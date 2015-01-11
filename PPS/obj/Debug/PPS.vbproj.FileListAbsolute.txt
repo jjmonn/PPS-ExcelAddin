@@ -1,0 +1,513 @@
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\temp\PPS\bin\Debug\PPS.dll
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\temp\PPS\bin\Debug\PPS.pdb
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\temp\PPS\bin\Debug\PPS.tlb
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\temp\PPS\bin\Debug\Microsoft.Office.Interop.Excel.dll
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\temp\PPS\bin\Debug\Microsoft.Vbe.Interop.dll
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\temp\PPS\bin\Debug\Office.dll
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\temp\PPS\bin\Debug\Interop.RefEdit.dll
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\temp\PPS\bin\Debug\AxInterop.RefEdit.dll
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\temp\PPS\obj\Debug\Interop.ADODB.dll
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\temp\PPS\obj\Debug\Interop.ADOR.dll
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\temp\PPS\obj\Debug\Interop.RefEdit.dll
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\temp\PPS\obj\Debug\AxInterop.RefEdit.dll
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\temp\PPS\obj\Debug\PPS.vbproj.ResolveComReference.cache
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\temp\PPS\obj\Debug\PPS.AddinModule.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\temp\PPS\obj\Debug\PPS.ExcelAddinModule1.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\temp\PPS\obj\Debug\PPS.ManualRangeSel_UI.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\temp\PPS\obj\Debug\PPS.SnapShotUI.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\temp\PPS\obj\Debug\PPS.Snapshot_SelectionUI.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\temp\PPS\obj\Debug\PPS.DataViewUI.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\temp\PPS\obj\Debug\PPS.DownloadUI.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\temp\PPS\obj\Debug\PPS.AccountsMGT_UI.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\temp\PPS\obj\Debug\PPS.Resources.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\temp\PPS\obj\Debug\PPS.vbproj.GenerateResource.Cache
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\temp\PPS\obj\Debug\PPS.dll
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\temp\PPS\obj\Debug\PPS.pdb
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS ADDIN\PPS\bin\Debug\PPS.dll
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS ADDIN\PPS\bin\Debug\PPS.pdb
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS ADDIN\PPS\bin\Debug\PPS.tlb
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS ADDIN\PPS\bin\Debug\Microsoft.Office.Interop.Excel.dll
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS ADDIN\PPS\bin\Debug\Microsoft.Vbe.Interop.dll
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS ADDIN\PPS\bin\Debug\Office.dll
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS ADDIN\PPS\bin\Debug\Interop.RefEdit.dll
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS ADDIN\PPS\bin\Debug\AxInterop.RefEdit.dll
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS ADDIN\PPS\obj\Debug\Interop.ADODB.dll
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS ADDIN\PPS\obj\Debug\Interop.ADOR.dll
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS ADDIN\PPS\obj\Debug\Interop.RefEdit.dll
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS ADDIN\PPS\obj\Debug\AxInterop.RefEdit.dll
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS ADDIN\PPS\obj\Debug\PPS.vbproj.ResolveComReference.cache
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS ADDIN\PPS\obj\Debug\PPS.AddinModule.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS ADDIN\PPS\obj\Debug\PPS.ExcelAddinModule1.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS ADDIN\PPS\obj\Debug\PPS.ManualRangeSel_UI.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS ADDIN\PPS\obj\Debug\PPS.SnapShotUI.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS ADDIN\PPS\obj\Debug\PPS.Snapshot_SelectionUI.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS ADDIN\PPS\obj\Debug\PPS.DataViewUI.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS ADDIN\PPS\obj\Debug\PPS.DownloadUI.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS ADDIN\PPS\obj\Debug\PPS.AccountsMGT_UI.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS ADDIN\PPS\obj\Debug\PPS.Resources.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS ADDIN\PPS\obj\Debug\PPS.vbproj.GenerateResource.Cache
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS ADDIN\PPS\obj\Debug\PPS.dll
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS ADDIN\PPS\obj\Debug\PPS.pdb
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Repository\PPS\PPS\obj\Debug\Interop.ADODB.dll
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Repository\PPS\PPS\obj\Debug\Interop.ADOR.dll
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Repository\PPS\PPS\obj\Debug\Interop.RefEdit.dll
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Repository\PPS\PPS\obj\Debug\AxInterop.RefEdit.dll
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Repository\PPS\PPS\obj\Debug\PPS.vbproj.ResolveComReference.cache
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Repository\PPS\PPS\obj\Debug\PPS.AddinModule.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Repository\PPS\PPS\obj\Debug\PPS.ExcelAddinModule1.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Repository\PPS\PPS\obj\Debug\PPS.ManualRangeSel_UI.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Repository\PPS\PPS\obj\Debug\PPS.SnapShotUI.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Repository\PPS\PPS\obj\Debug\PPS.Snapshot_SelectionUI.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Repository\PPS\PPS\obj\Debug\PPS.DataViewUI.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Repository\PPS\PPS\obj\Debug\PPS.DownloadUI.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Repository\PPS\PPS\obj\Debug\PPS.AccountsMGT_UI.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Repository\PPS\PPS\obj\Debug\PPS.AssetsManagementUI.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Repository\PPS\PPS\obj\Debug\PPS.Resources.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Repository\PPS\PPS\obj\Debug\PPS.vbproj.GenerateResource.Cache
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Repository\PPS\PPS\obj\Debug\PPS.dll
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Repository\PPS\PPS\obj\Debug\PPS.pdb
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Repository\PPS\PPS\bin\Debug\PPS.dll
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Repository\PPS\PPS\bin\Debug\PPS.pdb
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Repository\PPS\PPS\bin\Debug\PPS.tlb
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Repository\PPS\PPS\bin\Debug\Microsoft.Office.Interop.Excel.dll
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Repository\PPS\PPS\bin\Debug\Microsoft.Vbe.Interop.dll
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Repository\PPS\PPS\bin\Debug\Office.dll
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Repository\PPS\PPS\bin\Debug\Interop.RefEdit.dll
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Repository\PPS\PPS\bin\Debug\AxInterop.RefEdit.dll
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Repository\PPS\PPS\obj\Debug\PPS.vbprojResolveAssemblyReference.cache
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\last build\PPS\bin\Debug\PPS.dll
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\last build\PPS\bin\Debug\PPS.pdb
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\last build\PPS\bin\Debug\PPS.tlb
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\last build\PPS\bin\Debug\CheckBoxComboBox.dll
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\last build\PPS\bin\Debug\Microsoft.Office.Interop.Excel.dll
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\last build\PPS\bin\Debug\Microsoft.Vbe.Interop.dll
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\last build\PPS\bin\Debug\Office.dll
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\last build\PPS\bin\Debug\CheckBoxComboBox.pdb
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\last build\PPS\bin\Debug\Interop.RefEdit.dll
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\last build\PPS\bin\Debug\AxInterop.RefEdit.dll
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\last build\PPS\obj\Debug\Interop.ADODB.dll
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\last build\PPS\obj\Debug\Interop.ADOR.dll
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\last build\PPS\obj\Debug\Interop.RefEdit.dll
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\last build\PPS\obj\Debug\AxInterop.RefEdit.dll
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\last build\PPS\obj\Debug\PPS.vbproj.ResolveComReference.cache
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\last build\PPS\obj\Debug\PPS.AddinModule.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\last build\PPS\obj\Debug\PPS.ExcelAddinModule1.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\last build\PPS\obj\Debug\PPS.SimpleDisplaySnapshotUI.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\last build\PPS\obj\Debug\PPS.MultipleSheetsAcquisition.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\last build\PPS\obj\Debug\PPS.ManualRangeSel_UI.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\last build\PPS\obj\Debug\PPS.SnapShotUI.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\last build\PPS\obj\Debug\PPS.Snapshot_SelectionUI.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\last build\PPS\obj\Debug\PPS.DataMiningUI.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\last build\PPS\obj\Debug\PPS.DataViewUI.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\last build\PPS\obj\Debug\PPS.DownloadUI.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\last build\PPS\obj\Debug\PPS.AccountsMGT_UI.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\last build\PPS\obj\Debug\PPS.AssetsManagementUI.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\last build\PPS\obj\Debug\PPS.RangeSelectionUI.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\last build\PPS\obj\Debug\PPS.Resources.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\last build\PPS\obj\Debug\PPS.vbproj.GenerateResource.Cache
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\last build\PPS\obj\Debug\PPS.dll
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\last build\PPS\obj\Debug\PPS.pdb
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\last build\PPS\obj\Debug\PPS.vbprojResolveAssemblyReference.cache
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\last build\PPS\bin\Debug\ExpandableGridView.dll
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\last build\PPS\bin\Debug\ExpandableGridView.pdb
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\last build\PPS\obj\Debug\PPS.uploadReportUI.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS\bin\Debug\PPS.dll
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS\bin\Debug\PPS.pdb
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS\bin\Debug\CheckBoxComboBox.dll
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS\bin\Debug\DataTableMaker.dll
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS\bin\Debug\ExpandableGridView.dll
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS\bin\Debug\GaugeThis.dll
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS\bin\Debug\JacksonSoft.CustomTabControl.dll
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS\bin\Debug\Microsoft.Office.Interop.Excel.dll
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS\bin\Debug\Microsoft.Vbe.Interop.dll
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS\bin\Debug\Office.dll
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS\bin\Debug\PivotC.dll
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS\bin\Debug\SpannedDataGridViewNet2.dll
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS\bin\Debug\CheckBoxComboBox.pdb
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS\bin\Debug\DataTableMaker.pdb
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS\bin\Debug\ExpandableGridView.pdb
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS\bin\Debug\GaugeThis.pdb
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS\bin\Debug\GaugeThis.xml
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS\bin\Debug\PivotC.pdb
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS\bin\Debug\SpannedDataGridViewNet2.pdb
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS\bin\Debug\Interop.RefEdit.dll
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS\bin\Debug\AxInterop.RefEdit.dll
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS\obj\Debug\Interop.ADODB.dll
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS\obj\Debug\Interop.ADOMD.dll
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS\obj\Debug\Interop.ADOR.dll
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS\obj\Debug\Interop.MSDAOSP.dll
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS\obj\Debug\Interop.MSDASC.dll
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS\obj\Debug\Interop.RefEdit.dll
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS\obj\Debug\AxInterop.RefEdit.dll
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS\obj\Debug\PPS.vbproj.ResolveComReference.cache
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS\obj\Debug\PPS.AddinModule.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS\obj\Debug\PPS.ExcelAddinModule1.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS\obj\Debug\PPS.DataViewTEST.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS\obj\Debug\PPS.EntitySelectionForUsersMGT.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS\obj\Debug\PPS.UsersManagementUI.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS\obj\Debug\PPS.EntitySelectionUI.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS\obj\Debug\PPS.SimpleDisplaySnapshotUI.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS\obj\Debug\PPS.MultipleSheetsAcquisition.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS\obj\Debug\PPS.SnapshotColumnsSelectionUI.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS\obj\Debug\PPS.uploadReportUI.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS\obj\Debug\PPS.Categories.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS\obj\Debug\PPS.VersioningManagementUI.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS\obj\Debug\PPS.VersionSelectionUI.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS\obj\Debug\PPS.ControllingUI_2.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS\obj\Debug\PPS.DataMiningUI.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS\obj\Debug\PPS.DataViewUI.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS\obj\Debug\PPS.DownloadUI.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS\obj\Debug\PPS.AccountsMGT_UI.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS\obj\Debug\PPS.RangeSelectionUI.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS\obj\Debug\PPS.TESTDLL2.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS\obj\Debug\PPS.Resources.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS\obj\Debug\PPS.vbproj.GenerateResource.Cache
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS\obj\Debug\PPS.dll
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS\obj\Debug\PPS.pdb
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS\obj\Debug\PPS.NewUserForm.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS\obj\Debug\PPS.PasswordInputUI.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS\obj\Debug\PPS.SettingMainUI.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS\obj\Debug\PPS.ConnectionUI.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS\obj\Debug\PPS.ChangePasswordUI.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS\obj\Debug\PPS.NewEntityUI.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS\obj\Debug\PPS.EntitiesManagementUI.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS\bin\Debug\PPS.dll.config
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS\obj\Debug\PPS.CurrenciesManagementUI.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS\bin\Debug\ZedGraph.dll
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS\bin\Debug\ZedGraph.xml
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS\bin\Debug\de\ZedGraph.resources.dll
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS\bin\Debug\es\ZedGraph.resources.dll
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS\bin\Debug\fr\ZedGraph.resources.dll
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS\bin\Debug\hu\ZedGraph.resources.dll
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS\bin\Debug\it\ZedGraph.resources.dll
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS\bin\Debug\ja\ZedGraph.resources.dll
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS\bin\Debug\pt\ZedGraph.resources.dll
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS\bin\Debug\sv\ZedGraph.resources.dll
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS\bin\Debug\tr\ZedGraph.resources.dll
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS\bin\Debug\zh-cn\ZedGraph.resources.dll
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS\bin\Debug\zh-tw\ZedGraph.resources.dll
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS\obj\Debug\PPS.SubmissionControlUI.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS\obj\Debug\PPS.AcquisitionUI.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS\obj\Debug\PPS.ManualRangesSelectionUI.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS\obj\Debug\PPS.StatusReportInterfaceUI.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS\obj\Debug\PPS.CInputSelectionPane.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS\obj\Debug\PPS.CVersionSelectionPane.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS\obj\Debug\PPS.EntitySelectionTP.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS\obj\Debug\PPS.ProgressBarControl.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS\obj\Debug\PPS.PPSBI_UI.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS\bin\Debug\PPS.tlb
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS\obj\Debug\PPS.vbprojResolveAssemblyReference.cache
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS .V1\PPS\bin\Debug\PPS.dll.config
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS .V1\PPS\bin\Debug\PPS.dll
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS .V1\PPS\bin\Debug\PPS.pdb
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS .V1\PPS\bin\Debug\PPS.tlb
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS .V1\PPS\bin\Debug\JacksonSoft.CustomTabControl.dll
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS .V1\PPS\bin\Debug\Microsoft.Office.Interop.Excel.dll
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS .V1\PPS\bin\Debug\Office.dll
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS .V1\PPS\bin\Debug\Microsoft.Vbe.Interop.dll
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS .V1\PPS\bin\Debug\GaugeThis.pdb
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS .V1\PPS\bin\Debug\GaugeThis.xml
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS .V1\PPS\bin\Debug\ZedGraph.xml
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS .V1\PPS\bin\Debug\de\ZedGraph.resources.dll
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS .V1\PPS\bin\Debug\es\ZedGraph.resources.dll
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS .V1\PPS\bin\Debug\fr\ZedGraph.resources.dll
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS .V1\PPS\bin\Debug\hu\ZedGraph.resources.dll
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS .V1\PPS\bin\Debug\it\ZedGraph.resources.dll
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS .V1\PPS\bin\Debug\ja\ZedGraph.resources.dll
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS .V1\PPS\bin\Debug\pt\ZedGraph.resources.dll
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS .V1\PPS\bin\Debug\sv\ZedGraph.resources.dll
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS .V1\PPS\bin\Debug\tr\ZedGraph.resources.dll
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS .V1\PPS\bin\Debug\zh-cn\ZedGraph.resources.dll
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS .V1\PPS\bin\Debug\zh-tw\ZedGraph.resources.dll
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS .V1\PPS\obj\Debug\PPS.vbprojResolveAssemblyReference.cache
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS .V1\PPS\obj\Debug\Interop.ADODB.dll
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS .V1\PPS\obj\Debug\PPS.vbproj.ResolveComReference.cache
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS .V1\PPS\obj\Debug\PPS.AddinModule.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS .V1\PPS\obj\Debug\PPS.ProgressBarControl.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS .V1\PPS\obj\Debug\PPS.EntitySelectionTP.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS .V1\PPS\obj\Debug\PPS.CVersionSelectionPane.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS .V1\PPS\obj\Debug\PPS.CInputSelectionPane.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS .V1\PPS\obj\Debug\PPS.ExcelAddinModule1.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS .V1\PPS\obj\Debug\PPS.ChangePasswordUI.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS .V1\PPS\obj\Debug\PPS.ConnectionUI.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS .V1\PPS\obj\Debug\PPS.PasswordInputUI.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS .V1\PPS\obj\Debug\PPS.DataViewTEST.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS .V1\PPS\obj\Debug\PPS.NewEntityUI.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS .V1\PPS\obj\Debug\PPS.EntitySelectionForUsersMGT.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS .V1\PPS\obj\Debug\PPS.NewUserForm.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS .V1\PPS\obj\Debug\PPS.UsersManagementUI.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS .V1\PPS\obj\Debug\PPS.SettingMainUI.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS .V1\PPS\obj\Debug\PPS.SubmissionControlUI.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS .V1\PPS\obj\Debug\PPS.EntitySelectionUI.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS .V1\PPS\obj\Debug\PPS.PPSBI_UI.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS .V1\PPS\obj\Debug\PPS.SimpleDisplaySnapshotUI.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS .V1\PPS\obj\Debug\PPS.MultipleSheetsAcquisition.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS .V1\PPS\obj\Debug\PPS.ManualRangesSelectionUI.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS .V1\PPS\obj\Debug\PPS.SnapshotColumnsSelectionUI.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS .V1\PPS\obj\Debug\PPS.uploadReportUI.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS .V1\PPS\obj\Debug\PPS.Categories.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS .V1\PPS\obj\Debug\PPS.VersioningManagementUI.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS .V1\PPS\obj\Debug\PPS.VersionSelectionUI.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS .V1\PPS\obj\Debug\PPS.ControllingUI_2.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS .V1\PPS\obj\Debug\PPS.CurrenciesManagementUI.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS .V1\PPS\obj\Debug\PPS.DataMiningUI.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS .V1\PPS\obj\Debug\PPS.DataViewUI.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS .V1\PPS\obj\Debug\PPS.DownloadUI.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS .V1\PPS\obj\Debug\PPS.AccountsMGT_UI.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS .V1\PPS\obj\Debug\PPS.EntitiesManagementUI.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS .V1\PPS\obj\Debug\PPS.RangeSelectionUI.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS .V1\PPS\obj\Debug\PPS.TESTDLL2.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS .V1\PPS\obj\Debug\PPS.Resources.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS .V1\PPS\obj\Debug\PPS.AcquisitionUI.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS .V1\PPS\obj\Debug\PPS.StatusReportInterfaceUI.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS .V1\PPS\obj\Debug\PPS.vbproj.GenerateResource.Cache
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS .V1\PPS\obj\Debug\PPS.dll
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\PPS .V1\PPS\obj\Debug\PPS.pdb
+C:\Users\PPS\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\Back up PPS\PPS\bin\Debug\PPS.dll.config
+C:\Users\PPS\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\Back up PPS\PPS\bin\Debug\PPS.dll
+C:\Users\PPS\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\Back up PPS\PPS\bin\Debug\PPS.pdb
+C:\Users\PPS\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\Back up PPS\PPS\bin\Debug\PPS.tlb
+C:\Users\PPS\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\Back up PPS\PPS\bin\Debug\GaugeThis.dll
+C:\Users\PPS\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\Back up PPS\PPS\bin\Debug\JacksonSoft.CustomTabControl.dll
+C:\Users\PPS\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\Back up PPS\PPS\bin\Debug\Microsoft.Office.Interop.Excel.dll
+C:\Users\PPS\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\Back up PPS\PPS\bin\Debug\Office.dll
+C:\Users\PPS\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\Back up PPS\PPS\bin\Debug\ZedGraph.dll
+C:\Users\PPS\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\Back up PPS\PPS\bin\Debug\Microsoft.Vbe.Interop.dll
+C:\Users\PPS\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\Back up PPS\PPS\bin\Debug\GaugeThis.pdb
+C:\Users\PPS\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\Back up PPS\PPS\bin\Debug\GaugeThis.xml
+C:\Users\PPS\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\Back up PPS\PPS\bin\Debug\ZedGraph.xml
+C:\Users\PPS\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\Back up PPS\PPS\bin\Debug\de\ZedGraph.resources.dll
+C:\Users\PPS\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\Back up PPS\PPS\bin\Debug\es\ZedGraph.resources.dll
+C:\Users\PPS\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\Back up PPS\PPS\bin\Debug\fr\ZedGraph.resources.dll
+C:\Users\PPS\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\Back up PPS\PPS\bin\Debug\hu\ZedGraph.resources.dll
+C:\Users\PPS\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\Back up PPS\PPS\bin\Debug\it\ZedGraph.resources.dll
+C:\Users\PPS\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\Back up PPS\PPS\bin\Debug\ja\ZedGraph.resources.dll
+C:\Users\PPS\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\Back up PPS\PPS\bin\Debug\pt\ZedGraph.resources.dll
+C:\Users\PPS\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\Back up PPS\PPS\bin\Debug\sv\ZedGraph.resources.dll
+C:\Users\PPS\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\Back up PPS\PPS\bin\Debug\tr\ZedGraph.resources.dll
+C:\Users\PPS\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\Back up PPS\PPS\bin\Debug\zh-cn\ZedGraph.resources.dll
+C:\Users\PPS\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\Back up PPS\PPS\bin\Debug\zh-tw\ZedGraph.resources.dll
+C:\Users\PPS\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\Back up PPS\PPS\obj\Debug\Interop.ADODB.dll
+C:\Users\PPS\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\Back up PPS\PPS\obj\Debug\PPS.vbproj.ResolveComReference.cache
+C:\Users\PPS\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\Back up PPS\PPS\obj\Debug\PPS.AddinModule.resources
+C:\Users\PPS\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\Back up PPS\PPS\obj\Debug\PPS.ProgressBarControl.resources
+C:\Users\PPS\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\Back up PPS\PPS\obj\Debug\PPS.EntitySelectionTP.resources
+C:\Users\PPS\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\Back up PPS\PPS\obj\Debug\PPS.CVersionSelectionPane.resources
+C:\Users\PPS\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\Back up PPS\PPS\obj\Debug\PPS.CInputSelectionPane.resources
+C:\Users\PPS\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\Back up PPS\PPS\obj\Debug\PPS.ExcelAddinModule1.resources
+C:\Users\PPS\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\Back up PPS\PPS\obj\Debug\PPS.ChangePasswordUI.resources
+C:\Users\PPS\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\Back up PPS\PPS\obj\Debug\PPS.ConnectionUI.resources
+C:\Users\PPS\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\Back up PPS\PPS\obj\Debug\PPS.PasswordInputUI.resources
+C:\Users\PPS\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\Back up PPS\PPS\obj\Debug\PPS.DataViewTEST.resources
+C:\Users\PPS\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\Back up PPS\PPS\obj\Debug\PPS.NewEntityUI.resources
+C:\Users\PPS\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\Back up PPS\PPS\obj\Debug\PPS.EntitySelectionForUsersMGT.resources
+C:\Users\PPS\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\Back up PPS\PPS\obj\Debug\PPS.NewUserForm.resources
+C:\Users\PPS\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\Back up PPS\PPS\obj\Debug\PPS.UsersManagementUI.resources
+C:\Users\PPS\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\Back up PPS\PPS\obj\Debug\PPS.SettingMainUI.resources
+C:\Users\PPS\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\Back up PPS\PPS\obj\Debug\PPS.SubmissionControlUI.resources
+C:\Users\PPS\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\Back up PPS\PPS\obj\Debug\PPS.EntitySelectionUI.resources
+C:\Users\PPS\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\Back up PPS\PPS\obj\Debug\PPS.PPSBI_UI.resources
+C:\Users\PPS\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\Back up PPS\PPS\obj\Debug\PPS.SimpleDisplaySnapshotUI.resources
+C:\Users\PPS\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\Back up PPS\PPS\obj\Debug\PPS.MultipleSheetsAcquisition.resources
+C:\Users\PPS\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\Back up PPS\PPS\obj\Debug\PPS.ManualRangesSelectionUI.resources
+C:\Users\PPS\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\Back up PPS\PPS\obj\Debug\PPS.SnapshotColumnsSelectionUI.resources
+C:\Users\PPS\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\Back up PPS\PPS\obj\Debug\PPS.uploadReportUI.resources
+C:\Users\PPS\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\Back up PPS\PPS\obj\Debug\PPS.Categories.resources
+C:\Users\PPS\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\Back up PPS\PPS\obj\Debug\PPS.VersioningManagementUI.resources
+C:\Users\PPS\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\Back up PPS\PPS\obj\Debug\PPS.VersionSelectionUI.resources
+C:\Users\PPS\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\Back up PPS\PPS\obj\Debug\PPS.ControllingUI_2.resources
+C:\Users\PPS\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\Back up PPS\PPS\obj\Debug\PPS.CurrenciesManagementUI.resources
+C:\Users\PPS\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\Back up PPS\PPS\obj\Debug\PPS.DataMiningUI.resources
+C:\Users\PPS\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\Back up PPS\PPS\obj\Debug\PPS.DataViewUI.resources
+C:\Users\PPS\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\Back up PPS\PPS\obj\Debug\PPS.DownloadUI.resources
+C:\Users\PPS\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\Back up PPS\PPS\obj\Debug\PPS.AccountsMGT_UI.resources
+C:\Users\PPS\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\Back up PPS\PPS\obj\Debug\PPS.EntitiesManagementUI.resources
+C:\Users\PPS\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\Back up PPS\PPS\obj\Debug\PPS.RangeSelectionUI.resources
+C:\Users\PPS\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\Back up PPS\PPS\obj\Debug\PPS.Resources.resources
+C:\Users\PPS\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\Back up PPS\PPS\obj\Debug\PPS.AcquisitionUI.resources
+C:\Users\PPS\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\Back up PPS\PPS\obj\Debug\PPS.StatusReportInterfaceUI.resources
+C:\Users\PPS\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\Back up PPS\PPS\obj\Debug\PPS.vbproj.GenerateResource.Cache
+C:\Users\PPS\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\Back up PPS\PPS\obj\Debug\PPS.dll
+C:\Users\PPS\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\Back up PPS\PPS\obj\Debug\PPS.pdb
+C:\Users\PPS\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\Back up PPS\PPS\obj\Debug\PPS.vbprojResolveAssemblyReference.cache
+C:\Users\PPS\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\Back up PPS\PPS\obj\Debug\PPS.NewAccountUI.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\Back up PPS\PPS\bin\Debug\PPS.dll.config
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\Back up PPS\PPS\bin\Debug\PPS.dll
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\Back up PPS\PPS\bin\Debug\PPS.pdb
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\Back up PPS\PPS\bin\Debug\PPS.tlb
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\Back up PPS\PPS\bin\Debug\JacksonSoft.CustomTabControl.dll
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\Back up PPS\PPS\bin\Debug\Microsoft.Office.Interop.Excel.dll
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\Back up PPS\PPS\bin\Debug\Office.dll
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\Back up PPS\PPS\bin\Debug\Microsoft.Vbe.Interop.dll
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\Back up PPS\PPS\obj\Debug\Interop.ADODB.dll
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\Back up PPS\PPS\obj\Debug\PPS.vbproj.ResolveComReference.cache
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\Back up PPS\PPS\obj\Debug\PPS.AddinModule.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\Back up PPS\PPS\obj\Debug\PPS.NewAccountUI.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\Back up PPS\PPS\obj\Debug\PPS.ProgressBarControl.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\Back up PPS\PPS\obj\Debug\PPS.EntitySelectionTP.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\Back up PPS\PPS\obj\Debug\PPS.CVersionSelectionPane.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\Back up PPS\PPS\obj\Debug\PPS.CInputSelectionPane.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\Back up PPS\PPS\obj\Debug\PPS.ExcelAddinModule1.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\Back up PPS\PPS\obj\Debug\PPS.ChangePasswordUI.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\Back up PPS\PPS\obj\Debug\PPS.ConnectionUI.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\Back up PPS\PPS\obj\Debug\PPS.PasswordInputUI.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\Back up PPS\PPS\obj\Debug\PPS.DataViewTEST.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\Back up PPS\PPS\obj\Debug\PPS.NewEntityUI.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\Back up PPS\PPS\obj\Debug\PPS.EntitySelectionForUsersMGT.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\Back up PPS\PPS\obj\Debug\PPS.NewUserForm.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\Back up PPS\PPS\obj\Debug\PPS.UsersManagementUI.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\Back up PPS\PPS\obj\Debug\PPS.SettingMainUI.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\Back up PPS\PPS\obj\Debug\PPS.SubmissionControlUI.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\Back up PPS\PPS\obj\Debug\PPS.EntitySelectionUI.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\Back up PPS\PPS\obj\Debug\PPS.PPSBI_UI.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\Back up PPS\PPS\obj\Debug\PPS.SimpleDisplaySnapshotUI.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\Back up PPS\PPS\obj\Debug\PPS.MultipleSheetsAcquisition.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\Back up PPS\PPS\obj\Debug\PPS.ManualRangesSelectionUI.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\Back up PPS\PPS\obj\Debug\PPS.SnapshotColumnsSelectionUI.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\Back up PPS\PPS\obj\Debug\PPS.uploadReportUI.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\Back up PPS\PPS\obj\Debug\PPS.Categories.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\Back up PPS\PPS\obj\Debug\PPS.VersioningManagementUI.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\Back up PPS\PPS\obj\Debug\PPS.VersionSelectionUI.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\Back up PPS\PPS\obj\Debug\PPS.ControllingUI_2.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\Back up PPS\PPS\obj\Debug\PPS.CurrenciesManagementUI.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\Back up PPS\PPS\obj\Debug\PPS.DataMiningUI.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\Back up PPS\PPS\obj\Debug\PPS.DataViewUI.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\Back up PPS\PPS\obj\Debug\PPS.DownloadUI.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\Back up PPS\PPS\obj\Debug\PPS.AccountsMGT_UI.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\Back up PPS\PPS\obj\Debug\PPS.EntitiesManagementUI.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\Back up PPS\PPS\obj\Debug\PPS.RangeSelectionUI.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\Back up PPS\PPS\obj\Debug\PPS.Resources.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\Back up PPS\PPS\obj\Debug\PPS.AcquisitionUI.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\Back up PPS\PPS\obj\Debug\PPS.StatusReportInterfaceUI.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\Back up PPS\PPS\obj\Debug\PPS.vbproj.GenerateResource.Cache
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\Back up PPS\PPS\obj\Debug\PPS.dll
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\Back up PPS\PPS\obj\Debug\PPS.pdb
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\Back up PPS\PPS\obj\Debug\PPS.vbprojResolveAssemblyReference.cache
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\Back up PPS\PPS\obj\Debug\PPS.CircularProgressUI.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\Back up PPS\PPS\bin\Debug\ProgressControls.dll
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS Working version\Back up PPS\PPS\bin\Debug\ProgressControls.pdb
+C:\Users\PPS\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\Back up PPS\PPS\obj\Debug\PPS.CircularProgressUI.resources
+C:\Users\PPS\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\Back up PPS\PPS\obj\Debug\Interop.WinHttp.dll
+C:\Users\PPS\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\Back up PPS\PPS\obj\Debug\PPS.HTTP_test.resources
+C:\Users\PPS\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\Back up PPS\PPS\obj\Debug\PPS.PBarUI.resources
+C:\Users\PPS\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\Back up PPS\PPS\obj\Debug\PPS.UploadingHistoryUI.resources
+C:\Users\Julien Monnereau\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\Back up PPS\PPS\obj\Debug\PPS.dll
+C:\Users\Julien Monnereau\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\Back up PPS\PPS\obj\Debug\PPS.vbprojResolveAssemblyReference.cache
+C:\Users\Julien Monnereau\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\Back up PPS\PPS\obj\Debug\Interop.ADODB.dll
+C:\Users\Julien Monnereau\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\Back up PPS\PPS\obj\Debug\Interop.WinHttp.dll
+C:\Users\Julien Monnereau\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\Back up PPS\PPS\obj\Debug\PPS.vbproj.ResolveComReference.cache
+C:\Users\Julien Monnereau\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\Back up PPS\PPS\obj\Debug\PPS.AddinModule.resources
+C:\Users\Julien Monnereau\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\Back up PPS\PPS\obj\Debug\PPS.UploadingHistoryUI.resources
+C:\Users\Julien Monnereau\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\Back up PPS\PPS\obj\Debug\PPS.CubeView.resources
+C:\Users\Julien Monnereau\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\Back up PPS\PPS\obj\Debug\PPS.HTTP_test.resources
+C:\Users\Julien Monnereau\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\Back up PPS\PPS\obj\Debug\PPS.FModellingUI.resources
+C:\Users\Julien Monnereau\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\Back up PPS\PPS\obj\Debug\PPS.InputRatesExcel.resources
+C:\Users\Julien Monnereau\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\Back up PPS\PPS\obj\Debug\PPS.NewAccountUI.resources
+C:\Users\Julien Monnereau\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\Back up PPS\PPS\obj\Debug\PPS.PlatformMGTUI.resources
+C:\Users\Julien Monnereau\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\Back up PPS\PPS\obj\Debug\PPS.NewDataVersionUI.resources
+C:\Users\Julien Monnereau\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\Back up PPS\PPS\obj\Debug\PPS.ControlsMGTUI.resources
+C:\Users\Julien Monnereau\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\Back up PPS\PPS\obj\Debug\PPS.NewControlUI.resources
+C:\Users\Julien Monnereau\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\Back up PPS\PPS\obj\Debug\PPS.SubmissionsControlUI.resources
+C:\Users\Julien Monnereau\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\Back up PPS\PPS\obj\Debug\PPS.CircularProgressUI.resources
+C:\Users\Julien Monnereau\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\Back up PPS\PPS\obj\Debug\PPS.PBarUI.resources
+C:\Users\Julien Monnereau\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\Back up PPS\PPS\obj\Debug\PPS.ProgressBarControl.resources
+C:\Users\Julien Monnereau\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\Back up PPS\PPS\obj\Debug\PPS.EntitySelectionTP.resources
+C:\Users\Julien Monnereau\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\Back up PPS\PPS\obj\Debug\PPS.CVersionSelectionPane.resources
+C:\Users\Julien Monnereau\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\Back up PPS\PPS\obj\Debug\PPS.CInputSelectionPane.resources
+C:\Users\Julien Monnereau\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\Back up PPS\PPS\obj\Debug\PPS.ExcelAddinModule1.resources
+C:\Users\Julien Monnereau\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\Back up PPS\PPS\obj\Debug\PPS.ChangePasswordUI.resources
+C:\Users\Julien Monnereau\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\Back up PPS\PPS\obj\Debug\PPS.ConnectionUI.resources
+C:\Users\Julien Monnereau\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\Back up PPS\PPS\obj\Debug\PPS.NewEntityUI.resources
+C:\Users\Julien Monnereau\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\Back up PPS\PPS\obj\Debug\PPS.EntitySelectionForUsersMGT.resources
+C:\Users\Julien Monnereau\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\Back up PPS\PPS\obj\Debug\PPS.NewUserUI.resources
+C:\Users\Julien Monnereau\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\Back up PPS\PPS\obj\Debug\PPS.UsersManagementUI.resources
+C:\Users\Julien Monnereau\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\Back up PPS\PPS\obj\Debug\PPS.SettingMainUI.resources
+C:\Users\Julien Monnereau\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\Back up PPS\PPS\obj\Debug\PPS.PPSBI_UI.resources
+C:\Users\Julien Monnereau\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\Back up PPS\PPS\obj\Debug\PPS.SimpleDisplaySnapshotUI.resources
+C:\Users\Julien Monnereau\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\Back up PPS\PPS\obj\Debug\PPS.MultipleSheetsAcquisition.resources
+C:\Users\Julien Monnereau\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\Back up PPS\PPS\obj\Debug\PPS.ManualRangesSelectionUI.resources
+C:\Users\Julien Monnereau\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\Back up PPS\PPS\obj\Debug\PPS.CategoriesManagementUI.resources
+C:\Users\Julien Monnereau\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\Back up PPS\PPS\obj\Debug\PPS.VersioningManagementUI.resources
+C:\Users\Julien Monnereau\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\Back up PPS\PPS\obj\Debug\PPS.VersionSelectionUI.resources
+C:\Users\Julien Monnereau\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\Back up PPS\PPS\obj\Debug\PPS.ControllingUI_2.resources
+C:\Users\Julien Monnereau\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\Back up PPS\PPS\obj\Debug\PPS.CurrenciesManagementUI.resources
+C:\Users\Julien Monnereau\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\Back up PPS\PPS\obj\Debug\PPS.AccountsMGT_UI.resources
+C:\Users\Julien Monnereau\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\Back up PPS\PPS\obj\Debug\PPS.EntitiesManagementUI.resources
+C:\Users\Julien Monnereau\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\Back up PPS\PPS\obj\Debug\PPS.Resources.resources
+C:\Users\Julien Monnereau\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\Back up PPS\PPS\obj\Debug\PPS.AcquisitionUI.resources
+C:\Users\Julien Monnereau\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\Back up PPS\PPS\obj\Debug\PPS.StatusReportInterfaceUI.resources
+C:\Users\Julien Monnereau\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\Back up PPS\PPS\obj\Debug\PPS.vbproj.GenerateResource.Cache
+C:\Users\Julien Monnereau\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\Back up PPS\PPS\obj\Debug\PPS.pdb
+C:\Users\Julien Monnereau\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\PPS Working Version\PPS\obj\Debug\PPS.dll
+C:\Users\Julien Monnereau\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\PPS Working Version\PPS\bin\Debug\PPS.dll
+C:\Users\Julien Monnereau\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\PPS Working Version\PPS\bin\Debug\PPS.dll.config
+C:\Users\Julien Monnereau\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\PPS Working Version\PPS\bin\Debug\PPS.pdb
+C:\Users\Julien Monnereau\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\PPS Working Version\PPS\bin\Debug\PPS.tlb
+C:\Users\Julien Monnereau\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\PPS Working Version\PPS\bin\Debug\GaugeThis.dll
+C:\Users\Julien Monnereau\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\PPS Working Version\PPS\bin\Debug\JacksonSoft.CustomTabControl.dll
+C:\Users\Julien Monnereau\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\PPS Working Version\PPS\bin\Debug\Microsoft.Office.Interop.Excel.dll
+C:\Users\Julien Monnereau\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\PPS Working Version\PPS\bin\Debug\Office.dll
+C:\Users\Julien Monnereau\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\PPS Working Version\PPS\bin\Debug\ZedGraph.dll
+C:\Users\Julien Monnereau\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\PPS Working Version\PPS\bin\Debug\Microsoft.Vbe.Interop.dll
+C:\Users\Julien Monnereau\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\PPS Working Version\PPS\bin\Debug\GaugeThis.pdb
+C:\Users\Julien Monnereau\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\PPS Working Version\PPS\bin\Debug\GaugeThis.xml
+C:\Users\Julien Monnereau\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\PPS Working Version\PPS\bin\Debug\ZedGraph.xml
+C:\Users\Julien Monnereau\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\PPS Working Version\PPS\bin\Debug\de\ZedGraph.resources.dll
+C:\Users\Julien Monnereau\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\PPS Working Version\PPS\bin\Debug\es\ZedGraph.resources.dll
+C:\Users\Julien Monnereau\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\PPS Working Version\PPS\bin\Debug\fr\ZedGraph.resources.dll
+C:\Users\Julien Monnereau\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\PPS Working Version\PPS\bin\Debug\hu\ZedGraph.resources.dll
+C:\Users\Julien Monnereau\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\PPS Working Version\PPS\bin\Debug\it\ZedGraph.resources.dll
+C:\Users\Julien Monnereau\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\PPS Working Version\PPS\bin\Debug\ja\ZedGraph.resources.dll
+C:\Users\Julien Monnereau\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\PPS Working Version\PPS\bin\Debug\pt\ZedGraph.resources.dll
+C:\Users\Julien Monnereau\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\PPS Working Version\PPS\bin\Debug\sv\ZedGraph.resources.dll
+C:\Users\Julien Monnereau\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\PPS Working Version\PPS\bin\Debug\tr\ZedGraph.resources.dll
+C:\Users\Julien Monnereau\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\PPS Working Version\PPS\bin\Debug\zh-cn\ZedGraph.resources.dll
+C:\Users\Julien Monnereau\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\PPS Working Version\PPS\bin\Debug\zh-tw\ZedGraph.resources.dll
+C:\Users\Julien Monnereau\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\PPS Working Version\PPS\obj\Debug\Interop.ADODB.dll
+C:\Users\Julien Monnereau\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\PPS Working Version\PPS\obj\Debug\Interop.WinHttp.dll
+C:\Users\Julien Monnereau\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\PPS Working Version\PPS\obj\Debug\PPS.vbproj.ResolveComReference.cache
+C:\Users\Julien Monnereau\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\PPS Working Version\PPS\obj\Debug\PPS.AddinModule.resources
+C:\Users\Julien Monnereau\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\PPS Working Version\PPS\obj\Debug\PPS.UploadingHistoryUI.resources
+C:\Users\Julien Monnereau\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\PPS Working Version\PPS\obj\Debug\PPS.CubeView.resources
+C:\Users\Julien Monnereau\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\PPS Working Version\PPS\obj\Debug\PPS.HTTP_test.resources
+C:\Users\Julien Monnereau\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\PPS Working Version\PPS\obj\Debug\PPS.FModellingUI.resources
+C:\Users\Julien Monnereau\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\PPS Working Version\PPS\obj\Debug\PPS.LogUI.resources
+C:\Users\Julien Monnereau\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\PPS Working Version\PPS\obj\Debug\PPS.DataHistoryUI.resources
+C:\Users\Julien Monnereau\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\PPS Working Version\PPS\obj\Debug\PPS.InputRatesExcel.resources
+C:\Users\Julien Monnereau\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\PPS Working Version\PPS\obj\Debug\PPS.NewAccountUI.resources
+C:\Users\Julien Monnereau\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\PPS Working Version\PPS\obj\Debug\PPS.PlatformMGTUI.resources
+C:\Users\Julien Monnereau\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\PPS Working Version\PPS\obj\Debug\PPS.NewDataVersionUI.resources
+C:\Users\Julien Monnereau\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\PPS Working Version\PPS\obj\Debug\PPS.ControlsMGTUI.resources
+C:\Users\Julien Monnereau\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\PPS Working Version\PPS\obj\Debug\PPS.NewControlUI.resources
+C:\Users\Julien Monnereau\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\PPS Working Version\PPS\obj\Debug\PPS.SubmissionsControlUI.resources
+C:\Users\Julien Monnereau\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\PPS Working Version\PPS\obj\Debug\PPS.CircularProgressUI.resources
+C:\Users\Julien Monnereau\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\PPS Working Version\PPS\obj\Debug\PPS.PBarUI.resources
+C:\Users\Julien Monnereau\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\PPS Working Version\PPS\obj\Debug\PPS.ProgressBarControl.resources
+C:\Users\Julien Monnereau\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\PPS Working Version\PPS\obj\Debug\PPS.EntitySelectionTP.resources
+C:\Users\Julien Monnereau\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\PPS Working Version\PPS\obj\Debug\PPS.CVersionSelectionPane.resources
+C:\Users\Julien Monnereau\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\PPS Working Version\PPS\obj\Debug\PPS.CInputSelectionPane.resources
+C:\Users\Julien Monnereau\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\PPS Working Version\PPS\obj\Debug\PPS.ExcelAddinModule1.resources
+C:\Users\Julien Monnereau\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\PPS Working Version\PPS\obj\Debug\PPS.ChangePasswordUI.resources
+C:\Users\Julien Monnereau\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\PPS Working Version\PPS\obj\Debug\PPS.ConnectionUI.resources
+C:\Users\Julien Monnereau\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\PPS Working Version\PPS\obj\Debug\PPS.NewEntityUI.resources
+C:\Users\Julien Monnereau\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\PPS Working Version\PPS\obj\Debug\PPS.EntitySelectionForUsersMGT.resources
+C:\Users\Julien Monnereau\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\PPS Working Version\PPS\obj\Debug\PPS.NewUserUI.resources
+C:\Users\Julien Monnereau\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\PPS Working Version\PPS\obj\Debug\PPS.UsersManagementUI.resources
+C:\Users\Julien Monnereau\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\PPS Working Version\PPS\obj\Debug\PPS.SettingMainUI.resources
+C:\Users\Julien Monnereau\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\PPS Working Version\PPS\obj\Debug\PPS.PPSBI_UI.resources
+C:\Users\Julien Monnereau\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\PPS Working Version\PPS\obj\Debug\PPS.SimpleDisplaySnapshotUI.resources
+C:\Users\Julien Monnereau\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\PPS Working Version\PPS\obj\Debug\PPS.MultipleSheetsAcquisition.resources
+C:\Users\Julien Monnereau\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\PPS Working Version\PPS\obj\Debug\PPS.ManualRangesSelectionUI.resources
+C:\Users\Julien Monnereau\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\PPS Working Version\PPS\obj\Debug\PPS.CategoriesManagementUI.resources
+C:\Users\Julien Monnereau\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\PPS Working Version\PPS\obj\Debug\PPS.VersioningManagementUI.resources
+C:\Users\Julien Monnereau\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\PPS Working Version\PPS\obj\Debug\PPS.VersionSelectionUI.resources
+C:\Users\Julien Monnereau\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\PPS Working Version\PPS\obj\Debug\PPS.ControllingUI_2.resources
+C:\Users\Julien Monnereau\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\PPS Working Version\PPS\obj\Debug\PPS.CurrenciesManagementUI.resources
+C:\Users\Julien Monnereau\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\PPS Working Version\PPS\obj\Debug\PPS.AccountsMGT_UI.resources
+C:\Users\Julien Monnereau\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\PPS Working Version\PPS\obj\Debug\PPS.EntitiesManagementUI.resources
+C:\Users\Julien Monnereau\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\PPS Working Version\PPS\obj\Debug\PPS.Resources.resources
+C:\Users\Julien Monnereau\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\PPS Working Version\PPS\obj\Debug\PPS.AcquisitionUI.resources
+C:\Users\Julien Monnereau\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\PPS Working Version\PPS\obj\Debug\PPS.StatusReportInterfaceUI.resources
+C:\Users\Julien Monnereau\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\PPS Working Version\PPS\obj\Debug\PPS.vbproj.GenerateResource.Cache
+C:\Users\Julien Monnereau\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\PPS Working Version\PPS\obj\Debug\PPS.pdb
+C:\Users\Julien Monnereau\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\PPS Working Version\PPS\obj\Debug\PPS.vbprojResolveAssemblyReference.cache

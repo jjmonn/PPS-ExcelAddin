@@ -1,0 +1,50 @@
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\temp\PPS\bin\Debug\PPS.dll
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\temp\PPS\bin\Debug\PPS.pdb
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\temp\PPS\bin\Debug\PPS.tlb
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\temp\PPS\bin\Debug\Microsoft.Office.Interop.Excel.dll
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\temp\PPS\bin\Debug\Microsoft.Vbe.Interop.dll
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\temp\PPS\bin\Debug\Office.dll
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\temp\PPS\bin\Debug\Interop.RefEdit.dll
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\temp\PPS\bin\Debug\AxInterop.RefEdit.dll
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\temp\PPS\obj\Debug\Interop.ADODB.dll
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\temp\PPS\obj\Debug\Interop.ADOR.dll
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\temp\PPS\obj\Debug\Interop.RefEdit.dll
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\temp\PPS\obj\Debug\AxInterop.RefEdit.dll
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\temp\PPS\obj\Debug\PPS.vbproj.ResolveComReference.cache
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\temp\PPS\obj\Debug\PPS.AddinModule.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\temp\PPS\obj\Debug\PPS.ExcelAddinModule1.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\temp\PPS\obj\Debug\PPS.ManualRangeSel_UI.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\temp\PPS\obj\Debug\PPS.SnapShotUI.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\temp\PPS\obj\Debug\PPS.Snapshot_SelectionUI.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\temp\PPS\obj\Debug\PPS.DataViewUI.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\temp\PPS\obj\Debug\PPS.DownloadUI.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\temp\PPS\obj\Debug\PPS.AccountsMGT_UI.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\temp\PPS\obj\Debug\PPS.Resources.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\temp\PPS\obj\Debug\PPS.vbproj.GenerateResource.Cache
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\temp\PPS\obj\Debug\PPS.dll
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\temp\PPS\obj\Debug\PPS.pdb
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS ADDIN\PPS\bin\Debug\PPS.dll
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS ADDIN\PPS\bin\Debug\PPS.pdb
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS ADDIN\PPS\bin\Debug\PPS.tlb
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS ADDIN\PPS\bin\Debug\Microsoft.Office.Interop.Excel.dll
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS ADDIN\PPS\bin\Debug\Microsoft.Vbe.Interop.dll
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS ADDIN\PPS\bin\Debug\Office.dll
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS ADDIN\PPS\bin\Debug\Interop.RefEdit.dll
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS ADDIN\PPS\bin\Debug\AxInterop.RefEdit.dll
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS ADDIN\PPS\obj\Debug\Interop.ADODB.dll
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS ADDIN\PPS\obj\Debug\Interop.ADOR.dll
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS ADDIN\PPS\obj\Debug\Interop.RefEdit.dll
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS ADDIN\PPS\obj\Debug\AxInterop.RefEdit.dll
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS ADDIN\PPS\obj\Debug\PPS.vbproj.ResolveComReference.cache
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS ADDIN\PPS\obj\Debug\PPS.AddinModule.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS ADDIN\PPS\obj\Debug\PPS.ExcelAddinModule1.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS ADDIN\PPS\obj\Debug\PPS.ManualRangeSel_UI.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS ADDIN\PPS\obj\Debug\PPS.SnapShotUI.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS ADDIN\PPS\obj\Debug\PPS.Snapshot_SelectionUI.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS ADDIN\PPS\obj\Debug\PPS.DataViewUI.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS ADDIN\PPS\obj\Debug\PPS.DownloadUI.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS ADDIN\PPS\obj\Debug\PPS.AccountsMGT_UI.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS ADDIN\PPS\obj\Debug\PPS.Resources.resources
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS ADDIN\PPS\obj\Debug\PPS.vbproj.GenerateResource.Cache
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS ADDIN\PPS\obj\Debug\PPS.dll
+C:\Users\Julien Monnereau\Documents\Purple Sun\Projects\PPS ADDIN\PPS\obj\Debug\PPS.pdb

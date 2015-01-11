@@ -1,0 +1,150 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi" xmlns:netfx="http://schemas.microsoft.com/wix/NetFxExtension">
+	
+  <Product 
+    Id="94121fcb-87b2-4a75-b902-dc6cf6ea808f" 
+    Name="PPS" 
+    Language="1033" 
+    Version="1.0.0" 
+    Manufacturer="PurpleSun Solutions" 
+    UpgradeCode="94121fcb-87b2-4a75-b902-dc6cf6ea8080" 
+    Codepage="1252">
+    
+  	<Package 
+      InstallerVersion="200" 
+      Compressed="yes" 
+      InstallScope="perUser" 
+      Description="PPS"
+      Manufacturer="PurpleSun Solutions"
+      Languages="1033"
+      SummaryCodepage="1252" 
+      InstallPrivileges="limited"
+    />
+
+    <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
+    <Media Id="1" Cabinet="PPS.cab" EmbedCab="yes" />
+
+    <Property Id="WIXUI_INSTALLDIR" Value="INSTALLFOLDER" />
+
+    <Feature
+      Id="ProductFeature"
+      Title="PPS"
+      Level="1"
+      ConfigurableDirectory="INSTALLFOLDER">
+      <ComponentRef Id="INSTALLFOLDER" />
+      <ComponentGroupRef Id="ProductComponents" />
+      <ComponentRef Id="MSI"/>
+    </Feature>
+
+
+    <UIRef Id="WixUI_InstallDir" />
+    <UIRef Id="WixUI_ErrorProgressText" />
+
+    <Binary Id="adxregistrator_exe" SourceFile="$(var.ADX_PATH)\Redistributables\adxregistrator.exe" />
+
+    <CustomAction Id="RegisterApp"   BinaryKey="adxregistrator_exe" Execute="deferred" ExeCommand='/install="[INSTALLFOLDER]$(var.PPS.TargetFileName)" /privileges=user /returnExitCode=false' Impersonate="yes" />
+    <CustomAction Id="RollbackApp"   BinaryKey="adxregistrator_exe" Execute="rollback" ExeCommand='/uninstall="[INSTALLFOLDER]$(var.PPS.TargetFileName)" /privileges=user' Impersonate="yes" Return="ignore" />
+    <CustomAction Id="UnregisterApp" BinaryKey="adxregistrator_exe" Execute="deferred" ExeCommand='/uninstall="[INSTALLFOLDER]$(var.PPS.TargetFileName)" /privileges=user' Impersonate="yes" Return="ignore" />
+
+    <CustomAction
+      Id='Install_MSI'
+      Execute ='immediate'
+      Return="asyncNoWait"
+      Directory="ProgramMenuFolder"
+      ExeCommand="msiexec /i +quot;[MSI]mySqlODBCDriver5.1.msi+quot; /l*v +quot;[TempFolder]odbcDriverInst.log+quot;"
+    />
+
+    <CustomAction
+        Id="Uninstall_MSI"
+        Execute="immediate"
+        Return="asyncNoWait"
+        Directory="ProgramMenuFolder"
+        ExeCommand="msiexec /x {ef4fb315-ad6d-49cb-a479-3f6be808aac5} /l*v +quot;[TempFolder]odbcDriverUninst.log+quot;"
+    />
+
+    <InstallExecuteSequence>
+      <Custom Action="RegisterApp"     After="StartServices"><![CDATA[$ProductComponent>2]]>         </Custom>
+      <Custom Action="RollbackApp"     After="RegisterApp"><![CDATA[$ProductComponent>2]]>           </Custom>
+      <Custom Action="UnregisterApp"   After="MsiUnpublishAssemblies"><![CDATA[$ProductComponent=2]]></Custom>
+      <Custom Action="Install_MSI"     After="InstallFinalize">NOT Installed                         </Custom>
+      <Custom Action="Uninstall_MSI"   After="InstallFinalize">Installed                             </Custom>
+    </InstallExecuteSequence>
+
+    <!-- Properties for all current versions of the .NET Framework are available here: http://wix.sourceforge.net/manual-wix3/wixnetfxextension.htm -->
+    <PropertyRef Id="NETFRAMEWORK40CLIENT"/>
+    <Condition Message="This application requires .NET Framework 4.5. Please install the .NET Framework then run this installer again.">
+      <![CDATA[Installed OR NETFRAMEWORK40CLIENT]]>
+    </Condition>
+
+  </Product>
+
+
+  <Fragment>
+		<Directory Id="TARGETDIR" Name="SourceDir">
+			<Directory Id="LocalAppDataFolder">
+				<Directory Id="INSTALLFOLDER" Name="PPS" >
+         <Component Id="INSTALLFOLDER" Guid="997bdfac-e07d-4869-8fa6-6a3c96b5372c">
+            <RemoveFolder On="both" Id="INSTALLFOLDER"/>
+            <RegistryValue Root="HKCU" Key="Software\[Manufacturer]\[ProductName]" Type="string" Value="PPS" />
+         </Component>
+       </Directory>
+     </Directory>
+     <Directory Id="ProgramMenuFolder" />
+     <Directory Id="Drivers" Name="DRIVERS" >
+       <Directory Id="MSI" Name="MSI">
+         <Component Id="MSI" DiskId="1" Guid="ef4fb315-ad6d-49cb-a479-3f6be808aac5">
+           <File Id="mySqlODBCDriver5.1.msi"
+            Name="mySqlODBCDriver5.1.msi"
+            src="C:\Users\Julien Monnereau\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\mySqlODBCDriver5.1.msi"
+               />
+         </Component>
+       </Directory>
+     </Directory>
+   </Directory>
+ </Fragment>
+
+
+ <Fragment>
+		<ComponentGroup Id="ProductComponents" >
+      <Component Id="ProductComponent" Guid="d6bf2dd0-d096-40aa-b646-6933614525c6" DiskId="1" Directory="INSTALLFOLDER" >
+        <RegistryKey Root="HKCU" Key="Software\[Manufacturer]\[ProductName]">
+          <RegistryValue Type="string" Name="Installed" Value="[INSTALLFOLDER]" KeyPath="yes" />
+        </RegistryKey>
+        <File Id="_$(var.PPS.TargetName)_dll" Name="$(var.PPS.TargetFileName)" Source="$(var.PPS.TargetPath)" />
+        <File Id="_adxloader_dll_manifest" Name="adxloader.dll.manifest" Source="$(var.PPS.ProjectDir)Loader\" />
+        <File Id="_adxloader_PPS_dll" Name="adxloader.PPS.dll" Source="$(var.PPS.ProjectDir)Loader\"  />
+        <File Id="_adxloader64_PPS_dll" Name="adxloader64.PPS.dll" Source="$(var.PPS.ProjectDir)Loader\" />
+        <File Id="_AddinExpress_MSO_2005_dll" Name="AddinExpress.MSO.2005.dll" Source="C:\Program Files (x86)\Add-in Express\Add-in Express for .NET\Bin\" />
+				<File Id="_AddinExpress_XL_2005_dll" Name="AddinExpress.XL.2005.dll" Source="C:\Program Files (x86)\Add-in Express\Add-in Express for .NET\Bin\" />
+				<File Id="_GaugeThis_dll" Name="GaugeThis.dll" Source="$(var.PPS.TargetDir)" />
+				<File Id="_JacksonSoft_CustomTabControl_dll" Name="JacksonSoft.CustomTabControl.dll" Source="$(var.PPS.TargetDir)" />
+				<File Id="_Microsoft_Office_Interop_Excel_dll" Name="Microsoft.Office.Interop.Excel.dll" Source="$(var.PPS.TargetDir)" />
+				<File Id="_ProgressControls_dll" Name="ProgressControls.dll" Source="$(var.PPS.TargetDir)" />
+				<File Id="_VIBlend_WinForms_Controls_dll" Name="VIBlend.WinForms.Controls.dll" Source="C:\windows\assembly\GAC_MSIL\VIBlend.WinForms.Controls\10.0.0.0__6feea38fef5ea0cf\" />
+				<File Id="_VIBlend_WinForms_DataGridView_dll" Name="VIBlend.WinForms.DataGridView.dll" Source="C:\windows\assembly\GAC_MSIL\VIBlend.WinForms.DataGridView\10.0.0.0__84a1a092e92851e6\" />
+				<File Id="_VIBlend_WinForms_Utilities_dll" Name="VIBlend.WinForms.Utilities.dll" Source="C:\windows\assembly\GAC_MSIL\VIBlend.WinForms.Utilities\8.0.0.0__970a5af59bc48043\" />
+				<File Id="_ZedGraph_dll" Name="ZedGraph.dll" Source="$(var.PPS.TargetDir)" />
+				<File Id="_AxInterop_RefEdit_dll" Name="AxInterop.RefEdit.dll" Source="$(var.PPS.TargetDir)" />
+				<File Id="_CheckBoxComboBox_dll" Name="CheckBoxComboBox.dll" Source="$(var.PPS.TargetDir)" />
+				<File Id="_CheckBoxComboBox_pdb" Name="CheckBoxComboBox.pdb" Source="$(var.PPS.TargetDir)" />
+				<File Id="_DataTableMaker_dll" Name="DataTableMaker.dll" Source="$(var.PPS.TargetDir)" />
+				<File Id="_DataTableMaker_pdb" Name="DataTableMaker.pdb" Source="$(var.PPS.TargetDir)" />
+				<File Id="_DLL3_dll" Name="DLL3.dll" Source="C:\Users\Julien Monnereau\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\DLL3.dll" />
+				<File Id="_ExpandableGridView_dll" Name="ExpandableGridView.dll" Source="$(var.PPS.TargetDir)" />
+				<File Id="_ExpandableGridView_pdb" Name="ExpandableGridView.pdb" Source="$(var.PPS.TargetDir)" />
+				<File Id="_GaugeThis_pdb" Name="GaugeThis.pdb" Source="$(var.PPS.TargetDir)" />
+				<File Id="_GaugeThis_xml" Name="GaugeThis.xml" Source="$(var.PPS.TargetDir)" />
+				<File Id="_Interop_RefEdit_dll" Name="Interop.RefEdit.dll" Source="$(var.PPS.TargetDir)" />
+				<File Id="_Microsoft_Vbe_Interop_dll" Name="Microsoft.Vbe.Interop.dll" Source="$(var.PPS.TargetDir)" />
+				<File Id="_Office_dll" Name="Office.dll" Source="$(var.PPS.TargetDir)" />
+				<File Id="_PivotC_dll" Name="PivotC.dll" Source="$(var.PPS.TargetDir)" />
+				<File Id="_PivotC_pdb" Name="PivotC.pdb" Source="$(var.PPS.TargetDir)" />
+				<File Id="_PPS_dll_config" Name="PPS.dll.config" Source="$(var.PPS.TargetDir)" />
+				<File Id="_ProgressControls_pdb" Name="ProgressControls.pdb" Source="$(var.PPS.TargetDir)" />
+				<File Id="_SpannedDataGridViewNet2_dll" Name="SpannedDataGridViewNet2.dll" Source="$(var.PPS.TargetDir)" />
+				<File Id="_SpannedDataGridViewNet2_pdb" Name="SpannedDataGridViewNet2.pdb" Source="$(var.PPS.TargetDir)" />
+				<File Id="_ZedGraph_xml" Name="ZedGraph.xml" Source="$(var.PPS.TargetDir)" />
+      </Component>
+		</ComponentGroup>
+	</Fragment>
+ </Wix>

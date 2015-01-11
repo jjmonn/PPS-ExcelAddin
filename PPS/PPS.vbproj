@@ -1,0 +1,796 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{94121FCB-87B2-4A75-B902-DC6CF6EA808F}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>PPS</RootNamespace>
+    <AssemblyName>PPS</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <MyType>Windows</MyType>
+    <StartupObject>
+    </StartupObject>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>PPS.snk</AssemblyOriginatorKeyFile>
+    <OptionInfer>On</OptionInfer>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DocumentationFile>
+    </DocumentationFile>
+    <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036</NoWarn>
+    <RegisterForComInterop>true</RegisterForComInterop>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
+    <WarningsAsErrors>42025</WarningsAsErrors>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DocumentationFile>
+    </DocumentationFile>
+    <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036</NoWarn>
+    <WarningsAsErrors>42025</WarningsAsErrors>
+  </PropertyGroup>
+  <ItemGroup>
+    <Import Include="Microsoft.VisualBasic" />
+    <Import Include="System" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="AddinExpress.XL.2005, Version=7.5.4072.2005, Culture=neutral, PublicKeyToken=e69a7e0f3592d2b8, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
+    <Reference Include="GaugeThis">
+      <HintPath>..\..\..\..\..\Google Drive\OPERATIONS DEPARTMENT\Libraries\ProGauge\ProGauge\bin\Debug\GaugeThis.dll</HintPath>
+    </Reference>
+    <Reference Include="JacksonSoft.CustomTabControl">
+      <HintPath>..\..\..\..\..\Google Drive\OPERATIONS DEPARTMENT\Libraries\JacksonSoft.CustomTabControl.dll</HintPath>
+    </Reference>
+    <Reference Include="Office, Version=11.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c">
+      <SpecificVersion>False</SpecificVersion>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+      <HintPath>Interops\Office.dll</HintPath>
+    </Reference>
+    <Reference Include="ProgressControls, Version=1.2.0.0, Culture=neutral, PublicKeyToken=f34d47135ea7baa5, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\Google Drive\OPERATIONS DEPARTMENT\Libraries\CircularProgressIndicator\ProgressIndicator\obj\Debug\ProgressControls.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Windows.Forms.DataVisualization" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="AddinExpress.MSO.2005">
+      <HintPath>C:\Program Files (x86)\Add-in Express\Add-in Express for .NET\Bin\AddinExpress.MSO.2005.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Office.dll">
+      <HintPath>Interops\Office.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Office.Interop.Excel.dll">
+      <HintPath>Interops\Microsoft.Office.Interop.Excel.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="VIBlend.WinForms.Controls, Version=10.0.0.0, Culture=neutral, PublicKeyToken=6feea38fef5ea0cf" />
+    <Reference Include="VIBlend.WinForms.DataGridView, Version=10.0.0.0, Culture=neutral, PublicKeyToken=84a1a092e92851e6, processorArchitecture=MSIL" />
+    <Reference Include="VIBlend.WinForms.Utilities, Version=8.0.0.0, Culture=neutral, PublicKeyToken=970a5af59bc48043" />
+    <Reference Include="ZedGraph">
+      <HintPath>..\..\..\..\..\Google Drive\OPERATIONS DEPARTMENT\Libraries\zedgraph_dll_v5.0.9\ZedGraph.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="Loader\adxloader.dll.manifest" />
+    <!-- <None Include="PPS.snk" /> -->
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AddinModule.vb">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controllers\Utilities\ChartsUtilities.vb" />
+    <Compile Include="Models\CRUDs\Control.vb" />
+    <Compile Include="Models\CRUDs\ControlChart.vb" />
+    <Compile Include="Models\CRUDs\CredentialLevel.vb" />
+    <Compile Include="Models\CRUDs\FModellingAccount.vb" />
+    <Compile Include="Models\CRUDs\User.vb" />
+    <Compile Include="Models\dll Interfaces\FDLL_Interface.vb" />
+    <Compile Include="Models\Mappings\AccountTypesMapping.vb" />
+    <Compile Include="Models\Mappings\ControlOptionsMapping.vb" />
+    <Compile Include="Models\Mappings\ControlsMapping.vb" />
+    <Compile Include="Models\Mappings\FModellingAccountsMapping.vb" />
+    <Compile Include="Models\Mappings\OperatorsMapping.vb" />
+    <Compile Include="Models\Mappings\PalettesMapping.vb" />
+    <Compile Include="Models\Mappings\SeriesMapping.vb" />
+    <Compile Include="Models\Mappings\UsersMapping.vb" />
+    <Compile Include="Modules\CONTROLING UI\Model\CControlingMODEL.vb" />
+    <Compile Include="Modules\CONTROLING UI\Model\CVersionsForControlingUIs.vb" />
+    <Compile Include="Modules\CUBE\CubeView.Designer.vb">
+      <DependentUpon>CubeView.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Modules\CUBE\CubeView.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Modules\FINANCIAL MODELLING\Controller\FModellingExportController.vb" />
+    <Compile Include="Modules\FINANCIAL MODELLING\Controller\FModellingInputsController.vb" />
+    <Compile Include="Modules\FINANCIAL MODELLING\Controller\FModellingSimulationsControler.vb" />
+    <Compile Include="Modules\FINANCIAL MODELLING\Model\Scenario.vb" />
+    <Compile Include="Modules\FINANCIAL MODELLING\View\FModellingUI.Designer.vb">
+      <DependentUpon>FModellingUI.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Modules\FINANCIAL MODELLING\View\FModellingUI.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Modules\LOG\Controller\LogController.vb" />
+    <Compile Include="Modules\LOG\Model\LogModel.vb" />
+    <Compile Include="Modules\LOG\View\LogUI.Designer.vb">
+      <DependentUpon>LogUI.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Modules\LOG\View\LogUI.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Modules\LOG\View\DataHistoryUI.Designer.vb">
+      <DependentUpon>DataHistoryUI.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Modules\LOG\View\DataHistoryUI.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Modules\PLATFORM MANAGEMENT\Controls\Controller\ChartsControlsMGTController.vb" />
+    <Compile Include="Modules\PLATFORM MANAGEMENT\PlatformMGTUI.Designer.vb">
+      <DependentUpon>PlatformMGTUI.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Modules\PLATFORM MANAGEMENT\PlatformMGTUI.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Modules\PLATFORM MANAGEMENT\Versions\Views\NewDataVersionUI.Designer.vb">
+      <DependentUpon>NewDataVersionUI.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Modules\PLATFORM MANAGEMENT\Versions\Views\NewDataVersionUI.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Modules\PLATFORM MANAGEMENT\Controls\Controller\ControlsMGTController.vb" />
+    <Compile Include="Modules\SUBMISSIONS CONTROLS\Controller\SubmissionsControlsController.vb" />
+    <Compile Include="Modules\SUBMISSIONS CONTROLS\Model\SubmissionControlModel.vb" />
+    <Compile Include="Modules\PLATFORM MANAGEMENT\Controls\View\ControlsMGTUI.Designer.vb">
+      <DependentUpon>ControlsMGTUI.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Modules\PLATFORM MANAGEMENT\Controls\View\ControlsMGTUI.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Modules\PLATFORM MANAGEMENT\Controls\View\NewControlUI.Designer.vb">
+      <DependentUpon>NewControlUI.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Modules\PLATFORM MANAGEMENT\Controls\View\NewControlUI.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Modules\SUBMISSIONS CONTROLS\View\SubmissionsControlUI.Designer.vb">
+      <DependentUpon>SubmissionsControlUI.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Modules\SUBMISSIONS CONTROLS\View\SubmissionsControlUI.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Modules\Versions Selection\Controler\DataVersionSelection.vb" />
+    <Compile Include="Modules\Versions Selection\Controler\RatesVersionSelection.vb" />
+    <Compile Include="Modules\PLATFORM MANAGEMENT\Categories\Controller\CategoriesController.vb" />
+    <Compile Include="Modules\PLATFORM MANAGEMENT\Currencies\Views\InputRatesExcel.Designer.vb">
+      <DependentUpon>InputRatesExcel.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Modules\PLATFORM MANAGEMENT\Currencies\Views\InputRatesExcel.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Modules\PLATFORM MANAGEMENT\Users\Views\UsersTGV.vb" />
+    <Compile Include="Modules\REPORTS UPLOAD\CONTROLER\cAcquisitionUIController.vb" />
+    <Compile Include="Modules\REPORTS UPLOAD\CONTROLER\cExcelSubmissionWorksheetController.vb" />
+    <Compile Include="Modules\CONTROLING UI\Controler\CControlingCONTROLER.vb" />
+    <Compile Include="Modules\CONTROLING UI\Controler\CControlingDropOnExcel.vb" />
+    <Compile Include="Modules\CONTROLING UI\View\UploadingHistoryUI.Designer.vb">
+      <DependentUpon>UploadingHistoryUI.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Modules\CONTROLING UI\View\UploadingHistoryUI.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Modules\CUBE\HTTP test.Designer.vb">
+      <DependentUpon>HTTP test.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Modules\CUBE\HTTP test.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Modules\PLATFORM MANAGEMENT\Currencies\Controller\CExchangeRatesCONTROLER.vb" />
+    <Compile Include="Modules\Versions Selection\Controler\VersionSelection.vb" />
+    <Compile Include="Models\CRUDs\Category.vb" />
+    <Compile Include="Models\CRUDs\Entity.vb" />
+    <Compile Include="Models\CRUDs\Version.vb" />
+    <Compile Include="Models\Mappings\Periods.vb" />
+    <Compile Include="Modules\PLATFORM MANAGEMENT\Entities\CONTROLER\EntitiesController.vb" />
+    <Compile Include="Modules\PLATFORM MANAGEMENT\Accounts\Controller\AccountsController.vb" />
+    <Compile Include="Modules\PLATFORM MANAGEMENT\Accounts\Views\NewAccountUI.Designer.vb">
+      <DependentUpon>NewAccountUI.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Modules\PLATFORM MANAGEMENT\Accounts\Views\NewAccountUI.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Controllers\DB Data Transactions\DataModel.vb" />
+    <Compile Include="Models\Computing\GenericSingleEntityComputer.vb" />
+    <Compile Include="Models\CRUDs\Currency.vb" />
+    <Compile Include="Models\CRUDs\ExchangeRate.vb" />
+    <Compile Include="Models\CRUDs\RateVersion.vb" />
+    <Compile Include="Models\Mappings\ExtraDataMapping.vb" />
+    <Compile Include="Models\Mappings\FormulaTypesMapping.vb" />
+    <Compile Include="Transactions\SQLDataViews.vb" />
+    <Compile Include="Transactions\SQLEntitiesViews.vb" />
+    <Compile Include="Transactions\SQLLog.vb" />
+    <Compile Include="Views\PPS Controls\CircularProgressUI.Designer.vb">
+      <DependentUpon>CircularProgressUI.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Views\PPS Controls\CircularProgressUI.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Views\PPS Controls\PBarUI.Designer.vb">
+      <DependentUpon>PBarUI.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Views\PPS Controls\PBarUI.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Views\PPS Controls\ProgressBarControl.Designer.vb">
+      <DependentUpon>ProgressBarControl.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Views\PPS Controls\ProgressBarControl.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="My Project\Settings.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Task Panes\EntitySelectionTP.Designer.vb">
+      <DependentUpon>EntitySelectionTP.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Task Panes\EntitySelectionTP.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Views\Task Panes\CVersionSelectionPane.Designer.vb">
+      <DependentUpon>CVersionSelectionPane.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Task Panes\CVersionSelectionPane.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Views\Task Panes\CInputSelectionPane.Designer.vb">
+      <DependentUpon>CInputSelectionPane.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Task Panes\CInputSelectionPane.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ExcelAddinModule1.vb">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="EXTERNAL\cDataGridView.vb" />
+    <Compile Include="EXTERNAL\DataGridViewCustom.vb" />
+    <Compile Include="EXTERNAL\DataGridViewDisableButtonCell.vb" />
+    <Compile Include="EXTERNAL\DataGridViewDisableButtonColumn.vb" />
+    <Compile Include="GLOBAL\Constants Connection.vb" />
+    <Compile Include="GLOBAL\Constants.vb" />
+    <Compile Include="GLOBAL\Constants Data Tables.vb" />
+    <Compile Include="GLOBAL\Constants Display.vb" />
+    <Compile Include="GLOBAL\GLOBAL VARIABLES.vb" />
+    <Compile Include="Modules\CONNECTIONS\Views\ChangePasswordUI.Designer.vb">
+      <DependentUpon>ChangePasswordUI.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Modules\CONNECTIONS\Views\ChangePasswordUI.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Modules\CONNECTIONS\Views\ConnectionUI.Designer.vb">
+      <DependentUpon>ConnectionUI.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Modules\CONNECTIONS\Views\ConnectionUI.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Modules\CONNECTIONS\Models\SMTPConnection.vb" />
+    <Compile Include="Transactions\SQLCredentials.vb" />
+    <Compile Include="Controllers\DB Data Transactions\DataBaseDataUploader.vb" />
+    <Compile Include="Controllers\GloablInstancesRestartModule.vb" />
+    <Compile Include="Modules\PLATFORM MANAGEMENT\Currencies\Views\RatesView.vb" />
+    <Compile Include="Modules\PLATFORM MANAGEMENT\Entities\VIEW\NewEntityUI.Designer.vb">
+      <DependentUpon>NewEntityUI.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Modules\PLATFORM MANAGEMENT\Entities\VIEW\NewEntityUI.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Modules\PLATFORM MANAGEMENT\Settings\SettingMainUI.Designer.vb">
+      <DependentUpon>SettingMainUI.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Modules\PLATFORM MANAGEMENT\Settings\SettingMainUI.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Models\dll Interfaces\DLL3_Interface.vb" />
+    <Compile Include="Models\Mappings\CategoriesMapping.vb" />
+    <Compile Include="Models\Mappings\ExchangeRatesMapping.vb" />
+    <Compile Include="Models\Mappings\RateVersionsMapping.vb" />
+    <Compile Include="Models\Mappings\ConfigPrivilegesMapping.vb" />
+    <Compile Include="Models\Mappings\CredentialsLevelsMapping.vb" />
+    <Compile Include="Models\Mappings\CredentialsTypesMapping.vb" />
+    <Compile Include="Models\Mappings\CurrenciesMapping.vb" />
+    <Compile Include="Modules\PLATFORM MANAGEMENT\Users\Views\NewUserUI.Designer.vb">
+      <DependentUpon>NewUserUI.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Modules\PLATFORM MANAGEMENT\Users\Views\NewUserUI.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Transactions\SQLEntities.vb" />
+    <Compile Include="Modules\PLATFORM MANAGEMENT\Entities\VIEW\EntitiesDGV.vb" />
+    <Compile Include="Controllers\Utilities\PasswordGenerator.vb" />
+    <Compile Include="Transactions\SQLPrivileges.vb" />
+    <Compile Include="Modules\PLATFORM MANAGEMENT\Users\Controller\UsersController.vb" />
+    <Compile Include="Modules\PLATFORM MANAGEMENT\Users\Views\EntitySelectionForUsersMGT.Designer.vb">
+      <DependentUpon>EntitySelectionForUsersMGT.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Modules\PLATFORM MANAGEMENT\Users\Views\EntitySelectionForUsersMGT.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Modules\PLATFORM MANAGEMENT\Users\Views\UsersManagementUI.Designer.vb">
+      <DependentUpon>UsersManagementUI.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Modules\PLATFORM MANAGEMENT\Users\Views\UsersManagementUI.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Modules\PLATFORM MANAGEMENT\Categories\Views\CategoriesManagementUI.Designer.vb">
+      <DependentUpon>CategoriesManagementUI.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Modules\PLATFORM MANAGEMENT\Categories\Views\CategoriesManagementUI.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Modules\Versions Selection\Views\VersionSelectionUI.Designer.vb">
+      <DependentUpon>VersionSelectionUI.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Modules\Versions Selection\Views\VersionSelectionUI.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Models\Mappings\AccountsMapping.vb" />
+    <Compile Include="Modules\PLATFORM MANAGEMENT\Versions\Controller\DataVersionsController.vb" />
+    <Compile Include="Models\Mappings\VersionsMapping.vb" />
+    <Compile Include="Models\Mappings\FormatsMapping.vb" />
+    <Compile Include="Models\Mappings\EntitiesMapping.vb" />
+    <Compile Include="Controllers\DB Data Transactions\DataBaseDataDownloader.vb" />
+    <Compile Include="Modules\CONNECTIONS\Models\ModelServer.vb" />
+    <Compile Include="Models\Computing\CRefreshGetDataBatch.vb" />
+    <Compile Include="Modules\PPSBI\PPSBIUI.Designer.vb">
+      <DependentUpon>PPSBIUI.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Modules\PPSBI\PPSBIUI.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Controllers\Data Acquisition\SimpleDisplaySnapshotUI.Designer.vb">
+      <DependentUpon>SimpleDisplaySnapshotUI.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Controllers\Data Acquisition\SimpleDisplaySnapshotUI.vb" />
+    <Compile Include="Controllers\Data Acquisition\MultipleSheetsAcquisition.Designer.vb">
+      <DependentUpon>MultipleSheetsAcquisition.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Controllers\Data Acquisition\MultipleSheetsAcquisition.vb" />
+    <Compile Include="Modules\REPORTS UPLOAD\VIEW\ManualRangesSelectionUI.Designer.vb">
+      <DependentUpon>ManualRangesSelectionUI.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Modules\REPORTS UPLOAD\VIEW\ManualRangesSelectionUI.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Modules\PLATFORM MANAGEMENT\Versions\Views\VersioningManagementUI.Designer.vb">
+      <DependentUpon>VersioningManagementUI.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Modules\PLATFORM MANAGEMENT\Versions\Views\VersioningManagementUI.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Transactions\SQLVersions.vb" />
+    <Compile Include="Models\Computing\EntitiesSelectionBuilderClass.vb" />
+    <Compile Include="Models\Computing\ModelFormulasMGT.vb" />
+    <Compile Include="Controllers\CredentialsController.vb" />
+    <Compile Include="Controllers\ViewsController.vb" />
+    <Compile Include="Modules\CONTROLING UI\View\ControllingUI_2.Designer.vb">
+      <DependentUpon>ControllingUI_2.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Modules\CONTROLING UI\View\ControllingUI_2.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Modules\PLATFORM MANAGEMENT\Currencies\Views\CurrenciesManagementUI.Designer.vb">
+      <DependentUpon>CurrenciesManagementUI.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Modules\PLATFORM MANAGEMENT\Currencies\Views\CurrenciesManagementUI.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Modules\PLATFORM MANAGEMENT\Accounts\Views\AccountsMGT_UI.Designer.vb">
+      <DependentUpon>AccountsMGT_UI.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Modules\PLATFORM MANAGEMENT\Accounts\Views\AccountsMGT_UI.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Views\Utilities\ExcelEntitiesReportFormatting.vb" />
+    <Compile Include="Controllers\Utilities\DataGridViewsUtil.vb" />
+    <Compile Include="Modules\PLATFORM MANAGEMENT\Entities\VIEW\EntitiesManagementUI.Designer.vb">
+      <DependentUpon>EntitiesManagementUI.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Modules\PLATFORM MANAGEMENT\Entities\VIEW\EntitiesManagementUI.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Modules\REPORTS UPLOAD\CONTROLER\CGeneralReportSubmissionControler.vb" />
+    <Compile Include="Modules\REPORTS UPLOAD\VIEW\AcquisitionUI.Designer.vb">
+      <DependentUpon>AcquisitionUI.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Modules\REPORTS UPLOAD\VIEW\AcquisitionUI.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Modules\REPORTS UPLOAD\VIEW\StatusReportInterfaceUI.Designer.vb">
+      <DependentUpon>StatusReportInterfaceUI.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Modules\REPORTS UPLOAD\VIEW\StatusReportInterfaceUI.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Modules\REPORTS UPLOAD\MODEL\CAcquisitionModel.vb" />
+    <Compile Include="Modules\REPORTS UPLOAD\MODEL\CDataModificationsTracking.vb" />
+    <Compile Include="Modules\REPORTS UPLOAD\MODEL\CModelDataSet.vb" />
+    <Compile Include="Models\CRUDs\Account.vb" />
+    <Compile Include="Modules\CONNECTIONS\Connections_Functions.vb" />
+    <Compile Include="Controllers\Utilities\DataTables_Functions.vb" />
+    <Compile Include="Controllers\Utilities\cTreeViews_Functions.vb" />
+    <Compile Include="Controllers\Utilities\Utilities_Functions.vb" />
+    <Compile Include="Views\Utilities\CExcelFormatting.vb" />
+    <Compile Include="Modules\REPORTS UPLOAD\VIEW\CRangeHighlighter.vb" />
+    <Compile Include="Views\Utilities\UIs Events\CDGVEvents.vb" />
+    <Compile Include="Views\Utilities\UIs Events\ControlButtonsHover.vb" />
+    <Compile Include="Views\Utilities\UIs Events\FormsMove.vb" />
+    <Compile Include="Views\Utilities\UIs Events\Panel1.vb" />
+    <Compile Include="Views\Utilities\UIs Events\DragAndDrop.vb" />
+    <Compile Include="Views\Utilities\CWorksheetWrittingFunctions.vb" />
+    <Compile Include="My Project\AssemblyInfo.vb" />
+    <Compile Include="My Project\Resources.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Modules\PPSBI\cPPSBIControl.vb" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="AddinModule.resx">
+      <DependentUpon>AddinModule.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Modules\CONTROLING UI\View\UploadingHistoryUI.resx">
+      <DependentUpon>UploadingHistoryUI.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Modules\CUBE\CubeView.resx">
+      <DependentUpon>CubeView.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Modules\CUBE\HTTP test.resx">
+      <DependentUpon>HTTP test.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Modules\FINANCIAL MODELLING\View\FModellingUI.resx">
+      <DependentUpon>FModellingUI.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Modules\LOG\View\LogUI.resx">
+      <DependentUpon>LogUI.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Modules\LOG\View\DataHistoryUI.resx">
+      <DependentUpon>DataHistoryUI.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Modules\PLATFORM MANAGEMENT\Currencies\Views\InputRatesExcel.resx">
+      <DependentUpon>InputRatesExcel.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Modules\PLATFORM MANAGEMENT\Accounts\Views\NewAccountUI.resx">
+      <DependentUpon>NewAccountUI.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Modules\PLATFORM MANAGEMENT\PlatformMGTUI.resx">
+      <DependentUpon>PlatformMGTUI.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Modules\PLATFORM MANAGEMENT\Versions\Views\NewDataVersionUI.resx">
+      <DependentUpon>NewDataVersionUI.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Modules\PLATFORM MANAGEMENT\Controls\View\ControlsMGTUI.resx">
+      <DependentUpon>ControlsMGTUI.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Modules\PLATFORM MANAGEMENT\Controls\View\NewControlUI.resx">
+      <DependentUpon>NewControlUI.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Modules\SUBMISSIONS CONTROLS\View\SubmissionsControlUI.resx">
+      <DependentUpon>SubmissionsControlUI.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\PPS Controls\CircularProgressUI.resx">
+      <DependentUpon>CircularProgressUI.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\PPS Controls\PBarUI.resx">
+      <DependentUpon>PBarUI.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\PPS Controls\ProgressBarControl.resx">
+      <DependentUpon>ProgressBarControl.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\Task Panes\EntitySelectionTP.resx">
+      <DependentUpon>EntitySelectionTP.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\Task Panes\CVersionSelectionPane.resx">
+      <DependentUpon>CVersionSelectionPane.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\Task Panes\CInputSelectionPane.resx">
+      <DependentUpon>CInputSelectionPane.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ExcelAddinModule1.resx">
+      <DependentUpon>ExcelAddinModule1.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Modules\CONNECTIONS\Views\ChangePasswordUI.resx">
+      <DependentUpon>ChangePasswordUI.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Modules\CONNECTIONS\Views\ConnectionUI.resx">
+      <DependentUpon>ConnectionUI.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Modules\PLATFORM MANAGEMENT\Entities\VIEW\NewEntityUI.resx">
+      <DependentUpon>NewEntityUI.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Modules\PLATFORM MANAGEMENT\Users\Views\EntitySelectionForUsersMGT.resx">
+      <DependentUpon>EntitySelectionForUsersMGT.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Modules\PLATFORM MANAGEMENT\Users\Views\NewUserUI.resx">
+      <DependentUpon>NewUserUI.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Modules\PLATFORM MANAGEMENT\Users\Views\UsersManagementUI.resx">
+      <DependentUpon>UsersManagementUI.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Modules\PLATFORM MANAGEMENT\Settings\SettingMainUI.resx">
+      <DependentUpon>SettingMainUI.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Modules\PPSBI\PPSBIUI.resx">
+      <DependentUpon>PPSBIUI.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controllers\Data Acquisition\SimpleDisplaySnapshotUI.resx">
+      <DependentUpon>SimpleDisplaySnapshotUI.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controllers\Data Acquisition\MultipleSheetsAcquisition.resx">
+      <DependentUpon>MultipleSheetsAcquisition.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Modules\REPORTS UPLOAD\VIEW\ManualRangesSelectionUI.resx">
+      <DependentUpon>ManualRangesSelectionUI.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Modules\PLATFORM MANAGEMENT\Categories\Views\CategoriesManagementUI.resx">
+      <DependentUpon>CategoriesManagementUI.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Modules\PLATFORM MANAGEMENT\Versions\Views\VersioningManagementUI.resx">
+      <DependentUpon>VersioningManagementUI.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Modules\Versions Selection\Views\VersionSelectionUI.resx">
+      <DependentUpon>VersionSelectionUI.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Modules\CONTROLING UI\View\ControllingUI_2.resx">
+      <DependentUpon>ControllingUI_2.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Modules\PLATFORM MANAGEMENT\Currencies\Views\CurrenciesManagementUI.resx">
+      <DependentUpon>CurrenciesManagementUI.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Modules\PLATFORM MANAGEMENT\Accounts\Views\AccountsMGT_UI.resx">
+      <DependentUpon>AccountsMGT_UI.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Modules\PLATFORM MANAGEMENT\Entities\VIEW\EntitiesManagementUI.resx">
+      <DependentUpon>EntitiesManagementUI.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="My Project\Resources.resx">
+      <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
+      <CustomToolNamespace>My.Resources</CustomToolNamespace>
+      <SubType>Designer</SubType>
+      <LastGenOutput>Resources.Designer.vb</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Modules\REPORTS UPLOAD\VIEW\AcquisitionUI.resx">
+      <DependentUpon>AcquisitionUI.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Modules\REPORTS UPLOAD\VIEW\StatusReportInterfaceUI.resx">
+      <DependentUpon>StatusReportInterfaceUI.vb</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\entity icon 3.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="My Project\Application.myapp">
+      <Generator>MyApplicationCodeGenerator</Generator>
+    </None>
+    <None Include="My Project\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <CustomToolNamespace>My</CustomToolNamespace>
+      <LastGenOutput>Settings.Designer.vb</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Loop blue.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\entity icon 3 small.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\holding2 icon.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\entity icon 3 small1.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\BT BCKGD.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\BT BCKGD Green BCK control.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\BT BCGD BLUE ctrl bckd.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\background blue.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\light-blue-pattern-background.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\blue-backgrounds_00396566.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ACF Square 2 .1Control bgd.png" />
+    <None Include="Resources\ACF Square 2 Control bgd.png" />
+    <None Include="Resources\step00.gif" />
+    <None Include="Resources\apple-button-slice_13.gif" />
+    <None Include="Resources\small bars 64-64.ico" />
+    <None Include="Resources\small bars 32-32.ico" />
+    <None Include="Resources\small bars.ico" />
+    <None Include="Resources\Bars 64-64.bmp" />
+    <None Include="Resources\Bars 16-16.ico" />
+    <None Include="Resources\favicon%2855%29.ico" />
+    <None Include="Resources\add2.ico" />
+    <None Include="Resources\favicon%2857%29.ico" />
+    <None Include="Resources\favicon%2856%29.ico" />
+    <None Include="Resources\Close transp.ico" />
+    <None Include="Resources\favicon%2853%29.ico" />
+    <None Include="Resources\favicon%2852%29.ico" />
+    <None Include="Resources\favicon%2851%29.ico" />
+    <None Include="Resources\favicon%2848%29.ico" />
+    <None Include="Resources\favicon%2847%29.ico" />
+    <None Include="Resources\favicon%2846%29.ico" />
+    <None Include="Resources\Benjigarner-Softdimension-Excel1.ico" />
+    <None Include="Resources\favicon%2838%29.ico" />
+    <None Include="Resources\APPS ICON.ico" />
+    <None Include="Resources\favicon%2836%29.ico" />
+    <None Include="Resources\favicon%2835%29.ico" />
+    <None Include="Resources\favicon%2834%29.ico" />
+    <None Include="Resources\favicon%2832%29.ico" />
+    <None Include="Resources\favicon%2825%29.ico" />
+    <None Include="Resources\favicon%2819%29.ico" />
+    <None Include="Resources\favicon%2818%29.ico" />
+    <None Include="Resources\favicon%2817%29.ico" />
+    <None Include="Resources\simple-gray-button-hi.png" />
+    <None Include="Resources\grayButton.bmp" />
+    <None Include="Resources\imageres_891.ico" />
+    <None Include="Resources\page_add2.ico" />
+    <None Include="Resources\add1.ico" />
+    <None Include="Resources\Benjigarner-Softdimension-Excel.ico" />
+    <None Include="Resources\plus 2 small.jpg" />
+    <None Include="Resources\page_add1.ico" />
+    <None Include="Resources\add.ico" />
+    <None Include="Resources\add2.jpg" />
+    <None Include="Resources\page_add.ico" />
+    <None Include="Resources\notebook_add.ico" />
+    <None Include="Resources\imageres_89.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{94E38DFF-614B-4CBD-B67C-F211BB35CE8B}" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\favicon%2865%29.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <COMReference Include="ADODB">
+      <Guid>{B691E011-1797-432E-907A-4D8C69339129}</Guid>
+      <VersionMajor>6</VersionMajor>
+      <VersionMinor>1</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>tlbimp</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+    <COMReference Include="WinHttp">
+      <Guid>{662901FC-6951-4854-9EB2-D9A2570F2B2E}</Guid>
+      <VersionMajor>5</VersionMajor>
+      <VersionMinor>1</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>tlbimp</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\favicon %2847%29.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\refresh0.1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\refresh greay bcgd.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Report.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\checked.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\folder2.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\images.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\minimize blue source 3.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\add.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\add2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\imageres_59.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\down arrow.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\favicon%28226%29.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Download .jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Add file.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\favicon%28232%29.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\constraint.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Refresh2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\arrow 1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\graph 5 ctrl bgd.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\favicon%28217%29.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\favicon%28220%29.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\1_Earth_%28blank_2%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\favicon%28233%29.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\favicon%28188%29.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\favicon%28239%29.ico" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildBinPath)\Microsoft.VisualBasic.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
