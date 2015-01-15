@@ -109,6 +109,7 @@
     <Compile Include="Models\CRUDs\FModellingAccount.vb" />
     <Compile Include="Models\CRUDs\User.vb" />
     <Compile Include="Models\dll Interfaces\FDLL_Interface.vb" />
+    <Compile Include="Models\dll Interfaces\PSDLLL_Interface.vb" />
     <Compile Include="Models\Mappings\AccountTypesMapping.vb" />
     <Compile Include="Models\Mappings\ControlOptionsMapping.vb" />
     <Compile Include="Models\Mappings\ControlsMapping.vb" />

@@ -95,7 +95,7 @@ Partial Class HTTP_test
         Me.Button2.Name = "Button2"
         Me.Button2.Size = New System.Drawing.Size(107, 26)
         Me.Button2.TabIndex = 0
-        Me.Button2.Text = "Launch FDLL Test"
+        Me.Button2.Text = "Launch PSDLL Test"
         Me.Button2.UseVisualStyleBackColor = True
         '
         'Panel1
