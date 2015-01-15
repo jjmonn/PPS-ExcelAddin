@@ -471,15 +471,30 @@ Module Data_Tables_Constants
     Friend Const OPERATIONAL_UNITS_TABLE As String = "operational_units"
     Friend Const OPERATIONAL_UNITS_ID_VARIABLE As String = "id"
 
-
-
+    Friend Const OPERATIONAL_UNITS_CONVERSION_TABLE As String = "operational_unit_conversions"
+    Friend Const OPERATIONAL_UNITS_CONVERSION_ID_VAR As String = "id"
+    Friend Const OPERATIONAL_UNITS_CONVERSION_RATE_VAR As String = "rate"
 
 #End Region
 
 
 #Region "Market Indexes"
 
+    Friend Const MARKET_INDEXES_TABLE As String ="market_indexes"
+    Friend Const MARKET_INDEXES_ID_VARIABLE As String = "id"
 
+    Friend Const MARKET_INDEXES_PRICES_TABLE As String = "market_index_prices"
+    Friend Const MARKET_INDEXES_PRICES_ID_VAR As String = "id"
+    Friend Const MARKET_INDEXES_PRICES_VERSION_VAR As String = "version_id"
+    Friend Const MARKET_INDEXES_PRICES_PERIOD_VAR As String = "period"
+    Friend Const MARKET_INDEXES_PRICES_VALUE_VAR As String = "value"
+
+    Friend Const MARKET_INDEXES_VERSIONS_TABLE As String = "market_index_versions"
+    Friend Const MARKET_INDEXES_VERSIONS_ID_VAR As String = "id"
+    Friend Const MARKET_INDEXES_VERSIONS_PARENT_ID_VAR As String = "parent_id"
+    Friend Const MARKET_INDEXES_VERSIONS_NAME_VAR As String = "is_folder"
+    Friend Const MARKET_INDEXES_VERSIONS_IS_FOLER_VAR As String = "market_index_versions"
+  
 
 #End Region
 

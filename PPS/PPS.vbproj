@@ -146,6 +146,9 @@
     <Compile Include="Modules\GDF SUEZ - ALTERNATIVE SCENARIOS\View\ConfigurationPanel.vb">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Modules\GDF SUEZ - ALTERNATIVE SCENARIOS\View\MarketPricesPanel.vb">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Modules\LOG\Controller\LogController.vb" />
     <Compile Include="Modules\LOG\Model\LogModel.vb" />
     <Compile Include="Modules\LOG\View\LogUI.Designer.vb">
