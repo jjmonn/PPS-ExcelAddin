@@ -25,6 +25,8 @@ Module Data_Tables_Constants
     Friend Const CONFIG_DATABASE As String = "ACF_Config"
 
 
+#Region "Operational and Financials Items"
+
 #Region "Accounts Table"
 
     ' Accounts table
@@ -58,7 +60,6 @@ Module Data_Tables_Constants
 
 #End Region
 
-
 #Region "Accounts Types DataTable"
 
     Friend Const ACCOUNT_TYPE_TABLE = "account_types"
@@ -71,6 +72,35 @@ Module Data_Tables_Constants
 
 #End Region
 
+#Region "Formula Types Tables"
+
+    Friend Const FORMULA_TYPES_TABLE As String = "formula_types"
+    Friend Const FORMULA_TYPES_CODE_VARIABLE As String = "formula_type_code"
+    Friend Const FORMULA_TYPES_NAME_VARIABLE As String = "formula_type_name"
+    Friend Const FORMULA_TYPES_MODEL_CODE As String = "formula_type_model_code"
+    Friend Const FORMULA_TYPES_MODEL_INCLUSION As String = "included_in_modeling"
+    Friend Const FORMULA_TYPES_MUST_HAVE_F As String = "must_contain_formula"
+
+    ' constant to be stored in extra data table -> below = STUB !!
+    Friend Const DEFAULT_F_TYPE_ACC_CREATION As String = "Hard Value Input"
+    Friend Const AGGREGATION_F_TYPE_CODE As String = "SOAC"
+    Friend Const HARD_VALUE_F_TYPE_CODE As String = "HV"
+
+#End Region
+
+#Region "Account reference table"
+
+    Friend Const ACCOUNTS_REFERENCES_TABLE = "accounts_references"
+    Friend Const ACCOUNTS_REFERENCES_ID_VARIABLE = "acc_ref_ID"
+    Friend Const ACCOUNTS_REFERENCES_WORD_VARIABLE = "acc_Ref_Desc"
+
+#End Region
+
+
+#End Region
+
+
+#Region "Users and credentials"
 
 #Region "Credentials Type Table"
 
@@ -172,6 +202,8 @@ Module Data_Tables_Constants
 
 #End Region
 
+#End Region
+
 
 #Region "Categories Table"
 
@@ -206,6 +238,8 @@ Module Data_Tables_Constants
 
 #End Region
 
+
+#Region "Forex"
 
 #Region "Currencies Table"
 
@@ -258,6 +292,8 @@ Module Data_Tables_Constants
 
 #End Region
 
+#End Region
+
 
 #Region "ExtraData table"
 
@@ -300,23 +336,6 @@ Module Data_Tables_Constants
 #End Region
 
 
-#Region "Formula Types Tables"
-
-    Friend Const FORMULA_TYPES_TABLE As String = "formula_types"
-    Friend Const FORMULA_TYPES_CODE_VARIABLE As String = "formula_type_code"
-    Friend Const FORMULA_TYPES_NAME_VARIABLE As String = "formula_type_name"
-    Friend Const FORMULA_TYPES_MODEL_CODE As String = "formula_type_model_code"
-    Friend Const FORMULA_TYPES_MODEL_INCLUSION As String = "included_in_modeling"
-    Friend Const FORMULA_TYPES_MUST_HAVE_F As String = "must_contain_formula"
-
-    ' constant to be stored in extra data table -> below = STUB !!
-    Friend Const DEFAULT_F_TYPE_ACC_CREATION As String = "Hard Value Input"
-    Friend Const AGGREGATION_F_TYPE_CODE As String = "SOAC"
-    Friend Const HARD_VALUE_F_TYPE_CODE As String = "HV"
-
-#End Region
-
-
 #Region "Versioning Table"
 
     Friend Const VERSIONS_TABLE = "versions"
@@ -349,15 +368,6 @@ Module Data_Tables_Constants
     ' 
     ' VIEWS : no views
 
-
-#End Region
-
-
-#Region "Account reference table"
-
-    Friend Const ACCOUNTS_REFERENCES_TABLE = "accounts_references"
-    Friend Const ACCOUNTS_REFERENCES_ID_VARIABLE = "acc_ref_ID"
-    Friend Const ACCOUNTS_REFERENCES_WORD_VARIABLE = "acc_Ref_Desc"
 
 #End Region
 
@@ -416,6 +426,8 @@ Module Data_Tables_Constants
 #End Region
 
 
+#Region "Charts"
+
 #Region "Charts (Control)"
 
     Friend Const CONTROL_CHART_TABLE As String = "control_charts"
@@ -447,6 +459,26 @@ Module Data_Tables_Constants
 
     Friend Const PALETTES_TABLE As String = "palettes"
     Friend Const PALETTES_ID_VARIABLES As String = "id"
+
+
+#End Region
+
+#End Region
+
+
+#Region "Operational Items Conversions"
+
+    Friend Const OPERATIONAL_UNITS_TABLE As String = "operational_units"
+    Friend Const OPERATIONAL_UNITS_ID_VARIABLE As String = "id"
+
+
+
+
+#End Region
+
+
+#Region "Market Indexes"
+
 
 
 #End Region

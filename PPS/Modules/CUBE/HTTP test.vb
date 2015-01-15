@@ -85,7 +85,7 @@ Friend Class HTTP_test
         PSDLL.Compute(volumes, base_revenues, tax_rates)
 
         Dim results = PSDLL.GetResultsDict()
-
+        
     End Sub
 
 
