@@ -157,7 +157,7 @@ Partial Class FModellingUI
         Me.TabControl1.Margin = New System.Windows.Forms.Padding(1)
         Me.TabControl1.Name = "TabControl1"
         Me.TabControl1.SelectedIndex = 0
-        Me.TabControl1.Size = New System.Drawing.Size(1320, 611)
+        Me.TabControl1.Size = New System.Drawing.Size(722, 611)
         Me.TabControl1.TabIndex = 8
         '
         'TabPage1
@@ -167,7 +167,7 @@ Partial Class FModellingUI
         Me.TabPage1.Location = New System.Drawing.Point(4, 23)
         Me.TabPage1.Name = "TabPage1"
         Me.TabPage1.Padding = New System.Windows.Forms.Padding(3)
-        Me.TabPage1.Size = New System.Drawing.Size(1312, 584)
+        Me.TabPage1.Size = New System.Drawing.Size(714, 584)
         Me.TabPage1.TabIndex = 0
         Me.TabPage1.Text = "Inputs"
         '
@@ -200,26 +200,26 @@ Partial Class FModellingUI
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 36.0!))
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 38.25174!))
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 5.006773!))
-        Me.TableLayoutPanel1.Size = New System.Drawing.Size(1306, 578)
+        Me.TableLayoutPanel1.Size = New System.Drawing.Size(708, 578)
         Me.TableLayoutPanel1.TabIndex = 11
         '
         'MappingDGVPanel
         '
         Me.MappingDGVPanel.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.MappingDGVPanel.Location = New System.Drawing.Point(645, 48)
+        Me.MappingDGVPanel.Location = New System.Drawing.Point(348, 48)
         Me.MappingDGVPanel.Margin = New System.Windows.Forms.Padding(0)
         Me.MappingDGVPanel.Name = "MappingDGVPanel"
-        Me.MappingDGVPanel.Size = New System.Drawing.Size(617, 280)
+        Me.MappingDGVPanel.Size = New System.Drawing.Size(334, 280)
         Me.MappingDGVPanel.TabIndex = 14
         '
         'Panel6
         '
         Me.Panel6.Controls.Add(Me.Label4)
         Me.Panel6.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Panel6.Location = New System.Drawing.Point(645, 20)
+        Me.Panel6.Location = New System.Drawing.Point(348, 20)
         Me.Panel6.Margin = New System.Windows.Forms.Padding(0)
         Me.Panel6.Name = "Panel6"
-        Me.Panel6.Size = New System.Drawing.Size(617, 28)
+        Me.Panel6.Size = New System.Drawing.Size(334, 28)
         Me.Panel6.TabIndex = 13
         '
         'Label4
@@ -237,10 +237,10 @@ Partial Class FModellingUI
         Me.Panel5.Controls.Add(Me.Label3)
         Me.Panel5.Controls.Add(Me.LaunchConsoBT)
         Me.Panel5.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Panel5.Location = New System.Drawing.Point(645, 328)
+        Me.Panel5.Location = New System.Drawing.Point(348, 328)
         Me.Panel5.Margin = New System.Windows.Forms.Padding(0)
         Me.Panel5.Name = "Panel5"
-        Me.Panel5.Size = New System.Drawing.Size(617, 36)
+        Me.Panel5.Size = New System.Drawing.Size(334, 36)
         Me.Panel5.TabIndex = 12
         '
         'Label3
@@ -276,9 +276,9 @@ Partial Class FModellingUI
         'InputsDGVPanel
         '
         Me.InputsDGVPanel.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.InputsDGVPanel.Location = New System.Drawing.Point(648, 367)
+        Me.InputsDGVPanel.Location = New System.Drawing.Point(351, 367)
         Me.InputsDGVPanel.Name = "InputsDGVPanel"
-        Me.InputsDGVPanel.Size = New System.Drawing.Size(611, 182)
+        Me.InputsDGVPanel.Size = New System.Drawing.Size(328, 182)
         Me.InputsDGVPanel.TabIndex = 7
         '
         'Panel4
@@ -286,10 +286,10 @@ Partial Class FModellingUI
         Me.Panel4.Controls.Add(Me.Label5)
         Me.Panel4.Controls.Add(Me.ValidateInputsBT)
         Me.Panel4.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Panel4.Location = New System.Drawing.Point(645, 552)
+        Me.Panel4.Location = New System.Drawing.Point(348, 552)
         Me.Panel4.Margin = New System.Windows.Forms.Padding(0)
         Me.Panel4.Name = "Panel4"
-        Me.Panel4.Size = New System.Drawing.Size(617, 26)
+        Me.Panel4.Size = New System.Drawing.Size(334, 26)
         Me.Panel4.TabIndex = 11
         '
         'Label5
@@ -333,34 +333,34 @@ Partial Class FModellingUI
         '
         Me.EntitiesTVPanel.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
             Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.EntitiesTVPanel.Location = New System.Drawing.Point(344, 51)
+        Me.EntitiesTVPanel.Location = New System.Drawing.Point(187, 51)
         Me.EntitiesTVPanel.Name = "EntitiesTVPanel"
-        Me.EntitiesTVPanel.Size = New System.Drawing.Size(240, 274)
+        Me.EntitiesTVPanel.Size = New System.Drawing.Size(158, 274)
         Me.EntitiesTVPanel.TabIndex = 9
         '
         'VersionsTVpanel
         '
         Me.VersionsTVpanel.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
             Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.VersionsTVpanel.Location = New System.Drawing.Point(52, 51)
+        Me.VersionsTVpanel.Location = New System.Drawing.Point(29, 51)
         Me.VersionsTVpanel.Name = "VersionsTVpanel"
-        Me.VersionsTVpanel.Size = New System.Drawing.Size(240, 274)
+        Me.VersionsTVpanel.Size = New System.Drawing.Size(152, 274)
         Me.VersionsTVpanel.TabIndex = 0
         '
         'Label6
         '
         Me.Label6.AutoSize = True
-        Me.Label6.Location = New System.Drawing.Point(344, 26)
+        Me.Label6.Location = New System.Drawing.Point(187, 26)
         Me.Label6.Margin = New System.Windows.Forms.Padding(3, 6, 3, 0)
         Me.Label6.Name = "Label6"
-        Me.Label6.Size = New System.Drawing.Size(178, 13)
+        Me.Label6.Size = New System.Drawing.Size(140, 22)
         Me.Label6.TabIndex = 10
         Me.Label6.Text = "2. Select the Entity Level to work on"
         '
         'Label2
         '
         Me.Label2.AutoSize = True
-        Me.Label2.Location = New System.Drawing.Point(52, 26)
+        Me.Label2.Location = New System.Drawing.Point(29, 26)
         Me.Label2.Margin = New System.Windows.Forms.Padding(3, 6, 3, 0)
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(132, 13)
@@ -369,16 +369,16 @@ Partial Class FModellingUI
         '
         'EntityTB
         '
-        Me.EntityTB.Location = New System.Drawing.Point(344, 331)
+        Me.EntityTB.Location = New System.Drawing.Point(187, 331)
         Me.EntityTB.Name = "EntityTB"
-        Me.EntityTB.Size = New System.Drawing.Size(240, 20)
+        Me.EntityTB.Size = New System.Drawing.Size(158, 20)
         Me.EntityTB.TabIndex = 15
         '
         'VersionTB
         '
-        Me.VersionTB.Location = New System.Drawing.Point(52, 331)
+        Me.VersionTB.Location = New System.Drawing.Point(29, 331)
         Me.VersionTB.Name = "VersionTB"
-        Me.VersionTB.Size = New System.Drawing.Size(240, 20)
+        Me.VersionTB.Size = New System.Drawing.Size(152, 20)
         Me.VersionTB.TabIndex = 16
         '
         'TabPage2
@@ -388,7 +388,7 @@ Partial Class FModellingUI
         Me.TabPage2.Location = New System.Drawing.Point(4, 23)
         Me.TabPage2.Name = "TabPage2"
         Me.TabPage2.Padding = New System.Windows.Forms.Padding(3)
-        Me.TabPage2.Size = New System.Drawing.Size(1312, 584)
+        Me.TabPage2.Size = New System.Drawing.Size(714, 584)
         Me.TabPage2.TabIndex = 1
         Me.TabPage2.Text = "Simulations"
         '
@@ -405,8 +405,8 @@ Partial Class FModellingUI
         'SplitContainer1.Panel2
         '
         Me.SplitContainer1.Panel2.Controls.Add(Me.SplitContainer2)
-        Me.SplitContainer1.Size = New System.Drawing.Size(1306, 578)
-        Me.SplitContainer1.SplitterDistance = 205
+        Me.SplitContainer1.Size = New System.Drawing.Size(708, 578)
+        Me.SplitContainer1.SplitterDistance = 111
         Me.SplitContainer1.TabIndex = 0
         '
         'LeftPanel
@@ -422,7 +422,7 @@ Partial Class FModellingUI
         Me.LeftPanel.RowCount = 2
         Me.LeftPanel.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 26.0!))
         Me.LeftPanel.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.LeftPanel.Size = New System.Drawing.Size(205, 578)
+        Me.LeftPanel.Size = New System.Drawing.Size(111, 578)
         Me.LeftPanel.TabIndex = 0
         '
         'Panel3
@@ -435,7 +435,7 @@ Partial Class FModellingUI
         Me.Panel3.Location = New System.Drawing.Point(1, 1)
         Me.Panel3.Margin = New System.Windows.Forms.Padding(1)
         Me.Panel3.Name = "Panel3"
-        Me.Panel3.Size = New System.Drawing.Size(203, 24)
+        Me.Panel3.Size = New System.Drawing.Size(109, 24)
         Me.Panel3.TabIndex = 0
         '
         'EditConstraintBT
@@ -496,7 +496,7 @@ Partial Class FModellingUI
         Me.scenarioTVPanel.Location = New System.Drawing.Point(0, 26)
         Me.scenarioTVPanel.Margin = New System.Windows.Forms.Padding(0)
         Me.scenarioTVPanel.Name = "scenarioTVPanel"
-        Me.scenarioTVPanel.Size = New System.Drawing.Size(205, 552)
+        Me.scenarioTVPanel.Size = New System.Drawing.Size(111, 552)
         Me.scenarioTVPanel.TabIndex = 1
         '
         'SplitContainer2
@@ -513,7 +513,7 @@ Partial Class FModellingUI
         'SplitContainer2.Panel2
         '
         Me.SplitContainer2.Panel2.Controls.Add(Me.Panel2)
-        Me.SplitContainer2.Size = New System.Drawing.Size(1097, 578)
+        Me.SplitContainer2.Size = New System.Drawing.Size(593, 578)
         Me.SplitContainer2.SplitterDistance = 206
         Me.SplitContainer2.TabIndex = 0
         '
@@ -529,7 +529,7 @@ Partial Class FModellingUI
         Me.TableLayoutPanel2.RowCount = 2
         Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25.0!))
         Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TableLayoutPanel2.Size = New System.Drawing.Size(1097, 206)
+        Me.TableLayoutPanel2.Size = New System.Drawing.Size(593, 206)
         Me.TableLayoutPanel2.TabIndex = 0
         '
         'Panel1
@@ -546,7 +546,7 @@ Partial Class FModellingUI
         Me.Panel1.Location = New System.Drawing.Point(0, 0)
         Me.Panel1.Margin = New System.Windows.Forms.Padding(0)
         Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(1097, 25)
+        Me.Panel1.Size = New System.Drawing.Size(593, 25)
         Me.Panel1.TabIndex = 0
         '
         'AddConstraintBT
@@ -597,7 +597,7 @@ Partial Class FModellingUI
         Me.HideConstraintsBT.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.HideConstraintsBT.ImageKey = "favicon(236).ico"
         Me.HideConstraintsBT.ImageList = Me.ButtonsImageList
-        Me.HideConstraintsBT.Location = New System.Drawing.Point(1069, 1)
+        Me.HideConstraintsBT.Location = New System.Drawing.Point(565, 1)
         Me.HideConstraintsBT.Name = "HideConstraintsBT"
         Me.HideConstraintsBT.Size = New System.Drawing.Size(23, 23)
         Me.HideConstraintsBT.TabIndex = 6
@@ -644,7 +644,7 @@ Partial Class FModellingUI
         Me.InputDGPanel.Dock = System.Windows.Forms.DockStyle.Fill
         Me.InputDGPanel.Location = New System.Drawing.Point(3, 28)
         Me.InputDGPanel.Name = "InputDGPanel"
-        Me.InputDGPanel.Size = New System.Drawing.Size(1091, 175)
+        Me.InputDGPanel.Size = New System.Drawing.Size(587, 175)
         Me.InputDGPanel.TabIndex = 1
         '
         'Panel2
@@ -655,7 +655,7 @@ Partial Class FModellingUI
         Me.Panel2.Location = New System.Drawing.Point(0, 0)
         Me.Panel2.Margin = New System.Windows.Forms.Padding(1)
         Me.Panel2.Name = "Panel2"
-        Me.Panel2.Size = New System.Drawing.Size(1097, 368)
+        Me.Panel2.Size = New System.Drawing.Size(593, 368)
         Me.Panel2.TabIndex = 2
         '
         'ScenariiPanelLayout
@@ -671,7 +671,7 @@ Partial Class FModellingUI
         Me.ScenariiPanelLayout.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 200.0!))
         Me.ScenariiPanelLayout.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 200.0!))
         Me.ScenariiPanelLayout.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 200.0!))
-        Me.ScenariiPanelLayout.Size = New System.Drawing.Size(1097, 368)
+        Me.ScenariiPanelLayout.Size = New System.Drawing.Size(593, 368)
         Me.ScenariiPanelLayout.TabIndex = 1
         '
         'TabPage3
@@ -964,7 +964,7 @@ Partial Class FModellingUI
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(1320, 611)
+        Me.ClientSize = New System.Drawing.Size(722, 611)
         Me.Controls.Add(Me.TabControl1)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Name = "FModellingUI"

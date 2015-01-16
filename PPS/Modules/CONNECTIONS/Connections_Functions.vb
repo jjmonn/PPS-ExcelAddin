@@ -32,9 +32,9 @@ Module Connections_Functions
                            & "DATABASE=" + OPENING_DATABASE + ";" _
                            & "UID=" + userID + ";" _
                            & "PASSWORD=" + pwd + ";" _
-                           & "SSLKEY=C:\Users\Julien Monnereau\Documents\Purple Sun\SaaS\CA Google\client-key.pem;" _
-                           & "SSLCERT=C:\Users\Julien Monnereau\Documents\Purple Sun\SaaS\CA Google\client-cert.pem;" _
-                           & "SSLCA=C:\Users\Julien Monnereau\Documents\Purple Sun\SaaS\CA Google\server-ca.pem;" _
+                           & "SSLKEY=C:\Users\PPS\Documents\Purple Sun\CA\client-key.pem;" _
+                           & "SSLCERT=C:\Users\PPS\Documents\Purple Sun\CA\client-cert.pem;" _
+                           & "SSLCA=C:\Users\PPS\Documents\Purple Sun\CA\server-ca.pem;" _
                            & "Pooling=True;"
         ' & "OPTION=3" _
         ' & "OPTION=" & 2 + 3 + 8 + 32 + 2048 + 16384

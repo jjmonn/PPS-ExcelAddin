@@ -31,7 +31,7 @@ Imports System.Collections
 Imports H4xCode
 
 
-Public Class CControlingMODEL
+Friend Class CControlingMODEL
 
 
 #Region " Instance Variables"

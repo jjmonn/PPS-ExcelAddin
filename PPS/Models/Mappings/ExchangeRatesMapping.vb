@@ -22,16 +22,16 @@ Imports System.Collections
 Imports System.Collections.Generic
 
 
-Public Class ExchangeRatesMapping
+Friend Class ExchangeRatesMapping
 
 
-    Public Shared Function GetFXDictionary(ByRef Key As String, _
-                                    ByRef Value As String, _
-                                    ByRef version As String) As Hashtable
+    Protected Friend Shared Function GetFXDictionary(ByRef Key As String, _
+                                            ByRef Value As String, _
+                                            ByRef version As String) As Hashtable
 
         Dim tmpHT As New Hashtable
         Dim srv As New ModelServer
-        srv.openRst(CONFIG_DATABASE & "." & EXCHANGE_RATES_TABLE_NAME, ModelServer.FWD_CURSOR)
+        srv.OpenRst(CONFIG_DATABASE & "." & EXCHANGE_RATES_TABLE_NAME, ModelServer.FWD_CURSOR)
         srv.rst.Filter = EX_TABLE_RATE_VERSION & "='" & version & "'"
 
         If srv.rst.EOF = False And srv.rst.BOF = False Then
@@ -48,7 +48,7 @@ Public Class ExchangeRatesMapping
     End Function
 
     ' Convention: all periods rates has been previously filled in currencies management
-    Public Shared Sub FillRatesLists(ByVal currency_token As String, _
+    Protected Friend Shared Sub FillRatesLists(ByVal currency_token As String, _
                                      ByRef rates_version As String, _
                                      ByRef time_config As String, _
                                      ByRef reverse_flag As Int32, _

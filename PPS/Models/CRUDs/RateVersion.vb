@@ -88,7 +88,7 @@ Friend Class RateVersion
             Else
                 hash.Add(RATES_VERSIONS_PARENT_CODE_VARIABLE, RST.Fields(RATES_VERSIONS_PARENT_CODE_VARIABLE).Value)
             End If
-            hash.Add(ITEMS_POSITIONS, RST.Fields(RATES_VERSIONS_PARENT_CODE_VARIABLE).Value)
+            hash.Add(ITEMS_POSITIONS, RST.Fields(ITEMS_POSITIONS).Value)
 
             tmp_dic.Add(RST.Fields(RATES_VERSIONS_ID_VARIABLE).Value, hash)
             RST.MoveNext()
@@ -175,6 +175,7 @@ Friend Class RateVersion
                 rst.MoveNext()
             Loop
         End If
+        rst.Close()
 
     End Sub
 

@@ -1967,7 +1967,7 @@ Public Class AddinModule
 
     Public Sub LaunchVersionSelection(Optional ByRef input_mode As Int32 = 0)
 
-        If CDbl(APPS.Version.Replace(".", ",")) > EXCEL_MIN_VERSION Then
+        If CDbl(APPS.Version.Replace(".", ",")) > EXCEL_MIN_VERSION Then  ' 
             VersionsSelectionPaneVisible = True
             Me.VersionSelectionTaskPane.Init(input_mode)
             Me.VersionSelectionTaskPane.Show()
