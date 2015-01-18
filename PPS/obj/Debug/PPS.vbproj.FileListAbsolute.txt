@@ -640,3 +640,4 @@ C:\Users\PPS\Documents\GitHub\PPS-Repo.git\trunk\PPS\obj\Debug\PPS.vbproj.Genera
 C:\Users\PPS\Documents\GitHub\PPS-Repo.git\trunk\PPS\obj\Debug\PPS.dll
 C:\Users\PPS\Documents\GitHub\PPS-Repo.git\trunk\PPS\obj\Debug\PPS.pdb
 C:\Users\PPS\Documents\GitHub\PPS-Repo.git\trunk\PPS\bin\Debug\PPS.tlb
+C:\Users\PPS\Documents\GitHub\PPS-Repo.git\trunk\PPS\obj\Debug\PPS.vbprojResolveAssemblyReference.cache

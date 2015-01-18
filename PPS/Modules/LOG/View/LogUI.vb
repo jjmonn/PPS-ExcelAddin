@@ -127,7 +127,7 @@ Friend Class LogUI
         current_version_id = version_id
         For Each tab_ As TabPage In DGVTabControl.TabPages
             Dim dgv As vDataGridView = tab_.Controls(0)
-            DGVUtil.CreateDGVColumns(dgv, period_list.ToArray, time_config)
+            DataGridViewsUtil.CreateDGVColumns(dgv, period_list.ToArray, time_config, True)
             dgv.ColumnsHierarchy.AutoResize(AutoResizeMode.FIT_ALL)
             dgv.ColumnsHierarchy.AutoStretchColumns = True
         Next

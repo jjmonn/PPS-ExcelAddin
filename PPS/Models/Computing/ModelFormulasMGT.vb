@@ -167,7 +167,7 @@ Friend Class ModelFormulasMGT
         Dim i As Int32 = 0
         For Each item In formula_array
             If Not tokensList.Contains(item) And Not IsNumeric(item) Then
-                formula_array(i) = Rnd(5)
+                formula_array(i) = 2
             End If
             i = i + 1
         Next

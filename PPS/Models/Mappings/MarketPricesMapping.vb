@@ -5,7 +5,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 16/01/2015
+' Last modified: 17/01/2015
 
 
 Imports System.Collections.Generic
@@ -20,7 +20,7 @@ Friend Class MarketPricesMapping
                                                                    ByRef time_configuration As String) As Double()
 
         Dim srv As New ModelServer
-        Dim prices_array(period_array.Length) As Double
+        Dim prices_array(period_array.Length - 1) As Double
         srv.openRstSQL("SELECT * FROM " & CONFIG_DATABASE & "." & MARKET_INDEXES_PRICES_TABLE & _
                        " WHERE " & MARKET_INDEXES_PRICES_ID_VAR & "='" & index_id & "'" & " AND " & _
                        MARKET_INDEXES_PRICES_VERSION_VAR & "='" & version_id & "'", _
@@ -31,7 +31,7 @@ Friend Class MarketPricesMapping
                 For j = 0 To period_array.Length - 1
 
                     Dim tmp_list As New List(Of Double)
-                    Dim months_list As List(Of Integer) = Periods.GetMonthlyPeriodsList(period_array(j), 0)
+                    Dim months_list As List(Of Integer) = Periods.GetMonthlyPeriodsList(Year(Date.FromOADate(period_array(j))), 0)
                     For Each month_ In months_list
                         srv.rst.Filter = EX_TABLE_PERIOD_VARIABLE & "=" & month_
                         tmp_list.Add(srv.rst.Fields(MARKET_INDEXES_PRICES_VALUE_VAR).Value)

@@ -17,25 +17,23 @@ Imports System.Collections
 
 Friend Class AlternativeScenarioModel
 
+
 #Region "Instance Variables"
 
     ' Objects
     Private BaseComputer As CControlingMODEL
     Private VersionsMGT As New CVersionsForControlingUIs
+    Private Controller As AlternativeScenariosController
 
     ' Variables
-    Private market_indexes_list As List(Of String)
     Private indexes_list As List(Of String)
     Private entities_attributes_dictionary As New Dictionary(Of String, Hashtable)
-    Private sensitivities_dictionary As New Dictionary(Of String, Hashtable)
-    Private volumes As Double()
-    Private base_revenues As Double()
+    Protected Friend sensitivities_dictionary As New Dictionary(Of String, Hashtable)
 
     ' Data Dictionaries
-    Private SensisResultsDict As New Dictionary(Of String, Dictionary(Of String, Dictionary(Of String, Double())))
-    Private current_conso_data_dic As New Dictionary(Of String, Dictionary(Of String, Double()))
-    Private new_scenario_aggregates As New Dictionary(Of String, Double())
-
+    Protected Friend SensisResultsDict As New Dictionary(Of String, Dictionary(Of String, Dictionary(Of String, Double())))
+    Protected Friend current_conso_data_dic As New Dictionary(Of String, Dictionary(Of String, Double()))
+    
     ' Current Config
     Protected Friend periods_list As List(Of Int32)
     Protected Friend time_configuration As String
@@ -45,8 +43,9 @@ Friend Class AlternativeScenarioModel
 #End Region
 
 
-    Protected Friend Sub New()
+    Protected Friend Sub New(ByRef input_Controller As AlternativeScenariosController)
 
+        Controller = input_Controller
         BaseComputer = New CControlingMODEL(VersionsMGT.PERIODSMGT.yearlyPeriodList)
         indexes_list = MarketIndexesMapping.GetMarketIndexesList()
         entities_attributes_dictionary = GDFSUEZEntitiesAttributes.GetEntitiesAttributes()
@@ -58,12 +57,10 @@ Friend Class AlternativeScenarioModel
 
 #Region "Interface"
 
-    
     Protected Friend Sub ComputeEntity(ByRef version_id As String, _
                                        ByRef entity_node As TreeNode, _
                                        ByRef PBar As ProgressBarControl)
 
-        ' InitializePBar()-> controller
         BaseComputer.init_computer_complete_mode(entity_node)
         periods_list = VersionsMGT.GetPeriodList(version_id)
         time_configuration = VersionsMGT.versionsCodeTimeSetUpDict(version_id)(VERSIONS_TIME_CONFIG_VARIABLE)
@@ -77,12 +74,10 @@ Friend Class AlternativeScenarioModel
 
         entities_id_list = cTreeViews_Functions.GetNoChildrenNodesList(cTreeViews_Functions.GetNodesKeysList(entity_node), entity_node.TreeView)
         BuildDataDic(entity_node)
-        '  register version id and entity id in controller (before)
-        ' end pbar in controller
 
     End Sub
 
-    Protected Friend Sub ComputeSensitivities(ByRef market_prices_version_id As String)
+    Protected Friend Sub ComputeSensitivities(ByRef market_prices_version_id As String, ByRef PBar As ProgressBarControl)
 
 
         SensisResultsDict.Clear()
@@ -92,38 +87,89 @@ Friend Class AlternativeScenarioModel
                                               GetFormulas(sensitivities_dictionary(sensitivity_id)(GDF_SENSITIVITIES_FORMULA_NAME_VAR)).ToArray, _
                                               periods_list.Count)
 
-            For Each index In market_indexes_list
+            For Each index In indexes_list
                 Dim index_prices As Double() = MarketPricesMapping.GetIndexMarketPricesFlatArray(index, _
                                                                                                  market_prices_version_id, _
                                                                                                  periods_list.ToArray, _
                                                                                                  time_configuration)
                 PSDLL.ResgisterIndexMarketPrices(index_prices, index)
             Next
-            BuildVolumesAndBaseRevenuesFlatArrays(sensitivity_id)
+            Dim volumes, base_revenues As Double()
+            BuildVolumesAndBaseRevenuesFlatArrays(sensitivity_id, volumes, base_revenues)
             PSDLL.Compute(volumes, base_revenues, GetTaxRatesFlatArray())
             SensisResultsDict.Add(sensitivity_id, PSDLL.GetResultsDict())
+            PBar.AddProgress(2)
         Next
 
     End Sub
 
-    Protected Friend Sub AggregateSensis()
+    Protected Friend Sub AggregateSensis(ByRef entity_node As TreeNode)
 
+        Dim all_entities_id As List(Of String) = cTreeViews_Functions.GetNodesKeysList(entity_node)
+        all_entities_id.Reverse()
+
+        For Each entity_id As String In all_entities_id
+            If entities_id_list.Contains(entity_id) = False Then
+                Dim node As TreeNode = entity_node.TreeView.Nodes.Find(entity_id, True)(0)
+                Dim sensitivities_aggregations As New Dictionary(Of String, Double())
+                Dim incr_rev_aggregations As New Dictionary(Of String, Double())
+                Dim incr_NR_aggregations As New Dictionary(Of String, Double())
+
+                For Each sensitivity_id As String In sensitivities_dictionary.Keys
+
+                    Dim sensis_array(periods_list.Count - 1) As Double
+                    Dim incr_rev_array(periods_list.Count - 1) As Double
+                    Dim incr_NR_array(periods_list.Count - 1) As Double
+                    sensitivities_aggregations.Add(sensitivity_id, sensis_array)
+                    incr_rev_aggregations.Add(sensitivity_id, incr_rev_array)
+                    incr_NR_aggregations.Add(sensitivity_id, incr_NR_array)
+
+                Next
+                For j As Int32 = 0 To periods_list.Count - 1
+                    For Each child_node As TreeNode In node.Nodes
+                        For Each sensitivity_id As String In sensitivities_dictionary.Keys
+
+                            If Double.IsNaN(SensisResultsDict(sensitivity_id)(PSDLLL_Interface.SENSITIVITIES)(child_node.Name)(j)) _
+                            Then SensisResultsDict(sensitivity_id)(PSDLLL_Interface.SENSITIVITIES)(child_node.Name)(j) = 0
+                            sensitivities_aggregations(sensitivity_id)(j) = sensitivities_aggregations(sensitivity_id)(j) + SensisResultsDict(sensitivity_id)(PSDLLL_Interface.SENSITIVITIES)(child_node.Name)(j)
+                            incr_rev_aggregations(sensitivity_id)(j) = incr_rev_aggregations(sensitivity_id)(j) + SensisResultsDict(sensitivity_id)(PSDLLL_Interface.INCREMENTAL_REVENUES)(child_node.Name)(j)
+                            incr_NR_aggregations(sensitivity_id)(j) = incr_NR_aggregations(sensitivity_id)(j) + SensisResultsDict(sensitivity_id)(PSDLLL_Interface.INCREMENTAL_NET_RESULT)(child_node.Name)(j)
+                        Next
+                    Next
+                Next
+                For Each sensitivity_id As String In sensitivities_dictionary.Keys
+                    SensisResultsDict(sensitivity_id)(PSDLLL_Interface.SENSITIVITIES).Add(entity_id, sensitivities_aggregations(sensitivity_id))
+                    SensisResultsDict(sensitivity_id)(PSDLLL_Interface.INCREMENTAL_REVENUES).Add(entity_id, incr_rev_aggregations(sensitivity_id))
+                    SensisResultsDict(sensitivity_id)(PSDLLL_Interface.INCREMENTAL_NET_RESULT).Add(entity_id, incr_NR_aggregations(sensitivity_id))
+                Next
+            End If
+        Next
 
     End Sub
 
-    Protected Friend Sub AggregateNewScenario()
+    Protected Friend Function AggregateNewScenario(ByRef entity_id As String, _
+                                                   ByRef alternative_scenario_accounts As Dictionary(Of String, String)) _
+                                                   As Dictionary(Of String, Double())
 
+        Dim new_scenario_aggregates As New Dictionary(Of String, Double())
 
-        ' new = base + sensi aggreg()
-        '  new_scenario_aggregates
+        For Each account_id In alternative_scenario_accounts.Keys
+            Dim tmp_array(periods_list.Count - 1) As Double
+            For j As Int32 = 0 To periods_list.Count - 1
+                For Each sensitivity_id As String In SensisResultsDict.Keys
+                    Dim as_item As String = alternative_scenario_accounts(account_id)
+                    If as_item <> "" Then
+                        tmp_array(j) = current_conso_data_dic(entity_id)(account_id)(j) + SensisResultsDict(sensitivity_id)(as_item)(entity_id)(j)
+                    Else
+                        tmp_array(j) = current_conso_data_dic(entity_id)(account_id)(j)
+                    End If
+                Next
+            Next
+            new_scenario_aggregates.Add(account_id, tmp_array)
+        Next
+        Return new_scenario_aggregates
 
-
-        ' stub data visualization prototype
-
-
-
-
-    End Sub
+    End Function
 
 #End Region
 
@@ -153,7 +199,9 @@ Friend Class AlternativeScenarioModel
 
     End Sub
 
-    Private Sub BuildVolumesAndBaseRevenuesFlatArrays(ByRef sensitivity_id As String)
+    Private Sub BuildVolumesAndBaseRevenuesFlatArrays(ByRef sensitivity_id As String, _
+                                                      ByRef volumes As Double(), _
+                                                      ByRef base_revenues As Double())
 
         ReDim volumes(entities_id_list.Count * periods_list.Count)
         ReDim base_revenues(entities_id_list.Count * periods_list.Count)
@@ -176,7 +224,6 @@ Friend Class AlternativeScenarioModel
         Next
 
     End Sub
-
 
 #End Region
 
@@ -208,8 +255,6 @@ Friend Class AlternativeScenarioModel
         Return tax_rates_flat_array
 
     End Function
-
-
 
 #End Region
 

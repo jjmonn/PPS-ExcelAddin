@@ -61,6 +61,7 @@ Partial Class ControlsMGTUI
         Me.RenameRCBT = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
         Me.DeleteRCM = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ColorDialog1 = New System.Windows.Forms.ColorDialog()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.Panel1.SuspendLayout()
         Me.TabControl1.SuspendLayout()
@@ -538,4 +539,5 @@ Partial Class ControlsMGTUI
     Friend WithEvents PalettesCB As System.Windows.Forms.ComboBox
     Friend WithEvents ToolStripSeparator2 As System.Windows.Forms.ToolStripSeparator
     Friend WithEvents RenameRCBT As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ColorDialog1 As System.Windows.Forms.ColorDialog
 End Class

@@ -45,6 +45,7 @@ Friend Class SubmissionsControlsController
 
     Protected Friend Sub New()
 
+        View.ChartsTableLayoutPanel.Visible = False
         Entity.LoadEntitiesTree(EntitiesTV)
         ControlChart.LoadControlChartsTree(ChartsTV)
         entities_id_list = cTreeViews_Functions.GetNodesKeysList(EntitiesTV)
@@ -52,6 +53,7 @@ Friend Class SubmissionsControlsController
         View = New SubmissionsControlUI(Me, EntitiesTV, charts_dic)
         version_id = GLOBALCurrentVersionCode
         Computer = New CControlingMODEL(VersionsMGT.PERIODSMGT.yearlyPeriodList)
+        View.ChartsTableLayoutPanel.Visible = True
         View.Show()
 
     End Sub

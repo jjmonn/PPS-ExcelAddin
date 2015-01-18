@@ -27,13 +27,11 @@ Partial Class AlternativeScenariosUI
         Me.MenuStrip1 = New System.Windows.Forms.MenuStrip()
         Me.NewToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ConfigurationToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ConfTabControl = New System.Windows.Forms.CustomTabControl()
+        Me.MainTabControl = New System.Windows.Forms.CustomTabControl()
         Me.InputsTab = New System.Windows.Forms.TabPage()
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
         Me.Panel6 = New System.Windows.Forms.Panel()
         Me.Label4 = New System.Windows.Forms.Label()
-        Me.Panel5 = New System.Windows.Forms.Panel()
-        Me.MarketPricesTB = New System.Windows.Forms.TextBox()
         Me.EntitiesTVPanel = New System.Windows.Forms.Panel()
         Me.VersionsTVpanel = New System.Windows.Forms.Panel()
         Me.Label6 = New System.Windows.Forms.Label()
@@ -41,29 +39,40 @@ Partial Class AlternativeScenariosUI
         Me.EntityTB = New System.Windows.Forms.TextBox()
         Me.VersionTB = New System.Windows.Forms.TextBox()
         Me.MarketPricesPanel = New System.Windows.Forms.Panel()
-        Me.NumericUpDown1 = New System.Windows.Forms.NumericUpDown()
-        Me.Label1 = New System.Windows.Forms.Label()
         Me.MarketPricesTVPanel = New System.Windows.Forms.Panel()
-        Me.VarianceTB = New System.Windows.Forms.TextBox()
         Me.ComputeScenarioBT = New System.Windows.Forms.Button()
         Me.ButtonsImageList = New System.Windows.Forms.ImageList(Me.components)
+        Me.Panel1 = New System.Windows.Forms.Panel()
+        Me.NumericUpDown1 = New System.Windows.Forms.NumericUpDown()
+        Me.Label1 = New System.Windows.Forms.Label()
+        Me.MarketPricesTB = New System.Windows.Forms.TextBox()
         Me.MainTab = New System.Windows.Forms.TabPage()
-        Me.SplitContainer1 = New System.Windows.Forms.SplitContainer()
-        Me.CommitTab = New System.Windows.Forms.TabPage()
+        Me.MainPanel = New System.Windows.Forms.TableLayoutPanel()
+        Me.Panel2 = New System.Windows.Forms.Panel()
+        Me.TableLayoutPanel2 = New System.Windows.Forms.TableLayoutPanel()
+        Me.Label5 = New System.Windows.Forms.Label()
+        Me.Label3 = New System.Windows.Forms.Label()
+        Me.SensitivitiesTab = New System.Windows.Forms.TabPage()
+        Me.SensitivitiesTabControl = New System.Windows.Forms.CustomTabControl()
+        Me.CommitTabPage = New System.Windows.Forms.TabPage()
         Me.TVImageList = New System.Windows.Forms.ImageList(Me.components)
         Me.EntitiesTVImageList = New System.Windows.Forms.ImageList(Me.components)
         Me.VersionsTVIcons = New System.Windows.Forms.ImageList(Me.components)
+        Me.ReportsRCM = New System.Windows.Forms.ContextMenuStrip(Me.components)
+        Me.SendToExcelToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.MenuStrip1.SuspendLayout()
-        Me.ConfTabControl.SuspendLayout()
+        Me.MainTabControl.SuspendLayout()
         Me.InputsTab.SuspendLayout()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.Panel6.SuspendLayout()
-        Me.Panel5.SuspendLayout()
         Me.MarketPricesPanel.SuspendLayout()
+        Me.Panel1.SuspendLayout()
         CType(Me.NumericUpDown1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.MainTab.SuspendLayout()
-        CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.SplitContainer1.SuspendLayout()
+        Me.Panel2.SuspendLayout()
+        Me.TableLayoutPanel2.SuspendLayout()
+        Me.SensitivitiesTab.SuspendLayout()
+        Me.ReportsRCM.SuspendLayout()
         Me.SuspendLayout()
         '
         'MenuStrip1
@@ -87,37 +96,38 @@ Partial Class AlternativeScenariosUI
         Me.ConfigurationToolStripMenuItem.Size = New System.Drawing.Size(93, 20)
         Me.ConfigurationToolStripMenuItem.Text = "Configuration"
         '
-        'ConfTabControl
+        'MainTabControl
         '
-        Me.ConfTabControl.Controls.Add(Me.InputsTab)
-        Me.ConfTabControl.Controls.Add(Me.MainTab)
-        Me.ConfTabControl.Controls.Add(Me.CommitTab)
-        Me.ConfTabControl.DisplayStyle = System.Windows.Forms.TabStyle.Rounded
+        Me.MainTabControl.Controls.Add(Me.InputsTab)
+        Me.MainTabControl.Controls.Add(Me.MainTab)
+        Me.MainTabControl.Controls.Add(Me.SensitivitiesTab)
+        Me.MainTabControl.Controls.Add(Me.CommitTabPage)
+        Me.MainTabControl.DisplayStyle = System.Windows.Forms.TabStyle.Rounded
         '
         '
         '
-        Me.ConfTabControl.DisplayStyleProvider.BorderColor = System.Drawing.SystemColors.ControlDark
-        Me.ConfTabControl.DisplayStyleProvider.BorderColorHot = System.Drawing.SystemColors.ControlDark
-        Me.ConfTabControl.DisplayStyleProvider.BorderColorSelected = System.Drawing.Color.FromArgb(CType(CType(127, Byte), Integer), CType(CType(157, Byte), Integer), CType(CType(185, Byte), Integer))
-        Me.ConfTabControl.DisplayStyleProvider.CloserColor = System.Drawing.Color.DarkGray
-        Me.ConfTabControl.DisplayStyleProvider.FocusTrack = False
-        Me.ConfTabControl.DisplayStyleProvider.HotTrack = True
-        Me.ConfTabControl.DisplayStyleProvider.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.ConfTabControl.DisplayStyleProvider.Opacity = 1.0!
-        Me.ConfTabControl.DisplayStyleProvider.Overlap = 0
-        Me.ConfTabControl.DisplayStyleProvider.Padding = New System.Drawing.Point(6, 3)
-        Me.ConfTabControl.DisplayStyleProvider.Radius = 10
-        Me.ConfTabControl.DisplayStyleProvider.ShowTabCloser = False
-        Me.ConfTabControl.DisplayStyleProvider.TextColor = System.Drawing.SystemColors.ControlText
-        Me.ConfTabControl.DisplayStyleProvider.TextColorDisabled = System.Drawing.SystemColors.ControlDark
-        Me.ConfTabControl.DisplayStyleProvider.TextColorSelected = System.Drawing.SystemColors.ControlText
-        Me.ConfTabControl.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.ConfTabControl.HotTrack = True
-        Me.ConfTabControl.Location = New System.Drawing.Point(0, 24)
-        Me.ConfTabControl.Name = "ConfTabControl"
-        Me.ConfTabControl.SelectedIndex = 0
-        Me.ConfTabControl.Size = New System.Drawing.Size(734, 511)
-        Me.ConfTabControl.TabIndex = 9
+        Me.MainTabControl.DisplayStyleProvider.BorderColor = System.Drawing.SystemColors.ControlDark
+        Me.MainTabControl.DisplayStyleProvider.BorderColorHot = System.Drawing.SystemColors.ControlDark
+        Me.MainTabControl.DisplayStyleProvider.BorderColorSelected = System.Drawing.Color.FromArgb(CType(CType(127, Byte), Integer), CType(CType(157, Byte), Integer), CType(CType(185, Byte), Integer))
+        Me.MainTabControl.DisplayStyleProvider.CloserColor = System.Drawing.Color.DarkGray
+        Me.MainTabControl.DisplayStyleProvider.FocusTrack = False
+        Me.MainTabControl.DisplayStyleProvider.HotTrack = True
+        Me.MainTabControl.DisplayStyleProvider.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.MainTabControl.DisplayStyleProvider.Opacity = 1.0!
+        Me.MainTabControl.DisplayStyleProvider.Overlap = 0
+        Me.MainTabControl.DisplayStyleProvider.Padding = New System.Drawing.Point(6, 3)
+        Me.MainTabControl.DisplayStyleProvider.Radius = 10
+        Me.MainTabControl.DisplayStyleProvider.ShowTabCloser = False
+        Me.MainTabControl.DisplayStyleProvider.TextColor = System.Drawing.SystemColors.ControlText
+        Me.MainTabControl.DisplayStyleProvider.TextColorDisabled = System.Drawing.SystemColors.ControlDark
+        Me.MainTabControl.DisplayStyleProvider.TextColorSelected = System.Drawing.SystemColors.ControlText
+        Me.MainTabControl.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.MainTabControl.HotTrack = True
+        Me.MainTabControl.Location = New System.Drawing.Point(0, 24)
+        Me.MainTabControl.Name = "MainTabControl"
+        Me.MainTabControl.SelectedIndex = 0
+        Me.MainTabControl.Size = New System.Drawing.Size(734, 511)
+        Me.MainTabControl.TabIndex = 9
         '
         'InputsTab
         '
@@ -132,23 +142,23 @@ Partial Class AlternativeScenariosUI
         '
         'TableLayoutPanel1
         '
-        Me.TableLayoutPanel1.ColumnCount = 6
-        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 3.608034!))
-        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 23.9266!))
-        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 23.9266!))
-        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 39.21494!))
-        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 9.323833!))
-        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 23.0!))
-        Me.TableLayoutPanel1.Controls.Add(Me.Panel6, 3, 1)
-        Me.TableLayoutPanel1.Controls.Add(Me.Panel5, 3, 3)
-        Me.TableLayoutPanel1.Controls.Add(Me.EntitiesTVPanel, 2, 2)
-        Me.TableLayoutPanel1.Controls.Add(Me.VersionsTVpanel, 1, 2)
-        Me.TableLayoutPanel1.Controls.Add(Me.Label6, 2, 1)
-        Me.TableLayoutPanel1.Controls.Add(Me.Label2, 1, 1)
-        Me.TableLayoutPanel1.Controls.Add(Me.EntityTB, 2, 3)
-        Me.TableLayoutPanel1.Controls.Add(Me.VersionTB, 1, 3)
-        Me.TableLayoutPanel1.Controls.Add(Me.MarketPricesPanel, 3, 2)
-        Me.TableLayoutPanel1.Controls.Add(Me.ComputeScenarioBT, 4, 1)
+        Me.TableLayoutPanel1.ColumnCount = 4
+        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25.0!))
+        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25.0!))
+        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25.0!))
+        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25.0!))
+        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
+        Me.TableLayoutPanel1.Controls.Add(Me.Panel6, 2, 1)
+        Me.TableLayoutPanel1.Controls.Add(Me.EntitiesTVPanel, 1, 2)
+        Me.TableLayoutPanel1.Controls.Add(Me.VersionsTVpanel, 0, 2)
+        Me.TableLayoutPanel1.Controls.Add(Me.Label6, 1, 1)
+        Me.TableLayoutPanel1.Controls.Add(Me.Label2, 0, 1)
+        Me.TableLayoutPanel1.Controls.Add(Me.EntityTB, 1, 3)
+        Me.TableLayoutPanel1.Controls.Add(Me.VersionTB, 0, 3)
+        Me.TableLayoutPanel1.Controls.Add(Me.MarketPricesPanel, 2, 2)
+        Me.TableLayoutPanel1.Controls.Add(Me.ComputeScenarioBT, 3, 1)
+        Me.TableLayoutPanel1.Controls.Add(Me.Panel1, 3, 2)
+        Me.TableLayoutPanel1.Controls.Add(Me.MarketPricesTB, 2, 3)
         Me.TableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TableLayoutPanel1.Location = New System.Drawing.Point(3, 3)
         Me.TableLayoutPanel1.Name = "TableLayoutPanel1"
@@ -165,10 +175,10 @@ Partial Class AlternativeScenariosUI
         '
         Me.Panel6.Controls.Add(Me.Label4)
         Me.Panel6.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Panel6.Location = New System.Drawing.Point(357, 20)
+        Me.Panel6.Location = New System.Drawing.Point(360, 20)
         Me.Panel6.Margin = New System.Windows.Forms.Padding(0)
         Me.Panel6.Name = "Panel6"
-        Me.Panel6.Size = New System.Drawing.Size(273, 28)
+        Me.Panel6.Size = New System.Drawing.Size(180, 28)
         Me.Panel6.TabIndex = 13
         '
         'Label4
@@ -181,46 +191,26 @@ Partial Class AlternativeScenariosUI
         Me.Label4.TabIndex = 4
         Me.Label4.Text = "Market Prices Version"
         '
-        'Panel5
-        '
-        Me.Panel5.Controls.Add(Me.MarketPricesTB)
-        Me.Panel5.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Panel5.Location = New System.Drawing.Point(357, 418)
-        Me.Panel5.Margin = New System.Windows.Forms.Padding(0)
-        Me.Panel5.Name = "Panel5"
-        Me.Panel5.Size = New System.Drawing.Size(273, 40)
-        Me.Panel5.TabIndex = 12
-        '
-        'MarketPricesTB
-        '
-        Me.MarketPricesTB.Enabled = False
-        Me.MarketPricesTB.Location = New System.Drawing.Point(4, 3)
-        Me.MarketPricesTB.Name = "MarketPricesTB"
-        Me.MarketPricesTB.Size = New System.Drawing.Size(156, 20)
-        Me.MarketPricesTB.TabIndex = 16
-        '
         'EntitiesTVPanel
         '
-        Me.EntitiesTVPanel.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.EntitiesTVPanel.Location = New System.Drawing.Point(194, 51)
+        Me.EntitiesTVPanel.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.EntitiesTVPanel.Location = New System.Drawing.Point(183, 51)
         Me.EntitiesTVPanel.Name = "EntitiesTVPanel"
-        Me.EntitiesTVPanel.Size = New System.Drawing.Size(158, 364)
+        Me.EntitiesTVPanel.Size = New System.Drawing.Size(174, 364)
         Me.EntitiesTVPanel.TabIndex = 9
         '
         'VersionsTVpanel
         '
-        Me.VersionsTVpanel.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.VersionsTVpanel.Location = New System.Drawing.Point(28, 51)
+        Me.VersionsTVpanel.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.VersionsTVpanel.Location = New System.Drawing.Point(3, 51)
         Me.VersionsTVpanel.Name = "VersionsTVpanel"
-        Me.VersionsTVpanel.Size = New System.Drawing.Size(152, 364)
+        Me.VersionsTVpanel.Size = New System.Drawing.Size(174, 364)
         Me.VersionsTVpanel.TabIndex = 0
         '
         'Label6
         '
         Me.Label6.AutoSize = True
-        Me.Label6.Location = New System.Drawing.Point(194, 26)
+        Me.Label6.Location = New System.Drawing.Point(183, 26)
         Me.Label6.Margin = New System.Windows.Forms.Padding(3, 6, 3, 0)
         Me.Label6.Name = "Label6"
         Me.Label6.Size = New System.Drawing.Size(38, 13)
@@ -230,7 +220,7 @@ Partial Class AlternativeScenariosUI
         'Label2
         '
         Me.Label2.AutoSize = True
-        Me.Label2.Location = New System.Drawing.Point(28, 26)
+        Me.Label2.Location = New System.Drawing.Point(3, 26)
         Me.Label2.Margin = New System.Windows.Forms.Padding(3, 6, 3, 0)
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(76, 13)
@@ -239,75 +229,52 @@ Partial Class AlternativeScenariosUI
         '
         'EntityTB
         '
+        Me.EntityTB.Dock = System.Windows.Forms.DockStyle.Fill
         Me.EntityTB.Enabled = False
-        Me.EntityTB.Location = New System.Drawing.Point(194, 421)
+        Me.EntityTB.Location = New System.Drawing.Point(183, 421)
         Me.EntityTB.Name = "EntityTB"
-        Me.EntityTB.Size = New System.Drawing.Size(158, 20)
+        Me.EntityTB.Size = New System.Drawing.Size(174, 20)
         Me.EntityTB.TabIndex = 15
         '
         'VersionTB
         '
+        Me.VersionTB.Dock = System.Windows.Forms.DockStyle.Fill
         Me.VersionTB.Enabled = False
-        Me.VersionTB.Location = New System.Drawing.Point(28, 421)
+        Me.VersionTB.Location = New System.Drawing.Point(3, 421)
         Me.VersionTB.Name = "VersionTB"
-        Me.VersionTB.Size = New System.Drawing.Size(152, 20)
+        Me.VersionTB.Size = New System.Drawing.Size(174, 20)
         Me.VersionTB.TabIndex = 16
         '
         'MarketPricesPanel
         '
-        Me.MarketPricesPanel.Controls.Add(Me.NumericUpDown1)
-        Me.MarketPricesPanel.Controls.Add(Me.Label1)
         Me.MarketPricesPanel.Controls.Add(Me.MarketPricesTVPanel)
-        Me.MarketPricesPanel.Controls.Add(Me.VarianceTB)
         Me.MarketPricesPanel.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.MarketPricesPanel.Location = New System.Drawing.Point(360, 51)
+        Me.MarketPricesPanel.Location = New System.Drawing.Point(363, 51)
         Me.MarketPricesPanel.Name = "MarketPricesPanel"
-        Me.MarketPricesPanel.Size = New System.Drawing.Size(267, 364)
+        Me.MarketPricesPanel.Size = New System.Drawing.Size(174, 364)
         Me.MarketPricesPanel.TabIndex = 17
-        '
-        'NumericUpDown1
-        '
-        Me.NumericUpDown1.Location = New System.Drawing.Point(229, 44)
-        Me.NumericUpDown1.Name = "NumericUpDown1"
-        Me.NumericUpDown1.Size = New System.Drawing.Size(16, 20)
-        Me.NumericUpDown1.TabIndex = 12
-        '
-        'Label1
-        '
-        Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(182, 25)
-        Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(49, 13)
-        Me.Label1.TabIndex = 11
-        Me.Label1.Text = "Variance"
         '
         'MarketPricesTVPanel
         '
-        Me.MarketPricesTVPanel.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.MarketPricesTVPanel.Location = New System.Drawing.Point(1, 3)
+        Me.MarketPricesTVPanel.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.MarketPricesTVPanel.Location = New System.Drawing.Point(0, 0)
         Me.MarketPricesTVPanel.Name = "MarketPricesTVPanel"
-        Me.MarketPricesTVPanel.Size = New System.Drawing.Size(156, 364)
+        Me.MarketPricesTVPanel.Size = New System.Drawing.Size(174, 364)
         Me.MarketPricesTVPanel.TabIndex = 10
-        '
-        'VarianceTB
-        '
-        Me.VarianceTB.Location = New System.Drawing.Point(183, 44)
-        Me.VarianceTB.Name = "VarianceTB"
-        Me.VarianceTB.Size = New System.Drawing.Size(44, 20)
-        Me.VarianceTB.TabIndex = 0
         '
         'ComputeScenarioBT
         '
         Me.ComputeScenarioBT.FlatAppearance.BorderColor = System.Drawing.Color.Gray
         Me.ComputeScenarioBT.FlatAppearance.BorderSize = 0
         Me.ComputeScenarioBT.FlatAppearance.MouseOverBackColor = System.Drawing.SystemColors.ButtonFace
+        Me.ComputeScenarioBT.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
         Me.ComputeScenarioBT.ImageKey = "Report.png"
         Me.ComputeScenarioBT.ImageList = Me.ButtonsImageList
-        Me.ComputeScenarioBT.Location = New System.Drawing.Point(633, 23)
+        Me.ComputeScenarioBT.Location = New System.Drawing.Point(543, 23)
         Me.ComputeScenarioBT.Name = "ComputeScenarioBT"
-        Me.ComputeScenarioBT.Size = New System.Drawing.Size(56, 22)
+        Me.ComputeScenarioBT.Size = New System.Drawing.Size(152, 22)
         Me.ComputeScenarioBT.TabIndex = 3
+        Me.ComputeScenarioBT.Text = "Compute Scenario"
         Me.ComputeScenarioBT.UseVisualStyleBackColor = True
         '
         'ButtonsImageList
@@ -324,10 +291,46 @@ Partial Class AlternativeScenariosUI
         Me.ButtonsImageList.Images.SetKeyName(7, "add blue.jpg")
         Me.ButtonsImageList.Images.SetKeyName(8, "folder 2 ctrl bgd.png")
         '
+        'Panel1
+        '
+        Me.Panel1.Controls.Add(Me.NumericUpDown1)
+        Me.Panel1.Controls.Add(Me.Label1)
+        Me.Panel1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Panel1.Location = New System.Drawing.Point(543, 51)
+        Me.Panel1.Name = "Panel1"
+        Me.Panel1.Size = New System.Drawing.Size(174, 364)
+        Me.Panel1.TabIndex = 18
+        '
+        'NumericUpDown1
+        '
+        Me.NumericUpDown1.Location = New System.Drawing.Point(21, 41)
+        Me.NumericUpDown1.Name = "NumericUpDown1"
+        Me.NumericUpDown1.Size = New System.Drawing.Size(56, 20)
+        Me.NumericUpDown1.TabIndex = 12
+        '
+        'Label1
+        '
+        Me.Label1.AutoSize = True
+        Me.Label1.Location = New System.Drawing.Point(18, 22)
+        Me.Label1.Name = "Label1"
+        Me.Label1.Size = New System.Drawing.Size(49, 13)
+        Me.Label1.TabIndex = 11
+        Me.Label1.Text = "Variance"
+        '
+        'MarketPricesTB
+        '
+        Me.MarketPricesTB.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.MarketPricesTB.Enabled = False
+        Me.MarketPricesTB.Location = New System.Drawing.Point(363, 421)
+        Me.MarketPricesTB.Name = "MarketPricesTB"
+        Me.MarketPricesTB.Size = New System.Drawing.Size(174, 20)
+        Me.MarketPricesTB.TabIndex = 16
+        '
         'MainTab
         '
-        Me.MainTab.BackColor = System.Drawing.SystemColors.Control
-        Me.MainTab.Controls.Add(Me.SplitContainer1)
+        Me.MainTab.BackColor = System.Drawing.SystemColors.ButtonHighlight
+        Me.MainTab.Controls.Add(Me.MainPanel)
+        Me.MainTab.Controls.Add(Me.Panel2)
         Me.MainTab.Location = New System.Drawing.Point(4, 23)
         Me.MainTab.Name = "MainTab"
         Me.MainTab.Padding = New System.Windows.Forms.Padding(3)
@@ -335,24 +338,123 @@ Partial Class AlternativeScenariosUI
         Me.MainTab.TabIndex = 1
         Me.MainTab.Text = "Alternative Scenario"
         '
-        'SplitContainer1
+        'MainPanel
         '
-        Me.SplitContainer1.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.SplitContainer1.Location = New System.Drawing.Point(3, 3)
-        Me.SplitContainer1.Name = "SplitContainer1"
-        Me.SplitContainer1.Size = New System.Drawing.Size(720, 478)
-        Me.SplitContainer1.SplitterDistance = 356
-        Me.SplitContainer1.TabIndex = 0
+        Me.MainPanel.ColumnCount = 2
+        Me.MainPanel.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
+        Me.MainPanel.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
+        Me.MainPanel.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.MainPanel.Location = New System.Drawing.Point(3, 41)
+        Me.MainPanel.Name = "MainPanel"
+        Me.MainPanel.RowCount = 1
+        Me.MainPanel.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 440.0!))
+        Me.MainPanel.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 440.0!))
+        Me.MainPanel.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 440.0!))
+        Me.MainPanel.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 440.0!))
+        Me.MainPanel.Size = New System.Drawing.Size(720, 440)
+        Me.MainPanel.TabIndex = 2
         '
-        'CommitTab
+        'Panel2
         '
-        Me.CommitTab.BackColor = System.Drawing.SystemColors.Control
-        Me.CommitTab.Location = New System.Drawing.Point(4, 23)
-        Me.CommitTab.Name = "CommitTab"
-        Me.CommitTab.Padding = New System.Windows.Forms.Padding(3)
-        Me.CommitTab.Size = New System.Drawing.Size(726, 484)
-        Me.CommitTab.TabIndex = 2
-        Me.CommitTab.Text = "Commit Scenario"
+        Me.Panel2.BackColor = System.Drawing.SystemColors.Control
+        Me.Panel2.Controls.Add(Me.TableLayoutPanel2)
+        Me.Panel2.Dock = System.Windows.Forms.DockStyle.Top
+        Me.Panel2.Location = New System.Drawing.Point(3, 3)
+        Me.Panel2.Margin = New System.Windows.Forms.Padding(0)
+        Me.Panel2.Name = "Panel2"
+        Me.Panel2.Size = New System.Drawing.Size(720, 38)
+        Me.Panel2.TabIndex = 1
+        '
+        'TableLayoutPanel2
+        '
+        Me.TableLayoutPanel2.ColumnCount = 2
+        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
+        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
+        Me.TableLayoutPanel2.Controls.Add(Me.Label5, 1, 0)
+        Me.TableLayoutPanel2.Controls.Add(Me.Label3, 0, 0)
+        Me.TableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.TableLayoutPanel2.Location = New System.Drawing.Point(0, 0)
+        Me.TableLayoutPanel2.Name = "TableLayoutPanel2"
+        Me.TableLayoutPanel2.RowCount = 1
+        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
+        Me.TableLayoutPanel2.Size = New System.Drawing.Size(720, 38)
+        Me.TableLayoutPanel2.TabIndex = 0
+        '
+        'Label5
+        '
+        Me.Label5.AutoSize = True
+        Me.Label5.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Label5.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label5.Location = New System.Drawing.Point(363, 0)
+        Me.Label5.Name = "Label5"
+        Me.Label5.Size = New System.Drawing.Size(354, 38)
+        Me.Label5.TabIndex = 1
+        Me.Label5.Text = "Alternative Scenario"
+        Me.Label5.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        '
+        'Label3
+        '
+        Me.Label3.AutoSize = True
+        Me.Label3.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Label3.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label3.Location = New System.Drawing.Point(3, 0)
+        Me.Label3.Name = "Label3"
+        Me.Label3.Size = New System.Drawing.Size(354, 38)
+        Me.Label3.TabIndex = 0
+        Me.Label3.Text = "Base Scenario"
+        Me.Label3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        '
+        'SensitivitiesTab
+        '
+        Me.SensitivitiesTab.BackColor = System.Drawing.SystemColors.ButtonHighlight
+        Me.SensitivitiesTab.Controls.Add(Me.SensitivitiesTabControl)
+        Me.SensitivitiesTab.Location = New System.Drawing.Point(4, 23)
+        Me.SensitivitiesTab.Name = "SensitivitiesTab"
+        Me.SensitivitiesTab.Padding = New System.Windows.Forms.Padding(3)
+        Me.SensitivitiesTab.Size = New System.Drawing.Size(726, 484)
+        Me.SensitivitiesTab.TabIndex = 2
+        Me.SensitivitiesTab.Text = "Sensitivities"
+        '
+        'SensitivitiesTabControl
+        '
+        Me.SensitivitiesTabControl.DisplayStyle = System.Windows.Forms.TabStyle.Rounded
+        '
+        '
+        '
+        Me.SensitivitiesTabControl.DisplayStyleProvider.BorderColor = System.Drawing.SystemColors.GradientInactiveCaption
+        Me.SensitivitiesTabControl.DisplayStyleProvider.BorderColorHot = System.Drawing.SystemColors.GradientActiveCaption
+        Me.SensitivitiesTabControl.DisplayStyleProvider.BorderColorSelected = System.Drawing.SystemColors.ActiveCaption
+        Me.SensitivitiesTabControl.DisplayStyleProvider.CloserColor = System.Drawing.Color.Crimson
+        Me.SensitivitiesTabControl.DisplayStyleProvider.CloserColorActive = System.Drawing.Color.Crimson
+        Me.SensitivitiesTabControl.DisplayStyleProvider.FocusColor = System.Drawing.Color.Black
+        Me.SensitivitiesTabControl.DisplayStyleProvider.FocusTrack = False
+        Me.SensitivitiesTabControl.DisplayStyleProvider.HotTrack = True
+        Me.SensitivitiesTabControl.DisplayStyleProvider.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.SensitivitiesTabControl.DisplayStyleProvider.Opacity = 1.0!
+        Me.SensitivitiesTabControl.DisplayStyleProvider.Overlap = 0
+        Me.SensitivitiesTabControl.DisplayStyleProvider.Padding = New System.Drawing.Point(6, 3)
+        Me.SensitivitiesTabControl.DisplayStyleProvider.Radius = 10
+        Me.SensitivitiesTabControl.DisplayStyleProvider.ShowTabCloser = True
+        Me.SensitivitiesTabControl.DisplayStyleProvider.TextColor = System.Drawing.SystemColors.ControlText
+        Me.SensitivitiesTabControl.DisplayStyleProvider.TextColorDisabled = System.Drawing.SystemColors.ControlDark
+        Me.SensitivitiesTabControl.DisplayStyleProvider.TextColorSelected = System.Drawing.SystemColors.ControlText
+        Me.SensitivitiesTabControl.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.SensitivitiesTabControl.HotTrack = True
+        Me.SensitivitiesTabControl.Location = New System.Drawing.Point(3, 3)
+        Me.SensitivitiesTabControl.Name = "SensitivitiesTabControl"
+        Me.SensitivitiesTabControl.SelectedIndex = 0
+        Me.SensitivitiesTabControl.Size = New System.Drawing.Size(720, 478)
+        Me.SensitivitiesTabControl.TabIndex = 8
+        '
+        'CommitTabPage
+        '
+        Me.CommitTabPage.BackColor = System.Drawing.SystemColors.Control
+        Me.CommitTabPage.Location = New System.Drawing.Point(4, 23)
+        Me.CommitTabPage.Name = "CommitTabPage"
+        Me.CommitTabPage.Padding = New System.Windows.Forms.Padding(3)
+        Me.CommitTabPage.Size = New System.Drawing.Size(726, 484)
+        Me.CommitTabPage.TabIndex = 3
+        Me.CommitTabPage.Text = "Commit Scenario"
         '
         'TVImageList
         '
@@ -376,12 +478,24 @@ Partial Class AlternativeScenariosUI
         Me.VersionsTVIcons.Images.SetKeyName(1, "favicon(81).ico")
         Me.VersionsTVIcons.Images.SetKeyName(2, "icons-blue.png")
         '
+        'ReportsRCM
+        '
+        Me.ReportsRCM.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.SendToExcelToolStripMenuItem})
+        Me.ReportsRCM.Name = "ContextMenuStrip1"
+        Me.ReportsRCM.Size = New System.Drawing.Size(144, 26)
+        '
+        'SendToExcelToolStripMenuItem
+        '
+        Me.SendToExcelToolStripMenuItem.Name = "SendToExcelToolStripMenuItem"
+        Me.SendToExcelToolStripMenuItem.Size = New System.Drawing.Size(143, 22)
+        Me.SendToExcelToolStripMenuItem.Text = "Send to Excel"
+        '
         'AlternativeScenariosUI
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(734, 535)
-        Me.Controls.Add(Me.ConfTabControl)
+        Me.Controls.Add(Me.MainTabControl)
         Me.Controls.Add(Me.MenuStrip1)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.MainMenuStrip = Me.MenuStrip1
@@ -389,20 +503,22 @@ Partial Class AlternativeScenariosUI
         Me.Text = "Market Prices Scenarios Modeling"
         Me.MenuStrip1.ResumeLayout(False)
         Me.MenuStrip1.PerformLayout()
-        Me.ConfTabControl.ResumeLayout(False)
+        Me.MainTabControl.ResumeLayout(False)
         Me.InputsTab.ResumeLayout(False)
         Me.TableLayoutPanel1.ResumeLayout(False)
         Me.TableLayoutPanel1.PerformLayout()
         Me.Panel6.ResumeLayout(False)
         Me.Panel6.PerformLayout()
-        Me.Panel5.ResumeLayout(False)
-        Me.Panel5.PerformLayout()
         Me.MarketPricesPanel.ResumeLayout(False)
-        Me.MarketPricesPanel.PerformLayout()
+        Me.Panel1.ResumeLayout(False)
+        Me.Panel1.PerformLayout()
         CType(Me.NumericUpDown1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.MainTab.ResumeLayout(False)
-        CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.SplitContainer1.ResumeLayout(False)
+        Me.Panel2.ResumeLayout(False)
+        Me.TableLayoutPanel2.ResumeLayout(False)
+        Me.TableLayoutPanel2.PerformLayout()
+        Me.SensitivitiesTab.ResumeLayout(False)
+        Me.ReportsRCM.ResumeLayout(False)
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -410,15 +526,13 @@ Partial Class AlternativeScenariosUI
     Friend WithEvents MenuStrip1 As System.Windows.Forms.MenuStrip
     Friend WithEvents NewToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ConfigurationToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents ConfTabControl As System.Windows.Forms.CustomTabControl
+    Friend WithEvents MainTabControl As System.Windows.Forms.CustomTabControl
     Friend WithEvents InputsTab As System.Windows.Forms.TabPage
     Friend WithEvents MainTab As System.Windows.Forms.TabPage
-    Friend WithEvents SplitContainer1 As System.Windows.Forms.SplitContainer
-    Friend WithEvents CommitTab As System.Windows.Forms.TabPage
+    Friend WithEvents SensitivitiesTab As System.Windows.Forms.TabPage
     Friend WithEvents TableLayoutPanel1 As System.Windows.Forms.TableLayoutPanel
     Friend WithEvents Panel6 As System.Windows.Forms.Panel
     Friend WithEvents Label4 As System.Windows.Forms.Label
-    Friend WithEvents Panel5 As System.Windows.Forms.Panel
     Friend WithEvents ComputeScenarioBT As System.Windows.Forms.Button
     Friend WithEvents EntitiesTVPanel As System.Windows.Forms.Panel
     Friend WithEvents VersionsTVpanel As System.Windows.Forms.Panel
@@ -429,11 +543,20 @@ Partial Class AlternativeScenariosUI
     Friend WithEvents MarketPricesTB As System.Windows.Forms.TextBox
     Friend WithEvents MarketPricesPanel As System.Windows.Forms.Panel
     Friend WithEvents ButtonsImageList As System.Windows.Forms.ImageList
-    Friend WithEvents VarianceTB As System.Windows.Forms.TextBox
     Friend WithEvents NumericUpDown1 As System.Windows.Forms.NumericUpDown
     Friend WithEvents Label1 As System.Windows.Forms.Label
     Friend WithEvents MarketPricesTVPanel As System.Windows.Forms.Panel
     Friend WithEvents TVImageList As System.Windows.Forms.ImageList
     Public WithEvents EntitiesTVImageList As System.Windows.Forms.ImageList
     Friend WithEvents VersionsTVIcons As System.Windows.Forms.ImageList
+    Friend WithEvents CommitTabPage As System.Windows.Forms.TabPage
+    Friend WithEvents SensitivitiesTabControl As System.Windows.Forms.CustomTabControl
+    Friend WithEvents Panel1 As System.Windows.Forms.Panel
+    Friend WithEvents MainPanel As System.Windows.Forms.TableLayoutPanel
+    Friend WithEvents Panel2 As System.Windows.Forms.Panel
+    Friend WithEvents TableLayoutPanel2 As System.Windows.Forms.TableLayoutPanel
+    Friend WithEvents Label5 As System.Windows.Forms.Label
+    Friend WithEvents Label3 As System.Windows.Forms.Label
+    Friend WithEvents ReportsRCM As System.Windows.Forms.ContextMenuStrip
+    Friend WithEvents SendToExcelToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
 End Class

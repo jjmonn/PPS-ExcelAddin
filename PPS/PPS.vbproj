@@ -115,6 +115,8 @@
     <Compile Include="AddinModule.vb">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Clients Specific Modules\GDF SUEZ - ALTERNATIVE SCENARIOS\Configuration\Models\GDFSUEZASAccountsMapping.vb" />
+    <Compile Include="Clients Specific Modules\GDF SUEZ - ALTERNATIVE SCENARIOS\Configuration\Models\GDFSUEZASReport.vb" />
     <Compile Include="Clients Specific Modules\GDF SUEZ - ALTERNATIVE SCENARIOS\Configuration\Models\GDFSUEZEntitiesAttributes.vb" />
     <Compile Include="Clients Specific Modules\GDF SUEZ - ALTERNATIVE SCENARIOS\Configuration\Models\GDFSUEZSensitivitiesMapping.vb" />
     <Compile Include="Clients Specific Modules\GDF SUEZ - ALTERNATIVE SCENARIOS\Controller\AlternativeScenariosController.vb" />

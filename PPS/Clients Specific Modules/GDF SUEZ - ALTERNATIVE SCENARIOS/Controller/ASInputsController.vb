@@ -30,7 +30,7 @@ Friend Class ASInputsController
     Private ASController As AlternativeScenariosController
     Private View As AlternativeScenariosUI
     Private VersionsTV As New TreeView
-    Private EntitiesTV As New TreeView
+    Protected Friend EntitiesTV As New TreeView
     Private MarketPricesTV As New TreeView
 
     ' Variables
@@ -39,7 +39,7 @@ Friend Class ASInputsController
 
     ' Current Inputs Selection
     Protected Friend current_version_id As String
-    Protected Friend current_entity_id As String
+    Protected Friend current_entity_node As TreeNode
     Protected Friend current_market_prices_version_id As String
 
     ' Display
@@ -70,6 +70,12 @@ Friend Class ASInputsController
 
     End Sub
 
+    
+#End Region
+
+
+#Region "Interface"
+
     Protected Friend Sub InitializeView(ByRef input_view As AlternativeScenariosUI)
 
         View = input_view
@@ -82,17 +88,16 @@ Friend Class ASInputsController
 
         View.AddInputsTabElement(EntitiesTV, VersionsTV, MarketPricesTV)
 
+        View.NumericUpDown1.Value = 0
+        View.NumericUpDown1.Increment = 1
+
+
     End Sub
-
-#End Region
-
-
-#Region "Interface"
 
     Protected Friend Function ValidateInputsSelection() As Boolean
 
         If current_version_id <> "" Then
-            If current_entity_id <> "" Then
+            If Not current_entity_node Is Nothing Then
                 If current_market_prices_version_id <> "" Then
                     Return True
                 Else
@@ -106,10 +111,8 @@ Friend Class ASInputsController
             MsgBox("A Version must be selected")
             Return False
         End If
-        
-    End Function
 
-    
+    End Function
 
 #End Region
 
@@ -128,7 +131,7 @@ Friend Class ASInputsController
     Private Sub EntitiesTV_AfterSelect(sender As Object, e As TreeViewEventArgs)
 
         View.EntityTB.Text = e.Node.Text
-        current_entity_id = e.Node.Name
+        current_entity_node = e.Node
 
     End Sub
 
@@ -176,7 +179,6 @@ Friend Class ASInputsController
 #Region "Utilities"
 
   
-
 
 
 #End Region

@@ -466,6 +466,16 @@ Module Data_Tables_Constants
 #End Region
 
 
+#Region "Adjustments"
+
+    Friend Const ADJUSTMENTS_TABLE As String = "adjustments"
+    Friend Const ADJUSTMENTS_ID_VAR As String = "id"
+    Friend Const ADJUSTMENTS_NAME_VAR As String = "name"
+
+
+#End Region
+
+
 #Region "Operational Items Conversions"
 
     Friend Const OPERATIONAL_UNITS_TABLE As String = "operational_units"
@@ -492,8 +502,8 @@ Module Data_Tables_Constants
     Friend Const MARKET_INDEXES_VERSIONS_TABLE As String = "market_index_versions"
     Friend Const MARKET_INDEXES_VERSIONS_ID_VAR As String = "id"
     Friend Const MARKET_INDEXES_VERSIONS_PARENT_ID_VAR As String = "parent_id"
-    Friend Const MARKET_INDEXES_VERSIONS_NAME_VAR As String = "is_folder"
-    Friend Const MARKET_INDEXES_VERSIONS_IS_FOLER_VAR As String = "market_index_versions"
+    Friend Const MARKET_INDEXES_VERSIONS_NAME_VAR As String = "name"
+    Friend Const MARKET_INDEXES_VERSIONS_IS_FOLER_VAR As String = "is_folder"
   
 
 #End Region

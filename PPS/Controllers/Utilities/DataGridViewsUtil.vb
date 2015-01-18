@@ -17,7 +17,7 @@
 '
 '
 '
-' Last modified date: 24/11/2014
+' Last modified date: 17/01/2014
 ' Author: Julien Monnereau
 
 
@@ -48,6 +48,10 @@ Friend Class DataGridViewsUtil
     Private FIXED_SINGLE_HIERARCHY_COLUMN_WIDTH As Single = 150
     Public Const AVERAGE_CHAR_SIZE As Int32 = 9
     Public Const INDENT_CHAR_SIZE As Int32 = 2
+    Private Const BASIC_DGV_REPORT_THEME As VIBLEND_THEME = VIBLEND_THEME.OFFICE2010SILVER
+    Private Const BASIC_DGV_REPORT_FONT_SIZE As Single = 8
+    Private Const BASIC_DGV_REPORT_FIRST_COLUMN_CAPTION As String = ""
+
 
 #End Region
 
@@ -195,6 +199,13 @@ Friend Class DataGridViewsUtil
 
     End Sub
 
+    Protected Friend Shared Sub WhitenRowsHierarchy(ByRef DGV As vDataGridView)
+
+        Dim HStyle As VIBlend.Utilities.HierarchyItemStyle = GridTheme.GetDefaultTheme(DGV.VIBlendTheme).HierarchyItemStyleNormal
+
+
+    End Sub
+
     Public Shared Sub AdjustChildrenHierarchyItemSize(ByRef item As HierarchyItem)
 
         item.AutoResize(AutoResizeMode.FIT_ALL)
@@ -287,19 +298,19 @@ Friend Class DataGridViewsUtil
 #End Region
 
 
-
 #Region "DGV Columns Initialization"
 
     ' Initializes VDatagridViewColumns for NO VERSIONNING DGV 
-    Friend Function CreateDGVColumns(ByRef DataGridView As vDataGridView, _
-                                     ByRef periodList() As Integer, _
-                                     ByRef timeConfig As String) As Dictionary(Of Integer, Int32)
+    Friend Shared Function CreateDGVColumns(ByRef DataGridView As vDataGridView, _
+                                             ByRef periodList() As Integer, _
+                                             ByRef timeConfig As String, _
+                                             ByRef columns_reinit As Boolean) As Dictionary(Of Integer, Int32)
 
         Dim tmpDict As New Dictionary(Of Integer, Int32)        ' really used ?
         Dim i As Int32 = 0                                      ' i not incremented
         Dim periodStr As String
 
-        DataGridView.ColumnsHierarchy.Clear()
+        If columns_reinit = True Then DataGridView.ColumnsHierarchy.Clear()
         For Each period As Int32 In periodList
             Select Case timeConfig
                 Case MONTHLY_TIME_CONFIGURATION : periodStr = Format(DateTime.FromOADate(period), "Short date")
@@ -320,7 +331,7 @@ Friend Class DataGridViewsUtil
     ' Param DataGridView: the VDataGridview to init 
     ' Param periodList(): array of periods to be displayed
     ' Param Versions(): array of the versions to be displayed
-    Friend Function CreateDGVColumns(ByRef DataGridView As vDataGridView, _
+    Friend Shared Function CreateDGVColumns(ByRef DataGridView As vDataGridView, _
                                      ByRef periodList() As Integer, _
                                      ByRef Versions() As String, _
                                      ByRef timeConfig As String) _
@@ -470,6 +481,51 @@ Friend Class DataGridViewsUtil
 
     End Sub
 
+
+#End Region
+
+
+#Region "Basic Report DGV Utility"
+
+    Protected Friend Shared Function CreateBasicDGVReport(ByRef period_list As List(Of Integer), ByRef time_config As String) As vDataGridView
+
+        Dim DGV As New vDataGridView
+        DGV.VIBlendTheme = BASIC_DGV_REPORT_THEME
+        DGV.RowsHierarchy.Visible = False
+        DGV.BackColor = Color.White
+        DGV.ColumnsHierarchy.Items.Add(BASIC_DGV_REPORT_FIRST_COLUMN_CAPTION)
+        CreateDGVColumns(DGV, period_list.ToArray, time_config, False)
+        For j As Int32 = 1 To DGV.ColumnsHierarchy.Items.Count - 1
+            DGV.ColumnsHierarchy.Items(j).CellsFormatString = DEFAULT_FORMAT_STRING
+            DGV.ColumnsHierarchy.Items(j).CellsTextAlignment = ContentAlignment.MiddleRight
+            DGV.ColumnsHierarchy.Items(j).TextAlignment = ContentAlignment.MiddleRight
+        Next
+
+        DGVSetHiearchyFontSize(DGV, BASIC_DGV_REPORT_FONT_SIZE, BASIC_DGV_REPORT_FONT_SIZE)
+        DGV.GridLinesDisplayMode = GridLinesDisplayMode.DISPLAY_COLUMN_LINES
+        Return DGV
+
+    End Function
+
+    Protected Friend Shared Sub AddSerieToBasicDGVReport(ByRef DGV As vDataGridView, _
+                                                         ByRef serie_name As String, _
+                                                         ByRef values As Double())
+
+        ' evolution -> border + bold around  important items !!
+        Dim row As HierarchyItem = DGV.RowsHierarchy.Items.Add("")
+        DGV.CellsArea.SetCellValue(row, DGV.ColumnsHierarchy.Items(0), serie_name)
+        For j As Int32 = 1 To DGV.ColumnsHierarchy.Items.Count - 1
+            DGV.CellsArea.SetCellValue(row, DGV.ColumnsHierarchy.Items(j), values(j - 1))
+        Next
+
+    End Sub
+
+    Protected Friend Shared Sub FormatBasicDGV(ByRef DGV As vDataGridView)
+
+        DGV.ColumnsHierarchy.AutoResize(AutoResizeMode.FIT_ALL)
+        'DGV.ColumnsHierarchy.AutoStretchColumns = True
+
+    End Sub
 
 #End Region
 

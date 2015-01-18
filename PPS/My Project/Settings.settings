@@ -2,8 +2,14 @@
 <SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="My" GeneratedClassName="MySettings" UseMySettingsClassName="true">
   <Profiles />
   <Settings>
-    <Setting Name="preferredServer" Type="System.String" Scope="User">
-      <Value Profile="(Default)">tobedefined</Value>
+    <Setting Name="server" Type="System.String" Scope="User">
+      <Value Profile="(Default)">173.194.251.206</Value>
+    </Setting>
+    <Setting Name="certificatespath" Type="System.String" Scope="User">
+      <Value Profile="(Default)">C:\Users\PPS\Documents\Purple Sun\CA\</Value>
+    </Setting>
+    <Setting Name="version_id" Type="System.String" Scope="User">
+      <Value Profile="(Default)">VTOYT</Value>
     </Setting>
   </Settings>
 </SettingsFile>

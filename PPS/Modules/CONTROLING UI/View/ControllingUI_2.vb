@@ -251,12 +251,12 @@ Friend Class ControllingUI_2
         End Select
         For Each tab_ As TabPage In TabControl1.TabPages
             If versionsNamesArray.Length > 1 Then
-                periodsColumnIndexDictionary = DGVUTIL.CreateDGVColumns(tab_.Controls(0), periodsList.ToArray, versionsNamesArray, timeConfig)
+                periodsColumnIndexDictionary = DataGridViewsUtil.CreateDGVColumns(tab_.Controls(0), periodsList.ToArray, versionsNamesArray, timeConfig)
             Else
                 If rates_versions_list.Count > 1 Then
-                    periodsColumnIndexDictionary = DGVUTIL.CreateDGVColumns(tab_.Controls(0), periodsList.ToArray, rates_versions_list.ToArray, timeConfig)
+                    periodsColumnIndexDictionary = DataGridViewsUtil.CreateDGVColumns(tab_.Controls(0), periodsList.ToArray, rates_versions_list.ToArray, timeConfig)
                 Else
-                    periodsColumnIndexDictionary = DGVUTIL.CreateDGVColumns(tab_.Controls(0), periodsList.ToArray, timeConfig)
+                    periodsColumnIndexDictionary = DataGridViewsUtil.CreateDGVColumns(tab_.Controls(0), periodsList.ToArray, timeConfig, True)
                 End If
             End If
         Next

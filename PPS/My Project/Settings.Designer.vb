@@ -56,13 +56,37 @@ Namespace My
         
         <Global.System.Configuration.UserScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("tobedefined")>  _
-        Public Property preferredServer() As String
+         Global.System.Configuration.DefaultSettingValueAttribute("173.194.251.206")>  _
+        Public Property server() As String
             Get
-                Return CType(Me("preferredServer"),String)
+                Return CType(Me("server"),String)
             End Get
             Set
-                Me("preferredServer") = value
+                Me("server") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("C:\Users\PPS\Documents\Purple Sun\CA\")>  _
+        Public Property certificatespath() As String
+            Get
+                Return CType(Me("certificatespath"),String)
+            End Get
+            Set
+                Me("certificatespath") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("VTOYT")>  _
+        Public Property version_id() As String
+            Get
+                Return CType(Me("version_id"),String)
+            End Get
+            Set
+                Me("version_id") = value
             End Set
         End Property
     End Class

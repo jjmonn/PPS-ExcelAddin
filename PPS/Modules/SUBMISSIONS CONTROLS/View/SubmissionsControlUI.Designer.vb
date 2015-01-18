@@ -137,6 +137,7 @@ Partial Class SubmissionsControlUI
         '
         'ChartsTableLayoutPanel
         '
+        Me.ChartsTableLayoutPanel.BackColor = System.Drawing.SystemColors.ButtonHighlight
         Me.ChartsTableLayoutPanel.ColumnCount = 4
         Me.ChartsTableLayoutPanel.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25.0!))
         Me.ChartsTableLayoutPanel.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25.0!))
