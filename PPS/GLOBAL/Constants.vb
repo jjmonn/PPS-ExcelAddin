@@ -129,6 +129,7 @@ Module Constants
     ' PP006: The selected version corresponds to a versions folder. A version name should be selected
     ' PP007: UserID not present in the acf_uacs table -> could not give a credential
     ' PPS8: Error during data table creation 
+    ' PPS9: Unknown or NULL time configuration
 
 
 End Module

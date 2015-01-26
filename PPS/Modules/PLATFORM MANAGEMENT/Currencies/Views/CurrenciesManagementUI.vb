@@ -13,7 +13,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 29/10/2014
+' Last modified: 21/01/2015
 
 
 Imports System.Collections.Generic
@@ -22,15 +22,15 @@ Imports System.Collections
 Imports System.Windows.Forms
 
 
-Public Class CurrenciesManagementUI
+Friend Class CurrenciesManagementUI
 
 
 #Region "Instance Variables"
 
     ' Objects
-    Friend CONTROLER As CExchangeRatesCONTROLER
+    Friend Controller As CExchangeRatesCONTROLER
     Friend ratesView As RatesView
-    
+
     ' Variables
     Private mainMenuFlag As Boolean
     Private currenciesMenuFlag As Boolean
@@ -48,26 +48,26 @@ Public Class CurrenciesManagementUI
 
 #Region "Initialize"
 
-    Public Sub New()
+    Protected Friend Sub New()
 
         ' This call is required by the designer.
         InitializeComponent()
 
         ' Add any initialization after the InitializeComponent() call.
-        ratesView = New RatesView(rates_DGV, rates_chart)
-        CONTROLER = New CExchangeRatesCONTROLER(Me)
-        If CONTROLER.object_is_alive = False Then
+        ratesView = New RatesView(rates_DGV)
+        Controller = New CExchangeRatesCONTROLER(Me)
+        If Controller.object_is_alive = False Then
             MsgBox("There seems to be a network connection issue. You should try again and contact the PPS team if the error persist.")
             Me.Dispose()
         End If
-        ratesView.AttributeController(CONTROLER)
+        ratesView.AttributeController(Controller)
 
     End Sub
 
     Private Sub CurrenciesManagementUI_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 
         Me.WindowState = FormWindowState.Maximized
-        CollapseChartPane() 
+        CollapseChartPane()
         rates_DGV.AllowCopyPaste = True
         rates_DGV.ColumnsHierarchy.AutoResize(AutoResizeMode.FIT_ALL)
         rates_DGV.RowsHierarchy.CompactStyleRenderingEnabled = True
@@ -108,7 +108,7 @@ Public Class CurrenciesManagementUI
 
     Private Sub ImportFromExcelToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ImportFromExcelToolStripMenuItem.Click
 
-        CONTROLER.ImportRatesFromExcel()
+        Controller.ImportRatesFromExcel()
 
     End Sub
 
@@ -119,7 +119,7 @@ Public Class CurrenciesManagementUI
     ' New currency call back
     Private Sub NewCurrencyBT_Click(sender As Object, e As EventArgs) Handles AddNewCurrencyToolStripMenuItem.Click, _
                                                                               AddCurrencyToolStripMenuItem.Click
-        CONTROLER.AddNewCurrency()
+        Controller.AddNewCurrency()
 
     End Sub
 
@@ -136,7 +136,7 @@ Public Class CurrenciesManagementUI
 
     Private Sub select_version_Click(sender As Object, e As EventArgs) Handles select_version.Click
 
-        If right_clicked_node.SelectedImageIndex = 0 Then CONTROLER.ChangeVersion(right_clicked_node.Name)
+        If right_clicked_node.SelectedImageIndex = 0 Then Controller.ChangeVersion(right_clicked_node.Name)
 
     End Sub
 
@@ -145,13 +145,13 @@ Public Class CurrenciesManagementUI
         If Not right_clicked_node Is Nothing Then
             If right_clicked_node.SelectedImageIndex = 1 Then
                 Dim name As String = InputBox("Please enter a name for the new Folder")
-                If Len(name) < 50 Then CONTROLER.CreateVersion(name, 1, right_clicked_node) Else MsgBox("The name cannot exceed 50 characters")
+                If Len(name) < 50 Then Controller.CreateVersion(name, 1, , , right_clicked_node) Else MsgBox("The name cannot exceed 50 characters")
             Else
                 MsgBox("A folder can only be added to another folder")
             End If
         Else
             Dim name As String = InputBox("Please enter a name for the new Folder")
-            If Len(name) < 50 Then CONTROLER.CreateVersion(name, 1) Else MsgBox("The name cannot exceed 50 characters")
+            If Len(name) < 50 Then Controller.CreateVersion(name, 1) Else MsgBox("The name cannot exceed 50 characters")
         End If
 
     End Sub
@@ -159,15 +159,13 @@ Public Class CurrenciesManagementUI
     Private Sub AddRatesVersionRCM_Click(sender As Object, e As EventArgs) Handles AddRatesVersionRCM.Click
 
         If Not right_clicked_node Is Nothing Then
-            If right_clicked_node.SelectedImageIndex = 1 Then
-                Dim name As String = InputBox("Please enter the name of the new Version")
-                If Len(name) < 50 Then CONTROLER.CreateVersion(name, 0, right_clicked_node) Else MsgBox("The name cannot exceed 50 characters")
+            If Controller.IsFolderVersion(right_clicked_node.Name) = True Then
+                Controller.ShowNewRatesVersion(right_clicked_node)
             Else
                 MsgBox("A Version can only be added under a folder")
             End If
         Else
-            Dim name As String = InputBox("Please enter the name of the new Version")
-            If Len(name) < 50 Then CONTROLER.CreateVersion(name, 0) Else MsgBox("The name cannot exceed 50 characters")
+            Controller.ShowNewRatesVersion()
         End If
 
     End Sub
@@ -180,7 +178,7 @@ Public Class CurrenciesManagementUI
                                                       "This version and all sub versions will be deleted, do you confirm?" + Chr(13) + Chr(13), _
                                                       "Version deletion confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
             If confirm = DialogResult.Yes Then
-                CONTROLER.DeleteVersionsOrFolder(right_clicked_node)
+                Controller.DeleteVersionsOrFolder(right_clicked_node)
             End If
         End If
 
@@ -202,6 +200,12 @@ Public Class CurrenciesManagementUI
 
     End Sub
 
+    Private Sub CopyRateDownToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles CopyRateDownToolStripMenuItem.Click
+
+        ratesView.CopyRateValueDown()
+
+    End Sub
+
 #End Region
 
 #End Region
@@ -219,14 +223,14 @@ Public Class CurrenciesManagementUI
 
     Private Sub versionsTV_NodeMouseDoubleClick(sender As Object, e As TreeNodeMouseClickEventArgs) Handles versionsTV.NodeMouseDoubleClick
 
-        If e.Node.SelectedImageIndex = 0 Then CONTROLER.ChangeVersion(e.Node.Name)
+        If e.Node.SelectedImageIndex = 0 Then Controller.ChangeVersion(e.Node.Name)
 
     End Sub
 
     Private Sub versionsTV_KeyPress(sender As Object, e As KeyPressEventArgs) Handles versionsTV.KeyPress
 
         If e.KeyChar = Chr(13) AndAlso Not versionsTV.SelectedNode Is Nothing _
-        AndAlso versionsTV.SelectedNode.SelectedImageIndex = 0 Then CONTROLER.ChangeVersion(versionsTV.SelectedNode.Name)
+        AndAlso versionsTV.SelectedNode.SelectedImageIndex = 0 Then Controller.ChangeVersion(versionsTV.SelectedNode.Name)
 
         '   If e.KeyChar = Chr(10) Then DeleteVersionBT_Click(sender, e)
 
@@ -280,12 +284,13 @@ Public Class CurrenciesManagementUI
 
     Private Sub UI_FormClosing(sender As Object, e As Windows.Forms.FormClosingEventArgs) Handles MyBase.FormClosing
 
-        CONTROLER.CloseExchangeRates()
+        Controller.CloseExchangeRates()
 
     End Sub
 
 
 #End Region
+
 
 
 End Class

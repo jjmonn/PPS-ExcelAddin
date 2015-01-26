@@ -9,7 +9,7 @@
 ' Know bugs :
 ' 
 '
-'Last modified: 29/11/2014
+'Last modified: 19/01/2015
 ' Author: Julien Monnereau
 
 
@@ -17,16 +17,16 @@ Imports System.Collections.Generic
 Imports System.Collections
 
 
-Public Class VersionsMapping
+Friend Class VersionsMapping
 
 
 #Region "List provider"
 
-    Public Shared Function GetVersionsList(item As String) As List(Of String)
+    Protected Friend Shared Function GetVersionsList(item As String) As List(Of String)
 
         Dim srv As New ModelServer
         Dim tmpList As New List(Of String)
-        srv.openRst(CONFIG_DATABASE + "." + VERSIONS_TABLE, _
+        srv.OpenRst(CONFIG_DATABASE + "." + VERSIONS_TABLE, _
                     ModelServer.FWD_CURSOR)
         srv.rst.Filter = VERSIONS_IS_FOLDER_VARIABLE + "= 0"
 
@@ -49,13 +49,13 @@ Public Class VersionsMapping
 #Region "Dictionary Provider"
 
     ' returns a dictionary of keys: param1 | Values: param2
-    Public Shared Function GetVersionsHashTable(ByRef keys As String, ByRef values As String) As Hashtable
+    Protected Friend Shared Function GetVersionsHashTable(ByRef keys As String, ByRef values As String) As Hashtable
 
         Dim srv As New ModelServer
         Dim tmpHT As New Hashtable
-        srv.openRst(CONFIG_DATABASE + "." + VERSIONS_TABLE, _
+        srv.OpenRst(CONFIG_DATABASE + "." + VERSIONS_TABLE, _
                     ModelServer.FWD_CURSOR)
-        srv.rst.filter = VERSIONS_IS_FOLDER_VARIABLE + "= 0"
+        srv.rst.Filter = VERSIONS_IS_FOLDER_VARIABLE + "= 0"
         If srv.rst.EOF = False And srv.rst.BOF = False Then
 
             srv.rst.MoveFirst()
@@ -73,16 +73,17 @@ Public Class VersionsMapping
 
     End Function
 
-    Public Shared Function GetVersionTimeConfiguration(ByRef versionkey As String) As Hashtable
+    Protected Friend Shared Function GetVersionTimeConfiguration(ByRef versionkey As String) As Hashtable
 
         Dim srv As New ModelServer
         Dim tmpHT As New Hashtable
-        srv.openRst(CONFIG_DATABASE + "." + VERSIONS_TABLE, _
+        srv.OpenRst(CONFIG_DATABASE + "." + VERSIONS_TABLE, _
                     ModelServer.FWD_CURSOR)
-        srv.rst.filter = VERSIONS_CODE_VARIABLE + "='" + versionkey + "'"
+        srv.rst.Filter = VERSIONS_CODE_VARIABLE + "='" + versionkey + "'"
         If srv.rst.EOF = False And srv.rst.BOF = False Then
             tmpHT.Add(VERSIONS_TIME_CONFIG_VARIABLE, srv.rst.Fields(VERSIONS_TIME_CONFIG_VARIABLE).Value)
-            tmpHT.Add(VERSIONS_REFERENCE_YEAR_VARIABLE, srv.rst.Fields(VERSIONS_REFERENCE_YEAR_VARIABLE).Value)
+            tmpHT.Add(VERSIONS_START_PERIOD_VAR, srv.rst.Fields(VERSIONS_START_PERIOD_VAR).Value)
+            tmpHT.Add(VERSIONS_NB_PERIODS_VAR, srv.rst.Fields(VERSIONS_NB_PERIODS_VAR).Value)
             srv.rst.MoveNext()
         Else
             Return Nothing
@@ -93,13 +94,13 @@ Public Class VersionsMapping
 
     End Function
 
-    Public Shared Function GetVersionsTimeConfiguration() As Dictionary(Of String, Hashtable)
+    Protected Friend Shared Function GetVersionsTimeConfiguration() As Dictionary(Of String, Hashtable)
 
         Dim srv As New ModelServer
         Dim tmpDict As New Dictionary(Of String, Hashtable)
-        srv.openRst(CONFIG_DATABASE + "." + VERSIONS_TABLE, _
+        srv.OpenRst(CONFIG_DATABASE + "." + VERSIONS_TABLE, _
                     ModelServer.FWD_CURSOR)
-        srv.rst.filter = ""
+        srv.rst.Filter = ""
 
         If srv.rst.EOF = False And srv.rst.BOF = False Then
             srv.rst.MoveFirst()
@@ -107,14 +108,15 @@ Public Class VersionsMapping
 
                 Dim tmpHT As New Hashtable
                 tmpHT.Add(VERSIONS_TIME_CONFIG_VARIABLE, srv.rst.Fields(VERSIONS_TIME_CONFIG_VARIABLE).Value)
-                tmpHT.Add(VERSIONS_REFERENCE_YEAR_VARIABLE, srv.rst.Fields(VERSIONS_REFERENCE_YEAR_VARIABLE).Value)
+                tmpHT.Add(VERSIONS_START_PERIOD_VAR, srv.rst.Fields(VERSIONS_START_PERIOD_VAR).Value)
+                tmpHT.Add(VERSIONS_NB_PERIODS_VAR, srv.rst.Fields(VERSIONS_NB_PERIODS_VAR).Value)
                 tmpDict.Add(srv.rst.Fields(VERSIONS_CODE_VARIABLE).Value, tmpHT)
                 srv.rst.MoveNext()
             Loop
         Else
             Return Nothing
         End If
-        srv.rst.close()
+        srv.rst.Close()
         srv = Nothing
         Return tmpDict
 

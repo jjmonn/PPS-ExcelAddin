@@ -13,13 +13,14 @@
 ' 
 '
 ' Author: Julien Monnereau
-' Last modified: 01/12/2014
+' Last modified: 20/01/2015
 
 
 
 Imports System.Runtime.InteropServices
 Imports AddinExpress.XL
 Imports System.Windows.Forms
+
 
 Public Class CVersionSelectionPane
 
@@ -36,31 +37,25 @@ Public Class CVersionSelectionPane
 
 
     Public Sub New()
-        MyBase.New()
 
+        MyBase.New()
         InitializeComponent()
 
     End Sub
 
-    ' mode 0: both rates and data version, 1: data version, 2: rates version
-    Friend Sub Init(ByRef input_mode As Int32)
+    Friend Function Init(ByRef settings_version_id As String) As Boolean
 
-        Select Case input_mode
-            Case 0
-                VERSEL = New VersionSelection(VersioningTVIL, Me)
-                InsertDataVersionSelection()
-                InsertRatesVersionSelection()
-            Case 1
-                VERSEL = New VersionSelection(VersioningTVIL, Me)
-                InsertDataVersionSelection()
-            Case 2
-                VERSEL = New RatesVersionSelection(VersioningTVIL, Me)
-                InsertRatesVersionSelection()
-        End Select
-        mode = input_mode
-        AddHandler ValidateButton.Click, AddressOf VERSEL.SetSelectedVersion
+        VERSEL = New VersionSelection(VersioningTVIL, Me)
+        If VERSEL.IsVersionValid(settings_version_id) Then
+            VERSEL.versionsTV.SelectedNode = VERSEL.versionsTV.Nodes.Find(settings_version_id, True)(0)
+            VERSEL.SetSelectedVersion()
+            Return True
+        End If
+        InsertDataVersionSelection()
+        AddHandler ValidateBT.Click, AddressOf VERSEL.SetSelectedVersion
+        Return False
 
-    End Sub
+    End Function
 
     Private Sub InsertDataVersionSelection()
 
@@ -69,12 +64,6 @@ Public Class CVersionSelectionPane
 
     End Sub
 
-    Private Sub InsertRatesVersionSelection()
-
-        TableLayoutPanel1.Controls.Add(VERSEL.rates_versionTV, 0, 3)
-        TableLayoutPanel1.GetControlFromPosition(0, 3).Dock = DockStyle.Fill
-
-    End Sub
 
 #End Region
 
@@ -83,13 +72,7 @@ Public Class CVersionSelectionPane
 
         If Not VERSEL Is Nothing Then
             VERSEL.versionsTV.Nodes.Clear()
-            Select Case mode
-                Case 0
-                    TableLayoutPanel1.Controls.Remove(TableLayoutPanel1.GetControlFromPosition(0, 1))
-                    TableLayoutPanel1.Controls.Remove(TableLayoutPanel1.GetControlFromPosition(0, 3))
-                Case 1 : TableLayoutPanel1.Controls.Remove(TableLayoutPanel1.GetControlFromPosition(0, 1))
-                Case 2 : TableLayoutPanel1.Controls.Remove(TableLayoutPanel1.GetControlFromPosition(0, 3))
-            End Select
+            TableLayoutPanel1.Controls.Remove(TableLayoutPanel1.GetControlFromPosition(0, 1))
             VERSEL = Nothing
             Me.Hide()
         End If
@@ -116,8 +99,4 @@ Public Class CVersionSelectionPane
 
 
 
-
-
-    
-   
 End Class

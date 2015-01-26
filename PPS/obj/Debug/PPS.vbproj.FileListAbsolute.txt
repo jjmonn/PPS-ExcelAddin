@@ -569,6 +569,7 @@ C:\Users\Julien Monnereau\Documents\GitHub\PPS-Repo\PPS\obj\Debug\PPS.pdb
 C:\Users\PPS\Documents\GitHub\PPS-Repo.git\trunk\PPS\bin\Debug\PPS.dll.config
 C:\Users\PPS\Documents\GitHub\PPS-Repo.git\trunk\PPS\bin\Debug\PPS.dll
 C:\Users\PPS\Documents\GitHub\PPS-Repo.git\trunk\PPS\bin\Debug\PPS.pdb
+C:\Users\PPS\Documents\GitHub\PPS-Repo.git\trunk\PPS\bin\Debug\PPS.tlb
 C:\Users\PPS\Documents\GitHub\PPS-Repo.git\trunk\PPS\bin\Debug\GaugeThis.dll
 C:\Users\PPS\Documents\GitHub\PPS-Repo.git\trunk\PPS\bin\Debug\JacksonSoft.CustomTabControl.dll
 C:\Users\PPS\Documents\GitHub\PPS-Repo.git\trunk\PPS\bin\Debug\Microsoft.Office.Interop.Excel.dll
@@ -589,6 +590,7 @@ C:\Users\PPS\Documents\GitHub\PPS-Repo.git\trunk\PPS\bin\Debug\sv\ZedGraph.resou
 C:\Users\PPS\Documents\GitHub\PPS-Repo.git\trunk\PPS\bin\Debug\tr\ZedGraph.resources.dll
 C:\Users\PPS\Documents\GitHub\PPS-Repo.git\trunk\PPS\bin\Debug\zh-cn\ZedGraph.resources.dll
 C:\Users\PPS\Documents\GitHub\PPS-Repo.git\trunk\PPS\bin\Debug\zh-tw\ZedGraph.resources.dll
+C:\Users\PPS\Documents\GitHub\PPS-Repo.git\trunk\PPS\obj\Debug\PPS.vbprojResolveAssemblyReference.cache
 C:\Users\PPS\Documents\GitHub\PPS-Repo.git\trunk\PPS\obj\Debug\Interop.ADODB.dll
 C:\Users\PPS\Documents\GitHub\PPS-Repo.git\trunk\PPS\obj\Debug\Interop.WinHttp.dll
 C:\Users\PPS\Documents\GitHub\PPS-Repo.git\trunk\PPS\obj\Debug\PPS.vbproj.ResolveComReference.cache
@@ -603,6 +605,7 @@ C:\Users\PPS\Documents\GitHub\PPS-Repo.git\trunk\PPS\obj\Debug\PPS.LogUI.resourc
 C:\Users\PPS\Documents\GitHub\PPS-Repo.git\trunk\PPS\obj\Debug\PPS.DataHistoryUI.resources
 C:\Users\PPS\Documents\GitHub\PPS-Repo.git\trunk\PPS\obj\Debug\PPS.InputRatesExcel.resources
 C:\Users\PPS\Documents\GitHub\PPS-Repo.git\trunk\PPS\obj\Debug\PPS.NewAccountUI.resources
+C:\Users\PPS\Documents\GitHub\PPS-Repo.git\trunk\PPS\obj\Debug\PPS.NewRatesVersionUI.resources
 C:\Users\PPS\Documents\GitHub\PPS-Repo.git\trunk\PPS\obj\Debug\PPS.PlatformMGTUI.resources
 C:\Users\PPS\Documents\GitHub\PPS-Repo.git\trunk\PPS\obj\Debug\PPS.NewDataVersionUI.resources
 C:\Users\PPS\Documents\GitHub\PPS-Repo.git\trunk\PPS\obj\Debug\PPS.ControlsMGTUI.resources
@@ -639,5 +642,3 @@ C:\Users\PPS\Documents\GitHub\PPS-Repo.git\trunk\PPS\obj\Debug\PPS.StatusReportI
 C:\Users\PPS\Documents\GitHub\PPS-Repo.git\trunk\PPS\obj\Debug\PPS.vbproj.GenerateResource.Cache
 C:\Users\PPS\Documents\GitHub\PPS-Repo.git\trunk\PPS\obj\Debug\PPS.dll
 C:\Users\PPS\Documents\GitHub\PPS-Repo.git\trunk\PPS\obj\Debug\PPS.pdb
-C:\Users\PPS\Documents\GitHub\PPS-Repo.git\trunk\PPS\bin\Debug\PPS.tlb
-C:\Users\PPS\Documents\GitHub\PPS-Repo.git\trunk\PPS\obj\Debug\PPS.vbprojResolveAssemblyReference.cache

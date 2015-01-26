@@ -41,10 +41,12 @@ Partial Class CurrenciesManagementUI
         Me.dgvRCM = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.expand_periods = New System.Windows.Forms.ToolStripMenuItem()
         Me.collapse_periods = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator3 = New System.Windows.Forms.ToolStripSeparator()
+        Me.CopyRateDownToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.TableLayoutPanel3 = New System.Windows.Forms.TableLayoutPanel()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.rates_version_TB = New System.Windows.Forms.TextBox()
-        Me.rates_chart = New ZedGraph.ZedGraphControl()
+        Me.ChartPanel = New System.Windows.Forms.Panel()
         Me.currenciesRCMenu = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.AddCurrencyToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.DeleteCurrencyToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
@@ -171,6 +173,7 @@ Partial Class CurrenciesManagementUI
         '
         'SplitContainer2
         '
+        Me.SplitContainer2.BackColor = System.Drawing.SystemColors.ButtonHighlight
         Me.SplitContainer2.Dock = System.Windows.Forms.DockStyle.Fill
         Me.SplitContainer2.Location = New System.Drawing.Point(0, 0)
         Me.SplitContainer2.Name = "SplitContainer2"
@@ -182,7 +185,7 @@ Partial Class CurrenciesManagementUI
         '
         'SplitContainer2.Panel2
         '
-        Me.SplitContainer2.Panel2.Controls.Add(Me.rates_chart)
+        Me.SplitContainer2.Panel2.Controls.Add(Me.ChartPanel)
         Me.SplitContainer2.Size = New System.Drawing.Size(836, 578)
         Me.SplitContainer2.SplitterDistance = 353
         Me.SplitContainer2.SplitterWidth = 1
@@ -275,9 +278,9 @@ Partial Class CurrenciesManagementUI
         '
         'dgvRCM
         '
-        Me.dgvRCM.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.expand_periods, Me.collapse_periods})
+        Me.dgvRCM.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.expand_periods, Me.collapse_periods, Me.ToolStripSeparator3, Me.CopyRateDownToolStripMenuItem})
         Me.dgvRCM.Name = "dgvRCM"
-        Me.dgvRCM.Size = New System.Drawing.Size(177, 48)
+        Me.dgvRCM.Size = New System.Drawing.Size(177, 76)
         '
         'expand_periods
         '
@@ -291,6 +294,18 @@ Partial Class CurrenciesManagementUI
         Me.collapse_periods.Name = "collapse_periods"
         Me.collapse_periods.Size = New System.Drawing.Size(176, 22)
         Me.collapse_periods.Text = "Collapse all Periods"
+        '
+        'ToolStripSeparator3
+        '
+        Me.ToolStripSeparator3.Name = "ToolStripSeparator3"
+        Me.ToolStripSeparator3.Size = New System.Drawing.Size(173, 6)
+        '
+        'CopyRateDownToolStripMenuItem
+        '
+        Me.CopyRateDownToolStripMenuItem.Image = Global.PPS.My.Resources.Resources.Download_
+        Me.CopyRateDownToolStripMenuItem.Name = "CopyRateDownToolStripMenuItem"
+        Me.CopyRateDownToolStripMenuItem.Size = New System.Drawing.Size(176, 22)
+        Me.CopyRateDownToolStripMenuItem.Text = "Copy Rate Down"
         '
         'TableLayoutPanel3
         '
@@ -329,21 +344,14 @@ Partial Class CurrenciesManagementUI
         Me.rates_version_TB.Size = New System.Drawing.Size(141, 20)
         Me.rates_version_TB.TabIndex = 1
         '
-        'rates_chart
+        'ChartPanel
         '
-        Me.rates_chart.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.rates_chart.Location = New System.Drawing.Point(0, 0)
-        Me.rates_chart.Margin = New System.Windows.Forms.Padding(0)
-        Me.rates_chart.Name = "rates_chart"
-        Me.rates_chart.ScrollGrace = 0.0R
-        Me.rates_chart.ScrollMaxX = 0.0R
-        Me.rates_chart.ScrollMaxY = 0.0R
-        Me.rates_chart.ScrollMaxY2 = 0.0R
-        Me.rates_chart.ScrollMinX = 0.0R
-        Me.rates_chart.ScrollMinY = 0.0R
-        Me.rates_chart.ScrollMinY2 = 0.0R
-        Me.rates_chart.Size = New System.Drawing.Size(836, 224)
-        Me.rates_chart.TabIndex = 4
+        Me.ChartPanel.BackColor = System.Drawing.SystemColors.ButtonHighlight
+        Me.ChartPanel.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.ChartPanel.Location = New System.Drawing.Point(0, 0)
+        Me.ChartPanel.Name = "ChartPanel"
+        Me.ChartPanel.Size = New System.Drawing.Size(836, 224)
+        Me.ChartPanel.TabIndex = 0
         '
         'currenciesRCMenu
         '
@@ -460,7 +468,6 @@ Partial Class CurrenciesManagementUI
     Friend WithEvents rates_DGV As VIBlend.WinForms.DataGridView.vDataGridView
     Friend WithEvents MenuButtonIL As System.Windows.Forms.ImageList
     Friend WithEvents SplitContainer2 As System.Windows.Forms.SplitContainer
-    Friend WithEvents rates_chart As ZedGraph.ZedGraphControl
     Friend WithEvents ratesVersionsIL As System.Windows.Forms.ImageList
     Friend WithEvents MenuStrip1 As System.Windows.Forms.MenuStrip
     Friend WithEvents CurrenciesToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
@@ -486,4 +493,7 @@ Partial Class CurrenciesManagementUI
     Friend WithEvents select_version As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ToolStripSeparator2 As System.Windows.Forms.ToolStripSeparator
     Friend WithEvents ToolStripSeparator1 As System.Windows.Forms.ToolStripSeparator
+    Friend WithEvents ChartPanel As System.Windows.Forms.Panel
+    Friend WithEvents ToolStripSeparator3 As System.Windows.Forms.ToolStripSeparator
+    Friend WithEvents CopyRateDownToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
 End Class

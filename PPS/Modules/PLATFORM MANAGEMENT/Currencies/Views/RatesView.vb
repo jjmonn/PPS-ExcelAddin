@@ -14,7 +14,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 27/11/2014
+' Last modified: 21/01/2015
 
 
 Imports VIBlend.WinForms.DataGridView
@@ -25,14 +25,13 @@ Imports System.Drawing
 Imports System.Windows.Forms
 
 
-Public Class RatesView
+Friend Class RatesView
 
 
 #Region "Instance variables"
 
     ' Objects
     Private DGV As vDataGridView
-    Private CHART As ZedGraphControl
     Private CONTROLLER As CExchangeRatesCONTROLER
 
     ' Variables
@@ -57,8 +56,7 @@ Public Class RatesView
 
 #Region "Initialize"
 
-    Friend Sub New(ByRef inputDGV As vDataGridView, _
-                   ByRef inputChart As ZedGraphControl)
+    Friend Sub New(ByRef inputDGV As vDataGridView)
 
         DGV = inputDGV
 
@@ -67,11 +65,6 @@ Public Class RatesView
             .RowsHierarchy.CompactStyleRenderingEnabled = False
             AddHandler .CellValueChanging, AddressOf rates_DGV_CellValueChanging
         End With
-
-        CHART = inputChart
-        myPane = CHART.GraphPane
-        myPane.XAxis.Title.Text = "Periods"
-        myPane.XAxis.Type = AxisType.Date
 
     End Sub
 
@@ -93,6 +86,8 @@ Public Class RatesView
 
 
         ClearDictionaries()
+        DGV.ColumnsHierarchy.Clear()
+        DGV.RowsHierarchy.Clear()
         InitColumns(currenciesList)
         InitRows(globalPeriodsDictionary)
         DataGridViewsUtil.DGVSetHiearchyFontSize(DGV, DGV_ITEMS_FONT_SIZE, DGV_CELLS_FONT_SIZE)
@@ -115,7 +110,7 @@ Public Class RatesView
         Dim col As HierarchyItem = DGV.ColumnsHierarchy.Items.Add(curr + "/" + MAIN_CURRENCY)
         columnIDKeyDictionary.Add(col.GetUniqueID, curr)
         columnsKeyItemDictionary.Add(curr, col)
-        
+
     End Sub
 
     Private Sub InitRows(ByRef globalPeriodsDictionary As Dictionary(Of Int32, Integer()))
@@ -214,20 +209,12 @@ Public Class RatesView
 
 #Region "Chart Display"
 
-    ' Display currency curve
     Friend Sub DisplayCurrencyCurve(ByRef currencyKey As String)
 
         ReLoadRatesSerie(currencyKey)
         myPane.Title.Text = currencyKey + "/" + MAIN_CURRENCY + " rates curve"
         myPane.YAxis.Title.Text = currencyKey + "/" + MAIN_CURRENCY
 
-        ' Auto adjust Y scale to values 
-        ' show 0 and 1 at least
-
-        CHART.GraphPane.CurveList.Clear()
-        CHART.GraphPane.AddCurve("", chartSeriesDictionary(currencyKey), Color.Red, SymbolType.None)
-        CHART.AxisChange()
-        CHART.Refresh()
         chartDisplayedCurrency = currencyKey
 
     End Sub
@@ -252,8 +239,28 @@ Public Class RatesView
 #End Region
 
 
-#Region "DGV Events"
+#Region "Interface"
 
+    Protected Friend Sub CopyRateValueDown()
+
+        Dim value As Double = DGV.CellsArea.SelectedCells(0).Value
+        Dim column As HierarchyItem = DGV.CellsArea.SelectedCells(0).ColumnItem
+        Dim row As HierarchyItem = DGV.CellsArea.SelectedCells(0).RowItem
+
+        If Not row.ParentItem Is Nothing Then
+            CopyValueIntoCellsBelow(row.ParentItem, row.ItemIndex + 1, column, value)
+            For i = row.ParentItem.ItemIndex + 1 To DGV.RowsHierarchy.Items.Count - 1
+                CopyValueIntoCellsBelow(DGV.RowsHierarchy.Items(i), 0, column, value)
+            Next
+        End If
+        
+    End Sub
+
+
+#End Region
+
+
+#Region "DGV Events"
 
     Private Sub rates_DGV_CellValueChanging(sender As Object, args As CellValueChangingEventArgs)
 
@@ -269,7 +276,6 @@ Public Class RatesView
 
     End Sub
 
-   
 #End Region
 
 
@@ -285,7 +291,17 @@ Public Class RatesView
         DGV.ColumnsHierarchy.Clear()
 
     End Sub
-    
+
+    Private Sub CopyValueIntoCellsBelow(ByRef parent_row As HierarchyItem, _
+                                        ByRef start_index As Int32, _
+                                        ByRef column As HierarchyItem, _
+                                        ByRef value As Double)
+
+        For i As Int32 = start_index To parent_row.Items.Count - 1
+            DGV.CellsArea.SetCellValue(parent_row.Items(i), column, value)
+        Next
+
+    End Sub
 
 #End Region
 

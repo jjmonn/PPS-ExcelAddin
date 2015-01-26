@@ -33,7 +33,7 @@ Friend Class AcquisitionUI
 #Region "Instance Variables"
 
     ' Objects
-    Private ACQUCONTROLLER As cAcquisitionUIController
+    Private Controller As cAcquisitionUIController
     Private DATASET As CModelDataSet
     Friend DGV As vDataGridView
 
@@ -55,14 +55,14 @@ Friend Class AcquisitionUI
 
 #Region "Initialize"
 
-    Friend Sub New(ByRef inputDataSet As CModelDataSet, ByRef inputAcquController As cAcquisitionUIController)
+    Friend Sub New(ByRef inputDataSet As CModelDataSet, ByRef inputController As cAcquisitionUIController)
 
         ' This call is required by the designer.
         InitializeComponent()
 
         ' Add any initialization after the InitializeComponent() call.
         DATASET = inputDataSet
-        ACQUCONTROLLER = inputAcquController
+        Controller = inputController
         InitConditionalFormatting()
 
     End Sub
@@ -126,7 +126,7 @@ Friend Class AcquisitionUI
                                        ByRef accountsTV As TreeView)
 
         ClearHierarchyDictionary(hierarchy)
-        ACQUCONTROLLER.editorKeyHierarchyDictionary.Clear()
+        Controller.editorKeyHierarchyDictionary.Clear()
 
         For Each node As TreeNode In accountsTV.Nodes
             Dim item As HierarchyItem = AddItemToHierarchyAndDictionaries(hierarchy, node.Text)
@@ -142,19 +142,21 @@ Friend Class AcquisitionUI
     Friend Sub LoadPeriodsToHierarchy(ByRef hierarchy As Hierarchy, _
                                        ByRef currentEntity As String, _
                                        ByRef currentAccount As String, _
-                                       ByRef currentPeriodList As List(Of Integer))
+                                       ByRef currentPeriodList As List(Of Integer), _
+                                       ByRef time_config As String)
 
         ClearHierarchyDictionary(hierarchy)
         currentPeriodList.Clear()
         Dim formatStr As String = ""
-        Select Case DATASET.VERSIONSMGT.versionsCodeTimeSetUpDict(DATASET.currentVersionCode)(VERSIONS_TIME_CONFIG_VARIABLE)
+
+        Select Case time_config
             Case MONTHLY_TIME_CONFIGURATION : formatStr = "MMM yyyy"
             Case YEARLY_TIME_CONFIGURATION : formatStr = "yyyy"
         End Select
 
         For Each period As String In DATASET.dataSetDictionary(currentEntity)(currentAccount).Keys
             Dim item As HierarchyItem = AddItemToHierarchyAndDictionaries(hierarchy, period, Format(DateTime.FromOADate(period), formatStr))
-            ACQUCONTROLLER.periodsItemIDPeriodCodeDict.Add(item.GetUniqueID, period)
+            Controller.periodsItemIDPeriodCodeDict.Add(item.GetUniqueID, period)
             currentPeriodList.Add(CInt(period))
         Next
 
@@ -200,9 +202,9 @@ Friend Class AcquisitionUI
         subItem.CellsFormatString = FORMAT_CURRENCIES
 
         If TypeOf (hierarchy) Is RowsHierarchy Then
-            ACQUCONTROLLER.rowsKeyItemDictionary.Add(key, subItem)
+            Controller.rowsKeyItemDictionary.Add(key, subItem)
         Else
-            ACQUCONTROLLER.columnsKeyItemDictionary.Add(key, subItem)
+            Controller.columnsKeyItemDictionary.Add(key, subItem)
         End If
         Return subItem
 
@@ -214,9 +216,9 @@ Friend Class AcquisitionUI
         Dim subItem As HierarchyItem = item.Items.Add(key)
         subItem.CellsFormatString = FORMAT_CURRENCIES
         If TypeOf (item.Hierarchy) Is RowsHierarchy Then
-            ACQUCONTROLLER.rowsKeyItemDictionary.Add(key, subItem)
+            Controller.rowsKeyItemDictionary.Add(key, subItem)
         Else
-            ACQUCONTROLLER.columnsKeyItemDictionary.Add(key, subItem)
+            Controller.columnsKeyItemDictionary.Add(key, subItem)
         End If
         Return subItem
 
@@ -231,7 +233,7 @@ Friend Class AcquisitionUI
         item.CellsEditor = textBoxEditor
         AddHandler textBoxEditor.TextBox.KeyDown, AddressOf celleditor_KeyDown
         textBoxEditor.Name = item.Caption
-        ACQUCONTROLLER.editorKeyHierarchyDictionary.Add(textBoxEditor.Name, item)
+        Controller.editorKeyHierarchyDictionary.Add(textBoxEditor.Name, item)
 
     End Sub
 
@@ -293,20 +295,20 @@ Friend Class AcquisitionUI
             Dim test = CDbl(args.Cell.EditValue) + 0.25
 
             If TypeOf (args.Cell.Editor) Is TextBoxEditor AndAlso _
-            ACQUCONTROLLER.IsGRSUpdating = False Then
+            Controller.IsGRSUpdating = False Then
                 Dim textBox As TextBoxEditor = args.Cell.Editor
                 Dim entity, period As String
-                Dim accountHierarchy = ACQUCONTROLLER.editorKeyHierarchyDictionary(textBox.Name)
+                Dim accountHierarchy = Controller.editorKeyHierarchyDictionary(textBox.Name)
                 '  Dim secondHierarchy As Hierarchy
                 Dim account As String = accountHierarchy.Caption
 
-                Select Case ACQUCONTROLLER.currentDGVOrientationFlag
+                Select Case Controller.currentDGVOrientationFlag
                     Case CModelDataSet.DATASET_ACCOUNTS_PERIODS_OR, CModelDataSet.DATASET_PERIODS_ACCOUNTS_OR
                         If accountHierarchy.IsRowsHierarchyItem Then
-                            period = ACQUCONTROLLER.periodsItemIDPeriodCodeDict(args.Cell.ColumnItem.GetUniqueID)
+                            period = Controller.periodsItemIDPeriodCodeDict(args.Cell.ColumnItem.GetUniqueID)
                             '        secondHierarchy = args.Cell.ColumnItem.Hierarchy
                         Else
-                            period = ACQUCONTROLLER.periodsItemIDPeriodCodeDict(args.Cell.RowItem.GetUniqueID)
+                            period = Controller.periodsItemIDPeriodCodeDict(args.Cell.RowItem.GetUniqueID)
                             '       secondHierarchy = args.Cell.RowItem.Hierarchy
                         End If
                         entity = DGV.Name
@@ -321,7 +323,7 @@ Friend Class AcquisitionUI
                         period = DGV.Name
                 End Select
 
-                ACQUCONTROLLER.sendUpdateToGRS(entity, _
+                Controller.sendUpdateToGRS(entity, _
                                                account, _
                                                period, _
                                                args.Cell.Editor.EditorValue)
@@ -343,9 +345,9 @@ Friend Class AcquisitionUI
     Private Sub ClearHierarchyDictionary(ByRef hierarchy As Hierarchy)
 
         If TypeOf (hierarchy) Is RowsHierarchy Then
-            ACQUCONTROLLER.rowsKeyItemDictionary.Clear()
+            Controller.rowsKeyItemDictionary.Clear()
         Else
-            ACQUCONTROLLER.columnsKeyItemDictionary.Clear()
+            Controller.columnsKeyItemDictionary.Clear()
         End If
 
     End Sub
@@ -355,7 +357,7 @@ Friend Class AcquisitionUI
                                ByRef period As String) As GridCell
 
         Dim rowItem, columnItem As String
-        Select Case ACQUCONTROLLER.currentDGVOrientationFlag
+        Select Case Controller.currentDGVOrientationFlag
             Case CModelDataSet.DATASET_ACCOUNTS_PERIODS_OR
                 rowItem = account
                 columnItem = period
@@ -387,7 +389,7 @@ Friend Class AcquisitionUI
         End Select
 
         Try
-            DGV.CellsArea.SelectCell(ACQUCONTROLLER.rowsKeyItemDictionary(rowItem), ACQUCONTROLLER.columnsKeyItemDictionary(columnItem))
+            DGV.CellsArea.SelectCell(Controller.rowsKeyItemDictionary(rowItem), Controller.columnsKeyItemDictionary(columnItem))
             Return DGV.CellsArea.SelectedCells(0)
         Catch ex As Exception
             ' PPS Error tracking -> row item or column item not in dictionaries

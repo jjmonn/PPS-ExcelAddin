@@ -198,7 +198,7 @@ Module Data_Tables_Constants
     '       a) Write: DB MANAGER
     '       b) Read: NOT RESTRICTED
     '
-    
+
 
 #End Region
 
@@ -267,11 +267,11 @@ Module Data_Tables_Constants
 #Region "Exchange Rates table"
 
     Friend Const EXCHANGE_RATES_TABLE_NAME = "exchange_rates"
-    Friend Const EX_TABLE_CURRENCY_VARIABLE = "currency"
-    Friend Const EX_TABLE_PERIOD_VARIABLE = "period"
-    Friend Const EX_TABLE_RATE_VARIABLE = "rate"
-    Friend Const EX_TABLE_RATE_ID_VARIABLE = "id"
-    Friend Const EX_TABLE_RATE_VERSION As String = "rate_version"
+    Friend Const EX_RATES_CURRENCY_VARIABLE = "currency"
+    Friend Const EX_RATES_PERIOD_VARIABLE = "period"
+    Friend Const EX_RATES_RATE_VARIABLE = "value"
+    Friend Const EX_RATES_RATE_ID_VARIABLE = "id"
+    Friend Const EX_RATES_RATE_VERSION As String = "rates_version_id"
 
     Friend Const RATE_ID_SIZE As Int32 = 3
 
@@ -280,14 +280,16 @@ Module Data_Tables_Constants
 
 #Region "Exchange Rates Versions Table"
 
-    Friend Const RATES_VERSIONS_TABLE As String = "rate_versions"
+    Friend Const RATES_VERSIONS_TABLE As String = "exchange_rates_versions"
     Friend Const RATES_VERSIONS_ID_VARIABLE As String = "id"
-    Friend Const RATES_VERSIONS_NAME_VARIABLE As String = "version_name"
+    Friend Const RATES_VERSIONS_NAME_VARIABLE As String = "name"
     Friend Const RATES_VERSIONS_IS_FOLDER_VARIABLE As String = "is_folder"
     Friend Const RATES_VERSIONS_PARENT_CODE_VARIABLE As String = "parent_id"
 
+    Friend Const RATES_VERSIONS_START_PERIOD_VAR As String = "start_period"
+    Friend Const RATES_VERSIONS_NB_PERIODS_VAR As String = "nb_periods"
     Friend Const RATES_VERSIONS_TOKEN_SIZE As Int32 = 3
-    Friend Const RATES_VERSIONS_ROOT_TOKEN As String = "XXX"
+    Friend Const RATES_VERSIONS_MAX_NAME_SIZE As Int32 = 50
 
 
 #End Region
@@ -300,10 +302,6 @@ Module Data_Tables_Constants
     Friend Const EXTRA_DATA_TABLE_NAME = "extradatas"
     Friend Const EXTRA_DATA_KEY_VARIABLE = "variable"
     Friend Const EXTRA_DATA_VALUE_VARIABLE = "stored_value"
-
-    Friend Const STARTING_PERIOD_KEY As String = "SP"
-    Friend Const ENDING_PERIOD_KEY As String = "EP"
-
 
 #End Region
 
@@ -339,18 +337,21 @@ Module Data_Tables_Constants
 #Region "Versioning Table"
 
     Friend Const VERSIONS_TABLE = "versions"
-    Friend Const VERSIONS_NAME_VARIABLE = "version_name"
+    Friend Const VERSIONS_NAME_VARIABLE = "name"
     Friend Const VERSIONS_CREATION_DATE_VARIABLE = "created_at"
-    Friend Const VERSIONS_LOCKED_VARIABLE = "version_locked"
-    Friend Const VERSIONS_LOCKED_DATE_VARIABLE = "version_locked_date"
+    Friend Const VERSIONS_LOCKED_VARIABLE = "locked"
+    Friend Const VERSIONS_LOCKED_DATE_VARIABLE = "locked_date"
     Friend Const VERSIONS_CODE_VARIABLE = "id"
     Friend Const VERSIONS_PARENT_CODE_VARIABLE = "parent_id"
     Friend Const VERSIONS_IS_FOLDER_VARIABLE = "is_folder"
     Friend Const VERSIONS_TIME_CONFIG_VARIABLE = "time_config"
-    Friend Const VERSIONS_REFERENCE_YEAR_VARIABLE = "reference_year"
+    Friend Const VERSIONS_RATES_VERSION_ID_VAR = "rates_version_id"
+    Friend Const VERSIONS_START_PERIOD_VAR = "start_period"
+    Friend Const VERSIONS_NB_PERIODS_VAR = "nb_periods"
+
 
     ' Associated constants values
-    Friend Const VERSIONS_TOKEN_SIZE As Int32 = 5
+    Friend Const VERSIONS_TOKEN_SIZE As Int32 = 3
     Friend Const YEARLY_TIME_CONFIGURATION = "years"
     Friend Const MONTHLY_TIME_CONFIGURATION = "months"
     Friend Const DATA_VERSION_NAME_MAX_LENGTH As Int32 = 50
@@ -471,8 +472,9 @@ Module Data_Tables_Constants
     Friend Const ADJUSTMENTS_TABLE As String = "adjustments"
     Friend Const ADJUSTMENTS_ID_VAR As String = "id"
     Friend Const ADJUSTMENTS_NAME_VAR As String = "name"
-
-
+    Friend Const ADJUSTMENTS_TOKEN_SIZE As Int32 = 3
+    Friend Const DEFAULT_ADJUSTMENT_ID As String = "aaa"
+ 
 #End Region
 
 
@@ -490,7 +492,7 @@ Module Data_Tables_Constants
 
 #Region "Market Indexes"
 
-    Friend Const MARKET_INDEXES_TABLE As String ="market_indexes"
+    Friend Const MARKET_INDEXES_TABLE As String = "market_indexes"
     Friend Const MARKET_INDEXES_ID_VARIABLE As String = "id"
 
     Friend Const MARKET_INDEXES_PRICES_TABLE As String = "market_index_prices"
@@ -504,7 +506,7 @@ Module Data_Tables_Constants
     Friend Const MARKET_INDEXES_VERSIONS_PARENT_ID_VAR As String = "parent_id"
     Friend Const MARKET_INDEXES_VERSIONS_NAME_VAR As String = "name"
     Friend Const MARKET_INDEXES_VERSIONS_IS_FOLER_VAR As String = "is_folder"
-  
+
 
 #End Region
 
@@ -525,30 +527,7 @@ Module Data_Tables_Constants
     Friend Const DATA_ACCOUNT_ID_VARIABLE = "account_id"
     Friend Const DATA_PERIOD_VARIABLE = "period"
     Friend Const DATA_VALUE_VARIABLE = "value"
-
-    Friend Const DATA_PRIMARY_KEY = "pk_dataID"
-    ' Table information: 
-    '          
-    ' Primary keys: 
-    '
-
-    ' Foreign Keys
-    Friend Const DATA_ENTITY_ID_FK_VARIABLE = "data_ibfk_2"
-    Friend Const DATA_ACCOUNT_ID_FK_VARIABLE = "data_ibfk_1"
-    ' !!!! attention pas à jour ?!
-
-    ' Index: 
-    '
-    ' 
-    ' 
-    ' Privileges: 
-    '       a) Write: 
-    '       b) Read:     
-    '
-    '
-    ' VIEWS : 
-    ' 
-    '
+    Friend Const DATA_ADJUSTMENT_ID_VARIABLE = "adjustment_id"
 
 #End Region
 
@@ -561,6 +540,7 @@ Module Data_Tables_Constants
     Friend Const LOG_VALUE_VARIABLE As String = "value"
     Friend Const LOG_ENTITY_ID_VARIABLE As String = "entity_id"
     Friend Const LOG_ACCOUNT_ID_VARIABLE As String = "account_id"
+    Friend Const LOG_ADJUSTMENT_ID_VARIABLE As String = "adjustment_id"
     Friend Const LOG_PERIOD_VARIABLE As String = "period"
 
 

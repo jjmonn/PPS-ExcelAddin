@@ -4,15 +4,15 @@
 '
 '
 ' To do: 
-'       -> ideally resume action after closing connectUI
-'       - reimpllement properly
+'       - Ideally resume action after closing connectUI
+'       - Reimplement properly
 '
 '
 ' known bugs:
 '
 ' 
 ' Author: Julien Monnereau
-' Last modified: 28/09/2014
+' Last modified: 20/01/2015
 
 
 Imports ProgressControls
@@ -43,17 +43,23 @@ Friend Class ConnectionUI
         ' Add any initialization after the InitializeComponent() call.
         ADDIN = inputAddIn
         Me.FormBorderStyle = Windows.Forms.FormBorderStyle.None
-
         BackgroundWorker1.WorkerReportsProgress = True
 
         AddHandler mainPanel.Paint, AddressOf Panel1_Paint
         AddHandler mainPanel.MouseMove, AddressOf panel1_MouseMove
         AddHandler mainPanel.MouseDown, AddressOf form_MouseDown
         AddHandler mainPanel.MouseUp, AddressOf form_MouseUp
-        IDTB.Focus()
+        IDTB.Text = My.Settings.user
+        PWDTB.Select()
 
     End Sub
 
+    Private Sub ConnectionUI_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+
+        Me.Left = (APPS.ActiveSheet.width - Me.Width) / 2
+        Me.Top = (APPS.ActiveSheet.height - Me.Height) / 2
+
+    End Sub
 
 #End Region
 
@@ -85,7 +91,7 @@ Friend Class ConnectionUI
         ConnectioN = OpenConnection(IDTB.Text, PWDTB.Text)
         If Not ConnectioN Is Nothing Then
             If SQLCredentials.SetGLOBALUserCredential() Then
-                GENERICDCGLobalInstance = New GenericSingleEntityComputer
+                GENERICDCGLobalInstance = New GenericSingleEntityDLL3Computer
                 isCredentialValid = True
             Else
                 isCredentialValid = False
@@ -111,9 +117,11 @@ Friend Class ConnectionUI
         Else
             If Not ConnectioN Is Nothing Then
                 If isCredentialValid = True Then
+                    If My.Settings.user <> IDTB.Text Then My.Settings.user = IDTB.Text
                     Connection_Toggle_Button.Image = 1
                     Connection_Toggle_Button.Caption = "Connected"
                     ADDIN.LaunchVersionSelection()
+                    AdjustmentsMapping.LoadAdjustmentsIDDD()
                     CP.Dispose()
                     Me.Dispose()
                     Me.Close()
@@ -132,6 +140,7 @@ Friend Class ConnectionUI
     End Sub
 
 #End Region
+
 
 
 End Class

@@ -12,7 +12,7 @@
 '   - categories selection -> select all child nodes when parent select (and the same for deselection)
 '    
 '   - Zoom
-'   - check if possible security breach if CONTROLER access VIEW treeviews...
+'   - check if possible security breach if Controller access VIEW treeviews...
 '   - delete columns index dictionary ?
 '   - Dispatch monthly vs. yearly version -> frozen - Will be implemented if necessary
 '
@@ -21,7 +21,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 06/01/2015
+' Last modified: 25/01/2015
 
 
 Imports System.Windows.Forms
@@ -42,9 +42,9 @@ Friend Class ControllingUI_2
 
 #Region "Objects"
 
-    Private CONTROLER As CControlingCONTROLER
+    Private Controller As ControlingUI2Controller
     Friend DGVUTIL As New DataGridViewsUtil
-    Private DROPTOEXCELCONTROLER As CControlingDropOnExcel
+    Private DROPTOEXCELController As CControlingDropOnExcel
     Friend PBar As New ProgressBarControl
     Friend accountsTV As New TreeView
 
@@ -62,6 +62,7 @@ Friend Class ControllingUI_2
     Private isVersionComparisonDisplayed As Boolean
     Private right_clicked_node As TreeNode
     Private current_DGV_cell As GridCell
+    Private adjustments_lines_list As New List(Of HierarchyItem)
 
 #End Region
 
@@ -71,7 +72,6 @@ Friend Class ControllingUI_2
     Friend categoriesTV As New TreeView
     Private periodsCLB As New CheckedListBox
     Friend versionsTV As New TreeView
-    Friend rates_versionsTV As New TreeView
     Private DropMenu As New TableLayoutPanel
     Friend CurrenciesCLB As New CheckedListBox
 
@@ -108,8 +108,8 @@ Friend Class ControllingUI_2
         ' Add any initialization after the InitializeComponent() call. 
         AccountsTokenNamesDict = AccountsMapping.GetAccountsDictionary(ACCOUNT_ID_VARIABLE, ACCOUNT_NAME_VARIABLE)
         AccountsKeysTabNbDict = AccountsMapping.GetAccountsDictionary(ACCOUNT_ID_VARIABLE, ACCOUNT_TAB_VARIABLE)
-        CONTROLER = New CControlingCONTROLER(Me)
-        DROPTOEXCELCONTROLER = New CControlingDropOnExcel(Me, CONTROLER)
+        Controller = New ControlingUI2Controller(Me)
+        DROPTOEXCELController = New CControlingDropOnExcel(Me, Controller)
         LoadTrees()
         HideAllMenuItems()
 
@@ -129,7 +129,6 @@ Friend Class ControllingUI_2
 
         TVTableLayout.Controls.Add(entitiesTV, 0, 0)
         TVTableLayout.Controls.Add(categoriesTV, 0, 1)
-        TVTableLayout.Controls.Add(rates_versionsTV, 0, 1)
         TVTableLayout.Controls.Add(CurrenciesCLB, 0, 0)
         TVTableLayout.Controls.Add(periodsCLB, 0, 0)
         TVTableLayout.Controls.Add(versionsTV, 0, 0)
@@ -138,21 +137,15 @@ Friend Class ControllingUI_2
         versionsTV.ImageList = VersionsIL
         categoriesTV.ImageList = categoriesIL
         entitiesTV.ImageList = EntitiesTVImageList
-        rates_versionsTV.ImageList = VersionsIL ' Import IL from currencies MGT ? 
 
         Version.LoadVersionsTree(versionsTV)
         Entity.LoadEntitiesTree(entitiesTV)
         cTreeViews_Functions.set_TV_basics_icon_index(entitiesTV)
         Account.LoadAccountsTree(accountsTV)
         Category.LoadCategoriesTree(categoriesTV)
-        RateVersion.load_rates_version_tv(rates_versionsTV)
-        cTreeViews_Functions.set_TV_basics_icon_index(rates_versionsTV)
         LoadCurrencies()
 
         entitiesTV.Dock = DockStyle.Fill
-        rates_versionsTV.Dock = DockStyle.Fill
-        rates_versionsTV.CheckBoxes = True
-        rates_versionsTV.ExpandAll()
         categoriesTV.Dock = DockStyle.Fill
         categoriesTV.CheckBoxes = True
         categoriesTV.ExpandAll()
@@ -168,7 +161,6 @@ Friend Class ControllingUI_2
         AddHandler entitiesTV.NodeMouseClick, AddressOf EntitiesTV_NodeMouseClick
         AddHandler categoriesTV.AfterCheck, AddressOf Category_AfterCheck
         AddHandler CurrenciesCLB.ItemCheck, AddressOf currenciesCLB_ItemCheck
-        AddHandler rates_versionsTV.BeforeCheck, AddressOf rates_versions_Before_check
         AddHandler periodsCLB.ItemCheck, AddressOf periodsCLB_ItemCheck
         entitiesTV.ContextMenuStrip = entitiesRightClickMenu
         entitiesTV.Nodes(0).Checked = True
@@ -211,7 +203,6 @@ Friend Class ControllingUI_2
             DGV.Top = INNER_MARGIN
             DGV.BackColor = SystemColors.Control
             DGV.RowsHierarchy.CompactStyleRenderingEnabled = True
-            'DGV.RowsHierarchy.CompactStyleRenderingItemsIndent = true
             DGV.ContextMenuStrip = DGVsRCM
             AddHandler DGV.CellMouseClick, AddressOf DGV_CellMouseClick
             tab_.Controls.Add(DGV)
@@ -221,8 +212,6 @@ Friend Class ControllingUI_2
         If Not IsNothing(TabControl1.TabPages(0)) Then
             TabControl1.SelectedTab = TabControl1.TabPages(0)
         End If
-
-        rates_versionsTV.Nodes.Find(GLOBALCurrentRatesVersionCode, True)(0).Checked = True
         Me.WindowState = FormWindowState.Maximized
 
     End Sub
@@ -235,7 +224,6 @@ Friend Class ControllingUI_2
 
     Friend Sub VIEWInitialization(ByRef periodsList As List(Of Integer), _
                                   ByRef versionsNamesArray() As String, _
-                                  ByRef rates_versions_list As List(Of String), _
                                   ByRef versionComparisonFlag As String, _
                                   ByRef versionTimeConfig As String, _
                                   Optional ByRef entitiesArray() As String = Nothing, _
@@ -245,19 +233,15 @@ Friend Class ControllingUI_2
         ' Columns
         Dim timeConfig As String
         Select Case versionComparisonFlag
-            Case CVersionsForControlingUIs.YEARLY_VERSIONS_COMPARISON, CVersionsForControlingUIs.YEARLY_MONTHLY_VERSIONS_COMPARISON : timeConfig = YEARLY_TIME_CONFIGURATION
-            Case CVersionsForControlingUIs.MONTHLY_VERSIONS_COMPARISON : timeConfig = MONTHLY_TIME_CONFIGURATION
+            Case Version.YEARLY_VERSIONS_COMPARISON, Version.YEARLY_MONTHLY_VERSIONS_COMPARISON : timeConfig = YEARLY_TIME_CONFIGURATION
+            Case Version.MONTHLY_VERSIONS_COMPARISON : timeConfig = MONTHLY_TIME_CONFIGURATION
             Case Else : timeConfig = versionTimeConfig
         End Select
         For Each tab_ As TabPage In TabControl1.TabPages
             If versionsNamesArray.Length > 1 Then
                 periodsColumnIndexDictionary = DataGridViewsUtil.CreateDGVColumns(tab_.Controls(0), periodsList.ToArray, versionsNamesArray, timeConfig)
             Else
-                If rates_versions_list.Count > 1 Then
-                    periodsColumnIndexDictionary = DataGridViewsUtil.CreateDGVColumns(tab_.Controls(0), periodsList.ToArray, rates_versions_list.ToArray, timeConfig)
-                Else
-                    periodsColumnIndexDictionary = DataGridViewsUtil.CreateDGVColumns(tab_.Controls(0), periodsList.ToArray, timeConfig, True)
-                End If
+                periodsColumnIndexDictionary = DataGridViewsUtil.CreateDGVColumns(tab_.Controls(0), periodsList.ToArray, timeConfig, True)
             End If
         Next
 
@@ -364,6 +348,46 @@ Friend Class ControllingUI_2
 #End Region
 
 
+#Region "Adjustments Display"
+
+    Protected Friend Sub DisplayAdjustments(ByRef adjustments_dict As Dictionary(Of String, Dictionary(Of String, Dictionary(Of String, Dictionary(Of Int32, Double)))), _
+                                            Optional ByRef version_index As Int32 = -1)
+
+        Dim account_row As HierarchyItem
+        Dim entity_row As HierarchyItem
+        Dim period_column As HierarchyItem
+        Dim DGV As vDataGridView
+        Dim tab_index As Int32
+        Dim adjustments_id_names As Dictionary(Of String, String) = AdjustmentsMapping.GetAdjustmentsDictionary(ADJUSTMENTS_ID_VAR, ADJUSTMENTS_NAME_VAR)
+
+        For Each account_id In adjustments_dict.Keys
+            tab_index = AccountsKeysTabNbDict(account_id)
+            DGV = TabControl1.TabPages(tab_index).Controls(0)
+            account_row = DGV.RowsHierarchy.Items(vDGVAccountsKeyLineNbDic(tab_index)(account_id))
+
+            For Each entity_id In adjustments_dict(account_id).Keys
+                entity_row = GetEntityRow(account_row, cTreeViews_Functions.GetNodePath(entitiesTV.Nodes.Find(entity_id, True)(0), Controller.CurrentEntityKey))
+
+                For Each adjustment_id In adjustments_dict(account_id)(entity_id).Keys
+                    Dim adjt_row As HierarchyItem = entity_row.Items.Add(adjustments_id_names(adjustment_id))
+                    DataGridViewsUtil.FormatAdjustmentRow(adjt_row)
+                    adjustments_lines_list.Add(adjt_row)
+
+                    For Each Period In adjustments_dict(account_id)(entity_id)(adjustment_id).Keys
+                        period_column = DGV.ColumnsHierarchy.Items(periodsColumnIndexDictionary(Period))
+                        If version_index > -1 Then period_column = period_column.Items(version_index)
+                        DGV.CellsArea.SetCellValue(adjt_row, period_column, adjustments_dict(account_id)(entity_id)(adjustment_id)(Period))                        
+                    Next
+                Next
+            Next
+        Next
+
+    End Sub
+
+
+#End Region
+
+
 #Region "Events"
 
 #Region "Entities TreeView"
@@ -376,7 +400,7 @@ Friend Class ControllingUI_2
     Private Sub EntitiesTV_KeyDown(sender As Object, e As Windows.Forms.KeyEventArgs)
 
         If e.KeyCode = Keys.Enter Then
-            If Not entitiesTV.SelectedNode Is Nothing Then CONTROLER.compute_entity_complete(entitiesTV.SelectedNode)
+            If Not entitiesTV.SelectedNode Is Nothing Then Controller.compute_entity_complete(entitiesTV.SelectedNode)
         End If
 
     End Sub
@@ -403,7 +427,7 @@ Friend Class ControllingUI_2
 
         ' apply selectedvalue to children
         ' loop through children applys same selection as parent !!
-        CONTROLER.CategoriesUpdate()
+        Controller.CategoriesUpdate()
 
     End Sub
 
@@ -436,16 +460,7 @@ Friend Class ControllingUI_2
     ' Double click on tab event
     Private Sub TabControl1_MouseDoubleClick(sender As Object, e As MouseEventArgs) Handles TabControl1.DoubleClick
 
-        DROPTOEXCELCONTROLER.SendTabToExcel(TabControl1.SelectedTab.Controls(0))
-
-    End Sub
-
-    Private Sub rates_versions_Before_check(sender As Object, e As TreeViewCancelEventArgs)
-
-        If e.Node.Nodes.Count > 0 Then
-            e.Cancel = True
-            MsgBox("A folder cannot be selected as a version")
-        End If
+        DROPTOEXCELController.SendTabToExcel(TabControl1.SelectedTab.Controls(0))
 
     End Sub
 
@@ -523,16 +538,13 @@ Friend Class ControllingUI_2
             ExpandPane1()
             HideAllMenuItems()
             CurrenciesCLB.Visible = True
-            rates_versionsTV.Visible = True
             CurrenciesFlag = True
             DisplayTwoTrees()
-            'TVTableLayout.SetRow(rates_versionsTV, 1)
 
         Else
             CurrenciesToolStripMenuItem.CheckState = CheckState.Unchecked
             CollapsePane1()
             CurrenciesCLB.Visible = False
-            rates_versionsTV.Visible = False
             CurrenciesFlag = False
             DisplayFirstTreeOnly()
         End If
@@ -575,24 +587,22 @@ Friend Class ControllingUI_2
 
     Private Sub SendCurrentEntity_Click(sender As Object, e As EventArgs) Handles DropCurrentEntToExcelToolStripMenuItem.Click
 
-        DROPTOEXCELCONTROLER.SendCurrentEntityToExcel()
+        DROPTOEXCELController.SendCurrentEntityToExcel()
 
     End Sub
 
     Private Sub DropDrillDown_Click(sender As Object, e As EventArgs) Handles DropDrillDownToExcelToolStripMenuItem.Click
 
-        DROPTOEXCELCONTROLER.SendDropDownToExcel()
+        DROPTOEXCELController.SendDropDownToExcel()
 
     End Sub
 
     Private Sub Refresh_Click(sender As Object, e As EventArgs) Handles RefreshToolStripMenuItem.Click
 
-        ' Intégrer les comparaisons rates_versions
-        ' si pls data versions -> 1 seule rate version et vice versa !!
-        If CONTROLER.CurrentEntityKey <> "" Then
-            CONTROLER.compute_entity_complete(entitiesTV.Nodes.Find(CONTROLER.CurrentEntityKey, True)(0))
+        If Controller.CurrentEntityKey <> "" Then
+            Controller.compute_entity_complete(entitiesTV.Nodes.Find(Controller.CurrentEntityKey, True)(0))
         ElseIf Not entitiesTV.SelectedNode Is Nothing Then
-            CONTROLER.compute_entity_complete(entitiesTV.SelectedNode)
+            Controller.compute_entity_complete(entitiesTV.SelectedNode)
         Else
             MsgBox("An Entity level must be selected in order to refresh " + Chr(13) + Chr(13) + _
                    " Please select an entity")
@@ -605,7 +615,7 @@ Friend Class ControllingUI_2
         If isVersionComparisonDisplayed = True Then
             MsgBox("The Versions Comparison is already displayed")
         Else
-            If CONTROLER.VERSIONSMGT.VersionsCodeArray.Length = 2 Then
+            If Controller.versions_id_array.Length = 2 Then
                 For Each tab_ As TabPage In TabControl1.TabPages
                     Dim DGV As vDataGridView = tab_.Controls(0)
                     DGVUTIL.AddVersionComparison(DGV)
@@ -657,7 +667,7 @@ Friend Class ControllingUI_2
 
     Private Sub compute_complete_Click(sender As Object, e As EventArgs) Handles compute_complete.Click
 
-        CONTROLER.compute_entity_complete(right_clicked_node)
+        Controller.compute_entity_complete(right_clicked_node)
 
     End Sub
 
@@ -698,6 +708,12 @@ Friend Class ControllingUI_2
         If Not current_DGV_cell Is Nothing Then
             ' to be implemented -> quid -> find cell's account, entity, period, version from nothing...
         End If
+
+    End Sub
+
+    Private Sub DisplayAdjustmensRCM_Click(sender As Object, e As EventArgs) Handles DisplayAdjustmensRCM.Click
+
+        Controller.LoadAdjustments()
 
     End Sub
 
@@ -770,7 +786,6 @@ Friend Class ControllingUI_2
 
         DisplayFirstTreeOnly()
         CurrenciesCLB.Visible = False
-        rates_versionsTV.Visible = False
         periodsCLB.Visible = False
         versionsTV.Visible = False
         DropMenu.Visible = False
@@ -802,14 +817,25 @@ Friend Class ControllingUI_2
 
 #End Region
 
+    Private Function GetEntityRow(ByRef row As HierarchyItem, _
+                                  ByRef path_list As List(Of Int32)) As HierarchyItem
+
+        Dim entity_row As HierarchyItem = row
+        For Each index In path_list
+            entity_row = entity_row.Items(index)
+        Next
+        Return entity_row
+
+    End Function
+
+
     Private Sub ControllingUI_2_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
 
-        CONTROLER.close_model()
+        Controller.close_model()
 
     End Sub
 
 #End Region
-
 
 
 

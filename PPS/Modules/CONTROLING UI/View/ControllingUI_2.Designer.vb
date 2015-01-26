@@ -63,6 +63,8 @@ Partial Class ControllingUI_2
         Me.VersionsIL = New System.Windows.Forms.ImageList(Me.components)
         Me.EntitiesTVImageList = New System.Windows.Forms.ImageList(Me.components)
         Me.DGVsRCM = New System.Windows.Forms.ContextMenuStrip(Me.components)
+        Me.DisplayAdjustmensRCM = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator()
         Me.DisplayDataTrackingToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SplitContainer1.Panel1.SuspendLayout()
@@ -417,9 +419,20 @@ Partial Class ControllingUI_2
         '
         'DGVsRCM
         '
-        Me.DGVsRCM.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.DisplayDataTrackingToolStripMenuItem})
+        Me.DGVsRCM.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.DisplayAdjustmensRCM, Me.ToolStripSeparator2, Me.DisplayDataTrackingToolStripMenuItem})
         Me.DGVsRCM.Name = "DGVsRCM"
-        Me.DGVsRCM.Size = New System.Drawing.Size(189, 48)
+        Me.DGVsRCM.Size = New System.Drawing.Size(189, 54)
+        '
+        'DisplayAdjustmensRCM
+        '
+        Me.DisplayAdjustmensRCM.Name = "DisplayAdjustmensRCM"
+        Me.DisplayAdjustmensRCM.Size = New System.Drawing.Size(188, 22)
+        Me.DisplayAdjustmensRCM.Text = "Display Adjustments"
+        '
+        'ToolStripSeparator2
+        '
+        Me.ToolStripSeparator2.Name = "ToolStripSeparator2"
+        Me.ToolStripSeparator2.Size = New System.Drawing.Size(185, 6)
         '
         'DisplayDataTrackingToolStripMenuItem
         '
@@ -497,4 +510,6 @@ Partial Class ControllingUI_2
     Public WithEvents EntitiesTVImageList As System.Windows.Forms.ImageList
     Friend WithEvents DGVsRCM As System.Windows.Forms.ContextMenuStrip
     Friend WithEvents DisplayDataTrackingToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents DisplayAdjustmensRCM As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ToolStripSeparator2 As System.Windows.Forms.ToolStripSeparator
 End Class

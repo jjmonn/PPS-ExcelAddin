@@ -33,6 +33,8 @@ Partial Class VersioningManagementUI
         Me.AddFolderBT = New System.Windows.Forms.Button()
         Me.DeleteVersionBT = New System.Windows.Forms.Button()
         Me.TableLayoutPanel2 = New System.Windows.Forms.TableLayoutPanel()
+        Me.Label2 = New System.Windows.Forms.Label()
+        Me.Label1 = New System.Windows.Forms.Label()
         Me.Label11 = New System.Windows.Forms.Label()
         Me.Label10 = New System.Windows.Forms.Label()
         Me.Label4 = New System.Windows.Forms.Label()
@@ -44,7 +46,9 @@ Partial Class VersioningManagementUI
         Me.Label3 = New System.Windows.Forms.Label()
         Me.lockedCB = New System.Windows.Forms.CheckBox()
         Me.TimeConfigTB = New System.Windows.Forms.TextBox()
-        Me.RefPeriodTB = New System.Windows.Forms.TextBox()
+        Me.StartPeriodTB = New System.Windows.Forms.TextBox()
+        Me.NBPeriodsTB = New System.Windows.Forms.TextBox()
+        Me.RatesVersionCB = New System.Windows.Forms.ComboBox()
         Me.VersionsTVIcons = New System.Windows.Forms.ImageList(Me.components)
         Me.RCM_TV = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.new_version_bt = New System.Windows.Forms.ToolStripMenuItem()
@@ -120,7 +124,7 @@ Partial Class VersioningManagementUI
         Me.AddVersionBT.FlatAppearance.BorderColor = System.Drawing.Color.Gray
         Me.AddVersionBT.FlatAppearance.BorderSize = 0
         Me.AddVersionBT.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.AddVersionBT.ImageKey = "DB orange ctrl bcg.png"
+        Me.AddVersionBT.ImageKey = "favicon(2).ico"
         Me.AddVersionBT.ImageList = Me.ButtonsImageList
         Me.AddVersionBT.Location = New System.Drawing.Point(49, 1)
         Me.AddVersionBT.Name = "AddVersionBT"
@@ -135,8 +139,8 @@ Partial Class VersioningManagementUI
         Me.ButtonsImageList.Images.SetKeyName(0, "add blue.jpg")
         Me.ButtonsImageList.Images.SetKeyName(1, "favicon(188).ico")
         Me.ButtonsImageList.Images.SetKeyName(2, "favicon(81).ico")
-        Me.ButtonsImageList.Images.SetKeyName(3, "DB orange ctrl bcg.png")
-        Me.ButtonsImageList.Images.SetKeyName(4, "imageres_89.ico")
+        Me.ButtonsImageList.Images.SetKeyName(3, "imageres_89.ico")
+        Me.ButtonsImageList.Images.SetKeyName(4, "favicon(2).ico")
         '
         'AddFolderBT
         '
@@ -169,8 +173,10 @@ Partial Class VersioningManagementUI
         Me.TableLayoutPanel2.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.TableLayoutPanel2.ColumnCount = 2
-        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 32.68765!))
-        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 67.31235!))
+        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 21.00139!))
+        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 78.99861!))
+        Me.TableLayoutPanel2.Controls.Add(Me.Label2, 0, 7)
+        Me.TableLayoutPanel2.Controls.Add(Me.Label1, 0, 6)
         Me.TableLayoutPanel2.Controls.Add(Me.Label11, 0, 5)
         Me.TableLayoutPanel2.Controls.Add(Me.Label10, 0, 4)
         Me.TableLayoutPanel2.Controls.Add(Me.Label4, 0, 0)
@@ -182,34 +188,57 @@ Partial Class VersioningManagementUI
         Me.TableLayoutPanel2.Controls.Add(Me.Label3, 0, 1)
         Me.TableLayoutPanel2.Controls.Add(Me.lockedCB, 1, 2)
         Me.TableLayoutPanel2.Controls.Add(Me.TimeConfigTB, 1, 4)
-        Me.TableLayoutPanel2.Controls.Add(Me.RefPeriodTB, 1, 5)
-        Me.TableLayoutPanel2.Location = New System.Drawing.Point(12, 28)
+        Me.TableLayoutPanel2.Controls.Add(Me.StartPeriodTB, 1, 5)
+        Me.TableLayoutPanel2.Controls.Add(Me.NBPeriodsTB, 1, 6)
+        Me.TableLayoutPanel2.Controls.Add(Me.RatesVersionCB, 1, 7)
+        Me.TableLayoutPanel2.Location = New System.Drawing.Point(50, 28)
         Me.TableLayoutPanel2.Name = "TableLayoutPanel2"
-        Me.TableLayoutPanel2.RowCount = 6
-        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.66667!))
-        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.66667!))
-        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.66667!))
-        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.66667!))
-        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.66667!))
-        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.66667!))
-        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
-        Me.TableLayoutPanel2.Size = New System.Drawing.Size(719, 346)
+        Me.TableLayoutPanel2.RowCount = 8
+        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 12.5!))
+        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 12.5!))
+        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 12.5!))
+        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 12.5!))
+        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 12.5!))
+        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 12.5!))
+        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 12.5!))
+        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 12.5!))
+        Me.TableLayoutPanel2.Size = New System.Drawing.Size(681, 368)
         Me.TableLayoutPanel2.TabIndex = 0
+        '
+        'Label2
+        '
+        Me.Label2.AutoSize = True
+        Me.Label2.Location = New System.Drawing.Point(3, 329)
+        Me.Label2.Margin = New System.Windows.Forms.Padding(3, 7, 3, 0)
+        Me.Label2.Name = "Label2"
+        Me.Label2.Size = New System.Drawing.Size(124, 13)
+        Me.Label2.TabIndex = 22
+        Me.Label2.Text = "Exchange Rates Version"
+        '
+        'Label1
+        '
+        Me.Label1.AutoSize = True
+        Me.Label1.Location = New System.Drawing.Point(3, 283)
+        Me.Label1.Margin = New System.Windows.Forms.Padding(3, 7, 3, 0)
+        Me.Label1.Name = "Label1"
+        Me.Label1.Size = New System.Drawing.Size(86, 13)
+        Me.Label1.TabIndex = 20
+        Me.Label1.Text = "Number of Years"
         '
         'Label11
         '
         Me.Label11.AutoSize = True
-        Me.Label11.Location = New System.Drawing.Point(3, 292)
+        Me.Label11.Location = New System.Drawing.Point(3, 237)
         Me.Label11.Margin = New System.Windows.Forms.Padding(3, 7, 3, 0)
         Me.Label11.Name = "Label11"
-        Me.Label11.Size = New System.Drawing.Size(205, 13)
+        Me.Label11.Size = New System.Drawing.Size(68, 13)
         Me.Label11.TabIndex = 17
-        Me.Label11.Text = "Refrence year (monthly time configuration)"
+        Me.Label11.Text = "Starting Year"
         '
         'Label10
         '
         Me.Label10.AutoSize = True
-        Me.Label10.Location = New System.Drawing.Point(3, 235)
+        Me.Label10.Location = New System.Drawing.Point(3, 191)
         Me.Label10.Margin = New System.Windows.Forms.Padding(3, 7, 3, 0)
         Me.Label10.Name = "Label10"
         Me.Label10.Size = New System.Drawing.Size(106, 13)
@@ -229,22 +258,19 @@ Partial Class VersioningManagementUI
         '
         'CreationTB
         '
-        Me.CreationTB.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.CreationTB.Enabled = False
-        Me.CreationTB.Location = New System.Drawing.Point(238, 62)
+        Me.CreationTB.Location = New System.Drawing.Point(146, 51)
         Me.CreationTB.Margin = New System.Windows.Forms.Padding(3, 5, 3, 3)
         Me.CreationTB.MaximumSize = New System.Drawing.Size(400, 4)
         Me.CreationTB.MinimumSize = New System.Drawing.Size(280, 20)
         Me.CreationTB.Name = "CreationTB"
-        Me.CreationTB.Size = New System.Drawing.Size(400, 20)
+        Me.CreationTB.Size = New System.Drawing.Size(280, 20)
         Me.CreationTB.TabIndex = 3
         '
         'Label7
         '
         Me.Label7.AutoSize = True
-        Me.Label7.Location = New System.Drawing.Point(3, 121)
+        Me.Label7.Location = New System.Drawing.Point(3, 99)
         Me.Label7.Margin = New System.Windows.Forms.Padding(3, 7, 3, 0)
         Me.Label7.Name = "Label7"
         Me.Label7.Size = New System.Drawing.Size(77, 13)
@@ -254,7 +280,7 @@ Partial Class VersioningManagementUI
         'Label8
         '
         Me.Label8.AutoSize = True
-        Me.Label8.Location = New System.Drawing.Point(3, 178)
+        Me.Label8.Location = New System.Drawing.Point(3, 145)
         Me.Label8.Margin = New System.Windows.Forms.Padding(3, 7, 3, 0)
         Me.Label8.Name = "Label8"
         Me.Label8.Size = New System.Drawing.Size(67, 13)
@@ -263,16 +289,13 @@ Partial Class VersioningManagementUI
         '
         'LockedDateT
         '
-        Me.LockedDateT.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.LockedDateT.Enabled = False
-        Me.LockedDateT.Location = New System.Drawing.Point(238, 176)
+        Me.LockedDateT.Location = New System.Drawing.Point(146, 143)
         Me.LockedDateT.Margin = New System.Windows.Forms.Padding(3, 5, 3, 3)
         Me.LockedDateT.MaximumSize = New System.Drawing.Size(400, 4)
         Me.LockedDateT.MinimumSize = New System.Drawing.Size(280, 20)
         Me.LockedDateT.Name = "LockedDateT"
-        Me.LockedDateT.Size = New System.Drawing.Size(400, 20)
+        Me.LockedDateT.Size = New System.Drawing.Size(280, 20)
         Me.LockedDateT.TabIndex = 12
         '
         'NameTB
@@ -281,7 +304,7 @@ Partial Class VersioningManagementUI
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.NameTB.Enabled = False
-        Me.NameTB.Location = New System.Drawing.Point(238, 5)
+        Me.NameTB.Location = New System.Drawing.Point(146, 5)
         Me.NameTB.Margin = New System.Windows.Forms.Padding(3, 5, 3, 3)
         Me.NameTB.MaximumSize = New System.Drawing.Size(400, 4)
         Me.NameTB.MinimumSize = New System.Drawing.Size(280, 20)
@@ -292,7 +315,7 @@ Partial Class VersioningManagementUI
         'Label3
         '
         Me.Label3.AutoSize = True
-        Me.Label3.Location = New System.Drawing.Point(3, 64)
+        Me.Label3.Location = New System.Drawing.Point(3, 53)
         Me.Label3.Margin = New System.Windows.Forms.Padding(3, 7, 3, 0)
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(70, 13)
@@ -302,7 +325,7 @@ Partial Class VersioningManagementUI
         'lockedCB
         '
         Me.lockedCB.AutoSize = True
-        Me.lockedCB.Location = New System.Drawing.Point(238, 124)
+        Me.lockedCB.Location = New System.Drawing.Point(146, 102)
         Me.lockedCB.Margin = New System.Windows.Forms.Padding(3, 10, 3, 3)
         Me.lockedCB.Name = "lockedCB"
         Me.lockedCB.Size = New System.Drawing.Size(15, 14)
@@ -313,27 +336,41 @@ Partial Class VersioningManagementUI
         'TimeConfigTB
         '
         Me.TimeConfigTB.Enabled = False
-        Me.TimeConfigTB.Location = New System.Drawing.Point(238, 231)
+        Me.TimeConfigTB.Location = New System.Drawing.Point(146, 187)
         Me.TimeConfigTB.Name = "TimeConfigTB"
-        Me.TimeConfigTB.Size = New System.Drawing.Size(400, 20)
+        Me.TimeConfigTB.Size = New System.Drawing.Size(188, 20)
         Me.TimeConfigTB.TabIndex = 18
         '
-        'RefPeriodTB
+        'StartPeriodTB
         '
-        Me.RefPeriodTB.Enabled = False
-        Me.RefPeriodTB.Location = New System.Drawing.Point(238, 288)
-        Me.RefPeriodTB.Name = "RefPeriodTB"
-        Me.RefPeriodTB.Size = New System.Drawing.Size(400, 20)
-        Me.RefPeriodTB.TabIndex = 19
+        Me.StartPeriodTB.Enabled = False
+        Me.StartPeriodTB.Location = New System.Drawing.Point(146, 233)
+        Me.StartPeriodTB.Name = "StartPeriodTB"
+        Me.StartPeriodTB.Size = New System.Drawing.Size(188, 20)
+        Me.StartPeriodTB.TabIndex = 19
+        '
+        'NBPeriodsTB
+        '
+        Me.NBPeriodsTB.Enabled = False
+        Me.NBPeriodsTB.Location = New System.Drawing.Point(146, 279)
+        Me.NBPeriodsTB.Name = "NBPeriodsTB"
+        Me.NBPeriodsTB.Size = New System.Drawing.Size(188, 20)
+        Me.NBPeriodsTB.TabIndex = 21
+        '
+        'RatesVersionCB
+        '
+        Me.RatesVersionCB.FormattingEnabled = True
+        Me.RatesVersionCB.Location = New System.Drawing.Point(146, 325)
+        Me.RatesVersionCB.Name = "RatesVersionCB"
+        Me.RatesVersionCB.Size = New System.Drawing.Size(188, 21)
+        Me.RatesVersionCB.TabIndex = 23
         '
         'VersionsTVIcons
         '
         Me.VersionsTVIcons.ImageStream = CType(resources.GetObject("VersionsTVIcons.ImageStream"), System.Windows.Forms.ImageListStreamer)
         Me.VersionsTVIcons.TransparentColor = System.Drawing.Color.Transparent
-        Me.VersionsTVIcons.Images.SetKeyName(0, "favicon(220).ico")
+        Me.VersionsTVIcons.Images.SetKeyName(0, "favicon.ico")
         Me.VersionsTVIcons.Images.SetKeyName(1, "favicon(81).ico")
-        Me.VersionsTVIcons.Images.SetKeyName(2, "DB Grey.png")
-        Me.VersionsTVIcons.Images.SetKeyName(3, "icons-blue.png")
         '
         'RCM_TV
         '
@@ -420,7 +457,7 @@ Partial Class VersioningManagementUI
     Friend WithEvents ToolStripSeparator1 As System.Windows.Forms.ToolStripSeparator
     Friend WithEvents delete_bt As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents TimeConfigTB As System.Windows.Forms.TextBox
-    Friend WithEvents RefPeriodTB As System.Windows.Forms.TextBox
+    Friend WithEvents StartPeriodTB As System.Windows.Forms.TextBox
     Friend WithEvents TableLayoutPanel1 As System.Windows.Forms.TableLayoutPanel
     Friend WithEvents VersionsTVPanel As System.Windows.Forms.Panel
     Friend WithEvents Panel1 As System.Windows.Forms.Panel
@@ -428,4 +465,8 @@ Partial Class VersioningManagementUI
     Friend WithEvents AddVersionBT As System.Windows.Forms.Button
     Friend WithEvents ButtonsImageList As System.Windows.Forms.ImageList
     Friend WithEvents AddFolderBT As System.Windows.Forms.Button
+    Friend WithEvents Label1 As System.Windows.Forms.Label
+    Friend WithEvents NBPeriodsTB As System.Windows.Forms.TextBox
+    Friend WithEvents Label2 As System.Windows.Forms.Label
+    Friend WithEvents RatesVersionCB As System.Windows.Forms.ComboBox
 End Class

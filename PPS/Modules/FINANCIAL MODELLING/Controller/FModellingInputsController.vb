@@ -9,7 +9,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 26/12/2014
+' Last modified: 20/01/2015
 
 
 Imports System.Windows.Forms
@@ -26,9 +26,8 @@ Friend Class FModellingInputsController
     ' Object 
     Private SimulationsController As FModellingSimulationsControler
     Private View As FModellingUI
-    Private Model As CControlingMODEL
+    Private Model As ControlingUI2MODEL
     Private FModellingAccount As FModellingAccount
-    Private VersionsMGT As New CVersionsForControlingUIs
     Private VersionsTV As New TreeView
     Private EntitiesTV As New TreeView
     Protected Friend InputsDGV As New vDataGridView
@@ -62,7 +61,7 @@ Friend Class FModellingInputsController
 
         SimulationsController = input_simulations_controller
         FModellingAccount = input_FModellingAccount
-        Model = New CControlingMODEL(VersionsMGT.PERIODSMGT.yearlyPeriodList)
+        Model = New ControlingUI2Model()
         Version.LoadVersionsTree(VersionsTV)
         Entity.LoadEntitiesTree(EntitiesTV)
         inputs_list = FModellingAccountsMapping.GetFModellingAccountsList(FINANCIAL_MODELLING_ID_VARIABLE, FINANCIAL_MODELLING_INPUT_TYPE)
@@ -140,15 +139,22 @@ Friend Class FModellingInputsController
     Protected Friend Sub ComputeEntity(ByRef version_id As String, _
                                        ByRef entity_node As TreeNode)
 
+        Dim Versions As New Version
+        Dim time_configuration As String = Versions.ReadVersion(version_id, VERSIONS_TIME_CONFIG_VARIABLE)
         Model.init_computer_complete_mode(entity_node)
         InitializePBar()
-        periods_list = VersionsMGT.GetPeriodList(version_id)
+        periods_list = Versions.GetPeriodList(version_id)
+        Dim nb_periods As Int32 = Versions.ReadVersion(version_id, VERSIONS_NB_PERIODS_VAR)
+        Dim start_period As Int32 = Versions.ReadVersion(version_id, VERSIONS_START_PERIOD_VAR)
+        Versions.Close()
         Model.compute_selection_complete(version_id, _
                                          View.PBar, _
-                                         VersionsMGT.versionsCodeTimeSetUpDict(version_id)(VERSIONS_TIME_CONFIG_VARIABLE), _
+                                         time_configuration, _
                                          GLOBALCurrentRatesVersionCode, _
                                          periods_list, _
-                                         MAIN_CURRENCY)
+                                         MAIN_CURRENCY, _
+                                         start_period, _
+                                         nb_periods)
 
         BuildDataDic(entity_node.Name)
         InitInputsDGVColumns()

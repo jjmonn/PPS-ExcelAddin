@@ -178,7 +178,7 @@ Partial Class FModellingUI
         Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 24.24023!))
         Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 24.24023!))
         Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 51.51953!))
-        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 6.0!))
+        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 8.0!))
         Me.TableLayoutPanel1.Controls.Add(Me.MappingDGVPanel, 3, 2)
         Me.TableLayoutPanel1.Controls.Add(Me.Panel6, 3, 1)
         Me.TableLayoutPanel1.Controls.Add(Me.Panel5, 3, 3)
@@ -209,7 +209,7 @@ Partial Class FModellingUI
         Me.MappingDGVPanel.Location = New System.Drawing.Point(346, 51)
         Me.MappingDGVPanel.Margin = New System.Windows.Forms.Padding(5, 3, 3, 3)
         Me.MappingDGVPanel.Name = "MappingDGVPanel"
-        Me.MappingDGVPanel.Size = New System.Drawing.Size(351, 274)
+        Me.MappingDGVPanel.Size = New System.Drawing.Size(350, 274)
         Me.MappingDGVPanel.TabIndex = 14
         '
         'Panel6
@@ -219,7 +219,7 @@ Partial Class FModellingUI
         Me.Panel6.Location = New System.Drawing.Point(341, 20)
         Me.Panel6.Margin = New System.Windows.Forms.Padding(0)
         Me.Panel6.Name = "Panel6"
-        Me.Panel6.Size = New System.Drawing.Size(359, 28)
+        Me.Panel6.Size = New System.Drawing.Size(358, 28)
         Me.Panel6.TabIndex = 13
         '
         'Label4
@@ -240,7 +240,7 @@ Partial Class FModellingUI
         Me.Panel5.Location = New System.Drawing.Point(341, 328)
         Me.Panel5.Margin = New System.Windows.Forms.Padding(0)
         Me.Panel5.Name = "Panel5"
-        Me.Panel5.Size = New System.Drawing.Size(359, 36)
+        Me.Panel5.Size = New System.Drawing.Size(358, 36)
         Me.Panel5.TabIndex = 12
         '
         'Label3
@@ -278,7 +278,7 @@ Partial Class FModellingUI
         Me.InputsDGVPanel.Dock = System.Windows.Forms.DockStyle.Fill
         Me.InputsDGVPanel.Location = New System.Drawing.Point(344, 367)
         Me.InputsDGVPanel.Name = "InputsDGVPanel"
-        Me.InputsDGVPanel.Size = New System.Drawing.Size(353, 182)
+        Me.InputsDGVPanel.Size = New System.Drawing.Size(352, 182)
         Me.InputsDGVPanel.TabIndex = 7
         '
         'Panel4
@@ -289,7 +289,7 @@ Partial Class FModellingUI
         Me.Panel4.Location = New System.Drawing.Point(341, 552)
         Me.Panel4.Margin = New System.Windows.Forms.Padding(0)
         Me.Panel4.Name = "Panel4"
-        Me.Panel4.Size = New System.Drawing.Size(359, 26)
+        Me.Panel4.Size = New System.Drawing.Size(358, 26)
         Me.Panel4.TabIndex = 11
         '
         'Label5

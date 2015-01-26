@@ -8,7 +8,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 05/01/2015
+' Last modified: 20/01/2015
 
 
 Imports System.Windows.Forms
@@ -89,6 +89,8 @@ Friend Class RateVersion
                 hash.Add(RATES_VERSIONS_PARENT_CODE_VARIABLE, RST.Fields(RATES_VERSIONS_PARENT_CODE_VARIABLE).Value)
             End If
             hash.Add(ITEMS_POSITIONS, RST.Fields(ITEMS_POSITIONS).Value)
+            hash.Add(RATES_VERSIONS_START_PERIOD_VAR, RST.Fields(RATES_VERSIONS_START_PERIOD_VAR).Value)
+            hash.Add(RATES_VERSIONS_NB_PERIODS_VAR, RST.Fields(RATES_VERSIONS_NB_PERIODS_VAR).Value)
 
             tmp_dic.Add(RST.Fields(RATES_VERSIONS_ID_VARIABLE).Value, hash)
             RST.MoveNext()
@@ -191,6 +193,19 @@ Friend Class RateVersion
             Loop
         End If
         Return tmpList
+
+    End Function
+
+    Protected Friend Function GetPeriodList(ByRef rates_version_id As String) As List(Of Integer)
+
+        Return Period.GetYearlyPeriodList(ReadVersion(rates_version_id, RATES_VERSIONS_START_PERIOD_VAR), _
+                                          ReadVersion(rates_version_id, RATES_VERSIONS_NB_PERIODS_VAR))
+
+    End Function
+
+    Protected Friend Function GetPeriodsDictionary(ByRef rates_version_id As String) As Dictionary(Of Int32, Int32())
+
+        Return Period.GetGlobalPeriodsDictionary(GetPeriodList(rates_version_id))
 
     End Function
 

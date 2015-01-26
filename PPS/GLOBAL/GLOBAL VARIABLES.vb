@@ -13,7 +13,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 29/08/2014
+' Last modified: 18/01/2015
 
 
 Imports AddinExpress.MSO
@@ -29,8 +29,9 @@ Module GLOBAL_VARIABLES
   
     '  Friend Addin_Instance As AddinModule
     Friend Version_Label As ADXRibbonLabel
-    Friend Rates_Version_Label As ADXRibbonLabel
     Friend Version_label_Sub_Ribbon As ADXRibbonEditBox
+    Friend Rates_Version_Label As ADXRibbonLabel
+
     Friend GLOBALCurrentVersionCode As String
     Friend GLOBALCurrentRatesVersionCode As String
 
@@ -39,10 +40,9 @@ Module GLOBAL_VARIABLES
     Friend VersionsSelectionPaneVisible As Boolean
     Friend EntitySelectionPaneVisible As Boolean
 
-    'friend VersionsDictionary As hashtable
-
+ 
     ' Computation and refresh
-    Friend GENERICDCGLobalInstance As GenericSingleEntityComputer        ' change the name of this global instance
+    Friend GENERICDCGLobalInstance As GenericSingleEntityDLL3Computer        ' change the name of this global instance
     Friend UDFCALLBACKINSTANCE As cPPSBIControl
   
 
@@ -55,10 +55,13 @@ Module GLOBAL_VARIABLES
     Public Const MONTHLY_TIME_PERIOD_FORMAT As String = ""
     Public Const YEARLY_TIME_PERIOD_FORMAT As String = ""
 
+
 #Region "Submission Process Global Variables"
 
     Friend SubmissionStatusButton As ADXRibbonButton
     Friend WSHasChangedSinceLastSubmission As Boolean
+    Friend AdjustmentIDDropDown As ADXRibbonDropDown
+    Friend IsLoadingAdjusmtentsIDs As Boolean = False
 
 #End Region
 

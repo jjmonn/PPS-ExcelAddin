@@ -17,7 +17,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified date: 03/09/2014
+' Last modified date: 19/01/2015
 
 
 Imports Microsoft.Office.Interop
@@ -43,7 +43,7 @@ Friend Class CRefreshGetDataBatch
 
     Public Sub RefreshWorksheet()
 
-        GENERICDCGLobalInstance.ReinitializeGenericDataComputer()
+        GENERICDCGLobalInstance.ReinitializeGenericDataDLL3Computer()
         WS = APPS.ActiveSheet
         If findGetDataFormulaCells() Then
             evaluateFormulas()
@@ -100,14 +100,15 @@ Friend Class CRefreshGetDataBatch
 
 #Region "Refresh Report"
 
-    Public Shared Sub RefreshReport(Optional ByRef currency As String = "")
+    Friend Shared Sub RefreshReport(Optional ByRef currency As String = "", _
+                                    Optional ByVal adjustment_id As String = "")
 
         If currency = "" Then currency = "EUR"
         ' currency stub !-> if currency not provided dataset should identify the currency - if no currency found -> ask user
         Dim DS As New CModelDataSet(APPS.ActiveSheet)
         DS.SnapshotWS()
         DS.getOrientations()
-        If DS.GlobalOrientationFlag <> ORIENTATION_ERROR_FLAG Then DS.RefreshAll(currency)
+        If DS.GlobalOrientationFlag <> ORIENTATION_ERROR_FLAG Then DS.RefreshAll(adjustment_id)
 
     End Sub
 

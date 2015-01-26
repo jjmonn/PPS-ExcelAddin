@@ -431,9 +431,9 @@ Friend Class AccountsController
     Friend Sub UpdateModel()
 
         If Not GENERICDCGLobalInstance Is Nothing Then
-            GENERICDCGLobalInstance.CloseComputerInstance()
+            GENERICDCGLobalInstance.CloseDLL3ComputerInstance()
             GENERICDCGLobalInstance = Nothing
-            GENERICDCGLobalInstance = New GenericSingleEntityComputer
+            GENERICDCGLobalInstance = New GenericSingleEntityDLL3Computer
         End If
         needToUpdateModel = False
 

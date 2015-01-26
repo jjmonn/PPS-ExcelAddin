@@ -3,7 +3,7 @@
 ' To do: Reijection process can be improved by a different implementation of the database_Downloader (currently too much specific to controllingUI2)
 '
 '
-'
+'    stub on adjustments ID selection to be implemented correctly !! simple
 '
 '
 ' Author: Julien Monnereau
@@ -24,7 +24,7 @@ Friend Class FModellingExportController
     ' Objects
     Private SimulationsController As FModellingSimulationsControler
     Private View As FModellingUI
-    Private Model As CControlingMODEL
+    Private Model As ControlingUI2MODEL
     Private FModellingAccount As FModellingAccount
     Private ExportsTV As New TreeView
     Private EntitiesTV As New TreeView
@@ -136,6 +136,7 @@ Friend Class FModellingExportController
 
     Protected Friend Sub Export()
 
+        Dim DBUploader As New DataBaseDataUploader
         Dim scenario_id = scenarios_name_id_dic(ScenariosCB.SelectedItem)
         Dim scenario = SimulationsController.GetScenario(scenario_id)
         InitializePBar()
@@ -148,15 +149,20 @@ Friend Class FModellingExportController
                 Dim current_value = DataBaseDataDownloader.GetSingleValue(SimulationsController.version_id, _
                                                                           entity_id, _
                                                                           account_id, _
-                                                                          periods_list(j))
+                                                                          periods_list(j), _
+                                                                          DEFAULT_ADJUSTMENT_ID)
 
                 Dim new_value = current_value + scenario.data_dic(export_id)(j)
                 If new_value <> current_value Then _
-                DataBaseDataUploader.UpdateSingleValue(entity_id, _
+                DBUploader.UpdateSingleValue(entity_id, _
                                                        account_id, _
                                                        periods_list(j), _
                                                        new_value, _
-                                                       SimulationsController.version_id)
+                                                       SimulationsController.version_id, _
+                                                       DEFAULT_ADJUSTMENT_ID)
+
+                ' !!!!! STUB adjustment id must be validated in some mapping !!!
+
                 View.PBar.AddProgress()
             Next
         Next

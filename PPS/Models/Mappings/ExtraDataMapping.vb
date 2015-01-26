@@ -11,7 +11,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 29/08/2014
+' Last modified: 19/01/2015
 
 
 Imports System.Collections
@@ -28,25 +28,25 @@ Public Class ExtraDataMapping
 #End Region
 
 
-    ' Provides EP and SP
-    Friend Shared Function GetStartAndEndingPeriod() As Hashtable
+    '' Provides EP and SP
+    'Friend Shared Function GetStartAndEndingPeriod() As Hashtable
 
-        Dim srv As New ModelServer
-        srv.openRst(EXTRA_DATA_TABLE_ADDRESS, ModelServer.FWD_CURSOR)
-        Dim variablesArray() As String = {STARTING_PERIOD_KEY, ENDING_PERIOD_KEY}
-        Dim tmpHT As New Hashtable
+    '    Dim srv As New ModelServer
+    '    srv.openRst(EXTRA_DATA_TABLE_ADDRESS, ModelServer.FWD_CURSOR)
+    '    Dim variablesArray() As String = {STARTING_PERIOD_KEY, ENDING_PERIOD_KEY}
+    '    Dim tmpHT As New Hashtable
 
-        For Each variable In variablesArray
-            srv.rst.Filter = EXTRA_DATA_KEY_VARIABLE + "='" + variable + "'"
-            If srv.rst.EOF = False AndAlso srv.rst.BOF = False Then
-                tmpHT.Add(variable, srv.rst.Fields(EXTRA_DATA_VALUE_VARIABLE).Value)
-            End If
-        Next
-        srv.rst.Close()
-        srv = Nothing
-        Return tmpHT
+    '    For Each variable In variablesArray
+    '        srv.rst.Filter = EXTRA_DATA_KEY_VARIABLE + "='" + variable + "'"
+    '        If srv.rst.EOF = False AndAlso srv.rst.BOF = False Then
+    '            tmpHT.Add(variable, srv.rst.Fields(EXTRA_DATA_VALUE_VARIABLE).Value)
+    '        End If
+    '    Next
+    '    srv.rst.Close()
+    '    srv = Nothing
+    '    Return tmpHT
 
-    End Function
+    'End Function
 
 
     Friend Shared Function GetValue(ByRef key As String) As Object

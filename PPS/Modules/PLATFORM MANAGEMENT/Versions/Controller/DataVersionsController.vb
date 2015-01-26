@@ -37,7 +37,8 @@ Friend Class DataVersionsController
     Private versionsTV As New TreeView
     Friend versionsNamesList As New List(Of String)
     Friend positions_dictionary As New Dictionary(Of String, Double)
-
+    Protected Friend rates_versions_id_name_dic As Dictionary(Of String, String)
+    Protected Friend rates_versions_name_id_dic As Dictionary(Of String, String)
 
     ' Constants
     Private FORBIDEN_CHARS As String() = {","}
@@ -57,6 +58,8 @@ Friend Class DataVersionsController
         End If
 
         Version.LoadVersionsTree(versionsTV)
+        rates_versions_id_name_dic = RateVersionsMapping.GetRatesVersionDictionary(RATES_VERSIONS_ID_VARIABLE, RATES_VERSIONS_NAME_VARIABLE)
+        rates_versions_name_id_dic = RateVersionsMapping.GetRatesVersionDictionary(RATES_VERSIONS_NAME_VARIABLE, RATES_VERSIONS_ID_VARIABLE)
         ViewObject = New VersioningManagementUI(Me, versionsTV)
         versionsNamesList = cTreeViews_Functions.GetNodesTextsList(versionsTV)
         NewVersionUI = New NewDataVersionUI(Me)
@@ -64,6 +67,7 @@ Friend Class DataVersionsController
         ViewObject.Show()
 
     End Sub
+
 
 #End Region
 
@@ -104,7 +108,7 @@ Friend Class DataVersionsController
         hash.Add(VERSIONS_IS_FOLDER_VARIABLE, 1)
         hash.Add(ITEMS_POSITIONS, 1)
         If Not parent_node Is Nothing Then hash.Add(VERSIONS_PARENT_CODE_VARIABLE, parent_node.Name)
-       
+
         Versions.CreateVersion(hash)
         AddNode(new_id, folder_name, 1, parent_node)
 
@@ -125,6 +129,12 @@ Friend Class DataVersionsController
     Protected Friend Sub UpdateName(ByRef version_id As String, ByRef name As String)
 
         Versions.UpdateVersion(version_id, VERSIONS_NAME_VARIABLE, name)
+
+    End Sub
+
+    Protected Friend Sub UpdateRatesVersion_id(ByRef version_id As String, ByRef rates_version_id As String)
+
+        Versions.UpdateVersion(version_id, VERSIONS_RATES_VERSION_ID_VAR, rates_version_id)
 
     End Sub
 
@@ -208,6 +218,21 @@ Friend Class DataVersionsController
             If name.Contains(char_) Then Return False
         Next
         Return True
+
+    End Function
+
+    Protected Friend Function IsRatesVersionValid(ByRef start_period As Int32, _
+                                                  ByRef nb_periods As Int32, _
+                                                  ByRef rates_version_id As String) As Boolean
+
+        Dim RatesVersions As New RateVersion
+        Dim rates_version_start_period As Int32 = RatesVersions.ReadVersion(rates_version_id, RATES_VERSIONS_START_PERIOD_VAR)
+        Dim rates_version_nb_periods As Int32 = RatesVersions.ReadVersion(rates_version_id, RATES_VERSIONS_NB_PERIODS_VAR)
+        If start_period >= rates_version_start_period AndAlso _
+           nb_periods <= rates_version_nb_periods Then
+            Return True
+        End If
+        Return False
 
     End Function
 

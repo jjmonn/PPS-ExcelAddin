@@ -14,7 +14,8 @@ Module gdfsuezAlternativeScenarios
 
 #Region "DataBase Specifics"
 
-    ' Data Base Constants
+#Region "Alternative Scenario Sensitivities Tables"
+
     Friend Const GDF_SENSITIVITIES_LIST_TABLE As String = "gdfsuez_sensitivities"
     Friend Const GDF_SENSITIVITIES_ITEM_VAR As String = "item"
     Friend Const GDF_SENSITIVITIES_VOLUMES_ACCOUNT_ID_VAR As String = "volumes_account_id"
@@ -23,15 +24,37 @@ Module gdfsuezAlternativeScenarios
     Friend Const GDF_SENSITIVITIES_DEST_UNIT_VAR As String = "destination_unit"
     Friend Const GDF_SENSITIVITIES_FORMULA_NAME_VAR As String = "formula_name"
 
+#End Region
+
+#Region "Alternative Scenario Entities Attributes Table"
+
     Friend Const GDF_ENTITIES_AS_ATTRIBUTES_TABLE As String = "gdfsuez_entities_as_attributes"
     Friend Const GDF_ENTITIES_AS_ENTITY_ID_VAR As String = "entity_id"
     Friend Const GDF_ENTITIES_AS_GAS_FORMULA_VAR As String = "gas_formula"
     Friend Const GDF_ENTITIES_AS_LIQUID_VAR As String = "liquid_formula"
     Friend Const GDF_ENTITIES_AS_TAX_RATE_VAR As String = "tax_rate"
 
+#End Region
+
+#Region "Alternative Scenario Accounts Table"
+
     Friend Const GDF_AS_ACCOUNTS_TABLES As String = "gdfsuez_as_accounts"
     Friend Const GDF_AS_ACCOUNT_ID_VAR As String = "account_id"
     Friend Const GDF_AS_ITEM_VAR As String = "as_item"
+
+#End Region
+
+#Region "Alternative Scenario Exports Table"
+
+    Friend Const GDF_AS_EXPORTS_TABLE As String = "gdfsuez_as_exports"
+    Friend Const GDF_AS_EXPORTS_ITEM_VAR As String = "item"
+    Friend Const GDF_AS_EXPORTS_SENSI_VAR As String = "sensitivity"
+    Friend Const GDF_AS_EXPORTS_ACCOUNT_ID_VAR As String = "account_id"
+
+
+#End Region
+
+#Region "Alternative Scenario Reports Tables"
 
     Friend Const GDF_AS_REPORTS_TABLE As String = "gdfsuez_as_reports"
     Friend Const GDF_AS_REPORTS_ID_VAR As String = "id"
@@ -49,6 +72,8 @@ Module gdfsuezAlternativeScenarios
 
     Friend Const GDF_CHART_REPORT_TYPE As String = "C"
     Friend Const GDF_TABLE_REPORT_TYPE As String = "T"
+
+#End Region
 
 
 #End Region

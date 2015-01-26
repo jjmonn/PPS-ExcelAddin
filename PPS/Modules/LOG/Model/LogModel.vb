@@ -5,7 +5,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 07/01/2015
+' Last modified: 20/01/2015
 
 
 Imports System.Collections.Generic
@@ -16,8 +16,8 @@ Friend Class LogModel
 #Region "Instance Variables"
 
     ' Objects
-    Private Computer As New GenericSingleEntityComputer
-
+    Private Computer As New GenericSingleEntityDLL3Computer
+    Private Versions As New Version
 
 #End Region
 
@@ -26,13 +26,13 @@ Friend Class LogModel
 
     Protected Friend Function GetPeriodList(ByRef version_id As String) As List(Of Int32)
 
-        Return Computer.VERSIONSMGT.GetPeriodList(version_id)
+        Return Versions.GetPeriodList(version_id)
 
     End Function
 
     Protected Friend Function GetTimeConfig(ByRef version_id As String) As String
 
-        Return Computer.VERSIONSMGT.versionsCodeTimeSetUpDict(version_id)(VERSIONS_TIME_CONFIG_VARIABLE)
+        Return Versions.ReadVersion(version_id, VERSIONS_TIME_CONFIG_VARIABLE)
 
     End Function
 
@@ -46,7 +46,7 @@ Friend Class LogModel
     Protected Friend Function GetData(ByRef account_id As String, _
                                       ByRef period As Int32) As Double
 
-        Return Computer.GetDataFromComputer(account_id, period, MAIN_CURRENCY)
+        Return Computer.GetDataFromDLL3Computer(account_id, period)
 
     End Function
 

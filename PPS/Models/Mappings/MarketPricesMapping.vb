@@ -31,9 +31,9 @@ Friend Class MarketPricesMapping
                 For j = 0 To period_array.Length - 1
 
                     Dim tmp_list As New List(Of Double)
-                    Dim months_list As List(Of Integer) = Periods.GetMonthlyPeriodsList(Year(Date.FromOADate(period_array(j))), 0)
+                    Dim months_list As List(Of Integer) = Period.GetMonthsPeriodsInOneYear(Year(Date.FromOADate(period_array(j))), 0)
                     For Each month_ In months_list
-                        srv.rst.Filter = EX_TABLE_PERIOD_VARIABLE & "=" & month_
+                        srv.rst.Filter = EX_RATES_PERIOD_VARIABLE & "=" & month_
                         tmp_list.Add(srv.rst.Fields(MARKET_INDEXES_PRICES_VALUE_VAR).Value)
                     Next
                     prices_array(j) = ComputeAverage(tmp_list)
@@ -41,7 +41,7 @@ Friend Class MarketPricesMapping
                 Next
             Else
                 For j = 0 To period_array.Length - 1
-                    srv.rst.Filter = EX_TABLE_PERIOD_VARIABLE & "=" & period_array(j)
+                    srv.rst.Filter = EX_RATES_PERIOD_VARIABLE & "=" & period_array(j)
                     prices_array(j) = srv.rst.Fields(MARKET_INDEXES_PRICES_VALUE_VAR).Value
                 Next
             End If

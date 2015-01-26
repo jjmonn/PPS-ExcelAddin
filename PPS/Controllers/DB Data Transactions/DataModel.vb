@@ -16,7 +16,7 @@ Imports System.Collections.Generic
 Imports System.Collections
 
 
-Public Class DataModel
+Friend Class DataModel
 
 
 #Region "Instance Variables"

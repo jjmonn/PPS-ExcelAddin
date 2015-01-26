@@ -47,4 +47,26 @@ Public Class RateVersionsMapping
     End Function
 
 
+    Protected Friend Shared Function GetRatesVersionDictionary(ByRef Key As String, _
+                                                               ByRef Value As String) As Dictionary(Of String, String)
+
+        Dim srv As New ModelServer
+        Dim tmpHT As New Dictionary(Of String, String)
+        srv.OpenRst(CONFIG_DATABASE + "." + RATES_VERSIONS_TABLE, ModelServer.FWD_CURSOR)
+        srv.rst.Filter = RATES_VERSIONS_IS_FOLDER_VARIABLE + "= 0"
+
+        If srv.rst.EOF = False And srv.rst.BOF = False Then
+            srv.rst.MoveFirst()
+            Do While srv.rst.EOF = False
+                tmpHT.Add(srv.rst.Fields(Key).Value, srv.rst.Fields(Value).Value)
+                srv.rst.MoveNext()
+            Loop
+
+        End If
+        srv.rst.Close()
+        srv = Nothing
+        Return tmpHT
+
+    End Function
+
 End Class

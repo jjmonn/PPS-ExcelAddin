@@ -25,9 +25,8 @@ Partial Class CVersionSelectionPane
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(CVersionSelectionPane))
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
         Me.Label1 = New System.Windows.Forms.Label()
-        Me.ValidateButton = New System.Windows.Forms.Button()
+        Me.ValidateBT = New System.Windows.Forms.Button()
         Me.BTsIL = New System.Windows.Forms.ImageList(Me.components)
-        Me.Label2 = New System.Windows.Forms.Label()
         Me.VersioningTVIL = New System.Windows.Forms.ImageList(Me.components)
         Me.TableLayoutPanel1.SuspendLayout()
         Me.SuspendLayout()
@@ -37,18 +36,16 @@ Partial Class CVersionSelectionPane
         Me.TableLayoutPanel1.ColumnCount = 1
         Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
         Me.TableLayoutPanel1.Controls.Add(Me.Label1, 0, 0)
-        Me.TableLayoutPanel1.Controls.Add(Me.ValidateButton, 0, 4)
-        Me.TableLayoutPanel1.Controls.Add(Me.Label2, 0, 2)
+        Me.TableLayoutPanel1.Controls.Add(Me.ValidateBT, 0, 2)
         Me.TableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TableLayoutPanel1.Location = New System.Drawing.Point(0, 0)
         Me.TableLayoutPanel1.Name = "TableLayoutPanel1"
-        Me.TableLayoutPanel1.RowCount = 6
-        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 5.882353!))
+        Me.TableLayoutPanel1.RowCount = 3
+        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 5.882352!))
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 94.11765!))
-        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 21.0!))
-        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 255.0!))
-        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
-        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 74.0!))
+        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 85.0!))
+        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
+        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
         Me.TableLayoutPanel1.Size = New System.Drawing.Size(315, 701)
         Me.TableLayoutPanel1.TabIndex = 0
         '
@@ -62,36 +59,24 @@ Partial Class CVersionSelectionPane
         Me.Label1.TabIndex = 2
         Me.Label1.Text = "Select a Version"
         '
-        'ValidateButton
+        'ValidateBT
         '
-        Me.ValidateButton.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ValidateButton.FlatAppearance.BorderSize = 0
-        Me.ValidateButton.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
-        Me.ValidateButton.ImageKey = "favicon(76).ico"
-        Me.ValidateButton.ImageList = Me.BTsIL
-        Me.ValidateButton.Location = New System.Drawing.Point(231, 601)
-        Me.ValidateButton.Name = "ValidateButton"
-        Me.ValidateButton.Size = New System.Drawing.Size(81, 22)
-        Me.ValidateButton.TabIndex = 18
-        Me.ValidateButton.Text = "Validate"
-        Me.ValidateButton.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.ValidateButton.UseVisualStyleBackColor = True
+        Me.ValidateBT.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.ValidateBT.ImageKey = "favicon(76).ico"
+        Me.ValidateBT.ImageList = Me.BTsIL
+        Me.ValidateBT.Location = New System.Drawing.Point(3, 618)
+        Me.ValidateBT.Name = "ValidateBT"
+        Me.ValidateBT.Size = New System.Drawing.Size(75, 23)
+        Me.ValidateBT.TabIndex = 3
+        Me.ValidateBT.Text = "Validate"
+        Me.ValidateBT.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.ValidateBT.UseVisualStyleBackColor = True
         '
         'BTsIL
         '
         Me.BTsIL.ImageStream = CType(resources.GetObject("BTsIL.ImageStream"), System.Windows.Forms.ImageListStreamer)
         Me.BTsIL.TransparentColor = System.Drawing.Color.Transparent
         Me.BTsIL.Images.SetKeyName(0, "favicon(76).ico")
-        '
-        'Label2
-        '
-        Me.Label2.AutoSize = True
-        Me.Label2.Location = New System.Drawing.Point(3, 324)
-        Me.Label2.Margin = New System.Windows.Forms.Padding(3, 4, 3, 0)
-        Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(131, 13)
-        Me.Label2.TabIndex = 19
-        Me.Label2.Text = "Select a FX Rates Version"
         '
         'VersioningTVIL
         '
@@ -116,8 +101,7 @@ Partial Class CVersionSelectionPane
     Friend WithEvents TableLayoutPanel1 As System.Windows.Forms.TableLayoutPanel
     Friend WithEvents VersioningTVIL As System.Windows.Forms.ImageList
     Friend WithEvents Label1 As System.Windows.Forms.Label
-    Friend WithEvents ValidateButton As System.Windows.Forms.Button
     Friend WithEvents BTsIL As System.Windows.Forms.ImageList
-    Friend WithEvents Label2 As System.Windows.Forms.Label
+    Friend WithEvents ValidateBT As System.Windows.Forms.Button
 
 End Class

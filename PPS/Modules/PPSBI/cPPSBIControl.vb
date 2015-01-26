@@ -126,9 +126,9 @@ Public Class cPPSBIControl
 
         ESB.BuildCategoriesFilterFromFilterList(filterList)
 
-        If GENERICDCGLobalInstance.currentEntityCode <> entityKey _
+        If GENERICDCGLobalInstance.current_entity_id <> entityKey _
         Or GENERICDCGLobalInstance.currentStrSqlQuery <> ESB.StrSqlQuery _
-        Or GENERICDCGLobalInstance.currentVersionCode <> versionCode _
+        Or GENERICDCGLobalInstance.current_version_id <> versionCode _
         Or GENERICDCGLobalInstance.currentCurrency <> currencyString _
         Then
             '  NEW COMPUTATION (currencies) IMPLMEENTATION !!!!!
@@ -136,7 +136,7 @@ Public Class cPPSBIControl
         End If
 
 
-        Return GENERICDCGLobalInstance.GetDataFromComputer(accountKey, periodInteger, currencyString)
+        Return GENERICDCGLobalInstance.GetDataFromDLL3Computer(accountKey, periodInteger)
 
     End Function
 
@@ -176,7 +176,7 @@ Public Class cPPSBIControl
                                ByRef periodInteger As Integer, _
                                ByRef versionCode As String) As Boolean
 
-        Dim periodsList As List(Of Integer) = GENERICDCGLobalInstance.VERSIONSMGT.GetPeriodList(versionCode)
+        Dim periodsList As List(Of Integer) = GENERICDCGLobalInstance.period_list
 
         If IsDate(periodStr) Then
             Dim periodAsDate As Date = CDate(periodStr)
@@ -193,7 +193,7 @@ Public Class cPPSBIControl
                 periodInteger = periodStr
                 Return True
             Else
-                Select Case GENERICDCGLobalInstance.VERSIONSMGT.versionsCodeTimeSetUpDict(versionCode)(VERSIONS_TIME_CONFIG_VARIABLE)
+                Select Case GENERICDCGLobalInstance.time_config
                     Case MONTHLY_TIME_CONFIGURATION
                         For Each period As Integer In periodsList
                             If Month(DateTime.FromOADate(period)) = periodStr Then

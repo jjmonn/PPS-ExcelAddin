@@ -11,6 +11,8 @@
 '
 '
 ' To do:  
+'       - changement de version -> changement du display (cf. periods <>)!!
+'
 '       - case where status = false -> modified to true...!!
 '       - Dans le cas où le snapshotStatus est false -> si une action le fait passer en true ->enable buttons
 '       -                                            >> actions = modifications sur les inputs -> dans addin
@@ -31,7 +33,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 22/10/2014
+' Last modified: 19/01/2015
 
 
 Imports Microsoft.Office.Interop
@@ -58,7 +60,7 @@ Friend Class CGeneralReportSubmissionControler
     Private DBUploader As DataBaseDataUploader
     Private DBDownloader As New DataBaseDataDownloader
     Private CCOMPUTERINT As DLL3_Interface
-    Private ACQUMODEL As CAcquisitionModel
+    Private Model As CAcquisitionModel
     Private EXCELWSCONTROLLER As cExcelSubmissionWorksheetController
     Private ACQUICONTROLLER As cAcquisitionUIController
     Friend associatedWorksheet As Excel.Worksheet
@@ -95,12 +97,12 @@ Friend Class CGeneralReportSubmissionControler
         associatedWorksheet = APPS.ActiveSheet
 
         DATASET = New CModelDataSet(associatedWorksheet)
-        DBUploader = New DataBaseDataUploader(DATASET.EntitiesNameKeyDictionary, _
-                                               DATASET.AccountsNameKeyDictionary, _
-                                               Me)
+        DBUploader = New DataBaseDataUploader()
+        DBUploader.SetUpDictionaries(DATASET.EntitiesNameKeyDictionary, _
+                                     DATASET.AccountsNameKeyDictionary)
         CCOMPUTERINT = New DLL3_Interface
         DATAMODTRACKER = New CDataModificationsTracking(DATASET)
-        ACQUMODEL = New CAcquisitionModel(DATASET, DBDownloader, CCOMPUTERINT)
+        Model = New CAcquisitionModel(DATASET, DBDownloader, CCOMPUTERINT)
 
         BCKGW.WorkerReportsProgress = True
         AddHandler BCKGW.DoWork, AddressOf BCKGW_DoWork
@@ -115,14 +117,15 @@ Friend Class CGeneralReportSubmissionControler
         If Not DATASET.GlobalScreenShot Is Nothing Then
             DATASET.SnapshotWS()
             DATASET.getOrientations()
+            ' DATASET.RefreshAll -> possible evolution (take off refreshdatabatch in addin and set excel formatting here)
             DATAMODTRACKER.InitializeDataSetRegion()
             DATAMODTRACKER.InitializeOutputsRegion()
-            ACQUICONTROLLER = New cAcquisitionUIController(DATASET, Me, ACQUMODEL)
+            ACQUICONTROLLER = New cAcquisitionUIController(DATASET, Me, Model)
 
             If DATASET.GlobalOrientationFlag <> ORIENTATION_ERROR_FLAG Then
                 snapshotSuccess = True
                 InitializeAcquisitionModelAndSetUpDisplay()
-                EXCELWSCONTROLLER = New cExcelSubmissionWorksheetController(Me, DATASET, ACQUMODEL, DATAMODTRACKER)
+                EXCELWSCONTROLLER = New cExcelSubmissionWorksheetController(Me, DATASET, Model, DATAMODTRACKER)
                 EXCELWSCONTROLLER.AssociateWS(associatedWorksheet)
             Else
                 If DATASET.pAssetFlag = 0 AndAlso _
@@ -171,7 +174,7 @@ Friend Class CGeneralReportSubmissionControler
 
     Friend Sub LaunchInitialDBDifferencesLookUp()
 
-        DATAMODTRACKER.IdentifyDifferencesBtwDataSetAndDB(ACQUMODEL.DBInputsDictionary)
+        DATAMODTRACKER.IdentifyDifferencesBtwDataSetAndDB(Model.DBInputsDictionary)
 
     End Sub
 
@@ -256,7 +259,7 @@ Friend Class CGeneralReportSubmissionControler
         If Not DATASET Is Nothing Then DATASET = Nothing
         If Not DATAMODTRACKER Is Nothing Then DATAMODTRACKER = Nothing
         If Not CCOMPUTERINT Is Nothing Then CCOMPUTERINT = Nothing
-        If Not ACQUMODEL Is Nothing Then ACQUMODEL = Nothing
+        If Not Model Is Nothing Then Model = Nothing
         Try
             RemoveHandler associatedWorksheet.Change, AddressOf EXCELWSCONTROLLER.Worksheet_Change
         Catch ex As Exception
@@ -284,6 +287,17 @@ Friend Class CGeneralReportSubmissionControler
 
     End Sub
 
+    Protected Friend Sub UpdateGRSAfterAdjustmentIdChanged(ByVal adjustment_id As String)
+
+        isUpdating = True
+        DATASET.RefreshAll(adjustment_id)
+        InitializeAcquisitionModelAndSetUpDisplay()
+        Model.DownloadDBInputs(ADDIN.CurrentEntityTB.Text, adjustment_id)
+        UpdateModel(ADDIN.CurrentEntityTB.Text)
+        isUpdating = False
+
+    End Sub
+
 #End Region
 
 
@@ -297,7 +311,7 @@ Friend Class CGeneralReportSubmissionControler
 
 
         ACQUICONTROLLER.SetDGVCellValue(entityName, accountName, periodInt, value)
-        ACQUMODEL.ValuesDictionariesUpdate(entityName, accountName, periodInt, value)
+        Model.ValuesDictionariesUpdate(entityName, accountName, periodInt, value)
         DATAMODTRACKER.RegisterModification(cellAddress)
 
 
@@ -309,15 +323,15 @@ Friend Class CGeneralReportSubmissionControler
                                         ByVal value As Double)
 
         Dim cell As Excel.Range = EXCELWSCONTROLLER.UpdateExcelWS(entityName, accountName, periodInt, value)
-        ACQUMODEL.ValuesDictionariesUpdate(entityName, accountName, periodInt, value)
+        Model.ValuesDictionariesUpdate(entityName, accountName, periodInt, value)
         If Not cell Is Nothing Then DATAMODTRACKER.RegisterModification(cell.Address)
 
     End Sub
 
-    Friend Sub UpdateAcquModel(ByRef entityName)
+    Friend Sub UpdateModel(ByRef entityName As String)
 
         isUpdating = True
-        ACQUMODEL.ComputeCalculatedItems(entityName)
+        Model.ComputeCalculatedItems(entityName)
         EXCELWSCONTROLLER.UpdateCalculatedItemsOnWS(entityName)
         ACQUICONTROLLER.UpdateCalculatedItemsOnDGV(entityName)
         isUpdating = False
@@ -364,7 +378,8 @@ Friend Class CGeneralReportSubmissionControler
                                                              DATASET.CellsAddressItemsDictionary(cellAddress)(CModelDataSet.ACCOUNT_ITEM), _
                                                              DATASET.CellsAddressItemsDictionary(cellAddress)(CModelDataSet.PERIOD_ITEM), _
                                                              APPS.ActiveSheet.range(cellAddress).value, _
-                                                             DATASET.currentVersionCode) = False Then
+                                                             DATASET.currentVersionCode, _
+                                                             AdjustmentIDDropDown.SelectedItemId) = False Then
 
                 errorsList.Add("Error during upload of Entity: " & DATASET.CellsAddressItemsDictionary(cellAddress)(CModelDataSet.ENTITY_ITEM) _
                                & " Account: " & DATASET.CellsAddressItemsDictionary(cellAddress)(CModelDataSet.ACCOUNT_ITEM) _
@@ -430,12 +445,28 @@ Friend Class CGeneralReportSubmissionControler
     End Function
 
     Friend Sub HideACQUI()
+
         ACQUICONTROLLER.HideAcquisitionUI()
+
     End Sub
 
     Friend Sub ShowACQUI()
+
         ACQUICONTROLLER.ShowAcquisitionUI()
+
     End Sub
+
+    Protected Friend Function GetPeriodsList() As List(Of Int32)
+
+        Return Model.currentPeriodlist
+
+    End Function
+
+    Protected Friend Function GetTimeConfig() As String
+
+        Return Model.versionsTimeConfigDict(Model.mCurrentVersionCode)
+
+    End Function
 
 #End Region
 

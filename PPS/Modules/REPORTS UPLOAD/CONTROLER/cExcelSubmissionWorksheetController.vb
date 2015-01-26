@@ -143,7 +143,7 @@ Friend Class cExcelSubmissionWorksheetController
                     End If
                 End If
             Next
-            If modelUpdateFlag = True Then GRS.UpdateAcquModel(entityItem)
+            If modelUpdateFlag = True Then GRS.UpdateModel(entityItem)
         End If
 
     End Sub

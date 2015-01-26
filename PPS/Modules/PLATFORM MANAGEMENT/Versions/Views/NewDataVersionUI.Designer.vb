@@ -25,6 +25,8 @@ Partial Class NewDataVersionUI
         Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(NewDataVersionUI))
         Me.TableLayoutPanel2 = New System.Windows.Forms.TableLayoutPanel()
+        Me.Label2 = New System.Windows.Forms.Label()
+        Me.Label1 = New System.Windows.Forms.Label()
         Me.CreateCopyBT = New System.Windows.Forms.CheckBox()
         Me.BigIcons = New System.Windows.Forms.ImageList(Me.components)
         Me.Label11 = New System.Windows.Forms.Label()
@@ -33,12 +35,16 @@ Partial Class NewDataVersionUI
         Me.ReferenceTB = New System.Windows.Forms.TextBox()
         Me.NameTB = New System.Windows.Forms.TextBox()
         Me.TimeConfigCB = New System.Windows.Forms.ComboBox()
-        Me.RefPeriodCB = New System.Windows.Forms.ComboBox()
+        Me.NbPeriodsNUD = New System.Windows.Forms.NumericUpDown()
+        Me.StartingPeriodNUD = New System.Windows.Forms.NumericUpDown()
+        Me.RatesVersionCB = New System.Windows.Forms.ComboBox()
         Me.Panel1 = New System.Windows.Forms.Panel()
-        Me.CancelBT = New System.Windows.Forms.Button()
         Me.ButtonIcons = New System.Windows.Forms.ImageList(Me.components)
+        Me.CancelBT = New System.Windows.Forms.Button()
         Me.CreateEntityBT = New System.Windows.Forms.Button()
         Me.TableLayoutPanel2.SuspendLayout()
+        CType(Me.NbPeriodsNUD, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.StartingPeriodNUD, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'TableLayoutPanel2
@@ -46,6 +52,8 @@ Partial Class NewDataVersionUI
         Me.TableLayoutPanel2.ColumnCount = 2
         Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 38.35376!))
         Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 61.64624!))
+        Me.TableLayoutPanel2.Controls.Add(Me.Label2, 0, 5)
+        Me.TableLayoutPanel2.Controls.Add(Me.Label1, 0, 4)
         Me.TableLayoutPanel2.Controls.Add(Me.CreateCopyBT, 0, 1)
         Me.TableLayoutPanel2.Controls.Add(Me.Label11, 0, 3)
         Me.TableLayoutPanel2.Controls.Add(Me.Label10, 0, 2)
@@ -53,17 +61,40 @@ Partial Class NewDataVersionUI
         Me.TableLayoutPanel2.Controls.Add(Me.ReferenceTB, 1, 1)
         Me.TableLayoutPanel2.Controls.Add(Me.NameTB, 1, 0)
         Me.TableLayoutPanel2.Controls.Add(Me.TimeConfigCB, 1, 2)
-        Me.TableLayoutPanel2.Controls.Add(Me.RefPeriodCB, 1, 3)
+        Me.TableLayoutPanel2.Controls.Add(Me.NbPeriodsNUD, 1, 4)
+        Me.TableLayoutPanel2.Controls.Add(Me.StartingPeriodNUD, 1, 3)
+        Me.TableLayoutPanel2.Controls.Add(Me.RatesVersionCB, 1, 5)
         Me.TableLayoutPanel2.Location = New System.Drawing.Point(32, 27)
         Me.TableLayoutPanel2.Name = "TableLayoutPanel2"
-        Me.TableLayoutPanel2.RowCount = 4
-        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25.0!))
-        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25.0!))
-        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25.0!))
-        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25.0!))
-        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
-        Me.TableLayoutPanel2.Size = New System.Drawing.Size(586, 170)
+        Me.TableLayoutPanel2.RowCount = 6
+        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.66667!))
+        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.66667!))
+        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.66667!))
+        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.66667!))
+        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.66667!))
+        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.66667!))
+        Me.TableLayoutPanel2.Size = New System.Drawing.Size(586, 240)
         Me.TableLayoutPanel2.TabIndex = 1
+        '
+        'Label2
+        '
+        Me.Label2.AutoSize = True
+        Me.Label2.Location = New System.Drawing.Point(3, 202)
+        Me.Label2.Margin = New System.Windows.Forms.Padding(3, 7, 3, 0)
+        Me.Label2.Name = "Label2"
+        Me.Label2.Size = New System.Drawing.Size(124, 13)
+        Me.Label2.TabIndex = 28
+        Me.Label2.Text = "Exchange Rates Version"
+        '
+        'Label1
+        '
+        Me.Label1.AutoSize = True
+        Me.Label1.Location = New System.Drawing.Point(3, 163)
+        Me.Label1.Margin = New System.Windows.Forms.Padding(3, 7, 3, 0)
+        Me.Label1.Name = "Label1"
+        Me.Label1.Size = New System.Drawing.Size(86, 13)
+        Me.Label1.TabIndex = 25
+        Me.Label1.Text = "Number of Years"
         '
         'CreateCopyBT
         '
@@ -73,9 +104,9 @@ Partial Class NewDataVersionUI
         Me.CreateCopyBT.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
         Me.CreateCopyBT.ImageKey = "favicon(230).ico"
         Me.CreateCopyBT.ImageList = Me.BigIcons
-        Me.CreateCopyBT.Location = New System.Drawing.Point(3, 45)
+        Me.CreateCopyBT.Location = New System.Drawing.Point(3, 42)
         Me.CreateCopyBT.Name = "CreateCopyBT"
-        Me.CreateCopyBT.Size = New System.Drawing.Size(218, 36)
+        Me.CreateCopyBT.Size = New System.Drawing.Size(218, 33)
         Me.CreateCopyBT.TabIndex = 24
         Me.CreateCopyBT.Text = "Create Copy of"
         Me.CreateCopyBT.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -90,22 +121,22 @@ Partial Class NewDataVersionUI
         'Label11
         '
         Me.Label11.AutoSize = True
-        Me.Label11.Location = New System.Drawing.Point(3, 133)
+        Me.Label11.Location = New System.Drawing.Point(3, 124)
         Me.Label11.Margin = New System.Windows.Forms.Padding(3, 7, 3, 0)
         Me.Label11.Name = "Label11"
-        Me.Label11.Size = New System.Drawing.Size(205, 13)
+        Me.Label11.Size = New System.Drawing.Size(68, 13)
         Me.Label11.TabIndex = 17
-        Me.Label11.Text = "Refrence year (monthly time configuration)"
+        Me.Label11.Text = "Starting Year"
         '
         'Label10
         '
         Me.Label10.AutoSize = True
-        Me.Label10.Location = New System.Drawing.Point(3, 91)
+        Me.Label10.Location = New System.Drawing.Point(3, 85)
         Me.Label10.Margin = New System.Windows.Forms.Padding(3, 7, 3, 0)
         Me.Label10.Name = "Label10"
-        Me.Label10.Size = New System.Drawing.Size(106, 13)
+        Me.Label10.Size = New System.Drawing.Size(192, 13)
         Me.Label10.TabIndex = 15
-        Me.Label10.Text = "Periods configuration"
+        Me.Label10.Text = "Periods configuration (Yearly / Monthly)"
         '
         'Label4
         '
@@ -123,7 +154,7 @@ Partial Class NewDataVersionUI
         Me.ReferenceTB.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ReferenceTB.Location = New System.Drawing.Point(227, 47)
+        Me.ReferenceTB.Location = New System.Drawing.Point(227, 44)
         Me.ReferenceTB.Margin = New System.Windows.Forms.Padding(3, 5, 3, 3)
         Me.ReferenceTB.MaximumSize = New System.Drawing.Size(400, 4)
         Me.ReferenceTB.MinimumSize = New System.Drawing.Size(280, 20)
@@ -148,19 +179,35 @@ Partial Class NewDataVersionUI
         '
         Me.TimeConfigCB.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.TimeConfigCB.FormattingEnabled = True
-        Me.TimeConfigCB.Location = New System.Drawing.Point(227, 87)
+        Me.TimeConfigCB.Location = New System.Drawing.Point(227, 81)
         Me.TimeConfigCB.Name = "TimeConfigCB"
         Me.TimeConfigCB.Size = New System.Drawing.Size(143, 21)
         Me.TimeConfigCB.TabIndex = 16
         '
-        'RefPeriodCB
+        'NbPeriodsNUD
         '
-        Me.RefPeriodCB.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.RefPeriodCB.FormattingEnabled = True
-        Me.RefPeriodCB.Location = New System.Drawing.Point(227, 129)
-        Me.RefPeriodCB.Name = "RefPeriodCB"
-        Me.RefPeriodCB.Size = New System.Drawing.Size(143, 21)
-        Me.RefPeriodCB.TabIndex = 18
+        Me.NbPeriodsNUD.Location = New System.Drawing.Point(227, 159)
+        Me.NbPeriodsNUD.Maximum = New Decimal(New Integer() {70, 0, 0, 0})
+        Me.NbPeriodsNUD.Name = "NbPeriodsNUD"
+        Me.NbPeriodsNUD.Size = New System.Drawing.Size(139, 20)
+        Me.NbPeriodsNUD.TabIndex = 26
+        '
+        'StartingPeriodNUD
+        '
+        Me.StartingPeriodNUD.Location = New System.Drawing.Point(227, 120)
+        Me.StartingPeriodNUD.Maximum = New Decimal(New Integer() {3000, 0, 0, 0})
+        Me.StartingPeriodNUD.Name = "StartingPeriodNUD"
+        Me.StartingPeriodNUD.Size = New System.Drawing.Size(139, 20)
+        Me.StartingPeriodNUD.TabIndex = 27
+        '
+        'RatesVersionCB
+        '
+        Me.RatesVersionCB.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.RatesVersionCB.FormattingEnabled = True
+        Me.RatesVersionCB.Location = New System.Drawing.Point(227, 198)
+        Me.RatesVersionCB.Name = "RatesVersionCB"
+        Me.RatesVersionCB.Size = New System.Drawing.Size(143, 21)
+        Me.RatesVersionCB.TabIndex = 29
         '
         'Panel1
         '
@@ -169,12 +216,22 @@ Partial Class NewDataVersionUI
         Me.Panel1.Size = New System.Drawing.Size(393, 485)
         Me.Panel1.TabIndex = 2
         '
+        'ButtonIcons
+        '
+        Me.ButtonIcons.ImageStream = CType(resources.GetObject("ButtonIcons.ImageStream"), System.Windows.Forms.ImageListStreamer)
+        Me.ButtonIcons.TransparentColor = System.Drawing.Color.Transparent
+        Me.ButtonIcons.Images.SetKeyName(0, "favicon(97).ico")
+        Me.ButtonIcons.Images.SetKeyName(1, "imageres_99.ico")
+        Me.ButtonIcons.Images.SetKeyName(2, "folder 1.ico")
+        Me.ButtonIcons.Images.SetKeyName(3, "imageres_89.ico")
+        Me.ButtonIcons.Images.SetKeyName(4, "1420498403_340208.ico")
+        '
         'CancelBT
         '
         Me.CancelBT.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
         Me.CancelBT.ImageKey = "imageres_89.ico"
         Me.CancelBT.ImageList = Me.ButtonIcons
-        Me.CancelBT.Location = New System.Drawing.Point(306, 250)
+        Me.CancelBT.Location = New System.Drawing.Point(306, 296)
         Me.CancelBT.Name = "CancelBT"
         Me.CancelBT.Size = New System.Drawing.Size(92, 30)
         Me.CancelBT.TabIndex = 23
@@ -182,23 +239,12 @@ Partial Class NewDataVersionUI
         Me.CancelBT.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         Me.CancelBT.UseVisualStyleBackColor = True
         '
-        'ButtonIcons
-        '
-        Me.ButtonIcons.ImageStream = CType(resources.GetObject("ButtonIcons.ImageStream"), System.Windows.Forms.ImageListStreamer)
-        Me.ButtonIcons.TransparentColor = System.Drawing.Color.Transparent
-        Me.ButtonIcons.Images.SetKeyName(0, "imageres_89.ico")
-        Me.ButtonIcons.Images.SetKeyName(1, "favicon(95).ico")
-        Me.ButtonIcons.Images.SetKeyName(2, "submit 1 ok.ico")
-        Me.ButtonIcons.Images.SetKeyName(3, "favicon(97).ico")
-        Me.ButtonIcons.Images.SetKeyName(4, "imageres_99.ico")
-        Me.ButtonIcons.Images.SetKeyName(5, "folder 1.ico")
-        '
         'CreateEntityBT
         '
         Me.CreateEntityBT.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
-        Me.CreateEntityBT.ImageKey = "submit 1 ok.ico"
+        Me.CreateEntityBT.ImageKey = "1420498403_340208.ico"
         Me.CreateEntityBT.ImageList = Me.ButtonIcons
-        Me.CreateEntityBT.Location = New System.Drawing.Point(526, 250)
+        Me.CreateEntityBT.Location = New System.Drawing.Point(526, 296)
         Me.CreateEntityBT.Name = "CreateEntityBT"
         Me.CreateEntityBT.Size = New System.Drawing.Size(92, 30)
         Me.CreateEntityBT.TabIndex = 22
@@ -210,16 +256,18 @@ Partial Class NewDataVersionUI
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(641, 322)
+        Me.ClientSize = New System.Drawing.Size(641, 352)
         Me.Controls.Add(Me.CancelBT)
         Me.Controls.Add(Me.CreateEntityBT)
         Me.Controls.Add(Me.Panel1)
         Me.Controls.Add(Me.TableLayoutPanel2)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Name = "NewDataVersionUI"
-        Me.Text = "NewDataVersionUI"
+        Me.Text = "New Version"
         Me.TableLayoutPanel2.ResumeLayout(False)
         Me.TableLayoutPanel2.PerformLayout()
+        CType(Me.NbPeriodsNUD, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.StartingPeriodNUD, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub
@@ -230,11 +278,15 @@ Partial Class NewDataVersionUI
     Friend WithEvents ReferenceTB As System.Windows.Forms.TextBox
     Friend WithEvents NameTB As System.Windows.Forms.TextBox
     Friend WithEvents TimeConfigCB As System.Windows.Forms.ComboBox
-    Friend WithEvents RefPeriodCB As System.Windows.Forms.ComboBox
     Friend WithEvents Panel1 As System.Windows.Forms.Panel
     Friend WithEvents CancelBT As System.Windows.Forms.Button
     Friend WithEvents CreateEntityBT As System.Windows.Forms.Button
     Friend WithEvents ButtonIcons As System.Windows.Forms.ImageList
     Friend WithEvents BigIcons As System.Windows.Forms.ImageList
     Friend WithEvents CreateCopyBT As System.Windows.Forms.CheckBox
+    Friend WithEvents Label1 As System.Windows.Forms.Label
+    Friend WithEvents NbPeriodsNUD As System.Windows.Forms.NumericUpDown
+    Friend WithEvents StartingPeriodNUD As System.Windows.Forms.NumericUpDown
+    Friend WithEvents Label2 As System.Windows.Forms.Label
+    Friend WithEvents RatesVersionCB As System.Windows.Forms.ComboBox
 End Class

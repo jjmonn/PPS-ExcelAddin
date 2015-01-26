@@ -17,7 +17,7 @@
 '
 '
 '
-' Last modified date: 17/01/2014
+' Last modified date: 25/01/2014
 ' Author: Julien Monnereau
 
 
@@ -51,6 +51,10 @@ Friend Class DataGridViewsUtil
     Private Const BASIC_DGV_REPORT_THEME As VIBLEND_THEME = VIBLEND_THEME.OFFICE2010SILVER
     Private Const BASIC_DGV_REPORT_FONT_SIZE As Single = 8
     Private Const BASIC_DGV_REPORT_FIRST_COLUMN_CAPTION As String = ""
+
+    Friend Shared ADJUSTMENTS_ROW_THEME As VIBLEND_THEME = VIBLEND_THEME.VISTABLUE
+    Friend Shared ADJUSTMENTS_COLOR As Color = Color.Blue
+    Friend Shared ENTITIES_ROWS_THEME As VIBLEND_THEME = VIBLEND_THEME.RETROBLUE
 
 
 #End Region
@@ -206,7 +210,7 @@ Friend Class DataGridViewsUtil
 
     End Sub
 
-    Public Shared Sub AdjustChildrenHierarchyItemSize(ByRef item As HierarchyItem)
+    Protected Friend Shared Sub AdjustChildrenHierarchyItemSize(ByRef item As HierarchyItem)
 
         item.AutoResize(AutoResizeMode.FIT_ALL)
         item.TextAlignment = ContentAlignment.MiddleRight
@@ -219,9 +223,25 @@ Friend Class DataGridViewsUtil
 
     End Sub
 
+    Protected Friend Shared Sub EqualizeColumnsAndRowsHierarchyWidth(ByRef DGV As vDataGridView)
+
+        Dim width As Int32 = DGV.Width / (DGV.ColumnsHierarchy.Items.Count + 1)
+        DGV.RowsHierarchy.Items(0).Width = width
+        For Each item In DGV.ColumnsHierarchy.Items
+            item.Width = width
+        Next
+
+    End Sub
+
+
+#End Region
+
+
+#Region "Font Size"
+
     Protected Friend Shared Sub DGVSetHiearchyFontSize(ByRef DGV As vDataGridView, _
-                                                       itemsFontSize As Single, _
-                                                       cellsFontSize As Single)
+                                                     itemsFontSize As Single, _
+                                                     cellsFontSize As Single)
 
         Dim itemStyleNormal As HierarchyItemStyle = GridTheme.GetDefaultTheme(DGV.VIBlendTheme).HierarchyItemStyleNormal
         itemStyleNormal.Font = New System.Drawing.Font(DGV.Font.FontFamily, itemsFontSize)
@@ -283,17 +303,6 @@ Friend Class DataGridViewsUtil
         Next
 
     End Sub
-
-    Protected Friend Shared Sub EqualizeColumnsAndRowsHierarchyWidth(ByRef DGV As vDataGridView)
-
-        Dim width As Int32 = DGV.Width / (DGV.ColumnsHierarchy.Items.Count + 1)
-        DGV.RowsHierarchy.Items(0).Width = width
-        For Each item In DGV.ColumnsHierarchy.Items
-            item.Width = width
-        Next
-
-    End Sub
-
 
 #End Region
 
@@ -364,16 +373,15 @@ Friend Class DataGridViewsUtil
 
 #Region "DGV rows initialization"
 
-
     ' Initializes VDataGridViewRows Hierarchy
     ' Calls the 2 private subs below
     ' param index: tab# (corresponds to the node#)
     Protected Friend Function CreatesVDataGridViewRowsHierarchy(ByRef dgv As vDataGridView, _
-                                                      ByRef index As Integer, _
-                                                      ByRef AccountsTV As TreeView, _
-                                                      Optional ByRef entitiesArray() As String = Nothing, _
-                                                      Optional ByRef entity_node As TreeNode = Nothing) _
-                                                      As Dictionary(Of String, Int32)
+                                                              ByRef index As Integer, _
+                                                              ByRef AccountsTV As TreeView, _
+                                                              Optional ByRef entitiesArray() As String = Nothing, _
+                                                              Optional ByRef entity_node As TreeNode = Nothing) _
+                                                              As Dictionary(Of String, Int32)
 
         Dim KeyLineDictionary As New Dictionary(Of String, Int32)
         Dim line_index As Int32 = 0
@@ -485,13 +493,12 @@ Friend Class DataGridViewsUtil
 #End Region
 
 
-#Region "Basic Report DGV Utility"
+#Region "Alternative Scenarios Report DGV Utility"
 
-    Protected Friend Shared Function CreateBasicDGVReport(ByRef period_list As List(Of Integer), ByRef time_config As String) As vDataGridView
+    Protected Friend Shared Function CreateASDGVReport(ByRef period_list As List(Of Integer), ByRef time_config As String) As vDataGridView
 
         Dim DGV As New vDataGridView
         DGV.VIBlendTheme = BASIC_DGV_REPORT_THEME
-        DGV.RowsHierarchy.Visible = False
         DGV.BackColor = Color.White
         DGV.ColumnsHierarchy.Items.Add(BASIC_DGV_REPORT_FIRST_COLUMN_CAPTION)
         CreateDGVColumns(DGV, period_list.ToArray, time_config, False)
@@ -501,21 +508,27 @@ Friend Class DataGridViewsUtil
             DGV.ColumnsHierarchy.Items(j).TextAlignment = ContentAlignment.MiddleRight
         Next
 
+        DGV.RowsHierarchy.Items.Add("Base Scenario")
+        DGV.RowsHierarchy.Items.Add("New Scenario")
         DGVSetHiearchyFontSize(DGV, BASIC_DGV_REPORT_FONT_SIZE, BASIC_DGV_REPORT_FONT_SIZE)
+        DGV.RowsHierarchy.CompactStyleRenderingEnabled = True
         DGV.GridLinesDisplayMode = GridLinesDisplayMode.DISPLAY_COLUMN_LINES
+        DGV.RowsHierarchy.AutoResize(AutoResizeMode.FIT_ALL)
+        DGV.ColumnsHierarchy.AutoStretchColumns = True
+        DGV.Refresh()
         Return DGV
 
     End Function
 
-    Protected Friend Shared Sub AddSerieToBasicDGVReport(ByRef DGV As vDataGridView, _
+    Protected Friend Shared Sub AddSerieToBasicDGVReport(ByRef row As HierarchyItem, _
                                                          ByRef serie_name As String, _
                                                          ByRef values As Double())
 
         ' evolution -> border + bold around  important items !!
-        Dim row As HierarchyItem = DGV.RowsHierarchy.Items.Add("")
-        DGV.CellsArea.SetCellValue(row, DGV.ColumnsHierarchy.Items(0), serie_name)
-        For j As Int32 = 1 To DGV.ColumnsHierarchy.Items.Count - 1
-            DGV.CellsArea.SetCellValue(row, DGV.ColumnsHierarchy.Items(j), values(j - 1))
+        Dim sub_row As HierarchyItem = row.Items.Add("")
+        row.DataGridView.CellsArea.SetCellValue(sub_row, row.DataGridView.ColumnsHierarchy.Items(0), serie_name)
+        For j As Int32 = 1 To row.DataGridView.ColumnsHierarchy.Items.Count - 1
+            row.DataGridView.CellsArea.SetCellValue(sub_row, row.DataGridView.ColumnsHierarchy.Items(j), values(j - 1))
         Next
 
     End Sub
@@ -526,6 +539,35 @@ Friend Class DataGridViewsUtil
         'DGV.ColumnsHierarchy.AutoStretchColumns = True
 
     End Sub
+
+#End Region
+
+
+#Region "Adjustments Formatting"
+
+    Protected Friend Shared Sub FormatAdjustmentRow(ByRef row As HierarchyItem)
+
+        Dim itemStyleNormal As HierarchyItemStyle = GridTheme.GetDefaultTheme(ADJUSTMENTS_ROW_THEME).HierarchyItemStyleNormal
+        Dim itemStyleSelected As HierarchyItemStyle = GridTheme.GetDefaultTheme(ADJUSTMENTS_ROW_THEME).HierarchyItemStyleSelected
+        Dim CStyleNormal As GridCellStyle = GridTheme.GetDefaultTheme(ADJUSTMENTS_ROW_THEME).GridCellStyle
+
+        itemStyleNormal.TextColor = ADJUSTMENTS_COLOR
+        itemStyleSelected.TextColor = ADJUSTMENTS_COLOR
+        CStyleNormal.TextColor = ADJUSTMENTS_COLOR
+
+        itemStyleSelected.Font = New System.Drawing.Font(row.DataGridView.Font.FontFamily, BASIC_DGV_REPORT_FONT_SIZE)
+        itemStyleNormal.Font = New System.Drawing.Font(row.DataGridView.Font.FontFamily, BASIC_DGV_REPORT_FONT_SIZE)
+        CStyleNormal.Font = New System.Drawing.Font(row.DataGridView.Font.FontFamily, BASIC_DGV_REPORT_FONT_SIZE, FontStyle.Regular)
+
+        row.HierarchyItemStyleNormal = itemStyleNormal
+        row.HierarchyItemStyleSelected = itemStyleSelected
+        row.CellsStyle = CStyleNormal
+
+        row.CellsFormatString = row.ParentItem.CellsFormatString
+        row.CellsTextAlignment = ContentAlignment.MiddleRight
+
+    End Sub
+
 
 #End Region
 

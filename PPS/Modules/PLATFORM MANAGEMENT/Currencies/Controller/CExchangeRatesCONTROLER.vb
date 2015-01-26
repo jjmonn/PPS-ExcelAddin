@@ -12,7 +12,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 05/01/2015
+' Last modified: 20/01/2015
 
 
 Imports System.Collections.Generic
@@ -27,19 +27,20 @@ Friend Class CExchangeRatesCONTROLER
 #Region "Instance Variables"
 
     ' Objects
-    Private VIEWOBJECT As CurrenciesManagementUI
+    Private View As CurrenciesManagementUI
     Private ExchangeRates As ExchangeRate
     Private RatesVersions As New RateVersion
     Private Currencies As New Currency
-    Private Periods As New Periods
+    Private Periods As New Period
+    Private NewRatesVersionUI As NewRatesVersionUI
     Private ExcelImport As InputRatesExcel
     Private PBar As PBarUI
 
     ' Variables
     Friend current_version As String
     Friend currencies_list As List(Of String)
-    Private global_periods_dictionary As Dictionary(Of Integer, Integer())
     Friend object_is_alive As Boolean
+    Protected Friend global_periods_dictionary As Dictionary(Of Int32, Int32())
 
     ' Constants
     Private Const RATES_VERSIONS_TABLE_ADDRESS As String = CONFIG_DATABASE + "." + RATES_VERSIONS_TABLE
@@ -50,23 +51,18 @@ Friend Class CExchangeRatesCONTROLER
 
 #Region "Initialize"
 
-    Friend Sub New(ByRef inputVIEW As CurrenciesManagementUI)
+    Friend Sub New(ByRef input_view As CurrenciesManagementUI)
 
         If RatesVersions.object_is_alive AndAlso Currencies.object_is_alive Then
             object_is_alive = True
-            VIEWOBJECT = inputVIEW
-            RateVersion.load_rates_version_tv(VIEWOBJECT.versionsTV)
+            View = input_view
+            RateVersion.load_rates_version_tv(View.versionsTV)
             current_version = GLOBALCurrentRatesVersionCode
-            global_periods_dictionary = Periods.GetGlobalPeriodsDictionary()
             currencies_list = Currencies.ReadCurrencies()
-            VIEWOBJECT.ratesView.InitializeDGV(currencies_list, global_periods_dictionary)
-            ChangeVersion(current_version)
-            If Not ExchangeRates Is Nothing Then
-                VIEWOBJECT.ratesView.DisplayRatesVersionValuesinDGV(get_rates_dictionary)
-                VIEWOBJECT.rates_version_TB.Text = RatesVersions.ReadVersion(current_version, RATES_VERSIONS_NAME_VARIABLE)
-            Else
-                object_is_alive = False
-            End If
+            NewRatesVersionUI = New NewRatesVersionUI(Me)
+
+            If Not current_version Is Nothing Then ChangeVersion(current_version)
+            'If ExchangeRates Is Nothing Then object_is_alive = False
         Else
             object_is_alive = False
         End If
@@ -83,7 +79,7 @@ Friend Class CExchangeRatesCONTROLER
                           ByVal value As Double)
 
         Dim rate_id = curr & "/" & MAIN_CURRENCY & period
-        If Not ExchangeRates Is Nothing Then ExchangeRates.UpdateRate(rate_id, EX_TABLE_RATE_VARIABLE, value)
+        If Not ExchangeRates Is Nothing Then ExchangeRates.UpdateRate(rate_id, EX_RATES_RATE_VARIABLE, value)
 
     End Sub
 
@@ -93,8 +89,10 @@ Friend Class CExchangeRatesCONTROLER
         ExchangeRates = New ExchangeRate(version_id)
         If ExchangeRates.object_is_alive = True Then
             current_version = version_id
-            VIEWOBJECT.ratesView.DisplayRatesVersionValuesinDGV(get_rates_dictionary)
-            VIEWOBJECT.rates_version_TB.Text = RatesVersions.ReadVersion(current_version, RATES_VERSIONS_NAME_VARIABLE)
+            global_periods_dictionary = RatesVersions.GetPeriodsDictionary(version_id)
+            View.ratesView.InitializeDGV(currencies_list, global_periods_dictionary)
+            View.ratesView.DisplayRatesVersionValuesinDGV(get_rates_dictionary)
+            View.rates_version_TB.Text = RatesVersions.ReadVersion(current_version, RATES_VERSIONS_NAME_VARIABLE)
         Else
             ExchangeRates = Nothing
         End If
@@ -124,7 +122,7 @@ Friend Class CExchangeRatesCONTROLER
             If TypeOf (curr) Is String AndAlso Len(curr) = CURRENCIES_TOKEN_SIZE Then
                 Currencies.CreateCurrency(curr)
                 currencies_list.Add(curr)
-                VIEWOBJECT.ratesView.InitializeDGV(currencies_list, global_periods_dictionary)
+                View.ratesView.InitializeDGV(currencies_list, global_periods_dictionary)
                 ChangeVersion(current_version)
             Else
                 MsgBox("The format of the new currency is not valid." + Chr(13) + _
@@ -147,20 +145,29 @@ Friend Class CExchangeRatesCONTROLER
 
     Friend Sub CreateVersion(ByRef name As String, _
                              ByRef isFolder As Boolean, _
+                             Optional ByRef start_period As Int32 = 0, _
+                             Optional ByRef nb_periods As Int32 = 0, _
                              Optional ByRef parent_node As TreeNode = Nothing)
 
         Dim key = get_new_version_token()
         Dim tmpHT As New Hashtable
         tmpHT.Add(RATES_VERSIONS_ID_VARIABLE, key)
-        If parent_node Is Nothing Then tmpHT.Add(RATES_VERSIONS_PARENT_CODE_VARIABLE, DBNull.Value) Else tmpHT.Add(RATES_VERSIONS_PARENT_CODE_VARIABLE, parent_node.Name)
         tmpHT.Add(RATES_VERSIONS_NAME_VARIABLE, name)
-        If isFolder = True Then tmpHT.Add(RATES_VERSIONS_IS_FOLDER_VARIABLE, 1) Else tmpHT.Add(RATES_VERSIONS_IS_FOLDER_VARIABLE, 0)
-        tmpHT.Add(ITEMS_POSITIONS, 1) ' quid position !!! 
-        RatesVersions.CreateVersion(tmpHT)
+        tmpHT.Add(ITEMS_POSITIONS, 1)
 
-        If parent_node Is Nothing Then VIEWOBJECT.versionsTV.Nodes.Add(key, name) Else parent_node.Nodes.Add(key, name)
+        If parent_node Is Nothing Then tmpHT.Add(RATES_VERSIONS_PARENT_CODE_VARIABLE, DBNull.Value) Else tmpHT.Add(RATES_VERSIONS_PARENT_CODE_VARIABLE, parent_node.Name)
+        If isFolder = True Then
+            tmpHT.Add(RATES_VERSIONS_IS_FOLDER_VARIABLE, 1)
+        Else
+            tmpHT.Add(RATES_VERSIONS_IS_FOLDER_VARIABLE, 0)
+            tmpHT.Add(RATES_VERSIONS_START_PERIOD_VAR, start_period)
+            tmpHT.Add(RATES_VERSIONS_NB_PERIODS_VAR, nb_periods)
+        End If
+
+        RatesVersions.CreateVersion(tmpHT)
+        If parent_node Is Nothing Then View.versionsTV.Nodes.Add(key, name) Else parent_node.Nodes.Add(key, name)
         UpdateVersionsPositions()
-        RateVersion.load_rates_version_tv(VIEWOBJECT.versionsTV)
+        RateVersion.load_rates_version_tv(View.versionsTV)
         If isFolder = False Then ChangeVersion(key)
 
     End Sub
@@ -197,7 +204,7 @@ Friend Class CExchangeRatesCONTROLER
         If ExchangeRate.DeleteAllRates(version_id) Then
             If version_id = current_version Then
                 current_version = ""
-                VIEWOBJECT.ratesView.InitializeDGV(currencies_list, global_periods_dictionary)
+                View.ratesView.InitializeDGV(currencies_list, global_periods_dictionary)
             End If
             Return True
         Else
@@ -210,7 +217,7 @@ Friend Class CExchangeRatesCONTROLER
 
         RatesVersions.DeleteVersion(version_id)
         On Error Resume Next
-        VIEWOBJECT.versionsTV.Nodes.Find(version_id, True)(0).Remove()
+        View.versionsTV.Nodes.Find(version_id, True)(0).Remove()
 
     End Sub
 
@@ -221,11 +228,11 @@ Friend Class CExchangeRatesCONTROLER
 
     Friend Function IsFolderVersion(ByRef versionKey As String) As Boolean
 
-        'If RATESVERSIONSMODEL.Attributes(versionKey)(RATES_VERSIONS_IS_FOLDER_VARIABLE) = 1 Then
-        '    Return True
-        'Else
-        '    Return False
-        'End If
+        If RatesVersions.ReadVersion(versionKey, RATES_VERSIONS_IS_FOLDER_VARIABLE) = 1 Then
+            Return True
+        Else
+            Return False
+        End If
 
     End Function
 
@@ -239,7 +246,7 @@ Friend Class CExchangeRatesCONTROLER
                 For Each period In global_periods_dictionary.Keys
                     For Each month_period In global_periods_dictionary(period)
                         rate_id = currency_ & "/" & MAIN_CURRENCY & month_period
-                        hash.Add(month_period, ExchangeRates.ReadRate(rate_id, EX_TABLE_RATE_VARIABLE))
+                        hash.Add(month_period, ExchangeRates.ReadRate(rate_id, EX_RATES_RATE_VARIABLE))
                     Next
                 Next
                 tmp_dic.Add(currency_, hash)
@@ -252,7 +259,7 @@ Friend Class CExchangeRatesCONTROLER
     Private Function get_new_version_token()
 
         Dim key = cTreeViews_Functions.IssueNewToken(RATES_VERSIONS_TOKEN_SIZE)
-        While VIEWOBJECT.versionsTV.Nodes.Find(key, True).Length > 0
+        While View.versionsTV.Nodes.Find(key, True).Length > 0
             key = cTreeViews_Functions.IssueNewToken(RATES_VERSIONS_TOKEN_SIZE)
         End While
         Return key
@@ -261,7 +268,7 @@ Friend Class CExchangeRatesCONTROLER
 
     Private Sub UpdateVersionsPositions()
 
-        Dim positions_dic = cTreeViews_Functions.GeneratePositionsDictionary(VIEWOBJECT.versionsTV)
+        Dim positions_dic = cTreeViews_Functions.GeneratePositionsDictionary(View.versionsTV)
         For Each id In positions_dic.Keys
             RatesVersions.UpdateVersion(id, ITEMS_POSITIONS, positions_dic(id))
         Next
@@ -280,7 +287,7 @@ Friend Class CExchangeRatesCONTROLER
     Friend Sub InputRangesCallBack(ByRef period() As Integer, ByRef rates() As Double, ByRef curr As String)
 
         For i = 0 To period.Length - 1
-            VIEWOBJECT.ratesView.UpdateCell(curr, period(i), rates(i))
+            View.ratesView.UpdateCell(curr, period(i), rates(i))
         Next
         ExcelImport.Dispose()
 
@@ -288,6 +295,13 @@ Friend Class CExchangeRatesCONTROLER
 
 
 #End Region
+
+    Protected Friend Sub ShowNewRatesVersion(Optional ByRef parent_node As TreeNode = Nothing)
+
+        NewRatesVersionUI.parent_node = parent_node
+        NewRatesVersionUI.Show()
+
+    End Sub
 
 #End Region
 

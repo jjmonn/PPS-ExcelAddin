@@ -11,7 +11,7 @@
 '       -
 '
 ' Author: Julien Monnereau
-' Last modified: 22/10/2014
+' Last modified: 25/01/2015
 
 
 Imports System.Collections
@@ -20,7 +20,7 @@ Imports VIBlend.WinForms.DataGridView
 Imports System.Linq
 
 
-Public Class cAcquisitionUIController
+Friend Class cAcquisitionUIController
 
 
 #Region "Instance Variables"
@@ -30,7 +30,7 @@ Public Class cAcquisitionUIController
     Private ACQUI As AcquisitionUI
     Private ACQUMODEL As CAcquisitionModel
     Private DATASET As CModelDataSet
-   
+
     ' Variables
     Private isStandAlone As Boolean
     Friend currentDGVOrientationFlag As String
@@ -57,7 +57,7 @@ Public Class cAcquisitionUIController
         ACQUI = New AcquisitionUI(DATASET, Me)
         If Not inputAcquModel Is Nothing Then ACQUMODEL = inputAcquModel
         If Not inputGRS Is Nothing Then GRS = inputGRS
-        
+
     End Sub
 
 #End Region
@@ -111,7 +111,7 @@ Public Class cAcquisitionUIController
 
         End Select
         ACQUI.InitDGVDisplay()
-      
+
     End Sub
 
     Friend Sub UpdateCurrentEntityAndCurrencyOnACQUI(ByRef entityName As String, ByRef currency As String, ByRef version As String)
@@ -133,9 +133,9 @@ Public Class cAcquisitionUIController
     Friend Sub ConfigDGVAcPe(ByRef entity As String)
 
         ClearDGVandDictionaries()
+        ACQUMODEL.DownloadDBInputs(entity, AdjustmentIDDropDown.SelectedItemId)
         ACQUI.LoadAccountsToHierarchy(ACQUI.DGV.RowsHierarchy, entity, ACQUMODEL.accountsTV)
-        ACQUI.LoadPeriodsToHierarchy(ACQUI.DGV.ColumnsHierarchy, entity, GetRandomAccount(entity), ACQUMODEL.currentPeriodlist)
-        ACQUMODEL.DownloadDBInputs(entity)
+        ACQUI.LoadPeriodsToHierarchy(ACQUI.DGV.ColumnsHierarchy, entity, GetRandomAccount(entity), ACQUMODEL.currentPeriodlist, ACQUMODEL.versionsTimeConfigDict(ACQUMODEL.mCurrentVersionCode))
 
         For Each account In ACQUI.DGV.RowsHierarchy.Items
             FillInSubItemAcPe(account, ACQUI.DGV.ColumnsHierarchy, entity, CModelDataSet.DATASET_ACCOUNTS_PERIODS_OR)
@@ -154,8 +154,8 @@ Public Class cAcquisitionUIController
 
         ClearDGVandDictionaries()
         ACQUI.LoadAccountsToHierarchy(ACQUI.DGV.ColumnsHierarchy, entity, ACQUMODEL.accountsTV)
-        ACQUI.LoadPeriodsToHierarchy(ACQUI.DGV.RowsHierarchy, entity, GetRandomAccount(entity), ACQUMODEL.currentPeriodlist)
-        ACQUMODEL.DownloadDBInputs(entity)
+        ACQUI.LoadPeriodsToHierarchy(ACQUI.DGV.RowsHierarchy, entity, GetRandomAccount(entity), ACQUMODEL.currentPeriodlist, ACQUMODEL.versionsTimeConfigDict(ACQUMODEL.mCurrentVersionCode))
+        ACQUMODEL.DownloadDBInputs(entity, AdjustmentIDDropDown.SelectedItemId)
 
         For Each account In ACQUI.DGV.ColumnsHierarchy.Items
             FillInSubItemAcPe(account, ACQUI.DGV.RowsHierarchy, entity, CModelDataSet.DATASET_PERIODS_ACCOUNTS_OR)
@@ -215,7 +215,7 @@ Public Class cAcquisitionUIController
         ACQUI.DGV.Clear()
         ACQUI.LoadEntitiesToHierarchy(ACQUI.DGV.RowsHierarchy)
         Dim currentEntity As String = ACQUI.DGV.RowsHierarchy.Items(0).Caption
-        ACQUI.LoadPeriodsToHierarchy(ACQUI.DGV.ColumnsHierarchy, currentEntity, account, ACQUMODEL.currentPeriodlist)
+        ACQUI.LoadPeriodsToHierarchy(ACQUI.DGV.ColumnsHierarchy, currentEntity, account, ACQUMODEL.currentPeriodlist, ACQUMODEL.versionsTimeConfigDict(ACQUMODEL.mCurrentVersionCode))
 
         ' -> download DBInputs -> for all entities 
         Dim entitiesList As New List(Of String)
@@ -223,7 +223,7 @@ Public Class cAcquisitionUIController
             entitiesList.Add(item)
         Next
         ' -> we should keep this list ?
-        ACQUMODEL.DownloadDBInputs(entitiesList)
+        ACQUMODEL.DownloadDBInputs(entitiesList, AdjustmentIDDropDown.SelectedItemId)
         FillInSubItemEnPe(ACQUI.DGV.RowsHierarchy, ACQUI.DGV.ColumnsHierarchy, account, CModelDataSet.DATASET_ENTITIES_PERIODS_OR)
         currentDGVOrientationFlag = CModelDataSet.DATASET_ENTITIES_PERIODS_OR
 
@@ -235,7 +235,7 @@ Public Class cAcquisitionUIController
         ACQUI.DGV.Clear()
         ACQUI.LoadEntitiesToHierarchy(ACQUI.DGV.ColumnsHierarchy)
         Dim currentEntity As String = ACQUI.DGV.ColumnsHierarchy.Items(0).Caption
-        ACQUI.LoadPeriodsToHierarchy(ACQUI.DGV.RowsHierarchy, currentEntity, account, ACQUMODEL.currentPeriodlist)
+        ACQUI.LoadPeriodsToHierarchy(ACQUI.DGV.RowsHierarchy, currentEntity, account, ACQUMODEL.currentPeriodlist, ACQUMODEL.versionsTimeConfigDict(ACQUMODEL.mCurrentVersionCode))
 
         ' -> download DBInputs -> for all entities 
         Dim entitiesList As New List(Of String)
@@ -243,7 +243,7 @@ Public Class cAcquisitionUIController
             entitiesList.Add(item)
         Next
         ' -> we should keep this list ?
-        ACQUMODEL.DownloadDBInputs(entitiesList)
+        ACQUMODEL.DownloadDBInputs(entitiesList, AdjustmentIDDropDown.SelectedItemId)
         FillInSubItemEnPe(ACQUI.DGV.ColumnsHierarchy, ACQUI.DGV.RowsHierarchy, account, CModelDataSet.DATASET_PERIODS_ENTITIES_OR)
         currentDGVOrientationFlag = CModelDataSet.DATASET_PERIODS_ENTITIES_OR
 
@@ -396,7 +396,7 @@ Public Class cAcquisitionUIController
         For Each accountItem As HierarchyItem In accountHierarchy.Items
             FillInCalculatedSubItemsAcPe(accountItem, secondHierarchy, entityName, currentDGVOrientationFlag)
         Next
-     
+
     End Sub
 
     Friend Sub sendUpdateToGRS(ByRef entityName As String, _
@@ -405,7 +405,7 @@ Public Class cAcquisitionUIController
                                ByVal value As Double)
 
         GRS.UpdateExcelFromDGVUpdate(entityName, accountName, periodInt, value)
-        GRS.UpdateAcquModel(entityName)
+        GRS.UpdateModel(entityName)
 
     End Sub
 
@@ -445,6 +445,18 @@ Public Class cAcquisitionUIController
         periodsItemIDPeriodCodeDict.Clear()
 
     End Sub
+
+    Protected Friend Function GetPeriodsList() As List(Of Int32)
+
+        Return GRS.GetPeriodsList
+
+    End Function
+
+    Protected Friend Function GetTimeConfig()
+
+        Return GRS.GetTimeConfig
+
+    End Function
 
 #End Region
 

@@ -11,7 +11,7 @@
 '       -
 '
 '
-' Last modified: 02/12/2014
+' Last modified: 21/01/2015
 ' Author: Julien Monnereau
 
 
@@ -35,13 +35,15 @@ Friend Class DLL3_Interface
     Private objptr As Integer
 
     ' Variables
-    Public mPeriodList() As Integer
+    Protected Friend mPeriodList() As Integer
     Friend currentSingleEntityKey As String
     Friend dll3TimeSetup As String                  ' MONTHLY_TIME_CONFIGURATION or YEARLY_TIME_CONFIGURATION
     Private all_entities_ids As List(Of String)
     Friend accounts_array() As String
     Friend convertor_currencies_token_list As New List(Of String)
     Friend entities_currencies As New List(Of String)
+    Protected Friend current_start_period As Int32 = 0
+    Protected Friend current_nb_periods As Int32 = 0
 
 #End Region
 
@@ -208,7 +210,7 @@ Friend Class DLL3_Interface
 #Region "Initialize"
 
     ' DataSourceBuilder initialization -> Model init
-    Public Sub New()
+    Protected Friend Sub New()
 
         objptr = CreateDll3()
 
@@ -233,22 +235,43 @@ Friend Class DLL3_Interface
 
     End Sub
 
-    Friend Sub InitDllCurrencyConvertorPeriods(ByRef global_periods_list)
+    Friend Sub InitDllPeriods(ByRef periodsList As List(Of Integer), _
+                              ByRef timePeriodsSetUp As String)
 
-        initializeCurrencyConvertorDll3(objptr, global_periods_list.ToArray, global_periods_list.Count)
+        Dim periodsSetupArray As Integer() = periodsList.ToArray
+        Dim nbPeriods As Int32 = periodsList.Count
+        initPeriodsDll3(objptr, periodsSetupArray, nbPeriods)
+        dll3TimeSetup = timePeriodsSetUp
 
-        Dim years_months_dict As New Dictionary(Of Int32, Int32())
-        build_years_months_array(years_months_dict, global_periods_list.ToArray)
+    End Sub
 
-        For Each period In global_periods_list
+    Friend Sub InitDllCurrencyConvertorPeriods(ByVal periods_list As List(Of Int32), _
+                                               ByRef time_config As String, _
+                                               ByRef period_ref As Int32)
+
+        Dim years_periods_list As List(Of Int32)
+        Select Case time_config
+            Case MONTHLY_TIME_CONFIGURATION
+                years_periods_list = New List(Of Int32)
+                years_periods_list.Add(period_ref)
+            Case YEARLY_TIME_CONFIGURATION
+                years_periods_list = periods_list
+        End Select
+
+        initializeCurrencyConvertorDll3(objptr, years_periods_list.ToArray, years_periods_list.Count)
+        Dim years_months_dict As Dictionary(Of Int32, Int32()) = Period.GetGlobalPeriodsDictionary(years_periods_list)
+
+        For Each period In years_periods_list
             AddPeriodYearCurrencyConvertorDll3(objptr, years_months_dict(period))
         Next
         convertor_currencies_token_list.Clear()
+        current_start_period = years_periods_list(0)
+        current_nb_periods = years_periods_list.Count
 
     End Sub
 
     ' Currency_token: rates_version + curr1 + "/" + dest_curr + ref_period
-    Friend Sub AddYearlyCurrenciesRatesToConvertor(ByVal currency_token As String, ByRef periods_array() As Int32, _
+    Protected Friend Sub AddYearlyCurrenciesRatesToConvertor(ByVal currency_token As String, ByRef periods_array() As Int32, _
                                                    ByRef rates_array() As Double, ByRef nb_records As Int32)
 
         AddYearlyMatrixCurrencyDll3(objptr, currency_token, periods_array, rates_array, nb_records)
@@ -262,16 +285,6 @@ Friend Class DLL3_Interface
 
         AddMonthlyMatrixCurrencyDll3(objptr, currency_token, rates_array)
         convertor_currencies_token_list.Add(currency_token)
-
-    End Sub
-
-    Friend Sub InitDllPeriods(ByRef periodsList As List(Of Integer), _
-                              ByRef timePeriodsSetUp As String)
-
-        Dim periodsSetupArray As Integer() = periodsList.ToArray
-        Dim nbPeriods As Int32 = periodsList.Count
-        initPeriodsDll3(objptr, periodsSetupArray, nbPeriods)
-        dll3TimeSetup = timePeriodsSetUp
 
     End Sub
 
@@ -295,7 +308,6 @@ Friend Class DLL3_Interface
 
     End Sub
 
-
     ' Init and compute a single entity
     Friend Sub ComputeSingleEntity(ByRef entityKey As String, _
                                    ByRef accKeysArray() As String, _
@@ -311,12 +323,12 @@ Friend Class DLL3_Interface
 
     End Sub
 
-    ' Compute an entity
     Friend Sub ComputeEntity(ByRef accKeysArray() As String, _
                              ByRef periodsArray() As Integer, _
                              ByRef valuesArray() As Double, _
                              ByVal storage_option As Int32)
-        '!! take off currency in this function in dll
+
+        '!! take off currency in this function in dll3
         computeEntityDll3(objptr, _
                           accKeysArray, _
                           periodsArray, _
@@ -327,10 +339,10 @@ Friend Class DLL3_Interface
 
     End Sub
 
+    Friend Sub RegisterEmptyEntity()
 
-    ' Register empty entity
-    Friend Sub RegisterEmptyEntity(ByRef currency As String)
-        RegisterEmptyEntityDLL3(objptr, currency)
+        RegisterEmptyEntityDLL3(objptr, "")
+
     End Sub
 
     ' Fills the param array with DLL current computed data
@@ -343,14 +355,13 @@ Friend Class DLL3_Interface
 
     ' Retrieve specific Account|Period|Currency from current DLL Model instance
     Public Function GetDataFromComputer(ByRef accountKey As String, _
-                                        ByRef periodIndex As Integer, _
-                                        ByRef currencyString As String) As Object
+                                        ByRef periodIndex As Integer) As Object
 
         Try
             Return ReturnValueFromModelDLL3(objptr, _
                                             accountKey, _
                                             periodIndex, _
-                                            currencyString)
+                                            "")
 
         Catch ex As Exception
 
@@ -480,17 +491,6 @@ Friend Class DLL3_Interface
         Dim entitites_currencies_map = EntitiesMapping.GetEntitiesDictionary(ASSETS_TREE_ID_VARIABLE, ASSETS_CURRENCY_VARIABLE)
         For Each entity In entities_list
             entities_currencies.Add(entitites_currencies_map(entity))
-        Next
-
-    End Sub
-
-    Private Sub build_years_months_array(years_months_dict As Dictionary(Of Int32, Int32()), _
-                                       periods_array() As Int32)
-
-        For Each period As Integer In periods_array
-            Dim currentYear As Int32 = Year(DateTime.FromOADate(period))
-            Dim months_list As List(Of Int32) = Periods.GetMonthlyPeriodsList(currentYear, False)
-            years_months_dict.Add(period, months_list.ToArray)
         Next
 
     End Sub

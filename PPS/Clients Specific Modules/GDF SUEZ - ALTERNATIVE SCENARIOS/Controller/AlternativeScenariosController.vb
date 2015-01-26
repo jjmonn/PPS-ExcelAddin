@@ -1,10 +1,4 @@
-﻿Imports System.Collections.Generic
-Imports System.Collections
-Imports System.Windows.Forms
-Imports VIBlend.WinForms.DataGridView
-Imports System.Windows.Forms.DataVisualization.Charting
-
-' AlternativeScenariosController.vb
+﻿' AlternativeScenariosController.vb
 '
 '
 ' To do: 
@@ -13,8 +7,14 @@ Imports System.Windows.Forms.DataVisualization.Charting
 '
 '
 ' Author:Julien Monnereau
-' Last modified:17/01/2015
+' Last modified: 26/01/2015
 
+Imports System.Collections.Generic
+Imports System.Collections
+Imports System.Windows.Forms
+Imports VIBlend.WinForms.DataGridView
+Imports System.Windows.Forms.DataVisualization.Charting
+Imports System.Linq
 
 
 Friend Class AlternativeScenariosController
@@ -26,9 +26,11 @@ Friend Class AlternativeScenariosController
     Private Model As AlternativeScenarioModel
     Private InputsController As ASInputsController
     Private View As AlternativeScenariosUI
+    Private GDFSUEZASExports As New GDFSUEZASExport
 
     ' Variables
-
+    Private accounts_name_id_dict As Hashtable
+    Private items As String() = {AlternativeScenarioModel.INCREMENTAL_TAX, PSDLLL_Interface.INCREMENTAL_REVENUES}
 
 
 #End Region
@@ -40,11 +42,38 @@ Friend Class AlternativeScenariosController
 
         Model = New AlternativeScenarioModel(Me)
         InputsController = New ASInputsController(Me)
-        View = New AlternativeScenariosUI(Me, InputsController, Model.sensitivities_dictionary)
+        View = New AlternativeScenariosUI(Me, InputsController, Model.sensitivities_dictionary, GetExportsDictionary, GetAccountsComboBox)
         InputsController.InitializeView(View)
+        accounts_name_id_dict = AccountsMapping.GetAccountsDictionary(ACCOUNT_NAME_VARIABLE, ACCOUNT_ID_VARIABLE)
         View.Show()
 
     End Sub
+
+    Private Function GetExportsDictionary() As Dictionary(Of String, Dictionary(Of String, String))
+
+        Dim export_dict As New Dictionary(Of String, Dictionary(Of String, String))
+        Dim accounts_id_name_dic = AccountsMapping.GetAccountsDictionary(ACCOUNT_ID_VARIABLE, ACCOUNT_NAME_VARIABLE)
+
+        For Each sensitivity_id In Model.sensitivities_dictionary.Keys
+            Dim tmp_dict As New Dictionary(Of String, String)
+            For Each item In items
+                tmp_dict.Add(item, accounts_id_name_dic(GDFSUEZASExports.ReadExport(item, sensitivity_id)))
+            Next
+            export_dict.Add(sensitivity_id, tmp_dict)
+        Next
+        Return export_dict
+
+    End Function
+
+    Private Function GetAccountsComboBox() As ComboBoxEditor
+
+        Dim tmpCB As New ComboBoxEditor
+        For Each account_id As String In AccountsMapping.GetAccountsNamesList(LOOKUP_INPUTS)
+            tmpCB.Items.Add(account_id)
+        Next
+        Return tmpCB
+
+    End Function
 
 #End Region
 
@@ -78,6 +107,28 @@ Friend Class AlternativeScenariosController
 
     End Sub
 
+    Protected Friend Sub UpdateExportMapping(ByRef sensitivity_id As String, _
+                                             ByRef item As String, _
+                                             ByRef account_name As String)
+
+        GDFSUEZASExports.UpdateExport(item, sensitivity_id, accounts_name_id_dict(account_name))
+
+    End Sub
+
+    Protected Friend Sub ScenarioReinjection(Optional ByRef adjustment_id As String = "")
+
+        InitializePBarForExport()
+        If adjustment_id = "" Then adjustment_id = DEFAULT_ADJUSTMENT_ID
+        Model.ASReinjection(items, GDFSUEZASExports, InputsController.current_version_id, adjustment_id)
+        View.PBar.EndProgress()
+
+    End Sub
+
+    Protected Friend Sub AddProgress()
+
+        View.PBar.AddProgress()
+
+    End Sub
 
 #End Region
 
@@ -88,7 +139,6 @@ Friend Class AlternativeScenariosController
                                            ByRef period_list As List(Of Int32), _
                                            ByRef time_configuration As String)
 
-        ' split this function !!!! -> separate charts and tables ?
         View.ClearMainPanel()
         Dim accounts_id_name_dic As Hashtable = AccountsMapping.GetAccountsDictionary(ACCOUNT_ID_VARIABLE, ACCOUNT_NAME_VARIABLE)
         Dim reports_settings_dic As Dictionary(Of String, Hashtable) = GDFSUEZASReport.GetReportsSettingsDictionary()
@@ -98,44 +148,61 @@ Friend Class AlternativeScenariosController
         GDFSUEZASReport.LoadAlternativeScenarioReportsTV(ReportsTV)
 
         For Each report_node As TreeNode In ReportsTV.Nodes
-
             If reports_settings_dic(report_node.Name)(GDF_AS_REPORTS_TYPE_VAR) = GDF_CHART_REPORT_TYPE Then
-                Dim base_chart As Chart = ChartsUtilities.CreateChart(reports_settings_dic(report_node.Name)(GDF_AS_REPORTS_NAME_VAR), reports_settings_dic(report_node.Name)(GDF_AS_REPORTS_PALETTE_VAR))
-                Dim new_chart As Chart = ChartsUtilities.CreateChart(reports_settings_dic(report_node.Name)(GDF_AS_REPORTS_NAME_VAR), reports_settings_dic(report_node.Name)(GDF_AS_REPORTS_PALETTE_VAR))
-                For Each serie_node As TreeNode In report_node.Nodes
-                    ChartsUtilities.AddSerieToChart(base_chart, reports_settings_dic(serie_node.Name))
-                    ChartsUtilities.AddSerieToChart(new_chart, reports_settings_dic(serie_node.Name))
-                    If Not IsDBNull(reports_settings_dic(serie_node.Name)(GDF_AS_REPORTS_ACCOUNT_ID)) Then
-                        Dim serie_account_id = reports_settings_dic(serie_node.Name)(GDF_AS_REPORTS_ACCOUNT_ID)
-                        base_chart.Series(reports_settings_dic(serie_node.Name)(GDF_AS_REPORTS_NAME_VAR)).Points.DataBindXY(charts_periods, Model.current_conso_data_dic(entity_id)(serie_account_id))
-                        new_chart.Series(reports_settings_dic(serie_node.Name)(GDF_AS_REPORTS_NAME_VAR)).Points.DataBindXY(charts_periods, new_scenario_data(serie_account_id))
-                    End If
-                Next
-                View.AddReports(base_chart, new_chart, reports_settings_dic(report_node.Name)(GDF_AS_REPORTS_NAME_VAR))
-                ChartsUtilities.EqualizeChartsYAxis1(base_chart, new_chart)
-                AddHandler base_chart.MouseDown, AddressOf View.Reports_MouseClick
-                AddHandler new_chart.MouseDown, AddressOf View.Reports_MouseClick
+                DisplayCharts(entity_id, report_node, new_scenario_data, reports_settings_dic, charts_periods)
             Else
-                Dim base_DGV As vDataGridView = DataGridViewsUtil.CreateBasicDGVReport(period_list, time_configuration)
-                Dim new_DGV As vDataGridView = DataGridViewsUtil.CreateBasicDGVReport(period_list, time_configuration)
-                For Each serie_node As TreeNode In report_node.Nodes
-                    If Not IsDBNull(reports_settings_dic(serie_node.Name)(GDF_AS_REPORTS_ACCOUNT_ID)) Then
-                        Dim serie_account_id = reports_settings_dic(serie_node.Name)(GDF_AS_REPORTS_ACCOUNT_ID)
-                        Dim serie_name = reports_settings_dic(serie_node.Name)(GDF_AS_REPORTS_NAME_VAR)
-                        DataGridViewsUtil.AddSerieToBasicDGVReport(base_DGV, serie_name, Model.current_conso_data_dic(entity_id)(serie_account_id))
-                        DataGridViewsUtil.AddSerieToBasicDGVReport(new_DGV, serie_name, new_scenario_data(serie_account_id))
-                    End If
-                Next
-                DataGridViewsUtil.FormatBasicDGV(base_DGV)
-                DataGridViewsUtil.FormatBasicDGV(new_DGV)
-                View.AddReports(base_DGV, new_DGV, reports_settings_dic(report_node.Name)(GDF_AS_REPORTS_NAME_VAR))
-                AddHandler base_DGV.MouseDown, AddressOf View.Reports_MouseClick
-                AddHandler new_DGV.MouseDown, AddressOf View.Reports_MouseClick
+                DisplayDGVs(entity_id, report_node, new_scenario_data, reports_settings_dic, time_configuration, period_list)
             End If
         Next
 
     End Sub
 
+    Private Sub DisplayCharts(ByRef entity_id As String, _
+                              ByRef report_node As TreeNode, _
+                              ByRef new_scenario_data As Dictionary(Of String, Double()), _
+                              ByRef reports_settings_dic As Dictionary(Of String, Hashtable), _
+                              ByRef charts_periods As List(Of Int32))
+
+
+        Dim base_chart As Chart = ChartsUtilities.CreateChart(reports_settings_dic(report_node.Name)(GDF_AS_REPORTS_NAME_VAR) & " Base Scenario", reports_settings_dic(report_node.Name)(GDF_AS_REPORTS_PALETTE_VAR))
+        Dim new_chart As Chart = ChartsUtilities.CreateChart(reports_settings_dic(report_node.Name)(GDF_AS_REPORTS_NAME_VAR) & " New Scenario", reports_settings_dic(report_node.Name)(GDF_AS_REPORTS_PALETTE_VAR))
+        For Each serie_node As TreeNode In report_node.Nodes
+            ChartsUtilities.AddSerieToChart(base_chart, reports_settings_dic(serie_node.Name))
+            ChartsUtilities.AddSerieToChart(new_chart, reports_settings_dic(serie_node.Name))
+            If Not IsDBNull(reports_settings_dic(serie_node.Name)(GDF_AS_REPORTS_ACCOUNT_ID)) Then
+                Dim serie_account_id = reports_settings_dic(serie_node.Name)(GDF_AS_REPORTS_ACCOUNT_ID)
+                base_chart.Series(reports_settings_dic(serie_node.Name)(GDF_AS_REPORTS_NAME_VAR)).Points.DataBindXY(charts_periods, Model.current_conso_data_dic(entity_id)(serie_account_id))
+                new_chart.Series(reports_settings_dic(serie_node.Name)(GDF_AS_REPORTS_NAME_VAR)).Points.DataBindXY(charts_periods, new_scenario_data(serie_account_id))
+            End If
+        Next
+        View.AddCharts(base_chart, new_chart) ' , new_chart, reports_settings_dic(report_node.Name)(GDF_AS_REPORTS_NAME_VAR))
+        ChartsUtilities.EqualizeChartsYAxis1(base_chart, new_chart)
+        AddHandler base_chart.MouseDown, AddressOf View.Reports_MouseClick
+        AddHandler new_chart.MouseDown, AddressOf View.Reports_MouseClick
+
+    End Sub
+
+    Private Sub DisplayDGVs(ByRef entity_id As String, _
+                            ByRef report_node As TreeNode, _
+                            ByRef new_scenario_data As Dictionary(Of String, Double()), _
+                            ByRef reports_settings_dic As Dictionary(Of String, Hashtable), _
+                            ByRef time_configuration As String, _
+                            ByRef period_list As List(Of Int32))
+
+        Dim DGV As vDataGridView = DataGridViewsUtil.CreateASDGVReport(period_list, time_configuration)
+        For Each serie_node As TreeNode In report_node.Nodes
+            If Not IsDBNull(reports_settings_dic(serie_node.Name)(GDF_AS_REPORTS_ACCOUNT_ID)) Then
+                Dim serie_account_id = reports_settings_dic(serie_node.Name)(GDF_AS_REPORTS_ACCOUNT_ID)
+                Dim serie_name = reports_settings_dic(serie_node.Name)(GDF_AS_REPORTS_NAME_VAR)
+                DataGridViewsUtil.AddSerieToBasicDGVReport(DGV.RowsHierarchy.Items(0), serie_name, Model.current_conso_data_dic(entity_id)(serie_account_id))
+                DataGridViewsUtil.AddSerieToBasicDGVReport(DGV.RowsHierarchy.Items(1), serie_name, new_scenario_data(serie_account_id))
+            End If
+        Next
+        DataGridViewsUtil.FormatBasicDGV(DGV)
+        View.AddDGV(DGV) 'reports_settings_dic(report_node.Name)(GDF_AS_REPORTS_NAME_VAR))
+        AddHandler DGV.MouseDown, AddressOf View.Reports_MouseClick
+        
+    End Sub
 
 
 #End Region
@@ -147,6 +214,15 @@ Friend Class AlternativeScenariosController
                                         ByRef nb_sensitivities As Int32)
 
         Dim LoadingBarMax As Integer = input_entities.Count + (nb_sensitivities) * 2 + 5
+        View.PBar.Launch(1, LoadingBarMax)
+
+    End Sub
+
+    Private Sub InitializePBarForExport()
+
+        Dim LoadingBarMax As Integer = Model.sensitivities_dictionary.Count _
+                                     * Model.SensisResultsDict(Model.sensitivities_dictionary.ElementAt(0).Key).Keys.Count _
+                                     * Model.SensisResultsDict(Model.sensitivities_dictionary.ElementAt(0).Key).ElementAt(0).Value.Keys.Count + 2
         View.PBar.Launch(1, LoadingBarMax)
 
     End Sub
@@ -170,7 +246,6 @@ Friend Class AlternativeScenariosController
         Return charts_periods
 
     End Function
-
 
 
 #End Region

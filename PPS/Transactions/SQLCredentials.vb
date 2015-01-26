@@ -18,7 +18,7 @@ Imports System.Collections.Generic
 
 
 
-Class SQLCredentials
+Friend Class SQLCredentials
 
 
     Protected Friend Shared Function SetGLOBALUserCredential() As Boolean
@@ -42,13 +42,11 @@ Class SQLCredentials
 
     End Function
 
-
     Protected Friend Shared Sub SetEntitiesViewGlobalVariable()
 
         Entities_View = ENTITIES_TABLE & User_Credential
 
     End Sub
-
 
     Protected Friend Shared Sub UnvalidateCredentialLevelInUsers(ByRef credential_level As Int32)
 
@@ -60,7 +58,6 @@ Class SQLCredentials
         Next
 
     End Sub
-
 
     Protected Friend Shared Sub SetUserCredentialLevelToUnvalid(ByRef user_id As String)
 

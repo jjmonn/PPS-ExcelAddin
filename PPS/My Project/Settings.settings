@@ -9,7 +9,10 @@
       <Value Profile="(Default)">C:\Users\PPS\Documents\Purple Sun\CA\</Value>
     </Setting>
     <Setting Name="version_id" Type="System.String" Scope="User">
-      <Value Profile="(Default)">VTOYT</Value>
+      <Value Profile="(Default)">vto</Value>
+    </Setting>
+    <Setting Name="user" Type="System.String" Scope="User">
+      <Value Profile="(Default)">user2</Value>
     </Setting>
   </Settings>
 </SettingsFile>

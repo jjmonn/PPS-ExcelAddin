@@ -11,7 +11,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last Modified: 06/01/2015
+' Last Modified: 19/01/2015
 
 
 Imports System.Windows.Forms
@@ -24,7 +24,7 @@ Friend Class CControlingDropOnExcel
 #Region "Instance Variables"
 
     Private View As ControllingUI_2
-    Private Controller As CControlingCONTROLER
+    Private Controller As ControlingUI2Controller
 
 
 #End Region
@@ -33,7 +33,7 @@ Friend Class CControlingDropOnExcel
 #Region "Initialize"
 
     Protected Friend Sub New(ByRef inputView As ControllingUI_2, _
-                             ByRef inputControler As CControlingCONTROLER)
+                             ByRef inputControler As ControlingUI2Controller)
 
         View = inputView
         Controller = inputControler
@@ -53,7 +53,7 @@ Friend Class CControlingDropOnExcel
             Dim offset As Int32
             destination = destination.Offset(1, 0)
             For Each tab_ As TabPage In View.TabControl1.TabPages
-                If Controller.VERSIONSMGT.VersionsCodeArray.Length > 1 Then
+                If Controller.versions_id_array.Length > 1 Then
                     offset = View.DGVUTIL.writeControllingCurrentEntityToExcel(destination, tab_.Controls(0))
                 Else
                     offset = View.DGVUTIL.WriteCurrentEntityToExcel(destination, tab_.Controls(0))
@@ -71,7 +71,7 @@ Friend Class CControlingDropOnExcel
         If Controller.currentEntity <> "" Then
             Dim destination = CWorksheetWrittingFunctions.CreateReceptionWS(Controller.currentEntity)
             destination = destination.Offset(1, 0)
-            If Controller.VERSIONSMGT.VersionsCodeArray.GetLength(0) > 1 Then
+            If Controller.versions_id_array.GetLength(0) > 1 Then
                 View.DGVUTIL.writeControllingCurrentEntityToExcel(destination, currentDGV)
             Else
                 View.DGVUTIL.WriteCurrentEntityToExcel(destination, currentDGV)

@@ -44,9 +44,9 @@ Friend Class CAcquisitionModel
     Friend DBInputsDictionary As New Dictionary(Of String, Dictionary(Of String, Dictionary(Of String, Double)))    '(entities)(accounts)(periods) -> values
     Friend currentPeriodlist As New List(Of Integer)
     Friend outputsList As List(Of String)
-    Private versionsTimeConfigDict As Hashtable
+    Protected Friend versionsTimeConfigDict As Hashtable
     Friend accountsTV As New TreeView
-    Private mCurrentVersionCode As String
+    Protected Friend mCurrentVersionCode As String
     Private accountsNamesFormulaTypeDict As Hashtable
 
 
@@ -80,20 +80,25 @@ Friend Class CAcquisitionModel
 
 #Region "Interface"
 
-    Friend Sub DownloadDBInputs(ByRef entityName As String)
+    Friend Sub DownloadDBInputs(ByRef entityName As String, _
+                                ByRef adjustment_id As String)
 
         Dim entityKey As String = DATASET.EntitiesNameKeyDictionary(entityName)
         mCurrentVersionCode = GLOBALCurrentVersionCode
+
+        Dim Versions As New Version
+        currentPeriodlist = Versions.GetPeriodList(mCurrentVersionCode)
+
         Dim viewName = mCurrentVersionCode & User_Credential
-        DBDownloader.GetEntityInputsNonConverted(entityKey, viewName)
+        DBDownloader.GetEntityInputsNonConverted(entityKey, viewName, adjustment_id)
         LoadDBInputsDictionary(entityName)
 
     End Sub
 
-    Friend Sub downloadDBInputs(ByRef entitiesList As List(Of String))
+    Friend Sub downloadDBInputs(ByRef entitiesList As List(Of String), ByVal adjustment_id As String)
 
         For Each entityName As String In entitiesList
-            DownloadDBInputs(entityName)
+            DownloadDBInputs(entityName, adjustment_id)
         Next
 
     End Sub
@@ -101,7 +106,7 @@ Friend Class CAcquisitionModel
     Friend Function GetCalculatedValue(ByRef accKey As String, _
                                        ByRef PeriodInt As Integer) As Double
 
-        Return CCOMPUTERINT.GetDataFromComputer(accKey, PeriodInt, "")
+        Return CCOMPUTERINT.GetDataFromComputer(accKey, PeriodInt)
 
     End Function
 
@@ -164,8 +169,10 @@ Friend Class CAcquisitionModel
 
         Dim currentVersionTimeConfig As String = versionsTimeConfigDict(mCurrentVersionCode)
         If CCOMPUTERINT.dll3TimeSetup <> currentVersionTimeConfig Then
-            Dim periodslist As List(Of Integer) = DATASET.VERSIONSMGT.GetPeriodList(mCurrentVersionCode)
-            CCOMPUTERINT.InitDllPeriods(periodslist, currentVersionTimeConfig)
+            Dim Versions As New Version
+            currentPeriodlist = Versions.GetPeriodList(mCurrentVersionCode)
+            Versions.Close()
+            CCOMPUTERINT.InitDllPeriods(currentPeriodlist, currentVersionTimeConfig)
         End If
 
         CCOMPUTERINT.ComputeSingleEntity(entityKey, accKeysArray, periodsArray, valuesArray)

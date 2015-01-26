@@ -61,7 +61,9 @@ Public Class CInputSelectionPane
 
     ' Validate
     Private Sub ValidateInputSelection()
-        If EntitiesTV.SelectedNode.Nodes.Count = 0 Then ADDIN.InputReportPaneCallBack_ReportCreation()
+
+        If Not EntitiesTV.SelectedNode Is Nothing AndAlso EntitiesTV.SelectedNode.Nodes.Count = 0 Then ADDIN.InputReportPaneCallBack_ReportCreation()
+
     End Sub
 
 

@@ -3,6 +3,9 @@
 ' User interface for the construction of PPSBI functions
 '
 ' To do:
+'       >> highest hiearachy conso level or stay in aggregation queries with fx conversion in vb !!!!!)
+'
+'
 '       - Check if already a formula when opening: in this case fill TB with current values
 '       - Add possibility to design lines and columns off data
 '     
@@ -27,7 +30,6 @@ Friend Class PPSBI_UI
 
 #Region "Objects"
 
-    Private VERSIONSMGT As New CVersionsForControlingUIs
     Private entitiesTV As New TreeView
     Private accountsTV As New TreeView
     Private versionsTV As New TreeView
@@ -94,14 +96,16 @@ Friend Class PPSBI_UI
 
         periodsStrIntDictionary.Clear()
         PeriodCB.Items.Clear()
-
+        Dim Versions As New Version
+        ' may be improved -> anyway module to reimplement to efficiently compute what is needed
+      
         Dim strFormat As String = ""
-        Select Case VERSIONSMGT.versionsCodeTimeSetUpDict(versionCode)(VERSIONS_TIME_CONFIG_VARIABLE)
+        Select Case Versions.ReadVersion(versionCode, VERSIONS_TIME_CONFIG_VARIABLE)
             Case MONTHLY_TIME_CONFIGURATION : strFormat = "MMM yyyy"
             Case YEARLY_TIME_CONFIGURATION : strFormat = "yyyy"
         End Select
 
-        For Each period As Integer In VERSIONSMGT.GetPeriodList(versionCode)
+        For Each period As Integer In Versions.GetPeriodList(versionCode)
             PeriodCB.Items.Add(Format(DateTime.FromOADate(period), strFormat))
             periodsStrIntDictionary.Add(Format(DateTime.FromOADate(period), strFormat), period)
         Next

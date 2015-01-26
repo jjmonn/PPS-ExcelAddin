@@ -13,7 +13,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 25/11/2014
+' Last modified: 20/01/2015
 
 
 Imports System.Windows.Forms
@@ -23,64 +23,74 @@ Imports System.Collections
 
 
 
-Public Class VersionSelection
+Friend Class VersionSelection
 
 
 #Region "Instance Variables"
 
     Friend versionsTV As New TreeView
-    Friend rates_versionTV As New TreeView
     Private versions_id_list As List(Of String)
-    Friend rates_versions_list As List(Of String)
-    Friend VIEWOBJECT As Object
+    Friend View As Object
 
 #End Region
 
 
 #Region "Initialize"
 
-    Friend Sub New(ByRef inputimagelist As ImageList, inputVIEWOBJECT As Object)
+    Friend Sub New(ByRef inputimagelist As ImageList, inputView As Object)
 
-        VIEWOBJECT = inputVIEWOBJECT
+        View = inputView
         versionsTV.ImageList = inputimagelist
-        rates_versionTV.ImageList = inputimagelist
         Version.LoadVersionsTree(versionsTV)
         versionsTV.CollapseAll()
-        RateVersion.load_rates_version_tv(rates_versionTV)
-        rates_versionTV.CollapseAll()
-        rates_versions_list = RateVersionsMapping.GetRatesVersionsList(RATES_VERSIONS_ID_VARIABLE)
         versions_id_list = VersionsMapping.GetVersionsList(RATES_VERSIONS_ID_VARIABLE)
 
         AddHandler versionsTV.NodeMouseDoubleClick, AddressOf VersionsTV_NodeMouseDoubleClick
         AddHandler versionsTV.KeyPress, AddressOf VersionsTV_KeyPress
-        AddHandler rates_versionTV.NodeMouseDoubleClick, AddressOf Rates_VersionsTV_DoubleClick
-        AddHandler rates_versionTV.KeyPress, AddressOf Rates_VersionsTV_KeyPress
 
     End Sub
 
 #End Region
 
 
-#Region "Set Selected Version"
+#Region "Interface"
 
     ' Set main ribbon/ submission ribbon selected version = selected node
     Friend Overridable Sub SetSelectedVersion()
 
         If Not versionsTV.SelectedNode Is Nothing _
-        AndAlso versions_id_list.Contains(versionsTV.SelectedNode.Name) _
-        AndAlso Not rates_versionTV.SelectedNode Is Nothing _
-        AndAlso rates_versions_list.Contains(rates_versionTV.SelectedNode.Name) Then
-            GLOBALCurrentVersionCode = versionsTV.SelectedNode.Name
+        AndAlso versions_id_list.Contains(versionsTV.SelectedNode.Name) Then
+
+            Dim version_id = versionsTV.SelectedNode.Name
+            GLOBALCurrentVersionCode = version_id
             Version_Label.Caption = versionsTV.SelectedNode.Text
             Version_label_Sub_Ribbon.Text = versionsTV.SelectedNode.Text
-            GLOBALCurrentRatesVersionCode = rates_versionTV.SelectedNode.Name
-            Rates_Version_Label.Caption = rates_versionTV.SelectedNode.Text
-            VIEWOBJECT.ClearAndClose()
+            If My.Settings.version_id <> version_id Then My.Settings.version_id = version_id
+            View.ClearAndClose()
+
         End If
 
     End Sub
 
+    Protected Friend Function IsVersionValid(ByRef version_id As String) As Boolean
+
+        Return versions_id_list.Contains(version_id)
+
+    End Function
+
+
 #End Region
+
+    Private Sub SetAssociatedRatesVersion_id(ByRef version_id As String)
+
+        Dim Versions As New Version
+        GLOBALCurrentRatesVersionCode = Versions.ReadVersion(version_id, VERSIONS_RATES_VERSION_ID_VAR)
+        Versions.Close()
+        Dim RatesVersions As New RateVersion
+        Rates_Version_Label.Caption = RatesVersions.ReadVersion(GLOBALCurrentRatesVersionCode, RATES_VERSIONS_NAME_VARIABLE)
+        RatesVersions = Nothing
+
+    End Sub
 
 
 #Region "Events"
@@ -88,44 +98,14 @@ Public Class VersionSelection
 
     Private Sub VersionsTV_NodeMouseDoubleClick(sender As Object, e As Windows.Forms.TreeNodeMouseClickEventArgs)
 
-        If Not rates_versionTV.SelectedNode Is Nothing Then
-            SetSelectedVersion()
-        Else
-            rates_versionTV.Select()
-        End If
+        SetSelectedVersion()
 
     End Sub
 
     Private Sub VersionsTV_KeyPress(sender As Object, e As Windows.Forms.KeyPressEventArgs)
 
         If e.KeyChar = ChrW(Keys.Return) Then
-            If Not rates_versionTV.SelectedNode Is Nothing Then
-                SetSelectedVersion()
-            Else
-                rates_versionTV.Select()
-            End If
-        End If
-
-    End Sub
-
-    Friend Overridable Sub Rates_VersionsTV_DoubleClick(sender As Object, e As Windows.Forms.TreeNodeMouseClickEventArgs)
-
-        If Not versionsTV.SelectedNode Is Nothing Then
             SetSelectedVersion()
-        Else
-            versionsTV.Select()
-        End If
-
-    End Sub
-
-    Friend Overridable Sub Rates_VersionsTV_KeyPress(sender As Object, e As Windows.Forms.KeyPressEventArgs)
-
-        If e.KeyChar = ChrW(Keys.Return) Then
-            If Not versionsTV.SelectedNode Is Nothing Then
-                SetSelectedVersion()
-            Else
-                versionsTV.Select()
-            End If
         End If
 
     End Sub

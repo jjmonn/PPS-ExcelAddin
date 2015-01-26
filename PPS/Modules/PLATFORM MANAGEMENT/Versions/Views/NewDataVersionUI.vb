@@ -8,7 +8,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 05/01/2015
+' Last modified: 20/01/2015
 
 
 Imports System.Windows.Forms
@@ -32,7 +32,7 @@ Friend Class NewDataVersionUI
     ' Expansion Display Constants
     Private Const COLLAPSED_WIDTH As Int32 = 660
     Private Const EXPANDED_WIDTH As Int32 = 1120
-    Private Const COLLAPSED_HEIGHT As Int32 = 360
+    Private Const COLLAPSED_HEIGHT As Int32 = 390
     Private Const EXPANDED_HEIGHT As Int32 = 510
     Private Const NB_YEARS_AVAILABLE As Int32 = 5
 
@@ -64,15 +64,16 @@ Friend Class NewDataVersionUI
         TimeConfigCB.Items.Add(YEARLY_TIME_CONFIGURATION)
 
         Dim current_year As Int32 = Year(Now)
-        RefPeriodCB.Items.Add(current_year - 1)
-        RefPeriodCB.Items.Add(current_year)
-        For i = 0 To NB_YEARS_AVAILABLE
-            RefPeriodCB.Items.Add(current_year + i)
+        StartingPeriodNUD.Value = current_year - 1
+        StartingPeriodNUD.Increment = 1
+        NbPeriodsNUD.Increment = 1
+
+        For Each name_ In Controller.rates_versions_name_id_dic.Keys
+            RatesVersionCB.Items.Add(name_)
         Next
 
     End Sub
 
-   
 #End Region
 
 
@@ -103,7 +104,9 @@ Friend Class NewDataVersionUI
             hash.Add(VERSIONS_IS_FOLDER_VARIABLE, 0)
             hash.Add(VERSIONS_LOCKED_VARIABLE, 0)
             hash.Add(VERSIONS_TIME_CONFIG_VARIABLE, TimeConfigCB.Text)
-            If TimeConfigCB.Text = MONTHLY_TIME_CONFIGURATION Then hash.Add(VERSIONS_REFERENCE_YEAR_VARIABLE, RefPeriodCB.Text)
+            hash.Add(VERSIONS_START_PERIOD_VAR, StartingPeriodNUD.Text)
+            hash.Add(VERSIONS_NB_PERIODS_VAR, NbPeriodsNUD.Text)
+            hash.Add(VERSIONS_RATES_VERSION_ID_VAR, Controller.rates_versions_name_id_dic(RatesVersionCB.Text))
             If Not parent_node Is Nothing Then hash.Add(VERSIONS_PARENT_CODE_VARIABLE, parent_node.Name)
 
             If CreateCopyBT.Checked = True AndAlso _
@@ -112,7 +115,8 @@ Friend Class NewDataVersionUI
             Controller.IsFolder(reference_node.Name) = False Then
                 Dim record = Controller.GetRecord(reference_node.Name)
                 hash(VERSIONS_TIME_CONFIG_VARIABLE) = record(VERSIONS_TIME_CONFIG_VARIABLE)
-                hash(VERSIONS_REFERENCE_YEAR_VARIABLE) = record(VERSIONS_REFERENCE_YEAR_VARIABLE)
+                hash(VERSIONS_START_PERIOD_VAR) = record(VERSIONS_START_PERIOD_VAR)
+                hash(VERSIONS_NB_PERIODS_VAR) = record(VERSIONS_NB_PERIODS_VAR)
                 Controller.CreateVersion(hash, parent_node, reference_node.Name)
             Else
                 Controller.CreateVersion(hash, parent_node)
@@ -163,6 +167,16 @@ Friend Class NewDataVersionUI
 
     Private Sub CreateCopyBT_CheckedChanged(sender As Object, e As EventArgs) Handles CreateCopyBT.CheckedChanged
 
+        If CreateCopyBT.Checked = True AndAlso ReferenceTB.Text <> "" AndAlso _
+        reference_node.Text = ReferenceTB.Text AndAlso
+        Controller.IsFolder(reference_node.Name) = False Then
+
+            Dim record = Controller.GetRecord(reference_node.Name)
+            TimeConfigCB.SelectedText = record(VERSIONS_TIME_CONFIG_VARIABLE)
+            StartingPeriodNUD.Value = record(VERSIONS_START_PERIOD_VAR)
+            NbPeriodsNUD = record(VERSIONS_NB_PERIODS_VAR)
+
+        End If
 
     End Sub
 
@@ -176,8 +190,12 @@ Friend Class NewDataVersionUI
         If Controller.IsNameValid(name) Then
             If TimeConfigCB.Text <> "" Then
                 If TimeConfigCB.Text = MONTHLY_TIME_CONFIGURATION Then
-                    If RefPeriodCB.Text <> "" Then
-                        Return True
+                    If StartingPeriodNUD.Text <> "" Then
+                        If Controller.IsRatesVersionValid(StartingPeriodNUD.Value, NbPeriodsNUD.Value, Controller.rates_versions_name_id_dic(RatesVersionCB.Text)) = True Then
+                            Return True
+                        Else
+                            MsgBox("This Exchange Rates Version is not compatible with the Periods Configuration.")
+                        End If
                     Else
                         MsgBox("The Reference Year must be selected for monthly Time Configuration Versions.")
                         Return False
@@ -225,5 +243,5 @@ Friend Class NewDataVersionUI
 
 
 
-   
+
 End Class

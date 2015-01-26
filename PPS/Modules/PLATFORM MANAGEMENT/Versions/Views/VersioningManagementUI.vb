@@ -16,7 +16,7 @@
 ' Known bugs:
 '       
 '
-' Last modified: 11/12/2014
+' Last modified: 20/01/2015
 ' Author: Julien Monnereau
 
 
@@ -73,6 +73,9 @@ Friend Class VersioningManagementUI
         AddHandler VersionsTV.DragOver, AddressOf versionsTV_DragOver
         AddHandler VersionsTV.DragDrop, AddressOf versionsTV_DragDrop
 
+        For Each name_ In Controller.rates_versions_name_id_dic.Keys
+            RatesVersionCB.Items.Add(name_)
+        Next
 
     End Sub
 
@@ -89,7 +92,6 @@ Friend Class VersioningManagementUI
 
     Private Sub Display(ByRef inputNode As TreeNode)
 
-
         Dim record = Controller.GetRecord(inputNode.Name)
         If record(VERSIONS_IS_FOLDER_VARIABLE) = 1 Then
             NameTB.Text = ""
@@ -97,16 +99,16 @@ Friend Class VersioningManagementUI
             lockedCB.Checked = False
             LockedDateT.Text = ""
             TimeConfigTB.Text = ""
-            RefPeriodTB.Text = ""
+            StartPeriodTB.Text = ""
+            NBPeriodsTB.Text = ""
+            RatesVersionCB.Text = ""
         Else
             NameTB.Text = inputNode.Text
             CreationTB.Text = record(VERSIONS_CREATION_DATE_VARIABLE)
             TimeConfigTB.Text = record(VERSIONS_TIME_CONFIG_VARIABLE)
-            If record(VERSIONS_TIME_CONFIG_VARIABLE) = MONTHLY_TIME_CONFIGURATION Then
-                RefPeriodTB.Text = record(VERSIONS_REFERENCE_YEAR_VARIABLE)
-            Else
-                RefPeriodTB.Text = ""
-            End If
+            StartPeriodTB.Text = record(VERSIONS_START_PERIOD_VAR)
+            NBPeriodsTB.Text = record(VERSIONS_NB_PERIODS_VAR)
+            RatesVersionCB.SelectedItem = Controller.rates_versions_id_name_dic(record(VERSIONS_RATES_VERSION_ID_VAR))
             If record(VERSIONS_LOCKED_VARIABLE) = 1 Then
                 lockedCB.Checked = True
                 LockedDateT.Text = record(VERSIONS_LOCKED_DATE_VARIABLE)
@@ -308,6 +310,20 @@ Friend Class VersioningManagementUI
 
     End Sub
 
+    Private Sub RatesVersionCB_SelectedValueChanged(sender As Object, e As EventArgs) Handles RatesVersionCB.SelectedValueChanged
+
+        If Not VersionsTV.SelectedNode Is Nothing AndAlso isDisplaying = False Then
+            Dim version_id As String = VersionsTV.SelectedNode.Name
+            Dim rates_version_id As String = Controller.rates_versions_name_id_dic(RatesVersionCB.Text)
+            If Controller.IsRatesVersionValid(StartPeriodTB.Text, NBPeriodsTB.Text, rates_version_id) Then
+                Controller.UpdateRatesVersion_id(version_id, rates_version_id)
+            Else
+                MsgBox("This Exchange Rates Version is not compatible with the Periods Configuration.")
+            End If
+        End If
+
+    End Sub
+
 #End Region
 
 #End Region
@@ -397,7 +413,6 @@ Friend Class VersioningManagementUI
 #End Region
 
 
-
 #Region "Utilities"
 
     Private Sub VersioningManagementUI_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
@@ -410,7 +425,5 @@ Friend Class VersioningManagementUI
 
 #End Region
 
-
-
-
+   
 End Class

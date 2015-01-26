@@ -12,7 +12,7 @@
 '
 '
 '
-' Last modified: 05/12/2014
+' Last modified: 25/01/2015
 ' Author: Julien Monnereau
 
 
@@ -327,6 +327,20 @@ Class cTreeViews_Functions
         Return tmp_list
 
     End Function
+
+    Protected Friend Shared Function GetNodePath(ByRef node As TreeNode, _
+                                                 Optional ByRef max_hierarchy_id As String = "") As List(Of Int32)
+
+        Dim path_list As New List(Of Int32)
+        While Not node.Parent Is Nothing And node.Name <> max_hierarchy_id
+            path_list.Add(node.Index)
+            node = node.Parent
+        End While
+        path_list.Reverse()
+        Return path_list
+
+    End Function
+
 
 #End Region
 

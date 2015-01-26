@@ -37,7 +37,6 @@ Friend Class CModelDataSet
 
 #Region "Objects"
 
-    Friend VERSIONSMGT As New CVersionsForControlingUIs
     Friend WS As Excel.Worksheet
     Friend lastCell As Excel.Range
 
@@ -181,8 +180,10 @@ Friend Class CModelDataSet
     ' Look for date in the spreasheet, and populate periodsAddressValuesDictionary
     Private Sub DatesIdentify()
 
-        periodsDatesList = VERSIONSMGT.GetPeriodsDatesList(currentVersionCode)
-        
+        Dim Versions As New Version
+        periodsDatesList = Versions.GetPeriodsDatesList(currentVersionCode)
+        Versions.Close()
+
         Dim i, j, periodStoredAsInt As Integer
         For i = LBound(GlobalScreenShot, 1) To UBound(GlobalScreenShot, 1)
             For j = LBound(GlobalScreenShot, 2) To UBound(GlobalScreenShot, 2)
@@ -775,25 +776,24 @@ Friend Class CModelDataSet
     End Sub
 
     ' Write dataset data from Computation to the worksheet according to the current identified items
-    Friend Sub RefreshAll(ByRef destinationCurrency As String)
+    Friend Sub RefreshAll(Optional ByRef adjustment_id As String = "")
 
-        If GENERICDCGLobalInstance Is Nothing Then GENERICDCGLobalInstance = New GenericSingleEntityComputer
+        If GENERICDCGLobalInstance Is Nothing Then GENERICDCGLobalInstance = New GenericSingleEntityDLL3Computer
         Dim entityKey As String
         For Each EntityAddress As String In EntitiesAddressValuesDictionary.Keys
             entityKey = EntitiesNameKeyDictionary.Item(EntitiesAddressValuesDictionary.Item(EntityAddress))
 
             ' Here currentVersionCode Assumed to be set up -> TBC
-            GENERICDCGLobalInstance.ComputeSingleEntity(currentVersionCode, entityKey, destinationCurrency)         ' Recompute each time
-            RefreshAccounts(EntityAddress, AccountsAddressValuesDictionary, destinationCurrency)
-            RefreshAccounts(EntityAddress, OutputsAccountsAddressvaluesDictionary, destinationCurrency)
+            GENERICDCGLobalInstance.ComputeSingleEntity(currentVersionCode, entityKey, adjustment_id)         ' Recompute each time
+            RefreshAccounts(EntityAddress, AccountsAddressValuesDictionary)
+            RefreshAccounts(EntityAddress, OutputsAccountsAddressvaluesDictionary)
         Next
 
     End Sub
 
     ' Update the outputs values only on Excel 
     Friend Sub RefreshAccounts(ByRef entityAddress As String, _
-                               ByRef accountsAddressesRefreshDic As Dictionary(Of String, String), _
-                               ByRef currency As String)
+                               ByRef accountsAddressesRefreshDic As Dictionary(Of String, String))
 
         Dim accountKey, period As String
         For Each AccountAddress As String In accountsAddressesRefreshDic.Keys
@@ -808,7 +808,7 @@ Friend Class CModelDataSet
 
             For Each PeriodAddress As String In periodsAddressValuesDictionary.Keys
                 period = periodsAddressValuesDictionary.Item(PeriodAddress)
-                Dim tmpValue = GENERICDCGLobalInstance.GetDataFromComputer(accountKey, period, currency)
+                Dim tmpValue = GENERICDCGLobalInstance.GetDataFromDLL3Computer(accountKey, period)
                 UpdateExcelCell(entityAddress, AccountAddress, PeriodAddress, tmpValue)
             Next
         Next
@@ -900,5 +900,6 @@ Friend Class CModelDataSet
 
 
 #End Region
+
 
 End Class

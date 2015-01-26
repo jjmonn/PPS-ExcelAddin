@@ -9,7 +9,7 @@ Imports System.Runtime.InteropServices
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 29/12/2014
+' Last modified: 25/01/2015
 
 
 Friend Class ChartsUtilities
@@ -18,9 +18,10 @@ Friend Class ChartsUtilities
 #Region "Instance Variables"
 
     Friend Const LABELS_MAX_FONT_SIZE As Single = 8
+    Friend Const VALUES_LABELS_FONT_SIZE As Single = 7
     Friend Const DEFAULT_CHART_PALETTE = ChartColorPalette.Berry
     Friend Const CHART_TITLE_FONT_SIZE As Single = 9
-    Friend Const DEFAULT_LABELS_FORMAT As String = "##" '"{0:N0}"
+    Friend Const DEFAULT_LABELS_FORMAT As String = "{0:N0}"
 
 #End Region
 
@@ -69,7 +70,8 @@ Friend Class ChartsUtilities
         new_chart.Titles(0).Font = New Drawing.Font("Arial", CHART_TITLE_FONT_SIZE, Drawing.FontStyle.Bold)
         new_chart.BorderlineWidth = 1
         new_chart.BorderlineColor = Drawing.Color.Gray
-        ' new_chart.ChartAreas(0).Position = New ElementPosition(20, 20, 80, 80)
+        new_chart.ChartAreas(0).Position = New ElementPosition(10, 0, 80, 90)
+        new_chart.Legends(0).Position = New ElementPosition(0, 90, 100, 10)
         Return new_chart
 
     End Function
@@ -115,6 +117,8 @@ Friend Class ChartsUtilities
                 new_serie.LabelBorderColor = new_serie.Color
                 new_serie.LabelBorderWidth = 1
                 new_serie.LabelFormat = DEFAULT_LABELS_FORMAT
+                Dim label_font As System.Drawing.Font = New System.Drawing.Font(new_serie.Font.FontFamily, VALUES_LABELS_FONT_SIZE, Drawing.FontStyle.Regular)
+                new_serie.Font = label_font
             End If
         End If
 

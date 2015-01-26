@@ -19,7 +19,7 @@ Module Panel1
 
 
 
-    Public Sub Panel1_Paint(sender As System.Object, e As System.Windows.Forms.PaintEventArgs)
+    Friend Sub Panel1_Paint(sender As System.Object, e As System.Windows.Forms.PaintEventArgs)
 
         sender.BorderStyle = BorderStyle.None
 

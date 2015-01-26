@@ -5,7 +5,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 06/01/2015
+' Last modified: 20/01/2015
 
 
 Imports System.Windows.Forms
@@ -22,9 +22,8 @@ Friend Class SubmissionsControlsController
     ' Objects
     Private SubmissionControl As New SubmissionControlModel
     Private View As SubmissionsControlUI
-    Private Computer As CControlingMODEL
+    Private Computer As ControlingUI2MODEL
     Private ControlCharts As New ControlChart
-    Private VersionsMGT As New CVersionsForControlingUIs
     Private EntitiesTV As New TreeView
     Private ChartsTV As New TreeView
 
@@ -52,7 +51,7 @@ Friend Class SubmissionsControlsController
         InitializeChartsDictionary()
         View = New SubmissionsControlUI(Me, EntitiesTV, charts_dic)
         version_id = GLOBALCurrentVersionCode
-        Computer = New CControlingMODEL(VersionsMGT.PERIODSMGT.yearlyPeriodList)
+        Computer = New ControlingUI2Model()
         View.ChartsTableLayoutPanel.Visible = True
         View.Show()
 
@@ -90,7 +89,7 @@ Friend Class SubmissionsControlsController
     Protected Friend Sub DisplayEntityControls(ByRef entity_id As String)
 
         View.UpdateControlDGV(successfull_controls_dic(entity_id))
-       
+
         For Each chart_node In ChartsTV.Nodes
             For Each serie_node In chart_node.nodes
                 Dim serieHT As Hashtable = ControlCharts.GetSerieHT(serie_node.Name)
@@ -115,14 +114,21 @@ Friend Class SubmissionsControlsController
 
         If Not EntitiesTV.Nodes(0) Is Nothing Then
             Computer.init_computer_complete_mode(EntitiesTV.Nodes(0))
+            Dim Versions As New Version
+            Dim time_config As String = Versions.ReadVersion(version_id, VERSIONS_TIME_CONFIG_VARIABLE)
+            periods_list = Versions.GetPeriodList(version_id)
+            Dim nb_periods As Int32 = Versions.ReadVersion(version_id, VERSIONS_NB_PERIODS_VAR)
+            Dim start_period As Int32 = Versions.ReadVersion(version_id, VERSIONS_START_PERIOD_VAR)
+            Versions.Close()
             InitializePBar()
-            periods_list = VersionsMGT.GetPeriodList(version_id)
             Computer.compute_selection_complete(version_id, _
                                                 View.PBar, _
-                                                VersionsMGT.versionsCodeTimeSetUpDict(version_id)(VERSIONS_TIME_CONFIG_VARIABLE), _
+                                                time_config, _
                                                 GLOBALCurrentRatesVersionCode, _
                                                 periods_list, _
-                                                MAIN_CURRENCY)
+                                                MAIN_CURRENCY, _
+                                                start_period, _
+                                                nb_periods)
 
             BuildDataDictionaries()
             View.PBar.AddProgress()

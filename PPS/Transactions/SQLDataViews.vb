@@ -7,7 +7,7 @@
 '
 '
 ' author: Julien Monnereau
-' Last modified: 03/12/2014
+' Last modified: 18/01/2015
 
 
 Imports System.Collections.Generic
@@ -28,19 +28,14 @@ Friend Class SQLDataViews
                                   DATA_ACCOUNT_ID_VARIABLE + "," + _
                                   DATA_ASSET_ID_VARIABLE + "," + _
                                   DATA_PERIOD_VARIABLE + "," + _
-                                  DATA_VALUE_VARIABLE + _
+                                  DATA_VALUE_VARIABLE + "," + _
+                                  DATA_ADJUSTMENT_ID_VARIABLE + _
                                  " FROM " + DATA_DATABASE + "." + dataTableName + " D," + _
                                   LEGAL_ENTITIES_DATABASE + "." + ENTITIES_TABLE + " A" + _
                                  " WHERE A." + ASSETS_TREE_ID_VARIABLE + "= D." + DATA_ASSET_ID_VARIABLE
 
         If SqlCondition <> "" Then SqlQuery = SqlQuery + " AND " + SqlCondition
         Return srv.sqlQuery(SqlQuery)
-
-
-    End Function
-
-    Protected Friend Function DeleteViews() As Boolean
-
 
 
     End Function

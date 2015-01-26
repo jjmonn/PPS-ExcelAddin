@@ -101,7 +101,7 @@ Public Class ExcelAddinModule1
     ' Initialize the DLL computer instance
     Private Sub InitializeComputer()
 
-        GENERICDCGLobalInstance = New GenericSingleEntityComputer
+        GENERICDCGLobalInstance = New GenericSingleEntityDLL3Computer
         UDFCALLBACKINSTANCE = New cPPSBIControl
 
     End Sub

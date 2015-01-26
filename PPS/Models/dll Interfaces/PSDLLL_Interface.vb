@@ -122,6 +122,8 @@ Friend Class PSDLLL_Interface
 
     End Sub
 
+    ' Sensitivities Dictionary: (sensitivity_id)(item)(entity_id)(period)
+    ' Items are fixed (PSdll): incr_rev, incr_NR, incr_sensi
     Protected Friend Function GetResultsDict() As Dictionary(Of String, Dictionary(Of String, Double()))
 
         Dim result_dict As New Dictionary(Of String, Dictionary(Of String, Double()))
