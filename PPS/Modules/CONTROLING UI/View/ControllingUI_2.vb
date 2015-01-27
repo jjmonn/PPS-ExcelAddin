@@ -21,7 +21,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 25/01/2015
+' Last modified: 27/01/2015
 
 
 Imports System.Windows.Forms
@@ -475,7 +475,37 @@ Friend Class ControllingUI_2
 
 #Region "Main Menu Calls Backs"
 
-    Private Sub EntitiesMenuClick(sender As Object, e As EventArgs)
+#Region "Buttons"
+
+    Private Sub SelectionBT_Click(sender As Object, e As EventArgs) Handles SelectionBT.Click
+
+        EntitiesMenuClick(sender, e)
+
+    End Sub
+
+    Private Sub ExcelBT_Click(sender As Object, e As EventArgs) Handles ExcelBT.Click
+
+        SendCurrentEntity_Click(sender, e)
+
+    End Sub
+
+    Private Sub ControllingBT_Click(sender As Object, e As EventArgs) Handles ControllingBT.Click
+
+        AddVersionsComparisonToolStripMenuItem_Click(sender, e)
+
+    End Sub
+
+    Private Sub RefreshBT_Click(sender As Object, e As EventArgs) Handles RefreshBT.Click
+
+        Refresh_Click(sender, e)
+
+    End Sub
+
+#End Region
+
+#Region "Main Menus"
+
+    Private Sub EntitiesMenuClick(sender As Object, e As EventArgs) Handles EntitiesMBT.Click
 
         If EntitiesFlag = False Then
             EntitiesMBT.Checked = True
@@ -503,7 +533,7 @@ Friend Class ControllingUI_2
 
     End Sub
 
-    Private Sub CategoriesMenuClick(sender As Object, e As EventArgs)
+    Private Sub CategoriesMenuClick(sender As Object, e As EventArgs) Handles CategoriesMBT.Click
 
         If CategoriesFlag = False Then
             CategoriesMBT.CheckState = CheckState.Checked
@@ -530,7 +560,7 @@ Friend Class ControllingUI_2
 
     End Sub
 
-    Private Sub CurrenciesMenuClick(sender As Object, e As EventArgs)
+    Private Sub CurrenciesMenuClick(sender As Object, e As EventArgs) Handles CurrenciesMBT.Click
 
         If CurrenciesFlag = False Then
             CurrenciesMBT.CheckState = CheckState.Checked
@@ -550,7 +580,7 @@ Friend Class ControllingUI_2
 
     End Sub
 
-    Private Sub PeriodsMenuClick(sender As Object, e As EventArgs)
+    Private Sub PeriodsMenuClick(sender As Object, e As EventArgs) Handles PeriodsMBT.Click
 
         If PeriodsFlag = False Then
             PeriodsMBT.CheckState = CheckState.Checked
@@ -567,7 +597,7 @@ Friend Class ControllingUI_2
 
     End Sub
 
-    Private Sub VersionsMenuClick(sender As Object, e As EventArgs)
+    Private Sub VersionsMenuClick(sender As Object, e As EventArgs) Handles VersionsMBT.Click
 
         If VersionsFlag = False Then
             VersionsMBT.CheckState = CheckState.Checked
@@ -584,13 +614,13 @@ Friend Class ControllingUI_2
 
     End Sub
 
-    Private Sub SendCurrentEntity_Click(sender As Object, e As EventArgs) Handles DropCurrentEntToExcelToolStripMenuItem.Click
+    Private Sub SendCurrentEntity_Click(sender As Object, e As EventArgs) Handles ExcelExportMBT.Click, TopEntityExportMBT.Click
 
         DROPTOEXCELController.SendCurrentEntityToExcel()
 
     End Sub
 
-    Private Sub DropDrillDown_Click(sender As Object, e As EventArgs) Handles DropDrillDownToExcelToolStripMenuItem.Click
+    Private Sub DropDrillDown_Click(sender As Object, e As EventArgs) Handles DrillDownExportMBT.Click
 
         DROPTOEXCELController.SendDropDownToExcel()
 
@@ -609,7 +639,7 @@ Friend Class ControllingUI_2
 
     End Sub
 
-    Private Sub AddVersionsComparisonToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles AddVersionsComparisonToolStripMenuItem.Click
+    Private Sub AddVersionsComparisonToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles VersionsComparisonMBT.Click
 
         If isVersionComparisonDisplayed = True Then
             MsgBox("The Versions Comparison is already displayed")
@@ -629,7 +659,7 @@ Friend Class ControllingUI_2
 
     End Sub
 
-    Private Sub SwitchVersionsOrderToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles SwitchVersionsOrderToolStripMenuItem.Click
+    Private Sub SwitchVersionsOrderToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles SwitchVersionsMBT.Click
 
         Dim displayComparison As Boolean
         If isVersionComparisonDisplayed = True Then
@@ -644,7 +674,7 @@ Friend Class ControllingUI_2
 
     End Sub
 
-    Private Sub RemoveVersionsComparisonToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles RemoveVersionsComparisonToolStripMenuItem.Click
+    Private Sub RemoveVersionsComparisonToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles DeleteVersionsComparisonMBT.Click
 
         If isVersionComparisonDisplayed Then
             For Each tab_ As TabPage In TabControl1.TabPages
@@ -656,6 +686,7 @@ Friend Class ControllingUI_2
 
     End Sub
 
+#End Region
 
 #End Region
 
@@ -837,5 +868,5 @@ Friend Class ControllingUI_2
 #End Region
 
 
-
+  
 End Class
