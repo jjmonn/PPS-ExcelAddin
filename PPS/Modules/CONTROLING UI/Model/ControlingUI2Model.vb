@@ -169,7 +169,7 @@ Friend Class ControlingUI2Model
 #End Region
 
 
-#Region ""
+#Region "Adjustments"
 
     Protected Friend Function GetAdjustments(ByRef version_id As String, _
                                              ByVal destination_currency As String)

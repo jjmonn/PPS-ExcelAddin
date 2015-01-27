@@ -74,7 +74,7 @@ Friend Class AcquisitionUI
     Friend Sub InitDGVDisplay()
 
         Panel1.Controls.Add(DGV)
-        DataGridViewsUtil.FormatDGVFirstColumn(DGV)
+        DataGridViewsUtil.FormatDGVRowsHierarchy(DGV)
         DataGridViewsUtil.SetDGVCellsFontSize(DGV, DGV_FONT_SIZE)
         DGV.Dock = DockStyle.Fill
         DGV.ColumnsHierarchy.AutoStretchColumns = True

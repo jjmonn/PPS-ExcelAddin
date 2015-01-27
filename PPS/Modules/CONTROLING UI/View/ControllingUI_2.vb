@@ -229,7 +229,6 @@ Friend Class ControllingUI_2
                                   Optional ByRef entitiesArray() As String = Nothing, _
                                   Optional ByRef entity_node As TreeNode = Nothing)
 
-        ' Add the possibility to have several rates_version 
         ' Columns
         Dim timeConfig As String
         Select Case versionComparisonFlag
@@ -476,10 +475,10 @@ Friend Class ControllingUI_2
 
 #Region "Main Menu Calls Backs"
 
-    Private Sub EntitiesMenuClick(sender As Object, e As EventArgs) Handles EntitiesToolStripMenuItem.Click
+    Private Sub EntitiesMenuClick(sender As Object, e As EventArgs)
 
         If EntitiesFlag = False Then
-            EntitiesToolStripMenuItem.Checked = True
+            EntitiesMBT.Checked = True
             entitiesTV.Select()
             ExpandPane1()
             HideAllMenuItemsExceptCategories()
@@ -492,7 +491,7 @@ Friend Class ControllingUI_2
                 TVTableLayout.SetRow(entitiesTV, 0)
             End If
         Else
-            EntitiesToolStripMenuItem.Checked = False
+            EntitiesMBT.Checked = False
             If TVTableLayout.GetRow(entitiesTV) = 0 Then
                 CollapsePane1()
             Else
@@ -504,10 +503,10 @@ Friend Class ControllingUI_2
 
     End Sub
 
-    Private Sub CategoriesMenuClick(sender As Object, e As EventArgs) Handles CategoriesToolStripMenuItem.Click
+    Private Sub CategoriesMenuClick(sender As Object, e As EventArgs)
 
         If CategoriesFlag = False Then
-            CategoriesToolStripMenuItem.CheckState = CheckState.Checked
+            CategoriesMBT.CheckState = CheckState.Checked
             ExpandPane1()
             HideAllMenusItemExceptEntities()
             categoriesTV.Visible = True
@@ -519,7 +518,7 @@ Friend Class ControllingUI_2
                 TVTableLayout.SetRow(categoriesTV, 0)
             End If
         Else
-            CategoriesToolStripMenuItem.CheckState = CheckState.Unchecked
+            CategoriesMBT.CheckState = CheckState.Unchecked
             If TVTableLayout.GetRow(categoriesTV) = 0 Then
                 CollapsePane1()
             Else
@@ -531,10 +530,10 @@ Friend Class ControllingUI_2
 
     End Sub
 
-    Private Sub CurrenciesMenuClick(sender As Object, e As EventArgs) Handles CurrenciesToolStripMenuItem.Click
+    Private Sub CurrenciesMenuClick(sender As Object, e As EventArgs)
 
         If CurrenciesFlag = False Then
-            CurrenciesToolStripMenuItem.CheckState = CheckState.Checked
+            CurrenciesMBT.CheckState = CheckState.Checked
             ExpandPane1()
             HideAllMenuItems()
             CurrenciesCLB.Visible = True
@@ -542,7 +541,7 @@ Friend Class ControllingUI_2
             DisplayTwoTrees()
 
         Else
-            CurrenciesToolStripMenuItem.CheckState = CheckState.Unchecked
+            CurrenciesMBT.CheckState = CheckState.Unchecked
             CollapsePane1()
             CurrenciesCLB.Visible = False
             CurrenciesFlag = False
@@ -551,16 +550,16 @@ Friend Class ControllingUI_2
 
     End Sub
 
-    Private Sub PeriodsMenuClick(sender As Object, e As EventArgs) Handles PeriodsToolStripMenuItem.Click
+    Private Sub PeriodsMenuClick(sender As Object, e As EventArgs)
 
         If PeriodsFlag = False Then
-            PeriodsToolStripMenuItem.CheckState = CheckState.Checked
+            PeriodsMBT.CheckState = CheckState.Checked
             ExpandPane1()
             HideAllMenuItems()
             periodsCLB.Visible = True
             PeriodsFlag = True
         Else
-            PeriodsToolStripMenuItem.CheckState = CheckState.Unchecked
+            PeriodsMBT.CheckState = CheckState.Unchecked
             CollapsePane1()
             periodsCLB.Visible = False
             PeriodsFlag = False
@@ -568,16 +567,16 @@ Friend Class ControllingUI_2
 
     End Sub
 
-    Private Sub VersionsMenuClick(sender As Object, e As EventArgs) Handles VersionsToolStripMenuItem.Click
+    Private Sub VersionsMenuClick(sender As Object, e As EventArgs)
 
         If VersionsFlag = False Then
-            VersionsToolStripMenuItem.CheckState = CheckState.Checked
+            VersionsMBT.CheckState = CheckState.Checked
             ExpandPane1()
             HideAllMenuItems()
             versionsTV.Visible = True
             VersionsFlag = True
         Else
-            VersionsToolStripMenuItem.CheckState = CheckState.Unchecked
+            VersionsMBT.CheckState = CheckState.Unchecked
             CollapsePane1()
             versionsTV.Visible = False
             VersionsFlag = False
@@ -597,7 +596,7 @@ Friend Class ControllingUI_2
 
     End Sub
 
-    Private Sub Refresh_Click(sender As Object, e As EventArgs) Handles RefreshToolStripMenuItem.Click
+    Private Sub Refresh_Click(sender As Object, e As EventArgs) Handles RefreshMBT.Click
 
         If Controller.CurrentEntityKey <> "" Then
             Controller.compute_entity_complete(entitiesTV.Nodes.Find(Controller.CurrentEntityKey, True)(0))

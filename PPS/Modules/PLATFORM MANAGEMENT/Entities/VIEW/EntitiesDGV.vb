@@ -251,7 +251,7 @@ Friend Class EntitiesDGV
         Next
         isFillingDGV = False
         DataGridViewsUtil.DGVSetHiearchyFontSize(DGV, DGV_FONT_SIZE, DGV_FONT_SIZE)
-        DataGridViewsUtil.FormatDGVFirstColumn(DGV)
+        DataGridViewsUtil.FormatDGVRowsHierarchy(DGV)
         DGV.Refresh()
 
     End Sub

@@ -92,7 +92,7 @@ Friend Class RatesView
         InitRows(globalPeriodsDictionary)
         DataGridViewsUtil.DGVSetHiearchyFontSize(DGV, DGV_ITEMS_FONT_SIZE, DGV_CELLS_FONT_SIZE)
         DGV.ColumnsHierarchy.AutoResize(AutoResizeMode.FIT_ALL)
-        DataGridViewsUtil.FormatDGVFirstColumn(DGV)
+        DataGridViewsUtil.FormatDGVRowsHierarchy(DGV)
         DGV.Refresh()
 
     End Sub
@@ -253,7 +253,7 @@ Friend Class RatesView
                 CopyValueIntoCellsBelow(DGV.RowsHierarchy.Items(i), 0, column, value)
             Next
         End If
-        
+
     End Sub
 
 

@@ -133,7 +133,7 @@ Friend Class Scenario
         OutputDGV.ColumnsHierarchy.AutoStretchColumns = True
         DataGridViewsUtil.InitDisplayVDataGridView(OutputDGV, DGV_THEME)
         DataGridViewsUtil.EqualizeColumnsAndRowsHierarchyWidth(OutputDGV)
-        DataGridViewsUtil.FormatDGVFirstColumn(OutputDGV)
+        DataGridViewsUtil.AdjustDGVFColumnWidth(OutputDGV, 0)
         DataGridViewsUtil.DGVSetHiearchyFontSize(OutputDGV, DGV_CELLS_FONT_SIZE, DGV_CELLS_FONT_SIZE)
         OutputDGV.BackColor = System.Drawing.SystemColors.Control
 

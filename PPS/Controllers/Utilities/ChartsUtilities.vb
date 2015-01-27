@@ -70,7 +70,7 @@ Friend Class ChartsUtilities
         new_chart.Titles(0).Font = New Drawing.Font("Arial", CHART_TITLE_FONT_SIZE, Drawing.FontStyle.Bold)
         new_chart.BorderlineWidth = 1
         new_chart.BorderlineColor = Drawing.Color.Gray
-        new_chart.ChartAreas(0).Position = New ElementPosition(10, 0, 80, 90)
+        new_chart.ChartAreas(0).Position = New ElementPosition(10, 10, 80, 80)
         new_chart.Legends(0).Position = New ElementPosition(0, 90, 100, 10)
         Return new_chart
 

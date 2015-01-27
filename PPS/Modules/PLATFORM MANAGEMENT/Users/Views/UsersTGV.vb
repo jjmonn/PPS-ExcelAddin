@@ -112,7 +112,8 @@ Friend Class UsersTGV
         col3.CellsEditor = EmailTBEditor
 
         TGV.ColumnsHierarchy.AutoResize(AutoResizeMode.FIT_ALL)
-        DataGridViewsUtil.FormatDGVFirstColumn(TGV)
+        DataGridViewsUtil.FormatDGVRowsHierarchy(TGV)
+        DataGridViewsUtil.AdjustDGVFColumnWidth(TGV, 0)
 
     End Sub
 
@@ -164,7 +165,7 @@ Friend Class UsersTGV
         Next
         TGV.ColumnsHierarchy.AutoResize(AutoResizeMode.FIT_ALL)
         TGV.ColumnsHierarchy.AutoStretchColumns = True
-        DataGridViewsUtil.FormatDGVFirstColumn(TGV)
+        DataGridViewsUtil.FormatDGVRowsHierarchy(TGV)
         TGV.Refresh()
 
     End Sub

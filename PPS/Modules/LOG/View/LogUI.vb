@@ -90,7 +90,7 @@ Friend Class LogUI
             For Each sub_node In node.Nodes
                 CreateAccountsStructure(sub_node, DGV)
             Next
-            DataGridViewsUtil.FormatDGVFirstColumn(DGV)
+            DataGridViewsUtil.FormatDGVRowsHierarchy(DGV)
             index = index + 1
         Next
 

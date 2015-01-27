@@ -332,16 +332,14 @@ Friend Class AlternativeScenariosUI
         DGV.RowsHierarchy.CompactStyleRenderingEnabled = True
         DataGridViewsUtil.InitDisplayVDataGridView(DGV, DGV_THEME)
         DataGridViewsUtil.DGVSetHiearchyFontSize(DGV, DGV_CELLS_FONT_SIZE, DGV_CELLS_FONT_SIZE)
-        DataGridViewsUtil.FormatDGVFirstColumn(DGV)
+        DGV.ColumnsHierarchy.AutoStretchColumns = True
+        DataGridViewsUtil.AdjustDGVFColumnWidth(DGV, 0)
 
         For j As Int32 = 1 To DGV.ColumnsHierarchy.Items.Count - 1
-            DGV.ColumnsHierarchy.Items(j).TextAlignment = ContentAlignment.MiddleRight
+            DGV.ColumnsHierarchy.Items(j).TextAlignment = ContentAlignment.MiddleCenter
             DGV.ColumnsHierarchy.Items(j).CellsTextAlignment = ContentAlignment.MiddleRight
         Next
 
-        DGV.ColumnsHierarchy.AutoResize(AutoResizeMode.FIT_ALL)
-        DGV.ColumnsHierarchy.AutoStretchColumns = True
-        DataGridViewsUtil.AdjustChildrenHierarchyItemSize(DGV.ColumnsHierarchy.Items(0))
         DGV.Refresh()
         Try
             DGV.RowsHierarchy.Items(0).Selected = True
@@ -400,7 +398,7 @@ Friend Class AlternativeScenariosUI
         For i = 0 To MAIN_PANEL_INITIAL_LINES_NB - 1
             MainPanel.RowStyles.Add(New RowStyle(SizeType.Absolute, MAIN_PANEL_ROW_HEIGHT))
         Next
-
+        as_panel_lines_index = 0
 
     End Sub
 

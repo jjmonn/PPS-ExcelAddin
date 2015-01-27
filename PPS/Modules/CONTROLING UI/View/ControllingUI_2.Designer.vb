@@ -32,16 +32,11 @@ Partial Class ControllingUI_2
         Me.BackgroundWorker1 = New System.ComponentModel.BackgroundWorker()
         Me.categoriesIL = New System.Windows.Forms.ImageList(Me.components)
         Me.MenuStrip1 = New System.Windows.Forms.MenuStrip()
-        Me.EntitiesToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.CategoriesToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.CurrenciesToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.PeriodsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.VersionsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ExcelToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ExcelMBT = New System.Windows.Forms.ToolStripMenuItem()
         Me.DropCurrentEntToExcelToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.DropDrillDownToExcelToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.RefreshToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ControllingToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.RefreshMBT = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ControllingMBT = New System.Windows.Forms.ToolStripMenuItem()
         Me.AddVersionsComparisonToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.SwitchVersionsOrderToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.RemoveVersionsComparisonToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -66,6 +61,12 @@ Partial Class ControllingUI_2
         Me.DisplayAdjustmensRCM = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator()
         Me.DisplayDataTrackingToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.SelectionMBT = New System.Windows.Forms.ToolStripMenuItem()
+        Me.EntitiesMBT = New System.Windows.Forms.ToolStripMenuItem()
+        Me.CategoriesMBT = New System.Windows.Forms.ToolStripMenuItem()
+        Me.CurrenciesMBT = New System.Windows.Forms.ToolStripMenuItem()
+        Me.PeriodsMBT = New System.Windows.Forms.ToolStripMenuItem()
+        Me.VersionsMBT = New System.Windows.Forms.ToolStripMenuItem()
         CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SplitContainer1.Panel1.SuspendLayout()
         Me.SplitContainer1.Panel2.SuspendLayout()
@@ -115,8 +116,8 @@ Partial Class ControllingUI_2
         '
         Me.SplitContainer1.Panel2.BackColor = System.Drawing.SystemColors.Control
         Me.SplitContainer1.Panel2.Controls.Add(Me.TabControl1)
-        Me.SplitContainer1.Size = New System.Drawing.Size(1010, 563)
-        Me.SplitContainer1.SplitterDistance = 230
+        Me.SplitContainer1.Size = New System.Drawing.Size(724, 467)
+        Me.SplitContainer1.SplitterDistance = 164
         Me.SplitContainer1.SplitterWidth = 3
         Me.SplitContainer1.TabIndex = 11
         '
@@ -132,7 +133,7 @@ Partial Class ControllingUI_2
         Me.TVTableLayout.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
         Me.TVTableLayout.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 276.0!))
         Me.TVTableLayout.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
-        Me.TVTableLayout.Size = New System.Drawing.Size(230, 563)
+        Me.TVTableLayout.Size = New System.Drawing.Size(164, 467)
         Me.TVTableLayout.TabIndex = 0
         '
         'TabControl1
@@ -163,7 +164,7 @@ Partial Class ControllingUI_2
         Me.TabControl1.Location = New System.Drawing.Point(0, 0)
         Me.TabControl1.Name = "TabControl1"
         Me.TabControl1.SelectedIndex = 0
-        Me.TabControl1.Size = New System.Drawing.Size(777, 563)
+        Me.TabControl1.Size = New System.Drawing.Size(557, 467)
         Me.TabControl1.TabIndex = 7
         '
         'categoriesIL
@@ -176,55 +177,20 @@ Partial Class ControllingUI_2
         '
         'MenuStrip1
         '
-        Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.EntitiesToolStripMenuItem, Me.CategoriesToolStripMenuItem, Me.CurrenciesToolStripMenuItem, Me.PeriodsToolStripMenuItem, Me.VersionsToolStripMenuItem, Me.ExcelToolStripMenuItem, Me.RefreshToolStripMenuItem, Me.ControllingToolStripMenuItem})
+        Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.SelectionMBT, Me.ExcelMBT, Me.ControllingMBT, Me.RefreshMBT})
         Me.MenuStrip1.Location = New System.Drawing.Point(0, 0)
         Me.MenuStrip1.Name = "MenuStrip1"
-        Me.MenuStrip1.Size = New System.Drawing.Size(1010, 24)
+        Me.MenuStrip1.Size = New System.Drawing.Size(724, 24)
         Me.MenuStrip1.TabIndex = 12
         Me.MenuStrip1.Text = "MenuStrip1"
         '
-        'EntitiesToolStripMenuItem
+        'ExcelMBT
         '
-        Me.EntitiesToolStripMenuItem.CheckOnClick = True
-        Me.EntitiesToolStripMenuItem.Name = "EntitiesToolStripMenuItem"
-        Me.EntitiesToolStripMenuItem.Size = New System.Drawing.Size(57, 20)
-        Me.EntitiesToolStripMenuItem.Text = "Entities"
-        '
-        'CategoriesToolStripMenuItem
-        '
-        Me.CategoriesToolStripMenuItem.CheckOnClick = True
-        Me.CategoriesToolStripMenuItem.Name = "CategoriesToolStripMenuItem"
-        Me.CategoriesToolStripMenuItem.Size = New System.Drawing.Size(75, 20)
-        Me.CategoriesToolStripMenuItem.Text = "Categories"
-        '
-        'CurrenciesToolStripMenuItem
-        '
-        Me.CurrenciesToolStripMenuItem.CheckOnClick = True
-        Me.CurrenciesToolStripMenuItem.Name = "CurrenciesToolStripMenuItem"
-        Me.CurrenciesToolStripMenuItem.Size = New System.Drawing.Size(75, 20)
-        Me.CurrenciesToolStripMenuItem.Text = "Currencies"
-        '
-        'PeriodsToolStripMenuItem
-        '
-        Me.PeriodsToolStripMenuItem.CheckOnClick = True
-        Me.PeriodsToolStripMenuItem.Name = "PeriodsToolStripMenuItem"
-        Me.PeriodsToolStripMenuItem.Size = New System.Drawing.Size(58, 20)
-        Me.PeriodsToolStripMenuItem.Text = "Periods"
-        '
-        'VersionsToolStripMenuItem
-        '
-        Me.VersionsToolStripMenuItem.CheckOnClick = True
-        Me.VersionsToolStripMenuItem.Name = "VersionsToolStripMenuItem"
-        Me.VersionsToolStripMenuItem.Size = New System.Drawing.Size(63, 20)
-        Me.VersionsToolStripMenuItem.Text = "Versions"
-        '
-        'ExcelToolStripMenuItem
-        '
-        Me.ExcelToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.DropCurrentEntToExcelToolStripMenuItem, Me.DropDrillDownToExcelToolStripMenuItem})
-        Me.ExcelToolStripMenuItem.Image = Global.PPS.My.Resources.Resources.Benjigarner_Softdimension_Excel
-        Me.ExcelToolStripMenuItem.Name = "ExcelToolStripMenuItem"
-        Me.ExcelToolStripMenuItem.Size = New System.Drawing.Size(61, 20)
-        Me.ExcelToolStripMenuItem.Text = "Excel"
+        Me.ExcelMBT.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.DropCurrentEntToExcelToolStripMenuItem, Me.DropDrillDownToExcelToolStripMenuItem})
+        Me.ExcelMBT.Image = Global.PPS.My.Resources.Resources.Benjigarner_Softdimension_Excel
+        Me.ExcelMBT.Name = "ExcelMBT"
+        Me.ExcelMBT.Size = New System.Drawing.Size(61, 20)
+        Me.ExcelMBT.Text = "Excel"
         '
         'DropCurrentEntToExcelToolStripMenuItem
         '
@@ -238,19 +204,19 @@ Partial Class ControllingUI_2
         Me.DropDrillDownToExcelToolStripMenuItem.Size = New System.Drawing.Size(217, 22)
         Me.DropDrillDownToExcelToolStripMenuItem.Text = "Drop drill down to Excel"
         '
-        'RefreshToolStripMenuItem
+        'RefreshMBT
         '
-        Me.RefreshToolStripMenuItem.Image = Global.PPS.My.Resources.Resources.refresh_greay_bcgd
-        Me.RefreshToolStripMenuItem.Name = "RefreshToolStripMenuItem"
-        Me.RefreshToolStripMenuItem.Size = New System.Drawing.Size(74, 20)
-        Me.RefreshToolStripMenuItem.Text = "Refresh"
+        Me.RefreshMBT.Image = Global.PPS.My.Resources.Resources.Refresh2
+        Me.RefreshMBT.Name = "RefreshMBT"
+        Me.RefreshMBT.Size = New System.Drawing.Size(74, 20)
+        Me.RefreshMBT.Text = "Refresh"
         '
-        'ControllingToolStripMenuItem
+        'ControllingMBT
         '
-        Me.ControllingToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.AddVersionsComparisonToolStripMenuItem, Me.SwitchVersionsOrderToolStripMenuItem, Me.RemoveVersionsComparisonToolStripMenuItem})
-        Me.ControllingToolStripMenuItem.Name = "ControllingToolStripMenuItem"
-        Me.ControllingToolStripMenuItem.Size = New System.Drawing.Size(79, 20)
-        Me.ControllingToolStripMenuItem.Text = "Controlling"
+        Me.ControllingMBT.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.AddVersionsComparisonToolStripMenuItem, Me.SwitchVersionsOrderToolStripMenuItem, Me.RemoveVersionsComparisonToolStripMenuItem})
+        Me.ControllingMBT.Name = "ControllingMBT"
+        Me.ControllingMBT.Size = New System.Drawing.Size(79, 20)
+        Me.ControllingMBT.Text = "Controlling"
         '
         'AddVersionsComparisonToolStripMenuItem
         '
@@ -317,7 +283,7 @@ Partial Class ControllingUI_2
         Me.TableLayoutPanel1.Controls.Add(Me.Label2, 4, 0)
         Me.TableLayoutPanel1.Controls.Add(Me.entityTB, 1, 0)
         Me.TableLayoutPanel1.Controls.Add(Me.Label3, 2, 0)
-        Me.TableLayoutPanel1.Location = New System.Drawing.Point(457, 24)
+        Me.TableLayoutPanel1.Location = New System.Drawing.Point(171, 24)
         Me.TableLayoutPanel1.Name = "TableLayoutPanel1"
         Me.TableLayoutPanel1.RowCount = 1
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333!))
@@ -440,13 +406,50 @@ Partial Class ControllingUI_2
         Me.DisplayDataTrackingToolStripMenuItem.Size = New System.Drawing.Size(188, 22)
         Me.DisplayDataTrackingToolStripMenuItem.Text = "Display Data Tracking"
         '
+        'SelectionMBT
+        '
+        Me.SelectionMBT.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.EntitiesMBT, Me.CategoriesMBT, Me.CurrenciesMBT, Me.PeriodsMBT, Me.VersionsMBT})
+        Me.SelectionMBT.Name = "SelectionMBT"
+        Me.SelectionMBT.Size = New System.Drawing.Size(67, 20)
+        Me.SelectionMBT.Text = "Selection"
+        '
+        'EntitiesMBT
+        '
+        Me.EntitiesMBT.Name = "EntitiesMBT"
+        Me.EntitiesMBT.Size = New System.Drawing.Size(130, 22)
+        Me.EntitiesMBT.Text = "Entities"
+        '
+        'CategoriesMBT
+        '
+        Me.CategoriesMBT.Name = "CategoriesMBT"
+        Me.CategoriesMBT.Size = New System.Drawing.Size(130, 22)
+        Me.CategoriesMBT.Text = "Categories"
+        '
+        'CurrenciesMBT
+        '
+        Me.CurrenciesMBT.Name = "CurrenciesMBT"
+        Me.CurrenciesMBT.Size = New System.Drawing.Size(130, 22)
+        Me.CurrenciesMBT.Text = "Currencies"
+        '
+        'PeriodsMBT
+        '
+        Me.PeriodsMBT.Name = "PeriodsMBT"
+        Me.PeriodsMBT.Size = New System.Drawing.Size(130, 22)
+        Me.PeriodsMBT.Text = "Periods"
+        '
+        'VersionsMBT
+        '
+        Me.VersionsMBT.Name = "VersionsMBT"
+        Me.VersionsMBT.Size = New System.Drawing.Size(130, 22)
+        Me.VersionsMBT.Text = "Versions"
+        '
         'ControllingUI_2
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.SystemColors.Control
         Me.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
-        Me.ClientSize = New System.Drawing.Size(1010, 610)
+        Me.ClientSize = New System.Drawing.Size(724, 514)
         Me.Controls.Add(Me.TableLayoutPanel1)
         Me.Controls.Add(Me.SplitContainer1)
         Me.Controls.Add(Me.MenuStrip1)
@@ -478,15 +481,10 @@ Partial Class ControllingUI_2
     Friend WithEvents categoriesIL As System.Windows.Forms.ImageList
     Friend WithEvents TVTableLayout As System.Windows.Forms.TableLayoutPanel
     Friend WithEvents MenuStrip1 As System.Windows.Forms.MenuStrip
-    Friend WithEvents EntitiesToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents CategoriesToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents CurrenciesToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents PeriodsToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents VersionsToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents ExcelToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ExcelMBT As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents DropCurrentEntToExcelToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents RefreshToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents ControllingToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents RefreshMBT As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ControllingMBT As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents DropDrillDownToExcelToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents entitiesRightClickMenu As System.Windows.Forms.ContextMenuStrip
     Friend WithEvents ToolStripSeparator1 As System.Windows.Forms.ToolStripSeparator
@@ -512,4 +510,10 @@ Partial Class ControllingUI_2
     Friend WithEvents DisplayDataTrackingToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents DisplayAdjustmensRCM As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ToolStripSeparator2 As System.Windows.Forms.ToolStripSeparator
+    Friend WithEvents SelectionMBT As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents EntitiesMBT As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents CategoriesMBT As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents CurrenciesMBT As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents PeriodsMBT As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents VersionsMBT As System.Windows.Forms.ToolStripMenuItem
 End Class

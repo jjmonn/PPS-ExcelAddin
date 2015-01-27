@@ -118,7 +118,6 @@ Friend Class DataBaseDataDownloader
 
 #Region "Dll Entities Aggregation data hash build"
 
-
     Friend Function build_data_hash(ByRef entitiesIDList() As String, _
                                     ByRef ViewName As String, _
                                     Optional ByRef strSqlAdditionalClause As String = "") As Boolean
@@ -128,7 +127,10 @@ Friend Class DataBaseDataDownloader
             For Each entity_id In entitiesIDList
                 StoreEntityData(entity_id)
             Next
-            srv.rst.Close()
+            Try
+                srv.rst.Close()
+            Catch ex As Exception
+            End Try
             Return True
         Else
             Return False
@@ -212,11 +214,6 @@ Friend Class DataBaseDataDownloader
 
     End Function
 
-    ' aggregated query -> filter on adjustment_id should be send within str_sql_query (optional)
-    ' need an additional function retreiving only adjustments id values to display in DGVs
-
-
-
 #End Region
 
 
@@ -240,7 +237,10 @@ Friend Class DataBaseDataDownloader
             Return False
         Else
             Dim tmpArray(,) As Object = srv.rst.GetRows()
-            srv.rst.Close()
+            Try
+                srv.rst.Close()
+            Catch ex As Exception
+            End Try
             BuildOutputsArrays(tmpArray)
             Return True
         End If
@@ -266,6 +266,10 @@ Friend Class DataBaseDataDownloader
                                adjustments_dic, _
                                entitiesIDList)
         End If
+        Try
+            srv.rst.Close()
+        Catch ex As Exception
+        End Try
         Return adjustments_dic
 
     End Function
@@ -362,44 +366,6 @@ Friend Class DataBaseDataDownloader
 
     End Sub
 
-    ' Excahnge Rates: (currency_token)(period)(rate_type)
-    Protected Friend Shared Function GetExchangeRatesDictionary(ByRef version_id As String, _
-                                                                ByRef destination_currency As String, _
-                                                                ByRef entities_id_List As String()) _
-                                                                As Dictionary(Of String, Dictionary(Of Int32, Dictionary(Of String, Double)))
-
-        Dim rates_dic As New Dictionary(Of String, Dictionary(Of Int32, Dictionary(Of String, Double)))
-        Dim versions As New Version
-        Dim rates_version_id As String = versions.ReadVersion(version_id, VERSIONS_RATES_VERSION_ID_VAR)
-        Dim ExchangeRates As New ExchangeRate(rates_version_id)
-        Dim reverse_flag As Boolean = False
-        Dim start_period As Int32 = versions.ReadVersion(version_id, VERSIONS_START_PERIOD_VAR)
-        Dim nb_periods As Int32 = versions.ReadVersion(version_id, VERSIONS_NB_PERIODS_VAR)
-        Dim time_configuration As String = versions.ReadVersion(version_id, VERSIONS_TIME_CONFIG_VARIABLE)
-        versions.Close()
-
-        Dim currencies_list As List(Of String) = GetUniqueCurrencies(entities_id_List)
-        For Each original_currency As String In currencies_list
-
-            Dim currencies_token As String = original_currency & CURRENCIES_SEPARATOR & destination_currency
-            reverse_flag = False
-            If destination_currency <> MAIN_CURRENCY Then reverse_flag = True
-
-            ' !! Attention stub car besoin d'une fonction supp qui créé les taux 
-            ' -> NOK/USD par exemple (en passant par la main currency)
-
-            If original_currency <> destination_currency Then _
-            rates_dic.Add(currencies_token, ExchangeRates.BuildExchangeRatesDictionary(time_configuration, _
-                                                                                       start_period, _
-                                                                                       nb_periods, _
-                                                                                       currencies_token, _
-                                                                                       reverse_flag))
-        Next
-        Return rates_dic
-
-    End Function
-
-
 #End Region
 
 
@@ -436,6 +402,44 @@ Friend Class DataBaseDataDownloader
 
 
 #Region "Utilities"
+
+    ' Exchange Rates: (currency_token)(period)(rate_type)
+    Protected Friend Shared Function GetExchangeRatesDictionary(ByRef version_id As String, _
+                                                                ByRef destination_currency As String, _
+                                                                ByRef entities_id_List As String()) _
+                                                                As Dictionary(Of String, Dictionary(Of Int32, Dictionary(Of String, Double)))
+
+        Dim rates_dic As New Dictionary(Of String, Dictionary(Of Int32, Dictionary(Of String, Double)))
+        Dim versions As New Version
+        Dim rates_version_id As String = versions.ReadVersion(version_id, VERSIONS_RATES_VERSION_ID_VAR)
+        Dim ExchangeRates As New ExchangeRate(rates_version_id)
+        Dim reverse_flag As Boolean = False
+        Dim start_period As Int32 = versions.ReadVersion(version_id, VERSIONS_START_PERIOD_VAR)
+        Dim nb_periods As Int32 = versions.ReadVersion(version_id, VERSIONS_NB_PERIODS_VAR)
+        Dim time_configuration As String = versions.ReadVersion(version_id, VERSIONS_TIME_CONFIG_VARIABLE)
+        versions.Close()
+
+        Dim currencies_list As List(Of String) = GetUniqueCurrencies(entities_id_List)
+        For Each original_currency As String In currencies_list
+
+            Dim currencies_token As String = original_currency & CURRENCIES_SEPARATOR & destination_currency
+            reverse_flag = False
+            If destination_currency <> MAIN_CURRENCY Then reverse_flag = True
+
+            ' !! Attention stub car besoin d'une fonction supp qui créé les taux 
+            ' -> NOK/USD par exemple (en passant par la main currency)
+
+            If original_currency <> destination_currency Then _
+            rates_dic.Add(currencies_token, ExchangeRates.BuildExchangeRatesDictionary(time_configuration, _
+                                                                                       start_period, _
+                                                                                       nb_periods, _
+                                                                                       currencies_token, _
+                                                                                       reverse_flag))
+        Next
+        Return rates_dic
+
+    End Function
+
 
     Friend Sub ClearDatasDictionaries()
 

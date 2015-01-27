@@ -17,7 +17,7 @@
 '
 '
 '
-' Last modified date: 25/01/2014
+' Last modified date: 26/01/2014
 ' Author: Julien Monnereau
 
 
@@ -54,7 +54,7 @@ Friend Class DataGridViewsUtil
 
     Friend Shared ADJUSTMENTS_ROW_THEME As VIBLEND_THEME = VIBLEND_THEME.VISTABLUE
     Friend Shared ADJUSTMENTS_COLOR As Color = Color.Blue
-    Friend Shared ENTITIES_ROWS_THEME As VIBLEND_THEME = VIBLEND_THEME.RETROBLUE
+    Friend Shared ENTITIES_ROWS_THEME As VIBLEND_THEME = VIBLEND_THEME.OFFICE2003SILVER
 
 
 #End Region
@@ -71,7 +71,7 @@ Friend Class DataGridViewsUtil
     End Sub
 
 
-#Region "DGV Display Initialize Functions"
+#Region "ControllingUI2 DGVs Formatting"
 
     ' vDgv DISPLAY Initialization
     Protected Friend Shared Sub InitDisplayVDataGridView(ByRef vDataGridView As vDataGridView, _
@@ -95,33 +95,55 @@ Friend Class DataGridViewsUtil
     ' vDgv Display After Populating ' note controlling ui2 specificity !!
     Protected Friend Sub FormatDGVs(ByRef tabsControl As TabControl)
 
-        Dim formatCode, accountKey As String
+        Dim formatCode, account_id, fmtStr As String
         Dim indent As Int32
-
         For Each tab_ As TabPage In tabsControl.TabPages
             Dim vDgv As vDataGridView = tab_.Controls(0)
-
             For Each row In vDgv.RowsHierarchy.Items
-
                 formatCode = AccountsKeysFormatTypesDic.Item(AccountNamesKeysDic.Item(row.Caption)).Item(ACCOUNT_FORMAT_VARIABLE)
-                accountKey = AccountNamesKeysDic.Item(row.Caption)
+                account_id = AccountNamesKeysDic.Item(row.Caption)
 
-                Dim HStyle As VIBlend.Utilities.HierarchyItemStyle = GridTheme.GetDefaultTheme(VIBLEND_THEME.OFFICE2010SILVER).HierarchyItemStyleNormal
-                Dim CStyle As GridCellStyle = GridTheme.GetDefaultTheme(VIBLEND_THEME.OFFICE2010SILVER).GridCellStyle
+                Dim HANStyle As VIBlend.Utilities.HierarchyItemStyle = GridTheme.GetDefaultTheme(vDgv.VIBlendTheme).HierarchyItemStyleNormal
+                Dim HASStyle As VIBlend.Utilities.HierarchyItemStyle = GridTheme.GetDefaultTheme(vDgv.VIBlendTheme).HierarchyItemStyleSelected
+                Dim HENStyle As VIBlend.Utilities.HierarchyItemStyle = GridTheme.GetDefaultTheme(ENTITIES_ROWS_THEME).HierarchyItemStyleNormal
+                Dim HESStyle As VIBlend.Utilities.HierarchyItemStyle = GridTheme.GetDefaultTheme(ENTITIES_ROWS_THEME).HierarchyItemStyleSelected
+                Dim CAStyle As GridCellStyle = GridTheme.GetDefaultTheme(vDgv.VIBlendTheme).GridCellStyle
+                Dim CEStyle As GridCellStyle = GridTheme.GetDefaultTheme(ENTITIES_ROWS_THEME).GridCellStyle
+
+                HANStyle.Font = New System.Drawing.Font(vDgv.Font.FontFamily, BASIC_DGV_REPORT_FONT_SIZE)
+                HASStyle.Font = New System.Drawing.Font(vDgv.Font.FontFamily, BASIC_DGV_REPORT_FONT_SIZE)
+                HENStyle.Font = New System.Drawing.Font(vDgv.Font.FontFamily, BASIC_DGV_REPORT_FONT_SIZE)
+                HESStyle.Font = New System.Drawing.Font(vDgv.Font.FontFamily, BASIC_DGV_REPORT_FONT_SIZE)
+                CAStyle.Font = New System.Drawing.Font(vDgv.Font.FontFamily, BASIC_DGV_REPORT_FONT_SIZE)
+                CEStyle.Font = New System.Drawing.Font(vDgv.Font.FontFamily, BASIC_DGV_REPORT_FONT_SIZE)
 
                 If EXCELFORMATER.InputFormatsDictionary.Item(formatCode).Item(FORMAT_BOLD_VARIABLE) = 1 Then
-                    HStyle.Font = New System.Drawing.Font(vDgv.Font, FontStyle.Bold)
-                    CStyle.Font = New System.Drawing.Font(vDgv.Font, FontStyle.Bold)
+                    HANStyle.Font = New System.Drawing.Font(vDgv.Font, FontStyle.Bold)
+                    HASStyle.Font = New System.Drawing.Font(vDgv.Font, FontStyle.Bold)
+                    CAStyle.Font = New System.Drawing.Font(vDgv.Font, FontStyle.Bold)
                 End If
-
                 If EXCELFORMATER.InputFormatsDictionary.Item(formatCode).Item(FORMAT_ITALIC_VARIABLE) = 1 Then
-                    HStyle.Font = New System.Drawing.Font(vDgv.Font, FontStyle.Italic)
-                    CStyle.Font = New System.Drawing.Font(vDgv.Font, FontStyle.Italic)
+                    HANStyle.Font = New System.Drawing.Font(vDgv.Font, FontStyle.Italic)
+                    HASStyle.Font = New System.Drawing.Font(vDgv.Font, FontStyle.Italic)
+                    CAStyle.Font = New System.Drawing.Font(vDgv.Font, FontStyle.Italic)
                 End If
+                If formatCode = "l" Then
+                    CAStyle.TextColor = Color.Gray
+                End If
+                Select Case (AccountsKeysFormatTypesDic.Item(account_id).Item(ACCOUNT_TYPE_VARIABLE))
+                    Case "MO" : fmtStr = "{0:C0}"
+                    Case "RA" : fmtStr = "{0:P}"        ' put this in a table
+                    Case "OP" : fmtStr = "{0:N}"        ' further evolution set unit
+                    Case "NU" : fmtStr = "{0:N2}"
+                    Case Else : fmtStr = "{0:C0}"
+                End Select
 
                 indent = EXCELFORMATER.InputFormatsDictionary.Item(formatCode).Item(FORMAT_INDENT_VARIABLE)
-                format_row(row, formatCode, accountKey, CStyle, HStyle, indent)
-
+                If row.ParentItem Is Nothing Then
+                    format_row(row, formatCode, fmtStr, CAStyle, HANStyle, HASStyle, indent, CAStyle, CEStyle, HANStyle, HASStyle, HENStyle, HESStyle)
+                Else
+                    format_row(row, formatCode, fmtStr, CEStyle, HENStyle, HESStyle, indent, CAStyle, CEStyle, HANStyle, HASStyle, HENStyle, HESStyle)
+                End If
             Next
 
             If vDgv.ColumnsHierarchy.Items(0).Items.Count = 0 Then
@@ -141,27 +163,31 @@ Friend Class DataGridViewsUtil
 
     End Sub
 
+    'If InputFormatsDictionary.Item(formatCode).Item(FORMAT_BORDER_VARIABLE) = 1 Then
+    '    CStyle.BorderColor = Color.DarkBlue                    
+    'Else
+    '    CStyle.BorderColor = Color.Transparent
+    'End If
+
+    'If InputFormatsDictionary.Item(formatCode).Item(FORMAT_DGV_BACKGROUND_VARIABLE) <> "" Then
+    '    ' HStyle.FillStyle = New FillStyleSolid(Color.FromArgb(InputFormatsDictionary.Item(formatCode).Item(FORMAT_DGV_BACKGROUND_VARIABLE)))
+    '    CStyle.FillStyle = New FillStyleSolid(Color.FromArgb(InputFormatsDictionary.Item(formatCode).Item(FORMAT_DGV_BACKGROUND_VARIABLE)))
+    'End If
+    ' HStyle.TextColor = Color.FromArgb(InputFormatsDictionary.Item(formatCode).Item(FORMAT_TEXT_COLOR_VARIABLE))
+    ' CStyle.TextColor = Color.FromArgb(InputFormatsDictionary.Item(formatCode).Item(FORMAT_TEXT_COLOR_VARIABLE))
     Private Sub format_row(ByRef row As HierarchyItem, _
                            ByRef formatCode As String, _
-                           ByRef accountKey As String, _
+                           ByRef format_string As String, _
                            ByRef CStyle As GridCellStyle, _
-                           ByRef HStyle As HierarchyItemStyle, _
-                           ByRef indent As Int32)
-
-        'If InputFormatsDictionary.Item(formatCode).Item(FORMAT_BORDER_VARIABLE) = 1 Then
-        '    CStyle.BorderColor = Color.DarkBlue                    
-        'Else
-        '    CStyle.BorderColor = Color.Transparent
-        'End If
-
-        'If InputFormatsDictionary.Item(formatCode).Item(FORMAT_DGV_BACKGROUND_VARIABLE) <> "" Then
-        '    ' HStyle.FillStyle = New FillStyleSolid(Color.FromArgb(InputFormatsDictionary.Item(formatCode).Item(FORMAT_DGV_BACKGROUND_VARIABLE)))
-        '    CStyle.FillStyle = New FillStyleSolid(Color.FromArgb(InputFormatsDictionary.Item(formatCode).Item(FORMAT_DGV_BACKGROUND_VARIABLE)))
-        'End If
-        ' HStyle.TextColor = Color.FromArgb(InputFormatsDictionary.Item(formatCode).Item(FORMAT_TEXT_COLOR_VARIABLE))
-        'CStyle.TextColor = Color.FromArgb(InputFormatsDictionary.Item(formatCode).Item(FORMAT_TEXT_COLOR_VARIABLE))
-
-        ' below -> should be applied only on first items of hierarchy - other format for sub items
+                           ByRef HNStyle As HierarchyItemStyle, _
+                           ByRef HSStyle As HierarchyItemStyle, _
+                           ByRef indent As Int32, _
+                           ByRef CAStyle As GridCellStyle, _
+                           ByRef CEStyle As GridCellStyle, _
+                           ByRef HANStyle As HierarchyItemStyle, _
+                           ByRef HASStyle As HierarchyItemStyle, _
+                           ByRef HENStyle As HierarchyItemStyle, _
+                           ByRef HESStyle As HierarchyItemStyle)
 
         Select Case indent
             Case 1 : row.Caption = "   " & row.Caption
@@ -169,44 +195,23 @@ Friend Class DataGridViewsUtil
             Case 3 : row.Caption = "            " & row.Caption
         End Select
 
-        If formatCode = "l" Then
-            'row.TextAlignment = ContentAlignment.MiddleRight
-            CStyle.TextColor = Color.Gray
-        End If
-
-        row.HierarchyItemStyleNormal = HStyle
+        row.HierarchyItemStyleNormal = HNStyle
+        row.HierarchyItemStyleSelected = HSStyle
         row.CellsStyle = CStyle
-
-        Dim fmtStr As String
-        Select Case (AccountsKeysFormatTypesDic.Item(accountKey).Item(ACCOUNT_TYPE_VARIABLE))
-            Case "MO" : fmtStr = "{0:C0}"
-            Case "RA" : fmtStr = "{0:P}"        ' put this in a table
-            Case "OP" : fmtStr = "{0:N}"        ' further evolution set unit
-            Case "NU" : fmtStr = "{0:N2}"
-            Case Else : fmtStr = "{0:C0}"
-        End Select
-
-        row.CellsFormatString = fmtStr
-        If row.Items.Count > 0 Then
-            For Each item As HierarchyItem In row.Items
-                item.HierarchyItemStyleNormal = HStyle
-                item.CellsStyle = CStyle
-                item.CellsFormatString = fmtStr
-                item.CellsTextAlignment = ContentAlignment.MiddleRight
-            Next
-        End If
+        row.CellsFormatString = format_string
         row.CellsTextAlignment = ContentAlignment.MiddleRight
-
+        'If row.Items.Count > 0 Then
+        '    For Each item As HierarchyItem In row.Items
+        '        item.HierarchyItemStyleNormal = HNStyle
+        '        item.HierarchyItemStyleSelected = HSStyle
+        '        item.CellsStyle = CStyle
+        '        item.CellsFormatString = fmtStr
+        '        item.CellsTextAlignment = ContentAlignment.MiddleRight
+        '    Next
+        'End If
         For Each sub_row In row.Items
-            format_row(sub_row, formatCode, accountKey, CStyle, HStyle, indent)
+            format_row(sub_row, formatCode, format_string, CEStyle, HENStyle, HESStyle, indent, CAStyle, CEStyle, HANStyle, HASStyle, HENStyle, HESStyle)
         Next
-
-    End Sub
-
-    Protected Friend Shared Sub WhitenRowsHierarchy(ByRef DGV As vDataGridView)
-
-        Dim HStyle As VIBlend.Utilities.HierarchyItemStyle = GridTheme.GetDefaultTheme(DGV.VIBlendTheme).HierarchyItemStyleNormal
-
 
     End Sub
 
@@ -307,7 +312,7 @@ Friend Class DataGridViewsUtil
 #End Region
 
 
-#Region "DGV Columns Initialization"
+#Region "ControllingUI2 DGV Columns Initialization"
 
     ' Initializes VDatagridViewColumns for NO VERSIONNING DGV 
     Friend Shared Function CreateDGVColumns(ByRef DataGridView As vDataGridView, _
@@ -315,8 +320,8 @@ Friend Class DataGridViewsUtil
                                              ByRef timeConfig As String, _
                                              ByRef columns_reinit As Boolean) As Dictionary(Of Integer, Int32)
 
-        Dim tmpDict As New Dictionary(Of Integer, Int32)        ' really used ?
-        Dim i As Int32 = 0                                      ' i not incremented
+        Dim tmpDict As New Dictionary(Of Integer, Int32)
+        Dim i As Int32 = 0
         Dim periodStr As String
 
         If columns_reinit = True Then DataGridView.ColumnsHierarchy.Clear()
@@ -326,7 +331,7 @@ Friend Class DataGridViewsUtil
                 Case Else : periodStr = Format(DateTime.FromOADate(period), "Short date")
             End Select
             Dim column_ As HierarchyItem = DataGridView.ColumnsHierarchy.Items.Add(periodStr)
-            column_.TextAlignment = ContentAlignment.MiddleRight
+            column_.TextAlignment = ContentAlignment.MiddleCenter
             tmpDict.Add(period, i)
             i = i + 1
         Next
@@ -371,7 +376,7 @@ Friend Class DataGridViewsUtil
 #End Region
 
 
-#Region "DGV rows initialization"
+#Region "ControllingUI2 DGV rows initialization"
 
     ' Initializes VDataGridViewRows Hierarchy
     ' Calls the 2 private subs below
@@ -483,6 +488,9 @@ Friend Class DataGridViewsUtil
 
 
         Dim sub_row As HierarchyItem = row.Items.Add(EntitiesTokenNamesDict.Item(entity_node.Name))
+        '   sub_row.HierarchyItemStyleNormal = GridTheme.GetDefaultTheme(ENTITIES_ROWS_THEME).HierarchyItemStyleNormal
+        '   sub_row.HierarchyItemStyleSelected = GridTheme.GetDefaultTheme(ENTITIES_ROWS_THEME).HierarchyItemStyleSelected
+
         For Each child In entity_node.Nodes
             SetUpRowsHierarchyEntitiesHierarchy(sub_row, child, DGV, entities_token_names_dict)
         Next
@@ -505,7 +513,7 @@ Friend Class DataGridViewsUtil
         For j As Int32 = 1 To DGV.ColumnsHierarchy.Items.Count - 1
             DGV.ColumnsHierarchy.Items(j).CellsFormatString = DEFAULT_FORMAT_STRING
             DGV.ColumnsHierarchy.Items(j).CellsTextAlignment = ContentAlignment.MiddleRight
-            DGV.ColumnsHierarchy.Items(j).TextAlignment = ContentAlignment.MiddleRight
+            DGV.ColumnsHierarchy.Items(j).TextAlignment = ContentAlignment.MiddleCenter
         Next
 
         DGV.RowsHierarchy.Items.Add("Base Scenario")
@@ -535,8 +543,14 @@ Friend Class DataGridViewsUtil
 
     Protected Friend Shared Sub FormatBasicDGV(ByRef DGV As vDataGridView)
 
-        DGV.ColumnsHierarchy.AutoResize(AutoResizeMode.FIT_ALL)
-        'DGV.ColumnsHierarchy.AutoStretchColumns = True
+        DGV.ColumnsHierarchy.AutoStretchColumns = True
+        AdjustDGVFColumnWidth(DGV, 0)
+        Try
+            DGV.Refresh()
+            DGV.RowsHierarchy.Items(0).Selected = True
+        Catch ex As Exception
+
+        End Try
 
     End Sub
 
@@ -574,7 +588,6 @@ Friend Class DataGridViewsUtil
 
 #Region "Send to Excel Functions"
 
-
     ' DATA MINING - Drop the content of a DataGridView sur Excel - NO VERSION - SINGLE ENTITY
     Public Function WriteCurrentEntityToExcel(ByRef destination As Excel.Range, ByRef DatagridView As vDataGridView) As Int32
 
@@ -606,10 +619,7 @@ Friend Class DataGridViewsUtil
 
     End Function
 
-    ' DATA MINING -                                                           - DRILL DOWN 
-
-
-    ' CONTROLLING -                                                           - SINGLE ENTITY  
+    '  CONTROLLING -                                                           - SINGLE ENTITY  
     Public Function writeControllingCurrentEntityToExcel(ByRef destination As Excel.Range, ByRef dataGridView As vDataGridView) _
                                                           As Integer
 
@@ -656,6 +666,13 @@ Friend Class DataGridViewsUtil
         Return i + 1
 
     End Function
+
+    Protected Friend Sub CopyDGVToExcelGeneric(ByRef DGV As vDataGridView, _
+                                               ByRef info As String())
+
+
+
+    End Sub
 
 
 #End Region
@@ -754,9 +771,9 @@ Friend Class DataGridViewsUtil
 #End Region
 
 
-#Region "Utilities"
+#Region "Formatting Utilities"
 
-    Public Shared Sub FormatDGVFirstColumn(ByRef dgv As vDataGridView)
+    Protected Friend Shared Sub FormatDGVRowsHierarchy(ByRef dgv As vDataGridView)
 
         Dim maxLength As Int32 = 0
         Dim depth As Int32 = 0
@@ -773,7 +790,22 @@ Friend Class DataGridViewsUtil
 
     End Sub
 
-    Public Shared Sub GetItemMaxLength(ByRef item As HierarchyItem, ByRef maxLength As Int32, ByRef depth As Int32)
+    Protected Friend Shared Sub AdjustDGVFColumnWidth(ByRef DGV As vDataGridView, _
+                                               ByRef column_index As Int32)
+
+        Dim maxLength As Int32 = 0
+        Dim characters_size As Single = DGV.RowsHierarchy.Items(0).CellsStyle.Font.Size
+
+        For Each item In DGV.RowsHierarchy.Items
+            GetColumnMaxLength(item, column_index, maxLength)
+        Next
+        DGV.ColumnsHierarchy.Items(column_index).Width = maxLength * characters_size
+
+    End Sub
+
+    Protected Friend Shared Sub GetItemMaxLength(ByRef item As HierarchyItem, _
+                                                 ByRef maxLength As Int32, _
+                                                 ByRef depth As Int32)
 
         If item.Caption.Length > maxLength Then
             maxLength = item.Caption.Length
@@ -785,6 +817,19 @@ Friend Class DataGridViewsUtil
 
     End Sub
 
+    Protected Friend Shared Sub GetColumnMaxLength(ByRef item As HierarchyItem, _
+                                                 ByVal column_index As Int32, _
+                                                 ByRef maxLength As Int32)
+
+        Dim text As String = item.DataGridView.CellsArea.GetCellValue(item, item.DataGridView.ColumnsHierarchy.Items(column_index))
+        If Not text Is Nothing AndAlso text.Length > maxLength Then
+            maxLength = text.Length
+        End If
+        For Each subItem As HierarchyItem In item.Items
+            GetColumnMaxLength(subItem, column_index, maxLength)
+        Next
+
+    End Sub
 
 
 #End Region
