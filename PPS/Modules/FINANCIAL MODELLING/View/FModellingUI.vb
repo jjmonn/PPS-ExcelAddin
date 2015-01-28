@@ -119,6 +119,7 @@ Friend Class FModellingUI
 
         VersionsTV = input_versionsTV
         EntitiesTV = input_entitiesTV
+        cTreeViews_Functions.CheckAllNodes(EntitiesTV)
         AddHandler VersionsTV.AfterSelect, AddressOf VersionsTV_AfterSelect
         AddHandler EntitiesTV.AfterSelect, AddressOf EntitiesTV_AfterSelect
         AddHandler VersionsTV.KeyDown, AddressOf versionsTV_KeyDown

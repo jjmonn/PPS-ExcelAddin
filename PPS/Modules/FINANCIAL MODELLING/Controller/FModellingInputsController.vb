@@ -63,6 +63,7 @@ Friend Class FModellingInputsController
         FModellingAccount = input_FModellingAccount
         Model = New ControlingUI2Model()
         Version.LoadVersionsTree(VersionsTV)
+        cTreeViews_Functions.CheckAllNodes(EntitiesTV)
         Entity.LoadEntitiesTree(EntitiesTV)
         inputs_list = FModellingAccountsMapping.GetFModellingAccountsList(FINANCIAL_MODELLING_ID_VARIABLE, FINANCIAL_MODELLING_INPUT_TYPE)
         accounts_id_names_dic = AccountsMapping.GetAccountsDictionary(ACCOUNT_ID_VARIABLE, ACCOUNT_NAME_VARIABLE)
@@ -146,11 +147,12 @@ Friend Class FModellingInputsController
         periods_list = Versions.GetPeriodList(version_id)
         Dim nb_periods As Int32 = Versions.ReadVersion(version_id, VERSIONS_NB_PERIODS_VAR)
         Dim start_period As Int32 = Versions.ReadVersion(version_id, VERSIONS_START_PERIOD_VAR)
+        Dim rates_version As String = Versions.ReadVersion(version_id, VERSIONS_RATES_VERSION_ID_VAR)
         Versions.Close()
         Model.compute_selection_complete(version_id, _
                                          View.PBar, _
                                          time_configuration, _
-                                         GLOBALCurrentRatesVersionCode, _
+                                         rates_version, _
                                          periods_list, _
                                          MAIN_CURRENCY, _
                                          start_period, _

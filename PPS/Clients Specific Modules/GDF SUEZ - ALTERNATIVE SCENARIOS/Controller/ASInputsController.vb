@@ -10,7 +10,7 @@
 '
 '
 ' Author:Julien Monnereau
-' Last modified:16/01/2015
+' Last modified:28/01/2015
 
 
 Imports System.Windows.Forms
@@ -56,6 +56,7 @@ Friend Class ASInputsController
         
         Version.LoadVersionsTree(VersionsTV)
         Entity.LoadEntitiesTree(EntitiesTV)
+        cTreeViews_Functions.CheckAllNodes(EntitiesTV)
         MarketIndexVersion.load_market_index_version_tv(MarketPricesTV)
 
         versions_id_list = VersionsMapping.GetVersionsList(VERSIONS_CODE_VARIABLE)

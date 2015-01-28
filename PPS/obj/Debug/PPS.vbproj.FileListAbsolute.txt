@@ -641,3 +641,4 @@ C:\Users\PPS\Documents\GitHub\PPS-Repo.git\trunk\PPS\obj\Debug\PPS.StatusReportI
 C:\Users\PPS\Documents\GitHub\PPS-Repo.git\trunk\PPS\obj\Debug\PPS.vbproj.GenerateResource.Cache
 C:\Users\PPS\Documents\GitHub\PPS-Repo.git\trunk\PPS\obj\Debug\PPS.dll
 C:\Users\PPS\Documents\GitHub\PPS-Repo.git\trunk\PPS\obj\Debug\PPS.pdb
+C:\Users\PPS\Documents\GitHub\PPS-Repo.git\trunk\PPS\obj\Debug\PPS.vbprojResolveAssemblyReference.cache

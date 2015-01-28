@@ -371,7 +371,7 @@ Partial Class ControllingUI_2
         Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 120.0!))
         Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 120.0!))
         Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 120.0!))
-        Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 372.0!))
+        Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 373.0!))
         Me.TableLayoutPanel3.Controls.Add(Me.TableLayoutPanel1, 4, 0)
         Me.TableLayoutPanel3.Controls.Add(Me.Panel1, 0, 0)
         Me.TableLayoutPanel3.Controls.Add(Me.Panel2, 1, 0)
@@ -381,7 +381,7 @@ Partial Class ControllingUI_2
         Me.TableLayoutPanel3.Location = New System.Drawing.Point(3, 3)
         Me.TableLayoutPanel3.Name = "TableLayoutPanel3"
         Me.TableLayoutPanel3.RowCount = 1
-        Me.TableLayoutPanel3.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 75.0!))
+        Me.TableLayoutPanel3.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 76.0!))
         Me.TableLayoutPanel3.Size = New System.Drawing.Size(855, 74)
         Me.TableLayoutPanel3.TabIndex = 12
         '
@@ -398,7 +398,7 @@ Partial Class ControllingUI_2
         Me.TableLayoutPanel1.Controls.Add(Me.Label2, 0, 2)
         Me.TableLayoutPanel1.Controls.Add(Me.VersionTB, 1, 1)
         Me.TableLayoutPanel1.Controls.Add(Me.CurrencyTB, 1, 2)
-        Me.TableLayoutPanel1.Location = New System.Drawing.Point(564, 4)
+        Me.TableLayoutPanel1.Location = New System.Drawing.Point(565, 4)
         Me.TableLayoutPanel1.Name = "TableLayoutPanel1"
         Me.TableLayoutPanel1.RowCount = 3
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333!))
@@ -473,7 +473,7 @@ Partial Class ControllingUI_2
         Me.Panel1.Location = New System.Drawing.Point(1, 1)
         Me.Panel1.Margin = New System.Windows.Forms.Padding(0)
         Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(120, 75)
+        Me.Panel1.Size = New System.Drawing.Size(120, 76)
         Me.Panel1.TabIndex = 2
         '
         'SelectionBT
@@ -551,7 +551,7 @@ Partial Class ControllingUI_2
         Me.Panel2.Location = New System.Drawing.Point(122, 1)
         Me.Panel2.Margin = New System.Windows.Forms.Padding(0)
         Me.Panel2.Name = "Panel2"
-        Me.Panel2.Size = New System.Drawing.Size(120, 75)
+        Me.Panel2.Size = New System.Drawing.Size(120, 76)
         Me.Panel2.TabIndex = 3
         '
         'ExcelMenu
@@ -561,7 +561,7 @@ Partial Class ControllingUI_2
         Me.ExcelMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ExcelExportMBT})
         Me.ExcelMenu.Location = New System.Drawing.Point(30, 46)
         Me.ExcelMenu.Name = "ExcelMenu"
-        Me.ExcelMenu.Size = New System.Drawing.Size(145, 24)
+        Me.ExcelMenu.Size = New System.Drawing.Size(53, 24)
         Me.ExcelMenu.TabIndex = 3
         Me.ExcelMenu.Text = "MenuStrip2"
         '
@@ -605,7 +605,7 @@ Partial Class ControllingUI_2
         Me.Panel3.Location = New System.Drawing.Point(243, 1)
         Me.Panel3.Margin = New System.Windows.Forms.Padding(0)
         Me.Panel3.Name = "Panel3"
-        Me.Panel3.Size = New System.Drawing.Size(120, 75)
+        Me.Panel3.Size = New System.Drawing.Size(120, 76)
         Me.Panel3.TabIndex = 4
         '
         'ControllingMenu
@@ -671,7 +671,7 @@ Partial Class ControllingUI_2
         Me.Panel4.Location = New System.Drawing.Point(364, 1)
         Me.Panel4.Margin = New System.Windows.Forms.Padding(0)
         Me.Panel4.Name = "Panel4"
-        Me.Panel4.Size = New System.Drawing.Size(120, 75)
+        Me.Panel4.Size = New System.Drawing.Size(120, 76)
         Me.Panel4.TabIndex = 5
         '
         'RefreshMenu

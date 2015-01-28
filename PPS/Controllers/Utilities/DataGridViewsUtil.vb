@@ -877,7 +877,13 @@ Friend Class DataGridViewsUtil
                                                ByRef column_index As Int32)
 
         Dim maxLength As Int32 = 0
-        Dim characters_size As Single = DGV.RowsHierarchy.Items(0).CellsStyle.Font.Size
+        Dim characters_size As Single
+        Try
+            characters_size = DGV.RowsHierarchy.Items(0).CellsStyle.Font.Size
+        Catch ex As Exception
+            characters_size = BASIC_DGV_REPORT_FONT_SIZE
+        End Try
+
 
         For Each item In DGV.RowsHierarchy.Items
             GetColumnMaxLength(item, column_index, maxLength)
