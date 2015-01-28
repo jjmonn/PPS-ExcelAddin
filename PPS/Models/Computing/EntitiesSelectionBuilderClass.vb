@@ -23,7 +23,7 @@ Imports System.Collections
 
 
 
-Public Class EntitiesSelectionBuilderClass
+Friend Class EntitiesSelectionBuilderClass
 
 
 #Region "Instance Variables"
@@ -44,7 +44,7 @@ Public Class EntitiesSelectionBuilderClass
 #End Region
 
 
-    Public Sub New()
+    Protected Friend Sub New()
 
         Entity.LoadEntitiesTree(EntitiesTV)
         Category.LoadCategoriesTree(CategoriesTVInstance)
@@ -84,7 +84,7 @@ Public Class EntitiesSelectionBuilderClass
         If SelectionDictionary.Count > 0 Then
 
             Dim values As String
-            
+
             For Each Category As String In SelectionDictionary.Keys
                 Dim tmpStr As String
                 values = "'" + Join(SelectionDictionary.Item(Category).ToArray, "','") + "'"

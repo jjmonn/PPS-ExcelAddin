@@ -378,6 +378,7 @@ Friend Class DLL3_Interface
     Friend Function InitializeEntitiesAggregation(ByRef input_entity_node As TreeNode) As List(Of String)
 
         all_entities_ids = cTreeViews_Functions.GetNodesKeysList(input_entity_node)
+        cTreeViews_Functions.FilterSelectedNodes(input_entity_node, all_entities_ids)
         FillInEntitiesCurrencies(all_entities_ids, entities_currencies)
 
         InitializeEntitiesAggregationDll3(objptr, _
@@ -393,8 +394,8 @@ Friend Class DLL3_Interface
             Else
                 node = input_entity_node.Nodes.Find(entity_id, True)(0)
             End If
-            children_array = cTreeViews_Functions.GetNodeChildrenIDsStringArray(node)
-            AddEntityToEntitiesAggregationHierarchyDll3(objptr, entity_id, children_array, node.Nodes.Count)
+            children_array = cTreeViews_Functions.GetNodeChildrenIDsStringArray(node, True)
+            AddEntityToEntitiesAggregationHierarchyDll3(objptr, entity_id, children_array, children_array.Count)
         Next
 
         Return all_entities_ids

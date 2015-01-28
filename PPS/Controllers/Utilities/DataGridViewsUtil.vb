@@ -17,7 +17,7 @@
 '
 '
 '
-' Last modified date: 26/01/2014
+' Last modified date: 27/01/2014
 ' Author: Julien Monnereau
 
 
@@ -45,16 +45,16 @@ Friend Class DataGridViewsUtil
     Private accFtypes As Hashtable
 
     ' Constants
-    Private FIXED_SINGLE_HIERARCHY_COLUMN_WIDTH As Single = 150
+    Private FIXED_SINGLE_HIERARCHY_COLUMN_WIDTH As Single = 100
     Public Const AVERAGE_CHAR_SIZE As Int32 = 9
     Public Const INDENT_CHAR_SIZE As Int32 = 2
     Private Const BASIC_DGV_REPORT_THEME As VIBLEND_THEME = VIBLEND_THEME.OFFICE2010SILVER
     Private Const BASIC_DGV_REPORT_FONT_SIZE As Single = 8
     Private Const BASIC_DGV_REPORT_FIRST_COLUMN_CAPTION As String = ""
 
-    Friend Shared ADJUSTMENTS_ROW_THEME As VIBLEND_THEME = VIBLEND_THEME.VISTABLUE
+    Friend Shared ADJUSTMENTS_ROW_THEME As VIBLEND_THEME = VIBLEND_THEME.OFFICE2010BLACK
     Friend Shared ADJUSTMENTS_COLOR As Color = Color.Blue
-    Friend Shared ENTITIES_ROWS_THEME As VIBLEND_THEME = VIBLEND_THEME.OFFICE2003SILVER
+    Friend Shared ENTITIES_ROWS_THEME As VIBLEND_THEME = VIBLEND_THEME.OFFICE2010BLUE
 
 
 #End Region
@@ -486,14 +486,12 @@ Friend Class DataGridViewsUtil
                                                     ByRef DGV As vDataGridView, _
                                                     ByRef entities_token_names_dict As Hashtable)
 
-
+        If entity_node.Checked = True Then
         Dim sub_row As HierarchyItem = row.Items.Add(EntitiesTokenNamesDict.Item(entity_node.Name))
-        '   sub_row.HierarchyItemStyleNormal = GridTheme.GetDefaultTheme(ENTITIES_ROWS_THEME).HierarchyItemStyleNormal
-        '   sub_row.HierarchyItemStyleSelected = GridTheme.GetDefaultTheme(ENTITIES_ROWS_THEME).HierarchyItemStyleSelected
-
         For Each child In entity_node.Nodes
             SetUpRowsHierarchyEntitiesHierarchy(sub_row, child, DGV, entities_token_names_dict)
         Next
+        End If
 
     End Sub
 
@@ -565,8 +563,8 @@ Friend Class DataGridViewsUtil
         Dim itemStyleSelected As HierarchyItemStyle = GridTheme.GetDefaultTheme(ADJUSTMENTS_ROW_THEME).HierarchyItemStyleSelected
         Dim CStyleNormal As GridCellStyle = GridTheme.GetDefaultTheme(ADJUSTMENTS_ROW_THEME).GridCellStyle
 
-        itemStyleNormal.TextColor = ADJUSTMENTS_COLOR
-        itemStyleSelected.TextColor = ADJUSTMENTS_COLOR
+        ' itemStyleNormal.TextColor = ADJUSTMENTS_COLOR
+        ' itemStyleSelected.TextColor = ADJUSTMENTS_COLOR
         CStyleNormal.TextColor = ADJUSTMENTS_COLOR
 
         itemStyleSelected.Font = New System.Drawing.Font(row.DataGridView.Font.FontFamily, BASIC_DGV_REPORT_FONT_SIZE)
@@ -588,8 +586,8 @@ Friend Class DataGridViewsUtil
 
 #Region "Send to Excel Functions"
 
-    ' DATA MINING - Drop the content of a DataGridView sur Excel - NO VERSION - SINGLE ENTITY
-    Public Function WriteCurrentEntityToExcel(ByRef destination As Excel.Range, ByRef DatagridView As vDataGridView) As Int32
+    ' One Version - Top Entity
+    Protected Friend Function WriteCurrentEntityToExcel(ByRef destination As Excel.Range, ByRef DatagridView As vDataGridView) As Int32
 
         Dim i As Int32 = 1
         Dim j As Int32 = 1
@@ -619,9 +617,9 @@ Friend Class DataGridViewsUtil
 
     End Function
 
-    '  CONTROLLING -                                                           - SINGLE ENTITY  
-    Public Function writeControllingCurrentEntityToExcel(ByRef destination As Excel.Range, ByRef dataGridView As vDataGridView) _
-                                                          As Integer
+    ' Several Versions, Top Entity
+    Protected Friend Function writeControllingCurrentEntityToExcel(ByRef destination As Excel.Range, _
+                                                         ByRef dataGridView As vDataGridView) As Integer
 
         Dim i As Int32 = 1
         Dim j As Int32 = 1
@@ -667,13 +665,98 @@ Friend Class DataGridViewsUtil
 
     End Function
 
-    Protected Friend Sub CopyDGVToExcelGeneric(ByRef DGV As vDataGridView, _
-                                               ByRef info As String())
+    ' improve process -> here only write down on excel
+    ' formats taken care in controllingDropOnExcel
+#Region "Generic DGV Export to Excel"
 
 
+    Protected Friend Shared Function CopyDGVToExcelGeneric(ByRef DGV As vDataGridView, _
+                                                      ByRef dest_range As Excel.Range, _
+                                                      ByRef info_array As String())
+
+        Dim i As Int32 = 1
+        Dim j As Int32 = 1
+        Dim nb_columns_floors As Int32 = 1
+     
+        For Each column As HierarchyItem In DGV.ColumnsHierarchy.Items
+            SetupColumnsTitles(column, dest_range, i, j, nb_columns_floors)
+        Next
+
+        j = 0
+        i = i + 1
+        For Each row As HierarchyItem In DGV.RowsHierarchy.Items
+            SetupRowsTitles(row, dest_range, i, j)
+        Next
+
+        j = 1
+        i = nb_columns_floors + 1
+        For Each row As HierarchyItem In DGV.RowsHierarchy.Items
+            CopyRowHierarchy(row, dest_range, i, j)
+            i = i + 1
+        Next
+        Return i
+
+    End Function
+
+    Protected Friend Shared Sub SetupColumnsTitles(ByRef column As HierarchyItem, _
+                                                   ByRef range As Excel.Range, _
+                                                   ByRef i As Int32, _
+                                                   ByRef j As Int32, _
+                                                   ByRef parent_j As Int32)
+
+        range.Offset(i, j).Value = column.Caption
+        j = j + 1
+        If column.Items.Count > 0 Then
+            For Each sub_column As HierarchyItem In column.Items
+                i = i + 1
+                SetupColumnsTitles(sub_column, range, i, j, parent_j)
+            Next
+            parent_j = parent_j + column.Items.Count
+        End If
 
     End Sub
 
+    Protected Friend Shared Sub SetupRowsTitles(ByRef row As HierarchyItem, _
+                                                  ByRef range As Excel.Range, _
+                                                  ByRef i As Int32, _
+                                                  ByRef j As Int32)
+
+        range.Offset(i, j).Value = row.Caption
+        i = i + 1
+        For Each sub_row As HierarchyItem In row.Items
+            SetupRowsTitles(sub_row, range, i, j)
+        Next
+
+    End Sub
+
+    Protected Friend Shared Sub CopyRowHierarchy(ByRef row As HierarchyItem, _
+                                                 ByRef range As Excel.Range, _
+                                                 ByRef i As Int32, ByRef j As Int32)
+
+        j = 1
+        For Each column As HierarchyItem In row.DataGridView.ColumnsHierarchy.Items
+            CopyColumnHierarchy(row, column, range, i, j)
+        Next
+        i = i + 1
+        For Each sub_row In row.Items
+            CopyRowHierarchy(sub_row, range, i, j)
+        Next
+
+    End Sub
+
+    Protected Friend Shared Sub CopyColumnHierarchy(ByRef row As HierarchyItem, ByRef column As HierarchyItem, _
+                                                    ByRef range As Excel.Range, _
+                                                    ByRef i As Int32, ByRef j As Int32)
+
+        range.Offset(i, j).Value = row.DataGridView.CellsArea.GetCellValue(row, column)
+        j = j + 1
+        For Each sub_column In column.Items
+            CopyColumnHierarchy(row, sub_column, range, i, j)
+        Next
+
+    End Sub
+
+#End Region
 
 #End Region
 

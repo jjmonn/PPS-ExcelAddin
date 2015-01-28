@@ -12,7 +12,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 24/01/2015
+' Last modified: 27/01/2015
 
 Imports System.Windows.Forms
 Imports System.Collections.Generic
@@ -54,6 +54,8 @@ Friend Class ControlingUI2Controller
 
 
 #Region "Interface"
+
+#Region "Compute"
 
     Friend Sub compute_entity_complete(ByRef entity_node As TreeNode)
 
@@ -144,11 +146,14 @@ Friend Class ControlingUI2Controller
                                          View.CurrenciesCLB.CheckedItems(0), _
                                          start_period, _
                                          nb_periods, _
-                                         ESB.StrSqlQuery)
+                                         ESB.StrSqlQuery, _
+                                         GetAdjustmentsFilter)
 
         MODEL.LoadOutputMatrix(View.PBar)
 
     End Sub
+
+#End Region
 
 #End Region
 
@@ -171,7 +176,9 @@ Friend Class ControlingUI2Controller
     Protected Friend Sub LoadAdjustments()
 
         ' Adapt to several versions case
-        View.DisplayAdjustments(MODEL.GetAdjustments(versions_id_array(0), View.CurrenciesCLB.CheckedItems(0)))
+        View.DisplayAdjustments(MODEL.GetAdjustments(versions_id_array(0), _
+                                                     View.CurrenciesCLB.CheckedItems(0), _
+                                                     GetAdjustmentsFilter))
 
     End Sub
 
@@ -210,6 +217,17 @@ Friend Class ControlingUI2Controller
         MODEL.delete_model()
 
     End Sub
+
+    Private Function GetAdjustmentsFilter() As List(Of String)
+
+        Dim tmp_list As List(Of String) = cTreeViews_Functions.GetCheckedNodesID(View.adjustmentsTV)
+        If tmp_list.Count <> View.adjustmentsTV.Nodes.Count Then
+            Return tmp_list
+        Else
+            Return Nothing
+        End If
+
+    End Function
 
 #End Region
 

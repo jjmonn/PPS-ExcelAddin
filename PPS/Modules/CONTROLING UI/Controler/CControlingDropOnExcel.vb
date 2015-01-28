@@ -82,12 +82,15 @@ Friend Class CControlingDropOnExcel
 
     Protected Friend Sub SendDropDownToExcel()
 
-        ' TBI
-        ' Reflexion so far: send the dropdown to excel will be too heavy unmanageable 
-        ' solutions : 
-        '       - Use excel rows grouping - nb levels = 
-        '       - Send data to pivot table
-
+        If Controller.currentEntity <> "" Then
+            Dim destination = CWorksheetWrittingFunctions.CreateReceptionWS(Controller.currentEntity)
+            Dim offset As Int32 = 0
+            For Each tab_ As TabPage In View.TabControl1.TabPages
+                Dim DGV As vDataGridView = tab_.Controls(0)
+                offset = DataGridViewsUtil.CopyDGVToExcelGeneric(DGV, destination, {"1st try", Controller.currentEntity})
+                destination = destination.Offset(offset, 0)
+            Next
+        End If
 
     End Sub
 

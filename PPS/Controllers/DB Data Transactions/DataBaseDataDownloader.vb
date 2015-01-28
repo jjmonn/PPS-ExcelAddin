@@ -11,7 +11,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 24/01/2015
+' Last modified: 27/01/2015
 '
 
 
@@ -120,10 +120,11 @@ Friend Class DataBaseDataDownloader
 
     Friend Function build_data_hash(ByRef entitiesIDList() As String, _
                                     ByRef ViewName As String, _
-                                    Optional ByRef strSqlAdditionalClause As String = "") As Boolean
+                                    Optional ByRef strSqlAdditionalClause As String = "", _
+                                    Optional ByRef adjustments_id_list As List(Of String) = Nothing) As Boolean
 
         ClearDatasDictionaries()
-        If BuildDataRSTForEntityLoop(entitiesIDList, ViewName, strSqlAdditionalClause) Then
+        If BuildDataRSTForEntityLoop(entitiesIDList, ViewName, strSqlAdditionalClause, adjustments_id_list) Then
             For Each entity_id In entitiesIDList
                 StoreEntityData(entity_id)
             Next
@@ -140,7 +141,8 @@ Friend Class DataBaseDataDownloader
 
     Friend Function BuildDataRSTForEntityLoop(ByRef entitiesIDList() As String, _
                                              ByRef ViewName As String, _
-                                             Optional ByRef strSqlAdditionalClause As String = "") As Boolean
+                                             Optional ByRef strSqlAdditionalClause As String = "", _
+                                             Optional ByRef adjustments_id_list As List(Of String) = Nothing) As Boolean
 
         Dim keysSelection As String = "'" + Join(entitiesIDList, "','") + "'"
 
@@ -150,9 +152,15 @@ Friend Class DataBaseDataDownloader
                              + DATA_ASSET_ID_VARIABLE _
                              + " FROM " + VIEWS_DATABASE + "." + ViewName + " D" + ", " + VIEWS_DATABASE + "." + Entities_View + " A" _
                              + " WHERE " + "D." + DATA_ASSET_ID_VARIABLE + "=" + "A." + ASSETS_TREE_ID_VARIABLE _
-                             + " AND " + "A." + ASSETS_TREE_ID_VARIABLE + " IN " + "(" + keysSelection + ")"
+                             + " AND " + "A." + ASSETS_TREE_ID_VARIABLE + " IN (" + keysSelection + ")"
 
         If strSqlAdditionalClause <> "" Then strSQL = strSQL + " AND " + strSqlAdditionalClause ' Case filter on specific entities
+
+        If Not adjustments_id_list Is Nothing Then
+            Dim adjustments_selection As String = "'" + Join(adjustments_id_list.ToArray(), "','") + "'"
+            strSQL = strSQL + " AND D." + DATA_ADJUSTMENT_ID_VARIABLE + " IN (" + adjustments_selection + ")"
+        End If
+
         Dim str_sql_group As String = " GROUP BY " + DATA_PERIOD_VARIABLE + "," + _
                                                      DATA_ACCOUNT_ID_VARIABLE + "," + _
                                                      DATA_ASSET_ID_VARIABLE
@@ -254,12 +262,14 @@ Friend Class DataBaseDataDownloader
 #Region "Adjustments Queries"
 
     ' Return AdjustmentsDict (account_id)(entity_id)(adjustment_id)(period) -> value
+    ' Add optional filter param on adjustments_id
     Protected Friend Function GetAdjustments(ByRef version_id As String, _
                                              ByRef entitiesIDList As String(), _
-                                             ByRef destination_currency As String)
+                                             ByRef destination_currency As String, _
+                                             Optional ByRef adjustments_id_list As List(Of String) = Nothing)
 
         Dim adjustments_dic As New Dictionary(Of String, Dictionary(Of String, Dictionary(Of String, Dictionary(Of Int32, Double))))
-        If AdjustmentsQuery(version_id, entitiesIDList) = True Then
+        If AdjustmentsQuery(version_id, entitiesIDList, adjustments_id_list) = True Then
 
             ConvertAdjustments(version_id, _
                                destination_currency, _
@@ -275,7 +285,8 @@ Friend Class DataBaseDataDownloader
     End Function
 
     Private Function AdjustmentsQuery(ByRef version_id As String, _
-                                      ByRef entitiesIDList As String()) As Boolean
+                                      ByRef entitiesIDList As String(), _
+                                      ByRef adjustments_id_list As List(Of String)) As Boolean
 
         Dim entities_ids As String = "'" + Join(entitiesIDList, "','") + "'"
 
@@ -288,6 +299,11 @@ Friend Class DataBaseDataDownloader
                              & " FROM " & VIEWS_DATABASE & "." & version_id & User_Credential & " D" & ", " & VIEWS_DATABASE + "." & Entities_View + " A" _
                              & " WHERE " & "D." & DATA_ASSET_ID_VARIABLE & "=" & "A." & ASSETS_TREE_ID_VARIABLE _
                              & " AND " & DATA_ASSET_ID_VARIABLE & " IN " & "(" & entities_ids & ")"
+
+        If Not adjustments_id_list Is Nothing Then
+            Dim adjustments_selection As String = "'" + Join(adjustments_id_list.ToArray(), "','") + "'"
+            strSQL = strSQL + " AND " + DATA_ADJUSTMENT_ID_VARIABLE + " IN (" + adjustments_selection + ")"
+        End If
 
         Return srv.openRstSQL(strSQL, ModelServer.FWD_CURSOR)
 

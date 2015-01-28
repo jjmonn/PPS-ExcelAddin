@@ -85,6 +85,9 @@ Partial Class ControllingUI_2
         Me.RefreshMenu = New System.Windows.Forms.MenuStrip()
         Me.RefreshMBT = New System.Windows.Forms.ToolStripMenuItem()
         Me.RefreshBT = New System.Windows.Forms.Button()
+        Me.AdjustmentsRCM = New System.Windows.Forms.ContextMenuStrip(Me.components)
+        Me.SelectAllToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
+        Me.UnselectAllToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
         Me.entitiesRightClickMenu.SuspendLayout()
         Me.periodsRightClickMenu.SuspendLayout()
         Me.DGVsRCM.SuspendLayout()
@@ -105,6 +108,7 @@ Partial Class ControllingUI_2
         Me.ControllingMenu.SuspendLayout()
         Me.Panel4.SuspendLayout()
         Me.RefreshMenu.SuspendLayout()
+        Me.AdjustmentsRCM.SuspendLayout()
         Me.SuspendLayout()
         '
         'MenuIcons
@@ -367,7 +371,7 @@ Partial Class ControllingUI_2
         Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 120.0!))
         Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 120.0!))
         Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 120.0!))
-        Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 12.0!))
+        Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 372.0!))
         Me.TableLayoutPanel3.Controls.Add(Me.TableLayoutPanel1, 4, 0)
         Me.TableLayoutPanel3.Controls.Add(Me.Panel1, 0, 0)
         Me.TableLayoutPanel3.Controls.Add(Me.Panel2, 1, 0)
@@ -377,7 +381,7 @@ Partial Class ControllingUI_2
         Me.TableLayoutPanel3.Location = New System.Drawing.Point(3, 3)
         Me.TableLayoutPanel3.Name = "TableLayoutPanel3"
         Me.TableLayoutPanel3.RowCount = 1
-        Me.TableLayoutPanel3.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
+        Me.TableLayoutPanel3.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 75.0!))
         Me.TableLayoutPanel3.Size = New System.Drawing.Size(855, 74)
         Me.TableLayoutPanel3.TabIndex = 12
         '
@@ -394,7 +398,7 @@ Partial Class ControllingUI_2
         Me.TableLayoutPanel1.Controls.Add(Me.Label2, 0, 2)
         Me.TableLayoutPanel1.Controls.Add(Me.VersionTB, 1, 1)
         Me.TableLayoutPanel1.Controls.Add(Me.CurrencyTB, 1, 2)
-        Me.TableLayoutPanel1.Location = New System.Drawing.Point(561, 4)
+        Me.TableLayoutPanel1.Location = New System.Drawing.Point(564, 4)
         Me.TableLayoutPanel1.Name = "TableLayoutPanel1"
         Me.TableLayoutPanel1.RowCount = 3
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333!))
@@ -469,7 +473,7 @@ Partial Class ControllingUI_2
         Me.Panel1.Location = New System.Drawing.Point(1, 1)
         Me.Panel1.Margin = New System.Windows.Forms.Padding(0)
         Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(120, 72)
+        Me.Panel1.Size = New System.Drawing.Size(120, 75)
         Me.Panel1.TabIndex = 2
         '
         'SelectionBT
@@ -479,9 +483,9 @@ Partial Class ControllingUI_2
         Me.SelectionBT.FlatAppearance.BorderSize = 0
         Me.SelectionBT.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Silver
         Me.SelectionBT.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.SelectionBT.Location = New System.Drawing.Point(34, 4)
+        Me.SelectionBT.Location = New System.Drawing.Point(37, 5)
         Me.SelectionBT.Name = "SelectionBT"
-        Me.SelectionBT.Size = New System.Drawing.Size(50, 43)
+        Me.SelectionBT.Size = New System.Drawing.Size(40, 40)
         Me.SelectionBT.TabIndex = 0
         Me.SelectionBT.UseVisualStyleBackColor = True
         '
@@ -547,7 +551,7 @@ Partial Class ControllingUI_2
         Me.Panel2.Location = New System.Drawing.Point(122, 1)
         Me.Panel2.Margin = New System.Windows.Forms.Padding(0)
         Me.Panel2.Name = "Panel2"
-        Me.Panel2.Size = New System.Drawing.Size(120, 72)
+        Me.Panel2.Size = New System.Drawing.Size(120, 75)
         Me.Panel2.TabIndex = 3
         '
         'ExcelMenu
@@ -557,7 +561,7 @@ Partial Class ControllingUI_2
         Me.ExcelMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ExcelExportMBT})
         Me.ExcelMenu.Location = New System.Drawing.Point(30, 46)
         Me.ExcelMenu.Name = "ExcelMenu"
-        Me.ExcelMenu.Size = New System.Drawing.Size(53, 24)
+        Me.ExcelMenu.Size = New System.Drawing.Size(145, 24)
         Me.ExcelMenu.TabIndex = 3
         Me.ExcelMenu.Text = "MenuStrip2"
         '
@@ -587,9 +591,9 @@ Partial Class ControllingUI_2
         Me.ExcelBT.FlatAppearance.BorderSize = 0
         Me.ExcelBT.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Silver
         Me.ExcelBT.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.ExcelBT.Location = New System.Drawing.Point(34, 4)
+        Me.ExcelBT.Location = New System.Drawing.Point(37, 5)
         Me.ExcelBT.Name = "ExcelBT"
-        Me.ExcelBT.Size = New System.Drawing.Size(50, 43)
+        Me.ExcelBT.Size = New System.Drawing.Size(40, 40)
         Me.ExcelBT.TabIndex = 2
         Me.ExcelBT.UseVisualStyleBackColor = True
         '
@@ -601,7 +605,7 @@ Partial Class ControllingUI_2
         Me.Panel3.Location = New System.Drawing.Point(243, 1)
         Me.Panel3.Margin = New System.Windows.Forms.Padding(0)
         Me.Panel3.Name = "Panel3"
-        Me.Panel3.Size = New System.Drawing.Size(120, 72)
+        Me.Panel3.Size = New System.Drawing.Size(120, 75)
         Me.Panel3.TabIndex = 4
         '
         'ControllingMenu
@@ -653,9 +657,9 @@ Partial Class ControllingUI_2
         Me.ControllingBT.FlatAppearance.BorderSize = 0
         Me.ControllingBT.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Silver
         Me.ControllingBT.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.ControllingBT.Location = New System.Drawing.Point(35, 4)
+        Me.ControllingBT.Location = New System.Drawing.Point(38, 5)
         Me.ControllingBT.Name = "ControllingBT"
-        Me.ControllingBT.Size = New System.Drawing.Size(50, 43)
+        Me.ControllingBT.Size = New System.Drawing.Size(40, 40)
         Me.ControllingBT.TabIndex = 3
         Me.ControllingBT.UseVisualStyleBackColor = True
         '
@@ -667,7 +671,7 @@ Partial Class ControllingUI_2
         Me.Panel4.Location = New System.Drawing.Point(364, 1)
         Me.Panel4.Margin = New System.Windows.Forms.Padding(0)
         Me.Panel4.Name = "Panel4"
-        Me.Panel4.Size = New System.Drawing.Size(120, 72)
+        Me.Panel4.Size = New System.Drawing.Size(120, 75)
         Me.Panel4.TabIndex = 5
         '
         'RefreshMenu
@@ -694,11 +698,29 @@ Partial Class ControllingUI_2
         Me.RefreshBT.FlatAppearance.BorderSize = 0
         Me.RefreshBT.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Silver
         Me.RefreshBT.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.RefreshBT.Location = New System.Drawing.Point(35, 4)
+        Me.RefreshBT.Location = New System.Drawing.Point(38, 5)
         Me.RefreshBT.Name = "RefreshBT"
-        Me.RefreshBT.Size = New System.Drawing.Size(50, 43)
+        Me.RefreshBT.Size = New System.Drawing.Size(40, 40)
         Me.RefreshBT.TabIndex = 4
         Me.RefreshBT.UseVisualStyleBackColor = True
+        '
+        'AdjustmentsRCM
+        '
+        Me.AdjustmentsRCM.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.SelectAllToolStripMenuItem1, Me.UnselectAllToolStripMenuItem1})
+        Me.AdjustmentsRCM.Name = "AdjustmentsRCM"
+        Me.AdjustmentsRCM.Size = New System.Drawing.Size(137, 48)
+        '
+        'SelectAllToolStripMenuItem1
+        '
+        Me.SelectAllToolStripMenuItem1.Name = "SelectAllToolStripMenuItem1"
+        Me.SelectAllToolStripMenuItem1.Size = New System.Drawing.Size(136, 22)
+        Me.SelectAllToolStripMenuItem1.Text = "Select All"
+        '
+        'UnselectAllToolStripMenuItem1
+        '
+        Me.UnselectAllToolStripMenuItem1.Name = "UnselectAllToolStripMenuItem1"
+        Me.UnselectAllToolStripMenuItem1.Size = New System.Drawing.Size(136, 22)
+        Me.UnselectAllToolStripMenuItem1.Text = "Unselect All"
         '
         'ControllingUI_2
         '
@@ -741,6 +763,7 @@ Partial Class ControllingUI_2
         Me.Panel4.PerformLayout()
         Me.RefreshMenu.ResumeLayout(False)
         Me.RefreshMenu.PerformLayout()
+        Me.AdjustmentsRCM.ResumeLayout(False)
         Me.ResumeLayout(False)
 
     End Sub
@@ -805,4 +828,7 @@ Partial Class ControllingUI_2
     Friend WithEvents Panel2 As System.Windows.Forms.Panel
     Friend WithEvents MainTab As System.Windows.Forms.TabPage
     Friend WithEvents ChartsTab As System.Windows.Forms.TabPage
+    Friend WithEvents AdjustmentsRCM As System.Windows.Forms.ContextMenuStrip
+    Friend WithEvents SelectAllToolStripMenuItem1 As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents UnselectAllToolStripMenuItem1 As System.Windows.Forms.ToolStripMenuItem
 End Class

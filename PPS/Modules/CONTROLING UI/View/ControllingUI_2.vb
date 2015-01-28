@@ -66,10 +66,11 @@ Friend Class ControllingUI_2
 
 #End Region
 
-#Region "Menu"
+#Region "Treeviews"
 
     Friend entitiesTV As New TreeView
     Friend categoriesTV As New TreeView
+    Friend adjustmentsTV As New TreeView
     Private periodsCLB As New CheckedListBox
     Friend versionsTV As New TreeView
     Private DropMenu As New TableLayoutPanel
@@ -77,6 +78,7 @@ Friend Class ControllingUI_2
 
     Private EntitiesFlag As Boolean
     Private CategoriesFlag As Boolean
+    Private adjustments_flag As Boolean
     Private CurrenciesFlag As Boolean
     Private VersionsFlag As Boolean
     Private PeriodsFlag As Boolean
@@ -91,7 +93,7 @@ Friend Class ControllingUI_2
     Private Const INNER_MARGIN As Integer = 0
     Private Const EXCEL_SHEET_NAME_MAX_LENGHT = 31
     Friend Const DGV_FONT_SIZE As Single = 8
-    Private Const DGV_THEME = VIBlend.Utilities.VIBLEND_THEME.OFFICE2010BLUE
+    Private Const DGV_THEME = VIBlend.Utilities.VIBLEND_THEME.OFFICE2010SILVER
 
 #End Region
 
@@ -129,6 +131,7 @@ Friend Class ControllingUI_2
 
         TVTableLayout.Controls.Add(entitiesTV, 0, 0)
         TVTableLayout.Controls.Add(categoriesTV, 0, 1)
+        TVTableLayout.Controls.Add(adjustmentsTV, 0, 0)
         TVTableLayout.Controls.Add(CurrenciesCLB, 0, 0)
         TVTableLayout.Controls.Add(periodsCLB, 0, 0)
         TVTableLayout.Controls.Add(versionsTV, 0, 0)
@@ -143,12 +146,16 @@ Friend Class ControllingUI_2
         cTreeViews_Functions.set_TV_basics_icon_index(entitiesTV)
         Account.LoadAccountsTree(accountsTV)
         Category.LoadCategoriesTree(categoriesTV)
+        Adjustment.LoadAdjustmentsTree(adjustmentsTV)
         LoadCurrencies()
 
         entitiesTV.Dock = DockStyle.Fill
         categoriesTV.Dock = DockStyle.Fill
         categoriesTV.CheckBoxes = True
         categoriesTV.ExpandAll()
+        adjustmentsTV.Dock = DockStyle.Fill
+        adjustmentsTV.CheckBoxes = True
+        cTreeViews_Functions.CheckAllNodes(adjustmentsTV)
         versionsTV.Dock = DockStyle.Fill
         versionsTV.CheckBoxes = True
         versionsTV.ExpandAll()
@@ -162,9 +169,11 @@ Friend Class ControllingUI_2
         AddHandler categoriesTV.AfterCheck, AddressOf Category_AfterCheck
         AddHandler CurrenciesCLB.ItemCheck, AddressOf currenciesCLB_ItemCheck
         AddHandler periodsCLB.ItemCheck, AddressOf periodsCLB_ItemCheck
+
         entitiesTV.ContextMenuStrip = entitiesRightClickMenu
         entitiesTV.Nodes(0).Checked = True
         periodsCLB.ContextMenuStrip = periodsRightClickMenu
+        adjustmentsTV.ContextMenuStrip = AdjustmentsRCM
 
     End Sub
 
@@ -310,8 +319,8 @@ Friend Class ControllingUI_2
                 dgv.CellsArea.SetCellValue(account_row, column, value)
                 ' Entities loop
                 Dim entity_index As Int32 = 0
-                For Each child_entity_node In entity_node.Nodes
-                    fill_in_entities_children(dgv, data_hash, child_entity_node, entity_index, i, account_row, column)
+                For Each child_entity_node As TreeNode In entity_node.Nodes
+                    If child_entity_node.Checked = True Then fill_in_entities_children(dgv, data_hash, child_entity_node, entity_index, i, account_row, column)
                     entity_index = entity_index + 1
                 Next
                 i = i + 1
@@ -383,7 +392,6 @@ Friend Class ControllingUI_2
 
     End Sub
 
-
 #End Region
 
 
@@ -421,7 +429,6 @@ Friend Class ControllingUI_2
 
 #End Region
 
-    ' Category after Select
     Private Sub Category_AfterCheck(sender As Object, e As TreeViewEventArgs)
 
         ' apply selectedvalue to children
@@ -560,6 +567,25 @@ Friend Class ControllingUI_2
 
     End Sub
 
+    Private Sub AdjustmentsMenuClick(sender As Object, e As EventArgs) Handles AdjustmentsMBT.Click
+
+        If adjustments_flag = False Then
+            AdjustmentsMBT.CheckState = CheckState.Checked
+            ExpandPane1()
+            HideAllMenuItems()
+            adjustmentsTV.Visible = True
+            adjustments_flag = True
+            '          DisplayTwoTrees()
+        Else
+            AdjustmentsMBT.CheckState = CheckState.Unchecked
+            CollapsePane1()
+            adjustmentsTV.Visible = False
+            adjustments_flag = False
+            '     DisplayFirstTreeOnly()
+        End If
+
+    End Sub
+
     Private Sub CurrenciesMenuClick(sender As Object, e As EventArgs) Handles CurrenciesMBT.Click
 
         If CurrenciesFlag = False Then
@@ -614,7 +640,7 @@ Friend Class ControllingUI_2
 
     End Sub
 
-    Private Sub SendCurrentEntity_Click(sender As Object, e As EventArgs) Handles ExcelExportMBT.Click, TopEntityExportMBT.Click
+    Private Sub SendCurrentEntity_Click(sender As Object, e As EventArgs) Handles TopEntityExportMBT.Click
 
         DROPTOEXCELController.SendCurrentEntityToExcel()
 
@@ -793,18 +819,12 @@ Friend Class ControllingUI_2
         EntitiesFlag = False
         categoriesTV.Visible = False
         CategoriesFlag = False
+        adjustmentsTV.Visible = False
+        adjustments_flag = False
 
     End Sub
 
     Private Sub HideAllMenuItemsExceptCategories()
-
-        HideAllMenusItemsCore()
-        entitiesTV.Visible = False
-        EntitiesFlag = False
-
-    End Sub
-
-    Private Sub HideAllMenusItemExceptEntities()
 
         HideAllMenusItemsCore()
         categoriesTV.Visible = False
@@ -812,9 +832,18 @@ Friend Class ControllingUI_2
 
     End Sub
 
+    Private Sub HideAllMenusItemExceptEntities()
+
+        HideAllMenusItemsCore()
+        entitiesTV.Visible = False
+        EntitiesFlag = False
+
+    End Sub
+
     Private Sub HideAllMenusItemsCore()
 
         DisplayFirstTreeOnly()
+        adjustmentsTV.Visible = False
         CurrenciesCLB.Visible = False
         periodsCLB.Visible = False
         versionsTV.Visible = False
@@ -844,7 +873,6 @@ Friend Class ControllingUI_2
 
     End Sub
 
-
 #End Region
 
     Private Function GetEntityRow(ByRef row As HierarchyItem, _
@@ -857,7 +885,6 @@ Friend Class ControllingUI_2
         Return entity_row
 
     End Function
-
 
     Private Sub ControllingUI_2_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
 

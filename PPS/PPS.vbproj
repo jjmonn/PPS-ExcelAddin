@@ -55,11 +55,6 @@
     <Reference Include="JacksonSoft.CustomTabControl">
       <HintPath>..\..\..\..\..\Google Drive\OPERATIONS DEPARTMENT\Libraries\JacksonSoft.CustomTabControl.dll</HintPath>
     </Reference>
-    <Reference Include="Office, Version=11.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c">
-      <SpecificVersion>False</SpecificVersion>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
-      <HintPath>Interops\Office.dll</HintPath>
-    </Reference>
     <Reference Include="ProgressControls, Version=1.2.0.0, Culture=neutral, PublicKeyToken=f34d47135ea7baa5, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\..\Google Drive\OPERATIONS DEPARTMENT\Libraries\CircularProgressIndicator\ProgressIndicator\obj\Debug\ProgressControls.dll</HintPath>
@@ -124,6 +119,7 @@
     <Compile Include="Clients Specific Modules\GDF SUEZ - ALTERNATIVE SCENARIOS\Controller\ASInputsController.vb" />
     <Compile Include="Clients Specific Modules\GDF SUEZ - ALTERNATIVE SCENARIOS\Model\AlternativeScenarioModel.vb" />
     <Compile Include="Controllers\Utilities\ChartsUtilities.vb" />
+    <Compile Include="Models\CRUDs\Adjustment.vb" />
     <Compile Include="Models\CRUDs\Control.vb" />
     <Compile Include="Models\CRUDs\ControlChart.vb" />
     <Compile Include="Models\CRUDs\CredentialLevel.vb" />
@@ -838,6 +834,12 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Clients Specific Modules\GDF SUEZ - ALTERNATIVE SCENARIOS\Configuration\Controllers\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\excel.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\excel 2.png" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.

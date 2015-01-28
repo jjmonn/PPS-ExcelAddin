@@ -341,6 +341,7 @@ Public Class AddinModule
         Me.ImageList1.Images.SetKeyName(90, "favicon.ico")
         Me.ImageList1.Images.SetKeyName(91, "red white.png")
         Me.ImageList1.Images.SetKeyName(92, "Report green same.png")
+        Me.ImageList1.Images.SetKeyName(93, "favicon(1).ico")
         '
         'MaintTab
         '
@@ -630,7 +631,7 @@ Public Class AddinModule
         '
         Me.AlternativeScenariosBT.Caption = "Prices Scenarios"
         Me.AlternativeScenariosBT.Id = "adxRibbonButton_6dd871acf7b0458eb10d6781b75ced2b"
-        Me.AlternativeScenariosBT.Image = 89
+        Me.AlternativeScenariosBT.Image = 93
         Me.AlternativeScenariosBT.ImageList = Me.ImageList1
         Me.AlternativeScenariosBT.ImageTransparentColor = System.Drawing.Color.Transparent
         Me.AlternativeScenariosBT.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook

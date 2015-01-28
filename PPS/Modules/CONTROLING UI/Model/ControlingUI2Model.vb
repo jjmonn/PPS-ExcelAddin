@@ -16,7 +16,7 @@
 '       - 
 '       - erreur si pas de taux -> si nb records = 0 la matrice de devrait pas être lancée
 '
-' Last modified: 24/01/2015
+' Last modified: 27/01/2015
 ' Author: Julien Monnereau
 
 
@@ -57,7 +57,7 @@ Friend Class ControlingUI2Model
         entities_id_list = Dll3Computer.InitializeEntitiesAggregation(entity_node)
 
         inputs_entities_list = cTreeViews_Functions.GetNoChildrenNodesList(entities_id_list, entity_node.TreeView)
-
+        cTreeViews_Functions.FilterSelectedNodes(entity_node, entities_id_list)
 
     End Sub
 
@@ -69,7 +69,8 @@ Friend Class ControlingUI2Model
                                           ByVal destinationCurrency As String, _
                                           ByRef start_period As Int32, _
                                           ByRef nb_periods As Int32, _
-                                          Optional ByRef strSqlQuery As String = "")
+                                          Optional ByRef strSqlQuery As String = "", _
+                                          Optional ByRef adjustments_id_list As List(Of String) = Nothing)
 
         ResetDllCurrencyPeriodsConfigIfNeeded(periods_list, VersionTimeSetup, start_period, nb_periods)
         load_needed_currencies(VersionTimeSetup, rates_version, destinationCurrency, start_period)
@@ -83,7 +84,8 @@ Friend Class ControlingUI2Model
         Dim viewName As String = version_id & User_Credential
         If DBDOWNLOADER.BuildDataRSTForEntityLoop(inputs_entities_list.ToArray, _
                                                   viewName, _
-                                                  strSqlQuery) Then
+                                                  strSqlQuery, _
+                                                  adjustments_id_list) Then
 
             For Each entity_id In inputs_entities_list
                 If DBDOWNLOADER.FilterOnEntityID(entity_id) Then
@@ -172,9 +174,13 @@ Friend Class ControlingUI2Model
 #Region "Adjustments"
 
     Protected Friend Function GetAdjustments(ByRef version_id As String, _
-                                             ByVal destination_currency As String)
+                                             ByVal destination_currency As String,
+                                             Optional ByRef adjustments_id_list As List(Of String) = Nothing)
 
-        Return DBDOWNLOADER.GetAdjustments(version_id, inputs_entities_list.ToArray, destination_currency)
+        Return DBDOWNLOADER.GetAdjustments(version_id, _
+                                           inputs_entities_list.ToArray, _
+                                           destination_currency, _
+                                           adjustments_id_list)
 
     End Function
 
@@ -227,6 +233,8 @@ Friend Class ControlingUI2Model
         End If
 
     End Sub
+
+   
 
 #End Region
 

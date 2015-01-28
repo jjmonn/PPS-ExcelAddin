@@ -12,7 +12,7 @@
 '
 '
 '
-' Last modified: 25/01/2015
+' Last modified: 27/01/2015
 ' Author: Julien Monnereau
 
 
@@ -20,7 +20,8 @@ Imports System.Windows.Forms
 Imports System.Collections.Generic
 
 
-Class cTreeViews_Functions
+Friend Class cTreeViews_Functions
+
 
     Public Shared POSITION_STEP_CHILDREN As Double = 0.00000001
 
@@ -68,7 +69,7 @@ Class cTreeViews_Functions
 
         If Not IsNothing(TV.SelectedNode) Then
             Dim TreeNode1() As TreeNode = TV.Nodes.Find(TV.SelectedNode.Name, True)
-            TreeNode1(0).Nodes.Add(sKey, Str, imageIndex, selectedImageIndex)
+            TreeNode1(0).Nodes.Add(sKey, str, imageIndex, selectedImageIndex)
             With TreeNode1(0).Nodes(sKey)
                 .Tag = True
                 .Checked = True
@@ -156,9 +157,20 @@ Class cTreeViews_Functions
 #End Region
 
 
-#Region "Get Treeview Checked Nodes List"
+#Region "Treeviews Checked Nodes List"
 
-    Public Shared Function GetCheckedNodeCollection(inputTV As TreeView) As List(Of TreeNode)
+    Protected Friend Shared Sub FilterSelectedNodes(ByRef entity_node As TreeNode, _
+                                                    ByRef entities_list As List(Of String))
+
+        Dim tmp_array(entities_list.Count - 1) As String
+        entities_list.CopyTo(tmp_array)
+        For Each entity_id As String In tmp_array
+            If entity_node.TreeView.Nodes.Find(entity_id, True)(0).Checked = False Then entities_list.Remove(entity_id)
+        Next
+
+    End Sub
+
+    Protected Friend Shared Function GetCheckedNodeCollection(inputTV As TreeView) As List(Of TreeNode)
 
         Dim tmpList As New List(Of TreeNode)
         For Each node As TreeNode In inputTV.Nodes
@@ -168,7 +180,7 @@ Class cTreeViews_Functions
 
     End Function
 
-    Public Shared Sub GetSelectedNodes(ByRef inputNode As TreeNode, ByRef tmpList As List(Of TreeNode))
+    Protected Friend Shared Sub GetSelectedNodes(ByRef inputNode As TreeNode, ByRef tmpList As List(Of TreeNode))
 
         If inputNode.Checked = True Then tmpList.Add(inputNode)
         For Each childNode As TreeNode In inputNode.Nodes
@@ -176,6 +188,16 @@ Class cTreeViews_Functions
         Next
 
     End Sub
+
+    Protected Friend Shared Function GetCheckedNodesID(ByRef TV As TreeView) As List(Of String)
+
+        Dim tmpList As New List(Of String)
+        For Each childNode As TreeNode In TV.Nodes
+            If childNode.Checked = True Then tmpList.Add(childNode.Name)
+        Next
+        Return tmpList
+
+    End Function
 
 #End Region
 
@@ -285,15 +307,25 @@ Class cTreeViews_Functions
 
     End Sub
 
-    Public Shared Function GetNodeChildrenIDsStringArray(input_node As TreeNode)
+    Protected Friend Shared Function GetNodeChildrenIDsStringArray(ByRef input_node As TreeNode, _
+                                                                   Optional ByRef filter As Boolean = False)
 
-        Dim children(input_node.Nodes.Count - 1) As String
-        Dim i = 0
-        For Each child In input_node.Nodes
-            children(i) = child.name
+        Dim children_array(input_node.Nodes.Count - 1) As String
+        Dim i As Int32 = 0
+        For Each child As TreeNode In input_node.Nodes
+            children_array(i) = child.Name
             i = i + 1
         Next
-        Return children
+
+        If filter = True Then
+            Dim tmp_list As New List(Of String)
+            For Each child As String In children_array
+                If input_node.Nodes.Find(child, True)(0).Checked = True Then tmp_list.Add(child)
+            Next
+            ReDim children_array(tmp_list.Count - 1)
+            children_array = tmp_list.ToArray
+        End If
+        Return children_array
 
     End Function
 
@@ -483,7 +515,6 @@ Class cTreeViews_Functions
     End Sub
 
 #End Region
-
 
 
 End Class

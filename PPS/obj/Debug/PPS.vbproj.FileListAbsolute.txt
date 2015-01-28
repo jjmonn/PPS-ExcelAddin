@@ -590,7 +590,6 @@ C:\Users\PPS\Documents\GitHub\PPS-Repo.git\trunk\PPS\bin\Debug\sv\ZedGraph.resou
 C:\Users\PPS\Documents\GitHub\PPS-Repo.git\trunk\PPS\bin\Debug\tr\ZedGraph.resources.dll
 C:\Users\PPS\Documents\GitHub\PPS-Repo.git\trunk\PPS\bin\Debug\zh-cn\ZedGraph.resources.dll
 C:\Users\PPS\Documents\GitHub\PPS-Repo.git\trunk\PPS\bin\Debug\zh-tw\ZedGraph.resources.dll
-C:\Users\PPS\Documents\GitHub\PPS-Repo.git\trunk\PPS\obj\Debug\PPS.vbprojResolveAssemblyReference.cache
 C:\Users\PPS\Documents\GitHub\PPS-Repo.git\trunk\PPS\obj\Debug\Interop.ADODB.dll
 C:\Users\PPS\Documents\GitHub\PPS-Repo.git\trunk\PPS\obj\Debug\Interop.WinHttp.dll
 C:\Users\PPS\Documents\GitHub\PPS-Repo.git\trunk\PPS\obj\Debug\PPS.vbproj.ResolveComReference.cache
