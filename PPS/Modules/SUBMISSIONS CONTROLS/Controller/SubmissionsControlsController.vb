@@ -5,7 +5,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 20/01/2015
+' Last modified: 02/02/2015
 
 
 Imports System.Windows.Forms
@@ -44,15 +44,15 @@ Friend Class SubmissionsControlsController
 
     Protected Friend Sub New()
 
-        View.ChartsTableLayoutPanel.Visible = False
+
         Entity.LoadEntitiesTree(EntitiesTV)
+        cTreeViews_Functions.CheckAllNodes(EntitiesTV)
         ControlChart.LoadControlChartsTree(ChartsTV)
         entities_id_list = cTreeViews_Functions.GetNodesKeysList(EntitiesTV)
         InitializeChartsDictionary()
         View = New SubmissionsControlUI(Me, EntitiesTV, charts_dic)
         version_id = GLOBALCurrentVersionCode
         Computer = New ControlingUI2Model()
-        View.ChartsTableLayoutPanel.Visible = True
         View.Show()
 
     End Sub
@@ -119,12 +119,13 @@ Friend Class SubmissionsControlsController
             periods_list = Versions.GetPeriodList(version_id)
             Dim nb_periods As Int32 = Versions.ReadVersion(version_id, VERSIONS_NB_PERIODS_VAR)
             Dim start_period As Int32 = Versions.ReadVersion(version_id, VERSIONS_START_PERIOD_VAR)
+            Dim rates_version_id = Versions.ReadVersion(version_id, VERSIONS_RATES_VERSION_ID_VAR)
             Versions.Close()
             InitializePBar()
             Computer.compute_selection_complete(version_id, _
                                                 View.PBar, _
                                                 time_config, _
-                                                GLOBALCurrentRatesVersionCode, _
+                                                rates_version_id, _
                                                 periods_list, _
                                                 MAIN_CURRENCY, _
                                                 start_period, _
