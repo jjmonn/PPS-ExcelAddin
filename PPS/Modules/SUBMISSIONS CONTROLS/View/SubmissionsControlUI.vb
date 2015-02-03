@@ -134,8 +134,9 @@ Friend Class SubmissionsControlUI
         Me.Controls.Add(PBar)                           ' Progress Bar
         PBar.Left = (Me.Width - PBar.Width) / 2         ' Progress Bar
         PBar.Top = (Me.Height - PBar.Height) / 2        ' Progress Bar
-
+        ChartsTableLayoutPanel.Visible = False
         Controller.ControlSubmissions()
+        ChartsTableLayoutPanel.Visible = True
 
     End Sub
 
