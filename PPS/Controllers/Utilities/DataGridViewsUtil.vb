@@ -674,6 +674,7 @@ Friend Class DataGridViewsUtil
                                                       ByRef dest_range As Excel.Range, _
                                                       ByRef info_array As String())
 
+        '   Dim group_level As Int32 = DGV.RowsHierarchy.HierarchyDepth + 1
         Dim i As Int32 = 1
         Dim j As Int32 = 1
         Dim nb_columns_floors As Int32 = 1
@@ -692,7 +693,6 @@ Friend Class DataGridViewsUtil
         i = nb_columns_floors + 1
         For Each row As HierarchyItem In DGV.RowsHierarchy.Items
             CopyRowHierarchy(row, dest_range, i, j)
-            i = i + 1
         Next
         Return i
 
@@ -717,15 +717,27 @@ Friend Class DataGridViewsUtil
     End Sub
 
     Protected Friend Shared Sub SetupRowsTitles(ByRef row As HierarchyItem, _
-                                                  ByRef range As Excel.Range, _
-                                                  ByRef i As Int32, _
-                                                  ByRef j As Int32)
+                                                ByRef range As Excel.Range, _
+                                                ByRef i As Int32, _
+                                                ByRef j As Int32)
 
         range.Offset(i, j).Value = row.Caption
         i = i + 1
+        Dim sub_rows_nb As Int32 = 0
+        Dim group_start_row As Int32 = i
+
         For Each sub_row As HierarchyItem In row.Items
             SetupRowsTitles(sub_row, range, i, j)
+            sub_rows_nb = sub_rows_nb + sub_row.Items.Count
         Next
+
+        If row.Items.Count > 0 Then
+            Dim ws As Excel.Worksheet = range.Worksheet
+            Dim nb_sub_items As Int32 = 0
+            DataGridViewsUtil.CountSubItemsNb(row, nb_sub_items)
+            Dim grouped_range As Excel.Range = ws.Range(ws.Cells(group_start_row + 1, 1), ws.Cells(group_start_row + nb_sub_items, 2))
+            grouped_range.Rows.Group(Type.Missing, Type.Missing, Type.Missing, Type.Missing)
+        End If
 
     End Sub
 
@@ -916,6 +928,22 @@ Friend Class DataGridViewsUtil
         End If
         For Each subItem As HierarchyItem In item.Items
             GetColumnMaxLength(subItem, column_index, maxLength)
+        Next
+
+    End Sub
+
+
+#End Region
+
+
+#Region "DGV Utilities"
+
+    Protected Friend Shared Sub CountSubItemsNb(ByRef item As HierarchyItem, _
+                                                ByRef nb_items As Int32)
+
+        For Each sub_item As HierarchyItem In item.Items
+            nb_items = nb_items + 1
+            CountSubItemsNb(sub_item, nb_items)
         Next
 
     End Sub
