@@ -648,7 +648,7 @@ Friend Class ControllingUI_2
 
     Private Sub DropDrillDown_Click(sender As Object, e As EventArgs) Handles DrillDownExportMBT.Click
 
-        DROPTOEXCELController.SendDropDownToExcel()
+        DROPTOEXCELController.SendDrillDownToExcel()
 
     End Sub
 
