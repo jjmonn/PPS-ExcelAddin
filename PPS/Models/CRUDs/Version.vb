@@ -251,29 +251,29 @@ Friend Class Version
                                                    ByRef versionsComparisonFlag As Int32, _
                                                    ByRef versions_dict As Dictionary(Of String, Hashtable)) As List(Of Integer)
 
-        Dim period_list As New List(Of Int32)
+        Dim periods_list As New List(Of Int32)
         Select Case versionsComparisonFlag
 
             Case YEARLY_VERSIONS_COMPARISON, MONTHLY_VERSIONS_COMPARISON
                 For Each version_id In versions_id_array
                     For Each period_int In versions_dict(version_id)(period_list)
-                        If period_list.Contains(period_int) = False Then period_list.Add(period_int)
+                        If PERIOD_LIST.Contains(period_int) = False Then periods_list.Add(period_int)
                     Next
                 Next
-                Return period_list
+                Return periods_list
 
             Case YEARLY_MONTHLY_VERSIONS_COMPARISON
                 For Each version_id In versions_id_array
                     If versions_dict(version_id)(VERSIONS_TIME_CONFIG_VARIABLE) = YEARLY_TIME_CONFIGURATION Then
-                        For Each period_int In versions_dict(version_id)(period_list)
-                            If period_list.Contains(period_int) = False Then period_list.Add(period_int)
+                        For Each period_int In versions_dict(version_id)(PERIOD_LIST)
+                            If PERIOD_LIST.Contains(period_int) = False Then periods_list.Add(period_int)
                         Next
                     Else
                         Dim period_ = versions_dict(version_id)(VERSIONS_START_PERIOD_VAR)
-                        If period_list.Contains(period_) = False Then period_list.Add(period_)
+                        If PERIOD_LIST.Contains(period_) = False Then periods_list.Add(period_)
                     End If
                 Next
-                Return period_list
+                Return periods_list
 
             Case Else
                 ' PPS Error tracking
