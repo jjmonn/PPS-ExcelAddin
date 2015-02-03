@@ -80,16 +80,17 @@ Friend Class CControlingDropOnExcel
 
     End Sub
 
-    Protected Friend Sub SendDropDownToExcel()
+    Protected Friend Sub SendDrillDownToExcel()
 
         If Controller.currentEntity <> "" Then
             Dim destination = CWorksheetWrittingFunctions.CreateReceptionWS(Controller.currentEntity)
             Dim offset As Int32 = 0
-            For Each tab_ As TabPage In View.TabControl1.TabPages
-                Dim DGV As vDataGridView = tab_.Controls(0)
-                offset = DataGridViewsUtil.CopyDGVToExcelGeneric(DGV, destination, {"1st try", Controller.currentEntity})
-                destination = destination.Offset(offset, 0)
-            Next
+            ' For Each tab_ As TabPage In View.TabControl1.TabPages
+
+            Dim DGV As vDataGridView = View.TabControl1.TabPages(0).Controls(0)
+            offset = DataGridViewsUtil.CopyDGVToExcelGeneric(DGV, destination, {"1st try", Controller.currentEntity})
+            destination = destination.Offset(offset, 0)
+            'Next
         End If
 
     End Sub
