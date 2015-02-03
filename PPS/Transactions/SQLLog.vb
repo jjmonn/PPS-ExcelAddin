@@ -23,7 +23,7 @@ Friend Class SQLLog
         Dim srv As New ModelServer
         Dim str As String = "SELECT " & LOG_TIME_VARIABLE & "," & _
                                         LOG_USER_ID_VARIABLE & "," & _
-                                        LOG_VALUE_VARIABLE & _
+                                        LOG_VALUE_VARIABLE & "," & _
                                         LOG_ADJUSTMENT_ID_VARIABLE & _
                             " FROM " & DATA_DATABASE & "." & LOG_TABLE_NAME & _
                             " WHERE " & LOG_ENTITY_ID_VARIABLE & "='" & entity_id & "'" & _
