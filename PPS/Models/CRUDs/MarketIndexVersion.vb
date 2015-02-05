@@ -7,7 +7,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 16/01/2015
+' Last modified: 05/02/2015
 
 
 Imports System.Windows.Forms
@@ -75,7 +75,7 @@ Friend Class MarketIndexVersion
         While RST.EOF = False
             Dim hash As New Hashtable
             hash.Add(MARKET_INDEXES_VERSIONS_NAME_VAR, RST.Fields(MARKET_INDEXES_VERSIONS_NAME_VAR).Value)
-            hash.Add(MARKET_INDEXES_VERSIONS_IS_FOLER_VAR, RST.Fields(MARKET_INDEXES_VERSIONS_IS_FOLER_VAR).Value)
+            hash.Add(MARKET_INDEXES_VERSIONS_IS_FOLDER_VAR, RST.Fields(MARKET_INDEXES_VERSIONS_IS_FOLDER_VAR).Value)
             If IsDBNull(RST.Fields(MARKET_INDEXES_VERSIONS_PARENT_ID_VAR).Value) Then
                 hash.Add(MARKET_INDEXES_VERSIONS_PARENT_ID_VAR, "")
             Else
@@ -148,14 +148,14 @@ Friend Class MarketIndexVersion
                 If IsDBNull(rst.Fields(MARKET_INDEXES_VERSIONS_PARENT_ID_VAR).Value) Then
                     nodeX = TV.Nodes.Add(Trim(rst.Fields(MARKET_INDEXES_VERSIONS_ID_VAR).Value), _
                                          Trim(rst.Fields(MARKET_INDEXES_VERSIONS_NAME_VAR).Value), _
-                                         rst.Fields(MARKET_INDEXES_VERSIONS_IS_FOLER_VAR).Value, _
-                                         rst.Fields(MARKET_INDEXES_VERSIONS_IS_FOLER_VAR).Value)
+                                         rst.Fields(MARKET_INDEXES_VERSIONS_IS_FOLDER_VAR).Value, _
+                                         rst.Fields(MARKET_INDEXES_VERSIONS_IS_FOLDER_VAR).Value)
                 Else
                     ParentNode = TV.Nodes.Find(Trim(rst.Fields(MARKET_INDEXES_VERSIONS_PARENT_ID_VAR).Value), True)
                     nodeX = ParentNode(0).Nodes.Add(Trim(rst.Fields(MARKET_INDEXES_VERSIONS_ID_VAR).Value), _
                                                     Trim(rst.Fields(MARKET_INDEXES_VERSIONS_NAME_VAR).Value), _
-                                                    rst.Fields(MARKET_INDEXES_VERSIONS_IS_FOLER_VAR).Value, _
-                                                    rst.Fields(MARKET_INDEXES_VERSIONS_IS_FOLER_VAR).Value)
+                                                    rst.Fields(MARKET_INDEXES_VERSIONS_IS_FOLDER_VAR).Value, _
+                                                    rst.Fields(MARKET_INDEXES_VERSIONS_IS_FOLDER_VAR).Value)
                 End If
                 nodeX.EnsureVisible()
                 rst.MoveNext()
@@ -172,7 +172,7 @@ Friend Class MarketIndexVersion
         srv.OpenRst(CONFIG_DATABASE & "." & MARKET_INDEXES_VERSIONS_TABLE, ModelServer.FWD_CURSOR)
         Dim rst = srv.rst
 
-        rst.Filter = MARKET_INDEXES_VERSIONS_IS_FOLER_VAR + "= 0"
+        rst.Filter = MARKET_INDEXES_VERSIONS_IS_FOLDER_VAR + "= 0"
         If rst.EOF = False And rst.BOF = False Then
             rst.MoveFirst()
             Do While rst.EOF = False
@@ -183,6 +183,19 @@ Friend Class MarketIndexVersion
 
         rst.Close()
         Return tmpList
+
+    End Function
+
+    Protected Friend Function GetPeriodList(ByRef prices_version_id As String) As List(Of Integer)
+
+        Return Period.GetYearlyPeriodList(ReadVersion(prices_version_id, MARKET_INDEXES_VERSIONS_START_PERIOD_VAR), _
+                                          ReadVersion(prices_version_id, MARKET_INDEXES_VERSIONS_NB_PERIODS_VAR))
+
+    End Function
+
+    Protected Friend Function GetPeriodsDictionary(ByRef prices_version_id As String) As Dictionary(Of Int32, Int32())
+
+        Return Period.GetGlobalPeriodsDictionary(GetPeriodList(prices_version_id))
 
     End Function
 
