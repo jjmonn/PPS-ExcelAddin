@@ -34,7 +34,7 @@ Friend Class ControlingUI2Controller
     Friend CurrentEntityKey As String
     Friend globalPeriodsList As List(Of Integer)
     Protected Friend versions_id_array As String()
-    Private versions_name_array As String()
+    Protected Friend versions_name_array As String()
     Private versionsComparisonFlag As Int32
     Private versions_dict As Dictionary(Of String, Hashtable)
 

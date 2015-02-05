@@ -11,11 +11,12 @@
 '
 '
 ' Author: Julien Monnereau
-' Last Modified: 19/01/2015
+' Last Modified: 04/02/2015
 
 
 Imports System.Windows.Forms
 Imports VIBlend.WinForms.DataGridView
+Imports Microsoft.Office.Interop
 
 
 Friend Class CControlingDropOnExcel
@@ -45,11 +46,14 @@ Friend Class CControlingDropOnExcel
 
 #Region "Interface"
 
-    Protected Friend Sub SendCurrentEntityToExcel()
+    Protected Friend Sub SendCurrentEntityToExcel(ByRef version_name As String, _
+                                                  ByRef currency As String)
 
         If Controller.currentEntity <> "" Then
 
-            Dim destination = CWorksheetWrittingFunctions.CreateReceptionWS(Controller.currentEntity)
+            Dim destination = CWorksheetWrittingFunctions.CreateReceptionWS(Controller.currentEntity, _
+                                                                            {"Entity", "Version", "Currency"}, _
+                                                                            {Controller.currentEntity, version_name, Currency})
             Dim offset As Int32
             destination = destination.Offset(1, 0)
             For Each tab_ As TabPage In View.TabControl1.TabPages
@@ -66,10 +70,14 @@ Friend Class CControlingDropOnExcel
 
     End Sub
 
-    Protected Friend Sub SendTabToExcel(ByRef currentDGV As vDataGridView)
+    Protected Friend Sub SendTabToExcel(ByRef currentDGV As vDataGridView, _
+                                        ByRef version_name As String, _
+                                        ByRef currency As String)
 
         If Controller.currentEntity <> "" Then
-            Dim destination = CWorksheetWrittingFunctions.CreateReceptionWS(Controller.currentEntity)
+            Dim destination = CWorksheetWrittingFunctions.CreateReceptionWS(Controller.currentEntity, _
+                                                                            {"Entity", "Version", "Currency"}, _
+                                                                            {Controller.currentEntity, version_name, currency})
             destination = destination.Offset(1, 0)
             If Controller.versions_id_array.GetLength(0) > 1 Then
                 View.DGVUTIL.writeControllingCurrentEntityToExcel(destination, currentDGV)
@@ -80,17 +88,20 @@ Friend Class CControlingDropOnExcel
 
     End Sub
 
-    Protected Friend Sub SendDrillDownToExcel()
+    Protected Friend Sub SendDrillDownToExcel(ByRef version_name As String, _
+                                              ByRef currency As String)
 
         If Controller.currentEntity <> "" Then
-            Dim destination = CWorksheetWrittingFunctions.CreateReceptionWS(Controller.currentEntity)
-            Dim offset As Int32 = 0
-            ' For Each tab_ As TabPage In View.TabControl1.TabPages
-
-            Dim DGV As vDataGridView = View.TabControl1.TabPages(0).Controls(0)
-            offset = DataGridViewsUtil.CopyDGVToExcelGeneric(DGV, destination, {"1st try", Controller.currentEntity})
-            destination = destination.Offset(offset, 0)
-            'Next
+            Dim destination As Excel.Range = CWorksheetWrittingFunctions.CreateReceptionWS(Controller.currentEntity, _
+                                                                                           {"Entity", "Version", "Currency"}, _
+                                                                                           {Controller.currentEntity, version_name, currency})
+            Dim i As Int32 = 1
+            For Each tab_ As TabPage In View.TabControl1.TabPages
+                Dim DGV As vDataGridView = tab_.Controls(0)
+                DataGridViewsUtil.CopyDGVToExcelGeneric(DGV, destination, i)
+            Next
+            destination.Worksheet.Columns.AutoFit()
+            destination.Worksheet.Outline.ShowLevels(RowLevels:=1)
         End If
 
     End Sub
