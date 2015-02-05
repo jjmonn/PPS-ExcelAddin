@@ -68,7 +68,7 @@ Friend Class ExchangeRate
         Dim curr_token As String = curr & "/" & MAIN_CURRENCY
         RST(EX_RATES_CURRENCY_VARIABLE).Value = curr_token
         RST(EX_RATES_PERIOD_VARIABLE).Value = period
-        RST(EX_RATES_RATE_VARIABLE).Value = 1
+        RST(EX_RATES_RATE_VARIABLE).Value = value
         RST(EX_RATES_RATE_ID_VARIABLE).Value = curr_token & period
         RST(EX_RATES_RATE_VERSION).Value = version
         RST.Update()
