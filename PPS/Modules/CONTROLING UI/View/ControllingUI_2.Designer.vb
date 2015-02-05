@@ -365,13 +365,12 @@ Partial Class ControllingUI_2
         '
         'TableLayoutPanel3
         '
-        Me.TableLayoutPanel3.CellBorderStyle = System.Windows.Forms.TableLayoutPanelCellBorderStyle.[Single]
         Me.TableLayoutPanel3.ColumnCount = 5
         Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 120.0!))
         Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 120.0!))
         Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 120.0!))
         Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 120.0!))
-        Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 373.0!))
+        Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 375.0!))
         Me.TableLayoutPanel3.Controls.Add(Me.TableLayoutPanel1, 4, 0)
         Me.TableLayoutPanel3.Controls.Add(Me.Panel1, 0, 0)
         Me.TableLayoutPanel3.Controls.Add(Me.Panel2, 1, 0)
@@ -381,7 +380,7 @@ Partial Class ControllingUI_2
         Me.TableLayoutPanel3.Location = New System.Drawing.Point(3, 3)
         Me.TableLayoutPanel3.Name = "TableLayoutPanel3"
         Me.TableLayoutPanel3.RowCount = 1
-        Me.TableLayoutPanel3.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 76.0!))
+        Me.TableLayoutPanel3.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 78.0!))
         Me.TableLayoutPanel3.Size = New System.Drawing.Size(855, 74)
         Me.TableLayoutPanel3.TabIndex = 12
         '
@@ -398,7 +397,8 @@ Partial Class ControllingUI_2
         Me.TableLayoutPanel1.Controls.Add(Me.Label2, 0, 2)
         Me.TableLayoutPanel1.Controls.Add(Me.VersionTB, 1, 1)
         Me.TableLayoutPanel1.Controls.Add(Me.CurrencyTB, 1, 2)
-        Me.TableLayoutPanel1.Location = New System.Drawing.Point(565, 4)
+        Me.TableLayoutPanel1.Location = New System.Drawing.Point(562, 3)
+        Me.TableLayoutPanel1.Margin = New System.Windows.Forms.Padding(0, 3, 3, 0)
         Me.TableLayoutPanel1.Name = "TableLayoutPanel1"
         Me.TableLayoutPanel1.RowCount = 3
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333!))
@@ -421,9 +421,10 @@ Partial Class ControllingUI_2
         'entityTB
         '
         Me.entityTB.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.entityTB.Location = New System.Drawing.Point(75, 3)
+        Me.entityTB.Location = New System.Drawing.Point(72, 0)
+        Me.entityTB.Margin = New System.Windows.Forms.Padding(0)
         Me.entityTB.Name = "entityTB"
-        Me.entityTB.Size = New System.Drawing.Size(212, 20)
+        Me.entityTB.Size = New System.Drawing.Size(218, 20)
         Me.entityTB.TabIndex = 3
         '
         'Label3
@@ -452,17 +453,19 @@ Partial Class ControllingUI_2
         'VersionTB
         '
         Me.VersionTB.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.VersionTB.Location = New System.Drawing.Point(75, 25)
+        Me.VersionTB.Location = New System.Drawing.Point(72, 22)
+        Me.VersionTB.Margin = New System.Windows.Forms.Padding(0)
         Me.VersionTB.Name = "VersionTB"
-        Me.VersionTB.Size = New System.Drawing.Size(212, 20)
+        Me.VersionTB.Size = New System.Drawing.Size(218, 20)
         Me.VersionTB.TabIndex = 6
         '
         'CurrencyTB
         '
         Me.CurrencyTB.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.CurrencyTB.Location = New System.Drawing.Point(75, 47)
+        Me.CurrencyTB.Location = New System.Drawing.Point(72, 44)
+        Me.CurrencyTB.Margin = New System.Windows.Forms.Padding(0)
         Me.CurrencyTB.Name = "CurrencyTB"
-        Me.CurrencyTB.Size = New System.Drawing.Size(212, 20)
+        Me.CurrencyTB.Size = New System.Drawing.Size(218, 20)
         Me.CurrencyTB.TabIndex = 7
         '
         'Panel1
@@ -470,10 +473,10 @@ Partial Class ControllingUI_2
         Me.Panel1.Controls.Add(Me.SelectionBT)
         Me.Panel1.Controls.Add(Me.SelectionMenu)
         Me.Panel1.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Panel1.Location = New System.Drawing.Point(1, 1)
+        Me.Panel1.Location = New System.Drawing.Point(0, 0)
         Me.Panel1.Margin = New System.Windows.Forms.Padding(0)
         Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(120, 76)
+        Me.Panel1.Size = New System.Drawing.Size(120, 78)
         Me.Panel1.TabIndex = 2
         '
         'SelectionBT
@@ -485,7 +488,7 @@ Partial Class ControllingUI_2
         Me.SelectionBT.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.SelectionBT.Location = New System.Drawing.Point(37, 5)
         Me.SelectionBT.Name = "SelectionBT"
-        Me.SelectionBT.Size = New System.Drawing.Size(40, 40)
+        Me.SelectionBT.Size = New System.Drawing.Size(37, 37)
         Me.SelectionBT.TabIndex = 0
         Me.SelectionBT.UseVisualStyleBackColor = True
         '
@@ -494,7 +497,7 @@ Partial Class ControllingUI_2
         Me.SelectionMenu.BackColor = System.Drawing.SystemColors.Control
         Me.SelectionMenu.Dock = System.Windows.Forms.DockStyle.None
         Me.SelectionMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.SelectionToolStripMenuItem})
-        Me.SelectionMenu.Location = New System.Drawing.Point(17, 47)
+        Me.SelectionMenu.Location = New System.Drawing.Point(16, 43)
         Me.SelectionMenu.Name = "SelectionMenu"
         Me.SelectionMenu.Size = New System.Drawing.Size(75, 24)
         Me.SelectionMenu.TabIndex = 1
@@ -548,10 +551,10 @@ Partial Class ControllingUI_2
         Me.Panel2.Controls.Add(Me.ExcelMenu)
         Me.Panel2.Controls.Add(Me.ExcelBT)
         Me.Panel2.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Panel2.Location = New System.Drawing.Point(122, 1)
+        Me.Panel2.Location = New System.Drawing.Point(120, 0)
         Me.Panel2.Margin = New System.Windows.Forms.Padding(0)
         Me.Panel2.Name = "Panel2"
-        Me.Panel2.Size = New System.Drawing.Size(120, 76)
+        Me.Panel2.Size = New System.Drawing.Size(120, 78)
         Me.Panel2.TabIndex = 3
         '
         'ExcelMenu
@@ -559,7 +562,7 @@ Partial Class ControllingUI_2
         Me.ExcelMenu.BackColor = System.Drawing.SystemColors.Control
         Me.ExcelMenu.Dock = System.Windows.Forms.DockStyle.None
         Me.ExcelMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ExcelExportMBT})
-        Me.ExcelMenu.Location = New System.Drawing.Point(30, 46)
+        Me.ExcelMenu.Location = New System.Drawing.Point(30, 43)
         Me.ExcelMenu.Name = "ExcelMenu"
         Me.ExcelMenu.Size = New System.Drawing.Size(53, 24)
         Me.ExcelMenu.TabIndex = 3
@@ -593,7 +596,7 @@ Partial Class ControllingUI_2
         Me.ExcelBT.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.ExcelBT.Location = New System.Drawing.Point(37, 5)
         Me.ExcelBT.Name = "ExcelBT"
-        Me.ExcelBT.Size = New System.Drawing.Size(40, 40)
+        Me.ExcelBT.Size = New System.Drawing.Size(37, 37)
         Me.ExcelBT.TabIndex = 2
         Me.ExcelBT.UseVisualStyleBackColor = True
         '
@@ -602,10 +605,10 @@ Partial Class ControllingUI_2
         Me.Panel3.Controls.Add(Me.ControllingMenu)
         Me.Panel3.Controls.Add(Me.ControllingBT)
         Me.Panel3.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Panel3.Location = New System.Drawing.Point(243, 1)
+        Me.Panel3.Location = New System.Drawing.Point(240, 0)
         Me.Panel3.Margin = New System.Windows.Forms.Padding(0)
         Me.Panel3.Name = "Panel3"
-        Me.Panel3.Size = New System.Drawing.Size(120, 76)
+        Me.Panel3.Size = New System.Drawing.Size(120, 78)
         Me.Panel3.TabIndex = 4
         '
         'ControllingMenu
@@ -613,7 +616,7 @@ Partial Class ControllingUI_2
         Me.ControllingMenu.BackColor = System.Drawing.SystemColors.Control
         Me.ControllingMenu.Dock = System.Windows.Forms.DockStyle.None
         Me.ControllingMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ControllingMBT})
-        Me.ControllingMenu.Location = New System.Drawing.Point(17, 46)
+        Me.ControllingMenu.Location = New System.Drawing.Point(13, 43)
         Me.ControllingMenu.Name = "ControllingMenu"
         Me.ControllingMenu.Size = New System.Drawing.Size(87, 24)
         Me.ControllingMenu.TabIndex = 14
@@ -659,7 +662,7 @@ Partial Class ControllingUI_2
         Me.ControllingBT.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.ControllingBT.Location = New System.Drawing.Point(38, 5)
         Me.ControllingBT.Name = "ControllingBT"
-        Me.ControllingBT.Size = New System.Drawing.Size(40, 40)
+        Me.ControllingBT.Size = New System.Drawing.Size(37, 37)
         Me.ControllingBT.TabIndex = 3
         Me.ControllingBT.UseVisualStyleBackColor = True
         '
@@ -668,10 +671,10 @@ Partial Class ControllingUI_2
         Me.Panel4.Controls.Add(Me.RefreshMenu)
         Me.Panel4.Controls.Add(Me.RefreshBT)
         Me.Panel4.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Panel4.Location = New System.Drawing.Point(364, 1)
+        Me.Panel4.Location = New System.Drawing.Point(360, 0)
         Me.Panel4.Margin = New System.Windows.Forms.Padding(0)
         Me.Panel4.Name = "Panel4"
-        Me.Panel4.Size = New System.Drawing.Size(120, 76)
+        Me.Panel4.Size = New System.Drawing.Size(120, 78)
         Me.Panel4.TabIndex = 5
         '
         'RefreshMenu
@@ -679,7 +682,7 @@ Partial Class ControllingUI_2
         Me.RefreshMenu.BackColor = System.Drawing.SystemColors.Control
         Me.RefreshMenu.Dock = System.Windows.Forms.DockStyle.None
         Me.RefreshMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.RefreshMBT})
-        Me.RefreshMenu.Location = New System.Drawing.Point(27, 45)
+        Me.RefreshMenu.Location = New System.Drawing.Point(22, 43)
         Me.RefreshMenu.Name = "RefreshMenu"
         Me.RefreshMenu.Size = New System.Drawing.Size(66, 24)
         Me.RefreshMenu.TabIndex = 15
@@ -700,7 +703,7 @@ Partial Class ControllingUI_2
         Me.RefreshBT.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.RefreshBT.Location = New System.Drawing.Point(38, 5)
         Me.RefreshBT.Name = "RefreshBT"
-        Me.RefreshBT.Size = New System.Drawing.Size(40, 40)
+        Me.RefreshBT.Size = New System.Drawing.Size(37, 37)
         Me.RefreshBT.TabIndex = 4
         Me.RefreshBT.UseVisualStyleBackColor = True
         '

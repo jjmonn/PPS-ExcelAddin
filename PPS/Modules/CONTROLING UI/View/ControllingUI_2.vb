@@ -466,7 +466,9 @@ Friend Class ControllingUI_2
     ' Double click on tab event
     Private Sub TabControl1_MouseDoubleClick(sender As Object, e As MouseEventArgs) Handles TabControl1.DoubleClick
 
-        DROPTOEXCELController.SendTabToExcel(TabControl1.SelectedTab.Controls(0))
+        DROPTOEXCELController.SendTabToExcel(TabControl1.SelectedTab.Controls(0), _
+                                             VersionTB.Text, _
+                                            CurrencyTB.Text)
 
     End Sub
 
@@ -642,13 +644,20 @@ Friend Class ControllingUI_2
 
     Private Sub SendCurrentEntity_Click(sender As Object, e As EventArgs) Handles TopEntityExportMBT.Click
 
-        DROPTOEXCELController.SendCurrentEntityToExcel()
+        DROPTOEXCELController.SendCurrentEntityToExcel(VersionTB.Text, _
+                                                       CurrencyTB.Text)
 
     End Sub
 
     Private Sub DropDrillDown_Click(sender As Object, e As EventArgs) Handles DrillDownExportMBT.Click
 
-        DROPTOEXCELController.SendDrillDownToExcel()
+        If Controller.versions_id_array.Length > 1 Then
+
+        Else
+            DROPTOEXCELController.SendDrillDownToExcel(VersionTB.Text, _
+                                                       CurrencyTB.Text)
+        End If
+
 
     End Sub
 
@@ -896,4 +905,5 @@ Friend Class ControllingUI_2
 
 
   
+   
 End Class
