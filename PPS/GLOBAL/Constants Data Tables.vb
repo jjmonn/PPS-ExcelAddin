@@ -494,6 +494,7 @@ Module Data_Tables_Constants
 
     Friend Const MARKET_INDEXES_TABLE As String = "market_indexes"
     Friend Const MARKET_INDEXES_ID_VARIABLE As String = "id"
+    Friend Const MARKET_INDEXES_MAX_TOKEN_SIZE As Int32 = 20
 
     Friend Const MARKET_INDEXES_PRICES_TABLE As String = "market_index_prices"
     Friend Const MARKET_INDEXES_PRICES_ID_VAR As String = "id"
@@ -505,8 +506,10 @@ Module Data_Tables_Constants
     Friend Const MARKET_INDEXES_VERSIONS_ID_VAR As String = "id"
     Friend Const MARKET_INDEXES_VERSIONS_PARENT_ID_VAR As String = "parent_id"
     Friend Const MARKET_INDEXES_VERSIONS_NAME_VAR As String = "name"
-    Friend Const MARKET_INDEXES_VERSIONS_IS_FOLER_VAR As String = "is_folder"
-
+    Friend Const MARKET_INDEXES_VERSIONS_IS_FOLDER_VAR As String = "is_folder"
+    Friend Const MARKET_INDEXES_VERSIONS_START_PERIOD_VAR As String = "start_period"
+    Friend Const MARKET_INDEXES_VERSIONS_NB_PERIODS_VAR As String = "nb_periods"
+    Friend Const MARKET_INDEXES_VERSIONS_TOKEN_SIZE As Int32 = 3
 
 #End Region
 
