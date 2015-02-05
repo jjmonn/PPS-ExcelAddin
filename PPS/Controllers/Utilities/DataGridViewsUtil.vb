@@ -669,16 +669,13 @@ Friend Class DataGridViewsUtil
     ' formats taken care in controllingDropOnExcel
 #Region "Generic DGV Export to Excel"
 
-
-    Protected Friend Shared Function CopyDGVToExcelGeneric(ByRef DGV As vDataGridView, _
+    Protected Friend Shared Sub CopyDGVToExcelGeneric(ByRef DGV As vDataGridView, _
                                                       ByRef dest_range As Excel.Range, _
-                                                      ByRef info_array As String())
+                                                      ByRef i As Int32)
 
-        '   Dim group_level As Int32 = DGV.RowsHierarchy.HierarchyDepth + 1
-        Dim i As Int32 = 1
         Dim j As Int32 = 1
-        Dim nb_columns_floors As Int32 = 1
-     
+        Dim nb_columns_floors As Int32 = i
+
         For Each column As HierarchyItem In DGV.ColumnsHierarchy.Items
             SetupColumnsTitles(column, dest_range, i, j, nb_columns_floors)
         Next
@@ -694,9 +691,8 @@ Friend Class DataGridViewsUtil
         For Each row As HierarchyItem In DGV.RowsHierarchy.Items
             CopyRowHierarchy(row, dest_range, i, j)
         Next
-        Return i
-
-    End Function
+    
+    End Sub
 
     Protected Friend Shared Sub SetupColumnsTitles(ByRef column As HierarchyItem, _
                                                    ByRef range As Excel.Range, _
@@ -705,6 +701,8 @@ Friend Class DataGridViewsUtil
                                                    ByRef parent_j As Int32)
 
         range.Offset(i, j).Value = column.Caption
+        range.Offset(i, j).Font.Bold = True
+        ' FormatRangeFromHierarchyItem(range.Offset(i, j), column)
         j = j + 1
         If column.Items.Count > 0 Then
             For Each sub_column As HierarchyItem In column.Items
@@ -722,9 +720,10 @@ Friend Class DataGridViewsUtil
                                                 ByRef j As Int32)
 
         range.Offset(i, j).Value = row.Caption
+        FormatRangeFromHierarchyItem(range.Offset(i, j), row)
         i = i + 1
         Dim sub_rows_nb As Int32 = 0
-        Dim group_start_row As Int32 = i
+        Dim group_start_row As Int32 = i + range.Row - 1
 
         For Each sub_row As HierarchyItem In row.Items
             SetupRowsTitles(sub_row, range, i, j)
@@ -746,9 +745,12 @@ Friend Class DataGridViewsUtil
                                                  ByRef i As Int32, ByRef j As Int32)
 
         j = 1
+        Dim ws As Excel.Worksheet = range.Worksheet
         For Each column As HierarchyItem In row.DataGridView.ColumnsHierarchy.Items
             CopyColumnHierarchy(row, column, range, i, j)
         Next
+        FormatRangeFromGridCell(ws.Range(range.Offset(i, 1), range.Offset(i, j)), row)
+
         i = i + 1
         For Each sub_row In row.Items
             CopyRowHierarchy(sub_row, range, i, j)
@@ -932,6 +934,51 @@ Friend Class DataGridViewsUtil
 
     End Sub
 
+    Protected Friend Shared Sub SetColumnsMinWidth(ByRef DGV As vDataGridView, _
+                                                   ByRef min_width As Int32)
+
+        For Each column As HierarchyItem In DGV.ColumnsHierarchy.Items
+            If column.Width < min_width Then column.Width = min_width
+        Next
+
+    End Sub
+
+#Region "Format vDGV -> Excel"
+
+    Protected Friend Shared Sub FormatRangeFromGridCell(ByRef xlRange As Excel.Range, _
+                                                        ByRef item As HierarchyItem)
+
+        '   xlRange.NumberFormat = "# ##0 €"
+        Select Case item.CellsFormatString
+            Case "{0:C0}" : xlRange.NumberFormat = "# ##0 €"
+            Case "{0:P}" : xlRange.NumberFormat = "0,00%"
+            Case "{0:N}" : xlRange.NumberFormat = "General"
+            Case "{0:N2}" : xlRange.NumberFormat = "# ##0"
+            Case "{0:C0}" : xlRange.NumberFormat = "# ##0 €"
+        End Select
+        '   xlRange.Interior.Color = item.CellsStyle.FillStyle.Colors(0)
+        Try
+            xlRange.Font.Color = item.CellsStyle.TextColor.ToArgb()
+            xlRange.Font.Bold = item.CellsStyle.Font.Bold
+            xlRange.Font.Italic = item.CellsStyle.Font.Italic
+        Catch ex As Exception
+        End Try
+      
+    End Sub
+
+    Protected Friend Shared Sub FormatRangeFromHierarchyItem(ByRef xlRange As Excel.Range, _
+                                                             ByRef item As HierarchyItem)
+
+        If Not item.HierarchyItemStyleNormal Is Nothing Then
+            xlRange.Interior.Color = item.HierarchyItemStyleNormal.FillStyle.Colors(0)
+            xlRange.Font.Color = item.HierarchyItemStyleNormal.TextColor.ToArgb()
+            xlRange.Font.Bold = item.HierarchyItemStyleNormal.Font.Bold
+            xlRange.Font.Italic = item.HierarchyItemStyleNormal.Font.Italic
+        End If
+    
+    End Sub
+
+#End Region
 
 #End Region
 
