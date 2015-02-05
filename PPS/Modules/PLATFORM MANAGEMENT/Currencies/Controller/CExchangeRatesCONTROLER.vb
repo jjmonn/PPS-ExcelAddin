@@ -33,7 +33,7 @@ Friend Class CExchangeRatesCONTROLER
     Private Currencies As New Currency
     Private Periods As New Period
     Private NewRatesVersionUI As NewRatesVersionUI
-    Private ExcelImport As InputRatesExcel
+    Private ExcelImport As InputValuesExcel
     Private PBar As PBarUI
 
     ' Variables
@@ -41,9 +41,6 @@ Friend Class CExchangeRatesCONTROLER
     Friend currencies_list As List(Of String)
     Friend object_is_alive As Boolean
     Protected Friend global_periods_dictionary As Dictionary(Of Int32, Int32())
-
-    ' Constants
-    Private Const RATES_VERSIONS_TABLE_ADDRESS As String = CONFIG_DATABASE + "." + RATES_VERSIONS_TABLE
 
 
 #End Region
@@ -279,7 +276,7 @@ Friend Class CExchangeRatesCONTROLER
 
     Friend Sub ImportRatesFromExcel()
 
-        ExcelImport = New InputRatesExcel(Me)
+        ExcelImport = New InputValuesExcel(Me, currencies_list)
         ExcelImport.Show()
 
     End Sub

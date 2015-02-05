@@ -20,7 +20,6 @@
 Imports VIBlend.WinForms.DataGridView
 Imports System.Collections.Generic
 Imports System.Collections
-Imports ZedGraph
 Imports System.Drawing
 Imports System.Windows.Forms
 
@@ -39,8 +38,6 @@ Friend Class RatesView
     Friend columnsKeyItemDictionary As New Dictionary(Of String, HierarchyItem)
     Friend rowIDKeyDictionary As New Dictionary(Of String, Integer)
     Friend columnIDKeyDictionary As New Dictionary(Of String, String)
-    Friend chartSeriesDictionary As New Dictionary(Of String, PointPairList)
-    Private myPane As GraphPane
     Private is_filling_cells As Boolean
 
     ' Flags
@@ -211,27 +208,27 @@ Friend Class RatesView
 
     Friend Sub DisplayCurrencyCurve(ByRef currencyKey As String)
 
-        ReLoadRatesSerie(currencyKey)
-        myPane.Title.Text = currencyKey + "/" + MAIN_CURRENCY + " rates curve"
-        myPane.YAxis.Title.Text = currencyKey + "/" + MAIN_CURRENCY
+        'ReLoadRatesSerie(currencyKey)
+        'myPane.Title.Text = currencyKey + "/" + MAIN_CURRENCY + " rates curve"
+        'myPane.YAxis.Title.Text = currencyKey + "/" + MAIN_CURRENCY
 
-        chartDisplayedCurrency = currencyKey
+        'chartDisplayedCurrency = currencyKey
 
     End Sub
 
     ' Reload a rates serie
     Private Sub ReLoadRatesSerie(ByRef curr As String)
 
-        Dim col As HierarchyItem = columnsKeyItemDictionary(curr)
-        Dim tmpList = New PointPairList()
-        For Each row As HierarchyItem In DGV.RowsHierarchy.Items
+        'Dim col As HierarchyItem = columnsKeyItemDictionary(curr)
+        'Dim tmpList = New PointPairList()
+        'For Each row As HierarchyItem In DGV.RowsHierarchy.Items
 
-            Dim value As Double = DGV.CellsArea.GetCellValue(row, col)
-            Dim x As Double = CDbl(New XDate(CDbl(row.Caption)))
-            tmpList.Add(x, value)
+        '    Dim value As Double = DGV.CellsArea.GetCellValue(row, col)
+        '    Dim x As Double = CDbl(New XDate(CDbl(row.Caption)))
+        '    tmpList.Add(x, value)
 
-        Next
-        chartSeriesDictionary(curr) = tmpList
+        'Next
+        'chartSeriesDictionary(curr) = tmpList
 
     End Sub
 
