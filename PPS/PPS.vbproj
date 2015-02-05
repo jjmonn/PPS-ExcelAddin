@@ -120,11 +120,13 @@
     <Compile Include="Clients Specific Modules\GDF SUEZ - ALTERNATIVE SCENARIOS\Model\AlternativeScenarioModel.vb" />
     <Compile Include="Controllers\Utilities\ChartsUtilities.vb" />
     <Compile Include="Models\CRUDs\Adjustment.vb" />
+    <Compile Include="Models\CRUDs\MarketIndex.vb" />
     <Compile Include="Models\CRUDs\Control.vb" />
     <Compile Include="Models\CRUDs\ControlChart.vb" />
     <Compile Include="Models\CRUDs\CredentialLevel.vb" />
     <Compile Include="Models\CRUDs\FModellingAccount.vb" />
     <Compile Include="Models\CRUDs\MarketIndexVersion.vb" />
+    <Compile Include="Models\CRUDs\MarketPrice.vb" />
     <Compile Include="Models\CRUDs\User.vb" />
     <Compile Include="Models\dll Interfaces\FDLL_Interface.vb" />
     <Compile Include="Models\dll Interfaces\PSDLLL_Interface.vb" />
@@ -154,14 +156,28 @@
     <Compile Include="Modules\CUBE\CubeView.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Modules\FINANCIAL MODELLING\Controller\FModellingExportController.vb" />
-    <Compile Include="Modules\FINANCIAL MODELLING\Controller\FModellingInputsController.vb" />
-    <Compile Include="Modules\FINANCIAL MODELLING\Controller\FModellingSimulationsControler.vb" />
-    <Compile Include="Modules\FINANCIAL MODELLING\Model\Scenario.vb" />
-    <Compile Include="Modules\FINANCIAL MODELLING\View\FModellingUI.Designer.vb">
+    <Compile Include="Modules\MODELING\CONFIGURATION\Market Prices Config\Controller\MarketPricesController.vb" />
+    <Compile Include="Modules\MODELING\CONFIGURATION\Market Prices Config\Views\MarketPricesUI.Designer.vb">
+      <DependentUpon>MarketPricesUI.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Modules\MODELING\CONFIGURATION\Market Prices Config\Views\MarketPricesUI.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Modules\MODELING\CONFIGURATION\Market Prices Config\Views\MarketPricesView.vb" />
+    <Compile Include="Modules\MODELING\CONFIGURATION\Market Prices Config\Views\NewPricesVersionUI.Designer.vb">
+      <DependentUpon>NewPricesVersionUI.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Modules\MODELING\CONFIGURATION\Market Prices Config\Views\NewPricesVersionUI.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Modules\MODELING\FINANCIAL MODELLING\Controller\FModellingExportController.vb" />
+    <Compile Include="Modules\MODELING\FINANCIAL MODELLING\Controller\FModellingInputsController.vb" />
+    <Compile Include="Modules\MODELING\FINANCIAL MODELLING\Controller\FModellingSimulationsControler.vb" />
+    <Compile Include="Modules\MODELING\FINANCIAL MODELLING\Model\Scenario.vb" />
+    <Compile Include="Modules\MODELING\FINANCIAL MODELLING\View\FModellingUI.Designer.vb">
       <DependentUpon>FModellingUI.vb</DependentUpon>
     </Compile>
-    <Compile Include="Modules\FINANCIAL MODELLING\View\FModellingUI.vb">
+    <Compile Include="Modules\MODELING\FINANCIAL MODELLING\View\FModellingUI.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Clients Specific Modules\GDF SUEZ - ALTERNATIVE SCENARIOS\Configuration\Views\ASConfigurationPanel.Designer.vb">
@@ -225,10 +241,10 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Modules\PLATFORM MANAGEMENT\Categories\Controller\CategoriesController.vb" />
-    <Compile Include="Modules\PLATFORM MANAGEMENT\Currencies\Views\InputRatesExcel.Designer.vb">
-      <DependentUpon>InputRatesExcel.vb</DependentUpon>
+    <Compile Include="Views\InputValuesExcel.Designer.vb">
+      <DependentUpon>InputValuesExcel.vb</DependentUpon>
     </Compile>
-    <Compile Include="Modules\PLATFORM MANAGEMENT\Currencies\Views\InputRatesExcel.vb">
+    <Compile Include="Views\InputValuesExcel.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Modules\PLATFORM MANAGEMENT\Users\Views\UsersTGV.vb" />
@@ -515,7 +531,13 @@
     <EmbeddedResource Include="Modules\CUBE\HTTP test.resx">
       <DependentUpon>HTTP test.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Modules\FINANCIAL MODELLING\View\FModellingUI.resx">
+    <EmbeddedResource Include="Modules\MODELING\CONFIGURATION\Market Prices Config\Views\MarketPricesUI.resx">
+      <DependentUpon>MarketPricesUI.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Modules\MODELING\CONFIGURATION\Market Prices Config\Views\NewPricesVersionUI.resx">
+      <DependentUpon>NewPricesVersionUI.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Modules\MODELING\FINANCIAL MODELLING\View\FModellingUI.resx">
       <DependentUpon>FModellingUI.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Clients Specific Modules\GDF SUEZ - ALTERNATIVE SCENARIOS\Configuration\Views\ASConfigurationPanel.resx">
@@ -527,8 +549,8 @@
     <EmbeddedResource Include="Modules\LOG\View\DataHistoryUI.resx">
       <DependentUpon>DataHistoryUI.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Modules\PLATFORM MANAGEMENT\Currencies\Views\InputRatesExcel.resx">
-      <DependentUpon>InputRatesExcel.vb</DependentUpon>
+    <EmbeddedResource Include="Views\InputValuesExcel.resx">
+      <DependentUpon>InputValuesExcel.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Modules\PLATFORM MANAGEMENT\Accounts\Views\NewAccountUI.resx">
       <DependentUpon>NewAccountUI.vb</DependentUpon>
@@ -834,6 +856,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Clients Specific Modules\GDF SUEZ - ALTERNATIVE SCENARIOS\Configuration\Controllers\" />
+    <Folder Include="Modules\MODELING\CONFIGURATION\Market Prices Config\Model\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\excel.png" />
