@@ -15,7 +15,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 29/08/2014
+' Last modified: 05/02/2015
 
 
 
@@ -25,7 +25,7 @@ Imports System.Collections
 Imports System.Windows.Forms
 
 
-Public Class CWorksheetWrittingFunctions
+Friend Class CWorksheetWrittingFunctions
 
 
     Private Const EXCEL_SHEET_NAME_MAX_LENGHT = 31
@@ -44,7 +44,7 @@ Public Class CWorksheetWrittingFunctions
         WriteAccountsFromTreeView(accountsTV, WS.Cells(2, 1), periodList)
 
         accountsTV.Dispose()
-      
+
     End Sub
 
 
@@ -87,7 +87,7 @@ Public Class CWorksheetWrittingFunctions
             Next
         Next
         destinationCell.Worksheet.Columns(destinationCell.Column).autofit()
-      
+
     End Sub
 
     ' param+ = timeSetup for periods formatting
@@ -117,7 +117,9 @@ Public Class CWorksheetWrittingFunctions
 #Region "Worksheets Add/ Delete"
 
 
-    Public Shared Function CreateReceptionWS(ByRef wsName As String) As Excel.Range
+    Public Shared Function CreateReceptionWS(ByRef wsName As String, _
+                                             ByRef header_names_array As String(), _
+                                             ByRef header_values_array As String()) As Excel.Range
 
         Dim WS As Excel.Worksheet = CType(APPS.Worksheets.Add(), Excel.Worksheet)
         If Len(wsName) > EXCEL_SHEET_NAME_MAX_LENGHT Then
@@ -131,7 +133,16 @@ Public Class CWorksheetWrittingFunctions
         APPS.ActiveWindow.DisplayGridlines = False
         Dim destination As Excel.Range = WS.Cells(1, 1)
 
-        destination.Value = wsName
+        Dim i As Int32 = 0
+        For Each item In header_names_array
+            destination.Offset(i + 1, 0).Value = header_names_array(i)
+            destination.Offset(i + 1, 1).Value = header_values_array(i)
+            i = i + 1
+        Next
+        destination.Offset(i + 1, 0).Value = "Date"
+        destination.Offset(i + 1, 1).Value = Today
+
+        destination = destination.Offset(i + 2, 0)
         Return destination
 
     End Function
