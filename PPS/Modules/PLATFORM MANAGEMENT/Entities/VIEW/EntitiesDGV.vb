@@ -339,7 +339,9 @@ Friend Class EntitiesDGV
     ' Drop the current TGV in a new worksheet
     Friend Sub DropInExcel()
 
-        Dim cell As Excel.Range = CWorksheetWrittingFunctions.CreateReceptionWS(ENTITIES_TABLE)
+        Dim cell As Excel.Range = CWorksheetWrittingFunctions.CreateReceptionWS(ENTITIES_TABLE, _
+                                                                                {"Entities Hierarchy"}, _
+                                                                                {""})
         Dim nbRows As Int32
         For Each item As HierarchyItem In DGV.RowsHierarchy.Items
             DGVRowsCount(item, nbRows)
