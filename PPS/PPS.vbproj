@@ -140,6 +140,7 @@
     <Compile Include="Models\Mappings\OperationalUnitConversionMapping.vb" />
     <Compile Include="Models\Mappings\OperatorsMapping.vb" />
     <Compile Include="Models\Mappings\PalettesMapping.vb" />
+    <Compile Include="Models\Mappings\pps_colorsMapping.vb" />
     <Compile Include="Models\Mappings\SeriesMapping.vb" />
     <Compile Include="Models\Mappings\UsersMapping.vb" />
     <Compile Include="Clients Specific Modules\GDF SUEZ - ALTERNATIVE SCENARIOS\Configuration\Models\gdfsuezAlternativeScenarios.vb" />
