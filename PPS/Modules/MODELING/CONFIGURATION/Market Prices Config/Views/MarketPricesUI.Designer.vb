@@ -26,6 +26,9 @@ Partial Class MarketPricesUI
         Dim DataGridLocalization1 As VIBlend.WinForms.DataGridView.DataGridLocalization = New VIBlend.WinForms.DataGridView.DataGridLocalization()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(MarketPricesUI))
         Me.SplitContainer1 = New System.Windows.Forms.SplitContainer()
+        Me.indexesRCMenu = New System.Windows.Forms.ContextMenuStrip(Me.components)
+        Me.AddIndexToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.DeleteIndexToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
         Me.TableLayoutPanel2 = New System.Windows.Forms.TableLayoutPanel()
         Me.versionsTV = New System.Windows.Forms.TreeView()
         Me.VersionsRCMenu = New System.Windows.Forms.ContextMenuStrip(Me.components)
@@ -45,7 +48,6 @@ Partial Class MarketPricesUI
         Me.TableLayoutPanel3 = New System.Windows.Forms.TableLayoutPanel()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.index_version_TB = New System.Windows.Forms.TextBox()
-        Me.ChartPanel = New System.Windows.Forms.Panel()
         Me.MenuStrip1 = New System.Windows.Forms.MenuStrip()
         Me.versions_button = New System.Windows.Forms.ToolStripMenuItem()
         Me.indexesBT = New System.Windows.Forms.ToolStripMenuItem()
@@ -53,24 +55,20 @@ Partial Class MarketPricesUI
         Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
         Me.chart_button = New System.Windows.Forms.ToolStripMenuItem()
         Me.ImportFromExcelToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.indexesRCMenu = New System.Windows.Forms.ContextMenuStrip(Me.components)
-        Me.AddIndexToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.DeleteIndexToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
         CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SplitContainer1.Panel1.SuspendLayout()
         Me.SplitContainer1.Panel2.SuspendLayout()
         Me.SplitContainer1.SuspendLayout()
+        Me.indexesRCMenu.SuspendLayout()
         Me.TableLayoutPanel2.SuspendLayout()
         Me.VersionsRCMenu.SuspendLayout()
         CType(Me.SplitContainer2, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SplitContainer2.Panel1.SuspendLayout()
-        Me.SplitContainer2.Panel2.SuspendLayout()
         Me.SplitContainer2.SuspendLayout()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.dgvRCM.SuspendLayout()
         Me.TableLayoutPanel3.SuspendLayout()
         Me.MenuStrip1.SuspendLayout()
-        Me.indexesRCMenu.SuspendLayout()
         Me.SuspendLayout()
         '
         'SplitContainer1
@@ -90,10 +88,31 @@ Partial Class MarketPricesUI
         'SplitContainer1.Panel2
         '
         Me.SplitContainer1.Panel2.Controls.Add(Me.SplitContainer2)
-        Me.SplitContainer1.Size = New System.Drawing.Size(766, 434)
-        Me.SplitContainer1.SplitterDistance = 117
+        Me.SplitContainer1.Panel2.Margin = New System.Windows.Forms.Padding(3)
+        Me.SplitContainer1.Size = New System.Drawing.Size(823, 492)
+        Me.SplitContainer1.SplitterDistance = 125
         Me.SplitContainer1.SplitterWidth = 2
         Me.SplitContainer1.TabIndex = 1
+        '
+        'indexesRCMenu
+        '
+        Me.indexesRCMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.AddIndexToolStripMenuItem, Me.DeleteIndexToolStripMenuItem1})
+        Me.indexesRCMenu.Name = "currenciesRCMenu"
+        Me.indexesRCMenu.Size = New System.Drawing.Size(139, 48)
+        '
+        'AddIndexToolStripMenuItem
+        '
+        Me.AddIndexToolStripMenuItem.Image = Global.PPS.My.Resources.Resources.checked
+        Me.AddIndexToolStripMenuItem.Name = "AddIndexToolStripMenuItem"
+        Me.AddIndexToolStripMenuItem.Size = New System.Drawing.Size(138, 22)
+        Me.AddIndexToolStripMenuItem.Text = "Add Index"
+        '
+        'DeleteIndexToolStripMenuItem1
+        '
+        Me.DeleteIndexToolStripMenuItem1.Image = Global.PPS.My.Resources.Resources.imageres_891
+        Me.DeleteIndexToolStripMenuItem1.Name = "DeleteIndexToolStripMenuItem1"
+        Me.DeleteIndexToolStripMenuItem1.Size = New System.Drawing.Size(138, 22)
+        Me.DeleteIndexToolStripMenuItem1.Text = "Delete Index"
         '
         'TableLayoutPanel2
         '
@@ -105,11 +124,10 @@ Partial Class MarketPricesUI
         Me.TableLayoutPanel2.Controls.Add(Me.versionsTV, 0, 0)
         Me.TableLayoutPanel2.Location = New System.Drawing.Point(3, 24)
         Me.TableLayoutPanel2.Name = "TableLayoutPanel2"
-        Me.TableLayoutPanel2.RowCount = 2
+        Me.TableLayoutPanel2.RowCount = 1
         Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25.0!))
-        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
-        Me.TableLayoutPanel2.Size = New System.Drawing.Size(111, 407)
+        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 465.0!))
+        Me.TableLayoutPanel2.Size = New System.Drawing.Size(119, 465)
         Me.TableLayoutPanel2.TabIndex = 0
         '
         'versionsTV
@@ -119,7 +137,7 @@ Partial Class MarketPricesUI
         Me.versionsTV.Location = New System.Drawing.Point(3, 3)
         Me.versionsTV.Margin = New System.Windows.Forms.Padding(3, 3, 0, 3)
         Me.versionsTV.Name = "versionsTV"
-        Me.versionsTV.Size = New System.Drawing.Size(108, 376)
+        Me.versionsTV.Size = New System.Drawing.Size(116, 459)
         Me.versionsTV.TabIndex = 0
         '
         'VersionsRCMenu
@@ -175,9 +193,9 @@ Partial Class MarketPricesUI
         '
         'SplitContainer2.Panel2
         '
-        Me.SplitContainer2.Panel2.Controls.Add(Me.ChartPanel)
-        Me.SplitContainer2.Size = New System.Drawing.Size(647, 434)
-        Me.SplitContainer2.SplitterDistance = 264
+        Me.SplitContainer2.Panel2.Margin = New System.Windows.Forms.Padding(3)
+        Me.SplitContainer2.Size = New System.Drawing.Size(696, 492)
+        Me.SplitContainer2.SplitterDistance = 299
         Me.SplitContainer2.SplitterWidth = 1
         Me.SplitContainer2.TabIndex = 2
         '
@@ -193,7 +211,7 @@ Partial Class MarketPricesUI
         Me.TableLayoutPanel1.RowCount = 2
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25.0!))
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle())
-        Me.TableLayoutPanel1.Size = New System.Drawing.Size(647, 264)
+        Me.TableLayoutPanel1.Size = New System.Drawing.Size(696, 299)
         Me.TableLayoutPanel1.TabIndex = 3
         '
         'prices_DGV
@@ -255,7 +273,7 @@ Partial Class MarketPricesUI
         Me.prices_DGV.SelectionBorderWidth = 2
         Me.prices_DGV.SelectionMode = VIBlend.WinForms.DataGridView.vDataGridView.SELECTION_MODE.CELL_SELECT
         Me.prices_DGV.ShowBorder = True
-        Me.prices_DGV.Size = New System.Drawing.Size(641, 323)
+        Me.prices_DGV.Size = New System.Drawing.Size(690, 323)
         Me.prices_DGV.TabIndex = 1
         Me.prices_DGV.Text = "VDataGridView1"
         Me.prices_DGV.ToolTipDuration = 5000
@@ -312,7 +330,7 @@ Partial Class MarketPricesUI
         Me.TableLayoutPanel3.Name = "TableLayoutPanel3"
         Me.TableLayoutPanel3.RowCount = 1
         Me.TableLayoutPanel3.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TableLayoutPanel3.Size = New System.Drawing.Size(645, 23)
+        Me.TableLayoutPanel3.Size = New System.Drawing.Size(694, 23)
         Me.TableLayoutPanel3.TabIndex = 2
         '
         'Label2
@@ -335,21 +353,12 @@ Partial Class MarketPricesUI
         Me.index_version_TB.Size = New System.Drawing.Size(141, 20)
         Me.index_version_TB.TabIndex = 1
         '
-        'ChartPanel
-        '
-        Me.ChartPanel.BackColor = System.Drawing.SystemColors.ButtonHighlight
-        Me.ChartPanel.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.ChartPanel.Location = New System.Drawing.Point(0, 0)
-        Me.ChartPanel.Name = "ChartPanel"
-        Me.ChartPanel.Size = New System.Drawing.Size(647, 169)
-        Me.ChartPanel.TabIndex = 0
-        '
         'MenuStrip1
         '
         Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.versions_button, Me.indexesBT, Me.chart_button, Me.ImportFromExcelToolStripMenuItem})
         Me.MenuStrip1.Location = New System.Drawing.Point(0, 0)
         Me.MenuStrip1.Name = "MenuStrip1"
-        Me.MenuStrip1.Size = New System.Drawing.Size(766, 24)
+        Me.MenuStrip1.Size = New System.Drawing.Size(823, 24)
         Me.MenuStrip1.TabIndex = 2
         Me.MenuStrip1.Text = "MenuStrip1"
         '
@@ -391,31 +400,11 @@ Partial Class MarketPricesUI
         Me.ImportFromExcelToolStripMenuItem.Size = New System.Drawing.Size(129, 20)
         Me.ImportFromExcelToolStripMenuItem.Text = "Import from Excel"
         '
-        'indexesRCMenu
-        '
-        Me.indexesRCMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.AddIndexToolStripMenuItem, Me.DeleteIndexToolStripMenuItem1})
-        Me.indexesRCMenu.Name = "currenciesRCMenu"
-        Me.indexesRCMenu.Size = New System.Drawing.Size(139, 48)
-        '
-        'AddIndexToolStripMenuItem
-        '
-        Me.AddIndexToolStripMenuItem.Image = Global.PPS.My.Resources.Resources.checked
-        Me.AddIndexToolStripMenuItem.Name = "AddIndexToolStripMenuItem"
-        Me.AddIndexToolStripMenuItem.Size = New System.Drawing.Size(138, 22)
-        Me.AddIndexToolStripMenuItem.Text = "Add Index"
-        '
-        'DeleteIndexToolStripMenuItem1
-        '
-        Me.DeleteIndexToolStripMenuItem1.Image = Global.PPS.My.Resources.Resources.imageres_891
-        Me.DeleteIndexToolStripMenuItem1.Name = "DeleteIndexToolStripMenuItem1"
-        Me.DeleteIndexToolStripMenuItem1.Size = New System.Drawing.Size(138, 22)
-        Me.DeleteIndexToolStripMenuItem1.Text = "Delete Index"
-        '
         'MarketPricesUI
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(766, 460)
+        Me.ClientSize = New System.Drawing.Size(823, 518)
         Me.Controls.Add(Me.MenuStrip1)
         Me.Controls.Add(Me.SplitContainer1)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
@@ -425,10 +414,10 @@ Partial Class MarketPricesUI
         Me.SplitContainer1.Panel2.ResumeLayout(False)
         CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.SplitContainer1.ResumeLayout(False)
+        Me.indexesRCMenu.ResumeLayout(False)
         Me.TableLayoutPanel2.ResumeLayout(False)
         Me.VersionsRCMenu.ResumeLayout(False)
         Me.SplitContainer2.Panel1.ResumeLayout(False)
-        Me.SplitContainer2.Panel2.ResumeLayout(False)
         CType(Me.SplitContainer2, System.ComponentModel.ISupportInitialize).EndInit()
         Me.SplitContainer2.ResumeLayout(False)
         Me.TableLayoutPanel1.ResumeLayout(False)
@@ -437,7 +426,6 @@ Partial Class MarketPricesUI
         Me.TableLayoutPanel3.PerformLayout()
         Me.MenuStrip1.ResumeLayout(False)
         Me.MenuStrip1.PerformLayout()
-        Me.indexesRCMenu.ResumeLayout(False)
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -451,7 +439,6 @@ Partial Class MarketPricesUI
     Friend WithEvents TableLayoutPanel3 As System.Windows.Forms.TableLayoutPanel
     Friend WithEvents Label2 As System.Windows.Forms.Label
     Friend WithEvents index_version_TB As System.Windows.Forms.TextBox
-    Friend WithEvents ChartPanel As System.Windows.Forms.Panel
     Friend WithEvents MenuStrip1 As System.Windows.Forms.MenuStrip
     Friend WithEvents versions_button As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents indexesBT As System.Windows.Forms.ToolStripMenuItem

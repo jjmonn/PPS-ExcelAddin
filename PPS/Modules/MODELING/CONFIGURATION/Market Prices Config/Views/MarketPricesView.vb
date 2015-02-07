@@ -12,6 +12,7 @@ Imports System.Collections.Generic
 Imports System.Collections
 Imports System.Drawing
 Imports System.Windows.Forms
+Imports System.Windows.Forms.DataVisualization.Charting
 
 
 Friend Class MarketPricesView
@@ -22,6 +23,7 @@ Friend Class MarketPricesView
     ' Objects
     Private DGV As vDataGridView
     Private Controller As MarketPricesController
+    Private chart As New Chart
 
     ' Variables
     Friend rowsKeyItemDictionary As New Dictionary(Of Integer, HierarchyItem)
@@ -29,11 +31,14 @@ Friend Class MarketPricesView
     Friend rowIDKeyDictionary As New Dictionary(Of String, Integer)
     Friend columnIDKeyDictionary As New Dictionary(Of String, String)
     Private is_filling_cells As Boolean
+    Private colors_palette As List(Of Hashtable)
+    Private charts_periods As New List(Of String)
 
     ' Constants
     Private DGV_ITEMS_FONT_SIZE = 8
     Private DGV_CELLS_FONT_SIZE = 8
     Private COLUMNS_MIN_WIDTH As Int32 = 100
+    Private LINES_WIDTH As Single = 3
 
 
 #End Region
@@ -42,15 +47,16 @@ Friend Class MarketPricesView
 #Region "Initialize"
 
     Friend Sub New(ByRef inputDGV As vDataGridView, _
+                   ByRef input_chart As Chart, _
                    ByRef MarketPricesController As MarketPricesController)
 
         DGV = inputDGV
+        chart = input_chart
         Controller = MarketPricesController
-        With DGV
-            .AllowCopyPaste = True
-            .RowsHierarchy.CompactStyleRenderingEnabled = False
-            AddHandler .CellValueChanging, AddressOf rates_DGV_CellValueChanging
-        End With
+        DGV.AllowCopyPaste = True
+        DGV.RowsHierarchy.CompactStyleRenderingEnabled = False
+        colors_palette = pps_colorsMapping.GetColorsList()
+        AddHandler DGV.CellValueChanging, AddressOf rates_DGV_CellValueChanging
 
     End Sub
 
@@ -99,11 +105,13 @@ Friend Class MarketPricesView
 
     Private Sub InitRows(ByRef globalPeriodsDictionary As Dictionary(Of Int32, Integer()))
 
+        charts_periods.Clear()
         For Each yearAsInteger As Integer In globalPeriodsDictionary.Keys
             Dim row As HierarchyItem = DGV.RowsHierarchy.Items.Add(Year(Date.FromOADate(yearAsInteger)))
             For Each monthDateInteger As Integer In globalPeriodsDictionary(yearAsInteger)
                 Dim period As Date = Date.FromOADate(monthDateInteger)
                 AddSubRow(row, Format(period, "MMM yyyy"), monthDateInteger)
+                charts_periods.Add(Format(period, "MMM yyyy"))
             Next
         Next
 
@@ -145,20 +153,18 @@ Friend Class MarketPricesView
 
     Private Sub FillInGridData(ByRef MarketPricesDictionary As Dictionary(Of String, Hashtable))
 
+        chart.Series.Clear()
         is_filling_cells = True
         Dim index As String
         For Each column As HierarchyItem In DGV.ColumnsHierarchy.Items
             index = columnIDKeyDictionary(column.GetUniqueID)
             If MarketPricesDictionary.ContainsKey(index) Then
-
                 For Each row As HierarchyItem In DGV.RowsHierarchy.Items
                     For Each subRow As HierarchyItem In row.Items
-                        FillInGridCell(MarketPricesDictionary, _
-                                       subRow, _
-                                       index, _
-                                       column)
+                        FillInGridCell(MarketPricesDictionary, subRow, index, column)
                     Next
                 Next
+                DisplayPriceCurve(index, GetValuesFromPeriodsHT(MarketPricesDictionary(index)), column.ItemIndex)
             End If
         Next
         is_filling_cells = False
@@ -195,19 +201,26 @@ Friend Class MarketPricesView
 
 #Region "Chart Display"
 
-    Friend Sub DisplayPriceCurve(ByRef index As String)
+    Friend Sub DisplayPriceCurve(ByRef index As String, _
+                                 ByRef values As Double(), _
+                                 ByRef color_index As Int32)
 
-        ' to be implemented
-
-
-
+        Dim new_serie As New Series(index)
+        chart.Series.Add(index)
+        new_serie.ChartArea = "ChartArea1"
+        chart.Series(index).ChartType = SeriesChartType.Line
+        chart.Series(index).Color = Color.FromArgb(colors_palette(color_index)(PPS_COLORS_RED_VAR), colors_palette(color_index)(PPS_COLORS_GREEN_VAR), colors_palette(color_index)(PPS_COLORS_BLUE_VAR))
+        chart.Series(index).BorderWidth = LINES_WIDTH
+        chart.Series(index).Points.DataBindXY(charts_periods, values)
 
     End Sub
 
     Private Sub ReLoadPricesSerie(ByRef index As String)
 
-        ' to be implemented
+        ' ou clear juste la serie mise à jour
+        '   chart.ChartAreas.Clear()
 
+        chart.Series("").Points(0).SetValueY()
         'Dim col As HierarchyItem = columnsKeyItemDictionary(index)
         'Dim tmpList = New PointPairList()
         'For Each row As HierarchyItem In DGV.RowsHierarchy.Items
@@ -287,6 +300,20 @@ Friend Class MarketPricesView
         Next
 
     End Sub
+
+    Private Function GetValuesFromPeriodsHT(ByRef ht As Hashtable) As Double()
+
+        Dim tmp_array(charts_periods.Count - 1) As Double
+        Dim i As Int32 = 0
+        For Each row As HierarchyItem In DGV.RowsHierarchy.Items
+            For Each sub_row As HierarchyItem In row.Items
+                tmp_array(i) = ht(rowIDKeyDictionary(sub_row.GetUniqueID))
+                i = i + 1
+            Next
+        Next
+        Return tmp_array
+
+    End Function
 
 #End Region
 

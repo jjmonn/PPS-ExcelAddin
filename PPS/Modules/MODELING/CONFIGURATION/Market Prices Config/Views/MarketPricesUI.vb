@@ -11,6 +11,7 @@ Imports System.Collections.Generic
 Imports VIBlend.WinForms.DataGridView
 Imports System.Collections
 Imports System.Windows.Forms
+Imports System.Windows.Forms.DataVisualization.Charting
 
 
 Friend Class MarketPricesUI
@@ -21,6 +22,7 @@ Friend Class MarketPricesUI
     ' Objects
     Friend Controller As MarketPricesController
     Friend marketPricesView As MarketPricesView
+    Private chart As Chart
 
     ' Variables
     Private mainMenuFlag As Boolean
@@ -46,7 +48,12 @@ Friend Class MarketPricesUI
 
         ' Add any initialization after the InitializeComponent() call.
         Controller = MarketPricesController
-        marketPricesView = New MarketPricesView(prices_DGV, Controller)
+        chart = ChartsUtilities.CreateChart("Market Prices")
+        SplitContainer2.Panel2.Controls.Add(chart)
+        chart.Dock = DockStyle.Fill
+        chart.BorderlineColor = Drawing.Color.Gray
+        chart.BorderlineWidth = 1
+        marketPricesView = New MarketPricesView(prices_DGV, chart, Controller)
 
     End Sub
 
@@ -269,7 +276,7 @@ Friend Class MarketPricesUI
     Private Sub ExpandChartPane()
 
         SplitContainer2.SplitterDistance = chart_splitter_distance
-        SplitContainer2.Panel1.Show()
+        SplitContainer2.Panel2.Show()
 
     End Sub
 
