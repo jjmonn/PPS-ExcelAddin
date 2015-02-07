@@ -513,6 +513,16 @@ Module Data_Tables_Constants
 
 #End Region
 
+#Region "PPS Colors Palette"
+
+    Friend Const PPS_COLORS_TABLE As String = "pps_colors"
+    Friend Const PPS_COLORS_ID_VAR As String = "id"
+    Friend Const PPS_COLORS_RED_VAR As String = "red"
+    Friend Const PPS_COLORS_GREEN_VAR As String = "green"
+    Friend Const PPS_COLORS_BLUE_VAR As String = "blue"
+
+#End Region
+
 
 #End Region
 
