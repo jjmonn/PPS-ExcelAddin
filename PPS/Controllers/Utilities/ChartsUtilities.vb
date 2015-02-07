@@ -28,7 +28,8 @@ Friend Class ChartsUtilities
 
 #Region "Charts and Series Creation"
 
-    Protected Friend Shared Function CreateChart(ByRef title As String, ByRef palette As Object) As Chart
+    Protected Friend Shared Function CreateChart(ByRef title As String, _
+                                                 Optional ByRef palette As Object = Nothing) As Chart
 
         Dim new_chart As New Chart
         Dim ChartArea1 As New ChartArea
@@ -36,6 +37,7 @@ Friend Class ChartsUtilities
 
         ChartArea1.AxisY.LabelAutoFitMaxFontSize = LABELS_MAX_FONT_SIZE
         ChartArea1.AxisX.LabelAutoFitMaxFontSize = LABELS_MAX_FONT_SIZE
+        ' set legend min font size
         ChartArea1.AxisX.MajorGrid.Enabled = False
 
         If IsDBNull(palette) Then
@@ -64,14 +66,12 @@ Friend Class ChartsUtilities
         new_chart.Legends(0).IsDockedInsideChartArea = False
         new_chart.Legends(0).TableStyle = LegendTableStyle.Wide
         new_chart.Legends(0).Alignment = System.Drawing.StringAlignment.Center
-
+        new_chart.Legends(0).AutoFitMinFontSize = VALUES_LABELS_FONT_SIZE
 
         new_chart.Titles.Add(title)
         new_chart.Titles(0).Font = New Drawing.Font("Arial", CHART_TITLE_FONT_SIZE, Drawing.FontStyle.Bold)
         new_chart.BorderlineWidth = 1
         new_chart.BorderlineColor = Drawing.Color.Gray
-        new_chart.ChartAreas(0).Position = New ElementPosition(10, 10, 80, 80)
-        new_chart.Legends(0).Position = New ElementPosition(0, 90, 100, 10)
         Return new_chart
 
     End Function
@@ -134,11 +134,24 @@ Friend Class ChartsUtilities
             chart1.ChartAreas(0).AxisY.Maximum = chart2.ChartAreas(0).AxisY.Maximum
         End If
 
+    End Sub
+
+    
+#End Region
+
+
+#Region "Position Adjustment"
+
+    Protected Friend Shared Sub AdjustChartPosition(ByRef chart As Chart)
+
+        ' specific to PriceModeling
+        ' to be reviewed
+        chart.ChartAreas(0).Position = New ElementPosition(10, 10, 80, 80)
+        chart.Legends(0).Position = New ElementPosition(0, 90, 100, 10)
 
     End Sub
 
 #End Region
-
 
 #Region "Excel"
 
