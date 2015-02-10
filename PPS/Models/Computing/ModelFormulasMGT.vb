@@ -33,7 +33,7 @@ Friend Class ModelFormulasMGT
     Private formula_array() As String
 
     ' Constants
-    Public Shared ReadOnly FORMULAS_TOKEN_CHARACTERS As String() = {"(", ")", "+", "-", "*", "/", "=", "<", ">", "^", "?", ":", ";", "!"}
+    Protected Friend Shared ReadOnly FORMULAS_TOKEN_CHARACTERS As String() = {"(", ")", "+", "-", "*", "/", "=", "<", ">", "^", "?", ":", ";", "!"}
 
 
 #End Region
@@ -41,7 +41,7 @@ Friend Class ModelFormulasMGT
 
 #Region "Initialize"
 
-    Public Sub New(ByRef inputAccountsNameKeysDictionary As Hashtable, _
+    Protected Friend Sub New(ByRef inputAccountsNameKeysDictionary As Hashtable, _
                    ByRef inputAccountsTV As TreeView)
 
         AccountsNameKeyDictionary = inputAccountsNameKeysDictionary
@@ -59,7 +59,7 @@ Friend Class ModelFormulasMGT
 #Region "Interface"
 
     ' Convert a formula stored with accounts keys to accounts names
-    Public Function convertFormulaFromKeysToNames(formulaKeys As String) As String
+    Protected Friend Function convertFormulaFromKeysToNames(formulaKeys As String) As String
 
         Dim formulaArray() As String
         Dim i As Integer
@@ -74,7 +74,7 @@ Friend Class ModelFormulasMGT
     End Function
 
     ' Convert a formula stored with accounts names to accounts keys
-    Public Sub convertFormulaFromNamesToKeys(formulaNames As String)
+    Protected Friend Sub convertFormulaFromNamesToKeys(formulaNames As String)
 
         errorList.Clear()
         Dim accountKey As String
@@ -117,7 +117,7 @@ Friend Class ModelFormulasMGT
     End Sub
 
     ' Check the validity of a formula
-    Public Function testFormula() As Boolean
+    Protected Friend Function testFormula() As Boolean
 
         buildTestFormulaString()
         Return GENERICDCGLobalInstance.CheckParserFormula(formulaStringTest)
@@ -162,7 +162,7 @@ Friend Class ModelFormulasMGT
 #Region "Utilities"
 
     ' Replace accounts by random values in order to build a test expression
-    Public Sub buildTestFormulaString()
+    Protected Friend Sub buildTestFormulaString()
 
         Dim i As Int32 = 0
         For Each item In formula_array
@@ -177,7 +177,7 @@ Friend Class ModelFormulasMGT
             If Not item = " " Then formulaStringTest = formulaStringTest & item
         Next
         formulaStringTest.Replace(" ", "")
-     
+
     End Sub
 
 
