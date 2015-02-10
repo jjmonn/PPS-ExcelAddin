@@ -257,7 +257,7 @@ Friend Class Version
             Case YEARLY_VERSIONS_COMPARISON, MONTHLY_VERSIONS_COMPARISON
                 For Each version_id In versions_id_array
                     For Each period_int In versions_dict(version_id)(period_list)
-                        If PERIOD_LIST.Contains(period_int) = False Then periods_list.Add(period_int)
+                        If periods_list.Contains(period_int) = False Then periods_list.Add(period_int)
                     Next
                 Next
                 Return periods_list
