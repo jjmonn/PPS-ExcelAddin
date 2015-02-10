@@ -33,8 +33,8 @@ Module Connections_Functions
                            & "UID=" + userID + ";" _
                            & "PASSWORD=" + pwd + ";" _
                            & "SSLKEY=" & My.Settings.certificatespath & "\client-key.pem;" _
-                           & "SSLCERT=C:\Users\PPS\Documents\Purple Sun\CA\client-cert.pem;" _
-                           & "SSLCA=C:\Users\PPS\Documents\Purple Sun\CA\server-ca.pem;" _
+                           & "SSLCERT=" & My.Settings.certificatespath & "\client-cert.pem;" _
+                           & "SSLCA=" & My.Settings.certificatespath & "\server-ca.pem;" _
                            & "Pooling=True;"
 
         ' C:\Users\PPS\Documents\Purple Sun\CA

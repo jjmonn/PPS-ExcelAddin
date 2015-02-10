@@ -54,12 +54,6 @@ Friend Class ConnectionUI
 
     End Sub
 
-    Private Sub ConnectionUI_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-
-        Me.Left = (APPS.ActiveSheet.width - Me.Width) / 2
-        Me.Top = (APPS.ActiveSheet.height - Me.Height) / 2
-
-    End Sub
 
 #End Region
 
