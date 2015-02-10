@@ -16,7 +16,7 @@
 Imports System.Collections.Generic
 Imports System.Collections
 
-Public Class AccountsMapping
+Friend Class AccountsMapping
 
 
 
@@ -27,7 +27,7 @@ Public Class AccountsMapping
 
         Dim tmpList As New List(Of String)
         Dim srv = New ModelServer
-        srv.openRst(CONFIG_DATABASE + "." + ACCOUNTS_TABLE, ModelServer.FWD_CURSOR)
+        srv.OpenRst(CONFIG_DATABASE + "." + ACCOUNTS_TABLE, ModelServer.FWD_CURSOR)
         srv.rst.Sort = ITEMS_POSITIONS
 
         Select Case LookupOption
@@ -57,7 +57,7 @@ Public Class AccountsMapping
 
         Dim tmpList As New List(Of String)
         Dim srv = New ModelServer
-        srv.openRst(CONFIG_DATABASE + "." + ACCOUNTS_TABLE, ModelServer.FWD_CURSOR)
+        srv.OpenRst(CONFIG_DATABASE + "." + ACCOUNTS_TABLE, ModelServer.FWD_CURSOR)
 
         Select Case LookupOption
             Case LOOKUP_ALL : srv.rst.Filter = ""
@@ -85,7 +85,7 @@ Public Class AccountsMapping
 
         Dim tmpList As New List(Of String)
         Dim srv = New ModelServer
-        srv.openRst(CONFIG_DATABASE + "." + ACCOUNTS_TABLE, ModelServer.FWD_CURSOR)
+        srv.OpenRst(CONFIG_DATABASE + "." + ACCOUNTS_TABLE, ModelServer.FWD_CURSOR)
         srv.rst.Filter = ACCOUNT_RECOMPUTATION_OPTION_VARIABLE + "='" + RECOMPUTATION_CODE + "'"
 
         If srv.rst.EOF = False And srv.rst.BOF = False Then
@@ -111,7 +111,7 @@ Public Class AccountsMapping
 
         Dim tmpHT As New Hashtable
         Dim srv = New ModelServer
-        srv.openRst(CONFIG_DATABASE + "." + ACCOUNTS_TABLE, ModelServer.FWD_CURSOR)
+        srv.OpenRst(CONFIG_DATABASE + "." + ACCOUNTS_TABLE, ModelServer.FWD_CURSOR)
 
         srv.rst.Filter = ""
         If srv.rst.EOF = False And srv.rst.BOF = False Then
@@ -134,7 +134,7 @@ Public Class AccountsMapping
 
         Dim typesDict As New Dictionary(Of String, String)
         Dim srv = New ModelServer
-        srv.openRst(CONFIG_DATABASE + "." + ACCOUNTS_TABLE, ModelServer.FWD_CURSOR)
+        srv.OpenRst(CONFIG_DATABASE + "." + ACCOUNTS_TABLE, ModelServer.FWD_CURSOR)
 
         If srv.rst.EOF = False And srv.rst.BOF = False Then
             srv.rst.MoveFirst()
@@ -161,7 +161,7 @@ Public Class AccountsMapping
 
         Dim keysTypesFormatsDict As New Dictionary(Of String, Dictionary(Of String, String))
         Dim srv = New ModelServer
-        srv.openRst(CONFIG_DATABASE + "." + ACCOUNTS_TABLE, ModelServer.FWD_CURSOR)
+        srv.OpenRst(CONFIG_DATABASE + "." + ACCOUNTS_TABLE, ModelServer.FWD_CURSOR)
 
         srv.rst.MoveFirst()
         If srv.rst.EOF = True Or srv.rst.BOF = True Then
@@ -193,7 +193,7 @@ Public Class AccountsMapping
     Public Shared Function GetAccountsTableArrays() As Dictionary(Of String, String())
 
         Dim srv = New ModelServer
-        srv.openRst(CONFIG_DATABASE + "." + ACCOUNTS_TABLE, ModelServer.FWD_CURSOR)
+        srv.OpenRst(CONFIG_DATABASE + "." + ACCOUNTS_TABLE, ModelServer.FWD_CURSOR)
         srv.rst.Filter = ACCOUNT_FORMULA_TYPE_VARIABLE + "<>'" + FORMULA_TYPE_TITLE + "'"
         srv.rst.MoveFirst()
         srv.rst.Sort = ITEMS_POSITIONS
@@ -233,7 +233,7 @@ Public Class AccountsMapping
     Public Shared Function FindAccountChildren(Account As String) As List(Of String)
 
         Dim srv = New ModelServer
-        srv.openRst(CONFIG_DATABASE + "." + ACCOUNTS_TABLE, ModelServer.FWD_CURSOR)
+        srv.OpenRst(CONFIG_DATABASE + "." + ACCOUNTS_TABLE, ModelServer.FWD_CURSOR)
 
         Dim ChildrenList As New List(Of String)
         srv.rst.Filter = ACCOUNT_PARENT_ID_VARIABLE + "=" + "'" + Account + "'"
