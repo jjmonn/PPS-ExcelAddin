@@ -61,19 +61,19 @@ Friend Class ControlingUI2Controller
 
         Dim Versions As New Version
         versions_dict = Versions.InitializeVersionsArray(cTreeViews_Functions.GetCheckedNodeCollection(View.versionsTV), _
-                                                            globalPeriodsList, _
-                                                            versionsComparisonFlag, _
-                                                            versions_id_array, _
-                                                            versions_name_array)
+                                                        globalPeriodsList, _
+                                                        versionsComparisonFlag, _
+                                                        versions_id_array, _
+                                                        versions_name_array)
         MODEL.init_computer_complete_mode(entity_node)
         Versions.Close()
 
         Pbar_init_complete()
         View.VIEWInitialization(globalPeriodsList, _
-                                        versions_name_array, _
-                                        versionsComparisonFlag, _
-                                        versions_dict(versions_id_array(0))(VERSIONS_TIME_CONFIG_VARIABLE), _
-                                        , entity_node)
+                                versions_name_array, _
+                                versionsComparisonFlag, _
+                                versions_dict(versions_id_array(0))(VERSIONS_TIME_CONFIG_VARIABLE), _
+                                , entity_node)
         View.PBar.AddProgress(1)
 
         If versions_id_array.Length > 1 Then
