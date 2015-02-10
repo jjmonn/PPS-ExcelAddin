@@ -3,8 +3,13 @@
 ' View implementation for the market prices DGV and chart of the MarketPricesUI
 '
 '
+' to do:
+'       - circula progress while copying value down
+'
+'
+'
 ' Author: Julien Monnereau
-' Last modified: 05/02/2015
+' Last modified: 08/02/2015
 
 
 Imports VIBlend.WinForms.DataGridView
@@ -23,7 +28,7 @@ Friend Class MarketPricesView
     ' Objects
     Private DGV As vDataGridView
     Private Controller As MarketPricesController
-    Private chart As New Chart
+    Private chart As Chart
 
     ' Variables
     Friend rowsKeyItemDictionary As New Dictionary(Of Integer, HierarchyItem)
@@ -33,6 +38,7 @@ Friend Class MarketPricesView
     Private is_filling_cells As Boolean
     Private colors_palette As List(Of Hashtable)
     Private charts_periods As New List(Of String)
+    Private is_copying_value_down As Boolean = False
 
     ' Constants
     Private DGV_ITEMS_FONT_SIZE = 8
@@ -215,22 +221,19 @@ Friend Class MarketPricesView
 
     End Sub
 
-    Private Sub ReLoadPricesSerie(ByRef index As String)
+    Private Sub UpdateSerie(ByRef index As String, _
+                            ByRef column_index As Int32)
 
-        ' ou clear juste la serie mise à jour
-        '   chart.ChartAreas.Clear()
-
-        chart.Series("").Points(0).SetValueY()
-        'Dim col As HierarchyItem = columnsKeyItemDictionary(index)
-        'Dim tmpList = New PointPairList()
-        'For Each row As HierarchyItem In DGV.RowsHierarchy.Items
-
-        '    Dim value As Double = DGV.CellsArea.GetCellValue(row, col)
-        '    Dim x As Double = CDbl(New XDate(CDbl(row.Caption)))
-        '    tmpList.Add(x, value)
-
-        'Next
-        'chartSeriesDictionary(index) = tmpList
+        Dim values(charts_periods.Count - 1) As Double
+        Dim i As Int32 = 0
+        For Each row As HierarchyItem In DGV.RowsHierarchy.Items
+            For Each sub_row As HierarchyItem In row.Items
+                values(i) = DGV.CellsArea.GetCellValue(sub_row, DGV.ColumnsHierarchy.Items(column_index))
+                i = i + 1
+            Next
+        Next
+        chart.Series(index).Points.DataBindXY(charts_periods, values)
+        chart.Update()
 
     End Sub
 
@@ -246,12 +249,15 @@ Friend Class MarketPricesView
         Dim column As HierarchyItem = DGV.CellsArea.SelectedCells(0).ColumnItem
         Dim row As HierarchyItem = DGV.CellsArea.SelectedCells(0).RowItem
 
+        is_copying_value_down = True
         If Not row.ParentItem Is Nothing Then
             CopyValueIntoCellsBelow(row.ParentItem, row.ItemIndex + 1, column, value)
             For i = row.ParentItem.ItemIndex + 1 To DGV.RowsHierarchy.Items.Count - 1
                 CopyValueIntoCellsBelow(DGV.RowsHierarchy.Items(i), 0, column, value)
             Next
         End If
+        is_copying_value_down = False
+        UpdateSerie(column.Caption, column.ItemIndex)
 
     End Sub
 
@@ -269,6 +275,7 @@ Friend Class MarketPricesView
                 Dim index As String = columnIDKeyDictionary(args.Cell.ColumnItem.GetUniqueID)
                 Dim period As String = rowIDKeyDictionary(args.Cell.RowItem.GetUniqueID)
                 Controller.UpdateMarketPrice(index, period, args.NewValue)
+                If is_copying_value_down = False Then UpdateSerie(index, args.Cell.ColumnItem.ItemIndex)
             End If
         End If
 

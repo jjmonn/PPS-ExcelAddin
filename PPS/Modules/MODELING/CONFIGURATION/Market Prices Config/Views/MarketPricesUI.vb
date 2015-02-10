@@ -33,8 +33,8 @@ Friend Class MarketPricesUI
     ' Menu
     Private version_splitter_distance As Double = 240
     Private chart_splitter_distance As Double = 500
-    Private isVersionDisplayed As Boolean
-    Private isChartDisplayed As Boolean
+    Private isVersionDisplayed As Boolean = False
+    Private isChartDisplayed As Boolean = True
 
 #End Region
 
@@ -48,7 +48,9 @@ Friend Class MarketPricesUI
 
         ' Add any initialization after the InitializeComponent() call.
         Controller = MarketPricesController
-        chart = ChartsUtilities.CreateChart("Market Prices")
+        Dim ht As New Hashtable
+        ht.Add(REPORTS_NAME_VAR, "Market Prices")
+        chart = ChartsUtilities.CreateChart(ht)
         SplitContainer2.Panel2.Controls.Add(chart)
         chart.Dock = DockStyle.Fill
         chart.BorderlineColor = Drawing.Color.Gray
@@ -60,12 +62,12 @@ Friend Class MarketPricesUI
     Private Sub MarketPricesUILoad(sender As Object, e As EventArgs) Handles MyBase.Load
 
         Me.WindowState = FormWindowState.Maximized
-        CollapseChartPane()
         prices_DGV.AllowCopyPaste = True
         prices_DGV.ColumnsHierarchy.AutoResize(AutoResizeMode.FIT_ALL)
         prices_DGV.RowsHierarchy.CompactStyleRenderingEnabled = True
         prices_DGV.Refresh()
         prices_DGV.Select()
+        prices_DGV.RowsHierarchy.ExpandAllItems()
 
     End Sub
 
