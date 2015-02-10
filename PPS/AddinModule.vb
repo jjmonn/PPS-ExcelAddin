@@ -188,6 +188,7 @@ Public Class AddinModule
         Me.AdxRibbonMenu8 = New AddinExpress.MSO.ADXRibbonMenu(Me.components)
         Me.MarketPricesMGT = New AddinExpress.MSO.ADXRibbonButton(Me.components)
         Me.ASReportsMGTBT = New AddinExpress.MSO.ADXRibbonButton(Me.components)
+        Me.ASEntitiesAttributesTabBT = New AddinExpress.MSO.ADXRibbonButton(Me.components)
         Me.AdxRibbonGroup3 = New AddinExpress.MSO.ADXRibbonGroup(Me.components)
         Me.PlatformMGTBT = New AddinExpress.MSO.ADXRibbonSplitButton(Me.components)
         Me.AdxRibbonMenu4 = New AddinExpress.MSO.ADXRibbonMenu(Me.components)
@@ -250,7 +251,6 @@ Public Class AddinModule
         Me.VersionSelectionTaskPaneItem = New AddinExpress.XL.ADXExcelTaskPanesCollectionItem(Me.components)
         Me.EntitySelectionTaskPaneItem = New AddinExpress.XL.ADXExcelTaskPanesCollectionItem(Me.components)
         Me.AdxRibbonLabel1 = New AddinExpress.MSO.ADXRibbonLabel(Me.components)
-        Me.ASEntitiesAttributesTabBT = New AddinExpress.MSO.ADXRibbonButton(Me.components)
         '
         'MaintTab
         '
@@ -396,8 +396,11 @@ Public Class AddinModule
         Me.MainTabImageList.Images.SetKeyName(10, "favicon(236).ico")
         Me.MainTabImageList.Images.SetKeyName(11, "favicon(242).ico")
         Me.MainTabImageList.Images.SetKeyName(12, "favicon(245).ico")
-        Me.MainTabImageList.Images.SetKeyName(13, "favicon(246).ico")
+        Me.MainTabImageList.Images.SetKeyName(13, "favicon(7).ico")
         Me.MainTabImageList.Images.SetKeyName(14, "favicon(249).ico")
+        Me.MainTabImageList.Images.SetKeyName(15, "favicon(5).ico")
+        Me.MainTabImageList.Images.SetKeyName(16, "favicon(233).ico")
+        Me.MainTabImageList.Images.SetKeyName(17, "favicon(8).ico")
         '
         'InputReportLaunchBT
         '
@@ -494,7 +497,7 @@ Public Class AddinModule
         Me.FunctionDesigner.Caption = "Access Data"
         Me.FunctionDesigner.Controls.Add(Me.AdxRibbonMenu1)
         Me.FunctionDesigner.Id = "adxRibbonSplitButton_5986acbd4f414054bdd1177565ae2cf3"
-        Me.FunctionDesigner.Image = 11
+        Me.FunctionDesigner.Image = 15
         Me.FunctionDesigner.ImageList = Me.MainTabImageList
         Me.FunctionDesigner.ImageTransparentColor = System.Drawing.Color.Transparent
         Me.FunctionDesigner.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
@@ -528,7 +531,8 @@ Public Class AddinModule
         Me.AdvancedModelingBT.Caption = "Financial Modeling"
         Me.AdvancedModelingBT.Controls.Add(Me.AdxRibbonMenu2)
         Me.AdvancedModelingBT.Id = "adxRibbonSplitButton_48193c7e13704758a3814aa6156d5aee"
-        Me.AdvancedModelingBT.ImageMso = "SmartArtStylesGallery"
+        Me.AdvancedModelingBT.Image = 17
+        Me.AdvancedModelingBT.ImageList = Me.MainTabImageList
         Me.AdvancedModelingBT.ImageTransparentColor = System.Drawing.Color.Transparent
         Me.AdvancedModelingBT.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
         Me.AdvancedModelingBT.Size = AddinExpress.MSO.ADXRibbonXControlSize.Large
@@ -586,6 +590,13 @@ Public Class AddinModule
         Me.ASReportsMGTBT.Id = "adxRibbonButton_8831fac669b747eaad49c81f3aac35d3"
         Me.ASReportsMGTBT.ImageTransparentColor = System.Drawing.Color.Transparent
         Me.ASReportsMGTBT.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
+        '
+        'ASEntitiesAttributesTabBT
+        '
+        Me.ASEntitiesAttributesTabBT.Caption = "Formulas and Tax rates"
+        Me.ASEntitiesAttributesTabBT.Id = "adxRibbonButton_e576c2ab0d484106a08b784c65084217"
+        Me.ASEntitiesAttributesTabBT.ImageTransparentColor = System.Drawing.Color.Transparent
+        Me.ASEntitiesAttributesTabBT.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
         '
         'AdxRibbonGroup3
         '
@@ -1146,13 +1157,6 @@ Public Class AddinModule
         Me.AdxRibbonLabel1.Caption = "Associated with"
         Me.AdxRibbonLabel1.Id = "adxRibbonLabel_f8272bc6694448f6955f882ef772da9e"
         Me.AdxRibbonLabel1.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
-        '
-        'ASEntitiesAttributesTabBT
-        '
-        Me.ASEntitiesAttributesTabBT.Caption = "Formulas and Tax rates"
-        Me.ASEntitiesAttributesTabBT.Id = "adxRibbonButton_e576c2ab0d484106a08b784c65084217"
-        Me.ASEntitiesAttributesTabBT.ImageTransparentColor = System.Drawing.Color.Transparent
-        Me.ASEntitiesAttributesTabBT.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
         '
         'AddinModule
         '
