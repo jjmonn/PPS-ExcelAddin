@@ -13,7 +13,7 @@
 '
 '
 '
-' Last modified: 07/07/2014
+' Last modified: 10/02/2015
 ' Author: Julien Monnereau
 
 
@@ -55,14 +55,11 @@ Public Class SettingMainUI
 #End Region
 
 
-
-
 #Region "Call backs"
 
 
 #Region "Connection Tab"
 
-    ' Call back Connection
     Private Sub ConnectionBT_Click(sender As Object, e As EventArgs) Handles ConnectionBT.Click
 
         ConnectioN = OpenConnection(IDTB.Text, PWDTB.Text)
@@ -75,7 +72,6 @@ Public Class SettingMainUI
 
     End Sub
 
-    ' Call back Diconnection
     Private Sub DiconnectBT_Click(sender As Object, e As EventArgs) Handles DiconnectBT.Click
 
         ConnectioN.Close()
@@ -83,7 +79,6 @@ Public Class SettingMainUI
 
     End Sub
 
-    ' Call back Password reinit
     Private Sub ReinitPwdBT_Click(sender As Object, e As EventArgs) Handles ReinitPwdBT.Click
 
         Dim CHANGEPWD As New ChangePasswordUI
@@ -91,14 +86,18 @@ Public Class SettingMainUI
 
     End Sub
 
+    Private Sub CertificatesBT_Click(sender As Object, e As EventArgs) Handles CertificatesBT.Click
+
+        If FolderBrowserDialog1.ShowDialog() = DialogResult.OK Then
+            CertificatesPathTB.Text = FolderBrowserDialog1.SelectedPath
+        End If
+
+    End Sub
+
 #End Region
 
-
-
-
+   
 #End Region
-
-
 
 
 #Region "Events"
@@ -123,11 +122,14 @@ Public Class SettingMainUI
         g.DrawString(sText, ctlTab.Font, Brushes.Black, iX, iY)
     End Sub
 
+    Private Sub CertificatesPathTB_TextChanged(sender As Object, e As EventArgs) Handles CertificatesPathTB.TextChanged
+
+        My.Settings.certificatespath = CertificatesPathTB.Text
+
+    End Sub
 
 #End Region
 
 
 
-   
-  
 End Class

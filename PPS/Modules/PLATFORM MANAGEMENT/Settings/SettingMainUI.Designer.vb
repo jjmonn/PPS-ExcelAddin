@@ -29,6 +29,8 @@ Partial Class SettingMainUI
         Me.ControlImages = New System.Windows.Forms.ImageList(Me.components)
         Me.TabControl1 = New System.Windows.Forms.TabControl()
         Me.TabPage1 = New System.Windows.Forms.TabPage()
+        Me.CertificatesBT = New System.Windows.Forms.Button()
+        Me.CertificatesPathTB = New System.Windows.Forms.TextBox()
         Me.DiconnectBT = New System.Windows.Forms.Button()
         Me.ButtonIcons = New System.Windows.Forms.ImageList(Me.components)
         Me.ReinitPwdBT = New System.Windows.Forms.Button()
@@ -41,6 +43,7 @@ Partial Class SettingMainUI
         Me.Label1 = New System.Windows.Forms.Label()
         Me.TabPage2 = New System.Windows.Forms.TabPage()
         Me.ACFIcon = New System.Windows.Forms.ImageList(Me.components)
+        Me.FolderBrowserDialog1 = New System.Windows.Forms.FolderBrowserDialog()
         Me.Panel1.SuspendLayout()
         Me.TabControl1.SuspendLayout()
         Me.TabPage1.SuspendLayout()
@@ -54,7 +57,7 @@ Partial Class SettingMainUI
         Me.Panel1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Panel1.Location = New System.Drawing.Point(0, 0)
         Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(744, 520)
+        Me.Panel1.Size = New System.Drawing.Size(745, 496)
         Me.Panel1.TabIndex = 0
         '
         'CloseBT
@@ -89,12 +92,14 @@ Partial Class SettingMainUI
         Me.TabControl1.Multiline = True
         Me.TabControl1.Name = "TabControl1"
         Me.TabControl1.SelectedIndex = 0
-        Me.TabControl1.Size = New System.Drawing.Size(720, 462)
+        Me.TabControl1.Size = New System.Drawing.Size(720, 438)
         Me.TabControl1.SizeMode = System.Windows.Forms.TabSizeMode.Fixed
         Me.TabControl1.TabIndex = 0
         '
         'TabPage1
         '
+        Me.TabPage1.Controls.Add(Me.CertificatesBT)
+        Me.TabPage1.Controls.Add(Me.CertificatesPathTB)
         Me.TabPage1.Controls.Add(Me.DiconnectBT)
         Me.TabPage1.Controls.Add(Me.ReinitPwdBT)
         Me.TabPage1.Controls.Add(Me.ConnectionBT)
@@ -107,17 +112,34 @@ Partial Class SettingMainUI
         Me.TabPage1.Location = New System.Drawing.Point(124, 4)
         Me.TabPage1.Name = "TabPage1"
         Me.TabPage1.Padding = New System.Windows.Forms.Padding(3)
-        Me.TabPage1.Size = New System.Drawing.Size(592, 454)
+        Me.TabPage1.Size = New System.Drawing.Size(592, 430)
         Me.TabPage1.TabIndex = 0
         Me.TabPage1.Text = "Connection"
         Me.TabPage1.UseVisualStyleBackColor = True
+        '
+        'CertificatesBT
+        '
+        Me.CertificatesBT.Location = New System.Drawing.Point(30, 265)
+        Me.CertificatesBT.Name = "CertificatesBT"
+        Me.CertificatesBT.Size = New System.Drawing.Size(96, 25)
+        Me.CertificatesBT.TabIndex = 14
+        Me.CertificatesBT.Text = "Certificates Path"
+        Me.CertificatesBT.UseVisualStyleBackColor = True
+        '
+        'CertificatesPathTB
+        '
+        Me.CertificatesPathTB.Location = New System.Drawing.Point(151, 268)
+        Me.CertificatesPathTB.Name = "CertificatesPathTB"
+        Me.CertificatesPathTB.Size = New System.Drawing.Size(398, 20)
+        Me.CertificatesPathTB.TabIndex = 12
+        Me.CertificatesPathTB.UseSystemPasswordChar = True
         '
         'DiconnectBT
         '
         Me.DiconnectBT.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
         Me.DiconnectBT.ImageKey = "imageres_89.ico"
         Me.DiconnectBT.ImageList = Me.ButtonIcons
-        Me.DiconnectBT.Location = New System.Drawing.Point(194, 258)
+        Me.DiconnectBT.Location = New System.Drawing.Point(398, 100)
         Me.DiconnectBT.Name = "DiconnectBT"
         Me.DiconnectBT.Size = New System.Drawing.Size(151, 29)
         Me.DiconnectBT.TabIndex = 11
@@ -143,7 +165,7 @@ Partial Class SettingMainUI
         Me.ReinitPwdBT.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
         Me.ReinitPwdBT.ImageKey = "imageres_82.ico"
         Me.ReinitPwdBT.ImageList = Me.ButtonIcons
-        Me.ReinitPwdBT.Location = New System.Drawing.Point(194, 293)
+        Me.ReinitPwdBT.Location = New System.Drawing.Point(398, 149)
         Me.ReinitPwdBT.Name = "ReinitPwdBT"
         Me.ReinitPwdBT.Size = New System.Drawing.Size(151, 29)
         Me.ReinitPwdBT.TabIndex = 10
@@ -156,7 +178,7 @@ Partial Class SettingMainUI
         Me.ConnectionBT.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
         Me.ConnectionBT.ImageKey = "refresh greay bcgd.bmp"
         Me.ConnectionBT.ImageList = Me.ButtonIcons
-        Me.ConnectionBT.Location = New System.Drawing.Point(194, 223)
+        Me.ConnectionBT.Location = New System.Drawing.Point(398, 52)
         Me.ConnectionBT.Name = "ConnectionBT"
         Me.ConnectionBT.Size = New System.Drawing.Size(151, 29)
         Me.ConnectionBT.TabIndex = 9
@@ -166,7 +188,7 @@ Partial Class SettingMainUI
         '
         'ServerAddressTB
         '
-        Me.ServerAddressTB.Location = New System.Drawing.Point(149, 62)
+        Me.ServerAddressTB.Location = New System.Drawing.Point(151, 52)
         Me.ServerAddressTB.Name = "ServerAddressTB"
         Me.ServerAddressTB.Size = New System.Drawing.Size(196, 20)
         Me.ServerAddressTB.TabIndex = 5
@@ -174,7 +196,7 @@ Partial Class SettingMainUI
         'Label3
         '
         Me.Label3.AutoSize = True
-        Me.Label3.Location = New System.Drawing.Point(65, 65)
+        Me.Label3.Location = New System.Drawing.Point(27, 55)
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(38, 13)
         Me.Label3.TabIndex = 4
@@ -183,7 +205,7 @@ Partial Class SettingMainUI
         'Label2
         '
         Me.Label2.AutoSize = True
-        Me.Label2.Location = New System.Drawing.Point(65, 175)
+        Me.Label2.Location = New System.Drawing.Point(27, 161)
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(53, 13)
         Me.Label2.TabIndex = 3
@@ -191,7 +213,7 @@ Partial Class SettingMainUI
         '
         'PWDTB
         '
-        Me.PWDTB.Location = New System.Drawing.Point(149, 172)
+        Me.PWDTB.Location = New System.Drawing.Point(151, 158)
         Me.PWDTB.Name = "PWDTB"
         Me.PWDTB.Size = New System.Drawing.Size(196, 20)
         Me.PWDTB.TabIndex = 2
@@ -199,7 +221,7 @@ Partial Class SettingMainUI
         '
         'IDTB
         '
-        Me.IDTB.Location = New System.Drawing.Point(149, 119)
+        Me.IDTB.Location = New System.Drawing.Point(151, 105)
         Me.IDTB.Name = "IDTB"
         Me.IDTB.Size = New System.Drawing.Size(196, 20)
         Me.IDTB.TabIndex = 1
@@ -207,7 +229,7 @@ Partial Class SettingMainUI
         'Label1
         '
         Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(65, 122)
+        Me.Label1.Location = New System.Drawing.Point(27, 108)
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(43, 13)
         Me.Label1.TabIndex = 0
@@ -218,7 +240,7 @@ Partial Class SettingMainUI
         Me.TabPage2.Location = New System.Drawing.Point(124, 4)
         Me.TabPage2.Name = "TabPage2"
         Me.TabPage2.Padding = New System.Windows.Forms.Padding(3)
-        Me.TabPage2.Size = New System.Drawing.Size(592, 454)
+        Me.TabPage2.Size = New System.Drawing.Size(592, 430)
         Me.TabPage2.TabIndex = 1
         Me.TabPage2.Text = "TabPage2"
         Me.TabPage2.UseVisualStyleBackColor = True
@@ -233,7 +255,7 @@ Partial Class SettingMainUI
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(744, 520)
+        Me.ClientSize = New System.Drawing.Size(745, 496)
         Me.Controls.Add(Me.Panel1)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Name = "SettingMainUI"
@@ -263,4 +285,7 @@ Partial Class SettingMainUI
     Friend WithEvents ReinitPwdBT As System.Windows.Forms.Button
     Friend WithEvents ConnectionBT As System.Windows.Forms.Button
     Friend WithEvents DiconnectBT As System.Windows.Forms.Button
+    Friend WithEvents CertificatesPathTB As System.Windows.Forms.TextBox
+    Friend WithEvents CertificatesBT As System.Windows.Forms.Button
+    Friend WithEvents FolderBrowserDialog1 As System.Windows.Forms.FolderBrowserDialog
 End Class
