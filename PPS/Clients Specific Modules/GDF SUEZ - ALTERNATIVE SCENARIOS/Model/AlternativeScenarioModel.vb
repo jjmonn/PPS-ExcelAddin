@@ -50,7 +50,7 @@ Friend Class AlternativeScenarioModel
         Controller = input_Controller
         BaseComputer = New ControlingUI2Model()
         indexes_list = MarketIndexesMapping.GetMarketIndexesList()
-        entities_attributes_dictionary = GDFSUEZEntitiesAttributes.GetEntitiesAttributes()
+        entities_attributes_dictionary = GDFSUEZEntitiesAttributesMapping.GetEntitiesAttributes()
         sensitivities_dictionary = GDFSUEZSensitivitiesMapping.GetSensitivitiesDictionary()
 
 
