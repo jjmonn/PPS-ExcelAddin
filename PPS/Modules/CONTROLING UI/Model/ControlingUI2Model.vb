@@ -73,7 +73,7 @@ Friend Class ControlingUI2Model
                                           Optional ByRef adjustments_id_list As List(Of String) = Nothing)
 
         ResetDllCurrencyPeriodsConfigIfNeeded(periods_list, VersionTimeSetup, start_period, nb_periods)
-        load_needed_currencies(VersionTimeSetup, rates_version, destinationCurrency, start_period)
+        load_needed_currencies(VersionTimeSetup, rates_version, destinationCurrency, start_period, nb_periods)
 
         Dll3Computer.SetUpEABeforeCompute(periods_list, _
                                           destinationCurrency, _
@@ -125,12 +125,13 @@ Friend Class ControlingUI2Model
     Private Sub load_needed_currencies(ByRef time_config As String, _
                                        ByRef rates_version As String, _
                                        ByRef dest_currency As String, _
-                                       Optional ByRef ref_period As Integer = 0)
+                                       ByRef start_period As Int32, _
+                                       ByRef nb_periods As Int32)
 
         Dim currencies_tokens_list As New List(Of String)
         For Each currency In get_unique_currencies()
             Dim simple_currency_token As String = currency & CURRENCIES_SEPARATOR & dest_currency
-            Dim complex_currency_token As String = rates_version & simple_currency_token & ref_period
+            Dim complex_currency_token As String = rates_version & simple_currency_token & start_period
 
             If Dll3Computer.convertor_currencies_token_list.Contains(complex_currency_token) = False _
             AndAlso currency <> dest_currency _
@@ -139,7 +140,7 @@ Friend Class ControlingUI2Model
         Next
 
         For Each simple_currency_token In currencies_tokens_list
-            Dim complex_currency_token As String = rates_version & simple_currency_token & ref_period
+            Dim complex_currency_token As String = rates_version & simple_currency_token & start_period
 
             Dim ratesList As New List(Of Double)
             Dim ratesPeriodsList As New List(Of Int32)
@@ -148,11 +149,11 @@ Friend Class ControlingUI2Model
 
             ExchangeRatesMapping.FillRatesLists(simple_currency_token, _
                                                 rates_version, _
-                                                time_config, _
                                                 inverse_flag, _
                                                 ratesPeriodsList, _
                                                 ratesList, _
-                                                ref_period)
+                                                start_period, _
+                                                nb_periods)
 
             If time_config = MONTHLY_TIME_CONFIGURATION Then
                 Dll3Computer.AddMonthlyCurrenciesRatesToConvertor(complex_currency_token, _
@@ -166,7 +167,6 @@ Friend Class ControlingUI2Model
         Next
 
     End Sub
-
 
 #End Region
 
@@ -226,8 +226,8 @@ Friend Class ControlingUI2Model
                                                       ByRef time_config As String, _
                                                       ByRef start_period As Int32, _
                                                       ByRef nb_periods As Int32)
-     
-        If Dll3Computer.current_start_period <> start_period _
+
+        If Dll3Computer.current_start_period <> Int(DateSerial(start_period, 12, 31).ToOADate()) _
         Or Dll3Computer.current_nb_periods <> nb_periods Then
             Dll3Computer.InitDllCurrencyConvertorPeriods(periods_list, time_config, start_period)
         End If
