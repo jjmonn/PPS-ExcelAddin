@@ -141,14 +141,14 @@ Friend Class AlternativeScenariosController
 
         View.ClearMainPanel()
         Dim accounts_id_name_dic As Hashtable = AccountsMapping.GetAccountsDictionary(ACCOUNT_ID_VARIABLE, ACCOUNT_NAME_VARIABLE)
-        Dim reports_settings_dic As Dictionary(Of String, Hashtable) = GDFSUEZASReport.GetReportsSettingsDictionary()
+        Dim reports_settings_dic As Dictionary(Of String, Hashtable) = Report.GetReportsSettingsDictionary()
         Dim entity_id = InputsController.current_entity_node.Name
         Dim ReportsTV As New TreeView
         Dim charts_periods = GetChartsPeriods(period_list, time_configuration)
-        GDFSUEZASReport.LoadAlternativeScenarioReportsTV(ReportsTV)
+        Report.LoadReportsTV(ReportsTV)
 
         For Each report_node As TreeNode In ReportsTV.Nodes
-            If reports_settings_dic(report_node.Name)(GDF_AS_REPORTS_TYPE_VAR) = GDF_CHART_REPORT_TYPE Then
+            If reports_settings_dic(report_node.Name)(REPORTS_TYPE_VAR) = CHART_REPORT_TYPE Then
                 DisplayCharts(entity_id, report_node, new_scenario_data, reports_settings_dic, charts_periods)
             Else
                 DisplayDGVs(entity_id, report_node, new_scenario_data, reports_settings_dic, time_configuration, period_list)
@@ -163,20 +163,23 @@ Friend Class AlternativeScenariosController
                               ByRef reports_settings_dic As Dictionary(Of String, Hashtable), _
                               ByRef charts_periods As List(Of Int32))
 
-
-        Dim base_chart As Chart = ChartsUtilities.CreateChart(reports_settings_dic(report_node.Name)(GDF_AS_REPORTS_NAME_VAR) & " Base Scenario", reports_settings_dic(report_node.Name)(GDF_AS_REPORTS_PALETTE_VAR))
-        Dim new_chart As Chart = ChartsUtilities.CreateChart(reports_settings_dic(report_node.Name)(GDF_AS_REPORTS_NAME_VAR) & " New Scenario", reports_settings_dic(report_node.Name)(GDF_AS_REPORTS_PALETTE_VAR))
+        reports_settings_dic(report_node.Name)(REPORTS_NAME_VAR) = reports_settings_dic(report_node.Name)(REPORTS_NAME_VAR) & " Base Scenario"
+        reports_settings_dic(report_node.Name)(REPORTS_NAME_VAR) = reports_settings_dic(report_node.Name)(REPORTS_NAME_VAR) & " New Scenario"
+        Dim base_chart As Chart = ChartsUtilities.CreateChart(reports_settings_dic(report_node.Name))
+        Dim new_chart As Chart = ChartsUtilities.CreateChart(reports_settings_dic(report_node.Name))
         For Each serie_node As TreeNode In report_node.Nodes
             ChartsUtilities.AddSerieToChart(base_chart, reports_settings_dic(serie_node.Name))
             ChartsUtilities.AddSerieToChart(new_chart, reports_settings_dic(serie_node.Name))
-            If Not IsDBNull(reports_settings_dic(serie_node.Name)(GDF_AS_REPORTS_ACCOUNT_ID)) Then
-                Dim serie_account_id = reports_settings_dic(serie_node.Name)(GDF_AS_REPORTS_ACCOUNT_ID)
-                base_chart.Series(reports_settings_dic(serie_node.Name)(GDF_AS_REPORTS_NAME_VAR)).Points.DataBindXY(charts_periods, Model.current_conso_data_dic(entity_id)(serie_account_id))
-                new_chart.Series(reports_settings_dic(serie_node.Name)(GDF_AS_REPORTS_NAME_VAR)).Points.DataBindXY(charts_periods, new_scenario_data(serie_account_id))
+            If Not IsDBNull(reports_settings_dic(serie_node.Name)(REPORTS_ACCOUNT_ID)) Then
+                Dim serie_account_id = reports_settings_dic(serie_node.Name)(REPORTS_ACCOUNT_ID)
+                base_chart.Series(reports_settings_dic(serie_node.Name)(REPORTS_NAME_VAR)).Points.DataBindXY(charts_periods, Model.current_conso_data_dic(entity_id)(serie_account_id))
+                new_chart.Series(reports_settings_dic(serie_node.Name)(REPORTS_NAME_VAR)).Points.DataBindXY(charts_periods, new_scenario_data(serie_account_id))
             End If
         Next
-        View.AddCharts(base_chart, new_chart) ' , new_chart, reports_settings_dic(report_node.Name)(GDF_AS_REPORTS_NAME_VAR))
+        View.AddCharts(base_chart, new_chart) ' , new_chart, reports_settings_dic(report_node.Name)(REPORTS_NAME_VAR))
         ChartsUtilities.EqualizeChartsYAxis1(base_chart, new_chart)
+        ChartsUtilities.AdjustChartPosition(base_chart)
+        ChartsUtilities.AdjustChartPosition(new_chart)
         AddHandler base_chart.MouseDown, AddressOf View.Reports_MouseClick
         AddHandler new_chart.MouseDown, AddressOf View.Reports_MouseClick
 
@@ -191,15 +194,15 @@ Friend Class AlternativeScenariosController
 
         Dim DGV As vDataGridView = DataGridViewsUtil.CreateASDGVReport(period_list, time_configuration)
         For Each serie_node As TreeNode In report_node.Nodes
-            If Not IsDBNull(reports_settings_dic(serie_node.Name)(GDF_AS_REPORTS_ACCOUNT_ID)) Then
-                Dim serie_account_id = reports_settings_dic(serie_node.Name)(GDF_AS_REPORTS_ACCOUNT_ID)
-                Dim serie_name = reports_settings_dic(serie_node.Name)(GDF_AS_REPORTS_NAME_VAR)
+            If Not IsDBNull(reports_settings_dic(serie_node.Name)(REPORTS_ACCOUNT_ID)) Then
+                Dim serie_account_id = reports_settings_dic(serie_node.Name)(REPORTS_ACCOUNT_ID)
+                Dim serie_name = reports_settings_dic(serie_node.Name)(REPORTS_NAME_VAR)
                 DataGridViewsUtil.AddSerieToBasicDGVReport(DGV.RowsHierarchy.Items(0), serie_name, Model.current_conso_data_dic(entity_id)(serie_account_id))
                 DataGridViewsUtil.AddSerieToBasicDGVReport(DGV.RowsHierarchy.Items(1), serie_name, new_scenario_data(serie_account_id))
             End If
         Next
         DataGridViewsUtil.FormatBasicDGV(DGV)
-        View.AddDGV(DGV) 'reports_settings_dic(report_node.Name)(GDF_AS_REPORTS_NAME_VAR))
+        View.AddDGV(DGV) 'reports_settings_dic(report_node.Name)(REPORTS_NAME_VAR))
         AddHandler DGV.MouseDown, AddressOf View.Reports_MouseClick
         
     End Sub
