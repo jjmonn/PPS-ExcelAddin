@@ -124,17 +124,9 @@ Partial Class AccountsMGT_UI
         '
         Me.accountsIL.ImageStream = CType(resources.GetObject("accountsIL.ImageStream"), System.Windows.Forms.ImageListStreamer)
         Me.accountsIL.TransparentColor = System.Drawing.Color.Transparent
-        Me.accountsIL.Images.SetKeyName(0, "Titles-icon.png")
-        Me.accountsIL.Images.SetKeyName(1, "entity icon 3.jpg")
-        Me.accountsIL.Images.SetKeyName(2, "imageres_9.ico")
-        Me.accountsIL.Images.SetKeyName(3, "imageres_148.ico")
-        Me.accountsIL.Images.SetKeyName(4, "imageres_10.ico")
-        Me.accountsIL.Images.SetKeyName(5, "imageres_1013.ico")
-        Me.accountsIL.Images.SetKeyName(6, "imageres_100.ico")
-        Me.accountsIL.Images.SetKeyName(7, "star1.jpg")
-        Me.accountsIL.Images.SetKeyName(8, "imageres_190.ico")
-        Me.accountsIL.Images.SetKeyName(9, "imageres_81.ico")
-        Me.accountsIL.Images.SetKeyName(10, "favicon(217).ico")
+        Me.accountsIL.Images.SetKeyName(0, "flat-theme-action-math-function-icon.png")
+        Me.accountsIL.Images.SetKeyName(1, "sum icon.jpg")
+        Me.accountsIL.Images.SetKeyName(2, "folder 2.png")
         '
         'EditButtonsImagelist
         '
@@ -164,7 +156,7 @@ Partial Class AccountsMGT_UI
         Me.GroupBox1.Margin = New System.Windows.Forms.Padding(2)
         Me.GroupBox1.Name = "GroupBox1"
         Me.GroupBox1.Padding = New System.Windows.Forms.Padding(2)
-        Me.GroupBox1.Size = New System.Drawing.Size(787, 304)
+        Me.GroupBox1.Size = New System.Drawing.Size(575, 304)
         Me.GroupBox1.TabIndex = 17
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "Account's information"
@@ -332,7 +324,7 @@ Partial Class AccountsMGT_UI
         Me.submit_cmd.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.submit_cmd.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
         Me.submit_cmd.ImageKey = "submit 1 ok.ico"
-        Me.submit_cmd.Location = New System.Drawing.Point(586, 256)
+        Me.submit_cmd.Location = New System.Drawing.Point(586, 208)
         Me.submit_cmd.Margin = New System.Windows.Forms.Padding(2)
         Me.submit_cmd.Name = "submit_cmd"
         Me.submit_cmd.Size = New System.Drawing.Size(145, 28)
@@ -349,7 +341,7 @@ Partial Class AccountsMGT_UI
         Me.formula_TB.Margin = New System.Windows.Forms.Padding(2)
         Me.formula_TB.Multiline = True
         Me.formula_TB.Name = "formula_TB"
-        Me.formula_TB.Size = New System.Drawing.Size(711, 196)
+        Me.formula_TB.Size = New System.Drawing.Size(711, 148)
         Me.formula_TB.TabIndex = 6
         '
         'GroupBox3
@@ -360,7 +352,7 @@ Partial Class AccountsMGT_UI
         Me.GroupBox3.Dock = System.Windows.Forms.DockStyle.Fill
         Me.GroupBox3.Location = New System.Drawing.Point(3, 311)
         Me.GroupBox3.Name = "GroupBox3"
-        Me.GroupBox3.Size = New System.Drawing.Size(785, 292)
+        Me.GroupBox3.Size = New System.Drawing.Size(573, 244)
         Me.GroupBox3.TabIndex = 19
         Me.GroupBox3.TabStop = False
         Me.GroupBox3.Text = "Formula"
@@ -377,7 +369,7 @@ Partial Class AccountsMGT_UI
         Me.TableLayoutPanel2.RowCount = 2
         Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 308.0!))
         Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TableLayoutPanel2.Size = New System.Drawing.Size(791, 606)
+        Me.TableLayoutPanel2.Size = New System.Drawing.Size(579, 558)
         Me.TableLayoutPanel2.TabIndex = 1
         '
         'MainMenu
@@ -386,7 +378,7 @@ Partial Class AccountsMGT_UI
         Me.MainMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.NewToolStripMenuItem, Me.DropHierarchyToExcelToolStripMenuItem1, Me.HelpToolStripMenuItem})
         Me.MainMenu.Location = New System.Drawing.Point(0, 0)
         Me.MainMenu.Name = "MainMenu"
-        Me.MainMenu.Size = New System.Drawing.Size(1060, 24)
+        Me.MainMenu.Size = New System.Drawing.Size(777, 24)
         Me.MainMenu.TabIndex = 21
         Me.MainMenu.Text = "MenuStrip1"
         '
@@ -468,8 +460,8 @@ Partial Class AccountsMGT_UI
         'SplitContainer1.Panel2
         '
         Me.SplitContainer1.Panel2.Controls.Add(Me.TableLayoutPanel2)
-        Me.SplitContainer1.Size = New System.Drawing.Size(1060, 606)
-        Me.SplitContainer1.SplitterDistance = 265
+        Me.SplitContainer1.Size = New System.Drawing.Size(777, 558)
+        Me.SplitContainer1.SplitterDistance = 194
         Me.SplitContainer1.TabIndex = 22
         '
         'TableLayoutPanel1
@@ -484,7 +476,7 @@ Partial Class AccountsMGT_UI
         Me.TableLayoutPanel1.RowCount = 2
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25.0!))
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TableLayoutPanel1.Size = New System.Drawing.Size(265, 606)
+        Me.TableLayoutPanel1.Size = New System.Drawing.Size(194, 558)
         Me.TableLayoutPanel1.TabIndex = 0
         '
         'Panel1
@@ -493,7 +485,7 @@ Partial Class AccountsMGT_UI
         Me.Panel1.Location = New System.Drawing.Point(1, 1)
         Me.Panel1.Margin = New System.Windows.Forms.Padding(1)
         Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(263, 23)
+        Me.Panel1.Size = New System.Drawing.Size(192, 23)
         Me.Panel1.TabIndex = 1
         '
         'AccountsTVPanel
@@ -502,7 +494,7 @@ Partial Class AccountsMGT_UI
         Me.AccountsTVPanel.Location = New System.Drawing.Point(1, 26)
         Me.AccountsTVPanel.Margin = New System.Windows.Forms.Padding(1)
         Me.AccountsTVPanel.Name = "AccountsTVPanel"
-        Me.AccountsTVPanel.Size = New System.Drawing.Size(263, 579)
+        Me.AccountsTVPanel.Size = New System.Drawing.Size(192, 531)
         Me.AccountsTVPanel.TabIndex = 2
         '
         'AccountsMGT_UI
@@ -510,7 +502,7 @@ Partial Class AccountsMGT_UI
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.SystemColors.Control
-        Me.ClientSize = New System.Drawing.Size(1060, 630)
+        Me.ClientSize = New System.Drawing.Size(777, 582)
         Me.Controls.Add(Me.SplitContainer1)
         Me.Controls.Add(Me.MainMenu)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
