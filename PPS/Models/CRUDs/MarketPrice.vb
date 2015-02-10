@@ -124,8 +124,12 @@ Friend Class MarketPrice
 
     Protected Overrides Sub finalize()
 
-        RST.Close()
-        MyBase.Finalize()
+        Try
+            RST.Close()
+            MyBase.Finalize()
+        Catch ex As Exception
+
+        End Try
 
     End Sub
 
