@@ -110,11 +110,20 @@
     <Compile Include="AddinModule.vb">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Clients Specific Modules\GDF SUEZ - ALTERNATIVE SCENARIOS\Configuration\Models\GDFSUEZASAccountsMapping.vb" />
-    <Compile Include="Clients Specific Modules\GDF SUEZ - ALTERNATIVE SCENARIOS\Configuration\Models\GDFSUEZASExport.vb" />
-    <Compile Include="Clients Specific Modules\GDF SUEZ - ALTERNATIVE SCENARIOS\Configuration\Models\GDFSUEZASReport.vb" />
-    <Compile Include="Clients Specific Modules\GDF SUEZ - ALTERNATIVE SCENARIOS\Configuration\Models\GDFSUEZEntitiesAttributes.vb" />
-    <Compile Include="Clients Specific Modules\GDF SUEZ - ALTERNATIVE SCENARIOS\Configuration\Models\GDFSUEZSensitivitiesMapping.vb" />
+    <Compile Include="Clients Specific Modules\GDF SUEZ - ALTERNATIVE SCENARIOS\Configuration\Controllers\ASEntitiesAttributesController.vb" />
+    <Compile Include="Clients Specific Modules\GDF SUEZ - ALTERNATIVE SCENARIOS\Configuration\Models\CRUDs\GDFSUEZEntitiesAttribute.vb" />
+    <Compile Include="Clients Specific Modules\GDF SUEZ - ALTERNATIVE SCENARIOS\Configuration\Models\Mappings\GDFSUEZASAccountsMapping.vb" />
+    <Compile Include="Clients Specific Modules\GDF SUEZ - ALTERNATIVE SCENARIOS\Configuration\Models\CRUDs\GDFSUEZASExport.vb" />
+    <Compile Include="Models\Computing\FormulasGenericCheck.vb" />
+    <Compile Include="Clients Specific Modules\GDF SUEZ - ALTERNATIVE SCENARIOS\Configuration\Views\ASEntitiesAttributesUI.Designer.vb">
+      <DependentUpon>ASEntitiesAttributesUI.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Clients Specific Modules\GDF SUEZ - ALTERNATIVE SCENARIOS\Configuration\Views\ASEntitiesAttributesUI.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Models\CRUDs\Report.vb" />
+    <Compile Include="Clients Specific Modules\GDF SUEZ - ALTERNATIVE SCENARIOS\Configuration\Models\Mappings\GDFSUEZEntitiesAttributesMapping.vb" />
+    <Compile Include="Clients Specific Modules\GDF SUEZ - ALTERNATIVE SCENARIOS\Configuration\Models\Mappings\GDFSUEZSensitivitiesMapping.vb" />
     <Compile Include="Clients Specific Modules\GDF SUEZ - ALTERNATIVE SCENARIOS\Controller\AlternativeScenariosController.vb" />
     <Compile Include="Clients Specific Modules\GDF SUEZ - ALTERNATIVE SCENARIOS\Controller\ASInputsController.vb" />
     <Compile Include="Clients Specific Modules\GDF SUEZ - ALTERNATIVE SCENARIOS\Model\AlternativeScenarioModel.vb" />
@@ -221,6 +230,13 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Modules\PLATFORM MANAGEMENT\Controls\Controller\ControlsMGTController.vb" />
+    <Compile Include="Modules\REPORTS DESIGNER\Controller\ReportsDesignerController.vb" />
+    <Compile Include="Modules\REPORTS DESIGNER\Views\ReportsDesignerUI.Designer.vb">
+      <DependentUpon>ReportsDesignerUI.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Modules\REPORTS DESIGNER\Views\ReportsDesignerUI.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Modules\SUBMISSIONS CONTROLS\Controller\SubmissionsControlsController.vb" />
     <Compile Include="Modules\SUBMISSIONS CONTROLS\Model\SubmissionControlModel.vb" />
     <Compile Include="Modules\PLATFORM MANAGEMENT\Controls\View\ControlsMGTUI.Designer.vb">
@@ -520,6 +536,9 @@
     <EmbeddedResource Include="AddinModule.resx">
       <DependentUpon>AddinModule.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Clients Specific Modules\GDF SUEZ - ALTERNATIVE SCENARIOS\Configuration\Views\ASEntitiesAttributesUI.resx">
+      <DependentUpon>ASEntitiesAttributesUI.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Clients Specific Modules\GDF SUEZ - ALTERNATIVE SCENARIOS\View\AlternativeScenariosUI.resx">
       <DependentUpon>AlternativeScenariosUI.vb</DependentUpon>
     </EmbeddedResource>
@@ -549,6 +568,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Modules\LOG\View\DataHistoryUI.resx">
       <DependentUpon>DataHistoryUI.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Modules\REPORTS DESIGNER\Views\ReportsDesignerUI.resx">
+      <DependentUpon>ReportsDesignerUI.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\InputValuesExcel.resx">
       <DependentUpon>InputValuesExcel.vb</DependentUpon>
@@ -856,7 +878,6 @@
     <None Include="Resources\favicon%28239%29.ico" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Clients Specific Modules\GDF SUEZ - ALTERNATIVE SCENARIOS\Configuration\Controllers\" />
     <Folder Include="Modules\MODELING\CONFIGURATION\Market Prices Config\Model\" />
   </ItemGroup>
   <ItemGroup>
