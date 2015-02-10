@@ -1,15 +1,19 @@
-﻿Imports System.Windows.Forms.DataVisualization.Charting
-Imports System.Collections
-Imports Microsoft.Office.Interop
-Imports System.Runtime.InteropServices
-
-' ChartsUtilities.vb
+﻿' ChartsUtilities.vb
 '
 ' Utilities for creating Charts and add series
 '
+' To do:
+'       - Charts export serie color fix !
+'
 '
 ' Author: Julien Monnereau
-' Last modified: 25/01/2015
+' Last modified: 08/02/2015
+
+
+Imports System.Windows.Forms.DataVisualization.Charting
+Imports System.Collections
+Imports Microsoft.Office.Interop
+Imports System.Runtime.InteropServices
 
 
 Friend Class ChartsUtilities
@@ -28,37 +32,27 @@ Friend Class ChartsUtilities
 
 #Region "Charts and Series Creation"
 
-    Protected Friend Shared Function CreateChart(ByRef title As String, _
-                                                 Optional ByRef palette As Object = Nothing) As Chart
+    Protected Friend Shared Function CreateChart(ByRef reportHT As Hashtable) As Chart
 
         Dim new_chart As New Chart
         Dim ChartArea1 As New ChartArea
         new_chart.ChartAreas.Add(ChartArea1)
 
         ChartArea1.AxisY.LabelAutoFitMaxFontSize = LABELS_MAX_FONT_SIZE
+        If reportHT.ContainsKey(REPORTS_AXIS1_NAME_VAR) _
+        AndAlso Not IsDBNull(reportHT(REPORTS_AXIS1_NAME_VAR)) Then
+            ChartArea1.AxisY.Title = reportHT(REPORTS_AXIS1_NAME_VAR)
+            ChartArea1.AxisY.TextOrientation = TextOrientation.Rotated90
+        End If
+        If reportHT.ContainsKey(REPORTS_AXIS1_NAME_VAR) _
+        AndAlso Not IsDBNull(reportHT(REPORTS_AXIS2_NAME_VAR)) Then
+            ChartArea1.AxisY2.Title = reportHT(REPORTS_AXIS2_NAME_VAR)
+            ChartArea1.AxisY2.TextOrientation = TextOrientation.Rotated90
+        End If
         ChartArea1.AxisX.LabelAutoFitMaxFontSize = LABELS_MAX_FONT_SIZE
-        ' set legend min font size
         ChartArea1.AxisX.MajorGrid.Enabled = False
 
-        If IsDBNull(palette) Then
-            new_chart.Palette = DEFAULT_CHART_PALETTE
-        Else
-            Select Case palette
-                ' use rgb
-                Case "Berry" : new_chart.Palette = ChartColorPalette.Berry
-                Case "Bright" : new_chart.Palette = ChartColorPalette.Bright
-                Case "BrightPastel" : new_chart.Palette = ChartColorPalette.BrightPastel
-                Case "Chocolate" : new_chart.Palette = ChartColorPalette.Chocolate
-                Case "EarthTones" : new_chart.Palette = ChartColorPalette.EarthTones
-                Case "Excel" : new_chart.Palette = ChartColorPalette.Excel
-                Case "Fire" : new_chart.Palette = ChartColorPalette.Fire
-                Case "GrayScale" : new_chart.Palette = ChartColorPalette.Grayscale
-                Case "Light" : new_chart.Palette = ChartColorPalette.Light
-                Case "Pastel" : new_chart.Palette = ChartColorPalette.Pastel
-                Case "SeaGreen" : new_chart.Palette = ChartColorPalette.SeaGreen
-                Case "SemiTransparent" : new_chart.Palette = ChartColorPalette.SemiTransparent
-            End Select
-        End If
+        If reportHT.ContainsKey(REPORTS_PALETTE_VAR) Then SetChartPalette(new_chart, reportHT(REPORTS_PALETTE_VAR))
 
         Dim legend1 As New Legend
         new_chart.Legends.Add(legend1)
@@ -68,7 +62,7 @@ Friend Class ChartsUtilities
         new_chart.Legends(0).Alignment = System.Drawing.StringAlignment.Center
         new_chart.Legends(0).AutoFitMinFontSize = VALUES_LABELS_FONT_SIZE
 
-        new_chart.Titles.Add(title)
+        new_chart.Titles.Add(reportHT(REPORTS_NAME_VAR))
         new_chart.Titles(0).Font = New Drawing.Font("Arial", CHART_TITLE_FONT_SIZE, Drawing.FontStyle.Bold)
         new_chart.BorderlineWidth = 1
         new_chart.BorderlineColor = Drawing.Color.Gray
@@ -83,7 +77,8 @@ Friend Class ChartsUtilities
         chart.Series.Add(new_serie)
         new_serie.ChartArea = "ChartArea1"
 
-        If Not IsDBNull(serieHT(CONTROL_CHART_TYPE_VARIABLE)) Then
+        If serieHT.ContainsKey(CONTROL_CHART_TYPE_VARIABLE) AndAlso _
+        Not IsDBNull(serieHT(CONTROL_CHART_TYPE_VARIABLE)) Then
             Select Case serieHT(CONTROL_CHART_TYPE_VARIABLE)
                 Case "Area" : new_serie.ChartType = SeriesChartType.Area
                 Case "Bar" : new_serie.ChartType = SeriesChartType.Bar
@@ -95,23 +90,14 @@ Friend Class ChartsUtilities
             End Select
         End If
 
-        If Not IsDBNull(serieHT(CONTROL_CHART_COLOR_VARIABLE)) Then
-            Select Case serieHT(CONTROL_CHART_COLOR_VARIABLE)
-                Case "blue" : new_serie.Color = Drawing.Color.Blue
-                Case "green" : new_serie.Color = Drawing.Color.Green
-                Case "yellow" : new_serie.Color = Drawing.Color.Yellow
-                Case "red" : new_serie.Color = Drawing.Color.Red
-                Case "purple" : new_serie.Color = Drawing.Color.Purple
-                Case "gray" : new_serie.Color = Drawing.Color.Gray
-                Case "black" : new_serie.Color = Drawing.Color.Black
-                Case "Khaki" : new_serie.Color = Drawing.Color.Khaki
-                Case "DarkKhaki" : new_serie.Color = Drawing.Color.DarkKhaki
-            End Select
+        If serieHT.ContainsKey(CONTROL_CHART_COLOR_VARIABLE) AndAlso _
+        Not IsDBNull(serieHT(CONTROL_CHART_COLOR_VARIABLE)) Then
+            new_serie.Color = System.Drawing.Color.FromArgb(serieHT(CONTROL_CHART_COLOR_VARIABLE))
         End If
 
-        If serieHT.ContainsKey(GDF_AS_REPORTS_DISPLAY_VALUES_VAR) AndAlso _
-        Not IsDBNull(serieHT(GDF_AS_REPORTS_DISPLAY_VALUES_VAR)) Then
-            If serieHT(GDF_AS_REPORTS_DISPLAY_VALUES_VAR) = 1 Then
+        If serieHT.ContainsKey(REPORTS_DISPLAY_VALUES_VAR) AndAlso _
+        Not IsDBNull(serieHT(REPORTS_DISPLAY_VALUES_VAR)) Then
+            If serieHT(REPORTS_DISPLAY_VALUES_VAR) = 1 Then
                 new_serie.IsValueShownAsLabel = True
                 new_serie.LabelBackColor = Drawing.Color.White
                 new_serie.LabelBorderColor = new_serie.Color
@@ -120,6 +106,19 @@ Friend Class ChartsUtilities
                 Dim label_font As System.Drawing.Font = New System.Drawing.Font(new_serie.Font.FontFamily, VALUES_LABELS_FONT_SIZE, Drawing.FontStyle.Regular)
                 new_serie.Font = label_font
             End If
+        End If
+
+        If serieHT.ContainsKey(REPORTS_SERIE_WIDTH_VAR) AndAlso _
+        Not IsDBNull(serieHT(REPORTS_SERIE_WIDTH_VAR)) Then
+            new_serie.CustomProperties = "PixelPointWidth = " & serieHT(REPORTS_SERIE_WIDTH_VAR)
+        End If
+
+        If serieHT.ContainsKey(REPORTS_SERIE_AXIS_VAR) AndAlso _
+        Not IsDBNull(serieHT(REPORTS_SERIE_AXIS_VAR)) Then
+            Select Case serieHT(REPORTS_SERIE_AXIS_VAR)
+                Case "Primary" : new_serie.YAxisType = AxisType.Primary
+                Case "Secondary" : new_serie.YAxisType = AxisType.Secondary
+            End Select
         End If
 
     End Sub
@@ -144,8 +143,6 @@ Friend Class ChartsUtilities
 
     Protected Friend Shared Sub AdjustChartPosition(ByRef chart As Chart)
 
-        ' specific to PriceModeling
-        ' to be reviewed
         chart.ChartAreas(0).Position = New ElementPosition(10, 10, 80, 80)
         chart.Legends(0).Position = New ElementPosition(0, 90, 100, 10)
 
@@ -153,32 +150,87 @@ Friend Class ChartsUtilities
 
 #End Region
 
-#Region "Excel"
 
-    Protected Friend Shared Sub CopyChartToExcel(ByRef input_chart As Chart)
+#Region "Excel Export"
 
-        ' Dim dataSourceCells As Excel.Range = Nothing
-        Dim chartObjects As Excel.ChartObjects = APPS.ActiveSheet.ChartObjects
-        Dim chartObject As Excel.ChartObject = Nothing
-        Dim newChart As Excel.Chart = Nothing
+    Protected Friend Shared Sub ExportChartExcel(ByRef input_chart As Chart, _
+                                                 ByRef ws As Excel.Worksheet, _
+                                                 Optional ByRef i As Int32 = 2, _
+                                                 Optional ByRef j As Int32 = 2)
 
-        '  dataSourceCells = activeSheet.Range["A1", "G6"] 
-        chartObject = chartObjects.Add(100, 100, 350, 300)  ' (Excel.ChartObject)
-        newChart = chartObject.Chart
-        ' copy series and settings one by one ?
+        Dim chartObjs As Excel.ChartObjects = ws.ChartObjects(Type.Missing)     ' (ChartObjects) -> cast
+        Dim chartObj As Excel.ChartObject = chartObjs.Add(100, 20, 300, 300)
+        Dim xlChart As Excel.Chart = chartObj.Chart
+        xlChart.HasTitle = True
+        xlChart.ChartTitle.Caption = input_chart.Titles(0).Text
+        xlChart.ChartTitle.Font.Size = input_chart.Titles(0).Font.Size
+        xlChart.Legend.Position = Excel.XlLegendPosition.xlLegendPositionBottom
 
-        newChart.SetSourceData(input_chart.DataSource)    ' dataSourceCells
-        newChart.ChartType = Excel.XlChartType.xlLineMarkers
+        For Each serie As Series In input_chart.Series
+            j = 2
+            ws.Cells(i, 1).value = serie.Name
+            For Each point As DataPoint In serie.Points
+                ws.Cells(i, j).value = point.YValues(0)
+                ws.Cells(1, j).value = point.XValue
+                j = j + 1
+            Next
+            Dim xValues As Excel.Range = ws.Range(ws.Cells(1, 2), ws.Cells(1, j - 1))
+            Dim values As Excel.Range = ws.Range(ws.Cells(i, 2), ws.Cells(i, j - 1))
+            Dim SeriesCollection As Excel.SeriesCollection = xlChart.SeriesCollection()
+            Dim series1 As Excel.Series = SeriesCollection.NewSeries()
+            series1.XValues = xValues
+            series1.Values = values
+            series1.Name = serie.Name
+            series1.format.fill.visible = True
+            series1.format.fill.Solid()
+            series1.format.fill.Transparency = 0
+            series1.Format.Fill.ForeColor.rgb = System.Drawing.Color.Red.ToArgb.ToString
+            ' serie.Color.ToArgb
 
-        If Not chartObjects Is Nothing Then Marshal.ReleaseComObject(chartObjects)
-        If Not chartObject Is Nothing Then Marshal.ReleaseComObject(chartObject)
-        If Not newChart Is Nothing Then Marshal.ReleaseComObject(newChart)
-
+            Select Case serie.ChartType
+                Case SeriesChartType.Area : series1.ChartType = Excel.XlChartType.xlArea
+                Case SeriesChartType.Bar : series1.ChartType = Excel.XlChartType.xlBarClustered
+                Case SeriesChartType.Column : series1.ChartType = Excel.XlChartType.xlColumnClustered
+                Case SeriesChartType.Line : series1.ChartType = Excel.XlChartType.xlLine
+                Case SeriesChartType.Spline : series1.ChartType = Excel.XlChartType.xlLine
+                Case SeriesChartType.StackedColumn : series1.ChartType = Excel.XlChartType.xlColumnStacked
+                Case SeriesChartType.StackedColumn100 : series1.ChartType = Excel.XlChartType.xlColumnStacked100
+            End Select
+            i = i + 1
+        Next
 
     End Sub
 
+#End Region
 
+
+#Region "Utilities"
+
+    Protected Friend Shared Sub SetChartPalette(ByRef chart As Chart, _
+                                                      Optional ByRef palette As Object = Nothing)
+
+        If IsDBNull(palette) Or palette Is Nothing Then
+            chart.Palette = DEFAULT_CHART_PALETTE
+        Else
+            Select Case palette
+                Case "Berry" : chart.Palette = ChartColorPalette.Berry
+                Case "Bright" : chart.Palette = ChartColorPalette.Bright
+                Case "BrightPastel" : chart.Palette = ChartColorPalette.BrightPastel
+                Case "Chocolate" : chart.Palette = ChartColorPalette.Chocolate
+                Case "EarthTones" : chart.Palette = ChartColorPalette.EarthTones
+                Case "Excel" : chart.Palette = ChartColorPalette.Excel
+                Case "Fire" : chart.Palette = ChartColorPalette.Fire
+                Case "GrayScale" : chart.Palette = ChartColorPalette.Grayscale
+                Case "Light" : chart.Palette = ChartColorPalette.Light
+                Case "Pastel" : chart.Palette = ChartColorPalette.Pastel
+                Case "SeaGreen" : chart.Palette = ChartColorPalette.SeaGreen
+                Case "SemiTransparent" : chart.Palette = ChartColorPalette.SemiTransparent
+            End Select
+        End If
+
+    End Sub
 
 #End Region
+
 
 End Class
