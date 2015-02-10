@@ -43,6 +43,7 @@ Partial Class ControlsMGTUI
         Me.Label5 = New System.Windows.Forms.Label()
         Me.PalettesCB = New System.Windows.Forms.ComboBox()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
+        Me.ColorBT = New System.Windows.Forms.Button()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.Label4 = New System.Windows.Forms.Label()
         Me.SerieAccountIDCB = New System.Windows.Forms.ComboBox()
@@ -50,7 +51,6 @@ Partial Class ControlsMGTUI
         Me.SerieNameTB = New System.Windows.Forms.TextBox()
         Me.SerieTypeCB = New System.Windows.Forms.ComboBox()
         Me.Label2 = New System.Windows.Forms.Label()
-        Me.SerieColorCB = New System.Windows.Forms.ComboBox()
         Me.ChartNameLabel = New System.Windows.Forms.Label()
         Me.ChartNameTB = New System.Windows.Forms.TextBox()
         Me.ChartsTVImageList = New System.Windows.Forms.ImageList(Me.components)
@@ -321,6 +321,7 @@ Partial Class ControlsMGTUI
         '
         'GroupBox1
         '
+        Me.GroupBox1.Controls.Add(Me.ColorBT)
         Me.GroupBox1.Controls.Add(Me.Label1)
         Me.GroupBox1.Controls.Add(Me.Label4)
         Me.GroupBox1.Controls.Add(Me.SerieAccountIDCB)
@@ -328,13 +329,23 @@ Partial Class ControlsMGTUI
         Me.GroupBox1.Controls.Add(Me.SerieNameTB)
         Me.GroupBox1.Controls.Add(Me.SerieTypeCB)
         Me.GroupBox1.Controls.Add(Me.Label2)
-        Me.GroupBox1.Controls.Add(Me.SerieColorCB)
         Me.GroupBox1.Location = New System.Drawing.Point(59, 169)
         Me.GroupBox1.Name = "GroupBox1"
         Me.GroupBox1.Size = New System.Drawing.Size(607, 310)
         Me.GroupBox1.TabIndex = 10
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "Serie"
+        '
+        'ColorBT
+        '
+        Me.ColorBT.BackColor = System.Drawing.SystemColors.ButtonHighlight
+        Me.ColorBT.FlatAppearance.BorderSize = 0
+        Me.ColorBT.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.ColorBT.Location = New System.Drawing.Point(370, 118)
+        Me.ColorBT.Name = "ColorBT"
+        Me.ColorBT.Size = New System.Drawing.Size(27, 19)
+        Me.ColorBT.TabIndex = 19
+        Me.ColorBT.UseVisualStyleBackColor = False
         '
         'Label1
         '
@@ -348,7 +359,7 @@ Partial Class ControlsMGTUI
         'Label4
         '
         Me.Label4.AutoSize = True
-        Me.Label4.Location = New System.Drawing.Point(296, 200)
+        Me.Label4.Location = New System.Drawing.Point(296, 156)
         Me.Label4.Name = "Label4"
         Me.Label4.Size = New System.Drawing.Size(65, 13)
         Me.Label4.TabIndex = 9
@@ -384,7 +395,7 @@ Partial Class ControlsMGTUI
         '
         Me.SerieTypeCB.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.SerieTypeCB.FormattingEnabled = True
-        Me.SerieTypeCB.Location = New System.Drawing.Point(293, 226)
+        Me.SerieTypeCB.Location = New System.Drawing.Point(293, 182)
         Me.SerieTypeCB.Name = "SerieTypeCB"
         Me.SerieTypeCB.Size = New System.Drawing.Size(225, 21)
         Me.SerieTypeCB.TabIndex = 7
@@ -397,15 +408,6 @@ Partial Class ControlsMGTUI
         Me.Label2.Size = New System.Drawing.Size(175, 13)
         Me.Label2.TabIndex = 5
         Me.Label2.Text = "Serie's Financial or Operational Item"
-        '
-        'SerieColorCB
-        '
-        Me.SerieColorCB.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.SerieColorCB.FormattingEnabled = True
-        Me.SerieColorCB.Location = New System.Drawing.Point(293, 149)
-        Me.SerieColorCB.Name = "SerieColorCB"
-        Me.SerieColorCB.Size = New System.Drawing.Size(225, 21)
-        Me.SerieColorCB.TabIndex = 6
         '
         'ChartNameLabel
         '
@@ -475,6 +477,11 @@ Partial Class ControlsMGTUI
         Me.DeleteRCM.Size = New System.Drawing.Size(130, 22)
         Me.DeleteRCM.Text = "Delete"
         '
+        'ColorDialog1
+        '
+        Me.ColorDialog1.AnyColor = True
+        Me.ColorDialog1.Color = System.Drawing.Color.White
+        '
         'ControlsMGTUI
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -526,7 +533,6 @@ Partial Class ControlsMGTUI
     Friend WithEvents SerieNameTB As System.Windows.Forms.TextBox
     Friend WithEvents SerieTypeCB As System.Windows.Forms.ComboBox
     Friend WithEvents Label2 As System.Windows.Forms.Label
-    Friend WithEvents SerieColorCB As System.Windows.Forms.ComboBox
     Friend WithEvents ChartNameLabel As System.Windows.Forms.Label
     Friend WithEvents ChartNameTB As System.Windows.Forms.TextBox
     Friend WithEvents ChartsTVImageList As System.Windows.Forms.ImageList
@@ -540,4 +546,5 @@ Partial Class ControlsMGTUI
     Friend WithEvents ToolStripSeparator2 As System.Windows.Forms.ToolStripSeparator
     Friend WithEvents RenameRCBT As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ColorDialog1 As System.Windows.Forms.ColorDialog
+    Friend WithEvents ColorBT As System.Windows.Forms.Button
 End Class

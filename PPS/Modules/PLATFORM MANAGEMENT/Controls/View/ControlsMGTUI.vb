@@ -69,10 +69,10 @@ Friend Class ControlsMGTUI
 #Region "Initialize"
 
     Protected Friend Sub New(ByRef input_controller As ControlsMGTController, _
-                   ByRef input_chartsController As ChartsControlsMGTController, _
-                   ByRef input_accounts_name_id_dic As Hashtable, _
-                   ByRef input_operators_symbol_id_dic As Dictionary(Of String, String), _
-                   ByRef input_period_options_name_id_dic As Dictionary(Of String, String))
+                            ByRef input_chartsController As ChartsControlsMGTController, _
+                            ByRef input_accounts_name_id_dic As Hashtable, _
+                            ByRef input_operators_symbol_id_dic As Dictionary(Of String, String), _
+                            ByRef input_period_options_name_id_dic As Dictionary(Of String, String))
 
         ' This call is required by the designer.
         InitializeComponent()
@@ -134,15 +134,10 @@ Friend Class ControlsMGTUI
             SerieTypeCB.Items.Add(serie_type)
         Next
 
-        For Each serie_color In SeriesMapping.GetSerieColorsList
-            SerieColorCB.Items.Add(serie_color)
-        Next
-
         PalettesCB.Items.Add("")
         SerieAccountIDCB.Items.Add("")
         SerieTypeCB.Items.Add("")
-        SerieColorCB.Items.Add("")
-
+     
     End Sub
 
     Private Sub InitializeDGV()
@@ -391,19 +386,24 @@ Friend Class ControlsMGTUI
 
 #Region "Charts Controls"
 
-    Private Sub SerieAccountIDCB_SelectedValueChanged(sender As Object, e As EventArgs) Handles SerieAccountIDCB.SelectedValueChanged
+    Private Sub SerieAccountIDCB_SelectedValueChanged(sender As Object, e As EventArgs)
 
         If current_serie_id <> "" AndAlso isDisplayingSerie = False Then ChartsController.UpdateSerieAccountID(current_serie_id, accounts_name_id_dic(SerieAccountIDCB.Text))
 
     End Sub
 
-    Private Sub SerieColorTB_SelectedIndexChanged(sender As Object, e As EventArgs) Handles SerieColorCB.SelectedIndexChanged
+    Private Sub ColorBT_Click(sender As Object, e As EventArgs) Handles ColorBT.Click
 
-        If current_serie_id <> "" AndAlso isDisplayingSerie = False Then ChartsController.UpdateSerieColor(current_serie_id, SerieColorCB.Text)
+        If current_serie_id <> "" Then
+            If ColorDialog1.ShowDialog <> Windows.Forms.DialogResult.Cancel Then
+                ColorBT.BackColor = ColorDialog1.Color
+                ChartsController.UpdateSerieColor(current_serie_id, ColorDialog1.Color.ToArgb)
+            End If
+        End If
 
     End Sub
 
-    Private Sub SerieTypeTB_SelectedIndexChanged(sender As Object, e As EventArgs) Handles SerieTypeCB.SelectedIndexChanged
+    Private Sub SerieTypeTB_SelectedIndexChanged(sender As Object, e As EventArgs)
 
         If current_serie_id <> "" AndAlso isDisplayingSerie = False Then ChartsController.UpdateSerieType(current_serie_id, SerieTypeCB.Text)
 
@@ -472,7 +472,7 @@ Friend Class ControlsMGTUI
             ChartNameTB.Text = current_chart_node.Parent.Text
             SerieNameTB.Text = current_chart_node.Text
             If Not IsDBNull(ht(CONTROL_CHART_TYPE_VARIABLE)) Then SerieTypeCB.Text = ht(CONTROL_CHART_TYPE_VARIABLE) Else SerieTypeCB.Text = ""
-            If Not IsDBNull(ht(CONTROL_CHART_COLOR_VARIABLE)) Then SerieColorCB.Text = ht(CONTROL_CHART_COLOR_VARIABLE) Else SerieColorCB.Text = ""
+            If Not IsDBNull(ht(CONTROL_CHART_COLOR_VARIABLE)) Then ColorBT.BackColor = System.Drawing.Color.FromArgb(ht(CONTROL_CHART_COLOR_VARIABLE)) Else ColorBT.BackColor = Drawing.Color.White
             If Not IsDBNull(ht(CONTROL_CHART_ACCOUNT_ID_VARIABLE)) Then SerieAccountIDCB.SelectedItem = accounts_id_name_dic(ht(CONTROL_CHART_ACCOUNT_ID_VARIABLE)) Else SerieAccountIDCB.Text = ""
             isDisplayingSerie = False
         End If
@@ -484,7 +484,7 @@ Friend Class ControlsMGTUI
         isDisplayingSerie = True
         SerieNameTB.Text = ""
         SerieTypeCB.Text = ""
-        SerieColorCB.Text = ""
+        ColorBT.BackColor = Drawing.Color.White
         SerieAccountIDCB.Text = ""
         isDisplayingSerie = False
         current_serie_id = ""
