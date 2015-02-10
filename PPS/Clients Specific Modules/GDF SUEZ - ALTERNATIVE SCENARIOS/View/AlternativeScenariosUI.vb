@@ -186,14 +186,16 @@ Friend Class AlternativeScenariosUI
             ' use dgvutil > export excel ?
 
         Else
-            'ChartsUtilities.CopyChartToExcel(current_report)
-
-            Dim chart1 As Chart = current_report
-            Dim ms As MemoryStream = New MemoryStream()
-            chart1.SaveImage(ms, ChartImageFormat.Bmp)
-            Dim bm As Bitmap = New Bitmap(ms)
-            Clipboard.SetImage(bm)
-            ws.Paste()
+            Dim destination As Excel.Range = CWorksheetWrittingFunctions.CreateReceptionWS("Scenario", _
+                                                                                           {}, _
+                                                                                           {})
+            ChartsUtilities.ExportChartExcel(current_report, destination.Worksheet, 4)
+            '  Dim chart1 As Chart = current_report
+            'Dim ms As MemoryStream = New MemoryStream()
+            'chart1.SaveImage(ms, ChartImageFormat.Bmp)
+            'Dim bm As Bitmap = New Bitmap(ms)
+            'Clipboard.SetImage(bm)
+            'ws.Paste()
         End If
 
     End Sub
