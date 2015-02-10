@@ -14,7 +14,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 21/01/2015
+' Last modified: 08/02/2015
 
 
 Imports VIBlend.WinForms.DataGridView
@@ -22,6 +22,7 @@ Imports System.Collections.Generic
 Imports System.Collections
 Imports System.Drawing
 Imports System.Windows.Forms
+Imports System.Windows.Forms.DataVisualization.Charting
 
 
 Friend Class RatesView
@@ -32,6 +33,7 @@ Friend Class RatesView
     ' Objects
     Private DGV As vDataGridView
     Private CONTROLLER As CExchangeRatesCONTROLER
+    Private chart As New Chart
 
     ' Variables
     Friend rowsKeyItemDictionary As New Dictionary(Of Integer, HierarchyItem)
@@ -39,29 +41,28 @@ Friend Class RatesView
     Friend rowIDKeyDictionary As New Dictionary(Of String, Integer)
     Friend columnIDKeyDictionary As New Dictionary(Of String, String)
     Private is_filling_cells As Boolean
-
-    ' Flags
-    Private chartSerieDisplayed As Boolean
-    Private chartDisplayedCurrency As String
+    Private colors_palette As List(Of Hashtable)
+    Private charts_periods As New List(Of String)
+    Private is_copying_value_down As Boolean = False
 
     ' Constants
     Private DGV_ITEMS_FONT_SIZE = 8
     Private DGV_CELLS_FONT_SIZE = 8
+    Private LINES_WIDTH As Single = 3
 
 #End Region
 
 
 #Region "Initialize"
 
-    Friend Sub New(ByRef inputDGV As vDataGridView)
+    Friend Sub New(ByRef inputDGV As vDataGridView, ByRef input_chart As Chart)
 
         DGV = inputDGV
-
-        With DGV
-            .AllowCopyPaste = True
-            .RowsHierarchy.CompactStyleRenderingEnabled = False
-            AddHandler .CellValueChanging, AddressOf rates_DGV_CellValueChanging
-        End With
+        chart = input_chart
+        DGV.AllowCopyPaste = True
+        DGV.RowsHierarchy.CompactStyleRenderingEnabled = False
+        colors_palette = pps_colorsMapping.GetColorsList()
+        AddHandler DGV.CellValueChanging, AddressOf rates_DGV_CellValueChanging
 
     End Sub
 
@@ -112,11 +113,13 @@ Friend Class RatesView
 
     Private Sub InitRows(ByRef globalPeriodsDictionary As Dictionary(Of Int32, Integer()))
 
+        charts_periods.Clear()
         For Each yearAsInteger As Integer In globalPeriodsDictionary.Keys
             Dim row As HierarchyItem = DGV.RowsHierarchy.Items.Add(Year(Date.FromOADate(yearAsInteger)))
             For Each monthDateInteger As Integer In globalPeriodsDictionary(yearAsInteger)
                 Dim period As Date = Date.FromOADate(monthDateInteger)
                 AddSubRow(row, Format(period, "MMM yyyy"), monthDateInteger)
+                charts_periods.Add(Format(period, "MMM yyyy"))
             Next
         Next
 
@@ -163,15 +166,13 @@ Friend Class RatesView
         For Each column As HierarchyItem In DGV.ColumnsHierarchy.Items
             curr = columnIDKeyDictionary(column.GetUniqueID)
             If exchangeRatesDictionary.ContainsKey(curr) Then
-
                 For Each row As HierarchyItem In DGV.RowsHierarchy.Items
                     For Each subRow As HierarchyItem In row.Items
-                        FillInGridCell(exchangeRatesDictionary, _
-                                       subRow, _
-                                       curr, _
-                                       column)
+                        FillInGridCell(exchangeRatesDictionary, subRow, _
+                                       curr, column)
                     Next
                 Next
+                DisplayPriceCurve(curr, GetValuesFromPeriodsHT(exchangeRatesDictionary(curr)), column.ItemIndex)
             End If
         Next
         is_filling_cells = False
@@ -193,6 +194,7 @@ Friend Class RatesView
         End If
         DGV.CellsArea.SetCellValue(row, column, value)
 
+
     End Sub
 
     Friend Sub UpdateCell(ByRef curr As String, ByRef period As Integer, ByRef value As Double)
@@ -206,32 +208,35 @@ Friend Class RatesView
 
 #Region "Chart Display"
 
-    Friend Sub DisplayCurrencyCurve(ByRef currencyKey As String)
+    Friend Sub DisplayPriceCurve(ByRef curr As String, _
+                                 ByRef values As Double(), _
+                                 ByRef color_index As Int32)
 
-        'ReLoadRatesSerie(currencyKey)
-        'myPane.Title.Text = currencyKey + "/" + MAIN_CURRENCY + " rates curve"
-        'myPane.YAxis.Title.Text = currencyKey + "/" + MAIN_CURRENCY
-
-        'chartDisplayedCurrency = currencyKey
-
-    End Sub
-
-    ' Reload a rates serie
-    Private Sub ReLoadRatesSerie(ByRef curr As String)
-
-        'Dim col As HierarchyItem = columnsKeyItemDictionary(curr)
-        'Dim tmpList = New PointPairList()
-        'For Each row As HierarchyItem In DGV.RowsHierarchy.Items
-
-        '    Dim value As Double = DGV.CellsArea.GetCellValue(row, col)
-        '    Dim x As Double = CDbl(New XDate(CDbl(row.Caption)))
-        '    tmpList.Add(x, value)
-
-        'Next
-        'chartSeriesDictionary(curr) = tmpList
+        Dim new_serie As New Series(curr)
+        chart.Series.Add(curr)
+        new_serie.ChartArea = "ChartArea1"
+        chart.Series(curr).ChartType = SeriesChartType.Line
+        chart.Series(curr).Color = Color.FromArgb(colors_palette(color_index)(PPS_COLORS_RED_VAR), colors_palette(color_index)(PPS_COLORS_GREEN_VAR), colors_palette(color_index)(PPS_COLORS_BLUE_VAR))
+        chart.Series(curr).BorderWidth = LINES_WIDTH
+        chart.Series(curr).Points.DataBindXY(charts_periods, values)
 
     End Sub
 
+    Private Sub UpdateSerie(ByRef curr As String, _
+                            ByRef column_curr As Int32)
+
+        Dim values(charts_periods.Count - 1) As Double
+        Dim i As Int32 = 0
+        For Each row As HierarchyItem In DGV.RowsHierarchy.Items
+            For Each sub_row As HierarchyItem In row.Items
+                values(i) = DGV.CellsArea.GetCellValue(sub_row, DGV.ColumnsHierarchy.Items(column_curr))
+                i = i + 1
+            Next
+        Next
+        chart.Series(curr).Points.DataBindXY(charts_periods, values)
+        chart.Update()
+
+    End Sub
 
 #End Region
 
@@ -243,16 +248,16 @@ Friend Class RatesView
         Dim value As Double = DGV.CellsArea.SelectedCells(0).Value
         Dim column As HierarchyItem = DGV.CellsArea.SelectedCells(0).ColumnItem
         Dim row As HierarchyItem = DGV.CellsArea.SelectedCells(0).RowItem
-
+        is_copying_value_down = True
         If Not row.ParentItem Is Nothing Then
             CopyValueIntoCellsBelow(row.ParentItem, row.ItemIndex + 1, column, value)
             For i = row.ParentItem.ItemIndex + 1 To DGV.RowsHierarchy.Items.Count - 1
                 CopyValueIntoCellsBelow(DGV.RowsHierarchy.Items(i), 0, column, value)
             Next
         End If
+        is_copying_value_down = False
 
     End Sub
-
 
 #End Region
 
@@ -268,6 +273,7 @@ Friend Class RatesView
                 Dim curr As String = columnIDKeyDictionary(args.Cell.ColumnItem.GetUniqueID)
                 Dim period As String = rowIDKeyDictionary(args.Cell.RowItem.GetUniqueID)
                 CONTROLLER.UpdateRate(curr, period, args.NewValue)
+                If is_copying_value_down = False Then UpdateSerie(curr, args.Cell.ColumnItem.ItemIndex)
             End If
         End If
 
@@ -299,6 +305,20 @@ Friend Class RatesView
         Next
 
     End Sub
+
+    Private Function GetValuesFromPeriodsHT(ByRef ht As Hashtable) As Double()
+
+        Dim tmp_array(charts_periods.Count - 1) As Double
+        Dim i As Int32 = 0
+        For Each row As HierarchyItem In DGV.RowsHierarchy.Items
+            For Each sub_row As HierarchyItem In row.Items
+                tmp_array(i) = ht(rowIDKeyDictionary(sub_row.GetUniqueID))
+                i = i + 1
+            Next
+        Next
+        Return tmp_array
+
+    End Function
 
 #End Region
 

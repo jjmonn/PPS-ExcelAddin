@@ -13,13 +13,14 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 21/01/2015
+' Last modified: 08/02/2015
 
 
 Imports System.Collections.Generic
 Imports VIBlend.WinForms.DataGridView
 Imports System.Collections
 Imports System.Windows.Forms
+Imports System.Windows.Forms.DataVisualization.Charting
 
 
 Friend Class CurrenciesManagementUI
@@ -30,6 +31,7 @@ Friend Class CurrenciesManagementUI
     ' Objects
     Friend Controller As CExchangeRatesCONTROLER
     Friend ratesView As RatesView
+    Private chart As Chart
 
     ' Variables
     Private mainMenuFlag As Boolean
@@ -54,25 +56,34 @@ Friend Class CurrenciesManagementUI
         InitializeComponent()
 
         ' Add any initialization after the InitializeComponent() call.
-        ratesView = New RatesView(rates_DGV)
         Controller = New CExchangeRatesCONTROLER(Me)
+        Dim ht As New Hashtable
+        ht.Add(REPORTS_NAME_VAR, "Exchange Rates")
+        chart = ChartsUtilities.CreateChart(ht)
+        SplitContainer2.Panel2.Controls.Add(chart)
+        chart.Dock = DockStyle.Fill
+        chart.BorderlineColor = Drawing.Color.Gray
+        chart.BorderlineWidth = 1
+        ratesView = New RatesView(rates_DGV, chart)
         If Controller.object_is_alive = False Then
             MsgBox("There seems to be a network connection issue. You should try again and contact the PPS team if the error persist.")
             Me.Dispose()
         End If
         ratesView.AttributeController(Controller)
 
+
     End Sub
 
     Private Sub CurrenciesManagementUI_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 
         Me.WindowState = FormWindowState.Maximized
-        CollapseChartPane()
+        '  CollapseChartPane()
         rates_DGV.AllowCopyPaste = True
         rates_DGV.ColumnsHierarchy.AutoResize(AutoResizeMode.FIT_ALL)
         rates_DGV.RowsHierarchy.CompactStyleRenderingEnabled = True
         rates_DGV.Refresh()
         rates_DGV.Select()
+        ExpandChartPane()
 
     End Sub
 

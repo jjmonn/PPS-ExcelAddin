@@ -24,7 +24,7 @@ Partial Class CurrenciesManagementUI
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(CurrenciesManagementUI))
-        Dim DataGridLocalization1 As VIBlend.WinForms.DataGridView.DataGridLocalization = New VIBlend.WinForms.DataGridView.DataGridLocalization()
+        Dim DataGridLocalization2 As VIBlend.WinForms.DataGridView.DataGridLocalization = New VIBlend.WinForms.DataGridView.DataGridLocalization()
         Me.SplitContainer1 = New System.Windows.Forms.SplitContainer()
         Me.TableLayoutPanel2 = New System.Windows.Forms.TableLayoutPanel()
         Me.versionsTV = New System.Windows.Forms.TreeView()
@@ -46,7 +46,6 @@ Partial Class CurrenciesManagementUI
         Me.TableLayoutPanel3 = New System.Windows.Forms.TableLayoutPanel()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.rates_version_TB = New System.Windows.Forms.TextBox()
-        Me.ChartPanel = New System.Windows.Forms.Panel()
         Me.currenciesRCMenu = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.AddCurrencyToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.DeleteCurrencyToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
@@ -66,7 +65,6 @@ Partial Class CurrenciesManagementUI
         Me.VersionsRCMenu.SuspendLayout()
         CType(Me.SplitContainer2, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SplitContainer2.Panel1.SuspendLayout()
-        Me.SplitContainer2.Panel2.SuspendLayout()
         Me.SplitContainer2.SuspendLayout()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.dgvRCM.SuspendLayout()
@@ -182,10 +180,6 @@ Partial Class CurrenciesManagementUI
         'SplitContainer2.Panel1
         '
         Me.SplitContainer2.Panel1.Controls.Add(Me.TableLayoutPanel1)
-        '
-        'SplitContainer2.Panel2
-        '
-        Me.SplitContainer2.Panel2.Controls.Add(Me.ChartPanel)
         Me.SplitContainer2.Size = New System.Drawing.Size(836, 578)
         Me.SplitContainer2.SplitterDistance = 353
         Me.SplitContainer2.SplitterWidth = 1
@@ -245,7 +239,7 @@ Partial Class CurrenciesManagementUI
         Me.rates_DGV.HorizontalScrollBarLargeChange = 20
         Me.rates_DGV.HorizontalScrollBarSmallChange = 5
         Me.rates_DGV.ImageList = Nothing
-        Me.rates_DGV.Localization = DataGridLocalization1
+        Me.rates_DGV.Localization = DataGridLocalization2
         Me.rates_DGV.Location = New System.Drawing.Point(3, 28)
         Me.rates_DGV.MultipleSelectionEnabled = True
         Me.rates_DGV.Name = "rates_DGV"
@@ -344,15 +338,6 @@ Partial Class CurrenciesManagementUI
         Me.rates_version_TB.Size = New System.Drawing.Size(141, 20)
         Me.rates_version_TB.TabIndex = 1
         '
-        'ChartPanel
-        '
-        Me.ChartPanel.BackColor = System.Drawing.SystemColors.ButtonHighlight
-        Me.ChartPanel.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.ChartPanel.Location = New System.Drawing.Point(0, 0)
-        Me.ChartPanel.Name = "ChartPanel"
-        Me.ChartPanel.Size = New System.Drawing.Size(836, 224)
-        Me.ChartPanel.TabIndex = 0
-        '
         'currenciesRCMenu
         '
         Me.currenciesRCMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.AddCurrencyToolStripMenuItem, Me.DeleteCurrencyToolStripMenuItem1})
@@ -449,7 +434,6 @@ Partial Class CurrenciesManagementUI
         Me.TableLayoutPanel2.ResumeLayout(False)
         Me.VersionsRCMenu.ResumeLayout(False)
         Me.SplitContainer2.Panel1.ResumeLayout(False)
-        Me.SplitContainer2.Panel2.ResumeLayout(False)
         CType(Me.SplitContainer2, System.ComponentModel.ISupportInitialize).EndInit()
         Me.SplitContainer2.ResumeLayout(False)
         Me.TableLayoutPanel1.ResumeLayout(False)
@@ -493,7 +477,6 @@ Partial Class CurrenciesManagementUI
     Friend WithEvents select_version As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ToolStripSeparator2 As System.Windows.Forms.ToolStripSeparator
     Friend WithEvents ToolStripSeparator1 As System.Windows.Forms.ToolStripSeparator
-    Friend WithEvents ChartPanel As System.Windows.Forms.Panel
     Friend WithEvents ToolStripSeparator3 As System.Windows.Forms.ToolStripSeparator
     Friend WithEvents CopyRateDownToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
 End Class
