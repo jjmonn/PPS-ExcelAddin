@@ -31,7 +31,7 @@ Module gdfsuezAlternativeScenarios
     Friend Const GDF_ENTITIES_AS_ATTRIBUTES_TABLE As String = "gdfsuez_entities_as_attributes"
     Friend Const GDF_ENTITIES_AS_ENTITY_ID_VAR As String = "entity_id"
     Friend Const GDF_ENTITIES_AS_GAS_FORMULA_VAR As String = "gas_formula"
-    Friend Const GDF_ENTITIES_AS_LIQUID_VAR As String = "liquid_formula"
+    Friend Const GDF_ENTITIES_AS_LIQUID_FORMULA_VAR As String = "liquid_formula"
     Friend Const GDF_ENTITIES_AS_TAX_RATE_VAR As String = "tax_rate"
 
 #End Region
@@ -57,21 +57,23 @@ Module gdfsuezAlternativeScenarios
 #Region "Alternative Scenario Reports Tables"
 
     Friend Const GDF_AS_REPORTS_TABLE As String = "gdfsuez_as_reports"
-    Friend Const GDF_AS_REPORTS_ID_VAR As String = "id"
-    Friend Const GDF_AS_REPORTS_PARENT_ID_VAR As String = "parent_id"
-    Friend Const GDF_AS_REPORTS_NAME_VAR As String = "name"
-    Friend Const GDF_AS_REPORTS_ACCOUNT_ID As String = "account_id"
-    Friend Const GDF_AS_REPORTS_TYPE_VAR As String = "type"
-    Friend Const GDF_AS_REPORTS_COLOR_VAR As String = "color"
-    Friend Const GDF_AS_REPORTS_PALETTE_VAR As String = "palette"
-    Friend Const GDF_AS_REPORTS_AXIS1_NAME_VAR As String = "axis1"
-    Friend Const GDF_AS_REPORTS_AXIS2_NAME_VAR As String = "axis2"
-    Friend Const GDF_AS_REPORTS_SERIE_AXIS_VAR As String = "serie_axis"
-    Friend Const GDF_AS_REPORTS_SERIE_UNIT_VAR As String = "serie_unit"
-    Friend Const GDF_AS_REPORTS_DISPLAY_VALUES_VAR As String = "display_values"
+    Friend Const REPORTS_ID_VAR As String = "id"
+    Friend Const REPORTS_PARENT_ID_VAR As String = "parent_id"
+    Friend Const REPORTS_NAME_VAR As String = "name"
+    Friend Const REPORTS_ACCOUNT_ID As String = "account_id"
+    Friend Const REPORTS_TYPE_VAR As String = "type"
+    Friend Const REPORTS_COLOR_VAR As String = "color"
+    Friend Const REPORTS_PALETTE_VAR As String = "palette"
+    Friend Const REPORTS_AXIS1_NAME_VAR As String = "axis1"
+    Friend Const REPORTS_AXIS2_NAME_VAR As String = "axis2"
+    Friend Const REPORTS_SERIE_AXIS_VAR As String = "serie_axis"
+    Friend Const REPORTS_SERIE_UNIT_VAR As String = "serie_unit"
+    Friend Const REPORTS_DISPLAY_VALUES_VAR As String = "display_values"
+    Friend Const REPORTS_SERIE_WIDTH_VAR As String = "serie_width"
 
-    Friend Const GDF_CHART_REPORT_TYPE As String = "C"
-    Friend Const GDF_TABLE_REPORT_TYPE As String = "T"
+    Friend Const CHART_REPORT_TYPE As String = "C"
+    Friend Const TABLE_REPORT_TYPE As String = "T"
+    Friend Const REPORTS_TOKEN_SIZE As Int32 = 3
 
 #End Region
 
