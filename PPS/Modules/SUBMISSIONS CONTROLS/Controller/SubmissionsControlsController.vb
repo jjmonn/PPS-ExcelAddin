@@ -60,7 +60,7 @@ Friend Class SubmissionsControlsController
     Private Sub InitializeChartsDictionary()
 
         For Each chart_node As TreeNode In ChartsTV.Nodes
-            charts_dic.Add(chart_node.Name, ChartsUtilities.CreateChart(chart_node.Text, ControlCharts.ReadControlChart(chart_node.Name, CONTROL_CHART_PALETTE_VARIABLE)))
+            charts_dic.Add(chart_node.Name, ChartsUtilities.CreateChart(ControlCharts.GetSerieHT(chart_node.Name)))
             For Each serie_node As TreeNode In chart_node.Nodes
                 Dim serieHT As Hashtable = ControlCharts.GetSerieHT(serie_node.Name)
                 If Not IsDBNull(serieHT(CONTROL_CHART_ACCOUNT_ID_VARIABLE)) Then ChartsUtilities.AddSerieToChart(charts_dic(chart_node.Name), serieHT)

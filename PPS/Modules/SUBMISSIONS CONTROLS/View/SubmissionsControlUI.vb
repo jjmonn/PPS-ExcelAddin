@@ -109,7 +109,7 @@ Friend Class SubmissionsControlUI
         DataGridViewsUtil.InitDisplayVDataGridView(ControlsDGV, DGV_THEME)
         DataGridViewsUtil.DGVSetHiearchyFontSize(ControlsDGV, DGV_CELLS_FONT_SIZE, DGV_CELLS_FONT_SIZE)
         ControlsDGV.ColumnsHierarchy.AutoStretchColumns = True
-        ControlsDGV.BackColor = System.Drawing.SystemColors.Control
+        ControlsDGV.BackColor = System.Drawing.Color.White
 
         ControlsDGVPanel.Controls.Add(ControlsDGV)
         ControlsDGV.Dock = DockStyle.Fill
