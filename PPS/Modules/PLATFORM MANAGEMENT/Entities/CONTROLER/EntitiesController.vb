@@ -23,7 +23,7 @@ Imports VIBlend.WinForms.DataGridView
 
 
 
-Public Class EntitiesController
+Friend Class EntitiesController
 
 
 #Region "Instance Variables"
@@ -111,7 +111,7 @@ Public Class EntitiesController
     Protected Friend Sub UpdateValue(ByRef entity_id As String, ByRef field As String, ByRef value As Object)
 
         Entities.UpdateEntity(entity_id, field, value)
-      
+
     End Sub
 
     Friend Sub DeleteEntities(ByRef input_node As TreeNode)
