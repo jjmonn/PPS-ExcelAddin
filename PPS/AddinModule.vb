@@ -1746,13 +1746,9 @@ Public Class AddinModule
                                     control As AddinExpress.MSO.IRibbonControl,
                                     pressed As System.Boolean) Handles SettingsBT.OnClick
 
-        If ConnectioN Is Nothing Then
-            Dim CONNUI As New ConnectionUI(Me)
-            CONNUI.Show()
-        Else
-            Dim SETTINGSUI As New SettingMainUI
-            SETTINGSUI.Show()
-        End If
+         Dim SETTINGSUI As New SettingMainUI
+        SETTINGSUI.Show()
+
 
     End Sub
 
