@@ -16,6 +16,7 @@ Imports System.Windows.Forms
 Imports System.Collections.Generic
 Imports System.Collections
 Imports VIBlend.WinForms.DataGridView
+Imports System.Windows.Forms.DataVisualization.Charting
 
 
 
@@ -46,7 +47,7 @@ Friend Class FModellingSimulationsControler
     Private FModelling_name_id_dic As Hashtable
     Private FModelling_accounts_all_id_list As List(Of String)
     Private inputs_loaded_flag As Boolean
-   
+
     ' Const
     Private Const SCENARII_TOKENS_SIZE As Int32 = 3
 
@@ -94,7 +95,7 @@ Friend Class FModellingSimulationsControler
 
         LoadInputs()
         View.TabControl1.SelectedTab = View.TabControl1.TabPages(1)
-     
+
     End Sub
 
     Private Sub LoadInputs()
@@ -163,7 +164,7 @@ Friend Class FModellingSimulationsControler
         AddConstraint(new_id, "Cash Capitalization (%)", True, 0)
 
         new_node.Expand()
-        View.AddScenario(new_scenario, new_node.Index)
+        View.AddScenario(new_scenario, new_node.Index + 1)
 
     End Sub
 
@@ -217,7 +218,7 @@ Friend Class FModellingSimulationsControler
                            "Please contact the PPS Team if you need further help.")
             Case 1
                 Dim data_dic = Model.GetOutputMatrix(FModelling_accounts_all_id_list)
-                scenario.FillOutputs(data_dic)
+                scenario.FillOutputs(scenario.OutputDGV, scenario.Outputchart, data_dic)
                 View.Refresh()
             Case 2 : MsgBox("An occurred in the Financial Solver. You should contact the PPS Team and report this issue.")
         End Select
@@ -244,6 +245,24 @@ Friend Class FModellingSimulationsControler
                                           ByRef constraint_node As TreeNode)
 
         If scenarios_dic(scenario_id).DeleteConstraint(constraint_node.Name) = True Then constraint_node.Remove()
+
+    End Sub
+
+    Protected Friend Sub ExportScenarioToUI(ByRef scenario_id As String)
+
+        Dim scenario As Scenario = scenarios_dic(scenario_id)
+        Dim inputDGV As New vDataGridView
+        Dim outputDGV As New vDataGridView
+        Dim chart As New Chart
+
+        scenario.BuildInputsDGV(inputDGV)
+        scenario.BuildOutputsDGV(outputDGV)
+        scenario.BuildOutputsChart(chart)
+        scenario.FillOutputs(outputDGV, chart)
+        scenario.CopyInputsDGVLines(inputdgv)
+
+        View.ExportScenarioToSeparateUI(scenario_id, _
+                                        inputDGV, outputDGV, chart)
 
     End Sub
 

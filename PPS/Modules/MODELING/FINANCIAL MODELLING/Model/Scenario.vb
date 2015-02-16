@@ -41,7 +41,7 @@ Friend Class Scenario
     Private ConstraintsComboBox As New ComboBoxEditor()
     Private constraints_text_box_editor As New TextBoxEditor()
     Friend dividend_formula_option As Int32 = -1
-    Private OutputsDGV_id_rows_Dictionary As New Dictionary(Of String, HierarchyItem)
+    Private OutputsDGV_id_row_index_Dictionary As New Dictionary(Of String, Int32)
     Private inputsDGV_id_rows_Dictionary As New Dictionary(Of String, HierarchyItem)
     Private current_constraint_row As HierarchyItem = Nothing
     Private Outputs_name_id_dic As Hashtable
@@ -74,9 +74,9 @@ Friend Class Scenario
         ' set up the style for items and cells (font size) to be applied on DGVs !!
 
         InputsDGV.ContextMenuStrip = RC_Menu
-        BuildInputsDGV(periods_list)
-        BuildOutputsDGV(periods_list)
-        BuildOutputsChart()
+        BuildInputsDGV(InputsDGV)
+        BuildOutputsDGV(OutputDGV)
+        BuildOutputsChart(Outputchart)
 
     End Sub
 
@@ -90,74 +90,78 @@ Friend Class Scenario
 
     End Sub
 
-    Private Sub BuildInputsDGV(ByRef periods_list As Int32())
+    Protected Friend Sub BuildInputsDGV(ByRef DGV As vDataGridView)
 
-        InputsDGV.RowsHierarchy.Visible = False
-        InputsDGV.AllowCopyPaste = True
+        DGV.RowsHierarchy.Visible = False
+        DGV.AllowCopyPaste = True
 
         constraints_text_box_editor.ActivationFlags = EditorActivationFlags.MOUSE_CLICK_SELECTED_CELL
 
         ' Init Columns
-        Dim item_column = InputsDGV.ColumnsHierarchy.Items.Add("Constraint")
+        Dim item_column = DGV.ColumnsHierarchy.Items.Add("Constraints")
         item_column.CellsEditor = ConstraintsComboBox
 
-        For Each period In periods_list
-            Dim column = InputsDGV.ColumnsHierarchy.Items.Add(Format(DateTime.FromOADate(period), "yyyy"))
+        For Each period In periods_array
+            Dim column = DGV.ColumnsHierarchy.Items.Add(Format(DateTime.FromOADate(period), "yyyy"))
             column.CellsEditor = constraints_text_box_editor
         Next
 
-        DataGridViewsUtil.InitDisplayVDataGridView(InputsDGV, DGV_THEME)
-        ' DataGridViewsUtil.DGVSetHiearchyFontSize(InputsDGV, DGV_CELLS_FONT_SIZE, DGV_CELLS_FONT_SIZE)
-        InputsDGV.ColumnsHierarchy.AutoStretchColumns = True
-        AddHandler InputsDGV.CellValueChanging, AddressOf inputsDGV_CellValueChanging
-        AddHandler InputsDGV.CellMouseClick, AddressOf inputDGV_CellMouseClick
-        InputsDGV.BackColor = System.Drawing.SystemColors.Control
+        DataGridViewsUtil.InitDisplayVDataGridView(DGV, DGV_THEME)
+        ' DataGridViewsUtil.DGVSetHiearchyFontSize(dgv, DGV_CELLS_FONT_SIZE, DGV_CELLS_FONT_SIZE)
+        DGV.ColumnsHierarchy.AutoStretchColumns = True
+        DGV.BackColor = Drawing.Color.White
+        AddHandler DGV.CellValueChanging, AddressOf inputsDGV_CellValueChanging
+        AddHandler DGV.CellMouseClick, AddressOf inputDGV_CellMouseClick
 
     End Sub
 
-    Private Sub BuildOutputsDGV(ByRef periods_list As Int32())
+    Protected Friend Sub BuildOutputsDGV(ByRef DGV As vDataGridView)
 
         ' inputs in dark blue ?
         ' Init Columns
-        For Each period In periods_list
-            Dim column = OutputDGV.ColumnsHierarchy.Items.Add(Format(DateTime.FromOADate(period), "yyyy"))
+        For Each period In periods_array
+            Dim column = DGV.ColumnsHierarchy.Items.Add(Format(DateTime.FromOADate(period), "yyyy"))
             column.CellsTextAlignment = DataGridViewContentAlignment.MiddleRight
         Next
 
         ' Init Rows
+        ' modify output DGV to display all the computation
+        ' (except incremental)
+        ' -> output + formula ? 
+
         For Each output_id In Outputs_name_id_dic.Keys
-            Dim row = OutputDGV.RowsHierarchy.Items.Add(output_id)
+            Dim row As HierarchyItem = DGV.RowsHierarchy.Items.Add(output_id)
             row.CellsFormatString = FModellingAccount.ReadFModellingAccount(Outputs_name_id_dic(output_id), FINANCIAL_MODELLING_FORMAT_VARIABLE)
-            OutputsDGV_id_rows_Dictionary.Add(Outputs_name_id_dic(output_id), row)
+            If OutputsDGV_id_row_index_Dictionary.ContainsKey(Outputs_name_id_dic(output_id)) = False Then OutputsDGV_id_row_index_Dictionary.Add(Outputs_name_id_dic(output_id), row.ItemIndex)
         Next
-        OutputDGV.ColumnsHierarchy.AutoStretchColumns = True
-        DataGridViewsUtil.InitDisplayVDataGridView(OutputDGV, DGV_THEME)
-        DataGridViewsUtil.EqualizeColumnsAndRowsHierarchyWidth(OutputDGV)
-        DataGridViewsUtil.FormatDGVRowsHierarchy(OutputDGV)
-        DataGridViewsUtil.DGVSetHiearchyFontSize(OutputDGV, DGV_CELLS_FONT_SIZE, DGV_CELLS_FONT_SIZE)
-        OutputDGV.BackColor = System.Drawing.SystemColors.Control
+        DGV.ColumnsHierarchy.AutoStretchColumns = True
+        DGV.BackColor = Drawing.Color.White
+        DataGridViewsUtil.InitDisplayVDataGridView(DGV, DGV_THEME)
+        DataGridViewsUtil.EqualizeColumnsAndRowsHierarchyWidth(DGV)
+        DataGridViewsUtil.FormatDGVRowsHierarchy(DGV)
+        DataGridViewsUtil.DGVSetHiearchyFontSize(DGV, DGV_CELLS_FONT_SIZE, DGV_CELLS_FONT_SIZE)
 
     End Sub
 
-    Private Sub BuildOutputsChart()
+    Protected Friend Sub BuildOutputsChart(ByRef chart As Chart)
 
         ' Series display settings to go in a chart Util class
         Dim ChartArea1 As New ChartArea
         Dim ChartArea2 As New ChartArea
-        Outputchart.ChartAreas.Add(ChartArea1)
-        Outputchart.ChartAreas.Add(ChartArea2)
+        chart.ChartAreas.Add(ChartArea1)
+        chart.ChartAreas.Add(ChartArea2)
 
         ChartArea1.AxisY.LabelAutoFitMaxFontSize = 8
         ChartArea2.AxisY.LabelAutoFitMaxFontSize = 8
         ChartArea1.AxisX.LabelAutoFitMaxFontSize = 8
         ChartArea2.AxisX.LabelAutoFitMaxFontSize = 8
 
-        Outputchart.Palette = ChartColorPalette.Berry
+        chart.Palette = ChartColorPalette.Berry
         ChartArea1.AxisX.MajorGrid.Enabled = False
 
         Dim legend1 As New Legend
-        Outputchart.Legends.Add(legend1)
-        Outputchart.Legends(0).Docking = Docking.Bottom
+        chart.Legends.Add(legend1)
+        chart.Legends(0).Docking = Docking.Bottom
 
 
         Dim dividends_serie As New Series("Dividends")
@@ -166,10 +170,10 @@ Friend Class Scenario
         Dim payout As New Series("Payout")
         Dim doe As New Series("D/E")
 
-        Outputchart.Series.Add(dividends_serie)
-        Outputchart.Series.Add(cash_serie)
-        Outputchart.Series.Add(payout)
-        Outputchart.Series.Add(doe)
+        chart.Series.Add(dividends_serie)
+        chart.Series.Add(cash_serie)
+        chart.Series.Add(payout)
+        chart.Series.Add(doe)
 
         dividends_serie.ChartArea = "ChartArea1"
         cash_serie.ChartArea = "ChartArea1"
@@ -186,10 +190,11 @@ Friend Class Scenario
         ChartArea2.Position.Width = 50
         ChartArea2.Position.Height = 80
 
-        For Each serie In Outputchart.Series
-            serie.CustomProperties = "DrawingStyle=cylinder"
-        Next
+        'For Each serie In chart.Series
+        '    serie.CustomProperties = "DrawingStyle=cylinder"
+        'Next
 
+        charts_periods.Clear()
         For Each period In periods_array
             charts_periods.Add(Format(DateTime.FromOADate(period), "yyyy"))
         Next
@@ -201,23 +206,25 @@ Friend Class Scenario
 
 #Region "Interface"
 
-    Protected Friend Sub FillOutputs(ByRef input_data_dic As Dictionary(Of String, Double()))
+    Protected Friend Sub FillOutputs(ByRef DGV As vDataGridView, _
+                                     ByRef chart As Chart, _
+                                     Optional ByRef input_data_dic As Dictionary(Of String, Double()) = Nothing)
 
-        data_dic = input_data_dic
+        If Not input_data_dic Is Nothing Then data_dic = input_data_dic
         For Each id In Outputs_name_id_dic.Values
-            For j As Int32 = 0 To OutputDGV.ColumnsHierarchy.Items.Count - 1
-                Dim row As HierarchyItem = OutputsDGV_id_rows_Dictionary(id)
+            For j As Int32 = 0 To DGV.ColumnsHierarchy.Items.Count - 1
+                Dim row As HierarchyItem = DGV.RowsHierarchy.Items(OutputsDGV_id_row_index_Dictionary(id))
                 Dim value = data_dic(id)(j)
                 If row.CellsFormatString = PRCT_FORMAT_STRING Then value = value / 100
-                OutputDGV.CellsArea.SetCellValue(row, OutputDGV.ColumnsHierarchy.Items(j), value)
+                DGV.CellsArea.SetCellValue(row, DGV.ColumnsHierarchy.Items(j), value)
             Next
         Next
 
         ' Bind chart series
-        Outputchart.Series("Dividends").Points.DataBindXY(charts_periods, data_dic("div"))
-        Outputchart.Series("Cash").Points.DataBindXY(charts_periods, data_dic("cash"))
-        Outputchart.Series("Payout").Points.DataBindXY(charts_periods, data_dic("payout"))
-        Outputchart.Series("D/E").Points.DataBindXY(charts_periods, data_dic("doe"))
+        chart.Series("Dividends").Points.DataBindXY(charts_periods, data_dic("div"))
+        chart.Series("Cash").Points.DataBindXY(charts_periods, data_dic("cash"))
+        chart.Series("Payout").Points.DataBindXY(charts_periods, data_dic("payout"))
+        chart.Series("D/E").Points.DataBindXY(charts_periods, data_dic("doe"))
 
 
     End Sub
@@ -228,9 +235,7 @@ Friend Class Scenario
                                        Optional ByRef default_value As Double = Nothing)
 
         Dim new_row = InputsDGV.RowsHierarchy.Items.Add(id)
-        Dim CStyle As GridCellStyle = GridTheme.GetDefaultTheme(InputsDGV.VIBlendTheme).GridCellStyle
-        CStyle.TextColor = System.Drawing.Color.Blue
-        new_row.CellsStyle = CStyle
+        FormatInputRow(new_row)
 
             If name <> "" Then InputsDGV.CellsArea.SetCellValue(new_row, InputsDGV.ColumnsHierarchy.Items(0), name)
             If set_default_value = True Then
@@ -271,6 +276,19 @@ Friend Class Scenario
 
     End Sub
 
+    Protected Friend Sub CopyInputsDGVLines(ByRef DGV As vDataGridView)
+
+        For Each row As HierarchyItem In InputsDGV.RowsHierarchy.Items
+            Dim r As HierarchyItem = DGV.RowsHierarchy.Items.Add(row.Caption)
+            FormatInputRow(r)
+            For Each column As HierarchyItem In InputsDGV.ColumnsHierarchy.Items
+                Dim value = InputsDGV.CellsArea.GetCellValue(row, column)
+                DGV.CellsArea.SetCellValue(r, DGV.ColumnsHierarchy.Items(column.ItemIndex), value)
+            Next
+        Next
+
+    End Sub
+
 #End Region
 
 
@@ -300,6 +318,18 @@ Friend Class Scenario
 
 #End Region
 
+
+#Region "Utilities"
+
+    Private Sub FormatInputRow(ByRef row As HierarchyItem)
+
+        Dim CStyle As GridCellStyle = GridTheme.GetDefaultTheme(InputsDGV.VIBlendTheme).GridCellStyle
+        CStyle.TextColor = System.Drawing.Color.Blue
+        row.CellsStyle = CStyle
+
+    End Sub
+
+#End Region
 
 
 

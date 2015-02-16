@@ -9,7 +9,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 26/12/2014
+' Last modified: 13/02/2014
 
 
 Imports System.Windows.Forms
@@ -42,8 +42,10 @@ Friend Class FModellingUI
     Private current_scenario_node As TreeNode = Nothing
 
     ' Constants
-    Private Const OUTPUT_PANEL_ROWS_HEIGHT As Int32 = 200
+    Private Const OUTPUT_PANEL_DGV_ROWS_HEIGHT As Int32 = 220
+    Private Const OUTPUT_PANEL_CHART_ROWS_HEIGHT As Int32 = 250
     Private Const MAPPING_PANEL_ROWS_HEIGHT As Int32 = 24
+    Private EXPORT_BUTTON_SIZE As Int32 = 22
 
 #End Region
 
@@ -163,6 +165,32 @@ Friend Class FModellingUI
         AddHandler EntitiesTV2.DragEnter, AddressOf TV_DragEnter
         AddHandler ExportsTV.DragOver, AddressOf TV_DragOver
         AddHandler ExportsTV.DragDrop, AddressOf TV_DragDrop
+
+    End Sub
+
+    Protected Friend Sub ExportScenarioToSeparateUI(ByRef scenario_text As String, _
+                                                    ByRef inputDGV As vDataGridView, _
+                                                    ByRef outputDGV As vDataGridView, _
+                                                    ByRef chart As Chart)
+
+        Dim genericUI As New GenericView(scenario_text)
+        Dim pane As New TableLayoutPanel
+
+        pane.RowStyles.Add(New RowStyle(SizeType.Absolute, inputDGV.Height))
+        pane.RowStyles.Add(New RowStyle(SizeType.Absolute, outputDGV.Height))
+        pane.RowStyles.Add(New RowStyle(SizeType.Absolute, chart.Height))
+
+        pane.Controls.Add(inputDGV, 0, 0)
+        pane.Controls.Add(outputDGV, 0, 1)
+        pane.Controls.Add(chart, 0, 2)
+        genericUI.Controls.Add(pane)
+
+        pane.Dock = DockStyle.Fill
+        inputDGV.Dock = DockStyle.Fill
+        outputDGV.Dock = DockStyle.Fill
+        chart.Dock = DockStyle.Fill
+        genericUI.BackColor = Drawing.Color.White
+        genericUI.Show()
 
     End Sub
 
@@ -463,6 +491,14 @@ Friend Class FModellingUI
 
     End Sub
 
+    Private Sub BT_Export_OnClick(sender As Object, e As EventArgs)
+
+        Dim row_index As Int32 = ScenariiPanelLayout.GetCellPosition(sender).Row
+        SimulationsController.ExportScenarioToUI(ScenariosTV.Nodes.Item(row_index).Name)
+
+    End Sub
+
+
 #End Region
 
 #Region "Export Tab"
@@ -532,7 +568,7 @@ Friend Class FModellingUI
         End If
         ' dropNode.Remove()             'Remove the drop node from its current location
         dropNode = dropNode.Clone()
-       
+
         If targetNode Is Nothing Then
             selectedTreeview.Nodes.Add(dropNode)
         Else
@@ -607,7 +643,6 @@ Friend Class FModellingUI
         Dim index As Int32 = 0
         For Each scenario_node In ScenariosTV.Nodes
             AddOutputControls(index, SimulationsController.GetScenario(scenario_node.name))
-            index = index + 1
         Next
 
     End Sub
@@ -615,19 +650,33 @@ Friend Class FModellingUI
     Private Sub AddOutputControls(ByRef index As Int32, _
                                   ByRef scenario As Scenario)
 
-        'ScenariiPanelLayout.RowCount = ScenariiPanelLayout.RowCount + 1
-        ScenariiPanelLayout.RowStyles.Add(New RowStyle(SizeType.Absolute, OUTPUT_PANEL_ROWS_HEIGHT))
-
+        ScenariiPanelLayout.RowStyles.Add(New RowStyle(SizeType.Absolute, OUTPUT_PANEL_DGV_ROWS_HEIGHT))
         ScenariiPanelLayout.Controls.Add(scenario.OutputDGV, 0, index)
-        ScenariiPanelLayout.Controls.Add(scenario.Outputchart, 1, index)
+        ScenariiPanelLayout.Controls.Add(GetNewExportButton, 1, index)
+        ScenariiPanelLayout.RowStyles.Add(New RowStyle(SizeType.Absolute, OUTPUT_PANEL_CHART_ROWS_HEIGHT))
+        index = index + 1
+        ScenariiPanelLayout.Controls.Add(scenario.Outputchart, 0, index)
+        index = index + 1
         scenario.OutputDGV.Dock = DockStyle.Fill
         scenario.Outputchart.Dock = DockStyle.Fill
 
 
     End Sub
 
+    Private Function GetNewExportButton() As Button
+
+        Dim BT As New Button
+        BT.ImageList = ButtonsImageList
+        BT.FlatStyle = FlatStyle.Flat
+        BT.FlatAppearance.BorderSize = 0
+        BT.ImageKey = "blue.jpg"
+        AddHandler BT.Click, AddressOf BT_Export_OnClick
+        Return BT
+
+    End Function
+
 #End Region
 
 
-   
+
 End Class
