@@ -132,7 +132,6 @@ Partial Class SettingMainUI
         Me.CertificatesPathTB.Name = "CertificatesPathTB"
         Me.CertificatesPathTB.Size = New System.Drawing.Size(398, 20)
         Me.CertificatesPathTB.TabIndex = 12
-        Me.CertificatesPathTB.UseSystemPasswordChar = True
         '
         'DiconnectBT
         '

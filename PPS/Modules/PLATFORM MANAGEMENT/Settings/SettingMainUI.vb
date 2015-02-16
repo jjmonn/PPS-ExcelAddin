@@ -96,7 +96,13 @@ Public Class SettingMainUI
 
 #End Region
 
-   
+
+    Private Sub CloseBT_Click(sender As Object, e As EventArgs) Handles CloseBT.Click
+
+        Me.Dispose()
+
+    End Sub
+
 #End Region
 
 
@@ -132,4 +138,5 @@ Public Class SettingMainUI
 
 
 
+   
 End Class
