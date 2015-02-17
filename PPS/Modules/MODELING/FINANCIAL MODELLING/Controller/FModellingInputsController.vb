@@ -9,7 +9,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 20/01/2015
+' Last modified: 16/02/2015
 
 
 Imports System.Windows.Forms
@@ -25,7 +25,7 @@ Friend Class FModellingInputsController
 
     ' Object 
     Private SimulationsController As FModellingSimulationsControler
-    Private View As FModellingUI
+    Private View As FModelingUI
     Private Model As ControlingUI2MODEL
     Private FModellingAccount As FModellingAccount
     Private VersionsTV As New TreeView
@@ -120,14 +120,14 @@ Friend Class FModellingInputsController
 
     End Sub
 
-    Protected Friend Sub InitializeView(ByRef input_view As FModellingUI)
+    Protected Friend Sub InitializeView(ByRef input_view As FModelingUI)
 
         View = input_view
         EntitiesTV.ImageList = View.EntitiesTVImageList
         VersionsTV.ImageList = View.VersionsTVIcons
         EntitiesTV.CollapseAll()
         VersionsTV.CollapseAll()
-        View.AddInputsTabElement(EntitiesTV, VersionsTV, MappingDGV, InputsDGV)
+        View.AddInputsTabElement(EntitiesTV, VersionsTV)
 
     End Sub
 
@@ -164,6 +164,24 @@ Friend Class FModellingInputsController
         View.PBar.EndProgress()
         SimulationsController.SetPeriodList(periods_list)
         SimulationsController.version_id = version_id
+
+    End Sub
+
+    Protected Friend Sub DisplayInputsMapping()
+
+        Dim genericUI As New GenericView("Inputs Mapping")
+        genericUI.Controls.Add(MappingDGV)
+        MappingDGV.Dock = DockStyle.Fill
+        genericUI.Show()
+
+    End Sub
+
+    Protected Friend Sub DisplayInputsDGV()
+
+        Dim genericUI As New GenericView("Consolidated Inputs")
+        genericUI.Controls.Add(InputsDGV)
+        InputsDGV.Dock = DockStyle.Fill
+        genericUI.Show()
 
     End Sub
 

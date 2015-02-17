@@ -10,7 +10,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 25/12/2014
+' Last modified: 16/02/2015
 
 
 Imports System.Collections.Generic
@@ -19,6 +19,7 @@ Imports System.Windows.Forms.DataVisualization.Charting
 Imports System.Collections
 Imports System.Windows.Forms
 Imports VIBlend.Utilities
+Imports VIBlend.WinForms.Controls
 
 
 Friend Class Scenario
@@ -27,8 +28,7 @@ Friend Class Scenario
 #Region "Instance Variable"
 
     ' objects
-    Friend InputsDGV As New vDataGridView
-    Friend OutputDGV As New vDataGridView
+    Friend ScenarioDGV As New vDataGridView
     Private FModellingAccount As FModellingAccount
     Friend Outputchart As New Chart
     Private scenarioTV As TreeView
@@ -38,19 +38,18 @@ Friend Class Scenario
     Protected Friend data_dic As Dictionary(Of String, Double())
     Private periods_array As Int32()
     Private charts_periods As New List(Of Int32)
-    Private ConstraintsComboBox As New ComboBoxEditor()
     Private constraints_text_box_editor As New TextBoxEditor()
-    Friend dividend_formula_option As Int32 = -1
-    Private OutputsDGV_id_row_index_Dictionary As New Dictionary(Of String, Int32)
-    Private inputsDGV_id_rows_Dictionary As New Dictionary(Of String, HierarchyItem)
-    Private current_constraint_row As HierarchyItem = Nothing
+    Protected Friend dividend_formula_option As Int32 = -1
+    Protected Friend scenarioDGV_id_row_index_Dictionary As New Dictionary(Of String, Int32)
+    Private current_constraint_cell As GridCell = Nothing
     Private Outputs_name_id_dic As Hashtable
+    Private is_updating_value As Boolean
+    Private manual_edition As Boolean
 
     ' Display
-    Private Const CB_WIDTH As Double = 20
-    Private Const CB_NB_ITEMS_DISPLAYED As Int32 = 7
     Private DGV_CELLS_FONT_SIZE = 8
     Private Const DGV_THEME = VIBlend.Utilities.VIBLEND_THEME.OFFICE2010SILVER
+    Protected Friend Const PERCENT_FORMAT As String = "{0:P0}"
 
 
 #End Region
@@ -63,89 +62,76 @@ Friend Class Scenario
                              ByRef periods_list As Int32(), _
                              ByRef outputs_dic As Hashtable, _
                              ByRef RC_Menu As ContextMenuStrip, _
-                             ByRef input_FModellingAccount As FModellingAccount)
+                             ByRef input_FModellingAccount As FModellingAccount, _
+                             ByRef FModeling_constraint_name_id_dic As Hashtable)
 
         scenario_id = input_id
         scenarioTV = inputTV
         Outputs_name_id_dic = outputs_dic
-        InitializeConstraintsCB()
         periods_array = periods_list
         FModellingAccount = input_FModellingAccount
-        ' set up the style for items and cells (font size) to be applied on DGVs !!
-
-        InputsDGV.ContextMenuStrip = RC_Menu
-        BuildInputsDGV(InputsDGV)
-        BuildOutputsDGV(OutputDGV)
+        ScenarioDGV.ContextMenuStrip = RC_Menu
+        BuildScenarioDGV(FModeling_constraint_name_id_dic)
         BuildOutputsChart(Outputchart)
-
+        AddHandler ScenarioDGV.CellBeginEdit, AddressOf ScenarioDGV_CellBeginEdit
+   
     End Sub
 
-    Private Sub InitializeConstraintsCB()
+    Protected Friend Sub BuildScenarioDGV(ByRef FModeling_constraint_name_id_dic As Hashtable)
 
-        ConstraintsComboBox.DropDownHeight = ConstraintsComboBox.ItemHeight * CB_NB_ITEMS_DISPLAYED
-        ConstraintsComboBox.DropDownWidth = CB_WIDTH
-        For Each constraint As String In Outputs_name_id_dic.Keys
-            ConstraintsComboBox.Items.Add(constraint)
-        Next
-
-    End Sub
-
-    Protected Friend Sub BuildInputsDGV(ByRef DGV As vDataGridView)
-
-        DGV.RowsHierarchy.Visible = False
-        DGV.AllowCopyPaste = True
-
+        ScenarioDGV.RowsHierarchy.Visible = False
+        '   ScenarioDGV.AllowCopyPaste = True
         constraints_text_box_editor.ActivationFlags = EditorActivationFlags.MOUSE_CLICK_SELECTED_CELL
 
         ' Init Columns
-        Dim item_column = DGV.ColumnsHierarchy.Items.Add("Constraints")
-        item_column.CellsEditor = ConstraintsComboBox
-
+        ScenarioDGV.ColumnsHierarchy.Items.Add("")
+        Dim col As HierarchyItem = ScenarioDGV.ColumnsHierarchy.Items.Add("Chart")
+        col.CellsTextAlignment = Drawing.ContentAlignment.MiddleCenter
         For Each period In periods_array
-            Dim column = DGV.ColumnsHierarchy.Items.Add(Format(DateTime.FromOADate(period), "yyyy"))
+            Dim column = ScenarioDGV.ColumnsHierarchy.Items.Add(Format(DateTime.FromOADate(period), "yyyy"))
             column.CellsEditor = constraints_text_box_editor
-        Next
-
-        DataGridViewsUtil.InitDisplayVDataGridView(DGV, DGV_THEME)
-        ' DataGridViewsUtil.DGVSetHiearchyFontSize(dgv, DGV_CELLS_FONT_SIZE, DGV_CELLS_FONT_SIZE)
-        DGV.ColumnsHierarchy.AutoStretchColumns = True
-        DGV.BackColor = Drawing.Color.White
-        AddHandler DGV.CellValueChanging, AddressOf inputsDGV_CellValueChanging
-        AddHandler DGV.CellMouseClick, AddressOf inputDGV_CellMouseClick
-
-    End Sub
-
-    Protected Friend Sub BuildOutputsDGV(ByRef DGV As vDataGridView)
-
-        ' inputs in dark blue ?
-        ' Init Columns
-        For Each period In periods_array
-            Dim column = DGV.ColumnsHierarchy.Items.Add(Format(DateTime.FromOADate(period), "yyyy"))
+            column.TextAlignment = Drawing.ContentAlignment.MiddleCenter
             column.CellsTextAlignment = DataGridViewContentAlignment.MiddleRight
         Next
 
         ' Init Rows
-        ' modify output DGV to display all the computation
-        ' (except incremental)
-        ' -> output + formula ? 
-
-        For Each output_id In Outputs_name_id_dic.Keys
-            Dim row As HierarchyItem = DGV.RowsHierarchy.Items.Add(output_id)
-            row.CellsFormatString = FModellingAccount.ReadFModellingAccount(Outputs_name_id_dic(output_id), FINANCIAL_MODELLING_FORMAT_VARIABLE)
-            If OutputsDGV_id_row_index_Dictionary.ContainsKey(Outputs_name_id_dic(output_id)) = False Then OutputsDGV_id_row_index_Dictionary.Add(Outputs_name_id_dic(output_id), row.ItemIndex)
+        InitializeConstraints(FModeling_constraint_name_id_dic)
+        For Each f_account_id In Outputs_name_id_dic.Values
+            If scenarioDGV_id_row_index_Dictionary.ContainsKey(f_account_id) = False Then AddRow(f_account_id)
         Next
-        DGV.ColumnsHierarchy.AutoStretchColumns = True
-        DGV.BackColor = Drawing.Color.White
-        DataGridViewsUtil.InitDisplayVDataGridView(DGV, DGV_THEME)
-        DataGridViewsUtil.EqualizeColumnsAndRowsHierarchyWidth(DGV)
-        DataGridViewsUtil.FormatDGVRowsHierarchy(DGV)
-        DataGridViewsUtil.DGVSetHiearchyFontSize(DGV, DGV_CELLS_FONT_SIZE, DGV_CELLS_FONT_SIZE)
+        ScenarioDGV.BackColor = Drawing.Color.White
+        DataGridViewsUtil.InitDisplayVDataGridView(ScenarioDGV, DGV_THEME)
+        DataGridViewsUtil.DGVSetHiearchyFontSize(ScenarioDGV, DGV_CELLS_FONT_SIZE, DGV_CELLS_FONT_SIZE)
+        ScenarioDGV.ColumnsHierarchy.ResizeColumnsToFitGridWidth()
+        ScenarioDGV.Refresh()
+        AddHandler ScenarioDGV.CellValueChanging, AddressOf scenarioDGV_CellValueChanging
+        AddHandler ScenarioDGV.CellMouseClick, AddressOf scenarioDGV_CellMouseClick
+
+    End Sub
+
+    Private Sub InitializeConstraints(ByRef FModeling_constraint_name_id_dic As Hashtable)
+
+        For Each constraint_id As String In FModeling_constraint_name_id_dic.Values
+            AddRow(constraint_id)
+        Next
+
+    End Sub
+
+    Private Sub AddRow(ByRef f_account_id As String)
+
+        Dim row As HierarchyItem = ScenarioDGV.RowsHierarchy.Items.Add(f_account_id)
+        Dim f_account_name As String = FModellingAccount.ReadFModellingAccount(f_account_id, FINANCIAL_MODELLING_NAME_VARIABLE)
+        ScenarioDGV.CellsArea.SetCellValue(row, ScenarioDGV.ColumnsHierarchy.Items(0), f_account_name)
+        row.CellsFormatString = FModellingAccount.ReadFModellingAccount(f_account_id, FINANCIAL_MODELLING_FORMAT_VARIABLE)
+        If scenarioDGV_id_row_index_Dictionary.ContainsKey(f_account_id) = False Then scenarioDGV_id_row_index_Dictionary.Add(f_account_id, row.ItemIndex)
+        Dim checkBoxEditor As New CheckBoxEditor
+        ScenarioDGV.CellsArea.SetCellEditor(row, ScenarioDGV.ColumnsHierarchy.Items(1), checkBoxEditor)
+        AddHandler checkBoxEditor.CheckedChanged, AddressOf OutputDGV_Checkedchanged
 
     End Sub
 
     Protected Friend Sub BuildOutputsChart(ByRef chart As Chart)
 
-        ' Series display settings to go in a chart Util class
         Dim ChartArea1 As New ChartArea
         Dim ChartArea2 As New ChartArea
         chart.ChartAreas.Add(ChartArea1)
@@ -158,27 +144,11 @@ Friend Class Scenario
 
         chart.Palette = ChartColorPalette.Berry
         ChartArea1.AxisX.MajorGrid.Enabled = False
+        ChartArea2.AxisX.MajorGrid.Enabled = False
 
         Dim legend1 As New Legend
         chart.Legends.Add(legend1)
         chart.Legends(0).Docking = Docking.Bottom
-
-
-        Dim dividends_serie As New Series("Dividends")
-        Dim cash_serie As New Series("Cash")
-        cash_serie.ChartType = SeriesChartType.Line
-        Dim payout As New Series("Payout")
-        Dim doe As New Series("D/E")
-
-        chart.Series.Add(dividends_serie)
-        chart.Series.Add(cash_serie)
-        chart.Series.Add(payout)
-        chart.Series.Add(doe)
-
-        dividends_serie.ChartArea = "ChartArea1"
-        cash_serie.ChartArea = "ChartArea1"
-        payout.ChartArea = "ChartArea2"
-        doe.ChartArea = "ChartArea2"
 
         ChartArea1.Position.X = 0
         ChartArea1.Position.Y = 0
@@ -189,10 +159,6 @@ Friend Class Scenario
         ChartArea2.Position.Y = 0
         ChartArea2.Position.Width = 50
         ChartArea2.Position.Height = 80
-
-        'For Each serie In chart.Series
-        '    serie.CustomProperties = "DrawingStyle=cylinder"
-        'Next
 
         charts_periods.Clear()
         For Each period In periods_array
@@ -206,54 +172,44 @@ Friend Class Scenario
 
 #Region "Interface"
 
-    Protected Friend Sub FillOutputs(ByRef DGV As vDataGridView, _
-                                     ByRef chart As Chart, _
-                                     Optional ByRef input_data_dic As Dictionary(Of String, Double()) = Nothing)
+    Protected Friend Sub FillOutputs(ByRef input_data_dic As Dictionary(Of String, Double()))
 
-        If Not input_data_dic Is Nothing Then data_dic = input_data_dic
+        data_dic = input_data_dic
         For Each id In Outputs_name_id_dic.Values
-            For j As Int32 = 0 To DGV.ColumnsHierarchy.Items.Count - 1
-                Dim row As HierarchyItem = DGV.RowsHierarchy.Items(OutputsDGV_id_row_index_Dictionary(id))
-                Dim value = data_dic(id)(j)
+            For j As Int32 = 2 To ScenarioDGV.ColumnsHierarchy.Items.Count - 1
+                Dim row As HierarchyItem = ScenarioDGV.RowsHierarchy.Items(scenarioDGV_id_row_index_Dictionary(id))
+                Dim value = data_dic(id)(j - 2)
                 If row.CellsFormatString = PRCT_FORMAT_STRING Then value = value / 100
-                DGV.CellsArea.SetCellValue(row, DGV.ColumnsHierarchy.Items(j), value)
+                ScenarioDGV.CellsArea.SetCellValue(row, ScenarioDGV.ColumnsHierarchy.Items(j), value)
             Next
         Next
-
-        ' Bind chart series
-        chart.Series("Dividends").Points.DataBindXY(charts_periods, data_dic("div"))
-        chart.Series("Cash").Points.DataBindXY(charts_periods, data_dic("cash"))
-        chart.Series("Payout").Points.DataBindXY(charts_periods, data_dic("payout"))
-        chart.Series("D/E").Points.DataBindXY(charts_periods, data_dic("doe"))
-
+        ScenarioDGV.ColumnsHierarchy.AutoResize(AutoResizeMode.FIT_ALL)
+        ScenarioDGV.ColumnsHierarchy.ResizeColumnsToFitGridWidth()
+        BindChartSeries()
 
     End Sub
 
     Protected Friend Sub AddConstraint(ByRef id As String, _
-                                       Optional ByRef name As String = "",
-                                       Optional ByRef set_default_value As Boolean = False, _
-                                       Optional ByRef default_value As Double = Nothing)
+                                       ByRef f_account_name As String,
+                                       Optional ByRef default_value As Double = 0)
 
-        Dim new_row = InputsDGV.RowsHierarchy.Items.Add(id)
-        FormatInputRow(new_row)
+        Dim f_account_id As String = Outputs_name_id_dic(f_account_name)
+        Dim row As HierarchyItem = ScenarioDGV.RowsHierarchy.Items(scenarioDGV_id_row_index_Dictionary(f_account_id))
+        FormatRow(row, True)
 
-            If name <> "" Then InputsDGV.CellsArea.SetCellValue(new_row, InputsDGV.ColumnsHierarchy.Items(0), name)
-            If set_default_value = True Then
-                For j = 1 To InputsDGV.ColumnsHierarchy.Items.Count - 1
-                    InputsDGV.CellsArea.SetCellValue(new_row, InputsDGV.ColumnsHierarchy.Items(j), default_value)
-                Next
-            End If
-            inputsDGV_id_rows_Dictionary.Add(id, new_row)
-            new_row.Selected = True
+        For j = 2 To ScenarioDGV.ColumnsHierarchy.Items.Count - 1
+            ScenarioDGV.CellsArea.SetCellValue(row, ScenarioDGV.ColumnsHierarchy.Items(j), default_value)
+        Next
+        ScenarioDGV.Refresh()
 
     End Sub
 
     Protected Friend Function DeleteDGVActiveConstraint() As String
 
-        If Not current_constraint_row Is Nothing Then
-            Dim constraint_id = current_constraint_row.Caption
-            If current_constraint_row.ItemIndex <= 2 Then Return ""
-            current_constraint_row.Delete()
+        If Not current_constraint_cell Is Nothing Then
+            Dim constraint_id = current_constraint_cell.RowItem.Caption
+            If current_constraint_cell.RowItem.ItemIndex <= 2 Then Return ""
+            Format(current_constraint_cell.RowItem, False)
             Return constraint_id
         End If
         Return ""
@@ -262,10 +218,9 @@ Friend Class Scenario
 
     Protected Friend Function DeleteConstraint(ByRef constraint_id) As Boolean
 
-        Dim row As HierarchyItem = inputsDGV_id_rows_Dictionary(constraint_id)
-        If current_constraint_row.ItemIndex <= 2 Then Return False
-        row.Delete()
-        inputsDGV_id_rows_Dictionary.Remove(constraint_id)
+        Dim row As HierarchyItem = ScenarioDGV.RowsHierarchy.Items(scenarioDGV_id_row_index_Dictionary(constraint_id))
+        If current_constraint_cell.RowItem.ItemIndex <= 2 Then Return False
+        FormatRow(row, False)
         Return True
 
     End Function
@@ -276,16 +231,30 @@ Friend Class Scenario
 
     End Sub
 
-    Protected Friend Sub CopyInputsDGVLines(ByRef DGV As vDataGridView)
+    Protected Friend Sub AddSerieToChart(ByRef f_account_id As String)
 
-        For Each row As HierarchyItem In InputsDGV.RowsHierarchy.Items
-            Dim r As HierarchyItem = DGV.RowsHierarchy.Items.Add(row.Caption)
-            FormatInputRow(r)
-            For Each column As HierarchyItem In InputsDGV.ColumnsHierarchy.Items
-                Dim value = InputsDGV.CellsArea.GetCellValue(row, column)
-                DGV.CellsArea.SetCellValue(r, DGV.ColumnsHierarchy.Items(column.ItemIndex), value)
-            Next
-        Next
+        Dim serie_ht As New Hashtable
+        Dim f_account_name As String = FModellingAccount.ReadFModellingAccount(f_account_id, FINANCIAL_MODELLING_NAME_VARIABLE)
+        Dim chart_area As String
+        serie_ht.Add(CONTROL_CHART_NAME_VARIABLE, f_account_name)
+        If FModellingAccount.ReadFModellingAccount(f_account_id, FINANCIAL_MODELLING_FORMAT_VARIABLE) = PERCENT_FORMAT Then
+            serie_ht.Add(CONTROL_CHART_TYPE_VARIABLE, "Line")
+            chart_area = "ChartArea2"
+        Else
+            serie_ht.Add(CONTROL_CHART_TYPE_VARIABLE, "Column")
+            chart_area = "ChartArea1"
+        End If
+        '  serie_ht.Add(CONTROL_CHART_COLOR_VARIABLE, "")
+        serie_ht.Add(REPORTS_SERIE_WIDTH_VAR, 25)
+        ChartsUtilities.AddSerieToChart(Outputchart, serie_ht, chart_area)
+        Outputchart.Series(f_account_name).Points.DataBindXY(charts_periods, data_dic(f_account_id))
+
+    End Sub
+
+    Protected Friend Sub CopyValueRight()
+
+        DataGridViewsUtil.CopyValueRight(ScenarioDGV, current_constraint_cell)
+        ScenarioDGV.Refresh()
 
     End Sub
 
@@ -294,25 +263,45 @@ Friend Class Scenario
 
 #Region "Events"
 
-    Private Sub inputsDGV_CellValueChanging(sender As Object, args As CellValueChangingEventArgs)
+    Private Sub ScenarioDGV_CellBeginEdit(sender As Object, e As EventArgs)
 
-        Select Case args.Cell.ColumnItem.ItemIndex
-            Case 0
-                scenarioTV.Nodes.Find(args.Cell.RowItem.Caption, True)(0).Text = args.NewValue
-
-                ' maybe check if the constraint is in the list !!
-            Case Else
-                If Not IsNumeric(args.NewValue) Then
-                    args.Cancel = True
-                End If
-        End Select
-
+        manual_edition = True
 
     End Sub
 
-    Private Sub inputDGV_CellMouseClick(ByVal sender As Object, ByVal args As CellMouseEventArgs)
+    Private Sub scenarioDGV_CellValueChanging(sender As Object, args As CellValueChangingEventArgs)
 
-        current_constraint_row = args.Cell.RowItem
+        If manual_edition = True AndAlso is_updating_value = False Then
+            Select Case args.Cell.ColumnItem.ItemIndex
+                Case Is > 1
+                    If args.NewValue = Nothing Then Exit Sub
+                    If Not IsNumeric(args.NewValue) Then
+                        args.Cancel = True
+                    Else
+                        Dim f_account_id As String = args.Cell.RowItem.Caption
+                        If FModellingAccount.ReadFModellingAccount(f_account_id, FINANCIAL_MODELLING_FORMAT_VARIABLE) = PERCENT_FORMAT Then
+                            is_updating_value = True
+                            args.Cell.Value = args.NewValue / 100
+                            args.Cell.RowItem.CellsFormatString = PERCENT_FORMAT
+                            args.Cancel = True
+                            is_updating_value = False
+                        End If
+                    End If
+            End Select
+            manual_edition = False
+        End If
+
+    End Sub
+
+    Private Sub scenarioDGV_CellMouseClick(ByVal sender As Object, ByVal args As CellMouseEventArgs)
+
+        current_constraint_cell = args.Cell
+
+    End Sub
+
+    Private Sub OutputDGV_Checkedchanged(sender As Object, e As EventArgs)
+
+        BindChartSeries()
 
     End Sub
 
@@ -321,11 +310,28 @@ Friend Class Scenario
 
 #Region "Utilities"
 
-    Private Sub FormatInputRow(ByRef row As HierarchyItem)
+    Private Sub FormatRow(ByRef row As HierarchyItem, ByRef is_input As Boolean)
 
-        Dim CStyle As GridCellStyle = GridTheme.GetDefaultTheme(InputsDGV.VIBlendTheme).GridCellStyle
-        CStyle.TextColor = System.Drawing.Color.Blue
+        Dim CStyle As GridCellStyle = GridTheme.GetDefaultTheme(ScenarioDGV.VIBlendTheme).GridCellStyle
+        If is_input Then
+            CStyle.TextColor = System.Drawing.Color.Red
+        Else
+            CStyle.TextColor = System.Drawing.Color.Black
+        End If
         row.CellsStyle = CStyle
+
+    End Sub
+
+    Private Sub BindChartSeries()
+
+        Outputchart.Series.Clear()
+        For Each row As HierarchyItem In ScenarioDGV.RowsHierarchy.Items
+            Dim cb As CheckBoxEditor = ScenarioDGV.CellsArea.GetCellEditor(row, ScenarioDGV.ColumnsHierarchy.Items(1))
+            Dim checkBox As vCheckBox = TryCast(cb.Control, vCheckBox)
+            If checkBox.Checked = True Then
+                AddSerieToChart(row.Caption)
+            End If
+        Next
 
     End Sub
 

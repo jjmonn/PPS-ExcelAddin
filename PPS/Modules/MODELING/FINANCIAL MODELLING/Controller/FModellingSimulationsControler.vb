@@ -9,7 +9,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 28/12/2014
+' Last modified: 17/02/2015
 
 
 Imports System.Windows.Forms
@@ -27,7 +27,7 @@ Friend Class FModellingSimulationsControler
 
     ' Objects
     Private Model As New FDLL_Interface
-    Private View As FModellingUI
+    Private View As FModelingUI
     Private InputsController As FModellingInputsController
     Private ExportsController As FModellingExportController
     Private FModellingAccount As New FModellingAccount
@@ -43,14 +43,13 @@ Friend Class FModellingSimulationsControler
     Private constraints_list As New List(Of String)
     Private constraints_periods As New List(Of Int32)
     Private constraints_targets As New List(Of Double)
-    Private Outputs_name_id_dic As Hashtable
-    Private FModelling_name_id_dic As Hashtable
+    Protected Friend Outputs_name_id_dic As Hashtable
     Private FModelling_accounts_all_id_list As List(Of String)
+    Private FModeling_constraint_name_id_dic As Hashtable
     Private inputs_loaded_flag As Boolean
 
     ' Const
     Private Const SCENARII_TOKENS_SIZE As Int32 = 3
-
 
 #End Region
 
@@ -62,17 +61,18 @@ Friend Class FModellingSimulationsControler
         Outputs_name_id_dic = FModellingAccountsMapping.GetFModellingAccountsDict(FINANCIAL_MODELLING_NAME_VARIABLE, _
                                                                                   FINANCIAL_MODELLING_ID_VARIABLE, FINANCIAL_MODELLING_OUTPUT_TYPE)
 
-        FModelling_name_id_dic = FModellingAccountsMapping.GetFModellingAccountsDict(FINANCIAL_MODELLING_NAME_VARIABLE, _
-                                                                                     FINANCIAL_MODELLING_ID_VARIABLE, FINANCIAL_MODELLING_OUTPUT_TYPE)
-
         FModelling_accounts_all_id_list = FModellingAccountsMapping.GetFModellingAccountsList(FINANCIAL_MODELLING_ID_VARIABLE)
-        FModelling_name_id_dic.Add("Interest Rate (%)", "icod")
-        FModelling_name_id_dic.Add("Incremental Tax Rate (%)", "itrate")
-        FModelling_name_id_dic.Add("Cash Capitalization (%)", "iccap")
+        FModeling_constraint_name_id_dic = FModellingAccountsMapping.GetFModellingAccountsDict(FINANCIAL_MODELLING_NAME_VARIABLE, FINANCIAL_MODELLING_ID_VARIABLE, FINANCIAL_MODELLING_CONSTRAINT_TYPE)
+        For Each f_account_name In FModeling_constraint_name_id_dic.Keys
+            Outputs_name_id_dic.Add(f_account_name, FModeling_constraint_name_id_dic(f_account_name))
+        Next
 
         InputsController = New FModellingInputsController(Me, FModellingAccount)
-        ExportsController = New FModellingExportController(Me, FModellingAccount, InputsController.CBEditor, InputsController.accounts_id_names_dic, InputsController.accounts_names_id_dic)
-        View = New FModellingUI(Me, InputsController, ExportsController, scenariosTV)
+        ExportsController = New FModellingExportController(Me, FModellingAccount, _
+                                                           InputsController.CBEditor, _
+                                                           InputsController.accounts_id_names_dic, _
+                                                           InputsController.accounts_names_id_dic)
+        View = New FModelingUI(Me, InputsController, ExportsController, scenariosTV)
         InputsController.InitializeView(View)
         ExportsController.InitializeView(View)
         View.Show()
@@ -153,34 +153,33 @@ Friend Class FModellingSimulationsControler
 
         ' Create a new Scenario Object
         Dim new_id As String = cTreeViews_Functions.GetNewNodeKey(scenariosTV, SCENARII_TOKENS_SIZE)
+        Dim new_scenario As New Scenario(new_id, _
+                                         scenariosTV, _
+                                         periods_list, _
+                                         Outputs_name_id_dic, _
+                                         View.inputsDGVsRightClickMenu, _
+                                         FModellingAccount, _
+                                         FModeling_constraint_name_id_dic)
 
-        Dim new_scenario As New Scenario(new_id, scenariosTV, periods_list, Outputs_name_id_dic, View.inputsDGVsRightClickMenu, FModellingAccount)
         Dim new_node = scenariosTV.Nodes.Add(new_id, name, 0, 0)
         scenarios_dic.Add(new_id, new_scenario)
+        scenariosTV.SelectedNode = new_node
 
-        ' below should loop through type "contraint" available in DB
-        AddConstraint(new_id, "Interest Rate (%)", True, -2)
-        AddConstraint(new_id, "Incremental Tax Rate (%)", True, -33)
-        AddConstraint(new_id, "Cash Capitalization (%)", True, 0)
-
+        For Each constraint_name As String In FModeling_constraint_name_id_dic.Keys
+            AddConstraint(new_id, constraint_name, 0)
+        Next     
         new_node.Expand()
-        View.AddScenario(new_scenario, new_node.Index + 1)
+        View.AddScenario(new_scenario)
 
     End Sub
 
     Protected Friend Sub AddConstraint(ByRef scenario_id As String, _
-                                       Optional ByRef name As String = "", _
-                                       Optional ByRef set_default_value As Boolean = False, _
-                                       Optional ByRef default_value As Double = Nothing)
+                                       ByRef f_account_name As String, _
+                                       ByRef default_value As Double)
 
         Dim constraint_id As String = cTreeViews_Functions.GetNewNodeKey(scenariosTV, SCENARII_TOKENS_SIZE)
-        Dim new_node = scenariosTV.Nodes.Find(scenario_id, True)(0).Nodes.Add(constraint_id, name, 1, 1)
-        If set_default_value = True Then
-            scenarios_dic(scenario_id).AddConstraint(constraint_id, name, True, default_value)
-        Else
-            scenarios_dic(scenario_id).AddConstraint(constraint_id, name)
-        End If
-
+        Dim new_node = scenariosTV.Nodes.Find(scenario_id, True)(0).Nodes.Add(constraint_id, f_account_name, 1, 1)
+        scenarios_dic(scenario_id).AddConstraint(Outputs_name_id_dic(f_account_name), f_account_name, default_value)
 
     End Sub
 
@@ -218,7 +217,7 @@ Friend Class FModellingSimulationsControler
                            "Please contact the PPS Team if you need further help.")
             Case 1
                 Dim data_dic = Model.GetOutputMatrix(FModelling_accounts_all_id_list)
-                scenario.FillOutputs(scenario.OutputDGV, scenario.Outputchart, data_dic)
+                scenario.FillOutputs(data_dic)
                 View.Refresh()
             Case 2 : MsgBox("An occurred in the Financial Solver. You should contact the PPS Team and report this issue.")
         End Select
@@ -251,18 +250,21 @@ Friend Class FModellingSimulationsControler
     Protected Friend Sub ExportScenarioToUI(ByRef scenario_id As String)
 
         Dim scenario As Scenario = scenarios_dic(scenario_id)
-        Dim inputDGV As New vDataGridView
         Dim outputDGV As New vDataGridView
         Dim chart As New Chart
 
-        scenario.BuildInputsDGV(inputDGV)
-        scenario.BuildOutputsDGV(outputDGV)
+        ' build new DGV !!
         scenario.BuildOutputsChart(chart)
-        scenario.FillOutputs(outputDGV, chart)
-        scenario.CopyInputsDGVLines(inputdgv)
+        ' scenario.FillOutputs(outputDGV)
+        
+        'View.ExportScenarioToSeparateUI(scenario_id, _
+        '                                inputDGV, outputDGV, chart)
 
-        View.ExportScenarioToSeparateUI(scenario_id, _
-                                        inputDGV, outputDGV, chart)
+    End Sub
+
+    Protected Friend Sub CopyValueRight(ByRef scenario_id As String)
+
+        scenarios_dic(scenario_id).CopyValueRight()
 
     End Sub
 
@@ -277,13 +279,21 @@ Friend Class FModellingSimulationsControler
         constraints_periods.Clear()
         constraints_targets.Clear()
 
-        For Each row In scenario.InputsDGV.RowsHierarchy.Items
+        Dim scenario_node As TreeNode = scenariosTV.Nodes.Find(scenario.scenario_id, True)(0)
+        For Each constraint_node In scenario_node.Nodes
+            Dim constraint_id As String = Outputs_name_id_dic(constraint_node.text)
+            Dim row As HierarchyItem = scenario.ScenarioDGV.RowsHierarchy.Items(scenario.scenarioDGV_id_row_index_Dictionary(constraint_id))
             For j As Int32 = 1 To periods_list.Length
-                Dim value = scenario.InputsDGV.CellsArea.GetCellValue(row, scenario.InputsDGV.ColumnsHierarchy.Items(j))
+                Dim value = scenario.ScenarioDGV.CellsArea.GetCellValue(row, scenario.ScenarioDGV.ColumnsHierarchy.Items(j + 1))
                 If IsNumeric(value) Then
-                    constraints_list.Add(FModelling_name_id_dic(scenario.InputsDGV.CellsArea.GetCellValue(row, scenario.InputsDGV.ColumnsHierarchy.Items(0))))
-                    constraints_periods.Add(j - 1)
-                    constraints_targets.Add(value)
+                    If FModellingAccount.ReadFModellingAccount(constraint_id, FINANCIAL_MODELLING_FORMAT_VARIABLE) = scenario.PERCENT_FORMAT Then value = value * 100
+                    If FModeling_constraint_name_id_dic.ContainsValue(row.Caption) = False _
+                    AndAlso j - 1 = 0 Then
+                    Else
+                        constraints_list.Add(row.Caption)
+                        constraints_periods.Add(j - 1)
+                        constraints_targets.Add(value)
+                    End If
                 End If
             Next
         Next

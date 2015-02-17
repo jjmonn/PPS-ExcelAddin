@@ -23,7 +23,7 @@ Friend Class FModellingExportController
 
     ' Objects
     Private SimulationsController As FModellingSimulationsControler
-    Private View As FModellingUI
+    Private View As FModelingUI
     Private Model As ControlingUI2MODEL
     Private FModellingAccount As FModellingAccount
     Private ExportsTV As New TreeView
@@ -102,7 +102,7 @@ Friend Class FModellingExportController
             End If
         Next
         ExportsTV.AllowDrop = True
-      
+
     End Sub
 
 #End Region
@@ -110,7 +110,7 @@ Friend Class FModellingExportController
 
 #Region "Interface"
 
-    Protected Friend Sub InitializeView(ByRef input_view As FModellingUI)
+    Protected Friend Sub InitializeView(ByRef input_view As FModelingUI)
 
         View = input_view
         View.AddExportTabElements(ExportsTV, EntitiesTV, export_mappingDGV, ScenariosCB)

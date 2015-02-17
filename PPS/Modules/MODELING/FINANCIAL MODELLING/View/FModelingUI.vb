@@ -9,7 +9,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 13/02/2014
+' Last modified: 16/02/2014
 
 
 Imports System.Windows.Forms
@@ -18,7 +18,7 @@ Imports VIBlend.WinForms.DataGridView
 Imports System.Collections
 
 
-Friend Class FModellingUI
+Friend Class FModelingUI
 
 
 #Region "Instance Variables"
@@ -34,16 +34,19 @@ Friend Class FModellingUI
     Private EntitiesTV2 As TreeView
     Friend PBar As New ProgressBarControl
     Private ScenarioCB As ComboBox
+    Private ScenariiPanelLayout As New TableLayoutPanel
 
     ' Variables
-    Private constraints_splitter_distance As Double = 175
-    Private is_constraint_displayed As Boolean
-    Private displayed_scenario_id As String = ""
+    Private active_scenario_id As String = ""
     Private current_scenario_node As TreeNode = Nothing
+    Private row_index As Int32 = 0
 
     ' Constants
     Private Const OUTPUT_PANEL_DGV_ROWS_HEIGHT As Int32 = 220
-    Private Const OUTPUT_PANEL_CHART_ROWS_HEIGHT As Int32 = 250
+    Private Const OUTPUT_PANEL_CHART_ROWS_HEIGHT As Int32 = 200
+    Private Const OUTPUT_PANEL_SECOND_COLUMN_P As Int32 = 8
+    Private Const OUTPUT_PANEL_TITLE_ROW_HEIGHT As Int32 = 20
+    Private Const OUTPUT_PANEL_ROWS_MARGIN As Int32 = 9
     Private Const MAPPING_PANEL_ROWS_HEIGHT As Int32 = 24
     Private EXPORT_BUTTON_SIZE As Int32 = 22
 
@@ -65,16 +68,27 @@ Friend Class FModellingUI
         InputsController = input_inputs_controller
         ExportsController = input_exports_controller
         ScenariosTV = input_scenariosTV
+        InitializeDisplay()
+        InitializeToolTips()
+        AddHandler ScenariosTV.AfterSelect, AddressOf TV_AfterSelect
+        AddHandler ScenariosTV.NodeMouseClick, AddressOf tv_node_mouse_click
+       
+    End Sub
+
+    Private Sub InitializeDisplay()
+
         ScenariosTV.ImageList = TVImageList
         scenarioTVPanel.Controls.Add(ScenariosTV)
         ScenariosTV.Dock = DockStyle.Fill
         scenarioTVPanel.ContextMenuStrip = TreeviewRightClick
-        ScenariiPanelLayout.AutoScroll = True
 
-        AddHandler ScenariosTV.AfterSelect, AddressOf TV_AfterSelect
-        AddHandler ScenariosTV.NodeMouseClick, AddressOf tv_node_mouse_click
-        AddHandler ScenariosTV.NodeMouseDoubleClick, AddressOf tv_node_mouse_doubleclick
-        InitializeToolTips()
+        SplitContainer1.Panel2.Controls.Add(ScenariiPanelLayout)
+        ScenariiPanelLayout.Dock = DockStyle.Fill
+        ScenariiPanelLayout.AutoScroll = True
+        ScenariiPanelLayout.ColumnCount = ScenariiPanelLayout.ColumnCount + 1
+        ScenariiPanelLayout.ColumnStyles.Add(New ColumnStyle(SizeType.Percent, 100 - OUTPUT_PANEL_SECOND_COLUMN_P))
+        ScenariiPanelLayout.ColumnCount = ScenariiPanelLayout.ColumnCount + 1
+        ScenariiPanelLayout.ColumnStyles.Add(New ColumnStyle(SizeType.Percent, OUTPUT_PANEL_SECOND_COLUMN_P))
 
     End Sub
 
@@ -84,11 +98,7 @@ Friend Class FModellingUI
         ToolTip1.SetToolTip(NewScenarioBT, "New Scenario")
         ToolTip1.SetToolTip(NewConstraintBT, "New Target")
         ToolTip1.SetToolTip(Refresh2BT, "Refresh Scenarios")
-        ToolTip1.SetToolTip(EditConstraintBT, "Edit Scenario")
-        ToolTip1.SetToolTip(DeleteConstraintBT, "Delete Target")
-        ToolTip1.SetToolTip(RefreshBT, "Refresh Scenario")
-        ToolTip1.SetToolTip(HideConstraintsBT, "Minimize")
-
+  
     End Sub
 
     Private Sub FModellingUI_Load(sender As Object, e As EventArgs) Handles MyBase.Load
@@ -106,18 +116,12 @@ Friend Class FModellingUI
 #Region "Interface"
 
     Protected Friend Sub AddInputsTabElement(ByRef input_entitiesTV As TreeView, _
-                                             ByRef input_versionsTV As TreeView, _
-                                             ByRef input_mappingDGV As vDataGridView, _
-                                             ByRef input_inputsDGV As vDataGridView)
+                                             ByRef input_versionsTV As TreeView)
 
         EntitiesTVPanel.Controls.Add(input_entitiesTV)
         VersionsTVpanel.Controls.Add(input_versionsTV)
-        MappingDGVPanel.Controls.Add(input_mappingDGV)
-        InputsDGVPanel.Controls.Add(input_inputsDGV)
         input_entitiesTV.Dock = DockStyle.Fill
         input_versionsTV.Dock = DockStyle.Fill
-        input_mappingDGV.Dock = DockStyle.Fill
-        input_inputsDGV.Dock = DockStyle.Fill
 
         VersionsTV = input_versionsTV
         EntitiesTV = input_entitiesTV
@@ -127,16 +131,25 @@ Friend Class FModellingUI
         AddHandler VersionsTV.KeyDown, AddressOf versionsTV_KeyDown
         AddHandler EntitiesTV.KeyDown, AddressOf entitiesTV_KeyDown
 
+    End Sub
+
+    Protected Friend Sub AddScenario(ByRef scenario As Scenario)
+
+        AddOutputControls(scenario)
+        scenario.ScenarioDGV.Refresh()
+        scenario.ScenarioDGV.Select()
+        current_scenario_node = ScenariosTV.SelectedNode
+        active_scenario_id = scenario.scenario_id
 
     End Sub
 
-    Protected Friend Sub AddScenario(ByRef scenario As Scenario, ByRef index As Int32)
+    Protected Friend Sub AddConstraint(ByRef f_account_name As String, _
+                                       ByRef scenario_id As String, _
+                                       Optional ByRef default_value As Double = 0)
 
-        DisplayInputsForScenario(scenario)
-        ExpandConstraintPane()
-        AddOutputControls(index, scenario)
-        scenario.OutputDGV.Refresh()
-        scenario.OutputDGV.Select()
+        SimulationsController.AddConstraint(current_scenario_node.Name, _
+                                            f_account_name, _
+                                            default_value)
 
     End Sub
 
@@ -168,29 +181,40 @@ Friend Class FModellingUI
 
     End Sub
 
-    Protected Friend Sub ExportScenarioToSeparateUI(ByRef scenario_text As String, _
+    Protected Friend Sub ExportScenarioToSeparateUI(ByRef scenario_id As String, _
                                                     ByRef inputDGV As vDataGridView, _
-                                                    ByRef outputDGV As vDataGridView, _
+                                                    ByRef scenarioDGV As vDataGridView, _
                                                     ByRef chart As Chart)
 
-        Dim genericUI As New GenericView(scenario_text)
+        Dim genericUI As New GenericView("Scenario: " & ScenariosTV.Nodes.Find(scenario_id, True)(0).Text)
         Dim pane As New TableLayoutPanel
-
-        pane.RowStyles.Add(New RowStyle(SizeType.Absolute, inputDGV.Height))
-        pane.RowStyles.Add(New RowStyle(SizeType.Absolute, outputDGV.Height))
+        pane.AutoScroll = True
+        pane.RowCount = pane.RowCount + 1
+        pane.RowStyles.Add(New RowStyle(SizeType.Absolute, DataGridViewsUtil.GetDGVHeight(inputDGV)))
+        pane.RowCount = pane.RowCount + 1
+        pane.RowStyles.Add(New RowStyle(SizeType.Absolute, scenarioDGV.Height))
+        pane.RowCount = pane.RowCount + 1
         pane.RowStyles.Add(New RowStyle(SizeType.Absolute, chart.Height))
+        pane.RowCount = pane.RowCount + 1
+        pane.RowStyles.Add(New RowStyle(SizeType.Percent, 15))
 
         pane.Controls.Add(inputDGV, 0, 0)
-        pane.Controls.Add(outputDGV, 0, 1)
+        pane.Controls.Add(scenarioDGV, 0, 1)
         pane.Controls.Add(chart, 0, 2)
         genericUI.Controls.Add(pane)
 
         pane.Dock = DockStyle.Fill
         inputDGV.Dock = DockStyle.Fill
-        outputDGV.Dock = DockStyle.Fill
+        scenarioDGV.Dock = DockStyle.Fill
         chart.Dock = DockStyle.Fill
+        inputDGV.ColumnsHierarchy.ResizeColumnsToFitGridWidth()
+        scenarioDGV.ColumnsHierarchy.ResizeColumnsToFitGridWidth()
+        inputDGV.Refresh()
+        scenarioDGV.Refresh()
         genericUI.BackColor = Drawing.Color.White
         genericUI.Show()
+
+        AddHandler genericUI.ResizeEnd, AddressOf ExportedUI_ResizeEnd
 
     End Sub
 
@@ -201,6 +225,18 @@ Friend Class FModellingUI
 
 #Region "Inputs Tab"
 
+    Private Sub EditMappingToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles EditMappingToolStripMenuItem.Click
+
+        InputsController.DisplayInputsMapping()
+
+    End Sub
+
+    Private Sub DisplayConsolidatedInputsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles DisplayConsolidatedInputsToolStripMenuItem.Click
+
+        InputsController.DisplayInputsDGV()
+
+    End Sub
+
     Private Sub LaunchConsoBT_Click(sender As Object, e As EventArgs) Handles LaunchConsoBT.Click
 
         If Not EntitiesTV.SelectedNode Is Nothing Then
@@ -210,7 +246,7 @@ Friend Class FModellingUI
                     Exit Sub
                 End If
                 InputsController.ComputeEntity(VersionsTV.SelectedNode.Name, EntitiesTV.SelectedNode)
-                ValidateInputsBT.Select()
+                ValidateInputs(sender, e)
             Else
                 MsgBox("A Version must be selected.")
             End If
@@ -220,7 +256,7 @@ Friend Class FModellingUI
 
     End Sub
 
-    Private Sub ValidateInputsBT_Click(sender As Object, e As EventArgs) Handles ValidateInputsBT.Click
+    Private Sub ValidateInputs(sender As Object, e As EventArgs)
 
         If Not InputsController.periods_list Is Nothing Then
             If InputsController.IsMappingComplete() = False Then
@@ -256,9 +292,13 @@ Friend Class FModellingUI
 
         If Not current_scenario_node Is Nothing Then
             If current_scenario_node.Parent Is Nothing Then
-                SimulationsController.AddConstraint(current_scenario_node.Name)
+                Dim constraint_input_UI As New NewConstraintUI(Me, SimulationsController.Outputs_name_id_dic, _
+                                                               current_scenario_node.Name)
+                constraint_input_UI.Show()
             Else
-                SimulationsController.AddConstraint(current_scenario_node.Parent.Name)
+                Dim constraint_input_UI As New NewConstraintUI(Me, SimulationsController.Outputs_name_id_dic, _
+                                                               current_scenario_node.Parent.Name)
+                constraint_input_UI.Show()
             End If
         Else
             MsgBox("Please Select a Scenario.")
@@ -279,61 +319,10 @@ Friend Class FModellingUI
 
     End Sub
 
-    Private Sub EditConstraintBT_Click(sender As Object, e As EventArgs) Handles EditConstraintBT.Click
-
-        If is_constraint_displayed = True Then
-            CollapseConstraintPane()
-        Else
-            ExpandConstraintPane()
-        End If
-
-    End Sub
-
-#End Region
-
-#Region "Input DGV Panel Buttons"
-
-    Private Sub RefreshBT_Click_1(sender As Object, e As EventArgs) Handles RefreshBT.Click
-
-        If displayed_scenario_id <> "" Then SimulationsController.ComputeScenario(displayed_scenario_id)
-
-    End Sub
-
-    Private Sub DeleteConstraintBT_Click(sender As Object, e As EventArgs) Handles DeleteConstraintBT.Click
-
-        If displayed_scenario_id <> "" Then SimulationsController.DeleteDGVActiveConstraint(displayed_scenario_id)
-
-    End Sub
-
-    Private Sub HideConstraintsBT_Click_1(sender As Object, e As EventArgs) Handles HideConstraintsBT.Click
-
-        CollapseConstraintPane()
-
-    End Sub
-
-    Private Sub AddConstraintBT_Click(sender As Object, e As EventArgs) Handles AddConstraintBT.Click
-
-        If displayed_scenario_id <> "" Then SimulationsController.AddConstraint(displayed_scenario_id)
-
-    End Sub
 
 #End Region
 
 #Region "Scenarios TV Right Click Menu"
-
-    Private Sub EditConstraintRCTV_Click(sender As Object, e As EventArgs) Handles EditConstraintRCTV.Click
-
-        If Not current_scenario_node Is Nothing Then
-            If current_scenario_node.Parent Is Nothing Then
-                DisplayInputsForScenario(SimulationsController.GetScenario(current_scenario_node.Name))
-            Else
-                DisplayInputsForScenario(SimulationsController.GetScenario(current_scenario_node.Parent.Name))
-            End If
-        Else
-            MsgBox("Please Select a Scenario.")
-        End If
-
-    End Sub
 
     Private Sub NewScenarioToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles NewScenarioTVRCM.Click
 
@@ -356,7 +345,6 @@ Friend Class FModellingUI
                                                         MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question)
 
                 If confirm = DialogResult.Yes Then
-                    If current_scenario_node.Name = displayed_scenario_id Then ClearConstraintsEdition()
                     SimulationsController.DeleteScenario(current_scenario_node)
                 End If
             Else
@@ -394,19 +382,27 @@ Friend Class FModellingUI
 
     Private Sub AddConstraintToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles AddConstraintToolStripMenuItem.Click
 
-        SimulationsController.AddConstraint(displayed_scenario_id)
+        Dim constraint_input_UI As New NewConstraintUI(Me, SimulationsController.Outputs_name_id_dic, _
+                                                       active_scenario_id)
+        constraint_input_UI.Show()
 
     End Sub
 
     Private Sub DeleteConstraintToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles DeleteConstraintToolStripMenuItem.Click
 
-        SimulationsController.DeleteDGVActiveConstraint(displayed_scenario_id)
+        SimulationsController.DeleteDGVActiveConstraint(active_scenario_id)
 
     End Sub
 
     Private Sub RefreshScenarioToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles RefreshScenarioToolStripMenuItem.Click
 
-        SimulationsController.ComputeScenario(displayed_scenario_id)
+        SimulationsController.ComputeScenario(active_scenario_id)
+
+    End Sub
+
+    Private Sub CopyValueRightBT_Click(sender As Object, e As EventArgs) Handles CopyValueRightBT.Click
+
+        SimulationsController.CopyValueRight(active_scenario_id)
 
     End Sub
 
@@ -468,7 +464,6 @@ Friend Class FModellingUI
 
     End Sub
 
-
 #End Region
 
 #Region "Simulations Tabs Events"
@@ -476,18 +471,13 @@ Friend Class FModellingUI
     Private Sub TV_AfterSelect(sender As Object, e As TreeViewEventArgs)
 
         current_scenario_node = e.Node
+        active_scenario_id = current_scenario_node.Name
 
     End Sub
 
     Private Sub tv_node_mouse_click(sender As Object, e As TreeNodeMouseClickEventArgs)
 
         current_scenario_node = e.Node
-
-    End Sub
-
-    Private Sub tv_node_mouse_doubleclick(sender As Object, e As TreeNodeMouseClickEventArgs)
-
-        EditConstraintRCTV_Click(sender, e)
 
     End Sub
 
@@ -586,80 +576,65 @@ Friend Class FModellingUI
 
 #End Region
 
+#Region "Exported UI"
+
+    Private Sub ExportedUI_ResizeEnd(sender As Object, e As EventArgs)
+
+        sender.controls(0).getcontrolfromposition(0, 0).ColumnsHierarchy.ResizeColumnsToFitGridWidth()
+        sender.controls(0).getcontrolfromposition(0, 1).ColumnsHierarchy.ResizeColumnsToFitGridWidth()
+        sender.controls(0).getcontrolfromposition(0, 0).Refresh()
+        sender.controls(0).getcontrolfromposition(0, 1).Refresh()
+
+    End Sub
+
+#End Region
+
 #End Region
 
 
 #Region "Utilities"
 
-    Private Sub CollapseConstraintPane()
-
-        SplitContainer2.SplitterDistance = 0
-        SplitContainer2.Panel1.Hide()
-        is_constraint_displayed = False
-
-    End Sub
-
-    Private Sub ExpandConstraintPane()
-
-        SplitContainer2.SplitterDistance = constraints_splitter_distance
-        SplitContainer2.Panel1.Show()
-        is_constraint_displayed = True
-
-    End Sub
-
-    Private Sub DisplayInputsForScenario(ByRef scenario As Scenario)
-
-        InputDGPanel.Controls.Clear()
-        InputDGPanel.Controls.Add(scenario.InputsDGV)
-        scenario.InputsDGV.Dock = DockStyle.Fill
-
-        Dim dividend_formula_option = scenario.dividend_formula_option
-        If dividend_formula_option <> -1 Then
-            DividendFormulaCB.SelectedItem = dividend_formula_option
-            DividendFormulaRB.Checked = True
-        Else
-            DividendFormulaCB.SelectedItem = ""
-            DividendFormulaRB.Checked = False
-        End If
-
-        displayed_scenario_id = scenario.scenario_id
-        Displayed_ScenarioTB.Text = ScenariosTV.Nodes.Find(scenario.scenario_id, True)(0).Text
-
-    End Sub
-
-    Private Sub ClearConstraintsEdition()
-
-        InputDGPanel.Controls.Clear()
-        displayed_scenario_id = ""
-        Displayed_ScenarioTB.Text = ""
-
-    End Sub
-
     Protected Friend Sub RedrawOutputs()
 
         ScenariiPanelLayout.Controls.Clear()
         ScenariiPanelLayout.RowCount = 0
+        ScenariiPanelLayout.RowStyles.Clear()
 
-        Dim index As Int32 = 0
+        row_index = 0
         For Each scenario_node In ScenariosTV.Nodes
-            AddOutputControls(index, SimulationsController.GetScenario(scenario_node.name))
+            AddOutputControls(SimulationsController.GetScenario(scenario_node.name))
         Next
 
     End Sub
 
-    Private Sub AddOutputControls(ByRef index As Int32, _
-                                  ByRef scenario As Scenario)
+    Private Sub AddOutputControls(ByRef scenario As Scenario)
 
-        ScenariiPanelLayout.RowStyles.Add(New RowStyle(SizeType.Absolute, OUTPUT_PANEL_DGV_ROWS_HEIGHT))
-        ScenariiPanelLayout.Controls.Add(scenario.OutputDGV, 0, index)
-        ScenariiPanelLayout.Controls.Add(GetNewExportButton, 1, index)
+        ScenariiPanelLayout.RowCount = ScenariiPanelLayout.RowCount + 1
+        ScenariiPanelLayout.RowStyles.Add(New RowStyle(SizeType.Absolute, OUTPUT_PANEL_TITLE_ROW_HEIGHT))
+        ScenariiPanelLayout.RowCount = ScenariiPanelLayout.RowCount + 1
+        ScenariiPanelLayout.RowStyles.Add(New RowStyle(SizeType.Absolute, DataGridViewsUtil.GetDGVHeight(scenario.ScenarioDGV)))
+        ScenariiPanelLayout.RowCount = ScenariiPanelLayout.RowCount + 1
         ScenariiPanelLayout.RowStyles.Add(New RowStyle(SizeType.Absolute, OUTPUT_PANEL_CHART_ROWS_HEIGHT))
-        index = index + 1
-        ScenariiPanelLayout.Controls.Add(scenario.Outputchart, 0, index)
-        index = index + 1
-        scenario.OutputDGV.Dock = DockStyle.Fill
-        scenario.Outputchart.Dock = DockStyle.Fill
+        ScenariiPanelLayout.RowCount = ScenariiPanelLayout.RowCount + 1
+        ScenariiPanelLayout.RowStyles.Add(New RowStyle(SizeType.Absolute, OUTPUT_PANEL_ROWS_MARGIN))
 
+        Dim label As New Label
+        label.Text = "Scenario " & ScenariosTV.Nodes.Find(scenario.scenario_id, True)(0).Text
+        label.Margin = New Padding(3, 3, 0, 0)
+        label.ForeColor = Drawing.Color.DarkBlue
+        label.Font = New Drawing.Font(label.Font.FontFamily, 9, Drawing.FontStyle.Bold)
+
+        ScenariiPanelLayout.Controls.Add(label, 0, row_index)
+        ScenariiPanelLayout.Controls.Add(GetNewRefreshButton, 1, row_index)
+        row_index = row_index + 1
+        ScenariiPanelLayout.Controls.Add(scenario.ScenarioDGV, 0, row_index)
+        ScenariiPanelLayout.Controls.Add(GetNewExportButton, 1, row_index)
+        row_index = row_index + 1
+        ScenariiPanelLayout.Controls.Add(scenario.Outputchart, 0, row_index)
+        row_index = row_index + 2
+
+        scenario.ScenarioDGV.Dock = DockStyle.Fill
+        scenario.Outputchart.Dock = DockStyle.Fill
 
     End Sub
 
@@ -667,6 +642,7 @@ Friend Class FModellingUI
 
         Dim BT As New Button
         BT.ImageList = ButtonsImageList
+        BT.Margin = New Padding(0, 0, 0, 0)
         BT.FlatStyle = FlatStyle.Flat
         BT.FlatAppearance.BorderSize = 0
         BT.ImageKey = "blue.jpg"
@@ -675,8 +651,22 @@ Friend Class FModellingUI
 
     End Function
 
+    Private Function GetNewRefreshButton() As Button
+
+        Dim BT As New Button
+        BT.ImageList = ButtonsImageList
+        BT.Margin = New Padding(0, 0, 0, 0)
+        BT.FlatStyle = FlatStyle.Flat
+        BT.FlatAppearance.BorderSize = 0
+        BT.ImageKey = "refresh_icon(1).ico"
+        AddHandler BT.Click, AddressOf RefreshScenarioToolStripMenuItem_Click
+        Return BT
+
+    End Function
+
 #End Region
 
 
 
+    
 End Class
