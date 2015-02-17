@@ -1407,7 +1407,7 @@ Public Class AddinModule
 
     End Sub
 
-    Private Sub InputReportLaunchBT_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean)
+    Private Sub InputReportLaunchBT_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) Handles InputReportLaunchBT.OnClick
 
         If ConnectioN Is Nothing Then
             Dim CONNUI As New ConnectionUI(Me)
@@ -2061,7 +2061,5 @@ Public Class AddinModule
     End Sub
 
 
-
-   
 End Class
 
