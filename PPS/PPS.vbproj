@@ -166,6 +166,7 @@
     <Compile Include="Modules\CUBE\CubeView.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Modules\MODELING\CONFIGURATION\FModeling Accounts\Controller\FModellingAccountsController.vb" />
     <Compile Include="Modules\MODELING\CONFIGURATION\Market Prices Config\Controller\MarketPricesController.vb" />
     <Compile Include="Modules\MODELING\CONFIGURATION\Market Prices Config\Views\MarketPricesUI.Designer.vb">
       <DependentUpon>MarketPricesUI.vb</DependentUpon>
@@ -184,10 +185,10 @@
     <Compile Include="Modules\MODELING\FINANCIAL MODELLING\Controller\FModellingInputsController.vb" />
     <Compile Include="Modules\MODELING\FINANCIAL MODELLING\Controller\FModellingSimulationsControler.vb" />
     <Compile Include="Modules\MODELING\FINANCIAL MODELLING\Model\Scenario.vb" />
-    <Compile Include="Modules\MODELING\FINANCIAL MODELLING\View\FModellingUI.Designer.vb">
-      <DependentUpon>FModellingUI.vb</DependentUpon>
+    <Compile Include="Modules\MODELING\FINANCIAL MODELLING\View\FModelingUI.Designer.vb">
+      <DependentUpon>FModelingUI.vb</DependentUpon>
     </Compile>
-    <Compile Include="Modules\MODELING\FINANCIAL MODELLING\View\FModellingUI.vb">
+    <Compile Include="Modules\MODELING\FINANCIAL MODELLING\View\FModelingUI.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Clients Specific Modules\GDF SUEZ - ALTERNATIVE SCENARIOS\Configuration\Views\ASConfigurationPanel.Designer.vb">
@@ -208,6 +209,12 @@
       <DependentUpon>DataHistoryUI.vb</DependentUpon>
     </Compile>
     <Compile Include="Modules\LOG\View\DataHistoryUI.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Modules\MODELING\FINANCIAL MODELLING\View\NewConstraintUI.Designer.vb">
+      <DependentUpon>NewConstraintUI.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Modules\MODELING\FINANCIAL MODELLING\View\NewConstraintUI.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Modules\PLATFORM MANAGEMENT\Controls\Controller\ChartsControlsMGTController.vb" />
@@ -258,6 +265,12 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Modules\PLATFORM MANAGEMENT\Categories\Controller\CategoriesController.vb" />
+    <Compile Include="Views\GenericView.Designer.vb">
+      <DependentUpon>GenericView.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Views\GenericView.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Views\InputValuesExcel.Designer.vb">
       <DependentUpon>InputValuesExcel.vb</DependentUpon>
     </Compile>
@@ -557,8 +570,8 @@
     <EmbeddedResource Include="Modules\MODELING\CONFIGURATION\Market Prices Config\Views\NewPricesVersionUI.resx">
       <DependentUpon>NewPricesVersionUI.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Modules\MODELING\FINANCIAL MODELLING\View\FModellingUI.resx">
-      <DependentUpon>FModellingUI.vb</DependentUpon>
+    <EmbeddedResource Include="Modules\MODELING\FINANCIAL MODELLING\View\FModelingUI.resx">
+      <DependentUpon>FModelingUI.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Clients Specific Modules\GDF SUEZ - ALTERNATIVE SCENARIOS\Configuration\Views\ASConfigurationPanel.resx">
       <DependentUpon>ASConfigurationPanel.vb</DependentUpon>
@@ -569,8 +582,14 @@
     <EmbeddedResource Include="Modules\LOG\View\DataHistoryUI.resx">
       <DependentUpon>DataHistoryUI.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Modules\MODELING\FINANCIAL MODELLING\View\NewConstraintUI.resx">
+      <DependentUpon>NewConstraintUI.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Modules\REPORTS DESIGNER\Views\ReportsDesignerUI.resx">
       <DependentUpon>ReportsDesignerUI.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\GenericView.resx">
+      <DependentUpon>GenericView.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\InputValuesExcel.resx">
       <DependentUpon>InputValuesExcel.vb</DependentUpon>
@@ -878,6 +897,7 @@
     <None Include="Resources\favicon%28239%29.ico" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Modules\MODELING\CONFIGURATION\FModeling Accounts\View\" />
     <Folder Include="Modules\MODELING\CONFIGURATION\Market Prices Config\Model\" />
   </ItemGroup>
   <ItemGroup>
