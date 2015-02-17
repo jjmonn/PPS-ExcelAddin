@@ -71,11 +71,12 @@ Friend Class ChartsUtilities
     End Function
 
     Protected Friend Shared Sub AddSerieToChart(ByRef chart As Chart, _
-                                                ByRef serieHT As Hashtable)
+                                                ByRef serieHT As Hashtable, _
+                                                Optional ByRef chart_area As String = "ChartArea1")
 
         Dim new_serie As New Series(serieHT(CONTROL_CHART_NAME_VARIABLE))
         chart.Series.Add(new_serie)
-        new_serie.ChartArea = "ChartArea1"
+        new_serie.ChartArea = chart_area
 
         If serieHT.ContainsKey(CONTROL_CHART_TYPE_VARIABLE) AndAlso _
         Not IsDBNull(serieHT(CONTROL_CHART_TYPE_VARIABLE)) Then
