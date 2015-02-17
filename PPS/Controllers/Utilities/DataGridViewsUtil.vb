@@ -17,14 +17,13 @@
 '
 '
 '
-' Last modified date: 27/01/2014
+' Last modified date: 16/02/2014
 ' Author: Julien Monnereau
 
 
 Imports System.Drawing
 Imports Microsoft.Office.Interop.Excel
 Imports System.Windows.Forms
-Imports SpannedDataGridViewNet2
 Imports System.Collections.Generic
 Imports System.Collections
 Imports VIBlend.WinForms.DataGridView
@@ -55,7 +54,7 @@ Friend Class DataGridViewsUtil
     Friend Shared ADJUSTMENTS_ROW_THEME As VIBLEND_THEME = VIBLEND_THEME.OFFICE2010BLACK
     Friend Shared ADJUSTMENTS_COLOR As Color = Color.Blue
     Friend Shared ENTITIES_ROWS_THEME As VIBLEND_THEME = VIBLEND_THEME.OFFICE2010BLUE
-
+    Friend Shared DGV_HEIGHT_MARGIN As Int32 = 10
 
 #End Region
 
@@ -83,9 +82,7 @@ Friend Class DataGridViewsUtil
             .BackColor = Color.White
             .GridLinesDisplayMode = GridLinesDisplayMode.DISPLAY_NONE
             .ColumnsHierarchy.AutoResize(AutoResizeMode.FIT_ALL)
-            '.RowsHierarchy.AutoResize(AutoResizeMode.FIT_ALL)
             '.ColumnsHierarchy.AutoStretchColumns = True
-            '.FilterDisplayMode = FilterDisplayMode.Basic
         End With
 
 
@@ -245,45 +242,39 @@ Friend Class DataGridViewsUtil
 #Region "Font Size"
 
     Protected Friend Shared Sub DGVSetHiearchyFontSize(ByRef DGV As vDataGridView, _
-                                                     itemsFontSize As Single, _
-                                                     cellsFontSize As Single)
+                                                       ByRef itemsFontSize As Single, _
+                                                       Optional ByRef cellsFontSize As Single = 0)
 
         Dim itemStyleNormal As HierarchyItemStyle = GridTheme.GetDefaultTheme(DGV.VIBlendTheme).HierarchyItemStyleNormal
-        itemStyleNormal.Font = New System.Drawing.Font(DGV.Font.FontFamily, itemsFontSize)
         Dim itemStyleSelected As HierarchyItemStyle = GridTheme.GetDefaultTheme(DGV.VIBlendTheme).HierarchyItemStyleSelected
+        itemStyleNormal.Font = New System.Drawing.Font(DGV.Font.FontFamily, itemsFontSize)
         itemStyleSelected.Font = New System.Drawing.Font(DGV.Font.FontFamily, itemsFontSize)
-
-        Dim CStyleNormal As GridCellStyle = GridTheme.GetDefaultTheme(DGV.VIBlendTheme).GridCellStyle
-        CStyleNormal.Font = New System.Drawing.Font(DGV.Font.FontFamily, cellsFontSize, FontStyle.Regular)
 
         For Each item As HierarchyItem In DGV.RowsHierarchy.Items
             SetSubItemsFontSizes(item, _
                                  itemStyleNormal, _
-                                 itemStyleSelected, _
-                                 CStyleNormal)
+                                 itemStyleSelected)
         Next
         For Each item In DGV.ColumnsHierarchy.Items
             SetSubItemsFontSizes(item, _
                                  itemStyleNormal, _
-                                 itemStyleSelected, _
-                                 CStyleNormal)
+                                 itemStyleSelected)
         Next
+
+        If cellsFontSize <> 0 Then SetDGVCellsFontSize(DGV, cellsFontSize)
 
     End Sub
 
     Protected Friend Shared Sub SetSubItemsFontSizes(ByRef item As HierarchyItem, _
                                                      ByRef itemStyleNormal As HierarchyItemStyle, _
-                                                     ByRef itemStyleSelected As HierarchyItemStyle, _
-                                                     ByRef cStyleNormal As GridCellStyle)
+                                                     ByRef itemStyleSelected As HierarchyItemStyle)
 
         item.HierarchyItemStyleNormal = itemStyleNormal
         item.HierarchyItemStyleSelected = itemStyleSelected
-        item.CellsStyle = cStyleNormal
         For Each subItem As HierarchyItem In item.Items
             SetSubItemsFontSizes(subItem, _
                                  itemStyleNormal, _
-                                 itemStyleSelected, _
-                                 cStyleNormal)
+                                 itemStyleSelected)
         Next
 
     End Sub
@@ -300,7 +291,7 @@ Friend Class DataGridViewsUtil
     End Sub
 
     Protected Friend Shared Sub SetItemsCellsFontSize(ByRef item As HierarchyItem, _
-                                            ByRef cstyleN As GridCellStyle)
+                                                      ByRef cstyleN As GridCellStyle)
 
         item.CellsStyle = cstyleN
         For Each subItem In item.Items
@@ -888,7 +879,7 @@ Friend Class DataGridViewsUtil
     End Sub
 
     Protected Friend Shared Sub AdjustDGVFColumnWidth(ByRef DGV As vDataGridView, _
-                                               ByRef column_index As Int32)
+                                                      ByRef column_index As Int32)
 
         Dim maxLength As Int32 = 0
         Dim characters_size As Single
@@ -902,7 +893,7 @@ Friend Class DataGridViewsUtil
         For Each item In DGV.RowsHierarchy.Items
             GetColumnMaxLength(item, column_index, maxLength)
         Next
-        DGV.ColumnsHierarchy.Items(column_index).Width = maxLength * characters_size
+        DGV.ColumnsHierarchy.Items(column_index).Width = maxLength * 0.7 * characters_size
 
     End Sub
 
@@ -995,6 +986,28 @@ Friend Class DataGridViewsUtil
 
     End Sub
 
+    Protected Friend Shared Function GetDGVHeight(ByRef DGV As vDataGridView) As Int32
+
+        Dim height As Int32 = DGV_HEIGHT_MARGIN
+        Try
+            height = height + DGV.ColumnsHierarchy.Items(0).Height
+            height = height + (DGV.RowsHierarchy.Items.Count * DGV.RowsHierarchy.Items(0).Height)
+        Catch ex As Exception
+        End Try
+        Return height
+
+    End Function
+
+    Protected Friend Shared Sub CopyValueRight(ByRef DGV As vDataGridView, _
+                                               ByRef cell As GridCell)
+
+        Dim row As HierarchyItem = cell.RowItem
+        Dim column_index As Int32 = cell.ColumnItem.ItemIndex
+        For Each column As HierarchyItem In DGV.ColumnsHierarchy.Items
+            If column.ItemIndex > column_index Then DGV.CellsArea.SetCellValue(row, column, cell.Value)
+        Next
+
+    End Sub
 
 #End Region
 
