@@ -382,11 +382,9 @@ Module Data_Tables_Constants
     Friend Const FINANCIAL_MODELLING_FORMAT_VARIABLE = "format_string"
     Friend Const FINANCIAL_MODELLING_ACCOUNT_ID_VARIABLE = "account_id"
     Friend Const FINANCIAL_MODELLING_MAPPED_ENTITY_VARIABLE = "mapped_entity"
-
     Friend Const FINANCIAL_MODELLING_SERIE_COLOR_VARIABLE = "serie_color"
-    Friend Const FINANCIAL_MODELLING_SERIE_TYPE_ENTITY_VARIABLE = "serie_type"
+    Friend Const FINANCIAL_MODELLING_SERIE_TYPE_VARIABLE = "serie_type"
     Friend Const FINANCIAL_MODELLING_SERIE_CHART_VARIABLE = "serie_chart"
-
 
     Friend Const FINANCIAL_MODELLING_INPUT_TYPE = "input"
     Friend Const FINANCIAL_MODELLING_OUTPUT_TYPE = "output"

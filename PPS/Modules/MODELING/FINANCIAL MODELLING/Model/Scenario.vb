@@ -233,21 +233,10 @@ Friend Class Scenario
 
     Protected Friend Sub AddSerieToChart(ByRef f_account_id As String)
 
-        Dim serie_ht As New Hashtable
-        Dim f_account_name As String = FModellingAccount.ReadFModellingAccount(f_account_id, FINANCIAL_MODELLING_NAME_VARIABLE)
-        Dim chart_area As String
-        serie_ht.Add(CONTROL_CHART_NAME_VARIABLE, f_account_name)
-        If FModellingAccount.ReadFModellingAccount(f_account_id, FINANCIAL_MODELLING_FORMAT_VARIABLE) = PERCENT_FORMAT Then
-            serie_ht.Add(CONTROL_CHART_TYPE_VARIABLE, "Line")
-            chart_area = "ChartArea2"
-        Else
-            serie_ht.Add(CONTROL_CHART_TYPE_VARIABLE, "Column")
-            chart_area = "ChartArea1"
-        End If
-        '  serie_ht.Add(CONTROL_CHART_COLOR_VARIABLE, "")
+        Dim serie_ht As Hashtable = FModellingAccount.GetSeriHT(f_account_id)
         serie_ht.Add(REPORTS_SERIE_WIDTH_VAR, 25)
-        ChartsUtilities.AddSerieToChart(Outputchart, serie_ht, chart_area)
-        Outputchart.Series(f_account_name).Points.DataBindXY(charts_periods, data_dic(f_account_id))
+        ChartsUtilities.AddSerieToChart(Outputchart, serie_ht, serie_ht(FINANCIAL_MODELLING_SERIE_CHART_VARIABLE))
+        Outputchart.Series(FModellingAccount.ReadFModellingAccount(f_account_id, FINANCIAL_MODELLING_NAME_VARIABLE)).Points.DataBindXY(charts_periods, data_dic(f_account_id))
 
     End Sub
 

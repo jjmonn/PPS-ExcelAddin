@@ -31,6 +31,7 @@ Friend Class FModellingSimulationsControler
     Private InputsController As FModellingInputsController
     Private ExportsController As FModellingExportController
     Private FModellingAccount As New FModellingAccount
+    Private FAccountsController As FModellingAccountsController
 
     ' Variables
     Private scenariosTV As New TreeView
@@ -76,6 +77,7 @@ Friend Class FModellingSimulationsControler
         InputsController.InitializeView(View)
         ExportsController.InitializeView(View)
         View.Show()
+        FAccountsController = New FModellingAccountsController(Outputs_name_id_dic, FModellingAccount)
 
     End Sub
 
@@ -297,6 +299,12 @@ Friend Class FModellingSimulationsControler
                 End If
             Next
         Next
+
+    End Sub
+
+    Protected Friend Sub ShowFAccountsConfig()
+
+        FAccountsController.DisplayView()
 
     End Sub
 

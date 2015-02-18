@@ -82,6 +82,8 @@ Partial Class FModelingUI
         Me.VersionsTVIcons = New System.Windows.Forms.ImageList(Me.components)
         Me.ExportTVImageList = New System.Windows.Forms.ImageList(Me.components)
         Me.BigArrow = New System.Windows.Forms.ImageList(Me.components)
+        Me.SerieMGTRCMBT = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator5 = New System.Windows.Forms.ToolStripSeparator()
         Me.TabControl1.SuspendLayout()
         Me.TabPage1.SuspendLayout()
         Me.TableLayoutPanel1.SuspendLayout()
@@ -622,9 +624,9 @@ Partial Class FModelingUI
         '
         'inputsDGVsRightClickMenu
         '
-        Me.inputsDGVsRightClickMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.AddConstraintToolStripMenuItem, Me.DeleteConstraintToolStripMenuItem, Me.RefreshScenarioToolStripMenuItem, Me.ToolStripSeparator4, Me.CopyValueRightBT})
+        Me.inputsDGVsRightClickMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.AddConstraintToolStripMenuItem, Me.DeleteConstraintToolStripMenuItem, Me.RefreshScenarioToolStripMenuItem, Me.ToolStripSeparator4, Me.SerieMGTRCMBT, Me.ToolStripSeparator5, Me.CopyValueRightBT})
         Me.inputsDGVsRightClickMenu.Name = "inputsDGVsRightClickMenu"
-        Me.inputsDGVsRightClickMenu.Size = New System.Drawing.Size(166, 98)
+        Me.inputsDGVsRightClickMenu.Size = New System.Drawing.Size(166, 126)
         '
         'AddConstraintToolStripMenuItem
         '
@@ -692,6 +694,18 @@ Partial Class FModelingUI
         Me.BigArrow.ColorDepth = System.Windows.Forms.ColorDepth.Depth32Bit
         Me.BigArrow.ImageSize = New System.Drawing.Size(16, 16)
         Me.BigArrow.TransparentColor = System.Drawing.Color.Transparent
+        '
+        'SerieMGTRCMBT
+        '
+        Me.SerieMGTRCMBT.Image = Global.PPS.My.Resources.Resources.favicon_239_
+        Me.SerieMGTRCMBT.Name = "SerieMGTRCMBT"
+        Me.SerieMGTRCMBT.Size = New System.Drawing.Size(165, 22)
+        Me.SerieMGTRCMBT.Text = "Display Options"
+        '
+        'ToolStripSeparator5
+        '
+        Me.ToolStripSeparator5.Name = "ToolStripSeparator5"
+        Me.ToolStripSeparator5.Size = New System.Drawing.Size(162, 6)
         '
         'FModelingUI
         '
@@ -783,4 +797,6 @@ Partial Class FModelingUI
     Friend WithEvents DisplayConsolidatedInputsToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ToolStripSeparator4 As System.Windows.Forms.ToolStripSeparator
     Friend WithEvents CopyValueRightBT As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents SerieMGTRCMBT As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ToolStripSeparator5 As System.Windows.Forms.ToolStripSeparator
 End Class

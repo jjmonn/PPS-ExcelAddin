@@ -137,7 +137,7 @@ Friend Class ControlsMGTUI
         PalettesCB.Items.Add("")
         SerieAccountIDCB.Items.Add("")
         SerieTypeCB.Items.Add("")
-     
+
     End Sub
 
     Private Sub InitializeDGV()
@@ -515,6 +515,6 @@ Friend Class ControlsMGTUI
 
 #End Region
 
-   
-   
+
+
 End Class

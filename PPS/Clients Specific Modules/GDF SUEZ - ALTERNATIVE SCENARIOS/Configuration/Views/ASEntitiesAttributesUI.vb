@@ -24,7 +24,7 @@ Friend Class ASEntitiesAttributesUI
     ' Objects
     Private Controller As ASEntitiesAttributesController
     Private entitiesTV As TreeView
-   
+
     ' Variables
     Friend entities_name_id_dic As Hashtable
     Friend rows_id_item_dic As New Dictionary(Of String, HierarchyItem)

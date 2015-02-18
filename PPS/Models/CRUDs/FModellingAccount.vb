@@ -10,7 +10,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 17/02/2015
+' Last modified: 18/02/2015
 
 
 Imports System.Windows.Forms
@@ -80,23 +80,26 @@ Friend Class FModellingAccount
         Dim ht As New Hashtable
         RST.Filter = FINANCIAL_MODELLING_ID_VARIABLE + "='" + fmodelling_account_id + "'"
         If RST.EOF Then Return Nothing
-        While RST.EOF = False
-            ht.Add(FINANCIAL_MODELLING_NAME_VARIABLE, RST.Fields(FINANCIAL_MODELLING_NAME_VARIABLE).Value)
-            ht.Add(FINANCIAL_MODELLING_SERIE_COLOR_VARIABLE, RST.Fields(FINANCIAL_MODELLING_SERIE_COLOR_VARIABLE).Value)
-            ht.Add(FINANCIAL_MODELLING_SERIE_TYPE_ENTITY_VARIABLE, RST.Fields(FINANCIAL_MODELLING_SERIE_TYPE_ENTITY_VARIABLE).Value)
-            ht.Add(FINANCIAL_MODELLING_SERIE_CHART_VARIABLE, RST.Fields(FINANCIAL_MODELLING_SERIE_CHART_VARIABLE).Value)
-        End While
+        ht.Add(FINANCIAL_MODELLING_NAME_VARIABLE, RST.Fields(FINANCIAL_MODELLING_NAME_VARIABLE).Value)
+        ht.Add(CONTROL_CHART_COLOR_VARIABLE, RST.Fields(FINANCIAL_MODELLING_SERIE_COLOR_VARIABLE).Value)
+        ht.Add(CONTROL_CHART_TYPE_VARIABLE, RST.Fields(FINANCIAL_MODELLING_SERIE_TYPE_VARIABLE).Value)
+        ht.Add(FINANCIAL_MODELLING_SERIE_CHART_VARIABLE, RST.Fields(FINANCIAL_MODELLING_SERIE_CHART_VARIABLE).Value)
         Return ht
 
     End Function
 
     Protected Friend Sub UpdateFModellingAccount(ByRef fmodelling_account_id As String, _
                                        ByRef field As String, _
-                                       ByRef value As String)
+                                       ByVal value As String)
 
         RST.Filter = FINANCIAL_MODELLING_ID_VARIABLE + "='" + fmodelling_account_id + "'"
         If RST.EOF = False AndAlso RST.BOF = False Then
-            If RST.Fields(field).Value <> value Then
+            If IsDBNull(RST.Fields(field).Value) Then
+                If value <> "" Then
+                    RST.Fields(field).Value = value
+                    RST.Update()
+                End If
+            ElseIf RST.Fields(field).Value <> value Then
                 RST.Fields(field).Value = value
                 RST.Update()
             End If

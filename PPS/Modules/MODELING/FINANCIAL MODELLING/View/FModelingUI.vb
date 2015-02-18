@@ -9,7 +9,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 16/02/2014
+' Last modified: 18/02/2014
 
 
 Imports System.Windows.Forms
@@ -406,6 +406,12 @@ Friend Class FModelingUI
 
     End Sub
 
+    Private Sub SerieMGTRCMBT_Click(sender As Object, e As EventArgs) Handles SerieMGTRCMBT.Click
+
+        SimulationsController.ShowFAccountsConfig()
+
+    End Sub
+
 #End Region
 
 #End Region
@@ -666,7 +672,6 @@ Friend Class FModelingUI
 
 #End Region
 
-
-
     
+   
 End Class
