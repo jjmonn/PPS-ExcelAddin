@@ -23,8 +23,9 @@ Friend Class FormulasGenericCheck
 
 
     ' Constants
-  
+
 #End Region
+
 
 #Region "Interface"
 
