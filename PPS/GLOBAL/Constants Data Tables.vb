@@ -388,6 +388,7 @@ Module Data_Tables_Constants
 
     Friend Const FINANCIAL_MODELLING_INPUT_TYPE = "input"
     Friend Const FINANCIAL_MODELLING_OUTPUT_TYPE = "output"
+    Friend Const FINANCIAL_MODELLING_FORMULA_TYPE = "formula"
     Friend Const FINANCIAL_MODELLING_EXPORT_TYPE = "export"
     Friend Const FINANCIAL_MODELLING_CONSTRAINT_TYPE = "constraint"
 
