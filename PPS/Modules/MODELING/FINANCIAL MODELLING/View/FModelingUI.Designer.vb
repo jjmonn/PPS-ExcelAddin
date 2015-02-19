@@ -76,14 +76,14 @@ Partial Class FModelingUI
         Me.DeleteConstraintToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.RefreshScenarioToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator4 = New System.Windows.Forms.ToolStripSeparator()
+        Me.SerieMGTRCMBT = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator5 = New System.Windows.Forms.ToolStripSeparator()
         Me.CopyValueRightBT = New System.Windows.Forms.ToolStripMenuItem()
         Me.TVImageList = New System.Windows.Forms.ImageList(Me.components)
         Me.EntitiesTVImageList = New System.Windows.Forms.ImageList(Me.components)
         Me.VersionsTVIcons = New System.Windows.Forms.ImageList(Me.components)
         Me.ExportTVImageList = New System.Windows.Forms.ImageList(Me.components)
         Me.BigArrow = New System.Windows.Forms.ImageList(Me.components)
-        Me.SerieMGTRCMBT = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ToolStripSeparator5 = New System.Windows.Forms.ToolStripSeparator()
         Me.TabControl1.SuspendLayout()
         Me.TabPage1.SuspendLayout()
         Me.TableLayoutPanel1.SuspendLayout()
@@ -131,7 +131,7 @@ Partial Class FModelingUI
         Me.TabControl1.Margin = New System.Windows.Forms.Padding(1)
         Me.TabControl1.Name = "TabControl1"
         Me.TabControl1.SelectedIndex = 0
-        Me.TabControl1.Size = New System.Drawing.Size(748, 539)
+        Me.TabControl1.Size = New System.Drawing.Size(664, 350)
         Me.TabControl1.TabIndex = 8
         '
         'TabPage1
@@ -141,7 +141,7 @@ Partial Class FModelingUI
         Me.TabPage1.Location = New System.Drawing.Point(4, 23)
         Me.TabPage1.Name = "TabPage1"
         Me.TabPage1.Padding = New System.Windows.Forms.Padding(3)
-        Me.TabPage1.Size = New System.Drawing.Size(740, 512)
+        Me.TabPage1.Size = New System.Drawing.Size(656, 323)
         Me.TabPage1.TabIndex = 0
         Me.TabPage1.Text = "Inputs"
         '
@@ -172,7 +172,7 @@ Partial Class FModelingUI
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 91.90172!))
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 36.0!))
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 8.098282!))
-        Me.TableLayoutPanel1.Size = New System.Drawing.Size(734, 506)
+        Me.TableLayoutPanel1.Size = New System.Drawing.Size(650, 317)
         Me.TableLayoutPanel1.TabIndex = 11
         '
         'VersionsTVpanel
@@ -180,7 +180,7 @@ Partial Class FModelingUI
         Me.VersionsTVpanel.Dock = System.Windows.Forms.DockStyle.Fill
         Me.VersionsTVpanel.Location = New System.Drawing.Point(8, 59)
         Me.VersionsTVpanel.Name = "VersionsTVpanel"
-        Me.VersionsTVpanel.Size = New System.Drawing.Size(176, 374)
+        Me.VersionsTVpanel.Size = New System.Drawing.Size(154, 200)
         Me.VersionsTVpanel.TabIndex = 0
         '
         'Label2
@@ -196,35 +196,35 @@ Partial Class FModelingUI
         'VersionTB
         '
         Me.VersionTB.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.VersionTB.Location = New System.Drawing.Point(8, 439)
+        Me.VersionTB.Location = New System.Drawing.Point(8, 265)
         Me.VersionTB.Name = "VersionTB"
-        Me.VersionTB.Size = New System.Drawing.Size(176, 20)
+        Me.VersionTB.Size = New System.Drawing.Size(154, 20)
         Me.VersionTB.TabIndex = 16
         '
         'Label6
         '
         Me.Label6.AutoSize = True
-        Me.Label6.Location = New System.Drawing.Point(210, 36)
+        Me.Label6.Location = New System.Drawing.Point(188, 36)
         Me.Label6.Margin = New System.Windows.Forms.Padding(3, 6, 3, 0)
         Me.Label6.Name = "Label6"
-        Me.Label6.Size = New System.Drawing.Size(178, 13)
+        Me.Label6.Size = New System.Drawing.Size(140, 20)
         Me.Label6.TabIndex = 10
         Me.Label6.Text = "2. Select the Entity Level to work on"
         '
         'EntitiesTVPanel
         '
         Me.EntitiesTVPanel.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.EntitiesTVPanel.Location = New System.Drawing.Point(210, 59)
+        Me.EntitiesTVPanel.Location = New System.Drawing.Point(188, 59)
         Me.EntitiesTVPanel.Name = "EntitiesTVPanel"
-        Me.EntitiesTVPanel.Size = New System.Drawing.Size(183, 374)
+        Me.EntitiesTVPanel.Size = New System.Drawing.Size(159, 200)
         Me.EntitiesTVPanel.TabIndex = 9
         '
         'EntityTB
         '
         Me.EntityTB.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.EntityTB.Location = New System.Drawing.Point(210, 439)
+        Me.EntityTB.Location = New System.Drawing.Point(188, 265)
         Me.EntityTB.Name = "EntityTB"
-        Me.EntityTB.Size = New System.Drawing.Size(183, 20)
+        Me.EntityTB.Size = New System.Drawing.Size(159, 20)
         Me.EntityTB.TabIndex = 15
         '
         'MenuStrip1
@@ -233,7 +233,7 @@ Partial Class FModelingUI
         Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.EditToolStripMenuItem})
         Me.MenuStrip1.Location = New System.Drawing.Point(5, 0)
         Me.MenuStrip1.Name = "MenuStrip1"
-        Me.MenuStrip1.Size = New System.Drawing.Size(729, 24)
+        Me.MenuStrip1.Size = New System.Drawing.Size(645, 24)
         Me.MenuStrip1.TabIndex = 17
         Me.MenuStrip1.Text = "MenuStrip1"
         '
@@ -264,7 +264,7 @@ Partial Class FModelingUI
         Me.LaunchConsoBT.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
         Me.LaunchConsoBT.ImageKey = "1420498403_340208.ico"
         Me.LaunchConsoBT.ImageList = Me.ButtonsImageList
-        Me.LaunchConsoBT.Location = New System.Drawing.Point(416, 56)
+        Me.LaunchConsoBT.Location = New System.Drawing.Point(370, 56)
         Me.LaunchConsoBT.Margin = New System.Windows.Forms.Padding(0)
         Me.LaunchConsoBT.Name = "LaunchConsoBT"
         Me.LaunchConsoBT.Size = New System.Drawing.Size(82, 26)
@@ -278,14 +278,14 @@ Partial Class FModelingUI
         Me.ButtonsImageList.ImageStream = CType(resources.GetObject("ButtonsImageList.ImageStream"), System.Windows.Forms.ImageListStreamer)
         Me.ButtonsImageList.TransparentColor = System.Drawing.Color.Transparent
         Me.ButtonsImageList.Images.SetKeyName(0, "imageres_89.ico")
-        Me.ButtonsImageList.Images.SetKeyName(1, "refresh_icon(1).ico")
+        Me.ButtonsImageList.Images.SetKeyName(1, "refresh.ico")
         Me.ButtonsImageList.Images.SetKeyName(2, "Report.png")
         Me.ButtonsImageList.Images.SetKeyName(3, "favicon(196).ico")
         Me.ButtonsImageList.Images.SetKeyName(4, "add blue.jpg")
-        Me.ButtonsImageList.Images.SetKeyName(5, "folder 2 ctrl bgd.png")
-        Me.ButtonsImageList.Images.SetKeyName(6, "blue.jpg")
-        Me.ButtonsImageList.Images.SetKeyName(7, "1420498403_340208.ico")
-        Me.ButtonsImageList.Images.SetKeyName(8, "favicon(5).ico")
+        Me.ButtonsImageList.Images.SetKeyName(5, "blue.jpg")
+        Me.ButtonsImageList.Images.SetKeyName(6, "1420498403_340208.ico")
+        Me.ButtonsImageList.Images.SetKeyName(7, "favicon(5).ico")
+        Me.ButtonsImageList.Images.SetKeyName(8, "Scenario.ico")
         '
         'TabPage2
         '
@@ -294,12 +294,13 @@ Partial Class FModelingUI
         Me.TabPage2.Location = New System.Drawing.Point(4, 23)
         Me.TabPage2.Name = "TabPage2"
         Me.TabPage2.Padding = New System.Windows.Forms.Padding(3)
-        Me.TabPage2.Size = New System.Drawing.Size(740, 512)
+        Me.TabPage2.Size = New System.Drawing.Size(656, 323)
         Me.TabPage2.TabIndex = 1
         Me.TabPage2.Text = "Simulations"
         '
         'SplitContainer1
         '
+        Me.SplitContainer1.BackColor = System.Drawing.SystemColors.ButtonHighlight
         Me.SplitContainer1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.SplitContainer1.Location = New System.Drawing.Point(3, 3)
         Me.SplitContainer1.Name = "SplitContainer1"
@@ -311,8 +312,8 @@ Partial Class FModelingUI
         'SplitContainer1.Panel2
         '
         Me.SplitContainer1.Panel2.BackColor = System.Drawing.SystemColors.ButtonHighlight
-        Me.SplitContainer1.Size = New System.Drawing.Size(734, 506)
-        Me.SplitContainer1.SplitterDistance = 105
+        Me.SplitContainer1.Size = New System.Drawing.Size(650, 317)
+        Me.SplitContainer1.SplitterDistance = 92
         Me.SplitContainer1.TabIndex = 0
         '
         'LeftPanel
@@ -328,7 +329,7 @@ Partial Class FModelingUI
         Me.LeftPanel.RowCount = 2
         Me.LeftPanel.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 26.0!))
         Me.LeftPanel.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.LeftPanel.Size = New System.Drawing.Size(105, 506)
+        Me.LeftPanel.Size = New System.Drawing.Size(92, 317)
         Me.LeftPanel.TabIndex = 0
         '
         'Panel3
@@ -340,7 +341,7 @@ Partial Class FModelingUI
         Me.Panel3.Location = New System.Drawing.Point(1, 1)
         Me.Panel3.Margin = New System.Windows.Forms.Padding(1)
         Me.Panel3.Name = "Panel3"
-        Me.Panel3.Size = New System.Drawing.Size(103, 24)
+        Me.Panel3.Size = New System.Drawing.Size(90, 24)
         Me.Panel3.TabIndex = 0
         '
         'Refresh2BT
@@ -348,7 +349,7 @@ Partial Class FModelingUI
         Me.Refresh2BT.FlatAppearance.BorderColor = System.Drawing.Color.Gray
         Me.Refresh2BT.FlatAppearance.BorderSize = 0
         Me.Refresh2BT.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.Refresh2BT.ImageKey = "refresh_icon(1).ico"
+        Me.Refresh2BT.ImageKey = "refresh.ico"
         Me.Refresh2BT.ImageList = Me.ButtonsImageList
         Me.Refresh2BT.Location = New System.Drawing.Point(63, 0)
         Me.Refresh2BT.Name = "Refresh2BT"
@@ -371,10 +372,10 @@ Partial Class FModelingUI
         '
         'NewScenarioBT
         '
-        Me.NewScenarioBT.FlatAppearance.BorderColor = System.Drawing.SystemColors.ControlLight
+        Me.NewScenarioBT.FlatAppearance.BorderColor = System.Drawing.SystemColors.Control
         Me.NewScenarioBT.FlatAppearance.BorderSize = 0
         Me.NewScenarioBT.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.NewScenarioBT.ImageKey = "folder 2 ctrl bgd.png"
+        Me.NewScenarioBT.ImageKey = "Scenario.ico"
         Me.NewScenarioBT.ImageList = Me.ButtonsImageList
         Me.NewScenarioBT.Location = New System.Drawing.Point(4, 0)
         Me.NewScenarioBT.Name = "NewScenarioBT"
@@ -388,7 +389,7 @@ Partial Class FModelingUI
         Me.scenarioTVPanel.Location = New System.Drawing.Point(0, 26)
         Me.scenarioTVPanel.Margin = New System.Windows.Forms.Padding(0)
         Me.scenarioTVPanel.Name = "scenarioTVPanel"
-        Me.scenarioTVPanel.Size = New System.Drawing.Size(105, 480)
+        Me.scenarioTVPanel.Size = New System.Drawing.Size(92, 291)
         Me.scenarioTVPanel.TabIndex = 1
         '
         'TabPage3
@@ -398,7 +399,7 @@ Partial Class FModelingUI
         Me.TabPage3.Location = New System.Drawing.Point(4, 23)
         Me.TabPage3.Name = "TabPage3"
         Me.TabPage3.Padding = New System.Windows.Forms.Padding(3)
-        Me.TabPage3.Size = New System.Drawing.Size(740, 512)
+        Me.TabPage3.Size = New System.Drawing.Size(656, 323)
         Me.TabPage3.TabIndex = 2
         Me.TabPage3.Text = "Output"
         '
@@ -431,43 +432,43 @@ Partial Class FModelingUI
         Me.TableLayoutPanel3.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 68.28528!))
         Me.TableLayoutPanel3.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25.0!))
         Me.TableLayoutPanel3.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 21.92716!))
-        Me.TableLayoutPanel3.Size = New System.Drawing.Size(734, 506)
+        Me.TableLayoutPanel3.Size = New System.Drawing.Size(650, 317)
         Me.TableLayoutPanel3.TabIndex = 0
         '
         'ExportsTVPanel
         '
         Me.ExportsTVPanel.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.ExportsTVPanel.Location = New System.Drawing.Point(67, 74)
+        Me.ExportsTVPanel.Location = New System.Drawing.Point(67, 56)
         Me.ExportsTVPanel.Margin = New System.Windows.Forms.Padding(1, 5, 1, 1)
         Me.ExportsTVPanel.Name = "ExportsTVPanel"
-        Me.ExportsTVPanel.Size = New System.Drawing.Size(86, 305)
+        Me.ExportsTVPanel.Size = New System.Drawing.Size(67, 176)
         Me.ExportsTVPanel.TabIndex = 1
         '
         'EntitiesTV2Panel
         '
         Me.EntitiesTV2Panel.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.EntitiesTV2Panel.Location = New System.Drawing.Point(302, 74)
+        Me.EntitiesTV2Panel.Location = New System.Drawing.Point(283, 56)
         Me.EntitiesTV2Panel.Margin = New System.Windows.Forms.Padding(1, 5, 1, 1)
         Me.EntitiesTV2Panel.Name = "EntitiesTV2Panel"
-        Me.EntitiesTV2Panel.Size = New System.Drawing.Size(86, 305)
+        Me.EntitiesTV2Panel.Size = New System.Drawing.Size(67, 176)
         Me.EntitiesTV2Panel.TabIndex = 2
         '
         'ExportMappingPanel
         '
         Me.ExportMappingPanel.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.ExportMappingPanel.Location = New System.Drawing.Point(530, 74)
+        Me.ExportMappingPanel.Location = New System.Drawing.Point(492, 56)
         Me.ExportMappingPanel.Margin = New System.Windows.Forms.Padding(1, 5, 1, 1)
         Me.ExportMappingPanel.Name = "ExportMappingPanel"
-        Me.ExportMappingPanel.Size = New System.Drawing.Size(140, 305)
+        Me.ExportMappingPanel.Size = New System.Drawing.Size(108, 176)
         Me.ExportMappingPanel.TabIndex = 3
         '
         'ScenariosCBPanel
         '
         Me.ScenariosCBPanel.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.ScenariosCBPanel.Location = New System.Drawing.Point(66, 44)
+        Me.ScenariosCBPanel.Location = New System.Drawing.Point(66, 26)
         Me.ScenariosCBPanel.Margin = New System.Windows.Forms.Padding(0)
         Me.ScenariosCBPanel.Name = "ScenariosCBPanel"
-        Me.ScenariosCBPanel.Size = New System.Drawing.Size(88, 25)
+        Me.ScenariosCBPanel.Size = New System.Drawing.Size(69, 25)
         Me.ScenariosCBPanel.TabIndex = 4
         '
         'Panel7
@@ -475,9 +476,9 @@ Partial Class FModelingUI
         Me.Panel7.Controls.Add(Me.Button1)
         Me.Panel7.Controls.Add(Me.Label8)
         Me.Panel7.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Panel7.Location = New System.Drawing.Point(157, 72)
+        Me.Panel7.Location = New System.Drawing.Point(138, 54)
         Me.Panel7.Name = "Panel7"
-        Me.Panel7.Size = New System.Drawing.Size(141, 305)
+        Me.Panel7.Size = New System.Drawing.Size(141, 176)
         Me.Panel7.TabIndex = 5
         '
         'Button1
@@ -496,7 +497,7 @@ Partial Class FModelingUI
         '
         Me.Label8.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.Label8.AutoSize = True
-        Me.Label8.Location = New System.Drawing.Point(3, 144)
+        Me.Label8.Location = New System.Drawing.Point(3, 15)
         Me.Label8.Margin = New System.Windows.Forms.Padding(3, 0, 3, 5)
         Me.Label8.Name = "Label8"
         Me.Label8.Size = New System.Drawing.Size(138, 26)
@@ -507,10 +508,10 @@ Partial Class FModelingUI
         '
         Me.Label7.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.Label7.AutoSize = True
-        Me.Label7.Location = New System.Drawing.Point(69, 13)
+        Me.Label7.Location = New System.Drawing.Point(69, 0)
         Me.Label7.Margin = New System.Windows.Forms.Padding(3, 0, 3, 5)
         Me.Label7.Name = "Label7"
-        Me.Label7.Size = New System.Drawing.Size(70, 26)
+        Me.Label7.Size = New System.Drawing.Size(52, 21)
         Me.Label7.TabIndex = 6
         Me.Label7.Text = "1. Select the Scenario"
         '
@@ -518,7 +519,7 @@ Partial Class FModelingUI
         '
         Me.Label9.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.Label9.AutoSize = True
-        Me.Label9.Location = New System.Drawing.Point(532, 44)
+        Me.Label9.Location = New System.Drawing.Point(494, 26)
         Me.Label9.Margin = New System.Windows.Forms.Padding(3, 0, 3, 5)
         Me.Label9.Name = "Label9"
         Me.Label9.Size = New System.Drawing.Size(102, 20)
@@ -529,7 +530,7 @@ Partial Class FModelingUI
         '
         Me.Label10.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.Label10.AutoSize = True
-        Me.Label10.Location = New System.Drawing.Point(532, 380)
+        Me.Label10.Location = New System.Drawing.Point(494, 233)
         Me.Label10.Margin = New System.Windows.Forms.Padding(3, 0, 3, 5)
         Me.Label10.Name = "Label10"
         Me.Label10.Size = New System.Drawing.Size(97, 20)
@@ -544,7 +545,7 @@ Partial Class FModelingUI
         Me.ReinjectionBT.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
         Me.ReinjectionBT.ImageKey = "favicon(187).ico"
         Me.ReinjectionBT.ImageList = Me.ButtonsImageList
-        Me.ReinjectionBT.Location = New System.Drawing.Point(532, 408)
+        Me.ReinjectionBT.Location = New System.Drawing.Point(494, 261)
         Me.ReinjectionBT.Name = "ReinjectionBT"
         Me.ReinjectionBT.Size = New System.Drawing.Size(88, 30)
         Me.ReinjectionBT.TabIndex = 9
@@ -654,6 +655,18 @@ Partial Class FModelingUI
         Me.ToolStripSeparator4.Name = "ToolStripSeparator4"
         Me.ToolStripSeparator4.Size = New System.Drawing.Size(162, 6)
         '
+        'SerieMGTRCMBT
+        '
+        Me.SerieMGTRCMBT.Image = Global.PPS.My.Resources.Resources.favicon_239_
+        Me.SerieMGTRCMBT.Name = "SerieMGTRCMBT"
+        Me.SerieMGTRCMBT.Size = New System.Drawing.Size(165, 22)
+        Me.SerieMGTRCMBT.Text = "Display Options"
+        '
+        'ToolStripSeparator5
+        '
+        Me.ToolStripSeparator5.Name = "ToolStripSeparator5"
+        Me.ToolStripSeparator5.Size = New System.Drawing.Size(162, 6)
+        '
         'CopyValueRightBT
         '
         Me.CopyValueRightBT.Name = "CopyValueRightBT"
@@ -664,7 +677,7 @@ Partial Class FModelingUI
         '
         Me.TVImageList.ImageStream = CType(resources.GetObject("TVImageList.ImageStream"), System.Windows.Forms.ImageListStreamer)
         Me.TVImageList.TransparentColor = System.Drawing.Color.Transparent
-        Me.TVImageList.Images.SetKeyName(0, "folder 2.png")
+        Me.TVImageList.Images.SetKeyName(0, "Scenario.ico")
         Me.TVImageList.Images.SetKeyName(1, "favicon(232).ico")
         '
         'EntitiesTVImageList
@@ -695,23 +708,11 @@ Partial Class FModelingUI
         Me.BigArrow.ImageSize = New System.Drawing.Size(16, 16)
         Me.BigArrow.TransparentColor = System.Drawing.Color.Transparent
         '
-        'SerieMGTRCMBT
-        '
-        Me.SerieMGTRCMBT.Image = Global.PPS.My.Resources.Resources.favicon_239_
-        Me.SerieMGTRCMBT.Name = "SerieMGTRCMBT"
-        Me.SerieMGTRCMBT.Size = New System.Drawing.Size(165, 22)
-        Me.SerieMGTRCMBT.Text = "Display Options"
-        '
-        'ToolStripSeparator5
-        '
-        Me.ToolStripSeparator5.Name = "ToolStripSeparator5"
-        Me.ToolStripSeparator5.Size = New System.Drawing.Size(162, 6)
-        '
         'FModelingUI
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(748, 539)
+        Me.ClientSize = New System.Drawing.Size(664, 350)
         Me.Controls.Add(Me.TabControl1)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.MainMenuStrip = Me.MenuStrip1

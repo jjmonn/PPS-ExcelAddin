@@ -9,7 +9,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 17/02/2015
+' Last modified: 18/02/2015
 
 
 Imports System.Windows.Forms
@@ -252,15 +252,9 @@ Friend Class FModellingSimulationsControler
     Protected Friend Sub ExportScenarioToUI(ByRef scenario_id As String)
 
         Dim scenario As Scenario = scenarios_dic(scenario_id)
-        Dim outputDGV As New vDataGridView
-        Dim chart As New Chart
-
-        ' build new DGV !!
-        scenario.BuildOutputsChart(chart)
-        ' scenario.FillOutputs(outputDGV)
-        
-        'View.ExportScenarioToSeparateUI(scenario_id, _
-        '                                inputDGV, outputDGV, chart)
+        Dim DetailedDGV = scenario.GetDetailedDGV(FModelling_accounts_all_id_list)
+        scenario.DuplicateChart()
+        View.ExportScenarioToSeparateUI(scenario_id, DetailedDGV, scenario.ExportedChart)
 
     End Sub
 

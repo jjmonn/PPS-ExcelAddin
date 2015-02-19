@@ -10,7 +10,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 16/02/2015
+' Last modified: 18/02/2015
 
 
 Imports System.Collections.Generic
@@ -28,9 +28,11 @@ Friend Class Scenario
 #Region "Instance Variable"
 
     ' objects
-    Friend ScenarioDGV As New vDataGridView
+    Protected Friend ScenarioDGV As New vDataGridView
     Private FModellingAccount As FModellingAccount
-    Friend Outputchart As New Chart
+    Protected Friend Outputchart As New Chart
+    Protected Friend ExportedChart As New Chart
+    Protected Friend DetailedDGV As New vDataGridView
     Private scenarioTV As TreeView
 
     ' Variables
@@ -102,6 +104,7 @@ Friend Class Scenario
         ScenarioDGV.BackColor = Drawing.Color.White
         DataGridViewsUtil.InitDisplayVDataGridView(ScenarioDGV, DGV_THEME)
         DataGridViewsUtil.DGVSetHiearchyFontSize(ScenarioDGV, DGV_CELLS_FONT_SIZE, DGV_CELLS_FONT_SIZE)
+        ScenarioDGV.ColumnsHierarchy.AutoStretchColumns = True
         ScenarioDGV.ColumnsHierarchy.ResizeColumnsToFitGridWidth()
         ScenarioDGV.Refresh()
         AddHandler ScenarioDGV.CellValueChanging, AddressOf scenarioDGV_CellValueChanging
@@ -186,6 +189,7 @@ Friend Class Scenario
         ScenarioDGV.ColumnsHierarchy.AutoResize(AutoResizeMode.FIT_ALL)
         ScenarioDGV.ColumnsHierarchy.ResizeColumnsToFitGridWidth()
         BindChartSeries()
+        FillDetailedDGV()
 
     End Sub
 
@@ -244,6 +248,65 @@ Friend Class Scenario
 
         DataGridViewsUtil.CopyValueRight(ScenarioDGV, current_constraint_cell)
         ScenarioDGV.Refresh()
+
+    End Sub
+
+#End Region
+
+
+#Region "Detailed DGV"
+
+    Protected Friend Function GetDetailedDGV(ByRef f_accounts_id_list As List(Of String)) As vDataGridView
+
+        DetailedDGV.RowsHierarchy.Visible = False
+        DetailedDGV.BackColor = Drawing.Color.White
+        'DetailedDGV.ColumnsHierarchy.AutoResize(AutoResizeMode.FIT_ALL)
+        DetailedDGV.ColumnsHierarchy.AutoStretchColumns = True
+        DetailedDGV.ColumnsHierarchy.Items.Add("")
+        For Each period In periods_array
+            Dim column As HierarchyItem = DetailedDGV.ColumnsHierarchy.Items.Add(Format(DateTime.FromOADate(period), "yyyy"))
+            column.TextAlignment = Drawing.ContentAlignment.MiddleCenter
+            column.CellsTextAlignment = DataGridViewContentAlignment.MiddleRight
+        Next
+        DataGridViewsUtil.InitDisplayVDataGridView(DetailedDGV, DGV_THEME)
+        DataGridViewsUtil.DGVSetHiearchyFontSize(DetailedDGV, DGV_CELLS_FONT_SIZE, DGV_CELLS_FONT_SIZE)
+
+        For Each f_account_id As String In f_accounts_id_list
+            Dim row As HierarchyItem = detailedDGV.RowsHierarchy.Items.Add(f_account_id)
+            detailedDGV.CellsArea.SetCellValue(row, detailedDGV.ColumnsHierarchy.Items(0), FModellingAccount.ReadFModellingAccount(f_account_id, FINANCIAL_MODELLING_NAME_VARIABLE))
+            row.CellsFormatString = FModellingAccount.ReadFModellingAccount(f_account_id, FINANCIAL_MODELLING_FORMAT_VARIABLE)
+            FormatDetailedDGVRow(row, FModellingAccount.ReadFModellingAccount(f_account_id, FINANCIAL_MODELLING_TYPE_VARIABLE))
+        Next
+        FillDetailedDGV()
+        Return detailedDGV
+
+    End Function
+
+    Protected Friend Sub FillDetailedDGV()
+
+        For Each row As HierarchyItem In DetailedDGV.RowsHierarchy.Items
+            For j As Int32 = 1 To DetailedDGV.ColumnsHierarchy.Items.Count - 1
+                Dim value = data_dic(row.Caption)(j - 1)
+                If row.CellsFormatString = PRCT_FORMAT_STRING Then value = value / 100
+                DetailedDGV.CellsArea.SetCellValue(row, DetailedDGV.ColumnsHierarchy.Items(j), value)
+            Next
+        Next
+        DetailedDGV.ColumnsHierarchy.AutoResize(AutoResizeMode.FIT_ALL)
+        DetailedDGV.ColumnsHierarchy.ResizeColumnsToFitGridWidth()
+
+    End Sub
+
+    Private Sub FormatDetailedDGVRow(ByRef row As HierarchyItem, _
+                                     ByRef type As String)
+
+        Dim CStyle As GridCellStyle = GridTheme.GetDefaultTheme(row.DataGridView.VIBlendTheme).GridCellStyle
+        Select Case type
+            Case FINANCIAL_MODELLING_INPUT_TYPE : CStyle.TextColor = System.Drawing.Color.Blue
+            Case FINANCIAL_MODELLING_OUTPUT_TYPE : CStyle.TextColor = System.Drawing.Color.DarkBlue
+            Case FINANCIAL_MODELLING_EXPORT_TYPE, FINANCIAL_MODELLING_FORMULA_TYPE : CStyle.TextColor = System.Drawing.Color.Purple
+            Case FINANCIAL_MODELLING_CONSTRAINT_TYPE : CStyle.TextColor = System.Drawing.Color.Red
+        End Select
+        row.CellsStyle = CStyle
 
     End Sub
 
@@ -321,6 +384,15 @@ Friend Class Scenario
                 AddSerieToChart(row.Caption)
             End If
         Next
+        DuplicateChart()
+
+    End Sub
+
+    Protected Friend Sub DuplicateChart()
+
+        Dim myStream As System.IO.MemoryStream = New System.IO.MemoryStream()
+        Outputchart.Serializer.Save(myStream)
+        ExportedChart.Serializer.Load(myStream)
 
     End Sub
 

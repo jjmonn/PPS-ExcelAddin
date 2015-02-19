@@ -46,9 +46,11 @@ Friend Class FModelingUI
     Private Const OUTPUT_PANEL_CHART_ROWS_HEIGHT As Int32 = 200
     Private Const OUTPUT_PANEL_SECOND_COLUMN_P As Int32 = 8
     Private Const OUTPUT_PANEL_TITLE_ROW_HEIGHT As Int32 = 20
-    Private Const OUTPUT_PANEL_ROWS_MARGIN As Int32 = 9
+    Private Const OUTPUT_PANEL_ROWS_MARGIN As Int32 = 6
     Private Const MAPPING_PANEL_ROWS_HEIGHT As Int32 = 24
-    Private EXPORT_BUTTON_SIZE As Int32 = 22
+    Private Const EXPORT_BUTTON_SIZE As Int32 = 22
+    Private Const PANE_DGV_HEIGHT_MARGIN As Int32 = 30
+    Private Const SCENARIO_EXPORT_BT_FIXED_NAME = "ScenarioExportBT"
 
 #End Region
 
@@ -136,6 +138,7 @@ Friend Class FModelingUI
     Protected Friend Sub AddScenario(ByRef scenario As Scenario)
 
         AddOutputControls(scenario)
+        SimulationsController.ComputeScenario(scenario.scenario_id)
         scenario.ScenarioDGV.Refresh()
         scenario.ScenarioDGV.Select()
         current_scenario_node = ScenariosTV.SelectedNode
@@ -182,39 +185,24 @@ Friend Class FModelingUI
     End Sub
 
     Protected Friend Sub ExportScenarioToSeparateUI(ByRef scenario_id As String, _
-                                                    ByRef inputDGV As vDataGridView, _
-                                                    ByRef scenarioDGV As vDataGridView, _
+                                                    ByRef detailedDGV As vDataGridView, _
                                                     ByRef chart As Chart)
 
         Dim genericUI As New GenericView("Scenario: " & ScenariosTV.Nodes.Find(scenario_id, True)(0).Text)
-        Dim pane As New TableLayoutPanel
-        pane.AutoScroll = True
-        pane.RowCount = pane.RowCount + 1
-        pane.RowStyles.Add(New RowStyle(SizeType.Absolute, DataGridViewsUtil.GetDGVHeight(inputDGV)))
-        pane.RowCount = pane.RowCount + 1
-        pane.RowStyles.Add(New RowStyle(SizeType.Absolute, scenarioDGV.Height))
-        pane.RowCount = pane.RowCount + 1
-        pane.RowStyles.Add(New RowStyle(SizeType.Absolute, chart.Height))
-        pane.RowCount = pane.RowCount + 1
-        pane.RowStyles.Add(New RowStyle(SizeType.Percent, 15))
+        Dim SPC As New SplitContainer
+        SPC.Orientation = Orientation.Horizontal
+        SPC.SplitterDistance = DataGridViewsUtil.GetDGVHeight(detailedDGV)
+        SPC.Panel1.Controls.Add(detailedDGV)
+        SPC.Panel2.Controls.Add(chart)
+        genericUI.Controls.Add(SPC)
 
-        pane.Controls.Add(inputDGV, 0, 0)
-        pane.Controls.Add(scenarioDGV, 0, 1)
-        pane.Controls.Add(chart, 0, 2)
-        genericUI.Controls.Add(pane)
-
-        pane.Dock = DockStyle.Fill
-        inputDGV.Dock = DockStyle.Fill
-        scenarioDGV.Dock = DockStyle.Fill
+        SPC.Dock = DockStyle.Fill
+        detailedDGV.Dock = DockStyle.Fill
         chart.Dock = DockStyle.Fill
-        inputDGV.ColumnsHierarchy.ResizeColumnsToFitGridWidth()
-        scenarioDGV.ColumnsHierarchy.ResizeColumnsToFitGridWidth()
-        inputDGV.Refresh()
-        scenarioDGV.Refresh()
+        detailedDGV.ColumnsHierarchy.ResizeColumnsToFitGridWidth()
+        detailedDGV.Refresh()
         genericUI.BackColor = Drawing.Color.White
         genericUI.Show()
-
-        AddHandler genericUI.ResizeEnd, AddressOf ExportedUI_ResizeEnd
 
     End Sub
 
@@ -489,11 +477,10 @@ Friend Class FModelingUI
 
     Private Sub BT_Export_OnClick(sender As Object, e As EventArgs)
 
-        Dim row_index As Int32 = ScenariiPanelLayout.GetCellPosition(sender).Row
+        Dim row_index As Int32 = CInt(Strings.Right(sender.name, Len(sender.name) - Len(SCENARIO_EXPORT_BT_FIXED_NAME)))
         SimulationsController.ExportScenarioToUI(ScenariosTV.Nodes.Item(row_index).Name)
 
     End Sub
-
 
 #End Region
 
@@ -582,19 +569,6 @@ Friend Class FModelingUI
 
 #End Region
 
-#Region "Exported UI"
-
-    Private Sub ExportedUI_ResizeEnd(sender As Object, e As EventArgs)
-
-        sender.controls(0).getcontrolfromposition(0, 0).ColumnsHierarchy.ResizeColumnsToFitGridWidth()
-        sender.controls(0).getcontrolfromposition(0, 1).ColumnsHierarchy.ResizeColumnsToFitGridWidth()
-        sender.controls(0).getcontrolfromposition(0, 0).Refresh()
-        sender.controls(0).getcontrolfromposition(0, 1).Refresh()
-
-    End Sub
-
-#End Region
-
 #End Region
 
 
@@ -647,6 +621,7 @@ Friend Class FModelingUI
     Private Function GetNewExportButton() As Button
 
         Dim BT As New Button
+        BT.Name = SCENARIO_EXPORT_BT_FIXED_NAME & current_scenario_node.Index
         BT.ImageList = ButtonsImageList
         BT.Margin = New Padding(0, 0, 0, 0)
         BT.FlatStyle = FlatStyle.Flat
@@ -664,7 +639,7 @@ Friend Class FModelingUI
         BT.Margin = New Padding(0, 0, 0, 0)
         BT.FlatStyle = FlatStyle.Flat
         BT.FlatAppearance.BorderSize = 0
-        BT.ImageKey = "refresh_icon(1).ico"
+        BT.ImageKey = "refresh.ico"
         AddHandler BT.Click, AddressOf RefreshScenarioToolStripMenuItem_Click
         Return BT
 
