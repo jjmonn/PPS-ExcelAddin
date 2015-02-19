@@ -388,26 +388,26 @@ Public Class AddinModule
         Me.MainTabImageList.Images.SetKeyName(2, "financial-graph ctrl bcgk(1).ico")
         Me.MainTabImageList.Images.SetKeyName(3, "favicon(238).ico")
         Me.MainTabImageList.Images.SetKeyName(4, "favicon(208).ico")
-        Me.MainTabImageList.Images.SetKeyName(5, "1420498403_340208.ico")
+        Me.MainTabImageList.Images.SetKeyName(5, "favicon.ico")
         Me.MainTabImageList.Images.SetKeyName(6, "favicon (6).ico")
         Me.MainTabImageList.Images.SetKeyName(7, "Settings.ico")
         Me.MainTabImageList.Images.SetKeyName(8, "favicon(248).ico")
-        Me.MainTabImageList.Images.SetKeyName(9, "favicon(235).ico")
-        Me.MainTabImageList.Images.SetKeyName(10, "favicon(236).ico")
-        Me.MainTabImageList.Images.SetKeyName(11, "favicon(242).ico")
-        Me.MainTabImageList.Images.SetKeyName(12, "favicon(245).ico")
-        Me.MainTabImageList.Images.SetKeyName(13, "favicon(7).ico")
+        Me.MainTabImageList.Images.SetKeyName(9, "favicon(236).ico")
+        Me.MainTabImageList.Images.SetKeyName(10, "favicon(242).ico")
+        Me.MainTabImageList.Images.SetKeyName(11, "Edit glossy.ico")
+        Me.MainTabImageList.Images.SetKeyName(12, "Controlling glossy.ico")
+        Me.MainTabImageList.Images.SetKeyName(13, "congig glossy.ico")
         Me.MainTabImageList.Images.SetKeyName(14, "favicon(249).ico")
-        Me.MainTabImageList.Images.SetKeyName(15, "favicon(5).ico")
+        Me.MainTabImageList.Images.SetKeyName(15, "magnifyer glossy.ico")
         Me.MainTabImageList.Images.SetKeyName(16, "favicon(233).ico")
-        Me.MainTabImageList.Images.SetKeyName(17, "favicon(8).ico")
+        Me.MainTabImageList.Images.SetKeyName(17, "modeling glossy.ico")
         '
         'InputReportLaunchBT
         '
         Me.InputReportLaunchBT.Caption = "Edition"
         Me.InputReportLaunchBT.Controls.Add(Me.AdxRibbonMenu7)
         Me.InputReportLaunchBT.Id = "adxRibbonSplitButton_815e28e10c3d4a28a2eee8165efe3ff1"
-        Me.InputReportLaunchBT.Image = 9
+        Me.InputReportLaunchBT.Image = 11
         Me.InputReportLaunchBT.ImageList = Me.MainTabImageList
         Me.InputReportLaunchBT.ImageTransparentColor = System.Drawing.Color.Transparent
         Me.InputReportLaunchBT.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
