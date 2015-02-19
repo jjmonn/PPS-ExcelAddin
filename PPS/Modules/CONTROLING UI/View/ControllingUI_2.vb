@@ -33,6 +33,7 @@ Imports VIBlend.WinForms.DataGridView
 Imports System.Collections.Generic
 Imports System.Collections
 Imports VIBlend.WinForms.DataGridView.Filters
+Imports System.Windows.Forms.DataVisualization.Charting
 
 
 Friend Class ControllingUI_2
@@ -47,6 +48,8 @@ Friend Class ControllingUI_2
     Private DROPTOEXCELController As CControlingDropOnExcel
     Friend PBar As New ProgressBarControl
     Friend accountsTV As New TreeView
+    Private leftSplitContainer As SplitContainer
+    Private rightSplitContainer As SplitContainer
 
 #End Region
 
@@ -94,6 +97,11 @@ Friend Class ControllingUI_2
     Private Const EXCEL_SHEET_NAME_MAX_LENGHT = 31
     Friend Const DGV_FONT_SIZE As Single = 8
     Private Const DGV_THEME = VIBlend.Utilities.VIBLEND_THEME.OFFICE2010SILVER
+    Protected Friend Const TOP_LEFT_CHART_POSITION As String = "tl"
+    Protected Friend Const TOP_RIGHT_CHART_POSITION As String = "tr"
+    Protected Friend Const BOTTOM_LEFT_CHART_POSITION As String = "bl"
+    Protected Friend Const BOTTOM_RIGHT_CHART_POSITION As String = "br"
+
 
 #End Region
 
@@ -123,6 +131,7 @@ Friend Class ControllingUI_2
             TabControl1.TabPages.Add(node.Text, node.Text)
             '   tabsNodesDictionary.Add(node.Text, node)
         Next
+        InitializeChartsTab()
         CollapsePane1()
 
     End Sub
@@ -225,6 +234,11 @@ Friend Class ControllingUI_2
 
     End Sub
 
+    Private Sub InitializeChartsTab()
+
+
+
+    End Sub
 
 #End Region
 
@@ -785,6 +799,54 @@ Friend Class ControllingUI_2
 #End Region
 
 #End Region
+
+
+#Region "Charts Utilities"
+
+    ' Manages the charts configuration
+    ' -> Test sur un per user config !
+    '    
+
+
+    Protected Friend Sub DrawChart(ByRef chart_position As String, _
+                                   ByRef ChartHT As Hashtable, _
+                                   ByRef SeriesHT_Dic As Dictionary(Of String, Hashtable), _
+                                   ByRef SeriesData_Dic As Dictionary(Of String, Double()))
+
+        Dim chart As Chart = ChartsUtilities.CreateChart(ChartHT)
+
+        ' create chart
+        ' add series
+        ' bind series
+
+
+        InsertChart(chart, chart_position)
+
+    End Sub
+
+    Private Sub InsertChart(ByRef chart As Chart, _
+                            ByRef chart_position As String)
+
+        Select Case chart_position
+            Case TOP_LEFT_CHART_POSITION
+                leftSplitContainer.Panel1.Controls.Clear()
+                leftSplitContainer.Panel1.Controls.Add(chart)
+            Case TOP_RIGHT_CHART_POSITION
+                rightSplitContainer.Panel1.Controls.Clear()
+                rightSplitContainer.Panel1.Controls.Add(chart)
+            Case BOTTOM_LEFT_CHART_POSITION
+                leftSplitContainer.Panel2.Controls.Clear()
+                leftSplitContainer.Panel2.Controls.Add(chart)
+            Case BOTTOM_RIGHT_CHART_POSITION
+                rightSplitContainer.Panel2.Controls.Clear()
+                rightSplitContainer.Panel2.Controls.Add(chart)
+        End Select
+
+    End Sub
+
+
+#End Region
+
 
 
 #Region "Utilities"

@@ -53,7 +53,7 @@ Friend Class ControlingUI2Controller
 #End Region
 
 
-#Region "Interface"
+#Region "Model Interface"
 
 #Region "Compute"
 
@@ -181,6 +181,17 @@ Friend Class ControlingUI2Controller
                                                      GetAdjustmentsFilter))
 
     End Sub
+
+#End Region
+
+
+#Region "Charts Tab Interface"
+
+    ' deux principales options -> drill down ou conso
+
+
+
+
 
 #End Region
 
