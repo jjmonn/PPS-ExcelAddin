@@ -1,4 +1,4 @@
-﻿' UDFsCallBacks
+﻿' PPSBIController.vb
 ' 
 ' - Currently PPSBI user defined function call back
 ' - Manage the checks, launch computing and return formula result
@@ -17,7 +17,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 08/09/2014
+' Last modified: 20/02/2015
 '
 
 
@@ -26,23 +26,28 @@ Imports Microsoft.Office.Interop
 Imports System.Collections
 Imports System.Collections.Generic
 
-Public Class cPPSBIControl
+
+Friend Class PPSBIController
 
 
 #Region "Instance Variables"
 
+    ' Objects
+    Private ESB As EntitiesSelectionBuilderClass
+
+
+    ' Variables
     Private AccountsNameKeyDictionary As Hashtable
     Private EntitiesNameKeyDictionary As Hashtable
     Private CategoriesNameKeyDictionary As Hashtable
     Private emptyCellFlag As Boolean
-    Private ESB As EntitiesSelectionBuilderClass
     Friend filterList As New List(Of String)
 
 
 #End Region
 
 
-    Public Sub New()
+    Protected Friend Sub New()
 
         ESB = New EntitiesSelectionBuilderClass
 
@@ -131,10 +136,9 @@ Public Class cPPSBIControl
         Or GENERICDCGLobalInstance.current_version_id <> versionCode _
         Or GENERICDCGLobalInstance.currentCurrency <> currencyString _
         Then
-            '  NEW COMPUTATION (currencies) IMPLMEENTATION !!!!!
+            '  NEW COMPUTATION (currencies) IMPLEMENTATION !!!!!
             '  GENERICDCGLobalInstance.ComputeSingleEntity(versionCode, entityKey, currencyString, ESB.StrSqlQuery)
         End If
-
 
         Return GENERICDCGLobalInstance.GetDataFromDLL3Computer(accountKey, periodInteger)
 
@@ -232,9 +236,8 @@ Public Class cPPSBIControl
 
     End Sub
 
-
 #End Region
-    
+
 
 
 

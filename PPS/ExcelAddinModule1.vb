@@ -102,7 +102,7 @@ Public Class ExcelAddinModule1
     Private Sub InitializeComputer()
 
         GENERICDCGLobalInstance = New GenericSingleEntityDLL3Computer
-        UDFCALLBACKINSTANCE = New cPPSBIControl
+        UDFCALLBACKINSTANCE = New PPSBIController
 
     End Sub
 

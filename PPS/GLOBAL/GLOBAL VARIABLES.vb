@@ -43,7 +43,7 @@ Module GLOBAL_VARIABLES
  
     ' Computation and refresh
     Friend GENERICDCGLobalInstance As GenericSingleEntityDLL3Computer        ' change the name of this global instance
-    Friend UDFCALLBACKINSTANCE As cPPSBIControl
+    Friend UDFCALLBACKINSTANCE As PPSBIController
   
 
     ' Credential

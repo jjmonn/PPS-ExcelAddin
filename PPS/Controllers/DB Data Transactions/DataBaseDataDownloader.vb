@@ -49,14 +49,9 @@ Friend Class DataBaseDataDownloader
 
 #Region "Aggregations Queries"
 
-
-    '     Create Assets Aggregated DataArrays NOT CONVERTED
-    '    Param1: EntitiesIDList (array of string holding the tokens of entities to compute)
-    '   Param2: ViewName to query on
-    '  Param3: Entities short list
-    Friend Function getAggregateOutputsArraysNonConverted(ByRef entitiesIDList() As String, _
-                                                          ByRef ViewName As String, _
-                                                          Optional ByRef strSqlAdditionalClause As String = "") As Boolean
+    Friend Function GetAggregatedQuery(ByRef entitiesIDList() As String, _
+                                       ByRef ViewName As String, _
+                                       Optional ByRef strSqlAdditionalClause As String = "") As Boolean
 
         If BuildDataRSTWithoutCurrencies(entitiesIDList, ViewName, strSqlAdditionalClause) Then
             Dim data_array(,) As Object
@@ -112,6 +107,20 @@ Friend Class DataBaseDataDownloader
         End If
 
     End Function
+
+    Private Sub BuildOutputsArrays(ByRef data_array(,) As Object)
+
+        ReDim AccKeysArray(UBound(data_array, 2))
+        ReDim PeriodArray(UBound(data_array, 2))
+        ReDim ValuesArray(UBound(data_array, 2))
+
+        For i As Integer = 0 To UBound(data_array, 2)
+            PeriodArray(i) = data_array(0, i)
+            AccKeysArray(i) = data_array(1, i)
+            ValuesArray(i) = data_array(2, i)
+        Next
+
+    End Sub
 
 #End Region
 
@@ -228,8 +237,8 @@ Friend Class DataBaseDataDownloader
 #Region "Single Entity Queries"
 
     Protected Friend Function GetEntityInputsNonConverted(ByRef entityKey As String, _
-                                                ByRef ViewName As String, _
-                                                Optional ByVal adjustment_id As String = "") As Boolean
+                                                        ByRef ViewName As String, _
+                                                        Optional ByVal adjustment_id As String = "") As Boolean
 
         Dim strSql As String = "SELECT " + DATA_PERIOD_VARIABLE + ", " _
                              + DATA_ACCOUNT_ID_VARIABLE + ", " _
@@ -255,6 +264,20 @@ Friend Class DataBaseDataDownloader
 
 
     End Function
+
+    Private Sub BuildOutputsArrays(ByRef data_array(,) As Object)
+
+        ReDim AccKeysArray(UBound(data_array, 2))
+        ReDim PeriodArray(UBound(data_array, 2))
+        ReDim ValuesArray(UBound(data_array, 2))
+
+        For i As Integer = 0 To UBound(data_array, 2)
+            PeriodArray(i) = data_array(0, i)
+            AccKeysArray(i) = data_array(1, i)
+            ValuesArray(i) = data_array(2, i)
+        Next
+
+    End Sub
 
 #End Region
 
@@ -456,7 +479,6 @@ Friend Class DataBaseDataDownloader
 
     End Function
 
-
     Friend Sub ClearDatasDictionaries()
 
         accounts_ID_hash.Clear()
@@ -466,19 +488,6 @@ Friend Class DataBaseDataDownloader
 
     End Sub
 
-    Private Sub BuildOutputsArrays(ByRef data_array(,) As Object)
-
-        ReDim AccKeysArray(UBound(data_array, 2))
-        ReDim PeriodArray(UBound(data_array, 2))
-        ReDim ValuesArray(UBound(data_array, 2))
-
-        For i As Integer = 0 To UBound(data_array, 2)
-            PeriodArray(i) = data_array(0, i)
-            AccKeysArray(i) = data_array(1, i)
-            ValuesArray(i) = data_array(2, i)
-        Next
-
-    End Sub
 
     Protected Friend Shared Function GetUniqueCurrencies(ByRef entities_id_list As String()) As List(Of String)
 

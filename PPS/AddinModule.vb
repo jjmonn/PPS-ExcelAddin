@@ -254,7 +254,7 @@ Public Class AddinModule
         '
         'MaintTab
         '
-        Me.MaintTab.Caption = "Financial Intelligence"
+        Me.MaintTab.Caption = "Suit!"
         Me.MaintTab.Controls.Add(Me.AdxRibbonGroup6)
         Me.MaintTab.Controls.Add(Me.AdxRibbonGroup1)
         Me.MaintTab.Controls.Add(Me.AdxRibbonGroup2)
