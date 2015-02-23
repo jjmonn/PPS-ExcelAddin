@@ -125,4 +125,21 @@ Friend Class VersionsMapping
 #End Region
 
 
+    Protected Friend Shared Function GetVersionsIDFromName(ByRef version_name As String) As String
+
+        Dim srv As New ModelServer
+        Dim version_id As String
+        srv.OpenRst(CONFIG_DATABASE + "." + VERSIONS_TABLE, ModelServer.FWD_CURSOR)
+        srv.rst.Filter = VERSIONS_NAME_VARIABLE & "='" & version_name & "'"
+        If srv.rst.EOF = False And srv.rst.BOF = False Then
+            version_id = srv.rst.Fields(RATES_VERSIONS_ID_VARIABLE).Value
+            srv.rst.Close()
+            Return version_id
+        Else
+            srv.rst.Close()
+            Return ""
+        End If
+
+    End Function
+
 End Class

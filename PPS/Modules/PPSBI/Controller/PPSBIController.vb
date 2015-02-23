@@ -79,12 +79,12 @@ Friend Class PPSBIController
 
         Dim entityString As String
         Dim accountString As String
-        Dim entityKey As String
+        Dim entity_id As String
         Dim accountKey As String
         Dim periodString As String
         Dim periodInteger As Integer
         Dim currencyString As String
-        Dim versionCode As String
+        Dim version_id As String
         emptyCellFlag = False
 
         entityString = ReturnValueFromRange(entity)
@@ -113,7 +113,7 @@ Friend Class PPSBIController
         End If
 
         If EntitiesNameKeyDictionary.ContainsKey(entityString) Then
-            entityKey = EntitiesNameKeyDictionary.Item(entityString)
+            entity_id = EntitiesNameKeyDictionary.Item(entityString)
         Else
             Return "Entity not registered"
         End If
@@ -122,25 +122,32 @@ Friend Class PPSBIController
             Return "One of the function parameters is empty"
         End If
 
-        If CheckVersion(Version, versionCode) = False Then
+        If CheckVersion(Version, version_id) = False Then
             Return "Invalid version name. Please check spelling or refer to the versions interface."
-        End If
-        If CheckDate(periodString, periodInteger, versionCode) = False Then
-            Return "Invalid Period. The period format must be dd/mm/yyyy (e.g. 31/12/2014)."
         End If
 
         ESB.BuildCategoriesFilterFromFilterList(filterList)
 
-        If GENERICDCGLobalInstance.current_entity_id <> entityKey _
+        If GENERICDCGLobalInstance.current_entity_id <> entity_id _
         Or GENERICDCGLobalInstance.currentStrSqlQuery <> ESB.StrSqlQuery _
-        Or GENERICDCGLobalInstance.current_version_id <> versionCode _
+        Or GENERICDCGLobalInstance.current_version_id <> version_id _
         Or GENERICDCGLobalInstance.currentCurrency <> currencyString _
         Then
-            '  NEW COMPUTATION (currencies) IMPLEMENTATION !!!!!
-            '  GENERICDCGLobalInstance.ComputeSingleEntity(versionCode, entityKey, currencyString, ESB.StrSqlQuery)
+            GENERICDCGLobalInstance.ComputeAggregatedEntity(entity_id, _
+                                                            version_id, _
+                                                            currencyString, _
+                                                            ESB.StrSqlQuery)
         End If
 
-        Return GENERICDCGLobalInstance.GetDataFromDLL3Computer(accountKey, periodInteger)
+        If CheckDate(period, periodInteger, GENERICDCGLobalInstance.period_list) = False Then
+            Return "Invalid Period or Period format"
+        End If
+
+        Try
+            Return GENERICDCGLobalInstance.GetDataFromDLL3Computer(accountKey, periodInteger)
+        Catch ex As Exception
+            Return "Invalid parameters"
+        End Try
 
     End Function
 
@@ -160,56 +167,51 @@ Friend Class PPSBIController
 
     End Function
 
-    Private Function CheckVersion(ByRef version As Object, _
-                                  ByRef versionCode As String) As String
+    Private Function CheckVersion(ByRef version_name As Object, _
+                                  ByRef version_id As String) As String
 
-        If Not version Is Nothing Then
-            Dim versionString As String = ReturnValueFromRange(version)
-            ' need to check if data version exists !!
-            ' get version code from versionmapping !!!
-            versionCode = ""
-            ' must return true if ok
+        If Not version_name Is Nothing Then
+            Dim versionString As String = ReturnValueFromRange(version_name)
+            version_id = VersionsMapping.GetVersionsIDFromName(versionString)
+            If version_id <> "" Then Return True Else Return False
         Else
-            versionCode = GLOBALCurrentVersionCode
+            version_id = GLOBALCurrentVersionCode
             Return True
         End If
 
     End Function
 
-    Private Function CheckDate(ByRef periodStr As String, _
+    Private Function CheckDate(ByRef input_period_object As Object, _
                                ByRef periodInteger As Integer, _
-                               ByRef versionCode As String) As Boolean
+                               ByRef periodslist As List(Of Int32)) As Boolean
 
-        Dim periodsList As List(Of Integer) = GENERICDCGLobalInstance.period_list
-
-        If IsDate(periodStr) Then
-            Dim periodAsDate As Date = CDate(periodStr)
-
-            If periodsList.Contains(periodAsDate.ToOADate) Then
+        Dim periodstr As String = ReturnValueFromRange(input_period_object)
+        If IsDate(periodstr) Then
+            Dim periodAsDate As Date = CDate(periodstr)
+            If periodslist.Contains(periodAsDate.ToOADate) Then
                 periodInteger = periodAsDate.ToOADate
                 Return True
             Else
                 Return False
             End If
-
         Else
-            If periodsList.Contains(periodStr) Then
-                periodInteger = periodStr
+            If periodslist.Contains(periodstr) Then
+                periodInteger = periodstr
                 Return True
             Else
                 Select Case GENERICDCGLobalInstance.time_config
                     Case MONTHLY_TIME_CONFIGURATION
-                        For Each period As Integer In periodsList
-                            If Month(DateTime.FromOADate(period)) = periodStr Then
+                        For Each period As Integer In periodslist
+                            If Month(DateTime.FromOADate(period)) = periodstr Then
                                 periodInteger = period
-                                periodStr = DateTime.FromOADate(period)
+                                periodstr = DateTime.FromOADate(period)
                                 Return True
                             End If
                         Next
                     Case YEARLY_TIME_CONFIGURATION
-                        If IsNumeric(periodStr) Then
-                            For Each period As Integer In periodsList
-                                If Year(DateTime.FromOADate(period)) = periodStr Then
+                        If IsNumeric(periodstr) Then
+                            For Each period As Integer In periodslist
+                                If Year(DateTime.FromOADate(period)) = periodstr Then
                                     periodInteger = period
                                     Return True
                                 End If

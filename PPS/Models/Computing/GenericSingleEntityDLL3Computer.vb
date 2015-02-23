@@ -11,7 +11,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 20/01/2015
+' Last modified: 20/02/2015
 
 
 Imports System.Collections.Generic
@@ -59,7 +59,6 @@ Friend Class GenericSingleEntityDLL3Computer
 
 #Region "Interface"
 
-
     Friend Function ComputeSingleEntity(ByRef versionCode As String, _
                                         ByRef entity_id As String, _
                                         Optional ByVal adjustment_id As String = "") As Boolean
@@ -91,6 +90,47 @@ Friend Class GenericSingleEntityDLL3Computer
         End Select
 
         Return False
+
+    End Function
+
+    Friend Function ComputeAggregatedEntity(ByRef entity_id As String, _
+                                            ByRef version_id As String, _
+                                            ByRef destination_currency As String, _
+                                            Optional ByRef filter_sql_query As String = "") As Boolean
+
+        Dim entities_id_list As String()
+        Dim entity_node As TreeNode = EntitiesTV.Nodes.Find(entity_id, True)(0)
+        Dim Versions As New Version
+        time_config = Versions.ReadVersion(version_id, VERSIONS_TIME_CONFIG_VARIABLE)
+        If time_config <> DLL3Computer.dll3TimeSetup Then
+            period_list = Versions.GetPeriodList(version_id)
+            DLL3Computer.InitDllPeriods(period_list, time_config)
+        End If
+
+        DLL3Computer.InitializeDLLOutput(1, 0)
+        Select Case entity_node.Nodes.Count
+            Case 0
+                entities_id_list = {entity_id}
+            Case Else
+                Dim all_entities_id_list = cTreeViews_Functions.GetNodesKeysList(entity_node)
+                entities_id_list = cTreeViews_Functions.GetNoChildrenNodesList(all_entities_id_list, EntitiesTV).ToArray
+        End Select
+
+        If DBDownloader.GetAggregatedConvertedInputs(entities_id_list, _
+                                                     version_id, _
+                                                     destination_currency, _
+                                                     filter_sql_query) Then
+
+            DLL3Computer.ComputeEntity(DBDownloader.AccKeysArray, _
+                                       DBDownloader.PeriodArray, _
+                                       DBDownloader.ValuesArray, 1)
+
+            current_entity_id = entity_id
+            current_version_id = version_id
+            Return True
+        Else
+            Return False
+        End If
 
     End Function
 

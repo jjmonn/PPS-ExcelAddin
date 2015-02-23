@@ -11,7 +11,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 27/01/2015
+' Last modified: 20/02/2015
 '
 
 
@@ -49,76 +49,135 @@ Friend Class DataBaseDataDownloader
 
 #Region "Aggregations Queries"
 
-    Friend Function GetAggregatedQuery(ByRef entitiesIDList() As String, _
-                                       ByRef ViewName As String, _
-                                       Optional ByRef strSqlAdditionalClause As String = "") As Boolean
+    Friend Function GetAggregatedConvertedInputs(ByRef entitiesIDList() As String, _
+                                                 ByRef version_id As String, _
+                                                 ByRef destination_currency As String, _
+                                                 Optional ByRef strSqlAdditionalClause As String = "") As Boolean
 
-        If BuildDataRSTWithoutCurrencies(entitiesIDList, ViewName, strSqlAdditionalClause) Then
-            Dim data_array(,) As Object
-            data_array = srv.rst.GetRows
-            BuildOutputsArrays(data_array)
+        If DataAggregationQuery(entitiesIDList, version_id, strSqlAdditionalClause) = True Then
+            ConvertInputsArrays(version_id, entitiesIDList, destination_currency)
             srv.rst.Close()
             Return True
         Else
+            srv.rst.Close()
             Return False
         End If
 
     End Function
 
-    Friend Function BuildDataRSTWithoutCurrencies(ByRef entitiesIDList() As String, _
-                                                  ByRef ViewName As String, _
-                                                  Optional ByRef strSqlAdditionalClause As String = "") As Boolean
+    Friend Function DataAggregationQuery(ByRef entitiesIDList() As String, _
+                                         ByRef version_id As String, _
+                                         Optional ByRef strSqlAdditionalClause As String = "") As Boolean
 
-
-        Dim strSQL As String
         Dim keysSelection As String = "'" + Join(entitiesIDList, "','") + "'"
 
-        If strSqlAdditionalClause <> "" Then         ' Case filter on specific entities
+        Dim strSQL As String = "SELECT " & "D." & DATA_PERIOD_VARIABLE & "," _
+                             & "D." & DATA_ACCOUNT_ID_VARIABLE & "," _
+                             & "SUM(" & DATA_VALUE_VARIABLE & ") AS " & DATA_VALUE_VARIABLE & "," _
+                             & "A." & ASSETS_CURRENCY_VARIABLE _
+                             & " FROM " & VIEWS_DATABASE & "." & version_id & User_Credential & " D" & ", " & VIEWS_DATABASE & "." & Entities_View & " A" _
+                             & " WHERE " & "D." & DATA_ASSET_ID_VARIABLE & "=" & "A." & ASSETS_TREE_ID_VARIABLE _
+                             & " AND " & "A." & ASSETS_TREE_ID_VARIABLE & " IN (" & keysSelection & ")"
 
-            strSQL = "SELECT " + "D." + DATA_PERIOD_VARIABLE + "," _
-                       + "D." + DATA_ACCOUNT_ID_VARIABLE + "," _
-                       + "SUM(" + DATA_VALUE_VARIABLE + ")" + "," _
-                       + DATA_ASSET_ID_VARIABLE _
-                       + " FROM " + VIEWS_DATABASE + "." + ViewName + " D" + ", " + VIEWS_DATABASE + "." + Entities_View + " A" _
-                       + " WHERE " + "D." + DATA_ASSET_ID_VARIABLE + "=" + "A." + ASSETS_TREE_ID_VARIABLE _
-                       + " AND " + "A." + ASSETS_TREE_ID_VARIABLE + " IN " + "(" + keysSelection + ")" _
-                       + " AND " + strSqlAdditionalClause _
-                       + " GROUP BY " + "D." + DATA_PERIOD_VARIABLE + ", " _
-                       + "D." + DATA_ACCOUNT_ID_VARIABLE
+        If strSqlAdditionalClause <> "" Then strSQL = strSQL & " AND " & strSqlAdditionalClause
 
-        Else                                            ' Case no entities filter
-            strSQL = "SELECT " + "D." + DATA_PERIOD_VARIABLE + ", " _
-                       + "D." + DATA_ACCOUNT_ID_VARIABLE + ", " _
-                       + "SUM(" + DATA_VALUE_VARIABLE + ")" + "," _
-                       + DATA_ASSET_ID_VARIABLE _
-                       + " FROM " + VIEWS_DATABASE + "." + ViewName + " D" + ", " + VIEWS_DATABASE + "." + Entities_View + " A" _
-                       + " WHERE " + "D." + DATA_ASSET_ID_VARIABLE + "=" + "A." + ASSETS_TREE_ID_VARIABLE _
-                       + " AND " + "A." + ASSETS_TREE_ID_VARIABLE + " IN " + "(" + keysSelection + ")" _
-                       + " GROUP BY " + "D." + DATA_PERIOD_VARIABLE + ", " _
-                       + "D." + DATA_ACCOUNT_ID_VARIABLE
-        End If
+        strSQL = strSQL & " GROUP BY " & "D." & DATA_PERIOD_VARIABLE & "," & _
+                                                     "D." & DATA_ACCOUNT_ID_VARIABLE & "," & _
+                                                     "A." & ASSETS_CURRENCY_VARIABLE
 
         srv.openRstSQL(strSQL, ModelServer.FWD_CURSOR)
-        If srv.rst.BOF = True Or srv.rst.EOF = True Then
-            srv.rst.Close()
-            Return False
-        Else
-            Return True
-        End If
+        If srv.rst.EOF = True Then Return False Else Return True
 
     End Function
 
-    Private Sub BuildOutputsArrays(ByRef data_array(,) As Object)
+    Private Sub ConvertInputsArrays(ByRef version_id As String, _
+                                    ByRef entities_id_List() As String, _
+                                    ByRef destination_currency As String)
 
-        ReDim AccKeysArray(UBound(data_array, 2))
-        ReDim PeriodArray(UBound(data_array, 2))
-        ReDim ValuesArray(UBound(data_array, 2))
+        Dim typesDict As Hashtable = AccountsMapping.GetAccountsDictionary(ACCOUNT_ID_VARIABLE, ACCOUNT_TYPE_VARIABLE)
+        Dim conversion_flagDict As Hashtable = AccountsMapping.GetAccountsDictionary(ACCOUNT_ID_VARIABLE, ACCOUNT_CONVERSION_FLAG_VARIABLE)
+        Dim account_id As String
+        Dim value As Double
+        Dim rate_type, currency_token, currency_ As String
+        Dim values_dict As New Dictionary(Of Int32, Dictionary(Of String, List(Of Double)))
+        Dim accounts_list As New List(Of String)
+        Dim periods_list As New List(Of Int32)
 
-        For i As Integer = 0 To UBound(data_array, 2)
-            PeriodArray(i) = data_array(0, i)
-            AccKeysArray(i) = data_array(1, i)
-            ValuesArray(i) = data_array(2, i)
+        Dim exchange_rates_dictionary As Dictionary(Of String, Dictionary(Of Int32, Dictionary(Of String, Double))) _
+        = GetExchangeRatesDictionary(version_id, destination_currency, entities_id_List)
+
+        Do While srv.rst.EOF = False AndAlso srv.rst.BOF = False
+            account_id = srv.rst.Fields(DATA_ACCOUNT_ID_VARIABLE).Value
+            value = srv.rst.Fields(DATA_VALUE_VARIABLE).Value
+            currency_ = srv.rst.Fields(ASSETS_CURRENCY_VARIABLE).Value
+
+            If currency_ <> destination_currency AndAlso typesDict(account_id) = MONETARY_ACCOUNT_TYPE Then
+                If conversion_flagDict(account_id) = FLUX_CONVERSION Then rate_type = ExchangeRate.AVERAGE_RATE Else rate_type = ExchangeRate.CLOSING_RATE
+                currency_token = currency_ & CURRENCIES_SEPARATOR & destination_currency
+                value = value * exchange_rates_dictionary(currency_token)(srv.rst.Fields(DATA_PERIOD_VARIABLE).Value)(rate_type)
+            End If
+            AddValueToAggregatedConvertedValuesHash(values_dict, _
+                                                    accounts_list, _
+                                                    periods_list, _
+                                                    account_id, _
+                                                    srv.rst.Fields(DATA_PERIOD_VARIABLE).Value, _
+                                                    value)
+            srv.rst.MoveNext()
+        Loop
+        BuildAggregatedInputsArrays(values_dict, _
+                                    accounts_list, _
+                                    periods_list)
+
+    End Sub
+
+    Private Sub AddValueToAggregatedConvertedValuesHash(ByRef values_dict As Dictionary(Of Int32, Dictionary(Of String, List(Of Double))), _
+                                                        ByRef accounts_list As List(Of String), _
+                                                        ByRef periods_list As List(Of Int32), _
+                                                        ByRef account_id As String, _
+                                                        ByVal period_ As Int32, _
+                                                        ByRef value As Double)
+
+        If accounts_list.Contains(account_id) = False Then accounts_list.Add(account_id)
+        If periods_list.Contains(period_) = False Then periods_list.Add(period_)
+        If values_dict.ContainsKey(period_) Then
+            If values_dict(period_).ContainsKey(account_id) = False Then
+                Dim values_list As New List(Of Double)
+                values_dict(period_).Add(account_id, values_list)
+            End If
+        Else
+            Dim values_list As New List(Of Double)
+            Dim accounts_dic As New Dictionary(Of String, List(Of Double))
+            accounts_dic.Add(account_id, values_list)
+            values_dict.Add(period_, accounts_dic)
+        End If
+        values_dict(period_)(account_id).Add(value)
+
+    End Sub
+
+    Private Sub BuildAggregatedInputsArrays(ByRef values_dict As Dictionary(Of Int32, Dictionary(Of String, List(Of Double))), _
+                                            ByRef accounts_list As List(Of String), _
+                                            ByRef periods_list As List(Of Int32))
+
+        Dim nb_records As Int32 = (accounts_list.Count) * (periods_list.Count)
+        Dim i As Int32 = 0
+        ReDim PeriodArray(nb_records)
+        ReDim AccKeysArray(nb_records)
+        ReDim ValuesArray(nb_records)
+
+        For Each period_ As Int32 In periods_list
+            For Each account_id As String In accounts_list
+                Try
+                    ValuesArray(i) = values_dict(period_)(account_id).Sum
+                    PeriodArray(i) = period_
+                    AccKeysArray(i) = account_id
+                    i = i + 1
+                Catch ex As Exception
+                End Try
+            Next
         Next
+        ReDim Preserve PeriodArray(i - 1)
+        ReDim Preserve AccKeysArray(i - 1)
+        ReDim Preserve ValuesArray(i - 1)
 
     End Sub
 

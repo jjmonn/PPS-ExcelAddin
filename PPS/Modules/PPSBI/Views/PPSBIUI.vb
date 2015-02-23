@@ -494,7 +494,7 @@ Friend Class PPSBI_UI
                 If node.Checked = True Then categoriesFilterStr = categoriesFilterStr + PPSBI_FORMULA_CATEGORIES_SEPARATOR + node.Text
             Next
         Next
-        categoriesFilterStr = Strings.Right(categoriesFilterStr, Len(categoriesFilterStr) - 1)
+        If categoriesFilterStr <> "" Then categoriesFilterStr = Strings.Right(categoriesFilterStr, Len(categoriesFilterStr) - 1)
 
     End Sub
 

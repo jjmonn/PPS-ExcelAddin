@@ -364,7 +364,6 @@ Friend Class DLL3_Interface
                                             "")
 
         Catch ex As Exception
-
         End Try
 
     End Function
