@@ -45,7 +45,7 @@ Public Class ChangePasswordUI
     ' Reset password call back
     Private Sub ResetPWDBT_Click(sender As Object, e As EventArgs) Handles ResetPWDBT.Click
 
-        Dim testConnection As ADODB.Connection = OpenConnection(Current_User_ID, CurrentPwdTB.Text)
+        Dim testConnection As ADODB.Connection = OpenConnection(GlobalVariables.Current_User_ID, CurrentPwdTB.Text)
         If Not testConnection Is Nothing Then
             testConnection.Close()
             testConnection = Nothing

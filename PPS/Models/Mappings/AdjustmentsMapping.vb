@@ -34,13 +34,29 @@ Friend Class AdjustmentsMapping
 
     End Function
 
+    Protected Friend Shared Function GetAdjustmentsIDsList(ByRef field As String) As List(Of String)
+
+        Dim tmp_list As New List(Of String)
+        Dim srv As New ModelServer
+        srv.OpenRst(CONFIG_DATABASE + "." + ADJUSTMENTS_TABLE, ModelServer.FWD_CURSOR)
+        If srv.rst.EOF = False And srv.rst.BOF = False Then
+            srv.rst.MoveFirst()
+            Do While srv.rst.EOF = False
+                tmp_list.Add(srv.rst.Fields(field).Value)
+                srv.rst.MoveNext()
+            Loop
+        End If
+        srv.rst.Close()
+        Return tmp_list
+
+    End Function
+
     Protected Friend Shared Sub LoadAdjustmentsIDDD()
 
-        IsLoadingAdjusmtentsIDs = True
-        AdjustmentIDDropDown.Items.Clear()
+        GlobalVariables.IsLoadingAdjusmtentsIDs = True
+        GlobalVariables.AdjustmentIDDropDown.Items.Clear()
  
         Dim srv As New ModelServer
-        Dim tmpHT As New Dictionary(Of String, String)
         srv.OpenRst(CONFIG_DATABASE + "." + ADJUSTMENTS_TABLE, ModelServer.FWD_CURSOR)
 
         If srv.rst.EOF = False And srv.rst.BOF = False Then
@@ -52,8 +68,8 @@ Friend Class AdjustmentsMapping
             Loop
         End If
         srv.rst.Close()
-        AdjustmentIDDropDown.SelectedItemId = DEFAULT_ADJUSTMENT_ID
-        IsLoadingAdjusmtentsIDs = False
+        GlobalVariables.AdjustmentIDDropDown.SelectedItemId = DEFAULT_ADJUSTMENT_ID
+        GlobalVariables.IsLoadingAdjusmtentsIDs = False
 
     End Sub
 
@@ -64,7 +80,7 @@ Friend Class AdjustmentsMapping
         adxRibbonItem.Caption = caption
         adxRibbonItem.Id = id
         adxRibbonItem.ImageTransparentColor = System.Drawing.Color.Transparent
-        AdjustmentIDDropDown.Items.Add(adxRibbonItem)
+        GlobalVariables.AdjustmentIDDropDown.Items.Add(adxRibbonItem)
 
     End Sub
 

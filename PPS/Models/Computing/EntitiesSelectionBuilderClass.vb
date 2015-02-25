@@ -31,7 +31,7 @@ Friend Class EntitiesSelectionBuilderClass
     ' Objects
     '   Private EntitiesAttributes As Dictionary(Of String, Hashtable)
     Private CategoriesTVInstance As New TreeView
-    Private EntitiesTV As New TreeView
+    Protected Friend EntitiesTV As New TreeView
 
     ' Variables
     Private SelectionDictionary As New Dictionary(Of String, List(Of String))
@@ -48,6 +48,7 @@ Friend Class EntitiesSelectionBuilderClass
 
         Entity.LoadEntitiesTree(EntitiesTV)
         Category.LoadCategoriesTree(CategoriesTVInstance)
+        cTreeViews_Functions.CheckAllNodes(EntitiesTV)
 
     End Sub
 

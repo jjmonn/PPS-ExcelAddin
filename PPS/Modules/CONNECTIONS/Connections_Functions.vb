@@ -40,7 +40,7 @@ Module Connections_Functions
         ' C:\Users\PPS\Documents\Purple Sun\CA
         ' & "OPTION=3" _
         ' & "OPTION=" & 2 + 3 + 8 + 32 + 2048 + 16384
-            Current_User_ID = userID
+            GlobalVariables.Current_User_ID = userID
 
             Try
                 Dim tmpConnection = New ADODB.Connection

@@ -91,8 +91,8 @@ Public Class VersionSelectionUI
     Private Sub SelectVersionIfNotFolder(ByRef inputNode As TreeNode)
 
         If versions_id_list.Contains(inputNode.Name) Then
-            Version_Label.Caption = inputNode.Text
-            Version_label_Sub_Ribbon.Text = inputNode.Text
+            GlobalVariables.Version_Label.Caption = inputNode.Text
+            GlobalVariables.Version_label_Sub_Ribbon.Text = inputNode.Text
         End If
 
     End Sub

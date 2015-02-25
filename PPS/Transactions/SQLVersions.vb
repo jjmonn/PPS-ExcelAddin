@@ -85,7 +85,7 @@ Friend Class SQLVersions
 
     Private Function CreateTrigger(ByRef version_id As String) As Boolean
 
-        Dim str As String = "CREATE DEFINER=`" & Current_User_ID & "`@`%` TRIGGER `" & DATA_DATABASE & "`.`" & version_id & "_after_insert` AFTER INSERT ON `" & _
+        Dim str As String = "CREATE DEFINER=`" & GlobalVariables.Current_User_ID & "`@`%` TRIGGER `" & DATA_DATABASE & "`.`" & version_id & "_after_insert` AFTER INSERT ON `" & _
                             DATA_DATABASE & "`.`" & version_id & "`" & _
                             "FOR EACH ROW BEGIN " & _
                             "INSERT INTO `" & DATA_DATABASE & "`.`" & LOG_TABLE_NAME & "`(" & _

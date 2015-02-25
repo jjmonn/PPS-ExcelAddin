@@ -55,7 +55,7 @@ Public Class ManualRangesSelectionUI
     Private Sub AccountsEditBT_Click(sender As Object, e As EventArgs) Handles AccountsEditBT.Click
 
         Me.TopMost = False
-        Dim tmpRng As Excel.Range = APPS.InputBox("Select Account(s) Range(s)", System.Type.Missing, System.Type.Missing, _
+        Dim tmpRng As Excel.Range = GlobalVariables.apps.InputBox("Select Account(s) Range(s)", System.Type.Missing, System.Type.Missing, _
                           System.Type.Missing, System.Type.Missing, System.Type.Missing, _
                           System.Type.Missing, 8)
 
@@ -79,7 +79,7 @@ Public Class ManualRangesSelectionUI
     Private Sub EntitiesEditBT_Click(sender As Object, e As EventArgs) Handles EntitiesEditBT.Click
 
         Me.TopMost = False
-        Dim tmpRng As Excel.Range = APPS.InputBox("Select Entity(s) Range(s)", System.Type.Missing, System.Type.Missing, _
+        Dim tmpRng As Excel.Range = GlobalVariables.apps.InputBox("Select Entity(s) Range(s)", System.Type.Missing, System.Type.Missing, _
                       System.Type.Missing, System.Type.Missing, System.Type.Missing, _
                       System.Type.Missing, 8)
 
@@ -103,7 +103,7 @@ Public Class ManualRangesSelectionUI
     Private Sub PeriodsRef_Click(sender As Object, e As EventArgs) Handles PeriodsEditBT.Click
 
         Me.TopMost = False
-        Dim tmpRng As Excel.Range = APPS.InputBox("Select Period(s) Range(s)", System.Type.Missing, System.Type.Missing, _
+        Dim tmpRng As Excel.Range = GlobalVariables.apps.InputBox("Select Period(s) Range(s)", System.Type.Missing, System.Type.Missing, _
                             System.Type.Missing, System.Type.Missing, System.Type.Missing, _
                             System.Type.Missing, 8)
 

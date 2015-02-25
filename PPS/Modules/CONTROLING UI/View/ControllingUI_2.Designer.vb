@@ -711,18 +711,18 @@ Partial Class ControllingUI_2
         '
         Me.AdjustmentsRCM.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.SelectAllToolStripMenuItem1, Me.UnselectAllToolStripMenuItem1})
         Me.AdjustmentsRCM.Name = "AdjustmentsRCM"
-        Me.AdjustmentsRCM.Size = New System.Drawing.Size(137, 48)
+        Me.AdjustmentsRCM.Size = New System.Drawing.Size(153, 70)
         '
         'SelectAllToolStripMenuItem1
         '
         Me.SelectAllToolStripMenuItem1.Name = "SelectAllToolStripMenuItem1"
-        Me.SelectAllToolStripMenuItem1.Size = New System.Drawing.Size(136, 22)
+        Me.SelectAllToolStripMenuItem1.Size = New System.Drawing.Size(152, 22)
         Me.SelectAllToolStripMenuItem1.Text = "Select All"
         '
         'UnselectAllToolStripMenuItem1
         '
         Me.UnselectAllToolStripMenuItem1.Name = "UnselectAllToolStripMenuItem1"
-        Me.UnselectAllToolStripMenuItem1.Size = New System.Drawing.Size(136, 22)
+        Me.UnselectAllToolStripMenuItem1.Size = New System.Drawing.Size(152, 22)
         Me.UnselectAllToolStripMenuItem1.Text = "Unselect All"
         '
         'ControllingUI_2

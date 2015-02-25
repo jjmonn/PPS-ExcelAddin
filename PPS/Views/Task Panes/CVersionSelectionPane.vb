@@ -84,7 +84,7 @@ Public Class CVersionSelectionPane
 
     Private Sub ADXExcelTaskPane1_ADXBeforeTaskPaneShow(sender As Object, e As ADXBeforeTaskPaneShowEventArgs) Handles MyBase.ADXBeforeTaskPaneShow
 
-        Me.Visible = VersionsSelectionPaneVisible
+        Me.Visible = GlobalVariables.VersionsSelectionPaneVisible
 
     End Sub
 

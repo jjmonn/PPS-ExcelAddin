@@ -1,19 +1,12 @@
-﻿' GLOBAL VARIABLES.vb
-'
-' List and explains the global variables
-'
+﻿' GlobalVariables.vb
 '
 '
 ' To do:
 '       - Change syntax : Xxxx_Xxxx for Global_Variables
 '
 '
-'
-' Known Bugs
-'
-'
 ' Author: Julien Monnereau
-' Last modified: 18/01/2015
+' Last modified: 24/02/2015
 
 
 Imports AddinExpress.MSO
@@ -21,53 +14,55 @@ Imports Microsoft.Office.Interop.Excel
 
 
 
-Module GLOBAL_VARIABLES
+Friend Class GlobalVariables
 
+#Region "Versioning"
 
-    ' General
-    Friend APPS As Application
-  
-    '  Friend Addin_Instance As AddinModule
-    Friend Version_Label As ADXRibbonLabel
-    Friend Version_label_Sub_Ribbon As ADXRibbonEditBox
-    Friend Rates_Version_Label As ADXRibbonLabel
+    Protected Friend Shared Version_Label As ADXRibbonLabel
+    Protected Friend Shared Version_label_Sub_Ribbon As ADXRibbonEditBox
+    Protected Friend Shared Rates_Version_Label As ADXRibbonLabel
+    Protected Friend Shared GLOBALCurrentVersionCode As String
+    Protected Friend Shared GLOBALCurrentRatesVersionCode As String
 
-    Friend GLOBALCurrentVersionCode As String
-    Friend GLOBALCurrentRatesVersionCode As String
+#End Region
 
-    Friend Connection_Toggle_Button As ADXRibbonButton
-    Friend InputSelectionPaneVisible As Boolean
-    Friend VersionsSelectionPaneVisible As Boolean
-    Friend EntitySelectionPaneVisible As Boolean
+#Region "Menu Display"
 
- 
-    ' Computation and refresh
-    Friend GENERICDCGLobalInstance As GenericSingleEntityDLL3Computer        ' change the name of this global instance
-    Friend UDFCALLBACKINSTANCE As PPSBIController
-  
+    Protected Friend Shared Connection_Toggle_Button As ADXRibbonButton
+    Protected Friend Shared InputSelectionPaneVisible As Boolean
+    Protected Friend Shared VersionsSelectionPaneVisible As Boolean
+    Protected Friend Shared EntitySelectionPaneVisible As Boolean
 
-    ' Credential
-    Friend User_Credential As Int32             ' User credential for the current session -> gives a VIEW combined with a table name 
-    Friend Current_User_ID As String            ' Current user ID
-    Friend Entities_View As String              ' Default ACF_Lentities.entities table VIEW used to provide info on entities
+#End Region
 
-    ' Constants
-    Public Const MONTHLY_TIME_PERIOD_FORMAT As String = ""
-    Public Const YEARLY_TIME_PERIOD_FORMAT As String = ""
+#Region "Computing"
 
+    Protected Friend Shared APPS As Application
+    Protected Friend Shared GenericGlobalSingleEntityComputer As GenericSingleEntityDLL3Computer        ' change the name of this global instance
+    Protected Friend Shared GenericGlobalAggregationComputer As GenericAggregationDLL3Computing
+    Protected Friend Shared GlobalDll3Interface As DLL3_Interface
+    Protected Friend Shared GlobalDBDownloader As DataBaseDataDownloader
+    Protected Friend Shared GlobalPPSBIController As PPSBIController
+
+#End Region
+
+#Region "Credentials"
+
+    Protected Friend Shared User_Credential As Int32             ' User credential for the current session -> gives a VIEW combined with a table name 
+    Protected Friend Shared Current_User_ID As String            ' Current user ID
+    Protected Friend Shared Entities_View As String              ' Default ACF_Lentities.entities table VIEW used to provide info on entities
+
+#End Region
 
 #Region "Submission Process Global Variables"
 
-    Friend SubmissionStatusButton As ADXRibbonButton
-    Friend WSHasChangedSinceLastSubmission As Boolean
-    Friend AdjustmentIDDropDown As ADXRibbonDropDown
-    Friend IsLoadingAdjusmtentsIDs As Boolean = False
+    Protected Friend Shared SubmissionStatusButton As ADXRibbonButton
+    Protected Friend Shared WSHasChangedSinceLastSubmission As Boolean
+    Protected Friend Shared AdjustmentIDDropDown As ADXRibbonDropDown
+    Protected Friend Shared IsLoadingAdjusmtentsIDs As Boolean = False
 
 #End Region
 
 
 
-
-
-
-End Module
+End Class

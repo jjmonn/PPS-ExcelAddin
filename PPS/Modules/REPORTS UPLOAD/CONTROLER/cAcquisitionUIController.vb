@@ -133,7 +133,7 @@ Friend Class cAcquisitionUIController
     Friend Sub ConfigDGVAcPe(ByRef entity As String)
 
         ClearDGVandDictionaries()
-        ACQUMODEL.DownloadDBInputs(entity, AdjustmentIDDropDown.SelectedItemId)
+        ACQUMODEL.DownloadDBInputs(entity, GlobalVariables.AdjustmentIDDropDown.SelectedItemId)
         ACQUI.LoadAccountsToHierarchy(ACQUI.DGV.RowsHierarchy, entity, ACQUMODEL.accountsTV)
         ACQUI.LoadPeriodsToHierarchy(ACQUI.DGV.ColumnsHierarchy, entity, GetRandomAccount(entity), ACQUMODEL.currentPeriodlist, ACQUMODEL.versionsTimeConfigDict(ACQUMODEL.mCurrentVersionCode))
 
@@ -155,7 +155,7 @@ Friend Class cAcquisitionUIController
         ClearDGVandDictionaries()
         ACQUI.LoadAccountsToHierarchy(ACQUI.DGV.ColumnsHierarchy, entity, ACQUMODEL.accountsTV)
         ACQUI.LoadPeriodsToHierarchy(ACQUI.DGV.RowsHierarchy, entity, GetRandomAccount(entity), ACQUMODEL.currentPeriodlist, ACQUMODEL.versionsTimeConfigDict(ACQUMODEL.mCurrentVersionCode))
-        ACQUMODEL.DownloadDBInputs(entity, AdjustmentIDDropDown.SelectedItemId)
+        ACQUMODEL.DownloadDBInputs(entity, GlobalVariables.AdjustmentIDDropDown.SelectedItemId)
 
         For Each account In ACQUI.DGV.ColumnsHierarchy.Items
             FillInSubItemAcPe(account, ACQUI.DGV.RowsHierarchy, entity, CModelDataSet.DATASET_PERIODS_ACCOUNTS_OR)
@@ -223,7 +223,7 @@ Friend Class cAcquisitionUIController
             entitiesList.Add(item)
         Next
         ' -> we should keep this list ?
-        ACQUMODEL.DownloadDBInputs(entitiesList, AdjustmentIDDropDown.SelectedItemId)
+        ACQUMODEL.DownloadDBInputs(entitiesList, GlobalVariables.AdjustmentIDDropDown.SelectedItemId)
         FillInSubItemEnPe(ACQUI.DGV.RowsHierarchy, ACQUI.DGV.ColumnsHierarchy, account, CModelDataSet.DATASET_ENTITIES_PERIODS_OR)
         currentDGVOrientationFlag = CModelDataSet.DATASET_ENTITIES_PERIODS_OR
 
@@ -243,7 +243,7 @@ Friend Class cAcquisitionUIController
             entitiesList.Add(item)
         Next
         ' -> we should keep this list ?
-        ACQUMODEL.DownloadDBInputs(entitiesList, AdjustmentIDDropDown.SelectedItemId)
+        ACQUMODEL.DownloadDBInputs(entitiesList, GlobalVariables.AdjustmentIDDropDown.SelectedItemId)
         FillInSubItemEnPe(ACQUI.DGV.ColumnsHierarchy, ACQUI.DGV.RowsHierarchy, account, CModelDataSet.DATASET_PERIODS_ENTITIES_OR)
         currentDGVOrientationFlag = CModelDataSet.DATASET_PERIODS_ENTITIES_OR
 

@@ -62,9 +62,9 @@ Friend Class VersionSelection
         AndAlso versions_id_list.Contains(versionsTV.SelectedNode.Name) Then
 
             Dim version_id = versionsTV.SelectedNode.Name
-            GLOBALCurrentVersionCode = version_id
-            Version_Label.Caption = versionsTV.SelectedNode.Text
-            Version_label_Sub_Ribbon.Text = versionsTV.SelectedNode.Text
+            GlobalVariables.GLOBALCurrentVersionCode = version_id
+            GlobalVariables.Version_Label.Caption = versionsTV.SelectedNode.Text
+            GlobalVariables.Version_label_Sub_Ribbon.Text = versionsTV.SelectedNode.Text
             If My.Settings.version_id <> version_id Then My.Settings.version_id = version_id
             View.ClearAndClose()
 
@@ -84,10 +84,10 @@ Friend Class VersionSelection
     Private Sub SetAssociatedRatesVersion_id(ByRef version_id As String)
 
         Dim Versions As New Version
-        GLOBALCurrentRatesVersionCode = Versions.ReadVersion(version_id, VERSIONS_RATES_VERSION_ID_VAR)
+        GlobalVariables.GLOBALCurrentRatesVersionCode = Versions.ReadVersion(version_id, VERSIONS_RATES_VERSION_ID_VAR)
         Versions.Close()
         Dim RatesVersions As New RateVersion
-        Rates_Version_Label.Caption = RatesVersions.ReadVersion(GLOBALCurrentRatesVersionCode, RATES_VERSIONS_NAME_VARIABLE)
+        GlobalVariables.Rates_Version_Label.Caption = RatesVersions.ReadVersion(GlobalVariables.GLOBALCurrentRatesVersionCode, RATES_VERSIONS_NAME_VARIABLE)
         RatesVersions = Nothing
 
     End Sub

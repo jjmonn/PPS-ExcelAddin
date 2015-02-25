@@ -135,9 +135,9 @@ Friend Class Entity
         Dim srv As New ModelServer
         Dim q_result As Boolean
         If strSqlQuery <> "" Then
-            q_result = srv.openRstSQL("SELECT * FROM " + VIEWS_DATABASE + "." + Entities_View + " WHERE " + strSqlQuery, ModelServer.FWD_CURSOR)
+            q_result = srv.openRstSQL("SELECT * FROM " + VIEWS_DATABASE + "." + GlobalVariables.Entities_View + " WHERE " + strSqlQuery, ModelServer.FWD_CURSOR)
         Else
-            q_result = srv.openRst(VIEWS_DATABASE & "." & Entities_View, ModelServer.FWD_CURSOR)
+            q_result = srv.openRst(VIEWS_DATABASE & "." & GlobalVariables.Entities_View, ModelServer.FWD_CURSOR)
         End If
         If q_result = True Then
 
@@ -183,7 +183,7 @@ Friend Class Entity
 
         Dim srv As New ModelServer
         Dim q_result As Boolean
-        q_result = srv.openRst(VIEWS_DATABASE & "." & Entities_View, ModelServer.FWD_CURSOR)
+        q_result = srv.openRst(VIEWS_DATABASE & "." & GlobalVariables.Entities_View, ModelServer.FWD_CURSOR)
         If q_result = True Then
 
             Dim currentNode, ParentNode() As TreeNode
@@ -229,7 +229,7 @@ Friend Class Entity
         Dim srv As New ModelServer
 
         TV.Nodes.Clear()
-        srv.openRst(VIEWS_DATABASE + "." + Entities_View, ModelServer.FWD_CURSOR)
+        srv.openRst(VIEWS_DATABASE + "." + GlobalVariables.Entities_View, ModelServer.FWD_CURSOR)
         srv.rst.Sort = ITEMS_POSITIONS
 
         If srv.rst.RecordCount > 0 Then

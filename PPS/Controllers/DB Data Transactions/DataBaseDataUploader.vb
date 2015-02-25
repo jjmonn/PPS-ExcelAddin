@@ -180,8 +180,8 @@ Friend Class DataBaseDataUploader
                 Return ""
             End If
         Else
-            If VersionsNameTableAddressDictionary(Version_Label.Caption) <> "" Then
-                Return VersionsNameTableAddressDictionary(Version_Label.Caption)
+            If VersionsNameTableAddressDictionary(GlobalVariables.Version_Label.Caption) <> "" Then
+                Return VersionsNameTableAddressDictionary(GlobalVariables.Version_Label.Caption)
             Else
                 MsgBox("The selected version corresponds to a versions folder. A version name should be selected")
                 Return ""

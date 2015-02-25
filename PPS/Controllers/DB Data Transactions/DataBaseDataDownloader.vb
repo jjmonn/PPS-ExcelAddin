@@ -52,9 +52,10 @@ Friend Class DataBaseDataDownloader
     Friend Function GetAggregatedConvertedInputs(ByRef entitiesIDList() As String, _
                                                  ByRef version_id As String, _
                                                  ByRef destination_currency As String, _
+                                                 Optional ByRef adjustment_id As String = "", _
                                                  Optional ByRef strSqlAdditionalClause As String = "") As Boolean
 
-        If DataAggregationQuery(entitiesIDList, version_id, strSqlAdditionalClause) = True Then
+        If DataAggregationQuery(entitiesIDList, version_id, adjustment_id, strSqlAdditionalClause) = True Then
             ConvertInputsArrays(version_id, entitiesIDList, destination_currency)
             srv.rst.Close()
             Return True
@@ -67,6 +68,7 @@ Friend Class DataBaseDataDownloader
 
     Friend Function DataAggregationQuery(ByRef entitiesIDList() As String, _
                                          ByRef version_id As String, _
+                                         Optional ByRef adjustment_id As String = "", _
                                          Optional ByRef strSqlAdditionalClause As String = "") As Boolean
 
         Dim keysSelection As String = "'" + Join(entitiesIDList, "','") + "'"
@@ -75,15 +77,16 @@ Friend Class DataBaseDataDownloader
                              & "D." & DATA_ACCOUNT_ID_VARIABLE & "," _
                              & "SUM(" & DATA_VALUE_VARIABLE & ") AS " & DATA_VALUE_VARIABLE & "," _
                              & "A." & ASSETS_CURRENCY_VARIABLE _
-                             & " FROM " & VIEWS_DATABASE & "." & version_id & User_Credential & " D" & ", " & VIEWS_DATABASE & "." & Entities_View & " A" _
+                             & " FROM " & VIEWS_DATABASE & "." & version_id & GlobalVariables.User_Credential & " D" & ", " & VIEWS_DATABASE & "." & GlobalVariables.Entities_View & " A" _
                              & " WHERE " & "D." & DATA_ASSET_ID_VARIABLE & "=" & "A." & ASSETS_TREE_ID_VARIABLE _
                              & " AND " & "A." & ASSETS_TREE_ID_VARIABLE & " IN (" & keysSelection & ")"
 
+        If adjustment_id <> "" Then strSQL = strSQL & " AND " & "D." & DATA_ADJUSTMENT_ID_VARIABLE & " ='" & adjustment_id & "'"
         If strSqlAdditionalClause <> "" Then strSQL = strSQL & " AND " & strSqlAdditionalClause
 
         strSQL = strSQL & " GROUP BY " & "D." & DATA_PERIOD_VARIABLE & "," & _
-                                                     "D." & DATA_ACCOUNT_ID_VARIABLE & "," & _
-                                                     "A." & ASSETS_CURRENCY_VARIABLE
+                                         "D." & DATA_ACCOUNT_ID_VARIABLE & "," & _
+                                         "A." & ASSETS_CURRENCY_VARIABLE
 
         srv.openRstSQL(strSQL, ModelServer.FWD_CURSOR)
         If srv.rst.EOF = True Then Return False Else Return True
@@ -218,7 +221,7 @@ Friend Class DataBaseDataDownloader
                              + "D." + DATA_ACCOUNT_ID_VARIABLE + "," _
                              + "SUM(" + DATA_VALUE_VARIABLE + ") AS value," _
                              + DATA_ASSET_ID_VARIABLE _
-                             + " FROM " + VIEWS_DATABASE + "." + ViewName + " D" + ", " + VIEWS_DATABASE + "." + Entities_View + " A" _
+                             + " FROM " + VIEWS_DATABASE + "." + ViewName + " D" + ", " + VIEWS_DATABASE + "." + GlobalVariables.Entities_View + " A" _
                              + " WHERE " + "D." + DATA_ASSET_ID_VARIABLE + "=" + "A." + ASSETS_TREE_ID_VARIABLE _
                              + " AND " + "A." + ASSETS_TREE_ID_VARIABLE + " IN (" + keysSelection + ")"
 
@@ -378,7 +381,7 @@ Friend Class DataBaseDataDownloader
                              & " D." & DATA_ASSET_ID_VARIABLE & "," _
                              & " D." & DATA_ADJUSTMENT_ID_VARIABLE & "," _
                              & " A." & ASSETS_CURRENCY_VARIABLE _
-                             & " FROM " & VIEWS_DATABASE & "." & version_id & User_Credential & " D" & ", " & VIEWS_DATABASE + "." & Entities_View + " A" _
+                             & " FROM " & VIEWS_DATABASE & "." & version_id & GlobalVariables.User_Credential & " D" & ", " & VIEWS_DATABASE + "." & GlobalVariables.Entities_View + " A" _
                              & " WHERE " & "D." & DATA_ASSET_ID_VARIABLE & "=" & "A." & ASSETS_TREE_ID_VARIABLE _
                              & " AND " & DATA_ASSET_ID_VARIABLE & " IN " & "(" & entities_ids & ")"
 
@@ -477,7 +480,7 @@ Friend Class DataBaseDataDownloader
                                                     Optional ByRef adjustment_id As String = "") As Double
 
         Dim srv As New ModelServer
-        srv.OpenRst(VIEWS_DATABASE & "." & version_id & User_Credential, ModelServer.FWD_CURSOR)
+        srv.OpenRst(VIEWS_DATABASE & "." & version_id & GlobalVariables.User_Credential, ModelServer.FWD_CURSOR)
 
         Dim str_filter As String = DATA_ACCOUNT_ID_VARIABLE & "='" & account_id & "' AND " & _
                                    DATA_ASSET_ID_VARIABLE & "='" & entity_id & "' AND " & _

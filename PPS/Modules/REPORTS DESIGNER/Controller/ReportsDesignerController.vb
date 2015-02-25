@@ -40,7 +40,7 @@ Friend Class ReportsDesignerController
         positions_dictionary = cTreeViews_Functions.GeneratePositionsDictionary(ReportsTV)
         accounts_name_id_dic = AccountsMapping.GetAccountsDictionary(ACCOUNT_NAME_VARIABLE, ACCOUNT_ID_VARIABLE)
         View = New ReportsDesignerUI(Me, ReportsTV)
-        Dim accounts_names_list As List(Of String) = AccountsMapping.GetAccountsNamesList(LOOKUP_ALL)
+        Dim accounts_names_list As List(Of String) = AccountsMapping.GetAccountsNamesList(AccountsMapping.LOOKUP_ALL)
         If Not accounts_id_short_list Is Nothing Then FilterAccountsNames(accounts_id_short_list, accounts_names_list)
         View.InitializeDisplay(accounts_names_list)
         View.Show()

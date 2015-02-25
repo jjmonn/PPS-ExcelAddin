@@ -15,15 +15,11 @@
 ' Author: Julien Monnereau
 
 
-Imports Microsoft.Office.Interop
 Imports System.Runtime.InteropServices
 Imports System.Windows.Forms
 Imports System.Linq
-Imports System.Data
-Imports VIBlend.WinForms.DataGridView
 Imports System.Collections.Generic
 Imports System.Collections
-Imports H4xCode
 
 
 Friend Class DLL3_Interface
@@ -35,7 +31,7 @@ Friend Class DLL3_Interface
     Private objptr As Integer
 
     ' Variables
-    Protected Friend mPeriodList() As Integer
+    '  Protected Friend mPeriodList() As Integer
     Friend currentSingleEntityKey As String
     Friend dll3TimeSetup As String                  ' MONTHLY_TIME_CONFIGURATION or YEARLY_TIME_CONFIGURATION
     Private all_entities_ids As List(Of String)

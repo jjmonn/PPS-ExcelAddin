@@ -29,7 +29,7 @@
 '        InitializeComponent()
 
 '        ' Add any initialization after the InitializeComponent() call.
-'        For Each ws As Excel.Worksheet In apps.ActiveWorkbook.Worksheets
+'        For Each ws As Excel.Worksheet In GlobalVariables.apps.ActiveWorkbook.Worksheets
 '            CLB_worksheets.Items.Add(ws.Name, True)
 '        Next
 
@@ -42,9 +42,9 @@
 '        '-----------------------------------------------------------------------------------
 '        If RB_Structure.Checked = True Then
 
-'            DataSet = New CModelDataSet(apps.Worksheets(CLB_worksheets.CheckedItems(0)))
+'            DataSet = New CModelDataSet(GlobalVariables.apps.Worksheets(CLB_worksheets.CheckedItems(0)))
 '            DataSet.getDataSet()
-'            Dim SDD As New SimpleDisplaySnapshotUI(apps.Worksheets(CLB_worksheets.CheckedItems(0)), DataSet)
+'            Dim SDD As New SimpleDisplaySnapshotUI(GlobalVariables.apps.Worksheets(CLB_worksheets.CheckedItems(0)), DataSet)
 '            Me.AddOwnedForm(SDD)
 '            Me.Hide()
 '            SDD.Show()
@@ -75,7 +75,7 @@
 '        For Each worksheetName As String In CLB_worksheets.CheckedItems
 
 '            Dim test As String = worksheetName
-'            DataSet.WS = apps.Worksheets(worksheetName)
+'            DataSet.WS = GlobalVariables.apps.Worksheets(worksheetName)
 '            DataSet.UpdateDictionariesValuesWithCurrentWS()
 '            DataSet.getOrientations()
 '            DataSet.getDataSet()

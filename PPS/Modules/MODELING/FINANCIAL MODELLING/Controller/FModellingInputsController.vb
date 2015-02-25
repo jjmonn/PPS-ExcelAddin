@@ -26,7 +26,7 @@ Friend Class FModellingInputsController
     ' Object 
     Private SimulationsController As FModellingSimulationsControler
     Private View As FModelingUI
-    Private Model As ControlingUI2MODEL
+    Private Model As GenericAggregationDLL3Computing
     Private FModellingAccount As FModellingAccount
     Private VersionsTV As New TreeView
     Private EntitiesTV As New TreeView
@@ -61,14 +61,14 @@ Friend Class FModellingInputsController
 
         SimulationsController = input_simulations_controller
         FModellingAccount = input_FModellingAccount
-        Model = New ControlingUI2Model()
+        Model = New GenericAggregationDLL3Computing(GlobalVariables.GlobalDBDownloader)
         Version.LoadVersionsTree(VersionsTV)
         cTreeViews_Functions.CheckAllNodes(EntitiesTV)
         Entity.LoadEntitiesTree(EntitiesTV)
         inputs_list = FModellingAccountsMapping.GetFModellingAccountsList(FINANCIAL_MODELLING_ID_VARIABLE, FINANCIAL_MODELLING_INPUT_TYPE)
         accounts_id_names_dic = AccountsMapping.GetAccountsDictionary(ACCOUNT_ID_VARIABLE, ACCOUNT_NAME_VARIABLE)
         accounts_names_id_dic = AccountsMapping.GetAccountsDictionary(ACCOUNT_NAME_VARIABLE, ACCOUNT_ID_VARIABLE)
-        accounts_id_list = AccountsMapping.GetAccountsKeysList(LOOKUP_ALL)
+        accounts_id_list = AccountsMapping.GetAccountsKeysList(AccountsMapping.LOOKUP_ALL)
         versions_id_list = VersionsMapping.GetVersionsList(VERSIONS_CODE_VARIABLE)
 
         InitializeMappingDGV()
@@ -102,7 +102,7 @@ Friend Class FModellingInputsController
 
         CBEditor.DropDownHeight = CBEditor.ItemHeight * CB_NB_ITEMS_DISPLAYED
         CBEditor.DropDownWidth = CB_WIDTH
-        Dim accounts_list = AccountsMapping.GetAccountsNamesList(LOOKUP_ALL)
+        Dim accounts_list = AccountsMapping.GetAccountsNamesList(AccountsMapping.LOOKUP_ALL)
         For Each account_name In accounts_list
             CBEditor.Items.Add(account_name)
         Next
@@ -150,13 +150,13 @@ Friend Class FModellingInputsController
         Dim rates_version As String = Versions.ReadVersion(version_id, VERSIONS_RATES_VERSION_ID_VAR)
         Versions.Close()
         Model.compute_selection_complete(version_id, _
-                                         View.PBar, _
                                          time_configuration, _
                                          rates_version, _
                                          periods_list, _
                                          MAIN_CURRENCY, _
                                          start_period, _
-                                         nb_periods)
+                                         nb_periods, _
+                                         View.PBar)
 
         BuildDataDic(entity_node.Name)
         InitInputsDGVColumns()

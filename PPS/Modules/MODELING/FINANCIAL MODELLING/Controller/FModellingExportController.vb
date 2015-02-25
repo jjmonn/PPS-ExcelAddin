@@ -24,7 +24,7 @@ Friend Class FModellingExportController
     ' Objects
     Private SimulationsController As FModellingSimulationsControler
     Private View As FModelingUI
-    Private Model As ControlingUI2MODEL
+    Private Model As GenericAggregationDLL3Computing
     Private FModellingAccount As FModellingAccount
     Private ExportsTV As New TreeView
     Private EntitiesTV As New TreeView

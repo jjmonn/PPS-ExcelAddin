@@ -127,7 +127,7 @@ Friend Class CModelDataSet
     ' Lookup for Versions, Accounts, Periods and Entities
     Friend Sub SnapshotWS()
 
-        If Not VersionsIdentify() Then currentVersionCode = GLOBALCurrentVersionCode
+        If Not VersionsIdentify() Then currentVersionCode = GlobalVariables.GLOBALCurrentVersionCode
         DatesIdentify()
         AccountsIdentify()
         EntitiesIdentify()
@@ -210,11 +210,11 @@ Friend Class CModelDataSet
     End Sub
 
     ' Identify the mapped accounts in the WS  | CURRENTLY NOT using the Accounts Search Algo
-    Public Sub AccountsIdentify()
+    Protected Friend Sub AccountsIdentify()
 
         Dim i, j, nbWords As Integer
-        inputsAccountsList = AccountsMapping.GetAccountsNamesList(LOOKUP_INPUTS)
-        Dim outputsAccountsList As List(Of String) = AccountsMapping.GetAccountsNamesList(LOOKUP_OUTPUTS)
+        inputsAccountsList = AccountsMapping.GetAccountsNamesList(AccountsMapping.LOOKUP_INPUTS)
+        Dim outputsAccountsList As List(Of String) = AccountsMapping.GetAccountsNamesList(AccountsMapping.LOOKUP_OUTPUTS)
         AccountsAddressValuesDictionary.Clear()
 
         For i = LBound(GlobalScreenShot, 1) To UBound(GlobalScreenShot, 1)                                          ' Loop into rows of input array
@@ -257,7 +257,7 @@ Friend Class CModelDataSet
 
         Select Case AccountsAddressValuesDictionary.Count
             Case 0 : pAccountFlag = 0
-            Case 1: pAccountFlag = 1
+            Case 1 : pAccountFlag = 1
             Case Else : pAccountFlag = 2
         End Select
 
@@ -778,13 +778,13 @@ Friend Class CModelDataSet
     ' Write dataset data from Computation to the worksheet according to the current identified items
     Friend Sub RefreshAll(Optional ByRef adjustment_id As String = "")
 
-        If GENERICDCGLobalInstance Is Nothing Then GENERICDCGLobalInstance = New GenericSingleEntityDLL3Computer
+        If GlobalVariables.GenericGlobalSingleEntityComputer Is Nothing Then GlobalVariables.GenericGlobalSingleEntityComputer = New GenericSingleEntityDLL3Computer(GlobalVariables.GlobalDBDownloader, GlobalVariables.GlobalDll3Interface)
         Dim entityKey As String
         For Each EntityAddress As String In EntitiesAddressValuesDictionary.Keys
             entityKey = EntitiesNameKeyDictionary.Item(EntitiesAddressValuesDictionary.Item(EntityAddress))
 
             ' Here currentVersionCode Assumed to be set up -> TBC
-            GENERICDCGLobalInstance.ComputeSingleEntity(currentVersionCode, entityKey, adjustment_id)         ' Recompute each time
+            GlobalVariables.GenericGlobalSingleEntityComputer.ComputeSingleEntity(currentVersionCode, entityKey, adjustment_id)         ' Recompute each time
             RefreshAccounts(EntityAddress, AccountsAddressValuesDictionary)
             RefreshAccounts(EntityAddress, OutputsAccountsAddressvaluesDictionary)
         Next
@@ -808,7 +808,7 @@ Friend Class CModelDataSet
 
             For Each PeriodAddress As String In periodsAddressValuesDictionary.Keys
                 period = periodsAddressValuesDictionary.Item(PeriodAddress)
-                Dim tmpValue = GENERICDCGLobalInstance.GetDataFromDLL3Computer(accountKey, period)
+                Dim tmpValue = GlobalVariables.GenericGlobalSingleEntityComputer.GetDataFromDLL3Computer(accountKey, period)
                 UpdateExcelCell(entityAddress, AccountAddress, PeriodAddress, tmpValue)
             Next
         Next

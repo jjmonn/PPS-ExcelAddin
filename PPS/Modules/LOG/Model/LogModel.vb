@@ -16,7 +16,7 @@ Friend Class LogModel
 #Region "Instance Variables"
 
     ' Objects
-    Private Computer As New GenericSingleEntityDLL3Computer
+    Private Computer As New GenericSingleEntityDLL3Computer(GlobalVariables.GlobalDBDownloader)
     Private Versions As New Version
 
 #End Region

@@ -142,7 +142,7 @@ Friend Class LogUI
 
         CurrencyTB.Text = currency
         EntityTB.Text = current_entity_node.Text
-        VersionTB.Text = Version_label_Sub_Ribbon.Text
+        VersionTB.Text = GlobalVariables.Version_label_Sub_Ribbon.Text
 
 
     End Sub

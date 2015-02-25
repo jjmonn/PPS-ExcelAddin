@@ -64,7 +64,7 @@ Friend Class CControlingDropOnExcel
                 End If
                 destination = destination.Offset(offset, 0)
             Next
-            APPS.ActiveSheet.Columns(1).autofit()
+            GlobalVariables.apps.ActiveSheet.Columns(1).autofit()
 
         End If
 

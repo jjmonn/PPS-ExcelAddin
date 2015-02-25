@@ -54,7 +54,7 @@ Friend Class CExchangeRatesCONTROLER
             object_is_alive = True
             View = input_view
             RateVersion.load_rates_version_tv(View.versionsTV)
-            current_version = GLOBALCurrentRatesVersionCode
+            current_version = GlobalVariables.GLOBALCurrentRatesVersionCode
             currencies_list = Currencies.ReadCurrencies()
             NewRatesVersionUI = New NewRatesVersionUI(Me)
 
@@ -190,7 +190,7 @@ Friend Class CExchangeRatesCONTROLER
                 DeleteFromTreeAndModel(version_id)
             End If
         Next
-        If versions_list.Contains(GLOBALCurrentRatesVersionCode) Then APPS.COMAddIns.Item("PPS.AddinModule").Object.LaunchVersionSelection(2)
+        If versions_list.Contains(GlobalVariables.GLOBALCurrentRatesVersionCode) Then GlobalVariables.APPS.COMAddIns.Item("PPS.AddinModule").Object.LaunchVersionSelection(2)
 
     End Sub
 

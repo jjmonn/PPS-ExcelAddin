@@ -98,7 +98,7 @@ Friend Class ControlsMGTUI
 
     Private Sub InitializeNumericControlCBs()
 
-        accounts_list = AccountsMapping.GetAccountsNamesList(LOOKUP_ALL)
+        accounts_list = AccountsMapping.GetAccountsNamesList(AccountsMapping.LOOKUP_ALL)
         For Each account_name In accounts_list
             Item1Editor.Items.Add(account_name)
             Item2Editor.Items.Add(account_name)

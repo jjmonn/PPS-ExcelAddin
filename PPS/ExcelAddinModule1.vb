@@ -4,6 +4,7 @@
 '
 ' To do:
 '       - security > currently takes public global variables in AddinModule.vb !
+'       - Allow text without "'" in formula inputs
 '       - -> find a way to have those global variables accessible here and not public
 '
 '
@@ -72,8 +73,8 @@ Public Class ExcelAddinModule1
 
     Private Sub ExcelAddinModule1_AddinInitialize(sender As Object, e As EventArgs) Handles MyBase.AddinInitialize
 
-        APPS = Me.HostApplication
-        If APPS.COMAddIns.Item("PPS.AddinModule").Object.setupflag = True Then
+        GlobalVariables.APPS = Me.HostApplication
+        If GlobalVariables.apps.COMAddIns.Item("PPS.AddinModule").Object.setupflag = True Then
 
             InitializeGlobalVariables()
             InitializeComputer()
@@ -86,10 +87,10 @@ Public Class ExcelAddinModule1
     ' Initialize Global Variables
     Private Function InitializeGlobalVariables() As Boolean
 
-        ConnectioN = APPS.COMAddIns.Item("PPS.AddinModule").Object.GetAddinConnection()
-        User_Credential = APPS.COMAddIns.Item("PPS.AddinModule").Object.GetUserCredential()
-        Entities_View = APPS.COMAddIns.Item("PPS.AddinModule").Object.GetEntitiesView()
-        Version_Label = APPS.COMAddIns.Item("PPS.AddinModule").Object.GetVersionLabel()
+        ConnectioN = GlobalVariables.apps.COMAddIns.Item("PPS.AddinModule").Object.GetAddinConnection()
+        GlobalVariables.User_Credential = GlobalVariables.apps.COMAddIns.Item("PPS.AddinModule").Object.GetUserCredential()
+        GlobalVariables.Entities_View = GlobalVariables.apps.COMAddIns.Item("PPS.AddinModule").Object.GetEntitiesView()
+        GlobalVariables.Version_Label = GlobalVariables.APPS.COMAddIns.Item("PPS.AddinModule").Object.GetVersionLabel()
         If ConnectioN Is Nothing Then
             Return False
         Else
@@ -101,8 +102,13 @@ Public Class ExcelAddinModule1
     ' Initialize the DLL computer instance
     Private Sub InitializeComputer()
 
-        GENERICDCGLobalInstance = New GenericSingleEntityDLL3Computer
-        UDFCALLBACKINSTANCE = New PPSBIController
+        GlobalVariables.GlobalDBDownloader = New DataBaseDataDownloader
+        GlobalVariables.GlobalDll3Interface = New DLL3_Interface
+        GlobalVariables.GenericGlobalSingleEntityComputer = New GenericSingleEntityDLL3Computer(GlobalVariables.GlobalDBDownloader, _
+                                                                                                GlobalVariables.GlobalDll3Interface)
+        GlobalVariables.GenericGlobalAggregationComputer = New GenericAggregationDLL3Computing(GlobalVariables.GlobalDBDownloader, _
+                                                                                               GlobalVariables.GlobalDll3Interface)
+        GlobalVariables.GlobalPPSBIController = New PPSBIController
 
     End Sub
 
@@ -113,11 +119,12 @@ Public Class ExcelAddinModule1
     ' Need for a flag at PPS level raised when model is updated
     ' before PPSBI below computes need to check for update flag
     ' if model has been updated -> reinitialize computerInstance !!!
-    Public Function PPSBI(ByRef entity As Object, _
+    Public Function PPSBI(ByRef entity As String, _
                           ByRef account As Object, _
                           ByRef period As Object, _
-                          ByRef currency_ As Object, _
-                          ByRef Version As Object, _
+                          ByRef currency As Object, _
+                          ByRef version As Object, _
+                          Optional ByRef adjustment_filter As Object = Nothing, _
                           Optional ByRef filter1 As Object = Nothing, _
                           Optional ByRef filter2 As Object = Nothing, _
                           Optional ByRef filter3 As Object = Nothing, _
@@ -131,37 +138,28 @@ Public Class ExcelAddinModule1
                           Optional ByRef filter11 As Object = Nothing) As Object
 
         If setUpFlag = False Then
-            '  Version_Label = APPS.COMAddIns.Item("PPS.AddinModule").Object.GetVersionLabel()
-            If UDFCALLBACKINSTANCE Is Nothing Then
+            '  Version_Label = GlobalVariables.apps.COMAddIns.Item("PPS.AddinModule").Object.GetVersionLabel()
+            If GlobalVariables.GlobalPPSBIController Is Nothing Then
                 If InitializeGlobalVariables() = True Then
                     InitializeComputer()
                     setUpFlag = True
                 End If
             End If
-
         End If
 
         If ConnectioN Is Nothing Then
             Return "WAITING FOR CONNECTION"
         End If
 
-        Return UDFCALLBACKINSTANCE.getDataCallBack(entity, _
+        Dim filtersArray As Object() = {filter1, filter2, filter3, filter4, filter5, filter6, filter7, filter8, filter9, filter10, filter11}
+
+        Return GlobalVariables.GlobalPPSBIController.getDataCallBack(entity, _
                                                    account, _
                                                    period, _
-                                                   currency_,
-                                                   Version, _
-                                                   filter1, _
-                                                   filter2, _
-                                                   filter3, _
-                                                   filter4, _
-                                                   filter5, _
-                                                   filter6, _
-                                                   filter7, _
-                                                   filter8, _
-                                                   filter9, _
-                                                   filter10, _
-                                                   filter11)
-
+                                                   currency,
+                                                   version, _
+                                                   adjustment_filter, _
+                                                   filtersArray)
 
     End Function
 

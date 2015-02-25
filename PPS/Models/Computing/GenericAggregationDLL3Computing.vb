@@ -1,77 +1,92 @@
-﻿' CControlingMODEL
+﻿' GenericAggregationDLL3Computing.vb
 ' 
 ' Aim: 
-'      Builds datasources for the Controling User Interface : Build Data Arrays (enitty)(account)(period)
+'      Builds datasources for the Controling User Interface : Build Data Arrays (entity)(account)(period)
 '
 '
 ' To do: 
 '       - Clear dll-> empty computation memory but not model
-'       - Computation of an entity without childrend -> currently the strSqlFilter is not applied = should be
+'       - Computation of an entity without children -> currently the strSqlFilter is not applied = should be
 '       - currently currency selection but entities currencies not implemented
 '       - set formulasTypes and formulasCodes as constants
 '       - dynamic with settings displays N-1, N-2,  N-3 
-'       - GetDataFromComputer: currency should be a param at this stage -> already computed
+'    
 '
 ' Known Bugs:
-'       - 
 '       - erreur si pas de taux -> si nb records = 0 la matrice de devrait pas être lancée
 '
-' Last modified: 27/01/2015
+'
+' Last modified: 23/02/2015
 ' Author: Julien Monnereau
 
 
-Imports Microsoft.Office.Interop
-Imports System.Runtime.InteropServices
-Imports System.Windows.Forms
-Imports System.Linq
-Imports System.Data
-Imports VIBlend.WinForms.DataGridView
 Imports System.Collections.Generic
 Imports System.Collections
-Imports H4xCode
 
 
-Friend Class ControlingUI2Model
+Friend Class GenericAggregationDLL3Computing
 
 
 #Region " Instance Variables"
 
     ' Objects
-    Private Dll3Computer As New DLL3_Interface
-    Private DBDOWNLOADER As New DataBaseDataDownloader
+    Private Dll3Computer As DLL3_Interface
+    Private DBDOWNLOADER As DataBaseDataDownloader
 
-    ' Complete mode
-    Friend complete_data_dictionary As Dictionary(Of String, Double())
-    Friend entities_id_list As List(Of String)
-    Friend inputs_entities_list As List(Of String)
-
+    ' Variables
+    Protected Friend complete_data_dictionary As Dictionary(Of String, Double())
+    Protected Friend entities_id_list As List(Of String)
+    Protected Friend inputs_entities_list As List(Of String)
+    Protected Friend current_version_id As String = ""
+    Protected Friend current_currency As String = ""
+    Protected Friend current_sql_filter_query As String = ""
+    Protected Friend current_adjustment_id As String = ""
+    Protected Friend periods_list As List(Of Int32)
 
 #End Region
 
 
-#Region "Complete Mode"
+#Region "Initialize"
 
-    Friend Sub init_computer_complete_mode(ByVal entity_node As TreeNode)
+    Protected Friend Sub New(ByRef input_DBDownloader As DataBaseDataDownloader, _
+                             Optional ByRef input_dll3_interface As DLL3_Interface = Nothing)
+
+        DBDOWNLOADER = input_DBDownloader
+        If input_dll3_interface Is Nothing Then
+            Dll3Computer = New DLL3_Interface
+        Else
+            Dll3Computer = input_dll3_interface
+        End If
+
+    End Sub
+
+#End Region
+
+
+#Region "Interface"
+
+    Protected Friend Sub init_computer_complete_mode(ByVal entity_node As System.Windows.Forms.TreeNode)
 
         clear_complete_data_dictionary()
         entities_id_list = Dll3Computer.InitializeEntitiesAggregation(entity_node)
 
         inputs_entities_list = cTreeViews_Functions.GetNoChildrenNodesList(entities_id_list, entity_node.TreeView)
         cTreeViews_Functions.FilterSelectedNodes(entity_node, entities_id_list)
-
+       
     End Sub
 
-    Friend Sub compute_selection_complete(ByRef version_id As String, _
-                                          ByRef PBar As ProgressBarControl, _
-                                          ByRef VersionTimeSetup As String, _
-                                          ByRef rates_version As String, _
-                                          ByRef periods_list As List(Of Integer), _
-                                          ByVal destinationCurrency As String, _
-                                          ByRef start_period As Int32, _
-                                          ByRef nb_periods As Int32, _
-                                          Optional ByRef strSqlQuery As String = "", _
-                                          Optional ByRef adjustments_id_list As List(Of String) = Nothing)
+    Protected Friend Sub compute_selection_complete(ByRef version_id As String, _
+                                                  ByRef VersionTimeSetup As String, _
+                                                  ByRef rates_version As String, _
+                                                  ByRef input_periods_list As List(Of Integer), _
+                                                  ByVal destinationCurrency As String, _
+                                                  ByRef start_period As Int32, _
+                                                  ByRef nb_periods As Int32, _
+                                                  Optional ByRef PBar As ProgressBarControl = Nothing, _
+                                                  Optional ByRef strSqlQuery As String = "", _
+                                                  Optional ByRef adjustments_id_list As List(Of String) = Nothing)
 
+        periods_list = input_periods_list
         ResetDllCurrencyPeriodsConfigIfNeeded(periods_list, VersionTimeSetup, start_period, nb_periods)
         load_needed_currencies(VersionTimeSetup, rates_version, destinationCurrency, start_period, nb_periods)
 
@@ -81,7 +96,7 @@ Friend Class ControlingUI2Model
                                           rates_version, _
                                           start_period)
 
-        Dim viewName As String = version_id & User_Credential
+        Dim viewName As String = version_id & GlobalVariables.User_Credential
         If DBDOWNLOADER.BuildDataRSTForEntityLoop(inputs_entities_list.ToArray, _
                                                   viewName, _
                                                   strSqlQuery, _
@@ -94,33 +109,49 @@ Friend Class ControlingUI2Model
                                                     DBDOWNLOADER.PeriodArray, _
                                                     DBDOWNLOADER.ValuesArray)
                 End If
-                PBar.AddProgress(1)
+                If Not PBar Is Nothing Then PBar.AddProgress(1)
             Next
             DBDOWNLOADER.CloseRST()
         End If
         Dll3Computer.ComputeAggregation()
-        PBar.AddProgress(2)
+        If Not PBar Is Nothing Then PBar.AddProgress(2)
+        current_currency = destinationCurrency
+        current_version_id = version_id
+        current_sql_filter_query = strSqlQuery
+        If adjustments_id_list Is Nothing Then current_adjustment_id = "" Else current_adjustment_id = adjustments_id_list(0)
+        ' above: we should store a string with adjustments id directly !!
 
     End Sub
 
-    Protected Friend Sub LoadOutputMatrix(ByRef PBar As ProgressBarControl)
+    Protected Friend Sub LoadOutputMatrix(Optional ByRef PBar As ProgressBarControl = Nothing)
 
         complete_data_dictionary = Dll3Computer.GetOutputMatrix()
-        PBar.AddProgress(2)
+        If Not PBar Is Nothing Then PBar.AddProgress(2)
 
     End Sub
 
-    Protected Friend Function GetEntityArray(ByRef entity_id As String) As Double()
+    Protected Friend Sub ReinitializeComputerCache()
 
-        Return Dll3Computer.GetEntityDataArray(entity_id)
+        current_version_id = ""
+        current_currency = ""
+        current_sql_filter_query = ""
+
+    End Sub
+
+    Protected Friend Function GetValueFromComputer(ByRef entity_id As String, _
+                                                   ByRef account_id As String, _
+                                                   ByRef period As Int32) As Object
+
+        Return complete_data_dictionary(entity_id)((Array.IndexOf(Dll3Computer.accounts_array, account_id) _
+                                                  * periods_list.Count) _
+                                                  + periods_list.IndexOf(period))
 
     End Function
-
 
 #End Region
 
 
-#Region "Complete Mode Currency Convertor Management"
+#Region "Currencies Conversion Management"
 
     Private Sub load_needed_currencies(ByRef time_config As String, _
                                        ByRef rates_version As String, _
@@ -195,6 +226,12 @@ Friend Class ControlingUI2Model
 
     End Function
 
+    Protected Friend Function GetEntityArray(ByRef entity_id As String) As Double()
+
+        Return Dll3Computer.GetEntityDataArray(entity_id)
+
+    End Function
+
     Friend Sub clear_complete_data_dictionary()
 
         If Not complete_data_dictionary Is Nothing Then
@@ -234,7 +271,12 @@ Friend Class ControlingUI2Model
 
     End Sub
 
-   
+    Protected Friend Function IsEntityAlreadyComputed(ByRef entity_id As String) As Boolean
+
+        If entities_id_list Is Nothing Then Return False
+        If entities_id_list.Contains(entity_id) Then Return True Else Return False
+      
+    End Function
 
 #End Region
 

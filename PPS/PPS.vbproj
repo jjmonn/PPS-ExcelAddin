@@ -159,7 +159,13 @@
     <Compile Include="Clients Specific Modules\GDF SUEZ - ALTERNATIVE SCENARIOS\View\AlternativeScenariosUI.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Modules\CONTROLING UI\Model\ControlingUI2Model.vb" />
+    <Compile Include="Models\Computing\GenericAggregationDLL3Computing.vb" />
+    <Compile Include="Modules\CONTROLING UI\View\ControllingUIChartsConfig.Designer.vb">
+      <DependentUpon>ControllingUIChartsConfig.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Modules\CONTROLING UI\View\ControllingUIChartsConfig.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Modules\CUBE\CubeView.Designer.vb">
       <DependentUpon>CubeView.vb</DependentUpon>
     </Compile>
@@ -167,6 +173,12 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Modules\MODELING\CONFIGURATION\FModeling Accounts\Controller\FModellingAccountsController.vb" />
+    <Compile Include="Modules\MODELING\CONFIGURATION\FModeling Accounts\View\FModelingAccountsMGTUI.Designer.vb">
+      <DependentUpon>FModelingAccountsMGTUI.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Modules\MODELING\CONFIGURATION\FModeling Accounts\View\FModelingAccountsMGTUI.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Modules\MODELING\CONFIGURATION\Market Prices Config\Controller\MarketPricesController.vb" />
     <Compile Include="Modules\MODELING\CONFIGURATION\Market Prices Config\Views\MarketPricesUI.Designer.vb">
       <DependentUpon>MarketPricesUI.vb</DependentUpon>
@@ -450,11 +462,11 @@
     <Compile Include="Models\Mappings\EntitiesMapping.vb" />
     <Compile Include="Controllers\DB Data Transactions\DataBaseDataDownloader.vb" />
     <Compile Include="Modules\CONNECTIONS\Models\ModelServer.vb" />
-    <Compile Include="Models\Computing\CRefreshGetDataBatch.vb" />
-    <Compile Include="Modules\PPSBI\PPSBIUI.Designer.vb">
+    <Compile Include="Models\Computing\RefreshGetDataBatch.vb" />
+    <Compile Include="Modules\PPSBI\Views\PPSBIUI.Designer.vb">
       <DependentUpon>PPSBIUI.vb</DependentUpon>
     </Compile>
-    <Compile Include="Modules\PPSBI\PPSBIUI.vb">
+    <Compile Include="Modules\PPSBI\Views\PPSBIUI.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Controllers\Data Acquisition\SimpleDisplaySnapshotUI.Designer.vb">
@@ -543,7 +555,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Modules\PPSBI\cPPSBIControl.vb" />
+    <Compile Include="Modules\PPSBI\Controller\PPSBIController.vb" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="AddinModule.resx">
@@ -555,6 +567,9 @@
     <EmbeddedResource Include="Clients Specific Modules\GDF SUEZ - ALTERNATIVE SCENARIOS\View\AlternativeScenariosUI.resx">
       <DependentUpon>AlternativeScenariosUI.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Modules\CONTROLING UI\View\ControllingUIChartsConfig.resx">
+      <DependentUpon>ControllingUIChartsConfig.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Modules\CONTROLING UI\View\UploadingHistoryUI.resx">
       <DependentUpon>UploadingHistoryUI.vb</DependentUpon>
     </EmbeddedResource>
@@ -563,6 +578,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Modules\CUBE\HTTP test.resx">
       <DependentUpon>HTTP test.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Modules\MODELING\CONFIGURATION\FModeling Accounts\View\FModelingAccountsMGTUI.resx">
+      <DependentUpon>FModelingAccountsMGTUI.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Modules\MODELING\CONFIGURATION\Market Prices Config\Views\MarketPricesUI.resx">
       <DependentUpon>MarketPricesUI.vb</DependentUpon>
@@ -657,7 +675,7 @@
     <EmbeddedResource Include="Modules\PLATFORM MANAGEMENT\Settings\SettingMainUI.resx">
       <DependentUpon>SettingMainUI.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Modules\PPSBI\PPSBIUI.resx">
+    <EmbeddedResource Include="Modules\PPSBI\Views\PPSBIUI.resx">
       <DependentUpon>PPSBIUI.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controllers\Data Acquisition\SimpleDisplaySnapshotUI.resx">
@@ -897,7 +915,6 @@
     <None Include="Resources\favicon%28239%29.ico" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Modules\MODELING\CONFIGURATION\FModeling Accounts\View\" />
     <Folder Include="Modules\MODELING\CONFIGURATION\Market Prices Config\Model\" />
   </ItemGroup>
   <ItemGroup>

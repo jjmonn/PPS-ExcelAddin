@@ -181,7 +181,7 @@ Friend Class AlternativeScenariosUI
 
     Private Sub SendToExcelToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles SendToExcelToolStripMenuItem.Click
 
-        Dim ws As Excel.Worksheet = APPS.ActiveSheet
+        Dim ws As Excel.Worksheet = GlobalVariables.apps.ActiveSheet
         If TypeOf (current_report) Is vDataGridView Then
             ' use dgvutil > export excel ?
 

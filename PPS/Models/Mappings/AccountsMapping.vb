@@ -9,7 +9,7 @@
 ' Know bugs :
 ' 
 '
-'Last modified: 02/12/2014
+'Last modified: 23/02/2015
 ' Author: Julien Monnereau
 
 
@@ -18,6 +18,14 @@ Imports System.Collections
 
 Friend Class AccountsMapping
 
+
+#Region "Constants"
+
+    Protected Friend Const LOOKUP_OUTPUTS = "Outputs"
+    Protected Friend Const LOOKUP_INPUTS = "Inputs"
+    Protected Friend Const LOOKUP_ALL = "Everything"
+
+#End Region
 
 
 #Region "LISTS"

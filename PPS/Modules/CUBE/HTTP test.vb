@@ -41,7 +41,7 @@ Friend Class HTTP_test
 
         Dim account_name1 = j(0)("account_name")
         For i = 1 To j.length - 1
-            APPS.ActiveSheet.cells(i, 1).value = j(i)("account_name")
+            GlobalVariables.apps.ActiveSheet.cells(i, 1).value = j(i)("account_name")
 
         Next
 

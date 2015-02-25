@@ -120,7 +120,7 @@ Friend Class ModelFormulasMGT
     Protected Friend Function testFormula() As Boolean
 
         buildTestFormulaString()
-        Return GENERICDCGLobalInstance.CheckParserFormula(formulaStringTest)
+        Return GlobalVariables.GenericGlobalSingleEntityComputer.CheckParserFormula(formulaStringTest)
 
     End Function
 
@@ -151,7 +151,7 @@ Friend Class ModelFormulasMGT
     Private Function Eval(Ref As String) As Object
 
         Ref = Replace(Ref, ",", ".")
-        Eval = APPS.Evaluate(Ref)
+        Eval = GlobalVariables.apps.Evaluate(Ref)
 
     End Function
 

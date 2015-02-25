@@ -68,7 +68,7 @@ Friend Class AlternativeScenariosController
     Private Function GetAccountsComboBox() As ComboBoxEditor
 
         Dim tmpCB As New ComboBoxEditor
-        For Each account_id As String In AccountsMapping.GetAccountsNamesList(LOOKUP_INPUTS)
+        For Each account_id As String In AccountsMapping.GetAccountsNamesList(AccountsMapping.LOOKUP_INPUTS)
             tmpCB.Items.Add(account_id)
         Next
         Return tmpCB

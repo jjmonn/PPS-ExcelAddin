@@ -22,7 +22,7 @@ Friend Class SubmissionsControlsController
     ' Objects
     Private SubmissionControl As New SubmissionControlModel
     Private View As SubmissionsControlUI
-    Private Computer As ControlingUI2MODEL
+    Private Computer As GenericAggregationDLL3Computing
     Private ControlCharts As New ControlChart
     Private EntitiesTV As New TreeView
     Private ChartsTV As New TreeView
@@ -51,8 +51,8 @@ Friend Class SubmissionsControlsController
         entities_id_list = cTreeViews_Functions.GetNodesKeysList(EntitiesTV)
         InitializeChartsDictionary()
         View = New SubmissionsControlUI(Me, EntitiesTV, charts_dic)
-        version_id = GLOBALCurrentVersionCode
-        Computer = New ControlingUI2Model()
+        version_id = GlobalVariables.GLOBALCurrentVersionCode
+        Computer = New GenericAggregationDLL3Computing(GlobalVariables.GlobalDBDownloader, GlobalVariables.GlobalDll3Interface)
         View.Show()
 
     End Sub
@@ -100,7 +100,7 @@ Friend Class SubmissionsControlsController
         Next
 
         View.EntityTB.Text = EntitiesTV.Nodes.Find(entity_id, True)(0).Text
-        View.VersionTB.Text = Version_label_Sub_Ribbon.Text
+        View.VersionTB.Text = GlobalVariables.Version_label_Sub_Ribbon.Text
         View.CurrencyTB.Text = MAIN_CURRENCY
 
     End Sub
@@ -123,13 +123,13 @@ Friend Class SubmissionsControlsController
             Versions.Close()
             InitializePBar()
             Computer.compute_selection_complete(version_id, _
-                                                View.PBar, _
                                                 time_config, _
                                                 rates_version_id, _
                                                 periods_list, _
                                                 MAIN_CURRENCY, _
                                                 start_period, _
-                                                nb_periods)
+                                                nb_periods, _
+                                                View.PBar)
 
             BuildDataDictionaries()
             View.PBar.AddProgress()

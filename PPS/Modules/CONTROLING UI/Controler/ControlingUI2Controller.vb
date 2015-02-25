@@ -25,7 +25,7 @@ Friend Class ControlingUI2Controller
 #Region "Instance Variable"
 
     ' Objects
-    Friend MODEL As ControlingUI2MODEL
+    Friend MODEL As GenericAggregationDLL3Computing
     Private ESB As New EntitiesSelectionBuilderClass
     Private View As ControllingUI_2        ' Can hold a WinForm or Task Pane ;)
 
@@ -45,7 +45,7 @@ Friend Class ControlingUI2Controller
 
     Friend Sub New(ByRef inputView As Object)
 
-        MODEL = New ControlingUI2MODEL()
+        MODEL = New GenericAggregationDLL3Computing(GlobalVariables.GlobalDBDownloader)
         View = inputView
 
     End Sub
@@ -139,13 +139,13 @@ Friend Class ControlingUI2Controller
         nb_periods = versions_dict(version_id)(VERSIONS_NB_PERIODS_VAR)
 
         MODEL.compute_selection_complete(version_id, _
-                                         View.PBar, _
                                          versions_dict(version_id)(VERSIONS_TIME_CONFIG_VARIABLE), _
                                          rates_version, _
                                          versions_dict(version_id)(Version.PERIOD_LIST), _
                                          View.CurrenciesCLB.CheckedItems(0), _
                                          start_period, _
                                          nb_periods, _
+                                         View.PBar, _
                                          ESB.StrSqlQuery, _
                                          GetAdjustmentsFilter)
 

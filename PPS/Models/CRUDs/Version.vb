@@ -179,8 +179,8 @@ Friend Class Version
         Dim versions_dict As Dictionary(Of String, Hashtable)
         If Not periodsList Is Nothing Then periodsList = Nothing
         If versionsNodesList.Count = 0 Then
-            versions_id_array = {GLOBALCurrentVersionCode}
-            versions_name_array = {Version_Label.Caption}
+            versions_id_array = {GlobalVariables.GLOBALCurrentVersionCode}
+            versions_name_array = {GlobalVariables.Version_Label.Caption}
             versions_dict = GetVersionsDictionary(versions_id_array)
             periodsList = versions_dict(versions_id_array(0))(PERIOD_LIST)
         Else

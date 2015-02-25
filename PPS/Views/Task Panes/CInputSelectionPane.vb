@@ -107,7 +107,7 @@ Public Class CInputSelectionPane
 #Region "Form show and close events"
 
     Private Sub ADXExcelTaskPane1_ADXBeforeTaskPaneShow(sender As Object, e As ADXBeforeTaskPaneShowEventArgs) Handles MyBase.ADXBeforeTaskPaneShow
-        Me.Visible = InputSelectionPaneVisible
+        Me.Visible = GlobalVariables.InputSelectionPaneVisible
     End Sub
 
     Private Sub CInputSelectionPane_ADXAfterTaskPaneShow(sender As Object, e As ADXAfterTaskPaneShowEventArgs) Handles MyBase.ADXAfterTaskPaneShow

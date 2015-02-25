@@ -71,7 +71,7 @@ Friend Class CAcquisitionModel
 
         versionsTimeConfigDict = VersionsMapping.GetVersionsHashTable(VERSIONS_CODE_VARIABLE, VERSIONS_TIME_CONFIG_VARIABLE)
         accountsNamesFormulaTypeDict = AccountsMapping.GetAccountsDictionary(ACCOUNT_NAME_VARIABLE, ACCOUNT_FORMULA_TYPE_VARIABLE)
-        outputsList = AccountsMapping.GetAccountsNamesList(LOOKUP_OUTPUTS)
+        outputsList = AccountsMapping.GetAccountsNamesList(AccountsMapping.LOOKUP_OUTPUTS)
 
     End Sub
 
@@ -84,12 +84,12 @@ Friend Class CAcquisitionModel
                                 ByRef adjustment_id As String)
 
         Dim entityKey As String = DATASET.EntitiesNameKeyDictionary(entityName)
-        mCurrentVersionCode = GLOBALCurrentVersionCode
+        mCurrentVersionCode = GlobalVariables.GLOBALCurrentVersionCode
 
         Dim Versions As New Version
         currentPeriodlist = Versions.GetPeriodList(mCurrentVersionCode)
 
-        Dim viewName = mCurrentVersionCode & User_Credential
+        Dim viewName = mCurrentVersionCode & GlobalVariables.User_Credential
         DBDownloader.GetEntityInputsNonConverted(entityKey, viewName, adjustment_id)
         LoadDBInputsDictionary(entityName)
 

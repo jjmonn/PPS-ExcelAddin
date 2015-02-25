@@ -113,7 +113,7 @@ Friend Class cExcelSubmissionWorksheetController
         If GRS.isUpdating = False AndAlso disableWSChange = False Then
             For Each cell As Excel.Range In Target.Cells
 
-                Dim intersect = APPS.Intersect(cell, DATAMODTRACKER.dataSetRegion)
+                Dim intersect = GlobalVariables.apps.Intersect(cell, DATAMODTRACKER.dataSetRegion)
                 If Not intersect Is Nothing Then
 
                     entityItem = DATASET.CellsAddressItemsDictionary(cell.Address)(CModelDataSet.ENTITY_ITEM)
@@ -135,7 +135,7 @@ Friend Class cExcelSubmissionWorksheetController
                     End If
                 Else
                     On Error Resume Next
-                    Dim intersectOutput = APPS.Intersect(cell, DATAMODTRACKER.outputsRegion)
+                    Dim intersectOutput = GlobalVariables.apps.Intersect(cell, DATAMODTRACKER.outputsRegion)
                     If Not intersectOutput Is Nothing Then
                         disableWSChange = True
                         cell.Value = DATASET.OutputCellsAddressValuesDictionary(cell.Address)
@@ -152,8 +152,8 @@ Friend Class cExcelSubmissionWorksheetController
 
         Dim newButton As CommandBarButton
         On Error Resume Next
-        APPS.CommandBars("Cell").Controls("Account Details").Delete()
-        newButton = APPS.CommandBars("Cell").Controls.Add(Temporary:=True)
+        GlobalVariables.apps.CommandBars("Cell").Controls("Account Details").Delete()
+        newButton = GlobalVariables.apps.CommandBars("Cell").Controls.Add(Temporary:=True)
         newButton.Caption = "Account Details"
         newButton.Style = MsoButtonStyle.msoButtonCaption
         ' rajouter image -> icone PPS

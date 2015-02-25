@@ -41,8 +41,8 @@ Public Class CircularProgressUI
 
     Private Sub CircularProgressUI_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 
-        Me.Left = (APPS.Width - Me.Width) / 2
-        Me.Top = (APPS.Height - Me.Height) / 2
+        Me.Left = (GlobalVariables.apps.Width - Me.Width) / 2
+        Me.Top = (GlobalVariables.apps.Height - Me.Height) / 2
         Label1.Left = (Me.Width - Label1.Width) / 2
         CP.Start()
 

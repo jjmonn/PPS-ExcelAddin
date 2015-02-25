@@ -40,7 +40,7 @@ Friend Class FormulasGenericCheck
                                                token_list, _
                                                operators)
         If formula Is Nothing Then Return 0
-        If GENERICDCGLobalInstance.CheckParserFormula(formula) = True Then Return 2 Else Return 1
+        If GlobalVariables.GenericGlobalSingleEntityComputer.CheckParserFormula(formula) = True Then Return 2 Else Return 1
 
     End Function
 

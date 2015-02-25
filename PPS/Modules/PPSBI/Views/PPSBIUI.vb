@@ -12,7 +12,7 @@
 ' Quid: do the categories have sub categories...?
 '
 '
-' Last modified: 11/12/2014 
+' Last modified: 25/02/2015 
 ' Author: Julien Monnereau
 
 
@@ -59,8 +59,8 @@ Friend Class PPSBI_UI
     Private Const EXPANDED_CONTROL_HEIGHT As Integer = 620
     Private Const NON_EXPANDED_CONTROL_HEIGHT As Integer = 470
     Private Const EXPANSION_CONTROL_MARGIN As Integer = 30
-    Private Const EXPANDED_IMAGE_INDEX As Int32 = 6
-    Private Const COLLAPSED_IMAGE_INDEX As Int32 = 5
+    Private Const EXPANDED_IMAGE_INDEX As Int32 = 1
+    Private Const COLLAPSED_IMAGE_INDEX As Int32 = 0
     Private Const AVERAGE_LETTER_SIZE As Int32 = 10
 
 #End Region
@@ -70,14 +70,13 @@ Friend Class PPSBI_UI
 
 #Region "Initialization"
 
-
-    Public Sub New()
+    Protected Friend Sub New()
 
         ' This call is required by the designer.
         InitializeComponent()
 
         ' Add any initialization after the InitializeComponent() call.
-        destination = APPS.ActiveCell
+        destination = GlobalVariables.apps.ActiveCell
 
         Dim currencies As List(Of String) = CurrenciesMapping.getCurrenciesList(CURRENCIES_KEY_VARIABLE)
         For Each currency_ As String In currencies
@@ -86,8 +85,9 @@ Friend Class PPSBI_UI
 
         CurrencyCB.SelectedItem = MAIN_CURRENCY
         TreeviewsInitialization()
-        versionsTB.Text = versionsTV.Nodes.Find(GLOBALCurrentVersionCode, True)(0).Text
-        InitializeTimePeriodsSelection(GLOBALCurrentVersionCode)
+        InitializeAdjustmentsCB()
+        versionsTB.Text = versionsTV.Nodes.Find(GlobalVariables.GLOBALCurrentVersionCode, True)(0).Text
+        InitializeTimePeriodsSelection(GlobalVariables.GLOBALCurrentVersionCode)
         CategoriesControlTabInitialization()
 
     End Sub
@@ -97,7 +97,7 @@ Friend Class PPSBI_UI
         periodsStrIntDictionary.Clear()
         PeriodCB.Items.Clear()
         Dim Versions As New Version
-        ' may be improved -> anyway module to reimplement to efficiently compute what is needed
+        ' may be improved -> anyway module to reimplement to efficiently compute what is needed!
       
         Dim strFormat As String = ""
         Select Case Versions.ReadVersion(versionCode, VERSIONS_TIME_CONFIG_VARIABLE)
@@ -150,6 +150,15 @@ Friend Class PPSBI_UI
 
     End Sub
 
+    Private Sub InitializeAdjustmentsCB()
+
+        AdjustmentCB.Items.Add("")
+        For Each adjustment_name As String In AdjustmentsMapping.GetAdjustmentsIDsList(ADJUSTMENTS_NAME_VAR)
+            AdjustmentCB.Items.Add(adjustment_name)
+        Next
+
+    End Sub
+
     Private Sub CategoriesControlTabInitialization()
 
         For Each node As TreeNode In categoriesTV.Nodes
@@ -182,7 +191,6 @@ Friend Class PPSBI_UI
 
     End Sub
 
-
 #End Region
 
 
@@ -195,10 +203,16 @@ Friend Class PPSBI_UI
 
         Dim periodStr As String = (Format(DateTime.FromOADate(periodsStrIntDictionary(PeriodCB.Text)), "Short date"))
         Dim strFormula = "=" + UDF_FORMULA_GET_DATA_NAME + "(" + Chr(34) + entitiesTB.Text + Chr(34) + "," _
-                                                                   + Chr(34) + accountsTB.Text + Chr(34) + "," _
-                                                                   + Chr(34) + periodStr + Chr(34) + "," _
-                                                                   + Chr(34) + CurrencyCB.Text + Chr(34) + "," _
-                                                                   + Chr(34) + versionsTB.Text + Chr(34)
+                                                                + Chr(34) + accountsTB.Text + Chr(34) + "," _
+                                                                + Chr(34) + periodStr + Chr(34) + "," _
+                                                                + Chr(34) + CurrencyCB.Text + Chr(34) + "," _
+                                                                + Chr(34) + versionsTB.Text + Chr(34)
+        If AdjustmentCB.Text <> "" Then
+            strFormula = strFormula + "," + Chr(34) + AdjustmentCB.Text + Chr(34)
+        Else
+            strFormula = strFormula + "," + AdjustmentCB.Text
+        End If
+
         If categoriesFilterStr <> "" Then
             strFormula = strFormula + "," + Chr(34) + categoriesFilterStr + Chr(34) + ")"
         Else
@@ -209,7 +223,6 @@ Friend Class PPSBI_UI
 
     End Sub
 
-
 #Region "Main Selections Validation"
 
     Private Sub ValidateEntitySelection(ByRef entityName As String)
@@ -217,6 +230,7 @@ Friend Class PPSBI_UI
         entitiesTB.Text = entityName
         ShowCategoriesSelection()
         CollapseRightPane()
+        accountsTB.Select()
 
     End Sub
 
@@ -225,7 +239,7 @@ Friend Class PPSBI_UI
         accountsTB.Text = accountName
         ShowCategoriesSelection()
         CollapseRightPane()
-
+   
     End Sub
 
     Private Sub ValidateVersionSelection(ByRef versionCode As String, ByRef versionName As String)
@@ -234,6 +248,7 @@ Friend Class PPSBI_UI
         InitializeTimePeriodsSelection(versionCode)
         ShowCategoriesSelection()
         CollapseRightPane()
+        PeriodCB.Select()
 
     End Sub
 
@@ -464,7 +479,6 @@ Friend Class PPSBI_UI
 
 
 #End Region
-
 
 #End Region
 

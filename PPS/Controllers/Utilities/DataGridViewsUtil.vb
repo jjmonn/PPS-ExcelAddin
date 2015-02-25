@@ -582,7 +582,7 @@ Friend Class DataGridViewsUtil
 
         Dim i As Int32 = 1
         Dim j As Int32 = 1
-        APPS.ScreenUpdating = False
+        GlobalVariables.apps.ScreenUpdating = False
         destination.Value2 = DatagridView.Name
 
         For Each item As HierarchyItem In DatagridView.ColumnsHierarchy.Items
@@ -603,7 +603,7 @@ Friend Class DataGridViewsUtil
         Dim test = destination.Row
         EXCELFORMATER.FormatExcelRangeAs(destination.Worksheet.Range(destination, destination.Offset(i - 1, DatagridView.ColumnsHierarchy.Items.Count)), _
                                          INPUT_FORMAT_CODE)
-        APPS.ScreenUpdating = True
+        GlobalVariables.apps.ScreenUpdating = True
         Return i + 1
 
     End Function
@@ -615,7 +615,7 @@ Friend Class DataGridViewsUtil
         Dim i As Int32 = 1
         Dim j As Int32 = 1
 
-        APPS.ScreenUpdating = False
+        GlobalVariables.apps.ScreenUpdating = False
         destination.Offset(1, 0).Value2 = dataGridView.Name
         destination.Offset(1, 0).Rows.Font.Bold = True
 
@@ -651,7 +651,7 @@ Friend Class DataGridViewsUtil
                                        destination.Offset(i - 1, (dataGridView.ColumnsHierarchy.Items(0).Items.Count * _
                                        dataGridView.ColumnsHierarchy.Items.Count))), _
                                        INPUT_FORMAT_CODE)
-        APPS.ScreenUpdating = True
+        GlobalVariables.apps.ScreenUpdating = True
         Return i + 1
 
     End Function

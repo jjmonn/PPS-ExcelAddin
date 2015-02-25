@@ -25,7 +25,7 @@ Friend Class EntitiesMapping
 
         Dim srv As New ModelServer
         Dim tmpHT As New Hashtable
-        srv.openRst(VIEWS_DATABASE + "." + Entities_View, ModelServer.FWD_CURSOR)
+        srv.openRst(VIEWS_DATABASE + "." + GlobalVariables.Entities_View, ModelServer.FWD_CURSOR)
 
         If srv.rst.EOF = False And srv.rst.BOF = False Then
             srv.rst.MoveFirst()
@@ -46,7 +46,7 @@ Friend Class EntitiesMapping
 
         Dim namesList As New List(Of String)
         Dim srv As New ModelServer
-        srv.openRst(VIEWS_DATABASE + "." + Entities_View, ModelServer.FWD_CURSOR)
+        srv.openRst(VIEWS_DATABASE + "." + GlobalVariables.Entities_View, ModelServer.FWD_CURSOR)
         If srv.rst.EOF = False And srv.rst.BOF = False Then
 
             Do While srv.rst.EOF = False
@@ -65,7 +65,7 @@ Friend Class EntitiesMapping
 
         Dim keysList As New List(Of String)
         Dim srv As New ModelServer
-        srv.openRst(VIEWS_DATABASE + "." + Entities_View, ModelServer.FWD_CURSOR)
+        srv.openRst(VIEWS_DATABASE + "." + GlobalVariables.Entities_View, ModelServer.FWD_CURSOR)
         If srv.rst.EOF = False And srv.rst.BOF = False Then
 
             Do While srv.rst.EOF = False
@@ -85,7 +85,7 @@ Friend Class EntitiesMapping
 
         Dim tmpList As New List(Of String)
         Dim srv As New ModelServer
-        srv.openRst(VIEWS_DATABASE + "." + Entities_View, ModelServer.FWD_CURSOR)
+        srv.openRst(VIEWS_DATABASE + "." + GlobalVariables.Entities_View, ModelServer.FWD_CURSOR)
         If srv.rst.EOF = False And srv.rst.BOF = False Then
 
             Do While srv.rst.EOF = False
@@ -103,7 +103,7 @@ Friend Class EntitiesMapping
     Friend Shared Function GetEntityCurrency(ByRef entityKey As String) As String
 
         Dim srv As New ModelServer
-        srv.openRst(VIEWS_DATABASE + "." + Entities_View, ModelServer.FWD_CURSOR)
+        srv.openRst(VIEWS_DATABASE + "." + GlobalVariables.Entities_View, ModelServer.FWD_CURSOR)
         Dim criteria As String = ASSETS_TREE_ID_VARIABLE + "='" + entityKey + "'"
         srv.rst.Find(criteria, , , 1)
         If srv.rst.EOF = False AndAlso srv.rst.BOF = False Then

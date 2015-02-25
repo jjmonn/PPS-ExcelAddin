@@ -11,7 +11,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 20/02/2015
+' Last modified: 23/02/2015
 
 
 Imports System.Collections.Generic
@@ -26,15 +26,16 @@ Friend Class GenericSingleEntityDLL3Computer
 #Region "Instance Variables"
 
     ' Objects
-    Private DBDownloader As New DataBaseDataDownloader
+    Private DBDownloader As DataBaseDataDownloader
     Private DLL3Computer As DLL3_Interface
     Private EntitiesTV As New TreeView
 
     ' Variables
-    Friend current_version_id As String
-    Friend current_entity_id As String
-    Friend currentCurrency As String
-    Friend currentStrSqlQuery As String
+    Friend current_version_id As String = ""
+    Friend current_entity_id As String = ""
+    Friend currentCurrency As String = ""
+    Friend currentStrSqlQuery As String = ""
+    Friend current_adjusmtent_id As String = ""
     Protected Friend period_list As List(Of Int32)
     Protected Friend time_config As String
 
@@ -44,15 +45,19 @@ Friend Class GenericSingleEntityDLL3Computer
 
 #Region "Initialize"
 
-    Friend Sub New()
+    Friend Sub New(ByRef input_DBDownloader As DataBaseDataDownloader, _
+                   Optional ByRef input_dll3_interface As DLL3_Interface = Nothing)
 
-        DLL3Computer = New DLL3_Interface
+        DBDownloader = input_DBDownloader
+        If input_dll3_interface Is Nothing Then
+            DLL3Computer = New DLL3_Interface
+        Else
+            DLL3Computer = input_dll3_interface
+        End If
         Entity.LoadEntitiesTree(EntitiesTV)
         cTreeViews_Functions.CheckAllNodes(EntitiesTV)
 
     End Sub
-
-
 
 #End Region
 
@@ -63,7 +68,7 @@ Friend Class GenericSingleEntityDLL3Computer
                                         ByRef entity_id As String, _
                                         Optional ByVal adjustment_id As String = "") As Boolean
 
-        Dim viewName As String = versionCode & User_Credential
+        Dim viewName As String = versionCode & GlobalVariables.User_Credential
         Dim inputNode As TreeNode = EntitiesTV.Nodes.Find(entity_id, True)(0)
         Dim Versions As New Version
         time_config = Versions.ReadVersion(versionCode, VERSIONS_TIME_CONFIG_VARIABLE)
@@ -85,6 +90,7 @@ Friend Class GenericSingleEntityDLL3Computer
 
                     current_entity_id = entity_id
                     current_version_id = versionCode
+                    current_adjusmtent_id = adjustment_id
                     Return True
                 End If
         End Select
@@ -96,6 +102,7 @@ Friend Class GenericSingleEntityDLL3Computer
     Friend Function ComputeAggregatedEntity(ByRef entity_id As String, _
                                             ByRef version_id As String, _
                                             ByRef destination_currency As String, _
+                                            Optional ByVal adjustment_id As String = "", _
                                             Optional ByRef filter_sql_query As String = "") As Boolean
 
         Dim entities_id_list As String()
@@ -119,6 +126,7 @@ Friend Class GenericSingleEntityDLL3Computer
         If DBDownloader.GetAggregatedConvertedInputs(entities_id_list, _
                                                      version_id, _
                                                      destination_currency, _
+                                                     adjustment_id, _
                                                      filter_sql_query) Then
 
             DLL3Computer.ComputeEntity(DBDownloader.AccKeysArray, _
@@ -127,6 +135,8 @@ Friend Class GenericSingleEntityDLL3Computer
 
             current_entity_id = entity_id
             current_version_id = version_id
+            currentCurrency = destination_currency
+            current_adjusmtent_id = adjustment_id
             Return True
         Else
             Return False
@@ -141,12 +151,12 @@ Friend Class GenericSingleEntityDLL3Computer
 
     End Function
 
-    ' Renitialize the instance : set current variables(entity, version and currency to "") -> ideally should empty the c_DLL3ComputerInstance ?
     Friend Sub ReinitializeGenericDataDLL3Computer()
 
         current_entity_id = ""
         currentCurrency = ""
         current_version_id = ""
+        currentStrSqlQuery = ""
 
     End Sub
 

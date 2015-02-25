@@ -12,7 +12,7 @@
 '
 '
 '
-' Last modified: 27/01/2015
+' Last modified: 23/02/2015
 ' Author: Julien Monnereau
 
 
@@ -28,7 +28,7 @@ Friend Class cTreeViews_Functions
 
 #Region "Add nodes to Treeview"
 
-    Public Shared Function AddNode(ByRef TV As TreeView, _
+    Protected Friend Shared Function AddNode(ByRef TV As TreeView, _
                                    ByRef token_size As Int32, _
                                    Optional ByRef nodeText As String = "", _
                                    Optional ByRef imageIndex As Int32 = 0,
@@ -59,7 +59,7 @@ Friend Class cTreeViews_Functions
 
     End Function
 
-    Public Shared Function AddChildNode(ByRef TV As TreeView, _
+    Protected Friend Shared Function AddChildNode(ByRef TV As TreeView, _
                                         ByRef token_size As Int32, _
                                         Optional ByRef str As String = "", _
                                         Optional ByRef imageIndex As Int32 = 0, _
@@ -84,7 +84,7 @@ Friend Class cTreeViews_Functions
 
     End Function
 
-    Public Shared Function GetNewNodeKey(ByRef TV As TreeView, ByRef token_size As Int32) As String
+    Protected Friend Shared Function GetNewNodeKey(ByRef TV As TreeView, ByRef token_size As Int32) As String
 
         Dim key As String
         key = IssueNewToken(token_size)
@@ -95,7 +95,7 @@ Friend Class cTreeViews_Functions
 
     End Function
 
-    Public Shared Function IssueNewToken(ByRef NbCharacters As Int32) As String
+    Protected Friend Shared Function IssueNewToken(ByRef NbCharacters As Int32) As String
 
         Dim token As String = ""
 
@@ -202,43 +202,9 @@ Friend Class cTreeViews_Functions
 #End Region
 
 
-#Region "Utilities"
+#Region "Nodes Lists"
 
-    Public Shared Function ReturnRootNodeFromNode(ByRef inputNode As TreeNode) As TreeNode
-
-        Dim currentNode As TreeNode = inputNode
-        Do While Not currentNode.Parent Is Nothing
-            currentNode = currentNode.Parent
-        Loop
-        Return currentNode
-
-    End Function
-
-    Public Shared Function IsNameAlreadyInTree(ByRef TV As TreeView, _
-                                               ByRef str As String) As Boolean
-
-        For Each node As TreeNode In TV.Nodes
-            If IsNameIncludedInHierarchy(node, str) Then Return True
-        Next
-        Return False
-
-    End Function
-
-    Public Shared Function IsNameIncludedInHierarchy(ByRef node As TreeNode, _
-                                                     ByRef str As String) As Boolean
-
-        If node.Text = str Then
-            Return True
-        Else
-            For Each subNode As TreeNode In node.Nodes
-                IsNameIncludedInHierarchy(subNode, str)
-            Next
-        End If
-        Return False
-
-    End Function
-
-    Public Shared Function GetNodeAllChildrenCount(inputNode As TreeNode) As Integer
+    Protected Friend Shared Function GetNodeAllChildrenCount(inputNode As TreeNode) As Integer
 
         Dim nbChildren As Integer = 0
         If inputNode.Nodes.Count > 0 Then
@@ -253,7 +219,7 @@ Friend Class cTreeViews_Functions
 
     End Function
 
-    Public Shared Function GetNodesKeysList(ByRef TV As TreeView) As List(Of String)
+    Protected Friend Shared Function GetNodesKeysList(ByRef TV As TreeView) As List(Of String)
 
         Dim tmpList As New List(Of String)
         For Each node In TV.Nodes
@@ -263,7 +229,7 @@ Friend Class cTreeViews_Functions
 
     End Function
 
-    Public Shared Function GetNodesTextsList(ByRef TV As TreeView) As List(Of String)
+    Protected Friend Shared Function GetNodesTextsList(ByRef TV As TreeView) As List(Of String)
 
         Dim tmpList As New List(Of String)
         For Each node In TV.Nodes
@@ -273,7 +239,7 @@ Friend Class cTreeViews_Functions
 
     End Function
 
-    Public Shared Function GetNodesKeysList(ByRef node As TreeNode) As List(Of String)
+    Protected Friend Shared Function GetNodesKeysList(ByRef node As TreeNode) As List(Of String)
 
         Dim tmpList As New List(Of String)
         AddChildrenKeysToList(node, tmpList)
@@ -281,7 +247,7 @@ Friend Class cTreeViews_Functions
 
     End Function
 
-    Public Shared Function GetNodesTextsList(ByRef node As TreeNode) As List(Of String)
+    Protected Friend Shared Function GetNodesTextsList(ByRef node As TreeNode) As List(Of String)
 
         Dim tmpList As New List(Of String)
         AddChildrenTextsToList(node, tmpList)
@@ -289,7 +255,7 @@ Friend Class cTreeViews_Functions
 
     End Function
 
-    Public Shared Sub AddChildrenKeysToList(ByRef node As TreeNode, tmpList As List(Of String))
+    Protected Friend Shared Sub AddChildrenKeysToList(ByRef node As TreeNode, tmpList As List(Of String))
 
         tmpList.Add(node.Name)
         For Each subNode In node.Nodes
@@ -298,7 +264,7 @@ Friend Class cTreeViews_Functions
 
     End Sub
 
-    Public Shared Sub AddChildrenTextsToList(ByRef node As TreeNode, tmpList As List(Of String))
+    Protected Friend Shared Sub AddChildrenTextsToList(ByRef node As TreeNode, tmpList As List(Of String))
 
         tmpList.Add(node.Text)
         For Each subNode In node.Nodes
@@ -329,7 +295,7 @@ Friend Class cTreeViews_Functions
 
     End Function
 
-    Public Shared Function GetNoChildrenNodesList(ByRef allIDsList As List(Of String), ByRef tv As TreeView) As List(Of String)
+    Protected Friend Shared Function GetNoChildrenNodesList(ByRef allIDsList As List(Of String), ByRef tv As TreeView) As List(Of String)
 
         Dim tmpList As New List(Of String)
         For Each id In allIDsList
@@ -340,7 +306,7 @@ Friend Class cTreeViews_Functions
 
     End Function
 
-    Public Shared Function GetChildrenIDList(ByRef node As TreeNode) As List(Of String)
+    Protected Friend Shared Function GetChildrenIDList(ByRef node As TreeNode) As List(Of String)
 
         Dim children_list As New List(Of String)
         For Each child In node.Nodes
@@ -350,13 +316,52 @@ Friend Class cTreeViews_Functions
 
     End Function
 
-    Public Shared Function GetUniqueList(ByRef input_list As List(Of String)) As List(Of String)
+    Protected Friend Shared Function GetUniqueList(ByRef input_list As List(Of String)) As List(Of String)
 
         Dim tmp_list As New List(Of String)
         For Each item In input_list
             If tmp_list.Contains(item) = False Then tmp_list.Add(item)
         Next
         Return tmp_list
+
+    End Function
+
+#End Region
+
+
+#Region "Utilities"
+
+    Protected Friend Shared Function ReturnRootNodeFromNode(ByRef inputNode As TreeNode) As TreeNode
+
+        Dim currentNode As TreeNode = inputNode
+        Do While Not currentNode.Parent Is Nothing
+            currentNode = currentNode.Parent
+        Loop
+        Return currentNode
+
+    End Function
+
+    Protected Friend Shared Function IsNameAlreadyInTree(ByRef TV As TreeView, _
+                                               ByRef str As String) As Boolean
+
+        For Each node As TreeNode In TV.Nodes
+            If IsNameIncludedInHierarchy(node, str) Then Return True
+        Next
+        Return False
+
+    End Function
+
+    Protected Friend Shared Function IsNameIncludedInHierarchy(ByRef node As TreeNode, _
+                                                     ByRef str As String) As Boolean
+
+        If node.Text = str Then
+            Return True
+        Else
+            For Each subNode As TreeNode In node.Nodes
+                IsNameIncludedInHierarchy(subNode, str)
+            Next
+        End If
+        Return False
 
     End Function
 
@@ -373,6 +378,21 @@ Friend Class cTreeViews_Functions
 
     End Function
 
+    Protected Friend Shared Function GetHighestHierarchyLevelFromList(ByRef ids_list As List(Of String), _
+                                                                      ByRef TV As TreeView) As String
+
+        Dim all_nodes_list As List(Of String) = GetNodesKeysList(TV)
+        Dim highest_level_id As String = ""
+        Dim highest_index As Int32 = all_nodes_list.Count
+        For Each id As String In ids_list
+            If all_nodes_list.IndexOf(id) < highest_index Then
+                highest_level_id = id
+                highest_index = all_nodes_list.IndexOf(id)
+            End If
+        Next
+        Return highest_level_id
+
+    End Function
 
 #End Region
 

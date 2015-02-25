@@ -107,11 +107,11 @@ Friend Class CDataModificationsTracking
                 Dim appendRange = DATASET.WS.Range(DATASET.WS.Cells(VArea(1).row, HArea(1).column), _
                                                    DATASET.WS.Cells(VArea(VArea.Count).row, HArea(HArea.Count).column))
                 If region Is Nothing Then region = appendRange
-                region = APPS.Union(region, appendRange)
+                region = GlobalVariables.apps.Union(region, appendRange)
 
             Next
         Next
-        ' APPS.ActiveSheet.protect()
+        ' GlobalVariables.apps.ActiveSheet.protect()
 
     End Sub
 
@@ -121,7 +121,7 @@ Friend Class CDataModificationsTracking
         Dim rng As Excel.Range
         rng = DATASET.WS.Range(inputDict.ElementAt(0).Key)
         For Each address As String In inputDict.Keys
-            rng = APPS.Union(rng, DATASET.WS.Range(address))
+            rng = GlobalVariables.apps.Union(rng, DATASET.WS.Range(address))
         Next
 
         Return rng

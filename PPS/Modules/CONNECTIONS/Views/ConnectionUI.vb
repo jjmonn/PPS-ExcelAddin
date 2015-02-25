@@ -85,7 +85,12 @@ Friend Class ConnectionUI
         ConnectioN = OpenConnection(IDTB.Text, PWDTB.Text)
         If Not ConnectioN Is Nothing Then
             If SQLCredentials.SetGLOBALUserCredential() Then
-                GENERICDCGLobalInstance = New GenericSingleEntityDLL3Computer
+                GlobalVariables.GlobalDBDownloader = New DataBaseDataDownloader
+                GlobalVariables.GlobalDll3Interface = New DLL3_Interface
+                GlobalVariables.GenericGlobalSingleEntityComputer = New GenericSingleEntityDLL3Computer(GlobalVariables.GlobalDBDownloader, _
+                                                                                                        GlobalVariables.GlobalDll3Interface)
+                GlobalVariables.GenericGlobalAggregationComputer = New GenericAggregationDLL3Computing(GlobalVariables.GlobalDBDownloader, _
+                                                                                                       GlobalVariables.GlobalDll3Interface)
                 isCredentialValid = True
             Else
                 isCredentialValid = False
@@ -112,8 +117,8 @@ Friend Class ConnectionUI
             If Not ConnectioN Is Nothing Then
                 If isCredentialValid = True Then
                     If My.Settings.user <> IDTB.Text Then My.Settings.user = IDTB.Text
-                    Connection_Toggle_Button.Image = 1
-                    Connection_Toggle_Button.Caption = "Connected"
+                    GlobalVariables.Connection_Toggle_Button.Image = 1
+                    GlobalVariables.Connection_Toggle_Button.Caption = "Connected"
                     ADDIN.LaunchVersionSelection()
                     AdjustmentsMapping.LoadAdjustmentsIDDD()
                     CP.Dispose()

@@ -798,6 +798,31 @@ Friend Class ControllingUI_2
 
 #End Region
 
+#Region "Adjustments RCM"
+
+    Private Sub SelectAllToolStripMenuItem1_Click(sender As Object, e As EventArgs) Handles SelectAllToolStripMenuItem1.Click
+
+        SetAdjustmentsSelection(True)
+
+    End Sub
+
+    Private Sub UnselectAllToolStripMenuItem1_Click(sender As Object, e As EventArgs) Handles UnselectAllToolStripMenuItem1.Click
+
+        SetAdjustmentsSelection(False)
+
+    End Sub
+
+    Private Sub SetAdjustmentsSelection(ByRef state As Boolean)
+
+        For Each node As TreeNode In adjustmentsTV.Nodes
+            node.Checked = state
+        Next
+
+    End Sub
+
+
+#End Region
+
 #End Region
 
 
@@ -846,7 +871,6 @@ Friend Class ControllingUI_2
 
 
 #End Region
-
 
 
 #Region "Utilities"

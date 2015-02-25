@@ -121,16 +121,16 @@ Friend Class CWorksheetWrittingFunctions
                                              ByRef header_names_array As String(), _
                                              ByRef header_values_array As String()) As Excel.Range
 
-        Dim WS As Excel.Worksheet = CType(APPS.Worksheets.Add(), Excel.Worksheet)
+        Dim WS As Excel.Worksheet = CType(GlobalVariables.apps.Worksheets.Add(), Excel.Worksheet)
         If Len(wsName) > EXCEL_SHEET_NAME_MAX_LENGHT Then
-            If CheckIfWorkbookContainsWorksheetName(APPS.ActiveWorkbook, wsName.Substring(0, EXCEL_SHEET_NAME_MAX_LENGHT)) = False Then
+            If CheckIfWorkbookContainsWorksheetName(GlobalVariables.apps.ActiveWorkbook, wsName.Substring(0, EXCEL_SHEET_NAME_MAX_LENGHT)) = False Then
                 WS.Name = wsName.Substring(0, EXCEL_SHEET_NAME_MAX_LENGHT)
             End If
         Else
-            If CheckIfWorkbookContainsWorksheetName(APPS.ActiveWorkbook, wsName) = False Then WS.Name = wsName
+            If CheckIfWorkbookContainsWorksheetName(GlobalVariables.apps.ActiveWorkbook, wsName) = False Then WS.Name = wsName
         End If
 
-        APPS.ActiveWindow.DisplayGridlines = False
+        GlobalVariables.apps.ActiveWindow.DisplayGridlines = False
         Dim destination As Excel.Range = WS.Cells(1, 1)
 
         Dim i As Int32 = 0

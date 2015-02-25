@@ -25,16 +25,16 @@ Friend Class SQLCredentials
 
         Dim srv As New ModelServer
         Dim strSql As String = "SELECT " + USERS_CREDENTIAL_LEVEL_VARIABLE + " FROM " + CONFIG_DATABASE + "." + USERS_TABLE _
-                             + " WHERE " + USERS_ID_VARIABLE + "='" + Current_User_ID + "'"
+                             + " WHERE " + USERS_ID_VARIABLE + "='" + GlobalVariables.Current_User_ID + "'"
         srv.openRstSQL(strSql, ModelServer.FWD_CURSOR)
         If srv.rst.EOF = False Then
-            User_Credential = srv.rst.Fields(USERS_CREDENTIAL_LEVEL_VARIABLE).Value
+            GlobalVariables.User_Credential = srv.rst.Fields(USERS_CREDENTIAL_LEVEL_VARIABLE).Value
             srv.rst.Close()
         Else
-            MsgBox("The current user account: " + Current_User_ID + " is not registered." + Chr(13) + Chr(13) + _
+            MsgBox("The current user account: " + GlobalVariables.Current_User_ID + " is not registered." + Chr(13) + Chr(13) + _
                    "Please contact your Database manager." + Chr(13) + "(Error PP007)")
         End If
-        If User_Credential <> -1 Then
+        If GlobalVariables.User_Credential <> -1 Then
             SetEntitiesViewGlobalVariable()
             Return True
         End If
@@ -44,7 +44,7 @@ Friend Class SQLCredentials
 
     Protected Friend Shared Sub SetEntitiesViewGlobalVariable()
 
-        Entities_View = ENTITIES_TABLE & User_Credential
+        GlobalVariables.Entities_View = ENTITIES_TABLE & GlobalVariables.User_Credential
 
     End Sub
 

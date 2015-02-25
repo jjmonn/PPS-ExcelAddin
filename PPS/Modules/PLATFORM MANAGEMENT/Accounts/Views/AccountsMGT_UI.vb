@@ -202,8 +202,8 @@ Friend Class AccountsMGT_UI
 
         ' !! to be reimplemented ? !!
         formulaEdit.Checked = False
-        Dim ActiveWS As Excel.Worksheet = APPS.ActiveSheet
-        Dim RNG As Excel.Range = APPS.Application.ActiveCell
+        Dim ActiveWS As Excel.Worksheet = GlobalVariables.apps.ActiveSheet
+        Dim RNG As Excel.Range = GlobalVariables.apps.Application.ActiveCell
         Dim Response As MsgBoxResult
 
         If IsNothing(RNG) Then

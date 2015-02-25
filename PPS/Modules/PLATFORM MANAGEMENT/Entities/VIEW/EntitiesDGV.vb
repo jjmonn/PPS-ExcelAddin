@@ -362,7 +362,7 @@ Friend Class EntitiesDGV
         Next
 
         CWorksheetWrittingFunctions.WriteArray(DGVArray, cell)
-        ExcelEntitiesReportFormatting.FormatEntitiesReport(APPS.ActiveSheet.range(cell, cell.Offset(UBound(DGVArray, 1), UBound(DGVArray, 2))))
+        ExcelEntitiesReportFormatting.FormatEntitiesReport(GlobalVariables.apps.ActiveSheet.range(cell, cell.Offset(UBound(DGVArray, 1), UBound(DGVArray, 2))))
 
     End Sub
 

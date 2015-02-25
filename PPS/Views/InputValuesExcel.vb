@@ -55,7 +55,7 @@ Friend Class InputValuesExcel
     Private Sub PeriodsEditBT_Click(sender As Object, e As EventArgs) Handles periods_edit_BT.Click
 
         Me.TopMost = False
-        periods_range = APPS.InputBox("Select Account(s) Range(s)", System.Type.Missing, System.Type.Missing, _
+        periods_range = GlobalVariables.apps.InputBox("Select Account(s) Range(s)", System.Type.Missing, System.Type.Missing, _
                           System.Type.Missing, System.Type.Missing, System.Type.Missing, _
                           System.Type.Missing, 8)
 
@@ -69,7 +69,7 @@ Friend Class InputValuesExcel
     Private Sub RatesEditBT_Click(sender As Object, e As EventArgs) Handles rates_edit_BT.Click
 
         Me.TopMost = False
-        values_range = APPS.InputBox("Select Account(s) Range(s)", System.Type.Missing, System.Type.Missing, _
+        values_range = GlobalVariables.apps.InputBox("Select Account(s) Range(s)", System.Type.Missing, System.Type.Missing, _
                           System.Type.Missing, System.Type.Missing, System.Type.Missing, _
                           System.Type.Missing, 8)
 

@@ -94,7 +94,7 @@ Friend Class CGeneralReportSubmissionControler
 
         ADDIN = inputAddIn
         wsComboboxMenuItem = inputWSCB
-        associatedWorksheet = APPS.ActiveSheet
+        associatedWorksheet = GlobalVariables.apps.ActiveSheet
 
         DATASET = New CModelDataSet(associatedWorksheet)
         DBUploader = New DataBaseDataUploader()
@@ -184,20 +184,20 @@ Friend Class CGeneralReportSubmissionControler
 
 #Region "Ribbon Interface"
 
-    Friend Sub ActivateControler()
+    Protected Friend Sub ActivateControler()
 
         UpdateRibbonTextBoxes()
         ' Check that the dataSet is still the same ?
 
     End Sub
 
-    Friend Sub UpdateRibbonTextBoxes()
+    Protected Friend Sub UpdateRibbonTextBoxes()
 
         If DATASET.pAssetFlag = 1 Then FillInEntityAndCurrencyTB(DATASET.EntitiesAddressValuesDictionary.ElementAt(0).Value)
 
     End Sub
 
-    Friend Sub Submit()
+    Protected Friend Sub Submit()
 
         If DATASET.GlobalOrientationFlag <> ORIENTATION_ERROR_FLAG Then
             ' DBUploader.UpdateDataBase(DATASET.dataSetDictionary, _
@@ -212,7 +212,7 @@ Friend Class CGeneralReportSubmissionControler
             BCKGW.RunWorkerAsync()
 
         Else
-            SubmissionStatusButton.Image = 2
+            GlobalVariables.SubmissionStatusButton.Image = 2
             errorsList.Add("The worksheet recognition was not set up properly.")
             MsgBox("PPS Error tracking -> which flag error")
             uploadState = False
@@ -220,7 +220,7 @@ Friend Class CGeneralReportSubmissionControler
 
     End Sub
 
-    Friend Sub HighlightItemsAndDataRegions()
+    Protected Friend Sub HighlightItemsAndDataRegions()
 
         If itemsHighlightFlag = False Then
             DATAMODTRACKER.HighlightItemsAndDataRanges()
@@ -232,7 +232,7 @@ Friend Class CGeneralReportSubmissionControler
 
     End Sub
 
-    Friend Sub ChangeCurrentEntity(ByRef entityname As String)
+    Protected Friend Sub ChangeCurrentEntity(ByRef entityname As String)
 
         Dim entityCellAddress As String = DATASET.EntitiesAddressValuesDictionary.ElementAt(0).Key
         associatedWorksheet.Range(entityCellAddress).Value2 = entityname
@@ -241,7 +241,7 @@ Friend Class CGeneralReportSubmissionControler
 
     End Sub
 
-    Friend Sub DisplayUploadStatusAndErrorsUI()
+    Protected Friend Sub DisplayUploadStatusAndErrorsUI()
 
         Dim UploadStatusUI As New UploadingHistoryUI(uploadState, _
                                                      uploadTimeStamp, _
@@ -250,7 +250,7 @@ Friend Class CGeneralReportSubmissionControler
 
     End Sub
 
-    Friend Sub CloseInstance()
+    Protected Friend Sub CloseInstance()
 
         If Not ACQUICONTROLLER Is Nothing Then
             ACQUICONTROLLER.ShutDown()
@@ -279,7 +279,7 @@ Friend Class CGeneralReportSubmissionControler
 
     End Sub
 
-    Friend Sub RangeEdition()
+    Protected Friend Sub RangeEdition()
 
         Dim RNGEDITION As New ManualRangesSelectionUI(Me, DATASET)
         HideACQUI()
@@ -377,14 +377,14 @@ Friend Class CGeneralReportSubmissionControler
             If DBUploader.CheckAndUpdateSingleValueFromNames(DATASET.CellsAddressItemsDictionary(cellAddress)(CModelDataSet.ENTITY_ITEM), _
                                                              DATASET.CellsAddressItemsDictionary(cellAddress)(CModelDataSet.ACCOUNT_ITEM), _
                                                              DATASET.CellsAddressItemsDictionary(cellAddress)(CModelDataSet.PERIOD_ITEM), _
-                                                             APPS.ActiveSheet.range(cellAddress).value, _
+                                                             GlobalVariables.apps.ActiveSheet.range(cellAddress).value, _
                                                              DATASET.currentVersionCode, _
-                                                             AdjustmentIDDropDown.SelectedItemId) = False Then
+                                                             GlobalVariables.AdjustmentIDDropDown.SelectedItemId) = False Then
 
                 errorsList.Add("Error during upload of Entity: " & DATASET.CellsAddressItemsDictionary(cellAddress)(CModelDataSet.ENTITY_ITEM) _
                                & " Account: " & DATASET.CellsAddressItemsDictionary(cellAddress)(CModelDataSet.ACCOUNT_ITEM) _
                                & " Period: " & DATASET.CellsAddressItemsDictionary(cellAddress)(CModelDataSet.PERIOD_ITEM) _
-                               & " Value: " & APPS.ActiveSheet.range(cellAddress).value)
+                               & " Value: " & GlobalVariables.apps.ActiveSheet.range(cellAddress).value)
             Else
                 DATAMODTRACKER.UnregisterSingleModification(cellAddress)
             End If
@@ -405,24 +405,24 @@ Friend Class CGeneralReportSubmissionControler
         PBar.Close()
         If errorsList.Count = 0 Then
             uploadState = True
-            SubmissionStatusButton.Image = 1
+            GlobalVariables.SubmissionStatusButton.Image = 1
         Else
             uploadState = False
-            SubmissionStatusButton.Image = 2
+            GlobalVariables.SubmissionStatusButton.Image = 2
         End If
 
     End Sub
 
     ' Used only in the case where total cModelDataSet.dataSet is sent to be updated by DBUploader
-    Public Sub UpdateUploadResult(ByRef uploadSuccessfull As Boolean)
+    Protected Friend Sub UpdateUploadResult(ByRef uploadSuccessfull As Boolean)
 
         DBUploader.PBar.ProgressBarControl1.EndProgress()
         DBUploader.PBar.Close()
         If uploadSuccessfull = True Then
             DATAMODTRACKER.UnregisterModifications()
-            SubmissionStatusButton.Image = 1
+            GlobalVariables.SubmissionStatusButton.Image = 1
         Else
-            SubmissionStatusButton.Image = 2
+            GlobalVariables.SubmissionStatusButton.Image = 2
         End If
         ' -> should track error if not successfull (display details by clicking on red button upload)
 

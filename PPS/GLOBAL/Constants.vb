@@ -11,7 +11,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 19/06/2014
+' Last modified: 23/02/2015
 
 
 
@@ -29,23 +29,13 @@ Module Constants
 #End Region
 
 
-
-    ' Utilities functions
-    'Friend Declare Function FindWindowA Lib "user32" (ByVal lpClassName As String, ByVal lpWindowName As String) As Long
-    'Friend Declare Function GetWindowRect Lib "user32" (ByVal hwnd As Long, lpRect As RECT) As Long
-    'Friend Declare Function GetWindowLong Lib "user32" Alias "GetWindowLongA" (ByVal hwnd As Long, ByVal nIndex As Long) As Long
-    'Friend Declare Function SetWindowLong Lib "user32" Alias "SetWindowLongA" (ByVal hwnd As Long, ByVal nIndex As Long, ByVal dwNewLong As Long) As Long
-    'Friend Declare Function SetWindowPos Lib "user32" (ByVal hwnd As Long, ByVal hWndInsertAfter As Long, ByVal X As Long, ByVal Y As Long, ByVal CX As Long, ByVal CY As Long, ByVal wFlags As Long) As Long
-
-
     ' Upload report
     Friend Const STATUS_FULL As String = "Full Chart of Accounts"
     Friend Const STATUS_PARTIAL As String = "Incomplete Chart of Accounts"
 
 
-    '---------------------------------------------------
-    '---> Security <---
-    '---------------------------------------------------
+#Region "Security"
+
     Friend Const SNOW_KEY As String = "9!yh_U"
     Friend Const ANSII_FLOOR_TOKEN_CHAR = 97
     Friend Const ANSII_CEILING_TOKEN_CHAR = 122
@@ -53,34 +43,26 @@ Module Constants
     Friend Const ANSII_CEILING_PWD_CHAR = 122
     Friend Const PWD_LENGHT = 7
 
-    '---------------------------------------------------
-    '---> Algorithms parameters <---
-    '---------------------------------------------------
+#End Region
 
-    Friend Const LEVENSTEIN_THRESOLHD = 0.34999999999999998
-    Friend Const ACCOUNTS_SEARCH_ALGO_THRESHOLD = 0.59999999999999998
+    ' Algorithms parameters 
+    Friend Const LEVENSTEIN_THRESOLHD = 0.35
+    Friend Const ACCOUNTS_SEARCH_ALGO_THRESHOLD = 0.6
     Friend Const EPSILON_PLUS = 60                                          'Dates search range +
     Friend Const EPSILON_MINUS = 10                                         'Dates search range -
 
-    '---------------------------------------------------
-    '---> Look up Functions <---
-    '---------------------------------------------------
-
+    ' Look up Functions 
     Friend Const FORMULA_SEPARATOR = "|"
     Friend Const REFRESH_WAITING_TEXT = "#REFRESHING"
 
 
-    '---------------------------------------------------
-    ' --> DataSet <--
-    '---------------------------------------------------
-    ' lookup options for identifying accounts
-    Friend Const LOOKUP_OUTPUTS = "Outputs"
-    Friend Const LOOKUP_INPUTS = "Inputs"
-    Friend Const LOOKUP_ALL = "Everything"
-
+   
     '---------------------------------------------------
     ' --> Others <--
     '---------------------------------------------------
+    Friend Const MONTHLY_TIME_PERIOD_FORMAT As String = ""
+    Friend Const YEARLY_TIME_PERIOD_FORMAT As String = ""
+
     Friend Const Addin_Name = "ExcelAddIn2"
     Friend Const VALUE_FLAG = "V"
     Friend Const ADDRESS_FLAG = "A"

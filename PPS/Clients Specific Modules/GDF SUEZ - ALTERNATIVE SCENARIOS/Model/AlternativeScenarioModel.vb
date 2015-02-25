@@ -21,7 +21,7 @@ Friend Class AlternativeScenarioModel
 #Region "Instance Variables"
 
     ' Objects
-    Private BaseComputer As ControlingUI2MODEL
+    Private BaseComputer As GenericAggregationDLL3Computing
     '    Private VersionsMGT As New CVersionsForControlingUIs
     Private Controller As AlternativeScenariosController
 
@@ -48,7 +48,7 @@ Friend Class AlternativeScenarioModel
     Protected Friend Sub New(ByRef input_Controller As AlternativeScenariosController)
 
         Controller = input_Controller
-        BaseComputer = New ControlingUI2Model()
+        BaseComputer = New GenericAggregationDLL3Computing(GlobalVariables.GlobalDBDownloader)
         indexes_list = MarketIndexesMapping.GetMarketIndexesList()
         entities_attributes_dictionary = GDFSUEZEntitiesAttributesMapping.GetEntitiesAttributes()
         sensitivities_dictionary = GDFSUEZSensitivitiesMapping.GetSensitivitiesDictionary()
@@ -74,13 +74,13 @@ Friend Class AlternativeScenarioModel
         Versions.Close()
 
         BaseComputer.compute_selection_complete(version_id, _
-                                                PBar, _
                                                 time_configuration, _
                                                 rates_version_id, _
                                                 periods_list, _
                                                 MAIN_CURRENCY, _
                                                 start_period, _
-                                                nb_periods)
+                                                nb_periods, _
+                                                PBar)
 
         entities_id_list = cTreeViews_Functions.GetNoChildrenNodesList(cTreeViews_Functions.GetNodesKeysList(entity_node), entity_node.TreeView)
         BuildDataDic(entity_node)
