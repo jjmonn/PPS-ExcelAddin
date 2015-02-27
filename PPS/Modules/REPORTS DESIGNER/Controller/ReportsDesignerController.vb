@@ -37,7 +37,7 @@ Friend Class ReportsDesignerController
 
         Reports = New Report(table_name)
         Report.LoadReportsTV(ReportsTV)
-        positions_dictionary = cTreeViews_Functions.GeneratePositionsDictionary(ReportsTV)
+        positions_dictionary = TreeViewsUtilities.GeneratePositionsDictionary(ReportsTV)
         accounts_name_id_dic = AccountsMapping.GetAccountsDictionary(ACCOUNT_NAME_VARIABLE, ACCOUNT_ID_VARIABLE)
         View = New ReportsDesignerUI(Me, ReportsTV)
         Dim accounts_names_list As List(Of String) = AccountsMapping.GetAccountsNamesList(AccountsMapping.LOOKUP_ALL)
@@ -65,7 +65,7 @@ Friend Class ReportsDesignerController
     Protected Friend Sub UpdateReportType(ByRef report_id As String, ByRef type As String)
 
         Reports.UpdateReport(report_id, REPORTS_TYPE_VAR, type)
-        
+
     End Sub
 
     Protected Friend Sub UpdateReportAxis1(ByRef report_id As String, ByRef axis1_name As String)
@@ -146,14 +146,14 @@ Friend Class ReportsDesignerController
 
     Protected Friend Sub CreateReport(ByRef name As String)
 
-        Dim id As String = cTreeViews_Functions.GetNewNodeKey(ReportsTV, REPORTS_TOKEN_SIZE)
+        Dim id As String = TreeViewsUtilities.GetNewNodeKey(ReportsTV, REPORTS_TOKEN_SIZE)
         Dim HT As New Hashtable
         HT.Add(REPORTS_ID_VAR, id)
         HT.Add(REPORTS_NAME_VAR, name)
         HT.Add(ITEMS_POSITIONS, 1)
         Reports.CreateReport(HT)
         ReportsTV.Nodes.Add(id, name, 0, 0)
-        positions_dictionary = cTreeViews_Functions.GeneratePositionsDictionary(ReportsTV)
+        positions_dictionary = TreeViewsUtilities.GeneratePositionsDictionary(ReportsTV)
         Reports.UpdateReport(id, ITEMS_POSITIONS, positions_dictionary(id))
         ReportsTV.SelectedNode = ReportsTV.Nodes.Find(id, True)(0)
         View.DisplayPreviewChart(Reports.GetSerieHT(id), ReportsTV.SelectedNode)
@@ -167,14 +167,14 @@ Friend Class ReportsDesignerController
         Next
         Reports.DeleteReport(reports_node.Name)
         reports_node.Remove()
-        positions_dictionary = cTreeViews_Functions.GeneratePositionsDictionary(ReportsTV)
+        positions_dictionary = TreeViewsUtilities.GeneratePositionsDictionary(ReportsTV)
         SendNewPositionsToModel()
 
     End Sub
 
     Protected Friend Sub CreateSerie(ByRef reports_node As TreeNode, ByRef name As String)
 
-        Dim id As String = cTreeViews_Functions.GetNewNodeKey(ReportsTV, REPORTS_TOKEN_SIZE)
+        Dim id As String = TreeViewsUtilities.GetNewNodeKey(ReportsTV, REPORTS_TOKEN_SIZE)
         Dim HT As New Hashtable
         HT.Add(REPORTS_ID_VAR, id)
         HT.Add(REPORTS_PARENT_ID_VAR, reports_node.Name)
@@ -182,7 +182,7 @@ Friend Class ReportsDesignerController
         HT.Add(ITEMS_POSITIONS, 1)
         Reports.CreateReport(HT)
         reports_node.Nodes.Add(id, name, 1, 1)
-        positions_dictionary = cTreeViews_Functions.GeneratePositionsDictionary(ReportsTV)
+        positions_dictionary = TreeViewsUtilities.GeneratePositionsDictionary(ReportsTV)
         Reports.UpdateReport(id, ITEMS_POSITIONS, positions_dictionary(id))
         ReportsTV.SelectedNode = ReportsTV.Nodes.Find(id, True)(0)
         View.DisplayPreviewChart(Reports.GetSerieHT(ReportsTV.SelectedNode.Parent.Name), ReportsTV.SelectedNode.Parent)
@@ -207,7 +207,7 @@ Friend Class ReportsDesignerController
         Reports.DeleteReport(serie_node.Name)
         View.DisplayPreviewChart(Reports.GetSerieHT(serie_node.Parent.Name), serie_node.Parent)
         serie_node.Remove()
-        positions_dictionary = cTreeViews_Functions.GeneratePositionsDictionary(ReportsTV)
+        positions_dictionary = TreeViewsUtilities.GeneratePositionsDictionary(ReportsTV)
         SendNewPositionsToModel()
 
     End Sub

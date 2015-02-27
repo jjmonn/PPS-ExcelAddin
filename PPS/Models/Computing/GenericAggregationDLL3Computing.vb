@@ -70,8 +70,8 @@ Friend Class GenericAggregationDLL3Computing
         clear_complete_data_dictionary()
         entities_id_list = Dll3Computer.InitializeEntitiesAggregation(entity_node)
 
-        inputs_entities_list = cTreeViews_Functions.GetNoChildrenNodesList(entities_id_list, entity_node.TreeView)
-        cTreeViews_Functions.FilterSelectedNodes(entity_node, entities_id_list)
+        inputs_entities_list = TreeViewsUtilities.GetNoChildrenNodesList(entities_id_list, entity_node.TreeView)
+        TreeViewsUtilities.FilterSelectedNodes(entity_node, entities_id_list)
        
     End Sub
 

@@ -56,7 +56,7 @@ Friend Class ASInputsController
         
         Version.LoadVersionsTree(VersionsTV)
         Entity.LoadEntitiesTree(EntitiesTV)
-        cTreeViews_Functions.CheckAllNodes(EntitiesTV)
+        TreeViewsUtilities.CheckAllNodes(EntitiesTV)
         MarketIndexVersion.load_market_index_version_tv(MarketPricesTV)
 
         versions_id_list = VersionsMapping.GetVersionsList(VERSIONS_CODE_VARIABLE)

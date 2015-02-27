@@ -142,7 +142,7 @@ Public Class CredentialsController
 
     Private Sub UpdateEntitiesCredentialsLevels()
 
-        Dim entities_list = cTreeViews_Functions.GetNodesKeysList(entities_credentials_TV)
+        Dim entities_list = TreeViewsUtilities.GetNodesKeysList(entities_credentials_TV)
         For Each entity_id In entities_list
             Entities.UpdateEntity(entity_id, ASSETS_CREDENTIAL_ID_VARIABLE, entities_credentials_TV.Nodes.Find(entity_id, True)(0).Text)
         Next

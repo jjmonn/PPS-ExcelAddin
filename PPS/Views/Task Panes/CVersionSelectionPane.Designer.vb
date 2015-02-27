@@ -62,7 +62,7 @@ Partial Class CVersionSelectionPane
         'ValidateBT
         '
         Me.ValidateBT.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
-        Me.ValidateBT.ImageKey = "favicon(76).ico"
+        Me.ValidateBT.ImageKey = "1420498403_340208.ico"
         Me.ValidateBT.ImageList = Me.BTsIL
         Me.ValidateBT.Location = New System.Drawing.Point(3, 618)
         Me.ValidateBT.Name = "ValidateBT"
@@ -76,14 +76,14 @@ Partial Class CVersionSelectionPane
         '
         Me.BTsIL.ImageStream = CType(resources.GetObject("BTsIL.ImageStream"), System.Windows.Forms.ImageListStreamer)
         Me.BTsIL.TransparentColor = System.Drawing.Color.Transparent
-        Me.BTsIL.Images.SetKeyName(0, "favicon(76).ico")
+        Me.BTsIL.Images.SetKeyName(0, "1420498403_340208.ico")
         '
         'VersioningTVIL
         '
         Me.VersioningTVIL.ImageStream = CType(resources.GetObject("VersioningTVIL.ImageStream"), System.Windows.Forms.ImageListStreamer)
         Me.VersioningTVIL.TransparentColor = System.Drawing.Color.Transparent
-        Me.VersioningTVIL.Images.SetKeyName(0, "icons-blue.png")
-        Me.VersioningTVIL.Images.SetKeyName(1, "DB Grey.png")
+        Me.VersioningTVIL.Images.SetKeyName(0, "favicon(81).ico")
+        Me.VersioningTVIL.Images.SetKeyName(1, "config circle orangev small.png")
         '
         'CVersionSelectionPane
         '

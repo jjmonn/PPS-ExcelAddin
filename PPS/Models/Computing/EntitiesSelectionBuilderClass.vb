@@ -48,7 +48,7 @@ Friend Class EntitiesSelectionBuilderClass
 
         Entity.LoadEntitiesTree(EntitiesTV)
         Category.LoadCategoriesTree(CategoriesTVInstance)
-        cTreeViews_Functions.CheckAllNodes(EntitiesTV)
+        TreeViewsUtilities.CheckAllNodes(EntitiesTV)
 
     End Sub
 
@@ -148,7 +148,7 @@ Friend Class EntitiesSelectionBuilderClass
         Dim ActiveFilterCategoriesList As New List(Of TreeNode)
 
         For Each categoryValue As String In filterList
-            Dim RootCategoryNode As TreeNode = cTreeViews_Functions.ReturnRootNodeFromNode(CategoriesTVInstance.Nodes.Find(categoryValue, True)(0))
+            Dim RootCategoryNode As TreeNode = TreeViewsUtilities.ReturnRootNodeFromNode(CategoriesTVInstance.Nodes.Find(categoryValue, True)(0))
             If Not ActiveFilterCategoriesList.Contains(RootCategoryNode) Then ActiveFilterCategoriesList.Add(RootCategoryNode)
         Next
 

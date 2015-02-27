@@ -93,7 +93,7 @@ Friend Class NewAccountUI
         parentTB.Text = inputNode.Text
         parent_node = inputNode
         Dim parentFormatCode = Controller.ReadAccount(parent_node.Name, ACCOUNT_FORMAT_VARIABLE)
-        formatCB.SelectedItem = AccountsView.formatsDictionary(parentFormatCode)(FORMAT_NAME_VARIABLE)
+        formatCB.SelectedItem = AccountsView.formatKeyNameDictionary(parentFormatCode)
         typeCB.SelectedItem = AccountsView.accountsTypesKeyNameDict(DEFAULT_ACCOUNT_TYPE_VALUE)
         Dim parentFType = Controller.ReadAccount(parent_node.Name, ACCOUNT_FORMULA_TYPE_VARIABLE)
         formulaCB.SelectedItem = AccountsView.fTypeCodeNameDictionary(parentFType)
@@ -114,8 +114,8 @@ Friend Class NewAccountUI
             End If
             TempHT.Add(ACCOUNT_FORMAT_VARIABLE, AccountsView.formatsNameKeyDictionary(formatCB.Text))
             TempHT.Add(ACCOUNT_TYPE_VARIABLE, AccountsView.accountsTypeNameKeyDictionary(typeCB.Text))
-            TempHT.Add(ACCOUNT_IMAGE_VARIABLE, AccountsView.formatsDictionary(TempHT(ACCOUNT_FORMAT_VARIABLE))(FORMAT_ICON_VARIABLE))
-            TempHT.Add(ACCOUNT_SELECTED_IMAGE_VARIABLE, AccountsView.formatsDictionary(TempHT(ACCOUNT_FORMAT_VARIABLE))(FORMAT_ICON_VARIABLE))
+            TempHT.Add(ACCOUNT_IMAGE_VARIABLE, AccountsView.ftype_icon_dic(TempHT(ACCOUNT_FORMULA_TYPE_VARIABLE)))
+            TempHT.Add(ACCOUNT_SELECTED_IMAGE_VARIABLE, AccountsView.ftype_icon_dic(TempHT(ACCOUNT_FORMULA_TYPE_VARIABLE)))
             If aggregation_RB.Checked = True Then TempHT.Add(ACCOUNT_RECOMPUTATION_OPTION_VARIABLE, AGGREGATION_CODE)
             If recompute_RB.Checked = True Then TempHT.Add(ACCOUNT_RECOMPUTATION_OPTION_VARIABLE, RECOMPUTATION_CODE)
             If flux_RB.Checked = True Then TempHT.Add(ACCOUNT_CONVERSION_FLAG_VARIABLE, FLUX_CONVERSION)

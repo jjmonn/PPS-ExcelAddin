@@ -264,7 +264,7 @@ Friend Class Entity
         Dim srv As New ModelServer
         srv.openRst(LEGAL_ENTITIES_DATABASE + "." + ENTITIES_TABLE, ModelServer.STATIC_CURSOR)
 
-        Dim entities_id_list = cTreeViews_Functions.GetNodesKeysList(entitiesIDCredentialsTV)
+        Dim entities_id_list = TreeViewsUtilities.GetNodesKeysList(entitiesIDCredentialsTV)
         Dim node As TreeNode
         For Each entity_id In entities_id_list
 

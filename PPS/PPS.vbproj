@@ -539,7 +539,7 @@
     <Compile Include="Models\CRUDs\Account.vb" />
     <Compile Include="Modules\CONNECTIONS\Connections_Functions.vb" />
     <Compile Include="Controllers\Utilities\DataTables_Functions.vb" />
-    <Compile Include="Controllers\Utilities\cTreeViews_Functions.vb" />
+    <Compile Include="Controllers\Utilities\TreeViewsUtilities.vb" />
     <Compile Include="Controllers\Utilities\Utilities_Functions.vb" />
     <Compile Include="Views\Utilities\CExcelFormatting.vb" />
     <Compile Include="Modules\REPORTS UPLOAD\VIEW\CRangeHighlighter.vb" />

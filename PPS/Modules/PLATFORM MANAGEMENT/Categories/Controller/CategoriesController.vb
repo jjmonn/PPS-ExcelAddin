@@ -44,8 +44,8 @@ Friend Class CategoriesController
 
         ViewObject = New CategoriesManagementUI(Me, CategoriesTV)
         Category.LoadCategoriesTree(CategoriesTV)
-        categories_names_list = cTreeViews_Functions.GetNodesTextsList(CategoriesTV)
-        positions_dictionary = cTreeViews_Functions.GeneratePositionsDictionary(CategoriesTV)
+        categories_names_list = TreeViewsUtilities.GetNodesTextsList(CategoriesTV)
+        positions_dictionary = TreeViewsUtilities.GeneratePositionsDictionary(CategoriesTV)
         ViewObject.Show()
 
     End Sub
@@ -58,7 +58,7 @@ Friend Class CategoriesController
     Protected Friend Function CreateCategory(ByRef category_name As String) As Boolean
 
         If CategoryNameCheck(category_name) = False Then Return False
-        Dim new_category_id As String = cTreeViews_Functions.GetNewNodeKey(CategoriesTV, CATEGORIES_TOKEN_SIZE)
+        Dim new_category_id As String = TreeViewsUtilities.GetNewNodeKey(CategoriesTV, CATEGORIES_TOKEN_SIZE)
         Dim hash As New Hashtable
         hash.Add(CATEGORY_ID_VARIABLE, new_category_id)
         hash.Add(CATEGORY_NAME_VARIABLE, category_name)
@@ -79,7 +79,7 @@ Friend Class CategoriesController
                                                   Optional ByRef new_category_value_id As String = "") As Boolean
 
         If CategoryNameCheck(category_value_name) = False Then Return False
-        If new_category_value_id = "" Then new_category_value_id = cTreeViews_Functions.GetNewNodeKey(CategoriesTV, CATEGORIES_TOKEN_SIZE)
+        If new_category_value_id = "" Then new_category_value_id = TreeViewsUtilities.GetNewNodeKey(CategoriesTV, CATEGORIES_TOKEN_SIZE)
         Dim hash As New Hashtable
         hash.Add(CATEGORY_ID_VARIABLE, new_category_value_id)
         hash.Add(CATEGORY_PARENT_ID_VARIABLE, parent_node.Name)
@@ -171,7 +171,7 @@ Friend Class CategoriesController
             parent_node.Nodes.Add(new_id, new_name, image_index, image_index)
         End If
         categories_names_list.Add(new_name)
-        positions_dictionary = cTreeViews_Functions.GeneratePositionsDictionary(CategoriesTV)
+        positions_dictionary = TreeViewsUtilities.GeneratePositionsDictionary(CategoriesTV)
         Categories.UpdateCategory(new_id, ITEMS_POSITIONS, positions_dictionary(new_id))
 
     End Sub

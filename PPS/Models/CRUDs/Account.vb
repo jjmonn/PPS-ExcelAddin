@@ -158,9 +158,18 @@ Friend Class Account
 
     End Sub
 
+    Protected Friend Sub Close()
+
+        Me.finalize
+
+    End Sub
+
     Protected Overrides Sub finalize()
 
-        RST.Close()
+        Try
+            RST.Close()
+        Catch ex As Exception
+        End Try
         MyBase.Finalize()
 
     End Sub

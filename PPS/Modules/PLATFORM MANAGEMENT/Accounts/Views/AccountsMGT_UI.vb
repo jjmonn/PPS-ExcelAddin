@@ -11,7 +11,7 @@
 '        - drop on WS bug
 '        
 '
-' Last modified: 05/01/2015
+' Last modified: 26/02/2015
 ' Author: Julien Monnereau
 
 
@@ -28,45 +28,58 @@ Friend Class AccountsMGT_UI
 #Region "Instance Variables"
 
     ' Objects
-    Friend Controller As AccountsController
+    Protected Friend Controller As AccountsController
     Private CP As CircularProgressUI
     Private AccountsTV As TreeView
     Protected Friend current_node As TreeNode
 
     ' Variables
-    Friend formatsDictionary As Dictionary(Of String, Dictionary(Of String, Object))
-    Friend accountsTypesKeyNameDict As Dictionary(Of String, String)
-    Friend accountsTypeNameKeyDictionary As Dictionary(Of String, String)
-    Friend formatsNameKeyDictionary As Hashtable
-    Friend fTypeCodeNameDictionary As Dictionary(Of String, String)
-    Friend fTypeNameCodeDictionary As Dictionary(Of String, String)
+    Protected Friend accountsTypesKeyNameDict As Dictionary(Of String, String)
+    Protected Friend accountsTypeNameKeyDictionary As Dictionary(Of String, String)
+    Protected Friend formatsNameKeyDictionary As Hashtable
+    Protected Friend formatKeyNameDictionary As Hashtable
+    Protected Friend fTypeCodeNameDictionary As Dictionary(Of String, String)
+    Protected Friend fTypeNameCodeDictionary As Dictionary(Of String, String)
+    Protected Friend ftype_icon_dic As New Dictionary(Of String, Int32)
     Private fTypesCodesRequiringFormulas As List(Of String)
     Private isDisplayingAttributes As Boolean
-    Private nodesMovedUpOrDown As Boolean
 
     ' Constants
     Private Const MARGIN_SIZE As Integer = 15
     Private Const ACCCOUNTS_TV_MAX_WIDTH As Integer = 600
     Private Const MARGIN1 As Integer = 30
-    Private Const POSITION_STEP As Double = 0.0000001
+    Protected Friend Const T_ICON_INDEX As Int32 = 0
+    Protected Friend Const SOAC_ICON_INDEX As Int32 = 1
+    Protected Friend Const HV_ICON_INDEX As Int32 = 2
+    Protected Friend Const F_ICON_INDEX As Int32 = 3
+    Protected Friend Const BS_ICON_INDEX As Int32 = 4
+    Protected Friend Const WC_ICON_INDEX As Int32 = 5
+
 
 #End Region
 
 
 #Region "Initialization"
 
-    Public Sub New(ByRef input_controller As AccountsController, _
-                   ByRef input_accountTV As TreeView)
+    Protected Friend Sub New(ByRef input_controller As AccountsController, _
+                              ByRef input_accountTV As TreeView)
 
         ' This call is required by the designer.
         InitializeComponent()
 
         ' Add any initialization after the InitializeComponent() call.
         Controller = input_controller
-        accountstv = input_accountTV
-       
-        formatsNameKeyDictionary = FormatsMapping.GetFormatsDictionary(FORMAT_NAME_VARIABLE, FORMAT_CODE_VARIABLE)
+        AccountsTV = input_accountTV
+
+        formatsNameKeyDictionary = FormatsMapping.GetFormatsDictionary(FORMAT_NAME_VARIABLE, FORMAT_CODE_VARIABLE, INPUT_FORMAT_CODE)
+        formatKeyNameDictionary = FormatsMapping.GetFormatsDictionary(FORMAT_CODE_VARIABLE, FORMAT_NAME_VARIABLE, INPUT_FORMAT_CODE)
         fTypesCodesRequiringFormulas = FormulaTypesMapping.GetFTypesKeysNeedingFormula
+        ftype_icon_dic.Add(TITLE_FORMAT_CODE, T_ICON_INDEX)
+        ftype_icon_dic.Add(FORMULA_TYPE_SUM_OF_CHILDREN, SOAC_ICON_INDEX)
+        ftype_icon_dic.Add(HARD_VALUE_F_TYPE_CODE, HV_ICON_INDEX)
+        ftype_icon_dic.Add(FORMULA_ACCOUNT_FORMULA_TYPE, F_ICON_INDEX)
+        ftype_icon_dic.Add(BALANCE_SHEET_ACCOUNT_FORMULA_TYPE, BS_ICON_INDEX)
+        ftype_icon_dic.Add(WORKING_CAPITAL_ACCOUNT_FORMULA_TYPE, WC_ICON_INDEX)
 
         AccountsTVInit()
         ComboBoxesInit()
@@ -99,10 +112,9 @@ Friend Class AccountsMGT_UI
 
         accountsTypeNameKeyDictionary = AccountTypesMapping.GetAccountTypesDic(ACCOUNT_TYPE_NAME_VARIABLE, ACCOUNT_TYPE_CODE_VARIABLE)
         accountsTypesKeyNameDict = AccountTypesMapping.GetAccountTypesDic(ACCOUNT_TYPE_CODE_VARIABLE, ACCOUNT_TYPE_NAME_VARIABLE)
-        formatsDictionary = FormatsMapping.GetFormatTable(INPUT_FORMAT_CODE)
 
-        For Each key In formatsDictionary.Keys
-            formatsCB.Items.Add(formatsDictionary.Item(key).Item(FORMAT_NAME_VARIABLE))
+        For Each format_name In formatsNameKeyDictionary.Keys
+            formatsCB.Items.Add(format_name)
         Next
 
         For Each key In accountsTypesKeyNameDict.Keys
@@ -150,9 +162,9 @@ Friend Class AccountsMGT_UI
                 TempHT.Add(ACCOUNT_FORMAT_VARIABLE, TITLE_FORMAT_CODE)
                 TempHT.Add(ACCOUNT_TYPE_VARIABLE, NORMAL_ACCOUNT_TYPE)
                 TempHT.Add(ACCOUNT_TAB_VARIABLE, AccountsTV.Nodes.Count + 2)
-                TempHT.Add(ACCOUNT_IMAGE_VARIABLE, formatsDictionary(TITLE_FORMAT_CODE)(FORMAT_ICON_VARIABLE))
-                TempHT.Add(ACCOUNT_SELECTED_IMAGE_VARIABLE, formatsDictionary(TITLE_FORMAT_CODE)(FORMAT_ICON_VARIABLE))
-                TempHT.Add(ITEMS_POSITIONS, AccountsTV.Nodes.Count + 1)
+                TempHT.Add(ACCOUNT_IMAGE_VARIABLE, 0)
+                TempHT.Add(ACCOUNT_SELECTED_IMAGE_VARIABLE, 0)
+                TempHT.Add(ITEMS_POSITIONS, 1)
                 Controller.CreateCategory(TempHT)
             End If
         End If
@@ -253,11 +265,13 @@ Friend Class AccountsMGT_UI
 
             Case Keys.Up
                 If e.Control Then
-                    MoveNodeUp(AccountsTV.SelectedNode)
+                    TreeViewsUtilities.MoveNodeUp(AccountsTV.SelectedNode)
+                    Controller.UpdatePositionsDictionary()
                 End If
             Case Keys.Down
                 If e.Control Then
-                    MoveNodeDown(AccountsTV.SelectedNode)
+                    TreeViewsUtilities.MoveNodeDown(AccountsTV.SelectedNode)
+                    Controller.UpdatePositionsDictionary()
                 End If
         End Select
 
@@ -336,63 +350,13 @@ Friend Class AccountsMGT_UI
             dropNode.EnsureVisible()                                        ' Ensure the newley created node is visible to the user and 
             selectedTreeview.SelectedNode = dropNode                        ' Select it
             Dim tmpHT As New Hashtable
-            tmpHT.Add(ACCOUNT_TAB_VARIABLE, cTreeViews_Functions.ReturnRootNodeFromNode(dropNode).Index)
+            tmpHT.Add(ACCOUNT_TAB_VARIABLE, TreeViewsUtilities.ReturnRootNodeFromNode(dropNode).Index)
             tmpHT.Add(ACCOUNT_PARENT_ID_VARIABLE, targetNode.Name)
             Controller.UpdateAccount(dropNode.Name, tmpHT)
-
-            Dim currentPosition As Object = Controller.positionsDictionary(targetNode.Name) + targetNode.Nodes.Count + POSITION_STEP
-            cTreeViews_Functions.UpdateChildrenPosition(dropNode, currentPosition, Controller.positionsDictionary)
-            Controller.SendNewPositionsToModel()
-            nodesMovedUpOrDown = True
+            Controller.UpdatePositionsDictionary()
         End If
 
     End Sub
-
-#End Region
-
-#Region "Move nodes up and down into hierarchy Procedure"
-
-    ' Moves a node up
-    Private Sub MoveNodeUp(ByRef inputNode As TreeNode)
-
-        If Not inputNode.PrevNode Is Nothing Then
-            Dim currentKey As String = inputNode.Name
-            AccountsTV.Hide()
-            Dim currentPosition As Object = Controller.positionsDictionary(inputNode.PrevNode.Name) - 1 + POSITION_STEP
-            cTreeViews_Functions.UpdateChildrenPosition(inputNode, currentPosition, Controller.positionsDictionary)
-            ResumeAccountTree()
-            AccountsTV.Show()
-            AccountsTV.SelectedNode = AccountsTV.Nodes.Find(currentKey, True)(0)
-        End If
-  
-    End Sub
-
-    ' Moves a node down
-    Private Sub MoveNodeDown(ByRef inputNode As TreeNode)
-
-        If Not inputNode.NextNode Is Nothing Then
-            Dim currentKey As String = inputNode.Name
-            AccountsTV.Hide()
-            Dim currentPosition As Object = Controller.positionsDictionary(inputNode.NextNode.Name) _
-                                            + cTreeViews_Functions.GetNodeAllChildrenCount(inputNode.NextNode) + POSITION_STEP
-            cTreeViews_Functions.UpdateChildrenPosition(inputNode, currentPosition, Controller.positionsDictionary)
-            ResumeAccountTree()
-            AccountsTV.Show()
-            AccountsTV.SelectedNode = AccountsTV.Nodes.Find(currentKey, True)(0)
-        End If
-
-    End Sub
-
-    ' Update database, reload and set up display for the accounts tree
-    Private Sub ResumeAccountTree()
-
-        Dim expansionDic As Dictionary(Of String, Boolean) = cTreeViews_Functions.SaveNodesExpansionsLevel(AccountsTV)
-        Controller.SendNewPositionsToModel()
-        ReloadAccountsTree(expansionDic)
-        nodesMovedUpOrDown = True
-
-    End Sub
-
 
 #End Region
 
@@ -531,8 +495,6 @@ Friend Class AccountsMGT_UI
         AndAlso isDisplayingAttributes = False Then
             Dim tmpHT As New Hashtable
             tmpHT.Add(ACCOUNT_FORMAT_VARIABLE, formatsNameKeyDictionary(formatsCB.Text))
-            tmpHT.Add(ACCOUNT_IMAGE_VARIABLE, formatsDictionary(formatsNameKeyDictionary(formatsCB.Text))(FORMAT_ICON_VARIABLE))
-            tmpHT.Add(ACCOUNT_SELECTED_IMAGE_VARIABLE, formatsDictionary(formatsNameKeyDictionary(formatsCB.Text))(FORMAT_ICON_VARIABLE))
             Controller.UpdateAccount(current_node.Name, tmpHT)
         End If
 
@@ -554,7 +516,7 @@ Friend Class AccountsMGT_UI
         If Not IsNothing(current_node) _
         AndAlso isDisplayingAttributes = False Then
             Dim f_type = fTypeNameCodeDictionary(formulaTypeCB.Text)
-            Controller.UpdateAccount(current_node.Name, ACCOUNT_FORMULA_TYPE_VARIABLE, f_type)
+            Controller.UpdateFormulaType(current_node.Name, f_type)
             If f_type = TITLE_FORMAT_CODE Then DisableRecomputationOPtions() Else EnableRecomputationOPtions()
         End If
 
@@ -610,8 +572,8 @@ Friend Class AccountsMGT_UI
 
     Private Sub BackgroundWork_PositionsUpdate(sender As Object, e As DoWorkEventArgs) Handles PositionsBCDGW.DoWork
 
-        Controller.UpdateAccountsPositionsInDB()
-        ' If Controller.needToUpdateModel = True Then Controller.UpdateModel()
+        Controller.SendNewPositionsToModel()
+        If Controller.needToUpdateModel = True Then Controller.UpdateModel()
 
     End Sub
 
@@ -650,7 +612,7 @@ Friend Class AccountsMGT_UI
             Dim f_type As String = Controller.ReadAccount(key, ACCOUNT_FORMULA_TYPE_VARIABLE)
             Dim type As String = Controller.ReadAccount(key, ACCOUNT_TYPE_VARIABLE)
             Name_TB.Text = current_node.Text
-            formatsCB.Text = formatsDictionary(Controller.ReadAccount(key, ACCOUNT_FORMAT_VARIABLE))(FORMAT_NAME_VARIABLE)
+            formatsCB.Text = formatKeyNameDictionary(Controller.ReadAccount(key, ACCOUNT_FORMAT_VARIABLE))
             TypeCB.Text = accountsTypesKeyNameDict(type)
             formulaTypeCB.Text = fTypeCodeNameDictionary(f_type)
 
@@ -679,7 +641,7 @@ Friend Class AccountsMGT_UI
     Private Sub ReloadAccountsTree(ByRef expansionDic As Dictionary(Of String, Boolean))
 
         Account.LoadAccountsTree(AccountsTV)
-        cTreeViews_Functions.ResumeExpansionsLevel(AccountsTV, expansionDic)
+        TreeViewsUtilities.ResumeExpansionsLevel(AccountsTV, expansionDic)
 
     End Sub
 
@@ -716,5 +678,7 @@ Friend Class AccountsMGT_UI
 #End Region
 
 #End Region
+
+
 
 End Class

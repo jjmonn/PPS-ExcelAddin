@@ -49,7 +49,7 @@ Partial Class EntitySelectionTP
         '
         Me.ValidateBT.Anchor = System.Windows.Forms.AnchorStyles.Right
         Me.ValidateBT.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
-        Me.ValidateBT.ImageKey = "favicon(76).ico"
+        Me.ValidateBT.ImageKey = "1420498403_340208.ico"
         Me.ValidateBT.ImageList = Me.ImageList1
         Me.ValidateBT.Location = New System.Drawing.Point(184, 663)
         Me.ValidateBT.Margin = New System.Windows.Forms.Padding(3, 0, 3, 3)
@@ -64,14 +64,14 @@ Partial Class EntitySelectionTP
         '
         Me.ImageList1.ImageStream = CType(resources.GetObject("ImageList1.ImageStream"), System.Windows.Forms.ImageListStreamer)
         Me.ImageList1.TransparentColor = System.Drawing.Color.Transparent
-        Me.ImageList1.Images.SetKeyName(0, "favicon(76).ico")
+        Me.ImageList1.Images.SetKeyName(0, "1420498403_340208.ico")
         '
         'EntitiesTVImageList
         '
         Me.EntitiesTVImageList.ImageStream = CType(resources.GetObject("EntitiesTVImageList.ImageStream"), System.Windows.Forms.ImageListStreamer)
         Me.EntitiesTVImageList.TransparentColor = System.Drawing.Color.Transparent
-        Me.EntitiesTVImageList.Images.SetKeyName(0, "favicon(108).ico")
-        Me.EntitiesTVImageList.Images.SetKeyName(1, "favicon(110).ico")
+        Me.EntitiesTVImageList.Images.SetKeyName(0, "favicon(81).ico")
+        Me.EntitiesTVImageList.Images.SetKeyName(1, "config purple circle small.png")
         '
         'EntitySelectionTP
         '
@@ -87,7 +87,7 @@ Partial Class EntitySelectionTP
     End Sub
     Friend WithEvents TableLayoutPanel1 As System.Windows.Forms.TableLayoutPanel
     Friend WithEvents ValidateBT As System.Windows.Forms.Button
-    Friend WithEvents EntitiesTVImageList As System.Windows.Forms.ImageList
     Friend WithEvents ImageList1 As System.Windows.Forms.ImageList
+    Friend WithEvents EntitiesTVImageList As System.Windows.Forms.ImageList
 
 End Class

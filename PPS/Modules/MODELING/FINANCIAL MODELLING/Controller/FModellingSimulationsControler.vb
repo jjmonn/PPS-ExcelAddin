@@ -154,7 +154,7 @@ Friend Class FModellingSimulationsControler
     Protected Friend Sub NewScenario(ByRef name As String)
 
         ' Create a new Scenario Object
-        Dim new_id As String = cTreeViews_Functions.GetNewNodeKey(scenariosTV, SCENARII_TOKENS_SIZE)
+        Dim new_id As String = TreeViewsUtilities.GetNewNodeKey(scenariosTV, SCENARII_TOKENS_SIZE)
         Dim new_scenario As New Scenario(new_id, _
                                          scenariosTV, _
                                          periods_list, _
@@ -169,7 +169,7 @@ Friend Class FModellingSimulationsControler
 
         For Each constraint_name As String In FModeling_constraint_name_id_dic.Keys
             AddConstraint(new_id, constraint_name, 0)
-        Next     
+        Next
         new_node.Expand()
         View.AddScenario(new_scenario)
 
@@ -179,7 +179,7 @@ Friend Class FModellingSimulationsControler
                                        ByRef f_account_name As String, _
                                        ByRef default_value As Double)
 
-        Dim constraint_id As String = cTreeViews_Functions.GetNewNodeKey(scenariosTV, SCENARII_TOKENS_SIZE)
+        Dim constraint_id As String = TreeViewsUtilities.GetNewNodeKey(scenariosTV, SCENARII_TOKENS_SIZE)
         Dim new_node = scenariosTV.Nodes.Find(scenario_id, True)(0).Nodes.Add(constraint_id, f_account_name, 1, 1)
         scenarios_dic(scenario_id).AddConstraint(Outputs_name_id_dic(f_account_name), f_account_name, default_value)
 
@@ -299,6 +299,13 @@ Friend Class FModellingSimulationsControler
     Protected Friend Sub ShowFAccountsConfig()
 
         FAccountsController.DisplayView()
+
+    End Sub
+
+    Protected Friend Sub Close()
+
+        Model.DestroyDll()
+        MyBase.Finalize()
 
     End Sub
 

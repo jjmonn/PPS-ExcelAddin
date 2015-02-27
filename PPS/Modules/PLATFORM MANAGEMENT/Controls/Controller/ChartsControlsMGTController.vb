@@ -35,7 +35,7 @@ Friend Class ChartsControlsMGTController
     Protected Friend Sub New()
 
         ControlChart.LoadControlChartsTree(ChartsTV)
-        positions_dictionary = cTreeViews_Functions.GeneratePositionsDictionary(ChartsTV)
+        positions_dictionary = TreeViewsUtilities.GeneratePositionsDictionary(ChartsTV)
 
     End Sub
 
@@ -53,14 +53,14 @@ Friend Class ChartsControlsMGTController
 
     Protected Friend Sub CreateControlChart(ByRef name As String)
 
-        Dim id As String = cTreeViews_Functions.GetNewNodeKey(ChartsTV, CONTROL_CHARTS_TOKEN_SIZE)
+        Dim id As String = TreeViewsUtilities.GetNewNodeKey(ChartsTV, CONTROL_CHARTS_TOKEN_SIZE)
         Dim HT As New Hashtable
         HT.Add(CONTROL_CHART_ID_VARIABLE, id)
         HT.Add(CONTROL_CHART_NAME_VARIABLE, name)
         HT.Add(ITEMS_POSITIONS, 1)
         ControlCharts.CreateControlChart(HT)
         ChartsTV.Nodes.Add(id, name, 0, 0)
-        positions_dictionary = cTreeViews_Functions.GeneratePositionsDictionary(ChartsTV)
+        positions_dictionary = TreeViewsUtilities.GeneratePositionsDictionary(ChartsTV)
         ControlCharts.UpdateControlChart(id, ITEMS_POSITIONS, positions_dictionary(id))
 
     End Sub
@@ -84,14 +84,14 @@ Friend Class ChartsControlsMGTController
         Next
         ControlCharts.DeleteControlChart(controlchart_node.Name)
         controlchart_node.Remove()
-        positions_dictionary = cTreeViews_Functions.GeneratePositionsDictionary(ChartsTV)
+        positions_dictionary = TreeViewsUtilities.GeneratePositionsDictionary(ChartsTV)
         SendNewPositionsToModel()
 
     End Sub
 
     Protected Friend Sub CreateSerie(ByRef controlchart_node As TreeNode, ByRef name As String)
 
-        Dim id As String = cTreeViews_Functions.GetNewNodeKey(ChartsTV, CONTROL_CHARTS_TOKEN_SIZE)
+        Dim id As String = TreeViewsUtilities.GetNewNodeKey(ChartsTV, CONTROL_CHARTS_TOKEN_SIZE)
         Dim HT As New Hashtable
         HT.Add(CONTROL_CHART_ID_VARIABLE, id)
         HT.Add(CONTROL_CHART_PARENT_ID_VARIABLE, controlchart_node.Name)
@@ -99,7 +99,7 @@ Friend Class ChartsControlsMGTController
         HT.Add(ITEMS_POSITIONS, 1)
         ControlCharts.CreateControlChart(HT)
         controlchart_node.Nodes.Add(id, name, 1, 1)
-        positions_dictionary = cTreeViews_Functions.GeneratePositionsDictionary(ChartsTV)
+        positions_dictionary = TreeViewsUtilities.GeneratePositionsDictionary(ChartsTV)
         ControlCharts.UpdateControlChart(id, ITEMS_POSITIONS, positions_dictionary(id))
 
     End Sub
@@ -151,7 +151,7 @@ Friend Class ChartsControlsMGTController
 
         ControlCharts.DeleteControlChart(serie_node.Name)
         serie_node.Remove()
-        positions_dictionary = cTreeViews_Functions.GeneratePositionsDictionary(ChartsTV)
+        positions_dictionary = TreeViewsUtilities.GeneratePositionsDictionary(ChartsTV)
         SendNewPositionsToModel()
 
     End Sub

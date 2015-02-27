@@ -58,7 +58,7 @@ Partial Class CInputSelectionPane
         '
         Me.ValidateBT.Anchor = System.Windows.Forms.AnchorStyles.Right
         Me.ValidateBT.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
-        Me.ValidateBT.ImageKey = "favicon(76).ico"
+        Me.ValidateBT.ImageKey = "1420498403_340208.ico"
         Me.ValidateBT.ImageList = Me.ImageList1
         Me.ValidateBT.Location = New System.Drawing.Point(157, 656)
         Me.ValidateBT.Name = "ValidateBT"
@@ -72,7 +72,7 @@ Partial Class CInputSelectionPane
         '
         Me.ImageList1.ImageStream = CType(resources.GetObject("ImageList1.ImageStream"), System.Windows.Forms.ImageListStreamer)
         Me.ImageList1.TransparentColor = System.Drawing.Color.Transparent
-        Me.ImageList1.Images.SetKeyName(0, "favicon(76).ico")
+        Me.ImageList1.Images.SetKeyName(0, "1420498403_340208.ico")
         '
         'PeriodsLB
         '
@@ -109,8 +109,8 @@ Partial Class CInputSelectionPane
         '
         Me.EntitiesTVImageList.ImageStream = CType(resources.GetObject("EntitiesTVImageList.ImageStream"), System.Windows.Forms.ImageListStreamer)
         Me.EntitiesTVImageList.TransparentColor = System.Drawing.Color.Transparent
-        Me.EntitiesTVImageList.Images.SetKeyName(0, "favicon(108).ico")
-        Me.EntitiesTVImageList.Images.SetKeyName(1, "favicon(110).ico")
+        Me.EntitiesTVImageList.Images.SetKeyName(0, "favicon(81).ico")
+        Me.EntitiesTVImageList.Images.SetKeyName(1, "config purple circle small.png")
         '
         'TableLayoutPanel1
         '
@@ -127,8 +127,8 @@ Partial Class CInputSelectionPane
         Me.TableLayoutPanel1.Location = New System.Drawing.Point(0, 0)
         Me.TableLayoutPanel1.Name = "TableLayoutPanel1"
         Me.TableLayoutPanel1.RowCount = 6
-        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 4.7817049!))
-        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 95.2182922!))
+        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 4.781705!))
+        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 95.21829!))
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 29.0!))
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 28.0!))
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 128.0!))

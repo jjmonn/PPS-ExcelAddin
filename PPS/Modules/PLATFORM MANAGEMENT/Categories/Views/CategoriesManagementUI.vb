@@ -211,7 +211,7 @@ Friend Class CategoriesManagementUI
             Dim currentKey As String = current_node.Name
             Me.Hide()
             Dim currentPosition As Double = Controller.positions_dictionary(current_node.PrevNode.Name) - 1 + POSITION_STEP
-            cTreeViews_Functions.UpdateChildrenPosition(current_node, currentPosition, Controller.positions_dictionary)
+            TreeViewsUtilities.UpdateChildrenPosition(current_node, currentPosition, Controller.positions_dictionary)
             ResumeAccountTree()
             Me.Show()
             CategoriesTV.SelectedNode = CategoriesTV.Nodes.Find(currentKey, True)(0)
@@ -224,8 +224,8 @@ Friend Class CategoriesManagementUI
         If Not current_node.NextNode Is Nothing Then
             Dim currentKey As String = current_node.Name
             Dim currentPosition As Object = Controller.positions_dictionary(current_node.NextNode.Name) _
-                                            + cTreeViews_Functions.GetNodeAllChildrenCount(current_node.NextNode) + POSITION_STEP
-            cTreeViews_Functions.UpdateChildrenPosition(current_node, currentPosition, Controller.positions_dictionary)
+                                            + TreeViewsUtilities.GetNodeAllChildrenCount(current_node.NextNode) + POSITION_STEP
+            TreeViewsUtilities.UpdateChildrenPosition(current_node, currentPosition, Controller.positions_dictionary)
             Me.Hide()
             ResumeAccountTree()
             Me.Show()
@@ -236,18 +236,18 @@ Friend Class CategoriesManagementUI
 
     Private Sub ResumeAccountTree()
 
-        Dim expansionDic As Dictionary(Of String, Boolean) = cTreeViews_Functions.SaveNodesExpansionsLevel(CategoriesTV)
+        Dim expansionDic As Dictionary(Of String, Boolean) = TreeViewsUtilities.SaveNodesExpansionsLevel(CategoriesTV)
         Controller.SendNewPositionsToModel()
         Category.LoadCategoriesTree(CategoriesTV)
-        cTreeViews_Functions.ResumeExpansionsLevel(CategoriesTV, expansionDic)
-        
+        TreeViewsUtilities.ResumeExpansionsLevel(CategoriesTV, expansionDic)
+
     End Sub
 
 #End Region
 
     Private Sub Categories_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
 
-        Controller.positions_dictionary = cTreeViews_Functions.GeneratePositionsDictionary(CategoriesTV)
+        Controller.positions_dictionary = TreeViewsUtilities.GeneratePositionsDictionary(CategoriesTV)
         Controller.SendNewPositionsToModel()
 
     End Sub

@@ -118,7 +118,7 @@ Friend Class PPSBI_UI
         ' Entities TreeView
         entitiesTV.ImageList = EntitiesTVImageList
         Entity.LoadEntitiesTree(entitiesTV)
-        cTreeViews_Functions.set_TV_basics_icon_index(entitiesTV)
+        TreeViewsUtilities.set_TV_basics_icon_index(entitiesTV)
         entitiesTV.CollapseAll()
         entitiesTV.Dock = DockStyle.Fill
         AddHandler entitiesTV.KeyDown, AddressOf entitiesTV_KeyDown

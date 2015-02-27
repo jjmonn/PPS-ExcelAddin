@@ -55,7 +55,7 @@ Friend Class GenericSingleEntityDLL3Computer
             DLL3Computer = input_dll3_interface
         End If
         Entity.LoadEntitiesTree(EntitiesTV)
-        cTreeViews_Functions.CheckAllNodes(EntitiesTV)
+        TreeViewsUtilities.CheckAllNodes(EntitiesTV)
 
     End Sub
 
@@ -119,8 +119,8 @@ Friend Class GenericSingleEntityDLL3Computer
             Case 0
                 entities_id_list = {entity_id}
             Case Else
-                Dim all_entities_id_list = cTreeViews_Functions.GetNodesKeysList(entity_node)
-                entities_id_list = cTreeViews_Functions.GetNoChildrenNodesList(all_entities_id_list, EntitiesTV).ToArray
+                Dim all_entities_id_list = TreeViewsUtilities.GetNodesKeysList(entity_node)
+                entities_id_list = TreeViewsUtilities.GetNoChildrenNodesList(all_entities_id_list, EntitiesTV).ToArray
         End Select
 
         If DBDownloader.GetAggregatedConvertedInputs(entities_id_list, _

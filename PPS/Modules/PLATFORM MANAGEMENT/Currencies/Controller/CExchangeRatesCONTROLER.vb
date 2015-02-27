@@ -177,7 +177,7 @@ Friend Class CExchangeRatesCONTROLER
 
     Friend Sub DeleteVersionsOrFolder(ByRef version_node As TreeNode)
 
-        Dim versions_list = cTreeViews_Functions.GetNodesKeysList(version_node)
+        Dim versions_list = TreeViewsUtilities.GetNodesKeysList(version_node)
         versions_list.Reverse()
         For Each version_id In versions_list
             If RatesVersions.ReadVersion(version_id, RATES_VERSIONS_IS_FOLDER_VARIABLE) = 0 Then
@@ -255,9 +255,9 @@ Friend Class CExchangeRatesCONTROLER
 
     Private Function get_new_version_token()
 
-        Dim key = cTreeViews_Functions.IssueNewToken(RATES_VERSIONS_TOKEN_SIZE)
+        Dim key = TreeViewsUtilities.IssueNewToken(RATES_VERSIONS_TOKEN_SIZE)
         While View.versionsTV.Nodes.Find(key, True).Length > 0
-            key = cTreeViews_Functions.IssueNewToken(RATES_VERSIONS_TOKEN_SIZE)
+            key = TreeViewsUtilities.IssueNewToken(RATES_VERSIONS_TOKEN_SIZE)
         End While
         Return key
 
@@ -265,7 +265,7 @@ Friend Class CExchangeRatesCONTROLER
 
     Private Sub UpdateVersionsPositions()
 
-        Dim positions_dic = cTreeViews_Functions.GeneratePositionsDictionary(View.versionsTV)
+        Dim positions_dic = TreeViewsUtilities.GeneratePositionsDictionary(View.versionsTV)
         For Each id In positions_dic.Keys
             RatesVersions.UpdateVersion(id, ITEMS_POSITIONS, positions_dic(id))
         Next

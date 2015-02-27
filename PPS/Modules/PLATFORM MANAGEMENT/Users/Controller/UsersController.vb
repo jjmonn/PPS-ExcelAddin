@@ -59,7 +59,7 @@ Friend Class UsersController
     Friend Sub DisplayUsersTGV()
 
         Dim users_dictionary As New Dictionary(Of String, Hashtable)
-        Dim users_list = cTreeViews_Functions.GetNodesKeysList(usersTV)
+        Dim users_list = TreeViewsUtilities.GetNodesKeysList(usersTV)
         For Each user_id In users_list
             Dim tmp_hash As New Hashtable
             tmp_hash.Add(USERS_IS_FOLDER_VARIABLE, Users.ReadUser(user_id, USERS_IS_FOLDER_VARIABLE))
@@ -138,7 +138,7 @@ Friend Class UsersController
     Friend Sub DeleteFolder(ByRef user_id As String)
 
         Dim node = usersTV.Nodes.Find(user_id, True)(0)
-        Dim users_to_delete_list = cTreeViews_Functions.GetNodesKeysList(node)
+        Dim users_to_delete_list = TreeViewsUtilities.GetNodesKeysList(node)
         users_to_delete_list.Reverse()
         For Each item_id In users_to_delete_list
             If Users.ReadUser(item_id, USERS_IS_FOLDER_VARIABLE) = 0 Then
@@ -243,7 +243,7 @@ Friend Class UsersController
 
     Private Sub UpdateUsersPositions()
 
-        Dim positions_dic = cTreeViews_Functions.GeneratePositionsDictionary(usersTV)
+        Dim positions_dic = TreeViewsUtilities.GeneratePositionsDictionary(usersTV)
         For Each id In positions_dic.Keys
             Users.UpdateUser(id, ITEMS_POSITIONS, positions_dic(id))
         Next

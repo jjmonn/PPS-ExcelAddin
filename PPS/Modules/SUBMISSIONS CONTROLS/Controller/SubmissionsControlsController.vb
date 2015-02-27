@@ -46,9 +46,9 @@ Friend Class SubmissionsControlsController
 
 
         Entity.LoadEntitiesTree(EntitiesTV)
-        cTreeViews_Functions.CheckAllNodes(EntitiesTV)
+        TreeViewsUtilities.CheckAllNodes(EntitiesTV)
         ControlChart.LoadControlChartsTree(ChartsTV)
-        entities_id_list = cTreeViews_Functions.GetNodesKeysList(EntitiesTV)
+        entities_id_list = TreeViewsUtilities.GetNodesKeysList(EntitiesTV)
         InitializeChartsDictionary()
         View = New SubmissionsControlUI(Me, EntitiesTV, charts_dic)
         version_id = GlobalVariables.GLOBALCurrentVersionCode

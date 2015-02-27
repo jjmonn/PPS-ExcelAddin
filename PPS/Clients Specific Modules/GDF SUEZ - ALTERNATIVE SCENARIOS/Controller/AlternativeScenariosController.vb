@@ -84,7 +84,7 @@ Friend Class AlternativeScenariosController
 
         If InputsController.ValidateInputsSelection = True Then
 
-            InitializePBar(cTreeViews_Functions.GetNoChildrenNodesList(cTreeViews_Functions.GetNodesKeysList(InputsController.EntitiesTV), InputsController.EntitiesTV), _
+            InitializePBar(TreeViewsUtilities.GetNoChildrenNodesList(TreeViewsUtilities.GetNodesKeysList(InputsController.EntitiesTV), InputsController.EntitiesTV), _
                            Model.sensitivities_dictionary.Keys.Count)
             Model.ComputeEntity(InputsController.current_version_id, InputsController.current_entity_node, View.PBar)
             View.PBar.AddProgress(2)

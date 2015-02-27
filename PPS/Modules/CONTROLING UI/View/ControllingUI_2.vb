@@ -21,7 +21,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 27/01/2015
+' Last modified: 26/02/2015
 
 
 Imports System.Windows.Forms
@@ -66,6 +66,7 @@ Friend Class ControllingUI_2
     Private right_clicked_node As TreeNode
     Private current_DGV_cell As GridCell
     Private adjustments_lines_list As New List(Of HierarchyItem)
+    Private IsUpdatingChildrenCategory As Boolean = False
 
 #End Region
 
@@ -152,7 +153,7 @@ Friend Class ControllingUI_2
 
         Version.LoadVersionsTree(versionsTV)
         Entity.LoadEntitiesTree(entitiesTV)
-        cTreeViews_Functions.set_TV_basics_icon_index(entitiesTV)
+        TreeViewsUtilities.set_TV_basics_icon_index(entitiesTV)
         Account.LoadAccountsTree(accountsTV)
         Category.LoadCategoriesTree(categoriesTV)
         Adjustment.LoadAdjustmentsTree(adjustmentsTV)
@@ -164,7 +165,7 @@ Friend Class ControllingUI_2
         categoriesTV.ExpandAll()
         adjustmentsTV.Dock = DockStyle.Fill
         adjustmentsTV.CheckBoxes = True
-        cTreeViews_Functions.CheckAllNodes(adjustmentsTV)
+        TreeViewsUtilities.CheckAllNodes(adjustmentsTV)
         versionsTV.Dock = DockStyle.Fill
         versionsTV.CheckBoxes = True
         versionsTV.ExpandAll()
@@ -388,7 +389,7 @@ Friend Class ControllingUI_2
             account_row = DGV.RowsHierarchy.Items(vDGVAccountsKeyLineNbDic(tab_index)(account_id))
 
             For Each entity_id In adjustments_dict(account_id).Keys
-                entity_row = GetEntityRow(account_row, cTreeViews_Functions.GetNodePath(entitiesTV.Nodes.Find(entity_id, True)(0), Controller.CurrentEntityKey))
+                entity_row = GetEntityRow(account_row, TreeViewsUtilities.GetNodePath(entitiesTV.Nodes.Find(entity_id, True)(0), Controller.CurrentEntityKey))
 
                 For Each adjustment_id In adjustments_dict(account_id)(entity_id).Keys
                     Dim adjt_row As HierarchyItem = entity_row.Items.Add(adjustments_id_names(adjustment_id))
@@ -398,7 +399,7 @@ Friend Class ControllingUI_2
                     For Each Period In adjustments_dict(account_id)(entity_id)(adjustment_id).Keys
                         period_column = DGV.ColumnsHierarchy.Items(periodsColumnIndexDictionary(Period))
                         If version_index > -1 Then period_column = period_column.Items(version_index)
-                        DGV.CellsArea.SetCellValue(adjt_row, period_column, adjustments_dict(account_id)(entity_id)(adjustment_id)(Period))                        
+                        DGV.CellsArea.SetCellValue(adjt_row, period_column, adjustments_dict(account_id)(entity_id)(adjustment_id)(Period))
                     Next
                 Next
             Next
@@ -445,9 +446,17 @@ Friend Class ControllingUI_2
 
     Private Sub Category_AfterCheck(sender As Object, e As TreeViewEventArgs)
 
-        ' apply selectedvalue to children
-        ' loop through children applys same selection as parent !!
-        Controller.CategoriesUpdate()
+        If IsUpdatingChildrenCategory = False Then
+            If e.Node.Parent Is Nothing Then
+                Dim state As Boolean = e.Node.Checked
+                IsUpdatingChildrenCategory = True
+                For Each child_node As TreeNode In e.Node.Nodes
+                    child_node.Checked = state
+                Next
+                IsUpdatingChildrenCategory = False
+            End If
+            Controller.CategoriesUpdate()
+        End If
 
     End Sub
 

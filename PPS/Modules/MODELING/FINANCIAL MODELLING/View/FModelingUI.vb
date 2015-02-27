@@ -127,7 +127,7 @@ Friend Class FModelingUI
 
         VersionsTV = input_versionsTV
         EntitiesTV = input_entitiesTV
-        cTreeViews_Functions.CheckAllNodes(EntitiesTV)
+        TreeViewsUtilities.CheckAllNodes(EntitiesTV)
         AddHandler VersionsTV.AfterSelect, AddressOf VersionsTV_AfterSelect
         AddHandler EntitiesTV.AfterSelect, AddressOf EntitiesTV_AfterSelect
         AddHandler VersionsTV.KeyDown, AddressOf versionsTV_KeyDown
@@ -298,7 +298,7 @@ Friend Class FModelingUI
 
         Dim name = InputBox("Please enter the name of the New Scenario :")
         If name <> "" Then
-            If Not cTreeViews_Functions.GetNodesTextsList(ScenariosTV).Contains(name) Then
+            If Not TreeViewsUtilities.GetNodesTextsList(ScenariosTV).Contains(name) Then
                 SimulationsController.NewScenario(name)
             Else
                 MsgBox("This name is already in use. Please choose another one")
@@ -647,6 +647,11 @@ Friend Class FModelingUI
 
 #End Region
 
-    
    
+    Private Sub FModelingUI_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
+
+        SimulationsController.Close()
+
+    End Sub
+
 End Class

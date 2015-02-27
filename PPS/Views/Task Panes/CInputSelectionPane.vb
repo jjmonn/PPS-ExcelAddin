@@ -48,7 +48,7 @@ Public Class CInputSelectionPane
 
         ADDIN = AddinInstance
         Entity.LoadEntitiesTree(EntitiesTV)
-        cTreeViews_Functions.set_TV_basics_icon_index(EntitiesTV)
+        TreeViewsUtilities.set_TV_basics_icon_index(EntitiesTV)
         EntitiesTV.CollapseAll()
 
     End Sub

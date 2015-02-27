@@ -31,7 +31,6 @@ Friend Class DLL3_Interface
     Private objptr As Integer
 
     ' Variables
-    '  Protected Friend mPeriodList() As Integer
     Friend currentSingleEntityKey As String
     Friend dll3TimeSetup As String                  ' MONTHLY_TIME_CONFIGURATION or YEARLY_TIME_CONFIGURATION
     Private all_entities_ids As List(Of String)
@@ -40,6 +39,7 @@ Friend Class DLL3_Interface
     Friend entities_currencies As New List(Of String)
     Protected Friend current_start_period As Int32 = 0
     Protected Friend current_nb_periods As Int32 = 0
+    Private isModelAlive As Boolean = False
 
 #End Region
 
@@ -209,7 +209,7 @@ Friend Class DLL3_Interface
     Protected Friend Sub New()
 
         objptr = CreateDll3()
-
+        isModelAlive = True
         Dim formulaTypes() As String = FormulaTypesMapping.GetModelFormulaTypesKeys().ToArray        ' {"HV", "F", "SOAC", "BS", "WC"}
         Dim formulaCodes() As Integer = FormulaTypesMapping.GetModelFormulaTypesIntCodes.ToArray     ' { 0  ,  1 ,    2  ,  3  ,  4}
 
@@ -286,7 +286,10 @@ Friend Class DLL3_Interface
 
     Friend Sub destroy_dll()
 
-        DestroyDll3(objptr)
+        If isModelAlive = True Then
+            DestroyDll3(objptr)
+            isModelAlive = False
+        End If
 
     End Sub
 
@@ -372,8 +375,8 @@ Friend Class DLL3_Interface
 
     Friend Function InitializeEntitiesAggregation(ByRef input_entity_node As TreeNode) As List(Of String)
 
-        all_entities_ids = cTreeViews_Functions.GetNodesKeysList(input_entity_node)
-        cTreeViews_Functions.FilterSelectedNodes(input_entity_node, all_entities_ids)
+        all_entities_ids = TreeViewsUtilities.GetNodesKeysList(input_entity_node)
+        TreeViewsUtilities.FilterSelectedNodes(input_entity_node, all_entities_ids)
         FillInEntitiesCurrencies(all_entities_ids, entities_currencies)
 
         InitializeEntitiesAggregationDll3(objptr, _
@@ -389,7 +392,7 @@ Friend Class DLL3_Interface
             Else
                 node = input_entity_node.Nodes.Find(entity_id, True)(0)
             End If
-            children_array = cTreeViews_Functions.GetNodeChildrenIDsStringArray(node, True)
+            children_array = TreeViewsUtilities.GetNodeChildrenIDsStringArray(node, True)
             AddEntityToEntitiesAggregationHierarchyDll3(objptr, entity_id, children_array, children_array.Count)
         Next
 
@@ -499,5 +502,14 @@ Friend Class DLL3_Interface
 
 #End Region
 
+
+    Protected Overrides Sub finalize()
+
+        If isModelAlive = True Then
+            DestroyDll3(objptr)
+            isModelAlive = False
+        End If
+
+    End Sub
 
 End Class

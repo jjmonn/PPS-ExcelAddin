@@ -181,7 +181,7 @@ Friend Class VersioningManagementUI
             Dim currentKey As String = current_node.Name
             Me.Hide()
             Dim currentPosition As Double = Controller.positions_dictionary(current_node.PrevNode.Name) - 1 + POSITION_STEP
-            cTreeViews_Functions.UpdateChildrenPosition(current_node, currentPosition, Controller.positions_dictionary)
+            TreeViewsUtilities.UpdateChildrenPosition(current_node, currentPosition, Controller.positions_dictionary)
             ResumeVersionsTree()
             Me.Show()
             VersionsTV.SelectedNode = versionstv.Nodes.Find(currentKey, True)(0)
@@ -194,8 +194,8 @@ Friend Class VersioningManagementUI
         If Not current_node.NextNode Is Nothing Then
             Dim currentKey As String = current_node.Name
             Dim currentPosition As Object = Controller.positions_dictionary(current_node.NextNode.Name) _
-                                            + cTreeViews_Functions.GetNodeAllChildrenCount(current_node.NextNode) + POSITION_STEP
-            cTreeViews_Functions.UpdateChildrenPosition(current_node, currentPosition, Controller.positions_dictionary)
+                                            + TreeViewsUtilities.GetNodeAllChildrenCount(current_node.NextNode) + POSITION_STEP
+            TreeViewsUtilities.UpdateChildrenPosition(current_node, currentPosition, Controller.positions_dictionary)
             Me.Hide()
             ResumeVersionsTree()
             Me.Show()
@@ -206,10 +206,10 @@ Friend Class VersioningManagementUI
 
     Private Sub ResumeVersionsTree()
 
-        Dim expansionDic As Dictionary(Of String, Boolean) = cTreeViews_Functions.SaveNodesExpansionsLevel(versionstv)
+        Dim expansionDic As Dictionary(Of String, Boolean) = TreeViewsUtilities.SaveNodesExpansionsLevel(versionstv)
         Controller.SendNewPositionsToModel()
         Category.LoadCategoriesTree(versionstv)
-        cTreeViews_Functions.ResumeExpansionsLevel(versionstv, expansionDic)
+        TreeViewsUtilities.ResumeExpansionsLevel(versionstv, expansionDic)
 
     End Sub
 
@@ -285,7 +285,7 @@ Friend Class VersioningManagementUI
             Controller.UpdateParent(dropNode.Name, targetNode.Name)
 
             Dim currentPosition = Controller.positions_dictionary(targetNode.Name) + targetNode.Nodes.Count + POSITION_STEP
-            cTreeViews_Functions.UpdateChildrenPosition(dropNode, currentPosition, Controller.positions_dictionary)
+            TreeViewsUtilities.UpdateChildrenPosition(dropNode, currentPosition, Controller.positions_dictionary)
             Controller.SendNewPositionsToModel()
         End If
 
@@ -417,7 +417,7 @@ Friend Class VersioningManagementUI
 
     Private Sub VersioningManagementUI_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
 
-        Controller.positions_dictionary = cTreeViews_Functions.GeneratePositionsDictionary(VersionsTV)
+        Controller.positions_dictionary = TreeViewsUtilities.GeneratePositionsDictionary(VersionsTV)
         Controller.SendNewPositionsToModel()
 
     End Sub

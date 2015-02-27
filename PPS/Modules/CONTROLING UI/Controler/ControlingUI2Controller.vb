@@ -60,7 +60,7 @@ Friend Class ControlingUI2Controller
     Friend Sub compute_entity_complete(ByRef entity_node As TreeNode)
 
         Dim Versions As New Version
-        versions_dict = Versions.InitializeVersionsArray(cTreeViews_Functions.GetCheckedNodeCollection(View.versionsTV), _
+        versions_dict = Versions.InitializeVersionsArray(TreeViewsUtilities.GetCheckedNodeCollection(View.versionsTV), _
                                                         globalPeriodsList, _
                                                         versionsComparisonFlag, _
                                                         versions_id_array, _
@@ -202,11 +202,11 @@ Friend Class ControlingUI2Controller
     Friend Sub CategoriesUpdate()
 
         ESB.BuildCategoriesFilterFromTreeview(View.categoriesTV)
-        Dim expansionDict = cTreeViews_Functions.SaveNodesExpansionsLevel(View.entitiesTV)
-        Dim checkedList = cTreeViews_Functions.SaveCheckedStates(View.entitiesTV)
+        Dim expansionDict = TreeViewsUtilities.SaveNodesExpansionsLevel(View.entitiesTV)
+        Dim checkedList = TreeViewsUtilities.SaveCheckedStates(View.entitiesTV)
         Entity.LoadEntitiesTree(View.entitiesTV, ESB.StrSqlQueryForEntitiesUploadFunctions)
-        cTreeViews_Functions.ResumeExpansionsLevel(View.entitiesTV, expansionDict)
-        cTreeViews_Functions.ResumeCheckedStates(View.entitiesTV, checkedList)    ' a list of nodes filtered can be displayed
+        TreeViewsUtilities.ResumeExpansionsLevel(View.entitiesTV, expansionDict)
+        TreeViewsUtilities.ResumeCheckedStates(View.entitiesTV, checkedList)    ' a list of nodes filtered can be displayed
 
     End Sub
 
@@ -231,7 +231,7 @@ Friend Class ControlingUI2Controller
 
     Private Function GetAdjustmentsFilter() As List(Of String)
 
-        Dim tmp_list As List(Of String) = cTreeViews_Functions.GetCheckedNodesID(View.adjustmentsTV)
+        Dim tmp_list As List(Of String) = TreeViewsUtilities.GetCheckedNodesID(View.adjustmentsTV)
         If tmp_list.Count <> View.adjustmentsTV.Nodes.Count Then
             Return tmp_list
         Else

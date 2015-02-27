@@ -63,7 +63,7 @@ Friend Class FModellingInputsController
         FModellingAccount = input_FModellingAccount
         Model = New GenericAggregationDLL3Computing(GlobalVariables.GlobalDBDownloader)
         Version.LoadVersionsTree(VersionsTV)
-        cTreeViews_Functions.CheckAllNodes(EntitiesTV)
+        TreeViewsUtilities.CheckAllNodes(EntitiesTV)
         Entity.LoadEntitiesTree(EntitiesTV)
         inputs_list = FModellingAccountsMapping.GetFModellingAccountsList(FINANCIAL_MODELLING_ID_VARIABLE, FINANCIAL_MODELLING_INPUT_TYPE)
         accounts_id_names_dic = AccountsMapping.GetAccountsDictionary(ACCOUNT_ID_VARIABLE, ACCOUNT_NAME_VARIABLE)

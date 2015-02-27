@@ -61,9 +61,9 @@ Friend Class DataVersionsController
         rates_versions_id_name_dic = RateVersionsMapping.GetRatesVersionDictionary(RATES_VERSIONS_ID_VARIABLE, RATES_VERSIONS_NAME_VARIABLE)
         rates_versions_name_id_dic = RateVersionsMapping.GetRatesVersionDictionary(RATES_VERSIONS_NAME_VARIABLE, RATES_VERSIONS_ID_VARIABLE)
         ViewObject = New VersioningManagementUI(Me, versionsTV)
-        versionsNamesList = cTreeViews_Functions.GetNodesTextsList(versionsTV)
+        versionsNamesList = TreeViewsUtilities.GetNodesTextsList(versionsTV)
         NewVersionUI = New NewDataVersionUI(Me)
-        positions_dictionary = cTreeViews_Functions.GeneratePositionsDictionary(versionsTV)
+        positions_dictionary = TreeViewsUtilities.GeneratePositionsDictionary(versionsTV)
         ViewObject.Show()
 
     End Sub
@@ -78,7 +78,7 @@ Friend Class DataVersionsController
                                        Optional ByRef parent_node As TreeNode = Nothing, _
                                        Optional ByRef origin_version_id As String = "")
 
-        Dim new_id As String = cTreeViews_Functions.GetNewNodeKey(versionsTV, VERSIONS_TOKEN_SIZE)
+        Dim new_id As String = TreeViewsUtilities.GetNewNodeKey(versionsTV, VERSIONS_TOKEN_SIZE)
         hash.Add(RATES_VERSIONS_ID_VARIABLE, new_id)
         hash.Add(ITEMS_POSITIONS, 1)
         Dim table_creation_success As Boolean
@@ -102,7 +102,7 @@ Friend Class DataVersionsController
     Protected Friend Sub CreateFolder(ByRef folder_name As String, _
                                       Optional parent_node As TreeNode = Nothing)
 
-        Dim new_id As String = cTreeViews_Functions.GetNewNodeKey(versionsTV, VERSIONS_TOKEN_SIZE)
+        Dim new_id As String = TreeViewsUtilities.GetNewNodeKey(versionsTV, VERSIONS_TOKEN_SIZE)
         Dim hash As New Hashtable
         hash.Add(RATES_VERSIONS_ID_VARIABLE, new_id)
         hash.Add(VERSIONS_IS_FOLDER_VARIABLE, 1)
@@ -140,7 +140,7 @@ Friend Class DataVersionsController
 
     Protected Friend Sub DeleteVersions(ByRef node As TreeNode)
 
-        Dim versions_to_delete = cTreeViews_Functions.GetNodesKeysList(node)
+        Dim versions_to_delete = TreeViewsUtilities.GetNodesKeysList(node)
         versions_to_delete.Reverse()
         For Each version_id In versions_to_delete
             If IsFolder(version_id) Then
@@ -246,7 +246,7 @@ Friend Class DataVersionsController
         Else
             parent_node.Nodes.Add(id, name, is_folder, is_folder)
         End If
-        positions_dictionary = cTreeViews_Functions.GeneratePositionsDictionary(versionsTV)
+        positions_dictionary = TreeViewsUtilities.GeneratePositionsDictionary(versionsTV)
         Versions.UpdateVersion(id, ITEMS_POSITIONS, positions_dictionary(id))
 
     End Sub

@@ -23,7 +23,7 @@ Friend Class FDLL_Interface
     Private objptr As Integer
 
     ' Variables
-
+    Private IsModelAlive As Boolean = False
 
 #End Region
 
@@ -69,15 +69,9 @@ Friend Class FDLL_Interface
     Protected Friend Sub New()
 
         objptr = CreateDll3()
+        IsModelAlive = True
 
     End Sub
-
-    Protected Overrides Sub finalize()
-
-        DestroyDll3(objptr)  'attention only if alive !!!
-
-    End Sub
-
 
 #End Region
 
@@ -126,9 +120,27 @@ Friend Class FDLL_Interface
 
     End Function
 
+    Protected Friend Sub DestroyDll()
+
+        If IsModelAlive = True Then
+            DestroyDll3(objptr)
+            IsModelAlive = False
+        End If
+
+    End Sub
+
 
 #End Region
 
+
+    Protected Overrides Sub finalize()
+
+        If IsModelAlive = True Then
+            DestroyDll3(objptr)
+            IsModelAlive = False
+        End If
+
+    End Sub
 
 
 

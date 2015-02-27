@@ -262,7 +262,7 @@ Public Class NewEntityUI
 
     Private Function IsFormValid(ByRef new_entity_name As String) As Boolean
 
-            Dim names_list = cTreeViews_Functions.GetNodesTextsList(entitiesTV)
+        Dim names_list = TreeViewsUtilities.GetNodesTextsList(entitiesTV)
             If names_list.Contains(new_entity_Name) Then
                 MsgBox("This Entity name is already in use. Please choose another one.")
                 Return False

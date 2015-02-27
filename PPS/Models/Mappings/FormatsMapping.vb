@@ -53,11 +53,13 @@ Friend Class FormatsMapping
     End Function
 
     ' Returns the format code from name
-    Protected Friend Shared Function GetFormatsDictionary(ByRef Key As String, ByRef Value As String, Optional ByRef destination As String = REPORT_FORMAT_CODE) As Hashtable
+    Protected Friend Shared Function GetFormatsDictionary(ByRef Key As String, _
+                                                          ByRef Value As String, _
+                                                          Optional ByRef destination As String = REPORT_FORMAT_CODE) As Hashtable
 
         Dim tmpHT As New Hashtable
         Dim srv As New ModelServer
-        srv.openRst(CONFIG_DATABASE + "." + FORMATS_TABLE_NAME, ModelServer.FWD_CURSOR)
+        srv.OpenRst(CONFIG_DATABASE + "." + FORMATS_TABLE_NAME, ModelServer.FWD_CURSOR)
         srv.rst.Filter = FORMAT_DESTINATION_VARIABLE + "='" + destination + "'"
         If srv.rst.EOF = False And srv.rst.BOF = False Then
 

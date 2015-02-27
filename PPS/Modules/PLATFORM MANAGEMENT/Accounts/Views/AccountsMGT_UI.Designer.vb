@@ -124,9 +124,12 @@ Partial Class AccountsMGT_UI
         '
         Me.accountsIL.ImageStream = CType(resources.GetObject("accountsIL.ImageStream"), System.Windows.Forms.ImageListStreamer)
         Me.accountsIL.TransparentColor = System.Drawing.Color.Transparent
-        Me.accountsIL.Images.SetKeyName(0, "flat-theme-action-math-function-icon.png")
-        Me.accountsIL.Images.SetKeyName(1, "sum icon.jpg")
-        Me.accountsIL.Images.SetKeyName(2, "folder 2.png")
+        Me.accountsIL.Images.SetKeyName(0, "favicon(81).ico")
+        Me.accountsIL.Images.SetKeyName(1, "sum purple.png")
+        Me.accountsIL.Images.SetKeyName(2, "config blue circle.png")
+        Me.accountsIL.Images.SetKeyName(3, "func.png")
+        Me.accountsIL.Images.SetKeyName(4, "BS Blue.png")
+        Me.accountsIL.Images.SetKeyName(5, "WC blue.png")
         '
         'EditButtonsImagelist
         '

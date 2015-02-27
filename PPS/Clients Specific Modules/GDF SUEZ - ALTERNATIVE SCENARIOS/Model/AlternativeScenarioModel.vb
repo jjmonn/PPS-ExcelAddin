@@ -82,7 +82,7 @@ Friend Class AlternativeScenarioModel
                                                 nb_periods, _
                                                 PBar)
 
-        entities_id_list = cTreeViews_Functions.GetNoChildrenNodesList(cTreeViews_Functions.GetNodesKeysList(entity_node), entity_node.TreeView)
+        entities_id_list = TreeViewsUtilities.GetNoChildrenNodesList(TreeViewsUtilities.GetNodesKeysList(entity_node), entity_node.TreeView)
         BuildDataDic(entity_node)
 
     End Sub
@@ -92,7 +92,7 @@ Friend Class AlternativeScenarioModel
 
         SensisResultsDict.Clear()
         For Each sensitivity_id In sensitivities_dictionary.Keys
-            Dim PSDLL As New PSDLLL_Interface(indexes_list.ToArray, _
+            Dim PSDLLinterface As New PSDLLL_Interface(indexes_list.ToArray, _
                                               entities_id_list.ToArray, _
                                               GetFormulas(sensitivities_dictionary(sensitivity_id)(GDF_SENSITIVITIES_FORMULA_NAME_VAR)).ToArray, _
                                               periods_list.Count)
@@ -102,12 +102,12 @@ Friend Class AlternativeScenarioModel
                                                                                                  market_prices_version_id, _
                                                                                                  periods_list.ToArray, _
                                                                                                  time_configuration)
-                PSDLL.ResgisterIndexMarketPrices(index_prices, index)
+                PSDLLinterface.ResgisterIndexMarketPrices(index_prices, index)
             Next
             Dim volumes, base_revenues As Double()
             BuildVolumesAndBaseRevenuesFlatArrays(sensitivity_id, volumes, base_revenues)
-            PSDLL.Compute(volumes, base_revenues, GetTaxRatesFlatArray())
-            SensisResultsDict.Add(sensitivity_id, PSDLL.GetResultsDict())
+            PSDLLinterface.Compute(volumes, base_revenues, GetTaxRatesFlatArray())
+            SensisResultsDict.Add(sensitivity_id, PSDLLinterface.GetResultsDict())
             PBar.AddProgress(2)
         Next
 
@@ -115,7 +115,7 @@ Friend Class AlternativeScenarioModel
 
     Protected Friend Sub AggregateSensis(ByRef entity_node As TreeNode)
 
-        Dim all_entities_id As List(Of String) = cTreeViews_Functions.GetNodesKeysList(entity_node)
+        Dim all_entities_id As List(Of String) = TreeViewsUtilities.GetNodesKeysList(entity_node)
         all_entities_id.Reverse()
 
         For Each entity_id As String In all_entities_id
@@ -189,7 +189,7 @@ Friend Class AlternativeScenarioModel
     Private Sub BuildDataDic(ByRef entity_node As TreeNode)
 
         current_conso_data_dic.Clear()
-        For Each entity_id In cTreeViews_Functions.GetNodesKeysList(entity_node)
+        For Each entity_id In TreeViewsUtilities.GetNodesKeysList(entity_node)
             Dim tmp_dict As New Dictionary(Of String, Double())
             Dim tmp_data_array = BaseComputer.GetEntityArray(entity_id)
 

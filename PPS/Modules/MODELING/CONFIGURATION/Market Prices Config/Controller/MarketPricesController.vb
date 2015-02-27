@@ -149,7 +149,7 @@ Friend Class MarketPricesController
 
     Friend Sub DeleteVersionsOrFolder(ByRef version_node As TreeNode)
 
-        Dim versions_list = cTreeViews_Functions.GetNodesKeysList(version_node)
+        Dim versions_list = TreeViewsUtilities.GetNodesKeysList(version_node)
         versions_list.Reverse()
         For Each version_id In versions_list
             If MarketIndexVersions.ReadVersion(version_id, MARKET_INDEXES_VERSIONS_IS_FOLDER_VAR) = 0 Then
@@ -221,9 +221,9 @@ Friend Class MarketPricesController
 
     Private Function get_new_version_token()
 
-        Dim key = cTreeViews_Functions.IssueNewToken(MARKET_INDEXES_VERSIONS_TOKEN_SIZE)
+        Dim key = TreeViewsUtilities.IssueNewToken(MARKET_INDEXES_VERSIONS_TOKEN_SIZE)
         While View.versionsTV.Nodes.Find(key, True).Length > 0
-            key = cTreeViews_Functions.IssueNewToken(MARKET_INDEXES_VERSIONS_TOKEN_SIZE)
+            key = TreeViewsUtilities.IssueNewToken(MARKET_INDEXES_VERSIONS_TOKEN_SIZE)
         End While
         Return key
 
@@ -231,7 +231,7 @@ Friend Class MarketPricesController
 
     Private Sub UpdateVersionsPositions()
 
-        Dim positions_dic = cTreeViews_Functions.GeneratePositionsDictionary(View.versionsTV)
+        Dim positions_dic = TreeViewsUtilities.GeneratePositionsDictionary(View.versionsTV)
         For Each id In positions_dic.Keys
             MarketIndexVersions.UpdateVersion(id, ITEMS_POSITIONS, positions_dic(id))
         Next

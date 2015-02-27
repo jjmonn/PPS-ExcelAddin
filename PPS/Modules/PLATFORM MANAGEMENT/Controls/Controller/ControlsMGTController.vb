@@ -128,9 +128,9 @@ Friend Class ControlsMGTController
 
     Private Function GetNewID() As String
 
-        Dim new_id As String = cTreeViews_Functions.IssueNewToken(CONTROLS_TOKEN_SIZE)
+        Dim new_id As String = TreeViewsUtilities.IssueNewToken(CONTROLS_TOKEN_SIZE)
         While Not Model.ReadControl(new_id, CONTROL_NAME_VARIABLE) Is Nothing
-            new_id = cTreeViews_Functions.IssueNewToken(CONTROLS_TOKEN_SIZE)
+            new_id = TreeViewsUtilities.IssueNewToken(CONTROLS_TOKEN_SIZE)
         End While
         Return new_id
 

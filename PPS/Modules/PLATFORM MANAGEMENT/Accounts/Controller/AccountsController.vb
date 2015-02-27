@@ -36,10 +36,10 @@ Friend Class AccountsController
     Private AccountsTV As New TreeView
 
     ' Variables
-    Friend accountsNameKeysDictionary As Hashtable
-    Friend accountsKeyNamesDictionary As Hashtable
-    Friend positionsDictionary As New Dictionary(Of String, Double)
-    Friend needToUpdateModel As Boolean
+    Protected Friend accountsNameKeysDictionary As Hashtable
+    Protected Friend accountsKeyNamesDictionary As Hashtable
+    Protected Friend positionsDictionary As New Dictionary(Of String, Double)
+    Protected Friend needToUpdateModel As Boolean
     Private dependant_account_id As String
 
 
@@ -57,7 +57,7 @@ Friend Class AccountsController
         View = New AccountsMGT_UI(Me, AccountsTV)
         NewAccountView = New NewAccountUI(View, Me)
         formulasMGT = New ModelFormulasMGT(accountsNameKeysDictionary, AccountsTV)
-        positionsDictionary = cTreeViews_Functions.GeneratePositionsDictionary(AccountsTV)
+        positionsDictionary = TreeViewsUtilities.GeneratePositionsDictionary(AccountsTV)
         View.Show()
 
     End Sub
@@ -65,7 +65,7 @@ Friend Class AccountsController
 #End Region
 
 
-#Region "Interface"
+#Region "CRUD Interface"
 
     Friend Function ReadAccount(ByRef accountKey As String, ByRef field As String) As Object
 
@@ -76,15 +76,14 @@ Friend Class AccountsController
     Protected Friend Sub CreateAccount(ByRef accountsAttributes As Hashtable, _
                                        ByRef parent_node As TreeNode)
 
-        Dim id As String = cTreeViews_Functions.GetNewNodeKey(AccountsTV, ACCOUNTS_TOKEN_SIZE)
+        Dim id As String = TreeViewsUtilities.GetNewNodeKey(AccountsTV, ACCOUNTS_TOKEN_SIZE)
         accountsAttributes.Add(ACCOUNT_ID_VARIABLE, id)
         accountsAttributes.Add(ITEMS_POSITIONS, 1)
         accountsAttributes.Add(ACCOUNT_TAB_VARIABLE, Accounts.ReadAccount(parent_node.Name, ACCOUNT_TAB_VARIABLE))
         Accounts.CreateAccount(accountsAttributes)
 
-        Dim new_node As TreeNode = parent_node.Nodes.Add(id, accountsAttributes(ACCOUNT_NAME_VARIABLE)) ' ideally retreive image index from format
-        positionsDictionary = cTreeViews_Functions.GeneratePositionsDictionary(AccountsTV)
-        Accounts.UpdateAccount(id, ITEMS_POSITIONS, positionsDictionary(id))
+        Dim new_node As TreeNode = parent_node.Nodes.Add(id, accountsAttributes(ACCOUNT_NAME_VARIABLE))
+        positionsDictionary = TreeViewsUtilities.GeneratePositionsDictionary(AccountsTV)
 
         accountsNameKeysDictionary.Add(accountsAttributes(ACCOUNT_NAME_VARIABLE), accountsAttributes(ACCOUNT_ID_VARIABLE))
         accountsKeyNamesDictionary.Add(accountsAttributes(ACCOUNT_ID_VARIABLE), accountsAttributes(ACCOUNT_NAME_VARIABLE))
@@ -94,12 +93,12 @@ Friend Class AccountsController
 
     Protected Friend Sub CreateCategory(ByRef HT As Hashtable)
 
-        Dim id As String = cTreeViews_Functions.GetNewNodeKey(AccountsTV, ACCOUNTS_TOKEN_SIZE)
+        Dim id As String = TreeViewsUtilities.GetNewNodeKey(AccountsTV, ACCOUNTS_TOKEN_SIZE)
         HT.Add(ACCOUNT_ID_VARIABLE, id)
         Accounts.CreateAccount(HT)
 
         Dim newNode As TreeNode = AccountsTV.Nodes.Add(id, HT(ACCOUNT_NAME_VARIABLE))
-        positionsDictionary = cTreeViews_Functions.GeneratePositionsDictionary(AccountsTV)
+        positionsDictionary = TreeViewsUtilities.GeneratePositionsDictionary(AccountsTV)
         accountsNameKeysDictionary.Add(HT(ACCOUNT_NAME_VARIABLE), HT(ACCOUNT_ID_VARIABLE))
         accountsKeyNamesDictionary.Add(HT(ACCOUNT_ID_VARIABLE), HT(ACCOUNT_NAME_VARIABLE))
         needToUpdateModel = True
@@ -156,6 +155,20 @@ Friend Class AccountsController
 
     End Sub
 
+    Protected Friend Sub UpdateFormulaType(ByRef account_id As String, ByRef ftype As String)
+
+        Accounts.UpdateAccount(account_id, ACCOUNT_FORMULA_TYPE_VARIABLE, ftype)
+        Accounts.UpdateAccount(account_id, ACCOUNT_IMAGE_VARIABLE, View.ftype_icon_dic(ftype))
+        Accounts.UpdateAccount(account_id, ACCOUNT_SELECTED_IMAGE_VARIABLE, View.ftype_icon_dic(ftype))
+        View.current_node.ImageIndex = View.ftype_icon_dic(ftype)
+        View.current_node.SelectedImageIndex = View.ftype_icon_dic(ftype)
+        AccountsTV.Invalidate()
+        AccountsTV.Update()
+        AccountsTV.Refresh()
+        needToUpdateModel = True
+
+    End Sub
+
     Friend Function GetFormulaText(ByRef accountKey As String) As String
 
         Return formulasMGT.convertFormulaFromKeysToNames(ReadAccount(accountKey, ACCOUNT_FORMULA_VARIABLE))
@@ -164,7 +177,7 @@ Friend Class AccountsController
 
     Friend Function DeleteAccount(ByRef node As TreeNode) As Boolean
 
-        Dim accountsKeyList As List(Of String) = cTreeViews_Functions.GetNodesKeysList(node)
+        Dim accountsKeyList As List(Of String) = TreeViewsUtilities.GetNodesKeysList(node)
         accountsKeyList.Reverse()
         If AccountsDependenciesCheck(accountsKeyList) = False Then Return False
 
@@ -183,6 +196,7 @@ Friend Class AccountsController
         Else
             RemoveAccount(accountsKeyList, node)
         End If
+        positionsDictionary = TreeViewsUtilities.GeneratePositionsDictionary(AccountsTV)
         needToUpdateModel = True
         Return True
 
@@ -191,6 +205,35 @@ Friend Class AccountsController
     Friend Sub CloseModelRST()
 
         Accounts.RST.Close()
+
+    End Sub
+
+#End Region
+
+
+#Region "Computer and Positions Interface"
+
+    Protected Friend Sub UpdatePositionsDictionary()
+
+        positionsDictionary = TreeViewsUtilities.GeneratePositionsDictionary(AccountsTV)
+
+    End Sub
+
+    Friend Sub SendNewPositionsToModel()
+
+        For Each account In positionsDictionary.Keys
+            Accounts.UpdateAccount(account, ITEMS_POSITIONS, positionsDictionary(account))
+        Next
+
+    End Sub
+
+    Friend Sub UpdateModel()
+
+        If Not GlobalVariables.GlobalDll3Interface Is Nothing Then
+            Accounts.Close()
+            GlobalVariables.GlobalDll3Interface = New DLL3_Interface
+        End If
+        needToUpdateModel = False
 
     End Sub
 
@@ -316,7 +359,7 @@ Friend Class AccountsController
     Private Function InterdependancyTest() As Boolean
 
         Dim dependancies_dict As New Dictionary(Of String, List(Of String))
-        Dim accounts_list = cTreeViews_Functions.GetNodesKeysList(AccountsTV)
+        Dim accounts_list = TreeViewsUtilities.GetNodesKeysList(AccountsTV)
         For Each account_id In accounts_list
             Dim ftype As String = Accounts.ReadAccount(account_id, ACCOUNT_FORMULA_TYPE_VARIABLE)
             If ftype <> FORMULA_TYPE_HARD_VALUE _
@@ -357,7 +400,7 @@ Friend Class AccountsController
                                                ByRef dependancies_dict As Dictionary(Of String, List(Of String)))
 
         If Accounts.ReadAccount(dependant_id, ACCOUNT_FORMULA_TYPE_VARIABLE) = FORMULA_TYPE_SUM_OF_CHILDREN Then
-            dependancies_dict.Add(dependant_id, cTreeViews_Functions.GetChildrenIDList(AccountsTV.Nodes.Find(dependant_id, True)(0)))
+            dependancies_dict.Add(dependant_id, TreeViewsUtilities.GetChildrenIDList(AccountsTV.Nodes.Find(dependant_id, True)(0)))
         Else
             dependancies_dict.Add(dependant_id, formulasMGT.GetFormulaDependantsLIst(dependant_id))
         End If
@@ -408,38 +451,6 @@ Friend Class AccountsController
 
 #End Region
 
-    Protected Friend Sub UpdatePositionsDic()
-
-        positionsDictionary = cTreeViews_Functions.GeneratePositionsDictionary(AccountsTV)
-
-    End Sub
-
-    Friend Sub SendNewPositionsToModel()
-
-        For Each account In positionsDictionary.Keys
-            Accounts.UpdateAccount(account, ITEMS_POSITIONS, positionsDictionary(account))
-        Next
-
-    End Sub
-
-    Friend Sub UpdateAccountsPositionsInDB()
-
-        Accounts.UpdatePositionsDictionary()
-
-    End Sub
-
-    Friend Sub UpdateModel()
-
-        If Not GlobalVariables.GenericGlobalSingleEntityComputer Is Nothing Then
-            GlobalVariables.GenericGlobalSingleEntityComputer.CloseDLL3ComputerInstance()
-            GlobalVariables.GenericGlobalSingleEntityComputer = Nothing
-            GlobalVariables.GenericGlobalSingleEntityComputer = New GenericSingleEntityDLL3Computer(GlobalVariables.GlobalDBDownloader)
-        End If
-        needToUpdateModel = False
-
-    End Sub
-
-
 #End Region
 
 
@@ -459,8 +470,6 @@ Friend Class AccountsController
         NewAccountView.Show()
 
     End Sub
-
-
 
 #End Region
 

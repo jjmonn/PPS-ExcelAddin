@@ -102,8 +102,10 @@ Friend Class PSDLLL_Interface
 
     Protected Overrides Sub finalize()
 
-        On Error Resume Next
-        'DestroyPSDLL(objptr)
+        Try
+            DestroyPSDLL(objptr)
+        Catch ex As Exception
+        End Try
 
     End Sub
 

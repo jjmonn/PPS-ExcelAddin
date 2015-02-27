@@ -77,7 +77,7 @@ Friend Class EntitiesController
         ViewObject.EntitiesDGVMGT.InitializeTGVRows(entitiesTV)
 
         Dim entities_dic As New Dictionary(Of String, Hashtable)
-        Dim entities_list = cTreeViews_Functions.GetNodesKeysList(entitiesTV)
+        Dim entities_list = TreeViewsUtilities.GetNodesKeysList(entitiesTV)
         For Each entity_id In entities_list
             entities_dic.Add(entity_id, Entities.GetRecord(entity_id, categoriesTV))
         Next
@@ -87,7 +87,7 @@ Friend Class EntitiesController
 
     Protected Friend Sub CreateEntity(ByRef hash As Hashtable, ByRef parent_node As TreeNode)
 
-        Dim entity_id As String = cTreeViews_Functions.GetNewNodeKey(entitiesTV, ENTITIES_TOKEN_SIZE)
+        Dim entity_id As String = TreeViewsUtilities.GetNewNodeKey(entitiesTV, ENTITIES_TOKEN_SIZE)
         hash.Add(ASSETS_TREE_ID_VARIABLE, entity_id)
         Dim credential_level As Int32
         If Not parent_node Is Nothing Then
@@ -116,7 +116,7 @@ Friend Class EntitiesController
 
     Friend Sub DeleteEntities(ByRef input_node As TreeNode)
 
-        Dim entities_to_delete = cTreeViews_Functions.GetNodesKeysList(input_node)
+        Dim entities_to_delete = TreeViewsUtilities.GetNodesKeysList(input_node)
         entities_to_delete.Reverse()
         For Each entity_id In entities_to_delete
             DeleteEntity(entity_id)
@@ -163,7 +163,7 @@ Friend Class EntitiesController
             entitiesTV.Nodes.Add(entity_id, entity_name, 1, 1)
         End If
         entitiesNameKeyDic.Add(entity_name, entity_id)
-        positionsDictionary = cTreeViews_Functions.GeneratePositionsDictionary(entitiesTV)
+        positionsDictionary = TreeViewsUtilities.GeneratePositionsDictionary(entitiesTV)
 
     End Sub
 

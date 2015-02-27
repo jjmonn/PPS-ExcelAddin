@@ -48,8 +48,8 @@ Friend Class ASEntitiesAttributesController
     Private Sub DisplayDGVData()
 
         Dim entities_dic As New Dictionary(Of String, Hashtable)
-        Dim entities_list = cTreeViews_Functions.GetNodesKeysList(entitiesTV)
-        entities_list = cTreeViews_Functions.GetNoChildrenNodesList(entities_list, entitiesTV)
+        Dim entities_list = TreeViewsUtilities.GetNodesKeysList(entitiesTV)
+        entities_list = TreeViewsUtilities.GetNoChildrenNodesList(entities_list, entitiesTV)
         For Each entity_id In entities_list
             entities_dic.Add(entity_id, EntitiesAttributes.GetRecord(entity_id))
         Next

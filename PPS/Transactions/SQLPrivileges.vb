@@ -157,8 +157,8 @@ Friend Class SQLPrivileges
         nodes = credentialsTV.Nodes.Find(entity_id, True)
         If nodes.Length > 0 Then
             Dim entity_node = nodes(0)
-            Dim credentials_list = cTreeViews_Functions.GetNodesTextsList(entity_node)
-            credentials_list = cTreeViews_Functions.GetUniqueList(credentials_list)
+            Dim credentials_list = TreeViewsUtilities.GetNodesTextsList(entity_node)
+            credentials_list = TreeViewsUtilities.GetUniqueList(credentials_list)
 
             user_id = "'" + user_id + "'@'%'"
             For Each credential_level In credentials_list

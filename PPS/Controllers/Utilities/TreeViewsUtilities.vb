@@ -1,18 +1,9 @@
-﻿' cTreeViews_Functions.vb
+﻿' TreeViewsUtilities.vb
 '
 ' Common treeviews functions
 '
-' To do:
-'       -
-'       -
 '
-'
-' Known bugs:
-'       -
-'
-'
-'
-' Last modified: 23/02/2015
+' Last modified: 26/02/2015
 ' Author: Julien Monnereau
 
 
@@ -20,10 +11,7 @@ Imports System.Windows.Forms
 Imports System.Collections.Generic
 
 
-Friend Class cTreeViews_Functions
-
-
-    Public Shared POSITION_STEP_CHILDREN As Double = 0.00000001
+Friend Class TreeViewsUtilities
 
 
 #Region "Add nodes to Treeview"
@@ -534,7 +522,43 @@ Friend Class cTreeViews_Functions
 
     End Sub
 
+#Region "Move nodes up and down into hierarchy Procedure"
+
+    Protected Friend Shared Sub MoveNodeUp(ByRef inputNode As TreeNode)
+
+        Try
+            If Not (inputNode.PrevNode Is Nothing) Then
+                Dim prev_node = inputNode.PrevNode
+                inputNode.Parent.Nodes.Insert(inputNode.Index - 1, CType(inputNode.Clone, TreeNode))
+                inputNode.Remove()
+                inputNode.TreeView.SelectedNode = prev_node.PrevNode
+            End If
+        Catch ex As Exception
+        End Try
+
+    End Sub
+
+    Protected Friend Shared Sub MoveNodeDown(ByRef inputNode As TreeNode)
+
+        Try
+            If Not (inputNode.NextNode Is Nothing) Then
+                Dim nextnode = inputNode.NextNode
+                inputNode.Parent.Nodes.Insert(inputNode.Index + 2, CType(inputNode.Clone, TreeNode))
+                inputNode.Remove()
+                inputNode.TreeView.SelectedNode = nextnode.NextNode
+            End If
+        Catch ex As Exception
+        End Try
+
+    End Sub
+
 #End Region
+
+
+#End Region
+
+
+
 
 
 End Class
