@@ -86,17 +86,18 @@ Partial Class AccountsMGT_UI
         '
         Me.TVRCM.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.AddSubAccountToolStripMenuItem, Me.AddCategoryToolStripMenuItem, Me.DeleteAccountToolStripMenuItem, Me.DropHierarchyToExcelToolStripMenuItem, Me.ToolStripSeparator1})
         Me.TVRCM.Name = "ContextMenuStripTV"
-        Me.TVRCM.Size = New System.Drawing.Size(198, 98)
+        Me.TVRCM.Size = New System.Drawing.Size(198, 120)
         '
         'AddSubAccountToolStripMenuItem
         '
-        Me.AddSubAccountToolStripMenuItem.Image = Global.PPS.My.Resources.Resources.add1
+        Me.AddSubAccountToolStripMenuItem.Image = Global.PPS.My.Resources.Resources.config_circle_blue
         Me.AddSubAccountToolStripMenuItem.Name = "AddSubAccountToolStripMenuItem"
         Me.AddSubAccountToolStripMenuItem.Size = New System.Drawing.Size(197, 22)
         Me.AddSubAccountToolStripMenuItem.Text = "Add Sub Account"
         '
         'AddCategoryToolStripMenuItem
         '
+        Me.AddCategoryToolStripMenuItem.Image = Global.PPS.My.Resources.Resources.favicon_81_
         Me.AddCategoryToolStripMenuItem.Name = "AddCategoryToolStripMenuItem"
         Me.AddCategoryToolStripMenuItem.Size = New System.Drawing.Size(197, 22)
         Me.AddCategoryToolStripMenuItem.Text = "Add Category"

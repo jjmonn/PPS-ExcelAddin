@@ -13,7 +13,7 @@
 '
 '
 '
-' Last modified: 10/02/2015
+' Last modified: 27/02/2015
 ' Author: Julien Monnereau
 
 
@@ -22,12 +22,12 @@ Imports System.Windows.Forms
 
 
 
-Public Class SettingMainUI
+Friend Class SettingMainUI
 
 
 #Region "Initialize"
 
-    Public Sub New()
+    Protected Friend Sub New()
 
         ' This call is required by the designer.
         InitializeComponent()
@@ -45,12 +45,14 @@ Public Class SettingMainUI
 
     End Sub
 
-
-
     Private Sub SettingMainUI_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        ServerAddressTB.Text = SERVER_LOCATION
-    End Sub
 
+        ServerAddressTB.Text = My.Settings.server
+        PortTB.Text = My.Settings.port_number
+        IDTB.Text = My.Settings.user
+        CertificatesPathTB.Text = My.Settings.certificatespath
+
+    End Sub
 
 #End Region
 
@@ -108,7 +110,6 @@ Public Class SettingMainUI
 
 #Region "Events"
 
-
     Private Sub TabControl1_DrawItem(ByVal sender As Object, ByVal e As System.Windows.Forms.DrawItemEventArgs) Handles TabControl1.DrawItem
         Dim g As Graphics
         Dim sText As String
@@ -131,6 +132,24 @@ Public Class SettingMainUI
     Private Sub CertificatesPathTB_TextChanged(sender As Object, e As EventArgs) Handles CertificatesPathTB.TextChanged
 
         My.Settings.certificatespath = CertificatesPathTB.Text
+
+    End Sub
+
+    Private Sub PortTB_TextChanged(sender As Object, e As EventArgs) Handles PortTB.TextChanged
+
+        My.Settings.port_number = PortTB.Text
+
+    End Sub
+
+    Private Sub ServerAddressTB_TextChanged(sender As Object, e As EventArgs) Handles ServerAddressTB.TextChanged
+
+        My.Settings.server = ServerAddressTB.Text
+
+    End Sub
+
+    Private Sub IDTB_TextChanged(sender As Object, e As EventArgs) Handles IDTB.TextChanged
+
+        My.Settings.user = IDTB.Text
 
     End Sub
 

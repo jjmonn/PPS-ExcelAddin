@@ -12,7 +12,7 @@
 '
 ' 
 ' Author: Julien Monnereau
-' Last modified: 20/01/2015
+' Last modified: 26/02/2015
 
 
 Imports ProgressControls
@@ -88,7 +88,7 @@ Friend Class ConnectionUI
                 GlobalVariables.GlobalDBDownloader = New DataBaseDataDownloader
                 GlobalVariables.GlobalDll3Interface = New DLL3_Interface
                 GlobalVariables.GenericGlobalSingleEntityComputer = New GenericSingleEntityDLL3Computer(GlobalVariables.GlobalDBDownloader, _
-                                                                                                        GlobalVariables.GlobalDll3Interface)
+                                                                                                 GlobalVariables.GlobalDll3Interface)
                 GlobalVariables.GenericGlobalAggregationComputer = New GenericAggregationDLL3Computing(GlobalVariables.GlobalDBDownloader, _
                                                                                                        GlobalVariables.GlobalDll3Interface)
                 isCredentialValid = True
@@ -119,7 +119,13 @@ Friend Class ConnectionUI
                     If My.Settings.user <> IDTB.Text Then My.Settings.user = IDTB.Text
                     GlobalVariables.Connection_Toggle_Button.Image = 1
                     GlobalVariables.Connection_Toggle_Button.Caption = "Connected"
-                    ADDIN.LaunchVersionSelection()
+
+                    If VersionsMapping.IsVersionValid(My.Settings.version_id) Then
+                        ADDIN.SetVersion(My.Settings.version_id)
+                    Else
+                        ADDIN.LaunchVersionSelection()
+                    End If
+                  
                     AdjustmentsMapping.LoadAdjustmentsIDDD()
                     CP.Dispose()
                     Me.Dispose()

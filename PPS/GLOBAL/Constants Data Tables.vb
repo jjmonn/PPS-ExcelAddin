@@ -47,6 +47,7 @@ Module Data_Tables_Constants
     Friend Const ACCOUNT_CONVERSION_FLAG_VARIABLE = "conversion_flag"
 
     Friend Const ACCOUNT_COLUMN_NB_ACCOUNTID = 2
+    Friend Const TITLE_ACCOUNT_FORMULA_TYPE = "T"
     Friend Const BALANCE_SHEET_ACCOUNT_FORMULA_TYPE = "BS"
     Friend Const INPUT_ACCOUNT_FORMULA_TYPE = "HV"
     Friend Const WORKING_CAPITAL_ACCOUNT_FORMULA_TYPE = "WC"

@@ -82,9 +82,7 @@ Friend Class AccountsController
         accountsAttributes.Add(ACCOUNT_TAB_VARIABLE, Accounts.ReadAccount(parent_node.Name, ACCOUNT_TAB_VARIABLE))
         Accounts.CreateAccount(accountsAttributes)
 
-        Dim new_node As TreeNode = parent_node.Nodes.Add(id, accountsAttributes(ACCOUNT_NAME_VARIABLE))
-        positionsDictionary = TreeViewsUtilities.GeneratePositionsDictionary(AccountsTV)
-
+        Dim new_node As TreeNode = parent_node.Nodes.Add(id, accountsAttributes(ACCOUNT_NAME_VARIABLE), accountsAttributes(ACCOUNT_IMAGE_VARIABLE), accountsAttributes(ACCOUNT_SELECTED_IMAGE_VARIABLE))
         accountsNameKeysDictionary.Add(accountsAttributes(ACCOUNT_NAME_VARIABLE), accountsAttributes(ACCOUNT_ID_VARIABLE))
         accountsKeyNamesDictionary.Add(accountsAttributes(ACCOUNT_ID_VARIABLE), accountsAttributes(ACCOUNT_NAME_VARIABLE))
         needToUpdateModel = True
@@ -98,7 +96,6 @@ Friend Class AccountsController
         Accounts.CreateAccount(HT)
 
         Dim newNode As TreeNode = AccountsTV.Nodes.Add(id, HT(ACCOUNT_NAME_VARIABLE))
-        positionsDictionary = TreeViewsUtilities.GeneratePositionsDictionary(AccountsTV)
         accountsNameKeysDictionary.Add(HT(ACCOUNT_NAME_VARIABLE), HT(ACCOUNT_ID_VARIABLE))
         accountsKeyNamesDictionary.Add(HT(ACCOUNT_ID_VARIABLE), HT(ACCOUNT_NAME_VARIABLE))
         needToUpdateModel = True
@@ -196,7 +193,6 @@ Friend Class AccountsController
         Else
             RemoveAccount(accountsKeyList, node)
         End If
-        positionsDictionary = TreeViewsUtilities.GeneratePositionsDictionary(AccountsTV)
         needToUpdateModel = True
         Return True
 

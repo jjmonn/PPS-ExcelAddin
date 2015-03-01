@@ -16,7 +16,7 @@
 ' Known bugs:
 '       
 '
-' Last modified: 20/01/2015
+' Last modified: 27/02/2015
 ' Author: Julien Monnereau
 
 
@@ -42,7 +42,6 @@ Friend Class VersioningManagementUI
     Private isDisplaying As Boolean
 
     ' const
-    Private Const POSITION_STEP As Double = 0.0000001
 
 
 #End Region
@@ -163,55 +162,20 @@ Friend Class VersioningManagementUI
             Case Keys.Delete : delete_bt_Click(sender, e)
             Case Keys.Up
                 If e.Control Then
-                    If Not current_node Is Nothing Then MoveNodeUp()
+                    If Not current_node Is Nothing Then
+                        TreeViewsUtilities.MoveNodeUp(current_node)
+                    End If
                 End If
             Case Keys.Down
                 If e.Control Then
-                    If Not current_node Is Nothing Then MoveNodeDown()
+                    If Not current_node Is Nothing Then
+                        TreeViewsUtilities.MoveNodeDown(current_node)
+                    End If
                 End If
         End Select
 
     End Sub
 
-#Region "Move nodes up and down into hierarchy Procedure"
-
-    Private Sub MoveNodeUp()
-
-        If Not current_node.PrevNode Is Nothing Then
-            Dim currentKey As String = current_node.Name
-            Me.Hide()
-            Dim currentPosition As Double = Controller.positions_dictionary(current_node.PrevNode.Name) - 1 + POSITION_STEP
-            TreeViewsUtilities.UpdateChildrenPosition(current_node, currentPosition, Controller.positions_dictionary)
-            ResumeVersionsTree()
-            Me.Show()
-            VersionsTV.SelectedNode = versionstv.Nodes.Find(currentKey, True)(0)
-        End If
-
-    End Sub
-
-    Private Sub MoveNodeDown()
-
-        If Not current_node.NextNode Is Nothing Then
-            Dim currentKey As String = current_node.Name
-            Dim currentPosition As Object = Controller.positions_dictionary(current_node.NextNode.Name) _
-                                            + TreeViewsUtilities.GetNodeAllChildrenCount(current_node.NextNode) + POSITION_STEP
-            TreeViewsUtilities.UpdateChildrenPosition(current_node, currentPosition, Controller.positions_dictionary)
-            Me.Hide()
-            ResumeVersionsTree()
-            Me.Show()
-            versionstv.SelectedNode = versionstv.Nodes.Find(currentKey, True)(0)
-        End If
-
-    End Sub
-
-    Private Sub ResumeVersionsTree()
-
-        Dim expansionDic As Dictionary(Of String, Boolean) = TreeViewsUtilities.SaveNodesExpansionsLevel(versionstv)
-        Controller.SendNewPositionsToModel()
-        Category.LoadCategoriesTree(versionstv)
-        TreeViewsUtilities.ResumeExpansionsLevel(versionstv, expansionDic)
-
-    End Sub
 
 #End Region
 
@@ -283,10 +247,6 @@ Friend Class VersioningManagementUI
             dropNode.EnsureVisible()                                        ' Ensure the newley created node is visible to the user and 
             selectedTreeview.SelectedNode = dropNode
             Controller.UpdateParent(dropNode.Name, targetNode.Name)
-
-            Dim currentPosition = Controller.positions_dictionary(targetNode.Name) + targetNode.Nodes.Count + POSITION_STEP
-            TreeViewsUtilities.UpdateChildrenPosition(dropNode, currentPosition, Controller.positions_dictionary)
-            Controller.SendNewPositionsToModel()
         End If
 
     End Sub
@@ -295,6 +255,7 @@ Friend Class VersioningManagementUI
 
 
 #End Region
+
 
 #Region "Versions Attributes Modifications"
 
@@ -323,8 +284,6 @@ Friend Class VersioningManagementUI
         End If
 
     End Sub
-
-#End Region
 
 #End Region
 
@@ -425,5 +384,5 @@ Friend Class VersioningManagementUI
 
 #End Region
 
-   
+
 End Class

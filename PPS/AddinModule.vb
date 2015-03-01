@@ -16,7 +16,7 @@
 '
 '
 ' Author: Julien Monnereau/ Addin Express automated code
-' Last modified: 26/02/2015
+' Last modified: 27/02/2015
 
 
 Imports System.Runtime.InteropServices
@@ -2022,14 +2022,17 @@ Public Class AddinModule
 
 #Region "Version Selection"
 
+    Public Sub SetVersion(ByRef version_id As String)
+
+        Me.VersionSelectionTaskPane.SetVersion(version_id)
+
+    End Sub
+
     Public Sub LaunchVersionSelection()
 
-        If CDbl(GlobalVariables.apps.Version.Replace(".", ",")) > EXCEL_MIN_VERSION Then  ' 
+        If CDbl(GlobalVariables.APPS.Version.Replace(".", ",")) > EXCEL_MIN_VERSION Then  ' 
             GlobalVariables.VersionsSelectionPaneVisible = True
-
-            ' To be updated -> Different process for initialization !!
-            ' (addin initialize)
-            If Me.VersionSelectionTaskPane.Init(My.Settings.version_id) = False Then Me.VersionSelectionTaskPane.Show()
+            Me.VersionSelectionTaskPane.Show()
         Else
             ' Implement settings versions for version selection without panes
             Dim VERSELUI As New VersionSelectionUI
@@ -2044,7 +2047,7 @@ Public Class AddinModule
 
     Friend Sub LaunchEntitySelectionTP(ByRef parentObject As Object, Optional ByRef restrictionToInputsEntities As Boolean = False)
 
-        If CDbl(GlobalVariables.apps.Version.Replace(".", ",")) > EXCEL_MIN_VERSION Then
+        If CDbl(GlobalVariables.APPS.Version.Replace(".", ",")) > EXCEL_MIN_VERSION Then
             GlobalVariables.EntitySelectionPaneVisible = True
             Me.EntitySelectionTaskPane.Init(parentObject, True)
             Me.EntitySelectionTaskPane.Show()
@@ -2118,7 +2121,7 @@ Public Class AddinModule
     End Sub
 
 
-    
+
 
 End Class
 

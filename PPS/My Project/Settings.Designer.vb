@@ -56,7 +56,7 @@ Namespace My
         
         <Global.System.Configuration.UserScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("173.194.251.206")>  _
+         Global.System.Configuration.DefaultSettingValueAttribute("localhost")>  _
         Public Property server() As String
             Get
                 Return CType(Me("server"),String)
@@ -99,6 +99,18 @@ Namespace My
             End Get
             Set
                 Me("user") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("3307")>  _
+        Public Property port_number() As String
+            Get
+                Return CType(Me("port_number"),String)
+            End Get
+            Set
+                Me("port_number") = value
             End Set
         End Property
     End Class

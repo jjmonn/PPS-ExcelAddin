@@ -507,20 +507,7 @@ Friend Class TreeViewsUtilities
 
     End Sub
 
-    ' Update the position of the children in the accountsAttributes Dictionary
-    Protected Friend Shared Sub UpdateChildrenPosition(ByRef inputNode As TreeNode, _
-                                             ByRef currentPosition As Double, _
-                                             ByRef positionsDictionary As Dictionary(Of String, Double))
 
-        positionsDictionary(inputNode.Name) = currentPosition
-        If inputNode.Nodes.Count > 0 Then
-            For Each child As TreeNode In inputNode.Nodes
-                currentPosition = currentPosition + POSITION_STEP_CHILDREN
-                UpdateChildrenPosition(child, currentPosition, positionsDictionary)
-            Next
-        End If
-
-    End Sub
 
 #Region "Move nodes up and down into hierarchy Procedure"
 

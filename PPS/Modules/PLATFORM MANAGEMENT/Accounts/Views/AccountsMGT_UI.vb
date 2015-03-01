@@ -11,7 +11,7 @@
 '        - drop on WS bug
 '        
 '
-' Last modified: 26/02/2015
+' Last modified: 27/02/2015
 ' Author: Julien Monnereau
 
 
@@ -74,7 +74,7 @@ Friend Class AccountsMGT_UI
         formatsNameKeyDictionary = FormatsMapping.GetFormatsDictionary(FORMAT_NAME_VARIABLE, FORMAT_CODE_VARIABLE, INPUT_FORMAT_CODE)
         formatKeyNameDictionary = FormatsMapping.GetFormatsDictionary(FORMAT_CODE_VARIABLE, FORMAT_NAME_VARIABLE, INPUT_FORMAT_CODE)
         fTypesCodesRequiringFormulas = FormulaTypesMapping.GetFTypesKeysNeedingFormula
-        ftype_icon_dic.Add(TITLE_FORMAT_CODE, T_ICON_INDEX)
+        ftype_icon_dic.Add(TITLE_ACCOUNT_FORMULA_TYPE, T_ICON_INDEX)
         ftype_icon_dic.Add(FORMULA_TYPE_SUM_OF_CHILDREN, SOAC_ICON_INDEX)
         ftype_icon_dic.Add(HARD_VALUE_F_TYPE_CODE, HV_ICON_INDEX)
         ftype_icon_dic.Add(FORMULA_ACCOUNT_FORMULA_TYPE, F_ICON_INDEX)
@@ -156,12 +156,12 @@ Friend Class AccountsMGT_UI
             If Controller.AccountNameCheck(newCategoryName) = True Then
                 Dim TempHT As New Hashtable
                 TempHT.Add(ACCOUNT_NAME_VARIABLE, newCategoryName)
-                TempHT.Add(ACCOUNT_PARENT_ID_VARIABLE, TV_ROOT_KEY)
+                TempHT.Add(ACCOUNT_PARENT_ID_VARIABLE, DBNull.Value)
                 TempHT.Add(ACCOUNT_FORMULA_TYPE_VARIABLE, FORMULA_TYPE_TITLE)
                 TempHT.Add(ACCOUNT_FORMULA_VARIABLE, "")
                 TempHT.Add(ACCOUNT_FORMAT_VARIABLE, TITLE_FORMAT_CODE)
                 TempHT.Add(ACCOUNT_TYPE_VARIABLE, NORMAL_ACCOUNT_TYPE)
-                TempHT.Add(ACCOUNT_TAB_VARIABLE, AccountsTV.Nodes.Count + 2)
+                TempHT.Add(ACCOUNT_TAB_VARIABLE, AccountsTV.Nodes.Count)
                 TempHT.Add(ACCOUNT_IMAGE_VARIABLE, 0)
                 TempHT.Add(ACCOUNT_SELECTED_IMAGE_VARIABLE, 0)
                 TempHT.Add(ITEMS_POSITIONS, 1)
@@ -266,12 +266,10 @@ Friend Class AccountsMGT_UI
             Case Keys.Up
                 If e.Control Then
                     TreeViewsUtilities.MoveNodeUp(AccountsTV.SelectedNode)
-                    Controller.UpdatePositionsDictionary()
                 End If
             Case Keys.Down
                 If e.Control Then
                     TreeViewsUtilities.MoveNodeDown(AccountsTV.SelectedNode)
-                    Controller.UpdatePositionsDictionary()
                 End If
         End Select
 
@@ -353,7 +351,6 @@ Friend Class AccountsMGT_UI
             tmpHT.Add(ACCOUNT_TAB_VARIABLE, TreeViewsUtilities.ReturnRootNodeFromNode(dropNode).Index)
             tmpHT.Add(ACCOUNT_PARENT_ID_VARIABLE, targetNode.Name)
             Controller.UpdateAccount(dropNode.Name, tmpHT)
-            Controller.UpdatePositionsDictionary()
         End If
 
     End Sub
@@ -572,6 +569,7 @@ Friend Class AccountsMGT_UI
 
     Private Sub BackgroundWork_PositionsUpdate(sender As Object, e As DoWorkEventArgs) Handles PositionsBCDGW.DoWork
 
+        Controller.UpdatePositionsDictionary()
         Controller.SendNewPositionsToModel()
         If Controller.needToUpdateModel = True Then Controller.UpdateModel()
 

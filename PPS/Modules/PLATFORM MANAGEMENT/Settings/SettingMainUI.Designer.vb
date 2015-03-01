@@ -29,6 +29,8 @@ Partial Class SettingMainUI
         Me.ControlImages = New System.Windows.Forms.ImageList(Me.components)
         Me.TabControl1 = New System.Windows.Forms.TabControl()
         Me.TabPage1 = New System.Windows.Forms.TabPage()
+        Me.PortTB = New System.Windows.Forms.TextBox()
+        Me.Label4 = New System.Windows.Forms.Label()
         Me.CertificatesBT = New System.Windows.Forms.Button()
         Me.CertificatesPathTB = New System.Windows.Forms.TextBox()
         Me.DiconnectBT = New System.Windows.Forms.Button()
@@ -98,6 +100,8 @@ Partial Class SettingMainUI
         '
         'TabPage1
         '
+        Me.TabPage1.Controls.Add(Me.PortTB)
+        Me.TabPage1.Controls.Add(Me.Label4)
         Me.TabPage1.Controls.Add(Me.CertificatesBT)
         Me.TabPage1.Controls.Add(Me.CertificatesPathTB)
         Me.TabPage1.Controls.Add(Me.DiconnectBT)
@@ -117,9 +121,26 @@ Partial Class SettingMainUI
         Me.TabPage1.Text = "Connection"
         Me.TabPage1.UseVisualStyleBackColor = True
         '
+        'PortTB
+        '
+        Me.PortTB.AcceptsReturn = True
+        Me.PortTB.Location = New System.Drawing.Point(151, 104)
+        Me.PortTB.Name = "PortTB"
+        Me.PortTB.Size = New System.Drawing.Size(196, 20)
+        Me.PortTB.TabIndex = 16
+        '
+        'Label4
+        '
+        Me.Label4.AutoSize = True
+        Me.Label4.Location = New System.Drawing.Point(27, 107)
+        Me.Label4.Name = "Label4"
+        Me.Label4.Size = New System.Drawing.Size(26, 13)
+        Me.Label4.TabIndex = 15
+        Me.Label4.Text = "Port"
+        '
         'CertificatesBT
         '
-        Me.CertificatesBT.Location = New System.Drawing.Point(30, 265)
+        Me.CertificatesBT.Location = New System.Drawing.Point(30, 288)
         Me.CertificatesBT.Name = "CertificatesBT"
         Me.CertificatesBT.Size = New System.Drawing.Size(96, 25)
         Me.CertificatesBT.TabIndex = 14
@@ -128,7 +149,7 @@ Partial Class SettingMainUI
         '
         'CertificatesPathTB
         '
-        Me.CertificatesPathTB.Location = New System.Drawing.Point(151, 268)
+        Me.CertificatesPathTB.Location = New System.Drawing.Point(151, 291)
         Me.CertificatesPathTB.Name = "CertificatesPathTB"
         Me.CertificatesPathTB.Size = New System.Drawing.Size(398, 20)
         Me.CertificatesPathTB.TabIndex = 12
@@ -138,7 +159,7 @@ Partial Class SettingMainUI
         Me.DiconnectBT.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
         Me.DiconnectBT.ImageKey = "imageres_89.ico"
         Me.DiconnectBT.ImageList = Me.ButtonIcons
-        Me.DiconnectBT.Location = New System.Drawing.Point(398, 100)
+        Me.DiconnectBT.Location = New System.Drawing.Point(398, 151)
         Me.DiconnectBT.Name = "DiconnectBT"
         Me.DiconnectBT.Size = New System.Drawing.Size(151, 29)
         Me.DiconnectBT.TabIndex = 11
@@ -164,7 +185,7 @@ Partial Class SettingMainUI
         Me.ReinitPwdBT.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
         Me.ReinitPwdBT.ImageKey = "imageres_82.ico"
         Me.ReinitPwdBT.ImageList = Me.ButtonIcons
-        Me.ReinitPwdBT.Location = New System.Drawing.Point(398, 149)
+        Me.ReinitPwdBT.Location = New System.Drawing.Point(398, 200)
         Me.ReinitPwdBT.Name = "ReinitPwdBT"
         Me.ReinitPwdBT.Size = New System.Drawing.Size(151, 29)
         Me.ReinitPwdBT.TabIndex = 10
@@ -204,7 +225,7 @@ Partial Class SettingMainUI
         'Label2
         '
         Me.Label2.AutoSize = True
-        Me.Label2.Location = New System.Drawing.Point(27, 161)
+        Me.Label2.Location = New System.Drawing.Point(27, 212)
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(53, 13)
         Me.Label2.TabIndex = 3
@@ -212,7 +233,7 @@ Partial Class SettingMainUI
         '
         'PWDTB
         '
-        Me.PWDTB.Location = New System.Drawing.Point(151, 158)
+        Me.PWDTB.Location = New System.Drawing.Point(151, 209)
         Me.PWDTB.Name = "PWDTB"
         Me.PWDTB.Size = New System.Drawing.Size(196, 20)
         Me.PWDTB.TabIndex = 2
@@ -220,7 +241,7 @@ Partial Class SettingMainUI
         '
         'IDTB
         '
-        Me.IDTB.Location = New System.Drawing.Point(151, 105)
+        Me.IDTB.Location = New System.Drawing.Point(151, 156)
         Me.IDTB.Name = "IDTB"
         Me.IDTB.Size = New System.Drawing.Size(196, 20)
         Me.IDTB.TabIndex = 1
@@ -228,7 +249,7 @@ Partial Class SettingMainUI
         'Label1
         '
         Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(27, 108)
+        Me.Label1.Location = New System.Drawing.Point(27, 159)
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(43, 13)
         Me.Label1.TabIndex = 0
@@ -287,4 +308,6 @@ Partial Class SettingMainUI
     Friend WithEvents CertificatesPathTB As System.Windows.Forms.TextBox
     Friend WithEvents CertificatesBT As System.Windows.Forms.Button
     Friend WithEvents FolderBrowserDialog1 As System.Windows.Forms.FolderBrowserDialog
+    Friend WithEvents PortTB As System.Windows.Forms.TextBox
+    Friend WithEvents Label4 As System.Windows.Forms.Label
 End Class

@@ -9,7 +9,7 @@
 ' Know bugs :
 ' 
 '
-'Last modified: 23/02/2015
+'Last modified: 27/02/2015
 ' Author: Julien Monnereau
 
 
@@ -198,14 +198,13 @@ Friend Class AccountsMapping
 #Region "TABLE"
 
     ' Return accounts table arrays for model construction
-    Public Shared Function GetAccountsTableArrays() As Dictionary(Of String, String())
+    Protected Friend Shared Function GetAccountsTableArrays() As Dictionary(Of String, String())
 
         Dim srv = New ModelServer
         srv.OpenRst(CONFIG_DATABASE + "." + ACCOUNTS_TABLE, ModelServer.FWD_CURSOR)
         srv.rst.Filter = ACCOUNT_FORMULA_TYPE_VARIABLE + "<>'" + FORMULA_TYPE_TITLE + "'"
-        srv.rst.MoveFirst()
-        srv.rst.Sort = ITEMS_POSITIONS
 
+        Dim accountTableArrays As New Dictionary(Of String, String())
         Dim nbAccounts As Integer = srv.rst.RecordCount
         Dim i As Integer = 0
         Dim tokensArray(nbAccounts - 1) As String
@@ -214,17 +213,19 @@ Friend Class AccountsMapping
         Dim formulaArray(nbAccounts - 1) As String
         Dim conversionFlag(nbAccounts - 1) As String
 
-        Do While srv.rst.EOF = False
-            tokensArray(i) = srv.rst.Fields(ACCOUNT_ID_VARIABLE).Value
-            parentsArray(i) = srv.rst.Fields(ACCOUNT_PARENT_ID_VARIABLE).Value
-            formulaTypesArray(i) = srv.rst.Fields(ACCOUNT_FORMULA_TYPE_VARIABLE).Value
-            formulaArray(i) = srv.rst.Fields(ACCOUNT_FORMULA_VARIABLE).Value
-            conversionFlag(i) = srv.rst.Fields(ACCOUNT_CONVERSION_FLAG_VARIABLE).Value
-            srv.rst.MoveNext()
-            i = i + 1
-        Loop
-
-        Dim accountTableArrays As New Dictionary(Of String, String())
+        If srv.rst.EOF = False Then
+            srv.rst.MoveFirst()
+            srv.rst.Sort = ITEMS_POSITIONS
+            Do While srv.rst.EOF = False
+                tokensArray(i) = srv.rst.Fields(ACCOUNT_ID_VARIABLE).Value
+                parentsArray(i) = srv.rst.Fields(ACCOUNT_PARENT_ID_VARIABLE).Value
+                formulaTypesArray(i) = srv.rst.Fields(ACCOUNT_FORMULA_TYPE_VARIABLE).Value
+                formulaArray(i) = srv.rst.Fields(ACCOUNT_FORMULA_VARIABLE).Value
+                conversionFlag(i) = srv.rst.Fields(ACCOUNT_CONVERSION_FLAG_VARIABLE).Value
+                srv.rst.MoveNext()
+                i = i + 1
+            Loop
+        End If
         accountTableArrays.Add(ACCOUNT_ID_VARIABLE, tokensArray)
         accountTableArrays.Add(ACCOUNT_PARENT_ID_VARIABLE, parentsArray)
         accountTableArrays.Add(ACCOUNT_FORMULA_TYPE_VARIABLE, formulaTypesArray)
@@ -238,7 +239,7 @@ Friend Class AccountsMapping
     End Function
 
     ' Return Account Children List
-    Public Shared Function FindAccountChildren(Account As String) As List(Of String)
+    Protected Friend Shared Function FindAccountChildren(Account As String) As List(Of String)
 
         Dim srv = New ModelServer
         srv.OpenRst(CONFIG_DATABASE + "." + ACCOUNTS_TABLE, ModelServer.FWD_CURSOR)

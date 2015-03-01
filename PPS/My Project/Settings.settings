@@ -3,7 +3,7 @@
   <Profiles />
   <Settings>
     <Setting Name="server" Type="System.String" Scope="User">
-      <Value Profile="(Default)">173.194.251.206</Value>
+      <Value Profile="(Default)">localhost</Value>
     </Setting>
     <Setting Name="certificatespath" Type="System.String" Scope="User">
       <Value Profile="(Default)">C:\Users\monnereau\Documents\PURPLE SUN\CA</Value>
@@ -13,6 +13,9 @@
     </Setting>
     <Setting Name="user" Type="System.String" Scope="User">
       <Value Profile="(Default)">user2</Value>
+    </Setting>
+    <Setting Name="port_number" Type="System.String" Scope="User">
+      <Value Profile="(Default)">3307</Value>
     </Setting>
   </Settings>
 </SettingsFile>

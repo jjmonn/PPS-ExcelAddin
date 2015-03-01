@@ -106,10 +106,10 @@ Friend Class CategoriesController
         Next
         Categories.DeleteCategory(node.Name)
         SQLEntities.DeleteEntitiesVariable(node.Name)
-        ViewsController.CreateAllEntitiesViews()
         categories_names_list.Remove(node.Text)
         node.Remove()
-
+        ViewsController.CreateAllEntitiesViews()
+        
     End Sub
 
     Protected Friend Sub DeleteCategoryValue(ByRef node As TreeNode)

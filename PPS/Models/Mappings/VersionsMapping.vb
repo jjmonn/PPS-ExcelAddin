@@ -142,4 +142,19 @@ Friend Class VersionsMapping
 
     End Function
 
+
+    Protected Friend Shared Function IsVersionValid(ByRef version_id As String) As Boolean
+
+        Dim srv As New ModelServer
+        srv.OpenRst(CONFIG_DATABASE + "." + VERSIONS_TABLE, ModelServer.FWD_CURSOR)
+        srv.rst.Filter = RATES_VERSIONS_ID_VARIABLE & "='" & version_id & "'"
+        If srv.rst.EOF = False Then
+            Return True
+        Else
+            Return False
+        End If
+
+
+    End Function
+
 End Class

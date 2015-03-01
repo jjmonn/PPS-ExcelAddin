@@ -24,7 +24,6 @@ Partial Class CategoriesManagementUI
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(CategoriesManagementUI))
-        Me.ImageList2 = New System.Windows.Forms.ImageList(Me.components)
         Me.ImageList1 = New System.Windows.Forms.ImageList(Me.components)
         Me.MenuStrip1 = New System.Windows.Forms.MenuStrip()
         Me.RCM_TV = New System.Windows.Forms.ContextMenuStrip(Me.components)
@@ -38,20 +37,12 @@ Partial Class CategoriesManagementUI
         Me.RCM_TV.SuspendLayout()
         Me.SuspendLayout()
         '
-        'ImageList2
-        '
-        Me.ImageList2.ImageStream = CType(resources.GetObject("ImageList2.ImageStream"), System.Windows.Forms.ImageListStreamer)
-        Me.ImageList2.TransparentColor = System.Drawing.Color.Transparent
-        Me.ImageList2.Images.SetKeyName(0, "favicon(16).ico")
-        Me.ImageList2.Images.SetKeyName(1, "favicon(25).ico")
-        Me.ImageList2.Images.SetKeyName(2, "favicon(28).ico")
-        '
         'ImageList1
         '
         Me.ImageList1.ImageStream = CType(resources.GetObject("ImageList1.ImageStream"), System.Windows.Forms.ImageListStreamer)
         Me.ImageList1.TransparentColor = System.Drawing.Color.Transparent
-        Me.ImageList1.Images.SetKeyName(0, "DB Grey.png")
-        Me.ImageList1.Images.SetKeyName(1, "icons-blue.png")
+        Me.ImageList1.Images.SetKeyName(0, "favicon(81).ico")
+        Me.ImageList1.Images.SetKeyName(1, "config circle orangev small.png")
         '
         'MenuStrip1
         '
@@ -65,7 +56,7 @@ Partial Class CategoriesManagementUI
         '
         Me.RCM_TV.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.CreateCategoryBT, Me.AddCategoryValueBT, Me.ToolStripSeparator2, Me.RenameToolStripMenuItem, Me.ToolStripSeparator1, Me.DeleteBT})
         Me.RCM_TV.Name = "RCM_TV"
-        Me.RCM_TV.Size = New System.Drawing.Size(180, 104)
+        Me.RCM_TV.Size = New System.Drawing.Size(180, 126)
         '
         'CreateCategoryBT
         '
@@ -128,7 +119,6 @@ Partial Class CategoriesManagementUI
         Me.PerformLayout()
 
     End Sub
-    Friend WithEvents ImageList2 As System.Windows.Forms.ImageList
     Friend WithEvents ImageList1 As System.Windows.Forms.ImageList
     Friend WithEvents MenuStrip1 As System.Windows.Forms.MenuStrip
     Friend WithEvents RCM_TV As System.Windows.Forms.ContextMenuStrip

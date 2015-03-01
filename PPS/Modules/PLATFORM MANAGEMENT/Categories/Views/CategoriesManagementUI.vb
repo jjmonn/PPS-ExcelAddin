@@ -193,11 +193,17 @@ Friend Class CategoriesManagementUI
             Case Keys.Delete : DeleteBT_Click(sender, e)
             Case Keys.Up
                 If e.Control Then
-                    If Not current_node Is Nothing Then MoveNodeUp()
+                    If Not current_node Is Nothing Then
+                        TreeViewsUtilities.MoveNodeUp(current_node)
+                        Controller.positions_dictionary = TreeViewsUtilities.GeneratePositionsDictionary(CategoriesTV)
+                    End If
                 End If
             Case Keys.Down
                 If e.Control Then
-                    If Not current_node Is Nothing Then MoveNodeDown()
+                    If Not current_node Is Nothing Then
+                        TreeViewsUtilities.MoveNodeDown(current_node)
+                        Controller.positions_dictionary = TreeViewsUtilities.GeneratePositionsDictionary(CategoriesTV)
+                    End If
                 End If
         End Select
 
@@ -205,34 +211,6 @@ Friend Class CategoriesManagementUI
 
 #Region "Move nodes up and down into hierarchy Procedure"
 
-    Private Sub MoveNodeUp()
-
-        If Not current_node.PrevNode Is Nothing Then
-            Dim currentKey As String = current_node.Name
-            Me.Hide()
-            Dim currentPosition As Double = Controller.positions_dictionary(current_node.PrevNode.Name) - 1 + POSITION_STEP
-            TreeViewsUtilities.UpdateChildrenPosition(current_node, currentPosition, Controller.positions_dictionary)
-            ResumeAccountTree()
-            Me.Show()
-            CategoriesTV.SelectedNode = CategoriesTV.Nodes.Find(currentKey, True)(0)
-        End If
-
-    End Sub
-
-    Private Sub MoveNodeDown()
-
-        If Not current_node.NextNode Is Nothing Then
-            Dim currentKey As String = current_node.Name
-            Dim currentPosition As Object = Controller.positions_dictionary(current_node.NextNode.Name) _
-                                            + TreeViewsUtilities.GetNodeAllChildrenCount(current_node.NextNode) + POSITION_STEP
-            TreeViewsUtilities.UpdateChildrenPosition(current_node, currentPosition, Controller.positions_dictionary)
-            Me.Hide()
-            ResumeAccountTree()
-            Me.Show()
-            CategoriesTV.SelectedNode = CategoriesTV.Nodes.Find(currentKey, True)(0)
-        End If
-
-    End Sub
 
     Private Sub ResumeAccountTree()
 

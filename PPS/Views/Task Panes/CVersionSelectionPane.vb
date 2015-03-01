@@ -13,7 +13,7 @@
 ' 
 '
 ' Author: Julien Monnereau
-' Last modified: 20/01/2015
+' Last modified: 26/02/2015
 
 
 
@@ -43,14 +43,9 @@ Public Class CVersionSelectionPane
 
     End Sub
 
-    Friend Function Init(ByRef settings_version_id As String) As Boolean
+    Friend Function Init() As Boolean
 
         VERSEL = New VersionSelection(VersioningTVIL, Me)
-        If VERSEL.IsVersionValid(settings_version_id) Then
-            VERSEL.versionsTV.SelectedNode = VERSEL.versionsTV.Nodes.Find(settings_version_id, True)(0)
-            VERSEL.SetSelectedVersion()
-            Return True
-        End If
         InsertDataVersionSelection()
         AddHandler ValidateBT.Click, AddressOf VERSEL.SetSelectedVersion
         Return False
@@ -67,6 +62,7 @@ Public Class CVersionSelectionPane
 
 #End Region
 
+#Region "Interface"
 
     Public Sub ClearAndClose()
 
@@ -79,6 +75,15 @@ Public Class CVersionSelectionPane
 
     End Sub
 
+    Protected Friend Sub SetVersion(ByRef version_id As String)
+
+        If VERSEL Is Nothing Then VERSEL = New VersionSelection(VersioningTVIL, Me)
+        VERSEL.versionsTV.SelectedNode = VERSEL.versionsTV.Nodes.Find(version_id, True)(0)
+        VERSEL.SetSelectedVersion()
+
+    End Sub
+
+#End Region
 
 #Region "Events"
 

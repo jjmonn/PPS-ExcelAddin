@@ -12,7 +12,7 @@
 '
 '
 '
-' Last modified: 07/07/2014
+' Last modified: 27/02/2015
 ' Author: Julien Monnereau
 
 
@@ -27,8 +27,8 @@ Module Connections_Functions
         pwd = pwd + SNOW_KEY
        
         connectionString = "DRIVER={" + DRIVER_NAME + "};" _
-                           & "SERVER=" + SERVER_LOCATION + ";" _
-                           & "PORT=3306" _
+                           & "SERVER=" + My.Settings.server + ";" _
+                           & "PORT=" & My.Settings.port_number & ";" _
                            & "DATABASE=" + OPENING_DATABASE + ";" _
                            & "UID=" + userID + ";" _
                            & "PASSWORD=" + pwd + ";" _
