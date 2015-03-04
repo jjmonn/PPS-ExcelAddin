@@ -3,10 +3,10 @@
   <Profiles />
   <Settings>
     <Setting Name="server" Type="System.String" Scope="User">
-      <Value Profile="(Default)">localhost</Value>
+      <Value Profile="(Default)">173.194.251.206</Value>
     </Setting>
     <Setting Name="certificatespath" Type="System.String" Scope="User">
-      <Value Profile="(Default)">C:\Users\monnereau\Documents\PURPLE SUN\CA</Value>
+      <Value Profile="(Default)">C:\Users\PPS\Documents\Purple Sun\CA</Value>
     </Setting>
     <Setting Name="version_id" Type="System.String" Scope="User">
       <Value Profile="(Default)">vto</Value>
@@ -15,7 +15,7 @@
       <Value Profile="(Default)">user2</Value>
     </Setting>
     <Setting Name="port_number" Type="System.String" Scope="User">
-      <Value Profile="(Default)">3307</Value>
+      <Value Profile="(Default)">3306</Value>
     </Setting>
   </Settings>
 </SettingsFile>

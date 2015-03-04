@@ -250,6 +250,12 @@ Friend Class AlternativeScenariosController
 
     End Function
 
+    Protected Friend Sub Close()
+
+        Model.DestroyDll()
+        MyBase.Finalize()
+
+    End Sub
 
 #End Region
 

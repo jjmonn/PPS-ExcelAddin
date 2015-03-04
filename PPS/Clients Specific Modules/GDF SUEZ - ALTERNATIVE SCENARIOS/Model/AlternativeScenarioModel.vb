@@ -22,7 +22,6 @@ Friend Class AlternativeScenarioModel
 
     ' Objects
     Private BaseComputer As GenericAggregationDLL3Computing
-    '    Private VersionsMGT As New CVersionsForControlingUIs
     Private Controller As AlternativeScenariosController
 
     ' Variables
@@ -332,6 +331,12 @@ Friend Class AlternativeScenarioModel
             Next
             SensisResultsDict(sensitivity_id).Add(INCREMENTAL_TAX, tmp_dict)
         Next
+
+    End Sub
+
+    Protected Friend Sub DestroyDll()
+
+        BaseComputer.delete_model()
 
     End Sub
 

@@ -42,6 +42,8 @@ Partial Class ControllingUI_2
         Me.DisplayAdjustmensRCM = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator()
         Me.DisplayDataTrackingToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator4 = New System.Windows.Forms.ToolStripSeparator()
+        Me.FormatsRCMBT = New System.Windows.Forms.ToolStripMenuItem()
         Me.TableLayoutPanel2 = New System.Windows.Forms.TableLayoutPanel()
         Me.CustomTabControl2 = New System.Windows.Forms.CustomTabControl()
         Me.MainTab = New System.Windows.Forms.TabPage()
@@ -204,9 +206,9 @@ Partial Class ControllingUI_2
         '
         'DGVsRCM
         '
-        Me.DGVsRCM.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.DisplayAdjustmensRCM, Me.ToolStripSeparator2, Me.DisplayDataTrackingToolStripMenuItem})
+        Me.DGVsRCM.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.DisplayAdjustmensRCM, Me.ToolStripSeparator2, Me.DisplayDataTrackingToolStripMenuItem, Me.ToolStripSeparator4, Me.FormatsRCMBT})
         Me.DGVsRCM.Name = "DGVsRCM"
-        Me.DGVsRCM.Size = New System.Drawing.Size(189, 54)
+        Me.DGVsRCM.Size = New System.Drawing.Size(189, 82)
         '
         'DisplayAdjustmensRCM
         '
@@ -224,6 +226,18 @@ Partial Class ControllingUI_2
         Me.DisplayDataTrackingToolStripMenuItem.Name = "DisplayDataTrackingToolStripMenuItem"
         Me.DisplayDataTrackingToolStripMenuItem.Size = New System.Drawing.Size(188, 22)
         Me.DisplayDataTrackingToolStripMenuItem.Text = "Display Data Tracking"
+        '
+        'ToolStripSeparator4
+        '
+        Me.ToolStripSeparator4.Name = "ToolStripSeparator4"
+        Me.ToolStripSeparator4.Size = New System.Drawing.Size(185, 6)
+        '
+        'FormatsRCMBT
+        '
+        Me.FormatsRCMBT.Image = Global.PPS.My.Resources.Resources.Actions_format_stroke_color_icon
+        Me.FormatsRCMBT.Name = "FormatsRCMBT"
+        Me.FormatsRCMBT.Size = New System.Drawing.Size(188, 22)
+        Me.FormatsRCMBT.Text = "Display Options"
         '
         'TableLayoutPanel2
         '
@@ -711,18 +725,18 @@ Partial Class ControllingUI_2
         '
         Me.AdjustmentsRCM.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.SelectAllToolStripMenuItem1, Me.UnselectAllToolStripMenuItem1})
         Me.AdjustmentsRCM.Name = "AdjustmentsRCM"
-        Me.AdjustmentsRCM.Size = New System.Drawing.Size(153, 70)
+        Me.AdjustmentsRCM.Size = New System.Drawing.Size(137, 48)
         '
         'SelectAllToolStripMenuItem1
         '
         Me.SelectAllToolStripMenuItem1.Name = "SelectAllToolStripMenuItem1"
-        Me.SelectAllToolStripMenuItem1.Size = New System.Drawing.Size(152, 22)
+        Me.SelectAllToolStripMenuItem1.Size = New System.Drawing.Size(136, 22)
         Me.SelectAllToolStripMenuItem1.Text = "Select All"
         '
         'UnselectAllToolStripMenuItem1
         '
         Me.UnselectAllToolStripMenuItem1.Name = "UnselectAllToolStripMenuItem1"
-        Me.UnselectAllToolStripMenuItem1.Size = New System.Drawing.Size(152, 22)
+        Me.UnselectAllToolStripMenuItem1.Size = New System.Drawing.Size(136, 22)
         Me.UnselectAllToolStripMenuItem1.Text = "Unselect All"
         '
         'ControllingUI_2
@@ -834,4 +848,6 @@ Partial Class ControllingUI_2
     Friend WithEvents AdjustmentsRCM As System.Windows.Forms.ContextMenuStrip
     Friend WithEvents SelectAllToolStripMenuItem1 As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents UnselectAllToolStripMenuItem1 As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ToolStripSeparator4 As System.Windows.Forms.ToolStripSeparator
+    Friend WithEvents FormatsRCMBT As System.Windows.Forms.ToolStripMenuItem
 End Class

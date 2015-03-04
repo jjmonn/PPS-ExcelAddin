@@ -310,17 +310,16 @@ Module Data_Tables_Constants
 #Region "Formats table"
 
     Friend Const FORMATS_TABLE_NAME = "formats"
-    Friend Const FORMAT_CODE_VARIABLE = "format_code"
+    Friend Const FORMAT_CODE_VARIABLE = "code"
     Friend Const FORMAT_TEXT_COLOR_VARIABLE = "text_color"
     Friend Const FORMAT_BOLD_VARIABLE = "font_bold"
     Friend Const FORMAT_ITALIC_VARIABLE = "font_italic"
     Friend Const FORMAT_BORDER_VARIABLE = "border"
     Friend Const FORMAT_BCKGD_VARIABLE = "background"
-    Friend Const FORMAT_NAME_VARIABLE = "format_name"
+    Friend Const FORMAT_NAME_VARIABLE = "name"
     Friend Const FORMAT_ICON_VARIABLE = "icon"
-    Friend Const FORMAT_DGV_BACKGROUND_VARIABLE = "dgv_background_color"
     Friend Const FORMAT_INDENT_VARIABLE = "indent"
-    Friend Const FORMAT_DESTINATION_VARIABLE = "format_destination"
+    Friend Const FORMAT_DESTINATION_VARIABLE = "destination"
     Friend Const FORMAT_UP_BORDER_VARIABLE = "up_border_color"
     Friend Const FORMAT_BOTTOM_BORDER_VARIABLE = "bottom_border_color"
 
@@ -328,6 +327,7 @@ Module Data_Tables_Constants
     Friend Const INPUT_FORMAT_CODE = "input"            ' Value for input style formats
 
     Friend Const TITLE_FORMAT_CODE As String = "t"
+    Friend Const HV_FORMAT_CODE As String = "l"
     Friend Const DEFAULT_FORMAT_STRING As String = "{0:C0}"
     Friend Const PRCT_FORMAT_STRING As String = "{0:P0}"
 

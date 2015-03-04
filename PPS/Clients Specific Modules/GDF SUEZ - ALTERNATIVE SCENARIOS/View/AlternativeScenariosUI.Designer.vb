@@ -70,6 +70,11 @@ Partial Class AlternativeScenariosUI
         Me.ReportsRCM = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.SendToExcelToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.EntitiesTVImageList = New System.Windows.Forms.ImageList(Me.components)
+        Me.ChartsRCM2 = New System.Windows.Forms.ContextMenuStrip(Me.components)
+        Me.SendToExcelToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
+        Me.SetMaximumY1ValueToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.SetMaximumY2ValueToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.MenuStrip1.SuspendLayout()
         Me.MainTabControl.SuspendLayout()
         Me.InputsTab.SuspendLayout()
@@ -87,6 +92,7 @@ Partial Class AlternativeScenariosUI
         Me.CommitTabPage.SuspendLayout()
         Me.TableLayoutPanel3.SuspendLayout()
         Me.ReportsRCM.SuspendLayout()
+        Me.ChartsRCM2.SuspendLayout()
         Me.SuspendLayout()
         '
         'MenuStrip1
@@ -670,6 +676,7 @@ Partial Class AlternativeScenariosUI
         '
         'SendToExcelToolStripMenuItem
         '
+        Me.SendToExcelToolStripMenuItem.Image = Global.PPS.My.Resources.Resources.excel_2
         Me.SendToExcelToolStripMenuItem.Name = "SendToExcelToolStripMenuItem"
         Me.SendToExcelToolStripMenuItem.Size = New System.Drawing.Size(143, 22)
         Me.SendToExcelToolStripMenuItem.Text = "Send to Excel"
@@ -680,6 +687,36 @@ Partial Class AlternativeScenariosUI
         Me.EntitiesTVImageList.TransparentColor = System.Drawing.Color.Transparent
         Me.EntitiesTVImageList.Images.SetKeyName(0, "favicon(81).ico")
         Me.EntitiesTVImageList.Images.SetKeyName(1, "favicon(110).ico")
+        '
+        'ChartsRCM2
+        '
+        Me.ChartsRCM2.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.SendToExcelToolStripMenuItem1, Me.ToolStripSeparator1, Me.SetMaximumY1ValueToolStripMenuItem, Me.SetMaximumY2ValueToolStripMenuItem})
+        Me.ChartsRCM2.Name = "ContextMenuStrip1"
+        Me.ChartsRCM2.Size = New System.Drawing.Size(196, 76)
+        '
+        'SendToExcelToolStripMenuItem1
+        '
+        Me.SendToExcelToolStripMenuItem1.Image = Global.PPS.My.Resources.Resources.excel_2
+        Me.SendToExcelToolStripMenuItem1.Name = "SendToExcelToolStripMenuItem1"
+        Me.SendToExcelToolStripMenuItem1.Size = New System.Drawing.Size(195, 22)
+        Me.SendToExcelToolStripMenuItem1.Text = "Send to Excel"
+        '
+        'ToolStripSeparator1
+        '
+        Me.ToolStripSeparator1.Name = "ToolStripSeparator1"
+        Me.ToolStripSeparator1.Size = New System.Drawing.Size(192, 6)
+        '
+        'SetMaximumY1ValueToolStripMenuItem
+        '
+        Me.SetMaximumY1ValueToolStripMenuItem.Name = "SetMaximumY1ValueToolStripMenuItem"
+        Me.SetMaximumY1ValueToolStripMenuItem.Size = New System.Drawing.Size(195, 22)
+        Me.SetMaximumY1ValueToolStripMenuItem.Text = "Set Maximum Y1 Value"
+        '
+        'SetMaximumY2ValueToolStripMenuItem
+        '
+        Me.SetMaximumY2ValueToolStripMenuItem.Name = "SetMaximumY2ValueToolStripMenuItem"
+        Me.SetMaximumY2ValueToolStripMenuItem.Size = New System.Drawing.Size(195, 22)
+        Me.SetMaximumY2ValueToolStripMenuItem.Text = "Set Maximum Y2 Value"
         '
         'AlternativeScenariosUI
         '
@@ -714,6 +751,7 @@ Partial Class AlternativeScenariosUI
         Me.TableLayoutPanel3.ResumeLayout(False)
         Me.TableLayoutPanel3.PerformLayout()
         Me.ReportsRCM.ResumeLayout(False)
+        Me.ChartsRCM2.ResumeLayout(False)
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -764,4 +802,9 @@ Partial Class AlternativeScenariosUI
     Friend WithEvents AdjustmentsTVPanel As System.Windows.Forms.Panel
     Public WithEvents EntitiesTVImageList As System.Windows.Forms.ImageList
     Friend WithEvents Label8 As System.Windows.Forms.Label
+    Friend WithEvents ChartsRCM2 As System.Windows.Forms.ContextMenuStrip
+    Friend WithEvents SendToExcelToolStripMenuItem1 As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents SetMaximumY1ValueToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents SetMaximumY2ValueToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ToolStripSeparator1 As System.Windows.Forms.ToolStripSeparator
 End Class

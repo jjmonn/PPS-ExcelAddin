@@ -84,7 +84,6 @@ Module Constants
     Friend Const QUERY_FLAG_FIND_ID = "withoutParent"
     Friend Const PPSBI_FORMULA_CATEGORIES_SEPARATOR As String = ","
 
-    Friend Const INPUT_COLOR As String = "&H78E5CCFF"
 
 
     '-------------------------------------------------------------

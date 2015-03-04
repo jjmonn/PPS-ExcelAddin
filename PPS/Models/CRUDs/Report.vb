@@ -1,4 +1,4 @@
-﻿' GDFSUEZASReport.vb
+﻿'Report.vb
 '
 ' gdfsuez_as_reports table CRUD model
 '

@@ -43,7 +43,7 @@ Friend Class ASInputsController
     Protected Friend current_market_prices_version_id As String
 
     ' Display
-  
+
 
 #End Region
 
@@ -53,7 +53,7 @@ Friend Class ASInputsController
     Protected Friend Sub New(ByRef input_AScontroller As AlternativeScenariosController)
 
         ASController = input_AScontroller
-        
+
         Version.LoadVersionsTree(VersionsTV)
         Entity.LoadEntitiesTree(EntitiesTV)
         TreeViewsUtilities.CheckAllNodes(EntitiesTV)
@@ -71,7 +71,7 @@ Friend Class ASInputsController
 
     End Sub
 
-    
+
 #End Region
 
 

@@ -12,7 +12,7 @@
 '
 '
 '
-' Last Modified: 29/12/2014
+' Last Modified: 02/03/2014
 ' Author: Julien Monnereau
 
 
@@ -156,9 +156,11 @@ Friend Class AccountsController
 
         Accounts.UpdateAccount(account_id, ACCOUNT_FORMULA_TYPE_VARIABLE, ftype)
         Accounts.UpdateAccount(account_id, ACCOUNT_IMAGE_VARIABLE, View.ftype_icon_dic(ftype))
+        Accounts.UpdateAccount(account_id, ACCOUNT_FORMULA_VARIABLE, "")
         Accounts.UpdateAccount(account_id, ACCOUNT_SELECTED_IMAGE_VARIABLE, View.ftype_icon_dic(ftype))
         View.current_node.ImageIndex = View.ftype_icon_dic(ftype)
         View.current_node.SelectedImageIndex = View.ftype_icon_dic(ftype)
+        View.formula_TB.Text = ""
         AccountsTV.Invalidate()
         AccountsTV.Update()
         AccountsTV.Refresh()
@@ -227,6 +229,7 @@ Friend Class AccountsController
 
         If Not GlobalVariables.GlobalDll3Interface Is Nothing Then
             Accounts.Close()
+            GlobalVariables.GlobalDll3Interface.destroy_dll()
             GlobalVariables.GlobalDll3Interface = New DLL3_Interface
         End If
         needToUpdateModel = False

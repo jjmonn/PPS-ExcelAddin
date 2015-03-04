@@ -56,7 +56,6 @@ Friend Class FModelingAccountsMGTUI
         DGV.Dock = DockStyle.Fill
 
         AddHandler DGV.CellBeginEdit, AddressOf dataGridView_CellBeginEdit
-        AddHandler DGV.CellValueChanging, AddressOf dataGridView_CellValueChanging
         AddHandler DGV.CellMouseClick, AddressOf dataGridView_CellMouseClick
 
     End Sub
@@ -141,7 +140,7 @@ Friend Class FModelingAccountsMGTUI
         For Each f_account_id In f_accounts_seriesHT.Keys
             Dim row As HierarchyItem = rows_id_item_dic(f_account_id)
             DGV.CellsArea.SetCellValue(row, DGV.ColumnsHierarchy.Items(1), "")
-            If Not IsDBNull(f_accounts_seriesHT(f_account_id)(CONTROL_CHART_COLOR_VARIABLE)) Then FormatCell(row.Cells(1), f_accounts_seriesHT(f_account_id)(CONTROL_CHART_COLOR_VARIABLE))
+            If Not IsDBNull(f_accounts_seriesHT(f_account_id)(CONTROL_CHART_COLOR_VARIABLE)) Then DataGridViewsUtil.SetCellFillColor(row.Cells(1), f_accounts_seriesHT(f_account_id)(CONTROL_CHART_COLOR_VARIABLE))
             DGV.CellsArea.SetCellValue(row, DGV.ColumnsHierarchy.Items(2), f_accounts_seriesHT(f_account_id)(CONTROL_CHART_TYPE_VARIABLE))
             DGV.CellsArea.SetCellValue(row, DGV.ColumnsHierarchy.Items(3), f_accounts_seriesHT(f_account_id)(FINANCIAL_MODELLING_SERIE_CHART_VARIABLE))
         Next
@@ -165,22 +164,11 @@ Friend Class FModelingAccountsMGTUI
       
     End Sub
 
-    Private Sub dataGridView_CellValueChanging(sender As Object, args As CellValueChangingEventArgs)
-
-        If isFillingDGV = False Then
-            Select Case args.Cell.ColumnItem.ItemIndex
-                Case 2
-                Case 3
-            End Select
-        End If
-
-    End Sub
-
     Private Sub dataGridView_CellBeginEdit(sender As Object, e As CellEventArgs)
 
         If e.Cell.ColumnItem.ItemIndex = 1 Then
             If ColorDialog1.ShowDialog <> Windows.Forms.DialogResult.Cancel Then
-                FormatCell(e.Cell, ColorDialog1.Color.ToArgb)
+                DataGridViewsUtil.SetCellFillColor(e.Cell, ColorDialog1.Color.ToArgb)
                 Controller.UpdateSerieColor(current_serie_id, ColorDialog1.Color.ToArgb)
                 DGV.CloseEditor(False)
             End If
@@ -192,15 +180,6 @@ Friend Class FModelingAccountsMGTUI
 
 
 #Region "Utilities"
-
-    Private Sub FormatCell(ByRef cell As GridCell, _
-                           ByRef color_int As Int32)
-
-        Dim CStyle As GridCellStyle = GridTheme.GetDefaultTheme(DGV.VIBlendTheme).GridCellStyle
-        CStyle.FillStyle = New FillStyleSolid(System.Drawing.Color.FromArgb(color_int))
-        cell.DrawStyle = CStyle
-
-    End Sub
 
     Private Sub FModelingAccountsMGTUI_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
 

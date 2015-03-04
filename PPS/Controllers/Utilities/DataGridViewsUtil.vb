@@ -17,7 +17,7 @@
 '
 '
 '
-' Last modified date: 16/02/2014
+' Last modified date: 03/03/2015
 ' Author: Julien Monnereau
 
 
@@ -37,7 +37,6 @@ Friend Class DataGridViewsUtil
 #Region "Instance Variables"
 
     ' Objects
-    Private EXCELFORMATER As CExcelFormatting
     Private EntitiesTokenNamesDict As Hashtable
     Private AccountsKeysFormatTypesDic As Dictionary(Of String, Dictionary(Of String, String))
     Private AccountNamesKeysDic As Hashtable
@@ -65,8 +64,7 @@ Friend Class DataGridViewsUtil
         AccountsKeysFormatTypesDic = AccountsMapping.GetAccountsKeysFormatsTypesDictionary()
         AccountNamesKeysDic = AccountsMapping.GetAccountsDictionary(ACCOUNT_NAME_VARIABLE, ACCOUNT_ID_VARIABLE)
         accFtypes = AccountsMapping.GetAccountsDictionary(ACCOUNT_ID_VARIABLE, ACCOUNT_FORMULA_TYPE_VARIABLE)
-        EXCELFORMATER = New CExcelFormatting
-
+     
     End Sub
 
 
@@ -92,6 +90,7 @@ Friend Class DataGridViewsUtil
     ' vDgv Display After Populating ' note controlling ui2 specificity !!
     Protected Friend Sub FormatDGVs(ByRef tabsControl As TabControl)
 
+        Dim InputsFormatsDictionary = FormatsMapping.GetFormatTable(INPUT_FORMAT_CODE)
         Dim formatCode, account_id, fmtStr As String
         Dim indent As Int32
         For Each tab_ As TabPage In tabsControl.TabPages
@@ -114,19 +113,25 @@ Friend Class DataGridViewsUtil
                 CAStyle.Font = New System.Drawing.Font(vDgv.Font.FontFamily, BASIC_DGV_REPORT_FONT_SIZE)
                 CEStyle.Font = New System.Drawing.Font(vDgv.Font.FontFamily, BASIC_DGV_REPORT_FONT_SIZE)
 
-                If EXCELFORMATER.InputFormatsDictionary.Item(formatCode).Item(FORMAT_BOLD_VARIABLE) = 1 Then
-                    HANStyle.Font = New System.Drawing.Font(vDgv.Font, FontStyle.Bold)
-                    HASStyle.Font = New System.Drawing.Font(vDgv.Font, FontStyle.Bold)
-                    CAStyle.Font = New System.Drawing.Font(vDgv.Font, FontStyle.Bold)
+                If InputsFormatsDictionary(formatCode)(FORMAT_BOLD_VARIABLE) = 1 Then
+                    HANStyle.Font = New System.Drawing.Font(HANStyle.Font.FontFamily, BASIC_DGV_REPORT_FONT_SIZE, FontStyle.Bold)
+                    HASStyle.Font = New System.Drawing.Font(HASStyle.Font.FontFamily, BASIC_DGV_REPORT_FONT_SIZE, FontStyle.Bold)
+                    CAStyle.Font = New System.Drawing.Font(CAStyle.Font.FontFamily, BASIC_DGV_REPORT_FONT_SIZE, FontStyle.Bold)
                 End If
-                If EXCELFORMATER.InputFormatsDictionary.Item(formatCode).Item(FORMAT_ITALIC_VARIABLE) = 1 Then
-                    HANStyle.Font = New System.Drawing.Font(vDgv.Font, FontStyle.Italic)
-                    HASStyle.Font = New System.Drawing.Font(vDgv.Font, FontStyle.Italic)
-                    CAStyle.Font = New System.Drawing.Font(vDgv.Font, FontStyle.Italic)
+                If InputsFormatsDictionary(formatCode)(FORMAT_ITALIC_VARIABLE) = 1 Then
+                    HANStyle.Font = New System.Drawing.Font(HANStyle.Font.FontFamily, BASIC_DGV_REPORT_FONT_SIZE, FontStyle.Italic)
+                    HASStyle.Font = New System.Drawing.Font(HASStyle.Font.FontFamily, BASIC_DGV_REPORT_FONT_SIZE, FontStyle.Italic)
+                    CAStyle.Font = New System.Drawing.Font(CAStyle.Font.FontFamily, BASIC_DGV_REPORT_FONT_SIZE, FontStyle.Italic)
                 End If
-                If formatCode = "l" Then
-                    CAStyle.TextColor = Color.Gray
+
+                ' Colors 
+                If Not IsDBNull(InputsFormatsDictionary(formatCode)(FORMAT_TEXT_COLOR_VARIABLE)) Then
+                    CAStyle.TextColor = System.Drawing.Color.FromArgb(InputsFormatsDictionary(formatCode)(FORMAT_TEXT_COLOR_VARIABLE))
                 End If
+                If Not IsDBNull(InputsFormatsDictionary(formatCode)(FORMAT_BCKGD_VARIABLE)) Then
+                    CAStyle.FillStyle = New FillStyleSolid(System.Drawing.Color.FromArgb(InputsFormatsDictionary(formatCode)(FORMAT_BCKGD_VARIABLE)))
+                End If
+                
                 Select Case (AccountsKeysFormatTypesDic.Item(account_id).Item(ACCOUNT_TYPE_VARIABLE))
                     Case "MO" : fmtStr = "{0:C0}"
                     Case "RA" : fmtStr = "{0:P}"        ' put this in a table
@@ -135,7 +140,7 @@ Friend Class DataGridViewsUtil
                     Case Else : fmtStr = "{0:C0}"
                 End Select
 
-                indent = EXCELFORMATER.InputFormatsDictionary.Item(formatCode).Item(FORMAT_INDENT_VARIABLE)
+                indent = InputsFormatsDictionary(formatCode)(FORMAT_INDENT_VARIABLE)
                 If row.ParentItem Is Nothing Then
                     format_row(row, formatCode, fmtStr, CAStyle, HANStyle, HASStyle, indent, CAStyle, CEStyle, HANStyle, HASStyle, HENStyle, HESStyle)
                 Else
@@ -601,7 +606,7 @@ Friend Class DataGridViewsUtil
         Next
 
         Dim test = destination.Row
-        EXCELFORMATER.FormatExcelRangeAs(destination.Worksheet.Range(destination, destination.Offset(i - 1, DatagridView.ColumnsHierarchy.Items.Count)), _
+        CExcelFormatting.FormatExcelRangeAs(destination.Worksheet.Range(destination, destination.Offset(i - 1, DatagridView.ColumnsHierarchy.Items.Count)), _
                                          INPUT_FORMAT_CODE)
         GlobalVariables.apps.ScreenUpdating = True
         Return i + 1
@@ -647,7 +652,7 @@ Friend Class DataGridViewsUtil
         Next
 
         Dim test = destination.Row
-        EXCELFORMATER.FormatExcelRangeAs(destination.Worksheet.Range(destination.Offset(1, 0), _
+        CExcelFormatting.FormatExcelRangeAs(destination.Worksheet.Range(destination.Offset(1, 0), _
                                        destination.Offset(i - 1, (dataGridView.ColumnsHierarchy.Items(0).Items.Count * _
                                        dataGridView.ColumnsHierarchy.Items.Count))), _
                                        INPUT_FORMAT_CODE)
@@ -682,7 +687,8 @@ Friend Class DataGridViewsUtil
         For Each row As HierarchyItem In DGV.RowsHierarchy.Items
             CopyRowHierarchy(row, dest_range, i, j)
         Next
-    
+        dest_range.Worksheet.Range(dest_range.Worksheet.Cells(1, 1), dest_range.Offset(i, j)).Columns.AutoFit()
+
     End Sub
 
     Protected Friend Shared Sub SetupColumnsTitles(ByRef column As HierarchyItem, _
@@ -1008,6 +1014,16 @@ Friend Class DataGridViewsUtil
         Next
 
     End Sub
+
+    Protected Friend Shared Sub SetCellFillColor(ByRef cell As GridCell, _
+                                                 ByRef color_int As Int32)
+
+        Dim CStyle As GridCellStyle = GridTheme.GetDefaultTheme(cell.ColumnItem.DataGridView.VIBlendTheme).GridCellStyle
+        CStyle.FillStyle = New FillStyleSolid(System.Drawing.Color.FromArgb(color_int))
+        cell.DrawStyle = CStyle
+
+    End Sub
+
 
 #End Region
 

@@ -243,7 +243,7 @@ Friend Class GenericAggregationDLL3Computing
 
     End Sub
 
-    Friend Sub delete_model()
+    Protected Friend Sub delete_model()
 
         Dll3Computer.destroy_dll()
 

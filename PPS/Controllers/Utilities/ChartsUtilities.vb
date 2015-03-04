@@ -22,10 +22,11 @@ Friend Class ChartsUtilities
 #Region "Instance Variables"
 
     Friend Const LABELS_MAX_FONT_SIZE As Single = 8
-    Friend Const VALUES_LABELS_FONT_SIZE As Single = 7
+    Friend Const VALUES_LABELS_FONT_SIZE As Single = 8
     Friend Const DEFAULT_CHART_PALETTE = ChartColorPalette.Berry
     Friend Const CHART_TITLE_FONT_SIZE As Single = 9
     Friend Const DEFAULT_LABELS_FORMAT As String = "{0:N0}"
+    Friend Const CHARTS_X_AXIS_ANGLE As Int32 = -45
 
 #End Region
 
@@ -38,6 +39,8 @@ Friend Class ChartsUtilities
         Dim ChartArea1 As New ChartArea
         new_chart.ChartAreas.Add(ChartArea1)
 
+        ' Axis
+        ChartArea1.AxisX.LabelStyle.Angle = CHARTS_X_AXIS_ANGLE
         ChartArea1.AxisY.LabelAutoFitMaxFontSize = LABELS_MAX_FONT_SIZE
         If reportHT.ContainsKey(REPORTS_AXIS1_NAME_VAR) _
         AndAlso Not IsDBNull(reportHT(REPORTS_AXIS1_NAME_VAR)) Then
@@ -49,11 +52,17 @@ Friend Class ChartsUtilities
             ChartArea1.AxisY2.Title = reportHT(REPORTS_AXIS2_NAME_VAR)
             ChartArea1.AxisY2.TextOrientation = TextOrientation.Rotated90
         End If
+
+        ' Grid Lines
         ChartArea1.AxisX.LabelAutoFitMaxFontSize = LABELS_MAX_FONT_SIZE
         ChartArea1.AxisX.MajorGrid.Enabled = False
+        ChartArea1.AxisY.MajorGrid.LineColor = Drawing.Color.LightGray
+        ChartArea1.AxisY2.MajorGrid.Enabled = False
 
+        ' Colors Palette
         If reportHT.ContainsKey(REPORTS_PALETTE_VAR) Then SetChartPalette(new_chart, reportHT(REPORTS_PALETTE_VAR))
 
+        ' Legend
         Dim legend1 As New Legend
         new_chart.Legends.Add(legend1)
         new_chart.Legends(0).Docking = Docking.Bottom
@@ -62,8 +71,12 @@ Friend Class ChartsUtilities
         new_chart.Legends(0).Alignment = System.Drawing.StringAlignment.Center
         new_chart.Legends(0).AutoFitMinFontSize = VALUES_LABELS_FONT_SIZE
 
+
+        ' Title
         new_chart.Titles.Add(reportHT(REPORTS_NAME_VAR))
         new_chart.Titles(0).Font = New Drawing.Font("Arial", CHART_TITLE_FONT_SIZE, Drawing.FontStyle.Bold)
+
+        ' Borders
         new_chart.BorderlineWidth = 1
         new_chart.BorderlineColor = Drawing.Color.Gray
         Return new_chart
@@ -144,7 +157,7 @@ Friend Class ChartsUtilities
 
     Protected Friend Shared Sub AdjustChartPosition(ByRef chart As Chart)
 
-        chart.ChartAreas(0).Position = New ElementPosition(10, 10, 80, 80)
+        chart.ChartAreas(0).Position = New ElementPosition(0, 10, 100, 80)
         chart.Legends(0).Position = New ElementPosition(0, 90, 100, 10)
 
     End Sub
@@ -185,7 +198,10 @@ Friend Class ChartsUtilities
             series1.format.fill.visible = True
             series1.format.fill.Solid()
             series1.format.fill.Transparency = 0
-            series1.Format.Fill.ForeColor.rgb = System.Drawing.Color.Red.ToArgb.ToString
+            Dim c As System.Drawing.Color = System.Drawing.Color.FromArgb(serie.Color.ToArgb())
+            '  Dim rgb_color As System.Drawing.Color = Excel.ColorFormat
+            series1.Format.Fill.forecolor.rgb = RGB(c.R, c.G, c.B) 'System.Drawing.Color.FromArgb(serie.Color.ToArgb())
+
             ' serie.Color.ToArgb
 
             Select Case serie.ChartType
@@ -228,6 +244,20 @@ Friend Class ChartsUtilities
                 Case "SemiTransparent" : chart.Palette = ChartColorPalette.SemiTransparent
             End Select
         End If
+
+    End Sub
+
+    Protected Friend Shared Sub SetY1AxisMaxValue(ByRef chart As Chart, _
+                                                  ByRef max_y As Double)
+
+        chart.ChartAreas(0).AxisY.Maximum = max_y
+
+    End Sub
+
+    Protected Friend Shared Sub SetY2AxisMaxValue(ByRef chart As Chart, _
+                                                  ByRef max_y As Double)
+
+        chart.ChartAreas(0).AxisY2.Maximum = max_y
 
     End Sub
 

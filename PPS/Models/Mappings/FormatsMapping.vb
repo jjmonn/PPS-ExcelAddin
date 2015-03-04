@@ -37,7 +37,6 @@ Friend Class FormatsMapping
                 tempDict.Add(FORMAT_BCKGD_VARIABLE, srv.rst.Fields(FORMAT_BCKGD_VARIABLE).Value)
                 tempDict.Add(FORMAT_NAME_VARIABLE, srv.rst.Fields(FORMAT_NAME_VARIABLE).Value)
                 tempDict.Add(FORMAT_ICON_VARIABLE, srv.rst.Fields(FORMAT_ICON_VARIABLE).Value)
-                tempDict.Add(FORMAT_DGV_BACKGROUND_VARIABLE, srv.rst.Fields(FORMAT_DGV_BACKGROUND_VARIABLE).Value)
                 tempDict.Add(FORMAT_INDENT_VARIABLE, srv.rst.Fields(FORMAT_INDENT_VARIABLE).Value)
                 tempDict.Add(FORMAT_UP_BORDER_VARIABLE, srv.rst.Fields(FORMAT_UP_BORDER_VARIABLE).Value)
                 tempDict.Add(FORMAT_BOTTOM_BORDER_VARIABLE, srv.rst.Fields(FORMAT_BOTTOM_BORDER_VARIABLE).Value)

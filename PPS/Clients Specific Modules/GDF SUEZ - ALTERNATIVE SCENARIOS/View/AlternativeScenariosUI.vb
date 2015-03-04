@@ -7,7 +7,7 @@
 '
 '
 ' Author:Julien Monnereau
-' Last modified: 26/01/2015
+' Last modified: 02/03/2015
 
 
 Imports System.Windows.Forms
@@ -179,27 +179,6 @@ Friend Class AlternativeScenariosUI
 
     End Sub
 
-    Private Sub SendToExcelToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles SendToExcelToolStripMenuItem.Click
-
-        Dim ws As Excel.Worksheet = GlobalVariables.apps.ActiveSheet
-        If TypeOf (current_report) Is vDataGridView Then
-            ' use dgvutil > export excel ?
-
-        Else
-            Dim destination As Excel.Range = CWorksheetWrittingFunctions.CreateReceptionWS("Scenario", _
-                                                                                           {}, _
-                                                                                           {})
-            ChartsUtilities.ExportChartExcel(current_report, destination.Worksheet, 4)
-            '  Dim chart1 As Chart = current_report
-            'Dim ms As MemoryStream = New MemoryStream()
-            'chart1.SaveImage(ms, ChartImageFormat.Bmp)
-            'Dim bm As Bitmap = New Bitmap(ms)
-            'Clipboard.SetImage(bm)
-            'ws.Paste()
-        End If
-
-    End Sub
-
     Private Sub ReinjectionBT_Click(sender As Object, e As EventArgs) Handles ReinjectionBT.Click
 
         Dim confirm As Integer = MessageBox.Show("The Impacts of the new Scenario will be" + Chr(13) + Chr(13) + _
@@ -215,6 +194,57 @@ Friend Class AlternativeScenariosUI
         End If
 
     End Sub
+
+#Region "DGV RCM"
+
+    Private Sub SendToExcelToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles SendToExcelToolStripMenuItem.Click
+
+        Dim ws As Excel.Worksheet = GlobalVariables.APPS.ActiveSheet
+        Dim destination As Excel.Range = CWorksheetWrittingFunctions.CreateReceptionWS("Scenario", _
+                                                                                           {}, _
+                                                                                           {})
+        DataGridViewsUtil.CopyDGVToExcelGeneric(current_report, destination, 0)
+
+    End Sub
+
+
+#End Region
+
+#Region "Charts RCM"
+
+    Private Sub SendToExcelToolStripMenuItem1_Click(sender As Object, e As EventArgs) Handles SendToExcelToolStripMenuItem1.Click
+
+        Dim ws As Excel.Worksheet = GlobalVariables.APPS.ActiveSheet
+        Dim destination As Excel.Range = CWorksheetWrittingFunctions.CreateReceptionWS("Scenario", _
+                                                                                           {}, _
+                                                                                           {})
+        ChartsUtilities.ExportChartExcel(current_report, destination.Worksheet, 4)
+
+    End Sub
+
+    Private Sub SetMaximumY1ValueToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles SetMaximumY1ValueToolStripMenuItem.Click
+
+        Dim max_value As Int32 = InputBox("Set Maximum Axis Value")
+        If IsNumeric(max_value) = True Then
+            Dim row_index As Int32 = MainPanel.GetCellPosition(current_report).Row
+            ChartsUtilities.SetY1AxisMaxValue(MainPanel.GetControlFromPosition(0, row_index), max_value)
+            ChartsUtilities.SetY1AxisMaxValue(MainPanel.GetControlFromPosition(1, row_index), max_value)
+        End If
+
+    End Sub
+
+    Private Sub SetMaximumY2ValueToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles SetMaximumY2ValueToolStripMenuItem.Click
+
+        Dim max_value As Int32 = InputBox("Set Maximum Axis Value")
+        If IsNumeric(max_value) = True Then
+            Dim row_index As Int32 = MainPanel.GetCellPosition(current_report).Row
+            ChartsUtilities.SetY2AxisMaxValue(MainPanel.GetControlFromPosition(0, row_index), max_value)
+            ChartsUtilities.SetY2AxisMaxValue(MainPanel.GetControlFromPosition(1, row_index), max_value)
+        End If
+
+    End Sub
+
+#End Region
 
 #End Region
 
@@ -364,8 +394,8 @@ Friend Class AlternativeScenariosUI
         If as_panel_lines_index > MainPanel.RowCount Then MainPanel.RowStyles.Add(New RowStyle(SizeType.Absolute, MAIN_PANEL_ROW_HEIGHT))
         MainPanel.Controls.Add(base_chart, 0, as_panel_lines_index)
         MainPanel.Controls.Add(new_report, 1, as_panel_lines_index)
-        base_chart.ContextMenuStrip = ReportsRCM
-        new_report.contextmenustrip = ReportsRCM
+        base_chart.ContextMenuStrip = ChartsRCM2
+        new_report.ContextMenuStrip = ChartsRCM2
         base_chart.Dock = DockStyle.Fill
         new_report.Dock = DockStyle.Fill
         as_panel_lines_index = as_panel_lines_index + 1
@@ -384,7 +414,9 @@ Friend Class AlternativeScenariosUI
         DGV.Dock = DockStyle.Fill
         MainPanel.SetColumnSpan(DGV, 2)
         as_panel_lines_index = as_panel_lines_index + 1
-      
+        DGV.Refresh()
+        DGV.Select()
+
     End Sub
 
 
@@ -404,9 +436,14 @@ Friend Class AlternativeScenariosUI
 
     End Sub
 
+    Private Sub AlternativeScenariosUI_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
+
+        Controller.Close()
+
+    End Sub
 
 #End Region
 
 
-
+  
 End Class

@@ -805,6 +805,12 @@ Friend Class ControllingUI_2
 
     End Sub
 
+    Private Sub FormatsRCMBT_Click(sender As Object, e As EventArgs) Handles FormatsRCMBT.Click
+
+        Dim formatsController As New FormatsController
+
+    End Sub
+
 #End Region
 
 #Region "Adjustments RCM"
@@ -1000,5 +1006,6 @@ Friend Class ControllingUI_2
 
 
   
+   
    
 End Class
