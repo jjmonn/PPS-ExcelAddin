@@ -121,6 +121,7 @@
     <Compile Include="Clients Specific Modules\GDF SUEZ - ALTERNATIVE SCENARIOS\Configuration\Views\ASEntitiesAttributesUI.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Models\CRUDs\FormatM.vb" />
     <Compile Include="Models\CRUDs\Report.vb" />
     <Compile Include="Clients Specific Modules\GDF SUEZ - ALTERNATIVE SCENARIOS\Configuration\Models\Mappings\GDFSUEZEntitiesAttributesMapping.vb" />
     <Compile Include="Clients Specific Modules\GDF SUEZ - ALTERNATIVE SCENARIOS\Configuration\Models\Mappings\GDFSUEZSensitivitiesMapping.vb" />
@@ -165,6 +166,24 @@
     </Compile>
     <Compile Include="Modules\CONTROLING UI\View\ControllingUIChartsConfig.vb">
       <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Modules\CONTROLING UI\View\Controls\BusinessControlMenu.Designer.vb">
+      <DependentUpon>BusinessControlMenu.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Modules\CONTROLING UI\View\Controls\BusinessControlMenu.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Modules\CONTROLING UI\View\Controls\ExcelMenu.Designer.vb">
+      <DependentUpon>ExcelMenu.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Modules\CONTROLING UI\View\Controls\ExcelMenu.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Modules\CONTROLING UI\View\Controls\DisplayMenu.Designer.vb">
+      <DependentUpon>DisplayMenu.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Modules\CONTROLING UI\View\Controls\DisplayMenu.vb">
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Modules\CUBE\CubeView.Designer.vb">
       <DependentUpon>CubeView.vb</DependentUpon>
@@ -234,6 +253,13 @@
       <DependentUpon>NewRatesVersionUI.vb</DependentUpon>
     </Compile>
     <Compile Include="Modules\PLATFORM MANAGEMENT\Currencies\Views\NewRatesVersionUI.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Modules\PLATFORM MANAGEMENT\Formats\Controller\FormatsController.vb" />
+    <Compile Include="Modules\PLATFORM MANAGEMENT\Formats\Views\FormatMGTUI.Designer.vb">
+      <DependentUpon>FormatMGTUI.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Modules\PLATFORM MANAGEMENT\Formats\Views\FormatMGTUI.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Modules\PLATFORM MANAGEMENT\PlatformMGTUI.Designer.vb">
@@ -570,6 +596,15 @@
     <EmbeddedResource Include="Modules\CONTROLING UI\View\ControllingUIChartsConfig.resx">
       <DependentUpon>ControllingUIChartsConfig.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Modules\CONTROLING UI\View\Controls\BusinessControlMenu.resx">
+      <DependentUpon>BusinessControlMenu.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Modules\CONTROLING UI\View\Controls\ExcelMenu.resx">
+      <DependentUpon>ExcelMenu.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Modules\CONTROLING UI\View\Controls\DisplayMenu.resx">
+      <DependentUpon>DisplayMenu.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Modules\CONTROLING UI\View\UploadingHistoryUI.resx">
       <DependentUpon>UploadingHistoryUI.vb</DependentUpon>
     </EmbeddedResource>
@@ -602,6 +637,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Modules\MODELING\FINANCIAL MODELLING\View\NewConstraintUI.resx">
       <DependentUpon>NewConstraintUI.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Modules\PLATFORM MANAGEMENT\Formats\Views\FormatMGTUI.resx">
+      <DependentUpon>FormatMGTUI.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Modules\REPORTS DESIGNER\Views\ReportsDesignerUI.resx">
       <DependentUpon>ReportsDesignerUI.vb</DependentUpon>
@@ -928,6 +966,39 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\favicon%2881%29.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Actions-format-stroke-color-icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\config circle blue1.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\config circle green.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\favicon%2813%29.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\favicon%28249%29.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\config circle purple.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\purple table.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\db Purple big.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\excel blue.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\excel blue2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\favicon%2817%291.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
