@@ -243,13 +243,16 @@ Friend Class DLL3_Interface
 
     Friend Sub InitDllCurrencyConvertorPeriods(ByVal periods_list As List(Of Int32), _
                                                ByRef time_config As String, _
-                                               ByRef period_ref As Int32)
+                                               ByRef start_period As Int32, _
+                                               ByRef nb_periods As Int32)
 
         Dim years_periods_list As List(Of Int32)
         Select Case time_config
             Case MONTHLY_TIME_CONFIGURATION
                 years_periods_list = New List(Of Int32)
-                years_periods_list.Add(period_ref)
+                For i = 0 To nb_periods - 1
+                    years_periods_list.Add(start_period + i)
+                Next
             Case YEARLY_TIME_CONFIGURATION
                 years_periods_list = periods_list
         End Select

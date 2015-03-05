@@ -82,8 +82,8 @@ Partial Class CVersionSelectionPane
         '
         Me.VersioningTVIL.ImageStream = CType(resources.GetObject("VersioningTVIL.ImageStream"), System.Windows.Forms.ImageListStreamer)
         Me.VersioningTVIL.TransparentColor = System.Drawing.Color.Transparent
-        Me.VersioningTVIL.Images.SetKeyName(0, "favicon(81).ico")
-        Me.VersioningTVIL.Images.SetKeyName(1, "config circle orangev small.png")
+        Me.VersioningTVIL.Images.SetKeyName(0, "config circle orangev small.png")
+        Me.VersioningTVIL.Images.SetKeyName(1, "favicon(81).ico")
         '
         'CVersionSelectionPane
         '

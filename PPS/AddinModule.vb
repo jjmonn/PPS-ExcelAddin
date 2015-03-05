@@ -2013,6 +2013,7 @@ Public Class AddinModule
 
         If CDbl(GlobalVariables.APPS.Version.Replace(".", ",")) > EXCEL_MIN_VERSION Then  ' 
             GlobalVariables.VersionsSelectionPaneVisible = True
+            Me.VersionSelectionTaskPane.Init()
             Me.VersionSelectionTaskPane.Show()
         Else
             ' Implement settings versions for version selection without panes

@@ -16,7 +16,7 @@
 ' Known bugs:
 '       
 '
-' Last modified: 27/02/2015
+' Last modified: 05/03/2015
 ' Author: Julien Monnereau
 
 
@@ -219,7 +219,8 @@ Friend Class VersioningManagementUI
             Loop
         End If
         'Currently selected node is a suitable target
-        If Controller.IsFolder(targetNode.Name) = True Then e.Effect = DragDropEffects.Move ' here check that the process only allow to drop on folders!
+        ' If Controller.IsFolder(targetNode.Name) = True Then 
+        e.Effect = DragDropEffects.Move ' here check that the process only allow to drop on folders!
 
     End Sub
 
@@ -234,21 +235,18 @@ Friend Class VersioningManagementUI
 
         'The target node should be selected from the DragOver event
         Dim targetNode As TreeNode = selectedTreeview.SelectedNode
-        If Controller.IsFolder(targetNode.Name) = True Then
-
+        If targetNode Is Nothing Then
             dropNode.Remove()                                               'Remove the drop node from its current location
-
-            If targetNode Is Nothing Then
-                selectedTreeview.Nodes.Add(dropNode)
-            Else
-                targetNode.Nodes.Add(dropNode)
-            End If
-
-            dropNode.EnsureVisible()                                        ' Ensure the newley created node is visible to the user and 
-            selectedTreeview.SelectedNode = dropNode
+            selectedTreeview.Nodes.Add(dropNode)
+            Controller.UpdateParent(dropNode.Name, DBNull.Value)
+        ElseIf Controller.IsFolder(targetNode.Name) = True Then
+            dropNode.Remove()                                               'Remove the drop node from its current location
+            targetNode.Nodes.Add(dropNode)
             Controller.UpdateParent(dropNode.Name, targetNode.Name)
         End If
-
+            dropNode.EnsureVisible()
+            selectedTreeview.SelectedNode = dropNode
+       
     End Sub
 
 #End Region

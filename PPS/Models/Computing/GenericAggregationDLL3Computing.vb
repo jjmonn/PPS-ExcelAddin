@@ -266,7 +266,7 @@ Friend Class GenericAggregationDLL3Computing
 
         If Dll3Computer.current_start_period <> Int(DateSerial(start_period, 12, 31).ToOADate()) _
         Or Dll3Computer.current_nb_periods <> nb_periods Then
-            Dll3Computer.InitDllCurrencyConvertorPeriods(periods_list, time_config, start_period)
+            Dll3Computer.InitDllCurrencyConvertorPeriods(periods_list, time_config, start_period, nb_periods)
         End If
 
     End Sub

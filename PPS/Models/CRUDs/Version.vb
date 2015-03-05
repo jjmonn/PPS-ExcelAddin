@@ -8,7 +8,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 19/01/2015
+' Last modified: 05/03/2015
 
 
 Imports ADODB
@@ -105,15 +105,24 @@ Friend Class Version
     End Sub
 
     Protected Friend Sub UpdateVersion(ByRef version_id As String, _
-                              ByRef field As String, _
-                              ByVal value As Object)
+                                      ByRef field As String, _
+                                      ByVal value As Object)
 
         RST.Filter = VERSIONS_CODE_VARIABLE + "='" + version_id + "'"
-        If RST.EOF = False AndAlso RST.BOF = False Then
-            If RST.Fields(field).Value <> value Then
+        If RST.EOF = False Then
+
+            If IsDBNull(RST.Fields(field).Value) AndAlso Not IsDBNull(value) Then
                 RST.Fields(field).Value = value
                 RST.Update()
+                Exit Sub
             End If
+
+            If IsDBNull(value) Then
+                RST.Fields(field).Value = DBNull.Value
+            Else
+                If RST.Fields(field).Value <> value Then RST.Fields(field).Value = value
+            End If
+            RST.Update()
         End If
 
     End Sub

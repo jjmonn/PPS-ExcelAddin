@@ -13,7 +13,7 @@
 ' 
 '
 ' Author: Julien Monnereau
-' Last modified: 26/02/2015
+' Last modified: 05/03/2015
 
 
 
@@ -62,6 +62,7 @@ Public Class CVersionSelectionPane
 
 #End Region
 
+
 #Region "Interface"
 
     Public Sub ClearAndClose()
@@ -84,6 +85,7 @@ Public Class CVersionSelectionPane
     End Sub
 
 #End Region
+
 
 #Region "Events"
 

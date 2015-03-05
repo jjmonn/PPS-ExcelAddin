@@ -10,7 +10,7 @@
 ' Known bugs:
 '
 ' 
-' Last modified: 05/01/2015
+' Last modified: 05/03/2015
 ' Author: Julien Monnereau
 
 
@@ -120,7 +120,7 @@ Friend Class DataVersionsController
 
     End Function
 
-    Protected Friend Sub UpdateParent(ByRef version_id As String, ByRef parent_id As String)
+    Protected Friend Sub UpdateParent(ByRef version_id As String, ByRef parent_id As Object)
 
         Versions.UpdateVersion(version_id, VERSIONS_PARENT_CODE_VARIABLE, parent_id)
 

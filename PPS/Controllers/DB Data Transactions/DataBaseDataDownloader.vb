@@ -310,34 +310,38 @@ Friend Class DataBaseDataDownloader
 
         If adjustment_id <> "" Then strSql = strSql + " AND " + DATA_ADJUSTMENT_ID_VARIABLE + "='" + adjustment_id + "'"
 
-        srv.openRstSQL(strSql, ModelServer.FWD_CURSOR)
-        If srv.rst.BOF = True Or srv.rst.EOF = True Then
+        If srv.openRstSQL(strSql, ModelServer.FWD_CURSOR) = False Then Return False
+        Dim tmpArray(,) As Object = Nothing
+        If srv.rst.EOF = False Then tmpArray = srv.rst.GetRows()
+        Try
             srv.rst.Close()
-            Return False
-        Else
-            Dim tmpArray(,) As Object = srv.rst.GetRows()
-            Try
-                srv.rst.Close()
-            Catch ex As Exception
-            End Try
+        Catch ex As Exception
+        End Try
+        If Not tmpArray Is Nothing Then
             BuildOutputsArrays(tmpArray)
-            Return True
+        Else
+            Return False
         End If
-
+        Return True
 
     End Function
 
     Private Sub BuildOutputsArrays(ByRef data_array(,) As Object)
 
-        ReDim AccKeysArray(UBound(data_array, 2))
-        ReDim PeriodArray(UBound(data_array, 2))
-        ReDim ValuesArray(UBound(data_array, 2))
-
+        RedimOutputsArrays(UBound(data_array, 2))
         For i As Integer = 0 To UBound(data_array, 2)
             PeriodArray(i) = data_array(0, i)
             AccKeysArray(i) = data_array(1, i)
             ValuesArray(i) = data_array(2, i)
         Next
+
+    End Sub
+
+    Private Sub RedimOutputsArrays(ByVal upper_bound As Int32)
+
+        ReDim AccKeysArray(upper_bound)
+        ReDim PeriodArray(upper_bound)
+        ReDim ValuesArray(upper_bound)
 
     End Sub
 

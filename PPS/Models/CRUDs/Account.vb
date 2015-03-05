@@ -160,7 +160,7 @@ Friend Class Account
 
     Protected Friend Sub Close()
 
-        Me.finalize
+        Me.finalize()
 
     End Sub
 

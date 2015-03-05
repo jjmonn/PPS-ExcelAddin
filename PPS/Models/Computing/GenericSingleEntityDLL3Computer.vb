@@ -36,6 +36,7 @@ Friend Class GenericSingleEntityDLL3Computer
     Friend currentCurrency As String = ""
     Friend currentStrSqlQuery As String = ""
     Friend current_adjusmtent_id As String = ""
+    Friend current_state As Boolean = False
     Protected Friend period_list As List(Of Int32)
     Protected Friend time_config As String
 
@@ -91,10 +92,11 @@ Friend Class GenericSingleEntityDLL3Computer
                     current_entity_id = entity_id
                     current_version_id = versionCode
                     current_adjusmtent_id = adjustment_id
+                    current_state = True
                     Return True
                 End If
         End Select
-
+        current_state = False
         Return False
 
     End Function
@@ -145,9 +147,13 @@ Friend Class GenericSingleEntityDLL3Computer
     End Function
 
     Friend Function GetDataFromDLL3Computer(ByRef accountCode As String, _
-                                        ByRef period As Integer) As Double
+                                            ByRef period As Integer) As Double
 
-        Return DLL3Computer.GetDataFromComputer(accountCode, period)
+        If current_state = True Then
+            Return DLL3Computer.GetDataFromComputer(accountCode, period)
+        Else
+            Return 0
+        End If
 
     End Function
 

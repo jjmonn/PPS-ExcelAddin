@@ -13,7 +13,7 @@
 '
 ' 
 ' Author: Julien Monnereau
-' Last modified: 04/03/2015
+' Last modified: 05/03/2015
 
 
 Imports Microsoft.Office.Interop
@@ -161,7 +161,7 @@ Friend Class CExcelFormatting
             r.Font.Color = Drawing.Color.FromArgb(text_color)
         End If
         If Not IsDBNull(bckdg_color) Then
-            r.Interior.Color = Drawing.Color.FromArgb(bckdg_color).Name
+            r.Interior.Color = Drawing.Color.FromArgb(bckdg_color)
         End If
 
     End Sub
