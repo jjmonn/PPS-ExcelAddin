@@ -21,7 +21,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 26/02/2015
+' Last modified: 05/03/2015
 
 
 Imports System.Windows.Forms
@@ -50,6 +50,11 @@ Friend Class ControllingUI_2
     Friend accountsTV As New TreeView
     Private leftSplitContainer As SplitContainer
     Private rightSplitContainer As SplitContainer
+
+    ' Ribbons Menus
+    Private DisplayMenu As New DisplayMenu
+    Private ExcelMenu As New ExcelMenu
+    Private BusinessControlMenu As New BusinessControlMenu
 
 #End Region
 
@@ -134,6 +139,7 @@ Friend Class ControllingUI_2
         Next
         InitializeChartsTab()
         CollapsePane1()
+        InitializeTabMenus()
 
     End Sub
 
@@ -238,6 +244,40 @@ Friend Class ControllingUI_2
     Private Sub InitializeChartsTab()
 
 
+
+    End Sub
+
+    Private Sub InitializeTabMenus()
+
+        ' Display Menu Buttons Handlers
+        AddHandler DisplayMenu.EntitiesBT.Click, AddressOf EntitiesMenuClick
+        AddHandler DisplayMenu.EntitiesLabel.Click, AddressOf EntitiesMenuClick
+        AddHandler DisplayMenu.CategoriesBT.Click, AddressOf CategoriesMenuClick
+        AddHandler DisplayMenu.CategoriesLabel.Click, AddressOf CategoriesMenuClick
+        AddHandler DisplayMenu.AdjustmentBT.Click, AddressOf AdjustmentsMenuClick
+        AddHandler DisplayMenu.AdjustmentLabel.Click, AddressOf AdjustmentsMenuClick
+        AddHandler DisplayMenu.CurrenciesBT.Click, AddressOf CurrenciesMenuClick
+        AddHandler DisplayMenu.CurrenciesLabel.Click, AddressOf CurrenciesMenuClick
+        AddHandler DisplayMenu.PeriodsBT.Click, AddressOf PeriodsMenuClick
+        AddHandler DisplayMenu.PeriodsLabel.Click, AddressOf PeriodsMenuClick
+        AddHandler DisplayMenu.VersionsBT.Click, AddressOf VersionsMenuClick
+        AddHandler DisplayMenu.VersionsLabel.Click, AddressOf VersionsMenuClick
+
+        ' Excel Menu Buttons Handlers
+        AddHandler ExcelMenu.ConsoExportBT.Click, AddressOf SendCurrentEntity_Click
+        AddHandler ExcelMenu.ConsoExportlabel.Click, AddressOf SendCurrentEntity_Click
+        AddHandler ExcelMenu.DrillDownExportBT.Click, AddressOf DropDrillDown_Click
+        AddHandler ExcelMenu.DrillDownExportlabel.Click, AddressOf DropDrillDown_Click
+
+        ' Business Control Buttons Handlers
+        AddHandler BusinessControlMenu.VersionsComparisonBT.Click, AddressOf AddVersionsComparisonToolStripMenuItem_Click
+        AddHandler BusinessControlMenu.VersionsComparisonLabel.Click, AddressOf AddVersionsComparisonToolStripMenuItem_Click
+        AddHandler BusinessControlMenu.SwitchVersionsBT.Click, AddressOf SwitchVersionsOrderToolStripMenuItem_Click
+        AddHandler BusinessControlMenu.SwitchVersionsLabel.Click, AddressOf SwitchVersionsOrderToolStripMenuItem_Click
+        AddHandler BusinessControlMenu.DeleteComparisonBT.Click, AddressOf RemoveVersionsComparisonToolStripMenuItem_Click
+        AddHandler BusinessControlMenu.DeleteComparisonLabel.Click, AddressOf RemoveVersionsComparisonToolStripMenuItem_Click
+
+        DisplayDisplayMenu()
 
     End Sub
 
@@ -509,21 +549,21 @@ Friend Class ControllingUI_2
 
 #Region "Buttons"
 
-    Private Sub SelectionBT_Click(sender As Object, e As EventArgs) Handles SelectionBT.Click
+    Private Sub SelectionBT_Click(sender As Object, e As EventArgs) Handles SelectionMBT.Click
 
-        EntitiesMenuClick(sender, e)
-
-    End Sub
-
-    Private Sub ExcelBT_Click(sender As Object, e As EventArgs) Handles ExcelBT.Click
-
-        SendCurrentEntity_Click(sender, e)
+        DisplayDisplayMenu()
 
     End Sub
 
-    Private Sub ControllingBT_Click(sender As Object, e As EventArgs) Handles ControllingBT.Click
+    Private Sub ExcelBT_Click(sender As Object, e As EventArgs) Handles ExcelMBT.Click
 
-        AddVersionsComparisonToolStripMenuItem_Click(sender, e)
+        DisplayExcelMenu()
+
+    End Sub
+
+    Private Sub ControllingBT_Click(sender As Object, e As EventArgs) Handles BusinessControlMBT.Click
+
+        DisplayBusinessControlMenu()
 
     End Sub
 
@@ -537,10 +577,9 @@ Friend Class ControllingUI_2
 
 #Region "Main Menus"
 
-    Private Sub EntitiesMenuClick(sender As Object, e As EventArgs) Handles EntitiesMBT.Click
+    Private Sub EntitiesMenuClick(sender As Object, e As EventArgs)
 
         If EntitiesFlag = False Then
-            EntitiesMBT.Checked = True
             entitiesTV.Select()
             ExpandPane1()
             HideAllMenuItemsExceptCategories()
@@ -553,7 +592,6 @@ Friend Class ControllingUI_2
                 TVTableLayout.SetRow(entitiesTV, 0)
             End If
         Else
-            EntitiesMBT.Checked = False
             If TVTableLayout.GetRow(entitiesTV) = 0 Then
                 CollapsePane1()
             Else
@@ -565,10 +603,9 @@ Friend Class ControllingUI_2
 
     End Sub
 
-    Private Sub CategoriesMenuClick(sender As Object, e As EventArgs) Handles CategoriesMBT.Click
+    Private Sub CategoriesMenuClick(sender As Object, e As EventArgs)
 
         If CategoriesFlag = False Then
-            CategoriesMBT.CheckState = CheckState.Checked
             ExpandPane1()
             HideAllMenusItemExceptEntities()
             categoriesTV.Visible = True
@@ -580,7 +617,6 @@ Friend Class ControllingUI_2
                 TVTableLayout.SetRow(categoriesTV, 0)
             End If
         Else
-            CategoriesMBT.CheckState = CheckState.Unchecked
             If TVTableLayout.GetRow(categoriesTV) = 0 Then
                 CollapsePane1()
             Else
@@ -592,17 +628,15 @@ Friend Class ControllingUI_2
 
     End Sub
 
-    Private Sub AdjustmentsMenuClick(sender As Object, e As EventArgs) Handles AdjustmentsMBT.Click
+    Private Sub AdjustmentsMenuClick(sender As Object, e As EventArgs)
 
         If adjustments_flag = False Then
-            AdjustmentsMBT.CheckState = CheckState.Checked
             ExpandPane1()
             HideAllMenuItems()
             adjustmentsTV.Visible = True
             adjustments_flag = True
             '          DisplayTwoTrees()
         Else
-            AdjustmentsMBT.CheckState = CheckState.Unchecked
             CollapsePane1()
             adjustmentsTV.Visible = False
             adjustments_flag = False
@@ -611,10 +645,9 @@ Friend Class ControllingUI_2
 
     End Sub
 
-    Private Sub CurrenciesMenuClick(sender As Object, e As EventArgs) Handles CurrenciesMBT.Click
+    Private Sub CurrenciesMenuClick(sender As Object, e As EventArgs)
 
         If CurrenciesFlag = False Then
-            CurrenciesMBT.CheckState = CheckState.Checked
             ExpandPane1()
             HideAllMenuItems()
             CurrenciesCLB.Visible = True
@@ -622,7 +655,6 @@ Friend Class ControllingUI_2
             DisplayTwoTrees()
 
         Else
-            CurrenciesMBT.CheckState = CheckState.Unchecked
             CollapsePane1()
             CurrenciesCLB.Visible = False
             CurrenciesFlag = False
@@ -631,16 +663,14 @@ Friend Class ControllingUI_2
 
     End Sub
 
-    Private Sub PeriodsMenuClick(sender As Object, e As EventArgs) Handles PeriodsMBT.Click
+    Private Sub PeriodsMenuClick(sender As Object, e As EventArgs)
 
         If PeriodsFlag = False Then
-            PeriodsMBT.CheckState = CheckState.Checked
             ExpandPane1()
             HideAllMenuItems()
             periodsCLB.Visible = True
             PeriodsFlag = True
         Else
-            PeriodsMBT.CheckState = CheckState.Unchecked
             CollapsePane1()
             periodsCLB.Visible = False
             PeriodsFlag = False
@@ -648,16 +678,14 @@ Friend Class ControllingUI_2
 
     End Sub
 
-    Private Sub VersionsMenuClick(sender As Object, e As EventArgs) Handles VersionsMBT.Click
+    Private Sub VersionsMenuClick(sender As Object, e As EventArgs)
 
         If VersionsFlag = False Then
-            VersionsMBT.CheckState = CheckState.Checked
             ExpandPane1()
             HideAllMenuItems()
             versionsTV.Visible = True
             VersionsFlag = True
         Else
-            VersionsMBT.CheckState = CheckState.Unchecked
             CollapsePane1()
             versionsTV.Visible = False
             VersionsFlag = False
@@ -665,14 +693,14 @@ Friend Class ControllingUI_2
 
     End Sub
 
-    Private Sub SendCurrentEntity_Click(sender As Object, e As EventArgs) Handles TopEntityExportMBT.Click
+    Private Sub SendCurrentEntity_Click(sender As Object, e As EventArgs)
 
         DROPTOEXCELController.SendCurrentEntityToExcel(VersionTB.Text, _
                                                        CurrencyTB.Text)
 
     End Sub
 
-    Private Sub DropDrillDown_Click(sender As Object, e As EventArgs) Handles DrillDownExportMBT.Click
+    Private Sub DropDrillDown_Click(sender As Object, e As EventArgs)
 
         If Controller.versions_id_array.Length > 1 Then
 
@@ -684,7 +712,7 @@ Friend Class ControllingUI_2
 
     End Sub
 
-    Private Sub Refresh_Click(sender As Object, e As EventArgs) Handles RefreshMBT.Click
+    Private Sub Refresh_Click(sender As Object, e As EventArgs)
 
         If Controller.CurrentEntityKey <> "" Then
             Controller.compute_entity_complete(entitiesTV.Nodes.Find(Controller.CurrentEntityKey, True)(0))
@@ -697,7 +725,7 @@ Friend Class ControllingUI_2
 
     End Sub
 
-    Private Sub AddVersionsComparisonToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles VersionsComparisonMBT.Click
+    Private Sub AddVersionsComparisonToolStripMenuItem_Click(sender As Object, e As EventArgs)
 
         If isVersionComparisonDisplayed = True Then
             MsgBox("The Versions Comparison is already displayed")
@@ -717,7 +745,7 @@ Friend Class ControllingUI_2
 
     End Sub
 
-    Private Sub SwitchVersionsOrderToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles SwitchVersionsMBT.Click
+    Private Sub SwitchVersionsOrderToolStripMenuItem_Click(sender As Object, e As EventArgs)
 
         Dim displayComparison As Boolean
         If isVersionComparisonDisplayed = True Then
@@ -732,7 +760,7 @@ Friend Class ControllingUI_2
 
     End Sub
 
-    Private Sub RemoveVersionsComparisonToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles DeleteVersionsComparisonMBT.Click
+    Private Sub RemoveVersionsComparisonToolStripMenuItem_Click(sender As Object, e As EventArgs)
 
         If isVersionComparisonDisplayed Then
             For Each tab_ As TabPage In TabControl1.TabPages
@@ -741,6 +769,48 @@ Friend Class ControllingUI_2
             Next
             isVersionComparisonDisplayed = False
         End If
+
+    End Sub
+
+#End Region
+
+#Region "Menus Ribbon Display"
+
+    Private Sub DisplayDisplayMenu()
+
+        UncheckAllButtons()
+        SelectionMBT.Checked = CheckState.Checked
+        RibbonsPanel.Controls.Clear()
+        RibbonsPanel.Controls.Add(DisplayMenu)
+        DisplayMenu.Margin = New Padding(0, 0, 0, 0)
+     
+    End Sub
+
+    Private Sub DisplayExcelMenu()
+
+        UncheckAllButtons()
+        ExcelMBT.Checked = CheckState.Checked
+        RibbonsPanel.Controls.Clear()
+        RibbonsPanel.Controls.Add(ExcelMenu)
+        ExcelMenu.Margin = New Padding(0, 0, 0, 0)
+      
+    End Sub
+
+    Private Sub DisplayBusinessControlMenu()
+
+        UncheckAllButtons()
+        BusinessControlMBT.Checked = CheckState.Checked
+        RibbonsPanel.Controls.Clear()
+        RibbonsPanel.Controls.Add(BusinessControlMenu)
+        BusinessControlMenu.Margin = New Padding(0, 0, 0, 0)
+
+    End Sub
+
+    Private Sub UncheckAllButtons()
+
+        SelectionMBT.Checked = CheckState.Unchecked
+        BusinessControlMBT.Checked = CheckState.Unchecked
+        ExcelMBT.Checked = CheckState.Unchecked
 
     End Sub
 
@@ -1005,7 +1075,7 @@ Friend Class ControllingUI_2
 #End Region
 
 
-  
-   
-   
+
+
+
 End Class

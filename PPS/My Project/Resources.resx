@@ -127,11 +127,14 @@
   <data name="add" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\add.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="graph 5 ctrl bgd" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\graph 5 ctrl bgd.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="favicon(81)" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\favicon(81).ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="imageres_59" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\imageres_59.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Actions-format-stroke-color-icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Actions-format-stroke-color-icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="entity icon 3 small" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\entity icon 3 small.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -153,6 +156,9 @@
   </data>
   <data name="favicon(34)" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\favicon(34).ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="graph 5 ctrl bgd" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\graph 5 ctrl bgd.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="entity icon 3" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\entity icon 3.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -184,6 +190,9 @@
   <data name="page_add1" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\page_add1.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="config circle green" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\config circle green.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="down arrow" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\down arrow.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -201,6 +210,9 @@
   </data>
   <data name="add2" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\add2.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="holding2 icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\holding2 icon.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="1_Earth_(blank_2)" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\1_Earth_(blank_2).png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -223,8 +235,8 @@
   <data name="BT BCKGD Green BCK control" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\BT BCKGD Green BCK control.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="add1" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\add1.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="excel blue" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\excel blue.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="ACF Square 2 .1Control bgd" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ACF Square 2 .1Control bgd.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -253,8 +265,14 @@
   <data name="Benjigarner-Softdimension-Excel" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Benjigarner-Softdimension-Excel.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="holding2 icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\holding2 icon.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="add1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\add1.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="purple table" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\purple table.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="config circle purple" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\config circle purple.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="add3" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\add.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -265,6 +283,9 @@
   <data name="Add file" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Add file.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="excel blue2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\excel blue2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="background blue" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\background blue.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -274,8 +295,8 @@
   <data name="favicon(32)" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\favicon(32).ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="favicon(81)" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\favicon(81).ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="favicon(13)" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\favicon(13).ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="blue-backgrounds_00396566" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\blue-backgrounds_00396566.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -295,11 +316,20 @@
   <data name="notebook_add" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\notebook_add.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="favicon(249)" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\favicon(249).ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="BT BCKGD" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\BT BCKGD.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="db Purple big" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\db Purple big.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="apple-button-slice_13" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\apple-button-slice_13.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="config circle blue1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\config circle blue1.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="step00" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\step00.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -319,7 +349,7 @@
   <data name="favicon(188)" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\favicon(188).ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Actions-format-stroke-color-icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Actions-format-stroke-color-icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="favicon(17)1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\favicon(17)1.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

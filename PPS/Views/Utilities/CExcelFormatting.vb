@@ -13,7 +13,7 @@
 '
 ' 
 ' Author: Julien Monnereau
-' Last modified: 03/03/2015
+' Last modified: 04/03/2015
 
 
 Imports Microsoft.Office.Interop
@@ -61,7 +61,7 @@ Friend Class CExcelFormatting
                     SetRangeColors(row, _
                                    currentFormatsDictionary(formatCode)(FORMAT_TEXT_COLOR_VARIABLE), _
                                    currentFormatsDictionary(formatCode)(FORMAT_BCKGD_VARIABLE))
-                   
+
                     ' Format
                     row.Columns(1).IndentLevel = currentFormatsDictionary(formatCode)(FORMAT_INDENT_VARIABLE)
                     If currentFormatsDictionary(formatCode)(FORMAT_BOLD_VARIABLE) = 1 Then row.Font.Bold = True
