@@ -210,8 +210,8 @@ Friend Class FormatMGTUI
 
         Dim row As HierarchyItem = rows_id_item_dic(format_id)
         Dim CStyle As GridCellStyle = GridTheme.GetDefaultTheme(DGV.VIBlendTheme).GridCellStyle
-        CStyle.TextColor = System.Drawing.Color.FromArgb(format_HT(FORMAT_TEXT_COLOR_VARIABLE))
-        CStyle.FillStyle = New FillStyleSolid(System.Drawing.Color.FromArgb(format_HT(FORMAT_BCKGD_VARIABLE)))
+        If Not IsDBNull(format_HT(FORMAT_TEXT_COLOR_VARIABLE)) Then CStyle.TextColor = System.Drawing.Color.FromArgb(format_HT(FORMAT_TEXT_COLOR_VARIABLE))
+        If Not IsDBNull(format_HT(FORMAT_BCKGD_VARIABLE)) Then CStyle.FillStyle = New FillStyleSolid(System.Drawing.Color.FromArgb(format_HT(FORMAT_BCKGD_VARIABLE)))
         If format_HT(FORMAT_BOLD_VARIABLE) = 1 Then CStyle.Font = New System.Drawing.Font(CStyle.Font.FontFamily, DGV_CELLS_FONT_SIZE, FontStyle.Bold)
         If format_HT(FORMAT_ITALIC_VARIABLE) = 1 Then CStyle.Font = New System.Drawing.Font(CStyle.Font.FontFamily, DGV_CELLS_FONT_SIZE, FontStyle.Italic)
         DGV.CellsArea.SetCellDrawStyle(row, DGV.ColumnsHierarchy.Items(0), CStyle)
