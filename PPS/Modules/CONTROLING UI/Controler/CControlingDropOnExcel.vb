@@ -25,7 +25,7 @@ Friend Class CControlingDropOnExcel
 #Region "Instance Variables"
 
     Private View As ControllingUI_2
-    Private Controller As ControlingUI2Controller
+    Private Controller As ControllingUI2Controller
 
 
 #End Region
@@ -34,7 +34,7 @@ Friend Class CControlingDropOnExcel
 #Region "Initialize"
 
     Protected Friend Sub New(ByRef inputView As ControllingUI_2, _
-                             ByRef inputControler As ControlingUI2Controller)
+                             ByRef inputControler As ControllingUI2Controller)
 
         View = inputView
         Controller = inputControler

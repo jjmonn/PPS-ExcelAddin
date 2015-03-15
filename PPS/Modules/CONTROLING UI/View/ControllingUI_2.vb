@@ -43,7 +43,7 @@ Friend Class ControllingUI_2
 
 #Region "Objects"
 
-    Private Controller As ControlingUI2Controller
+    Private Controller As ControllingUI2Controller
     Friend DGVUTIL As New DataGridViewsUtil
     Private DROPTOEXCELController As CControlingDropOnExcel
     Friend PBar As New ProgressBarControl
@@ -124,7 +124,7 @@ Friend Class ControllingUI_2
         ' Add any initialization after the InitializeComponent() call. 
         AccountsTokenNamesDict = AccountsMapping.GetAccountsDictionary(ACCOUNT_ID_VARIABLE, ACCOUNT_NAME_VARIABLE)
         AccountsKeysTabNbDict = AccountsMapping.GetAccountsDictionary(ACCOUNT_ID_VARIABLE, ACCOUNT_TAB_VARIABLE)
-        Controller = New ControlingUI2Controller(Me)
+        Controller = New ControllingUI2Controller(Me)
         DROPTOEXCELController = New CControlingDropOnExcel(Me, Controller)
         LoadTrees()
         HideAllMenuItems()
