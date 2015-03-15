@@ -4,7 +4,7 @@
 '
 ' To do:
 '       - new entity -> put the parent entity's credential else 0 -> check !!       
-'       - 
+'       - implement rows up down ?
 '       - 
 '   
 '
@@ -13,7 +13,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 09/12/2014
+' Last modified: 12/03/2015
 
 
 Imports System.Windows.Forms
@@ -140,7 +140,13 @@ Friend Class EntitiesController
 
     Protected Friend Sub ShowNewEntityUI()
 
-        If Not ViewObject.current_node Is Nothing Then NewEntityView.FillIn(ViewObject.current_node.Text, Entities.GetRecord(ViewObject.current_node.Name, categoriesTV))
+        Dim current_node As TreeNode = Nothing
+        If Not ViewObject.currentRowItem Is Nothing Then
+            Dim entity_id As String = entitiesNameKeyDic(ViewObject.entitiesDGV.CellsArea.GetCellValue(ViewObject.currentRowItem, ViewObject.entitiesDGV.ColumnsHierarchy.Items(0)))
+            current_node = entitiesTV.Nodes.Find(entity_id, True)(0)
+            entitiesTV.SelectedNode = current_node
+            NewEntityView.FillIn(current_node.Text, Entities.GetRecord(current_node.Name, categoriesTV))
+        End If
         NewEntityView.AddEntitiesTV()
         NewEntityView.Show()
 
@@ -148,7 +154,6 @@ Friend Class EntitiesController
 
     Protected Friend Sub ShowEntitiesMGT()
 
-        ViewObject.AddEntitiesTreeview()
         ViewObject.Show()
 
     End Sub

@@ -28,7 +28,6 @@ Partial Class EntitiesManagementUI
         Me.ButtonsIL = New System.Windows.Forms.ImageList(Me.components)
         Me.EditButtonsImagelist = New System.Windows.Forms.ImageList(Me.components)
         Me.EntitiesTVImageList = New System.Windows.Forms.ImageList(Me.components)
-        Me.entitiesDGV = New VIBlend.WinForms.DataGridView.vDataGridView()
         Me.RCM_TGV = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.copy_down_bt = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator5 = New System.Windows.Forms.ToolStripSeparator()
@@ -37,8 +36,6 @@ Partial Class EntitiesManagementUI
         Me.CreateEntityToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.DeleteEntityToolStripMenuItem2 = New System.Windows.Forms.ToolStripMenuItem()
         Me.MenuButtonIL = New System.Windows.Forms.ImageList(Me.components)
-        Me.SplitContainer1 = New System.Windows.Forms.SplitContainer()
-        Me.Panel1 = New System.Windows.Forms.Panel()
         Me.RCM_TV = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.AddSubEntityToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
@@ -58,11 +55,8 @@ Partial Class EntitiesManagementUI
         Me.ShowTreeviewToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.HideTreeviewToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.HelpToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.entitiesDGV = New VIBlend.WinForms.DataGridView.vDataGridView()
         Me.RCM_TGV.SuspendLayout()
-        CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.SplitContainer1.Panel1.SuspendLayout()
-        Me.SplitContainer1.Panel2.SuspendLayout()
-        Me.SplitContainer1.SuspendLayout()
         Me.RCM_TV.SuspendLayout()
         Me.MenuStrip1.SuspendLayout()
         Me.SuspendLayout()
@@ -89,76 +83,6 @@ Partial Class EntitiesManagementUI
         Me.EntitiesTVImageList.TransparentColor = System.Drawing.Color.Transparent
         Me.EntitiesTVImageList.Images.SetKeyName(0, "favicon(81).ico")
         Me.EntitiesTVImageList.Images.SetKeyName(1, "favicon(110).ico")
-        '
-        'entitiesDGV
-        '
-        Me.entitiesDGV.AllowAnimations = True
-        Me.entitiesDGV.AllowCellMerge = True
-        Me.entitiesDGV.AllowClipDrawing = True
-        Me.entitiesDGV.AllowContextMenuColumnChooser = True
-        Me.entitiesDGV.AllowContextMenuFiltering = True
-        Me.entitiesDGV.AllowContextMenuGrouping = True
-        Me.entitiesDGV.AllowContextMenuSorting = True
-        Me.entitiesDGV.AllowCopyPaste = False
-        Me.entitiesDGV.AllowDefaultContextMenu = True
-        Me.entitiesDGV.AllowDragDropIndication = True
-        Me.entitiesDGV.AllowDrop = True
-        Me.entitiesDGV.AllowHeaderItemHighlightOnCellSelection = True
-        Me.entitiesDGV.AutoUpdateOnListChanged = False
-        Me.entitiesDGV.BackColor = System.Drawing.SystemColors.Control
-        Me.entitiesDGV.BindingProgressEnabled = False
-        Me.entitiesDGV.BindingProgressSampleRate = 20000
-        Me.entitiesDGV.BorderColor = System.Drawing.SystemColors.Control
-        Me.entitiesDGV.CellsArea.AllowCellMerge = True
-        Me.entitiesDGV.CellsArea.ConditionalFormattingEnabled = False
-        Me.entitiesDGV.ColumnsHierarchy.AllowDragDrop = False
-        Me.entitiesDGV.ColumnsHierarchy.AllowResize = True
-        Me.entitiesDGV.ColumnsHierarchy.AutoStretchColumns = False
-        Me.entitiesDGV.ColumnsHierarchy.Fixed = False
-        Me.entitiesDGV.ColumnsHierarchy.ShowExpandCollapseButtons = True
-        Me.entitiesDGV.ContextMenuStrip = Me.RCM_TGV
-        Me.entitiesDGV.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.entitiesDGV.EnableColumnChooser = False
-        Me.entitiesDGV.EnableResizeToolTip = True
-        Me.entitiesDGV.EnableToolTips = True
-        Me.entitiesDGV.FilterDisplayMode = VIBlend.WinForms.DataGridView.FilterDisplayMode.[Default]
-        Me.entitiesDGV.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.entitiesDGV.GridLinesDashStyle = System.Drawing.Drawing2D.DashStyle.Solid
-        Me.entitiesDGV.GridLinesDisplayMode = VIBlend.WinForms.DataGridView.GridLinesDisplayMode.DISPLAY_ALL
-        Me.entitiesDGV.GroupingEnabled = False
-        Me.entitiesDGV.HorizontalScroll = 0
-        Me.entitiesDGV.HorizontalScrollBarLargeChange = 20
-        Me.entitiesDGV.HorizontalScrollBarSmallChange = 5
-        Me.entitiesDGV.ImageList = Nothing
-        Me.entitiesDGV.Localization = DataGridLocalization1
-        Me.entitiesDGV.Location = New System.Drawing.Point(0, 0)
-        Me.entitiesDGV.MultipleSelectionEnabled = True
-        Me.entitiesDGV.Name = "entitiesDGV"
-        Me.entitiesDGV.PivotColumnsTotalsEnabled = False
-        Me.entitiesDGV.PivotColumnsTotalsMode = VIBlend.WinForms.DataGridView.PivotTotalsMode.DISPLAY_BOTH
-        Me.entitiesDGV.PivotRowsTotalsEnabled = False
-        Me.entitiesDGV.PivotRowsTotalsMode = VIBlend.WinForms.DataGridView.PivotTotalsMode.DISPLAY_BOTH
-        Me.entitiesDGV.RowsHierarchy.AllowDragDrop = False
-        Me.entitiesDGV.RowsHierarchy.AllowResize = True
-        Me.entitiesDGV.RowsHierarchy.CompactStyleRenderingEnabled = False
-        Me.entitiesDGV.RowsHierarchy.CompactStyleRenderingItemsIndent = 15
-        Me.entitiesDGV.RowsHierarchy.Fixed = False
-        Me.entitiesDGV.RowsHierarchy.ShowExpandCollapseButtons = True
-        Me.entitiesDGV.ScrollBarsEnabled = True
-        Me.entitiesDGV.SelectionBorderDashStyle = System.Drawing.Drawing2D.DashStyle.Solid
-        Me.entitiesDGV.SelectionBorderEnabled = True
-        Me.entitiesDGV.SelectionBorderWidth = 2
-        Me.entitiesDGV.SelectionMode = VIBlend.WinForms.DataGridView.vDataGridView.SELECTION_MODE.CELL_SELECT
-        Me.entitiesDGV.Size = New System.Drawing.Size(883, 652)
-        Me.entitiesDGV.TabIndex = 1
-        Me.entitiesDGV.Text = "VDataGridView1"
-        Me.entitiesDGV.ToolTipDuration = 5000
-        Me.entitiesDGV.ToolTipShowDelay = 1500
-        Me.entitiesDGV.VerticalScroll = 0
-        Me.entitiesDGV.VerticalScrollBarLargeChange = 20
-        Me.entitiesDGV.VerticalScrollBarSmallChange = 5
-        Me.entitiesDGV.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
-        Me.entitiesDGV.VirtualModeCellDefault = False
         '
         'RCM_TGV
         '
@@ -212,33 +136,6 @@ Partial Class EntitiesManagementUI
         Me.MenuButtonIL.Images.SetKeyName(1, "expandleft.png")
         Me.MenuButtonIL.Images.SetKeyName(2, "favicon(114).ico")
         Me.MenuButtonIL.Images.SetKeyName(3, "favicon(115).ico")
-        '
-        'SplitContainer1
-        '
-        Me.SplitContainer1.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.SplitContainer1.Location = New System.Drawing.Point(0, 24)
-        Me.SplitContainer1.Name = "SplitContainer1"
-        '
-        'SplitContainer1.Panel1
-        '
-        Me.SplitContainer1.Panel1.Controls.Add(Me.Panel1)
-        '
-        'SplitContainer1.Panel2
-        '
-        Me.SplitContainer1.Panel2.Controls.Add(Me.entitiesDGV)
-        Me.SplitContainer1.Size = New System.Drawing.Size(1100, 652)
-        Me.SplitContainer1.SplitterDistance = 213
-        Me.SplitContainer1.TabIndex = 2
-        '
-        'Panel1
-        '
-        Me.Panel1.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Panel1.Location = New System.Drawing.Point(3, 23)
-        Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(209, 626)
-        Me.Panel1.TabIndex = 0
         '
         'RCM_TV
         '
@@ -363,12 +260,82 @@ Partial Class EntitiesManagementUI
         Me.HelpToolStripMenuItem.Size = New System.Drawing.Size(44, 20)
         Me.HelpToolStripMenuItem.Text = "Help"
         '
+        'entitiesDGV
+        '
+        Me.entitiesDGV.AllowAnimations = True
+        Me.entitiesDGV.AllowCellMerge = True
+        Me.entitiesDGV.AllowClipDrawing = True
+        Me.entitiesDGV.AllowContextMenuColumnChooser = True
+        Me.entitiesDGV.AllowContextMenuFiltering = True
+        Me.entitiesDGV.AllowContextMenuGrouping = True
+        Me.entitiesDGV.AllowContextMenuSorting = True
+        Me.entitiesDGV.AllowCopyPaste = False
+        Me.entitiesDGV.AllowDefaultContextMenu = True
+        Me.entitiesDGV.AllowDragDropIndication = True
+        Me.entitiesDGV.AllowDrop = True
+        Me.entitiesDGV.AllowHeaderItemHighlightOnCellSelection = True
+        Me.entitiesDGV.AutoUpdateOnListChanged = False
+        Me.entitiesDGV.BackColor = System.Drawing.SystemColors.Control
+        Me.entitiesDGV.BindingProgressEnabled = False
+        Me.entitiesDGV.BindingProgressSampleRate = 20000
+        Me.entitiesDGV.BorderColor = System.Drawing.SystemColors.Control
+        Me.entitiesDGV.CellsArea.AllowCellMerge = True
+        Me.entitiesDGV.CellsArea.ConditionalFormattingEnabled = False
+        Me.entitiesDGV.ColumnsHierarchy.AllowDragDrop = False
+        Me.entitiesDGV.ColumnsHierarchy.AllowResize = True
+        Me.entitiesDGV.ColumnsHierarchy.AutoStretchColumns = False
+        Me.entitiesDGV.ColumnsHierarchy.Fixed = False
+        Me.entitiesDGV.ColumnsHierarchy.ShowExpandCollapseButtons = True
+        Me.entitiesDGV.ContextMenuStrip = Me.RCM_TGV
+        Me.entitiesDGV.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.entitiesDGV.EnableColumnChooser = False
+        Me.entitiesDGV.EnableResizeToolTip = True
+        Me.entitiesDGV.EnableToolTips = True
+        Me.entitiesDGV.FilterDisplayMode = VIBlend.WinForms.DataGridView.FilterDisplayMode.[Default]
+        Me.entitiesDGV.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.entitiesDGV.GridLinesDashStyle = System.Drawing.Drawing2D.DashStyle.Solid
+        Me.entitiesDGV.GridLinesDisplayMode = VIBlend.WinForms.DataGridView.GridLinesDisplayMode.DISPLAY_ALL
+        Me.entitiesDGV.GroupingEnabled = False
+        Me.entitiesDGV.HorizontalScroll = 0
+        Me.entitiesDGV.HorizontalScrollBarLargeChange = 20
+        Me.entitiesDGV.HorizontalScrollBarSmallChange = 5
+        Me.entitiesDGV.ImageList = Nothing
+        Me.entitiesDGV.Localization = DataGridLocalization1
+        Me.entitiesDGV.Location = New System.Drawing.Point(0, 24)
+        Me.entitiesDGV.MultipleSelectionEnabled = True
+        Me.entitiesDGV.Name = "entitiesDGV"
+        Me.entitiesDGV.PivotColumnsTotalsEnabled = False
+        Me.entitiesDGV.PivotColumnsTotalsMode = VIBlend.WinForms.DataGridView.PivotTotalsMode.DISPLAY_BOTH
+        Me.entitiesDGV.PivotRowsTotalsEnabled = False
+        Me.entitiesDGV.PivotRowsTotalsMode = VIBlend.WinForms.DataGridView.PivotTotalsMode.DISPLAY_BOTH
+        Me.entitiesDGV.RowsHierarchy.AllowDragDrop = False
+        Me.entitiesDGV.RowsHierarchy.AllowResize = True
+        Me.entitiesDGV.RowsHierarchy.CompactStyleRenderingEnabled = False
+        Me.entitiesDGV.RowsHierarchy.CompactStyleRenderingItemsIndent = 15
+        Me.entitiesDGV.RowsHierarchy.Fixed = False
+        Me.entitiesDGV.RowsHierarchy.ShowExpandCollapseButtons = True
+        Me.entitiesDGV.ScrollBarsEnabled = True
+        Me.entitiesDGV.SelectionBorderDashStyle = System.Drawing.Drawing2D.DashStyle.Solid
+        Me.entitiesDGV.SelectionBorderEnabled = True
+        Me.entitiesDGV.SelectionBorderWidth = 2
+        Me.entitiesDGV.SelectionMode = VIBlend.WinForms.DataGridView.vDataGridView.SELECTION_MODE.CELL_SELECT
+        Me.entitiesDGV.Size = New System.Drawing.Size(1100, 652)
+        Me.entitiesDGV.TabIndex = 4
+        Me.entitiesDGV.Text = "VDataGridView1"
+        Me.entitiesDGV.ToolTipDuration = 5000
+        Me.entitiesDGV.ToolTipShowDelay = 1500
+        Me.entitiesDGV.VerticalScroll = 0
+        Me.entitiesDGV.VerticalScrollBarLargeChange = 20
+        Me.entitiesDGV.VerticalScrollBarSmallChange = 5
+        Me.entitiesDGV.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
+        Me.entitiesDGV.VirtualModeCellDefault = False
+        '
         'EntitiesManagementUI
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(1100, 676)
-        Me.Controls.Add(Me.SplitContainer1)
+        Me.Controls.Add(Me.entitiesDGV)
         Me.Controls.Add(Me.MenuStrip1)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.MainMenuStrip = Me.MenuStrip1
@@ -376,10 +343,6 @@ Partial Class EntitiesManagementUI
         Me.Name = "EntitiesManagementUI"
         Me.Text = "Entities Management"
         Me.RCM_TGV.ResumeLayout(False)
-        Me.SplitContainer1.Panel1.ResumeLayout(False)
-        Me.SplitContainer1.Panel2.ResumeLayout(False)
-        CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.SplitContainer1.ResumeLayout(False)
         Me.RCM_TV.ResumeLayout(False)
         Me.MenuStrip1.ResumeLayout(False)
         Me.MenuStrip1.PerformLayout()
@@ -389,9 +352,7 @@ Partial Class EntitiesManagementUI
     End Sub
     Friend WithEvents EditButtonsImagelist As System.Windows.Forms.ImageList
     Friend WithEvents ButtonsIL As System.Windows.Forms.ImageList
-    Friend WithEvents entitiesDGV As VIBlend.WinForms.DataGridView.vDataGridView
     Friend WithEvents MenuButtonIL As System.Windows.Forms.ImageList
-    Friend WithEvents SplitContainer1 As System.Windows.Forms.SplitContainer
     Friend WithEvents MenuStrip1 As System.Windows.Forms.MenuStrip
     Friend WithEvents RCM_TV As System.Windows.Forms.ContextMenuStrip
     Friend WithEvents RCM_TGV As System.Windows.Forms.ContextMenuStrip
@@ -412,7 +373,6 @@ Partial Class EntitiesManagementUI
     Friend WithEvents ShowTreeviewToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents HideTreeviewToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Public WithEvents EntitiesTVImageList As System.Windows.Forms.ImageList
-    Friend WithEvents Panel1 As System.Windows.Forms.Panel
     Friend WithEvents ToolStripSeparator3 As System.Windows.Forms.ToolStripSeparator
     Friend WithEvents CreateEntityToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents DeleteEntityToolStripMenuItem2 As System.Windows.Forms.ToolStripMenuItem
@@ -420,4 +380,5 @@ Partial Class EntitiesManagementUI
     Friend WithEvents ToolStripSeparator4 As System.Windows.Forms.ToolStripSeparator
     Friend WithEvents ToolStripSeparator5 As System.Windows.Forms.ToolStripSeparator
     Friend WithEvents drop_to_excel_bt As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents entitiesDGV As VIBlend.WinForms.DataGridView.vDataGridView
 End Class

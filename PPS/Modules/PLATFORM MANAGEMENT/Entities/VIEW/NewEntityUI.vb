@@ -10,7 +10,7 @@
 '           -> should have "" and "NS" for each category (hence name-> keys dict in categories should be for each categories)
 '
 '
-' Last modified: 05/12/2014
+' Last modified: 12/03/2014
 ' Author: Julien Monnereau
 
 
@@ -20,14 +20,14 @@ Imports System.Collections
 
 
 
-Public Class NewEntityUI
+Friend Class NewEntityUI
 
 
 #Region "Instance Variables"
 
     ' Objects
     Private Controller As EntitiesController
-  
+
     ' Variables
     Private entitiesTV As TreeView
     Private categoriesTV As TreeView
@@ -263,10 +263,10 @@ Public Class NewEntityUI
     Private Function IsFormValid(ByRef new_entity_name As String) As Boolean
 
         Dim names_list = TreeViewsUtilities.GetNodesTextsList(entitiesTV)
-            If names_list.Contains(new_entity_Name) Then
-                MsgBox("This Entity name is already in use. Please choose another one.")
-                Return False
-            End If
+        If names_list.Contains(new_entity_name) Then
+            MsgBox("This Entity name is already in use. Please choose another one.")
+            Return False
+        End If
         Return True
 
     End Function
@@ -317,13 +317,13 @@ Public Class NewEntityUI
                 current_parent_entity_id = e.Node.Name
                 HideParentEntitiesTV()
         End Select
-       
+
     End Sub
 
     Private Sub EntitiesTV_KeyDown(sender As Object, e As KeyEventArgs)
 
         If e.KeyCode = Keys.Enter _
-        AndAlso Not EntitiesTV.SelectedNode Is Nothing Then
+        AndAlso Not entitiesTV.SelectedNode Is Nothing Then
             parentTB.Text = entitiesTV.SelectedNode.Text
             current_parent_entity_id = entitiesTV.SelectedNode.Name
             HideParentEntitiesTV()
@@ -339,6 +339,6 @@ Public Class NewEntityUI
 #End Region
 
 
-    
-   
+
+
 End Class
