@@ -2,7 +2,7 @@
 '
 ' To do:
 '       - Indexes deletion
-'
+'       - excel import to be copied from currencies !
 '
 '
 '
@@ -26,7 +26,7 @@ Friend Class MarketPricesController
     Private MarketIndexes As New MarketIndex
     Private View As MarketPricesUI
     Private NewMarketPricesVersion As NewMarketPricesVersionUI
-    Private ExcelImport As InputValuesExcel
+    Private ExcelImport As ExcelRatesImportUI
 
     ' Variables
     Protected Friend indexes_list As List(Of String)
@@ -242,8 +242,8 @@ Friend Class MarketPricesController
 
     Friend Sub ImportPricessFromExcel()
 
-        ExcelImport = New InputValuesExcel(Me, indexes_list)
-        ExcelImport.Show()
+        '  ExcelImport = New ExcelRatesImportUI(Me, indexes_list)
+        '  ExcelImport.Show()
 
     End Sub
 
