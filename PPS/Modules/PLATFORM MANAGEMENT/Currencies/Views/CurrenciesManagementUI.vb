@@ -4,7 +4,6 @@
 '
 '
 ' To do:
-'       - CHART display
 '       - chart automatically reload when changing version
 '       - Add rename rate version
 '
@@ -29,7 +28,7 @@ Friend Class CurrenciesManagementUI
 #Region "Instance Variables"
 
     ' Objects
-    Friend Controller As CExchangeRatesCONTROLER
+    Friend Controller As ExchangeRatesController
     Friend ratesView As RatesView
     Private chart As Chart
 
@@ -56,7 +55,7 @@ Friend Class CurrenciesManagementUI
         InitializeComponent()
 
         ' Add any initialization after the InitializeComponent() call.
-        Controller = New CExchangeRatesCONTROLER(Me)
+        Controller = New ExchangeRatesController(Me)
         Dim ht As New Hashtable
         ht.Add(REPORTS_NAME_VAR, "Exchange Rates")
         chart = ChartsUtilities.CreateChart(ht)

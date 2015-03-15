@@ -32,7 +32,7 @@ Friend Class RatesView
 
     ' Objects
     Private DGV As vDataGridView
-    Private CONTROLLER As CExchangeRatesCONTROLER
+    Private CONTROLLER As ExchangeRatesController
     Private chart As New Chart
 
     ' Variables
@@ -66,7 +66,7 @@ Friend Class RatesView
 
     End Sub
 
-    Friend Sub AttributeController(ByRef inputController As CExchangeRatesCONTROLER)
+    Friend Sub AttributeController(ByRef inputController As ExchangeRatesController)
 
         CONTROLLER = inputController
 
@@ -292,6 +292,7 @@ Friend Class RatesView
         columnIDKeyDictionary.Clear()
         DGV.RowsHierarchy.Clear()
         DGV.ColumnsHierarchy.Clear()
+        chart.Series.Clear()
 
     End Sub
 

@@ -15,7 +15,7 @@ Friend Class NewRatesVersionUI
 
 #Region "Instance Variables"
 
-    Private Controller As CExchangeRatesCONTROLER
+    Private Controller As ExchangeRatesController
     Protected Friend parent_node As TreeNode = Nothing
 
 #End Region
@@ -23,7 +23,7 @@ Friend Class NewRatesVersionUI
 
 #Region "Initialize"
 
-    Friend Sub New(ByRef input_controller As CExchangeRatesCONTROLER)
+    Friend Sub New(ByRef input_controller As ExchangeRatesController)
 
         ' This call is required by the designer.
         InitializeComponent()
