@@ -309,10 +309,10 @@
     <Compile Include="Views\GenericView.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Views\InputValuesExcel.Designer.vb">
-      <DependentUpon>InputValuesExcel.vb</DependentUpon>
+    <Compile Include="Modules\PLATFORM MANAGEMENT\Currencies\Views\ExcelRatesImportUI.Designer.vb">
+      <DependentUpon>ExcelRatesImportUI.vb</DependentUpon>
     </Compile>
-    <Compile Include="Views\InputValuesExcel.vb">
+    <Compile Include="Modules\PLATFORM MANAGEMENT\Currencies\Views\ExcelRatesImportUI.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Modules\PLATFORM MANAGEMENT\Users\Views\UsersTGV.vb" />
@@ -332,7 +332,7 @@
     <Compile Include="Modules\CUBE\HTTP test.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Modules\PLATFORM MANAGEMENT\Currencies\Controller\CExchangeRatesCONTROLER.vb" />
+    <Compile Include="Modules\PLATFORM MANAGEMENT\Currencies\Controller\ExchangeRatesController.vb" />
     <Compile Include="Modules\Versions Selection\Controler\VersionSelection.vb" />
     <Compile Include="Models\CRUDs\Category.vb" />
     <Compile Include="Models\CRUDs\Entity.vb" />
@@ -647,8 +647,8 @@
     <EmbeddedResource Include="Views\GenericView.resx">
       <DependentUpon>GenericView.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Views\InputValuesExcel.resx">
-      <DependentUpon>InputValuesExcel.vb</DependentUpon>
+    <EmbeddedResource Include="Modules\PLATFORM MANAGEMENT\Currencies\Views\ExcelRatesImportUI.resx">
+      <DependentUpon>ExcelRatesImportUI.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Modules\PLATFORM MANAGEMENT\Accounts\Views\NewAccountUI.resx">
       <DependentUpon>NewAccountUI.vb</DependentUpon>
