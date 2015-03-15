@@ -245,7 +245,7 @@ Friend Class FModellingSimulationsControler
     Protected Friend Sub DeleteConstraint(ByRef scenario_id As String, _
                                           ByRef constraint_node As TreeNode)
 
-        If scenarios_dic(scenario_id).DeleteConstraint(constraint_node.Name) = True Then constraint_node.Remove()
+        If scenarios_dic(scenario_id).DeleteConstraint(Outputs_name_id_dic(constraint_node.Text)) = True Then constraint_node.Remove()
 
     End Sub
 

@@ -220,7 +220,7 @@ Friend Class Scenario
 
     End Function
 
-    Protected Friend Function DeleteConstraint(ByRef constraint_id) As Boolean
+    Protected Friend Function DeleteConstraint(ByRef constraint_id As String) As Boolean
 
         Dim row As HierarchyItem = ScenarioDGV.RowsHierarchy.Items(scenarioDGV_id_row_index_Dictionary(constraint_id))
         If current_constraint_cell.RowItem.ItemIndex <= 2 Then Return False
