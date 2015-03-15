@@ -16,7 +16,7 @@
 '       - erreur si pas de taux -> si nb records = 0 la matrice de devrait pas être lancée
 '
 '
-' Last modified: 23/02/2015
+' Last modified: 09/03/2015
 ' Author: Julien Monnereau
 
 
@@ -27,7 +27,7 @@ Imports System.Collections
 Friend Class GenericAggregationDLL3Computing
 
 
-#Region " Instance Variables"
+#Region "Instance Variables"
 
     ' Objects
     Private Dll3Computer As DLL3_Interface
@@ -72,7 +72,7 @@ Friend Class GenericAggregationDLL3Computing
 
         inputs_entities_list = TreeViewsUtilities.GetNoChildrenNodesList(entities_id_list, entity_node.TreeView)
         TreeViewsUtilities.FilterSelectedNodes(entity_node, entities_id_list)
-       
+
     End Sub
 
     Protected Friend Sub compute_selection_complete(ByRef version_id As String, _
@@ -147,6 +147,46 @@ Friend Class GenericAggregationDLL3Computing
                                                   + periods_list.IndexOf(period))
 
     End Function
+
+    ' For monthly configuration - Provides Yearly Aggregations
+    Protected Friend Function ComputeMonthlyPeriodsAggregations(ByRef version_id As String, _
+                                                                ByRef destination_currency As String, _
+                                                                ByRef rates_version_id As String, _
+                                                                ByRef start_period As Int32,
+                                                                ByRef nb_periods As Int32, _
+                                                                ByRef global_periods_dic As Dictionary(Of Int32, Int32())) As Dictionary(Of String, Double())
+
+        Dim account_ids() As String
+        Dim period_ids() As Int32
+        Dim values As Double()
+        Dim accounts_id_ftype_dict As Hashtable = AccountsMapping.GetAccountsDictionary(ACCOUNT_ID_VARIABLE, ACCOUNT_FORMULA_TYPE_VARIABLE)
+        global_periods_dic = Period.GetGlobalPeriodsDictionary(start_period, nb_periods)
+        Dll3Computer.SetEntitiesCurrency(destination_currency)
+        Dll3Computer.SetUpEABeforeCompute(Period.GetYearlyPeriodList(start_period, nb_periods), _
+                                          destination_currency, _
+                                          MONTHLY_TIME_CONFIGURATION, _
+                                          rates_version_id, _
+                                          start_period)
+
+        For Each entity_id In inputs_entities_list
+            BuildMonthlyAggregationInputArrays(entity_id, _
+                                               account_ids, _
+                                               period_ids, _
+                                               values, _
+                                               accounts_id_ftype_dict, _
+                                               global_periods_dict)
+
+            Dll3Computer.ComputeInputEntity(entity_id, _
+                                            account_ids, _
+                                            period_ids, _
+                                            values)
+        Next
+        Dll3Computer.ComputeAggregation()
+        ReinitializeComputerCache()
+        Return Dll3Computer.GetOutputMatrix
+
+    End Function
+
 
 #End Region
 
@@ -275,8 +315,41 @@ Friend Class GenericAggregationDLL3Computing
 
         If entities_id_list Is Nothing Then Return False
         If entities_id_list.Contains(entity_id) Then Return True Else Return False
-      
+
     End Function
+
+    Private Sub BuildMonthlyAggregationInputArrays(ByRef entity_id As String, _
+                                                   ByRef account_ids As String(), _
+                                                   ByRef period_ids As Int32(), _
+                                                   ByRef values As Double(), _
+                                                   ByRef accounts_id_ftype_dict As Hashtable, _
+                                                   ByRef global_periods_dict As Dictionary(Of Int32, Int32()))
+
+        ReDim account_ids(Dll3Computer.accounts_array.Length * global_periods_dict.Keys.Count)
+        ReDim period_ids(Dll3Computer.accounts_array.Length * global_periods_dict.Keys.Count)
+        ReDim values(Dll3Computer.accounts_array.Length * global_periods_dict.Keys.Count)
+
+        Dim a_index As Int32 = 0
+        Dim i As Int32 = 0
+        For Each account_id As String In Dll3Computer.accounts_array
+            If accounts_id_ftype_dict(account_id) = HARD_VALUE_F_TYPE_CODE Then
+
+                For Each year_period As Int32 In global_periods_dict.Keys
+                    Dim tmp_value As Double
+                    For Each month_period As Int32 In global_periods_dict(year_period)
+                        tmp_value = tmp_value + complete_data_dictionary(entity_id)(i * periods_list.IndexOf(month_period))
+                    Next
+                    account_ids(a_index) = account_id
+                    period_ids(a_index) = year_period
+                    values(a_index) = tmp_value
+                Next
+                a_index = a_index + 1
+            End If
+            i = i + 1
+        Next
+
+
+    End Sub
 
 #End Region
 

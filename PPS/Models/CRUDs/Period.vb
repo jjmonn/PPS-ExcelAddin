@@ -47,8 +47,8 @@ Friend Class Period
     ' Reference year: year used for creating end of months dates
     ' PeriodMinusOneOption: true->include month-1 | false-> do not include
     Shared Function GetMonthlyPeriodsList(ByRef start_period As Int32, _
-                                                    ByRef nb_periods As Int32, _
-                                                    ByRef PeriodMinusOneOption As Boolean) As List(Of Integer)
+                                            ByRef nb_periods As Int32, _
+                                            ByRef PeriodMinusOneOption As Boolean) As List(Of Integer)
 
         Dim nbDaysinMonth As Int32
         Dim tmpList As New List(Of Integer)
@@ -101,6 +101,12 @@ Friend Class Period
 
     End Function
 
+    Protected Friend Shared Function GetGlobalPeriodsDictionary(ByRef start_period As Int32, _
+                                                                ByRef nb_periods As Int32) As Dictionary(Of Integer, Integer())
+
+        Return GetGlobalPeriodsDictionary(GetYearlyPeriodList(start_period, nb_periods))
+
+    End Function
 
 #End Region
 

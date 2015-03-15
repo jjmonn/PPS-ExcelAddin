@@ -11,7 +11,7 @@
 '       -
 '
 '
-' Last modified: 21/01/2015
+' Last modified: 09/03/2015
 ' Author: Julien Monnereau
 
 
@@ -155,6 +155,12 @@ Friend Class DLL3_Interface
                                                          <MarshalAs(UnmanagedType.SafeArray, SafeArraySubType:=VarEnum.VT_BSTR)> ByRef entities_array() As String, _
                                                          <MarshalAs(UnmanagedType.SafeArray, SafeArraySubType:=VarEnum.VT_BSTR)> ByRef entities_currencies() As String, _
                                                          ByVal nb_entities As Integer)
+
+    End Sub
+
+    <DllImport("DLL3.dll")>
+    Private Shared Sub SetEntitiesCurrencyDll3(ByVal objptr As Integer, _
+                                               ByRef currency As String)
 
     End Sub
 
@@ -402,6 +408,13 @@ Friend Class DLL3_Interface
         Return all_entities_ids
 
     End Function
+
+    Protected Friend Sub SetEntitiesCurrency(ByRef currency As String)
+
+        SetEntitiesCurrencyDll3(objptr, currency)
+
+    End Sub
+
 
     Friend Sub SetUpEABeforeCompute(ByRef periodsList As List(Of Integer), _
                                     ByRef destination_currency_arg As String, _

@@ -181,30 +181,25 @@ Friend Class Version
     Friend Function InitializeVersionsArray(ByRef versionsNodesList As List(Of TreeNode),
                                             ByRef periodsList As List(Of Integer), _
                                             ByRef versionsComparisonFlag As Int32, _
-                                            ByRef versions_id_array As String(), _
-                                            ByRef versions_name_array As String()) As Dictionary(Of String, Hashtable)
+                                            ByRef versions_id_array As String()) As Dictionary(Of String, Hashtable)
 
         versionsComparisonFlag = -1
         Dim versions_dict As Dictionary(Of String, Hashtable)
         If Not periodsList Is Nothing Then periodsList = Nothing
         If versionsNodesList.Count = 0 Then
             versions_id_array = {GlobalVariables.GLOBALCurrentVersionCode}
-            versions_name_array = {GlobalVariables.Version_Label.Caption}
             versions_dict = GetVersionsDictionary(versions_id_array)
             periodsList = versions_dict(versions_id_array(0))(PERIOD_LIST)
         Else
             ReDim versions_id_array(versionsNodesList.Count - 1)
-            ReDim versions_name_array(versionsNodesList.Count - 1)
             Dim i As Int32
             For Each Version As TreeNode In versionsNodesList
                 If Version.Nodes.Count = 0 Then
                     versions_id_array(i) = Version.Name
-                    versions_name_array(i) = Version.Text
                     i = i + 1
                 End If
             Next
             ReDim Preserve versions_id_array(i - 1)
-            ReDim Preserve versions_name_array(i - 1)
             versions_dict = GetVersionsDictionary(versions_id_array)
 
             If versions_id_array.Length > 1 Then
