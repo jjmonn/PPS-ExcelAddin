@@ -12,7 +12,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 20/01/2015
+' Last modified: 12/03/2015
 
 
 Imports System.Collections.Generic
@@ -21,7 +21,7 @@ Imports System.Windows.Forms
 Imports VIBlend.WinForms.DataGridView
 
 
-Friend Class CExchangeRatesCONTROLER
+Friend Class ExchangeRatesController
 
 
 #Region "Instance Variables"
@@ -33,7 +33,7 @@ Friend Class CExchangeRatesCONTROLER
     Private Currencies As New Currency
     Private Periods As New Period
     Private NewRatesVersionUI As NewRatesVersionUI
-    Private ExcelImport As InputValuesExcel
+    Private ExcelImport As ExcelRatesImportUI
     Private PBar As PBarUI
 
     ' Variables
@@ -276,7 +276,7 @@ Friend Class CExchangeRatesCONTROLER
 
     Friend Sub ImportRatesFromExcel()
 
-        ExcelImport = New InputValuesExcel(Me, currencies_list)
+        ExcelImport = New ExcelRatesImportUI(Me, currencies_list)
         ExcelImport.Show()
 
     End Sub
