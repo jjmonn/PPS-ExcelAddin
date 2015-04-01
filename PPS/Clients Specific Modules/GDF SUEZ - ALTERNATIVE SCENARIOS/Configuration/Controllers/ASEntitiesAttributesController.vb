@@ -37,7 +37,7 @@ Friend Class ASEntitiesAttributesController
     Friend Sub New()
 
         Entity.LoadEntitiesTree(entitiesTV)
-        entitiesNameKeyDic = EntitiesMapping.GetEntitiesDictionary(ASSETS_NAME_VARIABLE, ASSETS_TREE_ID_VARIABLE)
+        entitiesNameKeyDic = EntitiesMapping.GetEntitiesDictionary(ENTITIES_NAME_VARIABLE, ENTITIES_ID_VARIABLE)
         market_indexes_list = MarketIndexesMapping.GetMarketIndexesList
         View = New ASEntitiesAttributesUI(Me, entitiesNameKeyDic, entitiesTV)
         DisplayDGVData()

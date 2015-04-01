@@ -8,7 +8,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 08/12/2014
+' Last modified: 24/03/2015
 
 
 Imports ADODB
@@ -66,7 +66,7 @@ Friend Class Entity
 
     Protected Friend Function ReadEntity(ByRef entity_id As String, ByRef field As String) As Object
 
-        RST.Filter = ASSETS_TREE_ID_VARIABLE + "='" + entity_id + "'"
+        RST.Filter = ENTITIES_ID_VARIABLE + "='" + entity_id + "'"
         If RST.EOF Then Return Nothing
         Return RST.Fields(field).Value
 
@@ -74,12 +74,12 @@ Friend Class Entity
 
     Protected Friend Function GetRecord(ByRef entity_id As String, ByRef categoriesTV As TreeView) As Hashtable
 
-        RST.Filter = ASSETS_TREE_ID_VARIABLE + "='" + entity_id + "'"
+        RST.Filter = ENTITIES_ID_VARIABLE + "='" + entity_id + "'"
         If RST.EOF Then Return Nothing
         Dim hash As New Hashtable
-        hash.Add(ASSETS_NAME_VARIABLE, RST.Fields(ASSETS_NAME_VARIABLE).Value)
-        hash.Add(ASSETS_CURRENCY_VARIABLE, RST.Fields(ASSETS_CURRENCY_VARIABLE).Value)
-        hash.Add(ASSETS_ALLOW_EDITION_VARIABLE, RST.Fields(ASSETS_ALLOW_EDITION_VARIABLE).Value)
+        hash.Add(ENTITIES_NAME_VARIABLE, RST.Fields(ENTITIES_NAME_VARIABLE).Value)
+        hash.Add(ENTITIES_CURRENCY_VARIABLE, RST.Fields(ENTITIES_CURRENCY_VARIABLE).Value)
+        hash.Add(ENTITIES_ALLOW_EDITION_VARIABLE, RST.Fields(ENTITIES_ALLOW_EDITION_VARIABLE).Value)
         For Each category_node In categoriesTV.Nodes
             hash.Add(category_node.name, RST.Fields(category_node.name).Value)
         Next
@@ -89,7 +89,7 @@ Friend Class Entity
 
     Protected Friend Sub UpdateEntity(ByRef entity_id As String, ByRef hash As Hashtable)
 
-        RST.Filter = ASSETS_TREE_ID_VARIABLE + "='" + entity_id + "'"
+        RST.Filter = ENTITIES_ID_VARIABLE + "='" + entity_id + "'"
         If RST.EOF = False AndAlso RST.BOF = False Then
             For Each Attribute In hash.Keys
                 If RST.Fields(Attribute).Value <> hash(Attribute) Then
@@ -105,7 +105,7 @@ Friend Class Entity
                              ByRef field As String, _
                              ByVal value As Object)
 
-        RST.Filter = ASSETS_TREE_ID_VARIABLE + "='" + entity_id + "'"
+        RST.Filter = ENTITIES_ID_VARIABLE + "='" + entity_id + "'"
         If RST.EOF = False AndAlso RST.BOF = False Then
             If RST.Fields(field).Value <> value Then
                 RST.Fields(field).Value = value
@@ -117,7 +117,7 @@ Friend Class Entity
 
     Protected Friend Sub DeleteEntity(ByRef entity_id As String)
 
-        RST.Filter = ASSETS_TREE_ID_VARIABLE + "='" + entity_id + "'"
+        RST.Filter = ENTITIES_ID_VARIABLE + "='" + entity_id + "'"
         If RST.EOF = False Then
             RST.Delete()
             RST.Update()
@@ -139,40 +139,36 @@ Friend Class Entity
         Else
             q_result = srv.openRst(VIEWS_DATABASE & "." & GlobalVariables.Entities_View, ModelServer.FWD_CURSOR)
         End If
-        If q_result = True Then
 
+        If q_result = True Then
             Dim currentNode, ParentNode() As TreeNode
             TV.Nodes.Clear()
             srv.rst.Sort = ITEMS_POSITIONS
 
-            If srv.rst.RecordCount > 0 Then
-                srv.rst.MoveFirst()
-
                 Do While srv.rst.EOF = False
 
-                    Dim image_index As Int32 = srv.rst.Fields(ASSETS_ALLOW_EDITION_VARIABLE).Value
+                    Dim image_index As Int32 = srv.rst.Fields(ENTITIES_ALLOW_EDITION_VARIABLE).Value
 
-                    If IsDBNull(srv.rst.Fields(ASSETS_PARENT_ID_VARIABLE).Value) Then
-                        currentNode = TV.Nodes.Add(Trim(srv.rst.Fields(ASSETS_TREE_ID_VARIABLE).Value), _
-                                                   Trim(srv.rst.Fields(ASSETS_NAME_VARIABLE).Value), _
+                    If IsDBNull(srv.rst.Fields(ENTITIES_PARENT_ID_VARIABLE).Value) Then
+                        currentNode = TV.Nodes.Add(Trim(srv.rst.Fields(ENTITIES_ID_VARIABLE).Value), _
+                                                   Trim(srv.rst.Fields(ENTITIES_NAME_VARIABLE).Value), _
                                                    image_index, image_index)
                     Else
 
-                        ParentNode = TV.Nodes.Find(Trim(srv.rst.Fields(ASSETS_PARENT_ID_VARIABLE).Value), True)
+                        ParentNode = TV.Nodes.Find(Trim(srv.rst.Fields(ENTITIES_PARENT_ID_VARIABLE).Value), True)
                         If ParentNode.Length = 0 Then
-                            currentNode = TV.Nodes.Add(Trim(srv.rst.Fields(ASSETS_TREE_ID_VARIABLE).Value), _
-                                                       Trim(srv.rst.Fields(ASSETS_NAME_VARIABLE).Value), _
+                            currentNode = TV.Nodes.Add(Trim(srv.rst.Fields(ENTITIES_ID_VARIABLE).Value), _
+                                                       Trim(srv.rst.Fields(ENTITIES_NAME_VARIABLE).Value), _
                                                       image_index, image_index)
                         Else
-                            currentNode = ParentNode(0).Nodes.Add(Trim(srv.rst.Fields(ASSETS_TREE_ID_VARIABLE).Value), _
-                                                                  Trim(srv.rst.Fields(ASSETS_NAME_VARIABLE).Value), _
+                            currentNode = ParentNode(0).Nodes.Add(Trim(srv.rst.Fields(ENTITIES_ID_VARIABLE).Value), _
+                                                                  Trim(srv.rst.Fields(ENTITIES_NAME_VARIABLE).Value), _
                                                                   image_index, image_index)
                         End If
                     End If
-                    currentNode.EnsureVisible()
+                    currentNode.Checked = True
                     srv.rst.MoveNext()
                 Loop
-            End If
             srv.rst.Close()
         End If
 
@@ -190,34 +186,30 @@ Friend Class Entity
             TV.Nodes.Clear()
             srv.rst.Sort = ITEMS_POSITIONS
 
-            If srv.rst.RecordCount > 0 Then
-                srv.rst.MoveFirst()
+            Do While srv.rst.EOF = False
 
-                Do While srv.rst.EOF = False
+                Dim image_index As Int32 = nodes_icon_dic(srv.rst.Fields(ENTITIES_ID_VARIABLE).Value)
 
-                    Dim image_index As Int32 = nodes_icon_dic(srv.rst.Fields(ASSETS_TREE_ID_VARIABLE).Value)
+                If IsDBNull(srv.rst.Fields(ENTITIES_PARENT_ID_VARIABLE).Value) Then
+                    currentNode = TV.Nodes.Add(Trim(srv.rst.Fields(ENTITIES_ID_VARIABLE).Value), _
+                                                Trim(srv.rst.Fields(ENTITIES_NAME_VARIABLE).Value), _
+                                                image_index, image_index)
+                Else
 
-                    If IsDBNull(srv.rst.Fields(ASSETS_PARENT_ID_VARIABLE).Value) Then
-                        currentNode = TV.Nodes.Add(Trim(srv.rst.Fields(ASSETS_TREE_ID_VARIABLE).Value), _
-                                                   Trim(srv.rst.Fields(ASSETS_NAME_VARIABLE).Value), _
-                                                   image_index, image_index)
+                    ParentNode = TV.Nodes.Find(Trim(srv.rst.Fields(ENTITIES_PARENT_ID_VARIABLE).Value), True)
+                    If ParentNode.Length = 0 Then
+                        currentNode = TV.Nodes.Add(Trim(srv.rst.Fields(ENTITIES_ID_VARIABLE).Value), _
+                                                    Trim(srv.rst.Fields(ENTITIES_NAME_VARIABLE).Value), _
+                                                    image_index, image_index)
                     Else
-
-                        ParentNode = TV.Nodes.Find(Trim(srv.rst.Fields(ASSETS_PARENT_ID_VARIABLE).Value), True)
-                        If ParentNode.Length = 0 Then
-                            currentNode = TV.Nodes.Add(Trim(srv.rst.Fields(ASSETS_TREE_ID_VARIABLE).Value), _
-                                                       Trim(srv.rst.Fields(ASSETS_NAME_VARIABLE).Value), _
-                                                       image_index, image_index)
-                        Else
-                            currentNode = ParentNode(0).Nodes.Add(Trim(srv.rst.Fields(ASSETS_TREE_ID_VARIABLE).Value), _
-                                                                  Trim(srv.rst.Fields(ASSETS_NAME_VARIABLE).Value), _
-                                                                  image_index, image_index)
-                        End If
+                        currentNode = ParentNode(0).Nodes.Add(Trim(srv.rst.Fields(ENTITIES_ID_VARIABLE).Value), _
+                                                                Trim(srv.rst.Fields(ENTITIES_NAME_VARIABLE).Value), _
+                                                                image_index, image_index)
                     End If
-                    currentNode.EnsureVisible()
-                    srv.rst.MoveNext()
-                Loop
-            End If
+                End If
+                currentNode.Checked = True
+                srv.rst.MoveNext()
+            Loop
             srv.rst.Close()
         End If
 
@@ -232,28 +224,23 @@ Friend Class Entity
         srv.openRst(VIEWS_DATABASE + "." + GlobalVariables.Entities_View, ModelServer.FWD_CURSOR)
         srv.rst.Sort = ITEMS_POSITIONS
 
-        If srv.rst.RecordCount > 0 Then
-            srv.rst.MoveFirst()
-            Do While srv.rst.EOF = False
-
-                If IsDBNull(srv.rst.Fields(ASSETS_PARENT_ID_VARIABLE).Value) Then
-                    nodeX = TV.Nodes.Add(Trim(srv.rst.Fields(ASSETS_TREE_ID_VARIABLE).Value), _
-                                         Trim(srv.rst.Fields(ASSETS_CREDENTIAL_ID_VARIABLE).Value))
+        Do While srv.rst.EOF = False
+            If IsDBNull(srv.rst.Fields(ENTITIES_PARENT_ID_VARIABLE).Value) Then
+                nodeX = TV.Nodes.Add(Trim(srv.rst.Fields(ENTITIES_ID_VARIABLE).Value), _
+                                     Trim(srv.rst.Fields(ENTITIES_CREDENTIAL_ID_VARIABLE).Value))
+            Else
+                ParentNode = TV.Nodes.Find(Trim(srv.rst.Fields(ENTITIES_PARENT_ID_VARIABLE).Value), True)
+                If ParentNode.Length = 0 Then
+                    nodeX = TV.Nodes.Add(Trim(srv.rst.Fields(ENTITIES_ID_VARIABLE).Value), _
+                                         Trim(srv.rst.Fields(ENTITIES_CREDENTIAL_ID_VARIABLE).Value))
                 Else
-                    ParentNode = TV.Nodes.Find(Trim(srv.rst.Fields(ASSETS_PARENT_ID_VARIABLE).Value), True)
-                    If ParentNode.Length = 0 Then
-                        nodeX = TV.Nodes.Add(Trim(srv.rst.Fields(ASSETS_TREE_ID_VARIABLE).Value), _
-                                             Trim(srv.rst.Fields(ASSETS_CREDENTIAL_ID_VARIABLE).Value))
-                    Else
-                        nodeX = ParentNode(0).Nodes.Add(Trim(srv.rst.Fields(ASSETS_TREE_ID_VARIABLE).Value), _
-                                                        Trim(srv.rst.Fields(ASSETS_CREDENTIAL_ID_VARIABLE).Value))
-                    End If
+                    nodeX = ParentNode(0).Nodes.Add(Trim(srv.rst.Fields(ENTITIES_ID_VARIABLE).Value), _
+                                                    Trim(srv.rst.Fields(ENTITIES_CREDENTIAL_ID_VARIABLE).Value))
                 End If
-                nodeX.EnsureVisible()
-
-                srv.rst.MoveNext()
-            Loop
-        End If
+            End If
+            nodeX.Checked = True
+            srv.rst.MoveNext()
+        Loop
         srv.rst.Close()
         srv = Nothing
 
@@ -269,10 +256,10 @@ Friend Class Entity
         For Each entity_id In entities_id_list
 
             node = entitiesIDCredentialsTV.Nodes.Find(entity_id, True)(0)
-            srv.rst.Filter = ASSETS_TREE_ID_VARIABLE + "='" + entity_id + "'"
+            srv.rst.Filter = ENTITIES_ID_VARIABLE + "='" + entity_id + "'"
             If srv.rst.EOF = False AndAlso srv.rst.BOF = False Then
-                If srv.rst.Fields(ASSETS_CREDENTIAL_ID_VARIABLE).Value <> node.Text Then
-                    srv.rst.Fields(ASSETS_CREDENTIAL_ID_VARIABLE).Value = node.Text
+                If srv.rst.Fields(ENTITIES_CREDENTIAL_ID_VARIABLE).Value <> node.Text Then
+                    srv.rst.Fields(ENTITIES_CREDENTIAL_ID_VARIABLE).Value = node.Text
                 End If
             End If
         Next

@@ -503,7 +503,7 @@ Friend Class DLL3_Interface
                                          ByRef entities_currencies As List(Of String))
 
         entities_currencies.Clear()
-        Dim entitites_currencies_map = EntitiesMapping.GetEntitiesDictionary(ASSETS_TREE_ID_VARIABLE, ASSETS_CURRENCY_VARIABLE)
+        Dim entitites_currencies_map = EntitiesMapping.GetEntitiesDictionary(ENTITIES_ID_VARIABLE, ENTITIES_CURRENCY_VARIABLE)
         For Each entity In entities_list
             entities_currencies.Add(entitites_currencies_map(entity))
         Next

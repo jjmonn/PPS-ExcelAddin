@@ -95,7 +95,7 @@ Friend Class NewEntityUI
     Protected Friend Sub FillIn(ByRef parent_entity_name As String, ByRef attributes As Hashtable)
 
         parentTB.Text = parent_entity_name
-        Me.Controls.Find(CURRENCIES_CB_NAME, True)(0).Text = attributes(ASSETS_CURRENCY_VARIABLE)
+        Me.Controls.Find(CURRENCIES_CB_NAME, True)(0).Text = attributes(ENTITIES_CURRENCY_VARIABLE)
 
         For Each categoryNode As TreeNode In categoriesTV.Nodes
             Me.Controls.Find(categoryNode.Name + "CB", True)(0).Text = categoriesKeysNamesDictionaries(attributes(categoryNode.Name))
@@ -228,10 +228,10 @@ Friend Class NewEntityUI
         If IsFormValid(new_entity_Name) = True Then
 
             Dim hash As New Hashtable
-            hash.Add(ASSETS_NAME_VARIABLE, new_entity_Name)
-            If current_parent_entity_id <> "" Then hash.Add(ASSETS_PARENT_ID_VARIABLE, current_parent_entity_id)
-            hash.Add(ASSETS_CURRENCY_VARIABLE, Me.Controls.Find(CURRENCIES_CB_NAME, True)(0).Text)
-            hash.Add(ASSETS_ALLOW_EDITION_VARIABLE, 1)
+            hash.Add(ENTITIES_NAME_VARIABLE, new_entity_Name)
+            If current_parent_entity_id <> "" Then hash.Add(ENTITIES_PARENT_ID_VARIABLE, current_parent_entity_id)
+            hash.Add(ENTITIES_CURRENCY_VARIABLE, Me.Controls.Find(CURRENCIES_CB_NAME, True)(0).Text)
+            hash.Add(ENTITIES_ALLOW_EDITION_VARIABLE, 1)
 
             For Each categoryNode As TreeNode In categoriesTV.Nodes
                 Dim categoryValueText As String = Me.Controls.Find(categoryNode.Name + "CB", True)(0).Text

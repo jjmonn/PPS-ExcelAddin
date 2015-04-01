@@ -1,6 +1,6 @@
 ﻿' LogModel.vb
 '
-'
+' reimplement with all analysis axis !!
 '
 '
 '
@@ -44,7 +44,7 @@ Friend Class LogController
         Model = New LogModel()
         accounts_id_ftype_dic = AccountsMapping.GetAccountsDictionary(ACCOUNT_ID_VARIABLE, ACCOUNT_FORMULA_TYPE_VARIABLE)
 
-        entities_id_currency_dic = EntitiesMapping.GetEntitiesDictionary(ASSETS_TREE_ID_VARIABLE, ASSETS_CURRENCY_VARIABLE)
+        entities_id_currency_dic = EntitiesMapping.GetEntitiesDictionary(ENTITIES_ID_VARIABLE, ENTITIES_CURRENCY_VARIABLE)
         ChangeVersionID()
         View.Show()
 
@@ -63,12 +63,12 @@ Friend Class LogController
 
     End Sub
 
-    Protected Friend Sub LaunchComputation(ByRef entity_id As String)
+    Protected Friend Sub LaunchComputation(ByRef entity_node As TreeNode)
 
-        Model.ComputeEntity(entity_id, current_version_id)
+        Model.ComputeEntity(entity_node, current_version_id)
         DisplayResults()
-        View.DisplayCurrentAttributes(entities_id_currency_dic(entity_id))
-        current_entity_id = entity_id
+        View.DisplayCurrentAttributes(entities_id_currency_dic(entity_node.Name))
+        current_entity_id = entity_node.Name
 
     End Sub
 

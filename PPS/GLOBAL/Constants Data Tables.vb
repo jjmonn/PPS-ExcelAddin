@@ -18,6 +18,8 @@
 Module Data_Tables_Constants
 
     Friend Const ITEMS_POSITIONS As String = "item_position"
+    Friend Const NAMES_MAX_LENGTH As Int32 = 100
+
 
 #Region "ACF_Config Database"
 
@@ -206,40 +208,6 @@ Module Data_Tables_Constants
 #End Region
 
 
-#Region "Categories Table"
-
-    Friend Const CATEGORIES_TABLE_NAME As String = "categories"
-    Friend Const CATEGORY_ID_VARIABLE As String = "id"
-    Friend Const CATEGORY_NAME_VARIABLE As String = "category_name"
-    Friend Const CATEGORY_PARENT_ID_VARIABLE As String = "parent_id"
-    Friend Const CATEGORY_IS_CATEGORY_VARIABLE As String = "is_category"
-
-    Friend Const CATEGORIES_TOKEN_SIZE As Int32 = 5
-    Friend Const CATEGORIES_NAME_MAX_LENGTH As Int32 = 48
-    Friend Const NON_ATTRIBUTED_SUFIX As String = "na"
-
-    ' Table information: Holds information on assets categories.
-    '          
-    ' Primary key: category_id
-    '
-    ' !! Quid: can the categories have sub categories ?
-    '
-    ' -> catefories name / text cannot include commas
-    '
-    '
-    ' Allows to manage categories as a treeview
-    ' 
-    ' Privileges: 
-    '       a) Write: TO BE DECIDED
-    '       b) Read: TO BE DECIDED
-    '
-    ' 
-    ' VIEWS : TO BE IMPLEMENTED
-
-
-#End Region
-
-
 #Region "Forex"
 
 #Region "Currencies Table"
@@ -290,8 +258,7 @@ Module Data_Tables_Constants
     Friend Const RATES_VERSIONS_START_PERIOD_VAR As String = "start_period"
     Friend Const RATES_VERSIONS_NB_PERIODS_VAR As String = "nb_periods"
     Friend Const RATES_VERSIONS_TOKEN_SIZE As Int32 = 3
-    Friend Const RATES_VERSIONS_MAX_NAME_SIZE As Int32 = 50
-
+ 
 
 #End Region
 
@@ -355,8 +322,7 @@ Module Data_Tables_Constants
     Friend Const VERSIONS_TOKEN_SIZE As Int32 = 3
     Friend Const YEARLY_TIME_CONFIGURATION = "years"
     Friend Const MONTHLY_TIME_CONFIGURATION = "months"
-    Friend Const DATA_VERSION_NAME_MAX_LENGTH As Int32 = 50
-
+  
     ' Table information: Holds information on data versioning.
     '          
     ' Primary key: version_Name
@@ -473,14 +439,40 @@ Module Data_Tables_Constants
 #End Region
 
 
-#Region "Adjustments"
+#Region "ANALAYSIS AXIS"
 
     Friend Const ADJUSTMENTS_TABLE As String = "adjustments"
-    Friend Const ADJUSTMENTS_ID_VAR As String = "id"
-    Friend Const ADJUSTMENTS_NAME_VAR As String = "name"
-    Friend Const ADJUSTMENTS_TOKEN_SIZE As Int32 = 3
+    Friend Const CLIENTS_TABLE As String = "clients"
+    Friend Const PRODUCTS_TABLE As String = "products"
+
+    Friend Const ANALYSIS_AXIS_ID_VAR As String = "id"
+    Friend Const ANALYSIS_AXIS_NAME_VAR As String = "name"
+    Friend Const ANALYSIS_AXIS_TOKEN_SIZE As Int32 = 3
+
     Friend Const DEFAULT_ADJUSTMENT_ID As String = "aaa"
- 
+    Friend Const DEFAULT_CLIENT_ID As String = "aaa"
+    Friend Const DEFAULT_PRODUCT_ID As String = "aaa"
+
+    ' Codes
+
+
+
+
+#End Region
+
+
+#Region "Categories Table"
+
+    Friend Const CATEGORIES_TABLE_NAME As String = "categories"
+    Friend Const CATEGORY_ID_VARIABLE As String = "id"
+    Friend Const CATEGORY_NAME_VARIABLE As String = "name"
+    Friend Const CATEGORY_PARENT_ID_VARIABLE As String = "parent_id"
+    Friend Const CATEGORY_CODE_VARIABLE As String = "code"
+    Friend Const CATEGORY_IS_CATEGORY_VARIABLE As String = "is_category"
+
+    Friend Const CATEGORIES_TOKEN_SIZE As Int32 = 3
+    Friend Const NON_ATTRIBUTED_SUFIX As String = "na"
+
 #End Region
 
 
@@ -500,8 +492,7 @@ Module Data_Tables_Constants
 
     Friend Const MARKET_INDEXES_TABLE As String = "market_indexes"
     Friend Const MARKET_INDEXES_ID_VARIABLE As String = "id"
-    Friend Const MARKET_INDEXES_MAX_TOKEN_SIZE As Int32 = 20
-
+  
     Friend Const MARKET_INDEXES_PRICES_TABLE As String = "market_index_prices"
     Friend Const MARKET_INDEXES_PRICES_ID_VAR As String = "id"
     Friend Const MARKET_INDEXES_PRICES_VERSION_VAR As String = "version_id"
@@ -518,6 +509,7 @@ Module Data_Tables_Constants
     Friend Const MARKET_INDEXES_VERSIONS_TOKEN_SIZE As Int32 = 3
 
 #End Region
+
 
 #Region "PPS Colors Palette"
 
@@ -542,11 +534,13 @@ Module Data_Tables_Constants
 
 #Region "Data Tables"
 
-    Friend Const DATA_ASSET_ID_VARIABLE = "entity_id"
+    Friend Const DATA_ENTITY_ID_VARIABLE = "entity_id"
     Friend Const DATA_ACCOUNT_ID_VARIABLE = "account_id"
     Friend Const DATA_PERIOD_VARIABLE = "period"
     Friend Const DATA_VALUE_VARIABLE = "value"
     Friend Const DATA_ADJUSTMENT_ID_VARIABLE = "adjustment_id"
+    Friend Const DATA_CLIENT_ID_VARIABLE = "client_id"
+    Friend Const DATA_PRODUCT_ID_VARIABLE = "product_id"
 
 #End Region
 
@@ -579,12 +573,12 @@ Module Data_Tables_Constants
 #Region "Entities Table"
 
     Friend Const ENTITIES_TABLE = "entities"
-    Friend Const ASSETS_NAME_VARIABLE = "entity_name"
-    Friend Const ASSETS_TREE_ID_VARIABLE = "id"
-    Friend Const ASSETS_PARENT_ID_VARIABLE = "parent_id"
-    Friend Const ASSETS_CURRENCY_VARIABLE = "entity_currency"
-    Friend Const ASSETS_ALLOW_EDITION_VARIABLE = "allow_edition"
-    Friend Const ASSETS_CREDENTIAL_ID_VARIABLE = "credential_level"
+    Friend Const ENTITIES_NAME_VARIABLE = "entity_name"
+    Friend Const ENTITIES_ID_VARIABLE = "id"
+    Friend Const ENTITIES_PARENT_ID_VARIABLE = "parent_id"
+    Friend Const ENTITIES_CURRENCY_VARIABLE = "entity_currency"
+    Friend Const ENTITIES_ALLOW_EDITION_VARIABLE = "allow_edition"
+    Friend Const ENTITIES_CREDENTIAL_ID_VARIABLE = "credential_level"
 
     ' Columns are variables and corresponds to the attributes
     Friend Const ENTITIES_TOKEN_SIZE As Int32 = 3

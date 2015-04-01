@@ -7,7 +7,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 10/03/2015
+' Last modified: 24/03/2015
 
 Imports System.Windows.Forms
 Imports System.Collections.Generic
@@ -21,24 +21,31 @@ Friend Class ControllingUIModel
 
     ' Objects
     Private AggregationComputer As GenericAggregationDLL3Computing
-    Private ESB As EntitiesSelectionBuilderClass
-    Private Categories As TreeNode
+    Private ESB As ESB
     Private PBar As ProgressBarControl
 
     ' Variables
-    Protected Friend model_data_dict As New Hashtable
-    Private versions_dict As Dictionary(Of String, Hashtable)
-
+    Protected Friend categories_id_code_dict As New Dictionary(Of String, String)
 
 #End Region
 
 
 #Region "Initialize"
 
-    Protected Friend Sub New(ByRef input_ESB As EntitiesSelectionBuilderClass)
+    Protected Friend Sub New(ByRef input_ESB As ESB)
 
         AggregationComputer = New GenericAggregationDLL3Computing(GlobalVariables.GlobalDBDownloader)
         ESB = input_ESB
+        InitializeCategoriesIDsCodeDict()
+
+    End Sub
+
+    Private Sub InitializeCategoriesIDsCodeDict()
+
+        categories_id_code_dict = CategoriesMapping.GetCategoriesIDCodeMapping()
+        categories_id_code_dict.Add(ControllingUI2Controller.CLIENTS_CODE, ControllingUI2Controller.CLIENTS_CODE)
+        categories_id_code_dict.Add(ControllingUI2Controller.PRODUCT_CODE, ControllingUI2Controller.PRODUCT_CODE)
+        categories_id_code_dict.Add(ControllingUI2Controller.ADJUSTMENT_CODE, ControllingUI2Controller.ADJUSTMENT_CODE)
 
     End Sub
 
@@ -47,86 +54,99 @@ Friend Class ControllingUIModel
 
 #Region "Interface"
 
-    Protected Friend Function BuildGeneralDataHT(ByRef entity_node As TreeNode, _
-                                                 ByRef versions_id_array As String(), _
-                                                 ByRef versions_dic As Dictionary(Of String, Hashtable), _
-                                                 ByRef categories_array As String(), _
-                                                 ByRef adjustments_filters_list As List(Of String))
+    Protected Friend Sub IntializeComputerAndFilter(ByRef entity_node As TreeNode)
 
-        For Each category_id As String In categories_array
+        AggregationComputer.init_computer_complete_mode(entity_node)
+        AggregationComputer.ReinitializeFiltersList()
 
-            ' the model config depends on categories -> changes selection  !!!
-            ' use ESB for categories break down ?
-            ' play on the entities selection
-            ' maybe review the entities selection filter process on categories -> should use relational DB
-            ' what if a category filter is already applied ?
-            ' -> must be additive with categories filter
+    End Sub
 
-            AggregationComputer.init_computer_complete_mode(entity_node)
-            VersionsLoop(category_id, _
-                         entity_node, _
-                         versions_id_array, _
-                         adjustments_filters_list)
+    Protected Friend Sub SetDBFilters(ByRef filters_dict As Dictionary(Of String, String))
+
+        For Each filter_code As String In filters_dict.Keys
+            Dim str_filter_SQL As String = filter_code & "='" & filters_dict(filter_code) & "'"
+
+            Select Case categories_id_code_dict(filter_code)
+                Case ControllingUI2Controller.CLIENTS_CODE
+                    Dim clients_id_filter_list As New List(Of String)
+                    clients_id_filter_list.Add(filters_dict(filter_code))
+                    AggregationComputer.UpdateclientsFilters(clients_id_filter_list)
+
+                Case ControllingUI2Controller.PRODUCT_CODE
+                    Dim products_id_filter_list As New List(Of String)
+                    products_id_filter_list.Add(filters_dict(filter_code))
+                    AggregationComputer.UpdateproductsFilters(products_id_filter_list)
+
+                Case ControllingUI2Controller.ADJUSTMENT_CODE
+                    Dim adjustments_id_filter_list As New List(Of String)
+                    adjustments_id_filter_list.Add(filters_dict(filter_code))
+                    AggregationComputer.UpdateadjustmentsFilters(adjustments_id_filter_list)
+
+                Case ControllingUI2Controller.ENTITY_CATEGORY_CODE
+                    Dim entities_id_filter_list As List(Of String) = SQLFilterListsGenerators.GetEntitiesFilterList(str_filter_SQL)
+                    AggregationComputer.UpdateEntitiesFilters(entities_id_filter_list)
+
+                Case ControllingUI2Controller.CLIENT_CATEGORY_CODE
+                    Dim clients_id_filter_list As List(Of String) = SQLFilterListsGenerators.GetAnalysisAxisFilterList(CLIENTS_TABLE, str_filter_SQL)
+                    AggregationComputer.UpdateclientsFilters(clients_id_filter_list)
+
+                Case ControllingUI2Controller.PRODUCT_CATEGORY_CODE
+                    Dim products_id_filter_list As List(Of String) = SQLFilterListsGenerators.GetAnalysisAxisFilterList(PRODUCTS_TABLE, str_filter_SQL)
+                    AggregationComputer.UpdateproductsFilters(products_id_filter_list)
+
+            End Select
         Next
 
-    End Function
+    End Sub
 
+    Protected Friend Function GetDataHT(ByRef versions_id_list As List(Of String), _
+                                        ByRef versions_dict As Dictionary(Of String, Hashtable), _
+                                        ByRef destination_currency As String) As Hashtable
+
+        Dim DataHT As New Hashtable
+        For Each Version_id As String In versions_id_list
+            compute(DataHT, _
+                    Version_id, _
+                    versions_dict(Version_id)(VERSIONS_TIME_CONFIG_VARIABLE), _
+                    versions_dict(Version_id)(VERSIONS_START_PERIOD_VAR), _
+                    versions_dict(Version_id)(VERSIONS_NB_PERIODS_VAR), _
+                    versions_dict(Version_id)(VERSIONS_RATES_VERSION_ID_VAR), _
+                    versions_dict(Version_id)(Version.PERIOD_LIST), _
+                    destination_currency)
+        Next
+        Return DataHT
+
+    End Function
 
 #End Region
 
 
 #Region "Computations loops"
 
-    ' Loop through versions and Launch computations/ storage
-    Private Sub VersionsLoop(ByRef category_id As String, _
-                             ByRef entity_node As TreeNode, _
-                             ByRef versions_array As String(), _
-                             ByRef adjustments_filter_list As List(Of String))
-
-        Dim versionIndex As Int32 = 0
-        Dim Years_Versions_HT As New Hashtable
-        For Each Version_id As String In versions_array
-            compute(entity_node, _
-                    versions_dict(Version_id)(VERSIONS_TIME_CONFIG_VARIABLE), _
-                    Years_Versions_HT, _
-                    Version_id, _
-                    versions_dict(Version_id)(VERSIONS_RATES_VERSION_ID_VAR), _
-                    adjustments_filter_list)
-
-            versionIndex = versionIndex + 1
-        Next
-        model_data_dict.Add(category_id, Years_Versions_HT)
-    
-    End Sub
-
     ' Compute and Stores the (versions)(Entities)(Accounts)(Perios) HT
-    Private Sub compute(ByRef entity_node As TreeNode, _
-                        ByRef time_config As String, _
-                        ByRef versions_HT As Hashtable, _
+    Private Sub compute(ByRef versions_HT As Hashtable, _
                         ByRef version_id As String, _
-                        ByRef currency As String, _
-                        ByRef adjustments_filter_list As List(Of String))
-
-        Dim start_period As Int32 = versions_dict(version_id)(VERSIONS_START_PERIOD_VAR)
-        Dim nb_periods As Int32 = versions_dict(version_id)(VERSIONS_NB_PERIODS_VAR)
-        Dim rates_version_id As String = versions_dict(version_id)(VERSIONS_RATES_VERSION_ID_VAR)
+                        ByRef time_config As String, _
+                        ByRef start_period As Int32, _
+                        ByRef nb_periods As Int32, _
+                        ByRef rates_version_id As String, _
+                        ByRef period_list As List(Of Int32), _
+                        ByRef currency As String)
 
         AggregationComputer.compute_selection_complete(version_id, _
-                                                     versions_dict(version_id)(VERSIONS_TIME_CONFIG_VARIABLE), _
+                                                     time_config, _
                                                      rates_version_id, _
-                                                     versions_dict(version_id)(Version.PERIOD_LIST), _
+                                                     period_list, _
                                                      currency, _
                                                      start_period, _
                                                      nb_periods, _
-                                                     PBar, _
-                                                     ESB.StrSqlQuery, _
-                                                     adjustments_filter_list)
+                                                     PBar)
 
         AggregationComputer.LoadOutputMatrix(PBar)
         If time_config = YEARLY_TIME_CONFIGURATION Then
             versions_HT.Add(version_id, _
                             GetModelCurrentDataDictionary(AggregationComputer.complete_data_dictionary, _
-                                                          versions_dict(version_id)(Version.PERIOD_LIST)))
+                                                          period_list))
         Else
             Dim global_periods_dic As Dictionary(Of Int32, Int32())
             Dim years_data_dic As Dictionary(Of String, Double()) = AggregationComputer.ComputeMonthlyPeriodsAggregations(version_id, _
@@ -144,21 +164,10 @@ Friend Class ControllingUIModel
 
     End Sub
 
+    ' Below: those could go in the Aggregation Computer ! 
+    ' Would imply to reimplement all GenericAggregationDLL3Computing dependant processes
 
-#End Region
-
-
-#Region "Utilities"
-
-    Protected Friend Sub ClearDataDictionaries()
-
-        data_dict.Clear()
-       
-    End Sub
-
-    ' Below: those could go in the Aggregation Computer !
-
-    ' Returns (entities)(accounts)(years)
+    ' Returns (entities)(accounts)(years)(total)
     Private Function GetModelCurrentDataDictionary(ByRef data_dict As Dictionary(Of String, Double()), _
                                                    ByRef periods_list As List(Of Int32)) As Hashtable
 
@@ -169,7 +178,10 @@ Friend Class ControllingUIModel
             For Each account_id As String In AggregationComputer.get_model_accounts_list
                 Dim Account_HT As New Hashtable
                 For Each period As Int32 In periods_list
-                    Account_HT.Add(period, data_dict(entity_id)(account_index * periods_list.IndexOf(period)))
+                    Dim years_HT As New Hashtable
+                    Dim data_index As Int32 = (account_index * periods_list.Count) + periods_list.IndexOf(period)
+                    years_HT.Add(ControllingUI2Controller.ZERO_PERIOD_CODE, data_dict(entity_id)(data_index))
+                    Account_HT.Add(period, years_HT)
                 Next
                 Entity_HT.Add(account_id, Account_HT)
                 account_index = account_index + 1
@@ -196,7 +208,7 @@ Friend Class ControllingUIModel
                 Dim month_index As Int32 = 0
                 For Each year_period As Int32 In global_periods_list.Keys
                     Dim years_HT As New Hashtable
-                    years_HT.Add(0, years_data_dict(entity_id)(account_index * year_index))
+                    years_HT.Add(ControllingUI2Controller.ZERO_PERIOD_CODE, years_data_dict(entity_id)(account_index * year_index))
 
                     For Each month_period As Int32 In global_periods_list(year_period)
                         years_HT.Add(month_period, months_data_dict(entity_id)(account_index * month_index))
@@ -215,6 +227,16 @@ Friend Class ControllingUIModel
 
     End Function
 
+#End Region
+
+
+#Region "Utilities"
+
+    Protected Friend Sub CloseModel()
+
+        AggregationComputer.delete_model()
+
+    End Sub
 
 #End Region
 

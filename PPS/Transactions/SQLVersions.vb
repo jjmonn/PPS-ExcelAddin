@@ -9,7 +9,7 @@
 ' known bugs:
 '
 '
-' Last modified: 18/01/2015
+' Last modified: 16/03/2015
 ' Author: Julien Monnereau
 
 
@@ -31,14 +31,19 @@ Friend Class SQLVersions
 
         If srv.sqlQuery("CREATE TABLE " & DATA_DATABASE & "." & version_id & " (" & _
                       DATA_ACCOUNT_ID_VARIABLE & " CHAR(" & ACCOUNTS_TOKEN_SIZE & ") NOT NULL," & _
-                      DATA_ASSET_ID_VARIABLE & " CHAR(" & ENTITIES_TOKEN_SIZE & ") NOT NULL," & _
+                      DATA_ENTITY_ID_VARIABLE & " CHAR(" & ENTITIES_TOKEN_SIZE & ") NOT NULL," & _
                       DATA_PERIOD_VARIABLE & " INT NOT NULL," & _
                       DATA_VALUE_VARIABLE & " DOUBLE NOT NULL, " & _
-                      DATA_ADJUSTMENT_ID_VARIABLE & " CHAR(" & ADJUSTMENTS_TOKEN_SIZE & ") NOT NULL DEFAULT ''," & _
-                      " PRIMARY KEY (" & DATA_ASSET_ID_VARIABLE & "," & _
+                      DATA_ADJUSTMENT_ID_VARIABLE & " CHAR(" & ANALYSIS_AXIS_TOKEN_SIZE & ") NOT NULL DEFAULT ''," & _
+                      DATA_CLIENT_ID_VARIABLE & " CHAR(" & ANALYSIS_AXIS_TOKEN_SIZE & ") NOT NULL DEFAULT ''," & _
+                      DATA_PRODUCT_ID_VARIABLE & " CHAR(" & ANALYSIS_AXIS_TOKEN_SIZE & ") NOT NULL DEFAULT ''," & _
+                      " PRIMARY KEY (" & DATA_ENTITY_ID_VARIABLE & "," & _
                                          DATA_ACCOUNT_ID_VARIABLE & "," & _
                                          DATA_PERIOD_VARIABLE & "," & _
-                                         DATA_ADJUSTMENT_ID_VARIABLE & "))") Then
+                                         DATA_ADJUSTMENT_ID_VARIABLE & "," & _
+                                         DATA_CLIENT_ID_VARIABLE & "," & _
+                                         DATA_PRODUCT_ID_VARIABLE _
+                                         & "))") Then
 
             Return CreateTrigger(version_id)
         Else
@@ -52,10 +57,13 @@ Friend Class SQLVersions
         If srv.sqlQuery("CREATE TABLE " + DATA_DATABASE + "." + new_version_id + " AS (SELECT * FROM " + DATA_DATABASE + "." + old_version_id + ")") Then
 
             If srv.sqlQuery("ALTER TABLE " & DATA_DATABASE + "." + new_version_id & _
-                            " ADD CONSTRAINT pk_ID PRIMARY KEY (" & DATA_ASSET_ID_VARIABLE & "," & _
+                            " ADD CONSTRAINT pk_ID PRIMARY KEY (" & DATA_ENTITY_ID_VARIABLE & "," & _
                                                                     DATA_ACCOUNT_ID_VARIABLE & "," & _
                                                                     DATA_PERIOD_VARIABLE & _
-                                                                    DATA_ADJUSTMENT_ID_VARIABLE & ")") Then
+                                                                    DATA_ADJUSTMENT_ID_VARIABLE & "," & _
+                                                                    DATA_CLIENT_ID_VARIABLE & "," & _
+                                                                    DATA_PRODUCT_ID_VARIABLE _
+                                                                    & "))") Then
 
                 Return CreateTrigger(new_version_id)
             Else
@@ -89,20 +97,26 @@ Friend Class SQLVersions
                             DATA_DATABASE & "`.`" & version_id & "`" & _
                             "FOR EACH ROW BEGIN " & _
                             "INSERT INTO `" & DATA_DATABASE & "`.`" & LOG_TABLE_NAME & "`(" & _
-                            LOG_USER_ID_VARIABLE & "," & _
-                            LOG_VERSION_ID_VARIABLE & "," & _
-                            DATA_ACCOUNT_ID_VARIABLE & "," & _
-                            DATA_ASSET_ID_VARIABLE & "," & _
-                            DATA_PERIOD_VARIABLE & "," & _
-                            DATA_VALUE_VARIABLE & "," & _
-                            DATA_ADJUSTMENT_ID_VARIABLE & ") " & _
+                                LOG_USER_ID_VARIABLE & "," & _
+                                LOG_VERSION_ID_VARIABLE & "," & _
+                                DATA_ACCOUNT_ID_VARIABLE & "," & _
+                                DATA_ENTITY_ID_VARIABLE & "," & _
+                                DATA_PERIOD_VARIABLE & "," & _
+                                DATA_VALUE_VARIABLE & "," & _
+                                DATA_ADJUSTMENT_ID_VARIABLE & "," & _
+                                DATA_CLIENT_ID_VARIABLE & "," & _
+                                DATA_PRODUCT_ID_VARIABLE _
+                            & ") " & _
                             "VALUES(SUBSTRING_INDEX(USER(),'@',1),'" & _
-                            version_id & _
-                            "',NEW." & DATA_ACCOUNT_ID_VARIABLE & _
-                            ",NEW." & DATA_ASSET_ID_VARIABLE & _
-                            ", NEW." & DATA_PERIOD_VARIABLE & _
-                            ", NEW." & DATA_VALUE_VARIABLE & _
-                            ", NEW." & DATA_ADJUSTMENT_ID_VARIABLE & ");" & _
+                            version_id & "'" & _
+                                ", NEW." & DATA_ACCOUNT_ID_VARIABLE & _
+                                ", NEW." & DATA_ENTITY_ID_VARIABLE & _
+                                ", NEW." & DATA_PERIOD_VARIABLE & _
+                                ", NEW." & DATA_VALUE_VARIABLE & _
+                                ", NEW." & DATA_ADJUSTMENT_ID_VARIABLE & _
+                                ", NEW." & DATA_CLIENT_ID_VARIABLE & _
+                                ", NEW." & DATA_PRODUCT_ID_VARIABLE _
+                            & ");" & _
                             "END;"
 
         Return srv.sqlQuery(str)
@@ -121,8 +135,8 @@ Friend Class SQLVersions
     '' Entities Foreign Key
     'strSql = " ALTER TABLE " + versionTableName _
     '         + "ADD CONSTRAINT " + DATA_ENTITY_ID_FK_VARIABLE _
-    '         + " FOREIGN KEY(" + DATA_ASSET_ID_VARIABLE + ")" _
-    '         + " REFERENCES " + ASSETS_TABLE + "(" + ASSETS_TREE_ID_VARIABLE + ")"
+    '         + " FOREIGN KEY(" + DATA_ENTITY_ID_VARIABLE + ")" _
+    '         + " REFERENCES " + ASSETS_TABLE + "(" + ENTITIES_ID_VARIABLE + ")"
 
     'srv.sqlQuery(strSql)
 

@@ -28,12 +28,12 @@ Friend Class PPSBIController
 #Region "Instance Variables"
 
     ' Objects
-    Private ESB As EntitiesSelectionBuilderClass
+    Private ESB As ESB
 
     ' Variables
     Private AccountsNameKeyDictionary As Hashtable
     Private EntitiesNameKeyDictionary As Hashtable
-    Private CategoriesNameKeyDictionary As Hashtable
+    Private EntitiesCategoriesNameKeyDictionary As Hashtable
     Private AccountsFTypesDictionary As Hashtable
     Private Adjustments_name_id_dic As Dictionary(Of String, String)
     Private emptyCellFlag As Boolean
@@ -47,12 +47,12 @@ Friend Class PPSBIController
 
     Protected Friend Sub New()
 
-        ESB = New EntitiesSelectionBuilderClass
+        ESB = New ESB
         AccountsFTypesDictionary = AccountsMapping.GetAccountsDictionary(ACCOUNT_ID_VARIABLE, ACCOUNT_FORMULA_TYPE_VARIABLE)
         AccountsNameKeyDictionary = AccountsMapping.GetAccountsDictionary(ACCOUNT_NAME_VARIABLE, ACCOUNT_ID_VARIABLE)
-        EntitiesNameKeyDictionary = EntitiesMapping.GetEntitiesDictionary(ASSETS_NAME_VARIABLE, ASSETS_TREE_ID_VARIABLE)
-        CategoriesNameKeyDictionary = CategoriesMapping.GetCategoriesDictionary(CATEGORY_NAME_VARIABLE, CATEGORY_ID_VARIABLE)
-        Adjustments_name_id_dic = AdjustmentsMapping.GetAdjustmentsDictionary(ADJUSTMENTS_NAME_VAR, ADJUSTMENTS_ID_VAR)
+        EntitiesNameKeyDictionary = EntitiesMapping.GetEntitiesDictionary(ENTITIES_NAME_VARIABLE, ENTITIES_ID_VARIABLE)
+        EntitiesCategoriesNameKeyDictionary = CategoriesMapping.GetCategoryDictionary(ControllingUI2Controller.ENTITIES_CODE, CATEGORY_NAME_VARIABLE, CATEGORY_ID_VARIABLE)
+        Adjustments_name_id_dic = AdjustmentsMapping.GetAdjustmentsDictionary(ANALYSIS_AXIS_NAME_VAR, ANALYSIS_AXIS_ID_VAR)
         emptyCellFlag = False
         aggregation_computed_accounts_types.Add(FORMULA_ACCOUNT_FORMULA_TYPE)
         aggregation_computed_accounts_types.Add(FORMULA_TYPE_BALANCE_SHEET)
@@ -65,6 +65,8 @@ Friend Class PPSBIController
 
 #Region "Interface"
 
+
+    ' Stubs in this function - clients/ products adjustments filters should come as param or computed here ?!!!
     ' Period input: date as integer 
     Protected Friend Function getDataCallBack(ByRef entity As String, _
                                             ByRef account As Object, _
@@ -94,48 +96,67 @@ Friend Class PPSBIController
                            error_message) _
                            = False Then Return error_message
 
+        ' construction des clients_id_filter
+        '                  proudcts_id_filters
+        ' STUB !!!
+        Dim clients_id_filters As New List(Of String)
+        Dim products_id_filters As New List(Of String)
+        Dim adjustments_id_filters As New List(Of String)
+
+        '
+        ' ESB ?! -> applies filters on entity node
         ESB.BuildCategoriesFilterFromFilterList(filterList)
         Dim entity_node As TreeNode = ESB.EntitiesTV.Nodes.Find(entity_id, True)(0)
 
         If aggregation_computed_accounts_types.Contains(AccountsFTypesDictionary(account_id)) _
         AndAlso entity_node.Nodes.Count > 0 Then
-            Return ComputeViaAggregationComputer(entity_id, _
-                                                 entity_node, _
+            Return ComputeViaAggregationComputer(entity_node, _
                                                  account_id, _
                                                  version_id, _
                                                  currencyString, _
                                                  period, _
-                                                 adjustment_id)
+                                                 clients_id_filters, _
+                                                 products_id_filters, _
+                                                 adjustments_id_filters)
         Else
-            Return ComputeViaSingleEntityComputer(entity_id, _
+            Return ComputeViaSingleEntityComputer(entity_node, _
                                                   account_id, _
                                                   version_id, _
                                                   currencyString, _
                                                   period, _
-                                                  adjustment_id)
+                                                  clients_id_filters, _
+                                                 products_id_filters, _
+                                                 adjustments_id_filters)
         End If
+
 
     End Function
 
-    Private Function ComputeViaSingleEntityComputer(ByRef entity_id As String, _
+    Private Function ComputeViaSingleEntityComputer(ByRef entity_node As TreeNode, _
                                                     ByRef account_id As String, _
                                                     ByRef version_id As String, _
                                                     ByRef currency As String, _
                                                     ByRef period As Object, _
-                                                    ByRef adjustment_id As String) As Object
+                                                    Optional ByRef clients_id As List(Of String) = Nothing, _
+                                                    Optional ByRef products_id As List(Of String) = Nothing, _
+                                                    Optional ByRef adjustments_id As List(Of String) = Nothing) As Object
 
+        ' Find the entity node here ? 
+        
         Dim period_int As Int32
-        If GlobalVariables.GenericGlobalSingleEntityComputer.current_entity_id <> entity_id _
-        Or GlobalVariables.GenericGlobalSingleEntityComputer.currentStrSqlQuery <> ESB.StrSqlQuery _
+        If GlobalVariables.GenericGlobalSingleEntityComputer.CheckCache(entity_node, _
+                                                                        clients_id, _
+                                                                        products_id, _
+                                                                        adjustments_id) = False _
         Or GlobalVariables.GenericGlobalSingleEntityComputer.current_version_id <> version_id _
-        Or GlobalVariables.GenericGlobalSingleEntityComputer.currentCurrency <> currency _
-        Or GlobalVariables.GenericGlobalSingleEntityComputer.current_adjusmtent_id <> adjustment_id Then
+        Or GlobalVariables.GenericGlobalSingleEntityComputer.current_currency <> currency Then
 
-            GlobalVariables.GenericGlobalSingleEntityComputer.ComputeAggregatedEntity(entity_id, _
+            GlobalVariables.GenericGlobalSingleEntityComputer.ComputeAggregatedEntity(entity_node, _
                                                                                       version_id, _
                                                                                       currency, _
-                                                                                      adjustment_id, _
-                                                                                      ESB.StrSqlQuery)
+                                                                                      clients_id, _
+                                                                                      products_id, _
+                                                                                      adjustments_id)
         End If
 
         If CheckDate(period, period_int, GlobalVariables.GenericGlobalSingleEntityComputer.period_list) = False Then
@@ -150,33 +171,31 @@ Friend Class PPSBIController
 
     End Function
 
-    Private Function ComputeViaAggregationComputer(ByRef entity_id As String, _
-                                                   ByRef entity_node As TreeNode, _
+    Private Function ComputeViaAggregationComputer(ByRef entity_node As TreeNode, _
                                                    ByRef account_id As String, _
                                                    ByRef version_id As String, _
                                                    ByRef currency As String, _
                                                    ByRef period As Object, _
-                                                   ByRef adjustment_id As String) As Object
+                                                   Optional ByRef clients_id As List(Of String) = Nothing, _
+                                                   Optional ByRef products_id As List(Of String) = Nothing, _
+                                                   Optional ByRef adjustments_id As List(Of String) = Nothing) As Object
 
         Dim period_int As Int32
-        If GlobalVariables.GenericGlobalAggregationComputer.IsEntityAlreadyComputed(entity_id) = False _
-        Or GlobalVariables.GenericGlobalAggregationComputer.current_version_id <> version_id _
-        Or GlobalVariables.GenericGlobalAggregationComputer.current_currency <> currency _
-        Or GlobalVariables.GenericGlobalAggregationComputer.current_sql_filter_query <> ESB.StrSqlQuery _
-        Or GlobalVariables.GenericGlobalAggregationComputer.current_adjustment_id <> adjustment_id Then
+
+        If GlobalVariables.GenericGlobalAggregationComputer.IsEntityAlreadyComputed(entity_node.Name) = False _
+        Or GlobalVariables.GenericGlobalSingleEntityComputer.CheckCache(entity_node, _
+                                                                        clients_id, _
+                                                                        products_id, _
+                                                                        adjustments_id) = False _
+        Or GlobalVariables.GenericGlobalSingleEntityComputer.current_version_id <> version_id _
+        Or GlobalVariables.GenericGlobalSingleEntityComputer.current_currency <> currency Then
 
             Dim Versions As New Version
             Dim nb_periods, start_period As Int32
             Dim periods_list As List(Of Int32)
             Dim time_configuration As String
             Dim rates_version_id As String = Versions.ReadVersion(version_id, VERSIONS_RATES_VERSION_ID_VAR)
-            Dim adjustments_id_list As List(Of String)
-            If adjustment_id <> "" Then
-                adjustments_id_list = New List(Of String)
-                adjustments_id_list.Add(adjustment_id)
-            Else
-                adjustments_id_list = Nothing
-            End If
+
             GlobalVariables.GenericGlobalAggregationComputer.init_computer_complete_mode(entity_node)
             periods_list = Versions.GetPeriodList(version_id)
             time_configuration = Versions.ReadVersion(version_id, VERSIONS_TIME_CONFIG_VARIABLE)
@@ -190,16 +209,17 @@ Friend Class PPSBIController
                                                                                         periods_list, _
                                                                                         currency, _
                                                                                         start_period, _
-                                                                                        nb_periods, , _
-                                                                                        ESB.StrSqlQuery, _
-                                                                                        adjustments_id_list)
+                                                                                        nb_periods, _
+                                                                                        , clients_id, _
+                                                                                        products_id, _
+                                                                                        adjustments_id)
             GlobalVariables.GenericGlobalAggregationComputer.LoadOutputMatrix()
         End If
 
         If CheckDate(period, period_int, GlobalVariables.GenericGlobalAggregationComputer.periods_list) = False Then
             Return "Invalid Period or Period format"
         End If
-        Return GlobalVariables.GenericGlobalAggregationComputer.GetValueFromComputer(entity_id, _
+        Return GlobalVariables.GenericGlobalAggregationComputer.GetValueFromComputer(entity_node.Name, _
                                                                                      account_id, _
                                                                                      period_int)
     End Function
@@ -338,10 +358,10 @@ Friend Class PPSBIController
         Dim filterValue As String = ReturnValueFromRange(filter)
         If filterValue.Contains(",") = True Then
             For Each value As String In filterValue.Split(PPSBI_FORMULA_CATEGORIES_SEPARATOR)
-                If CategoriesNameKeyDictionary.ContainsKey(value) Then filterList.Add(CategoriesNameKeyDictionary.Item(value))
+                If EntitiesCategoriesNameKeyDictionary.ContainsKey(value) Then filterList.Add(EntitiesCategoriesNameKeyDictionary.Item(value))
             Next
         Else
-            If CategoriesNameKeyDictionary.ContainsKey(filterValue) Then filterList.Add(CategoriesNameKeyDictionary.Item(filterValue))
+            If EntitiesCategoriesNameKeyDictionary.ContainsKey(filterValue) Then filterList.Add(EntitiesCategoriesNameKeyDictionary.Item(filterValue))
         End If
 
     End Sub

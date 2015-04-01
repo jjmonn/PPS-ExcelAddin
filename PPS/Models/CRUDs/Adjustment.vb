@@ -60,7 +60,7 @@ Friend Class Adjustment
 
     Protected Friend Function ReadAdjustment(ByRef Adjustment_id As String, ByRef field As String) As Object
 
-        RST.Filter = ADJUSTMENTS_ID_VAR + "='" + Adjustment_id + "'"
+        RST.Filter = ANALYSIS_AXIS_ID_VAR + "='" + Adjustment_id + "'"
         If RST.EOF Then Return Nothing
         Return RST.Fields(field).Value
 
@@ -68,7 +68,7 @@ Friend Class Adjustment
 
     Protected Friend Sub UpdateAdjustment(ByRef Adjustment_id As String, ByRef hash As Hashtable)
 
-        RST.Filter = ADJUSTMENTS_ID_VAR + "='" + Adjustment_id + "'"
+        RST.Filter = ANALYSIS_AXIS_ID_VAR + "='" + Adjustment_id + "'"
         If RST.EOF = False AndAlso RST.BOF = False Then
             For Each Attribute In hash.Keys
                 If RST.Fields(Attribute).Value <> hash(Attribute) Then
@@ -84,7 +84,7 @@ Friend Class Adjustment
                                           ByRef field As String, _
                                           ByVal value As Object)
 
-        RST.Filter = ADJUSTMENTS_ID_VAR + "='" + Adjustment_id + "'"
+        RST.Filter = ANALYSIS_AXIS_ID_VAR + "='" + Adjustment_id + "'"
         If RST.EOF = False AndAlso RST.BOF = False Then
             If RST.Fields(field).Value <> value Then
                 RST.Fields(field).Value = value
@@ -96,7 +96,7 @@ Friend Class Adjustment
 
     Protected Friend Sub DeleteAdjustment(ByRef Adjustment_id As String)
 
-        RST.Filter = ADJUSTMENTS_ID_VAR + "='" + Adjustment_id + "'"
+        RST.Filter = ANALYSIS_AXIS_ID_VAR + "='" + Adjustment_id + "'"
         If RST.EOF = False Then
             RST.Delete()
             RST.Update()
@@ -125,8 +125,9 @@ Friend Class Adjustment
             TV.Nodes.Clear()
             srv.rst.MoveFirst()
             Do While srv.rst.EOF = False
-                TV.Nodes.Add(Trim(srv.rst.Fields(ADJUSTMENTS_ID_VAR).Value), _
-                             Trim(srv.rst.Fields(ADJUSTMENTS_NAME_VAR).Value), 0, 0)
+                Dim node As TreeNode = TV.Nodes.Add(Trim(srv.rst.Fields(ANALYSIS_AXIS_ID_VAR).Value), _
+                                                    Trim(srv.rst.Fields(ANALYSIS_AXIS_NAME_VAR).Value), 0, 0)
+                node.Checked = True
                 srv.rst.MoveNext()
             Loop
             End If

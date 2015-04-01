@@ -90,7 +90,10 @@ Friend Class CAcquisitionModel
         currentPeriodlist = Versions.GetPeriodList(mCurrentVersionCode)
 
         Dim viewName = mCurrentVersionCode & GlobalVariables.User_Credential
-        DBDownloader.GetEntityInputsNonConverted(entityKey, viewName, adjustment_id)
+        Dim adjustments_id_filter_list As New List(Of String)
+        adjustments_id_filter_list.Add(adjustment_id)
+        ' below STUB -> need clients/products/ adjuments lists !!!
+        DBDownloader.GetEntityInputsNonConverted(entityKey, viewName, , , adjustments_id_filter_list)
         LoadDBInputsDictionary(entityName)
 
     End Sub

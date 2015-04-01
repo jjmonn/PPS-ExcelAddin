@@ -38,7 +38,7 @@ Friend Class SQLEntitiesViews
 
         If credential_levels_list.Count > 0 Then
             Dim CredentialLevelsString As String = "'" + Join(credential_levels_list.ToArray, "','") + "'"
-            Return ASSETS_CREDENTIAL_ID_VARIABLE + " IN (" + CredentialLevelsString + ")"
+            Return ENTITIES_CREDENTIAL_ID_VARIABLE + " IN (" + CredentialLevelsString + ")"
         Else
             Return ""
         End If

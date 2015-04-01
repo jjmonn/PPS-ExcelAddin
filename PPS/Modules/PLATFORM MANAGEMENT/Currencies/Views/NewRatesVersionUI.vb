@@ -42,14 +42,14 @@ Friend Class NewRatesVersionUI
     Private Sub ValidateBT_Click(sender As Object, e As EventArgs) Handles ValidateBT.Click
 
         Dim name As String = NameTB.Text
-        If Len(name) < RATES_VERSIONS_MAX_NAME_SIZE Then
+        If Len(name) < NAMES_MAX_LENGTH Then
             Controller.CreateVersion(name, 0, _
                                      StartPeriodNUD.Value, _
                                      NBPeriodsNUD.Value, _
                                      parent_node)
             Me.Hide()
         Else
-            MsgBox("The Name cannot exceed " & RATES_VERSIONS_MAX_NAME_SIZE & " characters")
+            MsgBox("The Name cannot exceed " & NAMES_MAX_LENGTH & " characters")
         End If
 
     End Sub

@@ -159,7 +159,7 @@ Friend Class ASEntitiesAttributesUI
                 columnItem = entitiesDGV.ColumnsHierarchy.Items(column_index + 1)
                 entitiesDGV.CellsArea.SetCellValue(rowItem, columnItem, entities_dict(entity_id)(columns_ids(column_index + 1)))
             Next
-            ' If entities_dict(entity_id)(ASSETS_ALLOW_EDITION_VARIABLE) = 0 Then rowItem.ImageIndex = 0 
+            ' If entities_dict(entity_id)(ENTITIES_ALLOW_EDITION_VARIABLE) = 0 Then rowItem.ImageIndex = 0 
         Next
         isFillingDGV = False
         DataGridViewsUtil.DGVSetHiearchyFontSize(entitiesDGV, DGV_FONT_SIZE, DGV_FONT_SIZE)

@@ -1,11 +1,11 @@
 ﻿' LogUI.vb
 '
-'
+'    - Reimplement with all analysis axis
 '
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 08/01/2015
+' Last modified: 26/03/2015
 
 
 Imports System.Windows.Forms
@@ -226,7 +226,7 @@ Friend Class LogUI
     Private Sub LaunchComputationIfInput()
 
         If current_entity_node.Nodes.Count = 0 Then
-            Controller.LaunchComputation(current_entity_node.Name)
+            Controller.LaunchComputation(current_entity_node)
         Else
             MsgBox("Log can only be displayed on Inputs Entities.")
         End If

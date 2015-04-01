@@ -2,12 +2,12 @@
 '
 '
 '
-'
+'       - UI to reimplement !!! -> with Clients and Products
 '
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 11/12/2014
+' Last modified: 24/03/2015
 
 
 Imports System.Windows.Forms
@@ -43,7 +43,7 @@ Friend Class CategoriesController
     Friend Sub New()
 
         ViewObject = New CategoriesManagementUI(Me, CategoriesTV)
-        Category.LoadCategoriesTree(CategoriesTV)
+        Category.LoadCategoryCodeTV(CategoriesTV, ControllingUI2Controller.ENTITIES_CODE)
         categories_names_list = TreeViewsUtilities.GetNodesTextsList(CategoriesTV)
         positions_dictionary = TreeViewsUtilities.GeneratePositionsDictionary(CategoriesTV)
         ViewObject.Show()
@@ -144,7 +144,7 @@ Friend Class CategoriesController
     Private Function CategoryNameCheck(ByRef name As String) As Boolean
 
         If categories_names_list.Contains(name) Then Return False
-        If name.Length > CATEGORIES_NAME_MAX_LENGTH Then Return False
+        If name.Length > NAMES_MAX_LENGTH Then Return False
         For Each char_ In FORBIDEN_CHARS
             If name.Contains(char_) Then Return False
         Next

@@ -36,10 +36,10 @@ Friend Class LogModel
 
     End Function
 
-    Protected Friend Sub ComputeEntity(ByRef entity_id As String, _
+    Protected Friend Sub ComputeEntity(ByRef entity_node As System.Windows.Forms.TreeNode, _
                                        ByRef version_id As String)
 
-        Computer.ComputeSingleEntity(version_id, entity_id)
+        Computer.ComputeSingleEntity(version_id, entity_node)
 
     End Sub
 

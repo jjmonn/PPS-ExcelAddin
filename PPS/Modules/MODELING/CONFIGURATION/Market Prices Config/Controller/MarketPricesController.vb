@@ -7,7 +7,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last Modified: 05/02/2015
+' Last Modified: 24/03/2015
 
 
 Imports System.Collections.Generic
@@ -32,6 +32,9 @@ Friend Class MarketPricesController
     Protected Friend indexes_list As List(Of String)
     Protected Friend current_version As String
     Protected Friend global_periods_dictionary As Dictionary(Of Int32, Int32())
+
+    ' Const 
+    Private MARKET_INDEXES_MAX_TOKEN_SIZE As Int32 = 50
 
 #End Region
 
@@ -94,7 +97,7 @@ Friend Class MarketPricesController
                     View.marketPricesView.InitializeDGV(indexes_list, global_periods_dictionary)
                     ChangeVersion(current_version)
                 Else
-                    MsgBox("The format of the new Index is not valid.")
+                    MsgBox("The format of the new Index is not valid or exceeds maximum size (" & MARKET_INDEXES_MAX_TOKEN_SIZE & ")")
                 End If
             End If
         End If

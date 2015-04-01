@@ -15,7 +15,7 @@ Imports System.Collections.Generic
 Friend Class SQLDataViews
 
 
-    ' set up view creation SQL query
+    ' Set up view creation SQL query
     Protected Friend Function ViewCreationQuery(ByRef dataTableName As String, _
                                                 ByRef viewName As String, _
                                                 ByRef credential_levels_list As List(Of String)) _
@@ -26,13 +26,15 @@ Friend Class SQLDataViews
         Dim SqlQuery As String = "CREATE OR REPLACE VIEW " + VIEWS_DATABASE + "." + viewName + " AS " + _
                                  "SELECT " + _
                                   DATA_ACCOUNT_ID_VARIABLE + "," + _
-                                  DATA_ASSET_ID_VARIABLE + "," + _
+                                  DATA_ENTITY_ID_VARIABLE + "," + _
                                   DATA_PERIOD_VARIABLE + "," + _
                                   DATA_VALUE_VARIABLE + "," + _
                                   DATA_ADJUSTMENT_ID_VARIABLE + _
+                                  DATA_CLIENT_ID_VARIABLE + _
+                                  DATA_PERIOD_VARIABLE + _
                                  " FROM " + DATA_DATABASE + "." + dataTableName + " D," + _
                                   LEGAL_ENTITIES_DATABASE + "." + ENTITIES_TABLE + " A" + _
-                                 " WHERE A." + ASSETS_TREE_ID_VARIABLE + "= D." + DATA_ASSET_ID_VARIABLE
+                                 " WHERE A." + ENTITIES_ID_VARIABLE + "= D." + DATA_ENTITY_ID_VARIABLE
 
         If SqlCondition <> "" Then SqlQuery = SqlQuery + " AND " + SqlCondition
         Return srv.sqlQuery(SqlQuery)
@@ -45,7 +47,7 @@ Friend Class SQLDataViews
 
         If credential_levels_list.Count > 0 Then
             Dim CredentialLevelsString As String = "'" + Join(credential_levels_list.ToArray, "','") + "'"
-            Return "A." + ASSETS_CREDENTIAL_ID_VARIABLE + " IN (" + CredentialLevelsString + ")"
+            Return "A." + ENTITIES_CREDENTIAL_ID_VARIABLE + " IN (" + CredentialLevelsString + ")"
         Else
             Return ""
         End If

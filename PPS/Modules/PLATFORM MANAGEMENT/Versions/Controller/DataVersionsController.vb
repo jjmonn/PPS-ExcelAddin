@@ -213,7 +213,7 @@ Friend Class DataVersionsController
     Protected Friend Function IsNameValid(ByRef name As String)
 
         If versionsNamesList.Contains(name) Then Return False
-        If name.Length > DATA_VERSION_NAME_MAX_LENGTH Then Return False
+        If name.Length > NAMES_MAX_LENGTH Then Return False
         For Each char_ In FORBIDEN_CHARS
             If name.Contains(char_) Then Return False
         Next

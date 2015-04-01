@@ -4,7 +4,7 @@
 '
 ' To do:
 '       >> highest hiearachy conso level or stay in aggregation queries with fx conversion in vb !!!!!)
-'
+'       - Implement with new analysis axis !!!
 '
 '       - Check if already a formula when opening: in this case fill TB with current values
 '       - Add possibility to design lines and columns off data
@@ -142,7 +142,7 @@ Friend Class PPSBI_UI
         AddHandler versionsTV.NodeMouseDoubleClick, AddressOf versionsTV_NodeMouseClick
 
         'Categories
-        Category.LoadCategoriesTree(categoriesTV)
+        Category.LoadCategoryCodeTV(categoriesTV, ControllingUI2Controller.ENTITIES_CODE)
 
         Panel1.Controls.Add(entitiesTV)
         Panel2.Controls.Add(accountsTV)
@@ -153,7 +153,7 @@ Friend Class PPSBI_UI
     Private Sub InitializeAdjustmentsCB()
 
         AdjustmentCB.Items.Add("")
-        For Each adjustment_name As String In AdjustmentsMapping.GetAdjustmentsIDsList(ADJUSTMENTS_NAME_VAR)
+        For Each adjustment_name As String In AdjustmentsMapping.GetAdjustmentsIDsList(ANALYSIS_AXIS_NAME_VAR)
             AdjustmentCB.Items.Add(adjustment_name)
         Next
 

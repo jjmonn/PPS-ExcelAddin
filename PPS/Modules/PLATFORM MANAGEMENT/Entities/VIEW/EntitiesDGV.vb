@@ -74,8 +74,8 @@ Friend Class EntitiesDGV
         DGV = input_DGV
         Controller = input_controller
         currenciesList = CurrenciesMapping.getCurrenciesList(CURRENCIES_KEY_VARIABLE)
-        categoriesNameKeyDic = CategoriesMapping.GetCategoriesDictionary(CATEGORY_NAME_VARIABLE, CATEGORY_ID_VARIABLE)
-        categoriesKeyNameDic = CategoriesMapping.GetCategoriesDictionary(CATEGORY_ID_VARIABLE, CATEGORY_NAME_VARIABLE)
+        categoriesNameKeyDic = CategoriesMapping.GetCategoryDictionary(ControllingUI2Controller.ENTITIES_CODE, CATEGORY_NAME_VARIABLE, CATEGORY_ID_VARIABLE)
+        categoriesKeyNameDic = CategoriesMapping.GetCategoryDictionary(ControllingUI2Controller.ENTITIES_CODE, CATEGORY_ID_VARIABLE, CATEGORY_NAME_VARIABLE)
 
         AddHandler DGV.CellValueChanged, AddressOf dataGridView_CellValueChanged
         initFilters()
@@ -107,8 +107,8 @@ Friend Class EntitiesDGV
 
         DGV.ColumnsHierarchy.Items.Add("Entity")
         Dim col1 As HierarchyItem = DGV.ColumnsHierarchy.Items.Add(CURRENCY_COLUMN_NAME)
-        columnsDictionary.Add(ASSETS_CURRENCY_VARIABLE, col1)
-        columnsCaptionID.Add(CURRENCY_COLUMN_NAME, ASSETS_CURRENCY_VARIABLE)
+        columnsDictionary.Add(ENTITIES_CURRENCY_VARIABLE, col1)
+        columnsCaptionID.Add(CURRENCY_COLUMN_NAME, ENTITIES_CURRENCY_VARIABLE)
         InitCurrenciesCB()
         col1.AllowFiltering = True
         ' CreateFilter(col1)
@@ -218,7 +218,7 @@ Friend Class EntitiesDGV
             comboBox.Items.Add(currency_)
         Next
 
-        columnsDictionary(ASSETS_CURRENCY_VARIABLE).CellsEditor = comboBox
+        columnsDictionary(ENTITIES_CURRENCY_VARIABLE).CellsEditor = comboBox
         AddHandler comboBox.EditBase.TextBox.KeyDown, AddressOf comboTextBox_KeyDown
 
     End Sub
@@ -238,15 +238,15 @@ Friend Class EntitiesDGV
         For Each entity_id In entities_dict.Keys
             Dim rowItem = rows_id_item_dic(entity_id)
 
-            column = columnsDictionary(ASSETS_CURRENCY_VARIABLE)
-            DGV.CellsArea.SetCellValue(rowItem, column, entities_dict(entity_id)(ASSETS_CURRENCY_VARIABLE))
+            column = columnsDictionary(ENTITIES_CURRENCY_VARIABLE)
+            DGV.CellsArea.SetCellValue(rowItem, column, entities_dict(entity_id)(ENTITIES_CURRENCY_VARIABLE))
 
             For Each root_category_node As TreeNode In Controller.categoriesTV.Nodes
                 column = columnsDictionary(root_category_node.Name)
                 category_value = categoriesKeyNameDic(entities_dict(entity_id)(root_category_node.Name))
                 DGV.CellsArea.SetCellValue(rowItem, column, category_value)
             Next
-            If entities_dict(entity_id)(ASSETS_ALLOW_EDITION_VARIABLE) = 0 Then rowItem.ImageIndex = 0 Else rowItem.ImageIndex = 1
+            If entities_dict(entity_id)(ENTITIES_ALLOW_EDITION_VARIABLE) = 0 Then rowItem.ImageIndex = 0 Else rowItem.ImageIndex = 1
 
         Next
         isFillingDGV = False

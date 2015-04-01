@@ -1,17 +1,18 @@
-﻿' cDatabaseDataDownloader.vb
+﻿' DatabaseDataDownloader.vb
 ' 
 '  Manage data tables downloads
 '
 '
 ' To do:
+'       - Adapt Aggregated queries and single aggregation to filter on clients, products and adjustments
+'           -> process to be decided
 '
-'      
+'
 ' Known bugs:
 '       - 
 '
-'
 ' Author: Julien Monnereau
-' Last modified: 20/02/2015
+' Last modified: 18/03/2015
 '
 
 
@@ -31,14 +32,37 @@ Friend Class DataBaseDataDownloader
 
     ' Variables
     Friend stored_inputs_list As New List(Of String)
+    Friend currentRatesVersionCode As String = ""
+
+    ' Filter Process
+
+    '  Initial Lists
+    Private initial_clients_id_list As List(Of String)
+    Private initial_products_id_list As List(Of String)
+    Private initial_adjustments_id_list As List(Of String)
+
+    '  Filters Lists
+    Private entities_id_filter_list As List(Of String)
+    Private clients_id_filter_list As List(Of String)
+    Private products_id_filter_list As List(Of String)
+    Private adjustments_id_filter_list As List(Of String)
+
+    '  Flags
+    Private entities_filter_flag As Boolean
+    Private clients_filter_flag As Boolean
+    Private products_filter_flag As Boolean
+    Private adjustments_filter_flag As Boolean
+
+    ' Inputs Arrays and Dictionaries
+    '   Dll Entities Aggregation Process
     Friend accounts_ID_hash As New Dictionary(Of String, String())
     Friend periods_ID_hash As New Dictionary(Of String, Integer())
     Friend values_ID_hash As New Dictionary(Of String, Double())
 
+    '   Aggregation Queries Process
     Friend AccKeysArray() As String
     Friend PeriodArray() As Integer
     Friend ValuesArray() As Double
-    Friend currentRatesVersionCode As String = ""
 
     ' Constants
     Private Const MONETARY_TYPE_CODE As String = "MO"
@@ -47,16 +71,38 @@ Friend Class DataBaseDataDownloader
 #End Region
 
 
-#Region "Aggregations Queries"
+#Region "Initialize"
 
-    Friend Function GetAggregatedConvertedInputs(ByRef entitiesIDList() As String, _
+    Protected Friend Sub New()
+
+        initial_clients_id_list = ClientsMapping.GetclientsIDList()
+        initial_products_id_list = ProductsMapping.GetproductsIDList()
+        initial_adjustments_id_list = AdjustmentsMapping.GetAdjustmentsIDsList(ANALYSIS_AXIS_ID_VAR)
+
+    End Sub
+
+#End Region
+
+
+#Region "Aggregated Queries"
+
+    ' Purpose of the process: PPSBI Formula ?
+
+    ' the inputs arrays should be passed as params ! 
+    Friend Function GetAggregatedConvertedInputs(ByRef entities_id_list As List(Of String), _
                                                  ByRef version_id As String, _
                                                  ByRef destination_currency As String, _
-                                                 Optional ByRef adjustment_id As String = "", _
-                                                 Optional ByRef strSqlAdditionalClause As String = "") As Boolean
+                                                 Optional ByRef clients_id_list As List(Of String) = Nothing, _
+                                                 Optional ByRef products_id_list As List(Of String) = Nothing, _
+                                                 Optional ByRef adjustments_id_list As List(Of String) = Nothing) As Boolean
 
-        If DataAggregationQuery(entitiesIDList, version_id, adjustment_id, strSqlAdditionalClause) = True Then
-            ConvertInputsArrays(version_id, entitiesIDList, destination_currency)
+        Dim sql_where_clause As String = GetWhereClause(entities_id_list, _
+                                                        clients_id_list, _
+                                                        products_id_list, _
+                                                        adjustments_id_list)
+
+        If DataAggregationQuery(version_id, sql_where_clause) = True Then
+            ConvertInputsArrays(version_id, entities_id_list.ToArray(), destination_currency)
             srv.rst.Close()
             Return True
         Else
@@ -66,27 +112,21 @@ Friend Class DataBaseDataDownloader
 
     End Function
 
-    Friend Function DataAggregationQuery(ByRef entitiesIDList() As String, _
-                                         ByRef version_id As String, _
-                                         Optional ByRef adjustment_id As String = "", _
-                                         Optional ByRef strSqlAdditionalClause As String = "") As Boolean
-
-        Dim keysSelection As String = "'" + Join(entitiesIDList, "','") + "'"
+    Private Function DataAggregationQuery(ByRef version_id As String, _
+                                          ByRef sql_where_clause As String) As Boolean
 
         Dim strSQL As String = "SELECT " & "D." & DATA_PERIOD_VARIABLE & "," _
                              & "D." & DATA_ACCOUNT_ID_VARIABLE & "," _
                              & "SUM(" & DATA_VALUE_VARIABLE & ") AS " & DATA_VALUE_VARIABLE & "," _
-                             & "A." & ASSETS_CURRENCY_VARIABLE _
+                             & "A." & ENTITIES_CURRENCY_VARIABLE _
                              & " FROM " & VIEWS_DATABASE & "." & version_id & GlobalVariables.User_Credential & " D" & ", " & VIEWS_DATABASE & "." & GlobalVariables.Entities_View & " A" _
-                             & " WHERE " & "D." & DATA_ASSET_ID_VARIABLE & "=" & "A." & ASSETS_TREE_ID_VARIABLE _
-                             & " AND " & "A." & ASSETS_TREE_ID_VARIABLE & " IN (" & keysSelection & ")"
-
-        If adjustment_id <> "" Then strSQL = strSQL & " AND " & "D." & DATA_ADJUSTMENT_ID_VARIABLE & " ='" & adjustment_id & "'"
-        If strSqlAdditionalClause <> "" Then strSQL = strSQL & " AND " & strSqlAdditionalClause
+                             & " WHERE " & "D." & DATA_ENTITY_ID_VARIABLE & "=" & "A." & ENTITIES_ID_VARIABLE
+                            
+        If sql_where_clause <> "" Then strSQL = strSQL & " AND " & sql_where_clause
 
         strSQL = strSQL & " GROUP BY " & "D." & DATA_PERIOD_VARIABLE & "," & _
                                          "D." & DATA_ACCOUNT_ID_VARIABLE & "," & _
-                                         "A." & ASSETS_CURRENCY_VARIABLE
+                                         "A." & ENTITIES_CURRENCY_VARIABLE
 
         srv.openRstSQL(strSQL, ModelServer.FWD_CURSOR)
         If srv.rst.EOF = True Then Return False Else Return True
@@ -112,7 +152,7 @@ Friend Class DataBaseDataDownloader
         Do While srv.rst.EOF = False AndAlso srv.rst.BOF = False
             account_id = srv.rst.Fields(DATA_ACCOUNT_ID_VARIABLE).Value
             value = srv.rst.Fields(DATA_VALUE_VARIABLE).Value
-            currency_ = srv.rst.Fields(ASSETS_CURRENCY_VARIABLE).Value
+            currency_ = srv.rst.Fields(ENTITIES_CURRENCY_VARIABLE).Value
 
             If currency_ <> destination_currency AndAlso typesDict(account_id) = MONETARY_ACCOUNT_TYPE Then
                 If conversion_flagDict(account_id) = FLUX_CONVERSION Then rate_type = ExchangeRate.AVERAGE_RATE Else rate_type = ExchangeRate.CLOSING_RATE
@@ -189,52 +229,21 @@ Friend Class DataBaseDataDownloader
 
 #Region "Dll Entities Aggregation data hash build"
 
-    Friend Function build_data_hash(ByRef entitiesIDList() As String, _
-                                    ByRef ViewName As String, _
-                                    Optional ByRef strSqlAdditionalClause As String = "", _
-                                    Optional ByRef adjustments_id_list As List(Of String) = Nothing) As Boolean
-
-        ClearDatasDictionaries()
-        If BuildDataRSTForEntityLoop(entitiesIDList, ViewName, strSqlAdditionalClause, adjustments_id_list) Then
-            For Each entity_id In entitiesIDList
-                StoreEntityData(entity_id)
-            Next
-            Try
-                srv.rst.Close()
-            Catch ex As Exception
-            End Try
-            Return True
-        Else
-            Return False
-        End If
-
-    End Function
-
-    Friend Function BuildDataRSTForEntityLoop(ByRef entitiesIDList() As String, _
-                                             ByRef ViewName As String, _
-                                             Optional ByRef strSqlAdditionalClause As String = "", _
-                                             Optional ByRef adjustments_id_list As List(Of String) = Nothing) As Boolean
-
-        Dim keysSelection As String = "'" + Join(entitiesIDList, "','") + "'"
+    Friend Function BuildDataRSTForEntityLoop(ByRef data_view_name As String) As Boolean
 
         Dim strSQL As String = "SELECT " + "D." + DATA_PERIOD_VARIABLE + "," _
                              + "D." + DATA_ACCOUNT_ID_VARIABLE + "," _
                              + "SUM(" + DATA_VALUE_VARIABLE + ") AS value," _
-                             + DATA_ASSET_ID_VARIABLE _
-                             + " FROM " + VIEWS_DATABASE + "." + ViewName + " D" + ", " + VIEWS_DATABASE + "." + GlobalVariables.Entities_View + " A" _
-                             + " WHERE " + "D." + DATA_ASSET_ID_VARIABLE + "=" + "A." + ASSETS_TREE_ID_VARIABLE _
-                             + " AND " + "A." + ASSETS_TREE_ID_VARIABLE + " IN (" + keysSelection + ")"
+                             + DATA_ENTITY_ID_VARIABLE _
+                             + " FROM " + VIEWS_DATABASE + "." + data_view_name + " D" + ", " + VIEWS_DATABASE + "." + GlobalVariables.Entities_View + " A" _
+                             + " WHERE " + DATA_ENTITY_ID_VARIABLE + "=" + ENTITIES_ID_VARIABLE
 
-        If strSqlAdditionalClause <> "" Then strSQL = strSQL + " AND " + strSqlAdditionalClause ' Case filter on specific entities
-
-        If Not adjustments_id_list Is Nothing Then
-            Dim adjustments_selection As String = "'" + Join(adjustments_id_list.ToArray(), "','") + "'"
-            strSQL = strSQL + " AND D." + DATA_ADJUSTMENT_ID_VARIABLE + " IN (" + adjustments_selection + ")"
-        End If
+        Dim additional_where_clause As String = GetAdditionnalWhereClauseFromFilters()
+        If additional_where_clause <> "" Then strSQL = strSQL & " AND " & additional_where_clause
 
         Dim str_sql_group As String = " GROUP BY " + DATA_PERIOD_VARIABLE + "," + _
                                                      DATA_ACCOUNT_ID_VARIABLE + "," + _
-                                                     DATA_ASSET_ID_VARIABLE
+                                                     DATA_ENTITY_ID_VARIABLE
         strSQL = strSQL + str_sql_group
 
         srv.openRstSQL(strSQL, ModelServer.FWD_CURSOR)
@@ -249,7 +258,7 @@ Friend Class DataBaseDataDownloader
 
     Private Function StoreEntityData(ByRef entity_id As String)
 
-        srv.rst.Filter = DATA_ASSET_ID_VARIABLE & "='" & entity_id & "'"
+        srv.rst.Filter = DATA_ENTITY_ID_VARIABLE & "='" & entity_id & "'"
         If srv.rst.BOF = True Or srv.rst.EOF = True Then
             srv.rst.Filter = ""
             Return False
@@ -279,7 +288,7 @@ Friend Class DataBaseDataDownloader
 
     Friend Function FilterOnEntityID(ByRef entityID As String) As Boolean
 
-        srv.rst.Filter = DATA_ASSET_ID_VARIABLE & "='" & entityID & "'"
+        srv.rst.Filter = DATA_ENTITY_ID_VARIABLE & "='" & entityID & "'"
         If srv.rst.BOF = True Or srv.rst.EOF = True Then
             srv.rst.Filter = ""
             Return False
@@ -299,16 +308,21 @@ Friend Class DataBaseDataDownloader
 #Region "Single Entity Queries"
 
     Protected Friend Function GetEntityInputsNonConverted(ByRef entityKey As String, _
-                                                        ByRef ViewName As String, _
-                                                        Optional ByVal adjustment_id As String = "") As Boolean
+                                                          ByRef ViewName As String, _
+                                                          Optional ByRef clients_id_list As List(Of String) = Nothing, _
+                                                          Optional ByRef products_id_list As List(Of String) = Nothing, _
+                                                          Optional ByRef adjustments_id_list As List(Of String) = Nothing) As Boolean
 
-        Dim strSql As String = "SELECT " + DATA_PERIOD_VARIABLE + ", " _
-                             + DATA_ACCOUNT_ID_VARIABLE + ", " _
-                             + DATA_VALUE_VARIABLE _
-                             + " FROM " + VIEWS_DATABASE + "." + ViewName _
-                             + " WHERE " + DATA_ASSET_ID_VARIABLE + "='" + entityKey + "'"
-
-        If adjustment_id <> "" Then strSql = strSql + " AND " + DATA_ADJUSTMENT_ID_VARIABLE + "='" + adjustment_id + "'"
+        Dim strSql As String = "SELECT " & DATA_PERIOD_VARIABLE & ", " _
+                             & DATA_ACCOUNT_ID_VARIABLE & ", " _
+                             & DATA_VALUE_VARIABLE _
+                             & " FROM " & VIEWS_DATABASE & "." & ViewName _
+                             & " WHERE " & DATA_ENTITY_ID_VARIABLE & "='" & entityKey & "'"
+                          
+        Dim additional_where_clause As String = GetWhereClause(, clients_id_list, _
+                                                               products_id_list, _
+                                                               adjustments_id_list)
+        If additional_where_clause <> "" Then strSql = strSql & " AND " & additional_where_clause
 
         If srv.openRstSQL(strSql, ModelServer.FWD_CURSOR) = False Then Return False
         Dim tmpArray(,) As Object = Nothing
@@ -382,12 +396,12 @@ Friend Class DataBaseDataDownloader
         Dim strSQL As String = "SELECT D." & DATA_PERIOD_VARIABLE & "," _
                              & " D." & DATA_ACCOUNT_ID_VARIABLE & "," _
                              & " D." & DATA_VALUE_VARIABLE & "," _
-                             & " D." & DATA_ASSET_ID_VARIABLE & "," _
+                             & " D." & DATA_ENTITY_ID_VARIABLE & "," _
                              & " D." & DATA_ADJUSTMENT_ID_VARIABLE & "," _
-                             & " A." & ASSETS_CURRENCY_VARIABLE _
+                             & " A." & ENTITIES_CURRENCY_VARIABLE _
                              & " FROM " & VIEWS_DATABASE & "." & version_id & GlobalVariables.User_Credential & " D" & ", " & VIEWS_DATABASE + "." & GlobalVariables.Entities_View + " A" _
-                             & " WHERE " & "D." & DATA_ASSET_ID_VARIABLE & "=" & "A." & ASSETS_TREE_ID_VARIABLE _
-                             & " AND " & DATA_ASSET_ID_VARIABLE & " IN " & "(" & entities_ids & ")"
+                             & " WHERE " & "D." & DATA_ENTITY_ID_VARIABLE & "=" & "A." & ENTITIES_ID_VARIABLE _
+                             & " AND " & DATA_ENTITY_ID_VARIABLE & " IN " & "(" & entities_ids & ")"
 
         If Not adjustments_id_list Is Nothing Then
             Dim adjustments_selection As String = "'" + Join(adjustments_id_list.ToArray(), "','") + "'"
@@ -416,7 +430,7 @@ Friend Class DataBaseDataDownloader
         Do While srv.rst.EOF = False AndAlso srv.rst.BOF = False
             account_id = srv.rst.Fields(DATA_ACCOUNT_ID_VARIABLE).Value
             value = srv.rst.Fields(DATA_VALUE_VARIABLE).Value
-            currency_ = srv.rst.Fields(ASSETS_CURRENCY_VARIABLE).Value
+            currency_ = srv.rst.Fields(ENTITIES_CURRENCY_VARIABLE).Value
 
             If currency_ <> destination_currency AndAlso typesDict(account_id) = MONETARY_ACCOUNT_TYPE Then
 
@@ -426,7 +440,7 @@ Friend Class DataBaseDataDownloader
 
             End If
             AddAdjustmentToDictionary(adjustments_dic, _
-                               srv.rst.Fields(DATA_ASSET_ID_VARIABLE).Value, _
+                               srv.rst.Fields(DATA_ENTITY_ID_VARIABLE).Value, _
                                account_id, _
                                srv.rst.Fields(DATA_PERIOD_VARIABLE).Value, _
                                srv.rst.Fields(DATA_ADJUSTMENT_ID_VARIABLE).Value, _
@@ -481,16 +495,21 @@ Friend Class DataBaseDataDownloader
                                                     ByRef entity_id As String, _
                                                     ByRef account_id As String, _
                                                     ByRef period As Integer, _
+                                                    Optional ByRef client_id As String = "", _
+                                                    Optional ByRef product_id As String = "", _
                                                     Optional ByRef adjustment_id As String = "") As Double
 
         Dim srv As New ModelServer
         srv.OpenRst(VIEWS_DATABASE & "." & version_id & GlobalVariables.User_Credential, ModelServer.FWD_CURSOR)
 
         Dim str_filter As String = DATA_ACCOUNT_ID_VARIABLE & "='" & account_id & "' AND " & _
-                                   DATA_ASSET_ID_VARIABLE & "='" & entity_id & "' AND " & _
+                                   DATA_ENTITY_ID_VARIABLE & "='" & entity_id & "' AND " & _
                                    DATA_PERIOD_VARIABLE & "=" & period
 
-        If adjustment_id <> "" Then str_filter = str_filter + " AND " + DATA_ADJUSTMENT_ID_VARIABLE + "='" + adjustment_id + "'"
+        If client_id <> "" Then str_filter = str_filter & DATA_CLIENT_ID_VARIABLE & "='" & client_id & "'"
+        If product_id <> "" Then str_filter = str_filter & DATA_PRODUCT_ID_VARIABLE & "='" & client_id & "'"
+        If adjustment_id <> "" Then str_filter = str_filter & DATA_ADJUSTMENT_ID_VARIABLE & "='" & client_id & "'"
+
         srv.rst.Filter = str_filter
 
         If srv.rst.EOF = True Or srv.rst.BOF = True Then
@@ -502,6 +521,143 @@ Friend Class DataBaseDataDownloader
         Return value
 
     End Function
+
+#End Region
+
+
+#Region "DB Filters"
+
+#Region "Filters Reinitialization"
+
+    ' Reinitialize filters lists so that all values are present
+    Protected Friend Sub InitializeFilterLists(ByRef input_entities_id_list As List(Of String), _
+                                               Optional ByRef input_clients_id_list As List(Of String) = Nothing, _
+                                               Optional ByRef input_products_id_list As List(Of String) = Nothing, _
+                                               Optional ByRef input_adjustments_id_list As List(Of String) = Nothing)
+
+        ResetEntitiesFilter(input_entities_id_list)
+        ResetclientsFilter(input_clients_id_list)
+        ResetproductsFilter(input_products_id_list)
+        ResetadjustmentsFilter(input_adjustments_id_list)
+
+    End Sub
+
+    Protected Friend Sub ResetEntitiesFilter(ByRef input_entities_id_list As List(Of String))
+
+        entities_id_filter_list = input_entities_id_list
+        entities_filter_flag = False
+
+    End Sub
+
+    Protected Friend Sub ResetclientsFilter(ByRef input_clients_id_list As List(Of String))
+
+        If input_clients_id_list Is Nothing Then
+            clients_id_filter_list = initial_clients_id_list
+        Else
+            clients_id_filter_list = input_clients_id_list
+        End If
+        clients_filter_flag = False
+
+    End Sub
+
+    Protected Friend Sub ResetproductsFilter(ByRef input_products_id_list As List(Of String))
+
+        If input_products_id_list Is Nothing Then
+            products_id_filter_list = initial_products_id_list
+        Else
+            products_id_filter_list = input_products_id_list
+        End If
+        products_filter_flag = False
+
+    End Sub
+
+    Protected Friend Sub ResetadjustmentsFilter(ByRef input_adjustments_id_list As List(Of String))
+
+        If input_adjustments_id_list Is Nothing Then
+            adjustments_id_filter_list = initial_adjustments_id_list
+        Else
+            adjustments_id_filter_list = input_adjustments_id_list
+        End If
+        adjustments_filter_flag = False
+
+    End Sub
+
+#End Region
+
+#Region "Filters Additive Methods"
+
+    Protected Friend Sub UpdateEntitiesFilter(ByRef entities_id_short_list As List(Of String))
+
+        entities_id_filter_list = Utilities_Functions.GetShortList(entities_id_filter_list, entities_id_short_list)
+        entities_filter_flag = True
+
+    End Sub
+
+    Protected Friend Sub UpdateClientsFilter(ByRef clients_id_short_list As List(Of String))
+
+        clients_id_filter_list = Utilities_Functions.GetShortList(clients_id_filter_list, clients_id_short_list)
+        clients_filter_flag = True
+
+    End Sub
+
+    Protected Friend Sub UpdateProductsFilter(ByRef products_id_short_list As List(Of String))
+
+        products_id_filter_list = Utilities_Functions.GetShortList(products_id_filter_list, products_id_short_list)
+        products_filter_flag = True
+
+    End Sub
+
+    Protected Friend Sub UpdateAdjustmentsFilter(ByRef adjustments_id_short_list As List(Of String))
+
+        adjustments_id_filter_list = Utilities_Functions.GetShortList(adjustments_id_filter_list, adjustments_id_short_list)
+        adjustments_filter_flag = True
+
+    End Sub
+
+#End Region
+
+    Private Function GetAdditionnalWhereClauseFromFilters() As String
+
+        Dim str_SQL As String = ""
+        Dim entities_sql_filter As String = DATA_ENTITY_ID_VARIABLE & " IN ('" + Join(entities_id_filter_list.ToArray, "','") + "')"
+        Dim clients_sql_filter As String = DATA_CLIENT_ID_VARIABLE & " IN ('" + Join(clients_id_filter_list.ToArray, "','") + "')"
+        Dim products_sql_filter As String = DATA_PRODUCT_ID_VARIABLE & " IN ('" + Join(products_id_filter_list.ToArray, "','") + "')"
+        Dim adjustments_sql_filter As String = DATA_ADJUSTMENT_ID_VARIABLE & " IN ('" + Join(adjustments_id_filter_list.ToArray, "','") + "')"
+
+        If entities_filter_flag = True Then str_SQL = str_SQL & " AND " & entities_sql_filter
+        If clients_filter_flag = True Then str_SQL = str_SQL & " AND " & clients_sql_filter
+        If products_filter_flag = True Then str_SQL = str_SQL & " AND " & products_sql_filter
+        If adjustments_filter_flag = True Then str_SQL = str_SQL & " AND " & adjustments_sql_filter
+
+        If str_SQL = "" Then
+            Return str_SQL
+        Else
+            Return Right(str_SQL, Len(str_SQL) - Len(" AND "))
+        End If
+
+    End Function
+
+    ' below -> cache quid !
+    Private Function GetWhereClause(Optional ByRef input_entities_id_list As List(Of String) = Nothing, _
+                                    Optional ByRef input_clients_id_list As List(Of String) = Nothing, _
+                                    Optional ByRef input_products_id_list As List(Of String) = Nothing, _
+                                    Optional ByRef input_adjustments_id_list As List(Of String) = Nothing) As String
+
+        Dim str_SQL As String = ""
+        If Not input_entities_id_list Is Nothing Then str_SQL = str_SQL & " AND " & DATA_ENTITY_ID_VARIABLE & " IN ('" + Join(input_entities_id_list.ToArray, "','") + "')"
+        If Not input_clients_id_list Is Nothing Then str_SQL = str_SQL & " AND " & DATA_CLIENT_ID_VARIABLE & " IN ('" + Join(input_clients_id_list.ToArray, "','") + "')"
+        If Not input_products_id_list Is Nothing Then str_SQL = str_SQL & " AND " & DATA_PRODUCT_ID_VARIABLE & " IN ('" + Join(input_products_id_list.ToArray, "','") + "')"
+        If Not input_adjustments_id_list Is Nothing Then str_SQL = str_SQL & " AND " & DATA_ADJUSTMENT_ID_VARIABLE & " IN ('" + Join(adjustments_id_filter_list.ToArray, "','") + "')"
+
+        If str_SQL = "" Then
+            Return str_SQL
+        Else
+            Return Right(str_SQL, Len(str_SQL) - Len(" AND "))
+        End If
+
+    End Function
+
+
 
 #End Region
 
@@ -532,7 +688,7 @@ Friend Class DataBaseDataDownloader
             If destination_currency <> MAIN_CURRENCY Then reverse_flag = True
 
             ' !! Attention stub car besoin d'une fonction supp qui créé les taux 
-            ' -> NOK/USD par exemple (en passant par la main currency)
+            ' -> NOK/USD par exemple (en passant par la main currency) -> à voir car il y a le reverse token
 
             If original_currency <> destination_currency Then _
             rates_dic.Add(currencies_token, ExchangeRates.BuildExchangeRatesDictionary(time_configuration, _
@@ -554,11 +710,10 @@ Friend Class DataBaseDataDownloader
 
     End Sub
 
-
     Protected Friend Shared Function GetUniqueCurrencies(ByRef entities_id_list As String()) As List(Of String)
 
         Dim unique_currencies As New List(Of String)
-        Dim entities_id_currencies_dic As Hashtable = EntitiesMapping.GetEntitiesDictionary(ASSETS_TREE_ID_VARIABLE, ASSETS_CURRENCY_VARIABLE)
+        Dim entities_id_currencies_dic As Hashtable = EntitiesMapping.GetEntitiesDictionary(ENTITIES_ID_VARIABLE, ENTITIES_CURRENCY_VARIABLE)
         For Each entity_id In entities_id_list
             If unique_currencies.Contains(entities_id_currencies_dic(entity_id)) = False Then _
                 unique_currencies.Add(entities_id_currencies_dic(entity_id))

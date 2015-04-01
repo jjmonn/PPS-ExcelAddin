@@ -117,7 +117,7 @@ Friend Class DataBaseDataUploader
 
         Dim valueString As String = value.ToString("F", System.Globalization.CultureInfo.InvariantCulture)
         If srv.sqlQuery("REPLACE INTO " + DATA_DATABASE & "." & versionCode & _
-                        "(" & DATA_ASSET_ID_VARIABLE & "," & _
+                        "(" & DATA_ENTITY_ID_VARIABLE & "," & _
                            DATA_ACCOUNT_ID_VARIABLE & "," & _
                            DATA_PERIOD_VARIABLE & "," & _
                            DATA_VALUE_VARIABLE & "," & _
@@ -222,7 +222,7 @@ Friend Class DataBaseDataUploader
     '        Dim Fields(), Values() As Object
     '        Dim criteria, FormulaType, accountKey, entityKey As String
 
-    '        Fields = {DATA_ASSET_ID_VARIABLE,
+    '        Fields = {DATA_ENTITY_ID_VARIABLE,
     '                  DATA_ACCOUNT_ID_VARIABLE, _
     '                  DATA_PERIOD_VARIABLE,
     '                  DATA_VALUE_VARIABLE}
@@ -246,7 +246,7 @@ Friend Class DataBaseDataUploader
     '                                      period, _
     '                                      mDataSetDictionary(entity)(account)(period)}
 
-    '                            srv.rst.Filter = DATA_ASSET_ID_VARIABLE & "='" & Values(0) & "'" & _
+    '                            srv.rst.Filter = DATA_ENTITY_ID_VARIABLE & "='" & Values(0) & "'" & _
     '                                             DATA_ACCOUNT_ID_VARIABLE & "='" & Values(1) & "'" & _
     '                                             DATA_PERIOD_VARIABLE & "='" & Values(2) & "'" & _
     '                                             DATA_ADJUSTMENT_ID_VARIABLE & "='" & mAdjustmentId & "'"

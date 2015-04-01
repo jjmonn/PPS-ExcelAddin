@@ -49,8 +49,9 @@ Friend Class EntitiesController
     Friend Sub New()
 
         Entity.LoadEntitiesTree(entitiesTV)
-        Category.LoadCategoriesTree(categoriesTV)
-        entitiesNameKeyDic = EntitiesMapping.GetEntitiesDictionary(ASSETS_NAME_VARIABLE, ASSETS_TREE_ID_VARIABLE)
+        ' can be replaced by a treenode instead !
+        Category.LoadCategoryCodeTV(categoriesTV, ControllingUI2Controller.ENTITIES_CODE)
+        entitiesNameKeyDic = EntitiesMapping.GetEntitiesDictionary(ENTITIES_NAME_VARIABLE, ENTITIES_ID_VARIABLE)
         Entities = New Entity
 
         If Entities.object_is_alive = False Then
@@ -88,20 +89,20 @@ Friend Class EntitiesController
     Protected Friend Sub CreateEntity(ByRef hash As Hashtable, ByRef parent_node As TreeNode)
 
         Dim entity_id As String = TreeViewsUtilities.GetNewNodeKey(entitiesTV, ENTITIES_TOKEN_SIZE)
-        hash.Add(ASSETS_TREE_ID_VARIABLE, entity_id)
+        hash.Add(ENTITIES_ID_VARIABLE, entity_id)
         Dim credential_level As Int32
         If Not parent_node Is Nothing Then
-            credential_level = Entities.ReadEntity(hash(ASSETS_PARENT_ID_VARIABLE), ASSETS_CREDENTIAL_ID_VARIABLE)
+            credential_level = Entities.ReadEntity(hash(ENTITIES_PARENT_ID_VARIABLE), ENTITIES_CREDENTIAL_ID_VARIABLE)
         Else
             credential_level = 0
         End If
-        hash.Add(ASSETS_CREDENTIAL_ID_VARIABLE, credential_level)
+        hash.Add(ENTITIES_CREDENTIAL_ID_VARIABLE, credential_level)
         hash.Add(ITEMS_POSITIONS, 1)
 
         Entities.CreateEntity(hash)
-        AddNodeAndRow(entity_id, hash(ASSETS_NAME_VARIABLE), parent_node)
-        If Entities.ReadEntity(parent_node.Name, ASSETS_ALLOW_EDITION_VARIABLE) = 1 Then
-            Entities.UpdateEntity(parent_node.Name, ASSETS_ALLOW_EDITION_VARIABLE, 0)
+        AddNodeAndRow(entity_id, hash(ENTITIES_NAME_VARIABLE), parent_node)
+        If Entities.ReadEntity(parent_node.Name, ENTITIES_ALLOW_EDITION_VARIABLE) = 1 Then
+            Entities.UpdateEntity(parent_node.Name, ENTITIES_ALLOW_EDITION_VARIABLE, 0)
             parent_node.StateImageIndex = 0
         End If
         DisplayDGVData()

@@ -3,7 +3,7 @@
 ' Manages the transfert from controlingUI DGVs to Excel
 '
 ' To do:
-'       - Implement drop drill down to excel
+'       - Reimplement send drill down and send tab !
 '
 '
 ' Known Bugs:
@@ -11,7 +11,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last Modified: 04/02/2015
+' Last Modified: 23/03/2015
 
 
 Imports System.Windows.Forms
@@ -49,22 +49,13 @@ Friend Class CControlingDropOnExcel
     Protected Friend Sub SendCurrentEntityToExcel(ByRef version_name As String, _
                                                   ByRef currency As String)
 
-        If Controller.currentEntity <> "" Then
+        If Not Controller.Entity_node.Text Is Nothing Then
 
-            Dim destination = CWorksheetWrittingFunctions.CreateReceptionWS(Controller.currentEntity, _
+            Dim destination = CWorksheetWrittingFunctions.CreateReceptionWS(Controller.Entity_node.Text, _
                                                                             {"Entity", "Version", "Currency"}, _
-                                                                            {Controller.currentEntity, version_name, Currency})
-            Dim offset As Int32
-            destination = destination.Offset(1, 0)
-            For Each tab_ As TabPage In View.TabControl1.TabPages
-                If Controller.versions_id_array.Length > 1 Then
-                    offset = View.DGVUTIL.writeControllingCurrentEntityToExcel(destination, tab_.Controls(0))
-                Else
-                    offset = View.DGVUTIL.WriteCurrentEntityToExcel(destination, tab_.Controls(0))
-                End If
-                destination = destination.Offset(offset, 0)
-            Next
-            GlobalVariables.apps.ActiveSheet.Columns(1).autofit()
+                                                                            {Controller.Entity_node.Text, version_name, currency})
+
+            ' To be reimplemented -> copy send drill down method BUT without rows levels recursive loops
 
         End If
 
@@ -74,27 +65,18 @@ Friend Class CControlingDropOnExcel
                                         ByRef version_name As String, _
                                         ByRef currency As String)
 
-        If Controller.currentEntity <> "" Then
-            Dim destination = CWorksheetWrittingFunctions.CreateReceptionWS(Controller.currentEntity, _
-                                                                            {"Entity", "Version", "Currency"}, _
-                                                                            {Controller.currentEntity, version_name, currency})
-            destination = destination.Offset(1, 0)
-            If Controller.versions_id_array.GetLength(0) > 1 Then
-                View.DGVUTIL.writeControllingCurrentEntityToExcel(destination, currentDGV)
-            Else
-                View.DGVUTIL.WriteCurrentEntityToExcel(destination, currentDGV)
-            End If
-        End If
+        
+        ' To be reimplemented (like above BUT for the current tab only)
 
     End Sub
 
     Protected Friend Sub SendDrillDownToExcel(ByRef version_name As String, _
                                               ByRef currency As String)
 
-        If Controller.currentEntity <> "" Then
-            Dim destination As Excel.Range = CWorksheetWrittingFunctions.CreateReceptionWS(Controller.currentEntity, _
+        If Not Controller.Entity_node.Text Is Nothing Then
+            Dim destination As Excel.Range = CWorksheetWrittingFunctions.CreateReceptionWS(Controller.Entity_node.Text, _
                                                                                            {"Entity", "Version", "Currency"}, _
-                                                                                           {Controller.currentEntity, version_name, currency})
+                                                                                           {Controller.Entity_node.Text, version_name, currency})
             Dim i As Int32 = 1
             For Each tab_ As TabPage In View.TabControl1.TabPages
                 Dim DGV As vDataGridView = tab_.Controls(0)

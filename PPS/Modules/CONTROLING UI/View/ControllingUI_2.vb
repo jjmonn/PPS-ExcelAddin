@@ -3,25 +3,17 @@
 '     Visualize data
 '
 ' To do: 
+'       - Reimplement Versions comparison !!
+' 
+' 
 '
-'   1. reloading entitiesTV afetr categories selection -> same expansions levels + same selection (checkboxes) + msg box if changed
-'
-'   -> a priori le columns dictionary ne sert à rien !!
-'   - Drop to excel -> adapt method (drill down) -> 
-'   - Load DLL computer too slow -> check what is going on
-'   - categories selection -> select all child nodes when parent select (and the same for deselection)
-'    
-'   - Zoom
-'   - check if possible security breach if Controller access VIEW treeviews...
-'   - delete columns index dictionary ?
-'   - Dispatch monthly vs. yearly version -> frozen - Will be implemented if necessary
 '
 ' Known Bugs:
 '     
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 05/03/2015
+' Last modified: 24/03/2015
 
 
 Imports System.Windows.Forms
@@ -29,6 +21,7 @@ Imports Microsoft.Office.Interop
 Imports System.Drawing
 Imports System.IO
 Imports System.Data
+Imports System.Linq
 Imports VIBlend.WinForms.DataGridView
 Imports System.Collections.Generic
 Imports System.Collections
@@ -47,7 +40,6 @@ Friend Class ControllingUI_2
     Friend DGVUTIL As New DataGridViewsUtil
     Private DROPTOEXCELController As CControlingDropOnExcel
     Friend PBar As New ProgressBarControl
-    Friend accountsTV As New TreeView
     Private leftSplitContainer As SplitContainer
     Private rightSplitContainer As SplitContainer
 
@@ -61,25 +53,30 @@ Friend Class ControllingUI_2
 #Region "Variables"
 
     ' Friend tabsNodesDictionary As New Dictionary(Of String, TreeNode)
-    Friend vDGVAccountsKeyLineNbDic As New Dictionary(Of Int32, Dictionary(Of String, Int32))
+    ' Friend vDGVAccountsKeyLineNbDic As New Dictionary(Of Int32, Dictionary(Of String, Int32))
     Private EntitiesCategoriesSelectionList As List(Of String)
-    Private periodsColumnIndexDictionary As Dictionary(Of Integer, Int32)
+    '  Private periodsColumnIndexDictionary As Dictionary(Of Integer, Int32)
     Private AccountsTokenNamesDict As Hashtable
-    Private AccountsKeysTabNbDict As Hashtable
+    Protected Friend AccountsKeysTabNbDict As Hashtable
     Private isUpdatingPeriodsCheckList As Boolean
     Private isVersionComparisonDisplayed As Boolean
     Private right_clicked_node As TreeNode
     Private current_DGV_cell As GridCell
-    Private adjustments_lines_list As New List(Of HierarchyItem)
+    ' Private adjustments_lines_list As New List(Of HierarchyItem)
     Private IsUpdatingChildrenCategory As Boolean = False
 
 #End Region
 
 #Region "Treeviews"
 
-    Friend entitiesTV As New TreeView
-    Friend categoriesTV As New TreeView
-    Friend adjustmentsTV As New TreeView
+    Protected Friend accountsTV As New TreeView
+    Protected Friend entitiesTV As New TreeView
+    Protected Friend entities_categoriesTV As New TreeView
+    Protected Friend adjustmentsTV As New TreeView
+    Protected Friend clientsTV As New TreeView
+    Protected Friend clients_categoriesTV As New TreeView
+    Protected Friend productsTV As New TreeView
+    Protected Friend products_categoriesTV As New TreeView
     Private periodsCLB As New CheckedListBox
     Friend versionsTV As New TreeView
     Private DropMenu As New TableLayoutPanel
@@ -145,51 +142,54 @@ Friend Class ControllingUI_2
 
     Private Sub LoadTrees()
 
-        TVTableLayout.Controls.Add(entitiesTV, 0, 0)
-        TVTableLayout.Controls.Add(categoriesTV, 0, 1)
-        TVTableLayout.Controls.Add(adjustmentsTV, 0, 0)
-        TVTableLayout.Controls.Add(CurrenciesCLB, 0, 0)
-        TVTableLayout.Controls.Add(periodsCLB, 0, 0)
-        TVTableLayout.Controls.Add(versionsTV, 0, 0)
-
-        DisplayFirstTreeOnly()          ' TV Table Layout
-        versionsTV.ImageList = VersionsIL
-        categoriesTV.ImageList = categoriesIL
-        entitiesTV.ImageList = EntitiesTVImageList
-
-        Version.LoadVersionsTree(versionsTV)
         Entity.LoadEntitiesTree(entitiesTV)
-        TreeViewsUtilities.set_TV_basics_icon_index(entitiesTV)
+        Client.LoadClientsTree(clientsTV)
+        Product.LoadProductsTree(productsTV)
         Account.LoadAccountsTree(accountsTV)
-        Category.LoadCategoriesTree(categoriesTV)
+        Category.LoadCategoryCodeTV(entities_categoriesTV, ControllingUI2Controller.ENTITIES_CODE)
+        Category.LoadCategoryCodeTV(clients_categoriesTV, ControllingUI2Controller.CLIENTS_CODE)
+        Category.LoadCategoryCodeTV(products_categoriesTV, ControllingUI2Controller.PRODUCT_CODE)
         Adjustment.LoadAdjustmentsTree(adjustmentsTV)
+        Version.LoadVersionsTree(versionsTV)
+
+        TVSetup(entitiesTV, 0, EntitiesTVImageList)
+        TVSetup(clientsTV, 0)
+        TVSetup(productsTV, 0)
+        TVSetup(adjustmentsTV, 0)
+        TVSetup(versionsTV, 0, VersionsIL)
+        TVSetup(entities_categoriesTV, 1, categoriesIL)
+        TVSetup(clients_categoriesTV, 1, categoriesIL)
+        TVSetup(products_categoriesTV, 1, categoriesIL)
+
+        TreeViewsUtilities.set_TV_basics_icon_index(entitiesTV)
         LoadCurrencies()
 
-        entitiesTV.Dock = DockStyle.Fill
-        categoriesTV.Dock = DockStyle.Fill
-        categoriesTV.CheckBoxes = True
-        categoriesTV.ExpandAll()
-        adjustmentsTV.Dock = DockStyle.Fill
-        adjustmentsTV.CheckBoxes = True
-        TreeViewsUtilities.CheckAllNodes(adjustmentsTV)
-        versionsTV.Dock = DockStyle.Fill
-        versionsTV.CheckBoxes = True
-        versionsTV.ExpandAll()
-        entitiesTV.CollapseAll()
-        entitiesTV.CheckBoxes = True
 
+        ' Add TVs events for categories clients / products !!
         AddHandler entitiesTV.NodeMouseDoubleClick, AddressOf EntitiesTV_NodeMouseDoubleClick
         AddHandler entitiesTV.KeyDown, AddressOf EntitiesTV_KeyDown
         AddHandler entitiesTV.AfterCheck, AddressOf entitiesTV_AfterCheck
         AddHandler entitiesTV.NodeMouseClick, AddressOf EntitiesTV_NodeMouseClick
-        AddHandler categoriesTV.AfterCheck, AddressOf Category_AfterCheck
+        AddHandler entities_categoriesTV.AfterCheck, AddressOf Category_AfterCheck
         AddHandler CurrenciesCLB.ItemCheck, AddressOf currenciesCLB_ItemCheck
         AddHandler periodsCLB.ItemCheck, AddressOf periodsCLB_ItemCheck
 
         entitiesTV.ContextMenuStrip = entitiesRightClickMenu
-        entitiesTV.Nodes(0).Checked = True
-        periodsCLB.ContextMenuStrip = periodsRightClickMenu
         adjustmentsTV.ContextMenuStrip = AdjustmentsRCM
+        periodsCLB.ContextMenuStrip = periodsRightClickMenu
+
+        DisplayFirstTreeOnly()          ' TV Table Layout
+
+    End Sub
+
+    Private Sub TVSetup(ByRef TV As TreeView, _
+                        ByRef row_index As Int32, _
+                        Optional ByRef image_list As ImageList = Nothing)
+
+        TVTableLayout.Controls.Add(entitiesTV, 0, row_index)
+        TV.Dock = DockStyle.Fill
+        TV.CheckBoxes = True
+        If Not image_list Is Nothing Then TV.ImageList = image_list
 
     End Sub
 
@@ -205,6 +205,7 @@ Friend Class ControllingUI_2
             CurrenciesCLB.Items.Add(currency_, False)
         Next
         CurrenciesCLB.SetItemChecked(CurrenciesCLB.FindString(MAIN_CURRENCY), True)
+        CurrenciesCLB.SelectedItem = MAIN_CURRENCY
 
     End Sub
 
@@ -284,45 +285,549 @@ Friend Class ControllingUI_2
 #End Region
 
 
-#Region "DGVs Display Functions"
+#Region "DGV Hierarchies Creation"
 
-    Friend Sub VIEWInitialization(ByRef periodsList As List(Of Integer), _
-                                  ByRef versionsNamesArray() As String, _
-                                  ByRef versionComparisonFlag As String, _
-                                  ByRef versionTimeConfig As String, _
-                                  Optional ByRef entitiesArray() As String = Nothing, _
-                                  Optional ByRef entity_node As TreeNode = Nothing)
+    Protected Friend Sub CreateDGVsHierarchies(ByRef rows_hierarchy_nodes As TreeNode, _
+                                               ByRef columns_hierarchy_nodes As TreeNode, _
+                                               ByRef display_hierarchy As TreeNode)
 
-        ' Columns
-        Dim timeConfig As String
-        Select Case versionComparisonFlag
-            Case Version.YEARLY_VERSIONS_COMPARISON, Version.YEARLY_MONTHLY_VERSIONS_COMPARISON : timeConfig = YEARLY_TIME_CONFIGURATION
-            Case Version.MONTHLY_VERSIONS_COMPARISON : timeConfig = MONTHLY_TIME_CONFIGURATION
-            Case Else : timeConfig = versionTimeConfig
-        End Select
         For Each tab_ As TabPage In TabControl1.TabPages
-            If versionsNamesArray.Length > 1 Then
-                periodsColumnIndexDictionary = DataGridViewsUtil.CreateDGVColumns(tab_.Controls(0), periodsList.ToArray, versionsNamesArray, timeConfig)
+            Dim DGV As vDataGridView = tab_.Controls(0)
+            DGV.RowsHierarchy.Clear()
+            DGV.ColumnsHierarchy.Clear()
+
+            ' row creation
+
+            If columns_hierarchy_nodes.Nodes(0).Name = ControllingUI2Controller.YEARS_CODE Then
+                PeriodsColumnsCreationLoop(DGV, columns_hierarchy_nodes.Nodes(0))
             Else
-                periodsColumnIndexDictionary = DataGridViewsUtil.CreateDGVColumns(tab_.Controls(0), periodsList.ToArray, timeConfig, True)
+                ColumnsCreationLoop(DGV, columns_hierarchy_nodes.Nodes(0))
             End If
         Next
 
-        ' Rows
-        vDGVAccountsKeyLineNbDic.Clear()
-        Dim i As Integer = 0
-        For Each tab_ As TabPage In TabControl1.TabPages
-            vDGVAccountsKeyLineNbDic.Add(i, DGVUTIL.CreatesVDataGridViewRowsHierarchy(tab_.Controls(0), i, accountsTV, , entity_node))
-            i = i + 1
-        Next
+    End Sub
 
-        ' Menu Periods Combo Box
-        InitializeMenuPeriodsCB()
-        isVersionComparisonDisplayed = False
+#Region "Columns"
+
+    Private Sub CreatesColumns(ByRef columns_hierarchy_nodes As TreeNode)
+
+        For Each tab_ As TabPage In TabControl1.TabPages
+            Dim DGV As vDataGridView = tab_.Controls(0)
+            DGV.RowsHierarchy.Clear()
+            DGV.ColumnsHierarchy.Clear()
+
+            If columns_hierarchy_nodes.Nodes(0).Name = ControllingUI2Controller.YEARS_CODE Then
+                PeriodsColumnsCreationLoop(DGV, columns_hierarchy_nodes.Nodes(0))
+            Else
+                ColumnsCreationLoop(DGV, columns_hierarchy_nodes.Nodes(0))
+            End If
+        Next
 
     End Sub
 
-    Friend Sub FormatVIEWDataDisplay()
+    Private Sub ColumnsCreationLoop(ByRef DGV As vDataGridView, _
+                                    ByRef column_node As TreeNode, _
+                                    Optional ByRef parent_column As HierarchyItem = Nothing)
+
+        For Each filter_value As String In Controller.categories_values_dict(column_node.Name).Keys
+
+            ' Create Column
+            Dim column As HierarchyItem
+            If parent_column Is Nothing Then
+                column = DGV.ColumnsHierarchy.Items.Add(Controller.categories_values_dict(column_node.Name)(filter_value))
+            Else
+                column = parent_column.Items.Add(Controller.categories_values_dict(column_node.Name)(filter_value))
+            End If
+
+            ' Dive one Column hierarchy Level if any
+            If Not column_node.NextNode Is Nothing Then
+                If column_node.NextNode.Name = ControllingUI2Controller.YEARS_CODE Then
+                    PeriodsColumnsCreationLoop(DGV, column_node.NextNode, column)
+                Else
+                    ColumnsCreationLoop(DGV, column_node.NextNode, column)
+                End If
+            End If
+        Next
+
+
+    End Sub
+
+    Private Sub PeriodsColumnsCreationLoop(ByRef DGV As vDataGridView, _
+                                           ByVal column_node As TreeNode, _
+                                           Optional ByRef parent_column As HierarchyItem = Nothing)
+
+        Dim periods_node As TreeNode = column_node
+        For Each year_node As TreeNode In periods_node.Nodes
+
+            ' Create Year Column
+            Dim year_column As HierarchyItem
+            If parent_column Is Nothing Then
+                year_column = DGV.ColumnsHierarchy.Items.Add(year_node.Text)
+            Else
+                year_column = parent_column.Items.Add(year_node.Text)
+            End If
+
+            If Not column_node.NextNode Is Nothing AndAlso column_node.NextNode.Name = ControllingUI2Controller.MONTHS_CODE Then column_node = column_node.NextNode
+
+            If year_node.Nodes.Count > 0 Then
+
+                ' Iterate through Months
+                For Each month_node As TreeNode In year_node.Nodes
+                    Dim month_column = year_column.Items.Add(month_node.Text)
+                    If Not column_node.NextNode Is Nothing Then ColumnsCreationLoop(DGV, column_node.NextNode, month_column)
+                Next
+            Else
+                If Not column_node.NextNode Is Nothing Then ColumnsCreationLoop(DGV, column_node.NextNode, year_column)
+            End If
+        Next
+
+    End Sub
+
+#End Region
+
+#Region "Rows"
+
+
+
+#End Region
+
+#End Region
+
+
+#Region "DGV Fill Functions"
+
+    Protected Friend Sub DisplayData(ByRef DataDictionary As Hashtable, _
+                                     ByRef rows_hierarchy_nodes As TreeNode, _
+                                     ByRef columns_hirerarchy_nodes As TreeNode, _
+                                     ByRef display_hierarchy As TreeNode)
+
+        Dim filters_dictionary As New Dictionary(Of String, String)
+        ResetFiltersDictionary(filters_dictionary, rows_hierarchy_nodes)
+        CreatesColumns(columns_hirerarchy_nodes)
+
+        For Each tab_account_node As TreeNode In accountsTV.Nodes
+            ' Tab Selection
+            Dim DGV As vDataGridView = TabControl1.TabPages.Item(tab_account_node.Index).Controls(0)
+            AutoNextLoopSelection(DataDictionary, _
+                                  rows_hierarchy_nodes, _
+                                  columns_hirerarchy_nodes, _
+                                  tab_account_node, _
+                                  display_hierarchy.Nodes(0), _
+                                  filters_dictionary, _
+                                  DGV)
+        Next
+        FormatVIEWDataDisplay()
+        InitializeMenuPeriodsCB()
+
+    End Sub
+
+#Region "Rows Hierarchy Loops"
+
+    Private Sub DisplayHierarchyLoop(ByRef DataDictionary As Hashtable, _
+                                    ByRef rows_hierarchy_nodes As TreeNode, _
+                                    ByRef columns_hierarchy_nodes As TreeNode, _
+                                    ByRef tab_account_node As TreeNode, _
+                                    ByRef display_node As TreeNode, _
+                                    ByRef filters_dictionary As Dictionary(Of String, String), _
+                                    ByRef DGV As vDataGridView, _
+                                      Optional ByRef parent_row As HierarchyItem = Nothing)
+
+        ' Loop through the filter values of the category
+        For Each filter_value As String In Controller.categories_values_dict(display_node.Name).Keys
+            filters_dictionary(display_node.Name) = filter_value
+
+            ' Get corresponding dataHT and display row
+            Dim row As HierarchyItem = CreateAndFillRow(Controller.categories_values_dict(display_node.Name)(filter_value), _
+                                                        GetCorrespondingDataHT(rows_hierarchy_nodes, _
+                                                                               DataDictionary, _
+                                                                               filters_dictionary), _
+                                                        filters_dictionary, _
+                                                        columns_hierarchy_nodes, DGV, _
+                                                        parent_row)
+
+            If Not display_node.NextNode Is Nothing Then
+                AutoNextLoopSelection(DataDictionary, _
+                                      rows_hierarchy_nodes, _
+                                      columns_hierarchy_nodes, _
+                                      tab_account_node, _
+                                      display_node.NextNode, _
+                                      filters_dictionary, _
+                                      DGV, _
+                                      row)
+            End If
+        Next
+        filters_dictionary(display_node.Name) = ControllingUI2Controller.TOTAL_CODE
+
+    End Sub
+
+    Private Sub AccountsHierarchyLoop(ByRef DataDictionary As Hashtable, _
+                                      ByRef parent_account_node As TreeNode, _
+                                      ByRef rows_hierarchy_nodes As TreeNode, _
+                                      ByRef columns_hierarchy_nodes As TreeNode, _
+                                      ByRef tab_account_node As TreeNode, _
+                                      ByRef display_node As TreeNode, _
+                                      ByRef filters_dictionary As Dictionary(Of String, String), _
+                                      ByRef DGV As vDataGridView, _
+                                      Optional ByRef parent_row As HierarchyItem = Nothing)
+
+        For Each account_node As TreeNode In TreeViewsUtilities.GetNodesList(parent_account_node)
+
+            filters_dictionary(display_node.Name) = account_node.Name
+
+            ' Get corresponding dataHT and display row
+            Dim row As HierarchyItem = CreateAndFillRow(account_node.Text, _
+                                                        GetCorrespondingDataHT(rows_hierarchy_nodes, _
+                                                                               DataDictionary, _
+                                                                               filters_dictionary), _
+                                                        filters_dictionary, _
+                                                        columns_hierarchy_nodes, _
+                                                        DGV, _
+                                                        parent_row)
+
+            If Not display_node.NextNode Is Nothing Then
+                AutoNextLoopSelection(DataDictionary, _
+                                      rows_hierarchy_nodes, _
+                                      columns_hierarchy_nodes, _
+                                      tab_account_node, _
+                                      display_node.NextNode, _
+                                      filters_dictionary, _
+                                      DGV, _
+                                      row)
+            End If
+        Next
+        filters_dictionary(display_node.Name) = ControllingUI2Controller.TOTAL_CODE
+
+    End Sub
+
+    Private Sub DisplayEntitiesLoop(ByRef DataDictionary As Hashtable, _
+                                    ByRef entity_node As TreeNode, _
+                                    ByRef rows_hierarchy_nodes As TreeNode, _
+                                    ByRef columns_hierarchy_nodes As TreeNode, _
+                                    ByRef tab_account_node As TreeNode, _
+                                    ByRef display_node As TreeNode, _
+                                    ByRef filters_dictionary As Dictionary(Of String, String), _
+                                    ByRef DGV As vDataGridView, _
+                                    Optional ByRef parent_row As HierarchyItem = Nothing)
+
+        For Each current_node In entity_node.Nodes
+            filters_dictionary(display_node.Name) = current_node.name
+
+            ' Get corresponding dataHT and display row
+            Dim row As HierarchyItem = CreateAndFillRow(current_node.text, _
+                                                        GetCorrespondingDataHT(rows_hierarchy_nodes, _
+                                                                               DataDictionary, _
+                                                                               filters_dictionary), _
+                                                        filters_dictionary, _
+                                                        columns_hierarchy_nodes, _
+                                                        DGV, _
+                                                        parent_row)
+
+            If current_node.nodes.count > 0 Then
+                DisplayEntitiesLoop(DataDictionary, _
+                                    current_node, _
+                                    rows_hierarchy_nodes, _
+                                    columns_hierarchy_nodes, _
+                                    tab_account_node, _
+                                    display_node, _
+                                    filters_dictionary, _
+                                    DGV, _
+                                    row)
+
+            ElseIf Not display_node.NextNode Is Nothing Then
+                AutoNextLoopSelection(DataDictionary, _
+                                     rows_hierarchy_nodes, _
+                                     columns_hierarchy_nodes, _
+                                     tab_account_node, _
+                                     display_node.NextNode, _
+                                     filters_dictionary, _
+                                     DGV, _
+                                     row)
+            End If
+        Next
+        filters_dictionary(display_node.Name) = Controller.Entity_node.Name
+
+    End Sub
+
+    Private Sub AutoNextLoopSelection(ByRef DataDictionary As Hashtable, _
+                                      ByRef rows_hierarchy_nodes As TreeNode, _
+                                      ByRef columns_hierarchy_nodes As TreeNode, _
+                                      ByRef tab_account_node As TreeNode, _
+                                      ByRef display_node As TreeNode, _
+                                      ByRef filters_dictionary As Dictionary(Of String, String), _
+                                      ByRef DGV As vDataGridView, _
+                                      Optional ByRef parent_row As HierarchyItem = Nothing)
+
+
+        Select Case display_node.Name
+            Case ControllingUI2Controller.ENTITIES_CODE
+
+                DisplayEntitiesLoop(DataDictionary, _
+                                    Controller.Entity_node, _
+                                    rows_hierarchy_nodes, _
+                                    columns_hierarchy_nodes, _
+                                    tab_account_node, _
+                                    display_node, _
+                                    filters_dictionary, _
+                                    DGV, _
+                                    parent_row)
+
+            Case ControllingUI2Controller.ACCOUNTS_CODE
+
+                AccountsHierarchyLoop(DataDictionary, _
+                                      tab_account_node, _
+                                      rows_hierarchy_nodes, _
+                                      columns_hierarchy_nodes, _
+                                      tab_account_node, _
+                                      display_node, _
+                                      filters_dictionary, _
+                                      DGV, _
+                                      parent_row)
+
+            Case Else
+
+                DisplayHierarchyLoop(DataDictionary, _
+                                     rows_hierarchy_nodes, _
+                                     columns_hierarchy_nodes, _
+                                     tab_account_node, _
+                                     display_node, _
+                                     filters_dictionary, _
+                                     DGV, _
+                                     parent_row)
+        End Select
+
+    End Sub
+
+#End Region
+
+    Private Function GetCorrespondingDataHT(ByRef rows_hierarchy_node As TreeNode, _
+                                            ByRef DataDictionary As Hashtable, _
+                                            ByRef filter_dict As Dictionary(Of String, String)) As Hashtable
+
+        Dim dataHT As Hashtable = DataDictionary
+        For Each hierarchy_node As TreeNode In rows_hierarchy_node.Nodes
+            dataHT = dataHT(filter_dict(hierarchy_node.Name))
+        Next
+        Return dataHT
+
+    End Function
+
+    Private Function CreateAndFillRow(ByVal current_filter_name As String, _
+                                      ByRef dataHT As Hashtable, _
+                                      ByRef filters_dictionary As Dictionary(Of String, String), _
+                                      ByRef columns_hierarchy_nodes As TreeNode, _
+                                      ByRef DGV As vDataGridView, _
+                                      Optional ByRef parent_row As HierarchyItem = Nothing) As HierarchyItem
+
+        ' Create Row
+        Dim row As HierarchyItem
+        If Not parent_row Is Nothing Then
+            row = parent_row.Items.Add(current_filter_name)
+        Else
+            row = DGV.RowsHierarchy.Items.Add(current_filter_name)
+        End If
+
+        ' Enter Columns Loop
+        InitializeColumnsFilterDictionary(filters_dictionary)
+
+        If Not columns_hierarchy_nodes.Nodes(0) Is Nothing Then
+            Dim column_node As TreeNode = columns_hierarchy_nodes.Nodes(0)
+            If column_node.Name = ControllingUI2Controller.YEARS_CODE Then
+                PeriodsHierarchyLoop(row, column_node, dataHT, filters_dictionary)
+            Else
+                ColumnsHierarchyLoop(row, column_node, dataHT, filters_dictionary)
+            End If
+        End If
+        Return row
+
+    End Function
+
+    Private Sub ColumnsHierarchyLoop(ByRef row As HierarchyItem, _
+                                     ByRef column_node As TreeNode, _
+                                     ByRef dataHT As Hashtable, _
+                                     ByRef filters_dictionary As Dictionary(Of String, String), _
+                                     Optional ByRef parent_column As HierarchyItem = Nothing)
+
+        Dim column_index As Int32 = 0
+        Dim column_hierarchy_code As String = column_node.Name
+        If column_hierarchy_code = ControllingUI2Controller.MONTHS_CODE Then column_hierarchy_code = column_node.PrevNode.Name
+
+        For Each filter_value In Controller.categories_values_dict(column_hierarchy_code).Keys
+            ' Update Filter
+            filters_dictionary(column_hierarchy_code) = filter_value
+
+            ' Fill Cell
+            Dim column As HierarchyItem = SelectColumn(row, column_index, parent_column)
+            FillValue(row, column, dataHT, filters_dictionary)
+
+            ' Dive one Column hierarchy Level if any
+            If Not column_node.NextNode Is Nothing Then
+
+                If column_node.NextNode.Name = ControllingUI2Controller.YEARS_CODE Then
+                    PeriodsHierarchyLoop(row, column_node.NextNode, dataHT, filters_dictionary, column)
+                Else
+                    ColumnsHierarchyLoop(row, column_node.NextNode, dataHT, filters_dictionary, column)
+                End If
+
+            End If
+            column_index = column_index + 1
+        Next
+        ' Remove Current Filter
+        filters_dictionary(column_hierarchy_code) = ControllingUI2Controller.TOTAL_CODE
+
+    End Sub
+
+    Private Sub PeriodsHierarchyLoop(ByRef row As HierarchyItem, _
+                                     ByRef column_node As TreeNode, _
+                                     ByRef dataHT As Hashtable, _
+                                     ByRef filters_dictionary As Dictionary(Of String, String), _
+                                     Optional ByRef parent_column As HierarchyItem = Nothing)
+
+        Dim column_index As Int32 = 0
+        Dim periods_node As TreeNode = column_node
+        For Each year_node As TreeNode In periods_node.Nodes
+
+            ' Update Filter
+            filters_dictionary(column_node.Name) = year_node.Name
+
+            ' Fill Cell
+            Dim year_column As HierarchyItem = SelectColumn(row, column_index, parent_column)
+            FillValue(row, year_column, dataHT, filters_dictionary)
+
+            Dim new_column_node As TreeNode = column_node
+            If Not column_node.NextNode Is Nothing AndAlso column_node.NextNode.Name = ControllingUI2Controller.MONTHS_CODE Then new_column_node = column_node.NextNode
+            If year_node.Nodes.Count > 0 Then
+
+                ' Iterate through Months
+                For Each month_node As TreeNode In year_node.Nodes
+
+                    ' Update Filter
+                    filters_dictionary(new_column_node.Name) = month_node.Name
+
+                    ' Fill Cell
+                    Dim month_column_index As Int32 = 0
+                    Dim month_column As HierarchyItem = SelectColumn(row, month_column_index, year_column)
+                    FillValue(row, year_column, dataHT, filters_dictionary)
+
+                    If Not new_column_node.NextNode Is Nothing Then
+                        ColumnsHierarchyLoop(row, new_column_node.NextNode, dataHT, filters_dictionary, month_column)
+                    End If
+                    month_column_index = month_column_index + 1
+                Next
+                filters_dictionary(new_column_node.Name) = ControllingUI2Controller.ZERO_PERIOD_CODE
+
+            Else
+                ' Dive one hierarchy level deeper
+                If Not new_column_node.NextNode Is Nothing Then
+                    ColumnsHierarchyLoop(row, new_column_node.NextNode, dataHT, filters_dictionary, year_column)
+                End If
+            End If
+
+            column_index = column_index + 1
+        Next
+        ' Remove Current Filter
+        filters_dictionary(column_node.Name) = ControllingUI2Controller.ZERO_PERIOD_CODE
+
+    End Sub
+
+    Private Sub FillValue(ByRef row As HierarchyItem, _
+                          ByRef column As HierarchyItem, _
+                          ByRef dataHT As Hashtable, _
+                          ByRef filters_dictionary As Dictionary(Of String, String))
+
+        On Error GoTo handler
+        Dim version_id As String = filters_dictionary(ControllingUI2Controller.VERSIONS_CODE)
+        Dim entity_id As String = filters_dictionary(ControllingUI2Controller.ENTITIES_CODE)
+        Dim account_id As String = filters_dictionary(ControllingUI2Controller.ACCOUNTS_CODE)
+        Dim year_id As Int32 = filters_dictionary(ControllingUI2Controller.YEARS_CODE)
+        Dim month_id As Int32 = filters_dictionary(year_id)
+
+        ' Attention -> TOTAL_CODE n'existe pas pour Entities / accounts / versions / years !!!
+        Dim value As Double = dataHT(version_id)(entity_id)(account_id)(year_id)(month_id)
+        row.DataGridView.CellsArea.SetCellValue(row, column, value)
+
+handler:
+        If Err.Description <> "" Then
+            Dim test = Err.Description
+        End If
+        Exit Sub
+
+    End Sub
+
+#Region "Utilities"
+
+#Region "Columns"
+
+
+    Private Function SelectColumn(ByRef row As HierarchyItem, _
+                                  ByRef column_index As Int32, _
+                                  Optional ByRef parent_column As HierarchyItem = Nothing) As HierarchyItem
+
+        If parent_column Is Nothing Then
+            Return row.DataGridView.ColumnsHierarchy.Items(column_index)
+        Else
+            Return parent_column.Items(column_index)
+        End If
+
+    End Function
+
+#End Region
+
+#Region "Filters Dictionary"
+
+    Protected Friend Sub ResetFiltersDictionary(ByRef filters_dictionary As Dictionary(Of String, String), _
+                                                ByRef rows_hierarchy_node As TreeNode)
+
+        filters_dictionary.Clear()
+        InitializeColumnsFilterDictionary(filters_dictionary)
+        filters_dictionary.Add(ControllingUI2Controller.ENTITIES_CODE, Controller.Entity_node.Name)
+
+        For Each node As TreeNode In rows_hierarchy_node.Nodes
+            filters_dictionary.Add(node.Name, ControllingUI2Controller.TOTAL_CODE)
+        Next
+
+    End Sub
+
+    Private Sub InitializeColumnsFilterDictionary(ByRef filters_dictionary As Dictionary(Of String, String))
+
+        ' Reset Versions filters
+        If filters_dictionary.ContainsKey(ControllingUI2Controller.VERSIONS_CODE) Then
+            If Controller.categories_values_dict(ControllingUI2Controller.VERSIONS_CODE).Count > 1 Then
+                filters_dictionary(ControllingUI2Controller.VERSIONS_CODE) = ControllingUI2Controller.TOTAL_CODE
+            Else
+                filters_dictionary(ControllingUI2Controller.VERSIONS_CODE) = Controller.categories_values_dict(ControllingUI2Controller.VERSIONS_CODE).ElementAt(0).Key
+            End If
+        Else
+            If Controller.categories_values_dict(ControllingUI2Controller.VERSIONS_CODE).Count > 1 Then
+                filters_dictionary.Add(ControllingUI2Controller.VERSIONS_CODE, ControllingUI2Controller.TOTAL_CODE)
+            Else
+                filters_dictionary.Add(ControllingUI2Controller.VERSIONS_CODE, Controller.categories_values_dict(ControllingUI2Controller.VERSIONS_CODE).ElementAt(0).Key)
+            End If
+
+        End If
+
+        ' Reset Years filters
+        If filters_dictionary.ContainsKey(ControllingUI2Controller.YEARS_CODE) Then
+            filters_dictionary(ControllingUI2Controller.YEARS_CODE) = ControllingUI2Controller.ZERO_PERIOD_CODE
+        Else
+            filters_dictionary.Add(ControllingUI2Controller.YEARS_CODE, ControllingUI2Controller.ZERO_PERIOD_CODE)
+        End If
+
+        ' Reset Months filters
+        For Each year_id As Int32 In Controller.categories_values_dict(ControllingUI2Controller.YEARS_CODE).Keys
+            If filters_dictionary.ContainsKey(year_id) Then
+                filters_dictionary(year_id) = ControllingUI2Controller.ZERO_PERIOD_CODE
+            Else
+                filters_dictionary.Add(year_id, ControllingUI2Controller.ZERO_PERIOD_CODE)
+            End If
+        Next
+
+    End Sub
+
+#End Region
+
+#Region "Formatting"
+
+    Private Sub FormatVIEWDataDisplay()
 
         DGVUTIL.FormatDGVs(TabControl1)
         If Not IsNothing(TabControl1.TabPages(0)) Then TabControl1.SelectedTab = TabControl1.TabPages(0)
@@ -347,105 +852,7 @@ Friend Class ControllingUI_2
 
 #End Region
 
-
-#Region "Dispatch"
-
-    Friend Sub Dispatch_complete(ByRef entity_node As TreeNode, _
-                                  ByRef data_hash As Dictionary(Of String, Double()), _
-                                  ByRef period_list As List(Of Integer), _
-                                  ByRef accounts_array() As String, _
-                                  Optional ByRef VersionIndex As Int32 = -1)
-
-        Dim i As Int32 = 0
-        Dim column As HierarchyItem
-        For Each account_id In accounts_array
-            Dim tab_index = AccountsKeysTabNbDict(account_id)
-            Dim dgv As vDataGridView = TabControl1.TabPages(tab_index).controls(0)
-            Dim account_row = dgv.RowsHierarchy.Items(vDGVAccountsKeyLineNbDic(tab_index)(account_id))
-
-            Dim period_index As Int32 = 0
-            For Each period In period_list
-                If VersionIndex = -1 Then
-                    column = dgv.ColumnsHierarchy.Items(period_index)
-                Else
-                    column = dgv.ColumnsHierarchy.Items(period_index).Items(VersionIndex)
-                End If
-                Dim value = data_hash(entity_node.Name)(i)
-                dgv.CellsArea.SetCellValue(account_row, column, value)
-                ' Entities loop
-                Dim entity_index As Int32 = 0
-                For Each child_entity_node As TreeNode In entity_node.Nodes
-                    If child_entity_node.Checked = True Then fill_in_entities_children(dgv, data_hash, child_entity_node, entity_index, i, account_row, column)
-                    entity_index = entity_index + 1
-                Next
-                i = i + 1
-                period_index = period_index + 1
-            Next
-        Next
-
-    End Sub
-
-    ' Recursively fills the entity hierarchy in the DGV
-    Private Sub fill_in_entities_children(ByRef dgv As vDataGridView, _
-                                          ByRef data_hash As Dictionary(Of String, Double()), _
-                                          ByRef entity_node As TreeNode,
-                                          ByVal entity_index As Int32, _
-                                          ByVal i As Int32, _
-                                          ByRef parent_row As HierarchyItem, _
-                                          ByRef column As HierarchyItem)
-
-        Dim value = data_hash(entity_node.Name)(i)
-        Dim row = parent_row.Items(entity_index)
-        dgv.CellsArea.SetCellValue(row, column, value)
-        Dim child_entity_index As Int32 = 0
-        For Each child_node In entity_node.Nodes
-            fill_in_entities_children(dgv, data_hash, child_node, child_entity_index, i, row, column)
-            child_entity_index = child_entity_index + 1
-        Next
-
-
-    End Sub
-
-    ' Dispatch monthly vs. yearly version -> frozen - Will be implemented if necessary
-
 #End Region
-
-
-#Region "Adjustments Display"
-
-    Protected Friend Sub DisplayAdjustments(ByRef adjustments_dict As Dictionary(Of String, Dictionary(Of String, Dictionary(Of String, Dictionary(Of Int32, Double)))), _
-                                            Optional ByRef version_index As Int32 = -1)
-
-        Dim account_row As HierarchyItem
-        Dim entity_row As HierarchyItem
-        Dim period_column As HierarchyItem
-        Dim DGV As vDataGridView
-        Dim tab_index As Int32
-        Dim adjustments_id_names As Dictionary(Of String, String) = AdjustmentsMapping.GetAdjustmentsDictionary(ADJUSTMENTS_ID_VAR, ADJUSTMENTS_NAME_VAR)
-
-        For Each account_id In adjustments_dict.Keys
-            tab_index = AccountsKeysTabNbDict(account_id)
-            DGV = TabControl1.TabPages(tab_index).Controls(0)
-            account_row = DGV.RowsHierarchy.Items(vDGVAccountsKeyLineNbDic(tab_index)(account_id))
-
-            For Each entity_id In adjustments_dict(account_id).Keys
-                entity_row = GetEntityRow(account_row, TreeViewsUtilities.GetNodePath(entitiesTV.Nodes.Find(entity_id, True)(0), Controller.CurrentEntityKey))
-
-                For Each adjustment_id In adjustments_dict(account_id)(entity_id).Keys
-                    Dim adjt_row As HierarchyItem = entity_row.Items.Add(adjustments_id_names(adjustment_id))
-                    DataGridViewsUtil.FormatAdjustmentRow(adjt_row)
-                    adjustments_lines_list.Add(adjt_row)
-
-                    For Each Period In adjustments_dict(account_id)(entity_id)(adjustment_id).Keys
-                        period_column = DGV.ColumnsHierarchy.Items(periodsColumnIndexDictionary(Period))
-                        If version_index > -1 Then period_column = period_column.Items(version_index)
-                        DGV.CellsArea.SetCellValue(adjt_row, period_column, adjustments_dict(account_id)(entity_id)(adjustment_id)(Period))
-                    Next
-                Next
-            Next
-        Next
-
-    End Sub
 
 #End Region
 
@@ -462,7 +869,7 @@ Friend Class ControllingUI_2
     Private Sub EntitiesTV_KeyDown(sender As Object, e As Windows.Forms.KeyEventArgs)
 
         If e.KeyCode = Keys.Enter Then
-            If Not entitiesTV.SelectedNode Is Nothing Then Controller.compute_entity_complete(entitiesTV.SelectedNode)
+            If Not entitiesTV.SelectedNode Is Nothing Then Controller.STUBCompute(entitiesTV.SelectedNode)
         End If
 
     End Sub
@@ -495,7 +902,7 @@ Friend Class ControllingUI_2
                 Next
                 IsUpdatingChildrenCategory = False
             End If
-            Controller.CategoriesUpdate()
+            Controller.EntitiesCategoriesUpdate()
         End If
 
     End Sub
@@ -608,21 +1015,21 @@ Friend Class ControllingUI_2
         If CategoriesFlag = False Then
             ExpandPane1()
             HideAllMenusItemExceptEntities()
-            categoriesTV.Visible = True
+            entities_categoriesTV.Visible = True
             CategoriesFlag = True
             If EntitiesFlag = True Then
                 DisplayTwoTrees()
-                TVTableLayout.SetRow(categoriesTV, 1)
+                TVTableLayout.SetRow(entities_categoriesTV, 1)
             Else
-                TVTableLayout.SetRow(categoriesTV, 0)
+                TVTableLayout.SetRow(entities_categoriesTV, 0)
             End If
         Else
-            If TVTableLayout.GetRow(categoriesTV) = 0 Then
+            If TVTableLayout.GetRow(entities_categoriesTV) = 0 Then
                 CollapsePane1()
             Else
                 DisplayFirstTreeOnly()
             End If
-            categoriesTV.Visible = False
+            entities_categoriesTV.Visible = False
             CategoriesFlag = False
         End If
 
@@ -702,22 +1109,18 @@ Friend Class ControllingUI_2
 
     Private Sub DropDrillDown_Click(sender As Object, e As EventArgs)
 
-        If Controller.versions_id_array.Length > 1 Then
-
-        Else
-            DROPTOEXCELController.SendDrillDownToExcel(VersionTB.Text, _
-                                                       CurrencyTB.Text)
-        End If
-
+        ' Maybe issue if nothing in the DGV ? 
+        DROPTOEXCELController.SendDrillDownToExcel(VersionTB.Text, _
+                                                   CurrencyTB.Text)
 
     End Sub
 
     Private Sub Refresh_Click(sender As Object, e As EventArgs)
 
-        If Controller.CurrentEntityKey <> "" Then
-            Controller.compute_entity_complete(entitiesTV.Nodes.Find(Controller.CurrentEntityKey, True)(0))
+        If Not Controller.Entity_node Is Nothing Then
+            Controller.STUBCompute(entitiesTV.Nodes.Find(Controller.Entity_node.Name, True)(0))
         ElseIf Not entitiesTV.SelectedNode Is Nothing Then
-            Controller.compute_entity_complete(entitiesTV.SelectedNode)
+            Controller.STUBCompute(entitiesTV.SelectedNode)
         Else
             MsgBox("An Entity level must be selected in order to refresh " + Chr(13) + Chr(13) + _
                    " Please select an entity")
@@ -730,17 +1133,21 @@ Friend Class ControllingUI_2
         If isVersionComparisonDisplayed = True Then
             MsgBox("The Versions Comparison is already displayed")
         Else
-            If Controller.versions_id_array.Length = 2 Then
-                For Each tab_ As TabPage In TabControl1.TabPages
-                    Dim DGV As vDataGridView = tab_.Controls(0)
-                    DGVUTIL.AddVersionComparison(DGV)
-                Next
-                TabControl1.TabPages(0).Select()
-                isVersionComparisonDisplayed = True
-            Else
-                MsgBox("Two versions must be selected in order to display the comparison." + Chr(13) + _
-                       "Refresh must be applied after versions selection.")
-            End If
+
+            ' to be reimplemented -> launch request to controller
+            ' dependant on version position in columns hierarchy
+
+            'If Controller.versions_id_array.Length = 2 Then
+            '    For Each tab_ As TabPage In TabControl1.TabPages
+            '        Dim DGV As vDataGridView = tab_.Controls(0)
+            '        DGVUTIL.AddVersionComparison(DGV)
+            '    Next
+            '    TabControl1.TabPages(0).Select()
+            '    isVersionComparisonDisplayed = True
+            'Else
+            '    MsgBox("Two versions must be selected in order to display the comparison." + Chr(13) + _
+            '           "Refresh must be applied after versions selection.")
+            'End If
         End If
 
     End Sub
@@ -783,7 +1190,7 @@ Friend Class ControllingUI_2
         RibbonsPanel.Controls.Clear()
         RibbonsPanel.Controls.Add(DisplayMenu)
         DisplayMenu.Margin = New Padding(0, 0, 0, 0)
-     
+
     End Sub
 
     Private Sub DisplayExcelMenu()
@@ -793,7 +1200,7 @@ Friend Class ControllingUI_2
         RibbonsPanel.Controls.Clear()
         RibbonsPanel.Controls.Add(ExcelMenu)
         ExcelMenu.Margin = New Padding(0, 0, 0, 0)
-      
+
     End Sub
 
     Private Sub DisplayBusinessControlMenu()
@@ -825,7 +1232,7 @@ Friend Class ControllingUI_2
 
     Private Sub compute_complete_Click(sender As Object, e As EventArgs) Handles compute_complete.Click
 
-        Controller.compute_entity_complete(right_clicked_node)
+        Controller.STUBCompute(right_clicked_node)
 
     End Sub
 
@@ -866,12 +1273,6 @@ Friend Class ControllingUI_2
         If Not current_DGV_cell Is Nothing Then
             ' to be implemented -> quid -> find cell's account, entity, period, version from nothing...
         End If
-
-    End Sub
-
-    Private Sub DisplayAdjustmensRCM_Click(sender As Object, e As EventArgs) Handles DisplayAdjustmensRCM.Click
-
-        Controller.LoadAdjustments()
 
     End Sub
 
@@ -997,7 +1398,7 @@ Friend Class ControllingUI_2
         HideAllMenusItemsCore()
         entitiesTV.Visible = False
         EntitiesFlag = False
-        categoriesTV.Visible = False
+        entities_categoriesTV.Visible = False
         CategoriesFlag = False
         adjustmentsTV.Visible = False
         adjustments_flag = False
@@ -1007,7 +1408,7 @@ Friend Class ControllingUI_2
     Private Sub HideAllMenuItemsExceptCategories()
 
         HideAllMenusItemsCore()
-        categoriesTV.Visible = False
+        entities_categoriesTV.Visible = False
         CategoriesFlag = False
 
     End Sub

@@ -77,7 +77,7 @@ Friend Class SQLEntities
 
         For Each Version As String In dataTablesList
             srv.sqlQuery("DELETE FROM " & DATA_DATABASE & "." & Version & _
-                         " WHERE " & DATA_ASSET_ID_VARIABLE & "='" & entity_id & "'")
+                         " WHERE " & DATA_ENTITY_ID_VARIABLE & "='" & entity_id & "'")
         Next
 
     End Sub

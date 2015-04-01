@@ -3,7 +3,7 @@
 ' Manages DB Downloads and dll computations to provide data directly
 '
 ' To do:
-'       - 
+'       - Need to develop the cache : filters and current computers version/ entity ids
 '
 '
 ' Known Bugs:
@@ -11,7 +11,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 23/02/2015
+' Last modified: 24/03/2015
 
 
 Imports System.Collections.Generic
@@ -29,14 +29,15 @@ Friend Class GenericSingleEntityDLL3Computer
     Private DBDownloader As DataBaseDataDownloader
     Private DLL3Computer As DLL3_Interface
     Private EntitiesTV As New TreeView
+    Private entity_node As TreeNode
 
     ' Variables
-    Friend current_version_id As String = ""
-    Friend current_entity_id As String = ""
-    Friend currentCurrency As String = ""
-    Friend currentStrSqlQuery As String = ""
-    Friend current_adjusmtent_id As String = ""
-    Friend current_state As Boolean = False
+    Protected Friend current_version_id As String = ""
+    Protected Friend current_currency As String = ""
+    Protected Friend clients_id_filters_list As List(Of String)
+    Protected Friend products_id_filters_list As List(Of String)
+    Protected Friend adjustments_id_filters_list As List(Of String)
+    Protected Friend current_state As Boolean = False
     Protected Friend period_list As List(Of Int32)
     Protected Friend time_config As String
 
@@ -66,11 +67,13 @@ Friend Class GenericSingleEntityDLL3Computer
 #Region "Interface"
 
     Friend Function ComputeSingleEntity(ByRef versionCode As String, _
-                                        ByRef entity_id As String, _
-                                        Optional ByVal adjustment_id As String = "") As Boolean
+                                        ByRef input_entity_node As TreeNode, _
+                                        Optional ByRef clients_id_list As List(Of String) = Nothing, _
+                                        Optional ByRef products_id_list As List(Of String) = Nothing, _
+                                        Optional ByVal adjustment_id_list As List(Of String) = Nothing) As Boolean
 
         Dim viewName As String = versionCode & GlobalVariables.User_Credential
-        Dim inputNode As TreeNode = EntitiesTV.Nodes.Find(entity_id, True)(0)
+        entity_node = input_entity_node
         Dim Versions As New Version
         time_config = Versions.ReadVersion(versionCode, VERSIONS_TIME_CONFIG_VARIABLE)
         If time_config <> DLL3Computer.dll3TimeSetup Then
@@ -79,19 +82,22 @@ Friend Class GenericSingleEntityDLL3Computer
         End If
 
         DLL3Computer.InitializeDLLOutput(1, 0)
-        Select Case inputNode.Nodes.Count
+        Select Case entity_node.Nodes.Count
             Case 0
-                If DBDownloader.GetEntityInputsNonConverted(entity_id, _
+                If DBDownloader.GetEntityInputsNonConverted(entity_node.Name, _
                                                             viewName, _
-                                                            adjustment_id) Then
+                                                            clients_id_list, _
+                                                            products_id_list, _
+                                                            adjustment_id_list) Then
 
                     DLL3Computer.ComputeEntity(DBDownloader.AccKeysArray, _
                                                DBDownloader.PeriodArray, _
                                                DBDownloader.ValuesArray, 1)
 
-                    current_entity_id = entity_id
                     current_version_id = versionCode
-                    current_adjusmtent_id = adjustment_id
+                    clients_id_filters_list = clients_id_list
+                    products_id_filters_list = products_id_list
+                    adjustments_id_filters_list = adjustment_id_list
                     current_state = True
                     Return True
                 End If
@@ -101,14 +107,15 @@ Friend Class GenericSingleEntityDLL3Computer
 
     End Function
 
-    Friend Function ComputeAggregatedEntity(ByRef entity_id As String, _
+    Friend Function ComputeAggregatedEntity(ByRef input_entity_node As TreeNode, _
                                             ByRef version_id As String, _
                                             ByRef destination_currency As String, _
-                                            Optional ByVal adjustment_id As String = "", _
-                                            Optional ByRef filter_sql_query As String = "") As Boolean
+                                            Optional ByRef clients_id_list As List(Of String) = Nothing, _
+                                            Optional ByRef products_id_list As List(Of String) = Nothing, _
+                                            Optional ByVal adjustment_id_list As List(Of String) = Nothing) As Boolean
 
-        Dim entities_id_list As String()
-        Dim entity_node As TreeNode = EntitiesTV.Nodes.Find(entity_id, True)(0)
+        Dim entities_id_list As List(Of String)
+        entity_node = input_entity_node
         Dim Versions As New Version
         time_config = Versions.ReadVersion(version_id, VERSIONS_TIME_CONFIG_VARIABLE)
         If time_config <> DLL3Computer.dll3TimeSetup Then
@@ -119,26 +126,29 @@ Friend Class GenericSingleEntityDLL3Computer
         DLL3Computer.InitializeDLLOutput(1, 0)
         Select Case entity_node.Nodes.Count
             Case 0
-                entities_id_list = {entity_id}
+                entities_id_list = New List(Of String)
+                entities_id_list.Add(entity_node.Name)
             Case Else
                 Dim all_entities_id_list = TreeViewsUtilities.GetNodesKeysList(entity_node)
-                entities_id_list = TreeViewsUtilities.GetNoChildrenNodesList(all_entities_id_list, EntitiesTV).ToArray
+                entities_id_list = TreeViewsUtilities.GetNoChildrenNodesList(all_entities_id_list, EntitiesTV)
         End Select
 
         If DBDownloader.GetAggregatedConvertedInputs(entities_id_list, _
                                                      version_id, _
                                                      destination_currency, _
-                                                     adjustment_id, _
-                                                     filter_sql_query) Then
+                                                     clients_id_list, _
+                                                     products_id_list, _
+                                                     adjustment_id_list) Then
 
             DLL3Computer.ComputeEntity(DBDownloader.AccKeysArray, _
                                        DBDownloader.PeriodArray, _
                                        DBDownloader.ValuesArray, 1)
 
-            current_entity_id = entity_id
             current_version_id = version_id
-            currentCurrency = destination_currency
-            current_adjusmtent_id = adjustment_id
+            current_currency = destination_currency
+            clients_id_filters_list = clients_id_list
+            products_id_filters_list = products_id_list
+            adjustments_id_filters_list = adjustment_id_list
             Return True
         Else
             Return False
@@ -159,10 +169,12 @@ Friend Class GenericSingleEntityDLL3Computer
 
     Friend Sub ReinitializeGenericDataDLL3Computer()
 
-        current_entity_id = ""
-        currentCurrency = ""
+        entity_node = Nothing
+        current_currency = ""
         current_version_id = ""
-        currentStrSqlQuery = ""
+        clients_id_filters_list = Nothing
+        products_id_filters_list = Nothing
+        adjustments_id_filters_list = Nothing
 
     End Sub
 
@@ -194,6 +206,26 @@ Friend Class GenericSingleEntityDLL3Computer
     '    Next
 
     'End Sub
+
+    Protected Friend Function CheckCache(ByRef input_entity_node As TreeNode, _
+                                         ByRef clients_id As List(Of String), _
+                                         ByRef products_id As List(Of String), _
+                                         ByRef adjustments_id As List(Of String)) As Boolean
+
+        If Utilities_Functions.ListsEqualityCheck(TreeViewsUtilities.GetCheckedNodesID(input_entity_node), _
+                                                  TreeViewsUtilities.GetCheckedNodesID(entity_node)) = False Then Return False
+        If Utilities_Functions.ListsEqualityCheck(clients_id, clients_id_filters_list) = False Then Return False
+        If Utilities_Functions.ListsEqualityCheck(products_id, products_id_filters_list) = False Then Return False
+        If Utilities_Functions.ListsEqualityCheck(adjustments_id, adjustments_id_filters_list) = False Then Return False
+        Return True
+
+    End Function
+
+    Protected Friend Function GetEntityNode(ByRef entity_id As String) As TreeNode
+
+        Return EntitiesTV.Nodes.Find(entity_id, True)(0)
+
+    End Function
 
 #End Region
 

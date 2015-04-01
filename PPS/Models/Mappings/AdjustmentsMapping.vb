@@ -39,13 +39,10 @@ Friend Class AdjustmentsMapping
         Dim tmp_list As New List(Of String)
         Dim srv As New ModelServer
         srv.OpenRst(CONFIG_DATABASE + "." + ADJUSTMENTS_TABLE, ModelServer.FWD_CURSOR)
-        If srv.rst.EOF = False And srv.rst.BOF = False Then
-            srv.rst.MoveFirst()
-            Do While srv.rst.EOF = False
-                tmp_list.Add(srv.rst.Fields(field).Value)
-                srv.rst.MoveNext()
-            Loop
-        End If
+        Do While srv.rst.EOF = False
+            tmp_list.Add(srv.rst.Fields(field).Value)
+            srv.rst.MoveNext()
+        Loop
         srv.rst.Close()
         Return tmp_list
 
@@ -62,8 +59,8 @@ Friend Class AdjustmentsMapping
         If srv.rst.EOF = False And srv.rst.BOF = False Then
             srv.rst.MoveFirst()
             Do While srv.rst.EOF = False
-                AddItemToAdjustmentsIDDD(srv.rst.Fields(ADJUSTMENTS_ID_VAR).Value, _
-                                         srv.rst.Fields(ADJUSTMENTS_NAME_VAR).Value)
+                AddItemToAdjustmentsIDDD(srv.rst.Fields(ANALYSIS_AXIS_ID_VAR).Value, _
+                                         srv.rst.Fields(ANALYSIS_AXIS_NAME_VAR).Value)
                 srv.rst.MoveNext()
             Loop
         End If

@@ -114,7 +114,7 @@ Friend Class CModelDataSet
         GlobalScreenShot = WS.Range(WS.Cells(1, 1), lastCell).Value
         ReDim GlobalScreenShotFlag(UBound(GlobalScreenShot, 1), UBound(GlobalScreenShot, 2))
 
-        EntitiesNameKeyDictionary = EntitiesMapping.GetEntitiesDictionary(ASSETS_NAME_VARIABLE, ASSETS_TREE_ID_VARIABLE)
+        EntitiesNameKeyDictionary = EntitiesMapping.GetEntitiesDictionary(ENTITIES_NAME_VARIABLE, ENTITIES_ID_VARIABLE)
         AccountsNameKeyDictionary = AccountsMapping.GetAccountsDictionary(ACCOUNT_NAME_VARIABLE, ACCOUNT_ID_VARIABLE)
 
     End Sub
@@ -784,7 +784,10 @@ Friend Class CModelDataSet
             entityKey = EntitiesNameKeyDictionary.Item(EntitiesAddressValuesDictionary.Item(EntityAddress))
 
             ' Here currentVersionCode Assumed to be set up -> TBC
-            GlobalVariables.GenericGlobalSingleEntityComputer.ComputeSingleEntity(currentVersionCode, entityKey, adjustment_id)         ' Recompute each time
+            ' STUB BELOW !!! -> adjustments/clients/ producst filters list
+            GlobalVariables.GenericGlobalSingleEntityComputer.ComputeSingleEntity(currentVersionCode, _
+                                                                                  GlobalVariables.GenericGlobalSingleEntityComputer.GetEntityNode(entityKey), _
+                                                                                  )         ' Recompute each time
             RefreshAccounts(EntityAddress, AccountsAddressValuesDictionary)
             RefreshAccounts(EntityAddress, OutputsAccountsAddressvaluesDictionary)
         Next

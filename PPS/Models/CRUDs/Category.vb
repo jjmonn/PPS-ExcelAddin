@@ -8,7 +8,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 05/01/2015
+' Last modified: 24/03/2015
 
 
 Imports ADODB
@@ -27,7 +27,6 @@ Friend Class Category
 
     ' Constants
     Friend object_is_alive As Boolean
-    Private Const NB_CONNECTIONS_TRIALS = 10
 
 #End Region
 
@@ -38,14 +37,8 @@ Friend Class Category
 
         SRV = New ModelServer
         Dim i As Int32 = 0
-        Dim q_result = SRV.openRst(CONFIG_DATABASE & "." & CATEGORIES_TABLE_NAME, ModelServer.DYNAMIC_CURSOR)
-        While q_result = False AndAlso i < NB_CONNECTIONS_TRIALS
-            q_result = SRV.openRst(CONFIG_DATABASE & "." & CATEGORIES_TABLE_NAME, ModelServer.DYNAMIC_CURSOR)
-            i = i + 1
-        End While
-        SRV.rst.Sort = ITEMS_POSITIONS
+        object_is_alive = SRV.OpenRst(CONFIG_DATABASE & "." & CATEGORIES_TABLE_NAME, ModelServer.DYNAMIC_CURSOR)
         RST = SRV.rst
-        object_is_alive = q_result
 
     End Sub
 
@@ -116,39 +109,70 @@ Friend Class Category
 
 #Region "Utilities"
 
-    Protected Friend Shared Sub LoadCategoriesTree(ByRef TV As TreeView)
+    Protected Friend Shared Sub LoadCategoryCodeTV(ByRef TV As TreeView, ByRef code As String)
 
         Dim srv As New ModelServer
-        If srv.openRst(CONFIG_DATABASE & "." & CATEGORIES_TABLE_NAME, ModelServer.FWD_CURSOR) Then
+        If srv.OpenRst(CONFIG_DATABASE & "." & CATEGORIES_TABLE_NAME, ModelServer.FWD_CURSOR) Then
+            srv.rst.Filter = CATEGORY_CODE_VARIABLE & "='" & code & "'"
 
             Dim currentNode, ParentNode() As TreeNode
             TV.Nodes.Clear()
             srv.rst.Sort = ITEMS_POSITIONS
 
-            If srv.rst.RecordCount > 0 Then
-                srv.rst.MoveFirst()
-                Do While srv.rst.EOF = False
-
-                    If IsDBNull(srv.rst.Fields(CATEGORY_PARENT_ID_VARIABLE).Value) Then
+            Do While srv.rst.EOF = False
+                If IsDBNull(srv.rst.Fields(CATEGORY_PARENT_ID_VARIABLE).Value) Then
+                    currentNode = TV.Nodes.Add(Trim(srv.rst.Fields(CATEGORY_ID_VARIABLE).Value), _
+                                                Trim(srv.rst.Fields(CATEGORY_NAME_VARIABLE).Value), 1, 1)
+                Else
+                    ParentNode = TV.Nodes.Find(Trim(srv.rst.Fields(CATEGORY_PARENT_ID_VARIABLE).Value), True)
+                    If ParentNode.Length = 0 Then
                         currentNode = TV.Nodes.Add(Trim(srv.rst.Fields(CATEGORY_ID_VARIABLE).Value), _
-                                                   Trim(srv.rst.Fields(CATEGORY_NAME_VARIABLE).Value), 1, 1)
+                        Trim(srv.rst.Fields(CATEGORY_NAME_VARIABLE).Value), 1, 1)
                     Else
-                        ParentNode = TV.Nodes.Find(Trim(srv.rst.Fields(CATEGORY_PARENT_ID_VARIABLE).Value), True)
-                        If ParentNode.Length = 0 Then
-                            currentNode = TV.Nodes.Add(Trim(srv.rst.Fields(CATEGORY_ID_VARIABLE).Value), _
-                           Trim(srv.rst.Fields(CATEGORY_NAME_VARIABLE).Value), 1, 1)
-                        Else
-                            currentNode = ParentNode(0).Nodes.Add(Trim(srv.rst.Fields(CATEGORY_ID_VARIABLE).Value), _
-                                                             Trim(srv.rst.Fields(CATEGORY_NAME_VARIABLE).Value), 0, 0)
-                        End If
+                        currentNode = ParentNode(0).Nodes.Add(Trim(srv.rst.Fields(CATEGORY_ID_VARIABLE).Value), _
+                                                            Trim(srv.rst.Fields(CATEGORY_NAME_VARIABLE).Value), 0, 0)
                     End If
-                    srv.rst.MoveNext()
-                Loop
-            End If
+                End If
+                currentNode.Checked = True
+                srv.rst.MoveNext()
+            Loop
             srv.rst.Close()
         End If
 
     End Sub
+
+    Protected Friend Shared Function GetCategoryCodeNode(ByRef code As String) As TreeNode
+
+        Dim category_node As New TreeNode
+        Dim srv As New ModelServer
+        If srv.OpenRst(CONFIG_DATABASE & "." & CATEGORIES_TABLE_NAME, ModelServer.FWD_CURSOR) Then
+            srv.rst.Filter = CATEGORY_CODE_VARIABLE & "='" & code & "'"
+
+            Dim currentNode, ParentNode() As TreeNode
+            srv.rst.Sort = ITEMS_POSITIONS
+            Do While srv.rst.EOF = False
+
+                If IsDBNull(srv.rst.Fields(CATEGORY_PARENT_ID_VARIABLE).Value) Then
+                    currentNode = category_node.Nodes.Add(Trim(srv.rst.Fields(CATEGORY_ID_VARIABLE).Value), _
+                                               Trim(srv.rst.Fields(CATEGORY_NAME_VARIABLE).Value))
+                Else
+                    ParentNode = category_node.Nodes.Find(Trim(srv.rst.Fields(CATEGORY_PARENT_ID_VARIABLE).Value), True)
+                    If ParentNode.Length = 0 Then
+                        currentNode = category_node.Nodes.Add(Trim(srv.rst.Fields(CATEGORY_ID_VARIABLE).Value), _
+                       Trim(srv.rst.Fields(CATEGORY_NAME_VARIABLE).Value))
+                    Else
+                        currentNode = ParentNode(0).Nodes.Add(Trim(srv.rst.Fields(CATEGORY_ID_VARIABLE).Value), _
+                                                         Trim(srv.rst.Fields(CATEGORY_NAME_VARIABLE).Value))
+                    End If
+                End If
+                currentNode.Checked = True
+                srv.rst.MoveNext()
+            Loop
+            srv.rst.Close()
+        End If
+        Return category_node
+
+    End Function
 
     Protected Overrides Sub finalize()
 

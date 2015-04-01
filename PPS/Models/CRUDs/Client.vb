@@ -1,0 +1,141 @@
+﻿' Control.vb
+'
+' Controls table CRUD model
+'
+' To do: 
+'
+'
+'
+'
+' Author: Julien Monnereau
+' Last modified: 24/03/2015
+
+
+Imports ADODB
+Imports System.Windows.Forms
+Imports System.Collections
+Imports System.Collections.Generic
+
+
+Friend Class Client
+
+
+#Region "Instance Variables"
+
+    ' Objects
+    Private SRV As ModelServer
+    Friend RST As Recordset
+
+    ' Constants
+    Friend object_is_alive As Boolean
+
+#End Region
+
+
+#Region "Initialize"
+
+    Protected Friend Sub New()
+
+        SRV = New ModelServer
+        object_is_alive = SRV.OpenRst(CONFIG_DATABASE & "." & CLIENTS_TABLE, ModelServer.DYNAMIC_CURSOR)
+        RST = SRV.rst
+
+    End Sub
+
+#End Region
+
+
+#Region "CRUD Interface"
+
+    Protected Friend Sub CreateClient(ByRef hash As Hashtable)
+
+        Dim fieldsArray(hash.Count - 1) As Object
+        Dim valuesArray(hash.Count - 1) As Object
+        hash.Keys.CopyTo(fieldsArray, 0)
+        hash.Values.CopyTo(valuesArray, 0)
+        RST.AddNew(fieldsArray, valuesArray)
+
+    End Sub
+
+    Protected Friend Function ReadClient(ByRef Client_id As String, ByRef field As String) As Object
+
+        RST.Filter = ANALYSIS_AXIS_ID_VAR + "='" + Client_id + "'"
+        If RST.EOF Then Return Nothing
+        Return RST.Fields(field).Value
+
+    End Function
+
+    Protected Friend Sub UpdateClient(ByRef Client_id As String, ByRef hash As Hashtable)
+
+        RST.Filter = ANALYSIS_AXIS_ID_VAR + "='" + Client_id + "'"
+        If RST.EOF = False AndAlso RST.BOF = False Then
+            For Each Attribute In hash.Keys
+                If RST.Fields(Attribute).Value <> hash(Attribute) Then
+                    RST.Fields(Attribute).Value = hash(Attribute)
+                    RST.Update()
+                End If
+            Next
+        End If
+
+    End Sub
+
+    Protected Friend Sub UpdateClient(ByRef Client_id As String, _
+                                          ByRef field As String, _
+                                          ByVal value As Object)
+
+        RST.Filter = ANALYSIS_AXIS_ID_VAR + "='" + Client_id + "'"
+        If RST.EOF = False AndAlso RST.BOF = False Then
+            If RST.Fields(field).Value <> value Then
+                RST.Fields(field).Value = value
+                RST.Update()
+            End If
+        End If
+
+    End Sub
+
+    Protected Friend Sub DeleteClient(ByRef Client_id As String)
+
+        RST.Filter = ANALYSIS_AXIS_ID_VAR + "='" + Client_id + "'"
+        If RST.EOF = False Then
+            RST.Delete()
+            RST.Update()
+        End If
+
+    End Sub
+
+    Protected Overrides Sub finalize()
+
+        RST.Close()
+        MyBase.Finalize()
+
+    End Sub
+
+#End Region
+
+
+#Region "Utilities"
+
+    Protected Friend Shared Sub LoadClientsTree(ByRef TV As TreeView)
+
+        Dim srv As New ModelServer
+        Dim q_result As Boolean
+        q_result = srv.OpenRst(CONFIG_DATABASE & "." & ClientS_TABLE, ModelServer.FWD_CURSOR)
+        If q_result = True Then
+            TV.Nodes.Clear()
+            srv.rst.MoveFirst()
+            Do While srv.rst.EOF = False
+                Dim node As TreeNode = TV.Nodes.Add(Trim(srv.rst.Fields(ANALYSIS_AXIS_ID_VAR).Value), _
+                                                    Trim(srv.rst.Fields(ANALYSIS_AXIS_NAME_VAR).Value), 0, 0)
+                node.Checked = True
+                srv.rst.MoveNext()
+            Loop
+        End If
+        srv.rst.Close()
+
+    End Sub
+
+
+#End Region
+
+
+End Class

@@ -70,7 +70,7 @@ Module DataTables_Functions
     Public Function BuildDownloadDataTable() As Data.DataTable
 
         Dim table As New Data.DataTable
-        table.Columns.Add(DATA_ASSET_ID_VARIABLE, GetType(String))        ' Asset
+        table.Columns.Add(DATA_ENTITY_ID_VARIABLE, GetType(String))        ' Asset
         table.Columns.Add(DATA_ACCOUNT_ID_VARIABLE, GetType(String))         ' Account
         table.Columns.Add(DATA_PERIOD_VARIABLE, GetType(Integer))         ' Period
         table.Columns.Add(DATA_VALUE_VARIABLE, GetType(Double))           ' Value

@@ -16,7 +16,7 @@
 '       - erreur si pas de taux -> si nb records = 0 la matrice de devrait pas être lancée
 '
 '
-' Last modified: 09/03/2015
+' Last modified: 26/03/2015
 ' Author: Julien Monnereau
 
 
@@ -83,8 +83,9 @@ Friend Class GenericAggregationDLL3Computing
                                                   ByRef start_period As Int32, _
                                                   ByRef nb_periods As Int32, _
                                                   Optional ByRef PBar As ProgressBarControl = Nothing, _
-                                                  Optional ByRef strSqlQuery As String = "", _
-                                                  Optional ByRef adjustments_id_list As List(Of String) = Nothing)
+                                                  Optional ByRef clients_id_list As List(Of String) = Nothing, _
+                                                  Optional ByRef products_id_list As List(Of String) = Nothing, _
+                                                  Optional ByVal adjustment_id_list As List(Of String) = Nothing)
 
         periods_list = input_periods_list
         ResetDllCurrencyPeriodsConfigIfNeeded(periods_list, VersionTimeSetup, start_period, nb_periods)
@@ -97,10 +98,7 @@ Friend Class GenericAggregationDLL3Computing
                                           start_period)
 
         Dim viewName As String = version_id & GlobalVariables.User_Credential
-        If DBDOWNLOADER.BuildDataRSTForEntityLoop(inputs_entities_list.ToArray, _
-                                                  viewName, _
-                                                  strSqlQuery, _
-                                                  adjustments_id_list) Then
+        If DBDOWNLOADER.BuildDataRSTForEntityLoop(viewName) Then
 
             For Each entity_id In inputs_entities_list
                 If DBDOWNLOADER.FilterOnEntityID(entity_id) Then
@@ -117,9 +115,7 @@ Friend Class GenericAggregationDLL3Computing
         If Not PBar Is Nothing Then PBar.AddProgress(2)
         current_currency = destinationCurrency
         current_version_id = version_id
-        current_sql_filter_query = strSqlQuery
-        If adjustments_id_list Is Nothing Then current_adjustment_id = "" Else current_adjustment_id = adjustments_id_list(0)
-        ' above: we should store a string with adjustments id directly !!
+        
 
     End Sub
 
@@ -174,7 +170,7 @@ Friend Class GenericAggregationDLL3Computing
                                                period_ids, _
                                                values, _
                                                accounts_id_ftype_dict, _
-                                               global_periods_dict)
+                                               global_periods_dic)
 
             Dll3Computer.ComputeInputEntity(entity_id, _
                                             account_ids, _
@@ -187,6 +183,41 @@ Friend Class GenericAggregationDLL3Computing
 
     End Function
 
+
+#End Region
+
+
+#Region "DBDownloader Filters Interface"
+
+    Protected Friend Sub ReinitializeFiltersList()
+
+        DBDOWNLOADER.InitializeFilterLists(entities_id_list)
+
+    End Sub
+
+    Protected Friend Sub UpdateEntitiesFilters(ByRef filters_list As List(Of String))
+
+        DBDOWNLOADER.UpdateEntitiesFilter(filters_list)
+
+    End Sub
+
+    Protected Friend Sub UpdateclientsFilters(ByRef filters_list As List(Of String))
+
+        DBDOWNLOADER.UpdateClientsFilter(filters_list)
+
+    End Sub
+
+    Protected Friend Sub UpdateproductsFilters(ByRef filters_list As List(Of String))
+
+        DBDOWNLOADER.UpdateProductsFilter(filters_list)
+
+    End Sub
+
+    Protected Friend Sub UpdateadjustmentsFilters(ByRef filters_list As List(Of String))
+
+        DBDOWNLOADER.UpdateAdjustmentsFilter(filters_list)
+
+    End Sub
 
 #End Region
 

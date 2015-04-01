@@ -187,6 +187,16 @@ Friend Class TreeViewsUtilities
 
     End Function
 
+    Protected Friend Shared Function GetCheckedNodesID(ByRef node As TreeNode) As List(Of String)
+
+        Dim tmpList As New List(Of String)
+        For Each childNode As TreeNode In node.Nodes
+            If childNode.Checked = True Then tmpList.Add(childNode.Name)
+        Next
+        Return tmpList
+
+    End Function
+
 #End Region
 
 
@@ -243,11 +253,29 @@ Friend Class TreeViewsUtilities
 
     End Function
 
+    Protected Friend Shared Function GetNodesList(ByRef node As TreeNode) As List(Of TreeNode)
+
+        Dim tmp_list As New List(Of TreeNode)
+        AddChildrenNodesToList(node, tmp_list)
+        tmp_list.Remove(node)
+        Return tmp_list
+
+    End Function
+
     Protected Friend Shared Sub AddChildrenKeysToList(ByRef node As TreeNode, tmpList As List(Of String))
 
         tmpList.Add(node.Name)
         For Each subNode In node.Nodes
             AddChildrenKeysToList(subNode, tmpList)
+        Next
+
+    End Sub
+
+    Protected Friend Shared Sub AddChildrenNodesToList(ByRef node As TreeNode, tmpList As List(Of TreeNode))
+
+        tmpList.Add(node)
+        For Each subNode In node.Nodes
+            AddChildrenNodesToList(subNode, tmpList)
         Next
 
     End Sub

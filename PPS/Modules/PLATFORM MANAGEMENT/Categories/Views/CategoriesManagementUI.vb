@@ -2,7 +2,7 @@
 '
 ' 
 ' To do:
-'       - 
+'       - To be reimplemented -> manages all analysis axis categories
 '
 '
 ' Known bugs:
@@ -216,7 +216,7 @@ Friend Class CategoriesManagementUI
 
         Dim expansionDic As Dictionary(Of String, Boolean) = TreeViewsUtilities.SaveNodesExpansionsLevel(CategoriesTV)
         Controller.SendNewPositionsToModel()
-        Category.LoadCategoriesTree(CategoriesTV)
+        Category.LoadCategoryCodeTV(CategoriesTV, ControllingUI2Controller.ENTITIES_CODE)
         TreeViewsUtilities.ResumeExpansionsLevel(CategoriesTV, expansionDic)
 
     End Sub

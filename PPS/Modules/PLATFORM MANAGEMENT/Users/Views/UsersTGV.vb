@@ -64,7 +64,7 @@ Friend Class UsersTGV
         ParentView = input_parent_view
         TGV = inputTGV
         InitializeTGVColumns()
-        entitiesIDName = EntitiesMapping.GetEntitiesDictionary(ASSETS_TREE_ID_VARIABLE, ASSETS_NAME_VARIABLE)
+        entitiesIDName = EntitiesMapping.GetEntitiesDictionary(ENTITIES_ID_VARIABLE, ENTITIES_NAME_VARIABLE)
         credentials_types_list = CredentialsTypesMapping.GetCredentialsTypesList(CREDENTIALS_DESCRIPTION_VARIABLE)
 
         InitCredentialTypesComboBox()

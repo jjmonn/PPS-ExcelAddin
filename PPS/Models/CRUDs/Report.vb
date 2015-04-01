@@ -140,23 +140,20 @@ Friend Class Report
             TV.Nodes.Clear()
             srv.rst.Sort = ITEMS_POSITIONS
 
-            If srv.rst.RecordCount > 0 Then
-                srv.rst.MoveFirst()
-                Do While srv.rst.EOF = False
-                    If IsDBNull(srv.rst.Fields(REPORTS_PARENT_ID_VAR).Value) Then
-                        If srv.rst.Fields(REPORTS_TYPE_VAR).Value = TABLE_REPORT_TYPE Then image_index = 2 Else image_index = 0
-                        currentNode = TV.Nodes.Add(Trim(srv.rst.Fields(REPORTS_ID_VAR).Value), _
-                                                   Trim(srv.rst.Fields(REPORTS_NAME_VAR).Value), image_index, image_index)
-                    Else
-                        ParentNode = TV.Nodes.Find(Trim(srv.rst.Fields(REPORTS_PARENT_ID_VAR).Value), True)
-                        If ParentNode(0).ImageIndex = 0 Then image_index = 1 Else image_index = 3
-                        currentNode = ParentNode(0).Nodes.Add(Trim(srv.rst.Fields(REPORTS_ID_VAR).Value), _
-                                                                  Trim(srv.rst.Fields(REPORTS_NAME_VAR).Value), image_index, image_index)
-                    End If
-                    currentNode.EnsureVisible()
-                    srv.rst.MoveNext()
-                Loop
-            End If
+            Do While srv.rst.EOF = False
+                If IsDBNull(srv.rst.Fields(REPORTS_PARENT_ID_VAR).Value) Then
+                    If srv.rst.Fields(REPORTS_TYPE_VAR).Value = TABLE_REPORT_TYPE Then image_index = 2 Else image_index = 0
+                    currentNode = TV.Nodes.Add(Trim(srv.rst.Fields(REPORTS_ID_VAR).Value), _
+                                                Trim(srv.rst.Fields(REPORTS_NAME_VAR).Value), image_index, image_index)
+                Else
+                    ParentNode = TV.Nodes.Find(Trim(srv.rst.Fields(REPORTS_PARENT_ID_VAR).Value), True)
+                    If ParentNode(0).ImageIndex = 0 Then image_index = 1 Else image_index = 3
+                    currentNode = ParentNode(0).Nodes.Add(Trim(srv.rst.Fields(REPORTS_ID_VAR).Value), _
+                                                                Trim(srv.rst.Fields(REPORTS_NAME_VAR).Value), image_index, image_index)
+                End If
+                currentNode.EnsureVisible()
+                srv.rst.MoveNext()
+            Loop
             srv.rst.Close()
         End If
 

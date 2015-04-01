@@ -4,13 +4,12 @@
 '
 '
 ' To do : 
-'       - ADAPT TO VIEWS !!!!
-'
+'      
 '
 ' Know bugs :
 ' 
 '
-'Last modified: 05/12/2014
+'Last modified: 17/03/2015
 ' Author: Julien Monnereau
 
 
@@ -20,12 +19,11 @@ Imports System.Collections.Generic
 
 Friend Class EntitiesMapping
 
-    ' Returns a dictionary for Entities. Param 1: Key, Param 2: Values
     Friend Shared Function GetEntitiesDictionary(ByRef Key As String, ByRef Value As String) As Hashtable
 
         Dim srv As New ModelServer
         Dim tmpHT As New Hashtable
-        srv.openRst(VIEWS_DATABASE + "." + GlobalVariables.Entities_View, ModelServer.FWD_CURSOR)
+        srv.OpenRst(VIEWS_DATABASE + "." + GlobalVariables.Entities_View, ModelServer.FWD_CURSOR)
 
         If srv.rst.EOF = False And srv.rst.BOF = False Then
             srv.rst.MoveFirst()
@@ -41,16 +39,15 @@ Friend Class EntitiesMapping
 
     End Function
 
-    ' Return the list of the assets' name
     Friend Shared Function GetEntitiesNamesList() As List(Of String)
 
         Dim namesList As New List(Of String)
         Dim srv As New ModelServer
-        srv.openRst(VIEWS_DATABASE + "." + GlobalVariables.Entities_View, ModelServer.FWD_CURSOR)
+        srv.OpenRst(VIEWS_DATABASE + "." + GlobalVariables.Entities_View, ModelServer.FWD_CURSOR)
         If srv.rst.EOF = False And srv.rst.BOF = False Then
 
             Do While srv.rst.EOF = False
-                namesList.Add(srv.rst.Fields(ASSETS_NAME_VARIABLE).Value)
+                namesList.Add(srv.rst.Fields(ENTITIES_NAME_VARIABLE).Value)
                 srv.rst.MoveNext()
             Loop
 
@@ -60,16 +57,15 @@ Friend Class EntitiesMapping
 
     End Function
 
-    ' Return the list of the assets' keys
     Friend Shared Function GetEntitiesKeysList() As List(Of String)
 
         Dim keysList As New List(Of String)
         Dim srv As New ModelServer
-        srv.openRst(VIEWS_DATABASE + "." + GlobalVariables.Entities_View, ModelServer.FWD_CURSOR)
+        srv.OpenRst(VIEWS_DATABASE + "." + GlobalVariables.Entities_View, ModelServer.FWD_CURSOR)
         If srv.rst.EOF = False And srv.rst.BOF = False Then
 
             Do While srv.rst.EOF = False
-                keysList.Add(srv.rst.Fields(ASSETS_TREE_ID_VARIABLE).Value)
+                keysList.Add(srv.rst.Fields(ENTITIES_ID_VARIABLE).Value)
                 srv.rst.MoveNext()
             Loop
 
@@ -80,6 +76,22 @@ Friend Class EntitiesMapping
 
     End Function
 
+    Protected Friend Function GetInputsIDList() As List(Of String)
+
+        Dim tmp_list As New List(Of String)
+        Dim srv As New ModelServer
+        srv.OpenRst(VIEWS_DATABASE + "." + GlobalVariables.Entities_View, ModelServer.FWD_CURSOR)
+        srv.rst.Filter = ENTITIES_ALLOW_EDITION_VARIABLE & "= 1"
+        If srv.rst.EOF = False AndAlso srv.rst.BOF = False Then
+            Do While srv.rst.EOF = False
+                tmp_list.Add(srv.rst.Fields(ENTITIES_ID_VARIABLE).Value)
+                srv.rst.MoveNext()
+            Loop
+        End If
+        srv.rst.Close()
+        Return tmp_list
+
+    End Function
 
     Friend Shared Function GetCurrenciesInUseList() As List(Of String)
 
@@ -89,7 +101,7 @@ Friend Class EntitiesMapping
         If srv.rst.EOF = False And srv.rst.BOF = False Then
 
             Do While srv.rst.EOF = False
-                If Not tmpList.Contains(srv.rst.Fields(ASSETS_CURRENCY_VARIABLE).Value) Then tmpList.Add(srv.rst.Fields(ASSETS_CURRENCY_VARIABLE).Value)
+                If Not tmpList.Contains(srv.rst.Fields(ENTITIES_CURRENCY_VARIABLE).Value) Then tmpList.Add(srv.rst.Fields(ENTITIES_CURRENCY_VARIABLE).Value)
                 srv.rst.MoveNext()
             Loop
 
@@ -104,10 +116,10 @@ Friend Class EntitiesMapping
 
         Dim srv As New ModelServer
         srv.openRst(VIEWS_DATABASE + "." + GlobalVariables.Entities_View, ModelServer.FWD_CURSOR)
-        Dim criteria As String = ASSETS_TREE_ID_VARIABLE + "='" + entityKey + "'"
+        Dim criteria As String = ENTITIES_ID_VARIABLE + "='" + entityKey + "'"
         srv.rst.Find(criteria, , , 1)
         If srv.rst.EOF = False AndAlso srv.rst.BOF = False Then
-            Return srv.rst.Fields(ASSETS_CURRENCY_VARIABLE).Value
+            Return srv.rst.Fields(ENTITIES_CURRENCY_VARIABLE).Value
         End If
         Return Nothing
 

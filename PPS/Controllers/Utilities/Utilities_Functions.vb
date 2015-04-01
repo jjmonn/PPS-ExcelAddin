@@ -194,291 +194,6 @@ errorHandler:
 #End Region
 
 
-    '#Region "MATRIX FUNCTIONS"
-
-
-    '    '------------------------------------------------------------------------------
-    '    ' Function: Sum of the columns of a matrix
-    '    '------------------------------------------------------------------------------
-
-    '    Public Function sumColMatrix(Matrix(,) As Double) As Double()
-
-    '        Dim matrix2(UBound(Matrix, 2)) As Double
-    '        For L = LBound(Matrix, 2) To UBound(Matrix, 2)
-    '            With GlobalVariables.apps.WorksheetFunction
-    '                matrix2(L) = .Sum(.Index(Matrix, 0, L + 1))
-    '            End With
-    '        Next L
-    '        sumColMatrix = matrix2
-
-    '    End Function
-
-
-
-    '    '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-    '    ' Multiply a matrix with a scalar quantity
-    '    ' Function returns the solution or errors
-    '    ' 
-    '    ' -> To be written for a vector also !! 
-    '    '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-    '    Public Function ScalarMultiply(Value As Double, Mat(,) As Double) As Double(,)
-    '        Dim i As Integer, j As Integer
-    '        Dim Mat1(,) As Double, sol(,) As Double
-
-    '        On Error GoTo Error_Handler
-
-    '        Mat1 = Find_R_C(Mat)
-    '        ReDim sol(Mat1(0, 0) - 1, Mat1(0, 1) - 1)
-
-    '        For i = 1 To Mat1(0, 0)
-    '            For j = 1 To Mat1(0, 1)
-    '                sol(i - 1, j - 1) = Mat1(i, j) * Value
-    '            Next j
-    '        Next i
-
-    '        ScalarMultiply = sol
-
-    '        Exit Function
-
-    'Error_Handler:
-    '        Err.Raise("5022", , "Matrix was not assigned")
-    '    End Function
-
-    '    '====================================================================
-    '    ' ALGEBRA FUNCTIONS
-    '    '====================================================================
-
-    '    '--------------------------------------------------------------------
-    '    ' Function RMatrixMult
-    '    ' Carry on matrix A * matrix B
-    '    ' inputs: 1. Matrix A(m,k)
-    '    '         2. Matrix B(k,n)
-    '    '
-    '    ' Output: Matrix C(m,n)
-    '    '--------------------------------------------------------------------
-
-    '    Public Function RMatrixMult(A(,) As Double, B(,) As Double) As Double(,)
-
-    '        Dim m As Integer = UBound(A, 1) - LBound(A, 1) + 1
-    '        Dim K As Integer = UBound(A, 2) - LBound(A, 2) + 1
-    '        Dim n As Integer = UBound(B, 2) - LBound(B, 2) + 1
-    '        Dim C(m - 1, n - 1) As Double
-    '        'Call RMatrixGEMM(m, n, K, 1, A, 0, 0, 0, B, 0, 0, 0, 0, C, 0, 0)
-    '        RMatrixMult = C
-
-    '    End Function
-    '    '--------------------------------------------------------------------
-
-    '    '--------------------------------------------------------------------
-    '    ' Function RMatrixMultV
-    '    ' Carry on matrix A * vector
-    '    ' inputs: 1. Matrix A(m,n)
-    '    '         2. VectorX(n,1)
-    '    '
-    '    ' Output: Vector Y(m,n)
-    '    '--------------------------------------------------------------------
-    '    Public Function RMatrixMultV(A(,) As Double, X() As Double) As Double(,)
-
-    '        Dim m As Integer = UBound(A, 1) - LBound(A, 1) + 1
-    '        Dim n As Integer = UBound(A, 2) - LBound(A, 2) + 1
-    '        Dim Y(m, m) As Double
-    '        'Call RMatrixMV(m, n, A, 0, 0, 0, X, 0, Y, 0)
-    '        RMatrixMultV = Y
-
-    '    End Function
-
-    '    '-------------------------------------------------------------------
-    '    ' Function MatrixTranspose
-    '    ' Input: Matrix A
-    '    ' Output: A'
-    '    '-------------------------------------------------------------------
-
-    '    Public Function MatrixTranspose(A(,) As Object) As Double(,)
-
-    '        Dim m As Integer = UBound(A, 1) - LBound(A, 1) + 1
-    '        Dim n As Integer = UBound(A, 2) - LBound(A, 2) + 1
-    '        Dim Y(m, m) As Double
-    '        'Call RMatrixTranspose(m, n, A, 0, 0, Y, 0, 0)
-    '        MatrixTranspose = Y
-
-    '    End Function
-
-
-    '    '--------------------------------------------------------------------
-    '    ' Function MatrixAdd()
-    '    ' Inputs: 1. Matrix A
-    '    '         2. Matrix B
-    '    ' Output: Matrix C
-    '    '--------------------------------------------------------------------
-
-
-    '    ''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-    '    ' Add two matrices, their dimensions should be compatible!
-    '    ' Function returns the summation or errors due to
-    '    ' dimensions incompatibility
-    '    ' Example:
-    '    '  Check Main Form !!
-    '    ''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-    '    Public Function MatrixAdd(Mat_1(,) As Double, Mat_2(,) As Double) As Double(,)
-    '        Dim Mat1(,) As Double, Mat2(,) As Double
-    '        Dim sol(,) As Double
-    '        Dim i As Integer, j As Integer
-
-    '        On Error GoTo Error_Handler
-
-    '        Mat1 = Find_R_C(Mat_1)
-    '        Mat2 = Find_R_C(Mat_2)
-
-    '        If Mat1(0, 0) <> Mat2(0, 0) Or Mat1(0, 1) <> Mat2(0, 1) Then
-    '            GoTo Error_Dimension
-    '        End If
-
-    '        ReDim sol(Mat1(0, 0) - 1, Mat1(0, 1) - 1)
-    '        For i = 1 To Mat1(0, 0)
-    '            For j = 1 To Mat1(0, 1)
-    '                sol(i - 1, j - 1) = Mat1(i, j) + Mat2(i, j)
-    '            Next j
-    '        Next i
-
-    '        MatrixAdd = sol
-    '        Erase sol
-
-    '        Exit Function
-
-    'Error_Dimension:
-    '        Err.Raise("5005", , "Dimensions of the two matrices do not match !")
-
-    'Error_Handler:
-    '        If Err.Number = 5005 Then
-    '            Err.Raise("5005", , "Dimensions of the two matrices do not match !")
-    '        Else
-    '            Err.Raise("5022", , "One or both of the matrices are null, this operation cannot be done !!")
-    '        End If
-
-    '    End Function
-
-    '    ''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-    '    ' Subtracts two matrices from each other, their
-    '    ' dimensions should be compatible!
-    '    ' Function returns the solution or errors due to
-    '    ' dimensions incompatibility
-    '    ' Example:
-    '    '  Check Main Form !!
-    '    ''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-    '    Public Function Subtract(Mat_1(,) As Double, Mat_2(,) As Double) As Double(,)
-    '        Dim Mat1(,) As Double, Mat2(,) As Double
-    '        Dim i As Integer, j As Integer, sol(,) As Double
-
-    '        On Error GoTo Error_Handler
-
-    '        Mat1 = Find_R_C(Mat_1)
-    '        Mat2 = Find_R_C(Mat_2)
-
-    '        If Mat1(0, 0) <> Mat2(0, 0) Or Mat1(0, 1) <> Mat2(0, 1) Then
-    '            GoTo Error_Dimension
-    '        End If
-
-    '        ReDim sol(Mat1(0, 0) - 1, Mat1(0, 1) - 1)
-
-    '        For i = 1 To Mat1(0, 0)
-    '            For j = 1 To Mat1(0, 1)
-    '                sol(i - 1, j - 1) = Mat1(i, j) - Mat2(i, j)
-    '            Next j
-    '        Next i
-
-    '        Subtract = sol
-    '        Erase sol
-    '        Exit Function
-
-    'Error_Dimension:
-    '        Err.Raise("5007", , "Dimensions of the two matrices do not match !")
-
-    'Error_Handler:
-    '        If Err.Number = 5007 Then
-    '            Err.Raise("5007", , "Dimensions of the two matrices do not match !")
-    '        Else
-    '            Err.Raise("5022", , "One or both of the matrices are null, this operation cannot be done !!")
-    '        End If
-
-    '    End Function
-
-    '    ''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-    '    ' The dimensions of the matrix are checked
-    '    ' Here
-    '    ''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-
-    '    Private Function Find_R_C(Mat As Object) As Double(,)
-    '        Dim Rows As Integer, Columns As Integer
-    '        Dim i As Integer, j As Integer
-    '        Dim Result(,) As Double
-    '        Columns = 0
-    '        If Mat_1D(Mat, Rows) Then
-
-    '            ReDim Result(Rows, 1)
-    '            Result(0, 0) = Rows
-    '            Result(0, 1) = Columns + 1
-
-    '            For i = 1 To Rows
-    '                Result(i, 1) = Mat(i - 1)
-    '            Next i
-    '        Else
-    '            Call Mat_2D(Mat, Rows, Columns)
-    '            ReDim Result(Rows, Columns)
-    '            Result(0, 0) = Rows
-    '            Result(0, 1) = Columns
-
-    '            For i = 1 To Rows
-    '                For j = 1 To Columns '- 1
-    '                    Result(i, j) = Mat(i - 1, j - 1)
-    '                Next j
-    '            Next i
-    '        End If
-    '        Find_R_C = Result
-    '    End Function
-
-
-
-    '    ''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-    '    ' Check if matrix has only one column
-    '    ' shift the matrix one level and keep
-    '    ' its dimensions details in Mat(0,0) and Mat(0,1)
-    '    ' Mat(0,0)= no of rows
-    '    ' Mat(0,1)= no of columns
-    '    ''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-
-    '    Private Function Mat_1D(Mat As Object, m As Integer) As Boolean
-    '        Dim Temp_MAT As Double
-    '        On Error GoTo Error_Handler
-    '        Temp_MAT = Mat(0, 0)
-    '        Mat_1D = False
-    '        Exit Function
-    'Error_Handler:
-    '        Mat_1D = True
-    '        m = UBound(Mat) + 1
-    '    End Function
-
-
-    '    ''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-    '    ' Check if matrix has more than one column
-    '    ' if so return the dimension as described above
-    '    ''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-
-    '    Private Sub Mat_2D(Mat As Object, m As Integer, n As Integer)
-    '        Dim Temp_MAT As Double, i As Integer
-    '        i = 0
-    '        m = UBound(Mat) + 1
-    '        On Error GoTo Error_Handler
-    '        Do Until i < -1
-    '            Temp_MAT = Mat(0, i)
-    '            i = i + 1
-    '        Loop
-    'Error_Handler:
-    '        n = i
-    '    End Sub
-
-    '#End Region
-
-
 #Region "Strings Utilities"
 
     ' Transforms an array of accounts strings into a new array of words separated by special characters( (),.;:=+-*/)
@@ -625,6 +340,31 @@ nextWord:
 
 #End Region
 
+
+#Region "Lists Utilities"
+
+    Protected Friend Shared Function GetShortList(ByRef list1 As List(Of String), _
+                                                  ByRef list2 As List(Of String)) As List(Of String)
+
+        Dim tmp_list As New List(Of String)
+        For Each value In list1
+            If list2.Contains(value) Then tmp_list.Add(value)
+        Next
+        Return tmp_list
+
+    End Function
+
+    Protected Friend Shared Function ListsEqualityCheck(ByRef list1 As List(Of String), _
+                                                        ByRef list2 As List(Of String)) As Boolean
+
+        For Each element As Object In list1
+            If list2.Contains(element) = False Then Return False
+        Next
+        Return True
+
+    End Function
+
+#End Region
 
 
 End Class

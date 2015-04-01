@@ -60,7 +60,7 @@ Friend Class DataGridViewsUtil
 
     Protected Friend Sub New()
 
-        EntitiesTokenNamesDict = EntitiesMapping.GetEntitiesDictionary(ASSETS_TREE_ID_VARIABLE, ASSETS_NAME_VARIABLE)
+        EntitiesTokenNamesDict = EntitiesMapping.GetEntitiesDictionary(ENTITIES_ID_VARIABLE, ENTITIES_NAME_VARIABLE)
         AccountsKeysFormatTypesDic = AccountsMapping.GetAccountsKeysFormatsTypesDictionary()
         AccountNamesKeysDic = AccountsMapping.GetAccountsDictionary(ACCOUNT_NAME_VARIABLE, ACCOUNT_ID_VARIABLE)
         accFtypes = AccountsMapping.GetAccountsDictionary(ACCOUNT_ID_VARIABLE, ACCOUNT_FORMULA_TYPE_VARIABLE)

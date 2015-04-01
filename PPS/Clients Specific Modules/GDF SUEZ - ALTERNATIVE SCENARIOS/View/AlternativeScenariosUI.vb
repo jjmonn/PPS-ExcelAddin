@@ -91,7 +91,7 @@ Friend Class AlternativeScenariosUI
     Private Sub InitializeAdjustmentsTV()
 
         adjustmentsTV = New TreeView
-        Dim adjustments_id_names_dict = AdjustmentsMapping.GetAdjustmentsDictionary(ADJUSTMENTS_ID_VAR, ADJUSTMENTS_NAME_VAR)
+        Dim adjustments_id_names_dict = AdjustmentsMapping.GetAdjustmentsDictionary(ANALYSIS_AXIS_ID_VAR, ANALYSIS_AXIS_NAME_VAR)
         For Each adjustment_id As String In adjustments_id_names_dict.Keys
             adjustmentsTV.Nodes.Add(adjustment_id, adjustments_id_names_dict(adjustment_id))
         Next

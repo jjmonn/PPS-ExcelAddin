@@ -249,7 +249,7 @@ Friend Class AlternativeScenarioModel
         ComputeIncrementalTaxes()
         Dim DBDownloader As New DataBaseDataDownloader
         Dim exchange_rates As Dictionary(Of String, Dictionary(Of Int32, Dictionary(Of String, Double))) = DataBaseDataDownloader.GetExchangeRatesDictionary(version_id, MAIN_CURRENCY, entities_id_list.ToArray)
-        Dim entities_currencies As Hashtable = EntitiesMapping.GetEntitiesDictionary(ASSETS_TREE_ID_VARIABLE, ASSETS_CURRENCY_VARIABLE)
+        Dim entities_currencies As Hashtable = EntitiesMapping.GetEntitiesDictionary(ENTITIES_ID_VARIABLE, ENTITIES_CURRENCY_VARIABLE)
         Dim DBUploader As New DataBaseDataUploader
         Dim account_id, entity_currency As String
         Dim current_data_dic = DBDownloader.GetAdjustments(version_id, entities_id_list.ToArray, MAIN_CURRENCY)

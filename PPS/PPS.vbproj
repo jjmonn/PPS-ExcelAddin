@@ -121,7 +121,9 @@
     <Compile Include="Clients Specific Modules\GDF SUEZ - ALTERNATIVE SCENARIOS\Configuration\Views\ASEntitiesAttributesUI.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Models\CRUDs\Client.vb" />
     <Compile Include="Models\CRUDs\FormatM.vb" />
+    <Compile Include="Models\CRUDs\Product.vb" />
     <Compile Include="Models\CRUDs\Report.vb" />
     <Compile Include="Clients Specific Modules\GDF SUEZ - ALTERNATIVE SCENARIOS\Configuration\Models\Mappings\GDFSUEZEntitiesAttributesMapping.vb" />
     <Compile Include="Clients Specific Modules\GDF SUEZ - ALTERNATIVE SCENARIOS\Configuration\Models\Mappings\GDFSUEZSensitivitiesMapping.vb" />
@@ -142,6 +144,7 @@
     <Compile Include="Models\dll Interfaces\PSDLLL_Interface.vb" />
     <Compile Include="Models\Mappings\AccountTypesMapping.vb" />
     <Compile Include="Models\Mappings\AdjustmentsMapping.vb" />
+    <Compile Include="Models\Mappings\ClientsMapping.vb" />
     <Compile Include="Models\Mappings\ControlOptionsMapping.vb" />
     <Compile Include="Models\Mappings\ControlsMapping.vb" />
     <Compile Include="Models\Mappings\FModellingAccountsMapping.vb" />
@@ -151,6 +154,7 @@
     <Compile Include="Models\Mappings\OperatorsMapping.vb" />
     <Compile Include="Models\Mappings\PalettesMapping.vb" />
     <Compile Include="Models\Mappings\pps_colorsMapping.vb" />
+    <Compile Include="Models\Mappings\ProductsMapping.vb" />
     <Compile Include="Models\Mappings\SeriesMapping.vb" />
     <Compile Include="Models\Mappings\UsersMapping.vb" />
     <Compile Include="Clients Specific Modules\GDF SUEZ - ALTERNATIVE SCENARIOS\Configuration\Models\gdfsuezAlternativeScenarios.vb" />
@@ -161,6 +165,8 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Models\Computing\GenericAggregationDLL3Computing.vb" />
+    <Compile Include="Modules\CONTROLING UI\Controler\ControllingUI2Controller.vb" />
+    <Compile Include="Modules\CONTROLING UI\Model\ControllingUIModel.vb" />
     <Compile Include="Modules\CONTROLING UI\View\ControllingUIChartsConfig.Designer.vb">
       <DependentUpon>ControllingUIChartsConfig.vb</DependentUpon>
     </Compile>
@@ -303,6 +309,7 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Modules\PLATFORM MANAGEMENT\Categories\Controller\CategoriesController.vb" />
+    <Compile Include="Transactions\SQLFilterListsGenerators.vb" />
     <Compile Include="Views\GenericView.Designer.vb">
       <DependentUpon>GenericView.vb</DependentUpon>
     </Compile>
@@ -318,7 +325,6 @@
     <Compile Include="Modules\PLATFORM MANAGEMENT\Users\Views\UsersTGV.vb" />
     <Compile Include="Modules\REPORTS UPLOAD\CONTROLER\cAcquisitionUIController.vb" />
     <Compile Include="Modules\REPORTS UPLOAD\CONTROLER\cExcelSubmissionWorksheetController.vb" />
-    <Compile Include="Modules\CONTROLING UI\Controler\ControlingUI2Controller.vb" />
     <Compile Include="Modules\CONTROLING UI\Controler\CControlingDropOnExcel.vb" />
     <Compile Include="Modules\CONTROLING UI\View\UploadingHistoryUI.Designer.vb">
       <DependentUpon>UploadingHistoryUI.vb</DependentUpon>
@@ -516,7 +522,7 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Transactions\SQLVersions.vb" />
-    <Compile Include="Models\Computing\EntitiesSelectionBuilderClass.vb" />
+    <Compile Include="Models\Selection Builders\ESB.vb" />
     <Compile Include="Models\Computing\ModelFormulasMGT.vb" />
     <Compile Include="Controllers\CredentialsController.vb" />
     <Compile Include="Controllers\ViewsController.vb" />

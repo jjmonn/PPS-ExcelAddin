@@ -166,7 +166,7 @@ Friend Class CGeneralReportSubmissionControler
     Friend Sub FillInEntityAndCurrencyTB(ByRef entity As String)
 
         ADDIN.CurrentEntityTB.Text = entity
-        Dim entitiesNameCurrDic As Hashtable = EntitiesMapping.GetEntitiesDictionary(ASSETS_NAME_VARIABLE, ASSETS_CURRENCY_VARIABLE)
+        Dim entitiesNameCurrDic As Hashtable = EntitiesMapping.GetEntitiesDictionary(ENTITIES_NAME_VARIABLE, ENTITIES_CURRENCY_VARIABLE)
         ADDIN.EntCurrTB.Text = entitiesNameCurrDic(entity)
         ACQUICONTROLLER.UpdateCurrentEntityAndCurrencyOnACQUI(entity, entitiesNameCurrDic(entity), "??")
 

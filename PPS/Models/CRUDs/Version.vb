@@ -8,13 +8,14 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 05/03/2015
+' Last modified: 27/03/2015
 
 
 Imports ADODB
 Imports System.Windows.Forms
 Imports System.Collections
 Imports System.Collections.Generic
+Imports System.Linq
 
 
 Friend Class Version
@@ -78,6 +79,7 @@ Friend Class Version
         RST.Filter = VERSIONS_CODE_VARIABLE + "='" + version_id + "'"
         If RST.EOF Then Return Nothing
         Dim hash As New Hashtable
+        hash.Add(VERSIONS_NAME_VARIABLE, RST.Fields(VERSIONS_NAME_VARIABLE).Value)
         hash.Add(VERSIONS_IS_FOLDER_VARIABLE, RST.Fields(VERSIONS_IS_FOLDER_VARIABLE).Value)
         hash.Add(VERSIONS_CREATION_DATE_VARIABLE, RST.Fields(VERSIONS_CREATION_DATE_VARIABLE).Value)
         hash.Add(VERSIONS_LOCKED_VARIABLE, RST.Fields(VERSIONS_LOCKED_VARIABLE).Value)
@@ -178,38 +180,32 @@ Friend Class Version
 
     End Sub
 
-    Friend Function InitializeVersionsArray(ByRef versionsNodesList As List(Of TreeNode),
-                                            ByRef periodsList As List(Of Integer), _
-                                            ByRef versionsComparisonFlag As Int32, _
-                                            ByRef versions_id_array As String()) As Dictionary(Of String, Hashtable)
+    Protected Friend Function GetVersionsDictionary(ByRef versionsNodesList As List(Of String)) As Dictionary(Of String, Hashtable)
 
-        versionsComparisonFlag = -1
         Dim versions_dict As Dictionary(Of String, Hashtable)
-        If Not periodsList Is Nothing Then periodsList = Nothing
+        Dim versions_id_list As New List(Of String)
         If versionsNodesList.Count = 0 Then
-            versions_id_array = {GlobalVariables.GLOBALCurrentVersionCode}
-            versions_dict = GetVersionsDictionary(versions_id_array)
-            periodsList = versions_dict(versions_id_array(0))(PERIOD_LIST)
+            versions_dict = GetVersionsDictionary({GlobalVariables.GLOBALCurrentVersionCode})
         Else
-            ReDim versions_id_array(versionsNodesList.Count - 1)
-            Dim i As Int32
-            For Each Version As TreeNode In versionsNodesList
-                If Version.Nodes.Count = 0 Then
-                    versions_id_array(i) = Version.Name
-                    i = i + 1
+            For Each version_id As String In versionsNodesList
+                If ReadVersion(version_id, VERSIONS_IS_FOLDER_VARIABLE) = 0 Then
+                    versions_id_list.Add(version_id)
                 End If
             Next
-            ReDim Preserve versions_id_array(i - 1)
-            versions_dict = GetVersionsDictionary(versions_id_array)
-
-            If versions_id_array.Length > 1 Then
-                IdentifyVersionsComparison(versions_id_array, versionsComparisonFlag, versions_dict)
-                periodsList = GetSeveralVersionsPeriodsList(versions_id_array, versionsComparisonFlag, versions_dict)
-            Else
-                periodsList = versions_dict(versions_id_array(0))(PERIOD_LIST)
-            End If
+            versions_dict = GetVersionsDictionary(versions_id_list.ToArray)
         End If
         Return versions_dict
+
+    End Function
+
+    Protected Friend Function GetPeriodsNode(ByRef versions_dict As Dictionary(Of String, Hashtable)) As TreeNode
+
+        Select Case IdentifyVersionsComparison(versions_dict)
+            Case MONTHLY_TIME_CONFIGURATION, YEARLY_MONTHLY_VERSIONS_COMPARISON
+                Return GetVersionsComparisonPeriodsNode(versions_dict)
+            Case Else
+                Return GetYearlyPeriodsNode(versions_dict)
+        End Select
 
     End Function
 
@@ -230,60 +226,17 @@ Friend Class Version
 
 #Region "Utilities"
 
-    Private Sub IdentifyVersionsComparison(ByRef versions_id_array As String(), _
-                                           ByRef versionsComparisonFlag As Int32, _
-                                           ByRef versions_dict As Dictionary(Of String, Hashtable))
+    Private Function IdentifyVersionsComparison(ByRef versions_dict As Dictionary(Of String, Hashtable)) As String
 
-        Dim timeSetup As String = versions_dict(versions_id_array(0))(VERSIONS_TIME_CONFIG_VARIABLE)
-        For i = 0 To versions_id_array.Length - 1
-            If timeSetup <> versions_dict(versions_id_array(i))(VERSIONS_TIME_CONFIG_VARIABLE) Then
-                versionsComparisonFlag = YEARLY_MONTHLY_VERSIONS_COMPARISON
-                Exit Sub
+        Dim comparison_flag As String
+        Dim timeSetup As String = versions_dict.Values(0)(VERSIONS_TIME_CONFIG_VARIABLE)
+        For Each version_id As String In versions_dict.Keys
+            If timeSetup <> versions_dict(version_id)(VERSIONS_TIME_CONFIG_VARIABLE) Then
+                comparison_flag = YEARLY_MONTHLY_VERSIONS_COMPARISON
+                Return comparison_flag
             End If
         Next
-
-        If timeSetup = MONTHLY_TIME_CONFIGURATION Then
-            versionsComparisonFlag = MONTHLY_VERSIONS_COMPARISON
-        Else
-            versionsComparisonFlag = YEARLY_VERSIONS_COMPARISON
-        End If
-
-    End Sub
-
-    ' Return Union Periods List
-    Private Function GetSeveralVersionsPeriodsList(ByRef versions_id_array As String(), _
-                                                   ByRef versionsComparisonFlag As Int32, _
-                                                   ByRef versions_dict As Dictionary(Of String, Hashtable)) As List(Of Integer)
-
-        Dim periods_list As New List(Of Int32)
-        Select Case versionsComparisonFlag
-
-            Case YEARLY_VERSIONS_COMPARISON, MONTHLY_VERSIONS_COMPARISON
-                For Each version_id In versions_id_array
-                    For Each period_int In versions_dict(version_id)(period_list)
-                        If periods_list.Contains(period_int) = False Then periods_list.Add(period_int)
-                    Next
-                Next
-                Return periods_list
-
-            Case YEARLY_MONTHLY_VERSIONS_COMPARISON
-                For Each version_id In versions_id_array
-                    If versions_dict(version_id)(VERSIONS_TIME_CONFIG_VARIABLE) = YEARLY_TIME_CONFIGURATION Then
-                        For Each period_int In versions_dict(version_id)(PERIOD_LIST)
-                            If PERIOD_LIST.Contains(period_int) = False Then periods_list.Add(period_int)
-                        Next
-                    Else
-                        Dim period_ = versions_dict(version_id)(VERSIONS_START_PERIOD_VAR)
-                        If PERIOD_LIST.Contains(period_) = False Then periods_list.Add(period_)
-                    End If
-                Next
-                Return periods_list
-
-            Case Else
-                ' PPS Error tracking
-                Return Nothing
-        End Select
-
+        Return timeSetup
 
     End Function
 
@@ -298,8 +251,54 @@ Friend Class Version
 
     End Function
 
+    Private Function GetVersionsComparisonPeriodsNode(ByRef versions_dict As Dictionary(Of String, Hashtable)) As TreeNode
+
+        Dim year_nodes As New Dictionary(Of String, TreeNode)
+        For Each version_id In versions_dict.Keys
+            Dim years_list As List(Of Int32) = Period.GetYearlyPeriodList(versions_dict(version_id)(VERSIONS_START_PERIOD_VAR), versions_dict(version_id)(VERSIONS_NB_PERIODS_VAR))
+            For Each year_id In years_list
+                If year_nodes.ContainsKey(year_id) = False Then
+                    Dim tmp_node = New TreeNode(Format(DateTime.FromOADate(year_id), "yyyy"))
+                    tmp_node.Name = year_id
+                    For Each month_id In Period.GetMonthlyPeriodsList(year_id, 1, False)
+                        tmp_node.Nodes.Add(month_id, Format(DateTime.FromOADate(month_id), "MMM-yy"))
+                    Next
+                End If
+            Next
+        Next
+        Dim keys As List(Of String) = year_nodes.Keys.ToList
+        Dim periods_node As New TreeNode
+        keys.Sort()
+        For Each year_id As String In keys
+            periods_node.Nodes.Add(year_nodes(year_id))
+        Next
+        Return periods_node
+
+    End Function
+
+    Private Function GetYearlyPeriodsNode(ByRef versions_dict As Dictionary(Of String, Hashtable))
+
+        Dim year_dic As New Dictionary(Of String, String)
+        For Each version_id In versions_dict.Keys
+            Dim years_list As List(Of Int32) = Period.GetYearlyPeriodList(versions_dict(version_id)(VERSIONS_START_PERIOD_VAR), versions_dict(version_id)(VERSIONS_NB_PERIODS_VAR))
+            For Each year_id In years_list
+                If year_dic.ContainsKey(year_id) = False Then
+                    year_dic.Add(year_id, Format(DateTime.FromOADate(year_id), "yyyy"))
+                End If
+            Next
+        Next
+        Dim keys As List(Of String) = year_dic.Keys.ToList
+        Dim periods_node As New TreeNode
+        keys.Sort()
+        For Each year_id As String In keys
+            periods_node.Nodes.Add(year_id, year_dic(year_id))
+        Next
+        Return periods_node
+
+    End Function
+
     ' Return a list of Integer Periods corresponding to the param version code
-    Friend Function GetPeriodList(ByRef version_id) As List(Of Integer)
+    Friend Function GetPeriodList(ByRef version_id As String) As List(Of Integer)
 
         Dim time_configuration As String = ReadVersion(version_id, VERSIONS_TIME_CONFIG_VARIABLE)
         Select Case time_configuration
@@ -309,6 +308,11 @@ Friend Class Version
                 MsgBox("PPS Error N°9: Unknown Time Configuration")
                 Return Nothing
         End Select
+
+    End Function
+
+    Protected Friend Function GetGlobalPeriodsDict(ByRef version_id As String) As Dictionary(Of Int32, List(Of Int32))
+
 
     End Function
 

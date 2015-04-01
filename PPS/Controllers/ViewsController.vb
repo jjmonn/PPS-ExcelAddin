@@ -93,7 +93,7 @@ Friend Class ViewsController
     Protected Friend Sub DeleteDataVersionViews(ByRef version_id As String)
 
         Dim credential_levels_entities_list = CredentialsLevelsMapping.GetCredentialsList(CREDENTIALS_ASSETID_VARIABLE)
-        Dim entities_id_Credential_level_Dict = EntitiesMapping.GetEntitiesDictionary(ASSETS_TREE_ID_VARIABLE, ASSETS_CREDENTIAL_ID_VARIABLE)
+        Dim entities_id_Credential_level_Dict = EntitiesMapping.GetEntitiesDictionary(ENTITIES_ID_VARIABLE, ENTITIES_CREDENTIAL_ID_VARIABLE)
         For Each entity_id As String In credential_levels_entities_list
             Dim credential_level = entities_id_Credential_level_Dict(entity_id)
             EntitiesViewsFactory.DeleteViewQuery(version_id & credential_level)
