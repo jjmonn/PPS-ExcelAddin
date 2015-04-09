@@ -367,4 +367,32 @@ nextWord:
 #End Region
 
 
+#Region "Dictionaries Utilities"
+
+    Protected Friend Shared Sub AddOrSetValueToDict(ByRef dict As Dictionary(Of String, String), _
+                                                    ByRef key As String, _
+                                                    ByRef value As String)
+
+        If dict.ContainsKey(key) Then
+            dict(key) = value
+        Else
+            dict.Add(key, value)
+        End If
+
+    End Sub
+
+    Protected Friend Shared Function GetDictionaryCopy(ByRef input_dict As Dictionary(Of String, String)) As Dictionary(Of String, String)
+
+        Dim tmp_dict As New Dictionary(Of String, String)
+        For Each key As String In input_dict.Keys
+            tmp_dict.Add(key, input_dict(key))
+        Next
+        Return tmp_dict
+
+    End Function
+
+#End Region
+
+
+
 End Class

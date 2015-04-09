@@ -22,6 +22,7 @@
 
 Imports System.Collections.Generic
 Imports System.Collections
+Imports System.Linq
 
 
 Friend Class GenericAggregationDLL3Computing
@@ -35,6 +36,7 @@ Friend Class GenericAggregationDLL3Computing
 
     ' Variables
     Protected Friend complete_data_dictionary As Dictionary(Of String, Double())
+    Protected Friend years_aggregation_data_dictionary As Dictionary(Of String, Double())
     Protected Friend entities_id_list As List(Of String)
     Protected Friend inputs_entities_list As List(Of String)
     Protected Friend current_version_id As String = ""
@@ -145,20 +147,19 @@ Friend Class GenericAggregationDLL3Computing
     End Function
 
     ' For monthly configuration - Provides Yearly Aggregations
-    Protected Friend Function ComputeMonthlyPeriodsAggregations(ByRef version_id As String, _
-                                                                ByRef destination_currency As String, _
-                                                                ByRef rates_version_id As String, _
-                                                                ByRef start_period As Int32,
-                                                                ByRef nb_periods As Int32, _
-                                                                ByRef global_periods_dic As Dictionary(Of Int32, Int32())) As Dictionary(Of String, Double())
+    Protected Friend Sub ComputeMonthlyPeriodsAggregations(ByRef version_id As String, _
+                                                           ByRef destination_currency As String, _
+                                                           ByRef rates_version_id As String, _
+                                                           ByRef start_period As Int32,
+                                                           ByRef nb_periods As Int32, _
+                                                           ByRef global_periods_dic As Dictionary(Of Int32, Int32()))
 
         Dim account_ids() As String
         Dim period_ids() As Int32
         Dim values As Double()
         Dim accounts_id_ftype_dict As Hashtable = AccountsMapping.GetAccountsDictionary(ACCOUNT_ID_VARIABLE, ACCOUNT_FORMULA_TYPE_VARIABLE)
-        global_periods_dic = Period.GetGlobalPeriodsDictionary(start_period, nb_periods)
         Dll3Computer.SetEntitiesCurrency(destination_currency)
-        Dll3Computer.SetUpEABeforeCompute(Period.GetYearlyPeriodList(start_period, nb_periods), _
+        Dll3Computer.SetUpEABeforeCompute(global_periods_dic.Keys.tolist, _
                                           destination_currency, _
                                           MONTHLY_TIME_CONFIGURATION, _
                                           rates_version_id, _
@@ -179,9 +180,9 @@ Friend Class GenericAggregationDLL3Computing
         Next
         Dll3Computer.ComputeAggregation()
         ReinitializeComputerCache()
-        Return Dll3Computer.GetOutputMatrix
+        years_aggregation_data_dictionary = Dll3Computer.GetOutputMatrix
 
-    End Function
+    End Sub
 
 
 #End Region

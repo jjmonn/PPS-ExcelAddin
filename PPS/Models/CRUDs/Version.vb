@@ -33,6 +33,7 @@ Friend Class Version
     Friend Const YEARLY_VERSIONS_COMPARISON As Int32 = 0
     Friend Const MONTHLY_VERSIONS_COMPARISON As Int32 = 1
     Friend Const YEARLY_MONTHLY_VERSIONS_COMPARISON As Int32 = 2
+    Friend Const PERIOD_DICT As String = "PeriodsDict"
     Friend Const PERIOD_LIST As String = "PeriodsList"
 
 #End Region
@@ -218,7 +219,6 @@ Friend Class Version
         For Each period In periodsList
             datesList.Add(DateTime.FromOADate(period))
         Next
-
         Return datesList
 
     End Function
@@ -245,6 +245,7 @@ Friend Class Version
         Dim versions_dict As New Dictionary(Of String, Hashtable)
         For Each version_id In versions_id_array
             versions_dict.Add(version_id, GetRecord(version_id))
+            versions_dict(version_id).Add(PERIOD_DICT, GetPeriodsDict(version_id))
             versions_dict(version_id).Add(PERIOD_LIST, GetPeriodList(version_id))
         Next
         Return versions_dict
@@ -311,8 +312,20 @@ Friend Class Version
 
     End Function
 
-    Protected Friend Function GetGlobalPeriodsDict(ByRef version_id As String) As Dictionary(Of Int32, List(Of Int32))
+    Protected Friend Function GetPeriodsDict(ByRef version_id As String) As Dictionary(Of Int32, Int32())
 
+        If ReadVersion(version_id, VERSIONS_TIME_CONFIG_VARIABLE) = YEARLY_TIME_CONFIGURATION Then
+            Dim tmp_dict As New Dictionary(Of Int32, Int32())
+            For Each year_id In Period.GetYearlyPeriodList(ReadVersion(version_id, VERSIONS_START_PERIOD_VAR), _
+                                                           ReadVersion(version_id, VERSIONS_NB_PERIODS_VAR))
+                Dim tmp_arr As Int32() = {}
+                tmp_dict.Add(year_id, tmp_arr)
+            Next
+            Return tmp_dict
+        Else
+            Return Period.GetGlobalPeriodsDictionary(Period.GetMonthlyPeriodsList(ReadVersion(version_id, VERSIONS_START_PERIOD_VAR), _
+                                                                                  ReadVersion(version_id, VERSIONS_NB_PERIODS_VAR), True))
+        End If
 
     End Function
 

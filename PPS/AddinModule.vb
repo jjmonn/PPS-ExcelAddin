@@ -173,13 +173,13 @@ Public Class AddinModule
         Me.RefreshBT = New AddinExpress.MSO.ADXRibbonButton(Me.components)
         Me.AdxRibbonGroup2 = New AddinExpress.MSO.ADXRibbonGroup(Me.components)
         Me.ControlingUI2BT = New AddinExpress.MSO.ADXRibbonButton(Me.components)
-        Me.SubmissionControlBT = New AddinExpress.MSO.ADXRibbonSplitButton(Me.components)
-        Me.AdxRibbonMenu3 = New AddinExpress.MSO.ADXRibbonMenu(Me.components)
-        Me.LogBT = New AddinExpress.MSO.ADXRibbonButton(Me.components)
-        Me.AdxRibbonSeparator10 = New AddinExpress.MSO.ADXRibbonSeparator(Me.components)
         Me.FunctionDesigner = New AddinExpress.MSO.ADXRibbonSplitButton(Me.components)
         Me.AdxRibbonMenu1 = New AddinExpress.MSO.ADXRibbonMenu(Me.components)
         Me.BreakLinksBT = New AddinExpress.MSO.ADXRibbonButton(Me.components)
+        Me.AdxRibbonSeparator10 = New AddinExpress.MSO.ADXRibbonSeparator(Me.components)
+        Me.SubmissionControlBT = New AddinExpress.MSO.ADXRibbonSplitButton(Me.components)
+        Me.AdxRibbonMenu3 = New AddinExpress.MSO.ADXRibbonMenu(Me.components)
+        Me.LogBT = New AddinExpress.MSO.ADXRibbonButton(Me.components)
         Me.ModelingGroup = New AddinExpress.MSO.ADXRibbonGroup(Me.components)
         Me.AdvancedModelingBT = New AddinExpress.MSO.ADXRibbonSplitButton(Me.components)
         Me.AdxRibbonMenu2 = New AddinExpress.MSO.ADXRibbonMenu(Me.components)
@@ -254,7 +254,7 @@ Public Class AddinModule
         '
         'MaintTab
         '
-        Me.MaintTab.Caption = "PPS Financial®"
+        Me.MaintTab.Caption = "Financial BI®"
         Me.MaintTab.Controls.Add(Me.AdxRibbonGroup6)
         Me.MaintTab.Controls.Add(Me.AdxRibbonGroup1)
         Me.MaintTab.Controls.Add(Me.AdxRibbonGroup2)
@@ -474,37 +474,6 @@ Public Class AddinModule
         Me.ControlingUI2BT.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
         Me.ControlingUI2BT.Size = AddinExpress.MSO.ADXRibbonXControlSize.Large
         '
-        'SubmissionControlBT
-        '
-        Me.SubmissionControlBT.Caption = "Controls"
-        Me.SubmissionControlBT.Controls.Add(Me.AdxRibbonMenu3)
-        Me.SubmissionControlBT.Id = "adxRibbonSplitButton_c948ce7f779a4f6cbe647f9de2d15b60"
-        Me.SubmissionControlBT.Image = 24
-        Me.SubmissionControlBT.ImageList = Me.MainTabImageList
-        Me.SubmissionControlBT.ImageTransparentColor = System.Drawing.Color.Transparent
-        Me.SubmissionControlBT.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
-        Me.SubmissionControlBT.Size = AddinExpress.MSO.ADXRibbonXControlSize.Large
-        '
-        'AdxRibbonMenu3
-        '
-        Me.AdxRibbonMenu3.Caption = "AdxRibbonMenu3"
-        Me.AdxRibbonMenu3.Controls.Add(Me.LogBT)
-        Me.AdxRibbonMenu3.Id = "adxRibbonMenu_d792f3eb075e45e5b8f825e6af002b3c"
-        Me.AdxRibbonMenu3.ImageTransparentColor = System.Drawing.Color.Transparent
-        Me.AdxRibbonMenu3.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
-        '
-        'LogBT
-        '
-        Me.LogBT.Caption = "Log"
-        Me.LogBT.Id = "adxRibbonButton_545fba9d563749dbbafe3968577cf15d"
-        Me.LogBT.ImageTransparentColor = System.Drawing.Color.Transparent
-        Me.LogBT.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
-        '
-        'AdxRibbonSeparator10
-        '
-        Me.AdxRibbonSeparator10.Id = "adxRibbonSeparator_6870de15e9444c02a982637f9e485d3f"
-        Me.AdxRibbonSeparator10.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
-        '
         'FunctionDesigner
         '
         Me.FunctionDesigner.Caption = "PPSBI"
@@ -532,6 +501,37 @@ Public Class AddinModule
         Me.BreakLinksBT.ImageList = Me.MainTabImageList
         Me.BreakLinksBT.ImageTransparentColor = System.Drawing.Color.Transparent
         Me.BreakLinksBT.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
+        '
+        'AdxRibbonSeparator10
+        '
+        Me.AdxRibbonSeparator10.Id = "adxRibbonSeparator_6870de15e9444c02a982637f9e485d3f"
+        Me.AdxRibbonSeparator10.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
+        '
+        'SubmissionControlBT
+        '
+        Me.SubmissionControlBT.Caption = "Controls"
+        Me.SubmissionControlBT.Controls.Add(Me.AdxRibbonMenu3)
+        Me.SubmissionControlBT.Id = "adxRibbonSplitButton_c948ce7f779a4f6cbe647f9de2d15b60"
+        Me.SubmissionControlBT.Image = 24
+        Me.SubmissionControlBT.ImageList = Me.MainTabImageList
+        Me.SubmissionControlBT.ImageTransparentColor = System.Drawing.Color.Transparent
+        Me.SubmissionControlBT.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
+        Me.SubmissionControlBT.Size = AddinExpress.MSO.ADXRibbonXControlSize.Large
+        '
+        'AdxRibbonMenu3
+        '
+        Me.AdxRibbonMenu3.Caption = "AdxRibbonMenu3"
+        Me.AdxRibbonMenu3.Controls.Add(Me.LogBT)
+        Me.AdxRibbonMenu3.Id = "adxRibbonMenu_d792f3eb075e45e5b8f825e6af002b3c"
+        Me.AdxRibbonMenu3.ImageTransparentColor = System.Drawing.Color.Transparent
+        Me.AdxRibbonMenu3.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
+        '
+        'LogBT
+        '
+        Me.LogBT.Caption = "Log"
+        Me.LogBT.Id = "adxRibbonButton_545fba9d563749dbbafe3968577cf15d"
+        Me.LogBT.ImageTransparentColor = System.Drawing.Color.Transparent
+        Me.LogBT.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
         '
         'ModelingGroup
         '

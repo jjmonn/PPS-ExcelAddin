@@ -11,7 +11,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 24/03/2015
+' Last modified: 05/04/2015
 
 
 Imports System.Windows.Forms
@@ -32,12 +32,9 @@ Friend Class ControllingUI2Controller
     Protected Friend Entity_node As TreeNode
 
     ' Variables
-    ' Private DataDictionary As Hashtable
-    '   Private rows_hierarchy_node As New TreeNode
+    ' Private rows_hierarchy_node As New TreeNode
     Protected Friend categories_values_dict As New Dictionary(Of String, Dictionary(Of String, String))
     Private TVsDict As New Dictionary(Of String, TreeView)
-    
-    'Protected Friend globalPeriodsList As List(Of Integer)
     Private versions_dict As Dictionary(Of String, Hashtable)
 
     ' Const
@@ -128,37 +125,39 @@ Friend Class ControllingUI2Controller
 
     Protected Friend Sub STUBCompute(ByRef input_entity_node As TreeNode)
 
-        Dim display_node As New TreeNode
-        display_node.Nodes.Add(ACCOUNTS_CODE, ACCOUNTS_CODE)
-        display_node.Nodes.Add(ENTITIES_CODE, ENTITIES_CODE)
-        display_node.Nodes.Add(CLIENTS_CODE, CLIENTS_CODE)
+        Dim rows_display_nodes As New TreeNode
+        rows_display_nodes.Nodes.Add(ACCOUNTS_CODE, ACCOUNTS_CODE)
+        rows_display_nodes.Nodes.Add(ENTITIES_CODE, ENTITIES_CODE)
+        rows_display_nodes.Nodes.Add(CLIENTS_CODE, CLIENTS_CODE)
 
         Dim columns_hierarchy_nodes As New TreeNode
         columns_hierarchy_nodes.Nodes.Add(YEARS_CODE, YEARS_CODE)
-        columns_hierarchy_nodes.Nodes.Add(MONTHS_CODE, MONTHS_CODE)
+        ' columns_hierarchy_nodes.Nodes.Add(MONTHS_CODE, MONTHS_CODE)
         ' columns_hierarchy_nodes.Nodes.Add(VERSIONS_CODE, VERSIONS_CODE)
 
-        RefreshData(display_node, columns_hierarchy_nodes, input_entity_node)
+        RefreshData(rows_display_nodes, columns_hierarchy_nodes, input_entity_node)
 
 
     End Sub
 
-    Protected Friend Sub RefreshData(ByRef display_node As TreeNode, _
+    Protected Friend Sub RefreshData(ByRef rows_display_nodes As TreeNode, _
                                      ByRef columns_hierarchy_nodes As TreeNode, _
                                      ByRef input_entity_node As TreeNode)
 
-        Dim rows_hierarchy_nodes As TreeNode = BuildRowsHierarchy(display_node)
+        Dim rows_hierarchy_nodes As TreeNode = BuildRowsHierarchy(rows_display_nodes)
+        Entity_node = input_entity_node
         CategoriesValuesDictionaryBuild(BuildPeriodsTreeAndVersionsDic(), _
                                         columns_hierarchy_nodes, _
                                         rows_hierarchy_nodes)
 
-        Entity_node = input_entity_node
-        Dim DataDictionary As Hashtable = GetDataDictionary(rows_hierarchy_nodes, View.CurrenciesCLB.SelectedItem)
+        Model.InitializeDataDictionary(categories_values_dict, rows_display_nodes, columns_hierarchy_nodes)
+        View.CreateDGVHierarchies(columns_hierarchy_nodes, rows_display_nodes)
 
-        View.DisplayData(DataDictionary, _
-                         rows_hierarchy_nodes, _
+        GetDataDictionary(rows_hierarchy_nodes, View.CurrenciesCLB.SelectedItem)
+
+        View.DisplayData(Model.DataDictionary, _
                          columns_hierarchy_nodes, _
-                         display_node)
+                         rows_display_nodes)
         FillUIHeader()
 
     End Sub
@@ -166,12 +165,12 @@ Friend Class ControllingUI2Controller
 #End Region
 
 
-#Region "DGV Configuration"
+#Region "Hierarchies Configuration"
 
-    Private Function BuildRowsHierarchy(ByRef display_node As TreeNode) As TreeNode
+    Private Function BuildRowsHierarchy(ByRef rows_display_nodes As TreeNode) As TreeNode
 
         Dim rows_hierarchy_nodes As New TreeNode
-        For Each node As TreeNode In display_node.Nodes
+        For Each node As TreeNode In rows_display_nodes.Nodes
             If node.Name <> ControllingUI2Controller.ACCOUNTS_CODE _
             AndAlso node.Name <> ControllingUI2Controller.ENTITIES_CODE Then
                 rows_hierarchy_nodes.Nodes.Add(node.Name, node.Name)
@@ -196,6 +195,14 @@ Friend Class ControllingUI2Controller
                                                 ByRef rows_hierarchy_nodes As TreeNode)
 
         categories_values_dict.Clear()
+        ' Entities
+        Dim entities_dic As New Dictionary(Of String, String)
+        Dim entities_node_list As List(Of TreeNode) = TreeViewsUtilities.GetNodesList(Entity_node)
+        entities_dic.Add(Entity_node.Name, Entity_node.Text)
+        For Each node As TreeNode In entities_node_list
+            entities_dic.Add(node.Name, node.Text)
+        Next
+        categories_values_dict.Add(ENTITIES_CODE, entities_dic)
 
         ' Versions 
         Dim tmp_dic As New Dictionary(Of String, String)
@@ -251,61 +258,49 @@ Friend Class ControllingUI2Controller
 
 #Region "Model Interface"
 
-    Private Function GetDataDictionary(ByRef rows_hierarchy_node As TreeNode, _
-                                       ByRef destination_currency As String) As Hashtable
+    Private Sub GetDataDictionary(ByRef rows_hierarchy_node As TreeNode, _
+                                  ByRef destination_currency As String)
 
-        Dim DataDictionary = New Hashtable
         Pbar_init_complete()
         Dim filters_dict As New Dictionary(Of String, String)
-        ' Need to initialize the filters dic ?
+        RowsInnerLoop(rows_hierarchy_node.Nodes(0), filters_dict, destination_currency)
 
-        RowsInnerLoop(rows_hierarchy_node.Nodes(0), DataDictionary, filters_dict, destination_currency)
-        Return DataDictionary
+    End Sub
 
-    End Function
-
+    ' Still loop through rows_hierarchy but no need to nest DDs !
     Private Sub RowsInnerLoop(ByRef hierarchy_node As TreeNode, _
-                              ByRef DataHT As Hashtable, _
                               ByVal filters_dict As Dictionary(Of String, String), _
                               ByRef destination_currency As String)
 
         ' Total value Loop 
-        FilterValueLoop(TOTAL_CODE, hierarchy_node, DataHT, filters_dict, destination_currency)
+        FilterValueLoop(TOTAL_CODE, hierarchy_node, filters_dict, destination_currency)
 
         ' Loop through all filters value
         For Each filter_value As String In categories_values_dict(hierarchy_node.Name).Keys
-
-            ' Filter on the current value
-            If filters_dict.ContainsKey(hierarchy_node.Name) Then
-                filters_dict(hierarchy_node.Name) = filter_value
-            Else
-                filters_dict.Add(hierarchy_node.Name, filter_value)
-            End If
-            FilterValueLoop(filter_value, hierarchy_node, DataHT, filters_dict, destination_currency)
+            FilterValueLoop(filter_value, hierarchy_node, filters_dict, destination_currency)
         Next
-        ' Remove current level filter (end of loop, need to be cleared)
-        filters_dict.Remove(hierarchy_node.Name)
+        ' Remove current level filter
+        filters_dict(hierarchy_node.Name) = TOTAL_CODE
 
     End Sub
 
     Private Sub FilterValueLoop(ByRef filter_value As String, _
                                 ByRef hierarchy_node As TreeNode, _
-                                ByRef DataHT As Hashtable, _
                                 ByVal filters_dict As Dictionary(Of String, String), _
                                 ByRef destination_currency As String)
 
+        Utilities_Functions.AddOrSetValueToDict(filters_dict, hierarchy_node.Name, filter_value)
         If Not hierarchy_node.NextNode Is Nothing Then
             ' Goes one hierarchy level deeper
-            Dim tmp_HT As New Hashtable
-            DataHT.Add(filter_value, tmp_HT)
-            RowsInnerLoop(hierarchy_node.NextNode, tmp_HT, filters_dict, destination_currency)
+            RowsInnerLoop(hierarchy_node.NextNode, filters_dict, destination_currency)
         Else
             ' No deeper hierarchy: Apply filter and Compute
             Model.IntializeComputerAndFilter(Entity_node)
             Model.SetDBFilters(filters_dict)
-            DataHT.Add(filter_value, Model.GetDataHT(categories_values_dict(VERSIONS_CODE).Keys.ToList, _
-                                                     versions_dict, _
-                                                     destination_currency))
+            Model.ComputeAndFillDD(Utilities_Functions.GetDictionaryCopy(filters_dict), _
+                                   categories_values_dict(VERSIONS_CODE).Keys.ToList, _
+                                   versions_dict, _
+                                   destination_currency)
         End If
 
     End Sub
