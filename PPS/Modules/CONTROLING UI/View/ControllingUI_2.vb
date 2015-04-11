@@ -13,7 +13,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 05/04/2015
+' Last modified: 09/04/2015
 
 
 Imports System.Windows.Forms
@@ -85,12 +85,17 @@ Friend Class ControllingUI_2
     Protected Friend productsTV As New TreeView
     Protected Friend products_categoriesTV As New TreeView
     Private periodsCLB As New CheckedListBox
-    Friend versionsTV As New TreeView
+    Protected Friend versionsTV As New TreeView
     Private DropMenu As New TableLayoutPanel
     Friend CurrenciesCLB As New CheckedListBox
 
     Private EntitiesFlag As Boolean
-    Private CategoriesFlag As Boolean
+    Private EntitiesCategoriesFlag As Boolean
+    Private ClientsFlag As Boolean
+    Private ClientsCategoriesFlag As Boolean
+    Private productsFlag As Boolean
+    Private productsCategoriesFlag As Boolean
+
     Private adjustments_flag As Boolean
     Private CurrenciesFlag As Boolean
     Private VersionsFlag As Boolean
@@ -193,7 +198,7 @@ Friend Class ControllingUI_2
                         ByRef row_index As Int32, _
                         Optional ByRef image_list As ImageList = Nothing)
 
-        TVTableLayout.Controls.Add(entitiesTV, 0, row_index)
+        TVTableLayout.Controls.Add(TV, 0, row_index)
         TV.Dock = DockStyle.Fill
         TV.CheckBoxes = True
         If Not image_list Is Nothing Then TV.ImageList = image_list
@@ -294,6 +299,10 @@ Friend Class ControllingUI_2
 
 #Region "DGV Hierarchies Creation"
 
+    ' ---------------------------------------
+    ' Accounts = Always First Hierarchy
+    ' ---------------------------------------
+
     Protected Friend Sub CreateDGVHierarchies(ByRef columns_hierarchy_nodes As TreeNode, _
                                               ByRef rows_display_node As TreeNode)
 
@@ -309,30 +318,8 @@ Friend Class ControllingUI_2
             rows_list_dic.Add(tab_account_node.Name, rows_list)
             columns_list_dic.Add(tab_account_node.Name, columns_list)
 
-            ' Rows creation (Loop through accounts 1st (config))
-            For Each account_node As TreeNode In TreeViewsUtilities.GetNodesList(tab_account_node)
-
-                ' Create row
-                Dim row As HierarchyItem = DGV.RowsHierarchy.Items.Add(account_node.Text)
-                rows_list_dic(tab_account_node.Name).Add(row)
-
-                ' Dive one Display level if any
-                If Not rows_display_node.Nodes(0).NextNode Is Nothing Then
-                    Select Case rows_display_node.Nodes(0).NextNode.Name
-                        Case ControllingUI2Controller.ENTITIES_CODE : EntitiesRowsCreationLoopByRef(DGV, _
-                                                                                                    Controller.Entity_node, _
-                                                                                                    tab_account_node, _
-                                                                                                    rows_display_node.Nodes(0).NextNode, _
-                                                                                                    rows_list_dic(tab_account_node.Name), _
-                                                                                                    row)
-                        Case Else : RowsCreationLoopByRef(DGV, _
-                                                          tab_account_node, _
-                                                          rows_display_node.Nodes(0).NextNode, _
-                                                          rows_list_dic(tab_account_node.Name), _
-                                                          row)
-                    End Select
-                End If
-            Next
+            ' Rows creation (Accounts = Always 1st Hierarchy)
+            AccountsRowCreationLoop(DGV, tab_account_node, rows_display_node)
 
             ' Columns Creation
             If columns_hierarchy_nodes.Nodes(0).Name = ControllingUI2Controller.YEARS_CODE Then
@@ -413,14 +400,44 @@ Friend Class ControllingUI_2
 
 #Region "Rows"
 
-    ' modifier entities loop
-    ' + accounts = always first hierarchy
+    Private Sub AccountsRowCreationLoop(ByRef DGV As vDataGridView, _
+                                        ByRef tab_account_node As TreeNode, _
+                                        ByRef rows_display_node As TreeNode)
 
-    Private Sub RowsCreationLoopByRef(ByRef DGV As vDataGridView, _
-                                      ByRef tab_account_node As TreeNode, _
-                                      ByRef display_node As TreeNode, _
-                                      ByRef rows_list As List(Of HierarchyItem), _
-                                      Optional ByRef parent_row As HierarchyItem = Nothing)
+        For Each account_node As TreeNode In TreeViewsUtilities.GetNodesList(tab_account_node)
+
+            ' Create row
+            Dim row As HierarchyItem = DGV.RowsHierarchy.Items.Add(account_node.Text)
+            rows_list_dic(tab_account_node.Name).Add(row)
+
+            ' Dive one Display level if any
+            If Not rows_display_node.Nodes(0).NextNode Is Nothing Then
+                Select Case rows_display_node.Nodes(0).NextNode.Name
+                    Case ControllingUI2Controller.ENTITIES_CODE : EntitiesRowsCreationLoop(Controller.Entity_node, _
+                                                                                           tab_account_node, _
+                                                                                           rows_display_node.Nodes(0).NextNode, _
+                                                                                           rows_list_dic(tab_account_node.Name), _
+                                                                                           row)
+                    Case Else : RowsCreationLoop(tab_account_node, _
+                                                 rows_display_node.Nodes(0).NextNode, _
+                                                 rows_list_dic(tab_account_node.Name), _
+                                                 row)
+                End Select
+            End If
+        Next
+
+
+    End Sub
+
+    Private Sub RowsCreationLoop(ByRef tab_account_node As TreeNode, _
+                                 ByRef display_node As TreeNode, _
+                                 ByRef rows_list As List(Of HierarchyItem), _
+                                 Optional ByRef parent_row As HierarchyItem = Nothing)
+
+        ' Dive one Display level if any (Total Loop)
+        If Not display_node.NextNode Is Nothing Then
+            RowsCreationLoop(tab_account_node, display_node.NextNode, rows_list, parent_row)
+        End If
 
         ' Loop through the filter values of the category
         For Each filter_value As String In Controller.categories_values_dict(display_node.Name).Keys
@@ -432,25 +449,24 @@ Friend Class ControllingUI_2
             ' Dive one Display level if any
             If Not display_node.NextNode Is Nothing Then
                 Select Case display_node.NextNode.Name
-                    Case ControllingUI2Controller.ENTITIES_CODE : EntitiesRowsCreationLoopByRef(DGV, Controller.Entity_node, tab_account_node, display_node.NextNode, rows_list, row)
-                    Case Else : RowsCreationLoopByRef(DGV, tab_account_node, display_node.NextNode, rows_list, row)
+                    Case ControllingUI2Controller.ENTITIES_CODE : EntitiesRowsCreationLoop(Controller.Entity_node, tab_account_node, display_node.NextNode, rows_list, row)
+                    Case Else : RowsCreationLoop(tab_account_node, display_node.NextNode, rows_list, row)
                 End Select
             End If
         Next
 
     End Sub
 
-    Private Sub EntitiesRowsCreationLoopByRef(ByRef DGV As vDataGridView, _
-                                              ByRef entity_node As TreeNode, _
-                                               ByRef tab_account_node As TreeNode, _
-                                               ByRef display_node As TreeNode, _
-                                               ByRef rows_list As List(Of HierarchyItem), _
-                                               ByRef parent_row As HierarchyItem)
+    Private Sub EntitiesRowsCreationLoop(ByRef entity_node As TreeNode, _
+                                         ByRef tab_account_node As TreeNode, _
+                                         ByRef display_node As TreeNode, _
+                                         ByRef rows_list As List(Of HierarchyItem), _
+                                         ByRef parent_row As HierarchyItem)
 
         If entity_node.Name = Controller.Entity_node.Name Then
             ' Dive one Display level if any
             If Not display_node.NextNode Is Nothing Then
-                RowsCreationLoopByRef(DGV, tab_account_node, display_node.NextNode, rows_list, parent_row)
+                RowsCreationLoop(tab_account_node, display_node.NextNode, rows_list, parent_row)
             End If
         End If
 
@@ -462,12 +478,12 @@ Friend Class ControllingUI_2
 
             ' Dive one Display level if any
             If Not display_node.NextNode Is Nothing Then
-                RowsCreationLoopByRef(DGV, tab_account_node, display_node.NextNode, rows_list, row)
+                RowsCreationLoop(tab_account_node, display_node.NextNode, rows_list, row)
             End If
 
             ' Loop through children
             If current_entity_node.nodes.count > 0 Then
-                EntitiesRowsCreationLoopByRef(DGV, current_entity_node, tab_account_node, display_node, rows_list, row)
+                EntitiesRowsCreationLoop(current_entity_node, tab_account_node, display_node, rows_list, row)
             End If
         Next
 
@@ -486,16 +502,12 @@ Friend Class ControllingUI_2
                                      ByRef rows_display_hierarchy As TreeNode)
 
         For Each tab_account_node As TreeNode In accountsTV.Nodes
-            ' debug to be deleted
-            '  System.Diagnostics.Debug.Write(Chr(13) & "tab: " & tab_account_node.Text)
             Dim DGV As vDataGridView = TabControl1.TabPages.Item(tab_account_node.Index).Controls(0)
             Dim accounts_list As List(Of String) = TreeViewsUtilities.GetNodesKeysList(tab_account_node)
             accounts_list.Remove(tab_account_node.Name)
 
             row_index = 0
             For Each account_id As String In accounts_list
-                ' debug to be deleted
-                'System.Diagnostics.Debug.Write(Chr(13) & "account id: " & account_id)
 
                 ' --------------------------------------------------
                 ' stub for perf test -> "T" accounts ignored !!!!!
@@ -514,7 +526,6 @@ Friend Class ControllingUI_2
 
     End Sub
 
-    ' Si trop lent faire un test avec DD en IVAR !!
     Private Sub RowsFillingLoop(ByRef rows_display_node As TreeNode, _
                                 ByRef columns_display_node As TreeNode, _
                                 ByRef DataDictionary As Dictionary(Of Object, Object), _
@@ -522,9 +533,7 @@ Friend Class ControllingUI_2
                                 ByRef column_list As List(Of HierarchyItem))
 
         If rows_display_node.NextNode Is Nothing Then
-            ' debug to be deleted
-            ' System.Diagnostics.Debug.Write(Chr(13) & "Columns Loop; row= " & current_row.Caption & " display node: " & rows_display_node.Name)
-
+            column_index = 0
             ColumnsLoop(columns_display_node.Nodes(0), _
                         DataDictionary, _
                         rows_list(row_index), _
@@ -547,13 +556,21 @@ Friend Class ControllingUI_2
                             ByRef row As HierarchyItem, _
                             ByRef column_list As List(Of HierarchyItem))
 
-        column_index = 0
         If column_display_node.NextNode Is Nothing Then
-            For Each key In DataDictionary.Keys.ToList
-                row.DataGridView.CellsArea.SetCellValue(row, current_column, DataDictionary(key))
-                current_column = column_list(column_index)
-                column_index = column_index + 1
-            Next
+            Select Case column_display_node.Name
+                Case ControllingUI2Controller.VERSIONS_CODE
+                    For Each key In DataDictionary.Keys.ToList
+                        row.DataGridView.CellsArea.SetCellValue(row, GetNextVersionColumn(column_list), DataDictionary(key))
+                        column_index = column_index + 1
+                    Next
+
+                Case Else
+                    For Each key In DataDictionary.Keys.ToList
+                        row.DataGridView.CellsArea.SetCellValue(row, column_list(column_index), DataDictionary(key))
+                        column_index = column_index + 1
+                    Next
+
+            End Select
         Else
             For Each key As String In DataDictionary.Keys.ToList
                 ColumnsLoop(column_display_node.NextNode, _
@@ -565,6 +582,16 @@ Friend Class ControllingUI_2
 
     End Sub
 
+    Private Function GetNextVersionColumn(ByRef column_list As List(Of HierarchyItem)) As HierarchyItem
+
+        Dim column As HierarchyItem = column_list(column_index)
+        While column.Items.Count > 0
+            column_index = column_index + 1
+            column = column_list(column_index)
+        End While
+        Return column
+
+    End Function
 
 #Region "Formatting"
 
@@ -731,7 +758,7 @@ Friend Class ControllingUI_2
             HideAllMenuItemsExceptCategories()
             entitiesTV.Visible = True
             EntitiesFlag = True
-            If CategoriesFlag = True Then
+            If EntitiesCategoriesFlag = True Then
                 DisplayTwoTrees()
                 TVTableLayout.SetRow(entitiesTV, 1)
             Else
@@ -751,11 +778,11 @@ Friend Class ControllingUI_2
 
     Private Sub CategoriesMenuClick(sender As Object, e As EventArgs)
 
-        If CategoriesFlag = False Then
+        If ClientsCategoriesFlag = False Then
             ExpandPane1()
             HideAllMenusItemExceptEntities()
             entities_categoriesTV.Visible = True
-            CategoriesFlag = True
+            ClientsCategoriesFlag = True
             If EntitiesFlag = True Then
                 DisplayTwoTrees()
                 TVTableLayout.SetRow(entities_categoriesTV, 1)
@@ -769,7 +796,7 @@ Friend Class ControllingUI_2
                 DisplayFirstTreeOnly()
             End If
             entities_categoriesTV.Visible = False
-            CategoriesFlag = False
+            ClientsCategoriesFlag = False
         End If
 
     End Sub
@@ -1135,11 +1162,21 @@ Friend Class ControllingUI_2
     Private Sub HideAllMenuItems()
 
         HideAllMenusItemsCore()
+
         entitiesTV.Visible = False
-        EntitiesFlag = False
         entities_categoriesTV.Visible = False
-        CategoriesFlag = False
+        clientsTV.Visible = False
+        clients_categoriesTV.Visible = False
+        productsTV.Visible = False
+        products_categoriesTV.Visible = False
         adjustmentsTV.Visible = False
+
+        EntitiesFlag = False
+        EntitiesCategoriesFlag = False
+        ClientsFlag = False
+        productsFlag = False
+        ClientsCategoriesFlag = False
+        productsCategoriesFlag = False
         adjustments_flag = False
 
     End Sub
@@ -1148,7 +1185,7 @@ Friend Class ControllingUI_2
 
         HideAllMenusItemsCore()
         entities_categoriesTV.Visible = False
-        CategoriesFlag = False
+        ClientsCategoriesFlag = False
 
     End Sub
 

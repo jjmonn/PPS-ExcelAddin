@@ -11,7 +11,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 05/04/2015
+' Last modified: 09/04/2015
 
 
 Imports System.Windows.Forms
@@ -129,11 +129,12 @@ Friend Class ControllingUI2Controller
         rows_display_nodes.Nodes.Add(ACCOUNTS_CODE, ACCOUNTS_CODE)
         rows_display_nodes.Nodes.Add(ENTITIES_CODE, ENTITIES_CODE)
         rows_display_nodes.Nodes.Add(CLIENTS_CODE, CLIENTS_CODE)
+        rows_display_nodes.Nodes.Add(PRODUCT_CODE, PRODUCT_CODE)
 
         Dim columns_hierarchy_nodes As New TreeNode
         columns_hierarchy_nodes.Nodes.Add(YEARS_CODE, YEARS_CODE)
-        ' columns_hierarchy_nodes.Nodes.Add(MONTHS_CODE, MONTHS_CODE)
-        ' columns_hierarchy_nodes.Nodes.Add(VERSIONS_CODE, VERSIONS_CODE)
+        'columns_hierarchy_nodes.Nodes.Add(MONTHS_CODE, MONTHS_CODE)
+        columns_hierarchy_nodes.Nodes.Add(VERSIONS_CODE, VERSIONS_CODE)
 
         RefreshData(rows_display_nodes, columns_hierarchy_nodes, input_entity_node)
 

@@ -12,7 +12,7 @@
 '       - 
 '
 ' Author: Julien Monnereau
-' Last modified: 18/03/2015
+' Last modified: 09/04/2015
 '
 
 
@@ -647,7 +647,7 @@ Friend Class DataBaseDataDownloader
         If Not input_entities_id_list Is Nothing Then str_SQL = str_SQL & " AND " & DATA_ENTITY_ID_VARIABLE & " IN ('" + Join(input_entities_id_list.ToArray, "','") + "')"
         If Not input_clients_id_list Is Nothing Then str_SQL = str_SQL & " AND " & DATA_CLIENT_ID_VARIABLE & " IN ('" + Join(input_clients_id_list.ToArray, "','") + "')"
         If Not input_products_id_list Is Nothing Then str_SQL = str_SQL & " AND " & DATA_PRODUCT_ID_VARIABLE & " IN ('" + Join(input_products_id_list.ToArray, "','") + "')"
-        If Not input_adjustments_id_list Is Nothing Then str_SQL = str_SQL & " AND " & DATA_ADJUSTMENT_ID_VARIABLE & " IN ('" + Join(adjustments_id_filter_list.ToArray, "','") + "')"
+        If Not input_adjustments_id_list Is Nothing Then str_SQL = str_SQL & " AND " & DATA_ADJUSTMENT_ID_VARIABLE & " IN ('" + Join(input_adjustments_id_list.ToArray, "','") + "')"
 
         If str_SQL = "" Then
             Return str_SQL

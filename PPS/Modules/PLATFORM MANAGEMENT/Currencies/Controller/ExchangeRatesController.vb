@@ -40,7 +40,7 @@ Friend Class ExchangeRatesController
     Friend current_version As String
     Friend currencies_list As List(Of String)
     Friend object_is_alive As Boolean
-    Protected Friend global_periods_dictionary As Dictionary(Of Int32, Int32())
+    Protected Friend global_periods_dictionary As Dictionary(Of Int32, List(Of Int32))
 
 
 #End Region

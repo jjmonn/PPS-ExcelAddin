@@ -8,7 +8,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 27/03/2015
+' Last modified: 10/04/2015
 
 
 Imports ADODB
@@ -254,24 +254,41 @@ Friend Class Version
 
     Private Function GetVersionsComparisonPeriodsNode(ByRef versions_dict As Dictionary(Of String, Hashtable)) As TreeNode
 
-        Dim year_nodes As New Dictionary(Of String, TreeNode)
+        Dim global_versions_periods_dict As New Dictionary(Of Int32, List(Of Int32))
+        ' Versions Loop
         For Each version_id In versions_dict.Keys
-            Dim years_list As List(Of Int32) = Period.GetYearlyPeriodList(versions_dict(version_id)(VERSIONS_START_PERIOD_VAR), versions_dict(version_id)(VERSIONS_NB_PERIODS_VAR))
-            For Each year_id In years_list
-                If year_nodes.ContainsKey(year_id) = False Then
-                    Dim tmp_node = New TreeNode(Format(DateTime.FromOADate(year_id), "yyyy"))
-                    tmp_node.Name = year_id
-                    For Each month_id In Period.GetMonthlyPeriodsList(year_id, 1, False)
-                        tmp_node.Nodes.Add(month_id, Format(DateTime.FromOADate(month_id), "MMM-yy"))
-                    Next
+            Dim periods_dic = versions_dict(version_id)(PERIOD_DICT)
+
+            ' Years Loop
+            For Each year_id In periods_dic.keys
+                If global_versions_periods_dict.ContainsKey(year_id) = False Then
+                    Dim tmp_list As New List(Of Int32)
+                    global_versions_periods_dict.Add(year_id, tmp_list)
                 End If
+
+                ' Months Loop
+                For Each month_id In periods_dic(year_id)
+                    If global_versions_periods_dict(year_id).Contains(month_id) = False Then _
+                    global_versions_periods_dict(year_id).Add(month_id)
+                Next
             Next
         Next
-        Dim keys As List(Of String) = year_nodes.Keys.ToList
-        Dim periods_node As New TreeNode
+
+        ' Retraitement et construction du Period Nodes fomr Global Periods Dictionary
+        Dim keys As List(Of Int32) = global_versions_periods_dict.Keys.ToList
         keys.Sort()
+        Dim periods_node As New TreeNode
+
+        ' Years Loop
         For Each year_id As String In keys
-            periods_node.Nodes.Add(year_nodes(year_id))
+            Dim year_node As TreeNode = periods_node.Nodes.Add(year_id, Format(DateTime.FromOADate(year_id), "yyyy"))
+
+            ' Months Loop
+            Dim months_list As List(Of Int32) = global_versions_periods_dict(year_id)
+            months_list.Sort()
+            For Each month_id As Int32 In months_list
+                year_node.Nodes.Add(month_id, Format(DateTime.FromOADate(month_id), "MMM-yy"))
+            Next
         Next
         Return periods_node
 
@@ -312,19 +329,19 @@ Friend Class Version
 
     End Function
 
-    Protected Friend Function GetPeriodsDict(ByRef version_id As String) As Dictionary(Of Int32, Int32())
+    Protected Friend Function GetPeriodsDict(ByRef version_id As String) As Dictionary(Of Int32, List(Of Int32))
 
         If ReadVersion(version_id, VERSIONS_TIME_CONFIG_VARIABLE) = YEARLY_TIME_CONFIGURATION Then
-            Dim tmp_dict As New Dictionary(Of Int32, Int32())
+            Dim tmp_dict As New Dictionary(Of Int32, List(Of Int32))
             For Each year_id In Period.GetYearlyPeriodList(ReadVersion(version_id, VERSIONS_START_PERIOD_VAR), _
                                                            ReadVersion(version_id, VERSIONS_NB_PERIODS_VAR))
-                Dim tmp_arr As Int32() = {}
-                tmp_dict.Add(year_id, tmp_arr)
+                Dim tmp_list As New List(Of Int32)
+                tmp_dict.Add(year_id, tmp_list)
             Next
             Return tmp_dict
         Else
-            Return Period.GetGlobalPeriodsDictionary(Period.GetMonthlyPeriodsList(ReadVersion(version_id, VERSIONS_START_PERIOD_VAR), _
-                                                                                  ReadVersion(version_id, VERSIONS_NB_PERIODS_VAR), True))
+            Return Period.GetGlobalPeriodsDictionary(ReadVersion(version_id, VERSIONS_START_PERIOD_VAR), _
+                                                     ReadVersion(version_id, VERSIONS_NB_PERIODS_VAR))
         End If
 
     End Function

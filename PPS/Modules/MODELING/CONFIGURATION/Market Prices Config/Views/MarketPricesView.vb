@@ -74,7 +74,7 @@ Friend Class MarketPricesView
 #Region "Initialize DGV Display"
 
     Friend Sub InitializeDGV(ByRef indexenciesList As List(Of String), _
-                             ByRef globalPeriodsDictionary As Dictionary(Of Int32, Integer()))
+                             ByRef globalPeriodsDictionary As Dictionary(Of Int32, List(Of Int32)))
 
 
         ClearDictionaries()
@@ -109,7 +109,7 @@ Friend Class MarketPricesView
 
     End Sub
 
-    Private Sub InitRows(ByRef globalPeriodsDictionary As Dictionary(Of Int32, Integer()))
+    Private Sub InitRows(ByRef globalPeriodsDictionary As Dictionary(Of Int32, List(Of Int32)))
 
         charts_periods.Clear()
         For Each yearAsInteger As Integer In globalPeriodsDictionary.Keys

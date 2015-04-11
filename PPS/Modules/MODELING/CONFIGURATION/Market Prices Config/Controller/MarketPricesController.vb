@@ -31,7 +31,7 @@ Friend Class MarketPricesController
     ' Variables
     Protected Friend indexes_list As List(Of String)
     Protected Friend current_version As String
-    Protected Friend global_periods_dictionary As Dictionary(Of Int32, Int32())
+    Protected Friend global_periods_dictionary As Dictionary(Of Int32, List(Of Int32))
 
     ' Const 
     Private MARKET_INDEXES_MAX_TOKEN_SIZE As Int32 = 50

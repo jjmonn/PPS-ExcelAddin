@@ -15,6 +15,7 @@
 
 Imports Microsoft.Office.Interop
 Imports System.Collections.Generic
+Imports System.Collections
 
 
 Friend Class Utilities_Functions
@@ -145,7 +146,7 @@ errorHandler:
 
         IsRange = True
         On Error Resume Next
-        TestRange = GlobalVariables.apps.Range(sRangeAddress)
+        TestRange = GlobalVariables.APPS.Range(sRangeAddress)
         If Err.Number <> 0 Then
             IsRange = False
         End If
@@ -168,14 +169,14 @@ errorHandler:
         If Right$(sAddress, 1) = Chr(34) Then sAddress = Left$(sAddress, Len(sAddress) - 1)
 
         On Error Resume Next
-        sAddress = GlobalVariables.apps.ConvertFormula(sAddress, Excel.XlReferenceStyle.xlR1C1, Excel.XlReferenceStyle.xlA1)
+        sAddress = GlobalVariables.APPS.ConvertFormula(sAddress, Excel.XlReferenceStyle.xlR1C1, Excel.XlReferenceStyle.xlA1)
 
         If IsRange(sAddress) Then
-            rng = GlobalVariables.apps.Range(sAddress)
+            rng = GlobalVariables.APPS.Range(sAddress)
         End If
 
         If Not rng Is Nothing Then
-            sFullAddress = rng.Address(, , GlobalVariables.apps.ReferenceStyle, True)
+            sFullAddress = rng.Address(, , GlobalVariables.APPS.ReferenceStyle, True)
             If Left$(sFullAddress, 1) = "'" Then
                 sAddress = "'"
             Else
@@ -325,7 +326,7 @@ nextWord:
         For Each specialCharacter As String In ModelFormulasMGT.FORMULAS_TOKEN_CHARACTERS
 
             On Error Resume Next
-            charPosition = GlobalVariables.apps.WorksheetFunction.Find(specialCharacter, str)
+            charPosition = GlobalVariables.APPS.WorksheetFunction.Find(specialCharacter, str)
             If Err.Number = 0 And charPosition >= 1 Then
 
                 findOperator = charPosition
@@ -388,6 +389,17 @@ nextWord:
             tmp_dict.Add(key, input_dict(key))
         Next
         Return tmp_dict
+
+    End Function
+
+    Protected Friend Shared Function CountNbValueIs(ByRef value_to_be_counted As String, _
+                                                    ByRef dict As Hashtable) As Int32
+
+        Dim count As Int32
+        For Each key As String In dict.Keys
+            If dict(key) = value_to_be_counted Then count = count + 1
+        Next
+        Return count
 
     End Function
 

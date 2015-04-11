@@ -224,7 +224,7 @@ Partial Class ControllingUI_2
         Me.TableLayoutPanel2.RowCount = 2
         Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 61.0!))
         Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TableLayoutPanel2.Size = New System.Drawing.Size(911, 622)
+        Me.TableLayoutPanel2.Size = New System.Drawing.Size(867, 628)
         Me.TableLayoutPanel2.TabIndex = 13
         '
         'CustomTabControl2
@@ -255,7 +255,7 @@ Partial Class ControllingUI_2
         Me.CustomTabControl2.Margin = New System.Windows.Forms.Padding(0)
         Me.CustomTabControl2.Name = "CustomTabControl2"
         Me.CustomTabControl2.SelectedIndex = 0
-        Me.CustomTabControl2.Size = New System.Drawing.Size(911, 561)
+        Me.CustomTabControl2.Size = New System.Drawing.Size(867, 567)
         Me.CustomTabControl2.TabIndex = 15
         '
         'MainTab
@@ -266,7 +266,7 @@ Partial Class ControllingUI_2
         Me.MainTab.Margin = New System.Windows.Forms.Padding(0)
         Me.MainTab.Name = "MainTab"
         Me.MainTab.Padding = New System.Windows.Forms.Padding(3)
-        Me.MainTab.Size = New System.Drawing.Size(903, 534)
+        Me.MainTab.Size = New System.Drawing.Size(859, 540)
         Me.MainTab.TabIndex = 0
         Me.MainTab.Text = "Data"
         '
@@ -286,8 +286,8 @@ Partial Class ControllingUI_2
         '
         Me.SplitContainer1.Panel2.BackColor = System.Drawing.SystemColors.Control
         Me.SplitContainer1.Panel2.Controls.Add(Me.TabControl1)
-        Me.SplitContainer1.Size = New System.Drawing.Size(897, 528)
-        Me.SplitContainer1.SplitterDistance = 201
+        Me.SplitContainer1.Size = New System.Drawing.Size(853, 534)
+        Me.SplitContainer1.SplitterDistance = 191
         Me.SplitContainer1.SplitterWidth = 3
         Me.SplitContainer1.TabIndex = 11
         '
@@ -303,7 +303,7 @@ Partial Class ControllingUI_2
         Me.TVTableLayout.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
         Me.TVTableLayout.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 276.0!))
         Me.TVTableLayout.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
-        Me.TVTableLayout.Size = New System.Drawing.Size(201, 528)
+        Me.TVTableLayout.Size = New System.Drawing.Size(191, 534)
         Me.TVTableLayout.TabIndex = 0
         '
         'TabControl1
@@ -334,7 +334,7 @@ Partial Class ControllingUI_2
         Me.TabControl1.Location = New System.Drawing.Point(0, 0)
         Me.TabControl1.Name = "TabControl1"
         Me.TabControl1.SelectedIndex = 0
-        Me.TabControl1.Size = New System.Drawing.Size(693, 528)
+        Me.TabControl1.Size = New System.Drawing.Size(659, 534)
         Me.TabControl1.TabIndex = 7
         '
         'ChartsTab
@@ -353,7 +353,7 @@ Partial Class ControllingUI_2
         Me.MenuTableLayout.ColumnCount = 3
         Me.MenuTableLayout.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 78.5!))
         Me.MenuTableLayout.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 21.5!))
-        Me.MenuTableLayout.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 271.0!))
+        Me.MenuTableLayout.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 288.0!))
         Me.MenuTableLayout.Controls.Add(Me.TableLayoutPanel1, 2, 0)
         Me.MenuTableLayout.Controls.Add(Me.RibbonsPanel, 0, 0)
         Me.MenuTableLayout.Controls.Add(Me.RefreshBT, 1, 0)
@@ -363,7 +363,7 @@ Partial Class ControllingUI_2
         Me.MenuTableLayout.Name = "MenuTableLayout"
         Me.MenuTableLayout.RowCount = 1
         Me.MenuTableLayout.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 78.0!))
-        Me.MenuTableLayout.Size = New System.Drawing.Size(911, 61)
+        Me.MenuTableLayout.Size = New System.Drawing.Size(867, 61)
         Me.MenuTableLayout.TabIndex = 12
         '
         'TableLayoutPanel1
@@ -379,14 +379,14 @@ Partial Class ControllingUI_2
         Me.TableLayoutPanel1.Controls.Add(Me.Label2, 0, 2)
         Me.TableLayoutPanel1.Controls.Add(Me.VersionTB, 1, 1)
         Me.TableLayoutPanel1.Controls.Add(Me.CurrencyTB, 1, 2)
-        Me.TableLayoutPanel1.Location = New System.Drawing.Point(641, 0)
+        Me.TableLayoutPanel1.Location = New System.Drawing.Point(578, 0)
         Me.TableLayoutPanel1.Margin = New System.Windows.Forms.Padding(0)
         Me.TableLayoutPanel1.Name = "TableLayoutPanel1"
         Me.TableLayoutPanel1.RowCount = 3
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333!))
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333!))
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333!))
-        Me.TableLayoutPanel1.Size = New System.Drawing.Size(270, 60)
+        Me.TableLayoutPanel1.Size = New System.Drawing.Size(289, 60)
         Me.TableLayoutPanel1.TabIndex = 1
         '
         'Label1
@@ -403,7 +403,7 @@ Partial Class ControllingUI_2
         'entityTB
         '
         Me.entityTB.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.entityTB.Location = New System.Drawing.Point(52, 0)
+        Me.entityTB.Location = New System.Drawing.Point(71, 0)
         Me.entityTB.Margin = New System.Windows.Forms.Padding(0)
         Me.entityTB.Name = "entityTB"
         Me.entityTB.Size = New System.Drawing.Size(218, 20)
@@ -425,17 +425,17 @@ Partial Class ControllingUI_2
         '
         Me.Label2.Anchor = System.Windows.Forms.AnchorStyles.Left
         Me.Label2.AutoSize = True
-        Me.Label2.Location = New System.Drawing.Point(3, 43)
+        Me.Label2.Location = New System.Drawing.Point(3, 45)
         Me.Label2.Margin = New System.Windows.Forms.Padding(3, 3, 3, 0)
         Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(44, 17)
+        Me.Label2.Size = New System.Drawing.Size(49, 13)
         Me.Label2.TabIndex = 1
         Me.Label2.Text = "Currency"
         '
         'VersionTB
         '
         Me.VersionTB.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.VersionTB.Location = New System.Drawing.Point(52, 20)
+        Me.VersionTB.Location = New System.Drawing.Point(71, 20)
         Me.VersionTB.Margin = New System.Windows.Forms.Padding(0)
         Me.VersionTB.Name = "VersionTB"
         Me.VersionTB.Size = New System.Drawing.Size(218, 20)
@@ -444,7 +444,7 @@ Partial Class ControllingUI_2
         'CurrencyTB
         '
         Me.CurrencyTB.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.CurrencyTB.Location = New System.Drawing.Point(52, 40)
+        Me.CurrencyTB.Location = New System.Drawing.Point(71, 40)
         Me.CurrencyTB.Margin = New System.Windows.Forms.Padding(0)
         Me.CurrencyTB.Name = "CurrencyTB"
         Me.CurrencyTB.Size = New System.Drawing.Size(218, 20)
@@ -456,7 +456,7 @@ Partial Class ControllingUI_2
         Me.RibbonsPanel.Location = New System.Drawing.Point(15, 0)
         Me.RibbonsPanel.Margin = New System.Windows.Forms.Padding(15, 0, 0, 0)
         Me.RibbonsPanel.Name = "RibbonsPanel"
-        Me.RibbonsPanel.Size = New System.Drawing.Size(471, 50)
+        Me.RibbonsPanel.Size = New System.Drawing.Size(439, 50)
         Me.RibbonsPanel.TabIndex = 7
         '
         'RefreshBT
@@ -467,7 +467,7 @@ Partial Class ControllingUI_2
         Me.RefreshBT.FlatAppearance.BorderSize = 0
         Me.RefreshBT.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Silver
         Me.RefreshBT.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.RefreshBT.Location = New System.Drawing.Point(591, 5)
+        Me.RefreshBT.Location = New System.Drawing.Point(530, 5)
         Me.RefreshBT.Margin = New System.Windows.Forms.Padding(0, 5, 10, 0)
         Me.RefreshBT.Name = "RefreshBT"
         Me.RefreshBT.Size = New System.Drawing.Size(38, 35)
@@ -480,7 +480,7 @@ Partial Class ControllingUI_2
         Me.MainMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.SelectionMBT, Me.BusinessControlMBT, Me.ExcelMBT})
         Me.MainMenu.Location = New System.Drawing.Point(0, 0)
         Me.MainMenu.Name = "MainMenu"
-        Me.MainMenu.Size = New System.Drawing.Size(911, 24)
+        Me.MainMenu.Size = New System.Drawing.Size(867, 24)
         Me.MainMenu.TabIndex = 1
         Me.MainMenu.Text = "MenuStrip2"
         '
@@ -529,7 +529,7 @@ Partial Class ControllingUI_2
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.SystemColors.Control
         Me.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
-        Me.ClientSize = New System.Drawing.Size(911, 649)
+        Me.ClientSize = New System.Drawing.Size(867, 655)
         Me.Controls.Add(Me.MainMenu)
         Me.Controls.Add(Me.TableLayoutPanel2)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)

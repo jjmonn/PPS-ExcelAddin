@@ -203,7 +203,7 @@ Friend Class RateVersion
 
     End Function
 
-    Protected Friend Function GetPeriodsDictionary(ByRef rates_version_id As String) As Dictionary(Of Int32, Int32())
+    Protected Friend Function GetPeriodsDictionary(ByRef rates_version_id As String) As Dictionary(Of Int32, List(Of Int32))
 
         Return Period.GetGlobalPeriodsDictionary(GetPeriodList(rates_version_id))
 

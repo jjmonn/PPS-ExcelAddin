@@ -160,7 +160,7 @@ Friend Class DLL3_Interface
 
     <DllImport("DLL3.dll")>
     Private Shared Sub SetEntitiesCurrencyDll3(ByVal objptr As Integer, _
-                                               ByRef currency As String)
+                                               <MarshalAs(UnmanagedType.BStr)> ByVal currency As String)
 
     End Sub
 
@@ -264,10 +264,10 @@ Friend Class DLL3_Interface
         End Select
 
         initializeCurrencyConvertorDll3(objptr, years_periods_list.ToArray, years_periods_list.Count)
-        Dim years_months_dict As Dictionary(Of Int32, Int32()) = Period.GetGlobalPeriodsDictionary(years_periods_list)
+        Dim years_months_dict As Dictionary(Of Int32, List(Of Int32)) = Period.GetGlobalPeriodsDictionary(years_periods_list)
 
         For Each period In years_periods_list
-            AddPeriodYearCurrencyConvertorDll3(objptr, years_months_dict(period))
+            AddPeriodYearCurrencyConvertorDll3(objptr, years_months_dict(period).ToArray)
         Next
         convertor_currencies_token_list.Clear()
         current_start_period = years_periods_list(0)

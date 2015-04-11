@@ -180,12 +180,21 @@ Friend Class TreeViewsUtilities
     Protected Friend Shared Function GetCheckedNodesID(ByRef TV As TreeView) As List(Of String)
 
         Dim tmpList As New List(Of String)
-        For Each childNode As TreeNode In TV.Nodes
-            If childNode.Checked = True Then tmpList.Add(childNode.Name)
+        For Each node As TreeNode In TV.Nodes
+            AddCheckedNodesToList(node, tmpList)
         Next
         Return tmpList
 
     End Function
+
+    Protected Friend Shared Sub AddCheckedNodesToList(ByRef node As TreeNode, ByRef list As List(Of String))
+
+        If node.Checked = True Then list.Add(node.Name)
+        For Each child_node As TreeNode In node.Nodes
+            AddCheckedNodesToList(child_node, list)
+        Next
+
+    End Sub
 
     Protected Friend Shared Function GetCheckedNodesID(ByRef node As TreeNode) As List(Of String)
 

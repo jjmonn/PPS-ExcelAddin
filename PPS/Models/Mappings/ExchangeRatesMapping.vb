@@ -62,8 +62,7 @@ Friend Class ExchangeRatesMapping
                                   EX_RATES_RATE_VERSION & "='" & rates_version & "'"
 
         srv.openRstSQL(str_SQL, ModelServer.FWD_CURSOR)
-        For year_period As Int32 = start_period To start_period + nb_periods - 1
-            Dim months_list As List(Of Integer) = Period.GetMonthsPeriodsInOneYear(year_period, 0)
+        Dim months_list As List(Of Integer) = Period.GetMonthlyPeriodsList(start_period, nb_periods, False)
             For Each period In months_list
                 periods_list.Add(period)
                 srv.rst.Filter = EX_RATES_PERIOD_VARIABLE & "=" & period
@@ -77,7 +76,6 @@ Friend Class ExchangeRatesMapping
                     rates.Add(1)
                 End If
             Next
-        Next
         srv.rst.Close()
         srv = Nothing
 

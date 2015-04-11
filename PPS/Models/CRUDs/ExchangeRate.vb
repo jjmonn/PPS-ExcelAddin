@@ -155,7 +155,7 @@ Friend Class ExchangeRate
         Select Case time_config
             Case YEARLY_TIME_CONFIGURATION
                 Dim periods_list As List(Of Int32) = Period.GetYearlyPeriodList(start_period, nb_periods)
-                Dim global_periods_list As Dictionary(Of Integer, Integer()) = Period.GetGlobalPeriodsDictionary(periods_list)
+                Dim global_periods_list As Dictionary(Of Integer, List(Of Int32)) = Period.GetGlobalPeriodsDictionary(periods_list)
 
                 For Each year_int In periods_list
                     Dim tmp_dic As New Dictionary(Of String, Double)
@@ -170,7 +170,7 @@ Friend Class ExchangeRate
 
             Case MONTHLY_TIME_CONFIGURATION
                 Dim periods_list As List(Of Int32) = Period.GetYearlyPeriodList(start_period, nb_periods)
-                Dim global_periods_list As Dictionary(Of Integer, Integer()) = Period.GetGlobalPeriodsDictionary(periods_list)
+                Dim global_periods_list As Dictionary(Of Integer, List(Of Int32)) = Period.GetGlobalPeriodsDictionary(periods_list)
                 For Each year_int In periods_list
                     Dim tmp_dic As New Dictionary(Of String, Double)
                     For Each month_int In global_periods_list(year_int)

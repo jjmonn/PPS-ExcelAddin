@@ -16,7 +16,7 @@
 '       - erreur si pas de taux -> si nb records = 0 la matrice de devrait pas être lancée
 '
 '
-' Last modified: 26/03/2015
+' Last modified: 09/04/2015
 ' Author: Julien Monnereau
 
 
@@ -152,14 +152,17 @@ Friend Class GenericAggregationDLL3Computing
                                                            ByRef rates_version_id As String, _
                                                            ByRef start_period As Int32,
                                                            ByRef nb_periods As Int32, _
-                                                           ByRef global_periods_dic As Dictionary(Of Int32, Int32()))
+                                                           ByRef global_periods_dic As Dictionary(Of Int32, List(Of Int32)))
 
-        Dim account_ids() As String
-        Dim period_ids() As Int32
-        Dim values As Double()
+        Dim account_ids As New List(Of String)
+        Dim period_ids As New List(Of Int32)
+        Dim values As New List(Of Double)
         Dim accounts_id_ftype_dict As Hashtable = AccountsMapping.GetAccountsDictionary(ACCOUNT_ID_VARIABLE, ACCOUNT_FORMULA_TYPE_VARIABLE)
+        Dim nb_HV_accounts As Int32 = Utilities_Functions.CountNbValueIs(HARD_VALUE_F_TYPE_CODE, accounts_id_ftype_dict)
+
+        ' ResetDllCurrencyPeriodsConfigIfNeeded(global_periods_dic.Keys.ToList, YEARLY_TIME_CONFIGURATION, start_period, nb_periods)
         Dll3Computer.SetEntitiesCurrency(destination_currency)
-        Dll3Computer.SetUpEABeforeCompute(global_periods_dic.Keys.tolist, _
+        Dll3Computer.SetUpEABeforeCompute(global_periods_dic.Keys.ToList, _
                                           destination_currency, _
                                           MONTHLY_TIME_CONFIGURATION, _
                                           rates_version_id, _
@@ -171,12 +174,13 @@ Friend Class GenericAggregationDLL3Computing
                                                period_ids, _
                                                values, _
                                                accounts_id_ftype_dict, _
+                                               nb_HV_accounts, _
                                                global_periods_dic)
 
             Dll3Computer.ComputeInputEntity(entity_id, _
-                                            account_ids, _
-                                            period_ids, _
-                                            values)
+                                            account_ids.ToArray, _
+                                            period_ids.ToArray, _
+                                            values.ToArray)
         Next
         Dll3Computer.ComputeAggregation()
         ReinitializeComputerCache()
@@ -351,35 +355,43 @@ Friend Class GenericAggregationDLL3Computing
     End Function
 
     Private Sub BuildMonthlyAggregationInputArrays(ByRef entity_id As String, _
-                                                   ByRef account_ids As String(), _
-                                                   ByRef period_ids As Int32(), _
-                                                   ByRef values As Double(), _
+                                                   ByRef account_ids As List(Of String), _
+                                                   ByRef period_ids As List(Of Int32), _
+                                                   ByRef values As List(Of Double), _
                                                    ByRef accounts_id_ftype_dict As Hashtable, _
-                                                   ByRef global_periods_dict As Dictionary(Of Int32, Int32()))
-
-        ReDim account_ids(Dll3Computer.accounts_array.Length * global_periods_dict.Keys.Count)
-        ReDim period_ids(Dll3Computer.accounts_array.Length * global_periods_dict.Keys.Count)
-        ReDim values(Dll3Computer.accounts_array.Length * global_periods_dict.Keys.Count)
-
-        Dim a_index As Int32 = 0
-        Dim i As Int32 = 0
+                                                   ByRef nb_HV_accounts As Int32, _
+                                                   ByRef global_periods_dict As Dictionary(Of Int32, List(Of Int32)))
+        account_ids.Clear()
+        period_ids.Clear()
+        values.Clear()
+        Dim account_index As Int32 = 0
         For Each account_id As String In Dll3Computer.accounts_array
-            If accounts_id_ftype_dict(account_id) = HARD_VALUE_F_TYPE_CODE Then
 
-                For Each year_period As Int32 In global_periods_dict.Keys
-                    Dim tmp_value As Double
-                    For Each month_period As Int32 In global_periods_dict(year_period)
-                        tmp_value = tmp_value + complete_data_dictionary(entity_id)(i * periods_list.IndexOf(month_period))
+            Select Case accounts_id_ftype_dict(account_id)
+                Case HARD_VALUE_F_TYPE_CODE
+                    For Each year_period As Int32 In global_periods_dict.Keys
+                        Dim tmp_value As Double = 0
+                        For Each month_period As Int32 In global_periods_dict(year_period)
+                            tmp_value = tmp_value + _
+                                        complete_data_dictionary(entity_id)((account_index * periods_list.Count) _
+                                                                            + periods_list.IndexOf(month_period))
+                        Next
+                        account_ids.Add(account_id)
+                        period_ids.Add(year_period)
+                        values.Add(tmp_value)
                     Next
-                    account_ids(a_index) = account_id
-                    period_ids(a_index) = year_period
-                    values(a_index) = tmp_value
-                Next
-                a_index = a_index + 1
-            End If
-            i = i + 1
-        Next
 
+                Case BALANCE_SHEET_ACCOUNT_FORMULA_TYPE, WORKING_CAPITAL_ACCOUNT_FORMULA_TYPE
+                    On Error Resume Next
+                    Dim value As Double = 0
+                    value = complete_data_dictionary(entity_id)((account_index * periods_list.Count) _
+                                                                 + periods_list.IndexOf(global_periods_dict.ElementAt(0).Value.ElementAt(0)))
+                    account_ids.Add(account_id)
+                    period_ids.Add(global_periods_dict.ElementAt(0).Key)
+                    values.Add(value)
+            End Select
+            account_index = account_index + 1
+        Next
 
     End Sub
 

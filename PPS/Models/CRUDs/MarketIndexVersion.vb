@@ -193,7 +193,7 @@ Friend Class MarketIndexVersion
 
     End Function
 
-    Protected Friend Function GetPeriodsDictionary(ByRef prices_version_id As String) As Dictionary(Of Int32, Int32())
+    Protected Friend Function GetPeriodsDictionary(ByRef prices_version_id As String) As Dictionary(Of Int32, List(Of Int32))
 
         Return Period.GetGlobalPeriodsDictionary(GetPeriodList(prices_version_id))
 
