@@ -156,7 +156,7 @@ Partial Class CurrenciesManagementUI
         '
         'DeleteVersionRCM
         '
-        Me.DeleteVersionRCM.Image = Global.PPS.My.Resources.Resources.imageres_891
+        Me.DeleteVersionRCM.Image = Global.PPS.My.Resources.Resources.imageres_89
         Me.DeleteVersionRCM.Name = "DeleteVersionRCM"
         Me.DeleteVersionRCM.Size = New System.Drawing.Size(147, 22)
         Me.DeleteVersionRCM.Text = "Delete"
@@ -353,7 +353,7 @@ Partial Class CurrenciesManagementUI
         '
         'DeleteCurrencyToolStripMenuItem1
         '
-        Me.DeleteCurrencyToolStripMenuItem1.Image = Global.PPS.My.Resources.Resources.imageres_891
+        Me.DeleteCurrencyToolStripMenuItem1.Image = Global.PPS.My.Resources.Resources.imageres_89
         Me.DeleteCurrencyToolStripMenuItem1.Name = "DeleteCurrencyToolStripMenuItem1"
         Me.DeleteCurrencyToolStripMenuItem1.Size = New System.Drawing.Size(158, 22)
         Me.DeleteCurrencyToolStripMenuItem1.Text = "Delete Currency"

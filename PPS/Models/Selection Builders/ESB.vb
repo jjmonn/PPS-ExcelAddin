@@ -13,7 +13,7 @@
 ' Known bugs
 '
 '
-' Last modified: 24/03/2014
+' Last modified: 17/04/2014
 ' Author: Julien Monnereau
 
 
@@ -29,8 +29,7 @@ Friend Class ESB
 #Region "Instance Variables"
 
     ' Objects
-    Protected Friend EntitiesTV As New TreeView
-
+ 
     ' Variables
     Private entities_categories_TV_instance As TreeNode
     Friend StrSqlQuery As String
@@ -43,7 +42,6 @@ Friend Class ESB
 
     Protected Friend Sub New()
 
-        Entity.LoadEntitiesTree(EntitiesTV)
         entities_categories_TV_instance = Category.GetCategoryCodeNode(ControllingUI2Controller.ENTITIES_CODE)
       
     End Sub
@@ -75,7 +73,7 @@ Friend Class ESB
 #End Region
 
 
-#Region "Computation"
+#Region "SQL Query Build"
 
     ' Builds an SQL Query WHERE CLAUSE to match categories filter criterias
     Private Function SQLQueryBuild(ByRef SelectionDictionary As Dictionary(Of String, List(Of String))) As Boolean
@@ -114,8 +112,8 @@ Friend Class ESB
 
     ' Build the selection Dictionary based on the selected values in Parameter CategoriesTV
     ' The list contains not selected values 
-    Private Sub SelectionDictionaryBuild(ByRef CategoriesTV As TreeView, _
-                                         ByRef SelectionDictionary As Dictionary(Of String, List(Of String)))
+    Protected Friend Sub SelectionDictionaryBuild(ByRef CategoriesTV As TreeView, _
+                                                  ByRef SelectionDictionary As Dictionary(Of String, List(Of String)))
 
         Dim ActiveFilterCategoriesList As New List(Of String)
 

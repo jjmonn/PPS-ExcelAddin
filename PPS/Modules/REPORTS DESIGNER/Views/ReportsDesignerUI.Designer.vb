@@ -630,7 +630,7 @@ Partial Class ReportsDesignerUI
         '
         'DeleteRCM
         '
-        Me.DeleteRCM.Image = Global.PPS.My.Resources.Resources.imageres_891
+        Me.DeleteRCM.Image = Global.PPS.My.Resources.Resources.imageres_89
         Me.DeleteRCM.Name = "DeleteRCM"
         Me.DeleteRCM.Size = New System.Drawing.Size(136, 22)
         Me.DeleteRCM.Text = "Delete"

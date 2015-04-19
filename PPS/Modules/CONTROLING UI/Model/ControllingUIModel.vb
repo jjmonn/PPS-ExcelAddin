@@ -7,7 +7,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 04/04/2015
+' Last modified: 17/04/2015
 
 
 Imports System.Windows.Forms
@@ -22,7 +22,6 @@ Friend Class ControllingUIModel
 
     ' Objects
     Private AggregationComputer As GenericAggregationDLL3Computing
-    Private ESB As ESB
     Private PBar As ProgressBarControl
 
     ' Variables
@@ -39,10 +38,10 @@ Friend Class ControllingUIModel
 
 #Region "Initialize"
 
-    Protected Friend Sub New(ByRef input_ESB As ESB)
+    Protected Friend Sub New(ByRef input_pBar As ProgressBarControl)
 
         AggregationComputer = New GenericAggregationDLL3Computing(GlobalVariables.GlobalDBDownloader)
-        ESB = input_ESB
+        PBar = input_pBar
         InitializeCategoriesIDsCodeDict()
 
     End Sub
@@ -51,7 +50,7 @@ Friend Class ControllingUIModel
 
         categories_id_code_dict = CategoriesMapping.GetCategoriesIDCodeMapping()
         categories_id_code_dict.Add(ControllingUI2Controller.CLIENTS_CODE, ControllingUI2Controller.CLIENTS_CODE)
-        categories_id_code_dict.Add(ControllingUI2Controller.PRODUCT_CODE, ControllingUI2Controller.PRODUCT_CODE)
+        categories_id_code_dict.Add(ControllingUI2Controller.PRODUCTS_CODE, ControllingUI2Controller.PRODUCTS_CODE)
         categories_id_code_dict.Add(ControllingUI2Controller.ADJUSTMENT_CODE, ControllingUI2Controller.ADJUSTMENT_CODE)
 
     End Sub
@@ -91,7 +90,7 @@ Friend Class ControllingUIModel
                         clients_id_filter_list.Add(filters_dict(filter_code))
                         AggregationComputer.UpdateclientsFilters(clients_id_filter_list)
 
-                    Case ControllingUI2Controller.PRODUCT_CODE
+                    Case ControllingUI2Controller.PRODUCTS_CODE
                         Dim products_id_filter_list As New List(Of String)
                         products_id_filter_list.Add(filters_dict(filter_code))
                         AggregationComputer.UpdateproductsFilters(products_id_filter_list)
@@ -149,11 +148,14 @@ Friend Class ControllingUIModel
             years_aggregation_period_list = periods_dict.Keys.ToList
             complete_period_list = versions_dict(Version_id)(Version.PERIOD_LIST)
 
+            filters_dict(ControllingUI2Controller.ENTITIES_CODE) = categories_values_dict(ControllingUI2Controller.ENTITIES_CODE).Keys(0)
             DataDictionaryFill(DataDictionary, _
                                hierarchies_node.Nodes(0), _
                                filters_dict, _
-                               versions_dict(Version_id)(Version.PERIOD_DICT))
-          Next
+                               versions_dict(Version_id)(Version.PERIOD_DICT), _
+                               versions_dict(Version_id)(VERSIONS_TIME_CONFIG_VARIABLE))
+            PBar.AddProgress(2)
+        Next
 
     End Sub
 
@@ -171,6 +173,7 @@ Friend Class ControllingUIModel
                                    ByRef hierarchies_node As TreeNode, _
                                    ByRef filters_dict As Dictionary(Of String, String), _
                                    ByRef periods_dict As Dictionary(Of Int32, List(Of Int32)), _
+                                   ByRef time_config As String, _
                                    Optional ByRef period_id As Int32 = 0)
 
         If hierarchies_node.NextNode Is Nothing Then
@@ -179,42 +182,41 @@ Friend Class ControllingUIModel
                 Case ControllingUI2Controller.ACCOUNTS_CODE
                     account_index = 0
                     For Each account_id As String In AggregationComputer.get_model_accounts_list
-                        Utilities_Functions.AddOrSetValueToDict(filters_dict, ControllingUI2Controller.ACCOUNTS_CODE, account_id)
-                        SetOrAddValueToHT(current_data_dictionary, account_id, GetValue(filters_dict, period_id))
+                        filters_dict(ControllingUI2Controller.ACCOUNTS_CODE) = account_id
+                        current_data_dictionary(account_id) = GetValue(filters_dict, period_id, time_config)
                         account_index = account_index + 1
                     Next
 
                 Case ControllingUI2Controller.ENTITIES_CODE
-                    For Each entity_id As String In AggregationComputer.complete_data_dictionary.Keys
+                    For Each entity_id As String In categories_values_dict(ControllingUI2Controller.ENTITIES_CODE).Keys
                         Utilities_Functions.AddOrSetValueToDict(filters_dict, ControllingUI2Controller.ENTITIES_CODE, entity_id)
-                        SetOrAddValueToHT(current_data_dictionary, entity_id, GetValue(filters_dict, period_id))
+                        current_data_dictionary(entity_id) = GetValue(filters_dict, period_id, time_config)
                     Next
 
                 Case ControllingUI2Controller.YEARS_CODE
                     For Each year_id As Int32 In categories_values_dict(ControllingUI2Controller.YEARS_CODE).Keys
-                        Utilities_Functions.AddOrSetValueToDict(filters_dict, ControllingUI2Controller.YEARS_CODE, year_id)
+                        filters_dict(ControllingUI2Controller.YEARS_CODE) = year_id
                         period_id = year_id
-                        SetOrAddValueToHT(current_data_dictionary, year_id, GetValue(filters_dict, period_id))
+                        current_data_dictionary(year_id) = GetValue(filters_dict, period_id, time_config)
                     Next
 
                 Case ControllingUI2Controller.MONTHS_CODE
                     ' Loop with month = 0 (years aggregation)
                     period_id = filters_dict(ControllingUI2Controller.YEARS_CODE)
-                    Utilities_Functions.AddOrSetValueToDict(filters_dict, ControllingUI2Controller.MONTHS_CODE, ControllingUI2Controller.ZERO_PERIOD_CODE)
-                    SetOrAddValueToHT(current_data_dictionary, _
-                                      ControllingUI2Controller.ZERO_PERIOD_CODE, _
-                                      GetValue(filters_dict, period_id))
+                    filters_dict(ControllingUI2Controller.MONTHS_CODE) = ControllingUI2Controller.ZERO_PERIOD_CODE
+                    current_data_dictionary(ControllingUI2Controller.ZERO_PERIOD_CODE) = GetValue(filters_dict, period_id, time_config)
 
                     ' Months Loop 
-                    For Each month_id As Int32 In categories_values_dict(filters_dict(ControllingUI2Controller.YEARS_CODE)).Keys
-                        period_id = month_id
-                        Utilities_Functions.AddOrSetValueToDict(filters_dict, ControllingUI2Controller.MONTHS_CODE, month_id)
-                        SetOrAddValueToHT(current_data_dictionary, month_id, GetValue(filters_dict, period_id))
-                    Next
+                    If categories_values_dict.ContainsKey(filters_dict(ControllingUI2Controller.YEARS_CODE)) Then
+                        For Each month_id As Int32 In categories_values_dict(filters_dict(ControllingUI2Controller.YEARS_CODE)).Keys
+                            period_id = month_id
+                            filters_dict(ControllingUI2Controller.MONTHS_CODE) = month_id
+                            current_data_dictionary(month_id) = GetValue(filters_dict, period_id, time_config)
+                        Next
+                    End If
 
                 Case Else
-                    SetOrAddValueToHT(current_data_dictionary, filters_dict(hierarchies_node.Name), GetValue(filters_dict, period_id))
-
+                    current_data_dictionary(filters_dict(hierarchies_node.Name)) = GetValue(filters_dict, period_id, time_config)
             End Select
 
         Else
@@ -223,78 +225,92 @@ Friend Class ControllingUIModel
 
                     account_index = 0
                     For Each account_id As String In AggregationComputer.get_model_accounts_list
-                        Utilities_Functions.AddOrSetValueToDict(filters_dict, ControllingUI2Controller.ACCOUNTS_CODE, account_id)
+
+                        filters_dict(ControllingUI2Controller.ACCOUNTS_CODE) = account_id
 
                         DataDictionaryFill(SetOrAddHTToHT(current_data_dictionary, account_id), _
                                            hierarchies_node.NextNode, _
                                            filters_dict, _
                                            periods_dict, _
+                                           time_config, _
                                            period_id)
                         account_index = account_index + 1
                     Next
 
                 Case ControllingUI2Controller.ENTITIES_CODE
 
-                    For Each entity_id As String In AggregationComputer.complete_data_dictionary.Keys
-                        Utilities_Functions.AddOrSetValueToDict(filters_dict, ControllingUI2Controller.ENTITIES_CODE, entity_id)
-
+                    For Each entity_id As String In categories_values_dict(ControllingUI2Controller.ENTITIES_CODE).Keys
+                        filters_dict(ControllingUI2Controller.ENTITIES_CODE) = entity_id
                         DataDictionaryFill(SetOrAddHTToHT(current_data_dictionary, entity_id), _
                                            hierarchies_node.NextNode, _
                                            filters_dict, _
                                            periods_dict, _
+                                           time_config, _
                                            period_id)
                     Next
 
                 Case ControllingUI2Controller.YEARS_CODE
                     For Each year_id As Int32 In categories_values_dict(ControllingUI2Controller.YEARS_CODE).Keys
                         period_id = year_id
-                        Utilities_Functions.AddOrSetValueToDict(filters_dict, ControllingUI2Controller.YEARS_CODE, year_id)
+                        filters_dict(ControllingUI2Controller.YEARS_CODE) = year_id
+                        filters_dict(ControllingUI2Controller.MONTHS_CODE) = ControllingUI2Controller.ZERO_PERIOD_CODE
                         DataDictionaryFill(SetOrAddHTToHT(current_data_dictionary, year_id), _
                                            hierarchies_node.NextNode, _
                                            filters_dict, _
                                            periods_dict, _
+                                           time_config, _
                                            period_id)
                     Next
 
                 Case ControllingUI2Controller.MONTHS_CODE
                     ' Loop with month = 0 (years aggregation)
                     period_id = filters_dict(ControllingUI2Controller.YEARS_CODE)
-                    Utilities_Functions.AddOrSetValueToDict(filters_dict, ControllingUI2Controller.MONTHS_CODE, ControllingUI2Controller.ZERO_PERIOD_CODE)
+                    filters_dict(ControllingUI2Controller.MONTHS_CODE) = ControllingUI2Controller.ZERO_PERIOD_CODE
                     DataDictionaryFill(SetOrAddHTToHT(current_data_dictionary, ControllingUI2Controller.ZERO_PERIOD_CODE), _
                                        hierarchies_node.NextNode, _
                                        filters_dict, _
                                        periods_dict, _
-                                           period_id)
+                                       time_config, _
+                                       period_id)
                     ' Months Loop 
-                    For Each month_id As Int32 In categories_values_dict(filters_dict(ControllingUI2Controller.YEARS_CODE)).Keys
-                        period_id = month_id
-                        Utilities_Functions.AddOrSetValueToDict(filters_dict, ControllingUI2Controller.MONTHS_CODE, month_id)
-                        DataDictionaryFill(SetOrAddHTToHT(current_data_dictionary, month_id), _
-                                           hierarchies_node.NextNode, _
-                                           filters_dict, _
-                                           periods_dict, _
-                                           period_id)
-                    Next
+                    If categories_values_dict.ContainsKey(filters_dict(ControllingUI2Controller.YEARS_CODE)) Then
+                        For Each month_id As Int32 In categories_values_dict(filters_dict(ControllingUI2Controller.YEARS_CODE)).Keys
+                            period_id = month_id
+                            filters_dict(ControllingUI2Controller.MONTHS_CODE) = month_id
+                            DataDictionaryFill(SetOrAddHTToHT(current_data_dictionary, month_id), _
+                                               hierarchies_node.NextNode, _
+                                               filters_dict, _
+                                               periods_dict, _
+                                               time_config, _
+                                               period_id)
+                        Next
+                    End If
 
                 Case Else
                     DataDictionaryFill(SetOrAddHTToHT(current_data_dictionary, filters_dict(hierarchies_node.Name)), _
                                        hierarchies_node.NextNode, _
                                        filters_dict, _
                                        periods_dict, _
-                                           period_id)
+                                       time_config, _
+                                       period_id)
             End Select
         End If
 
     End Sub
 
     Private Function GetValue(ByRef filters_dict As Dictionary(Of String, String), _
-                              ByRef period_id As Int32) As Double
+                              ByRef period_id As Int32, _
+                              ByRef time_config As String) As Double
 
         On Error GoTo error_handler
-        If filters_dict.ContainsKey(ControllingUI2Controller.MONTHS_CODE) _
+        If time_config = MONTHLY_TIME_CONFIGURATION _
         AndAlso filters_dict(ControllingUI2Controller.MONTHS_CODE) = ControllingUI2Controller.ZERO_PERIOD_CODE Then
-            Dim data_index As Int32 = ((account_index * years_aggregation_period_list.Count) + years_aggregation_period_list.IndexOf(period_id))
-            Return AggregationComputer.years_aggregation_data_dictionary(filters_dict(ControllingUI2Controller.ENTITIES_CODE))(data_index)
+            If years_aggregation_period_list.Contains(period_id) Then
+                Dim data_index As Int32 = ((account_index * years_aggregation_period_list.Count) + years_aggregation_period_list.IndexOf(period_id))
+                Return AggregationComputer.years_aggregation_data_dictionary(filters_dict(ControllingUI2Controller.ENTITIES_CODE))(data_index)
+            Else
+                Return 0
+            End If          
         Else
             Dim data_index As Int32 = ((account_index * complete_period_list.Count) + complete_period_list.IndexOf(period_id))
             Return AggregationComputer.complete_data_dictionary(filters_dict(ControllingUI2Controller.ENTITIES_CODE))(data_index)
@@ -302,7 +318,7 @@ Friend Class ControllingUIModel
 
 error_handler:
         ' debug to be deleted !
-        If period_id = -1 Then MsgBox("Careful period_id = -1")
+        'If period_id = -1 Then MsgBox("Careful period_id = -1")
         Return 0
 
     End Function
@@ -336,19 +352,6 @@ error_handler:
         End If
 
     End Function
-
-    Private Sub SetOrAddValueToHT(ByRef HT As Dictionary(Of Object, Object), _
-                                  ByRef key As Object, _
-                                  ByRef value As Double)
-
-        If HT.ContainsKey(key) Then
-            HT(key) = value
-        Else
-            HT.Add(key, Nothing)
-            HT(key) = value
-        End If
-
-    End Sub
 
     Protected Friend Sub CloseModel()
 

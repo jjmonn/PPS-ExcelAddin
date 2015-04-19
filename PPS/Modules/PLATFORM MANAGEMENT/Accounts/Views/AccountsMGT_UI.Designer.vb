@@ -407,7 +407,7 @@ Partial Class AccountsMGT_UI
         '
         'DeleteAccountToolStripMenuItem1
         '
-        Me.DeleteAccountToolStripMenuItem1.Image = Global.PPS.My.Resources.Resources.imageres_891
+        Me.DeleteAccountToolStripMenuItem1.Image = Global.PPS.My.Resources.Resources.imageres_89
         Me.DeleteAccountToolStripMenuItem1.Name = "DeleteAccountToolStripMenuItem1"
         Me.DeleteAccountToolStripMenuItem1.Size = New System.Drawing.Size(193, 22)
         Me.DeleteAccountToolStripMenuItem1.Text = "Delete Account"

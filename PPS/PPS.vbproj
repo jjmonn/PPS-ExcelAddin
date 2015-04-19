@@ -49,6 +49,9 @@
     <Reference Include="AddinExpress.XL.2005, Version=7.5.4072.2005, Culture=neutral, PublicKeyToken=e69a7e0f3592d2b8, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
     </Reference>
+    <Reference Include="CUI2DisplayControl">
+      <HintPath>..\..\..\..\Visual Studio 2012\Projects\CUI2DisplayControl\CUI2DisplayControl\bin\Debug\CUI2DisplayControl.dll</HintPath>
+    </Reference>
     <Reference Include="GaugeThis">
       <HintPath>..\..\..\..\..\Google Drive\OPERATIONS DEPARTMENT\Libraries\ProGauge\ProGauge\bin\Debug\GaugeThis.dll</HintPath>
     </Reference>
@@ -165,6 +168,7 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Models\Computing\GenericAggregationDLL3Computing.vb" />
+    <Compile Include="Models\Selection Builders\GenericSelectionBuilder.vb" />
     <Compile Include="Modules\CONTROLING UI\Controler\ControllingUI2Controller.vb" />
     <Compile Include="Modules\CONTROLING UI\Model\ControllingUIModel.vb" />
     <Compile Include="Modules\CONTROLING UI\View\ControllingUIChartsConfig.Designer.vb">
@@ -172,24 +176,6 @@
     </Compile>
     <Compile Include="Modules\CONTROLING UI\View\ControllingUIChartsConfig.vb">
       <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Modules\CONTROLING UI\View\Controls\BusinessControlMenu.Designer.vb">
-      <DependentUpon>BusinessControlMenu.vb</DependentUpon>
-    </Compile>
-    <Compile Include="Modules\CONTROLING UI\View\Controls\BusinessControlMenu.vb">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Modules\CONTROLING UI\View\Controls\ExcelMenu.Designer.vb">
-      <DependentUpon>ExcelMenu.vb</DependentUpon>
-    </Compile>
-    <Compile Include="Modules\CONTROLING UI\View\Controls\ExcelMenu.vb">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Modules\CONTROLING UI\View\Controls\DisplayMenu.Designer.vb">
-      <DependentUpon>DisplayMenu.vb</DependentUpon>
-    </Compile>
-    <Compile Include="Modules\CONTROLING UI\View\Controls\DisplayMenu.vb">
-      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Modules\CUBE\CubeView.Designer.vb">
       <DependentUpon>CubeView.vb</DependentUpon>
@@ -602,15 +588,6 @@
     <EmbeddedResource Include="Modules\CONTROLING UI\View\ControllingUIChartsConfig.resx">
       <DependentUpon>ControllingUIChartsConfig.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Modules\CONTROLING UI\View\Controls\BusinessControlMenu.resx">
-      <DependentUpon>BusinessControlMenu.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Modules\CONTROLING UI\View\Controls\ExcelMenu.resx">
-      <DependentUpon>ExcelMenu.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Modules\CONTROLING UI\View\Controls\DisplayMenu.resx">
-      <DependentUpon>DisplayMenu.vb</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Modules\CONTROLING UI\View\UploadingHistoryUI.resx">
       <DependentUpon>UploadingHistoryUI.vb</DependentUpon>
     </EmbeddedResource>
@@ -842,7 +819,7 @@
     <None Include="Resources\favicon%2817%29.ico" />
     <None Include="Resources\simple-gray-button-hi.png" />
     <None Include="Resources\grayButton.bmp" />
-    <None Include="Resources\imageres_891.ico" />
+    <None Include="Resources\imageres_89.ico" />
     <None Include="Resources\page_add2.ico" />
     <None Include="Resources\add1.ico" />
     <None Include="Resources\Benjigarner-Softdimension-Excel.ico" />
@@ -1005,6 +982,90 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\favicon%2817%291.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\checkbox.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\element_branch2.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\elements.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\registry.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\share.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\sizes.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\upload.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\users_relation2.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\barcode.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\calendar_31.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\checkbox1.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\data.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\delete.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\element_branch21.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\elements1.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Refresh blue 32x32.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\registry1.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\sizes1.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\symbol_dollar_euro.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\tablet_computer.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\users_relation21.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Excel Blue 32x32.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Excel Green 32x32.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\arrow_circle2.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\yellow-ms-excel-32.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\registry2.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\elements3.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\elements31.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.

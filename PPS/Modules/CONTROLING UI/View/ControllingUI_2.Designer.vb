@@ -24,10 +24,8 @@ Partial Class ControllingUI_2
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(ControllingUI_2))
-        Me.MenuIcons = New System.Windows.Forms.ImageList(Me.components)
         Me.TVsImageList = New System.Windows.Forms.ImageList(Me.components)
         Me.BackgroundWorker1 = New System.ComponentModel.BackgroundWorker()
-        Me.categoriesIL = New System.Windows.Forms.ImageList(Me.components)
         Me.entitiesRightClickMenu = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.compute_complete = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
@@ -44,59 +42,80 @@ Partial Class ControllingUI_2
         Me.DisplayDataTrackingToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator4 = New System.Windows.Forms.ToolStripSeparator()
         Me.FormatsRCMBT = New System.Windows.Forms.ToolStripMenuItem()
-        Me.TableLayoutPanel2 = New System.Windows.Forms.TableLayoutPanel()
-        Me.CustomTabControl2 = New System.Windows.Forms.CustomTabControl()
-        Me.MainTab = New System.Windows.Forms.TabPage()
+        Me.AdjustmentsRCM = New System.Windows.Forms.ContextMenuStrip(Me.components)
+        Me.SelectAllToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
+        Me.UnselectAllToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
         Me.SplitContainer1 = New System.Windows.Forms.SplitContainer()
         Me.TVTableLayout = New System.Windows.Forms.TableLayoutPanel()
         Me.TabControl1 = New System.Windows.Forms.CustomTabControl()
-        Me.ChartsTab = New System.Windows.Forms.TabPage()
-        Me.MenuTableLayout = New System.Windows.Forms.TableLayoutPanel()
+        Me.TabControl2 = New System.Windows.Forms.TabControl()
+        Me.TabPage1 = New System.Windows.Forms.TabPage()
+        Me.TableLayoutPanel2 = New System.Windows.Forms.TableLayoutPanel()
+        Me.Label4 = New System.Windows.Forms.Label()
+        Me.EntityTB2 = New System.Windows.Forms.TextBox()
+        Me.Label5 = New System.Windows.Forms.Label()
+        Me.Label6 = New System.Windows.Forms.Label()
+        Me.VersionTB2 = New System.Windows.Forms.TextBox()
+        Me.CurrencyTB2 = New System.Windows.Forms.TextBox()
+        Me.HomeMenu = New System.Windows.Forms.MenuStrip()
+        Me.EntitiesMenuBT1 = New System.Windows.Forms.ToolStripMenuItem()
+        Me.DisplayMenuBT = New System.Windows.Forms.ToolStripMenuItem()
+        Me.SelectionMenuBT = New System.Windows.Forms.ToolStripMenuItem()
+        Me.EntitiesMenuBT2 = New System.Windows.Forms.ToolStripMenuItem()
+        Me.entitiesCategoriesMenuBT = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ClientsMenuBT = New System.Windows.Forms.ToolStripMenuItem()
+        Me.clientsCategoriesMenuBT = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ProductsMenuBT = New System.Windows.Forms.ToolStripMenuItem()
+        Me.productsCategoriesMenuBT = New System.Windows.Forms.ToolStripMenuItem()
+        Me.AdjustmentsMenuBT = New System.Windows.Forms.ToolStripMenuItem()
+        Me.CurrenciesMenuBT = New System.Windows.Forms.ToolStripMenuItem()
+        Me.PeriodsMenuBT = New System.Windows.Forms.ToolStripMenuItem()
+        Me.VersionsMenuBT = New System.Windows.Forms.ToolStripMenuItem()
+        Me.RefreshMenuBT = New System.Windows.Forms.ToolStripMenuItem()
+        Me.TabPage2 = New System.Windows.Forms.TabPage()
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
         Me.Label1 = New System.Windows.Forms.Label()
-        Me.entityTB = New System.Windows.Forms.TextBox()
+        Me.EntityTB = New System.Windows.Forms.TextBox()
         Me.Label3 = New System.Windows.Forms.Label()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.VersionTB = New System.Windows.Forms.TextBox()
         Me.CurrencyTB = New System.Windows.Forms.TextBox()
-        Me.RibbonsPanel = New System.Windows.Forms.Panel()
-        Me.RefreshBT = New System.Windows.Forms.Button()
-        Me.MainMenu = New System.Windows.Forms.MenuStrip()
-        Me.SelectionMBT = New System.Windows.Forms.ToolStripMenuItem()
-        Me.BusinessControlMBT = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ExcelMBT = New System.Windows.Forms.ToolStripMenuItem()
-        Me.AdjustmentsRCM = New System.Windows.Forms.ContextMenuStrip(Me.components)
-        Me.SelectAllToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
-        Me.UnselectAllToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
+        Me.BusinessControlMenu = New System.Windows.Forms.MenuStrip()
+        Me.versionComparisonBT = New System.Windows.Forms.ToolStripMenuItem()
+        Me.switchVersionsBT = New System.Windows.Forms.ToolStripMenuItem()
+        Me.deleteComparisonBT = New System.Windows.Forms.ToolStripMenuItem()
+        Me.RefreshMenuBT2 = New System.Windows.Forms.ToolStripMenuItem()
+        Me.TabPage3 = New System.Windows.Forms.TabPage()
+        Me.TableLayoutPanel3 = New System.Windows.Forms.TableLayoutPanel()
+        Me.Label7 = New System.Windows.Forms.Label()
+        Me.EntityTB3 = New System.Windows.Forms.TextBox()
+        Me.Label8 = New System.Windows.Forms.Label()
+        Me.Label9 = New System.Windows.Forms.Label()
+        Me.VersionTB3 = New System.Windows.Forms.TextBox()
+        Me.CurrencyTB3 = New System.Windows.Forms.TextBox()
+        Me.ExcelMenu = New System.Windows.Forms.MenuStrip()
+        Me.SendConsoBT = New System.Windows.Forms.ToolStripMenuItem()
+        Me.SendBreakDownBT = New System.Windows.Forms.ToolStripMenuItem()
+        Me.CategoriesIL = New System.Windows.Forms.ImageList(Me.components)
         Me.entitiesRightClickMenu.SuspendLayout()
         Me.periodsRightClickMenu.SuspendLayout()
         Me.DGVsRCM.SuspendLayout()
-        Me.TableLayoutPanel2.SuspendLayout()
-        Me.CustomTabControl2.SuspendLayout()
-        Me.MainTab.SuspendLayout()
+        Me.AdjustmentsRCM.SuspendLayout()
         CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SplitContainer1.Panel1.SuspendLayout()
         Me.SplitContainer1.Panel2.SuspendLayout()
         Me.SplitContainer1.SuspendLayout()
-        Me.MenuTableLayout.SuspendLayout()
+        Me.TabControl2.SuspendLayout()
+        Me.TabPage1.SuspendLayout()
+        Me.TableLayoutPanel2.SuspendLayout()
+        Me.HomeMenu.SuspendLayout()
+        Me.TabPage2.SuspendLayout()
         Me.TableLayoutPanel1.SuspendLayout()
-        Me.MainMenu.SuspendLayout()
-        Me.AdjustmentsRCM.SuspendLayout()
+        Me.BusinessControlMenu.SuspendLayout()
+        Me.TabPage3.SuspendLayout()
+        Me.TableLayoutPanel3.SuspendLayout()
+        Me.ExcelMenu.SuspendLayout()
         Me.SuspendLayout()
-        '
-        'MenuIcons
-        '
-        Me.MenuIcons.ImageStream = CType(resources.GetObject("MenuIcons.ImageStream"), System.Windows.Forms.ImageListStreamer)
-        Me.MenuIcons.TransparentColor = System.Drawing.Color.Transparent
-        Me.MenuIcons.Images.SetKeyName(0, "chart.ico")
-        Me.MenuIcons.Images.SetKeyName(1, "Bars 16-16.ico")
-        Me.MenuIcons.Images.SetKeyName(2, "favicon(57).ico")
-        Me.MenuIcons.Images.SetKeyName(3, "favicon(54).ico")
-        Me.MenuIcons.Images.SetKeyName(4, "favicon(30).ico")
-        Me.MenuIcons.Images.SetKeyName(5, "favicon(15).ico")
-        Me.MenuIcons.Images.SetKeyName(6, "favicon(31).ico")
-        Me.MenuIcons.Images.SetKeyName(7, "Benjigarner-Softdimension-Excel.ico")
-        Me.MenuIcons.Images.SetKeyName(8, "favicon(20).ico")
         '
         'TVsImageList
         '
@@ -104,14 +123,6 @@ Partial Class ControllingUI_2
         Me.TVsImageList.TransparentColor = System.Drawing.Color.Transparent
         Me.TVsImageList.Images.SetKeyName(0, "imageres_148.ico")
         Me.TVsImageList.Images.SetKeyName(1, "file icon blue small.png")
-        '
-        'categoriesIL
-        '
-        Me.categoriesIL.ImageStream = CType(resources.GetObject("categoriesIL.ImageStream"), System.Windows.Forms.ImageListStreamer)
-        Me.categoriesIL.TransparentColor = System.Drawing.Color.Transparent
-        Me.categoriesIL.Images.SetKeyName(0, "favicon(195).ico")
-        Me.categoriesIL.Images.SetKeyName(1, "folder-blue.png")
-        Me.categoriesIL.Images.SetKeyName(2, "DB Grey.png")
         '
         'entitiesRightClickMenu
         '
@@ -165,8 +176,8 @@ Partial Class ControllingUI_2
         '
         Me.VersionsIL.ImageStream = CType(resources.GetObject("VersionsIL.ImageStream"), System.Windows.Forms.ImageListStreamer)
         Me.VersionsIL.TransparentColor = System.Drawing.Color.Transparent
-        Me.VersionsIL.Images.SetKeyName(0, "favicon(217).ico")
-        Me.VersionsIL.Images.SetKeyName(1, "favicon(97).ico")
+        Me.VersionsIL.Images.SetKeyName(0, "elements3.ico")
+        Me.VersionsIL.Images.SetKeyName(1, "favicon(81).ico")
         '
         'EntitiesTVImageList
         '
@@ -210,72 +221,30 @@ Partial Class ControllingUI_2
         Me.FormatsRCMBT.Size = New System.Drawing.Size(188, 22)
         Me.FormatsRCMBT.Text = "Display Options"
         '
-        'TableLayoutPanel2
+        'AdjustmentsRCM
         '
-        Me.TableLayoutPanel2.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.TableLayoutPanel2.ColumnCount = 1
-        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TableLayoutPanel2.Controls.Add(Me.CustomTabControl2, 0, 1)
-        Me.TableLayoutPanel2.Controls.Add(Me.MenuTableLayout, 0, 0)
-        Me.TableLayoutPanel2.Location = New System.Drawing.Point(0, 27)
-        Me.TableLayoutPanel2.Name = "TableLayoutPanel2"
-        Me.TableLayoutPanel2.RowCount = 2
-        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 61.0!))
-        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TableLayoutPanel2.Size = New System.Drawing.Size(867, 628)
-        Me.TableLayoutPanel2.TabIndex = 13
+        Me.AdjustmentsRCM.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.SelectAllToolStripMenuItem1, Me.UnselectAllToolStripMenuItem1})
+        Me.AdjustmentsRCM.Name = "AdjustmentsRCM"
+        Me.AdjustmentsRCM.Size = New System.Drawing.Size(137, 48)
         '
-        'CustomTabControl2
+        'SelectAllToolStripMenuItem1
         '
-        Me.CustomTabControl2.Controls.Add(Me.MainTab)
-        Me.CustomTabControl2.Controls.Add(Me.ChartsTab)
+        Me.SelectAllToolStripMenuItem1.Name = "SelectAllToolStripMenuItem1"
+        Me.SelectAllToolStripMenuItem1.Size = New System.Drawing.Size(136, 22)
+        Me.SelectAllToolStripMenuItem1.Text = "Select All"
         '
+        'UnselectAllToolStripMenuItem1
         '
-        '
-        Me.CustomTabControl2.DisplayStyleProvider.BorderColor = System.Drawing.SystemColors.ControlDark
-        Me.CustomTabControl2.DisplayStyleProvider.BorderColorHot = System.Drawing.SystemColors.ControlDark
-        Me.CustomTabControl2.DisplayStyleProvider.BorderColorSelected = System.Drawing.Color.FromArgb(CType(CType(127, Byte), Integer), CType(CType(157, Byte), Integer), CType(CType(185, Byte), Integer))
-        Me.CustomTabControl2.DisplayStyleProvider.CloserColor = System.Drawing.Color.DarkGray
-        Me.CustomTabControl2.DisplayStyleProvider.FocusTrack = True
-        Me.CustomTabControl2.DisplayStyleProvider.HotTrack = True
-        Me.CustomTabControl2.DisplayStyleProvider.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.CustomTabControl2.DisplayStyleProvider.Opacity = 1.0!
-        Me.CustomTabControl2.DisplayStyleProvider.Overlap = 0
-        Me.CustomTabControl2.DisplayStyleProvider.Padding = New System.Drawing.Point(6, 3)
-        Me.CustomTabControl2.DisplayStyleProvider.Radius = 2
-        Me.CustomTabControl2.DisplayStyleProvider.ShowTabCloser = False
-        Me.CustomTabControl2.DisplayStyleProvider.TextColor = System.Drawing.SystemColors.ControlText
-        Me.CustomTabControl2.DisplayStyleProvider.TextColorDisabled = System.Drawing.SystemColors.ControlDark
-        Me.CustomTabControl2.DisplayStyleProvider.TextColorSelected = System.Drawing.SystemColors.ControlText
-        Me.CustomTabControl2.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.CustomTabControl2.HotTrack = True
-        Me.CustomTabControl2.Location = New System.Drawing.Point(0, 61)
-        Me.CustomTabControl2.Margin = New System.Windows.Forms.Padding(0)
-        Me.CustomTabControl2.Name = "CustomTabControl2"
-        Me.CustomTabControl2.SelectedIndex = 0
-        Me.CustomTabControl2.Size = New System.Drawing.Size(867, 567)
-        Me.CustomTabControl2.TabIndex = 15
-        '
-        'MainTab
-        '
-        Me.MainTab.BackColor = System.Drawing.SystemColors.Control
-        Me.MainTab.Controls.Add(Me.SplitContainer1)
-        Me.MainTab.Location = New System.Drawing.Point(4, 23)
-        Me.MainTab.Margin = New System.Windows.Forms.Padding(0)
-        Me.MainTab.Name = "MainTab"
-        Me.MainTab.Padding = New System.Windows.Forms.Padding(3)
-        Me.MainTab.Size = New System.Drawing.Size(859, 540)
-        Me.MainTab.TabIndex = 0
-        Me.MainTab.Text = "Data"
+        Me.UnselectAllToolStripMenuItem1.Name = "UnselectAllToolStripMenuItem1"
+        Me.UnselectAllToolStripMenuItem1.Size = New System.Drawing.Size(136, 22)
+        Me.UnselectAllToolStripMenuItem1.Text = "Unselect All"
         '
         'SplitContainer1
         '
-        Me.SplitContainer1.BackColor = System.Drawing.SystemColors.Control
-        Me.SplitContainer1.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.SplitContainer1.Location = New System.Drawing.Point(3, 3)
-        Me.SplitContainer1.Margin = New System.Windows.Forms.Padding(0)
+        Me.SplitContainer1.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.SplitContainer1.Location = New System.Drawing.Point(0, 103)
         Me.SplitContainer1.Name = "SplitContainer1"
         '
         'SplitContainer1.Panel1
@@ -284,26 +253,22 @@ Partial Class ControllingUI_2
         '
         'SplitContainer1.Panel2
         '
-        Me.SplitContainer1.Panel2.BackColor = System.Drawing.SystemColors.Control
         Me.SplitContainer1.Panel2.Controls.Add(Me.TabControl1)
-        Me.SplitContainer1.Size = New System.Drawing.Size(853, 534)
-        Me.SplitContainer1.SplitterDistance = 191
-        Me.SplitContainer1.SplitterWidth = 3
-        Me.SplitContainer1.TabIndex = 11
+        Me.SplitContainer1.Size = New System.Drawing.Size(715, 257)
+        Me.SplitContainer1.SplitterDistance = 138
+        Me.SplitContainer1.TabIndex = 6
         '
         'TVTableLayout
         '
-        Me.TVTableLayout.BackColor = System.Drawing.SystemColors.Control
         Me.TVTableLayout.ColumnCount = 1
-        Me.TVTableLayout.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
+        Me.TVTableLayout.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
         Me.TVTableLayout.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TVTableLayout.Location = New System.Drawing.Point(0, 0)
         Me.TVTableLayout.Name = "TVTableLayout"
         Me.TVTableLayout.RowCount = 2
-        Me.TVTableLayout.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TVTableLayout.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 276.0!))
-        Me.TVTableLayout.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
-        Me.TVTableLayout.Size = New System.Drawing.Size(191, 534)
+        Me.TVTableLayout.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
+        Me.TVTableLayout.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 87.0!))
+        Me.TVTableLayout.Size = New System.Drawing.Size(138, 257)
         Me.TVTableLayout.TabIndex = 0
         '
         'TabControl1
@@ -334,194 +299,529 @@ Partial Class ControllingUI_2
         Me.TabControl1.Location = New System.Drawing.Point(0, 0)
         Me.TabControl1.Name = "TabControl1"
         Me.TabControl1.SelectedIndex = 0
-        Me.TabControl1.Size = New System.Drawing.Size(659, 534)
-        Me.TabControl1.TabIndex = 7
+        Me.TabControl1.Size = New System.Drawing.Size(573, 257)
+        Me.TabControl1.TabIndex = 8
         '
-        'ChartsTab
+        'TabControl2
         '
-        Me.ChartsTab.Location = New System.Drawing.Point(4, 23)
-        Me.ChartsTab.Margin = New System.Windows.Forms.Padding(0)
-        Me.ChartsTab.Name = "ChartsTab"
-        Me.ChartsTab.Padding = New System.Windows.Forms.Padding(3)
-        Me.ChartsTab.Size = New System.Drawing.Size(903, 534)
-        Me.ChartsTab.TabIndex = 1
-        Me.ChartsTab.Text = "Charts"
-        Me.ChartsTab.UseVisualStyleBackColor = True
+        Me.TabControl2.Controls.Add(Me.TabPage1)
+        Me.TabControl2.Controls.Add(Me.TabPage2)
+        Me.TabControl2.Controls.Add(Me.TabPage3)
+        Me.TabControl2.Dock = System.Windows.Forms.DockStyle.Top
+        Me.TabControl2.Location = New System.Drawing.Point(0, 0)
+        Me.TabControl2.Margin = New System.Windows.Forms.Padding(0)
+        Me.TabControl2.Name = "TabControl2"
+        Me.TabControl2.SelectedIndex = 0
+        Me.TabControl2.Size = New System.Drawing.Size(715, 100)
+        Me.TabControl2.TabIndex = 7
         '
-        'MenuTableLayout
+        'TabPage1
         '
-        Me.MenuTableLayout.ColumnCount = 3
-        Me.MenuTableLayout.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 78.5!))
-        Me.MenuTableLayout.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 21.5!))
-        Me.MenuTableLayout.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 288.0!))
-        Me.MenuTableLayout.Controls.Add(Me.TableLayoutPanel1, 2, 0)
-        Me.MenuTableLayout.Controls.Add(Me.RibbonsPanel, 0, 0)
-        Me.MenuTableLayout.Controls.Add(Me.RefreshBT, 1, 0)
-        Me.MenuTableLayout.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.MenuTableLayout.Location = New System.Drawing.Point(0, 0)
-        Me.MenuTableLayout.Margin = New System.Windows.Forms.Padding(0)
-        Me.MenuTableLayout.Name = "MenuTableLayout"
-        Me.MenuTableLayout.RowCount = 1
-        Me.MenuTableLayout.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 78.0!))
-        Me.MenuTableLayout.Size = New System.Drawing.Size(867, 61)
-        Me.MenuTableLayout.TabIndex = 12
+        Me.TabPage1.BackColor = System.Drawing.SystemColors.Control
+        Me.TabPage1.Controls.Add(Me.TableLayoutPanel2)
+        Me.TabPage1.Controls.Add(Me.HomeMenu)
+        Me.TabPage1.Location = New System.Drawing.Point(4, 22)
+        Me.TabPage1.Name = "TabPage1"
+        Me.TabPage1.Padding = New System.Windows.Forms.Padding(3)
+        Me.TabPage1.Size = New System.Drawing.Size(707, 74)
+        Me.TabPage1.TabIndex = 0
+        Me.TabPage1.Text = "Home"
+        '
+        'TableLayoutPanel2
+        '
+        Me.TableLayoutPanel2.BackColor = System.Drawing.SystemColors.Control
+        Me.TableLayoutPanel2.ColumnCount = 2
+        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
+        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 220.0!))
+        Me.TableLayoutPanel2.Controls.Add(Me.Label4, 0, 0)
+        Me.TableLayoutPanel2.Controls.Add(Me.EntityTB2, 1, 0)
+        Me.TableLayoutPanel2.Controls.Add(Me.Label5, 0, 1)
+        Me.TableLayoutPanel2.Controls.Add(Me.Label6, 0, 2)
+        Me.TableLayoutPanel2.Controls.Add(Me.VersionTB2, 1, 1)
+        Me.TableLayoutPanel2.Controls.Add(Me.CurrencyTB2, 1, 2)
+        Me.TableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Right
+        Me.TableLayoutPanel2.Location = New System.Drawing.Point(426, 3)
+        Me.TableLayoutPanel2.Margin = New System.Windows.Forms.Padding(0)
+        Me.TableLayoutPanel2.Name = "TableLayoutPanel2"
+        Me.TableLayoutPanel2.RowCount = 3
+        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333!))
+        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333!))
+        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333!))
+        Me.TableLayoutPanel2.Size = New System.Drawing.Size(278, 68)
+        Me.TableLayoutPanel2.TabIndex = 10
+        '
+        'Label4
+        '
+        Me.Label4.AutoSize = True
+        Me.Label4.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Label4.Location = New System.Drawing.Point(0, 0)
+        Me.Label4.Margin = New System.Windows.Forms.Padding(0)
+        Me.Label4.Name = "Label4"
+        Me.Label4.Size = New System.Drawing.Size(58, 22)
+        Me.Label4.TabIndex = 0
+        Me.Label4.Text = "Entity"
+        Me.Label4.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'EntityTB2
+        '
+        Me.EntityTB2.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.EntityTB2.Location = New System.Drawing.Point(58, 0)
+        Me.EntityTB2.Margin = New System.Windows.Forms.Padding(0, 0, 3, 0)
+        Me.EntityTB2.Name = "EntityTB2"
+        Me.EntityTB2.Size = New System.Drawing.Size(217, 20)
+        Me.EntityTB2.TabIndex = 3
+        '
+        'Label5
+        '
+        Me.Label5.AutoSize = True
+        Me.Label5.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Label5.Location = New System.Drawing.Point(0, 22)
+        Me.Label5.Margin = New System.Windows.Forms.Padding(0)
+        Me.Label5.Name = "Label5"
+        Me.Label5.Size = New System.Drawing.Size(58, 22)
+        Me.Label5.TabIndex = 2
+        Me.Label5.Text = "Version"
+        Me.Label5.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'Label6
+        '
+        Me.Label6.AutoSize = True
+        Me.Label6.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Label6.Location = New System.Drawing.Point(0, 44)
+        Me.Label6.Margin = New System.Windows.Forms.Padding(0)
+        Me.Label6.Name = "Label6"
+        Me.Label6.Size = New System.Drawing.Size(58, 24)
+        Me.Label6.TabIndex = 1
+        Me.Label6.Text = "Currency"
+        Me.Label6.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'VersionTB2
+        '
+        Me.VersionTB2.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.VersionTB2.Location = New System.Drawing.Point(58, 22)
+        Me.VersionTB2.Margin = New System.Windows.Forms.Padding(0, 0, 3, 0)
+        Me.VersionTB2.Name = "VersionTB2"
+        Me.VersionTB2.Size = New System.Drawing.Size(217, 20)
+        Me.VersionTB2.TabIndex = 6
+        '
+        'CurrencyTB2
+        '
+        Me.CurrencyTB2.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.CurrencyTB2.Location = New System.Drawing.Point(58, 44)
+        Me.CurrencyTB2.Margin = New System.Windows.Forms.Padding(0, 0, 3, 0)
+        Me.CurrencyTB2.Name = "CurrencyTB2"
+        Me.CurrencyTB2.Size = New System.Drawing.Size(217, 20)
+        Me.CurrencyTB2.TabIndex = 7
+        '
+        'HomeMenu
+        '
+        Me.HomeMenu.BackColor = System.Drawing.Color.Transparent
+        Me.HomeMenu.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.HomeMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.EntitiesMenuBT1, Me.DisplayMenuBT, Me.SelectionMenuBT, Me.RefreshMenuBT})
+        Me.HomeMenu.Location = New System.Drawing.Point(3, 3)
+        Me.HomeMenu.Name = "HomeMenu"
+        Me.HomeMenu.Size = New System.Drawing.Size(701, 68)
+        Me.HomeMenu.TabIndex = 0
+        Me.HomeMenu.Text = "MenuStrip4"
+        '
+        'EntitiesMenuBT1
+        '
+        Me.EntitiesMenuBT1.Image = CType(resources.GetObject("EntitiesMenuBT1.Image"), System.Drawing.Image)
+        Me.EntitiesMenuBT1.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
+        Me.EntitiesMenuBT1.Name = "EntitiesMenuBT1"
+        Me.EntitiesMenuBT1.Size = New System.Drawing.Size(57, 64)
+        Me.EntitiesMenuBT1.Text = "Entities"
+        Me.EntitiesMenuBT1.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
+        '
+        'DisplayMenuBT
+        '
+        Me.DisplayMenuBT.Image = CType(resources.GetObject("DisplayMenuBT.Image"), System.Drawing.Image)
+        Me.DisplayMenuBT.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
+        Me.DisplayMenuBT.Name = "DisplayMenuBT"
+        Me.DisplayMenuBT.Size = New System.Drawing.Size(57, 64)
+        Me.DisplayMenuBT.Text = "Display"
+        Me.DisplayMenuBT.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
+        '
+        'SelectionMenuBT
+        '
+        Me.SelectionMenuBT.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.EntitiesMenuBT2, Me.ClientsMenuBT, Me.ProductsMenuBT, Me.AdjustmentsMenuBT, Me.CurrenciesMenuBT, Me.PeriodsMenuBT, Me.VersionsMenuBT})
+        Me.SelectionMenuBT.Image = CType(resources.GetObject("SelectionMenuBT.Image"), System.Drawing.Image)
+        Me.SelectionMenuBT.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
+        Me.SelectionMenuBT.Name = "SelectionMenuBT"
+        Me.SelectionMenuBT.Size = New System.Drawing.Size(67, 64)
+        Me.SelectionMenuBT.Text = "Selection"
+        Me.SelectionMenuBT.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
+        '
+        'EntitiesMenuBT2
+        '
+        Me.EntitiesMenuBT2.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.entitiesCategoriesMenuBT})
+        Me.EntitiesMenuBT2.Image = CType(resources.GetObject("EntitiesMenuBT2.Image"), System.Drawing.Image)
+        Me.EntitiesMenuBT2.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
+        Me.EntitiesMenuBT2.Name = "EntitiesMenuBT2"
+        Me.EntitiesMenuBT2.Size = New System.Drawing.Size(168, 38)
+        Me.EntitiesMenuBT2.Text = "Legal Entities"
+        '
+        'entitiesCategoriesMenuBT
+        '
+        Me.entitiesCategoriesMenuBT.Image = CType(resources.GetObject("entitiesCategoriesMenuBT.Image"), System.Drawing.Image)
+        Me.entitiesCategoriesMenuBT.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
+        Me.entitiesCategoriesMenuBT.Name = "entitiesCategoriesMenuBT"
+        Me.entitiesCategoriesMenuBT.Size = New System.Drawing.Size(218, 38)
+        Me.entitiesCategoriesMenuBT.Text = "Legal Entities Categories"
+        '
+        'ClientsMenuBT
+        '
+        Me.ClientsMenuBT.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.clientsCategoriesMenuBT})
+        Me.ClientsMenuBT.Image = CType(resources.GetObject("ClientsMenuBT.Image"), System.Drawing.Image)
+        Me.ClientsMenuBT.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
+        Me.ClientsMenuBT.Name = "ClientsMenuBT"
+        Me.ClientsMenuBT.Size = New System.Drawing.Size(168, 38)
+        Me.ClientsMenuBT.Text = "Clients"
+        '
+        'clientsCategoriesMenuBT
+        '
+        Me.clientsCategoriesMenuBT.Image = CType(resources.GetObject("clientsCategoriesMenuBT.Image"), System.Drawing.Image)
+        Me.clientsCategoriesMenuBT.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
+        Me.clientsCategoriesMenuBT.Name = "clientsCategoriesMenuBT"
+        Me.clientsCategoriesMenuBT.Size = New System.Drawing.Size(185, 38)
+        Me.clientsCategoriesMenuBT.Text = "Clients Categories"
+        '
+        'ProductsMenuBT
+        '
+        Me.ProductsMenuBT.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.productsCategoriesMenuBT})
+        Me.ProductsMenuBT.Image = Global.PPS.My.Resources.Resources.barcode
+        Me.ProductsMenuBT.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
+        Me.ProductsMenuBT.Name = "ProductsMenuBT"
+        Me.ProductsMenuBT.Size = New System.Drawing.Size(168, 38)
+        Me.ProductsMenuBT.Text = "Products"
+        '
+        'productsCategoriesMenuBT
+        '
+        Me.productsCategoriesMenuBT.Image = CType(resources.GetObject("productsCategoriesMenuBT.Image"), System.Drawing.Image)
+        Me.productsCategoriesMenuBT.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
+        Me.productsCategoriesMenuBT.Name = "productsCategoriesMenuBT"
+        Me.productsCategoriesMenuBT.Size = New System.Drawing.Size(196, 38)
+        Me.productsCategoriesMenuBT.Text = "Products Categories"
+        '
+        'AdjustmentsMenuBT
+        '
+        Me.AdjustmentsMenuBT.Image = Global.PPS.My.Resources.Resources.registry1
+        Me.AdjustmentsMenuBT.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
+        Me.AdjustmentsMenuBT.Name = "AdjustmentsMenuBT"
+        Me.AdjustmentsMenuBT.Size = New System.Drawing.Size(168, 38)
+        Me.AdjustmentsMenuBT.Text = "Adjustments"
+        '
+        'CurrenciesMenuBT
+        '
+        Me.CurrenciesMenuBT.Image = CType(resources.GetObject("CurrenciesMenuBT.Image"), System.Drawing.Image)
+        Me.CurrenciesMenuBT.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
+        Me.CurrenciesMenuBT.Name = "CurrenciesMenuBT"
+        Me.CurrenciesMenuBT.Size = New System.Drawing.Size(168, 38)
+        Me.CurrenciesMenuBT.Text = "Currencies"
+        '
+        'PeriodsMenuBT
+        '
+        Me.PeriodsMenuBT.Image = CType(resources.GetObject("PeriodsMenuBT.Image"), System.Drawing.Image)
+        Me.PeriodsMenuBT.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
+        Me.PeriodsMenuBT.Name = "PeriodsMenuBT"
+        Me.PeriodsMenuBT.Size = New System.Drawing.Size(168, 38)
+        Me.PeriodsMenuBT.Text = "Periods"
+        '
+        'VersionsMenuBT
+        '
+        Me.VersionsMenuBT.Image = Global.PPS.My.Resources.Resources.elements31
+        Me.VersionsMenuBT.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
+        Me.VersionsMenuBT.Name = "VersionsMenuBT"
+        Me.VersionsMenuBT.Size = New System.Drawing.Size(168, 38)
+        Me.VersionsMenuBT.Text = "Versions"
+        '
+        'RefreshMenuBT
+        '
+        Me.RefreshMenuBT.Image = Global.PPS.My.Resources.Resources.Refresh_blue_32x32
+        Me.RefreshMenuBT.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
+        Me.RefreshMenuBT.Name = "RefreshMenuBT"
+        Me.RefreshMenuBT.Size = New System.Drawing.Size(58, 64)
+        Me.RefreshMenuBT.Text = "Refresh"
+        Me.RefreshMenuBT.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
+        '
+        'TabPage2
+        '
+        Me.TabPage2.BackColor = System.Drawing.SystemColors.Control
+        Me.TabPage2.Controls.Add(Me.TableLayoutPanel1)
+        Me.TabPage2.Controls.Add(Me.BusinessControlMenu)
+        Me.TabPage2.Location = New System.Drawing.Point(4, 22)
+        Me.TabPage2.Name = "TabPage2"
+        Me.TabPage2.Padding = New System.Windows.Forms.Padding(3)
+        Me.TabPage2.Size = New System.Drawing.Size(707, 74)
+        Me.TabPage2.TabIndex = 1
+        Me.TabPage2.Text = "Business Control"
         '
         'TableLayoutPanel1
         '
-        Me.TableLayoutPanel1.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.TableLayoutPanel1.BackColor = System.Drawing.SystemColors.Control
         Me.TableLayoutPanel1.ColumnCount = 2
         Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 218.0!))
+        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 220.0!))
         Me.TableLayoutPanel1.Controls.Add(Me.Label1, 0, 0)
-        Me.TableLayoutPanel1.Controls.Add(Me.entityTB, 1, 0)
+        Me.TableLayoutPanel1.Controls.Add(Me.EntityTB, 1, 0)
         Me.TableLayoutPanel1.Controls.Add(Me.Label3, 0, 1)
         Me.TableLayoutPanel1.Controls.Add(Me.Label2, 0, 2)
         Me.TableLayoutPanel1.Controls.Add(Me.VersionTB, 1, 1)
         Me.TableLayoutPanel1.Controls.Add(Me.CurrencyTB, 1, 2)
-        Me.TableLayoutPanel1.Location = New System.Drawing.Point(578, 0)
+        Me.TableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Right
+        Me.TableLayoutPanel1.Location = New System.Drawing.Point(426, 3)
         Me.TableLayoutPanel1.Margin = New System.Windows.Forms.Padding(0)
         Me.TableLayoutPanel1.Name = "TableLayoutPanel1"
         Me.TableLayoutPanel1.RowCount = 3
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333!))
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333!))
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333!))
-        Me.TableLayoutPanel1.Size = New System.Drawing.Size(289, 60)
-        Me.TableLayoutPanel1.TabIndex = 1
+        Me.TableLayoutPanel1.Size = New System.Drawing.Size(278, 68)
+        Me.TableLayoutPanel1.TabIndex = 9
         '
         'Label1
         '
-        Me.Label1.Anchor = System.Windows.Forms.AnchorStyles.Left
         Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(3, 5)
-        Me.Label1.Margin = New System.Windows.Forms.Padding(3, 3, 3, 0)
+        Me.Label1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Label1.Location = New System.Drawing.Point(0, 0)
+        Me.Label1.Margin = New System.Windows.Forms.Padding(0)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(33, 13)
+        Me.Label1.Size = New System.Drawing.Size(58, 22)
         Me.Label1.TabIndex = 0
         Me.Label1.Text = "Entity"
+        Me.Label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
-        'entityTB
+        'EntityTB
         '
-        Me.entityTB.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.entityTB.Location = New System.Drawing.Point(71, 0)
-        Me.entityTB.Margin = New System.Windows.Forms.Padding(0)
-        Me.entityTB.Name = "entityTB"
-        Me.entityTB.Size = New System.Drawing.Size(218, 20)
-        Me.entityTB.TabIndex = 3
+        Me.EntityTB.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.EntityTB.Location = New System.Drawing.Point(58, 0)
+        Me.EntityTB.Margin = New System.Windows.Forms.Padding(0, 0, 3, 0)
+        Me.EntityTB.Name = "EntityTB"
+        Me.EntityTB.Size = New System.Drawing.Size(217, 20)
+        Me.EntityTB.TabIndex = 3
         '
         'Label3
         '
-        Me.Label3.Anchor = System.Windows.Forms.AnchorStyles.Left
         Me.Label3.AutoSize = True
-        Me.Label3.Location = New System.Drawing.Point(3, 25)
-        Me.Label3.Margin = New System.Windows.Forms.Padding(3, 3, 3, 0)
+        Me.Label3.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Label3.Location = New System.Drawing.Point(0, 22)
+        Me.Label3.Margin = New System.Windows.Forms.Padding(0)
         Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(42, 13)
+        Me.Label3.Size = New System.Drawing.Size(58, 22)
         Me.Label3.TabIndex = 2
         Me.Label3.Text = "Version"
-        Me.Label3.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.Label3.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'Label2
         '
-        Me.Label2.Anchor = System.Windows.Forms.AnchorStyles.Left
         Me.Label2.AutoSize = True
-        Me.Label2.Location = New System.Drawing.Point(3, 45)
-        Me.Label2.Margin = New System.Windows.Forms.Padding(3, 3, 3, 0)
+        Me.Label2.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Label2.Location = New System.Drawing.Point(0, 44)
+        Me.Label2.Margin = New System.Windows.Forms.Padding(0)
         Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(49, 13)
+        Me.Label2.Size = New System.Drawing.Size(58, 24)
         Me.Label2.TabIndex = 1
         Me.Label2.Text = "Currency"
+        Me.Label2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'VersionTB
         '
         Me.VersionTB.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.VersionTB.Location = New System.Drawing.Point(71, 20)
-        Me.VersionTB.Margin = New System.Windows.Forms.Padding(0)
+        Me.VersionTB.Location = New System.Drawing.Point(58, 22)
+        Me.VersionTB.Margin = New System.Windows.Forms.Padding(0, 0, 3, 0)
         Me.VersionTB.Name = "VersionTB"
-        Me.VersionTB.Size = New System.Drawing.Size(218, 20)
+        Me.VersionTB.Size = New System.Drawing.Size(217, 20)
         Me.VersionTB.TabIndex = 6
         '
         'CurrencyTB
         '
         Me.CurrencyTB.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.CurrencyTB.Location = New System.Drawing.Point(71, 40)
-        Me.CurrencyTB.Margin = New System.Windows.Forms.Padding(0)
+        Me.CurrencyTB.Location = New System.Drawing.Point(58, 44)
+        Me.CurrencyTB.Margin = New System.Windows.Forms.Padding(0, 0, 3, 0)
         Me.CurrencyTB.Name = "CurrencyTB"
-        Me.CurrencyTB.Size = New System.Drawing.Size(218, 20)
+        Me.CurrencyTB.Size = New System.Drawing.Size(217, 20)
         Me.CurrencyTB.TabIndex = 7
         '
-        'RibbonsPanel
+        'BusinessControlMenu
         '
-        Me.RibbonsPanel.BackColor = System.Drawing.SystemColors.Control
-        Me.RibbonsPanel.Location = New System.Drawing.Point(15, 0)
-        Me.RibbonsPanel.Margin = New System.Windows.Forms.Padding(15, 0, 0, 0)
-        Me.RibbonsPanel.Name = "RibbonsPanel"
-        Me.RibbonsPanel.Size = New System.Drawing.Size(439, 50)
-        Me.RibbonsPanel.TabIndex = 7
+        Me.BusinessControlMenu.BackColor = System.Drawing.Color.Transparent
+        Me.BusinessControlMenu.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.BusinessControlMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.versionComparisonBT, Me.switchVersionsBT, Me.deleteComparisonBT, Me.RefreshMenuBT2})
+        Me.BusinessControlMenu.Location = New System.Drawing.Point(3, 3)
+        Me.BusinessControlMenu.Name = "BusinessControlMenu"
+        Me.BusinessControlMenu.Size = New System.Drawing.Size(701, 68)
+        Me.BusinessControlMenu.TabIndex = 1
+        Me.BusinessControlMenu.Text = "MenuStrip5"
         '
-        'RefreshBT
+        'versionComparisonBT
         '
-        Me.RefreshBT.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.RefreshBT.BackgroundImage = Global.PPS.My.Resources.Resources.Refresh2
-        Me.RefreshBT.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
-        Me.RefreshBT.FlatAppearance.BorderSize = 0
-        Me.RefreshBT.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Silver
-        Me.RefreshBT.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.RefreshBT.Location = New System.Drawing.Point(530, 5)
-        Me.RefreshBT.Margin = New System.Windows.Forms.Padding(0, 5, 10, 0)
-        Me.RefreshBT.Name = "RefreshBT"
-        Me.RefreshBT.Size = New System.Drawing.Size(38, 35)
-        Me.RefreshBT.TabIndex = 6
-        Me.RefreshBT.UseVisualStyleBackColor = True
+        Me.versionComparisonBT.Image = Global.PPS.My.Resources.Resources.sizes1
+        Me.versionComparisonBT.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
+        Me.versionComparisonBT.Name = "versionComparisonBT"
+        Me.versionComparisonBT.Size = New System.Drawing.Size(131, 64)
+        Me.versionComparisonBT.Text = "Versions Comparison"
+        Me.versionComparisonBT.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
         '
-        'MainMenu
+        'switchVersionsBT
         '
-        Me.MainMenu.BackColor = System.Drawing.SystemColors.Control
-        Me.MainMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.SelectionMBT, Me.BusinessControlMBT, Me.ExcelMBT})
-        Me.MainMenu.Location = New System.Drawing.Point(0, 0)
-        Me.MainMenu.Name = "MainMenu"
-        Me.MainMenu.Size = New System.Drawing.Size(867, 24)
-        Me.MainMenu.TabIndex = 1
-        Me.MainMenu.Text = "MenuStrip2"
+        Me.switchVersionsBT.Image = Global.PPS.My.Resources.Resources.arrow_circle2
+        Me.switchVersionsBT.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
+        Me.switchVersionsBT.Name = "switchVersionsBT"
+        Me.switchVersionsBT.Size = New System.Drawing.Size(101, 64)
+        Me.switchVersionsBT.Text = "Switch Versions"
+        Me.switchVersionsBT.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
         '
-        'SelectionMBT
+        'deleteComparisonBT
         '
-        Me.SelectionMBT.CheckOnClick = True
-        Me.SelectionMBT.Name = "SelectionMBT"
-        Me.SelectionMBT.Size = New System.Drawing.Size(67, 20)
-        Me.SelectionMBT.Text = "Selection"
+        Me.deleteComparisonBT.Image = Global.PPS.My.Resources.Resources.delete
+        Me.deleteComparisonBT.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
+        Me.deleteComparisonBT.Name = "deleteComparisonBT"
+        Me.deleteComparisonBT.Size = New System.Drawing.Size(120, 64)
+        Me.deleteComparisonBT.Text = "Delete Comparison"
+        Me.deleteComparisonBT.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
         '
-        'BusinessControlMBT
+        'RefreshMenuBT2
         '
-        Me.BusinessControlMBT.CheckOnClick = True
-        Me.BusinessControlMBT.Name = "BusinessControlMBT"
-        Me.BusinessControlMBT.Size = New System.Drawing.Size(107, 20)
-        Me.BusinessControlMBT.Text = "Business Control"
+        Me.RefreshMenuBT2.Image = Global.PPS.My.Resources.Resources.Refresh_blue_32x32
+        Me.RefreshMenuBT2.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
+        Me.RefreshMenuBT2.Name = "RefreshMenuBT2"
+        Me.RefreshMenuBT2.Size = New System.Drawing.Size(58, 64)
+        Me.RefreshMenuBT2.Text = "Refresh"
+        Me.RefreshMenuBT2.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
         '
-        'ExcelMBT
+        'TabPage3
         '
-        Me.ExcelMBT.CheckOnClick = True
-        Me.ExcelMBT.Name = "ExcelMBT"
-        Me.ExcelMBT.Size = New System.Drawing.Size(45, 20)
-        Me.ExcelMBT.Text = "Excel"
+        Me.TabPage3.BackColor = System.Drawing.SystemColors.Control
+        Me.TabPage3.Controls.Add(Me.TableLayoutPanel3)
+        Me.TabPage3.Controls.Add(Me.ExcelMenu)
+        Me.TabPage3.Location = New System.Drawing.Point(4, 22)
+        Me.TabPage3.Name = "TabPage3"
+        Me.TabPage3.Padding = New System.Windows.Forms.Padding(3)
+        Me.TabPage3.Size = New System.Drawing.Size(707, 74)
+        Me.TabPage3.TabIndex = 2
+        Me.TabPage3.Text = "Excel"
         '
-        'AdjustmentsRCM
+        'TableLayoutPanel3
         '
-        Me.AdjustmentsRCM.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.SelectAllToolStripMenuItem1, Me.UnselectAllToolStripMenuItem1})
-        Me.AdjustmentsRCM.Name = "AdjustmentsRCM"
-        Me.AdjustmentsRCM.Size = New System.Drawing.Size(137, 48)
+        Me.TableLayoutPanel3.BackColor = System.Drawing.SystemColors.Control
+        Me.TableLayoutPanel3.ColumnCount = 2
+        Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
+        Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 220.0!))
+        Me.TableLayoutPanel3.Controls.Add(Me.Label7, 0, 0)
+        Me.TableLayoutPanel3.Controls.Add(Me.EntityTB3, 1, 0)
+        Me.TableLayoutPanel3.Controls.Add(Me.Label8, 0, 1)
+        Me.TableLayoutPanel3.Controls.Add(Me.Label9, 0, 2)
+        Me.TableLayoutPanel3.Controls.Add(Me.VersionTB3, 1, 1)
+        Me.TableLayoutPanel3.Controls.Add(Me.CurrencyTB3, 1, 2)
+        Me.TableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Right
+        Me.TableLayoutPanel3.Location = New System.Drawing.Point(426, 3)
+        Me.TableLayoutPanel3.Margin = New System.Windows.Forms.Padding(0)
+        Me.TableLayoutPanel3.Name = "TableLayoutPanel3"
+        Me.TableLayoutPanel3.RowCount = 3
+        Me.TableLayoutPanel3.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333!))
+        Me.TableLayoutPanel3.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333!))
+        Me.TableLayoutPanel3.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333!))
+        Me.TableLayoutPanel3.Size = New System.Drawing.Size(278, 68)
+        Me.TableLayoutPanel3.TabIndex = 10
         '
-        'SelectAllToolStripMenuItem1
+        'Label7
         '
-        Me.SelectAllToolStripMenuItem1.Name = "SelectAllToolStripMenuItem1"
-        Me.SelectAllToolStripMenuItem1.Size = New System.Drawing.Size(136, 22)
-        Me.SelectAllToolStripMenuItem1.Text = "Select All"
+        Me.Label7.AutoSize = True
+        Me.Label7.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Label7.Location = New System.Drawing.Point(0, 0)
+        Me.Label7.Margin = New System.Windows.Forms.Padding(0)
+        Me.Label7.Name = "Label7"
+        Me.Label7.Size = New System.Drawing.Size(58, 22)
+        Me.Label7.TabIndex = 0
+        Me.Label7.Text = "Entity"
+        Me.Label7.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
-        'UnselectAllToolStripMenuItem1
+        'EntityTB3
         '
-        Me.UnselectAllToolStripMenuItem1.Name = "UnselectAllToolStripMenuItem1"
-        Me.UnselectAllToolStripMenuItem1.Size = New System.Drawing.Size(136, 22)
-        Me.UnselectAllToolStripMenuItem1.Text = "Unselect All"
+        Me.EntityTB3.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.EntityTB3.Location = New System.Drawing.Point(58, 0)
+        Me.EntityTB3.Margin = New System.Windows.Forms.Padding(0, 0, 3, 0)
+        Me.EntityTB3.Name = "EntityTB3"
+        Me.EntityTB3.Size = New System.Drawing.Size(217, 20)
+        Me.EntityTB3.TabIndex = 3
+        '
+        'Label8
+        '
+        Me.Label8.AutoSize = True
+        Me.Label8.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Label8.Location = New System.Drawing.Point(0, 22)
+        Me.Label8.Margin = New System.Windows.Forms.Padding(0)
+        Me.Label8.Name = "Label8"
+        Me.Label8.Size = New System.Drawing.Size(58, 22)
+        Me.Label8.TabIndex = 2
+        Me.Label8.Text = "Version"
+        Me.Label8.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'Label9
+        '
+        Me.Label9.AutoSize = True
+        Me.Label9.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Label9.Location = New System.Drawing.Point(0, 44)
+        Me.Label9.Margin = New System.Windows.Forms.Padding(0)
+        Me.Label9.Name = "Label9"
+        Me.Label9.Size = New System.Drawing.Size(58, 24)
+        Me.Label9.TabIndex = 1
+        Me.Label9.Text = "Currency"
+        Me.Label9.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'VersionTB3
+        '
+        Me.VersionTB3.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.VersionTB3.Location = New System.Drawing.Point(58, 22)
+        Me.VersionTB3.Margin = New System.Windows.Forms.Padding(0, 0, 3, 0)
+        Me.VersionTB3.Name = "VersionTB3"
+        Me.VersionTB3.Size = New System.Drawing.Size(217, 20)
+        Me.VersionTB3.TabIndex = 6
+        '
+        'CurrencyTB3
+        '
+        Me.CurrencyTB3.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.CurrencyTB3.Location = New System.Drawing.Point(58, 44)
+        Me.CurrencyTB3.Margin = New System.Windows.Forms.Padding(0, 0, 3, 0)
+        Me.CurrencyTB3.Name = "CurrencyTB3"
+        Me.CurrencyTB3.Size = New System.Drawing.Size(217, 20)
+        Me.CurrencyTB3.TabIndex = 7
+        '
+        'ExcelMenu
+        '
+        Me.ExcelMenu.BackColor = System.Drawing.Color.Transparent
+        Me.ExcelMenu.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.ExcelMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.SendConsoBT, Me.SendBreakDownBT})
+        Me.ExcelMenu.Location = New System.Drawing.Point(3, 3)
+        Me.ExcelMenu.Name = "ExcelMenu"
+        Me.ExcelMenu.Size = New System.Drawing.Size(701, 68)
+        Me.ExcelMenu.TabIndex = 2
+        Me.ExcelMenu.Text = "MenuStrip6"
+        '
+        'SendConsoBT
+        '
+        Me.SendConsoBT.Image = Global.PPS.My.Resources.Resources.yellow_ms_excel_32
+        Me.SendConsoBT.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
+        Me.SendConsoBT.Name = "SendConsoBT"
+        Me.SendConsoBT.Size = New System.Drawing.Size(82, 64)
+        Me.SendConsoBT.Text = "Send Conso"
+        Me.SendConsoBT.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
+        '
+        'SendBreakDownBT
+        '
+        Me.SendBreakDownBT.Image = Global.PPS.My.Resources.Resources.Excel_Blue_32x32
+        Me.SendBreakDownBT.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
+        Me.SendBreakDownBT.Name = "SendBreakDownBT"
+        Me.SendBreakDownBT.Size = New System.Drawing.Size(111, 64)
+        Me.SendBreakDownBT.Text = "Send Break Down"
+        Me.SendBreakDownBT.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
+        '
+        'CategoriesIL
+        '
+        Me.CategoriesIL.ImageStream = CType(resources.GetObject("CategoriesIL.ImageStream"), System.Windows.Forms.ImageListStreamer)
+        Me.CategoriesIL.TransparentColor = System.Drawing.Color.Transparent
+        Me.CategoriesIL.Images.SetKeyName(0, "elements.ico")
+        Me.CategoriesIL.Images.SetKeyName(1, "favicon(81).ico")
         '
         'ControllingUI_2
         '
@@ -529,9 +829,9 @@ Partial Class ControllingUI_2
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.SystemColors.Control
         Me.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
-        Me.ClientSize = New System.Drawing.Size(867, 655)
-        Me.Controls.Add(Me.MainMenu)
-        Me.Controls.Add(Me.TableLayoutPanel2)
+        Me.ClientSize = New System.Drawing.Size(715, 360)
+        Me.Controls.Add(Me.TabControl2)
+        Me.Controls.Add(Me.SplitContainer1)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Margin = New System.Windows.Forms.Padding(2)
         Me.Name = "ControllingUI_2"
@@ -539,27 +839,35 @@ Partial Class ControllingUI_2
         Me.entitiesRightClickMenu.ResumeLayout(False)
         Me.periodsRightClickMenu.ResumeLayout(False)
         Me.DGVsRCM.ResumeLayout(False)
-        Me.TableLayoutPanel2.ResumeLayout(False)
-        Me.CustomTabControl2.ResumeLayout(False)
-        Me.MainTab.ResumeLayout(False)
+        Me.AdjustmentsRCM.ResumeLayout(False)
         Me.SplitContainer1.Panel1.ResumeLayout(False)
         Me.SplitContainer1.Panel2.ResumeLayout(False)
         CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.SplitContainer1.ResumeLayout(False)
-        Me.MenuTableLayout.ResumeLayout(False)
+        Me.TabControl2.ResumeLayout(False)
+        Me.TabPage1.ResumeLayout(False)
+        Me.TabPage1.PerformLayout()
+        Me.TableLayoutPanel2.ResumeLayout(False)
+        Me.TableLayoutPanel2.PerformLayout()
+        Me.HomeMenu.ResumeLayout(False)
+        Me.HomeMenu.PerformLayout()
+        Me.TabPage2.ResumeLayout(False)
+        Me.TabPage2.PerformLayout()
         Me.TableLayoutPanel1.ResumeLayout(False)
         Me.TableLayoutPanel1.PerformLayout()
-        Me.MainMenu.ResumeLayout(False)
-        Me.MainMenu.PerformLayout()
-        Me.AdjustmentsRCM.ResumeLayout(False)
+        Me.BusinessControlMenu.ResumeLayout(False)
+        Me.BusinessControlMenu.PerformLayout()
+        Me.TabPage3.ResumeLayout(False)
+        Me.TabPage3.PerformLayout()
+        Me.TableLayoutPanel3.ResumeLayout(False)
+        Me.TableLayoutPanel3.PerformLayout()
+        Me.ExcelMenu.ResumeLayout(False)
+        Me.ExcelMenu.PerformLayout()
         Me.ResumeLayout(False)
-        Me.PerformLayout()
 
     End Sub
-    Friend WithEvents MenuIcons As System.Windows.Forms.ImageList
     Friend WithEvents TVsImageList As System.Windows.Forms.ImageList
     Friend WithEvents BackgroundWorker1 As System.ComponentModel.BackgroundWorker
-    Friend WithEvents categoriesIL As System.Windows.Forms.ImageList
     Friend WithEvents entitiesRightClickMenu As System.Windows.Forms.ContextMenuStrip
     Friend WithEvents ToolStripSeparator1 As System.Windows.Forms.ToolStripSeparator
     Friend WithEvents SelectAllSubEntitiesToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
@@ -574,30 +882,61 @@ Partial Class ControllingUI_2
     Friend WithEvents DisplayDataTrackingToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents DisplayAdjustmensRCM As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ToolStripSeparator2 As System.Windows.Forms.ToolStripSeparator
-    Friend WithEvents TableLayoutPanel2 As System.Windows.Forms.TableLayoutPanel
-    Friend WithEvents MenuTableLayout As System.Windows.Forms.TableLayoutPanel
-    Friend WithEvents TableLayoutPanel1 As System.Windows.Forms.TableLayoutPanel
-    Friend WithEvents Label1 As System.Windows.Forms.Label
-    Friend WithEvents entityTB As System.Windows.Forms.TextBox
-    Friend WithEvents Label3 As System.Windows.Forms.Label
-    Friend WithEvents Label2 As System.Windows.Forms.Label
-    Friend WithEvents VersionTB As System.Windows.Forms.TextBox
-    Friend WithEvents CurrencyTB As System.Windows.Forms.TextBox
-    Friend WithEvents MainMenu As System.Windows.Forms.MenuStrip
-    Friend WithEvents SelectionMBT As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents CustomTabControl2 As System.Windows.Forms.CustomTabControl
-    Friend WithEvents SplitContainer1 As System.Windows.Forms.SplitContainer
-    Friend WithEvents TVTableLayout As System.Windows.Forms.TableLayoutPanel
-    Friend WithEvents TabControl1 As System.Windows.Forms.CustomTabControl
-    Friend WithEvents MainTab As System.Windows.Forms.TabPage
-    Friend WithEvents ChartsTab As System.Windows.Forms.TabPage
     Friend WithEvents AdjustmentsRCM As System.Windows.Forms.ContextMenuStrip
     Friend WithEvents SelectAllToolStripMenuItem1 As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents UnselectAllToolStripMenuItem1 As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ToolStripSeparator4 As System.Windows.Forms.ToolStripSeparator
     Friend WithEvents FormatsRCMBT As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents BusinessControlMBT As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents ExcelMBT As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents RefreshBT As System.Windows.Forms.Button
-    Friend WithEvents RibbonsPanel As System.Windows.Forms.Panel
+    Friend WithEvents SplitContainer1 As System.Windows.Forms.SplitContainer
+    Friend WithEvents TabControl2 As System.Windows.Forms.TabControl
+    Friend WithEvents TabPage1 As System.Windows.Forms.TabPage
+    Friend WithEvents HomeMenu As System.Windows.Forms.MenuStrip
+    Friend WithEvents EntitiesMenuBT1 As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents DisplayMenuBT As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents SelectionMenuBT As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents EntitiesMenuBT2 As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents entitiesCategoriesMenuBT As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ClientsMenuBT As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents clientsCategoriesMenuBT As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ProductsMenuBT As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents productsCategoriesMenuBT As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents AdjustmentsMenuBT As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents CurrenciesMenuBT As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents PeriodsMenuBT As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents VersionsMenuBT As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents RefreshMenuBT As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents TabPage2 As System.Windows.Forms.TabPage
+    Friend WithEvents TableLayoutPanel1 As System.Windows.Forms.TableLayoutPanel
+    Friend WithEvents Label1 As System.Windows.Forms.Label
+    Friend WithEvents EntityTB As System.Windows.Forms.TextBox
+    Friend WithEvents Label3 As System.Windows.Forms.Label
+    Friend WithEvents Label2 As System.Windows.Forms.Label
+    Friend WithEvents VersionTB As System.Windows.Forms.TextBox
+    Friend WithEvents CurrencyTB As System.Windows.Forms.TextBox
+    Friend WithEvents BusinessControlMenu As System.Windows.Forms.MenuStrip
+    Friend WithEvents versionComparisonBT As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents switchVersionsBT As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents deleteComparisonBT As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents RefreshMenuBT2 As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents TabPage3 As System.Windows.Forms.TabPage
+    Friend WithEvents ExcelMenu As System.Windows.Forms.MenuStrip
+    Friend WithEvents SendConsoBT As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents SendBreakDownBT As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents TableLayoutPanel2 As System.Windows.Forms.TableLayoutPanel
+    Friend WithEvents Label4 As System.Windows.Forms.Label
+    Friend WithEvents EntityTB2 As System.Windows.Forms.TextBox
+    Friend WithEvents Label5 As System.Windows.Forms.Label
+    Friend WithEvents Label6 As System.Windows.Forms.Label
+    Friend WithEvents VersionTB2 As System.Windows.Forms.TextBox
+    Friend WithEvents CurrencyTB2 As System.Windows.Forms.TextBox
+    Friend WithEvents TableLayoutPanel3 As System.Windows.Forms.TableLayoutPanel
+    Friend WithEvents Label7 As System.Windows.Forms.Label
+    Friend WithEvents EntityTB3 As System.Windows.Forms.TextBox
+    Friend WithEvents Label8 As System.Windows.Forms.Label
+    Friend WithEvents Label9 As System.Windows.Forms.Label
+    Friend WithEvents VersionTB3 As System.Windows.Forms.TextBox
+    Friend WithEvents CurrencyTB3 As System.Windows.Forms.TextBox
+    Friend WithEvents TVTableLayout As System.Windows.Forms.TableLayoutPanel
+    Friend WithEvents CategoriesIL As System.Windows.Forms.ImageList
+    Friend WithEvents TabControl1 As System.Windows.Forms.CustomTabControl
 End Class

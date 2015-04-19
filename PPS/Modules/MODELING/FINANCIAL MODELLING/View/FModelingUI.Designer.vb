@@ -618,7 +618,7 @@ Partial Class FModelingUI
         '
         'DeleteToolStripMenuItem
         '
-        Me.DeleteToolStripMenuItem.Image = Global.PPS.My.Resources.Resources.imageres_891
+        Me.DeleteToolStripMenuItem.Image = Global.PPS.My.Resources.Resources.imageres_89
         Me.DeleteToolStripMenuItem.Name = "DeleteToolStripMenuItem"
         Me.DeleteToolStripMenuItem.Size = New System.Drawing.Size(166, 22)
         Me.DeleteToolStripMenuItem.Text = "Delete"
@@ -638,7 +638,7 @@ Partial Class FModelingUI
         '
         'DeleteConstraintToolStripMenuItem
         '
-        Me.DeleteConstraintToolStripMenuItem.Image = Global.PPS.My.Resources.Resources.imageres_891
+        Me.DeleteConstraintToolStripMenuItem.Image = Global.PPS.My.Resources.Resources.imageres_89
         Me.DeleteConstraintToolStripMenuItem.Name = "DeleteConstraintToolStripMenuItem"
         Me.DeleteConstraintToolStripMenuItem.Size = New System.Drawing.Size(165, 22)
         Me.DeleteConstraintToolStripMenuItem.Text = "Delete Target"

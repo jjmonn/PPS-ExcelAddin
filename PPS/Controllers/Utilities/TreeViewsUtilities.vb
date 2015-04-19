@@ -553,9 +553,13 @@ Friend Class TreeViewsUtilities
         Try
             If Not (inputNode.PrevNode Is Nothing) Then
                 Dim prev_node = inputNode.PrevNode
-                inputNode.Parent.Nodes.Insert(inputNode.Index - 1, CType(inputNode.Clone, TreeNode))
+                If inputNode.Parent Is Nothing Then
+                    inputNode.TreeView.Nodes.Insert(inputNode.Index - 1, CType(inputNode.Clone, TreeNode))
+                Else
+                    inputNode.Parent.Nodes.Insert(inputNode.Index - 1, CType(inputNode.Clone, TreeNode))
+                End If
                 inputNode.Remove()
-                inputNode.TreeView.SelectedNode = prev_node.PrevNode
+                prev_node.TreeView.SelectedNode = prev_node.PrevNode
             End If
         Catch ex As Exception
         End Try
@@ -567,9 +571,13 @@ Friend Class TreeViewsUtilities
         Try
             If Not (inputNode.NextNode Is Nothing) Then
                 Dim nextnode = inputNode.NextNode
-                inputNode.Parent.Nodes.Insert(inputNode.Index + 2, CType(inputNode.Clone, TreeNode))
+                If inputNode.Parent Is Nothing Then
+                    inputNode.TreeView.Nodes.Insert(inputNode.Index + 2, CType(inputNode.Clone, TreeNode))
+                Else
+                    inputNode.Parent.Nodes.Insert(inputNode.Index + 2, CType(inputNode.Clone, TreeNode))
+                End If
                 inputNode.Remove()
-                inputNode.TreeView.SelectedNode = nextnode.NextNode
+                nextnode.TreeView.SelectedNode = nextnode.NextNode
             End If
         Catch ex As Exception
         End Try

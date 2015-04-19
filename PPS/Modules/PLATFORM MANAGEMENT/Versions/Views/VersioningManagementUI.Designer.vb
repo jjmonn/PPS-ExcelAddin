@@ -410,7 +410,7 @@ Partial Class VersioningManagementUI
         '
         'delete_bt
         '
-        Me.delete_bt.Image = Global.PPS.My.Resources.Resources.imageres_891
+        Me.delete_bt.Image = Global.PPS.My.Resources.Resources.imageres_89
         Me.delete_bt.Name = "delete_bt"
         Me.delete_bt.Size = New System.Drawing.Size(150, 22)
         Me.delete_bt.Text = "Delete"

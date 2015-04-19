@@ -18,10 +18,11 @@ Friend Class SQLFilterListsGenerators
 
         Dim srv As New ModelServer
         Dim tmp_list As New List(Of String)
-        srv.openRstSQL(VIEWS_DATABASE & GlobalVariables.Entities_View, ModelServer.FWD_CURSOR)
+        srv.OpenRst(VIEWS_DATABASE & "." & GlobalVariables.Entities_View, ModelServer.FWD_CURSOR)
         srv.rst.Filter = str_sql_filter
         While srv.rst.EOF = False
             tmp_list.Add(srv.rst.Fields(ENTITIES_ID_VARIABLE).Value)
+            srv.rst.MoveNext()
         End While
         Return tmp_list
 
@@ -32,10 +33,15 @@ Friend Class SQLFilterListsGenerators
 
         Dim srv As New ModelServer
         Dim tmp_list As New List(Of String)
-        srv.openRstSQL(table_name, ModelServer.FWD_CURSOR)
-        srv.rst.Filter = str_sql_filter
+        Dim strSQL As String = "SELECT " + ANALYSIS_AXIS_ID_VAR + _
+                               " FROM " + CONFIG_DATABASE & "." & table_name
+
+        If str_sql_filter <> "" Then strSQL = strSQL + " WHERE " + str_sql_filter
+
+        srv.openRstSQL(strSQL, ModelServer.FWD_CURSOR)
         While srv.rst.EOF = False
             tmp_list.Add(srv.rst.Fields(ANALYSIS_AXIS_ID_VAR).Value)
+            srv.rst.MoveNext()
         End While
         Return tmp_list
 

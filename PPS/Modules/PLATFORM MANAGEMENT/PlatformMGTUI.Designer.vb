@@ -65,7 +65,6 @@ Partial Class PlatformMGTUI
         '
         'Button4
         '
-        Me.Button4.BackgroundImage = Global.PPS.My.Resources.Resources._1_Earth__blank_2_
         Me.Button4.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
         Me.Button4.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Button4.FlatAppearance.BorderColor = System.Drawing.Color.Gray

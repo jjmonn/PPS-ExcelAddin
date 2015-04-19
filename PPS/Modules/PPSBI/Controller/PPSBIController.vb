@@ -68,7 +68,7 @@ Friend Class PPSBIController
 
     ' Stubs in this function - clients/ products adjustments filters should come as param or computed here ?!!!
     ' Period input: date as integer 
-    Protected Friend Function getDataCallBack(ByRef entity As String, _
+    Protected Friend Function getDataCallBack(ByRef entity_name As String, _
                                             ByRef account As Object, _
                                             ByRef period As Object, _
                                             ByRef currency As Object, _
@@ -78,7 +78,7 @@ Friend Class PPSBIController
 
         Dim entityString, entity_id, account_id, accountString, periodString, currencyString, version_id, adjustment_string, adjustment_id, error_message As String
         emptyCellFlag = False
-        entityString = ReturnValueFromRange(entity)
+        entityString = ReturnValueFromRange(entity_name)
         accountString = ReturnValueFromRange(account)
         periodString = ReturnValueFromRange(period)
         currencyString = ReturnValueFromRange(currency)
@@ -106,7 +106,11 @@ Friend Class PPSBIController
         '
         ' ESB ?! -> applies filters on entity node
         ESB.BuildCategoriesFilterFromFilterList(filterList)
-        Dim entity_node As TreeNode = ESB.EntitiesTV.Nodes.Find(entity_id, True)(0)
+
+        ' -> Besoin d'un moyen plus rapide !!!
+        Dim entitiesTV As New TreeView
+        Entity.LoadEntitiesTree(entitiesTV)
+        Dim entity_node As TreeNode = entitiesTV.Nodes.Find(entity_id, True)(0)
 
         If aggregation_computed_accounts_types.Contains(AccountsFTypesDictionary(account_id)) _
         AndAlso entity_node.Nodes.Count > 0 Then
@@ -203,6 +207,7 @@ Friend Class PPSBIController
             start_period = Versions.ReadVersion(version_id, VERSIONS_START_PERIOD_VAR)
             Versions.Close()
 
+            Dim pbar As New ProgressBarControl
             GlobalVariables.GenericGlobalAggregationComputer.compute_selection_complete(version_id, _
                                                                                         time_configuration, _
                                                                                         rates_version_id, _
@@ -210,7 +215,8 @@ Friend Class PPSBIController
                                                                                         currency, _
                                                                                         start_period, _
                                                                                         nb_periods, _
-                                                                                        , clients_id, _
+                                                                                        pbar, _
+                                                                                        clients_id, _
                                                                                         products_id, _
                                                                                         adjustments_id)
             GlobalVariables.GenericGlobalAggregationComputer.LoadOutputMatrix()

@@ -90,7 +90,7 @@ Partial Class CategoriesManagementUI
         '
         'DeleteBT
         '
-        Me.DeleteBT.Image = Global.PPS.My.Resources.Resources.imageres_891
+        Me.DeleteBT.Image = Global.PPS.My.Resources.Resources.imageres_89
         Me.DeleteBT.Name = "DeleteBT"
         Me.DeleteBT.Size = New System.Drawing.Size(179, 22)
         Me.DeleteBT.Text = "Delete"

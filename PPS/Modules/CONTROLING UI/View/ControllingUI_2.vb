@@ -1,6 +1,7 @@
 ﻿' Class: ControlingUI_2.vb
 ' 
 '     Visualize data
+'     Rows -> "Accounts" is always the first hierarchy Level
 '
 ' To do: 
 '       - Reimplement Versions comparison !!
@@ -13,7 +14,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 09/04/2015
+' Last modified: 17/04/2015
 
 
 Imports System.Windows.Forms
@@ -27,6 +28,7 @@ Imports System.Collections.Generic
 Imports System.Collections
 Imports VIBlend.WinForms.DataGridView.Filters
 Imports System.Windows.Forms.DataVisualization.Charting
+Imports PPSFBIControls
 
 
 Friend Class ControllingUI_2
@@ -40,33 +42,18 @@ Friend Class ControllingUI_2
     Friend DGVUTIL As New DataGridViewsUtil
     Private DROPTOEXCELController As CControlingDropOnExcel
     Friend PBar As New ProgressBarControl
+    Friend display_control As DisplayControl
     Private leftSplitContainer As SplitContainer
     Private rightSplitContainer As SplitContainer
 
-    ' Ribbons Menus
-    Private DisplayMenu As New DisplayMenu
-    Private ExcelMenu As New ExcelMenu
-    Private BusinessControlMenu As New BusinessControlMenu
 
 #End Region
 
 #Region "Variables"
 
-    ' Friend tabsNodesDictionary As New Dictionary(Of String, TreeNode)
-    ' Friend vDGVAccountsKeyLineNbDic As New Dictionary(Of Int32, Dictionary(Of String, Int32))
-    Private EntitiesCategoriesSelectionList As List(Of String)
-    '  Private periodsColumnIndexDictionary As Dictionary(Of Integer, Int32)
-    Private AccountsTokenNamesDict As Hashtable
-    Protected Friend AccountsKeysTabNbDict As Hashtable
-    Private isUpdatingPeriodsCheckList As Boolean
-    Private isVersionComparisonDisplayed As Boolean
+    Protected Friend AccountsKeysTabNbDict As Hashtable  
     Private right_clicked_node As TreeNode
     Private current_DGV_cell As GridCell
-    ' Private adjustments_lines_list As New List(Of HierarchyItem)
-    Private IsUpdatingChildrenCategory As Boolean = False
-
-    Private current_column As HierarchyItem
-    Private current_row_caption As String
     Private rows_list_dic As New Dictionary(Of String, List(Of HierarchyItem))
     Private columns_list_dic As New Dictionary(Of String, List(Of HierarchyItem))
     Private row_index As Int32
@@ -86,8 +73,17 @@ Friend Class ControllingUI_2
     Protected Friend products_categoriesTV As New TreeView
     Private periodsCLB As New CheckedListBox
     Protected Friend versionsTV As New TreeView
-    Private DropMenu As New TableLayoutPanel
     Friend CurrenciesCLB As New CheckedListBox
+
+    Private tmpSplitterDistance As Double = 230
+
+#End Region
+
+#Region "Flags"
+
+    Private isUpdatingPeriodsCheckList As Boolean
+    Private isVersionComparisonDisplayed As Boolean
+    Private IsUpdatingChildrenCategory As Boolean = False
 
     Private EntitiesFlag As Boolean
     Private EntitiesCategoriesFlag As Boolean
@@ -100,8 +96,7 @@ Friend Class ControllingUI_2
     Private CurrenciesFlag As Boolean
     Private VersionsFlag As Boolean
     Private PeriodsFlag As Boolean
-    Private DropMenuFlag As Boolean
-    Private tmpSplitterDistance As Double = 230
+    Private displayControlFlag As Boolean
 
 #End Region
 
@@ -131,12 +126,11 @@ Friend Class ControllingUI_2
         InitializeComponent()
 
         ' Add any initialization after the InitializeComponent() call. 
-        AccountsTokenNamesDict = AccountsMapping.GetAccountsDictionary(ACCOUNT_ID_VARIABLE, ACCOUNT_NAME_VARIABLE)
         AccountsKeysTabNbDict = AccountsMapping.GetAccountsDictionary(ACCOUNT_ID_VARIABLE, ACCOUNT_TAB_VARIABLE)
         Controller = New ControllingUI2Controller(Me)
         DROPTOEXCELController = New CControlingDropOnExcel(Me, Controller)
+
         LoadTrees()
-        HideAllMenuItems()
 
         periodsCLB.Dock = DockStyle.Fill
         periodsCLB.CheckOnClick = True
@@ -147,8 +141,11 @@ Friend Class ControllingUI_2
             '   tabsNodesDictionary.Add(node.Text, node)
         Next
         InitializeChartsTab()
+        leftPaneSetUp()
+        TVTableLayout.Controls.Add(periodsCLB, 0, 0)
+        HideAllMenusItems()
         CollapsePane1()
-        InitializeTabMenus()
+        DisplayFirstTreeOnly()          ' TV Table Layout
 
     End Sub
 
@@ -158,9 +155,9 @@ Friend Class ControllingUI_2
         Client.LoadClientsTree(clientsTV)
         Product.LoadProductsTree(productsTV)
         Account.LoadAccountsTree(accountsTV)
-        Category.LoadCategoryCodeTV(entities_categoriesTV, ControllingUI2Controller.ENTITIES_CODE)
-        Category.LoadCategoryCodeTV(clients_categoriesTV, ControllingUI2Controller.CLIENTS_CODE)
-        Category.LoadCategoryCodeTV(products_categoriesTV, ControllingUI2Controller.PRODUCT_CODE)
+        Category.LoadCategoryCodeTV(entities_categoriesTV, ControllingUI2Controller.ENTITY_CATEGORY_CODE)
+        Category.LoadCategoryCodeTV(clients_categoriesTV, ControllingUI2Controller.CLIENT_CATEGORY_CODE)
+        Category.LoadCategoryCodeTV(products_categoriesTV, ControllingUI2Controller.PRODUCT_CATEGORY_CODE)
         Adjustment.LoadAdjustmentsTree(adjustmentsTV)
         Version.LoadVersionsTree(versionsTV)
 
@@ -169,10 +166,10 @@ Friend Class ControllingUI_2
         TVSetup(productsTV, 0)
         TVSetup(adjustmentsTV, 0)
         TVSetup(versionsTV, 0, VersionsIL)
-        TVSetup(entities_categoriesTV, 1, categoriesIL)
-        TVSetup(clients_categoriesTV, 1, categoriesIL)
-        TVSetup(products_categoriesTV, 1, categoriesIL)
-
+        TVSetup(entities_categoriesTV, 1, CategoriesIL)
+        TVSetup(clients_categoriesTV, 1, CategoriesIL)
+        TVSetup(products_categoriesTV, 1, CategoriesIL)
+        
         TreeViewsUtilities.set_TV_basics_icon_index(entitiesTV)
         LoadCurrencies()
 
@@ -182,15 +179,15 @@ Friend Class ControllingUI_2
         AddHandler entitiesTV.KeyDown, AddressOf EntitiesTV_KeyDown
         AddHandler entitiesTV.AfterCheck, AddressOf entitiesTV_AfterCheck
         AddHandler entitiesTV.NodeMouseClick, AddressOf EntitiesTV_NodeMouseClick
-        AddHandler entities_categoriesTV.AfterCheck, AddressOf Category_AfterCheck
+        AddHandler entities_categoriesTV.AfterCheck, AddressOf entitiesCategory_AfterCheck
+        AddHandler clients_categoriesTV.AfterCheck, AddressOf clientsCategory_AfterCheck
+        AddHandler products_categoriesTV.AfterCheck, AddressOf productsCategory_AfterCheck
         AddHandler CurrenciesCLB.ItemCheck, AddressOf currenciesCLB_ItemCheck
         AddHandler periodsCLB.ItemCheck, AddressOf periodsCLB_ItemCheck
 
         entitiesTV.ContextMenuStrip = entitiesRightClickMenu
         adjustmentsTV.ContextMenuStrip = AdjustmentsRCM
         periodsCLB.ContextMenuStrip = periodsRightClickMenu
-
-        DisplayFirstTreeOnly()          ' TV Table Layout
 
     End Sub
 
@@ -207,6 +204,7 @@ Friend Class ControllingUI_2
 
     Private Sub LoadCurrencies()
 
+        TVTableLayout.Controls.Add(CurrenciesCLB, 0, 0)
         CurrenciesCLB.Dock = DockStyle.Fill
         CurrenciesCLB.CheckOnClick = True
         CurrenciesCLB.SelectionMode = SelectionMode.One
@@ -235,7 +233,6 @@ Friend Class ControllingUI_2
             Dim DGV As New vDataGridView
             DataGridViewsUtil.InitDisplayVDataGridView(DGV, DGV_THEME)
             DGV.Name = tab_.Name
-            DGV.ImageList = MenuIcons
             DGV.Dock = DockStyle.Fill
             DGV.Left = INNER_MARGIN
             DGV.Top = INNER_MARGIN
@@ -258,41 +255,38 @@ Friend Class ControllingUI_2
 
 
 
-    End Sub
-
-    Private Sub InitializeTabMenus()
-
-        ' Display Menu Buttons Handlers
-        AddHandler DisplayMenu.EntitiesBT.Click, AddressOf EntitiesMenuClick
-        AddHandler DisplayMenu.EntitiesLabel.Click, AddressOf EntitiesMenuClick
-        AddHandler DisplayMenu.CategoriesBT.Click, AddressOf CategoriesMenuClick
-        AddHandler DisplayMenu.CategoriesLabel.Click, AddressOf CategoriesMenuClick
-        AddHandler DisplayMenu.AdjustmentBT.Click, AddressOf AdjustmentsMenuClick
-        AddHandler DisplayMenu.AdjustmentLabel.Click, AddressOf AdjustmentsMenuClick
-        AddHandler DisplayMenu.CurrenciesBT.Click, AddressOf CurrenciesMenuClick
-        AddHandler DisplayMenu.CurrenciesLabel.Click, AddressOf CurrenciesMenuClick
-        AddHandler DisplayMenu.PeriodsBT.Click, AddressOf PeriodsMenuClick
-        AddHandler DisplayMenu.PeriodsLabel.Click, AddressOf PeriodsMenuClick
-        AddHandler DisplayMenu.VersionsBT.Click, AddressOf VersionsMenuClick
-        AddHandler DisplayMenu.VersionsLabel.Click, AddressOf VersionsMenuClick
-
-        ' Excel Menu Buttons Handlers
-        AddHandler ExcelMenu.ConsoExportBT.Click, AddressOf SendCurrentEntity_Click
-        AddHandler ExcelMenu.ConsoExportlabel.Click, AddressOf SendCurrentEntity_Click
-        AddHandler ExcelMenu.DrillDownExportBT.Click, AddressOf DropDrillDown_Click
-        AddHandler ExcelMenu.DrillDownExportlabel.Click, AddressOf DropDrillDown_Click
-
-        ' Business Control Buttons Handlers
-        AddHandler BusinessControlMenu.VersionsComparisonBT.Click, AddressOf AddVersionsComparisonToolStripMenuItem_Click
-        AddHandler BusinessControlMenu.VersionsComparisonLabel.Click, AddressOf AddVersionsComparisonToolStripMenuItem_Click
-        AddHandler BusinessControlMenu.SwitchVersionsBT.Click, AddressOf SwitchVersionsOrderToolStripMenuItem_Click
-        AddHandler BusinessControlMenu.SwitchVersionsLabel.Click, AddressOf SwitchVersionsOrderToolStripMenuItem_Click
-        AddHandler BusinessControlMenu.DeleteComparisonBT.Click, AddressOf RemoveVersionsComparisonToolStripMenuItem_Click
-        AddHandler BusinessControlMenu.DeleteComparisonLabel.Click, AddressOf RemoveVersionsComparisonToolStripMenuItem_Click
-
-        DisplayDisplayMenu()
 
     End Sub
+
+    Private Sub leftPaneSetUp()
+
+        Dim analysis_axis_tv As New TreeView
+
+        ' Entities Analysis Axis and Categories Nodes
+        Dim entities_node As TreeNode = analysis_axis_tv.Nodes.Add(ControllingUI2Controller.ENTITIES_CODE, ControllingUI2Controller.ENTITIES_CODE)
+        For Each entity_node As TreeNode In entities_categoriesTV.Nodes
+            entities_node.Nodes.Add(entity_node.Name, entity_node.Text)
+        Next
+
+        ' Clients Analysis Axis and Categories Nodes
+        Dim clients_node As TreeNode = analysis_axis_tv.Nodes.Add(ControllingUI2Controller.CLIENTS_CODE, ControllingUI2Controller.CLIENTS_CODE)
+        For Each client_category_node As TreeNode In clients_categoriesTV.Nodes
+            clients_node.Nodes.Add(client_category_node.Name, client_category_node.Text)
+        Next
+
+        ' Products Analysis Axis and Categories Nodes
+        Dim products_node As TreeNode = analysis_axis_tv.Nodes.Add(ControllingUI2Controller.PRODUCTS_CODE, ControllingUI2Controller.PRODUCTS_CODE)
+        For Each product_category_node As TreeNode In products_categoriesTV.Nodes
+            products_node.Nodes.Add(product_category_node.Name, product_category_node.Text)
+        Next
+
+        display_control = New DisplayControl(analysis_axis_tv)
+        TVTableLayout.Controls.Add(display_control, 0, 0)
+        display_control.Dock = DockStyle.Fill
+        AddHandler display_control.rows_display_tv.KeyDown, AddressOf displayControlRowDisplayTV_KeyDown
+
+    End Sub
+
 
 #End Region
 
@@ -404,28 +398,31 @@ Friend Class ControllingUI_2
                                         ByRef tab_account_node As TreeNode, _
                                         ByRef rows_display_node As TreeNode)
 
+        Dim titles_accounts_list As List(Of String) = AccountsMapping.GetAccountsKeysList(AccountsMapping.LOOKUP_TITLES)
         For Each account_node As TreeNode In TreeViewsUtilities.GetNodesList(tab_account_node)
 
-            ' Create row
-            Dim row As HierarchyItem = DGV.RowsHierarchy.Items.Add(account_node.Text)
-            rows_list_dic(tab_account_node.Name).Add(row)
+            If titles_accounts_list.Contains(account_node.Name) = False Then
 
-            ' Dive one Display level if any
-            If Not rows_display_node.Nodes(0).NextNode Is Nothing Then
-                Select Case rows_display_node.Nodes(0).NextNode.Name
-                    Case ControllingUI2Controller.ENTITIES_CODE : EntitiesRowsCreationLoop(Controller.Entity_node, _
-                                                                                           tab_account_node, _
-                                                                                           rows_display_node.Nodes(0).NextNode, _
-                                                                                           rows_list_dic(tab_account_node.Name), _
-                                                                                           row)
-                    Case Else : RowsCreationLoop(tab_account_node, _
-                                                 rows_display_node.Nodes(0).NextNode, _
-                                                 rows_list_dic(tab_account_node.Name), _
-                                                 row)
-                End Select
+                ' Create row
+                Dim row As HierarchyItem = DGV.RowsHierarchy.Items.Add(account_node.Text)
+                rows_list_dic(tab_account_node.Name).Add(row)
+
+                ' Dive one Display level if any
+                If Not rows_display_node.Nodes(0).NextNode Is Nothing Then
+                    Select Case rows_display_node.Nodes(0).NextNode.Name
+                        Case ControllingUI2Controller.ENTITIES_CODE : EntitiesRowsCreationLoop(Controller.Entity_node, _
+                                                                                               tab_account_node, _
+                                                                                               rows_display_node.Nodes(0).NextNode, _
+                                                                                               rows_list_dic(tab_account_node.Name), _
+                                                                                               row)
+                        Case Else : RowsCreationLoop(tab_account_node, _
+                                                     rows_display_node.Nodes(0).NextNode, _
+                                                     rows_list_dic(tab_account_node.Name), _
+                                                     row)
+                    End Select
+                End If
             End If
         Next
-
 
     End Sub
 
@@ -434,10 +431,10 @@ Friend Class ControllingUI_2
                                  ByRef rows_list As List(Of HierarchyItem), _
                                  Optional ByRef parent_row As HierarchyItem = Nothing)
 
-        ' Dive one Display level if any (Total Loop)
-        If Not display_node.NextNode Is Nothing Then
-            RowsCreationLoop(tab_account_node, display_node.NextNode, rows_list, parent_row)
-        End If
+        '' Dive one Display level if any (Total Loop)
+        'If Not display_node.NextNode Is Nothing Then
+        '    RowsCreationLoop(tab_account_node, display_node.NextNode, rows_list, parent_row)
+        'End If
 
         ' Loop through the filter values of the category
         For Each filter_value As String In Controller.categories_values_dict(display_node.Name).Keys
@@ -463,12 +460,12 @@ Friend Class ControllingUI_2
                                          ByRef rows_list As List(Of HierarchyItem), _
                                          ByRef parent_row As HierarchyItem)
 
-        If entity_node.Name = Controller.Entity_node.Name Then
-            ' Dive one Display level if any
-            If Not display_node.NextNode Is Nothing Then
-                RowsCreationLoop(tab_account_node, display_node.NextNode, rows_list, parent_row)
-            End If
-        End If
+        'If entity_node.Name = Controller.Entity_node.Name Then
+        '    ' Dive one Display level if any
+        '    If Not display_node.NextNode Is Nothing Then
+        '        RowsCreationLoop(tab_account_node, display_node.NextNode, rows_list, parent_row)
+        '    End If
+        'End If
 
         For Each current_entity_node In entity_node.Nodes
 
@@ -491,12 +488,13 @@ Friend Class ControllingUI_2
 
 #End Region
 
-
 #End Region
 
 
 #Region "DGV Fill Functions"
 
+    ' Careful to the case where rows_display_node = only accounts
+    '  => In that case 
     Protected Friend Sub DisplayData(ByRef DataDictionary As Dictionary(Of Object, Object), _
                                      ByRef columns_hirerarchy_nodes As TreeNode, _
                                      ByRef rows_display_hierarchy As TreeNode)
@@ -509,15 +507,13 @@ Friend Class ControllingUI_2
             row_index = 0
             For Each account_id As String In accounts_list
 
-                ' --------------------------------------------------
-                ' stub for perf test -> "T" accounts ignored !!!!!
-                ' --------------------------------------------------
                 If DataDictionary.ContainsKey(account_id) Then
                     RowsFillingLoop(rows_display_hierarchy.Nodes(0), _
                                     columns_hirerarchy_nodes, _
                                     DataDictionary(account_id), _
                                     rows_list_dic(tab_account_node.Name), _
                                     columns_list_dic(tab_account_node.Name))
+                    PBar.AddProgress()
                 End If
             Next
         Next
@@ -530,7 +526,8 @@ Friend Class ControllingUI_2
                                 ByRef columns_display_node As TreeNode, _
                                 ByRef DataDictionary As Dictionary(Of Object, Object), _
                                 ByRef rows_list As List(Of HierarchyItem), _
-                                ByRef column_list As List(Of HierarchyItem))
+                                ByRef column_list As List(Of HierarchyItem), _
+                                Optional ByRef total_loop As Boolean = False)
 
         If rows_display_node.NextNode Is Nothing Then
             column_index = 0
@@ -540,13 +537,28 @@ Friend Class ControllingUI_2
                         column_list)
             row_index = row_index + 1
         Else
-            For Each key In DataDictionary.Keys.ToList
-                RowsFillingLoop(rows_display_node.NextNode, _
-                                columns_display_node, _
-                                DataDictionary(key), _
-                                rows_list, _
-                                column_list)
-            Next
+            Select Case total_loop
+                Case True
+                    Dim key As String = DataDictionary.ElementAt(0).Key
+                    RowsFillingLoop(rows_display_node.NextNode, _
+                                    columns_display_node, _
+                                    DataDictionary(key), _
+                                    rows_list, _
+                                    column_list, _
+                                    total_loop)
+                Case False
+                    Dim keys_list = DataDictionary.Keys.ToList
+                    For Each key In keys_list
+                        If keys_list.IndexOf(key) = 0 Then total_loop = True
+                        RowsFillingLoop(rows_display_node.NextNode, _
+                                        columns_display_node, _
+                                        DataDictionary(key), _
+                                        rows_list, _
+                                        column_list, _
+                                        total_loop)
+                        total_loop = False
+                    Next
+            End Select
         End If
 
     End Sub
@@ -563,13 +575,11 @@ Friend Class ControllingUI_2
                         row.DataGridView.CellsArea.SetCellValue(row, GetNextVersionColumn(column_list), DataDictionary(key))
                         column_index = column_index + 1
                     Next
-
                 Case Else
                     For Each key In DataDictionary.Keys.ToList
                         row.DataGridView.CellsArea.SetCellValue(row, column_list(column_index), DataDictionary(key))
                         column_index = column_index + 1
                     Next
-
             End Select
         Else
             For Each key As String In DataDictionary.Keys.ToList
@@ -635,7 +645,7 @@ Friend Class ControllingUI_2
     Private Sub EntitiesTV_KeyDown(sender As Object, e As Windows.Forms.KeyEventArgs)
 
         If e.KeyCode = Keys.Enter Then
-            If Not entitiesTV.SelectedNode Is Nothing Then Controller.STUBCompute(entitiesTV.SelectedNode)
+            If Not entitiesTV.SelectedNode Is Nothing Then Controller.RefreshData(entitiesTV.SelectedNode)
         End If
 
     End Sub
@@ -657,18 +667,42 @@ Friend Class ControllingUI_2
 
 #End Region
 
-    Private Sub Category_AfterCheck(sender As Object, e As TreeViewEventArgs)
+    Private Sub entitiesCategory_AfterCheck(sender As Object, e As TreeViewEventArgs)
 
         If IsUpdatingChildrenCategory = False Then
-            If e.Node.Parent Is Nothing Then
-                Dim state As Boolean = e.Node.Checked
-                IsUpdatingChildrenCategory = True
-                For Each child_node As TreeNode In e.Node.Nodes
-                    child_node.Checked = state
-                Next
-                IsUpdatingChildrenCategory = False
-            End If
+            updateChildrenCheckedState(e.Node)
             Controller.EntitiesCategoriesUpdate()
+        End If
+
+    End Sub
+
+    Private Sub clientsCategory_AfterCheck(sender As Object, e As TreeViewEventArgs)
+
+        If IsUpdatingChildrenCategory = False Then
+            updateChildrenCheckedState(e.Node)
+            Controller.ClientsCategoriesUpdate()
+        End If
+
+    End Sub
+
+    Private Sub productsCategory_AfterCheck(sender As Object, e As TreeViewEventArgs)
+
+        If IsUpdatingChildrenCategory = False Then
+            updateChildrenCheckedState(e.Node)
+            Controller.ProductsCategoriesUpdate()
+        End If
+
+    End Sub
+
+    Private Sub updateChildrenCheckedState(ByRef node As TreeNode)
+
+        If node.Parent Is Nothing Then
+            Dim state As Boolean = node.Checked
+            IsUpdatingChildrenCategory = True
+            For Each child_node As TreeNode In node.Nodes
+                child_node.Checked = state
+            Next
+            IsUpdatingChildrenCategory = False
         End If
 
     End Sub
@@ -714,51 +748,48 @@ Friend Class ControllingUI_2
 
     End Sub
 
+    Private Sub displayControlRowDisplayTV_KeyDown(sender As Object, e As KeyEventArgs)
+
+        Select Case e.KeyCode
+            Case Keys.Delete : display_control.rows_display_tv.SelectedNode.Remove()
+
+            Case Keys.Up
+                If e.Control Then
+                    TreeViewsUtilities.MoveNodeUp(sender.SelectedNode)
+                End If
+            Case Keys.Down
+                If e.Control Then
+                    TreeViewsUtilities.MoveNodeDown(sender.SelectedNode)
+                End If
+        End Select
+
+
+    End Sub
 
 #End Region
+
+
+#Region "Menus and Display Management"
 
 
 #Region "Main Menu Calls Backs"
 
-#Region "Buttons"
+#Region "Home Menu"
 
-    Private Sub SelectionBT_Click(sender As Object, e As EventArgs) Handles SelectionMBT.Click
-
-        DisplayDisplayMenu()
-
-    End Sub
-
-    Private Sub ExcelBT_Click(sender As Object, e As EventArgs) Handles ExcelMBT.Click
-
-        DisplayExcelMenu()
-
-    End Sub
-
-    Private Sub ControllingBT_Click(sender As Object, e As EventArgs) Handles BusinessControlMBT.Click
-
-        DisplayBusinessControlMenu()
-
-    End Sub
-
-    Private Sub RefreshBT_Click(sender As Object, e As EventArgs) Handles RefreshBT.Click
-
-        Refresh_Click(sender, e)
-
-    End Sub
-
-#End Region
-
-#Region "Main Menus"
-
-    Private Sub EntitiesMenuClick(sender As Object, e As EventArgs)
+    Private Sub EntitiesMenuBTClick(sender As Object, e As EventArgs) Handles EntitiesMenuBT1.Click, EntitiesMenuBT2.Click
 
         If EntitiesFlag = False Then
             entitiesTV.Select()
             ExpandPane1()
-            HideAllMenuItemsExceptCategories()
+            Dim show_entities_categories As Boolean = EntitiesCategoriesFlag
+            HideAllMenusItems()
+
             entitiesTV.Visible = True
             EntitiesFlag = True
-            If EntitiesCategoriesFlag = True Then
+
+            If show_entities_categories = True Then
+                entities_categoriesTV.Visible = True
+                EntitiesCategoriesFlag = True
                 DisplayTwoTrees()
                 TVTableLayout.SetRow(entitiesTV, 1)
             Else
@@ -776,14 +807,39 @@ Friend Class ControllingUI_2
 
     End Sub
 
-    Private Sub CategoriesMenuClick(sender As Object, e As EventArgs)
+    Private Sub DisplayMenuBTClick(sender As Object, e As EventArgs) Handles DisplayMenuBT.Click
 
-        If ClientsCategoriesFlag = False Then
+        If displayControlFlag = False Then
             ExpandPane1()
-            HideAllMenusItemExceptEntities()
+            HideAllMenusItems()
+            display_control.Visible = True
+            displayControlFlag = True
+        Else
+            If TVTableLayout.GetRow(display_control) = 0 Then
+                CollapsePane1()
+            Else
+                DisplayFirstTreeOnly()
+            End If
+            display_control.Visible = False
+            displayControlFlag = False
+        End If
+
+    End Sub
+
+#Region "Selection"
+
+    Private Sub entitiesCategoriesMenuClick(sender As Object, e As EventArgs) Handles entitiesCategoriesMenuBT.Click
+
+        If EntitiesCategoriesFlag = False Then
+            ExpandPane1()
+            Dim show_entities As Boolean = EntitiesFlag
+            HideAllMenusItems()
             entities_categoriesTV.Visible = True
-            ClientsCategoriesFlag = True
-            If EntitiesFlag = True Then
+            EntitiesCategoriesFlag = True
+
+            If show_entities = True Then
+                entitiesTV.Visible = True
+                EntitiesFlag = True
                 DisplayTwoTrees()
                 TVTableLayout.SetRow(entities_categoriesTV, 1)
             Else
@@ -796,33 +852,151 @@ Friend Class ControllingUI_2
                 DisplayFirstTreeOnly()
             End If
             entities_categoriesTV.Visible = False
+            EntitiesCategoriesFlag = False
+        End If
+
+    End Sub
+
+    Private Sub ClientsMenuBT_Click(sender As Object, e As EventArgs) Handles ClientsMenuBT.Click
+
+        If ClientsFlag = False Then
+            clientsTV.Select()
+            ExpandPane1()
+            Dim show_clients_categories As Boolean = ClientsCategoriesFlag
+            HideAllMenusItems()
+
+            clientsTV.Visible = True
+            ClientsFlag = True
+
+            If show_clients_categories = True Then
+                clients_categoriesTV.Visible = True
+                ClientsCategoriesFlag = True
+                DisplayTwoTrees()
+                TVTableLayout.SetRow(clientsTV, 1)
+            Else
+                TVTableLayout.SetRow(clientsTV, 0)
+            End If
+        Else
+            If TVTableLayout.GetRow(clientsTV) = 0 Then
+                CollapsePane1()
+            Else
+                DisplayFirstTreeOnly()
+            End If
+            clientsTV.Visible = False
+            ClientsFlag = False
+        End If
+
+    End Sub
+
+    Private Sub clientsCategoriesMenuBT_Click(sender As Object, e As EventArgs) Handles clientsCategoriesMenuBT.Click
+
+        If ClientsCategoriesFlag = False Then
+            ExpandPane1()
+            Dim show_clients As Boolean = ClientsFlag
+            HideAllMenusItems()
+            clients_categoriesTV.Visible = True
+            ClientsCategoriesFlag = True
+
+            If show_clients = True Then
+                clientsTV.Visible = True
+                ClientsFlag = True
+                DisplayTwoTrees()
+                TVTableLayout.SetRow(clients_categoriesTV, 1)
+            Else
+                TVTableLayout.SetRow(clients_categoriesTV, 0)
+            End If
+        Else
+            If TVTableLayout.GetRow(clients_categoriesTV) = 0 Then
+                CollapsePane1()
+            Else
+                DisplayFirstTreeOnly()
+            End If
+            clients_categoriesTV.Visible = False
             ClientsCategoriesFlag = False
         End If
 
     End Sub
 
-    Private Sub AdjustmentsMenuClick(sender As Object, e As EventArgs)
+    Private Sub ProductsMenuBT_Click(sender As Object, e As EventArgs) Handles ProductsMenuBT.Click
 
-        If adjustments_flag = False Then
+        If productsFlag = False Then
+            productsTV.Select()
             ExpandPane1()
-            HideAllMenuItems()
-            adjustmentsTV.Visible = True
-            adjustments_flag = True
-            '          DisplayTwoTrees()
+            Dim show_products_categories As Boolean = productsCategoriesFlag
+            HideAllMenusItems()
+
+            productsTV.Visible = True
+            productsFlag = True
+
+            If show_products_categories = True Then
+                products_categoriesTV.Visible = True
+                productsCategoriesFlag = True
+                DisplayTwoTrees()
+                TVTableLayout.SetRow(productsTV, 1)
+            Else
+                TVTableLayout.SetRow(productsTV, 0)
+            End If
         Else
-            CollapsePane1()
-            adjustmentsTV.Visible = False
-            adjustments_flag = False
-            '     DisplayFirstTreeOnly()
+            If TVTableLayout.GetRow(productsTV) = 0 Then
+                CollapsePane1()
+            Else
+                DisplayFirstTreeOnly()
+            End If
+            productsTV.Visible = False
+            productsFlag = False
         End If
 
     End Sub
 
-    Private Sub CurrenciesMenuClick(sender As Object, e As EventArgs)
+    Private Sub productsCategoriesMenuBT_Click(sender As Object, e As EventArgs) Handles productsCategoriesMenuBT.Click
+
+        If productsCategoriesFlag = False Then
+            ExpandPane1()
+            Dim show_products As Boolean = productsFlag
+            HideAllMenusItems()
+            products_categoriesTV.Visible = True
+            productsCategoriesFlag = True
+
+            If show_products = True Then
+                productsTV.Visible = True
+                productsFlag = True
+                DisplayTwoTrees()
+                TVTableLayout.SetRow(products_categoriesTV, 1)
+            Else
+                TVTableLayout.SetRow(products_categoriesTV, 0)
+            End If
+        Else
+            If TVTableLayout.GetRow(products_categoriesTV) = 0 Then
+                CollapsePane1()
+            Else
+                DisplayFirstTreeOnly()
+            End If
+            products_categoriesTV.Visible = False
+            productsCategoriesFlag = False
+        End If
+
+    End Sub
+
+    Private Sub AdjustmentsMenuBT_Click(sender As Object, e As EventArgs) Handles AdjustmentsMenuBT.Click
+
+        If adjustments_flag = False Then
+            ExpandPane1()
+            HideAllMenusItems()
+            adjustmentsTV.Visible = True
+            adjustments_flag = True
+        Else
+            CollapsePane1()
+            adjustmentsTV.Visible = False
+            adjustments_flag = False
+        End If
+
+    End Sub
+
+    Private Sub CurrenciesMenuClick(sender As Object, e As EventArgs) Handles CurrenciesMenuBT.Click
 
         If CurrenciesFlag = False Then
             ExpandPane1()
-            HideAllMenuItems()
+            HideAllMenusItems()
             CurrenciesCLB.Visible = True
             CurrenciesFlag = True
             DisplayTwoTrees()
@@ -836,11 +1010,11 @@ Friend Class ControllingUI_2
 
     End Sub
 
-    Private Sub PeriodsMenuClick(sender As Object, e As EventArgs)
+    Private Sub PeriodsMenuClick(sender As Object, e As EventArgs) Handles PeriodsMenuBT.Click
 
         If PeriodsFlag = False Then
             ExpandPane1()
-            HideAllMenuItems()
+            HideAllMenusItems()
             periodsCLB.Visible = True
             PeriodsFlag = True
         Else
@@ -851,11 +1025,11 @@ Friend Class ControllingUI_2
 
     End Sub
 
-    Private Sub VersionsMenuClick(sender As Object, e As EventArgs)
+    Private Sub VersionsMenuClick(sender As Object, e As EventArgs) Handles VersionsMenuBT.Click
 
         If VersionsFlag = False Then
             ExpandPane1()
-            HideAllMenuItems()
+            HideAllMenusItems()
             versionsTV.Visible = True
             VersionsFlag = True
         Else
@@ -866,27 +1040,14 @@ Friend Class ControllingUI_2
 
     End Sub
 
-    Private Sub SendCurrentEntity_Click(sender As Object, e As EventArgs)
+#End Region
 
-        DROPTOEXCELController.SendCurrentEntityToExcel(VersionTB.Text, _
-                                                       CurrencyTB.Text)
-
-    End Sub
-
-    Private Sub DropDrillDown_Click(sender As Object, e As EventArgs)
-
-        ' Maybe issue if nothing in the DGV ? 
-        DROPTOEXCELController.SendDrillDownToExcel(VersionTB.Text, _
-                                                   CurrencyTB.Text)
-
-    End Sub
-
-    Private Sub Refresh_Click(sender As Object, e As EventArgs)
+    Private Sub Refresh_Click(sender As Object, e As EventArgs) Handles RefreshMenuBT.Click, RefreshMenuBT2.Click
 
         If Not Controller.Entity_node Is Nothing Then
-            Controller.STUBCompute(entitiesTV.Nodes.Find(Controller.Entity_node.Name, True)(0))
+            Controller.RefreshData(entitiesTV.Nodes.Find(Controller.Entity_node.Name, True)(0))
         ElseIf Not entitiesTV.SelectedNode Is Nothing Then
-            Controller.STUBCompute(entitiesTV.SelectedNode)
+            Controller.RefreshData(entitiesTV.SelectedNode)
         Else
             MsgBox("An Entity level must be selected in order to refresh " + Chr(13) + Chr(13) + _
                    " Please select an entity")
@@ -894,7 +1055,11 @@ Friend Class ControllingUI_2
 
     End Sub
 
-    Private Sub AddVersionsComparisonToolStripMenuItem_Click(sender As Object, e As EventArgs)
+#End Region
+
+#Region "Business Control"
+
+    Private Sub AddVersionsComparisonToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles versionComparisonBT.Click
 
         If isVersionComparisonDisplayed = True Then
             MsgBox("The Versions Comparison is already displayed")
@@ -918,7 +1083,7 @@ Friend Class ControllingUI_2
 
     End Sub
 
-    Private Sub SwitchVersionsOrderToolStripMenuItem_Click(sender As Object, e As EventArgs)
+    Private Sub SwitchVersionsOrderToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles switchVersionsBT.Click
 
         Dim displayComparison As Boolean
         If isVersionComparisonDisplayed = True Then
@@ -933,7 +1098,7 @@ Friend Class ControllingUI_2
 
     End Sub
 
-    Private Sub RemoveVersionsComparisonToolStripMenuItem_Click(sender As Object, e As EventArgs)
+    Private Sub RemoveVersionsComparisonToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles deleteComparisonBT.Click
 
         If isVersionComparisonDisplayed Then
             For Each tab_ As TabPage In TabControl1.TabPages
@@ -947,43 +1112,18 @@ Friend Class ControllingUI_2
 
 #End Region
 
-#Region "Menus Ribbon Display"
+#Region "Excel"
 
-    Private Sub DisplayDisplayMenu()
+    Private Sub SendCurrentEntity_Click(sender As Object, e As EventArgs) Handles SendConsoBT.Click
 
-        UncheckAllButtons()
-        SelectionMBT.Checked = CheckState.Checked
-        RibbonsPanel.Controls.Clear()
-        RibbonsPanel.Controls.Add(DisplayMenu)
-        DisplayMenu.Margin = New Padding(0, 0, 0, 0)
+        DROPTOEXCELController.SendCurrentEntityToExcel(VersionTB.Text, CurrencyTB.Text)
 
     End Sub
 
-    Private Sub DisplayExcelMenu()
+    Private Sub DropDrillDown_Click(sender As Object, e As EventArgs) Handles SendBreakDownBT.Click
 
-        UncheckAllButtons()
-        ExcelMBT.Checked = CheckState.Checked
-        RibbonsPanel.Controls.Clear()
-        RibbonsPanel.Controls.Add(ExcelMenu)
-        ExcelMenu.Margin = New Padding(0, 0, 0, 0)
-
-    End Sub
-
-    Private Sub DisplayBusinessControlMenu()
-
-        UncheckAllButtons()
-        BusinessControlMBT.Checked = CheckState.Checked
-        RibbonsPanel.Controls.Clear()
-        RibbonsPanel.Controls.Add(BusinessControlMenu)
-        BusinessControlMenu.Margin = New Padding(0, 0, 0, 0)
-
-    End Sub
-
-    Private Sub UncheckAllButtons()
-
-        SelectionMBT.Checked = CheckState.Unchecked
-        BusinessControlMBT.Checked = CheckState.Unchecked
-        ExcelMBT.Checked = CheckState.Unchecked
+        ' Maybe issue if nothing in the DGV ? !
+        DROPTOEXCELController.SendDrillDownToExcel(VersionTB.Text, CurrencyTB.Text)
 
     End Sub
 
@@ -998,7 +1138,7 @@ Friend Class ControllingUI_2
 
     Private Sub compute_complete_Click(sender As Object, e As EventArgs) Handles compute_complete.Click
 
-        Controller.STUBCompute(right_clicked_node)
+        Controller.RefreshData(right_clicked_node)
 
     End Sub
 
@@ -1143,7 +1283,17 @@ Friend Class ControllingUI_2
 
     End Sub
 
-#Region "Menu Utilities"
+    Private Sub ControllingUI_2_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
+
+        Controller.close_model()
+
+    End Sub
+
+#End Region
+
+
+
+#Region "Left Pane Expansion/ Collapse"
 
     Private Sub CollapsePane1()
 
@@ -1159,9 +1309,9 @@ Friend Class ControllingUI_2
 
     End Sub
 
-    Private Sub HideAllMenuItems()
+    Private Sub HideAllMenusItems()
 
-        HideAllMenusItemsCore()
+        DisplayFirstTreeOnly()
 
         entitiesTV.Visible = False
         entities_categoriesTV.Visible = False
@@ -1169,46 +1319,25 @@ Friend Class ControllingUI_2
         clients_categoriesTV.Visible = False
         productsTV.Visible = False
         products_categoriesTV.Visible = False
-        adjustmentsTV.Visible = False
 
-        EntitiesFlag = False
-        EntitiesCategoriesFlag = False
-        ClientsFlag = False
-        productsFlag = False
-        ClientsCategoriesFlag = False
-        productsCategoriesFlag = False
-        adjustments_flag = False
-
-    End Sub
-
-    Private Sub HideAllMenuItemsExceptCategories()
-
-        HideAllMenusItemsCore()
-        entities_categoriesTV.Visible = False
-        ClientsCategoriesFlag = False
-
-    End Sub
-
-    Private Sub HideAllMenusItemExceptEntities()
-
-        HideAllMenusItemsCore()
-        entitiesTV.Visible = False
-        EntitiesFlag = False
-
-    End Sub
-
-    Private Sub HideAllMenusItemsCore()
-
-        DisplayFirstTreeOnly()
         adjustmentsTV.Visible = False
         CurrenciesCLB.Visible = False
         periodsCLB.Visible = False
         versionsTV.Visible = False
-        DropMenu.Visible = False
+        display_control.Visible = False
+
+        EntitiesFlag = False
+        EntitiesCategoriesFlag = False
+        ClientsFlag = False
+        ClientsCategoriesFlag = False
+        productsFlag = False
+        productsCategoriesFlag = False
+
+        adjustments_flag = False
         CurrenciesFlag = False
         PeriodsFlag = False
         VersionsFlag = False
-        DropMenuFlag = False
+        displayControlFlag = False
 
     End Sub
 
@@ -1232,24 +1361,10 @@ Friend Class ControllingUI_2
 
 #End Region
 
-    Private Function GetEntityRow(ByRef row As HierarchyItem, _
-                                  ByRef path_list As List(Of Int32)) As HierarchyItem
-
-        Dim entity_row As HierarchyItem = row
-        For Each index In path_list
-            entity_row = entity_row.Items(index)
-        Next
-        Return entity_row
-
-    End Function
-
-    Private Sub ControllingUI_2_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
-
-        Controller.close_model()
-
-    End Sub
 
 #End Region
+
+
 
 
 End Class

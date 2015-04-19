@@ -8,7 +8,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 10/04/2015
+' Last modified: 17/04/2015
 
 
 Imports ADODB
@@ -199,12 +199,16 @@ Friend Class Version
 
     End Function
 
-    Protected Friend Function GetPeriodsNode(ByRef versions_dict As Dictionary(Of String, Hashtable)) As TreeNode
+    Protected Friend Function GetPeriodsNode(ByRef versions_dict As Dictionary(Of String, Hashtable), _
+                                             ByRef time_config As String) As TreeNode
 
-        Select Case IdentifyVersionsComparison(versions_dict)
-            Case MONTHLY_TIME_CONFIGURATION, YEARLY_MONTHLY_VERSIONS_COMPARISON
+        Select Case time_config
+            Case MONTHLY_TIME_CONFIGURATION, _
+                 MONTHLY_VERSIONS_COMPARISON
                 Return GetVersionsComparisonPeriodsNode(versions_dict)
             Case Else
+                ' YEARLY_TIME_CONFIGURATION
+                ' YEARLY_MONTHLY_VERSIONS_COMPARISON
                 Return GetYearlyPeriodsNode(versions_dict)
         End Select
 
@@ -226,18 +230,24 @@ Friend Class Version
 
 #Region "Utilities"
 
-    Private Function IdentifyVersionsComparison(ByRef versions_dict As Dictionary(Of String, Hashtable)) As String
+    Protected Friend Shared Function IdentifyVersionsComparison(ByRef versions_dict As Dictionary(Of String, Hashtable)) As String
 
-        Dim comparison_flag As String
         Dim timeSetup As String = versions_dict.Values(0)(VERSIONS_TIME_CONFIG_VARIABLE)
-        For Each version_id As String In versions_dict.Keys
-            If timeSetup <> versions_dict(version_id)(VERSIONS_TIME_CONFIG_VARIABLE) Then
-                comparison_flag = YEARLY_MONTHLY_VERSIONS_COMPARISON
-                Return comparison_flag
-            End If
-        Next
-        Return timeSetup
-
+        If versions_dict.Count > 1 Then
+            For Each version_id As String In versions_dict.Keys
+                If timeSetup <> versions_dict(version_id)(VERSIONS_TIME_CONFIG_VARIABLE) Then
+                    Return YEARLY_MONTHLY_VERSIONS_COMPARISON
+                End If
+            Next
+            Select Case timeSetup
+                Case MONTHLY_TIME_CONFIGURATION : Return MONTHLY_VERSIONS_COMPARISON
+                Case YEARLY_TIME_CONFIGURATION : Return YEARLY_VERSIONS_COMPARISON
+                Case Else : Return Nothing
+            End Select
+        Else
+            Return versions_dict.Values(0)(VERSIONS_TIME_CONFIG_VARIABLE)
+        End If
+    
     End Function
 
     Private Function GetVersionsDictionary(ByRef versions_id_array As String()) As Dictionary(Of String, Hashtable)

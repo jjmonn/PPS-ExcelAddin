@@ -8,7 +8,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 24/03/2015
+' Last modified: 17/04/2015
 
 
 Imports ADODB
@@ -134,6 +134,26 @@ Friend Class Product
 
     End Sub
 
+    Protected Friend Shared Sub LoadProductsTree(ByRef TV As TreeView, ByRef filter_list As List(Of String))
+
+        Dim srv As New ModelServer
+        Dim q_result As Boolean
+        q_result = srv.OpenRst(CONFIG_DATABASE & "." & PRODUCTS_TABLE, ModelServer.FWD_CURSOR)
+        If q_result = True Then
+            TV.Nodes.Clear()
+            srv.rst.MoveFirst()
+            Do While srv.rst.EOF = False
+                If filter_list.Contains(srv.rst.Fields(ANALYSIS_AXIS_ID_VAR).Value) Then
+                    Dim node As TreeNode = TV.Nodes.Add(Trim(srv.rst.Fields(ANALYSIS_AXIS_ID_VAR).Value), _
+                                                        Trim(srv.rst.Fields(ANALYSIS_AXIS_NAME_VAR).Value), 0, 0)
+                    node.Checked = True
+                End If   
+                srv.rst.MoveNext()
+            Loop
+        End If
+        srv.rst.Close()
+
+    End Sub
 
 #End Region
 

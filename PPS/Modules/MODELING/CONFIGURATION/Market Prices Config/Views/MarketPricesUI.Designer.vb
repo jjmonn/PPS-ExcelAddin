@@ -109,7 +109,7 @@ Partial Class MarketPricesUI
         '
         'DeleteIndexToolStripMenuItem1
         '
-        Me.DeleteIndexToolStripMenuItem1.Image = Global.PPS.My.Resources.Resources.imageres_891
+        Me.DeleteIndexToolStripMenuItem1.Image = Global.PPS.My.Resources.Resources.imageres_89
         Me.DeleteIndexToolStripMenuItem1.Name = "DeleteIndexToolStripMenuItem1"
         Me.DeleteIndexToolStripMenuItem1.Size = New System.Drawing.Size(138, 22)
         Me.DeleteIndexToolStripMenuItem1.Text = "Delete Index"
@@ -174,7 +174,7 @@ Partial Class MarketPricesUI
         '
         'DeleteVersionRCM
         '
-        Me.DeleteVersionRCM.Image = Global.PPS.My.Resources.Resources.imageres_891
+        Me.DeleteVersionRCM.Image = Global.PPS.My.Resources.Resources.imageres_89
         Me.DeleteVersionRCM.Name = "DeleteVersionRCM"
         Me.DeleteVersionRCM.Size = New System.Drawing.Size(147, 22)
         Me.DeleteVersionRCM.Text = "Delete"

@@ -21,17 +21,22 @@ Friend Class AccountsMapping
 
 #Region "Constants"
 
-    Protected Friend Const LOOKUP_OUTPUTS = "Outputs"
-    Protected Friend Const LOOKUP_INPUTS = "Inputs"
-    Protected Friend Const LOOKUP_ALL = "Everything"
+    Protected Friend Const LOOKUP_OUTPUTS As String = "Outputs"
+    Protected Friend Const LOOKUP_INPUTS As String = "Inputs"
+    Protected Friend Const LOOKUP_ALL As String = "Everything"
+    Protected Friend Const LOOKUP_TITLES As String = "Titles"
 
 #End Region
 
 
 #Region "LISTS"
 
-    ' Return a list of Accounts NAMES.Param: LOOKUP_ALL , LOOKUP_INPUTS, LOOKUP_OUTPUTS
-    Public Shared Function GetAccountsNamesList(ByRef LookupOption As String) As List(Of String)
+    ' Return a list of Accounts NAMES.Param: 
+    '  - LOOKUP_ALL 
+    '  - LOOKUP_INPUTS
+    '  - LOOKUP_OUTPUTS
+    '  - LOOKUP_TITLES
+    Protected Friend Shared Function GetAccountsNamesList(ByRef LookupOption As String) As List(Of String)
 
         Dim tmpList As New List(Of String)
         Dim srv = New ModelServer
@@ -44,6 +49,7 @@ Friend Class AccountsMapping
                                                   + "OR " + ACCOUNT_FORMULA_TYPE_VARIABLE + "='BS'"
             Case LOOKUP_OUTPUTS : srv.rst.Filter = ACCOUNT_FORMULA_TYPE_VARIABLE + "<>'HV'" _
                                                    + "AND " + ACCOUNT_FORMULA_TYPE_VARIABLE + "<>'T'"
+            Case LOOKUP_TITLES : srv.rst.Filter = ACCOUNT_FORMULA_TYPE_VARIABLE + "='T'"
         End Select
 
         If srv.rst.EOF = False And srv.rst.BOF = False Then
@@ -61,7 +67,7 @@ Friend Class AccountsMapping
     End Function
 
     ' Return a list of Accounts KEYS. Param: LOOKUP_ALL , LOOKUP_INPUTS, LOOKUP_OUTPUTS
-    Public Shared Function GetAccountsKeysList(ByRef LookupOption As String) As List(Of String)
+    Protected Friend Shared Function GetAccountsKeysList(ByRef LookupOption As String) As List(Of String)
 
         Dim tmpList As New List(Of String)
         Dim srv = New ModelServer
@@ -73,6 +79,7 @@ Friend Class AccountsMapping
                                                   + "OR " + ACCOUNT_FORMULA_TYPE_VARIABLE + "='BS'"
             Case LOOKUP_OUTPUTS : srv.rst.Filter = ACCOUNT_FORMULA_TYPE_VARIABLE + "<>'HV'" _
                                                    + ACCOUNT_FORMULA_TYPE_VARIABLE + "<>'T'"
+            Case LOOKUP_TITLES : srv.rst.Filter = ACCOUNT_FORMULA_TYPE_VARIABLE + "='T'"
         End Select
 
         If srv.rst.EOF = False And srv.rst.BOF = False Then
@@ -89,7 +96,7 @@ Friend Class AccountsMapping
 
     End Function
 
-    Public Shared Function GetRecomputedAccountsIDsList() As List(Of String)
+    Protected Friend Shared Function GetRecomputedAccountsIDsList() As List(Of String)
 
         Dim tmpList As New List(Of String)
         Dim srv = New ModelServer

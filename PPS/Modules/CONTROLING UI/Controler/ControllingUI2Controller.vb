@@ -11,7 +11,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 09/04/2015
+' Last modified: 17/04/2015
 
 
 Imports System.Windows.Forms
@@ -32,7 +32,6 @@ Friend Class ControllingUI2Controller
     Protected Friend Entity_node As TreeNode
 
     ' Variables
-    ' Private rows_hierarchy_node As New TreeNode
     Protected Friend categories_values_dict As New Dictionary(Of String, Dictionary(Of String, String))
     Private TVsDict As New Dictionary(Of String, TreeView)
     Private versions_dict As Dictionary(Of String, Hashtable)
@@ -42,13 +41,13 @@ Friend Class ControllingUI2Controller
     Friend Const YEARS_CODE As String = "years"
     Friend Const MONTHS_CODE As String = "months"
     Friend Const VERSIONS_CODE As String = "versions"
-    Friend Const ENTITIES_CODE As String = "entities"
-    Friend Const CLIENTS_CODE As String = "clients"
-    Friend Const PRODUCT_CODE As String = "product"
+    Friend Const ENTITIES_CODE As String = "Entities"
+    Friend Const CLIENTS_CODE As String = "Clients"
+    Friend Const PRODUCTS_CODE As String = "Products"
     Friend Const ADJUSTMENT_CODE As String = "adjustments"
-    Friend Const ENTITY_CATEGORY_CODE As String = "entitycategories"
-    Friend Const CLIENT_CATEGORY_CODE As String = "clientcategories"
-    Friend Const PRODUCT_CATEGORY_CODE As String = "productcategories"
+    Friend Const ENTITY_CATEGORY_CODE As String = "entitiescategories"
+    Friend Const CLIENT_CATEGORY_CODE As String = "clientscategories"
+    Friend Const PRODUCT_CATEGORY_CODE As String = "productscategories"
     Friend Const TOTAL_CODE As String = "total"
     Friend Const ZERO_PERIOD_CODE As Int32 = 0
 
@@ -107,10 +106,10 @@ Friend Class ControllingUI2Controller
     Friend Sub New(ByRef inputView As Object)
 
         View = inputView
-        Model = New ControllingUIModel(ESB)
+        Model = New ControllingUIModel(View.PBar)
         TVsDict.Add(ENTITIES_CODE, View.entitiesTV)
         TVsDict.Add(CLIENTS_CODE, View.clientsTV)
-        TVsDict.Add(PRODUCT_CODE, View.productsTV)
+        TVsDict.Add(PRODUCTS_CODE, View.productsTV)
         TVsDict.Add(ADJUSTMENT_CODE, View.adjustmentsTV)
         TVsDict.Add(ENTITY_CATEGORY_CODE, View.entities_categoriesTV)
         TVsDict.Add(CLIENT_CATEGORY_CODE, View.clients_categoriesTV)
@@ -123,41 +122,33 @@ Friend Class ControllingUI2Controller
 
 #Region "Interface"
 
-    Protected Friend Sub STUBCompute(ByRef input_entity_node As TreeNode)
+    Protected Friend Sub RefreshData(ByRef input_entity_node As TreeNode)
 
         Dim rows_display_nodes As New TreeNode
         rows_display_nodes.Nodes.Add(ACCOUNTS_CODE, ACCOUNTS_CODE)
-        rows_display_nodes.Nodes.Add(ENTITIES_CODE, ENTITIES_CODE)
-        rows_display_nodes.Nodes.Add(CLIENTS_CODE, CLIENTS_CODE)
-        rows_display_nodes.Nodes.Add(PRODUCT_CODE, PRODUCT_CODE)
-
-        Dim columns_hierarchy_nodes As New TreeNode
-        columns_hierarchy_nodes.Nodes.Add(YEARS_CODE, YEARS_CODE)
-        'columns_hierarchy_nodes.Nodes.Add(MONTHS_CODE, MONTHS_CODE)
-        columns_hierarchy_nodes.Nodes.Add(VERSIONS_CODE, VERSIONS_CODE)
-
-        RefreshData(rows_display_nodes, columns_hierarchy_nodes, input_entity_node)
-
-
-    End Sub
-
-    Protected Friend Sub RefreshData(ByRef rows_display_nodes As TreeNode, _
-                                     ByRef columns_hierarchy_nodes As TreeNode, _
-                                     ByRef input_entity_node As TreeNode)
-
+        For Each node As TreeNode In View.display_control.rows_display_tv.Nodes
+            rows_display_nodes.Nodes.Add(node.Name, node.Text)
+        Next
         Dim rows_hierarchy_nodes As TreeNode = BuildRowsHierarchy(rows_display_nodes)
         Entity_node = input_entity_node
-        CategoriesValuesDictionaryBuild(BuildPeriodsTreeAndVersionsDic(), _
-                                        columns_hierarchy_nodes, _
+
+        Dim periods_node As TreeNode
+        Dim columns_display_node As New TreeNode
+        BuildColumnsHierarchy(columns_display_node, periods_node)
+
+        CategoriesValuesDictionaryBuild(periods_node, _
+                                        columns_display_node, _
+                                        rows_display_nodes, _
                                         rows_hierarchy_nodes)
 
-        Model.InitializeDataDictionary(categories_values_dict, rows_display_nodes, columns_hierarchy_nodes)
-        View.CreateDGVHierarchies(columns_hierarchy_nodes, rows_display_nodes)
+        Pbar_init_complete()
+        Model.InitializeDataDictionary(categories_values_dict, rows_display_nodes, columns_display_node)
+        View.CreateDGVHierarchies(columns_display_node, rows_display_nodes)
 
         GetDataDictionary(rows_hierarchy_nodes, View.CurrenciesCLB.SelectedItem)
 
         View.DisplayData(Model.DataDictionary, _
-                         columns_hierarchy_nodes, _
+                         columns_display_node, _
                          rows_display_nodes)
         FillUIHeader()
 
@@ -181,28 +172,48 @@ Friend Class ControllingUI2Controller
 
     End Function
 
-    Private Function BuildPeriodsTreeAndVersionsDic() As TreeNode
+    Private Sub BuildColumnsHierarchy(ByRef columns_display_node As TreeNode, _
+                                      ByRef periods_node As TreeNode)
 
         Dim versions As New Version
         versions_dict = versions.GetVersionsDictionary(TreeViewsUtilities.GetCheckedNodesID(View.versionsTV))
-        Dim periods_node As TreeNode = versions.GetPeriodsNode(versions_dict)
         versions.Close()
-        Return periods_node
 
-    End Function
+        Dim time_config As String = Version.IdentifyVersionsComparison(versions_dict)
+
+        columns_display_node.Nodes.Add(YEARS_CODE, YEARS_CODE)
+        Select Case time_config
+            Case Version.YEARLY_VERSIONS_COMPARISON, Version.YEARLY_MONTHLY_VERSIONS_COMPARISON
+                columns_display_node.Nodes.Add(VERSIONS_CODE, VERSIONS_CODE)
+
+            Case MONTHLY_TIME_CONFIGURATION
+                columns_display_node.Nodes.Add(MONTHS_CODE, MONTHS_CODE)
+
+            Case Version.MONTHLY_VERSIONS_COMPARISON
+                columns_display_node.Nodes.Add(MONTHS_CODE, MONTHS_CODE)
+                columns_display_node.Nodes.Add(VERSIONS_CODE, VERSIONS_CODE)
+
+        End Select
+        periods_node = versions.GetPeriodsNode(versions_dict, time_config)
+
+    End Sub
 
     Private Sub CategoriesValuesDictionaryBuild(ByRef periods_node As TreeNode, _
                                                 ByRef columns_hierarchy_nodes As TreeNode, _
+                                                ByRef rows_display_node As TreeNode, _
                                                 ByRef rows_hierarchy_nodes As TreeNode)
 
         categories_values_dict.Clear()
         ' Entities
         Dim entities_dic As New Dictionary(Of String, String)
-        Dim entities_node_list As List(Of TreeNode) = TreeViewsUtilities.GetNodesList(Entity_node)
         entities_dic.Add(Entity_node.Name, Entity_node.Text)
-        For Each node As TreeNode In entities_node_list
-            entities_dic.Add(node.Name, node.Text)
-        Next
+
+        If rows_display_node.Nodes.Find(ENTITIES_CODE, True).Count > 0 Then
+            Dim entities_node_list As List(Of TreeNode) = TreeViewsUtilities.GetNodesList(Entity_node)
+            For Each node As TreeNode In entities_node_list
+                entities_dic.Add(node.Name, node.Text)
+            Next
+        End If
         categories_values_dict.Add(ENTITIES_CODE, entities_dic)
 
         ' Versions 
@@ -232,7 +243,7 @@ Friend Class ControllingUI2Controller
 
             Select Case Model.categories_id_code_dict(node.Name)
                 Case ControllingUI2Controller.CLIENTS_CODE, _
-                     ControllingUI2Controller.PRODUCT_CODE, _
+                     ControllingUI2Controller.PRODUCTS_CODE, _
                      ControllingUI2Controller.ADJUSTMENT_CODE
 
                     For Each value_node As TreeNode In TVsDict(node.Name).Nodes
@@ -243,7 +254,7 @@ Friend Class ControllingUI2Controller
                      ControllingUI2Controller.CLIENT_CATEGORY_CODE, _
                      ControllingUI2Controller.PRODUCT_CATEGORY_CODE
 
-                    For Each value_node As TreeNode In TVsDict(node.Name).Nodes.Find(node.Name, True)(0).Nodes
+                    For Each value_node As TreeNode In TVsDict(Model.categories_id_code_dict(node.Name)).Nodes.Find(node.Name, True)(0).Nodes
                         If value_node.Checked = True Then tmp_values_dic.Add(value_node.Name, value_node.Text)
                     Next
 
@@ -253,22 +264,23 @@ Friend Class ControllingUI2Controller
 
     End Sub
 
-
 #End Region
 
 
-#Region "Model Interface"
+#Region "Model Computations Management"
 
     Private Sub GetDataDictionary(ByRef rows_hierarchy_node As TreeNode, _
                                   ByRef destination_currency As String)
 
-        Pbar_init_complete()
         Dim filters_dict As New Dictionary(Of String, String)
-        RowsInnerLoop(rows_hierarchy_node.Nodes(0), filters_dict, destination_currency)
+        If rows_hierarchy_node.Nodes.Count > 0 Then
+            RowsInnerLoop(rows_hierarchy_node.Nodes(0), filters_dict, destination_currency)
+        Else
+            compute(filters_dict, destination_currency)
+        End If
 
     End Sub
 
-    ' Still loop through rows_hierarchy but no need to nest DDs !
     Private Sub RowsInnerLoop(ByRef hierarchy_node As TreeNode, _
                               ByVal filters_dict As Dictionary(Of String, String), _
                               ByRef destination_currency As String)
@@ -290,19 +302,26 @@ Friend Class ControllingUI2Controller
                                 ByVal filters_dict As Dictionary(Of String, String), _
                                 ByRef destination_currency As String)
 
-        Utilities_Functions.AddOrSetValueToDict(filters_dict, hierarchy_node.Name, filter_value)
+        filters_dict(hierarchy_node.Name) = filter_value
         If Not hierarchy_node.NextNode Is Nothing Then
             ' Goes one hierarchy level deeper
             RowsInnerLoop(hierarchy_node.NextNode, filters_dict, destination_currency)
         Else
             ' No deeper hierarchy: Apply filter and Compute
-            Model.IntializeComputerAndFilter(Entity_node)
-            Model.SetDBFilters(filters_dict)
-            Model.ComputeAndFillDD(Utilities_Functions.GetDictionaryCopy(filters_dict), _
-                                   categories_values_dict(VERSIONS_CODE).Keys.ToList, _
-                                   versions_dict, _
-                                   destination_currency)
+            compute(filters_dict, destination_currency)
         End If
+
+    End Sub
+
+    Private Sub compute(ByVal filters_dict As Dictionary(Of String, String), _
+                        ByRef destination_currency As String)
+
+        Model.IntializeComputerAndFilter(Entity_node)
+        Model.SetDBFilters(filters_dict)
+        Model.ComputeAndFillDD(Utilities_Functions.GetDictionaryCopy(filters_dict), _
+                               categories_values_dict(VERSIONS_CODE).Keys.ToList, _
+                               versions_dict, _
+                               destination_currency)
 
     End Sub
 
@@ -313,9 +332,14 @@ Friend Class ControllingUI2Controller
 
     Private Sub Pbar_init_complete()
 
-        ' To implement (cf computing time estimation)
-        Dim LoadingBarMax As Integer = 200 '(Model.inputs_entities_list.Count + 5) * versions_id_array.Length + 2
-        View.PBar.Launch(1, LoadingBarMax)
+        Dim load_max As Int32 = 0
+        For Each key As String In categories_values_dict.Keys
+            load_max = load_max + 1 + categories_values_dict(key).Count
+        Next
+
+        '(Model.inputs_entities_list.Count + 5) * versions_id_array.Length + 2
+        View.PBar.Launch(1, load_max * 2)
+        View.PBar.Visible = True
 
     End Sub
 
@@ -332,23 +356,32 @@ Friend Class ControllingUI2Controller
 
     Protected Friend Sub ClientsCategoriesUpdate()
 
-        ' Categories Update: triggered by VIEW, update category list and entities treeview items according to category selection
-
+        View.clientsTV.Nodes.Clear()
+        Client.LoadClientsTree(View.clientsTV, GenericSelectionBuilder.getFilteredList(View.clients_categoriesTV, CLIENTS_TABLE))
 
     End Sub
 
     Protected Friend Sub ProductsCategoriesUpdate()
 
-
+        View.productsTV.Nodes.Clear()
+        Product.LoadProductsTree(View.productsTV, GenericSelectionBuilder.getFilteredList(View.products_categoriesTV, PRODUCTS_TABLE))
 
     End Sub
 
     Private Sub FillUIHeader()
 
         View.PBar.EndProgress()
-        View.entityTB.Text = Entity_node.Text
+        View.EntityTB.Text = Entity_node.Text
+        View.EntityTB2.Text = Entity_node.Text
+        View.EntityTB3.Text = Entity_node.Text
+
         View.VersionTB.Text = String.Join(" ; ", categories_values_dict(VERSIONS_CODE).Keys.ToList.ToArray)
+        View.VersionTB2.Text = View.VersionTB.Text
+        View.VersionTB3.Text = View.VersionTB.Text
+
         View.CurrencyTB.Text = View.CurrenciesCLB.CheckedItems(0)
+        View.CurrencyTB2.Text = View.CurrencyTB.Text
+        View.CurrencyTB3.Text = View.CurrencyTB.Text
 
     End Sub
 

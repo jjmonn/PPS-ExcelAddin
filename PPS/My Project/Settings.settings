@@ -6,7 +6,7 @@
       <Value Profile="(Default)">173.194.251.206</Value>
     </Setting>
     <Setting Name="certificatespath" Type="System.String" Scope="User">
-      <Value Profile="(Default)">C:\Users\PPS\Documents\Purple Sun\CA</Value>
+      <Value Profile="(Default)">C:\Users\monnereau\Documents\PURPLE SUN\CA</Value>
     </Setting>
     <Setting Name="version_id" Type="System.String" Scope="User">
       <Value Profile="(Default)">vto</Value>

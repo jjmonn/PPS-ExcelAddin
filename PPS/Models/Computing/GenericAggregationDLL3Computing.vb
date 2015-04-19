@@ -84,7 +84,7 @@ Friend Class GenericAggregationDLL3Computing
                                                   ByVal destinationCurrency As String, _
                                                   ByRef start_period As Int32, _
                                                   ByRef nb_periods As Int32, _
-                                                  Optional ByRef PBar As ProgressBarControl = Nothing, _
+                                                ByRef PBar As ProgressBarControl, _
                                                   Optional ByRef clients_id_list As List(Of String) = Nothing, _
                                                   Optional ByRef products_id_list As List(Of String) = Nothing, _
                                                   Optional ByVal adjustment_id_list As List(Of String) = Nothing)
@@ -109,15 +109,14 @@ Friend Class GenericAggregationDLL3Computing
                                                     DBDOWNLOADER.PeriodArray, _
                                                     DBDOWNLOADER.ValuesArray)
                 End If
-                If Not PBar Is Nothing Then PBar.AddProgress(1)
+                PBar.AddProgress(1)
             Next
             DBDOWNLOADER.CloseRST()
         End If
         Dll3Computer.ComputeAggregation()
-        If Not PBar Is Nothing Then PBar.AddProgress(2)
         current_currency = destinationCurrency
         current_version_id = version_id
-        
+
 
     End Sub
 
