@@ -65,6 +65,19 @@ Friend Class Product
 
     End Function
 
+    Protected Friend Function GetRecord(ByRef product_id As String, ByRef categoriesTV As TreeView) As Hashtable
+
+        RST.Filter = ANALYSIS_AXIS_ID_VAR + "='" + product_id + "'"
+        If RST.EOF Then Return Nothing
+        Dim hash As New Hashtable
+        hash.Add(ANALYSIS_AXIS_NAME_VAR, RST.Fields(ANALYSIS_AXIS_NAME_VAR).Value)
+        For Each category_node In categoriesTV.Nodes
+            hash.Add(category_node.name, RST.Fields(category_node.name).Value)
+        Next
+        Return hash
+
+    End Function
+
     Protected Friend Sub UpdateProduct(ByRef Product_id As String, ByRef hash As Hashtable)
 
         RST.Filter = ANALYSIS_AXIS_ID_VAR + "='" + Product_id + "'"
@@ -105,6 +118,7 @@ Friend Class Product
 
     Protected Overrides Sub finalize()
 
+        On Error Resume Next
         RST.Close()
         MyBase.Finalize()
 
@@ -147,7 +161,7 @@ Friend Class Product
                     Dim node As TreeNode = TV.Nodes.Add(Trim(srv.rst.Fields(ANALYSIS_AXIS_ID_VAR).Value), _
                                                         Trim(srv.rst.Fields(ANALYSIS_AXIS_NAME_VAR).Value), 0, 0)
                     node.Checked = True
-                End If   
+                End If
                 srv.rst.MoveNext()
             Loop
         End If

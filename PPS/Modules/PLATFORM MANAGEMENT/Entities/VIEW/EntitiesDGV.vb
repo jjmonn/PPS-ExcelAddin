@@ -1,14 +1,14 @@
 ﻿' EntitiesTGV.vb
 '
 '
-' To do: 
+' To do: Should inherit from analysisDGV and override init functions !
 '
 '
 ' Known bugs: 
 '       -
 '
 '
-' Last modified: 09/01/2014
+' Last modified: 21/04/2014
 ' Author: Julien Monnereau
 
 
@@ -29,63 +29,55 @@ Friend Class EntitiesDGV
 #Region "Instance Variables"
 
     ' Objects
-    Private Controller As EntitiesController
-    Private ParentView As EntitiesManagementUI
-    Friend DGV As vDataGridView
+    Protected Friend DGV As New vDataGridView
 
     ' Variables
-    Friend categoriesNameKeyDic As Hashtable
-    Friend categoriesKeyNameDic As Hashtable
-    Friend columnsDictionary As New Dictionary(Of String, HierarchyItem)
-    Friend columnsCaptionID As New Dictionary(Of String, String)
-    Friend rows_id_item_dic As New Dictionary(Of String, HierarchyItem)
+    Private categoriesTV As TreeView
+    Private categoriesNameKeyDic As Hashtable
+    Protected Friend columnsDictionary As New Dictionary(Of String, HierarchyItem)
+    Protected Friend columnsCaptionID As New Dictionary(Of String, String)
+    Protected Friend rows_id_item_dic As New Dictionary(Of String, HierarchyItem)
     Private DGVArray(,) As String
     Private filterGroup As New FilterGroup(Of String)()
-    Friend currenciesList As List(Of String)
-    Friend isFillingDGV As Boolean
-    Friend current_cell As GridCell
-
-    ' Display
-    Private itemStyleNormal As HierarchyItemStyle
-    Private itemStyleDisabled As HierarchyItemStyle
-    Private itemStyleSelected As HierarchyItemStyle
-    Friend rowsWidth As Int32
-
+    Protected Friend currenciesList As List(Of String)
+    Protected Friend currentRowItem As HierarchyItem
+    Protected Friend isFillingDGV As Boolean
+   
     ' Constants
     Private Const DGV_VI_BLEND_STYLE As VIBLEND_THEME = VIBLEND_THEME.OFFICE2010SILVER
     Friend DGV_FONT_SIZE As Single = 8
-    Private Const CURRENCY_COLUMN_NAME As String = "Currency"
+    Protected Friend Const CURRENCY_COLUMN_NAME As String = "Currency"
     Private Const NAME_COLUMN_NAME As String = "Name"
     Private Const CB_WIDTH As Double = 20
     Private Const CB_NB_ITEMS_DISPLAYED As Int32 = 7
-    Private Const FONT_SIZE_ROW_ITEMS As Int32 = 8
-    Private Const ENTITIES_TABLE_ADDRESS As String = LEGAL_ENTITIES_DATABASE + "." + ENTITIES_TABLE
 
 #End Region
 
 
 #Region "Initialize"
 
-    Protected Friend Sub New(ByRef input_parent As EntitiesManagementUI, _
-                             ByRef input_DGV As vDataGridView, _
-                             ByRef input_controller As EntitiesController)
+    Protected Friend Sub New(ByRef entitiesTV As TreeView, _
+                             ByRef input_categoriesTV As TreeView, _
+                             ByRef entities_dict As Dictionary(Of String, Hashtable), _
+                             ByRef input_categoriesKeyNameDic As Hashtable)
 
-        ParentView = input_parent
-        DGV = input_DGV
-        Controller = input_controller
         currenciesList = CurrenciesMapping.getCurrenciesList(CURRENCIES_KEY_VARIABLE)
-        categoriesNameKeyDic = CategoriesMapping.GetCategoryDictionary(ControllingUI2Controller.ENTITIES_CODE, CATEGORY_NAME_VARIABLE, CATEGORY_ID_VARIABLE)
-        categoriesKeyNameDic = CategoriesMapping.GetCategoryDictionary(ControllingUI2Controller.ENTITIES_CODE, CATEGORY_ID_VARIABLE, CATEGORY_NAME_VARIABLE)
+        categoriesTV = input_categoriesTV
 
-        AddHandler DGV.CellValueChanged, AddressOf dataGridView_CellValueChanged
         initFilters()
         InitializeDGVDisplay()
         DGVColumnsInitialize()
+        DGVRowsInitialize(entitiesTV)
+        fillDGV(entities_dict)
+
+        AddHandler DGV.CellMouseClick, AddressOf dataGridView_CellMouseClick
+        AddHandler DGV.HierarchyItemMouseClick, AddressOf dataGridView_HierarchyItemMouseClick
 
     End Sub
 
     Private Sub InitializeDGVDisplay()
 
+        DGV.ColumnsHierarchy.AutoResize(AutoResizeMode.FIT_ALL)
         DGV.ColumnsHierarchy.AutoStretchColumns = True
         DGV.ColumnsHierarchy.AllowResize = True
         'DGV.RowsHierarchy.AllowDragDrop = True
@@ -95,12 +87,13 @@ Friend Class EntitiesDGV
         DGV.FilterDisplayMode = FilterDisplayMode.Custom
         DGV.VIBlendTheme = DGV_VI_BLEND_STYLE
         DGV.BackColor = SystemColors.Control
+        'DGV.ImageList = EntitiesIL
 
     End Sub
 
 #Region "Columns Initialization"
 
-    Protected Friend Sub DGVColumnsInitialize()
+    Private Sub DGVColumnsInitialize()
 
         DGV.ColumnsHierarchy.Clear()
         columnsDictionary.Clear()
@@ -113,7 +106,7 @@ Friend Class EntitiesDGV
         col1.AllowFiltering = True
         ' CreateFilter(col1)
 
-        For Each rootNode As TreeNode In Controller.categoriesTV.Nodes
+        For Each rootNode As TreeNode In categoriesTV.Nodes
             Dim col As HierarchyItem = DGV.ColumnsHierarchy.Items.Add(rootNode.Text)
             columnsDictionary.Add(rootNode.Name, col)
             columnsCaptionID.Add(rootNode.Text, rootNode.Name)
@@ -152,7 +145,7 @@ Friend Class EntitiesDGV
 
 #Region "Rows Initialization"
 
-    Protected Friend Sub InitializeTGVRows(ByRef entities_tv As TreeView)
+    Private Sub DGVRowsInitialize(ByRef entities_tv As TreeView)
 
         DGV.RowsHierarchy.Clear()
         rows_id_item_dic.Clear()
@@ -225,12 +218,7 @@ Friend Class EntitiesDGV
 
 #End Region
 
-#End Region
-
-
-#Region "Interface"
-
-    Protected Friend Sub FillDGV(ByRef entities_dict As Dictionary(Of String, Hashtable))
+    Private Sub fillDGV(ByRef entities_dict As Dictionary(Of String, Hashtable))
 
         isFillingDGV = True
         Dim column As HierarchyItem
@@ -241,9 +229,9 @@ Friend Class EntitiesDGV
             column = columnsDictionary(ENTITIES_CURRENCY_VARIABLE)
             DGV.CellsArea.SetCellValue(rowItem, column, entities_dict(entity_id)(ENTITIES_CURRENCY_VARIABLE))
 
-            For Each root_category_node As TreeNode In Controller.categoriesTV.Nodes
+            For Each root_category_node As TreeNode In categoriesTV.Nodes
                 column = columnsDictionary(root_category_node.Name)
-                category_value = categoriesKeyNameDic(entities_dict(entity_id)(root_category_node.Name))
+                category_value = categoriesTV.Nodes.Find((entities_dict(entity_id)(root_category_node.Name)), True)(0).Text
                 DGV.CellsArea.SetCellValue(rowItem, column, category_value)
             Next
             If entities_dict(entity_id)(ENTITIES_ALLOW_EDITION_VARIABLE) = 0 Then rowItem.ImageIndex = 0 Else rowItem.ImageIndex = 1
@@ -273,15 +261,15 @@ Friend Class EntitiesDGV
 
     End Sub
 
-    Private Sub dataGridView_CellValueChanged(sender As Object, args As CellEventArgs)
+    Private Sub dataGridView_HierarchyItemMouseClick(sender As Object, args As HierarchyItemMouseEventArgs)
 
-        If isFillingDGV = False Then
-            Dim value As Object
-            If args.Cell.ColumnItem.Caption <> CURRENCY_COLUMN_NAME Then value = categoriesNameKeyDic(args.Cell.Value) Else value = args.Cell.Value
-            Controller.UpdateValue(ParentView.entitiesNameKeyDic(DGV.CellsArea.GetCellValue(args.Cell.RowItem, DGV.ColumnsHierarchy.Items(0))), _
-                                   columnsCaptionID(args.Cell.ColumnItem.Caption), _
-                                   value)
-        End If
+        currentRowItem = args.HierarchyItem
+
+    End Sub
+
+    Private Sub dataGridView_CellMouseClick(ByVal sender As Object, ByVal args As CellMouseEventArgs)
+
+        currentRowItem = args.Cell.RowItem
 
     End Sub
 
@@ -292,14 +280,13 @@ Friend Class EntitiesDGV
 
     Friend Sub CopyValueDown()
 
-        If Not current_cell Is Nothing Then
-            Dim row As HierarchyItem = current_cell.RowItem
-            Dim column As HierarchyItem = current_cell.ColumnItem
-            Dim value As String = current_cell.Value
+        If Not DGV.CellsArea.SelectedCells(0) Is Nothing Then
+            Dim row As HierarchyItem = DGV.CellsArea.SelectedCells(0).RowItem
+            Dim column As HierarchyItem = DGV.CellsArea.SelectedCells(0).ColumnItem
+            Dim value As String = DGV.CellsArea.SelectedCells(0).Value
 
             SetValueToChildrenItems(row, column, value)
             DGV.Refresh()
-            ParentView.Refresh()
             DGV.Select()
         End If
 
@@ -362,7 +349,7 @@ Friend Class EntitiesDGV
         Next
 
         CWorksheetWrittingFunctions.WriteArray(DGVArray, cell)
-        ExcelEntitiesReportFormatting.FormatEntitiesReport(GlobalVariables.apps.ActiveSheet.range(cell, cell.Offset(UBound(DGVArray, 1), UBound(DGVArray, 2))))
+        ExcelEntitiesReportFormatting.FormatEntitiesReport(GlobalVariables.APPS.ActiveSheet.range(cell, cell.Offset(UBound(DGVArray, 1), UBound(DGVArray, 2))))
 
     End Sub
 

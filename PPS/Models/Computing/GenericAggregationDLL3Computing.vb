@@ -6,7 +6,6 @@
 '
 ' To do: 
 '       - Clear dll-> empty computation memory but not model
-'       - Computation of an entity without children -> currently the strSqlFilter is not applied = should be
 '       - currently currency selection but entities currencies not implemented
 '       - set formulasTypes and formulasCodes as constants
 '       - dynamic with settings displays N-1, N-2,  N-3 

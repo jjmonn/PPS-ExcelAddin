@@ -12,7 +12,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 12/03/2015
+' Last modified: 21/04/2015
 
 
 Imports System.Collections.Generic
@@ -27,9 +27,10 @@ Friend Class ExchangeRatesController
 #Region "Instance Variables"
 
     ' Objects
-    Private View As CurrenciesManagementUI
+    Private View As CurrenciesControl
     Private ExchangeRates As ExchangeRate
     Private RatesVersions As New RateVersion
+    Private rates_versionsTV As New TreeView
     Private Currencies As New Currency
     Private Periods As New Period
     Private NewRatesVersionUI As NewRatesVersionUI
@@ -48,12 +49,12 @@ Friend Class ExchangeRatesController
 
 #Region "Initialize"
 
-    Friend Sub New(ByRef input_view As CurrenciesManagementUI)
+    Friend Sub New()
 
         If RatesVersions.object_is_alive AndAlso Currencies.object_is_alive Then
             object_is_alive = True
-            View = input_view
-            RateVersion.load_rates_version_tv(View.versionsTV)
+            View = New CurrenciesControl(Me, rates_versionsTV)
+            RateVersion.load_rates_version_tv(rates_versionsTV)
             current_version = GlobalVariables.GLOBALCurrentRatesVersionCode
             currencies_list = Currencies.ReadCurrencies()
             NewRatesVersionUI = New NewRatesVersionUI(Me)
@@ -65,6 +66,22 @@ Friend Class ExchangeRatesController
         End If
 
     End Sub
+
+    Public Sub addControlToPanel(ByRef dest_panel As Panel)
+
+        dest_panel.Controls.Add(View)
+        View.Dock = Windows.Forms.DockStyle.Fill
+
+    End Sub
+
+    Public Sub close()
+
+        View.closeControl()
+        '   View.Dispose()
+        '   View = Nothing
+
+    End Sub
+
 
 #End Region
 
@@ -162,9 +179,9 @@ Friend Class ExchangeRatesController
         End If
 
         RatesVersions.CreateVersion(tmpHT)
-        If parent_node Is Nothing Then View.versionsTV.Nodes.Add(key, name) Else parent_node.Nodes.Add(key, name)
+        If parent_node Is Nothing Then rates_versionsTV.Nodes.Add(key, name) Else parent_node.Nodes.Add(key, name)
         UpdateVersionsPositions()
-        RateVersion.load_rates_version_tv(View.versionsTV)
+        RateVersion.load_rates_version_tv(rates_versionsTV)
         If isFolder = False Then ChangeVersion(key)
 
     End Sub
@@ -214,7 +231,7 @@ Friend Class ExchangeRatesController
 
         RatesVersions.DeleteVersion(version_id)
         On Error Resume Next
-        View.versionsTV.Nodes.Find(version_id, True)(0).Remove()
+        rates_versionsTV.Nodes.Find(version_id, True)(0).Remove()
 
     End Sub
 
@@ -256,7 +273,7 @@ Friend Class ExchangeRatesController
     Private Function get_new_version_token()
 
         Dim key = TreeViewsUtilities.IssueNewToken(RATES_VERSIONS_TOKEN_SIZE)
-        While View.versionsTV.Nodes.Find(key, True).Length > 0
+        While rates_versionsTV.Nodes.Find(key, True).Length > 0
             key = TreeViewsUtilities.IssueNewToken(RATES_VERSIONS_TOKEN_SIZE)
         End While
         Return key
@@ -265,7 +282,7 @@ Friend Class ExchangeRatesController
 
     Private Sub UpdateVersionsPositions()
 
-        Dim positions_dic = TreeViewsUtilities.GeneratePositionsDictionary(View.versionsTV)
+        Dim positions_dic = TreeViewsUtilities.GeneratePositionsDictionary(rates_versionsTV)
         For Each id In positions_dic.Keys
             RatesVersions.UpdateVersion(id, ITEMS_POSITIONS, positions_dic(id))
         Next

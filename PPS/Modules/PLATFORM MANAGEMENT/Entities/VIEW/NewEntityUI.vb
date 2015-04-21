@@ -10,7 +10,7 @@
 '           -> should have "" and "NS" for each category (hence name-> keys dict in categories should be for each categories)
 '
 '
-' Last modified: 12/03/2014
+' Last modified: 21/04/2015
 ' Author: Julien Monnereau
 
 
@@ -31,9 +31,8 @@ Friend Class NewEntityUI
     ' Variables
     Private entitiesTV As TreeView
     Private categoriesTV As TreeView
-    Private categoriesNamesKeysDictionaries As Hashtable
-    Private categoriesKeysNamesDictionaries As Hashtable
-    Friend currenciesList As List(Of String)
+    Private categoriesNamesKeysDict As Hashtable
+    Private currenciesList As List(Of String)
     Private parentTB As New TextBox
     Private isFormExpanded As Boolean
     Private current_parent_entity_id As String
@@ -64,8 +63,7 @@ Friend Class NewEntityUI
     Friend Sub New(ByRef input_controller As EntitiesController, _
                    ByRef input_entities_TV As TreeView, _
                    ByRef input_categories_tree As TreeView, _
-                   ByRef input_categories_name_key_dic As Hashtable, _
-                   ByRef input_categories_key_name_dic As Hashtable)
+                   ByRef input_categories_name_key_dic As Hashtable)
 
         ' This call is required by the designer.
         InitializeComponent()
@@ -75,9 +73,7 @@ Friend Class NewEntityUI
         entitiesTV = input_entities_TV
         currenciesList = CurrenciesMapping.getCurrenciesList(CURRENCIES_KEY_VARIABLE)
         categoriesTV = input_categories_tree
-
-        categoriesNamesKeysDictionaries = input_categories_name_key_dic
-        categoriesKeysNamesDictionaries = input_categories_key_name_dic
+        categoriesNamesKeysDict = input_categories_name_key_dic
 
         TableLayoutInit()
         InitializeDisplay()
@@ -98,7 +94,7 @@ Friend Class NewEntityUI
         Me.Controls.Find(CURRENCIES_CB_NAME, True)(0).Text = attributes(ENTITIES_CURRENCY_VARIABLE)
 
         For Each categoryNode As TreeNode In categoriesTV.Nodes
-            Me.Controls.Find(categoryNode.Name + "CB", True)(0).Text = categoriesKeysNamesDictionaries(attributes(categoryNode.Name))
+            Me.Controls.Find(categoryNode.Name + "CB", True)(0).Text = categoriesTV.Nodes.Find(attributes(categoryNode.Name), True)(0).Text
         Next
 
     End Sub
@@ -179,7 +175,7 @@ Friend Class NewEntityUI
 
             AddControl(rowIndex, 1, newCombobox)
             AddLabel(rowIndex, categoryNode.Text)
-            ' categoriesNamesKeysDictionaries.Add(categoryNode.Name, tmpHT)
+            ' categoriesNamesKeysDict.Add(categoryNode.Name, tmpHT)
             rowIndex = rowIndex + 1
         Next
         AddLabel(rowIndex, "")
@@ -235,7 +231,7 @@ Friend Class NewEntityUI
 
             For Each categoryNode As TreeNode In categoriesTV.Nodes
                 Dim categoryValueText As String = Me.Controls.Find(categoryNode.Name + "CB", True)(0).Text
-                hash.Add(categoryNode.Name, categoriesNamesKeysDictionaries(categoryValueText))
+                hash.Add(categoryNode.Name, categoriesNamesKeysDict(categoryValueText))
             Next
 
             Controller.CreateEntity(hash, entitiesTV.SelectedNode)

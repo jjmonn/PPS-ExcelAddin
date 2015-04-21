@@ -12,7 +12,7 @@
 '
 '
 '
-' Last Modified: 02/03/2014
+' Last Modified: 20/04/2014
 ' Author: Julien Monnereau
 
 
@@ -31,7 +31,7 @@ Friend Class AccountsController
     Private Accounts As Account
     Private formulasMGT As ModelFormulasMGT
     Private DATAMODEL As DataModel
-    Private View As AccountsMGT_UI
+    Private View As AccountsControl
     Private NewAccountView As NewAccountUI
     Private AccountsTV As New TreeView
 
@@ -54,11 +54,26 @@ Friend Class AccountsController
         accountsNameKeysDictionary = AccountsMapping.GetAccountsDictionary(ACCOUNT_NAME_VARIABLE, ACCOUNT_ID_VARIABLE)
         accountsKeyNamesDictionary = AccountsMapping.GetAccountsDictionary(ACCOUNT_ID_VARIABLE, ACCOUNT_NAME_VARIABLE)
         Account.LoadAccountsTree(AccountsTV)
-        View = New AccountsMGT_UI(Me, AccountsTV)
+        View = New AccountsControl(Me, AccountsTV)
         NewAccountView = New NewAccountUI(View, Me)
         formulasMGT = New ModelFormulasMGT(accountsNameKeysDictionary, AccountsTV)
         positionsDictionary = TreeViewsUtilities.GeneratePositionsDictionary(AccountsTV)
-        View.Show()
+
+    End Sub
+
+    Public Sub addControlToPanel(ByRef dest_panel As Panel)
+
+        dest_panel.Controls.Add(View)
+        View.Dock = Windows.Forms.DockStyle.Fill
+
+    End Sub
+
+    Public Sub close()
+
+        View.closeControl()
+        ' View.Dispose()
+        ' View = Nothing
+        Accounts.RST.Close()
 
     End Sub
 
@@ -199,12 +214,6 @@ Friend Class AccountsController
         Return True
 
     End Function
-
-    Friend Sub CloseModelRST()
-
-        Accounts.RST.Close()
-
-    End Sub
 
 #End Region
 

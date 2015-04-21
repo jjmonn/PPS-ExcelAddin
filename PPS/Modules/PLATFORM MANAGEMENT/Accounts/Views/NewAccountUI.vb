@@ -12,7 +12,7 @@
 '       - 
 '
 '
-' Last modified: 27/02/2015
+' Last modified: 20/04/2015
 ' Author: Julien Monnereau
 
 
@@ -27,7 +27,7 @@ Friend Class NewAccountUI
 #Region "Instance Variables"
 
     ' Objects
-    Private AccountsView As AccountsMGT_UI
+    Private AccountsView As AccountsControl
     Private Controller As AccountsController
     Private accountsTV As New TreeView
 
@@ -47,7 +47,7 @@ Friend Class NewAccountUI
 
 #Region "Initialize"
 
-    Protected Friend Sub New(ByRef input_accountsView As AccountsMGT_UI, _
+    Protected Friend Sub New(ByRef input_accountsView As AccountsControl, _
                              ByRef input_controller As AccountsController)
 
         ' This call is required by the designer.
@@ -58,7 +58,7 @@ Friend Class NewAccountUI
         Controller = input_controller
         Account.LoadAccountsTree(accountsTV)
         ComboBoxesInitialize()
-       
+
         accountsTVPanel.Controls.Add(accountsTV)
         accountsTV.Dock = DockStyle.Fill
         AddHandler accountsTV.NodeMouseClick, AddressOf AccountsTV_NodeMouseClick

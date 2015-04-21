@@ -13,7 +13,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 12/03/2015
+' Last modified: 21/04/2015
 
 
 Imports System.Windows.Forms
@@ -30,16 +30,16 @@ Friend Class EntitiesController
 
     ' Objects
     Private Entities As Entity
-    Private ViewObject As EntitiesManagementUI
-    Friend NewEntityView As NewEntityUI
+    Private View As EntitiesControl
+    Private entitiesTV As New TreeView
+    Private categoriesTV As New TreeView
+    Private NewEntityView As NewEntityUI
     Private EntitiesDeletion As New SQLEntities
 
     ' Variables
-    Private entitiesTV As New TreeView
-    Friend categoriesTV As New TreeView
+    Friend categoriesNameKeyDic As Hashtable
     Private entitiesNameKeyDic As Hashtable
-    Friend positionsDictionary As New Dictionary(Of String, Double)
-
+    Private positionsDictionary As New Dictionary(Of String, Double)
 
 #End Region
 
@@ -48,11 +48,11 @@ Friend Class EntitiesController
 
     Friend Sub New()
 
-        Entity.LoadEntitiesTree(entitiesTV)
-        ' can be replaced by a treenode instead !
+        Entities = New Entity
+        Entity.LoadEntitiesTree(entitiesTV)   ' can be replaced by a treenode instead !
         Category.LoadCategoryCodeTV(categoriesTV, ControllingUI2Controller.ENTITIES_CODE)
         entitiesNameKeyDic = EntitiesMapping.GetEntitiesDictionary(ENTITIES_NAME_VARIABLE, ENTITIES_ID_VARIABLE)
-        Entities = New Entity
+        categoriesNameKeyDic = CategoriesMapping.GetCategoryDictionary(ControllingUI2Controller.ENTITIES_CODE, CATEGORY_NAME_VARIABLE, CATEGORY_ID_VARIABLE)
 
         If Entities.object_is_alive = False Then
             MsgBox("An error occured with network connection. Please check the connection and try again." & Chr(13) & _
@@ -60,31 +60,43 @@ Friend Class EntitiesController
             Exit Sub
         End If
 
-        ViewObject = New EntitiesManagementUI(Me, entitiesNameKeyDic, entitiesTV)
-        NewEntityView = New NewEntityUI(Me, entitiesTV, categoriesTV, ViewObject.EntitiesDGVMGT.categoriesNameKeyDic, ViewObject.EntitiesDGVMGT.categoriesKeyNameDic)
-
-        DisplayDGVData()
-        ViewObject.Show()
+        View = New EntitiesControl(Me, getEntitiesDict, entitiesTV, entitiesNameKeyDic, categoriesNameKeyDic, categoriesTV)
+        NewEntityView = New NewEntityUI(Me, entitiesTV, categoriesTV, categoriesNameKeyDic)
 
     End Sub
 
-#End Region
-
-
-#Region "Interface"
-
-    Private Sub DisplayDGVData()
-
-        ViewObject.EntitiesDGVMGT.InitializeTGVRows(entitiesTV)
+    Private Function getEntitiesDict() As Dictionary(Of String, Hashtable)
 
         Dim entities_dic As New Dictionary(Of String, Hashtable)
         Dim entities_list = TreeViewsUtilities.GetNodesKeysList(entitiesTV)
         For Each entity_id In entities_list
             entities_dic.Add(entity_id, Entities.GetRecord(entity_id, categoriesTV))
         Next
-        ViewObject.EntitiesDGVMGT.FillDGV(entities_dic)
+        Return entities_dic
+
+    End Function
+
+    Public Sub addControlToPanel(ByRef dest_panel As Panel)
+
+        dest_panel.Controls.Add(View)
+        View.Dock = Windows.Forms.DockStyle.Fill
 
     End Sub
+
+    Public Sub close()
+
+        View.closeControl()
+        ' View.Dispose()
+        ' View = Nothing
+        ' Entities.rst.close()
+
+    End Sub
+
+
+#End Region
+
+
+#Region "Interface"
 
     Protected Friend Sub CreateEntity(ByRef hash As Hashtable, ByRef parent_node As TreeNode)
 
@@ -105,8 +117,7 @@ Friend Class EntitiesController
             Entities.UpdateEntity(parent_node.Name, ENTITIES_ALLOW_EDITION_VARIABLE, 0)
             parent_node.StateImageIndex = 0
         End If
-        DisplayDGVData()
-
+       
     End Sub
 
     Protected Friend Sub UpdateValue(ByRef entity_id As String, ByRef field As String, ByRef value As Object)
@@ -122,7 +133,7 @@ Friend Class EntitiesController
         For Each entity_id In entities_to_delete
             DeleteEntity(entity_id)
         Next
-        ViewObject.EntitiesDGVMGT.rows_id_item_dic(input_node.Name).Delete()
+        View.getDGVRowsIDItemsDict()(input_node.Name).Delete()
         input_node.Remove()
 
     End Sub
@@ -142,8 +153,8 @@ Friend Class EntitiesController
     Protected Friend Sub ShowNewEntityUI()
 
         Dim current_node As TreeNode = Nothing
-        If Not ViewObject.currentRowItem Is Nothing Then
-            Dim entity_id As String = entitiesNameKeyDic(ViewObject.entitiesDGV.CellsArea.GetCellValue(ViewObject.currentRowItem, ViewObject.entitiesDGV.ColumnsHierarchy.Items(0)))
+        If Not View.getCurrentRowItem Is Nothing Then
+            Dim entity_id As String = entitiesNameKeyDic(View.getCurrentEntityName())
             current_node = entitiesTV.Nodes.Find(entity_id, True)(0)
             entitiesTV.SelectedNode = current_node
             NewEntityView.FillIn(current_node.Text, Entities.GetRecord(current_node.Name, categoriesTV))
@@ -155,7 +166,7 @@ Friend Class EntitiesController
 
     Protected Friend Sub ShowEntitiesMGT()
 
-        ViewObject.Show()
+        View.Show()
 
     End Sub
 

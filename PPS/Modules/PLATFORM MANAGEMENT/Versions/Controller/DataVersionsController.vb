@@ -10,7 +10,7 @@
 ' Known bugs:
 '
 ' 
-' Last modified: 05/03/2015
+' Last modified: 20/04/2015
 ' Author: Julien Monnereau
 
 
@@ -28,7 +28,7 @@ Friend Class DataVersionsController
 
     'Objects
     Private Versions As Version
-    Private ViewObject As VersioningManagementUI
+    Private View As VersionsControl
     Private ViewsController As New ViewsController
     Private SQLVersions As New SQLVersions
     Private NewVersionUI As NewDataVersionUI
@@ -60,11 +60,24 @@ Friend Class DataVersionsController
         Version.LoadVersionsTree(versionsTV)
         rates_versions_id_name_dic = RateVersionsMapping.GetRatesVersionDictionary(RATES_VERSIONS_ID_VARIABLE, RATES_VERSIONS_NAME_VARIABLE)
         rates_versions_name_id_dic = RateVersionsMapping.GetRatesVersionDictionary(RATES_VERSIONS_NAME_VARIABLE, RATES_VERSIONS_ID_VARIABLE)
-        ViewObject = New VersioningManagementUI(Me, versionsTV)
+        View = New VersionsControl(Me, versionsTV)
         versionsNamesList = TreeViewsUtilities.GetNodesTextsList(versionsTV)
         NewVersionUI = New NewDataVersionUI(Me)
         positions_dictionary = TreeViewsUtilities.GeneratePositionsDictionary(versionsTV)
-        ViewObject.Show()
+
+    End Sub
+
+    Public Sub addControlToPanel(ByRef dest_panel As Panel)
+
+        dest_panel.Controls.Add(View)
+        View.Dock = Windows.Forms.DockStyle.Fill
+
+    End Sub
+
+    Public Sub close()
+
+        View.closeControl()
+        Versions.Close()
 
     End Sub
 
@@ -198,7 +211,7 @@ Friend Class DataVersionsController
 
     Protected Friend Sub ShowVersionsMGT()
 
-        ViewObject.Show()
+        View.Show()
 
     End Sub
 
