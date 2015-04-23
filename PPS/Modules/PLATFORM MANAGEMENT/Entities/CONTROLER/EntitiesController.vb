@@ -50,7 +50,7 @@ Friend Class EntitiesController
 
         Entities = New Entity
         Entity.LoadEntitiesTree(entitiesTV)   ' can be replaced by a treenode instead !
-        Category.LoadCategoryCodeTV(categoriesTV, ControllingUI2Controller.ENTITIES_CODE)
+        Category.LoadCategoryCodeTV(categoriesTV, ControllingUI2Controller.ENTITY_CATEGORY_CODE)
         entitiesNameKeyDic = EntitiesMapping.GetEntitiesDictionary(ENTITIES_NAME_VARIABLE, ENTITIES_ID_VARIABLE)
         categoriesNameKeyDic = CategoriesMapping.GetCategoryDictionary(ControllingUI2Controller.ENTITIES_CODE, CATEGORY_NAME_VARIABLE, CATEGORY_ID_VARIABLE)
 

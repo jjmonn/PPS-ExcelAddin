@@ -233,7 +233,7 @@ Friend Class AccountsControl
         End If
     End Sub
 
-    Private Sub Exit_cmd_Click(sender As Object, e As EventArgs) Handles ExitToolStripMenuItem.Click
+    Private Sub Exit_cmd_Click(sender As Object, e As EventArgs)
 
         Me.Dispose()
 

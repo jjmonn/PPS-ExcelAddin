@@ -259,7 +259,7 @@ Friend Class VersionsControl
 
 #Region "Versions Attributes Modifications"
 
-    Private Sub lockedCB_CheckedChanged(sender As Object, e As EventArgs) Handles lockedCB.CheckedChanged
+    Private Sub lockedCB_CheckedChanged(sender As Object, e As EventArgs)
 
         ' only if not folder ?
         If Not VersionsTV.SelectedNode Is Nothing AndAlso isDisplaying = False Then
@@ -271,7 +271,7 @@ Friend Class VersionsControl
 
     End Sub
 
-    Private Sub RatesVersionCB_SelectedValueChanged(sender As Object, e As EventArgs) Handles RatesVersionCB.SelectedValueChanged
+    Private Sub RatesVersionCB_SelectedValueChanged(sender As Object, e As EventArgs)
 
         If Not VersionsTV.SelectedNode Is Nothing AndAlso isDisplaying = False Then
             Dim version_id As String = VersionsTV.SelectedNode.Name
@@ -290,7 +290,7 @@ Friend Class VersionsControl
 
 #Region "Right Click Menu"
 
-    Private Sub new_version_bt_Click(sender As Object, e As EventArgs) Handles new_version_bt.Click
+    Private Sub new_version_bt_Click(sender As Object, e As EventArgs) Handles new_version_bt.Click, NewVersionMenuBT.Click
 
         If Not current_node Is Nothing Then
             If Controller.IsFolder(current_node.Name) Then
@@ -304,7 +304,7 @@ Friend Class VersionsControl
 
     End Sub
 
-    Private Sub new_folder_bt_Click(sender As Object, e As EventArgs) Handles new_folder_bt.Click
+    Private Sub new_folder_bt_Click(sender As Object, e As EventArgs) Handles new_folder_bt.Click, NewFolderMenuBT.Click
 
         Dim name = InputBox("Please enter the new Folder Name")
         If name <> "" Then
@@ -321,13 +321,13 @@ Friend Class VersionsControl
 
     End Sub
 
-    Private Sub delete_bt_Click(sender As Object, e As EventArgs) Handles delete_bt.Click
+    Private Sub delete_bt_Click(sender As Object, e As EventArgs) Handles delete_bt.Click, DeleteVersionMenuBT.Click
 
         DeleteVersion()
 
     End Sub
 
-    Private Sub rename_bt_Click(sender As Object, e As EventArgs) Handles rename_bt.Click
+    Private Sub rename_bt_Click(sender As Object, e As EventArgs) Handles rename_bt.Click, RenameMenuBT.Click
 
         If Not current_node Is Nothing Then
             Dim name As String = InputBox("Enter the new Name: ")
@@ -348,19 +348,19 @@ Friend Class VersionsControl
 
 #Region "Main Menu Call Backs"
 
-    Private Sub AddFolderBT_Click(sender As Object, e As EventArgs) Handles AddFolderBT.Click
+    Private Sub AddFolderBT_Click(sender As Object, e As EventArgs)
 
         new_folder_bt_Click(sender, e)
 
     End Sub
 
-    Private Sub AddVersionBT_Click(sender As Object, e As EventArgs) Handles AddVersionBT.Click
+    Private Sub AddVersionBT_Click(sender As Object, e As EventArgs)
 
         new_version_bt_Click(sender, e)
 
     End Sub
 
-    Private Sub DeleteVersionBT_Click(sender As Object, e As EventArgs) Handles DeleteVersionBT.Click
+    Private Sub DeleteVersionBT_Click(sender As Object, e As EventArgs)
 
         delete_bt_Click(sender, e)
 

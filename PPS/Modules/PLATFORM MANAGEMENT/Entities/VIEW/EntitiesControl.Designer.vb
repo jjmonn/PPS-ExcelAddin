@@ -39,8 +39,6 @@ Partial Class EntitiesControl
         Me.CreateANewEntityToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.DeleteEntityToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator()
-        Me.ExitToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.CategoriesToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ExcelToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.SendEntitiesHierarchyToExcelToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.RCM_TGV.SuspendLayout()
@@ -81,7 +79,7 @@ Partial Class EntitiesControl
         '
         'drop_to_excel_bt
         '
-        Me.drop_to_excel_bt.Image = Global.PPS.My.Resources.Resources.Benjigarner_Softdimension_Excel
+        Me.drop_to_excel_bt.Image = Global.PPS.My.Resources.Resources.Excel_Blue_32x32
         Me.drop_to_excel_bt.Name = "drop_to_excel_bt"
         Me.drop_to_excel_bt.Size = New System.Drawing.Size(168, 22)
         Me.drop_to_excel_bt.Text = "Drop To Excel"
@@ -93,14 +91,14 @@ Partial Class EntitiesControl
         '
         'CreateEntityToolStripMenuItem
         '
-        Me.CreateEntityToolStripMenuItem.Image = Global.PPS.My.Resources.Resources.checked
+        Me.CreateEntityToolStripMenuItem.Image = Global.PPS.My.Resources.Resources.element_branch2_add
         Me.CreateEntityToolStripMenuItem.Name = "CreateEntityToolStripMenuItem"
         Me.CreateEntityToolStripMenuItem.Size = New System.Drawing.Size(168, 22)
         Me.CreateEntityToolStripMenuItem.Text = "Create Entity"
         '
         'DeleteEntityToolStripMenuItem2
         '
-        Me.DeleteEntityToolStripMenuItem2.Image = Global.PPS.My.Resources.Resources.imageres_89
+        Me.DeleteEntityToolStripMenuItem2.Image = Global.PPS.My.Resources.Resources.element_branch2_delete
         Me.DeleteEntityToolStripMenuItem2.Name = "DeleteEntityToolStripMenuItem2"
         Me.DeleteEntityToolStripMenuItem2.Size = New System.Drawing.Size(168, 22)
         Me.DeleteEntityToolStripMenuItem2.Text = "Delete Entity"
@@ -122,7 +120,7 @@ Partial Class EntitiesControl
         '
         'MenuStrip1
         '
-        Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.EditToolStripMenuItem, Me.CategoriesToolStripMenuItem, Me.ExcelToolStripMenuItem})
+        Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.EditToolStripMenuItem, Me.ExcelToolStripMenuItem})
         Me.MenuStrip1.Location = New System.Drawing.Point(0, 0)
         Me.MenuStrip1.Name = "MenuStrip1"
         Me.MenuStrip1.Size = New System.Drawing.Size(516, 24)
@@ -131,21 +129,22 @@ Partial Class EntitiesControl
         '
         'EditToolStripMenuItem
         '
-        Me.EditToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.CreateANewEntityToolStripMenuItem, Me.DeleteEntityToolStripMenuItem, Me.ToolStripSeparator2, Me.ExitToolStripMenuItem})
+        Me.EditToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.CreateANewEntityToolStripMenuItem, Me.DeleteEntityToolStripMenuItem, Me.ToolStripSeparator2})
+        Me.EditToolStripMenuItem.Image = Global.PPS.My.Resources.Resources.element_branch21
         Me.EditToolStripMenuItem.Name = "EditToolStripMenuItem"
-        Me.EditToolStripMenuItem.Size = New System.Drawing.Size(39, 20)
-        Me.EditToolStripMenuItem.Text = "Edit"
+        Me.EditToolStripMenuItem.Size = New System.Drawing.Size(104, 20)
+        Me.EditToolStripMenuItem.Text = "Legal Entities"
         '
         'CreateANewEntityToolStripMenuItem
         '
-        Me.CreateANewEntityToolStripMenuItem.Image = Global.PPS.My.Resources.Resources.checked
+        Me.CreateANewEntityToolStripMenuItem.Image = Global.PPS.My.Resources.Resources.element_branch2_add
         Me.CreateANewEntityToolStripMenuItem.Name = "CreateANewEntityToolStripMenuItem"
         Me.CreateANewEntityToolStripMenuItem.Size = New System.Drawing.Size(175, 22)
         Me.CreateANewEntityToolStripMenuItem.Text = "Create a new Entity"
         '
         'DeleteEntityToolStripMenuItem
         '
-        Me.DeleteEntityToolStripMenuItem.Image = Global.PPS.My.Resources.Resources.imageres_89
+        Me.DeleteEntityToolStripMenuItem.Image = Global.PPS.My.Resources.Resources.element_branch2_delete
         Me.DeleteEntityToolStripMenuItem.Name = "DeleteEntityToolStripMenuItem"
         Me.DeleteEntityToolStripMenuItem.Size = New System.Drawing.Size(175, 22)
         Me.DeleteEntityToolStripMenuItem.Text = "Delete Entity"
@@ -154,18 +153,6 @@ Partial Class EntitiesControl
         '
         Me.ToolStripSeparator2.Name = "ToolStripSeparator2"
         Me.ToolStripSeparator2.Size = New System.Drawing.Size(172, 6)
-        '
-        'ExitToolStripMenuItem
-        '
-        Me.ExitToolStripMenuItem.Name = "ExitToolStripMenuItem"
-        Me.ExitToolStripMenuItem.Size = New System.Drawing.Size(175, 22)
-        Me.ExitToolStripMenuItem.Text = "Exit"
-        '
-        'CategoriesToolStripMenuItem
-        '
-        Me.CategoriesToolStripMenuItem.Name = "CategoriesToolStripMenuItem"
-        Me.CategoriesToolStripMenuItem.Size = New System.Drawing.Size(75, 20)
-        Me.CategoriesToolStripMenuItem.Text = "Categories"
         '
         'ExcelToolStripMenuItem
         '
@@ -176,7 +163,7 @@ Partial Class EntitiesControl
         '
         'SendEntitiesHierarchyToExcelToolStripMenuItem
         '
-        Me.SendEntitiesHierarchyToExcelToolStripMenuItem.Image = Global.PPS.My.Resources.Resources.Benjigarner_Softdimension_Excel
+        Me.SendEntitiesHierarchyToExcelToolStripMenuItem.Image = Global.PPS.My.Resources.Resources.Excel_Blue_32x32
         Me.SendEntitiesHierarchyToExcelToolStripMenuItem.Name = "SendEntitiesHierarchyToExcelToolStripMenuItem"
         Me.SendEntitiesHierarchyToExcelToolStripMenuItem.Size = New System.Drawing.Size(238, 22)
         Me.SendEntitiesHierarchyToExcelToolStripMenuItem.Text = "Send Entities Hierarchy to Excel"
@@ -211,8 +198,6 @@ Partial Class EntitiesControl
     Friend WithEvents CreateANewEntityToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents DeleteEntityToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ToolStripSeparator2 As System.Windows.Forms.ToolStripSeparator
-    Friend WithEvents ExitToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents CategoriesToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ExcelToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents SendEntitiesHierarchyToExcelToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
 

@@ -64,6 +64,7 @@ Friend Class EntitiesControl
 
         Me.TableLayoutPanel1.Controls.Add(EntitiesDGV.DGV, 0, 1)
         EntitiesDGV.DGV.Dock = DockStyle.Fill
+        EntitiesDGV.DGV.ContextMenuStrip = RCM_TGV
 
         AddHandler EntitiesDGV.DGV.CellValueChanged, AddressOf dataGridView_CellValueChanged
         AddHandler EntitiesDGV.DGV.KeyDown, AddressOf entitiesDGV_KeyDown

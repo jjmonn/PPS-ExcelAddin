@@ -42,7 +42,7 @@ Friend Class EntitiesDGV
     Protected Friend currenciesList As List(Of String)
     Protected Friend currentRowItem As HierarchyItem
     Protected Friend isFillingDGV As Boolean
-   
+
     ' Constants
     Private Const DGV_VI_BLEND_STYLE As VIBLEND_THEME = VIBLEND_THEME.OFFICE2010SILVER
     Friend DGV_FONT_SIZE As Single = 8

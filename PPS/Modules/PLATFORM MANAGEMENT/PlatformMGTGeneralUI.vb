@@ -5,10 +5,11 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 21/04/2015
+' Last modified: 23/04/2015
 
 
 Imports System.ComponentModel
+Imports System.Threading.Tasks
 
 
 Friend Class PlatformMGTGeneralUI
@@ -18,8 +19,7 @@ Friend Class PlatformMGTGeneralUI
 
     ' Objects
     Private current_controller As Object
-    Private CP As CircularProgressUI
-
+ 
     ' Variables
     Private controller_index As Int32
 
@@ -42,7 +42,7 @@ Friend Class PlatformMGTGeneralUI
 
     Private Sub OrganizationToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles OrganizationToolStripMenuItem.Click
 
-         displayControl(2)
+        displayControl(2)
 
     End Sub
 
@@ -67,7 +67,7 @@ Friend Class PlatformMGTGeneralUI
     Private Sub ProductsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ProductsToolStripMenuItem.Click
 
         displayControl(6)
-
+        
     End Sub
 
     Private Sub ProductsCategoriesToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ProductsCategoriesToolStripMenuItem.Click
@@ -97,18 +97,16 @@ Friend Class PlatformMGTGeneralUI
 #End Region
 
 
-#Region "Background Worker Methods"
+#Region "Utilities"
 
-    Delegate Sub EndSubmission_Delegate()
-
-    Private Sub BackgroundWork(sender As Object, e As DoWorkEventArgs) Handles BCDWorker.DoWork
+    Private Sub displayControl(ByVal index As Int32)
 
         If Not current_controller Is Nothing Then
             current_controller.close()
             current_controller = Nothing
         End If
 
-        Select Case controller_index
+        Select Case index
             Case 0 : current_controller = New AccountsController()
             Case 1 ' current_controller = New adjustments(Panel1)
             Case 2 : current_controller = New EntitiesController()
@@ -120,51 +118,17 @@ Friend Class PlatformMGTGeneralUI
             Case 8 : current_controller = New DataVersionsController()
             Case 9 : current_controller = New ExchangeRatesController()
             Case 10 'current_controller = New UsersController(Panel1)
+
+                ' controls and Charts to be added !!!
         End Select
-
-    End Sub
-
-    Private Sub BGW_RunWorkerCompleted(sender As Object, e As RunWorkerCompletedEventArgs) Handles BCDWorker.RunWorkerCompleted
-
-        EndSubmission_ThreadSafe()
-
-    End Sub
-
-    Private Sub EndSubmission_ThreadSafe()
-
-        If InvokeRequired Then
-            Dim MyDelegate As New EndSubmission_Delegate(AddressOf EndSubmission_ThreadSafe)
-            Me.Invoke(MyDelegate, New Object() {})
-
-            If Panel1.Controls.Count > 0 Then Panel1.Controls(0).Dispose()
-            current_controller.addControlToPanel(Panel1)
-            CP.Dispose()
-            CP.Close()
-        Else
-
-            If Panel1.Controls.Count > 0 Then Panel1.Controls(0).Dispose()
-            current_controller.addControlToPanel(Panel1)
-            CP.Close()
-            CP.Dispose()
-        End If
+        If Panel1.Controls.Count > 0 Then Panel1.Controls(0).Dispose()
+        current_controller.addControlToPanel(Panel1)
 
     End Sub
 
 #End Region
 
 
-#Region "Utilities"
-
-    Private Sub displayControl(ByRef index As Int32)
-
-        controller_index = index
-        CP = New CircularProgressUI(Drawing.Color.Purple, "")
-        CP.Show()
-        BCDWorker.RunWorkerAsync()
-
-    End Sub
-
-#End Region
-
+  
 
 End Class

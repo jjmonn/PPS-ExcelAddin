@@ -106,9 +106,17 @@ Friend Class Product
 
     End Sub
 
-    Protected Friend Sub DeleteProduct(ByRef Product_id As String)
+    Protected Friend Sub deleteProduct(ByRef product_id As String)
 
-        RST.Filter = ANALYSIS_AXIS_ID_VAR + "='" + Product_id + "'"
+        ' Delete the data associated with the product in Data Tables
+        Dim dataTablesList As List(Of String) = VersionsMapping.GetVersionsList(VERSIONS_CODE_VARIABLE)
+        For Each Version As String In dataTablesList
+            SRV.sqlQuery("DELETE FROM " & DATA_DATABASE & "." & Version & _
+                         " WHERE " & DATA_PRODUCT_ID_VARIABLE & "='" & product_id & "'")
+        Next
+
+        ' Delete the item fomr Products Table
+        RST.Filter = ANALYSIS_AXIS_ID_VAR + "='" + product_id + "'"
         If RST.EOF = False Then
             RST.Delete()
             RST.Update()
@@ -168,6 +176,25 @@ Friend Class Product
         srv.rst.Close()
 
     End Sub
+
+    Protected Friend Function getNewId() As String
+
+        Dim id As String = TreeViewsUtilities.IssueNewToken(ANALYSIS_AXIS_TOKEN_SIZE)
+        Do While Not ReadProduct(id, ANALYSIS_AXIS_ID_VAR) Is Nothing
+            id = TreeViewsUtilities.IssueNewToken(ANALYSIS_AXIS_TOKEN_SIZE)
+        Loop
+        Return id
+
+    End Function
+
+    Protected Friend Function isNameValid(ByRef name As String) As Boolean
+
+        If name = "" Then Return False
+        SRV.rst.Filter = ANALYSIS_AXIS_NAME_VAR + "='" + name + "'"
+        If SRV.rst.EOF = False Then Return False
+        Return True
+
+    End Function
 
 #End Region
 

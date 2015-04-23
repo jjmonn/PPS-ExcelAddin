@@ -36,7 +36,6 @@ Partial Class PlatformMGTGeneralUI
         Me.CurrenciesToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.UsersToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.Panel1 = New System.Windows.Forms.Panel()
-        Me.BCDWorker = New System.ComponentModel.BackgroundWorker()
         Me.MenuStrip1.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -165,10 +164,6 @@ Partial Class PlatformMGTGeneralUI
         Me.Panel1.Size = New System.Drawing.Size(674, 387)
         Me.Panel1.TabIndex = 1
         '
-        'BCDWorker
-        '
-        Me.BCDWorker.WorkerReportsProgress = True
-        '
         'PlatformMGTGeneralUI
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -199,5 +194,4 @@ Partial Class PlatformMGTGeneralUI
     Friend WithEvents CurrenciesToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents UsersToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents Panel1 As System.Windows.Forms.Panel
-    Friend WithEvents BCDWorker As System.ComponentModel.BackgroundWorker
 End Class

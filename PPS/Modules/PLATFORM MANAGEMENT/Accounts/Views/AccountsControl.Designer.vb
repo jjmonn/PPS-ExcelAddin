@@ -51,23 +51,22 @@ Partial Class AccountsControl
         Me.accountsIL = New System.Windows.Forms.ImageList(Me.components)
         Me.EditButtonsImagelist = New System.Windows.Forms.ImageList(Me.components)
         Me.TVRCM = New System.Windows.Forms.ContextMenuStrip(Me.components)
-        Me.AddSubAccountToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.AddCategoryToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.DeleteAccountToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.DropHierarchyToExcelToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
         Me.PositionsBCDGW = New System.ComponentModel.BackgroundWorker()
         Me.MainMenu = New System.Windows.Forms.MenuStrip()
         Me.NewToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.CreateANewAccountToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.CreateANewCategoryToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.DeleteAccountToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator()
-        Me.ExitToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.DropHierarchyToExcelToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
         Me.DropAllAccountsHierarchyToExcelToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.DropSelectedAccountHierarchyToExcelToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.HelpToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.CreateANewAccountToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.DeleteAccountToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
+        Me.AddSubAccountToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.AddCategoryToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.DeleteAccountToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.DropHierarchyToExcelToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SplitContainer1.Panel1.SuspendLayout()
         Me.SplitContainer1.Panel2.SuspendLayout()
@@ -332,7 +331,8 @@ Partial Class AccountsControl
         Me.formulaEdit.AutoSize = True
         Me.formulaEdit.BackColor = System.Drawing.Color.AliceBlue
         Me.formulaEdit.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
-        Me.formulaEdit.ImageKey = "favicon(1).ico"
+        Me.formulaEdit.ImageKey = "config circle purple.ico"
+        Me.formulaEdit.ImageList = Me.EditButtonsImagelist
         Me.formulaEdit.Location = New System.Drawing.Point(20, 23)
         Me.formulaEdit.Name = "formulaEdit"
         Me.formulaEdit.Size = New System.Drawing.Size(93, 23)
@@ -344,7 +344,8 @@ Partial Class AccountsControl
         '
         Me.submit_cmd.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.submit_cmd.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
-        Me.submit_cmd.ImageKey = "submit 1 ok.ico"
+        Me.submit_cmd.ImageKey = "1420498403_340208.ico"
+        Me.submit_cmd.ImageList = Me.EditButtonsImagelist
         Me.submit_cmd.Location = New System.Drawing.Point(421, 196)
         Me.submit_cmd.Margin = New System.Windows.Forms.Padding(2)
         Me.submit_cmd.Name = "submit_cmd"
@@ -382,45 +383,14 @@ Partial Class AccountsControl
         '
         Me.EditButtonsImagelist.ImageStream = CType(resources.GetObject("EditButtonsImagelist.ImageStream"), System.Windows.Forms.ImageListStreamer)
         Me.EditButtonsImagelist.TransparentColor = System.Drawing.Color.Transparent
-        Me.EditButtonsImagelist.Images.SetKeyName(0, "imageres_89.ico")
-        Me.EditButtonsImagelist.Images.SetKeyName(1, "favicon(1).ico")
-        Me.EditButtonsImagelist.Images.SetKeyName(2, "favicon(5).ico")
-        Me.EditButtonsImagelist.Images.SetKeyName(3, "favicon(47).ico")
-        Me.EditButtonsImagelist.Images.SetKeyName(4, "favicon(9).ico")
+        Me.EditButtonsImagelist.Images.SetKeyName(0, "1420498403_340208.ico")
+        Me.EditButtonsImagelist.Images.SetKeyName(1, "config circle purple.ico")
         '
         'TVRCM
         '
         Me.TVRCM.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.AddSubAccountToolStripMenuItem, Me.AddCategoryToolStripMenuItem, Me.DeleteAccountToolStripMenuItem, Me.DropHierarchyToExcelToolStripMenuItem, Me.ToolStripSeparator1})
         Me.TVRCM.Name = "ContextMenuStripTV"
         Me.TVRCM.Size = New System.Drawing.Size(198, 98)
-        '
-        'AddSubAccountToolStripMenuItem
-        '
-        Me.AddSubAccountToolStripMenuItem.Image = Global.PPS.My.Resources.Resources.config_circle_blue
-        Me.AddSubAccountToolStripMenuItem.Name = "AddSubAccountToolStripMenuItem"
-        Me.AddSubAccountToolStripMenuItem.Size = New System.Drawing.Size(197, 22)
-        Me.AddSubAccountToolStripMenuItem.Text = "Add Sub Account"
-        '
-        'AddCategoryToolStripMenuItem
-        '
-        Me.AddCategoryToolStripMenuItem.Image = Global.PPS.My.Resources.Resources.favicon_81_
-        Me.AddCategoryToolStripMenuItem.Name = "AddCategoryToolStripMenuItem"
-        Me.AddCategoryToolStripMenuItem.Size = New System.Drawing.Size(197, 22)
-        Me.AddCategoryToolStripMenuItem.Text = "Add Category"
-        '
-        'DeleteAccountToolStripMenuItem
-        '
-        Me.DeleteAccountToolStripMenuItem.Image = Global.PPS.My.Resources.Resources.imageres_89
-        Me.DeleteAccountToolStripMenuItem.Name = "DeleteAccountToolStripMenuItem"
-        Me.DeleteAccountToolStripMenuItem.Size = New System.Drawing.Size(197, 22)
-        Me.DeleteAccountToolStripMenuItem.Text = "Delete Account"
-        '
-        'DropHierarchyToExcelToolStripMenuItem
-        '
-        Me.DropHierarchyToExcelToolStripMenuItem.Image = Global.PPS.My.Resources.Resources.Benjigarner_Softdimension_Excel
-        Me.DropHierarchyToExcelToolStripMenuItem.Name = "DropHierarchyToExcelToolStripMenuItem"
-        Me.DropHierarchyToExcelToolStripMenuItem.Size = New System.Drawing.Size(197, 22)
-        Me.DropHierarchyToExcelToolStripMenuItem.Text = "Drop Hierarchy to Excel"
         '
         'ToolStripSeparator1
         '
@@ -442,40 +412,22 @@ Partial Class AccountsControl
         '
         'NewToolStripMenuItem
         '
-        Me.NewToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.CreateANewAccountToolStripMenuItem, Me.CreateANewCategoryToolStripMenuItem, Me.DeleteAccountToolStripMenuItem1, Me.ToolStripSeparator2, Me.ExitToolStripMenuItem})
+        Me.NewToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.CreateANewAccountToolStripMenuItem, Me.CreateANewCategoryToolStripMenuItem, Me.DeleteAccountToolStripMenuItem1, Me.ToolStripSeparator2})
         Me.NewToolStripMenuItem.Name = "NewToolStripMenuItem"
-        Me.NewToolStripMenuItem.Size = New System.Drawing.Size(39, 20)
-        Me.NewToolStripMenuItem.Text = "Edit"
-        '
-        'CreateANewAccountToolStripMenuItem
-        '
-        Me.CreateANewAccountToolStripMenuItem.Name = "CreateANewAccountToolStripMenuItem"
-        Me.CreateANewAccountToolStripMenuItem.Size = New System.Drawing.Size(193, 22)
-        Me.CreateANewAccountToolStripMenuItem.Text = "Create a new Account"
+        Me.NewToolStripMenuItem.Size = New System.Drawing.Size(64, 20)
+        Me.NewToolStripMenuItem.Text = "Account"
         '
         'CreateANewCategoryToolStripMenuItem
         '
+        Me.CreateANewCategoryToolStripMenuItem.Image = Global.PPS.My.Resources.Resources.favicon_81_
         Me.CreateANewCategoryToolStripMenuItem.Name = "CreateANewCategoryToolStripMenuItem"
         Me.CreateANewCategoryToolStripMenuItem.Size = New System.Drawing.Size(193, 22)
         Me.CreateANewCategoryToolStripMenuItem.Text = "Create a new Category"
-        '
-        'DeleteAccountToolStripMenuItem1
-        '
-        Me.DeleteAccountToolStripMenuItem1.Image = Global.PPS.My.Resources.Resources.imageres_89
-        Me.DeleteAccountToolStripMenuItem1.Name = "DeleteAccountToolStripMenuItem1"
-        Me.DeleteAccountToolStripMenuItem1.Size = New System.Drawing.Size(193, 22)
-        Me.DeleteAccountToolStripMenuItem1.Text = "Delete Account"
         '
         'ToolStripSeparator2
         '
         Me.ToolStripSeparator2.Name = "ToolStripSeparator2"
         Me.ToolStripSeparator2.Size = New System.Drawing.Size(190, 6)
-        '
-        'ExitToolStripMenuItem
-        '
-        Me.ExitToolStripMenuItem.Name = "ExitToolStripMenuItem"
-        Me.ExitToolStripMenuItem.Size = New System.Drawing.Size(193, 22)
-        Me.ExitToolStripMenuItem.Text = "Exit"
         '
         'DropHierarchyToExcelToolStripMenuItem1
         '
@@ -486,12 +438,14 @@ Partial Class AccountsControl
         '
         'DropAllAccountsHierarchyToExcelToolStripMenuItem
         '
+        Me.DropAllAccountsHierarchyToExcelToolStripMenuItem.Image = Global.PPS.My.Resources.Resources.Excel_Blue_32x32
         Me.DropAllAccountsHierarchyToExcelToolStripMenuItem.Name = "DropAllAccountsHierarchyToExcelToolStripMenuItem"
         Me.DropAllAccountsHierarchyToExcelToolStripMenuItem.Size = New System.Drawing.Size(291, 22)
         Me.DropAllAccountsHierarchyToExcelToolStripMenuItem.Text = "Drop all Accounts Hierarchy to Excel"
         '
         'DropSelectedAccountHierarchyToExcelToolStripMenuItem
         '
+        Me.DropSelectedAccountHierarchyToExcelToolStripMenuItem.Image = Global.PPS.My.Resources.Resources.Excel_Green_32x32
         Me.DropSelectedAccountHierarchyToExcelToolStripMenuItem.Name = "DropSelectedAccountHierarchyToExcelToolStripMenuItem"
         Me.DropSelectedAccountHierarchyToExcelToolStripMenuItem.Size = New System.Drawing.Size(291, 22)
         Me.DropSelectedAccountHierarchyToExcelToolStripMenuItem.Text = "Drop selected Account Hierarchy to Excel"
@@ -501,6 +455,48 @@ Partial Class AccountsControl
         Me.HelpToolStripMenuItem.Name = "HelpToolStripMenuItem"
         Me.HelpToolStripMenuItem.Size = New System.Drawing.Size(44, 20)
         Me.HelpToolStripMenuItem.Text = "Help"
+        '
+        'CreateANewAccountToolStripMenuItem
+        '
+        Me.CreateANewAccountToolStripMenuItem.Image = Global.PPS.My.Resources.Resources.registry_add
+        Me.CreateANewAccountToolStripMenuItem.Name = "CreateANewAccountToolStripMenuItem"
+        Me.CreateANewAccountToolStripMenuItem.Size = New System.Drawing.Size(193, 22)
+        Me.CreateANewAccountToolStripMenuItem.Text = "Create a new Account"
+        '
+        'DeleteAccountToolStripMenuItem1
+        '
+        Me.DeleteAccountToolStripMenuItem1.Image = Global.PPS.My.Resources.Resources.registry_delete
+        Me.DeleteAccountToolStripMenuItem1.Name = "DeleteAccountToolStripMenuItem1"
+        Me.DeleteAccountToolStripMenuItem1.Size = New System.Drawing.Size(193, 22)
+        Me.DeleteAccountToolStripMenuItem1.Text = "Delete Account"
+        '
+        'AddSubAccountToolStripMenuItem
+        '
+        Me.AddSubAccountToolStripMenuItem.Image = Global.PPS.My.Resources.Resources.registry_add
+        Me.AddSubAccountToolStripMenuItem.Name = "AddSubAccountToolStripMenuItem"
+        Me.AddSubAccountToolStripMenuItem.Size = New System.Drawing.Size(197, 22)
+        Me.AddSubAccountToolStripMenuItem.Text = "Add Sub Account"
+        '
+        'AddCategoryToolStripMenuItem
+        '
+        Me.AddCategoryToolStripMenuItem.Image = Global.PPS.My.Resources.Resources.favicon_81_
+        Me.AddCategoryToolStripMenuItem.Name = "AddCategoryToolStripMenuItem"
+        Me.AddCategoryToolStripMenuItem.Size = New System.Drawing.Size(197, 22)
+        Me.AddCategoryToolStripMenuItem.Text = "Add Category"
+        '
+        'DeleteAccountToolStripMenuItem
+        '
+        Me.DeleteAccountToolStripMenuItem.Image = Global.PPS.My.Resources.Resources.registry_delete
+        Me.DeleteAccountToolStripMenuItem.Name = "DeleteAccountToolStripMenuItem"
+        Me.DeleteAccountToolStripMenuItem.Size = New System.Drawing.Size(197, 22)
+        Me.DeleteAccountToolStripMenuItem.Text = "Delete Account"
+        '
+        'DropHierarchyToExcelToolStripMenuItem
+        '
+        Me.DropHierarchyToExcelToolStripMenuItem.Image = Global.PPS.My.Resources.Resources.Excel_Blue_32x32
+        Me.DropHierarchyToExcelToolStripMenuItem.Name = "DropHierarchyToExcelToolStripMenuItem"
+        Me.DropHierarchyToExcelToolStripMenuItem.Size = New System.Drawing.Size(197, 22)
+        Me.DropHierarchyToExcelToolStripMenuItem.Text = "Drop Hierarchy to Excel"
         '
         'AccountsControl
         '
@@ -570,7 +566,6 @@ Partial Class AccountsControl
     Friend WithEvents CreateANewCategoryToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents DeleteAccountToolStripMenuItem1 As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ToolStripSeparator2 As System.Windows.Forms.ToolStripSeparator
-    Friend WithEvents ExitToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents DropHierarchyToExcelToolStripMenuItem1 As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents DropAllAccountsHierarchyToExcelToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents DropSelectedAccountHierarchyToExcelToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem

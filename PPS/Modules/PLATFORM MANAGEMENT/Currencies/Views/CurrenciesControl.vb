@@ -31,6 +31,7 @@ Friend Class CurrenciesControl
     Friend Controller As ExchangeRatesController
     Private rates_versionsTV As TreeView
     Friend ratesView As RatesView
+    Protected Friend rates_DGV As New vDataGridView
     Private chart As Chart
 
     ' Variables
@@ -61,6 +62,8 @@ Friend Class CurrenciesControl
         rates_versionsTV = input_rates_versionsTV
         TableLayoutPanel2.Controls.Add(rates_versionsTV, 0, 0)
         rates_versionsTV.Dock = DockStyle.Fill
+        SplitContainer2.Panel1.Controls.Add(rates_DGV)
+        rates_DGV.Dock = DockStyle.Fill
 
         Dim ht As New Hashtable
         ht.Add(REPORTS_NAME_VAR, "Exchange Rates")
@@ -75,6 +78,10 @@ Friend Class CurrenciesControl
             Me.Dispose()
         End If
         ratesView.AttributeController(Controller)
+
+        ' add handlers dgv
+        ' + rcm?
+
 
     End Sub
 
@@ -300,7 +307,6 @@ Friend Class CurrenciesControl
 
 
 #End Region
-
 
 
 End Class

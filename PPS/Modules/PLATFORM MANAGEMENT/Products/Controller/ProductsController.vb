@@ -9,7 +9,7 @@ Imports System.Collections
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 20/04/2015
+' Last modified: 21/04/2015
 
 
 Friend Class ProductsController
@@ -78,11 +78,42 @@ Friend Class ProductsController
 
 #Region "Interface"
 
-    Protected Friend Sub updateValue(ByRef category_id As String, _
-                                     ByRef item_id As String, _
-                                     ByRef value As String)
+    Protected Friend Sub createProduct(ByRef hash As Hashtable)
 
+        If products.isNameValid(hash(ANALYSIS_AXIS_NAME_VAR)) = True Then
+            hash.Add(ANALYSIS_AXIS_ID_VAR, products.getNewId())
+            products.CreateProduct(hash)
+            view.addProductRow(hash(ANALYSIS_AXIS_ID_VAR), hash)
+        Else
+            MsgBox("Invalid Name. Names must be unique and not empty.")
+        End If
+      
+    End Sub
 
+    Protected Friend Function updateProductName(ByRef item_id As String, _
+                                                ByRef value As String) As Boolean
+
+        If products.isNameValid(value) = True Then
+            products.UpdateProduct(item_id, ANALYSIS_AXIS_NAME_VAR, value)
+            Return True
+        Else
+            MsgBox("Invalid Name. Names must be unique and not empty.")
+            Return False
+        End If
+
+    End Function
+
+    Protected Friend Sub updateProductCategory(ByRef item_id As String, _
+                                               ByRef category_id As String, _
+                                               ByRef value As String)
+
+        products.UpdateProduct(item_id, category_id, value)
+
+    End Sub
+
+    Protected Friend Sub deleteproduct(ByRef product_id As String)
+
+        products.deleteProduct(product_id)
 
     End Sub
 

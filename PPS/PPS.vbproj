@@ -114,6 +114,26 @@
     <Compile Include="AddinModule.vb">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Analysis Axis Super Classes\AnalysisAxisCategoriesControl.Designer.vb">
+      <DependentUpon>AnalysisAxisCategoriesControl.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Analysis Axis Super Classes\AnalysisAxisCategoriesControl.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Analysis Axis Super Classes\AnalysisAxisCategoriesController.vb" />
+    <Compile Include="Analysis Axis Super Classes\AnalysisAxisControl.Designer.vb">
+      <DependentUpon>AnalysisAxisControl.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Analysis Axis Super Classes\AnalysisAxisControl.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Analysis Axis Super Classes\AnalysisAxisController.vb" />
+    <Compile Include="Analysis Axis Super Classes\NewAnalysisAxisUI.Designer.vb">
+      <DependentUpon>NewAnalysisAxisUI.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Analysis Axis Super Classes\NewAnalysisAxisUI.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Clients Specific Modules\GDF SUEZ - ALTERNATIVE SCENARIOS\Configuration\Controllers\ASEntitiesAttributesController.vb" />
     <Compile Include="Clients Specific Modules\GDF SUEZ - ALTERNATIVE SCENARIOS\Configuration\Models\CRUDs\GDFSUEZEntitiesAttribute.vb" />
     <Compile Include="Clients Specific Modules\GDF SUEZ - ALTERNATIVE SCENARIOS\Configuration\Models\Mappings\GDFSUEZASAccountsMapping.vb" />
@@ -392,10 +412,10 @@
     <Compile Include="Transactions\SQLDataViews.vb" />
     <Compile Include="Transactions\SQLEntitiesViews.vb" />
     <Compile Include="Transactions\SQLLog.vb" />
-    <Compile Include="Views\PPS Controls\AnalysisAxisDGV.Designer.vb">
+    <Compile Include="Analysis Axis Super Classes\AnalysisAxisDGV.Designer.vb">
       <DependentUpon>AnalysisAxisDGV.vb</DependentUpon>
     </Compile>
-    <Compile Include="Views\PPS Controls\AnalysisAxisDGV.vb">
+    <Compile Include="Analysis Axis Super Classes\AnalysisAxisDGV.vb">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Views\PPS Controls\CircularProgressUI.Designer.vb">
@@ -599,6 +619,9 @@
     <EmbeddedResource Include="AddinModule.resx">
       <DependentUpon>AddinModule.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Analysis Axis Super Classes\NewAnalysisAxisUI.resx">
+      <DependentUpon>NewAnalysisAxisUI.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Clients Specific Modules\GDF SUEZ - ALTERNATIVE SCENARIOS\Configuration\Views\ASEntitiesAttributesUI.resx">
       <DependentUpon>ASEntitiesAttributesUI.vb</DependentUpon>
     </EmbeddedResource>
@@ -695,7 +718,7 @@
     <EmbeddedResource Include="Modules\SUBMISSIONS CONTROLS\View\SubmissionsControlUI.resx">
       <DependentUpon>SubmissionsControlUI.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Views\PPS Controls\AnalysisAxisDGV.resx">
+    <EmbeddedResource Include="Analysis Axis Super Classes\AnalysisAxisDGV.resx">
       <DependentUpon>AnalysisAxisDGV.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\PPS Controls\CircularProgressUI.resx">
@@ -1099,6 +1122,57 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\user.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\barcode_add.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\barcode_delete.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\element_branch2_add.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\element_branch2_delete.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\users_relation2_add.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\users_relation2_delete.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\arrow_down.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\elements_delete.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\elements_add.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\symbol_dollar_euro_delete.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\symbol_dollar_euro_add.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\elements3_delete.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\elements3_add.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\registry_delete.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\registry_add.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\UIscon Yellow.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\UIscon Yellow.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
