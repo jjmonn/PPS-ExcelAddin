@@ -25,12 +25,16 @@ Partial Class PlatformMGTGeneralUI
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(PlatformMGTGeneralUI))
         Me.MenuStrip1 = New System.Windows.Forms.MenuStrip()
         Me.FinancialsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.FinancialsAndOperationalItemsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.AdjustmentsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.OrganizationToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.OrganizationToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
         Me.OrganizationCategoriesToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ClientsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ClientsToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
         Me.ClientsCategoriesToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ProductsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ProductsToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
         Me.ProductsCategoriesToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.VersionsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.CurrenciesToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -51,7 +55,7 @@ Partial Class PlatformMGTGeneralUI
         'FinancialsToolStripMenuItem
         '
         Me.FinancialsToolStripMenuItem.CheckOnClick = True
-        Me.FinancialsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.AdjustmentsToolStripMenuItem})
+        Me.FinancialsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.FinancialsAndOperationalItemsToolStripMenuItem, Me.AdjustmentsToolStripMenuItem})
         Me.FinancialsToolStripMenuItem.Image = Global.PPS.My.Resources.Resources.registry1
         Me.FinancialsToolStripMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
         Me.FinancialsToolStripMenuItem.Name = "FinancialsToolStripMenuItem"
@@ -59,24 +63,40 @@ Partial Class PlatformMGTGeneralUI
         Me.FinancialsToolStripMenuItem.Text = "Financials"
         Me.FinancialsToolStripMenuItem.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
         '
+        'FinancialsAndOperationalItemsToolStripMenuItem
+        '
+        Me.FinancialsAndOperationalItemsToolStripMenuItem.Image = Global.PPS.My.Resources.Resources.registry1
+        Me.FinancialsAndOperationalItemsToolStripMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
+        Me.FinancialsAndOperationalItemsToolStripMenuItem.Name = "FinancialsAndOperationalItemsToolStripMenuItem"
+        Me.FinancialsAndOperationalItemsToolStripMenuItem.Size = New System.Drawing.Size(262, 38)
+        Me.FinancialsAndOperationalItemsToolStripMenuItem.Text = "Financials and Operational Items"
+        '
         'AdjustmentsToolStripMenuItem
         '
         Me.AdjustmentsToolStripMenuItem.Image = Global.PPS.My.Resources.Resources.elements1
         Me.AdjustmentsToolStripMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
         Me.AdjustmentsToolStripMenuItem.Name = "AdjustmentsToolStripMenuItem"
-        Me.AdjustmentsToolStripMenuItem.Size = New System.Drawing.Size(157, 38)
+        Me.AdjustmentsToolStripMenuItem.Size = New System.Drawing.Size(262, 38)
         Me.AdjustmentsToolStripMenuItem.Text = "Adjustments"
         '
         'OrganizationToolStripMenuItem
         '
         Me.OrganizationToolStripMenuItem.CheckOnClick = True
-        Me.OrganizationToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.OrganizationCategoriesToolStripMenuItem})
+        Me.OrganizationToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.OrganizationToolStripMenuItem1, Me.OrganizationCategoriesToolStripMenuItem})
         Me.OrganizationToolStripMenuItem.Image = Global.PPS.My.Resources.Resources.element_branch21
         Me.OrganizationToolStripMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
         Me.OrganizationToolStripMenuItem.Name = "OrganizationToolStripMenuItem"
         Me.OrganizationToolStripMenuItem.Size = New System.Drawing.Size(87, 51)
         Me.OrganizationToolStripMenuItem.Text = "Organization"
         Me.OrganizationToolStripMenuItem.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
+        '
+        'OrganizationToolStripMenuItem1
+        '
+        Me.OrganizationToolStripMenuItem1.Image = Global.PPS.My.Resources.Resources.element_branch21
+        Me.OrganizationToolStripMenuItem1.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
+        Me.OrganizationToolStripMenuItem1.Name = "OrganizationToolStripMenuItem1"
+        Me.OrganizationToolStripMenuItem1.Size = New System.Drawing.Size(217, 38)
+        Me.OrganizationToolStripMenuItem1.Text = "Organization"
         '
         'OrganizationCategoriesToolStripMenuItem
         '
@@ -89,13 +109,21 @@ Partial Class PlatformMGTGeneralUI
         'ClientsToolStripMenuItem
         '
         Me.ClientsToolStripMenuItem.CheckOnClick = True
-        Me.ClientsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ClientsCategoriesToolStripMenuItem})
+        Me.ClientsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ClientsToolStripMenuItem1, Me.ClientsCategoriesToolStripMenuItem})
         Me.ClientsToolStripMenuItem.Image = Global.PPS.My.Resources.Resources.users_relation21
         Me.ClientsToolStripMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
         Me.ClientsToolStripMenuItem.Name = "ClientsToolStripMenuItem"
         Me.ClientsToolStripMenuItem.Size = New System.Drawing.Size(55, 51)
         Me.ClientsToolStripMenuItem.Text = "Clients"
         Me.ClientsToolStripMenuItem.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
+        '
+        'ClientsToolStripMenuItem1
+        '
+        Me.ClientsToolStripMenuItem1.Image = Global.PPS.My.Resources.Resources.users_relation21
+        Me.ClientsToolStripMenuItem1.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
+        Me.ClientsToolStripMenuItem1.Name = "ClientsToolStripMenuItem1"
+        Me.ClientsToolStripMenuItem1.Size = New System.Drawing.Size(185, 38)
+        Me.ClientsToolStripMenuItem1.Text = "Clients"
         '
         'ClientsCategoriesToolStripMenuItem
         '
@@ -108,13 +136,21 @@ Partial Class PlatformMGTGeneralUI
         'ProductsToolStripMenuItem
         '
         Me.ProductsToolStripMenuItem.CheckOnClick = True
-        Me.ProductsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ProductsCategoriesToolStripMenuItem})
+        Me.ProductsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ProductsToolStripMenuItem1, Me.ProductsCategoriesToolStripMenuItem})
         Me.ProductsToolStripMenuItem.Image = Global.PPS.My.Resources.Resources.barcode
         Me.ProductsToolStripMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
         Me.ProductsToolStripMenuItem.Name = "ProductsToolStripMenuItem"
         Me.ProductsToolStripMenuItem.Size = New System.Drawing.Size(66, 51)
         Me.ProductsToolStripMenuItem.Text = "Products"
         Me.ProductsToolStripMenuItem.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
+        '
+        'ProductsToolStripMenuItem1
+        '
+        Me.ProductsToolStripMenuItem1.Image = Global.PPS.My.Resources.Resources.barcode
+        Me.ProductsToolStripMenuItem1.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
+        Me.ProductsToolStripMenuItem1.Name = "ProductsToolStripMenuItem1"
+        Me.ProductsToolStripMenuItem1.Size = New System.Drawing.Size(196, 38)
+        Me.ProductsToolStripMenuItem1.Text = "Products"
         '
         'ProductsCategoriesToolStripMenuItem
         '
@@ -194,4 +230,8 @@ Partial Class PlatformMGTGeneralUI
     Friend WithEvents CurrenciesToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents UsersToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents Panel1 As System.Windows.Forms.Panel
+    Friend WithEvents FinancialsAndOperationalItemsToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents OrganizationToolStripMenuItem1 As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ClientsToolStripMenuItem1 As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ProductsToolStripMenuItem1 As System.Windows.Forms.ToolStripMenuItem
 End Class

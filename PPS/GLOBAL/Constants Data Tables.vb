@@ -449,14 +449,8 @@ Module Data_Tables_Constants
     Friend Const ANALYSIS_AXIS_NAME_VAR As String = "name"
     Friend Const ANALYSIS_AXIS_TOKEN_SIZE As Int32 = 3
 
-    Friend Const DEFAULT_ADJUSTMENT_ID As String = "aaa"
-    Friend Const DEFAULT_CLIENT_ID As String = "aaa"
-    Friend Const DEFAULT_PRODUCT_ID As String = "aaa"
-
-    ' Codes
-
-
-
+    Friend Const DEFAULT_ANALYSIS_AXIS_ID As String = "aaa"
+ 
 
 #End Region
 

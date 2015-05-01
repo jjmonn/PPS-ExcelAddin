@@ -276,6 +276,8 @@ Friend Class AlternativeScenarioModel
                                                                                         periods_list(j), _
                                                                                         new_value, _
                                                                                         version_id, _
+                                                                                        DEFAULT_ANALYSIS_AXIS_ID, _
+                                                                                        DEFAULT_ANALYSIS_AXIS_ID, _
                                                                                         adjustment_id)
                         Controller.AddProgress()
                     Next

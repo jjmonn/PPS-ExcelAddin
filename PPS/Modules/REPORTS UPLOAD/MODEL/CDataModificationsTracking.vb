@@ -28,7 +28,7 @@ Friend Class CDataModificationsTracking
 #Region "Instance Variables"
 
     ' Objects
-    Private DATASET As CModelDataSet
+    Private DATASET As ModelDataSet
     Friend RANGEHIGHLIGHTER As CRangeHighlighter
     Friend dataSetRegion As Excel.Range
     Friend outputsRegion As Excel.Range
@@ -54,7 +54,7 @@ Friend Class CDataModificationsTracking
 
 #Region "Initialize"
 
-    Friend Sub New(ByRef inputDataSet As CModelDataSet)
+    Friend Sub New(ByRef inputDataSet As ModelDataSet)
 
         DATASET = inputDataSet
         RANGEHIGHLIGHTER = New CRangeHighlighter(DATASET.WS)
@@ -71,12 +71,12 @@ Friend Class CDataModificationsTracking
     Friend Sub InitializeDataSetRegion()
 
         Select Case DATASET.GlobalOrientationFlag
-            Case CModelDataSet.DATASET_ACCOUNTS_PERIODS_OR : AppendDataRegionRanges(dataSetRegion, DATASET.AccountsAddressValuesDictionary, DATASET.periodsAddressValuesDictionary)
-            Case CModelDataSet.DATASET_PERIODS_ACCOUNTS_OR : AppendDataRegionRanges(dataSetRegion, DATASET.periodsAddressValuesDictionary, DATASET.AccountsAddressValuesDictionary)
-            Case CModelDataSet.DATASET_ACCOUNTS_ENTITIES_OR : AppendDataRegionRanges(dataSetRegion, DATASET.AccountsAddressValuesDictionary, DATASET.EntitiesAddressValuesDictionary)
-            Case CModelDataSet.DATASET_ENTITIES_ACCOUNTS_OR : AppendDataRegionRanges(dataSetRegion, DATASET.EntitiesAddressValuesDictionary, DATASET.AccountsAddressValuesDictionary)
-            Case CModelDataSet.DATASET_PERIODS_ENTITIES_OR : AppendDataRegionRanges(dataSetRegion, DATASET.periodsAddressValuesDictionary, DATASET.EntitiesAddressValuesDictionary)
-            Case CModelDataSet.DATASET_ENTITIES_PERIODS_OR : AppendDataRegionRanges(dataSetRegion, DATASET.EntitiesAddressValuesDictionary, DATASET.periodsAddressValuesDictionary)
+            Case ModelDataSet.DATASET_ACCOUNTS_PERIODS_OR : AppendDataRegionRanges(dataSetRegion, DATASET.AccountsAddressValuesDictionary, DATASET.periodsAddressValuesDictionary)
+            Case ModelDataSet.DATASET_PERIODS_ACCOUNTS_OR : AppendDataRegionRanges(dataSetRegion, DATASET.periodsAddressValuesDictionary, DATASET.AccountsAddressValuesDictionary)
+            Case ModelDataSet.DATASET_ACCOUNTS_ENTITIES_OR : AppendDataRegionRanges(dataSetRegion, DATASET.AccountsAddressValuesDictionary, DATASET.EntitiesAddressValuesDictionary)
+            Case ModelDataSet.DATASET_ENTITIES_ACCOUNTS_OR : AppendDataRegionRanges(dataSetRegion, DATASET.EntitiesAddressValuesDictionary, DATASET.AccountsAddressValuesDictionary)
+            Case ModelDataSet.DATASET_PERIODS_ENTITIES_OR : AppendDataRegionRanges(dataSetRegion, DATASET.periodsAddressValuesDictionary, DATASET.EntitiesAddressValuesDictionary)
+            Case ModelDataSet.DATASET_ENTITIES_PERIODS_OR : AppendDataRegionRanges(dataSetRegion, DATASET.EntitiesAddressValuesDictionary, DATASET.periodsAddressValuesDictionary)
             Case Else
                 ' PPS error tracking
                 Exit Sub
@@ -87,10 +87,10 @@ Friend Class CDataModificationsTracking
     Friend Sub InitializeOutputsRegion()
 
         Select Case DATASET.GlobalOrientationFlag
-            Case CModelDataSet.DATASET_ACCOUNTS_PERIODS_OR : AppendDataRegionRanges(outputsRegion, DATASET.OutputsAccountsAddressvaluesDictionary, DATASET.periodsAddressValuesDictionary)
-            Case CModelDataSet.DATASET_PERIODS_ACCOUNTS_OR : AppendDataRegionRanges(outputsRegion, DATASET.periodsAddressValuesDictionary, DATASET.OutputsAccountsAddressvaluesDictionary)
-            Case CModelDataSet.DATASET_ACCOUNTS_ENTITIES_OR : AppendDataRegionRanges(outputsRegion, DATASET.OutputsAccountsAddressvaluesDictionary, DATASET.EntitiesAddressValuesDictionary)
-            Case CModelDataSet.DATASET_ENTITIES_ACCOUNTS_OR : AppendDataRegionRanges(outputsRegion, DATASET.EntitiesAddressValuesDictionary, DATASET.OutputsAccountsAddressvaluesDictionary)
+            Case ModelDataSet.DATASET_ACCOUNTS_PERIODS_OR : AppendDataRegionRanges(outputsRegion, DATASET.OutputsAccountsAddressvaluesDictionary, DATASET.periodsAddressValuesDictionary)
+            Case ModelDataSet.DATASET_PERIODS_ACCOUNTS_OR : AppendDataRegionRanges(outputsRegion, DATASET.periodsAddressValuesDictionary, DATASET.OutputsAccountsAddressvaluesDictionary)
+            Case ModelDataSet.DATASET_ACCOUNTS_ENTITIES_OR : AppendDataRegionRanges(outputsRegion, DATASET.OutputsAccountsAddressvaluesDictionary, DATASET.EntitiesAddressValuesDictionary)
+            Case ModelDataSet.DATASET_ENTITIES_ACCOUNTS_OR : AppendDataRegionRanges(outputsRegion, DATASET.EntitiesAddressValuesDictionary, DATASET.OutputsAccountsAddressvaluesDictionary)
         End Select
 
     End Sub
@@ -205,12 +205,12 @@ Friend Class CDataModificationsTracking
     Private Sub DataHighlight()
 
         Select Case DATASET.GlobalOrientationFlag
-            Case CModelDataSet.DATASET_ACCOUNTS_PERIODS_OR : DataAreasHighlight(DATASET.AccountsAddressValuesDictionary, DATASET.periodsAddressValuesDictionary)
-            Case CModelDataSet.DATASET_PERIODS_ACCOUNTS_OR : DataAreasHighlight(DATASET.periodsAddressValuesDictionary, DATASET.AccountsAddressValuesDictionary)
-            Case CModelDataSet.DATASET_ACCOUNTS_ENTITIES_OR : DataAreasHighlight(DATASET.AccountsAddressValuesDictionary, DATASET.EntitiesAddressValuesDictionary)
-            Case CModelDataSet.DATASET_ENTITIES_ACCOUNTS_OR : DataAreasHighlight(DATASET.EntitiesAddressValuesDictionary, DATASET.AccountsAddressValuesDictionary)
-            Case CModelDataSet.DATASET_PERIODS_ENTITIES_OR : DataAreasHighlight(DATASET.periodsAddressValuesDictionary, DATASET.EntitiesAddressValuesDictionary)
-            Case CModelDataSet.DATASET_ENTITIES_PERIODS_OR : DataAreasHighlight(DATASET.EntitiesAddressValuesDictionary, DATASET.periodsAddressValuesDictionary)
+            Case ModelDataSet.DATASET_ACCOUNTS_PERIODS_OR : DataAreasHighlight(DATASET.AccountsAddressValuesDictionary, DATASET.periodsAddressValuesDictionary)
+            Case ModelDataSet.DATASET_PERIODS_ACCOUNTS_OR : DataAreasHighlight(DATASET.periodsAddressValuesDictionary, DATASET.AccountsAddressValuesDictionary)
+            Case ModelDataSet.DATASET_ACCOUNTS_ENTITIES_OR : DataAreasHighlight(DATASET.AccountsAddressValuesDictionary, DATASET.EntitiesAddressValuesDictionary)
+            Case ModelDataSet.DATASET_ENTITIES_ACCOUNTS_OR : DataAreasHighlight(DATASET.EntitiesAddressValuesDictionary, DATASET.AccountsAddressValuesDictionary)
+            Case ModelDataSet.DATASET_PERIODS_ENTITIES_OR : DataAreasHighlight(DATASET.periodsAddressValuesDictionary, DATASET.EntitiesAddressValuesDictionary)
+            Case ModelDataSet.DATASET_ENTITIES_PERIODS_OR : DataAreasHighlight(DATASET.EntitiesAddressValuesDictionary, DATASET.periodsAddressValuesDictionary)
             Case Else : Exit Sub
         End Select
 
@@ -271,13 +271,13 @@ Friend Class CDataModificationsTracking
     Friend Function GetExcelCell(ByRef entity As String, ByRef account As String, ByRef period As String) As Excel.Range
 
         Dim entityAddress, accountAddress, periodAddress As String
-        If DATASET.EntitiesAddressValuesDictionary.ContainsValue(entity) Then entityAddress = cExcelSubmissionWorksheetController.GetDictionaryKey(DATASET.EntitiesAddressValuesDictionary, entity)
+        If DATASET.EntitiesAddressValuesDictionary.ContainsValue(entity) Then entityAddress = SubmissionWSController.GetDictionaryKey(DATASET.EntitiesAddressValuesDictionary, entity)
         If DATASET.AccountsAddressValuesDictionary.ContainsValue(account) Then
-            accountAddress = cExcelSubmissionWorksheetController.GetDictionaryKey(DATASET.AccountsAddressValuesDictionary, account)
+            accountAddress = SubmissionWSController.GetDictionaryKey(DATASET.AccountsAddressValuesDictionary, account)
         ElseIf DATASET.OutputsAccountsAddressvaluesDictionary.ContainsValue(account) Then
-            accountAddress = cExcelSubmissionWorksheetController.GetDictionaryKey(DATASET.OutputsAccountsAddressvaluesDictionary, account)
+            accountAddress = SubmissionWSController.GetDictionaryKey(DATASET.OutputsAccountsAddressvaluesDictionary, account)
         End If
-        If DATASET.periodsAddressValuesDictionary.ContainsValue(period) Then periodAddress = cExcelSubmissionWorksheetController.GetDictionaryKey(DATASET.periodsAddressValuesDictionary, period)
+        If DATASET.periodsAddressValuesDictionary.ContainsValue(period) Then periodAddress = SubmissionWSController.GetDictionaryKey(DATASET.periodsAddressValuesDictionary, period)
 
         If Not entityAddress Is Nothing AndAlso Not accountAddress Is Nothing AndAlso Not periodAddress Is Nothing Then
             Return DATASET.GetCellFromItem(entityAddress, accountAddress, periodAddress)

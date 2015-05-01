@@ -59,6 +59,7 @@ Partial Class VersionsControl
         Me.NewFolderMenuBT = New System.Windows.Forms.ToolStripMenuItem()
         Me.DeleteVersionMenuBT = New System.Windows.Forms.ToolStripMenuItem()
         Me.RenameMenuBT = New System.Windows.Forms.ToolStripMenuItem()
+        Me.BackgroundWorker1 = New System.ComponentModel.BackgroundWorker()
         Me.RCM_TV.SuspendLayout()
         Me.TableLayoutPanel3.SuspendLayout()
         CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -126,7 +127,7 @@ Partial Class VersionsControl
         '
         Me.VersionsTVIcons.ImageStream = CType(resources.GetObject("VersionsTVIcons.ImageStream"), System.Windows.Forms.ImageListStreamer)
         Me.VersionsTVIcons.TransparentColor = System.Drawing.Color.Transparent
-        Me.VersionsTVIcons.Images.SetKeyName(0, "favicon.ico")
+        Me.VersionsTVIcons.Images.SetKeyName(0, "breakpoint.png")
         Me.VersionsTVIcons.Images.SetKeyName(1, "favicon(81).ico")
         '
         'TableLayoutPanel3
@@ -386,28 +387,31 @@ Partial Class VersionsControl
         '
         Me.NewVersionMenuBT.Image = Global.PPS.My.Resources.Resources.elements3_add
         Me.NewVersionMenuBT.Name = "NewVersionMenuBT"
-        Me.NewVersionMenuBT.Size = New System.Drawing.Size(152, 22)
+        Me.NewVersionMenuBT.Size = New System.Drawing.Size(149, 22)
         Me.NewVersionMenuBT.Text = "New Version"
         '
         'NewFolderMenuBT
         '
         Me.NewFolderMenuBT.Image = Global.PPS.My.Resources.Resources.favicon_81_
         Me.NewFolderMenuBT.Name = "NewFolderMenuBT"
-        Me.NewFolderMenuBT.Size = New System.Drawing.Size(152, 22)
+        Me.NewFolderMenuBT.Size = New System.Drawing.Size(149, 22)
         Me.NewFolderMenuBT.Text = "New Folder"
         '
         'DeleteVersionMenuBT
         '
         Me.DeleteVersionMenuBT.Image = Global.PPS.My.Resources.Resources.elements3_delete
         Me.DeleteVersionMenuBT.Name = "DeleteVersionMenuBT"
-        Me.DeleteVersionMenuBT.Size = New System.Drawing.Size(152, 22)
+        Me.DeleteVersionMenuBT.Size = New System.Drawing.Size(149, 22)
         Me.DeleteVersionMenuBT.Text = "Delete Version"
         '
         'RenameMenuBT
         '
         Me.RenameMenuBT.Name = "RenameMenuBT"
-        Me.RenameMenuBT.Size = New System.Drawing.Size(152, 22)
+        Me.RenameMenuBT.Size = New System.Drawing.Size(149, 22)
         Me.RenameMenuBT.Text = "Rename"
+        '
+        'BackgroundWorker1
+        '
         '
         'VersionsControl
         '
@@ -465,5 +469,6 @@ Partial Class VersionsControl
     Friend WithEvents NBPeriodsTB As System.Windows.Forms.TextBox
     Friend WithEvents RatesVersionCB As System.Windows.Forms.ComboBox
     Friend WithEvents RenameMenuBT As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents BackgroundWorker1 As System.ComponentModel.BackgroundWorker
 
 End Class

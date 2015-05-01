@@ -12,7 +12,7 @@
 '
 '
 '
-' Last Modified: 20/04/2014
+' Last Modified: 28/04/2014
 ' Author: Julien Monnereau
 
 
@@ -34,6 +34,7 @@ Friend Class AccountsController
     Private View As AccountsControl
     Private NewAccountView As NewAccountUI
     Private AccountsTV As New TreeView
+    Private PlatformMGTUI As PlatformMGTGeneralUI
 
     ' Variables
     Protected Friend accountsNameKeysDictionary As Hashtable
@@ -41,12 +42,11 @@ Friend Class AccountsController
     Protected Friend positionsDictionary As New Dictionary(Of String, Double)
     Protected Friend needToUpdateModel As Boolean
     Private dependant_account_id As String
-
-
+    
 #End Region
 
 
-#Region "Initialization"
+#Region "Initialization and Closing"
 
     Protected Friend Sub New()
 
@@ -61,8 +61,10 @@ Friend Class AccountsController
 
     End Sub
 
-    Public Sub addControlToPanel(ByRef dest_panel As Panel)
+    Public Sub addControlToPanel(ByRef dest_panel As Panel, _
+                                 ByRef PlatformMGTUI As PlatformMGTGeneralUI)
 
+        Me.PlatformMGTUI = PlatformMGTUI
         dest_panel.Controls.Add(View)
         View.Dock = Windows.Forms.DockStyle.Fill
 
@@ -71,9 +73,14 @@ Friend Class AccountsController
     Public Sub close()
 
         View.closeControl()
-        ' View.Dispose()
-        ' View = Nothing
-        Accounts.RST.Close()
+
+    End Sub
+
+    Protected Friend Sub sendCloseOrder()
+
+        View.Dispose()
+        Accounts.Close()
+        PlatformMGTUI.displayControl()
 
     End Sub
 
@@ -220,14 +227,9 @@ Friend Class AccountsController
 
 #Region "Computer and Positions Interface"
 
-    Protected Friend Sub UpdatePositionsDictionary()
-
-        positionsDictionary = TreeViewsUtilities.GeneratePositionsDictionary(AccountsTV)
-
-    End Sub
-
     Friend Sub SendNewPositionsToModel()
 
+        positionsDictionary = TreeViewsUtilities.GeneratePositionsDictionary(AccountsTV)
         For Each account In positionsDictionary.Keys
             Accounts.UpdateAccount(account, ITEMS_POSITIONS, positionsDictionary(account))
         Next
@@ -478,6 +480,7 @@ Friend Class AccountsController
         NewAccountView.Show()
 
     End Sub
+
 
 #End Region
 

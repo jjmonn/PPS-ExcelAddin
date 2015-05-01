@@ -150,7 +150,7 @@ Friend Class FModellingExportController
                                                                           entity_id, _
                                                                           account_id, _
                                                                           periods_list(j), _
-                                                                          DEFAULT_ADJUSTMENT_ID)
+                                                                          DEFAULT_ANALYSIS_AXIS_ID)
 
                 Dim new_value = current_value + scenario.data_dic(export_id)(j)
                 If new_value <> current_value Then _
@@ -159,7 +159,9 @@ Friend Class FModellingExportController
                                                        periods_list(j), _
                                                        new_value, _
                                                        SimulationsController.version_id, _
-                                                       DEFAULT_ADJUSTMENT_ID)
+                                                        DEFAULT_ANALYSIS_AXIS_ID, _
+                                                        DEFAULT_ANALYSIS_AXIS_ID, _
+                                                        DEFAULT_ANALYSIS_AXIS_ID)
 
                 ' !!!!! STUB adjustment id must be validated in some mapping !!!
 

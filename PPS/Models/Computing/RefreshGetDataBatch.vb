@@ -124,15 +124,14 @@ Friend Class RefreshGetDataBatch
 
 #Region "Refresh Report"
 
-    Friend Shared Sub RefreshReport(Optional ByRef currency As String = "", _
-                                    Optional ByVal adjustment_id As String = "")
+    Friend Shared Sub RefreshReport(Optional ByRef currency As String = MAIN_CURRENCY, _
+                                    Optional ByVal adjustment_id As String = "aaa")
 
-        If currency = "" Then currency = "EUR"
         ' currency stub !-> if currency not provided dataset should identify the currency - if no currency found -> ask user
-        Dim DS As New CModelDataSet(GlobalVariables.apps.ActiveSheet)
+        Dim DS As New ModelDataSet(GlobalVariables.APPS.ActiveSheet)
         DS.SnapshotWS()
         DS.getOrientations()
-        If DS.GlobalOrientationFlag <> ORIENTATION_ERROR_FLAG Then DS.RefreshAll(adjustment_id)
+        ' If DS.GlobalOrientationFlag <> ORIENTATION_ERROR_FLAG Then DS.RefreshAll(adjustment_id)
 
     End Sub
 

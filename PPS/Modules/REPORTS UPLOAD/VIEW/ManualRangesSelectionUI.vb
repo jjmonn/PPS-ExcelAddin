@@ -25,8 +25,8 @@ Public Class ManualRangesSelectionUI
 #Region "Instance Variables"
 
     ' Objects
-    Private GRS As CGeneralReportSubmissionControler
-    Private DATASET As CModelDataSet
+    Private GRS As GeneralSubmissionControler
+    Private DATASET As ModelDataSet
 
     ' Variables
     Private rangesModifiedFlag As Boolean
@@ -35,8 +35,8 @@ Public Class ManualRangesSelectionUI
 
 #Region "Initialize"
 
-    Friend Sub New(ByRef inputGRS As CGeneralReportSubmissionControler, _
-                   ByRef inputDATASET As CModelDataSet)
+    Friend Sub New(ByRef inputGRS As GeneralSubmissionControler, _
+                   ByRef inputDATASET As ModelDataSet)
 
         ' This call is required by the designer.
         InitializeComponent()

@@ -12,7 +12,7 @@
 '       - 
 '
 ' Author: Julien Monnereau
-' Last modified: 09/04/2015
+' Last modified: 01/05/2015
 '
 
 
@@ -78,6 +78,12 @@ Friend Class DataBaseDataDownloader
         initial_clients_id_list = ClientsMapping.GetclientsIDList()
         initial_products_id_list = ProductsMapping.GetproductsIDList()
         initial_adjustments_id_list = AdjustmentsMapping.GetAdjustmentsIDsList(ANALYSIS_AXIS_ID_VAR)
+
+        ' below ?!!
+        clients_id_filter_list = initial_clients_id_list
+        products_id_filter_list = initial_products_id_list
+        adjustments_id_filter_list = initial_adjustments_id_list
+
 
     End Sub
 
@@ -318,7 +324,7 @@ Friend Class DataBaseDataDownloader
                              & DATA_VALUE_VARIABLE _
                              & " FROM " & VIEWS_DATABASE & "." & ViewName _
                              & " WHERE " & DATA_ENTITY_ID_VARIABLE & "='" & entityKey & "'"
-                          
+
         Dim additional_where_clause As String = GetWhereClause(, clients_id_list, _
                                                                products_id_list, _
                                                                adjustments_id_list)
@@ -333,11 +339,14 @@ Friend Class DataBaseDataDownloader
         End Try
         If Not tmpArray Is Nothing Then
             BuildOutputsArrays(tmpArray)
+            Return True
         Else
+            Erase PeriodArray
+            Erase AccKeysArray
+            Erase ValuesArray
             Return False
         End If
-        Return True
-
+        
     End Function
 
     Private Sub BuildOutputsArrays(ByRef data_array(,) As Object)

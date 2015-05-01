@@ -11,7 +11,7 @@
 '        - drop on WS bug
 '        
 '
-' Last modified: 20/04/2015
+' Last modified: 05/01/2015
 ' Author: Julien Monnereau
 
 
@@ -130,6 +130,14 @@ Friend Class AccountsControl
 
     End Sub
 
+    Protected Friend Sub closeControl()
+
+        CP = New CircularProgressUI(Drawing.Color.Yellow, "Saving")
+        CP.Show()
+        BackgroundWorker1.RunWorkerAsync()
+
+    End Sub
+
 #End Region
 
 
@@ -226,17 +234,11 @@ Friend Class AccountsControl
             Response = MsgBox("The Accounts will be dropped into cell" + RNG.Address, MsgBoxStyle.OkCancel)
             If Response = MsgBoxResult.Ok Then
                 ' Launch Accounts Drop
-                CWorksheetWrittingFunctions.WriteAccountsFromTreeView(AccountsTV, RNG)
+                WorksheetWrittingFunctions.WriteAccountsFromTreeView(AccountsTV, RNG)
             ElseIf Response = MsgBoxResult.Cancel Then
                 Exit Sub
             End If
         End If
-    End Sub
-
-    Private Sub Exit_cmd_Click(sender As Object, e As EventArgs)
-
-        Me.Dispose()
-
     End Sub
 
 #End Region
@@ -550,34 +552,31 @@ Friend Class AccountsControl
 #End Region
 
 
-#Region "Background Worker Methods"
+#Region "Background Worker 1"
 
-    Delegate Sub EndSubmission_Delegate()
+    Private Sub BackgroundWorker1_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles BackgroundWorker1.DoWork
 
-    Private Sub BackgroundWork_PositionsUpdate(sender As Object, e As DoWorkEventArgs) Handles PositionsBCDGW.DoWork
-
-        Controller.UpdatePositionsDictionary()
         Controller.SendNewPositionsToModel()
         If Controller.needToUpdateModel = True Then Controller.UpdateModel()
 
     End Sub
 
-    Private Sub BGW_RunWorkerCompleted(sender As Object, e As RunWorkerCompletedEventArgs) Handles PositionsBCDGW.RunWorkerCompleted
+    Private Sub BackgroundWorker1_RunWorkerCompleted(sender As Object, e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles BackgroundWorker1.RunWorkerCompleted
 
-        EndSubmission_ThreadSafe()
+        AfterClosingAttemp_ThreadSafe()
 
     End Sub
 
-    Private Sub EndSubmission_ThreadSafe()
+    Delegate Sub AfterClosing_Delegate()
+
+    Private Sub AfterClosingAttemp_ThreadSafe()
 
         If InvokeRequired Then
-            Dim MyDelegate As New EndSubmission_Delegate(AddressOf EndSubmission_ThreadSafe)
+            Dim MyDelegate As New AfterClosing_Delegate(AddressOf AfterClosingAttemp_ThreadSafe)
             Me.Invoke(MyDelegate, New Object() {})
-            CP.Dispose()
-            CP.Close()
         Else
-            CP.Close()
             CP.Dispose()
+            Controller.sendCloseOrder()
         End If
 
     End Sub
@@ -661,20 +660,6 @@ Friend Class AccountsControl
     End Sub
 
 #End Region
-
-    Protected Friend Sub closeControl()
-
-        'PositionsBCDGW.WorkerReportsProgress = True
-        'CP = New CircularProgressUI(Drawing.Color.Purple, "Saving Space")
-        'CP.Show()
-        'PositionsBCDGW.RunWorkerAsync()
-
-        Controller.UpdatePositionsDictionary()
-        Controller.SendNewPositionsToModel()
-        If Controller.needToUpdateModel = True Then Controller.UpdateModel()
-
-    End Sub
-
 
 #End Region
 

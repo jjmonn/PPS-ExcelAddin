@@ -41,6 +41,7 @@ Partial Class EntitiesControl
         Me.ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator()
         Me.ExcelToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.SendEntitiesHierarchyToExcelToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.BackgroundWorker1 = New System.ComponentModel.BackgroundWorker()
         Me.RCM_TGV.SuspendLayout()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.MenuStrip1.SuspendLayout()
@@ -50,8 +51,8 @@ Partial Class EntitiesControl
         '
         Me.EntitiesIL.ImageStream = CType(resources.GetObject("EntitiesIL.ImageStream"), System.Windows.Forms.ImageListStreamer)
         Me.EntitiesIL.TransparentColor = System.Drawing.Color.Transparent
-        Me.EntitiesIL.Images.SetKeyName(0, "favicon(81).ico")
-        Me.EntitiesIL.Images.SetKeyName(1, "favicon(110).ico")
+        Me.EntitiesIL.Images.SetKeyName(0, "element_branch2.ico")
+        Me.EntitiesIL.Images.SetKeyName(1, "breakpoint.ico")
         '
         'ButtonsIL
         '
@@ -200,5 +201,6 @@ Partial Class EntitiesControl
     Friend WithEvents ToolStripSeparator2 As System.Windows.Forms.ToolStripSeparator
     Friend WithEvents ExcelToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents SendEntitiesHierarchyToExcelToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents BackgroundWorker1 As System.ComponentModel.BackgroundWorker
 
 End Class

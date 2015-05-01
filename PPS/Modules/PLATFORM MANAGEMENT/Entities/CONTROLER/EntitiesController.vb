@@ -35,6 +35,7 @@ Friend Class EntitiesController
     Private categoriesTV As New TreeView
     Private NewEntityView As NewEntityUI
     Private EntitiesDeletion As New SQLEntities
+    Private PlatformMGTUI As PlatformMGTGeneralUI
 
     ' Variables
     Friend categoriesNameKeyDic As Hashtable
@@ -50,7 +51,7 @@ Friend Class EntitiesController
 
         Entities = New Entity
         Entity.LoadEntitiesTree(entitiesTV)   ' can be replaced by a treenode instead !
-        Category.LoadCategoryCodeTV(categoriesTV, ControllingUI2Controller.ENTITY_CATEGORY_CODE)
+        AnalysisAxisCategory.LoadCategoryCodeTV(categoriesTV, ControllingUI2Controller.ENTITY_CATEGORY_CODE)
         entitiesNameKeyDic = EntitiesMapping.GetEntitiesDictionary(ENTITIES_NAME_VARIABLE, ENTITIES_ID_VARIABLE)
         categoriesNameKeyDic = CategoriesMapping.GetCategoryDictionary(ControllingUI2Controller.ENTITIES_CODE, CATEGORY_NAME_VARIABLE, CATEGORY_ID_VARIABLE)
 
@@ -76,8 +77,10 @@ Friend Class EntitiesController
 
     End Function
 
-    Public Sub addControlToPanel(ByRef dest_panel As Panel)
+    Public Sub addControlToPanel(ByRef dest_panel As Panel, _
+                                 ByRef PlatformMGTUI As PlatformMGTGeneralUI)
 
+        Me.PlatformMGTUI = PlatformMGTUI
         dest_panel.Controls.Add(View)
         View.Dock = Windows.Forms.DockStyle.Fill
 
@@ -86,12 +89,16 @@ Friend Class EntitiesController
     Public Sub close()
 
         View.closeControl()
-        ' View.Dispose()
-        ' View = Nothing
         ' Entities.rst.close()
 
     End Sub
 
+    Protected Friend Sub sendCloseOrder()
+
+        View.Dispose()
+        PlatformMGTUI.displayControl()
+
+    End Sub
 
 #End Region
 

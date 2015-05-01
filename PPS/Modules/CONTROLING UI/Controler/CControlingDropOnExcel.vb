@@ -51,7 +51,7 @@ Friend Class CControlingDropOnExcel
 
         If Not Controller.Entity_node.Text Is Nothing Then
 
-            Dim destination = CWorksheetWrittingFunctions.CreateReceptionWS(Controller.Entity_node.Text, _
+            Dim destination = WorksheetWrittingFunctions.CreateReceptionWS(Controller.Entity_node.Text, _
                                                                             {"Entity", "Version", "Currency"}, _
                                                                             {Controller.Entity_node.Text, version_name, currency})
 
@@ -65,7 +65,7 @@ Friend Class CControlingDropOnExcel
                                         ByRef version_name As String, _
                                         ByRef currency As String)
 
-        
+
         ' To be reimplemented (like above BUT for the current tab only)
 
     End Sub
@@ -74,7 +74,7 @@ Friend Class CControlingDropOnExcel
                                               ByRef currency As String)
 
         If Not Controller.Entity_node.Text Is Nothing Then
-            Dim destination As Excel.Range = CWorksheetWrittingFunctions.CreateReceptionWS(Controller.Entity_node.Text, _
+            Dim destination As Excel.Range = WorksheetWrittingFunctions.CreateReceptionWS(Controller.Entity_node.Text, _
                                                                                            {"Entity", "Version", "Currency"}, _
                                                                                            {Controller.Entity_node.Text, version_name, currency})
             Dim i As Int32 = 1

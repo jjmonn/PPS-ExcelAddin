@@ -1,8 +1,4 @@
-﻿Imports System.Windows.Forms
-Imports System.Collections.Generic
-Imports System.Collections
-
-' ProductsControl.vb
+﻿' ProductsControl.vb
 '
 ' 
 '
@@ -10,6 +6,11 @@ Imports System.Collections
 '
 ' Author: Julien Monnereau
 ' Last modified: 21/04/2015
+
+
+Imports System.Windows.Forms
+Imports System.Collections.Generic
+Imports System.Collections
 
 
 Friend Class ProductsController
@@ -21,6 +22,7 @@ Friend Class ProductsController
     Private view As ProductsControl
     Private products As Product
     Private products_categoriesTV As New TreeView
+    Private PlatformMGTUI As PlatformMGTGeneralUI
 
     ' Variable
     Private products_list As List(Of String)
@@ -35,7 +37,7 @@ Friend Class ProductsController
     Protected Friend Sub New()
 
         products = New Product
-        Category.LoadCategoryCodeTV(products_categoriesTV, ControllingUI2Controller.PRODUCT_CATEGORY_CODE)
+        AnalysisAxisCategory.LoadCategoryCodeTV(products_categoriesTV, ControllingUI2Controller.PRODUCT_CATEGORY_CODE)
         products_list = ProductsMapping.GetproductsIDList()
         categoriesNameKeyDic = CategoriesMapping.GetCategoryDictionary(ControllingUI2Controller.PRODUCT_CATEGORY_CODE, _
                                                                        ANALYSIS_AXIS_NAME_VAR, _
@@ -47,10 +49,12 @@ Friend Class ProductsController
     
     End Sub
 
-    Public Sub addControlToPanel(ByRef dest_panel As Panel)
+    Public Sub addControlToPanel(ByRef dest_panel As Panel, _
+                                 ByRef PlatformMGTUI As PlatformMGTGeneralUI)
 
-        dest_panel.Controls.Add(View)
-        View.Dock = Windows.Forms.DockStyle.Fill
+        Me.PlatformMGTUI = PlatformMGTUI
+        dest_panel.Controls.Add(view)
+        view.Dock = Windows.Forms.DockStyle.Fill
 
     End Sub
 
@@ -67,9 +71,9 @@ Friend Class ProductsController
     Public Sub close()
 
         View.closeControl()
-        ' View.Dispose()
-        'View = Nothing
+        view.Dispose()
         products.RST.Close()
+        PlatformMGTUI.displayControl()
 
     End Sub
 

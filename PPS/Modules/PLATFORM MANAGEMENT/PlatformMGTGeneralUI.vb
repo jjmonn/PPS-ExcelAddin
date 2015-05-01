@@ -28,93 +28,101 @@ Friend Class PlatformMGTGeneralUI
 
 #Region "Main Menu Call Backs"
 
-    Private Sub FinancialsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles FinancialsToolStripMenuItem.Click
+    Private Sub FinancialsAndOperationalItemsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles FinancialsAndOperationalItemsToolStripMenuItem.Click
 
-        displayControl(0)
+        closeCurrentControl(0)
 
     End Sub
 
     Private Sub AdjustmentsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles AdjustmentsToolStripMenuItem.Click
 
-        displayControl(1)
+        closeCurrentControl(1)
 
     End Sub
 
-    Private Sub OrganizationToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles OrganizationToolStripMenuItem.Click
+    Private Sub OrganizationToolStripMenuItem1_Click(sender As Object, e As EventArgs) Handles OrganizationToolStripMenuItem1.Click
 
-        displayControl(2)
+        closeCurrentControl(2)
 
     End Sub
 
     Private Sub OrganizationCategoriesToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles OrganizationCategoriesToolStripMenuItem.Click
 
-        displayControl(3)
+        closeCurrentControl(3)
 
     End Sub
 
-    Private Sub ClientsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ClientsToolStripMenuItem.Click
+    Private Sub ClientsToolStripMenuItem1_Click(sender As Object, e As EventArgs) Handles ClientsToolStripMenuItem1.Click
 
-        displayControl(4)
+        closeCurrentControl(4)
 
     End Sub
 
     Private Sub ClientsCategoriesToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ClientsCategoriesToolStripMenuItem.Click
 
-        displayControl(5)
+        closeCurrentControl(5)
 
     End Sub
 
-    Private Sub ProductsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ProductsToolStripMenuItem.Click
+    Private Sub ProductsToolStripMenuItem1_Click(sender As Object, e As EventArgs) Handles ProductsToolStripMenuItem1.Click
 
-        displayControl(6)
-        
+        closeCurrentControl(6)
+
     End Sub
 
     Private Sub ProductsCategoriesToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ProductsCategoriesToolStripMenuItem.Click
 
-        displayControl(7)
+        closeCurrentControl(7)
 
     End Sub
 
     Private Sub VersionsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles VersionsToolStripMenuItem.Click
 
-        displayControl(8)
+        closeCurrentControl(8)
 
     End Sub
 
     Private Sub CurrenciesToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles CurrenciesToolStripMenuItem.Click
 
-        displayControl(9)
+        closeCurrentControl(9)
 
     End Sub
 
     Private Sub UsersToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles UsersToolStripMenuItem.Click
 
-        displayControl(10)
+        closeCurrentControl(10)
 
     End Sub
 
 #End Region
 
 
-#Region "Utilities"
+#Region "Controls Display"
 
-    Private Sub displayControl(ByVal index As Int32)
+    Private Sub closeCurrentControl(ByVal index As Int32)
 
+        controller_index = index
         If Not current_controller Is Nothing Then
             current_controller.close()
-            current_controller = Nothing
+        Else
+            displayControl()
         End If
 
-        Select Case index
+    End Sub
+
+    Protected Friend Sub displayControl()
+
+        If Not current_controller Is Nothing Then current_controller = Nothing
+
+        Select Case controller_index
             Case 0 : current_controller = New AccountsController()
             Case 1 ' current_controller = New adjustments(Panel1)
             Case 2 : current_controller = New EntitiesController()
-            Case 3 'current_controller = New entitiescategoriesController(Panel1)
-            Case 4 'current_controller = New clientsController(Panel1)
-            Case 5 'current_controller = New clientscategoriesController(Panel1)
+            Case 3 : current_controller = New EntitiesCategoriesController()
+            Case 4 : current_controller = New ClientsController()
+            Case 5 : current_controller = New ClientsCategoriesController()
             Case 6 : current_controller = New ProductsController()
-            Case 7 'current_controller = New productscategoriesController(Panel1)
+            Case 7 : current_controller = New productsCategoriesController()
             Case 8 : current_controller = New DataVersionsController()
             Case 9 : current_controller = New ExchangeRatesController()
             Case 10 'current_controller = New UsersController(Panel1)
@@ -122,13 +130,21 @@ Friend Class PlatformMGTGeneralUI
                 ' controls and Charts to be added !!!
         End Select
         If Panel1.Controls.Count > 0 Then Panel1.Controls(0).Dispose()
-        current_controller.addControlToPanel(Panel1)
+        current_controller.addControlToPanel(Panel1, Me)
 
     End Sub
+
 
 #End Region
 
 
-  
+    Private Sub PlatformMGTGeneralUI_FormClosing(sender As Object, e As Windows.Forms.FormClosingEventArgs) Handles MyBase.FormClosing
+
+        If Not current_controller Is Nothing Then
+            '  e.Cancel = True
+            current_controller.close()
+        End If
+
+    End Sub
 
 End Class

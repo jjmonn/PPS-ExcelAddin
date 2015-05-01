@@ -126,7 +126,8 @@ Friend Class ConnectionUI
                         ADDIN.LaunchVersionSelection()
                     End If
                   
-                    AdjustmentsMapping.LoadAdjustmentsIDDD()
+                    AddinModule.loadDropDownsSubmissionButtons()
+
                     CP.Dispose()
                     Me.Dispose()
                     Me.Close()

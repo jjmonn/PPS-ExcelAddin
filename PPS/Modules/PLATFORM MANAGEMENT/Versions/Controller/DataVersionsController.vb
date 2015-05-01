@@ -10,7 +10,7 @@
 ' Known bugs:
 '
 ' 
-' Last modified: 20/04/2015
+' Last modified: 28/04/2015
 ' Author: Julien Monnereau
 
 
@@ -32,6 +32,7 @@ Friend Class DataVersionsController
     Private ViewsController As New ViewsController
     Private SQLVersions As New SQLVersions
     Private NewVersionUI As NewDataVersionUI
+    Private PlatformMGTUI As PlatformMGTGeneralUI
 
     ' Variables
     Private versionsTV As New TreeView
@@ -67,8 +68,10 @@ Friend Class DataVersionsController
 
     End Sub
 
-    Public Sub addControlToPanel(ByRef dest_panel As Panel)
+    Public Sub addControlToPanel(ByRef dest_panel As Panel, _
+                                 ByRef PlatformMGTUI As PlatformMGTGeneralUI)
 
+        Me.PlatformMGTUI = PlatformMGTUI
         dest_panel.Controls.Add(View)
         View.Dock = Windows.Forms.DockStyle.Fill
 
@@ -77,7 +80,14 @@ Friend Class DataVersionsController
     Public Sub close()
 
         View.closeControl()
+
+    End Sub
+
+    Protected Friend Sub sendCloseOrder()
+
+        View.Dispose()
         Versions.Close()
+        PlatformMGTUI.displayControl()
 
     End Sub
 
@@ -266,6 +276,7 @@ Friend Class DataVersionsController
 
     Protected Friend Sub SendNewPositionsToModel()
 
+        positions_dictionary = TreeViewsUtilities.GeneratePositionsDictionary(versionsTV)
         For Each category_id In positions_dictionary.Keys
             Versions.UpdateVersion(category_id, ITEMS_POSITIONS, positions_dictionary(category_id))
         Next

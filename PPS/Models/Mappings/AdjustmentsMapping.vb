@@ -48,38 +48,6 @@ Friend Class AdjustmentsMapping
 
     End Function
 
-    Protected Friend Shared Sub LoadAdjustmentsIDDD()
-
-        GlobalVariables.IsLoadingAdjusmtentsIDs = True
-        GlobalVariables.AdjustmentIDDropDown.Items.Clear()
- 
-        Dim srv As New ModelServer
-        srv.OpenRst(CONFIG_DATABASE + "." + ADJUSTMENTS_TABLE, ModelServer.FWD_CURSOR)
-
-        If srv.rst.EOF = False And srv.rst.BOF = False Then
-            srv.rst.MoveFirst()
-            Do While srv.rst.EOF = False
-                AddItemToAdjustmentsIDDD(srv.rst.Fields(ANALYSIS_AXIS_ID_VAR).Value, _
-                                         srv.rst.Fields(ANALYSIS_AXIS_NAME_VAR).Value)
-                srv.rst.MoveNext()
-            Loop
-        End If
-        srv.rst.Close()
-        GlobalVariables.AdjustmentIDDropDown.SelectedItemId = DEFAULT_ADJUSTMENT_ID
-        GlobalVariables.IsLoadingAdjusmtentsIDs = False
-
-    End Sub
-
-    Protected Friend Shared Sub AddItemToAdjustmentsIDDD(ByVal id As String, _
-                                                         ByVal caption As String)
-
-        Dim adxRibbonItem As AddinExpress.MSO.ADXRibbonItem = New AddinExpress.MSO.ADXRibbonItem()
-        adxRibbonItem.Caption = caption
-        adxRibbonItem.Id = id
-        adxRibbonItem.ImageTransparentColor = System.Drawing.Color.Transparent
-        GlobalVariables.AdjustmentIDDropDown.Items.Add(adxRibbonItem)
-
-    End Sub
-
-
+    
+    
 End Class

@@ -27,7 +27,7 @@ Friend Class Account
 
     ' Objects
     Private SRV As ModelServer
-    Friend RST As Recordset
+    Private RST As Recordset
 
     ' Constants
     Private ACCOUNTS_TABLE_ADDRESS As String = CONFIG_DATABASE + "." + ACCOUNTS_TABLE
@@ -160,6 +160,8 @@ Friend Class Account
 
     Protected Friend Sub Close()
 
+        On Error Resume Next
+        RST.Close()
         Me.finalize()
 
     End Sub

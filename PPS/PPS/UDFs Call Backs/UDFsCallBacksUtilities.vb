@@ -1,5 +1,0 @@
-﻿Module UDFsCallBacksUtilities
-
-
-
-End Module

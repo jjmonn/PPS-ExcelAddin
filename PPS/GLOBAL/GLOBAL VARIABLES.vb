@@ -58,9 +58,10 @@ Friend Class GlobalVariables
 
     Protected Friend Shared SubmissionStatusButton As ADXRibbonButton
     Protected Friend Shared WSHasChangedSinceLastSubmission As Boolean
+    Protected Friend Shared ClientsIDDropDown As ADXRibbonDropDown
+    Protected Friend Shared ProductsIDDropDown As ADXRibbonDropDown
     Protected Friend Shared AdjustmentIDDropDown As ADXRibbonDropDown
-    Protected Friend Shared IsLoadingAdjusmtentsIDs As Boolean = False
-
+  
 #End Region
 
 

@@ -18,7 +18,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 25/01/2015
+' Last modified: 28/04/2015
 
 
 Imports System.Linq
@@ -88,6 +88,8 @@ Friend Class DataBaseDataUploader
                                                        ByVal period As Integer, _
                                                        ByVal value As Double, _
                                                        ByRef versionCode As String, _
+                                                       ByVal client_id As String, _
+                                                       ByVal product_id As String, _
                                                        ByVal adjustment_id As String) As Boolean
 
         Dim entityKey As String = EntitiesNameKeyDictionary(entityName)
@@ -103,6 +105,8 @@ Friend Class DataBaseDataUploader
                                      period,
                                      value,
                                      versionCode, _
+                                     client_id, _
+                                     product_id, _
                                      adjustment_id)
         End If
 
@@ -113,6 +117,8 @@ Friend Class DataBaseDataUploader
                                                 ByRef period As Integer, _
                                                 ByRef value As Double, _
                                                 ByRef versionCode As String, _
+                                                ByVal client_id As String, _
+                                                ByVal product_id As String, _
                                                 ByVal adjustment_id As String) As Boolean
 
         Dim valueString As String = value.ToString("F", System.Globalization.CultureInfo.InvariantCulture)
@@ -121,11 +127,15 @@ Friend Class DataBaseDataUploader
                            DATA_ACCOUNT_ID_VARIABLE & "," & _
                            DATA_PERIOD_VARIABLE & "," & _
                            DATA_VALUE_VARIABLE & "," & _
+                           DATA_CLIENT_ID_VARIABLE & "," & _
+                           DATA_PRODUCT_ID_VARIABLE & "," & _
                            DATA_ADJUSTMENT_ID_VARIABLE & ")" & _
                         " VALUES ('" & entityKey & "','" & _
                                      accountKey & "'," & _
                                      period & "," & _
                                      valueString & ",'" & _
+                                     client_id & "','" & _
+                                     product_id & "','" & _
                                      adjustment_id & "')") = True Then
 
             Return True

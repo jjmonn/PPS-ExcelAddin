@@ -5,7 +5,8 @@
 '
 '
 ' Known bugs: 
-'       -
+'       - dgv row filling crashes if entity has "" value for a category
+'           -> will be an issue in implementing no categories value for conso entities
 '
 '
 ' Last modified: 21/04/2014
@@ -326,7 +327,7 @@ Friend Class EntitiesDGV
     ' Drop the current TGV in a new worksheet
     Friend Sub DropInExcel()
 
-        Dim cell As Excel.Range = CWorksheetWrittingFunctions.CreateReceptionWS(ENTITIES_TABLE, _
+        Dim cell As Excel.Range = WorksheetWrittingFunctions.CreateReceptionWS(ENTITIES_TABLE, _
                                                                                 {"Entities Hierarchy"}, _
                                                                                 {""})
         Dim nbRows As Int32
@@ -348,7 +349,7 @@ Friend Class EntitiesDGV
             fillInDGVArrayRow(row, 1)
         Next
 
-        CWorksheetWrittingFunctions.WriteArray(DGVArray, cell)
+        WorksheetWrittingFunctions.WriteArray(DGVArray, cell)
         ExcelEntitiesReportFormatting.FormatEntitiesReport(GlobalVariables.APPS.ActiveSheet.range(cell, cell.Offset(UBound(DGVArray, 1), UBound(DGVArray, 2))))
 
     End Sub

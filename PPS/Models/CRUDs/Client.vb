@@ -3,12 +3,12 @@
 ' Controls table CRUD model
 '
 ' To do: 
-'
+'  We could have only one AnalysisAxis CRUD Model
 '
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 24/03/2015
+' Last modified: 27/07/2015
 
 
 Imports ADODB
@@ -65,6 +65,19 @@ Friend Class Client
 
     End Function
 
+    Protected Friend Function GetRecord(ByRef client_id As String, ByRef categoriesTV As TreeView) As Hashtable
+
+        RST.Filter = ANALYSIS_AXIS_ID_VAR + "='" + client_id + "'"
+        If RST.EOF Then Return Nothing
+        Dim hash As New Hashtable
+        hash.Add(ANALYSIS_AXIS_NAME_VAR, RST.Fields(ANALYSIS_AXIS_NAME_VAR).Value)
+        For Each category_node In categoriesTV.Nodes
+            hash.Add(category_node.name, RST.Fields(category_node.name).Value)
+        Next
+        Return hash
+
+    End Function
+
     Protected Friend Sub UpdateClient(ByRef Client_id As String, ByRef hash As Hashtable)
 
         RST.Filter = ANALYSIS_AXIS_ID_VAR + "='" + Client_id + "'"
@@ -105,6 +118,7 @@ Friend Class Client
 
     Protected Overrides Sub finalize()
 
+        On Error Resume Next
         RST.Close()
         MyBase.Finalize()
 
@@ -154,6 +168,65 @@ Friend Class Client
         srv.rst.Close()
 
     End Sub
+
+    Protected Friend Function getNewId() As String
+
+        Dim id As String = TreeViewsUtilities.IssueNewToken(ANALYSIS_AXIS_TOKEN_SIZE)
+        Do While Not ReadClient(id, ANALYSIS_AXIS_ID_VAR) Is Nothing
+            id = TreeViewsUtilities.IssueNewToken(ANALYSIS_AXIS_TOKEN_SIZE)
+        Loop
+        Return id
+
+    End Function
+
+    Protected Friend Function isNameValid(ByRef name As String) As Boolean
+
+        If name = "" Then Return False
+        SRV.rst.Filter = ANALYSIS_AXIS_NAME_VAR + "='" + name + "'"
+        If SRV.rst.EOF = False Then Return False
+        Return True
+
+    End Function
+
+    Protected Friend Sub closeRST()
+
+        On Error Resume Next
+        RST.Close()
+
+    End Sub
+
+#End Region
+
+
+#Region "Categories Utilities"
+
+    Protected Friend Shared Function CreateNewClientsVariable(ByRef variable_id As String) As Boolean
+
+        Dim tmp_srv As New ModelServer
+        Dim column_values_length As Int32 = CATEGORIES_TOKEN_SIZE + Len(NON_ATTRIBUTED_SUFIX)
+        Return tmp_srv.sqlQuery("ALTER TABLE " + CONFIG_DATABASE + "." + CLIENTS_TABLE + _
+                                " ADD COLUMN " & variable_id & " VARCHAR(" & column_values_length & ") DEFAULT '" & variable_id & NON_ATTRIBUTED_SUFIX & "'")
+
+    End Function
+
+    Protected Friend Shared Function DeleteClientsVariable(ByRef variable_id) As Boolean
+
+        Dim tmp_srv As New ModelServer
+        Return tmp_srv.sqlQuery("ALTER TABLE " + CONFIG_DATABASE + "." + CLIENTS_TABLE + _
+                                " DROP COLUMN " & variable_id)
+
+    End Function
+
+    Protected Friend Shared Function ReplaceClientsCategoryValue(ByRef category_id As String, _
+                                                                 ByRef origin_value As String) As Boolean
+
+        Dim tmp_srv As New ModelServer
+        Dim new_value = category_id & NON_ATTRIBUTED_SUFIX
+        Return tmp_srv.sqlQuery("UPDATE " & CONFIG_DATABASE + "." + CLIENTS_TABLE & _
+                                " SET " & category_id & "='" & new_value & "'" & _
+                                " WHERE " & category_id & "='" & origin_value & "'")
+
+    End Function
 
 #End Region
 

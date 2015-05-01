@@ -15,7 +15,7 @@
 '       - erreur si pas de taux -> si nb records = 0 la matrice de devrait pas être lancée
 '
 '
-' Last modified: 09/04/2015
+' Last modified: 01/05/2015
 ' Author: Julien Monnereau
 
 
@@ -70,6 +70,7 @@ Friend Class GenericAggregationDLL3Computing
 
         clear_complete_data_dictionary()
         entities_id_list = Dll3Computer.InitializeEntitiesAggregation(entity_node)
+        DBDOWNLOADER.ResetEntitiesFilter(entities_id_list)
 
         inputs_entities_list = TreeViewsUtilities.GetNoChildrenNodesList(entities_id_list, entity_node.TreeView)
         TreeViewsUtilities.FilterSelectedNodes(entity_node, entities_id_list)

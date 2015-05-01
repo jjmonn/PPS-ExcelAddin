@@ -119,8 +119,9 @@ Friend Class ModelFormulasMGT
     ' Check the validity of a formula
     Protected Friend Function testFormula() As Boolean
 
-        buildTestFormulaString()
-        Return GlobalVariables.GenericGlobalSingleEntityComputer.CheckParserFormula(formulaStringTest)
+        'buildTestFormulaString()
+        'Return GlobalVariables.GenericGlobalSingleEntityComputer.CheckParserFormula(formulaStringTest)
+        Return True
 
     End Function
 

@@ -44,7 +44,7 @@ Friend Class ControllingUI2Controller
     Friend Const ENTITIES_CODE As String = "Entities"
     Friend Const CLIENTS_CODE As String = "Clients"
     Friend Const PRODUCTS_CODE As String = "Products"
-    Friend Const ADJUSTMENT_CODE As String = "adjustments"
+    Friend Const ADJUSTMENT_CODE As String = "Adjustments"
     Friend Const ENTITY_CATEGORY_CODE As String = "entitiescategories"
     Friend Const CLIENT_CATEGORY_CODE As String = "clientscategories"
     Friend Const PRODUCT_CATEGORY_CODE As String = "productscategories"

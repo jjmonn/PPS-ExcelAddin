@@ -114,24 +114,11 @@
     <Compile Include="AddinModule.vb">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Analysis Axis Super Classes\AnalysisAxisCategoriesControl.Designer.vb">
-      <DependentUpon>AnalysisAxisCategoriesControl.vb</DependentUpon>
-    </Compile>
-    <Compile Include="Analysis Axis Super Classes\AnalysisAxisCategoriesControl.vb">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Analysis Axis Super Classes\AnalysisAxisCategoriesController.vb" />
-    <Compile Include="Analysis Axis Super Classes\AnalysisAxisControl.Designer.vb">
-      <DependentUpon>AnalysisAxisControl.vb</DependentUpon>
-    </Compile>
-    <Compile Include="Analysis Axis Super Classes\AnalysisAxisControl.vb">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Analysis Axis Super Classes\AnalysisAxisController.vb" />
-    <Compile Include="Analysis Axis Super Classes\NewAnalysisAxisUI.Designer.vb">
+    <Compile Include="Modules\PLATFORM MANAGEMENT\Analysis Axis Super Classes\Controllers\AnalysisAxisCategoriesController.vb" />
+    <Compile Include="Modules\PLATFORM MANAGEMENT\Analysis Axis Super Classes\Views\NewAnalysisAxisUI.Designer.vb">
       <DependentUpon>NewAnalysisAxisUI.vb</DependentUpon>
     </Compile>
-    <Compile Include="Analysis Axis Super Classes\NewAnalysisAxisUI.vb">
+    <Compile Include="Modules\PLATFORM MANAGEMENT\Analysis Axis Super Classes\Views\NewAnalysisAxisUI.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Clients Specific Modules\GDF SUEZ - ALTERNATIVE SCENARIOS\Configuration\Controllers\ASEntitiesAttributesController.vb" />
@@ -274,6 +261,9 @@
     <Compile Include="Modules\PLATFORM MANAGEMENT\Accounts\Views\AccountsControl.vb">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="Modules\PLATFORM MANAGEMENT\Categories\Controller\ClientsCategoriesController.vb" />
+    <Compile Include="Modules\PLATFORM MANAGEMENT\Categories\Controller\ProductsCategoryController.vb" />
+    <Compile Include="Modules\PLATFORM MANAGEMENT\Clients\Controller\ClientsController.vb" />
     <Compile Include="Modules\PLATFORM MANAGEMENT\Clients\Views\ClientsControl.Designer.vb">
       <DependentUpon>ClientsControl.vb</DependentUpon>
     </Compile>
@@ -292,6 +282,12 @@
     </Compile>
     <Compile Include="Modules\PLATFORM MANAGEMENT\Currencies\Views\NewRatesVersionUI.vb">
       <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Modules\PLATFORM MANAGEMENT\Analysis Axis Super Classes\Views\AnalysisCategoriesControl.Designer.vb">
+      <DependentUpon>AnalysisCategoriesControl.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Modules\PLATFORM MANAGEMENT\Analysis Axis Super Classes\Views\AnalysisCategoriesControl.vb">
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Modules\PLATFORM MANAGEMENT\Entities\VIEW\EntitiesControl.Designer.vb">
       <DependentUpon>EntitiesControl.vb</DependentUpon>
@@ -358,7 +354,7 @@
     <Compile Include="Modules\SUBMISSIONS CONTROLS\View\SubmissionsControlUI.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Modules\PLATFORM MANAGEMENT\Entities Categories\Controller\CategoriesController.vb" />
+    <Compile Include="Modules\PLATFORM MANAGEMENT\Categories\Controller\EntitiesCategoriesController.vb" />
     <Compile Include="Transactions\SQLFilterListsGenerators.vb" />
     <Compile Include="Views\GenericView.Designer.vb">
       <DependentUpon>GenericView.vb</DependentUpon>
@@ -373,8 +369,8 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Modules\PLATFORM MANAGEMENT\Users\Views\UsersTGV.vb" />
-    <Compile Include="Modules\REPORTS UPLOAD\CONTROLER\cAcquisitionUIController.vb" />
-    <Compile Include="Modules\REPORTS UPLOAD\CONTROLER\cExcelSubmissionWorksheetController.vb" />
+    <Compile Include="Modules\REPORTS UPLOAD\AcquisitionInterface\Controller\AcquisitionInterfaceController.vb" />
+    <Compile Include="Modules\REPORTS UPLOAD\VIEW\SubmissionWSController.vb" />
     <Compile Include="Modules\CONTROLING UI\Controler\CControlingDropOnExcel.vb" />
     <Compile Include="Modules\CONTROLING UI\View\UploadingHistoryUI.Designer.vb">
       <DependentUpon>UploadingHistoryUI.vb</DependentUpon>
@@ -390,7 +386,7 @@
     </Compile>
     <Compile Include="Modules\PLATFORM MANAGEMENT\Currencies\Controller\ExchangeRatesController.vb" />
     <Compile Include="Modules\Versions Selection\Controler\VersionSelection.vb" />
-    <Compile Include="Models\CRUDs\Category.vb" />
+    <Compile Include="Models\CRUDs\AnalysisAxisCategory.vb" />
     <Compile Include="Models\CRUDs\Entity.vb" />
     <Compile Include="Models\CRUDs\Version.vb" />
     <Compile Include="Models\CRUDs\Period.vb" />
@@ -412,10 +408,10 @@
     <Compile Include="Transactions\SQLDataViews.vb" />
     <Compile Include="Transactions\SQLEntitiesViews.vb" />
     <Compile Include="Transactions\SQLLog.vb" />
-    <Compile Include="Analysis Axis Super Classes\AnalysisAxisDGV.Designer.vb">
+    <Compile Include="Modules\PLATFORM MANAGEMENT\Analysis Axis Super Classes\Views\AnalysisAxisDGV.Designer.vb">
       <DependentUpon>AnalysisAxisDGV.vb</DependentUpon>
     </Compile>
-    <Compile Include="Analysis Axis Super Classes\AnalysisAxisDGV.vb">
+    <Compile Include="Modules\PLATFORM MANAGEMENT\Analysis Axis Super Classes\Views\AnalysisAxisDGV.vb">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Views\PPS Controls\CircularProgressUI.Designer.vb">
@@ -525,12 +521,6 @@
     <Compile Include="Modules\PLATFORM MANAGEMENT\Users\Views\UsersManagementUI.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Modules\PLATFORM MANAGEMENT\Entities Categories\Views\CategoriesManagementUI.Designer.vb">
-      <DependentUpon>CategoriesManagementUI.vb</DependentUpon>
-    </Compile>
-    <Compile Include="Modules\PLATFORM MANAGEMENT\Entities Categories\Views\CategoriesManagementUI.vb">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="Modules\Versions Selection\Views\VersionSelectionUI.Designer.vb">
       <DependentUpon>VersionSelectionUI.vb</DependentUpon>
     </Compile>
@@ -578,11 +568,11 @@
     </Compile>
     <Compile Include="Views\Utilities\ExcelEntitiesReportFormatting.vb" />
     <Compile Include="Controllers\Utilities\DataGridViewsUtil.vb" />
-    <Compile Include="Modules\REPORTS UPLOAD\CONTROLER\CGeneralReportSubmissionControler.vb" />
-    <Compile Include="Modules\REPORTS UPLOAD\VIEW\AcquisitionUI.Designer.vb">
-      <DependentUpon>AcquisitionUI.vb</DependentUpon>
+    <Compile Include="Modules\REPORTS UPLOAD\CONTROLER\GeneralSubmissionControler.vb" />
+    <Compile Include="Modules\REPORTS UPLOAD\AcquisitionInterface\View\AcquisitionInterface.Designer.vb">
+      <DependentUpon>AcquisitionInterface.vb</DependentUpon>
     </Compile>
-    <Compile Include="Modules\REPORTS UPLOAD\VIEW\AcquisitionUI.vb">
+    <Compile Include="Modules\REPORTS UPLOAD\AcquisitionInterface\View\AcquisitionInterface.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Modules\REPORTS UPLOAD\VIEW\StatusReportInterfaceUI.Designer.vb">
@@ -591,9 +581,9 @@
     <Compile Include="Modules\REPORTS UPLOAD\VIEW\StatusReportInterfaceUI.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Modules\REPORTS UPLOAD\MODEL\CAcquisitionModel.vb" />
+    <Compile Include="Modules\REPORTS UPLOAD\MODEL\AcquisitionModel.vb" />
     <Compile Include="Modules\REPORTS UPLOAD\MODEL\CDataModificationsTracking.vb" />
-    <Compile Include="Modules\REPORTS UPLOAD\MODEL\CModelDataSet.vb" />
+    <Compile Include="Modules\REPORTS UPLOAD\MODEL\ModelDataSet.vb" />
     <Compile Include="Models\CRUDs\Account.vb" />
     <Compile Include="Modules\CONNECTIONS\Connections_Functions.vb" />
     <Compile Include="Controllers\Utilities\DataTables_Functions.vb" />
@@ -606,7 +596,7 @@
     <Compile Include="Views\Utilities\UIs Events\FormsMove.vb" />
     <Compile Include="Views\Utilities\UIs Events\Panel1.vb" />
     <Compile Include="Views\Utilities\UIs Events\DragAndDrop.vb" />
-    <Compile Include="Views\Utilities\CWorksheetWrittingFunctions.vb" />
+    <Compile Include="Views\Utilities\WorksheetWrittingFunctions.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Resources.Designer.vb">
       <AutoGen>True</AutoGen>
@@ -619,7 +609,7 @@
     <EmbeddedResource Include="AddinModule.resx">
       <DependentUpon>AddinModule.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Analysis Axis Super Classes\NewAnalysisAxisUI.resx">
+    <EmbeddedResource Include="Modules\PLATFORM MANAGEMENT\Analysis Axis Super Classes\Views\NewAnalysisAxisUI.resx">
       <DependentUpon>NewAnalysisAxisUI.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Clients Specific Modules\GDF SUEZ - ALTERNATIVE SCENARIOS\Configuration\Views\ASEntitiesAttributesUI.resx">
@@ -676,6 +666,9 @@
     <EmbeddedResource Include="Modules\PLATFORM MANAGEMENT\Currencies\Views\CurrenciesControl.resx">
       <DependentUpon>CurrenciesControl.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Modules\PLATFORM MANAGEMENT\Analysis Axis Super Classes\Views\AnalysisCategoriesControl.resx">
+      <DependentUpon>AnalysisCategoriesControl.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Modules\PLATFORM MANAGEMENT\Entities\VIEW\EntitiesControl.resx">
       <DependentUpon>EntitiesControl.vb</DependentUpon>
     </EmbeddedResource>
@@ -718,7 +711,7 @@
     <EmbeddedResource Include="Modules\SUBMISSIONS CONTROLS\View\SubmissionsControlUI.resx">
       <DependentUpon>SubmissionsControlUI.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Analysis Axis Super Classes\AnalysisAxisDGV.resx">
+    <EmbeddedResource Include="Modules\PLATFORM MANAGEMENT\Analysis Axis Super Classes\Views\AnalysisAxisDGV.resx">
       <DependentUpon>AnalysisAxisDGV.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\PPS Controls\CircularProgressUI.resx">
@@ -772,9 +765,6 @@
     <EmbeddedResource Include="Modules\REPORTS UPLOAD\VIEW\ManualRangesSelectionUI.resx">
       <DependentUpon>ManualRangesSelectionUI.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Modules\PLATFORM MANAGEMENT\Entities Categories\Views\CategoriesManagementUI.resx">
-      <DependentUpon>CategoriesManagementUI.vb</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Modules\Versions Selection\Views\VersionSelectionUI.resx">
       <DependentUpon>VersionSelectionUI.vb</DependentUpon>
     </EmbeddedResource>
@@ -787,8 +777,8 @@
       <SubType>Designer</SubType>
       <LastGenOutput>Resources.Designer.vb</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="Modules\REPORTS UPLOAD\VIEW\AcquisitionUI.resx">
-      <DependentUpon>AcquisitionUI.vb</DependentUpon>
+    <EmbeddedResource Include="Modules\REPORTS UPLOAD\AcquisitionInterface\View\AcquisitionInterface.resx">
+      <DependentUpon>AcquisitionInterface.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Modules\REPORTS UPLOAD\VIEW\StatusReportInterfaceUI.resx">
       <DependentUpon>StatusReportInterfaceUI.vb</DependentUpon>
@@ -989,7 +979,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Modules\MODELING\CONFIGURATION\Market Prices Config\Model\" />
-    <Folder Include="Modules\PLATFORM MANAGEMENT\Clients\Controller\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\excel.png" />
@@ -1173,6 +1162,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\UIscon Yellow.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\folder_open_add.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.

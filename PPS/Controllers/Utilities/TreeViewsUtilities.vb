@@ -199,6 +199,7 @@ Friend Class TreeViewsUtilities
     Protected Friend Shared Function GetCheckedNodesID(ByRef node As TreeNode) As List(Of String)
 
         Dim tmpList As New List(Of String)
+        If node Is Nothing Then Return tmpList
         For Each childNode As TreeNode In node.Nodes
             If childNode.Checked = True Then tmpList.Add(childNode.Name)
         Next

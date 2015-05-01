@@ -35,14 +35,12 @@ Friend Class VersionsControl
     ' Objects
     Private Controller As DataVersionsController
     Private VersionsTV As TreeView
-    
+    Private CP As CircularProgressUI
+
     ' Variables
     Private current_node As TreeNode
     Private creationFlag As String
     Private isDisplaying As Boolean
-
-    ' const
-
 
 #End Region
 
@@ -80,8 +78,9 @@ Friend Class VersionsControl
 
     Protected Friend Sub closeControl()
 
-        Controller.positions_dictionary = TreeViewsUtilities.GeneratePositionsDictionary(VersionsTV)
-        Controller.SendNewPositionsToModel()
+        CP = New CircularProgressUI(Drawing.Color.Yellow, "Saving")
+        CP.Show()
+        BackgroundWorker1.RunWorkerAsync()
 
     End Sub
 
@@ -371,6 +370,36 @@ Friend Class VersionsControl
 
 #End Region
 
+
+#Region "Background Worker 1"
+
+    Private Sub BackgroundWorker1_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles BackgroundWorker1.DoWork
+
+        Controller.SendNewPositionsToModel()
+
+    End Sub
+
+    Private Sub BackgroundWorker1_RunWorkerCompleted(sender As Object, e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles BackgroundWorker1.RunWorkerCompleted
+
+        AfterClosingAttemp_ThreadSafe()
+
+    End Sub
+
+    Delegate Sub AfterClosing_Delegate()
+
+    Private Sub AfterClosingAttemp_ThreadSafe()
+
+        If InvokeRequired Then
+            Dim MyDelegate As New AfterClosing_Delegate(AddressOf AfterClosingAttemp_ThreadSafe)
+            Me.Invoke(MyDelegate, New Object() {})
+        Else
+            CP.Dispose()
+            Controller.sendCloseOrder()
+        End If
+
+    End Sub
+
+#End Region
 
 
 End Class

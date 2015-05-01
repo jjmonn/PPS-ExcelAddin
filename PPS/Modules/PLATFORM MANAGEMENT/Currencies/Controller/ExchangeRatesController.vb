@@ -12,7 +12,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 21/04/2015
+' Last modified: 28/04/2015
 
 
 Imports System.Collections.Generic
@@ -36,6 +36,7 @@ Friend Class ExchangeRatesController
     Private NewRatesVersionUI As NewRatesVersionUI
     Private ExcelImport As ExcelRatesImportUI
     Private PBar As PBarUI
+    Private PlatformMGTUI As PlatformMGTGeneralUI
 
     ' Variables
     Friend current_version As String
@@ -67,8 +68,10 @@ Friend Class ExchangeRatesController
 
     End Sub
 
-    Public Sub addControlToPanel(ByRef dest_panel As Panel)
+    Public Sub addControlToPanel(ByRef dest_panel As Panel, _
+                                 ByRef PlatformMGTUI As PlatformMGTGeneralUI)
 
+        Me.PlatformMGTUI = PlatformMGTUI
         dest_panel.Controls.Add(View)
         View.Dock = Windows.Forms.DockStyle.Fill
 
@@ -77,8 +80,9 @@ Friend Class ExchangeRatesController
     Public Sub close()
 
         View.closeControl()
-        '   View.Dispose()
-        '   View = Nothing
+        View.Dispose()
+        View = Nothing
+        PlatformMGTUI.displayControl()
 
     End Sub
 

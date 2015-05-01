@@ -28,19 +28,20 @@ Friend Class CExcelFormatting
 
     ' Identify the current range and 
     ' Param: REPORT_FORMAT_CODE or INPUT_FORMAT_CODE
-    Protected Friend Shared Sub FormatExcelRange(ByRef WS As Excel.Worksheet, _
-                                ByRef format As String, _
-                                Optional ByRef startingDate As Date = Nothing)
+    Protected Friend Shared Sub FormatExcelRange(ByRef first_range_cell As Excel.Range, _
+                                                ByRef format As String, _
+                                                Optional ByRef startingDate As Date = Nothing)
 
+        Dim ws As Excel.Worksheet = first_range_cell.Worksheet
         Dim tmpRange As Excel.Range
-        tmpRange = WS.Range(WS.Cells(1, 1), Utilities_Functions.GetRealLastCell(WS))
+        tmpRange = ws.Range(first_range_cell, Utilities_Functions.GetRealLastCell(ws))
         FormatExcelRangeAs(tmpRange, format, startingDate)
 
     End Sub
 
     Protected Friend Shared Sub FormatExcelRangeAs(ByRef inputRange As Excel.Range, _
-                                  ByRef reportFormat As String, _
-                                  Optional ByRef startingDate As Date = Nothing)
+                                                  ByRef reportFormat As String, _
+                                                  Optional ByRef startingDate As Date = Nothing)
 
         Dim AccountsNameFormatDictionary As Hashtable = AccountsMapping.GetAccountsDictionary(ACCOUNT_NAME_VARIABLE, ACCOUNT_FORMAT_VARIABLE)
         Dim currentFormatsDictionary As Dictionary(Of String, Dictionary(Of String, Object))
@@ -88,8 +89,8 @@ Friend Class CExcelFormatting
                                                                                   startingDate)
 
         inputRange.Columns.AutoFit()
-        inputRange.NumberFormat = "#,##0"
-        inputRange.Rows(1).NumberFormat = "Short date"
+        'inputRange.NumberFormat = "#,##0"
+        'inputRange.Rows(1).NumberFormat = "Short date"
 
     End Sub
 

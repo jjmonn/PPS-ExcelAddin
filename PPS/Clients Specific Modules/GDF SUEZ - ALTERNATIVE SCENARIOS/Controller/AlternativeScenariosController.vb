@@ -118,7 +118,7 @@ Friend Class AlternativeScenariosController
     Protected Friend Sub ScenarioReinjection(Optional ByRef adjustment_id As String = "")
 
         InitializePBarForExport()
-        If adjustment_id = "" Then adjustment_id = DEFAULT_ADJUSTMENT_ID
+        If adjustment_id = "" Then adjustment_id = DEFAULT_ANALYSIS_AXIS_ID
         Model.ASReinjection(items, GDFSUEZASExports, InputsController.current_version_id, adjustment_id)
         View.PBar.EndProgress()
 

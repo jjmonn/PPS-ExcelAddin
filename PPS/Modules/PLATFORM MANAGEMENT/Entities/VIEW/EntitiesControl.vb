@@ -8,7 +8,7 @@
 '
 '
 '
-' Last modified: 21/04/2014
+' Last modified: 28/04/2014
 ' Author: Julien Monnereau
 
 
@@ -31,6 +31,7 @@ Friend Class EntitiesControl
     Private Controller As EntitiesController
     Private EntitiesDGV As EntitiesDGV
     Private entitiesTV As TreeView
+    Private CP As CircularProgressUI
 
     ' Variables
     Protected Friend entitiesNameKeyDic As Hashtable
@@ -73,7 +74,9 @@ Friend Class EntitiesControl
 
     Protected Friend Sub closeControl()
 
-        Controller.SendNewPositionsToModel()
+        CP = New CircularProgressUI(Drawing.Color.Yellow, "Saving")
+        CP.Show()
+        BackgroundWorker1.RunWorkerAsync()
 
     End Sub
 
@@ -193,6 +196,36 @@ Friend Class EntitiesControl
 
 #End Region
 
+
+#Region "Background Worker 1"
+
+    Private Sub BackgroundWorker1_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles BackgroundWorker1.DoWork
+
+       Controller.SendNewPositionsToModel()
+
+    End Sub
+
+    Private Sub BackgroundWorker1_RunWorkerCompleted(sender As Object, e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles BackgroundWorker1.RunWorkerCompleted
+
+        AfterClosingAttemp_ThreadSafe()
+
+    End Sub
+
+    Delegate Sub AfterClosing_Delegate()
+
+    Private Sub AfterClosingAttemp_ThreadSafe()
+
+        If InvokeRequired Then
+            Dim MyDelegate As New AfterClosing_Delegate(AddressOf AfterClosingAttemp_ThreadSafe)
+            Me.Invoke(MyDelegate, New Object() {})
+        Else
+            CP.Dispose()
+            Controller.sendCloseOrder()
+        End If
+
+    End Sub
+
+#End Region
 
 
 End Class

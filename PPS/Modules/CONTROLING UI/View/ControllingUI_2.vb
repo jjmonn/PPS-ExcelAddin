@@ -155,9 +155,9 @@ Friend Class ControllingUI_2
         Client.LoadClientsTree(clientsTV)
         Product.LoadProductsTree(productsTV)
         Account.LoadAccountsTree(accountsTV)
-        Category.LoadCategoryCodeTV(entities_categoriesTV, ControllingUI2Controller.ENTITY_CATEGORY_CODE)
-        Category.LoadCategoryCodeTV(clients_categoriesTV, ControllingUI2Controller.CLIENT_CATEGORY_CODE)
-        Category.LoadCategoryCodeTV(products_categoriesTV, ControllingUI2Controller.PRODUCT_CATEGORY_CODE)
+        AnalysisAxisCategory.LoadCategoryCodeTV(entities_categoriesTV, ControllingUI2Controller.ENTITY_CATEGORY_CODE)
+        AnalysisAxisCategory.LoadCategoryCodeTV(clients_categoriesTV, ControllingUI2Controller.CLIENT_CATEGORY_CODE)
+        AnalysisAxisCategory.LoadCategoryCodeTV(products_categoriesTV, ControllingUI2Controller.PRODUCT_CATEGORY_CODE)
         Adjustment.LoadAdjustmentsTree(adjustmentsTV)
         Version.LoadVersionsTree(versionsTV)
 
@@ -279,6 +279,8 @@ Friend Class ControllingUI_2
         For Each product_category_node As TreeNode In products_categoriesTV.Nodes
             products_node.Nodes.Add(product_category_node.Name, product_category_node.Text)
         Next
+
+        analysis_axis_tv.Nodes.Add(ControllingUI2Controller.ADJUSTMENT_CODE, ControllingUI2Controller.ADJUSTMENT_CODE)
 
         display_control = New DisplayControl(analysis_axis_tv)
         TVTableLayout.Controls.Add(display_control, 0, 0)

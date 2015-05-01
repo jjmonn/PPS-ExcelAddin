@@ -49,6 +49,7 @@ Friend Class ProductsControl
         productsDGV = New AnalysisAxisDGV(categoriesTV, values_dict)
         TableLayoutPanel1.Controls.Add(productsDGV.DGV, 0, 1)
         productsDGV.DGV.Dock = Windows.Forms.DockStyle.Fill
+        productsDGV.DGV.ContextMenuStrip = RCM_TGV
 
         AddHandler productsDGV.DGV.CellValueChanging, AddressOf DGV_CellValueChanging
         AddHandler productsDGV.DGV.KeyDown, AddressOf DGV_KeyDown
@@ -155,7 +156,11 @@ Friend Class ProductsControl
         hash.Add(ANALYSIS_AXIS_NAME_VAR, newAnalysisAxisUI.nameTextEditor.Text)
         For Each categoryNode As TreeNode In categoriesTV.Nodes
             Dim categoryValueText As String = newAnalysisAxisUI.Controls.Find(categoryNode.Name + "CB", True)(0).Text
-            hash.Add(categoryNode.Name, categoriesNameKeyDic(categoryValueText))
+            If categoryValueText <> "" Then
+                hash.Add(categoryNode.Name, categoriesNameKeyDic(categoryValueText))
+            Else
+                hash.Add(categoryNode.Name, categoryNode.Name & NON_ATTRIBUTED_SUFIX)
+            End If
         Next
         controller.createProduct(hash)
         newAnalysisAxisUI.Hide()

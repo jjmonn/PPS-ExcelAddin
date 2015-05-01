@@ -8,7 +8,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 17/04/2015
+' Last modified: 27/04/2015
 
 
 Imports ADODB
@@ -195,6 +195,47 @@ Friend Class Product
         Return True
 
     End Function
+
+    Protected Friend Sub closeRST()
+
+        On Error Resume Next
+        RST.Close()
+
+    End Sub
+
+#End Region
+
+
+#Region "Categories Utilities"
+
+    Protected Friend Shared Function CreateNewProductsVariable(ByRef variable_id As String) As Boolean
+
+        Dim tmp_srv As New ModelServer
+        Dim column_values_length As Int32 = CATEGORIES_TOKEN_SIZE + Len(NON_ATTRIBUTED_SUFIX)
+        Return tmp_srv.sqlQuery("ALTER TABLE " + CONFIG_DATABASE + "." + PRODUCTS_TABLE + _
+                                " ADD COLUMN " & variable_id & " VARCHAR(" & column_values_length & ") DEFAULT '" & variable_id & NON_ATTRIBUTED_SUFIX & "'")
+
+    End Function
+
+    Protected Friend Shared Function DeleteProductsVariable(ByRef variable_id) As Boolean
+
+        Dim tmp_srv As New ModelServer
+        Return tmp_srv.sqlQuery("ALTER TABLE " + CONFIG_DATABASE + "." + PRODUCTS_TABLE + _
+                                " DROP COLUMN " & variable_id)
+
+    End Function
+
+    Protected Friend Shared Function ReplaceProductsCategoryValue(ByRef category_id As String, _
+                                                                  ByRef origin_value As String) As Boolean
+
+        Dim tmp_srv As New ModelServer
+        Dim new_value = category_id & NON_ATTRIBUTED_SUFIX
+        Return tmp_srv.sqlQuery("UPDATE " & CONFIG_DATABASE + "." + PRODUCTS_TABLE & _
+                                " SET " & category_id & "='" & new_value & "'" & _
+                                " WHERE " & category_id & "='" & origin_value & "'")
+
+    End Function
+
 
 #End Region
 

@@ -142,7 +142,7 @@ Friend Class PPSBI_UI
         AddHandler versionsTV.NodeMouseDoubleClick, AddressOf versionsTV_NodeMouseClick
 
         'Categories
-        Category.LoadCategoryCodeTV(categoriesTV, ControllingUI2Controller.ENTITIES_CODE)
+        AnalysisAxisCategory.LoadCategoryCodeTV(categoriesTV, ControllingUI2Controller.ENTITIES_CODE)
 
         Panel1.Controls.Add(entitiesTV)
         Panel2.Controls.Add(accountsTV)

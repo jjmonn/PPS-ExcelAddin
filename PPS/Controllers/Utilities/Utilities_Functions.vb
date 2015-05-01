@@ -3,14 +3,8 @@
 '
 '
 '
-'
-'
-'
-'
-'
-'
-' Last modified: 24/02/2015
-' Authors: Julien Monnereau
+' Last modified: 28/04/2015
+' Author: Julien Monnereau
 
 
 Imports Microsoft.Office.Interop
@@ -362,6 +356,16 @@ nextWord:
             If list2.Contains(element) = False Then Return False
         Next
         Return True
+
+    End Function
+
+    Protected Friend Shared Function getStringsList(ByRef input_array As String()) As List(Of String)
+
+        Dim tmp_list As New List(Of String)
+        For Each value As String In input_array
+            tmp_list.Add(value)
+        Next
+        Return tmp_list
 
     End Function
 

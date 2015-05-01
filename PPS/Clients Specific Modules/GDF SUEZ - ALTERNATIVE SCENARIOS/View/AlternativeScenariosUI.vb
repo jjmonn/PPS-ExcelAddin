@@ -200,7 +200,7 @@ Friend Class AlternativeScenariosUI
     Private Sub SendToExcelToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles SendToExcelToolStripMenuItem.Click
 
         Dim ws As Excel.Worksheet = GlobalVariables.APPS.ActiveSheet
-        Dim destination As Excel.Range = CWorksheetWrittingFunctions.CreateReceptionWS("Scenario", _
+        Dim destination As Excel.Range = WorksheetWrittingFunctions.CreateReceptionWS("Scenario", _
                                                                                            {}, _
                                                                                            {})
         DataGridViewsUtil.CopyDGVToExcelGeneric(current_report, destination, 0)
@@ -215,7 +215,7 @@ Friend Class AlternativeScenariosUI
     Private Sub SendToExcelToolStripMenuItem1_Click(sender As Object, e As EventArgs) Handles SendToExcelToolStripMenuItem1.Click
 
         Dim ws As Excel.Worksheet = GlobalVariables.APPS.ActiveSheet
-        Dim destination As Excel.Range = CWorksheetWrittingFunctions.CreateReceptionWS("Scenario", _
+        Dim destination As Excel.Range = WorksheetWrittingFunctions.CreateReceptionWS("Scenario", _
                                                                                            {}, _
                                                                                            {})
         ChartsUtilities.ExportChartExcel(current_report, destination.Worksheet, 4)

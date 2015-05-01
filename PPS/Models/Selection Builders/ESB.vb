@@ -42,7 +42,7 @@ Friend Class ESB
 
     Protected Friend Sub New()
 
-        entities_categories_TV_instance = Category.GetCategoryCodeNode(ControllingUI2Controller.ENTITIES_CODE)
+        entities_categories_TV_instance = AnalysisAxisCategory.GetCategoryCodeNode(ControllingUI2Controller.ENTITIES_CODE)
       
     End Sub
 
