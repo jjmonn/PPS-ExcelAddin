@@ -34,6 +34,7 @@ Partial Class CurrenciesControl
         Me.ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator()
         Me.AddRatesVersionRCM = New System.Windows.Forms.ToolStripMenuItem()
         Me.AddFolderRCM = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator6 = New System.Windows.Forms.ToolStripSeparator()
         Me.DeleteVersionRCM = New System.Windows.Forms.ToolStripMenuItem()
         Me.dgvRCM = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.expand_periods = New System.Windows.Forms.ToolStripMenuItem()
@@ -41,32 +42,38 @@ Partial Class CurrenciesControl
         Me.ToolStripSeparator3 = New System.Windows.Forms.ToolStripSeparator()
         Me.CopyRateDownToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.TableLayoutPanel4 = New System.Windows.Forms.TableLayoutPanel()
+        Me.SplitContainer2 = New System.Windows.Forms.SplitContainer()
+        Me.SplitContainer1 = New System.Windows.Forms.SplitContainer()
         Me.TableLayoutPanel5 = New System.Windows.Forms.TableLayoutPanel()
-        Me.TableLayoutPanel3 = New System.Windows.Forms.TableLayoutPanel()
-        Me.Label2 = New System.Windows.Forms.Label()
-        Me.rates_version_TB = New System.Windows.Forms.TextBox()
         Me.MenuStrip1 = New System.Windows.Forms.MenuStrip()
+        Me.ToolStripMenuItem2 = New System.Windows.Forms.ToolStripMenuItem()
+        Me.DisplayRatesToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator5 = New System.Windows.Forms.ToolStripSeparator()
+        Me.CreateFolderToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.CreateVersionToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator4 = New System.Windows.Forms.ToolStripSeparator()
+        Me.DeleteToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.CurrenciesToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.AddNewCurrencyToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
         Me.chart_button = New System.Windows.Forms.ToolStripMenuItem()
         Me.ImportFromExcelToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.SplitContainer1 = New System.Windows.Forms.SplitContainer()
-        Me.TableLayoutPanel2 = New System.Windows.Forms.TableLayoutPanel()
-        Me.SplitContainer2 = New System.Windows.Forms.SplitContainer()
+        Me.ToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
+        Me.Panel1 = New System.Windows.Forms.Panel()
+        Me.rates_version_TB = New System.Windows.Forms.TextBox()
+        Me.VersionLabel = New System.Windows.Forms.Label()
         Me.currenciesRCMenu.SuspendLayout()
         Me.VersionsRCMenu.SuspendLayout()
         Me.dgvRCM.SuspendLayout()
         Me.TableLayoutPanel4.SuspendLayout()
-        Me.TableLayoutPanel5.SuspendLayout()
-        Me.TableLayoutPanel3.SuspendLayout()
-        Me.MenuStrip1.SuspendLayout()
-        CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.SplitContainer1.Panel1.SuspendLayout()
-        Me.SplitContainer1.Panel2.SuspendLayout()
-        Me.SplitContainer1.SuspendLayout()
         CType(Me.SplitContainer2, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.SplitContainer2.Panel1.SuspendLayout()
         Me.SplitContainer2.SuspendLayout()
+        CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.SplitContainer1.SuspendLayout()
+        Me.TableLayoutPanel5.SuspendLayout()
+        Me.MenuStrip1.SuspendLayout()
+        Me.Panel1.SuspendLayout()
         Me.SuspendLayout()
         '
         'MenuButtonIL
@@ -110,13 +117,13 @@ Partial Class CurrenciesControl
         '
         'VersionsRCMenu
         '
-        Me.VersionsRCMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.select_version, Me.ToolStripSeparator2, Me.AddRatesVersionRCM, Me.AddFolderRCM, Me.DeleteVersionRCM})
+        Me.VersionsRCMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.select_version, Me.ToolStripSeparator2, Me.AddRatesVersionRCM, Me.AddFolderRCM, Me.ToolStripSeparator6, Me.DeleteVersionRCM})
         Me.VersionsRCMenu.Name = "VersionsRCMenu"
-        Me.VersionsRCMenu.Size = New System.Drawing.Size(148, 98)
+        Me.VersionsRCMenu.Size = New System.Drawing.Size(148, 104)
         '
         'select_version
         '
-        Me.select_version.Image = Global.PPS.My.Resources.Resources.checked
+        Me.select_version.Image = Global.PPS.My.Resources.Resources.config_circle_green
         Me.select_version.Name = "select_version"
         Me.select_version.Size = New System.Drawing.Size(147, 22)
         Me.select_version.Text = "Select Version"
@@ -128,21 +135,26 @@ Partial Class CurrenciesControl
         '
         'AddRatesVersionRCM
         '
-        Me.AddRatesVersionRCM.Image = Global.PPS.My.Resources.Resources.add21
+        Me.AddRatesVersionRCM.Image = Global.PPS.My.Resources.Resources.elements3_add
         Me.AddRatesVersionRCM.Name = "AddRatesVersionRCM"
         Me.AddRatesVersionRCM.Size = New System.Drawing.Size(147, 22)
         Me.AddRatesVersionRCM.Text = "Add Version"
         '
         'AddFolderRCM
         '
-        Me.AddFolderRCM.Image = Global.PPS.My.Resources.Resources.folder2
+        Me.AddFolderRCM.Image = Global.PPS.My.Resources.Resources.folder_open_add
         Me.AddFolderRCM.Name = "AddFolderRCM"
         Me.AddFolderRCM.Size = New System.Drawing.Size(147, 22)
         Me.AddFolderRCM.Text = "Add Folder"
         '
+        'ToolStripSeparator6
+        '
+        Me.ToolStripSeparator6.Name = "ToolStripSeparator6"
+        Me.ToolStripSeparator6.Size = New System.Drawing.Size(144, 6)
+        '
         'DeleteVersionRCM
         '
-        Me.DeleteVersionRCM.Image = Global.PPS.My.Resources.Resources.imageres_89
+        Me.DeleteVersionRCM.Image = Global.PPS.My.Resources.Resources.elements3_delete
         Me.DeleteVersionRCM.Name = "DeleteVersionRCM"
         Me.DeleteVersionRCM.Size = New System.Drawing.Size(147, 22)
         Me.DeleteVersionRCM.Text = "Delete"
@@ -181,86 +193,130 @@ Partial Class CurrenciesControl
         'TableLayoutPanel4
         '
         Me.TableLayoutPanel4.ColumnCount = 1
-        Me.TableLayoutPanel4.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
+        Me.TableLayoutPanel4.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
+        Me.TableLayoutPanel4.Controls.Add(Me.SplitContainer2, 0, 1)
         Me.TableLayoutPanel4.Controls.Add(Me.TableLayoutPanel5, 0, 0)
-        Me.TableLayoutPanel4.Controls.Add(Me.SplitContainer1, 0, 1)
         Me.TableLayoutPanel4.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TableLayoutPanel4.Location = New System.Drawing.Point(0, 0)
         Me.TableLayoutPanel4.Margin = New System.Windows.Forms.Padding(0)
         Me.TableLayoutPanel4.Name = "TableLayoutPanel4"
         Me.TableLayoutPanel4.RowCount = 2
-        Me.TableLayoutPanel4.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 4.831933!))
-        Me.TableLayoutPanel4.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 95.16807!))
+        Me.TableLayoutPanel4.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24.0!))
+        Me.TableLayoutPanel4.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
         Me.TableLayoutPanel4.Size = New System.Drawing.Size(580, 476)
         Me.TableLayoutPanel4.TabIndex = 5
         '
+        'SplitContainer2
+        '
+        Me.SplitContainer2.BackColor = System.Drawing.SystemColors.ButtonHighlight
+        Me.SplitContainer2.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.SplitContainer2.Location = New System.Drawing.Point(3, 27)
+        Me.SplitContainer2.Name = "SplitContainer2"
+        Me.SplitContainer2.Orientation = System.Windows.Forms.Orientation.Horizontal
+        '
+        'SplitContainer2.Panel1
+        '
+        Me.SplitContainer2.Panel1.Controls.Add(Me.SplitContainer1)
+        Me.SplitContainer2.Size = New System.Drawing.Size(574, 446)
+        Me.SplitContainer2.SplitterDistance = 328
+        Me.SplitContainer2.SplitterWidth = 1
+        Me.SplitContainer2.TabIndex = 2
+        '
+        'SplitContainer1
+        '
+        Me.SplitContainer1.BackColor = System.Drawing.SystemColors.Control
+        Me.SplitContainer1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.SplitContainer1.Location = New System.Drawing.Point(0, 0)
+        Me.SplitContainer1.Margin = New System.Windows.Forms.Padding(0)
+        Me.SplitContainer1.Name = "SplitContainer1"
+        '
+        'SplitContainer1.Panel2
+        '
+        Me.SplitContainer1.Panel2.BackColor = System.Drawing.SystemColors.ButtonHighlight
+        Me.SplitContainer1.Size = New System.Drawing.Size(574, 328)
+        Me.SplitContainer1.SplitterDistance = 87
+        Me.SplitContainer1.SplitterWidth = 2
+        Me.SplitContainer1.TabIndex = 5
+        '
         'TableLayoutPanel5
         '
-        Me.TableLayoutPanel5.ColumnCount = 2
-        Me.TableLayoutPanel5.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 382.0!))
-        Me.TableLayoutPanel5.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 198.0!))
-        Me.TableLayoutPanel5.Controls.Add(Me.TableLayoutPanel3, 0, 0)
+        Me.TableLayoutPanel5.ColumnCount = 3
+        Me.TableLayoutPanel5.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 97.02381!))
+        Me.TableLayoutPanel5.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 2.976191!))
+        Me.TableLayoutPanel5.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 205.0!))
         Me.TableLayoutPanel5.Controls.Add(Me.MenuStrip1, 0, 0)
+        Me.TableLayoutPanel5.Controls.Add(Me.Panel1, 2, 0)
         Me.TableLayoutPanel5.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TableLayoutPanel5.Location = New System.Drawing.Point(0, 0)
-        Me.TableLayoutPanel5.Margin = New System.Windows.Forms.Padding(0)
+        Me.TableLayoutPanel5.Margin = New System.Windows.Forms.Padding(0, 0, 4, 0)
         Me.TableLayoutPanel5.Name = "TableLayoutPanel5"
         Me.TableLayoutPanel5.RowCount = 1
         Me.TableLayoutPanel5.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TableLayoutPanel5.Size = New System.Drawing.Size(580, 23)
+        Me.TableLayoutPanel5.Size = New System.Drawing.Size(576, 24)
         Me.TableLayoutPanel5.TabIndex = 2
-        '
-        'TableLayoutPanel3
-        '
-        Me.TableLayoutPanel3.ColumnCount = 2
-        Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 92.0!))
-        Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 336.0!))
-        Me.TableLayoutPanel3.Controls.Add(Me.Label2, 0, 0)
-        Me.TableLayoutPanel3.Controls.Add(Me.rates_version_TB, 1, 0)
-        Me.TableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TableLayoutPanel3.Location = New System.Drawing.Point(383, 1)
-        Me.TableLayoutPanel3.Margin = New System.Windows.Forms.Padding(1)
-        Me.TableLayoutPanel3.Name = "TableLayoutPanel3"
-        Me.TableLayoutPanel3.RowCount = 1
-        Me.TableLayoutPanel3.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TableLayoutPanel3.Size = New System.Drawing.Size(196, 21)
-        Me.TableLayoutPanel3.TabIndex = 6
-        '
-        'Label2
-        '
-        Me.Label2.AutoSize = True
-        Me.Label2.Location = New System.Drawing.Point(5, 5)
-        Me.Label2.Margin = New System.Windows.Forms.Padding(5, 5, 3, 0)
-        Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(79, 13)
-        Me.Label2.TabIndex = 0
-        Me.Label2.Text = "Current Version"
-        '
-        'rates_version_TB
-        '
-        Me.rates_version_TB.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.rates_version_TB.Enabled = False
-        Me.rates_version_TB.Location = New System.Drawing.Point(93, 1)
-        Me.rates_version_TB.Margin = New System.Windows.Forms.Padding(1)
-        Me.rates_version_TB.Name = "rates_version_TB"
-        Me.rates_version_TB.Size = New System.Drawing.Size(334, 20)
-        Me.rates_version_TB.TabIndex = 1
         '
         'MenuStrip1
         '
-        Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.CurrenciesToolStripMenuItem, Me.chart_button, Me.ImportFromExcelToolStripMenuItem})
+        Me.MenuStrip1.Dock = System.Windows.Forms.DockStyle.None
+        Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.CurrenciesToolStripMenuItem, Me.ToolStripMenuItem2, Me.chart_button, Me.ImportFromExcelToolStripMenuItem, Me.ToolStripMenuItem1})
         Me.MenuStrip1.Location = New System.Drawing.Point(0, 0)
         Me.MenuStrip1.Name = "MenuStrip1"
-        Me.MenuStrip1.Size = New System.Drawing.Size(382, 23)
+        Me.MenuStrip1.Size = New System.Drawing.Size(359, 24)
         Me.MenuStrip1.TabIndex = 5
         Me.MenuStrip1.Text = "MenuStrip1"
+        '
+        'ToolStripMenuItem2
+        '
+        Me.ToolStripMenuItem2.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.DisplayRatesToolStripMenuItem, Me.ToolStripSeparator5, Me.CreateFolderToolStripMenuItem, Me.CreateVersionToolStripMenuItem, Me.ToolStripSeparator4, Me.DeleteToolStripMenuItem})
+        Me.ToolStripMenuItem2.Image = Global.PPS.My.Resources.Resources.breakpoints
+        Me.ToolStripMenuItem2.Name = "ToolStripMenuItem2"
+        Me.ToolStripMenuItem2.Size = New System.Drawing.Size(79, 20)
+        Me.ToolStripMenuItem2.Text = "Versions"
+        '
+        'DisplayRatesToolStripMenuItem
+        '
+        Me.DisplayRatesToolStripMenuItem.Image = Global.PPS.My.Resources.Resources.config_circle_green
+        Me.DisplayRatesToolStripMenuItem.Name = "DisplayRatesToolStripMenuItem"
+        Me.DisplayRatesToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.DisplayRatesToolStripMenuItem.Text = "Display Rates"
+        '
+        'ToolStripSeparator5
+        '
+        Me.ToolStripSeparator5.Name = "ToolStripSeparator5"
+        Me.ToolStripSeparator5.Size = New System.Drawing.Size(149, 6)
+        '
+        'CreateFolderToolStripMenuItem
+        '
+        Me.CreateFolderToolStripMenuItem.Image = Global.PPS.My.Resources.Resources.folder_open_add
+        Me.CreateFolderToolStripMenuItem.Name = "CreateFolderToolStripMenuItem"
+        Me.CreateFolderToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.CreateFolderToolStripMenuItem.Text = "Create Folder"
+        '
+        'CreateVersionToolStripMenuItem
+        '
+        Me.CreateVersionToolStripMenuItem.Image = Global.PPS.My.Resources.Resources.elements3_add
+        Me.CreateVersionToolStripMenuItem.Name = "CreateVersionToolStripMenuItem"
+        Me.CreateVersionToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.CreateVersionToolStripMenuItem.Text = "Create Version"
+        '
+        'ToolStripSeparator4
+        '
+        Me.ToolStripSeparator4.Name = "ToolStripSeparator4"
+        Me.ToolStripSeparator4.Size = New System.Drawing.Size(149, 6)
+        '
+        'DeleteToolStripMenuItem
+        '
+        Me.DeleteToolStripMenuItem.Image = Global.PPS.My.Resources.Resources.elements3_delete
+        Me.DeleteToolStripMenuItem.Name = "DeleteToolStripMenuItem"
+        Me.DeleteToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.DeleteToolStripMenuItem.Text = "Delete"
         '
         'CurrenciesToolStripMenuItem
         '
         Me.CurrenciesToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.AddNewCurrencyToolStripMenuItem, Me.ToolStripSeparator1})
         Me.CurrenciesToolStripMenuItem.Image = Global.PPS.My.Resources.Resources.symbol_dollar_euro
         Me.CurrenciesToolStripMenuItem.Name = "CurrenciesToolStripMenuItem"
-        Me.CurrenciesToolStripMenuItem.Size = New System.Drawing.Size(91, 19)
+        Me.CurrenciesToolStripMenuItem.Size = New System.Drawing.Size(91, 20)
         Me.CurrenciesToolStripMenuItem.Text = "Currencies"
         '
         'AddNewCurrencyToolStripMenuItem
@@ -277,67 +333,57 @@ Partial Class CurrenciesControl
         '
         'chart_button
         '
+        Me.chart_button.Image = Global.PPS.My.Resources.Resources.chart2
         Me.chart_button.Name = "chart_button"
-        Me.chart_button.Size = New System.Drawing.Size(48, 19)
+        Me.chart_button.Size = New System.Drawing.Size(64, 20)
         Me.chart_button.Text = "Chart"
         '
         'ImportFromExcelToolStripMenuItem
         '
         Me.ImportFromExcelToolStripMenuItem.Image = Global.PPS.My.Resources.Resources.excel_blue2
         Me.ImportFromExcelToolStripMenuItem.Name = "ImportFromExcelToolStripMenuItem"
-        Me.ImportFromExcelToolStripMenuItem.Size = New System.Drawing.Size(129, 19)
+        Me.ImportFromExcelToolStripMenuItem.Size = New System.Drawing.Size(129, 20)
         Me.ImportFromExcelToolStripMenuItem.Text = "Import from Excel"
         '
-        'SplitContainer1
+        'ToolStripMenuItem1
         '
-        Me.SplitContainer1.BackColor = System.Drawing.SystemColors.Control
-        Me.SplitContainer1.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.SplitContainer1.Location = New System.Drawing.Point(0, 23)
-        Me.SplitContainer1.Margin = New System.Windows.Forms.Padding(0)
-        Me.SplitContainer1.Name = "SplitContainer1"
+        Me.ToolStripMenuItem1.Name = "ToolStripMenuItem1"
+        Me.ToolStripMenuItem1.Size = New System.Drawing.Size(12, 20)
         '
-        'SplitContainer1.Panel1
+        'Panel1
         '
-        Me.SplitContainer1.Panel1.Controls.Add(Me.TableLayoutPanel2)
+        Me.Panel1.Controls.Add(Me.VersionLabel)
+        Me.Panel1.Controls.Add(Me.rates_version_TB)
+        Me.Panel1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Panel1.Location = New System.Drawing.Point(370, 0)
+        Me.Panel1.Margin = New System.Windows.Forms.Padding(0)
+        Me.Panel1.Name = "Panel1"
+        Me.Panel1.Size = New System.Drawing.Size(206, 24)
+        Me.Panel1.TabIndex = 6
         '
-        'SplitContainer1.Panel2
+        'rates_version_TB
         '
-        Me.SplitContainer1.Panel2.Controls.Add(Me.SplitContainer2)
-        Me.SplitContainer1.Size = New System.Drawing.Size(580, 453)
-        Me.SplitContainer1.SplitterDistance = 88
-        Me.SplitContainer1.SplitterWidth = 2
-        Me.SplitContainer1.TabIndex = 5
+        Me.rates_version_TB.Enabled = False
+        Me.rates_version_TB.Location = New System.Drawing.Point(54, 3)
+        Me.rates_version_TB.Margin = New System.Windows.Forms.Padding(1)
+        Me.rates_version_TB.Name = "rates_version_TB"
+        Me.rates_version_TB.Size = New System.Drawing.Size(130, 20)
+        Me.rates_version_TB.TabIndex = 2
         '
-        'TableLayoutPanel2
+        'VersionLabel
         '
-        Me.TableLayoutPanel2.ColumnCount = 1
-        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TableLayoutPanel2.Location = New System.Drawing.Point(0, 0)
-        Me.TableLayoutPanel2.Name = "TableLayoutPanel2"
-        Me.TableLayoutPanel2.RowCount = 2
-        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25.0!))
-        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
-        Me.TableLayoutPanel2.Size = New System.Drawing.Size(88, 453)
-        Me.TableLayoutPanel2.TabIndex = 0
-        '
-        'SplitContainer2
-        '
-        Me.SplitContainer2.BackColor = System.Drawing.SystemColors.ButtonHighlight
-        Me.SplitContainer2.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.SplitContainer2.Location = New System.Drawing.Point(0, 0)
-        Me.SplitContainer2.Name = "SplitContainer2"
-        Me.SplitContainer2.Orientation = System.Windows.Forms.Orientation.Horizontal
-        Me.SplitContainer2.Size = New System.Drawing.Size(490, 453)
-        Me.SplitContainer2.SplitterDistance = 274
-        Me.SplitContainer2.SplitterWidth = 1
-        Me.SplitContainer2.TabIndex = 2
+        Me.VersionLabel.AutoSize = True
+        Me.VersionLabel.Location = New System.Drawing.Point(8, 7)
+        Me.VersionLabel.Name = "VersionLabel"
+        Me.VersionLabel.Size = New System.Drawing.Size(42, 13)
+        Me.VersionLabel.TabIndex = 3
+        Me.VersionLabel.Text = "Version"
         '
         'CurrenciesControl
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
+        Me.BackColor = System.Drawing.SystemColors.ButtonFace
         Me.Controls.Add(Me.TableLayoutPanel4)
         Me.Name = "CurrenciesControl"
         Me.Size = New System.Drawing.Size(580, 476)
@@ -345,18 +391,17 @@ Partial Class CurrenciesControl
         Me.VersionsRCMenu.ResumeLayout(False)
         Me.dgvRCM.ResumeLayout(False)
         Me.TableLayoutPanel4.ResumeLayout(False)
-        Me.TableLayoutPanel5.ResumeLayout(False)
-        Me.TableLayoutPanel5.PerformLayout()
-        Me.TableLayoutPanel3.ResumeLayout(False)
-        Me.TableLayoutPanel3.PerformLayout()
-        Me.MenuStrip1.ResumeLayout(False)
-        Me.MenuStrip1.PerformLayout()
-        Me.SplitContainer1.Panel1.ResumeLayout(False)
-        Me.SplitContainer1.Panel2.ResumeLayout(False)
-        CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.SplitContainer1.ResumeLayout(False)
+        Me.SplitContainer2.Panel1.ResumeLayout(False)
         CType(Me.SplitContainer2, System.ComponentModel.ISupportInitialize).EndInit()
         Me.SplitContainer2.ResumeLayout(False)
+        CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.SplitContainer1.ResumeLayout(False)
+        Me.TableLayoutPanel5.ResumeLayout(False)
+        Me.TableLayoutPanel5.PerformLayout()
+        Me.MenuStrip1.ResumeLayout(False)
+        Me.MenuStrip1.PerformLayout()
+        Me.Panel1.ResumeLayout(False)
+        Me.Panel1.PerformLayout()
         Me.ResumeLayout(False)
 
     End Sub
@@ -378,17 +423,25 @@ Partial Class CurrenciesControl
     Friend WithEvents CopyRateDownToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents TableLayoutPanel4 As System.Windows.Forms.TableLayoutPanel
     Friend WithEvents SplitContainer1 As System.Windows.Forms.SplitContainer
-    Friend WithEvents TableLayoutPanel2 As System.Windows.Forms.TableLayoutPanel
     Friend WithEvents SplitContainer2 As System.Windows.Forms.SplitContainer
     Friend WithEvents TableLayoutPanel5 As System.Windows.Forms.TableLayoutPanel
-    Friend WithEvents TableLayoutPanel3 As System.Windows.Forms.TableLayoutPanel
-    Friend WithEvents Label2 As System.Windows.Forms.Label
-    Friend WithEvents rates_version_TB As System.Windows.Forms.TextBox
     Friend WithEvents MenuStrip1 As System.Windows.Forms.MenuStrip
     Friend WithEvents CurrenciesToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents AddNewCurrencyToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ToolStripSeparator1 As System.Windows.Forms.ToolStripSeparator
     Friend WithEvents chart_button As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ImportFromExcelToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ToolStripMenuItem1 As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ToolStripSeparator6 As System.Windows.Forms.ToolStripSeparator
+    Friend WithEvents ToolStripMenuItem2 As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents DisplayRatesToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ToolStripSeparator5 As System.Windows.Forms.ToolStripSeparator
+    Friend WithEvents CreateFolderToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents CreateVersionToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ToolStripSeparator4 As System.Windows.Forms.ToolStripSeparator
+    Friend WithEvents DeleteToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents Panel1 As System.Windows.Forms.Panel
+    Friend WithEvents VersionLabel As System.Windows.Forms.Label
+    Friend WithEvents rates_version_TB As System.Windows.Forms.TextBox
 
 End Class

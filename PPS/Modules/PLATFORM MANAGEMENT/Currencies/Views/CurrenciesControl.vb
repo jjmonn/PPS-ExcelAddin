@@ -60,10 +60,11 @@ Friend Class CurrenciesControl
         ' Add any initialization after the InitializeComponent() call.
         Controller = input_controller
         rates_versionsTV = input_rates_versionsTV
-        TableLayoutPanel2.Controls.Add(rates_versionsTV, 0, 0)
+        SplitContainer1.Panel1.Controls.Add(rates_versionsTV)
         rates_versionsTV.Dock = DockStyle.Fill
-        SplitContainer2.Panel1.Controls.Add(rates_DGV)
+        SplitContainer1.Panel2.Controls.Add(rates_DGV)
         rates_DGV.Dock = DockStyle.Fill
+        rates_DGV.ContextMenuStrip = dgvRCM
 
         Dim ht As New Hashtable
         ht.Add(REPORTS_NAME_VAR, "Exchange Rates")
@@ -79,21 +80,22 @@ Friend Class CurrenciesControl
         End If
         ratesView.AttributeController(Controller)
 
-        ' add handlers dgv
-        ' + rcm?
-
+        rates_versionsTV.ContextMenuStrip = VersionsRCMenu
+        AddHandler rates_versionsTV.NodeMouseClick, AddressOf rates_version_MouseClick
+        AddHandler rates_versionsTV.KeyPress, AddressOf rates_versionsTV_KeyPress
+        AddHandler rates_versionsTV.NodeMouseDoubleClick, AddressOf rates_versionsTV_NodeMouseDoubleClick
 
     End Sub
 
     Private Sub CurrenciesManagementUI_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 
-        '  CollapseChartPane()
+        CollapseChartPane()
         rates_DGV.AllowCopyPaste = True
         rates_DGV.ColumnsHierarchy.AutoResize(AutoResizeMode.FIT_ALL)
         rates_DGV.RowsHierarchy.CompactStyleRenderingEnabled = True
         rates_DGV.Refresh()
         rates_DGV.Select()
-        ExpandChartPane()
+        'ExpandChartPane()
 
     End Sub
 
@@ -121,14 +123,12 @@ Friend Class CurrenciesControl
         End If
     End Sub
 
-    Private Sub chart_display_Click(sender As Object, e As EventArgs)
+    Private Sub chart_display_Click(sender As Object, e As EventArgs) Handles chart_button.Click
 
         If isChartDisplayed = True Then
             CollapseChartPane()
-            isChartDisplayed = False
         Else
             ExpandChartPane()
-            isChartDisplayed = True
         End If
 
     End Sub
@@ -139,13 +139,14 @@ Friend Class CurrenciesControl
 
     End Sub
 
+
 #End Region
 
 #Region "Currencies Call backs"
 
     ' New currency call back
-    Private Sub NewCurrencyBT_Click(sender As Object, e As EventArgs) Handles _
-                                                                              AddCurrencyToolStripMenuItem.Click
+    Private Sub NewCurrencyBT_Click(sender As Object, e As EventArgs) Handles AddCurrencyToolStripMenuItem.Click
+
         Controller.AddNewCurrency()
 
     End Sub
@@ -242,7 +243,7 @@ Friend Class CurrenciesControl
 
     Private Sub rates_version_MouseClick(sender As Object, e As MouseEventArgs)
 
-        VersionsToolStripMenuItem_Click(sender, e)  ' Display Versions pane
+        ' VersionsToolStripMenuItem_Click(sender, e)  ' Display Versions pane
 
     End Sub
 
@@ -295,13 +296,15 @@ Friend Class CurrenciesControl
 
         SplitContainer2.SplitterDistance = SplitContainer2.Height
         SplitContainer2.Panel2.Hide()
+        isChartDisplayed = False
 
     End Sub
 
     Private Sub ExpandChartPane()
 
         SplitContainer2.SplitterDistance = chart_splitter_distance
-        SplitContainer2.Panel1.Show()
+        SplitContainer2.Panel2.Show()
+        isChartDisplayed = True
 
     End Sub
 
@@ -309,4 +312,5 @@ Friend Class CurrenciesControl
 #End Region
 
 
+   
 End Class

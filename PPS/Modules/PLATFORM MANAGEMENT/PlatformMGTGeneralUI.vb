@@ -147,4 +147,11 @@ Friend Class PlatformMGTGeneralUI
 
     End Sub
 
+    Private Sub PlatformMGTGeneralUI_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+
+        Me.WindowState = Windows.Forms.FormWindowState.Maximized
+
+    End Sub
+
+
 End Class

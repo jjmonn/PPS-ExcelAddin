@@ -208,6 +208,9 @@
   <data name="add3" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\add.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="chart2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\chart2.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="registry2" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\registry2.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -361,6 +364,9 @@
   <data name="db Purple big" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\db Purple big.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="folder_open_add" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\folder_open_add.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="Excel Blue 32x32" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Excel Blue 32x32.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -394,7 +400,7 @@
   <data name="Refresh blue 32x32" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Refresh blue 32x32.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="folder_open_add" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\folder_open_add.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="breakpoints" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\breakpoints.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

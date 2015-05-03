@@ -91,6 +91,7 @@ Friend Class RatesView
         DataGridViewsUtil.DGVSetHiearchyFontSize(DGV, DGV_ITEMS_FONT_SIZE, DGV_CELLS_FONT_SIZE)
         DGV.ColumnsHierarchy.AutoResize(AutoResizeMode.FIT_ALL)
         DataGridViewsUtil.FormatDGVRowsHierarchy(DGV)
+        DGV.BackColor = Color.White
         DGV.Refresh()
 
     End Sub
@@ -152,14 +153,7 @@ Friend Class RatesView
 
 #End Region
 
-    Friend Sub DisplayRatesVersionValuesinDGV(ByRef versionExchangeRatesDictionary As Dictionary(Of String, Hashtable))
-
-        FillInGridData(versionExchangeRatesDictionary)
-        DGV.Refresh()
-
-    End Sub
-
-    Private Sub FillInGridData(ByRef exchangeRatesDictionary As Dictionary(Of String, Hashtable))
+    Friend Sub DisplayRatesVersionValuesinDGV(ByRef ExchangeRatesDictionary As Dictionary(Of String, Hashtable))
 
         is_filling_cells = True
         Dim curr As String
@@ -176,6 +170,7 @@ Friend Class RatesView
             End If
         Next
         is_filling_cells = False
+        DGV.Refresh()
 
     End Sub
 
