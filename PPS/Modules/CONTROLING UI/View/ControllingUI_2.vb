@@ -40,7 +40,6 @@ Friend Class ControllingUI_2
 
     Private Controller As ControllingUI2Controller
     Friend DGVUTIL As New DataGridViewsUtil
-    Private DROPTOEXCELController As CControlingDropOnExcel
     Friend PBar As New ProgressBarControl
     Friend display_control As DisplayControl
     Private leftSplitContainer As SplitContainer
@@ -128,8 +127,6 @@ Friend Class ControllingUI_2
         ' Add any initialization after the InitializeComponent() call. 
         AccountsKeysTabNbDict = AccountsMapping.GetAccountsDictionary(ACCOUNT_ID_VARIABLE, ACCOUNT_TAB_VARIABLE)
         Controller = New ControllingUI2Controller(Me)
-        DROPTOEXCELController = New CControlingDropOnExcel(Me, Controller)
-
         LoadTrees()
 
         periodsCLB.Dock = DockStyle.Fill
@@ -735,15 +732,6 @@ Friend Class ControllingUI_2
 
     End Sub
 
-    ' Double click on tab event
-    Private Sub TabControl1_MouseDoubleClick(sender As Object, e As MouseEventArgs) Handles TabControl1.DoubleClick
-
-        DROPTOEXCELController.SendTabToExcel(TabControl1.SelectedTab.Controls(0), _
-                                             VersionTB.Text, _
-                                            CurrencyTB.Text)
-
-    End Sub
-
     Private Sub DGV_CellMouseClick(sender As Object, e As CellMouseEventArgs)
 
         current_DGV_cell = e.Cell
@@ -1116,17 +1104,10 @@ Friend Class ControllingUI_2
 
 #Region "Excel"
 
-    Private Sub SendCurrentEntity_Click(sender As Object, e As EventArgs) Handles SendConsoBT.Click
-
-        DROPTOEXCELController.SendCurrentEntityToExcel(VersionTB.Text, CurrencyTB.Text)
-
-    End Sub
-
     Private Sub DropDrillDown_Click(sender As Object, e As EventArgs) Handles SendBreakDownBT.Click
 
-        ' Maybe issue if nothing in the DGV ? !
-        DROPTOEXCELController.SendDrillDownToExcel(VersionTB.Text, CurrencyTB.Text)
-
+        Controller.dropOnExcel()
+       
     End Sub
 
 #End Region
@@ -1292,7 +1273,6 @@ Friend Class ControllingUI_2
     End Sub
 
 #End Region
-
 
 
 #Region "Left Pane Expansion/ Collapse"

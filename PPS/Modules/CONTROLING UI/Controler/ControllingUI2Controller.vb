@@ -154,6 +154,24 @@ Friend Class ControllingUI2Controller
 
     End Sub
 
+    Protected Friend Sub dropOnExcel()
+
+        ' Maybe issue if nothing in the DGV ? !
+        If Not Entity_node.Text Is Nothing Then
+            Dim destination As Microsoft.Office.Interop.Excel.Range = WorksheetWrittingFunctions.CreateReceptionWS(Entity_node.Text, _
+                                                                                           {"Entity", "Version", "Currency"}, _
+                                                                                           {Entity_node.Text, View.VersionTB.Text, View.CurrencyTB.Text})
+            Dim i As Int32 = 1
+            For Each tab_ As TabPage In View.TabControl1.TabPages
+                Dim DGV As VIBlend.WinForms.DataGridView.vDataGridView = tab_.Controls(0)
+                DataGridViewsUtil.CopyDGVToExcelGeneric(DGV, destination, i)
+            Next
+            destination.Worksheet.Columns.AutoFit()
+            destination.Worksheet.Outline.ShowLevels(RowLevels:=1)
+        End If
+
+    End Sub
+
 #End Region
 
 
