@@ -562,10 +562,12 @@ Friend Class DataBaseDataDownloader
 
         If input_clients_id_list Is Nothing Then
             clients_id_filter_list = initial_clients_id_list
+            clients_filter_flag = False
         Else
             clients_id_filter_list = input_clients_id_list
+            clients_filter_flag = True
         End If
-        clients_filter_flag = False
+
 
     End Sub
 
@@ -573,10 +575,12 @@ Friend Class DataBaseDataDownloader
 
         If input_products_id_list Is Nothing Then
             products_id_filter_list = initial_products_id_list
+            products_filter_flag = False
         Else
             products_id_filter_list = input_products_id_list
+            products_filter_flag = True
         End If
-        products_filter_flag = False
+
 
     End Sub
 
@@ -584,10 +588,11 @@ Friend Class DataBaseDataDownloader
 
         If input_adjustments_id_list Is Nothing Then
             adjustments_id_filter_list = initial_adjustments_id_list
+            adjustments_filter_flag = False
         Else
             adjustments_id_filter_list = input_adjustments_id_list
+            adjustments_filter_flag = True
         End If
-        adjustments_filter_flag = False
 
     End Sub
 

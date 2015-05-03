@@ -551,35 +551,6 @@ Friend Class DataGridViewsUtil
 #End Region
 
 
-#Region "Adjustments Formatting"
-
-    Protected Friend Shared Sub FormatAdjustmentRow(ByRef row As HierarchyItem)
-
-        Dim itemStyleNormal As HierarchyItemStyle = GridTheme.GetDefaultTheme(ADJUSTMENTS_ROW_THEME).HierarchyItemStyleNormal
-        Dim itemStyleSelected As HierarchyItemStyle = GridTheme.GetDefaultTheme(ADJUSTMENTS_ROW_THEME).HierarchyItemStyleSelected
-        Dim CStyleNormal As GridCellStyle = GridTheme.GetDefaultTheme(ADJUSTMENTS_ROW_THEME).GridCellStyle
-
-        ' itemStyleNormal.TextColor = ADJUSTMENTS_COLOR
-        ' itemStyleSelected.TextColor = ADJUSTMENTS_COLOR
-        CStyleNormal.TextColor = ADJUSTMENTS_COLOR
-
-        itemStyleSelected.Font = New System.Drawing.Font(row.DataGridView.Font.FontFamily, BASIC_DGV_REPORT_FONT_SIZE)
-        itemStyleNormal.Font = New System.Drawing.Font(row.DataGridView.Font.FontFamily, BASIC_DGV_REPORT_FONT_SIZE)
-        CStyleNormal.Font = New System.Drawing.Font(row.DataGridView.Font.FontFamily, BASIC_DGV_REPORT_FONT_SIZE, FontStyle.Regular)
-
-        row.HierarchyItemStyleNormal = itemStyleNormal
-        row.HierarchyItemStyleSelected = itemStyleSelected
-        row.CellsStyle = CStyleNormal
-
-        row.CellsFormatString = row.ParentItem.CellsFormatString
-        row.CellsTextAlignment = ContentAlignment.MiddleRight
-
-    End Sub
-
-
-#End Region
-
-
 #Region "Send to Excel Functions"
 
     ' One Version - Top Entity

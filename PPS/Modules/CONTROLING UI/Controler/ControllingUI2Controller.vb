@@ -11,7 +11,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 17/04/2015
+' Last modified: 03/05/2015
 
 
 Imports System.Windows.Forms
@@ -157,7 +157,7 @@ Friend Class ControllingUI2Controller
 #End Region
 
 
-#Region "Hierarchies Configuration"
+#Region "Hierarchies Configuration - Values Dictionaries Initialization"
 
     Private Function BuildRowsHierarchy(ByRef rows_display_nodes As TreeNode) As TreeNode
 
@@ -204,6 +204,7 @@ Friend Class ControllingUI2Controller
                                                 ByRef rows_hierarchy_nodes As TreeNode)
 
         categories_values_dict.Clear()
+        
         ' Entities
         Dim entities_dic As New Dictionary(Of String, String)
         entities_dic.Add(Entity_node.Name, Entity_node.Text)
@@ -264,7 +265,7 @@ Friend Class ControllingUI2Controller
 
     End Sub
 
-#End Region
+   #End Region
 
 
 #Region "Model Computations Management"
@@ -316,7 +317,9 @@ Friend Class ControllingUI2Controller
     Private Sub compute(ByVal filters_dict As Dictionary(Of String, String), _
                         ByRef destination_currency As String)
 
-        Model.IntializeComputerAndFilter(Entity_node)
+        Model.IntializeComputer(Entity_node, _
+                                TreeViewsUtilities.GetCheckedNodesID(TVsDict(ControllingUI2Controller.CLIENTS_CODE)), _
+                                TreeViewsUtilities.GetCheckedNodesID(TVsDict(ControllingUI2Controller.PRODUCTS_CODE)))
         Model.SetDBFilters(filters_dict)
         Model.ComputeAndFillDD(Utilities_Functions.GetDictionaryCopy(filters_dict), _
                                categories_values_dict(VERSIONS_CODE).Keys.ToList, _

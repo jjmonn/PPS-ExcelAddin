@@ -7,7 +7,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 17/04/2015
+' Last modified: 03/05/2015
 
 
 Imports System.Windows.Forms
@@ -70,10 +70,13 @@ Friend Class ControllingUIModel
 
     End Sub
 
-    Protected Friend Sub IntializeComputerAndFilter(ByRef entity_node As TreeNode)
+    Protected Friend Sub IntializeComputer(ByRef entity_node As TreeNode, _
+                                           Optional ByRef clients_id_filter_list As List(Of String) = Nothing, _
+                                           Optional ByRef products_id_filter_list As List(Of String) = Nothing)
 
-        AggregationComputer.init_computer_complete_mode(entity_node)
-        AggregationComputer.ReinitializeFiltersList()
+        AggregationComputer.init_computer_complete_mode(entity_node, _
+                                                        clients_id_filter_list, _
+                                                        products_id_filter_list)
 
     End Sub
 
@@ -86,19 +89,13 @@ Friend Class ControllingUIModel
 
                 Select Case categories_id_code_dict(filter_code)
                     Case ControllingUI2Controller.CLIENTS_CODE
-                        Dim clients_id_filter_list As New List(Of String)
-                        clients_id_filter_list.Add(filters_dict(filter_code))
-                        AggregationComputer.UpdateclientsFilters(clients_id_filter_list)
+                        AggregationComputer.UpdateclientsFilters(Utilities_Functions.getStringsList({filters_dict(filter_code)}))
 
                     Case ControllingUI2Controller.PRODUCTS_CODE
-                        Dim products_id_filter_list As New List(Of String)
-                        products_id_filter_list.Add(filters_dict(filter_code))
-                        AggregationComputer.UpdateproductsFilters(products_id_filter_list)
+                        AggregationComputer.UpdateproductsFilters(Utilities_Functions.getStringsList({filters_dict(filter_code)}))
 
                     Case ControllingUI2Controller.ADJUSTMENT_CODE
-                        Dim adjustments_id_filter_list As New List(Of String)
-                        adjustments_id_filter_list.Add(filters_dict(filter_code))
-                        AggregationComputer.UpdateadjustmentsFilters(adjustments_id_filter_list)
+                        AggregationComputer.UpdateadjustmentsFilters(Utilities_Functions.getStringsList({filters_dict(filter_code)}))
 
                     Case ControllingUI2Controller.ENTITY_CATEGORY_CODE
                         Dim entities_id_filter_list As List(Of String) = SQLFilterListsGenerators.GetEntitiesFilterList(str_filter_SQL)
@@ -158,8 +155,6 @@ Friend Class ControllingUIModel
         Next
 
     End Sub
-
-
 
 #End Region
 

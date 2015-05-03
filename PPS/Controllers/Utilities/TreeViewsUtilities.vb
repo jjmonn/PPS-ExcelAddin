@@ -183,7 +183,8 @@ Friend Class TreeViewsUtilities
         For Each node As TreeNode In TV.Nodes
             AddCheckedNodesToList(node, tmpList)
         Next
-        Return tmpList
+        If tmpList.Count > 0 Then Return tmpList
+        Return Nothing
 
     End Function
 

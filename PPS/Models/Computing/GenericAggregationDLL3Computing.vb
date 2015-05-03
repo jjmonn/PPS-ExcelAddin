@@ -66,11 +66,15 @@ Friend Class GenericAggregationDLL3Computing
 
 #Region "Interface"
 
-    Protected Friend Sub init_computer_complete_mode(ByVal entity_node As System.Windows.Forms.TreeNode)
+    Protected Friend Sub init_computer_complete_mode(ByVal entity_node As System.Windows.Forms.TreeNode,
+                                                     Optional ByRef clients_id_filter_list As List(Of String) = Nothing, _
+                                                     Optional ByRef products_id_filter_list As List(Of String) = Nothing)
 
         clear_complete_data_dictionary()
         entities_id_list = Dll3Computer.InitializeEntitiesAggregation(entity_node)
-        DBDOWNLOADER.ResetEntitiesFilter(entities_id_list)
+        DBDOWNLOADER.InitializeFilterLists(entities_id_list, _
+                                           clients_id_filter_list, _
+                                           products_id_filter_list)
 
         inputs_entities_list = TreeViewsUtilities.GetNoChildrenNodesList(entities_id_list, entity_node.TreeView)
         TreeViewsUtilities.FilterSelectedNodes(entity_node, entities_id_list)
@@ -193,11 +197,11 @@ Friend Class GenericAggregationDLL3Computing
 
 #Region "DBDownloader Filters Interface"
 
-    Protected Friend Sub ReinitializeFiltersList()
+    'Protected Friend Sub ReinitializeFiltersList()
 
-        DBDOWNLOADER.InitializeFilterLists(entities_id_list)
+    '    DBDOWNLOADER.InitializeFilterLists(entities_id_list)
 
-    End Sub
+    'End Sub
 
     Protected Friend Sub UpdateEntitiesFilters(ByRef filters_list As List(Of String))
 

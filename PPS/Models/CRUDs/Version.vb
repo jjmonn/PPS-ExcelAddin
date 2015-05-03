@@ -185,7 +185,7 @@ Friend Class Version
 
         Dim versions_dict As Dictionary(Of String, Hashtable)
         Dim versions_id_list As New List(Of String)
-        If versionsNodesList.Count = 0 Then
+        If versionsNodesList Is Nothing Then
             versions_dict = GetVersionsDictionary({GlobalVariables.GLOBALCurrentVersionCode})
         Else
             For Each version_id As String In versionsNodesList
