@@ -10,7 +10,7 @@
 '       - Create table for accounts types ! attention changer naming -> accounts type = Monetary, ope...
 '
 '
-' Last modified: 05/01/2015
+' Last modified: 03/05/2015
 ' Author: Julien Monnereau
 
 
@@ -208,26 +208,16 @@ Module Data_Tables_Constants
 #End Region
 
 
-#Region "Forex"
+#Region "Currencies and Exchange Rates"
 
-#Region "Currencies Table"
+#Region "Currencies and Currencies Symbol Tables"
 
     Friend Const CURRENCIES_TABLE_NAME As String = "currencies"
+    Friend Const CURRENCIES_SYMBOLS_TABLE_NAME As String = "currencies_symbols"
     Friend Const CURRENCIES_KEY_VARIABLE As String = "id"
-
+    Friend Const CURRENCIES_SYMBOL_VARIABLE As String = "symbol"
+    Friend Const CURRENCIES_NAME_VARIABLE As String = "name"
     Friend Const CURRENCIES_TOKEN_SIZE As Int32 = 3
-    ' Table information: Holds information on available currencies.
-    '          
-    ' Primary key: currencies_key
-    '
-    ' Allows to provide the list of currencies in use
-    ' 
-    ' Privileges: 
-    '       a) Write: TO BE DECIDED
-    '       b) Read: TO BE DECIDED
-    '
-    ' 
-    ' VIEWS : TO BE IMPLEMENTED
 
 
 #End Region
@@ -258,7 +248,7 @@ Module Data_Tables_Constants
     Friend Const RATES_VERSIONS_START_PERIOD_VAR As String = "start_period"
     Friend Const RATES_VERSIONS_NB_PERIODS_VAR As String = "nb_periods"
     Friend Const RATES_VERSIONS_TOKEN_SIZE As Int32 = 3
- 
+
 
 #End Region
 

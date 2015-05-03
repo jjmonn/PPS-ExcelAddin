@@ -147,10 +147,10 @@ Friend Class ControllingUI2Controller
 
         GetDataDictionary(rows_hierarchy_nodes, View.CurrenciesCLB.SelectedItem)
 
+        FillUIHeader()
         View.DisplayData(Model.DataDictionary, _
                          columns_display_node, _
                          rows_display_nodes)
-        FillUIHeader()
 
     End Sub
 

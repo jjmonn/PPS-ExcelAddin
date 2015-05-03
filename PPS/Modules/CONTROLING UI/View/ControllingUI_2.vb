@@ -609,7 +609,7 @@ Friend Class ControllingUI_2
 
     Private Sub FormatVIEWDataDisplay()
 
-        DGVUTIL.FormatDGVs(TabControl1)
+        DGVUTIL.FormatDGVs(TabControl1, CurrencyTB.Text)
         If Not IsNothing(TabControl1.TabPages(0)) Then TabControl1.SelectedTab = TabControl1.TabPages(0)
         Me.Update()
 

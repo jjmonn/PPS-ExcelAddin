@@ -36,11 +36,12 @@ Friend Class DataGridViewsUtil
 
 #Region "Instance Variables"
 
-    ' Objects
+    ' Variables
     Private EntitiesTokenNamesDict As Hashtable
     Private AccountsKeysFormatTypesDic As Dictionary(Of String, Dictionary(Of String, String))
     Private AccountNamesKeysDic As Hashtable
     Private accFtypes As Hashtable
+    Private currencies_symbol_dict As Dictionary(Of String, String)
 
     ' Constants
     Private FIXED_SINGLE_HIERARCHY_COLUMN_WIDTH As Single = 100
@@ -64,7 +65,8 @@ Friend Class DataGridViewsUtil
         AccountsKeysFormatTypesDic = AccountsMapping.GetAccountsKeysFormatsTypesDictionary()
         AccountNamesKeysDic = AccountsMapping.GetAccountsDictionary(ACCOUNT_NAME_VARIABLE, ACCOUNT_ID_VARIABLE)
         accFtypes = AccountsMapping.GetAccountsDictionary(ACCOUNT_ID_VARIABLE, ACCOUNT_FORMULA_TYPE_VARIABLE)
-     
+        currencies_symbol_dict = CurrenciesMapping.getCurrenciesDict(CURRENCIES_KEY_VARIABLE, CURRENCIES_SYMBOL_VARIABLE)
+
     End Sub
 
 
@@ -83,12 +85,11 @@ Friend Class DataGridViewsUtil
             '.ColumnsHierarchy.AutoStretchColumns = True
         End With
 
-
-
     End Sub
 
     ' vDgv Display After Populating ' note controlling ui2 specificity !!
-    Protected Friend Sub FormatDGVs(ByRef tabsControl As TabControl)
+    Protected Friend Sub FormatDGVs(ByRef tabsControl As TabControl, _
+                                    ByRef currency As String)
 
         Dim InputsFormatsDictionary = FormatsMapping.GetFormatTable(INPUT_FORMAT_CODE)
         Dim formatCode, account_id, fmtStr As String
@@ -131,11 +132,11 @@ Friend Class DataGridViewsUtil
                 If Not IsDBNull(InputsFormatsDictionary(formatCode)(FORMAT_BCKGD_VARIABLE)) Then
                     CAStyle.FillStyle = New FillStyleSolid(System.Drawing.Color.FromArgb(InputsFormatsDictionary(formatCode)(FORMAT_BCKGD_VARIABLE)))
                 End If
-                
+
                 Select Case (AccountsKeysFormatTypesDic.Item(account_id).Item(ACCOUNT_TYPE_VARIABLE))
-                    Case "MO" : fmtStr = "{0:C0}"
-                    Case "RA" : fmtStr = "{0:P}"        ' put this in a table
-                    Case "OP" : fmtStr = "{0:N}"        ' further evolution set unit
+                    Case "MO" : fmtStr = "{0:" & currencies_symbol_dict(currency) & "#,##0.00;(" & currencies_symbol_dict(currency) & "#,##0.00)}"
+                    Case "RA" : fmtStr = "{0:P}"        ' put this in a table ?
+                    Case "OP" : fmtStr = "{0:N}"        ' further evolution set unit ?
                     Case "NU" : fmtStr = "{0:N2}"
                     Case Else : fmtStr = "{0:C0}"
                 End Select

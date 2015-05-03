@@ -114,6 +114,7 @@
     <Compile Include="AddinModule.vb">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Models\Mappings\CurrenciesSymbolsMapping.vb" />
     <Compile Include="Modules\PLATFORM MANAGEMENT\Analysis Axis Super Classes\Controllers\AnalysisAxisCategoriesController.vb" />
     <Compile Include="Modules\PLATFORM MANAGEMENT\Analysis Axis Super Classes\Views\NewAnalysisAxisUI.Designer.vb">
       <DependentUpon>NewAnalysisAxisUI.vb</DependentUpon>

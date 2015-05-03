@@ -132,7 +132,7 @@ Friend Class LogUI
             dgv.ColumnsHierarchy.AutoStretchColumns = True
         Next
 
-        DGVUtil.FormatDGVs(DGVTabControl)
+        DGVUtil.FormatDGVs(DGVTabControl, MAIN_CURRENCY)
         If Not IsNothing(TabControl1.TabPages(0)) Then TabControl1.SelectedTab = TabControl1.TabPages(0)
         Me.Update()
 
