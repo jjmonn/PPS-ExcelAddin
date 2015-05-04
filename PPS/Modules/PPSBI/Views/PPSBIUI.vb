@@ -3,16 +3,14 @@
 ' User interface for the construction of PPSBI functions
 '
 ' To do:
-'       >> highest hiearachy conso level or stay in aggregation queries with fx conversion in vb !!!!!)
 '       - Implement with new analysis axis !!!
-'
 '       - Check if already a formula when opening: in this case fill TB with current values
-'       - Add possibility to design lines and columns off data
-'     
+'       - Formula separator <=> general settings: "," or ";"     
+'
 ' Quid: do the categories have sub categories...?
 '
 '
-' Last modified: 25/02/2015 
+' Last modified: 04/05/2015 
 ' Author: Julien Monnereau
 
 
@@ -28,17 +26,13 @@ Friend Class PPSBI_UI
 
 #Region "Instance Variables"
 
-#Region "Objects"
-
+    ' Objects
     Private entitiesTV As New TreeView
     Private accountsTV As New TreeView
     Private versionsTV As New TreeView
     Private categoriesTV As New TreeView
 
-#End Region
-
-#Region "Variables"
-
+    ' Variables
     Private versions_name_id As Hashtable
     Private currentSelection As String
     Private destination As Excel.Range
@@ -48,22 +42,16 @@ Friend Class PPSBI_UI
     Private expandedControlWidth As Int32
     Private categoriesTabControlWidth As Int32
 
-#End Region
-
-#Region "Constants"
-
+    ' Constants
     Private Const ENTITIES_SELECTION As String = "entSel"
     Private Const ACCOUNTS_SELECTION As String = "accSel"
     Private Const VERSIONS_SELECTION As String = "verSel"
     Private Const NON_EXPANDED_CONTROL_WIDTH As Integer = 600
-    Private Const EXPANDED_CONTROL_HEIGHT As Integer = 620
-    Private Const NON_EXPANDED_CONTROL_HEIGHT As Integer = 470
     Private Const EXPANSION_CONTROL_MARGIN As Integer = 30
     Private Const EXPANDED_IMAGE_INDEX As Int32 = 1
     Private Const COLLAPSED_IMAGE_INDEX As Int32 = 0
     Private Const AVERAGE_LETTER_SIZE As Int32 = 10
 
-#End Region
 
 #End Region
 
@@ -89,6 +77,8 @@ Friend Class PPSBI_UI
         versionsTB.Text = versionsTV.Nodes.Find(GlobalVariables.GLOBALCurrentVersionCode, True)(0).Text
         InitializeTimePeriodsSelection(GlobalVariables.GLOBALCurrentVersionCode)
         CategoriesControlTabInitialization()
+        expandedControlWidth = NON_EXPANDED_CONTROL_WIDTH + categoriesTabControlWidth + EXPANSION_CONTROL_MARGIN
+        categoriesSelectionGroupBox.Width = categoriesTabControlWidth + 2
 
     End Sub
 
@@ -142,7 +132,7 @@ Friend Class PPSBI_UI
         AddHandler versionsTV.NodeMouseDoubleClick, AddressOf versionsTV_NodeMouseClick
 
         'Categories
-        AnalysisAxisCategory.LoadCategoryCodeTV(categoriesTV, ControllingUI2Controller.ENTITIES_CODE)
+        AnalysisAxisCategory.LoadCategoryCodeTV(categoriesTV, ControllingUI2Controller.ENTITY_CATEGORY_CODE)
 
         Panel1.Controls.Add(entitiesTV)
         Panel2.Controls.Add(accountsTV)
@@ -176,7 +166,6 @@ Friend Class PPSBI_UI
             CategoriesTVsTabControl.TabPages(CategoriesTVsTabControl.TabPages.IndexOfKey(node.Name)).Controls.Add(catTV)
 
         Next
-        expandedControlWidth = NON_EXPANDED_CONTROL_WIDTH + categoriesTabControlWidth + EXPANSION_CONTROL_MARGIN
         categoriesSelectionGroupBox.Width = categoriesTabControlWidth + 2
         
     End Sub
@@ -291,7 +280,9 @@ Friend Class PPSBI_UI
 #Region "SelectionButtons Events"
 
     Private Sub entitiesClick(sender As Object, e As EventArgs) Handles entityLabel.Click, selectEntity.Click
+
         ShowEntitiesSelectionTree()
+
     End Sub
 
     Private Sub accountsClick(sender As Object, e As EventArgs) Handles accountLabel.Click, accountSelect.Click
@@ -405,7 +396,6 @@ Friend Class PPSBI_UI
     Private Sub ExpandRightPane()
 
         Me.Width = expandedControlWidth
-        Me.Height = EXPANDED_CONTROL_HEIGHT
         rightSideEpxansionBT.ImageIndex = EXPANDED_IMAGE_INDEX
         isRightSideExpanded = True
 
@@ -414,7 +404,6 @@ Friend Class PPSBI_UI
     Private Sub CollapseRightPane()
 
         Me.Width = NON_EXPANDED_CONTROL_WIDTH
-        Me.Height = NON_EXPANDED_CONTROL_HEIGHT
         rightSideEpxansionBT.ImageIndex = COLLAPSED_IMAGE_INDEX
         isRightSideExpanded = False
 

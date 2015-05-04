@@ -13,7 +13,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 21/04/2015
+' Last modified: 04/05/2015
 
 
 Imports System.Windows.Forms
@@ -53,7 +53,7 @@ Friend Class EntitiesController
         Entity.LoadEntitiesTree(entitiesTV)   ' can be replaced by a treenode instead !
         AnalysisAxisCategory.LoadCategoryCodeTV(categoriesTV, ControllingUI2Controller.ENTITY_CATEGORY_CODE)
         entitiesNameKeyDic = EntitiesMapping.GetEntitiesDictionary(ENTITIES_NAME_VARIABLE, ENTITIES_ID_VARIABLE)
-        categoriesNameKeyDic = CategoriesMapping.GetCategoryDictionary(ControllingUI2Controller.ENTITIES_CODE, CATEGORY_NAME_VARIABLE, CATEGORY_ID_VARIABLE)
+        categoriesNameKeyDic = CategoriesMapping.GetCategoryDictionary(ControllingUI2Controller.ENTITY_CATEGORY_CODE, CATEGORY_NAME_VARIABLE, CATEGORY_ID_VARIABLE)
 
         If Entities.object_is_alive = False Then
             MsgBox("An error occured with network connection. Please check the connection and try again." & Chr(13) & _
@@ -88,8 +88,8 @@ Friend Class EntitiesController
 
     Public Sub close()
 
+        Entities.close()
         View.closeControl()
-        ' Entities.rst.close()
 
     End Sub
 

@@ -133,7 +133,7 @@ Friend Class DataGridViewsUtil
                     CAStyle.FillStyle = New FillStyleSolid(System.Drawing.Color.FromArgb(InputsFormatsDictionary(formatCode)(FORMAT_BCKGD_VARIABLE)))
                 End If
 
-                Select Case (AccountsKeysFormatTypesDic.Item(account_id).Item(ACCOUNT_TYPE_VARIABLE))
+                Select Case (AccountsKeysFormatTypesDic(account_id)(ACCOUNT_TYPE_VARIABLE))
                     Case "MO" : fmtStr = "{0:" & currencies_symbol_dict(currency) & "#,##0.00;(" & currencies_symbol_dict(currency) & "#,##0.00)}"
                     Case "RA" : fmtStr = "{0:P}"        ' put this in a table ?
                     Case "OP" : fmtStr = "{0:N}"        ' further evolution set unit ?
@@ -554,89 +554,6 @@ Friend Class DataGridViewsUtil
 
 #Region "Send to Excel Functions"
 
-    ' One Version - Top Entity
-    Protected Friend Function WriteCurrentEntityToExcel(ByRef destination As Excel.Range, ByRef DatagridView As vDataGridView) As Int32
-
-        Dim i As Int32 = 1
-        Dim j As Int32 = 1
-        GlobalVariables.apps.ScreenUpdating = False
-        destination.Value2 = DatagridView.Name
-
-        For Each item As HierarchyItem In DatagridView.ColumnsHierarchy.Items
-            destination.Offset(0, j).Value2 = item.Caption
-            j = j + 1
-        Next
-
-        For Each row As HierarchyItem In DatagridView.RowsHierarchy.Items
-            destination.Offset(i, 0).Value2 = row.Caption
-            j = 1
-            For Each column As HierarchyItem In DatagridView.ColumnsHierarchy.Items
-                destination.Offset(i, j).Value2 = DatagridView.CellsArea.GetCellValue(row, column)
-                j = j + 1
-            Next
-            i = i + 1
-        Next
-
-        Dim test = destination.Row
-        CExcelFormatting.FormatExcelRangeAs(destination.Worksheet.Range(destination, destination.Offset(i - 1, DatagridView.ColumnsHierarchy.Items.Count)), _
-                                         INPUT_FORMAT_CODE)
-        GlobalVariables.apps.ScreenUpdating = True
-        Return i + 1
-
-    End Function
-
-    ' Several Versions, Top Entity
-    Protected Friend Function writeControllingCurrentEntityToExcel(ByRef destination As Excel.Range, _
-                                                         ByRef dataGridView As vDataGridView) As Integer
-
-        Dim i As Int32 = 1
-        Dim j As Int32 = 1
-
-        GlobalVariables.apps.ScreenUpdating = False
-        destination.Offset(1, 0).Value2 = dataGridView.Name
-        destination.Offset(1, 0).Rows.Font.Bold = True
-
-        ' Headers
-        For Each item As HierarchyItem In dataGridView.ColumnsHierarchy.Items
-            destination.Offset(0, j).Value2 = item.Caption
-            destination.Worksheet.Range(destination.Offset(0, j), _
-                                        destination.Offset(0, j + dataGridView.ColumnsHierarchy.Items(0).Items.Count)). _
-                                        HorizontalAlignment = HorizontalAlignment.Center
-
-            For Each subItem In item.Items
-                destination.Offset(1, j).Value2 = subItem.Caption
-                j = j + 1
-            Next
-        Next
-
-        ' Values
-        i = 2
-        For Each row As HierarchyItem In dataGridView.RowsHierarchy.Items
-            destination.Offset(i, 0).Value2 = row.Caption
-            j = 1
-            For Each column As HierarchyItem In dataGridView.ColumnsHierarchy.Items
-                For Each item As HierarchyItem In column.Items
-                    destination.Offset(i, j).Value2 = dataGridView.CellsArea.GetCellValue(row, item)
-                    j = j + 1
-                Next
-            Next
-            i = i + 1
-        Next
-
-        Dim test = destination.Row
-        CExcelFormatting.FormatExcelRangeAs(destination.Worksheet.Range(destination.Offset(1, 0), _
-                                       destination.Offset(i - 1, (dataGridView.ColumnsHierarchy.Items(0).Items.Count * _
-                                       dataGridView.ColumnsHierarchy.Items.Count))), _
-                                       INPUT_FORMAT_CODE)
-        GlobalVariables.apps.ScreenUpdating = True
-        Return i + 1
-
-    End Function
-
-    ' improve process -> here only write down on excel
-    ' formats taken care in controllingDropOnExcel
-#Region "Generic DGV Export to Excel"
-
     Protected Friend Shared Sub CopyDGVToExcelGeneric(ByRef DGV As vDataGridView, _
                                                       ByRef dest_range As Excel.Range, _
                                                       ByRef i As Int32)
@@ -738,8 +655,6 @@ Friend Class DataGridViewsUtil
         Next
 
     End Sub
-
-#End Region
 
 #End Region
 

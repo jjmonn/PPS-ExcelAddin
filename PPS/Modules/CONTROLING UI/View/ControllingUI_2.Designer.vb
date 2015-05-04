@@ -62,10 +62,13 @@ Partial Class ControllingUI_2
         Me.DisplayMenuBT = New System.Windows.Forms.ToolStripMenuItem()
         Me.SelectionMenuBT = New System.Windows.Forms.ToolStripMenuItem()
         Me.EntitiesMenuBT2 = New System.Windows.Forms.ToolStripMenuItem()
+        Me.SelectionToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.entitiesCategoriesMenuBT = New System.Windows.Forms.ToolStripMenuItem()
         Me.ClientsMenuBT = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ClientsSelectionToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.clientsCategoriesMenuBT = New System.Windows.Forms.ToolStripMenuItem()
         Me.ProductsMenuBT = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ProductsFilterToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.productsCategoriesMenuBT = New System.Windows.Forms.ToolStripMenuItem()
         Me.AdjustmentsMenuBT = New System.Windows.Forms.ToolStripMenuItem()
         Me.CurrenciesMenuBT = New System.Windows.Forms.ToolStripMenuItem()
@@ -95,8 +98,8 @@ Partial Class ControllingUI_2
         Me.CurrencyTB3 = New System.Windows.Forms.TextBox()
         Me.ExcelMenu = New System.Windows.Forms.MenuStrip()
         Me.SendBreakDownBT = New System.Windows.Forms.ToolStripMenuItem()
-        Me.CategoriesIL = New System.Windows.Forms.ImageList(Me.components)
         Me.MenuIL = New System.Windows.Forms.ImageList(Me.components)
+        Me.CategoriesIL = New System.Windows.Forms.ImageList(Me.components)
         Me.entitiesRightClickMenu.SuspendLayout()
         Me.periodsRightClickMenu.SuspendLayout()
         Me.DGVsRCM.SuspendLayout()
@@ -456,12 +459,20 @@ Partial Class ControllingUI_2
         '
         'EntitiesMenuBT2
         '
-        Me.EntitiesMenuBT2.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.entitiesCategoriesMenuBT})
+        Me.EntitiesMenuBT2.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.SelectionToolStripMenuItem, Me.entitiesCategoriesMenuBT})
         Me.EntitiesMenuBT2.Image = CType(resources.GetObject("EntitiesMenuBT2.Image"), System.Drawing.Image)
         Me.EntitiesMenuBT2.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
         Me.EntitiesMenuBT2.Name = "EntitiesMenuBT2"
-        Me.EntitiesMenuBT2.Size = New System.Drawing.Size(159, 38)
+        Me.EntitiesMenuBT2.Size = New System.Drawing.Size(168, 38)
         Me.EntitiesMenuBT2.Text = "Legal Entities"
+        '
+        'SelectionToolStripMenuItem
+        '
+        Me.SelectionToolStripMenuItem.Image = Global.PPS.My.Resources.Resources.element_branch21
+        Me.SelectionToolStripMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
+        Me.SelectionToolStripMenuItem.Name = "SelectionToolStripMenuItem"
+        Me.SelectionToolStripMenuItem.Size = New System.Drawing.Size(218, 38)
+        Me.SelectionToolStripMenuItem.Text = "Selection"
         '
         'entitiesCategoriesMenuBT
         '
@@ -473,12 +484,20 @@ Partial Class ControllingUI_2
         '
         'ClientsMenuBT
         '
-        Me.ClientsMenuBT.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.clientsCategoriesMenuBT})
+        Me.ClientsMenuBT.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ClientsSelectionToolStripMenuItem, Me.clientsCategoriesMenuBT})
         Me.ClientsMenuBT.Image = CType(resources.GetObject("ClientsMenuBT.Image"), System.Drawing.Image)
         Me.ClientsMenuBT.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
         Me.ClientsMenuBT.Name = "ClientsMenuBT"
-        Me.ClientsMenuBT.Size = New System.Drawing.Size(159, 38)
+        Me.ClientsMenuBT.Size = New System.Drawing.Size(168, 38)
         Me.ClientsMenuBT.Text = "Clients"
+        '
+        'ClientsSelectionToolStripMenuItem
+        '
+        Me.ClientsSelectionToolStripMenuItem.Image = Global.PPS.My.Resources.Resources.users_relation21
+        Me.ClientsSelectionToolStripMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
+        Me.ClientsSelectionToolStripMenuItem.Name = "ClientsSelectionToolStripMenuItem"
+        Me.ClientsSelectionToolStripMenuItem.Size = New System.Drawing.Size(185, 38)
+        Me.ClientsSelectionToolStripMenuItem.Text = "Clients Filter"
         '
         'clientsCategoriesMenuBT
         '
@@ -490,12 +509,20 @@ Partial Class ControllingUI_2
         '
         'ProductsMenuBT
         '
-        Me.ProductsMenuBT.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.productsCategoriesMenuBT})
+        Me.ProductsMenuBT.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ProductsFilterToolStripMenuItem, Me.productsCategoriesMenuBT})
         Me.ProductsMenuBT.Image = Global.PPS.My.Resources.Resources.barcode
         Me.ProductsMenuBT.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
         Me.ProductsMenuBT.Name = "ProductsMenuBT"
-        Me.ProductsMenuBT.Size = New System.Drawing.Size(159, 38)
+        Me.ProductsMenuBT.Size = New System.Drawing.Size(168, 38)
         Me.ProductsMenuBT.Text = "Products"
+        '
+        'ProductsFilterToolStripMenuItem
+        '
+        Me.ProductsFilterToolStripMenuItem.Image = Global.PPS.My.Resources.Resources.barcode
+        Me.ProductsFilterToolStripMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
+        Me.ProductsFilterToolStripMenuItem.Name = "ProductsFilterToolStripMenuItem"
+        Me.ProductsFilterToolStripMenuItem.Size = New System.Drawing.Size(196, 38)
+        Me.ProductsFilterToolStripMenuItem.Text = "Products Filter"
         '
         'productsCategoriesMenuBT
         '
@@ -510,7 +537,7 @@ Partial Class ControllingUI_2
         Me.AdjustmentsMenuBT.Image = Global.PPS.My.Resources.Resources.registry1
         Me.AdjustmentsMenuBT.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
         Me.AdjustmentsMenuBT.Name = "AdjustmentsMenuBT"
-        Me.AdjustmentsMenuBT.Size = New System.Drawing.Size(159, 38)
+        Me.AdjustmentsMenuBT.Size = New System.Drawing.Size(168, 38)
         Me.AdjustmentsMenuBT.Text = "Adjustments"
         '
         'CurrenciesMenuBT
@@ -518,7 +545,7 @@ Partial Class ControllingUI_2
         Me.CurrenciesMenuBT.Image = CType(resources.GetObject("CurrenciesMenuBT.Image"), System.Drawing.Image)
         Me.CurrenciesMenuBT.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
         Me.CurrenciesMenuBT.Name = "CurrenciesMenuBT"
-        Me.CurrenciesMenuBT.Size = New System.Drawing.Size(159, 38)
+        Me.CurrenciesMenuBT.Size = New System.Drawing.Size(168, 38)
         Me.CurrenciesMenuBT.Text = "Currencies"
         '
         'PeriodsMenuBT
@@ -526,7 +553,7 @@ Partial Class ControllingUI_2
         Me.PeriodsMenuBT.Image = CType(resources.GetObject("PeriodsMenuBT.Image"), System.Drawing.Image)
         Me.PeriodsMenuBT.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
         Me.PeriodsMenuBT.Name = "PeriodsMenuBT"
-        Me.PeriodsMenuBT.Size = New System.Drawing.Size(159, 38)
+        Me.PeriodsMenuBT.Size = New System.Drawing.Size(168, 38)
         Me.PeriodsMenuBT.Text = "Periods"
         '
         'VersionsMenuBT
@@ -534,7 +561,7 @@ Partial Class ControllingUI_2
         Me.VersionsMenuBT.Image = Global.PPS.My.Resources.Resources.elements31
         Me.VersionsMenuBT.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
         Me.VersionsMenuBT.Name = "VersionsMenuBT"
-        Me.VersionsMenuBT.Size = New System.Drawing.Size(159, 38)
+        Me.VersionsMenuBT.Size = New System.Drawing.Size(168, 38)
         Me.VersionsMenuBT.Text = "Versions"
         '
         'RefreshMenuBT
@@ -811,13 +838,6 @@ Partial Class ControllingUI_2
         Me.SendBreakDownBT.Text = "Drop on Excel"
         Me.SendBreakDownBT.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
         '
-        'CategoriesIL
-        '
-        Me.CategoriesIL.ImageStream = CType(resources.GetObject("CategoriesIL.ImageStream"), System.Windows.Forms.ImageListStreamer)
-        Me.CategoriesIL.TransparentColor = System.Drawing.Color.Transparent
-        Me.CategoriesIL.Images.SetKeyName(0, "elements.ico")
-        Me.CategoriesIL.Images.SetKeyName(1, "favicon(81).ico")
-        '
         'MenuIL
         '
         Me.MenuIL.ImageStream = CType(resources.GetObject("MenuIL.ImageStream"), System.Windows.Forms.ImageListStreamer)
@@ -825,6 +845,13 @@ Partial Class ControllingUI_2
         Me.MenuIL.Images.SetKeyName(0, "element_branch2.ico")
         Me.MenuIL.Images.SetKeyName(1, "elements.ico")
         Me.MenuIL.Images.SetKeyName(2, "favicon(2).ico")
+        '
+        'CategoriesIL
+        '
+        Me.CategoriesIL.ImageStream = CType(resources.GetObject("CategoriesIL.ImageStream"), System.Windows.Forms.ImageListStreamer)
+        Me.CategoriesIL.TransparentColor = System.Drawing.Color.Transparent
+        Me.CategoriesIL.Images.SetKeyName(0, "elements.ico")
+        Me.CategoriesIL.Images.SetKeyName(1, "favicon(81).ico")
         '
         'ControllingUI_2
         '
@@ -942,4 +969,7 @@ Partial Class ControllingUI_2
     Friend WithEvents ExcelMenu As System.Windows.Forms.MenuStrip
     Friend WithEvents SendBreakDownBT As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents MenuIL As System.Windows.Forms.ImageList
+    Friend WithEvents ClientsSelectionToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ProductsFilterToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents SelectionToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
 End Class

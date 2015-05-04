@@ -372,7 +372,6 @@
     <Compile Include="Modules\PLATFORM MANAGEMENT\Users\Views\UsersTGV.vb" />
     <Compile Include="Modules\REPORTS UPLOAD\AcquisitionInterface\Controller\AcquisitionInterfaceController.vb" />
     <Compile Include="Modules\REPORTS UPLOAD\VIEW\SubmissionWSController.vb" />
-    <Compile Include="Modules\CONTROLING UI\Controler\CControlingDropOnExcel.vb" />
     <Compile Include="Modules\CONTROLING UI\View\UploadingHistoryUI.Designer.vb">
       <DependentUpon>UploadingHistoryUI.vb</DependentUpon>
     </Compile>

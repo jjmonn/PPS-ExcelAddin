@@ -285,8 +285,7 @@ Friend Class EntitiesDGV
             Dim row As HierarchyItem = DGV.CellsArea.SelectedCells(0).RowItem
             Dim column As HierarchyItem = DGV.CellsArea.SelectedCells(0).ColumnItem
             Dim value As String = DGV.CellsArea.SelectedCells(0).Value
-
-            SetValueToChildrenItems(row, column, value)
+            If row.Items.Count > 0 Then SetValueToChildrenItems(row, column, value) Else  SetValueToSibbling(row, column, value)
             DGV.Refresh()
             DGV.Select()
         End If

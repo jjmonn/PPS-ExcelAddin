@@ -268,8 +268,15 @@ Friend Class Entity
 
     End Sub
 
+    Protected Friend Sub close()
+
+        finalize()
+
+    End Sub
+
     Protected Overrides Sub finalize()
 
+        On Error Resume Next
         RST.Close()
         MyBase.Finalize()
 

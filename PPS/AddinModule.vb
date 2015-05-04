@@ -37,7 +37,6 @@ Public Class AddinModule
 #Region "instance Variables"
 
 
-    Friend WithEvents RefreshBT As AddinExpress.MSO.ADXRibbonButton
     Friend WithEvents AdxRibbonGroup2 As AddinExpress.MSO.ADXRibbonGroup
     Friend WithEvents AdxRibbonGroup1 As AddinExpress.MSO.ADXRibbonGroup
     Friend WithEvents MaintTab As AddinExpress.MSO.ADXRibbonTab
@@ -127,6 +126,13 @@ Public Class AddinModule
     Friend WithEvents ClientsDropDown As AddinExpress.MSO.ADXRibbonDropDown
     Friend WithEvents ProductsDropDown As AddinExpress.MSO.ADXRibbonDropDown
     Friend WithEvents WSCB As AddinExpress.MSO.ADXRibbonDropDown
+    Friend WithEvents RefreshBT As AddinExpress.MSO.ADXRibbonSplitButton
+    Friend WithEvents RefreshMenu As AddinExpress.MSO.ADXRibbonMenu
+    Friend WithEvents RefreshSelectionBT As AddinExpress.MSO.ADXRibbonButton
+    Friend WithEvents RefreshWorksheetBT As AddinExpress.MSO.ADXRibbonButton
+    Friend WithEvents RefreshWorkbookBT As AddinExpress.MSO.ADXRibbonButton
+    Friend WithEvents AdxRibbonMenuSeparator1 As AddinExpress.MSO.ADXRibbonMenuSeparator
+    Friend WithEvents AutoRefreshBT As AddinExpress.MSO.ADXRibbonCheckBox
 
 
 #End Region
@@ -159,7 +165,13 @@ Public Class AddinModule
         Me.MainTabImageList = New System.Windows.Forms.ImageList(Me.components)
         Me.InputReportLaunchBT = New AddinExpress.MSO.ADXRibbonSplitButton(Me.components)
         Me.AdxRibbonMenu7 = New AddinExpress.MSO.ADXRibbonMenu(Me.components)
-        Me.RefreshBT = New AddinExpress.MSO.ADXRibbonButton(Me.components)
+        Me.RefreshBT = New AddinExpress.MSO.ADXRibbonSplitButton(Me.components)
+        Me.RefreshMenu = New AddinExpress.MSO.ADXRibbonMenu(Me.components)
+        Me.RefreshSelectionBT = New AddinExpress.MSO.ADXRibbonButton(Me.components)
+        Me.RefreshWorksheetBT = New AddinExpress.MSO.ADXRibbonButton(Me.components)
+        Me.RefreshWorkbookBT = New AddinExpress.MSO.ADXRibbonButton(Me.components)
+        Me.AdxRibbonMenuSeparator1 = New AddinExpress.MSO.ADXRibbonMenuSeparator(Me.components)
+        Me.AutoRefreshBT = New AddinExpress.MSO.ADXRibbonCheckBox(Me.components)
         Me.AdxRibbonGroup2 = New AddinExpress.MSO.ADXRibbonGroup(Me.components)
         Me.ControlingUI2BT = New AddinExpress.MSO.ADXRibbonButton(Me.components)
         Me.FunctionDesigner = New AddinExpress.MSO.ADXRibbonSplitButton(Me.components)
@@ -270,11 +282,10 @@ Public Class AddinModule
         '
         Me.ConnectionIcons.ImageStream = CType(resources.GetObject("ConnectionIcons.ImageStream"), System.Windows.Forms.ImageListStreamer)
         Me.ConnectionIcons.TransparentColor = System.Drawing.Color.Transparent
-        Me.ConnectionIcons.Images.SetKeyName(0, "favicon(155).ico")
-        Me.ConnectionIcons.Images.SetKeyName(1, "favicon(154).ico")
-        Me.ConnectionIcons.Images.SetKeyName(2, "connection red 3.png")
-        Me.ConnectionIcons.Images.SetKeyName(3, "connection green 2.png")
-        Me.ConnectionIcons.Images.SetKeyName(4, "favicon(153).ico")
+        Me.ConnectionIcons.Images.SetKeyName(0, "favicon(4).ico")
+        Me.ConnectionIcons.Images.SetKeyName(1, "favicon(3).ico")
+        Me.ConnectionIcons.Images.SetKeyName(2, "refresh_red.ico")
+        Me.ConnectionIcons.Images.SetKeyName(3, "refresh_green.ico")
         '
         'AdxRibbonSeparator1
         '
@@ -318,6 +329,8 @@ Public Class AddinModule
         Me.NewICOs.Images.SetKeyName(21, "spreadsheet.ico.ico")
         Me.NewICOs.Images.SetKeyName(22, "edit.ico.ico")
         Me.NewICOs.Images.SetKeyName(23, "upload.ico")
+        Me.NewICOs.Images.SetKeyName(24, "selection_refresh.ico")
+        Me.NewICOs.Images.SetKeyName(25, "favicon(2).ico")
         '
         'Addin_Version_label
         '
@@ -439,12 +452,65 @@ Public Class AddinModule
         'RefreshBT
         '
         Me.RefreshBT.Caption = "Refresh"
-        Me.RefreshBT.Id = "adxRibbonButton_87f8b7409d6b41e19a24024d33bd3085"
+        Me.RefreshBT.Controls.Add(Me.RefreshMenu)
+        Me.RefreshBT.Id = "adxRibbonSplitButton_8aab3e36ecdf4fdfbd62b6bc29af40ee"
         Me.RefreshBT.Image = 19
         Me.RefreshBT.ImageList = Me.MainTabImageList
         Me.RefreshBT.ImageTransparentColor = System.Drawing.Color.Transparent
         Me.RefreshBT.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
         Me.RefreshBT.Size = AddinExpress.MSO.ADXRibbonXControlSize.Large
+        '
+        'RefreshMenu
+        '
+        Me.RefreshMenu.Caption = "AdxRibbonMenu4"
+        Me.RefreshMenu.Controls.Add(Me.RefreshSelectionBT)
+        Me.RefreshMenu.Controls.Add(Me.RefreshWorksheetBT)
+        Me.RefreshMenu.Controls.Add(Me.RefreshWorkbookBT)
+        Me.RefreshMenu.Controls.Add(Me.AdxRibbonMenuSeparator1)
+        Me.RefreshMenu.Controls.Add(Me.AutoRefreshBT)
+        Me.RefreshMenu.Id = "adxRibbonMenu_0ae167392d0a46098646510a5dbc2853"
+        Me.RefreshMenu.ImageTransparentColor = System.Drawing.Color.Transparent
+        Me.RefreshMenu.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
+        '
+        'RefreshSelectionBT
+        '
+        Me.RefreshSelectionBT.Caption = "Refresh Selection"
+        Me.RefreshSelectionBT.Id = "adxRibbonButton_3054a08e726d43dcba22a017f6d8905c"
+        Me.RefreshSelectionBT.Image = 24
+        Me.RefreshSelectionBT.ImageList = Me.NewICOs
+        Me.RefreshSelectionBT.ImageTransparentColor = System.Drawing.Color.Transparent
+        Me.RefreshSelectionBT.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
+        '
+        'RefreshWorksheetBT
+        '
+        Me.RefreshWorksheetBT.Caption = "Refresh Worksheet"
+        Me.RefreshWorksheetBT.Id = "adxRibbonButton_a4e368eb8aff4079a3fa585ebe79d4fe"
+        Me.RefreshWorksheetBT.Image = 21
+        Me.RefreshWorksheetBT.ImageList = Me.NewICOs
+        Me.RefreshWorksheetBT.ImageTransparentColor = System.Drawing.Color.Transparent
+        Me.RefreshWorksheetBT.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
+        '
+        'RefreshWorkbookBT
+        '
+        Me.RefreshWorkbookBT.Caption = "Refresh Workbook"
+        Me.RefreshWorkbookBT.Id = "adxRibbonButton_456f45077bc4422dbde8ae3912d4a635"
+        Me.RefreshWorkbookBT.Image = 25
+        Me.RefreshWorkbookBT.ImageList = Me.NewICOs
+        Me.RefreshWorkbookBT.ImageTransparentColor = System.Drawing.Color.Transparent
+        Me.RefreshWorkbookBT.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
+        '
+        'AdxRibbonMenuSeparator1
+        '
+        Me.AdxRibbonMenuSeparator1.Caption = "Option"
+        Me.AdxRibbonMenuSeparator1.Id = "adxRibbonMenuSeparator_0e263d2a409c42da887efa81f01ad042"
+        Me.AdxRibbonMenuSeparator1.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
+        '
+        'AutoRefreshBT
+        '
+        Me.AutoRefreshBT.Caption = "Auto Refresh"
+        Me.AutoRefreshBT.Id = "adxRibbonCheckBox_b2ef6805d0174a5d81ade5a1952862c7"
+        Me.AutoRefreshBT.Pressed = True
+        Me.AutoRefreshBT.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
         '
         'AdxRibbonGroup2
         '
@@ -1168,6 +1234,7 @@ Public Class AddinModule
     Friend GRSControlersDictionary As New Dictionary(Of Excel.Worksheet, GeneralSubmissionControler)
     Private ctrlsTextWSDictionary As New Dictionary(Of String, Excel.Worksheet)
     Public setUpFlag As Boolean
+    Public ppsbi_refresh_flag As Boolean = True
     Private CurrentGRSControler As GeneralSubmissionControler
     Private Const EXCEL_MIN_VERSION As Double = 9
 
@@ -1458,9 +1525,10 @@ Public Class AddinModule
 
     End Sub
 
-    Private Sub RefreshBT_onclick(sender As System.Object,
-                                         control As AddinExpress.MSO.IRibbonControl,
-                                         pressed As System.Boolean) Handles RefreshBT.OnClick
+  
+#Region "Refresh"
+
+    Private Sub AdxRibbonSplitButton1_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) Handles RefreshBT.OnClick, RefreshWorksheetBT.OnClick
 
         If ConnectioN Is Nothing Then
             Dim CONNUI As New ConnectionUI(Me)
@@ -1476,6 +1544,46 @@ Public Class AddinModule
         End If
 
     End Sub
+
+    Private Sub RefreshSelectionBT_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) Handles RefreshSelectionBT.OnClick
+
+        If ConnectioN Is Nothing Then
+            Dim CONNUI As New ConnectionUI(Me)
+            CONNUI.Show()
+        Else
+            If Not GRSControlersDictionary.ContainsKey(GlobalVariables.APPS.ActiveSheet) Then
+                Dim cREFRESH As New RefreshGetDataBatch
+                Dim ws As Excel.Worksheet = GlobalVariables.APPS.ActiveSheet
+                cREFRESH.RefreshWorksheet(GlobalVariables.APPS.Selection)
+            Else
+                MsgBox("Cannot Refresh while the worksheet is being edited. " + Chr(13) + _
+                       "The submission must be closed for this worksheet in order to refresh it.")
+            End If
+        End If
+
+    End Sub
+
+    Private Sub RefreshWorkbookBT_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) Handles RefreshWorkbookBT.OnClick
+
+        ' to be implemented !
+
+    End Sub
+
+    Private Sub AutoRefreshBT_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) Handles AutoRefreshBT.OnClick
+
+        If ppsbi_refresh_flag = True Then
+
+            ppsbi_refresh_flag = False
+        Else
+
+            ppsbi_refresh_flag = True
+        End If
+
+
+    End Sub
+
+#End Region
+
 
     Private Sub PPSBIFuncBT_onclick(sender As System.Object,
                                     control As AddinExpress.MSO.IRibbonControl,
@@ -1607,28 +1715,28 @@ Public Class AddinModule
 
 #Region "Export"
 
-    Private Sub ReportFMTBT_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) _
-            Handles ReportFmtBT.OnClick, FormattingBT.OnClick
+    'Private Sub ReportFMTBT_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) _
+    '        Handles ReportFmtBT.OnClick, FormattingBT.OnClick
 
-        If ConnectioN Is Nothing Then
-            Dim CONNUI As New ConnectionUI(Me)
-            CONNUI.Show()
-        Else
-            CExcelFormatting.FormatExcelRange(GlobalVariables.APPS.ActiveSheet, REPORT_FORMAT_CODE)
-        End If
+    '    If ConnectioN Is Nothing Then
+    '        Dim CONNUI As New ConnectionUI(Me)
+    '        CONNUI.Show()
+    '    Else
+    '        CExcelFormatting.FormatExcelRange(GlobalVariables.APPS.ActiveSheet, REPORT_FORMAT_CODE)
+    '    End If
 
-    End Sub
+    'End Sub
 
-    Private Sub InputFMTBT_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) Handles InputFmtBT.OnClick
+    'Private Sub InputFMTBT_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) Handles InputFmtBT.OnClick
 
-        If ConnectioN Is Nothing Then
-            Dim CONNUI As New ConnectionUI(Me)
-            CONNUI.Show()
-        Else
-            CExcelFormatting.FormatExcelRange(GlobalVariables.APPS.ActiveSheet, INPUT_FORMAT_CODE)
-        End If
+    '    If ConnectioN Is Nothing Then
+    '        Dim CONNUI As New ConnectionUI(Me)
+    '        CONNUI.Show()
+    '    Else
+    '        CExcelFormatting.FormatExcelRange(GlobalVariables.APPS.ActiveSheet, INPUT_FORMAT_CODE)
+    '    End If
 
-    End Sub
+    'End Sub
 
 #End Region
 
@@ -1889,7 +1997,7 @@ Public Class AddinModule
         Me.InputReportTaskPane.Hide()
         Me.InputReportTaskPane.Close()
         Versions.Close()
-        CExcelFormatting.FormatExcelRange(currentcell, INPUT_FORMAT_CODE, periodlist(0))
+        CExcelFormatting.FormatExcelRange(currentcell, INPUT_FORMAT_CODE, currency, periodlist(0))
         GlobalVariables.APPS.ScreenUpdating = True
         AssociateGRSControler()
 
@@ -1997,6 +2105,6 @@ Public Class AddinModule
     End Sub
 
 
-
+  
 End Class
 

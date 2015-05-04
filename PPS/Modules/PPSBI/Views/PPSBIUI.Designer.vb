@@ -289,7 +289,7 @@ Partial Class PPSBI_UI
         Me.validate_cmd.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
         Me.validate_cmd.ImageKey = "submit 1 ok.ico"
         Me.validate_cmd.ImageList = Me.ButtonsIL
-        Me.validate_cmd.Location = New System.Drawing.Point(445, 388)
+        Me.validate_cmd.Location = New System.Drawing.Point(445, 527)
         Me.validate_cmd.Name = "validate_cmd"
         Me.validate_cmd.Size = New System.Drawing.Size(114, 27)
         Me.validate_cmd.TabIndex = 6
@@ -450,7 +450,7 @@ Partial Class PPSBI_UI
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.SystemColors.Control
-        Me.ClientSize = New System.Drawing.Size(578, 440)
+        Me.ClientSize = New System.Drawing.Size(576, 569)
         Me.Controls.Add(Me.rightSideEpxansionBT)
         Me.Controls.Add(Me.categoriesSelectionGroupBox)
         Me.Controls.Add(Me.MainTVsSelectionGB)

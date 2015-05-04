@@ -42,7 +42,7 @@ Friend Class ESB
 
     Protected Friend Sub New()
 
-        entities_categories_TV_instance = AnalysisAxisCategory.GetCategoryCodeNode(ControllingUI2Controller.ENTITIES_CODE)
+        entities_categories_TV_instance = AnalysisAxisCategory.GetCategoryCodeNode(ControllingUI2Controller.ENTITY_CATEGORY_CODE)
       
     End Sub
 
@@ -146,7 +146,7 @@ Friend Class ESB
         Dim ActiveFilterCategoriesList As New List(Of TreeNode)
 
         For Each categoryValue As String In filterList
-            Dim RootCategoryNode As TreeNode = TreeViewsUtilities.ReturnRootNodeFromNode(entities_categories_TV_instance.Nodes.Find(categoryValue, True)(0))
+            Dim RootCategoryNode As TreeNode = entities_categories_TV_instance.Nodes.Find(categoryValue, True)(0).Parent
             If Not ActiveFilterCategoriesList.Contains(RootCategoryNode) Then ActiveFilterCategoriesList.Add(RootCategoryNode)
         Next
 

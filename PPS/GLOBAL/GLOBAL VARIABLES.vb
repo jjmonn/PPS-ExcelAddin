@@ -2,11 +2,11 @@
 '
 '
 ' To do:
-'       - Change syntax : Xxxx_Xxxx for Global_Variables
+'       - Change syntax : Xxxx_Xxxx for Global_Variables ?
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 24/02/2015
+' Last modified: 04/05/2015
 
 
 Imports AddinExpress.MSO
@@ -43,7 +43,7 @@ Friend Class GlobalVariables
     Protected Friend Shared GlobalDll3Interface As DLL3_Interface
     Protected Friend Shared GlobalDBDownloader As DataBaseDataDownloader
     Protected Friend Shared GlobalPPSBIController As PPSBIController
-
+  
 #End Region
 
 #Region "Credentials"

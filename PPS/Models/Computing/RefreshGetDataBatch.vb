@@ -40,13 +40,14 @@ Friend Class RefreshGetDataBatch
 
 #Region "Interface"
 
-    Protected Friend Sub RefreshWorksheet()
+    Protected Friend Sub RefreshWorksheet(Optional ByRef rng As Excel.Range = Nothing)
 
         Dim FormulasRangesCollection As New Dictionary(Of Excel.Range, String)
-        Dim WS As Excel.Worksheet = GlobalVariables.APPS.ActiveSheet
         GlobalVariables.GenericGlobalSingleEntityComputer.ReinitializeGenericDataDLL3Computer()
         GlobalVariables.GenericGlobalAggregationComputer.ReinitializeComputerCache()
-        If findGetDataFormulaCells(FormulasRangesCollection, WS) Then
+
+        If rng Is Nothing Then rng = GlobalVariables.APPS.ActiveSheet
+        If findGetDataFormulaCells(FormulasRangesCollection, rng) Then
             evaluateFormulas(FormulasRangesCollection)
         Else
             RefreshReport()
@@ -60,23 +61,29 @@ Friend Class RefreshGetDataBatch
 
     ' Loop throught worksheet and add ranges to formulaDictionary if "PPSBI" formula found
     Protected Friend Shared Function findGetDataFormulaCells(ByRef FormulasRangesCollection As Dictionary(Of Excel.Range, String), _
-                                                            ByRef ws As Excel.Worksheet) As Boolean
+                                                             ByRef rng As Excel.Range) As Boolean
 
         Dim c As Excel.Range
         Dim firstAddress As String
-        With ws.Cells
-            c = .Find(UDF_FORMULA_NAME, ws.Cells(1, 1), , )
 
-            If Not c Is Nothing Then
-                firstAddress = c.Address
-                Do
-                    FormulasRangesCollection.Add(c, c.Formula)
-                    c.Value2 = REFRESH_WAITING_TEXT
-                    c = .FindNext(c)
-                    If IsNothing(c) Then Exit Do
-                Loop While Not c Is Nothing And c.Address <> firstAddress
-            End If
-        End With
+        If rng.Count = 1 Then
+            FormulasRangesCollection.Add(rng, rng.Formula)
+            rng.Value2 = REFRESH_WAITING_TEXT
+        Else
+            With rng.Cells
+                c = .Find(UDF_FORMULA_NAME, rng.Cells(1, 1), , )
+
+                If Not c Is Nothing Then
+                    firstAddress = c.Address
+                    Do
+                        FormulasRangesCollection.Add(c, c.Formula)
+                        c.Value2 = REFRESH_WAITING_TEXT
+                        c = .FindNext(c)
+                        If IsNothing(c) Then Exit Do
+                    Loop While Not c Is Nothing And c.Address <> firstAddress
+                End If
+            End With
+        End If
 
         If FormulasRangesCollection.Count > 0 Then
             Return True
@@ -128,9 +135,13 @@ Friend Class RefreshGetDataBatch
                                     Optional ByVal adjustment_id As String = "aaa")
 
         ' currency stub !-> if currency not provided dataset should identify the currency - if no currency found -> ask user
-        Dim DS As New ModelDataSet(GlobalVariables.APPS.ActiveSheet)
-        DS.SnapshotWS()
-        DS.getOrientations()
+
+        ' decision to be made here !!!
+
+
+        'Dim DS As New ModelDataSet(GlobalVariables.APPS.ActiveSheet)
+        'DS.SnapshotWS()
+        'DS.getOrientations()
         ' If DS.GlobalOrientationFlag <> ORIENTATION_ERROR_FLAG Then DS.RefreshAll(adjustment_id)
 
     End Sub

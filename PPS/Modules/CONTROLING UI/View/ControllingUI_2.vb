@@ -6,8 +6,6 @@
 ' To do: 
 '       - Reimplement Versions comparison !!
 ' 
-' 
-'
 '
 ' Known Bugs:
 '     
@@ -766,7 +764,7 @@ Friend Class ControllingUI_2
 
 #Region "Home Menu"
 
-    Private Sub EntitiesMenuBTClick(sender As Object, e As EventArgs) Handles EntitiesMenuBT1.Click, EntitiesMenuBT2.Click
+    Private Sub EntitiesMenuBTClick(sender As Object, e As EventArgs) Handles EntitiesMenuBT1.Click, SelectionToolStripMenuItem.Click
 
         If EntitiesFlag = False Then
             entitiesTV.Select()
@@ -847,7 +845,7 @@ Friend Class ControllingUI_2
 
     End Sub
 
-    Private Sub ClientsMenuBT_Click(sender As Object, e As EventArgs) Handles ClientsMenuBT.Click
+    Private Sub ClientsMenuBT_Click(sender As Object, e As EventArgs) Handles ClientsSelectionToolStripMenuItem.Click
 
         If ClientsFlag = False Then
             clientsTV.Select()
@@ -907,7 +905,7 @@ Friend Class ControllingUI_2
 
     End Sub
 
-    Private Sub ProductsMenuBT_Click(sender As Object, e As EventArgs) Handles ProductsMenuBT.Click
+    Private Sub ProductsMenuBT_Click(sender As Object, e As EventArgs) Handles ProductsFilterToolStripMenuItem.Click
 
         If productsFlag = False Then
             productsTV.Select()
@@ -1345,8 +1343,6 @@ Friend Class ControllingUI_2
 
 
 #End Region
-
-
 
 
 End Class

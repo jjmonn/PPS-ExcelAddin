@@ -7,12 +7,14 @@
 '      - Simplification : loop through optional parameters
 '      - Version and currency dllcomputerinstance current checks to add when those params are operationals
 '      - Must be able to identify dates more globally -> regex for example     
-
+'       - EntitiesTV can be stored in aggregation computer
+'
+'
 '  Known bugs:
 '      
 '
 ' Author: Julien Monnereau
-' Last modified: 25/02/2015
+' Last modified: 04/05/2015
 '
 
 
@@ -51,7 +53,7 @@ Friend Class PPSBIController
         AccountsFTypesDictionary = AccountsMapping.GetAccountsDictionary(ACCOUNT_ID_VARIABLE, ACCOUNT_FORMULA_TYPE_VARIABLE)
         AccountsNameKeyDictionary = AccountsMapping.GetAccountsDictionary(ACCOUNT_NAME_VARIABLE, ACCOUNT_ID_VARIABLE)
         EntitiesNameKeyDictionary = EntitiesMapping.GetEntitiesDictionary(ENTITIES_NAME_VARIABLE, ENTITIES_ID_VARIABLE)
-        EntitiesCategoriesNameKeyDictionary = CategoriesMapping.GetCategoryDictionary(ControllingUI2Controller.ENTITIES_CODE, CATEGORY_NAME_VARIABLE, CATEGORY_ID_VARIABLE)
+        EntitiesCategoriesNameKeyDictionary = CategoriesMapping.GetCategoryDictionary(ControllingUI2Controller.ENTITY_CATEGORY_CODE, CATEGORY_NAME_VARIABLE, CATEGORY_ID_VARIABLE)
         Adjustments_name_id_dic = AdjustmentsMapping.GetAdjustmentsDictionary(ANALYSIS_AXIS_NAME_VAR, ANALYSIS_AXIS_ID_VAR)
         emptyCellFlag = False
         aggregation_computed_accounts_types.Add(FORMULA_ACCOUNT_FORMULA_TYPE)
@@ -74,7 +76,7 @@ Friend Class PPSBIController
                                             ByRef currency As Object, _
                                             ByRef version As Object, _
                                             Optional ByRef adjustment_filter As Object = Nothing, _
-                                            Optional ByRef filtersArray As Object() = Nothing) As Object
+                                            Optional ByRef filtersArray As Object = Nothing) As Object
 
         Dim entityString, entity_id, account_id, accountString, periodString, currencyString, version_id, adjustment_string, adjustment_id, error_message As String
         emptyCellFlag = False
@@ -85,9 +87,11 @@ Friend Class PPSBIController
         adjustment_string = ReturnValueFromRange(adjustment_filter)
 
         filterList.Clear()
-        For Each filter_ In filtersArray
-            If Not filter_ Is Nothing Then AddFilterValueToFiltersList(filter_)
-        Next
+        If Not filtersArray Is Nothing Then
+            For Each filter_ In filtersArray
+                If Not filter_ Is Nothing Then AddFilterValueToFiltersList(filter_)
+            Next
+        End If
 
         If CheckParameters(accountString, account_id, _
                            entityString, entity_id, _
@@ -103,14 +107,8 @@ Friend Class PPSBIController
         Dim products_id_filters As New List(Of String)
         Dim adjustments_id_filters As New List(Of String)
 
-        '
-        ' ESB ?! -> applies filters on entity node
-        ESB.BuildCategoriesFilterFromFilterList(filterList)
-
-        ' -> Besoin d'un moyen plus rapide !!!
-        Dim entitiesTV As New TreeView
-        Entity.LoadEntitiesTree(entitiesTV)
-        Dim entity_node As TreeNode = entitiesTV.Nodes.Find(entity_id, True)(0)
+        Dim entity_node As TreeNode = getEntityNode(entity_id)
+        If entity_node Is Nothing Then Return "Entity not in selection"
 
         If aggregation_computed_accounts_types.Contains(AccountsFTypesDictionary(account_id)) _
         AndAlso entity_node.Nodes.Count > 0 Then
@@ -344,6 +342,23 @@ Friend Class PPSBIController
 #End Region
 
 
+#Region " Selections Builders"
+
+    Private Function getEntityNode(ByRef entity_id As String) As TreeNode
+
+        Dim entitiesTV As New TreeView      ' Store in computers ?
+        ESB.BuildCategoriesFilterFromFilterList(filterList)
+        Entity.LoadEntitiesTree(entitiesTV, ESB.StrSqlQueryForEntitiesUploadFunctions)
+        Dim lookup_result As TreeNode() = entitiesTV.Nodes.Find(entity_id, True)
+        If lookup_result.Length > 0 Then Return lookup_result(0) Else Return Nothing
+
+    End Function
+
+
+
+#End Region
+
+
 #Region "Utilities"
 
     Private Function ReturnValueFromRange(ByRef input As Object) As Object
@@ -362,14 +377,8 @@ Friend Class PPSBIController
     Private Sub AddFilterValueToFiltersList(ByRef filter As Object)
 
         Dim filterValue As String = ReturnValueFromRange(filter)
-        If filterValue.Contains(",") = True Then
-            For Each value As String In filterValue.Split(PPSBI_FORMULA_CATEGORIES_SEPARATOR)
-                If EntitiesCategoriesNameKeyDictionary.ContainsKey(value) Then filterList.Add(EntitiesCategoriesNameKeyDictionary.Item(value))
-            Next
-        Else
-            If EntitiesCategoriesNameKeyDictionary.ContainsKey(filterValue) Then filterList.Add(EntitiesCategoriesNameKeyDictionary.Item(filterValue))
-        End If
-
+        If Not filterValue Is Nothing AndAlso EntitiesCategoriesNameKeyDictionary.ContainsKey(filterValue) Then filterList.Add(EntitiesCategoriesNameKeyDictionary.Item(filterValue))
+      
     End Sub
 
 #End Region
