@@ -6,7 +6,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 09/02/2015
+' Last modified: 05/05/2015
 
 
 Imports System.Windows.Forms
@@ -14,13 +14,13 @@ Imports System.Collections
 Imports System.Collections.Generic
 
 
-Friend Class ChartsControlsMGTController
+Friend Class ChartsControlsController
 
 #Region "Instance Variables"
 
     ' Objects
     Private ControlCharts As New ControlChart
-    Private View As ControlsMGTUI
+    Private View As ControlsControl
     Private ChartsTV As New TreeView
 
     ' Variables
@@ -44,7 +44,7 @@ Friend Class ChartsControlsMGTController
 
 #Region "Interface"
 
-    Protected Friend Sub InitializeDisplay(ByRef input_view As ControlsMGTUI)
+    Protected Friend Sub InitializeDisplay(ByRef input_view As ControlsControl)
 
         View = input_view
         View.DisplayChartsInit(ChartsTV)

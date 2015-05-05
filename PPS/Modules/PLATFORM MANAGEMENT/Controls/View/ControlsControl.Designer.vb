@@ -1,8 +1,8 @@
 ﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
-Partial Class ControlsMGTUI
-    Inherits System.Windows.Forms.Form
+Partial Class ControlsControl
+    Inherits System.Windows.Forms.UserControl
 
-    'Form overrides dispose to clean up the component list.
+    'UserControl overrides dispose to clean up the component list.
     <System.Diagnostics.DebuggerNonUserCode()> _
     Protected Overrides Sub Dispose(ByVal disposing As Boolean)
         Try
@@ -23,15 +23,15 @@ Partial Class ControlsMGTUI
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
-        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(ControlsMGTUI))
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(ControlsControl))
+        Me.TabControl1 = New System.Windows.Forms.CustomTabControl()
+        Me.TabPage1 = New System.Windows.Forms.TabPage()
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
         Me.ControlsDGVPanel = New System.Windows.Forms.Panel()
         Me.Panel1 = New System.Windows.Forms.Panel()
         Me.AddControlBT = New System.Windows.Forms.Button()
         Me.ButtonsImageList = New System.Windows.Forms.ImageList(Me.components)
         Me.DeleteControlBT = New System.Windows.Forms.Button()
-        Me.TabControl1 = New System.Windows.Forms.CustomTabControl()
-        Me.TabPage1 = New System.Windows.Forms.TabPage()
         Me.TabPage2 = New System.Windows.Forms.TabPage()
         Me.SplitContainer1 = New System.Windows.Forms.SplitContainer()
         Me.TableLayoutPanel2 = New System.Windows.Forms.TableLayoutPanel()
@@ -62,10 +62,10 @@ Partial Class ControlsMGTUI
         Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
         Me.DeleteRCM = New System.Windows.Forms.ToolStripMenuItem()
         Me.ColorDialog1 = New System.Windows.Forms.ColorDialog()
-        Me.TableLayoutPanel1.SuspendLayout()
-        Me.Panel1.SuspendLayout()
         Me.TabControl1.SuspendLayout()
         Me.TabPage1.SuspendLayout()
+        Me.TableLayoutPanel1.SuspendLayout()
+        Me.Panel1.SuspendLayout()
         Me.TabPage2.SuspendLayout()
         CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SplitContainer1.Panel1.SuspendLayout()
@@ -76,6 +76,48 @@ Partial Class ControlsMGTUI
         Me.GroupBox1.SuspendLayout()
         Me.ChartsTVRCM.SuspendLayout()
         Me.SuspendLayout()
+        '
+        'TabControl1
+        '
+        Me.TabControl1.Controls.Add(Me.TabPage1)
+        Me.TabControl1.Controls.Add(Me.TabPage2)
+        Me.TabControl1.DisplayStyle = System.Windows.Forms.TabStyle.Rounded
+        '
+        '
+        '
+        Me.TabControl1.DisplayStyleProvider.BorderColor = System.Drawing.SystemColors.ControlDark
+        Me.TabControl1.DisplayStyleProvider.BorderColorHot = System.Drawing.SystemColors.ControlDark
+        Me.TabControl1.DisplayStyleProvider.BorderColorSelected = System.Drawing.Color.FromArgb(CType(CType(127, Byte), Integer), CType(CType(157, Byte), Integer), CType(CType(185, Byte), Integer))
+        Me.TabControl1.DisplayStyleProvider.CloserColor = System.Drawing.Color.DarkGray
+        Me.TabControl1.DisplayStyleProvider.FocusTrack = False
+        Me.TabControl1.DisplayStyleProvider.HotTrack = True
+        Me.TabControl1.DisplayStyleProvider.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.TabControl1.DisplayStyleProvider.Opacity = 1.0!
+        Me.TabControl1.DisplayStyleProvider.Overlap = 0
+        Me.TabControl1.DisplayStyleProvider.Padding = New System.Drawing.Point(6, 3)
+        Me.TabControl1.DisplayStyleProvider.Radius = 10
+        Me.TabControl1.DisplayStyleProvider.ShowTabCloser = False
+        Me.TabControl1.DisplayStyleProvider.TextColor = System.Drawing.SystemColors.ControlText
+        Me.TabControl1.DisplayStyleProvider.TextColorDisabled = System.Drawing.SystemColors.ControlDark
+        Me.TabControl1.DisplayStyleProvider.TextColorSelected = System.Drawing.SystemColors.ControlText
+        Me.TabControl1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.TabControl1.HotTrack = True
+        Me.TabControl1.Location = New System.Drawing.Point(0, 0)
+        Me.TabControl1.Name = "TabControl1"
+        Me.TabControl1.SelectedIndex = 0
+        Me.TabControl1.Size = New System.Drawing.Size(952, 552)
+        Me.TabControl1.TabIndex = 9
+        '
+        'TabPage1
+        '
+        Me.TabPage1.BackColor = System.Drawing.SystemColors.Control
+        Me.TabPage1.Controls.Add(Me.TableLayoutPanel1)
+        Me.TabPage1.Location = New System.Drawing.Point(4, 23)
+        Me.TabPage1.Name = "TabPage1"
+        Me.TabPage1.Padding = New System.Windows.Forms.Padding(3)
+        Me.TabPage1.Size = New System.Drawing.Size(944, 525)
+        Me.TabPage1.TabIndex = 0
+        Me.TabPage1.Text = "Numeric Controls"
         '
         'TableLayoutPanel1
         '
@@ -90,7 +132,7 @@ Partial Class ControlsMGTUI
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25.0!))
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
-        Me.TableLayoutPanel1.Size = New System.Drawing.Size(930, 526)
+        Me.TableLayoutPanel1.Size = New System.Drawing.Size(938, 519)
         Me.TableLayoutPanel1.TabIndex = 0
         '
         'ControlsDGVPanel
@@ -98,7 +140,7 @@ Partial Class ControlsMGTUI
         Me.ControlsDGVPanel.Dock = System.Windows.Forms.DockStyle.Fill
         Me.ControlsDGVPanel.Location = New System.Drawing.Point(3, 28)
         Me.ControlsDGVPanel.Name = "ControlsDGVPanel"
-        Me.ControlsDGVPanel.Size = New System.Drawing.Size(924, 495)
+        Me.ControlsDGVPanel.Size = New System.Drawing.Size(932, 488)
         Me.ControlsDGVPanel.TabIndex = 0
         '
         'Panel1
@@ -110,7 +152,7 @@ Partial Class ControlsMGTUI
         Me.Panel1.Location = New System.Drawing.Point(0, 0)
         Me.Panel1.Margin = New System.Windows.Forms.Padding(0)
         Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(930, 25)
+        Me.Panel1.Size = New System.Drawing.Size(938, 25)
         Me.Panel1.TabIndex = 1
         '
         'AddControlBT
@@ -154,48 +196,6 @@ Partial Class ControlsMGTUI
         Me.DeleteControlBT.TabIndex = 11
         Me.DeleteControlBT.UseVisualStyleBackColor = True
         '
-        'TabControl1
-        '
-        Me.TabControl1.Controls.Add(Me.TabPage1)
-        Me.TabControl1.Controls.Add(Me.TabPage2)
-        Me.TabControl1.DisplayStyle = System.Windows.Forms.TabStyle.Rounded
-        '
-        '
-        '
-        Me.TabControl1.DisplayStyleProvider.BorderColor = System.Drawing.SystemColors.ControlDark
-        Me.TabControl1.DisplayStyleProvider.BorderColorHot = System.Drawing.SystemColors.ControlDark
-        Me.TabControl1.DisplayStyleProvider.BorderColorSelected = System.Drawing.Color.FromArgb(CType(CType(127, Byte), Integer), CType(CType(157, Byte), Integer), CType(CType(185, Byte), Integer))
-        Me.TabControl1.DisplayStyleProvider.CloserColor = System.Drawing.Color.DarkGray
-        Me.TabControl1.DisplayStyleProvider.FocusTrack = False
-        Me.TabControl1.DisplayStyleProvider.HotTrack = True
-        Me.TabControl1.DisplayStyleProvider.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.TabControl1.DisplayStyleProvider.Opacity = 1.0!
-        Me.TabControl1.DisplayStyleProvider.Overlap = 0
-        Me.TabControl1.DisplayStyleProvider.Padding = New System.Drawing.Point(6, 3)
-        Me.TabControl1.DisplayStyleProvider.Radius = 10
-        Me.TabControl1.DisplayStyleProvider.ShowTabCloser = False
-        Me.TabControl1.DisplayStyleProvider.TextColor = System.Drawing.SystemColors.ControlText
-        Me.TabControl1.DisplayStyleProvider.TextColorDisabled = System.Drawing.SystemColors.ControlDark
-        Me.TabControl1.DisplayStyleProvider.TextColorSelected = System.Drawing.SystemColors.ControlText
-        Me.TabControl1.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TabControl1.HotTrack = True
-        Me.TabControl1.Location = New System.Drawing.Point(0, 0)
-        Me.TabControl1.Name = "TabControl1"
-        Me.TabControl1.SelectedIndex = 0
-        Me.TabControl1.Size = New System.Drawing.Size(944, 559)
-        Me.TabControl1.TabIndex = 8
-        '
-        'TabPage1
-        '
-        Me.TabPage1.BackColor = System.Drawing.SystemColors.Control
-        Me.TabPage1.Controls.Add(Me.TableLayoutPanel1)
-        Me.TabPage1.Location = New System.Drawing.Point(4, 23)
-        Me.TabPage1.Name = "TabPage1"
-        Me.TabPage1.Padding = New System.Windows.Forms.Padding(3)
-        Me.TabPage1.Size = New System.Drawing.Size(936, 532)
-        Me.TabPage1.TabIndex = 0
-        Me.TabPage1.Text = "Numeric Controls"
-        '
         'TabPage2
         '
         Me.TabPage2.BackColor = System.Drawing.SystemColors.Control
@@ -203,7 +203,7 @@ Partial Class ControlsMGTUI
         Me.TabPage2.Location = New System.Drawing.Point(4, 23)
         Me.TabPage2.Name = "TabPage2"
         Me.TabPage2.Padding = New System.Windows.Forms.Padding(3)
-        Me.TabPage2.Size = New System.Drawing.Size(936, 532)
+        Me.TabPage2.Size = New System.Drawing.Size(944, 525)
         Me.TabPage2.TabIndex = 1
         Me.TabPage2.Text = "Visual Controls"
         '
@@ -224,8 +224,8 @@ Partial Class ControlsMGTUI
         Me.SplitContainer1.Panel2.Controls.Add(Me.GroupBox1)
         Me.SplitContainer1.Panel2.Controls.Add(Me.ChartNameLabel)
         Me.SplitContainer1.Panel2.Controls.Add(Me.ChartNameTB)
-        Me.SplitContainer1.Size = New System.Drawing.Size(930, 526)
-        Me.SplitContainer1.SplitterDistance = 231
+        Me.SplitContainer1.Size = New System.Drawing.Size(938, 519)
+        Me.SplitContainer1.SplitterDistance = 232
         Me.SplitContainer1.TabIndex = 0
         '
         'TableLayoutPanel2
@@ -240,7 +240,7 @@ Partial Class ControlsMGTUI
         Me.TableLayoutPanel2.RowCount = 2
         Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25.0!))
         Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TableLayoutPanel2.Size = New System.Drawing.Size(231, 526)
+        Me.TableLayoutPanel2.Size = New System.Drawing.Size(232, 519)
         Me.TableLayoutPanel2.TabIndex = 0
         '
         'ChartsTVPanel
@@ -248,7 +248,7 @@ Partial Class ControlsMGTUI
         Me.ChartsTVPanel.Dock = System.Windows.Forms.DockStyle.Fill
         Me.ChartsTVPanel.Location = New System.Drawing.Point(3, 28)
         Me.ChartsTVPanel.Name = "ChartsTVPanel"
-        Me.ChartsTVPanel.Size = New System.Drawing.Size(225, 495)
+        Me.ChartsTVPanel.Size = New System.Drawing.Size(226, 488)
         Me.ChartsTVPanel.TabIndex = 0
         '
         'Panel2
@@ -260,7 +260,7 @@ Partial Class ControlsMGTUI
         Me.Panel2.Location = New System.Drawing.Point(1, 1)
         Me.Panel2.Margin = New System.Windows.Forms.Padding(1)
         Me.Panel2.Name = "Panel2"
-        Me.Panel2.Size = New System.Drawing.Size(229, 23)
+        Me.Panel2.Size = New System.Drawing.Size(230, 23)
         Me.Panel2.TabIndex = 1
         '
         'NewSerieBT
@@ -339,7 +339,7 @@ Partial Class ControlsMGTUI
         'ColorBT
         '
         Me.ColorBT.BackColor = System.Drawing.SystemColors.ButtonHighlight
-        Me.ColorBT.FlatAppearance.BorderSize = 0
+        Me.ColorBT.FlatAppearance.BorderColor = System.Drawing.Color.Gray
         Me.ColorBT.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.ColorBT.Location = New System.Drawing.Point(370, 118)
         Me.ColorBT.Name = "ColorBT"
@@ -482,19 +482,17 @@ Partial Class ControlsMGTUI
         Me.ColorDialog1.AnyColor = True
         Me.ColorDialog1.Color = System.Drawing.Color.White
         '
-        'ControlsMGTUI
+        'ControlsControl
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(944, 559)
         Me.Controls.Add(Me.TabControl1)
-        Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
-        Me.Name = "ControlsMGTUI"
-        Me.Text = "Submissions Controls Configuration"
-        Me.TableLayoutPanel1.ResumeLayout(False)
-        Me.Panel1.ResumeLayout(False)
+        Me.Name = "ControlsControl"
+        Me.Size = New System.Drawing.Size(952, 552)
         Me.TabControl1.ResumeLayout(False)
         Me.TabPage1.ResumeLayout(False)
+        Me.TableLayoutPanel1.ResumeLayout(False)
+        Me.Panel1.ResumeLayout(False)
         Me.TabPage2.ResumeLayout(False)
         Me.SplitContainer1.Panel1.ResumeLayout(False)
         Me.SplitContainer1.Panel2.ResumeLayout(False)
@@ -509,15 +507,14 @@ Partial Class ControlsMGTUI
         Me.ResumeLayout(False)
 
     End Sub
-    Friend WithEvents TableLayoutPanel1 As System.Windows.Forms.TableLayoutPanel
-    Friend WithEvents ControlsDGVPanel As System.Windows.Forms.Panel
-    Friend WithEvents ButtonsImageList As System.Windows.Forms.ImageList
-    Friend WithEvents Panel1 As System.Windows.Forms.Panel
     Friend WithEvents TabControl1 As System.Windows.Forms.CustomTabControl
     Friend WithEvents TabPage1 As System.Windows.Forms.TabPage
-    Friend WithEvents TabPage2 As System.Windows.Forms.TabPage
+    Friend WithEvents TableLayoutPanel1 As System.Windows.Forms.TableLayoutPanel
+    Friend WithEvents ControlsDGVPanel As System.Windows.Forms.Panel
+    Friend WithEvents Panel1 As System.Windows.Forms.Panel
     Friend WithEvents AddControlBT As System.Windows.Forms.Button
     Friend WithEvents DeleteControlBT As System.Windows.Forms.Button
+    Friend WithEvents TabPage2 As System.Windows.Forms.TabPage
     Friend WithEvents SplitContainer1 As System.Windows.Forms.SplitContainer
     Friend WithEvents TableLayoutPanel2 As System.Windows.Forms.TableLayoutPanel
     Friend WithEvents ChartsTVPanel As System.Windows.Forms.Panel
@@ -525,7 +522,10 @@ Partial Class ControlsMGTUI
     Friend WithEvents NewSerieBT As System.Windows.Forms.Button
     Friend WithEvents NewChartBT As System.Windows.Forms.Button
     Friend WithEvents DeleteChartsBT As System.Windows.Forms.Button
+    Friend WithEvents Label5 As System.Windows.Forms.Label
+    Friend WithEvents PalettesCB As System.Windows.Forms.ComboBox
     Friend WithEvents GroupBox1 As System.Windows.Forms.GroupBox
+    Friend WithEvents ColorBT As System.Windows.Forms.Button
     Friend WithEvents Label1 As System.Windows.Forms.Label
     Friend WithEvents Label4 As System.Windows.Forms.Label
     Friend WithEvents SerieAccountIDCB As System.Windows.Forms.ComboBox
@@ -535,16 +535,15 @@ Partial Class ControlsMGTUI
     Friend WithEvents Label2 As System.Windows.Forms.Label
     Friend WithEvents ChartNameLabel As System.Windows.Forms.Label
     Friend WithEvents ChartNameTB As System.Windows.Forms.TextBox
+    Friend WithEvents ButtonsImageList As System.Windows.Forms.ImageList
     Friend WithEvents ChartsTVImageList As System.Windows.Forms.ImageList
     Friend WithEvents ChartsTVRCM As System.Windows.Forms.ContextMenuStrip
     Friend WithEvents NewChartRCM As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents NewSerieRCM As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents ToolStripSeparator1 As System.Windows.Forms.ToolStripSeparator
-    Friend WithEvents DeleteRCM As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents Label5 As System.Windows.Forms.Label
-    Friend WithEvents PalettesCB As System.Windows.Forms.ComboBox
     Friend WithEvents ToolStripSeparator2 As System.Windows.Forms.ToolStripSeparator
     Friend WithEvents RenameRCBT As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ToolStripSeparator1 As System.Windows.Forms.ToolStripSeparator
+    Friend WithEvents DeleteRCM As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ColorDialog1 As System.Windows.Forms.ColorDialog
-    Friend WithEvents ColorBT As System.Windows.Forms.Button
+
 End Class

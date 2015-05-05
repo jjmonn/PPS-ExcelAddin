@@ -1,11 +1,11 @@
-﻿'
+﻿' ControlsControl.vb
 '
 '
 '
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 06/01/2015
+' Last modified: 05/05/2015
 
 
 Imports VIBlend.WinForms.DataGridView
@@ -15,14 +15,14 @@ Imports VIBlend.Utilities
 Imports System.Windows.Forms
 
 
-Friend Class ControlsMGTUI
+Friend Class ControlsControl
 
 
 #Region "Instance Variables"
 
     ' Objects
-    Private Controller As ControlsMGTController
-    Private ChartsController As ChartsControlsMGTController
+    Private Controller As ControlsController
+    Private ChartsController As ChartsControlsController
     Protected Friend DGV As New vDataGridView
     Private ChartsTV As TreeView
 
@@ -68,8 +68,8 @@ Friend Class ControlsMGTUI
 
 #Region "Initialize"
 
-    Protected Friend Sub New(ByRef input_controller As ControlsMGTController, _
-                            ByRef input_chartsController As ChartsControlsMGTController, _
+    Protected Friend Sub New(ByRef input_controller As ControlsController, _
+                            ByRef input_chartsController As ChartsControlsController, _
                             ByRef input_accounts_name_id_dic As Hashtable, _
                             ByRef input_operators_symbol_id_dic As Dictionary(Of String, String), _
                             ByRef input_period_options_name_id_dic As Dictionary(Of String, String))
@@ -165,9 +165,7 @@ Friend Class ControlsMGTUI
 
     End Sub
 
-    Private Sub ControlsMGTUI_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-
-        Me.WindowState = FormWindowState.Maximized
+    Protected Friend Sub closeControl()
 
     End Sub
 
@@ -254,14 +252,14 @@ Friend Class ControlsMGTUI
 
 #Region "Charts Controls"
 
-    Private Sub NewChartBT_Click(sender As Object, e As EventArgs) Handles NewChartBT.Click
+    Private Sub NewChartBT_Click(sender As Object, e As EventArgs) Handles NewChartRCM.Click, NewChartBT.Click
 
         Dim name = InputBox("Please enter the Name of the New Chart: ")
         If name <> "" Then ChartsController.CreateControlChart(name)
 
     End Sub
 
-    Private Sub NewSerieBT_Click(sender As Object, e As EventArgs) Handles NewSerieBT.Click
+    Private Sub NewSerieBT_Click(sender As Object, e As EventArgs) Handles NewSerieRCM.Click, NewSerieBT.Click
 
         If Not current_chart_node Is Nothing Then
             Dim name As String = InputBox("new Serie Name: ")
@@ -280,7 +278,7 @@ Friend Class ControlsMGTUI
 
     End Sub
 
-    Private Sub DeleteChartsBT_Click(sender As Object, e As EventArgs) Handles DeleteChartsBT.Click
+    Private Sub DeleteChartsBT_Click(sender As Object, e As EventArgs) Handles DeleteRCM.Click, DeleteChartsBT.Click
 
         If Not current_chart_node Is Nothing Then
             If current_chart_node.Parent Is Nothing Then
@@ -293,26 +291,6 @@ Friend Class ControlsMGTUI
         Else
             MsgBox("A Chart or a Serie must be selected.")
         End If
-
-    End Sub
-
-#Region "Right Click Menu"
-
-    Private Sub DeleteRCM_Click(sender As Object, e As EventArgs) Handles DeleteRCM.Click
-
-        DeleteChartsBT_Click(sender, e)
-
-    End Sub
-
-    Private Sub NewSerieRCM_Click(sender As Object, e As EventArgs) Handles NewSerieRCM.Click
-
-        NewSerieBT_Click(sender, e)
-
-    End Sub
-
-    Private Sub NewChartRCM_Click(sender As Object, e As EventArgs) Handles NewChartRCM.Click
-
-        NewChartBT_Click(sender, e)
 
     End Sub
 
@@ -329,8 +307,6 @@ Friend Class ControlsMGTUI
         End If
 
     End Sub
-
-#End Region
 
 #End Region
 
@@ -386,7 +362,7 @@ Friend Class ControlsMGTUI
 
 #Region "Charts Controls"
 
-    Private Sub SerieAccountIDCB_SelectedValueChanged(sender As Object, e As EventArgs)
+    Private Sub SerieAccountIDCB_SelectedValueChanged(sender As Object, e As EventArgs) Handles SerieAccountIDCB.SelectedValueChanged
 
         If current_serie_id <> "" AndAlso isDisplayingSerie = False Then ChartsController.UpdateSerieAccountID(current_serie_id, accounts_name_id_dic(SerieAccountIDCB.Text))
 
@@ -403,7 +379,7 @@ Friend Class ControlsMGTUI
 
     End Sub
 
-    Private Sub SerieTypeTB_SelectedIndexChanged(sender As Object, e As EventArgs)
+    Private Sub SerieTypeTB_SelectedIndexChanged(sender As Object, e As EventArgs) Handles SerieTypeCB.SelectedIndexChanged
 
         If current_serie_id <> "" AndAlso isDisplayingSerie = False Then ChartsController.UpdateSerieType(current_serie_id, SerieTypeCB.Text)
 

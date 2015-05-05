@@ -52,13 +52,7 @@ Public Class AddinModule
     Friend WithEvents AdxRibbonMenu2 As AddinExpress.MSO.ADXRibbonMenu
     Friend WithEvents BreakLinksBT As AddinExpress.MSO.ADXRibbonButton
     Friend WithEvents AdxRibbonGroup6 As AddinExpress.MSO.ADXRibbonGroup
-    Friend WithEvents AdxRibbonGroup7 As AddinExpress.MSO.ADXRibbonGroup
-    Friend WithEvents PPTExportBT As AddinExpress.MSO.ADXRibbonButton
-    Friend WithEvents ReportFmtBT As AddinExpress.MSO.ADXRibbonButton
     Friend WithEvents LightsImageList As System.Windows.Forms.ImageList
-    Friend WithEvents FormattingBT As AddinExpress.MSO.ADXRibbonSplitButton
-    Friend WithEvents AdxRibbonMenu6 As AddinExpress.MSO.ADXRibbonMenu
-    Friend WithEvents InputFmtBT As AddinExpress.MSO.ADXRibbonButton
     Friend WithEvents VersionBT As AddinExpress.MSO.ADXRibbonButton
     Friend WithEvents Addin_Version_label As AddinExpress.MSO.ADXRibbonLabel
     Friend WithEvents ConnectionIcons As System.Windows.Forms.ImageList
@@ -117,7 +111,7 @@ Public Class AddinModule
     Friend WithEvents AdxRibbonSeparator4 As AddinExpress.MSO.ADXRibbonSeparator
     Friend WithEvents AdxRibbonSeparator5 As AddinExpress.MSO.ADXRibbonSeparator
     Friend WithEvents NewICOs As System.Windows.Forms.ImageList
-    Friend WithEvents NewIcosBlue As System.Windows.Forms.ImageList
+    Friend WithEvents NewIcosSmall As System.Windows.Forms.ImageList
     Friend WithEvents ConfigurationRibbonBT As AddinExpress.MSO.ADXRibbonButton
     Friend WithEvents AdxRibbonButton1 As AddinExpress.MSO.ADXRibbonButton
     Friend WithEvents AdxRibbonButton2 As AddinExpress.MSO.ADXRibbonButton
@@ -133,6 +127,8 @@ Public Class AddinModule
     Friend WithEvents RefreshWorkbookBT As AddinExpress.MSO.ADXRibbonButton
     Friend WithEvents AdxRibbonMenuSeparator1 As AddinExpress.MSO.ADXRibbonMenuSeparator
     Friend WithEvents AutoRefreshBT As AddinExpress.MSO.ADXRibbonCheckBox
+    Friend WithEvents AdxRibbonButton5 As AddinExpress.MSO.ADXRibbonButton
+    Friend WithEvents AdxRibbonMenuSeparator2 As AddinExpress.MSO.ADXRibbonMenuSeparator
 
 
 #End Region
@@ -179,7 +175,10 @@ Public Class AddinModule
         Me.BreakLinksBT = New AddinExpress.MSO.ADXRibbonButton(Me.components)
         Me.AdvancedModelingBT = New AddinExpress.MSO.ADXRibbonSplitButton(Me.components)
         Me.AdxRibbonMenu2 = New AddinExpress.MSO.ADXRibbonMenu(Me.components)
+        Me.AdxRibbonButton5 = New AddinExpress.MSO.ADXRibbonButton(Me.components)
+        Me.NewIcosSmall = New System.Windows.Forms.ImageList(Me.components)
         Me.AlternativeScenariosBT = New AddinExpress.MSO.ADXRibbonButton(Me.components)
+        Me.AdxRibbonMenuSeparator2 = New AddinExpress.MSO.ADXRibbonMenuSeparator(Me.components)
         Me.ModellingConfigBT = New AddinExpress.MSO.ADXRibbonSplitButton(Me.components)
         Me.AdxRibbonMenu8 = New AddinExpress.MSO.ADXRibbonMenu(Me.components)
         Me.MarketPricesMGT = New AddinExpress.MSO.ADXRibbonButton(Me.components)
@@ -191,13 +190,6 @@ Public Class AddinModule
         Me.AdxRibbonGroup3 = New AddinExpress.MSO.ADXRibbonGroup(Me.components)
         Me.ConfigurationRibbonBT = New AddinExpress.MSO.ADXRibbonButton(Me.components)
         Me.SettingsBT = New AddinExpress.MSO.ADXRibbonButton(Me.components)
-        Me.AdxRibbonGroup7 = New AddinExpress.MSO.ADXRibbonGroup(Me.components)
-        Me.PPTExportBT = New AddinExpress.MSO.ADXRibbonButton(Me.components)
-        Me.FormattingBT = New AddinExpress.MSO.ADXRibbonSplitButton(Me.components)
-        Me.AdxRibbonMenu6 = New AddinExpress.MSO.ADXRibbonMenu(Me.components)
-        Me.ReportFmtBT = New AddinExpress.MSO.ADXRibbonButton(Me.components)
-        Me.InputFmtBT = New AddinExpress.MSO.ADXRibbonButton(Me.components)
-        Me.NewIcosBlue = New System.Windows.Forms.ImageList(Me.components)
         Me.ConfigImageList = New System.Windows.Forms.ImageList(Me.components)
         Me.SubmissionRibbonIL = New System.Windows.Forms.ImageList(Me.components)
         Me.LightsImageList = New System.Windows.Forms.ImageList(Me.components)
@@ -246,12 +238,11 @@ Public Class AddinModule
         '
         'MaintTab
         '
-        Me.MaintTab.Caption = "Financial BI"
+        Me.MaintTab.Caption = "PPS®"
         Me.MaintTab.Controls.Add(Me.AdxRibbonGroup6)
         Me.MaintTab.Controls.Add(Me.AdxRibbonGroup1)
         Me.MaintTab.Controls.Add(Me.AdxRibbonGroup2)
         Me.MaintTab.Controls.Add(Me.AdxRibbonGroup3)
-        Me.MaintTab.Controls.Add(Me.AdxRibbonGroup7)
         Me.MaintTab.Id = "adxRibbonTab_b30b165b93e0463887478085c350e723"
         Me.MaintTab.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
         '
@@ -331,6 +322,10 @@ Public Class AddinModule
         Me.NewICOs.Images.SetKeyName(23, "upload.ico")
         Me.NewICOs.Images.SetKeyName(24, "selection_refresh.ico")
         Me.NewICOs.Images.SetKeyName(25, "favicon(2).ico")
+        Me.NewICOs.Images.SetKeyName(26, "money.ico")
+        Me.NewICOs.Images.SetKeyName(27, "favicon(6).ico")
+        Me.NewICOs.Images.SetKeyName(28, "favicon(11).ico")
+        Me.NewICOs.Images.SetKeyName(29, "favicon(10).ico")
         '
         'Addin_Version_label
         '
@@ -563,10 +558,10 @@ Public Class AddinModule
         '
         'AdvancedModelingBT
         '
-        Me.AdvancedModelingBT.Caption = "Financial Modeling"
+        Me.AdvancedModelingBT.Caption = "Modeling"
         Me.AdvancedModelingBT.Controls.Add(Me.AdxRibbonMenu2)
         Me.AdvancedModelingBT.Id = "adxRibbonSplitButton_48193c7e13704758a3814aa6156d5aee"
-        Me.AdvancedModelingBT.Image = 20
+        Me.AdvancedModelingBT.Image = 27
         Me.AdvancedModelingBT.ImageList = Me.NewICOs
         Me.AdvancedModelingBT.ImageTransparentColor = System.Drawing.Color.Transparent
         Me.AdvancedModelingBT.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
@@ -575,7 +570,9 @@ Public Class AddinModule
         'AdxRibbonMenu2
         '
         Me.AdxRibbonMenu2.Caption = "Menu1"
+        Me.AdxRibbonMenu2.Controls.Add(Me.AdxRibbonButton5)
         Me.AdxRibbonMenu2.Controls.Add(Me.AlternativeScenariosBT)
+        Me.AdxRibbonMenu2.Controls.Add(Me.AdxRibbonMenuSeparator2)
         Me.AdxRibbonMenu2.Controls.Add(Me.ModellingConfigBT)
         Me.AdxRibbonMenu2.Id = "adxRibbonMenu_e6e084f75db842218b137a40a859729b"
         Me.AdxRibbonMenu2.ImageMso = "EquationInsertGallery"
@@ -583,22 +580,47 @@ Public Class AddinModule
         Me.AdxRibbonMenu2.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
         Me.AdxRibbonMenu2.Size = AddinExpress.MSO.ADXRibbonXControlSize.Large
         '
+        'AdxRibbonButton5
+        '
+        Me.AdxRibbonButton5.Caption = "Financial Modeling"
+        Me.AdxRibbonButton5.Id = "adxRibbonButton_543572754ac3483d8751176b3133ad1d"
+        Me.AdxRibbonButton5.Image = 0
+        Me.AdxRibbonButton5.ImageList = Me.NewIcosSmall
+        Me.AdxRibbonButton5.ImageTransparentColor = System.Drawing.Color.Transparent
+        Me.AdxRibbonButton5.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
+        Me.AdxRibbonButton5.Size = AddinExpress.MSO.ADXRibbonXControlSize.Large
+        '
+        'NewIcosSmall
+        '
+        Me.NewIcosSmall.ImageStream = CType(resources.GetObject("NewIcosSmall.ImageStream"), System.Windows.Forms.ImageListStreamer)
+        Me.NewIcosSmall.TransparentColor = System.Drawing.Color.Transparent
+        Me.NewIcosSmall.Images.SetKeyName(0, "university.ico")
+        Me.NewIcosSmall.Images.SetKeyName(1, "tables.ico")
+        Me.NewIcosSmall.Images.SetKeyName(2, "element_branch2.ico")
+        '
         'AlternativeScenariosBT
         '
-        Me.AlternativeScenariosBT.Caption = "Prices Scenarios"
+        Me.AlternativeScenariosBT.Caption = "Prices Scenarii"
         Me.AlternativeScenariosBT.Id = "adxRibbonButton_6dd871acf7b0458eb10d6781b75ced2b"
-        Me.AlternativeScenariosBT.ImageList = Me.MainTabImageList
+        Me.AlternativeScenariosBT.Image = 1
+        Me.AlternativeScenariosBT.ImageList = Me.NewIcosSmall
         Me.AlternativeScenariosBT.ImageTransparentColor = System.Drawing.Color.Transparent
         Me.AlternativeScenariosBT.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
         Me.AlternativeScenariosBT.Size = AddinExpress.MSO.ADXRibbonXControlSize.Large
+        '
+        'AdxRibbonMenuSeparator2
+        '
+        Me.AdxRibbonMenuSeparator2.Caption = " "
+        Me.AdxRibbonMenuSeparator2.Id = "adxRibbonMenuSeparator_cd62524bad69495687241bedb004ef72"
+        Me.AdxRibbonMenuSeparator2.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
         '
         'ModellingConfigBT
         '
         Me.ModellingConfigBT.Caption = "Configuration"
         Me.ModellingConfigBT.Controls.Add(Me.AdxRibbonMenu8)
         Me.ModellingConfigBT.Id = "adxRibbonSplitButton_275360996f3a4611ad07fb3f83b0eda5"
-        Me.ModellingConfigBT.Image = 21
-        Me.ModellingConfigBT.ImageList = Me.MainTabImageList
+        Me.ModellingConfigBT.Image = 2
+        Me.ModellingConfigBT.ImageList = Me.NewIcosSmall
         Me.ModellingConfigBT.ImageTransparentColor = System.Drawing.Color.Transparent
         Me.ModellingConfigBT.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
         '
@@ -674,7 +696,7 @@ Public Class AddinModule
         '
         Me.ConfigurationRibbonBT.Caption = "Configuration"
         Me.ConfigurationRibbonBT.Id = "adxRibbonButton_d4cfb8ca7c6d487b9892703b68ee0fce"
-        Me.ConfigurationRibbonBT.Image = 17
+        Me.ConfigurationRibbonBT.Image = 29
         Me.ConfigurationRibbonBT.ImageList = Me.NewICOs
         Me.ConfigurationRibbonBT.ImageTransparentColor = System.Drawing.Color.Transparent
         Me.ConfigurationRibbonBT.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
@@ -684,83 +706,11 @@ Public Class AddinModule
         '
         Me.SettingsBT.Caption = "PPS Settings"
         Me.SettingsBT.Id = "adxRibbonButton_aa28ec782b5541edb1482374e14ceaa6"
-        Me.SettingsBT.Image = 18
+        Me.SettingsBT.Image = 28
         Me.SettingsBT.ImageList = Me.NewICOs
         Me.SettingsBT.ImageTransparentColor = System.Drawing.Color.Transparent
         Me.SettingsBT.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
         Me.SettingsBT.Size = AddinExpress.MSO.ADXRibbonXControlSize.Large
-        '
-        'AdxRibbonGroup7
-        '
-        Me.AdxRibbonGroup7.Caption = "Export"
-        Me.AdxRibbonGroup7.Controls.Add(Me.PPTExportBT)
-        Me.AdxRibbonGroup7.Controls.Add(Me.FormattingBT)
-        Me.AdxRibbonGroup7.Id = "adxRibbonGroup_01ea01d30dcf40a9a03f63e1d0b965b8"
-        Me.AdxRibbonGroup7.ImageTransparentColor = System.Drawing.Color.Transparent
-        Me.AdxRibbonGroup7.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
-        '
-        'PPTExportBT
-        '
-        Me.PPTExportBT.Caption = "Export"
-        Me.PPTExportBT.Id = "adxRibbonButton_4a7a400a8fe4439fb34f7edb9ebd6bb7"
-        Me.PPTExportBT.ImageList = Me.NewICOs
-        Me.PPTExportBT.ImageTransparentColor = System.Drawing.Color.Transparent
-        Me.PPTExportBT.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
-        Me.PPTExportBT.Size = AddinExpress.MSO.ADXRibbonXControlSize.Large
-        '
-        'FormattingBT
-        '
-        Me.FormattingBT.Caption = "Formatting"
-        Me.FormattingBT.Controls.Add(Me.AdxRibbonMenu6)
-        Me.FormattingBT.Id = "adxRibbonSplitButton_310b0b24062947479934b5576ee4ced1"
-        Me.FormattingBT.Image = 19
-        Me.FormattingBT.ImageList = Me.NewICOs
-        Me.FormattingBT.ImageTransparentColor = System.Drawing.Color.Transparent
-        Me.FormattingBT.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
-        Me.FormattingBT.Size = AddinExpress.MSO.ADXRibbonXControlSize.Large
-        '
-        'AdxRibbonMenu6
-        '
-        Me.AdxRibbonMenu6.Caption = "AdxRibbonMenu6"
-        Me.AdxRibbonMenu6.Controls.Add(Me.ReportFmtBT)
-        Me.AdxRibbonMenu6.Controls.Add(Me.InputFmtBT)
-        Me.AdxRibbonMenu6.Id = "adxRibbonMenu_be2c85c16a6744799af1411f4234d1b4"
-        Me.AdxRibbonMenu6.ImageTransparentColor = System.Drawing.Color.Transparent
-        Me.AdxRibbonMenu6.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
-        '
-        'ReportFmtBT
-        '
-        Me.ReportFmtBT.Caption = "Format Report"
-        Me.ReportFmtBT.Id = "adxRibbonButton_d561533b72d348bcb2b83d3f51d6250d"
-        Me.ReportFmtBT.ImageTransparentColor = System.Drawing.Color.Transparent
-        Me.ReportFmtBT.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
-        Me.ReportFmtBT.Size = AddinExpress.MSO.ADXRibbonXControlSize.Large
-        '
-        'InputFmtBT
-        '
-        Me.InputFmtBT.Caption = "Come back to input format"
-        Me.InputFmtBT.Id = "adxRibbonButton_df4a98711f4c41daad9fb7d1ae242eaa"
-        Me.InputFmtBT.ImageTransparentColor = System.Drawing.Color.Transparent
-        Me.InputFmtBT.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
-        '
-        'NewIcosBlue
-        '
-        Me.NewIcosBlue.ImageStream = CType(resources.GetObject("NewIcosBlue.ImageStream"), System.Windows.Forms.ImageListStreamer)
-        Me.NewIcosBlue.TransparentColor = System.Drawing.Color.Transparent
-        Me.NewIcosBlue.Images.SetKeyName(0, "breakpoint.ico")
-        Me.NewIcosBlue.Images.SetKeyName(1, "client_network.ico")
-        Me.NewIcosBlue.Images.SetKeyName(2, "cloud.ico")
-        Me.NewIcosBlue.Images.SetKeyName(3, "cloud_upload.ico")
-        Me.NewIcosBlue.Images.SetKeyName(4, "front.ico")
-        Me.NewIcosBlue.Images.SetKeyName(5, "logic_and.ico")
-        Me.NewIcosBlue.Images.SetKeyName(6, "molecule_h2o.ico")
-        Me.NewIcosBlue.Images.SetKeyName(7, "monitor.ico")
-        Me.NewIcosBlue.Images.SetKeyName(8, "solar_panel.ico")
-        Me.NewIcosBlue.Images.SetKeyName(9, "breakpoints.ico")
-        Me.NewIcosBlue.Images.SetKeyName(10, "symbol_dollar_euro.ico")
-        Me.NewIcosBlue.Images.SetKeyName(11, "ok.ico")
-        Me.NewIcosBlue.Images.SetKeyName(12, "registry.ico")
-        Me.NewIcosBlue.Images.SetKeyName(13, "magnifying_glass.ico")
         '
         'ConfigImageList
         '
@@ -1292,6 +1242,7 @@ Public Class AddinModule
 
         Application.EnableVisualStyles()
         'This call is required by the Component Designer
+        VIBlend.Utilities.Licensing.LicenseContent = "0g1g635664091223436417g90e96c0507a72043860957103d347f6e2aff|FAm4zjmJK8JlBTfmliEZJprE1CQtP5o4nLEaO1P8Jg1Ruvdu29b8pYhiy1w6gs7VuzD3JFAdcGgdcXLAmYbK7P4suihb6MdQLW6pYShfS/hp1VldcuSxmveQnpm0mVnbpoub6Zf9uU4f4Tz9kiMVIdiQHtri4VQC73nxfJF7tLw="
         InitializeComponent()
 
         'Please add any initialization code to the AddinInitialize event handler
@@ -1525,7 +1476,7 @@ Public Class AddinModule
 
     End Sub
 
-  
+
 #Region "Refresh"
 
     Private Sub AdxRibbonSplitButton1_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) Handles RefreshBT.OnClick, RefreshWorksheetBT.OnClick
@@ -1980,7 +1931,7 @@ Public Class AddinModule
 
     Friend Sub InputReportPaneCallBack_ReportCreation()
 
-        GlobalVariables.APPS.ScreenUpdating = False
+        '   GlobalVariables.APPS.ScreenUpdating = False
         Dim entity_id As String = Me.InputReportTaskPane.EntitiesTV.SelectedNode.Name
         Dim entity_name As String = Me.InputReportTaskPane.EntitiesTV.SelectedNode.Text
         Dim currency As String = EntitiesMapping.GetEntityCurrency(entity_id)
@@ -2097,7 +2048,7 @@ Public Class AddinModule
 #End Region
 
 
-    Private Sub PPTExportBT_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) Handles PPTExportBT.OnClick
+    Private Sub PPTExportBT_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean)
 
         Dim testHTTPUI As New HTTP_test
         testHTTPUI.Show()

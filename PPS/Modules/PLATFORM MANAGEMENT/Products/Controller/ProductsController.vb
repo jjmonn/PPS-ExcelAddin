@@ -70,7 +70,7 @@ Friend Class ProductsController
 
     Public Sub close()
 
-        View.closeControl()
+        view.closeControl()
         view.Dispose()
         products.RST.Close()
         PlatformMGTUI.displayControl()

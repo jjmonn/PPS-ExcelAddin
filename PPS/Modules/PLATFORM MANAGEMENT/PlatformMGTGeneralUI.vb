@@ -5,7 +5,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 23/04/2015
+' Last modified: 05/05/2015
 
 
 Imports System.ComponentModel
@@ -22,6 +22,7 @@ Friend Class PlatformMGTGeneralUI
  
     ' Variables
     Private controller_index As Int32
+    Friend close_all As Boolean = False
 
 #End Region
 
@@ -94,6 +95,13 @@ Friend Class PlatformMGTGeneralUI
 
     End Sub
 
+    Private Sub ControlsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ControlsToolStripMenuItem.Click
+
+        closeCurrentControl(11)
+
+    End Sub
+
+
 #End Region
 
 
@@ -112,11 +120,12 @@ Friend Class PlatformMGTGeneralUI
 
     Protected Friend Sub displayControl()
 
+        If close_all = True Then Exit Sub
         If Not current_controller Is Nothing Then current_controller = Nothing
 
         Select Case controller_index
             Case 0 : current_controller = New AccountsController()
-            Case 1 ' current_controller = New adjustments(Panel1)
+            Case 1 ' current_controller = New adjustments()
             Case 2 : current_controller = New EntitiesController()
             Case 3 : current_controller = New EntitiesCategoriesController()
             Case 4 : current_controller = New ClientsController()
@@ -125,9 +134,9 @@ Friend Class PlatformMGTGeneralUI
             Case 7 : current_controller = New productsCategoriesController()
             Case 8 : current_controller = New DataVersionsController()
             Case 9 : current_controller = New ExchangeRatesController()
-            Case 10 'current_controller = New UsersController(Panel1)
+            Case 10 : current_controller = New UsersController()
+            Case 11 : current_controller = New ControlsController()
 
-                ' controls and Charts to be added !!!
         End Select
         If Panel1.Controls.Count > 0 Then Panel1.Controls(0).Dispose()
         current_controller.addControlToPanel(Panel1, Me)
@@ -141,7 +150,7 @@ Friend Class PlatformMGTGeneralUI
     Private Sub PlatformMGTGeneralUI_FormClosing(sender As Object, e As Windows.Forms.FormClosingEventArgs) Handles MyBase.FormClosing
 
         If Not current_controller Is Nothing Then
-            '  e.Cancel = True
+            close_all = True
             current_controller.close()
         End If
 
@@ -153,5 +162,7 @@ Friend Class PlatformMGTGeneralUI
 
     End Sub
 
+
+  
 
 End Class

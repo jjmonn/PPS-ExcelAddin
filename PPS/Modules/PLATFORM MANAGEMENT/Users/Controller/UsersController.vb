@@ -10,7 +10,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 09/12/2014
+' Last modified: 05/05/2014
 
 
 Imports VIBlend.WinForms.DataGridView
@@ -27,7 +27,7 @@ Friend Class UsersController
 
     ' Objects
     Private Users As User
-    Private VIEWOBJECT As UsersManagementUI
+    Private View As UsersControl
     Private NewUserUI As NewUserUI
     Private PrivilegesController As New SQLPrivileges
     Private usersTV As New TreeView
@@ -35,22 +35,23 @@ Friend Class UsersController
     Private PasswordGenerator As New PasswordGenerator
     Private SMTPConnection As New SMTPConnection
     Private ViewsController As New ViewsController
+    Private PlatformMGTUI As PlatformMGTGeneralUI
 
 #End Region
 
 
 #Region "Initialize"
 
-    Protected Friend Sub New(ByRef input_view As UsersManagementUI)
+    Protected Friend Sub New()
 
-        VIEWOBJECT = input_view
+        View = New UsersControl(Me)
         Users = New User
         If Users.object_is_alive = False Then
             ' Must close everything !! implement
             Exit Sub
         End If
         User.LoadUsersTree(usersTV)
-        VIEWOBJECT.UsersTGVMGT.InitializeTGVRows(usersTV)
+        View.UsersTGVMGT.InitializeTGVRows(usersTV)
         DisplayUsersTGV()
         NewUserUI = New NewUserUI(Me)
 
@@ -68,7 +69,24 @@ Friend Class UsersController
             tmp_hash.Add(USERS_EMAIL_VARIABLE, Users.ReadUser(user_id, USERS_EMAIL_VARIABLE))
             users_dictionary.Add(user_id, tmp_hash)
         Next
-        VIEWOBJECT.UsersTGVMGT.FillUsersTGV(users_dictionary)
+        View.UsersTGVMGT.FillUsersTGV(users_dictionary)
+
+    End Sub
+
+    Public Sub addControlToPanel(ByRef dest_panel As Windows.Forms.Panel, _
+                              ByRef PlatformMGTUI As PlatformMGTGeneralUI)
+
+        Me.PlatformMGTUI = PlatformMGTUI
+        dest_panel.Controls.Add(View)
+        View.Dock = Windows.Forms.DockStyle.Fill
+
+    End Sub
+
+    Public Sub close()
+
+        View.Dispose()
+        Users.close()
+        PlatformMGTUI.displayControl()
 
     End Sub
 
@@ -104,7 +122,7 @@ Friend Class UsersController
         CreateRowAndNode(user_id, False, parent_item)
         UpdateUsersPositions()
         DisplayUsersTGV()
-        VIEWOBJECT.Show()
+        View.Show()
 
     End Sub
 
@@ -131,7 +149,7 @@ Friend Class UsersController
         Users.DeleteUser(user_id)
         PrivilegesController.DropUser(user_id)
         DeleteRowAndNode(user_id)
-        VIEWOBJECT.UsersTGVMGT.currentRowItem = Nothing
+        View.UsersTGVMGT.currentRowItem = Nothing
 
     End Sub
 
@@ -148,7 +166,7 @@ Friend Class UsersController
             End If
         Next
         DeleteRowAndNode(user_id)
-        VIEWOBJECT.UsersTGVMGT.currentRowItem = Nothing
+        View.UsersTGVMGT.currentRowItem = Nothing
 
     End Sub
 
@@ -215,29 +233,29 @@ Friend Class UsersController
         Else
             usersTV.Nodes.Find(parent_item.Caption, True)(0).Nodes.Add(user_id, user_id)
         End If
-        VIEWOBJECT.UsersTGVMGT.AddRow(user_id, is_folder, parent_item)
+        View.UsersTGVMGT.AddRow(user_id, is_folder, parent_item)
 
     End Sub
 
     Private Sub DeleteRowAndNode(ByRef user_id As String)
 
         usersTV.Nodes.Find(user_id, True)(0).Remove()
-        VIEWOBJECT.UsersTGVMGT.rowsIDItem(user_id).Delete()
-        VIEWOBJECT.UsersTGVMGT.rowsIDItem.Remove(user_id)
+        View.UsersTGVMGT.rowsIDItem(user_id).Delete()
+        View.UsersTGVMGT.rowsIDItem.Remove(user_id)
 
     End Sub
 
     Friend Sub ShowNewUserUI()
 
         NewUserUI.UserIDTB.Text = ""
-        NewUserUI.parent_item = VIEWOBJECT.UsersTGVMGT.currentRowItem
+        NewUserUI.parent_item = View.UsersTGVMGT.currentRowItem
         NewUserUI.Show()
 
     End Sub
 
     Friend Sub ShowUsersMGTUI()
 
-        VIEWOBJECT.Show()
+        View.Show()
 
     End Sub
 

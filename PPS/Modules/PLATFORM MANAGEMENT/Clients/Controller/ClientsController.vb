@@ -69,7 +69,7 @@ Friend Class ClientsController
 
     Public Sub close()
 
-        View.closeControl()
+        view.closeControl()
         view.Dispose()
         clients.RST.Close()
         PlatformMGTUI.displayControl()

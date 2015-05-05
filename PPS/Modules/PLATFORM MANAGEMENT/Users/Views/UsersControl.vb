@@ -1,32 +1,22 @@
-﻿' UsersManagementUI.vb
-'
-' Main view for users management
-' 
-' to do:
-'       - DBM should only see and manage THEIR users !!!!
-'    
-'
-' known bugs: 
+﻿' UsersControl.vb
 '
 '
-' Auhtor: Julien Monnereau
-' Last modified: 05/12/2014
+'
+'
+' Author: Julien Monnereau
+' Last modified: 05/05/2015
 
 
-Imports System.Collections.Generic
-Imports System.Collections
-Imports VIBlend.WinForms.DataGridView
 Imports System.Windows.Forms
-Imports System.Drawing
 
 
-Friend Class UsersManagementUI
+Friend Class UsersControl
 
 
 #Region "Instance variables"
 
     ' Objects
-    Friend CONTROLLER As UsersController
+    Friend Controller As UsersController
     Friend UsersTGVMGT As UsersTGV
     Friend EntitySelectionUI As EntitySelectionForUsersMGT
 
@@ -36,18 +26,17 @@ Friend Class UsersManagementUI
 
 #Region "Initialize"
 
-    Protected Friend Sub New()
+    Protected Friend Sub New(ByRef Controller As UsersController)
 
         ' This call is required by the designer.
         InitializeComponent()
 
         ' Add any initialization after the InitializeComponent() call.
+        Me.Controller = Controller
         usersTGV.ImageList = TGVIcons
         UsersTGVMGT = New UsersTGV(usersTGV, Me)
-        CONTROLLER = New UsersController(Me)
-        UsersTGVMGT.SetController(CONTROLLER)
+        UsersTGVMGT.SetController(Controller)
         EntitySelectionUI = New EntitySelectionForUsersMGT(UsersTGVMGT)
-        Me.WindowState = FormWindowState.Maximized
 
     End Sub
 
@@ -61,13 +50,13 @@ Friend Class UsersManagementUI
         If Not UsersTGVMGT.currentRowItem Is Nothing Then
             If UsersTGVMGT.currentRowItem.ImageIndex = 1 Then
                 Dim new_user_id = PromptUser_id()
-                CONTROLLER.CreateFolder(new_user_id, UsersTGVMGT.currentRowItem)
+                Controller.CreateFolder(new_user_id, UsersTGVMGT.currentRowItem)
             Else
                 MsgBox("A Folder cannot be created under a user.")
             End If
         Else
             Dim new_user_id = PromptUser_id()
-            CONTROLLER.CreateFolder(new_user_id)
+            Controller.CreateFolder(new_user_id)
         End If
 
     End Sub
@@ -75,7 +64,7 @@ Friend Class UsersManagementUI
     Private Sub AddUser_Click(sender As Object, e As EventArgs) Handles addUserBT.Click
 
         Me.Hide()
-        CONTROLLER.ShowNewUserUI()
+        Controller.ShowNewUserUI()
 
     End Sub
 
@@ -89,7 +78,7 @@ Friend Class UsersManagementUI
                                                          "Do you confirm?" + Chr(13) + Chr(13), _
                                                          "User deletion confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
                 If confirm = DialogResult.Yes Then
-                    CONTROLLER.DeleteUser(UsersTGVMGT.currentRowItem.Caption)
+                    Controller.DeleteUser(UsersTGVMGT.currentRowItem.Caption)
                 End If
             Else
                 Dim confirm As Integer = MessageBox.Show("Careful, you are about to delete folder " + Chr(13) + Chr(13) + _
@@ -98,7 +87,7 @@ Friend Class UsersManagementUI
                                                           "Do you confirm?" + Chr(13) + Chr(13), _
                                                           "Folder deletion confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
                 If confirm = DialogResult.Yes Then
-                    CONTROLLER.DeleteFolder(UsersTGVMGT.currentRowItem.Caption)
+                    Controller.DeleteFolder(UsersTGVMGT.currentRowItem.Caption)
                     UsersTGVMGT.currentRowItem = Nothing
                 End If
             End If
@@ -109,7 +98,7 @@ Friend Class UsersManagementUI
     Private Sub ReinitPwdBT_Click(sender As Object, e As EventArgs) Handles ReinitPwdBT.Click
 
         If Not UsersTGVMGT.currentRowItem Is Nothing AndAlso UsersTGVMGT.currentRowItem.ImageIndex = 0 Then
-            CONTROLLER.ReiniatilizePassword(UsersTGVMGT.currentRowItem.Caption)
+            Controller.ReiniatilizePassword(UsersTGVMGT.currentRowItem.Caption)
         Else
             MsgBox("A user must be selected in order to reinitialize the password")
         End If
@@ -162,7 +151,7 @@ Friend Class UsersManagementUI
 
         EntitySelectionUI.Show()
         Me.Cursor = New Cursor(Cursor.Current.Handle)
-        Dim temp As Point = MousePosition
+        Dim temp As Drawing.Point = MousePosition
         temp.X = temp.X
         temp.Y = temp.Y
         EntitySelectionUI.Location = temp
@@ -178,7 +167,7 @@ Friend Class UsersManagementUI
     Private Function PromptUser_id() As String
 
         Dim new_user_id As String = InputBox("Enter the new folder name")
-        If CONTROLLER.IsUSerIDAlreadyInUse(new_user_id) = True Then
+        If Controller.IsUSerIDAlreadyInUse(new_user_id) = True Then
             MsgBox("This name already exists, please enter another name")
             Return ""
         ElseIf Len(new_user_id) > USERS_ID_MAX_SIZE Then
@@ -189,8 +178,8 @@ Friend Class UsersManagementUI
 
     End Function
 
-
 #End Region
+
 
 
 

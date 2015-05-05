@@ -54,6 +54,7 @@ Friend Class DataGridViewsUtil
     Friend Shared ADJUSTMENTS_ROW_THEME As VIBLEND_THEME = VIBLEND_THEME.OFFICE2010BLACK
     Friend Shared ADJUSTMENTS_COLOR As Color = Color.Blue
     Friend Shared ENTITIES_ROWS_THEME As VIBLEND_THEME = VIBLEND_THEME.OFFICE2010BLUE
+    ' format break down to be enhanced !!
     Friend Shared DGV_HEIGHT_MARGIN As Int32 = 10
 
 #End Region

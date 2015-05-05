@@ -24,6 +24,7 @@ Partial Class PlatformMGTGeneralUI
     Private Sub InitializeComponent()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(PlatformMGTGeneralUI))
         Me.MenuStrip1 = New System.Windows.Forms.MenuStrip()
+        Me.Panel1 = New System.Windows.Forms.Panel()
         Me.FinancialsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.FinancialsAndOperationalItemsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.AdjustmentsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -39,18 +40,28 @@ Partial Class PlatformMGTGeneralUI
         Me.VersionsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.CurrenciesToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.UsersToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.Panel1 = New System.Windows.Forms.Panel()
+        Me.ControlsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.MenuStrip1.SuspendLayout()
         Me.SuspendLayout()
         '
         'MenuStrip1
         '
-        Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.FinancialsToolStripMenuItem, Me.OrganizationToolStripMenuItem, Me.ClientsToolStripMenuItem, Me.ProductsToolStripMenuItem, Me.VersionsToolStripMenuItem, Me.CurrenciesToolStripMenuItem, Me.UsersToolStripMenuItem})
+        Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.FinancialsToolStripMenuItem, Me.OrganizationToolStripMenuItem, Me.ClientsToolStripMenuItem, Me.ProductsToolStripMenuItem, Me.VersionsToolStripMenuItem, Me.CurrenciesToolStripMenuItem, Me.UsersToolStripMenuItem, Me.ControlsToolStripMenuItem})
         Me.MenuStrip1.Location = New System.Drawing.Point(0, 0)
         Me.MenuStrip1.Name = "MenuStrip1"
         Me.MenuStrip1.Size = New System.Drawing.Size(674, 55)
         Me.MenuStrip1.TabIndex = 0
         Me.MenuStrip1.Text = "MenuStrip1"
+        '
+        'Panel1
+        '
+        Me.Panel1.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Panel1.Location = New System.Drawing.Point(0, 83)
+        Me.Panel1.Name = "Panel1"
+        Me.Panel1.Size = New System.Drawing.Size(674, 387)
+        Me.Panel1.TabIndex = 1
         '
         'FinancialsToolStripMenuItem
         '
@@ -190,15 +201,14 @@ Partial Class PlatformMGTGeneralUI
         Me.UsersToolStripMenuItem.Text = "Users"
         Me.UsersToolStripMenuItem.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
         '
-        'Panel1
+        'ControlsToolStripMenuItem
         '
-        Me.Panel1.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Panel1.Location = New System.Drawing.Point(0, 83)
-        Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(674, 387)
-        Me.Panel1.TabIndex = 1
+        Me.ControlsToolStripMenuItem.Image = Global.PPS.My.Resources.Resources.checkbox2
+        Me.ControlsToolStripMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
+        Me.ControlsToolStripMenuItem.Name = "ControlsToolStripMenuItem"
+        Me.ControlsToolStripMenuItem.Size = New System.Drawing.Size(64, 51)
+        Me.ControlsToolStripMenuItem.Text = "Controls"
+        Me.ControlsToolStripMenuItem.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
         '
         'PlatformMGTGeneralUI
         '
@@ -234,4 +244,5 @@ Partial Class PlatformMGTGeneralUI
     Friend WithEvents OrganizationToolStripMenuItem1 As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ClientsToolStripMenuItem1 As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ProductsToolStripMenuItem1 As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ControlsToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
 End Class

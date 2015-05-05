@@ -20,7 +20,7 @@ Friend Class NewControlUI
 #Region "Instance Variables"
 
     ' Objects
-    Private Controller As ControlsMGTController
+    Private Controller As ControlsController
 
     ' Variables
     Private accounts_name_id_dic As Hashtable
@@ -34,7 +34,7 @@ Friend Class NewControlUI
 
 #Region "Initialization"
 
-    Friend Sub New(ByRef input_controller As ControlsMGTController, _
+    Friend Sub New(ByRef input_controller As ControlsController, _
                    ByRef input_accounts_name_id_dic As Hashtable, _
                    ByRef input_operators_symbol_id_dic As Dictionary(Of String, String), _
                    ByRef input_period_options_name_id_dic As Dictionary(Of String, String))

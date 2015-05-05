@@ -24,7 +24,7 @@ Friend Class User
 
     ' Objects
     Private SRV As ModelServer
-    Friend RST As Recordset
+    Private RST As Recordset
 
     ' Constants
     Friend object_is_alive As Boolean
@@ -164,8 +164,16 @@ Friend Class User
 
     End Sub
 
+    Friend Sub close()
+
+        On Error Resume Next
+        RST.Close()
+
+    End Sub
+
     Protected Overrides Sub finalize()
 
+        On Error Resume Next
         RST.Close()
         MyBase.Finalize()
 

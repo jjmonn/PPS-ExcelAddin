@@ -65,7 +65,8 @@ Friend Class ModelServer
         If lock_type = Nothing Then lock_type = LockTypeEnum.adLockOptimistic
         Dim nb_attemps As Int32 = 0
         Dim success As Boolean
-        While success = False AndAlso nb_attemps <= NB_QUERIES_ATTEMPS
+        While success = False _
+        AndAlso nb_attemps <= NB_QUERIES_ATTEMPS
             success = RstTableConnection(strSQL, cursor_option, lock_type)
             nb_attemps = nb_attemps + 1
         End While

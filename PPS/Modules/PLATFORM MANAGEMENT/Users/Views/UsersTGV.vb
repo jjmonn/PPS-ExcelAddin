@@ -28,7 +28,7 @@ Friend Class UsersTGV
     ' Objects
     Private CONTROLLER As UsersController
     Private TGV As vDataGridView
-    Private ParentView As UsersManagementUI
+    Private ParentView As UsersControl
 
     ' Variables
     Friend columnsDictionary As New Dictionary(Of String, HierarchyItem)
@@ -59,7 +59,7 @@ Friend Class UsersTGV
 #Region "Initialize"
 
     Protected Friend Sub New(ByRef inputTGV As vDataGridView, _
-                   ByRef input_parent_view As UsersManagementUI)
+                             ByRef input_parent_view As UsersControl)
 
         ParentView = input_parent_view
         TGV = inputTGV

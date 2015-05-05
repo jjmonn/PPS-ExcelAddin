@@ -77,7 +77,7 @@ Friend Class CExcelFormatting
                         Case "RA" : row.Cells.NumberFormat = "0.00%"        ' put this in a table ?
                         Case "OP" : row.Cells.NumberFormat = "#,##0.00"        ' further evolution set unit ?
                         Case "NU" : row.Cells.NumberFormat = "#,##0"
-                        Case "DA" : row.Cells.NumberFormat = "dd/mm/yyyy;@" ' d-mmm-yy
+                        Case "DA" : row.Cells.NumberFormat = "d-mmm-yy" ' d-mmm-yy
                         Case Else : row.Cells.NumberFormat = "#,##0.00"
                     End Select
 
@@ -95,44 +95,41 @@ Friend Class CExcelFormatting
                 End If
             End If
         Next
-
+        ' !! inconsistence dans les formats -> à revoir !!!
         If reportFormat = INPUT_FORMAT_CODE Then ApplyBackGroundColorToInputCells(inputRange, _
                                                                                   currentFormatsDictionary.Item(HV_FORMAT_CODE).Item(FORMAT_TEXT_COLOR_VARIABLE), _
                                                                                   currentFormatsDictionary.Item(HV_FORMAT_CODE).Item(FORMAT_BCKGD_VARIABLE), _
                                                                                   startingDate)
-
         inputRange.Columns.AutoFit()
-        'inputRange.NumberFormat = "#,##0"
-        'inputRange.Rows(1).NumberFormat = "Short date"
-
+      
     End Sub
 
     Protected Friend Shared Sub ApplyBackGroundColorToInputCells(ByRef inputRange As Excel.Range,
-                                                ByRef text_color As Object, _
-                                                ByRef bckgd_color As Object, _
-                                                Optional ByRef startingDate As Date = Nothing)
+                                                                 ByRef text_color As Object, _
+                                                                 ByRef bckgd_color As Object, _
+                                                                 Optional ByRef startingDate As Date = Nothing)
 
         Dim fType As String
         Dim StartingDateColumn As Int32
         Dim accountsNamesFTypesDictionary As Hashtable = AccountsMapping.GetAccountsDictionary(ACCOUNT_NAME_VARIABLE, ACCOUNT_FORMULA_TYPE_VARIABLE)
 
-        If IsDate(startingDate) Then StartingDateColumn = GetStaringPeriodColumn(inputRange, startingDate)
+        '    If IsDate(startingDate) Then StartingDateColumn = GetStaringPeriodColumn(inputRange, startingDate)
 
         For Each row As Excel.Range In inputRange.Rows
 
-            Dim subRange As Excel.Range = row.Offset(0, 1).Resize(row.Rows.Count, row.Columns.Count - 1)
+            '      Dim subRange As Excel.Range = row.Offset(0, 1).Resize(1, inputRange.Columns.Count - 1)
             Dim accValue As String = row.Cells(1, 1).value2
 
             If Not accValue Is Nothing Then
                 If accountsNamesFTypesDictionary.ContainsKey(accValue) Then
-                    fType = accountsNamesFTypesDictionary(accValue)
-                    If fType = INPUT_ACCOUNT_FORMULA_TYPE Then
-                        SetRangeColors(subRange, text_color, bckgd_color)
+                    Select Case accountsNamesFTypesDictionary(accValue)
 
-                    ElseIf IsDate(startingDate) _
-                    AndAlso fType = BALANCE_SHEET_ACCOUNT_FORMULA_TYPE Then
-                        SetRangeColors(subRange, text_color, bckgd_color)
-                    End If
+                        Case INPUT_ACCOUNT_FORMULA_TYPE : SetRangeColors(row, text_color, bckgd_color)
+                        Case BALANCE_SHEET_ACCOUNT_FORMULA_TYPE, _
+                             WORKING_CAPITAL_ACCOUNT_FORMULA_TYPE
+                            SetRangeColors(row.Cells(1, 2), text_color, bckgd_color)
+
+                    End Select
                 End If
             End If
         Next
@@ -157,13 +154,16 @@ Friend Class CExcelFormatting
         Dim datesLine As Int32 = DatesLineIdentification(inputRange)
         On Error Resume Next
         If datesLine <> -1 Then
-            For i = 1 To inputRange.Columns.Count
-                Dim dateIfDateType = Nothing
-                dateIfDateType = CDate(inputRange.Cells(datesLine, i).value)
-                If Not dateIfDateType Is Nothing Then If dateIfDateType = startingDate Then Return i
-            Next
+            'For i = 1 To inputRange.Columns.Count
+            '    Dim test = inputRange.Cells(datesLine, i).value
+            '    Dim test2 = Date.FromOADate(CDbl(inputRange.Cells(datesLine, i).value))
+            '    If IsDate(inputRange.Cells(datesLine, i).value) _
+            '    AndAlso inputRange.Cells(datesLine, i).value = startingDate Then Return i
+            'Next
+
+            ' fin a way to find the date stub !!!!
         End If
-        Return -1
+        Return 2
 
     End Function
 

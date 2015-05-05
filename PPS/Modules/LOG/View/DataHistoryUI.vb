@@ -30,7 +30,10 @@ Friend Class DataHistoryUI
 
 #Region "Initialize"
 
-    Protected Friend Sub New(ByRef data_history_list As List(Of Hashtable))
+    Protected Friend Sub New(ByRef data_history_list As List(Of Hashtable), _
+                             ByRef client_id_name_dict As Hashtable, _
+                             ByRef product_id_name_dict As Hashtable, _
+                             ByRef adjustment_id_name_dict As Dictionary(Of String, String))
 
         ' This call is required by the designer.
         InitializeComponent()
@@ -44,7 +47,10 @@ Friend Class DataHistoryUI
                 Dim row As HierarchyItem = DGV.RowsHierarchy.Items.Add("")
                 DGV.CellsArea.SetCellValue(row, DGV.ColumnsHierarchy.Items(0), ht(LOG_TIME_VARIABLE))
                 DGV.CellsArea.SetCellValue(row, DGV.ColumnsHierarchy.Items(1), ht(LOG_USER_ID_VARIABLE))
-                DGV.CellsArea.SetCellValue(row, DGV.ColumnsHierarchy.Items(2), ht(LOG_VALUE_VARIABLE))
+                DGV.CellsArea.SetCellValue(row, DGV.ColumnsHierarchy.Items(2), client_id_name_dict(ht(LOG_CLIENT_ID_VARIABLE)))
+                DGV.CellsArea.SetCellValue(row, DGV.ColumnsHierarchy.Items(3), product_id_name_dict(ht(LOG_PRODUCT_ID_VARIABLE)))
+                DGV.CellsArea.SetCellValue(row, DGV.ColumnsHierarchy.Items(4), adjustment_id_name_dict(ht(LOG_ADJUSTMENT_ID_VARIABLE)))
+                DGV.CellsArea.SetCellValue(row, DGV.ColumnsHierarchy.Items(5), ht(LOG_VALUE_VARIABLE))
             Next
             DGV.ColumnsHierarchy.AutoResize(AutoResizeMode.FIT_ALL)
             DGV.ColumnsHierarchy.AutoStretchColumns = True
@@ -57,6 +63,9 @@ Friend Class DataHistoryUI
         DGV.RowsHierarchy.Visible = False
         DGV.ColumnsHierarchy.Items.Add("Date")
         DGV.ColumnsHierarchy.Items.Add("User")
+        DGV.ColumnsHierarchy.Items.Add("Client")
+        DGV.ColumnsHierarchy.Items.Add("Product")
+        DGV.ColumnsHierarchy.Items.Add("Adjustment")
         DGV.ColumnsHierarchy.Items.Add("Value")
         DGV.ColumnsHierarchy.Items(2).CellsFormatString = VALUES_FORMAT_STRING
         DataGridViewsUtil.InitDisplayVDataGridView(DGV, DGV_THEME)

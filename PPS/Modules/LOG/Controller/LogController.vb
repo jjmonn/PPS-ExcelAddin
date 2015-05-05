@@ -31,6 +31,9 @@ Friend Class LogController
     Protected Friend current_entity_id As String
     Private accounts_id_ftype_dic As Hashtable
     Private entities_id_currency_dic As Hashtable
+    Private client_id_name_dict As Hashtable = ClientsMapping.GetClientsDictionary(ANALYSIS_AXIS_ID_VAR, ANALYSIS_AXIS_NAME_VAR)
+    Private product_id_name_dict As Hashtable = ProductsMapping.GetproductsDictionary(ANALYSIS_AXIS_ID_VAR, ANALYSIS_AXIS_NAME_VAR)
+    Private adjustment_id_name_dict As Dictionary(Of String, String) = AdjustmentsMapping.GetAdjustmentsDictionary(ANALYSIS_AXIS_ID_VAR, ANALYSIS_AXIS_NAME_VAR)
 
 #End Region
 
@@ -79,7 +82,11 @@ Friend Class LogController
         Dim DataHistory As New DataHistoryUI(SQLLog.GetValueHistory(current_entity_id, _
                                                                     current_version_id, _
                                                                     account_id, _
-                                                                    period))
+                                                                    period), _
+                                            client_id_name_dict, _
+                                            product_id_name_dict, _
+                                            adjustment_id_name_dict)
+
         Dim p As New Point(cell.Bounds.Left + View.DGVTabControl.Left, cell.Bounds.Top + View.DGVTabControl.Top)
         DataHistory.Location = p
         DataHistory.Show()

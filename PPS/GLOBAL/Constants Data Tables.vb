@@ -538,6 +538,8 @@ Module Data_Tables_Constants
     Friend Const LOG_ENTITY_ID_VARIABLE As String = "entity_id"
     Friend Const LOG_ACCOUNT_ID_VARIABLE As String = "account_id"
     Friend Const LOG_ADJUSTMENT_ID_VARIABLE As String = "adjustment_id"
+    Friend Const LOG_CLIENT_ID_VARIABLE As String = "client_id"
+    Friend Const LOG_PRODUCT_ID_VARIABLE As String = "product_id"
     Friend Const LOG_PERIOD_VARIABLE As String = "period"
 
 

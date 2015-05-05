@@ -24,6 +24,8 @@ Friend Class SQLLog
         Dim str As String = "SELECT " & LOG_TIME_VARIABLE & "," & _
                                         LOG_USER_ID_VARIABLE & "," & _
                                         LOG_VALUE_VARIABLE & "," & _
+                                        LOG_CLIENT_ID_VARIABLE & "," & _
+                                        LOG_PRODUCT_ID_VARIABLE & "," & _
                                         LOG_ADJUSTMENT_ID_VARIABLE & _
                             " FROM " & DATA_DATABASE & "." & LOG_TABLE_NAME & _
                             " WHERE " & LOG_ENTITY_ID_VARIABLE & "='" & entity_id & "'" & _
@@ -40,6 +42,8 @@ Friend Class SQLLog
                 ht.Add(LOG_TIME_VARIABLE, srv.rst.Fields(LOG_TIME_VARIABLE).Value)
                 ht.Add(LOG_USER_ID_VARIABLE, srv.rst.Fields(LOG_USER_ID_VARIABLE).Value)
                 ht.Add(LOG_VALUE_VARIABLE, srv.rst.Fields(LOG_VALUE_VARIABLE).Value)
+                ht.Add(LOG_CLIENT_ID_VARIABLE, srv.rst.Fields(LOG_CLIENT_ID_VARIABLE).Value)
+                ht.Add(LOG_PRODUCT_ID_VARIABLE, srv.rst.Fields(LOG_PRODUCT_ID_VARIABLE).Value)
                 ht.Add(LOG_ADJUSTMENT_ID_VARIABLE, srv.rst.Fields(LOG_ADJUSTMENT_ID_VARIABLE).Value)
                 result_list.Add(ht)
                 srv.rst.MoveNext()
