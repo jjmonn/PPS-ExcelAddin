@@ -248,6 +248,10 @@ Friend Class DataGridViewsUtil
 
 #Region "Font Size"
 
+
+    ' set row font size / row cells
+
+
     Protected Friend Shared Sub DGVSetHiearchyFontSize(ByRef DGV As vDataGridView, _
                                                        ByRef itemsFontSize As Single, _
                                                        Optional ByRef cellsFontSize As Single = 0)

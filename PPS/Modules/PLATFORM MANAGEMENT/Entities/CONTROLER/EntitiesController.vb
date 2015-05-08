@@ -88,13 +88,13 @@ Friend Class EntitiesController
 
     Public Sub close()
 
-        Entities.close()
         View.closeControl()
 
     End Sub
 
     Protected Friend Sub sendCloseOrder()
 
+        Entities.close()
         View.Dispose()
         PlatformMGTUI.displayControl()
 
@@ -119,7 +119,7 @@ Friend Class EntitiesController
         hash.Add(ITEMS_POSITIONS, 1)
 
         Entities.CreateEntity(hash)
-        AddNodeAndRow(entity_id, hash(ENTITIES_NAME_VARIABLE), parent_node)
+        AddNodeAndRow(entity_id, hash, parent_node)
         If Entities.ReadEntity(parent_node.Name, ENTITIES_ALLOW_EDITION_VARIABLE) = 1 Then
             Entities.UpdateEntity(parent_node.Name, ENTITIES_ALLOW_EDITION_VARIABLE, 0)
             parent_node.StateImageIndex = 0
@@ -178,21 +178,24 @@ Friend Class EntitiesController
     End Sub
 
     Private Sub AddNodeAndRow(ByRef entity_id As String, _
-                              ByRef entity_name As String, _
+                              ByRef ht As Hashtable, _
                               ByRef parent_node As TreeNode)
 
         If Not parent_node Is Nothing Then
-            parent_node.Nodes.Add(entity_id, entity_name, 1, 1)
+            Dim node As TreeNode = parent_node.Nodes.Add(entity_id, ht(ENTITIES_NAME_VARIABLE), 1, 1)
+            View.EntitiesDGV.addRow(node, View.EntitiesDGV.rows_id_item_dic(parent_node.Name))
         Else
-            entitiesTV.Nodes.Add(entity_id, entity_name, 1, 1)
+            Dim node As TreeNode = entitiesTV.Nodes.Add(entity_id, ht(ENTITIES_NAME_VARIABLE), 1, 1)
+            View.EntitiesDGV.addRow(node)
         End If
-        entitiesNameKeyDic.Add(entity_name, entity_id)
-        positionsDictionary = TreeViewsUtilities.GeneratePositionsDictionary(entitiesTV)
+        View.EntitiesDGV.fillRow(entity_id, ht)
+        entitiesNameKeyDic(ht(ENTITIES_NAME_VARIABLE)) = entity_id
 
     End Sub
 
     Protected Friend Sub SendNewPositionsToModel()
 
+        positionsDictionary = TreeViewsUtilities.GeneratePositionsDictionary(entitiesTV)
         For Each entity_id In positionsDictionary.Keys
             Entities.UpdateEntity(entity_id, ITEMS_POSITIONS, positionsDictionary(entity_id))
         Next

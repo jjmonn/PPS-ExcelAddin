@@ -150,26 +150,28 @@ Friend Class EntitiesDGV
 
         DGV.RowsHierarchy.Clear()
         rows_id_item_dic.Clear()
-
-        isFillingDGV = True
         For Each node In entities_tv.Nodes
-            Dim row As HierarchyItem = DGV.RowsHierarchy.Items.Add("")
-            DGV.CellsArea.SetCellValue(row, DGV.ColumnsHierarchy.Items(0), node.text)
-            FormatRow(row, node.name)
-            addChildrenRows(node, row)
+            addRow(node)
         Next
-        isFillingDGV = False
 
     End Sub
 
-    Private Sub addChildrenRows(ByRef node As TreeNode, ByRef row As HierarchyItem)
+    Friend Sub addRow(ByRef node As TreeNode, _
+                      Optional ByRef parent_row As HierarchyItem = Nothing)
 
+        isFillingDGV = True
+        Dim row As HierarchyItem
+        If parent_row Is Nothing Then
+            row = DGV.RowsHierarchy.Items.Add("")
+        Else
+            row = parent_row.Items.Add("")
+        End If
+        DGV.CellsArea.SetCellValue(row, DGV.ColumnsHierarchy.Items(0), node.Text)
+        FormatRow(row, node.Name)
         For Each child_node In node.Nodes
-            Dim sub_row As HierarchyItem = row.Items.Add("")
-            DGV.CellsArea.SetCellValue(sub_row, DGV.ColumnsHierarchy.Items(0), child_node.Text)
-            FormatRow(sub_row, child_node.Name)
-            addChildrenRows(child_node, sub_row)
+            addRow(child_node, row)
         Next
+        isFillingDGV = False
 
     End Sub
 
@@ -222,23 +224,34 @@ Friend Class EntitiesDGV
     Private Sub fillDGV(ByRef entities_dict As Dictionary(Of String, Hashtable))
 
         isFillingDGV = True
-        Dim column As HierarchyItem
-        Dim category_value As String
         For Each entity_id In entities_dict.Keys
-            Dim rowItem = rows_id_item_dic(entity_id)
-
-            column = columnsDictionary(ENTITIES_CURRENCY_VARIABLE)
-            DGV.CellsArea.SetCellValue(rowItem, column, entities_dict(entity_id)(ENTITIES_CURRENCY_VARIABLE))
-
-            For Each root_category_node As TreeNode In categoriesTV.Nodes
-                column = columnsDictionary(root_category_node.Name)
-                category_value = categoriesTV.Nodes.Find((entities_dict(entity_id)(root_category_node.Name)), True)(0).Text
-                DGV.CellsArea.SetCellValue(rowItem, column, category_value)
-            Next
-            If entities_dict(entity_id)(ENTITIES_ALLOW_EDITION_VARIABLE) = 0 Then rowItem.ImageIndex = 0 Else rowItem.ImageIndex = 1
-
+            fillRow(entity_id, entities_dict(entity_id))
         Next
         isFillingDGV = False
+        updateDGVFormat()
+
+    End Sub
+
+    Friend Sub fillRow(ByVal entity_id As String, _
+                       ByVal entity_ht As Hashtable)
+
+        Dim column As HierarchyItem
+        Dim category_value As String
+
+        Dim rowItem = rows_id_item_dic(entity_id)
+        column = columnsDictionary(ENTITIES_CURRENCY_VARIABLE)
+        DGV.CellsArea.SetCellValue(rowItem, column, entity_ht(ENTITIES_CURRENCY_VARIABLE))
+        For Each root_category_node As TreeNode In categoriesTV.Nodes
+            column = columnsDictionary(root_category_node.Name)
+            category_value = categoriesTV.Nodes.Find((entity_ht(root_category_node.Name)), True)(0).Text
+            DGV.CellsArea.SetCellValue(rowItem, column, category_value)
+        Next
+        If entity_ht(ENTITIES_ALLOW_EDITION_VARIABLE) = 0 Then rowItem.ImageIndex = 0 Else rowItem.ImageIndex = 1
+
+    End Sub
+
+    Private Sub updateDGVFormat()
+
         DataGridViewsUtil.DGVSetHiearchyFontSize(DGV, DGV_FONT_SIZE, DGV_FONT_SIZE)
         DataGridViewsUtil.FormatDGVRowsHierarchy(DGV)
         DGV.Refresh()

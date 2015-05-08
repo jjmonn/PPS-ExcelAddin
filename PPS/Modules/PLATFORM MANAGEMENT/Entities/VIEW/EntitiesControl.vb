@@ -29,7 +29,7 @@ Friend Class EntitiesControl
 
     ' Objects
     Private Controller As EntitiesController
-    Private EntitiesDGV As EntitiesDGV
+    Friend EntitiesDGV As EntitiesDGV
     Private entitiesTV As TreeView
     Private CP As CircularProgressUI
 
