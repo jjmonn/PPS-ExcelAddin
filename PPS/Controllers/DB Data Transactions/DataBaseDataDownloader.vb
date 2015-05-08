@@ -410,8 +410,11 @@ Friend Class DataBaseDataDownloader
                              & " A." & ENTITIES_CURRENCY_VARIABLE _
                              & " FROM " & VIEWS_DATABASE & "." & version_id & GlobalVariables.User_Credential & " D" & ", " & VIEWS_DATABASE + "." & GlobalVariables.Entities_View + " A" _
                              & " WHERE " & "D." & DATA_ENTITY_ID_VARIABLE & "=" & "A." & ENTITIES_ID_VARIABLE _
-                             & " AND " & DATA_ENTITY_ID_VARIABLE & " IN " & "(" & entities_ids & ")"
+                             & " AND " & DATA_ENTITY_ID_VARIABLE & " IN " & "(" & entities_ids & ")" _
+                             & " AND " & DATA_CLIENT_ID_VARIABLE & " ='aaa'" _
+                             & " AND " & DATA_PRODUCT_ID_VARIABLE & " ='aaa'"
 
+        ' STUB  !!!!!!! attention à modifier
         If Not adjustments_id_list Is Nothing Then
             Dim adjustments_selection As String = "'" + Join(adjustments_id_list.ToArray(), "','") + "'"
             strSQL = strSQL + " AND " + DATA_ADJUSTMENT_ID_VARIABLE + " IN (" + adjustments_selection + ")"

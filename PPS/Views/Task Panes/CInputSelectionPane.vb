@@ -85,22 +85,8 @@ Public Class CInputSelectionPane
 
     End Sub
 
-    Private Sub ValidateBT_Click(sender As Object, e As EventArgs) Handles ValidateBT.Click
+    Private Sub ValidateBT_Click(sender As Object, e As EventArgs)
         ValidateInputSelection()
-    End Sub
-
-    Private Sub SelectCB_CheckedChanged(sender As Object, e As EventArgs) Handles SelectCB.CheckedChanged
-
-        Dim state As CheckState
-        If SelectCB.Checked = True Then
-            state = CheckState.Checked
-        Else
-            state = CheckState.Unchecked
-        End If
-        For i = 0 To PeriodsLB.Items.Count - 1
-            PeriodsLB.SetItemCheckState(i, state)
-        Next
-
     End Sub
 
 
@@ -118,7 +104,6 @@ Public Class CInputSelectionPane
 
     Private Sub CInputSelectionPane_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
         EntitiesTV.Nodes.Clear()
-        PeriodsLB.Items.Clear()
         e.Cancel = True
     End Sub
 

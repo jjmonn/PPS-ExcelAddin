@@ -119,7 +119,7 @@ Public Class ExcelAddinModule1
     ' Need for a flag at PPS level raised when model is updated
     ' before PPSBI below computes need to check for update flag
     ' if model has been updated -> reinitialize computerInstance !!!
-    Public Function PPSBI(ByRef entity As String, _
+    Public Function PPSBI(ByRef entity As Object, _
                           ByRef account As Object, _
                           ByRef period As Object, _
                           ByRef currency As Object, _

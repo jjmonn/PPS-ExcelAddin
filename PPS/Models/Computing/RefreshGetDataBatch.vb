@@ -46,7 +46,11 @@ Friend Class RefreshGetDataBatch
         GlobalVariables.GenericGlobalSingleEntityComputer.ReinitializeGenericDataDLL3Computer()
         GlobalVariables.GenericGlobalAggregationComputer.ReinitializeComputerCache()
 
-        If rng Is Nothing Then rng = GlobalVariables.APPS.ActiveSheet
+        If rng Is Nothing Then
+            Dim ws As Excel.Worksheet = GlobalVariables.APPS.ActiveSheet
+            rng = ws.Range(ws.Cells(1, 1), Utilities_Functions.GetRealLastCell(ws))
+        End If
+
         If findGetDataFormulaCells(FormulasRangesCollection, rng) Then
             evaluateFormulas(FormulasRangesCollection)
         Else
@@ -71,7 +75,7 @@ Friend Class RefreshGetDataBatch
             rng.Value2 = REFRESH_WAITING_TEXT
         Else
             With rng.Cells
-                c = .Find(UDF_FORMULA_NAME, rng.Cells(1, 1), , )
+                c = .Find(UDF_FORMULA_NAME, rng.Cells(1, 1), , , Excel.XlSearchOrder.xlByRows, Excel.XlSearchDirection.xlNext)
 
                 If Not c Is Nothing Then
                     firstAddress = c.Address

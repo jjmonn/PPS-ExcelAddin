@@ -15,6 +15,8 @@ Imports System.Collections.Generic
 Friend Class SQLDataViews
 
 
+
+    ' process to be reviewed => credentials + views reconstructions
     ' Set up view creation SQL query
     Protected Friend Function ViewCreationQuery(ByRef dataTableName As String, _
                                                 ByRef viewName As String, _
@@ -29,9 +31,9 @@ Friend Class SQLDataViews
                                   DATA_ENTITY_ID_VARIABLE + "," + _
                                   DATA_PERIOD_VARIABLE + "," + _
                                   DATA_VALUE_VARIABLE + "," + _
+                                  DATA_CLIENT_ID_VARIABLE + "," + _
+                                  DATA_PRODUCT_ID_VARIABLE + "," + _
                                   DATA_ADJUSTMENT_ID_VARIABLE + _
-                                  DATA_CLIENT_ID_VARIABLE + _
-                                  DATA_PERIOD_VARIABLE + _
                                  " FROM " + DATA_DATABASE + "." + dataTableName + " D," + _
                                   LEGAL_ENTITIES_DATABASE + "." + ENTITIES_TABLE + " A" + _
                                  " WHERE A." + ENTITIES_ID_VARIABLE + "= D." + DATA_ENTITY_ID_VARIABLE

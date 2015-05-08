@@ -132,30 +132,45 @@ Friend Class SettingMainUI
     Private Sub CertificatesPathTB_TextChanged(sender As Object, e As EventArgs) Handles CertificatesPathTB.TextChanged
 
         My.Settings.certificatespath = CertificatesPathTB.Text
+        My.Settings.Save()
 
     End Sub
 
     Private Sub PortTB_TextChanged(sender As Object, e As EventArgs) Handles PortTB.TextChanged
 
         My.Settings.port_number = PortTB.Text
+        My.Settings.Save()
 
     End Sub
 
-    Private Sub ServerAddressTB_TextChanged(sender As Object, e As EventArgs) Handles ServerAddressTB.TextChanged
-
-        My.Settings.server = ServerAddressTB.Text
-
-    End Sub
 
     Private Sub IDTB_TextChanged(sender As Object, e As EventArgs) Handles IDTB.TextChanged
 
         My.Settings.user = IDTB.Text
+        My.Settings.Save()
 
     End Sub
 
 #End Region
 
 
+    ' below -> to be generalized everywhere !!
+   
+    Private Sub ServerAddressTB_Validated(sender As Object, e As EventArgs) Handles ServerAddressTB.Validated
+
+        My.Settings.server = ServerAddressTB.Text
+        My.Settings.Save()
+
+    End Sub
 
    
+    Private Sub ServerAddressTB_KeyDown(sender As Object, e As KeyEventArgs) Handles ServerAddressTB.KeyDown
+
+        If e.KeyCode = Keys.Enter Then
+            My.Settings.server = ServerAddressTB.Text
+            My.Settings.Save()
+        End If
+
+    End Sub
+
 End Class

@@ -70,7 +70,7 @@ Friend Class PPSBIController
 
     ' Stubs in this function - clients/ products adjustments filters should come as param or computed here ?!!!
     ' Period input: date as integer 
-    Protected Friend Function getDataCallBack(ByRef entity_name As String, _
+    Protected Friend Function getDataCallBack(ByRef entity_name As Object, _
                                             ByRef account As Object, _
                                             ByRef period As Object, _
                                             ByRef currency As Object, _
