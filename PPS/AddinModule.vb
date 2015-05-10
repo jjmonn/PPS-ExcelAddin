@@ -16,7 +16,7 @@
 '
 '
 ' Author: Julien Monnereau/ Addin Express automated code
-' Last modified: 01/05/2015
+' Last modified: 09/05/2015
 
 
 Imports System.Runtime.InteropServices
@@ -48,7 +48,7 @@ Public Class AddinModule
     Friend WithEvents UplodBT1 As AddinExpress.MSO.ADXRibbonMenu
     Friend WithEvents WBUplaodBT As AddinExpress.MSO.ADXRibbonButton
     Friend WithEvents SettingsBT As AddinExpress.MSO.ADXRibbonButton
-    Friend WithEvents FinancialModelingBT As AddinExpress.MSO.ADXRibbonSplitButton
+    Friend WithEvents AdvancedModelingBT As AddinExpress.MSO.ADXRibbonSplitButton
     Friend WithEvents AdxRibbonMenu2 As AddinExpress.MSO.ADXRibbonMenu
     Friend WithEvents BreakLinksBT As AddinExpress.MSO.ADXRibbonButton
     Friend WithEvents AdxRibbonGroup6 As AddinExpress.MSO.ADXRibbonGroup
@@ -127,7 +127,7 @@ Public Class AddinModule
     Friend WithEvents RefreshWorkbookBT As AddinExpress.MSO.ADXRibbonButton
     Friend WithEvents AdxRibbonMenuSeparator1 As AddinExpress.MSO.ADXRibbonMenuSeparator
     Friend WithEvents AutoRefreshBT As AddinExpress.MSO.ADXRibbonCheckBox
-    Friend WithEvents FinancialModelingBT2 As AddinExpress.MSO.ADXRibbonButton
+    Friend WithEvents AdxRibbonButton5 As AddinExpress.MSO.ADXRibbonButton
     Friend WithEvents AdxRibbonMenuSeparator2 As AddinExpress.MSO.ADXRibbonMenuSeparator
 
 
@@ -173,9 +173,9 @@ Public Class AddinModule
         Me.FunctionDesigner = New AddinExpress.MSO.ADXRibbonSplitButton(Me.components)
         Me.AdxRibbonMenu1 = New AddinExpress.MSO.ADXRibbonMenu(Me.components)
         Me.BreakLinksBT = New AddinExpress.MSO.ADXRibbonButton(Me.components)
-        Me.FinancialModelingBT = New AddinExpress.MSO.ADXRibbonSplitButton(Me.components)
+        Me.AdvancedModelingBT = New AddinExpress.MSO.ADXRibbonSplitButton(Me.components)
         Me.AdxRibbonMenu2 = New AddinExpress.MSO.ADXRibbonMenu(Me.components)
-        Me.FinancialModelingBT2 = New AddinExpress.MSO.ADXRibbonButton(Me.components)
+        Me.AdxRibbonButton5 = New AddinExpress.MSO.ADXRibbonButton(Me.components)
         Me.NewIcosSmall = New System.Windows.Forms.ImageList(Me.components)
         Me.AlternativeScenariosBT = New AddinExpress.MSO.ADXRibbonButton(Me.components)
         Me.AdxRibbonMenuSeparator2 = New AddinExpress.MSO.ADXRibbonMenuSeparator(Me.components)
@@ -512,7 +512,7 @@ Public Class AddinModule
         Me.AdxRibbonGroup2.Caption = "Data Mining"
         Me.AdxRibbonGroup2.Controls.Add(Me.ControlingUI2BT)
         Me.AdxRibbonGroup2.Controls.Add(Me.FunctionDesigner)
-        Me.AdxRibbonGroup2.Controls.Add(Me.FinancialModelingBT)
+        Me.AdxRibbonGroup2.Controls.Add(Me.AdvancedModelingBT)
         Me.AdxRibbonGroup2.Controls.Add(Me.SubmissionControlBT)
         Me.AdxRibbonGroup2.Id = "adxRibbonGroup_13e7ba6b0acf4975af1793d5cfec00ed"
         Me.AdxRibbonGroup2.ImageTransparentColor = System.Drawing.Color.Transparent
@@ -556,21 +556,21 @@ Public Class AddinModule
         Me.BreakLinksBT.ImageTransparentColor = System.Drawing.Color.Transparent
         Me.BreakLinksBT.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
         '
-        'FinancialModelingBT
+        'AdvancedModelingBT
         '
-        Me.FinancialModelingBT.Caption = "Modeling"
-        Me.FinancialModelingBT.Controls.Add(Me.AdxRibbonMenu2)
-        Me.FinancialModelingBT.Id = "adxRibbonSplitButton_48193c7e13704758a3814aa6156d5aee"
-        Me.FinancialModelingBT.Image = 27
-        Me.FinancialModelingBT.ImageList = Me.NewICOs
-        Me.FinancialModelingBT.ImageTransparentColor = System.Drawing.Color.Transparent
-        Me.FinancialModelingBT.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
-        Me.FinancialModelingBT.Size = AddinExpress.MSO.ADXRibbonXControlSize.Large
+        Me.AdvancedModelingBT.Caption = "Modeling"
+        Me.AdvancedModelingBT.Controls.Add(Me.AdxRibbonMenu2)
+        Me.AdvancedModelingBT.Id = "adxRibbonSplitButton_48193c7e13704758a3814aa6156d5aee"
+        Me.AdvancedModelingBT.Image = 27
+        Me.AdvancedModelingBT.ImageList = Me.NewICOs
+        Me.AdvancedModelingBT.ImageTransparentColor = System.Drawing.Color.Transparent
+        Me.AdvancedModelingBT.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
+        Me.AdvancedModelingBT.Size = AddinExpress.MSO.ADXRibbonXControlSize.Large
         '
         'AdxRibbonMenu2
         '
         Me.AdxRibbonMenu2.Caption = "Menu1"
-        Me.AdxRibbonMenu2.Controls.Add(Me.FinancialModelingBT2)
+        Me.AdxRibbonMenu2.Controls.Add(Me.AdxRibbonButton5)
         Me.AdxRibbonMenu2.Controls.Add(Me.AlternativeScenariosBT)
         Me.AdxRibbonMenu2.Controls.Add(Me.AdxRibbonMenuSeparator2)
         Me.AdxRibbonMenu2.Controls.Add(Me.ModellingConfigBT)
@@ -580,15 +580,15 @@ Public Class AddinModule
         Me.AdxRibbonMenu2.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
         Me.AdxRibbonMenu2.Size = AddinExpress.MSO.ADXRibbonXControlSize.Large
         '
-        'FinancialModelingBT2
+        'AdxRibbonButton5
         '
-        Me.FinancialModelingBT2.Caption = "Financial Modeling"
-        Me.FinancialModelingBT2.Id = "adxRibbonButton_543572754ac3483d8751176b3133ad1d"
-        Me.FinancialModelingBT2.Image = 0
-        Me.FinancialModelingBT2.ImageList = Me.NewIcosSmall
-        Me.FinancialModelingBT2.ImageTransparentColor = System.Drawing.Color.Transparent
-        Me.FinancialModelingBT2.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
-        Me.FinancialModelingBT2.Size = AddinExpress.MSO.ADXRibbonXControlSize.Large
+        Me.AdxRibbonButton5.Caption = "Financial Modeling"
+        Me.AdxRibbonButton5.Id = "adxRibbonButton_543572754ac3483d8751176b3133ad1d"
+        Me.AdxRibbonButton5.Image = 0
+        Me.AdxRibbonButton5.ImageList = Me.NewIcosSmall
+        Me.AdxRibbonButton5.ImageTransparentColor = System.Drawing.Color.Transparent
+        Me.AdxRibbonButton5.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
+        Me.AdxRibbonButton5.Size = AddinExpress.MSO.ADXRibbonXControlSize.Large
         '
         'NewIcosSmall
         '
@@ -1345,7 +1345,7 @@ Public Class AddinModule
 
 #Region "PPS Data Acquisition"
 
-    Private Sub UploadBT_onclick(sender As System.Object,
+    Private Sub snapshotBT_onclick(sender As System.Object,
                                  control As AddinExpress.MSO.IRibbonControl,
                                  pressed As System.Boolean) Handles UploadBT.OnClick
 
@@ -1353,7 +1353,14 @@ Public Class AddinModule
             Dim CONNUI As New ConnectionUI(Me)
             CONNUI.Show()
         Else
-            LaunchGRSControler()
+            If GRSControlersDictionary.ContainsKey(GlobalVariables.APPS.ActiveSheet) Then
+                CurrentGRSControler = GRSControlersDictionary(GlobalVariables.APPS.ActiveSheet)
+                CurrentGRSControler.UpdateRibbon()
+                SubmissionModeRibbon.Visible = True
+            Else
+                ' -> choix adjustment, client, product
+                AssociateGRSControler(False)
+            End If
         End If
 
     End Sub
@@ -1408,27 +1415,9 @@ Public Class AddinModule
 
 #Region "GRS Controler Display Functions"
 
-    ' GRS Controler display or construction
-    Private Sub LaunchGRSControler()
-
-        If GRSControlersDictionary.ContainsKey(GlobalVariables.APPS.ActiveSheet) Then
-            CurrentGRSControler = GRSControlersDictionary(GlobalVariables.APPS.ActiveSheet)
-            CurrentGRSControler.UpdateRibbon()
-            SubmissionModeRibbon.Visible = True
-        Else
-            'Dim confirm As Integer = MessageBox.Show("In order to submit data the software must identify the information provided in the worksheet" + Chr(13) + Chr(13) + _
-            '                                         "Click on confirm to launch the automatic recognition." + Chr(13) + Chr(13) + _
-            '                                         "You will be able to edit data and identified items afterwards", "Automated Data Recognition", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
-            'If confirm = DialogResult.Yes Then
-            ' Add circular progress
-            AssociateGRSControler()
-            'End If
-        End If
-
-    End Sub
 
     ' Create GRS Conctroler and display
-    Private Sub AssociateGRSControler()
+    Private Sub AssociateGRSControler(ByRef update_inputs As Boolean)
 
         Dim ctrl As ADXRibbonItem = AddButtonToDropDown(WSCB, GlobalVariables.APPS.ActiveSheet.name, GlobalVariables.APPS.ActiveSheet.name)
         Dim CGRSControlerInstance As New GeneralSubmissionControler(ctrl, Me)
@@ -1436,7 +1425,7 @@ Public Class AddinModule
         GRSControlersDictionary.Add(GlobalVariables.APPS.ActiveSheet, CGRSControlerInstance)
         ctrlsTextWSDictionary.Add(ctrl.Caption, GlobalVariables.APPS.ActiveSheet)
         CurrentGRSControler = CGRSControlerInstance
-        CurrentGRSControler.LaunchDatasetSnapshotAndAssociateModel()
+        CurrentGRSControler.LaunchDatasetSnapshotAndAssociateModel(update_inputs)
         SubmissionModeRibbon.Activate()
         SubmissionModeRibbon.Visible = True
         WSCB.SelectedItemId = ctrl.Id
@@ -1583,7 +1572,7 @@ Public Class AddinModule
 
 #Region "Modelling"
 
-    Private Sub AdvancedModelingBT_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) Handles FinancialModelingBT.OnClick, FinancialModelingBT2.OnClick
+    Private Sub AdvancedModelingBT_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) Handles AdvancedModelingBT.OnClick
 
         If ConnectioN Is Nothing Then
             Dim CONNUI As New ConnectionUI(Me)
@@ -1897,8 +1886,8 @@ Public Class AddinModule
     Private Sub ProductsDropDown_OnAction(sender As Object, Control As IRibbonControl, selectedId As String, selectedIndex As Integer) Handles ProductsDropDown.OnAction
 
         CurrentGRSControler.UpdateAfterAnalysisAxisChanged(ClientsDropDown.SelectedItemId, _
-                                                             selectedId, _
-                                                              AdjustmentDD.SelectedItemId, _
+                                                              ProductsDropDown.SelectedItemId, _
+                                                              selectedId, _
                                                               True)
 
     End Sub
@@ -1931,7 +1920,7 @@ Public Class AddinModule
 
     Friend Sub InputReportPaneCallBack_ReportCreation()
 
-        GlobalVariables.APPS.ScreenUpdating = False
+        '   GlobalVariables.APPS.ScreenUpdating = False
         Dim entity_id As String = Me.InputReportTaskPane.EntitiesTV.SelectedNode.Name
         Dim entity_name As String = Me.InputReportTaskPane.EntitiesTV.SelectedNode.Text
         Dim currency As String = EntitiesMapping.GetEntityCurrency(entity_id)
@@ -1950,7 +1939,7 @@ Public Class AddinModule
         Versions.Close()
         CExcelFormatting.FormatExcelRange(currentcell, INPUT_FORMAT_CODE, currency, periodlist(0))
         GlobalVariables.APPS.ScreenUpdating = True
-        AssociateGRSControler()
+        AssociateGRSControler(True)
 
     End Sub
 
@@ -2054,6 +2043,7 @@ Public Class AddinModule
         testHTTPUI.Show()
 
     End Sub
+
 
 
 End Class
