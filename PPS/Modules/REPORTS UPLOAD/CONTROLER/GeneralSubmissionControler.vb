@@ -284,12 +284,14 @@ Friend Class GeneralSubmissionControler
 
 #Region "Excel-DGV Controllers Interface"
 
-    Friend Sub UpdateDGVFromExcelUpdate(ByRef entityName As String, _
-                                        ByRef accountName As String, _
-                                        ByRef periodInt As Integer, _
-                                        ByVal value As Double, _
-                                        ByRef cellAddress As String)
+    Friend Sub UpdateModelFromExcelUpdate(ByRef entityName As String, _
+                                          ByRef accountName As String, _
+                                            ByRef periodInt As Integer, _
+                                            ByVal value As Double, _
+                                            ByRef cellAddress As String)
 
+        'Dataset.getDataSet()
+        'DataModificationsTracker.IdentifyDifferencesBtwDataSetAndDB(Model.DBInputsDictionary)
 
         Model.ValuesDictionariesUpdate(entityName, accountName, periodInt, value)
         DataModificationsTracker.RegisterModification(cellAddress)
@@ -317,7 +319,7 @@ Friend Class GeneralSubmissionControler
 
 #End Region
 
-    ' Below -> OK
+
 #Region "Data Set And Display Update"
 
     Friend Sub UpdateDatasetRegions()
@@ -343,7 +345,7 @@ Friend Class GeneralSubmissionControler
 
 #End Region
 
-    ' Below -> OK
+
 #Region "Submission Background Worker"
 
     ' Implies type of cell checked before -> only double
@@ -411,7 +413,7 @@ Friend Class GeneralSubmissionControler
 
 #End Region
 
-    ' Below -> OK
+
 #Region "Utilities"
 
     Private Function IdentifyFlagsErrors() As String
@@ -424,7 +426,7 @@ Friend Class GeneralSubmissionControler
 
     End Function
 
-   
+
     Protected Friend Function GetPeriodsList() As List(Of Int32)
 
         Return Model.currentPeriodlist

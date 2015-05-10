@@ -18,6 +18,7 @@ Imports Microsoft.Office.Interop
 Imports Microsoft.Office.Interop.Excel
 Imports Microsoft.Office.Core
 Imports VIBlend.WinForms.DataGridView
+Imports System.Collections
 
 
 Friend Class SubmissionWSController
@@ -36,7 +37,7 @@ Friend Class SubmissionWSController
 
 #End Region
 
-    ' Below -> OK
+
 #Region "Initialize"
 
     Friend Sub New(ByRef inputGeneralSubmissionController As GeneralSubmissionControler, _
@@ -70,14 +71,14 @@ Friend Class SubmissionWSController
                                   ByRef value As Double) As Excel.Range
 
         Dim entityAddress, accountAddress, periodAddress As String
-        If DataSet.EntitiesAddressValuesDictionary.ContainsValue(entity) Then entityAddress = GetDictionaryKey(DataSet.EntitiesAddressValuesDictionary, entity)
+        If DataSet.EntitiesAddressValuesDictionary.ContainsValue(entity) Then entityAddress = GetDictionaryKeyFromValue(DataSet.EntitiesAddressValuesDictionary, entity)
         If DataSet.AccountsAddressValuesDictionary.ContainsValue(account) Then
-            accountAddress = GetDictionaryKey(DataSet.AccountsAddressValuesDictionary, account)
+            accountAddress = GetDictionaryKeyFromValue(DataSet.AccountsAddressValuesDictionary, account)
         ElseIf DataSet.OutputsAccountsAddressvaluesDictionary.ContainsValue(account) Then
-            accountAddress = GetDictionaryKey(DataSet.OutputsAccountsAddressvaluesDictionary, account)
+            accountAddress = GetDictionaryKeyFromValue(DataSet.OutputsAccountsAddressvaluesDictionary, account)
         End If
 
-        If DataSet.periodsAddressValuesDictionary.ContainsValue(period) Then periodAddress = GetDictionaryKey(DataSet.periodsAddressValuesDictionary, period)
+        If DataSet.periodsAddressValuesDictionary.ContainsValue(period) Then periodAddress = GetDictionaryKeyFromValue(DataSet.periodsAddressValuesDictionary, period)
 
         If Not entityAddress Is Nothing AndAlso Not accountAddress Is Nothing AndAlso Not periodAddress Is Nothing Then
             DataSet.UpdateExcelCell(entityAddress, accountAddress, periodAddress, value, True)
@@ -127,37 +128,59 @@ Friend Class SubmissionWSController
 
 #Region "Events"
 
+    ' Listen to changes in associated worksheet
     Friend Sub Worksheet_Change(ByVal Target As Excel.Range)
 
-        Dim entityItem As String
         Dim modelUpdateFlag As Boolean = False
-
+        Dim cell_itemsHT As Hashtable
+        Dim dependents_cells As Excel.Range = Nothing
         If GeneralSubmissionController.isUpdating = False AndAlso disableWSChange = False Then
+
             For Each cell As Excel.Range In Target.Cells
 
-                Dim intersect = GlobalVariables.apps.Intersect(cell, DataModificationsTracker.DataSetRegion)
+                Dim intersect = GlobalVariables.APPS.Intersect(cell, DataModificationsTracker.dataSetRegion)
                 If Not intersect Is Nothing Then
 
-                    entityItem = DataSet.CellsAddressItemsDictionary(cell.Address)(ModelDataSet.ENTITY_ITEM)
-                    Dim accountItem As String = DataSet.CellsAddressItemsDictionary(cell.Address)(ModelDataSet.ACCOUNT_ITEM)
-                    Dim periodItem As String = DataSet.CellsAddressItemsDictionary(cell.Address)(ModelDataSet.PERIOD_ITEM)
-
+                    cell_itemsHT = getAxisFromCell(cell)
                     If IsNumeric(cell.Value) Then
-                        If AcquisitionModel.CheckIfBSCalculatedItem(accountItem, periodItem) = False Then
+                        If AcquisitionModel.CheckIfBSCalculatedItem(cell_itemsHT(ModelDataSet.ACCOUNT_ITEM), cell_itemsHT(ModelDataSet.PERIOD_ITEM)) = False Then
 
+                            ' Cell modification registration
                             modelUpdateFlag = True
-                            GeneralSubmissionController.UpdateDGVFromExcelUpdate(entityItem, accountItem, periodItem, cell.Value2, cell.Address)
+                            GeneralSubmissionController.UpdateModelFromExcelUpdate(cell_itemsHT(ModelDataSet.ENTITY_ITEM), _
+                                                                                   cell_itemsHT(ModelDataSet.ACCOUNT_ITEM), _
+                                                                                   cell_itemsHT(ModelDataSet.PERIOD_ITEM), _
+                                                                                   cell.Value2, _
+                                                                                   cell.Address)
+
+                            ' Register modification in dependant cells
+                            On Error Resume Next
+                            dependents_cells = cell.Dependents
+                            If Not dependents_cells Is Nothing Then
+                                For Each dependant_cell As Excel.Range In dependents_cells
+                                    intersect = GlobalVariables.APPS.Intersect(dependant_cell, DataModificationsTracker.dataSetRegion)
+                                    If Not intersect Is Nothing Then
+                                        Dim dependant_cell_itemsHT As Hashtable = getAxisFromCell(dependant_cell)
+                                        GeneralSubmissionController.UpdateModelFromExcelUpdate(dependant_cell_itemsHT(ModelDataSet.ENTITY_ITEM), _
+                                                                                              dependant_cell_itemsHT(ModelDataSet.ACCOUNT_ITEM), _
+                                                                                              dependant_cell_itemsHT(ModelDataSet.PERIOD_ITEM), _
+                                                                                              dependant_cell.Value2, _
+                                                                                              dependant_cell.Address)
+                                    End If
+                                Next
+                            End If
                             If GeneralSubmissionController.autoCommitFlag = True Then GeneralSubmissionController.Submit()
 
                         End If
                     Else
+                        ' Utile ?
                         disableWSChange = True
-                        cell.Value = DataSet.DataSetDictionary(entityItem)(accountItem)(periodItem)
+                        cell.Value = DataSet.dataSetDictionary(cell_itemsHT(ModelDataSet.ENTITY_ITEM))(cell_itemsHT(ModelDataSet.ACCOUNT_ITEM))(cell_itemsHT(ModelDataSet.PERIOD_ITEM))
                         disableWSChange = False
                     End If
                 Else
                     On Error Resume Next
-                    Dim intersectOutput = GlobalVariables.apps.Intersect(cell, DataModificationsTracker.outputsRegion)
+                    Dim intersectOutput = GlobalVariables.APPS.Intersect(cell, DataModificationsTracker.outputsRegion)
                     If Not intersectOutput Is Nothing Then
                         disableWSChange = True
                         cell.Value = DataSet.OutputCellsAddressValuesDictionary(cell.Address)
@@ -165,7 +188,7 @@ Friend Class SubmissionWSController
                     End If
                 End If
             Next
-            If modelUpdateFlag = True Then GeneralSubmissionController.UpdateCalculatedItems(entityItem)
+            If modelUpdateFlag = True Then GeneralSubmissionController.UpdateCalculatedItems(cell_itemsHT(ModelDataSet.ENTITY_ITEM))
         End If
 
     End Sub
@@ -196,7 +219,17 @@ Friend Class SubmissionWSController
 
 #Region "Utilities"
 
-    Public Shared Function GetDictionaryKey(ByRef dic As Dictionary(Of String, String), ByRef value As String) As String
+    Private Function getAxisFromCell(ByRef cell As Excel.Range) As Hashtable
+
+        Dim ht As New Hashtable
+        ht.Add(ModelDataSet.ENTITY_ITEM, DataSet.CellsAddressItemsDictionary(cell.Address)(ModelDataSet.ENTITY_ITEM))
+        ht.Add(ModelDataSet.ACCOUNT_ITEM, DataSet.CellsAddressItemsDictionary(cell.Address)(ModelDataSet.ACCOUNT_ITEM))
+        ht.Add(ModelDataSet.PERIOD_ITEM, DataSet.CellsAddressItemsDictionary(cell.Address)(ModelDataSet.PERIOD_ITEM))
+        Return ht
+
+    End Function
+
+    Public Shared Function GetDictionaryKeyFromValue(ByRef dic As Dictionary(Of String, String), ByRef value As String) As String
 
         For Each key As String In dic.Keys
             If dic(key) = value Then Return key

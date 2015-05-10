@@ -271,13 +271,13 @@ Friend Class CDataModificationsTracking
     Friend Function GetExcelCell(ByRef entity As String, ByRef account As String, ByRef period As String) As Excel.Range
 
         Dim entityAddress, accountAddress, periodAddress As String
-        If DATASET.EntitiesAddressValuesDictionary.ContainsValue(entity) Then entityAddress = SubmissionWSController.GetDictionaryKey(DATASET.EntitiesAddressValuesDictionary, entity)
+        If DATASET.EntitiesAddressValuesDictionary.ContainsValue(entity) Then entityAddress = SubmissionWSController.GetDictionaryKeyFromValue(DATASET.EntitiesAddressValuesDictionary, entity)
         If DATASET.AccountsAddressValuesDictionary.ContainsValue(account) Then
-            accountAddress = SubmissionWSController.GetDictionaryKey(DATASET.AccountsAddressValuesDictionary, account)
+            accountAddress = SubmissionWSController.GetDictionaryKeyFromValue(DATASET.AccountsAddressValuesDictionary, account)
         ElseIf DATASET.OutputsAccountsAddressvaluesDictionary.ContainsValue(account) Then
-            accountAddress = SubmissionWSController.GetDictionaryKey(DATASET.OutputsAccountsAddressvaluesDictionary, account)
+            accountAddress = SubmissionWSController.GetDictionaryKeyFromValue(DATASET.OutputsAccountsAddressvaluesDictionary, account)
         End If
-        If DATASET.periodsAddressValuesDictionary.ContainsValue(period) Then periodAddress = SubmissionWSController.GetDictionaryKey(DATASET.periodsAddressValuesDictionary, period)
+        If DATASET.periodsAddressValuesDictionary.ContainsValue(period) Then periodAddress = SubmissionWSController.GetDictionaryKeyFromValue(DATASET.periodsAddressValuesDictionary, period)
 
         If Not entityAddress Is Nothing AndAlso Not accountAddress Is Nothing AndAlso Not periodAddress Is Nothing Then
             Return DATASET.GetCellFromItem(entityAddress, accountAddress, periodAddress)
