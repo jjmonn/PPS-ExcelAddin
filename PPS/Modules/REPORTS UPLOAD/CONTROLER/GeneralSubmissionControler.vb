@@ -32,7 +32,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 01/05/2015
+' Last modified: 09/05/2015
 
 
 Imports Microsoft.Office.Interop
@@ -103,7 +103,7 @@ Friend Class GeneralSubmissionControler
     End Sub
 
     ' Snapshot WS and initializes ACQMODEL accordingly
-    Friend Sub LaunchDatasetSnapshotAndAssociateModel()
+    Friend Sub LaunchDatasetSnapshotAndAssociateModel(ByRef update_inputs As Boolean)
 
         If Not Dataset.GlobalScreenShot Is Nothing Then
             Dataset.SnapshotWS()
@@ -111,7 +111,7 @@ Friend Class GeneralSubmissionControler
             ' Dataset.RefreshAll -> possible evolution (take off refreshdatabatch in addin and set excel formatting here)
             DataModificationsTracker.InitializeDataSetRegion()
             DataModificationsTracker.InitializeOutputsRegion()
-       
+
             If Dataset.GlobalOrientationFlag <> ORIENTATION_ERROR_FLAG Then
                 snapshotSuccess = True
                 FillInEntityAndCurrencyTB(Dataset.EntitiesAddressValuesDictionary.ElementAt(0).Value)
@@ -120,7 +120,7 @@ Friend Class GeneralSubmissionControler
                 UpdateAfterAnalysisAxisChanged(GlobalVariables.ClientsIDDropDown.SelectedItemId, _
                                                GlobalVariables.ProductsIDDropDown.SelectedItemId, _
                                                GlobalVariables.AdjustmentIDDropDown.SelectedItemId, _
-                                               True)
+                                               update_inputs)
 
                 SubmissionWSController.AssociateWS(associatedWorksheet)
             Else
@@ -270,9 +270,9 @@ Friend Class GeneralSubmissionControler
 
         If update_inputs_from_DB = True Then
             updateInputs(ADDIN.CurrentEntityTB.Text)
-            Dataset.getDataSet()
-            RefreshDataSetAndSetUpDisplay()
         End If
+        Dataset.getDataSet()
+        RefreshDataSetAndSetUpDisplay()
 
         UpdateCalculatedItems(ADDIN.CurrentEntityTB.Text)
         isUpdating = False
