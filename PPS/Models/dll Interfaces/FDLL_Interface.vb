@@ -43,11 +43,11 @@ Friend Class FDLL_Interface
                                         ByVal nb_periods As Integer, _
                                         <MarshalAs(UnmanagedType.SafeArray, SafeArraySubType:=VarEnum.VT_BSTR)> ByRef inputs_accounts() As String, _
                                         <MarshalAs(UnmanagedType.SafeArray, SafeArraySubType:=VarEnum.VT_INT)> ByRef inputs_periods() As Integer, _
-                                        <MarshalAs(UnmanagedType.SafeArray, SafeArraySubType:=VarEnum.VT_R8)> ByRef inputs_values() As Double, _
+                                        <MarshalAs(UnmanagedType.SafeArray, SafeArraySubType:=VarEnum.VT_INT)> ByRef inputs_values() As Int32, _
                                          ByVal nb_inputs As Integer, _
                                         <MarshalAs(UnmanagedType.SafeArray, SafeArraySubType:=VarEnum.VT_BSTR)> ByRef constraints_accounts() As String, _
                                         <MarshalAs(UnmanagedType.SafeArray, SafeArraySubType:=VarEnum.VT_INT)> ByRef constraints_periods() As Integer, _
-                                        <MarshalAs(UnmanagedType.SafeArray, SafeArraySubType:=VarEnum.VT_R8)> ByRef constraints_targets() As Double, _
+                                        <MarshalAs(UnmanagedType.SafeArray, SafeArraySubType:=VarEnum.VT_INT)> ByRef constraints_targets() As Int32, _
                                         ByVal nb_constraints As Integer, _
                                         ByVal dbt_mvt_locked As Integer) As Integer
     End Function
@@ -66,7 +66,7 @@ Friend Class FDLL_Interface
 
 #Region "Initialize"
 
-    Protected Friend Sub New()
+    Friend Sub New()
 
         objptr = CreateDll3()
         IsModelAlive = True
@@ -78,14 +78,14 @@ Friend Class FDLL_Interface
 
 #Region "Interface"
 
-    Protected Friend Function Compute(ByVal inputs_list As String(), _
-                                    ByVal inputs_periods As Int32(), _
-                                    ByVal inputs_values As Double(), _
-                                    ByVal constraints_list As String(), _
-                                    ByVal constraints_periods As Int32(), _
-                                    ByVal constraints_values As Double(), _
-                                    ByVal nb_periods As Int32, _
-                                    ByRef debt_mvt_locked As Int32) As Int32
+    Friend Function Compute(ByVal inputs_list As String(), _
+                            ByVal inputs_periods As Int32(), _
+                            ByVal inputs_values As Int32(), _
+                            ByVal constraints_list As String(), _
+                            ByVal constraints_periods As Int32(), _
+                            ByVal constraints_values As Int32(), _
+                            ByVal nb_periods As Int32, _
+                            ByRef debt_mvt_locked As Int32) As Int32
 
         Dim nb_inputs = inputs_list.Length
         Dim nb_constraints = constraints_list.Length
@@ -100,11 +100,14 @@ Friend Class FDLL_Interface
 
     End Function
 
-    Protected Friend Function GetOutputMatrix(ByRef accounts_id_list) As Dictionary(Of String, Double())
+    Friend Function GetOutputMatrix(ByRef accounts_id_list) As Dictionary(Of String, Double())
 
         Dim tmpDict As New Dictionary(Of String, Double())
         For Each account_id In accounts_id_list
             Dim tmpDataArray() As Double
+            ' Gérer la possibilité d'un plantage au niveau c++ !!
+            ' ne doit pas faire planter tout le programme si un account ne pas pas être retourné
+            ' -> si passage en réseau le tout sera retourné en array donc ok
             ReturnAccountArrayFDll(tmpDataArray, objptr, account_id)
             tmpDict.Add(account_id, tmpDataArray)
         Next
@@ -112,7 +115,7 @@ Friend Class FDLL_Interface
 
     End Function
 
-    Protected Friend Function GetAccountArray(ByRef account_id As String) As Double()
+    Friend Function GetAccountArray(ByRef account_id As String) As Double()
 
         Dim tmpDataArray() As Double
         ReturnAccountArrayFDll(tmpDataArray, objptr, account_id)
@@ -120,7 +123,7 @@ Friend Class FDLL_Interface
 
     End Function
 
-    Protected Friend Sub DestroyDll()
+    Friend Sub DestroyDll()
 
         If IsModelAlive = True Then
             DestroyDll3(objptr)

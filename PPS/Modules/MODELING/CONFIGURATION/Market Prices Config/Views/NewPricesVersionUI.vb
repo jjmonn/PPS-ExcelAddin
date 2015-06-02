@@ -41,8 +41,10 @@ Friend Class NewMarketPricesVersionUI
 
     Private Sub ValidateBT_Click(sender As Object, e As EventArgs) Handles ValidateBT.Click
 
+        ' not ok -> check must go in controller or model
+        ' + controls must include name unicity ->
         Dim name As String = NameTB.Text
-        If Len(name) < MARKET_INDEXES_VERSIONS_TOKEN_SIZE Then
+        If Len(name) < NAMES_MAX_LENGTH Then
             Controller.CreateVersion(name, 0, _
                                      StartPeriodNUD.Value, _
                                      NBPeriodsNUD.Value, _

@@ -4,12 +4,12 @@
 ' 
 ' To do:
 '       - Adaptation of the process to monthly configurations
-'       - or at least prevent from opening monthly configured version ! 
-'
+'       -> or at least prevent from opening monthly configured version ! 
+'       -> or compute yearly aggrgations in input !!
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 16/02/2015
+' Last modified: 27/05/2015
 
 
 Imports System.Windows.Forms
@@ -18,33 +18,33 @@ Imports System.Collections.Generic
 Imports System.Collections
 
 
-Friend Class FModellingInputsController
+Friend Class FModelingInputsController
 
 
 #Region "Instance Variables"
 
     ' Object 
-    Private SimulationsController As FModellingSimulationsControler
-    Private View As FModelingUI
+    Private MainView As FModelingUI2
+    Friend View As FModelingInputsControl
     Private Model As GenericAggregationDLL3Computing
     Private FModellingAccount As FModellingAccount
     Private VersionsTV As New TreeView
     Private EntitiesTV As New TreeView
-    Protected Friend InputsDGV As New vDataGridView
-    Private MappingDGV As New vDataGridView
+    Friend InputsDGV As New vDataGridView
+    Friend MappingDGV As New vDataGridView
 
     ' Variables
     Private inputs_list As List(Of String)
-    Protected Friend accounts_id_names_dic As Hashtable
-    Protected Friend accounts_names_id_dic As Hashtable
-    Protected Friend inputs_mapping As Dictionary(Of String, String)
+    Friend accounts_id_names_dic As Hashtable
+    Friend accounts_names_id_dic As Hashtable
+    Friend inputs_mapping As Dictionary(Of String, String)
     Private accounts_id_list As List(Of String)
-    Protected Friend periods_list As List(Of Int32)
+    Friend periods_list As List(Of Int32)
     Private current_conso_data_dic As New Dictionary(Of String, Double())
     Private versions_id_list As List(Of String)
 
     ' Display
-    Protected Friend CBEditor As New ComboBoxEditor
+    Friend CBEditor As New ComboBoxEditor
     Private Const CB_WIDTH As Double = 20
     Private Const CB_NB_ITEMS_DISPLAYED As Int32 = 20
     Private DGV_CELLS_FONT_SIZE = 8
@@ -56,16 +56,19 @@ Friend Class FModellingInputsController
 
 #Region "Initialize"
 
-    Protected Friend Sub New(ByRef input_simulations_controller As FModellingSimulationsControler, _
-                             ByRef input_FModellingAccount As FModellingAccount)
+    Protected Friend Sub New(ByRef MainView As FModelingUI2, _
+                             ByRef FModellingAccount As FModellingAccount)
 
-        SimulationsController = input_simulations_controller
-        FModellingAccount = input_FModellingAccount
+        Me.MainView = MainView
+        Me.FModellingAccount = FModellingAccount
+
+        View = New FModelingInputsControl(Me)
         Model = New GenericAggregationDLL3Computing(GlobalVariables.GlobalDBDownloader)
+
         Version.LoadVersionsTree(VersionsTV)
         TreeViewsUtilities.CheckAllNodes(EntitiesTV)
         Entity.LoadEntitiesTree(EntitiesTV)
-        inputs_list = FModellingAccountsMapping.GetFModellingAccountsList(FINANCIAL_MODELLING_ID_VARIABLE, FINANCIAL_MODELLING_INPUT_TYPE)
+        inputs_list = FModelingAccountsMapping.GetFModellingAccountsList(FINANCIAL_MODELLING_ID_VARIABLE, FINANCIAL_MODELLING_INPUT_TYPE)
         accounts_id_names_dic = AccountsMapping.GetAccountsDictionary(ACCOUNT_ID_VARIABLE, ACCOUNT_NAME_VARIABLE)
         accounts_names_id_dic = AccountsMapping.GetAccountsDictionary(ACCOUNT_NAME_VARIABLE, ACCOUNT_ID_VARIABLE)
         accounts_id_list = AccountsMapping.GetAccountsKeysList(AccountsMapping.LOOKUP_ALL)
@@ -120,13 +123,8 @@ Friend Class FModellingInputsController
 
     End Sub
 
-    Protected Friend Sub InitializeView(ByRef input_view As FModelingUI)
+    Protected Friend Sub InitializeView()
 
-        View = input_view
-        EntitiesTV.ImageList = View.EntitiesTVImageList
-        VersionsTV.ImageList = View.VersionsTVIcons
-        EntitiesTV.CollapseAll()
-        VersionsTV.CollapseAll()
         View.AddInputsTabElement(EntitiesTV, VersionsTV)
 
     End Sub
@@ -137,19 +135,19 @@ Friend Class FModellingInputsController
 #Region "Interface"
 
     ' So far only "Years" period config accepted
-    Protected Friend Sub ComputeEntity(ByRef version_id As String, _
-                                       ByRef entity_node As TreeNode)
+    Friend Sub ComputeEntity(ByRef version_node As TreeNode, _
+                             ByRef entity_node As TreeNode)
 
         Dim Versions As New Version
-        Dim time_configuration As String = Versions.ReadVersion(version_id, VERSIONS_TIME_CONFIG_VARIABLE)
+        Dim time_configuration As String = Versions.ReadVersion(version_node.Name, VERSIONS_TIME_CONFIG_VARIABLE)
         Model.init_computer_complete_mode(entity_node)
         InitializePBar()
-        periods_list = Versions.GetPeriodList(version_id)
-        Dim nb_periods As Int32 = Versions.ReadVersion(version_id, VERSIONS_NB_PERIODS_VAR)
-        Dim start_period As Int32 = Versions.ReadVersion(version_id, VERSIONS_START_PERIOD_VAR)
-        Dim rates_version As String = Versions.ReadVersion(version_id, VERSIONS_RATES_VERSION_ID_VAR)
+        periods_list = Versions.GetPeriodList(version_node.Name)
+        Dim nb_periods As Int32 = Versions.ReadVersion(version_node.Name, VERSIONS_NB_PERIODS_VAR)
+        Dim start_period As Int32 = Versions.ReadVersion(version_node.Name, VERSIONS_START_PERIOD_VAR)
+        Dim rates_version As String = Versions.ReadVersion(version_node.Name, VERSIONS_RATES_VERSION_ID_VAR)
         Versions.Close()
-        Model.compute_selection_complete(version_id, _
+        Model.compute_selection_complete(version_node.Name, _
                                          time_configuration, _
                                          rates_version, _
                                          periods_list, _
@@ -162,26 +160,23 @@ Friend Class FModellingInputsController
         InitInputsDGVColumns()
         FillInInputsDGV()
         View.PBar.EndProgress()
-        SimulationsController.SetPeriodList(periods_list)
-        SimulationsController.version_id = version_id
+        MainView.setVersionAndPeriods(periods_list, version_node.Name, version_node.Text)
 
     End Sub
 
-    Protected Friend Sub DisplayInputsMapping()
-
-        Dim genericUI As New GenericView("Inputs Mapping")
-        genericUI.Controls.Add(MappingDGV)
-        MappingDGV.Dock = DockStyle.Fill
-        genericUI.Show()
-
-    End Sub
-
-    Protected Friend Sub DisplayInputsDGV()
+    Friend Sub DisplayInputsDGV()
 
         Dim genericUI As New GenericView("Consolidated Inputs")
         genericUI.Controls.Add(InputsDGV)
         InputsDGV.Dock = DockStyle.Fill
         genericUI.Show()
+
+    End Sub
+
+    Friend Sub sendInputsToSimulationController()
+
+        MainView.sendInputsToSimulationController(InputsDGV)
+        MainView.displaySimulation()
 
     End Sub
 

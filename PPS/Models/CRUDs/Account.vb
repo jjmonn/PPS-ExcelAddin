@@ -147,7 +147,7 @@ Friend Class Account
                     srv.rst.MoveNext()
                 Loop
             End If
-
+            srv.rst.Close()
         End If
 
     End Sub

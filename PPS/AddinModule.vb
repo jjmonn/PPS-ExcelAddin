@@ -127,7 +127,7 @@ Public Class AddinModule
     Friend WithEvents RefreshWorkbookBT As AddinExpress.MSO.ADXRibbonButton
     Friend WithEvents AdxRibbonMenuSeparator1 As AddinExpress.MSO.ADXRibbonMenuSeparator
     Friend WithEvents AutoRefreshBT As AddinExpress.MSO.ADXRibbonCheckBox
-    Friend WithEvents AdxRibbonButton5 As AddinExpress.MSO.ADXRibbonButton
+    Friend WithEvents FModelingBT As AddinExpress.MSO.ADXRibbonButton
     Friend WithEvents AdxRibbonMenuSeparator2 As AddinExpress.MSO.ADXRibbonMenuSeparator
 
 
@@ -175,7 +175,7 @@ Public Class AddinModule
         Me.BreakLinksBT = New AddinExpress.MSO.ADXRibbonButton(Me.components)
         Me.AdvancedModelingBT = New AddinExpress.MSO.ADXRibbonSplitButton(Me.components)
         Me.AdxRibbonMenu2 = New AddinExpress.MSO.ADXRibbonMenu(Me.components)
-        Me.AdxRibbonButton5 = New AddinExpress.MSO.ADXRibbonButton(Me.components)
+        Me.FModelingBT = New AddinExpress.MSO.ADXRibbonButton(Me.components)
         Me.NewIcosSmall = New System.Windows.Forms.ImageList(Me.components)
         Me.AlternativeScenariosBT = New AddinExpress.MSO.ADXRibbonButton(Me.components)
         Me.AdxRibbonMenuSeparator2 = New AddinExpress.MSO.ADXRibbonMenuSeparator(Me.components)
@@ -238,7 +238,7 @@ Public Class AddinModule
         '
         'MaintTab
         '
-        Me.MaintTab.Caption = "PPS®"
+        Me.MaintTab.Caption = "PPS Bi®"
         Me.MaintTab.Controls.Add(Me.AdxRibbonGroup6)
         Me.MaintTab.Controls.Add(Me.AdxRibbonGroup1)
         Me.MaintTab.Controls.Add(Me.AdxRibbonGroup2)
@@ -570,7 +570,7 @@ Public Class AddinModule
         'AdxRibbonMenu2
         '
         Me.AdxRibbonMenu2.Caption = "Menu1"
-        Me.AdxRibbonMenu2.Controls.Add(Me.AdxRibbonButton5)
+        Me.AdxRibbonMenu2.Controls.Add(Me.FModelingBT)
         Me.AdxRibbonMenu2.Controls.Add(Me.AlternativeScenariosBT)
         Me.AdxRibbonMenu2.Controls.Add(Me.AdxRibbonMenuSeparator2)
         Me.AdxRibbonMenu2.Controls.Add(Me.ModellingConfigBT)
@@ -580,15 +580,15 @@ Public Class AddinModule
         Me.AdxRibbonMenu2.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
         Me.AdxRibbonMenu2.Size = AddinExpress.MSO.ADXRibbonXControlSize.Large
         '
-        'AdxRibbonButton5
+        'FModelingBT
         '
-        Me.AdxRibbonButton5.Caption = "Financial Modeling"
-        Me.AdxRibbonButton5.Id = "adxRibbonButton_543572754ac3483d8751176b3133ad1d"
-        Me.AdxRibbonButton5.Image = 0
-        Me.AdxRibbonButton5.ImageList = Me.NewIcosSmall
-        Me.AdxRibbonButton5.ImageTransparentColor = System.Drawing.Color.Transparent
-        Me.AdxRibbonButton5.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
-        Me.AdxRibbonButton5.Size = AddinExpress.MSO.ADXRibbonXControlSize.Large
+        Me.FModelingBT.Caption = "Financial Modeling"
+        Me.FModelingBT.Id = "adxRibbonButton_543572754ac3483d8751176b3133ad1d"
+        Me.FModelingBT.Image = 0
+        Me.FModelingBT.ImageList = Me.NewIcosSmall
+        Me.FModelingBT.ImageTransparentColor = System.Drawing.Color.Transparent
+        Me.FModelingBT.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
+        Me.FModelingBT.Size = AddinExpress.MSO.ADXRibbonXControlSize.Large
         '
         'NewIcosSmall
         '
@@ -769,7 +769,7 @@ Public Class AddinModule
         '
         'SubmissionModeRibbon
         '
-        Me.SubmissionModeRibbon.Caption = "Data Submission"
+        Me.SubmissionModeRibbon.Caption = "PPS Bi® Submission"
         Me.SubmissionModeRibbon.Controls.Add(Me.SubmissionnGroup)
         Me.SubmissionModeRibbon.Controls.Add(Me.StateSelectionGroup)
         Me.SubmissionModeRibbon.Controls.Add(Me.EditSelectionGroup)
@@ -1572,13 +1572,14 @@ Public Class AddinModule
 
 #Region "Modelling"
 
-    Private Sub AdvancedModelingBT_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) Handles AdvancedModelingBT.OnClick
+    Private Sub AdvancedModelingBT_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) Handles FModelingBT.OnClick
 
         If ConnectioN Is Nothing Then
             Dim CONNUI As New ConnectionUI(Me)
             CONNUI.Show()
         Else
-            Dim FModellingController As New FModellingSimulationsControler
+            Dim FModellingui2 As New FModelingUI2
+            FModellingui2.Show()
         End If
 
     End Sub

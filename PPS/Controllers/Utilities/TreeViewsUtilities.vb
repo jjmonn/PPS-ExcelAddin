@@ -16,11 +16,11 @@ Friend Class TreeViewsUtilities
 
 #Region "Add nodes to Treeview"
 
-    Protected Friend Shared Function AddNode(ByRef TV As TreeView, _
-                                   ByRef token_size As Int32, _
-                                   Optional ByRef nodeText As String = "", _
-                                   Optional ByRef imageIndex As Int32 = 0,
-                                   Optional ByRef selectedImageIndex As Int32 = 0) As String
+    Friend Shared Function AddNode(ByRef TV As TreeView, _
+                                  ByRef token_size As Int32, _
+                                  Optional ByRef nodeText As String = "", _
+                                  Optional ByRef imageIndex As Int32 = 0,
+                                  Optional ByRef selectedImageIndex As Int32 = 0) As String
 
         Dim sKey As String = GetNewNodeKey(TV, token_size)
 
@@ -47,11 +47,11 @@ Friend Class TreeViewsUtilities
 
     End Function
 
-    Protected Friend Shared Function AddChildNode(ByRef TV As TreeView, _
-                                        ByRef token_size As Int32, _
-                                        Optional ByRef str As String = "", _
-                                        Optional ByRef imageIndex As Int32 = 0, _
-                                        Optional ByRef selectedImageIndex As Int32 = 0) As String
+    Friend Shared Function AddChildNode(ByRef TV As TreeView, _
+                                       ByRef token_size As Int32, _
+                                       Optional ByRef str As String = "", _
+                                       Optional ByRef imageIndex As Int32 = 0, _
+                                       Optional ByRef selectedImageIndex As Int32 = 0) As String
 
         Dim sKey As String = GetNewNodeKey(TV, token_size)
 
@@ -72,7 +72,7 @@ Friend Class TreeViewsUtilities
 
     End Function
 
-    Protected Friend Shared Function GetNewNodeKey(ByRef TV As TreeView, ByRef token_size As Int32) As String
+    Friend Shared Function GetNewNodeKey(ByRef TV As TreeView, ByRef token_size As Int32) As String
 
         Dim key As String
         key = IssueNewToken(token_size)
@@ -83,7 +83,7 @@ Friend Class TreeViewsUtilities
 
     End Function
 
-    Protected Friend Shared Function IssueNewToken(ByRef NbCharacters As Int32) As String
+    Friend Shared Function IssueNewToken(ByRef NbCharacters As Int32) As String
 
         Dim token As String = ""
 
@@ -147,8 +147,8 @@ Friend Class TreeViewsUtilities
 
 #Region "Treeviews Checked Nodes List"
 
-    Protected Friend Shared Sub FilterSelectedNodes(ByRef entity_node As TreeNode, _
-                                                    ByRef entities_list As List(Of String))
+    Friend Shared Sub FilterSelectedNodes(ByRef entity_node As TreeNode, _
+                                                   ByRef entities_list As List(Of String))
 
         Dim tmp_array(entities_list.Count - 1) As String
         entities_list.CopyTo(tmp_array)
@@ -158,7 +158,7 @@ Friend Class TreeViewsUtilities
 
     End Sub
 
-    Protected Friend Shared Function GetCheckedNodeCollection(inputTV As TreeView) As List(Of TreeNode)
+    Friend Shared Function GetCheckedNodeCollection(inputTV As TreeView) As List(Of TreeNode)
 
         Dim tmpList As New List(Of TreeNode)
         For Each node As TreeNode In inputTV.Nodes
@@ -168,7 +168,7 @@ Friend Class TreeViewsUtilities
 
     End Function
 
-    Protected Friend Shared Sub GetSelectedNodes(ByRef inputNode As TreeNode, ByRef tmpList As List(Of TreeNode))
+    Friend Shared Sub GetSelectedNodes(ByRef inputNode As TreeNode, ByRef tmpList As List(Of TreeNode))
 
         If inputNode.Checked = True Then tmpList.Add(inputNode)
         For Each childNode As TreeNode In inputNode.Nodes
@@ -177,7 +177,7 @@ Friend Class TreeViewsUtilities
 
     End Sub
 
-    Protected Friend Shared Function GetCheckedNodesID(ByRef TV As TreeView) As List(Of String)
+    Friend Shared Function GetCheckedNodesID(ByRef TV As TreeView) As List(Of String)
 
         Dim tmpList As New List(Of String)
         For Each node As TreeNode In TV.Nodes
@@ -188,7 +188,7 @@ Friend Class TreeViewsUtilities
 
     End Function
 
-    Protected Friend Shared Sub AddCheckedNodesToList(ByRef node As TreeNode, ByRef list As List(Of String))
+    Friend Shared Sub AddCheckedNodesToList(ByRef node As TreeNode, ByRef list As List(Of String))
 
         If node.Checked = True Then list.Add(node.Name)
         For Each child_node As TreeNode In node.Nodes
@@ -197,7 +197,7 @@ Friend Class TreeViewsUtilities
 
     End Sub
 
-    Protected Friend Shared Function GetCheckedNodesID(ByRef node As TreeNode) As List(Of String)
+    Friend Shared Function GetCheckedNodesID(ByRef node As TreeNode) As List(Of String)
 
         Dim tmpList As New List(Of String)
         If node Is Nothing Then Return tmpList
@@ -213,7 +213,7 @@ Friend Class TreeViewsUtilities
 
 #Region "Nodes Lists"
 
-    Protected Friend Shared Function GetNodeAllChildrenCount(inputNode As TreeNode) As Integer
+    Friend Shared Function GetNodeAllChildrenCount(inputNode As TreeNode) As Integer
 
         Dim nbChildren As Integer = 0
         If inputNode.Nodes.Count > 0 Then
@@ -228,7 +228,7 @@ Friend Class TreeViewsUtilities
 
     End Function
 
-    Protected Friend Shared Function GetNodesKeysList(ByRef TV As TreeView) As List(Of String)
+    Friend Shared Function GetNodesKeysList(ByRef TV As TreeView) As List(Of String)
 
         Dim tmpList As New List(Of String)
         For Each node In TV.Nodes
@@ -238,7 +238,7 @@ Friend Class TreeViewsUtilities
 
     End Function
 
-    Protected Friend Shared Function GetNodesTextsList(ByRef TV As TreeView) As List(Of String)
+    Friend Shared Function GetNodesTextsList(ByRef TV As TreeView) As List(Of String)
 
         Dim tmpList As New List(Of String)
         For Each node In TV.Nodes
@@ -248,7 +248,7 @@ Friend Class TreeViewsUtilities
 
     End Function
 
-    Protected Friend Shared Function GetNodesKeysList(ByRef node As TreeNode) As List(Of String)
+    Friend Shared Function GetNodesKeysList(ByRef node As TreeNode) As List(Of String)
 
         Dim tmpList As New List(Of String)
         AddChildrenKeysToList(node, tmpList)
@@ -256,7 +256,7 @@ Friend Class TreeViewsUtilities
 
     End Function
 
-    Protected Friend Shared Function GetNodesTextsList(ByRef node As TreeNode) As List(Of String)
+    Friend Shared Function GetNodesTextsList(ByRef node As TreeNode) As List(Of String)
 
         Dim tmpList As New List(Of String)
         AddChildrenTextsToList(node, tmpList)
@@ -264,7 +264,7 @@ Friend Class TreeViewsUtilities
 
     End Function
 
-    Protected Friend Shared Function GetNodesList(ByRef node As TreeNode) As List(Of TreeNode)
+    Friend Shared Function GetNodesList(ByRef node As TreeNode) As List(Of TreeNode)
 
         Dim tmp_list As New List(Of TreeNode)
         AddChildrenNodesToList(node, tmp_list)
@@ -273,7 +273,7 @@ Friend Class TreeViewsUtilities
 
     End Function
 
-    Protected Friend Shared Sub AddChildrenKeysToList(ByRef node As TreeNode, tmpList As List(Of String))
+    Friend Shared Sub AddChildrenKeysToList(ByRef node As TreeNode, tmpList As List(Of String))
 
         tmpList.Add(node.Name)
         For Each subNode In node.Nodes
@@ -282,7 +282,7 @@ Friend Class TreeViewsUtilities
 
     End Sub
 
-    Protected Friend Shared Sub AddChildrenNodesToList(ByRef node As TreeNode, tmpList As List(Of TreeNode))
+    Friend Shared Sub AddChildrenNodesToList(ByRef node As TreeNode, tmpList As List(Of TreeNode))
 
         tmpList.Add(node)
         For Each subNode In node.Nodes
@@ -291,7 +291,7 @@ Friend Class TreeViewsUtilities
 
     End Sub
 
-    Protected Friend Shared Sub AddChildrenTextsToList(ByRef node As TreeNode, tmpList As List(Of String))
+    Friend Shared Sub AddChildrenTextsToList(ByRef node As TreeNode, tmpList As List(Of String))
 
         tmpList.Add(node.Text)
         For Each subNode In node.Nodes
@@ -300,8 +300,8 @@ Friend Class TreeViewsUtilities
 
     End Sub
 
-    Protected Friend Shared Function GetNodeChildrenIDsStringArray(ByRef input_node As TreeNode, _
-                                                                   Optional ByRef filter As Boolean = False)
+    Friend Shared Function GetNodeChildrenIDsStringArray(ByRef input_node As TreeNode, _
+                                                                  Optional ByRef filter As Boolean = False)
 
         Dim children_array(input_node.Nodes.Count - 1) As String
         Dim i As Int32 = 0
@@ -322,7 +322,8 @@ Friend Class TreeViewsUtilities
 
     End Function
 
-    Protected Friend Shared Function GetNoChildrenNodesList(ByRef allIDsList As List(Of String), ByRef tv As TreeView) As List(Of String)
+    Friend Shared Function GetNoChildrenNodesList(ByRef allIDsList As List(Of String),
+                                                  ByRef tv As TreeView) As List(Of String)
 
         Dim tmpList As New List(Of String)
         For Each id In allIDsList
@@ -333,7 +334,20 @@ Friend Class TreeViewsUtilities
 
     End Function
 
-    Protected Friend Shared Function GetChildrenIDList(ByRef node As TreeNode) As List(Of String)
+    Friend Shared Function getNoChildrenNodesList(ByRef node As TreeNode)
+
+        Dim tmpList As New List(Of String)
+        Dim allIdList As List(Of String) = GetNodesKeysList(node)
+        allIdList.Remove(node.Name)
+        For Each id In allIdList
+            Dim tmpNode As TreeNode = node.Nodes.Find(id, True)(0)
+            If tmpNode.Nodes.Count = 0 Then tmpList.Add(tmpNode.Name)
+        Next
+        Return tmpList
+
+    End Function
+
+    Friend Shared Function GetChildrenIDList(ByRef node As TreeNode) As List(Of String)
 
         Dim children_list As New List(Of String)
         For Each child In node.Nodes
@@ -343,7 +357,7 @@ Friend Class TreeViewsUtilities
 
     End Function
 
-    Protected Friend Shared Function GetUniqueList(ByRef input_list As List(Of String)) As List(Of String)
+    Friend Shared Function GetUniqueList(ByRef input_list As List(Of String)) As List(Of String)
 
         Dim tmp_list As New List(Of String)
         For Each item In input_list
@@ -358,7 +372,7 @@ Friend Class TreeViewsUtilities
 
 #Region "Utilities"
 
-    Protected Friend Shared Function ReturnRootNodeFromNode(ByRef inputNode As TreeNode) As TreeNode
+    Friend Shared Function ReturnRootNodeFromNode(ByRef inputNode As TreeNode) As TreeNode
 
         Dim currentNode As TreeNode = inputNode
         Do While Not currentNode.Parent Is Nothing
@@ -368,8 +382,8 @@ Friend Class TreeViewsUtilities
 
     End Function
 
-    Protected Friend Shared Function IsNameAlreadyInTree(ByRef TV As TreeView, _
-                                               ByRef str As String) As Boolean
+    Friend Shared Function IsNameAlreadyInTree(ByRef TV As TreeView, _
+                                              ByRef str As String) As Boolean
 
         For Each node As TreeNode In TV.Nodes
             If IsNameIncludedInHierarchy(node, str) Then Return True
@@ -378,8 +392,8 @@ Friend Class TreeViewsUtilities
 
     End Function
 
-    Protected Friend Shared Function IsNameIncludedInHierarchy(ByRef node As TreeNode, _
-                                                     ByRef str As String) As Boolean
+    Friend Shared Function IsNameIncludedInHierarchy(ByRef node As TreeNode, _
+                                                    ByRef str As String) As Boolean
 
         If node.Text = str Then
             Return True
@@ -392,8 +406,8 @@ Friend Class TreeViewsUtilities
 
     End Function
 
-    Protected Friend Shared Function GetNodePath(ByRef node As TreeNode, _
-                                                 Optional ByRef max_hierarchy_id As String = "") As List(Of Int32)
+    Friend Shared Function GetNodePath(ByRef node As TreeNode, _
+                                                Optional ByRef max_hierarchy_id As String = "") As List(Of Int32)
 
         Dim path_list As New List(Of Int32)
         While Not node.Parent Is Nothing And node.Name <> max_hierarchy_id
@@ -405,8 +419,8 @@ Friend Class TreeViewsUtilities
 
     End Function
 
-    Protected Friend Shared Function GetHighestHierarchyLevelFromList(ByRef ids_list As List(Of String), _
-                                                                      ByRef TV As TreeView) As String
+    Friend Shared Function GetHighestHierarchyLevelFromList(ByRef ids_list As List(Of String), _
+                                                                     ByRef TV As TreeView) As String
 
         Dim all_nodes_list As List(Of String) = GetNodesKeysList(TV)
         Dim highest_level_id As String = ""
@@ -523,7 +537,7 @@ Friend Class TreeViewsUtilities
 
 #Region "Position Management"
 
-    Protected Friend Shared Function GeneratePositionsDictionary(ByRef TV As TreeView) As Dictionary(Of String, Double)
+    Friend Shared Function GeneratePositionsDictionary(ByRef TV As TreeView) As Dictionary(Of String, Double)
 
         Dim positionsDictionary As New Dictionary(Of String, Double)
         Dim currentPosition As Int32 = 0
@@ -534,9 +548,9 @@ Friend Class TreeViewsUtilities
 
     End Function
 
-    Protected Friend Shared Sub AddNodeToPositionDictionary(ByRef inputNode As TreeNode, _
-                                                  ByRef currentPosition As Int32, _
-                                                  ByRef positionsDictionary As Dictionary(Of String, Double))
+    Friend Shared Sub AddNodeToPositionDictionary(ByRef inputNode As TreeNode, _
+                                                 ByRef currentPosition As Int32, _
+                                                 ByRef positionsDictionary As Dictionary(Of String, Double))
 
         positionsDictionary.Add(inputNode.Name, currentPosition)
         currentPosition = currentPosition + 1
@@ -550,7 +564,7 @@ Friend Class TreeViewsUtilities
 
 #Region "Move nodes up and down into hierarchy Procedure"
 
-    Protected Friend Shared Sub MoveNodeUp(ByRef inputNode As TreeNode)
+    Friend Shared Sub MoveNodeUp(ByRef inputNode As TreeNode)
 
         Try
             If Not (inputNode.PrevNode Is Nothing) Then
@@ -568,7 +582,7 @@ Friend Class TreeViewsUtilities
 
     End Sub
 
-    Protected Friend Shared Sub MoveNodeDown(ByRef inputNode As TreeNode)
+    Friend Shared Sub MoveNodeDown(ByRef inputNode As TreeNode)
 
         Try
             If Not (inputNode.NextNode Is Nothing) Then

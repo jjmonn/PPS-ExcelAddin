@@ -10,7 +10,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 18/02/2015
+' Last modified: 11/05/2015
 
 
 Imports System.Windows.Forms
@@ -41,14 +41,9 @@ Friend Class FModellingAccount
 
         SRV = New ModelServer
         Dim i As Int32 = 0
-        Dim q_result = SRV.openRst(CONFIG_DATABASE + "." + FINANCIAL_MODELLING_TABLE, ModelServer.DYNAMIC_CURSOR)
-        While q_result = False AndAlso i < 10
-            q_result = SRV.openRst(CONFIG_DATABASE + "." + FINANCIAL_MODELLING_TABLE, ModelServer.DYNAMIC_CURSOR)
-            i = i + 1
-        End While
+        object_is_alive = SRV.OpenRst(CONFIG_DATABASE + "." + FINANCIAL_MODELLING_TABLE, ModelServer.DYNAMIC_CURSOR)
         RST = SRV.rst
         RST.Sort = ITEMS_POSITIONS
-        object_is_alive = q_result
 
     End Sub
 
@@ -120,13 +115,45 @@ Friend Class FModellingAccount
 #End Region
 
 
+#Region "Utilities"
+
+    Friend Shared Function getFAccountsNode() As TreeNode
+
+        Dim f_accounts_nodes As New TreeNode
+        Dim srv As New ModelServer
+        If srv.OpenRst(CONFIG_DATABASE + "." + FINANCIAL_MODELLING_TABLE, ModelServer.DYNAMIC_CURSOR) Then
+
+            Dim currentNode, ParentNode() As TreeNode
+            srv.rst.Sort = ITEMS_POSITIONS
+
+            Do While srv.rst.EOF = False
+                If IsDBNull(srv.rst.Fields(FINANCIAL_MODELLING_PARENT_ID_VARIABLE).Value) Then
+                    currentNode = f_accounts_nodes.Nodes.Add(Trim(srv.rst.Fields(FINANCIAL_MODELLING_ID_VARIABLE).Value), _
+                                                                Trim(srv.rst.Fields(FINANCIAL_MODELLING_NAME_VARIABLE).Value))
+                Else
+                    ParentNode = f_accounts_nodes.Nodes.Find(Trim(srv.rst.Fields(FINANCIAL_MODELLING_PARENT_ID_VARIABLE).Value), True)
+                    currentNode = ParentNode(0).Nodes.Add(Trim(srv.rst.Fields(FINANCIAL_MODELLING_ID_VARIABLE).Value), _
+                                                            Trim(srv.rst.Fields(FINANCIAL_MODELLING_NAME_VARIABLE).Value))
+                End If
+                srv.rst.MoveNext()
+            Loop
+            srv.rst.Close()
+        End If
+        Return f_accounts_nodes
+
+    End Function
+
     Protected Overrides Sub finalize()
 
+        On Error Resume Next
         RST.Close()
         MyBase.Finalize()
 
     End Sub
 
+
+#End Region
+   
 
 
 End Class

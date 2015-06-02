@@ -115,6 +115,30 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Models\Mappings\CurrenciesSymbolsMapping.vb" />
+    <Compile Include="Modules\MODELING\FINANCIAL MODELLING\Views\Controls\FModelingInputsControl.Designer.vb">
+      <DependentUpon>FModelingInputsControl.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Modules\MODELING\FINANCIAL MODELLING\Views\Controls\FModelingInputsControl.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Modules\MODELING\FINANCIAL MODELLING\Views\Controls\FModelingExportControl.Designer.vb">
+      <DependentUpon>FModelingExportControl.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Modules\MODELING\FINANCIAL MODELLING\Views\Controls\FModelingExportControl.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Modules\MODELING\FINANCIAL MODELLING\Views\Controls\FModelingSimulationControl.Designer.vb">
+      <DependentUpon>FModelingSimulationControl.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Modules\MODELING\FINANCIAL MODELLING\Views\Controls\FModelingSimulationControl.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Modules\MODELING\FINANCIAL MODELLING\Views\FModelingUI2.Designer.vb">
+      <DependentUpon>FModelingUI2.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Modules\MODELING\FINANCIAL MODELLING\Views\FModelingUI2.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Modules\PLATFORM MANAGEMENT\Analysis Axis Super Classes\Controllers\AnalysisAxisCategoriesController.vb" />
     <Compile Include="Modules\PLATFORM MANAGEMENT\Analysis Axis Super Classes\Views\NewAnalysisAxisUI.Designer.vb">
       <DependentUpon>NewAnalysisAxisUI.vb</DependentUpon>
@@ -159,7 +183,7 @@
     <Compile Include="Models\Mappings\ClientsMapping.vb" />
     <Compile Include="Models\Mappings\ControlOptionsMapping.vb" />
     <Compile Include="Models\Mappings\ControlsMapping.vb" />
-    <Compile Include="Models\Mappings\FModellingAccountsMapping.vb" />
+    <Compile Include="Models\Mappings\FModelingAccountsMapping.vb" />
     <Compile Include="Models\Mappings\MarketIndexesMapping.vb" />
     <Compile Include="Models\Mappings\MarketPricesMapping.vb" />
     <Compile Include="Models\Mappings\OperationalUnitConversionMapping.vb" />
@@ -220,16 +244,10 @@
     <Compile Include="Modules\MODELING\CONFIGURATION\Market Prices Config\Views\NewPricesVersionUI.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Modules\MODELING\FINANCIAL MODELLING\Controller\FModellingExportController.vb" />
-    <Compile Include="Modules\MODELING\FINANCIAL MODELLING\Controller\FModellingInputsController.vb" />
-    <Compile Include="Modules\MODELING\FINANCIAL MODELLING\Controller\FModellingSimulationsControler.vb" />
+    <Compile Include="Modules\MODELING\FINANCIAL MODELLING\Controller\FModelingExportController.vb" />
+    <Compile Include="Modules\MODELING\FINANCIAL MODELLING\Controller\FModelingInputsController.vb" />
+    <Compile Include="Modules\MODELING\FINANCIAL MODELLING\Controller\FModelingSimulationController.vb" />
     <Compile Include="Modules\MODELING\FINANCIAL MODELLING\Model\Scenario.vb" />
-    <Compile Include="Modules\MODELING\FINANCIAL MODELLING\View\FModelingUI.Designer.vb">
-      <DependentUpon>FModelingUI.vb</DependentUpon>
-    </Compile>
-    <Compile Include="Modules\MODELING\FINANCIAL MODELLING\View\FModelingUI.vb">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="Clients Specific Modules\GDF SUEZ - ALTERNATIVE SCENARIOS\Configuration\Views\ASConfigurationPanel.Designer.vb">
       <DependentUpon>ASConfigurationPanel.vb</DependentUpon>
     </Compile>
@@ -250,10 +268,10 @@
     <Compile Include="Modules\LOG\View\DataHistoryUI.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Modules\MODELING\FINANCIAL MODELLING\View\NewConstraintUI.Designer.vb">
+    <Compile Include="Modules\MODELING\FINANCIAL MODELLING\Views\NewConstraintUI.Designer.vb">
       <DependentUpon>NewConstraintUI.vb</DependentUpon>
     </Compile>
-    <Compile Include="Modules\MODELING\FINANCIAL MODELLING\View\NewConstraintUI.vb">
+    <Compile Include="Modules\MODELING\FINANCIAL MODELLING\Views\NewConstraintUI.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Modules\PLATFORM MANAGEMENT\Accounts\Views\AccountsControl.Designer.vb">
@@ -609,6 +627,18 @@
     <EmbeddedResource Include="AddinModule.resx">
       <DependentUpon>AddinModule.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Modules\MODELING\FINANCIAL MODELLING\Views\Controls\FModelingInputsControl.resx">
+      <DependentUpon>FModelingInputsControl.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Modules\MODELING\FINANCIAL MODELLING\Views\Controls\FModelingExportControl.resx">
+      <DependentUpon>FModelingExportControl.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Modules\MODELING\FINANCIAL MODELLING\Views\Controls\FModelingSimulationControl.resx">
+      <DependentUpon>FModelingSimulationControl.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Modules\MODELING\FINANCIAL MODELLING\Views\FModelingUI2.resx">
+      <DependentUpon>FModelingUI2.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Modules\PLATFORM MANAGEMENT\Analysis Axis Super Classes\Views\NewAnalysisAxisUI.resx">
       <DependentUpon>NewAnalysisAxisUI.vb</DependentUpon>
     </EmbeddedResource>
@@ -642,9 +672,6 @@
     <EmbeddedResource Include="Modules\MODELING\CONFIGURATION\Market Prices Config\Views\NewPricesVersionUI.resx">
       <DependentUpon>NewPricesVersionUI.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Modules\MODELING\FINANCIAL MODELLING\View\FModelingUI.resx">
-      <DependentUpon>FModelingUI.vb</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Clients Specific Modules\GDF SUEZ - ALTERNATIVE SCENARIOS\Configuration\Views\ASConfigurationPanel.resx">
       <DependentUpon>ASConfigurationPanel.vb</DependentUpon>
     </EmbeddedResource>
@@ -654,7 +681,7 @@
     <EmbeddedResource Include="Modules\LOG\View\DataHistoryUI.resx">
       <DependentUpon>DataHistoryUI.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Modules\MODELING\FINANCIAL MODELLING\View\NewConstraintUI.resx">
+    <EmbeddedResource Include="Modules\MODELING\FINANCIAL MODELLING\Views\NewConstraintUI.resx">
       <DependentUpon>NewConstraintUI.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Modules\PLATFORM MANAGEMENT\Accounts\Views\AccountsControl.resx">

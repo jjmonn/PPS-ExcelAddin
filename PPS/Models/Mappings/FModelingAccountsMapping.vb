@@ -16,7 +16,7 @@ Imports System.Collections.Generic
 Imports System.Collections
 
 
-Friend Class FModellingAccountsMapping
+Friend Class FModelingAccountsMapping
 
 
 #Region "Lists"

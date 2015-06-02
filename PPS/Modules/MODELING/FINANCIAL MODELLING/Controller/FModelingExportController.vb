@@ -7,7 +7,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 26/12/2014
+' Last modified: 11/05/2015
 
 
 Imports System.Windows.Forms
@@ -16,14 +16,14 @@ Imports System.Collections.Generic
 Imports System.Collections
 
 
-Friend Class FModellingExportController
+Friend Class FModelingExportController
 
 
 #Region "Instance Variables"
 
     ' Objects
-    Private SimulationsController As FModellingSimulationsControler
-    Private View As FModelingUI
+    Private MainView As FModelingUI2
+    Friend View As FModelingExportControl
     Private Model As GenericAggregationDLL3Computing
     Private FModellingAccount As FModellingAccount
     Private ExportsTV As New TreeView
@@ -36,9 +36,8 @@ Friend Class FModellingExportController
     Private accounts_names_id_dic As Hashtable
     Private periods_list As Int32()
     Private CBEditor As New ComboBoxEditor
-    Private ScenariosCB As New ComboBox
-    Private scenarios_name_id_dic As New Dictionary(Of String, String)
 
+  
     ' Display Const
     Private Const CB_WIDTH As Double = 20
     Private Const CB_NB_ITEMS_DISPLAYED As Int32 = 20
@@ -50,21 +49,22 @@ Friend Class FModellingExportController
 
 #Region "Initialize"
 
-    Friend Sub New(ByRef input_simulations_controller As FModellingSimulationsControler, _
-                   ByRef input_FModellingAccount As FModellingAccount, _
-                   ByRef input_CBEditor As ComboBoxEditor,
-                   ByRef input_accounts_id_names_dic As Hashtable, _
-                   ByRef input_accounts_names_id_dic As Hashtable)
+    Friend Sub New(ByRef MainView As FModelingUI2, _
+                   ByRef FModellingAccount As FModellingAccount, _
+                   ByRef accounts_id_names_dic As Hashtable, _
+                   ByRef accounts_names_id_dic As Hashtable, _
+                   ByRef CBEditor As ComboBoxEditor)
 
-        SimulationsController = input_simulations_controller
-        FModellingAccount = input_FModellingAccount
-        accounts_id_names_dic = input_accounts_id_names_dic
-        accounts_names_id_dic = input_accounts_names_id_dic
-        CBEditor = input_CBEditor
+        Me.MainView = MainView
+        Me.FModellingAccount = FModellingAccount
+        Me.accounts_id_names_dic = accounts_id_names_dic
+        Me.accounts_names_id_dic = accounts_names_id_dic
+        Me.CBEditor = CBEditor
+
+        View = New FModelingExportControl(Me)
+
         Entity.LoadEntitiesTree(EntitiesTV)
-        exports_id_list = FModellingAccountsMapping.GetFModellingAccountsList(FINANCIAL_MODELLING_ID_VARIABLE, FINANCIAL_MODELLING_EXPORT_TYPE)
-
-        ScenariosCB.DropDownStyle = ComboBoxStyle.DropDownList
+        exports_id_list = FModelingAccountsMapping.GetFModellingAccountsList(FINANCIAL_MODELLING_ID_VARIABLE, FINANCIAL_MODELLING_EXPORT_TYPE)
         InitializeExportMappingDGV()
         InitializeExportsTV()
 
@@ -110,21 +110,9 @@ Friend Class FModellingExportController
 
 #Region "Interface"
 
-    Protected Friend Sub InitializeView(ByRef input_view As FModelingUI)
+    Protected Friend Sub InitializeView()
 
-        View = input_view
-        View.AddExportTabElements(ExportsTV, EntitiesTV, export_mappingDGV, ScenariosCB)
-
-    End Sub
-
-    Protected Friend Sub GenerateScenarioCB(ByRef scenariosTV As TreeView)
-
-        ScenariosCB.Items.Clear()
-        scenarios_name_id_dic.Clear()
-        For Each node As TreeNode In scenariosTV.Nodes
-            ScenariosCB.Items.Add(node.Text)
-            scenarios_name_id_dic.Add(node.Text, node.Name)
-        Next
+        View.AddExportTabElements(ExportsTV, EntitiesTV, export_mappingDGV)
 
     End Sub
 
@@ -134,11 +122,11 @@ Friend Class FModellingExportController
 
     End Sub
 
-    Protected Friend Sub Export()
+    Friend Sub Export()
 
+        Dim version_id As String = MainView.getVersion_id()
+        Dim dataDict As Dictionary(Of String, Double()) = MainView.getDataDictionary()
         Dim DBUploader As New DataBaseDataUploader
-        Dim scenario_id = scenarios_name_id_dic(ScenariosCB.SelectedItem)
-        Dim scenario = SimulationsController.GetScenario(scenario_id)
         InitializePBar()
 
         For Each export_id In exports_id_list
@@ -146,22 +134,22 @@ Friend Class FModellingExportController
             Dim entity_id = FModellingAccount.ReadFModellingAccount(export_id, FINANCIAL_MODELLING_MAPPED_ENTITY_VARIABLE)
             For j As Int32 = 0 To periods_list.Length - 1
 
-                Dim current_value = DataBaseDataDownloader.GetSingleValue(SimulationsController.version_id, _
+                Dim current_value = DataBaseDataDownloader.GetSingleValue(version_id, _
                                                                           entity_id, _
                                                                           account_id, _
                                                                           periods_list(j), _
                                                                           DEFAULT_ANALYSIS_AXIS_ID)
 
-                Dim new_value = current_value + scenario.data_dic(export_id)(j)
+                Dim new_value = current_value + dataDict(export_id)(j)
                 If new_value <> current_value Then _
                 DBUploader.UpdateSingleValue(entity_id, _
-                                                       account_id, _
-                                                       periods_list(j), _
-                                                       new_value, _
-                                                       SimulationsController.version_id, _
-                                                        DEFAULT_ANALYSIS_AXIS_ID, _
-                                                        DEFAULT_ANALYSIS_AXIS_ID, _
-                                                        DEFAULT_ANALYSIS_AXIS_ID)
+                                            account_id, _
+                                            periods_list(j), _
+                                            new_value, _
+                                            version_id, _
+                                            DEFAULT_ANALYSIS_AXIS_ID, _
+                                            DEFAULT_ANALYSIS_AXIS_ID, _
+                                            DEFAULT_ANALYSIS_AXIS_ID)
 
                 ' !!!!! STUB adjustment id must be validated in some mapping !!!
 
@@ -186,8 +174,8 @@ Friend Class FModellingExportController
 
     End Sub
 
-    Protected Friend Sub UpdateMappedEntity(ByRef fmodelling_account_id As String, _
-                                            ByRef entity_id As String)
+    Friend Sub UpdateMappedEntity(ByRef fmodelling_account_id As String, _
+                                  ByRef entity_id As String)
 
         FModellingAccount.UpdateFModellingAccount(fmodelling_account_id, _
                                                   FINANCIAL_MODELLING_MAPPED_ENTITY_VARIABLE, _
@@ -195,7 +183,7 @@ Friend Class FModellingExportController
 
     End Sub
 
-    Protected Friend Function AreMappingsComplete() As Int32
+    Friend Function AreMappingsComplete() As Int32
 
         For Each row In export_mappingDGV.RowsHierarchy.Items
             If export_mappingDGV.CellsArea.GetCellValue(row, export_mappingDGV.ColumnsHierarchy.Items(1)) = "" Then Return -1

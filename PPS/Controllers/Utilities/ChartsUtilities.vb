@@ -7,7 +7,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 04/03/2015
+' Last modified: 28/05/2015
 
 
 Imports System.Windows.Forms.DataVisualization.Charting
@@ -33,7 +33,7 @@ Friend Class ChartsUtilities
 
 #Region "Charts and Series Creation"
 
-    Protected Friend Shared Function CreateChart(ByRef reportHT As Hashtable) As Chart
+    Friend Shared Function CreateChart(ByRef reportHT As Hashtable) As Chart
 
         Dim new_chart As New Chart
         Dim ChartArea1 As New ChartArea
@@ -83,9 +83,9 @@ Friend Class ChartsUtilities
 
     End Function
 
-    Protected Friend Shared Sub AddSerieToChart(ByRef chart As Chart, _
-                                                ByRef serieHT As Hashtable, _
-                                                Optional ByRef chart_area As String = "ChartArea1")
+    Friend Shared Sub AddSerieToChart(ByRef chart As Chart, _
+                                               ByRef serieHT As Hashtable, _
+                                               Optional ByRef chart_area As String = "ChartArea1")
 
         Dim new_serie As New Series(serieHT(CONTROL_CHART_NAME_VARIABLE))
         chart.Series.Add(new_serie)
@@ -137,8 +137,8 @@ Friend Class ChartsUtilities
 
     End Sub
 
-    Protected Friend Shared Sub EqualizeChartsYAxis1(ByRef chart1 As Chart, _
-                                                     ByRef chart2 As Chart)
+    Friend Shared Sub EqualizeChartsYAxis1(ByRef chart1 As Chart, _
+                                                    ByRef chart2 As Chart)
 
 
         If chart1.ChartAreas(0).AxisY.Maximum > chart2.ChartAreas(0).AxisY.Maximum Then
@@ -149,13 +149,13 @@ Friend Class ChartsUtilities
 
     End Sub
 
-    
+
 #End Region
 
 
 #Region "Position Adjustment"
 
-    Protected Friend Shared Sub AdjustChartPosition(ByRef chart As Chart)
+    Friend Shared Sub AdjustChartPosition(ByRef chart As Chart)
 
         chart.ChartAreas(0).Position = New ElementPosition(0, 10, 100, 80)
         chart.Legends(0).Position = New ElementPosition(0, 90, 100, 10)
@@ -167,10 +167,10 @@ Friend Class ChartsUtilities
 
 #Region "Excel Export"
 
-    Protected Friend Shared Sub ExportChartExcel(ByRef input_chart As Chart, _
-                                                 ByRef ws As Excel.Worksheet, _
-                                                 Optional ByRef i As Int32 = 2, _
-                                                 Optional ByRef j As Int32 = 2)
+    Friend Shared Sub ExportChartExcel(ByRef input_chart As Chart, _
+                                                ByRef ws As Excel.Worksheet, _
+                                                Optional ByRef i As Int32 = 2, _
+                                                Optional ByRef j As Int32 = 2)
 
         Dim chartObjs As Excel.ChartObjects = ws.ChartObjects(Type.Missing)     ' (ChartObjects) -> cast
         Dim chartObj As Excel.ChartObject = chartObjs.Add(100, 20, 300, 300)
@@ -223,8 +223,8 @@ Friend Class ChartsUtilities
 
 #Region "Utilities"
 
-    Protected Friend Shared Sub SetChartPalette(ByRef chart As Chart, _
-                                                      Optional ByRef palette As Object = Nothing)
+    Friend Shared Sub SetChartPalette(ByRef chart As Chart, _
+                                                     Optional ByRef palette As Object = Nothing)
 
         If IsDBNull(palette) Or palette Is Nothing Then
             chart.Palette = DEFAULT_CHART_PALETTE
@@ -247,17 +247,25 @@ Friend Class ChartsUtilities
 
     End Sub
 
-    Protected Friend Shared Sub SetY1AxisMaxValue(ByRef chart As Chart, _
-                                                  ByRef max_y As Double)
+    Friend Shared Sub SetY1AxisMaxValue(ByRef chart As Chart, _
+                                                 ByRef max_y As Double)
 
         chart.ChartAreas(0).AxisY.Maximum = max_y
 
     End Sub
 
-    Protected Friend Shared Sub SetY2AxisMaxValue(ByRef chart As Chart, _
-                                                  ByRef max_y As Double)
+    Friend Shared Sub SetY2AxisMaxValue(ByRef chart As Chart, _
+                                                 ByRef max_y As Double)
 
         chart.ChartAreas(0).AxisY2.Maximum = max_y
+
+    End Sub
+
+    Friend Sub DuplicateChart()
+
+        Dim myStream As System.IO.MemoryStream = New System.IO.MemoryStream()
+        'Outputchart.Serializer.Save(myStream)
+        'ExportedChart.Serializer.Load(myStream)
 
     End Sub
 

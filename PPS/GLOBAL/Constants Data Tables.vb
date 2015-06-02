@@ -330,10 +330,11 @@ Module Data_Tables_Constants
 #End Region
 
 
-#Region "Financial Modelling Accounts Table"
+#Region "Financial Modeling Accounts Table"
 
-    Friend Const FINANCIAL_MODELLING_TABLE = "fmodelling_accounts"
+    Friend Const FINANCIAL_MODELLING_TABLE = "fmodeling_accounts"
     Friend Const FINANCIAL_MODELLING_ID_VARIABLE = "id"
+    Friend Const FINANCIAL_MODELLING_PARENT_ID_VARIABLE = "parent_id"
     Friend Const FINANCIAL_MODELLING_NAME_VARIABLE = "name"
     Friend Const FINANCIAL_MODELLING_TYPE_VARIABLE = "type"
     Friend Const FINANCIAL_MODELLING_FORMAT_VARIABLE = "format_string"

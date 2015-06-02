@@ -1,11 +1,12 @@
 ﻿' NewConstraintUI.vb
 '
-'
+' UI allowing to add a new constraint
 '
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 16/02/2015
+' Last modified: 11/05/2015
+
 
 Imports System.Collections
 
@@ -15,7 +16,7 @@ Friend Class NewConstraintUI
 
 #Region "Instance Variables"
 
-    Private FModelingUI As FModelingUI
+    Private ParentView As FModelingSimulationControl
     Private scenario_id As String
 
 #End Region
@@ -23,22 +24,20 @@ Friend Class NewConstraintUI
 
 #Region "Initialize"
 
-    Protected Friend Sub New(ByRef input_UI As FModelingUI, _
-                             ByRef Outputs_name_id_dic As Hashtable, _
-                             ByRef input_scenario_id As String)
+    Protected Friend Sub New(ByRef input_UI As FModelingSimulationControl, _
+                             ByRef possible_constraints_name_list As Generic.List(Of String))
 
         ' This call is required by the designer.
         InitializeComponent()
 
         ' Add any initialization after the InitializeComponent() call.
-        FModelingUI = input_UI
-        scenario_id = input_scenario_id
-        For Each constraint As String In Outputs_name_id_dic.Keys
+        ParentView = input_UI
+        For Each constraint As String In possible_constraints_name_list
             ConstraintsComboBox.Items.Add(constraint)
         Next
         Me.TopMost = True
-        Me.Top = (FModelingUI.Height + Me.Height) / 2
-        Me.Left = (FModelingUI.Width + Me.Width) / 2
+        Me.Top = (ParentView.Height + Me.Height) / 2
+        Me.Left = (ParentView.Width + Me.Width) / 2
 
 
     End Sub
@@ -52,10 +51,8 @@ Friend Class NewConstraintUI
 
         Dim default_value As Double = 0
         If IsNumeric(DefaultValueTB.Text) Then default_value = DefaultValueTB.Text
-        FModelingUI.AddConstraint(ConstraintsComboBox.SelectedItem, _
-                                  scenario_id, _
-                                  default_value)
-
+        ParentView.addConstraint(ConstraintsComboBox.SelectedItem, _
+                                 default_value)
         Me.Dispose()
 
     End Sub
