@@ -3,7 +3,7 @@
 '
 '
 '
-' Last modified: 28/04/2015
+' Last modified: 08/06/2015
 ' Author: Julien Monnereau
 
 
@@ -354,6 +354,9 @@ nextWord:
 
         For Each element As Object In list1
             If list2.Contains(element) = False Then Return False
+        Next
+        For Each element As Object In list2
+            If list1.Contains(element) = False Then Return False
         Next
         Return True
 

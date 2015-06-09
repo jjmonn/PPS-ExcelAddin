@@ -107,7 +107,8 @@ Friend Class DataBaseDataDownloader
                                                         products_id_list, _
                                                         adjustments_id_list)
 
-        If DataAggregationQuery(version_id, sql_where_clause) = True Then
+        If DataAggregationQuery(version_id, sql_where_clause) = True _
+          AndAlso entities_id_list.Count > 0 Then
             ConvertInputsArrays(version_id, entities_id_list.ToArray(), destination_currency)
             srv.rst.Close()
             Return True
@@ -661,10 +662,17 @@ Friend Class DataBaseDataDownloader
                                     Optional ByRef input_adjustments_id_list As List(Of String) = Nothing) As String
 
         Dim str_SQL As String = ""
-        If Not input_entities_id_list Is Nothing Then str_SQL = str_SQL & " AND " & DATA_ENTITY_ID_VARIABLE & " IN ('" + Join(input_entities_id_list.ToArray, "','") + "')"
-        If Not input_clients_id_list Is Nothing Then str_SQL = str_SQL & " AND " & DATA_CLIENT_ID_VARIABLE & " IN ('" + Join(input_clients_id_list.ToArray, "','") + "')"
-        If Not input_products_id_list Is Nothing Then str_SQL = str_SQL & " AND " & DATA_PRODUCT_ID_VARIABLE & " IN ('" + Join(input_products_id_list.ToArray, "','") + "')"
-        If Not input_adjustments_id_list Is Nothing Then str_SQL = str_SQL & " AND " & DATA_ADJUSTMENT_ID_VARIABLE & " IN ('" + Join(input_adjustments_id_list.ToArray, "','") + "')"
+        If Not input_entities_id_list Is Nothing _
+        AndAlso input_entities_id_list.Count > 0 Then str_SQL = str_SQL & " AND " & DATA_ENTITY_ID_VARIABLE & " IN ('" + Join(input_entities_id_list.ToArray, "','") + "')"
+
+        If Not input_clients_id_list Is Nothing _
+        AndAlso input_clients_id_list.Count > 0 Then str_SQL = str_SQL & " AND " & DATA_CLIENT_ID_VARIABLE & " IN ('" + Join(input_clients_id_list.ToArray, "','") + "')"
+
+        If Not input_products_id_list Is Nothing _
+        AndAlso input_products_id_list.Count > 0 Then str_SQL = str_SQL & " AND " & DATA_PRODUCT_ID_VARIABLE & " IN ('" + Join(input_products_id_list.ToArray, "','") + "')"
+
+        If Not input_adjustments_id_list Is Nothing _
+        AndAlso input_adjustments_id_list.Count > 0 Then str_SQL = str_SQL & " AND " & DATA_ADJUSTMENT_ID_VARIABLE & " IN ('" + Join(input_adjustments_id_list.ToArray, "','") + "')"
 
         If str_SQL = "" Then
             Return str_SQL

@@ -14,7 +14,7 @@
 '      
 '
 ' Author: Julien Monnereau
-' Last modified: 04/05/2015
+' Last modified: 08/06/2015
 '
 
 
@@ -70,7 +70,7 @@ Friend Class PPSBIController
 
     ' Stubs in this function - clients/ products adjustments filters should come as param or computed here ?!!!
     ' Period input: date as integer 
-    Protected Friend Function getDataCallBack(ByRef entity_name As Object, _
+    Friend Function getDataCallBack(ByRef entity_name As Object, _
                                             ByRef account As Object, _
                                             ByRef period As Object, _
                                             ByRef currency As Object, _
@@ -185,12 +185,12 @@ Friend Class PPSBIController
         Dim period_int As Int32
 
         If GlobalVariables.GenericGlobalAggregationComputer.IsEntityAlreadyComputed(entity_node.Name) = False _
-        Or GlobalVariables.GenericGlobalSingleEntityComputer.CheckCache(entity_node, _
+        Or GlobalVariables.GenericGlobalAggregationComputer.CheckCache(entity_node, _
                                                                         clients_id, _
                                                                         products_id, _
                                                                         adjustments_id) = False _
-        Or GlobalVariables.GenericGlobalSingleEntityComputer.current_version_id <> version_id _
-        Or GlobalVariables.GenericGlobalSingleEntityComputer.current_currency <> currency Then
+        Or GlobalVariables.GenericGlobalAggregationComputer.current_version_id <> version_id _
+        Or GlobalVariables.GenericGlobalAggregationComputer.current_currency <> currency Then
 
             Dim Versions As New Version
             Dim nb_periods, start_period As Int32
@@ -350,6 +350,9 @@ Friend Class PPSBIController
         ESB.BuildCategoriesFilterFromFilterList(filterList)
         Entity.LoadEntitiesTree(entitiesTV, ESB.StrSqlQueryForEntitiesUploadFunctions)
         Dim lookup_result As TreeNode() = entitiesTV.Nodes.Find(entity_id, True)
+
+        ' !!! Result even if entity_id not in selection ! -> we still have the children !
+
         If lookup_result.Length > 0 Then Return lookup_result(0) Else Return Nothing
 
     End Function

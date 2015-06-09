@@ -11,7 +11,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 25/05/2015
+' Last modified: 08/06/2015
 
 
 Imports System.Collections.Generic
@@ -32,14 +32,14 @@ Friend Class GenericSingleEntityDLL3Computer
     Private entity_node As TreeNode
 
     ' Variables
-    Protected Friend current_version_id As String = ""
-    Protected Friend current_currency As String = ""
-    Protected Friend clients_id_filters_list As List(Of String)
-    Protected Friend products_id_filters_list As List(Of String)
-    Protected Friend adjustments_id_filters_list As List(Of String)
-    Protected Friend current_state As Boolean = False
-    Protected Friend period_list As List(Of Int32)
-    Protected Friend time_config As String
+    Friend current_version_id As String = ""
+    Friend current_currency As String = ""
+    Friend clients_id_filters_list As List(Of String)
+    Friend products_id_filters_list As List(Of String)
+    Friend adjustments_id_filters_list As List(Of String)
+    Friend current_state As Boolean = False
+    Friend period_list As List(Of Int32)
+    Friend time_config As String
 
 
 #End Region
@@ -149,8 +149,10 @@ Friend Class GenericSingleEntityDLL3Computer
             clients_id_filters_list = clients_id_list
             products_id_filters_list = products_id_list
             adjustments_id_filters_list = adjustment_id_list
+            current_state = True
             Return True
         Else
+            current_state = False
             Return False
         End If
 
@@ -207,11 +209,13 @@ Friend Class GenericSingleEntityDLL3Computer
 
     'End Sub
 
-    Protected Friend Function CheckCache(ByRef input_entity_node As TreeNode, _
-                                         ByRef clients_id As List(Of String), _
-                                         ByRef products_id As List(Of String), _
-                                         ByRef adjustments_id As List(Of String)) As Boolean
+    ' Same function in Generic Aggregation Computer
+    Friend Function CheckCache(ByRef input_entity_node As TreeNode, _
+                               ByRef clients_id As List(Of String), _
+                               ByRef products_id As List(Of String), _
+                               ByRef adjustments_id As List(Of String)) As Boolean
 
+        If entity_node Is Nothing Then Return False
         If Utilities_Functions.ListsEqualityCheck(TreeViewsUtilities.GetCheckedNodesID(input_entity_node), _
                                                   TreeViewsUtilities.GetCheckedNodesID(entity_node)) = False Then Return False
         If Utilities_Functions.ListsEqualityCheck(clients_id, clients_id_filters_list) = False Then Return False

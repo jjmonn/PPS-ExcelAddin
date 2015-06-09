@@ -202,7 +202,7 @@ Friend Class TreeViewsUtilities
         Dim tmpList As New List(Of String)
         If node Is Nothing Then Return tmpList
         For Each childNode As TreeNode In node.Nodes
-            If childNode.Checked = True Then tmpList.Add(childNode.Name)
+            AddCheckedNodesToList(childNode, tmpList)
         Next
         Return tmpList
 

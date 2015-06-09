@@ -47,6 +47,7 @@ Friend Class PPSBI_UI
     Private Const ACCOUNTS_SELECTION As String = "accSel"
     Private Const VERSIONS_SELECTION As String = "verSel"
     Private Const NON_EXPANDED_CONTROL_WIDTH As Integer = 600
+    Private Const EXPANDED_CONTROL_WIDTH As Integer = 1060
     Private Const EXPANSION_CONTROL_MARGIN As Integer = 30
     Private Const EXPANDED_IMAGE_INDEX As Int32 = 1
     Private Const COLLAPSED_IMAGE_INDEX As Int32 = 0
@@ -77,7 +78,7 @@ Friend Class PPSBI_UI
         versionsTB.Text = versionsTV.Nodes.Find(GlobalVariables.GLOBALCurrentVersionCode, True)(0).Text
         InitializeTimePeriodsSelection(GlobalVariables.GLOBALCurrentVersionCode)
         CategoriesControlTabInitialization()
-        expandedControlWidth = NON_EXPANDED_CONTROL_WIDTH + categoriesTabControlWidth + EXPANSION_CONTROL_MARGIN
+        expandedControlWidth = EXPANDED_CONTROL_WIDTH  'NON_EXPANDED_CONTROL_WIDTH + categoriesTabControlWidth + EXPANSION_CONTROL_MARGIN
         categoriesSelectionGroupBox.Width = categoriesTabControlWidth + 2
 
     End Sub
@@ -153,7 +154,7 @@ Friend Class PPSBI_UI
 
         For Each node As TreeNode In categoriesTV.Nodes
 
-            categoriesTabControlWidth = categoriesTabControlWidth + node.Text.Length * AVERAGE_LETTER_SIZE
+            categoriesTabControlWidth = 400 'categoriesTabControlWidth + node.Text.Length * AVERAGE_LETTER_SIZE
             CategoriesTVsTabControl.TabPages.Add(node.Name, node.Text)
             Dim catTV As New TreeView
             catTV.CheckBoxes = True

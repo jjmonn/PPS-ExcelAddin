@@ -15,7 +15,7 @@
 '       - erreur si pas de taux -> si nb records = 0 la matrice de devrait pas être lancée
 '
 '
-' Last modified: 01/05/2015
+' Last modified: 08/06/2015
 ' Author: Julien Monnereau
 
 
@@ -32,17 +32,20 @@ Friend Class GenericAggregationDLL3Computing
     ' Objects
     Private Dll3Computer As DLL3_Interface
     Private DBDOWNLOADER As DataBaseDataDownloader
+    Private entity_node As Windows.Forms.TreeNode
 
     ' Variables
-    Protected Friend complete_data_dictionary As Dictionary(Of String, Double())
-    Protected Friend years_aggregation_data_dictionary As Dictionary(Of String, Double())
-    Protected Friend entities_id_list As List(Of String)
-    Protected Friend inputs_entities_list As List(Of String)
-    Protected Friend current_version_id As String = ""
-    Protected Friend current_currency As String = ""
-    Protected Friend current_sql_filter_query As String = ""
-    Protected Friend current_adjustment_id As String = ""
-    Protected Friend periods_list As List(Of Int32)
+    Friend complete_data_dictionary As Dictionary(Of String, Double())
+    Friend years_aggregation_data_dictionary As Dictionary(Of String, Double())
+    Friend entities_id_list As List(Of String)
+    Friend inputs_entities_list As List(Of String)
+    Friend current_version_id As String = ""
+    Friend current_currency As String = ""
+    '   Friend current_adjustment_id As String = ""
+    Friend clients_id_filters_list As List(Of String)
+    Friend products_id_filters_list As List(Of String)
+    Friend adjustments_id_filters_list As List(Of String)
+    Friend periods_list As List(Of Int32)
 
 #End Region
 
@@ -78,6 +81,7 @@ Friend Class GenericAggregationDLL3Computing
 
         inputs_entities_list = TreeViewsUtilities.GetNoChildrenNodesList(entities_id_list, entity_node.TreeView)
         TreeViewsUtilities.FilterSelectedNodes(entity_node, entities_id_list)
+        Me.entity_node = entity_node
 
     End Sub
 
@@ -118,6 +122,9 @@ Friend Class GenericAggregationDLL3Computing
             DBDOWNLOADER.CloseRST()
         End If
         Dll3Computer.ComputeAggregation()
+        clients_id_filters_list = clients_id_list
+        products_id_filters_list = products_id_list
+        adjustments_id_filters_list = adjustment_id_list
         current_currency = destinationCurrency
         current_version_id = version_id
 
@@ -131,11 +138,13 @@ Friend Class GenericAggregationDLL3Computing
 
     End Sub
 
-    Protected Friend Sub ReinitializeComputerCache()
+    Friend Sub ReinitializeComputerCache()
 
         current_version_id = ""
         current_currency = ""
-        current_sql_filter_query = ""
+        If Not clients_id_filters_list Is Nothing Then clients_id_filters_list.Clear()
+        If Not products_id_filters_list Is Nothing Then products_id_filters_list.Clear()
+        If Not entity_node Is Nothing Then entity_node.Nodes.Clear()
 
     End Sub
 
@@ -397,6 +406,21 @@ Friend Class GenericAggregationDLL3Computing
         Next
 
     End Sub
+
+    Friend Function CheckCache(ByRef input_entity_node As Windows.Forms.TreeNode, _
+                                ByRef clients_id As List(Of String), _
+                                ByRef products_id As List(Of String), _
+                                ByRef adjustments_id As List(Of String)) As Boolean
+
+        If entity_node Is Nothing Then Return False
+        If Utilities_Functions.ListsEqualityCheck(TreeViewsUtilities.GetCheckedNodesID(input_entity_node), _
+                                                  TreeViewsUtilities.GetCheckedNodesID(entity_node)) = False Then Return False
+        If Utilities_Functions.ListsEqualityCheck(clients_id, clients_id_filters_list) = False Then Return False
+        If Utilities_Functions.ListsEqualityCheck(products_id, products_id_filters_list) = False Then Return False
+        If Utilities_Functions.ListsEqualityCheck(adjustments_id, adjustments_id_filters_list) = False Then Return False
+        Return True
+
+    End Function
 
 #End Region
 
