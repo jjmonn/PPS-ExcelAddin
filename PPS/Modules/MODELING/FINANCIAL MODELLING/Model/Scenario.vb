@@ -32,7 +32,6 @@ Friend Class Scenario
     Friend generalDGV As New vDataGridView
     Private FModellingAccounts As FModellingAccount
     Friend Outputchart As New Chart
-    Friend ExportedChart As New Chart
     Private fAccountsNodes As TreeNode
     Private constraints_text_box_editor As New TextBoxEditor()
 
@@ -252,17 +251,12 @@ Friend Class Scenario
         If Not current_constraint_cell Is Nothing Then
             Dim constraint_id = current_constraint_cell.RowItem.Caption
             If current_constraint_cell.RowItem.ItemIndex <= 2 Then Return ""
-            Format(current_constraint_cell.RowItem, False)
+            constraints_DGV_rows_id_item_dict(constraint_id).Delete()
+            constraintsDGV.Refresh()
+            constraintsDGV.ColumnsHierarchy.AutoResize(AutoResizeMode.FIT_ALL)
             Return constraint_id
         End If
-        Return ""
-
-    End Function
-
-    Friend Function DeleteConstraint(ByRef constraint_id As String) As Boolean
-
-        ' !!
-        MsgBox("to be implemented")
+        Return "na"
 
     End Function
 
@@ -350,11 +344,13 @@ Friend Class Scenario
 
         Outputchart.Series.Clear()
         For Each row As HierarchyItem In generalDGV.RowsHierarchy.Items
-            Dim cb As CheckBoxEditor = generalDGV.CellsArea.GetCellEditor(row, generalDGV.ColumnsHierarchy.Items(1))
-            Dim checkBox As vCheckBox = TryCast(cb.Control, vCheckBox)
-            If checkBox.Checked = True Then
-                AddSerieToChart(row.Caption)
-            End If
+            For Each sub_row As HierarchyItem In row.Items
+                Dim cb As CheckBoxEditor = generalDGV.CellsArea.GetCellEditor(sub_row, generalDGV.ColumnsHierarchy.Items(1))
+                Dim checkBox As vCheckBox = TryCast(cb.Control, vCheckBox)
+                If checkBox.Checked = True Then
+                    AddSerieToChart(sub_row.Caption)
+                End If
+            Next
         Next
 
     End Sub

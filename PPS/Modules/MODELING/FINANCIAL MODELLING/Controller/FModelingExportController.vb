@@ -97,7 +97,8 @@ Friend Class FModelingExportController
         For Each fmodelling_account_id In exports_id_list
             Dim node As TreeNode = ExportsTV.Nodes.Add(fmodelling_account_id, FModellingAccount.ReadFModellingAccount(fmodelling_account_id, FINANCIAL_MODELLING_NAME_VARIABLE), 0, 0)
             Dim entity_id = FModellingAccount.ReadFModellingAccount(fmodelling_account_id, FINANCIAL_MODELLING_MAPPED_ENTITY_VARIABLE)
-            If Not IsDBNull(entity_id) Then
+            If Not IsDBNull(entity_id) _
+            AndAlso EntitiesTV.Nodes.Find(entity_id, True).Length > 0 Then
                 node.Nodes.Add(entity_id, EntitiesTV.Nodes.Find(entity_id, True)(0).Text, 1, 1)
             End If
         Next

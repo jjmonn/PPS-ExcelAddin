@@ -27,6 +27,7 @@ Partial Class FModelingSimulationControl
         Me.SplitContainer1 = New System.Windows.Forms.SplitContainer()
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
         Me.Panel1 = New System.Windows.Forms.Panel()
+        Me.Button1 = New System.Windows.Forms.Button()
         Me.rightnavBT = New System.Windows.Forms.Button()
         Me.ButtonsIL = New System.Windows.Forms.ImageList(Me.components)
         Me.leftnavBT = New System.Windows.Forms.Button()
@@ -38,9 +39,6 @@ Partial Class FModelingSimulationControl
         Me.InputsVersionTB = New VIBlend.WinForms.Controls.vTextBox()
         Me.refreshBT = New System.Windows.Forms.Button()
         Me.DGVsSplitContainer = New System.Windows.Forms.SplitContainer()
-        Me.ChartsTableLayoutPanel = New System.Windows.Forms.TableLayoutPanel()
-        Me.ratios_chart_label = New System.Windows.Forms.Label()
-        Me.values_chart_label = New System.Windows.Forms.Label()
         Me.inputsDGVsRightClickMenu = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.AddConstraintToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.DeleteConstraintToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -49,16 +47,13 @@ Partial Class FModelingSimulationControl
         Me.SerieMGTRCMBT = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator5 = New System.Windows.Forms.ToolStripSeparator()
         Me.CopyValueRightBT = New System.Windows.Forms.ToolStripMenuItem()
-        Me.Button1 = New System.Windows.Forms.Button()
         CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SplitContainer1.Panel1.SuspendLayout()
-        Me.SplitContainer1.Panel2.SuspendLayout()
         Me.SplitContainer1.SuspendLayout()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.Panel1.SuspendLayout()
         CType(Me.DGVsSplitContainer, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.DGVsSplitContainer.SuspendLayout()
-        Me.ChartsTableLayoutPanel.SuspendLayout()
         Me.inputsDGVsRightClickMenu.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -72,10 +67,6 @@ Partial Class FModelingSimulationControl
         'SplitContainer1.Panel1
         '
         Me.SplitContainer1.Panel1.Controls.Add(Me.TableLayoutPanel1)
-        '
-        'SplitContainer1.Panel2
-        '
-        Me.SplitContainer1.Panel2.Controls.Add(Me.ChartsTableLayoutPanel)
         Me.SplitContainer1.Size = New System.Drawing.Size(862, 501)
         Me.SplitContainer1.SplitterDistance = 348
         Me.SplitContainer1.TabIndex = 0
@@ -114,6 +105,15 @@ Partial Class FModelingSimulationControl
         Me.Panel1.Name = "Panel1"
         Me.Panel1.Size = New System.Drawing.Size(860, 45)
         Me.Panel1.TabIndex = 0
+        '
+        'Button1
+        '
+        Me.Button1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
+        Me.Button1.Location = New System.Drawing.Point(79, 5)
+        Me.Button1.Name = "Button1"
+        Me.Button1.Size = New System.Drawing.Size(35, 35)
+        Me.Button1.TabIndex = 9
+        Me.Button1.UseVisualStyleBackColor = True
         '
         'rightnavBT
         '
@@ -254,47 +254,6 @@ Partial Class FModelingSimulationControl
         Me.DGVsSplitContainer.SplitterDistance = 82
         Me.DGVsSplitContainer.TabIndex = 1
         '
-        'ChartsTableLayoutPanel
-        '
-        Me.ChartsTableLayoutPanel.CellBorderStyle = System.Windows.Forms.TableLayoutPanelCellBorderStyle.[Single]
-        Me.ChartsTableLayoutPanel.ColumnCount = 2
-        Me.ChartsTableLayoutPanel.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
-        Me.ChartsTableLayoutPanel.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
-        Me.ChartsTableLayoutPanel.Controls.Add(Me.ratios_chart_label, 1, 0)
-        Me.ChartsTableLayoutPanel.Controls.Add(Me.values_chart_label, 0, 0)
-        Me.ChartsTableLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.ChartsTableLayoutPanel.Location = New System.Drawing.Point(0, 0)
-        Me.ChartsTableLayoutPanel.Name = "ChartsTableLayoutPanel"
-        Me.ChartsTableLayoutPanel.RowCount = 2
-        Me.ChartsTableLayoutPanel.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24.0!))
-        Me.ChartsTableLayoutPanel.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
-        Me.ChartsTableLayoutPanel.Size = New System.Drawing.Size(862, 149)
-        Me.ChartsTableLayoutPanel.TabIndex = 0
-        '
-        'ratios_chart_label
-        '
-        Me.ratios_chart_label.AutoSize = True
-        Me.ratios_chart_label.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.ratios_chart_label.Location = New System.Drawing.Point(434, 4)
-        Me.ratios_chart_label.Margin = New System.Windows.Forms.Padding(3)
-        Me.ratios_chart_label.Name = "ratios_chart_label"
-        Me.ratios_chart_label.Size = New System.Drawing.Size(424, 18)
-        Me.ratios_chart_label.TabIndex = 1
-        Me.ratios_chart_label.Text = "Ratios Chart (%)"
-        Me.ratios_chart_label.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
-        '
-        'values_chart_label
-        '
-        Me.values_chart_label.AutoSize = True
-        Me.values_chart_label.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.values_chart_label.Location = New System.Drawing.Point(4, 4)
-        Me.values_chart_label.Margin = New System.Windows.Forms.Padding(3)
-        Me.values_chart_label.Name = "values_chart_label"
-        Me.values_chart_label.Size = New System.Drawing.Size(423, 18)
-        Me.values_chart_label.TabIndex = 0
-        Me.values_chart_label.Text = "Label1"
-        Me.values_chart_label.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
-        '
         'inputsDGVsRightClickMenu
         '
         Me.inputsDGVsRightClickMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.AddConstraintToolStripMenuItem, Me.DeleteConstraintToolStripMenuItem, Me.RefreshScenarioToolStripMenuItem, Me.ToolStripSeparator4, Me.SerieMGTRCMBT, Me.ToolStripSeparator5, Me.CopyValueRightBT})
@@ -341,15 +300,6 @@ Partial Class FModelingSimulationControl
         Me.CopyValueRightBT.Size = New System.Drawing.Size(165, 22)
         Me.CopyValueRightBT.Text = "Copy Value Right"
         '
-        'Button1
-        '
-        Me.Button1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
-        Me.Button1.Location = New System.Drawing.Point(79, 5)
-        Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(35, 35)
-        Me.Button1.TabIndex = 9
-        Me.Button1.UseVisualStyleBackColor = True
-        '
         'FModelingSimulationControl
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -358,7 +308,6 @@ Partial Class FModelingSimulationControl
         Me.Name = "FModelingSimulationControl"
         Me.Size = New System.Drawing.Size(862, 501)
         Me.SplitContainer1.Panel1.ResumeLayout(False)
-        Me.SplitContainer1.Panel2.ResumeLayout(False)
         CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.SplitContainer1.ResumeLayout(False)
         Me.TableLayoutPanel1.ResumeLayout(False)
@@ -366,8 +315,6 @@ Partial Class FModelingSimulationControl
         Me.Panel1.PerformLayout()
         CType(Me.DGVsSplitContainer, System.ComponentModel.ISupportInitialize).EndInit()
         Me.DGVsSplitContainer.ResumeLayout(False)
-        Me.ChartsTableLayoutPanel.ResumeLayout(False)
-        Me.ChartsTableLayoutPanel.PerformLayout()
         Me.inputsDGVsRightClickMenu.ResumeLayout(False)
         Me.ResumeLayout(False)
 
@@ -375,9 +322,6 @@ Partial Class FModelingSimulationControl
     Friend WithEvents SplitContainer1 As System.Windows.Forms.SplitContainer
     Friend WithEvents TableLayoutPanel1 As System.Windows.Forms.TableLayoutPanel
     Friend WithEvents refreshBT As System.Windows.Forms.Button
-    Friend WithEvents ChartsTableLayoutPanel As System.Windows.Forms.TableLayoutPanel
-    Friend WithEvents ratios_chart_label As System.Windows.Forms.Label
-    Friend WithEvents values_chart_label As System.Windows.Forms.Label
     Friend WithEvents Label1 As System.Windows.Forms.Label
     Friend WithEvents InputsVersionTB As VIBlend.WinForms.Controls.vTextBox
     Friend WithEvents Label3 As System.Windows.Forms.Label

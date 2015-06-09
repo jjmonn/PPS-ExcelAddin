@@ -24,7 +24,7 @@ Module Data_Tables_Constants
 #Region "ACF_Config Database"
 
     ' Stores the model definition tables
-    Friend Const CONFIG_DATABASE As String = "ACF_Config"
+    Friend Const CONFIG_DATABASE As String = "acf_config"
 
 
 #Region "Operational and Financials Items"
@@ -514,7 +514,7 @@ Module Data_Tables_Constants
 
     ' Stores the data tables
 
-    Friend Const DATA_DATABASE As String = "ACF_Data"
+    Friend Const DATA_DATABASE As String = "acf_data"
 
 
 #Region "Data Tables"
@@ -554,7 +554,7 @@ Module Data_Tables_Constants
 
     ' Stores the entities table
 
-    Friend Const LEGAL_ENTITIES_DATABASE As String = "ACF_LEntities"
+    Friend Const LEGAL_ENTITIES_DATABASE As String = "acf_lentities"
 
 
 #Region "Entities Table"
@@ -581,7 +581,7 @@ Module Data_Tables_Constants
 
     ' Stores the views tables
 
-    Friend Const VIEWS_DATABASE As String = "ACF_Views"
+    Friend Const VIEWS_DATABASE As String = "acf_views"
     ' Views table are stored in ACF_Config.acf_ Views
 
 #End Region
@@ -590,10 +590,10 @@ Module Data_Tables_Constants
 #Region "ACF_Access"
 
     ' Stores read and write tables for privileges granting
-    Friend Const ACCESS_DATABASE As String = "ACF_Access"
+    Friend Const ACCESS_DATABASE As String = "acf_access"
 
-    Friend Const CONFIG_READ_TABLES As String = "Config_Tables_Read"
-    Friend Const CONFIG_WRITE_TABLES As String = "Config_Tables_Write"
+    Friend Const CONFIG_READ_TABLES As String = "config_tables_read"
+    Friend Const CONFIG_WRITE_TABLES As String = "config_tables_write"
     Friend Const CONFIG_ACCESS_TABLE_NAME_VARIABLE As String = "table_name"
     Friend Const CONFIG_ACCESS_CREDENTIAL_TYPE_VARIABLE As String = "credential_type"
 

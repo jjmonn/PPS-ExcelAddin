@@ -95,7 +95,7 @@ Public Class AddinModule
     Friend WithEvents AdxRibbonMenu3 As AddinExpress.MSO.ADXRibbonMenu
     Friend WithEvents FunctionDesigner As AddinExpress.MSO.ADXRibbonSplitButton
     Friend WithEvents AdxRibbonMenu1 As AddinExpress.MSO.ADXRibbonMenu
-    Friend WithEvents AdjustmentDD As AddinExpress.MSO.ADXRibbonDropDown
+    Friend WithEvents AdjustmentDropDown As AddinExpress.MSO.ADXRibbonDropDown
     Friend WithEvents MainTabImageList As System.Windows.Forms.ImageList
     Friend WithEvents InputReportLaunchBT As AddinExpress.MSO.ADXRibbonSplitButton
     Friend WithEvents AdxRibbonMenu7 As AddinExpress.MSO.ADXRibbonMenu
@@ -209,7 +209,7 @@ Public Class AddinModule
         Me.AdxRibbonButton2 = New AddinExpress.MSO.ADXRibbonButton(Me.components)
         Me.AdxRibbonButton3 = New AddinExpress.MSO.ADXRibbonButton(Me.components)
         Me.AdxRibbonButton4 = New AddinExpress.MSO.ADXRibbonButton(Me.components)
-        Me.AdjustmentDD = New AddinExpress.MSO.ADXRibbonDropDown(Me.components)
+        Me.AdjustmentDropDown = New AddinExpress.MSO.ADXRibbonDropDown(Me.components)
         Me.ClientsDropDown = New AddinExpress.MSO.ADXRibbonDropDown(Me.components)
         Me.ProductsDropDown = New AddinExpress.MSO.ADXRibbonDropDown(Me.components)
         Me.EditSelectionGroup = New AddinExpress.MSO.ADXRibbonGroup(Me.components)
@@ -837,7 +837,7 @@ Public Class AddinModule
         Me.StateSelectionGroup.Controls.Add(Me.AdxRibbonButton2)
         Me.StateSelectionGroup.Controls.Add(Me.AdxRibbonButton3)
         Me.StateSelectionGroup.Controls.Add(Me.AdxRibbonButton4)
-        Me.StateSelectionGroup.Controls.Add(Me.AdjustmentDD)
+        Me.StateSelectionGroup.Controls.Add(Me.AdjustmentDropDown)
         Me.StateSelectionGroup.Controls.Add(Me.ClientsDropDown)
         Me.StateSelectionGroup.Controls.Add(Me.ProductsDropDown)
         Me.StateSelectionGroup.Id = "adxRibbonGroup_31e139cc6d9d421dbf833740d494b4a0"
@@ -928,14 +928,14 @@ Public Class AddinModule
         Me.AdxRibbonButton4.ImageTransparentColor = System.Drawing.Color.Transparent
         Me.AdxRibbonButton4.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
         '
-        'AdjustmentDD
+        'AdjustmentDropDown
         '
-        Me.AdjustmentDD.Caption = " "
-        Me.AdjustmentDD.Id = "adxRibbonDropDown_3f4be5b43d974d048c6f5ea42f91efd4"
-        Me.AdjustmentDD.ImageList = Me.NewICOs
-        Me.AdjustmentDD.ImageTransparentColor = System.Drawing.Color.Transparent
-        Me.AdjustmentDD.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
-        Me.AdjustmentDD.SelectedItemIndex = 0
+        Me.AdjustmentDropDown.Caption = " "
+        Me.AdjustmentDropDown.Id = "adxRibbonDropDown_3f4be5b43d974d048c6f5ea42f91efd4"
+        Me.AdjustmentDropDown.ImageList = Me.NewICOs
+        Me.AdjustmentDropDown.ImageTransparentColor = System.Drawing.Color.Transparent
+        Me.AdjustmentDropDown.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
+        Me.AdjustmentDropDown.SelectedItemIndex = 0
         '
         'ClientsDropDown
         '
@@ -1257,7 +1257,7 @@ Public Class AddinModule
         GlobalVariables.Version_label_Sub_Ribbon = VersionTBSubRibbon
         GlobalVariables.ClientsIDDropDown = ClientsDropDown
         GlobalVariables.ProductsIDDropDown = ProductsDropDown
-        GlobalVariables.AdjustmentIDDropDown = AdjustmentDD
+        GlobalVariables.AdjustmentIDDropDown = AdjustmentDropDown
 
     End Sub
 
@@ -1395,21 +1395,21 @@ Public Class AddinModule
 
 #Region "GRS Controler Display Functions"
 
-
     ' Create GRS Conctroler and display
     Private Sub AssociateGRSControler(ByRef update_inputs As Boolean)
 
         Dim ctrl As ADXRibbonItem = AddButtonToDropDown(WSCB, GlobalVariables.APPS.ActiveSheet.name, GlobalVariables.APPS.ActiveSheet.name)
+        loadDropDownsSubmissionButtons()
         Dim CGRSControlerInstance As New GeneralSubmissionControler(ctrl, Me)
-
         GRSControlersDictionary.Add(GlobalVariables.APPS.ActiveSheet, CGRSControlerInstance)
         ctrlsTextWSDictionary.Add(ctrl.Caption, GlobalVariables.APPS.ActiveSheet)
         CurrentGRSControler = CGRSControlerInstance
-        CurrentGRSControler.LaunchDatasetSnapshotAndAssociateModel(update_inputs)
-        SubmissionModeRibbon.Activate()
-        SubmissionModeRibbon.Visible = True
-        WSCB.SelectedItemId = ctrl.Id
 
+        CurrentGRSControler.LaunchDatasetSnapshotAndAssociateModel(update_inputs)
+        SubmissionModeRibbon.Visible = True
+        SubmissionModeRibbon.Activate()
+        WSCB.SelectedItemId = ctrl.Id
+       
     End Sub
 
     ' Disable Submission Buttons (Call back from GRSController)
@@ -1858,7 +1858,7 @@ Public Class AddinModule
 
         CurrentGRSControler.UpdateAfterAnalysisAxisChanged(selectedId, _
                                                            ProductsDropDown.SelectedItemId, _
-                                                           AdjustmentDD.SelectedItemId,
+                                                           AdjustmentDropDown.SelectedItemId,
                                                            True)
 
     End Sub
@@ -1867,19 +1867,19 @@ Public Class AddinModule
     Private Sub ProductsDropDown_OnAction(sender As Object, Control As IRibbonControl, selectedId As String, selectedIndex As Integer) Handles ProductsDropDown.OnAction
 
         CurrentGRSControler.UpdateAfterAnalysisAxisChanged(ClientsDropDown.SelectedItemId, _
-                                                              ProductsDropDown.SelectedItemId, _
-                                                              selectedId, _
-                                                              True)
+                                                           selectedId, _
+                                                           AdjustmentDropDown.SelectedItemId, _
+                                                           True)
 
     End Sub
 
     ' Change in Adjustments DropDown
-    Private Sub AdjustmentDD_OnAction(sender As Object, Control As IRibbonControl, selectedId As String, selectedIndex As Integer) Handles AdjustmentDD.OnAction
+    Private Sub AdjustmentDD_OnAction(sender As Object, Control As IRibbonControl, selectedId As String, selectedIndex As Integer) Handles AdjustmentDropDown.OnAction
 
         CurrentGRSControler.UpdateAfterAnalysisAxisChanged(ClientsDropDown.SelectedItemId, _
-                                                              ProductsDropDown.SelectedItemId, _
-                                                              selectedId, _
-                                                              True)
+                                                            ProductsDropDown.SelectedItemId, _
+                                                            selectedId, _
+                                                            True)
 
     End Sub
 
@@ -1901,7 +1901,8 @@ Public Class AddinModule
 
     Friend Sub InputReportPaneCallBack_ReportCreation()
 
-        '   GlobalVariables.APPS.ScreenUpdating = False
+        ' circular progress !!!
+        GlobalVariables.APPS.ScreenUpdating = False
         Dim entity_id As String = Me.InputReportTaskPane.EntitiesTV.SelectedNode.Name
         Dim entity_name As String = Me.InputReportTaskPane.EntitiesTV.SelectedNode.Text
         Dim currency As String = EntitiesMapping.GetEntityCurrency(entity_id)

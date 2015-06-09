@@ -28,8 +28,7 @@ Friend Class Entity
 
     ' Constants
     Friend object_is_alive As Boolean
-    Private Const NB_CONNECTIONS_TRIALS = 10
-
+ 
 #End Region
 
 
@@ -37,16 +36,10 @@ Friend Class Entity
 
     Protected Friend Sub New()
 
-        Dim i As Int32 = 0
-        Dim q_result = SRV.openRst(LEGAL_ENTITIES_DATABASE & "." & ENTITIES_TABLE, ModelServer.DYNAMIC_CURSOR)
-        While q_result = False AndAlso i < NB_CONNECTIONS_TRIALS
-            q_result = SRV.openRst(LEGAL_ENTITIES_DATABASE & "." & ENTITIES_TABLE, ModelServer.DYNAMIC_CURSOR)
-            i = i + 1
-        End While
+        object_is_alive = SRV.OpenRst(LEGAL_ENTITIES_DATABASE & "." & ENTITIES_TABLE, ModelServer.DYNAMIC_CURSOR)
         SRV.rst.Sort = ITEMS_POSITIONS
         RST = SRV.rst
-        object_is_alive = q_result
-
+        
     End Sub
 
 #End Region
@@ -145,30 +138,30 @@ Friend Class Entity
             TV.Nodes.Clear()
             srv.rst.Sort = ITEMS_POSITIONS
 
-                Do While srv.rst.EOF = False
+            Do While srv.rst.EOF = False
 
-                    Dim image_index As Int32 = srv.rst.Fields(ENTITIES_ALLOW_EDITION_VARIABLE).Value
+                Dim image_index As Int32 = srv.rst.Fields(ENTITIES_ALLOW_EDITION_VARIABLE).Value
 
-                    If IsDBNull(srv.rst.Fields(ENTITIES_PARENT_ID_VARIABLE).Value) Then
+                If IsDBNull(srv.rst.Fields(ENTITIES_PARENT_ID_VARIABLE).Value) Then
+                    currentNode = TV.Nodes.Add(Trim(srv.rst.Fields(ENTITIES_ID_VARIABLE).Value), _
+                                               Trim(srv.rst.Fields(ENTITIES_NAME_VARIABLE).Value), _
+                                               image_index, image_index)
+                Else
+
+                    ParentNode = TV.Nodes.Find(Trim(srv.rst.Fields(ENTITIES_PARENT_ID_VARIABLE).Value), True)
+                    If ParentNode.Length = 0 Then
                         currentNode = TV.Nodes.Add(Trim(srv.rst.Fields(ENTITIES_ID_VARIABLE).Value), _
                                                    Trim(srv.rst.Fields(ENTITIES_NAME_VARIABLE).Value), _
-                                                   image_index, image_index)
+                                                  image_index, image_index)
                     Else
-
-                        ParentNode = TV.Nodes.Find(Trim(srv.rst.Fields(ENTITIES_PARENT_ID_VARIABLE).Value), True)
-                        If ParentNode.Length = 0 Then
-                            currentNode = TV.Nodes.Add(Trim(srv.rst.Fields(ENTITIES_ID_VARIABLE).Value), _
-                                                       Trim(srv.rst.Fields(ENTITIES_NAME_VARIABLE).Value), _
-                                                      image_index, image_index)
-                        Else
-                            currentNode = ParentNode(0).Nodes.Add(Trim(srv.rst.Fields(ENTITIES_ID_VARIABLE).Value), _
-                                                                  Trim(srv.rst.Fields(ENTITIES_NAME_VARIABLE).Value), _
-                                                                  image_index, image_index)
-                        End If
+                        currentNode = ParentNode(0).Nodes.Add(Trim(srv.rst.Fields(ENTITIES_ID_VARIABLE).Value), _
+                                                              Trim(srv.rst.Fields(ENTITIES_NAME_VARIABLE).Value), _
+                                                              image_index, image_index)
                     End If
-                    currentNode.Checked = True
-                    srv.rst.MoveNext()
-                Loop
+                End If
+                currentNode.Checked = True
+                srv.rst.MoveNext()
+            Loop
             srv.rst.Close()
         End If
 
@@ -221,7 +214,7 @@ Friend Class Entity
         Dim srv As New ModelServer
 
         TV.Nodes.Clear()
-        srv.openRst(VIEWS_DATABASE + "." + GlobalVariables.Entities_View, ModelServer.FWD_CURSOR)
+        srv.OpenRst(LEGAL_ENTITIES_DATABASE + "." + ENTITIES_TABLE, ModelServer.FWD_CURSOR)
         srv.rst.Sort = ITEMS_POSITIONS
 
         Do While srv.rst.EOF = False

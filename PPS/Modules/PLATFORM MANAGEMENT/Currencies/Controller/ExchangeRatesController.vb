@@ -96,8 +96,7 @@ Friend Class ExchangeRatesController
                           ByRef period As Integer, _
                           ByVal value As Double)
 
-        Dim rate_id = curr & "/" & MAIN_CURRENCY & period
-        If Not ExchangeRates Is Nothing Then ExchangeRates.UpdateRate(rate_id, EX_RATES_RATE_VARIABLE, value)
+        If Not ExchangeRates Is Nothing Then ExchangeRates.UpdateRate(curr, period, value)
 
     End Sub
 

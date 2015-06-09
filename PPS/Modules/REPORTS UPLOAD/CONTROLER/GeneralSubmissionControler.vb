@@ -32,7 +32,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 09/05/2015
+' Last modified: 08/06/2015
 
 
 Imports Microsoft.Office.Interop
@@ -66,6 +66,7 @@ Friend Class GeneralSubmissionControler
     Private BCKGW As New BackgroundWorker
 
     ' Variables
+    Private current_entity_name As String
     Friend snapshotSuccess As Boolean
     Friend autoCommitFlag As Boolean
     Private itemsHighlightFlag As Boolean
@@ -161,7 +162,8 @@ Friend Class GeneralSubmissionControler
         ADDIN.CurrentEntityTB.Text = entity
         Dim entitiesNameCurrDic As Hashtable = EntitiesMapping.GetEntitiesDictionary(ENTITIES_NAME_VARIABLE, ENTITIES_CURRENCY_VARIABLE)
         ADDIN.EntCurrTB.Text = entitiesNameCurrDic(entity)
-     
+        current_entity_name = entity
+
     End Sub
 
     
@@ -263,18 +265,19 @@ Friend Class GeneralSubmissionControler
                                                         Optional ByRef update_inputs_from_DB As Boolean = False)
 
         isUpdating = True
-        Model.DownloadDBInputs(ADDIN.CurrentEntityTB.Text, _
+        ' PB: Ceci ne marche que pour le cas orientation "AcDa"  !!! 
+        Model.DownloadDBInputs(current_entity_name, _
                                client_id, _
                                product_id, _
                                adjustment_id)
 
         If update_inputs_from_DB = True Then
-            updateInputs(ADDIN.CurrentEntityTB.Text)
+            updateInputs(current_entity_name)
         End If
         Dataset.getDataSet()
         RefreshDataSetAndSetUpDisplay()
 
-        UpdateCalculatedItems(ADDIN.CurrentEntityTB.Text)
+        UpdateCalculatedItems(current_entity_name)
         isUpdating = False
 
     End Sub

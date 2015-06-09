@@ -126,7 +126,7 @@ Friend Class ConnectionUI
                         ADDIN.LaunchVersionSelection()
                     End If
                   
-                    AddinModule.loadDropDownsSubmissionButtons()
+                    '  AddinModule.loadDropDownsSubmissionButtons()
 
                     CP.Dispose()
                     Me.Dispose()

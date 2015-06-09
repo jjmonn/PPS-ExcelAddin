@@ -146,26 +146,26 @@
     <Compile Include="Modules\PLATFORM MANAGEMENT\Analysis Axis Super Classes\Views\NewAnalysisAxisUI.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Clients Specific Modules\GDF SUEZ - ALTERNATIVE SCENARIOS\Configuration\Controllers\ASEntitiesAttributesController.vb" />
-    <Compile Include="Clients Specific Modules\GDF SUEZ - ALTERNATIVE SCENARIOS\Configuration\Models\CRUDs\GDFSUEZEntitiesAttribute.vb" />
-    <Compile Include="Clients Specific Modules\GDF SUEZ - ALTERNATIVE SCENARIOS\Configuration\Models\Mappings\GDFSUEZASAccountsMapping.vb" />
-    <Compile Include="Clients Specific Modules\GDF SUEZ - ALTERNATIVE SCENARIOS\Configuration\Models\CRUDs\GDFSUEZASExport.vb" />
+    <Compile Include="Modules\MODELING\PS MODELING\Configuration\Controllers\ASEntitiesAttributesController.vb" />
+    <Compile Include="Modules\MODELING\PS MODELING\Configuration\Models\CRUDs\GDFSUEZEntitiesAttribute.vb" />
+    <Compile Include="Modules\MODELING\PS MODELING\Configuration\Models\Mappings\GDFSUEZASAccountsMapping.vb" />
+    <Compile Include="Modules\MODELING\PS MODELING\Configuration\Models\CRUDs\GDFSUEZASExport.vb" />
     <Compile Include="Models\Computing\FormulasGenericCheck.vb" />
-    <Compile Include="Clients Specific Modules\GDF SUEZ - ALTERNATIVE SCENARIOS\Configuration\Views\ASEntitiesAttributesUI.Designer.vb">
+    <Compile Include="Modules\MODELING\PS MODELING\Configuration\Views\ASEntitiesAttributesUI.Designer.vb">
       <DependentUpon>ASEntitiesAttributesUI.vb</DependentUpon>
     </Compile>
-    <Compile Include="Clients Specific Modules\GDF SUEZ - ALTERNATIVE SCENARIOS\Configuration\Views\ASEntitiesAttributesUI.vb">
+    <Compile Include="Modules\MODELING\PS MODELING\Configuration\Views\ASEntitiesAttributesUI.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Models\CRUDs\Client.vb" />
     <Compile Include="Models\CRUDs\FormatM.vb" />
     <Compile Include="Models\CRUDs\Product.vb" />
     <Compile Include="Models\CRUDs\Report.vb" />
-    <Compile Include="Clients Specific Modules\GDF SUEZ - ALTERNATIVE SCENARIOS\Configuration\Models\Mappings\GDFSUEZEntitiesAttributesMapping.vb" />
-    <Compile Include="Clients Specific Modules\GDF SUEZ - ALTERNATIVE SCENARIOS\Configuration\Models\Mappings\GDFSUEZSensitivitiesMapping.vb" />
-    <Compile Include="Clients Specific Modules\GDF SUEZ - ALTERNATIVE SCENARIOS\Controller\AlternativeScenariosController.vb" />
-    <Compile Include="Clients Specific Modules\GDF SUEZ - ALTERNATIVE SCENARIOS\Controller\ASInputsController.vb" />
-    <Compile Include="Clients Specific Modules\GDF SUEZ - ALTERNATIVE SCENARIOS\Model\AlternativeScenarioModel.vb" />
+    <Compile Include="Modules\MODELING\PS MODELING\Configuration\Models\Mappings\GDFSUEZEntitiesAttributesMapping.vb" />
+    <Compile Include="Modules\MODELING\PS MODELING\Configuration\Models\Mappings\GDFSUEZSensitivitiesMapping.vb" />
+    <Compile Include="Modules\MODELING\PS MODELING\Controller\AlternativeScenariosController.vb" />
+    <Compile Include="Modules\MODELING\PS MODELING\Controller\ASInputsController.vb" />
+    <Compile Include="Modules\MODELING\PS MODELING\Model\AlternativeScenarioModel.vb" />
     <Compile Include="Controllers\Utilities\ChartsUtilities.vb" />
     <Compile Include="Models\CRUDs\Adjustment.vb" />
     <Compile Include="Models\CRUDs\MarketIndex.vb" />
@@ -193,11 +193,11 @@
     <Compile Include="Models\Mappings\ProductsMapping.vb" />
     <Compile Include="Models\Mappings\SeriesMapping.vb" />
     <Compile Include="Models\Mappings\UsersMapping.vb" />
-    <Compile Include="Clients Specific Modules\GDF SUEZ - ALTERNATIVE SCENARIOS\Configuration\Models\gdfsuezAlternativeScenarios.vb" />
-    <Compile Include="Clients Specific Modules\GDF SUEZ - ALTERNATIVE SCENARIOS\View\AlternativeScenariosUI.Designer.vb">
+    <Compile Include="Modules\MODELING\PS MODELING\Configuration\Models\gdfsuezAlternativeScenarios.vb" />
+    <Compile Include="Modules\MODELING\PS MODELING\View\AlternativeScenariosUI.Designer.vb">
       <DependentUpon>AlternativeScenariosUI.vb</DependentUpon>
     </Compile>
-    <Compile Include="Clients Specific Modules\GDF SUEZ - ALTERNATIVE SCENARIOS\View\AlternativeScenariosUI.vb">
+    <Compile Include="Modules\MODELING\PS MODELING\View\AlternativeScenariosUI.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Models\Computing\GenericAggregationDLL3Computing.vb" />
@@ -230,28 +230,28 @@
     <Compile Include="Modules\MODELING\CONFIGURATION\FModeling Accounts\View\FModelingAccountsMGTUI.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Modules\MODELING\CONFIGURATION\Market Prices Config\Controller\MarketPricesController.vb" />
-    <Compile Include="Modules\MODELING\CONFIGURATION\Market Prices Config\Views\MarketPricesUI.Designer.vb">
+    <Compile Include="Modules\MODELING\PS MODELING\Configuration\Market Prices Config\Controller\MarketPricesController.vb" />
+    <Compile Include="Modules\MODELING\PS MODELING\Configuration\Market Prices Config\Views\MarketPricesUI.Designer.vb">
       <DependentUpon>MarketPricesUI.vb</DependentUpon>
     </Compile>
-    <Compile Include="Modules\MODELING\CONFIGURATION\Market Prices Config\Views\MarketPricesUI.vb">
+    <Compile Include="Modules\MODELING\PS MODELING\Configuration\Market Prices Config\Views\MarketPricesUI.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Modules\MODELING\CONFIGURATION\Market Prices Config\Views\MarketPricesView.vb" />
-    <Compile Include="Modules\MODELING\CONFIGURATION\Market Prices Config\Views\NewPricesVersionUI.Designer.vb">
+    <Compile Include="Modules\MODELING\PS MODELING\Configuration\Market Prices Config\Views\MarketPricesView.vb" />
+    <Compile Include="Modules\MODELING\PS MODELING\Configuration\Market Prices Config\Views\NewPricesVersionUI.Designer.vb">
       <DependentUpon>NewPricesVersionUI.vb</DependentUpon>
     </Compile>
-    <Compile Include="Modules\MODELING\CONFIGURATION\Market Prices Config\Views\NewPricesVersionUI.vb">
+    <Compile Include="Modules\MODELING\PS MODELING\Configuration\Market Prices Config\Views\NewPricesVersionUI.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Modules\MODELING\FINANCIAL MODELLING\Controller\FModelingExportController.vb" />
     <Compile Include="Modules\MODELING\FINANCIAL MODELLING\Controller\FModelingInputsController.vb" />
     <Compile Include="Modules\MODELING\FINANCIAL MODELLING\Controller\FModelingSimulationController.vb" />
     <Compile Include="Modules\MODELING\FINANCIAL MODELLING\Model\Scenario.vb" />
-    <Compile Include="Clients Specific Modules\GDF SUEZ - ALTERNATIVE SCENARIOS\Configuration\Views\ASConfigurationPanel.Designer.vb">
+    <Compile Include="Modules\MODELING\PS MODELING\Configuration\Views\ASConfigurationPanel.Designer.vb">
       <DependentUpon>ASConfigurationPanel.vb</DependentUpon>
     </Compile>
-    <Compile Include="Clients Specific Modules\GDF SUEZ - ALTERNATIVE SCENARIOS\Configuration\Views\ASConfigurationPanel.vb">
+    <Compile Include="Modules\MODELING\PS MODELING\Configuration\Views\ASConfigurationPanel.vb">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Modules\LOG\Controller\LogController.vb" />
@@ -642,10 +642,10 @@
     <EmbeddedResource Include="Modules\PLATFORM MANAGEMENT\Analysis Axis Super Classes\Views\NewAnalysisAxisUI.resx">
       <DependentUpon>NewAnalysisAxisUI.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Clients Specific Modules\GDF SUEZ - ALTERNATIVE SCENARIOS\Configuration\Views\ASEntitiesAttributesUI.resx">
+    <EmbeddedResource Include="Modules\MODELING\PS MODELING\Configuration\Views\ASEntitiesAttributesUI.resx">
       <DependentUpon>ASEntitiesAttributesUI.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Clients Specific Modules\GDF SUEZ - ALTERNATIVE SCENARIOS\View\AlternativeScenariosUI.resx">
+    <EmbeddedResource Include="Modules\MODELING\PS MODELING\View\AlternativeScenariosUI.resx">
       <DependentUpon>AlternativeScenariosUI.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Modules\CONTROLING UI\View\ControllingUIChartsConfig.resx">
@@ -666,13 +666,13 @@
     <EmbeddedResource Include="Modules\MODELING\CONFIGURATION\FModeling Accounts\View\FModelingAccountsMGTUI.resx">
       <DependentUpon>FModelingAccountsMGTUI.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Modules\MODELING\CONFIGURATION\Market Prices Config\Views\MarketPricesUI.resx">
+    <EmbeddedResource Include="Modules\MODELING\PS MODELING\Configuration\Market Prices Config\Views\MarketPricesUI.resx">
       <DependentUpon>MarketPricesUI.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Modules\MODELING\CONFIGURATION\Market Prices Config\Views\NewPricesVersionUI.resx">
+    <EmbeddedResource Include="Modules\MODELING\PS MODELING\Configuration\Market Prices Config\Views\NewPricesVersionUI.resx">
       <DependentUpon>NewPricesVersionUI.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Clients Specific Modules\GDF SUEZ - ALTERNATIVE SCENARIOS\Configuration\Views\ASConfigurationPanel.resx">
+    <EmbeddedResource Include="Modules\MODELING\PS MODELING\Configuration\Views\ASConfigurationPanel.resx">
       <DependentUpon>ASConfigurationPanel.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Modules\LOG\View\LogUI.resx">
@@ -1005,7 +1005,7 @@
     <None Include="Resources\favicon%28239%29.ico" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Modules\MODELING\CONFIGURATION\Market Prices Config\Model\" />
+    <Folder Include="Modules\MODELING\PS MODELING\Configuration\Market Prices Config\Model\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\excel.png" />

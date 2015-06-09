@@ -103,8 +103,10 @@ Friend Class FModelingSimulationController
         scenario.constraintsDGV.ContextMenuStrip = View.inputsDGVsRightClickMenu
         View.DGVsSplitContainer.Panel1.Controls.Add(scenario.constraintsDGV)
         View.DGVsSplitContainer.Panel2.Controls.Add(scenario.generalDGV)
+        View.SplitContainer1.Panel2.Controls.Add(scenario.Outputchart)
         scenario.constraintsDGV.Dock = DockStyle.Fill
         scenario.generalDGV.Dock = DockStyle.Fill
+        scenario.Outputchart.Dock = DockStyle.Fill
 
         ComputeScenario()
 
@@ -151,15 +153,12 @@ Friend Class FModelingSimulationController
 
     Friend Sub DeleteDGVActiveConstraint()
 
-        Dim constraint_id = scenario.DeleteDGVActiveConstraint
+        Select Case scenario.DeleteDGVActiveConstraint
+            Case "" : MsgBox("This is a necessary constraint that cannot be removed, but can be set to 0.")
+            Case "na" : MsgBox("Please select a constraint to remove.")
+        End Select
 
     End Sub
-
-    'Friend Sub DeleteConstraint(ByRef scenario_id As String)
-
-    '    If scenario.DeleteConstraint(fAccountsNodes.Nodes.Find(f_account_name, True)(0).Text) = True Then constraint_node.Remove()
-
-    'End Sub
 
     Friend Sub CopyValueRight()
 

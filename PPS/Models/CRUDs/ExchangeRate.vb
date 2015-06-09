@@ -7,7 +7,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 24/01/2015
+' Last modified: 08/06/2015
 
 
 Imports System.Windows.Forms
@@ -59,9 +59,8 @@ Friend Class ExchangeRate
 
 #Region "CRUD Interface"
 
-    Protected Friend Sub CreateExchangeRate(ByRef curr As String, _
+    Friend Sub CreateExchangeRate(ByRef curr As String, _
                                   ByRef period As Integer, _
-                                  ByRef version As String, _
                                   ByRef value As Double)
 
         RST.AddNew()
@@ -70,12 +69,12 @@ Friend Class ExchangeRate
         RST(EX_RATES_PERIOD_VARIABLE).Value = period
         RST(EX_RATES_RATE_VARIABLE).Value = value
         RST(EX_RATES_RATE_ID_VARIABLE).Value = curr_token & period
-        RST(EX_RATES_RATE_VERSION).Value = version
+        RST(EX_RATES_RATE_VERSION).Value = current_version
         RST.Update()
 
     End Sub
 
-    Protected Friend Function ReadRate(ByRef rate_id As String, ByRef field As String) As Object
+    Friend Function ReadRate(ByRef rate_id As String, ByRef field As String) As Object
 
         RST.Filter = EX_RATES_RATE_ID_VARIABLE + "='" + rate_id + "'"
         If RST.EOF Then Return Nothing
@@ -83,7 +82,7 @@ Friend Class ExchangeRate
 
     End Function
 
-    Protected Friend Sub UpdateRate(ByRef rate_id As String, ByRef rateAttributes As Hashtable)
+    Friend Sub UpdateRate(ByRef rate_id As String, ByRef rateAttributes As Hashtable)
 
         RST.Filter = EX_RATES_RATE_ID_VARIABLE + "='" + rate_id + "'"
         If RST.EOF = False AndAlso RST.BOF = False Then
@@ -95,21 +94,24 @@ Friend Class ExchangeRate
 
     End Sub
 
-    Protected Friend Sub UpdateRate(ByRef rate_id As String, _
-                          ByRef field As String, _
+    Friend Sub UpdateRate(ByRef currency As String, _
+                          ByRef period As String, _
                           ByVal value As Object)
 
-        RST.Filter = EX_RATES_RATE_ID_VARIABLE + "='" + rate_id + "'"
+        Dim rate_id As String = "='" + currency & "/" & MAIN_CURRENCY & period + "'"
+        RST.Filter = EX_RATES_RATE_ID_VARIABLE + rate_id
         If RST.EOF = False AndAlso RST.BOF = False Then
-            If RST.Fields(field).Value <> value Then
-                RST.Fields(field).Value = value
-                modified_flag = True
+            If RST.Fields(EX_RATES_RATE_VARIABLE).Value <> value Then
+                RST.Fields(EX_RATES_RATE_VARIABLE).Value = value
             End If
+        Else
+            CreateExchangeRate(currency, period, value)
         End If
+        modified_flag = True
 
     End Sub
 
-    Protected Friend Sub DeleteRate(ByRef rate_id As String)
+    Friend Sub DeleteRate(ByRef rate_id As String)
 
         RST.Filter = EX_RATES_RATE_ID_VARIABLE + "='" + rate_id + "'"
         If RST.EOF = False Then
@@ -119,7 +121,7 @@ Friend Class ExchangeRate
 
     End Sub
 
-    Protected Friend Sub UpdateModel()
+    Friend Sub UpdateModel()
 
         RST.UpdateBatch()
         modified_flag = False
@@ -184,10 +186,13 @@ Friend Class ExchangeRate
 
     End Function
 
-
     Protected Overrides Sub finalize()
 
-        RST.Close()
+        Try
+            RST.Close()
+        Catch ex As Exception
+
+        End Try
         MyBase.Finalize()
 
     End Sub

@@ -11,7 +11,6 @@
 '
 ' to do: 
 '       - Write method: implement version choice (currently using the VERSION BUTTON)
-'       - Careful with "short string" (<3 words for entities recognition)
 '       - Try to factor getDataSet
 '       - swap GetData. v and h dicts
 '
@@ -77,6 +76,11 @@ Friend Class ModelDataSet
     Friend datesOrientation As String
     Friend accountsOrientation As String
     Friend assetsOrientation As String
+
+    Private Const string_flag As String = "String"
+    Private Const account_flag As String = "Account"
+    Private Const entity_flag As String = "Entity"
+    Private Const period_flag As String = "Period"
 
 #End Region
 
@@ -193,7 +197,7 @@ Friend Class ModelDataSet
                     AndAlso Not periodsAddressValuesDictionary.ContainsValue(periodStoredAsInt) Then
 
                         periodsAddressValuesDictionary.Add(Split(WS.Columns(j).Address(ColumnAbsolute:=False), ":")(1) & i, periodStoredAsInt)
-                        GlobalScreenShotFlag(i, j) = "period"
+                        GlobalScreenShotFlag(i, j) = period_flag
 
                     End If
                 End If
@@ -228,28 +232,21 @@ Friend Class ModelDataSet
 
                         AccountsAddressValuesDictionary.Add(Split(WS.Columns(j).Address(ColumnAbsolute:=False), ":")(1) & i, _
                                                  CStr(GlobalScreenShot(i, j)))
-                        GlobalScreenShotFlag(i, j) = "Account"
+                        GlobalScreenShotFlag(i, j) = account_flag
 
                     ElseIf outputsAccountsList.Contains(CStr(GlobalScreenShot(i, j))) _
                     AndAlso Not AccountsAddressValuesDictionary.ContainsValue(CStr(GlobalScreenShot(i, j))) Then
 
                         OutputsAccountsAddressvaluesDictionary.Add(Split(WS.Columns(j).Address(ColumnAbsolute:=False), ":")(1) & i, _
                                             CStr(GlobalScreenShot(i, j)))
-                        GlobalScreenShotFlag(i, j) = "Account"
+                        GlobalScreenShotFlag(i, j) = account_flag
 
                         '         ElseIf AccountSearchAlgo(GlobalScreenShot(i, j)) = True Then           'Repeated procedure but faster...
                         '
                         '            AccountsAddressValuesDictionary.add(Split(Columns(j).Address(ColumnAbsolute:=False), ":")(1) + i, CStr(GlobalScreenShot(i, j)))
-                        '            GlobalScreenShotFlag(i, j) = "Account"
+                        '            GlobalScreenShotFlag(i, j) = account_flag
                     End If
-
-                    nbWords = Len(GlobalScreenShot(i, j)) - Len(Replace(GlobalScreenShot(i, j), " ", "")) + 1
-
-                    If nbWords <= 3 Then
-                        GlobalScreenShotFlag(i, j) = "ShortString"                                        ' Flag for assets lookup
-                    Else
-                        GlobalScreenShotFlag(i, j) = "LongString"
-                    End If
+                   GlobalScreenShotFlag(i, j) = string_flag                                       ' Flag for assets lookup
 
                 End If
             Next j
@@ -273,7 +270,7 @@ Friend Class ModelDataSet
             For j = LBound(GlobalScreenShot, 2) To UBound(GlobalScreenShot, 2)
 
                 Select Case GlobalScreenShotFlag(i, j)
-                    Case "ShortString"
+                    Case string_flag
 
                         If assetsList.Contains(CStr(GlobalScreenShot(i, j))) _
                         AndAlso Not EntitiesAddressValuesDictionary.ContainsValue(CStr(GlobalScreenShot(i, j))) Then
@@ -541,29 +538,29 @@ Friend Class ModelDataSet
         ' Get Maximum Right cell
         If WS.Range(periodsAddressValuesDictionary.ElementAt(periodsAddressValuesDictionary.Count - 1).Key).Column > WS.Range(AccountsAddressValuesDictionary.ElementAt(AccountsAddressValuesDictionary.Count - 1).Key).Column Then
             If WS.Range(periodsAddressValuesDictionary.ElementAt(periodsAddressValuesDictionary.Count - 1).Key).Column > WS.Range(EntitiesAddressValuesDictionary.ElementAt(EntitiesAddressValuesDictionary.Count - 1).Key).Column Then
-                MaxRight = "Date"
+                MaxRight = period_flag
             Else
-                MaxRight = "Asset"
+                MaxRight = entity_flag
             End If
         Else
             If WS.Range(AccountsAddressValuesDictionary.ElementAt(AccountsAddressValuesDictionary.Count - 1).Key).Column > WS.Range(EntitiesAddressValuesDictionary.ElementAt(EntitiesAddressValuesDictionary.Count - 1).Key).Column Then
-                MaxRight = "Account"
+                MaxRight = account_flag
             Else
-                MaxRight = "Asset"
+                MaxRight = entity_flag
             End If
         End If
         ' Get Maximum Below cell
         If WS.Range(periodsAddressValuesDictionary.ElementAt(periodsAddressValuesDictionary.Count - 1).Key).Row > WS.Range(AccountsAddressValuesDictionary.ElementAt(AccountsAddressValuesDictionary.Count - 1).Key).Row Then
             If WS.Range(periodsAddressValuesDictionary.ElementAt(periodsAddressValuesDictionary.Count - 1).Key).Row > WS.Range(EntitiesAddressValuesDictionary.ElementAt(EntitiesAddressValuesDictionary.Count - 1).Key).Row Then
-                MaxBelow = "Date"
+                MaxBelow = period_flag
             Else
-                MaxBelow = "Asset"
+                MaxBelow = entity_flag
             End If
         Else
             If WS.Range(AccountsAddressValuesDictionary.ElementAt(AccountsAddressValuesDictionary.Count - 1).Key).Row > WS.Range(EntitiesAddressValuesDictionary.ElementAt(EntitiesAddressValuesDictionary.Count - 1).Key).Row Then
-                MaxBelow = "Account"
+                MaxBelow = account_flag
             Else
-                MaxBelow = "Asset"
+                MaxBelow = entity_flag
             End If
         End If
     End Sub

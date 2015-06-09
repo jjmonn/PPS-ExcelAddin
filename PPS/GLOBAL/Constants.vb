@@ -67,7 +67,7 @@ Module Constants
     Friend Const VALUE_FLAG = "V"
     Friend Const ADDRESS_FLAG = "A"
     Friend Const ACCOUNT_FLAG = "Account"
-    Friend Const ASSET_FLAG = "Asset"
+    Friend Const ASSET_FLAG = "Entity"
     Friend Const PERIOD_FLAG = "Period"
     Friend Const VERSION_FLAG = "Version"
     Friend Const ORIENTATION_ERROR_FLAG = "Orientation_error"

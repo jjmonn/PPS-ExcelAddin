@@ -108,14 +108,19 @@ Friend Class WorksheetWrittingFunctions
 
 #Region "Worksheets Add/ Delete"
 
-    Protected Friend Shared Function CreateReceptionWS(ByRef wsName As String, _
+    Friend Shared Function CreateReceptionWS(ByRef wsName As String, _
                                                        ByRef header_names_array As String(), _
                                                        ByRef header_values_array As String()) As Excel.Range
 
         Dim WS As Excel.Worksheet = CType(GlobalVariables.APPS.Worksheets.Add(), Excel.Worksheet)
         If Len(wsName) < EXCEL_SHEET_NAME_MAX_LENGHT _
-        And CheckIfWorkbookContainsWorksheetName(GlobalVariables.APPS.ActiveWorkbook, wsName) = False Then
+        AndAlso CheckIfWorkbookContainsWorksheetName(GlobalVariables.APPS.ActiveWorkbook, wsName) = False Then
             WS.Name = wsName
+        Else
+            wsName = Left(wsName, EXCEL_SHEET_NAME_MAX_LENGHT)
+            If CheckIfWorkbookContainsWorksheetName(GlobalVariables.APPS.ActiveWorkbook, wsName) = False Then
+                WS.Name = wsName
+            End If
         End If
 
         GlobalVariables.APPS.ActiveWindow.DisplayGridlines = False
@@ -135,7 +140,7 @@ Friend Class WorksheetWrittingFunctions
 
     End Function
 
-    Public Shared Function CheckIfWorkbookContainsWorksheetName(ByRef WB As Excel.Workbook, WSName As String) As Boolean
+    Friend Shared Function CheckIfWorkbookContainsWorksheetName(ByRef WB As Excel.Workbook, WSName As String) As Boolean
 
         For Each WS As Excel.Worksheet In WB.Worksheets
             If WS.Name = WSName Then

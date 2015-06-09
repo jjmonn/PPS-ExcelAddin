@@ -450,7 +450,7 @@ Partial Class PPSBI_UI
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.SystemColors.Control
-        Me.ClientSize = New System.Drawing.Size(576, 569)
+        Me.ClientSize = New System.Drawing.Size(1043, 569)
         Me.Controls.Add(Me.rightSideEpxansionBT)
         Me.Controls.Add(Me.categoriesSelectionGroupBox)
         Me.Controls.Add(Me.MainTVsSelectionGB)
