@@ -81,6 +81,8 @@ Friend Class AlternativeScenarioModel
                                                 nb_periods, _
                                                 PBar)
 
+        ' PB -> if affiliate not modeled -> no children but no need to be modeled !!
+        ' we cannot use only the "no children" -> need to use "allow edition" !!!
         entities_id_list = TreeViewsUtilities.GetNoChildrenNodesList(TreeViewsUtilities.GetNodesKeysList(entity_node), entity_node.TreeView)
         BuildDataDic(entity_node)
 
@@ -295,7 +297,10 @@ Friend Class AlternativeScenarioModel
 
     Private Function GetFormulas(ByRef formula_id As String) As List(Of String)
 
+        ' careful we have an issue with entities without formulas in as_attributes table !!!
+        ' to be updated -> no formula = keep original values for the accounts
         Dim formulas As New List(Of String)
+      
         For Each entity_id In entities_id_list
             formulas.Add(entities_attributes_dictionary(entity_id)(formula_id))
         Next

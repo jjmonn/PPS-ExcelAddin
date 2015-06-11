@@ -519,9 +519,9 @@ Friend Class DataBaseDataDownloader
                                    DATA_ENTITY_ID_VARIABLE & "='" & entity_id & "' AND " & _
                                    DATA_PERIOD_VARIABLE & "=" & period
 
-        If client_id <> "" Then str_filter = str_filter & DATA_CLIENT_ID_VARIABLE & "='" & client_id & "'"
-        If product_id <> "" Then str_filter = str_filter & DATA_PRODUCT_ID_VARIABLE & "='" & client_id & "'"
-        If adjustment_id <> "" Then str_filter = str_filter & DATA_ADJUSTMENT_ID_VARIABLE & "='" & client_id & "'"
+        If client_id <> "" Then str_filter = str_filter & " AND " & DATA_CLIENT_ID_VARIABLE & "='" & client_id & "'"
+        If product_id <> "" Then str_filter = str_filter & " AND " & DATA_PRODUCT_ID_VARIABLE & "='" & client_id & "'"
+        If adjustment_id <> "" Then str_filter = str_filter & " AND " & DATA_ADJUSTMENT_ID_VARIABLE & "='" & client_id & "'"
 
         srv.rst.Filter = str_filter
 

@@ -415,6 +415,7 @@ Friend Class AlternativeScenariosUI
         MainPanel.SetColumnSpan(DGV, 2)
         as_panel_lines_index = as_panel_lines_index + 1
         DGV.Refresh()
+        DGV.ColumnsHierarchy.AutoResize(AutoResizeMode.FIT_ALL)
         DGV.Select()
 
     End Sub

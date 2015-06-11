@@ -392,17 +392,29 @@ Friend Class ControllingUI2Controller
     Private Sub FillUIHeader()
 
         View.PBar.EndProgress()
+
+        ' Entities Textbox
         View.EntityTB.Text = Entity_node.Text
         View.EntityTB2.Text = Entity_node.Text
         View.EntityTB3.Text = Entity_node.Text
 
-        View.VersionTB.Text = String.Join(" ; ", categories_values_dict(VERSIONS_CODE).Keys.ToList.ToArray)
-        View.VersionTB2.Text = View.VersionTB.Text
-        View.VersionTB3.Text = View.VersionTB.Text
-
+        ' Currencies textbox
         View.CurrencyTB.Text = View.CurrenciesCLB.CheckedItems(0)
         View.CurrencyTB2.Text = View.CurrencyTB.Text
         View.CurrencyTB3.Text = View.CurrencyTB.Text
+
+        ' Versions Textbox
+        ' Get versions name from ids
+        Dim versions_ids(categories_values_dict(VERSIONS_CODE).Keys.Count) As String
+        Dim i = 0
+        For Each id As String In categories_values_dict(VERSIONS_CODE).Keys
+            versions_ids(i) = versions_dict(id)(VERSIONS_NAME_VARIABLE)
+            i = i + 1
+        Next
+        ' fill textbox
+        View.VersionTB.Text = String.Join(" ; ", versions_ids)
+        View.VersionTB2.Text = View.VersionTB.Text
+        View.VersionTB3.Text = View.VersionTB.Text
 
     End Sub
 

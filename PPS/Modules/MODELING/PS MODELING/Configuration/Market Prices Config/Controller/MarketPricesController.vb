@@ -245,8 +245,8 @@ Friend Class MarketPricesController
 
     Friend Sub ImportPricessFromExcel()
 
-        '  ExcelImport = New ExcelRatesImportUI(Me, indexes_list)
-        '  ExcelImport.Show()
+        'ExcelImport = New ExcelRatesImportUI(Me, indexes_list)
+        'ExcelImport.Show()
 
     End Sub
 

@@ -113,7 +113,11 @@ Friend Class GeneralSubmissionControler
             DataModificationsTracker.InitializeDataSetRegion()
             DataModificationsTracker.InitializeOutputsRegion()
 
-            If Dataset.GlobalOrientationFlag <> ORIENTATION_ERROR_FLAG Then
+            If Dataset.GlobalOrientationFlag <> ORIENTATION_ERROR_FLAG _
+            AndAlso Dataset.EntitiesAddressValuesDictionary.Count > 0 Then
+
+                ' Attention crash si entity not identified !!!
+
                 snapshotSuccess = True
                 FillInEntityAndCurrencyTB(Dataset.EntitiesAddressValuesDictionary.ElementAt(0).Value)
                 SubmissionWSController = New SubmissionWSController(Me, Dataset, Model, DataModificationsTracker)

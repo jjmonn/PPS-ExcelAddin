@@ -135,7 +135,8 @@ Friend Class DataGridViewsUtil
                 End If
 
                 Select Case (AccountsKeysFormatTypesDic(account_id)(ACCOUNT_TYPE_VARIABLE))
-                    Case "MO" : fmtStr = "{0:" & currencies_symbol_dict(currency) & "#,##0.00;(" & currencies_symbol_dict(currency) & "#,##0.00)}"
+                    ' nombe de chiffres après la virgule à variabiliser -> settings !!!!
+                    Case "MO" : fmtStr = "{0:" & currencies_symbol_dict(currency) & "#,##0;(" & currencies_symbol_dict(currency) & "#,##0)}"
                     Case "RA" : fmtStr = "{0:P}"        ' put this in a table ?
                     Case "OP" : fmtStr = "{0:N}"        ' further evolution set unit ?
                     Case "NU" : fmtStr = "{0:N2}"

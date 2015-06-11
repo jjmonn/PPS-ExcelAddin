@@ -254,6 +254,7 @@ Friend Class Scenario
             constraints_DGV_rows_id_item_dict(constraint_id).Delete()
             constraintsDGV.Refresh()
             constraintsDGV.ColumnsHierarchy.AutoResize(AutoResizeMode.FIT_ALL)
+            constraints_DGV_rows_id_item_dict(constraint_id).Delete()
             Return constraint_id
         End If
         Return "na"
