@@ -12,7 +12,7 @@
 '
 '
 '
-' Last Modified: 28/04/2014
+' Last Modified: 15/06/2015
 ' Author: Julien Monnereau
 
 
@@ -37,10 +37,10 @@ Friend Class AccountsController
     Private PlatformMGTUI As PlatformMGTGeneralUI
 
     ' Variables
-    Protected Friend accountsNameKeysDictionary As Hashtable
-    Protected Friend accountsKeyNamesDictionary As Hashtable
-    Protected Friend positionsDictionary As New Dictionary(Of String, Double)
-    Protected Friend needToUpdateModel As Boolean
+    Friend accountsNameKeysDictionary As Hashtable
+    Friend accountsKeyNamesDictionary As Hashtable
+    Friend positionsDictionary As New Dictionary(Of String, Double)
+    Friend needToUpdateModel As Boolean
     Private dependant_account_id As String
     
 #End Region
@@ -121,6 +121,17 @@ Friend Class AccountsController
         accountsNameKeysDictionary.Add(HT(ACCOUNT_NAME_VARIABLE), HT(ACCOUNT_ID_VARIABLE))
         accountsKeyNamesDictionary.Add(HT(ACCOUNT_ID_VARIABLE), HT(ACCOUNT_NAME_VARIABLE))
         needToUpdateModel = True
+
+    End Sub
+
+    Friend Sub UpdateAccountName(ByRef account_id As String, _
+                                 ByRef new_name As String)
+
+        UpdateAccount(account_id, ACCOUNT_NAME_VARIABLE, new_name)
+        Dim old_name = accountsKeyNamesDictionary(account_id)
+        accountsNameKeysDictionary.Remove(old_name)
+        accountsNameKeysDictionary.Add(new_name, account_id)
+        accountsKeyNamesDictionary(account_id) = new_name
 
     End Sub
 
@@ -350,7 +361,12 @@ Friend Class AccountsController
                     MsgBox("This Name contains special characters (e.g. '+', ','). Please enter another Account Name")
                     Return False
                 Else
-                    Return True
+                    If nameStr.Length > NAMES_MAX_LENGTH Then
+                        MsgBox("The Account Names cannot exceed " & NAMES_MAX_LENGTH & " characters.")
+                        Return False
+                    Else
+                        Return True
+                    End If
                 End If
             End If
         End If
@@ -466,14 +482,14 @@ Friend Class AccountsController
 
 #Region "Utilities"
 
-    Protected Friend Sub DisplayAcountsView()
+    Friend Sub DisplayAcountsView()
 
         NewAccountView.Hide()
         View.Show()
 
     End Sub
 
-    Protected Friend Sub DisplayNewAccountView(ByRef parent_node As TreeNode)
+    Friend Sub DisplayNewAccountView(ByRef parent_node As TreeNode)
 
         View.Hide()
         NewAccountView.PrePopulateForm(parent_node)

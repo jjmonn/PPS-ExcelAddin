@@ -12,7 +12,7 @@
 '       - 
 '
 '
-' Last modified: 20/04/2015
+' Last modified: 15/06/2015
 ' Author: Julien Monnereau
 
 
@@ -56,7 +56,6 @@ Friend Class NewAccountUI
         ' Add any initialization after the InitializeComponent() call.
         AccountsView = input_accountsView
         Controller = input_controller
-        Account.LoadAccountsTree(accountsTV)
         ComboBoxesInitialize()
 
         accountsTVPanel.Controls.Add(accountsTV)
@@ -92,11 +91,12 @@ Friend Class NewAccountUI
 
         parentTB.Text = inputNode.Text
         parent_node = inputNode
-        Dim parentFormatCode = Controller.ReadAccount(parent_node.Name, ACCOUNT_FORMAT_VARIABLE)
-        formatCB.SelectedItem = AccountsView.formatKeyNameDictionary(parentFormatCode)
-        typeCB.SelectedItem = AccountsView.accountsTypesKeyNameDict(DEFAULT_ACCOUNT_TYPE_VALUE)
-        Dim parentFType = Controller.ReadAccount(parent_node.Name, ACCOUNT_FORMULA_TYPE_VARIABLE)
-        formulaCB.SelectedItem = AccountsView.fTypeCodeNameDictionary(parentFType)
+        TreeViewsUtilities.TreeviewCopy(inputNode.TreeView, accountsTV)
+        'Dim parentFormatCode = Controller.ReadAccount(parent_node.Name, ACCOUNT_FORMAT_VARIABLE)
+        'formatCB.SelectedItem = AccountsView.formatKeyNameDictionary(parentFormatCode)
+        'typeCB.SelectedItem = AccountsView.accountsTypesKeyNameDict(DEFAULT_ACCOUNT_TYPE_VALUE)
+        'Dim parentFType = Controller.ReadAccount(parent_node.Name, ACCOUNT_FORMULA_TYPE_VARIABLE)
+        'formulaCB.SelectedItem = AccountsView.fTypeCodeNameDictionary(parentFType)
 
     End Sub
 

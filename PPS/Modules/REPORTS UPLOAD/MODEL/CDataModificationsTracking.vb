@@ -86,12 +86,14 @@ Friend Class CDataModificationsTracking
 
     Friend Sub InitializeOutputsRegion()
 
-        Select Case DATASET.GlobalOrientationFlag
-            Case ModelDataSet.DATASET_ACCOUNTS_PERIODS_OR : AppendDataRegionRanges(outputsRegion, DATASET.OutputsAccountsAddressvaluesDictionary, DATASET.periodsAddressValuesDictionary)
-            Case ModelDataSet.DATASET_PERIODS_ACCOUNTS_OR : AppendDataRegionRanges(outputsRegion, DATASET.periodsAddressValuesDictionary, DATASET.OutputsAccountsAddressvaluesDictionary)
-            Case ModelDataSet.DATASET_ACCOUNTS_ENTITIES_OR : AppendDataRegionRanges(outputsRegion, DATASET.OutputsAccountsAddressvaluesDictionary, DATASET.EntitiesAddressValuesDictionary)
-            Case ModelDataSet.DATASET_ENTITIES_ACCOUNTS_OR : AppendDataRegionRanges(outputsRegion, DATASET.EntitiesAddressValuesDictionary, DATASET.OutputsAccountsAddressvaluesDictionary)
-        End Select
+        If DATASET.OutputsAccountsAddressvaluesDictionary.Count > 0 Then
+            Select Case DATASET.GlobalOrientationFlag
+                Case ModelDataSet.DATASET_ACCOUNTS_PERIODS_OR : AppendDataRegionRanges(outputsRegion, DATASET.OutputsAccountsAddressvaluesDictionary, DATASET.periodsAddressValuesDictionary)
+                Case ModelDataSet.DATASET_PERIODS_ACCOUNTS_OR : AppendDataRegionRanges(outputsRegion, DATASET.periodsAddressValuesDictionary, DATASET.OutputsAccountsAddressvaluesDictionary)
+                Case ModelDataSet.DATASET_ACCOUNTS_ENTITIES_OR : AppendDataRegionRanges(outputsRegion, DATASET.OutputsAccountsAddressvaluesDictionary, DATASET.EntitiesAddressValuesDictionary)
+                Case ModelDataSet.DATASET_ENTITIES_ACCOUNTS_OR : AppendDataRegionRanges(outputsRegion, DATASET.EntitiesAddressValuesDictionary, DATASET.OutputsAccountsAddressvaluesDictionary)
+            End Select
+        End If
 
     End Sub
 

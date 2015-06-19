@@ -29,6 +29,14 @@ Partial Class AccountsControl
         Me.Panel1 = New System.Windows.Forms.Panel()
         Me.AccountsTVPanel = New System.Windows.Forms.Panel()
         Me.TableLayoutPanel2 = New System.Windows.Forms.TableLayoutPanel()
+        Me.GroupBox5 = New System.Windows.Forms.GroupBox()
+        Me.SaveDescriptionBT = New System.Windows.Forms.Button()
+        Me.EditButtonsImagelist = New System.Windows.Forms.ImageList(Me.components)
+        Me.DescriptionTB = New System.Windows.Forms.TextBox()
+        Me.GroupBox3 = New System.Windows.Forms.GroupBox()
+        Me.formulaEdit = New System.Windows.Forms.CheckBox()
+        Me.submit_cmd = New System.Windows.Forms.Button()
+        Me.formula_TB = New System.Windows.Forms.TextBox()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
         Me.GroupBox4 = New System.Windows.Forms.GroupBox()
         Me.flux_RB = New System.Windows.Forms.RadioButton()
@@ -44,11 +52,6 @@ Partial Class AccountsControl
         Me.Label5 = New System.Windows.Forms.Label()
         Me.Name_TB = New System.Windows.Forms.TextBox()
         Me.Label1 = New System.Windows.Forms.Label()
-        Me.GroupBox3 = New System.Windows.Forms.GroupBox()
-        Me.formulaEdit = New System.Windows.Forms.CheckBox()
-        Me.EditButtonsImagelist = New System.Windows.Forms.ImageList(Me.components)
-        Me.submit_cmd = New System.Windows.Forms.Button()
-        Me.formula_TB = New System.Windows.Forms.TextBox()
         Me.accountsIL = New System.Windows.Forms.ImageList(Me.components)
         Me.TVRCM = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.AddSubAccountToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -73,10 +76,11 @@ Partial Class AccountsControl
         Me.SplitContainer1.SuspendLayout()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.TableLayoutPanel2.SuspendLayout()
+        Me.GroupBox5.SuspendLayout()
+        Me.GroupBox3.SuspendLayout()
         Me.GroupBox1.SuspendLayout()
         Me.GroupBox4.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
-        Me.GroupBox3.SuspendLayout()
         Me.TVRCM.SuspendLayout()
         Me.MainMenu.SuspendLayout()
         Me.SuspendLayout()
@@ -94,8 +98,8 @@ Partial Class AccountsControl
         'SplitContainer1.Panel2
         '
         Me.SplitContainer1.Panel2.Controls.Add(Me.TableLayoutPanel2)
-        Me.SplitContainer1.Size = New System.Drawing.Size(772, 544)
-        Me.SplitContainer1.SplitterDistance = 192
+        Me.SplitContainer1.Size = New System.Drawing.Size(926, 652)
+        Me.SplitContainer1.SplitterDistance = 229
         Me.SplitContainer1.TabIndex = 23
         '
         'TableLayoutPanel1
@@ -110,7 +114,7 @@ Partial Class AccountsControl
         Me.TableLayoutPanel1.RowCount = 2
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25.0!))
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TableLayoutPanel1.Size = New System.Drawing.Size(192, 544)
+        Me.TableLayoutPanel1.Size = New System.Drawing.Size(229, 652)
         Me.TableLayoutPanel1.TabIndex = 0
         '
         'Panel1
@@ -119,7 +123,7 @@ Partial Class AccountsControl
         Me.Panel1.Location = New System.Drawing.Point(1, 1)
         Me.Panel1.Margin = New System.Windows.Forms.Padding(1)
         Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(190, 23)
+        Me.Panel1.Size = New System.Drawing.Size(227, 23)
         Me.Panel1.TabIndex = 1
         '
         'AccountsTVPanel
@@ -128,23 +132,131 @@ Partial Class AccountsControl
         Me.AccountsTVPanel.Location = New System.Drawing.Point(1, 26)
         Me.AccountsTVPanel.Margin = New System.Windows.Forms.Padding(1)
         Me.AccountsTVPanel.Name = "AccountsTVPanel"
-        Me.AccountsTVPanel.Size = New System.Drawing.Size(190, 517)
+        Me.AccountsTVPanel.Size = New System.Drawing.Size(227, 625)
         Me.AccountsTVPanel.TabIndex = 2
         '
         'TableLayoutPanel2
         '
         Me.TableLayoutPanel2.ColumnCount = 1
         Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TableLayoutPanel2.Controls.Add(Me.GroupBox1, 0, 0)
-        Me.TableLayoutPanel2.Controls.Add(Me.GroupBox3, 0, 1)
+        Me.TableLayoutPanel2.Controls.Add(Me.GroupBox5, 0, 3)
+        Me.TableLayoutPanel2.Controls.Add(Me.GroupBox3, 0, 2)
+        Me.TableLayoutPanel2.Controls.Add(Me.GroupBox1, 0, 1)
         Me.TableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TableLayoutPanel2.Location = New System.Drawing.Point(0, 0)
         Me.TableLayoutPanel2.Name = "TableLayoutPanel2"
-        Me.TableLayoutPanel2.RowCount = 2
-        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 308.0!))
-        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TableLayoutPanel2.Size = New System.Drawing.Size(576, 544)
+        Me.TableLayoutPanel2.RowCount = 4
+        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25.0!))
+        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 297.0!))
+        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
+        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
+        Me.TableLayoutPanel2.Size = New System.Drawing.Size(693, 652)
         Me.TableLayoutPanel2.TabIndex = 1
+        '
+        'GroupBox5
+        '
+        Me.GroupBox5.Controls.Add(Me.SaveDescriptionBT)
+        Me.GroupBox5.Controls.Add(Me.DescriptionTB)
+        Me.GroupBox5.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.GroupBox5.Location = New System.Drawing.Point(3, 490)
+        Me.GroupBox5.Name = "GroupBox5"
+        Me.GroupBox5.Size = New System.Drawing.Size(687, 159)
+        Me.GroupBox5.TabIndex = 20
+        Me.GroupBox5.TabStop = False
+        Me.GroupBox5.Text = "Account's Description"
+        '
+        'SaveDescriptionBT
+        '
+        Me.SaveDescriptionBT.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.SaveDescriptionBT.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.SaveDescriptionBT.ImageKey = "1420498403_340208.ico"
+        Me.SaveDescriptionBT.ImageList = Me.EditButtonsImagelist
+        Me.SaveDescriptionBT.Location = New System.Drawing.Point(556, 119)
+        Me.SaveDescriptionBT.Margin = New System.Windows.Forms.Padding(2)
+        Me.SaveDescriptionBT.Name = "SaveDescriptionBT"
+        Me.SaveDescriptionBT.Size = New System.Drawing.Size(111, 28)
+        Me.SaveDescriptionBT.TabIndex = 7
+        Me.SaveDescriptionBT.Text = "Save Description"
+        Me.SaveDescriptionBT.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.SaveDescriptionBT.UseVisualStyleBackColor = True
+        '
+        'EditButtonsImagelist
+        '
+        Me.EditButtonsImagelist.ImageStream = CType(resources.GetObject("EditButtonsImagelist.ImageStream"), System.Windows.Forms.ImageListStreamer)
+        Me.EditButtonsImagelist.TransparentColor = System.Drawing.Color.Transparent
+        Me.EditButtonsImagelist.Images.SetKeyName(0, "1420498403_340208.ico")
+        Me.EditButtonsImagelist.Images.SetKeyName(1, "config circle purple.ico")
+        '
+        'DescriptionTB
+        '
+        Me.DescriptionTB.AllowDrop = True
+        Me.DescriptionTB.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.DescriptionTB.BackColor = System.Drawing.SystemColors.HighlightText
+        Me.DescriptionTB.Location = New System.Drawing.Point(20, 30)
+        Me.DescriptionTB.Margin = New System.Windows.Forms.Padding(2)
+        Me.DescriptionTB.Multiline = True
+        Me.DescriptionTB.Name = "DescriptionTB"
+        Me.DescriptionTB.Size = New System.Drawing.Size(647, 85)
+        Me.DescriptionTB.TabIndex = 6
+        '
+        'GroupBox3
+        '
+        Me.GroupBox3.Controls.Add(Me.formulaEdit)
+        Me.GroupBox3.Controls.Add(Me.submit_cmd)
+        Me.GroupBox3.Controls.Add(Me.formula_TB)
+        Me.GroupBox3.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.GroupBox3.Location = New System.Drawing.Point(3, 325)
+        Me.GroupBox3.Name = "GroupBox3"
+        Me.GroupBox3.Size = New System.Drawing.Size(687, 159)
+        Me.GroupBox3.TabIndex = 19
+        Me.GroupBox3.TabStop = False
+        Me.GroupBox3.Text = "Account's Formula"
+        '
+        'formulaEdit
+        '
+        Me.formulaEdit.Appearance = System.Windows.Forms.Appearance.Button
+        Me.formulaEdit.AutoSize = True
+        Me.formulaEdit.BackColor = System.Drawing.Color.AliceBlue
+        Me.formulaEdit.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.formulaEdit.ImageKey = "config circle purple.ico"
+        Me.formulaEdit.ImageList = Me.EditButtonsImagelist
+        Me.formulaEdit.Location = New System.Drawing.Point(20, 23)
+        Me.formulaEdit.Name = "formulaEdit"
+        Me.formulaEdit.Size = New System.Drawing.Size(93, 23)
+        Me.formulaEdit.TabIndex = 5
+        Me.formulaEdit.Text = "Edit Formula      "
+        Me.formulaEdit.UseVisualStyleBackColor = True
+        '
+        'submit_cmd
+        '
+        Me.submit_cmd.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.submit_cmd.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.submit_cmd.ImageKey = "1420498403_340208.ico"
+        Me.submit_cmd.ImageList = Me.EditButtonsImagelist
+        Me.submit_cmd.Location = New System.Drawing.Point(556, 126)
+        Me.submit_cmd.Margin = New System.Windows.Forms.Padding(2)
+        Me.submit_cmd.Name = "submit_cmd"
+        Me.submit_cmd.Size = New System.Drawing.Size(111, 28)
+        Me.submit_cmd.TabIndex = 7
+        Me.submit_cmd.Text = "Validate Formula"
+        Me.submit_cmd.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.submit_cmd.UseVisualStyleBackColor = True
+        '
+        'formula_TB
+        '
+        Me.formula_TB.AllowDrop = True
+        Me.formula_TB.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.formula_TB.BackColor = System.Drawing.SystemColors.HighlightText
+        Me.formula_TB.Location = New System.Drawing.Point(5, 51)
+        Me.formula_TB.Margin = New System.Windows.Forms.Padding(2)
+        Me.formula_TB.Multiline = True
+        Me.formula_TB.Name = "formula_TB"
+        Me.formula_TB.Size = New System.Drawing.Size(662, 63)
+        Me.formula_TB.TabIndex = 6
         '
         'GroupBox1
         '
@@ -160,11 +272,11 @@ Partial Class AccountsControl
         Me.GroupBox1.Controls.Add(Me.Label1)
         Me.GroupBox1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.GroupBox1.FlatStyle = System.Windows.Forms.FlatStyle.Popup
-        Me.GroupBox1.Location = New System.Drawing.Point(2, 2)
+        Me.GroupBox1.Location = New System.Drawing.Point(2, 27)
         Me.GroupBox1.Margin = New System.Windows.Forms.Padding(2)
         Me.GroupBox1.Name = "GroupBox1"
         Me.GroupBox1.Padding = New System.Windows.Forms.Padding(2)
-        Me.GroupBox1.Size = New System.Drawing.Size(572, 304)
+        Me.GroupBox1.Size = New System.Drawing.Size(689, 293)
         Me.GroupBox1.TabIndex = 17
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "Account's information"
@@ -173,22 +285,22 @@ Partial Class AccountsControl
         '
         Me.GroupBox4.Controls.Add(Me.flux_RB)
         Me.GroupBox4.Controls.Add(Me.bs_item_RB)
-        Me.GroupBox4.Location = New System.Drawing.Point(39, 226)
+        Me.GroupBox4.Location = New System.Drawing.Point(39, 224)
         Me.GroupBox4.Name = "GroupBox4"
         Me.GroupBox4.Size = New System.Drawing.Size(479, 45)
         Me.GroupBox4.TabIndex = 27
         Me.GroupBox4.TabStop = False
-        Me.GroupBox4.Text = "Conversion Option"
+        Me.GroupBox4.Text = "Currency Conversion"
         '
         'flux_RB
         '
         Me.flux_RB.AutoSize = True
         Me.flux_RB.Location = New System.Drawing.Point(140, 19)
         Me.flux_RB.Name = "flux_RB"
-        Me.flux_RB.Size = New System.Drawing.Size(44, 17)
+        Me.flux_RB.Size = New System.Drawing.Size(107, 17)
         Me.flux_RB.TabIndex = 24
         Me.flux_RB.TabStop = True
-        Me.flux_RB.Text = "Flux"
+        Me.flux_RB.Text = "Average FX Rate"
         Me.flux_RB.UseVisualStyleBackColor = True
         '
         'bs_item_RB
@@ -196,10 +308,10 @@ Partial Class AccountsControl
         Me.bs_item_RB.AutoSize = True
         Me.bs_item_RB.Location = New System.Drawing.Point(275, 19)
         Me.bs_item_RB.Name = "bs_item_RB"
-        Me.bs_item_RB.Size = New System.Drawing.Size(118, 17)
+        Me.bs_item_RB.Size = New System.Drawing.Size(131, 17)
         Me.bs_item_RB.TabIndex = 25
         Me.bs_item_RB.TabStop = True
-        Me.bs_item_RB.Text = "Balance Sheet Item"
+        Me.bs_item_RB.Text = "End of Period FX Rate"
         Me.bs_item_RB.UseVisualStyleBackColor = True
         '
         'GroupBox2
@@ -211,7 +323,7 @@ Partial Class AccountsControl
         Me.GroupBox2.Size = New System.Drawing.Size(479, 45)
         Me.GroupBox2.TabIndex = 26
         Me.GroupBox2.TabStop = False
-        Me.GroupBox2.Text = "Computation Option"
+        Me.GroupBox2.Text = "Consolidation Option"
         '
         'recompute_RB
         '
@@ -312,69 +424,6 @@ Partial Class AccountsControl
         Me.Label1.TabIndex = 8
         Me.Label1.Text = "Account's name"
         '
-        'GroupBox3
-        '
-        Me.GroupBox3.Controls.Add(Me.formulaEdit)
-        Me.GroupBox3.Controls.Add(Me.submit_cmd)
-        Me.GroupBox3.Controls.Add(Me.formula_TB)
-        Me.GroupBox3.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.GroupBox3.Location = New System.Drawing.Point(3, 311)
-        Me.GroupBox3.Name = "GroupBox3"
-        Me.GroupBox3.Size = New System.Drawing.Size(570, 230)
-        Me.GroupBox3.TabIndex = 19
-        Me.GroupBox3.TabStop = False
-        Me.GroupBox3.Text = "Formula"
-        '
-        'formulaEdit
-        '
-        Me.formulaEdit.Appearance = System.Windows.Forms.Appearance.Button
-        Me.formulaEdit.AutoSize = True
-        Me.formulaEdit.BackColor = System.Drawing.Color.AliceBlue
-        Me.formulaEdit.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
-        Me.formulaEdit.ImageKey = "config circle purple.ico"
-        Me.formulaEdit.ImageList = Me.EditButtonsImagelist
-        Me.formulaEdit.Location = New System.Drawing.Point(20, 23)
-        Me.formulaEdit.Name = "formulaEdit"
-        Me.formulaEdit.Size = New System.Drawing.Size(93, 23)
-        Me.formulaEdit.TabIndex = 5
-        Me.formulaEdit.Text = "Edit Formula      "
-        Me.formulaEdit.UseVisualStyleBackColor = True
-        '
-        'EditButtonsImagelist
-        '
-        Me.EditButtonsImagelist.ImageStream = CType(resources.GetObject("EditButtonsImagelist.ImageStream"), System.Windows.Forms.ImageListStreamer)
-        Me.EditButtonsImagelist.TransparentColor = System.Drawing.Color.Transparent
-        Me.EditButtonsImagelist.Images.SetKeyName(0, "1420498403_340208.ico")
-        Me.EditButtonsImagelist.Images.SetKeyName(1, "config circle purple.ico")
-        '
-        'submit_cmd
-        '
-        Me.submit_cmd.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.submit_cmd.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
-        Me.submit_cmd.ImageKey = "1420498403_340208.ico"
-        Me.submit_cmd.ImageList = Me.EditButtonsImagelist
-        Me.submit_cmd.Location = New System.Drawing.Point(421, 196)
-        Me.submit_cmd.Margin = New System.Windows.Forms.Padding(2)
-        Me.submit_cmd.Name = "submit_cmd"
-        Me.submit_cmd.Size = New System.Drawing.Size(145, 28)
-        Me.submit_cmd.TabIndex = 7
-        Me.submit_cmd.Text = "Validate Formula"
-        Me.submit_cmd.UseVisualStyleBackColor = True
-        '
-        'formula_TB
-        '
-        Me.formula_TB.AllowDrop = True
-        Me.formula_TB.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.formula_TB.BackColor = System.Drawing.SystemColors.HighlightText
-        Me.formula_TB.Location = New System.Drawing.Point(20, 52)
-        Me.formula_TB.Margin = New System.Windows.Forms.Padding(2)
-        Me.formula_TB.Multiline = True
-        Me.formula_TB.Name = "formula_TB"
-        Me.formula_TB.Size = New System.Drawing.Size(545, 134)
-        Me.formula_TB.TabIndex = 6
-        '
         'accountsIL
         '
         Me.accountsIL.ImageStream = CType(resources.GetObject("accountsIL.ImageStream"), System.Windows.Forms.ImageListStreamer)
@@ -431,7 +480,7 @@ Partial Class AccountsControl
         Me.MainMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.NewToolStripMenuItem, Me.DropHierarchyToExcelToolStripMenuItem1, Me.HelpToolStripMenuItem})
         Me.MainMenu.Location = New System.Drawing.Point(0, 0)
         Me.MainMenu.Name = "MainMenu"
-        Me.MainMenu.Size = New System.Drawing.Size(772, 24)
+        Me.MainMenu.Size = New System.Drawing.Size(926, 24)
         Me.MainMenu.TabIndex = 25
         Me.MainMenu.Text = "MenuStrip1"
         '
@@ -495,6 +544,9 @@ Partial Class AccountsControl
         Me.HelpToolStripMenuItem.Size = New System.Drawing.Size(44, 20)
         Me.HelpToolStripMenuItem.Text = "Help"
         '
+        'BackgroundWorker1
+        '
+        '
         'AccountsControl
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -502,21 +554,23 @@ Partial Class AccountsControl
         Me.Controls.Add(Me.MainMenu)
         Me.Controls.Add(Me.SplitContainer1)
         Me.Name = "AccountsControl"
-        Me.Size = New System.Drawing.Size(772, 544)
+        Me.Size = New System.Drawing.Size(926, 652)
         Me.SplitContainer1.Panel1.ResumeLayout(False)
         Me.SplitContainer1.Panel2.ResumeLayout(False)
         CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.SplitContainer1.ResumeLayout(False)
         Me.TableLayoutPanel1.ResumeLayout(False)
         Me.TableLayoutPanel2.ResumeLayout(False)
+        Me.GroupBox5.ResumeLayout(False)
+        Me.GroupBox5.PerformLayout()
+        Me.GroupBox3.ResumeLayout(False)
+        Me.GroupBox3.PerformLayout()
         Me.GroupBox1.ResumeLayout(False)
         Me.GroupBox1.PerformLayout()
         Me.GroupBox4.ResumeLayout(False)
         Me.GroupBox4.PerformLayout()
         Me.GroupBox2.ResumeLayout(False)
         Me.GroupBox2.PerformLayout()
-        Me.GroupBox3.ResumeLayout(False)
-        Me.GroupBox3.PerformLayout()
         Me.TVRCM.ResumeLayout(False)
         Me.MainMenu.ResumeLayout(False)
         Me.MainMenu.PerformLayout()
@@ -567,5 +621,8 @@ Partial Class AccountsControl
     Friend WithEvents DropSelectedAccountHierarchyToExcelToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents HelpToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents BackgroundWorker1 As System.ComponentModel.BackgroundWorker
+    Friend WithEvents GroupBox5 As System.Windows.Forms.GroupBox
+    Friend WithEvents SaveDescriptionBT As System.Windows.Forms.Button
+    Friend WithEvents DescriptionTB As System.Windows.Forms.TextBox
 
 End Class

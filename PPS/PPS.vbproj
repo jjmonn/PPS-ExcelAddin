@@ -166,7 +166,7 @@
     <Compile Include="Modules\MODELING\PS MODELING\Controller\AlternativeScenariosController.vb" />
     <Compile Include="Modules\MODELING\PS MODELING\Controller\ASInputsController.vb" />
     <Compile Include="Modules\MODELING\PS MODELING\Model\AlternativeScenarioModel.vb" />
-    <Compile Include="Controllers\Utilities\ChartsUtilities.vb" />
+    <Compile Include="Utilities\ChartsUtilities.vb" />
     <Compile Include="Models\CRUDs\Adjustment.vb" />
     <Compile Include="Models\CRUDs\MarketIndex.vb" />
     <Compile Include="Models\CRUDs\Control.vb" />
@@ -422,7 +422,7 @@
     <Compile Include="Modules\PLATFORM MANAGEMENT\Accounts\Views\NewAccountUI.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Controllers\DB Data Transactions\DataModel.vb" />
+    <Compile Include="Controllers\DataModel.vb" />
     <Compile Include="Models\Computing\GenericSingleEntityDLL3Computer.vb" />
     <Compile Include="Models\CRUDs\Currency.vb" />
     <Compile Include="Models\CRUDs\ExchangeRate.vb" />
@@ -505,7 +505,7 @@
     </Compile>
     <Compile Include="Modules\CONNECTIONS\Models\SMTPConnection.vb" />
     <Compile Include="Transactions\SQLCredentials.vb" />
-    <Compile Include="Controllers\DB Data Transactions\DataBaseDataUploader.vb" />
+    <Compile Include="Transactions\DataBaseDataUploader.vb" />
     <Compile Include="Controllers\GloablInstancesRestartModule.vb" />
     <Compile Include="Modules\PLATFORM MANAGEMENT\Currencies\Views\RatesView.vb" />
     <Compile Include="Modules\PLATFORM MANAGEMENT\Entities\VIEW\NewEntityUI.Designer.vb">
@@ -530,7 +530,7 @@
     </Compile>
     <Compile Include="Transactions\SQLEntities.vb" />
     <Compile Include="Modules\PLATFORM MANAGEMENT\Entities\VIEW\EntitiesDGV.vb" />
-    <Compile Include="Controllers\Utilities\PasswordGenerator.vb" />
+    <Compile Include="Utilities\PasswordGenerator.vb" />
     <Compile Include="Transactions\SQLPrivileges.vb" />
     <Compile Include="Modules\PLATFORM MANAGEMENT\Users\Controller\UsersController.vb" />
     <Compile Include="Modules\PLATFORM MANAGEMENT\Users\Views\EntitySelectionForUsersMGT.Designer.vb">
@@ -550,7 +550,7 @@
     <Compile Include="Models\Mappings\VersionsMapping.vb" />
     <Compile Include="Models\Mappings\FormatsMapping.vb" />
     <Compile Include="Models\Mappings\EntitiesMapping.vb" />
-    <Compile Include="Controllers\DB Data Transactions\DataBaseDataDownloader.vb" />
+    <Compile Include="Transactions\DataBaseDataDownloader.vb" />
     <Compile Include="Modules\CONNECTIONS\Models\ModelServer.vb" />
     <Compile Include="Models\Computing\RefreshGetDataBatch.vb" />
     <Compile Include="Modules\PPSBI\Views\PPSBIUI.Designer.vb">
@@ -585,7 +585,7 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Views\Utilities\ExcelEntitiesReportFormatting.vb" />
-    <Compile Include="Controllers\Utilities\DataGridViewsUtil.vb" />
+    <Compile Include="Utilities\DataGridViewsUtil.vb" />
     <Compile Include="Modules\REPORTS UPLOAD\CONTROLER\GeneralSubmissionControler.vb" />
     <Compile Include="Modules\REPORTS UPLOAD\AcquisitionInterface\View\AcquisitionInterface.Designer.vb">
       <DependentUpon>AcquisitionInterface.vb</DependentUpon>
@@ -604,9 +604,9 @@
     <Compile Include="Modules\REPORTS UPLOAD\MODEL\ModelDataSet.vb" />
     <Compile Include="Models\CRUDs\Account.vb" />
     <Compile Include="Modules\CONNECTIONS\Connections_Functions.vb" />
-    <Compile Include="Controllers\Utilities\DataTables_Functions.vb" />
-    <Compile Include="Controllers\Utilities\TreeViewsUtilities.vb" />
-    <Compile Include="Controllers\Utilities\Utilities_Functions.vb" />
+    <Compile Include="Utilities\DataTables_Functions.vb" />
+    <Compile Include="Utilities\TreeViewsUtilities.vb" />
+    <Compile Include="Utilities\Utilities_Functions.vb" />
     <Compile Include="Views\Utilities\CExcelFormatting.vb" />
     <Compile Include="Modules\REPORTS UPLOAD\VIEW\CRangeHighlighter.vb" />
     <Compile Include="Views\Utilities\UIs Events\CDGVEvents.vb" />

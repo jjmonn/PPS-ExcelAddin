@@ -223,11 +223,12 @@ Friend Class AcquisitionModel
                 accKeysArray(i) = DATASET.AccountsNameKeyDictionary(inputAccount)
                 periodsArray(i) = period
 
-                If DATASET.dataSetDictionary.ContainsKey(entity) AndAlso _
-                DATASET.dataSetDictionary(entity).ContainsKey(inputAccount) Then
+                If DATASET.dataSetDictionary.ContainsKey(entity) _
+                AndAlso DATASET.dataSetDictionary(entity).ContainsKey(inputAccount) _
+                AndAlso DATASET.dataSetDictionary(entity)(inputAccount).ContainsKey(Trim(CStr(period))) Then
                     valuesArray(i) = DATASET.dataSetDictionary(entity)(inputAccount)(Trim(CStr(period)))
-                ElseIf DBInputsDictionary(entity).ContainsKey(inputAccount) AndAlso _
-                       DBInputsDictionary(entity)(inputAccount).ContainsKey(Trim(CStr(period))) Then
+                ElseIf DBInputsDictionary(entity).ContainsKey(inputAccount) _
+                AndAlso DBInputsDictionary(entity)(inputAccount).ContainsKey(Trim(CStr(period))) Then
                     valuesArray(i) = DBInputsDictionary(entity)(inputAccount)(Trim(CStr(period)))
                 Else
                     valuesArray(i) = 0

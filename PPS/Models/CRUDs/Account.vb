@@ -119,34 +119,12 @@ Friend Class Account
 
 #Region "Utilities"
 
-    Protected Friend Shared Sub LoadAccountsTree(ByRef TV As TreeView)
+    Friend Shared Sub LoadAccountsTree(ByRef TV As TreeView)
 
         Dim srv As New ModelServer
         If srv.openRst(CONFIG_DATABASE + "." + ACCOUNTS_TABLE, ModelServer.FWD_CURSOR) Then
-
-            Dim currentNode, ParentNode() As TreeNode
-            TV.Nodes.Clear()
             srv.rst.Sort = ITEMS_POSITIONS
-
-            If srv.rst.RecordCount > 0 Then
-                srv.rst.MoveFirst()
-
-                Do While srv.rst.EOF = False
-
-                    Dim image_index As Int32 = srv.rst.Fields(ACCOUNT_IMAGE_VARIABLE).Value
-
-                    If IsDBNull(srv.rst.Fields(ACCOUNT_PARENT_ID_VARIABLE).Value) Then
-                        currentNode = TV.Nodes.Add(Trim(srv.rst.Fields(ACCOUNT_ID_VARIABLE).Value), _
-                                             Trim(srv.rst.Fields(ACCOUNT_NAME_VARIABLE).Value), image_index, image_index)
-                    Else
-                        ParentNode = TV.Nodes.Find(Trim(srv.rst.Fields(ACCOUNT_PARENT_ID_VARIABLE).Value), True)
-                        currentNode = ParentNode(0).Nodes.Add(Trim(srv.rst.Fields(ACCOUNT_ID_VARIABLE).Value), _
-                                                              Trim(srv.rst.Fields(ACCOUNT_NAME_VARIABLE).Value), image_index, image_index)
-
-                    End If
-                    srv.rst.MoveNext()
-                Loop
-            End If
+            TreeViewsUtilities.LoadAccountsTree(TV, srv.rst)
             srv.rst.Close()
         End If
 

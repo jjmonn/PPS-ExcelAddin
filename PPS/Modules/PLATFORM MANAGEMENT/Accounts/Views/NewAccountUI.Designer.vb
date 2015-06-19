@@ -25,6 +25,7 @@ Partial Class NewAccountUI
         Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(NewAccountUI))
         Me.Panel1 = New System.Windows.Forms.Panel()
+        Me.Label9 = New System.Windows.Forms.Label()
         Me.accountsTVPanel = New System.Windows.Forms.Panel()
         Me.selectParentBT = New System.Windows.Forms.Button()
         Me.ButtonsIL = New System.Windows.Forms.ImageList(Me.components)
@@ -33,20 +34,20 @@ Partial Class NewAccountUI
         Me.bs_item_RB = New System.Windows.Forms.RadioButton()
         Me.flux_RB = New System.Windows.Forms.RadioButton()
         Me.Label8 = New System.Windows.Forms.Label()
-        Me.Label6 = New System.Windows.Forms.Label()
         Me.Label4 = New System.Windows.Forms.Label()
         Me.Label2 = New System.Windows.Forms.Label()
-        Me.Label5 = New System.Windows.Forms.Label()
-        Me.Label3 = New System.Windows.Forms.Label()
         Me.parentTB = New System.Windows.Forms.TextBox()
+        Me.Label5 = New System.Windows.Forms.Label()
         Me.nameTB = New System.Windows.Forms.TextBox()
         Me.formulaCB = New System.Windows.Forms.ComboBox()
-        Me.typeCB = New System.Windows.Forms.ComboBox()
-        Me.formatCB = New System.Windows.Forms.ComboBox()
         Me.Label7 = New System.Windows.Forms.Label()
+        Me.formatCB = New System.Windows.Forms.ComboBox()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
         Me.recompute_RB = New System.Windows.Forms.RadioButton()
         Me.aggregation_RB = New System.Windows.Forms.RadioButton()
+        Me.Label6 = New System.Windows.Forms.Label()
+        Me.Label3 = New System.Windows.Forms.Label()
+        Me.typeCB = New System.Windows.Forms.ComboBox()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.CancelBT = New System.Windows.Forms.Button()
         Me.CreateAccountBT = New System.Windows.Forms.Button()
@@ -61,6 +62,7 @@ Partial Class NewAccountUI
         'Panel1
         '
         Me.Panel1.BackColor = System.Drawing.SystemColors.Control
+        Me.Panel1.Controls.Add(Me.Label9)
         Me.Panel1.Controls.Add(Me.accountsTVPanel)
         Me.Panel1.Controls.Add(Me.selectParentBT)
         Me.Panel1.Controls.Add(Me.TableLayoutPanel1)
@@ -73,11 +75,24 @@ Partial Class NewAccountUI
         Me.Panel1.Size = New System.Drawing.Size(1084, 442)
         Me.Panel1.TabIndex = 20
         '
+        'Label9
+        '
+        Me.Label9.AutoSize = True
+        Me.Label9.ForeColor = System.Drawing.SystemColors.MenuText
+        Me.Label9.Location = New System.Drawing.Point(731, 42)
+        Me.Label9.Name = "Label9"
+        Me.Label9.Size = New System.Drawing.Size(81, 13)
+        Me.Label9.TabIndex = 26
+        Me.Label9.Text = "Parent Account"
+        '
         'accountsTVPanel
         '
-        Me.accountsTVPanel.Location = New System.Drawing.Point(733, 51)
+        Me.accountsTVPanel.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.accountsTVPanel.Location = New System.Drawing.Point(733, 61)
         Me.accountsTVPanel.Name = "accountsTVPanel"
-        Me.accountsTVPanel.Size = New System.Drawing.Size(339, 379)
+        Me.accountsTVPanel.Size = New System.Drawing.Size(339, 369)
         Me.accountsTVPanel.TabIndex = 25
         '
         'selectParentBT
@@ -110,18 +125,18 @@ Partial Class NewAccountUI
         Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 65.24487!))
         Me.TableLayoutPanel1.Controls.Add(Me.GroupBox2, 1, 6)
         Me.TableLayoutPanel1.Controls.Add(Me.Label8, 0, 6)
-        Me.TableLayoutPanel1.Controls.Add(Me.Label6, 0, 2)
         Me.TableLayoutPanel1.Controls.Add(Me.Label4, 0, 1)
         Me.TableLayoutPanel1.Controls.Add(Me.Label2, 0, 0)
-        Me.TableLayoutPanel1.Controls.Add(Me.Label5, 0, 3)
-        Me.TableLayoutPanel1.Controls.Add(Me.Label3, 0, 4)
         Me.TableLayoutPanel1.Controls.Add(Me.parentTB, 1, 0)
+        Me.TableLayoutPanel1.Controls.Add(Me.Label5, 0, 4)
         Me.TableLayoutPanel1.Controls.Add(Me.nameTB, 1, 1)
         Me.TableLayoutPanel1.Controls.Add(Me.formulaCB, 1, 2)
-        Me.TableLayoutPanel1.Controls.Add(Me.typeCB, 1, 3)
-        Me.TableLayoutPanel1.Controls.Add(Me.formatCB, 1, 4)
         Me.TableLayoutPanel1.Controls.Add(Me.Label7, 0, 5)
+        Me.TableLayoutPanel1.Controls.Add(Me.formatCB, 1, 3)
         Me.TableLayoutPanel1.Controls.Add(Me.GroupBox1, 1, 5)
+        Me.TableLayoutPanel1.Controls.Add(Me.Label6, 0, 2)
+        Me.TableLayoutPanel1.Controls.Add(Me.Label3, 0, 3)
+        Me.TableLayoutPanel1.Controls.Add(Me.typeCB, 1, 4)
         Me.TableLayoutPanel1.Location = New System.Drawing.Point(28, 61)
         Me.TableLayoutPanel1.Name = "TableLayoutPanel1"
         Me.TableLayoutPanel1.RowCount = 7
@@ -152,10 +167,10 @@ Partial Class NewAccountUI
         Me.bs_item_RB.AutoSize = True
         Me.bs_item_RB.Location = New System.Drawing.Point(167, 12)
         Me.bs_item_RB.Name = "bs_item_RB"
-        Me.bs_item_RB.Size = New System.Drawing.Size(118, 17)
+        Me.bs_item_RB.Size = New System.Drawing.Size(131, 17)
         Me.bs_item_RB.TabIndex = 27
         Me.bs_item_RB.TabStop = True
-        Me.bs_item_RB.Text = "Balance Sheet Item"
+        Me.bs_item_RB.Text = "End of Period FX Rate"
         Me.bs_item_RB.UseVisualStyleBackColor = True
         '
         'flux_RB
@@ -163,10 +178,10 @@ Partial Class NewAccountUI
         Me.flux_RB.AutoSize = True
         Me.flux_RB.Location = New System.Drawing.Point(39, 12)
         Me.flux_RB.Name = "flux_RB"
-        Me.flux_RB.Size = New System.Drawing.Size(44, 17)
+        Me.flux_RB.Size = New System.Drawing.Size(107, 17)
         Me.flux_RB.TabIndex = 26
         Me.flux_RB.TabStop = True
-        Me.flux_RB.Text = "Flux"
+        Me.flux_RB.Text = "Average FX Rate"
         Me.flux_RB.UseVisualStyleBackColor = True
         '
         'Label8
@@ -174,18 +189,9 @@ Partial Class NewAccountUI
         Me.Label8.AutoSize = True
         Me.Label8.Location = New System.Drawing.Point(3, 204)
         Me.Label8.Name = "Label8"
-        Me.Label8.Size = New System.Drawing.Size(94, 13)
+        Me.Label8.Size = New System.Drawing.Size(105, 13)
         Me.Label8.TabIndex = 11
-        Me.Label8.Text = "Conversion Option"
-        '
-        'Label6
-        '
-        Me.Label6.AutoSize = True
-        Me.Label6.Location = New System.Drawing.Point(3, 68)
-        Me.Label6.Name = "Label6"
-        Me.Label6.Size = New System.Drawing.Size(76, 13)
-        Me.Label6.TabIndex = 4
-        Me.Label6.Text = "Formula/ Input"
+        Me.Label8.Text = "Currency Conversion"
         '
         'Label4
         '
@@ -205,24 +211,6 @@ Partial Class NewAccountUI
         Me.Label2.TabIndex = 0
         Me.Label2.Text = "Parent Account"
         '
-        'Label5
-        '
-        Me.Label5.AutoSize = True
-        Me.Label5.Location = New System.Drawing.Point(3, 102)
-        Me.Label5.Name = "Label5"
-        Me.Label5.Size = New System.Drawing.Size(113, 13)
-        Me.Label5.TabIndex = 3
-        Me.Label5.Text = "Monetary/ Operational"
-        '
-        'Label3
-        '
-        Me.Label3.AutoSize = True
-        Me.Label3.Location = New System.Drawing.Point(3, 136)
-        Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(89, 13)
-        Me.Label3.TabIndex = 1
-        Me.Label3.Text = "Account's Format"
-        '
         'parentTB
         '
         Me.parentTB.Dock = System.Windows.Forms.DockStyle.Fill
@@ -231,6 +219,15 @@ Partial Class NewAccountUI
         Me.parentTB.Name = "parentTB"
         Me.parentTB.Size = New System.Drawing.Size(408, 20)
         Me.parentTB.TabIndex = 5
+        '
+        'Label5
+        '
+        Me.Label5.AutoSize = True
+        Me.Label5.Location = New System.Drawing.Point(3, 136)
+        Me.Label5.Name = "Label5"
+        Me.Label5.Size = New System.Drawing.Size(113, 13)
+        Me.Label5.TabIndex = 3
+        Me.Label5.Text = "Monetary/ Operational"
         '
         'nameTB
         '
@@ -249,32 +246,23 @@ Partial Class NewAccountUI
         Me.formulaCB.Size = New System.Drawing.Size(408, 21)
         Me.formulaCB.TabIndex = 7
         '
-        'typeCB
-        '
-        Me.typeCB.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.typeCB.FormattingEnabled = True
-        Me.typeCB.Location = New System.Drawing.Point(222, 105)
-        Me.typeCB.Name = "typeCB"
-        Me.typeCB.Size = New System.Drawing.Size(408, 21)
-        Me.typeCB.TabIndex = 8
-        '
-        'formatCB
-        '
-        Me.formatCB.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.formatCB.FormattingEnabled = True
-        Me.formatCB.Location = New System.Drawing.Point(222, 139)
-        Me.formatCB.Name = "formatCB"
-        Me.formatCB.Size = New System.Drawing.Size(408, 21)
-        Me.formatCB.TabIndex = 9
-        '
         'Label7
         '
         Me.Label7.AutoSize = True
         Me.Label7.Location = New System.Drawing.Point(3, 170)
         Me.Label7.Name = "Label7"
-        Me.Label7.Size = New System.Drawing.Size(100, 13)
+        Me.Label7.Size = New System.Drawing.Size(104, 13)
         Me.Label7.TabIndex = 10
-        Me.Label7.Text = "Computation Option"
+        Me.Label7.Text = "Consolidation Option"
+        '
+        'formatCB
+        '
+        Me.formatCB.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.formatCB.FormattingEnabled = True
+        Me.formatCB.Location = New System.Drawing.Point(222, 105)
+        Me.formatCB.Name = "formatCB"
+        Me.formatCB.Size = New System.Drawing.Size(408, 21)
+        Me.formatCB.TabIndex = 9
         '
         'GroupBox1
         '
@@ -309,6 +297,33 @@ Partial Class NewAccountUI
         Me.aggregation_RB.TabStop = True
         Me.aggregation_RB.Text = "Aggregation"
         Me.aggregation_RB.UseVisualStyleBackColor = True
+        '
+        'Label6
+        '
+        Me.Label6.AutoSize = True
+        Me.Label6.Location = New System.Drawing.Point(3, 68)
+        Me.Label6.Name = "Label6"
+        Me.Label6.Size = New System.Drawing.Size(76, 13)
+        Me.Label6.TabIndex = 4
+        Me.Label6.Text = "Formula/ Input"
+        '
+        'Label3
+        '
+        Me.Label3.AutoSize = True
+        Me.Label3.Location = New System.Drawing.Point(3, 102)
+        Me.Label3.Name = "Label3"
+        Me.Label3.Size = New System.Drawing.Size(89, 13)
+        Me.Label3.TabIndex = 1
+        Me.Label3.Text = "Account's Format"
+        '
+        'typeCB
+        '
+        Me.typeCB.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.typeCB.FormattingEnabled = True
+        Me.typeCB.Location = New System.Drawing.Point(222, 139)
+        Me.typeCB.Name = "typeCB"
+        Me.typeCB.Size = New System.Drawing.Size(408, 21)
+        Me.typeCB.TabIndex = 8
         '
         'Label1
         '
@@ -417,4 +432,5 @@ Partial Class NewAccountUI
     Friend WithEvents aggregation_RB As System.Windows.Forms.RadioButton
     Friend WithEvents bs_item_RB As System.Windows.Forms.RadioButton
     Friend WithEvents flux_RB As System.Windows.Forms.RadioButton
+    Friend WithEvents Label9 As System.Windows.Forms.Label
 End Class

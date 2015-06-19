@@ -4,14 +4,14 @@
 '
 ' To do:
 '       - Formulas WC and BS  -> must be explained in the manual !!
-'       - Drop hierarchies to Excel
+'       -
 '              
 '
 '    Known bugs:
-'        - drop on WS bug
+'       -
 '        
 '
-' Last modified: 05/01/2015
+' Last modified: 15/06/2015
 ' Author: Julien Monnereau
 
 
@@ -44,6 +44,7 @@ Friend Class AccountsControl
     Protected Friend ftype_icon_dic As New Dictionary(Of String, Int32)
     Private fTypesCodesRequiringFormulas As List(Of String)
     Private isDisplayingAttributes As Boolean
+    Private drag_and_drop As Boolean = False
 
     ' Constants
     Private Const MARGIN_SIZE As Integer = 15
@@ -241,6 +242,12 @@ Friend Class AccountsControl
         End If
     End Sub
 
+    Private Sub SaveDescriptionBT_Click(sender As Object, e As EventArgs) Handles SaveDescriptionBT.Click
+
+
+
+    End Sub
+
 #End Region
 
 
@@ -248,34 +255,39 @@ Friend Class AccountsControl
 
     Private Sub AccountsTV_NodeMouseClick(sender As Object, e As TreeNodeMouseClickEventArgs)
 
-        If formulaEdit.Checked = False Then current_node = e.Node
+        If drag_and_drop = False Then
+            If formulaEdit.Checked = False Then current_node = e.Node
+        End If
 
     End Sub
 
     Private Sub AccountsTV_AfterSelect(sender As Object, e As TreeViewEventArgs)
 
-        If formulaEdit.Checked = False Then
-            current_node = e.Node
-            DisplayAttributes()
+        If drag_and_drop = False Then
+            If formulaEdit.Checked = False Then
+                current_node = e.Node
+                DisplayAttributes()
+            End If
         End If
 
     End Sub
 
     Private Sub AccountsTV_KeyDown(sender As Object, e As KeyEventArgs)
 
-        Select Case e.KeyCode
-            Case Keys.Delete : B_DeleteAccount_Click(sender, e)
+        If drag_and_drop = False Then
+            Select Case e.KeyCode
+                Case Keys.Delete : B_DeleteAccount_Click(sender, e)
 
-            Case Keys.Up
-                If e.Control Then
-                    TreeViewsUtilities.MoveNodeUp(AccountsTV.SelectedNode)
-                End If
-            Case Keys.Down
-                If e.Control Then
-                    TreeViewsUtilities.MoveNodeDown(AccountsTV.SelectedNode)
-                End If
-        End Select
-
+                Case Keys.Up
+                    If e.Control Then
+                        TreeViewsUtilities.MoveNodeUp(AccountsTV.SelectedNode)
+                    End If
+                Case Keys.Down
+                    If e.Control Then
+                        TreeViewsUtilities.MoveNodeDown(AccountsTV.SelectedNode)
+                    End If
+            End Select
+        End If
 
     End Sub
 
@@ -284,6 +296,7 @@ Friend Class AccountsControl
     Private Sub AccountsTV_ItemDrag(sender As Object, e As ItemDragEventArgs)
 
         DoDragDrop(e.Item, Windows.Forms.DragDropEffects.Move)
+        drag_and_drop = True
 
     End Sub
 
@@ -340,21 +353,32 @@ Friend Class AccountsControl
             'The target node should be selected from the DragOver event
             Dim targetNode As TreeNode = selectedTreeview.SelectedNode
 
-            dropNode.Remove()                                               'Remove the drop node from its current location
-
             If targetNode Is Nothing Then
                 selectedTreeview.Nodes.Add(dropNode)
             Else
-                targetNode.Nodes.Add(dropNode)
+                If Not targetNode Is dropNode _
+                AndAlso TreeViewsUtilities.GetNodesKeysList(dropNode).Contains(targetNode.Name) = False Then
+
+                    dropNode.Remove()                                               'Remove the drop node from its current location
+                    targetNode.Nodes.Add(dropNode)
+
+                Else
+                    e.Effect = DragDropEffects.None
+                    drag_and_drop = False
+                    Exit Sub
+                End If
             End If
 
+            drag_and_drop = False
             dropNode.EnsureVisible()                                        ' Ensure the newley created node is visible to the user and 
             selectedTreeview.SelectedNode = dropNode                        ' Select it
             Dim tmpHT As New Hashtable
             tmpHT.Add(ACCOUNT_TAB_VARIABLE, TreeViewsUtilities.ReturnRootNodeFromNode(dropNode).Index)
             tmpHT.Add(ACCOUNT_PARENT_ID_VARIABLE, targetNode.Name)
             Controller.UpdateAccount(dropNode.Name, tmpHT)
+
         End If
+
 
     End Sub
 
@@ -475,7 +499,7 @@ Friend Class AccountsControl
 
             If Controller.AccountNameCheck(newNameStr) = True Then
                 current_node.Text = Name_TB.Text
-                Controller.UpdateAccount(current_node.Name, ACCOUNT_NAME_VARIABLE, Name_TB.Text)
+                Controller.UpdateAccountName(current_node.Name, current_node.Text)
             Else
                 Name_TB.Text = current_node.Text
             End If
@@ -545,6 +569,16 @@ Friend Class AccountsControl
                 Controller.UpdateAccount(current_node.Name, ACCOUNT_CONVERSION_FLAG_VARIABLE, BS_ITEM_CONVERSION)
             End If
 
+        End If
+
+    End Sub
+
+    Private Sub TypeCB_SelectedIndexChanged(sender As Object, e As EventArgs) Handles TypeCB.SelectedIndexChanged
+
+        If TypeCB.SelectedItem = fTypeCodeNameDictionary(MONETARY_ACCOUNT_TYPE) Then
+            EnableConversionOptions()
+        Else
+            DisableConversionOptions()
         End If
 
     End Sub

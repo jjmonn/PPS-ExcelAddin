@@ -3,7 +3,7 @@
 ' Common treeviews functions
 '
 '
-' Last modified: 26/02/2015
+' Last modified: 15/06/2015
 ' Author: Julien Monnereau
 
 
@@ -434,6 +434,96 @@ Friend Class TreeViewsUtilities
         Return highest_level_id
 
     End Function
+
+    Friend Shared Sub TreeviewCopy(ByRef input_tv As TreeView, ByRef copy_tv As TreeView)
+
+        copy_tv.Nodes.Clear()
+        For Each node As TreeNode In input_tv.Nodes
+            Dim copy_node As TreeNode = copy_tv.Nodes.Add(node.Name, _
+                                                          node.Text, _
+                                                          node.StateImageIndex, _
+                                                          node.SelectedImageIndex)
+
+            For Each sub_node As TreeNode In node.Nodes
+                CopyNode(sub_node, copy_node)
+            Next
+        Next
+
+    End Sub
+
+    Friend Shared Sub CopyNode(ByRef input_node As TreeNode,
+                               ByRef copy_parent_node As TreeNode)
+
+        Dim copy_node As TreeNode = copy_parent_node.Nodes.Add(input_node.Name, _
+                                                               input_node.Text, _
+                                                               input_node.StateImageIndex, _
+                                                               input_node.SelectedImageIndex)
+        For Each node As TreeNode In input_node.Nodes
+            CopyNode(node, copy_node)
+        Next
+
+    End Sub
+
+    Friend Shared Sub LoadAccountsTree(ByRef TV As TreeView, _
+                                       ByRef RST As ADODB.Recordset)
+
+        Dim currentNode, ParentNode() As TreeNode
+        Dim orphans_ids_list As New List(Of String)
+        TV.Nodes.Clear()
+        RST.MoveFirst()
+        Do While RST.EOF = False
+            Dim image_index As Int32 = RST.Fields(IMAGE_VARIABLE).Value
+
+            If IsDBNull(RST.Fields(PARENT_ID_VARIABLE).Value) Then
+                currentNode = TV.Nodes.Add(Trim(RST.Fields(ID_VARIABLE).Value), _
+                                           Trim(RST.Fields(NAME_VARIABLE).Value), _
+                                           image_index, image_index)
+            Else
+                ParentNode = TV.Nodes.Find(Trim(RST.Fields(PARENT_ID_VARIABLE).Value), True)
+                If ParentNode.Length > 0 Then
+                    currentNode = ParentNode(0).Nodes.Add(Trim(RST.Fields(ID_VARIABLE).Value), _
+                                                          Trim(RST.Fields(NAME_VARIABLE).Value), _
+                                                          image_index, image_index)
+                Else
+                    orphans_ids_list.Add(RST.Fields(ID_VARIABLE).Value)
+                End If
+            End If
+            RST.MoveNext()
+        Loop
+        If orphans_ids_list.Count > 0 Then SolveOrphanNodesList(TV, RST, orphans_ids_list)
+
+    End Sub
+
+    Friend Shared Sub SolveOrphanNodesList(ByRef TV As TreeView, _
+                                           ByRef RST As ADODB.Recordset, _
+                                           ByRef orphans_id_list As List(Of String), _
+                                           Optional ByRef solved_orphans_list As List(Of String) = Nothing)
+
+        Dim current_node, parent_nodes() As TreeNode
+        Dim image_index As Int32
+        If solved_orphans_list Is Nothing Then solved_orphans_list = New List(Of String)
+        For Each orphan_id In orphans_id_list
+            If solved_orphans_list.Contains(orphan_id) = False Then
+                RST.Filter = ID_VARIABLE & "='" & orphan_id & "'"
+                parent_nodes = TV.Nodes.Find(RST.Fields(PARENT_ID_VARIABLE).Value, True)
+
+                If parent_nodes.Length > 0 Then
+                    image_index = RST.Fields(IMAGE_VARIABLE).Value
+                    current_node = parent_nodes(0).Nodes.Add(Trim(RST.Fields(ID_VARIABLE).Value), _
+                                                             Trim(RST.Fields(NAME_VARIABLE).Value), _
+                                                             image_index, _
+                                                             image_index)
+                    solved_orphans_list.Add(orphan_id)
+                End If
+            End If
+        Next
+        If solved_orphans_list.Count <> orphans_id_list.Count Then SolveOrphanNodesList(TV, _
+                                                                                       RST, _
+                                                                                       orphans_id_list, _
+                                                                                       solved_orphans_list)
+
+    End Sub
+
 
 #End Region
 

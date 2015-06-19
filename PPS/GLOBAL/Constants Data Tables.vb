@@ -21,6 +21,17 @@ Module Data_Tables_Constants
     Friend Const NAMES_MAX_LENGTH As Int32 = 100
 
 
+#Region "Common All Tables"
+
+    Friend Const ID_VARIABLE As String = "id"
+    Friend Const PARENT_ID_VARIABLE As String = "parent_id"
+    Friend Const NAME_VARIABLE As String = "name"
+    Friend Const IMAGE_VARIABLE As String = "image"
+
+
+#End Region
+
+
 #Region "ACF_Config Database"
 
     ' Stores the model definition tables
@@ -36,12 +47,12 @@ Module Data_Tables_Constants
     Friend Const TV_ROOT_KEY As String = "XXXXX"
     Friend Const ACCOUNTS_TOKEN_SIZE = 3
     Friend Const ACCOUNT_ID_VARIABLE = "id"
-    Friend Const ACCOUNT_NAME_VARIABLE = "account_name"
+    Friend Const ACCOUNT_NAME_VARIABLE = "name"
     Friend Const ACCOUNT_PARENT_ID_VARIABLE = "parent_id"
     Friend Const ACCOUNT_FORMULA_TYPE_VARIABLE = "account_formula_type"
     Friend Const ACCOUNT_FORMULA_VARIABLE = "account_formula"
-    Friend Const ACCOUNT_IMAGE_VARIABLE = "account_image"
-    Friend Const ACCOUNT_SELECTED_IMAGE_VARIABLE = "account_selected_image"
+    Friend Const ACCOUNT_IMAGE_VARIABLE = "image"
+    Friend Const ACCOUNT_SELECTED_IMAGE_VARIABLE = "selected_image"
     Friend Const ACCOUNT_FORMAT_VARIABLE = "format_id"
     Friend Const ACCOUNT_TAB_VARIABLE = "account_tab"
     Friend Const ACCOUNT_TYPE_VARIABLE = "type_id"
@@ -72,6 +83,7 @@ Module Data_Tables_Constants
     Friend Const DEFAULT_ACCOUNT_TYPE_VALUE = "MO"      ' should be in DB
     Friend Const MONETARY_ACCOUNT_TYPE As String = "MO" ' should be in DB
     Friend Const NORMAL_ACCOUNT_TYPE As String = "NU"
+    Friend Const MONETARY_NAME_TYPE As String = "Monetary"
 
 #End Region
 

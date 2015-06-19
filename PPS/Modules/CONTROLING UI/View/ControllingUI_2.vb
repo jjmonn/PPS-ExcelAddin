@@ -398,12 +398,12 @@ Friend Class ControllingUI_2
         Dim titles_accounts_list As List(Of String) = AccountsMapping.GetAccountsKeysList(AccountsMapping.LOOKUP_TITLES)
         For Each account_node As TreeNode In TreeViewsUtilities.GetNodesList(tab_account_node)
 
+            ' Create row
+            Dim row As HierarchyItem = DGV.RowsHierarchy.Items.Add(account_node.Text)
+            rows_list_dic(tab_account_node.Name).Add(row)
+
+            ' Only dive if account type != "Title"
             If titles_accounts_list.Contains(account_node.Name) = False Then
-
-                ' Create row
-                Dim row As HierarchyItem = DGV.RowsHierarchy.Items.Add(account_node.Text)
-                rows_list_dic(tab_account_node.Name).Add(row)
-
                 ' Dive one Display level if any
                 If Not rows_display_node.Nodes(0).NextNode Is Nothing Then
                     Select Case rows_display_node.Nodes(0).NextNode.Name
@@ -511,6 +511,8 @@ Friend Class ControllingUI_2
                                     rows_list_dic(tab_account_node.Name), _
                                     columns_list_dic(tab_account_node.Name))
                     PBar.AddProgress()
+                Else
+                    row_index = row_index + 1
                 End If
             Next
         Next
