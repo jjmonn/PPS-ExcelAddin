@@ -110,26 +110,26 @@ Friend Class PPSBIController
         Dim entity_node As TreeNode = getEntityNode(entity_id)
         If entity_node Is Nothing Then Return "Entity not in selection"
 
-        If aggregation_computed_accounts_types.Contains(AccountsFTypesDictionary(account_id)) _
-        AndAlso entity_node.Nodes.Count > 0 Then
-            Return ComputeViaAggregationComputer(entity_node, _
-                                                 account_id, _
-                                                 version_id, _
-                                                 currencyString, _
-                                                 period, _
-                                                 clients_id_filters, _
-                                                 products_id_filters, _
-                                                 adjustments_id_filters)
-        Else
-            Return ComputeViaSingleEntityComputer(entity_node, _
-                                                  account_id, _
-                                                  version_id, _
-                                                  currencyString, _
-                                                  period, _
-                                                  clients_id_filters, _
-                                                 products_id_filters, _
-                                                 adjustments_id_filters)
-        End If
+        'If aggregation_computed_accounts_types.Contains(AccountsFTypesDictionary(account_id)) _
+        'AndAlso entity_node.Nodes.Count > 0 Then
+        Return ComputeViaAggregationComputer(entity_node, _
+                                             account_id, _
+                                             version_id, _
+                                             currencyString, _
+                                             period, _
+                                             clients_id_filters, _
+                                             products_id_filters, _
+                                             adjustments_id_filters)
+        '   Else
+        'Return ComputeViaSingleEntityComputer(entity_node, _
+        '                                      account_id, _
+        '                                      version_id, _
+        '                                      currencyString, _
+        '                                      period, _
+        '                                      clients_id_filters, _
+        '                                     products_id_filters, _
+        '                                     adjustments_id_filters)
+        '  End If
 
 
     End Function
@@ -309,32 +309,33 @@ Friend Class PPSBIController
                 Return False
             End If
         Else
-            If periodslist.Contains(periodstr) Then
-                periodInteger = periodstr
-                Return True
-            Else
-                Select Case GlobalVariables.GenericGlobalSingleEntityComputer.time_config
-                    Case MONTHLY_TIME_CONFIGURATION
-                        For Each period As Integer In periodslist
-                            If Month(DateTime.FromOADate(period)) = periodstr Then
-                                periodInteger = period
-                                periodstr = DateTime.FromOADate(period)
-                                Return True
-                            End If
-                        Next
-                    Case YEARLY_TIME_CONFIGURATION
-                        If IsNumeric(periodstr) Then
+            If Not periodslist Is Nothing Then
+                If periodslist.Contains(periodstr) Then
+                    periodInteger = periodstr
+                    Return True
+                Else
+                    Select Case GlobalVariables.GenericGlobalSingleEntityComputer.time_config
+                        Case MONTHLY_TIME_CONFIGURATION
                             For Each period As Integer In periodslist
-                                If Year(DateTime.FromOADate(period)) = periodstr Then
+                                If Month(DateTime.FromOADate(period)) = periodstr Then
                                     periodInteger = period
+                                    periodstr = DateTime.FromOADate(period)
                                     Return True
                                 End If
                             Next
-                        End If
-                End Select
+                        Case YEARLY_TIME_CONFIGURATION
+                            If IsNumeric(periodstr) Then
+                                For Each period As Integer In periodslist
+                                    If Year(DateTime.FromOADate(period)) = periodstr Then
+                                        periodInteger = period
+                                        Return True
+                                    End If
+                                Next
+                            End If
+                    End Select
+                End If
             End If
-
-        End If
+            End If
         Return False
 
     End Function
