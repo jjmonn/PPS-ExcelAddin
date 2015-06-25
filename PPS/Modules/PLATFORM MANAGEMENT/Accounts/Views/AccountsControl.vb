@@ -530,7 +530,11 @@ Friend Class AccountsControl
         AndAlso isDisplayingAttributes = False Then
             Dim type As String = accountsTypeNameKeyDictionary(TypeCB.Text)
             Controller.UpdateAccount(current_node.Name, ACCOUNT_TYPE_VARIABLE, type)
-            If type = MONETARY_ACCOUNT_TYPE Then EnableConversionOptions() Else DisableConversionOptions()
+            If type = MONETARY_ACCOUNT_TYPE Then
+                EnableConversionOptions()
+            Else
+                DisableConversionOptions()
+            End If
         End If
 
     End Sub
@@ -573,15 +577,16 @@ Friend Class AccountsControl
 
     End Sub
 
-    Private Sub TypeCB_SelectedIndexChanged(sender As Object, e As EventArgs) Handles TypeCB.SelectedIndexChanged
+    'Private Sub TypeCB_SelectedIndexChanged(sender As Object, e As EventArgs) Handles TypeCB.SelectedIndexChanged
 
-        If TypeCB.SelectedItem = fTypeCodeNameDictionary(MONETARY_ACCOUNT_TYPE) Then
-            EnableConversionOptions()
-        Else
-            DisableConversionOptions()
-        End If
+    '    If TypeCB.SelectedItem = fTypeCodeNameDictionary(MONETARY_ACCOUNT_TYPE) _
+    '    AndAlso isDisplayingAttributes = False Then
+    '        EnableConversionOptions()
+    '    Else
+    '        DisableConversionOptions()
+    '    End If
 
-    End Sub
+    'End Sub
 
 #End Region
 
