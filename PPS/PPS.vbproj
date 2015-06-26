@@ -458,22 +458,28 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
+    <Compile Include="Views\Task Panes\ConnectionTP.Designer.vb">
+      <DependentUpon>ConnectionTP.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Task Panes\ConnectionTP.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Views\Task Panes\EntitySelectionTP.Designer.vb">
       <DependentUpon>EntitySelectionTP.vb</DependentUpon>
     </Compile>
     <Compile Include="Views\Task Panes\EntitySelectionTP.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Views\Task Panes\CVersionSelectionPane.Designer.vb">
-      <DependentUpon>CVersionSelectionPane.vb</DependentUpon>
+    <Compile Include="Views\Task Panes\VersionSelectionPane.Designer.vb">
+      <DependentUpon>VersionSelectionPane.vb</DependentUpon>
     </Compile>
-    <Compile Include="Views\Task Panes\CVersionSelectionPane.vb">
+    <Compile Include="Views\Task Panes\VersionSelectionPane.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Views\Task Panes\CInputSelectionPane.Designer.vb">
-      <DependentUpon>CInputSelectionPane.vb</DependentUpon>
+    <Compile Include="Views\Task Panes\InputSelectionPane.Designer.vb">
+      <DependentUpon>InputSelectionPane.vb</DependentUpon>
     </Compile>
-    <Compile Include="Views\Task Panes\CInputSelectionPane.vb">
+    <Compile Include="Views\Task Panes\InputSelectionPane.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="ExcelAddinModule1.vb">
@@ -593,7 +599,7 @@
     <Compile Include="Modules\REPORTS UPLOAD\MODEL\CDataModificationsTracking.vb" />
     <Compile Include="Modules\REPORTS UPLOAD\MODEL\ModelDataSet.vb" />
     <Compile Include="Models\CRUDs\Account.vb" />
-    <Compile Include="Modules\CONNECTIONS\Connections_Functions.vb" />
+    <Compile Include="Modules\CONNECTIONS\ConnectionsFunctions.vb" />
     <Compile Include="Utilities\DataTables_Functions.vb" />
     <Compile Include="Utilities\TreeViewsUtilities.vb" />
     <Compile Include="Utilities\Utilities_Functions.vb" />
@@ -743,14 +749,17 @@
     <EmbeddedResource Include="Views\PPS Controls\ProgressBarControl.resx">
       <DependentUpon>ProgressBarControl.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Views\Task Panes\ConnectionTP.resx">
+      <DependentUpon>ConnectionTP.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Views\Task Panes\EntitySelectionTP.resx">
       <DependentUpon>EntitySelectionTP.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Views\Task Panes\CVersionSelectionPane.resx">
-      <DependentUpon>CVersionSelectionPane.vb</DependentUpon>
+    <EmbeddedResource Include="Views\Task Panes\VersionSelectionPane.resx">
+      <DependentUpon>VersionSelectionPane.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Views\Task Panes\CInputSelectionPane.resx">
-      <DependentUpon>CInputSelectionPane.vb</DependentUpon>
+    <EmbeddedResource Include="Views\Task Panes\InputSelectionPane.resx">
+      <DependentUpon>InputSelectionPane.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ExcelAddinModule1.resx">
       <DependentUpon>ExcelAddinModule1.vb</DependentUpon>

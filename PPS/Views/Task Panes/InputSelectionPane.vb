@@ -23,7 +23,7 @@ Imports System.Windows.Forms
 
 
 
-Public Class CInputSelectionPane
+Public Class InputSelectionPane
 
 
 #Region "Instance Variables"
@@ -93,18 +93,23 @@ Public Class CInputSelectionPane
 #Region "Form show and close events"
 
     Private Sub ADXExcelTaskPane1_ADXBeforeTaskPaneShow(sender As Object, e As ADXBeforeTaskPaneShowEventArgs) Handles MyBase.ADXBeforeTaskPaneShow
+
         Me.Visible = GlobalVariables.InputSelectionPaneVisible
+
     End Sub
 
     Private Sub CInputSelectionPane_ADXAfterTaskPaneShow(sender As Object, e As ADXAfterTaskPaneShowEventArgs) Handles MyBase.ADXAfterTaskPaneShow
 
         EntitiesTV.Select()
         If EntitiesTV.Nodes.Count > 0 Then EntitiesTV.SelectedNode = EntitiesTV.Nodes(0)
+
     End Sub
 
     Private Sub CInputSelectionPane_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
+
         EntitiesTV.Nodes.Clear()
         e.Cancel = True
+
     End Sub
 
 #End Region

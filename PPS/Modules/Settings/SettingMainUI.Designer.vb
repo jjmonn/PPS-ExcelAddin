@@ -25,11 +25,9 @@ Partial Class SettingMainUI
         Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(SettingMainUI))
         Me.Panel1 = New System.Windows.Forms.Panel()
-        Me.CloseBT = New System.Windows.Forms.Button()
-        Me.ControlImages = New System.Windows.Forms.ImageList(Me.components)
         Me.TabControl1 = New System.Windows.Forms.TabControl()
         Me.TabPage1 = New System.Windows.Forms.TabPage()
-        Me.databaseTB = New System.Windows.Forms.TextBox()
+        Me.databasesCB = New System.Windows.Forms.ComboBox()
         Me.Label5 = New System.Windows.Forms.Label()
         Me.PortTB = New System.Windows.Forms.TextBox()
         Me.Label4 = New System.Windows.Forms.Label()
@@ -46,9 +44,9 @@ Partial Class SettingMainUI
         Me.IDTB = New System.Windows.Forms.TextBox()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.TabPage2 = New System.Windows.Forms.TabPage()
+        Me.ControlImages = New System.Windows.Forms.ImageList(Me.components)
         Me.ACFIcon = New System.Windows.Forms.ImageList(Me.components)
         Me.FolderBrowserDialog1 = New System.Windows.Forms.FolderBrowserDialog()
-        Me.databasesCB = New System.Windows.Forms.ComboBox()
         Me.Panel1.SuspendLayout()
         Me.TabControl1.SuspendLayout()
         Me.TabPage1.SuspendLayout()
@@ -57,34 +55,12 @@ Partial Class SettingMainUI
         'Panel1
         '
         Me.Panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.Panel1.Controls.Add(Me.CloseBT)
         Me.Panel1.Controls.Add(Me.TabControl1)
         Me.Panel1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Panel1.Location = New System.Drawing.Point(0, 0)
         Me.Panel1.Name = "Panel1"
         Me.Panel1.Size = New System.Drawing.Size(745, 496)
         Me.Panel1.TabIndex = 0
-        '
-        'CloseBT
-        '
-        Me.CloseBT.FlatAppearance.BorderColor = System.Drawing.Color.Purple
-        Me.CloseBT.FlatAppearance.MouseDownBackColor = System.Drawing.SystemColors.Control
-        Me.CloseBT.FlatAppearance.MouseOverBackColor = System.Drawing.SystemColors.Control
-        Me.CloseBT.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.CloseBT.ImageIndex = 1
-        Me.CloseBT.ImageList = Me.ControlImages
-        Me.CloseBT.Location = New System.Drawing.Point(717, 7)
-        Me.CloseBT.Name = "CloseBT"
-        Me.CloseBT.Size = New System.Drawing.Size(18, 18)
-        Me.CloseBT.TabIndex = 2
-        Me.CloseBT.UseVisualStyleBackColor = True
-        '
-        'ControlImages
-        '
-        Me.ControlImages.ImageStream = CType(resources.GetObject("ControlImages.ImageStream"), System.Windows.Forms.ImageListStreamer)
-        Me.ControlImages.TransparentColor = System.Drawing.Color.Transparent
-        Me.ControlImages.Images.SetKeyName(0, "close blue light.ico")
-        Me.ControlImages.Images.SetKeyName(1, "favicon(99).ico")
         '
         'TabControl1
         '
@@ -104,7 +80,6 @@ Partial Class SettingMainUI
         'TabPage1
         '
         Me.TabPage1.Controls.Add(Me.databasesCB)
-        Me.TabPage1.Controls.Add(Me.databaseTB)
         Me.TabPage1.Controls.Add(Me.Label5)
         Me.TabPage1.Controls.Add(Me.PortTB)
         Me.TabPage1.Controls.Add(Me.Label4)
@@ -127,13 +102,13 @@ Partial Class SettingMainUI
         Me.TabPage1.Text = "Connection"
         Me.TabPage1.UseVisualStyleBackColor = True
         '
-        'databaseTB
+        'databasesCB
         '
-        Me.databaseTB.AcceptsReturn = True
-        Me.databaseTB.Location = New System.Drawing.Point(151, 157)
-        Me.databaseTB.Name = "databaseTB"
-        Me.databaseTB.Size = New System.Drawing.Size(196, 20)
-        Me.databaseTB.TabIndex = 18
+        Me.databasesCB.FormattingEnabled = True
+        Me.databasesCB.Location = New System.Drawing.Point(151, 157)
+        Me.databasesCB.Name = "databasesCB"
+        Me.databasesCB.Size = New System.Drawing.Size(197, 21)
+        Me.databasesCB.TabIndex = 19
         '
         'Label5
         '
@@ -288,19 +263,18 @@ Partial Class SettingMainUI
         Me.TabPage2.Text = "TabPage2"
         Me.TabPage2.UseVisualStyleBackColor = True
         '
+        'ControlImages
+        '
+        Me.ControlImages.ImageStream = CType(resources.GetObject("ControlImages.ImageStream"), System.Windows.Forms.ImageListStreamer)
+        Me.ControlImages.TransparentColor = System.Drawing.Color.Transparent
+        Me.ControlImages.Images.SetKeyName(0, "close blue light.ico")
+        Me.ControlImages.Images.SetKeyName(1, "favicon(99).ico")
+        '
         'ACFIcon
         '
         Me.ACFIcon.ImageStream = CType(resources.GetObject("ACFIcon.ImageStream"), System.Windows.Forms.ImageListStreamer)
         Me.ACFIcon.TransparentColor = System.Drawing.Color.Transparent
         Me.ACFIcon.Images.SetKeyName(0, "ACF Square 2 .1Control bgd.png")
-        '
-        'databasesCB
-        '
-        Me.databasesCB.FormattingEnabled = True
-        Me.databasesCB.Location = New System.Drawing.Point(150, 190)
-        Me.databasesCB.Name = "databasesCB"
-        Me.databasesCB.Size = New System.Drawing.Size(197, 21)
-        Me.databasesCB.TabIndex = 19
         '
         'SettingMainUI
         '
@@ -326,7 +300,6 @@ Partial Class SettingMainUI
     Friend WithEvents ControlImages As System.Windows.Forms.ImageList
     Friend WithEvents ButtonIcons As System.Windows.Forms.ImageList
     Friend WithEvents ACFIcon As System.Windows.Forms.ImageList
-    Friend WithEvents CloseBT As System.Windows.Forms.Button
     Friend WithEvents Label2 As System.Windows.Forms.Label
     Friend WithEvents PWDTB As System.Windows.Forms.TextBox
     Friend WithEvents IDTB As System.Windows.Forms.TextBox
@@ -342,6 +315,5 @@ Partial Class SettingMainUI
     Friend WithEvents PortTB As System.Windows.Forms.TextBox
     Friend WithEvents Label4 As System.Windows.Forms.Label
     Friend WithEvents Label5 As System.Windows.Forms.Label
-    Friend WithEvents databaseTB As System.Windows.Forms.TextBox
     Friend WithEvents databasesCB As System.Windows.Forms.ComboBox
 End Class

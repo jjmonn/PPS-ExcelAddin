@@ -127,6 +127,7 @@ Public Class AddinModule
     Friend WithEvents AdxRibbonMenuSeparator1 As AddinExpress.MSO.ADXRibbonMenuSeparator
     Friend WithEvents AutoRefreshBT As AddinExpress.MSO.ADXRibbonCheckBox
     Friend WithEvents financialModelingBT As AddinExpress.MSO.ADXRibbonButton
+    Friend WithEvents ConnectionTaskPaneItem As AddinExpress.XL.ADXExcelTaskPanesCollectionItem
 
 
 #End Region
@@ -231,10 +232,11 @@ Public Class AddinModule
         Me.VersionSelectionTaskPaneItem = New AddinExpress.XL.ADXExcelTaskPanesCollectionItem(Me.components)
         Me.EntitySelectionTaskPaneItem = New AddinExpress.XL.ADXExcelTaskPanesCollectionItem(Me.components)
         Me.AdxRibbonLabel1 = New AddinExpress.MSO.ADXRibbonLabel(Me.components)
+        Me.ConnectionTaskPaneItem = New AddinExpress.XL.ADXExcelTaskPanesCollectionItem(Me.components)
         '
         'MaintTab
         '
-        Me.MaintTab.Caption = "PPS Bi®"
+        Me.MaintTab.Caption = "FINANCIAL BI®"
         Me.MaintTab.Controls.Add(Me.AdxRibbonGroup6)
         Me.MaintTab.Controls.Add(Me.AdxRibbonGroup1)
         Me.MaintTab.Controls.Add(Me.AdxRibbonGroup2)
@@ -1088,6 +1090,7 @@ Public Class AddinModule
         Me.AdxExcelTaskPanesManager1.Items.Add(Me.InputSelectionTaskPaneItem)
         Me.AdxExcelTaskPanesManager1.Items.Add(Me.VersionSelectionTaskPaneItem)
         Me.AdxExcelTaskPanesManager1.Items.Add(Me.EntitySelectionTaskPaneItem)
+        Me.AdxExcelTaskPanesManager1.Items.Add(Me.ConnectionTaskPaneItem)
         Me.AdxExcelTaskPanesManager1.SetOwner(Me)
         '
         'InputSelectionTaskPaneItem
@@ -1095,7 +1098,7 @@ Public Class AddinModule
         Me.InputSelectionTaskPaneItem.AlwaysShowHeader = True
         Me.InputSelectionTaskPaneItem.CloseButton = True
         Me.InputSelectionTaskPaneItem.Position = AddinExpress.XL.ADXExcelTaskPanePosition.Right
-        Me.InputSelectionTaskPaneItem.TaskPaneClassName = "CInputSelectionPane"
+        Me.InputSelectionTaskPaneItem.TaskPaneClassName = "InputSelectionPane"
         Me.InputSelectionTaskPaneItem.UseOfficeThemeForBackground = True
         '
         'VersionSelectionTaskPaneItem
@@ -1103,7 +1106,7 @@ Public Class AddinModule
         Me.VersionSelectionTaskPaneItem.AlwaysShowHeader = True
         Me.VersionSelectionTaskPaneItem.CloseButton = True
         Me.VersionSelectionTaskPaneItem.Position = AddinExpress.XL.ADXExcelTaskPanePosition.Right
-        Me.VersionSelectionTaskPaneItem.TaskPaneClassName = "CVersionSelectionPane"
+        Me.VersionSelectionTaskPaneItem.TaskPaneClassName = "VersionSelectionPane"
         Me.VersionSelectionTaskPaneItem.UseOfficeThemeForBackground = True
         '
         'EntitySelectionTaskPaneItem
@@ -1118,6 +1121,17 @@ Public Class AddinModule
         Me.AdxRibbonLabel1.Caption = "Associated with"
         Me.AdxRibbonLabel1.Id = "adxRibbonLabel_f8272bc6694448f6955f882ef772da9e"
         Me.AdxRibbonLabel1.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
+        '
+        'ConnectionTaskPaneItem
+        '
+        Me.ConnectionTaskPaneItem.AllowedDropPositions = CType((((AddinExpress.XL.ADXExcelAllowedDropPositions.Top Or AddinExpress.XL.ADXExcelAllowedDropPositions.Bottom) _
+            Or AddinExpress.XL.ADXExcelAllowedDropPositions.Right) _
+            Or AddinExpress.XL.ADXExcelAllowedDropPositions.Left), AddinExpress.XL.ADXExcelAllowedDropPositions)
+        Me.ConnectionTaskPaneItem.AlwaysShowHeader = True
+        Me.ConnectionTaskPaneItem.CloseButton = True
+        Me.ConnectionTaskPaneItem.Position = AddinExpress.XL.ADXExcelTaskPanePosition.Right
+        Me.ConnectionTaskPaneItem.TaskPaneClassName = "ConnectionTP"
+        Me.ConnectionTaskPaneItem.UseOfficeThemeForBackground = True
         '
         'AddinModule
         '
@@ -1174,7 +1188,7 @@ Public Class AddinModule
 
 #Region "Task Panes"
 
-    Private ReadOnly Property InputReportTaskPane() As CInputSelectionPane
+    Private ReadOnly Property InputReportTaskPane() As InputSelectionPane
 
         Get
             Dim taskPaneInstance As AddinExpress.XL.ADXExcelTaskPane = Nothing
@@ -1184,11 +1198,11 @@ Public Class AddinModule
                 taskPaneInstance = InputSelectionTaskPaneItem.CreateTaskPaneInstance()
             End If
 
-            Return TryCast(taskPaneInstance, CInputSelectionPane)
+            Return TryCast(taskPaneInstance, InputSelectionPane)
         End Get
     End Property
 
-    Private ReadOnly Property VersionSelectionTaskPane() As CVersionSelectionPane
+    Private ReadOnly Property VersionSelectionTaskPane() As VersionSelectionPane
         Get
             Dim taskPaneInstance As AddinExpress.XL.ADXExcelTaskPane = Nothing
             taskPaneInstance = VersionSelectionTaskPaneItem.TaskPaneInstance
@@ -1196,7 +1210,7 @@ Public Class AddinModule
             If taskPaneInstance Is Nothing Then
                 taskPaneInstance = VersionSelectionTaskPaneItem.CreateTaskPaneInstance()
             End If
-            Return TryCast(taskPaneInstance, CVersionSelectionPane)
+            Return TryCast(taskPaneInstance, VersionSelectionPane)
         End Get
     End Property
 
@@ -1210,6 +1224,20 @@ Public Class AddinModule
             End If
             Return TryCast(taskPaneInstance, EntitySelectionTP)
         End Get
+    End Property
+
+    Friend ReadOnly Property ConnectionTaskPane As ConnectionTP
+
+        Get
+            Dim taskPaneInstance As AddinExpress.XL.ADXExcelTaskPane = Nothing
+            taskPaneInstance = ConnectionTaskPaneItem.TaskPaneInstance
+
+            If taskPaneInstance Is Nothing Then
+                taskPaneInstance = ConnectionTaskPaneItem.CreateTaskPaneInstance()
+            End If
+            Return TryCast(taskPaneInstance, ConnectionTP)
+        End Get
+
     End Property
 
 #End Region
@@ -1261,20 +1289,12 @@ Public Class AddinModule
 
     End Sub
 
-    ' (Triggered by ExcelAddinModule1)
-    Public Sub SetUpConnection()
-
-        Dim CONNECTIONUI As New ConnectionUI(Me)
-        CONNECTIONUI.Show()
-        setUpFlag = True
-
-    End Sub
 
 #Region "Properties Getters"
 
     ' Returns the connection instance variable
     Public Function GetAddinConnection() As ADODB.Connection
-        Return ConnectioN
+        Return GlobalVariables.Connection
     End Function
 
     ' Returns the entities View variable
@@ -1300,13 +1320,25 @@ Public Class AddinModule
 #Region "Connection"
 
     Private Sub ConnectionBT_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) Handles ConnectionBT.OnClick
-        SetUpConnection()
-        ' set up disconnection
+
+        If CDbl(GlobalVariables.APPS.Version.Replace(".", ",")) > EXCEL_MIN_VERSION Then
+
+            GlobalVariables.ConnectionPaneVisible = True
+            Me.ConnectionTaskPane.Init(Me)
+            Me.ConnectionTaskPane.Show()
+
+        Else
+            Dim CONNECTIONUI As New ConnectionUI(Me)
+            CONNECTIONUI.Show()
+        End If
+
+        ' setupflag to be set !!
+
     End Sub
 
     Private Sub VersionBT_OnClick_1(sender As Object, control As IRibbonControl, pressed As Boolean) Handles VersionBT.OnClick
 
-        If ConnectioN Is Nothing Then
+        If globalvariables.ConnectioN Is Nothing Then
             Dim CONNUI As New ConnectionUI(Me)
             CONNUI.Show()
         Else
@@ -1324,7 +1356,7 @@ Public Class AddinModule
                                  control As AddinExpress.MSO.IRibbonControl,
                                  pressed As System.Boolean) Handles UploadBT.OnClick
 
-        If ConnectioN Is Nothing Then
+        If globalvariables.ConnectioN Is Nothing Then
             Dim CONNUI As New ConnectionUI(Me)
             CONNUI.Show()
         Else
@@ -1344,7 +1376,7 @@ Public Class AddinModule
                                   control As AddinExpress.MSO.IRibbonControl,
                                   pressed As System.Boolean) Handles WSUplaodBT.OnClick
 
-        If ConnectioN Is Nothing Then
+        If globalvariables.ConnectioN Is Nothing Then
             Dim CONNUI As New ConnectionUI(Me)
             CONNUI.Show()
         Else
@@ -1356,7 +1388,7 @@ Public Class AddinModule
 
     Private Sub WBUploadBT_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) Handles WBUplaodBT.OnClick
 
-        If ConnectioN Is Nothing Then
+        If globalvariables.ConnectioN Is Nothing Then
             Dim CONNUI As New ConnectionUI(Me)
             CONNUI.Show()
         Else
@@ -1372,7 +1404,7 @@ Public Class AddinModule
 
     Private Sub InputReportLaunchBT_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) Handles InputReportLaunchBT.OnClick
 
-        If ConnectioN Is Nothing Then
+        If globalvariables.ConnectioN Is Nothing Then
             Dim CONNUI As New ConnectionUI(Me)
             CONNUI.Show()
         Else
@@ -1430,7 +1462,7 @@ Public Class AddinModule
                                         control As AddinExpress.MSO.IRibbonControl,
                                         pressed As System.Boolean) Handles ControlingUI2BT.OnClick
 
-        If ConnectioN Is Nothing Then
+        If globalvariables.ConnectioN Is Nothing Then
             Dim CONNUI As New ConnectionUI(Me)
             CONNUI.Show()
         Else
@@ -1445,7 +1477,7 @@ Public Class AddinModule
 
     Private Sub AdxRibbonSplitButton1_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) Handles RefreshBT.OnClick, RefreshWorksheetBT.OnClick
 
-        If ConnectioN Is Nothing Then
+        If GlobalVariables.Connection Is Nothing Then
             Dim CONNUI As New ConnectionUI(Me)
             CONNUI.Show()
         Else
@@ -1462,7 +1494,7 @@ Public Class AddinModule
 
     Private Sub RefreshSelectionBT_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) Handles RefreshSelectionBT.OnClick
 
-        If ConnectioN Is Nothing Then
+        If globalvariables.ConnectioN Is Nothing Then
             Dim CONNUI As New ConnectionUI(Me)
             CONNUI.Show()
         Else
@@ -1504,7 +1536,7 @@ Public Class AddinModule
                                     control As AddinExpress.MSO.IRibbonControl,
                                     pressed As System.Boolean) Handles FunctionDesigner.OnClick
 
-        If ConnectioN Is Nothing Then
+        If globalvariables.ConnectioN Is Nothing Then
             Dim CONNUI As New ConnectionUI(Me)
             CONNUI.Show()
         Else
@@ -1522,7 +1554,7 @@ Public Class AddinModule
 
     Private Sub SubmissionsControlBT_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) Handles SubmissionControlBT.OnClick
 
-        If ConnectioN Is Nothing Then
+        If globalvariables.ConnectioN Is Nothing Then
             Dim CONNUI As New ConnectionUI(Me)
             CONNUI.Show()
         Else
@@ -1533,7 +1565,7 @@ Public Class AddinModule
 
     Private Sub LogBT_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) Handles LogBT.OnClick
 
-        If ConnectioN Is Nothing Then
+        If globalvariables.ConnectioN Is Nothing Then
             Dim CONNUI As New ConnectionUI(Me)
             CONNUI.Show()
         Else
@@ -1549,7 +1581,7 @@ Public Class AddinModule
 
     Private Sub FModelingBT_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) Handles financialModelingBT.OnClick
 
-        If ConnectioN Is Nothing Then
+        If globalvariables.ConnectioN Is Nothing Then
             Dim CONNUI As New ConnectionUI(Me)
             CONNUI.Show()
         Else
@@ -1561,7 +1593,7 @@ Public Class AddinModule
 
     Private Sub AlternativeScenariosBT_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) Handles AdvancedModelingBT.OnClick
 
-        If ConnectioN Is Nothing Then
+        If globalvariables.ConnectioN Is Nothing Then
             Dim CONNUI As New ConnectionUI(Me)
             CONNUI.Show()
         Else
@@ -1574,7 +1606,7 @@ Public Class AddinModule
 
     Private Sub MarketPricesMGT_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) Handles MarketPricesMGT.OnClick
 
-        If ConnectioN Is Nothing Then
+        If globalvariables.ConnectioN Is Nothing Then
             Dim CONNUI As New ConnectionUI(Me)
             CONNUI.Show()
         Else
@@ -1585,7 +1617,7 @@ Public Class AddinModule
 
     Private Sub ASReportsMGTBT_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) Handles ASReportsMGTBT.OnClick
 
-        If ConnectioN Is Nothing Then
+        If globalvariables.ConnectioN Is Nothing Then
             Dim CONNUI As New ConnectionUI(Me)
             CONNUI.Show()
         Else
@@ -1596,7 +1628,7 @@ Public Class AddinModule
 
     Private Sub ASEntitiesAttributesTabBT_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) Handles ASEntitiesAttributesTabBT.OnClick
 
-        If ConnectioN Is Nothing Then
+        If globalvariables.ConnectioN Is Nothing Then
             Dim CONNUI As New ConnectionUI(Me)
             CONNUI.Show()
         Else
@@ -1614,7 +1646,7 @@ Public Class AddinModule
 
     Private Sub ConfigurationRibbonBT_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) Handles ConfigurationRibbonBT.OnClick
 
-        If ConnectioN Is Nothing Then
+        If globalvariables.ConnectioN Is Nothing Then
             Dim CONNUI As New ConnectionUI(Me)
             CONNUI.Show()
         Else
@@ -1634,7 +1666,7 @@ Public Class AddinModule
     'Private Sub ReportFMTBT_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) _
     '        Handles ReportFmtBT.OnClick, FormattingBT.OnClick
 
-    '    If ConnectioN Is Nothing Then
+    '    If globalvariables.ConnectioN Is Nothing Then
     '        Dim CONNUI As New ConnectionUI(Me)
     '        CONNUI.Show()
     '    Else
@@ -1645,7 +1677,7 @@ Public Class AddinModule
 
     'Private Sub InputFMTBT_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) Handles InputFmtBT.OnClick
 
-    '    If ConnectioN Is Nothing Then
+    '    If globalvariables.ConnectioN Is Nothing Then
     '        Dim CONNUI As New ConnectionUI(Me)
     '        CONNUI.Show()
     '    Else
@@ -1756,7 +1788,7 @@ Public Class AddinModule
     Private Sub VersionBT2_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) Handles VersionBT2.OnClick
 
         ' Open side pane to select version ?
-        If ConnectioN Is Nothing Then
+        If globalvariables.ConnectioN Is Nothing Then
             Dim CONNUI As New ConnectionUI(Me)
             CONNUI.Show()
         Else
@@ -1920,6 +1952,9 @@ Public Class AddinModule
 
     End Sub
 
+
+
+
 #Region "Version Selection"
 
     Public Sub SetVersion(ByRef version_id As String)
@@ -1943,6 +1978,7 @@ Public Class AddinModule
     End Sub
 
 #End Region
+
 
 #Region "Entity Selection"
 

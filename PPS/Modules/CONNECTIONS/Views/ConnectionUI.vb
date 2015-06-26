@@ -27,9 +27,7 @@ Friend Class ConnectionUI
     Private ADDIN As AddinModule
     Private CP As CircularProgressUI
 
-    ' Variables
-    Private isCredentialValid As Boolean
-
+   
 #End Region
 
 
@@ -60,7 +58,7 @@ Friend Class ConnectionUI
 
 #Region "Call Backs"
 
-    Private Sub ConnectionBT_Click(sender As Object, e As EventArgs) Handles ConnectionBT.Click
+    Private Sub ConnectionBT_Click(sender As Object, e As EventArgs)
 
         CP = New CircularProgressUI(Drawing.Color.Purple, "Connecting and Initializing")
         Me.Hide()
@@ -70,8 +68,10 @@ Friend Class ConnectionUI
     End Sub
 
     Private Sub CloseBT_Click(sender As Object, e As EventArgs) Handles CloseBT.Click
+
         Me.Dispose()
         Me.Close()
+
     End Sub
 
 
@@ -82,17 +82,9 @@ Friend Class ConnectionUI
 
     Private Sub BackgroundWorker1_DoWork(sender As Object, e As ComponentModel.DoWorkEventArgs) Handles BackgroundWorker1.DoWork
 
-        ConnectioN = OpenConnection(IDTB.Text, PWDTB.Text)
-        If Not ConnectioN Is Nothing Then
-            GlobalVariables.GlobalDBDownloader = New DataBaseDataDownloader
-            GlobalVariables.GlobalDll3Interface = New DLL3_Interface
-            GlobalVariables.GenericGlobalSingleEntityComputer = New GenericSingleEntityDLL3Computer(GlobalVariables.GlobalDBDownloader, _
-                                                                                                    GlobalVariables.GlobalDll3Interface)
-            GlobalVariables.GenericGlobalAggregationComputer = New GenericAggregationDLL3Computing(GlobalVariables.GlobalDBDownloader, _
-                                                                                                    GlobalVariables.GlobalDll3Interface)
-            isCredentialValid = True
-            Exit Sub
-        End If
+        ConnectionsFunctions.Connection(ADDIN, _
+                                        IDTB.Text, _
+                                        PWDTB.Text)
 
     End Sub
 
@@ -110,33 +102,15 @@ Friend Class ConnectionUI
             Dim MyDelegate As New AfterConnectionAttemp_Delegate(AddressOf AfterConnectionAttemp_ThreadSafe)
             Me.Invoke(MyDelegate, New Object() {})
         Else
-            If Not ConnectioN Is Nothing Then
-                If isCredentialValid = True Then
-                    If My.Settings.user <> IDTB.Text Then My.Settings.user = IDTB.Text
-                    GlobalVariables.Connection_Toggle_Button.Image = 1
-                    GlobalVariables.Connection_Toggle_Button.Caption = "Connected"
-
-                    If VersionsMapping.IsVersionValid(My.Settings.version_id) Then
-                        ADDIN.SetVersion(My.Settings.version_id)
-                    Else
-                        ADDIN.LaunchVersionSelection()
-                    End If
-                  
-                    '  AddinModule.loadDropDownsSubmissionButtons()
-
+            If Not GlobalVariables.Connection Is Nothing Then
                     CP.Dispose()
                     Me.Dispose()
                     Me.Close()
-                Else
-                    CP.Close()
-                    MsgBox("Your credentials have been revoked. Please contact your Administrator.")
-                    ConnectioN.Close()
-                End If
             Else
                 CP.Close()
-                MsgBox("Connection failed")
+                '     GlobalVariables.Connection.Close()
             End If
-
+          
         End If
 
     End Sub

@@ -18,6 +18,7 @@ Friend Class GlobalVariables
 
 #Region "Connections and Server"
 
+    Friend Shared Connection As ADODB.Connection
     Friend Shared database As String = My.Settings.database
 
 #End Region
@@ -38,6 +39,7 @@ Friend Class GlobalVariables
     Friend Shared InputSelectionPaneVisible As Boolean
     Friend Shared VersionsSelectionPaneVisible As Boolean
     Friend Shared EntitySelectionPaneVisible As Boolean
+    Friend Shared ConnectionPaneVisible As Boolean
 
 #End Region
 

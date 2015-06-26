@@ -13,7 +13,7 @@
 '
 '
 '
-' Last modified: 25/06/2015
+' Last modified: 625/06/2015
 ' Author: Julien Monnereau
 
 
@@ -34,15 +34,7 @@ Friend Class SettingMainUI
         InitializeComponent()
 
         ' Add any initialization after the InitializeComponent() call.
-        Me.FormBorderStyle = Windows.Forms.FormBorderStyle.None
-
-
-        ' Event handlers
-        AddHandler Panel1.Paint, AddressOf Panel1_Paint
-        AddHandler Panel1.MouseMove, AddressOf panel1_MouseMove
-        AddHandler Panel1.MouseDown, AddressOf form_MouseDown
-        AddHandler Panel1.MouseUp, AddressOf form_MouseUp
-
+        
 
     End Sub
 
@@ -86,19 +78,13 @@ Friend Class SettingMainUI
 
     Private Sub ConnectionBT_Click(sender As Object, e As EventArgs) Handles ConnectionBT.Click
 
-        ConnectioN = OpenConnection(IDTB.Text, PWDTB.Text)
-        If Not ConnectioN Is Nothing Then
-            MsgBox("Connection succeeded")
-        Else
-            MsgBox("Connection failed")
-        End If
+        ' to be reimplemented -> launch pane
 
     End Sub
 
     Private Sub DiconnectBT_Click(sender As Object, e As EventArgs) Handles DiconnectBT.Click
 
-        ConnectioN.Close()
-        ConnectioN = Nothing
+        ConnectionsFunctions.CloseConnection()
 
     End Sub
 
@@ -120,7 +106,7 @@ Friend Class SettingMainUI
 #End Region
 
 
-    Private Sub CloseBT_Click(sender As Object, e As EventArgs) Handles CloseBT.Click
+    Private Sub CloseBT_Click(sender As Object, e As EventArgs)
 
         Me.Dispose()
 
@@ -188,18 +174,18 @@ Friend Class SettingMainUI
 
     End Sub
 
-    Private Sub databaseTB_TextChanged(sender As Object, e As KeyEventArgs) Handles databaseTB.KeyDown
+    Private Sub databasesCB_SelectedIndexChanged(sender As Object, e As EventArgs) Handles databasesCB.SelectedIndexChanged
 
-        If e.KeyCode = Keys.Enter Or e.KeyCode = Keys.Tab Then
-            My.Settings.database = databaseTB.Text
-            GlobalVariables.database = databaseTB.Text
-        End If
+        My.Settings.database = databasesCB.SelectedText
+        My.Settings.Save()
 
     End Sub
+   
 
 #End Region
 
 
 
 
+  
 End Class

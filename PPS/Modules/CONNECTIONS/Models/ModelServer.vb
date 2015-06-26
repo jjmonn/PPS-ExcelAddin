@@ -48,7 +48,7 @@ Friend Class ModelServer
         rst.CursorLocation = CursorLocationEnum.adUseClient
 
         cmd = New Command
-        cmd.ActiveConnection = ConnectioN
+        cmd.ActiveConnection = GlobalVariables.Connection
         cmd.CommandType = CommandTypeEnum.adCmdText
         ' adLockOptimistic
 
@@ -133,7 +133,7 @@ Friend Class ModelServer
 
         On Error GoTo queryError
         rst.Open(strSQL, _
-                 ConnectioN, _
+                 GlobalVariables.Connection, _
                  GetCursor(cursor_option), _
                  lock_type, _
                  CommandTypeEnum.adCmdTable)
@@ -152,7 +152,7 @@ queryError:
 
         On Error GoTo queryError
         rst.Open(sqlQuery, _
-                 ConnectioN, _
+                 GlobalVariables.Connection, _
                  GetCursor(cursor_option), _
                  lock_type, _
                  ADODB.CommandTypeEnum.adCmdText)

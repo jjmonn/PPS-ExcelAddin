@@ -22,7 +22,7 @@ Imports AddinExpress.XL
 Imports System.Windows.Forms
 
 
-Public Class CVersionSelectionPane
+Public Class VersionSelectionPane
 
 
 #Region "Instance Variables"

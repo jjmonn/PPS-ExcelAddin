@@ -1,5 +1,5 @@
 <Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
-Partial Class CVersionSelectionPane
+Partial Class VersionSelectionPane
     Inherits AddinExpress.XL.ADXExcelTaskPane
 
     'Form overrides dispose to clean up the component list.
@@ -22,7 +22,7 @@ Partial Class CVersionSelectionPane
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
-        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(CVersionSelectionPane))
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(VersionSelectionPane))
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.ValidateBT = New System.Windows.Forms.Button()
