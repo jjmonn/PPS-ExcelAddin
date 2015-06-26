@@ -16,7 +16,7 @@ Friend Class PalettesMapping
 
         Dim tmpList As New List(Of String)
         Dim srv As New ModelServer
-        srv.openRst(CONFIG_DATABASE + "." + PALETTES_TABLE, ModelServer.FWD_CURSOR)
+        srv.openRst(GlobalVariables.database + "." + PALETTES_TABLE, ModelServer.FWD_CURSOR)
 
         If srv.rst.EOF = False And srv.rst.BOF = False Then
             srv.rst.MoveFirst()

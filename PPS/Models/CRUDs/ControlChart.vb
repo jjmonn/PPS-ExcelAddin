@@ -38,9 +38,9 @@ Friend Class ControlChart
     Protected Friend Sub New()
 
         Dim i As Int32 = 0
-        Dim q_result = SRV.openRst(CONFIG_DATABASE & "." & CONTROL_CHART_TABLE, ModelServer.DYNAMIC_CURSOR)
+        Dim q_result = SRV.openRst(GlobalVariables.database & "." & CONTROL_CHART_TABLE, ModelServer.DYNAMIC_CURSOR)
         While q_result = False AndAlso i < NB_CONNECTIONS_TRIALS
-            q_result = SRV.openRst(CONFIG_DATABASE & "." & CONTROL_CHART_TABLE, ModelServer.DYNAMIC_CURSOR)
+            q_result = SRV.openRst(GlobalVariables.database & "." & CONTROL_CHART_TABLE, ModelServer.DYNAMIC_CURSOR)
             i = i + 1
         End While
         SRV.rst.Sort = ITEMS_POSITIONS
@@ -125,7 +125,7 @@ Friend Class ControlChart
     Protected Friend Shared Sub LoadControlChartsTree(ByRef TV As TreeView)
 
         Dim srv As New ModelServer
-        Dim q_result As Boolean = srv.openRst(CONFIG_DATABASE & "." & CONTROL_CHART_TABLE, ModelServer.FWD_CURSOR)
+        Dim q_result As Boolean = srv.openRst(GlobalVariables.database & "." & CONTROL_CHART_TABLE, ModelServer.FWD_CURSOR)
         If q_result = True Then
 
             Dim currentNode, ParentNode() As TreeNode

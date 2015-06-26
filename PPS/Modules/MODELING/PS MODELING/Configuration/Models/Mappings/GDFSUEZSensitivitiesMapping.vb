@@ -24,7 +24,7 @@ Friend Class GDFSUEZSensitivitiesMapping
 
         Dim sensitivities_dict As New Dictionary(Of String, Hashtable)
         Dim srv As New ModelServer
-        srv.OpenRst(CONFIG_DATABASE + "." + GDF_SENSITIVITIES_LIST_TABLE, ModelServer.FWD_CURSOR)
+        srv.OpenRst(GlobalVariables.database + "." + GDF_SENSITIVITIES_LIST_TABLE, ModelServer.FWD_CURSOR)
 
         If srv.rst.EOF = False And srv.rst.BOF = False Then
             srv.rst.MoveFirst()

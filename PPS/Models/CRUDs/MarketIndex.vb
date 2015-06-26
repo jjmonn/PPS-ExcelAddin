@@ -34,7 +34,7 @@ Friend Class MarketIndex
 
         SRV = New ModelServer
         Dim i As Int32 = 0
-        object_is_alive = SRV.OpenRst(CONFIG_DATABASE & "." & MARKET_INDEXES_TABLE, ModelServer.STATIC_CURSOR)
+        object_is_alive = SRV.OpenRst(GlobalVariables.database & "." & MARKET_INDEXES_TABLE, ModelServer.STATIC_CURSOR)
         RST = SRV.rst
 
     End Sub

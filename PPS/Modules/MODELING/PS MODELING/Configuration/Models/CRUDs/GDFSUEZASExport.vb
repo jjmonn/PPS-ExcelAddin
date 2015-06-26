@@ -37,7 +37,7 @@ Friend Class GDFSUEZASExport
     Protected Friend Sub New()
 
         SRV = New ModelServer
-        Dim q_result = SRV.OpenRst(CONFIG_DATABASE + "." + GDF_AS_EXPORTS_TABLE, ModelServer.DYNAMIC_CURSOR)
+        Dim q_result = SRV.OpenRst(GlobalVariables.database + "." + GDF_AS_EXPORTS_TABLE, ModelServer.DYNAMIC_CURSOR)
         RST = SRV.rst
         object_is_alive = q_result
 

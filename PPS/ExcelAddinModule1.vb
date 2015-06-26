@@ -14,7 +14,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 04/05/2015
+' Last modified: 25/06/2015
 
 
 Imports System.Runtime.InteropServices
@@ -88,8 +88,7 @@ Public Class ExcelAddinModule1
     Private Function InitializeGlobalVariables() As Boolean
 
         ConnectioN = GlobalVariables.apps.COMAddIns.Item("PPS.AddinModule").Object.GetAddinConnection()
-        GlobalVariables.User_Credential = GlobalVariables.apps.COMAddIns.Item("PPS.AddinModule").Object.GetUserCredential()
-        GlobalVariables.Entities_View = GlobalVariables.apps.COMAddIns.Item("PPS.AddinModule").Object.GetEntitiesView()
+
         GlobalVariables.Version_Label = GlobalVariables.APPS.COMAddIns.Item("PPS.AddinModule").Object.GetVersionLabel()
         If ConnectioN Is Nothing Then
             Return False

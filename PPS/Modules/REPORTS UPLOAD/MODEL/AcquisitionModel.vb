@@ -18,7 +18,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 01/05/2014
+' Last modified: 25/06/2015
 
 
 Imports VIBlend.WinForms.DataGridView
@@ -93,7 +93,7 @@ Friend Class AcquisitionModel
         Dim Versions As New Version
         currentPeriodlist = Versions.GetPeriodList(current_version_id)
 
-        Dim viewName = current_version_id & GlobalVariables.User_Credential
+        Dim viewName = current_version_id
         DBDownloader.GetEntityInputsNonConverted(entityKey, _
                                                  viewName, _
                                                  Utilities_Functions.getStringsList({client_id}), _

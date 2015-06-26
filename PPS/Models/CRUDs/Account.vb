@@ -30,7 +30,7 @@ Friend Class Account
     Private RST As Recordset
 
     ' Constants
-    Private ACCOUNTS_TABLE_ADDRESS As String = CONFIG_DATABASE + "." + ACCOUNTS_TABLE
+    Private ACCOUNTS_TABLE_ADDRESS As String = GlobalVariables.database + "." + ACCOUNTS_TABLE
     Friend object_is_alive As Boolean
 
 #End Region
@@ -122,7 +122,7 @@ Friend Class Account
     Friend Shared Sub LoadAccountsTree(ByRef TV As TreeView)
 
         Dim srv As New ModelServer
-        If srv.openRst(CONFIG_DATABASE + "." + ACCOUNTS_TABLE, ModelServer.FWD_CURSOR) Then
+        If srv.openRst(GlobalVariables.database + "." + ACCOUNTS_TABLE, ModelServer.FWD_CURSOR) Then
             srv.rst.Sort = ITEMS_POSITIONS
             TreeViewsUtilities.LoadAccountsTree(TV, srv.rst)
             srv.rst.Close()
@@ -132,7 +132,7 @@ Friend Class Account
 
     Protected Friend Sub UpdatePositionsDictionary()
 
-        SRV.sqlQuery("CALL " & CONFIG_DATABASE & "." & UPDATE_ACCOUNTS_POSITIONS_SP)
+        SRV.sqlQuery("CALL " & GlobalVariables.database & "." & UPDATE_ACCOUNTS_POSITIONS_SP)
 
     End Sub
 

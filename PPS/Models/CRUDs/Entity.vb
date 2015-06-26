@@ -36,7 +36,7 @@ Friend Class Entity
 
     Protected Friend Sub New()
 
-        object_is_alive = SRV.OpenRst(LEGAL_ENTITIES_DATABASE & "." & ENTITIES_TABLE, ModelServer.DYNAMIC_CURSOR)
+        object_is_alive = SRV.OpenRst(GlobalVariables.database & "." & ENTITIES_TABLE, ModelServer.DYNAMIC_CURSOR)
         SRV.rst.Sort = ITEMS_POSITIONS
         RST = SRV.rst
         
@@ -128,9 +128,9 @@ Friend Class Entity
         Dim srv As New ModelServer
         Dim q_result As Boolean
         If strSqlQuery <> "" Then
-            q_result = srv.openRstSQL("SELECT * FROM " + VIEWS_DATABASE + "." + GlobalVariables.Entities_View + " WHERE " + strSqlQuery, ModelServer.FWD_CURSOR)
+            q_result = srv.openRstSQL("SELECT * FROM " + GlobalVariables.database + "." + ENTITIES_TABLE + " WHERE " + strSqlQuery, ModelServer.FWD_CURSOR)
         Else
-            q_result = srv.openRst(VIEWS_DATABASE & "." & GlobalVariables.Entities_View, ModelServer.FWD_CURSOR)
+            q_result = srv.openRst(GlobalVariables.database & "." & ENTITIES_TABLE, ModelServer.FWD_CURSOR)
         End If
 
         If q_result = True Then
@@ -172,7 +172,7 @@ Friend Class Entity
 
         Dim srv As New ModelServer
         Dim q_result As Boolean
-        q_result = srv.openRst(VIEWS_DATABASE & "." & GlobalVariables.Entities_View, ModelServer.FWD_CURSOR)
+        q_result = srv.openRst(GlobalVariables.database & "." & ENTITIES_TABLE, ModelServer.FWD_CURSOR)
         If q_result = True Then
 
             Dim currentNode, ParentNode() As TreeNode
@@ -214,7 +214,7 @@ Friend Class Entity
         Dim srv As New ModelServer
 
         TV.Nodes.Clear()
-        srv.OpenRst(LEGAL_ENTITIES_DATABASE + "." + ENTITIES_TABLE, ModelServer.FWD_CURSOR)
+        srv.OpenRst(GlobalVariables.database + "." + ENTITIES_TABLE, ModelServer.FWD_CURSOR)
         srv.rst.Sort = ITEMS_POSITIONS
 
         Do While srv.rst.EOF = False
@@ -242,7 +242,7 @@ Friend Class Entity
     Protected Friend Shared Sub UpdateEntitiesCredentialLevels(ByRef entitiesIDCredentialsTV As TreeView)
 
         Dim srv As New ModelServer
-        srv.openRst(LEGAL_ENTITIES_DATABASE + "." + ENTITIES_TABLE, ModelServer.STATIC_CURSOR)
+        srv.openRst(GlobalVariables.database + "." + ENTITIES_TABLE, ModelServer.STATIC_CURSOR)
 
         Dim entities_id_list = TreeViewsUtilities.GetNodesKeysList(entitiesIDCredentialsTV)
         Dim node As TreeNode

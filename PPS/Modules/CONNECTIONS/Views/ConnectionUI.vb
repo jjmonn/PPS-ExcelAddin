@@ -84,18 +84,14 @@ Friend Class ConnectionUI
 
         ConnectioN = OpenConnection(IDTB.Text, PWDTB.Text)
         If Not ConnectioN Is Nothing Then
-            If SQLCredentials.SetGLOBALUserCredential() Then
-                GlobalVariables.GlobalDBDownloader = New DataBaseDataDownloader
-                GlobalVariables.GlobalDll3Interface = New DLL3_Interface
-                GlobalVariables.GenericGlobalSingleEntityComputer = New GenericSingleEntityDLL3Computer(GlobalVariables.GlobalDBDownloader, _
-                                                                                                 GlobalVariables.GlobalDll3Interface)
-                GlobalVariables.GenericGlobalAggregationComputer = New GenericAggregationDLL3Computing(GlobalVariables.GlobalDBDownloader, _
-                                                                                                       GlobalVariables.GlobalDll3Interface)
-                isCredentialValid = True
-            Else
-                isCredentialValid = False
-                Exit Sub
-            End If
+            GlobalVariables.GlobalDBDownloader = New DataBaseDataDownloader
+            GlobalVariables.GlobalDll3Interface = New DLL3_Interface
+            GlobalVariables.GenericGlobalSingleEntityComputer = New GenericSingleEntityDLL3Computer(GlobalVariables.GlobalDBDownloader, _
+                                                                                                    GlobalVariables.GlobalDll3Interface)
+            GlobalVariables.GenericGlobalAggregationComputer = New GenericAggregationDLL3Computing(GlobalVariables.GlobalDBDownloader, _
+                                                                                                    GlobalVariables.GlobalDll3Interface)
+            isCredentialValid = True
+            Exit Sub
         End If
 
     End Sub

@@ -18,7 +18,7 @@ Friend Class AdjustmentsMapping
 
         Dim srv As New ModelServer
         Dim tmpHT As New Dictionary(Of String, String)
-        srv.OpenRst(CONFIG_DATABASE + "." + ADJUSTMENTS_TABLE, ModelServer.FWD_CURSOR)
+        srv.OpenRst(GlobalVariables.database + "." + ADJUSTMENTS_TABLE, ModelServer.FWD_CURSOR)
 
         If srv.rst.EOF = False And srv.rst.BOF = False Then
             srv.rst.MoveFirst()
@@ -38,7 +38,7 @@ Friend Class AdjustmentsMapping
 
         Dim tmp_list As New List(Of String)
         Dim srv As New ModelServer
-        srv.OpenRst(CONFIG_DATABASE + "." + ADJUSTMENTS_TABLE, ModelServer.FWD_CURSOR)
+        srv.OpenRst(GlobalVariables.database + "." + ADJUSTMENTS_TABLE, ModelServer.FWD_CURSOR)
         Do While srv.rst.EOF = False
             tmp_list.Add(srv.rst.Fields(field).Value)
             srv.rst.MoveNext()

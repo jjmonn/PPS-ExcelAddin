@@ -18,7 +18,7 @@ Friend Class OperatorsMapping
 
         Dim srv As New ModelServer
         Dim tmpHT As New Dictionary(Of String, String)
-        srv.openRst(CONFIG_DATABASE + "." + OPERATORS_TABLE, ModelServer.FWD_CURSOR)
+        srv.openRst(GlobalVariables.database + "." + OPERATORS_TABLE, ModelServer.FWD_CURSOR)
 
         If srv.rst.EOF = False And srv.rst.BOF = False Then
             srv.rst.MoveFirst()

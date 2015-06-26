@@ -12,7 +12,7 @@
 '
 '
 '
-' Last modified: 27/02/2015
+' Last modified: 25/06/2015
 ' Author: Julien Monnereau
 
 
@@ -29,13 +29,14 @@ Module Connections_Functions
         connectionString = "DRIVER={" + DRIVER_NAME + "};" _
                            & "SERVER=" + My.Settings.server + ";" _
                            & "PORT=" & My.Settings.port_number & ";" _
-                           & "DATABASE=" + OPENING_DATABASE + ";" _
+                           & "DATABASE=" + My.Settings.database + ";" _
                            & "UID=" + userID + ";" _
                            & "PASSWORD=" + pwd + ";" _
                            & "SSLKEY=" & My.Settings.certificatespath & "\client-key.pem;" _
                            & "SSLCERT=" & My.Settings.certificatespath & "\client-cert.pem;" _
                            & "SSLCA=" & My.Settings.certificatespath & "\server-ca.pem;" _
                            & "Pooling=True;"
+
 
         ' C:\Users\PPS\Documents\Purple Sun\CA
         ' & "OPTION=3" _

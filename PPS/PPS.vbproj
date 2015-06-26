@@ -171,11 +171,9 @@
     <Compile Include="Models\CRUDs\MarketIndex.vb" />
     <Compile Include="Models\CRUDs\Control.vb" />
     <Compile Include="Models\CRUDs\ControlChart.vb" />
-    <Compile Include="Models\CRUDs\CredentialLevel.vb" />
     <Compile Include="Models\CRUDs\FModellingAccount.vb" />
     <Compile Include="Models\CRUDs\MarketIndexVersion.vb" />
     <Compile Include="Models\CRUDs\MarketPrice.vb" />
-    <Compile Include="Models\CRUDs\User.vb" />
     <Compile Include="Models\dll Interfaces\FDLL_Interface.vb" />
     <Compile Include="Models\dll Interfaces\PSDLLL_Interface.vb" />
     <Compile Include="Models\Mappings\AccountTypesMapping.vb" />
@@ -192,7 +190,6 @@
     <Compile Include="Models\Mappings\pps_colorsMapping.vb" />
     <Compile Include="Models\Mappings\ProductsMapping.vb" />
     <Compile Include="Models\Mappings\SeriesMapping.vb" />
-    <Compile Include="Models\Mappings\UsersMapping.vb" />
     <Compile Include="Modules\MODELING\PS MODELING\Configuration\Models\gdfsuezAlternativeScenarios.vb" />
     <Compile Include="Modules\MODELING\PS MODELING\View\AlternativeScenariosUI.Designer.vb">
       <DependentUpon>AlternativeScenariosUI.vb</DependentUpon>
@@ -504,7 +501,6 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Modules\CONNECTIONS\Models\SMTPConnection.vb" />
-    <Compile Include="Transactions\SQLCredentials.vb" />
     <Compile Include="Transactions\DataBaseDataUploader.vb" />
     <Compile Include="Controllers\GloablInstancesRestartModule.vb" />
     <Compile Include="Modules\PLATFORM MANAGEMENT\Currencies\Views\RatesView.vb" />
@@ -518,9 +514,6 @@
     <Compile Include="Models\Mappings\CategoriesMapping.vb" />
     <Compile Include="Models\Mappings\ExchangeRatesMapping.vb" />
     <Compile Include="Models\Mappings\RateVersionsMapping.vb" />
-    <Compile Include="Models\Mappings\ConfigPrivilegesMapping.vb" />
-    <Compile Include="Models\Mappings\CredentialsLevelsMapping.vb" />
-    <Compile Include="Models\Mappings\CredentialsTypesMapping.vb" />
     <Compile Include="Models\Mappings\CurrenciesMapping.vb" />
     <Compile Include="Modules\PLATFORM MANAGEMENT\Users\Views\NewUserUI.Designer.vb">
       <DependentUpon>NewUserUI.vb</DependentUpon>
@@ -531,7 +524,6 @@
     <Compile Include="Transactions\SQLEntities.vb" />
     <Compile Include="Modules\PLATFORM MANAGEMENT\Entities\VIEW\EntitiesDGV.vb" />
     <Compile Include="Utilities\PasswordGenerator.vb" />
-    <Compile Include="Transactions\SQLPrivileges.vb" />
     <Compile Include="Modules\PLATFORM MANAGEMENT\Users\Controller\UsersController.vb" />
     <Compile Include="Modules\PLATFORM MANAGEMENT\Users\Views\EntitySelectionForUsersMGT.Designer.vb">
       <DependentUpon>EntitySelectionForUsersMGT.vb</DependentUpon>
@@ -576,8 +568,6 @@
     <Compile Include="Transactions\SQLVersions.vb" />
     <Compile Include="Models\Selection Builders\ESB.vb" />
     <Compile Include="Models\Computing\ModelFormulasMGT.vb" />
-    <Compile Include="Controllers\CredentialsController.vb" />
-    <Compile Include="Controllers\ViewsController.vb" />
     <Compile Include="Modules\CONTROLING UI\View\ControllingUI_2.Designer.vb">
       <DependentUpon>ControllingUI_2.vb</DependentUpon>
     </Compile>

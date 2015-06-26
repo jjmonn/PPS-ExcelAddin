@@ -36,7 +36,7 @@ Friend Class FormatM
     Protected Friend Sub New()
 
         Dim i As Int32 = 0
-        Dim q_result = SRV.OpenRst(CONFIG_DATABASE & "." & FORMATS_TABLE_NAME, ModelServer.DYNAMIC_CURSOR)
+        Dim q_result = SRV.OpenRst(GlobalVariables.database & "." & FORMATS_TABLE_NAME, ModelServer.DYNAMIC_CURSOR)
         RST = SRV.rst
 
     End Sub

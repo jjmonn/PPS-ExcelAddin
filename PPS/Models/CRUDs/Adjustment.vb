@@ -37,7 +37,7 @@ Friend Class Adjustment
     Protected Friend Sub New()
 
         SRV = New ModelServer
-        Dim q_result = SRV.OpenRst(CONFIG_DATABASE & "." & ADJUSTMENTS_TABLE, ModelServer.DYNAMIC_CURSOR)
+        Dim q_result = SRV.OpenRst(GlobalVariables.database & "." & ADJUSTMENTS_TABLE, ModelServer.DYNAMIC_CURSOR)
         RST = SRV.rst
         object_is_alive = q_result
 
@@ -120,7 +120,7 @@ Friend Class Adjustment
 
         Dim srv As New ModelServer
         Dim q_result As Boolean
-        q_result = srv.OpenRst(CONFIG_DATABASE & "." & ADJUSTMENTS_TABLE, ModelServer.FWD_CURSOR)
+        q_result = srv.OpenRst(GlobalVariables.database & "." & ADJUSTMENTS_TABLE, ModelServer.FWD_CURSOR)
         If q_result = True Then
             TV.Nodes.Clear()
             srv.rst.MoveFirst()

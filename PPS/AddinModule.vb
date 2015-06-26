@@ -16,7 +16,7 @@
 '
 '
 ' Author: Julien Monnereau/ Addin Express automated code
-' Last modified: 09/05/2015
+' Last modified: 25/06/2015
 
 
 Imports System.Runtime.InteropServices
@@ -1277,14 +1277,9 @@ Public Class AddinModule
         Return ConnectioN
     End Function
 
-    ' Returns the user credential instance variable
-    Public Function GetUserCredential() As Int32
-        Return GlobalVariables.User_Credential
-    End Function
-
     ' Returns the entities View variable
     Public Function GetEntitiesView() As String
-        Return GlobalVariables.Entities_View
+        Return ENTITIES_TABLE
     End Function
 
     ' Returns the entities View variable
@@ -1409,7 +1404,7 @@ Public Class AddinModule
         SubmissionModeRibbon.Visible = True
         SubmissionModeRibbon.Activate()
         WSCB.SelectedItemId = ctrl.Id
-       
+
     End Sub
 
     ' Disable Submission Buttons (Call back from GRSController)
@@ -2028,6 +2023,6 @@ Public Class AddinModule
 
 
 
-  
+
 End Class
 

@@ -43,7 +43,7 @@ Friend Class ExchangeRate
     Protected Friend Sub New(ByRef rates_version_id As String)
 
         SRV = New ModelServer
-        Dim str_sql = "SELECT * FROM " & CONFIG_DATABASE & "." & EXCHANGE_RATES_TABLE_NAME & _
+        Dim str_sql = "SELECT * FROM " & GlobalVariables.database & "." & EXCHANGE_RATES_TABLE_NAME & _
                               " WHERE " & EX_RATES_RATE_VERSION & "='" & rates_version_id & "'"
         Dim i As Int32 = 0
         Dim q_result = SRV.openRstSQL(str_sql, ModelServer.FWD_CURSOR)  '
@@ -136,7 +136,7 @@ Friend Class ExchangeRate
     Protected Friend Shared Function DeleteAllRates(ByRef version_id As String) As Boolean
 
         Dim srv As New ModelServer
-        Dim str_sql As String = "DELETE FROM " & CONFIG_DATABASE & "." & EXCHANGE_RATES_TABLE_NAME & _
+        Dim str_sql As String = "DELETE FROM " & GlobalVariables.database & "." & EXCHANGE_RATES_TABLE_NAME & _
                                 " WHERE " & EX_RATES_RATE_VERSION & "='" & version_id & "'"
         Dim i As Int32 = 0
         Dim q_result = srv.sqlQuery(str_sql)

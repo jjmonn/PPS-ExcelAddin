@@ -39,9 +39,9 @@ Friend Class Control
 
         SRV = New ModelServer
         Dim i As Int32 = 0
-        Dim q_result = SRV.openRst(CONFIG_DATABASE & "." & CONTROLS_TABLE, ModelServer.DYNAMIC_CURSOR)
+        Dim q_result = SRV.openRst(GlobalVariables.database & "." & CONTROLS_TABLE, ModelServer.DYNAMIC_CURSOR)
         While q_result = False AndAlso i < NB_CONNECTIONS_TRIALS
-            q_result = SRV.openRst(CONFIG_DATABASE & "." & CONTROLS_TABLE, ModelServer.DYNAMIC_CURSOR)
+            q_result = SRV.openRst(GlobalVariables.database & "." & CONTROLS_TABLE, ModelServer.DYNAMIC_CURSOR)
             i = i + 1
         End While
         RST = SRV.rst

@@ -3,7 +3,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 28/04/2015
+' Last modified: 25/06/2015
 
 
 Imports System.Windows.Forms
@@ -18,7 +18,6 @@ Friend Class EntitiesCategoriesController : Inherits AnalysisAxisCategoriesContr
 #Region "Instance Variables"
 
     ' Objects
-    Private EntitiesSQLViews As New ViewsController
     Private SQLEntities As New SQLEntities
 
 #End Region
@@ -52,7 +51,7 @@ Friend Class EntitiesCategoriesController : Inherits AnalysisAxisCategoriesContr
 
         MyBase.AddNode(new_category_id, category_name, 1)
         SQLEntities.CreateNewEntitiesVariable(new_category_id)
-        EntitiesSQLViews.CreateAllEntitiesViews()
+        '    EntitiesSQLViews.CreateAllEntitiesViews()
         GenerateNewCategoryDefaultValue(MyBase.CategoriesTV.Nodes.Find(new_category_id, True)(0))
         Return True
 
@@ -68,7 +67,7 @@ Friend Class EntitiesCategoriesController : Inherits AnalysisAxisCategoriesContr
         SQLEntities.DeleteEntitiesVariable(node.Name)
         MyBase.categories_names_list.Remove(node.Text)
         node.Remove()
-        EntitiesSQLViews.CreateAllEntitiesViews()
+        '    EntitiesSQLViews.CreateAllEntitiesViews()
 
     End Sub
 

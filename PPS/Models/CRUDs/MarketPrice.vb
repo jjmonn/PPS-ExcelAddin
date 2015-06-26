@@ -38,7 +38,7 @@ Friend Class MarketPrice
     Protected Friend Sub New(ByRef market_price_version_id As String)
 
         SRV = New ModelServer
-        Dim str_sql = "SELECT * FROM " & CONFIG_DATABASE & "." & MARKET_INDEXES_PRICES_TABLE & _
+        Dim str_sql = "SELECT * FROM " & GlobalVariables.database & "." & MARKET_INDEXES_PRICES_TABLE & _
                      " WHERE " & MARKET_INDEXES_PRICES_VERSION_VAR & "='" & market_price_version_id & "'"
         Dim i As Int32 = 0
         Dim q_result = SRV.openRstSQL(str_sql, ModelServer.FWD_CURSOR)  '
@@ -113,7 +113,7 @@ Friend Class MarketPrice
     Protected Friend Shared Function DeleteAllMarketPrices(ByRef version_id As String) As Boolean
 
         Dim srv As New ModelServer
-        Dim str_sql As String = "DELETE FROM " & CONFIG_DATABASE & "." & MARKET_INDEXES_PRICES_TABLE & _
+        Dim str_sql As String = "DELETE FROM " & GlobalVariables.database & "." & MARKET_INDEXES_PRICES_TABLE & _
                                 " WHERE " & MARKET_INDEXES_PRICES_VERSION_VAR & "='" & version_id & "'"
         Dim i As Int32 = 0
         Dim q_result = srv.sqlQuery(str_sql)

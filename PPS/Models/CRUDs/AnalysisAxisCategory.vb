@@ -39,7 +39,7 @@ Friend Class AnalysisAxisCategory
 
         Me.category_code = category_code
         SRV = New ModelServer
-        object_is_alive = SRV.OpenRst(CONFIG_DATABASE & "." & CATEGORIES_TABLE_NAME, ModelServer.DYNAMIC_CURSOR)
+        object_is_alive = SRV.OpenRst(GlobalVariables.database & "." & CATEGORIES_TABLE_NAME, ModelServer.DYNAMIC_CURSOR)
         RST = SRV.rst
 
     End Sub
@@ -117,7 +117,7 @@ Friend Class AnalysisAxisCategory
     Protected Friend Shared Sub LoadCategoryCodeTV(ByRef TV As TreeView, ByRef code As String)
 
         Dim srv As New ModelServer
-        If srv.OpenRst(CONFIG_DATABASE & "." & CATEGORIES_TABLE_NAME, ModelServer.FWD_CURSOR) Then
+        If srv.OpenRst(GlobalVariables.database & "." & CATEGORIES_TABLE_NAME, ModelServer.FWD_CURSOR) Then
             srv.rst.Filter = CATEGORY_CODE_VARIABLE & "='" & code & "'"
 
             Dim currentNode, ParentNode() As TreeNode
@@ -150,7 +150,7 @@ Friend Class AnalysisAxisCategory
 
         Dim category_node As New TreeNode
         Dim srv As New ModelServer
-        If srv.OpenRst(CONFIG_DATABASE & "." & CATEGORIES_TABLE_NAME, ModelServer.FWD_CURSOR) Then
+        If srv.OpenRst(GlobalVariables.database & "." & CATEGORIES_TABLE_NAME, ModelServer.FWD_CURSOR) Then
             srv.rst.Filter = CATEGORY_CODE_VARIABLE & "='" & code & "'"
 
             Dim currentNode, ParentNode() As TreeNode

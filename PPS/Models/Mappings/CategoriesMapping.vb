@@ -29,7 +29,7 @@ Friend Class CategoriesMapping
 
         Dim tmpHT As New Hashtable
         Dim srv As New ModelServer
-        srv.OpenRst(CONFIG_DATABASE + "." + CATEGORIES_TABLE_NAME, ModelServer.FWD_CURSOR)
+        srv.OpenRst(GlobalVariables.database + "." + CATEGORIES_TABLE_NAME, ModelServer.FWD_CURSOR)
         srv.rst.Filter = CATEGORY_CODE_VARIABLE & "='" & code & "'"
 
         Do While srv.rst.EOF = False
@@ -47,7 +47,7 @@ Friend Class CategoriesMapping
 
         Dim tmp_dict As New Dictionary(Of String, String)
         Dim srv As New ModelServer
-        srv.OpenRst(CONFIG_DATABASE + "." + CATEGORIES_TABLE_NAME, ModelServer.FWD_CURSOR)
+        srv.OpenRst(GlobalVariables.database + "." + CATEGORIES_TABLE_NAME, ModelServer.FWD_CURSOR)
         srv.rst.Filter = CATEGORY_PARENT_ID_VARIABLE & "=NULL"
 
         Do While srv.rst.EOF = False

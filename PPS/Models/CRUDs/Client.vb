@@ -37,7 +37,7 @@ Friend Class Client
     Protected Friend Sub New()
 
         SRV = New ModelServer
-        object_is_alive = SRV.OpenRst(CONFIG_DATABASE & "." & CLIENTS_TABLE, ModelServer.DYNAMIC_CURSOR)
+        object_is_alive = SRV.OpenRst(GlobalVariables.database & "." & CLIENTS_TABLE, ModelServer.DYNAMIC_CURSOR)
         RST = SRV.rst
 
     End Sub
@@ -133,7 +133,7 @@ Friend Class Client
 
         Dim srv As New ModelServer
         Dim q_result As Boolean
-        q_result = srv.OpenRst(CONFIG_DATABASE & "." & ClientS_TABLE, ModelServer.FWD_CURSOR)
+        q_result = srv.OpenRst(GlobalVariables.database & "." & ClientS_TABLE, ModelServer.FWD_CURSOR)
         If q_result = True Then
             TV.Nodes.Clear()
             srv.rst.MoveFirst()
@@ -152,7 +152,7 @@ Friend Class Client
 
         Dim srv As New ModelServer
         Dim q_result As Boolean
-        q_result = srv.OpenRst(CONFIG_DATABASE & "." & CLIENTS_TABLE, ModelServer.FWD_CURSOR)
+        q_result = srv.OpenRst(GlobalVariables.database & "." & CLIENTS_TABLE, ModelServer.FWD_CURSOR)
         If q_result = True Then
             TV.Nodes.Clear()
             srv.rst.MoveFirst()
@@ -204,7 +204,7 @@ Friend Class Client
 
         Dim tmp_srv As New ModelServer
         Dim column_values_length As Int32 = CATEGORIES_TOKEN_SIZE + Len(NON_ATTRIBUTED_SUFIX)
-        Return tmp_srv.sqlQuery("ALTER TABLE " + CONFIG_DATABASE + "." + CLIENTS_TABLE + _
+        Return tmp_srv.sqlQuery("ALTER TABLE " + GlobalVariables.database + "." + CLIENTS_TABLE + _
                                 " ADD COLUMN " & variable_id & " VARCHAR(" & column_values_length & ") DEFAULT '" & variable_id & NON_ATTRIBUTED_SUFIX & "'")
 
     End Function
@@ -212,7 +212,7 @@ Friend Class Client
     Protected Friend Shared Function DeleteClientsVariable(ByRef variable_id) As Boolean
 
         Dim tmp_srv As New ModelServer
-        Return tmp_srv.sqlQuery("ALTER TABLE " + CONFIG_DATABASE + "." + CLIENTS_TABLE + _
+        Return tmp_srv.sqlQuery("ALTER TABLE " + GlobalVariables.database + "." + CLIENTS_TABLE + _
                                 " DROP COLUMN " & variable_id)
 
     End Function
@@ -222,7 +222,7 @@ Friend Class Client
 
         Dim tmp_srv As New ModelServer
         Dim new_value = category_id & NON_ATTRIBUTED_SUFIX
-        Return tmp_srv.sqlQuery("UPDATE " & CONFIG_DATABASE + "." + CLIENTS_TABLE & _
+        Return tmp_srv.sqlQuery("UPDATE " & GlobalVariables.database + "." + CLIENTS_TABLE & _
                                 " SET " & category_id & "='" & new_value & "'" & _
                                 " WHERE " & category_id & "='" & origin_value & "'")
 

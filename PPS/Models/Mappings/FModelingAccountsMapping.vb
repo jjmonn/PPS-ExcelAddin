@@ -26,7 +26,7 @@ Friend Class FModelingAccountsMapping
 
         Dim tmpList As New List(Of String)
         Dim srv = New ModelServer
-        srv.openRst(CONFIG_DATABASE + "." + FINANCIAL_MODELLING_TABLE, ModelServer.FWD_CURSOR)
+        srv.openRst(GlobalVariables.database + "." + FINANCIAL_MODELLING_TABLE, ModelServer.FWD_CURSOR)
         srv.rst.Sort = ITEMS_POSITIONS
         If type <> "" Then srv.rst.Filter = FINANCIAL_MODELLING_TYPE_VARIABLE + "='" & type & "'"
 
@@ -56,7 +56,7 @@ Friend Class FModelingAccountsMapping
 
         Dim tmpHT As New Hashtable
         Dim srv = New ModelServer
-        srv.openRst(CONFIG_DATABASE + "." + FINANCIAL_MODELLING_TABLE, ModelServer.FWD_CURSOR)
+        srv.openRst(GlobalVariables.database + "." + FINANCIAL_MODELLING_TABLE, ModelServer.FWD_CURSOR)
         srv.rst.Sort = ITEMS_POSITIONS
         If type <> "" Then srv.rst.Filter = FINANCIAL_MODELLING_TYPE_VARIABLE + "='" & type & "'"
 

@@ -29,6 +29,8 @@ Partial Class SettingMainUI
         Me.ControlImages = New System.Windows.Forms.ImageList(Me.components)
         Me.TabControl1 = New System.Windows.Forms.TabControl()
         Me.TabPage1 = New System.Windows.Forms.TabPage()
+        Me.databaseTB = New System.Windows.Forms.TextBox()
+        Me.Label5 = New System.Windows.Forms.Label()
         Me.PortTB = New System.Windows.Forms.TextBox()
         Me.Label4 = New System.Windows.Forms.Label()
         Me.CertificatesBT = New System.Windows.Forms.Button()
@@ -46,6 +48,7 @@ Partial Class SettingMainUI
         Me.TabPage2 = New System.Windows.Forms.TabPage()
         Me.ACFIcon = New System.Windows.Forms.ImageList(Me.components)
         Me.FolderBrowserDialog1 = New System.Windows.Forms.FolderBrowserDialog()
+        Me.databasesCB = New System.Windows.Forms.ComboBox()
         Me.Panel1.SuspendLayout()
         Me.TabControl1.SuspendLayout()
         Me.TabPage1.SuspendLayout()
@@ -100,6 +103,9 @@ Partial Class SettingMainUI
         '
         'TabPage1
         '
+        Me.TabPage1.Controls.Add(Me.databasesCB)
+        Me.TabPage1.Controls.Add(Me.databaseTB)
+        Me.TabPage1.Controls.Add(Me.Label5)
         Me.TabPage1.Controls.Add(Me.PortTB)
         Me.TabPage1.Controls.Add(Me.Label4)
         Me.TabPage1.Controls.Add(Me.CertificatesBT)
@@ -121,6 +127,23 @@ Partial Class SettingMainUI
         Me.TabPage1.Text = "Connection"
         Me.TabPage1.UseVisualStyleBackColor = True
         '
+        'databaseTB
+        '
+        Me.databaseTB.AcceptsReturn = True
+        Me.databaseTB.Location = New System.Drawing.Point(151, 157)
+        Me.databaseTB.Name = "databaseTB"
+        Me.databaseTB.Size = New System.Drawing.Size(196, 20)
+        Me.databaseTB.TabIndex = 18
+        '
+        'Label5
+        '
+        Me.Label5.AutoSize = True
+        Me.Label5.Location = New System.Drawing.Point(27, 157)
+        Me.Label5.Name = "Label5"
+        Me.Label5.Size = New System.Drawing.Size(60, 15)
+        Me.Label5.TabIndex = 17
+        Me.Label5.Text = "Database"
+        '
         'PortTB
         '
         Me.PortTB.AcceptsReturn = True
@@ -134,13 +157,13 @@ Partial Class SettingMainUI
         Me.Label4.AutoSize = True
         Me.Label4.Location = New System.Drawing.Point(27, 107)
         Me.Label4.Name = "Label4"
-        Me.Label4.Size = New System.Drawing.Size(26, 13)
+        Me.Label4.Size = New System.Drawing.Size(29, 15)
         Me.Label4.TabIndex = 15
         Me.Label4.Text = "Port"
         '
         'CertificatesBT
         '
-        Me.CertificatesBT.Location = New System.Drawing.Point(30, 288)
+        Me.CertificatesBT.Location = New System.Drawing.Point(30, 349)
         Me.CertificatesBT.Name = "CertificatesBT"
         Me.CertificatesBT.Size = New System.Drawing.Size(96, 25)
         Me.CertificatesBT.TabIndex = 14
@@ -149,7 +172,7 @@ Partial Class SettingMainUI
         '
         'CertificatesPathTB
         '
-        Me.CertificatesPathTB.Location = New System.Drawing.Point(151, 291)
+        Me.CertificatesPathTB.Location = New System.Drawing.Point(151, 352)
         Me.CertificatesPathTB.Name = "CertificatesPathTB"
         Me.CertificatesPathTB.Size = New System.Drawing.Size(398, 20)
         Me.CertificatesPathTB.TabIndex = 12
@@ -159,7 +182,7 @@ Partial Class SettingMainUI
         Me.DiconnectBT.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
         Me.DiconnectBT.ImageKey = "imageres_89.ico"
         Me.DiconnectBT.ImageList = Me.ButtonIcons
-        Me.DiconnectBT.Location = New System.Drawing.Point(398, 151)
+        Me.DiconnectBT.Location = New System.Drawing.Point(398, 93)
         Me.DiconnectBT.Name = "DiconnectBT"
         Me.DiconnectBT.Size = New System.Drawing.Size(151, 29)
         Me.DiconnectBT.TabIndex = 11
@@ -185,7 +208,7 @@ Partial Class SettingMainUI
         Me.ReinitPwdBT.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
         Me.ReinitPwdBT.ImageKey = "imageres_82.ico"
         Me.ReinitPwdBT.ImageList = Me.ButtonIcons
-        Me.ReinitPwdBT.Location = New System.Drawing.Point(398, 200)
+        Me.ReinitPwdBT.Location = New System.Drawing.Point(398, 293)
         Me.ReinitPwdBT.Name = "ReinitPwdBT"
         Me.ReinitPwdBT.Size = New System.Drawing.Size(151, 29)
         Me.ReinitPwdBT.TabIndex = 10
@@ -198,7 +221,7 @@ Partial Class SettingMainUI
         Me.ConnectionBT.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
         Me.ConnectionBT.ImageKey = "refresh greay bcgd.bmp"
         Me.ConnectionBT.ImageList = Me.ButtonIcons
-        Me.ConnectionBT.Location = New System.Drawing.Point(398, 52)
+        Me.ConnectionBT.Location = New System.Drawing.Point(398, 47)
         Me.ConnectionBT.Name = "ConnectionBT"
         Me.ConnectionBT.Size = New System.Drawing.Size(151, 29)
         Me.ConnectionBT.TabIndex = 9
@@ -218,22 +241,22 @@ Partial Class SettingMainUI
         Me.Label3.AutoSize = True
         Me.Label3.Location = New System.Drawing.Point(27, 55)
         Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(38, 13)
+        Me.Label3.Size = New System.Drawing.Size(42, 15)
         Me.Label3.TabIndex = 4
         Me.Label3.Text = "Server"
         '
         'Label2
         '
         Me.Label2.AutoSize = True
-        Me.Label2.Location = New System.Drawing.Point(27, 212)
+        Me.Label2.Location = New System.Drawing.Point(27, 305)
         Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(53, 13)
+        Me.Label2.Size = New System.Drawing.Size(61, 15)
         Me.Label2.TabIndex = 3
         Me.Label2.Text = "Password"
         '
         'PWDTB
         '
-        Me.PWDTB.Location = New System.Drawing.Point(151, 209)
+        Me.PWDTB.Location = New System.Drawing.Point(151, 302)
         Me.PWDTB.Name = "PWDTB"
         Me.PWDTB.Size = New System.Drawing.Size(196, 20)
         Me.PWDTB.TabIndex = 2
@@ -241,7 +264,7 @@ Partial Class SettingMainUI
         '
         'IDTB
         '
-        Me.IDTB.Location = New System.Drawing.Point(151, 156)
+        Me.IDTB.Location = New System.Drawing.Point(151, 249)
         Me.IDTB.Name = "IDTB"
         Me.IDTB.Size = New System.Drawing.Size(196, 20)
         Me.IDTB.TabIndex = 1
@@ -249,9 +272,9 @@ Partial Class SettingMainUI
         'Label1
         '
         Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(27, 159)
+        Me.Label1.Location = New System.Drawing.Point(27, 252)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(43, 13)
+        Me.Label1.Size = New System.Drawing.Size(48, 15)
         Me.Label1.TabIndex = 0
         Me.Label1.Text = "User ID"
         '
@@ -270,6 +293,14 @@ Partial Class SettingMainUI
         Me.ACFIcon.ImageStream = CType(resources.GetObject("ACFIcon.ImageStream"), System.Windows.Forms.ImageListStreamer)
         Me.ACFIcon.TransparentColor = System.Drawing.Color.Transparent
         Me.ACFIcon.Images.SetKeyName(0, "ACF Square 2 .1Control bgd.png")
+        '
+        'databasesCB
+        '
+        Me.databasesCB.FormattingEnabled = True
+        Me.databasesCB.Location = New System.Drawing.Point(150, 190)
+        Me.databasesCB.Name = "databasesCB"
+        Me.databasesCB.Size = New System.Drawing.Size(197, 21)
+        Me.databasesCB.TabIndex = 19
         '
         'SettingMainUI
         '
@@ -310,4 +341,7 @@ Partial Class SettingMainUI
     Friend WithEvents FolderBrowserDialog1 As System.Windows.Forms.FolderBrowserDialog
     Friend WithEvents PortTB As System.Windows.Forms.TextBox
     Friend WithEvents Label4 As System.Windows.Forms.Label
+    Friend WithEvents Label5 As System.Windows.Forms.Label
+    Friend WithEvents databaseTB As System.Windows.Forms.TextBox
+    Friend WithEvents databasesCB As System.Windows.Forms.ComboBox
 End Class

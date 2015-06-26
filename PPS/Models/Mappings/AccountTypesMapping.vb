@@ -22,7 +22,7 @@ Friend Class AccountTypesMapping
 
         Dim tmpHT As New Dictionary(Of String, String)
         Dim srv As New ModelServer
-        srv.openRst(CONFIG_DATABASE + "." + ACCOUNT_TYPE_TABLE, ModelServer.FWD_CURSOR)
+        srv.openRst(GlobalVariables.database + "." + ACCOUNT_TYPE_TABLE, ModelServer.FWD_CURSOR)
         If srv.rst.EOF = False And srv.rst.BOF = False Then
             srv.rst.MoveFirst()
             Do While srv.rst.EOF = False

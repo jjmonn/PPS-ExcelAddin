@@ -15,7 +15,7 @@
 '       - erreur si pas de taux -> si nb records = 0 la matrice de devrait pas être lancée
 '
 '
-' Last modified: 08/06/2015
+' Last modified: 25/06/2015
 ' Author: Julien Monnereau
 
 
@@ -107,7 +107,7 @@ Friend Class GenericAggregationDLL3Computing
                                           rates_version, _
                                           start_period)
 
-        Dim viewName As String = version_id & GlobalVariables.User_Credential
+        Dim viewName As String = version_id
         If DBDOWNLOADER.BuildDataRSTForEntityLoop(viewName) Then
 
             For Each entity_id In inputs_entities_list

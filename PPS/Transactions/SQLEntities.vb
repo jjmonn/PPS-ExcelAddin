@@ -11,7 +11,7 @@
 '
 '
 ' Auhtor: Julien Monnereau
-' Last modified: 10/12/2014
+' Last modified: 25/06/2015
 
 
 Imports System.Collections.Generic
@@ -23,7 +23,6 @@ Friend Class SQLEntities
 #Region "Instance Variables"
 
     'Objects
-    Private CredentialsController As New CredentialsController
     Private srv As New ModelServer
     Private dataTablesList As List(Of String)
 
@@ -47,21 +46,21 @@ Friend Class SQLEntities
     Protected Friend Sub DeleteEntityFromPlatform(ByRef entityKey As String)
 
         DeleteEntityFromDataTables(entityKey)
-        CredentialsController.DeleteCredentialKey(entityKey)
+        '  CredentialsController.DeleteCredentialKey(entityKey)
 
     End Sub
 
     Protected Friend Function CreateNewEntitiesVariable(ByRef variable_id As String) As Boolean
 
         Dim column_values_length As Int32 = CATEGORIES_TOKEN_SIZE + Len(NON_ATTRIBUTED_SUFIX)
-        Return srv.sqlQuery("ALTER TABLE " + LEGAL_ENTITIES_DATABASE + "." + ENTITIES_TABLE + _
+        Return srv.sqlQuery("ALTER TABLE " + GlobalVariables.database + "." + ENTITIES_TABLE + _
                             " ADD COLUMN " & variable_id & " VARCHAR(" & column_values_length & ") DEFAULT '" & variable_id & NON_ATTRIBUTED_SUFIX & "'")
 
     End Function
 
     Protected Friend Function DeleteEntitiesVariable(ByRef variable_id) As Boolean
 
-        Return srv.sqlQuery("ALTER TABLE " + LEGAL_ENTITIES_DATABASE + "." + ENTITIES_TABLE + _
+        Return srv.sqlQuery("ALTER TABLE " + GlobalVariables.database + "." + ENTITIES_TABLE + _
                             " DROP COLUMN " & variable_id)
 
     End Function
@@ -76,7 +75,7 @@ Friend Class SQLEntities
         ' replace by a sub in a class managing all data databases transactions ?
 
         For Each Version As String In dataTablesList
-            srv.sqlQuery("DELETE FROM " & DATA_DATABASE & "." & Version & _
+            srv.sqlQuery("DELETE FROM " & GlobalVariables.database & "." & Version & _
                          " WHERE " & DATA_ENTITY_ID_VARIABLE & "='" & entity_id & "'")
         Next
 
@@ -86,7 +85,7 @@ Friend Class SQLEntities
                                                        ByRef origin_value As String) As Boolean
 
         Dim new_value = category_id & NON_ATTRIBUTED_SUFIX
-        Return srv.sqlQuery("UPDATE " & LEGAL_ENTITIES_DATABASE & "." + ENTITIES_TABLE & _
+        Return srv.sqlQuery("UPDATE " & GlobalVariables.database & "." + ENTITIES_TABLE & _
                             " SET " & category_id & "='" & new_value & "'" & _
                             " WHERE " & category_id & "='" & origin_value & "'")
 
@@ -95,7 +94,7 @@ Friend Class SQLEntities
     Protected Friend Function SetNewCategoryDefaultValue(ByRef category_id As String) As Boolean
 
         Dim new_value = category_id & NON_ATTRIBUTED_SUFIX
-        Return srv.sqlQuery("UPDATE " & LEGAL_ENTITIES_DATABASE & "." + ENTITIES_TABLE & _
+        Return srv.sqlQuery("UPDATE " & GlobalVariables.database & "." + ENTITIES_TABLE & _
                             " SET " & category_id & "='" & new_value & "'")
 
     End Function

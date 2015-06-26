@@ -22,7 +22,7 @@ Friend Class FormatsMapping
 
         Dim formatList As New Dictionary(Of String, Dictionary(Of String, Object))
         Dim srv As New ModelServer
-        srv.openRst(CONFIG_DATABASE + "." + FORMATS_TABLE_NAME, ModelServer.FWD_CURSOR)
+        srv.openRst(GlobalVariables.database + "." + FORMATS_TABLE_NAME, ModelServer.FWD_CURSOR)
         srv.rst.Filter = FORMAT_DESTINATION_VARIABLE + "='" + formatDestinationCode + "'"
 
         If srv.rst.EOF = False And srv.rst.BOF = False Then
@@ -58,7 +58,7 @@ Friend Class FormatsMapping
 
         Dim tmpHT As New Hashtable
         Dim srv As New ModelServer
-        srv.OpenRst(CONFIG_DATABASE + "." + FORMATS_TABLE_NAME, ModelServer.FWD_CURSOR)
+        srv.OpenRst(GlobalVariables.database + "." + FORMATS_TABLE_NAME, ModelServer.FWD_CURSOR)
         srv.rst.Filter = FORMAT_DESTINATION_VARIABLE + "='" + destination + "'"
         If srv.rst.EOF = False And srv.rst.BOF = False Then
 

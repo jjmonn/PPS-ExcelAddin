@@ -37,7 +37,7 @@ Friend Class Report
     Protected Friend Sub New(ByRef table_name As String)
 
         Dim i As Int32 = 0
-        Dim q_result = SRV.OpenRst(CONFIG_DATABASE & "." & table_name, ModelServer.DYNAMIC_CURSOR)
+        Dim q_result = SRV.OpenRst(GlobalVariables.database & "." & table_name, ModelServer.DYNAMIC_CURSOR)
         SRV.rst.Sort = ITEMS_POSITIONS
         RST = SRV.rst
         object_is_alive = q_result
@@ -132,7 +132,7 @@ Friend Class Report
     Protected Friend Shared Sub LoadReportsTV(ByRef TV As TreeView)
 
         Dim srv As New ModelServer
-        Dim q_result As Boolean = srv.OpenRst(CONFIG_DATABASE & "." & GDF_AS_REPORTS_TABLE, ModelServer.FWD_CURSOR)
+        Dim q_result As Boolean = srv.OpenRst(GlobalVariables.database & "." & GDF_AS_REPORTS_TABLE, ModelServer.FWD_CURSOR)
         If q_result = True Then
 
             Dim currentNode, ParentNode() As TreeNode
@@ -163,7 +163,7 @@ Friend Class Report
 
         If SRV Is Nothing Then SRV = New ModelServer
         Dim reports_dict As New Dictionary(Of String, Hashtable)
-        SRV.OpenRst(CONFIG_DATABASE + "." + GDF_AS_REPORTS_TABLE, ModelServer.FWD_CURSOR)
+        SRV.OpenRst(GlobalVariables.database + "." + GDF_AS_REPORTS_TABLE, ModelServer.FWD_CURSOR)
 
         If SRV.rst.EOF = False And SRV.rst.BOF = False Then
             SRV.rst.MoveFirst()

@@ -21,7 +21,7 @@ Friend Class ProductsMapping
 
         Dim srv As New ModelServer
         Dim tmpHT As New Hashtable
-        srv.OpenRst(CONFIG_DATABASE + "." + PRODUCTS_TABLE, ModelServer.FWD_CURSOR)
+        srv.OpenRst(GlobalVariables.database + "." + PRODUCTS_TABLE, ModelServer.FWD_CURSOR)
         Do While srv.rst.EOF = False
             tmpHT.Add(srv.rst.Fields(Key).Value, srv.rst.Fields(Value).Value)
             srv.rst.MoveNext()
@@ -36,7 +36,7 @@ Friend Class ProductsMapping
 
         Dim ids_list As New List(Of String)
         Dim srv As New ModelServer
-        srv.OpenRst(CONFIG_DATABASE + "." + PRODUCTS_TABLE, ModelServer.FWD_CURSOR)
+        srv.OpenRst(GlobalVariables.database + "." + PRODUCTS_TABLE, ModelServer.FWD_CURSOR)
         Do While srv.rst.EOF = False
             ids_list.Add(srv.rst.Fields(ANALYSIS_AXIS_ID_VAR).Value)
             srv.rst.MoveNext()

@@ -18,7 +18,7 @@ Friend Class ControlsMapping
 
         Dim srv As New ModelServer
         Dim tmpHT As New Dictionary(Of String, String)
-        srv.openRst(CONFIG_DATABASE + "." + CONTROLS_TABLE, ModelServer.FWD_CURSOR)
+        srv.openRst(GlobalVariables.database + "." + CONTROLS_TABLE, ModelServer.FWD_CURSOR)
 
         If srv.rst.EOF = False And srv.rst.BOF = False Then
             srv.rst.MoveFirst()
@@ -38,7 +38,7 @@ Friend Class ControlsMapping
 
         Dim srv As New ModelServer
         Dim tmpList As New List(Of String)
-        srv.openRst(CONFIG_DATABASE + "." + CONTROLS_TABLE, ModelServer.FWD_CURSOR)
+        srv.openRst(GlobalVariables.database + "." + CONTROLS_TABLE, ModelServer.FWD_CURSOR)
 
         If srv.rst.EOF = False And srv.rst.BOF = False Then
             srv.rst.MoveFirst()

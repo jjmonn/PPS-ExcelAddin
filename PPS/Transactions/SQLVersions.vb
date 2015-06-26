@@ -29,7 +29,7 @@ Friend Class SQLVersions
 
     Protected Friend Function CreateNewVersionTable(ByRef version_id As String) As Boolean
 
-        If srv.sqlQuery("CREATE TABLE " & DATA_DATABASE & "." & version_id & " (" & _
+        If srv.sqlQuery("CREATE TABLE " & GlobalVariables.database & "." & version_id & " (" & _
                       DATA_ACCOUNT_ID_VARIABLE & " CHAR(" & ACCOUNTS_TOKEN_SIZE & ") NOT NULL," & _
                       DATA_ENTITY_ID_VARIABLE & " CHAR(" & ENTITIES_TOKEN_SIZE & ") NOT NULL," & _
                       DATA_PERIOD_VARIABLE & " INT NOT NULL," & _
@@ -54,9 +54,9 @@ Friend Class SQLVersions
 
     Protected Friend Function CreateNewVersionTableFrom(ByRef new_version_id As String, ByRef old_version_id As String) As Boolean
 
-        If srv.sqlQuery("CREATE TABLE " + DATA_DATABASE + "." + new_version_id + " AS (SELECT * FROM " + DATA_DATABASE + "." + old_version_id + ")") Then
+        If srv.sqlQuery("CREATE TABLE " + GlobalVariables.database + "." + new_version_id + " AS (SELECT * FROM " + GlobalVariables.database + "." + old_version_id + ")") Then
 
-            If srv.sqlQuery("ALTER TABLE " & DATA_DATABASE + "." + new_version_id & _
+            If srv.sqlQuery("ALTER TABLE " & GlobalVariables.database + "." + new_version_id & _
                             " ADD CONSTRAINT pk_ID PRIMARY KEY (" & DATA_ENTITY_ID_VARIABLE & "," & _
                                                                     DATA_ACCOUNT_ID_VARIABLE & "," & _
                                                                     DATA_PERIOD_VARIABLE & _
@@ -77,7 +77,7 @@ Friend Class SQLVersions
 
     Protected Friend Function DeleteVersionQueries(ByRef version_id As String) As Boolean
 
-        Return srv.sqlQuery("DROP TABLE " + DATA_DATABASE + "." + version_id)
+        Return srv.sqlQuery("DROP TABLE " + GlobalVariables.database + "." + version_id)
 
     End Function
 
@@ -93,10 +93,10 @@ Friend Class SQLVersions
 
     Private Function CreateTrigger(ByRef version_id As String) As Boolean
 
-        Dim str As String = "CREATE DEFINER=`" & GlobalVariables.Current_User_ID & "`@`%` TRIGGER `" & DATA_DATABASE & "`.`" & version_id & "_after_insert` AFTER INSERT ON `" & _
-                            DATA_DATABASE & "`.`" & version_id & "`" & _
+        Dim str As String = "CREATE DEFINER=`" & GlobalVariables.Current_User_ID & "`@`%` TRIGGER `" & GlobalVariables.database & "`.`" & version_id & "_after_insert` AFTER INSERT ON `" & _
+                            GlobalVariables.database & "`.`" & version_id & "`" & _
                             "FOR EACH ROW BEGIN " & _
-                            "INSERT INTO `" & DATA_DATABASE & "`.`" & LOG_TABLE_NAME & "`(" & _
+                            "INSERT INTO `" & GlobalVariables.database & "`.`" & LOG_TABLE_NAME & "`(" & _
                                 LOG_USER_ID_VARIABLE & "," & _
                                 LOG_VERSION_ID_VARIABLE & "," & _
                                 DATA_ACCOUNT_ID_VARIABLE & "," & _
@@ -127,7 +127,7 @@ Friend Class SQLVersions
     'Dim strSql As String = " ALTER TABLE " + versionTableName _
     '                       + "ADD CONSTRAINT " + DATA_ACCOUNT_ID_FK_VARIABLE _
     '                       + " FOREIGN KEY(" + DATA_ACCOUNT_ID_VARIABLE + ")" _
-    '                       + " REFERENCES " + CONFIG_DATABASE + "." + ACCOUNTS_TABLE + "(" + ACCOUNT_ID_VARIABLE + ")"
+    '                       + " REFERENCES " + GlobalVariables.database + "." + ACCOUNTS_TABLE + "(" + ACCOUNT_ID_VARIABLE + ")"
 
     'srv.sqlQuery(strSql)
 

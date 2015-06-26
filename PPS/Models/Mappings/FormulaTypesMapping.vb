@@ -26,7 +26,7 @@ Public Class FormulaTypesMapping
 
         Dim tmpDict As New Dictionary(Of String, String)
         Dim srv As New ModelServer
-        srv.openRst(CONFIG_DATABASE + "." + FORMULA_TYPES_TABLE, ModelServer.FWD_CURSOR)
+        srv.openRst(GlobalVariables.database + "." + FORMULA_TYPES_TABLE, ModelServer.FWD_CURSOR)
 
         If srv.rst.EOF = False And srv.rst.BOF = False Then
             Do While srv.rst.EOF = False
@@ -44,7 +44,7 @@ Public Class FormulaTypesMapping
 
         Dim tmpList As New List(Of String)
         Dim srv As New ModelServer
-        srv.openRst(CONFIG_DATABASE + "." + FORMULA_TYPES_TABLE, ModelServer.FWD_CURSOR)
+        srv.openRst(GlobalVariables.database + "." + FORMULA_TYPES_TABLE, ModelServer.FWD_CURSOR)
         srv.rst.Filter = FORMULA_TYPES_MUST_HAVE_F + "=1"
 
         If srv.rst.EOF = False And srv.rst.BOF = False Then
@@ -68,7 +68,7 @@ Public Class FormulaTypesMapping
 
         Dim codesList As New List(Of Int32)
         Dim srv As New ModelServer
-        srv.openRst(CONFIG_DATABASE + "." + FORMULA_TYPES_TABLE, ModelServer.FWD_CURSOR)
+        srv.openRst(GlobalVariables.database + "." + FORMULA_TYPES_TABLE, ModelServer.FWD_CURSOR)
         
         If srv.rst.EOF = False And srv.rst.BOF = False Then
             Do While srv.rst.EOF = False And srv.rst.BOF = False
@@ -88,7 +88,7 @@ Public Class FormulaTypesMapping
 
         Dim namesList As New List(Of String)
         Dim srv As New ModelServer
-        srv.openRst(CONFIG_DATABASE + "." + FORMULA_TYPES_TABLE, ModelServer.FWD_CURSOR)
+        srv.openRst(GlobalVariables.database + "." + FORMULA_TYPES_TABLE, ModelServer.FWD_CURSOR)
 
         If srv.rst.EOF = False And srv.rst.BOF = False Then
             Do While srv.rst.EOF = False

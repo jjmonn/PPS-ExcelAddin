@@ -41,7 +41,7 @@ Friend Class FModellingAccount
 
         SRV = New ModelServer
         Dim i As Int32 = 0
-        object_is_alive = SRV.OpenRst(CONFIG_DATABASE + "." + FINANCIAL_MODELLING_TABLE, ModelServer.DYNAMIC_CURSOR)
+        object_is_alive = SRV.OpenRst(GlobalVariables.database + "." + FINANCIAL_MODELLING_TABLE, ModelServer.DYNAMIC_CURSOR)
         RST = SRV.rst
         RST.Sort = ITEMS_POSITIONS
 
@@ -121,7 +121,7 @@ Friend Class FModellingAccount
 
         Dim f_accounts_nodes As New TreeNode
         Dim srv As New ModelServer
-        If srv.OpenRst(CONFIG_DATABASE + "." + FINANCIAL_MODELLING_TABLE, ModelServer.DYNAMIC_CURSOR) Then
+        If srv.OpenRst(GlobalVariables.database + "." + FINANCIAL_MODELLING_TABLE, ModelServer.DYNAMIC_CURSOR) Then
 
             Dim currentNode, ParentNode() As TreeNode
             srv.rst.Sort = ITEMS_POSITIONS

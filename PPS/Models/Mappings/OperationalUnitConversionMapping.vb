@@ -19,7 +19,7 @@ Friend Class OperationalUnitConversionMapping
                                                   ByRef conversion_rate As Double)
 
         Dim srv As New ModelServer
-        srv.OpenRst(CONFIG_DATABASE & "." & OPERATIONAL_UNITS_CONVERSION_TABLE, ModelServer.FWD_CURSOR)
+        srv.OpenRst(GlobalVariables.database & "." & OPERATIONAL_UNITS_CONVERSION_TABLE, ModelServer.FWD_CURSOR)
         srv.rst.Filter = OPERATIONAL_UNITS_CONVERSION_ID_VAR & "='" & conversion_rate_id & "'"
         If srv.rst.EOF = False Then
             conversion_rate = srv.rst.Fields(OPERATIONAL_UNITS_CONVERSION_RATE_VAR).Value

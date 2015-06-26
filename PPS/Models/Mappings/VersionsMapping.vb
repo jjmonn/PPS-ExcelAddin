@@ -26,7 +26,7 @@ Friend Class VersionsMapping
 
         Dim srv As New ModelServer
         Dim tmpList As New List(Of String)
-        srv.OpenRst(CONFIG_DATABASE + "." + VERSIONS_TABLE, _
+        srv.OpenRst(GlobalVariables.database + "." + VERSIONS_TABLE, _
                     ModelServer.FWD_CURSOR)
         srv.rst.Filter = VERSIONS_IS_FOLDER_VARIABLE + "= 0"
 
@@ -53,7 +53,7 @@ Friend Class VersionsMapping
 
         Dim srv As New ModelServer
         Dim tmpHT As New Hashtable
-        srv.OpenRst(CONFIG_DATABASE + "." + VERSIONS_TABLE, _
+        srv.OpenRst(GlobalVariables.database + "." + VERSIONS_TABLE, _
                     ModelServer.FWD_CURSOR)
         srv.rst.Filter = VERSIONS_IS_FOLDER_VARIABLE + "= 0"
         If srv.rst.EOF = False And srv.rst.BOF = False Then
@@ -77,7 +77,7 @@ Friend Class VersionsMapping
 
         Dim srv As New ModelServer
         Dim tmpHT As New Hashtable
-        srv.OpenRst(CONFIG_DATABASE + "." + VERSIONS_TABLE, _
+        srv.OpenRst(GlobalVariables.database + "." + VERSIONS_TABLE, _
                     ModelServer.FWD_CURSOR)
         srv.rst.Filter = VERSIONS_CODE_VARIABLE + "='" + versionkey + "'"
         If srv.rst.EOF = False And srv.rst.BOF = False Then
@@ -98,7 +98,7 @@ Friend Class VersionsMapping
 
         Dim srv As New ModelServer
         Dim tmpDict As New Dictionary(Of String, Hashtable)
-        srv.OpenRst(CONFIG_DATABASE + "." + VERSIONS_TABLE, _
+        srv.OpenRst(GlobalVariables.database + "." + VERSIONS_TABLE, _
                     ModelServer.FWD_CURSOR)
         srv.rst.Filter = ""
 
@@ -129,7 +129,7 @@ Friend Class VersionsMapping
 
         Dim srv As New ModelServer
         Dim version_id As String
-        srv.OpenRst(CONFIG_DATABASE + "." + VERSIONS_TABLE, ModelServer.FWD_CURSOR)
+        srv.OpenRst(GlobalVariables.database + "." + VERSIONS_TABLE, ModelServer.FWD_CURSOR)
         srv.rst.Filter = VERSIONS_NAME_VARIABLE & "='" & version_name & "'"
         If srv.rst.EOF = False And srv.rst.BOF = False Then
             version_id = srv.rst.Fields(RATES_VERSIONS_ID_VARIABLE).Value
@@ -146,7 +146,7 @@ Friend Class VersionsMapping
     Protected Friend Shared Function IsVersionValid(ByRef version_id As String) As Boolean
 
         Dim srv As New ModelServer
-        srv.OpenRst(CONFIG_DATABASE + "." + VERSIONS_TABLE, ModelServer.FWD_CURSOR)
+        srv.OpenRst(GlobalVariables.database + "." + VERSIONS_TABLE, ModelServer.FWD_CURSOR)
         srv.rst.Filter = RATES_VERSIONS_ID_VARIABLE & "='" & version_id & "'"
         If srv.rst.EOF = False Then
             Return True

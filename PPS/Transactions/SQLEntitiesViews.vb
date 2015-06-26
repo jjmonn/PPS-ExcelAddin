@@ -24,9 +24,9 @@ Friend Class SQLEntitiesViews
         Dim srv As New ModelServer
         Dim viewName As String = ENTITIES_TABLE & credential_level
         Dim SqlCondition As String = DefineEntitiesWhereClause(credential_levels_list)
-        Dim SqlQuery As String = "CREATE OR REPLACE VIEW " + VIEWS_DATABASE + "." + viewName + " AS " + _
+        Dim SqlQuery As String = "CREATE OR REPLACE VIEW " + GlobalVariables.database + "." + viewName + " AS " + _
                                  "SELECT * " + _
-                                 "FROM " + LEGAL_ENTITIES_DATABASE + "." + ENTITIES_TABLE
+                                 "FROM " + GlobalVariables.database + "." + ENTITIES_TABLE
 
         If SqlCondition <> "" Then SqlQuery = SqlQuery + " WHERE " + SqlCondition
         Return srv.sqlQuery(SqlQuery)
@@ -52,7 +52,7 @@ Friend Class SQLEntitiesViews
     Protected Friend Sub DeleteViewQuery(ByRef viewName As String)
 
         Dim srv As New ModelServer
-        srv.sqlQuery("DROP VIEW " + VIEWS_DATABASE + "." + viewName)
+        srv.sqlQuery("DROP VIEW " + GlobalVariables.database + "." + viewName)
    
     End Sub
 

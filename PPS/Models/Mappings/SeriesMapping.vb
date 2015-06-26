@@ -16,7 +16,7 @@ Friend Class SeriesMapping
 
         Dim tmpList As New List(Of String)
         Dim srv As New ModelServer
-        srv.openRst(CONFIG_DATABASE + "." + SERIE_COLORS_TABLE, ModelServer.FWD_CURSOR)
+        srv.openRst(GlobalVariables.database + "." + SERIE_COLORS_TABLE, ModelServer.FWD_CURSOR)
 
         If srv.rst.EOF = False And srv.rst.BOF = False Then
             srv.rst.MoveFirst()
@@ -35,7 +35,7 @@ Friend Class SeriesMapping
 
         Dim tmpList As New List(Of String)
         Dim srv As New ModelServer
-        srv.openRst(CONFIG_DATABASE + "." + SERIE_TYPE_TABLE, ModelServer.FWD_CURSOR)
+        srv.openRst(GlobalVariables.database + "." + SERIE_TYPE_TABLE, ModelServer.FWD_CURSOR)
 
         If srv.rst.EOF = False And srv.rst.BOF = False Then
             srv.rst.MoveFirst()

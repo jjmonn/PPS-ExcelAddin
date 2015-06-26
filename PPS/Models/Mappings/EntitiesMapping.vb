@@ -9,7 +9,7 @@
 ' Know bugs :
 ' 
 '
-'Last modified: 17/03/2015
+'Last modified: 25/06/2015
 ' Author: Julien Monnereau
 
 
@@ -23,7 +23,7 @@ Friend Class EntitiesMapping
 
         Dim srv As New ModelServer
         Dim tmpHT As New Hashtable
-        srv.OpenRst(VIEWS_DATABASE + "." + GlobalVariables.Entities_View, ModelServer.FWD_CURSOR)
+        srv.OpenRst(GlobalVariables.database + "." + ENTITIES_TABLE, ModelServer.FWD_CURSOR)
 
         If srv.rst.EOF = False And srv.rst.BOF = False Then
             srv.rst.MoveFirst()
@@ -43,7 +43,7 @@ Friend Class EntitiesMapping
 
         Dim namesList As New List(Of String)
         Dim srv As New ModelServer
-        srv.OpenRst(VIEWS_DATABASE + "." + GlobalVariables.Entities_View, ModelServer.FWD_CURSOR)
+        srv.OpenRst(GlobalVariables.database + "." + ENTITIES_TABLE, ModelServer.FWD_CURSOR)
         If srv.rst.EOF = False And srv.rst.BOF = False Then
 
             Do While srv.rst.EOF = False
@@ -61,7 +61,7 @@ Friend Class EntitiesMapping
 
         Dim keysList As New List(Of String)
         Dim srv As New ModelServer
-        srv.OpenRst(VIEWS_DATABASE + "." + GlobalVariables.Entities_View, ModelServer.FWD_CURSOR)
+        srv.OpenRst(GlobalVariables.database + "." + ENTITIES_TABLE, ModelServer.FWD_CURSOR)
         If srv.rst.EOF = False And srv.rst.BOF = False Then
 
             Do While srv.rst.EOF = False
@@ -80,7 +80,7 @@ Friend Class EntitiesMapping
 
         Dim tmp_list As New List(Of String)
         Dim srv As New ModelServer
-        srv.OpenRst(VIEWS_DATABASE + "." + GlobalVariables.Entities_View, ModelServer.FWD_CURSOR)
+        srv.OpenRst(GlobalVariables.database + "." + ENTITIES_TABLE, ModelServer.FWD_CURSOR)
         srv.rst.Filter = ENTITIES_ALLOW_EDITION_VARIABLE & "= 1"
         If srv.rst.EOF = False AndAlso srv.rst.BOF = False Then
             Do While srv.rst.EOF = False
@@ -97,7 +97,7 @@ Friend Class EntitiesMapping
 
         Dim tmpList As New List(Of String)
         Dim srv As New ModelServer
-        srv.openRst(VIEWS_DATABASE + "." + GlobalVariables.Entities_View, ModelServer.FWD_CURSOR)
+        srv.openRst(GlobalVariables.database + "." + ENTITIES_TABLE, ModelServer.FWD_CURSOR)
         If srv.rst.EOF = False And srv.rst.BOF = False Then
 
             Do While srv.rst.EOF = False
@@ -115,7 +115,7 @@ Friend Class EntitiesMapping
     Friend Shared Function GetEntityCurrency(ByRef entityKey As String) As String
 
         Dim srv As New ModelServer
-        srv.openRst(VIEWS_DATABASE + "." + GlobalVariables.Entities_View, ModelServer.FWD_CURSOR)
+        srv.openRst(GlobalVariables.database + "." + ENTITIES_TABLE, ModelServer.FWD_CURSOR)
         Dim criteria As String = ENTITIES_ID_VARIABLE + "='" + entityKey + "'"
         srv.rst.Find(criteria, , , 1)
         If srv.rst.EOF = False AndAlso srv.rst.BOF = False Then

@@ -48,7 +48,7 @@ Friend Class DataModel
 
         Dim positiveVersions As New List(Of String)
         For Each dataTable In dataVersionsKeyNameDictionary.Keys
-            srv.openRstSQL("SELECT 1 FROM " + DATA_DATABASE + "." + dataTable + _
+            srv.openRstSQL("SELECT 1 FROM " + GlobalVariables.database + "." + dataTable + _
                            " WHERE " + itemVariable + "='" + itemKey + "'", ModelServer.FWD_CURSOR)
             If srv.rst.EOF = False Then positiveVersions.Add(dataVersionsKeyNameDictionary(dataTable))
             srv.rst.Close()
@@ -62,7 +62,7 @@ Friend Class DataModel
         Dim errorList As New List(Of String)
         For Each dataTable In dataVersionsKeyNameDictionary.Keys
             Try
-                srv.sqlQuery("DELETE FROM " + DATA_DATABASE + "." + dataTable + _
+                srv.sqlQuery("DELETE FROM " + GlobalVariables.database + "." + dataTable + _
                              " WHERE " + itemVariable + "='" + itemKey + "'")
             Catch ex As Exception
                 errorList.Add(dataTable)

@@ -37,7 +37,7 @@ Friend Class GDFSUEZEntitiesAttribute
     Protected Friend Sub New()
 
         Dim i As Int32 = 0
-        object_is_alive = SRV.OpenRst(CONFIG_DATABASE & "." & GDF_ENTITIES_AS_ATTRIBUTES_TABLE, ModelServer.FWD_CURSOR)
+        object_is_alive = SRV.OpenRst(GlobalVariables.database & "." & GDF_ENTITIES_AS_ATTRIBUTES_TABLE, ModelServer.FWD_CURSOR)
         RST = SRV.rst
 
     End Sub

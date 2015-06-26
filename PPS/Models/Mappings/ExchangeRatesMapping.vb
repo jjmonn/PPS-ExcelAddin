@@ -31,7 +31,7 @@ Friend Class ExchangeRatesMapping
 
         Dim tmpHT As New Hashtable
         Dim srv As New ModelServer
-        srv.OpenRst(CONFIG_DATABASE & "." & EXCHANGE_RATES_TABLE_NAME, ModelServer.FWD_CURSOR)
+        srv.OpenRst(GlobalVariables.database & "." & EXCHANGE_RATES_TABLE_NAME, ModelServer.FWD_CURSOR)
         srv.rst.Filter = EX_RATES_RATE_VERSION & "='" & version & "'"
 
         If srv.rst.EOF = False And srv.rst.BOF = False Then
@@ -57,7 +57,7 @@ Friend Class ExchangeRatesMapping
 
         Dim srv As New ModelServer
         If reverse_flag = 1 Then reverse_token(currency_token)
-        Dim str_SQL As String = "SELECT * FROM " & CONFIG_DATABASE & "." & EXCHANGE_RATES_TABLE_NAME & _
+        Dim str_SQL As String = "SELECT * FROM " & GlobalVariables.database & "." & EXCHANGE_RATES_TABLE_NAME & _
                                 " WHERE " & EX_RATES_CURRENCY_VARIABLE & "='" & currency_token & "'" & " AND " & _
                                   EX_RATES_RATE_VERSION & "='" & rates_version & "'"
 

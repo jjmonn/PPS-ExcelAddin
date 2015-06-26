@@ -17,7 +17,7 @@ Friend Class pps_colorsMapping
 
         Dim tmpList As New List(Of Hashtable)
         Dim srv As New ModelServer
-        srv.OpenRst(CONFIG_DATABASE + "." + PPS_COLORS_TABLE, ModelServer.FWD_CURSOR)
+        srv.OpenRst(GlobalVariables.database + "." + PPS_COLORS_TABLE, ModelServer.FWD_CURSOR)
         If srv.rst.EOF = False And srv.rst.BOF = False Then
             srv.rst.MoveFirst()
             Do While srv.rst.EOF = False

@@ -10,7 +10,7 @@
 ' known bugs: 
 '
 '
-' Last modified: 07/07/2014
+' Last modified: 25/06/2015
 ' Author: Julien Monnereau
 
 
@@ -18,9 +18,6 @@
 
 
 Public Class ChangePasswordUI
-
-
-    Private PRIVMGT As New SQLPrivileges
 
 
 
@@ -57,7 +54,7 @@ Public Class ChangePasswordUI
         If NewPwd1.Text = NewPwd2.Text Then
             Dim pwd As String = NewPwd1.Text
             pwd = pwd + SNOW_KEY
-            PRIVMGT.ChangeCurrentUserPwd(pwd)
+            ' PRIVMGT.ChangeCurrentUserPwd(pwd)
             MsgBox("The password has been changed")
         Else
             MsgBox("The two values for the new password do not correspond")

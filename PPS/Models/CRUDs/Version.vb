@@ -45,7 +45,7 @@ Friend Class Version
 
         SRV = New ModelServer
         Dim i As Int32 = 0
-        Dim q_result = SRV.OpenRst(CONFIG_DATABASE & "." & VERSIONS_TABLE, ModelServer.DYNAMIC_CURSOR)
+        Dim q_result = SRV.OpenRst(GlobalVariables.database & "." & VERSIONS_TABLE, ModelServer.DYNAMIC_CURSOR)
         SRV.rst.Sort = ITEMS_POSITIONS
         RST = SRV.rst
         object_is_alive = q_result
@@ -149,7 +149,7 @@ Friend Class Version
     Protected Friend Shared Sub LoadVersionsTree(ByRef TV As TreeView)
 
         Dim srv As New ModelServer
-        If srv.OpenRst(CONFIG_DATABASE & "." & VERSIONS_TABLE, ModelServer.FWD_CURSOR) Then
+        If srv.OpenRst(GlobalVariables.database & "." & VERSIONS_TABLE, ModelServer.FWD_CURSOR) Then
 
             Dim currentNode, ParentNode() As TreeNode
             TV.Nodes.Clear()

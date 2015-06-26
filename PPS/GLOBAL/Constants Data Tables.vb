@@ -5,12 +5,9 @@
 '
 '
 ' To do: 
-'       - Write specifications for each table
-'       - Séparation des tables categories et création d'un table qui liste les catégories
-'       - Create table for accounts types ! attention changer naming -> accounts type = Monetary, ope...
+'      
 '
-'
-' Last modified: 03/05/2015
+' Last modified: 25/06/2015
 ' Author: Julien Monnereau
 
 
@@ -35,8 +32,7 @@ Module Data_Tables_Constants
 #Region "ACF_Config Database"
 
     ' Stores the model definition tables
-    Friend Const CONFIG_DATABASE As String = "acf_config"
-
+  
 
 #Region "Operational and Financials Items"
 
@@ -115,109 +111,6 @@ Module Data_Tables_Constants
 #End Region
 
 
-#Region "Users and credentials"
-
-#Region "Credentials Type Table"
-
-    Friend Const CREDENTIALS_TYPES_TABLE As String = "credential_types"
-    Friend Const CREDENTIALS_DESCRIPTION_VARIABLE As String = "id"
-
-    Friend Const ALL_ACCESS_CREDENTIAL_TYPE = "All access"
-    Friend Const DATA_BASE_MANAGER_CREDENTIAL_TYPE = "Data Base Manager"
-    Friend Const DATA_USER_CREDENTIAL_TYPE = "User"
-
-    Friend Const DEFAULT_CREDENTIAL_TYPE As String = DATA_USER_CREDENTIAL_TYPE
-
-
-    ' Table information: Holds information on credentials
-    '          
-    ' Primary key: credential_key
-    '
-    ' Allows to manage credentials grants
-    ' 
-    ' Privileges: 
-    '       a) Write: DB MANAGER
-    '       b) Read: NOT RESTRICTED
-    '
-    ' 
-    ' VIEWS : ?
-
-
-#End Region
-
-
-#Region "Credential Levels Table"
-
-    Friend Const CREDENTIALS_ID_TABLE As String = "credential_levels"
-    Friend Const CREDENTIALS_ASSETID_VARIABLE As String = "entity_id"
-    Friend Const CREDENTIALS_ID_VARIABLE As String = "credential_level"
-
-    Friend Const DEFAULT_CREDENTIAL_KEY As Int32 = 0
-
-    ' Table information: Holds assetID | credentialID mapping
-    '          
-    ' Primary key: assetID
-    '
-    ' Allows to manage credentials grants
-    ' 
-    ' Privileges: 
-    '       a) Write: DB MANAGER
-    '       b) Read: NOT RESTRICTED
-    '
-    ' 
-    ' VIEWS : ?
-
-
-#End Region
-
-
-#Region "Users Table"
-
-    Friend Const USERS_TABLE As String = "users"
-    Friend Const USERS_ID_VARIABLE As String = "id"
-    Friend Const USERS_IS_FOLDER_VARIABLE As String = "is_folder"
-    Friend Const USERS_ENTITY_ID_VARIABLE As String = "entity_id"
-    Friend Const USERS_PARENT_ID_VARIABLE As String = "parent_id"
-    Friend Const USERS_CREDENTIAL_LEVEL_VARIABLE As String = "credential_level"
-    Friend Const USERS_CREDENTIAL_TYPE_VARIABLE As String = "credential_type"
-    Friend Const USERS_EMAIL_VARIABLE As String = "user_email"
-
-    Friend Const USERS_TOKEN_SIZE As Int32 = 3
-    Friend Const USERS_ID_MAX_SIZE As Int32 = 15
-
-    ' Table information: Holds information on users and their credentials
-    '          
-    ' Primary key: userID
-    '
-    ' Allows to manage users' credential
-    ' 
-    ' Privileges: 
-    '       a) Write: DB MANAGER
-    '       b) Read: NOT RESTRICTED
-    '
-    ' 
-    ' VIEWS : ?
-
-
-#End Region
-
-
-#Region "Views Table"
-
-    Friend Const VIEWS_TABLE As String = "views"
-    Friend Const VIEWS_ID_VARIABLE As String = "id"
-    '
-    ' Tracks Views
-    ' 
-    ' Privileges: 
-    '       a) Write: DB MANAGER
-    '       b) Read: NOT RESTRICTED
-    '
-
-
-#End Region
-
-#End Region
 
 
 #Region "Currencies and Exchange Rates"
@@ -526,8 +419,6 @@ Module Data_Tables_Constants
 
     ' Stores the data tables
 
-    Friend Const DATA_DATABASE As String = "acf_data"
-
 
 #Region "Data Tables"
 
@@ -562,13 +453,6 @@ Module Data_Tables_Constants
 #End Region
 
 
-#Region "ACF_LEntities"
-
-    ' Stores the entities table
-
-    Friend Const LEGAL_ENTITIES_DATABASE As String = "acf_lentities"
-
-
 #Region "Entities Table"
 
     Friend Const ENTITIES_TABLE = "entities"
@@ -586,33 +470,23 @@ Module Data_Tables_Constants
 #End Region
 
 
-#End Region
+#Region "users"
 
 
-#Region "ACF_Views"
+    Friend Const USERS_TABLE As String = "users"
+    Friend Const USERS_ID_VARIABLE As String = "id"
+    Friend Const USERS_IS_FOLDER_VARIABLE As String = "is_folder"
+    Friend Const USERS_ENTITY_ID_VARIABLE As String = "entity_id"
+    Friend Const USERS_PARENT_ID_VARIABLE As String = "parent_id"
+    Friend Const USERS_CREDENTIAL_LEVEL_VARIABLE As String = "credential_level"
+    Friend Const USERS_CREDENTIAL_TYPE_VARIABLE As String = "credential_type"
+    Friend Const USERS_EMAIL_VARIABLE As String = "user_email"
 
-    ' Stores the views tables
+    Friend Const USERS_TOKEN_SIZE As Int32 = 3
+    Friend Const USERS_ID_MAX_SIZE As Int32 = 15
 
-    Friend Const VIEWS_DATABASE As String = "acf_views"
-    ' Views table are stored in ACF_Config.acf_ Views
-
-#End Region
-
-
-#Region "ACF_Access"
-
-    ' Stores read and write tables for privileges granting
-    Friend Const ACCESS_DATABASE As String = "acf_access"
-
-    Friend Const CONFIG_READ_TABLES As String = "config_tables_read"
-    Friend Const CONFIG_WRITE_TABLES As String = "config_tables_write"
-    Friend Const CONFIG_ACCESS_TABLE_NAME_VARIABLE As String = "table_name"
-    Friend Const CONFIG_ACCESS_CREDENTIAL_TYPE_VARIABLE As String = "credential_type"
-
-    ' table name and credential types are the primary key
 
 #End Region
-
 
     ' DATASET ARRAY COLUMNS INDEXING - 
 #Region "DataSet DataArray indexes"

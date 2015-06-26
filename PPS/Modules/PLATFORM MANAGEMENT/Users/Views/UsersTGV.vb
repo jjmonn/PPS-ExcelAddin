@@ -10,7 +10,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 05/01/2014
+' Last modified: 25/06/2015
 
 
 Imports VIBlend.WinForms.DataGridView
@@ -65,7 +65,7 @@ Friend Class UsersTGV
         TGV = inputTGV
         InitializeTGVColumns()
         entitiesIDName = EntitiesMapping.GetEntitiesDictionary(ENTITIES_ID_VARIABLE, ENTITIES_NAME_VARIABLE)
-        credentials_types_list = CredentialsTypesMapping.GetCredentialsTypesList(CREDENTIALS_DESCRIPTION_VARIABLE)
+        '  credentials_types_list = CredentialsTypesMapping.GetCredentialsTypesList(CREDENTIALS_DESCRIPTION_VARIABLE)
 
         InitCredentialTypesComboBox()
         TGV.RowsHierarchy.CompactStyleRenderingEnabled = True
@@ -85,15 +85,15 @@ Friend Class UsersTGV
 
     Private Sub InitCredentialTypesComboBox()
 
-        CredentialTypeBoxEditor.DropDownHeight = CredentialTypeBoxEditor.ItemHeight * CREDENTIAL_CB_NB_ITEMS_DISPLYED
-        CredentialTypeBoxEditor.DropDownWidth = CREDENTIAL_CB_WIDTH
-        Dim credentialsList = CredentialsTypesMapping.GetCredentialsTypesList(CREDENTIALS_DESCRIPTION_VARIABLE)
+        'CredentialTypeBoxEditor.DropDownHeight = CredentialTypeBoxEditor.ItemHeight * CREDENTIAL_CB_NB_ITEMS_DISPLYED
+        'CredentialTypeBoxEditor.DropDownWidth = CREDENTIAL_CB_WIDTH
+        'Dim credentialsList = CredentialsTypesMapping.GetCredentialsTypesList(CREDENTIALS_DESCRIPTION_VARIABLE)
 
-        For Each credential As String In credentialsList
-            CredentialTypeBoxEditor.Items.Add(credential)
-        Next
+        'For Each credential As String In credentialsList
+        '    CredentialTypeBoxEditor.Items.Add(credential)
+        'Next
 
-        AddHandler CredentialTypeBoxEditor.EditBase.TextBox.KeyDown, AddressOf CredentialTypeCBEditor_KeyDown
+        'AddHandler CredentialTypeBoxEditor.EditBase.TextBox.KeyDown, AddressOf CredentialTypeCBEditor_KeyDown
 
     End Sub
 
@@ -236,23 +236,23 @@ Friend Class UsersTGV
 
     Private Sub dataGrid_CellEndEdit(ByVal sender As Object, ByVal args As CellCancelEventArgs)
 
-        If args.Cell.RowItem.ImageIndex = 0 Then
-            Dim cell As GridCell = args.Cell
-            If args.Cell.ColumnItem Is columnsDictionary(USERS_ENTITY_ID_VARIABLE) Then
-                If tmp_entity_id <> "" _
-                AndAlso ParentView.EntitySelectionUI.entitiesTV.Nodes.Find(tmp_entity_id, True).Length > 0 Then
-                    TGV.CellsArea.SetCellValue(cell.RowItem, cell.ColumnItem, tmp_entity_name)
-                    CONTROLLER.UpdateUserCredentialLevel(args.Cell.RowItem.Caption, tmp_entity_id)
-                    ParentView.HideEntitySelection()
-                End If
-            ElseIf args.Cell.ColumnItem Is columnsDictionary(USERS_CREDENTIAL_TYPE_VARIABLE) Then
-                If credentials_types_list.Contains(cell.Editor.EditorValue) Then
-                    CONTROLLER.UpdateUserCredentialType(cell.RowItem.Caption, cell.Editor.EditorValue)
-                End If
-            Else
-                CONTROLLER.UpdateUserEmail(cell.RowItem.Caption, cell.Editor.EditorValue)
-            End If
-        End If
+        'If args.Cell.RowItem.ImageIndex = 0 Then
+        '    Dim cell As GridCell = args.Cell
+        '    If args.Cell.ColumnItem Is columnsDictionary(USERS_ENTITY_ID_VARIABLE) Then
+        '        If tmp_entity_id <> "" _
+        '        AndAlso ParentView.EntitySelectionUI.entitiesTV.Nodes.Find(tmp_entity_id, True).Length > 0 Then
+        '            TGV.CellsArea.SetCellValue(cell.RowItem, cell.ColumnItem, tmp_entity_name)
+        '            CONTROLLER.UpdateUserCredentialLevel(args.Cell.RowItem.Caption, tmp_entity_id)
+        '            ParentView.HideEntitySelection()
+        '        End If
+        '    ElseIf args.Cell.ColumnItem Is columnsDictionary(USERS_CREDENTIAL_TYPE_VARIABLE) Then
+        '        If credentials_types_list.Contains(cell.Editor.EditorValue) Then
+        '            CONTROLLER.UpdateUserCredentialType(cell.RowItem.Caption, cell.Editor.EditorValue)
+        '        End If
+        '    Else
+        '        CONTROLLER.UpdateUserEmail(cell.RowItem.Caption, cell.Editor.EditorValue)
+        '    End If
+        'End If
 
     End Sub
 

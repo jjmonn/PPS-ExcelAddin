@@ -10,7 +10,7 @@
 ' Known bugs:
 '
 ' 
-' Last modified: 28/04/2015
+' Last modified: 25/06/2015
 ' Author: Julien Monnereau
 
 
@@ -29,7 +29,6 @@ Friend Class DataVersionsController
     'Objects
     Private Versions As Version
     Private View As VersionsControl
-    Private ViewsController As New ViewsController
     Private SQLVersions As New SQLVersions
     Private NewVersionUI As NewDataVersionUI
     Private PlatformMGTUI As PlatformMGTGeneralUI
@@ -114,7 +113,7 @@ Friend Class DataVersionsController
         If table_creation_success Then
             Versions.CreateVersion(hash)
             AddNode(new_id, hash(VERSIONS_NAME_VARIABLE), 0, parent_node)
-            ViewsController.CreateDataTableViewsForAllCredentialLevels(new_id)
+            '       ViewsController.CreateDataTableViewsForAllCredentialLevels(new_id)
         Else
             MsgBox("The Version could not be created. PPS Error 8. Please contact PPS Team if the error persists.")
         End If
@@ -179,7 +178,7 @@ Friend Class DataVersionsController
     Private Sub DeleteVersion(ByRef version_id As String)
 
         SQLVersions.DeleteVersionQueries(version_id)
-        ViewsController.DeleteDataVersionViews(version_id)
+        '   ViewsController.DeleteDataVersionViews(version_id)
         Delete(version_id)
 
     End Sub

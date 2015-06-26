@@ -4,7 +4,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 05/05/2015
+' Last modified: 25/06/2015
 
 
 Imports System.Windows.Forms
@@ -45,71 +45,71 @@ Friend Class UsersControl
 
 #Region "Call backs"
 
-    Private Sub AddFolderBT_Click(sender As Object, e As EventArgs) Handles addFolderBT.Click
+    'Private Sub AddFolderBT_Click(sender As Object, e As EventArgs) Handles addFolderBT.Click
 
-        If Not UsersTGVMGT.currentRowItem Is Nothing Then
-            If UsersTGVMGT.currentRowItem.ImageIndex = 1 Then
-                Dim new_user_id = PromptUser_id()
-                Controller.CreateFolder(new_user_id, UsersTGVMGT.currentRowItem)
-            Else
-                MsgBox("A Folder cannot be created under a user.")
-            End If
-        Else
-            Dim new_user_id = PromptUser_id()
-            Controller.CreateFolder(new_user_id)
-        End If
+    '    If Not UsersTGVMGT.currentRowItem Is Nothing Then
+    '        If UsersTGVMGT.currentRowItem.ImageIndex = 1 Then
+    '            Dim new_user_id = PromptUser_id()
+    '            Controller.CreateFolder(new_user_id, UsersTGVMGT.currentRowItem)
+    '        Else
+    '            MsgBox("A Folder cannot be created under a user.")
+    '        End If
+    '    Else
+    '        Dim new_user_id = PromptUser_id()
+    '        Controller.CreateFolder(new_user_id)
+    '    End If
 
-    End Sub
+    'End Sub
 
-    Private Sub AddUser_Click(sender As Object, e As EventArgs) Handles addUserBT.Click
+    'Private Sub AddUser_Click(sender As Object, e As EventArgs) Handles addUserBT.Click
 
-        Me.Hide()
-        Controller.ShowNewUserUI()
+    '    Me.Hide()
+    '    Controller.ShowNewUserUI()
 
-    End Sub
+    'End Sub
 
-    Private Sub DeleteBT_Click(sender As Object, e As EventArgs) Handles DeleteBT.Click
+    'Private Sub DeleteBT_Click(sender As Object, e As EventArgs) Handles DeleteBT.Click
 
-        If Not UsersTGVMGT.currentRowItem Is Nothing Then
+    '    If Not UsersTGVMGT.currentRowItem Is Nothing Then
 
-            If UsersTGVMGT.currentRowItem.ImageIndex = 0 Then
-                Dim confirm As Integer = MessageBox.Show("Careful, you are about to delete user " + Chr(13) + Chr(13) + _
-                                                         UsersTGVMGT.currentRowItem.Caption + Chr(13) + Chr(13) + _
-                                                         "Do you confirm?" + Chr(13) + Chr(13), _
-                                                         "User deletion confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
-                If confirm = DialogResult.Yes Then
-                    Controller.DeleteUser(UsersTGVMGT.currentRowItem.Caption)
-                End If
-            Else
-                Dim confirm As Integer = MessageBox.Show("Careful, you are about to delete folder " + Chr(13) + Chr(13) + _
-                                                          UsersTGVMGT.currentRowItem.Caption + Chr(13) + Chr(13) + _
-                                                          "Deleting this folder will delete all sub folders and users" + Chr(13) + Chr(13) + _
-                                                          "Do you confirm?" + Chr(13) + Chr(13), _
-                                                          "Folder deletion confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
-                If confirm = DialogResult.Yes Then
-                    Controller.DeleteFolder(UsersTGVMGT.currentRowItem.Caption)
-                    UsersTGVMGT.currentRowItem = Nothing
-                End If
-            End If
-        End If
+    '        If UsersTGVMGT.currentRowItem.ImageIndex = 0 Then
+    '            Dim confirm As Integer = MessageBox.Show("Careful, you are about to delete user " + Chr(13) + Chr(13) + _
+    '                                                     UsersTGVMGT.currentRowItem.Caption + Chr(13) + Chr(13) + _
+    '                                                     "Do you confirm?" + Chr(13) + Chr(13), _
+    '                                                     "User deletion confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+    '            If confirm = DialogResult.Yes Then
+    '                Controller.DeleteUser(UsersTGVMGT.currentRowItem.Caption)
+    '            End If
+    '        Else
+    '            Dim confirm As Integer = MessageBox.Show("Careful, you are about to delete folder " + Chr(13) + Chr(13) + _
+    '                                                      UsersTGVMGT.currentRowItem.Caption + Chr(13) + Chr(13) + _
+    '                                                      "Deleting this folder will delete all sub folders and users" + Chr(13) + Chr(13) + _
+    '                                                      "Do you confirm?" + Chr(13) + Chr(13), _
+    '                                                      "Folder deletion confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+    '            If confirm = DialogResult.Yes Then
+    '                Controller.DeleteFolder(UsersTGVMGT.currentRowItem.Caption)
+    '                UsersTGVMGT.currentRowItem = Nothing
+    '            End If
+    '        End If
+    '    End If
 
-    End Sub
+    'End Sub
 
-    Private Sub ReinitPwdBT_Click(sender As Object, e As EventArgs) Handles ReinitPwdBT.Click
+    'Private Sub ReinitPwdBT_Click(sender As Object, e As EventArgs) Handles ReinitPwdBT.Click
 
-        If Not UsersTGVMGT.currentRowItem Is Nothing AndAlso UsersTGVMGT.currentRowItem.ImageIndex = 0 Then
-            Controller.ReiniatilizePassword(UsersTGVMGT.currentRowItem.Caption)
-        Else
-            MsgBox("A user must be selected in order to reinitialize the password")
-        End If
+    '    If Not UsersTGVMGT.currentRowItem Is Nothing AndAlso UsersTGVMGT.currentRowItem.ImageIndex = 0 Then
+    '        Controller.ReiniatilizePassword(UsersTGVMGT.currentRowItem.Caption)
+    '    Else
+    '        MsgBox("A user must be selected in order to reinitialize the password")
+    '    End If
 
-    End Sub
+    'End Sub
 
-    Private Sub ExitBT_Click(sender As Object, e As EventArgs) Handles ExitBT.Click
+    'Private Sub ExitBT_Click(sender As Object, e As EventArgs) Handles ExitBT.Click
 
-        Me.Dispose()
+    '    Me.Dispose()
 
-    End Sub
+    'End Sub
 
 
 #End Region
@@ -117,29 +117,29 @@ Friend Class UsersControl
 
 #Region "Right Click Menu"
 
-    Private Sub CreateUserToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles CreateUserToolStripMenuItem.Click
+    'Private Sub CreateUserToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles CreateUserToolStripMenuItem.Click
 
-        AddUser_Click(sender, e)
+    '    AddUser_Click(sender, e)
 
-    End Sub
+    'End Sub
 
-    Private Sub CreateFolderToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles CreateFolderToolStripMenuItem.Click
+    'Private Sub CreateFolderToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles CreateFolderToolStripMenuItem.Click
 
-        AddFolderBT_Click(sender, e)
+    '    AddFolderBT_Click(sender, e)
 
-    End Sub
+    'End Sub
 
-    Private Sub DeleteToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles DeleteToolStripMenuItem.Click
+    'Private Sub DeleteToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles DeleteToolStripMenuItem.Click
 
-        DeleteBT_Click(sender, e)
+    '    DeleteBT_Click(sender, e)
 
-    End Sub
+    'End Sub
 
-    Private Sub ReinitializePasswordToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ReinitializePasswordToolStripMenuItem.Click
+    'Private Sub ReinitializePasswordToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ReinitializePasswordToolStripMenuItem.Click
 
-        ReinitPwdBT_Click(sender, e)
+    '    ReinitPwdBT_Click(sender, e)
 
-    End Sub
+    'End Sub
 
 
 #End Region

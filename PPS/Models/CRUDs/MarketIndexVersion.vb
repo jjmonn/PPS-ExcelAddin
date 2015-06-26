@@ -36,7 +36,7 @@ Friend Class MarketIndexVersion
     Protected Friend Sub New()
 
         SRV = New ModelServer
-        Dim q_result = SRV.OpenRst(CONFIG_DATABASE & "." & MARKET_INDEXES_VERSIONS_TABLE, ModelServer.DYNAMIC_CURSOR)
+        Dim q_result = SRV.OpenRst(GlobalVariables.database & "." & MARKET_INDEXES_VERSIONS_TABLE, ModelServer.DYNAMIC_CURSOR)
         object_is_alive = q_result
         SRV.rst.Sort = ITEMS_POSITIONS
         RST = SRV.rst
@@ -135,7 +135,7 @@ Friend Class MarketIndexVersion
     Protected Friend Shared Sub load_market_index_version_tv(ByRef TV As TreeView)
 
         Dim srv As New ModelServer
-        srv.OpenRst(CONFIG_DATABASE & "." & MARKET_INDEXES_VERSIONS_TABLE, ModelServer.FWD_CURSOR)
+        srv.OpenRst(GlobalVariables.database & "." & MARKET_INDEXES_VERSIONS_TABLE, ModelServer.FWD_CURSOR)
         Dim rst = srv.rst
         Dim nodeX, ParentNode() As TreeNode
         TV.Nodes.Clear()
@@ -169,7 +169,7 @@ Friend Class MarketIndexVersion
 
         Dim tmpList As New List(Of String)
         Dim srv As New ModelServer
-        srv.OpenRst(CONFIG_DATABASE & "." & MARKET_INDEXES_VERSIONS_TABLE, ModelServer.FWD_CURSOR)
+        srv.OpenRst(GlobalVariables.database & "." & MARKET_INDEXES_VERSIONS_TABLE, ModelServer.FWD_CURSOR)
         Dim rst = srv.rst
 
         rst.Filter = MARKET_INDEXES_VERSIONS_IS_FOLDER_VAR + "= 0"

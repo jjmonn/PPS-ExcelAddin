@@ -21,7 +21,7 @@ Friend Class MarketPricesMapping
 
         Dim srv As New ModelServer
         Dim prices_array(period_array.Length - 1) As Double
-        srv.openRstSQL("SELECT * FROM " & CONFIG_DATABASE & "." & MARKET_INDEXES_PRICES_TABLE & _
+        srv.openRstSQL("SELECT * FROM " & GlobalVariables.database & "." & MARKET_INDEXES_PRICES_TABLE & _
                        " WHERE " & MARKET_INDEXES_PRICES_ID_VAR & "='" & index_id & "'" & " AND " & _
                        MARKET_INDEXES_PRICES_VERSION_VAR & "='" & version_id & "'", _
                        ModelServer.FWD_CURSOR)

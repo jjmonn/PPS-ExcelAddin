@@ -39,9 +39,9 @@ Friend Class RateVersion
 
         SRV = New ModelServer
         Dim i As Int32 = 0
-        Dim q_result = SRV.openRst(CONFIG_DATABASE & "." & RATES_VERSIONS_TABLE, ModelServer.DYNAMIC_CURSOR)
+        Dim q_result = SRV.openRst(GlobalVariables.database & "." & RATES_VERSIONS_TABLE, ModelServer.DYNAMIC_CURSOR)
         While q_result = False AndAlso i < 10
-            q_result = SRV.openRst(CONFIG_DATABASE & "." & RATES_VERSIONS_TABLE, ModelServer.DYNAMIC_CURSOR)
+            q_result = SRV.openRst(GlobalVariables.database & "." & RATES_VERSIONS_TABLE, ModelServer.DYNAMIC_CURSOR)
             i = i + 1
         End While
         object_is_alive = q_result
@@ -151,7 +151,7 @@ Friend Class RateVersion
     Protected Friend Shared Sub load_rates_version_tv(ByRef TV As TreeView)
 
         Dim srv As New ModelServer
-        srv.openRst(CONFIG_DATABASE & "." & RATES_VERSIONS_TABLE, ModelServer.FWD_CURSOR)
+        srv.openRst(GlobalVariables.database & "." & RATES_VERSIONS_TABLE, ModelServer.FWD_CURSOR)
         Dim rst = srv.rst
         Dim nodeX, ParentNode() As TreeNode
         TV.Nodes.Clear()

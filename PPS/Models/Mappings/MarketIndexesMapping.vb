@@ -26,7 +26,7 @@ Friend Class MarketIndexesMapping
 
         Dim tmpList As New List(Of String)
         Dim srv As New ModelServer
-        srv.OpenRst(CONFIG_DATABASE + "." + MARKET_INDEXES_TABLE, ModelServer.FWD_CURSOR)
+        srv.OpenRst(GlobalVariables.database + "." + MARKET_INDEXES_TABLE, ModelServer.FWD_CURSOR)
 
         If srv.rst.EOF = False And srv.rst.BOF = False Then
             srv.rst.MoveFirst()

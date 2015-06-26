@@ -25,7 +25,7 @@ Friend Class SQLDataViews
 
         Dim srv As New ModelServer
         Dim SqlCondition As String = DefineDataWhereClause(credential_levels_list)
-        Dim SqlQuery As String = "CREATE OR REPLACE VIEW " + VIEWS_DATABASE + "." + viewName + " AS " + _
+        Dim SqlQuery As String = "CREATE OR REPLACE VIEW " + GlobalVariables.database + "." + viewName + " AS " + _
                                  "SELECT " + _
                                   DATA_ACCOUNT_ID_VARIABLE + "," + _
                                   DATA_ENTITY_ID_VARIABLE + "," + _
@@ -34,8 +34,8 @@ Friend Class SQLDataViews
                                   DATA_CLIENT_ID_VARIABLE + "," + _
                                   DATA_PRODUCT_ID_VARIABLE + "," + _
                                   DATA_ADJUSTMENT_ID_VARIABLE + _
-                                 " FROM " + DATA_DATABASE + "." + dataTableName + " D," + _
-                                  LEGAL_ENTITIES_DATABASE + "." + ENTITIES_TABLE + " A" + _
+                                 " FROM " + GlobalVariables.database + "." + dataTableName + " D," + _
+                                  GlobalVariables.database + "." + ENTITIES_TABLE + " A" + _
                                  " WHERE A." + ENTITIES_ID_VARIABLE + "= D." + DATA_ENTITY_ID_VARIABLE
 
         If SqlCondition <> "" Then SqlQuery = SqlQuery + " AND " + SqlCondition

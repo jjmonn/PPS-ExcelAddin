@@ -22,7 +22,7 @@ Friend Class GDFSUEZASAccountsMapping
 
         Dim dict As New Dictionary(Of String, String)
         Dim srv As New ModelServer
-        srv.OpenRst(CONFIG_DATABASE + "." + GDF_AS_ACCOUNTS_TABLES, ModelServer.FWD_CURSOR)
+        srv.OpenRst(GlobalVariables.database + "." + GDF_AS_ACCOUNTS_TABLES, ModelServer.FWD_CURSOR)
 
         If srv.rst.EOF = False And srv.rst.BOF = False Then
             srv.rst.MoveFirst()
@@ -40,7 +40,7 @@ Friend Class GDFSUEZASAccountsMapping
 
         Dim tmp_list As New List(Of String)
         Dim srv As New ModelServer
-        srv.OpenRst(CONFIG_DATABASE + "." + GDF_AS_ACCOUNTS_TABLES, ModelServer.FWD_CURSOR)
+        srv.OpenRst(GlobalVariables.database + "." + GDF_AS_ACCOUNTS_TABLES, ModelServer.FWD_CURSOR)
         If srv.rst.EOF = False And srv.rst.BOF = False Then
             srv.rst.MoveFirst()
             Do While srv.rst.EOF = False

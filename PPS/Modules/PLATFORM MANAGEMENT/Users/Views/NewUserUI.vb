@@ -13,7 +13,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 03/12/2014
+' Last modified: 25/06/2015
 
 
 Imports System.Windows.Forms
@@ -58,11 +58,11 @@ Friend Class NewUserUI
 
     Private Sub InitCredentialTypesCB()
 
-        Dim credentials_types_list = CredentialsTypesMapping.GetCredentialsTypesList(CREDENTIALS_DESCRIPTION_VARIABLE)
-        For Each Type As String In credentials_types_list
-            CredentialTypeCB.Items.Add(Type)
-        Next
-        CredentialTypeCB.Text = DEFAULT_CREDENTIAL_TYPE
+        'Dim credentials_types_list = CredentialsTypesMapping.GetCredentialsTypesList(CREDENTIALS_DESCRIPTION_VARIABLE)
+        'For Each Type As String In credentials_types_list
+        '    CredentialTypeCB.Items.Add(Type)
+        'Next
+        'CredentialTypeCB.Text = DEFAULT_CREDENTIAL_TYPE
 
     End Sub
 
@@ -105,7 +105,7 @@ Friend Class NewUserUI
             Exit Sub
         End If
 
-        CONTROLLER.CreateUser(user_id, entityID, CredentialTypeCB.Text, emailTB.Text, parent_item)
+        '  CONTROLLER.CreateUser(user_id, entityID, CredentialTypeCB.Text, emailTB.Text, parent_item)
         Me.Hide()
 
     End Sub

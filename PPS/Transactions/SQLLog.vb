@@ -27,7 +27,7 @@ Friend Class SQLLog
                                         LOG_CLIENT_ID_VARIABLE & "," & _
                                         LOG_PRODUCT_ID_VARIABLE & "," & _
                                         LOG_ADJUSTMENT_ID_VARIABLE & _
-                            " FROM " & DATA_DATABASE & "." & LOG_TABLE_NAME & _
+                            " FROM " & GlobalVariables.database & "." & LOG_TABLE_NAME & _
                             " WHERE " & LOG_ENTITY_ID_VARIABLE & "='" & entity_id & "'" & _
                             " AND " & LOG_VERSION_ID_VARIABLE & "='" & version_id & "'" & _
                             " AND " & LOG_ACCOUNT_ID_VARIABLE & "='" & account_id & "'" & _

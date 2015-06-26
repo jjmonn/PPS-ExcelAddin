@@ -25,7 +25,7 @@ Friend Class CurrenciesMapping
 
         Dim tmpDict As New Collections.Generic.Dictionary(Of String, String)
         Dim srv As New ModelServer
-        srv.OpenRst(CONFIG_DATABASE + "." + CURRENCIES_TABLE_NAME, ModelServer.FWD_CURSOR)
+        srv.OpenRst(GlobalVariables.database + "." + CURRENCIES_TABLE_NAME, ModelServer.FWD_CURSOR)
 
         Do While srv.rst.EOF = False
             tmpDict.Add(srv.rst.Fields(key).Value, srv.rst.Fields(value).Value)
@@ -41,7 +41,7 @@ Friend Class CurrenciesMapping
 
         Dim tmpList As New List(Of String)
         Dim srv As New ModelServer
-        srv.OpenRst(CONFIG_DATABASE + "." + CURRENCIES_TABLE_NAME, ModelServer.FWD_CURSOR)
+        srv.OpenRst(GlobalVariables.database + "." + CURRENCIES_TABLE_NAME, ModelServer.FWD_CURSOR)
 
         Do While srv.rst.EOF = False
             tmpList.Add(srv.rst.Fields(item).Value)

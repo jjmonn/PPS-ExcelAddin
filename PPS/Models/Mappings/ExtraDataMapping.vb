@@ -23,7 +23,6 @@ Public Class ExtraDataMapping
 
 #Region "Ivars"
 
-    Friend Const EXTRA_DATA_TABLE_ADDRESS As String = CONFIG_DATABASE + "." + EXTRA_DATA_TABLE_NAME
 
 #End Region
 
@@ -52,7 +51,7 @@ Public Class ExtraDataMapping
     Friend Shared Function GetValue(ByRef key As String) As Object
 
         Dim srv As New ModelServer
-        srv.openRstSQL("SELECT * FROM " & EXTRA_DATA_TABLE_ADDRESS & " WHERE " & EXTRA_DATA_KEY_VARIABLE & "='" & key & "'", _
+        srv.openRstSQL("SELECT * FROM " & GlobalVariables.database + "." & EXTRA_DATA_TABLE_NAME & " WHERE " & EXTRA_DATA_KEY_VARIABLE & "='" & key & "'", _
                         ModelServer.FWD_CURSOR)
         If srv.rst.EOF = False And srv.rst.BOF = False Then
             Return srv.rst.Fields(EXTRA_DATA_VALUE_VARIABLE).Value

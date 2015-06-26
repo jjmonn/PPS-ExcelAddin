@@ -40,9 +40,9 @@ Friend Class Currency
 
         SRV = New ModelServer
         Dim i As Int32 = 0
-        Dim q_result = SRV.openRst(CONFIG_DATABASE & "." & CURRENCIES_TABLE_NAME, ModelServer.STATIC_CURSOR)
+        Dim q_result = SRV.openRst(GlobalVariables.database & "." & CURRENCIES_TABLE_NAME, ModelServer.STATIC_CURSOR)
         While q_result = False AndAlso i < 10
-            q_result = SRV.openRst(CONFIG_DATABASE & "." & CURRENCIES_TABLE_NAME, ModelServer.STATIC_CURSOR)
+            q_result = SRV.openRst(GlobalVariables.database & "." & CURRENCIES_TABLE_NAME, ModelServer.STATIC_CURSOR)
             i = i + 1
         End While
         object_is_alive = q_result

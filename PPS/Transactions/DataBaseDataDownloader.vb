@@ -12,7 +12,7 @@
 '       - 
 '
 ' Author: Julien Monnereau
-' Last modified: 01/05/2015
+' Last modified: 25/06/2015
 '
 
 
@@ -126,7 +126,7 @@ Friend Class DataBaseDataDownloader
                              & "D." & DATA_ACCOUNT_ID_VARIABLE & "," _
                              & "SUM(" & DATA_VALUE_VARIABLE & ") AS " & DATA_VALUE_VARIABLE & "," _
                              & "A." & ENTITIES_CURRENCY_VARIABLE _
-                             & " FROM " & VIEWS_DATABASE & "." & version_id & GlobalVariables.User_Credential & " D" & ", " & VIEWS_DATABASE & "." & GlobalVariables.Entities_View & " A" _
+                             & " FROM " & GlobalVariables.database & "." & version_id & " D" & ", " & GlobalVariables.database & "." & ENTITIES_TABLE & " A" _
                              & " WHERE " & "D." & DATA_ENTITY_ID_VARIABLE & "=" & "A." & ENTITIES_ID_VARIABLE
                             
         If sql_where_clause <> "" Then strSQL = strSQL & " AND " & sql_where_clause
@@ -242,7 +242,7 @@ Friend Class DataBaseDataDownloader
                              + "D." + DATA_ACCOUNT_ID_VARIABLE + "," _
                              + "SUM(" + DATA_VALUE_VARIABLE + ") AS value," _
                              + DATA_ENTITY_ID_VARIABLE _
-                             + " FROM " + VIEWS_DATABASE + "." + data_view_name + " D" + ", " + VIEWS_DATABASE + "." + GlobalVariables.Entities_View + " A" _
+                             + " FROM " + GlobalVariables.database + "." + data_view_name + " D" + ", " + GlobalVariables.database + "." + ENTITIES_TABLE + " A" _
                              + " WHERE " + DATA_ENTITY_ID_VARIABLE + "=" + ENTITIES_ID_VARIABLE
 
         Dim additional_where_clause As String = GetAdditionnalWhereClauseFromFilters()
@@ -323,7 +323,7 @@ Friend Class DataBaseDataDownloader
         Dim strSql As String = "SELECT " & DATA_PERIOD_VARIABLE & ", " _
                              & DATA_ACCOUNT_ID_VARIABLE & ", " _
                              & DATA_VALUE_VARIABLE _
-                             & " FROM " & VIEWS_DATABASE & "." & ViewName _
+                             & " FROM " & GlobalVariables.database & "." & ViewName _
                              & " WHERE " & DATA_ENTITY_ID_VARIABLE & "='" & entityKey & "'"
 
         Dim additional_where_clause As String = GetWhereClause(, clients_id_list, _
@@ -409,7 +409,7 @@ Friend Class DataBaseDataDownloader
                              & " D." & DATA_ENTITY_ID_VARIABLE & "," _
                              & " D." & DATA_ADJUSTMENT_ID_VARIABLE & "," _
                              & " A." & ENTITIES_CURRENCY_VARIABLE _
-                             & " FROM " & VIEWS_DATABASE & "." & version_id & GlobalVariables.User_Credential & " D" & ", " & VIEWS_DATABASE + "." & GlobalVariables.Entities_View + " A" _
+                             & " FROM " & GlobalVariables.database & "." & version_id & " D" & ", " & GlobalVariables.database + "." & ENTITIES_TABLE + " A" _
                              & " WHERE " & "D." & DATA_ENTITY_ID_VARIABLE & "=" & "A." & ENTITIES_ID_VARIABLE _
                              & " AND " & DATA_ENTITY_ID_VARIABLE & " IN " & "(" & entities_ids & ")" _
                              & " AND " & DATA_CLIENT_ID_VARIABLE & " ='aaa'" _
@@ -513,7 +513,7 @@ Friend Class DataBaseDataDownloader
                                                     Optional ByRef adjustment_id As String = "") As Double
 
         Dim srv As New ModelServer
-        srv.OpenRst(VIEWS_DATABASE & "." & version_id & GlobalVariables.User_Credential, ModelServer.FWD_CURSOR)
+        srv.OpenRst(GlobalVariables.database & "." & version_id, ModelServer.FWD_CURSOR)
 
         Dim str_filter As String = DATA_ACCOUNT_ID_VARIABLE & "='" & account_id & "' AND " & _
                                    DATA_ENTITY_ID_VARIABLE & "='" & entity_id & "' AND " & _

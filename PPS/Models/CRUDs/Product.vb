@@ -37,7 +37,7 @@ Friend Class Product
     Protected Friend Sub New()
 
         SRV = New ModelServer
-        object_is_alive = SRV.OpenRst(CONFIG_DATABASE & "." & ProductS_TABLE, ModelServer.DYNAMIC_CURSOR)
+        object_is_alive = SRV.OpenRst(GlobalVariables.database & "." & ProductS_TABLE, ModelServer.DYNAMIC_CURSOR)
         RST = SRV.rst
 
     End Sub
@@ -111,7 +111,7 @@ Friend Class Product
         ' Delete the data associated with the product in Data Tables
         Dim dataTablesList As List(Of String) = VersionsMapping.GetVersionsList(VERSIONS_CODE_VARIABLE)
         For Each Version As String In dataTablesList
-            SRV.sqlQuery("DELETE FROM " & DATA_DATABASE & "." & Version & _
+            SRV.sqlQuery("DELETE FROM " & GlobalVariables.database & "." & Version & _
                          " WHERE " & DATA_PRODUCT_ID_VARIABLE & "='" & product_id & "'")
         Next
 
@@ -141,7 +141,7 @@ Friend Class Product
 
         Dim srv As New ModelServer
         Dim q_result As Boolean
-        q_result = srv.OpenRst(CONFIG_DATABASE & "." & ProductS_TABLE, ModelServer.FWD_CURSOR)
+        q_result = srv.OpenRst(GlobalVariables.database & "." & ProductS_TABLE, ModelServer.FWD_CURSOR)
         If q_result = True Then
             TV.Nodes.Clear()
             srv.rst.MoveFirst()
@@ -160,7 +160,7 @@ Friend Class Product
 
         Dim srv As New ModelServer
         Dim q_result As Boolean
-        q_result = srv.OpenRst(CONFIG_DATABASE & "." & PRODUCTS_TABLE, ModelServer.FWD_CURSOR)
+        q_result = srv.OpenRst(GlobalVariables.database & "." & PRODUCTS_TABLE, ModelServer.FWD_CURSOR)
         If q_result = True Then
             TV.Nodes.Clear()
             srv.rst.MoveFirst()
@@ -212,7 +212,7 @@ Friend Class Product
 
         Dim tmp_srv As New ModelServer
         Dim column_values_length As Int32 = CATEGORIES_TOKEN_SIZE + Len(NON_ATTRIBUTED_SUFIX)
-        Return tmp_srv.sqlQuery("ALTER TABLE " + CONFIG_DATABASE + "." + PRODUCTS_TABLE + _
+        Return tmp_srv.sqlQuery("ALTER TABLE " + GlobalVariables.database + "." + PRODUCTS_TABLE + _
                                 " ADD COLUMN " & variable_id & " VARCHAR(" & column_values_length & ") DEFAULT '" & variable_id & NON_ATTRIBUTED_SUFIX & "'")
 
     End Function
@@ -220,7 +220,7 @@ Friend Class Product
     Protected Friend Shared Function DeleteProductsVariable(ByRef variable_id) As Boolean
 
         Dim tmp_srv As New ModelServer
-        Return tmp_srv.sqlQuery("ALTER TABLE " + CONFIG_DATABASE + "." + PRODUCTS_TABLE + _
+        Return tmp_srv.sqlQuery("ALTER TABLE " + GlobalVariables.database + "." + PRODUCTS_TABLE + _
                                 " DROP COLUMN " & variable_id)
 
     End Function
@@ -230,7 +230,7 @@ Friend Class Product
 
         Dim tmp_srv As New ModelServer
         Dim new_value = category_id & NON_ATTRIBUTED_SUFIX
-        Return tmp_srv.sqlQuery("UPDATE " & CONFIG_DATABASE + "." + PRODUCTS_TABLE & _
+        Return tmp_srv.sqlQuery("UPDATE " & GlobalVariables.database + "." + PRODUCTS_TABLE & _
                                 " SET " & category_id & "='" & new_value & "'" & _
                                 " WHERE " & category_id & "='" & origin_value & "'")
 

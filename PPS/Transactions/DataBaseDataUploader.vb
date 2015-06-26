@@ -122,7 +122,7 @@ Friend Class DataBaseDataUploader
                                                 ByVal adjustment_id As String) As Boolean
 
         Dim valueString As String = value.ToString("F", System.Globalization.CultureInfo.InvariantCulture)
-        If srv.sqlQuery("REPLACE INTO " + DATA_DATABASE & "." & versionCode & _
+        If srv.sqlQuery("REPLACE INTO " + GlobalVariables.database & "." & versionCode & _
                         "(" & DATA_ENTITY_ID_VARIABLE & "," & _
                            DATA_ACCOUNT_ID_VARIABLE & "," & _
                            DATA_PERIOD_VARIABLE & "," & _
@@ -237,7 +237,7 @@ Friend Class DataBaseDataUploader
     '                  DATA_PERIOD_VARIABLE,
     '                  DATA_VALUE_VARIABLE}
 
-    '        If srv.openRst(DATA_DATABASE + "." + mVersionCode, ModelServer.STATIC_CURSOR) = True Then                                                          ' Open data table recordset
+    '        If srv.openRst(GlobalVariables.database + "." + mVersionCode, ModelServer.STATIC_CURSOR) = True Then                                                          ' Open data table recordset
 
     '            For Each entity In mDataSetDictionary.Keys
     '                entityKey = EntitiesNameKeyDictionary.Item(entity)

@@ -72,7 +72,7 @@ Friend Class GenericSingleEntityDLL3Computer
                                         Optional ByRef products_id_list As List(Of String) = Nothing, _
                                         Optional ByVal adjustment_id_list As List(Of String) = Nothing) As Boolean
 
-        Dim viewName As String = versionCode & GlobalVariables.User_Credential
+        Dim viewName As String = versionCode
         entity_node = input_entity_node
         Dim Versions As New Version
         time_config = Versions.ReadVersion(versionCode, VERSIONS_TIME_CONFIG_VARIABLE)
