@@ -44,9 +44,10 @@ Friend Class SettingMainUI
         PortTB.Text = My.Settings.port_number
         IDTB.Text = My.Settings.user
         CertificatesPathTB.Text = My.Settings.certificatespath
-        For Each db In getDatabasesList()
-            databasesCB.Items.Add(db)
-        Next
+
+        'For Each db In getDatabasesList()
+        ' databasesCB.Items.Add(db)
+        ' Next
 
         If databasesCB.Items.Contains(My.Settings.database) Then
             databasesCB.SelectedItem = My.Settings.database

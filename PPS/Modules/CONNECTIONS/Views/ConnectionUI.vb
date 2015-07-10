@@ -82,10 +82,11 @@ Friend Class ConnectionUI
 
     Private Sub BackgroundWorker1_DoWork(sender As Object, e As ComponentModel.DoWorkEventArgs) Handles BackgroundWorker1.DoWork
 
-        ConnectionsFunctions.Connection(ADDIN, _
-                                        IDTB.Text, _
-                                        PWDTB.Text)
-
+        '     ConnectionsFunctions.Connection(ADDIN, _
+        '                                    IDTB.Text, _
+        '                                   PWDTB.Text)
+        ConnectionsFunctions.NetworkConnection(My.Settings.server, _
+                                               My.Settings.port_number)
     End Sub
 
     Private Sub BackgroundWorker1_RunWorkerCompleted(sender As Object, e As ComponentModel.RunWorkerCompletedEventArgs) Handles BackgroundWorker1.RunWorkerCompleted

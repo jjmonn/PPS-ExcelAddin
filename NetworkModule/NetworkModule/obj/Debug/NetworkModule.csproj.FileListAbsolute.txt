@@ -1,0 +1,5 @@
+c:\users\pps bi\documents\visual studio 2013\Projects\NetworkModule\NetworkModule\bin\Debug\NetworkModule.dll
+c:\users\pps bi\documents\visual studio 2013\Projects\NetworkModule\NetworkModule\bin\Debug\NetworkModule.pdb
+c:\users\pps bi\documents\visual studio 2013\Projects\NetworkModule\NetworkModule\obj\Debug\NetworkModule.dll
+c:\users\pps bi\documents\visual studio 2013\Projects\NetworkModule\NetworkModule\obj\Debug\NetworkModule.pdb
+C:\Users\PPS Bi\documents\visual studio 2013\Projects\NetworkModule\NetworkModule\obj\Debug\NetworkModule.csprojResolveAssemblyReference.cache

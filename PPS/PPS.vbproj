@@ -59,6 +59,10 @@
     <Reference Include="JacksonSoft.CustomTabControl">
       <HintPath>..\..\..\..\..\Google Drive\OPERATIONS DEPARTMENT\Libraries\JacksonSoft.CustomTabControl.dll</HintPath>
     </Reference>
+    <Reference Include="NetworkModule, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Debug\NetworkModule.dll</HintPath>
+    </Reference>
     <Reference Include="ProgressControls, Version=1.2.0.0, Culture=neutral, PublicKeyToken=f34d47135ea7baa5, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\..\Google Drive\OPERATIONS DEPARTMENT\Libraries\CircularProgressIndicator\ProgressIndicator\obj\Debug\ProgressControls.dll</HintPath>
@@ -87,7 +91,7 @@
     </Reference>
     <Reference Include="VIBlend.WinForms.Controls, Version=10.1.0.0, Culture=neutral, PublicKeyToken=6feea38fef5ea0cf, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\VIBlend\Windows Forms Controls v.10.1.0.0\VIBlend.WinForms.Controls.dll</HintPath>
+      <HintPath>..\..\..\..\..\Program Files (x86)\VIBlend\Windows Forms Controls v.10.1.0.0\VIBlend.WinForms.Controls.dll</HintPath>
     </Reference>
     <Reference Include="VIBlend.WinForms.Controls.Design, Version=10.1.0.0, Culture=neutral, PublicKeyToken=6feea38fef5ea0cf, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -166,6 +170,12 @@
     <Compile Include="Modules\MODELING\PS MODELING\Controller\AlternativeScenariosController.vb" />
     <Compile Include="Modules\MODELING\PS MODELING\Controller\ASInputsController.vb" />
     <Compile Include="Modules\MODELING\PS MODELING\Model\AlternativeScenarioModel.vb" />
+    <Compile Include="Modules\Test\ServerTest.Designer.vb">
+      <DependentUpon>ServerTest.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Modules\Test\ServerTest.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Utilities\ChartsUtilities.vb" />
     <Compile Include="Models\CRUDs\Adjustment.vb" />
     <Compile Include="Models\CRUDs\MarketIndex.vb" />
@@ -715,6 +725,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Modules\Settings\SettingMainUI.resx">
       <DependentUpon>SettingMainUI.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Modules\Test\ServerTest.resx">
+      <DependentUpon>ServerTest.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\GenericView.resx">
       <DependentUpon>GenericView.vb</DependentUpon>

@@ -128,6 +128,7 @@ Public Class AddinModule
     Friend WithEvents AutoRefreshBT As AddinExpress.MSO.ADXRibbonCheckBox
     Friend WithEvents financialModelingBT As AddinExpress.MSO.ADXRibbonButton
     Friend WithEvents ConnectionTaskPaneItem As AddinExpress.XL.ADXExcelTaskPanesCollectionItem
+    Friend WithEvents testBT As AddinExpress.MSO.ADXRibbonButton
 
 
 #End Region
@@ -231,8 +232,9 @@ Public Class AddinModule
         Me.InputSelectionTaskPaneItem = New AddinExpress.XL.ADXExcelTaskPanesCollectionItem(Me.components)
         Me.VersionSelectionTaskPaneItem = New AddinExpress.XL.ADXExcelTaskPanesCollectionItem(Me.components)
         Me.EntitySelectionTaskPaneItem = New AddinExpress.XL.ADXExcelTaskPanesCollectionItem(Me.components)
-        Me.AdxRibbonLabel1 = New AddinExpress.MSO.ADXRibbonLabel(Me.components)
         Me.ConnectionTaskPaneItem = New AddinExpress.XL.ADXExcelTaskPanesCollectionItem(Me.components)
+        Me.AdxRibbonLabel1 = New AddinExpress.MSO.ADXRibbonLabel(Me.components)
+        Me.testBT = New AddinExpress.MSO.ADXRibbonButton(Me.components)
         '
         'MaintTab
         '
@@ -670,6 +672,7 @@ Public Class AddinModule
         Me.AdxRibbonGroup3.Caption = "Configuration"
         Me.AdxRibbonGroup3.Controls.Add(Me.ConfigurationRibbonBT)
         Me.AdxRibbonGroup3.Controls.Add(Me.SettingsBT)
+        Me.AdxRibbonGroup3.Controls.Add(Me.testBT)
         Me.AdxRibbonGroup3.Id = "adxRibbonGroup_472aee773e454c20851d757e92f14553"
         Me.AdxRibbonGroup3.ImageTransparentColor = System.Drawing.Color.Transparent
         Me.AdxRibbonGroup3.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
@@ -1116,12 +1119,6 @@ Public Class AddinModule
         Me.EntitySelectionTaskPaneItem.TaskPaneClassName = "EntitySelectionTP"
         Me.EntitySelectionTaskPaneItem.UseOfficeThemeForBackground = True
         '
-        'AdxRibbonLabel1
-        '
-        Me.AdxRibbonLabel1.Caption = "Associated with"
-        Me.AdxRibbonLabel1.Id = "adxRibbonLabel_f8272bc6694448f6955f882ef772da9e"
-        Me.AdxRibbonLabel1.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
-        '
         'ConnectionTaskPaneItem
         '
         Me.ConnectionTaskPaneItem.AllowedDropPositions = CType((((AddinExpress.XL.ADXExcelAllowedDropPositions.Top Or AddinExpress.XL.ADXExcelAllowedDropPositions.Bottom) _
@@ -1132,6 +1129,20 @@ Public Class AddinModule
         Me.ConnectionTaskPaneItem.Position = AddinExpress.XL.ADXExcelTaskPanePosition.Right
         Me.ConnectionTaskPaneItem.TaskPaneClassName = "ConnectionTP"
         Me.ConnectionTaskPaneItem.UseOfficeThemeForBackground = True
+        '
+        'AdxRibbonLabel1
+        '
+        Me.AdxRibbonLabel1.Caption = "Associated with"
+        Me.AdxRibbonLabel1.Id = "adxRibbonLabel_f8272bc6694448f6955f882ef772da9e"
+        Me.AdxRibbonLabel1.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
+        '
+        'testBT
+        '
+        Me.testBT.Caption = "Test Server"
+        Me.testBT.Id = "adxRibbonButton_22c0e4935c1a48af8d7dd00e53a9303e"
+        Me.testBT.ImageTransparentColor = System.Drawing.Color.Transparent
+        Me.testBT.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
+        Me.testBT.Size = AddinExpress.MSO.ADXRibbonXControlSize.Large
         '
         'AddinModule
         '
@@ -1338,7 +1349,7 @@ Public Class AddinModule
 
     Private Sub VersionBT_OnClick_1(sender As Object, control As IRibbonControl, pressed As Boolean) Handles VersionBT.OnClick
 
-        If globalvariables.ConnectioN Is Nothing Then
+        If GlobalVariables.Connection Is Nothing Then
             Dim CONNUI As New ConnectionUI(Me)
             CONNUI.Show()
         Else
@@ -1356,7 +1367,7 @@ Public Class AddinModule
                                  control As AddinExpress.MSO.IRibbonControl,
                                  pressed As System.Boolean) Handles UploadBT.OnClick
 
-        If globalvariables.ConnectioN Is Nothing Then
+        If GlobalVariables.Connection Is Nothing Then
             Dim CONNUI As New ConnectionUI(Me)
             CONNUI.Show()
         Else
@@ -1376,7 +1387,7 @@ Public Class AddinModule
                                   control As AddinExpress.MSO.IRibbonControl,
                                   pressed As System.Boolean) Handles WSUplaodBT.OnClick
 
-        If globalvariables.ConnectioN Is Nothing Then
+        If GlobalVariables.Connection Is Nothing Then
             Dim CONNUI As New ConnectionUI(Me)
             CONNUI.Show()
         Else
@@ -1388,7 +1399,7 @@ Public Class AddinModule
 
     Private Sub WBUploadBT_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) Handles WBUplaodBT.OnClick
 
-        If globalvariables.ConnectioN Is Nothing Then
+        If GlobalVariables.Connection Is Nothing Then
             Dim CONNUI As New ConnectionUI(Me)
             CONNUI.Show()
         Else
@@ -1404,7 +1415,7 @@ Public Class AddinModule
 
     Private Sub InputReportLaunchBT_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) Handles InputReportLaunchBT.OnClick
 
-        If globalvariables.ConnectioN Is Nothing Then
+        If GlobalVariables.Connection Is Nothing Then
             Dim CONNUI As New ConnectionUI(Me)
             CONNUI.Show()
         Else
@@ -1462,7 +1473,7 @@ Public Class AddinModule
                                         control As AddinExpress.MSO.IRibbonControl,
                                         pressed As System.Boolean) Handles ControlingUI2BT.OnClick
 
-        If globalvariables.ConnectioN Is Nothing Then
+        If GlobalVariables.Connection Is Nothing Then
             Dim CONNUI As New ConnectionUI(Me)
             CONNUI.Show()
         Else
@@ -1494,7 +1505,7 @@ Public Class AddinModule
 
     Private Sub RefreshSelectionBT_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) Handles RefreshSelectionBT.OnClick
 
-        If globalvariables.ConnectioN Is Nothing Then
+        If GlobalVariables.Connection Is Nothing Then
             Dim CONNUI As New ConnectionUI(Me)
             CONNUI.Show()
         Else
@@ -1536,7 +1547,7 @@ Public Class AddinModule
                                     control As AddinExpress.MSO.IRibbonControl,
                                     pressed As System.Boolean) Handles FunctionDesigner.OnClick
 
-        If globalvariables.ConnectioN Is Nothing Then
+        If GlobalVariables.Connection Is Nothing Then
             Dim CONNUI As New ConnectionUI(Me)
             CONNUI.Show()
         Else
@@ -1554,7 +1565,7 @@ Public Class AddinModule
 
     Private Sub SubmissionsControlBT_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) Handles SubmissionControlBT.OnClick
 
-        If globalvariables.ConnectioN Is Nothing Then
+        If GlobalVariables.Connection Is Nothing Then
             Dim CONNUI As New ConnectionUI(Me)
             CONNUI.Show()
         Else
@@ -1565,7 +1576,7 @@ Public Class AddinModule
 
     Private Sub LogBT_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) Handles LogBT.OnClick
 
-        If globalvariables.ConnectioN Is Nothing Then
+        If GlobalVariables.Connection Is Nothing Then
             Dim CONNUI As New ConnectionUI(Me)
             CONNUI.Show()
         Else
@@ -1581,7 +1592,7 @@ Public Class AddinModule
 
     Private Sub FModelingBT_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) Handles financialModelingBT.OnClick
 
-        If globalvariables.ConnectioN Is Nothing Then
+        If GlobalVariables.Connection Is Nothing Then
             Dim CONNUI As New ConnectionUI(Me)
             CONNUI.Show()
         Else
@@ -1593,7 +1604,7 @@ Public Class AddinModule
 
     Private Sub AlternativeScenariosBT_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) Handles AdvancedModelingBT.OnClick
 
-        If globalvariables.ConnectioN Is Nothing Then
+        If GlobalVariables.Connection Is Nothing Then
             Dim CONNUI As New ConnectionUI(Me)
             CONNUI.Show()
         Else
@@ -1606,7 +1617,7 @@ Public Class AddinModule
 
     Private Sub MarketPricesMGT_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) Handles MarketPricesMGT.OnClick
 
-        If globalvariables.ConnectioN Is Nothing Then
+        If GlobalVariables.Connection Is Nothing Then
             Dim CONNUI As New ConnectionUI(Me)
             CONNUI.Show()
         Else
@@ -1617,7 +1628,7 @@ Public Class AddinModule
 
     Private Sub ASReportsMGTBT_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) Handles ASReportsMGTBT.OnClick
 
-        If globalvariables.ConnectioN Is Nothing Then
+        If GlobalVariables.Connection Is Nothing Then
             Dim CONNUI As New ConnectionUI(Me)
             CONNUI.Show()
         Else
@@ -1628,7 +1639,7 @@ Public Class AddinModule
 
     Private Sub ASEntitiesAttributesTabBT_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) Handles ASEntitiesAttributesTabBT.OnClick
 
-        If globalvariables.ConnectioN Is Nothing Then
+        If GlobalVariables.Connection Is Nothing Then
             Dim CONNUI As New ConnectionUI(Me)
             CONNUI.Show()
         Else
@@ -1646,7 +1657,7 @@ Public Class AddinModule
 
     Private Sub ConfigurationRibbonBT_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) Handles ConfigurationRibbonBT.OnClick
 
-        If globalvariables.ConnectioN Is Nothing Then
+        If GlobalVariables.Connection Is Nothing Then
             Dim CONNUI As New ConnectionUI(Me)
             CONNUI.Show()
         Else
@@ -1788,7 +1799,7 @@ Public Class AddinModule
     Private Sub VersionBT2_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) Handles VersionBT2.OnClick
 
         ' Open side pane to select version ?
-        If globalvariables.ConnectioN Is Nothing Then
+        If GlobalVariables.Connection Is Nothing Then
             Dim CONNUI As New ConnectionUI(Me)
             CONNUI.Show()
         Else
@@ -2057,6 +2068,16 @@ Public Class AddinModule
 
     End Sub
 
+
+
+
+    Private Sub testBT_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) Handles testBT.OnClick
+
+
+        Dim ST As New ServerTest
+        ST.Show()
+
+    End Sub
 
 
 
