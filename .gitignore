@@ -41,3 +41,8 @@ $RECYCLE.BIN/
 Network Trash Folder
 Temporary Items
 .apdisk
+PPS/obj/*
+PPS/bin/*
+*.suo
+*.vbproj
+PPS/PPS.vbproj

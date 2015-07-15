@@ -19,6 +19,7 @@ Friend Class GlobalVariables
 #Region "Connections and Server"
 
     Friend Shared Connection As ADODB.Connection
+    Friend Shared NetworkConnect As NetworkLauncher
     Friend Shared database As String = My.Settings.database
 
 #End Region

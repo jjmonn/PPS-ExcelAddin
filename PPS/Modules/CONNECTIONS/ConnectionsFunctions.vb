@@ -17,7 +17,7 @@
 
 Friend Class ConnectionsFunctions
 
-  
+
     Friend Shared Function Connection(ByRef addin As AddinModule, _
                                       ByRef user_id As String, _
                                       ByRef pwd As String) As Boolean
@@ -49,7 +49,10 @@ Friend Class ConnectionsFunctions
             Return False
         End If
 
+    End Function
 
+    Friend Shared Function NetworkConnection(ByRef p_hostname As String, ByVal p_port As UShort) As Boolean
+        Return (GlobalVariables.NetworkConnect.Launch(p_hostname, p_port))
     End Function
 
     Friend Shared Function OpenConnection(ByRef userID As String, ByVal pwd As String) As ADODB.Connection
@@ -96,6 +99,10 @@ Friend Class ConnectionsFunctions
         GlobalVariables.Connection_Toggle_Button.Image = 0
         GlobalVariables.Connection_Toggle_Button.Caption = "Not connected"
 
+    End Sub
+
+    Friend Shared Sub CloseNetworkConnection()
+        GlobalVariables.NetworkConnect.Stop()
     End Sub
 
     'a) MySQL ODBC 5.2 ANSI Driver case
