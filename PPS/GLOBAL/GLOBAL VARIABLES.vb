@@ -20,8 +20,6 @@ Friend Class GlobalVariables
 
     Friend Shared Connection As ADODB.Connection
     Friend Shared database As String = My.Settings.database
-    Friend Shared state As ClientState = ClientState.not_connected
-    Friend Shared NetworkConnect As New NetworkLauncher(state)
 
 #End Region
 

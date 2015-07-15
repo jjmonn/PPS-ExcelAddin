@@ -23,7 +23,6 @@ Friend Class ConnectionsFunctions
                                       ByRef pwd As String) As Boolean
 
         GlobalVariables.Connection = OpenConnection(user_id, pwd)
-
         If Not GlobalVariables.Connection Is Nothing Then
 
             GlobalVariables.GlobalDBDownloader = New DataBaseDataDownloader
@@ -51,18 +50,6 @@ Friend Class ConnectionsFunctions
         End If
 
 
-    End Function
-
-    Friend Shared Function NetworkConnection(ByRef p_ip As String, ByVal p_port As UShort) As Boolean
-        If (GlobalVariables.NetworkConnect.Launch(p_ip, p_port)) Then
-            GlobalVariables.Connection_Toggle_Button.Image = 1
-            GlobalVariables.Connection_Toggle_Button.Caption = "Connected"
-            Return True
-        Else
-            GlobalVariables.Connection_Toggle_Button.Image = 0
-            GlobalVariables.Connection_Toggle_Button.Caption = "Not connected"
-            Return False
-        End If
     End Function
 
     Friend Shared Function OpenConnection(ByRef userID As String, ByVal pwd As String) As ADODB.Connection
@@ -108,7 +95,6 @@ Friend Class ConnectionsFunctions
         GlobalVariables.Connection = Nothing
         GlobalVariables.Connection_Toggle_Button.Image = 0
         GlobalVariables.Connection_Toggle_Button.Caption = "Not connected"
-        GlobalVariables.NetworkConnect.Stop()
 
     End Sub
 
