@@ -6,6 +6,9 @@ using System.IO;
 
 public class ByteBuffer : MemoryStream
 {
+    static Int32 m_nextId = 1;
+    Int32 m_requestId = -1;
+
     public ByteBuffer(ushort p_opcode)
     {
         this.WriteUint32(0);
@@ -147,5 +150,18 @@ public class ByteBuffer : MemoryStream
         Write(BitConverter.GetBytes(p_value), 0, sizeof(UInt32));
         Position = l_savePos;
     }
+
+    public Int32 AssignRequestId()
+    {
+        WriteInt32(m_nextId);
+        m_nextId++;
+        return (m_nextId - 1);
+    }
+
+    public Int32 GetRequestId()
+    {
+        if (m_requestId == -1)
+            m_requestId = this.ReadInt32();
+        return (m_requestId);
+    }
 }
-    
