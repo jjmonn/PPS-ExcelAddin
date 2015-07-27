@@ -75,7 +75,7 @@ Friend Class DataBaseDataUploader
 
         EntitiesNameKeyDictionary = input_entities_name_id_Dic
         AccountsNameKeyDictionary = input_accounts_name_id_Dic
-        AccountsKeyFormulaTypeDictionary = AccountsMapping.GetAccountsDictionary(ACCOUNT_ID_VARIABLE, ACCOUNT_FORMULA_TYPE_VARIABLE)
+        AccountsKeyFormulaTypeDictionary = globalvariables.accounts.GetAccountsDictionary(ID_VARIABLE, ACCOUNT_FORMULA_TYPE_VARIABLE)
         VersionsNameTableAddressDictionary = VersionsMapping.GetVersionsHashTable(VERSIONS_NAME_VARIABLE, VERSIONS_CODE_VARIABLE)
 
     End Sub
@@ -96,7 +96,7 @@ Friend Class DataBaseDataUploader
         Dim accountKey As String = AccountsNameKeyDictionary(accountName)
         Dim formulaType As String = AccountsKeyFormulaTypeDictionary(accountKey)
 
-        If formulaType = BALANCE_SHEET_ACCOUNT_FORMULA_TYPE _
+        If formulaType = GlobalEnums.FormulaTypes.FIRST_PERIOD_INPUT _
         AndAlso Not period = mStartingPeriod Then
             Return False
         Else

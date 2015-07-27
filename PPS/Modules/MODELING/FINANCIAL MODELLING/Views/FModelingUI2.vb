@@ -37,7 +37,6 @@ Friend Class FModelingUI2
         SimulationsController = New FModelingSimulationController(Me)
         InputsController = New FModelingInputsController(Me, SimulationsController.FModellingAccount)
         ExportsController = New FModelingExportController(Me, SimulationsController.FModellingAccount, _
-                                                          InputsController.accounts_id_names_dic, _
                                                           InputsController.accounts_names_id_dic, _
                                                           InputsController.CBEditor)
 

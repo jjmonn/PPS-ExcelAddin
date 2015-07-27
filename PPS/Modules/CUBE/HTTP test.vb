@@ -64,27 +64,27 @@ Friend Class HTTP_test
 
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
 
-        Dim entities As String() = {"a", "b", "c"}
-        Dim formulas As String() = {"NBP*0.5", "brent*1.2", "TTF"}
-        Dim nb_entities As Int32 = 3
-        Dim nb_periods As Int32 = 4
+        'Dim entities As String() = {"a", "b", "c"}
+        'Dim formulas As String() = {"NBP*0.5", "brent*1.2", "TTF"}
+        'Dim nb_entities As Int32 = 3
+        'Dim nb_periods As Int32 = 4
 
-        Dim nbp_prices As Double() = {10, 12, 15, 11}
-        Dim brent_prices As Double() = {82, 83, 82, 85}
-        Dim TTF_prices As Double() = {5, 5.2, 5.1, 5.3}
-        Dim index_list As String() = {"NBP", "brent", "TTF"}
+        'Dim nbp_prices As Double() = {10, 12, 15, 11}
+        'Dim brent_prices As Double() = {82, 83, 82, 85}
+        'Dim TTF_prices As Double() = {5, 5.2, 5.1, 5.3}
+        'Dim index_list As String() = {"NBP", "brent", "TTF"}
 
-        Dim volumes As Double() = {1, 1.1, 1.2, 1.2, 2, 2, 2, 2, 4, 3, 2, 1}
-        Dim base_revenues As Double() = {100, 101, 102, 103, 2000, 2000, 2000, 2000, 400, 300, 200, 100}
-        Dim tax_rates As Double() = {0.3, 0.3, 0.3, 0.3, 0.25, 0.25, 0.25, 0.25, 0.5, 0.5, 0.5, 0.5}
+        'Dim volumes As Double() = {1, 1.1, 1.2, 1.2, 2, 2, 2, 2, 4, 3, 2, 1}
+        'Dim base_revenues As Double() = {100, 101, 102, 103, 2000, 2000, 2000, 2000, 400, 300, 200, 100}
+        'Dim tax_rates As Double() = {0.3, 0.3, 0.3, 0.3, 0.25, 0.25, 0.25, 0.25, 0.5, 0.5, 0.5, 0.5}
 
-        Dim PSDLL As New PSDLLL_Interface(index_list, entities, formulas, nb_periods)
-        PSDLL.ResgisterIndexMarketPrices(nbp_prices, "NBP")
-        PSDLL.ResgisterIndexMarketPrices(brent_prices, "brent")
-        PSDLL.ResgisterIndexMarketPrices(TTF_prices, "TTF")
-        PSDLL.Compute(volumes, base_revenues, tax_rates)
+        'Dim PSDLL As New PSDLLL_Interface(index_list, entities, formulas, nb_periods)
+        'PSDLL.ResgisterIndexMarketPrices(nbp_prices, "NBP")
+        'PSDLL.ResgisterIndexMarketPrices(brent_prices, "brent")
+        'PSDLL.ResgisterIndexMarketPrices(TTF_prices, "TTF")
+        'PSDLL.Compute(volumes, base_revenues, tax_rates)
 
-        Dim results = PSDLL.GetResultsDict()
+        'Dim results = PSDLL.GetResultsDict()
         
     End Sub
 

@@ -91,9 +91,8 @@ Friend Class AlternativeScenariosUI
     Private Sub InitializeAdjustmentsTV()
 
         adjustmentsTV = New TreeView
-        Dim adjustments_id_names_dict = AdjustmentsMapping.GetAdjustmentsDictionary(ANALYSIS_AXIS_ID_VAR, ANALYSIS_AXIS_NAME_VAR)
-        For Each adjustment_id As String In adjustments_id_names_dict.Keys
-            adjustmentsTV.Nodes.Add(adjustment_id, adjustments_id_names_dict(adjustment_id))
+        For Each adjustment_id As String In GlobalVariables.Adjustments.adjustments_hash.Keys
+            adjustmentsTV.Nodes.Add(adjustment_id, GlobalVariables.Adjustments.adjustments_hash(adjustment_id)(NAME_VARIABLE))
         Next
         AdjustmentsTVPanel.Controls.Add(adjustmentsTV)
         adjustmentsTV.Dock = DockStyle.Fill
@@ -437,12 +436,7 @@ Friend Class AlternativeScenariosUI
 
     End Sub
 
-    Private Sub AlternativeScenariosUI_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
-
-        Controller.Close()
-
-    End Sub
-
+  
 #End Region
 
 

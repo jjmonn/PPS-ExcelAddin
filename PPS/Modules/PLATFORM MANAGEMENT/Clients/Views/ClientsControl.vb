@@ -33,9 +33,9 @@ Friend Class ClientsControl
 
 #Region "Initialize"
 
-    Protected Friend Sub New(ByRef controller As clientsController, _
+    Protected Friend Sub New(ByRef controller As ClientsController, _
                              ByRef categoriesTV As Windows.Forms.TreeView, _
-                             ByRef values_dict As Dictionary(Of String, Hashtable), _
+                             ByRef values_dict As Hashtable, _
                              ByRef input_categoriesNameKeyDic As Hashtable)
 
         ' This call is required by the designer.
@@ -112,7 +112,7 @@ Friend Class ClientsControl
     Private Sub NewAnalysisAxisValidate_Click(sender As Object, e As EventArgs)
 
         Dim hash As New Hashtable
-        hash.Add(ANALYSIS_AXIS_NAME_VAR, newAnalysisAxisUI.nameTextEditor.Text)
+        hash.Add(NAME_VARIABLE, newAnalysisAxisUI.nameTextEditor.Text)
         For Each categoryNode As TreeNode In categoriesTV.Nodes
             Dim categoryValueText As String = newAnalysisAxisUI.Controls.Find(categoryNode.Name + "CB", True)(0).Text
             If categoryValueText <> "" Then

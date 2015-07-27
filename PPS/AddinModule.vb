@@ -16,7 +16,7 @@
 '
 '
 ' Author: Julien Monnereau/ Addin Express automated code
-' Last modified: 25/06/2015
+' Last modified: 24/07/2015
 
 
 Imports System.Runtime.InteropServices
@@ -1298,11 +1298,6 @@ Public Class AddinModule
     End Function
 
     ' Returns the entities View variable
-    Public Function GetEntitiesView() As String
-        Return ENTITIES_TABLE
-    End Function
-
-    ' Returns the entities View variable
     Public Function GetVersionLabel() As ADXRibbonLabel
         Return GlobalVariables.Version_Label
     End Function
@@ -1813,10 +1808,10 @@ Public Class AddinModule
 
 #Region "Analysis Axis Drop Down Buttons Loading"
 
-    Protected Friend Shared Sub loadDropDownsSubmissionButtons()
+    Friend Shared Sub loadDropDownsSubmissionButtons()
 
         GlobalVariables.ClientsIDDropDown.Items.Clear()
-        Dim clients_dict = ClientsMapping.GetClientsDictionary(ANALYSIS_AXIS_ID_VAR, ANALYSIS_AXIS_NAME_VAR)
+        Dim clients_dict = GlobalVariables.Clients.GetClientsDictionary(ID_VARIABLE, NAME_VARIABLE)
         For Each key As String In clients_dict.Keys
             AddButtonToDropDown(GlobalVariables.ClientsIDDropDown, _
                                 key, _
@@ -1825,7 +1820,7 @@ Public Class AddinModule
         GlobalVariables.ClientsIDDropDown.SelectedItemId = DEFAULT_ANALYSIS_AXIS_ID
 
         GlobalVariables.ProductsIDDropDown.Items.Clear()
-        Dim products_dict = ProductsMapping.GetproductsDictionary(ANALYSIS_AXIS_ID_VAR, ANALYSIS_AXIS_NAME_VAR)
+        Dim products_dict = GlobalVariables.Products.GetProductsDictionary(ID_VARIABLE, NAME_VARIABLE)
         For Each key As String In products_dict.Keys
             AddButtonToDropDown(GlobalVariables.ProductsIDDropDown, _
                                 key, _
@@ -1834,7 +1829,7 @@ Public Class AddinModule
         GlobalVariables.ProductsIDDropDown.SelectedItemId = DEFAULT_ANALYSIS_AXIS_ID
 
         GlobalVariables.AdjustmentIDDropDown.Items.Clear()
-        Dim adjustments_dict = AdjustmentsMapping.GetAdjustmentsDictionary(ANALYSIS_AXIS_ID_VAR, ANALYSIS_AXIS_NAME_VAR)
+        Dim adjustments_dict = GlobalVariables.Adjustments.GetAdjustmentsDictionary(ID_VARIABLE, NAME_VARIABLE)
         For Each key As String In adjustments_dict.Keys
             AddButtonToDropDown(GlobalVariables.AdjustmentIDDropDown, _
                                 key, _
@@ -1932,7 +1927,7 @@ Public Class AddinModule
         GlobalVariables.APPS.ScreenUpdating = False
         Dim entity_id As String = Me.InputReportTaskPane.EntitiesTV.SelectedNode.Name
         Dim entity_name As String = Me.InputReportTaskPane.EntitiesTV.SelectedNode.Text
-        Dim currency As String = EntitiesMapping.GetEntityCurrency(entity_id)
+        Dim currency As String = GlobalVariables.Entities.entities_hash(entity_id)(ENTITIES_CURRENCY_VARIABLE)
         Dim currentcell As Excel.Range = WorksheetWrittingFunctions.CreateReceptionWS(entity_name, _
                                                                                        {"Entity", "Currency", "Version"}, _
                                                                                        {entity_name, currency, GlobalVariables.Version_Label.Caption})

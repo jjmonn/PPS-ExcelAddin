@@ -3,7 +3,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 27/04/2015
+' Last modified: 24/07/2015
 
 
 Imports System.Windows.Forms
@@ -16,7 +16,7 @@ Friend Class AnalysisCategoriesControl
 #Region "Instance Variables"
 
     ' Objects
-    Private Controller As AnalysisAxisCategoriesController
+    Private Controller As AxisFiltersController
     Private CategoriesTV As New TreeView
 
     ' Variables
@@ -27,7 +27,7 @@ Friend Class AnalysisCategoriesControl
 
 #Region "Initialization"
 
-    Protected Friend Sub New(ByRef input_controller As AnalysisAxisCategoriesController, _
+    Protected Friend Sub New(ByRef input_controller As AxisFiltersController, _
                              ByRef input_categories_tv As TreeView)
 
         ' This call is required by the designer.
@@ -61,7 +61,7 @@ Friend Class AnalysisCategoriesControl
     Private Sub CreateCategoryBT_Click(sender As Object, e As EventArgs) Handles NewCategoryMenuBT.Click, CreateCategoryRCM.Click
 
         Dim name = InputBox("Please enter the name of the New Category :")
-        If Controller.CreateCategory(name) = False Then
+        If Controller.CreateFilter(name) = False Then
             MsgBox("This name is already used or contains forbiden characters.")
         End If
 
@@ -69,17 +69,26 @@ Friend Class AnalysisCategoriesControl
 
     Private Sub AddCategoryValueBT_Click_1(sender As Object, e As EventArgs) Handles AddValueRCM.Click, NewCategoryMenuBT.Click
 
-        If Not CategoriesTV.SelectedNode Is Nothing Then
-            Dim current_node As TreeNode = CategoriesTV.SelectedNode
-            If Controller.IsCategory(CategoriesTV.SelectedNode.Name) = False Then current_node = current_node.Parent
+        ' reimplement: priority normal:
+        '
+        ' if node has already children 
+        '   -> add a child
+        ' else
+        '   -> add filter (ask for filter name) -> does not produce node addition
+        '   -> enchainer sur demande première valeur ?
 
-            Dim name = InputBox("Please enter the new Category Value Name:")
-            If Controller.CreateCategoryValue(name, current_node) = False Then
-                MsgBox("This name is already used or contains forbiden characters. The length must not exceed 48 characters.")
-            End If
-        Else
-            MsgBox("A Category must be selected in order ot Add a Value.")
-        End If
+
+        'If Not CategoriesTV.SelectedNode Is Nothing Then
+        '    Dim current_node As TreeNode = CategoriesTV.SelectedNode
+        '    If Controller.IsCategory(CategoriesTV.SelectedNode.Name) = False Then current_node = current_node.Parent
+
+        '    Dim name = InputBox("Please enter the new Category Value Name:")
+        '    If Controller.CreateCategoryValue(name, current_node) = False Then
+        '        MsgBox("This name is already used or contains forbiden characters. The length must not exceed 48 characters.")
+        '    End If
+        'Else
+        '    MsgBox("A Category must be selected in order ot Add a Value.")
+        'End If
 
     End Sub
 
@@ -91,7 +100,7 @@ Friend Class AnalysisCategoriesControl
             If IsNonAttributedValue(current_node) = False Then
                 Dim name = InputBox("Please enter the new Category Value Name:")
                 If name <> "" Then
-                    If Controller.RenameCategoryValue(current_node.Name, name) Then
+                    If Controller.RenameFilterValue(current_node.Name, name) Then
                         current_node.Text = name
                     Else
                         MsgBox("This name is already used or contains forbiden characters.")
@@ -108,15 +117,18 @@ Friend Class AnalysisCategoriesControl
 
     Private Sub DeleteBT_Click(sender As Object, e As EventArgs) Handles DeleteMenuBT.Click, DeleteRCM.Click
 
+        ' to be validated 
+        ' priority normal 
+        ' !!!
         If Not CategoriesTV.SelectedNode Is Nothing Then
             Dim current_node As TreeNode = CategoriesTV.SelectedNode
-            If Controller.IsCategory(CategoriesTV.SelectedNode.Name) Then
+            If Controller.Isfilter(CategoriesTV.SelectedNode.Name) Then
                 ' Delete Category
                 Dim confirm As Integer = MessageBox.Show("Careful, you are about to delete the Category: " + Chr(13) + current_node.Text + Chr(13) + "Do you confirm?", _
                                                          "Category deletion confirmation", _
                                                          MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question)
                 If confirm = DialogResult.Yes Then
-                    Controller.DeleteCategory(current_node)
+                    Controller.DeleteFilter(current_node)
                 End If
             Else
                 ' Delete Category Value
@@ -125,7 +137,7 @@ Friend Class AnalysisCategoriesControl
                                                              "Category value deletion confirmation", _
                                                              MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question)
                     If confirm = DialogResult.Yes Then
-                        Controller.DeleteCategoryValue(current_node)
+                        Controller.DeleteFilterValue(current_node)
                     End If
                 Else
                     MsgBox("Cannot delete a NA Value.")
@@ -167,20 +179,6 @@ Friend Class AnalysisCategoriesControl
         End Select
 
     End Sub
-
-#Region "Move nodes up and down into hierarchy Procedure"
-
-
-    Private Sub ResumeAccountTree()
-
-        Dim expansionDic As Dictionary(Of String, Boolean) = TreeViewsUtilities.SaveNodesExpansionsLevel(CategoriesTV)
-        Controller.SendNewPositionsToModel()
-        AnalysisAxisCategory.LoadCategoryCodeTV(CategoriesTV, ControllingUI2Controller.ENTITIES_CODE)
-        TreeViewsUtilities.ResumeExpansionsLevel(CategoriesTV, expansionDic)
-
-    End Sub
-
-#End Region
 
 #End Region
 

@@ -32,7 +32,6 @@ Friend Class RefreshGetDataBatch
 
     '   Private WS As Excel.Worksheet
     Private cellsByEntityDictionary As Dictionary(Of String, List(Of Excel.Range))
-
     Private Const UDF_FORMULA_NAME = UDF_FORMULA_GET_DATA_NAME
 
 #End Region
@@ -43,9 +42,7 @@ Friend Class RefreshGetDataBatch
     Protected Friend Sub RefreshWorksheet(Optional ByRef rng As Excel.Range = Nothing)
 
         Dim FormulasRangesCollection As New Dictionary(Of Excel.Range, String)
-        GlobalVariables.GenericGlobalSingleEntityComputer.ReinitializeGenericDataDLL3Computer()
-        GlobalVariables.GenericGlobalAggregationComputer.ReinitializeComputerCache()
-
+     
         If rng Is Nothing Then
             Dim ws As Excel.Worksheet = GlobalVariables.APPS.ActiveSheet
             rng = ws.Range(ws.Cells(1, 1), Utilities_Functions.GetRealLastCell(ws))

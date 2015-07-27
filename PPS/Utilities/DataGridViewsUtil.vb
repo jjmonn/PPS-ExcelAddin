@@ -38,9 +38,7 @@ Friend Class DataGridViewsUtil
 
     ' Variables
     Private EntitiesTokenNamesDict As Hashtable
-    Private AccountsKeysFormatTypesDic As Dictionary(Of String, Dictionary(Of String, String))
     Private AccountNamesKeysDic As Hashtable
-    Private accFtypes As Hashtable
     Private currencies_symbol_dict As Dictionary(Of String, String)
 
     ' Constants
@@ -62,10 +60,8 @@ Friend Class DataGridViewsUtil
 
     Protected Friend Sub New()
 
-        EntitiesTokenNamesDict = EntitiesMapping.GetEntitiesDictionary(ENTITIES_ID_VARIABLE, ENTITIES_NAME_VARIABLE)
-        AccountsKeysFormatTypesDic = AccountsMapping.GetAccountsKeysFormatsTypesDictionary()
-        AccountNamesKeysDic = AccountsMapping.GetAccountsDictionary(ACCOUNT_NAME_VARIABLE, ACCOUNT_ID_VARIABLE)
-        accFtypes = AccountsMapping.GetAccountsDictionary(ACCOUNT_ID_VARIABLE, ACCOUNT_FORMULA_TYPE_VARIABLE)
+        EntitiesTokenNamesDict = GlobalVariables.Entities.GetEntitiesDictionary(ID_VARIABLE, NAME_VARIABLE)
+        AccountNamesKeysDic = globalvariables.accounts.GetAccountsDictionary(NAME_VARIABLE, ID_VARIABLE)
         currencies_symbol_dict = CurrenciesMapping.getCurrenciesDict(CURRENCIES_KEY_VARIABLE, CURRENCIES_SYMBOL_VARIABLE)
 
     End Sub
@@ -98,7 +94,7 @@ Friend Class DataGridViewsUtil
         For Each tab_ As TabPage In tabsControl.TabPages
             Dim vDgv As vDataGridView = tab_.Controls(0)
             For Each row In vDgv.RowsHierarchy.Items
-                formatCode = AccountsKeysFormatTypesDic.Item(AccountNamesKeysDic.Item(row.Caption)).Item(ACCOUNT_FORMAT_VARIABLE)
+                formatCode = GlobalVariables.Accounts.accounts_hash(AccountNamesKeysDic.Item(row.Caption))(ACCOUNT_FORMAT_VARIABLE)
                 account_id = AccountNamesKeysDic.Item(row.Caption)
 
                 Dim HANStyle As VIBlend.Utilities.HierarchyItemStyle = GridTheme.GetDefaultTheme(vDgv.VIBlendTheme).HierarchyItemStyleNormal
@@ -134,7 +130,7 @@ Friend Class DataGridViewsUtil
                     CAStyle.FillStyle = New FillStyleSolid(System.Drawing.Color.FromArgb(InputsFormatsDictionary(formatCode)(FORMAT_BCKGD_VARIABLE)))
                 End If
 
-                Select Case (AccountsKeysFormatTypesDic(account_id)(ACCOUNT_TYPE_VARIABLE))
+                Select Case (GlobalVariables.Accounts.accounts_hash(account_id)(ACCOUNT_TYPE_VARIABLE))
                     ' nombe de chiffres après la virgule à variabiliser -> settings !!!!
                     Case "MO" : fmtStr = "{0:" & currencies_symbol_dict(currency) & "#,##0;(" & currencies_symbol_dict(currency) & "#,##0)}"
                     Case "RA" : fmtStr = "{0:P}"        ' put this in a table ?
@@ -453,7 +449,7 @@ Friend Class DataGridViewsUtil
         End If
         If account_node.Nodes.Count > 0 Then
             For Each account As TreeNode In account_node.Nodes
-                If accFtypes(account) <> TITLE_FORMAT_CODE Then
+                If GlobalVariables.Accounts.accounts_hash(account.Name)(ACCOUNT_FORMAT_VARIABLE) <> TITLE_FORMAT_CODE Then
                     FillInSubRowsHierarchySeveralEntities(account, _
                                                           line_index, _
                                                           dgv, _

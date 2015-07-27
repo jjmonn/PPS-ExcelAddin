@@ -37,7 +37,7 @@ Public Class EntitySelectionForUsersMGT
 
         ' Add any initialization after the InitializeComponent() call.
         entitiesTV.ImageList = EntitiesTVImageList
-        Entity.LoadEntitiesTree(entitiesTV)
+        Globalvariables.Entities.LoadEntitiesTV(entitiesTV)
         TreeViewsUtilities.set_TV_basics_icon_index(entitiesTV)
         entitiesTV.CollapseAll()
         PARENTOBJECT_ = input_parent

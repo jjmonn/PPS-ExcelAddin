@@ -33,7 +33,7 @@ Friend Class DataHistoryUI
     Protected Friend Sub New(ByRef data_history_list As List(Of Hashtable), _
                              ByRef client_id_name_dict As Hashtable, _
                              ByRef product_id_name_dict As Hashtable, _
-                             ByRef adjustment_id_name_dict As Dictionary(Of String, String))
+                             ByRef adjustment_id_name_dict As Hashtable)
 
         ' This call is required by the designer.
         InitializeComponent()

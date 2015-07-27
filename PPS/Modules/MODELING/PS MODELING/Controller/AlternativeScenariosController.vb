@@ -7,7 +7,7 @@
 '
 '
 ' Author:Julien Monnereau
-' Last modified: 26/01/2015
+' Last modified: 17/07/2015
 
 Imports System.Collections.Generic
 Imports System.Collections
@@ -44,7 +44,7 @@ Friend Class AlternativeScenariosController
         InputsController = New ASInputsController(Me)
         View = New AlternativeScenariosUI(Me, InputsController, Model.sensitivities_dictionary, GetExportsDictionary, GetAccountsComboBox)
         InputsController.InitializeView(View)
-        accounts_name_id_dict = AccountsMapping.GetAccountsDictionary(ACCOUNT_NAME_VARIABLE, ACCOUNT_ID_VARIABLE)
+        accounts_name_id_dict = globalvariables.accounts.GetAccountsDictionary(NAME_VARIABLE, ID_VARIABLE)
         View.Show()
 
     End Sub
@@ -52,7 +52,7 @@ Friend Class AlternativeScenariosController
     Private Function GetExportsDictionary() As Dictionary(Of String, Dictionary(Of String, String))
 
         Dim export_dict As New Dictionary(Of String, Dictionary(Of String, String))
-        Dim accounts_id_name_dic = AccountsMapping.GetAccountsDictionary(ACCOUNT_ID_VARIABLE, ACCOUNT_NAME_VARIABLE)
+        Dim accounts_id_name_dic = globalvariables.accounts.GetAccountsDictionary(ID_VARIABLE, NAME_VARIABLE)
 
         For Each sensitivity_id In Model.sensitivities_dictionary.Keys
             Dim tmp_dict As New Dictionary(Of String, String)
@@ -68,7 +68,7 @@ Friend Class AlternativeScenariosController
     Private Function GetAccountsComboBox() As ComboBoxEditor
 
         Dim tmpCB As New ComboBoxEditor
-        For Each account_id As String In AccountsMapping.GetAccountsNamesList(AccountsMapping.LOOKUP_INPUTS)
+        For Each account_id As String In GlobalVariables.Accounts.GetAccountsList(GlobalEnums.AccountsLookupOptions.LOOKUP_INPUTS, NAME_VARIABLE)
             tmpCB.Items.Add(account_id)
         Next
         Return tmpCB
@@ -140,7 +140,7 @@ Friend Class AlternativeScenariosController
                                            ByRef time_configuration As String)
 
         View.ClearMainPanel()
-        Dim accounts_id_name_dic As Hashtable = AccountsMapping.GetAccountsDictionary(ACCOUNT_ID_VARIABLE, ACCOUNT_NAME_VARIABLE)
+        Dim accounts_id_name_dic As Hashtable = globalvariables.accounts.GetAccountsDictionary(ID_VARIABLE, NAME_VARIABLE)
         Dim reports_settings_dic As Dictionary(Of String, Hashtable) = Report.GetReportsSettingsDictionary()
         Dim entity_id = InputsController.current_entity_node.Name
         Dim ReportsTV As New TreeView
@@ -204,7 +204,7 @@ Friend Class AlternativeScenariosController
         DataGridViewsUtil.FormatBasicDGV(DGV)
         View.AddDGV(DGV) 'reports_settings_dic(report_node.Name)(REPORTS_NAME_VAR))
         AddHandler DGV.MouseDown, AddressOf View.Reports_MouseClick
-        
+
     End Sub
 
 
@@ -213,7 +213,7 @@ Friend Class AlternativeScenariosController
 
 #Region "Utilities"
 
-    Protected Friend Sub InitializePBar(ByRef input_entities As List(Of String), _
+    Protected Friend Sub InitializePBar(ByRef input_entities As List(Of UInt32), _
                                         ByRef nb_sensitivities As Int32)
 
         Dim LoadingBarMax As Integer = input_entities.Count + (nb_sensitivities) * 2 + 5
@@ -250,12 +250,6 @@ Friend Class AlternativeScenariosController
 
     End Function
 
-    Protected Friend Sub Close()
-
-        Model.DestroyDll()
-        MyBase.Finalize()
-
-    End Sub
 
 #End Region
 

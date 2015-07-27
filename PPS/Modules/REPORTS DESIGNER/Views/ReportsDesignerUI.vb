@@ -60,7 +60,7 @@ Friend Class ReportsDesignerUI
         chart = ChartsUtilities.CreateChart(ht)
         ChartPanel.Controls.Add(chart)
         chart.Dock = DockStyle.Fill
-        accounts_id_name_dic = AccountsMapping.GetAccountsDictionary(ACCOUNT_ID_VARIABLE, ACCOUNT_NAME_VARIABLE)
+        accounts_id_name_dic = globalvariables.accounts.GetAccountsDictionary(ID_VARIABLE, NAME_VARIABLE)
         AddHandler reportsTV.AfterSelect, AddressOf reportsTV_AfterSelect
         AddHandler reportsTV.NodeMouseClick, AddressOf reportsTV_node_mouse_click
         AddHandler reportsTV.KeyDown, AddressOf reportsTV_KeyDown

@@ -5,7 +5,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 02/02/2015
+' Last modified: 24/07/2015
 
 
 Imports System.Windows.Forms
@@ -22,7 +22,6 @@ Friend Class SubmissionsControlsController
     ' Objects
     Private SubmissionControl As New SubmissionControlModel
     Private View As SubmissionsControlUI
-    Private Computer As GenericAggregationDLL3Computing
     Private ControlCharts As New ControlChart
     Private EntitiesTV As New TreeView
     Private ChartsTV As New TreeView
@@ -33,7 +32,7 @@ Friend Class SubmissionsControlsController
     Private periods_list As List(Of Int32)
     Private version_id As String
     Private successfull_controls_dic As New Dictionary(Of String, List(Of String))
-    Private entities_id_list As List(Of String)
+    Private entities_id_list As List(Of UInt32)
     Private charts_periods As New List(Of Int32)
 
 
@@ -45,14 +44,13 @@ Friend Class SubmissionsControlsController
     Protected Friend Sub New()
 
 
-        Entity.LoadEntitiesTree(EntitiesTV)
+        Globalvariables.Entities.LoadEntitiesTV(EntitiesTV)
         TreeViewsUtilities.CheckAllNodes(EntitiesTV)
         ControlChart.LoadControlChartsTree(ChartsTV)
         entities_id_list = TreeViewsUtilities.GetNodesKeysList(EntitiesTV)
         InitializeChartsDictionary()
         View = New SubmissionsControlUI(Me, EntitiesTV, charts_dic)
         version_id = GlobalVariables.GLOBALCurrentVersionCode
-        Computer = New GenericAggregationDLL3Computing(GlobalVariables.GlobalDBDownloader, GlobalVariables.GlobalDll3Interface)
         View.Show()
 
     End Sub
@@ -113,23 +111,14 @@ Friend Class SubmissionsControlsController
     Private Sub ComputeEntities()
 
         If Not EntitiesTV.Nodes(0) Is Nothing Then
-            Computer.init_computer_complete_mode(EntitiesTV.Nodes(0))
-            Dim Versions As New Version
-            Dim time_config As String = Versions.ReadVersion(version_id, VERSIONS_TIME_CONFIG_VARIABLE)
-            periods_list = Versions.GetPeriodList(version_id)
-            Dim nb_periods As Int32 = Versions.ReadVersion(version_id, VERSIONS_NB_PERIODS_VAR)
-            Dim start_period As Int32 = Versions.ReadVersion(version_id, VERSIONS_START_PERIOD_VAR)
-            Dim rates_version_id = Versions.ReadVersion(version_id, VERSIONS_RATES_VERSION_ID_VAR)
-            Versions.Close()
+
+            ' computation query to computer.vb 
+            'priority high
             InitializePBar()
-            Computer.compute_selection_complete(version_id, _
-                                                time_config, _
-                                                rates_version_id, _
-                                                periods_list, _
-                                                MAIN_CURRENCY, _
-                                                start_period, _
-                                                nb_periods, _
-                                                View.PBar)
+
+            ' wait for server answer
+
+            'below send to reception function priority high
 
             BuildDataDictionaries()
             View.PBar.AddProgress()
@@ -141,19 +130,26 @@ Friend Class SubmissionsControlsController
 
     Private Sub BuildDataDictionaries()
 
+
+        ' data_map will be directly accessible from computer.vb
+        ' [version][entity][account][period]
+        ' priority high
+
         data_dictionaries.Clear()
         For Each entity_id In entities_id_list
             Dim tmp_dic As New Dictionary(Of String, Double())
-            Dim tmp_data_array = Computer.GetEntityArray(entity_id)
+
+            'Dim tmp_data_array = Computer.GetEntityArray(entity_id)
+
             Dim i As Int32 = 0
-            For Each account_id In Computer.get_model_accounts_list
-                Dim account_array(periods_list.Count - 1) As Double
-                For j = 0 To periods_list.Count - 1
-                    account_array(j) = tmp_data_array(i)
-                    i = i + 1
-                Next
-                tmp_dic.Add(account_id, account_array)
-            Next
+            'For Each account_id In Computer.get_model_accounts_list
+            '    Dim account_array(periods_list.Count - 1) As Double
+            '    For j = 0 To periods_list.Count - 1
+            '        account_array(j) = tmp_data_array(i)
+            '        i = i + 1
+            '    Next
+            '    tmp_dic.Add(account_id, account_array)
+            'Next
             data_dictionaries.Add(entity_id, tmp_dic)
         Next
 
@@ -166,7 +162,7 @@ Friend Class SubmissionsControlsController
             successfull_controls_dic.Add(entity_id, SubmissionControl.CheckSubmission(periods_list, data_dictionaries(entity_id)))
         Next
 
-        Dim nodes_icon_dic As New Dictionary(Of String, Int32)
+        Dim nodes_icon_dic As New Dictionary(Of UInt32, Int32)
         Dim nb_controls As Int32 = SubmissionControl.controls_dic.Keys.Count
         For Each entity_id In entities_id_list
             If successfull_controls_dic(entity_id).Count = nb_controls Then
@@ -175,7 +171,7 @@ Friend Class SubmissionsControlsController
                 nodes_icon_dic.Add(entity_id, 0)
             End If
         Next
-        Entity.LoadEntitiesTree(EntitiesTV, nodes_icon_dic)
+        GlobalVariables.Entities.LoadEntitiesTV(EntitiesTV, nodes_icon_dic)
         EntitiesTV.CollapseAll()
         EntitiesTV.Refresh()
 
@@ -188,8 +184,9 @@ Friend Class SubmissionsControlsController
 
     Private Sub InitializePBar()
 
-        Dim LoadingBarMax As Integer = Computer.inputs_entities_list.Count + 5
-        View.PBar.Launch(1, LoadingBarMax)
+        ' to be reimplemented : priority normal
+        '     Dim LoadingBarMax As Integer = Computer.inputs_entities_list.Count + 5
+        '   View.PBar.Launch(1, LoadingBarMax)
         '    View.PBar.Visible = True
 
     End Sub

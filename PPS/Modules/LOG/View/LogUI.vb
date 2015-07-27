@@ -61,7 +61,7 @@ Friend Class LogUI
         AddHandler EntitiesTV.KeyDown, AddressOf EntitiesTV_KeyDown
         AddHandler EntitiesTV.NodeMouseClick, AddressOf EntitiesTV_NodeMouseClick
 
-        Account.LoadAccountsTree(AccountsTV)
+        GlobalVariables.Accounts.LoadAccountsTV(AccountsTV)
         InitializeDGV()
 
     End Sub

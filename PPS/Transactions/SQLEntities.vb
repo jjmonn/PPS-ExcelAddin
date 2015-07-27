@@ -50,21 +50,7 @@ Friend Class SQLEntities
 
     End Sub
 
-    Protected Friend Function CreateNewEntitiesVariable(ByRef variable_id As String) As Boolean
-
-        Dim column_values_length As Int32 = CATEGORIES_TOKEN_SIZE + Len(NON_ATTRIBUTED_SUFIX)
-        Return srv.sqlQuery("ALTER TABLE " + GlobalVariables.database + "." + ENTITIES_TABLE + _
-                            " ADD COLUMN " & variable_id & " VARCHAR(" & column_values_length & ") DEFAULT '" & variable_id & NON_ATTRIBUTED_SUFIX & "'")
-
-    End Function
-
-    Protected Friend Function DeleteEntitiesVariable(ByRef variable_id) As Boolean
-
-        Return srv.sqlQuery("ALTER TABLE " + GlobalVariables.database + "." + ENTITIES_TABLE + _
-                            " DROP COLUMN " & variable_id)
-
-    End Function
-
+  
 #End Region
 
 
@@ -84,18 +70,22 @@ Friend Class SQLEntities
     Protected Friend Function ReplaceEntitiesCategoryValue(ByRef category_id As String, _
                                                        ByRef origin_value As String) As Boolean
 
-        Dim new_value = category_id & NON_ATTRIBUTED_SUFIX
-        Return srv.sqlQuery("UPDATE " & GlobalVariables.database & "." + ENTITIES_TABLE & _
-                            " SET " & category_id & "='" & new_value & "'" & _
-                            " WHERE " & category_id & "='" & origin_value & "'")
+        ' Implement on server before delete 
+        MsgBox("implement category replacement on server")
+
+        'Dim new_value = category_id & NON_ATTRIBUTED_SUFIX
+        'Return srv.sqlQuery("UPDATE " & GlobalVariables.database & "." + ENTITIES_TABLE & _
+        '                    " SET " & category_id & "='" & new_value & "'" & _
+        '                    " WHERE " & category_id & "='" & origin_value & "'")
 
     End Function
 
     Protected Friend Function SetNewCategoryDefaultValue(ByRef category_id As String) As Boolean
 
-        Dim new_value = category_id & NON_ATTRIBUTED_SUFIX
-        Return srv.sqlQuery("UPDATE " & GlobalVariables.database & "." + ENTITIES_TABLE & _
-                            " SET " & category_id & "='" & new_value & "'")
+        MsgBox("implement category replacement on server")
+        'Dim new_value = category_id & NON_ATTRIBUTED_SUFIX
+        'Return srv.sqlQuery("UPDATE " & GlobalVariables.database & "." + ENTITIES_TABLE & _
+        '                    " SET " & category_id & "='" & new_value & "'")
 
     End Function
 

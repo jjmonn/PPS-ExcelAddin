@@ -24,8 +24,7 @@ Friend Class FModelingExportController
     ' Objects
     Private MainView As FModelingUI2
     Friend View As FModelingExportControl
-    Private Model As GenericAggregationDLL3Computing
-    Private FModellingAccount As FModellingAccount
+      Private FModellingAccount As FModellingAccount
     Private ExportsTV As New TreeView
     Private EntitiesTV As New TreeView
 
@@ -51,7 +50,6 @@ Friend Class FModelingExportController
 
     Friend Sub New(ByRef MainView As FModelingUI2, _
                    ByRef FModellingAccount As FModellingAccount, _
-                   ByRef accounts_id_names_dic As Hashtable, _
                    ByRef accounts_names_id_dic As Hashtable, _
                    ByRef CBEditor As ComboBoxEditor)
 
@@ -63,7 +61,7 @@ Friend Class FModelingExportController
 
         View = New FModelingExportControl(Me)
 
-        Entity.LoadEntitiesTree(EntitiesTV)
+        Globalvariables.Entities.LoadEntitiesTV(EntitiesTV)
         exports_id_list = FModelingAccountsMapping.GetFModellingAccountsList(FINANCIAL_MODELLING_ID_VARIABLE, FINANCIAL_MODELLING_EXPORT_TYPE)
         InitializeExportMappingDGV()
         InitializeExportsTV()
@@ -135,22 +133,24 @@ Friend Class FModelingExportController
             Dim entity_id = FModellingAccount.ReadFModellingAccount(export_id, FINANCIAL_MODELLING_MAPPED_ENTITY_VARIABLE)
             For j As Int32 = 0 To periods_list.Length - 1
 
-                Dim current_value = DataBaseDataDownloader.GetSingleValue(version_id, _
-                                                                          entity_id, _
-                                                                          account_id, _
-                                                                          periods_list(j), _
-                                                                          DEFAULT_ANALYSIS_AXIS_ID)
+                ' use server upload object (to be designed) priority high !!
 
-                Dim new_value = current_value + dataDict(export_id)(j)
-                If new_value <> current_value Then _
-                DBUploader.UpdateSingleValue(entity_id, _
-                                            account_id, _
-                                            periods_list(j), _
-                                            new_value, _
-                                            version_id, _
-                                            DEFAULT_ANALYSIS_AXIS_ID, _
-                                            DEFAULT_ANALYSIS_AXIS_ID, _
-                                            DEFAULT_ANALYSIS_AXIS_ID)
+                'Dim current_value = DataBaseDataDownloader.GetSingleValue(version_id, _
+                '                                                          entity_id, _
+                '                                                          account_id, _
+                '                                                          periods_list(j), _
+                '                                                          DEFAULT_ANALYSIS_AXIS_ID)
+
+                'Dim new_value = current_value + dataDict(export_id)(j)
+                'If new_value <> current_value Then _
+                'DBUploader.UpdateSingleValue(entity_id, _
+                '                            account_id, _
+                '                            periods_list(j), _
+                '                            new_value, _
+                '                            version_id, _
+                '                            DEFAULT_ANALYSIS_AXIS_ID, _
+                '                            DEFAULT_ANALYSIS_AXIS_ID, _
+                '                            DEFAULT_ANALYSIS_AXIS_ID)
 
                 ' !!!!! STUB adjustment id must be validated in some mapping !!!
 

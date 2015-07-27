@@ -1,7 +1,8 @@
 ﻿' VersioningQueriesSupport.vb
 '
 ' Manages the SQL queries related to versions tables
-' 
+'  
+'
 '  to do:
 '   - lock/ unlock process
 '   
@@ -9,13 +10,16 @@
 ' known bugs:
 '
 '
-' Last modified: 16/03/2015
+' Last modified: 17/07/2015
 ' Author: Julien Monnereau
 
 
 Imports System.Collections.Generic
 
 
+' ----------------------------------
+' CLASS TO BE DELETED !!!
+' ----------------------------------
 Friend Class SQLVersions
 
 
@@ -29,26 +33,26 @@ Friend Class SQLVersions
 
     Protected Friend Function CreateNewVersionTable(ByRef version_id As String) As Boolean
 
-        If srv.sqlQuery("CREATE TABLE " & GlobalVariables.database & "." & version_id & " (" & _
-                      DATA_ACCOUNT_ID_VARIABLE & " CHAR(" & ACCOUNTS_TOKEN_SIZE & ") NOT NULL," & _
-                      DATA_ENTITY_ID_VARIABLE & " CHAR(" & ENTITIES_TOKEN_SIZE & ") NOT NULL," & _
-                      DATA_PERIOD_VARIABLE & " INT NOT NULL," & _
-                      DATA_VALUE_VARIABLE & " DOUBLE NOT NULL, " & _
-                      DATA_ADJUSTMENT_ID_VARIABLE & " CHAR(" & ANALYSIS_AXIS_TOKEN_SIZE & ") NOT NULL DEFAULT ''," & _
-                      DATA_CLIENT_ID_VARIABLE & " CHAR(" & ANALYSIS_AXIS_TOKEN_SIZE & ") NOT NULL DEFAULT ''," & _
-                      DATA_PRODUCT_ID_VARIABLE & " CHAR(" & ANALYSIS_AXIS_TOKEN_SIZE & ") NOT NULL DEFAULT ''," & _
-                      " PRIMARY KEY (" & DATA_ENTITY_ID_VARIABLE & "," & _
-                                         DATA_ACCOUNT_ID_VARIABLE & "," & _
-                                         DATA_PERIOD_VARIABLE & "," & _
-                                         DATA_ADJUSTMENT_ID_VARIABLE & "," & _
-                                         DATA_CLIENT_ID_VARIABLE & "," & _
-                                         DATA_PRODUCT_ID_VARIABLE _
-                                         & "))") Then
+        'If srv.sqlQuery("CREATE TABLE " & GlobalVariables.database & "." & version_id & " (" & _
+        '              DATA_ACCOUNT_ID_VARIABLE & " CHAR(" & ACCOUNTS_TOKEN_SIZE & ") NOT NULL," & _
+        '              DATA_ENTITY_ID_VARIABLE & " CHAR(" & ENTITIES_TOKEN_SIZE & ") NOT NULL," & _
+        '              DATA_PERIOD_VARIABLE & " INT NOT NULL," & _
+        '              DATA_VALUE_VARIABLE & " DOUBLE NOT NULL, " & _
+        '              DATA_ADJUSTMENT_ID_VARIABLE & " CHAR(" & ANALYSIS_AXIS_TOKEN_SIZE & ") NOT NULL DEFAULT ''," & _
+        '              DATA_CLIENT_ID_VARIABLE & " CHAR(" & ANALYSIS_AXIS_TOKEN_SIZE & ") NOT NULL DEFAULT ''," & _
+        '              DATA_PRODUCT_ID_VARIABLE & " CHAR(" & ANALYSIS_AXIS_TOKEN_SIZE & ") NOT NULL DEFAULT ''," & _
+        '              " PRIMARY KEY (" & DATA_ENTITY_ID_VARIABLE & "," & _
+        '                                 DATA_ACCOUNT_ID_VARIABLE & "," & _
+        '                                 DATA_PERIOD_VARIABLE & "," & _
+        '                                 DATA_ADJUSTMENT_ID_VARIABLE & "," & _
+        '                                 DATA_CLIENT_ID_VARIABLE & "," & _
+        '                                 DATA_PRODUCT_ID_VARIABLE _
+        '                                 & "))") Then
 
-            Return CreateTrigger(version_id)
-        Else
-            Return False
-        End If
+        '    Return CreateTrigger(version_id)
+        'Else
+        '    Return False
+        'End If
 
     End Function
 
@@ -127,7 +131,7 @@ Friend Class SQLVersions
     'Dim strSql As String = " ALTER TABLE " + versionTableName _
     '                       + "ADD CONSTRAINT " + DATA_ACCOUNT_ID_FK_VARIABLE _
     '                       + " FOREIGN KEY(" + DATA_ACCOUNT_ID_VARIABLE + ")" _
-    '                       + " REFERENCES " + GlobalVariables.database + "." + ACCOUNTS_TABLE + "(" + ACCOUNT_ID_VARIABLE + ")"
+    '                       + " REFERENCES " + GlobalVariables.database + "." + ACCOUNTS_TABLE + "(" + ID_VARIABLE + ")"
 
     'srv.sqlQuery(strSql)
 
@@ -136,7 +140,7 @@ Friend Class SQLVersions
     'strSql = " ALTER TABLE " + versionTableName _
     '         + "ADD CONSTRAINT " + DATA_ENTITY_ID_FK_VARIABLE _
     '         + " FOREIGN KEY(" + DATA_ENTITY_ID_VARIABLE + ")" _
-    '         + " REFERENCES " + ASSETS_TABLE + "(" + ENTITIES_ID_VARIABLE + ")"
+    '         + " REFERENCES " + ASSETS_TABLE + "(" + ID_VARIABLE + ")"
 
     'srv.sqlQuery(strSql)
 

@@ -118,8 +118,8 @@ Friend Class ModelDataSet
         GlobalScreenShot = WS.Range(WS.Cells(1, 1), lastCell).Value
         ReDim GlobalScreenShotFlag(UBound(GlobalScreenShot, 1), UBound(GlobalScreenShot, 2))
 
-        EntitiesNameKeyDictionary = EntitiesMapping.GetEntitiesDictionary(ENTITIES_NAME_VARIABLE, ENTITIES_ID_VARIABLE)
-        AccountsNameKeyDictionary = AccountsMapping.GetAccountsDictionary(ACCOUNT_NAME_VARIABLE, ACCOUNT_ID_VARIABLE)
+        EntitiesNameKeyDictionary = GlobalVariables.Entities.GetEntitiesDictionary(NAME_VARIABLE, ID_VARIABLE)
+        AccountsNameKeyDictionary = globalvariables.accounts.GetAccountsDictionary(NAME_VARIABLE, ID_VARIABLE)
 
     End Sub
 
@@ -217,8 +217,8 @@ Friend Class ModelDataSet
     Protected Friend Sub AccountsIdentify()
 
         Dim i, j, nbWords As Integer
-        inputsAccountsList = AccountsMapping.GetAccountsNamesList(AccountsMapping.LOOKUP_INPUTS)
-        Dim outputsAccountsList As List(Of String) = AccountsMapping.GetAccountsNamesList(AccountsMapping.LOOKUP_OUTPUTS)
+        inputsAccountsList = GlobalVariables.Accounts.GetAccountsList(GlobalEnums.AccountsLookupOptions.LOOKUP_INPUTS, NAME_VARIABLE)
+        Dim outputsAccountsList As List(Of String) = GlobalVariables.Accounts.GetAccountsList(GlobalEnums.AccountsLookupOptions.LOOKUP_OUTPUTS, NAME_VARIABLE)
         AccountsAddressValuesDictionary.Clear()
 
         For i = LBound(GlobalScreenShot, 1) To UBound(GlobalScreenShot, 1)                                          ' Loop into rows of input array
@@ -264,7 +264,7 @@ Friend Class ModelDataSet
     Private Sub EntitiesIdentify()
 
         Dim i, j As Integer
-        assetsList = EntitiesMapping.GetEntitiesNamesList()
+        assetsList = GlobalVariables.Entities.GetEntitiesList(NAME_VARIABLE)
 
         For i = LBound(GlobalScreenShot, 1) To UBound(GlobalScreenShot, 1)
             For j = LBound(GlobalScreenShot, 2) To UBound(GlobalScreenShot, 2)

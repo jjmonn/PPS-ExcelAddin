@@ -13,7 +13,7 @@
 '
 ' 
 ' Author: Julien Monnereau
-' Last modified: 05/03/2015
+' Last modified: 17/07/2015
 
 
 Imports Microsoft.Office.Interop
@@ -45,8 +45,8 @@ Friend Class CExcelFormatting
                                                   ByRef currency As String, _
                                                   Optional ByRef startingDate As Date = Nothing)
 
-        Dim AccountsNameFormatDictionary As Hashtable = AccountsMapping.GetAccountsDictionary(ACCOUNT_NAME_VARIABLE, ACCOUNT_FORMAT_VARIABLE)
-        Dim AccountsNameTypeDict As Hashtable = AccountsMapping.GetAccountsDictionary(ACCOUNT_NAME_VARIABLE, ACCOUNT_TYPE_VARIABLE)
+        Dim AccountsNameFormatDictionary As Hashtable = globalvariables.accounts.GetAccountsDictionary(NAME_VARIABLE, ACCOUNT_FORMAT_VARIABLE)
+        Dim AccountsNameTypeDict As Hashtable = globalvariables.accounts.GetAccountsDictionary(NAME_VARIABLE, ACCOUNT_TYPE_VARIABLE)
         Dim currentFormatsDictionary As Dictionary(Of String, Dictionary(Of String, Object))
         Dim currencies_symbol_dict As Dictionary(Of String, String) = CurrenciesMapping.getCurrenciesDict(CURRENCIES_KEY_VARIABLE, CURRENCIES_SYMBOL_VARIABLE)
         Select Case reportFormat
@@ -111,7 +111,7 @@ Friend Class CExcelFormatting
 
         Dim fType As String
         Dim StartingDateColumn As Int32
-        Dim accountsNamesFTypesDictionary As Hashtable = AccountsMapping.GetAccountsDictionary(ACCOUNT_NAME_VARIABLE, ACCOUNT_FORMULA_TYPE_VARIABLE)
+        Dim accountsNamesFTypesDictionary As Hashtable = globalvariables.accounts.GetAccountsDictionary(NAME_VARIABLE, ACCOUNT_FORMULA_TYPE_VARIABLE)
 
         '    If IsDate(startingDate) Then StartingDateColumn = GetStaringPeriodColumn(inputRange, startingDate)
 
@@ -124,10 +124,8 @@ Friend Class CExcelFormatting
                 If accountsNamesFTypesDictionary.ContainsKey(accValue) Then
                     Select Case accountsNamesFTypesDictionary(accValue)
 
-                        Case INPUT_ACCOUNT_FORMULA_TYPE : SetRangeColors(row, text_color, bckgd_color)
-                        Case BALANCE_SHEET_ACCOUNT_FORMULA_TYPE, _
-                             WORKING_CAPITAL_ACCOUNT_FORMULA_TYPE
-                            SetRangeColors(row.Cells(1, 2), text_color, bckgd_color)
+                        Case GlobalEnums.FormulaTypes.HARD_VALUE_INPUT : SetRangeColors(row, text_color, bckgd_color)
+                        Case GlobalEnums.FormulaTypes.FIRST_PERIOD_INPUT : SetRangeColors(row.Cells(1, 2), text_color, bckgd_color)
 
                     End Select
                 End If

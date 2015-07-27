@@ -39,12 +39,6 @@ Module Data_Tables_Constants
 #Region "Accounts Table"
 
     ' Accounts table
-    Friend Const ACCOUNTS_TABLE = "accounts"
-    Friend Const TV_ROOT_KEY As String = "XXXXX"
-    Friend Const ACCOUNTS_TOKEN_SIZE = 3
-    Friend Const ACCOUNT_ID_VARIABLE = "id"
-    Friend Const ACCOUNT_NAME_VARIABLE = "name"
-    Friend Const ACCOUNT_PARENT_ID_VARIABLE = "parent_id"
     Friend Const ACCOUNT_FORMULA_TYPE_VARIABLE = "account_formula_type"
     Friend Const ACCOUNT_FORMULA_VARIABLE = "account_formula"
     Friend Const ACCOUNT_IMAGE_VARIABLE = "image"
@@ -52,21 +46,9 @@ Module Data_Tables_Constants
     Friend Const ACCOUNT_FORMAT_VARIABLE = "format_id"
     Friend Const ACCOUNT_TAB_VARIABLE = "account_tab"
     Friend Const ACCOUNT_TYPE_VARIABLE = "type_id"
-    Friend Const ACCOUNT_RECOMPUTATION_OPTION_VARIABLE = "computation_option"
-    Friend Const ACCOUNT_CONVERSION_FLAG_VARIABLE = "conversion_flag"
+    Friend Const ACCOUNT_CONSOLIDATION_OPTION_VARIABLE = "computation_option"
+    Friend Const ACCOUNT_CONVERSION_OPTION_VARIABLE = "conversion_flag"
 
-    Friend Const ACCOUNT_COLUMN_NB_ACCOUNTID = 2
-    Friend Const TITLE_ACCOUNT_FORMULA_TYPE = "T"
-    Friend Const BALANCE_SHEET_ACCOUNT_FORMULA_TYPE = "BS"
-    Friend Const INPUT_ACCOUNT_FORMULA_TYPE = "HV"
-    Friend Const WORKING_CAPITAL_ACCOUNT_FORMULA_TYPE = "WC"
-    Friend Const FORMULA_ACCOUNT_FORMULA_TYPE = "F"
-    Friend Const AGGREGATION_ACCOUNT_FORMULA_TYPE = "SOAC"
-    Friend Const RECOMPUTATION_CODE = "cal"
-    Friend Const AGGREGATION_CODE = "agg"
-    Friend Const FLUX_CONVERSION = "F"
-    Friend Const BS_ITEM_CONVERSION = "B"
-    Friend Const UPDATE_ACCOUNTS_POSITIONS_SP = "update_accounts_positions"
 
 #End Region
 
@@ -109,7 +91,6 @@ Module Data_Tables_Constants
 
 
 #End Region
-
 
 
 
@@ -335,36 +316,6 @@ Module Data_Tables_Constants
 #End Region
 
 
-#Region "ANALAYSIS AXIS"
-
-    Friend Const ADJUSTMENTS_TABLE As String = "adjustments"
-    Friend Const CLIENTS_TABLE As String = "clients"
-    Friend Const PRODUCTS_TABLE As String = "products"
-
-    Friend Const ANALYSIS_AXIS_ID_VAR As String = "id"
-    Friend Const ANALYSIS_AXIS_NAME_VAR As String = "name"
-    Friend Const ANALYSIS_AXIS_TOKEN_SIZE As Int32 = 3
-
-    Friend Const DEFAULT_ANALYSIS_AXIS_ID As String = "aaa"
- 
-
-#End Region
-
-
-#Region "Categories Table"
-
-    Friend Const CATEGORIES_TABLE_NAME As String = "categories"
-    Friend Const CATEGORY_ID_VARIABLE As String = "id"
-    Friend Const CATEGORY_NAME_VARIABLE As String = "name"
-    Friend Const CATEGORY_PARENT_ID_VARIABLE As String = "parent_id"
-    Friend Const CATEGORY_CODE_VARIABLE As String = "code"
-    Friend Const CATEGORY_IS_CATEGORY_VARIABLE As String = "is_category"
-
-    Friend Const CATEGORIES_TOKEN_SIZE As Int32 = 3
-    Friend Const NON_ATTRIBUTED_SUFIX As String = "na"
-
-#End Region
-
 
 #Region "Operational Items Conversions"
 
@@ -453,18 +404,34 @@ Module Data_Tables_Constants
 #End Region
 
 
-#Region "Entities Table"
+#Region "Axis and Filters"
 
-    Friend Const ENTITIES_TABLE = "entities"
-    Friend Const ENTITIES_NAME_VARIABLE = "entity_name"
-    Friend Const ENTITIES_ID_VARIABLE = "id"
-    Friend Const ENTITIES_PARENT_ID_VARIABLE = "parent_id"
     Friend Const ENTITIES_CURRENCY_VARIABLE = "entity_currency"
     Friend Const ENTITIES_ALLOW_EDITION_VARIABLE = "allow_edition"
-    Friend Const ENTITIES_CREDENTIAL_ID_VARIABLE = "credential_level"
 
-    ' Columns are variables and corresponds to the attributes
-    Friend Const ENTITIES_TOKEN_SIZE As Int32 = 3
+
+    Friend Const ADJUSTMENTS_TABLE As String = "adjustments"
+    Friend Const CLIENTS_TABLE As String = "clients"
+    Friend Const PRODUCTS_TABLE As String = "products"
+
+    Friend Const FILTER_VALUE_ID_VARIABLE As String = "filter_value_id"
+    Friend Const ENTITY_ID_VARIABLE As String = "entity_id"
+    Friend Const CLIENT_ID_VARIABLE As String = "client_id"
+    Friend Const PRODUCT_ID_VARIABLE As String = "product_id"
+    Friend Const ADJUSTMENT_ID_VARIABLE As String = "adjustment_id"
+
+
+    ' filters
+    Friend Const FILTER_AXIS_ID_VARIABLE As String = "axis_id"
+    Friend Const FILTER_IS_PARENT_VARIABLE As String = "is_parent"
+    Friend Const NON_ATTRIBUTED_SUFIX As String = "na"
+
+    ' filters_values
+    Friend Const FILTER_ID_VARIABLE As String = "filter_id"
+    Friend Const PARENT_FILTER_VALUE_ID_VARIABLE As String = "parent_filter_value_id"
+
+    Friend Const AXIS_NAME_FORBIDEN_CHARS = ","
+    Friend Const DEFAULT_ANALYSIS_AXIS_ID As String = "aaa"
 
 
 #End Region
@@ -503,18 +470,8 @@ Module Data_Tables_Constants
     ' Snapshot DataTable
     Friend Const SELECTION_COLUMN_TITLE = "Selection"
 
-    '---------------------------------------------------
-    ' --> Formulas <--
-    '---------------------------------------------------
 
-    Friend Const FORMULA_TYPE_TITLE = "T"
-    Friend Const FORMULA_TYPE_HARD_VALUE = "HV"
-    Friend Const FORMULA_TYPE_SUM_OF_CHILDREN = "SOAC"
-    Friend Const FORMULA_TYPE_FORMULA = "F"
-    Friend Const FORMULA_TYPE_OTHER_LINE = "OL"
-    Friend Const FORMULA_TYPE_BALANCE_SHEET = "BS"
-    Friend Const FORMULA_TYPE_OPENING_BALANCE = "OB"
-
+   
 
 
 End Module

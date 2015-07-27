@@ -227,7 +227,7 @@ Friend Class Scenario
 #Region "Interface"
 
     Friend Sub fillGeneralDGV(ByRef input_data_dic As Dictionary(Of String, Double()), _
-                              ByRef fAccountsIdsList As List(Of String))
+                              ByRef fAccountsIdsList As List(Of UInt32))
 
         data_dic = input_data_dic
         For Each f_account_id As String In fAccountsIdsList

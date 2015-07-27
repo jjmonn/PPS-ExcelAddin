@@ -108,7 +108,7 @@ Friend Class PPSBI_UI
 
         ' Entities TreeView
         entitiesTV.ImageList = EntitiesTVImageList
-        Entity.LoadEntitiesTree(entitiesTV)
+        Globalvariables.Entities.LoadEntitiesTV(entitiesTV)
         TreeViewsUtilities.set_TV_basics_icon_index(entitiesTV)
         entitiesTV.CollapseAll()
         entitiesTV.Dock = DockStyle.Fill
@@ -117,7 +117,7 @@ Friend Class PPSBI_UI
 
         ' Accounts
         accountsTV.ImageList = accountsIL
-        Account.LoadAccountsTree(accountsTV)
+        GlobalVariables.Accounts.LoadAccountsTV(accountsTV)
         accountsTV.CollapseAll()
         accountsTV.Dock = DockStyle.Fill
         AddHandler accountsTV.KeyDown, AddressOf accountsTV_KeyDown
@@ -133,7 +133,8 @@ Friend Class PPSBI_UI
         AddHandler versionsTV.NodeMouseDoubleClick, AddressOf versionsTV_NodeMouseClick
 
         'Categories
-        AnalysisAxisCategory.LoadCategoryCodeTV(categoriesTV, ControllingUI2Controller.ENTITY_CATEGORY_CODE)
+        ' attention below NOT OK !! priority high !! will crash ??
+        GlobalVariables.Filters.LoadFiltersTV(categoriesTV, GlobalEnums.AnalysisAxis.ENTITIES)
 
         Panel1.Controls.Add(entitiesTV)
         Panel2.Controls.Add(accountsTV)
@@ -144,7 +145,7 @@ Friend Class PPSBI_UI
     Private Sub InitializeAdjustmentsCB()
 
         AdjustmentCB.Items.Add("")
-        For Each adjustment_name As String In AdjustmentsMapping.GetAdjustmentsIDsList(ANALYSIS_AXIS_NAME_VAR)
+        For Each adjustment_name As String In GlobalVariables.Adjustments.GetAdjustmentsNames()
             AdjustmentCB.Items.Add(adjustment_name)
         Next
 

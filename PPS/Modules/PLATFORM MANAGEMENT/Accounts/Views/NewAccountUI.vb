@@ -12,7 +12,7 @@
 '       - 
 '
 '
-' Last modified: 15/06/2015
+' Last modified: 17/07/2015
 ' Author: Julien Monnereau
 
 
@@ -104,8 +104,7 @@ Friend Class NewAccountUI
 
         If IsFormValid() = True Then
             Dim TempHT As New Hashtable
-            TempHT.Add(ACCOUNT_PARENT_ID_VARIABLE, parent_node.Name)
-            TempHT.Add(ACCOUNT_NAME_VARIABLE, nameTB.Text)
+            TempHT.Add(NAME_VARIABLE, nameTB.Text)
             TempHT.Add(ACCOUNT_FORMULA_TYPE_VARIABLE, AccountsView.fTypeNameCodeDictionary(formulaCB.Text))
             If TempHT(ACCOUNT_FORMULA_TYPE_VARIABLE) = AGGREGATION_F_TYPE_CODE Then
                 TempHT.Add(ACCOUNT_FORMULA_VARIABLE, AGGREGATION_F_TYPE_CODE)
@@ -114,12 +113,12 @@ Friend Class NewAccountUI
             End If
             TempHT.Add(ACCOUNT_FORMAT_VARIABLE, AccountsView.formatsNameKeyDictionary(formatCB.Text))
             TempHT.Add(ACCOUNT_TYPE_VARIABLE, AccountsView.accountsTypeNameKeyDictionary(typeCB.Text))
-            TempHT.Add(ACCOUNT_IMAGE_VARIABLE, AccountsView.ftype_icon_dic(TempHT(ACCOUNT_FORMULA_TYPE_VARIABLE)))
-            TempHT.Add(ACCOUNT_SELECTED_IMAGE_VARIABLE, AccountsView.ftype_icon_dic(TempHT(ACCOUNT_FORMULA_TYPE_VARIABLE)))
-            If aggregation_RB.Checked = True Then TempHT.Add(ACCOUNT_RECOMPUTATION_OPTION_VARIABLE, AGGREGATION_CODE)
-            If recompute_RB.Checked = True Then TempHT.Add(ACCOUNT_RECOMPUTATION_OPTION_VARIABLE, RECOMPUTATION_CODE)
-            If flux_RB.Checked = True Then TempHT.Add(ACCOUNT_CONVERSION_FLAG_VARIABLE, FLUX_CONVERSION)
-            If bs_item_RB.Checked = True Then TempHT.Add(ACCOUNT_CONVERSION_FLAG_VARIABLE, BS_ITEM_CONVERSION)
+            TempHT.Add(ACCOUNT_IMAGE_VARIABLE, TempHT(ACCOUNT_FORMULA_TYPE_VARIABLE))
+            TempHT.Add(ACCOUNT_SELECTED_IMAGE_VARIABLE, TempHT(ACCOUNT_FORMULA_TYPE_VARIABLE))
+            If aggregation_RB.Checked = True Then TempHT.Add(ACCOUNT_CONSOLIDATION_OPTION_VARIABLE, GlobalEnums.ConsolidationOptions.AGGREGATION)
+            If recompute_RB.Checked = True Then TempHT.Add(ACCOUNT_CONSOLIDATION_OPTION_VARIABLE, GlobalEnums.ConsolidationOptions.RECOMPUTATION)
+            If flux_RB.Checked = True Then TempHT.Add(ACCOUNT_CONVERSION_OPTION_VARIABLE, GlobalEnums.ConversionOptions.AVERAGE_PERIOD_RATE)
+            If bs_item_RB.Checked = True Then TempHT.Add(ACCOUNT_CONVERSION_OPTION_VARIABLE, GlobalEnums.ConversionOptions.END_OF_PERIOD_RATE)
 
             Controller.CreateAccount(TempHT, parent_node)
             Return True

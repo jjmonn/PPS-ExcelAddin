@@ -14,7 +14,7 @@
 '      
 '
 ' Author: Julien Monnereau
-' Last modified: 08/06/2015
+' Last modified: 17/07/2015
 '
 
 
@@ -30,14 +30,12 @@ Friend Class PPSBIController
 #Region "Instance Variables"
 
     ' Objects
-    Private ESB As ESB
-
+  
     ' Variables
     Private AccountsNameKeyDictionary As Hashtable
     Private EntitiesNameKeyDictionary As Hashtable
     Private EntitiesCategoriesNameKeyDictionary As Hashtable
-    Private AccountsFTypesDictionary As Hashtable
-    Private Adjustments_name_id_dic As Dictionary(Of String, String)
+    Private Adjustments_name_id_dic As Hashtable
     Private emptyCellFlag As Boolean
     Friend filterList As New List(Of String)
     Private aggregation_computed_accounts_types As New List(Of String)
@@ -47,18 +45,16 @@ Friend Class PPSBIController
 
 #Region "Initialize"
 
-    Protected Friend Sub New()
+    Friend Sub New()
 
-        ESB = New ESB
-        AccountsFTypesDictionary = AccountsMapping.GetAccountsDictionary(ACCOUNT_ID_VARIABLE, ACCOUNT_FORMULA_TYPE_VARIABLE)
-        AccountsNameKeyDictionary = AccountsMapping.GetAccountsDictionary(ACCOUNT_NAME_VARIABLE, ACCOUNT_ID_VARIABLE)
-        EntitiesNameKeyDictionary = EntitiesMapping.GetEntitiesDictionary(ENTITIES_NAME_VARIABLE, ENTITIES_ID_VARIABLE)
-        EntitiesCategoriesNameKeyDictionary = CategoriesMapping.GetCategoryDictionary(ControllingUI2Controller.ENTITY_CATEGORY_CODE, CATEGORY_NAME_VARIABLE, CATEGORY_ID_VARIABLE)
-        Adjustments_name_id_dic = AdjustmentsMapping.GetAdjustmentsDictionary(ANALYSIS_AXIS_NAME_VAR, ANALYSIS_AXIS_ID_VAR)
+        AccountsNameKeyDictionary = GlobalVariables.Accounts.GetAccountsDictionary(NAME_VARIABLE, ID_VARIABLE)
+        EntitiesNameKeyDictionary = GlobalVariables.Entities.GetEntitiesDictionary(NAME_VARIABLE, ID_VARIABLE)
+        EntitiesCategoriesNameKeyDictionary = GlobalVariables.FiltersValues.GetFiltervaluesDictionary(GlobalEnums.AnalysisAxis.ENTITIES, NAME_VARIABLE, ID_VARIABLE)
+        Adjustments_name_id_dic = GlobalVariables.Adjustments.GetAdjustmentsDictionary(NAME_VARIABLE, ID_VARIABLE)
         emptyCellFlag = False
-        aggregation_computed_accounts_types.Add(FORMULA_ACCOUNT_FORMULA_TYPE)
-        aggregation_computed_accounts_types.Add(FORMULA_TYPE_BALANCE_SHEET)
-        aggregation_computed_accounts_types.Add(FORMULA_TYPE_SUM_OF_CHILDREN)
+        aggregation_computed_accounts_types.Add(GlobalEnums.FormulaTypes.FORMULA)
+        aggregation_computed_accounts_types.Add(GlobalEnums.FormulaTypes.FIRST_PERIOD_INPUT)
+        aggregation_computed_accounts_types.Add(GlobalEnums.FormulaTypes.AGGREGATION_OF_SUB_ACCOUNTS)
 
     End Sub
 
@@ -71,12 +67,12 @@ Friend Class PPSBIController
     ' Stubs in this function - clients/ products adjustments filters should come as param or computed here ?!!!
     ' Period input: date as integer 
     Friend Function getDataCallBack(ByRef entity_name As Object, _
-                                            ByRef account As Object, _
-                                            ByRef period As Object, _
-                                            ByRef currency As Object, _
-                                            ByRef version As Object, _
-                                            Optional ByRef adjustment_filter As Object = Nothing, _
-                                            Optional ByRef filtersArray As Object = Nothing) As Object
+                                    ByRef account As Object, _
+                                    ByRef period As Object, _
+                                    ByRef currency As Object, _
+                                    ByRef version As Object, _
+                                    Optional ByRef adjustment_filter As Object = Nothing, _
+                                    Optional ByRef filtersArray As Object = Nothing) As Object
 
         Dim entityString, entity_id, account_id, accountString, periodString, currencyString, version_id, adjustment_string, adjustment_id, error_message As String
         emptyCellFlag = False
@@ -107,127 +103,28 @@ Friend Class PPSBIController
         Dim products_id_filters As New List(Of String)
         Dim adjustments_id_filters As New List(Of String)
 
-        Dim entity_node As TreeNode = getEntityNode(entity_id)
-        If entity_node Is Nothing Then Return "Entity not in selection"
+        '   Dim entity_node As TreeNode = getEntityNode(entity_id)
+        '  If entity_node Is Nothing Then Return "Entity not in selection"
 
-        'If aggregation_computed_accounts_types.Contains(AccountsFTypesDictionary(account_id)) _
-        'AndAlso entity_node.Nodes.Count > 0 Then
-        Return ComputeViaAggregationComputer(entity_node, _
-                                             account_id, _
-                                             version_id, _
-                                             currencyString, _
-                                             period, _
-                                             clients_id_filters, _
-                                             products_id_filters, _
-                                             adjustments_id_filters)
-        '   Else
-        'Return ComputeViaSingleEntityComputer(entity_node, _
+        'If CheckDate(period, period_int, GlobalVariables.GenericGlobalSingleEntityComputer.period_list) = False Then
+        '    Return "Invalid Period or Period format"
+        'End If
+
+        ' launch computation => computer.vb
+
+        'ComputeViaAggregationComputer(entity_node, _
         '                                      account_id, _
         '                                      version_id, _
         '                                      currencyString, _
         '                                      period, _
         '                                      clients_id_filters, _
-        '                                     products_id_filters, _
-        '                                     adjustments_id_filters)
-        '  End If
-
-
-    End Function
-
-    Private Function ComputeViaSingleEntityComputer(ByRef entity_node As TreeNode, _
-                                                    ByRef account_id As String, _
-                                                    ByRef version_id As String, _
-                                                    ByRef currency As String, _
-                                                    ByRef period As Object, _
-                                                    Optional ByRef clients_id As List(Of String) = Nothing, _
-                                                    Optional ByRef products_id As List(Of String) = Nothing, _
-                                                    Optional ByRef adjustments_id As List(Of String) = Nothing) As Object
-
-        ' Find the entity node here ? 
-        
-        Dim period_int As Int32
-        If GlobalVariables.GenericGlobalSingleEntityComputer.CheckCache(entity_node, _
-                                                                        clients_id, _
-                                                                        products_id, _
-                                                                        adjustments_id) = False _
-        Or GlobalVariables.GenericGlobalSingleEntityComputer.current_version_id <> version_id _
-        Or GlobalVariables.GenericGlobalSingleEntityComputer.current_currency <> currency Then
-
-            GlobalVariables.GenericGlobalSingleEntityComputer.ComputeAggregatedEntity(entity_node, _
-                                                                                      version_id, _
-                                                                                      currency, _
-                                                                                      clients_id, _
-                                                                                      products_id, _
-                                                                                      adjustments_id)
-        End If
-
-        If CheckDate(period, period_int, GlobalVariables.GenericGlobalSingleEntityComputer.period_list) = False Then
-            Return "Invalid Period or Period format"
-        End If
-
-        Try
-            Return GlobalVariables.GenericGlobalSingleEntityComputer.GetDataFromDLL3Computer(account_id, period_int)
-        Catch ex As Exception
-            Return "Invalid parameters"
-        End Try
+        '                                      products_id_filters, _
+        '                                      adjustments_id_filters)
+       
 
     End Function
 
-    Private Function ComputeViaAggregationComputer(ByRef entity_node As TreeNode, _
-                                                   ByRef account_id As String, _
-                                                   ByRef version_id As String, _
-                                                   ByRef currency As String, _
-                                                   ByRef period As Object, _
-                                                   Optional ByRef clients_id As List(Of String) = Nothing, _
-                                                   Optional ByRef products_id As List(Of String) = Nothing, _
-                                                   Optional ByRef adjustments_id As List(Of String) = Nothing) As Object
-
-        Dim period_int As Int32
-
-        If GlobalVariables.GenericGlobalAggregationComputer.IsEntityAlreadyComputed(entity_node.Name) = False _
-        Or GlobalVariables.GenericGlobalAggregationComputer.CheckCache(entity_node, _
-                                                                        clients_id, _
-                                                                        products_id, _
-                                                                        adjustments_id) = False _
-        Or GlobalVariables.GenericGlobalAggregationComputer.current_version_id <> version_id _
-        Or GlobalVariables.GenericGlobalAggregationComputer.current_currency <> currency Then
-
-            Dim Versions As New Version
-            Dim nb_periods, start_period As Int32
-            Dim periods_list As List(Of Int32)
-            Dim time_configuration As String
-            Dim rates_version_id As String = Versions.ReadVersion(version_id, VERSIONS_RATES_VERSION_ID_VAR)
-
-            GlobalVariables.GenericGlobalAggregationComputer.init_computer_complete_mode(entity_node)
-            periods_list = Versions.GetPeriodList(version_id)
-            time_configuration = Versions.ReadVersion(version_id, VERSIONS_TIME_CONFIG_VARIABLE)
-            nb_periods = Versions.ReadVersion(version_id, VERSIONS_NB_PERIODS_VAR)
-            start_period = Versions.ReadVersion(version_id, VERSIONS_START_PERIOD_VAR)
-            Versions.Close()
-
-            Dim pbar As New ProgressBarControl
-            GlobalVariables.GenericGlobalAggregationComputer.compute_selection_complete(version_id, _
-                                                                                        time_configuration, _
-                                                                                        rates_version_id, _
-                                                                                        periods_list, _
-                                                                                        currency, _
-                                                                                        start_period, _
-                                                                                        nb_periods, _
-                                                                                        pbar, _
-                                                                                        clients_id, _
-                                                                                        products_id, _
-                                                                                        adjustments_id)
-            GlobalVariables.GenericGlobalAggregationComputer.LoadOutputMatrix()
-        End If
-
-        If CheckDate(period, period_int, GlobalVariables.GenericGlobalAggregationComputer.periods_list) = False Then
-            Return "Invalid Period or Period format"
-        End If
-        Return GlobalVariables.GenericGlobalAggregationComputer.GetValueFromComputer(entity_node.Name, _
-                                                                                     account_id, _
-                                                                                     period_int)
-    End Function
-
+  
 #End Region
 
 
@@ -314,25 +211,9 @@ Friend Class PPSBIController
                     periodInteger = periodstr
                     Return True
                 Else
-                    Select Case GlobalVariables.GenericGlobalSingleEntityComputer.time_config
-                        Case MONTHLY_TIME_CONFIGURATION
-                            For Each period As Integer In periodslist
-                                If Month(DateTime.FromOADate(period)) = periodstr Then
-                                    periodInteger = period
-                                    periodstr = DateTime.FromOADate(period)
-                                    Return True
-                                End If
-                            Next
-                        Case YEARLY_TIME_CONFIGURATION
-                            If IsNumeric(periodstr) Then
-                                For Each period As Integer In periodslist
-                                    If Year(DateTime.FromOADate(period)) = periodstr Then
-                                        periodInteger = period
-                                        Return True
-                                    End If
-                                Next
-                            End If
-                    End Select
+
+                    ' period check to be reimplemented !!
+
                 End If
             End If
             End If
@@ -345,18 +226,18 @@ Friend Class PPSBIController
 
 #Region " Selections Builders"
 
-    Private Function getEntityNode(ByRef entity_id As String) As TreeNode
+    'Private Function getEntityNode(ByRef entity_id As String) As TreeNode
 
-        Dim entitiesTV As New TreeView      ' Store in computers ?
-        ESB.BuildCategoriesFilterFromFilterList(filterList)
-        Entity.LoadEntitiesTree(entitiesTV, ESB.StrSqlQueryForEntitiesUploadFunctions)
-        Dim lookup_result As TreeNode() = entitiesTV.Nodes.Find(entity_id, True)
+    '    Dim entitiesTV As New TreeView      ' Store in computers ?
+    '    ESB.BuildCategoriesFilterFromFilterList(filterList)
+    '    Globalvariables.Entities.LoadEntitiesTV(entitiesTV, ESB.StrSqlQueryForEntitiesUploadFunctions)
+    '    Dim lookup_result As TreeNode() = entitiesTV.Nodes.Find(entity_id, True)
 
-        ' !!! Result even if entity_id not in selection ! -> we still have the children !
+    '    ' !!! Result even if entity_id not in selection ! -> we still have the children !
 
-        If lookup_result.Length > 0 Then Return lookup_result(0) Else Return Nothing
+    '    If lookup_result.Length > 0 Then Return lookup_result(0) Else Return Nothing
 
-    End Function
+    'End Function
 
 
 

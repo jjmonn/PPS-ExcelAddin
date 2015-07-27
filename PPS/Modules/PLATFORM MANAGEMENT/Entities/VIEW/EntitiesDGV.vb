@@ -59,7 +59,7 @@ Friend Class EntitiesDGV
 
     Protected Friend Sub New(ByRef entitiesTV As TreeView, _
                              ByRef input_categoriesTV As TreeView, _
-                             ByRef entities_dict As Dictionary(Of String, Hashtable), _
+                             ByRef entities_dict As Hashtable, _
                              ByRef input_categoriesKeyNameDic As Hashtable)
 
         currenciesList = CurrenciesMapping.getCurrenciesList(CURRENCIES_KEY_VARIABLE)
@@ -221,7 +221,7 @@ Friend Class EntitiesDGV
 
 #End Region
 
-    Private Sub fillDGV(ByRef entities_dict As Dictionary(Of String, Hashtable))
+    Private Sub fillDGV(ByRef entities_dict As Hashtable)
 
         isFillingDGV = True
         For Each entity_id In entities_dict.Keys
@@ -339,7 +339,7 @@ Friend Class EntitiesDGV
     ' Drop the current TGV in a new worksheet
     Friend Sub DropInExcel()
 
-        Dim cell As Excel.Range = WorksheetWrittingFunctions.CreateReceptionWS(ENTITIES_TABLE, _
+        Dim cell As Excel.Range = WorksheetWrittingFunctions.CreateReceptionWS("Entities", _
                                                                                 {"Entities Hierarchy"}, _
                                                                                 {""})
         Dim nbRows As Int32

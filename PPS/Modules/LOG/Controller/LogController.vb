@@ -5,7 +5,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 07/01/2015
+' Last modified: 24/07/2015
 
 
 Imports System.Windows.Forms
@@ -28,12 +28,11 @@ Friend Class LogController
     ' Variables
     Private current_version_id As String
     Private period_list As List(Of Int32)
-    Protected Friend current_entity_id As String
-    Private accounts_id_ftype_dic As Hashtable
+    Friend current_entity_id As String
     Private entities_id_currency_dic As Hashtable
-    Private client_id_name_dict As Hashtable = ClientsMapping.GetClientsDictionary(ANALYSIS_AXIS_ID_VAR, ANALYSIS_AXIS_NAME_VAR)
-    Private product_id_name_dict As Hashtable = ProductsMapping.GetproductsDictionary(ANALYSIS_AXIS_ID_VAR, ANALYSIS_AXIS_NAME_VAR)
-    Private adjustment_id_name_dict As Dictionary(Of String, String) = AdjustmentsMapping.GetAdjustmentsDictionary(ANALYSIS_AXIS_ID_VAR, ANALYSIS_AXIS_NAME_VAR)
+    Private client_id_name_dict As Hashtable = GlobalVariables.Clients.GetClientsDictionary(ID_VARIABLE, NAME_VARIABLE)
+    Private product_id_name_dict As Hashtable = GlobalVariables.Products.GetProductsDictionary(ID_VARIABLE, NAME_VARIABLE)
+    Private adjustment_id_name_dict As Hashtable = GlobalVariables.Adjustments.GetAdjustmentsDictionary(ID_VARIABLE, NAME_VARIABLE)
 
 #End Region
 
@@ -42,12 +41,10 @@ Friend Class LogController
 
     Protected Friend Sub New()
 
-        Entity.LoadEntitiesTree(EntitiesTV)
+        Globalvariables.Entities.LoadEntitiesTV(EntitiesTV)
         View = New LogUI(Me, EntitiesTV)
         Model = New LogModel()
-        accounts_id_ftype_dic = AccountsMapping.GetAccountsDictionary(ACCOUNT_ID_VARIABLE, ACCOUNT_FORMULA_TYPE_VARIABLE)
-
-        entities_id_currency_dic = EntitiesMapping.GetEntitiesDictionary(ENTITIES_ID_VARIABLE, ENTITIES_CURRENCY_VARIABLE)
+        entities_id_currency_dic = GlobalVariables.Entities.GetEntitiesDictionary(ID_VARIABLE, ENTITIES_CURRENCY_VARIABLE)
         ChangeVersionID()
         View.Show()
 
@@ -99,13 +96,13 @@ Friend Class LogController
 #Region "Utilities"
 
     Protected Friend Function IsAccountInput(ByRef account_id As String, _
-                                           ByRef period_index As Int32) As Boolean
+                                             ByRef period_index As Int32) As Boolean
 
-        Dim ftype As String = accounts_id_ftype_dic(account_id)
-        If ftype = FORMULA_TYPE_HARD_VALUE Then
+        Dim ftype As String = GlobalVariables.Accounts.accounts_hash(account_id)(ACCOUNT_FORMULA_TYPE_VARIABLE)
+        If ftype = GlobalEnums.FormulaTypes.HARD_VALUE_INPUT Then
             Return True
         Else
-            If ftype = BALANCE_SHEET_ACCOUNT_FORMULA_TYPE Or ftype = WORKING_CAPITAL_ACCOUNT_FORMULA_TYPE Then
+            If ftype = GlobalEnums.FormulaTypes.FIRST_PERIOD_INPUT Then
                 If period_index = 0 Then Return True
             End If
         End If
@@ -132,7 +129,9 @@ Friend Class LogController
 
         For Each column As HierarchyItem In DGV.ColumnsHierarchy.Items
             Dim account_id = View.rows_item_account_id_dic(row)
-            If accounts_id_ftype_dic(account_id) <> FORMULA_TYPE_TITLE Then DGV.CellsArea.SetCellValue(row, column, Model.GetData(account_id, period_list(column.ItemIndex)))
+            If GlobalVariables.Accounts.accounts_hash(account_id)(ACCOUNT_FORMULA_TYPE_VARIABLE) _
+               <> GlobalEnums.FormulaTypes.TITLE Then _
+                 DGV.CellsArea.SetCellValue(row, column, Model.GetData(account_id, period_list(column.ItemIndex)))
         Next
         For Each sub_row As HierarchyItem In row.Items
             FillInViewRow(sub_row, DGV)

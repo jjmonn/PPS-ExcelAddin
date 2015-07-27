@@ -1,243 +1,271 @@
-﻿' Control.vb
+﻿Imports System.Collections
+Imports System.Collections.Generic
+
+
+' Product2.vb
 '
-' Controls table CRUD model
-'
-' To do: 
+' CRUD for products table - relation with c++ server
 '
 '
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 27/04/2015
+' Created: 24/07/2015
+' Last modified: 24/07/2015
 
-
-Imports ADODB
-Imports System.Windows.Forms
-Imports System.Collections
-Imports System.Collections.Generic
 
 
 Friend Class Product
 
+#Region "Instance variables"
 
-#Region "Instance Variables"
+    ' Variables
+    Friend state_flag As Boolean
+    Friend server_response_flag As Boolean
+    Friend products_hash As New Hashtable
+    Private request_id As Dictionary(Of UInt32, Boolean)
 
-    ' Objects
-    Private SRV As ModelServer
-    Friend RST As Recordset
+    ' Events
+    Public Event ProductCreationEvent(ByRef attributes As Hashtable)
+    Public Shared Event ProductRead(ByRef attributes As Hashtable)
+    Public Event ProductUpdateEvent(ByRef ht As Hashtable)
+    Public Event ProductDeleteEvent(ByRef id As UInt32)
 
-    ' Constants
-    Friend object_is_alive As Boolean
 
 #End Region
 
 
-#Region "Initialize"
+#Region "Init"
 
-    Protected Friend Sub New()
+    Friend Sub New()
 
-        SRV = New ModelServer
-        object_is_alive = SRV.OpenRst(GlobalVariables.database & "." & ProductS_TABLE, ModelServer.DYNAMIC_CURSOR)
-        RST = SRV.rst
-
-    End Sub
-
-#End Region
-
-
-#Region "CRUD Interface"
-
-    Protected Friend Sub CreateProduct(ByRef hash As Hashtable)
-
-        Dim fieldsArray(hash.Count - 1) As Object
-        Dim valuesArray(hash.Count - 1) As Object
-        hash.Keys.CopyTo(fieldsArray, 0)
-        hash.Values.CopyTo(valuesArray, 0)
-        RST.AddNew(fieldsArray, valuesArray)
-
-    End Sub
-
-    Protected Friend Function ReadProduct(ByRef Product_id As String, ByRef field As String) As Object
-
-        RST.Filter = ANALYSIS_AXIS_ID_VAR + "='" + Product_id + "'"
-        If RST.EOF Then Return Nothing
-        Return RST.Fields(field).Value
-
-    End Function
-
-    Protected Friend Function GetRecord(ByRef product_id As String, ByRef categoriesTV As TreeView) As Hashtable
-
-        RST.Filter = ANALYSIS_AXIS_ID_VAR + "='" + product_id + "'"
-        If RST.EOF Then Return Nothing
-        Dim hash As New Hashtable
-        hash.Add(ANALYSIS_AXIS_NAME_VAR, RST.Fields(ANALYSIS_AXIS_NAME_VAR).Value)
-        For Each category_node In categoriesTV.Nodes
-            hash.Add(category_node.name, RST.Fields(category_node.name).Value)
-        Next
-        Return hash
-
-    End Function
-
-    Protected Friend Sub UpdateProduct(ByRef Product_id As String, ByRef hash As Hashtable)
-
-        RST.Filter = ANALYSIS_AXIS_ID_VAR + "='" + Product_id + "'"
-        If RST.EOF = False AndAlso RST.BOF = False Then
-            For Each Attribute In hash.Keys
-                If RST.Fields(Attribute).Value <> hash(Attribute) Then
-                    RST.Fields(Attribute).Value = hash(Attribute)
-                    RST.Update()
-                End If
-            Next
-        End If
-
-    End Sub
-
-    Protected Friend Sub UpdateProduct(ByRef Product_id As String, _
-                                          ByRef field As String, _
-                                          ByVal value As Object)
-
-        RST.Filter = ANALYSIS_AXIS_ID_VAR + "='" + Product_id + "'"
-        If RST.EOF = False AndAlso RST.BOF = False Then
-            If RST.Fields(field).Value <> value Then
-                RST.Fields(field).Value = value
-                RST.Update()
+        LoadProductsTable()
+        Dim time_stamp = Timer
+        Do
+            If Timer - time_stamp > GlobalVariables.timeOut Then
+                state_flag = False
+                Exit Do
             End If
-        End If
+        Loop While server_response_flag = True
+        state_flag = True
 
     End Sub
 
-    Protected Friend Sub deleteProduct(ByRef product_id As String)
+    Friend Sub LoadProductsTable()
 
-        ' Delete the data associated with the product in Data Tables
-        Dim dataTablesList As List(Of String) = VersionsMapping.GetVersionsList(VERSIONS_CODE_VARIABLE)
-        For Each Version As String In dataTablesList
-            SRV.sqlQuery("DELETE FROM " & GlobalVariables.database & "." & Version & _
-                         " WHERE " & DATA_PRODUCT_ID_VARIABLE & "='" & product_id & "'")
+        NetworkManager.GetInstance().SetCallback(GlobalEnums.ServerMessage.SMSG_LIST_PRODUCT_ANSWER, AddressOf SMSG_LIST_PRODUCT_ANSWER)
+        Dim packet As New ByteBuffer(CType(GlobalEnums.ClientMessage.CMSG_LIST_PRODUCT, UShort))
+        packet.Release()
+        NetworkManager.GetInstance().Send(packet)
+
+    End Sub
+
+    Private Sub SMSG_LIST_PRODUCT_ANSWER(packet As ByteBuffer)
+
+        For i As Int32 = 0 To packet.ReadInt32()
+            Dim tmp_ht As New Hashtable
+            GetProductHTFromPacket(packet, tmp_ht)
+            products_hash(tmp_ht(ID_VARIABLE)) = tmp_ht
+        Next
+        NetworkManager.GetInstance().RemoveCallback(GlobalEnums.ServerMessage.SMSG_LIST_PRODUCT_ANSWER, AddressOf SMSG_LIST_PRODUCT_ANSWER)
+        server_response_flag = True
+
+    End Sub
+
+#End Region
+
+
+#Region "CRUD"
+
+    Friend Sub CMSG_CREATE_PRODUCT(ByRef attributes As Hashtable)
+
+        NetworkManager.GetInstance().SetCallback(GlobalEnums.ServerMessage.SMSG_CREATE_PRODUCT_ANSWER, AddressOf SMSG_CREATE_PRODUCT_ANSWER)
+        Dim packet As New ByteBuffer(CType(GlobalEnums.ClientMessage.CMSG_CREATE_PRODUCT, UShort))
+        WriteProductPacket(packet, attributes)
+        packet.Release()
+        NetworkManager.GetInstance().Send(packet)
+
+    End Sub
+
+    Private Sub SMSG_CREATE_PRODUCT_ANSWER(packet As ByteBuffer)
+
+        MsgBox(packet.ReadString())
+        Dim tmp_ht As New Hashtable
+        GetProductHTFromPacket(packet, tmp_ht)
+        products_hash(tmp_ht(ID_VARIABLE)) = tmp_ht
+        NetworkManager.GetInstance().RemoveCallback(GlobalEnums.ServerMessage.SMSG_CREATE_PRODUCT_ANSWER, AddressOf SMSG_CREATE_PRODUCT_ANSWER)
+        RaiseEvent ProductCreationEvent(tmp_ht)
+
+    End Sub
+
+    Friend Shared Sub CMSG_READ_PRODUCT(ByRef id As UInt32)
+
+        NetworkManager.GetInstance().SetCallback(GlobalEnums.ServerMessage.SMSG_READ_PRODUCT_ANSWER, AddressOf SMSG_READ_PRODUCT_ANSWER)
+        Dim packet As New ByteBuffer(CType(GlobalEnums.ClientMessage.CMSG_CREATE_PRODUCT, UShort))
+        packet.Release()
+        NetworkManager.GetInstance().Send(packet)
+
+    End Sub
+
+    Friend Shared Sub SMSG_READ_PRODUCT_ANSWER(packet As ByteBuffer)
+
+        Dim ht As New Hashtable
+        GetProductHTFromPacket(packet, ht)
+        NetworkManager.GetInstance().RemoveCallback(GlobalEnums.ServerMessage.SMSG_CREATE_PRODUCT_ANSWER, AddressOf SMSG_READ_PRODUCT_ANSWER)
+        RaiseEvent ProductRead(ht)
+
+    End Sub
+
+    Friend Sub UpdateBatch(ByRef updates As List(Of Object()))
+
+        ' to be implemented !!!! priority normal
+
+        request_id.Clear()
+        For Each update As Object() In updates
+
+
         Next
 
-        ' Delete the item fomr Products Table
-        RST.Filter = ANALYSIS_AXIS_ID_VAR + "='" + product_id + "'"
-        If RST.EOF = False Then
-            RST.Delete()
-            RST.Update()
-        End If
 
     End Sub
 
-    Protected Overrides Sub finalize()
+    Friend Sub CMSG_UPDATE_PRODUCT(ByRef id As UInt32, _
+                                  ByRef updated_var As String, _
+                                  ByRef new_value As String)
 
-        On Error Resume Next
-        RST.Close()
-        MyBase.Finalize()
+        Dim tmp_ht As Hashtable = products_hash(id).clone ' check clone !!!!
+        tmp_ht(updated_var) = new_value
+
+        NetworkManager.GetInstance().SetCallback(GlobalEnums.ServerMessage.SMSG_UPDATE_PRODUCT_ANSWER, AddressOf SMSG_UPDATE_PRODUCT_ANSWER)
+        Dim packet As New ByteBuffer(CType(GlobalEnums.ClientMessage.CMSG_UPDATE_PRODUCT, UShort))
+        WriteProductPacket(packet, tmp_ht)
+        packet.Release()
+        NetworkManager.GetInstance().Send(packet)
 
     End Sub
+
+    Friend Sub CMSG_UPDATE_PRODUCT(ByRef attributes As Hashtable)
+
+        NetworkManager.GetInstance().SetCallback(GlobalEnums.ServerMessage.SMSG_UPDATE_PRODUCT_ANSWER, AddressOf SMSG_UPDATE_PRODUCT_ANSWER)
+        Dim packet As New ByteBuffer(CType(GlobalEnums.ClientMessage.CMSG_UPDATE_PRODUCT, UShort))
+        WriteProductPacket(packet, attributes)
+        packet.Release()
+        NetworkManager.GetInstance().Send(packet)
+
+    End Sub
+
+    Private Sub SMSG_UPDATE_PRODUCT_ANSWER(packet As ByteBuffer)
+
+        Dim ht As New Hashtable
+        GetProductHTFromPacket(packet, ht)
+        products_hash(ht(ID_VARIABLE)) = ht
+        NetworkManager.GetInstance().RemoveCallback(GlobalEnums.ServerMessage.SMSG_UPDATE_PRODUCT_ANSWER, AddressOf SMSG_UPDATE_PRODUCT_ANSWER)
+        RaiseEvent ProductUpdateEvent(ht)
+
+    End Sub
+
+    Friend Sub CMSG_DELETE_PRODUCT(ByRef id As UInt32)
+
+        NetworkManager.GetInstance().SetCallback(GlobalEnums.ServerMessage.SMSG_DELETE_PRODUCT_ANSWER, AddressOf SMSG_DELETE_PRODUCT_ANSWER)
+        Dim packet As New ByteBuffer(CType(GlobalEnums.ClientMessage.CMSG_DELETE_PRODUCT, UShort))
+        packet.WriteUint32(id)
+        packet.Release()
+        NetworkManager.GetInstance().Send(packet)
+
+    End Sub
+
+    Private Sub SMSG_DELETE_PRODUCT_ANSWER()
+
+        Dim id As UInt32
+        ' get id from request_id ?
+        NetworkManager.GetInstance().RemoveCallback(GlobalEnums.ServerMessage.SMSG_DELETE_PRODUCT_ANSWER, AddressOf SMSG_DELETE_PRODUCT_ANSWER)
+        RaiseEvent ProductDeleteEvent(id)
+
+    End Sub
+
+#End Region
+
+
+#Region "Mappings"
+
+    Friend Function GetProductsNameList() As List(Of String)
+
+        Dim tmp_list As New List(Of String)
+        For Each id In products_hash.Keys
+            tmp_list.Add(products_hash(id)(NAME_VARIABLE))
+        Next
+        Return tmp_list
+
+    End Function
+
+    Friend Function GetProductsDictionary(ByRef Key As String, ByRef Value As String) As Hashtable
+
+        Dim tmpHT As New Hashtable
+        For Each id In products_hash.Keys
+            tmpHT(products_hash(id)(Key)) = products_hash(id)(Value)
+        Next
+        Return tmpHT
+
+    End Function
 
 #End Region
 
 
 #Region "Utilities"
 
-    Protected Friend Shared Sub LoadProductsTree(ByRef TV As TreeView)
+    Friend Shared Sub GetProductHTFromPacket(ByRef packet As ByteBuffer, ByRef product_ht As Hashtable)
 
-        Dim srv As New ModelServer
-        Dim q_result As Boolean
-        q_result = srv.OpenRst(GlobalVariables.database & "." & ProductS_TABLE, ModelServer.FWD_CURSOR)
-        If q_result = True Then
-            TV.Nodes.Clear()
-            srv.rst.MoveFirst()
-            Do While srv.rst.EOF = False
-                Dim node As TreeNode = TV.Nodes.Add(Trim(srv.rst.Fields(ANALYSIS_AXIS_ID_VAR).Value), _
-                                                    Trim(srv.rst.Fields(ANALYSIS_AXIS_NAME_VAR).Value), 0, 0)
-                node.Checked = True
-                srv.rst.MoveNext()
-            Loop
-        End If
-        srv.rst.Close()
+        product_ht(ID_VARIABLE) = packet.ReadInt32()
+        product_ht(NAME_VARIABLE) = packet.ReadString()
 
     End Sub
 
-    Protected Friend Shared Sub LoadProductsTree(ByRef TV As TreeView, ByRef filter_list As List(Of String))
+    Private Sub WriteProductPacket(ByRef packet As ByteBuffer, ByRef attributes As Hashtable)
 
-        Dim srv As New ModelServer
-        Dim q_result As Boolean
-        q_result = srv.OpenRst(GlobalVariables.database & "." & PRODUCTS_TABLE, ModelServer.FWD_CURSOR)
-        If q_result = True Then
-            TV.Nodes.Clear()
-            srv.rst.MoveFirst()
-            Do While srv.rst.EOF = False
-                If filter_list.Contains(srv.rst.Fields(ANALYSIS_AXIS_ID_VAR).Value) Then
-                    Dim node As TreeNode = TV.Nodes.Add(Trim(srv.rst.Fields(ANALYSIS_AXIS_ID_VAR).Value), _
-                                                        Trim(srv.rst.Fields(ANALYSIS_AXIS_NAME_VAR).Value), 0, 0)
-                    node.Checked = True
-                End If
-                srv.rst.MoveNext()
-            Loop
-        End If
-        srv.rst.Close()
+        If attributes.ContainsKey(ID_VARIABLE) Then packet.WriteInt32(attributes(ID_VARIABLE))
+        packet.WriteString(attributes(NAME_VARIABLE))
 
     End Sub
 
-    Protected Friend Function getNewId() As String
+    Friend Sub LoadProductsTree(ByRef TV As Windows.Forms.TreeView)
 
-        Dim id As String = TreeViewsUtilities.IssueNewToken(ANALYSIS_AXIS_TOKEN_SIZE)
-        Do While Not ReadProduct(id, ANALYSIS_AXIS_ID_VAR) Is Nothing
-            id = TreeViewsUtilities.IssueNewToken(ANALYSIS_AXIS_TOKEN_SIZE)
-        Loop
-        Return id
+        TV.Nodes.Clear()
+        For Each id As UInt32 In products_hash.Keys
+            Dim node As Windows.Forms.TreeNode = TV.Nodes.Add(CStr(id), _
+                                                              products_hash(id)(NAME_VARIABLE), _
+                                                              0, 0)
+            node.Checked = True
+        Next
 
-    End Function
+    End Sub
 
-    Protected Friend Function isNameValid(ByRef name As String) As Boolean
+    Friend Sub LoadProductsTree(ByRef TV As Windows.Forms.TreeView, _
+                                ByRef filter_list As List(Of UInt32))
 
+        TV.Nodes.Clear()
+        For Each id As UInt32 In products_hash.Keys
+            Dim node As Windows.Forms.TreeNode = TV.Nodes.Add(CStr(id), _
+                                                              products_hash(id)(NAME_VARIABLE), _
+                                                              0, 0)
+            node.Checked = True
+        Next
+
+    End Sub
+
+    Friend Function IsNameValid(ByRef name As String) As Boolean
+
+        If name.Length > NAMES_MAX_LENGTH Then Return False
+        For Each char_ As Char In AXIS_NAME_FORBIDEN_CHARS
+            If name.Contains(char_) Then Return False
+        Next
         If name = "" Then Return False
-        SRV.rst.Filter = ANALYSIS_AXIS_NAME_VAR + "='" + name + "'"
-        If SRV.rst.EOF = False Then Return False
+        If GetProductsNameList(NAME_VARIABLE).Contains(name) Then Return False
         Return True
 
     End Function
 
-    Protected Friend Sub closeRST()
-
-        On Error Resume Next
-        RST.Close()
-
-    End Sub
-
 #End Region
 
-
-#Region "Categories Utilities"
-
-    Protected Friend Shared Function CreateNewProductsVariable(ByRef variable_id As String) As Boolean
-
-        Dim tmp_srv As New ModelServer
-        Dim column_values_length As Int32 = CATEGORIES_TOKEN_SIZE + Len(NON_ATTRIBUTED_SUFIX)
-        Return tmp_srv.sqlQuery("ALTER TABLE " + GlobalVariables.database + "." + PRODUCTS_TABLE + _
-                                " ADD COLUMN " & variable_id & " VARCHAR(" & column_values_length & ") DEFAULT '" & variable_id & NON_ATTRIBUTED_SUFIX & "'")
-
-    End Function
-
-    Protected Friend Shared Function DeleteProductsVariable(ByRef variable_id) As Boolean
-
-        Dim tmp_srv As New ModelServer
-        Return tmp_srv.sqlQuery("ALTER TABLE " + GlobalVariables.database + "." + PRODUCTS_TABLE + _
-                                " DROP COLUMN " & variable_id)
-
-    End Function
-
-    Protected Friend Shared Function ReplaceProductsCategoryValue(ByRef category_id As String, _
-                                                                  ByRef origin_value As String) As Boolean
-
-        Dim tmp_srv As New ModelServer
-        Dim new_value = category_id & NON_ATTRIBUTED_SUFIX
-        Return tmp_srv.sqlQuery("UPDATE " & GlobalVariables.database + "." + PRODUCTS_TABLE & _
-                                " SET " & category_id & "='" & new_value & "'" & _
-                                " WHERE " & category_id & "='" & origin_value & "'")
-
-    End Function
-
-
-#End Region
 
 
 End Class

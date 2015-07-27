@@ -101,12 +101,6 @@ Public Class ExcelAddinModule1
     ' Initialize the DLL computer instance
     Private Sub InitializeComputer()
 
-        GlobalVariables.GlobalDBDownloader = New DataBaseDataDownloader
-        GlobalVariables.GlobalDll3Interface = New DLL3_Interface
-        GlobalVariables.GenericGlobalSingleEntityComputer = New GenericSingleEntityDLL3Computer(GlobalVariables.GlobalDBDownloader, _
-                                                                                                GlobalVariables.GlobalDll3Interface)
-        GlobalVariables.GenericGlobalAggregationComputer = New GenericAggregationDLL3Computing(GlobalVariables.GlobalDBDownloader, _
-                                                                                               GlobalVariables.GlobalDll3Interface)
         GlobalVariables.GlobalPPSBIController = New PPSBIController
 
     End Sub

@@ -38,7 +38,7 @@ Friend Class WorksheetWrittingFunctions
 
         Dim accountsTV As New TreeView
         Dim WS As Excel.Worksheet = destinationcell.Worksheet
-        Account.LoadAccountsTree(accountsTV)
+        GlobalVariables.Accounts.LoadAccountsTV(accountsTV)
         WriteAccountsFromTreeView(accountsTV, destinationcell, periodList)
         accountsTV.Dispose()
 
@@ -109,8 +109,8 @@ Friend Class WorksheetWrittingFunctions
 #Region "Worksheets Add/ Delete"
 
     Friend Shared Function CreateReceptionWS(ByRef wsName As String, _
-                                                       ByRef header_names_array As String(), _
-                                                       ByRef header_values_array As String()) As Excel.Range
+                                            ByRef header_names_array As String(), _
+                                            ByRef header_values_array As String()) As Excel.Range
 
         Dim WS As Excel.Worksheet = CType(GlobalVariables.APPS.Worksheets.Add(), Excel.Worksheet)
         If Len(wsName) < EXCEL_SHEET_NAME_MAX_LENGHT _

@@ -5,7 +5,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 05/05/2015
+' Last modified: 17/07/2015
 
 
 Imports VIBlend.WinForms.DataGridView
@@ -84,7 +84,7 @@ Friend Class ControlsControl
         period_options_name_id_dic = input_period_options_name_id_dic
         ChartsController = input_chartsController
 
-        accounts_id_name_dic = AccountsMapping.GetAccountsDictionary(ACCOUNT_ID_VARIABLE, ACCOUNT_NAME_VARIABLE)
+        accounts_id_name_dic = GlobalVariables.Accounts.GetAccountsDictionary(ID_VARIABLE, NAME_VARIABLE)
         operators_id_symbol_dic = OperatorsMapping.GetOperatorsDictionary(OPERATOR_ID_VARIABLE, OPERATOR_SYMBOL_VARIABLE)
         period_options_id_name_dic = ControlOptionsMapping.GetControlOptionsDictionary(CONTROL_OPTION_ID_VARIABLE, CONTROL_OPTION_NAME_VARIABLE)
 
@@ -98,7 +98,7 @@ Friend Class ControlsControl
 
     Private Sub InitializeNumericControlCBs()
 
-        accounts_list = AccountsMapping.GetAccountsNamesList(AccountsMapping.LOOKUP_ALL)
+        accounts_list = GlobalVariables.Accounts.GetAccountsList(GlobalEnums.AccountsLookupOptions.LOOKUP_ALL, NAME_VARIABLE)
         For Each account_name In accounts_list
             Item1Editor.Items.Add(account_name)
             Item2Editor.Items.Add(account_name)

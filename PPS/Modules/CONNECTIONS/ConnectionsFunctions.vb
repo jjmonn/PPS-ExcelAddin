@@ -25,12 +25,6 @@ Friend Class ConnectionsFunctions
         GlobalVariables.Connection = OpenConnection(user_id, pwd)
         If Not GlobalVariables.Connection Is Nothing Then
 
-            GlobalVariables.GlobalDBDownloader = New DataBaseDataDownloader
-            GlobalVariables.GlobalDll3Interface = New DLL3_Interface
-            GlobalVariables.GenericGlobalSingleEntityComputer = New GenericSingleEntityDLL3Computer(GlobalVariables.GlobalDBDownloader, _
-                                                                                                    GlobalVariables.GlobalDll3Interface)
-            GlobalVariables.GenericGlobalAggregationComputer = New GenericAggregationDLL3Computing(GlobalVariables.GlobalDBDownloader, _
-                                                                                                    GlobalVariables.GlobalDll3Interface)
             If My.Settings.user <> user_id Then My.Settings.user = user_id
             GlobalVariables.Connection_Toggle_Button.Image = 1
             GlobalVariables.Connection_Toggle_Button.Caption = "Connected"
@@ -52,7 +46,9 @@ Friend Class ConnectionsFunctions
     End Function
 
     Friend Shared Function NetworkConnection(ByRef p_hostname As String, ByVal p_port As UShort) As Boolean
+
         Return (GlobalVariables.NetworkConnect.Launch(p_hostname, p_port))
+
     End Function
 
     Friend Shared Function OpenConnection(ByRef userID As String, ByVal pwd As String) As ADODB.Connection

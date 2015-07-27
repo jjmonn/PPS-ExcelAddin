@@ -21,7 +21,6 @@ Friend Class AlternativeScenarioModel
 #Region "Instance Variables"
 
     ' Objects
-    Private BaseComputer As GenericAggregationDLL3Computing
     Private Controller As AlternativeScenariosController
 
     ' Variables
@@ -36,7 +35,7 @@ Friend Class AlternativeScenarioModel
     ' Current Config
     Protected Friend periods_list As List(Of Int32)
     Protected Friend time_configuration As String
-    Private entities_id_list As List(Of String)
+    Private entities_id_list As List(Of UInt32)
 
     ' Constants
     Protected Friend Const INCREMENTAL_TAX As String = "incr_tax"
@@ -47,8 +46,7 @@ Friend Class AlternativeScenarioModel
     Protected Friend Sub New(ByRef input_Controller As AlternativeScenariosController)
 
         Controller = input_Controller
-        BaseComputer = New GenericAggregationDLL3Computing(GlobalVariables.GlobalDBDownloader)
-        indexes_list = MarketIndexesMapping.GetMarketIndexesList()
+       indexes_list = MarketIndexesMapping.GetMarketIndexesList()
         entities_attributes_dictionary = GDFSUEZEntitiesAttributesMapping.GetEntitiesAttributes()
         sensitivities_dictionary = GDFSUEZSensitivitiesMapping.GetSensitivitiesDictionary()
 
@@ -58,37 +56,34 @@ Friend Class AlternativeScenarioModel
 
 #Region "Interface"
 
-    Protected Friend Sub ComputeEntity(ByRef version_id As String, _
+    Friend Sub ComputeEntity(ByRef version_id As String, _
                                        ByRef entity_node As TreeNode, _
                                        ByRef PBar As ProgressBarControl)
 
         Dim Versions As New Version
         Dim nb_periods, start_period As Int32
         Dim rates_version_id As String = Versions.ReadVersion(version_id, VERSIONS_RATES_VERSION_ID_VAR)
-        BaseComputer.init_computer_complete_mode(entity_node)
-        periods_list = Versions.GetPeriodList(version_id)
-        time_configuration = Versions.ReadVersion(version_id, VERSIONS_TIME_CONFIG_VARIABLE)
-        nb_periods = Versions.ReadVersion(version_id, VERSIONS_NB_PERIODS_VAR)
-        start_period = Versions.ReadVersion(version_id, VERSIONS_START_PERIOD_VAR)
-        Versions.Close()
 
-        BaseComputer.compute_selection_complete(version_id, _
-                                                time_configuration, _
-                                                rates_version_id, _
-                                                periods_list, _
-                                                MAIN_CURRENCY, _
-                                                start_period, _
-                                                nb_periods, _
-                                                PBar)
+        ' computer.vb ask computation
+        ' priority high
+        ' wait for server answer
+
+        ' below -> goes into
 
         ' PB -> if affiliate not modeled -> no children but no need to be modeled !!
         ' we cannot use only the "no children" -> need to use "allow edition" !!!
+
+        ' below -> id list from entities_hash.keys ? is it ok
+        ' priority normal
         entities_id_list = TreeViewsUtilities.GetNoChildrenNodesList(TreeViewsUtilities.GetNodesKeysList(entity_node), entity_node.TreeView)
-        BuildDataDic(entity_node)
+
+        ' data_dictionary already available in computer.vb?
+
+        ' below -> unnecessay ?'BuildDataDic(entity_node)
 
     End Sub
 
-    Protected Friend Sub ComputeSensitivities(ByRef market_prices_version_id As String, ByRef PBar As ProgressBarControl)
+    Friend Sub ComputeSensitivities(ByRef market_prices_version_id As String, ByRef PBar As ProgressBarControl)
 
 
         SensisResultsDict.Clear()
@@ -114,9 +109,9 @@ Friend Class AlternativeScenarioModel
 
     End Sub
 
-    Protected Friend Sub AggregateSensis(ByRef entity_node As TreeNode)
+    Friend Sub AggregateSensis(ByRef entity_node As TreeNode)
 
-        Dim all_entities_id As List(Of String) = TreeViewsUtilities.GetNodesKeysList(entity_node)
+        Dim all_entities_id As List(Of UInt32) = TreeViewsUtilities.GetNodesKeysList(entity_node)
         all_entities_id.Reverse()
 
         For Each entity_id As String In all_entities_id
@@ -158,7 +153,7 @@ Friend Class AlternativeScenarioModel
 
     End Sub
 
-    Protected Friend Function AggregateNewScenario(ByRef entity_id As String, _
+    Friend Function AggregateNewScenario(ByRef entity_id As String, _
                                                    ByRef alternative_scenario_accounts As Dictionary(Of String, String)) _
                                                    As Dictionary(Of String, Double())
 
@@ -189,23 +184,25 @@ Friend Class AlternativeScenarioModel
 
     Private Sub BuildDataDic(ByRef entity_node As TreeNode)
 
-        current_conso_data_dic.Clear()
-        For Each entity_id In TreeViewsUtilities.GetNodesKeysList(entity_node)
-            Dim tmp_dict As New Dictionary(Of String, Double())
-            Dim tmp_data_array = BaseComputer.GetEntityArray(entity_id)
+        ' data_map already available in computer.vb
 
-            Dim i As Int32 = 0
-            For Each account_id In BaseComputer.get_model_accounts_list
-                Dim account_array(periods_list.Count - 1) As Double
-                For j = 0 To periods_list.Count - 1
-                    account_array(j) = tmp_data_array(i)
-                    i = i + 1
-                Next
-                tmp_dict.Add(account_id, account_array)
-            Next
-            current_conso_data_dic.Add(entity_id, tmp_dict)
-        Next
-        BaseComputer.clear_complete_data_dictionary()
+        'current_conso_data_dic.Clear()
+        'For Each entity_id In TreeViewsUtilities.GetNodesKeysList(entity_node)
+        '    Dim tmp_dict As New Dictionary(Of String, Double())
+        '    Dim tmp_data_array = BaseComputer.GetEntityArray(entity_id)
+
+        '    Dim i As Int32 = 0
+        '    For Each account_id In BaseComputer.get_model_accounts_list
+        '        Dim account_array(periods_list.Count - 1) As Double
+        '        For j = 0 To periods_list.Count - 1
+        '            account_array(j) = tmp_data_array(i)
+        '            i = i + 1
+        '        Next
+        '        tmp_dict.Add(account_id, account_array)
+        '    Next
+        '    current_conso_data_dic.Add(entity_id, tmp_dict)
+        'Next
+        'BaseComputer.clear_complete_data_dictionary()
         ' Erase array in dll3 ?
 
     End Sub
@@ -248,44 +245,46 @@ Friend Class AlternativeScenarioModel
                                        ByRef version_id As String, _
                                        ByRef adjustment_id As String)
 
-        ComputeIncrementalTaxes()
-        Dim DBDownloader As New DataBaseDataDownloader
-        Dim exchange_rates As Dictionary(Of String, Dictionary(Of Int32, Dictionary(Of String, Double))) = DataBaseDataDownloader.GetExchangeRatesDictionary(version_id, MAIN_CURRENCY, entities_id_list.ToArray)
-        Dim entities_currencies As Hashtable = EntitiesMapping.GetEntitiesDictionary(ENTITIES_ID_VARIABLE, ENTITIES_CURRENCY_VARIABLE)
-        Dim DBUploader As New DataBaseDataUploader
-        Dim account_id, entity_currency As String
-        Dim current_data_dic = DBDownloader.GetAdjustments(version_id, entities_id_list.ToArray, MAIN_CURRENCY)
-        Dim new_value, current_value As Double
+        ' to be reimplemented with new model (computer.vb) priority normal-> 
 
-        For Each sensitivity_id In sensitivities_dictionary.Keys
-            For Each item As String In items
+        'ComputeIncrementalTaxes()
+        ''    Dim DBDownloader As New DataBaseDataDownloader
+        'Dim exchange_rates As Dictionary(Of String, Dictionary(Of Int32, Dictionary(Of String, Double))) = DataBaseDataDownloader.GetExchangeRatesDictionary(version_id, MAIN_CURRENCY, entities_id_list.ToArray)
+        'Dim entities_currencies As Hashtable = EntitiesMapping.GetEntitiesDictionary(ID_VARIABLE, ENTITIES_CURRENCY_VARIABLE)
+        'Dim DBUploader As New DataBaseDataUploader
+        'Dim account_id, entity_currency As String
+        ''     Dim current_data_dic = DBDownloader.GetAdjustments(version_id, entities_id_list.ToArray, MAIN_CURRENCY)
+        'Dim new_value, current_value As Double
 
-                account_id = GDFSUEZASExports.ReadExport(item, sensitivity_id)
-                For Each entity_id As String In entities_id_list
+        'For Each sensitivity_id In sensitivities_dictionary.Keys
+        '    For Each item As String In items
 
-                    entity_currency = entities_currencies(entity_id)
-                    For j As Int32 = 0 To periods_list.Count - 1
-                        current_value = 0
-                        Try
-                            current_value = current_data_dic(account_id)(entity_id)(adjustment_id)(periods_list(j))
-                        Catch ex As Exception
-                        End Try
-                        new_value = SensisResultsDict(sensitivity_id)(item)(entity_id)(j)
-                        If entity_currency <> MAIN_CURRENCY Then new_value = new_value * (1 / exchange_rates(entity_currency & CURRENCIES_SEPARATOR & MAIN_CURRENCY)(periods_list(j))(ExchangeRate.AVERAGE_RATE))
-                        new_value = current_value + new_value
-                        If new_value <> current_value Then DBUploader.UpdateSingleValue(entity_id, _
-                                                                                        account_id, _
-                                                                                        periods_list(j), _
-                                                                                        new_value, _
-                                                                                        version_id, _
-                                                                                        DEFAULT_ANALYSIS_AXIS_ID, _
-                                                                                        DEFAULT_ANALYSIS_AXIS_ID, _
-                                                                                        adjustment_id)
-                        Controller.AddProgress()
-                    Next
-                Next
-            Next
-        Next
+        '        account_id = GDFSUEZASExports.ReadExport(item, sensitivity_id)
+        '        For Each entity_id As String In entities_id_list
+
+        '            entity_currency = entities_currencies(entity_id)
+        '            For j As Int32 = 0 To periods_list.Count - 1
+        '                current_value = 0
+        '                Try
+        '                    current_value = current_data_dic(account_id)(entity_id)(adjustment_id)(periods_list(j))
+        '                Catch ex As Exception
+        '                End Try
+        '                new_value = SensisResultsDict(sensitivity_id)(item)(entity_id)(j)
+        '                If entity_currency <> MAIN_CURRENCY Then new_value = new_value * (1 / exchange_rates(entity_currency & CURRENCIES_SEPARATOR & MAIN_CURRENCY)(periods_list(j))(ExchangeRate.AVERAGE_RATE))
+        '                new_value = current_value + new_value
+        '                If new_value <> current_value Then DBUploader.UpdateSingleValue(entity_id, _
+        '                                                                                account_id, _
+        '                                                                                periods_list(j), _
+        '                                                                                new_value, _
+        '                                                                                version_id, _
+        '                                                                                DEFAULT_ANALYSIS_AXIS_ID, _
+        '                                                                                DEFAULT_ANALYSIS_AXIS_ID, _
+        '                                                                                adjustment_id)
+        '                Controller.AddProgress()
+        '            Next
+        '        Next
+        '    Next
+        'Next
 
     End Sub
 
@@ -341,11 +340,7 @@ Friend Class AlternativeScenarioModel
 
     End Sub
 
-    Protected Friend Sub DestroyDll()
-
-        BaseComputer.delete_model()
-
-    End Sub
+   
 
 #End Region
 

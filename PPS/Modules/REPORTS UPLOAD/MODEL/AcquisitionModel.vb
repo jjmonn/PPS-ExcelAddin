@@ -18,7 +18,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 25/06/2015
+' Last modified: 17/07/2015
 
 
 Imports VIBlend.WinForms.DataGridView
@@ -37,9 +37,7 @@ Friend Class AcquisitionModel
 
     ' Objects
     Private DATASET As ModelDataSet
-    Private CCOMPUTERINT As DLL3_Interface
-    Private DBDownloader As DataBaseDataDownloader
-
+ 
     ' Variables
     Friend DBInputsDictionary As New Dictionary(Of String, Dictionary(Of String, Dictionary(Of String, Double)))    '(entities)(accounts)(periods) -> values
     Friend currentPeriodlist As New List(Of Integer)
@@ -60,18 +58,14 @@ Friend Class AcquisitionModel
 
 #Region "Initialize"
 
-    Friend Sub New(ByRef inputDataSet As ModelDataSet, _
-                   ByRef inputDBDownloader As DataBaseDataDownloader, _
-                   ByRef inputComputerInt As DLL3_Interface)
+    Friend Sub New(ByRef inputDataSet As ModelDataSet)
 
-        DBDownloader = inputDBDownloader
-        Account.LoadAccountsTree(accountsTV)
+        GlobalVariables.Accounts.LoadAccountsTV(accountsTV)
         DATASET = inputDataSet
-        CCOMPUTERINT = inputComputerInt
-
+     
         versionsTimeConfigDict = VersionsMapping.GetVersionsHashTable(VERSIONS_CODE_VARIABLE, VERSIONS_TIME_CONFIG_VARIABLE)
-        accountsNamesFormulaTypeDict = AccountsMapping.GetAccountsDictionary(ACCOUNT_NAME_VARIABLE, ACCOUNT_FORMULA_TYPE_VARIABLE)
-        outputsList = AccountsMapping.GetAccountsNamesList(AccountsMapping.LOOKUP_OUTPUTS)
+        accountsNamesFormulaTypeDict = globalvariables.accounts.GetAccountsDictionary(NAME_VARIABLE, ACCOUNT_FORMULA_TYPE_VARIABLE)
+        outputsList = GlobalVariables.Accounts.GetAccountsList(GlobalEnums.AccountsLookupOptions.LOOKUP_OUTPUTS, NAME_VARIABLE)
 
     End Sub
 
@@ -94,11 +88,14 @@ Friend Class AcquisitionModel
         currentPeriodlist = Versions.GetPeriodList(current_version_id)
 
         Dim viewName = current_version_id
-        DBDownloader.GetEntityInputsNonConverted(entityKey, _
-                                                 viewName, _
-                                                 Utilities_Functions.getStringsList({client_id}), _
-                                                 Utilities_Functions.getStringsList({product_id}), _
-                                                 Utilities_Functions.getStringsList({adjustment_id}))
+
+        ' -> ask nathanael a method returning the inputs for an entity !!
+
+        'DBDownloader.GetEntityInputsNonConverted(entityKey, _
+        '                                         viewName, _
+        '                                         Utilities_Functions.getStringsList({client_id}), _
+        '                                         Utilities_Functions.getStringsList({product_id}), _
+        '                                         Utilities_Functions.getStringsList({adjustment_id}))
         LoadDBInputsDictionary(entityName)
 
     End Sub
@@ -120,7 +117,7 @@ Friend Class AcquisitionModel
     Friend Function GetCalculatedValue(ByRef accKey As String, _
                                        ByRef PeriodInt As Integer) As Double
 
-        Return CCOMPUTERINT.GetDataFromComputer(accKey, PeriodInt)
+        ' Return CCOMPUTERINT.GetDataFromComputer(accKey, PeriodInt)
 
     End Function
 
@@ -155,17 +152,20 @@ Friend Class AcquisitionModel
             DBInputsDictionary(entityName).Clear()
         End If
 
-        If Not DBDownloader.AccKeysArray Is Nothing Then
-            For i As Int32 = 0 To DBDownloader.AccKeysArray.Length - 1
-                Dim accountName As String = accountsTV.Nodes.Find(DBDownloader.AccKeysArray(i), True)(0).Text
 
-                If Not DBInputsDictionary(entityName).ContainsKey(accountName) Then
-                    Dim tmpDict As New Dictionary(Of String, Double)
-                    DBInputsDictionary(entityName).Add(accountName, tmpDict)
-                End If
-                DBInputsDictionary(entityName)(accountName).Add(CStr(DBDownloader.PeriodArray(i)), DBDownloader.ValuesArray(i))
-            Next
-        End If
+        ' replace DBDownloader by a server relation object dedicated to loading inputs !! priority high
+        ' If Not DBDownloader.AccKeysArray Is Nothing Then
+        'For i As Int32 = 0 To DBDownloader.AccKeysArray.Length - 1
+        'Dim accountName As String = accountsTV.Nodes.Find(DBDownloader.AccKeysArray(i), True)(0).Text
+
+        'If Not DBInputsDictionary(entityName).ContainsKey(accountName) Then
+        'Dim tmpDict As New Dictionary(Of String, Double)
+        'DBInputsDictionary(entityName).Add(accountName, tmpDict)
+        'End If
+        ' Objectif -> remplir Inputs dictionary !
+        '         DBInputsDictionary(entityName)(accountName).Add(CStr(DBDownloader.PeriodArray(i)), DBDownloader.ValuesArray(i))
+        'Next
+        'End If
         FillInWithZeroValuesItemsNotPresentInDB(entityName)
 
     End Sub
@@ -197,15 +197,9 @@ Friend Class AcquisitionModel
         Dim entityKey As String = DATASET.EntitiesNameKeyDictionary(entity)
         BuildInputsArrays(entity)
 
-        Dim currentVersionTimeConfig As String = versionsTimeConfigDict(current_version_id)
-        If CCOMPUTERINT.dll3TimeSetup <> currentVersionTimeConfig Then
-            Dim Versions As New Version
-            currentPeriodlist = Versions.GetPeriodList(current_version_id)
-            Versions.Close()
-            CCOMPUTERINT.InitDllPeriods(currentPeriodlist, currentVersionTimeConfig)
-        End If
-
-        CCOMPUTERINT.ComputeSingleEntity(entityKey, accKeysArray, periodsArray, valuesArray)
+        ' launch computer.vb computation
+        ' wait for server answer
+        ' priority high
 
     End Sub
 
@@ -250,7 +244,7 @@ Friend Class AcquisitionModel
 
     Friend Function CheckIfBSCalculatedItem(ByRef accountName As String, ByRef period As Integer) As Boolean
 
-        If accountsNamesFormulaTypeDict(accountName) = BALANCE_SHEET_ACCOUNT_FORMULA_TYPE _
+        If accountsNamesFormulaTypeDict(accountName) = GlobalEnums.FormulaTypes.FIRST_PERIOD_INPUT _
         AndAlso Not period = CInt(CDbl(DATASET.periodsDatesList(0).ToOADate())) Then
             Return True
         Else

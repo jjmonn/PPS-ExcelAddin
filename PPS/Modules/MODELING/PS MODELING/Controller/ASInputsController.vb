@@ -55,7 +55,7 @@ Friend Class ASInputsController
         ASController = input_AScontroller
 
         Version.LoadVersionsTree(VersionsTV)
-        Entity.LoadEntitiesTree(EntitiesTV)
+        Globalvariables.Entities.LoadEntitiesTV(EntitiesTV)
         TreeViewsUtilities.CheckAllNodes(EntitiesTV)
         MarketIndexVersion.load_market_index_version_tv(MarketPricesTV)
 

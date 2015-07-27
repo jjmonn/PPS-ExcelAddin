@@ -9,7 +9,7 @@ Imports System.Collections
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 26/04/2015
+' Last modified: 22/07/2015
 
 
 Friend Class ClientsController
@@ -20,11 +20,11 @@ Friend Class ClientsController
     ' Objects
     Private view As clientsControl
     Private clients As client
-    Private clients_categoriesTV As New TreeView
+    Private clientsFiltersTV As New TreeView
     Private PlatformMGTUI As PlatformMGTGeneralUI
 
     ' Variable
-    Private clients_list As List(Of String)
+    Private clients_list As List(Of UInt32)
     Friend categoriesNameKeyDic As Hashtable
 
 
@@ -33,18 +33,28 @@ Friend Class ClientsController
 
 #Region "Initialize"
 
-    Protected Friend Sub New()
+    Friend Sub New()
 
-        clients = New client
-        AnalysisAxisCategory.LoadCategoryCodeTV(clients_categoriesTV, ControllingUI2Controller.client_CATEGORY_CODE)
-        clients_list = clientsMapping.GetclientsIDList()
-        categoriesNameKeyDic = CategoriesMapping.GetCategoryDictionary(ControllingUI2Controller.client_CATEGORY_CODE, _
-                                                                       ANALYSIS_AXIS_NAME_VAR, _
-                                                                       ANALYSIS_AXIS_ID_VAR)
-        view = New clientsControl(Me, _
-                                   clients_categoriesTV, _
-                                   getclientsHash(), _
+        clients = New Client
+        ' ->  Analysis Axis Filter controller (generic) 
+        ' to be implemented after entities_filters, clients_filters, products_filters
+        ' A ce niveau le CategoryTV est utilisé pour itérer à travers les variables des axis 
+        ' priority normal
+
+
+        '     AnalysisAxisCategory.LoadCategoryCodeTV(clientsFiltersTV, GlobalEnums.AnalysisAxis.CLIENTS)
+        clients_list = GlobalVariables.Clients.clients_hash.Keys
+        categoriesNameKeyDic = GlobalVariables.Filters.GetFiltersDictionary(GlobalEnums.AnalysisAxis.CLIENTS, _
+                                                                            NAME_VARIABLE, _
+                                                                            ID_VARIABLE)
+        view = New ClientsControl(Me, _
+                                   clientsFiltersTV, _
+                                   clients.clients_hash, _
                                    categoriesNameKeyDic)
+
+        AddHandler GlobalVariables.Clients.ClientCreationEvent, AddressOf AfterClientCreation
+        AddHandler GlobalVariables.Clients.ClientUpdateEvent, AddressOf AfterClientUpdate
+        AddHandler GlobalVariables.Clients.ClientDeleteEvent, AddressOf AfterClientDelete
 
     End Sub
 
@@ -57,21 +67,10 @@ Friend Class ClientsController
 
     End Sub
 
-    Private Function getclientsHash() As Dictionary(Of String, Hashtable)
-
-        Dim tmp_dict As New Dictionary(Of String, Hashtable)
-        For Each client_id As String In clients_list
-            tmp_dict.Add(client_id, clients.GetRecord(client_id, clients_categoriesTV))
-        Next
-        Return tmp_dict
-
-    End Function
-
     Public Sub close()
 
         view.closeControl()
         view.Dispose()
-        clients.RST.Close()
         PlatformMGTUI.displayControl()
 
     End Sub
@@ -82,23 +81,29 @@ Friend Class ClientsController
 
 #Region "Interface"
 
-    Protected Friend Sub createclient(ByRef hash As Hashtable)
+    Friend Sub createclient(ByRef hash As Hashtable)
 
-        If clients.isNameValid(hash(ANALYSIS_AXIS_NAME_VAR)) = True Then
-            hash.Add(ANALYSIS_AXIS_ID_VAR, clients.getNewId())
-            clients.Createclient(hash)
-            view.addclientRow(hash(ANALYSIS_AXIS_ID_VAR), hash)
+        If GlobalVariables.Clients.IsNameValid(hash(NAME_VARIABLE)) = True Then
+            GlobalVariables.Clients.CMSG_CREATE_CLIENT(hash)
+
+            view.addclientRow(hash(ID_VARIABLE), hash)
         Else
             MsgBox("Invalid Name. Names must be unique and not empty.")
         End If
 
     End Sub
 
-    Protected Friend Function updateclientName(ByRef item_id As String, _
-                                                ByRef value As String) As Boolean
+    Private Sub AfterClientCreation(ByRef ht As Hashtable)
 
-        If clients.isNameValid(value) = True Then
-            clients.Updateclient(item_id, ANALYSIS_AXIS_NAME_VAR, value)
+
+
+    End Sub
+
+    Friend Function updateclientName(ByRef item_id As String, _
+                                      ByRef value As String) As Boolean
+
+        If clients.IsNameValid(value) = True Then
+            GlobalVariables.Clients.CMSG_UPDATE_CLIENT(item_id, NAME_VARIABLE, value)
             Return True
         Else
             MsgBox("Invalid Name. Names must be unique and not empty.")
@@ -107,19 +112,34 @@ Friend Class ClientsController
 
     End Function
 
-    Protected Friend Sub updateclientCategory(ByRef item_id As String, _
+    Private Sub AfterClientUpdate(ByRef ht As Hashtable)
+
+
+        ' to be implemented priority normal !!
+
+
+    End Sub
+
+    Friend Sub updateclientCategory(ByRef item_id As String, _
                                                ByRef category_id As String, _
                                                ByRef value As String)
 
-        clients.Updateclient(item_id, category_id, value)
+        GlobalVariables.Clients.CMSG_UPDATE_CLIENT(item_id, category_id, value)
 
     End Sub
 
-    Protected Friend Sub deleteclient(ByRef client_id As String)
+    Friend Sub deleteclient(ByRef client_id As String)
 
-        clients.deleteclient(client_id)
+        GlobalVariables.Clients.CMSG_DELETE_CLIENT(client_id)
 
     End Sub
+
+    Private Sub AfterClientDelete(ByRef id As UInt32)
+
+        ' to be implemented priority normal !!
+
+    End Sub
+
 
 #End Region
 

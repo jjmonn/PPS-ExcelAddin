@@ -6,7 +6,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 05/05/2015
+' Last modified: 17/07/2015
 
 
 Imports System.Collections
@@ -37,7 +37,7 @@ Friend Class ControlsController
 
     Protected Friend Sub New()
 
-        accounts_name_id_dic = AccountsMapping.GetAccountsDictionary(ACCOUNT_NAME_VARIABLE, ACCOUNT_ID_VARIABLE)
+        accounts_name_id_dic = GlobalVariables.Accounts.GetAccountsDictionary(NAME_VARIABLE, ID_VARIABLE)
         operators_symbol_id_dic = OperatorsMapping.GetOperatorsDictionary(OPERATOR_SYMBOL_VARIABLE, OPERATOR_ID_VARIABLE)
         period_options_name_id_dic = ControlOptionsMapping.GetControlOptionsDictionary(CONTROL_OPTION_NAME_VARIABLE, CONTROL_OPTION_ID_VARIABLE)
 

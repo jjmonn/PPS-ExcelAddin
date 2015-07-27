@@ -11,7 +11,7 @@
 '       -
 '        
 '
-' Last modified: 15/06/2015
+' Last modified: 17/07/2015
 ' Author: Julien Monnereau
 
 
@@ -29,19 +29,18 @@ Friend Class AccountsControl
 #Region "Instance Variables"
 
     ' Objects
-    Protected Friend Controller As AccountsController
+    Friend Controller As AccountsController
     Private CP As CircularProgressUI
     Private AccountsTV As TreeView
-    Protected Friend current_node As TreeNode
+    Friend current_node As TreeNode
 
     ' Variables
-    Protected Friend accountsTypesKeyNameDict As Dictionary(Of String, String)
-    Protected Friend accountsTypeNameKeyDictionary As Dictionary(Of String, String)
-    Protected Friend formatsNameKeyDictionary As Hashtable
-    Protected Friend formatKeyNameDictionary As Hashtable
-    Protected Friend fTypeCodeNameDictionary As Dictionary(Of String, String)
-    Protected Friend fTypeNameCodeDictionary As Dictionary(Of String, String)
-    Protected Friend ftype_icon_dic As New Dictionary(Of String, Int32)
+    Friend accountsTypesKeyNameDict As Dictionary(Of String, String)
+    Friend accountsTypeNameKeyDictionary As Dictionary(Of String, String)
+    Friend formatsNameKeyDictionary As Hashtable
+    Friend formatKeyNameDictionary As Hashtable
+    Friend fTypeCodeNameDictionary As Dictionary(Of String, String)
+    Friend fTypeNameCodeDictionary As Dictionary(Of String, String)
     Private fTypesCodesRequiringFormulas As List(Of String)
     Private isDisplayingAttributes As Boolean
     Private drag_and_drop As Boolean = False
@@ -50,12 +49,6 @@ Friend Class AccountsControl
     Private Const MARGIN_SIZE As Integer = 15
     Private Const ACCCOUNTS_TV_MAX_WIDTH As Integer = 600
     Private Const MARGIN1 As Integer = 30
-    Protected Friend Const T_ICON_INDEX As Int32 = 0
-    Protected Friend Const SOAC_ICON_INDEX As Int32 = 1
-    Protected Friend Const HV_ICON_INDEX As Int32 = 2
-    Protected Friend Const F_ICON_INDEX As Int32 = 3
-    Protected Friend Const BS_ICON_INDEX As Int32 = 4
-    Protected Friend Const WC_ICON_INDEX As Int32 = 5
 
 
 #End Region
@@ -63,7 +56,7 @@ Friend Class AccountsControl
 
 #Region "Initialization"
 
-    Protected Friend Sub New(ByRef input_controller As AccountsController, _
+    Friend Sub New(ByRef input_controller As AccountsController, _
                               ByRef input_accountTV As TreeView)
 
         ' This call is required by the designer.
@@ -76,12 +69,6 @@ Friend Class AccountsControl
         formatsNameKeyDictionary = FormatsMapping.GetFormatsDictionary(FORMAT_NAME_VARIABLE, FORMAT_CODE_VARIABLE, INPUT_FORMAT_CODE)
         formatKeyNameDictionary = FormatsMapping.GetFormatsDictionary(FORMAT_CODE_VARIABLE, FORMAT_NAME_VARIABLE, INPUT_FORMAT_CODE)
         fTypesCodesRequiringFormulas = FormulaTypesMapping.GetFTypesKeysNeedingFormula
-        ftype_icon_dic.Add(TITLE_ACCOUNT_FORMULA_TYPE, T_ICON_INDEX)
-        ftype_icon_dic.Add(FORMULA_TYPE_SUM_OF_CHILDREN, SOAC_ICON_INDEX)
-        ftype_icon_dic.Add(HARD_VALUE_F_TYPE_CODE, HV_ICON_INDEX)
-        ftype_icon_dic.Add(FORMULA_ACCOUNT_FORMULA_TYPE, F_ICON_INDEX)
-        ftype_icon_dic.Add(BALANCE_SHEET_ACCOUNT_FORMULA_TYPE, BS_ICON_INDEX)
-        ftype_icon_dic.Add(WORKING_CAPITAL_ACCOUNT_FORMULA_TYPE, WC_ICON_INDEX)
 
         AccountsTVInit()
         ComboBoxesInit()
@@ -131,11 +118,28 @@ Friend Class AccountsControl
 
     End Sub
 
-    Protected Friend Sub closeControl()
+    Friend Sub closeControl()
 
-        CP = New CircularProgressUI(Drawing.Color.Yellow, "Saving")
-        CP.Show()
+        LaunchCP()
         BackgroundWorker1.RunWorkerAsync()
+
+    End Sub
+
+#End Region
+
+
+#Region "Interface"
+
+    Friend Sub LaunchCP()
+
+        CP = New CircularProgressUI(Drawing.Color.Blue, "Saving")
+        CP.Show()
+
+    End Sub
+
+    Friend Sub StopCP()
+
+        CP.Dispose()
 
     End Sub
 
@@ -165,9 +169,9 @@ Friend Class AccountsControl
 
             If Controller.AccountNameCheck(newCategoryName) = True Then
                 Dim TempHT As New Hashtable
-                TempHT.Add(ACCOUNT_NAME_VARIABLE, newCategoryName)
-                TempHT.Add(ACCOUNT_PARENT_ID_VARIABLE, DBNull.Value)
-                TempHT.Add(ACCOUNT_FORMULA_TYPE_VARIABLE, FORMULA_TYPE_TITLE)
+                TempHT.Add(NAME_VARIABLE, newCategoryName)
+                TempHT.Add(PARENT_ID_VARIABLE, DBNull.Value)
+                TempHT.Add(ACCOUNT_FORMULA_TYPE_VARIABLE, GlobalEnums.FormulaTypes.TITLE)
                 TempHT.Add(ACCOUNT_FORMULA_VARIABLE, "")
                 TempHT.Add(ACCOUNT_FORMAT_VARIABLE, TITLE_FORMAT_CODE)
                 TempHT.Add(ACCOUNT_TYPE_VARIABLE, NORMAL_ACCOUNT_TYPE)
@@ -175,7 +179,7 @@ Friend Class AccountsControl
                 TempHT.Add(ACCOUNT_IMAGE_VARIABLE, 0)
                 TempHT.Add(ACCOUNT_SELECTED_IMAGE_VARIABLE, 0)
                 TempHT.Add(ITEMS_POSITIONS, 1)
-                Controller.CreateCategory(TempHT)
+                Controller.CreateAccount(TempHT)
             End If
         End If
 
@@ -374,7 +378,7 @@ Friend Class AccountsControl
             selectedTreeview.SelectedNode = dropNode                        ' Select it
             Dim tmpHT As New Hashtable
             tmpHT.Add(ACCOUNT_TAB_VARIABLE, TreeViewsUtilities.ReturnRootNodeFromNode(dropNode).Index)
-            tmpHT.Add(ACCOUNT_PARENT_ID_VARIABLE, targetNode.Name)
+            tmpHT.Add(PARENT_ID_VARIABLE, targetNode.Name)
             Controller.UpdateAccount(dropNode.Name, tmpHT)
 
         End If
@@ -499,7 +503,7 @@ Friend Class AccountsControl
 
             If Controller.AccountNameCheck(newNameStr) = True Then
                 current_node.Text = Name_TB.Text
-                Controller.UpdateAccountName(current_node.Name, current_node.Text)
+                Controller.UpdateName(current_node.Name, current_node.Text)
             Else
                 Name_TB.Text = current_node.Text
             End If
@@ -555,9 +559,9 @@ Friend Class AccountsControl
         If Not IsNothing(current_node) _
         AndAlso isDisplayingAttributes = False Then
             If aggregation_RB.Checked = True Then
-                Controller.UpdateAccount(current_node.Name, ACCOUNT_RECOMPUTATION_OPTION_VARIABLE, AGGREGATION_CODE)
+                Controller.UpdateAccount(current_node.Name, ACCOUNT_CONSOLIDATION_OPTION_VARIABLE, GlobalEnums.ConsolidationOptions.AGGREGATION)
             Else
-                Controller.UpdateAccount(current_node.Name, ACCOUNT_RECOMPUTATION_OPTION_VARIABLE, RECOMPUTATION_CODE)
+                Controller.UpdateAccount(current_node.Name, ACCOUNT_CONSOLIDATION_OPTION_VARIABLE, GlobalEnums.ConsolidationOptions.RECOMPUTATION)
             End If
         End If
 
@@ -568,9 +572,9 @@ Friend Class AccountsControl
         If Not IsNothing(current_node) _
         AndAlso isDisplayingAttributes = False Then
             If flux_RB.Checked = True Then
-                Controller.UpdateAccount(current_node.Name, ACCOUNT_CONVERSION_FLAG_VARIABLE, FLUX_CONVERSION)
+                Controller.UpdateAccount(current_node.Name, ACCOUNT_CONVERSION_OPTION_VARIABLE, GlobalEnums.ConversionOptions.AVERAGE_PERIOD_RATE)
             Else
-                Controller.UpdateAccount(current_node.Name, ACCOUNT_CONVERSION_FLAG_VARIABLE, BS_ITEM_CONVERSION)
+                Controller.UpdateAccount(current_node.Name, ACCOUNT_CONVERSION_OPTION_VARIABLE, GlobalEnums.ConversionOptions.END_OF_PERIOD_RATE)
             End If
 
         End If
@@ -596,7 +600,6 @@ Friend Class AccountsControl
     Private Sub BackgroundWorker1_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles BackgroundWorker1.DoWork
 
         Controller.SendNewPositionsToModel()
-        If Controller.needToUpdateModel = True Then Controller.UpdateModel()
 
     End Sub
 
@@ -639,13 +642,13 @@ Friend Class AccountsControl
             TypeCB.Text = accountsTypesKeyNameDict(type)
             formulaTypeCB.Text = fTypeCodeNameDictionary(f_type)
 
-            If f_type = FORMULA_TYPE_TITLE Then DisableRecomputationOPtions() Else EnableRecomputationOPtions()
-            If Controller.ReadAccount(key, ACCOUNT_RECOMPUTATION_OPTION_VARIABLE) = RECOMPUTATION_CODE Then recompute_RB.Checked = True
-            If Controller.ReadAccount(key, ACCOUNT_RECOMPUTATION_OPTION_VARIABLE) = AGGREGATION_CODE Then aggregation_RB.Checked = True
+            If f_type = GlobalEnums.FormulaTypes.TITLE Then DisableRecomputationOPtions() Else EnableRecomputationOPtions()
+            If Controller.ReadAccount(key, ACCOUNT_CONSOLIDATION_OPTION_VARIABLE) = GlobalEnums.ConsolidationOptions.RECOMPUTATION Then recompute_RB.Checked = True
+            If Controller.ReadAccount(key, ACCOUNT_CONSOLIDATION_OPTION_VARIABLE) = GlobalEnums.ConsolidationOptions.AGGREGATION Then aggregation_RB.Checked = True
             If type = MONETARY_ACCOUNT_TYPE Then
                 EnableConversionOptions()
-                If Controller.ReadAccount(key, ACCOUNT_CONVERSION_FLAG_VARIABLE) = FLUX_CONVERSION Then flux_RB.Checked = True
-                If Controller.ReadAccount(key, ACCOUNT_CONVERSION_FLAG_VARIABLE) = BS_ITEM_CONVERSION Then bs_item_RB.Checked = True
+                If Controller.ReadAccount(key, ACCOUNT_CONVERSION_OPTION_VARIABLE) = GlobalEnums.ConversionOptions.AVERAGE_PERIOD_RATE Then flux_RB.Checked = True
+                If Controller.ReadAccount(key, ACCOUNT_CONVERSION_OPTION_VARIABLE) = GlobalEnums.ConversionOptions.END_OF_PERIOD_RATE Then bs_item_RB.Checked = True
             Else
                 DisableConversionOptions()
             End If
@@ -663,7 +666,7 @@ Friend Class AccountsControl
 
     Private Sub ReloadAccountsTree(ByRef expansionDic As Dictionary(Of String, Boolean))
 
-        Account.LoadAccountsTree(AccountsTV)
+        GlobalVariables.Accounts.LoadAccountsTV(AccountsTV)
         TreeViewsUtilities.ResumeExpansionsLevel(AccountsTV, expansionDic)
 
     End Sub

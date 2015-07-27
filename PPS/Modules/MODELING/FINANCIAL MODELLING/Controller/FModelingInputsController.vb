@@ -9,7 +9,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 27/05/2015
+' Last modified: 17/07/2015
 
 
 Imports System.Windows.Forms
@@ -26,8 +26,7 @@ Friend Class FModelingInputsController
     ' Object 
     Private MainView As FModelingUI2
     Friend View As FModelingInputsControl
-    Private Model As GenericAggregationDLL3Computing
-    Private FModellingAccount As FModellingAccount
+     Private FModellingAccount As FModellingAccount
     Private VersionsTV As New TreeView
     Private EntitiesTV As New TreeView
     Friend InputsDGV As New vDataGridView
@@ -35,7 +34,6 @@ Friend Class FModelingInputsController
 
     ' Variables
     Private inputs_list As List(Of String)
-    Friend accounts_id_names_dic As Hashtable
     Friend accounts_names_id_dic As Hashtable
     Friend inputs_mapping As Dictionary(Of String, String)
     Private accounts_id_list As List(Of String)
@@ -63,15 +61,14 @@ Friend Class FModelingInputsController
         Me.FModellingAccount = FModellingAccount
 
         View = New FModelingInputsControl(Me)
-        Model = New GenericAggregationDLL3Computing(GlobalVariables.GlobalDBDownloader)
+
 
         Version.LoadVersionsTree(VersionsTV)
         TreeViewsUtilities.CheckAllNodes(EntitiesTV)
-        Entity.LoadEntitiesTree(EntitiesTV)
+        Globalvariables.Entities.LoadEntitiesTV(EntitiesTV)
         inputs_list = FModelingAccountsMapping.GetFModellingAccountsList(FINANCIAL_MODELLING_ID_VARIABLE, FINANCIAL_MODELLING_INPUT_TYPE)
-        accounts_id_names_dic = AccountsMapping.GetAccountsDictionary(ACCOUNT_ID_VARIABLE, ACCOUNT_NAME_VARIABLE)
-        accounts_names_id_dic = AccountsMapping.GetAccountsDictionary(ACCOUNT_NAME_VARIABLE, ACCOUNT_ID_VARIABLE)
-        accounts_id_list = AccountsMapping.GetAccountsKeysList(AccountsMapping.LOOKUP_ALL)
+        accounts_names_id_dic = GlobalVariables.Accounts.GetAccountsDictionary(NAME_VARIABLE, ID_VARIABLE)
+        accounts_id_list = GlobalVariables.Accounts.GetAccountsList(GlobalEnums.AccountsLookupOptions.LOOKUP_ALL, ID_VARIABLE)
         versions_id_list = VersionsMapping.GetVersionsList(VERSIONS_CODE_VARIABLE)
 
         InitializeMappingDGV()
@@ -91,7 +88,7 @@ Friend Class FModelingInputsController
             Dim account_id = FModellingAccount.ReadFModellingAccount(fmodelling_account_id, FINANCIAL_MODELLING_ACCOUNT_ID_VARIABLE)
             Dim row = MappingDGV.RowsHierarchy.Items.Add(fmodelling_account_id)
             MappingDGV.CellsArea.SetCellValue(row, MappingDGV.ColumnsHierarchy.Items(1), FModellingAccount.ReadFModellingAccount(fmodelling_account_id, FINANCIAL_MODELLING_NAME_VARIABLE))
-            If Not account_id Is Nothing Then MappingDGV.CellsArea.SetCellValue(row, MappingDGV.ColumnsHierarchy.Items(0), accounts_id_names_dic(account_id))
+            If Not account_id Is Nothing Then MappingDGV.CellsArea.SetCellValue(row, MappingDGV.ColumnsHierarchy.Items(0), GlobalVariables.Accounts.accounts_hash(account_id)(NAME_VARIABLE))
         Next
         DataGridViewsUtil.InitDisplayVDataGridView(MappingDGV, DGV_THEME)
         DataGridViewsUtil.DGVSetHiearchyFontSize(MappingDGV, DGV_CELLS_FONT_SIZE, DGV_CELLS_FONT_SIZE)
@@ -105,7 +102,7 @@ Friend Class FModelingInputsController
 
         CBEditor.DropDownHeight = CBEditor.ItemHeight * CB_NB_ITEMS_DISPLAYED
         CBEditor.DropDownWidth = CB_WIDTH
-        Dim accounts_list = AccountsMapping.GetAccountsNamesList(AccountsMapping.LOOKUP_ALL)
+        Dim accounts_list = GlobalVariables.Accounts.GetAccountsList(GlobalEnums.AccountsLookupOptions.LOOKUP_ALL, NAME_VARIABLE)
         For Each account_name In accounts_list
             CBEditor.Items.Add(account_name)
         Next
@@ -138,29 +135,31 @@ Friend Class FModelingInputsController
     Friend Sub ComputeEntity(ByRef version_node As TreeNode, _
                              ByRef entity_node As TreeNode)
 
-        Dim Versions As New Version
-        Dim time_configuration As String = Versions.ReadVersion(version_node.Name, VERSIONS_TIME_CONFIG_VARIABLE)
-        Model.init_computer_complete_mode(entity_node)
-        InitializePBar()
-        periods_list = Versions.GetPeriodList(version_node.Name)
-        Dim nb_periods As Int32 = Versions.ReadVersion(version_node.Name, VERSIONS_NB_PERIODS_VAR)
-        Dim start_period As Int32 = Versions.ReadVersion(version_node.Name, VERSIONS_START_PERIOD_VAR)
-        Dim rates_version As String = Versions.ReadVersion(version_node.Name, VERSIONS_RATES_VERSION_ID_VAR)
-        Versions.Close()
-        Model.compute_selection_complete(version_node.Name, _
-                                         time_configuration, _
-                                         rates_version, _
-                                         periods_list, _
-                                         MAIN_CURRENCY, _
-                                         start_period, _
-                                         nb_periods, _
-                                         View.PBar)
+        ' to be reimplemented with new model (computer.vb) priority normal-> 
 
-        BuildDataDic(entity_node.Name)
-        InitInputsDGVColumns()
-        FillInInputsDGV()
-        View.PBar.EndProgress()
-        MainView.setVersionAndPeriods(periods_list, version_node.Name, version_node.Text)
+        'Dim Versions As New Version
+        'Dim time_configuration As String = Versions.ReadVersion(version_node.Name, VERSIONS_TIME_CONFIG_VARIABLE)
+        'Model.init_computer_complete_mode(entity_node)
+        'InitializePBar()
+        'periods_list = Versions.GetPeriodList(version_node.Name)
+        'Dim nb_periods As Int32 = Versions.ReadVersion(version_node.Name, VERSIONS_NB_PERIODS_VAR)
+        'Dim start_period As Int32 = Versions.ReadVersion(version_node.Name, VERSIONS_START_PERIOD_VAR)
+        'Dim rates_version As String = Versions.ReadVersion(version_node.Name, VERSIONS_RATES_VERSION_ID_VAR)
+        'Versions.Close()
+        'Model.compute_selection_complete(version_node.Name, _
+        '                                 time_configuration, _
+        '                                 rates_version, _
+        '                                 periods_list, _
+        '                                 MAIN_CURRENCY, _
+        '                                 start_period, _
+        '                                 nb_periods, _
+        '                                 View.PBar)
+
+        'BuildDataDic(entity_node.Name)
+        'InitInputsDGVColumns()
+        'FillInInputsDGV()
+        'View.PBar.EndProgress()
+        'MainView.setVersionAndPeriods(periods_list, version_node.Name, version_node.Text)
 
     End Sub
 
@@ -187,7 +186,8 @@ Friend Class FModelingInputsController
 
     Private Sub InitializePBar()
 
-        Dim LoadingBarMax As Integer = Model.inputs_entities_list.Count + 7
+        ' to be reimplemented : priority normal
+        Dim LoadingBarMax As Integer = 0 ' !!
         View.PBar.Launch(1, LoadingBarMax)
 
     End Sub
@@ -195,16 +195,19 @@ Friend Class FModelingInputsController
     Private Sub BuildDataDic(ByRef entity_id As String)
 
         current_conso_data_dic.Clear()
-        Dim tmp_data_array = Model.GetEntityArray(entity_id)
+        'Dim tmp_data_array = Model.GetEntityArray(entity_id)
+        ' -> get from computer.vb 
+        ' new! priority normal
+
         Dim i As Int32 = 0
-        For Each account_id In Model.get_model_accounts_list
-            Dim account_array(periods_list.Count - 1) As Double
-            For j = 0 To periods_list.Count - 1
-                account_array(j) = tmp_data_array(i)
-                i = i + 1
-            Next
-            current_conso_data_dic.Add(account_id, account_array)
-        Next
+        'For Each account_id In Model.get_model_accounts_list
+        '    Dim account_array(periods_list.Count - 1) As Double
+        '    For j = 0 To periods_list.Count - 1
+        '        account_array(j) = tmp_data_array(i)
+        '        i = i + 1
+        '    Next
+        '    current_conso_data_dic.Add(account_id, account_array)
+        'Next
 
     End Sub
 

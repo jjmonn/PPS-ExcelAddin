@@ -1,281 +1,280 @@
-﻿' Entity.vb
+﻿Imports System.Collections
+Imports System.Collections.Generic
+
+
+' Entity2.vb
 '
-' Entities table CRUD model
-'
-' To do: 
+' CRUD for entities table - relation with c++ server
 '
 '
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 20/04/2015
+' Created: 21/07/2015
+' Last modified: 22/07/2015
 
-
-Imports ADODB
-Imports System.Windows.Forms
-Imports System.Collections
-Imports System.Collections.Generic
 
 
 Friend Class Entity
 
-
-#Region "Instance Variables"
-
-    ' Objects
-    Private SRV As New ModelServer
-    Private RST As Recordset
-
-    ' Constants
-    Friend object_is_alive As Boolean
- 
-#End Region
+#Region "Instance variables"
 
 
-#Region "Initialize"
+    ' Variables
+    Friend state_flag As Boolean
+    Friend server_response_flag As Boolean
+    Friend entities_hash As New Hashtable
+    Private request_id As Dictionary(Of UInt32, Boolean)
 
-    Protected Friend Sub New()
+    ' Events
+    Public Event EntityCreationEvent(ByRef attributes As Hashtable)
+    Public Shared Event EntityRead(ByRef attributes As Hashtable)
+    Public Event EntityUpdateEvent()
+    Public Event EntityDeleteEvent(ByRef id As UInt32)
 
-        object_is_alive = SRV.OpenRst(GlobalVariables.database & "." & ENTITIES_TABLE, ModelServer.DYNAMIC_CURSOR)
-        SRV.rst.Sort = ITEMS_POSITIONS
-        RST = SRV.rst
-        
-    End Sub
 
 #End Region
 
 
-#Region "CRUD Interface"
+#Region "Init"
 
-    Protected Friend Sub CreateEntity(ByRef hash As Hashtable)
+    Friend Sub New()
 
-        Dim fieldsArray(hash.Count - 1) As Object
-        Dim valuesArray(hash.Count - 1) As Object
-        hash.Keys.CopyTo(fieldsArray, 0)
-        hash.Values.CopyTo(valuesArray, 0)
-        RST.AddNew(fieldsArray, valuesArray)
-
-    End Sub
-
-    Protected Friend Function ReadEntity(ByRef entity_id As String, ByRef field As String) As Object
-
-        RST.Filter = ENTITIES_ID_VARIABLE + "='" + entity_id + "'"
-        If RST.EOF Then Return Nothing
-        Return RST.Fields(field).Value
-
-    End Function
-
-    Protected Friend Function GetRecord(ByRef entity_id As String, ByRef categoriesTV As TreeView) As Hashtable
-
-        RST.Filter = ENTITIES_ID_VARIABLE + "='" + entity_id + "'"
-        If RST.EOF Then Return Nothing
-        Dim hash As New Hashtable
-        hash.Add(ENTITIES_NAME_VARIABLE, RST.Fields(ENTITIES_NAME_VARIABLE).Value)
-        hash.Add(ENTITIES_CURRENCY_VARIABLE, RST.Fields(ENTITIES_CURRENCY_VARIABLE).Value)
-        hash.Add(ENTITIES_ALLOW_EDITION_VARIABLE, RST.Fields(ENTITIES_ALLOW_EDITION_VARIABLE).Value)
-        For Each category_node In categoriesTV.Nodes
-            hash.Add(category_node.name, RST.Fields(category_node.name).Value)
-        Next
-        Return hash
-
-    End Function
-
-    Protected Friend Sub UpdateEntity(ByRef entity_id As String, ByRef hash As Hashtable)
-
-        RST.Filter = ENTITIES_ID_VARIABLE + "='" + entity_id + "'"
-        If RST.EOF = False AndAlso RST.BOF = False Then
-            For Each Attribute In hash.Keys
-                If RST.Fields(Attribute).Value <> hash(Attribute) Then
-                    RST.Fields(Attribute).Value = hash(Attribute)
-                    RST.Update()
-                End If
-            Next
-        End If
-
-    End Sub
-
-    Protected Friend Sub UpdateEntity(ByRef entity_id As String, _
-                             ByRef field As String, _
-                             ByVal value As Object)
-
-        RST.Filter = ENTITIES_ID_VARIABLE + "='" + entity_id + "'"
-        If RST.EOF = False AndAlso RST.BOF = False Then
-            If RST.Fields(field).Value <> value Then
-                RST.Fields(field).Value = value
-                RST.Update()
+        LoadEntitiesTable()
+        Dim time_stamp = Timer
+        Do
+            If Timer - time_stamp > GlobalVariables.timeOut Then
+                state_flag = False
+                Exit Do
             End If
-        End If
+        Loop While server_response_flag = True
+        state_flag = True
 
     End Sub
 
-    Protected Friend Sub DeleteEntity(ByRef entity_id As String)
+    Friend Sub LoadEntitiesTable()
 
-        RST.Filter = ENTITIES_ID_VARIABLE + "='" + entity_id + "'"
-        If RST.EOF = False Then
-            RST.Delete()
-            RST.Update()
-        End If
+        NetworkManager.GetInstance().SetCallback(GlobalEnums.ServerMessage.SMSG_LIST_ENTITY_ANSWER, AddressOf SMSG_LIST_ENTITY_ANSWER)
+        Dim packet As New ByteBuffer(CType(GlobalEnums.ClientMessage.CMSG_LIST_ENTITY, UShort))
+        packet.Release()
+        NetworkManager.GetInstance().Send(packet)
 
     End Sub
+
+    Private Sub SMSG_LIST_ENTITY_ANSWER(packet As ByteBuffer)
+
+        For i As Int32 = 0 To packet.ReadInt32()
+            Dim tmp_ht As New Hashtable
+            GetEntityHTFromPacket(packet, tmp_ht)
+            entities_hash(tmp_ht(ID_VARIABLE)) = tmp_ht
+        Next
+        NetworkManager.GetInstance().RemoveCallback(GlobalEnums.ServerMessage.SMSG_LIST_ENTITY_ANSWER, AddressOf SMSG_LIST_ENTITY_ANSWER)
+        server_response_flag = True
+
+    End Sub
+
+#End Region
+
+
+#Region "CRUD"
+
+    Friend Sub CMSG_CREATE_ENTITY(ByRef attributes As Hashtable)
+
+        NetworkManager.GetInstance().SetCallback(GlobalEnums.ServerMessage.SMSG_CREATE_ENTITY_ANSWER, AddressOf SMSG_CREATE_ENTITY_ANSWER)
+        Dim packet As New ByteBuffer(CType(GlobalEnums.ClientMessage.CMSG_CREATE_ENTITY, UShort))
+        WriteEntityPacket(packet, attributes)
+        packet.Release()
+        NetworkManager.GetInstance().Send(packet)
+
+    End Sub
+
+    Private Sub SMSG_CREATE_ENTITY_ANSWER(packet As ByteBuffer)
+
+        MsgBox(packet.ReadString())
+        Dim tmp_ht As New Hashtable
+        GetEntityHTFromPacket(packet, tmp_ht)
+        entities_hash(tmp_ht(ID_VARIABLE)) = tmp_ht
+        NetworkManager.GetInstance().RemoveCallback(GlobalEnums.ServerMessage.SMSG_CREATE_ENTITY_ANSWER, AddressOf SMSG_CREATE_ENTITY_ANSWER)
+        RaiseEvent EntityCreationEvent(tmp_ht)
+
+    End Sub
+
+    Friend Shared Sub CMSG_READ_ENTITY(ByRef id As UInt32)
+
+        NetworkManager.GetInstance().SetCallback(GlobalEnums.ServerMessage.SMSG_READ_ENTITY_ANSWER, AddressOf SMSG_READ_ENTITY_ANSWER)
+        Dim packet As New ByteBuffer(CType(GlobalEnums.ClientMessage.CMSG_CREATE_ENTITY, UShort))
+        packet.Release()
+        NetworkManager.GetInstance().Send(packet)
+
+    End Sub
+
+    Friend Shared Sub SMSG_READ_ENTITY_ANSWER(packet As ByteBuffer)
+
+        Dim ht As New Hashtable
+        GetEntityHTFromPacket(packet, ht)
+        NetworkManager.GetInstance().RemoveCallback(GlobalEnums.ServerMessage.SMSG_CREATE_ENTITY_ANSWER, AddressOf SMSG_READ_ENTITY_ANSWER)
+        RaiseEvent EntityRead(ht)
+
+    End Sub
+
+    Friend Sub UpdateBatch(ByRef updates As List(Of Object()))
+
+        ' to be implemented !!!! priority normal
+
+        request_id.Clear()
+        For Each update As Object() In updates
+
+
+        Next
+
+
+    End Sub
+
+    Friend Sub CMSG_UPDATE_ENTITY(ByRef id As UInt32, _
+                                  ByRef updated_var As String, _
+                                  ByRef new_value As String)
+
+        Dim tmp_ht As Hashtable = entities_hash(id).clone ' check clone !!!!
+        tmp_ht(updated_var) = new_value
+
+        NetworkManager.GetInstance().SetCallback(GlobalEnums.ServerMessage.SMSG_UPDATE_ENTITY_ANSWER, AddressOf SMSG_UPDATE_ENTITY_ANSWER)
+        Dim packet As New ByteBuffer(CType(GlobalEnums.ClientMessage.CMSG_UPDATE_ENTITY, UShort))
+        WriteEntityPacket(packet, tmp_ht)
+        packet.Release()
+        NetworkManager.GetInstance().Send(packet)
+
+    End Sub
+
+    Friend Sub CMSG_UPDATE_ENTITY(ByRef attributes As Hashtable)
+
+        NetworkManager.GetInstance().SetCallback(GlobalEnums.ServerMessage.SMSG_UPDATE_ENTITY_ANSWER, AddressOf SMSG_UPDATE_ENTITY_ANSWER)
+        Dim packet As New ByteBuffer(CType(GlobalEnums.ClientMessage.CMSG_UPDATE_ENTITY, UShort))
+        WriteEntityPacket(packet, attributes)
+        packet.Release()
+        NetworkManager.GetInstance().Send(packet)
+
+    End Sub
+
+    Private Sub SMSG_UPDATE_ENTITY_ANSWER(packet As ByteBuffer)
+
+        Dim ht As New Hashtable
+        GetEntityHTFromPacket(packet, ht)
+        entities_hash(ht(ID_VARIABLE)) = ht
+        NetworkManager.GetInstance().RemoveCallback(GlobalEnums.ServerMessage.SMSG_UPDATE_ENTITY_ANSWER, AddressOf SMSG_UPDATE_ENTITY_ANSWER)
+        RaiseEvent EntityUpdateEvent()
+
+    End Sub
+
+    Friend Sub CMSG_DELETE_ENTITY(ByRef id As UInt32)
+
+        NetworkManager.GetInstance().SetCallback(GlobalEnums.ServerMessage.SMSG_DELETE_ENTITY_ANSWER, AddressOf SMSG_DELETE_ENTITY_ANSWER)
+        Dim packet As New ByteBuffer(CType(GlobalEnums.ClientMessage.CMSG_DELETE_ENTITY, UShort))
+        packet.WriteUint32(id)
+        packet.Release()
+        NetworkManager.GetInstance().Send(packet)
+
+    End Sub
+
+    Private Sub SMSG_DELETE_ENTITY_ANSWER()
+
+        Dim id As UInt32
+        ' get id from request_id ?
+        NetworkManager.GetInstance().RemoveCallback(GlobalEnums.ServerMessage.SMSG_DELETE_ENTITY_ANSWER, AddressOf SMSG_DELETE_ENTITY_ANSWER)
+        RaiseEvent EntityDeleteEvent(id)
+
+    End Sub
+
+#End Region
+
+
+#Region "Mappings"
+
+    Friend Function GetEntitiesList(ByRef variable As String)
+
+        Dim tmp_list As New List(Of String)
+        Dim selection() As String = {}
+
+        For Each id In entities_hash.Keys
+            tmp_list.Add(entities_hash(id)(variable))
+        Next
+        Return tmp_list
+
+    End Function
+
+    Friend Function GetEntitiesDictionary(ByRef Key As String, ByRef Value As String) As Hashtable
+
+        Dim tmpHT As New Hashtable
+        For Each id In entities_hash.Keys
+            tmpHT(entities_hash(id)(Key)) = entities_hash(id)(Value)
+        Next
+        Return tmpHT
+
+    End Function
 
 #End Region
 
 
 #Region "Utilities"
 
-    Protected Friend Shared Sub LoadEntitiesTree(ByRef TV As TreeView, Optional ByRef strSqlQuery As String = "")
+    Friend Shared Sub GetEntityHTFromPacket(ByRef packet As ByteBuffer, ByRef entity_ht As Hashtable)
 
-        Dim srv As New ModelServer
-        Dim q_result As Boolean
-        If strSqlQuery <> "" Then
-            q_result = srv.openRstSQL("SELECT * FROM " + GlobalVariables.database + "." + ENTITIES_TABLE + " WHERE " + strSqlQuery, ModelServer.FWD_CURSOR)
-        Else
-            q_result = srv.openRst(GlobalVariables.database & "." & ENTITIES_TABLE, ModelServer.FWD_CURSOR)
-        End If
-
-        If q_result = True Then
-            Dim currentNode, ParentNode() As TreeNode
-            TV.Nodes.Clear()
-            srv.rst.Sort = ITEMS_POSITIONS
-
-            Do While srv.rst.EOF = False
-
-                Dim image_index As Int32 = srv.rst.Fields(ENTITIES_ALLOW_EDITION_VARIABLE).Value
-
-                If IsDBNull(srv.rst.Fields(ENTITIES_PARENT_ID_VARIABLE).Value) Then
-                    currentNode = TV.Nodes.Add(Trim(srv.rst.Fields(ENTITIES_ID_VARIABLE).Value), _
-                                               Trim(srv.rst.Fields(ENTITIES_NAME_VARIABLE).Value), _
-                                               image_index, image_index)
-                Else
-
-                    ParentNode = TV.Nodes.Find(Trim(srv.rst.Fields(ENTITIES_PARENT_ID_VARIABLE).Value), True)
-                    If ParentNode.Length = 0 Then
-                        currentNode = TV.Nodes.Add(Trim(srv.rst.Fields(ENTITIES_ID_VARIABLE).Value), _
-                                                   Trim(srv.rst.Fields(ENTITIES_NAME_VARIABLE).Value), _
-                                                  image_index, image_index)
-                    Else
-                        currentNode = ParentNode(0).Nodes.Add(Trim(srv.rst.Fields(ENTITIES_ID_VARIABLE).Value), _
-                                                              Trim(srv.rst.Fields(ENTITIES_NAME_VARIABLE).Value), _
-                                                              image_index, image_index)
-                    End If
-                End If
-                currentNode.Checked = True
-                srv.rst.MoveNext()
-            Loop
-            srv.rst.Close()
-        End If
+        entity_ht(ID_VARIABLE) = packet.ReadInt32()
+        entity_ht(PARENT_ID_VARIABLE) = packet.ReadInt32()
+        entity_ht(ENTITIES_CURRENCY_VARIABLE) = packet.ReadInt32()
+        entity_ht(NAME_VARIABLE) = packet.ReadString()
+        entity_ht(ITEMS_POSITIONS) = packet.ReadInt32()
+        entity_ht(ENTITIES_ALLOW_EDITION_VARIABLE) = packet.ReadInt32()
+        entity_ht(IMAGE_VARIABLE) = entity_ht(ENTITIES_ALLOW_EDITION_VARIABLE)
 
     End Sub
 
-    Protected Friend Shared Sub LoadEntitiesTree(ByRef TV As TreeView, _
-                                                 ByRef nodes_icon_dic As Dictionary(Of String, Int32))
+    Private Sub WriteEntityPacket(ByRef packet As ByteBuffer, ByRef attributes As Hashtable)
 
-        Dim srv As New ModelServer
-        Dim q_result As Boolean
-        q_result = srv.openRst(GlobalVariables.database & "." & ENTITIES_TABLE, ModelServer.FWD_CURSOR)
-        If q_result = True Then
-
-            Dim currentNode, ParentNode() As TreeNode
-            TV.Nodes.Clear()
-            srv.rst.Sort = ITEMS_POSITIONS
-
-            Do While srv.rst.EOF = False
-
-                Dim image_index As Int32 = nodes_icon_dic(srv.rst.Fields(ENTITIES_ID_VARIABLE).Value)
-
-                If IsDBNull(srv.rst.Fields(ENTITIES_PARENT_ID_VARIABLE).Value) Then
-                    currentNode = TV.Nodes.Add(Trim(srv.rst.Fields(ENTITIES_ID_VARIABLE).Value), _
-                                                Trim(srv.rst.Fields(ENTITIES_NAME_VARIABLE).Value), _
-                                                image_index, image_index)
-                Else
-
-                    ParentNode = TV.Nodes.Find(Trim(srv.rst.Fields(ENTITIES_PARENT_ID_VARIABLE).Value), True)
-                    If ParentNode.Length = 0 Then
-                        currentNode = TV.Nodes.Add(Trim(srv.rst.Fields(ENTITIES_ID_VARIABLE).Value), _
-                                                    Trim(srv.rst.Fields(ENTITIES_NAME_VARIABLE).Value), _
-                                                    image_index, image_index)
-                    Else
-                        currentNode = ParentNode(0).Nodes.Add(Trim(srv.rst.Fields(ENTITIES_ID_VARIABLE).Value), _
-                                                                Trim(srv.rst.Fields(ENTITIES_NAME_VARIABLE).Value), _
-                                                                image_index, image_index)
-                    End If
-                End If
-                currentNode.Checked = True
-                srv.rst.MoveNext()
-            Loop
-            srv.rst.Close()
-        End If
+        If attributes.ContainsKey(ID_VARIABLE) Then packet.WriteInt32(attributes(ID_VARIABLE))
+        packet.WriteInt32(attributes(PARENT_ID_VARIABLE))
+        packet.WriteInt32(attributes(ENTITIES_CURRENCY_VARIABLE))
+        packet.WriteString(attributes(NAME_VARIABLE))
+        packet.WriteInt32(attributes(ITEMS_POSITIONS))
+        packet.WriteInt32(attributes(ENTITIES_ALLOW_EDITION_VARIABLE))
 
     End Sub
 
-    Protected Friend Shared Sub LoadEntitiesCredentialTree(ByRef TV As TreeView)
+    Friend Sub LoadEntitiesTV(ByRef TV As Windows.Forms.TreeView)
 
-        Dim nodeX, ParentNode() As Windows.Forms.TreeNode
-        Dim srv As New ModelServer
-
-        TV.Nodes.Clear()
-        srv.OpenRst(GlobalVariables.database + "." + ENTITIES_TABLE, ModelServer.FWD_CURSOR)
-        srv.rst.Sort = ITEMS_POSITIONS
-
-        Do While srv.rst.EOF = False
-            If IsDBNull(srv.rst.Fields(ENTITIES_PARENT_ID_VARIABLE).Value) Then
-                nodeX = TV.Nodes.Add(Trim(srv.rst.Fields(ENTITIES_ID_VARIABLE).Value), _
-                                     Trim(srv.rst.Fields(ENTITIES_CREDENTIAL_ID_VARIABLE).Value))
-            Else
-                ParentNode = TV.Nodes.Find(Trim(srv.rst.Fields(ENTITIES_PARENT_ID_VARIABLE).Value), True)
-                If ParentNode.Length = 0 Then
-                    nodeX = TV.Nodes.Add(Trim(srv.rst.Fields(ENTITIES_ID_VARIABLE).Value), _
-                                         Trim(srv.rst.Fields(ENTITIES_CREDENTIAL_ID_VARIABLE).Value))
-                Else
-                    nodeX = ParentNode(0).Nodes.Add(Trim(srv.rst.Fields(ENTITIES_ID_VARIABLE).Value), _
-                                                    Trim(srv.rst.Fields(ENTITIES_CREDENTIAL_ID_VARIABLE).Value))
-                End If
-            End If
-            nodeX.Checked = True
-            srv.rst.MoveNext()
-        Loop
-        srv.rst.Close()
-        srv = Nothing
+        TreeViewsUtilities.LoadTreeview(TV, entities_hash)
 
     End Sub
 
-    Protected Friend Shared Sub UpdateEntitiesCredentialLevels(ByRef entitiesIDCredentialsTV As TreeView)
+    Friend Sub LoadEntitiesTV(ByRef TV As Windows.Forms.TreeView, _
+                            ByRef nodes_icon_dic As Dictionary(Of UInt32, Int32))
 
-        Dim srv As New ModelServer
-        srv.openRst(GlobalVariables.database + "." + ENTITIES_TABLE, ModelServer.STATIC_CURSOR)
+        Dim tmp_ht As New Hashtable
+        tmp_ht = entities_hash
+        For Each id As UInt32 In nodes_icon_dic.Keys
+            tmp_ht(id)(IMAGE_VARIABLE) = nodes_icon_dic(id)
+        Next
+        TreeViewsUtilities.LoadTreeview(TV, tmp_ht)
 
-        Dim entities_id_list = TreeViewsUtilities.GetNodesKeysList(entitiesIDCredentialsTV)
-        Dim node As TreeNode
-        For Each entity_id In entities_id_list
+    End Sub
 
-            node = entitiesIDCredentialsTV.Nodes.Find(entity_id, True)(0)
-            srv.rst.Filter = ENTITIES_ID_VARIABLE + "='" + entity_id + "'"
-            If srv.rst.EOF = False AndAlso srv.rst.BOF = False Then
-                If srv.rst.Fields(ENTITIES_CREDENTIAL_ID_VARIABLE).Value <> node.Text Then
-                    srv.rst.Fields(ENTITIES_CREDENTIAL_ID_VARIABLE).Value = node.Text
-                End If
+    Friend Sub LoadEntitiesTVWithFilters(ByRef TV As Windows.Forms.TreeView, _
+                                         ByRef axisFilteredValues As List(Of UInt32))
+
+
+        Dim tmp_ht As New Hashtable
+        For Each id As UInt32 In entities_hash.Keys
+            If axisFilteredValues.Contains(id) Then
+                tmp_ht(id) = entities_hash(id)
             End If
         Next
-        srv.rst.Update()
-        srv.CloseRst()
+        TreeViewsUtilities.LoadTreeview(TV, tmp_ht)
 
     End Sub
 
-    Protected Friend Sub close()
-
-        finalize()
-
-    End Sub
-
-    Protected Overrides Sub finalize()
-
-        On Error Resume Next
-        RST.Close()
-        MyBase.Finalize()
-
-    End Sub
 
 #End Region
+
+
 
 
 

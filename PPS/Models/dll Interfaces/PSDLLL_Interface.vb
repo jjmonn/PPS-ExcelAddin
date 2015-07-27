@@ -24,7 +24,7 @@ Friend Class PSDLLL_Interface
     Private objptr As Integer
 
     ' Variables
-    Private mEntitiesList As String()
+    Private mEntitiesList As UInt32()
     Private mNbentities As Int32
     Private mNbperiods As Int32
 
@@ -46,7 +46,7 @@ Friend Class PSDLLL_Interface
     Private Shared Sub InitPSDLL(ByVal objptr As Integer, _
                                       <MarshalAs(UnmanagedType.SafeArray, SafeArraySubType:=VarEnum.VT_BSTR)> ByRef index_list() As String, _
                                       ByVal nb_indexes As Integer, _
-                                      <MarshalAs(UnmanagedType.SafeArray, SafeArraySubType:=VarEnum.VT_BSTR)> ByRef entities_list() As String, _
+                                      <MarshalAs(UnmanagedType.SafeArray, SafeArraySubType:=VarEnum.VT_UINT)> ByRef entities_list() As UInt32, _
                                       <MarshalAs(UnmanagedType.SafeArray, SafeArraySubType:=VarEnum.VT_BSTR)> ByRef formulas() As String, _
                                       ByVal nb_entities As Integer, ByVal nb_periods As Integer)
     End Sub
@@ -86,8 +86,8 @@ Friend Class PSDLLL_Interface
 #Region "Interface"
 
 
-    Protected Friend Sub New(ByRef index_list As String(), _
-                             ByRef entities As String(), _
+    Friend Sub New(ByRef index_list As String(), _
+                             ByRef entities As UInt32(), _
                              ByRef formulas As String(), _
                              ByRef nb_periods As Int32)
 

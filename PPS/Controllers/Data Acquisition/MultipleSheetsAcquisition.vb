@@ -70,7 +70,7 @@
 '        Dim DB As New cDataBaseDataUploader
 '        Dim ENTMAPP As New EntitiesMappingTransactions
 '        Dim errorList As New Collections.Generic.List(Of String)
-'        Dim EntitiesNameEditionAllowanceDictionary As Hashtable = ENTMAPP.GetEntitiesDictionary(ENTITIES_NAME_VARIABLE, ENTITIES_ALLOW_EDITION_VARIABLE)
+'        Dim EntitiesNameEditionAllowanceDictionary As Hashtable = ENTMAPP.GetEntitiesDictionary(NAME_VARIABLE, ENTITIES_ALLOW_EDITION_VARIABLE)
 
 '        For Each worksheetName As String In CLB_worksheets.CheckedItems
 

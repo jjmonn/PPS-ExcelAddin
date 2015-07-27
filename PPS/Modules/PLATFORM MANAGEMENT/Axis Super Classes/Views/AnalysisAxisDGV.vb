@@ -44,7 +44,7 @@ Friend Class AnalysisAxisDGV
 #Region "Initialize"
 
     Protected Friend Sub New(ByRef input_categoriesTV As TreeView, _
-                             ByRef values_dict As Dictionary(Of String, Hashtable))
+                             ByRef values_dict As Hashtable)
 
         ' This call is required by the designer.
         InitializeComponent()
@@ -113,7 +113,7 @@ Friend Class AnalysisAxisDGV
 
     End Sub
 
-    Private Sub fillDGV(ByRef values_dict As Dictionary(Of String, Hashtable))
+    Private Sub fillDGV(ByRef values_dict As Hashtable)
 
         isFillingDGV = True
         For Each value_id In values_dict.Keys
@@ -137,7 +137,7 @@ Friend Class AnalysisAxisDGV
         Dim rowItem = DGV.RowsHierarchy.Items.Add(item_id)
         rowItem.TextAlignment = Drawing.ContentAlignment.MiddleLeft
         Dim column As HierarchyItem = DGV.ColumnsHierarchy.Items(0)
-        DGV.CellsArea.SetCellValue(rowItem, column, itemHT(ANALYSIS_AXIS_NAME_VAR))
+        DGV.CellsArea.SetCellValue(rowItem, column, itemHT(NAME_VARIABLE))
 
         For Each root_category_node As TreeNode In categoriesTV.Nodes
             column = columnsIDItemDict(root_category_node.Name)

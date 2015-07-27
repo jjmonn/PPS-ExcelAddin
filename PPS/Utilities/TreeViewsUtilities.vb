@@ -3,7 +3,7 @@
 ' Common treeviews functions
 '
 '
-' Last modified: 15/06/2015
+' Last modified: 24/07/2015
 ' Author: Julien Monnereau
 
 
@@ -12,6 +12,185 @@ Imports System.Collections.Generic
 
 
 Friend Class TreeViewsUtilities
+
+
+#Region "Treeviews Loading"
+
+    Friend Shared Sub LoadTreeview(ByRef TV As TreeView, _
+                                   ByRef RST As ADODB.Recordset)
+
+        Dim currentNode, ParentNode() As TreeNode
+        Dim orphans_ids_list As New List(Of String)
+        TV.Nodes.Clear()
+        RST.MoveFirst()
+        Do While RST.EOF = False
+            Dim image_index As Int32 = RST.Fields(IMAGE_VARIABLE).Value
+
+            If IsDBNull(RST.Fields(PARENT_ID_VARIABLE).Value) Then
+                currentNode = TV.Nodes.Add(Trim(RST.Fields(ID_VARIABLE).Value), _
+                                           Trim(RST.Fields(NAME_VARIABLE).Value), _
+                                           image_index, image_index)
+            Else
+                ParentNode = TV.Nodes.Find(Trim(RST.Fields(PARENT_ID_VARIABLE).Value), True)
+                If ParentNode.Length > 0 Then
+                    currentNode = ParentNode(0).Nodes.Add(Trim(RST.Fields(ID_VARIABLE).Value), _
+                                                          Trim(RST.Fields(NAME_VARIABLE).Value), _
+                                                          image_index, image_index)
+                Else
+                    orphans_ids_list.Add(RST.Fields(ID_VARIABLE).Value)
+                End If
+            End If
+            RST.MoveNext()
+        Loop
+        If orphans_ids_list.Count > 0 Then SolveOrphanNodesList(TV, RST, orphans_ids_list)
+
+    End Sub
+
+    Friend Shared Sub SolveOrphanNodesList(ByRef TV As TreeView, _
+                                           ByRef RST As ADODB.Recordset, _
+                                           ByRef orphans_id_list As List(Of String), _
+                                           Optional ByRef solved_orphans_list As List(Of String) = Nothing)
+
+        Dim current_node, parent_nodes() As TreeNode
+        Dim image_index As Int32
+        If solved_orphans_list Is Nothing Then solved_orphans_list = New List(Of String)
+        For Each orphan_id In orphans_id_list
+            If solved_orphans_list.Contains(orphan_id) = False Then
+                RST.Filter = ID_VARIABLE & "='" & orphan_id & "'"
+                parent_nodes = TV.Nodes.Find(RST.Fields(PARENT_ID_VARIABLE).Value, True)
+
+                If parent_nodes.Length > 0 Then
+                    image_index = RST.Fields(IMAGE_VARIABLE).Value
+                    current_node = parent_nodes(0).Nodes.Add(Trim(RST.Fields(ID_VARIABLE).Value), _
+                                                             Trim(RST.Fields(NAME_VARIABLE).Value), _
+                                                             image_index, _
+                                                             image_index)
+                    solved_orphans_list.Add(orphan_id)
+                End If
+            End If
+        Next
+        If solved_orphans_list.Count <> orphans_id_list.Count Then SolveOrphanNodesList(TV, _
+                                                                                       RST, _
+                                                                                       orphans_id_list, _
+                                                                                       solved_orphans_list)
+
+    End Sub
+
+    Friend Shared Sub LoadTreeview(ByRef TV As TreeView, ByRef items_attributes As Collections.Hashtable)
+
+        Dim currentNode, ParentNode() As TreeNode
+        Dim orphans_ids_list As New List(Of String)
+        Dim image_index As UInt16 = 0
+        TV.Nodes.Clear()
+
+        For Each id In items_attributes.Keys
+            If items_attributes(id).ContainsKey(IMAGE_VARIABLE) Then image_index = items_attributes(IMAGE_VARIABLE)
+            If Not IsNumeric(items_attributes(id)(PARENT_ID_VARIABLE)) Then
+                currentNode = TV.Nodes.Add(items_attributes(id)(ID_VARIABLE), _
+                                           items_attributes(id)(NAME_VARIABLE), _
+                                           image_index, image_index)
+            Else
+                ParentNode = TV.Nodes.Find((items_attributes(id)(PARENT_ID_VARIABLE)), True)
+                If ParentNode.Length > 0 Then
+                    currentNode = ParentNode(0).Nodes.Add(items_attributes(id)(ID_VARIABLE), _
+                                                          items_attributes(id)(NAME_VARIABLE), _
+                                                          image_index, image_index)
+                Else
+                    orphans_ids_list.Add(items_attributes(id)(ID_VARIABLE))
+                End If
+            End If
+        Next
+        If orphans_ids_list.Count > 0 Then SolveOrphanNodesList(TV, items_attributes, orphans_ids_list)
+
+    End Sub
+
+    Friend Shared Sub SolveOrphanNodesList(ByRef TV As TreeView, _
+                                          ByRef items_attributes As Collections.Hashtable, _
+                                          ByRef orphans_id_list As List(Of String), _
+                                          Optional ByRef solved_orphans_list As List(Of String) = Nothing)
+
+        Dim current_node, parent_nodes() As TreeNode
+        Dim image_index As UInt16 = 0
+        If solved_orphans_list Is Nothing Then solved_orphans_list = New List(Of String)
+        For Each orphan_id In orphans_id_list
+            If items_attributes(orphan_id).ContainsKey(IMAGE_VARIABLE) Then image_index = items_attributes(IMAGE_VARIABLE)
+            If solved_orphans_list.Contains(orphan_id) = False Then
+                parent_nodes = TV.Nodes.Find(items_attributes(orphan_id)(PARENT_ID_VARIABLE), True)
+
+                If parent_nodes.Length > 0 Then
+                    current_node = parent_nodes(0).Nodes.Add(items_attributes(orphan_id)(ID_VARIABLE), _
+                                                             items_attributes(orphan_id)(NAME_VARIABLE), _
+                                                             image_index, _
+                                                             image_index)
+                    solved_orphans_list.Add(orphan_id)
+                End If
+            End If
+        Next
+        If solved_orphans_list.Count <> orphans_id_list.Count Then SolveOrphanNodesList(TV, _
+                                                                                        items_attributes, _
+                                                                                        orphans_id_list, _
+                                                                                        solved_orphans_list)
+
+    End Sub
+
+    Friend Shared Sub LoadTreeview(ByRef node As TreeNode, ByRef items_attributes As Collections.Hashtable)
+
+        Dim currentNode, ParentNode() As TreeNode
+        Dim orphans_ids_list As New List(Of String)
+        Dim image_index As UInt16 = 0
+        node.Nodes.Clear()
+
+        For Each id In items_attributes.Keys
+            If items_attributes(id).ContainsKey(IMAGE_VARIABLE) Then image_index = items_attributes(IMAGE_VARIABLE)
+            If Not IsNumeric(items_attributes(id)(PARENT_ID_VARIABLE)) Then
+                currentNode = node.Nodes.Add(items_attributes(id)(ID_VARIABLE), _
+                                           items_attributes(id)(NAME_VARIABLE), _
+                                           image_index, image_index)
+            Else
+                ParentNode = node.Nodes.Find((items_attributes(id)(PARENT_ID_VARIABLE)), True)
+                If ParentNode.Length > 0 Then
+                    currentNode = ParentNode(0).Nodes.Add(items_attributes(id)(ID_VARIABLE), _
+                                                          items_attributes(id)(NAME_VARIABLE), _
+                                                          image_index, image_index)
+                Else
+                    orphans_ids_list.Add(items_attributes(id)(ID_VARIABLE))
+                End If
+            End If
+        Next
+        If orphans_ids_list.Count > 0 Then SolveOrphanNodesList(node, items_attributes, orphans_ids_list)
+
+    End Sub
+
+    Friend Shared Sub SolveOrphanNodesList(ByRef node As TreeNode, _
+                                          ByRef items_attributes As Collections.Hashtable, _
+                                          ByRef orphans_id_list As List(Of String), _
+                                          Optional ByRef solved_orphans_list As List(Of String) = Nothing)
+
+        Dim current_node, parent_nodes() As TreeNode
+        Dim image_index As UInt16 = 0
+        If solved_orphans_list Is Nothing Then solved_orphans_list = New List(Of String)
+        For Each orphan_id In orphans_id_list
+            If items_attributes(orphan_id).ContainsKey(IMAGE_VARIABLE) Then image_index = items_attributes(IMAGE_VARIABLE)
+            If solved_orphans_list.Contains(orphan_id) = False Then
+                parent_nodes = node.Nodes.Find(items_attributes(orphan_id)(PARENT_ID_VARIABLE), True)
+
+                If parent_nodes.Length > 0 Then
+                    current_node = parent_nodes(0).Nodes.Add(items_attributes(orphan_id)(ID_VARIABLE), _
+                                                             items_attributes(orphan_id)(NAME_VARIABLE), _
+                                                             image_index, _
+                                                             image_index)
+                    solved_orphans_list.Add(orphan_id)
+                End If
+            End If
+        Next
+        If solved_orphans_list.Count <> orphans_id_list.Count Then SolveOrphanNodesList(node, _
+                                                                                        items_attributes, _
+                                                                                        orphans_id_list, _
+                                                                                        solved_orphans_list)
+
+    End Sub
+
+#End Region
 
 
 #Region "Add nodes to Treeview"
@@ -228,9 +407,9 @@ Friend Class TreeViewsUtilities
 
     End Function
 
-    Friend Shared Function GetNodesKeysList(ByRef TV As TreeView) As List(Of String)
+    Friend Shared Function GetNodesKeysList(ByRef TV As TreeView) As List(Of UInt32)
 
-        Dim tmpList As New List(Of String)
+        Dim tmpList As New List(Of UInt32)
         For Each node In TV.Nodes
             AddChildrenKeysToList(node, tmpList)
         Next
@@ -248,9 +427,9 @@ Friend Class TreeViewsUtilities
 
     End Function
 
-    Friend Shared Function GetNodesKeysList(ByRef node As TreeNode) As List(Of String)
+    Friend Shared Function GetNodesKeysList(ByRef node As TreeNode) As List(Of UInt32)
 
-        Dim tmpList As New List(Of String)
+        Dim tmpList As New List(Of UInt32)
         AddChildrenKeysToList(node, tmpList)
         Return tmpList
 
@@ -273,9 +452,19 @@ Friend Class TreeViewsUtilities
 
     End Function
 
-    Friend Shared Sub AddChildrenKeysToList(ByRef node As TreeNode, tmpList As List(Of String))
+    Friend Shared Function GetNodesList(ByRef tv As TreeView) As List(Of TreeNode)
 
-        tmpList.Add(node.Name)
+        Dim tmp_list As New List(Of TreeNode)
+        For Each node In tv.Nodes
+            AddChildrenNodesToList(node, tmp_list)
+        Next
+        Return tmp_list
+
+    End Function
+
+    Friend Shared Sub AddChildrenKeysToList(ByRef node As TreeNode, tmpList As List(Of UInt32))
+
+        tmpList.Add(CInt(node.Name))
         For Each subNode In node.Nodes
             AddChildrenKeysToList(subNode, tmpList)
         Next
@@ -300,8 +489,8 @@ Friend Class TreeViewsUtilities
 
     End Sub
 
-    Friend Shared Function GetNodeChildrenIDsStringArray(ByRef input_node As TreeNode, _
-                                                                  Optional ByRef filter As Boolean = False)
+    Friend Shared Function GetNodeChildrenIDsArray(ByRef input_node As TreeNode, _
+                                                  Optional ByRef filter As Boolean = False)
 
         Dim children_array(input_node.Nodes.Count - 1) As String
         Dim i As Int32 = 0
@@ -322,10 +511,10 @@ Friend Class TreeViewsUtilities
 
     End Function
 
-    Friend Shared Function GetNoChildrenNodesList(ByRef allIDsList As List(Of String),
-                                                  ByRef tv As TreeView) As List(Of String)
+    Friend Shared Function GetNoChildrenNodesList(ByRef allIDsList As List(Of UInt32),
+                                                  ByRef tv As TreeView) As List(Of UInt32)
 
-        Dim tmpList As New List(Of String)
+        Dim tmpList As New List(Of UInt32)
         For Each id In allIDsList
             Dim tmpNode As TreeNode = tv.Nodes.Find(id, True)(0)
             If tmpNode.Nodes.Count = 0 Then tmpList.Add(tmpNode.Name)
@@ -334,10 +523,10 @@ Friend Class TreeViewsUtilities
 
     End Function
 
-    Friend Shared Function getNoChildrenNodesList(ByRef node As TreeNode)
+    Friend Shared Function getNoChildrenNodesList(ByRef node As TreeNode) As List(Of UInt32)
 
-        Dim tmpList As New List(Of String)
-        Dim allIdList As List(Of String) = GetNodesKeysList(node)
+        Dim tmpList As New List(Of UInt32)
+        Dim allIdList As List(Of UInt32) = GetNodesKeysList(node)
         allIdList.Remove(node.Name)
         For Each id In allIdList
             Dim tmpNode As TreeNode = node.Nodes.Find(id, True)(0)
@@ -357,9 +546,9 @@ Friend Class TreeViewsUtilities
 
     End Function
 
-    Friend Shared Function GetUniqueList(ByRef input_list As List(Of String)) As List(Of String)
+    Friend Shared Function GetUniqueList(ByRef input_list As List(Of UInt32)) As List(Of UInt32)
 
-        Dim tmp_list As New List(Of String)
+        Dim tmp_list As New List(Of UInt32)
         For Each item In input_list
             If tmp_list.Contains(item) = False Then tmp_list.Add(item)
         Next
@@ -422,7 +611,7 @@ Friend Class TreeViewsUtilities
     Friend Shared Function GetHighestHierarchyLevelFromList(ByRef ids_list As List(Of String), _
                                                                      ByRef TV As TreeView) As String
 
-        Dim all_nodes_list As List(Of String) = GetNodesKeysList(TV)
+        Dim all_nodes_list As List(Of UInt32) = GetNodesKeysList(TV)
         Dim highest_level_id As String = ""
         Dim highest_index As Int32 = all_nodes_list.Count
         For Each id As String In ids_list
@@ -463,67 +652,6 @@ Friend Class TreeViewsUtilities
         Next
 
     End Sub
-
-    Friend Shared Sub LoadAccountsTree(ByRef TV As TreeView, _
-                                       ByRef RST As ADODB.Recordset)
-
-        Dim currentNode, ParentNode() As TreeNode
-        Dim orphans_ids_list As New List(Of String)
-        TV.Nodes.Clear()
-        RST.MoveFirst()
-        Do While RST.EOF = False
-            Dim image_index As Int32 = RST.Fields(IMAGE_VARIABLE).Value
-
-            If IsDBNull(RST.Fields(PARENT_ID_VARIABLE).Value) Then
-                currentNode = TV.Nodes.Add(Trim(RST.Fields(ID_VARIABLE).Value), _
-                                           Trim(RST.Fields(NAME_VARIABLE).Value), _
-                                           image_index, image_index)
-            Else
-                ParentNode = TV.Nodes.Find(Trim(RST.Fields(PARENT_ID_VARIABLE).Value), True)
-                If ParentNode.Length > 0 Then
-                    currentNode = ParentNode(0).Nodes.Add(Trim(RST.Fields(ID_VARIABLE).Value), _
-                                                          Trim(RST.Fields(NAME_VARIABLE).Value), _
-                                                          image_index, image_index)
-                Else
-                    orphans_ids_list.Add(RST.Fields(ID_VARIABLE).Value)
-                End If
-            End If
-            RST.MoveNext()
-        Loop
-        If orphans_ids_list.Count > 0 Then SolveOrphanNodesList(TV, RST, orphans_ids_list)
-
-    End Sub
-
-    Friend Shared Sub SolveOrphanNodesList(ByRef TV As TreeView, _
-                                           ByRef RST As ADODB.Recordset, _
-                                           ByRef orphans_id_list As List(Of String), _
-                                           Optional ByRef solved_orphans_list As List(Of String) = Nothing)
-
-        Dim current_node, parent_nodes() As TreeNode
-        Dim image_index As Int32
-        If solved_orphans_list Is Nothing Then solved_orphans_list = New List(Of String)
-        For Each orphan_id In orphans_id_list
-            If solved_orphans_list.Contains(orphan_id) = False Then
-                RST.Filter = ID_VARIABLE & "='" & orphan_id & "'"
-                parent_nodes = TV.Nodes.Find(RST.Fields(PARENT_ID_VARIABLE).Value, True)
-
-                If parent_nodes.Length > 0 Then
-                    image_index = RST.Fields(IMAGE_VARIABLE).Value
-                    current_node = parent_nodes(0).Nodes.Add(Trim(RST.Fields(ID_VARIABLE).Value), _
-                                                             Trim(RST.Fields(NAME_VARIABLE).Value), _
-                                                             image_index, _
-                                                             image_index)
-                    solved_orphans_list.Add(orphan_id)
-                End If
-            End If
-        Next
-        If solved_orphans_list.Count <> orphans_id_list.Count Then SolveOrphanNodesList(TV, _
-                                                                                       RST, _
-                                                                                       orphans_id_list, _
-                                                                                       solved_orphans_list)
-
-    End Sub
-
 
 #End Region
 
@@ -608,7 +736,7 @@ Friend Class TreeViewsUtilities
 
     Public Shared Sub set_TV_basics_icon_index(ByRef TV As TreeView)
 
-        Dim nodes_keys_list As List(Of String) = GetNodesKeysList(TV)
+        Dim nodes_keys_list As List(Of UInt32) = GetNodesKeysList(TV)
         For Each key In nodes_keys_list
             Dim tmp_node = TV.Nodes.Find(key, True)(0)
             If tmp_node.Nodes.Count > 0 Then

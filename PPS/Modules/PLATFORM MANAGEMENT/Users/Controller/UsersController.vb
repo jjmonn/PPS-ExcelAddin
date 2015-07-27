@@ -251,8 +251,11 @@ Friend Class UsersController
 
     Private Sub ReCreateAllViewsFromCurrentUser()
 
+        ' class to be deleted => on server !!!!! priority normal
+
+        MsgBox("users mgt to be implemented on server")
         Dim entities_credentials_tv As New TreeView
-        Entity.LoadEntitiesCredentialTree(entities_credentials_tv)
+        '  Entity.LoadEntitiesCredentialTree(entities_credentials_tv)
         'ViewsController.CreateAllViews(entities_credentials_tv)
 
     End Sub

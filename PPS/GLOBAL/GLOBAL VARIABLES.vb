@@ -12,6 +12,8 @@
 Imports AddinExpress.MSO
 Imports Microsoft.Office.Interop.Excel
 
+'Imports Microsoft.Office.Interop.Excel
+
 
 
 Friend Class GlobalVariables
@@ -21,6 +23,7 @@ Friend Class GlobalVariables
     Friend Shared Connection As ADODB.Connection
     Friend Shared NetworkConnect As NetworkLauncher
     Friend Shared database As String = My.Settings.database
+    Friend Shared timeOut As UInt16 = 5
 
 #End Region
 
@@ -47,10 +50,6 @@ Friend Class GlobalVariables
 #Region "Computing"
 
     Friend Shared APPS As Application
-    Friend Shared GenericGlobalSingleEntityComputer As GenericSingleEntityDLL3Computer        ' change the name of this global instance
-    Friend Shared GenericGlobalAggregationComputer As GenericAggregationDLL3Computing
-    Friend Shared GlobalDll3Interface As DLL3_Interface
-    Friend Shared GlobalDBDownloader As DataBaseDataDownloader
     Friend Shared GlobalPPSBIController As PPSBIController
 
 #End Region
@@ -71,6 +70,22 @@ Friend Class GlobalVariables
 
 #End Region
 
+#Region "Models"
 
+    Friend Shared Accounts As Account
+    Friend Shared Entities As Entity
+    Friend Shared Filters As Filter
+    Friend Shared FiltersValues As FilterValue
+    Friend Shared Clients As Client
+    Friend Shared Products As Product
+    Friend Shared Adjustments As Adjustment
+
+    Friend Shared EntitiesFilters As EntitiesFilter
+    Friend Shared ClientsFilters As ClientsFilter
+    Friend Shared ProductsFilters As ProductsFilter
+    Friend Shared AdjustmentsFilters As AdjustmentFilter
+
+
+#End Region
 
 End Class

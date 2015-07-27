@@ -47,7 +47,7 @@ Friend Class EntitiesControl
 #Region "Initialization"
 
     Protected Friend Sub New(ByRef input_controller As EntitiesController, _
-                            ByRef entities_dict As Dictionary(Of String, Hashtable), _
+                            ByRef entities_dict As Hashtable, _
                             ByRef input_entitiesTV As TreeView, _
                             ByRef input_entitiesNameKeyDic As Hashtable, _
                             ByRef input_categoriesNameKeyDic As Hashtable, _

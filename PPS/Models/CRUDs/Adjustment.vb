@@ -1,142 +1,246 @@
-﻿' Control.vb
+﻿Imports System.Collections
+Imports System.Collections.Generic
+
+
+' Adjustment2.vb
 '
-' Controls table CRUD model
-'
-' To do: 
+' CRUD for adjustments table - relation with c++ server
 '
 '
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 27/01/2015
+' Created: 24/07/2015
+' Last modified: 24/07/2015
 
-
-Imports ADODB
-Imports System.Windows.Forms
-Imports System.Collections
-Imports System.Collections.Generic
 
 
 Friend Class Adjustment
 
+#Region "Instance variables"
 
-#Region "Instance Variables"
+    ' Variables
+    Friend state_flag As Boolean
+    Friend server_response_flag As Boolean
+    Friend adjustments_hash As New Hashtable
+    Private request_id As Dictionary(Of UInt32, Boolean)
 
-    ' Objects
-    Private SRV As ModelServer
-    Friend RST As Recordset
+    ' Events
+    Public Event AdjustmentCreationEvent(ByRef attributes As Hashtable)
+    Public Shared Event AdjustmentRead(ByRef attributes As Hashtable)
+    Public Event AdjustmentUpdateEvent()
+    Public Event AdjustmentDeleteEvent(ByRef id As UInt32)
 
-    ' Constants
-    Friend object_is_alive As Boolean
-   
+
 #End Region
 
 
-#Region "Initialize"
+#Region "Init"
 
-    Protected Friend Sub New()
+    Friend Sub New()
 
-        SRV = New ModelServer
-        Dim q_result = SRV.OpenRst(GlobalVariables.database & "." & ADJUSTMENTS_TABLE, ModelServer.DYNAMIC_CURSOR)
-        RST = SRV.rst
-        object_is_alive = q_result
+        LoadAdjustmentsTable()
+        Dim time_stamp = Timer
+        Do
+            If Timer - time_stamp > GlobalVariables.timeOut Then
+                state_flag = False
+                Exit Do
+            End If
+        Loop While server_response_flag = True
+        state_flag = True
+
+    End Sub
+
+    Friend Sub LoadAdjustmentsTable()
+
+        NetworkManager.GetInstance().SetCallback(GlobalEnums.ServerMessage.SMSG_LIST_ADJUSTMENT_ANSWER, AddressOf SMSG_LIST_ADJUSTMENT_ANSWER)
+        Dim packet As New ByteBuffer(CType(GlobalEnums.ClientMessage.CMSG_LIST_ADJUSTMENT, UShort))
+        packet.Release()
+        NetworkManager.GetInstance().Send(packet)
+
+    End Sub
+
+    Private Sub SMSG_LIST_ADJUSTMENT_ANSWER(packet As ByteBuffer)
+
+        For i As Int32 = 0 To packet.ReadInt32()
+            Dim tmp_ht As New Hashtable
+            GetAdjustmentHTFromPacket(packet, tmp_ht)
+            adjustments_hash(tmp_ht(ID_VARIABLE)) = tmp_ht
+        Next
+        NetworkManager.GetInstance().RemoveCallback(GlobalEnums.ServerMessage.SMSG_LIST_ADJUSTMENT_ANSWER, AddressOf SMSG_LIST_ADJUSTMENT_ANSWER)
+        server_response_flag = True
 
     End Sub
 
 #End Region
 
 
-#Region "CRUD Interface"
+#Region "CRUD"
 
-    Protected Friend Sub CreateAdjustment(ByRef hash As Hashtable)
+    Friend Sub CMSG_CREATE_ADJUSTMENT(ByRef attributes As Hashtable)
 
-        Dim fieldsArray(hash.Count - 1) As Object
-        Dim valuesArray(hash.Count - 1) As Object
-        hash.Keys.CopyTo(fieldsArray, 0)
-        hash.Values.CopyTo(valuesArray, 0)
-        RST.AddNew(fieldsArray, valuesArray)
+        NetworkManager.GetInstance().SetCallback(GlobalEnums.ServerMessage.SMSG_CREATE_ADJUSTMENT_ANSWER, AddressOf SMSG_CREATE_ADJUSTMENT_ANSWER)
+        Dim packet As New ByteBuffer(CType(GlobalEnums.ClientMessage.CMSG_CREATE_ADJUSTMENT, UShort))
+        WriteAdjustmentPacket(packet, attributes)
+        packet.Release()
+        NetworkManager.GetInstance().Send(packet)
 
     End Sub
 
-    Protected Friend Function ReadAdjustment(ByRef Adjustment_id As String, ByRef field As String) As Object
+    Private Sub SMSG_CREATE_ADJUSTMENT_ANSWER(packet As ByteBuffer)
 
-        RST.Filter = ANALYSIS_AXIS_ID_VAR + "='" + Adjustment_id + "'"
-        If RST.EOF Then Return Nothing
-        Return RST.Fields(field).Value
+        MsgBox(packet.ReadString())
+        Dim tmp_ht As New Hashtable
+        GetAdjustmentHTFromPacket(packet, tmp_ht)
+        adjustments_hash(tmp_ht(ID_VARIABLE)) = tmp_ht
+        NetworkManager.GetInstance().RemoveCallback(GlobalEnums.ServerMessage.SMSG_CREATE_ADJUSTMENT_ANSWER, AddressOf SMSG_CREATE_ADJUSTMENT_ANSWER)
+        RaiseEvent AdjustmentCreationEvent(tmp_ht)
+
+    End Sub
+
+    Friend Shared Sub CMSG_READ_ADJUSTMENT(ByRef id As UInt32)
+
+        NetworkManager.GetInstance().SetCallback(GlobalEnums.ServerMessage.SMSG_READ_ADJUSTMENT_ANSWER, AddressOf SMSG_READ_ADJUSTMENT_ANSWER)
+        Dim packet As New ByteBuffer(CType(GlobalEnums.ClientMessage.CMSG_CREATE_ADJUSTMENT, UShort))
+        packet.Release()
+        NetworkManager.GetInstance().Send(packet)
+
+    End Sub
+
+    Friend Shared Sub SMSG_READ_ADJUSTMENT_ANSWER(packet As ByteBuffer)
+
+        Dim ht As New Hashtable
+        GetAdjustmentHTFromPacket(packet, ht)
+        NetworkManager.GetInstance().RemoveCallback(GlobalEnums.ServerMessage.SMSG_CREATE_ADJUSTMENT_ANSWER, AddressOf SMSG_READ_ADJUSTMENT_ANSWER)
+        RaiseEvent AdjustmentRead(ht)
+
+    End Sub
+
+    Friend Sub CMSG_UPDATE_ADJUSTMENT(ByRef id As UInt32, _
+                                  ByRef updated_var As String, _
+                                  ByRef new_value As String)
+
+        Dim tmp_ht As Hashtable = adjustments_hash(id).clone ' check clone !!!!
+        tmp_ht(updated_var) = new_value
+
+        NetworkManager.GetInstance().SetCallback(GlobalEnums.ServerMessage.SMSG_UPDATE_ADJUSTMENT_ANSWER, AddressOf SMSG_UPDATE_ADJUSTMENT_ANSWER)
+        Dim packet As New ByteBuffer(CType(GlobalEnums.ClientMessage.CMSG_UPDATE_ADJUSTMENT, UShort))
+        WriteAdjustmentPacket(packet, tmp_ht)
+        packet.Release()
+        NetworkManager.GetInstance().Send(packet)
+
+    End Sub
+
+    Friend Sub CMSG_UPDATE_ADJUSTMENT(ByRef attributes As Hashtable)
+
+        NetworkManager.GetInstance().SetCallback(GlobalEnums.ServerMessage.SMSG_UPDATE_ADJUSTMENT_ANSWER, AddressOf SMSG_UPDATE_ADJUSTMENT_ANSWER)
+        Dim packet As New ByteBuffer(CType(GlobalEnums.ClientMessage.CMSG_UPDATE_ADJUSTMENT, UShort))
+        WriteAdjustmentPacket(packet, attributes)
+        packet.Release()
+        NetworkManager.GetInstance().Send(packet)
+
+    End Sub
+
+    Private Sub SMSG_UPDATE_ADJUSTMENT_ANSWER(packet As ByteBuffer)
+
+        Dim ht As New Hashtable
+        GetAdjustmentHTFromPacket(packet, ht)
+        adjustments_hash(ht(ID_VARIABLE)) = ht
+        NetworkManager.GetInstance().RemoveCallback(GlobalEnums.ServerMessage.SMSG_UPDATE_ADJUSTMENT_ANSWER, AddressOf SMSG_UPDATE_ADJUSTMENT_ANSWER)
+        RaiseEvent AdjustmentUpdateEvent()
+
+    End Sub
+
+    Friend Sub CMSG_DELETE_ADJUSTMENT(ByRef id As UInt32)
+
+        NetworkManager.GetInstance().SetCallback(GlobalEnums.ServerMessage.SMSG_DELETE_ADJUSTMENT_ANSWER, AddressOf SMSG_DELETE_ADJUSTMENT_ANSWER)
+        Dim packet As New ByteBuffer(CType(GlobalEnums.ClientMessage.CMSG_DELETE_ADJUSTMENT, UShort))
+        packet.WriteUint32(id)
+        packet.Release()
+        NetworkManager.GetInstance().Send(packet)
+
+    End Sub
+
+    Private Sub SMSG_DELETE_ADJUSTMENT_ANSWER()
+
+        Dim id As UInt32
+        ' get id from request_id ?
+        NetworkManager.GetInstance().RemoveCallback(GlobalEnums.ServerMessage.SMSG_DELETE_ADJUSTMENT_ANSWER, AddressOf SMSG_DELETE_ADJUSTMENT_ANSWER)
+        RaiseEvent AdjustmentDeleteEvent(id)
+
+    End Sub
+
+#End Region
+
+
+#Region "Mappings"
+
+    Friend Function GetAdjustmentsNames() As List(Of String)
+
+        Dim tmp_list As New List(Of String)
+        For Each id In adjustments_hash.Keys
+            tmp_list.Add(NAME_VARIABLE)
+        Next
+        Return tmp_list
 
     End Function
 
-    Protected Friend Sub UpdateAdjustment(ByRef Adjustment_id As String, ByRef hash As Hashtable)
+    Friend Function GetAdjustmentsDictionary(ByRef Key As String, ByRef Value As String) As Hashtable
 
-        RST.Filter = ANALYSIS_AXIS_ID_VAR + "='" + Adjustment_id + "'"
-        If RST.EOF = False AndAlso RST.BOF = False Then
-            For Each Attribute In hash.Keys
-                If RST.Fields(Attribute).Value <> hash(Attribute) Then
-                    RST.Fields(Attribute).Value = hash(Attribute)
-                    RST.Update()
-                End If
-            Next
-        End If
+        Dim tmpHT As New Hashtable
+        For Each id In adjustments_hash.Keys
+            tmpHT(adjustments_hash(id)(Key)) = adjustments_hash(id)(Value)
+        Next
+        Return tmpHT
 
-    End Sub
-
-    Protected Friend Sub UpdateAdjustment(ByRef Adjustment_id As String, _
-                                          ByRef field As String, _
-                                          ByVal value As Object)
-
-        RST.Filter = ANALYSIS_AXIS_ID_VAR + "='" + Adjustment_id + "'"
-        If RST.EOF = False AndAlso RST.BOF = False Then
-            If RST.Fields(field).Value <> value Then
-                RST.Fields(field).Value = value
-                RST.Update()
-            End If
-        End If
-
-    End Sub
-
-    Protected Friend Sub DeleteAdjustment(ByRef Adjustment_id As String)
-
-        RST.Filter = ANALYSIS_AXIS_ID_VAR + "='" + Adjustment_id + "'"
-        If RST.EOF = False Then
-            RST.Delete()
-            RST.Update()
-        End If
-
-    End Sub
-
-    Protected Overrides Sub finalize()
-
-        RST.Close()
-        MyBase.Finalize()
-
-    End Sub
+    End Function
 
 #End Region
 
 
 #Region "Utilities"
 
-    Protected Friend Shared Sub LoadAdjustmentsTree(ByRef TV As TreeView)
+    Friend Shared Sub GetAdjustmentHTFromPacket(ByRef packet As ByteBuffer, ByRef adjustment_ht As Hashtable)
 
-        Dim srv As New ModelServer
-        Dim q_result As Boolean
-        q_result = srv.OpenRst(GlobalVariables.database & "." & ADJUSTMENTS_TABLE, ModelServer.FWD_CURSOR)
-        If q_result = True Then
-            TV.Nodes.Clear()
-            srv.rst.MoveFirst()
-            Do While srv.rst.EOF = False
-                Dim node As TreeNode = TV.Nodes.Add(Trim(srv.rst.Fields(ANALYSIS_AXIS_ID_VAR).Value), _
-                                                    Trim(srv.rst.Fields(ANALYSIS_AXIS_NAME_VAR).Value), 0, 0)
-                node.Checked = True
-                srv.rst.MoveNext()
-            Loop
-            End If
-            srv.rst.Close()
-       
+        adjustment_ht(ID_VARIABLE) = packet.ReadInt32()
+        adjustment_ht(NAME_VARIABLE) = packet.ReadString()
+
     End Sub
 
+    Private Sub WriteAdjustmentPacket(ByRef packet As ByteBuffer, ByRef attributes As Hashtable)
+
+        If attributes.ContainsKey(ID_VARIABLE) Then packet.WriteInt32(attributes(ID_VARIABLE))
+        packet.WriteString(attributes(NAME_VARIABLE))
+
+    End Sub
+
+    Friend Sub LoadAdjustmentsTree(ByRef TV As Windows.Forms.TreeView)
+
+        TV.Nodes.Clear()
+        For Each id As UInt32 In adjustments_hash.Keys
+            Dim node As Windows.Forms.TreeNode = TV.Nodes.Add(CStr(id), _
+                                                              adjustments_hash(id)(NAME_VARIABLE), _
+                                                              0, 0)
+            node.Checked = True
+        Next
+
+    End Sub
+
+    Friend Sub LoadAdjustmentsTree(ByRef TV As Windows.Forms.TreeView, _
+                                ByRef filter_list As List(Of UInt32))
+
+        TV.Nodes.Clear()
+        For Each id As UInt32 In adjustments_hash.Keys
+            Dim node As Windows.Forms.TreeNode = TV.Nodes.Add(CStr(id), _
+                                                              adjustments_hash(id)(NAME_VARIABLE), _
+                                                              0, 0)
+            node.Checked = True
+        Next
+
+    End Sub
 
 #End Region
+
 
 
 End Class

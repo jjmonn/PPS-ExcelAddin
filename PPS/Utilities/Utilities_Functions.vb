@@ -389,7 +389,7 @@ nextWord:
 
     End Sub
 
-    Protected Friend Shared Function GetDictionaryCopy(ByRef input_dict As Dictionary(Of String, String)) As Dictionary(Of String, String)
+    Friend Shared Function GetDictionaryCopy(ByRef input_dict As Dictionary(Of String, String)) As Dictionary(Of String, String)
 
         Dim tmp_dict As New Dictionary(Of String, String)
         For Each key As String In input_dict.Keys
@@ -399,8 +399,8 @@ nextWord:
 
     End Function
 
-    Protected Friend Shared Function CountNbValueIs(ByRef value_to_be_counted As String, _
-                                                    ByRef dict As Hashtable) As Int32
+    Friend Shared Function CountNbValueIs(ByRef value_to_be_counted As String, _
+                                        ByRef dict As Hashtable) As Int32
 
         Dim count As Int32
         For Each key As String In dict.Keys
@@ -409,6 +409,8 @@ nextWord:
         Return count
 
     End Function
+
+
 
 #End Region
 

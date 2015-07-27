@@ -16,7 +16,6 @@ Friend Class LogModel
 #Region "Instance Variables"
 
     ' Objects
-    Private Computer As New GenericSingleEntityDLL3Computer(GlobalVariables.GlobalDBDownloader)
     Private Versions As New Version
 
 #End Region
@@ -39,14 +38,12 @@ Friend Class LogModel
     Protected Friend Sub ComputeEntity(ByRef entity_node As System.Windows.Forms.TreeNode, _
                                        ByRef version_id As String)
 
-        Computer.ComputeSingleEntity(version_id, entity_node)
-
+      
     End Sub
 
     Protected Friend Function GetData(ByRef account_id As String, _
                                       ByRef period As Int32) As Double
 
-        Return Computer.GetDataFromDLL3Computer(account_id, period)
 
     End Function
 

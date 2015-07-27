@@ -20,12 +20,10 @@ Friend Class ProductsController
 
     ' Objects
     Private view As ProductsControl
-    Private products As Product
-    Private products_categoriesTV As New TreeView
+    Private productsFiltersTV As New TreeView
     Private PlatformMGTUI As PlatformMGTGeneralUI
 
     ' Variable
-    Private products_list As List(Of String)
     Friend categoriesNameKeyDic As Hashtable
 
 
@@ -36,17 +34,19 @@ Friend Class ProductsController
 
     Protected Friend Sub New()
 
-        products = New Product
-        AnalysisAxisCategory.LoadCategoryCodeTV(products_categoriesTV, ControllingUI2Controller.PRODUCT_CATEGORY_CODE)
-        products_list = ProductsMapping.GetproductsIDList()
-        categoriesNameKeyDic = CategoriesMapping.GetCategoryDictionary(ControllingUI2Controller.PRODUCT_CATEGORY_CODE, _
-                                                                       ANALYSIS_AXIS_NAME_VAR, _
-                                                                       ANALYSIS_AXIS_ID_VAR)
+        GlobalVariables.Filters.LoadFiltersTV(productsFiltersTV, GlobalEnums.AnalysisAxis.PRODUCTS)
+        GlobalVariables.Filters.GetFiltersDictionary(GlobalEnums.AnalysisAxis.PRODUCTS, NAME_VARIABLE, ID_VARIABLE)
+
         view = New ProductsControl(Me, _
-                                   products_categoriesTV, _
+                                   productsFiltersTV, _
                                    getProductsHash(), _
                                    categoriesNameKeyDic)
-    
+
+        AddHandler GlobalVariables.Products.ProductCreationEvent, AddressOf AfterProductCreation
+        AddHandler GlobalVariables.Products.ProductUpdateEvent, AddressOf AfterProductUpdate
+        AddHandler GlobalVariables.Products.ProductDeleteEvent, AddressOf AfterproductDelete
+
+
     End Sub
 
     Public Sub addControlToPanel(ByRef dest_panel As Panel, _
@@ -58,12 +58,17 @@ Friend Class ProductsController
 
     End Sub
 
-    Private Function getProductsHash() As Dictionary(Of String, Hashtable)
+    Private Function getProductsHash() As Hashtable
 
-        Dim tmp_dict As New Dictionary(Of String, Hashtable)
-        For Each product_id As String In products_list
-            tmp_dict.Add(product_id, products.GetRecord(product_id, products_categoriesTV))
-        Next
+        Dim tmp_dict As New Hashtable
+
+        ' same issue as in entitiesController
+        ' function to be placed elsewhere (filters values ?)
+        ' priority normal !! !
+
+        'For Each product_id As String In products_list
+        '    tmp_dict.Add(product_id, products.GetRecord(product_id, productsFiltersTV))
+        'Next
         Return tmp_dict
 
     End Function
@@ -72,7 +77,6 @@ Friend Class ProductsController
 
         view.closeControl()
         view.Dispose()
-        products.RST.Close()
         PlatformMGTUI.displayControl()
 
     End Sub
@@ -82,23 +86,30 @@ Friend Class ProductsController
 
 #Region "Interface"
 
-    Protected Friend Sub createProduct(ByRef hash As Hashtable)
+    Friend Sub createProduct(ByRef hash As Hashtable)
 
-        If products.isNameValid(hash(ANALYSIS_AXIS_NAME_VAR)) = True Then
-            hash.Add(ANALYSIS_AXIS_ID_VAR, products.getNewId())
-            products.CreateProduct(hash)
-            view.addProductRow(hash(ANALYSIS_AXIS_ID_VAR), hash)
+        If GlobalVariables.Products.IsNameValid(hash(NAME_VARIABLE)) = True Then
+            GlobalVariables.Products.CMSG_CREATE_PRODUCT(hash)
         Else
             MsgBox("Invalid Name. Names must be unique and not empty.")
         End If
-      
+
     End Sub
 
-    Protected Friend Function updateProductName(ByRef item_id As String, _
-                                                ByRef value As String) As Boolean
+    Private Sub AfterProductCreation(ByRef ht As Hashtable)
 
-        If products.isNameValid(value) = True Then
-            products.UpdateProduct(item_id, ANALYSIS_AXIS_NAME_VAR, value)
+        ' to be validated/ reviewed
+        ' priority normal !!! 
+        view.addProductRow(ht(ID_VARIABLE), ht)
+
+    End Sub
+
+
+    Friend Function updateProductName(ByRef item_id As String, _
+                                      ByRef value As String) As Boolean
+
+        If GlobalVariables.Products.IsNameValid(value) = True Then
+            GlobalVariables.Products.CMSG_UPDATE_PRODUCT(item_id, NAME_VARIABLE, value)
             Return True
         Else
             MsgBox("Invalid Name. Names must be unique and not empty.")
@@ -107,17 +118,30 @@ Friend Class ProductsController
 
     End Function
 
-    Protected Friend Sub updateProductCategory(ByRef item_id As String, _
-                                               ByRef category_id As String, _
-                                               ByRef value As String)
+    Private Sub AfterProductUpdate(ByRef ht As Hashtable)
 
-        products.UpdateProduct(item_id, category_id, value)
+        ' to be reviewed -> priority normal !
 
     End Sub
 
-    Protected Friend Sub deleteproduct(ByRef product_id As String)
+    Friend Sub UpdateProductCategory(ByRef item_id As String, _
+                                     ByRef category_id As String, _
+                                     ByRef value As String)
 
-        products.deleteProduct(product_id)
+        GlobalVariables.Products.CMSG_UPDATE_PRODUCT(item_id, category_id, value)
+
+    End Sub
+
+    Friend Sub deleteproduct(ByRef product_id As String)
+
+        GlobalVariables.Products.CMSG_DELETE_PRODUCT(product_id)
+
+    End Sub
+
+    Private Sub AfterproductDelete(ByRef id As UInt32)
+
+        ' to be implemented
+        ' priority normal
 
     End Sub
 

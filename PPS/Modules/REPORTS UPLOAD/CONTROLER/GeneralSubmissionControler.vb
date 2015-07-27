@@ -56,8 +56,6 @@ Friend Class GeneralSubmissionControler
     Private Dataset As ModelDataSet
     Private DataModificationsTracker As CDataModificationsTracking
     Private DBUploader As DataBaseDataUploader
-    Private DBDownloader As New DataBaseDataDownloader
-    Private Dll3ComputerInterface As DLL3_Interface
     Private Model As AcquisitionModel
     Private SubmissionWSController As SubmissionWSController
    Friend associatedWorksheet As Excel.Worksheet
@@ -92,10 +90,8 @@ Friend Class GeneralSubmissionControler
         DBUploader = New DataBaseDataUploader()
         DBUploader.SetUpDictionaries(Dataset.EntitiesNameKeyDictionary, _
                                      Dataset.AccountsNameKeyDictionary)
-        Dll3ComputerInterface = New DLL3_Interface
         DataModificationsTracker = New CDataModificationsTracking(Dataset)
-        Model = New AcquisitionModel(Dataset, DBDownloader, Dll3ComputerInterface)
-
+   
         BCKGW.WorkerReportsProgress = True
         AddHandler BCKGW.DoWork, AddressOf BCKGW_DoWork
         AddHandler BCKGW.RunWorkerCompleted, AddressOf BCKGW_RunWorkerCompleted
@@ -164,7 +160,7 @@ Friend Class GeneralSubmissionControler
     Friend Sub FillInEntityAndCurrencyTB(ByRef entity As String)
 
         ADDIN.CurrentEntityTB.Text = entity
-        Dim entitiesNameCurrDic As Hashtable = EntitiesMapping.GetEntitiesDictionary(ENTITIES_NAME_VARIABLE, ENTITIES_CURRENCY_VARIABLE)
+        Dim entitiesNameCurrDic As Hashtable = GlobalVariables.Entities.GetEntitiesDictionary(NAME_VARIABLE, ENTITIES_CURRENCY_VARIABLE)
         ADDIN.EntCurrTB.Text = entitiesNameCurrDic(entity)
         current_entity_name = entity
 
@@ -235,7 +231,6 @@ Friend Class GeneralSubmissionControler
 
         If Not Dataset Is Nothing Then Dataset = Nothing
         If Not DataModificationsTracker Is Nothing Then DataModificationsTracker = Nothing
-        If Not Dll3ComputerInterface Is Nothing Then Dll3ComputerInterface = Nothing
         If Not Model Is Nothing Then Model = Nothing
         Try
             RemoveHandler associatedWorksheet.Change, AddressOf SubmissionWSController.Worksheet_Change

@@ -240,12 +240,12 @@ Friend Class CDataModificationsTracking
     ' Param: DBInputsDictionary (from ACQMODEL-> (entity)(account)(period))
     Friend Sub IdentifyDifferencesBtwDataSetAndDB(ByRef DBInputsDictionary As Dictionary(Of String, Dictionary(Of String, Dictionary(Of String, Double))))
 
-        Dim accountsNameTypeDict As Hashtable = AccountsMapping.GetAccountsDictionary(ACCOUNT_NAME_VARIABLE, ACCOUNT_FORMULA_TYPE_VARIABLE)
+        Dim accountsNameTypeDict As Hashtable = globalvariables.accounts.GetAccountsDictionary(NAME_VARIABLE, ACCOUNT_FORMULA_TYPE_VARIABLE)
         For Each entity As String In DATASET.dataSetDictionary.Keys
             For Each account As String In DATASET.dataSetDictionary(entity).Keys
 
                 Select Case accountsNameTypeDict(account)
-                    Case BALANCE_SHEET_ACCOUNT_FORMULA_TYPE
+                    Case GlobalEnums.FormulaTypes.FIRST_PERIOD_INPUT
                         Dim period As Integer = CInt(CDbl(DATASET.periodsDatesList(0).ToOADate))        ' date from dataset converted to integer to meet DB integer date storage
                         If DATASET.dataSetDictionary(entity)(account)(period) <> DBInputsDictionary(entity)(account)(period) Then _
                            RegisterModification(GetExcelCell(entity, account, period).Address)

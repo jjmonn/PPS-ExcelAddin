@@ -12,7 +12,7 @@
 '
 '
 '
-' Last Modified: 15/06/2015
+' Last Modified: 17/07/2015
 ' Author: Julien Monnereau
 
 
@@ -28,7 +28,6 @@ Friend Class AccountsController
 #Region "Instance Variables"
 
     ' Objects
-    Private Accounts As Account
     Private formulasMGT As ModelFormulasMGT
     Private DATAMODEL As DataModel
     Private View As AccountsControl
@@ -38,9 +37,7 @@ Friend Class AccountsController
 
     ' Variables
     Friend accountsNameKeysDictionary As Hashtable
-    Friend accountsKeyNamesDictionary As Hashtable
     Friend positionsDictionary As New Dictionary(Of String, Double)
-    Friend needToUpdateModel As Boolean
     Private dependant_account_id As String
     
 #End Region
@@ -50,14 +47,16 @@ Friend Class AccountsController
 
     Protected Friend Sub New()
 
-        Accounts = New Account
-        accountsNameKeysDictionary = AccountsMapping.GetAccountsDictionary(ACCOUNT_NAME_VARIABLE, ACCOUNT_ID_VARIABLE)
-        accountsKeyNamesDictionary = AccountsMapping.GetAccountsDictionary(ACCOUNT_ID_VARIABLE, ACCOUNT_NAME_VARIABLE)
-        Account.LoadAccountsTree(AccountsTV)
+        accountsNameKeysDictionary = GlobalVariables.Accounts.GetAccountsDictionary(NAME_VARIABLE, ID_VARIABLE)
+        GlobalVariables.Accounts.LoadAccountsTV(AccountsTV)
         View = New AccountsControl(Me, AccountsTV)
         NewAccountView = New NewAccountUI(View, Me)
         formulasMGT = New ModelFormulasMGT(accountsNameKeysDictionary, AccountsTV)
         positionsDictionary = TreeViewsUtilities.GeneratePositionsDictionary(AccountsTV)
+
+        AddHandler globalvariables.accounts.AccountCreationEvent, AddressOf AccountCreateConfirmation
+        AddHandler globalvariables.accounts.AccountUpdateEvent, AddressOf AccountUpdateConfirmation
+        AddHandler globalvariables.accounts.AccountDeleteEvent, AddressOf AccountDeleteConfirmation
 
     End Sub
 
@@ -79,7 +78,6 @@ Friend Class AccountsController
     Protected Friend Sub sendCloseOrder()
 
         View.Dispose()
-        Accounts.Close()
         PlatformMGTUI.displayControl()
 
     End Sub
@@ -91,75 +89,93 @@ Friend Class AccountsController
 
     Friend Function ReadAccount(ByRef accountKey As String, ByRef field As String) As Object
 
-        Return Accounts.ReadAccount(accountKey, field)
+        Return GlobalVariables.Accounts.accounts_hash(accountKey)(field)
 
     End Function
 
-    Protected Friend Sub CreateAccount(ByRef accountsAttributes As Hashtable, _
-                                       ByRef parent_node As TreeNode)
+    Friend Sub CreateAccount(ByRef attributes As Hashtable, _
+                                       Optional ByRef parent_node As TreeNode = Nothing)
 
-        Dim id As String = TreeViewsUtilities.GetNewNodeKey(AccountsTV, ACCOUNTS_TOKEN_SIZE)
-        accountsAttributes.Add(ACCOUNT_ID_VARIABLE, id)
-        accountsAttributes.Add(ITEMS_POSITIONS, 1)
-        accountsAttributes.Add(ACCOUNT_TAB_VARIABLE, Accounts.ReadAccount(parent_node.Name, ACCOUNT_TAB_VARIABLE))
-        Accounts.CreateAccount(accountsAttributes)
-
-        Dim new_node As TreeNode = parent_node.Nodes.Add(id, accountsAttributes(ACCOUNT_NAME_VARIABLE), accountsAttributes(ACCOUNT_IMAGE_VARIABLE), accountsAttributes(ACCOUNT_SELECTED_IMAGE_VARIABLE))
-        accountsNameKeysDictionary.Add(accountsAttributes(ACCOUNT_NAME_VARIABLE), accountsAttributes(ACCOUNT_ID_VARIABLE))
-        accountsKeyNamesDictionary.Add(accountsAttributes(ACCOUNT_ID_VARIABLE), accountsAttributes(ACCOUNT_NAME_VARIABLE))
-        needToUpdateModel = True
-
-    End Sub
-
-    Protected Friend Sub CreateCategory(ByRef HT As Hashtable)
-
-        Dim id As String = TreeViewsUtilities.GetNewNodeKey(AccountsTV, ACCOUNTS_TOKEN_SIZE)
-        HT.Add(ACCOUNT_ID_VARIABLE, id)
-        Accounts.CreateAccount(HT)
-
-        Dim newNode As TreeNode = AccountsTV.Nodes.Add(id, HT(ACCOUNT_NAME_VARIABLE))
-        accountsNameKeysDictionary.Add(HT(ACCOUNT_NAME_VARIABLE), HT(ACCOUNT_ID_VARIABLE))
-        accountsKeyNamesDictionary.Add(HT(ACCOUNT_ID_VARIABLE), HT(ACCOUNT_NAME_VARIABLE))
-        needToUpdateModel = True
+        If Not parent_node Is Nothing Then
+            attributes.Add(PARENT_ID_VARIABLE, parent_node.Name)
+        Else
+            attributes.Add(PARENT_ID_VARIABLE, DBNull.Value)  ' Attention !! ok server ? 
+        End If
+        attributes.Add(ITEMS_POSITIONS, 1)
+        attributes.Add(ACCOUNT_TAB_VARIABLE, globalvariables.accounts.accounts_hash(parent_node.Name)(ACCOUNT_TAB_VARIABLE))
+        globalvariables.accounts.CMSG_CREATE_ACCOUNT(attributes)
+        View.LaunchCP()
 
     End Sub
 
-    Friend Sub UpdateAccountName(ByRef account_id As String, _
-                                 ByRef new_name As String)
+    Friend Sub UpdateAccount(ByRef id As String, ByRef variable As String, ByVal value As Object)
 
-        UpdateAccount(account_id, ACCOUNT_NAME_VARIABLE, new_name)
-        Dim old_name = accountsKeyNamesDictionary(account_id)
+        Dim ht As Hashtable = globalvariables.accounts.accounts_hash(id)
+        ht(variable) = value
+        globalvariables.accounts.CMSG_UPDATE_ACCOUNT(ht)
+        View.LaunchCP()
+
+    End Sub
+
+    Friend Sub UpdateAccount(ByRef id As String, ByRef account_attributes As Hashtable)
+
+        Dim ht As Hashtable = globalvariables.accounts.accounts_hash(id)
+        For Each attribute As String In account_attributes
+            ht(attribute) = account_attributes(attribute)
+        Next
+        globalvariables.accounts.CMSG_UPDATE_ACCOUNT(ht)
+        View.LaunchCP()
+
+    End Sub
+
+    Friend Function DeleteAccount(ByRef node As TreeNode) As Boolean
+
+        Dim accountsKeyList As List(Of UInt32) = TreeViewsUtilities.GetNodesKeysList(node)
+        accountsKeyList.Reverse()
+        If AccountsDependenciesCheck(accountsKeyList) = False Then Return False
+
+        DATAMODEL = New DataModel
+        Dim accountsToBeDeleted = AccountsVersionsCheck(accountsKeyList)
+        If accountsToBeDeleted.Count > 0 Then
+            Dim confirm As Integer = MessageBox.Show("The data corresponding to the accounts will be deleted permanetly, do you confirm?", _
+                                                     "Accounts deletion validation", _
+                                                       MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question)
+            If confirm = DialogResult.Yes Then
+                ' below -> goes on server ?!
+                RemoveAccountsFromDataTables(accountsToBeDeleted)
+                RemoveAccount(accountsKeyList, node)
+            Else
+                Return False
+            End If
+        Else
+            RemoveAccount(accountsKeyList, node)
+        End If
+        Return True
+
+    End Function
+
+    Friend Sub UpdateName(ByRef account_id As String, _
+                          ByRef new_name As String)
+
+        ' below -> may raise issue if pb on update!(priority: low)
+        Dim old_name = globalvariables.accounts.accounts_hash(account_id)(NAME_VARIABLE)
         accountsNameKeysDictionary.Remove(old_name)
         accountsNameKeysDictionary.Add(new_name, account_id)
-        accountsKeyNamesDictionary(account_id) = new_name
+        UpdateAccount(account_id, NAME_VARIABLE, new_name)
 
     End Sub
 
-    Friend Sub UpdateAccount(ByRef accountKey As String, ByRef variable As String, ByVal value As Object)
-
-        Accounts.UpdateAccount(accountKey, variable, value)
-        needToUpdateModel = True
-
-    End Sub
-
-    Friend Sub UpdateAccount(ByRef accountKey As String, ByRef HT As Hashtable)
-
-        Accounts.UpdateAccount(accountKey, HT)
-        needToUpdateModel = True
-
-    End Sub
-
-    Friend Sub UpdateFormula(ByRef accountKey As String, ByRef formulaStr As String)
+    Friend Sub UpdateFormula(ByRef id As String, ByRef formulaStr As String)
 
         If formulaStr <> "" Then
             formulasMGT.convertFormulaFromNamesToKeys(formulaStr)
             If formulasMGT.errorList.Count = 0 Then
                 If formulasMGT.testFormula() = True _
                 AndAlso InterdependancyTest() = True Then
-                    Accounts.UpdateAccount(accountKey, ACCOUNT_FORMULA_TYPE_VARIABLE, FORMULA_TYPE_FORMULA)
-                    Accounts.UpdateAccount(accountKey, ACCOUNT_FORMULA_VARIABLE, formulasMGT.keysFormulaString.Replace(",", "."))
-                    MsgBox("Formula successfully saved")
-                    needToUpdateModel = True
+                    Dim tmp_ht As New Hashtable
+                    tmp_ht(ACCOUNT_FORMULA_TYPE_VARIABLE) = GlobalEnums.FormulaTypes.FORMULA
+                    tmp_ht(ACCOUNT_FORMULA_VARIABLE) = formulasMGT.keysFormulaString.Replace(",", ".")
+                    UpdateAccount(id, tmp_ht)
                 Else
                     MsgBox("The formula is not valid and could not be saved.")
                 End If
@@ -176,28 +192,31 @@ Friend Class AccountsController
                                                       "Formula validation", _
                                                        MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question)
             If confirm2 = DialogResult.Yes Then
-                Accounts.UpdateAccount(accountKey, ACCOUNT_FORMULA_TYPE_VARIABLE, FORMULA_TYPE_FORMULA)
-                Accounts.UpdateAccount(accountKey, ACCOUNT_FORMULA_VARIABLE, "")
-                MsgBox("Formula successfully saved")
-                needToUpdateModel = True
+                Dim tmp_ht As New Hashtable
+                tmp_ht(ACCOUNT_FORMULA_TYPE_VARIABLE) = GlobalEnums.FormulaTypes.FORMULA
+                tmp_ht(ACCOUNT_FORMULA_VARIABLE) = ""
+                UpdateAccount(id, tmp_ht)
             End If
         End If
 
     End Sub
 
-    Protected Friend Sub UpdateFormulaType(ByRef account_id As String, ByRef ftype As String)
+    Friend Sub UpdateFormulaType(ByRef id As String, ByRef ftype As String)
 
-        Accounts.UpdateAccount(account_id, ACCOUNT_FORMULA_TYPE_VARIABLE, ftype)
-        Accounts.UpdateAccount(account_id, ACCOUNT_IMAGE_VARIABLE, View.ftype_icon_dic(ftype))
-        Accounts.UpdateAccount(account_id, ACCOUNT_FORMULA_VARIABLE, "")
-        Accounts.UpdateAccount(account_id, ACCOUNT_SELECTED_IMAGE_VARIABLE, View.ftype_icon_dic(ftype))
-        View.current_node.ImageIndex = View.ftype_icon_dic(ftype)
-        View.current_node.SelectedImageIndex = View.ftype_icon_dic(ftype)
-        View.formula_TB.Text = ""
-        AccountsTV.Invalidate()
-        AccountsTV.Update()
-        AccountsTV.Refresh()
-        needToUpdateModel = True
+        ' A revoir !!
+        'Dim tmp_ht As New Hashtable
+        'tmp_ht(ACCOUNT_FORMULA_TYPE_VARIABLE) = ftype
+        'tmp_ht(ACCOUNT_IMAGE_VARIABLE) = View.ftype_icon_dic(ftype)
+        'tmp_ht(ACCOUNT_SELECTED_IMAGE_VARIABLE) = View.ftype_icon_dic(ftype)
+        'tmp_ht(ACCOUNT_FORMULA_VARIABLE) = "" ' ?????!!!!!!!
+        'UpdateAccount(id, tmp_ht)
+
+        'View.current_node.ImageIndex = View.ftype_icon_dic(ftype)
+        'View.current_node.SelectedImageIndex = View.ftype_icon_dic(ftype)
+        'View.formula_TB.Text = ""
+        'AccountsTV.Invalidate()
+        'AccountsTV.Update()
+        'AccountsTV.Refresh()
 
     End Sub
 
@@ -207,65 +226,25 @@ Friend Class AccountsController
 
     End Function
 
-    Friend Function DeleteAccount(ByRef node As TreeNode) As Boolean
-
-        Dim accountsKeyList As List(Of String) = TreeViewsUtilities.GetNodesKeysList(node)
-        accountsKeyList.Reverse()
-        If AccountsDependenciesCheck(accountsKeyList) = False Then Return False
-
-        DATAMODEL = New DataModel
-        Dim accountsToBeDeleted = AccountsVersionsCheck(accountsKeyList)
-        If accountsToBeDeleted.Count > 0 Then
-            Dim confirm As Integer = MessageBox.Show("The data corresponding to the accounts will be deleted permanetly, do you confirm?", _
-                                                     "Accounts deletion validation", _
-                                                       MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question)
-            If confirm = DialogResult.Yes Then
-                RemoveAccountsFromDataTables(accountsToBeDeleted)
-                RemoveAccount(accountsKeyList, node)
-            Else
-                Return False
-            End If
-        Else
-            RemoveAccount(accountsKeyList, node)
-        End If
-        needToUpdateModel = True
-        Return True
-
-    End Function
-
-#End Region
-
-
-#Region "Computer and Positions Interface"
-
     Friend Sub SendNewPositionsToModel()
 
+        ' dans l'idéal trouver une autre solution !!
         positionsDictionary = TreeViewsUtilities.GeneratePositionsDictionary(AccountsTV)
         For Each account In positionsDictionary.Keys
-            Accounts.UpdateAccount(account, ITEMS_POSITIONS, positionsDictionary(account))
+            UpdateAccount(account, ITEMS_POSITIONS, positionsDictionary(account))
         Next
 
     End Sub
 
-    Friend Sub UpdateModel()
-
-        If Not GlobalVariables.GlobalDll3Interface Is Nothing Then
-            Accounts.Close()
-            GlobalVariables.GlobalDll3Interface.destroy_dll()
-            GlobalVariables.GlobalDll3Interface = New DLL3_Interface
-        End If
-        needToUpdateModel = False
-
-    End Sub
 
 #End Region
 
 
 #Region "Accounts Deletion"
 
-    Private Function AccountsDependenciesCheck(ByRef accountsKeyList As List(Of String)) As Boolean
+    Private Function AccountsDependenciesCheck(ByRef accountsKeyList As List(Of UInt32)) As Boolean
 
-        Dim dependenciesList As List(Of String) = DependenciesLoopCheck(accountsKeyList)
+        Dim dependenciesList As List(Of UInt32) = DependenciesLoopCheck(accountsKeyList)
         If dependenciesList.Count > 0 Then
             Dim listStr As String = ""
             For Each accountName In dependenciesList
@@ -281,13 +260,13 @@ Friend Class AccountsController
 
     End Function
 
-    Private Function DependenciesLoopCheck(ByRef accountsKeyList As List(Of String)) As List(Of String)
+    Private Function DependenciesLoopCheck(ByRef accountsKeyList As List(Of UInt32)) As List(Of UInt32)
 
-        Dim dependenciesList As New List(Of String)
+        Dim dependenciesList As New List(Of UInt32)
         For Each key In accountsKeyList
             CheckForDependencies(key, dependenciesList)
         Next
-        Dim uniqueDependenciesList As List(Of String) = dependenciesList.Distinct().ToList
+        Dim uniqueDependenciesList As List(Of UInt32) = dependenciesList.Distinct().ToList
         For Each accountName In accountsKeyList
             If uniqueDependenciesList.Contains(accountsNameKeysDictionary(accountName)) Then uniqueDependenciesList.Remove(accountName)
         Next
@@ -295,22 +274,28 @@ Friend Class AccountsController
 
     End Function
 
-    Private Function AccountsVersionsCheck(ByRef accountsKeyList As List(Of String)) As List(Of String)
+    Private Function AccountsVersionsCheck(ByRef accountsKeyList As List(Of UInt32)) As List(Of UInt32)
 
-        Dim accountsToBeDeleted As New List(Of String)
-        Dim accountsDictionaries As New Dictionary(Of String, List(Of String))
+        Dim accountsToBeDeleted As New List(Of UInt32)
+        Dim accountsDictionaries As New Dictionary(Of UInt32, List(Of String))
         For Each accountKey In accountsKeyList
             Dim tmpList = DATAMODEL.checkForItemInDataTables(accountKey, DATA_ACCOUNT_ID_VARIABLE)
             If tmpList.Count > 0 Then
                 accountsToBeDeleted.Add(accountKey)
-                accountsDictionaries.Add(accountsKeyNamesDictionary(accountKey), tmpList)
+                accountsDictionaries.Add(GlobalVariables.Accounts.accounts_hash(accountKey)(NAME_VARIABLE), tmpList)
             End If
         Next
+
+        ' below -> not ok !
+        ' display accounts ids to users !!
+        ' priority normal
+        ' a priori implémenté au niveau server on account deletion ?
+        ' to be validated/ reviewed
 
         If accountsDictionaries.Count > 0 Then
             Dim resultStr As String = "The following Accounts were found in the databases: " + Chr(13)
             For Each account In accountsDictionaries.Keys
-                resultStr = resultStr + "- " + account + " found in: " + Chr(13)
+                resultStr = resultStr & "- " & account & " found in: " + Chr(13)
                 For Each versionName In accountsDictionaries(account)
                     resultStr = resultStr + "  - " + versionName + Chr(13)
                 Next
@@ -322,7 +307,7 @@ Friend Class AccountsController
 
     End Function
 
-    Private Sub RemoveAccountsFromDataTables(ByRef AccountsToBeDeleted As List(Of String))
+    Private Sub RemoveAccountsFromDataTables(ByRef AccountsToBeDeleted As List(Of UInt32))
 
         For Each accountKey In AccountsToBeDeleted
             DATAMODEL.deleteRowsWithItemKeys(accountKey, DATA_ACCOUNT_ID_VARIABLE)
@@ -330,12 +315,12 @@ Friend Class AccountsController
 
     End Sub
 
-    Private Sub RemoveAccount(ByRef accountsList As List(Of String), ByRef node As TreeNode)
+    Private Sub RemoveAccount(ByRef accountsList As List(Of UInt32), ByRef node As TreeNode)
 
-        For Each accountKey In accountsList
-            Accounts.DeleteAccount(accountKey)
-            accountsNameKeysDictionary.Remove(accountsKeyNamesDictionary(accountKey))
-            accountsKeyNamesDictionary.Remove(accountKey)
+        For Each id In accountsList
+            GlobalVariables.Accounts.CMSG_DELETE_ACCOUNT(id)
+            ' -> must wait for confirmation !!
+            accountsNameKeysDictionary.Remove(GlobalVariables.Accounts.accounts_hash(id)(NAME_VARIABLE))
         Next
 
     End Sub
@@ -387,14 +372,14 @@ Friend Class AccountsController
         Dim dependancies_dict As New Dictionary(Of String, List(Of String))
         Dim accounts_list = TreeViewsUtilities.GetNodesKeysList(AccountsTV)
         For Each account_id In accounts_list
-            Dim ftype As String = Accounts.ReadAccount(account_id, ACCOUNT_FORMULA_TYPE_VARIABLE)
-            If ftype <> FORMULA_TYPE_HARD_VALUE _
-            AndAlso ftype <> FORMULA_TYPE_TITLE Then
+            Dim ftype As String = globalvariables.accounts.accounts_hash(account_id)(ACCOUNT_FORMULA_TYPE_VARIABLE)
+            If ftype <> GlobalEnums.FormulaTypes.HARD_VALUE_INPUT _
+            AndAlso ftype <> GlobalEnums.FormulaTypes.TITLE Then
                 If dependancies_dict.ContainsKey(account_id) = False Then AddDependantToDependanciesDict(account_id, dependancies_dict)
                 For Each dependant_id In dependancies_dict(account_id)
                     If CheckDependantsInterdependancy(account_id, dependant_id, dependancies_dict) = False Then
                         MsgBox("An interdependancy has been introduced inot accounts formula: " & Chr(13) & Chr(13) & _
-                               accountsKeyNamesDictionary(dependant_account_id) & " depends on " & accountsKeyNamesDictionary(account_id) & Chr(13) & Chr(13) & _
+                               GlobalVariables.Accounts.accounts_hash(dependant_account_id)(NAME_VARIABLE) & " depends on " & GlobalVariables.Accounts.accounts_hash(account_id)(NAME_VARIABLE) & Chr(13) & Chr(13) & _
                                "The formula cannot therefore be saved.")
                         Return False
                     End If
@@ -425,7 +410,7 @@ Friend Class AccountsController
     Private Sub AddDependantToDependanciesDict(ByRef dependant_id As String, _
                                                ByRef dependancies_dict As Dictionary(Of String, List(Of String)))
 
-        If Accounts.ReadAccount(dependant_id, ACCOUNT_FORMULA_TYPE_VARIABLE) = FORMULA_TYPE_SUM_OF_CHILDREN Then
+        If GlobalVariables.Accounts.accounts_hash(dependant_id)(ACCOUNT_FORMULA_TYPE_VARIABLE) = GlobalEnums.FormulaTypes.AGGREGATION_OF_SUB_ACCOUNTS Then
             dependancies_dict.Add(dependant_id, TreeViewsUtilities.GetChildrenIDList(AccountsTV.Nodes.Find(dependant_id, True)(0)))
         Else
             dependancies_dict.Add(dependant_id, formulasMGT.GetFormulaDependantsLIst(dependant_id))
@@ -443,9 +428,9 @@ Friend Class AccountsController
         Dim accountsNamesFormulaErrorList As New List(Of String)
         Dim FTypesToBeTested As List(Of String) = FormulaTypesMapping.GetFTypesKeysNeedingFormula
         For Each accountKey In positionsDictionary.Keys
-            If FTypesToBeTested.Contains(Accounts.ReadAccount(accountKey, ACCOUNT_FORMULA_TYPE_VARIABLE)) Then
-                If Accounts.ReadAccount(accountKey, ACCOUNT_FORMULA_VARIABLE) = "" Then _
-                    accountsNamesFormulaErrorList.Add(Accounts.ReadAccount(accountKey, ACCOUNT_NAME_VARIABLE))
+            If FTypesToBeTested.Contains(globalvariables.accounts.accounts_hash(accountKey)(ACCOUNT_FORMULA_TYPE_VARIABLE)) Then
+                If globalvariables.accounts.accounts_hash(accountKey)(ACCOUNT_FORMULA_VARIABLE) = "" Then _
+                    accountsNamesFormulaErrorList.Add(globalvariables.accounts.accounts_hash(accountKey)(NAME_VARIABLE))
             End If
         Next
 
@@ -465,12 +450,12 @@ Friend Class AccountsController
     End Function
 
     ' Looks for the param accountKey in Accounts formulas
-    Private Sub CheckForDependencies(ByRef accountKey As String, dependenciesList As List(Of String))
+    Private Sub CheckForDependencies(ByRef accountKey As String, dependenciesList As List(Of UInt32))
 
         For Each currentKey In positionsDictionary.Keys
-            Dim formula As String = Accounts.ReadAccount(currentKey, ACCOUNT_FORMULA_VARIABLE)
+            Dim formula As String = GlobalVariables.Accounts.accounts_hash(currentKey)(ACCOUNT_FORMULA_VARIABLE)
             If Not formula Is Nothing AndAlso formula.Contains(accountKey) Then _
-                dependenciesList.Add(Accounts.ReadAccount(currentKey, ACCOUNT_NAME_VARIABLE))
+                dependenciesList.Add(GlobalVariables.Accounts.accounts_hash(currentKey)(NAME_VARIABLE))
         Next
 
     End Sub
@@ -494,6 +479,43 @@ Friend Class AccountsController
         View.Hide()
         NewAccountView.PrePopulateForm(parent_node)
         NewAccountView.Show()
+
+    End Sub
+
+
+#End Region
+
+
+#Region "Events"
+
+    Private Sub AccountCreateConfirmation(ByRef attributes As Hashtable)
+
+        accountsNameKeysDictionary.Add(attributes(NAME_VARIABLE), attributes(ID_VARIABLE))
+        If IsNumeric(attributes(PARENT_ID_VARIABLE)) Then
+            Dim parent_node As TreeNode = AccountsTV.Nodes.Find(attributes(ID_VARIABLE), True)(0)
+            parent_node.Nodes.Add(attributes(ID_VARIABLE), _
+                                  attributes(NAME_VARIABLE), _
+                                  attributes(IMAGE_VARIABLE), _
+                                  attributes(IMAGE_VARIABLE))
+        Else
+            AccountsTV.Nodes.Add(attributes(ID_VARIABLE), _
+                                attributes(NAME_VARIABLE), _
+                                attributes(IMAGE_VARIABLE), _
+                                attributes(IMAGE_VARIABLE))
+        End If
+        View.StopCP()
+
+    End Sub
+
+    Private Sub AccountUpdateConfirmation()
+
+        View.StopCP()
+
+    End Sub
+
+    Private Sub AccountDeleteConfirmation()
+
+        View.StopCP()
 
     End Sub
 

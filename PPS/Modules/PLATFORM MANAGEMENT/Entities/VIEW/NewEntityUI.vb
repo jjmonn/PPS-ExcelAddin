@@ -224,8 +224,8 @@ Friend Class NewEntityUI
         If IsFormValid(new_entity_Name) = True Then
 
             Dim hash As New Hashtable
-            hash.Add(ENTITIES_NAME_VARIABLE, new_entity_Name)
-            If current_parent_entity_id <> "" Then hash.Add(ENTITIES_PARENT_ID_VARIABLE, current_parent_entity_id)
+            hash.Add(NAME_VARIABLE, new_entity_Name)
+            If current_parent_entity_id <> "" Then hash.Add(PARENT_ID_VARIABLE, current_parent_entity_id)
             hash.Add(ENTITIES_CURRENCY_VARIABLE, Me.Controls.Find(CURRENCIES_CB_NAME, True)(0).Text)
             hash.Add(ENTITIES_ALLOW_EDITION_VARIABLE, 1)
 

@@ -1,160 +1,268 @@
-﻿' Account.vb
-' 
-' CRUD model for table accounts
-' 
-' To do:
-'       - Delete accounts: delete references of the account in other formulas
-'     
+﻿' Account2.vb
 '
-' Known bugs: 
-'       - 
+' CRUD for accounts table - relation with c++ server
+'
+'
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 05/01/2015
+' Created: 16/07/2015
+' Last modified: 17/07/2015
 
 
-Imports System.Windows.Forms
-Imports System.Collections.Generic
 Imports System.Collections
-Imports ADODB
+Imports System.Collections.Generic
+
 
 
 Friend Class Account
 
+#Region "Instance variables"
 
-#Region "Instance Variables"
 
-    ' Objects
-    Private SRV As ModelServer
-    Private RST As Recordset
+    ' Variables
+    Friend state_flag As Boolean
+    Friend server_response_flag As Boolean
+    Friend accounts_hash As New Hashtable
 
-    ' Constants
-    Private ACCOUNTS_TABLE_ADDRESS As String = GlobalVariables.database + "." + ACCOUNTS_TABLE
-    Friend object_is_alive As Boolean
+    ' Events
+    Public Event AccountCreationEvent(ByRef attributes As Hashtable)
+    Public Event AccountUpdateEvent()
+    Public Event AccountDeleteEvent()
+
 
 #End Region
 
 
-#Region "Initialize"
+#Region "Init"
 
-    Protected Friend Sub New()
+    Friend Sub New()
 
-        SRV = New ModelServer
-        Dim i As Int32 = 0
-        Dim q_result = SRV.openRst(ACCOUNTS_TABLE_ADDRESS, ModelServer.STATIC_CURSOR)
-        While q_result = False AndAlso i < 10
-            q_result = SRV.openRst(ACCOUNTS_TABLE_ADDRESS, ModelServer.STATIC_CURSOR)
-            i = i + 1
-        End While
-        RST = SRV.rst
-        object_is_alive = q_result
+        LoadAccountsTable()
+        Dim time_stamp = Timer
+        Do
+            If Timer - time_stamp > GlobalVariables.timeOut Then
+                state_flag = False
+                Exit Do
+            End If
+        Loop While server_response_flag = True
+        state_flag = True
+
+    End Sub
+
+    Friend Sub LoadAccountsTable()
+
+        NetworkManager.GetInstance().SetCallback(GlobalEnums.ServerMessage.SMSG_LIST_ACCOUNT_ANSWER, AddressOf SMSG_LIST_ACCOUNT_ANSWER)
+        Dim packet As New ByteBuffer(CType(GlobalEnums.ClientMessage.CMSG_LIST_ACCOUNT, UShort))
+        packet.Release()
+        NetworkManager.GetInstance().Send(packet)
+
+    End Sub
+
+    Private Sub SMSG_LIST_ACCOUNT_ANSWER(packet As ByteBuffer)
+
+        For i As Int32 = 0 To packet.ReadInt32()
+            Dim tmp_ht As New Hashtable
+            GetAccountHTFromPacket(packet, tmp_ht)
+            accounts_hash(tmp_ht(ID_VARIABLE)) = tmp_ht
+        Next
+        NetworkManager.GetInstance().RemoveCallback(GlobalEnums.ServerMessage.SMSG_LIST_ACCOUNT_ANSWER, AddressOf SMSG_LIST_ACCOUNT_ANSWER)
+        server_response_flag = True
 
     End Sub
 
 #End Region
 
 
-#Region "CRUD Interface"
+#Region "CRUD"
 
-    Protected Friend Sub CreateAccount(ByRef newAccountAttributes As Hashtable)
+    Friend Sub CMSG_CREATE_ACCOUNT(ByRef attributes As Hashtable)
 
-        Dim fieldsArray(newAccountAttributes.Count - 1) As Object
-        Dim valuesArray(newAccountAttributes.Count - 1) As Object
-        newAccountAttributes.Keys.CopyTo(fieldsArray, 0)
-        newAccountAttributes.Values.CopyTo(valuesArray, 0)
-        RST.AddNew(fieldsArray, valuesArray)
+        NetworkManager.GetInstance().SetCallback(GlobalEnums.ServerMessage.SMSG_CREATE_ACCOUNT_ANSWER, AddressOf SMSG_CREATE_ACCOUNT_ANSWER)
+        Dim packet As New ByteBuffer(CType(GlobalEnums.ClientMessage.CMSG_CREATE_ACCOUNT, UShort))
+        WriteAccountPacket(packet, attributes)
+        packet.Release()
+        NetworkManager.GetInstance().Send(packet)
 
     End Sub
 
-    Protected Friend Function ReadAccount(ByRef accountKey As String, ByRef field As String) As Object
+    Private Sub SMSG_CREATE_ACCOUNT_ANSWER(packet As ByteBuffer)
 
-        RST.Filter = ACCOUNT_ID_VARIABLE + "='" + accountKey + "'"
-        If RST.EOF Then Return Nothing
-        Return RST.Fields(field).Value
+        MsgBox(packet.ReadString())
+        ' we should receive the account and the confirmation that the account has been created
+        Dim tmp_ht As New Hashtable
+        GetAccountHTFromPacket(packet, tmp_ht)
+        accounts_hash(tmp_ht(ID_VARIABLE)) = tmp_ht
+        NetworkManager.GetInstance().RemoveCallback(GlobalEnums.ServerMessage.SMSG_CREATE_ACCOUNT_ANSWER, AddressOf SMSG_CREATE_ACCOUNT_ANSWER)
+        RaiseEvent AccountCreationEvent(tmp_ht)
+
+    End Sub
+
+    Friend Shared Sub CMSG_READ_ACCOUNT(ByRef id As UInt32)
+
+        NetworkManager.GetInstance().SetCallback(GlobalEnums.ServerMessage.SMSG_READ_ACCOUNT_ANSWER, AddressOf SMSG_READ_ACCOUNT_ANSWER)
+        Dim packet As New ByteBuffer(CType(GlobalEnums.ClientMessage.CMSG_CREATE_ACCOUNT, UShort))
+        packet.Release()
+        NetworkManager.GetInstance().Send(packet)
+
+    End Sub
+
+    Friend Shared Sub SMSG_READ_ACCOUNT_ANSWER(packet As ByteBuffer)
+
+        Dim ht As New Hashtable
+        GetAccountHTFromPacket(packet, ht)
+        NetworkManager.GetInstance().RemoveCallback(GlobalEnums.ServerMessage.SMSG_CREATE_ACCOUNT_ANSWER, AddressOf SMSG_READ_ACCOUNT_ANSWER)
+        ' Send the ht to the object which demanded it
+
+    End Sub
+
+    Friend Sub CMSG_UPDATE_ACCOUNT(ByRef attributes As Hashtable)
+
+        NetworkManager.GetInstance().SetCallback(GlobalEnums.ServerMessage.SMSG_UPDATE_ACCOUNT_ANSWER, AddressOf SMSG_UPDATE_ACCOUNT_ANSWER)
+        Dim packet As New ByteBuffer(CType(GlobalEnums.ClientMessage.CMSG_UPDATE_ACCOUNT, UShort))
+        WriteAccountPacket(packet, attributes)
+        packet.Release()
+        NetworkManager.GetInstance().Send(packet)
+
+    End Sub
+
+    Private Sub SMSG_UPDATE_ACCOUNT_ANSWER(packet As ByteBuffer)
+
+        ' Confirmation => return account
+        Dim ht As New Hashtable
+        GetAccountHTFromPacket(packet, ht)
+        accounts_hash(ht(ID_VARIABLE)) = ht
+        NetworkManager.GetInstance().RemoveCallback(GlobalEnums.ServerMessage.SMSG_UPDATE_ACCOUNT_ANSWER, AddressOf SMSG_UPDATE_ACCOUNT_ANSWER)
+        RaiseEvent AccountUpdateEvent()
+
+    End Sub
+
+    Friend Sub CMSG_DELETE_ACCOUNT(ByRef id As UInt32)
+
+        NetworkManager.GetInstance().SetCallback(GlobalEnums.ServerMessage.SMSG_DELETE_ACCOUNT_ANSWER, AddressOf SMSG_DELETE_ACCOUNT_ANSWER)
+        Dim packet As New ByteBuffer(CType(GlobalEnums.ClientMessage.CMSG_DELETE_ACCOUNT, UShort))
+        packet.WriteUint32(id)
+        packet.Release()
+        NetworkManager.GetInstance().Send(packet)
+
+    End Sub
+
+    Private Sub SMSG_DELETE_ACCOUNT_ANSWER()
+
+        NetworkManager.GetInstance().RemoveCallback(GlobalEnums.ServerMessage.SMSG_DELETE_ACCOUNT_ANSWER, AddressOf SMSG_DELETE_ACCOUNT_ANSWER)
+        RaiseEvent AccountDeleteEvent()
+
+    End Sub
+
+#End Region
+
+
+#Region "Mappings"
+
+    Friend Function GetAccountsList(ByRef LookupOption As String, ByRef variable As String)
+
+        Dim tmp_list As New List(Of String)
+        Dim selection() As String = {}
+        Select Case LookupOption
+            Case GlobalEnums.AccountsLookupOptions.LOOKUP_ALL : selection = {GlobalEnums.FormulaTypes.AGGREGATION_OF_SUB_ACCOUNTS, _
+                                                                            GlobalEnums.FormulaTypes.FIRST_PERIOD_INPUT, _
+                                                                            GlobalEnums.FormulaTypes.FORMULA, _
+                                                                            GlobalEnums.FormulaTypes.HARD_VALUE_INPUT}
+
+            Case GlobalEnums.AccountsLookupOptions.LOOKUP_INPUTS : selection = {GlobalEnums.FormulaTypes.FIRST_PERIOD_INPUT, _
+                                                                                GlobalEnums.FormulaTypes.HARD_VALUE_INPUT}
+
+            Case GlobalEnums.AccountsLookupOptions.LOOKUP_OUTPUTS : selection = {GlobalEnums.FormulaTypes.AGGREGATION_OF_SUB_ACCOUNTS, _
+                                                                                 GlobalEnums.FormulaTypes.FIRST_PERIOD_INPUT, _
+                                                                                 GlobalEnums.FormulaTypes.FORMULA}
+
+            Case GlobalEnums.AccountsLookupOptions.LOOKUP_TITLES : selection = {GlobalEnums.FormulaTypes.AGGREGATION_OF_SUB_ACCOUNTS, _
+                                                                                 GlobalEnums.FormulaTypes.FIRST_PERIOD_INPUT, _
+                                                                                 GlobalEnums.FormulaTypes.FORMULA}
+        End Select
+
+        For Each id In accounts_hash.Keys
+            If selection.ToString.Contains(accounts_hash(id)(ACCOUNT_FORMULA_TYPE_VARIABLE)) Then
+                tmp_list.Add(accounts_hash(id)(variable))
+            End If
+        Next
+        Return tmp_list
 
     End Function
 
-    Protected Friend Sub UpdateAccount(ByRef accountKey As String, ByRef accountAttributes As Hashtable)
+    Friend Function GetAccountsDictionary(ByRef Key As String, ByRef Value As String) As Hashtable
 
-        RST.Filter = ACCOUNT_ID_VARIABLE + "='" + accountKey + "'"
-        If RST.EOF = False AndAlso RST.BOF = False Then
-            For Each Attribute In accountAttributes.Keys
-                If RST.Fields(Attribute).Value <> accountAttributes(Attribute) Then
-                    RST.Fields(Attribute).Value = accountAttributes(Attribute)
-                    RST.Update()
-                End If
-            Next
-        End If
+        Dim tmpHT As New Hashtable
+        For Each id In accounts_hash.Keys
+            tmpHT(accounts_hash(id)(Key)) = accounts_hash(id)(Value)
+        Next
+        Return tmpHT
 
-    End Sub
-
-    Protected Friend Sub UpdateAccount(ByRef accountKey As String, _
-                             ByRef field As String, _
-                             ByVal value As Object)
-
-        RST.Filter = ACCOUNT_ID_VARIABLE + "='" + accountKey + "'"
-        If RST.EOF = False AndAlso RST.BOF = False Then
-            If RST.Fields(field).Value <> value Then
-                RST.Fields(field).Value = value
-                RST.Update()
-            End If
-        End If
-
-    End Sub
-
-    Protected Friend Sub DeleteAccount(ByRef accountKey As String)
-
-        RST.Filter = ACCOUNT_ID_VARIABLE + "='" + accountKey + "'"
-        If RST.EOF = False Then
-            RST.Delete()
-            RST.Update()
-        End If
-
-    End Sub
-
+    End Function
 
 #End Region
 
 
 #Region "Utilities"
 
-    Friend Shared Sub LoadAccountsTree(ByRef TV As TreeView)
+    Friend Shared Sub GetAccountHTFromPacket(ByRef packet As ByteBuffer, ByRef account_ht As Hashtable)
 
-        Dim srv As New ModelServer
-        If srv.openRst(GlobalVariables.database + "." + ACCOUNTS_TABLE, ModelServer.FWD_CURSOR) Then
-            srv.rst.Sort = ITEMS_POSITIONS
-            TreeViewsUtilities.LoadAccountsTree(TV, srv.rst)
-            srv.rst.Close()
-        End If
-
-    End Sub
-
-    Protected Friend Sub UpdatePositionsDictionary()
-
-        SRV.sqlQuery("CALL " & GlobalVariables.database & "." & UPDATE_ACCOUNTS_POSITIONS_SP)
-
-    End Sub
-
-    Protected Friend Sub Close()
-
-        On Error Resume Next
-        RST.Close()
-        Me.finalize()
+        account_ht(ID_VARIABLE) = packet.ReadInt32()
+        account_ht(PARENT_ID_VARIABLE) = packet.ReadInt32()
+        account_ht(NAME_VARIABLE) = packet.ReadString()
+        account_ht(ACCOUNT_FORMULA_TYPE_VARIABLE) = packet.ReadInt32()
+        account_ht(ACCOUNT_FORMULA_VARIABLE) = packet.ReadString()
+        account_ht(ACCOUNT_TYPE_VARIABLE) = packet.ReadInt32()
+        account_ht(ACCOUNT_CONSOLIDATION_OPTION_VARIABLE) = packet.ReadInt32()
+        account_ht(ACCOUNT_CONVERSION_OPTION_VARIABLE) = packet.ReadInt32()
+        account_ht(ACCOUNT_FORMAT_VARIABLE) = packet.ReadString()
+        account_ht(ACCOUNT_IMAGE_VARIABLE) = packet.ReadInt32()
+        account_ht(ITEMS_POSITIONS) = packet.ReadInt32()
+        account_ht(ACCOUNT_TAB_VARIABLE) = packet.ReadInt32()
 
     End Sub
 
-    Protected Overrides Sub finalize()
+    Private Sub WriteAccountPacket(ByRef packet As ByteBuffer, ByRef attributes As Hashtable)
 
-        Try
-            RST.Close()
-        Catch ex As Exception
-        End Try
-        MyBase.Finalize()
+        If attributes.ContainsKey(ID_VARIABLE) Then packet.WriteInt32(attributes(ID_VARIABLE))
+        packet.WriteInt32(attributes(PARENT_ID_VARIABLE))
+        packet.WriteString(attributes(NAME_VARIABLE))
+        packet.WriteInt32(attributes(ACCOUNT_FORMULA_TYPE_VARIABLE))
+        packet.WriteString(attributes(ACCOUNT_FORMULA_VARIABLE))
+        packet.WriteInt32(attributes(ACCOUNT_TYPE_VARIABLE))
+        packet.WriteInt32(attributes(ACCOUNT_CONSOLIDATION_OPTION_VARIABLE))
+        packet.WriteInt32(attributes(ACCOUNT_CONVERSION_OPTION_VARIABLE))
+        packet.WriteString(attributes(ACCOUNT_FORMAT_VARIABLE))
+        packet.WriteInt32(attributes(ACCOUNT_IMAGE_VARIABLE))
+        packet.WriteInt32(attributes(ITEMS_POSITIONS))
+        packet.WriteInt32(attributes(ACCOUNT_TAB_VARIABLE))
 
     End Sub
+
+    Friend Sub LoadAccountsTV(ByRef TV As Windows.Forms.TreeView)
+
+        TreeViewsUtilities.LoadTreeview(TV, accounts_hash)
+
+    End Sub
+
+    'Private Function GetAccountHashShortListedByFormulaType(ByRef formula_type As String)
+
+    '    Dim tmp_acc_hash As New Hashtable
+    '    For Each id In accounts_hash.Keys
+    '        If accounts_hash(id)(ACCOUNT_FORMULA_TYPE_VARIABLE) = formula_type Then
+    '            tmp_acc_hash(id) = accounts_hash(id)
+    '        End If
+    '    Next
+    '    Return tmp_acc_hash
+
+    'End Function
 
 #End Region
+
+
+
+
+
 
 
 End Class
