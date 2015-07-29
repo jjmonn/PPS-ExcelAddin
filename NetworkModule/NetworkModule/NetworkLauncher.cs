@@ -7,9 +7,9 @@ public class NetworkLauncher
     NetworkManager m_netMgr;
     ClientState m_state;
 
-    public NetworkLauncher(ref ClientState p_state)
+    public NetworkLauncher()
     {
-        m_state = p_state;
+        m_state = ClientState.not_connected;
         m_netMgr = NetworkManager.GetInstance();
     }
 
@@ -42,4 +42,10 @@ public class NetworkLauncher
             Thread.Sleep(10);
         }
     }
+
+    ClientState GetState()
+    {
+        return (m_state);
+    }
+
 }

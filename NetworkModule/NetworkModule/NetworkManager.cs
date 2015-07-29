@@ -18,16 +18,16 @@ public class NetworkManager
     public NetworkManager()
     {
         m_Sock = new TcpClient();
-        m_callback = new List<Action<ByteBuffer>>[(byte)ServerMessage.OpcodeMax];
+        m_callback = new List<Action<ByteBuffer>>[(byte)ClientMessage.OpcodeMax];
     }
 
     public void SetCallback(UInt16 p_opcodeId, Action<ByteBuffer> p_newCallback)
     {
-        if (p_opcodeId > (byte)ServerMessage.OpcodeMax)
+        if (p_opcodeId > (byte)ClientMessage.OpcodeMax)
             return;
         if (m_callback[p_opcodeId] == null)
             m_callback[p_opcodeId] = new List<Action<ByteBuffer>>();
-        for (int i = 0; i < (byte)ServerMessage.OpcodeMax; i++)
+        for (int i = 0; i < (byte)ClientMessage.OpcodeMax; i++)
         {
             if (m_callback[i] != null && m_callback[i].Contains(p_newCallback))
                 return;
@@ -37,14 +37,14 @@ public class NetworkManager
 
     public List<Action<ByteBuffer>> GetCallback(UInt16 p_opcodeId)
     {
-        if (p_opcodeId < (byte)ServerMessage.OpcodeMax)
+        if (p_opcodeId < (byte)ClientMessage.OpcodeMax)
             return (m_callback[p_opcodeId]);
         return (null);
     }
 
     public void RemoveCallback(int p_opcode, Action<ByteBuffer> p_oldCallback)
     {
-        if (p_opcode > (byte)ServerMessage.OpcodeMax)
+        if (p_opcode > (byte)ClientMessage.OpcodeMax)
             return;
         if (m_callback[p_opcode] != null)
             m_callback[p_opcode].Remove(p_oldCallback);
@@ -82,6 +82,7 @@ public class NetworkManager
         if (l_size < 4)
         {
             Console.WriteLine("Invalid packet received");
+            System.Diagnostics.Debug.Write("Invalid packet received");
             return (null);
         }
         l_sizeBuffer = l_buffer[3] << 24 | l_buffer[2] << 16 | l_buffer[1] << 8 | l_buffer[0];
@@ -122,10 +123,17 @@ public class NetworkManager
             l_packet.Position = 0;
             l_opcode = l_packet.ReadUint16();
             if ((l_callback = this.GetCallback(l_opcode)) == null)
+            {
                 Console.WriteLine("Undefined packet type " + l_opcode.ToString("X2"));
+                System.Diagnostics.Debug.Write("Undefined packet type " + l_opcode.ToString("X2"));
+            }
             else
+            {
+                Console.WriteLine("Receive defined " + l_opcode.ToString("X2"));
+                System.Diagnostics.Debug.Write("Receive defined " + l_opcode.ToString("X2"));
                 for (int i = 0; i < l_callback.Count; i++)
                     l_callback.ElementAt(i)(l_packet);
+            }
         }
         return (true);
     }
