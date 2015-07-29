@@ -41,20 +41,20 @@ Friend Class AdjustmentFilter
 
         LoadAdjustmentFiltersTable()
         Dim time_stamp = Timer
-        Do
-            If Timer - time_stamp > GlobalVariables.timeOut Then
-                state_flag = False
-                Exit Do
-            End If
-        Loop While server_response_flag = True
-        state_flag = True
+        'Do
+        '    If Timer - time_stamp > GlobalVariables.timeOut Then
+        '        state_flag = False
+        '        Exit Do
+        '    End If
+        'Loop While server_response_flag = True
+        'state_flag = True
 
     End Sub
 
     Friend Sub LoadAdjustmentFiltersTable()
 
-        NetworkManager.GetInstance().SetCallback(GlobalEnums.ServerMessage.SMSG_LIST_ADJUSTMENT_FILTER_ANSWER, AddressOf SMSG_LIST_ADJUSTMENT_FILTER_ANSWER)
-        Dim packet As New ByteBuffer(CType(GlobalEnums.ClientMessage.CMSG_LIST_ADJUSTMENTS_FILTER, UShort))
+        NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_LIST_ADJUSTMENT_FILTER_ANSWER, AddressOf SMSG_LIST_ADJUSTMENT_FILTER_ANSWER)
+        Dim packet As New ByteBuffer(CType(ClientMessage.CMSG_LIST_ADJUSTMENTS_FILTER, UShort))
         packet.Release()
         NetworkManager.GetInstance().Send(packet)
 
@@ -67,7 +67,7 @@ Friend Class AdjustmentFilter
             GetAdjustmentFilterHTFromPacket(packet, tmp_ht)
             adjustmentsFilters_list(tmp_ht(ID_VARIABLE)) = tmp_ht
         Next
-        NetworkManager.GetInstance().RemoveCallback(GlobalEnums.ServerMessage.SMSG_LIST_ADJUSTMENT_FILTER_ANSWER, AddressOf SMSG_LIST_ADJUSTMENT_FILTER_ANSWER)
+        NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_LIST_ADJUSTMENT_FILTER_ANSWER, AddressOf SMSG_LIST_ADJUSTMENT_FILTER_ANSWER)
         server_response_flag = True
 
     End Sub
@@ -79,8 +79,8 @@ Friend Class AdjustmentFilter
 
     Friend Sub CMSG_CREATE_ADJUSTMENT_FILTER(ByRef attributes As Hashtable)
 
-        NetworkManager.GetInstance().SetCallback(GlobalEnums.ServerMessage.SMSG_CREATE_ADJUSTMENT_FILTER_ANSWER, AddressOf SMSG_CREATE_ADJUSTMENT_FILTER_ANSWER)
-        Dim packet As New ByteBuffer(CType(GlobalEnums.ClientMessage.CMSG_CREATE_ADJUSTMENTS_FILTER, UShort))
+        NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_CREATE_ADJUSTMENT_FILTER_ANSWER, AddressOf SMSG_CREATE_ADJUSTMENT_FILTER_ANSWER)
+        Dim packet As New ByteBuffer(CType(ClientMessage.CMSG_CREATE_ADJUSTMENTS_FILTER, UShort))
         WriteAdjustmentFilterPacket(packet, attributes)
         packet.Release()
         NetworkManager.GetInstance().Send(packet)
@@ -93,15 +93,15 @@ Friend Class AdjustmentFilter
         Dim tmp_ht As New Hashtable
         GetAdjustmentFilterHTFromPacket(packet, tmp_ht)
         adjustmentsFilters_list.Add(tmp_ht)
-        NetworkManager.GetInstance().RemoveCallback(GlobalEnums.ServerMessage.SMSG_CREATE_ADJUSTMENT_FILTER_ANSWER, AddressOf SMSG_CREATE_ADJUSTMENT_FILTER_ANSWER)
+        NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_CREATE_ADJUSTMENT_FILTER_ANSWER, AddressOf SMSG_CREATE_ADJUSTMENT_FILTER_ANSWER)
         RaiseEvent AdjustmentFilterCreationEvent(tmp_ht)
 
     End Sub
 
     Friend Shared Sub CMSG_READ_ADJUSTMENT_FILTER(ByRef id As UInt32)
 
-        NetworkManager.GetInstance().SetCallback(GlobalEnums.ServerMessage.SMSG_READ_ADJUSTMENT_FILTER_ANSWER, AddressOf SMSG_READ_ADJUSTMENT_FILTER_ANSWER)
-        Dim packet As New ByteBuffer(CType(GlobalEnums.ClientMessage.CMSG_CREATE_ADJUSTMENTS_FILTER, UShort))
+        NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_READ_ADJUSTMENT_FILTER_ANSWER, AddressOf SMSG_READ_ADJUSTMENT_FILTER_ANSWER)
+        Dim packet As New ByteBuffer(CType(ClientMessage.CMSG_CREATE_ADJUSTMENTS_FILTER, UShort))
         packet.Release()
         NetworkManager.GetInstance().Send(packet)
 
@@ -111,7 +111,7 @@ Friend Class AdjustmentFilter
 
         Dim ht As New Hashtable
         GetAdjustmentFilterHTFromPacket(packet, ht)
-        NetworkManager.GetInstance().RemoveCallback(GlobalEnums.ServerMessage.SMSG_CREATE_ADJUSTMENT_FILTER_ANSWER, AddressOf SMSG_READ_ADJUSTMENT_FILTER_ANSWER)
+        NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_CREATE_ADJUSTMENT_FILTER_ANSWER, AddressOf SMSG_READ_ADJUSTMENT_FILTER_ANSWER)
         RaiseEvent AdjustmentFilterRead(ht)
 
     End Sub
@@ -123,8 +123,8 @@ Friend Class AdjustmentFilter
         Dim tmp_ht As Hashtable = adjustmentsFilters_list(id).Clone ' check clone !!!!
         tmp_ht(updated_var) = new_value
 
-        NetworkManager.GetInstance().SetCallback(GlobalEnums.ServerMessage.SMSG_UPDATE_ADJUSTMENT_FILTER_ANSWER, AddressOf SMSG_UPDATE_ADJUSTMENT_FILTER_ANSWER)
-        Dim packet As New ByteBuffer(CType(GlobalEnums.ClientMessage.CMSG_UPDATE_ADJUSTMENTS_FILTER, UShort))
+        NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_UPDATE_ADJUSTMENT_FILTER_ANSWER, AddressOf SMSG_UPDATE_ADJUSTMENT_FILTER_ANSWER)
+        Dim packet As New ByteBuffer(CType(ClientMessage.CMSG_UPDATE_ADJUSTMENTS_FILTER, UShort))
         WriteAdjustmentFilterPacket(packet, tmp_ht)
         packet.Release()
         NetworkManager.GetInstance().Send(packet)
@@ -133,8 +133,8 @@ Friend Class AdjustmentFilter
 
     Friend Sub CMSG_UPDATE_ADJUSTMENT_FILTER(ByRef attributes As Hashtable)
 
-        NetworkManager.GetInstance().SetCallback(GlobalEnums.ServerMessage.SMSG_UPDATE_ADJUSTMENT_FILTER_ANSWER, AddressOf SMSG_UPDATE_ADJUSTMENT_FILTER_ANSWER)
-        Dim packet As New ByteBuffer(CType(GlobalEnums.ClientMessage.CMSG_UPDATE_ADJUSTMENTS_FILTER, UShort))
+        NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_UPDATE_ADJUSTMENT_FILTER_ANSWER, AddressOf SMSG_UPDATE_ADJUSTMENT_FILTER_ANSWER)
+        Dim packet As New ByteBuffer(CType(ClientMessage.CMSG_UPDATE_ADJUSTMENTS_FILTER, UShort))
         WriteAdjustmentFilterPacket(packet, attributes)
         packet.Release()
         NetworkManager.GetInstance().Send(packet)
@@ -146,15 +146,15 @@ Friend Class AdjustmentFilter
         Dim ht As New Hashtable
         GetAdjustmentFilterHTFromPacket(packet, ht)
         adjustmentsFilters_list(ht(ID_VARIABLE)) = ht
-        NetworkManager.GetInstance().RemoveCallback(GlobalEnums.ServerMessage.SMSG_UPDATE_ADJUSTMENT_FILTER_ANSWER, AddressOf SMSG_UPDATE_ADJUSTMENT_FILTER_ANSWER)
+        NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_UPDATE_ADJUSTMENT_FILTER_ANSWER, AddressOf SMSG_UPDATE_ADJUSTMENT_FILTER_ANSWER)
         RaiseEvent AdjustmentFilterUpdateEvent()
 
     End Sub
 
     Friend Sub CMSG_DELETE_ADJUSTMENT_FILTER(ByRef id As UInt32)
 
-        NetworkManager.GetInstance().SetCallback(GlobalEnums.ServerMessage.SMSG_DELETE_ADJUSTMENT_FILTER_ANSWER, AddressOf SMSG_DELETE_ADJUSTMENT_FILTER_ANSWER)
-        Dim packet As New ByteBuffer(CType(GlobalEnums.ClientMessage.CMSG_DELETE_ADJUSTMENTS_FILTER, UShort))
+        NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_DELETE_ADJUSTMENT_FILTER_ANSWER, AddressOf SMSG_DELETE_ADJUSTMENT_FILTER_ANSWER)
+        Dim packet As New ByteBuffer(CType(ClientMessage.CMSG_DELETE_ADJUSTMENTS_FILTER, UShort))
         packet.WriteUint32(id)
         packet.Release()
         NetworkManager.GetInstance().Send(packet)
@@ -165,7 +165,7 @@ Friend Class AdjustmentFilter
 
         Dim id As UInt32
         ' get id from request_id ?
-        NetworkManager.GetInstance().RemoveCallback(GlobalEnums.ServerMessage.SMSG_DELETE_ADJUSTMENT_FILTER_ANSWER, AddressOf SMSG_DELETE_ADJUSTMENT_FILTER_ANSWER)
+        NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_DELETE_ADJUSTMENT_FILTER_ANSWER, AddressOf SMSG_DELETE_ADJUSTMENT_FILTER_ANSWER)
         RaiseEvent AdjustmentFilterDeleteEvent(id)
 
     End Sub

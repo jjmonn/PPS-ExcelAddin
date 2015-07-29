@@ -63,7 +63,7 @@ Friend Class AcquisitionModel
         GlobalVariables.Accounts.LoadAccountsTV(accountsTV)
         DATASET = inputDataSet
      
-        versionsTimeConfigDict = VersionsMapping.GetVersionsHashTable(VERSIONS_CODE_VARIABLE, VERSIONS_TIME_CONFIG_VARIABLE)
+        versionsTimeConfigDict = VersionsMapping.GetVersionsHashTable(ID_VARIABLE, VERSIONS_TIME_CONFIG_VARIABLE)
         accountsNamesFormulaTypeDict = globalvariables.accounts.GetAccountsDictionary(NAME_VARIABLE, ACCOUNT_FORMULA_TYPE_VARIABLE)
         outputsList = GlobalVariables.Accounts.GetAccountsList(GlobalEnums.AccountsLookupOptions.LOOKUP_OUTPUTS, NAME_VARIABLE)
 

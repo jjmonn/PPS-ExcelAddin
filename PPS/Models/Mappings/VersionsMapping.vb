@@ -79,7 +79,7 @@ Friend Class VersionsMapping
         Dim tmpHT As New Hashtable
         srv.OpenRst(GlobalVariables.database + "." + VERSIONS_TABLE, _
                     ModelServer.FWD_CURSOR)
-        srv.rst.Filter = VERSIONS_CODE_VARIABLE + "='" + versionkey + "'"
+        srv.rst.Filter = ID_VARIABLE + "='" + versionkey + "'"
         If srv.rst.EOF = False And srv.rst.BOF = False Then
             tmpHT.Add(VERSIONS_TIME_CONFIG_VARIABLE, srv.rst.Fields(VERSIONS_TIME_CONFIG_VARIABLE).Value)
             tmpHT.Add(VERSIONS_START_PERIOD_VAR, srv.rst.Fields(VERSIONS_START_PERIOD_VAR).Value)
@@ -110,7 +110,7 @@ Friend Class VersionsMapping
                 tmpHT.Add(VERSIONS_TIME_CONFIG_VARIABLE, srv.rst.Fields(VERSIONS_TIME_CONFIG_VARIABLE).Value)
                 tmpHT.Add(VERSIONS_START_PERIOD_VAR, srv.rst.Fields(VERSIONS_START_PERIOD_VAR).Value)
                 tmpHT.Add(VERSIONS_NB_PERIODS_VAR, srv.rst.Fields(VERSIONS_NB_PERIODS_VAR).Value)
-                tmpDict.Add(srv.rst.Fields(VERSIONS_CODE_VARIABLE).Value, tmpHT)
+                tmpDict.Add(srv.rst.Fields(ID_VARIABLE).Value, tmpHT)
                 srv.rst.MoveNext()
             Loop
         Else
@@ -130,7 +130,7 @@ Friend Class VersionsMapping
         Dim srv As New ModelServer
         Dim version_id As String
         srv.OpenRst(GlobalVariables.database + "." + VERSIONS_TABLE, ModelServer.FWD_CURSOR)
-        srv.rst.Filter = VERSIONS_NAME_VARIABLE & "='" & version_name & "'"
+        srv.rst.Filter = NAME_VARIABLE & "='" & version_name & "'"
         If srv.rst.EOF = False And srv.rst.BOF = False Then
             version_id = srv.rst.Fields(RATES_VERSIONS_ID_VARIABLE).Value
             srv.rst.Close()

@@ -87,7 +87,7 @@ Friend Class VersionSelection
         GlobalVariables.GLOBALCurrentRatesVersionCode = Versions.ReadVersion(version_id, VERSIONS_RATES_VERSION_ID_VAR)
         Versions.Close()
         Dim RatesVersions As New RateVersion
-        GlobalVariables.Rates_Version_Label.Caption = RatesVersions.ReadVersion(GlobalVariables.GLOBALCurrentRatesVersionCode, RATES_VERSIONS_NAME_VARIABLE)
+        GlobalVariables.Rates_Version_Label.Caption = RatesVersions.ReadVersion(GlobalVariables.GLOBALCurrentRatesVersionCode, NAME_VARIABLE)
         RatesVersions = Nothing
 
     End Sub

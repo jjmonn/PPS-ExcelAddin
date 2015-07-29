@@ -69,7 +69,7 @@ Friend Class Version
 
     Protected Friend Function ReadVersion(ByRef version_id As String, ByRef field As String) As Object
 
-        RST.Filter = VERSIONS_CODE_VARIABLE + "='" + version_id + "'"
+        RST.Filter = ID_VARIABLE + "='" + version_id + "'"
         If RST.EOF Then Return Nothing
         Return RST.Fields(field).Value
 
@@ -77,10 +77,10 @@ Friend Class Version
 
     Protected Friend Function GetRecord(ByRef version_id As String) As Hashtable
 
-        RST.Filter = VERSIONS_CODE_VARIABLE + "='" + version_id + "'"
+        RST.Filter = ID_VARIABLE + "='" + version_id + "'"
         If RST.EOF Then Return Nothing
         Dim hash As New Hashtable
-        hash.Add(VERSIONS_NAME_VARIABLE, RST.Fields(VERSIONS_NAME_VARIABLE).Value)
+        hash.Add(NAME_VARIABLE, RST.Fields(NAME_VARIABLE).Value)
         hash.Add(VERSIONS_IS_FOLDER_VARIABLE, RST.Fields(VERSIONS_IS_FOLDER_VARIABLE).Value)
         hash.Add(VERSIONS_CREATION_DATE_VARIABLE, RST.Fields(VERSIONS_CREATION_DATE_VARIABLE).Value)
         hash.Add(VERSIONS_LOCKED_VARIABLE, RST.Fields(VERSIONS_LOCKED_VARIABLE).Value)
@@ -95,7 +95,7 @@ Friend Class Version
 
     Protected Friend Sub UpdateVersion(ByRef version_id As String, ByRef hash As Hashtable)
 
-        RST.Filter = VERSIONS_CODE_VARIABLE + "='" + version_id + "'"
+        RST.Filter = ID_VARIABLE + "='" + version_id + "'"
         If RST.EOF = False AndAlso RST.BOF = False Then
             For Each Attribute In hash.Keys
                 If RST.Fields(Attribute).Value <> hash(Attribute) Then
@@ -111,7 +111,7 @@ Friend Class Version
                                       ByRef field As String, _
                                       ByVal value As Object)
 
-        RST.Filter = VERSIONS_CODE_VARIABLE + "='" + version_id + "'"
+        RST.Filter = ID_VARIABLE + "='" + version_id + "'"
         If RST.EOF = False Then
 
             If IsDBNull(RST.Fields(field).Value) AndAlso Not IsDBNull(value) Then
@@ -132,7 +132,7 @@ Friend Class Version
 
     Protected Friend Sub DeleteVersion(ByRef version_id As String)
 
-        RST.Filter = VERSIONS_CODE_VARIABLE + "='" + version_id + "'"
+        RST.Filter = ID_VARIABLE + "='" + version_id + "'"
         If RST.EOF = False Then
             RST.Delete()
             RST.Update()
@@ -161,14 +161,14 @@ Friend Class Version
                 Do While srv.rst.EOF = False
 
                     If IsDBNull(srv.rst.Fields(VERSIONS_PARENT_CODE_VARIABLE).Value) Then
-                        currentNode = TV.Nodes.Add(Trim(srv.rst.Fields(VERSIONS_CODE_VARIABLE).Value), _
-                                                   Trim(srv.rst.Fields(VERSIONS_NAME_VARIABLE).Value), _
+                        currentNode = TV.Nodes.Add(Trim(srv.rst.Fields(ID_VARIABLE).Value), _
+                                                   Trim(srv.rst.Fields(NAME_VARIABLE).Value), _
                                                    srv.rst.Fields(VERSIONS_IS_FOLDER_VARIABLE).Value, _
                                                    srv.rst.Fields(VERSIONS_IS_FOLDER_VARIABLE).Value)
                     Else
                         ParentNode = TV.Nodes.Find(Trim(srv.rst.Fields(VERSIONS_PARENT_CODE_VARIABLE).Value), True)
-                        currentNode = ParentNode(0).Nodes.Add(Trim(srv.rst.Fields(VERSIONS_CODE_VARIABLE).Value), _
-                                                              Trim(srv.rst.Fields(VERSIONS_NAME_VARIABLE).Value), _
+                        currentNode = ParentNode(0).Nodes.Add(Trim(srv.rst.Fields(ID_VARIABLE).Value), _
+                                                              Trim(srv.rst.Fields(NAME_VARIABLE).Value), _
                                                               srv.rst.Fields(VERSIONS_IS_FOLDER_VARIABLE).Value, _
                                                               srv.rst.Fields(VERSIONS_IS_FOLDER_VARIABLE).Value)
 

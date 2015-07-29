@@ -164,8 +164,8 @@ Friend Class ModelDataSet
 
     Private Function VersionsIdentify() As Boolean
 
-        Dim versionsNameList As List(Of String) = VersionsMapping.GetVersionsList(VERSIONS_NAME_VARIABLE)
-        Dim versionsNameCodeDictionary As Hashtable = VersionsMapping.GetVersionsHashTable(VERSIONS_NAME_VARIABLE, VERSIONS_CODE_VARIABLE)
+        Dim versionsNameList As List(Of String) = VersionsMapping.GetVersionsList(NAME_VARIABLE)
+        Dim versionsNameCodeDictionary As Hashtable = VersionsMapping.GetVersionsHashTable(NAME_VARIABLE, ID_VARIABLE)
 
         Dim i, j As Integer
         For i = LBound(GlobalScreenShot, 1) To UBound(GlobalScreenShot, 1)

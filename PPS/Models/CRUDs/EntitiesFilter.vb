@@ -42,21 +42,21 @@ Friend Class EntitiesFilter
     Friend Sub New()
 
         LoadEntityFiltersTable()
-        Dim time_stamp = Timer
-        Do
-            If Timer - time_stamp > GlobalVariables.timeOut Then
-                state_flag = False
-                Exit Do
-            End If
-        Loop While server_response_flag = True
-        state_flag = True
+        'Dim time_stamp = Timer
+        'Do
+        '    If Timer - time_stamp > GlobalVariables.timeOut Then
+        '        state_flag = False
+        '        Exit Do
+        '    End If
+        'Loop While server_response_flag = True
+        'state_flag = True
 
     End Sub
 
     Friend Sub LoadEntityFiltersTable()
 
-        NetworkManager.GetInstance().SetCallback(GlobalEnums.ServerMessage.SMSG_LIST_ENTITY_FILTER_ANSWER, AddressOf SMSG_LIST_ENTITY_FILTER_ANSWER)
-        Dim packet As New ByteBuffer(CType(GlobalEnums.ClientMessage.CMSG_LIST_ENTITY_FILTER, UShort))
+        NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_LIST_ENTITY_FILTER_ANSWER, AddressOf SMSG_LIST_ENTITY_FILTER_ANSWER)
+        Dim packet As New ByteBuffer(CType(ClientMessage.CMSG_LIST_ENTITY_FILTER, UShort))
         packet.Release()
         NetworkManager.GetInstance().Send(packet)
 
@@ -70,7 +70,7 @@ Friend Class EntitiesFilter
             entitiesFilters_list(tmp_ht(ID_VARIABLE)) = tmp_ht
             fIdFvDict.Add(tmp_ht(ENTITY_ID_VARIABLE) & tmp_ht(FILTER_ID_VARIABLE), tmp_ht(FILTER_VALUE_ID_VARIABLE))
         Next
-        NetworkManager.GetInstance().RemoveCallback(GlobalEnums.ServerMessage.SMSG_LIST_ENTITY_FILTER_ANSWER, AddressOf SMSG_LIST_ENTITY_FILTER_ANSWER)
+        NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_LIST_ENTITY_FILTER_ANSWER, AddressOf SMSG_LIST_ENTITY_FILTER_ANSWER)
         server_response_flag = True
 
     End Sub
@@ -82,8 +82,8 @@ Friend Class EntitiesFilter
 
     Friend Sub CMSG_CREATE_ENTITY_FILTER(ByRef attributes As Hashtable)
 
-        NetworkManager.GetInstance().SetCallback(GlobalEnums.ServerMessage.SMSG_CREATE_ENTITY_FILTER_ANSWER, AddressOf SMSG_CREATE_ENTITY_FILTER_ANSWER)
-        Dim packet As New ByteBuffer(CType(GlobalEnums.ClientMessage.CMSG_CREATE_ENTITY_FILTER, UShort))
+        NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_CREATE_ENTITY_FILTER_ANSWER, AddressOf SMSG_CREATE_ENTITY_FILTER_ANSWER)
+        Dim packet As New ByteBuffer(CType(ClientMessage.CMSG_CREATE_ENTITY_FILTER, UShort))
         WriteEntityFilterPacket(packet, attributes)
         packet.Release()
         NetworkManager.GetInstance().Send(packet)
@@ -96,15 +96,15 @@ Friend Class EntitiesFilter
         Dim tmp_ht As New Hashtable
         GetEntityFilterHTFromPacket(packet, tmp_ht)
         entitiesFilters_list.Add(tmp_ht)
-        NetworkManager.GetInstance().RemoveCallback(GlobalEnums.ServerMessage.SMSG_CREATE_ENTITY_FILTER_ANSWER, AddressOf SMSG_CREATE_ENTITY_FILTER_ANSWER)
+        NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_CREATE_ENTITY_FILTER_ANSWER, AddressOf SMSG_CREATE_ENTITY_FILTER_ANSWER)
         RaiseEvent EntityFilterCreationEvent(tmp_ht)
 
     End Sub
 
     Friend Shared Sub CMSG_READ_ENTITY_FILTER(ByRef id As UInt32)
 
-        NetworkManager.GetInstance().SetCallback(GlobalEnums.ServerMessage.SMSG_READ_ENTITY_FILTER_ANSWER, AddressOf SMSG_READ_ENTITY_FILTER_ANSWER)
-        Dim packet As New ByteBuffer(CType(GlobalEnums.ClientMessage.CMSG_CREATE_ENTITY_FILTER, UShort))
+        NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_READ_ENTITY_FILTER_ANSWER, AddressOf SMSG_READ_ENTITY_FILTER_ANSWER)
+        Dim packet As New ByteBuffer(CType(ClientMessage.CMSG_CREATE_ENTITY_FILTER, UShort))
         packet.Release()
         NetworkManager.GetInstance().Send(packet)
 
@@ -114,7 +114,7 @@ Friend Class EntitiesFilter
 
         Dim ht As New Hashtable
         GetEntityFilterHTFromPacket(packet, ht)
-        NetworkManager.GetInstance().RemoveCallback(GlobalEnums.ServerMessage.SMSG_CREATE_ENTITY_FILTER_ANSWER, AddressOf SMSG_READ_ENTITY_FILTER_ANSWER)
+        NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_CREATE_ENTITY_FILTER_ANSWER, AddressOf SMSG_READ_ENTITY_FILTER_ANSWER)
         RaiseEvent EntityFilterRead(ht)
 
     End Sub
@@ -126,8 +126,8 @@ Friend Class EntitiesFilter
         Dim tmp_ht As Hashtable = entitiesFilters_list(id).clone ' check clone !!!!
         tmp_ht(updated_var) = new_value
 
-        NetworkManager.GetInstance().SetCallback(GlobalEnums.ServerMessage.SMSG_UPDATE_ENTITY_FILTER_ANSWER, AddressOf SMSG_UPDATE_ENTITY_FILTER_ANSWER)
-        Dim packet As New ByteBuffer(CType(GlobalEnums.ClientMessage.CMSG_UPDATE_ENTITY_FILTER, UShort))
+        NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_UPDATE_ENTITY_FILTER_ANSWER, AddressOf SMSG_UPDATE_ENTITY_FILTER_ANSWER)
+        Dim packet As New ByteBuffer(CType(ClientMessage.CMSG_UPDATE_ENTITY_FILTER, UShort))
         WriteEntityFilterPacket(packet, tmp_ht)
         packet.Release()
         NetworkManager.GetInstance().Send(packet)
@@ -136,8 +136,8 @@ Friend Class EntitiesFilter
 
     Friend Sub CMSG_UPDATE_ENTITY_FILTER(ByRef attributes As Hashtable)
 
-        NetworkManager.GetInstance().SetCallback(GlobalEnums.ServerMessage.SMSG_UPDATE_ENTITY_FILTER_ANSWER, AddressOf SMSG_UPDATE_ENTITY_FILTER_ANSWER)
-        Dim packet As New ByteBuffer(CType(GlobalEnums.ClientMessage.CMSG_UPDATE_ENTITY_FILTER, UShort))
+        NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_UPDATE_ENTITY_FILTER_ANSWER, AddressOf SMSG_UPDATE_ENTITY_FILTER_ANSWER)
+        Dim packet As New ByteBuffer(CType(ClientMessage.CMSG_UPDATE_ENTITY_FILTER, UShort))
         WriteEntityFilterPacket(packet, attributes)
         packet.Release()
         NetworkManager.GetInstance().Send(packet)
@@ -149,15 +149,15 @@ Friend Class EntitiesFilter
         Dim ht As New Hashtable
         GetEntityFilterHTFromPacket(packet, ht)
         entitiesFilters_list(ht(ID_VARIABLE)) = ht
-        NetworkManager.GetInstance().RemoveCallback(GlobalEnums.ServerMessage.SMSG_UPDATE_ENTITY_FILTER_ANSWER, AddressOf SMSG_UPDATE_ENTITY_FILTER_ANSWER)
+        NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_UPDATE_ENTITY_FILTER_ANSWER, AddressOf SMSG_UPDATE_ENTITY_FILTER_ANSWER)
         RaiseEvent EntityFilterUpdateEvent()
 
     End Sub
 
     Friend Sub CMSG_DELETE_ENTITY_FILTER(ByRef id As UInt32)
 
-        NetworkManager.GetInstance().SetCallback(GlobalEnums.ServerMessage.SMSG_DELETE_ENTITY_FILTER_ANSWER, AddressOf SMSG_DELETE_ENTITY_FILTER_ANSWER)
-        Dim packet As New ByteBuffer(CType(GlobalEnums.ClientMessage.CMSG_DELETE_ENTITY_FILTER, UShort))
+        NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_DELETE_ENTITY_FILTER_ANSWER, AddressOf SMSG_DELETE_ENTITY_FILTER_ANSWER)
+        Dim packet As New ByteBuffer(CType(ClientMessage.CMSG_DELETE_ENTITY_FILTER, UShort))
         packet.WriteUint32(id)
         packet.Release()
         NetworkManager.GetInstance().Send(packet)
@@ -168,7 +168,7 @@ Friend Class EntitiesFilter
 
         Dim id As UInt32
         ' get id from request_id ?
-        NetworkManager.GetInstance().RemoveCallback(GlobalEnums.ServerMessage.SMSG_DELETE_ENTITY_FILTER_ANSWER, AddressOf SMSG_DELETE_ENTITY_FILTER_ANSWER)
+        NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_DELETE_ENTITY_FILTER_ANSWER, AddressOf SMSG_DELETE_ENTITY_FILTER_ANSWER)
         RaiseEvent EntityFilterDeleteEvent(id)
 
     End Sub

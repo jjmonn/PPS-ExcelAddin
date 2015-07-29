@@ -59,7 +59,7 @@ Friend Class ASInputsController
         TreeViewsUtilities.CheckAllNodes(EntitiesTV)
         MarketIndexVersion.load_market_index_version_tv(MarketPricesTV)
 
-        versions_id_list = VersionsMapping.GetVersionsList(VERSIONS_CODE_VARIABLE)
+        versions_id_list = VersionsMapping.GetVersionsList(ID_VARIABLE)
         market_index_versions_id_list = MarketIndexVersion.GetMarketIndexesVersionsList(MARKET_INDEXES_VERSIONS_ID_VAR)
 
         AddHandler VersionsTV.AfterSelect, AddressOf VersionsTV_AfterSelect

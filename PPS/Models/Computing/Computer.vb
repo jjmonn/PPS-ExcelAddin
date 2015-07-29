@@ -40,10 +40,21 @@ Friend Class Computer
 #End Region
 
 
+#Region "Interface"
+
+    Friend Function GetData() As Collections.Hashtable
+
+        Return dataMap
+
+    End Function
+
+#End Region
+
+
 #Region "Computing Request"
 
     ' manage request IDs !!!!! -> binded with versions
-    ' à vérifier avec la méthode de réceptio nath !! priority high
+    ' à vérifier avec la méthode de réception nath !! priority high
     Friend Sub CMSG_COMPUTE_REQUEST(ByRef versions_id As UInt32(), _
                                     ByRef entity_id As UInt32, _
                                     ByRef currency_id As UInt32, _
@@ -59,7 +70,7 @@ Friend Class Computer
 
         For Each version_id In versions_id
 
-            NetworkManager.GetInstance().SetCallback(GlobalEnums.ServerMessage.SMSG_COMPUTE_RESULT, AddressOf SMSG_COMPUTE_RESULT)
+            NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_COMPUTE_RESULT, AddressOf SMSG_COMPUTE_RESULT)
             Dim packet As New ByteBuffer(CType(ClientMessage.CMSG_COMPUTE_REQUEST, UShort))
             packet.AssignRequestId()
             packet.WriteUint32(version_id)                                               ' version_id
@@ -71,8 +82,8 @@ Friend Class Computer
                 packet.WriteUint32(GetTotalFiltersDictionariesValues(filters))          ' number of filters_values
                 For Each Filter_id In filters.Keys
                     For Each filter_value_id In filters(Filter_id)
-                        packet.WriteUint16(Filter_id)                                   ' filter_id
                         packet.WriteUint32(GlobalVariables.Filters.filters_hash(Filter_id)(FILTER_AXIS_ID_VARIABLE))              ' axis_id 
+                        packet.WriteUint32(Filter_id)                                   ' filter_id
                         packet.WriteUint32(filter_value_id)                             ' filter_value_id
                     Next
                 Next
@@ -94,8 +105,18 @@ Friend Class Computer
             If Not hierarchy Is Nothing Then
                 packet.WriteUint32(hierarchy.Count)                                      ' decomposition hierarchy size
                 For Each item In hierarchy
-                    packet.WriteUint32(GetDecompositionQueryType(item))                  ' axis or filter
-                    packet.WriteUint32(GetItemID(item))                                  ' decomposition item
+                    Dim axis_id As UInt32
+                    Dim isAxis As Boolean
+                    Dim query_type As UInt32 = GetDecompositionQueryType(item)
+                    If query_type = GlobalEnums.DecompositionQueryType.AXIS Then
+                        axis_id = GetItemID(item)
+                        isAxis = True
+                    Else
+                        axis_id = GlobalVariables.Filters.filters_hash(GetItemID(item))(FILTER_AXIS_ID_VARIABLE)
+                        isAxis = False
+                    End If
+                    packet.WriteUint32(axis_id)                                          ' axis_id
+                    packet.WriteUint8(isAxis)                                            ' is axis ?
                 Next
             Else
                 packet.WriteUint32(0)                                                    ' decomposition hierarchy size = 0
@@ -126,8 +147,8 @@ Friend Class Computer
 
         versions_comp_flag(version_id) = True
         If AreAllVersionsComputed() = True Then
-            ' NetworkManager.GetInstance().RemoveCallback(GlobalEnums.ServerMessage.SMSG_COMPUTE_RESULT, AddressOf SMSG_COMPUTE_RESULT)
-            ' RaiseEvent ComputationAnswered()
+            NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_COMPUTE_RESULT, AddressOf SMSG_COMPUTE_RESULT)
+            RaiseEvent ComputationAnswered()
         End If
 
     End Sub

@@ -58,8 +58,8 @@ Friend Class DataVersionsController
         End If
 
         Version.LoadVersionsTree(versionsTV)
-        rates_versions_id_name_dic = RateVersionsMapping.GetRatesVersionDictionary(RATES_VERSIONS_ID_VARIABLE, RATES_VERSIONS_NAME_VARIABLE)
-        rates_versions_name_id_dic = RateVersionsMapping.GetRatesVersionDictionary(RATES_VERSIONS_NAME_VARIABLE, RATES_VERSIONS_ID_VARIABLE)
+        rates_versions_id_name_dic = RateVersionsMapping.GetRatesVersionDictionary(RATES_VERSIONS_ID_VARIABLE, NAME_VARIABLE)
+        rates_versions_name_id_dic = RateVersionsMapping.GetRatesVersionDictionary(NAME_VARIABLE, RATES_VERSIONS_ID_VARIABLE)
         View = New VersionsControl(Me, versionsTV)
         versionsNamesList = TreeViewsUtilities.GetNodesTextsList(versionsTV)
         NewVersionUI = New NewDataVersionUI(Me)
@@ -112,7 +112,7 @@ Friend Class DataVersionsController
         End If
         If table_creation_success Then
             Versions.CreateVersion(hash)
-            AddNode(new_id, hash(VERSIONS_NAME_VARIABLE), 0, parent_node)
+            AddNode(new_id, hash(NAME_VARIABLE), 0, parent_node)
             '       ViewsController.CreateDataTableViewsForAllCredentialLevels(new_id)
         Else
             MsgBox("The Version could not be created. PPS Error 8. Please contact PPS Team if the error persists.")
@@ -150,7 +150,7 @@ Friend Class DataVersionsController
 
     Protected Friend Sub UpdateName(ByRef version_id As String, ByRef name As String)
 
-        Versions.UpdateVersion(version_id, VERSIONS_NAME_VARIABLE, name)
+        Versions.UpdateVersion(version_id, NAME_VARIABLE, name)
 
     End Sub
 
@@ -186,7 +186,7 @@ Friend Class DataVersionsController
     Private Sub Delete(ByRef version_id As String)
 
         Versions.DeleteVersion(version_id)
-        versionsNamesList.Remove(Versions.ReadVersion(version_id, VERSIONS_NAME_VARIABLE))
+        versionsNamesList.Remove(Versions.ReadVersion(version_id, NAME_VARIABLE))
 
     End Sub
 

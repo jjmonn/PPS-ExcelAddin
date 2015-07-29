@@ -356,9 +356,9 @@ Friend Class TreeViewsUtilities
 
     End Sub
 
-    Friend Shared Function GetCheckedNodesID(ByRef TV As TreeView) As List(Of String)
+    Friend Shared Function GetCheckedNodesID(ByRef TV As TreeView) As List(Of UInt32)
 
-        Dim tmpList As New List(Of String)
+        Dim tmpList As New List(Of UInt32)
         For Each node As TreeNode In TV.Nodes
             AddCheckedNodesToList(node, tmpList)
         Next
@@ -367,18 +367,18 @@ Friend Class TreeViewsUtilities
 
     End Function
 
-    Friend Shared Sub AddCheckedNodesToList(ByRef node As TreeNode, ByRef list As List(Of String))
+    Friend Shared Sub AddCheckedNodesToList(ByRef node As TreeNode, ByRef list As List(Of UInt32))
 
-        If node.Checked = True Then list.Add(node.Name)
+        If node.Checked = True Then list.Add(CInt(node.Name))
         For Each child_node As TreeNode In node.Nodes
             AddCheckedNodesToList(child_node, list)
         Next
 
     End Sub
 
-    Friend Shared Function GetCheckedNodesID(ByRef node As TreeNode) As List(Of String)
+    Friend Shared Function GetCheckedNodesID(ByRef node As TreeNode) As List(Of UInt32)
 
-        Dim tmpList As New List(Of String)
+        Dim tmpList As New List(Of UInt32)
         If node Is Nothing Then Return tmpList
         For Each childNode As TreeNode In node.Nodes
             AddCheckedNodesToList(childNode, tmpList)

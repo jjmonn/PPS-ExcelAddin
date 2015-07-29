@@ -27,6 +27,7 @@ Imports System.Collections
 Imports VIBlend.WinForms.DataGridView.Filters
 Imports System.Windows.Forms.DataVisualization.Charting
 Imports PPSFBIControls
+Imports System.ComponentModel
 
 
 Friend Class ControllingUI_2
@@ -36,13 +37,17 @@ Friend Class ControllingUI_2
 
 #Region "Objects"
 
-    Private Controller As ControllingUI2Controller
+    Private Controller As FinancialUIController
     Friend DGVUTIL As New DataGridViewsUtil
+    Private DataDisplayController As FinancialsDataDisplay
     Friend PBar As New ProgressBarControl
     Friend display_control As DisplayControl
     Private leftSplitContainer As SplitContainer
     Private rightSplitContainer As SplitContainer
     Private Accounts As New Account
+    Private CP As CircularProgressUI
+    Friend ComputingBCGWorker As New BackgroundWorker
+    Private DisplayBCGWorker As New BackgroundWorker
 
 #End Region
 
@@ -131,7 +136,8 @@ Friend Class ControllingUI_2
         InitializeComponent()
 
         ' Add any initialization after the InitializeComponent() call. 
-        Controller = New ControllingUI2Controller(Me)
+        Controller = New FinancialUIController(Me)
+        DataDisplayController = New FinancialsDataDisplay(Me)
         LoadTrees()
 
         periodsCLB.Dock = DockStyle.Fill
@@ -149,9 +155,19 @@ Friend Class ControllingUI_2
         CollapsePane1()
         DisplayFirstTreeOnly()          ' TV Table Layout
 
+        ComputingBCGWorker.WorkerSupportsCancellation = True
+        DisplayBCGWorker.WorkerSupportsCancellation = True
+        AddHandler ComputingBCGWorker.DoWork, AddressOf ComputingBKGWorker_DoWork
+        AddHandler ComputingBCGWorker.RunWorkerCompleted, AddressOf ComputingBKGWorker_RunWorkerCompleted
+        AddHandler DisplayBCGWorker.DoWork, AddressOf DisplayBKGWorker_DoWork
+        AddHandler DisplayBCGWorker.RunWorkerCompleted, AddressOf ComputingBKGWorker_RunWorkerCompleted
+
+
     End Sub
 
     Private Sub LoadTrees()
+
+        ' controller actions !!!!!! priority high
 
         GlobalVariables.Entities.LoadEntitiesTV(entitiesTV)
         GlobalVariables.Clients.LoadClientsTree(clientsTV)
@@ -163,7 +179,7 @@ Friend Class ControllingUI_2
         AxisFilter.LoadFvTv(clientsFiltersTV, GlobalEnums.AnalysisAxis.CLIENTS)
         AxisFilter.LoadFvTv(productsFiltersTV, GlobalEnums.AnalysisAxis.PRODUCTS)
         AxisFilter.LoadFvTv(adjustmentsFiltersTV, GlobalEnums.AnalysisAxis.ADJUSTMENTS)
-      
+
         Version.LoadVersionsTree(versionsTV)
 
         TVSetup(entitiesTV, 0, EntitiesTVImageList)
@@ -265,6 +281,8 @@ Friend Class ControllingUI_2
 
     Private Sub leftPaneSetUp()
 
+        ' This initialization should go into controller ?!!
+        ' priority high
         Dim analysis_axis_tv As New TreeView
         analysis_axis_tv.Nodes.Add(Computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.ACCOUNTS, ACCOUNTS_CODE)
         analysis_axis_tv.Nodes.Add(Computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.VERSIONS, VERSIONS_CODE)
@@ -308,8 +326,23 @@ Friend Class ControllingUI_2
         display_control = New DisplayControl(analysis_axis_tv)
         TVTableLayout.Controls.Add(display_control, 0, 0)
         display_control.Dock = DockStyle.Fill
-        AddHandler display_control.rows_display_tv.KeyDown, AddressOf displayControlRowDisplayTV_KeyDown
+        AddHandler display_control.rows_display_tv.KeyDown, AddressOf displayControlDisplayTVs_KeyDown
+        AddHandler display_control.columns_display_tv.KeyDown, AddressOf displayControlDisplayTVs_KeyDown
 
+    End Sub
+
+
+#End Region
+
+
+#Region "Interface"
+
+    Private Sub RefreshData(ByRef entityNode As TreeNode)
+
+        Controller.Entity_node = entityNode
+        CP = New CircularProgressUI(System.Drawing.Color.Blue, "Computing")
+        ComputingBCGWorker.RunWorkerAsync()
+        
     End Sub
 
 
@@ -344,7 +377,6 @@ Friend Class ControllingUI_2
 #End Region
 
 
-
 #Region "Events"
 
 #Region "Entities TreeView"
@@ -357,7 +389,7 @@ Friend Class ControllingUI_2
     Private Sub EntitiesTV_KeyDown(sender As Object, e As Windows.Forms.KeyEventArgs)
 
         If e.KeyCode = Keys.Enter Then
-            If Not entitiesTV.SelectedNode Is Nothing Then Controller.RefreshData(entitiesTV.SelectedNode)
+            If Not entitiesTV.SelectedNode Is Nothing Then RefreshData(entitiesTV.SelectedNode)
         End If
 
     End Sub
@@ -451,10 +483,10 @@ Friend Class ControllingUI_2
 
     End Sub
 
-    Private Sub displayControlRowDisplayTV_KeyDown(sender As Object, e As KeyEventArgs)
+    Private Sub displayControlDisplayTVs_KeyDown(sender As Object, e As KeyEventArgs)
 
         Select Case e.KeyCode
-            Case Keys.Delete : display_control.rows_display_tv.SelectedNode.Remove()
+            Case Keys.Delete : sender.SelectedNode.Remove()
 
             Case Keys.Up
                 If e.Control Then
@@ -465,7 +497,6 @@ Friend Class ControllingUI_2
                     TreeViewsUtilities.MoveNodeDown(sender.SelectedNode)
                 End If
         End Select
-
 
     End Sub
 
@@ -748,9 +779,9 @@ Friend Class ControllingUI_2
     Private Sub Refresh_Click(sender As Object, e As EventArgs) Handles RefreshMenuBT.Click, RefreshMenuBT2.Click
 
         If Not Controller.Entity_node Is Nothing Then
-            Controller.RefreshData(entitiesTV.Nodes.Find(Controller.Entity_node.Name, True)(0))
+            RefreshData(entitiesTV.Nodes.Find(Controller.Entity_node.Name, True)(0))
         ElseIf Not entitiesTV.SelectedNode Is Nothing Then
-            Controller.RefreshData(entitiesTV.SelectedNode)
+            RefreshData(entitiesTV.SelectedNode)
         Else
             MsgBox("An Entity level must be selected in order to refresh " + Chr(13) + Chr(13) + _
                    " Please select an entity")
@@ -830,15 +861,11 @@ Friend Class ControllingUI_2
 
 #Region "Right Click Menus"
 
-#Region "EntitiesTV Right Click Menu Call Backs"
-
     Private Sub compute_complete_Click(sender As Object, e As EventArgs) Handles compute_complete.Click
 
-        Controller.RefreshData(right_clicked_node)
+        RefreshData(right_clicked_node)
 
     End Sub
-
-#End Region
 
 #Region "Periods Right Click Menu"
 
@@ -981,7 +1008,6 @@ Friend Class ControllingUI_2
 
     Private Sub ControllingUI_2_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
 
-        Controller.close_model()
 
     End Sub
 
@@ -1056,6 +1082,90 @@ Friend Class ControllingUI_2
 
 #End Region
 
+
+#End Region
+
+
+#Region "Background Workers"
+
+#Region "Computing Backgroundworker"
+
+    Private Sub ComputingBKGWorker_DoWork(sender As Object, e As DoWorkEventArgs)
+
+        Dim rowsHiearchyNodeList As New List(Of TreeNode)
+        Dim columnsHiearchyNodeList As New List(Of TreeNode)
+
+        Controller.Compute(rowsHiearchyNodeList, columnsHiearchyNodeList)
+        DataDisplayController.InitDisplay(rowsHiearchyNodeList, columnsHiearchyNodeList)
+
+        For Each tab_ As TabPage In TabControl1.TabPages
+            DataDisplayController.CreateRowsAndColumns(tab_.Controls(0))
+        Next
+
+        Dim dumb As Boolean = False
+        Do While dumb = True
+            ' Waiting for the controller to send cancel order 
+        Loop
+
+    End Sub
+
+    Private Sub ComputingBKGWorker_RunWorkerCompleted(sender As Object, e As RunWorkerCompletedEventArgs)
+
+        AfterComputeAttemp_ThreadSafe()
+
+    End Sub
+
+    Delegate Sub AfterComputeAttemp_Delegate()
+
+    Private Sub AfterComputeAttemp_ThreadSafe()
+
+        If InvokeRequired Then
+            Dim MyDelegate As New AfterComputeAttemp_Delegate(AddressOf AfterComputeAttemp_ThreadSafe)
+            Me.Invoke(MyDelegate, New Object() {})
+        Else
+            CP.Close()
+            CP = New CircularProgressUI(System.Drawing.Color.Purple, "Displaying")
+            DisplayBCGWorker.RunWorkerAsync()
+        End If
+
+    End Sub
+
+#End Region
+
+#Region "Display Backgroundworker"
+
+    Private Sub DisplayBKGWorker_DoWork(sender As Object, e As DoWorkEventArgs)
+
+        For Each tab_ As TabPage In TabControl1.TabPages
+            Dim DGV As vDataGridView = tab_.Controls(0)
+
+            ' tab account_id -> ? priority high
+            DataDisplayController.FillDGVs(DGV, 0)
+        Next
+
+    End Sub
+
+    Private Sub DisplayBKGWorker_RunWorkerCompleted(sender As Object, e As RunWorkerCompletedEventArgs)
+
+        AfterDisplayAttemp_ThreadSafe()
+
+    End Sub
+
+    Delegate Sub AfterDisplayAttemp_Delegate()
+
+    Private Sub AfterDisplayAttemp_ThreadSafe()
+
+        If InvokeRequired Then
+            Dim MyDelegate As New AfterDisplayAttemp_Delegate(AddressOf AfterDisplayAttemp_ThreadSafe)
+            Me.Invoke(MyDelegate, New Object() {})
+        Else
+            'CP.Dispose()
+
+        End If
+
+    End Sub
+
+#End Region
 
 #End Region
 

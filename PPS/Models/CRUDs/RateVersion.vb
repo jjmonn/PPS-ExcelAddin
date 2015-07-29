@@ -81,7 +81,7 @@ Friend Class RateVersion
         RST.MoveFirst()
         While RST.EOF = False
             Dim hash As New Hashtable
-            hash.Add(RATES_VERSIONS_NAME_VARIABLE, RST.Fields(RATES_VERSIONS_NAME_VARIABLE).Value)
+            hash.Add(NAME_VARIABLE, RST.Fields(NAME_VARIABLE).Value)
             hash.Add(RATES_VERSIONS_IS_FOLDER_VARIABLE, RST.Fields(RATES_VERSIONS_IS_FOLDER_VARIABLE).Value)
             If IsDBNull(RST.Fields(RATES_VERSIONS_PARENT_CODE_VARIABLE).Value) Then
                 hash.Add(RATES_VERSIONS_PARENT_CODE_VARIABLE, "")
@@ -163,13 +163,13 @@ Friend Class RateVersion
 
                 If IsDBNull(rst.Fields(RATES_VERSIONS_PARENT_CODE_VARIABLE).Value) Then
                     nodeX = TV.Nodes.Add(Trim(rst.Fields(RATES_VERSIONS_ID_VARIABLE).Value), _
-                                         Trim(rst.Fields(RATES_VERSIONS_NAME_VARIABLE).Value), _
+                                         Trim(rst.Fields(NAME_VARIABLE).Value), _
                                          rst.Fields(RATES_VERSIONS_IS_FOLDER_VARIABLE).Value, _
                                          rst.Fields(RATES_VERSIONS_IS_FOLDER_VARIABLE).Value)
                 Else
                     ParentNode = TV.Nodes.Find(Trim(rst.Fields(RATES_VERSIONS_PARENT_CODE_VARIABLE).Value), True)
                     nodeX = ParentNode(0).Nodes.Add(Trim(rst.Fields(RATES_VERSIONS_ID_VARIABLE).Value), _
-                                                    Trim(rst.Fields(RATES_VERSIONS_NAME_VARIABLE).Value), _
+                                                    Trim(rst.Fields(NAME_VARIABLE).Value), _
                                                     rst.Fields(RATES_VERSIONS_IS_FOLDER_VARIABLE).Value, _
                                                     rst.Fields(RATES_VERSIONS_IS_FOLDER_VARIABLE).Value)
                 End If

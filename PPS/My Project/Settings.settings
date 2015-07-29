@@ -2,8 +2,8 @@
 <SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="My" GeneratedClassName="MySettings" UseMySettingsClassName="true">
   <Profiles />
   <Settings>
-    <Setting Name="server" Type="System.String" Scope="User">
-      <Value Profile="(Default)">173.194.251.206</Value>
+    <Setting Name="serverIp" Type="System.String" Scope="User">
+      <Value Profile="(Default)">52.18.230.208</Value>
     </Setting>
     <Setting Name="version_id" Type="System.String" Scope="User">
       <Value Profile="(Default)">vto</Value>
@@ -12,13 +12,19 @@
       <Value Profile="(Default)">user2</Value>
     </Setting>
     <Setting Name="port_number" Type="System.String" Scope="User">
-      <Value Profile="(Default)">3306</Value>
+      <Value Profile="(Default)">4242</Value>
     </Setting>
     <Setting Name="certificatespath" Type="System.String" Scope="User">
       <Value Profile="(Default)">C:\Users\PPS\Documents\Purple Sun\CA</Value>
     </Setting>
     <Setting Name="database" Type="System.String" Scope="User">
-      <Value Profile="(Default)">ppsbi_ENGIE</Value>
+      <Value Profile="(Default)">ppsbi_engie</Value>
+    </Setting>
+    <Setting Name="oldIp" Type="System.String" Scope="User">
+      <Value Profile="(Default)">localhost</Value>
+    </Setting>
+    <Setting Name="oldPort" Type="System.String" Scope="User">
+      <Value Profile="(Default)">3306</Value>
     </Setting>
   </Settings>
 </SettingsFile>

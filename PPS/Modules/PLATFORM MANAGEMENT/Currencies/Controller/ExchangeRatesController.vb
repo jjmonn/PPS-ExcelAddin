@@ -109,7 +109,7 @@ Friend Class ExchangeRatesController
             global_periods_dictionary = RatesVersions.GetPeriodsDictionary(version_id)
             View.ratesView.InitializeDGV(currencies_list, global_periods_dictionary)
             View.ratesView.DisplayRatesVersionValuesinDGV(get_rates_dictionary)
-            View.rates_version_TB.Text = RatesVersions.ReadVersion(current_version, RATES_VERSIONS_NAME_VARIABLE)
+            View.rates_version_TB.Text = RatesVersions.ReadVersion(current_version, NAME_VARIABLE)
         Else
             ExchangeRates = Nothing
         End If
@@ -169,7 +169,7 @@ Friend Class ExchangeRatesController
         Dim key = get_new_version_token()
         Dim tmpHT As New Hashtable
         tmpHT.Add(RATES_VERSIONS_ID_VARIABLE, key)
-        tmpHT.Add(RATES_VERSIONS_NAME_VARIABLE, name)
+        tmpHT.Add(NAME_VARIABLE, name)
         tmpHT.Add(ITEMS_POSITIONS, 1)
 
         If parent_node Is Nothing Then tmpHT.Add(RATES_VERSIONS_PARENT_CODE_VARIABLE, DBNull.Value) Else tmpHT.Add(RATES_VERSIONS_PARENT_CODE_VARIABLE, parent_node.Name)
@@ -191,7 +191,7 @@ Friend Class ExchangeRatesController
 
     Friend Sub UpdateVersionName(ByRef version_id As String, ByRef name As String)
 
-        RatesVersions.UpdateVersion(version_id, RATES_VERSIONS_NAME_VARIABLE, name)
+        RatesVersions.UpdateVersion(version_id, NAME_VARIABLE, name)
 
     End Sub
 

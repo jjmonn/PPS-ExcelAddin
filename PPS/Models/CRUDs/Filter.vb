@@ -45,21 +45,21 @@ Friend Class Filter
     Friend Sub New()
 
         LoadFiltersTable()
-        Dim time_stamp = Timer
-        Do
-            If Timer - time_stamp > GlobalVariables.timeOut Then
-                state_flag = False
-                Exit Do
-            End If
-        Loop While server_response_flag = True
-        state_flag = True
+        'Dim time_stamp = Timer
+        'Do
+        '    If Timer - time_stamp > GlobalVariables.timeOut Then
+        '        state_flag = False
+        '        Exit Do
+        '    End If
+        'Loop While server_response_flag = True
+        'state_flag = True
 
     End Sub
 
     Friend Sub LoadFiltersTable()
 
-        NetworkManager.GetInstance().SetCallback(GlobalEnums.ServerMessage.SMSG_LIST_FILTER_ANSWER, AddressOf SMSG_LIST_FILTER_ANSWER)
-        Dim packet As New ByteBuffer(CType(GlobalEnums.ClientMessage.CMSG_LIST_FILTER, UShort))
+        NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_LIST_FILTER_ANSWER, AddressOf SMSG_LIST_FILTER_ANSWER)
+        Dim packet As New ByteBuffer(CType(ClientMessage.CMSG_LIST_FILTER, UShort))
         packet.Release()
         NetworkManager.GetInstance().Send(packet)
 
@@ -72,7 +72,7 @@ Friend Class Filter
             GetFilterHTFromPacket(packet, tmp_ht)
             filters_hash(tmp_ht(ID_VARIABLE)) = tmp_ht
         Next
-        NetworkManager.GetInstance().RemoveCallback(GlobalEnums.ServerMessage.SMSG_LIST_FILTER_ANSWER, AddressOf SMSG_LIST_FILTER_ANSWER)
+        NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_LIST_FILTER_ANSWER, AddressOf SMSG_LIST_FILTER_ANSWER)
         server_response_flag = True
 
     End Sub
@@ -84,8 +84,8 @@ Friend Class Filter
 
     Friend Sub CMSG_CREATE_FILTER(ByRef attributes As Hashtable)
 
-        NetworkManager.GetInstance().SetCallback(GlobalEnums.ServerMessage.SMSG_CREATE_FILTER_ANSWER, AddressOf SMSG_CREATE_FILTER_ANSWER)
-        Dim packet As New ByteBuffer(CType(GlobalEnums.ClientMessage.CMSG_CREATE_FILTER, UShort))
+        NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_CREATE_FILTER_ANSWER, AddressOf SMSG_CREATE_FILTER_ANSWER)
+        Dim packet As New ByteBuffer(CType(ClientMessage.CMSG_CREATE_FILTER, UShort))
         WriteFilterPacket(packet, attributes)
         packet.Release()
         NetworkManager.GetInstance().Send(packet)
@@ -98,15 +98,15 @@ Friend Class Filter
         Dim tmp_ht As New Hashtable
         GetFilterHTFromPacket(packet, tmp_ht)
         filters_hash(tmp_ht(ID_VARIABLE)) = tmp_ht
-        NetworkManager.GetInstance().RemoveCallback(GlobalEnums.ServerMessage.SMSG_CREATE_FILTER_ANSWER, AddressOf SMSG_CREATE_FILTER_ANSWER)
+        NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_CREATE_FILTER_ANSWER, AddressOf SMSG_CREATE_FILTER_ANSWER)
         RaiseEvent FilterCreationEvent(tmp_ht)
 
     End Sub
 
     Friend Shared Sub CMSG_READ_FILTER(ByRef id As UInt32)
 
-        NetworkManager.GetInstance().SetCallback(GlobalEnums.ServerMessage.SMSG_READ_FILTER_ANSWER, AddressOf SMSG_READ_FILTER_ANSWER)
-        Dim packet As New ByteBuffer(CType(GlobalEnums.ClientMessage.CMSG_CREATE_FILTER, UShort))
+        NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_READ_FILTER_ANSWER, AddressOf SMSG_READ_FILTER_ANSWER)
+        Dim packet As New ByteBuffer(CType(ClientMessage.CMSG_CREATE_FILTER, UShort))
         packet.Release()
         NetworkManager.GetInstance().Send(packet)
 
@@ -116,7 +116,7 @@ Friend Class Filter
 
         Dim ht As New Hashtable
         GetFilterHTFromPacket(packet, ht)
-        NetworkManager.GetInstance().RemoveCallback(GlobalEnums.ServerMessage.SMSG_CREATE_FILTER_ANSWER, AddressOf SMSG_READ_FILTER_ANSWER)
+        NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_CREATE_FILTER_ANSWER, AddressOf SMSG_READ_FILTER_ANSWER)
         RaiseEvent FilterRead(ht)
 
     End Sub
@@ -141,8 +141,8 @@ Friend Class Filter
         Dim tmp_ht As Hashtable = filters_hash(id).clone ' check clone !!!!
         tmp_ht(updated_var) = new_value
 
-        NetworkManager.GetInstance().SetCallback(GlobalEnums.ServerMessage.SMSG_UPDATE_FILTER_ANSWER, AddressOf SMSG_UPDATE_FILTER_ANSWER)
-        Dim packet As New ByteBuffer(CType(GlobalEnums.ClientMessage.CMSG_UPDATE_FILTER, UShort))
+        NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_UPDATE_FILTER_ANSWER, AddressOf SMSG_UPDATE_FILTER_ANSWER)
+        Dim packet As New ByteBuffer(CType(ClientMessage.CMSG_UPDATE_FILTER, UShort))
         WriteFilterPacket(packet, tmp_ht)
         packet.Release()
         NetworkManager.GetInstance().Send(packet)
@@ -151,8 +151,8 @@ Friend Class Filter
 
     Friend Sub CMSG_UPDATE_FILTER(ByRef attributes As Hashtable)
 
-        NetworkManager.GetInstance().SetCallback(GlobalEnums.ServerMessage.SMSG_UPDATE_FILTER_ANSWER, AddressOf SMSG_UPDATE_FILTER_ANSWER)
-        Dim packet As New ByteBuffer(CType(GlobalEnums.ClientMessage.CMSG_UPDATE_FILTER, UShort))
+        NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_UPDATE_FILTER_ANSWER, AddressOf SMSG_UPDATE_FILTER_ANSWER)
+        Dim packet As New ByteBuffer(CType(ClientMessage.CMSG_UPDATE_FILTER, UShort))
         WriteFilterPacket(packet, attributes)
         packet.Release()
         NetworkManager.GetInstance().Send(packet)
@@ -164,15 +164,15 @@ Friend Class Filter
         Dim ht As New Hashtable
         GetFilterHTFromPacket(packet, ht)
         filters_hash(ht(ID_VARIABLE)) = ht
-        NetworkManager.GetInstance().RemoveCallback(GlobalEnums.ServerMessage.SMSG_UPDATE_FILTER_ANSWER, AddressOf SMSG_UPDATE_FILTER_ANSWER)
+        NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_UPDATE_FILTER_ANSWER, AddressOf SMSG_UPDATE_FILTER_ANSWER)
         RaiseEvent FilterUpdateEvent()
 
     End Sub
 
     Friend Sub CMSG_DELETE_FILTER(ByRef id As UInt32)
 
-        NetworkManager.GetInstance().SetCallback(GlobalEnums.ServerMessage.SMSG_DELETE_FILTER_ANSWER, AddressOf SMSG_DELETE_FILTER_ANSWER)
-        Dim packet As New ByteBuffer(CType(GlobalEnums.ClientMessage.CMSG_DELETE_FILTER, UShort))
+        NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_DELETE_FILTER_ANSWER, AddressOf SMSG_DELETE_FILTER_ANSWER)
+        Dim packet As New ByteBuffer(CType(ClientMessage.CMSG_DELETE_FILTER, UShort))
         packet.WriteUint32(id)
         packet.Release()
         NetworkManager.GetInstance().Send(packet)
@@ -182,7 +182,7 @@ Friend Class Filter
     Private Sub SMSG_DELETE_FILTER_ANSWER()
 
         Dim id As UInt32
-        NetworkManager.GetInstance().RemoveCallback(GlobalEnums.ServerMessage.SMSG_DELETE_FILTER_ANSWER, AddressOf SMSG_DELETE_FILTER_ANSWER)
+        NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_DELETE_FILTER_ANSWER, AddressOf SMSG_DELETE_FILTER_ANSWER)
         RaiseEvent FilterDeleteEvent(id)
 
     End Sub

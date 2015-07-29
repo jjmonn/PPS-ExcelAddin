@@ -181,7 +181,6 @@ Module Data_Tables_Constants
 #Region "Versioning Table"
 
     Friend Const VERSIONS_TABLE = "versions"
-    Friend Const VERSIONS_NAME_VARIABLE = "name"
     Friend Const VERSIONS_CREATION_DATE_VARIABLE = "created_at"
     Friend Const VERSIONS_LOCKED_VARIABLE = "locked"
     Friend Const VERSIONS_LOCKED_DATE_VARIABLE = "locked_date"

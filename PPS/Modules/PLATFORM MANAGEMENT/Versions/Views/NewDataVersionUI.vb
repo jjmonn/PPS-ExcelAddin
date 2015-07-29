@@ -99,7 +99,7 @@ Friend Class NewDataVersionUI
         Dim name As String = NameTB.Text
         If IsFormValid(name) = True Then
             Dim hash As New Hashtable
-            hash.Add(VERSIONS_NAME_VARIABLE, name)
+            hash.Add(NAME_VARIABLE, name)
             hash.Add(VERSIONS_CREATION_DATE_VARIABLE, Format(Now, "short Date"))
             hash.Add(VERSIONS_IS_FOLDER_VARIABLE, 0)
             hash.Add(VERSIONS_LOCKED_VARIABLE, 0)

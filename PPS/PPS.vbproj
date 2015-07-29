@@ -132,6 +132,7 @@
     <Compile Include="Models\CRUDs\FilterValue.vb" />
     <Compile Include="Models\CRUDs\Product.vb" />
     <Compile Include="Models\CRUDs\ProductsFilter.vb" />
+    <Compile Include="Models\CRUDs\Version2.vb" />
     <Compile Include="Models\Mappings\CurrenciesSymbolsMapping.vb" />
     <Compile Include="Modules\CONTROLING UI\Controler\FinancialsDataDisplay.vb" />
     <Compile Include="Modules\MODELING\FINANCIAL MODELLING\Views\Controls\FModelingInputsControl.Designer.vb">
@@ -183,6 +184,12 @@
     <Compile Include="Modules\MODELING\PS MODELING\Controller\AlternativeScenariosController.vb" />
     <Compile Include="Modules\MODELING\PS MODELING\Controller\ASInputsController.vb" />
     <Compile Include="Modules\MODELING\PS MODELING\Model\AlternativeScenarioModel.vb" />
+    <Compile Include="Modules\T1\Test.Designer.vb">
+      <DependentUpon>Test.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Modules\T1\Test.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Utilities\ChartsUtilities.vb" />
     <Compile Include="Models\CRUDs\MarketIndex.vb" />
     <Compile Include="Models\CRUDs\Control.vb" />
@@ -211,7 +218,7 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Models\GenericSelectionBuilder.vb" />
-    <Compile Include="Modules\CONTROLING UI\Controler\ControllingUI2Controller.vb" />
+    <Compile Include="Modules\CONTROLING UI\Controler\FinancialUIController.vb" />
     <Compile Include="Modules\CONTROLING UI\Model\ControllingUIModel.vb" />
     <Compile Include="Modules\CONTROLING UI\View\ControllingUIChartsConfig.Designer.vb">
       <DependentUpon>ControllingUIChartsConfig.vb</DependentUpon>
@@ -716,6 +723,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Modules\Settings\SettingMainUI.resx">
       <DependentUpon>SettingMainUI.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Modules\T1\Test.resx">
+      <DependentUpon>Test.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\GenericView.resx">
       <DependentUpon>GenericView.vb</DependentUpon>

@@ -35,7 +35,7 @@ Friend Class DataModel
 
     Public Sub New()
 
-        dataVersionsKeyNameDictionary = VersionsMapping.GetVersionsHashTable(VERSIONS_CODE_VARIABLE, VERSIONS_NAME_VARIABLE)
+        dataVersionsKeyNameDictionary = VersionsMapping.GetVersionsHashTable(ID_VARIABLE, NAME_VARIABLE)
 
     End Sub
 

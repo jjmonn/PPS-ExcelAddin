@@ -34,7 +34,7 @@ Friend Class SQLEntities
 
     Friend Sub New()
 
-        dataTablesList = VersionsMapping.GetVersionsList(VERSIONS_CODE_VARIABLE)
+        dataTablesList = VersionsMapping.GetVersionsList(ID_VARIABLE)
 
     End Sub
 

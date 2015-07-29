@@ -64,7 +64,10 @@ Public Class ConnectionTP
         'ConnectionsFunctions.Connection(Addin, _
         '                                IDTB.Text, _
         '                                PWDTB.Text)
-        ConnectionsFunctions.NetworkConnection(My.Settings.server, My.Settings.port_number)
+        ConnectionsFunctions.NetworkConnection(My.Settings.serverIp, _
+                                               My.Settings.port_number)
+
+
 
     End Sub
 
@@ -83,13 +86,13 @@ Public Class ConnectionTP
             Me.Invoke(MyDelegate, New Object() {})
         Else
             CP.Dispose()
+            PWDTB.Clear()
             Me.Hide()
         End If
 
     End Sub
 
 #End Region
-
 
 
 #Region "Form show and close events"
@@ -109,6 +112,7 @@ Public Class ConnectionTP
     Private Sub ConnectionPane_FormClosing(sender As Object, e As Windows.Forms.FormClosingEventArgs) Handles MyBase.FormClosing
 
         If Not CP Is Nothing Then CP.Dispose()
+        PWDTB.Clear()
         CPPanel.Controls.Clear()
         e.Cancel = True
 

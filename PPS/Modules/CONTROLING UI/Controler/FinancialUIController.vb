@@ -4,14 +4,13 @@
 '
 ' To do:
 '      
-'      - Implement Clients and Products Categories TV after check (bottom of this page) !! 
-'
+'   
 '
 ' Known bugs:
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 24/07/2015
+' Last modified: 28/07/2015
 
 
 Imports System.Windows.Forms
@@ -20,28 +19,21 @@ Imports System.Collections
 Imports System.Linq
 
 
-Friend Class ControllingUI2Controller
+Friend Class FinancialUIController
 
 
 #Region "Instance Variable"
 
     ' Objects
-    ' Private Model As ControllingUIModel
+    Private Computer As New Computer
     Private View As ControllingUI_2
-    Protected Friend Entity_node As TreeNode
+    Friend Entity_node As TreeNode
+
 
     ' Variables
-    Protected Friend categories_values_dict As New Dictionary(Of String, Dictionary(Of String, String))
-    Private TVsDict As New Dictionary(Of String, TreeView)
     Private versions_dict As Dictionary(Of String, Hashtable)
+    Private currenciesNameIdDict As Dictionary(Of String, UInt32)
 
-    ' Const
-  
-    'Friend Const ENTITY_CATEGORY_CODE As String = "entitiescategories"
-    'Friend Const CLIENT_CATEGORY_CODE As String = "clientscategories"
-    'Friend Const PRODUCT_CATEGORY_CODE As String = "productscategories"
-    Friend Const TOTAL_CODE As String = "T"
-    Friend Const ZERO_PERIOD_CODE As Int32 = 0
 
 #End Region
 
@@ -98,13 +90,7 @@ Friend Class ControllingUI2Controller
     Friend Sub New(ByRef inputView As Object)
 
         View = inputView
-        ' TVsDict.Add(ENTITIES_CODE, View.entitiesTV)
-        'TVsDict.Add(CLIENTS_CODE, View.clientsTV)
-        'TVsDict.Add(PRODUCTS_CODE, View.productsTV)
-        'TVsDict.Add(ADJUSTMENT_CODE, View.adjustmentsTV)
-        'TVsDict.Add(ENTITY_CATEGORY_CODE, View.entitiesFiltersTV)
-        'TVsDict.Add(CLIENT_CATEGORY_CODE, View.clientsFiltersTV)
-        'TVsDict.Add(PRODUCT_CATEGORY_CODE, View.productsFiltersTV)
+        AddHandler Computer.ComputationAnswered, AddressOf AfterCompute
 
     End Sub
 
@@ -113,40 +99,60 @@ Friend Class ControllingUI2Controller
 
 #Region "Interface"
 
-    Protected Friend Sub RefreshData(ByRef input_entity_node As TreeNode)
+    Friend Sub Compute(ByRef rowsHierarchyNodesList As List(Of TreeNode), _
+                       ByRef columnsHierarchyNodesList As List(Of TreeNode))
 
-        Dim rows_display_nodes As New TreeNode
         For Each node As TreeNode In View.display_control.rows_display_tv.Nodes
-            rows_display_nodes.Nodes.Add(node.Name, node.Text)
+            rowsHierarchyNodesList.Add(node)
         Next
-        Dim rows_hierarchy_nodes As TreeNode = BuildRowsHierarchy(rows_display_nodes)
-        Entity_node = input_entity_node
+        For Each node As TreeNode In View.display_control.columns_display_tv.Nodes
+            columnsHierarchyNodesList.Add(node)
+        Next
 
-        Dim periods_node As TreeNode
-        Dim columns_display_node As New TreeNode
-        BuildColumnsHierarchy(columns_display_node, periods_node)
+        ' Filters and axis Filters Build
+        Dim filters As New Dictionary(Of UInt32, List(Of UInt32))
+        Dim axisFilters As New Dictionary(Of UInt32, List(Of UInt32))
+        ' ------------------------------------------
+        '   -> to be implemented priority high !!
+        ' ------------------------------------------
 
-        'CategoriesValuesDictionaryBuild(periods_node, _
-        '                                columns_display_node, _
-        '                                rows_display_nodes, _
-        '                                rows_hierarchy_nodes)
 
-        Pbar_init_complete()
-        '  View.CreateDGVHierarchies(columns_display_node, rows_display_nodes)
+        ' Decomposition Hierarchy build
+        Dim computingHierarchyList As New List(Of String)
+        IncrementComputingHierarchy(rowsHierarchyNodesList, computingHierarchyList)
+        IncrementComputingHierarchy(columnsHierarchyNodesList, computingHierarchyList)
+        If computingHierarchyList.Count = 0 Then computingHierarchyList = Nothing
 
-        ' Computer.vb -> compute priority high
-        '
-        '  GetDataDictionary(rows_hierarchy_nodes, View.CurrenciesCLB.SelectedItem)
+        ' Currency setting
+        Dim currencyId As UInt32 = currenciesNameIdDict(View.CurrenciesCLB.SelectedItem)
 
-        FillUIHeader()
-        ' send computer.data_map to the view to be displayed - priority high
-        ' View.DisplayData(Model.DataDictionary, _
-        '                 columns_display_node, _
-        '                 rows_display_nodes)
+        ' Computing order
+        Computer.CMSG_COMPUTE_REQUEST(TreeViewsUtilities.GetCheckedNodesID(View.versionsTV).ToArray, _
+                                      CInt(Entity_node.Name), _
+                                      currencyId, _
+                                      filters, _
+                                      axisFilters, _
+                                      computingHierarchyList)
+
+        ' -> fill UI header not here !! priority normal
+        '  FillUIHeader()
 
     End Sub
 
-    Protected Friend Sub dropOnExcel()
+    Private Sub AfterCompute()
+
+        View.ComputingBCGWorker.CancelAsync()
+
+    End Sub
+
+    Friend Function GetDataMap() As Hashtable
+
+        Return Computer.GetData()
+
+    End Function
+
+
+    Friend Sub dropOnExcel()
 
         ' Maybe issue if nothing in the DGV ? !
         If Not Entity_node.Text Is Nothing Then
@@ -169,21 +175,26 @@ Friend Class ControllingUI2Controller
 
 #Region "Hierarchies Configuration - Values Dictionaries Initialization"
 
-    Private Function BuildRowsHierarchy(ByRef rows_display_nodes As TreeNode) As TreeNode
+    Private Sub IncrementComputingHierarchy(ByRef hierarchyNodesList As List(Of TreeNode), _
+                                            ByRef computingHierarchyList As List(Of String))
 
-        'Dim rows_hierarchy_nodes As New TreeNode
-        'For Each node As TreeNode In rows_display_nodes.Nodes
-        '    If node.Name <> ControllingUI2Controller.ACCOUNTS_CODE _
-        '    AndAlso node.Name <> ControllingUI2Controller.ENTITIES_CODE Then
-        '        rows_hierarchy_nodes.Nodes.Add(node.Name, node.Name)
-        '    End If
-        'Next
-        'Return rows_hierarchy_nodes
+        For Each node As TreeNode In hierarchyNodesList
+            If node.Name <> Computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.ACCOUNTS _
+            AndAlso node.Name <> Computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.ENTITIES _
+            AndAlso node.Name <> Computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.ACCOUNTS _
+            AndAlso node.Name <> Computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.VERSIONS _
+            AndAlso node.Name <> Computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.YEARS _
+            AndAlso node.Name <> Computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.MONTHS Then
+                computingHierarchyList.Add(node.Name)
+            End If
+        Next
 
-    End Function
+    End Sub
 
+    ' below -> à garder pour la construction du tv filters values
     Private Sub BuildColumnsHierarchy(ByRef columns_display_node As TreeNode, _
                                       ByRef periods_node As TreeNode)
+
 
         'Dim versions As New Version
         'versions_dict = versions.GetVersionsDictionary(TreeViewsUtilities.GetCheckedNodesID(View.versionsTV))
@@ -234,7 +245,7 @@ Friend Class ControllingUI2Controller
         '' Versions 
         'Dim tmp_dic As New Dictionary(Of String, String)
         'For Each version_id As String In versions_dict.Keys
-        '    tmp_dic.Add(version_id, versions_dict(version_id)(VERSIONS_NAME_VARIABLE))
+        '    tmp_dic.Add(version_id, versions_dict(version_id)(NAME_VARIABLE))
         'Next
         'categories_values_dict.Add(VERSIONS_CODE, tmp_dic)
 
@@ -282,93 +293,11 @@ Friend Class ControllingUI2Controller
 #End Region
 
 
-#Region "Model Computations Management"
-
-    Private Sub GetDataDictionary(ByRef rows_hierarchy_node As TreeNode, _
-                                  ByRef destination_currency As String)
-
-        ' 
-
-        ' Launch computer.vb computation
-        ' wait for server answer
-        ' priority high
-
-        'Dim filters_dict As New Dictionary(Of String, String)
-        'If rows_hierarchy_node.Nodes.Count > 0 Then
-        '    RowsInnerLoop(rows_hierarchy_node.Nodes(0), filters_dict, destination_currency)
-        'Else
-        '    compute(filters_dict, destination_currency)
-        'End If
-
-    End Sub
-
-    'Private Sub RowsInnerLoop(ByRef hierarchy_node As TreeNode, _
-    '                          ByVal filters_dict As Dictionary(Of String, String), _
-    '                          ByRef destination_currency As String)
-
-    '    ' Total value Loop 
-    '    FilterValueLoop(TOTAL_CODE, hierarchy_node, filters_dict, destination_currency)
-
-    '    ' Loop through all filters value
-    '    For Each filter_value As String In categories_values_dict(hierarchy_node.Name).Keys
-    '        FilterValueLoop(filter_value, hierarchy_node, filters_dict, destination_currency)
-    '    Next
-    '    ' Remove current level filter
-    '    filters_dict(hierarchy_node.Name) = TOTAL_CODE
-
-    'End Sub
-
-    'Private Sub FilterValueLoop(ByRef filter_value As String, _
-    '                            ByRef hierarchy_node As TreeNode, _
-    '                            ByVal filters_dict As Dictionary(Of String, String), _
-    '                            ByRef destination_currency As String)
-
-    '    filters_dict(hierarchy_node.Name) = filter_value
-    '    If Not hierarchy_node.NextNode Is Nothing Then
-    '        ' Goes one hierarchy level deeper
-    '        RowsInnerLoop(hierarchy_node.NextNode, filters_dict, destination_currency)
-    '    Else
-    '        ' No deeper hierarchy: Apply filter and Compute
-    '        compute(filters_dict, destination_currency)
-    '    End If
-
-    'End Sub
-
-    'Private Sub compute(ByVal filters_dict As Dictionary(Of String, String), _
-    '                    ByRef destination_currency As String)
-
-    '    'Model.IntializeComputer(Entity_node, _
-    '    '                        TreeViewsUtilities.GetCheckedNodesID(TVsDict(ControllingUI2Controller.CLIENTS_CODE)), _
-    '    '                        TreeViewsUtilities.GetCheckedNodesID(TVsDict(ControllingUI2Controller.PRODUCTS_CODE)))
-    '    'Model.SetDBFilters(filters_dict)
-    '    'Model.ComputeAndFillDD(Utilities_Functions.GetDictionaryCopy(filters_dict), _
-    '    '                       categories_values_dict(VERSIONS_CODE).Keys.ToList, _
-    '    '                       versions_dict, _
-    '    '                       destination_currency)
-
-    'End Sub
-
-#End Region
-
-
 #Region "Utilities"
-
-    Private Sub Pbar_init_complete()
-
-        Dim load_max As Int32 = 0
-        For Each key As String In categories_values_dict.Keys
-            load_max = load_max + 1 + categories_values_dict(key).Count
-        Next
-
-        '(Model.inputs_entities_list.Count + 5) * versions_id_array.Length + 2
-        View.PBar.Launch(1, load_max * 2)
-        View.PBar.Visible = True
-
-    End Sub
 
     Friend Sub EntitiesCategoriesUpdate()
 
-          Dim expansionDict = TreeViewsUtilities.SaveNodesExpansionsLevel(View.entitiesTV)
+        Dim expansionDict = TreeViewsUtilities.SaveNodesExpansionsLevel(View.entitiesTV)
         Dim checkedList = TreeViewsUtilities.SaveCheckedStates(View.entitiesTV)
         Dim filtersDict As List(Of UInt32) = GenericSelectionBuilder.GetAxisFilteredValuesList(View.entitiesFiltersTV, _
                                                                                                GlobalEnums.AnalysisAxis.ENTITIES)
@@ -396,8 +325,8 @@ Friend Class ControllingUI2Controller
 
     Friend Sub AdjustmentsCategoriesUpdate()
 
-        GlobalVariables.Products.LoadProductsTree(View.adjustmentsTV, _
-                                                  GenericSelectionBuilder.GetAxisFilteredValuesList(View.adjustmentsFiltersTV, _
+        GlobalVariables.Adjustments.LoadAdjustmentsTree(View.adjustmentsTV, _
+                                                        GenericSelectionBuilder.GetAxisFilteredValuesList(View.adjustmentsFiltersTV, _
                                                                                                     GlobalEnums.AnalysisAxis.ADJUSTMENTS))
 
     End Sub
@@ -421,7 +350,7 @@ Friend Class ControllingUI2Controller
         'Dim versions_ids(categories_values_dict(VERSIONS_CODE).Keys.Count) As String
         'Dim i = 0
         'For Each id As String In categories_values_dict(VERSIONS_CODE).Keys
-        '    versions_ids(i) = versions_dict(id)(VERSIONS_NAME_VARIABLE)
+        '    versions_ids(i) = versions_dict(id)(NAME_VARIABLE)
         '    i = i + 1
         'Next
         ' fill textbox
@@ -431,16 +360,9 @@ Friend Class ControllingUI2Controller
 
     End Sub
 
-    Friend Sub close_model()
+    Private Function GetAdjustmentsFilter() As List(Of UInt32)
 
-        ' closing relation with server ?
-        ' priority normal
-
-    End Sub
-
-    Private Function GetAdjustmentsFilter() As List(Of String)
-
-        Dim tmp_list As List(Of String) = TreeViewsUtilities.GetCheckedNodesID(View.adjustmentsTV)
+        Dim tmp_list As List(Of UInt32) = TreeViewsUtilities.GetCheckedNodesID(View.adjustmentsTV)
         If tmp_list.Count <> View.adjustmentsTV.Nodes.Count Then
             Return tmp_list
         Else

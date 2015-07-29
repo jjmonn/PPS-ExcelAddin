@@ -69,7 +69,7 @@ Friend Class FModelingInputsController
         inputs_list = FModelingAccountsMapping.GetFModellingAccountsList(FINANCIAL_MODELLING_ID_VARIABLE, FINANCIAL_MODELLING_INPUT_TYPE)
         accounts_names_id_dic = GlobalVariables.Accounts.GetAccountsDictionary(NAME_VARIABLE, ID_VARIABLE)
         accounts_id_list = GlobalVariables.Accounts.GetAccountsList(GlobalEnums.AccountsLookupOptions.LOOKUP_ALL, ID_VARIABLE)
-        versions_id_list = VersionsMapping.GetVersionsList(VERSIONS_CODE_VARIABLE)
+        versions_id_list = VersionsMapping.GetVersionsList(ID_VARIABLE)
 
         InitializeMappingDGV()
         InitializeInputsDGV()
