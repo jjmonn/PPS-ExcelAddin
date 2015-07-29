@@ -47,8 +47,31 @@ Friend Class ConnectionsFunctions
 
     Friend Shared Function NetworkConnection(ByRef p_hostname As String, ByVal p_port As UShort) As Boolean
 
-        Return (GlobalVariables.NetworkConnect.Launch(p_hostname, p_port))
+        GlobalVariables.NetworkConnect = New NetworkLauncher()
+        Dim connection_success As Boolean = (GlobalVariables.NetworkConnect.Launch(p_hostname, p_port))
 
+        ' below :
+        ' check connection state before
+        ' place init code elsewhere !!
+        ' priority normal
+        If connection_success = True Then
+            'GlobalVariables.Entities = New Entity
+            'GlobalVariables.Accounts = New Account
+            'GlobalVariables.Entities = New Entity
+            'GlobalVariables.Filters = New Filter
+            'GlobalVariables.FiltersValues = New FilterValue
+            'GlobalVariables.Clients = New Client
+            'GlobalVariables.Products = New Product
+            'GlobalVariables.Adjustments = New Adjustment
+            'GlobalVariables.EntitiesFilters = New EntitiesFilter
+            'GlobalVariables.ClientsFilters = New ClientsFilter
+            'GlobalVariables.ProductsFilters = New ProductsFilter
+            'GlobalVariables.AdjustmentsFilters = New AdjustmentFilter
+            Return True
+        Else
+            Return False
+        End If
+       
     End Function
 
     Friend Shared Function OpenConnection(ByRef userID As String, ByVal pwd As String) As ADODB.Connection
@@ -57,8 +80,8 @@ Friend Class ConnectionsFunctions
         pwd = pwd + SNOW_KEY
 
         connectionString = "DRIVER={" + DRIVER_NAME + "};" _
-                           & "SERVER=" + My.Settings.server + ";" _
-                           & "PORT=" & My.Settings.port_number & ";" _
+                           & "SERVER=" + My.Settings.oldIp + ";" _
+                           & "PORT=" & My.Settings.oldPort & ";" _
                            & "DATABASE=" + My.Settings.database + ";" _
                            & "UID=" + userID + ";" _
                            & "PASSWORD=" + pwd + ";" _
