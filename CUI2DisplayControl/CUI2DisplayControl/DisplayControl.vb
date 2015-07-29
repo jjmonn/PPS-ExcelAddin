@@ -7,7 +7,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 14/04/2015
+' Last modified: 29/07/2015
 
 
 
@@ -34,8 +34,10 @@ Public Class DisplayControl
         ' Add any initialization after the InitializeComponent() call.
         Me.analysis_axis_tv = analysis_axis_tv
         TableLayoutPanel1.Controls.Add(analysis_axis_tv, 0, 0)
+        TableLayoutPanel1.SetColumnSpan(analysis_axis_tv, 2)
         analysis_axis_tv.Dock = DockStyle.Fill
         rows_display_tv.AllowDrop = True
+        columns_display_tv.AllowDrop = True
 
         ' By default add the fisrt node
         rows_display_tv.Nodes.Add(analysis_axis_tv.Nodes(0).Name, analysis_axis_tv.Nodes(0).Name)
@@ -65,14 +67,14 @@ Public Class DisplayControl
         End If
     End Sub
 
-    Private Sub rowDisplayTV_DragOver(sender As Object, e As Windows.Forms.DragEventArgs) Handles rows_display_tv.DragOver
+    Private Sub TV_DragOver(sender As Object, e As Windows.Forms.DragEventArgs) Handles rows_display_tv.DragOver, columns_display_tv.DragOver
 
         If e.Data.GetDataPresent("System.Windows.Forms.TreeNode", True) = False Then Exit Sub
         e.Effect = DragDropEffects.Move
 
     End Sub
 
-    Private Sub rowDisplayTV_DragDrop(sender As Object, e As Windows.Forms.DragEventArgs) Handles rows_display_tv.DragDrop
+    Private Sub TV_DragDrop(sender As Object, e As Windows.Forms.DragEventArgs) Handles rows_display_tv.DragDrop, columns_display_tv.DragDrop
 
         'Check that there is a TreeNode being dragged
         If e.Data.GetDataPresent("System.Windows.Forms.TreeNode", True) = False Then Exit Sub
@@ -91,7 +93,6 @@ Public Class DisplayControl
     End Sub
 
 #End Region
-
 
 
 End Class
