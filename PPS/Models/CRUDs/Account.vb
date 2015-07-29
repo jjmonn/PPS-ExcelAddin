@@ -38,22 +38,23 @@ Friend Class Account
 
     Friend Sub New()
 
+        state_flag = False
         LoadAccountsTable()
         Dim time_stamp = Timer
-        Do
-            If Timer - time_stamp > GlobalVariables.timeOut Then
-                state_flag = False
-                Exit Do
-            End If
-        Loop While server_response_flag = True
+        'Do
+        '    'If Timer - time_stamp > GlobalVariables.timeOut Then
+        '    '    state_flag = False
+        '    '    Exit Do
+        '    'End If
+        'Loop While server_response_flag = False
         state_flag = True
 
     End Sub
 
     Friend Sub LoadAccountsTable()
 
-        NetworkManager.GetInstance().SetCallback(GlobalEnums.ServerMessage.SMSG_LIST_ACCOUNT_ANSWER, AddressOf SMSG_LIST_ACCOUNT_ANSWER)
-        Dim packet As New ByteBuffer(CType(GlobalEnums.ClientMessage.CMSG_LIST_ACCOUNT, UShort))
+        NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_LIST_ACCOUNT_ANSWER, AddressOf SMSG_LIST_ACCOUNT_ANSWER)
+        Dim packet As New ByteBuffer(CType(ClientMessage.CMSG_LIST_ACCOUNT, UShort))
         packet.Release()
         NetworkManager.GetInstance().Send(packet)
 
@@ -61,13 +62,18 @@ Friend Class Account
 
     Private Sub SMSG_LIST_ACCOUNT_ANSWER(packet As ByteBuffer)
 
-        For i As Int32 = 0 To packet.ReadInt32()
-            Dim tmp_ht As New Hashtable
-            GetAccountHTFromPacket(packet, tmp_ht)
-            accounts_hash(tmp_ht(ID_VARIABLE)) = tmp_ht
-        Next
-        NetworkManager.GetInstance().RemoveCallback(GlobalEnums.ServerMessage.SMSG_LIST_ACCOUNT_ANSWER, AddressOf SMSG_LIST_ACCOUNT_ANSWER)
-        server_response_flag = True
+        If packet.ReadInt32() = 0 Then
+            Dim nb_accounts = packet.ReadInt32()
+            For i As Int32 = 0 To nb_accounts - 1
+                Dim tmp_ht As New Hashtable
+                GetAccountHTFromPacket(packet, tmp_ht)
+                accounts_hash(tmp_ht(ID_VARIABLE)) = tmp_ht
+            Next
+            NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_LIST_ACCOUNT_ANSWER, AddressOf SMSG_LIST_ACCOUNT_ANSWER)
+            server_response_flag = True
+        Else
+            server_response_flag = False
+        End If
 
     End Sub
 
@@ -78,8 +84,8 @@ Friend Class Account
 
     Friend Sub CMSG_CREATE_ACCOUNT(ByRef attributes As Hashtable)
 
-        NetworkManager.GetInstance().SetCallback(GlobalEnums.ServerMessage.SMSG_CREATE_ACCOUNT_ANSWER, AddressOf SMSG_CREATE_ACCOUNT_ANSWER)
-        Dim packet As New ByteBuffer(CType(GlobalEnums.ClientMessage.CMSG_CREATE_ACCOUNT, UShort))
+        NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_CREATE_ACCOUNT_ANSWER, AddressOf SMSG_CREATE_ACCOUNT_ANSWER)
+        Dim packet As New ByteBuffer(CType(ClientMessage.CMSG_CREATE_ACCOUNT, UShort))
         WriteAccountPacket(packet, attributes)
         packet.Release()
         NetworkManager.GetInstance().Send(packet)
@@ -93,15 +99,15 @@ Friend Class Account
         Dim tmp_ht As New Hashtable
         GetAccountHTFromPacket(packet, tmp_ht)
         accounts_hash(tmp_ht(ID_VARIABLE)) = tmp_ht
-        NetworkManager.GetInstance().RemoveCallback(GlobalEnums.ServerMessage.SMSG_CREATE_ACCOUNT_ANSWER, AddressOf SMSG_CREATE_ACCOUNT_ANSWER)
+        NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_CREATE_ACCOUNT_ANSWER, AddressOf SMSG_CREATE_ACCOUNT_ANSWER)
         RaiseEvent AccountCreationEvent(tmp_ht)
 
     End Sub
 
     Friend Shared Sub CMSG_READ_ACCOUNT(ByRef id As UInt32)
 
-        NetworkManager.GetInstance().SetCallback(GlobalEnums.ServerMessage.SMSG_READ_ACCOUNT_ANSWER, AddressOf SMSG_READ_ACCOUNT_ANSWER)
-        Dim packet As New ByteBuffer(CType(GlobalEnums.ClientMessage.CMSG_CREATE_ACCOUNT, UShort))
+        NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_READ_ACCOUNT_ANSWER, AddressOf SMSG_READ_ACCOUNT_ANSWER)
+        Dim packet As New ByteBuffer(CType(ClientMessage.CMSG_CREATE_ACCOUNT, UShort))
         packet.Release()
         NetworkManager.GetInstance().Send(packet)
 
@@ -111,15 +117,15 @@ Friend Class Account
 
         Dim ht As New Hashtable
         GetAccountHTFromPacket(packet, ht)
-        NetworkManager.GetInstance().RemoveCallback(GlobalEnums.ServerMessage.SMSG_CREATE_ACCOUNT_ANSWER, AddressOf SMSG_READ_ACCOUNT_ANSWER)
+        NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_CREATE_ACCOUNT_ANSWER, AddressOf SMSG_READ_ACCOUNT_ANSWER)
         ' Send the ht to the object which demanded it
 
     End Sub
 
     Friend Sub CMSG_UPDATE_ACCOUNT(ByRef attributes As Hashtable)
 
-        NetworkManager.GetInstance().SetCallback(GlobalEnums.ServerMessage.SMSG_UPDATE_ACCOUNT_ANSWER, AddressOf SMSG_UPDATE_ACCOUNT_ANSWER)
-        Dim packet As New ByteBuffer(CType(GlobalEnums.ClientMessage.CMSG_UPDATE_ACCOUNT, UShort))
+        NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_UPDATE_ACCOUNT_ANSWER, AddressOf SMSG_UPDATE_ACCOUNT_ANSWER)
+        Dim packet As New ByteBuffer(CType(ClientMessage.CMSG_UPDATE_ACCOUNT, UShort))
         WriteAccountPacket(packet, attributes)
         packet.Release()
         NetworkManager.GetInstance().Send(packet)
@@ -132,15 +138,15 @@ Friend Class Account
         Dim ht As New Hashtable
         GetAccountHTFromPacket(packet, ht)
         accounts_hash(ht(ID_VARIABLE)) = ht
-        NetworkManager.GetInstance().RemoveCallback(GlobalEnums.ServerMessage.SMSG_UPDATE_ACCOUNT_ANSWER, AddressOf SMSG_UPDATE_ACCOUNT_ANSWER)
+        NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_UPDATE_ACCOUNT_ANSWER, AddressOf SMSG_UPDATE_ACCOUNT_ANSWER)
         RaiseEvent AccountUpdateEvent()
 
     End Sub
 
     Friend Sub CMSG_DELETE_ACCOUNT(ByRef id As UInt32)
 
-        NetworkManager.GetInstance().SetCallback(GlobalEnums.ServerMessage.SMSG_DELETE_ACCOUNT_ANSWER, AddressOf SMSG_DELETE_ACCOUNT_ANSWER)
-        Dim packet As New ByteBuffer(CType(GlobalEnums.ClientMessage.CMSG_DELETE_ACCOUNT, UShort))
+        NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_DELETE_ACCOUNT_ANSWER, AddressOf SMSG_DELETE_ACCOUNT_ANSWER)
+        Dim packet As New ByteBuffer(CType(ClientMessage.CMSG_DELETE_ACCOUNT, UShort))
         packet.WriteUint32(id)
         packet.Release()
         NetworkManager.GetInstance().Send(packet)
@@ -149,7 +155,7 @@ Friend Class Account
 
     Private Sub SMSG_DELETE_ACCOUNT_ANSWER()
 
-        NetworkManager.GetInstance().RemoveCallback(GlobalEnums.ServerMessage.SMSG_DELETE_ACCOUNT_ANSWER, AddressOf SMSG_DELETE_ACCOUNT_ANSWER)
+        NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_DELETE_ACCOUNT_ANSWER, AddressOf SMSG_DELETE_ACCOUNT_ANSWER)
         RaiseEvent AccountDeleteEvent()
 
     End Sub
@@ -208,7 +214,7 @@ Friend Class Account
     Friend Shared Sub GetAccountHTFromPacket(ByRef packet As ByteBuffer, ByRef account_ht As Hashtable)
 
         account_ht(ID_VARIABLE) = packet.ReadInt32()
-        account_ht(PARENT_ID_VARIABLE) = packet.ReadInt32()
+        account_ht(PARENT_ID_VARIABLE) = packet.ReadUint32()
         account_ht(NAME_VARIABLE) = packet.ReadString()
         account_ht(ACCOUNT_FORMULA_TYPE_VARIABLE) = packet.ReadInt32()
         account_ht(ACCOUNT_FORMULA_VARIABLE) = packet.ReadString()
@@ -216,7 +222,7 @@ Friend Class Account
         account_ht(ACCOUNT_CONSOLIDATION_OPTION_VARIABLE) = packet.ReadInt32()
         account_ht(ACCOUNT_CONVERSION_OPTION_VARIABLE) = packet.ReadInt32()
         account_ht(ACCOUNT_FORMAT_VARIABLE) = packet.ReadString()
-        account_ht(ACCOUNT_IMAGE_VARIABLE) = packet.ReadInt32()
+        account_ht(ACCOUNT_IMAGE_VARIABLE) = packet.ReadUint32()
         account_ht(ITEMS_POSITIONS) = packet.ReadInt32()
         account_ht(ACCOUNT_TAB_VARIABLE) = packet.ReadInt32()
 
