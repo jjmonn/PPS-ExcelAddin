@@ -40,7 +40,7 @@ Friend Class SettingMainUI
 
     Private Sub SettingMainUI_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 
-        ServerAddressTB.Text = My.Settings.server
+        ServerAddressTB.Text = My.Settings.serverIp
         PortTB.Text = My.Settings.port_number
         IDTB.Text = My.Settings.user
         CertificatesPathTB.Text = My.Settings.certificatespath
@@ -160,7 +160,7 @@ Friend Class SettingMainUI
 
     Private Sub ServerAddressTB_Validated(sender As Object, e As EventArgs) Handles ServerAddressTB.Validated
 
-        My.Settings.server = ServerAddressTB.Text
+        My.Settings.serverIp = ServerAddressTB.Text
         My.Settings.Save()
 
     End Sub
@@ -168,7 +168,7 @@ Friend Class SettingMainUI
     Private Sub ServerAddressTB_KeyDown(sender As Object, e As KeyEventArgs) Handles ServerAddressTB.KeyDown
 
         If e.KeyCode = Keys.Enter Or e.KeyCode = Keys.Tab Then
-            My.Settings.server = ServerAddressTB.Text
+            My.Settings.serverIp = ServerAddressTB.Text
             My.Settings.Save()
         End If
 
@@ -180,7 +180,7 @@ Friend Class SettingMainUI
         My.Settings.Save()
 
     End Sub
-   
+
 
 #End Region
 
