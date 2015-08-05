@@ -44,27 +44,28 @@ Friend Class SettingMainUI
         PortTB.Text = My.Settings.port_number
         IDTB.Text = My.Settings.user
         CertificatesPathTB.Text = My.Settings.certificatespath
-        For Each db In getDatabasesList()
-            databasesCB.Items.Add(db)
-        Next
+        'For Each db In getDatabasesList()
+        '    databasesCB.Items.Add(db)
+        'Next
 
-        If databasesCB.Items.Contains(My.Settings.database) Then
-            databasesCB.SelectedItem = My.Settings.database
-        End If
+        'If databasesCB.Items.Contains(My.Settings.database) Then
+        '    databasesCB.SelectedItem = My.Settings.database
+        'End If
 
 
     End Sub
 
     Friend Function getDatabasesList() As List(Of String)
 
-        Dim tmp_list As New List(Of String)
-        Dim srv As New ModelServer
-        srv.openRstSQL("SHOW DATABASES", ModelServer.STATIC_CURSOR)
-        While srv.rst.EOF = False
-            tmp_list.Add(srv.rst.Fields(0).Value)
-            srv.rst.MoveNext()
-        End While
-        Return tmp_list
+        'Dim tmp_list As New List(Of String)
+
+        'Dim srv As New ModelServer
+        'srv.openRstSQL("SHOW DATABASES", ModelServer.STATIC_CURSOR)
+        'While srv.rst.EOF = False
+        '    tmp_list.Add(srv.rst.Fields(0).Value)
+        '    srv.rst.MoveNext()
+        'End While
+        'Return tmp_list
 
     End Function
 
@@ -176,7 +177,7 @@ Friend Class SettingMainUI
 
     Private Sub databasesCB_SelectedIndexChanged(sender As Object, e As EventArgs) Handles databasesCB.SelectedIndexChanged
 
-        My.Settings.database = databasesCB.SelectedText
+        My.Settings.database = databasesCB.text
         My.Settings.Save()
 
     End Sub
