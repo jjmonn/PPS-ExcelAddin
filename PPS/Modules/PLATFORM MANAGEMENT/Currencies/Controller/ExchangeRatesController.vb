@@ -12,7 +12,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 03/05/2015
+' Last modified: 05/08/2015
 
 
 Imports System.Collections.Generic
@@ -28,10 +28,9 @@ Friend Class ExchangeRatesController
 
     ' Objects
     Private View As CurrenciesControl
-    Private ExchangeRates As ExchangeRate
+    Private ExchangeRates As New ExchangeRate2
     Private RatesVersions As New RateVersion
     Private rates_versionsTV As New TreeView
-    Private Currencies As New Currency
     Private Periods As New Period
     Private NewRatesVersionUI As NewRatesVersionUI
     Private ExcelImport As ExcelRatesImportUI
@@ -40,7 +39,7 @@ Friend Class ExchangeRatesController
 
     ' Variables
     Friend current_version As String
-    Friend currencies_list As List(Of String)
+    Friend currencies_list As List(Of UInt32)
     Friend object_is_alive As Boolean
     Protected Friend global_periods_dictionary As Dictionary(Of Int32, List(Of Int32))
 
@@ -52,20 +51,20 @@ Friend Class ExchangeRatesController
 
     Friend Sub New()
 
-        If RatesVersions.object_is_alive AndAlso Currencies.object_is_alive Then
+        If RatesVersions.object_is_alive Then
             object_is_alive = True
             View = New CurrenciesControl(Me, rates_versionsTV)
             RateVersion.load_rates_version_tv(rates_versionsTV)
             current_version = GlobalVariables.GLOBALCurrentRatesVersionCode
-            currencies_list = Currencies.ReadCurrencies()
+            currencies_list = GlobalVariables.Currencies.currencies_hash.Keys
             NewRatesVersionUI = New NewRatesVersionUI(Me)
-
             If Not current_version Is Nothing Then ChangeVersion(current_version)
-            'If ExchangeRates Is Nothing Then object_is_alive = False
         Else
             object_is_alive = False
         End If
 
+        AddHandler ExchangeRates.ExchangeRateUpdateEvent, AddressOf AfterRateUpdate
+        
     End Sub
 
     Public Sub addControlToPanel(ByRef dest_panel As Panel, _
@@ -96,33 +95,35 @@ Friend Class ExchangeRatesController
                           ByRef period As Integer, _
                           ByVal value As Double)
 
-        If Not ExchangeRates Is Nothing Then ExchangeRates.UpdateRate(curr, period, value)
+
+        Dim ht As New Hashtable
+        ' fill ht priority high !!!!!!!!!!!!!!!!!
+        ' quid origin currency
+        '
+        ExchangeRates.CMSG_UPDATE_EXCHANGE_RATE(ht)
 
     End Sub
 
     Friend Sub ChangeVersion(ByRef version_id As String)
 
-        If Not ExchangeRates Is Nothing Then CloseExchangeRates()
-        ExchangeRates = New ExchangeRate(version_id)
-        If ExchangeRates.object_is_alive = True Then
-            current_version = version_id
-            global_periods_dictionary = RatesVersions.GetPeriodsDictionary(version_id)
-            View.ratesView.InitializeDGV(currencies_list, global_periods_dictionary)
-            View.ratesView.DisplayRatesVersionValuesinDGV(get_rates_dictionary)
-            View.rates_version_TB.Text = RatesVersions.ReadVersion(current_version, NAME_VARIABLE)
-        Else
-            ExchangeRates = Nothing
-        End If
+
+        ' change rates_version
+
+        current_version = version_id
+        global_periods_dictionary = RatesVersions.GetPeriodsDictionary(version_id)
+        View.ratesView.InitializeDGV(currencies_list, global_periods_dictionary)
+        View.ratesView.DisplayRatesVersionValuesinDGV(ExchangeRates.exchangeRates_hash(version_id))
+        View.rates_version_TB.Text = RatesVersions.ReadVersion(current_version, NAME_VARIABLE)
 
     End Sub
 
-    Friend Sub CloseExchangeRates()
+    Private Sub AfterRateUpdate(ByRef ht As Hashtable)
 
-        If Not ExchangeRates Is Nothing Then
-            If ExchangeRates.modified_flag = True Then ExchangeRates.UpdateModel()
-        End If
+        ' to be implemented priority normal
 
     End Sub
+
+
 
 #End Region
 
@@ -137,7 +138,9 @@ Friend Class ExchangeRatesController
             MsgBox("This currency already exists. Please enter a currency which name isn't already in the list")
         Else
             If TypeOf (curr) Is String AndAlso Len(curr) = CURRENCIES_TOKEN_SIZE Then
-                Currencies.CreateCurrency(curr)
+                ' to be reimplemented !!
+                ' priority normal
+                'GlobalVariables.Currencies.CMSG_CREATE_CURRENCY(curr)
                 currencies_list.Add(curr)
                 View.ratesView.InitializeDGV(currencies_list, global_periods_dictionary)
                 ChangeVersion(current_version)
@@ -166,13 +169,11 @@ Friend Class ExchangeRatesController
                              Optional ByRef nb_periods As Int32 = 0, _
                              Optional ByRef parent_node As TreeNode = Nothing)
 
-        Dim key = get_new_version_token()
         Dim tmpHT As New Hashtable
-        tmpHT.Add(RATES_VERSIONS_ID_VARIABLE, key)
         tmpHT.Add(NAME_VARIABLE, name)
         tmpHT.Add(ITEMS_POSITIONS, 1)
 
-        If parent_node Is Nothing Then tmpHT.Add(RATES_VERSIONS_PARENT_CODE_VARIABLE, DBNull.Value) Else tmpHT.Add(RATES_VERSIONS_PARENT_CODE_VARIABLE, parent_node.Name)
+        If parent_node Is Nothing Then tmpHT.Add(RATES_parent_id, DBNull.Value) Else tmpHT.Add(RATES_parent_id, parent_node.Name)
         If isFolder = True Then
             tmpHT.Add(RATES_VERSIONS_IS_FOLDER_VARIABLE, 1)
         Else
@@ -182,10 +183,14 @@ Friend Class ExchangeRatesController
         End If
 
         RatesVersions.CreateVersion(tmpHT)
-        If parent_node Is Nothing Then rates_versionsTV.Nodes.Add(key, name) Else parent_node.Nodes.Add(key, name)
-        UpdateVersionsPositions()
-        RateVersion.load_rates_version_tv(rates_versionsTV)
-        If isFolder = False Then ChangeVersion(key)
+
+        ' below -> after create
+        ' priority normal , new crud to be implemented !!
+
+        'If parent_node Is Nothing Then rates_versionsTV.Nodes.Add(key, name) Else parent_node.Nodes.Add(key, name)
+        'UpdateVersionsPositions()
+        'RateVersion.load_rates_version_tv(rates_versionsTV)
+        'If isFolder = False Then ChangeVersion(key)
 
     End Sub
 
@@ -217,17 +222,14 @@ Friend Class ExchangeRatesController
     Private Function DeleteVersion(ByRef version_id As String) As Boolean
 
         Dim tmp_version = current_version
-        CloseExchangeRates()
-        If ExchangeRate.DeleteAllRates(version_id) Then
-            If version_id = current_version Then
-                current_version = ""
-                View.ratesView.InitializeDGV(currencies_list, global_periods_dictionary)
-            End If
-            Return True
-        Else
-            Return False
-        End If
+        ExchangeRates.DeleteAllRatesForVersion(version_id)
 
+        If version_id = current_version Then
+            current_version = ""
+            View.ratesView.InitializeDGV(currencies_list, global_periods_dictionary)
+        End If
+        Return True
+     
     End Function
 
     Private Sub DeleteFromTreeAndModel(ByRef version_id)
@@ -237,6 +239,7 @@ Friend Class ExchangeRatesController
         rates_versionsTV.Nodes.Find(version_id, True)(0).Remove()
 
     End Sub
+
 
 #End Region
 
@@ -250,36 +253,6 @@ Friend Class ExchangeRatesController
         Else
             Return False
         End If
-
-    End Function
-
-    Private Function get_rates_dictionary() As Dictionary(Of String, Hashtable)
-
-        Dim tmp_dic As New Dictionary(Of String, Hashtable)
-        Dim rate_id As String
-        For Each currency_ In currencies_list
-            If currency_ <> MAIN_CURRENCY Then
-                Dim hash As New Hashtable
-                For Each period In global_periods_dictionary.Keys
-                    For Each month_period In global_periods_dictionary(period)
-                        rate_id = currency_ & "/" & MAIN_CURRENCY & month_period
-                        hash.Add(month_period, ExchangeRates.ReadRate(rate_id, EX_RATES_RATE_VARIABLE))
-                    Next
-                Next
-                tmp_dic.Add(currency_, hash)
-            End If
-        Next
-        Return tmp_dic
-
-    End Function
-
-    Private Function get_new_version_token()
-
-        Dim key = TreeViewsUtilities.IssueNewToken(RATES_VERSIONS_TOKEN_SIZE)
-        While rates_versionsTV.Nodes.Find(key, True).Length > 0
-            key = TreeViewsUtilities.IssueNewToken(RATES_VERSIONS_TOKEN_SIZE)
-        End While
-        Return key
 
     End Function
 
@@ -310,10 +283,9 @@ Friend Class ExchangeRatesController
 
     End Sub
 
-
 #End Region
 
-    Protected Friend Sub ShowNewRatesVersion(Optional ByRef parent_node As TreeNode = Nothing)
+    Friend Sub ShowNewRatesVersion(Optional ByRef parent_node As TreeNode = Nothing)
 
         NewRatesVersionUI.parent_node = parent_node
         NewRatesVersionUI.Show()

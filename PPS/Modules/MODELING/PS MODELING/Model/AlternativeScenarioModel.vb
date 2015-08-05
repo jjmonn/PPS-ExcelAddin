@@ -26,19 +26,19 @@ Friend Class AlternativeScenarioModel
     ' Variables
     Private indexes_list As List(Of String)
     Private entities_attributes_dictionary As New Dictionary(Of String, Hashtable)
-    Protected Friend sensitivities_dictionary As New Dictionary(Of String, Hashtable)
+    Friend sensitivities_dictionary As New Dictionary(Of String, Hashtable)
 
     ' Data Dictionaries
-    Protected Friend SensisResultsDict As New Dictionary(Of String, Dictionary(Of String, Dictionary(Of String, Double())))
-    Protected Friend current_conso_data_dic As New Dictionary(Of String, Dictionary(Of String, Double()))
+    Friend SensisResultsDict As New Dictionary(Of String, Dictionary(Of String, Dictionary(Of String, Double())))
+    Friend current_conso_data_dic As New Dictionary(Of String, Dictionary(Of String, Double()))
 
     ' Current Config
-    Protected Friend periods_list As List(Of Int32)
-    Protected Friend time_configuration As String
+    Friend periods_list As List(Of UInt32)
+    Friend time_configuration As String
     Private entities_id_list As List(Of UInt32)
 
     ' Constants
-    Protected Friend Const INCREMENTAL_TAX As String = "incr_tax"
+    Friend Const INCREMENTAL_TAX As String = "incr_tax"
 
 #End Region
 
@@ -60,9 +60,8 @@ Friend Class AlternativeScenarioModel
                                        ByRef entity_node As TreeNode, _
                                        ByRef PBar As ProgressBarControl)
 
-        Dim Versions As New Version
         Dim nb_periods, start_period As Int32
-        Dim rates_version_id As String = Versions.ReadVersion(version_id, VERSIONS_RATES_VERSION_ID_VAR)
+        Dim rates_version_id As String = GlobalVariables.Versions.versions_hash(version_id)(VERSIONS_RATES_VERSION_ID_VAR)
 
         ' computer.vb ask computation
         ' priority high
@@ -83,7 +82,8 @@ Friend Class AlternativeScenarioModel
 
     End Sub
 
-    Friend Sub ComputeSensitivities(ByRef market_prices_version_id As String, ByRef PBar As ProgressBarControl)
+    Friend Sub ComputeSensitivities(ByRef market_prices_version_id As String, _
+                                    ByRef PBar As ProgressBarControl)
 
 
         SensisResultsDict.Clear()
@@ -249,11 +249,11 @@ Friend Class AlternativeScenarioModel
 
         'ComputeIncrementalTaxes()
         ''    Dim DBDownloader As New DataBaseDataDownloader
-        'Dim exchange_rates As Dictionary(Of String, Dictionary(Of Int32, Dictionary(Of String, Double))) = DataBaseDataDownloader.GetExchangeRatesDictionary(version_id, MAIN_CURRENCY, entities_id_list.ToArray)
+        'Dim exchange_rates As Dictionary(Of String, Dictionary(Of Int32, Dictionary(Of String, Double))) = DataBaseDataDownloader.GetExchangeRatesDictionary(version_id, my.settings.mainCurrency, entities_id_list.ToArray)
         'Dim entities_currencies As Hashtable = EntitiesMapping.GetEntitiesDictionary(ID_VARIABLE, ENTITIES_CURRENCY_VARIABLE)
         'Dim DBUploader As New DataBaseDataUploader
         'Dim account_id, entity_currency As String
-        ''     Dim current_data_dic = DBDownloader.GetAdjustments(version_id, entities_id_list.ToArray, MAIN_CURRENCY)
+        ''     Dim current_data_dic = DBDownloader.GetAdjustments(version_id, entities_id_list.ToArray, my.settings.mainCurrency)
         'Dim new_value, current_value As Double
 
         'For Each sensitivity_id In sensitivities_dictionary.Keys
@@ -270,7 +270,7 @@ Friend Class AlternativeScenarioModel
         '                Catch ex As Exception
         '                End Try
         '                new_value = SensisResultsDict(sensitivity_id)(item)(entity_id)(j)
-        '                If entity_currency <> MAIN_CURRENCY Then new_value = new_value * (1 / exchange_rates(entity_currency & CURRENCIES_SEPARATOR & MAIN_CURRENCY)(periods_list(j))(ExchangeRate.AVERAGE_RATE))
+        '                If entity_currency <> my.settings.mainCurrency Then new_value = new_value * (1 / exchange_rates(entity_currency & CURRENCIES_SEPARATOR & my.settings.mainCurrency)(periods_list(j))(ExchangeRate.AVERAGE_RATE))
         '                new_value = current_value + new_value
         '                If new_value <> current_value Then DBUploader.UpdateSingleValue(entity_id, _
         '                                                                                account_id, _

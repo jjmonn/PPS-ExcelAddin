@@ -92,8 +92,7 @@ Friend Class VersionsControl
 
     Private Sub Display(ByRef inputNode As TreeNode)
 
-        Dim record = Controller.GetRecord(inputNode.Name)
-        If record(VERSIONS_IS_FOLDER_VARIABLE) = 1 Then
+        If GlobalVariables.Versions.versions_hash(CInt(inputNode.Name))(VERSIONS_IS_FOLDER_VARIABLE) = 1 Then
             NameTB.Text = ""
             CreationTB.Text = ""
             lockedCB.Checked = False
@@ -104,14 +103,14 @@ Friend Class VersionsControl
             RatesVersionCB.Text = ""
         Else
             NameTB.Text = inputNode.Text
-            CreationTB.Text = record(VERSIONS_CREATION_DATE_VARIABLE)
-            TimeConfigTB.Text = record(VERSIONS_TIME_CONFIG_VARIABLE)
-            StartPeriodTB.Text = record(VERSIONS_START_PERIOD_VAR)
-            NBPeriodsTB.Text = record(VERSIONS_NB_PERIODS_VAR)
-            RatesVersionCB.SelectedItem = Controller.rates_versions_id_name_dic(record(VERSIONS_RATES_VERSION_ID_VAR))
-            If record(VERSIONS_LOCKED_VARIABLE) = 1 Then
+            CreationTB.Text = GlobalVariables.Versions.versions_hash(CInt(inputNode.Name))(VERSIONS_CREATION_DATE_VARIABLE)
+            TimeConfigTB.Text = GlobalVariables.Versions.versions_hash(CInt(inputNode.Name))(VERSIONS_TIME_CONFIG_VARIABLE)
+            StartPeriodTB.Text = GlobalVariables.Versions.versions_hash(CInt(inputNode.Name))(VERSIONS_START_PERIOD_VAR)
+            NBPeriodsTB.Text = GlobalVariables.Versions.versions_hash(CInt(inputNode.Name))(VERSIONS_NB_PERIODS_VAR)
+            RatesVersionCB.SelectedItem = Controller.rates_versions_id_name_dic(GlobalVariables.Versions.versions_hash(CInt(inputNode.Name))(VERSIONS_RATES_VERSION_ID_VAR))
+            If GlobalVariables.Versions.versions_hash(CInt(inputNode.Name))(VERSIONS_LOCKED_VARIABLE) = 1 Then
                 lockedCB.Checked = True
-                LockedDateT.Text = record(VERSIONS_LOCKED_DATE_VARIABLE)
+                LockedDateT.Text = GlobalVariables.Versions.versions_hash(CInt(inputNode.Name))(VERSIONS_LOCKED_DATE_VARIABLE)
             Else
                 lockedCB.Checked = False
                 LockedDateT.Text = "Version not locked"

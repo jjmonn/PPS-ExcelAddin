@@ -48,7 +48,7 @@ Friend Class NewDataVersionUI
 
         ' Add any initialization after the InitializeComponent() call.
         Controller = input_controller
-        Version.LoadVersionsTree(versionsTV)
+        GlobalVariables.Versions.LoadVersionsTV(versionsTV)
 
         InitializeCBs()
         Panel1.Controls.Add(versionsTV)
@@ -94,7 +94,7 @@ Friend Class NewDataVersionUI
 
 #Region "Call Backs"
 
-    Private Sub CreateBT_Click(sender As Object, e As EventArgs) Handles CreateEntityBT.Click
+    Private Sub CreateBT_Click(sender As Object, e As EventArgs) Handles CreateVersionBT.Click
 
         Dim name As String = NameTB.Text
         If IsFormValid(name) = True Then
@@ -107,16 +107,16 @@ Friend Class NewDataVersionUI
             hash.Add(VERSIONS_START_PERIOD_VAR, StartingPeriodNUD.Text)
             hash.Add(VERSIONS_NB_PERIODS_VAR, NbPeriodsNUD.Text)
             hash.Add(VERSIONS_RATES_VERSION_ID_VAR, Controller.rates_versions_name_id_dic(RatesVersionCB.Text))
-            If Not parent_node Is Nothing Then hash.Add(VERSIONS_PARENT_CODE_VARIABLE, parent_node.Name)
+            If Not parent_node Is Nothing Then hash.Add(PARENT_ID_VARIABLE, parent_node.Name)
 
             If CreateCopyBT.Checked = True AndAlso _
             ReferenceTB.Text <> "" AndAlso _
             reference_node.Text = ReferenceTB.Text AndAlso
             Controller.IsFolder(reference_node.Name) = False Then
-                Dim record = Controller.GetRecord(reference_node.Name)
-                hash(VERSIONS_TIME_CONFIG_VARIABLE) = record(VERSIONS_TIME_CONFIG_VARIABLE)
-                hash(VERSIONS_START_PERIOD_VAR) = record(VERSIONS_START_PERIOD_VAR)
-                hash(VERSIONS_NB_PERIODS_VAR) = record(VERSIONS_NB_PERIODS_VAR)
+                Dim id As UInt32 = reference_node.Name
+                hash(VERSIONS_TIME_CONFIG_VARIABLE) = GlobalVariables.Versions.versions_hash(id)(VERSIONS_TIME_CONFIG_VARIABLE)
+                hash(VERSIONS_START_PERIOD_VAR) = GlobalVariables.Versions.versions_hash(id)(VERSIONS_START_PERIOD_VAR)
+                hash(VERSIONS_NB_PERIODS_VAR) = GlobalVariables.Versions.versions_hash(id)(VERSIONS_NB_PERIODS_VAR)
                 Controller.CreateVersion(hash, parent_node, reference_node.Name)
             Else
                 Controller.CreateVersion(hash, parent_node)
@@ -171,10 +171,9 @@ Friend Class NewDataVersionUI
         reference_node.Text = ReferenceTB.Text AndAlso
         Controller.IsFolder(reference_node.Name) = False Then
 
-            Dim record = Controller.GetRecord(reference_node.Name)
-            TimeConfigCB.SelectedText = record(VERSIONS_TIME_CONFIG_VARIABLE)
-            StartingPeriodNUD.Value = record(VERSIONS_START_PERIOD_VAR)
-            NbPeriodsNUD = record(VERSIONS_NB_PERIODS_VAR)
+            TimeConfigCB.SelectedText = GlobalVariables.Versions.versions_hash(reference_node.Name)(VERSIONS_TIME_CONFIG_VARIABLE)
+            StartingPeriodNUD.Value = GlobalVariables.Versions.versions_hash(reference_node.Name)(VERSIONS_START_PERIOD_VAR)
+            NbPeriodsNUD = GlobalVariables.Versions.versions_hash(reference_node.Name)(VERSIONS_NB_PERIODS_VAR)
 
         End If
 

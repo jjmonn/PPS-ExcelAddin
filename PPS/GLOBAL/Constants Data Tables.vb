@@ -93,7 +93,6 @@ Module Data_Tables_Constants
 #End Region
 
 
-
 #Region "Currencies and Exchange Rates"
 
 #Region "Currencies and Currencies Symbol Tables"
@@ -111,15 +110,12 @@ Module Data_Tables_Constants
 
 #Region "Exchange Rates table"
 
-    Friend Const EXCHANGE_RATES_TABLE_NAME = "exchange_rates"
-    Friend Const EX_RATES_CURRENCY_VARIABLE = "currency"
-    Friend Const EX_RATES_PERIOD_VARIABLE = "period"
-    Friend Const EX_RATES_RATE_VARIABLE = "value"
-    Friend Const EX_RATES_RATE_ID_VARIABLE = "id"
-    Friend Const EX_RATES_RATE_VERSION As String = "rates_version_id"
-
-    Friend Const RATE_ID_SIZE As Int32 = 3
-
+    Friend Const EX_RATES_ORIGIN_CURR_VAR As String = "origin_currency"
+    Friend Const EX_RATES_DEST_CURR_VAR As String = "dest_currency"
+    Friend Const EX_RATES_RATE_VERSION As String = "rate_version_id"
+    Friend Const EX_RATES_PERIOD_VARIABLE As String = "rate_period"
+    Friend Const EX_RATES_RATE_VARIABLE As String = "rate_value"
+    
 #End Region
 
 
@@ -129,7 +125,7 @@ Module Data_Tables_Constants
     Friend Const RATES_VERSIONS_ID_VARIABLE As String = "id"
     Friend Const RATES_VERSIONS_NAME_VARIABLE As String = "name"
     Friend Const RATES_VERSIONS_IS_FOLDER_VARIABLE As String = "is_folder"
-    Friend Const RATES_VERSIONS_PARENT_CODE_VARIABLE As String = "parent_id"
+    Friend Const RATES_parent_id As String = "parent_id"
 
     Friend Const RATES_VERSIONS_START_PERIOD_VAR As String = "start_period"
     Friend Const RATES_VERSIONS_NB_PERIODS_VAR As String = "nb_periods"
@@ -180,12 +176,9 @@ Module Data_Tables_Constants
 
 #Region "Versioning Table"
 
-    Friend Const VERSIONS_TABLE = "versions"
     Friend Const VERSIONS_CREATION_DATE_VARIABLE = "created_at"
     Friend Const VERSIONS_LOCKED_VARIABLE = "locked"
     Friend Const VERSIONS_LOCKED_DATE_VARIABLE = "locked_date"
-    Friend Const VERSIONS_CODE_VARIABLE = "id"
-    Friend Const VERSIONS_PARENT_CODE_VARIABLE = "parent_id"
     Friend Const VERSIONS_IS_FOLDER_VARIABLE = "is_folder"
     Friend Const VERSIONS_TIME_CONFIG_VARIABLE = "time_config"
     Friend Const VERSIONS_RATES_VERSION_ID_VAR = "rates_version_id"
@@ -313,7 +306,6 @@ Module Data_Tables_Constants
 #End Region
 
 #End Region
-
 
 
 #Region "Operational Items Conversions"

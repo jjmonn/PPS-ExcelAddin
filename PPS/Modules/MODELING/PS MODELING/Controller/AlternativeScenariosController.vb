@@ -136,11 +136,11 @@ Friend Class AlternativeScenariosController
 #Region "Main Display Functions"
 
     Private Sub DisplayAlternativeScenario(ByRef new_scenario_data As Dictionary(Of String, Double()), _
-                                           ByRef period_list As List(Of Int32), _
+                                           ByRef period_list As List(Of UInt32), _
                                            ByRef time_configuration As String)
 
         View.ClearMainPanel()
-        Dim accounts_id_name_dic As Hashtable = globalvariables.accounts.GetAccountsDictionary(ID_VARIABLE, NAME_VARIABLE)
+        Dim accounts_id_name_dic As Hashtable = GlobalVariables.Accounts.GetAccountsDictionary(ID_VARIABLE, NAME_VARIABLE)
         Dim reports_settings_dic As Dictionary(Of String, Hashtable) = Report.GetReportsSettingsDictionary()
         Dim entity_id = InputsController.current_entity_node.Name
         Dim ReportsTV As New TreeView
@@ -190,7 +190,7 @@ Friend Class AlternativeScenariosController
                             ByRef new_scenario_data As Dictionary(Of String, Double()), _
                             ByRef reports_settings_dic As Dictionary(Of String, Hashtable), _
                             ByRef time_configuration As String, _
-                            ByRef period_list As List(Of Int32))
+                            ByRef period_list As List(Of UInt32))
 
         Dim DGV As vDataGridView = DataGridViewsUtil.CreateASDGVReport(period_list, time_configuration)
         For Each serie_node As TreeNode In report_node.Nodes
@@ -230,7 +230,7 @@ Friend Class AlternativeScenariosController
 
     End Sub
 
-    Protected Friend Function GetChartsPeriods(ByRef period_list As List(Of Int32), _
+    Protected Friend Function GetChartsPeriods(ByRef period_list As List(Of UInt32), _
                                                ByRef time_config As String)
 
         Dim charts_periods

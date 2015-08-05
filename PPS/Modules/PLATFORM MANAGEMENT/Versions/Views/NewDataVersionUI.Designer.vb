@@ -41,7 +41,7 @@ Partial Class NewDataVersionUI
         Me.Panel1 = New System.Windows.Forms.Panel()
         Me.ButtonIcons = New System.Windows.Forms.ImageList(Me.components)
         Me.CancelBT = New System.Windows.Forms.Button()
-        Me.CreateEntityBT = New System.Windows.Forms.Button()
+        Me.CreateVersionBT = New System.Windows.Forms.Button()
         Me.TableLayoutPanel2.SuspendLayout()
         CType(Me.NbPeriodsNUD, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.StartingPeriodNUD, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -82,7 +82,7 @@ Partial Class NewDataVersionUI
         Me.Label2.Location = New System.Drawing.Point(3, 202)
         Me.Label2.Margin = New System.Windows.Forms.Padding(3, 7, 3, 0)
         Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(124, 13)
+        Me.Label2.Size = New System.Drawing.Size(141, 15)
         Me.Label2.TabIndex = 28
         Me.Label2.Text = "Exchange Rates Version"
         '
@@ -92,7 +92,7 @@ Partial Class NewDataVersionUI
         Me.Label1.Location = New System.Drawing.Point(3, 163)
         Me.Label1.Margin = New System.Windows.Forms.Padding(3, 7, 3, 0)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(86, 13)
+        Me.Label1.Size = New System.Drawing.Size(99, 15)
         Me.Label1.TabIndex = 25
         Me.Label1.Text = "Number of Years"
         '
@@ -124,7 +124,7 @@ Partial Class NewDataVersionUI
         Me.Label11.Location = New System.Drawing.Point(3, 124)
         Me.Label11.Margin = New System.Windows.Forms.Padding(3, 7, 3, 0)
         Me.Label11.Name = "Label11"
-        Me.Label11.Size = New System.Drawing.Size(68, 13)
+        Me.Label11.Size = New System.Drawing.Size(77, 15)
         Me.Label11.TabIndex = 17
         Me.Label11.Text = "Starting Year"
         '
@@ -134,7 +134,7 @@ Partial Class NewDataVersionUI
         Me.Label10.Location = New System.Drawing.Point(3, 85)
         Me.Label10.Margin = New System.Windows.Forms.Padding(3, 7, 3, 0)
         Me.Label10.Name = "Label10"
-        Me.Label10.Size = New System.Drawing.Size(192, 13)
+        Me.Label10.Size = New System.Drawing.Size(172, 30)
         Me.Label10.TabIndex = 15
         Me.Label10.Text = "Periods configuration (Yearly / Monthly)"
         '
@@ -145,7 +145,7 @@ Partial Class NewDataVersionUI
         Me.Label4.Location = New System.Drawing.Point(3, 7)
         Me.Label4.Margin = New System.Windows.Forms.Padding(3, 7, 3, 0)
         Me.Label4.Name = "Label4"
-        Me.Label4.Size = New System.Drawing.Size(85, 13)
+        Me.Label4.Size = New System.Drawing.Size(97, 15)
         Me.Label4.TabIndex = 7
         Me.Label4.Text = "Version Name"
         '
@@ -239,18 +239,18 @@ Partial Class NewDataVersionUI
         Me.CancelBT.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         Me.CancelBT.UseVisualStyleBackColor = True
         '
-        'CreateEntityBT
+        'CreateVersionBT
         '
-        Me.CreateEntityBT.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
-        Me.CreateEntityBT.ImageKey = "1420498403_340208.ico"
-        Me.CreateEntityBT.ImageList = Me.ButtonIcons
-        Me.CreateEntityBT.Location = New System.Drawing.Point(526, 296)
-        Me.CreateEntityBT.Name = "CreateEntityBT"
-        Me.CreateEntityBT.Size = New System.Drawing.Size(92, 30)
-        Me.CreateEntityBT.TabIndex = 22
-        Me.CreateEntityBT.Text = "Create"
-        Me.CreateEntityBT.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.CreateEntityBT.UseVisualStyleBackColor = True
+        Me.CreateVersionBT.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.CreateVersionBT.ImageKey = "1420498403_340208.ico"
+        Me.CreateVersionBT.ImageList = Me.ButtonIcons
+        Me.CreateVersionBT.Location = New System.Drawing.Point(526, 296)
+        Me.CreateVersionBT.Name = "CreateVersionBT"
+        Me.CreateVersionBT.Size = New System.Drawing.Size(92, 30)
+        Me.CreateVersionBT.TabIndex = 22
+        Me.CreateVersionBT.Text = "Create"
+        Me.CreateVersionBT.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.CreateVersionBT.UseVisualStyleBackColor = True
         '
         'NewDataVersionUI
         '
@@ -258,7 +258,7 @@ Partial Class NewDataVersionUI
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(641, 352)
         Me.Controls.Add(Me.CancelBT)
-        Me.Controls.Add(Me.CreateEntityBT)
+        Me.Controls.Add(Me.CreateVersionBT)
         Me.Controls.Add(Me.Panel1)
         Me.Controls.Add(Me.TableLayoutPanel2)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
@@ -280,7 +280,7 @@ Partial Class NewDataVersionUI
     Friend WithEvents TimeConfigCB As System.Windows.Forms.ComboBox
     Friend WithEvents Panel1 As System.Windows.Forms.Panel
     Friend WithEvents CancelBT As System.Windows.Forms.Button
-    Friend WithEvents CreateEntityBT As System.Windows.Forms.Button
+    Friend WithEvents CreateVersionBT As System.Windows.Forms.Button
     Friend WithEvents ButtonIcons As System.Windows.Forms.ImageList
     Friend WithEvents BigIcons As System.Windows.Forms.ImageList
     Friend WithEvents CreateCopyBT As System.Windows.Forms.CheckBox

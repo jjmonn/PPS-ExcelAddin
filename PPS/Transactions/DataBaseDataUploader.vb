@@ -76,7 +76,7 @@ Friend Class DataBaseDataUploader
         EntitiesNameKeyDictionary = input_entities_name_id_Dic
         AccountsNameKeyDictionary = input_accounts_name_id_Dic
         AccountsKeyFormulaTypeDictionary = globalvariables.accounts.GetAccountsDictionary(ID_VARIABLE, ACCOUNT_FORMULA_TYPE_VARIABLE)
-        VersionsNameTableAddressDictionary = VersionsMapping.GetVersionsHashTable(NAME_VARIABLE, ID_VARIABLE)
+        VersionsNameTableAddressDictionary = GlobalVariables.Versions.GetVersionsDictionary(NAME_VARIABLE, ID_VARIABLE)
 
     End Sub
 

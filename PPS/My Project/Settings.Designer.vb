@@ -54,99 +54,135 @@ Namespace My
             End Get
         End Property
         
-        <Global.System.Configuration.UserScopedSettingAttribute(), _
-         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(), _
-         Global.System.Configuration.DefaultSettingValueAttribute("52.18.230.208")> _
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("52.18.31.221")>  _
         Public Property serverIp() As String
             Get
-                Return CType(Me("serverIp"), String)
+                Return CType(Me("serverIp"),String)
             End Get
-            Set(value As String)
+            Set
                 Me("serverIp") = value
             End Set
         End Property
-
-        <Global.System.Configuration.UserScopedSettingAttribute(), _
-         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(), _
-         Global.System.Configuration.DefaultSettingValueAttribute("vto")> _
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("vto")>  _
         Public Property version_id() As String
             Get
-                Return CType(Me("version_id"), String)
+                Return CType(Me("version_id"),String)
             End Get
-            Set(value As String)
+            Set
                 Me("version_id") = value
             End Set
         End Property
-
-        <Global.System.Configuration.UserScopedSettingAttribute(), _
-         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(), _
-         Global.System.Configuration.DefaultSettingValueAttribute("user2")> _
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("user2")>  _
         Public Property user() As String
             Get
-                Return CType(Me("user"), String)
+                Return CType(Me("user"),String)
             End Get
-            Set(value As String)
+            Set
                 Me("user") = value
             End Set
         End Property
-
-        <Global.System.Configuration.UserScopedSettingAttribute(), _
-         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(), _
-         Global.System.Configuration.DefaultSettingValueAttribute("4242")> _
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("4242")>  _
         Public Property port_number() As String
             Get
-                Return CType(Me("port_number"), String)
+                Return CType(Me("port_number"),String)
             End Get
-            Set(value As String)
+            Set
                 Me("port_number") = value
             End Set
         End Property
-
-        <Global.System.Configuration.UserScopedSettingAttribute(), _
-         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(), _
-         Global.System.Configuration.DefaultSettingValueAttribute("C:\Users\PPS\Documents\Purple Sun\CA")> _
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("C:\Users\PPS\Documents\Purple Sun\CA")>  _
         Public Property certificatespath() As String
             Get
-                Return CType(Me("certificatespath"), String)
+                Return CType(Me("certificatespath"),String)
             End Get
-            Set(value As String)
+            Set
                 Me("certificatespath") = value
             End Set
         End Property
-
-        <Global.System.Configuration.UserScopedSettingAttribute(), _
-         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(), _
-         Global.System.Configuration.DefaultSettingValueAttribute("ppsbi_engie")> _
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("ppsbi_engie")>  _
         Public Property database() As String
             Get
-                Return CType(Me("database"), String)
+                Return CType(Me("database"),String)
             End Get
-            Set(value As String)
+            Set
                 Me("database") = value
             End Set
         End Property
-
-        <Global.System.Configuration.UserScopedSettingAttribute(), _
-         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(), _
-         Global.System.Configuration.DefaultSettingValueAttribute("localhost")> _
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("localhost")>  _
         Public Property oldIp() As String
             Get
-                Return CType(Me("oldIp"), String)
+                Return CType(Me("oldIp"),String)
             End Get
-            Set(value As String)
+            Set
                 Me("oldIp") = value
             End Set
         End Property
-
-        <Global.System.Configuration.UserScopedSettingAttribute(), _
-         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(), _
-         Global.System.Configuration.DefaultSettingValueAttribute("3306")> _
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("3306")>  _
         Public Property oldPort() As String
             Get
-                Return CType(Me("oldPort"), String)
+                Return CType(Me("oldPort"),String)
             End Get
-            Set(value As String)
+            Set
                 Me("oldPort") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("8")>  _
+        Public Property tablesFontSize() As UInteger
+            Get
+                Return CType(Me("tablesFontSize"),UInteger)
+            End Get
+            Set
+                Me("tablesFontSize") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("3")>  _
+        Public Property mainCurrency() As UInteger
+            Get
+                Return CType(Me("mainCurrency"),UInteger)
+            End Get
+            Set
+                Me("mainCurrency") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("EUR")>  _
+        Public Property mainCurrencyName() As String
+            Get
+                Return CType(Me("mainCurrencyName"),String)
+            End Get
+            Set
+                Me("mainCurrencyName") = value
             End Set
         End Property
     End Class

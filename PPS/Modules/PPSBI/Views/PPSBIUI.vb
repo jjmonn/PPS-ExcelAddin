@@ -67,12 +67,12 @@ Friend Class PPSBI_UI
         ' Add any initialization after the InitializeComponent() call.
         destination = GlobalVariables.apps.ActiveCell
 
-        Dim currencies As List(Of String) = CurrenciesMapping.getCurrenciesList(CURRENCIES_KEY_VARIABLE)
+        Dim currencies As List(Of String) = GlobalVariables.Currencies.currencies_hash.Keys
         For Each currency_ As String In currencies
             CurrencyCB.Items.Add(currency_)
         Next
 
-        CurrencyCB.SelectedItem = MAIN_CURRENCY
+        CurrencyCB.SelectedItem = my.settings.mainCurrency
         TreeviewsInitialization()
         InitializeAdjustmentsCB()
         versionsTB.Text = versionsTV.Nodes.Find(GlobalVariables.GLOBALCurrentVersionCode, True)(0).Text
@@ -83,20 +83,19 @@ Friend Class PPSBI_UI
 
     End Sub
 
-    Private Sub InitializeTimePeriodsSelection(ByRef versionCode As String)
+    Private Sub InitializeTimePeriodsSelection(ByRef versionId As String)
 
         periodsStrIntDictionary.Clear()
         PeriodCB.Items.Clear()
-        Dim Versions As New Version
         ' may be improved -> anyway module to reimplement to efficiently compute what is needed!
-      
+
         Dim strFormat As String = ""
-        Select Case Versions.ReadVersion(versionCode, VERSIONS_TIME_CONFIG_VARIABLE)
+        Select Case GlobalVariables.Versions.versions_hash(versionId)(VERSIONS_TIME_CONFIG_VARIABLE)
             Case MONTHLY_TIME_CONFIGURATION : strFormat = "MMM yyyy"
             Case YEARLY_TIME_CONFIGURATION : strFormat = "yyyy"
         End Select
 
-        For Each period As Integer In Versions.GetPeriodList(versionCode)
+        For Each period As Integer In GlobalVariables.Versions.GetPeriodsList(versionId)
             PeriodCB.Items.Add(Format(DateTime.FromOADate(period), strFormat))
             periodsStrIntDictionary.Add(Format(DateTime.FromOADate(period), strFormat), period)
         Next
@@ -125,8 +124,8 @@ Friend Class PPSBI_UI
 
         ' Versions
         versionsTV.ImageList = VersionsTVIcons
-        Version.LoadVersionsTree(versionsTV)
-        versions_name_id = VersionsMapping.GetVersionsHashTable(NAME_VARIABLE, RATES_VERSIONS_ID_VARIABLE)
+        GlobalVariables.Versions.LoadVersionsTV(versionsTV)
+        versions_name_id = GlobalVariables.Versions.GetVersionsDictionary(NAME_VARIABLE, RATES_VERSIONS_ID_VARIABLE)
         versionsTV.CollapseAll()
         versionsTV.Dock = DockStyle.Fill
         AddHandler versionsTV.KeyDown, AddressOf versionsTV_KeyDown

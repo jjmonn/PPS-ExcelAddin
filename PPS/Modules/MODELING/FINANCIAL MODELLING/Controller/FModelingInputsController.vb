@@ -63,13 +63,13 @@ Friend Class FModelingInputsController
         View = New FModelingInputsControl(Me)
 
 
-        Version.LoadVersionsTree(VersionsTV)
+        GlobalVariables.Versions.LoadVersionsTV(VersionsTV)
         TreeViewsUtilities.CheckAllNodes(EntitiesTV)
         Globalvariables.Entities.LoadEntitiesTV(EntitiesTV)
         inputs_list = FModelingAccountsMapping.GetFModellingAccountsList(FINANCIAL_MODELLING_ID_VARIABLE, FINANCIAL_MODELLING_INPUT_TYPE)
         accounts_names_id_dic = GlobalVariables.Accounts.GetAccountsDictionary(NAME_VARIABLE, ID_VARIABLE)
         accounts_id_list = GlobalVariables.Accounts.GetAccountsList(GlobalEnums.AccountsLookupOptions.LOOKUP_ALL, ID_VARIABLE)
-        versions_id_list = VersionsMapping.GetVersionsList(ID_VARIABLE)
+        versions_id_list = GlobalVariables.Versions.versions_hash.Keys
 
         InitializeMappingDGV()
         InitializeInputsDGV()
@@ -137,7 +137,6 @@ Friend Class FModelingInputsController
 
         ' to be reimplemented with new model (computer.vb) priority normal-> 
 
-        'Dim Versions As New Version
         'Dim time_configuration As String = Versions.ReadVersion(version_node.Name, VERSIONS_TIME_CONFIG_VARIABLE)
         'Model.init_computer_complete_mode(entity_node)
         'InitializePBar()
@@ -150,7 +149,7 @@ Friend Class FModelingInputsController
         '                                 time_configuration, _
         '                                 rates_version, _
         '                                 periods_list, _
-        '                                 MAIN_CURRENCY, _
+        '                                 my.settings.mainCurrency, _
         '                                 start_period, _
         '                                 nb_periods, _
         '                                 View.PBar)

@@ -26,7 +26,7 @@ Friend Class LogUI
 
     ' Variables
     Protected Friend FinancialDGV As New vDataGridView
-    Private period_list As List(Of Int32)
+    Private period_list As UInt32()
     Private current_version_id As String
     Protected Friend rows_item_account_id_dic As New Dictionary(Of HierarchyItem, String)
     Private current_DGV_cell As GridCell
@@ -119,26 +119,26 @@ Friend Class LogUI
 
 #Region "Interface"
 
-    Protected Friend Sub InitializeDGVColumns(ByRef version_id As String,
-                                              ByRef input_period_list As List(Of Int32), _
-                                              ByRef time_config As String)
+    Friend Sub InitializeDGVColumns(ByRef version_id As String,
+                                    ByRef input_period_list As UInt32(), _
+                                    ByRef time_config As String)
 
         period_list = input_period_list
         current_version_id = version_id
         For Each tab_ As TabPage In DGVTabControl.TabPages
             Dim dgv As vDataGridView = tab_.Controls(0)
-            DataGridViewsUtil.CreateDGVColumns(dgv, period_list.ToArray, time_config, True)
+            DataGridViewsUtil.CreateDGVColumns(dgv, period_list, time_config, True)
             dgv.ColumnsHierarchy.AutoResize(AutoResizeMode.FIT_ALL)
             dgv.ColumnsHierarchy.AutoStretchColumns = True
         Next
 
-        DGVUtil.FormatDGVs(DGVTabControl, MAIN_CURRENCY)
+        DGVUtil.FormatDGVs(DGVTabControl, my.settings.mainCurrency)
         If Not IsNothing(TabControl1.TabPages(0)) Then TabControl1.SelectedTab = TabControl1.TabPages(0)
         Me.Update()
 
     End Sub
 
-    Protected Friend Sub DisplayCurrentAttributes(ByRef currency As String)
+    Friend Sub DisplayCurrentAttributes(ByRef currency As String)
 
         CurrencyTB.Text = currency
         EntityTB.Text = current_entity_node.Text

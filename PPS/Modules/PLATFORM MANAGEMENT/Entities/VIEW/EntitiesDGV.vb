@@ -62,7 +62,7 @@ Friend Class EntitiesDGV
                              ByRef entities_dict As Hashtable, _
                              ByRef input_categoriesKeyNameDic As Hashtable)
 
-        currenciesList = CurrenciesMapping.getCurrenciesList(CURRENCIES_KEY_VARIABLE)
+        currenciesList = GlobalVariables.Currencies.currencies_hash.Keys
         categoriesTV = input_categoriesTV
 
         initFilters()

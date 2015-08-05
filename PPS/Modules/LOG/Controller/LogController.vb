@@ -27,7 +27,7 @@ Friend Class LogController
 
     ' Variables
     Private current_version_id As String
-    Private period_list As List(Of Int32)
+    Private period_list As UInt32()
     Friend current_entity_id As String
     Private entities_id_currency_dic As Hashtable
     Private client_id_name_dict As Hashtable = GlobalVariables.Clients.GetClientsDictionary(ID_VARIABLE, NAME_VARIABLE)

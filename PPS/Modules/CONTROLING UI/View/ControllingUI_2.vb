@@ -39,8 +39,7 @@ Friend Class ControllingUI_2
 
     Private Controller As FinancialUIController
     Friend DGVUTIL As New DataGridViewsUtil
-    Private DataDisplayController As FinancialsDataDisplay
-    Friend PBar As New ProgressBarControl
+    '  Friend PBar As New ProgressBarControl
     Friend display_control As DisplayControl
     Private leftSplitContainer As SplitContainer
     Private rightSplitContainer As SplitContainer
@@ -137,7 +136,6 @@ Friend Class ControllingUI_2
 
         ' Add any initialization after the InitializeComponent() call. 
         Controller = New FinancialUIController(Me)
-        DataDisplayController = New FinancialsDataDisplay(Me)
         LoadTrees()
 
         periodsCLB.Dock = DockStyle.Fill
@@ -145,7 +143,7 @@ Friend Class ControllingUI_2
 
         ' Init TabControl
         For Each node As TreeNode In accountsTV.Nodes
-            TabControl1.TabPages.Add(node.Text, node.Text)
+            TabControl1.TabPages.Add(node.Name, node.Text)
             '   tabsNodesDictionary.Add(node.Text, node)
         Next
         InitializeChartsTab()
@@ -180,7 +178,7 @@ Friend Class ControllingUI_2
         AxisFilter.LoadFvTv(productsFiltersTV, GlobalEnums.AnalysisAxis.PRODUCTS)
         AxisFilter.LoadFvTv(adjustmentsFiltersTV, GlobalEnums.AnalysisAxis.ADJUSTMENTS)
 
-        Version.LoadVersionsTree(versionsTV)
+        GlobalVariables.Versions.LoadVersionsTV(versionsTV)
 
         TVSetup(entitiesTV, 0, EntitiesTVImageList)
         TVSetup(clientsTV, 0)
@@ -231,20 +229,20 @@ Friend Class ControllingUI_2
         CurrenciesCLB.SelectionMode = SelectionMode.One
 
         Dim currenciesList As List(Of String)
-        currenciesList = CurrenciesMapping.getCurrenciesList(CURRENCIES_KEY_VARIABLE)
+        currenciesList = GlobalVariables.Currencies.currencies_hash.Keys
         For Each currency_ As String In currenciesList
             CurrenciesCLB.Items.Add(currency_, False)
         Next
-        CurrenciesCLB.SetItemChecked(CurrenciesCLB.FindString(MAIN_CURRENCY), True)
-        CurrenciesCLB.SelectedItem = MAIN_CURRENCY
+        CurrenciesCLB.SetItemChecked(CurrenciesCLB.FindString(my.settings.mainCurrency), True)
+        CurrenciesCLB.SelectedItem = my.settings.mainCurrency
 
     End Sub
 
     Private Sub DataMiningUI_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 
-        Me.Controls.Add(PBar)                           ' Progress Bar
-        PBar.Left = (Me.Width - PBar.Width) / 2         ' Progress Bar
-        PBar.Top = (Me.Height - PBar.Height) / 2        ' Progress Bar
+        'Me.Controls.Add(PBar)                           ' Progress Bar
+        'PBar.Left = (Me.Width - PBar.Width) / 2         ' Progress Bar
+        'PBar.Top = (Me.Height - PBar.Height) / 2        ' Progress Bar
 
         For Each tab_ As TabPage In TabControl1.TabPages
 
@@ -1095,15 +1093,17 @@ Friend Class ControllingUI_2
         Dim rowsHiearchyNodeList As New List(Of TreeNode)
         Dim columnsHiearchyNodeList As New List(Of TreeNode)
 
+        ' Computing
         Controller.Compute(rowsHiearchyNodeList, columnsHiearchyNodeList)
-        DataDisplayController.InitDisplay(rowsHiearchyNodeList, columnsHiearchyNodeList)
 
+        ' Display init
+        Controller.InitDisplay(rowsHiearchyNodeList, columnsHiearchyNodeList)
         For Each tab_ As TabPage In TabControl1.TabPages
-            DataDisplayController.CreateRowsAndColumns(tab_.Controls(0))
+            Controller.CreateRowsAndColumns(tab_.Controls(0))
         Next
+        Controller.initDisplayFlag = True
 
-        Dim dumb As Boolean = False
-        Do While dumb = True
+        Do While True
             ' Waiting for the controller to send cancel order 
         Loop
 
@@ -1138,9 +1138,7 @@ Friend Class ControllingUI_2
 
         For Each tab_ As TabPage In TabControl1.TabPages
             Dim DGV As vDataGridView = tab_.Controls(0)
-
-            ' tab account_id -> ? priority high
-            DataDisplayController.FillDGVs(DGV, 0)
+            Controller.FillDGVs(DGV, tab_.Name) ' check tab account name => = account id ?
         Next
 
     End Sub

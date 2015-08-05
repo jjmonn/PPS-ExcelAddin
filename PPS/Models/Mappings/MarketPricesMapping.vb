@@ -16,7 +16,7 @@ Friend Class MarketPricesMapping
 
     Protected Friend Shared Function GetIndexMarketPricesFlatArray(ByRef index_id As String, _
                                                                    ByRef version_id As String, _
-                                                                   ByRef period_array As Int32(), _
+                                                                   ByRef period_array As UInt32(), _
                                                                    ByRef time_configuration As String) As Double()
 
         Dim srv As New ModelServer

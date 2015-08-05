@@ -132,9 +132,12 @@ Friend Class RefreshGetDataBatch
 
 #Region "Refresh Report"
 
-    Friend Shared Sub RefreshReport(Optional ByRef currency As String = MAIN_CURRENCY, _
+
+    ' My.Settings.mainCurrency
+    Friend Shared Sub RefreshReport(Optional ByRef currency As String = "", _
                                     Optional ByVal adjustment_id As String = "aaa")
 
+        ' stub !!! priority high
         ' currency stub !-> if currency not provided dataset should identify the currency - if no currency found -> ask user
 
         ' decision to be made here !!!

@@ -40,7 +40,7 @@ Friend Class AcquisitionModel
  
     ' Variables
     Friend DBInputsDictionary As New Dictionary(Of String, Dictionary(Of String, Dictionary(Of String, Double)))    '(entities)(accounts)(periods) -> values
-    Friend currentPeriodlist As New List(Of Integer)
+    Friend currentPeriodlist As New List(Of UInt32)
     Friend outputsList As List(Of String)
     Protected Friend versionsTimeConfigDict As Hashtable
     Friend accountsTV As New TreeView
@@ -63,7 +63,7 @@ Friend Class AcquisitionModel
         GlobalVariables.Accounts.LoadAccountsTV(accountsTV)
         DATASET = inputDataSet
      
-        versionsTimeConfigDict = VersionsMapping.GetVersionsHashTable(ID_VARIABLE, VERSIONS_TIME_CONFIG_VARIABLE)
+        versionsTimeConfigDict = GlobalVariables.Versions.GetVersionsDictionary(ID_VARIABLE, VERSIONS_TIME_CONFIG_VARIABLE)
         accountsNamesFormulaTypeDict = globalvariables.accounts.GetAccountsDictionary(NAME_VARIABLE, ACCOUNT_FORMULA_TYPE_VARIABLE)
         outputsList = GlobalVariables.Accounts.GetAccountsList(GlobalEnums.AccountsLookupOptions.LOOKUP_OUTPUTS, NAME_VARIABLE)
 
@@ -84,8 +84,10 @@ Friend Class AcquisitionModel
         Dim entityKey As String = DATASET.EntitiesNameKeyDictionary(entityName)
         current_version_id = GlobalVariables.GLOBALCurrentVersionCode
 
-        Dim Versions As New Version
-        currentPeriodlist = Versions.GetPeriodList(current_version_id)
+        currentPeriodlist.Clear()
+        For Each periodId In GlobalVariables.Versions.GetPeriodsList(current_version_id)
+            currentPeriodlist.Add(periodId)
+        Next
 
         Dim viewName = current_version_id
 

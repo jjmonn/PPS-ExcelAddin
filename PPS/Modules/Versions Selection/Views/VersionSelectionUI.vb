@@ -42,9 +42,9 @@ Public Class VersionSelectionUI
 
         ' Add any initialization after the InitializeComponent() call.
         VersionsTV.ImageList = VersioningTVIL
-        Version.LoadVersionsTree(VersionsTV)
+        GlobalVariables.Versions.LoadVersionsTV(VersionsTV)
         VersionsTV.ExpandAll()
-        versions_id_list = VersionsMapping.GetVersionsList(RATES_VERSIONS_ID_VARIABLE)
+        versions_id_list = GlobalVariables.Versions.versions_hash.Keys
 
     End Sub
 

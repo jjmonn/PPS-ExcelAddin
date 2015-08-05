@@ -121,26 +121,24 @@ Friend Class MarketPricesController
                              Optional ByRef nb_periods As Int32 = 0, _
                              Optional ByRef parent_node As TreeNode = Nothing)
 
-        Dim new_version_id = get_new_version_token()
-        Dim tmpHT As New Hashtable
-        tmpHT.Add(MARKET_INDEXES_VERSIONS_ID_VAR, new_version_id)
-        tmpHT.Add(MARKET_INDEXES_VERSIONS_NAME_VAR, name)
-        tmpHT.Add(ITEMS_POSITIONS, 1)
+        'Dim tmpHT As New Hashtable
+        'tmpHT.Add(MARKET_INDEXES_VERSIONS_NAME_VAR, name)
+        'tmpHT.Add(ITEMS_POSITIONS, 1)
 
-        If parent_node Is Nothing Then tmpHT.Add(MARKET_INDEXES_VERSIONS_PARENT_ID_VAR, DBNull.Value) Else tmpHT.Add(MARKET_INDEXES_VERSIONS_PARENT_ID_VAR, parent_node.Name)
-        If isFolder = True Then
-            tmpHT.Add(MARKET_INDEXES_VERSIONS_IS_FOLDER_VAR, 1)
-        Else
-            tmpHT.Add(MARKET_INDEXES_VERSIONS_IS_FOLDER_VAR, 0)
-            tmpHT.Add(MARKET_INDEXES_VERSIONS_START_PERIOD_VAR, start_period)
-            tmpHT.Add(MARKET_INDEXES_VERSIONS_NB_PERIODS_VAR, nb_periods)
-        End If
+        'If parent_node Is Nothing Then tmpHT.Add(MARKET_INDEXES_VERSIONS_PARENT_ID_VAR, DBNull.Value) Else tmpHT.Add(MARKET_INDEXES_VERSIONS_PARENT_ID_VAR, parent_node.Name)
+        'If isFolder = True Then
+        '    tmpHT.Add(MARKET_INDEXES_VERSIONS_IS_FOLDER_VAR, 1)
+        'Else
+        '    tmpHT.Add(MARKET_INDEXES_VERSIONS_IS_FOLDER_VAR, 0)
+        '    tmpHT.Add(MARKET_INDEXES_VERSIONS_START_PERIOD_VAR, start_period)
+        '    tmpHT.Add(MARKET_INDEXES_VERSIONS_NB_PERIODS_VAR, nb_periods)
+        'End If
 
-        MarketIndexVersions.CreateVersion(tmpHT)
-        If parent_node Is Nothing Then View.versionsTV.Nodes.Add(new_version_id, name) Else parent_node.Nodes.Add(new_version_id, name)
-        UpdateVersionsPositions()
-        MarketIndexVersion.load_market_index_version_tv(View.versionsTV)
-        If isFolder = False Then ChangeVersion(new_version_id)
+        'MarketIndexVersions.CreateVersion(tmpHT)
+        'If parent_node Is Nothing Then View.versionsTV.Nodes.Add(new_version_id, name) Else parent_node.Nodes.Add(new_version_id, name)
+        'UpdateVersionsPositions()
+        'MarketIndexVersion.load_market_index_version_tv(View.versionsTV)
+        'If isFolder = False Then ChangeVersion(new_version_id)
 
     End Sub
 
@@ -222,15 +220,6 @@ Friend Class MarketPricesController
 
     End Function
 
-    Private Function get_new_version_token()
-
-        Dim key = TreeViewsUtilities.IssueNewToken(MARKET_INDEXES_VERSIONS_TOKEN_SIZE)
-        While View.versionsTV.Nodes.Find(key, True).Length > 0
-            key = TreeViewsUtilities.IssueNewToken(MARKET_INDEXES_VERSIONS_TOKEN_SIZE)
-        End While
-        Return key
-
-    End Function
 
     Private Sub UpdateVersionsPositions()
 

@@ -29,7 +29,6 @@ Friend Class AccountsController
 
     ' Objects
     Private formulasMGT As ModelFormulasMGT
-    Private DATAMODEL As DataModel
     Private View As AccountsControl
     Private NewAccountView As NewAccountUI
     Private AccountsTV As New TreeView
@@ -134,15 +133,12 @@ Friend Class AccountsController
         accountsKeyList.Reverse()
         If AccountsDependenciesCheck(accountsKeyList) = False Then Return False
 
-        DATAMODEL = New DataModel
         Dim accountsToBeDeleted = AccountsVersionsCheck(accountsKeyList)
         If accountsToBeDeleted.Count > 0 Then
             Dim confirm As Integer = MessageBox.Show("The data corresponding to the accounts will be deleted permanetly, do you confirm?", _
                                                      "Accounts deletion validation", _
                                                        MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question)
             If confirm = DialogResult.Yes Then
-                ' below -> goes on server ?!
-                RemoveAccountsFromDataTables(accountsToBeDeleted)
                 RemoveAccount(accountsKeyList, node)
             Else
                 Return False
@@ -276,44 +272,33 @@ Friend Class AccountsController
 
     Private Function AccountsVersionsCheck(ByRef accountsKeyList As List(Of UInt32)) As List(Of UInt32)
 
-        Dim accountsToBeDeleted As New List(Of UInt32)
-        Dim accountsDictionaries As New Dictionary(Of UInt32, List(Of String))
-        For Each accountKey In accountsKeyList
-            Dim tmpList = DATAMODEL.checkForItemInDataTables(accountKey, DATA_ACCOUNT_ID_VARIABLE)
-            If tmpList.Count > 0 Then
-                accountsToBeDeleted.Add(accountKey)
-                accountsDictionaries.Add(GlobalVariables.Accounts.accounts_hash(accountKey)(NAME_VARIABLE), tmpList)
-            End If
-        Next
-
-        ' below -> not ok !
         ' display accounts ids to users !!
         ' priority normal
         ' a priori implémenté au niveau server on account deletion ?
         ' to be validated/ reviewed
 
-        If accountsDictionaries.Count > 0 Then
-            Dim resultStr As String = "The following Accounts were found in the databases: " + Chr(13)
-            For Each account In accountsDictionaries.Keys
-                resultStr = resultStr & "- " & account & " found in: " + Chr(13)
-                For Each versionName In accountsDictionaries(account)
-                    resultStr = resultStr + "  - " + versionName + Chr(13)
-                Next
-            Next
-            MsgBox(resultStr)
-        End If
+        ' ------------------------------------
+        ' 
+        ' ask server for the list of accounts !
+        '
+        '-------------------------------------
 
-        Return accountsToBeDeleted
+        'If accountsDictionaries.Count > 0 Then
+        '    Dim resultStr As String = "The following Accounts were found in the databases: " + Chr(13)
+        '    For Each account In accountsDictionaries.Keys
+        '        resultStr = resultStr & "- " & account & " found in: " + Chr(13)
+        '        For Each versionName In accountsDictionaries(account)
+        '            resultStr = resultStr + "  - " + versionName + Chr(13)
+        '        Next
+        '    Next
+        '    MsgBox(resultStr)
+        'End If
+
+
 
     End Function
 
-    Private Sub RemoveAccountsFromDataTables(ByRef AccountsToBeDeleted As List(Of UInt32))
-
-        For Each accountKey In AccountsToBeDeleted
-            DATAMODEL.deleteRowsWithItemKeys(accountKey, DATA_ACCOUNT_ID_VARIABLE)
-        Next
-
-    End Sub
+    
 
     Private Sub RemoveAccount(ByRef accountsList As List(Of UInt32), ByRef node As TreeNode)
 

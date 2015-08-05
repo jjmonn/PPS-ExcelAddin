@@ -9,12 +9,14 @@
 '       - Implement hierarchy item expanded -> row items column resize
 '       
 ' Known bugs:
+'       - display to be checked -> modification des noms des colones
+'
 '       - rates DGV rows item are not wide enough
 '       - Edit rate error (not double) -> should exit edition and do nothing 
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 03/05/2015
+' Last modified: 05/08/2015
 
 
 Imports VIBlend.WinForms.DataGridView
@@ -46,8 +48,6 @@ Friend Class RatesView
     Private is_copying_value_down As Boolean = False
 
     ' Constants
-    Private DGV_ITEMS_FONT_SIZE = 8
-    Private DGV_CELLS_FONT_SIZE = 8
     Private LINES_WIDTH As Single = 3
 
 #End Region
@@ -79,7 +79,7 @@ Friend Class RatesView
 
 #Region "Initialize DGV Display"
 
-    Friend Sub InitializeDGV(ByRef currenciesList As List(Of String), _
+    Friend Sub InitializeDGV(ByRef currenciesList As List(Of UInt32), _
                              ByRef globalPeriodsDictionary As Dictionary(Of Int32, List(Of Int32)))
 
 
@@ -88,7 +88,7 @@ Friend Class RatesView
         DGV.RowsHierarchy.Clear()
         InitColumns(currenciesList)
         InitRows(globalPeriodsDictionary)
-        DataGridViewsUtil.DGVSetHiearchyFontSize(DGV, DGV_ITEMS_FONT_SIZE, DGV_CELLS_FONT_SIZE)
+        DataGridViewsUtil.DGVSetHiearchyFontSize(DGV, My.Settings.tablesFontSize, My.Settings.tablesFontSize)
         DGV.ColumnsHierarchy.AutoResize(AutoResizeMode.FIT_ALL)
         DataGridViewsUtil.FormatDGVRowsHierarchy(DGV)
         DGV.BackColor = Color.White
@@ -96,19 +96,21 @@ Friend Class RatesView
 
     End Sub
 
-    Private Sub InitColumns(ByRef currenciesList As List(Of String))
+    Private Sub InitColumns(ByRef currenciesList As List(Of UInt32))
 
-        For Each curr As String In currenciesList
-            If curr <> MAIN_CURRENCY Then AddColumn(curr)
+        For Each currencyId As UInt32 In currenciesList
+            If currencyId <> My.Settings.mainCurrency Then AddColumn(currencyId)
         Next
 
     End Sub
 
-    Private Sub AddColumn(ByRef curr As String)
+    Private Sub AddColumn(ByRef currencyId As UInt32)
 
-        Dim col As HierarchyItem = DGV.ColumnsHierarchy.Items.Add(curr + "/" + MAIN_CURRENCY)
-        columnIDKeyDictionary.Add(col.GetUniqueID, curr)
-        columnsKeyItemDictionary.Add(curr, col)
+        Dim col As HierarchyItem = DGV.ColumnsHierarchy.Items.Add(My.Settings.mainCurrencyName & "/" & currencyId)
+        Dim token As String = ExchangeRate2.TokenizeRateCurrencies(My.Settings.mainCurrency, _
+                                                                   currencyId)
+        columnIDKeyDictionary.Add(col.GetUniqueID, token)
+        columnsKeyItemDictionary.Add(token, col)
 
     End Sub
 
@@ -153,20 +155,24 @@ Friend Class RatesView
 
 #End Region
 
-    Friend Sub DisplayRatesVersionValuesinDGV(ByRef ExchangeRatesDictionary As Dictionary(Of String, Hashtable))
+    Friend Sub DisplayRatesVersionValuesinDGV(ByRef ExchangeRatesDictionary As Hashtable)
 
         is_filling_cells = True
-        Dim curr As String
+        Dim rateToken As String
         For Each column As HierarchyItem In DGV.ColumnsHierarchy.Items
-            curr = columnIDKeyDictionary(column.GetUniqueID)
-            If exchangeRatesDictionary.ContainsKey(curr) Then
-                For Each row As HierarchyItem In DGV.RowsHierarchy.Items
-                    For Each subRow As HierarchyItem In row.Items
-                        FillInGridCell(exchangeRatesDictionary, subRow, _
-                                       curr, column)
-                    Next
-                Next
-                DisplayPriceCurve(curr, GetValuesFromPeriodsHT(exchangeRatesDictionary(curr)), column.ItemIndex)
+            rateToken = columnIDKeyDictionary(column.GetUniqueID)
+
+            If ExchangeRatesDictionary.ContainsKey(rateToken) Then
+                DisplayRatesColumn(ExchangeRatesDictionary, _
+                   rateToken, _
+                   column)
+            Else
+                rateToken = ExchangeRate2.ReverseToken(rateToken)
+                If ExchangeRatesDictionary.ContainsKey(rateToken) Then
+                    DisplayRatesColumn(ExchangeRatesDictionary, _
+                       rateToken, _
+                       column)
+                End If
             End If
         Next
         is_filling_cells = False
@@ -174,21 +180,34 @@ Friend Class RatesView
 
     End Sub
 
-    Private Sub FillInGridCell(ByRef exchangeRatesDictionary As Dictionary(Of String, Hashtable), _
+    Private Sub DisplayRatesColumn(ByRef ExchangeRatesDictionary As Hashtable, _
+                                   ByRef rateToken As String, _
+                                   ByRef column As HierarchyItem)
+
+        For Each row As HierarchyItem In DGV.RowsHierarchy.Items
+            For Each subRow As HierarchyItem In row.Items
+                FillInGridCell(ExchangeRatesDictionary, subRow, _
+                               rateToken, column)
+            Next
+        Next
+        DisplayPriceCurve(rateToken, GetValuesFromPeriodsHT(ExchangeRatesDictionary(rateToken)), column.ItemIndex)
+
+    End Sub
+
+    Private Sub FillInGridCell(ByRef exchangeRatesDictionary As Hashtable, _
                                ByRef row As HierarchyItem, _
-                               ByRef curr As String, _
+                               ByRef rateToken As String, _
                                ByRef column As HierarchyItem)
 
         Dim value As Double
         Dim period As Integer = rowIDKeyDictionary(row.GetUniqueID)
 
-        If exchangeRatesDictionary(curr).ContainsKey(period) Then
-            value = exchangeRatesDictionary(curr)(period)
+        If exchangeRatesDictionary(rateToken).ContainsKey(period) Then
+            value = exchangeRatesDictionary(rateToken)(period)
         Else
             value = 1
         End If
         DGV.CellsArea.SetCellValue(row, column, value)
-
 
     End Sub
 

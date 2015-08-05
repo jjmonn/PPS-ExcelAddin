@@ -16,22 +16,22 @@ Friend Class LogModel
 #Region "Instance Variables"
 
     ' Objects
-    Private Versions As New Version
+
 
 #End Region
 
 
 #Region "Interface"
 
-    Protected Friend Function GetPeriodList(ByRef version_id As String) As List(Of Int32)
+    Friend Function GetPeriodList(ByRef version_id As String) As UInt32()
 
-        Return Versions.GetPeriodList(version_id)
+        Return GlobalVariables.Versions.GetPeriodsList(version_id)
 
     End Function
 
     Protected Friend Function GetTimeConfig(ByRef version_id As String) As String
 
-        Return Versions.ReadVersion(version_id, VERSIONS_TIME_CONFIG_VARIABLE)
+        Return GlobalVariables.Versions.versions_hash(version_id)(VERSIONS_TIME_CONFIG_VARIABLE)
 
     End Function
 

@@ -76,7 +76,6 @@ Module Constants
 
     Friend Const OPERATORS_FLAG = "OPERATORFlag"
     Friend Const OPERANDS_FLAG = "OPERANDFlag"
-    Friend Const MAIN_CURRENCY = "EUR"
     Friend Const CURRENCIES_SEPARATOR = "/"
     Friend Const INDEX_SEPARATOR = "."
 

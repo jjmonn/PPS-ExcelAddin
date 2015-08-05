@@ -1942,16 +1942,15 @@ Public Class AddinModule
                                                                                        {"Entity", "Currency", "Version"}, _
                                                                                        {entity_name, currency, GlobalVariables.Version_Label.Caption})
 
-        Dim Versions As New Version
-        Dim periodlist As List(Of Date) = Versions.GetPeriodsDatesList(GlobalVariables.GLOBALCurrentVersionCode)
+        Dim timeConfig As UInt32 = GlobalVariables.Versions.versions_hash(GlobalVariables.GLOBALCurrentVersionCode)(VERSIONS_TIME_CONFIG_VARIABLE)
+        Dim periodlist As UInt32() = GlobalVariables.Versions.GetPeriodsList(GlobalVariables.GLOBALCurrentVersionCode)
         WorksheetWrittingFunctions.InsertInputReportOnWS(currentcell, _
                                                           periodlist, _
-                                                          Versions.ReadVersion(GlobalVariables.GLOBALCurrentVersionCode, VERSIONS_TIME_CONFIG_VARIABLE))
+                                                          timeConfig)
 
         Me.InputReportTaskPane.Hide()
         Me.InputReportTaskPane.Close()
-        Versions.Close()
-        CExcelFormatting.FormatExcelRange(currentcell, INPUT_FORMAT_CODE, currency, periodlist(0))
+        CExcelFormatting.FormatExcelRange(currentcell, INPUT_FORMAT_CODE, currency, Date.FromOADate(periodlist(0)))
         GlobalVariables.APPS.ScreenUpdating = True
         AssociateGRSControler(True)
 

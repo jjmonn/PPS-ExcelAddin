@@ -84,15 +84,18 @@ Friend Class ControlsController
 
 #Region "Interface"
 
-    Protected Friend Sub CreateControl(ByRef HT As Hashtable)
+    Friend Sub CreateControl(ByRef HT As Hashtable)
 
-        Dim id = GetNewID()
-        HT.Add(CONTROL_ID_VARIABLE, id)
         Controls.CreateControl(HT)
-        controls_names_list.Add(HT(CONTROL_NAME_VARIABLE))
-        View.AddRow(HT)
-        View.DGV.Refresh()
-        View.DGV.Select()
+
+
+        ' after create
+        ' priority normal
+
+        'controls_names_list.Add(HT(CONTROL_NAME_VARIABLE))
+        'View.AddRow(HT)
+        'View.DGV.Refresh()
+        'View.DGV.Select()
 
     End Sub
 
@@ -137,22 +140,13 @@ Friend Class ControlsController
 
 #Region "Utilities"
 
-    Protected Friend Function IsNameValid(ByRef name As String) As Boolean
+    Friend Function IsNameValid(ByRef name As String) As Boolean
 
         If controls_names_list.Contains(name) Then Return False
         Return True
 
     End Function
 
-    Private Function GetNewID() As String
-
-        Dim new_id As String = TreeViewsUtilities.IssueNewToken(CONTROLS_TOKEN_SIZE)
-        While Not Controls.ReadControl(new_id, CONTROL_NAME_VARIABLE) Is Nothing
-            new_id = TreeViewsUtilities.IssueNewToken(CONTROLS_TOKEN_SIZE)
-        End While
-        Return new_id
-
-    End Function
 
 #Region "Display Utilities"
 

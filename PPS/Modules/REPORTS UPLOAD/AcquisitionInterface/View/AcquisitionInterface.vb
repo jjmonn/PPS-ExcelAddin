@@ -142,7 +142,7 @@ Friend Class AcquisitionInterface
     Friend Sub LoadPeriodsToHierarchy(ByRef hierarchy As Hierarchy, _
                                        ByRef currentEntity As String, _
                                        ByRef currentAccount As String, _
-                                       ByRef currentPeriodList As List(Of Integer), _
+                                       ByRef currentPeriodList As List(Of UInt32), _
                                        ByRef time_config As String)
 
         ClearHierarchyDictionary(hierarchy)

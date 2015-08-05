@@ -164,8 +164,8 @@ Friend Class ModelDataSet
 
     Private Function VersionsIdentify() As Boolean
 
-        Dim versionsNameList As List(Of String) = VersionsMapping.GetVersionsList(NAME_VARIABLE)
-        Dim versionsNameCodeDictionary As Hashtable = VersionsMapping.GetVersionsHashTable(NAME_VARIABLE, ID_VARIABLE)
+        Dim versionsNameList As List(Of String) = GlobalVariables.Versions.GetVersionsNameList(NAME_VARIABLE)
+        Dim versionsNameCodeDictionary As Hashtable = GlobalVariables.Versions.GetVersionsDictionary(NAME_VARIABLE, ID_VARIABLE)
 
         Dim i, j As Integer
         For i = LBound(GlobalScreenShot, 1) To UBound(GlobalScreenShot, 1)
@@ -184,9 +184,9 @@ Friend Class ModelDataSet
     ' Look for date in the spreasheet, and populate periodsAddressValuesDictionary
     Private Sub DatesIdentify()
 
-        Dim Versions As New Version
-        periodsDatesList = Versions.GetPeriodsDatesList(currentVersionCode)
-        Versions.Close()
+        For Each periodId As UInt32 In GlobalVariables.Versions.GetPeriodsList(currentVersionCode)
+            periodsDatesList.Add(Date.FromOADate(periodId))
+        Next
 
         Dim i, j, periodStoredAsInt As Integer
         For i = LBound(GlobalScreenShot, 1) To UBound(GlobalScreenShot, 1)

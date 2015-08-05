@@ -61,7 +61,7 @@
     </Reference>
     <Reference Include="NetworkModule, Version=1.0.0.0, Culture=neutral, PublicKeyToken=32e2d6a2d1db8114, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>bin\Debug\NetworkModule.dll</HintPath>
+      <HintPath>..\NetworkModule\NetworkModule\bin\Debug\NetworkModule.dll</HintPath>
     </Reference>
     <Reference Include="ProgressControls, Version=1.2.0.0, Culture=neutral, PublicKeyToken=f34d47135ea7baa5, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -120,21 +120,22 @@
     </Compile>
     <Compile Include="GLOBAL\GlobalEnums.vb" />
     <Compile Include="Models\Computing\Computer.vb" />
-    <Compile Include="Models\CRUDs\Account.vb" />
-    <Compile Include="Models\CRUDs\Adjustment.vb" />
-    <Compile Include="Models\CRUDs\AdjustmentsFilter.vb" />
+    <Compile Include="Models\CRUDs\New CRUDs\Account.vb" />
+    <Compile Include="Models\CRUDs\New CRUDs\Adjustment.vb" />
+    <Compile Include="Models\CRUDs\New CRUDs\AdjustmentsFilter.vb" />
     <Compile Include="Models\CRUDs\AxisFilter.vb" />
-    <Compile Include="Models\CRUDs\Clients.vb" />
-    <Compile Include="Models\CRUDs\ClientsFilter.vb" />
-    <Compile Include="Models\CRUDs\EntitiesFilter.vb" />
-    <Compile Include="Models\CRUDs\Entity.vb" />
-    <Compile Include="Models\CRUDs\Filter.vb" />
-    <Compile Include="Models\CRUDs\FilterValue.vb" />
-    <Compile Include="Models\CRUDs\Product.vb" />
-    <Compile Include="Models\CRUDs\ProductsFilter.vb" />
-    <Compile Include="Models\CRUDs\Version2.vb" />
+    <Compile Include="Models\CRUDs\New CRUDs\Clients.vb" />
+    <Compile Include="Models\CRUDs\New CRUDs\ClientsFilter.vb" />
+    <Compile Include="Models\CRUDs\New CRUDs\EntitiesFilter.vb" />
+    <Compile Include="Models\CRUDs\New CRUDs\Entity.vb" />
+    <Compile Include="Models\CRUDs\New CRUDs\ExchangeRates.vb" />
+    <Compile Include="Models\CRUDs\New CRUDs\Filter.vb" />
+    <Compile Include="Models\CRUDs\New CRUDs\FilterValue.vb" />
+    <Compile Include="Models\CRUDs\New CRUDs\Product.vb" />
+    <Compile Include="Models\CRUDs\New CRUDs\ProductsFilter.vb" />
+    <Compile Include="Models\CRUDs\New CRUDs\FactsVersion.vb" />
+    <Compile Include="Models\CRUDs\New CRUDs\SuperCRUD.vb" />
     <Compile Include="Models\Mappings\CurrenciesSymbolsMapping.vb" />
-    <Compile Include="Modules\CONTROLING UI\Controler\FinancialsDataDisplay.vb" />
     <Compile Include="Modules\MODELING\FINANCIAL MODELLING\Views\Controls\FModelingInputsControl.Designer.vb">
       <DependentUpon>FModelingInputsControl.vb</DependentUpon>
     </Compile>
@@ -177,8 +178,8 @@
     <Compile Include="Modules\MODELING\PS MODELING\Configuration\Views\ASEntitiesAttributesUI.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Models\CRUDs\FormatM.vb" />
-    <Compile Include="Models\CRUDs\Report.vb" />
+    <Compile Include="Models\CRUDs\Old CRUDs\FormatM.vb" />
+    <Compile Include="Models\CRUDs\Old CRUDs\Report.vb" />
     <Compile Include="Modules\MODELING\PS MODELING\Configuration\Models\Mappings\GDFSUEZEntitiesAttributesMapping.vb" />
     <Compile Include="Modules\MODELING\PS MODELING\Configuration\Models\Mappings\GDFSUEZSensitivitiesMapping.vb" />
     <Compile Include="Modules\MODELING\PS MODELING\Controller\AlternativeScenariosController.vb" />
@@ -191,12 +192,12 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Utilities\ChartsUtilities.vb" />
-    <Compile Include="Models\CRUDs\MarketIndex.vb" />
-    <Compile Include="Models\CRUDs\Control.vb" />
-    <Compile Include="Models\CRUDs\ControlChart.vb" />
-    <Compile Include="Models\CRUDs\FModellingAccount.vb" />
-    <Compile Include="Models\CRUDs\MarketIndexVersion.vb" />
-    <Compile Include="Models\CRUDs\MarketPrice.vb" />
+    <Compile Include="Models\CRUDs\Old CRUDs\MarketIndex.vb" />
+    <Compile Include="Models\CRUDs\Old CRUDs\Control.vb" />
+    <Compile Include="Models\CRUDs\Old CRUDs\ControlChart.vb" />
+    <Compile Include="Models\CRUDs\Old CRUDs\FModellingAccount.vb" />
+    <Compile Include="Models\CRUDs\Old CRUDs\MarketIndexVersion.vb" />
+    <Compile Include="Models\CRUDs\Old CRUDs\MarketPrice.vb" />
     <Compile Include="Models\dll Interfaces\FDLL_Interface.vb" />
     <Compile Include="Models\dll Interfaces\PSDLLL_Interface.vb" />
     <Compile Include="Models\Mappings\AccountTypesMapping.vb" />
@@ -425,8 +426,7 @@
     </Compile>
     <Compile Include="Modules\PLATFORM MANAGEMENT\Currencies\Controller\ExchangeRatesController.vb" />
     <Compile Include="Modules\Versions Selection\Controler\VersionSelection.vb" />
-    <Compile Include="Models\CRUDs\Version.vb" />
-    <Compile Include="Models\CRUDs\Period.vb" />
+    <Compile Include="Models\CRUDs\Old CRUDs\Period.vb" />
     <Compile Include="Modules\PLATFORM MANAGEMENT\Entities\CONTROLER\EntitiesController.vb" />
     <Compile Include="Modules\PLATFORM MANAGEMENT\Accounts\Controller\AccountsController.vb" />
     <Compile Include="Modules\PLATFORM MANAGEMENT\Accounts\Views\NewAccountUI.Designer.vb">
@@ -435,14 +435,10 @@
     <Compile Include="Modules\PLATFORM MANAGEMENT\Accounts\Views\NewAccountUI.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Controllers\DataModel.vb" />
-    <Compile Include="Models\CRUDs\Currency.vb" />
-    <Compile Include="Models\CRUDs\ExchangeRate.vb" />
-    <Compile Include="Models\CRUDs\RateVersion.vb" />
+    <Compile Include="Models\CRUDs\New CRUDs\Currency.vb" />
+    <Compile Include="Models\CRUDs\Old CRUDs\RateVersion.vb" />
     <Compile Include="Models\Mappings\ExtraDataMapping.vb" />
     <Compile Include="Models\Mappings\FormulaTypesMapping.vb" />
-    <Compile Include="Transactions\SQLDataViews.vb" />
-    <Compile Include="Transactions\SQLEntitiesViews.vb" />
     <Compile Include="Transactions\SQLLog.vb" />
     <Compile Include="Modules\PLATFORM MANAGEMENT\Axis Super Classes\Views\AnalysisAxisDGV.Designer.vb">
       <DependentUpon>AnalysisAxisDGV.vb</DependentUpon>
@@ -531,16 +527,13 @@
     <Compile Include="Modules\PLATFORM MANAGEMENT\Entities\VIEW\NewEntityUI.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Models\Mappings\ExchangeRatesMapping.vb" />
     <Compile Include="Models\Mappings\RateVersionsMapping.vb" />
-    <Compile Include="Models\Mappings\CurrenciesMapping.vb" />
     <Compile Include="Modules\PLATFORM MANAGEMENT\Users\Views\NewUserUI.Designer.vb">
       <DependentUpon>NewUserUI.vb</DependentUpon>
     </Compile>
     <Compile Include="Modules\PLATFORM MANAGEMENT\Users\Views\NewUserUI.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Transactions\SQLEntities.vb" />
     <Compile Include="Modules\PLATFORM MANAGEMENT\Entities\VIEW\EntitiesDGV.vb" />
     <Compile Include="Utilities\PasswordGenerator.vb" />
     <Compile Include="Modules\PLATFORM MANAGEMENT\Users\Controller\UsersController.vb" />
@@ -557,7 +550,6 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Modules\PLATFORM MANAGEMENT\Versions\Controller\DataVersionsController.vb" />
-    <Compile Include="Models\Mappings\VersionsMapping.vb" />
     <Compile Include="Models\Mappings\FormatsMapping.vb" />
     <Compile Include="Transactions\DataBaseDataDownloader.vb" />
     <Compile Include="Modules\CONNECTIONS\Models\ModelServer.vb" />
@@ -582,7 +574,6 @@
     <Compile Include="Modules\REPORTS UPLOAD\VIEW\ManualRangesSelectionUI.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Transactions\SQLVersions.vb" />
     <Compile Include="Models\Computing\ModelFormulasMGT.vb" />
     <Compile Include="Modules\CONTROLING UI\View\ControllingUI_2.Designer.vb">
       <DependentUpon>ControllingUI_2.vb</DependentUpon>

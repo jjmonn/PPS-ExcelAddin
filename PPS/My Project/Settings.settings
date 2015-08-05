@@ -3,7 +3,7 @@
   <Profiles />
   <Settings>
     <Setting Name="serverIp" Type="System.String" Scope="User">
-      <Value Profile="(Default)">52.18.230.208</Value>
+      <Value Profile="(Default)">52.18.31.221</Value>
     </Setting>
     <Setting Name="version_id" Type="System.String" Scope="User">
       <Value Profile="(Default)">vto</Value>
@@ -25,6 +25,15 @@
     </Setting>
     <Setting Name="oldPort" Type="System.String" Scope="User">
       <Value Profile="(Default)">3306</Value>
+    </Setting>
+    <Setting Name="tablesFontSize" Type="System.UInt32" Scope="User">
+      <Value Profile="(Default)">8</Value>
+    </Setting>
+    <Setting Name="mainCurrency" Type="System.UInt32" Scope="User">
+      <Value Profile="(Default)">3</Value>
+    </Setting>
+    <Setting Name="mainCurrencyName" Type="System.String" Scope="User">
+      <Value Profile="(Default)">EUR</Value>
     </Setting>
   </Settings>
 </SettingsFile>

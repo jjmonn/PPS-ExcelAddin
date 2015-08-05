@@ -33,7 +33,6 @@ Friend Class EntitiesController
     Private entitiesTV As New TreeView
     Private categoriesTV As New TreeView
     Private NewEntityView As NewEntityUI
-    Private EntitiesDeletion As New SQLEntities
     Private PlatformMGTUI As PlatformMGTGeneralUI
 
     ' Variables

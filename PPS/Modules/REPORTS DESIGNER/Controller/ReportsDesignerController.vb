@@ -144,23 +144,25 @@ Friend Class ReportsDesignerController
 
 #End Region
 
-    Protected Friend Sub CreateReport(ByRef name As String)
+    Friend Sub CreateReport(ByRef name As String)
 
-        Dim id As String = TreeViewsUtilities.GetNewNodeKey(ReportsTV, REPORTS_TOKEN_SIZE)
         Dim HT As New Hashtable
-        HT.Add(REPORTS_ID_VAR, id)
         HT.Add(REPORTS_NAME_VAR, name)
         HT.Add(ITEMS_POSITIONS, 1)
         Reports.CreateReport(HT)
-        ReportsTV.Nodes.Add(id, name, 0, 0)
-        positions_dictionary = TreeViewsUtilities.GeneratePositionsDictionary(ReportsTV)
-        Reports.UpdateReport(id, ITEMS_POSITIONS, positions_dictionary(id))
-        ReportsTV.SelectedNode = ReportsTV.Nodes.Find(id, True)(0)
-        View.DisplayPreviewChart(Reports.GetSerieHT(id), ReportsTV.SelectedNode)
+
+        ' below -> after create
+        ' priority normal , new crud to be implemented !!!
+
+        'ReportsTV.Nodes.Add(id, name, 0, 0)
+        'positions_dictionary = TreeViewsUtilities.GeneratePositionsDictionary(ReportsTV)
+        'Reports.UpdateReport(id, ITEMS_POSITIONS, positions_dictionary(id))
+        'ReportsTV.SelectedNode = ReportsTV.Nodes.Find(id, True)(0)
+        'View.DisplayPreviewChart(Reports.GetSerieHT(id), ReportsTV.SelectedNode)
 
     End Sub
 
-    Protected Friend Sub DeleteReport(ByRef reports_node As TreeNode)
+    Friend Sub DeleteReport(ByRef reports_node As TreeNode)
 
         For Each node In reports_node.Nodes
             Reports.DeleteReport(node.Name)
@@ -172,37 +174,39 @@ Friend Class ReportsDesignerController
 
     End Sub
 
-    Protected Friend Sub CreateSerie(ByRef reports_node As TreeNode, ByRef name As String)
+    Friend Sub CreateSerie(ByRef reports_node As TreeNode, ByRef name As String)
 
-        Dim id As String = TreeViewsUtilities.GetNewNodeKey(ReportsTV, REPORTS_TOKEN_SIZE)
         Dim HT As New Hashtable
-        HT.Add(REPORTS_ID_VAR, id)
         HT.Add(REPORTS_PARENT_ID_VAR, reports_node.Name)
         HT.Add(REPORTS_NAME_VAR, name)
         HT.Add(ITEMS_POSITIONS, 1)
         Reports.CreateReport(HT)
-        reports_node.Nodes.Add(id, name, 1, 1)
-        positions_dictionary = TreeViewsUtilities.GeneratePositionsDictionary(ReportsTV)
-        Reports.UpdateReport(id, ITEMS_POSITIONS, positions_dictionary(id))
-        ReportsTV.SelectedNode = ReportsTV.Nodes.Find(id, True)(0)
-        View.DisplayPreviewChart(Reports.GetSerieHT(ReportsTV.SelectedNode.Parent.Name), ReportsTV.SelectedNode.Parent)
+
+        ' below -> after create
+        ' priority normal , new crud to be implemented !!! 
+
+        'reports_node.Nodes.Add(id, name, 1, 1)
+        'positions_dictionary = TreeViewsUtilities.GeneratePositionsDictionary(ReportsTV)
+        'Reports.UpdateReport(id, ITEMS_POSITIONS, positions_dictionary(id))
+        'ReportsTV.SelectedNode = ReportsTV.Nodes.Find(id, True)(0)
+        'View.DisplayPreviewChart(Reports.GetSerieHT(ReportsTV.SelectedNode.Parent.Name), ReportsTV.SelectedNode.Parent)
 
     End Sub
 
-    Protected Friend Function GetSerieHT(ByRef serie_id As String)
+    Friend Function GetSerieHT(ByRef serie_id As String)
 
         Return Reports.GetSerieHT(serie_id)
 
     End Function
 
-    Protected Friend Sub UpdateName(ByRef node As TreeNode, ByRef name As String)
+    Friend Sub UpdateName(ByRef node As TreeNode, ByRef name As String)
 
         Reports.UpdateReport(node.Name, REPORTS_NAME_VAR, name)
         node.Text = name
 
     End Sub
 
-    Protected Friend Sub DeleteSerie(ByRef serie_node As TreeNode)
+    Friend Sub DeleteSerie(ByRef serie_node As TreeNode)
 
         Reports.DeleteReport(serie_node.Name)
         View.DisplayPreviewChart(Reports.GetSerieHT(serie_node.Parent.Name), serie_node.Parent)

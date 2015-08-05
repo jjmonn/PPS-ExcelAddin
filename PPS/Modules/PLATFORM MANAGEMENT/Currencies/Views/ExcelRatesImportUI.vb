@@ -7,7 +7,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 05/02/2015
+' Last modified: 05/08/2015
 
 
 Imports Microsoft.Office.Interop
@@ -34,7 +34,7 @@ Friend Class ExcelRatesImportUI
 #Region "Initialize"
 
     Friend Sub New(ByRef inputController As ExchangeRatesController, _
-                   ByRef input_items_list As List(Of String))
+                   ByRef input_items_list As List(Of UInt32))
 
         ' This call is required by the designer.
         InitializeComponent()
@@ -42,7 +42,7 @@ Friend Class ExcelRatesImportUI
         ' Add any initialization after the InitializeComponent() call.
         Controller = inputController
         For Each item In input_items_list
-            If item <> MAIN_CURRENCY Then items_CB.Items.Add(item)
+            If item <> My.Settings.mainCurrency Then items_CB.Items.Add(item)
         Next
 
     End Sub

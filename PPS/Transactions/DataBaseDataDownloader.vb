@@ -696,7 +696,7 @@
 '                                                                As Dictionary(Of String, Dictionary(Of Int32, Dictionary(Of String, Double)))
 
 '        Dim rates_dic As New Dictionary(Of String, Dictionary(Of Int32, Dictionary(Of String, Double)))
-'        Dim versions As New Version
+'
 '        Dim rates_version_id As String = versions.ReadVersion(version_id, VERSIONS_RATES_VERSION_ID_VAR)
 '        Dim ExchangeRates As New ExchangeRate(rates_version_id)
 '        Dim reverse_flag As Boolean = False
@@ -710,7 +710,7 @@
 
 '            Dim currencies_token As String = original_currency & CURRENCIES_SEPARATOR & destination_currency
 '            reverse_flag = False
-'            If destination_currency <> MAIN_CURRENCY Then reverse_flag = True
+'            If destination_currency <> my.settings.mainCurrency Then reverse_flag = True
 
 '            ' !! Attention stub car besoin d'une fonction supp qui créé les taux 
 '            ' -> NOK/USD par exemple (en passant par la main currency) -> à voir car il y a le reverse token

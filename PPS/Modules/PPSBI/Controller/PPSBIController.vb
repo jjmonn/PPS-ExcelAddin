@@ -179,11 +179,11 @@ Friend Class PPSBIController
     End Function
 
     Private Function CheckVersion(ByRef version_name As Object, _
-                               ByRef version_id As String) As String
+                                  ByRef version_id As String) As String
 
         If Not version_name Is Nothing Then
             Dim versionString As String = ReturnValueFromRange(version_name)
-            version_id = VersionsMapping.GetVersionsIDFromName(versionString)
+            version_id = GlobalVariables.Versions.GetVersionsIDFromName(versionString)
             If version_id <> "" Then Return True Else Return False
         Else
             version_id = GlobalVariables.GLOBALCurrentVersionCode

@@ -99,7 +99,7 @@ Friend Class SubmissionsControlsController
 
         View.EntityTB.Text = EntitiesTV.Nodes.Find(entity_id, True)(0).Text
         View.VersionTB.Text = GlobalVariables.Version_label_Sub_Ribbon.Text
-        View.CurrencyTB.Text = MAIN_CURRENCY
+        View.CurrencyTB.Text = my.settings.mainCurrency
 
     End Sub
 

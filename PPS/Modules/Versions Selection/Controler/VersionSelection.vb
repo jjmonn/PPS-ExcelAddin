@@ -41,9 +41,9 @@ Friend Class VersionSelection
 
         View = inputView
         versionsTV.ImageList = inputimagelist
-        Version.LoadVersionsTree(versionsTV)
+        GlobalVariables.Versions.LoadVersionsTV(versionsTV)
         versionsTV.CollapseAll()
-        versions_id_list = VersionsMapping.GetVersionsList(RATES_VERSIONS_ID_VARIABLE)
+        versions_id_list = GlobalVariables.Versions.versions_hash.Keys
 
         AddHandler versionsTV.NodeMouseDoubleClick, AddressOf VersionsTV_NodeMouseDoubleClick
         AddHandler versionsTV.KeyPress, AddressOf VersionsTV_KeyPress
@@ -81,11 +81,10 @@ Friend Class VersionSelection
 
 #End Region
 
-    Private Sub SetAssociatedRatesVersion_id(ByRef version_id As String)
 
-        Dim Versions As New Version
-        GlobalVariables.GLOBALCurrentRatesVersionCode = Versions.ReadVersion(version_id, VERSIONS_RATES_VERSION_ID_VAR)
-        Versions.Close()
+    Private Sub SetAssociatedRatesVersion_id(ByRef version_id As UInt32)
+
+        GlobalVariables.GLOBALCurrentRatesVersionCode = GlobalVariables.Versions.versions_hash(version_id)(VERSIONS_RATES_VERSION_ID_VAR)
         Dim RatesVersions As New RateVersion
         GlobalVariables.Rates_Version_Label.Caption = RatesVersions.ReadVersion(GlobalVariables.GLOBALCurrentRatesVersionCode, NAME_VARIABLE)
         RatesVersions = Nothing

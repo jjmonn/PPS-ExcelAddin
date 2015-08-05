@@ -39,7 +39,7 @@ Friend Class DataGridViewsUtil
     ' Variables
     Private EntitiesTokenNamesDict As Hashtable
     Private AccountNamesKeysDic As Hashtable
-    Private currencies_symbol_dict As Dictionary(Of String, String)
+    Private currencies_symbol_dict As Hashtable
 
     ' Constants
     Private FIXED_SINGLE_HIERARCHY_COLUMN_WIDTH As Single = 100
@@ -62,7 +62,7 @@ Friend Class DataGridViewsUtil
 
         EntitiesTokenNamesDict = GlobalVariables.Entities.GetEntitiesDictionary(ID_VARIABLE, NAME_VARIABLE)
         AccountNamesKeysDic = globalvariables.accounts.GetAccountsDictionary(NAME_VARIABLE, ID_VARIABLE)
-        currencies_symbol_dict = CurrenciesMapping.getCurrenciesDict(CURRENCIES_KEY_VARIABLE, CURRENCIES_SYMBOL_VARIABLE)
+        currencies_symbol_dict = GlobalVariables.Currencies.GetCurrenciesDict(CURRENCIES_KEY_VARIABLE, CURRENCIES_SYMBOL_VARIABLE)
 
     End Sub
 
@@ -315,7 +315,7 @@ Friend Class DataGridViewsUtil
 
     ' Initializes VDatagridViewColumns for NO VERSIONNING DGV 
     Friend Shared Function CreateDGVColumns(ByRef DataGridView As vDataGridView, _
-                                             ByRef periodList() As Integer, _
+                                             ByRef periodList() As UInt32, _
                                              ByRef timeConfig As String, _
                                              ByRef columns_reinit As Boolean) As Dictionary(Of Integer, Int32)
 
@@ -345,10 +345,10 @@ Friend Class DataGridViewsUtil
     ' Param periodList(): array of periods to be displayed
     ' Param Versions(): array of the versions to be displayed
     Friend Shared Function CreateDGVColumns(ByRef DataGridView As vDataGridView, _
-                                     ByRef periodList() As Integer, _
-                                     ByRef Versions() As String, _
-                                     ByRef timeConfig As String) _
-                                     As Dictionary(Of Integer, Int32)
+                                             ByRef periodList() As UInt32, _
+                                             ByRef Versions() As UInt32, _
+                                             ByRef timeConfig As String) _
+                                             As Dictionary(Of Integer, Int32)
 
         DataGridView.ColumnsHierarchy.Clear()
         Dim tmpDict As New Dictionary(Of Integer, Int32)
@@ -500,7 +500,7 @@ Friend Class DataGridViewsUtil
 
 #Region "Alternative Scenarios Report DGV Utility"
 
-    Protected Friend Shared Function CreateASDGVReport(ByRef period_list As List(Of Integer), ByRef time_config As String) As vDataGridView
+    Protected Friend Shared Function CreateASDGVReport(ByRef period_list As List(Of UInt32), ByRef time_config As String) As vDataGridView
 
         Dim DGV As New vDataGridView
         DGV.VIBlendTheme = BASIC_DGV_REPORT_THEME

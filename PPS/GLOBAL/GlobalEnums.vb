@@ -53,7 +53,6 @@
 
     End Enum
 
-
     Enum DataMapAxis
 
         FILTERS = 1
@@ -62,6 +61,39 @@
         ACCOUNTS
         YEARS
         MONTHS
+
+    End Enum
+
+    Enum TimeConfig
+
+        YEARS = 1
+        MONTHS
+
+    End Enum
+
+    Enum VersionComparisonConfig
+
+        Y_VERSIONS_COMPARISON = 1
+        M_VERSIONS_COMPARISON
+        Y_M_VERSIONS_COMPARISON
+
+    End Enum
+
+    Enum GlobalModels
+
+        ACCOUNTS = 1
+        ENTITIES
+        FILTERS
+        FILTERSVALUES
+        CLIENTS
+        PRODUCTS
+        ADJUSTMENTS
+        ENTITIESFILTERS
+        CLIENTSFILTERS
+        PRODUCTSFILTERS
+        ADJUSTMENTSFILTERS
+        FACTSVERSIONS
+
 
     End Enum
 

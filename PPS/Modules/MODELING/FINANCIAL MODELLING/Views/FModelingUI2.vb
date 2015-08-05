@@ -139,7 +139,7 @@ Friend Class FModelingUI2
         SimulationsController.periods_list = input_period_list.ToArray
         SimulationsController.version_id = version_id
         ExportsController.UpdatePeriodList(input_period_list.ToArray)
-        SimulationsController.setCartoucheValues(version_name, MAIN_CURRENCY)
+        SimulationsController.setCartoucheValues(version_name, my.settings.mainCurrency)
 
     End Sub
 

@@ -44,24 +44,24 @@ Friend Class ChartsControlsController
 
 #Region "Interface"
 
-    Protected Friend Sub InitializeDisplay(ByRef input_view As ControlsControl)
+    Friend Sub InitializeDisplay(ByRef input_view As ControlsControl)
 
         View = input_view
         View.DisplayChartsInit(ChartsTV)
 
     End Sub
 
-    Protected Friend Sub CreateControlChart(ByRef name As String)
+    Friend Sub CreateControlChart(ByRef name As String)
 
-        Dim id As String = TreeViewsUtilities.GetNewNodeKey(ChartsTV, CONTROL_CHARTS_TOKEN_SIZE)
         Dim HT As New Hashtable
-        HT.Add(CONTROL_CHART_ID_VARIABLE, id)
         HT.Add(CONTROL_CHART_NAME_VARIABLE, name)
         HT.Add(ITEMS_POSITIONS, 1)
         ControlCharts.CreateControlChart(HT)
-        ChartsTV.Nodes.Add(id, name, 0, 0)
-        positions_dictionary = TreeViewsUtilities.GeneratePositionsDictionary(ChartsTV)
-        ControlCharts.UpdateControlChart(id, ITEMS_POSITIONS, positions_dictionary(id))
+
+        ' after update  priority normal to be implemented !!! 
+        'ChartsTV.Nodes.Add(id, name, 0, 0)
+        'positions_dictionary = TreeViewsUtilities.GeneratePositionsDictionary(ChartsTV)
+        'ControlCharts.UpdateControlChart(id, ITEMS_POSITIONS, positions_dictionary(id))
 
     End Sub
 
@@ -71,13 +71,13 @@ Friend Class ChartsControlsController
 
     End Function
 
-    Protected Friend Sub UpdateChartName(ByRef controlchart_id As String, ByRef name As String)
+    Friend Sub UpdateChartName(ByRef controlchart_id As String, ByRef name As String)
 
         ControlCharts.UpdateControlChart(controlchart_id, CONTROL_CHART_NAME_VARIABLE, name)
 
     End Sub
 
-    Protected Friend Sub DeleteChart(ByRef controlchart_node As TreeNode)
+    Friend Sub DeleteChart(ByRef controlchart_node As TreeNode)
 
         For Each node In controlchart_node.Nodes
             ControlCharts.DeleteControlChart(node.Name)
@@ -89,18 +89,18 @@ Friend Class ChartsControlsController
 
     End Sub
 
-    Protected Friend Sub CreateSerie(ByRef controlchart_node As TreeNode, ByRef name As String)
+    Friend Sub CreateSerie(ByRef controlchart_node As TreeNode, ByRef name As String)
 
-        Dim id As String = TreeViewsUtilities.GetNewNodeKey(ChartsTV, CONTROL_CHARTS_TOKEN_SIZE)
         Dim HT As New Hashtable
-        HT.Add(CONTROL_CHART_ID_VARIABLE, id)
         HT.Add(CONTROL_CHART_PARENT_ID_VARIABLE, controlchart_node.Name)
         HT.Add(CONTROL_CHART_NAME_VARIABLE, name)
         HT.Add(ITEMS_POSITIONS, 1)
         ControlCharts.CreateControlChart(HT)
-        controlchart_node.Nodes.Add(id, name, 1, 1)
-        positions_dictionary = TreeViewsUtilities.GeneratePositionsDictionary(ChartsTV)
-        ControlCharts.UpdateControlChart(id, ITEMS_POSITIONS, positions_dictionary(id))
+
+        ' after update  priority normal to be implemented !!! 
+        'controlchart_node.Nodes.Add(id, name, 1, 1)
+        'positions_dictionary = TreeViewsUtilities.GeneratePositionsDictionary(ChartsTV)
+        'ControlCharts.UpdateControlChart(id, ITEMS_POSITIONS, positions_dictionary(id))
 
     End Sub
 

@@ -77,7 +77,7 @@ Friend Class AlternativeScenariosUI
                 If sensi_tab.Text = VOLUMES_TAB_CAPTION Then
                     tmp_TabControl.TabPages.Add(sensitivity_item + " (" + sensitivities_dictionary(sensitivity_item)(GDF_SENSITIVITIES_DEST_UNIT_VAR) + ")")
                 Else
-                    tmp_TabControl.TabPages.Add(sensitivity_item + " (" + MAIN_CURRENCY + ")")
+                    tmp_TabControl.TabPages.Add(sensitivity_item + " (" + my.settings.mainCurrency + ")")
                 End If
                 Dim DGV As New vDataGridView
                 tmp_TabControl.TabPages(tab_index).Controls.Add(DGV)
@@ -158,7 +158,7 @@ Friend Class AlternativeScenariosUI
     End Sub
 
     Protected Friend Sub DisplaySensibilitiesTabs(ByRef sensitivities_results As Dictionary(Of String, Dictionary(Of String, Dictionary(Of String, Double()))), _
-                                                  ByRef period_list As List(Of Int32), _
+                                                  ByRef period_list As List(Of UInt32), _
                                                   ByRef time_config As String, _
                                                   ByRef entity_node As TreeNode)
 
@@ -271,7 +271,7 @@ Friend Class AlternativeScenariosUI
 
 #Region "Sensitivities Tab"
 
-    Private Sub SensitivitiesDGVsInitialization(ByRef period_list As List(Of Int32), _
+    Private Sub SensitivitiesDGVsInitialization(ByRef period_list As List(Of UInt32), _
                                                 ByRef time_config As String, _
                                                 ByRef entity_node As TreeNode)
 

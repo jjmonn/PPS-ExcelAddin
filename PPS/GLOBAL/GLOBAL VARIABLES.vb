@@ -79,12 +79,12 @@ Friend Class GlobalVariables
     Friend Shared Clients As Client
     Friend Shared Products As Product
     Friend Shared Adjustments As Adjustment
-
     Friend Shared EntitiesFilters As EntitiesFilter
     Friend Shared ClientsFilters As ClientsFilter
     Friend Shared ProductsFilters As ProductsFilter
     Friend Shared AdjustmentsFilters As AdjustmentFilter
-
+    Friend Shared Versions As FactsVersion
+    Friend Shared Currencies As Currency2
 
 #End Region
 

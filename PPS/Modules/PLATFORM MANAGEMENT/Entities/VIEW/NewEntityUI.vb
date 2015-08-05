@@ -71,7 +71,7 @@ Friend Class NewEntityUI
         ' Add any initialization after the InitializeComponent() call.
         Controller = input_controller
         entitiesTV = input_entities_TV
-        currenciesList = CurrenciesMapping.getCurrenciesList(CURRENCIES_KEY_VARIABLE)
+        currenciesList = GlobalVariables.Currencies.currencies_hash.Keys
         categoriesTV = input_categories_tree
         categoriesNamesKeysDict = input_categories_name_key_dic
 

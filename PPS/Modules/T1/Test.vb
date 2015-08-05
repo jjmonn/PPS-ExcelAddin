@@ -1,67 +1,60 @@
 ﻿Public Class Test
 
+
+    Private Computer As New Computer
+
+
     Public Sub New()
 
         InitializeComponent()
         NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_TEST_ANSWER, AddressOf SMSG_TEST_ANSWER)
-        '    NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_LIST_ACCOUNT_ANSWER, AddressOf SMSG_LIST_ACCOUNT_ANSWER)
+        AddHandler Computer.ComputationAnswered, AddressOf AfterComputation
 
     End Sub
 
 
-    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
+    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles ComputeBT.Click
 
-        Dim Accounts As New Account
+        Computer.CMSG_COMPUTE_REQUEST({5}, _
+                                      2, _
+                                      3, _
+                                      , _
+                                      , _
+                                      )
 
     End Sub
 
 
-    Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
+    Private Sub AfterComputation()
 
-        '  CMSG_TEST()
-        LoadAccountsTable()
+        Dim dataMap = Computer.GetData
+
+    End Sub
+
+
+
+#Region "Test"
+
+    Private Sub Button1_Click_1(sender As Object, e As EventArgs) Handles Button1.Click
+
+        Dim packet As New ByteBuffer(CType(ClientMessage.CMSG_TEST, UShort))
+        packet.WriteString("Hello Nath !! I am a test string")
+        packet.Release()
+        NetworkManager.GetInstance().Send(packet)
 
     End Sub
 
     Private Sub SMSG_TEST_ANSWER(packet As ByteBuffer)
-        MsgBox(packet.ReadString())
 
-    End Sub
-
-    Private Sub CMSG_TEST()
-        Dim packet As New ByteBuffer(CType(ClientMessage.CMSG_TEST, UShort))
-
-        packet.WriteString("Hell Nath")
-        packet.Release()
-
-        NetworkManager.GetInstance().Send(packet)
-    End Sub
-
-    Private Sub Test_Leave(sender As Object, e As EventArgs) Handles MyBase.Leave
-
-        NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_TEST_ANSWER, AddressOf CMSG_TEST)
-        NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_LIST_ACCOUNT_ANSWER, AddressOf SMSG_LIST_ACCOUNT_ANSWER)
+        MsgBox(452.8)
+        MsgBox(packet.ReadDouble())
 
     End Sub
 
 
-    Friend Sub LoadAccountsTable()
+#End Region
 
-        Dim packet As New ByteBuffer(CType(ClientMessage.CMSG_LIST_ACCOUNT, UShort))
-        packet.Release()
-        NetworkManager.GetInstance().Send(packet)
 
-    End Sub
-
-    Private Sub SMSG_LIST_ACCOUNT_ANSWER(packet As ByteBuffer)
-
-        For i As Int32 = 0 To packet.ReadInt32()
-            '    Dim tmp_ht As New Hashtable
-            '   GetAccountHTFromPacket(packet, tmp_ht)
-            '  accounts_hash(tmp_ht(ID_VARIABLE)) = tmp_ht
-        Next
-  
-    End Sub
 
 
 End Class

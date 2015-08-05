@@ -426,7 +426,7 @@ Friend Class GeneralSubmissionControler
     End Function
 
 
-    Protected Friend Function GetPeriodsList() As List(Of Int32)
+    Protected Friend Function GetPeriodsList() As List(Of UInt32)
 
         Return Model.currentPeriodlist
 

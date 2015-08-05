@@ -64,11 +64,11 @@ Public Class ConnectionTP
         'ConnectionsFunctions.Connection(Addin, _
         '                                IDTB.Text, _
         '                                PWDTB.Text)
-        ConnectionsFunctions.NetworkConnection(My.Settings.serverIp, _
+        Dim connectionFunction As New ConnectionsFunctions
+        connectionFunction.NetworkConnection(My.Settings.serverIp, _
                                                My.Settings.port_number)
-
-
-
+        Dim initFlag As Boolean = False
+       
     End Sub
 
     Private Sub BackgroundWorker1_RunWorkerCompleted(sender As Object, e As ComponentModel.RunWorkerCompletedEventArgs) Handles BackgroundWorker1.RunWorkerCompleted
