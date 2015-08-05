@@ -2,8 +2,8 @@
 
 public enum ClientMessage : ushort
 {
-    CMSG_TEST = 0x00,
-   
+    CMSG_TEST = 0x000,
+
     CMSG_CREATE_ACCOUNT,
     CMSG_READ_ACCOUNT,
     CMSG_UPDATE_ACCOUNT,
@@ -71,10 +71,8 @@ public enum ClientMessage : ushort
     CMSG_LIST_RATE_VERSION,
 
     CMSG_CREATE_FACT,
-    CMSG_READ_FACT,
     CMSG_UPDATE_FACT,
     CMSG_DELETE_FACT,
-    CMSG_LIST_FACT,
 
     CMSG_CREATE_FILTER,
     CMSG_READ_FILTER,
@@ -97,6 +95,7 @@ public enum ClientMessage : ushort
     CMSG_AUTH_REQUEST,
     CMSG_LOGOUT,
     CMSG_COMPUTE_REQUEST,
+
     OpcodeMax
 
 }

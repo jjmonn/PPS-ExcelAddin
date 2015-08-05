@@ -52,6 +52,11 @@ public class ByteBuffer : MemoryStream
         Write(BitConverter.GetBytes(value), 0, 4);
     }
 
+    public void WriteDouble(double value)
+    {
+        Write(BitConverter.GetBytes(value), 0, sizeof(double));
+    }
+
     public void WriteString(String value)
     {
         byte[] tmp = System.Text.Encoding.UTF8.GetBytes(value);
@@ -65,7 +70,10 @@ public class ByteBuffer : MemoryStream
     }
     public Byte ReadUint8()
     {
-        return (Byte)ReadByte();
+        byte[] tmp = new byte[1];
+        Read(tmp, 0, 1);
+
+        return tmp[0];
     }
 
     public UInt16 ReadUint16()
