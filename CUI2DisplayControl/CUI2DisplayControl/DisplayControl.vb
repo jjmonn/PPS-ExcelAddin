@@ -7,7 +7,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 29/07/2015
+' Last modified: 03/08/2015
 
 
 
@@ -87,8 +87,10 @@ Public Class DisplayControl
         'The target node should be selected from the DragOver event
         Dim targetNode As TreeNode = selectedTreeview.SelectedNode
 
-        If selectedTreeview.Nodes.Find(dropNode.Name, True).Count = 0 Then _
+        If columns_display_tv.Nodes.Find(dropNode.Name, True).Count = 0 _
+        AndAlso rows_display_tv.Nodes.Find(dropNode.Name, True).Count = 0 Then
             selectedTreeview.Nodes.Add(dropNode.Name, dropNode.Text)
+        End If
 
     End Sub
 
