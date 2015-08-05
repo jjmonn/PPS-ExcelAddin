@@ -237,12 +237,12 @@ Friend Class Entity
 
     Friend Shared Sub GetEntityHTFromPacket(ByRef packet As ByteBuffer, ByRef entity_ht As Hashtable)
 
-        entity_ht(ID_VARIABLE) = packet.ReadInt32()
-        entity_ht(PARENT_ID_VARIABLE) = packet.ReadInt32()
-        entity_ht(ENTITIES_CURRENCY_VARIABLE) = packet.ReadInt32()
+        entity_ht(ID_VARIABLE) = packet.ReadUint32()
+        entity_ht(PARENT_ID_VARIABLE) = packet.ReadUint32()
+        entity_ht(ENTITIES_CURRENCY_VARIABLE) = packet.ReadUint32()
         entity_ht(NAME_VARIABLE) = packet.ReadString()
-        entity_ht(ITEMS_POSITIONS) = packet.ReadInt32()
-        entity_ht(ENTITIES_ALLOW_EDITION_VARIABLE) = packet.ReadInt32()
+        entity_ht(ITEMS_POSITIONS) = packet.ReadUint32()
+        entity_ht(ENTITIES_ALLOW_EDITION_VARIABLE) = packet.ReadBool()
         entity_ht(IMAGE_VARIABLE) = entity_ht(ENTITIES_ALLOW_EDITION_VARIABLE)
 
     End Sub
@@ -254,7 +254,7 @@ Friend Class Entity
         packet.WriteInt32(attributes(ENTITIES_CURRENCY_VARIABLE))
         packet.WriteString(attributes(NAME_VARIABLE))
         packet.WriteInt32(attributes(ITEMS_POSITIONS))
-        packet.WriteInt32(attributes(ENTITIES_ALLOW_EDITION_VARIABLE))
+        packet.WriteUint8(attributes(ENTITIES_ALLOW_EDITION_VARIABLE))
 
     End Sub
 
