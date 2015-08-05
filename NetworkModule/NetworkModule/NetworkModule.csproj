@@ -33,7 +33,7 @@
     <SignAssembly>true</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>Network.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>network.pfx</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -54,6 +54,8 @@
     <Compile Include="ServerMessage.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="network vvf1.pfx" />
+    <None Include="network.pfx" />
     <None Include="Network.snk" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

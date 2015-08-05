@@ -18,16 +18,16 @@ public class NetworkManager
     public NetworkManager()
     {
         m_Sock = new TcpClient();
-        m_callback = new List<Action<ByteBuffer>>[(byte)ClientMessage.OpcodeMax];
+        m_callback = new List<Action<ByteBuffer>>[(byte)ServerMessage.OpcodeMax];
     }
 
     public void SetCallback(UInt16 p_opcodeId, Action<ByteBuffer> p_newCallback)
     {
-        if (p_opcodeId > (byte)ClientMessage.OpcodeMax)
+        if (p_opcodeId > (byte)ServerMessage.OpcodeMax)
             return;
         if (m_callback[p_opcodeId] == null)
             m_callback[p_opcodeId] = new List<Action<ByteBuffer>>();
-        for (int i = 0; i < (byte)ClientMessage.OpcodeMax; i++)
+        for (int i = 0; i < (byte)ServerMessage.OpcodeMax; i++)
         {
             if (m_callback[i] != null && m_callback[i].Contains(p_newCallback))
                 return;
@@ -37,14 +37,14 @@ public class NetworkManager
 
     public List<Action<ByteBuffer>> GetCallback(UInt16 p_opcodeId)
     {
-        if (p_opcodeId < (byte)ClientMessage.OpcodeMax)
+        if (p_opcodeId < (byte)ServerMessage.OpcodeMax)
             return (m_callback[p_opcodeId]);
         return (null);
     }
 
     public void RemoveCallback(int p_opcode, Action<ByteBuffer> p_oldCallback)
     {
-        if (p_opcode > (byte)ClientMessage.OpcodeMax)
+        if (p_opcode > (byte)ServerMessage.OpcodeMax)
             return;
         if (m_callback[p_opcode] != null)
             m_callback[p_opcode].Remove(p_oldCallback);
