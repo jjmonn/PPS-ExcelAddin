@@ -57,10 +57,10 @@ Friend Class Entity
     Private Sub SMSG_LIST_ENTITY_ANSWER(packet As ByteBuffer)
 
         If packet.ReadInt32() = 0 Then
-            For i As Int32 = 0 To packet.ReadInt32()
+            For i As Int32 = 1 To packet.ReadInt32()
                 Dim tmp_ht As New Hashtable
                 GetEntityHTFromPacket(packet, tmp_ht)
-                entities_hash(tmp_ht(ID_VARIABLE)) = tmp_ht
+                entities_hash(CInt(tmp_ht(ID_VARIABLE))) = tmp_ht
             Next
             NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_LIST_ENTITY_ANSWER, AddressOf SMSG_LIST_ENTITY_ANSWER)
             server_response_flag = True
@@ -243,17 +243,21 @@ Friend Class Entity
         entity_ht(NAME_VARIABLE) = packet.ReadString()
         entity_ht(ITEMS_POSITIONS) = packet.ReadUint32()
         entity_ht(ENTITIES_ALLOW_EDITION_VARIABLE) = packet.ReadBool()
-        entity_ht(IMAGE_VARIABLE) = entity_ht(ENTITIES_ALLOW_EDITION_VARIABLE)
+        If entity_ht(ENTITIES_ALLOW_EDITION_VARIABLE) = True Then
+            entity_ht(IMAGE_VARIABLE) = 1
+        Else
+            entity_ht(IMAGE_VARIABLE) = 0
+        End If
 
     End Sub
 
     Private Sub WriteEntityPacket(ByRef packet As ByteBuffer, ByRef attributes As Hashtable)
 
-        If attributes.ContainsKey(ID_VARIABLE) Then packet.WriteInt32(attributes(ID_VARIABLE))
-        packet.WriteInt32(attributes(PARENT_ID_VARIABLE))
-        packet.WriteInt32(attributes(ENTITIES_CURRENCY_VARIABLE))
+        If attributes.ContainsKey(ID_VARIABLE) Then packet.WriteUint32(attributes(ID_VARIABLE))
+        packet.WriteUint32(attributes(PARENT_ID_VARIABLE))
+        packet.WriteUint32(attributes(ENTITIES_CURRENCY_VARIABLE))
         packet.WriteString(attributes(NAME_VARIABLE))
-        packet.WriteInt32(attributes(ITEMS_POSITIONS))
+        packet.WriteUint32(attributes(ITEMS_POSITIONS))
         packet.WriteUint8(attributes(ENTITIES_ALLOW_EDITION_VARIABLE))
 
     End Sub
