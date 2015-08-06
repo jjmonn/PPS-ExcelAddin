@@ -11,7 +11,7 @@ Imports System.Collections.Generic
 '
 ' Author: Julien Monnereau
 ' Created: 23/07/2015
-' Last modified: 03/08/2015
+' Last modified: 05/08/2015
 
 
 
@@ -25,6 +25,7 @@ Friend Class AdjustmentFilter
     Friend server_response_flag As Boolean
     Friend adjustmentsFilters_list As New List(Of Hashtable)
     Private request_id As Dictionary(Of UInt32, Boolean)
+    Private fIdFvDict As New Dictionary(Of String, UInt32)
 
     ' Events
     Public Event ObjectInitialized()
@@ -56,10 +57,11 @@ Friend Class AdjustmentFilter
     Private Sub SMSG_LIST_ADJUSTMENT_FILTER_ANSWER(packet As ByteBuffer)
 
         If packet.ReadInt32() = 0 Then
-            For i As Int32 = 0 To packet.ReadInt32()
+            For i As Int32 = 1 To packet.ReadInt32()
                 Dim tmp_ht As New Hashtable
                 GetAdjustmentFilterHTFromPacket(packet, tmp_ht)
-                adjustmentsFilters_list(tmp_ht(ID_VARIABLE)) = tmp_ht
+                adjustmentsFilters_list.Add(tmp_ht)
+                fIdFvDict.Add(tmp_ht(ADJUSTMENT_ID_VARIABLE) & tmp_ht(FILTER_ID_VARIABLE), tmp_ht(FILTER_VALUE_ID_VARIABLE))
             Next
             NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_LIST_ADJUSTMENT_FILTER_ANSWER, AddressOf SMSG_LIST_ADJUSTMENT_FILTER_ANSWER)
             server_response_flag = True
@@ -197,6 +199,13 @@ Friend Class AdjustmentFilter
             End If
         Next
         Return adjustments_list
+
+    End Function
+
+    Friend Function GetFilterValue(ByRef adjustment_id As UInt32, _
+                                   ByRef filter_id As UInt32)
+
+        Return fIdFvDict(adjustment_id & filter_id)
 
     End Function
 

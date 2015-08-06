@@ -48,9 +48,9 @@ Friend Class Period
 
     Friend Shared Function GetYearsList(ByRef startPeriod As UInt32, _
                                          ByRef nbPeriod As UInt16, _
-                                         ByRef timeConfig As UInt16) As UInt32()
+                                         ByRef timeConfig As UInt16) As Int32()
 
-        Dim periodsList(nbPeriod - 1) As UInt32
+        Dim periodsList(nbPeriod - 1) As Int32
         periodsList(0) = startPeriod
 
         If timeConfig = GlobalEnums.TimeConfig.MONTHS Then
@@ -74,9 +74,9 @@ Friend Class Period
     End Function
 
     Friend Shared Function GetMonthsList(ByRef startPeriod As UInt32, _
-                                        ByRef nbPeriod As UInt16) As UInt32()
+                                        ByRef nbPeriod As UInt16) As Int32()
 
-        Dim periodsList As New List(Of UInt32)
+        Dim periodsList As New List(Of Int32)
         Dim monthList() As UInt16 = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31}
         Dim year As Double = CDbl(startPeriod) / 365.25 + 1900
         Dim Month As UInt16 = year - Int(year)

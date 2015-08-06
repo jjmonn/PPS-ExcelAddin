@@ -23,7 +23,7 @@ Friend Class LogModel
 
 #Region "Interface"
 
-    Friend Function GetPeriodList(ByRef version_id As String) As UInt32()
+    Friend Function GetPeriodList(ByRef version_id As String) As Int32()
 
         Return GlobalVariables.Versions.GetPeriodsList(version_id)
 

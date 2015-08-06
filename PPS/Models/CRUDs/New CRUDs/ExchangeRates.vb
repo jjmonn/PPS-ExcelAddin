@@ -62,7 +62,7 @@ Friend Class ExchangeRate2
         If packet.ReadInt32() = 0 Then
             exchangeRates_hash.Clear()
 
-            For i As Int32 = 0 To packet.ReadInt32()
+            For i As Int32 = 1 To packet.ReadInt32()
 
                 Dim tmp_ht As New Hashtable
                 GetExchangeRateHTFromPacket(packet, tmp_ht)
@@ -274,6 +274,7 @@ Friend Class ExchangeRate2
     End Function
 
 #End Region
+
 
     Public Shared Function ReverseToken(ByRef token As String) As String
 

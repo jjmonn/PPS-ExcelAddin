@@ -56,10 +56,10 @@ Friend Class FactsVersion
 
         If packet.ReadInt32() = 0 Then
             Dim nb_versions = packet.ReadInt32()
-            For i As Int32 = 0 To nb_versions - 1
+            For i As Int32 = 1 To nb_versions
                 Dim tmp_ht As New Hashtable
                 GetVersionHTFromPacket(packet, tmp_ht)
-                versions_hash(tmp_ht(ID_VARIABLE)) = tmp_ht
+                versions_hash(CInt(tmp_ht(ID_VARIABLE))) = tmp_ht
             Next
             NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_LIST_VERSION_ANSWER, AddressOf SMSG_LIST_VERSION_ANSWER)
             state_flag = True
@@ -214,15 +214,15 @@ Friend Class FactsVersion
 
 #Region "Periods Interface"
 
-    Friend Function GetYears(ByRef versionsIdDict As Dictionary(Of UInt32, String)) As List(Of UInt32)
+    Friend Function GetYears(ByRef versionsIdDict As Dictionary(Of Int32, String)) As List(Of Int32)
 
-        Dim yearsList As New List(Of UInt32)
-        For Each versionId As UInt32 In versionsIdDict.Keys
-            Dim startPeriod As UInt32 = versions_hash(versionId)(VERSIONS_START_PERIOD_VAR)
+        Dim yearsList As New List(Of Int32)
+        For Each versionId As Int32 In versionsIdDict.Keys
+            Dim startPeriod As Int32 = versions_hash(versionId)(VERSIONS_START_PERIOD_VAR)
             Dim nbPeriods As UInt16 = versions_hash(versionId)(VERSIONS_NB_PERIODS_VAR)
             Dim timeConfig As UInt16 = versions_hash(versionId)(VERSIONS_TIME_CONFIG_VARIABLE)
 
-            For Each yearId As UInt32 In Period.GetYearsList(startPeriod, nbPeriods, timeConfig)
+            For Each yearId As Int32 In Period.GetYearsList(startPeriod, nbPeriods, timeConfig)
                 If yearsList.Contains(yearId) = False Then
                     yearsList.Add(yearId)
                 End If
@@ -233,15 +233,15 @@ Friend Class FactsVersion
 
     End Function
 
-    Friend Function GetMonths(ByRef versionsIdDict As Dictionary(Of UInt32, String)) As List(Of UInt32)
+    Friend Function GetMonths(ByRef versionsIdDict As Dictionary(Of Int32, String)) As List(Of Int32)
 
-        Dim monthsList As New List(Of UInt32)
-        For Each versionId As UInt32 In versionsIdDict.Keys
-            Dim startPeriod As UInt32 = versions_hash(versionId)(VERSIONS_START_PERIOD_VAR)
-            Dim nbPeriods As UInt16 = versions_hash(versionId)(VERSIONS_NB_PERIODS_VAR)
+        Dim monthsList As New List(Of Int32)
+        For Each versionId As Int32 In versionsIdDict.Keys
+            Dim startPeriod As Int32 = versions_hash(versionId)(VERSIONS_START_PERIOD_VAR)
+            Dim nbPeriods As Int16 = versions_hash(versionId)(VERSIONS_NB_PERIODS_VAR)
 
             If versions_hash(versionId)(VERSIONS_TIME_CONFIG_VARIABLE) = GlobalEnums.TimeConfig.MONTHS Then
-                For Each monthId As UInt32 In Period.GetMonthsList(startPeriod, nbPeriods)
+                For Each monthId As Int32 In Period.GetMonthsList(startPeriod, nbPeriods)
                     If monthsList.Contains(monthId) = False Then
                         monthsList.Add(monthId)
                     End If
@@ -253,11 +253,11 @@ Friend Class FactsVersion
 
     End Function
 
-    Friend Function GetPeriodsList(ByRef versionId As UInt32) As UInt32()
+    Friend Function GetPeriodsList(ByRef versionId As Int32) As Int32()
 
-        Dim startPeriod As UInt32 = versions_hash(versionId)(VERSIONS_START_PERIOD_VAR)
-        Dim nbPeriods As UInt16 = versions_hash(versionId)(VERSIONS_NB_PERIODS_VAR)
-        Dim timeConfig As UInt16 = versions_hash(versionId)(VERSIONS_TIME_CONFIG_VARIABLE)
+        Dim startPeriod As Int32 = versions_hash(versionId)(VERSIONS_START_PERIOD_VAR)
+        Dim nbPeriods As Int16 = versions_hash(versionId)(VERSIONS_NB_PERIODS_VAR)
+        Dim timeConfig As Int16 = versions_hash(versionId)(VERSIONS_TIME_CONFIG_VARIABLE)
 
         Select Case timeConfig
             Case GlobalEnums.TimeConfig.YEARS
@@ -271,7 +271,7 @@ Friend Class FactsVersion
 
     End Function
 
-    Friend Function GetPeriodTokensDict(ByRef versionId As UInt32) As Dictionary(Of String, String)
+    Friend Function GetPeriodTokensDict(ByRef versionId As Int32) As Dictionary(Of String, String)
 
         Dim periodsTokens As New Dictionary(Of String, String)
         Select Case versions_hash(versionId)(VERSIONS_TIME_CONFIG_VARIABLE)
@@ -283,14 +283,14 @@ Friend Class FactsVersion
                 Next
 
             Case GlobalEnums.TimeConfig.MONTHS
-                Dim monthIndex As UInt16 = 0
-                For Each monthId As UInt32 In GetPeriodsList(versionId)
+                Dim monthIndex As Int32 = 0
+                For Each monthId As Int32 In GetPeriodsList(versionId)
                     periodsTokens.Add(Computer.MONTH_PERIOD_IDENTIFIER & monthIndex, Computer.MONTH_PERIOD_IDENTIFIER & monthId)
                     monthIndex += 1
                 Next
 
-                Dim yearIndex As UInt16 = 0
-                For Each yearId As UInt32 In Period.GetYearsList(versions_hash(versionId)(VERSIONS_START_PERIOD_VAR), _
+                Dim yearIndex As Int32 = 0
+                For Each yearId As Int32 In Period.GetYearsList(versions_hash(versionId)(VERSIONS_START_PERIOD_VAR), _
                                                                  versions_hash(versionId)(VERSIONS_NB_PERIODS_VAR), _
                                                                  versions_hash(versionId)(VERSIONS_TIME_CONFIG_VARIABLE))
                     periodsTokens.Add(Computer.YEAR_PERIOD_IDENTIFIER & yearIndex, Computer.YEAR_PERIOD_IDENTIFIER & yearId)

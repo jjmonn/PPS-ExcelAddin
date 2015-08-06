@@ -44,9 +44,9 @@ Friend Class ControllingUI_2
     Private leftSplitContainer As SplitContainer
     Private rightSplitContainer As SplitContainer
     Private Accounts As New Account
-    Private CP As CircularProgressUI
+    Friend CP As CircularProgressUI
     Friend ComputingBCGWorker As New BackgroundWorker
-    Private DisplayBCGWorker As New BackgroundWorker
+    Friend DisplayBCGWorker As New BackgroundWorker
 
 #End Region
 
@@ -153,14 +153,17 @@ Friend Class ControllingUI_2
         CollapsePane1()
         DisplayFirstTreeOnly()          ' TV Table Layout
 
+        If versionsTV.Nodes.Find(My.Settings.version_id, True).Length > 0 Then
+            versionsTV.Nodes.Find(My.Settings.version_id, True)(0).Checked = True
+        End If
+
         ComputingBCGWorker.WorkerSupportsCancellation = True
-        DisplayBCGWorker.WorkerSupportsCancellation = True
+        '    DisplayBCGWorker.WorkerSupportsCancellation = True
         AddHandler ComputingBCGWorker.DoWork, AddressOf ComputingBKGWorker_DoWork
         AddHandler ComputingBCGWorker.RunWorkerCompleted, AddressOf ComputingBKGWorker_RunWorkerCompleted
         AddHandler DisplayBCGWorker.DoWork, AddressOf DisplayBKGWorker_DoWork
-        AddHandler DisplayBCGWorker.RunWorkerCompleted, AddressOf ComputingBKGWorker_RunWorkerCompleted
-
-
+        AddHandler DisplayBCGWorker.RunWorkerCompleted, AddressOf DisplayBKGWorker_RunWorkerCompleted
+     
     End Sub
 
     Private Sub LoadTrees()
@@ -191,7 +194,6 @@ Friend Class ControllingUI_2
 
         TreeViewsUtilities.set_TV_basics_icon_index(entitiesTV)
         LoadCurrencies()
-
 
         ' Add TVs events for categories clients / products !!
         AddHandler entitiesTV.NodeMouseDoubleClick, AddressOf EntitiesTV_NodeMouseDoubleClick
@@ -228,8 +230,14 @@ Friend Class ControllingUI_2
         CurrenciesCLB.CheckOnClick = True
         CurrenciesCLB.SelectionMode = SelectionMode.One
 
-        Dim currenciesList As List(Of String)
-        currenciesList = GlobalVariables.Currencies.currencies_hash.Keys
+        Dim currenciesList As New List(Of UInt32)
+        ' STUB !!!!!!!!!!
+        ' GlobalVariables.Currencies.currencies_hash.Keys
+        currenciesList.Add(1) '
+        currenciesList.Add(2)
+        currenciesList.Add(3)
+        ' -------------------------- priotiy high !!!!!!!
+
         For Each currency_ As String In currenciesList
             CurrenciesCLB.Items.Add(currency_, False)
         Next
@@ -283,10 +291,6 @@ Friend Class ControllingUI_2
         ' priority high
         Dim analysis_axis_tv As New TreeView
         analysis_axis_tv.Nodes.Add(Computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.ACCOUNTS, ACCOUNTS_CODE)
-        analysis_axis_tv.Nodes.Add(Computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.VERSIONS, VERSIONS_CODE)
-        analysis_axis_tv.Nodes.Add(Computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.YEARS, YEARS_CODE)
-        analysis_axis_tv.Nodes.Add(Computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.MONTHS, MONTHS_CODE)
-
         ' Entities Analysis Axis and Categories Nodes
         Dim entities_node As TreeNode = analysis_axis_tv.Nodes.Add(Computer.AXIS_DECOMPOSITION_IDENTIFIER _
                                                                    & GlobalEnums.AnalysisAxis.ENTITIES, _
@@ -296,6 +300,11 @@ Friend Class ControllingUI_2
                                     & entity_node.Name, _
                                     entity_node.Text)
         Next
+
+        analysis_axis_tv.Nodes.Add(Computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.YEARS, YEARS_CODE)
+        analysis_axis_tv.Nodes.Add(Computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.MONTHS, MONTHS_CODE)
+        analysis_axis_tv.Nodes.Add(Computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.VERSIONS, VERSIONS_CODE)
+
 
         ' Clients Analysis Axis and Categories Nodes
         Dim clients_node As TreeNode = analysis_axis_tv.Nodes.Add(Computer.AXIS_DECOMPOSITION_IDENTIFIER _
@@ -337,8 +346,13 @@ Friend Class ControllingUI_2
 
     Private Sub RefreshData(ByRef entityNode As TreeNode)
 
-        Controller.Entity_node = entityNode
+        ' check that 1 version is selected at least
+        ' + attention => it seems that we can select folder versions !! 
+        ' priority high !!! 
+
+        Controller.EntityNode = entityNode
         CP = New CircularProgressUI(System.Drawing.Color.Blue, "Computing")
+        '  CP.Show()
         ComputingBCGWorker.RunWorkerAsync()
         
     End Sub
@@ -776,8 +790,8 @@ Friend Class ControllingUI_2
 
     Private Sub Refresh_Click(sender As Object, e As EventArgs) Handles RefreshMenuBT.Click, RefreshMenuBT2.Click
 
-        If Not Controller.Entity_node Is Nothing Then
-            RefreshData(entitiesTV.Nodes.Find(Controller.Entity_node.Name, True)(0))
+        If Not Controller.EntityNode Is Nothing Then
+            RefreshData(entitiesTV.Nodes.Find(Controller.EntityNode.Name, True)(0))
         ElseIf Not entitiesTV.SelectedNode Is Nothing Then
             RefreshData(entitiesTV.SelectedNode)
         Else
@@ -1099,36 +1113,31 @@ Friend Class ControllingUI_2
         ' Display init
         Controller.InitDisplay(rowsHiearchyNodeList, columnsHiearchyNodeList)
         For Each tab_ As TabPage In TabControl1.TabPages
-            Controller.CreateRowsAndColumns(tab_.Controls(0))
+            Controller.CreateRowsAndColumns(tab_.Controls(0), tab_.Name)
         Next
         Controller.initDisplayFlag = True
 
-        Do While True
-            ' Waiting for the controller to send cancel order 
-        Loop
 
     End Sub
 
     Private Sub ComputingBKGWorker_RunWorkerCompleted(sender As Object, e As RunWorkerCompletedEventArgs)
 
-        AfterComputeAttemp_ThreadSafe()
+        '  AfterComputeAttemp_ThreadSafe()
 
     End Sub
 
-    Delegate Sub AfterComputeAttemp_Delegate()
+    'Delegate Sub AfterComputeAttemp_Delegate()
 
-    Private Sub AfterComputeAttemp_ThreadSafe()
+    'Private Sub AfterComputeAttemp_ThreadSafe()
 
-        If InvokeRequired Then
-            Dim MyDelegate As New AfterComputeAttemp_Delegate(AddressOf AfterComputeAttemp_ThreadSafe)
-            Me.Invoke(MyDelegate, New Object() {})
-        Else
-            CP.Close()
-            CP = New CircularProgressUI(System.Drawing.Color.Purple, "Displaying")
-            DisplayBCGWorker.RunWorkerAsync()
-        End If
+    '    If InvokeRequired Then
+    '        Dim MyDelegate As New AfterComputeAttemp_Delegate(AddressOf AfterComputeAttemp_ThreadSafe)
+    '        Me.Invoke(MyDelegate, New Object() {})
+    '    Else
 
-    End Sub
+    '    End If
+
+    'End Sub
 
 #End Region
 
@@ -1138,7 +1147,9 @@ Friend Class ControllingUI_2
 
         For Each tab_ As TabPage In TabControl1.TabPages
             Dim DGV As vDataGridView = tab_.Controls(0)
-            Controller.FillDGVs(DGV, tab_.Name) ' check tab account name => = account id ?
+            Controller.FillDGVs(DGV, tab_.Name)
+            DGV.RowsHierarchy.AutoResize(AutoResizeMode.FIT_ALL)
+            DGV.ColumnsHierarchy.AutoResize(AutoResizeMode.FIT_ALL)
         Next
 
     End Sub
@@ -1157,7 +1168,7 @@ Friend Class ControllingUI_2
             Dim MyDelegate As New AfterDisplayAttemp_Delegate(AddressOf AfterDisplayAttemp_ThreadSafe)
             Me.Invoke(MyDelegate, New Object() {})
         Else
-            'CP.Dispose()
+            CP.Dispose()
 
         End If
 

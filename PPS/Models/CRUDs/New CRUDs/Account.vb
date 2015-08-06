@@ -57,10 +57,10 @@ Friend Class Account
 
         If packet.ReadInt32() = 0 Then
             Dim nb_accounts = packet.ReadInt32()
-            For i As Int32 = 0 To nb_accounts - 1
+            For i As Int32 = 1 To nb_accounts
                 Dim tmp_ht As New Hashtable
                 GetAccountHTFromPacket(packet, tmp_ht)
-                accounts_hash(tmp_ht(ID_VARIABLE)) = tmp_ht
+                accounts_hash(CInt(tmp_ht(ID_VARIABLE))) = tmp_ht
             Next
             NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_LIST_ACCOUNT_ANSWER, AddressOf SMSG_LIST_ACCOUNT_ANSWER)
             server_response_flag = True

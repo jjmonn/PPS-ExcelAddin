@@ -324,7 +324,7 @@ Partial Class ControllingUI_2
         Me.TabPage1.BackColor = System.Drawing.SystemColors.Control
         Me.TabPage1.Controls.Add(Me.TableLayoutPanel2)
         Me.TabPage1.Controls.Add(Me.HomeMenu)
-        Me.TabPage1.ImageKey = "element_branch2.ico"
+        Me.TabPage1.ImageKey = "(none)"
         Me.TabPage1.Location = New System.Drawing.Point(4, 23)
         Me.TabPage1.Name = "TabPage1"
         Me.TabPage1.Padding = New System.Windows.Forms.Padding(3)
@@ -431,7 +431,7 @@ Partial Class ControllingUI_2
         '
         'EntitiesMenuBT1
         '
-        Me.EntitiesMenuBT1.Image = CType(resources.GetObject("EntitiesMenuBT1.Image"), System.Drawing.Image)
+        Me.EntitiesMenuBT1.Image = Global.PPS.My.Resources.Resources.element_branch24
         Me.EntitiesMenuBT1.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
         Me.EntitiesMenuBT1.Name = "EntitiesMenuBT1"
         Me.EntitiesMenuBT1.Size = New System.Drawing.Size(65, 63)
@@ -440,7 +440,7 @@ Partial Class ControllingUI_2
         '
         'DisplayMenuBT
         '
-        Me.DisplayMenuBT.Image = CType(resources.GetObject("DisplayMenuBT.Image"), System.Drawing.Image)
+        Me.DisplayMenuBT.Image = Global.PPS.My.Resources.Resources.tablet_computer1
         Me.DisplayMenuBT.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
         Me.DisplayMenuBT.Name = "DisplayMenuBT"
         Me.DisplayMenuBT.Size = New System.Drawing.Size(65, 63)
@@ -450,7 +450,7 @@ Partial Class ControllingUI_2
         'SelectionMenuBT
         '
         Me.SelectionMenuBT.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.EntitiesMenuBT2, Me.ClientsMenuBT, Me.ProductsMenuBT, Me.AdjustmentsMenuBT, Me.CurrenciesMenuBT, Me.PeriodsMenuBT, Me.VersionsMenuBT})
-        Me.SelectionMenuBT.Image = CType(resources.GetObject("SelectionMenuBT.Image"), System.Drawing.Image)
+        Me.SelectionMenuBT.Image = Global.PPS.My.Resources.Resources.checkbox3
         Me.SelectionMenuBT.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
         Me.SelectionMenuBT.Name = "SelectionMenuBT"
         Me.SelectionMenuBT.Size = New System.Drawing.Size(75, 63)
@@ -842,9 +842,9 @@ Partial Class ControllingUI_2
         '
         Me.MenuIL.ImageStream = CType(resources.GetObject("MenuIL.ImageStream"), System.Windows.Forms.ImageListStreamer)
         Me.MenuIL.TransparentColor = System.Drawing.Color.Transparent
-        Me.MenuIL.Images.SetKeyName(0, "element_branch2.ico")
-        Me.MenuIL.Images.SetKeyName(1, "elements.ico")
-        Me.MenuIL.Images.SetKeyName(2, "favicon(2).ico")
+        Me.MenuIL.Images.SetKeyName(0, "elements.ico")
+        Me.MenuIL.Images.SetKeyName(1, "favicon(2).ico")
+        Me.MenuIL.Images.SetKeyName(2, "element_branch2.ico")
         '
         'CategoriesIL
         '

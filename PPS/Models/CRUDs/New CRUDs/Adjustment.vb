@@ -56,10 +56,10 @@ Friend Class Adjustment
     Private Sub SMSG_LIST_ADJUSTMENT_ANSWER(packet As ByteBuffer)
 
         If packet.ReadInt32() = 0 Then
-            For i As Int32 = 0 To packet.ReadInt32()
+            For i As Int32 = 1 To packet.ReadInt32()
                 Dim tmp_ht As New Hashtable
                 GetAdjustmentHTFromPacket(packet, tmp_ht)
-                adjustments_hash(tmp_ht(ID_VARIABLE)) = tmp_ht
+                adjustments_hash(CInt(tmp_ht(ID_VARIABLE))) = tmp_ht
             Next
             NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_LIST_ADJUSTMENT_ANSWER, AddressOf SMSG_LIST_ADJUSTMENT_ANSWER)
             server_response_flag = True
@@ -228,7 +228,7 @@ Friend Class Adjustment
     Friend Sub LoadAdjustmentsTree(ByRef TV As Windows.Forms.TreeView)
 
         TV.Nodes.Clear()
-        For Each id As UInt32 In adjustments_hash.Keys
+        For Each id As Int32 In adjustments_hash.Keys
             Dim node As Windows.Forms.TreeNode = TV.Nodes.Add(CStr(id), _
                                                               adjustments_hash(id)(NAME_VARIABLE), _
                                                               0, 0)
@@ -241,7 +241,7 @@ Friend Class Adjustment
                                 ByRef filter_list As List(Of UInt32))
 
         TV.Nodes.Clear()
-        For Each id As UInt32 In adjustments_hash.Keys
+        For Each id As Int32 In adjustments_hash.Keys
             Dim node As Windows.Forms.TreeNode = TV.Nodes.Add(CStr(id), _
                                                               adjustments_hash(id)(NAME_VARIABLE), _
                                                               0, 0)

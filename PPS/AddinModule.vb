@@ -129,6 +129,7 @@ Public Class AddinModule
     Friend WithEvents financialModelingBT As AddinExpress.MSO.ADXRibbonButton
     Friend WithEvents ConnectionTaskPaneItem As AddinExpress.XL.ADXExcelTaskPanesCollectionItem
     Friend WithEvents AdxRibbonButton5 As AddinExpress.MSO.ADXRibbonButton
+    Friend WithEvents Menu3 As System.Windows.Forms.ImageList
 
 
 #End Region
@@ -188,6 +189,7 @@ Public Class AddinModule
         Me.AdxRibbonGroup3 = New AddinExpress.MSO.ADXRibbonGroup(Me.components)
         Me.ConfigurationRibbonBT = New AddinExpress.MSO.ADXRibbonButton(Me.components)
         Me.SettingsBT = New AddinExpress.MSO.ADXRibbonButton(Me.components)
+        Me.AdxRibbonButton5 = New AddinExpress.MSO.ADXRibbonButton(Me.components)
         Me.ConfigImageList = New System.Windows.Forms.ImageList(Me.components)
         Me.SubmissionRibbonIL = New System.Windows.Forms.ImageList(Me.components)
         Me.LightsImageList = New System.Windows.Forms.ImageList(Me.components)
@@ -234,11 +236,11 @@ Public Class AddinModule
         Me.EntitySelectionTaskPaneItem = New AddinExpress.XL.ADXExcelTaskPanesCollectionItem(Me.components)
         Me.ConnectionTaskPaneItem = New AddinExpress.XL.ADXExcelTaskPanesCollectionItem(Me.components)
         Me.AdxRibbonLabel1 = New AddinExpress.MSO.ADXRibbonLabel(Me.components)
-        Me.AdxRibbonButton5 = New AddinExpress.MSO.ADXRibbonButton(Me.components)
+        Me.Menu3 = New System.Windows.Forms.ImageList(Me.components)
         '
         'MaintTab
         '
-        Me.MaintTab.Caption = "FINANCIAL BI®"
+        Me.MaintTab.Caption = "Financial BI®"
         Me.MaintTab.Controls.Add(Me.AdxRibbonGroup6)
         Me.MaintTab.Controls.Add(Me.AdxRibbonGroup1)
         Me.MaintTab.Controls.Add(Me.AdxRibbonGroup2)
@@ -291,6 +293,7 @@ Public Class AddinModule
         Me.VersionBT.ImageList = Me.NewICOs
         Me.VersionBT.ImageTransparentColor = System.Drawing.Color.Transparent
         Me.VersionBT.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
+        Me.VersionBT.SuperTip = "Click to select a version"
         '
         'NewICOs
         '
@@ -337,7 +340,7 @@ Public Class AddinModule
         '
         'Addin_rates_version_label
         '
-        Me.Addin_rates_version_label.Caption = "FX Rates Version"
+        Me.Addin_rates_version_label.Caption = " "
         Me.Addin_rates_version_label.Id = "adxRibbonLabel_43aa53308e4d4b3a8e3d7193f8945b6f"
         Me.Addin_rates_version_label.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
         '
@@ -356,11 +359,13 @@ Public Class AddinModule
         Me.UploadBT.Caption = "Snapshot"
         Me.UploadBT.Controls.Add(Me.UplodBT1)
         Me.UploadBT.Id = "adxRibbonSplitButton_d2989ac910ad415381c6cc902b2051e5"
-        Me.UploadBT.Image = 4
-        Me.UploadBT.ImageList = Me.MainTabImageList
+        Me.UploadBT.Image = 8
+        Me.UploadBT.ImageList = Me.Menu3
         Me.UploadBT.ImageTransparentColor = System.Drawing.Color.Transparent
         Me.UploadBT.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
+        Me.UploadBT.ScreenTip = "Capture the Worksheet and opens Data Edition"
         Me.UploadBT.Size = AddinExpress.MSO.ADXRibbonXControlSize.Large
+        Me.UploadBT.SuperTip = "Capture the Worksheet and open the Data Edition"
         '
         'UplodBT1
         '
@@ -433,8 +438,8 @@ Public Class AddinModule
         Me.InputReportLaunchBT.Caption = "Edition"
         Me.InputReportLaunchBT.Controls.Add(Me.AdxRibbonMenu7)
         Me.InputReportLaunchBT.Id = "adxRibbonSplitButton_815e28e10c3d4a28a2eee8165efe3ff1"
-        Me.InputReportLaunchBT.Image = 22
-        Me.InputReportLaunchBT.ImageList = Me.NewICOs
+        Me.InputReportLaunchBT.Image = 0
+        Me.InputReportLaunchBT.ImageList = Me.Menu3
         Me.InputReportLaunchBT.ImageTransparentColor = System.Drawing.Color.Transparent
         Me.InputReportLaunchBT.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
         Me.InputReportLaunchBT.Size = AddinExpress.MSO.ADXRibbonXControlSize.Large
@@ -451,8 +456,8 @@ Public Class AddinModule
         Me.RefreshBT.Caption = "Refresh"
         Me.RefreshBT.Controls.Add(Me.RefreshMenu)
         Me.RefreshBT.Id = "adxRibbonSplitButton_8aab3e36ecdf4fdfbd62b6bc29af40ee"
-        Me.RefreshBT.Image = 19
-        Me.RefreshBT.ImageList = Me.MainTabImageList
+        Me.RefreshBT.Image = 11
+        Me.RefreshBT.ImageList = Me.Menu3
         Me.RefreshBT.ImageTransparentColor = System.Drawing.Color.Transparent
         Me.RefreshBT.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
         Me.RefreshBT.Size = AddinExpress.MSO.ADXRibbonXControlSize.Large
@@ -511,7 +516,7 @@ Public Class AddinModule
         '
         'AdxRibbonGroup2
         '
-        Me.AdxRibbonGroup2.Caption = "Data Mining"
+        Me.AdxRibbonGroup2.Caption = " "
         Me.AdxRibbonGroup2.Controls.Add(Me.ControlingUI2BT)
         Me.AdxRibbonGroup2.Controls.Add(Me.FunctionDesigner)
         Me.AdxRibbonGroup2.Controls.Add(Me.SubmissionControlBT)
@@ -525,19 +530,21 @@ Public Class AddinModule
         '
         Me.ControlingUI2BT.Caption = "Financials"
         Me.ControlingUI2BT.Id = "adxRibbonButton_7d5683509a144f39bf95ea6b3db155b9"
-        Me.ControlingUI2BT.Image = 12
-        Me.ControlingUI2BT.ImageList = Me.NewICOs
+        Me.ControlingUI2BT.Image = 10
+        Me.ControlingUI2BT.ImageList = Me.Menu3
         Me.ControlingUI2BT.ImageTransparentColor = System.Drawing.Color.Transparent
         Me.ControlingUI2BT.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
+        Me.ControlingUI2BT.ScreenTip = "General Data Crunching interface"
         Me.ControlingUI2BT.Size = AddinExpress.MSO.ADXRibbonXControlSize.Large
+        Me.ControlingUI2BT.SuperTip = "General Data Crunching interface"
         '
         'FunctionDesigner
         '
         Me.FunctionDesigner.Caption = "PPSBI"
         Me.FunctionDesigner.Controls.Add(Me.AdxRibbonMenu1)
         Me.FunctionDesigner.Id = "adxRibbonSplitButton_5986acbd4f414054bdd1177565ae2cf3"
-        Me.FunctionDesigner.Image = 21
-        Me.FunctionDesigner.ImageList = Me.NewICOs
+        Me.FunctionDesigner.Image = 4
+        Me.FunctionDesigner.ImageList = Me.Menu3
         Me.FunctionDesigner.ImageTransparentColor = System.Drawing.Color.Transparent
         Me.FunctionDesigner.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
         Me.FunctionDesigner.Size = AddinExpress.MSO.ADXRibbonXControlSize.Large
@@ -564,8 +571,8 @@ Public Class AddinModule
         Me.SubmissionControlBT.Caption = "Controls"
         Me.SubmissionControlBT.Controls.Add(Me.AdxRibbonMenu3)
         Me.SubmissionControlBT.Id = "adxRibbonSplitButton_c948ce7f779a4f6cbe647f9de2d15b60"
-        Me.SubmissionControlBT.Image = 14
-        Me.SubmissionControlBT.ImageList = Me.NewICOs
+        Me.SubmissionControlBT.Image = 2
+        Me.SubmissionControlBT.ImageList = Me.Menu3
         Me.SubmissionControlBT.ImageTransparentColor = System.Drawing.Color.Transparent
         Me.SubmissionControlBT.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
         Me.SubmissionControlBT.Size = AddinExpress.MSO.ADXRibbonXControlSize.Large
@@ -589,8 +596,8 @@ Public Class AddinModule
         '
         Me.financialModelingBT.Caption = "Financial Modeling"
         Me.financialModelingBT.Id = "adxRibbonButton_92cac61b68be42c19c331fc2988b85c5"
-        Me.financialModelingBT.Image = 31
-        Me.financialModelingBT.ImageList = Me.NewICOs
+        Me.financialModelingBT.Image = 7
+        Me.financialModelingBT.ImageList = Me.Menu3
         Me.financialModelingBT.ImageTransparentColor = System.Drawing.Color.Transparent
         Me.financialModelingBT.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
         Me.financialModelingBT.Size = AddinExpress.MSO.ADXRibbonXControlSize.Large
@@ -600,8 +607,8 @@ Public Class AddinModule
         Me.AdvancedModelingBT.Caption = "Modeling"
         Me.AdvancedModelingBT.Controls.Add(Me.AdxRibbonMenu2)
         Me.AdvancedModelingBT.Id = "adxRibbonSplitButton_48193c7e13704758a3814aa6156d5aee"
-        Me.AdvancedModelingBT.Image = 30
-        Me.AdvancedModelingBT.ImageList = Me.NewICOs
+        Me.AdvancedModelingBT.Image = 1
+        Me.AdvancedModelingBT.ImageList = Me.Menu3
         Me.AdvancedModelingBT.ImageTransparentColor = System.Drawing.Color.Transparent
         Me.AdvancedModelingBT.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
         Me.AdvancedModelingBT.Size = AddinExpress.MSO.ADXRibbonXControlSize.Large
@@ -681,8 +688,8 @@ Public Class AddinModule
         '
         Me.ConfigurationRibbonBT.Caption = "Configuration"
         Me.ConfigurationRibbonBT.Id = "adxRibbonButton_d4cfb8ca7c6d487b9892703b68ee0fce"
-        Me.ConfigurationRibbonBT.Image = 29
-        Me.ConfigurationRibbonBT.ImageList = Me.NewICOs
+        Me.ConfigurationRibbonBT.Image = 6
+        Me.ConfigurationRibbonBT.ImageList = Me.Menu3
         Me.ConfigurationRibbonBT.ImageTransparentColor = System.Drawing.Color.Transparent
         Me.ConfigurationRibbonBT.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
         Me.ConfigurationRibbonBT.Size = AddinExpress.MSO.ADXRibbonXControlSize.Large
@@ -691,11 +698,18 @@ Public Class AddinModule
         '
         Me.SettingsBT.Caption = "PPS Settings"
         Me.SettingsBT.Id = "adxRibbonButton_aa28ec782b5541edb1482374e14ceaa6"
-        Me.SettingsBT.Image = 28
-        Me.SettingsBT.ImageList = Me.NewICOs
+        Me.SettingsBT.Image = 9
+        Me.SettingsBT.ImageList = Me.Menu3
         Me.SettingsBT.ImageTransparentColor = System.Drawing.Color.Transparent
         Me.SettingsBT.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
         Me.SettingsBT.Size = AddinExpress.MSO.ADXRibbonXControlSize.Large
+        '
+        'AdxRibbonButton5
+        '
+        Me.AdxRibbonButton5.Caption = "Test"
+        Me.AdxRibbonButton5.Id = "adxRibbonButton_b719d7b14f384e4cbceb93693d07814b"
+        Me.AdxRibbonButton5.ImageTransparentColor = System.Drawing.Color.Transparent
+        Me.AdxRibbonButton5.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
         '
         'ConfigImageList
         '
@@ -1136,12 +1150,22 @@ Public Class AddinModule
         Me.AdxRibbonLabel1.Id = "adxRibbonLabel_f8272bc6694448f6955f882ef772da9e"
         Me.AdxRibbonLabel1.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
         '
-        'AdxRibbonButton5
+        'Menu3
         '
-        Me.AdxRibbonButton5.Caption = "Test"
-        Me.AdxRibbonButton5.Id = "adxRibbonButton_b719d7b14f384e4cbceb93693d07814b"
-        Me.AdxRibbonButton5.ImageTransparentColor = System.Drawing.Color.Transparent
-        Me.AdxRibbonButton5.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
+        Me.Menu3.ImageStream = CType(resources.GetObject("Menu3.ImageStream"), System.Windows.Forms.ImageListStreamer)
+        Me.Menu3.TransparentColor = System.Drawing.Color.Transparent
+        Me.Menu3.Images.SetKeyName(0, "registry.ico")
+        Me.Menu3.Images.SetKeyName(1, "chart_hi_lo.ico")
+        Me.Menu3.Images.SetKeyName(2, "ok.ico")
+        Me.Menu3.Images.SetKeyName(3, "refresh black 2.ico")
+        Me.Menu3.Images.SetKeyName(4, "spreadsheed_cell.ico")
+        Me.Menu3.Images.SetKeyName(5, "window_equalizer.ico")
+        Me.Menu3.Images.SetKeyName(6, "element_branch2.ico")
+        Me.Menu3.Images.SetKeyName(7, "pieces.ico")
+        Me.Menu3.Images.SetKeyName(8, "snapshot ico green.ico")
+        Me.Menu3.Images.SetKeyName(9, "window_equalizer.ico")
+        Me.Menu3.Images.SetKeyName(10, "tablet_computer.ico")
+        Me.Menu3.Images.SetKeyName(11, "refresh 2.ico")
         '
         'AddinModule
         '
@@ -1303,9 +1327,11 @@ Public Class AddinModule
 #Region "Properties Getters"
 
     ' Returns the connection instance variable
-    Public Function GetAddinConnection() As ADODB.Connection
-        Return GlobalVariables.Connection
-    End Function
+    'Public Function GetAddinConnection() As ADODB.Connection
+
+    '    Return GlobalVariables.Connection
+
+    'End Function
 
     ' Returns the entities View variable
     Public Function GetVersionLabel() As ADXRibbonLabel
@@ -1343,9 +1369,8 @@ Public Class AddinModule
 
     Private Sub VersionBT_OnClick_1(sender As Object, control As IRibbonControl, pressed As Boolean) Handles VersionBT.OnClick
 
-        If GlobalVariables.Connection Is Nothing Then
-            Dim CONNUI As New ConnectionUI(Me)
-            CONNUI.Show()
+        If GlobalVariables.ConnectionState = False Then
+            ConnectionBT_OnClick(sender, control, pressed)
         Else
             LaunchVersionSelection()
         End If
@@ -1361,9 +1386,8 @@ Public Class AddinModule
                                  control As AddinExpress.MSO.IRibbonControl,
                                  pressed As System.Boolean) Handles UploadBT.OnClick
 
-        If GlobalVariables.Connection Is Nothing Then
-            Dim CONNUI As New ConnectionUI(Me)
-            CONNUI.Show()
+       If GlobalVariables.ConnectionState = False Then
+            ConnectionBT_OnClick(sender, control, pressed)
         Else
             If GRSControlersDictionary.ContainsKey(GlobalVariables.APPS.ActiveSheet) Then
                 CurrentGRSControler = GRSControlersDictionary(GlobalVariables.APPS.ActiveSheet)
@@ -1381,9 +1405,8 @@ Public Class AddinModule
                                   control As AddinExpress.MSO.IRibbonControl,
                                   pressed As System.Boolean) Handles WSUplaodBT.OnClick
 
-        If GlobalVariables.Connection Is Nothing Then
-            Dim CONNUI As New ConnectionUI(Me)
-            CONNUI.Show()
+         If GlobalVariables.ConnectionState = False Then
+            ConnectionBT_OnClick(sender, control, pressed)
         Else
             '    Dim DSDUI As New SubmissionControlUI
             '    DSDUI.Show()
@@ -1393,9 +1416,8 @@ Public Class AddinModule
 
     Private Sub WBUploadBT_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) Handles WBUplaodBT.OnClick
 
-        If GlobalVariables.Connection Is Nothing Then
-            Dim CONNUI As New ConnectionUI(Me)
-            CONNUI.Show()
+       If GlobalVariables.ConnectionState = False Then
+            ConnectionBT_OnClick(sender, control, pressed)
         Else
             Dim MSA As New MultipleSheetsAcquisition
             MSA.Show()
@@ -1409,9 +1431,8 @@ Public Class AddinModule
 
     Private Sub InputReportLaunchBT_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) Handles InputReportLaunchBT.OnClick
 
-        If GlobalVariables.Connection Is Nothing Then
-            Dim CONNUI As New ConnectionUI(Me)
-            CONNUI.Show()
+         If GlobalVariables.ConnectionState = False Then
+            ConnectionBT_OnClick(sender, control, pressed)
         Else
             If CDbl(GlobalVariables.APPS.Version.Replace(".", ",")) > EXCEL_MIN_VERSION Then
                 GlobalVariables.InputSelectionPaneVisible = True
@@ -1467,9 +1488,8 @@ Public Class AddinModule
                                         control As AddinExpress.MSO.IRibbonControl,
                                         pressed As System.Boolean) Handles ControlingUI2BT.OnClick
 
-        If GlobalVariables.Connection Is Nothing Then
-            Dim CONNUI As New ConnectionUI(Me)
-            CONNUI.Show()
+       If GlobalVariables.ConnectionState = False Then
+            ConnectionBT_OnClick(sender, control, pressed)
         Else
             Dim CONTROLLING As New ControllingUI_2
             CONTROLLING.Show()
@@ -1482,9 +1502,8 @@ Public Class AddinModule
 
     Private Sub AdxRibbonSplitButton1_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) Handles RefreshBT.OnClick, RefreshWorksheetBT.OnClick
 
-        If GlobalVariables.Connection Is Nothing Then
-            Dim CONNUI As New ConnectionUI(Me)
-            CONNUI.Show()
+       If GlobalVariables.ConnectionState = False Then
+            ConnectionBT_OnClick(sender, control, pressed)
         Else
             If Not GRSControlersDictionary.ContainsKey(GlobalVariables.APPS.ActiveSheet) Then
                 Dim cREFRESH As New RefreshGetDataBatch
@@ -1499,9 +1518,8 @@ Public Class AddinModule
 
     Private Sub RefreshSelectionBT_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) Handles RefreshSelectionBT.OnClick
 
-        If GlobalVariables.Connection Is Nothing Then
-            Dim CONNUI As New ConnectionUI(Me)
-            CONNUI.Show()
+       If GlobalVariables.ConnectionState = False Then
+            ConnectionBT_OnClick(sender, control, pressed)
         Else
             If Not GRSControlersDictionary.ContainsKey(GlobalVariables.APPS.ActiveSheet) Then
                 Dim cREFRESH As New RefreshGetDataBatch
@@ -1541,9 +1559,8 @@ Public Class AddinModule
                                     control As AddinExpress.MSO.IRibbonControl,
                                     pressed As System.Boolean) Handles FunctionDesigner.OnClick
 
-        If GlobalVariables.Connection Is Nothing Then
-            Dim CONNUI As New ConnectionUI(Me)
-            CONNUI.Show()
+       If GlobalVariables.ConnectionState = False Then
+            ConnectionBT_OnClick(sender, control, pressed)
         Else
             Dim PPSBI As New PPSBI_UI
             PPSBI.Show()
@@ -1559,9 +1576,8 @@ Public Class AddinModule
 
     Private Sub SubmissionsControlBT_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) Handles SubmissionControlBT.OnClick
 
-        If GlobalVariables.Connection Is Nothing Then
-            Dim CONNUI As New ConnectionUI(Me)
-            CONNUI.Show()
+         If GlobalVariables.ConnectionState = False Then
+            ConnectionBT_OnClick(sender, control, pressed)
         Else
             Dim SubmissionControl As New SubmissionsControlsController
         End If
@@ -1570,9 +1586,8 @@ Public Class AddinModule
 
     Private Sub LogBT_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) Handles LogBT.OnClick
 
-        If GlobalVariables.Connection Is Nothing Then
-            Dim CONNUI As New ConnectionUI(Me)
-            CONNUI.Show()
+          If GlobalVariables.ConnectionState = False Then
+            ConnectionBT_OnClick(sender, control, pressed)
         Else
             Dim logController As New LogController
         End If
@@ -1586,9 +1601,8 @@ Public Class AddinModule
 
     Private Sub FModelingBT_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) Handles financialModelingBT.OnClick
 
-        If GlobalVariables.Connection Is Nothing Then
-            Dim CONNUI As New ConnectionUI(Me)
-            CONNUI.Show()
+       If GlobalVariables.ConnectionState = False Then
+            ConnectionBT_OnClick(sender, control, pressed)
         Else
             Dim FModellingui2 As New FModelingUI2
             FModellingui2.Show()
@@ -1598,9 +1612,8 @@ Public Class AddinModule
 
     Private Sub AlternativeScenariosBT_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) Handles AdvancedModelingBT.OnClick
 
-        If GlobalVariables.Connection Is Nothing Then
-            Dim CONNUI As New ConnectionUI(Me)
-            CONNUI.Show()
+         If GlobalVariables.ConnectionState = False Then
+            ConnectionBT_OnClick(sender, control, pressed)
         Else
             Dim ASController As New AlternativeScenariosController
         End If
@@ -1611,9 +1624,8 @@ Public Class AddinModule
 
     Private Sub MarketPricesMGT_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) Handles MarketPricesMGT.OnClick
 
-        If GlobalVariables.Connection Is Nothing Then
-            Dim CONNUI As New ConnectionUI(Me)
-            CONNUI.Show()
+        If GlobalVariables.ConnectionState = False Then
+            ConnectionBT_OnClick(sender, control, pressed)
         Else
             Dim MarketPricesMGT As New MarketPricesController
         End If
@@ -1622,9 +1634,8 @@ Public Class AddinModule
 
     Private Sub ASReportsMGTBT_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) Handles ASReportsMGTBT.OnClick
 
-        If GlobalVariables.Connection Is Nothing Then
-            Dim CONNUI As New ConnectionUI(Me)
-            CONNUI.Show()
+          If GlobalVariables.ConnectionState = False Then
+            ConnectionBT_OnClick(sender, control, pressed)
         Else
             Dim ReportDesigner As New ReportsDesignerController(GDF_AS_REPORTS_TABLE, GDFSUEZASAccountsMapping.GetAlternativeScenarioAccountsList)
         End If
@@ -1633,9 +1644,8 @@ Public Class AddinModule
 
     Private Sub ASEntitiesAttributesTabBT_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) Handles ASEntitiesAttributesTabBT.OnClick
 
-        If GlobalVariables.Connection Is Nothing Then
-            Dim CONNUI As New ConnectionUI(Me)
-            CONNUI.Show()
+       If GlobalVariables.ConnectionState = False Then
+            ConnectionBT_OnClick(sender, control, pressed)
         Else
             Dim EntitiesAttributesMGT As New ASEntitiesAttributesController
         End If
@@ -1651,9 +1661,8 @@ Public Class AddinModule
 
     Private Sub ConfigurationRibbonBT_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) Handles ConfigurationRibbonBT.OnClick
 
-        If GlobalVariables.Connection Is Nothing Then
-            Dim CONNUI As New ConnectionUI(Me)
-            CONNUI.Show()
+        If GlobalVariables.ConnectionState = False Then
+            ConnectionBT_OnClick(sender, control, pressed)
         Else
             Dim MGTUI As New PlatformMGTGeneralUI
             MGTUI.Show()
@@ -1792,10 +1801,8 @@ Public Class AddinModule
 
     Private Sub VersionBT2_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) Handles VersionBT2.OnClick
 
-        ' Open side pane to select version ?
-        If GlobalVariables.Connection Is Nothing Then
-            Dim CONNUI As New ConnectionUI(Me)
-            CONNUI.Show()
+        If GlobalVariables.ConnectionState = False Then
+            ConnectionBT_OnClick(sender, control, pressed)
         Else
             LaunchVersionSelection()
         End If
@@ -1943,7 +1950,7 @@ Public Class AddinModule
                                                                                        {entity_name, currency, GlobalVariables.Version_Label.Caption})
 
         Dim timeConfig As UInt32 = GlobalVariables.Versions.versions_hash(GlobalVariables.GLOBALCurrentVersionCode)(VERSIONS_TIME_CONFIG_VARIABLE)
-        Dim periodlist As UInt32() = GlobalVariables.Versions.GetPeriodsList(GlobalVariables.GLOBALCurrentVersionCode)
+        Dim periodlist As Int32() = GlobalVariables.Versions.GetPeriodsList(GlobalVariables.GLOBALCurrentVersionCode)
         WorksheetWrittingFunctions.InsertInputReportOnWS(currentcell, _
                                                           periodlist, _
                                                           timeConfig)

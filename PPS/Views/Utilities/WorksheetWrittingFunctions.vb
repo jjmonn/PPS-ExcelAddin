@@ -33,7 +33,7 @@ Friend Class WorksheetWrittingFunctions
 #Region "Input Report Creation"
 
     Protected Friend Shared Sub InsertInputReportOnWS(ByVal destinationcell As Excel.Range, _
-                                                      ByRef periodList As UInt32(), _
+                                                      ByRef periodList As Int32(), _
                                                       ByRef timeConfig As String)
 
         Dim accountsTV As New TreeView
@@ -58,7 +58,7 @@ Friend Class WorksheetWrittingFunctions
 
     Public Shared Sub WriteAccountsFromTreeView(ByRef TV As Windows.Forms.TreeView, _
                                                 ByVal destinationCell As Excel.Range, _
-                                                Optional ByRef periodDatesList As UInt32() = Nothing)
+                                                Optional ByRef periodDatesList As Int32() = Nothing)
 
         Dim IndentLevel As Integer = 0
         For Each Node As TreeNode In TV.Nodes

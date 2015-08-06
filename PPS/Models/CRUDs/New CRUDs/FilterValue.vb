@@ -57,7 +57,7 @@ Friend Class FilterValue
     Private Sub SMSG_LIST_FILTER_VALUE_ANSWER(packet As ByteBuffer)
 
         If packet.ReadInt32() = 0 Then
-            For i As Int32 = 0 To packet.ReadInt32()
+            For i As Int32 = 1 To packet.ReadInt32()
                 Dim tmp_ht As New Hashtable
                 GetFilterValueHTFromPacket(packet, tmp_ht)
                 filtervalues_hash(tmp_ht(ID_VARIABLE)) = tmp_ht

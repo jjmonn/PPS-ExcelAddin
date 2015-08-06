@@ -11,7 +11,7 @@ Imports System.Collections.Generic
 '
 ' Author: Julien Monnereau
 ' Created: 23/07/2015
-' Last modified: 03/08/2015
+' Last modified: 05/08/2015
 
 
 
@@ -24,6 +24,7 @@ Friend Class ProductsFilter
     Friend state_flag As Boolean
     Friend server_response_flag As Boolean
     Friend productsFilters_list As New List(Of Hashtable)
+    Private fIdFvDict As New Dictionary(Of String, UInt32)
     Private request_id As Dictionary(Of UInt32, Boolean)
 
     ' Events
@@ -56,10 +57,11 @@ Friend Class ProductsFilter
     Private Sub SMSG_LIST_PRODUCT_FILTER_ANSWER(packet As ByteBuffer)
 
         If packet.ReadInt32() = 0 Then
-            For i As Int32 = 0 To packet.ReadInt32()
+            For i As Int32 = 1 To packet.ReadInt32()
                 Dim tmp_ht As New Hashtable
                 GetProductFilterHTFromPacket(packet, tmp_ht)
-                productsFilters_list(tmp_ht(ID_VARIABLE)) = tmp_ht
+                productsFilters_list.Add(tmp_ht)
+                fIdFvDict.Add(tmp_ht(PRODUCT_ID_VARIABLE) & tmp_ht(FILTER_ID_VARIABLE), tmp_ht(FILTER_VALUE_ID_VARIABLE))
             Next
             NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_LIST_PRODUCT_FILTER_ANSWER, AddressOf SMSG_LIST_PRODUCT_FILTER_ANSWER)
             server_response_flag = True
@@ -200,6 +202,12 @@ Friend Class ProductsFilter
 
     End Function
 
+    Friend Function GetFilterValue(ByRef product_id As UInt32, _
+                                   ByRef filter_id As UInt32)
+
+        Return fIdFvDict(product_id & filter_id)
+
+    End Function
 
 #End Region
 

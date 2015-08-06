@@ -87,14 +87,16 @@ Public Class ExcelAddinModule1
     ' Initialize Global Variables
     Private Function InitializeGlobalVariables() As Boolean
 
-        GlobalVariables.Connection = GlobalVariables.APPS.COMAddIns.Item("PPS.AddinModule").Object.GetAddinConnection()
+        ' to be reimplemented => priority normal
 
-        GlobalVariables.Version_Label = GlobalVariables.APPS.COMAddIns.Item("PPS.AddinModule").Object.GetVersionLabel()
-        If GlobalVariables.Connection Is Nothing Then
-            Return False
-        Else
-            Return True
-        End If
+        'GlobalVariables.Connection = GlobalVariables.APPS.COMAddIns.Item("PPS.AddinModule").Object.GetAddinConnection()
+
+        'GlobalVariables.Version_Label = GlobalVariables.APPS.COMAddIns.Item("PPS.AddinModule").Object.GetVersionLabel()
+        'If GlobalVariables.Connection Is Nothing Then
+        '    Return False
+        'Else
+        '    Return True
+        'End If
 
     End Function
 
@@ -131,7 +133,7 @@ Public Class ExcelAddinModule1
                 End If
             End If
 
-            If GlobalVariables.Connection Is Nothing Then
+            If GlobalVariables.ConnectionState = False Then
                 Return "WAITING FOR CONNECTION"
             End If
 

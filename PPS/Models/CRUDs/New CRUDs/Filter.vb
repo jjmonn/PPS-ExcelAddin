@@ -61,10 +61,10 @@ Friend Class Filter
     Private Sub SMSG_LIST_FILTER_ANSWER(packet As ByteBuffer)
 
         If packet.ReadInt32() = 0 Then
-            For i As Int32 = 0 To packet.ReadInt32()
+            For i As Int32 = 1 To packet.ReadInt32()
                 Dim tmp_ht As New Hashtable
                 GetFilterHTFromPacket(packet, tmp_ht)
-                filters_hash(tmp_ht(ID_VARIABLE)) = tmp_ht
+                filters_hash(CInt(tmp_ht(ID_VARIABLE))) = tmp_ht
             Next
             NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_LIST_FILTER_ANSWER, AddressOf SMSG_LIST_FILTER_ANSWER)
             server_response_flag = True
@@ -275,7 +275,7 @@ Friend Class Filter
                              ByRef axis_id As UInt32)
 
         Dim tmp_ht As New Hashtable
-        For Each id As UInt32 In filters_hash.Keys
+        For Each id As Int32 In filters_hash.Keys
             If filters_hash(id)(FILTER_AXIS_ID_VARIABLE) = axis_id Then
                 tmp_ht(id) = filters_hash(id)
             End If
@@ -288,7 +288,7 @@ Friend Class Filter
                             ByRef axis_id As UInt32)
 
         Dim tmp_ht As New Hashtable
-        For Each id As UInt32 In filters_hash.Keys
+        For Each id As Int32 In filters_hash.Keys
             If filters_hash(id)(FILTER_AXIS_ID_VARIABLE) = axis_id Then
                 tmp_ht(id) = filters_hash(id)
             End If

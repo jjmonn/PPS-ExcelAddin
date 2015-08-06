@@ -12,7 +12,7 @@
 '
 ' 
 ' Author: Julien Monnereau
-' Last modified: 26/02/2015
+' Last modified: 05/08/2015
 
 
 Imports ProgressControls
@@ -104,15 +104,9 @@ Friend Class ConnectionUI
             Dim MyDelegate As New AfterConnectionAttemp_Delegate(AddressOf AfterConnectionAttemp_ThreadSafe)
             Me.Invoke(MyDelegate, New Object() {})
         Else
-            If Not GlobalVariables.Connection Is Nothing Then
-                    CP.Dispose()
-                    Me.Dispose()
-                    Me.Close()
-            Else
-                CP.Close()
-                '     GlobalVariables.Connection.Close()
-            End If
-          
+            CP.Dispose()
+            Me.Dispose()
+            Me.Close()
         End If
 
     End Sub

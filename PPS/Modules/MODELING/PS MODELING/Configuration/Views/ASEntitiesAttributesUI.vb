@@ -149,11 +149,11 @@ Friend Class ASEntitiesAttributesUI
 
 #End Region
 
-    Protected Friend Sub FillDGV(ByRef entities_dict As Dictionary(Of String, Hashtable))
+    Protected Friend Sub FillDGV(ByRef entities_dict As Dictionary(Of Int32, Hashtable))
 
         isFillingDGV = True
         Dim columnItem As HierarchyItem
-        For Each entity_id In entities_dict.Keys
+        For Each entity_id As Int32 In entities_dict.Keys
             Dim rowItem = rows_id_item_dic(entity_id)
             For column_index = 0 To entities_dict(entity_id).Count - 1
                 columnItem = entitiesDGV.ColumnsHierarchy.Items(column_index + 1)

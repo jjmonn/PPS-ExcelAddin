@@ -56,10 +56,10 @@ Friend Class Client
     Private Sub SMSG_LIST_CLIENT_ANSWER(packet As ByteBuffer)
 
         If packet.ReadInt32() = 0 Then
-            For i As Int32 = 0 To packet.ReadInt32()
+            For i As Int32 = 1 To packet.ReadInt32()
                 Dim tmp_ht As New Hashtable
                 GetClientHTFromPacket(packet, tmp_ht)
-                clients_hash(tmp_ht(ID_VARIABLE)) = tmp_ht
+                clients_hash(CInt(tmp_ht(ID_VARIABLE))) = tmp_ht
             Next
             NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_LIST_CLIENT_ANSWER, AddressOf SMSG_LIST_CLIENT_ANSWER)
             server_response_flag = True
@@ -241,7 +241,7 @@ Friend Class Client
     Friend Sub LoadClientsTree(ByRef TV As Windows.Forms.TreeView)
 
         TV.Nodes.Clear()
-        For Each id As UInt32 In clients_hash.Keys
+        For Each id As Int32 In clients_hash.Keys
             Dim node As Windows.Forms.TreeNode = TV.Nodes.Add(CStr(id), _
                                                               clients_hash(id)(NAME_VARIABLE), _
                                                               0, 0)
@@ -254,7 +254,7 @@ Friend Class Client
                                ByRef filter_list As List(Of UInt32))
 
         TV.Nodes.Clear()
-        For Each id As UInt32 In clients_hash.Keys
+        For Each id As Int32 In clients_hash.Keys
             Dim node As Windows.Forms.TreeNode = TV.Nodes.Add(CStr(id), _
                                                               clients_hash(id)(NAME_VARIABLE), _
                                                               0, 0)

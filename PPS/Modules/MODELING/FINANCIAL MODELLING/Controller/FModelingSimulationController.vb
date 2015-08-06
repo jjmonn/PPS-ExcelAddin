@@ -138,7 +138,7 @@ Friend Class FModelingSimulationController
                 View.simulationResultTB.Text = "No Solution"
                 View.simulationResultTB.ForeColor = Drawing.Color.Orange
             Case 1
-                Dim fAccountsIdsList As List(Of UInt32) = TreeViewsUtilities.GetNoChildrenNodesList(fAccountsNodes)
+                Dim fAccountsIdsList As List(Of Int32) = TreeViewsUtilities.GetNoChildrenNodesList(fAccountsNodes)
                 Dim data_dic = Model.GetOutputMatrix(fAccountsIdsList)
                 scenario.fillGeneralDGV(data_dic, fAccountsIdsList)
                 View.Refresh()

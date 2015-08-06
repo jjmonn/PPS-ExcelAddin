@@ -47,7 +47,7 @@ Friend Class ASEntitiesAttributesController
 
     Private Sub DisplayDGVData()
 
-        Dim entities_dic As New Dictionary(Of String, Hashtable)
+        Dim entities_dic As New Dictionary(Of Int32, Hashtable)
         Dim entities_list = TreeViewsUtilities.GetNodesKeysList(entitiesTV)
         entities_list = TreeViewsUtilities.GetNoChildrenNodesList(entities_list, entitiesTV)
         For Each entity_id In entities_list

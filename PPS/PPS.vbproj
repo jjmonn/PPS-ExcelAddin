@@ -1203,6 +1203,21 @@
   <ItemGroup>
     <None Include="Resources\checkbox2.ico" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\element_branch22.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\element_branch23.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\element_branch24.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\tablet_computer1.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\checkbox3.ico" />
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.

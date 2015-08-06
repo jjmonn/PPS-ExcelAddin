@@ -57,10 +57,10 @@ Friend Class Currency2
 
     '    If packet.ReadInt32() = 0 Then
     '        Dim nb_currencies = packet.ReadInt32()
-    '        For i As Int32 = 0 To nb_currencies - 1
+    '        For i As Int32 = 1 To nb_currencies
     '            Dim tmp_ht As New Hashtable
     '            GetcurrencyHTFromPacket(packet, tmp_ht)
-    '            currencies_hash(tmp_ht(ID_VARIABLE)) = tmp_ht
+    '            currencies_hash(CInt(tmp_ht(ID_VARIABLE))) = tmp_ht
     '        Next
     '        NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_LIST_CURRENCY_ANSWER, AddressOf SMSG_LIST_CURRENCY_ANSWER)
     '        server_response_flag = True

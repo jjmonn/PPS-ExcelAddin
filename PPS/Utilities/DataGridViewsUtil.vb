@@ -61,8 +61,8 @@ Friend Class DataGridViewsUtil
     Protected Friend Sub New()
 
         EntitiesTokenNamesDict = GlobalVariables.Entities.GetEntitiesDictionary(ID_VARIABLE, NAME_VARIABLE)
-        AccountNamesKeysDic = globalvariables.accounts.GetAccountsDictionary(NAME_VARIABLE, ID_VARIABLE)
-        currencies_symbol_dict = GlobalVariables.Currencies.GetCurrenciesDict(CURRENCIES_KEY_VARIABLE, CURRENCIES_SYMBOL_VARIABLE)
+        AccountNamesKeysDic = GlobalVariables.Accounts.GetAccountsDictionary(NAME_VARIABLE, ID_VARIABLE)
+        ' currencies_symbol_dict = GlobalVariables.Currencies.GetCurrenciesDict(CURRENCIES_KEY_VARIABLE, CURRENCIES_SYMBOL_VARIABLE)
 
     End Sub
 
@@ -315,7 +315,7 @@ Friend Class DataGridViewsUtil
 
     ' Initializes VDatagridViewColumns for NO VERSIONNING DGV 
     Friend Shared Function CreateDGVColumns(ByRef DataGridView As vDataGridView, _
-                                             ByRef periodList() As UInt32, _
+                                             ByRef periodList() As Int32, _
                                              ByRef timeConfig As String, _
                                              ByRef columns_reinit As Boolean) As Dictionary(Of Integer, Int32)
 
@@ -500,7 +500,8 @@ Friend Class DataGridViewsUtil
 
 #Region "Alternative Scenarios Report DGV Utility"
 
-    Protected Friend Shared Function CreateASDGVReport(ByRef period_list As List(Of UInt32), ByRef time_config As String) As vDataGridView
+    Protected Friend Shared Function CreateASDGVReport(ByRef period_list As List(Of Int32), _
+                                                       ByRef time_config As String) As vDataGridView
 
         Dim DGV As New vDataGridView
         DGV.VIBlendTheme = BASIC_DGV_REPORT_THEME

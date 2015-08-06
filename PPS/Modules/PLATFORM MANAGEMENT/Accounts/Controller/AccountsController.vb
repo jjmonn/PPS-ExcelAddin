@@ -129,7 +129,7 @@ Friend Class AccountsController
 
     Friend Function DeleteAccount(ByRef node As TreeNode) As Boolean
 
-        Dim accountsKeyList As List(Of UInt32) = TreeViewsUtilities.GetNodesKeysList(node)
+        Dim accountsKeyList As List(Of Int32) = TreeViewsUtilities.GetNodesKeysList(node)
         accountsKeyList.Reverse()
         If AccountsDependenciesCheck(accountsKeyList) = False Then Return False
 
@@ -238,9 +238,9 @@ Friend Class AccountsController
 
 #Region "Accounts Deletion"
 
-    Private Function AccountsDependenciesCheck(ByRef accountsKeyList As List(Of UInt32)) As Boolean
+    Private Function AccountsDependenciesCheck(ByRef accountsKeyList As List(Of Int32)) As Boolean
 
-        Dim dependenciesList As List(Of UInt32) = DependenciesLoopCheck(accountsKeyList)
+        Dim dependenciesList As List(Of Int32) = DependenciesLoopCheck(accountsKeyList)
         If dependenciesList.Count > 0 Then
             Dim listStr As String = ""
             For Each accountName In dependenciesList
@@ -256,13 +256,13 @@ Friend Class AccountsController
 
     End Function
 
-    Private Function DependenciesLoopCheck(ByRef accountsKeyList As List(Of UInt32)) As List(Of UInt32)
+    Private Function DependenciesLoopCheck(ByRef accountsKeyList As List(Of Int32)) As List(Of Int32)
 
-        Dim dependenciesList As New List(Of UInt32)
+        Dim dependenciesList As New List(Of Int32)
         For Each key In accountsKeyList
             CheckForDependencies(key, dependenciesList)
         Next
-        Dim uniqueDependenciesList As List(Of UInt32) = dependenciesList.Distinct().ToList
+        Dim uniqueDependenciesList As List(Of Int32) = dependenciesList.Distinct().ToList
         For Each accountName In accountsKeyList
             If uniqueDependenciesList.Contains(accountsNameKeysDictionary(accountName)) Then uniqueDependenciesList.Remove(accountName)
         Next
@@ -270,7 +270,7 @@ Friend Class AccountsController
 
     End Function
 
-    Private Function AccountsVersionsCheck(ByRef accountsKeyList As List(Of UInt32)) As List(Of UInt32)
+    Private Function AccountsVersionsCheck(ByRef accountsKeyList As List(Of Int32)) As List(Of Int32)
 
         ' display accounts ids to users !!
         ' priority normal
@@ -300,7 +300,7 @@ Friend Class AccountsController
 
     
 
-    Private Sub RemoveAccount(ByRef accountsList As List(Of UInt32), ByRef node As TreeNode)
+    Private Sub RemoveAccount(ByRef accountsList As List(Of Int32), ByRef node As TreeNode)
 
         For Each id In accountsList
             GlobalVariables.Accounts.CMSG_DELETE_ACCOUNT(id)
@@ -435,7 +435,7 @@ Friend Class AccountsController
     End Function
 
     ' Looks for the param accountKey in Accounts formulas
-    Private Sub CheckForDependencies(ByRef accountKey As String, dependenciesList As List(Of UInt32))
+    Private Sub CheckForDependencies(ByRef accountKey As String, dependenciesList As List(Of Int32))
 
         For Each currentKey In positionsDictionary.Keys
             Dim formula As String = GlobalVariables.Accounts.accounts_hash(currentKey)(ACCOUNT_FORMULA_VARIABLE)

@@ -5,8 +5,8 @@
     <Setting Name="serverIp" Type="System.String" Scope="User">
       <Value Profile="(Default)">52.18.31.221</Value>
     </Setting>
-    <Setting Name="version_id" Type="System.String" Scope="User">
-      <Value Profile="(Default)">vto</Value>
+    <Setting Name="version_id" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">5</Value>
     </Setting>
     <Setting Name="user" Type="System.String" Scope="User">
       <Value Profile="(Default)">user2</Value>

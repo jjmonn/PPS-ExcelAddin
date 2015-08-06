@@ -32,7 +32,7 @@ Friend Class SubmissionsControlsController
     Private periods_list As List(Of Int32)
     Private version_id As String
     Private successfull_controls_dic As New Dictionary(Of String, List(Of String))
-    Private entities_id_list As List(Of UInt32)
+    Private entities_id_list As List(Of Int32)
     Private charts_periods As New List(Of Int32)
 
 

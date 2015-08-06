@@ -11,7 +11,7 @@ Imports System.Collections.Generic
 '
 ' Author: Julien Monnereau
 ' Created: 23/07/2015
-' Last modified: 03/08/2015
+' Last modified: 05/08/2015
 
 
 
@@ -57,10 +57,11 @@ Friend Class EntitiesFilter
     Private Sub SMSG_LIST_ENTITY_FILTER_ANSWER(packet As ByteBuffer)
 
         If packet.ReadInt32() = 0 Then
-            For i As Int32 = 0 To packet.ReadInt32()
+            Dim nbRecords As UInt32 = packet.ReadInt32()
+            For i As Int32 = 1 To nbRecords
                 Dim tmp_ht As New Hashtable
                 GetEntityFilterHTFromPacket(packet, tmp_ht)
-                entitiesFilters_list(tmp_ht(ID_VARIABLE)) = tmp_ht
+                entitiesFilters_list.Add(tmp_ht)
                 fIdFvDict.Add(tmp_ht(ENTITY_ID_VARIABLE) & tmp_ht(FILTER_ID_VARIABLE), tmp_ht(FILTER_VALUE_ID_VARIABLE))
             Next
             NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_LIST_ENTITY_FILTER_ANSWER, AddressOf SMSG_LIST_ENTITY_FILTER_ANSWER)
@@ -188,10 +189,6 @@ Friend Class EntitiesFilter
 
 #Region "Mappings"
 
-    Friend Function GetEntitiesFiltersDictionary()
-
-
-    End Function
 
     Friend Function GetFilteredEntityIDs(ByRef filter_id As UInt32, _
                                          ByRef filter_value_id As UInt32) As List(Of UInt32)

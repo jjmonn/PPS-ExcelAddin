@@ -4,7 +4,7 @@
 '
 ' To do:
 '       - Track server deconection error
-'       -
+'       - to be deleted -> priority high
 '
 ' Known bugs:
 '       - 
@@ -44,13 +44,13 @@ Friend Class ModelServer
 
     Protected Friend Sub New()
 
-        rst = New Recordset
-        rst.CursorLocation = CursorLocationEnum.adUseClient
+        'rst = New Recordset
+        'rst.CursorLocation = CursorLocationEnum.adUseClient
 
-        cmd = New Command
-        cmd.ActiveConnection = GlobalVariables.Connection
-        cmd.CommandType = CommandTypeEnum.adCmdText
-        ' adLockOptimistic
+        'cmd = New Command
+        'cmd.ActiveConnection = GlobalVariables.Connection
+        'cmd.CommandType = CommandTypeEnum.adCmdText
+        '' adLockOptimistic
 
 
     End Sub
@@ -131,18 +131,18 @@ Friend Class ModelServer
                                        ByRef cursor_option As Int32, _
                                        ByRef lock_type As LockTypeEnum) As Boolean
 
-        On Error GoTo queryError
-        rst.Open(strSQL, _
-                 GlobalVariables.Connection, _
-                 GetCursor(cursor_option), _
-                 lock_type, _
-                 CommandTypeEnum.adCmdTable)
-        Return True
-        Exit Function
+        '        On Error GoTo queryError
+        '        rst.Open(strSQL, _
+        '                 GlobalVariables.Connection, _
+        '                 GetCursor(cursor_option), _
+        '                 lock_type, _
+        '                 CommandTypeEnum.adCmdTable)
+        '        Return True
+        '        Exit Function
 
-queryError:
-        ErrorMessage = Err.Description
-        Return False
+        'queryError:
+        '        ErrorMessage = Err.Description
+        '        Return False
 
     End Function
 
@@ -150,18 +150,18 @@ queryError:
                                         ByRef cursor_option As Int32, _
                                         ByRef lock_type As LockTypeEnum) As Boolean
 
-        On Error GoTo queryError
-        rst.Open(sqlQuery, _
-                 GlobalVariables.Connection, _
-                 GetCursor(cursor_option), _
-                 lock_type, _
-                 ADODB.CommandTypeEnum.adCmdText)
-        Return True
-        Exit Function
+        '        On Error GoTo queryError
+        '        rst.Open(sqlQuery, _
+        '                 GlobalVariables.Connection, _
+        '                 GetCursor(cursor_option), _
+        '                 lock_type, _
+        '                 ADODB.CommandTypeEnum.adCmdText)
+        '        Return True
+        '        Exit Function
 
-queryError:
-        ErrorMessage = Err.Description
-        Return False
+        'queryError:
+        '        ErrorMessage = Err.Description
+        '        Return False
 
     End Function
 

@@ -68,10 +68,10 @@ Namespace My
         
         <Global.System.Configuration.UserScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("vto")>  _
-        Public Property version_id() As String
+         Global.System.Configuration.DefaultSettingValueAttribute("5")>  _
+        Public Property version_id() As Integer
             Get
-                Return CType(Me("version_id"),String)
+                Return CType(Me("version_id"),Integer)
             End Get
             Set
                 Me("version_id") = value

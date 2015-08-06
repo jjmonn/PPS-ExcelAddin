@@ -26,7 +26,7 @@ Friend Class LogUI
 
     ' Variables
     Protected Friend FinancialDGV As New vDataGridView
-    Private period_list As UInt32()
+    Private period_list As Int32()
     Private current_version_id As String
     Protected Friend rows_item_account_id_dic As New Dictionary(Of HierarchyItem, String)
     Private current_DGV_cell As GridCell
@@ -120,7 +120,7 @@ Friend Class LogUI
 #Region "Interface"
 
     Friend Sub InitializeDGVColumns(ByRef version_id As String,
-                                    ByRef input_period_list As UInt32(), _
+                                    ByRef input_period_list As Int32(), _
                                     ByRef time_config As String)
 
         period_list = input_period_list
@@ -132,7 +132,7 @@ Friend Class LogUI
             dgv.ColumnsHierarchy.AutoStretchColumns = True
         Next
 
-        DGVUtil.FormatDGVs(DGVTabControl, my.settings.mainCurrency)
+        DGVUtil.FormatDGVs(DGVTabControl, My.Settings.mainCurrency)
         If Not IsNothing(TabControl1.TabPages(0)) Then TabControl1.SelectedTab = TabControl1.TabPages(0)
         Me.Update()
 

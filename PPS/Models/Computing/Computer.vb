@@ -46,11 +46,11 @@ Friend Class Computer
 
     ' manage request IDs !!!!! -> binded with versions
     ' à vérifier avec la méthode de réception nath !! priority high
-    Friend Sub CMSG_COMPUTE_REQUEST(ByRef versions_id As UInt32(), _
-                                    ByRef entity_id As UInt32, _
-                                    ByRef currency_id As UInt32, _
-                                    Optional ByRef filters As Dictionary(Of UInt32, List(Of UInt32)) = Nothing, _
-                                    Optional ByRef axis_filters As Dictionary(Of UInt32, List(Of UInt32)) = Nothing, _
+    Friend Sub CMSG_COMPUTE_REQUEST(ByRef versions_id As Int32(), _
+                                    ByRef entity_id As Int32, _
+                                    ByRef currency_id As Int32, _
+                                    Optional ByRef filters As Dictionary(Of Int32, List(Of Int32)) = Nothing, _
+                                    Optional ByRef axis_filters As Dictionary(Of Int32, List(Of Int32)) = Nothing, _
                                     Optional ByRef hierarchy As List(Of String) = Nothing)
 
         dataMap = New Collections.Hashtable
@@ -141,10 +141,10 @@ Friend Class Computer
 
         If packet.ReadInt32() = 0 Then
             Dim request_id = packet.GetRequestId()
-            Dim version_id As UInt32 = requestIdVersionIdDict(request_id)
+            Dim version_id As Int32 = requestIdVersionIdDict(request_id)
             requestIdVersionIdDict.Remove(request_id)
 
-            Dim filters_dict As New Dictionary(Of String, UInt32)
+            Dim filters_dict As New Dictionary(Of String, Int32)
 
             dataMap(version_id) = New Hashtable
 
@@ -174,8 +174,8 @@ Friend Class Computer
     End Sub
 
     Private Sub FillResultData(ByRef packet As ByteBuffer, _
-                               ByRef version_id As UInt32, _
-                               ByRef filter_dict As Dictionary(Of String, UInt32), _
+                               ByRef version_id As Int32, _
+                               ByRef filter_dict As Dictionary(Of String, Int32), _
                                ByRef periodIdentifier As Char, _
                                ByRef periodsTokenDict As Dictionary(Of String, String))
 
@@ -184,17 +184,17 @@ Friend Class Computer
         Dim isFiltered As Boolean = packet.ReadBool()
         If isFiltered = True Then
 
-            Dim axis As UInt32 = packet.ReadUint32()
+            Dim axis As UInt32 = packet.ReadUint8()
             isAxis = packet.ReadBool()
-            If isAxis Then
-                filter_code = AXIS_DECOMPOSITION_IDENTIFIER & axis
-            Else
+            If isAxis = False Then
                 filter_code = FILTERS_DECOMPOSITION_IDENTIFIER & packet.ReadUint32
+            Else
+                filter_code = AXIS_DECOMPOSITION_IDENTIFIER & axis
             End If
             filter_dict.Add(filter_code, 0)
         End If
 
-        Dim nb_results As UInt32 = packet.ReadInt32
+        Dim nb_results As UInt32 = packet.ReadUint32
         For result_index As UInt32 = 1 To nb_results
             FillAccountData(packet, _
                             version_id, _
@@ -220,11 +220,11 @@ Friend Class Computer
     End Sub
 
     Private Sub FillAccountData(ByRef packet As ByteBuffer, _
-                                ByRef version_id As UInt32, _
+                                ByRef version_id As Int32, _
                                 ByRef isFiltered As Boolean, _
                                 ByRef isAxis As Boolean, _
                                 ByRef filter_code As String, _
-                                ByRef filter_dict As Dictionary(Of String, UInt32), _
+                                ByRef filter_dict As Dictionary(Of String, Int32), _
                                 ByRef periodIdentifier As Char, _
                                 ByRef periodsTokenDict As Dictionary(Of String, String))
 
@@ -239,33 +239,37 @@ Friend Class Computer
         End If
 
         Dim filter_token As String = GetFiltersToken(filter_dict)
+        System.Diagnostics.Debug.Write("filter Token:" & filter_token & Chr(13))
         If dataMap(version_id).containskey(filter_token) = False Then
             dataMap(version_id)(filter_token) = New Hashtable
         End If
 
-        Dim entity_id As UInt32 = packet.ReadUint32()
+        Dim entity_id As Int32 = packet.ReadUint32()
+        System.Diagnostics.Debug.Write("entityId:" & entity_id & Chr(13))
         Dim nb_accounts As UInt32 = packet.ReadUint32()
         ' If dataMap(version_id)(filter_token).containskey(entity_id) = False Then
         dataMap(version_id)(filter_token)(entity_id) = New Hashtable
         ' End If
 
         For account_index As UInt32 = 1 To nb_accounts
-            Dim account_id As UInt32 = packet.ReadUint32()
+            Dim account_id As Int32 = packet.ReadUint32()
             dataMap(version_id)(filter_token)(entity_id)(account_id) = New Hashtable
 
             ' Non aggregated data
-            Dim nb_periods As UInt32 = packet.ReadUint16()
-            For period_index As UInt32 = 0 To nb_periods - 1
-                dataMap(version_id) _
-                       (filter_token) _
-                       (entity_id) _
-                       (account_id) _
-                       (periodsTokenDict(periodIdentifier & period_index)) _
-                       = packet.ReadDouble()
-            Next
+            Dim nb_periods As UInt16 = packet.ReadUint16()
+            If nb_periods > 0 Then
+                For period_index As UInt16 = 0 To nb_periods - 1
+                    dataMap(version_id) _
+                           (filter_token) _
+                           (entity_id) _
+                           (account_id) _
+                           (periodsTokenDict(periodIdentifier & period_index)) _
+                           = packet.ReadDouble()
+                Next
+            End If
 
             ' Aggreagted data
-            Dim nbAggregations As UInt16 = packet.ReadUint32()
+            Dim nbAggregations As UInt32 = packet.ReadUint32()
             For aggregationIndex As UInt32 = 1 To nbAggregations
                 dataMap(version_id) _
                     (filter_token) _
@@ -321,9 +325,9 @@ Friend Class Computer
 
     End Function
 
-    Friend Function GetTotalFiltersDictionariesValues(ByRef dict As Dictionary(Of UInt32, List(Of UInt32))) As UInt32
+    Friend Function GetTotalFiltersDictionariesValues(ByRef dict As Dictionary(Of Int32, List(Of Int32))) As Int32
 
-        Dim counter As UInt32 = 0
+        Dim counter As Int32 = 0
         For Each key In dict.Keys
             For Each value In dict(key)
                 counter += 1
@@ -333,7 +337,7 @@ Friend Class Computer
 
     End Function
 
-    Friend Shared Function GetFiltersToken(ByRef dict As Dictionary(Of String, UInt32)) As String
+    Friend Shared Function GetFiltersToken(ByRef dict As Dictionary(Of String, Int32)) As String
 
         Dim token As String = ""
         If dict.Count > 0 Then
@@ -342,7 +346,7 @@ Friend Class Computer
             Next
             Return Left(token, Len(token) - 1)
         Else
-            Return ""
+            Return 0
         End If
 
     End Function

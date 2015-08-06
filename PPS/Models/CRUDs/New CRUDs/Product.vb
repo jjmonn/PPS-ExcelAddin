@@ -55,10 +55,10 @@ Friend Class Product
     Private Sub SMSG_LIST_PRODUCT_ANSWER(packet As ByteBuffer)
 
         If packet.ReadInt32() = 0 Then
-            For i As Int32 = 0 To packet.ReadInt32()
+            For i As Int32 = 1 To packet.ReadInt32()
                 Dim tmp_ht As New Hashtable
                 GetProductHTFromPacket(packet, tmp_ht)
-                products_hash(tmp_ht(ID_VARIABLE)) = tmp_ht
+                products_hash(CInt(tmp_ht(ID_VARIABLE))) = tmp_ht
             Next
             NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_LIST_PRODUCT_ANSWER, AddressOf SMSG_LIST_PRODUCT_ANSWER)
             server_response_flag = True
@@ -240,7 +240,7 @@ Friend Class Product
     Friend Sub LoadProductsTree(ByRef TV As Windows.Forms.TreeView)
 
         TV.Nodes.Clear()
-        For Each id As UInt32 In products_hash.Keys
+        For Each id As Int32 In products_hash.Keys
             Dim node As Windows.Forms.TreeNode = TV.Nodes.Add(CStr(id), _
                                                               products_hash(id)(NAME_VARIABLE), _
                                                               0, 0)
@@ -253,7 +253,7 @@ Friend Class Product
                                 ByRef filter_list As List(Of UInt32))
 
         TV.Nodes.Clear()
-        For Each id As UInt32 In products_hash.Keys
+        For Each id As Int32 In products_hash.Keys
             Dim node As Windows.Forms.TreeNode = TV.Nodes.Add(CStr(id), _
                                                               products_hash(id)(NAME_VARIABLE), _
                                                               0, 0)

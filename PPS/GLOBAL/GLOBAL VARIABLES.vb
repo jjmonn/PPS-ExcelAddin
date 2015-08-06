@@ -1,27 +1,23 @@
 ﻿' GlobalVariables.vb
 '
 '
-' To do:
-'       - Change syntax : Xxxx_Xxxx for Global_Variables ?
-'
+'     
 '
 ' Author: Julien Monnereau
-' Last modified: 26/06/2015
+' Last modified: 05/08/2015
 
 
 Imports AddinExpress.MSO
 Imports Microsoft.Office.Interop.Excel
-
-'Imports Microsoft.Office.Interop.Excel
-
 
 
 Friend Class GlobalVariables
 
 #Region "Connections and Server"
 
-    Friend Shared Connection As ADODB.Connection
+    'Friend Shared Connection As ADODB.Connection
     Friend Shared NetworkConnect As NetworkLauncher
+    Friend Shared ConnectionState As Boolean = False
     Friend Shared database As String = My.Settings.database
     Friend Shared timeOut As UInt16 = 5
 

@@ -33,9 +33,9 @@ Friend Class AlternativeScenarioModel
     Friend current_conso_data_dic As New Dictionary(Of String, Dictionary(Of String, Double()))
 
     ' Current Config
-    Friend periods_list As List(Of UInt32)
+    Friend periods_list As List(Of Int32)
     Friend time_configuration As String
-    Private entities_id_list As List(Of UInt32)
+    Private entities_id_list As List(Of Int32)
 
     ' Constants
     Friend Const INCREMENTAL_TAX As String = "incr_tax"
@@ -56,9 +56,9 @@ Friend Class AlternativeScenarioModel
 
 #Region "Interface"
 
-    Friend Sub ComputeEntity(ByRef version_id As String, _
-                                       ByRef entity_node As TreeNode, _
-                                       ByRef PBar As ProgressBarControl)
+    Friend Sub ComputeEntity(ByRef version_id As Int32, _
+                             ByRef entity_node As TreeNode, _
+                            ByRef PBar As ProgressBarControl)
 
         Dim nb_periods, start_period As Int32
         Dim rates_version_id As String = GlobalVariables.Versions.versions_hash(version_id)(VERSIONS_RATES_VERSION_ID_VAR)
@@ -89,7 +89,7 @@ Friend Class AlternativeScenarioModel
         SensisResultsDict.Clear()
         For Each sensitivity_id In sensitivities_dictionary.Keys
             Dim PSDLLinterface As New PSDLLL_Interface(indexes_list.ToArray, _
-                                              entities_id_list.ToArray, _
+                                                entities_id_list.ToArray, _
                                               GetFormulas(sensitivities_dictionary(sensitivity_id)(GDF_SENSITIVITIES_FORMULA_NAME_VAR)).ToArray, _
                                               periods_list.Count)
 
@@ -111,7 +111,7 @@ Friend Class AlternativeScenarioModel
 
     Friend Sub AggregateSensis(ByRef entity_node As TreeNode)
 
-        Dim all_entities_id As List(Of UInt32) = TreeViewsUtilities.GetNodesKeysList(entity_node)
+        Dim all_entities_id As List(Of Int32) = TreeViewsUtilities.GetNodesKeysList(entity_node)
         all_entities_id.Reverse()
 
         For Each entity_id As String In all_entities_id

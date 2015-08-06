@@ -158,7 +158,7 @@ Friend Class AlternativeScenariosUI
     End Sub
 
     Protected Friend Sub DisplaySensibilitiesTabs(ByRef sensitivities_results As Dictionary(Of String, Dictionary(Of String, Dictionary(Of String, Double()))), _
-                                                  ByRef period_list As List(Of UInt32), _
+                                                  ByRef period_list As List(Of Int32), _
                                                   ByRef time_config As String, _
                                                   ByRef entity_node As TreeNode)
 
@@ -271,7 +271,7 @@ Friend Class AlternativeScenariosUI
 
 #Region "Sensitivities Tab"
 
-    Private Sub SensitivitiesDGVsInitialization(ByRef period_list As List(Of UInt32), _
+    Private Sub SensitivitiesDGVsInitialization(ByRef period_list As List(Of Int32), _
                                                 ByRef time_config As String, _
                                                 ByRef entity_node As TreeNode)
 

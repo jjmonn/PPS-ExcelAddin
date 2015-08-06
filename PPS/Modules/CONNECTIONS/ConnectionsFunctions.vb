@@ -31,13 +31,13 @@ Friend Class ConnectionsFunctions
         globalVariablesInitFlags.clear()
         globalInitFlag = False
         GlobalVariables.NetworkConnect = New NetworkLauncher()
-        Dim connection_success As Boolean = (GlobalVariables.NetworkConnect.Launch(p_hostname, p_port))
+        GlobalVariables.ConnectionState = (GlobalVariables.NetworkConnect.Launch(p_hostname, p_port))
 
         ' below :
         ' check connection state before
         ' place init code elsewhere !!?
         ' priority normal
-        If connection_success = True Then
+        If GlobalVariables.ConnectionState = True Then
 
             GlobalVariables.Accounts = New Account
             GlobalVariables.Entities = New Entity
@@ -79,15 +79,17 @@ Friend Class ConnectionsFunctions
             globalVariablesInitFlags.Add(GlobalEnums.GlobalModels.FACTSVERSIONS, False)
 
             Do While globalInitFlag = False
-
-                ' waiting for all global variables to be initialized
                 ' implement a timeout 
                 ' Reiterate server query for variables init ?
                 ' priority high !!!
-
             Loop
+            GlobalVariables.Connection_Toggle_Button.Image = 1
+            GlobalVariables.Connection_Toggle_Button.Caption = "Connected"
             Return True
         Else
+            GlobalVariables.ConnectionState = False
+            GlobalVariables.Connection_Toggle_Button.Image = 0
+            GlobalVariables.Connection_Toggle_Button.Caption = "Not connected"
             Return False
         End If
 
@@ -98,6 +100,7 @@ Friend Class ConnectionsFunctions
         GlobalVariables.NetworkConnect.Stop()
         GlobalVariables.Connection_Toggle_Button.Image = 0
         GlobalVariables.Connection_Toggle_Button.Caption = "Not connected"
+        GlobalVariables.ConnectionState = False
 
     End Sub
 
@@ -108,26 +111,26 @@ Friend Class ConnectionsFunctions
                                    ByRef user_id As String, _
                                    ByRef pwd As String) As Boolean
 
-        GlobalVariables.Connection = OpenConnection(user_id, pwd)
-        If Not GlobalVariables.Connection Is Nothing Then
+        'GlobalVariables.Connection = OpenConnection(user_id, pwd)
+        'If Not GlobalVariables.Connection Is Nothing Then
 
-            If My.Settings.user <> user_id Then My.Settings.user = user_id
-            GlobalVariables.Connection_Toggle_Button.Image = 1
-            GlobalVariables.Connection_Toggle_Button.Caption = "Connected"
-            addin.setUpFlag = True
+        '    If My.Settings.user <> user_id Then My.Settings.user = user_id
+        '    GlobalVariables.Connection_Toggle_Button.Image = 1
+        '    GlobalVariables.Connection_Toggle_Button.Caption = "Connected"
+        '    addin.setUpFlag = True
 
-            If GlobalVariables.Versions.versions_hash.ContainsKey(My.Settings.version_id) Then
-                addin.SetVersion(My.Settings.version_id)
-            Else
-                addin.LaunchVersionSelection()
-            End If
-            Return True
-        Else
-            GlobalVariables.Connection.Close()
-            GlobalVariables.Connection_Toggle_Button.Image = 0
-            MsgBox("Connection failed")
-            Return False
-        End If
+        '    If GlobalVariables.Versions.versions_hash.ContainsKey(My.Settings.version_id) Then
+        '        addin.SetVersion(My.Settings.version_id)
+        '    Else
+        '        addin.LaunchVersionSelection()
+        '    End If
+        '    Return True
+        'Else
+        '    GlobalVariables.Connection.Close()
+        '    GlobalVariables.Connection_Toggle_Button.Image = 0
+        '    MsgBox("Connection failed")
+        '    Return False
+        'End If
 
     End Function
 
@@ -170,10 +173,10 @@ Friend Class ConnectionsFunctions
 
     Friend Shared Sub CloseConnection()
 
-        GlobalVariables.Connection.Close()
-        GlobalVariables.Connection = Nothing
-        GlobalVariables.Connection_Toggle_Button.Image = 0
-        GlobalVariables.Connection_Toggle_Button.Caption = "Not connected"
+        'GlobalVariables.Connection.Close()
+        'GlobalVariables.Connection = Nothing
+        'GlobalVariables.Connection_Toggle_Button.Image = 0
+        'GlobalVariables.Connection_Toggle_Button.Caption = "Not connected"
 
     End Sub
 
