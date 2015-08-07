@@ -54,7 +54,6 @@
     <Compile Include="ServerMessage.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="network vvf1.pfx" />
     <None Include="network.pfx" />
     <None Include="Network.snk" />
   </ItemGroup>
