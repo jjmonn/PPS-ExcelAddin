@@ -48,7 +48,7 @@
     <SignAssembly>true</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>np1.pfx</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>displaycontrol.pfx</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -110,6 +110,7 @@
   <ItemGroup>
     <None Include="CUI2DisplaConfig.pfx" />
     <None Include="CUI2DisplayMGT.pfx" />
+    <None Include="displaycontrol.pfx" />
     <None Include="My Project\Application.myapp">
       <Generator>MyApplicationCodeGenerator</Generator>
       <LastGenOutput>Application.Designer.vb</LastGenOutput>
@@ -119,7 +120,6 @@
       <CustomToolNamespace>My</CustomToolNamespace>
       <LastGenOutput>Settings.Designer.vb</LastGenOutput>
     </None>
-    <None Include="np1.pfx" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{94E38DFF-614B-4cbd-B67C-F211BB35CE8B}" />

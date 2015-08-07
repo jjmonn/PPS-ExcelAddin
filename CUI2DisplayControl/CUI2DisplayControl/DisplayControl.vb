@@ -40,7 +40,9 @@ Public Class DisplayControl
         columns_display_tv.AllowDrop = True
 
         ' By default add the fisrt node
-        rows_display_tv.Nodes.Add(analysis_axis_tv.Nodes(0).Name, analysis_axis_tv.Nodes(0).Name)
+        rows_display_tv.Nodes.Add(analysis_axis_tv.Nodes(0).Name, analysis_axis_tv.Nodes(0).Text)
+        rows_display_tv.Nodes.Add(analysis_axis_tv.Nodes(1).Name, analysis_axis_tv.Nodes(1).Text)
+        columns_display_tv.Nodes.Add(analysis_axis_tv.Nodes(2).Name, analysis_axis_tv.Nodes(2).Text)
 
         AddHandler analysis_axis_tv.ItemDrag, AddressOf analysisAxisTV_ItemDrag
         AddHandler analysis_axis_tv.DragEnter, AddressOf analysisAxisTV_DragEnter
