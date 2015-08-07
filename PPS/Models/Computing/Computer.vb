@@ -16,10 +16,11 @@ Imports System.Collections
 '
 ' Author: Julien Monnereau Julien
 ' Created: 17/07/2015
-' Last modified: 03/08/2015
+' Last modified: 06/08/2015
 
 
 Friend Class Computer
+
 
 #Region "Intance Variables"
 
@@ -235,7 +236,9 @@ Friend Class Computer
                 filter_dict(filter_code) = packet.ReadUint32()
             End If
         Else
-            filter_dict(filter_code) = 0
+            'filter_dict(filter_code) = 0
+            ' to be checked -> priority high
+            filter_dict.Remove(filter_code)
         End If
 
         Dim filter_token As String = GetFiltersToken(filter_dict)
@@ -280,7 +283,8 @@ Friend Class Computer
             Next
         Next
 
-        ' Clean filter code out after ?
+        ' Clean filter code out after ? !! 
+        ' priority high
 
         Dim nb_children_entities As UInt32 = packet.ReadUint32()
         For children_index As UInt32 = 1 To nb_children_entities

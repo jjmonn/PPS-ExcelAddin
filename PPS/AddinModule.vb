@@ -130,6 +130,7 @@ Public Class AddinModule
     Friend WithEvents ConnectionTaskPaneItem As AddinExpress.XL.ADXExcelTaskPanesCollectionItem
     Friend WithEvents AdxRibbonButton5 As AddinExpress.MSO.ADXRibbonButton
     Friend WithEvents Menu3 As System.Windows.Forms.ImageList
+    Friend WithEvents AdxRibbonSeparator2 As AddinExpress.MSO.ADXRibbonSeparator
 
 
 #End Region
@@ -159,7 +160,7 @@ Public Class AddinModule
         Me.WSUplaodBT = New AddinExpress.MSO.ADXRibbonButton(Me.components)
         Me.WBUplaodBT = New AddinExpress.MSO.ADXRibbonButton(Me.components)
         Me.CurrentLinkedWSBT = New AddinExpress.MSO.ADXRibbonButton(Me.components)
-        Me.MainTabImageList = New System.Windows.Forms.ImageList(Me.components)
+        Me.Menu3 = New System.Windows.Forms.ImageList(Me.components)
         Me.InputReportLaunchBT = New AddinExpress.MSO.ADXRibbonSplitButton(Me.components)
         Me.AdxRibbonMenu7 = New AddinExpress.MSO.ADXRibbonMenu(Me.components)
         Me.RefreshBT = New AddinExpress.MSO.ADXRibbonSplitButton(Me.components)
@@ -174,6 +175,7 @@ Public Class AddinModule
         Me.FunctionDesigner = New AddinExpress.MSO.ADXRibbonSplitButton(Me.components)
         Me.AdxRibbonMenu1 = New AddinExpress.MSO.ADXRibbonMenu(Me.components)
         Me.BreakLinksBT = New AddinExpress.MSO.ADXRibbonButton(Me.components)
+        Me.MainTabImageList = New System.Windows.Forms.ImageList(Me.components)
         Me.SubmissionControlBT = New AddinExpress.MSO.ADXRibbonSplitButton(Me.components)
         Me.AdxRibbonMenu3 = New AddinExpress.MSO.ADXRibbonMenu(Me.components)
         Me.LogBT = New AddinExpress.MSO.ADXRibbonButton(Me.components)
@@ -236,7 +238,7 @@ Public Class AddinModule
         Me.EntitySelectionTaskPaneItem = New AddinExpress.XL.ADXExcelTaskPanesCollectionItem(Me.components)
         Me.ConnectionTaskPaneItem = New AddinExpress.XL.ADXExcelTaskPanesCollectionItem(Me.components)
         Me.AdxRibbonLabel1 = New AddinExpress.MSO.ADXRibbonLabel(Me.components)
-        Me.Menu3 = New System.Windows.Forms.ImageList(Me.components)
+        Me.AdxRibbonSeparator2 = New AddinExpress.MSO.ADXRibbonSeparator(Me.components)
         '
         'MaintTab
         '
@@ -276,9 +278,7 @@ Public Class AddinModule
         Me.ConnectionIcons.ImageStream = CType(resources.GetObject("ConnectionIcons.ImageStream"), System.Windows.Forms.ImageListStreamer)
         Me.ConnectionIcons.TransparentColor = System.Drawing.Color.Transparent
         Me.ConnectionIcons.Images.SetKeyName(0, "favicon(4).ico")
-        Me.ConnectionIcons.Images.SetKeyName(1, "favicon(3).ico")
-        Me.ConnectionIcons.Images.SetKeyName(2, "refresh_red.ico")
-        Me.ConnectionIcons.Images.SetKeyName(3, "refresh_green.ico")
+        Me.ConnectionIcons.Images.SetKeyName(1, "client_network.ico")
         '
         'AdxRibbonSeparator1
         '
@@ -289,7 +289,6 @@ Public Class AddinModule
         '
         Me.VersionBT.Caption = "Versions selection"
         Me.VersionBT.Id = "adxRibbonButton_47a60ea441584fe3b0b975b2829b6ec1"
-        Me.VersionBT.Image = 2
         Me.VersionBT.ImageList = Me.NewICOs
         Me.VersionBT.ImageTransparentColor = System.Drawing.Color.Transparent
         Me.VersionBT.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
@@ -359,7 +358,7 @@ Public Class AddinModule
         Me.UploadBT.Caption = "Snapshot"
         Me.UploadBT.Controls.Add(Me.UplodBT1)
         Me.UploadBT.Id = "adxRibbonSplitButton_d2989ac910ad415381c6cc902b2051e5"
-        Me.UploadBT.Image = 8
+        Me.UploadBT.Image = 19
         Me.UploadBT.ImageList = Me.Menu3
         Me.UploadBT.ImageTransparentColor = System.Drawing.Color.Transparent
         Me.UploadBT.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
@@ -402,43 +401,37 @@ Public Class AddinModule
         Me.CurrentLinkedWSBT.ImageTransparentColor = System.Drawing.Color.Transparent
         Me.CurrentLinkedWSBT.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
         '
-        'MainTabImageList
+        'Menu3
         '
-        Me.MainTabImageList.ImageStream = CType(resources.GetObject("MainTabImageList.ImageStream"), System.Windows.Forms.ImageListStreamer)
-        Me.MainTabImageList.TransparentColor = System.Drawing.Color.Transparent
-        Me.MainTabImageList.Images.SetKeyName(0, "favicon(262).ico")
-        Me.MainTabImageList.Images.SetKeyName(1, "favicon(251).ico")
-        Me.MainTabImageList.Images.SetKeyName(2, "financial-graph ctrl bcgk(1).ico")
-        Me.MainTabImageList.Images.SetKeyName(3, "favicon(238).ico")
-        Me.MainTabImageList.Images.SetKeyName(4, "favicon(208).ico")
-        Me.MainTabImageList.Images.SetKeyName(5, "favicon(16).ico")
-        Me.MainTabImageList.Images.SetKeyName(6, "favicon (6).ico")
-        Me.MainTabImageList.Images.SetKeyName(7, "favicon(13).ico")
-        Me.MainTabImageList.Images.SetKeyName(8, "favicon(248).ico")
-        Me.MainTabImageList.Images.SetKeyName(9, "favicon(236).ico")
-        Me.MainTabImageList.Images.SetKeyName(10, "favicon(242).ico")
-        Me.MainTabImageList.Images.SetKeyName(11, "Edit glossy.ico")
-        Me.MainTabImageList.Images.SetKeyName(12, "Controlling glossy.ico")
-        Me.MainTabImageList.Images.SetKeyName(13, "favicon(12).ico")
-        Me.MainTabImageList.Images.SetKeyName(14, "favicon(249).ico")
-        Me.MainTabImageList.Images.SetKeyName(15, "favicon(8).ico")
-        Me.MainTabImageList.Images.SetKeyName(16, "favicon(233).ico")
-        Me.MainTabImageList.Images.SetKeyName(17, "favicon(9).ico")
-        Me.MainTabImageList.Images.SetKeyName(18, "favicon(7).ico")
-        Me.MainTabImageList.Images.SetKeyName(19, "favicon(11).ico")
-        Me.MainTabImageList.Images.SetKeyName(20, "break link orange.png")
-        Me.MainTabImageList.Images.SetKeyName(21, "Scenario.ico")
-        Me.MainTabImageList.Images.SetKeyName(22, "db Purple big.ico")
-        Me.MainTabImageList.Images.SetKeyName(23, "favicon(13).ico")
-        Me.MainTabImageList.Images.SetKeyName(24, "favicon(15).ico")
-        Me.MainTabImageList.Images.SetKeyName(25, "symbol_dollar_euro.ico")
+        Me.Menu3.ImageStream = CType(resources.GetObject("Menu3.ImageStream"), System.Windows.Forms.ImageListStreamer)
+        Me.Menu3.TransparentColor = System.Drawing.Color.Transparent
+        Me.Menu3.Images.SetKeyName(0, "registry.ico")
+        Me.Menu3.Images.SetKeyName(1, "chart_hi_lo.ico")
+        Me.Menu3.Images.SetKeyName(2, "refresh black 2.ico")
+        Me.Menu3.Images.SetKeyName(3, "ok.ico")
+        Me.Menu3.Images.SetKeyName(4, "spreadsheed_cell.ico")
+        Me.Menu3.Images.SetKeyName(5, "window_equalizer.ico")
+        Me.Menu3.Images.SetKeyName(6, "element_branch2.ico")
+        Me.Menu3.Images.SetKeyName(7, "pieces.ico")
+        Me.Menu3.Images.SetKeyName(8, "snapshot ico green.ico")
+        Me.Menu3.Images.SetKeyName(9, "window_equalizer.ico")
+        Me.Menu3.Images.SetKeyName(10, "tablet_computer.ico")
+        Me.Menu3.Images.SetKeyName(11, "refresh 2.ico")
+        Me.Menu3.Images.SetKeyName(12, "Financial BI Ico.ico")
+        Me.Menu3.Images.SetKeyName(13, "favicon(15).ico")
+        Me.Menu3.Images.SetKeyName(14, "favicon(16).ico")
+        Me.Menu3.Images.SetKeyName(15, "favicon(17).ico")
+        Me.Menu3.Images.SetKeyName(16, "favicon(18).ico")
+        Me.Menu3.Images.SetKeyName(17, "favicon(19).ico")
+        Me.Menu3.Images.SetKeyName(18, "Financial BI Ico.ico")
+        Me.Menu3.Images.SetKeyName(19, "snap green.ico")
         '
         'InputReportLaunchBT
         '
         Me.InputReportLaunchBT.Caption = "Edition"
         Me.InputReportLaunchBT.Controls.Add(Me.AdxRibbonMenu7)
         Me.InputReportLaunchBT.Id = "adxRibbonSplitButton_815e28e10c3d4a28a2eee8165efe3ff1"
-        Me.InputReportLaunchBT.Image = 0
+        Me.InputReportLaunchBT.Image = 15
         Me.InputReportLaunchBT.ImageList = Me.Menu3
         Me.InputReportLaunchBT.ImageTransparentColor = System.Drawing.Color.Transparent
         Me.InputReportLaunchBT.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
@@ -520,6 +513,7 @@ Public Class AddinModule
         Me.AdxRibbonGroup2.Controls.Add(Me.ControlingUI2BT)
         Me.AdxRibbonGroup2.Controls.Add(Me.FunctionDesigner)
         Me.AdxRibbonGroup2.Controls.Add(Me.SubmissionControlBT)
+        Me.AdxRibbonGroup2.Controls.Add(Me.AdxRibbonSeparator2)
         Me.AdxRibbonGroup2.Controls.Add(Me.financialModelingBT)
         Me.AdxRibbonGroup2.Controls.Add(Me.AdvancedModelingBT)
         Me.AdxRibbonGroup2.Id = "adxRibbonGroup_13e7ba6b0acf4975af1793d5cfec00ed"
@@ -543,7 +537,7 @@ Public Class AddinModule
         Me.FunctionDesigner.Caption = "PPSBI"
         Me.FunctionDesigner.Controls.Add(Me.AdxRibbonMenu1)
         Me.FunctionDesigner.Id = "adxRibbonSplitButton_5986acbd4f414054bdd1177565ae2cf3"
-        Me.FunctionDesigner.Image = 4
+        Me.FunctionDesigner.Image = 12
         Me.FunctionDesigner.ImageList = Me.Menu3
         Me.FunctionDesigner.ImageTransparentColor = System.Drawing.Color.Transparent
         Me.FunctionDesigner.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
@@ -566,12 +560,43 @@ Public Class AddinModule
         Me.BreakLinksBT.ImageTransparentColor = System.Drawing.Color.Transparent
         Me.BreakLinksBT.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
         '
+        'MainTabImageList
+        '
+        Me.MainTabImageList.ImageStream = CType(resources.GetObject("MainTabImageList.ImageStream"), System.Windows.Forms.ImageListStreamer)
+        Me.MainTabImageList.TransparentColor = System.Drawing.Color.Transparent
+        Me.MainTabImageList.Images.SetKeyName(0, "favicon(262).ico")
+        Me.MainTabImageList.Images.SetKeyName(1, "favicon(251).ico")
+        Me.MainTabImageList.Images.SetKeyName(2, "financial-graph ctrl bcgk(1).ico")
+        Me.MainTabImageList.Images.SetKeyName(3, "favicon(238).ico")
+        Me.MainTabImageList.Images.SetKeyName(4, "favicon(208).ico")
+        Me.MainTabImageList.Images.SetKeyName(5, "favicon(16).ico")
+        Me.MainTabImageList.Images.SetKeyName(6, "favicon (6).ico")
+        Me.MainTabImageList.Images.SetKeyName(7, "favicon(13).ico")
+        Me.MainTabImageList.Images.SetKeyName(8, "favicon(248).ico")
+        Me.MainTabImageList.Images.SetKeyName(9, "favicon(236).ico")
+        Me.MainTabImageList.Images.SetKeyName(10, "favicon(242).ico")
+        Me.MainTabImageList.Images.SetKeyName(11, "Edit glossy.ico")
+        Me.MainTabImageList.Images.SetKeyName(12, "Controlling glossy.ico")
+        Me.MainTabImageList.Images.SetKeyName(13, "favicon(12).ico")
+        Me.MainTabImageList.Images.SetKeyName(14, "favicon(249).ico")
+        Me.MainTabImageList.Images.SetKeyName(15, "favicon(8).ico")
+        Me.MainTabImageList.Images.SetKeyName(16, "favicon(233).ico")
+        Me.MainTabImageList.Images.SetKeyName(17, "favicon(9).ico")
+        Me.MainTabImageList.Images.SetKeyName(18, "favicon(7).ico")
+        Me.MainTabImageList.Images.SetKeyName(19, "favicon(11).ico")
+        Me.MainTabImageList.Images.SetKeyName(20, "break link orange.png")
+        Me.MainTabImageList.Images.SetKeyName(21, "Scenario.ico")
+        Me.MainTabImageList.Images.SetKeyName(22, "db Purple big.ico")
+        Me.MainTabImageList.Images.SetKeyName(23, "favicon(13).ico")
+        Me.MainTabImageList.Images.SetKeyName(24, "favicon(15).ico")
+        Me.MainTabImageList.Images.SetKeyName(25, "symbol_dollar_euro.ico")
+        '
         'SubmissionControlBT
         '
         Me.SubmissionControlBT.Caption = "Controls"
         Me.SubmissionControlBT.Controls.Add(Me.AdxRibbonMenu3)
         Me.SubmissionControlBT.Id = "adxRibbonSplitButton_c948ce7f779a4f6cbe647f9de2d15b60"
-        Me.SubmissionControlBT.Image = 2
+        Me.SubmissionControlBT.Image = 3
         Me.SubmissionControlBT.ImageList = Me.Menu3
         Me.SubmissionControlBT.ImageTransparentColor = System.Drawing.Color.Transparent
         Me.SubmissionControlBT.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
@@ -1150,22 +1175,10 @@ Public Class AddinModule
         Me.AdxRibbonLabel1.Id = "adxRibbonLabel_f8272bc6694448f6955f882ef772da9e"
         Me.AdxRibbonLabel1.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
         '
-        'Menu3
+        'AdxRibbonSeparator2
         '
-        Me.Menu3.ImageStream = CType(resources.GetObject("Menu3.ImageStream"), System.Windows.Forms.ImageListStreamer)
-        Me.Menu3.TransparentColor = System.Drawing.Color.Transparent
-        Me.Menu3.Images.SetKeyName(0, "registry.ico")
-        Me.Menu3.Images.SetKeyName(1, "chart_hi_lo.ico")
-        Me.Menu3.Images.SetKeyName(2, "ok.ico")
-        Me.Menu3.Images.SetKeyName(3, "refresh black 2.ico")
-        Me.Menu3.Images.SetKeyName(4, "spreadsheed_cell.ico")
-        Me.Menu3.Images.SetKeyName(5, "window_equalizer.ico")
-        Me.Menu3.Images.SetKeyName(6, "element_branch2.ico")
-        Me.Menu3.Images.SetKeyName(7, "pieces.ico")
-        Me.Menu3.Images.SetKeyName(8, "snapshot ico green.ico")
-        Me.Menu3.Images.SetKeyName(9, "window_equalizer.ico")
-        Me.Menu3.Images.SetKeyName(10, "tablet_computer.ico")
-        Me.Menu3.Images.SetKeyName(11, "refresh 2.ico")
+        Me.AdxRibbonSeparator2.Id = "adxRibbonSeparator_8edf3ca9f7bb41ea82f576292d634286"
+        Me.AdxRibbonSeparator2.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
         '
         'AddinModule
         '

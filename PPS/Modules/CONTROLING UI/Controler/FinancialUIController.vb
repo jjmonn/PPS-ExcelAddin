@@ -419,6 +419,8 @@ Friend Class FinancialUIController
                 ' Set value
                 ' virtual binding -> priority normal !!!
                 row.DataGridView.CellsArea.SetCellValue(row, column, GetData())
+                ' bind attributes to column ?
+                '
 
                 ' Dig one level deeper if needed
                 If Not dimensionNode.NextNode Is Nothing Then
@@ -449,6 +451,9 @@ Friend Class FinancialUIController
                     ' must manage other cases ?! 
                     ' priority high
                     ' tests output !!
+                Case Computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.ACCOUNTS
+                    display_axis_ht(GlobalEnums.DataMapAxis.ACCOUNTS) = 0
+
 
             End Select
         End If
@@ -510,7 +515,7 @@ Friend Class FinancialUIController
                            (display_axis_ht(GlobalEnums.DataMapAxis.ACCOUNTS)) _
                            (display_axis_ht(GlobalEnums.DataMapAxis.PERIODS))
         Catch ex As Exception
-            Return "Error"
+            Return ""
         End Try
 
     End Function

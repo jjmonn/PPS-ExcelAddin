@@ -77,22 +77,52 @@ Friend Class Period
                                         ByRef nbPeriod As UInt16) As Int32()
 
         Dim periodsList As New List(Of Int32)
-        Dim monthList() As UInt16 = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31}
-        Dim year As Double = CDbl(startPeriod) / 365.25 + 1900
-        Dim Month As UInt16 = year - Int(year)
 
-        For i As UInt16 = 1 To nbPeriod - 1
-            startPeriod += monthList(Month + 1)
-            If (Month = 2 AndAlso DateTime.IsLeapYear(year)) Then    ' february of a leap year
-                startPeriod += 1
-            End If
-            periodsList.Add(startPeriod)
-            If (Month = 12) Then
-                year += 1
-                Month = 0
-            End If
-            Month += 1
-        Next
+        ' to be reimplemented priority high
+
+        'Dim monthList() As UInt16 = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31}
+        'Dim year As Double = CDbl(startPeriod) / 365.25 + 1900
+        'Dim Month As UInt16 = year - Int(year)
+
+        'For i As UInt16 = 1 To nbPeriod - 1
+        '    startPeriod += monthList(Month + 1)
+        '    If (Month = 2 AndAlso DateTime.IsLeapYear(year)) Then    ' february of a leap year
+        '        startPeriod += 1
+        '    End If
+        '    periodsList.Add(startPeriod)
+        '    If (Month = 12) Then
+        '        year += 1
+        '        Month = 0
+        '    End If
+        '    Month += 1
+        'Next
+
+        ' STUB !!!!! PRIORITY IMMEDIATE §!!!!!
+
+        'periodsList.Add(42035)
+        'periodsList.Add(42063)
+        'periodsList.Add(42094)
+        'periodsList.Add(42124)
+        'periodsList.Add(42155)
+        'periodsList.Add(42185)
+        'periodsList.Add(42216)
+        'periodsList.Add(42247)
+        'periodsList.Add(42277)
+        'periodsList.Add(42308)
+        'periodsList.Add(42338)
+        'periodsList.Add(42369)
+        'periodsList.Add(42400)
+        'periodsList.Add(42429)
+        'periodsList.Add(42460)
+        'periodsList.Add(42490)
+        'periodsList.Add(42521)
+        'periodsList.Add(42551)
+        'periodsList.Add(42582)
+        'periodsList.Add(42613)
+        'periodsList.Add(42643)
+        'periodsList.Add(42674)
+        'periodsList.Add(42704)
+        'periodsList.Add(42735)
 
         Return periodsList.ToArray
 
