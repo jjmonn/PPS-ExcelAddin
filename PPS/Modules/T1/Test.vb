@@ -13,14 +13,16 @@
     End Sub
 
 
-    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles ComputeBT.Click
+    Private Sub ComputeBT_Click(sender As Object, e As EventArgs) Handles ComputeBT.Click
 
+        Dim decompList As New Collections.Generic.List(Of String)
+        decompList.Add("A2")
         Computer.CMSG_COMPUTE_REQUEST({5}, _
                                       2, _
                                       3, _
                                       , _
                                       , _
-                                      )
+                                     decompList)
 
     End Sub
 

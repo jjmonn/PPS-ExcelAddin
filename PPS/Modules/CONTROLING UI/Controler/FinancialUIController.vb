@@ -10,7 +10,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 06/08/2015
+' Last modified: 07/08/2015
 
 
 Imports System.Windows.Forms
@@ -36,14 +36,17 @@ Friend Class FinancialUIController
     Private rows_hierarchy_node As New TreeNode
     Private columns_hierarchy_node As New TreeNode
     Private display_axis_ht As New Hashtable
-    'Private node_id_display_axis_dict As New Dictionary(Of String, Int32)
-    Private filtersDimensionsIDs As New List(Of String)
+    Private filtersAndAxisDict As New Dictionary(Of String, List(Of Int32))
     Private dataMap As Hashtable
-    Private filters_dict As Dictionary(Of String, Int32)
-    Private TVsDict As New Dictionary(Of String, TreeView)
+    Private filters_dict As New Dictionary(Of String, Int32)
+    Private filtersNodes As New TreeNode
     Private VersionsTV As New TreeView
     Friend versionsDict As New Dictionary(Of Int32, String)
     Friend initDisplayFlag As Boolean = False
+
+    ' Virtual binding
+    Private itemsDimensionsDict As New Dictionary(Of HierarchyItem, Hashtable)
+
 
 #End Region
 
@@ -53,21 +56,44 @@ Friend Class FinancialUIController
     Friend Sub New(ByRef inputView As Object)
 
         View = inputView
-        Dim filters_id_values_id_lists As New Dictionary(Of UInt32, List(Of UInt32))
-        For Each filter_id As Int32 In filters_id_values_id_lists.Keys
-            filtersDimensionsIDs.Add(Computer.FILTERS_DECOMPOSITION_IDENTIFIER & filter_id)
+        LoadSpecialFiltersValuesNode()
+        AddHandler Computer.ComputationAnswered, AddressOf AfterCompute
+
+    End Sub
+
+    Private Sub LoadSpecialFiltersValuesNode()
+
+         ' Load Filters Nodes
+        For Each filterId As Int32 In GlobalVariables.Filters.filters_hash.Keys
+            Dim filterNodeName As String = Computer.FILTERS_DECOMPOSITION_IDENTIFIER & filterId
+            Dim filterNodeText As String = GlobalVariables.Filters.filters_hash(filterId)(NAME_VARIABLE)
+            Dim filterNode As TreeNode = filtersNodes.Nodes.Add(filterNodeName, filterNodeText)
+
+            Dim filterValuesDict As Hashtable = GlobalVariables.FiltersValues.GetFiltervaluesDictionary(filterId, _
+                                                                                                        ID_VARIABLE, _
+                                                                                                        NAME_VARIABLE)
+            For Each filterValueId As UInt32 In filterValuesDict.Keys
+                filterNode.Nodes.Add(filterValueId, filterValuesDict(filterValueId))
+            Next
         Next
 
-        TVsDict.Add(Computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.ACCOUNTS, View.accountsTV)
-        TVsDict.Add(Computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.CLIENTS, View.clientsTV)
-        TVsDict.Add(Computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.PRODUCTS, View.productsTV)
-        TVsDict.Add(Computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.ADJUSTMENTS, View.adjustmentsTV)
-        TVsDict.Add(Computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.VERSIONS, VersionsTV)
-        Dim FullFvTV As New TreeView
-        LoadSpecialFiltersValuesNode(FullFvTV)
-        TVsDict.Add(Computer.FILTERS_DECOMPOSITION_IDENTIFIER, FullFvTV)
+        ' Load Clients Nodes
+        Dim clientsNode = filtersNodes.Nodes.Add(Computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.CLIENTS, ControllingUI_2.CLIENTS_CODE)
+        For Each clientId As Int32 In GlobalVariables.Clients.clients_hash.Keys
+            clientsNode.Nodes.Add(clientId, GlobalVariables.Clients.clients_hash(clientId)(NAME_VARIABLE))
+        Next
 
-        AddHandler Computer.ComputationAnswered, AddressOf AfterCompute
+        ' Load Products Nodes
+        Dim productsNode = filtersNodes.Nodes.Add(Computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.PRODUCTS, ControllingUI_2.PRODUCTS_CODE)
+        For Each productId As Int32 In GlobalVariables.Products.products_hash.Keys
+            productsNode.Nodes.Add(productId, GlobalVariables.Products.products_hash(productId)(NAME_VARIABLE))
+        Next
+
+        ' Load Adjustment Nodes
+        Dim adjustmentsNode = filtersNodes.Nodes.Add(Computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.ADJUSTMENTS, ControllingUI_2.ADJUSTMENT_CODE)
+        For Each adjustmentId As Int32 In GlobalVariables.Adjustments.adjustments_hash.Keys
+            adjustmentsNode.Nodes.Add(adjustmentId, GlobalVariables.Adjustments.adjustments_hash(adjustmentId)(NAME_VARIABLE))
+        Next
 
     End Sub
 
@@ -135,9 +161,13 @@ Friend Class FinancialUIController
         End While
         View.ComputingBCGWorker.CancelAsync()
         dataMap = Computer.GetData()
-        View.CP = New CircularProgressUI(System.Drawing.Color.Purple, "Displaying")
+        '     View.CP.Dispose()
+        ' View.CP = New CircularProgressUI(System.Drawing.Color.Purple, "Displaying")
         'View.CP.Show()
-        View.DisplayBCGWorker.RunWorkerAsync()
+        '  View.DisplayBCGWorker.RunWorkerAsync()
+        'For Each tab_ As TabPage In View.TabControl1.TabPages
+        '    tab_.Controls(0).Refresh()
+        'Next
 
     End Sub
 
@@ -163,11 +193,12 @@ Friend Class FinancialUIController
 #Region "Display Initialization"
 
     Friend Sub InitDisplay(ByRef rowsHierarchyNodeList As List(Of TreeNode), _
-                        ByRef columnsHierarchyNodeList As List(Of TreeNode))
+                           ByRef columnsHierarchyNodeList As List(Of TreeNode))
 
         filters_dict = New Dictionary(Of String, Int32)
         rows_hierarchy_node.Nodes.Clear()
         columns_hierarchy_node.Nodes.Clear()
+        itemsDimensionsDict.Clear()
         FillHierarchy(rows_hierarchy_node, rowsHierarchyNodeList)
         FillHierarchy(columns_hierarchy_node, columnsHierarchyNodeList)
 
@@ -191,11 +222,16 @@ Friend Class FinancialUIController
                     Next
 
                 Case Computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.ACCOUNTS
-                    For Each account_node In TreeViewsUtilities.GetNodesList(TVsDict(item_node.Name))
+                    ' Accounts hierarchy if not first item in hierarchy !!!
+                    ' !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                    ' priority high
+                    For Each account_node In TreeViewsUtilities.GetNodesList(View.accountsTV)
                         axis_node.Nodes.Add(account_node.Name, account_node.Text)
                     Next
 
                 Case Computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.VERSIONS
+                    ' versions comparisons implementation !!
+                    ' priority high
                     For Each version_id In versionsDict.Keys
                         axis_node.Nodes.Add(version_id, versionsDict(version_id))
                     Next
@@ -211,7 +247,7 @@ Friend Class FinancialUIController
                     Next
 
                 Case Else
-                    For Each value_node In TVsDict(Computer.FILTERS_DECOMPOSITION_IDENTIFIER).Nodes
+                    For Each value_node In filtersNodes.Nodes.Find(item_node.Name, True)(0).Nodes
                         axis_node.Nodes.Add(value_node.name, value_node.text)
                     Next
 
@@ -223,8 +259,25 @@ Friend Class FinancialUIController
     Friend Sub CreateRowsAndColumns(ByRef DGV As vDataGridView, _
                                     ByRef tab_account_id As Int32)
 
+        AddHandler DGV.CellValueNeeded, AddressOf DGVs_CellValueNeeded
+    
         accounts_id_shortlist = TreeViewsUtilities.GetNodesKeysList(View.accountsTV.Nodes.Find(tab_account_id, True)(0))
         accounts_id_shortlist.Remove(tab_account_id)
+
+        ' Display_axis_values Initialization 
+        display_axis_ht.Clear()
+        display_axis_ht(GlobalEnums.DataMapAxis.ACCOUNTS) = 0
+        display_axis_ht(GlobalEnums.DataMapAxis.PERIODS) = ""
+        display_axis_ht(GlobalEnums.DataMapAxis.FILTERS) = "0"
+        display_axis_ht(GlobalEnums.DataMapAxis.ENTITIES) = CInt(EntityNode.Name)
+        If versionsDict.Keys.Count = 1 Then
+            display_axis_ht(GlobalEnums.DataMapAxis.VERSIONS) = CInt(versionsDict.Keys(0))
+        End If
+        ' Case multiple versions !!!! priority high
+        '  -> filters = 0
+        ' priority high !!!!
+
+        ' Bien vérifier le display des filters values = TOTAL ("0")
 
         ' keep track of dimension id / column ? priority normal !!!
         ' keep track of version hierarchy item !!! priority high !!!!
@@ -234,7 +287,9 @@ Friend Class FinancialUIController
         DGV.ColumnsHierarchy.Clear()
         CreateColumn(DGV, columns_hierarchy_node.Nodes(0))
         CreateRow(DGV, rows_hierarchy_node.Nodes(0))
-    
+        'DGV.RowsHierarchy.AutoResize(AutoResizeMode.FIT_ALL)
+        'DGV.ColumnsHierarchy.AutoResize(AutoResizeMode.FIT_ALL)
+
     End Sub
 
     Private Sub CreateColumn(ByRef dgv As vDataGridView, _
@@ -250,27 +305,28 @@ Friend Class FinancialUIController
                 CreateColumn(dgv, dimensionNode, subNode, subColumn)
             Next
         Else
-            ' If dimension = accounts check that value belongs to accounts shortlist
-            If dimensionNode.Name = Computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.ACCOUNTS _
-            AndAlso accounts_id_shortlist.Contains(CInt(valueNode.Name)) = False Then
-                Exit Sub
-            End If
+            'Set current value for current display axis
+            If SetDisplayAxisValue(dimensionNode, valueNode) = True Then
 
-            If column Is Nothing Then
-                subColumn = dgv.ColumnsHierarchy.Items.Add(valueNode.Text)
-            Else
-                subColumn = column.Items.Add(valueNode.Text)
-            End If
+                If column Is Nothing Then
+                    subColumn = dgv.ColumnsHierarchy.Items.Add(valueNode.Text)
+                Else
+                    subColumn = column.Items.Add(valueNode.Text)
+                End If
+                RegisterHierarchyItemDimensions(subColumn)
 
-            ' Dig one level deeper if any
-            If Not dimensionNode.NextNode Is Nothing Then
-                CreateColumn(dgv, dimensionNode.NextNode, , subColumn)
-            End If
+                ' Dig one level deeper if any
+                If Not dimensionNode.NextNode Is Nothing Then
+                    CreateColumn(dgv, dimensionNode.NextNode, , subColumn)
+                End If
 
-            ' Loop through children if any
-            For Each subNode In valueNode.Nodes
-                CreateColumn(dgv, dimensionNode, subNode, subColumn)
-            Next
+                ' Loop through children if any
+                For Each subNode In valueNode.Nodes
+                    CreateColumn(dgv, dimensionNode, subNode, subColumn)
+                Next
+
+                LevelDimensionFilterOrAxis(dimensionNode)
+            End If
         End If
 
     End Sub
@@ -287,175 +343,30 @@ Friend Class FinancialUIController
                 CreateRow(dgv, dimensionNode, subNode, row)
             Next
         Else
-            ' If dimension = accounts check that value belongs to accounts shortlist
-            If dimensionNode.Name = Computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.ACCOUNTS _
-            AndAlso accounts_id_shortlist.Contains(CInt(valueNode.Name)) = False Then
-                Exit Sub
-            End If
-
-            If row Is Nothing Then
-                subRow = dgv.RowsHierarchy.Items.Add(valueNode.Text)
-            Else
-                subRow = row.Items.Add(valueNode.Text)
-            End If
-            subRow.CellsFormatString = "{0:N}"
-
-            ' Dig one level deeper if any
-            If Not dimensionNode.NextNode Is Nothing Then
-                CreateRow(dgv, dimensionNode.NextNode, , subRow)
-            End If
-
-            ' Loop through children if any
-            For Each subNode In valueNode.Nodes
-                CreateRow(dgv, dimensionNode, subNode, subRow)
-            Next
-        End If
-
-    End Sub
-
-#End Region
-
-
-#Region "Fill Data"
-
-    Friend Sub FillDGVs(ByRef DGV As vDataGridView, _
-                       ByRef tab_account_id As Int32)
-
-        accounts_id_shortlist = TreeViewsUtilities.GetNodesKeysList(View.accountsTV.Nodes.Find(tab_account_id, True)(0))
-        accounts_id_shortlist.Remove(tab_account_id)
-
-        ' display_axis_values should be initialized !!! 
-        display_axis_ht(GlobalEnums.DataMapAxis.ENTITIES) = CInt(EntityNode.Name)
-        If versionsDict.Keys.Count = 1 Then
-            display_axis_ht(GlobalEnums.DataMapAxis.VERSIONS) = CInt(versionsDict.Keys(0))
-        End If
-        ' Case multiple versions !!!! priority high
-        '  -> filters = 0
-        ' priority high !!!!
-
-        ' Bien vérifier le display des filters values = TOTAL ("0")
-
-        For Each node As TreeNode In rows_hierarchy_node.Nodes
-            RowsDisplayLoop(DGV, rows_hierarchy_node.Nodes(0))
-        Next
-
-        ' format ?
-
-    End Sub
-
-
-    ' rows head to be updated -> i.e. accounts/ entities => accounts line contains head entity !!!
-    ' priority high 
-
-    Private Sub RowsDisplayLoop(ByRef DGV As vDataGridView, _
-                                ByRef dimensionNode As TreeNode, _
-                                Optional ByRef valueNode As TreeNode = Nothing, _
-                                Optional ByRef row_index As UInt32 = 0, _
-                                Optional ByRef parent_row As HierarchyItem = Nothing)
-
-        Dim sub_row_index As UInt32 = 0
-        Dim row As HierarchyItem
-
-        If valueNode Is Nothing Then
-            For Each currentValueNode In dimensionNode.Nodes
-                RowsDisplayLoop(DGV, dimensionNode, currentValueNode, row_index, parent_row)
-            Next
-        Else
             'Set current value for current display axis
             If SetDisplayAxisValue(dimensionNode, valueNode) = True Then
 
-                ' Set current DGV row
-                If parent_row Is Nothing Then
-                    row = DGV.RowsHierarchy.Items(row_index)
+                If row Is Nothing Then
+                    subRow = dgv.RowsHierarchy.Items.Add(valueNode.Text)
                 Else
-                    row = parent_row.Items(row_index)
+                    subRow = row.Items.Add(valueNode.Text)
                 End If
-
-                '  Launch columns loop
-                ColumnsDisplayLoop(row, columns_hierarchy_node.Nodes(0))
+                RegisterHierarchyItemDimensions(subRow)
+                subRow.CellsDataSource = GridCellDataSource.Virtual
+                subRow.CellsFormatString = "{0:N}"
 
                 ' Dig one level deeper if any
                 If Not dimensionNode.NextNode Is Nothing Then
-                    RowsDisplayLoop(DGV, dimensionNode.NextNode, , sub_row_index, row)
-                End If
-
-                '  Loop through children if any
-                For Each subValueNode As TreeNode In valueNode.Nodes
-                    RowsDisplayLoop(DGV, dimensionNode, subValueNode, sub_row_index, row)
-                Next
-
-                LevelDimensionFilterOrAxis(dimensionNode)
-                row_index += 1
-            End If
-        End If
-
-    End Sub
-
-    Private Sub ColumnsDisplayLoop(ByRef row As HierarchyItem, _
-                                   ByRef dimensionNode As TreeNode, _
-                                   Optional ByRef valueNode As TreeNode = Nothing, _
-                                   Optional ByRef column_index As UInt32 = 0, _
-                                   Optional ByRef parent_column As HierarchyItem = Nothing)
-
-        Dim sub_column_index As UInt32 = 0
-        Dim column As HierarchyItem
-
-
-        If valueNode Is Nothing Then
-            For Each currentValueNode In dimensionNode.Nodes
-                ColumnsDisplayLoop(row, dimensionNode, currentValueNode, column_index, parent_column)
-            Next
-        Else
-            ' Set current value for current display axis
-            If SetDisplayAxisValue(dimensionNode, valueNode) = True Then
-
-                ' Set current DGV column
-                If parent_column Is Nothing Then
-                    column = row.DataGridView.ColumnsHierarchy.Items(column_index)
-                Else
-                    column = parent_column.Items(column_index)
-                End If
-
-                ' Set value
-                ' virtual binding -> priority normal !!!
-                row.DataGridView.CellsArea.SetCellValue(row, column, GetData())
-                ' bind attributes to column ?
-                '
-
-                ' Dig one level deeper if needed
-                If Not dimensionNode.NextNode Is Nothing Then
-                    ColumnsDisplayLoop(row, dimensionNode.NextNode, , sub_column_index, column)
+                    CreateRow(dgv, dimensionNode.NextNode, , subRow)
                 End If
 
                 ' Loop through children if any
-                For Each subValueNode As TreeNode In valueNode.Nodes
-                    RowsDisplayLoop(row.DataGridView, dimensionNode, subValueNode, sub_column_index, row)
+                For Each subNode In valueNode.Nodes
+                    CreateRow(dgv, dimensionNode, subNode, subRow)
                 Next
 
                 LevelDimensionFilterOrAxis(dimensionNode)
-                column_index += 1
             End If
-        End If
-
-    End Sub
-
-    Private Sub LevelDimensionFilterOrAxis(ByRef dimensionNode As TreeNode)
-
-        If filtersDimensionsIDs.Contains(dimensionNode.Name) Then
-            filters_dict.Remove(dimensionNode.Name)                 ' remove filter from filters dic
-        Else
-            Select Case dimensionNode.Name
-                Case Computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.ENTITIES
-                    display_axis_ht(GlobalEnums.DataMapAxis.ENTITIES) = CInt(EntityNode.Name)
-
-                    ' must manage other cases ?! 
-                    ' priority high
-                    ' tests output !!
-                Case Computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.ACCOUNTS
-                    display_axis_ht(GlobalEnums.DataMapAxis.ACCOUNTS) = 0
-
-
-            End Select
         End If
 
     End Sub
@@ -495,30 +406,88 @@ Friend Class FinancialUIController
 
     End Function
 
-    Private Function GetData() As Object
+    Private Sub LevelDimensionFilterOrAxis(ByRef dimensionNode As TreeNode)
 
-        ' careful: May be a difference of treatment of total "filters" => "filter_code#0" ou pas de référence du tout
-        '          A regarder au moment des essais et fixer avec Nath
-        '          S'assurer que la boucle total a bien lieu au niveau du serveur
-        '
-        ' La dataMap devrait être conservée ici ?
+        If filtersNodes.Nodes.Find(dimensionNode.Name, True).Length > 0 Then
+            filters_dict.Remove(dimensionNode.Name)                 ' remove filter from filters dic
+        Else
+            Select Case dimensionNode.Name
+                Case Computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.ENTITIES
+                    display_axis_ht(GlobalEnums.DataMapAxis.ENTITIES) = CInt(EntityNode.Name)
+
+                    ' must manage other cases ?! 
+                    ' priority high
+                    ' tests output !!
+                Case Computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.ACCOUNTS
+                    display_axis_ht(GlobalEnums.DataMapAxis.ACCOUNTS) = 0
+
+                Case Computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.YEARS
+                    ' manage => priority high
+
+                Case Computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.MONTHS
+                    ' manage => priority high
+
+            End Select
+        End If
+
+    End Sub
+
+    Private Sub RegisterHierarchyItemDimensions(ByRef item As HierarchyItem)
+
+        itemsDimensionsDict.Add(item, New Hashtable)
+        display_axis_ht(GlobalEnums.DataMapAxis.FILTERS) = Computer.GetFiltersToken(filters_dict)
+        For Each key In display_axis_ht.Keys
+            itemsDimensionsDict(item)(key) = display_axis_ht(key)
+        Next
+
+    End Sub
+
+    Private Sub DGVs_CellValueNeeded(ByVal sender As Object, ByVal args As CellValueNeededEventArgs)
+
+        Dim accountId As Int32 = 0
+        Dim entityId As Int32 = 0
+        Dim periodId As String = ""
+        Dim versionId As Int32 = 0
+        Dim filterId As String = ""
+
+        Dim items() As HierarchyItem = {args.RowItem, args.ColumnItem}
+        For Each item As HierarchyItem In items
+            Dim ht As Hashtable = itemsDimensionsDict(item)
+            For Each dimension In ht.Keys
+                Dim value = ht(dimension)
+                Select Case dimension
+                    Case GlobalEnums.DataMapAxis.ACCOUNTS
+                        If value <> 0 Then accountId = value
+                    Case GlobalEnums.DataMapAxis.ENTITIES
+                        If value <> 0 Then
+                            Select Case entityId
+                                Case 0
+                                    entityId = value
+                                Case Else
+                                    If entityId = CInt(EntityNode.Name) Then entityId = value
+                            End Select
+                        End If
+                    Case GlobalEnums.DataMapAxis.PERIODS
+                        If value <> "" Then periodId = value
+                    Case GlobalEnums.DataMapAxis.VERSIONS
+                        If value <> 0 Then versionId = value
+                    Case GlobalEnums.DataMapAxis.FILTERS
+                        If value <> "0" Then filterId = value
+                End Select
+            Next
+        Next
+
         Try
-            Dim accountId As Int32 = display_axis_ht(GlobalEnums.DataMapAxis.ACCOUNTS)
-            Dim entityId As Int32 = display_axis_ht(GlobalEnums.DataMapAxis.ENTITIES)
-            Dim periodId As String = display_axis_ht(GlobalEnums.DataMapAxis.PERIODS)
-            Dim versionId As Int32 = display_axis_ht(GlobalEnums.DataMapAxis.VERSIONS)
-            Dim filterId As String = Computer.GetFiltersToken(filters_dict)
-
-            Return dataMap(display_axis_ht(GlobalEnums.DataMapAxis.VERSIONS)) _
-                           (Computer.GetFiltersToken(filters_dict)) _
-                           (display_axis_ht(GlobalEnums.DataMapAxis.ENTITIES)) _
-                           (display_axis_ht(GlobalEnums.DataMapAxis.ACCOUNTS)) _
-                           (display_axis_ht(GlobalEnums.DataMapAxis.PERIODS))
+            args.CellValue = dataMap(versionId) _
+                             (filterId) _
+                             (entityId) _
+                             (accountId) _
+                             (periodId)
         Catch ex As Exception
-            Return ""
+            args.CellValue = ""
         End Try
 
-    End Function
+    End Sub
 
 #End Region
 
@@ -531,23 +500,6 @@ Friend Class FinancialUIController
         For Each node In or_node.Nodes
             Dim new_node As TreeNode = des_node.Nodes.Add(node.name, node.text)
             CopySubNodes(node, new_node)
-        Next
-
-    End Sub
-
-    Private Sub LoadSpecialFiltersValuesNode(ByRef FullFvNode As TreeView)
-
-        For Each filterId As Int32 In GlobalVariables.Filters.filters_hash.Keys
-            Dim filterNodeName As String = Computer.FILTERS_DECOMPOSITION_IDENTIFIER & filterId
-            Dim filterNodeText As String = GlobalVariables.Filters.filters_hash(filterId)(NAME_VARIABLE)
-            Dim filterNode As TreeNode = FullFvNode.Nodes.Add(filterNodeName, filterNodeText)
-
-            Dim filterValuesDict As Hashtable = GlobalVariables.FiltersValues.GetFiltervaluesDictionary(filterId, _
-                                                                                                        ID_VARIABLE, _
-                                                                                                        NAME_VARIABLE)
-            For Each filterValueId As UInt32 In filterValuesDict.Keys
-                filterNode.Nodes.Add(filterValueId, filterValuesDict(filterValueId))
-            Next
         Next
 
     End Sub

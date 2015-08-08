@@ -238,7 +238,7 @@ Friend Class Computer
         Else
             'filter_dict(filter_code) = 0
             ' to be checked -> priority high
-            filter_dict.Remove(filter_code)
+            '  filter_dict.Remove(filter_code)
         End If
 
         Dim filter_token As String = GetFiltersToken(filter_dict)
@@ -272,8 +272,8 @@ Friend Class Computer
             End If
 
             ' Aggreagted data
-            Dim nbAggregations As UInt32 = packet.ReadUint32()
-            For aggregationIndex As UInt32 = 1 To nbAggregations
+            Dim nbAggregations As Int32 = packet.ReadUint32()
+            For aggregationIndex As Int32 = 0 To nbAggregations - 1
                 dataMap(version_id) _
                     (filter_token) _
                     (entity_id) _
@@ -290,7 +290,7 @@ Friend Class Computer
         For children_index As UInt32 = 1 To nb_children_entities
             FillAccountData(packet, _
                             version_id, _
-                            isFiltered, _
+                            False, _
                             isAxis, _
                             filter_code, _
                             filter_dict, _

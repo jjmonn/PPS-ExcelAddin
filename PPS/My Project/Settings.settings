@@ -3,10 +3,10 @@
   <Profiles />
   <Settings>
     <Setting Name="serverIp" Type="System.String" Scope="User">
-      <Value Profile="(Default)">52.18.31.221</Value>
+      <Value Profile="(Default)">52.18.218.60</Value>
     </Setting>
     <Setting Name="version_id" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">5</Value>
+      <Value Profile="(Default)">3</Value>
     </Setting>
     <Setting Name="user" Type="System.String" Scope="User">
       <Value Profile="(Default)">user2</Value>

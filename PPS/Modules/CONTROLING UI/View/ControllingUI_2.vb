@@ -12,7 +12,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 27/07/2015
+' Last modified: 07/08/2015
 
 
 Imports System.Windows.Forms
@@ -46,7 +46,7 @@ Friend Class ControllingUI_2
     Private Accounts As New Account
     Friend CP As CircularProgressUI
     Friend ComputingBCGWorker As New BackgroundWorker
-    Friend DisplayBCGWorker As New BackgroundWorker
+    '   Friend DisplayBCGWorker As New BackgroundWorker
 
 #End Region
 
@@ -76,7 +76,8 @@ Friend Class ControllingUI_2
     Friend versionsTV As New TreeView
     Friend CurrenciesCLB As New CheckedListBox
 
-    Private tmpSplitterDistance As Double = 230
+    Private SP1Distance As Single = 230
+    Private SP2Distance As Single = 900
 
 #End Region
 
@@ -84,7 +85,7 @@ Friend Class ControllingUI_2
 
     Private isUpdatingPeriodsCheckList As Boolean
     Private isVersionComparisonDisplayed As Boolean
-    Private IsUpdatingChildrenCategory As Boolean = False
+    Private IsUpdatingChildrenCategory As Boolean
 
     Private EntitiesFlag As Boolean
     Private EntitiesCategoriesFlag As Boolean
@@ -97,7 +98,7 @@ Friend Class ControllingUI_2
     Private CurrenciesFlag As Boolean
     Private VersionsFlag As Boolean
     Private PeriodsFlag As Boolean
-    Private displayControlFlag As Boolean
+    Private displayControlFlag As Boolean = True
 
 #End Region
 
@@ -150,20 +151,20 @@ Friend Class ControllingUI_2
         leftPaneSetUp()
         TVTableLayout.Controls.Add(periodsCLB, 0, 0)
         HideAllMenusItems()
-        CollapsePane1()
-        DisplayFirstTreeOnly()          ' TV Table Layout
+        CollapseSP1Pane1()
+         DisplayFirstTreeOnly()          ' TV Table Layout
 
         If versionsTV.Nodes.Find(My.Settings.version_id, True).Length > 0 Then
             versionsTV.Nodes.Find(My.Settings.version_id, True)(0).Checked = True
         End If
 
-        ComputingBCGWorker.WorkerSupportsCancellation = True
+          ComputingBCGWorker.WorkerSupportsCancellation = True
         '    DisplayBCGWorker.WorkerSupportsCancellation = True
         AddHandler ComputingBCGWorker.DoWork, AddressOf ComputingBKGWorker_DoWork
         AddHandler ComputingBCGWorker.RunWorkerCompleted, AddressOf ComputingBKGWorker_RunWorkerCompleted
-        AddHandler DisplayBCGWorker.DoWork, AddressOf DisplayBKGWorker_DoWork
-        AddHandler DisplayBCGWorker.RunWorkerCompleted, AddressOf DisplayBKGWorker_RunWorkerCompleted
-     
+        'AddHandler DisplayBCGWorker.DoWork, AddressOf DisplayBKGWorker_DoWork
+        'AddHandler DisplayBCGWorker.RunWorkerCompleted, AddressOf DisplayBKGWorker_RunWorkerCompleted
+
     End Sub
 
     Private Sub LoadTrees()
@@ -331,7 +332,7 @@ Friend Class ControllingUI_2
                                    ADJUSTMENT_CODE)
 
         display_control = New DisplayControl(analysis_axis_tv)
-        TVTableLayout.Controls.Add(display_control, 0, 0)
+        SplitContainer2.Panel2.Controls.Add(display_control)
         display_control.Dock = DockStyle.Fill
         AddHandler display_control.rows_display_tv.KeyDown, AddressOf displayControlDisplayTVs_KeyDown
         AddHandler display_control.columns_display_tv.KeyDown, AddressOf displayControlDisplayTVs_KeyDown
@@ -352,9 +353,9 @@ Friend Class ControllingUI_2
 
         Controller.EntityNode = entityNode
         CP = New CircularProgressUI(System.Drawing.Color.Blue, "Computing")
-        '  CP.Show()
+        ' CP.Show()
         ComputingBCGWorker.RunWorkerAsync()
-        
+
     End Sub
 
 
@@ -526,7 +527,7 @@ Friend Class ControllingUI_2
 
         If EntitiesFlag = False Then
             entitiesTV.Select()
-            ExpandPane1()
+            ExpandSP1Pane1()
             Dim show_entities_categories As Boolean = EntitiesCategoriesFlag
             HideAllMenusItems()
 
@@ -543,7 +544,7 @@ Friend Class ControllingUI_2
             End If
         Else
             If TVTableLayout.GetRow(entitiesTV) = 0 Then
-                CollapsePane1()
+                CollapseSP1Pane1()
             Else
                 DisplayFirstTreeOnly()
             End If
@@ -553,20 +554,15 @@ Friend Class ControllingUI_2
 
     End Sub
 
-    Private Sub DisplayMenuBTClick(sender As Object, e As EventArgs) Handles DisplayMenuBT.Click
+    Private Sub DisplayMenuBTClick(sender As Object, e As EventArgs) Handles DisplayBT.Click, displayLabel.Click, _
+                                                                             DisplayBT2.Click, DisplayLabel2.Click, _
+                                                                             DisplayBT3.Click, DisplayLabel3.Click
 
         If displayControlFlag = False Then
-            ExpandPane1()
-            HideAllMenusItems()
-            display_control.Visible = True
+            ExpandSP2Pane2()
             displayControlFlag = True
         Else
-            If TVTableLayout.GetRow(display_control) = 0 Then
-                CollapsePane1()
-            Else
-                DisplayFirstTreeOnly()
-            End If
-            display_control.Visible = False
+            CollapseSP2Pane2()
             displayControlFlag = False
         End If
 
@@ -577,7 +573,7 @@ Friend Class ControllingUI_2
     Private Sub entitiesCategoriesMenuClick(sender As Object, e As EventArgs) Handles entitiesCategoriesMenuBT.Click
 
         If EntitiesCategoriesFlag = False Then
-            ExpandPane1()
+            ExpandSP1Pane1()
             Dim show_entities As Boolean = EntitiesFlag
             HideAllMenusItems()
             entitiesFiltersTV.Visible = True
@@ -593,7 +589,7 @@ Friend Class ControllingUI_2
             End If
         Else
             If TVTableLayout.GetRow(entitiesFiltersTV) = 0 Then
-                CollapsePane1()
+                CollapseSP1Pane1()
             Else
                 DisplayFirstTreeOnly()
             End If
@@ -607,7 +603,7 @@ Friend Class ControllingUI_2
 
         If ClientsFlag = False Then
             clientsTV.Select()
-            ExpandPane1()
+            ExpandSP1Pane1()
             Dim show_clients_categories As Boolean = ClientsCategoriesFlag
             HideAllMenusItems()
 
@@ -624,7 +620,7 @@ Friend Class ControllingUI_2
             End If
         Else
             If TVTableLayout.GetRow(clientsTV) = 0 Then
-                CollapsePane1()
+                CollapseSP1Pane1()
             Else
                 DisplayFirstTreeOnly()
             End If
@@ -637,7 +633,7 @@ Friend Class ControllingUI_2
     Private Sub clientsCategoriesMenuBT_Click(sender As Object, e As EventArgs) Handles clientsCategoriesMenuBT.Click
 
         If ClientsCategoriesFlag = False Then
-            ExpandPane1()
+            ExpandSP1Pane1()
             Dim show_clients As Boolean = ClientsFlag
             HideAllMenusItems()
             clientsFiltersTV.Visible = True
@@ -653,7 +649,7 @@ Friend Class ControllingUI_2
             End If
         Else
             If TVTableLayout.GetRow(clientsFiltersTV) = 0 Then
-                CollapsePane1()
+                CollapseSP1Pane1()
             Else
                 DisplayFirstTreeOnly()
             End If
@@ -667,7 +663,7 @@ Friend Class ControllingUI_2
 
         If productsFlag = False Then
             productsTV.Select()
-            ExpandPane1()
+            ExpandSP1Pane1()
             Dim show_products_categories As Boolean = productsCategoriesFlag
             HideAllMenusItems()
 
@@ -684,7 +680,7 @@ Friend Class ControllingUI_2
             End If
         Else
             If TVTableLayout.GetRow(productsTV) = 0 Then
-                CollapsePane1()
+                CollapseSP1Pane1()
             Else
                 DisplayFirstTreeOnly()
             End If
@@ -697,7 +693,7 @@ Friend Class ControllingUI_2
     Private Sub productsCategoriesMenuBT_Click(sender As Object, e As EventArgs) Handles productsCategoriesMenuBT.Click
 
         If productsCategoriesFlag = False Then
-            ExpandPane1()
+            ExpandSP1Pane1()
             Dim show_products As Boolean = productsFlag
             HideAllMenusItems()
             productsFiltersTV.Visible = True
@@ -713,7 +709,7 @@ Friend Class ControllingUI_2
             End If
         Else
             If TVTableLayout.GetRow(productsFiltersTV) = 0 Then
-                CollapsePane1()
+                CollapseSP1Pane1()
             Else
                 DisplayFirstTreeOnly()
             End If
@@ -726,12 +722,12 @@ Friend Class ControllingUI_2
     Private Sub AdjustmentsMenuBT_Click(sender As Object, e As EventArgs) Handles AdjustmentsMenuBT.Click
 
         If adjustments_flag = False Then
-            ExpandPane1()
+            ExpandSP1Pane1()
             HideAllMenusItems()
             adjustmentsTV.Visible = True
             adjustments_flag = True
         Else
-            CollapsePane1()
+            CollapseSP1Pane1()
             adjustmentsTV.Visible = False
             adjustments_flag = False
         End If
@@ -741,14 +737,14 @@ Friend Class ControllingUI_2
     Private Sub CurrenciesMenuClick(sender As Object, e As EventArgs) Handles CurrenciesMenuBT.Click
 
         If CurrenciesFlag = False Then
-            ExpandPane1()
+            ExpandSP1Pane1()
             HideAllMenusItems()
             CurrenciesCLB.Visible = True
             CurrenciesFlag = True
             DisplayTwoTrees()
 
         Else
-            CollapsePane1()
+            CollapseSP1Pane1()
             CurrenciesCLB.Visible = False
             CurrenciesFlag = False
             DisplayFirstTreeOnly()
@@ -759,12 +755,12 @@ Friend Class ControllingUI_2
     Private Sub PeriodsMenuClick(sender As Object, e As EventArgs) Handles PeriodsMenuBT.Click
 
         If PeriodsFlag = False Then
-            ExpandPane1()
+            ExpandSP1Pane1()
             HideAllMenusItems()
             periodsCLB.Visible = True
             PeriodsFlag = True
         Else
-            CollapsePane1()
+            CollapseSP1Pane1()
             periodsCLB.Visible = False
             PeriodsFlag = False
         End If
@@ -774,12 +770,12 @@ Friend Class ControllingUI_2
     Private Sub VersionsMenuClick(sender As Object, e As EventArgs) Handles VersionsMenuBT.Click
 
         If VersionsFlag = False Then
-            ExpandPane1()
+            ExpandSP1Pane1()
             HideAllMenusItems()
             versionsTV.Visible = True
             VersionsFlag = True
         Else
-            CollapsePane1()
+            CollapseSP1Pane1()
             versionsTV.Visible = False
             VersionsFlag = False
         End If
@@ -1028,16 +1024,31 @@ Friend Class ControllingUI_2
 
 #Region "Left Pane Expansion/ Collapse"
 
-    Private Sub CollapsePane1()
+    Private Sub CollapseSP2Pane2()
+
+        SP2Distance = SplitContainer2.SplitterDistance
+        SplitContainer2.SplitterDistance = SplitContainer2.Width
+        SplitContainer2.Panel2.Hide()
+
+    End Sub
+
+    Private Sub ExpandSP2Pane2()
+
+        SplitContainer2.SplitterDistance = SP2Distance
+        SplitContainer2.Panel2.Show()
+
+    End Sub
+
+    Private Sub CollapseSP1Pane1()
 
         SplitContainer1.SplitterDistance = 0
         SplitContainer1.Panel1.Hide()
 
     End Sub
 
-    Private Sub ExpandPane1()
+    Private Sub ExpandSP1Pane1()
 
-        SplitContainer1.SplitterDistance = tmpSplitterDistance
+        SplitContainer1.SplitterDistance = SP1Distance
         SplitContainer1.Panel1.Show()
 
     End Sub
@@ -1052,26 +1063,22 @@ Friend Class ControllingUI_2
         clientsFiltersTV.Visible = False
         productsTV.Visible = False
         productsFiltersTV.Visible = False
-
         adjustmentsTV.Visible = False
         CurrenciesCLB.Visible = False
         periodsCLB.Visible = False
         versionsTV.Visible = False
-        display_control.Visible = False
-
+   
         EntitiesFlag = False
         EntitiesCategoriesFlag = False
         ClientsFlag = False
         ClientsCategoriesFlag = False
         productsFlag = False
         productsCategoriesFlag = False
-
         adjustments_flag = False
         CurrenciesFlag = False
         PeriodsFlag = False
         VersionsFlag = False
-        displayControlFlag = False
-
+    
     End Sub
 
     Private Sub DisplayFirstTreeOnly()
@@ -1143,40 +1150,41 @@ Friend Class ControllingUI_2
 
 #Region "Display Backgroundworker"
 
-    Private Sub DisplayBKGWorker_DoWork(sender As Object, e As DoWorkEventArgs)
+    'Private Sub DisplayBKGWorker_DoWork(sender As Object, e As DoWorkEventArgs)
 
-        For Each tab_ As TabPage In TabControl1.TabPages
-            Dim DGV As vDataGridView = tab_.Controls(0)
-            Controller.FillDGVs(DGV, tab_.Name)
-            DGV.RowsHierarchy.AutoResize(AutoResizeMode.FIT_ALL)
-            DGV.ColumnsHierarchy.AutoResize(AutoResizeMode.FIT_ALL)
-        Next
+    '    For Each tab_ As TabPage In TabControl1.TabPages
+    '        Dim DGV As vDataGridView = tab_.Controls(0)
+    '        Controller.FillDGVs(DGV, tab_.Name)
+    '        DGV.RowsHierarchy.AutoResize(AutoResizeMode.FIT_ALL)
+    '        DGV.ColumnsHierarchy.AutoResize(AutoResizeMode.FIT_ALL)
+    '    Next
 
-    End Sub
+    'End Sub
 
-    Private Sub DisplayBKGWorker_RunWorkerCompleted(sender As Object, e As RunWorkerCompletedEventArgs)
+    'Private Sub DisplayBKGWorker_RunWorkerCompleted(sender As Object, e As RunWorkerCompletedEventArgs)
 
-        AfterDisplayAttemp_ThreadSafe()
+    '    AfterDisplayAttemp_ThreadSafe()
 
-    End Sub
+    'End Sub
 
-    Delegate Sub AfterDisplayAttemp_Delegate()
+    'Delegate Sub AfterDisplayAttemp_Delegate()
 
-    Private Sub AfterDisplayAttemp_ThreadSafe()
+    'Private Sub AfterDisplayAttemp_ThreadSafe()
 
-        If InvokeRequired Then
-            Dim MyDelegate As New AfterDisplayAttemp_Delegate(AddressOf AfterDisplayAttemp_ThreadSafe)
-            Me.Invoke(MyDelegate, New Object() {})
-        Else
-            CP.Dispose()
+    '    If InvokeRequired Then
+    '        Dim MyDelegate As New AfterDisplayAttemp_Delegate(AddressOf AfterDisplayAttemp_ThreadSafe)
+    '        Me.Invoke(MyDelegate, New Object() {})
+    '    Else
+    '        CP.Dispose()
 
-        End If
+    '    End If
 
-    End Sub
-
-#End Region
+    'End Sub
 
 #End Region
 
+#End Region
 
+
+  
 End Class

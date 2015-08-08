@@ -18,7 +18,7 @@ Public Class DisplayControl
 
     ' Objects
     Private analysis_axis_tv As TreeView
-
+    Public Event RefreshOrder()
 
 
 #End Region
@@ -33,8 +33,7 @@ Public Class DisplayControl
 
         ' Add any initialization after the InitializeComponent() call.
         Me.analysis_axis_tv = analysis_axis_tv
-        TableLayoutPanel1.Controls.Add(analysis_axis_tv, 0, 0)
-        TableLayoutPanel1.SetColumnSpan(analysis_axis_tv, 2)
+        DimensionsTVPanel.Controls.Add(analysis_axis_tv)
         analysis_axis_tv.Dock = DockStyle.Fill
         rows_display_tv.AllowDrop = True
         columns_display_tv.AllowDrop = True
@@ -97,6 +96,16 @@ Public Class DisplayControl
     End Sub
 
 #End Region
+
+
+#Region "Call Backs"
+
+    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
+        RaiseEvent RefreshOrder()
+    End Sub
+
+#End Region
+
 
 
 End Class
