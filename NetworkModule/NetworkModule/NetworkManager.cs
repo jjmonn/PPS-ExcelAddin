@@ -96,6 +96,7 @@ public class NetworkManager
         while (l_byteReaded != l_sizeBuffer);
 
         l_byteBuffer.Write(l_buffer, 0, l_sizeBuffer);
+        l_byteBuffer.Uncompress();
         return (l_byteBuffer);
     }
 
