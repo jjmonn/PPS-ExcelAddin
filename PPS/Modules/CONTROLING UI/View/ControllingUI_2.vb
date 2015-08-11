@@ -12,7 +12,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 10/08/2015
+' Last modified: 11/08/2015
 
 
 Imports System.Windows.Forms
@@ -106,8 +106,7 @@ Friend Class ControllingUI_2
     Private Const MARGIN_SIZE As Double = 25
     Private Const INNER_MARGIN As Integer = 0
     Private Const EXCEL_SHEET_NAME_MAX_LENGHT = 31
-    Friend Const DGV_FONT_SIZE As Single = 8
-    Private Const DGV_THEME = VIBlend.Utilities.VIBLEND_THEME.OFFICE2010SILVER
+    Private Const DGV_THEME = VIBlend.Utilities.VIBLEND_THEME.OFFICESILVER
     Friend Const TOP_LEFT_CHART_POSITION As String = "tl"
     Friend Const TOP_RIGHT_CHART_POSITION As String = "tr"
     Friend Const BOTTOM_LEFT_CHART_POSITION As String = "bl"
@@ -147,7 +146,7 @@ Friend Class ControllingUI_2
             '   tabsNodesDictionary.Add(node.Text, node)
         Next
         InitializeChartsTab()
-        leftPaneSetUp()
+        DimensionsDisplayPaneSetup()
         TVTableLayout.Controls.Add(periodsCLB, 0, 0)
         HideAllMenusItems()
         CollapseSP1Pane1()
@@ -278,7 +277,7 @@ Friend Class ControllingUI_2
 
     End Sub
 
-    Private Sub leftPaneSetUp()
+    Private Sub DimensionsDisplayPaneSetup()
 
         ' This initialization should go into controller ?!!
         ' priority high
@@ -326,8 +325,8 @@ Friend Class ControllingUI_2
         display_control = New DisplayControl(analysis_axis_tv)
         SplitContainer2.Panel2.Controls.Add(display_control)
         display_control.Dock = DockStyle.Fill
-        AddHandler display_control.rows_display_tv.KeyDown, AddressOf displayControlDisplayTVs_KeyDown
-        AddHandler display_control.columns_display_tv.KeyDown, AddressOf displayControlDisplayTVs_KeyDown
+        'AddHandler display_control.rows_display_tv.KeyDown, AddressOf displayControlDisplayTVs_KeyDown
+        'AddHandler display_control.columns_display_tv.KeyDown, AddressOf displayControlDisplayTVs_KeyDown
 
     End Sub
 
@@ -488,22 +487,22 @@ Friend Class ControllingUI_2
 
     End Sub
 
-    Private Sub displayControlDisplayTVs_KeyDown(sender As Object, e As KeyEventArgs)
+    'Private Sub displayControlDisplayTVs_KeyDown(sender As Object, e As KeyEventArgs)
 
-        Select Case e.KeyCode
-            Case Keys.Delete : sender.SelectedNode.Remove()
+    '    Select Case e.KeyCode
+    '        Case Keys.Delete : sender.SelectedNode.Remove()
 
-            Case Keys.Up
-                If e.Control Then
-                    TreeViewsUtilities.MoveNodeUp(sender.SelectedNode)
-                End If
-            Case Keys.Down
-                If e.Control Then
-                    TreeViewsUtilities.MoveNodeDown(sender.SelectedNode)
-                End If
-        End Select
+    '        Case Keys.Up
+    '            If e.Control Then
+    '                TreeViewsUtilities.MoveNodeUp(sender.SelectedNode)
+    '            End If
+    '        Case Keys.Down
+    '            If e.Control Then
+    '                TreeViewsUtilities.MoveNodeDown(sender.SelectedNode)
+    '            End If
+    '    End Select
 
-    End Sub
+    'End Sub
 
 #End Region
 

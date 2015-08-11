@@ -48,7 +48,7 @@
     <SignAssembly>true</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>displaycontrol.pfx</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>ccc.pfx</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -110,6 +110,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <None Include="ccc.pfx" />
     <None Include="CUI2DisplaConfig.pfx" />
     <None Include="CUI2DisplayMGT.pfx" />
     <None Include="displaycontrol.pfx" />

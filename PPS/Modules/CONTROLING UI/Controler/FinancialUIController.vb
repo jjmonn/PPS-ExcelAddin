@@ -18,6 +18,7 @@ Imports VIBlend.WinForms.DataGridView
 Imports System.Collections.Generic
 Imports System.Collections
 Imports System.Linq
+Imports VIBlend.Utilities
 
 
 Friend Class FinancialUIController
@@ -116,11 +117,11 @@ Friend Class FinancialUIController
         columnsHierarchyNode.Nodes.Clear()
 
         initDisplayFlag = False
-        For Each node As TreeNode In View.display_control.rows_display_tv.Nodes
-            rowsHierarchyNode.Nodes.Add(node.Name, node.Text)
+        For Each item In View.display_control.rowsDisplayList.Items
+            rowsHierarchyNode.Nodes.Add(item.Value, item.Text)
         Next
-        For Each node As TreeNode In View.display_control.columns_display_tv.Nodes
-            columnsHierarchyNode.Nodes.Add(node.Name, node.Text)
+        For Each item In View.display_control.columnsDisplayList.Items
+            columnsHierarchyNode.Nodes.Add(item.Value, item.Text)
         Next
 
         ' ------------------------------------------
@@ -136,7 +137,7 @@ Friend Class FinancialUIController
         Dim computingHierarchyList As New List(Of String)
         IncrementComputingHierarchy(rowsHierarchyNode, computingHierarchyList)
         IncrementComputingHierarchy(columnsHierarchyNode, computingHierarchyList)
- 
+
         ' => computing hierarchy = cache system implementation !!!!
         '     Priority high !!!
         '
@@ -344,7 +345,7 @@ Friend Class FinancialUIController
 
         ' Build period related hierarchy nodes
         Dim periodsNodes As New TreeNode
-        For Each node As TreeNode In hierarchyNode.nodes
+        For Each node As TreeNode In hierarchyNode.Nodes
             Select Case node.Name
                 Case Computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.YEARS
                     periodsNodes.Nodes.Add(1, 1)
@@ -359,7 +360,7 @@ Friend Class FinancialUIController
                 Case "12"
                     ' if years before months => only keep months but with special code
                     Dim monthsNode As TreeNode = hierarchyNode.Nodes.Find(Computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.MONTHS, True)(0)
-                    monthsNode.name = Computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.YMONTHS
+                    monthsNode.Name = Computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.YMONTHS
                     hierarchyNode.Nodes.Find(Computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.YEARS, True)(0).Remove()
                 Case "21"
                     ' if years after months => delete years
@@ -426,9 +427,16 @@ Friend Class FinancialUIController
                     subColumn = column.Items.Add(valueNode.Text)
                 End If
                 subColumn.CellsDataSource = GridCellDataSource.Virtual
+
+                ' Style => will go in utilities !!! priority normal
+                ' ------------------------------------------------------------------------------
                 subColumn.CellsFormatString = "{0:N}"
+                Dim CEStyle As GridCellStyle = GridTheme.GetDefaultTheme(dgv.VIBlendTheme).GridCellStyle
+                CEStyle.Font = New System.Drawing.Font(dgv.Font.FontFamily, My.Settings.dgvFontSize)
+                subColumn.CellsStyle = CEStyle
                 subColumn.CellsTextAlignment = Drawing.ContentAlignment.MiddleRight
                 RegisterHierarchyItemDimensions(subColumn)
+                ' ------------------------------------------------------------------------------
 
                 ' Dig one level deeper if any
                 If Not dimensionNode.NextNode Is Nothing Then

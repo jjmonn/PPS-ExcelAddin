@@ -28,10 +28,10 @@ Partial Class DisplayControl
         Me.TableLayoutPanel2 = New System.Windows.Forms.TableLayoutPanel()
         Me.Button1 = New System.Windows.Forms.Button()
         Me.ImageList1 = New System.Windows.Forms.ImageList(Me.components)
-        Me.columns_display_tv = New System.Windows.Forms.TreeView()
-        Me.rows_display_tv = New System.Windows.Forms.TreeView()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.Label1 = New System.Windows.Forms.Label()
+        Me.columnsDisplayList = New VIBlend.WinForms.Controls.vListBox()
+        Me.rowsDisplayList = New VIBlend.WinForms.Controls.vListBox()
         Me.Label3 = New System.Windows.Forms.Label()
         Me.DimensionsTVPanel = New System.Windows.Forms.Panel()
         Me.TableLayoutPanel1.SuspendLayout()
@@ -42,7 +42,7 @@ Partial Class DisplayControl
         '
         Me.TableLayoutPanel1.BackColor = System.Drawing.SystemColors.GradientInactiveCaption
         Me.TableLayoutPanel1.ColumnCount = 1
-        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
+        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
         Me.TableLayoutPanel1.Controls.Add(Me.TableLayoutPanel2, 0, 2)
         Me.TableLayoutPanel1.Controls.Add(Me.Label3, 0, 0)
         Me.TableLayoutPanel1.Controls.Add(Me.DimensionsTVPanel, 0, 1)
@@ -51,9 +51,9 @@ Partial Class DisplayControl
         Me.TableLayoutPanel1.Margin = New System.Windows.Forms.Padding(10)
         Me.TableLayoutPanel1.Name = "TableLayoutPanel1"
         Me.TableLayoutPanel1.RowCount = 3
-        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25.0!))
-        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333!))
-        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 358.0!))
+        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35.0!))
+        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 43.37742!))
+        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 56.62257!))
         Me.TableLayoutPanel1.Size = New System.Drawing.Size(277, 616)
         Me.TableLayoutPanel1.TabIndex = 1
         '
@@ -62,31 +62,32 @@ Partial Class DisplayControl
         Me.TableLayoutPanel2.ColumnCount = 2
         Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
         Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
-        Me.TableLayoutPanel2.Controls.Add(Me.Button1, 1, 2)
-        Me.TableLayoutPanel2.Controls.Add(Me.columns_display_tv, 1, 1)
-        Me.TableLayoutPanel2.Controls.Add(Me.rows_display_tv, 0, 2)
         Me.TableLayoutPanel2.Controls.Add(Me.Label2, 0, 1)
         Me.TableLayoutPanel2.Controls.Add(Me.Label1, 1, 0)
+        Me.TableLayoutPanel2.Controls.Add(Me.columnsDisplayList, 1, 1)
+        Me.TableLayoutPanel2.Controls.Add(Me.rowsDisplayList, 0, 2)
+        Me.TableLayoutPanel2.Controls.Add(Me.Button1, 1, 3)
         Me.TableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TableLayoutPanel2.Location = New System.Drawing.Point(10, 268)
+        Me.TableLayoutPanel2.Location = New System.Drawing.Point(10, 297)
         Me.TableLayoutPanel2.Margin = New System.Windows.Forms.Padding(10)
         Me.TableLayoutPanel2.Name = "TableLayoutPanel2"
-        Me.TableLayoutPanel2.RowCount = 3
+        Me.TableLayoutPanel2.RowCount = 4
         Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
         Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
         Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
-        Me.TableLayoutPanel2.Size = New System.Drawing.Size(257, 338)
+        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
+        Me.TableLayoutPanel2.Size = New System.Drawing.Size(257, 309)
         Me.TableLayoutPanel2.TabIndex = 5
         '
         'Button1
         '
-        Me.Button1.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Button1.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Button1.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
         Me.Button1.ImageKey = "refresh blue.ico"
         Me.Button1.ImageList = Me.ImageList1
-        Me.Button1.Location = New System.Drawing.Point(183, 310)
+        Me.Button1.Location = New System.Drawing.Point(179, 281)
         Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(71, 25)
+        Me.Button1.Size = New System.Drawing.Size(75, 25)
         Me.Button1.TabIndex = 0
         Me.Button1.Text = "Update"
         Me.Button1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
@@ -98,27 +99,11 @@ Partial Class DisplayControl
         Me.ImageList1.TransparentColor = System.Drawing.Color.Transparent
         Me.ImageList1.Images.SetKeyName(0, "refresh blue.ico")
         '
-        'columns_display_tv
-        '
-        Me.columns_display_tv.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.columns_display_tv.Location = New System.Drawing.Point(131, 23)
-        Me.columns_display_tv.Name = "columns_display_tv"
-        Me.columns_display_tv.Size = New System.Drawing.Size(123, 153)
-        Me.columns_display_tv.TabIndex = 2
-        '
-        'rows_display_tv
-        '
-        Me.rows_display_tv.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.rows_display_tv.Location = New System.Drawing.Point(3, 182)
-        Me.rows_display_tv.Name = "rows_display_tv"
-        Me.rows_display_tv.Size = New System.Drawing.Size(122, 153)
-        Me.rows_display_tv.TabIndex = 1
-        '
         'Label2
         '
         Me.Label2.AutoSize = True
         Me.Label2.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.Label2.Location = New System.Drawing.Point(3, 164)
+        Me.Label2.Location = New System.Drawing.Point(3, 134)
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(122, 15)
         Me.Label2.TabIndex = 4
@@ -134,11 +119,35 @@ Partial Class DisplayControl
         Me.Label1.TabIndex = 3
         Me.Label1.Text = "Columns Labels"
         '
+        'columnsDisplayList
+        '
+        Me.columnsDisplayList.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.columnsDisplayList.Location = New System.Drawing.Point(131, 23)
+        Me.columnsDisplayList.Name = "columnsDisplayList"
+        Me.columnsDisplayList.RoundedCornersMaskListItem = CType(15, Byte)
+        Me.columnsDisplayList.Size = New System.Drawing.Size(123, 123)
+        Me.columnsDisplayList.TabIndex = 5
+        Me.columnsDisplayList.Text = "VListBox1"
+        Me.columnsDisplayList.VIBlendScrollBarsTheme = VIBlend.Utilities.VIBLEND_THEME.OFFICESILVER
+        Me.columnsDisplayList.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.OFFICESILVER
+        '
+        'rowsDisplayList
+        '
+        Me.rowsDisplayList.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.rowsDisplayList.Location = New System.Drawing.Point(3, 152)
+        Me.rowsDisplayList.Name = "rowsDisplayList"
+        Me.rowsDisplayList.RoundedCornersMaskListItem = CType(15, Byte)
+        Me.rowsDisplayList.Size = New System.Drawing.Size(122, 123)
+        Me.rowsDisplayList.TabIndex = 6
+        Me.rowsDisplayList.Text = "VListBox1"
+        Me.rowsDisplayList.VIBlendScrollBarsTheme = VIBlend.Utilities.VIBLEND_THEME.OFFICESILVER
+        Me.rowsDisplayList.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.OFFICESILVER
+        '
         'Label3
         '
         Me.Label3.AutoSize = True
         Me.Label3.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.Label3.Location = New System.Drawing.Point(10, 10)
+        Me.Label3.Location = New System.Drawing.Point(10, 20)
         Me.Label3.Margin = New System.Windows.Forms.Padding(10, 3, 3, 0)
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(264, 15)
@@ -148,10 +157,10 @@ Partial Class DisplayControl
         'DimensionsTVPanel
         '
         Me.DimensionsTVPanel.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.DimensionsTVPanel.Location = New System.Drawing.Point(10, 35)
+        Me.DimensionsTVPanel.Location = New System.Drawing.Point(10, 45)
         Me.DimensionsTVPanel.Margin = New System.Windows.Forms.Padding(10)
         Me.DimensionsTVPanel.Name = "DimensionsTVPanel"
-        Me.DimensionsTVPanel.Size = New System.Drawing.Size(257, 213)
+        Me.DimensionsTVPanel.Size = New System.Drawing.Size(257, 232)
         Me.DimensionsTVPanel.TabIndex = 7
         '
         'DisplayControl
@@ -170,13 +179,13 @@ Partial Class DisplayControl
     End Sub
     Friend WithEvents TableLayoutPanel1 As System.Windows.Forms.TableLayoutPanel
     Friend WithEvents TableLayoutPanel2 As System.Windows.Forms.TableLayoutPanel
-    Public WithEvents columns_display_tv As System.Windows.Forms.TreeView
-    Public WithEvents rows_display_tv As System.Windows.Forms.TreeView
     Friend WithEvents Label2 As System.Windows.Forms.Label
     Friend WithEvents Label1 As System.Windows.Forms.Label
     Friend WithEvents Label3 As System.Windows.Forms.Label
     Friend WithEvents DimensionsTVPanel As System.Windows.Forms.Panel
     Friend WithEvents Button1 As System.Windows.Forms.Button
     Friend WithEvents ImageList1 As System.Windows.Forms.ImageList
+    Public WithEvents columnsDisplayList As VIBlend.WinForms.Controls.vListBox
+    Public WithEvents rowsDisplayList As VIBlend.WinForms.Controls.vListBox
 
 End Class
