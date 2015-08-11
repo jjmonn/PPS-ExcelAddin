@@ -338,7 +338,7 @@ nextWord:
 
 #Region "Lists Utilities"
 
-    Protected Friend Shared Function GetShortList(ByRef list1 As List(Of String), _
+    Friend Shared Function GetShortList(ByRef list1 As List(Of String), _
                                                   ByRef list2 As List(Of String)) As List(Of String)
 
         Dim tmp_list As New List(Of String)
@@ -349,8 +349,8 @@ nextWord:
 
     End Function
 
-    Protected Friend Shared Function ListsEqualityCheck(ByRef list1 As List(Of String), _
-                                                        ByRef list2 As List(Of String)) As Boolean
+    Friend Shared Function ListsEqualityCheck(ByRef list1 As List(Of String), _
+                                              ByRef list2 As List(Of String)) As Boolean
 
         For Each element As Object In list1
             If list2.Contains(element) = False Then Return False
@@ -362,7 +362,7 @@ nextWord:
 
     End Function
 
-    Protected Friend Shared Function getStringsList(ByRef input_array As String()) As List(Of String)
+    Friend Shared Function getStringsList(ByRef input_array As String()) As List(Of String)
 
         Dim tmp_list As New List(Of String)
         For Each value As String In input_array
@@ -371,6 +371,8 @@ nextWord:
         Return tmp_list
 
     End Function
+
+   
 
 #End Region
 

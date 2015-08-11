@@ -21,8 +21,7 @@ Friend Class DataHistoryUI
     Private DGV As New vDataGridView
 
     ' Constants
-    Friend Const DGV_FONT_SIZE As Single = 8
-    Private Const DGV_THEME = VIBlend.Utilities.VIBLEND_THEME.OFFICE2010SILVER
+     Private Const DGV_THEME = VIBlend.Utilities.VIBLEND_THEME.OFFICE2010SILVER
     Private Const VALUES_FORMAT_STRING As String = "{0:C0}"
 
 #End Region
@@ -69,7 +68,7 @@ Friend Class DataHistoryUI
         DGV.ColumnsHierarchy.Items.Add("Value")
         DGV.ColumnsHierarchy.Items(2).CellsFormatString = VALUES_FORMAT_STRING
         DataGridViewsUtil.InitDisplayVDataGridView(DGV, DGV_THEME)
-        DataGridViewsUtil.DGVSetHiearchyFontSize(DGV, DGV_FONT_SIZE, DGV_FONT_SIZE)
+        DataGridViewsUtil.DGVSetHiearchyFontSize(DGV, My.Settings.dgvFontSize, My.Settings.dgvFontSize)
         Me.Controls.Add(DGV)
         DGV.Dock = Windows.Forms.DockStyle.Fill
 

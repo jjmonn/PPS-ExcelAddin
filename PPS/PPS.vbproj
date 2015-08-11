@@ -51,7 +51,8 @@
     <Reference Include="AddinExpress.XL.2005, Version=7.5.4072.2005, Culture=neutral, PublicKeyToken=e69a7e0f3592d2b8, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
     </Reference>
-    <Reference Include="CUI2DisplayControl">
+    <Reference Include="CUI2DisplayControl, Version=1.0.5701.31140, Culture=neutral, PublicKeyToken=888daf071761e3c2, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\CUI2DisplayControl\CUI2DisplayControl\bin\Debug\CUI2DisplayControl.dll</HintPath>
     </Reference>
     <Reference Include="GaugeThis">

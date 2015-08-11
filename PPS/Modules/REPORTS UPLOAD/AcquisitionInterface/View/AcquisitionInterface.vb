@@ -46,8 +46,7 @@ Friend Class AcquisitionInterface
     Private redStyleS As HierarchyItemStyle
 
     ' Constants
-    Public Const DGV_FONT_SIZE As Single = 8
-    Private Const FORMAT_CURRENCIES As String = "{0:C0}"
+      Private Const FORMAT_CURRENCIES As String = "{0:C0}"
     Private Const DGV_VI_BLEND_STYLE As VIBLEND_THEME = VIBLEND_THEME.VISTABLUE
 
 #End Region
@@ -75,7 +74,7 @@ Friend Class AcquisitionInterface
 
         Panel1.Controls.Add(DGV)
         DataGridViewsUtil.FormatDGVRowsHierarchy(DGV)
-        DataGridViewsUtil.SetDGVCellsFontSize(DGV, DGV_FONT_SIZE)
+        DataGridViewsUtil.SetDGVCellsFontSize(DGV, My.Settings.dgvFontSize)
         DGV.Dock = DockStyle.Fill
         DGV.ColumnsHierarchy.AutoStretchColumns = True
         DGV.ColumnsHierarchy.AutoResize(AutoResizeMode.FIT_ALL)
@@ -98,12 +97,12 @@ Friend Class AcquisitionInterface
         redStyleN = GridTheme.GetDefaultTheme(VIBLEND_THEME.METROORANGE).HierarchyItemStyleNormal
         redStyleS = GridTheme.GetDefaultTheme(VIBLEND_THEME.METROORANGE).HierarchyItemStyleSelected
 
-        normalStyleN.Font = New Font(normalStyleN.Font.FontFamily, DGV_FONT_SIZE)
-        normalStyleS.Font = New Font(normalStyleS.Font.FontFamily, DGV_FONT_SIZE)
-        greenStyleN.Font = New Font(greenStyleN.Font.FontFamily, DGV_FONT_SIZE)
-        greenStyleS.Font = New Font(greenStyleS.Font.FontFamily, DGV_FONT_SIZE)
-        redStyleN.Font = New Font(redStyleN.Font.FontFamily, DGV_FONT_SIZE)
-        redStyleS.Font = New Font(redStyleS.Font.FontFamily, DGV_FONT_SIZE)
+        normalStyleN.Font = New Font(normalStyleN.Font.FontFamily, My.Settings.dgvFontSize)
+        normalStyleS.Font = New Font(normalStyleS.Font.FontFamily, My.Settings.dgvFontSize)
+        greenStyleN.Font = New Font(greenStyleN.Font.FontFamily, My.Settings.dgvFontSize)
+        greenStyleS.Font = New Font(greenStyleS.Font.FontFamily, My.Settings.dgvFontSize)
+        redStyleN.Font = New Font(redStyleN.Font.FontFamily, My.Settings.dgvFontSize)
+        redStyleS.Font = New Font(redStyleS.Font.FontFamily, My.Settings.dgvFontSize)
 
     End Sub
 

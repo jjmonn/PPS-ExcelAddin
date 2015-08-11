@@ -77,7 +77,7 @@ Friend Class AcquisitionInterfaceController
     Friend Sub InitializeACQUIDGV()
 
         ACQUI.DGV = New vDataGridView
-        DataGridViewsUtil.DGVSetHiearchyFontSize(ACQUI.DGV, AcquisitionInterface.DGV_FONT_SIZE, AcquisitionInterface.DGV_FONT_SIZE)
+        DataGridViewsUtil.DGVSetHiearchyFontSize(ACQUI.DGV, My.Settings.dgvFontSize, My.Settings.dgvFontSize)
 
         Select Case DATASET.GlobalOrientationFlag
             Case ModelDataSet.DATASET_ACCOUNTS_PERIODS_OR

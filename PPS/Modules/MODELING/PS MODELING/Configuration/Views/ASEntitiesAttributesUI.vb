@@ -32,7 +32,6 @@ Friend Class ASEntitiesAttributesUI
     Friend current_cell As GridCell
 
     ' Constants
-    Private Const DGV_FONT_SIZE As Single = 8
     Private Const CONSO_ENTITIES_ROW_THEME As VIBLEND_THEME = VIBLEND_THEME.OFFICE2010BLUE
     Private Const INPUT_ENTITIES_ROW_THEME As VIBLEND_THEME = VIBLEND_THEME.METROBLUE
     Private columns_names As String() = {"Entity", "Gas Formula", "Liquids Formula", "Tax Rate"}
@@ -162,7 +161,7 @@ Friend Class ASEntitiesAttributesUI
             ' If entities_dict(entity_id)(ENTITIES_ALLOW_EDITION_VARIABLE) = 0 Then rowItem.ImageIndex = 0 
         Next
         isFillingDGV = False
-        DataGridViewsUtil.DGVSetHiearchyFontSize(entitiesDGV, DGV_FONT_SIZE, DGV_FONT_SIZE)
+        DataGridViewsUtil.DGVSetHiearchyFontSize(entitiesDGV, My.Settings.dgvFontSize, My.Settings.dgvFontSize)
         DataGridViewsUtil.FormatDGVRowsHierarchy(entitiesDGV)
         entitiesDGV.Refresh()
 

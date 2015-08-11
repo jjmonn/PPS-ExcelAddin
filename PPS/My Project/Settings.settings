@@ -3,7 +3,7 @@
   <Profiles />
   <Settings>
     <Setting Name="serverIp" Type="System.String" Scope="User">
-      <Value Profile="(Default)">52.19.49.78</Value>
+      <Value Profile="(Default)">52.18.248.159</Value>
     </Setting>
     <Setting Name="version_id" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">5</Value>
@@ -34,6 +34,9 @@
     </Setting>
     <Setting Name="mainCurrencyName" Type="System.String" Scope="User">
       <Value Profile="(Default)">EUR</Value>
+    </Setting>
+    <Setting Name="dgvFontSize" Type="System.Single" Scope="User">
+      <Value Profile="(Default)">8.5</Value>
     </Setting>
   </Settings>
 </SettingsFile>

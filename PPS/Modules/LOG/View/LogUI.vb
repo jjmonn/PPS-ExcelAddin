@@ -33,7 +33,6 @@ Friend Class LogUI
     Private current_entity_node As TreeNode
 
     ' Display
-    Friend Const DGV_FONT_SIZE As Single = 8
     Private Const DGV_THEME = VIBlend.Utilities.VIBLEND_THEME.OFFICE2010SILVER
     Private Const INNER_MARGIN As Integer = 0
 

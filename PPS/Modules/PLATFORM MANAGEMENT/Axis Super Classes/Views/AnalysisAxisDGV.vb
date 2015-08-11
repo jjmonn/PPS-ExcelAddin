@@ -33,8 +33,7 @@ Friend Class AnalysisAxisDGV
 
     ' Constants
     Private Const DGV_VI_BLEND_STYLE As VIBLEND_THEME = VIBLEND_THEME.OFFICE2010SILVER
-    Protected Friend DGV_FONT_SIZE As Single = 8
-    Private Const CB_WIDTH As Double = 20
+      Private Const CB_WIDTH As Double = 20
     Private Const CB_NB_ITEMS_DISPLAYED As Int32 = 7
 
 
@@ -120,7 +119,7 @@ Friend Class AnalysisAxisDGV
             addRow(value_id, values_dict(value_id))
         Next
         isFillingDGV = False
-        DataGridViewsUtil.DGVSetHiearchyFontSize(DGV, DGV_FONT_SIZE, DGV_FONT_SIZE)
+        DataGridViewsUtil.DGVSetHiearchyFontSize(DGV, My.Settings.dgvFontSize, My.Settings.dgvFontSize)
         DataGridViewsUtil.FormatDGVRowsHierarchy(DGV)
         DGV.Refresh()
 

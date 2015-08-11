@@ -46,7 +46,6 @@ Friend Class EntitiesDGV
 
     ' Constants
     Private Const DGV_VI_BLEND_STYLE As VIBLEND_THEME = VIBLEND_THEME.OFFICE2010SILVER
-    Friend DGV_FONT_SIZE As Single = 8
     Protected Friend Const CURRENCY_COLUMN_NAME As String = "Currency"
     Private Const NAME_COLUMN_NAME As String = "Name"
     Private Const CB_WIDTH As Double = 20
@@ -252,7 +251,7 @@ Friend Class EntitiesDGV
 
     Private Sub updateDGVFormat()
 
-        DataGridViewsUtil.DGVSetHiearchyFontSize(DGV, DGV_FONT_SIZE, DGV_FONT_SIZE)
+        DataGridViewsUtil.DGVSetHiearchyFontSize(DGV, My.Settings.dgvFontSize, My.Settings.dgvFontSize)
         DataGridViewsUtil.FormatDGVRowsHierarchy(DGV)
         DGV.Refresh()
 

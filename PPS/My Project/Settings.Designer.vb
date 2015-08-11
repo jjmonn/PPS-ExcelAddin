@@ -185,6 +185,18 @@ Namespace My
                 Me("mainCurrencyName") = value
             End Set
         End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("8.5")>  _
+        Public Property dgvFontSize() As Single
+            Get
+                Return CType(Me("dgvFontSize"),Single)
+            End Get
+            Set
+                Me("dgvFontSize") = value
+            End Set
+        End Property
     End Class
 End Namespace
 

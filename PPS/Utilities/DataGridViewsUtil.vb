@@ -70,7 +70,7 @@ Friend Class DataGridViewsUtil
 #Region "ControllingUI2 DGVs Formatting"
 
     ' vDgv DISPLAY Initialization
-    Protected Friend Shared Sub InitDisplayVDataGridView(ByRef vDataGridView As vDataGridView, _
+    Friend Shared Sub InitDisplayVDataGridView(ByRef vDataGridView As vDataGridView, _
                                                          ByRef theme As VIBLEND_THEME)
 
         With vDataGridView
@@ -85,7 +85,7 @@ Friend Class DataGridViewsUtil
     End Sub
 
     ' vDgv Display After Populating ' note controlling ui2 specificity !!
-    Protected Friend Sub FormatDGVs(ByRef tabsControl As TabControl, _
+    Friend Sub FormatDGVs(ByRef tabsControl As TabControl, _
                                     ByRef currency As String)
 
         Dim InputsFormatsDictionary = FormatsMapping.GetFormatTable(INPUT_FORMAT_CODE)
