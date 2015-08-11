@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
+using Ionic.Zlib;
 
 public class ByteBuffer : MemoryStream
 {
@@ -171,5 +172,18 @@ public class ByteBuffer : MemoryStream
         if (m_requestId == -1)
             m_requestId = this.ReadInt32();
         return (m_requestId);
+    }
+
+    public void Uncompress()
+    {
+        GZipStream stream = new GZipStream(this, CompressionMode.Decompress);
+        byte[] uncompressed = new byte[Length * 20];
+        int size = stream.Read(uncompressed, 0, (int)Length * 20);
+
+        byte[] buffer = GetBuffer();
+        Array.Clear(buffer, 0, buffer.Length);
+        Position = 0;
+        SetLength(0);
+        Write(uncompressed, 0, size);
     }
 }

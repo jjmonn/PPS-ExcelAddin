@@ -33,9 +33,12 @@
     <SignAssembly>true</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>network.pfx</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>network.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Ionic.Zlib">
+      <HintPath>dep\zlib-v1.9\Debug\Ionic.Zlib.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -54,8 +57,7 @@
     <Compile Include="ServerMessage.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="network.pfx" />
-    <None Include="Network.snk" />
+    <None Include="network.snk" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -1,0 +1,7 @@
+C:\Users\PPS Bi\Documents\PPS-Repo\NetworkModule\NetworkModule\bin\Debug\NetworkModule.dll
+C:\Users\PPS Bi\Documents\PPS-Repo\NetworkModule\NetworkModule\bin\Debug\NetworkModule.pdb
+C:\Users\PPS Bi\Documents\PPS-Repo\NetworkModule\NetworkModule\bin\Debug\Ionic.Zlib.dll
+C:\Users\PPS Bi\Documents\PPS-Repo\NetworkModule\NetworkModule\bin\Debug\Ionic.Zlib.pdb
+C:\Users\PPS Bi\Documents\PPS-Repo\NetworkModule\NetworkModule\bin\Debug\Ionic.Zlib.xml
+C:\Users\PPS Bi\Documents\PPS-Repo\NetworkModule\NetworkModule\obj\Debug\NetworkModule.dll
+C:\Users\PPS Bi\Documents\PPS-Repo\NetworkModule\NetworkModule\obj\Debug\NetworkModule.pdb
