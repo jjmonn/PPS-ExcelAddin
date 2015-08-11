@@ -195,8 +195,10 @@ Friend Class Computer
             End If
             filter_dict.Add(filterCode, 0)
         End If
+        System.Diagnostics.Debug.WriteLine("Filter code: " & filterCode)
 
         For result_index As Int32 = 1 To packet.ReadUint32()
+            System.Diagnostics.Debug.WriteLine("Result_index: " & result_index)
             FillAccountData(packet, _
                             isFiltered, _
                             filterCode, _
@@ -204,6 +206,7 @@ Friend Class Computer
         Next
 
         For child_result_index As Int32 = 1 To packet.ReadUint32()
+            System.Diagnostics.Debug.WriteLine("child result index: " & child_result_index)
             FillResultData(packet, filter_dict)
         Next
 
@@ -222,6 +225,7 @@ Friend Class Computer
             Else
                 filter_dict(filter_code) = packet.ReadUint32()
             End If
+            System.Diagnostics.Debug.WriteLine("filter Token:" & filter_dict(filter_code))
         Else
             ' filter_dict(filter_code) = "0"
             ' to be checked -> priority high
@@ -229,10 +233,10 @@ Friend Class Computer
         End If
 
         filterToken = GetFiltersToken(filter_dict)
-        System.Diagnostics.Debug.Write("filter Token:" & filterToken & Chr(13))
+        '  System.Diagnostics.Debug.Write("filter Token:" & filterToken & Chr(13))
 
         entityId = packet.ReadUint32()
-        System.Diagnostics.Debug.Write("entityId:" & entityId & Chr(13))
+        '     System.Diagnostics.Debug.Write("entityId:" & entityId & Chr(13))
 
         For account_index As Int32 = 1 To packet.ReadUint32()
             accountId = packet.ReadUint32()
