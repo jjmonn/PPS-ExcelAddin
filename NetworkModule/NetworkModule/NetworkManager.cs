@@ -72,20 +72,22 @@ public class NetworkManager
 
     public ByteBuffer Receive()
     {
-        byte[] l_buffer = new byte[4];
+        byte[] l_buffer = new byte[8];
         ByteBuffer l_byteBuffer = new ByteBuffer();
         int l_size;
         int l_sizeBuffer;
+        int l_realSize;
         int l_byteReaded = 0;
 
-        l_size = m_Sock.GetStream().Read(l_buffer, 0, 4);
-        if (l_size < 4)
+        l_size = m_Sock.GetStream().Read(l_buffer, 0, 8);
+        if (l_size < 8)
         {
             Console.WriteLine("Invalid packet received");
             System.Diagnostics.Debug.Write("Invalid packet received");
             return (null);
         }
         l_sizeBuffer = l_buffer[3] << 24 | l_buffer[2] << 16 | l_buffer[1] << 8 | l_buffer[0];
+        l_realSize = l_buffer[7] << 24 | l_buffer[6] << 16 | l_buffer[5] << 8 | l_buffer[4];
         l_buffer = new byte[l_sizeBuffer];
 
         do
@@ -96,7 +98,7 @@ public class NetworkManager
         while (l_byteReaded != l_sizeBuffer);
 
         l_byteBuffer.Write(l_buffer, 0, l_sizeBuffer);
-        l_byteBuffer.Uncompress();
+        l_byteBuffer.Uncompress(l_realSize);
         return (l_byteBuffer);
     }
 

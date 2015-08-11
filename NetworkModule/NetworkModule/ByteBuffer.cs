@@ -174,11 +174,11 @@ public class ByteBuffer : MemoryStream
         return (m_requestId);
     }
 
-    public void Uncompress()
+    public void Uncompress(int p_realSize)
     {
-        GZipStream stream = new GZipStream(this, CompressionMode.Decompress);
-        byte[] uncompressed = new byte[Length * 20];
-        int size = stream.Read(uncompressed, 0, (int)Length * 20);
+        ZlibStream stream = new ZlibStream(new MemoryStream(this.ToArray()), CompressionMode.Decompress);
+        byte[] uncompressed = new byte[p_realSize];
+        int size = stream.Read(uncompressed, 0, p_realSize);
 
         byte[] buffer = GetBuffer();
         Array.Clear(buffer, 0, buffer.Length);
