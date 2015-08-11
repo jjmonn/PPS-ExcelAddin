@@ -28,9 +28,23 @@ Friend Class Computer
     Public Event ComputationAnswered()
 
     ' Variables
-    Private dataMap As Collections.Hashtable
+    Private dataMap As Dictionary(Of String, Double)
     Private versions_comp_flag As New Collections.Generic.Dictionary(Of UInt32, Boolean)
     Private requestIdVersionIdDict As New Dictionary(Of UInt32, UInt32)
+
+    ' Computing
+    Private isAxis As Boolean
+    Private isFiltered As Boolean
+    Private axisId As Int32
+    Private versionId As Int32
+    Private entityId As Int32
+    Private accountId As Int32
+    Private periodId As Int32
+    Private filterToken As String
+    Private periodIdentifier As Char
+    Private periodsTokenDict As Dictionary(Of String, String)
+    Private filterCode As String
+    Private filters_dict As New Dictionary(Of String, Int32)
 
     ' Constants
     Friend Const FILTERS_DECOMPOSITION_IDENTIFIER As Char = "F"
@@ -54,12 +68,8 @@ Friend Class Computer
                                     Optional ByRef axis_filters As Dictionary(Of Int32, List(Of Int32)) = Nothing, _
                                     Optional ByRef hierarchy As List(Of String) = Nothing)
 
-        dataMap = New Collections.Hashtable
-
-
-
-
-        requestIdVersionIdDict.Clear()
+        dataMap = New Dictionary(Of String, Double)
+       requestIdVersionIdDict.Clear()
         versions_comp_flag.Clear()
         For Each id In versions_id
             versions_comp_flag.Add(id, False)
@@ -126,7 +136,7 @@ Friend Class Computer
 
     End Sub
 
-    Friend Function GetData() As Collections.Hashtable
+    Friend Function GetData() As Dictionary(Of String, Double)
 
         Return dataMap
 
@@ -142,28 +152,22 @@ Friend Class Computer
 
         If packet.ReadInt32() = 0 Then
             Dim request_id = packet.GetRequestId()
-            Dim version_id As Int32 = requestIdVersionIdDict(request_id)
+            versionid = requestIdVersionIdDict(request_id)
             requestIdVersionIdDict.Remove(request_id)
 
-            Dim filters_dict As New Dictionary(Of String, Int32)
+            filters_dict.Clear()
 
-            dataMap(version_id) = New Hashtable
+            Dim timeStamp = Date.Now
+            periodsTokenDict = GlobalVariables.Versions.GetPeriodTokensDict(versionId)
 
-            Dim periodsTokenDict As Dictionary(Of String, String) = GlobalVariables.Versions.GetPeriodTokensDict(version_id)
-
-            Dim periodIdentifier As Char
-            Select Case GlobalVariables.Versions.versions_hash(version_id)(VERSIONS_TIME_CONFIG_VARIABLE)
+            Select Case GlobalVariables.Versions.versions_hash(versionId)(VERSIONS_TIME_CONFIG_VARIABLE)
                 Case GlobalEnums.TimeConfig.YEARS : periodIdentifier = YEAR_PERIOD_IDENTIFIER
                 Case GlobalEnums.TimeConfig.MONTHS : periodIdentifier = MONTH_PERIOD_IDENTIFIER
             End Select
-
-            FillResultData(packet, _
-                           version_id, _
-                           filters_dict, _
-                           periodIdentifier, _
-                           periodsTokenDict)
-
-            versions_comp_flag(version_id) = True
+            
+            FillResultData(packet,filters_dict)
+            
+            versions_comp_flag(versionId) = True
             If AreAllVersionsComputed() = True Then
                 NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_COMPUTE_RESULT, AddressOf SMSG_COMPUTE_RESULT)
                 RaiseEvent ComputationAnswered()
@@ -172,62 +176,45 @@ Friend Class Computer
             ' server answered error
         End If
 
+
     End Sub
 
     Private Sub FillResultData(ByRef packet As ByteBuffer, _
-                               ByRef version_id As Int32, _
-                               ByRef filter_dict As Dictionary(Of String, Int32), _
-                               ByRef periodIdentifier As Char, _
-                               ByRef periodsTokenDict As Dictionary(Of String, String))
+                               ByRef filter_dict As Dictionary(Of String, Int32))
 
-        Dim isAxis As Boolean
-        Dim filter_code As String = ""
-        Dim isFiltered As Boolean = packet.ReadBool()
+        filterCode = ""
+        isFiltered = packet.ReadBool()
         If isFiltered = True Then
 
-            Dim axis As UInt32 = packet.ReadUint8()
+            axisId = packet.ReadUint8()
             isAxis = packet.ReadBool()
             If isAxis = False Then
-                filter_code = FILTERS_DECOMPOSITION_IDENTIFIER & packet.ReadUint32
+                filterCode = FILTERS_DECOMPOSITION_IDENTIFIER & packet.ReadUint32
             Else
-                filter_code = AXIS_DECOMPOSITION_IDENTIFIER & axis
+                filterCode = AXIS_DECOMPOSITION_IDENTIFIER & axisId
             End If
-            filter_dict.Add(filter_code, 0)
+            filter_dict.Add(filterCode, 0)
         End If
 
-        Dim nb_results As UInt32 = packet.ReadUint32
-        For result_index As UInt32 = 1 To nb_results
+        For result_index As Int32 = 1 To packet.ReadUint32()
             FillAccountData(packet, _
-                            version_id, _
                             isFiltered, _
-                            isAxis, _
-                            filter_code, _
-                            filter_dict, _
-                             periodIdentifier, _
-                            periodsTokenDict)
+                            filterCode, _
+                            filter_dict)
         Next
 
-        Dim nb_result_children As UInt32 = packet.ReadUint32
-        For child_result_index As UInt32 = 1 To nb_result_children
-            FillResultData(packet, _
-                           version_id, _
-                           filter_dict, _
-                           periodIdentifier, _
-                           periodsTokenDict)
+        For child_result_index As Int32 = 1 To packet.ReadUint32()
+            FillResultData(packet, filter_dict)
         Next
 
-        If isFiltered = True Then filter_dict.Remove(filter_code)
+        If isFiltered = True Then filter_dict.Remove(filterCode)
 
     End Sub
 
     Private Sub FillAccountData(ByRef packet As ByteBuffer, _
-                                ByRef version_id As Int32, _
                                 ByRef isFiltered As Boolean, _
-                                ByRef isAxis As Boolean, _
                                 ByRef filter_code As String, _
-                                ByRef filter_dict As Dictionary(Of String, Int32), _
-                                ByRef periodIdentifier As Char, _
-                                ByRef periodsTokenDict As Dictionary(Of String, String))
+                                ByRef filter_dict As Dictionary(Of String, Int32))
 
         If isFiltered = True Then
             If isAxis = True Then
@@ -236,66 +223,50 @@ Friend Class Computer
                 filter_dict(filter_code) = packet.ReadUint32()
             End If
         Else
-            'filter_dict(filter_code) = 0
+            ' filter_dict(filter_code) = "0"
             ' to be checked -> priority high
-            '  filter_dict.Remove(filter_code)
+            ' filter_dict.Remove(filter_code)
         End If
 
-        Dim filter_token As String = GetFiltersToken(filter_dict)
-        System.Diagnostics.Debug.Write("filter Token:" & filter_token & Chr(13))
-        If dataMap(version_id).containskey(filter_token) = False Then
-            dataMap(version_id)(filter_token) = New Hashtable
-        End If
+        filterToken = GetFiltersToken(filter_dict)
+        System.Diagnostics.Debug.Write("filter Token:" & filterToken & Chr(13))
 
-        Dim entity_id As Int32 = packet.ReadUint32()
-        System.Diagnostics.Debug.Write("entityId:" & entity_id & Chr(13))
-        Dim nb_accounts As UInt32 = packet.ReadUint32()
-        ' If dataMap(version_id)(filter_token).containskey(entity_id) = False Then
-        dataMap(version_id)(filter_token)(entity_id) = New Hashtable
-        ' End If
+        entityId = packet.ReadUint32()
+        System.Diagnostics.Debug.Write("entityId:" & entityId & Chr(13))
 
-        For account_index As UInt32 = 1 To nb_accounts
-            Dim account_id As Int32 = packet.ReadUint32()
-            dataMap(version_id)(filter_token)(entity_id)(account_id) = New Hashtable
+        For account_index As Int32 = 1 To packet.ReadUint32()
+            accountId = packet.ReadUint32()
 
             ' Non aggregated data
-            Dim nb_periods As UInt16 = packet.ReadUint16()
-            If nb_periods > 0 Then
-                For period_index As UInt16 = 0 To nb_periods - 1
-                    dataMap(version_id) _
-                           (filter_token) _
-                           (entity_id) _
-                           (account_id) _
-                           (periodsTokenDict(periodIdentifier & period_index)) _
-                           = packet.ReadDouble()
-                Next
-            End If
+            For period_index As Int16 = 0 To packet.ReadUint16() - 1
+                dataMap(versionId & _
+                        filterToken & _
+                        entityId & _
+                        accountId & _
+                        periodsTokenDict(periodIdentifier & period_index)) _
+                        = packet.ReadDouble()
+            Next
 
             ' Aggreagted data
-            Dim nbAggregations As Int32 = packet.ReadUint32()
-            For aggregationIndex As Int32 = 0 To nbAggregations - 1
-                dataMap(version_id) _
-                    (filter_token) _
-                    (entity_id) _
-                    (account_id) _
-                    (periodsTokenDict(YEAR_PERIOD_IDENTIFIER & aggregationIndex)) _
-                    = packet.ReadDouble()
+            For aggregationIndex As Int32 = 0 To packet.ReadUint32() - 1
+                dataMap(versionId & _
+                        filterToken & _
+                        entityId & _
+                        accountId & _
+                        periodsTokenDict(YEAR_PERIOD_IDENTIFIER & aggregationIndex)) _
+                        = packet.ReadDouble()
             Next
         Next
 
         ' Clean filter code out after ? !! 
         ' priority high
 
-        Dim nb_children_entities As UInt32 = packet.ReadUint32()
-        For children_index As UInt32 = 1 To nb_children_entities
+        ' Dim nb_children_entities As UInt32 = 
+        For children_index As Int32 = 1 To packet.ReadUint32()
             FillAccountData(packet, _
-                            version_id, _
                             False, _
-                            isAxis, _
                             filter_code, _
-                            filter_dict, _
-                            periodIdentifier, _
-                            periodsTokenDict)
+                            filter_dict)
         Next
 
     End Sub

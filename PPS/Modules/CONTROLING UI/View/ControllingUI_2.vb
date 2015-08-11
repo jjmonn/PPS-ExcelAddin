@@ -12,7 +12,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 07/08/2015
+' Last modified: 10/08/2015
 
 
 Imports System.Windows.Forms
@@ -45,9 +45,7 @@ Friend Class ControllingUI_2
     Private rightSplitContainer As SplitContainer
     Private Accounts As New Account
     Friend CP As CircularProgressUI
-    Friend ComputingBCGWorker As New BackgroundWorker
-    '   Friend DisplayBCGWorker As New BackgroundWorker
-
+  
 #End Region
 
 #Region "Variables"
@@ -58,6 +56,7 @@ Friend Class ControllingUI_2
     Private columns_list_dic As New Dictionary(Of String, List(Of HierarchyItem))
     Private row_index As Int32
     Private column_index As Int32
+
 
 #End Region
 
@@ -152,18 +151,11 @@ Friend Class ControllingUI_2
         TVTableLayout.Controls.Add(periodsCLB, 0, 0)
         HideAllMenusItems()
         CollapseSP1Pane1()
-         DisplayFirstTreeOnly()          ' TV Table Layout
+        DisplayFirstTreeOnly()          ' TV Table Layout
 
         If versionsTV.Nodes.Find(My.Settings.version_id, True).Length > 0 Then
             versionsTV.Nodes.Find(My.Settings.version_id, True)(0).Checked = True
         End If
-
-          ComputingBCGWorker.WorkerSupportsCancellation = True
-        '    DisplayBCGWorker.WorkerSupportsCancellation = True
-        AddHandler ComputingBCGWorker.DoWork, AddressOf ComputingBKGWorker_DoWork
-        AddHandler ComputingBCGWorker.RunWorkerCompleted, AddressOf ComputingBKGWorker_RunWorkerCompleted
-        'AddHandler DisplayBCGWorker.DoWork, AddressOf DisplayBKGWorker_DoWork
-        'AddHandler DisplayBCGWorker.RunWorkerCompleted, AddressOf DisplayBKGWorker_RunWorkerCompleted
 
     End Sub
 
@@ -347,14 +339,14 @@ Friend Class ControllingUI_2
 
     Private Sub RefreshData(ByRef entityNode As TreeNode)
 
-        ' check that 1 version is selected at least
+        ' check that 1 version is selected at least 
+
         ' + attention => it seems that we can select folder versions !! 
         ' priority high !!! 
 
-        Controller.EntityNode = entityNode
-        CP = New CircularProgressUI(System.Drawing.Color.Blue, "Computing")
-        ' CP.Show()
-        ComputingBCGWorker.RunWorkerAsync()
+        Controller.EntityNode = entityNode ' inverser to be put in controller  !! priority normal 
+         ' Computing
+        Controller.Compute()
 
     End Sub
 
@@ -786,9 +778,7 @@ Friend Class ControllingUI_2
 
     Private Sub Refresh_Click(sender As Object, e As EventArgs) Handles RefreshMenuBT.Click, RefreshMenuBT2.Click
 
-        If Not Controller.EntityNode Is Nothing Then
-            RefreshData(entitiesTV.Nodes.Find(Controller.EntityNode.Name, True)(0))
-        ElseIf Not entitiesTV.SelectedNode Is Nothing Then
+        If Not entitiesTV.SelectedNode Is Nothing Then
             RefreshData(entitiesTV.SelectedNode)
         Else
             MsgBox("An Entity level must be selected in order to refresh " + Chr(13) + Chr(13) + _
@@ -1067,7 +1057,7 @@ Friend Class ControllingUI_2
         CurrenciesCLB.Visible = False
         periodsCLB.Visible = False
         versionsTV.Visible = False
-   
+
         EntitiesFlag = False
         EntitiesCategoriesFlag = False
         ClientsFlag = False
@@ -1078,7 +1068,7 @@ Friend Class ControllingUI_2
         CurrenciesFlag = False
         PeriodsFlag = False
         VersionsFlag = False
-    
+
     End Sub
 
     Private Sub DisplayFirstTreeOnly()
@@ -1107,84 +1097,29 @@ Friend Class ControllingUI_2
 
 #Region "Background Workers"
 
-#Region "Computing Backgroundworker"
+    Delegate Sub AfterDisplayAttemp_Delegate()
 
-    Private Sub ComputingBKGWorker_DoWork(sender As Object, e As DoWorkEventArgs)
+    Friend Sub AfterDisplayAttemp_ThreadSafe()
 
-        Dim rowsHiearchyNodeList As New List(Of TreeNode)
-        Dim columnsHiearchyNodeList As New List(Of TreeNode)
+        If InvokeRequired Then
+            Dim MyDelegate As New AfterDisplayAttemp_Delegate(AddressOf AfterDisplayAttemp_ThreadSafe)
+            Me.Invoke(MyDelegate, New Object() {})
+        Else
+            CP.Dispose()
+            For Each tab_ As TabPage In TabControl1.TabPages
+                Dim dgv As vDataGridView = tab_.Controls(0)
+                dgv.RowsHierarchy.AutoResize(AutoResizeMode.FIT_ALL)
+                dgv.ColumnsHierarchy.AutoResize(AutoResizeMode.FIT_ALL)
+                On Error Resume Next
+                dgv.Refresh()
+            Next
 
-        ' Computing
-        Controller.Compute(rowsHiearchyNodeList, columnsHiearchyNodeList)
-
-        ' Display init
-        Controller.InitDisplay(rowsHiearchyNodeList, columnsHiearchyNodeList)
-        For Each tab_ As TabPage In TabControl1.TabPages
-            Controller.CreateRowsAndColumns(tab_.Controls(0), tab_.Name)
-        Next
-        Controller.initDisplayFlag = True
-
-
-    End Sub
-
-    Private Sub ComputingBKGWorker_RunWorkerCompleted(sender As Object, e As RunWorkerCompletedEventArgs)
-
-        '  AfterComputeAttemp_ThreadSafe()
+        End If
 
     End Sub
 
-    'Delegate Sub AfterComputeAttemp_Delegate()
-
-    'Private Sub AfterComputeAttemp_ThreadSafe()
-
-    '    If InvokeRequired Then
-    '        Dim MyDelegate As New AfterComputeAttemp_Delegate(AddressOf AfterComputeAttemp_ThreadSafe)
-    '        Me.Invoke(MyDelegate, New Object() {})
-    '    Else
-
-    '    End If
-
-    'End Sub
-
-#End Region
-
-#Region "Display Backgroundworker"
-
-    'Private Sub DisplayBKGWorker_DoWork(sender As Object, e As DoWorkEventArgs)
-
-    '    For Each tab_ As TabPage In TabControl1.TabPages
-    '        Dim DGV As vDataGridView = tab_.Controls(0)
-    '        Controller.FillDGVs(DGV, tab_.Name)
-    '        DGV.RowsHierarchy.AutoResize(AutoResizeMode.FIT_ALL)
-    '        DGV.ColumnsHierarchy.AutoResize(AutoResizeMode.FIT_ALL)
-    '    Next
-
-    'End Sub
-
-    'Private Sub DisplayBKGWorker_RunWorkerCompleted(sender As Object, e As RunWorkerCompletedEventArgs)
-
-    '    AfterDisplayAttemp_ThreadSafe()
-
-    'End Sub
-
-    'Delegate Sub AfterDisplayAttemp_Delegate()
-
-    'Private Sub AfterDisplayAttemp_ThreadSafe()
-
-    '    If InvokeRequired Then
-    '        Dim MyDelegate As New AfterDisplayAttemp_Delegate(AddressOf AfterDisplayAttemp_ThreadSafe)
-    '        Me.Invoke(MyDelegate, New Object() {})
-    '    Else
-    '        CP.Dispose()
-
-    '    End If
-
-    'End Sub
-
-#End Region
-
 #End Region
 
 
-  
+
 End Class

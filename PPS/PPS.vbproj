@@ -30,6 +30,7 @@
     <RunCodeAnalysis>false</RunCodeAnalysis>
     <WarningsAsErrors>42025</WarningsAsErrors>
     <UseVSHostingProcess>true</UseVSHostingProcess>
+    <Optimize>true</Optimize>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>

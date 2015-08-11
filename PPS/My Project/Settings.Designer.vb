@@ -56,7 +56,7 @@ Namespace My
         
         <Global.System.Configuration.UserScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("52.18.218.60")>  _
+         Global.System.Configuration.DefaultSettingValueAttribute("52.18.248.159")>  _
         Public Property serverIp() As String
             Get
                 Return CType(Me("serverIp"),String)
@@ -68,7 +68,7 @@ Namespace My
         
         <Global.System.Configuration.UserScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("3")>  _
+         Global.System.Configuration.DefaultSettingValueAttribute("5")>  _
         Public Property version_id() As Integer
             Get
                 Return CType(Me("version_id"),Integer)

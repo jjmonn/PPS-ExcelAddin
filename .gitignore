@@ -46,3 +46,14 @@ PPS/bin/*
 *.suo
 *.vbproj
 PPS/PPS.vbproj
+CUI2DisplayControl/CUI2DisplayControl/displaycontrol.pfx
+CUI2DisplayControl/CUI2DisplayControl/obj/Debug/CUI2DisplayControl.pdb
+CUI2DisplayControl/CUI2DisplayControl/obj/Debug/CUI2DisplayControl.vbproj.FileListAbsolute.txt
+CUI2DisplayControl/CUI2DisplayControl/obj/Debug/CUI2DisplayControl.vbproj.GenerateResource.Cache
+CUI2DisplayControl/CUI2DisplayControl/obj/Debug/DesignTimeResolveAssemblyReferencesInput.cache
+CUI2DisplayControl/CUI2DisplayControl/obj/Debug/PPSFBIControls.Resources.resources
+PPS/bin/Debug/CUI2DisplayControl.pdb
+PPS/bin/Debug/PPS.dll
+PPS/bin/Debug/PPS.pdb
+CUI2DisplayControl/CUI2DisplayControl/obj/Debug/PPSFBIControls.DisplayControl.resources
+CUI2DisplayControl/CUI2DisplayControl/obj/Debug/CUI2DisplayControl.dll

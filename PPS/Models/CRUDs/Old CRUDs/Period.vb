@@ -14,7 +14,7 @@
 '
 '
 ' Auhtor: Julien Monnereau
-' Last modified: 09/04/2015
+' Last modified: 10/08/2015
 
 
 Imports System.Collections.Generic
@@ -34,21 +34,11 @@ Friend Class Period
 #End Region
 
 
-#Region "Initialize"
-
-    Friend Sub New()
-
-
-    End Sub
-
-#End Region
-
-
 #Region "Interface 2"
 
-    Friend Shared Function GetYearsList(ByRef startPeriod As UInt32, _
-                                         ByRef nbPeriod As UInt16, _
-                                         ByRef timeConfig As UInt16) As Int32()
+    Friend Shared Function GetYearsList(ByVal startPeriod As UInt32, _
+                                         ByVal nbPeriod As UInt16, _
+                                         ByVal timeConfig As UInt16) As Int32()
 
         Dim periodsList As New List(Of Int32)
         periodsList.Add(startPeriod)
@@ -59,7 +49,7 @@ Friend Class Period
 
         Dim year As Double = startPeriod / 365.25 + 1900
 
-        For i As UInt16 = 1 To nbPeriod - 1
+        For i As Int16 = 1 To nbPeriod - 1
             If (DateTime.IsLeapYear(year)) Then
                 startPeriod += 366
             Else
@@ -73,8 +63,8 @@ Friend Class Period
 
     End Function
 
-    Friend Shared Function GetMonthsList(ByRef startPeriod As UInt32, _
-                                        ByRef nbPeriod As UInt16) As Int32()
+    Friend Shared Function GetMonthsList(ByVal startPeriod As UInt32, _
+                                         ByVal nbPeriod As UInt16) As Int32()
 
         Dim periodsList As New List(Of Int32)
         periodsList.Add(startPeriod)

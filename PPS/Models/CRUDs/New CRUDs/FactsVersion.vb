@@ -7,7 +7,7 @@
 '
 ' Author: Julien Monnereau
 ' Created: 29/07/2015
-' Last modified: 03/08/2015
+' Last modified: 10/08/2015
 
 
 Imports System.Collections
@@ -233,23 +233,16 @@ Friend Class FactsVersion
 
     End Function
 
-    Friend Function GetMonths(ByRef versionsIdDict As Dictionary(Of Int32, String)) As List(Of Int32)
+    Friend Function GetMonths(ByRef versionsIdDict As Dictionary(Of Int32, String)) As Dictionary(Of Int32, List(Of Int32))
 
-        Dim monthsList As New List(Of Int32)
-        For Each versionId As Int32 In versionsIdDict.Keys
-            Dim startPeriod As Int32 = versions_hash(versionId)(VERSIONS_START_PERIOD_VAR)
-            Dim nbPeriods As Int16 = versions_hash(versionId)(VERSIONS_NB_PERIODS_VAR)
-
-            If versions_hash(versionId)(VERSIONS_TIME_CONFIG_VARIABLE) = GlobalEnums.TimeConfig.MONTHS Then
-                For Each monthId As Int32 In Period.GetMonthsList(startPeriod, nbPeriods)
-                    If monthsList.Contains(monthId) = False Then
-                        monthsList.Add(monthId)
-                    End If
-                Next
-            End If
+        Dim monthsDict As New Dictionary(Of Int32, List(Of Int32))
+        For Each yearId As Int32 In GetYears(versionsIdDict)
+            monthsDict.Add(yearId, New List(Of Int32))
+            For Each monthId As Int32 In Period.GetMonthsList(yearId, 12)
+                monthsDict(yearId).Add(monthId)
+            Next
         Next
-        monthsList.Sort()
-        Return monthsList
+        Return monthsDict
 
     End Function
 
