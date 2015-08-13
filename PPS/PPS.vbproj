@@ -222,7 +222,6 @@
     </Compile>
     <Compile Include="Models\GenericSelectionBuilder.vb" />
     <Compile Include="Modules\CONTROLING UI\Controler\FinancialUIController.vb" />
-    <Compile Include="Modules\CONTROLING UI\Model\ControllingUIModel.vb" />
     <Compile Include="Modules\CONTROLING UI\View\ControllingUIChartsConfig.Designer.vb">
       <DependentUpon>ControllingUIChartsConfig.vb</DependentUpon>
     </Compile>

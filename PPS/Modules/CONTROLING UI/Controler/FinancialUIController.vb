@@ -195,7 +195,7 @@ Friend Class FinancialUIController
 
         ' Create rows and columns
         InitDisplay()
-        For Each tab_ As TabPage In View.TabControl1.TabPages
+        For Each tab_ As VIBlend.WinForms.Controls.vTabPage In View.tabControl1.TabPages
             CreateRowsAndColumns(tab_.Controls(0), tab_.Name)
         Next
         initDisplayFlag = True
@@ -581,6 +581,8 @@ Friend Class FinancialUIController
 
     Private Sub DGVs_CellValueNeeded(ByVal sender As Object, ByVal args As CellValueNeededEventArgs)
 
+
+
         Dim accountId As Int32 = 0
         Dim entityId As Int32 = 0
         Dim periodId As String = ""
@@ -653,7 +655,7 @@ Friend Class FinancialUIController
 
     Friend Sub VersionsCompDisplay(ByVal display As Boolean)
 
-        For Each tab_ As TabPage In View.TabControl1.TabPages
+        For Each tab_ As VIBlend.WinForms.Controls.vTabPage In View.tabControl1.TabPages
             Dim DGV As vDataGridView = tab_.Controls(0)
             For Each row As HierarchyItem In DGV.RowsHierarchy.Items
                 DisplayVCompHierarchy(row, display)
@@ -811,7 +813,7 @@ Friend Class FinancialUIController
                                                                                            {"Entity", "Version", "Currency"}, _
                                                                                            {EntityNode.Text, View.VersionTB.Text, View.CurrencyTB.Text})
             Dim i As Int32 = 1
-            For Each tab_ As TabPage In View.TabControl1.TabPages
+            For Each tab_ As VIBlend.WinForms.Controls.vTabPage In View.tabControl1.TabPages
                 Dim DGV As VIBlend.WinForms.DataGridView.vDataGridView = tab_.Controls(0)
                 DataGridViewsUtil.CopyDGVToExcelGeneric(DGV, destination, i)
             Next
@@ -850,6 +852,19 @@ Friend Class FinancialUIController
     End Function
 
 #End Region
+
+
+#Region "DGVs Events"
+
+    Friend Sub DGV_Hierarchy_Expanded()
+
+
+
+    End Sub
+
+
+#End Region
+
 
 
 End Class

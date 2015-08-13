@@ -1,10 +1,7 @@
-﻿' Class: ControlingUI_2.vb
+﻿' ControlingUI_2.vb
 ' 
-'     Visualize data
-'     Rows -> "Accounts" is always the first hierarchy Level
-'
+'  
 ' To do: 
-'       - Reimplement Versions comparison !! priority high
 '       - Adjustments TV display !
 '
 ' Known Bugs:
@@ -12,7 +9,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 12/08/2015
+' Last modified: 13/08/2015
 
 
 Imports System.Windows.Forms
@@ -143,8 +140,10 @@ Friend Class ControllingUI_2
 
         ' Init TabControl
         For Each node As TreeNode In accountsTV.Nodes
-            TabControl1.TabPages.Add(node.Name, node.Text)
-            '   tabsNodesDictionary.Add(node.Text, node)
+            Dim newTab As New vTabPage
+            newTab.Text = node.Text
+            newTab.Name = node.Name
+            tabControl1.TabPages.Add(newTab)
         Next
         InitializeChartsTab()
         DimensionsDisplayPaneSetup()
@@ -245,9 +244,9 @@ Friend Class ControllingUI_2
         'PBar.Left = (Me.Width - PBar.Width) / 2         ' Progress Bar
         'PBar.Top = (Me.Height - PBar.Height) / 2        ' Progress Bar
 
-        For Each tab_ As TabPage In TabControl1.TabPages
+        For Each tab_ As vTabPage In tabControl1.TabPages
 
-            TabControl1.SelectedTab = tab_
+            tabControl1.SelectedTab = tab_
             tab_.ImageIndex = 0
 
             Dim DGV As New vDataGridView
@@ -260,6 +259,9 @@ Friend Class ControllingUI_2
             DGV.RowsHierarchy.CompactStyleRenderingEnabled = True
             DGV.ContextMenuStrip = DGVsRCM
             AddHandler DGV.CellMouseClick, AddressOf DGV_CellMouseClick
+            AddHandler DGV.HierarchyItemExpanded, AddressOf Controller.DGV_Hierarchy_Expanded
+            'AddHandler DGV.HierarchyItemCollapsed
+
             tab_.Controls.Add(DGV)
 
         Next
@@ -361,9 +363,11 @@ Friend Class ControllingUI_2
 
     Private Sub FormatVIEWDataDisplay()
 
-        DGVUTIL.FormatDGVs(TabControl1, CurrencyTB.Text)
-        If Not IsNothing(TabControl1.TabPages(0)) Then TabControl1.SelectedTab = TabControl1.TabPages(0)
-        Me.Update()
+        ' to be reimplemented priority high !!!!!!
+
+        'DGVUTIL.FormatDGVs(TabControl1, CurrencyTB.Text)
+        'If Not IsNothing(TabControl1.TabPages(0)) Then TabControl1.SelectedTab = TabControl1.TabPages(0)
+        'Me.Update()
 
     End Sub
 
@@ -818,7 +822,7 @@ Friend Class ControllingUI_2
     Private Sub RemoveVersionsComparisonToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles deleteComparisonBT.Click
 
         If isVersionComparisonDisplayed Then
-            For Each tab_ As TabPage In TabControl1.TabPages
+            For Each tab_ As vTabPage In tabControl1.TabPages
                 Dim DGV As vDataGridView = tab_.Controls(0)
                 DGVUTIL.RemoveVersionsComparison(DGV)
             Next
@@ -975,7 +979,7 @@ Friend Class ControllingUI_2
 
     Private Sub DisplaySelectedPeriods(ByRef selectionList As List(Of Int32))
 
-        For Each tab_ As TabPage In TabControl1.TabPages
+        For Each tab_ As vTabPage In tabControl1.TabPages
             Dim DGV As vDataGridView = tab_.Controls(0)
 
             For Each col As HierarchyItem In DGV.ColumnsHierarchy.Items
@@ -1117,7 +1121,7 @@ Friend Class ControllingUI_2
             Me.Invoke(MyDelegate, New Object() {})
         Else
             CP.Dispose()
-            For Each tab_ As TabPage In TabControl1.TabPages
+            For Each tab_ As vTabPage In tabControl1.TabPages
                 Dim dgv As vDataGridView = tab_.Controls(0)
                 dgv.RowsHierarchy.AutoResize(AutoResizeMode.FIT_ALL)
                 dgv.ColumnsHierarchy.AutoResize(AutoResizeMode.FIT_ALL)

@@ -48,7 +48,6 @@ Partial Class ControllingUI_2
         Me.SplitContainer1 = New System.Windows.Forms.SplitContainer()
         Me.TVTableLayout = New System.Windows.Forms.TableLayoutPanel()
         Me.Label1 = New System.Windows.Forms.Label()
-        Me.TabControl1 = New System.Windows.Forms.CustomTabControl()
         Me.TabControl2 = New System.Windows.Forms.TabControl()
         Me.TabPage1 = New System.Windows.Forms.TabPage()
         Me.TableLayoutPanel2 = New System.Windows.Forms.TableLayoutPanel()
@@ -109,6 +108,7 @@ Partial Class ControllingUI_2
         Me.CategoriesIL = New System.Windows.Forms.ImageList(Me.components)
         Me.SplitContainer2 = New System.Windows.Forms.SplitContainer()
         Me.ImageList1 = New System.Windows.Forms.ImageList(Me.components)
+        Me.tabControl1 = New VIBlend.WinForms.Controls.vTabControl()
         Me.entitiesRightClickMenu.SuspendLayout()
         Me.periodsRightClickMenu.SuspendLayout()
         Me.DGVsRCM.SuspendLayout()
@@ -144,48 +144,48 @@ Partial Class ControllingUI_2
         '
         Me.entitiesRightClickMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.compute_complete, Me.ToolStripSeparator1, Me.SelectAllSubEntitiesToolStripMenuItem, Me.UnselectAllSubEntitiesToolStripMenuItem})
         Me.entitiesRightClickMenu.Name = "ContextMenuStripEntitiesNodes"
-        Me.entitiesRightClickMenu.Size = New System.Drawing.Size(225, 82)
+        Me.entitiesRightClickMenu.Size = New System.Drawing.Size(201, 76)
         '
         'compute_complete
         '
         Me.compute_complete.Image = Global.PPS.My.Resources.Resources.Report
         Me.compute_complete.Name = "compute_complete"
-        Me.compute_complete.Size = New System.Drawing.Size(224, 24)
+        Me.compute_complete.Size = New System.Drawing.Size(200, 22)
         Me.compute_complete.Text = "Display Complete Entity"
         '
         'ToolStripSeparator1
         '
         Me.ToolStripSeparator1.Name = "ToolStripSeparator1"
-        Me.ToolStripSeparator1.Size = New System.Drawing.Size(221, 6)
+        Me.ToolStripSeparator1.Size = New System.Drawing.Size(197, 6)
         '
         'SelectAllSubEntitiesToolStripMenuItem
         '
         Me.SelectAllSubEntitiesToolStripMenuItem.Name = "SelectAllSubEntitiesToolStripMenuItem"
-        Me.SelectAllSubEntitiesToolStripMenuItem.Size = New System.Drawing.Size(224, 24)
+        Me.SelectAllSubEntitiesToolStripMenuItem.Size = New System.Drawing.Size(200, 22)
         Me.SelectAllSubEntitiesToolStripMenuItem.Text = "Select All Sub Entities"
         '
         'UnselectAllSubEntitiesToolStripMenuItem
         '
         Me.UnselectAllSubEntitiesToolStripMenuItem.Name = "UnselectAllSubEntitiesToolStripMenuItem"
-        Me.UnselectAllSubEntitiesToolStripMenuItem.Size = New System.Drawing.Size(224, 24)
+        Me.UnselectAllSubEntitiesToolStripMenuItem.Size = New System.Drawing.Size(200, 22)
         Me.UnselectAllSubEntitiesToolStripMenuItem.Text = "Unselect All Sub Entities"
         '
         'periodsRightClickMenu
         '
         Me.periodsRightClickMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.SelectAllToolStripMenuItem, Me.UnselectAllToolStripMenuItem})
         Me.periodsRightClickMenu.Name = "periodsRightClickMenu"
-        Me.periodsRightClickMenu.Size = New System.Drawing.Size(150, 52)
+        Me.periodsRightClickMenu.Size = New System.Drawing.Size(137, 48)
         '
         'SelectAllToolStripMenuItem
         '
         Me.SelectAllToolStripMenuItem.Name = "SelectAllToolStripMenuItem"
-        Me.SelectAllToolStripMenuItem.Size = New System.Drawing.Size(149, 24)
+        Me.SelectAllToolStripMenuItem.Size = New System.Drawing.Size(136, 22)
         Me.SelectAllToolStripMenuItem.Text = "Select All"
         '
         'UnselectAllToolStripMenuItem
         '
         Me.UnselectAllToolStripMenuItem.Name = "UnselectAllToolStripMenuItem"
-        Me.UnselectAllToolStripMenuItem.Size = New System.Drawing.Size(149, 24)
+        Me.UnselectAllToolStripMenuItem.Size = New System.Drawing.Size(136, 22)
         Me.UnselectAllToolStripMenuItem.Text = "Unselect All"
         '
         'VersionsIL
@@ -206,53 +206,53 @@ Partial Class ControllingUI_2
         '
         Me.DGVsRCM.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.DisplayAdjustmensRCM, Me.ToolStripSeparator2, Me.DisplayDataTrackingToolStripMenuItem, Me.ToolStripSeparator4, Me.FormatsRCMBT})
         Me.DGVsRCM.Name = "DGVsRCM"
-        Me.DGVsRCM.Size = New System.Drawing.Size(211, 88)
+        Me.DGVsRCM.Size = New System.Drawing.Size(189, 82)
         '
         'DisplayAdjustmensRCM
         '
         Me.DisplayAdjustmensRCM.Name = "DisplayAdjustmensRCM"
-        Me.DisplayAdjustmensRCM.Size = New System.Drawing.Size(210, 24)
+        Me.DisplayAdjustmensRCM.Size = New System.Drawing.Size(188, 22)
         Me.DisplayAdjustmensRCM.Text = "Display Adjustments"
         '
         'ToolStripSeparator2
         '
         Me.ToolStripSeparator2.Name = "ToolStripSeparator2"
-        Me.ToolStripSeparator2.Size = New System.Drawing.Size(207, 6)
+        Me.ToolStripSeparator2.Size = New System.Drawing.Size(185, 6)
         '
         'DisplayDataTrackingToolStripMenuItem
         '
         Me.DisplayDataTrackingToolStripMenuItem.Name = "DisplayDataTrackingToolStripMenuItem"
-        Me.DisplayDataTrackingToolStripMenuItem.Size = New System.Drawing.Size(210, 24)
+        Me.DisplayDataTrackingToolStripMenuItem.Size = New System.Drawing.Size(188, 22)
         Me.DisplayDataTrackingToolStripMenuItem.Text = "Display Data Tracking"
         '
         'ToolStripSeparator4
         '
         Me.ToolStripSeparator4.Name = "ToolStripSeparator4"
-        Me.ToolStripSeparator4.Size = New System.Drawing.Size(207, 6)
+        Me.ToolStripSeparator4.Size = New System.Drawing.Size(185, 6)
         '
         'FormatsRCMBT
         '
         Me.FormatsRCMBT.Image = Global.PPS.My.Resources.Resources.Actions_format_stroke_color_icon
         Me.FormatsRCMBT.Name = "FormatsRCMBT"
-        Me.FormatsRCMBT.Size = New System.Drawing.Size(210, 24)
+        Me.FormatsRCMBT.Size = New System.Drawing.Size(188, 22)
         Me.FormatsRCMBT.Text = "Display Options"
         '
         'AdjustmentsRCM
         '
         Me.AdjustmentsRCM.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.SelectAllToolStripMenuItem1, Me.UnselectAllToolStripMenuItem1})
         Me.AdjustmentsRCM.Name = "AdjustmentsRCM"
-        Me.AdjustmentsRCM.Size = New System.Drawing.Size(150, 52)
+        Me.AdjustmentsRCM.Size = New System.Drawing.Size(137, 48)
         '
         'SelectAllToolStripMenuItem1
         '
         Me.SelectAllToolStripMenuItem1.Name = "SelectAllToolStripMenuItem1"
-        Me.SelectAllToolStripMenuItem1.Size = New System.Drawing.Size(149, 24)
+        Me.SelectAllToolStripMenuItem1.Size = New System.Drawing.Size(136, 22)
         Me.SelectAllToolStripMenuItem1.Text = "Select All"
         '
         'UnselectAllToolStripMenuItem1
         '
         Me.UnselectAllToolStripMenuItem1.Name = "UnselectAllToolStripMenuItem1"
-        Me.UnselectAllToolStripMenuItem1.Size = New System.Drawing.Size(149, 24)
+        Me.UnselectAllToolStripMenuItem1.Size = New System.Drawing.Size(136, 22)
         Me.UnselectAllToolStripMenuItem1.Text = "Unselect All"
         '
         'SplitContainer1
@@ -269,8 +269,8 @@ Partial Class ControllingUI_2
         '
         'SplitContainer1.Panel2
         '
-        Me.SplitContainer1.Panel2.Controls.Add(Me.TabControl1)
-        Me.SplitContainer1.Size = New System.Drawing.Size(572, 509)
+        Me.SplitContainer1.Panel2.Controls.Add(Me.tabControl1)
+        Me.SplitContainer1.Size = New System.Drawing.Size(572, 221)
         Me.SplitContainer1.SplitterDistance = 106
         Me.SplitContainer1.TabIndex = 8
         '
@@ -286,7 +286,7 @@ Partial Class ControllingUI_2
         Me.TVTableLayout.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
         Me.TVTableLayout.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
         Me.TVTableLayout.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
-        Me.TVTableLayout.Size = New System.Drawing.Size(106, 509)
+        Me.TVTableLayout.Size = New System.Drawing.Size(106, 221)
         Me.TVTableLayout.TabIndex = 0
         '
         'Label1
@@ -300,37 +300,6 @@ Partial Class ControllingUI_2
         Me.Label1.TabIndex = 0
         Me.Label1.Text = "Entities Selection"
         Me.Label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
-        '
-        'TabControl1
-        '
-        Me.TabControl1.DisplayStyle = System.Windows.Forms.TabStyle.Rounded
-        '
-        '
-        '
-        Me.TabControl1.DisplayStyleProvider.BorderColor = System.Drawing.SystemColors.GradientInactiveCaption
-        Me.TabControl1.DisplayStyleProvider.BorderColorHot = System.Drawing.SystemColors.GradientActiveCaption
-        Me.TabControl1.DisplayStyleProvider.BorderColorSelected = System.Drawing.SystemColors.ActiveCaption
-        Me.TabControl1.DisplayStyleProvider.CloserColor = System.Drawing.Color.Crimson
-        Me.TabControl1.DisplayStyleProvider.CloserColorActive = System.Drawing.Color.Crimson
-        Me.TabControl1.DisplayStyleProvider.FocusColor = System.Drawing.Color.Black
-        Me.TabControl1.DisplayStyleProvider.FocusTrack = False
-        Me.TabControl1.DisplayStyleProvider.HotTrack = True
-        Me.TabControl1.DisplayStyleProvider.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.TabControl1.DisplayStyleProvider.Opacity = 1.0!
-        Me.TabControl1.DisplayStyleProvider.Overlap = 0
-        Me.TabControl1.DisplayStyleProvider.Padding = New System.Drawing.Point(6, 3)
-        Me.TabControl1.DisplayStyleProvider.Radius = 10
-        Me.TabControl1.DisplayStyleProvider.ShowTabCloser = True
-        Me.TabControl1.DisplayStyleProvider.TextColor = System.Drawing.SystemColors.ControlText
-        Me.TabControl1.DisplayStyleProvider.TextColorDisabled = System.Drawing.SystemColors.ControlDark
-        Me.TabControl1.DisplayStyleProvider.TextColorSelected = System.Drawing.SystemColors.ControlText
-        Me.TabControl1.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TabControl1.HotTrack = True
-        Me.TabControl1.Location = New System.Drawing.Point(0, 0)
-        Me.TabControl1.Name = "TabControl1"
-        Me.TabControl1.SelectedIndex = 0
-        Me.TabControl1.Size = New System.Drawing.Size(462, 509)
-        Me.TabControl1.TabIndex = 9
         '
         'TabControl2
         '
@@ -392,7 +361,7 @@ Partial Class ControllingUI_2
         Me.displayLabel.Dock = System.Windows.Forms.DockStyle.Top
         Me.displayLabel.Location = New System.Drawing.Point(239, 44)
         Me.displayLabel.Name = "displayLabel"
-        Me.displayLabel.Size = New System.Drawing.Size(58, 15)
+        Me.displayLabel.Size = New System.Drawing.Size(58, 13)
         Me.displayLabel.TabIndex = 12
         Me.displayLabel.Text = "Display"
         Me.displayLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -498,7 +467,7 @@ Partial Class ControllingUI_2
         Me.EntitiesMenuBT1.Image = Global.PPS.My.Resources.Resources.element_branch24
         Me.EntitiesMenuBT1.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
         Me.EntitiesMenuBT1.Name = "EntitiesMenuBT1"
-        Me.EntitiesMenuBT1.Size = New System.Drawing.Size(65, 63)
+        Me.EntitiesMenuBT1.Size = New System.Drawing.Size(57, 63)
         Me.EntitiesMenuBT1.Text = "Entities"
         Me.EntitiesMenuBT1.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
         '
@@ -508,7 +477,7 @@ Partial Class ControllingUI_2
         Me.SelectionMenuBT.Image = Global.PPS.My.Resources.Resources.checkbox3
         Me.SelectionMenuBT.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
         Me.SelectionMenuBT.Name = "SelectionMenuBT"
-        Me.SelectionMenuBT.Size = New System.Drawing.Size(75, 63)
+        Me.SelectionMenuBT.Size = New System.Drawing.Size(67, 63)
         Me.SelectionMenuBT.Text = "Selection"
         Me.SelectionMenuBT.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
         '
@@ -518,7 +487,7 @@ Partial Class ControllingUI_2
         Me.EntitiesMenuBT2.Image = CType(resources.GetObject("EntitiesMenuBT2.Image"), System.Drawing.Image)
         Me.EntitiesMenuBT2.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
         Me.EntitiesMenuBT2.Name = "EntitiesMenuBT2"
-        Me.EntitiesMenuBT2.Size = New System.Drawing.Size(174, 38)
+        Me.EntitiesMenuBT2.Size = New System.Drawing.Size(159, 38)
         Me.EntitiesMenuBT2.Text = "Legal Entities"
         '
         'SelectionToolStripMenuItem
@@ -526,7 +495,7 @@ Partial Class ControllingUI_2
         Me.SelectionToolStripMenuItem.Image = Global.PPS.My.Resources.Resources.element_branch21
         Me.SelectionToolStripMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
         Me.SelectionToolStripMenuItem.Name = "SelectionToolStripMenuItem"
-        Me.SelectionToolStripMenuItem.Size = New System.Drawing.Size(243, 38)
+        Me.SelectionToolStripMenuItem.Size = New System.Drawing.Size(218, 38)
         Me.SelectionToolStripMenuItem.Text = "Selection"
         '
         'entitiesCategoriesMenuBT
@@ -534,7 +503,7 @@ Partial Class ControllingUI_2
         Me.entitiesCategoriesMenuBT.Image = CType(resources.GetObject("entitiesCategoriesMenuBT.Image"), System.Drawing.Image)
         Me.entitiesCategoriesMenuBT.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
         Me.entitiesCategoriesMenuBT.Name = "entitiesCategoriesMenuBT"
-        Me.entitiesCategoriesMenuBT.Size = New System.Drawing.Size(243, 38)
+        Me.entitiesCategoriesMenuBT.Size = New System.Drawing.Size(218, 38)
         Me.entitiesCategoriesMenuBT.Text = "Legal Entities Categories"
         '
         'ClientsMenuBT
@@ -543,7 +512,7 @@ Partial Class ControllingUI_2
         Me.ClientsMenuBT.Image = CType(resources.GetObject("ClientsMenuBT.Image"), System.Drawing.Image)
         Me.ClientsMenuBT.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
         Me.ClientsMenuBT.Name = "ClientsMenuBT"
-        Me.ClientsMenuBT.Size = New System.Drawing.Size(174, 38)
+        Me.ClientsMenuBT.Size = New System.Drawing.Size(159, 38)
         Me.ClientsMenuBT.Text = "Clients"
         '
         'ClientsSelectionToolStripMenuItem
@@ -551,7 +520,7 @@ Partial Class ControllingUI_2
         Me.ClientsSelectionToolStripMenuItem.Image = Global.PPS.My.Resources.Resources.users_relation21
         Me.ClientsSelectionToolStripMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
         Me.ClientsSelectionToolStripMenuItem.Name = "ClientsSelectionToolStripMenuItem"
-        Me.ClientsSelectionToolStripMenuItem.Size = New System.Drawing.Size(204, 38)
+        Me.ClientsSelectionToolStripMenuItem.Size = New System.Drawing.Size(185, 38)
         Me.ClientsSelectionToolStripMenuItem.Text = "Clients Filter"
         '
         'clientsCategoriesMenuBT
@@ -559,7 +528,7 @@ Partial Class ControllingUI_2
         Me.clientsCategoriesMenuBT.Image = CType(resources.GetObject("clientsCategoriesMenuBT.Image"), System.Drawing.Image)
         Me.clientsCategoriesMenuBT.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
         Me.clientsCategoriesMenuBT.Name = "clientsCategoriesMenuBT"
-        Me.clientsCategoriesMenuBT.Size = New System.Drawing.Size(204, 38)
+        Me.clientsCategoriesMenuBT.Size = New System.Drawing.Size(185, 38)
         Me.clientsCategoriesMenuBT.Text = "Clients Categories"
         '
         'ProductsMenuBT
@@ -568,7 +537,7 @@ Partial Class ControllingUI_2
         Me.ProductsMenuBT.Image = Global.PPS.My.Resources.Resources.barcode
         Me.ProductsMenuBT.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
         Me.ProductsMenuBT.Name = "ProductsMenuBT"
-        Me.ProductsMenuBT.Size = New System.Drawing.Size(174, 38)
+        Me.ProductsMenuBT.Size = New System.Drawing.Size(159, 38)
         Me.ProductsMenuBT.Text = "Products"
         '
         'ProductsFilterToolStripMenuItem
@@ -576,7 +545,7 @@ Partial Class ControllingUI_2
         Me.ProductsFilterToolStripMenuItem.Image = Global.PPS.My.Resources.Resources.barcode
         Me.ProductsFilterToolStripMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
         Me.ProductsFilterToolStripMenuItem.Name = "ProductsFilterToolStripMenuItem"
-        Me.ProductsFilterToolStripMenuItem.Size = New System.Drawing.Size(217, 38)
+        Me.ProductsFilterToolStripMenuItem.Size = New System.Drawing.Size(196, 38)
         Me.ProductsFilterToolStripMenuItem.Text = "Products Filter"
         '
         'productsCategoriesMenuBT
@@ -584,7 +553,7 @@ Partial Class ControllingUI_2
         Me.productsCategoriesMenuBT.Image = CType(resources.GetObject("productsCategoriesMenuBT.Image"), System.Drawing.Image)
         Me.productsCategoriesMenuBT.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
         Me.productsCategoriesMenuBT.Name = "productsCategoriesMenuBT"
-        Me.productsCategoriesMenuBT.Size = New System.Drawing.Size(217, 38)
+        Me.productsCategoriesMenuBT.Size = New System.Drawing.Size(196, 38)
         Me.productsCategoriesMenuBT.Text = "Products Categories"
         '
         'AdjustmentsMenuBT
@@ -592,7 +561,7 @@ Partial Class ControllingUI_2
         Me.AdjustmentsMenuBT.Image = Global.PPS.My.Resources.Resources.registry1
         Me.AdjustmentsMenuBT.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
         Me.AdjustmentsMenuBT.Name = "AdjustmentsMenuBT"
-        Me.AdjustmentsMenuBT.Size = New System.Drawing.Size(174, 38)
+        Me.AdjustmentsMenuBT.Size = New System.Drawing.Size(159, 38)
         Me.AdjustmentsMenuBT.Text = "Adjustments"
         '
         'CurrenciesMenuBT
@@ -600,7 +569,7 @@ Partial Class ControllingUI_2
         Me.CurrenciesMenuBT.Image = CType(resources.GetObject("CurrenciesMenuBT.Image"), System.Drawing.Image)
         Me.CurrenciesMenuBT.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
         Me.CurrenciesMenuBT.Name = "CurrenciesMenuBT"
-        Me.CurrenciesMenuBT.Size = New System.Drawing.Size(174, 38)
+        Me.CurrenciesMenuBT.Size = New System.Drawing.Size(159, 38)
         Me.CurrenciesMenuBT.Text = "Currencies"
         '
         'PeriodsMenuBT
@@ -608,7 +577,7 @@ Partial Class ControllingUI_2
         Me.PeriodsMenuBT.Image = CType(resources.GetObject("PeriodsMenuBT.Image"), System.Drawing.Image)
         Me.PeriodsMenuBT.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
         Me.PeriodsMenuBT.Name = "PeriodsMenuBT"
-        Me.PeriodsMenuBT.Size = New System.Drawing.Size(174, 38)
+        Me.PeriodsMenuBT.Size = New System.Drawing.Size(159, 38)
         Me.PeriodsMenuBT.Text = "Periods"
         '
         'VersionsMenuBT
@@ -616,7 +585,7 @@ Partial Class ControllingUI_2
         Me.VersionsMenuBT.Image = Global.PPS.My.Resources.Resources.elements31
         Me.VersionsMenuBT.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
         Me.VersionsMenuBT.Name = "VersionsMenuBT"
-        Me.VersionsMenuBT.Size = New System.Drawing.Size(174, 38)
+        Me.VersionsMenuBT.Size = New System.Drawing.Size(159, 38)
         Me.VersionsMenuBT.Text = "Versions"
         '
         'RefreshMenuBT
@@ -624,7 +593,7 @@ Partial Class ControllingUI_2
         Me.RefreshMenuBT.Image = Global.PPS.My.Resources.Resources.Refresh_blue_32x32
         Me.RefreshMenuBT.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
         Me.RefreshMenuBT.Name = "RefreshMenuBT"
-        Me.RefreshMenuBT.Size = New System.Drawing.Size(66, 63)
+        Me.RefreshMenuBT.Size = New System.Drawing.Size(58, 63)
         Me.RefreshMenuBT.Text = "Refresh"
         Me.RefreshMenuBT.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
         '
@@ -674,7 +643,7 @@ Partial Class ControllingUI_2
         Me.DisplayLabel2.Dock = System.Windows.Forms.DockStyle.Top
         Me.DisplayLabel2.Location = New System.Drawing.Point(239, 44)
         Me.DisplayLabel2.Name = "DisplayLabel2"
-        Me.DisplayLabel2.Size = New System.Drawing.Size(58, 15)
+        Me.DisplayLabel2.Size = New System.Drawing.Size(58, 13)
         Me.DisplayLabel2.TabIndex = 12
         Me.DisplayLabel2.Text = "Display"
         Me.DisplayLabel2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -774,7 +743,7 @@ Partial Class ControllingUI_2
         Me.versionComparisonBT.Image = Global.PPS.My.Resources.Resources.sizes1
         Me.versionComparisonBT.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
         Me.versionComparisonBT.Name = "versionComparisonBT"
-        Me.versionComparisonBT.Size = New System.Drawing.Size(151, 63)
+        Me.versionComparisonBT.Size = New System.Drawing.Size(131, 63)
         Me.versionComparisonBT.Text = "Versions Comparison"
         Me.versionComparisonBT.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
         '
@@ -783,7 +752,7 @@ Partial Class ControllingUI_2
         Me.switchVersionsBT.Image = Global.PPS.My.Resources.Resources.arrow_circle2
         Me.switchVersionsBT.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
         Me.switchVersionsBT.Name = "switchVersionsBT"
-        Me.switchVersionsBT.Size = New System.Drawing.Size(116, 63)
+        Me.switchVersionsBT.Size = New System.Drawing.Size(101, 63)
         Me.switchVersionsBT.Text = "Switch Versions"
         Me.switchVersionsBT.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
         '
@@ -792,7 +761,7 @@ Partial Class ControllingUI_2
         Me.deleteComparisonBT.Image = Global.PPS.My.Resources.Resources.delete
         Me.deleteComparisonBT.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
         Me.deleteComparisonBT.Name = "deleteComparisonBT"
-        Me.deleteComparisonBT.Size = New System.Drawing.Size(138, 63)
+        Me.deleteComparisonBT.Size = New System.Drawing.Size(120, 63)
         Me.deleteComparisonBT.Text = "Delete Comparison"
         Me.deleteComparisonBT.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
         '
@@ -801,7 +770,7 @@ Partial Class ControllingUI_2
         Me.RefreshMenuBT2.Image = Global.PPS.My.Resources.Resources.Refresh_blue_32x32
         Me.RefreshMenuBT2.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
         Me.RefreshMenuBT2.Name = "RefreshMenuBT2"
-        Me.RefreshMenuBT2.Size = New System.Drawing.Size(66, 63)
+        Me.RefreshMenuBT2.Size = New System.Drawing.Size(58, 63)
         Me.RefreshMenuBT2.Text = "Refresh"
         Me.RefreshMenuBT2.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
         '
@@ -851,7 +820,7 @@ Partial Class ControllingUI_2
         Me.DisplayLabel3.Dock = System.Windows.Forms.DockStyle.Top
         Me.DisplayLabel3.Location = New System.Drawing.Point(239, 44)
         Me.DisplayLabel3.Name = "DisplayLabel3"
-        Me.DisplayLabel3.Size = New System.Drawing.Size(58, 15)
+        Me.DisplayLabel3.Size = New System.Drawing.Size(58, 13)
         Me.DisplayLabel3.TabIndex = 12
         Me.DisplayLabel3.Text = "Display"
         Me.DisplayLabel3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -951,7 +920,7 @@ Partial Class ControllingUI_2
         Me.SendBreakDownBT.Image = Global.PPS.My.Resources.Resources.Excel_Blue_32x32
         Me.SendBreakDownBT.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
         Me.SendBreakDownBT.Name = "SendBreakDownBT"
-        Me.SendBreakDownBT.Size = New System.Drawing.Size(105, 63)
+        Me.SendBreakDownBT.Size = New System.Drawing.Size(91, 63)
         Me.SendBreakDownBT.Text = "Drop on Excel"
         Me.SendBreakDownBT.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
         '
@@ -983,7 +952,7 @@ Partial Class ControllingUI_2
         'SplitContainer2.Panel1
         '
         Me.SplitContainer2.Panel1.Controls.Add(Me.SplitContainer1)
-        Me.SplitContainer2.Size = New System.Drawing.Size(721, 515)
+        Me.SplitContainer2.Size = New System.Drawing.Size(721, 227)
         Me.SplitContainer2.SplitterDistance = 575
         Me.SplitContainer2.TabIndex = 8
         '
@@ -993,13 +962,26 @@ Partial Class ControllingUI_2
         Me.ImageList1.ImageSize = New System.Drawing.Size(16, 16)
         Me.ImageList1.TransparentColor = System.Drawing.Color.Transparent
         '
+        'tabControl1
+        '
+        Me.tabControl1.AllowAnimations = True
+        Me.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.tabControl1.Location = New System.Drawing.Point(0, 0)
+        Me.tabControl1.Name = "tabControl1"
+        Me.tabControl1.Padding = New System.Windows.Forms.Padding(0, 45, 0, 0)
+        Me.tabControl1.Size = New System.Drawing.Size(462, 221)
+        Me.tabControl1.TabAlignment = VIBlend.WinForms.Controls.vTabPageAlignment.Top
+        Me.tabControl1.TabIndex = 0
+        Me.tabControl1.TabsAreaBackColor = System.Drawing.Color.FromArgb(CType(CType(207, Byte), Integer), CType(CType(212, Byte), Integer), CType(CType(221, Byte), Integer))
+        Me.tabControl1.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.OFFICESILVER
+        '
         'ControllingUI_2
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.BackColor = System.Drawing.SystemColors.Control
+        Me.BackColor = System.Drawing.Color.Lavender
         Me.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
-        Me.ClientSize = New System.Drawing.Size(721, 615)
+        Me.ClientSize = New System.Drawing.Size(721, 327)
         Me.Controls.Add(Me.SplitContainer2)
         Me.Controls.Add(Me.TabControl2)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
@@ -1102,7 +1084,6 @@ Partial Class ControllingUI_2
     Friend WithEvents ProductsFilterToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents SelectionToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents SplitContainer2 As System.Windows.Forms.SplitContainer
-    Friend WithEvents TabControl1 As System.Windows.Forms.CustomTabControl
     Friend WithEvents displayLabel As System.Windows.Forms.Label
     Friend WithEvents DisplayBT As System.Windows.Forms.Button
     Friend WithEvents TableLayoutPanel1 As System.Windows.Forms.TableLayoutPanel
@@ -1126,4 +1107,5 @@ Partial Class ControllingUI_2
     Friend WithEvents BTIL As System.Windows.Forms.ImageList
     Friend WithEvents ImageList1 As System.Windows.Forms.ImageList
     Friend WithEvents Label1 As System.Windows.Forms.Label
+    Friend WithEvents tabControl1 As VIBlend.WinForms.Controls.vTabControl
 End Class
