@@ -261,7 +261,6 @@ Friend Class ControllingUI_2
             AddHandler DGV.CellMouseClick, AddressOf DGV_CellMouseClick
             AddHandler DGV.HierarchyItemExpanded, AddressOf Controller.DGV_Hierarchy_Expanded
             'AddHandler DGV.HierarchyItemCollapsed
-
             tab_.Controls.Add(DGV)
 
         Next

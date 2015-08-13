@@ -45,7 +45,7 @@ Friend Class FinancialUIController
     Private VersionsTV As New TreeView
     Friend versionsDict As New Dictionary(Of Int32, String)
     Friend initDisplayFlag As Boolean = False
-
+   
     ' Cache
     Private cacheEntityID As Int32
     Private cacheCurrencyId As Int32
@@ -56,6 +56,7 @@ Friend Class FinancialUIController
 
     ' Virtual binding
     Private itemsDimensionsDict As New Dictionary(Of HierarchyItem, Hashtable)
+    Private Const CELL_VALUE_GIVEN As Char = "g"
 
 
 #End Region
@@ -379,7 +380,6 @@ Friend Class FinancialUIController
                                     ByRef tab_account_id As Int32)
 
         AddHandler DGV.CellValueNeeded, AddressOf DGVs_CellValueNeeded
-
         accounts_id_shortlist = TreeViewsUtilities.GetNodesKeysList(View.accountsTV.Nodes.Find(tab_account_id, True)(0))
         accounts_id_shortlist.Remove(tab_account_id)
 
@@ -433,7 +433,6 @@ Friend Class FinancialUIController
                 Else
                     subColumn = column.Items.Add(valueNode.Text)
                 End If
-                subColumn.CellsDataSource = GridCellDataSource.Virtual
                 HideHiearchyItemIfVComp(subColumn, _
                                         dimensionNode, _
                                         valueNode)
@@ -484,7 +483,7 @@ Friend Class FinancialUIController
                 Else
                     subRow = row.Items.Add(valueNode.Text)
                 End If
-                '     subRow.CellsDataSource = GridCellDataSource.Virtual
+                subRow.CellsDataSource = GridCellDataSource.Virtual
                 'For Each column As HierarchyItem In dgv.ColumnsHierarchy.Items
                 '    SetHierarchyVirtualDataSource(subRow, column)
                 'Next
@@ -576,13 +575,13 @@ Friend Class FinancialUIController
         For Each key In display_axis_ht.Keys
             itemsDimensionsDict(item)(key) = display_axis_ht(key)
         Next
+        itemsDimensionsDict(item)(CELL_VALUE_GIVEN) = False
 
     End Sub
 
     Private Sub DGVs_CellValueNeeded(ByVal sender As Object, ByVal args As CellValueNeededEventArgs)
 
-
-
+        If itemsDimensionsDict(args.RowItem)(CELL_VALUE_GIVEN) = True Then Exit Sub
         Dim accountId As Int32 = 0
         Dim entityId As Int32 = 0
         Dim periodId As String = ""
@@ -634,6 +633,7 @@ Friend Class FinancialUIController
                 args.CellValue = ""
             End If
         End If
+        itemsDimensionsDict(args.RowItem)(CELL_VALUE_GIVEN) = True
 
     End Sub
 
@@ -856,9 +856,9 @@ Friend Class FinancialUIController
 
 #Region "DGVs Events"
 
-    Friend Sub DGV_Hierarchy_Expanded()
+    Friend Sub DGV_Hierarchy_Expanded(sender As Object, args As HierarchyItemEventArgs)
 
-
+        itemsDimensionsDict(args.HierarchyItem)(CELL_VALUE_GIVEN) = False
 
     End Sub
 
