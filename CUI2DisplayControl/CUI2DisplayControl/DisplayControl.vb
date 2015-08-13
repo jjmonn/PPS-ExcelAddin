@@ -9,7 +9,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 11/08/2015
+' Last modified: 12/08/2015
 
 
 
@@ -19,16 +19,17 @@ Public Class DisplayControl
 #Region "Instance Variables"
 
     ' Objects
-    Private analysis_axis_tv As TreeView
-    Public Event RefreshOrder()
+    Private analysis_axis_tv As vTreeView
     Private dimensionsList As New List(Of String)
+    Public Event RefreshOrder()
+    Public Event HideControl()
 
 #End Region
 
 
 #Region "Interface"
 
-    Public Sub New(ByRef analysis_axis_tv As TreeView)
+    Public Sub New(ByRef analysis_axis_tv As vTreeView)
 
         ' This call is required by the designer.
         InitializeComponent()
@@ -37,24 +38,24 @@ Public Class DisplayControl
         Me.analysis_axis_tv = analysis_axis_tv
         DimensionsTVPanel.Controls.Add(analysis_axis_tv)
         analysis_axis_tv.Dock = DockStyle.Fill
-        rowsDisplayList.AllowDrop = True
-        columnsDisplayList.AllowDrop = True
 
         ' Init listboxes
-        rowsDisplayList.ItemHeight = 20
-        columnsDisplayList.ItemHeight = 20
+        rowsDisplayList.ItemHeight = 17
+        columnsDisplayList.ItemHeight = 17
         rowsDisplayList.HotTrack = True
         columnsDisplayList.HotTrack = True
         rowsDisplayList.AllowDragDrop = True
         columnsDisplayList.AllowDragDrop = True
+        rowsDisplayList.AllowDrop = True
+        columnsDisplayList.AllowDrop = True
 
         ' By default add the fisrt node
         Dim accountsItem = rowsDisplayList.Items.Add(analysis_axis_tv.Nodes(0).Text)
-        accountsItem.Value = analysis_axis_tv.Nodes(0).Name
+        accountsItem.Value = analysis_axis_tv.Nodes(0).Value
         Dim entitiesItem = rowsDisplayList.Items.Add(analysis_axis_tv.Nodes(1).Text)
-        entitiesItem.Value = analysis_axis_tv.Nodes(1).Name
+        entitiesItem.Value = analysis_axis_tv.Nodes(1).Value
         Dim yearsItem = columnsDisplayList.Items.Add(analysis_axis_tv.Nodes(2).Text)
-        yearsItem.Value = analysis_axis_tv.Nodes(2).Name
+        yearsItem.Value = analysis_axis_tv.Nodes(2).Value
 
         dimensionsList.Add(accountsItem.Value)
         dimensionsList.Add(entitiesItem.Value)
@@ -66,9 +67,16 @@ Public Class DisplayControl
 
     Private Sub AddHandlers()
 
-        AddHandler analysis_axis_tv.ItemDrag, AddressOf analysisAxisTV_ItemDrag
-        AddHandler analysis_axis_tv.DragEnter, AddressOf analysisAxisTV_DragEnter
+        'analysis_axis_tv.EnableIndicatorsAnimation = False
+        'analysis_axis_tv.DefaultExpandCollapseIndicators = True
+        '   analysis_axis_tv.ShowRootLines = true
 
+        ' Tv Drag and drop
+        '   AddHandler analysis_axis_tv.DragDrop, AddressOf vTreeView1_DragDrop
+        AddHandler analysis_axis_tv.MouseDown, AddressOf vTreeView1_MouseDown
+        AddHandler analysis_axis_tv.AfterSelect, AddressOf vTreeView_AfterSelect
+
+        ' List Drag and Drop
         AddHandler rowsDisplayList.ItemDragging, AddressOf rowsDisplayList_ItemDragging
         AddHandler columnsDisplayList.ItemDragging, AddressOf columnsDisplayList_ItemDragging
 
@@ -87,18 +95,30 @@ Public Class DisplayControl
 
 #Region "TreeNode"
 
-    Private Sub analysisAxisTV_ItemDrag(sender As Object, e As ItemDragEventArgs)
+    'Private Sub analysisAxisTV_ItemDrag(sender As Object, e As ItemDragEventArgs)
 
-        DoDragDrop(e.Item, Windows.Forms.DragDropEffects.Move)
+    '    DoDragDrop(e.Item, Windows.Forms.DragDropEffects.Move)
 
+    'End Sub
+
+    'Private Sub analysisAxisTV_DragEnter(sender As Object, e As Windows.Forms.DragEventArgs)
+
+    '    If e.Data.GetDataPresent("System.Windows.Forms.TreeNode", True) Then
+    '        e.Effect = DragDropEffects.Move
+    '    Else
+    '        e.Effect = DragDropEffects.None
+    '    End If
+    'End Sub
+
+    Private Sub vTreeView_AfterSelect(ByVal sender As Object, ByVal e As vTreeViewEventArgs)
+        Me.analysis_axis_tv.Capture = False
     End Sub
 
-    Private Sub analysisAxisTV_DragEnter(sender As Object, e As Windows.Forms.DragEventArgs)
-
-        If e.Data.GetDataPresent("System.Windows.Forms.TreeNode", True) Then
-            e.Effect = DragDropEffects.Move
-        Else
-            e.Effect = DragDropEffects.None
+    Private Sub vTreeView1_MouseDown(ByVal sender As Object, ByVal e As MouseEventArgs)
+        Dim point As Point = e.Location
+        Dim node As vTreeNode = Me.analysis_axis_tv.HitTest(e.Location)
+        If node IsNot Nothing Then
+            Me.analysis_axis_tv.DoDragDrop(node, DragDropEffects.All)
         End If
     End Sub
 
@@ -138,6 +158,9 @@ Public Class DisplayControl
         Dim rowsDisplayListScreenRectangle As Rectangle = Me.rowsDisplayList.RectangleToScreen(rowsDisplayList.ClientRectangle)
         If rowsDisplayListScreenRectangle.Contains(Cursor.Position) Then
             vListBox.DropItem(Me.columnsDisplayList, Me.rowsDisplayList, e.SourceItem)
+            If dimensionsList.Contains(e.SourceItem.Value) = False Then
+                dimensionsList.Add(e.SourceItem.Value)
+            End If
         End If
         rowsDisplayList.StopDraggingTimer()
         columnsDisplayList.StopDraggingTimer()
@@ -149,6 +172,9 @@ Public Class DisplayControl
         Dim columnsDisplayListScreenRectangle As Rectangle = Me.columnsDisplayList.RectangleToScreen(columnsDisplayList.ClientRectangle)
         If columnsDisplayListScreenRectangle.Contains(Cursor.Position) Then
             vListBox.DropItem(Me.rowsDisplayList, Me.columnsDisplayList, e.SourceItem)
+            If dimensionsList.Contains(e.SourceItem.Value) = False Then
+                dimensionsList.Add(e.SourceItem.Value)
+            End If
         End If
         rowsDisplayList.StopDraggingTimer()
         columnsDisplayList.StopDraggingTimer()
@@ -197,30 +223,21 @@ Public Class DisplayControl
 
 #Region "Lists Node Drop"
 
-    Private Sub TV_DragOver(sender As Object, e As Windows.Forms.DragEventArgs) Handles rowsDisplayList.DragOver, columnsDisplayList.DragOver
+    Private Sub Lists_DragOver(sender As Object, e As Windows.Forms.DragEventArgs) Handles rowsDisplayList.DragOver, columnsDisplayList.DragOver
 
-        If e.Data.GetDataPresent("System.Windows.Forms.TreeNode", True) = False Then _
-            Exit Sub
         e.Effect = DragDropEffects.Move
 
     End Sub
 
-    Private Sub List_DragDrop(sender As Object, e As Windows.Forms.DragEventArgs) Handles columnsDisplayList.DragDrop, rowsDisplayList.DragDrop
-
-        'Check that there is a TreeNode being dragged
-        If e.Data.GetDataPresent("System.Windows.Forms.TreeNode", True) = False Then Exit Sub
+    Private Sub List_DragDrop(sender As Object, e As DragEventArgs) Handles columnsDisplayList.DragDrop, rowsDisplayList.DragDrop
 
         Dim selectedListBox As vListBox = CType(sender, vListBox)
-
-        'Get the TreeNode being dragged
-        Dim dropNode As TreeNode = CType(e.Data.GetData("System.Windows.Forms.TreeNode"), TreeNode)
-
-        'The target node should be selected from the DragOver event
-        'Dim targetNode As TreeNode = selectedTreeview.SelectedNode
-
-        If dimensionsList.Contains(dropNode.Name) = False Then
-            Dim item = selectedListBox.Items.Add(dropNode.Text)
-            item.Value = dropNode.Name
+        Dim dropNode As vTreeNode = TryCast(e.Data.GetData(GetType(vTreeNode)), vTreeNode)
+        If dropNode IsNot Nothing Then
+            If dimensionsList.Contains(dropNode.Value) = False Then
+                Dim item = selectedListBox.Items.Add(dropNode.Text)
+                item.Value = dropNode.Value
+            End If
         End If
 
     End Sub
@@ -230,7 +247,7 @@ Public Class DisplayControl
 
 #Region "Move Up and Down"
 
-    Private Sub columnsDisplayList_KeyDown(sender As Object, e As KeyEventArgs) Handles columnsDisplayList.KeyDown, rowsDisplayList.KeyDown
+    Private Sub DisplayLists_KeyDown(sender As Object, e As KeyEventArgs) Handles columnsDisplayList.KeyDown, rowsDisplayList.KeyDown
 
         Select Case e.KeyCode
             Case Keys.Delete
@@ -281,15 +298,19 @@ Public Class DisplayControl
 #End Region
 
 
-
 #Region "Call Backs"
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
         RaiseEvent RefreshOrder()
     End Sub
 
+    Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
+        RaiseEvent HideControl()
+    End Sub
+
 #End Region
 
 
 
+    
 End Class
