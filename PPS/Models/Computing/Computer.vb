@@ -16,7 +16,7 @@ Imports System.Collections
 '
 ' Author: Julien Monnereau Julien
 ' Created: 17/07/2015
-' Last modified: 06/08/2015
+' Last modified: 11/08/2015
 
 
 Friend Class Computer
@@ -44,7 +44,7 @@ Friend Class Computer
     Private periodIdentifier As Char
     Private periodsTokenDict As Dictionary(Of String, String)
     Private filterCode As String
-    Private filters_dict As New Dictionary(Of String, Int32)
+    Private filtersDict As New Hashtable
 
     ' Constants
     Friend Const FILTERS_DECOMPOSITION_IDENTIFIER As Char = "F"
@@ -152,10 +152,10 @@ Friend Class Computer
 
         If packet.ReadInt32() = 0 Then
             Dim request_id = packet.GetRequestId()
-            versionid = requestIdVersionIdDict(request_id)
+            versionId = requestIdVersionIdDict(request_id)
             requestIdVersionIdDict.Remove(request_id)
 
-            filters_dict.Clear()
+            filtersDict.Clear()
 
             Dim timeStamp = Date.Now
             periodsTokenDict = GlobalVariables.Versions.GetPeriodTokensDict(versionId)
@@ -164,9 +164,9 @@ Friend Class Computer
                 Case GlobalEnums.TimeConfig.YEARS : periodIdentifier = YEAR_PERIOD_IDENTIFIER
                 Case GlobalEnums.TimeConfig.MONTHS : periodIdentifier = MONTH_PERIOD_IDENTIFIER
             End Select
-            
-            FillResultData(packet,filters_dict)
-            
+
+            FillResultData(packet)
+
             versions_comp_flag(versionId) = True
             If AreAllVersionsComputed() = True Then
                 NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_COMPUTE_RESULT, AddressOf SMSG_COMPUTE_RESULT)
@@ -179,60 +179,36 @@ Friend Class Computer
 
     End Sub
 
-    Private Sub FillResultData(ByRef packet As ByteBuffer, _
-                               ByRef filter_dict As Dictionary(Of String, Int32))
+    Private Sub FillResultData(ByRef packet As ByteBuffer)
 
-        filterCode = ""
         isFiltered = packet.ReadBool()
         If isFiltered = True Then
-
             axisId = packet.ReadUint8()
             isAxis = packet.ReadBool()
-            If isAxis = False Then
-                filterCode = FILTERS_DECOMPOSITION_IDENTIFIER & packet.ReadUint32
-            Else
+            If isAxis = True Then
                 filterCode = AXIS_DECOMPOSITION_IDENTIFIER & axisId
+                filtersDict(filterCode) = packet.ReadUint32
+            Else
+                filterCode = FILTERS_DECOMPOSITION_IDENTIFIER & packet.ReadUint32
+                filtersDict(filterCode) = packet.ReadUint32
             End If
-            filter_dict.Add(filterCode, 0)
-        End If
-        System.Diagnostics.Debug.WriteLine("Filter code: " & filterCode)
 
-        For result_index As Int32 = 1 To packet.ReadUint32()
-            System.Diagnostics.Debug.WriteLine("Result_index: " & result_index)
-            FillAccountData(packet, _
-                            isFiltered, _
-                            filterCode, _
-                            filter_dict)
-        Next
+        End If
+        'System.Diagnostics.Debug.WriteLine("Filter code: " & filterCode)
+        FillEntityData(packet)
 
         For child_result_index As Int32 = 1 To packet.ReadUint32()
-            System.Diagnostics.Debug.WriteLine("child result index: " & child_result_index)
-            FillResultData(packet, filter_dict)
+            FillResultData(packet)
         Next
 
-        If isFiltered = True Then filter_dict.Remove(filterCode)
+        If isFiltered = True Then filtersDict.Remove(filterCode)
+        ' here is it ok ?!!! -> priority high !!!
 
     End Sub
 
-    Private Sub FillAccountData(ByRef packet As ByteBuffer, _
-                                ByRef isFiltered As Boolean, _
-                                ByRef filter_code As String, _
-                                ByRef filter_dict As Dictionary(Of String, Int32))
+    Private Sub FillEntityData(ByRef packet As ByteBuffer)
 
-        If isFiltered = True Then
-            If isAxis = True Then
-                filter_dict(filter_code) = packet.ReadUint32()  ' same for us here a priori, to be checked
-            Else
-                filter_dict(filter_code) = packet.ReadUint32()
-            End If
-            System.Diagnostics.Debug.WriteLine("filter Token:" & filter_dict(filter_code))
-        Else
-            ' filter_dict(filter_code) = "0"
-            ' to be checked -> priority high
-            ' filter_dict.Remove(filter_code)
-        End If
-
-        filterToken = GetFiltersToken(filter_dict)
+        filterToken = GetFiltersToken(filtersDict)
         '  System.Diagnostics.Debug.Write("filter Token:" & filterToken & Chr(13))
 
         entityId = packet.ReadUint32()
@@ -267,10 +243,7 @@ Friend Class Computer
 
         ' Dim nb_children_entities As UInt32 = 
         For children_index As Int32 = 1 To packet.ReadUint32()
-            FillAccountData(packet, _
-                            False, _
-                            filter_code, _
-                            filter_dict)
+            FillEntityData(packet)
         Next
 
     End Sub
@@ -316,7 +289,7 @@ Friend Class Computer
 
     End Function
 
-    Friend Shared Function GetFiltersToken(ByRef dict As Dictionary(Of String, Int32)) As String
+    Friend Shared Function GetFiltersToken(ByRef dict As Hashtable) As String
 
         Dim token As String = ""
         If dict.Count > 0 Then

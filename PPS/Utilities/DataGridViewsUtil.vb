@@ -249,9 +249,9 @@ Friend Class DataGridViewsUtil
     ' set row font size / row cells
 
 
-    Protected Friend Shared Sub DGVSetHiearchyFontSize(ByRef DGV As vDataGridView, _
-                                                       ByRef itemsFontSize As Single, _
-                                                       Optional ByRef cellsFontSize As Single = 0)
+    Friend Shared Sub DGVSetHiearchyFontSize(ByRef DGV As vDataGridView, _
+                                                ByRef itemsFontSize As Single, _
+                                                Optional ByRef cellsFontSize As Single = 0)
 
         Dim itemStyleNormal As HierarchyItemStyle = GridTheme.GetDefaultTheme(DGV.VIBlendTheme).HierarchyItemStyleNormal
         Dim itemStyleSelected As HierarchyItemStyle = GridTheme.GetDefaultTheme(DGV.VIBlendTheme).HierarchyItemStyleSelected
@@ -273,9 +273,9 @@ Friend Class DataGridViewsUtil
 
     End Sub
 
-    Protected Friend Shared Sub SetSubItemsFontSizes(ByRef item As HierarchyItem, _
-                                                     ByRef itemStyleNormal As HierarchyItemStyle, _
-                                                     ByRef itemStyleSelected As HierarchyItemStyle)
+    Friend Shared Sub SetSubItemsFontSizes(ByRef item As HierarchyItem, _
+                                            ByRef itemStyleNormal As HierarchyItemStyle, _
+                                            ByRef itemStyleSelected As HierarchyItemStyle)
 
         item.HierarchyItemStyleNormal = itemStyleNormal
         item.HierarchyItemStyleSelected = itemStyleSelected

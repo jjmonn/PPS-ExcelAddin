@@ -47,6 +47,7 @@ Partial Class ControllingUI_2
         Me.UnselectAllToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
         Me.SplitContainer1 = New System.Windows.Forms.SplitContainer()
         Me.TVTableLayout = New System.Windows.Forms.TableLayoutPanel()
+        Me.Label1 = New System.Windows.Forms.Label()
         Me.TabControl1 = New System.Windows.Forms.CustomTabControl()
         Me.TabControl2 = New System.Windows.Forms.TabControl()
         Me.TabPage1 = New System.Windows.Forms.TabPage()
@@ -116,6 +117,7 @@ Partial Class ControllingUI_2
         Me.SplitContainer1.Panel1.SuspendLayout()
         Me.SplitContainer1.Panel2.SuspendLayout()
         Me.SplitContainer1.SuspendLayout()
+        Me.TVTableLayout.SuspendLayout()
         Me.TabControl2.SuspendLayout()
         Me.TabPage1.SuspendLayout()
         Me.TableLayoutPanel2.SuspendLayout()
@@ -190,7 +192,7 @@ Partial Class ControllingUI_2
         '
         Me.VersionsIL.ImageStream = CType(resources.GetObject("VersionsIL.ImageStream"), System.Windows.Forms.ImageListStreamer)
         Me.VersionsIL.TransparentColor = System.Drawing.Color.Transparent
-        Me.VersionsIL.Images.SetKeyName(0, "elements3.ico")
+        Me.VersionsIL.Images.SetKeyName(0, "versions.ico")
         Me.VersionsIL.Images.SetKeyName(1, "favicon(81).ico")
         '
         'EntitiesTVImageList
@@ -275,15 +277,29 @@ Partial Class ControllingUI_2
         'TVTableLayout
         '
         Me.TVTableLayout.ColumnCount = 1
-        Me.TVTableLayout.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
+        Me.TVTableLayout.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
+        Me.TVTableLayout.Controls.Add(Me.Label1, 0, 0)
         Me.TVTableLayout.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TVTableLayout.Location = New System.Drawing.Point(0, 0)
         Me.TVTableLayout.Name = "TVTableLayout"
-        Me.TVTableLayout.RowCount = 2
+        Me.TVTableLayout.RowCount = 3
+        Me.TVTableLayout.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
         Me.TVTableLayout.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
-        Me.TVTableLayout.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 87.0!))
+        Me.TVTableLayout.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
         Me.TVTableLayout.Size = New System.Drawing.Size(106, 509)
         Me.TVTableLayout.TabIndex = 0
+        '
+        'Label1
+        '
+        Me.Label1.AutoSize = True
+        Me.Label1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Label1.Font = New System.Drawing.Font("Microsoft Sans Serif", 7.058824!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label1.Location = New System.Drawing.Point(3, 0)
+        Me.Label1.Name = "Label1"
+        Me.Label1.Size = New System.Drawing.Size(100, 20)
+        Me.Label1.TabIndex = 0
+        Me.Label1.Text = "Entities Selection"
+        Me.Label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'TabControl1
         '
@@ -998,6 +1014,8 @@ Partial Class ControllingUI_2
         Me.SplitContainer1.Panel2.ResumeLayout(False)
         CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.SplitContainer1.ResumeLayout(False)
+        Me.TVTableLayout.ResumeLayout(False)
+        Me.TVTableLayout.PerformLayout()
         Me.TabControl2.ResumeLayout(False)
         Me.TabPage1.ResumeLayout(False)
         Me.TabPage1.PerformLayout()
@@ -1107,4 +1125,5 @@ Partial Class ControllingUI_2
     Friend WithEvents CurrencyTB3 As System.Windows.Forms.TextBox
     Friend WithEvents BTIL As System.Windows.Forms.ImageList
     Friend WithEvents ImageList1 As System.Windows.Forms.ImageList
+    Friend WithEvents Label1 As System.Windows.Forms.Label
 End Class

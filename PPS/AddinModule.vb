@@ -179,6 +179,7 @@ Public Class AddinModule
         Me.SubmissionControlBT = New AddinExpress.MSO.ADXRibbonSplitButton(Me.components)
         Me.AdxRibbonMenu3 = New AddinExpress.MSO.ADXRibbonMenu(Me.components)
         Me.LogBT = New AddinExpress.MSO.ADXRibbonButton(Me.components)
+        Me.AdxRibbonSeparator2 = New AddinExpress.MSO.ADXRibbonSeparator(Me.components)
         Me.financialModelingBT = New AddinExpress.MSO.ADXRibbonButton(Me.components)
         Me.AdvancedModelingBT = New AddinExpress.MSO.ADXRibbonSplitButton(Me.components)
         Me.AdxRibbonMenu2 = New AddinExpress.MSO.ADXRibbonMenu(Me.components)
@@ -238,7 +239,6 @@ Public Class AddinModule
         Me.EntitySelectionTaskPaneItem = New AddinExpress.XL.ADXExcelTaskPanesCollectionItem(Me.components)
         Me.ConnectionTaskPaneItem = New AddinExpress.XL.ADXExcelTaskPanesCollectionItem(Me.components)
         Me.AdxRibbonLabel1 = New AddinExpress.MSO.ADXRibbonLabel(Me.components)
-        Me.AdxRibbonSeparator2 = New AddinExpress.MSO.ADXRibbonSeparator(Me.components)
         '
         'MaintTab
         '
@@ -358,7 +358,7 @@ Public Class AddinModule
         Me.UploadBT.Caption = "Snapshot"
         Me.UploadBT.Controls.Add(Me.UplodBT1)
         Me.UploadBT.Id = "adxRibbonSplitButton_d2989ac910ad415381c6cc902b2051e5"
-        Me.UploadBT.Image = 19
+        Me.UploadBT.Image = 20
         Me.UploadBT.ImageList = Me.Menu3
         Me.UploadBT.ImageTransparentColor = System.Drawing.Color.Transparent
         Me.UploadBT.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
@@ -407,7 +407,7 @@ Public Class AddinModule
         Me.Menu3.TransparentColor = System.Drawing.Color.Transparent
         Me.Menu3.Images.SetKeyName(0, "registry.ico")
         Me.Menu3.Images.SetKeyName(1, "chart_hi_lo.ico")
-        Me.Menu3.Images.SetKeyName(2, "refresh black 2.ico")
+        Me.Menu3.Images.SetKeyName(2, "Refresh.ico")
         Me.Menu3.Images.SetKeyName(3, "ok.ico")
         Me.Menu3.Images.SetKeyName(4, "spreadsheed_cell.ico")
         Me.Menu3.Images.SetKeyName(5, "window_equalizer.ico")
@@ -425,6 +425,7 @@ Public Class AddinModule
         Me.Menu3.Images.SetKeyName(17, "favicon(19).ico")
         Me.Menu3.Images.SetKeyName(18, "Financial BI Ico.ico")
         Me.Menu3.Images.SetKeyName(19, "snap green.ico")
+        Me.Menu3.Images.SetKeyName(20, "snapshot 3.0.ico")
         '
         'InputReportLaunchBT
         '
@@ -449,7 +450,7 @@ Public Class AddinModule
         Me.RefreshBT.Caption = "Refresh"
         Me.RefreshBT.Controls.Add(Me.RefreshMenu)
         Me.RefreshBT.Id = "adxRibbonSplitButton_8aab3e36ecdf4fdfbd62b6bc29af40ee"
-        Me.RefreshBT.Image = 11
+        Me.RefreshBT.Image = 2
         Me.RefreshBT.ImageList = Me.Menu3
         Me.RefreshBT.ImageTransparentColor = System.Drawing.Color.Transparent
         Me.RefreshBT.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
@@ -616,6 +617,11 @@ Public Class AddinModule
         Me.LogBT.Id = "adxRibbonButton_545fba9d563749dbbafe3968577cf15d"
         Me.LogBT.ImageTransparentColor = System.Drawing.Color.Transparent
         Me.LogBT.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
+        '
+        'AdxRibbonSeparator2
+        '
+        Me.AdxRibbonSeparator2.Id = "adxRibbonSeparator_8edf3ca9f7bb41ea82f576292d634286"
+        Me.AdxRibbonSeparator2.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
         '
         'financialModelingBT
         '
@@ -1174,11 +1180,6 @@ Public Class AddinModule
         Me.AdxRibbonLabel1.Caption = "Associated with"
         Me.AdxRibbonLabel1.Id = "adxRibbonLabel_f8272bc6694448f6955f882ef772da9e"
         Me.AdxRibbonLabel1.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
-        '
-        'AdxRibbonSeparator2
-        '
-        Me.AdxRibbonSeparator2.Id = "adxRibbonSeparator_8edf3ca9f7bb41ea82f576292d634286"
-        Me.AdxRibbonSeparator2.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
         '
         'AddinModule
         '

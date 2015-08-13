@@ -12,7 +12,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 11/08/2015
+' Last modified: 12/08/2015
 
 
 Imports System.Windows.Forms
@@ -28,6 +28,7 @@ Imports VIBlend.WinForms.DataGridView.Filters
 Imports System.Windows.Forms.DataVisualization.Charting
 Imports PPSFBIControls
 Imports System.ComponentModel
+Imports VIBlend.WinForms.Controls
 
 
 Friend Class ControllingUI_2
@@ -45,7 +46,7 @@ Friend Class ControllingUI_2
     Private rightSplitContainer As SplitContainer
     Private Accounts As New Account
     Friend CP As CircularProgressUI
-  
+
 #End Region
 
 #Region "Variables"
@@ -106,7 +107,7 @@ Friend Class ControllingUI_2
     Private Const MARGIN_SIZE As Double = 25
     Private Const INNER_MARGIN As Integer = 0
     Private Const EXCEL_SHEET_NAME_MAX_LENGHT = 31
-    Private Const DGV_THEME = VIBlend.Utilities.VIBLEND_THEME.OFFICESILVER
+    Private Const DGV_THEME As Int32 = VIBlend.Utilities.VIBLEND_THEME.OFFICESILVER
     Friend Const TOP_LEFT_CHART_POSITION As String = "tl"
     Friend Const TOP_RIGHT_CHART_POSITION As String = "tr"
     Friend Const BOTTOM_LEFT_CHART_POSITION As String = "bl"
@@ -147,7 +148,7 @@ Friend Class ControllingUI_2
         Next
         InitializeChartsTab()
         DimensionsDisplayPaneSetup()
-        TVTableLayout.Controls.Add(periodsCLB, 0, 0)
+        TVTableLayout.Controls.Add(periodsCLB, 0, 1)
         HideAllMenusItems()
         CollapseSP1Pane1()
         DisplayFirstTreeOnly()          ' TV Table Layout
@@ -175,14 +176,14 @@ Friend Class ControllingUI_2
 
         GlobalVariables.Versions.LoadVersionsTV(versionsTV)
 
-        TVSetup(entitiesTV, 0, EntitiesTVImageList)
-        TVSetup(clientsTV, 0)
-        TVSetup(productsTV, 0)
-        TVSetup(adjustmentsTV, 0)
-        TVSetup(versionsTV, 0, VersionsIL)
-        TVSetup(entitiesFiltersTV, 1, CategoriesIL)
-        TVSetup(clientsFiltersTV, 1, CategoriesIL)
-        TVSetup(productsFiltersTV, 1, CategoriesIL)
+        TVSetup(entitiesTV, 1, EntitiesTVImageList)
+        TVSetup(clientsTV, 1)
+        TVSetup(productsTV, 1)
+        TVSetup(adjustmentsTV, 1)
+        TVSetup(versionsTV, 1, VersionsIL)
+        TVSetup(entitiesFiltersTV, 2, CategoriesIL)
+        TVSetup(clientsFiltersTV, 2, CategoriesIL)
+        TVSetup(productsFiltersTV, 2, CategoriesIL)
 
         TreeViewsUtilities.set_TV_basics_icon_index(entitiesTV)
         LoadCurrencies()
@@ -217,7 +218,7 @@ Friend Class ControllingUI_2
 
     Private Sub LoadCurrencies()
 
-        TVTableLayout.Controls.Add(CurrenciesCLB, 0, 0)
+        TVTableLayout.Controls.Add(CurrenciesCLB, 0, 1)
         CurrenciesCLB.Dock = DockStyle.Fill
         CurrenciesCLB.CheckOnClick = True
         CurrenciesCLB.SelectionMode = SelectionMode.One
@@ -233,8 +234,8 @@ Friend Class ControllingUI_2
         For Each currency_ As String In currenciesList
             CurrenciesCLB.Items.Add(currency_, False)
         Next
-        CurrenciesCLB.SetItemChecked(CurrenciesCLB.FindString(my.settings.mainCurrency), True)
-        CurrenciesCLB.SelectedItem = my.settings.mainCurrency
+        CurrenciesCLB.SetItemChecked(CurrenciesCLB.FindString(My.Settings.mainCurrency), True)
+        CurrenciesCLB.SelectedItem = My.Settings.mainCurrency
 
     End Sub
 
@@ -281,52 +282,54 @@ Friend Class ControllingUI_2
 
         ' This initialization should go into controller ?!!
         ' priority high
-        Dim analysis_axis_tv As New TreeView
-        analysis_axis_tv.Nodes.Add(Computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.ACCOUNTS, ACCOUNTS_CODE)
+        Dim analysis_axis_tv As New vTreeView
+        VTreeViewUtil.InitTVFormat(analysis_axis_tv)
+         VTreeViewUtil.AddNode(Computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.ACCOUNTS, ACCOUNTS_CODE, analysis_axis_tv)
+
         ' Entities Analysis Axis and Categories Nodes
-        Dim entities_node As TreeNode = analysis_axis_tv.Nodes.Add(Computer.AXIS_DECOMPOSITION_IDENTIFIER _
-                                                                   & GlobalEnums.AnalysisAxis.ENTITIES, _
-                                                                  ENTITIES_CODE)
+        Dim entities_node As vTreeNode = VTreeViewUtil.AddNode(Computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.ENTITIES, _
+                                                               ENTITIES_CODE, _
+                                                               analysis_axis_tv)
+
         For Each entity_node As TreeNode In entitiesFiltersTV.Nodes
-            entities_node.Nodes.Add(Computer.FILTERS_DECOMPOSITION_IDENTIFIER _
-                                    & entity_node.Name, _
-                                    entity_node.Text)
+            VTreeViewUtil.AddNode(Computer.FILTERS_DECOMPOSITION_IDENTIFIER & entity_node.Name, _
+                                  entity_node.Text, _
+                                  entities_node)
         Next
 
-        analysis_axis_tv.Nodes.Add(Computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.YEARS, YEARS_CODE)
-        analysis_axis_tv.Nodes.Add(Computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.MONTHS, MONTHS_CODE)
-        analysis_axis_tv.Nodes.Add(Computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.VERSIONS, VERSIONS_CODE)
-
+        VTreeViewUtil.AddNode(Computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.YEARS, YEARS_CODE, analysis_axis_tv)
+        VTreeViewUtil.AddNode(Computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.MONTHS, MONTHS_CODE, analysis_axis_tv)
+        VTreeViewUtil.AddNode(Computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.VERSIONS, VERSIONS_CODE, analysis_axis_tv)
 
         ' Clients Analysis Axis and Categories Nodes
-        Dim clients_node As TreeNode = analysis_axis_tv.Nodes.Add(Computer.AXIS_DECOMPOSITION_IDENTIFIER _
-                                                                  & GlobalEnums.AnalysisAxis.CLIENTS, _
-                                                                 CLIENTS_CODE)
+        Dim clientsNode As vTreeNode = VTreeViewUtil.AddNode(Computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.CLIENTS, CLIENTS_CODE, analysis_axis_tv)
         For Each client_category_node As TreeNode In clientsFiltersTV.Nodes
-            clients_node.Nodes.Add(Computer.FILTERS_DECOMPOSITION_IDENTIFIER _
-                                    & client_category_node.Name, _
-                                    client_category_node.Text)
-        Next
+            VTreeViewUtil.AddNode(Computer.FILTERS_DECOMPOSITION_IDENTIFIER & client_category_node.Name, _
+                                  client_category_node.Text, _
+                                  clientsNode)
+          Next
 
         ' Products Analysis Axis and Categories Nodes
-        Dim products_node As TreeNode = analysis_axis_tv.Nodes.Add(Computer.AXIS_DECOMPOSITION_IDENTIFIER _
-                                                                   & GlobalEnums.AnalysisAxis.PRODUCTS,
-                                                                   PRODUCTS_CODE)
+        Dim products_node As vTreeNode = VTreeViewUtil.AddNode(Computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.PRODUCTS,
+                                                               PRODUCTS_CODE, _
+                                                               analysis_axis_tv)
+
         For Each product_category_node As TreeNode In productsFiltersTV.Nodes
-            products_node.Nodes.Add(Computer.FILTERS_DECOMPOSITION_IDENTIFIER _
-                                    & product_category_node.Name, _
-                                    product_category_node.Text)
+            VTreeViewUtil.AddNode(Computer.FILTERS_DECOMPOSITION_IDENTIFIER & product_category_node.Name, _
+                                  product_category_node.Text, _
+                                  products_node)
         Next
 
-        analysis_axis_tv.Nodes.Add(Computer.AXIS_DECOMPOSITION_IDENTIFIER _
-                                   & GlobalEnums.AnalysisAxis.ADJUSTMENTS, _
-                                   ADJUSTMENT_CODE)
-
+        VTreeViewUtil.AddNode(Computer.AXIS_DECOMPOSITION_IDENTIFIER _
+                              & GlobalEnums.AnalysisAxis.ADJUSTMENTS, _
+                              ADJUSTMENT_CODE, analysis_axis_tv)
+      
         display_control = New DisplayControl(analysis_axis_tv)
         SplitContainer2.Panel2.Controls.Add(display_control)
         display_control.Dock = DockStyle.Fill
-        'AddHandler display_control.rows_display_tv.KeyDown, AddressOf displayControlDisplayTVs_KeyDown
-        'AddHandler display_control.columns_display_tv.KeyDown, AddressOf displayControlDisplayTVs_KeyDown
+
+        AddHandler display_control.RefreshOrder, AddressOf RefreshFromRightPane
+        AddHandler display_control.HideControl, AddressOf HideRightPane
 
     End Sub
 
@@ -336,7 +339,8 @@ Friend Class ControllingUI_2
 
 #Region "Interface"
 
-    Private Sub RefreshData(ByRef entityNode As TreeNode)
+    Private Sub RefreshData(ByRef entityNode As TreeNode, _
+                            Optional ByRef useCache As Boolean = False)
 
         ' check that 1 version is selected at least 
 
@@ -344,7 +348,7 @@ Friend Class ControllingUI_2
         ' priority high !!! 
 
         Controller.EntityNode = entityNode ' inverser to be put in controller  !! priority normal 
-         ' Computing
+        ' Computing
         Controller.Compute()
 
     End Sub
@@ -509,7 +513,6 @@ Friend Class ControllingUI_2
 
 #Region "Menus and Display Management"
 
-
 #Region "Main Menu Calls Backs"
 
 #Region "Home Menu"
@@ -529,12 +532,12 @@ Friend Class ControllingUI_2
                 entitiesFiltersTV.Visible = True
                 EntitiesCategoriesFlag = True
                 DisplayTwoTrees()
-                TVTableLayout.SetRow(entitiesTV, 1)
+                TVTableLayout.SetRow(entitiesTV, 2)
             Else
-                TVTableLayout.SetRow(entitiesTV, 0)
+                TVTableLayout.SetRow(entitiesTV, 1)
             End If
         Else
-            If TVTableLayout.GetRow(entitiesTV) = 0 Then
+            If TVTableLayout.GetRow(entitiesTV) = 1 Then
                 CollapseSP1Pane1()
             Else
                 DisplayFirstTreeOnly()
@@ -574,12 +577,12 @@ Friend Class ControllingUI_2
                 entitiesTV.Visible = True
                 EntitiesFlag = True
                 DisplayTwoTrees()
-                TVTableLayout.SetRow(entitiesFiltersTV, 1)
+                TVTableLayout.SetRow(entitiesFiltersTV, 2)
             Else
-                TVTableLayout.SetRow(entitiesFiltersTV, 0)
+                TVTableLayout.SetRow(entitiesFiltersTV, 1)
             End If
         Else
-            If TVTableLayout.GetRow(entitiesFiltersTV) = 0 Then
+            If TVTableLayout.GetRow(entitiesFiltersTV) = 1 Then
                 CollapseSP1Pane1()
             Else
                 DisplayFirstTreeOnly()
@@ -605,12 +608,12 @@ Friend Class ControllingUI_2
                 clientsFiltersTV.Visible = True
                 ClientsCategoriesFlag = True
                 DisplayTwoTrees()
-                TVTableLayout.SetRow(clientsTV, 1)
+                TVTableLayout.SetRow(clientsTV, 2)
             Else
-                TVTableLayout.SetRow(clientsTV, 0)
+                TVTableLayout.SetRow(clientsTV, 1)
             End If
         Else
-            If TVTableLayout.GetRow(clientsTV) = 0 Then
+            If TVTableLayout.GetRow(clientsTV) = 1 Then
                 CollapseSP1Pane1()
             Else
                 DisplayFirstTreeOnly()
@@ -634,12 +637,12 @@ Friend Class ControllingUI_2
                 clientsTV.Visible = True
                 ClientsFlag = True
                 DisplayTwoTrees()
-                TVTableLayout.SetRow(clientsFiltersTV, 1)
+                TVTableLayout.SetRow(clientsFiltersTV, 2)
             Else
-                TVTableLayout.SetRow(clientsFiltersTV, 0)
+                TVTableLayout.SetRow(clientsFiltersTV, 1)
             End If
         Else
-            If TVTableLayout.GetRow(clientsFiltersTV) = 0 Then
+            If TVTableLayout.GetRow(clientsFiltersTV) = 1 Then
                 CollapseSP1Pane1()
             Else
                 DisplayFirstTreeOnly()
@@ -665,12 +668,12 @@ Friend Class ControllingUI_2
                 productsFiltersTV.Visible = True
                 productsCategoriesFlag = True
                 DisplayTwoTrees()
-                TVTableLayout.SetRow(productsTV, 1)
+                TVTableLayout.SetRow(productsTV, 2)
             Else
-                TVTableLayout.SetRow(productsTV, 0)
+                TVTableLayout.SetRow(productsTV, 1)
             End If
         Else
-            If TVTableLayout.GetRow(productsTV) = 0 Then
+            If TVTableLayout.GetRow(productsTV) = 1 Then
                 CollapseSP1Pane1()
             Else
                 DisplayFirstTreeOnly()
@@ -694,12 +697,12 @@ Friend Class ControllingUI_2
                 productsTV.Visible = True
                 productsFlag = True
                 DisplayTwoTrees()
-                TVTableLayout.SetRow(productsFiltersTV, 1)
+                TVTableLayout.SetRow(productsFiltersTV, 2)
             Else
-                TVTableLayout.SetRow(productsFiltersTV, 0)
+                TVTableLayout.SetRow(productsFiltersTV, 1)
             End If
         Else
-            If TVTableLayout.GetRow(productsFiltersTV) = 0 Then
+            If TVTableLayout.GetRow(productsFiltersTV) = 1 Then
                 CollapseSP1Pane1()
             Else
                 DisplayFirstTreeOnly()
@@ -793,39 +796,22 @@ Friend Class ControllingUI_2
     Private Sub AddVersionsComparisonToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles versionComparisonBT.Click
 
         If isVersionComparisonDisplayed = True Then
-            MsgBox("The Versions Comparison is already displayed")
+            Controller.VersionsCompDisplay(False)
+            isVersionComparisonDisplayed = False
         Else
-
-            ' to be reimplemented -> launch request to controller
-            ' dependant on version position in columns hierarchy
-
-            'If Controller.versions_id_array.Length = 2 Then
-            '    For Each tab_ As TabPage In TabControl1.TabPages
-            '        Dim DGV As vDataGridView = tab_.Controls(0)
-            '        DGVUTIL.AddVersionComparison(DGV)
-            '    Next
-            '    TabControl1.TabPages(0).Select()
-            '    isVersionComparisonDisplayed = True
-            'Else
-            '    MsgBox("Two versions must be selected in order to display the comparison." + Chr(13) + _
-            '           "Refresh must be applied after versions selection.")
-            'End If
+            If Controller.versionsDict.Count = 2 Then
+                Controller.VersionsCompDisplay(True)
+                isVersionComparisonDisplayed = True
+            Else
+                MsgBox("Two versions must be selected in order to display the comparison.")
+            End If
         End If
 
     End Sub
 
     Private Sub SwitchVersionsOrderToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles switchVersionsBT.Click
 
-        Dim displayComparison As Boolean
-        If isVersionComparisonDisplayed = True Then
-            RemoveVersionsComparisonToolStripMenuItem_Click(sender, e)
-            displayComparison = True
-        End If
-        For Each tab_ As TabPage In TabControl1.TabPages
-            Dim DGV As vDataGridView = tab_.Controls(0)
-            DGVUTIL.SwitchVersionsOrderWithoutComparison(DGV)
-        Next
-        If displayComparison = True Then AddVersionsComparisonToolStripMenuItem_Click(sender, e)
+        Controller.ReverseVersionsComparison()
 
     End Sub
 
@@ -1072,10 +1058,10 @@ Friend Class ControllingUI_2
 
     Private Sub DisplayFirstTreeOnly()
 
-        TVTableLayout.RowStyles.Item(0).SizeType = SizeType.Percent
         TVTableLayout.RowStyles.Item(1).SizeType = SizeType.Percent
-        TVTableLayout.RowStyles.Item(0).Height = 100
-        TVTableLayout.RowStyles.Item(1).Height = 0
+        TVTableLayout.RowStyles.Item(2).SizeType = SizeType.Percent
+        TVTableLayout.RowStyles.Item(1).Height = 100
+        TVTableLayout.RowStyles.Item(2).Height = 0
 
     End Sub
 
@@ -1085,6 +1071,32 @@ Friend Class ControllingUI_2
         TVTableLayout.RowStyles.Item(1).SizeType = SizeType.Percent
         TVTableLayout.RowStyles.Item(0).Height = 50
         TVTableLayout.RowStyles.Item(1).Height = 50
+
+    End Sub
+
+#End Region
+
+
+#Region "Dimension Right Pane Call Backs"
+
+    Private Sub HideRightPane()
+
+        CollapseSP2Pane2()
+
+    End Sub
+
+    Private Sub RefreshFromRightPane()
+
+        If Not Controller.EntityNode Is Nothing Then
+            RefreshData(Controller.EntityNode, True)
+        Else
+            If Not entitiesTV.SelectedNode Is Nothing Then
+                RefreshData(entitiesTV.SelectedNode, True)
+            Else
+                MsgBox("Please select an Entity to refresh")
+            End If
+        End If
+       
 
     End Sub
 

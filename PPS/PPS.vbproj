@@ -399,6 +399,7 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Modules\PLATFORM MANAGEMENT\Categories\Controller\EntitiesCategoriesController.vb" />
+    <Compile Include="Utilities\VTreeViewUtil.vb" />
     <Compile Include="Views\GenericView.Designer.vb">
       <DependentUpon>GenericView.vb</DependentUpon>
     </Compile>

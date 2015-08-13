@@ -10,7 +10,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 11/08/2015
+' Last modified: 13/08/2015
 
 
 Imports System.Windows.Forms
@@ -30,6 +30,7 @@ Friend Class FinancialUIController
     Private Computer As New Computer
     Private View As ControllingUI_2
     Friend EntityNode As TreeNode
+    Private vCompNode As TreeNode
 
     ' Variables
     Private currenciesNameIdDict As Dictionary(Of String, Int32)
@@ -39,7 +40,7 @@ Friend Class FinancialUIController
     Private display_axis_ht As New Hashtable
     Private filtersAndAxisDict As New Dictionary(Of String, List(Of Int32))
     Private dataMap As Dictionary(Of String, Double)
-    Private filters_dict As New Dictionary(Of String, Int32)
+    Private filters_dict As New Hashtable
     Private filtersNodes As New TreeNode
     Private VersionsTV As New TreeView
     Friend versionsDict As New Dictionary(Of Int32, String)
@@ -116,6 +117,19 @@ Friend Class FinancialUIController
         rowsHierarchyNode.Nodes.Clear()
         columnsHierarchyNode.Nodes.Clear()
 
+        ' Versions init
+        Dim versionIDs() As Int32 = TreeViewsUtilities.GetCheckedNodesID(View.versionsTV).ToArray
+        versionsDict.Clear()
+        For Each version_Id As Int32 In versionIDs
+            Dim versionNode As TreeNode = View.versionsTV.Nodes.Find(version_Id, True)(0)
+            versionsDict.Add(versionNode.Name, versionNode.Text)
+        Next
+        ' if versions > 1 then display versions as a dimensions
+        ' => check if present
+        ' if not present add to columns
+        ' priority normal !!!!!!!!!!!!!!
+
+
         initDisplayFlag = False
         For Each item In View.display_control.rowsDisplayList.Items
             rowsHierarchyNode.Nodes.Add(item.Value, item.Text)
@@ -146,13 +160,7 @@ Friend Class FinancialUIController
         ' STUBS !!!!!!!!!!!!! priority high
         Dim currencyId As Int32 = 3 ' currenciesNameIdDict(View.CurrenciesCLB.SelectedItem)
 
-        ' Versions init
-        Dim versionIDs() As Int32 = TreeViewsUtilities.GetCheckedNodesID(View.versionsTV).ToArray
-        versionsDict.Clear()
-        For Each version_Id As Int32 In versionIDs
-            Dim versionNode As TreeNode = View.versionsTV.Nodes.Find(version_Id, True)(0)
-            versionsDict.Add(versionNode.Name, versionNode.Text)
-        Next
+      
 
         ' Computing order
         Dim mustCompute As Boolean = True
@@ -259,21 +267,14 @@ Friend Class FinancialUIController
 
     Private Sub InitDisplay()
 
-        filters_dict = New Dictionary(Of String, Int32)
+        filters_dict = New Hashtable
         itemsDimensionsDict.Clear()
         FillHierarchy(rowsHierarchyNode)
         FillHierarchy(columnsHierarchyNode)
 
     End Sub
 
-    ' rows head to be updated -> i.e. accounts/ entities => accounts line contains head entity !!!
-    ' priority high 
-
-    ' Generic Rows/ Columns hierarchy node initialization
     Private Sub FillHierarchy(ByRef hierarchyNode As TreeNode)
-
-        ' analyse list: entities/ accounts => which one is the first/ absent
-        ' priority high
 
         HierarchyListPeriodsTreatment(hierarchyNode)
 
@@ -302,11 +303,15 @@ Friend Class FinancialUIController
                     End If
 
                 Case Computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.VERSIONS
-                    ' versions comparisons implementation !!
-                    ' priority high
-                    For Each version_id In versionsDict.Keys
+                   For Each version_id In versionsDict.Keys
                         node.Nodes.Add(version_id, versionsDict(version_id))
                     Next
+                    If versionsDict.Count = 2 Then
+                        vCompNode = node.Nodes.Add(versionsDict.Keys(0) & Computer.FILTERS_TOKEN_SEPARATOR & versionsDict.Keys(1), _
+                                    versionsDict.Values(0) & Computer.FILTERS_TOKEN_SEPARATOR & versionsDict.Values(1))
+                    Else
+                        vCompNode = Nothing
+                    End If
 
                 Case Computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.YEARS
                     For Each yearId As Int32 In GlobalVariables.Versions.GetYears(versionsDict)
@@ -386,6 +391,8 @@ Friend Class FinancialUIController
         display_axis_ht(GlobalEnums.DataMapAxis.ENTITIES) = CInt(EntityNode.Name)
         If versionsDict.Keys.Count = 1 Then
             display_axis_ht(GlobalEnums.DataMapAxis.VERSIONS) = CInt(versionsDict.Keys(0))
+        Else
+            display_axis_ht(GlobalEnums.DataMapAxis.VERSIONS) = 0
         End If
         ' Case multiple versions !!!! priority high
         '  -> filters = 0
@@ -427,6 +434,9 @@ Friend Class FinancialUIController
                     subColumn = column.Items.Add(valueNode.Text)
                 End If
                 subColumn.CellsDataSource = GridCellDataSource.Virtual
+                HideHiearchyItemIfVComp(subColumn, _
+                                        dimensionNode, _
+                                        valueNode)
 
                 ' Style => will go in utilities !!! priority normal
                 ' ------------------------------------------------------------------------------
@@ -478,6 +488,9 @@ Friend Class FinancialUIController
                 'For Each column As HierarchyItem In dgv.ColumnsHierarchy.Items
                 '    SetHierarchyVirtualDataSource(subRow, column)
                 'Next
+                HideHiearchyItemIfVComp(subRow, _
+                                        dimensionNode, _
+                                        valueNode)
                 RegisterHierarchyItemDimensions(subRow)
 
                 ' Dig one level deeper if any
@@ -512,7 +525,7 @@ Friend Class FinancialUIController
                 display_axis_ht(GlobalEnums.DataMapAxis.ENTITIES) = CInt(valueNode.Name)
 
             Case Computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.VERSIONS
-                display_axis_ht(GlobalEnums.DataMapAxis.VERSIONS) = CInt(valueNode.Name)
+                display_axis_ht(GlobalEnums.DataMapAxis.VERSIONS) = valueNode.Name
 
             Case Computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.YEARS, _
                  Computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.MONTHS, _
@@ -523,7 +536,7 @@ Friend Class FinancialUIController
                 ' Filters (clients, products, adjustments, oter filters)
                 ' In case display_axis is filters we just add the filter_value_id to the filters_values_id_list
                 ' Possible values are analysis_axis except entities
-                filters_dict.Add(dimensionNode.Name, valueNode.Name)
+                filters_dict(dimensionNode.Name) = valueNode.Name
 
         End Select
         Return True
@@ -539,17 +552,17 @@ Friend Class FinancialUIController
                 Case Computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.ENTITIES
                     display_axis_ht(GlobalEnums.DataMapAxis.ENTITIES) = CInt(EntityNode.Name)
 
-                    ' must manage other cases ?! 
-                    ' priority high
-                    ' tests output !!
+                Case Computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.VERSIONS
+                    display_axis_ht(GlobalEnums.DataMapAxis.VERSIONS) = 0
+
                 Case Computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.ACCOUNTS
                     display_axis_ht(GlobalEnums.DataMapAxis.ACCOUNTS) = 0
 
                 Case Computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.YEARS
-                    ' manage => priority high
+                    display_axis_ht(GlobalEnums.DataMapAxis.PERIODS) = ""
 
                 Case Computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.MONTHS
-                    ' manage => priority high
+                    display_axis_ht(GlobalEnums.DataMapAxis.PERIODS) = ""
 
             End Select
         End If
@@ -571,7 +584,7 @@ Friend Class FinancialUIController
         Dim accountId As Int32 = 0
         Dim entityId As Int32 = 0
         Dim periodId As String = ""
-        Dim versionId As Int32 = 0
+        Dim versionId As String = 0
         Dim filterId As String = "0"
 
         Dim items() As HierarchyItem = {args.RowItem, args.ColumnItem}
@@ -594,29 +607,91 @@ Friend Class FinancialUIController
                     Case GlobalEnums.DataMapAxis.PERIODS
                         If value <> "" Then periodId = value
                     Case GlobalEnums.DataMapAxis.VERSIONS
-                        If value <> 0 Then versionId = value
+                        If value <> "0" Then versionId = value
                     Case GlobalEnums.DataMapAxis.FILTERS
                         If value <> "0" Then filterId = value
                 End Select
             Next
         Next
 
-        If dataMap.ContainsKey(versionId & _
-                               filterId & _
-                               entityId & _
-                               accountId & _
-                               periodId) Then
+        If versionId.Contains(Computer.FILTERS_TOKEN_SEPARATOR) Then
+            Dim v1 As Int32 = GetFirstVersionId(versionId)
+            Dim v2 As Int32 = GetSecondVersionId(versionId)
 
-            args.CellValue = dataMap(versionId & _
-                                     filterId & _
-                                     entityId & _
-                                     accountId & _
-                                     periodId)
+            If dataMap.ContainsKey(v1 & filterId & entityId & accountId & periodId) _
+            AndAlso dataMap.ContainsKey(v2 & filterId & entityId & accountId & periodId) Then
+                args.CellValue = dataMap(v1 & filterId & entityId & accountId & periodId) _
+                                 - dataMap(v2 & filterId & entityId & accountId & periodId)
+            Else
+                args.CellValue = ""
+            End If
         Else
-            args.CellValue = ""
+            If dataMap.ContainsKey(versionId & filterId & entityId & accountId & periodId) Then
+                args.CellValue = dataMap(versionId & filterId & entityId & accountId & periodId)
+            Else
+                args.CellValue = ""
+            End If
         End If
 
-        '   System.Diagnostics.Debug.WriteLine("cell value given, row: " & args.RowItem.Caption & " column: " & args.ColumnItem.Caption)
+    End Sub
+
+#End Region
+
+
+#Region "Versions Comparison"
+
+    Private Sub HideHiearchyItemIfVComp(ByRef item As HierarchyItem, _
+                                       ByRef dimensionNode As TreeNode, _
+                                       ByRef valueNode As TreeNode)
+
+        If dimensionNode.Name = Computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.VERSIONS _
+         AndAlso valueNode.Name.Contains(Computer.FILTERS_TOKEN_SEPARATOR) Then
+            item.Hidden = True
+        End If
+
+    End Sub
+
+    Friend Sub VersionsCompDisplay(ByVal display As Boolean)
+
+        For Each tab_ As TabPage In View.TabControl1.TabPages
+            Dim DGV As vDataGridView = tab_.Controls(0)
+            For Each row As HierarchyItem In DGV.RowsHierarchy.Items
+                DisplayVCompHierarchy(row, display)
+            Next
+            For Each column As HierarchyItem In DGV.ColumnsHierarchy.Items
+                DisplayVCompHierarchy(column, display)
+            Next
+        Next
+
+    End Sub
+
+    Private Sub DisplayVCompHierarchy(ByRef item As HierarchyItem, _
+                                     ByRef display As Boolean)
+
+        If item.Caption.Contains(Computer.FILTERS_TOKEN_SEPARATOR) Then
+            item.Hidden = display
+        Else
+            For Each subItem As HierarchyItem In item.Items
+                DisplayVCompHierarchy(subItem, display)
+            Next
+        End If
+
+    End Sub
+
+    Friend Sub ReverseVersionsComparison()
+
+        If vCompNode Is Nothing Then Exit Sub
+        Dim v1 As String = GetFirstVersionId(vCompNode.Name)
+        Dim v2 As String = GetSecondVersionId(vCompNode.Name)
+        vCompNode.Name = v2 & Computer.FILTERS_TOKEN_SEPARATOR & v1
+
+        v1 = GetFirstVersionId(vCompNode.Text)
+        v2 = GetSecondVersionId(vCompNode.Text)
+        vCompNode.Text = v2 & Computer.FILTERS_TOKEN_SEPARATOR & v1
+
+        ' Then launch rows and column hierarchies redrawing 
+        '   => priority normal !!!
+
 
     End Sub
 
@@ -757,6 +832,20 @@ Friend Class FinancialUIController
             Next
         Next
         Return True
+
+    End Function
+
+    Private Function GetFirstVersionId(ByRef versionId As String) As Object
+
+        Dim sepIndex = versionId.IndexOf(Computer.FILTERS_TOKEN_SEPARATOR)
+        Return Left(versionId, sepIndex)
+
+    End Function
+
+    Private Function GetSecondVersionId(ByRef versionId As String) As Object
+
+        Dim sepIndex = versionId.IndexOf(Computer.FILTERS_TOKEN_SEPARATOR)
+        Return Right(versionId, Len(versionId) - sepIndex - 1)
 
     End Function
 

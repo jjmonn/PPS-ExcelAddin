@@ -41,22 +41,25 @@ Friend Class Period
                                          ByVal timeConfig As UInt16) As Int32()
 
         Dim periodsList As New List(Of Int32)
-        periodsList.Add(startPeriod)
 
         If timeConfig = GlobalEnums.TimeConfig.MONTHS Then
             nbPeriod \= 12
+            Dim d1 As Date = Date.FromOADate(startPeriod)
+            Dim year_ As Int32 = d1.Year
+            startPeriod = CDbl(DateSerial(year_, 12, 31).ToOADate())
         End If
+        periodsList.Add(startPeriod)
 
-        Dim year As Double = startPeriod / 365.25 + 1900
+        Dim year__ As Double = startPeriod / 365.25 + 1900
 
         For i As Int16 = 1 To nbPeriod - 1
-            If (DateTime.IsLeapYear(year)) Then
+            If (DateTime.IsLeapYear(year__)) Then
                 startPeriod += 366
             Else
                 startPeriod += 365
             End If
             periodsList.Add(startPeriod)
-            year += 1
+            year__ += 1
         Next
 
         Return periodsList.ToArray
