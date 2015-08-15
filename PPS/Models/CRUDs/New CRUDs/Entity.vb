@@ -268,6 +268,12 @@ Friend Class Entity
 
     End Sub
 
+    Friend Sub LoadEntitiesTV(ByRef TV As VIBlend.WinForms.Controls.vTreeView)
+
+        VTreeViewUtil.LoadTreeview(TV, entities_hash)
+
+    End Sub
+
     Friend Sub LoadEntitiesTV(ByRef TV As Windows.Forms.TreeView, _
                             ByRef nodes_icon_dic As Dictionary(Of UInt32, Int32))
 

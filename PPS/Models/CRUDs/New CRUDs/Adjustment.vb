@@ -11,7 +11,7 @@ Imports System.Collections.Generic
 '
 ' Author: Julien Monnereau
 ' Created: 24/07/2015
-' Last modified: 03/08/2015
+' Last modified: 15/08/2015
 
 
 
@@ -225,33 +225,33 @@ Friend Class Adjustment
 
     End Sub
 
-    Friend Sub LoadAdjustmentsTree(ByRef TV As Windows.Forms.TreeView)
+
+#End Region
+
+
+#Region "TV Loading"
+
+    Friend Sub LoadadjustmentsTree(ByRef TV As VIBlend.WinForms.Controls.vTreeView)
 
         TV.Nodes.Clear()
         For Each id As Int32 In adjustments_hash.Keys
-            Dim node As Windows.Forms.TreeNode = TV.Nodes.Add(CStr(id), _
-                                                              adjustments_hash(id)(NAME_VARIABLE), _
-                                                              0, 0)
+            Dim node As VIBlend.WinForms.Controls.vTreeNode = VTreeViewUtil.AddNode(id, adjustments_hash(id)(NAME_VARIABLE), TV, 0)
             node.Checked = True
         Next
 
     End Sub
 
-    Friend Sub LoadAdjustmentsTree(ByRef TV As Windows.Forms.TreeView, _
-                                ByRef filter_list As List(Of UInt32))
+    Friend Sub LoadadjustmentsTree(ByRef TV As VIBlend.WinForms.Controls.vTreeView, _
+                               ByRef filter_list As List(Of UInt32))
 
         TV.Nodes.Clear()
         For Each id As Int32 In adjustments_hash.Keys
-            Dim node As Windows.Forms.TreeNode = TV.Nodes.Add(CStr(id), _
-                                                              adjustments_hash(id)(NAME_VARIABLE), _
-                                                              0, 0)
+            Dim node As VIBlend.WinForms.Controls.vTreeNode = VTreeViewUtil.AddNode(id, adjustments_hash(id)(NAME_VARIABLE), TV, 0)
             node.Checked = True
         Next
 
     End Sub
 
 #End Region
-
-
 
 End Class

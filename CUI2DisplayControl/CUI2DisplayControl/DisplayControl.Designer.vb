@@ -27,16 +27,16 @@ Partial Class DisplayControl
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
         Me.TableLayoutPanel2 = New System.Windows.Forms.TableLayoutPanel()
         Me.Label2 = New System.Windows.Forms.Label()
+        Me.ImageList2 = New System.Windows.Forms.ImageList(Me.components)
         Me.Label1 = New System.Windows.Forms.Label()
-        Me.ImageList1 = New System.Windows.Forms.ImageList(Me.components)
         Me.columnsDisplayList = New VIBlend.WinForms.Controls.vListBox()
         Me.rowsDisplayList = New VIBlend.WinForms.Controls.vListBox()
         Me.Button1 = New System.Windows.Forms.Button()
+        Me.ImageList1 = New System.Windows.Forms.ImageList(Me.components)
         Me.DimensionsTVPanel = New System.Windows.Forms.Panel()
         Me.Panel1 = New System.Windows.Forms.Panel()
         Me.Button2 = New System.Windows.Forms.Button()
         Me.Label3 = New System.Windows.Forms.Label()
-        Me.ImageList2 = New System.Windows.Forms.ImageList(Me.components)
         Me.TableLayoutPanel1.SuspendLayout()
         Me.TableLayoutPanel2.SuspendLayout()
         Me.Panel1.SuspendLayout()
@@ -44,7 +44,7 @@ Partial Class DisplayControl
         '
         'TableLayoutPanel1
         '
-        Me.TableLayoutPanel1.BackColor = System.Drawing.Color.DimGray
+        Me.TableLayoutPanel1.BackColor = System.Drawing.Color.Transparent
         Me.TableLayoutPanel1.ColumnCount = 1
         Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
         Me.TableLayoutPanel1.Controls.Add(Me.TableLayoutPanel2, 0, 2)
@@ -87,7 +87,7 @@ Partial Class DisplayControl
         '
         Me.Label2.AutoSize = True
         Me.Label2.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.Label2.ForeColor = System.Drawing.Color.White
+        Me.Label2.ForeColor = System.Drawing.Color.Black
         Me.Label2.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
         Me.Label2.ImageKey = "table_selection_row.ico"
         Me.Label2.ImageList = Me.ImageList2
@@ -98,11 +98,19 @@ Partial Class DisplayControl
         Me.Label2.Text = "Rows Labels"
         Me.Label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
+        'ImageList2
+        '
+        Me.ImageList2.ImageStream = CType(resources.GetObject("ImageList2.ImageStream"), System.Windows.Forms.ImageListStreamer)
+        Me.ImageList2.TransparentColor = System.Drawing.Color.Transparent
+        Me.ImageList2.Images.SetKeyName(0, "Close_Box_Red.png")
+        Me.ImageList2.Images.SetKeyName(1, "table_selection_column.ico")
+        Me.ImageList2.Images.SetKeyName(2, "table_selection_row.ico")
+        '
         'Label1
         '
         Me.Label1.AutoSize = True
         Me.Label1.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.Label1.ForeColor = System.Drawing.Color.White
+        Me.Label1.ForeColor = System.Drawing.Color.Black
         Me.Label1.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
         Me.Label1.ImageKey = "table_selection_column.ico"
         Me.Label1.ImageList = Me.ImageList2
@@ -112,13 +120,6 @@ Partial Class DisplayControl
         Me.Label1.TabIndex = 3
         Me.Label1.Text = "Columns Labels"
         Me.Label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight
-        '
-        'ImageList1
-        '
-        Me.ImageList1.ImageStream = CType(resources.GetObject("ImageList1.ImageStream"), System.Windows.Forms.ImageListStreamer)
-        Me.ImageList1.TransparentColor = System.Drawing.Color.Transparent
-        Me.ImageList1.Images.SetKeyName(0, "refresh blue.ico")
-        Me.ImageList1.Images.SetKeyName(1, "Close_Box_Red.png")
         '
         'columnsDisplayList
         '
@@ -158,6 +159,13 @@ Partial Class DisplayControl
         Me.Button1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         Me.Button1.UseVisualStyleBackColor = True
         '
+        'ImageList1
+        '
+        Me.ImageList1.ImageStream = CType(resources.GetObject("ImageList1.ImageStream"), System.Windows.Forms.ImageListStreamer)
+        Me.ImageList1.TransparentColor = System.Drawing.Color.Transparent
+        Me.ImageList1.Images.SetKeyName(0, "refresh blue.ico")
+        Me.ImageList1.Images.SetKeyName(1, "Close_Box_Red.png")
+        '
         'DimensionsTVPanel
         '
         Me.DimensionsTVPanel.Dock = System.Windows.Forms.DockStyle.Fill
@@ -194,7 +202,7 @@ Partial Class DisplayControl
         'Label3
         '
         Me.Label3.AutoSize = True
-        Me.Label3.ForeColor = System.Drawing.Color.White
+        Me.Label3.ForeColor = System.Drawing.Color.Black
         Me.Label3.Location = New System.Drawing.Point(10, 20)
         Me.Label3.Margin = New System.Windows.Forms.Padding(10, 3, 3, 0)
         Me.Label3.Name = "Label3"
@@ -202,18 +210,11 @@ Partial Class DisplayControl
         Me.Label3.TabIndex = 6
         Me.Label3.Text = "Choose fields to add to report:"
         '
-        'ImageList2
-        '
-        Me.ImageList2.ImageStream = CType(resources.GetObject("ImageList2.ImageStream"), System.Windows.Forms.ImageListStreamer)
-        Me.ImageList2.TransparentColor = System.Drawing.Color.Transparent
-        Me.ImageList2.Images.SetKeyName(0, "Close_Box_Red.png")
-        Me.ImageList2.Images.SetKeyName(1, "table_selection_column.ico")
-        Me.ImageList2.Images.SetKeyName(2, "table_selection_row.ico")
-        '
         'DisplayControl
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
+        Me.BackColor = System.Drawing.Color.FromArgb(CType(CType(207, Byte), Integer), CType(CType(212, Byte), Integer), CType(CType(221, Byte), Integer))
         Me.Controls.Add(Me.TableLayoutPanel1)
         Me.Name = "DisplayControl"
         Me.Size = New System.Drawing.Size(277, 616)

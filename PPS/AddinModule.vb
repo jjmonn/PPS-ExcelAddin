@@ -420,12 +420,16 @@ Public Class AddinModule
         Me.Menu3.Images.SetKeyName(12, "Financial BI Ico.ico")
         Me.Menu3.Images.SetKeyName(13, "favicon(15).ico")
         Me.Menu3.Images.SetKeyName(14, "favicon(16).ico")
-        Me.Menu3.Images.SetKeyName(15, "favicon(17).ico")
+        Me.Menu3.Images.SetKeyName(15, "Financial BI Green small.ico")
         Me.Menu3.Images.SetKeyName(16, "favicon(18).ico")
         Me.Menu3.Images.SetKeyName(17, "favicon(19).ico")
         Me.Menu3.Images.SetKeyName(18, "Financial BI Ico.ico")
         Me.Menu3.Images.SetKeyName(19, "snap green.ico")
         Me.Menu3.Images.SetKeyName(20, "snapshot 3.0.ico")
+        Me.Menu3.Images.SetKeyName(21, "Export classic green bigger.ico")
+        Me.Menu3.Images.SetKeyName(22, "ok.ico")
+        Me.Menu3.Images.SetKeyName(23, "tablet_computer.ico")
+        Me.Menu3.Images.SetKeyName(24, "Financial BI blue smaller.ico")
         '
         'InputReportLaunchBT
         '
@@ -450,7 +454,7 @@ Public Class AddinModule
         Me.RefreshBT.Caption = "Refresh"
         Me.RefreshBT.Controls.Add(Me.RefreshMenu)
         Me.RefreshBT.Id = "adxRibbonSplitButton_8aab3e36ecdf4fdfbd62b6bc29af40ee"
-        Me.RefreshBT.Image = 2
+        Me.RefreshBT.Image = 21
         Me.RefreshBT.ImageList = Me.Menu3
         Me.RefreshBT.ImageTransparentColor = System.Drawing.Color.Transparent
         Me.RefreshBT.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
@@ -525,7 +529,7 @@ Public Class AddinModule
         '
         Me.ControlingUI2BT.Caption = "Financials"
         Me.ControlingUI2BT.Id = "adxRibbonButton_7d5683509a144f39bf95ea6b3db155b9"
-        Me.ControlingUI2BT.Image = 10
+        Me.ControlingUI2BT.Image = 23
         Me.ControlingUI2BT.ImageList = Me.Menu3
         Me.ControlingUI2BT.ImageTransparentColor = System.Drawing.Color.Transparent
         Me.ControlingUI2BT.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
@@ -538,7 +542,7 @@ Public Class AddinModule
         Me.FunctionDesigner.Caption = "PPSBI"
         Me.FunctionDesigner.Controls.Add(Me.AdxRibbonMenu1)
         Me.FunctionDesigner.Id = "adxRibbonSplitButton_5986acbd4f414054bdd1177565ae2cf3"
-        Me.FunctionDesigner.Image = 12
+        Me.FunctionDesigner.Image = 24
         Me.FunctionDesigner.ImageList = Me.Menu3
         Me.FunctionDesigner.ImageTransparentColor = System.Drawing.Color.Transparent
         Me.FunctionDesigner.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
@@ -597,7 +601,7 @@ Public Class AddinModule
         Me.SubmissionControlBT.Caption = "Controls"
         Me.SubmissionControlBT.Controls.Add(Me.AdxRibbonMenu3)
         Me.SubmissionControlBT.Id = "adxRibbonSplitButton_c948ce7f779a4f6cbe647f9de2d15b60"
-        Me.SubmissionControlBT.Image = 3
+        Me.SubmissionControlBT.Image = 22
         Me.SubmissionControlBT.ImageList = Me.Menu3
         Me.SubmissionControlBT.ImageTransparentColor = System.Drawing.Color.Transparent
         Me.SubmissionControlBT.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook

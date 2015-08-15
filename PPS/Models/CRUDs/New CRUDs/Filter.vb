@@ -11,7 +11,7 @@ Imports System.Collections.Generic
 '
 ' Author: Julien Monnereau
 ' Created: 22/07/2015
-' Last modified: 03/08/2015
+' Last modified: 15/08/2015
 
 
 
@@ -271,6 +271,9 @@ Friend Class Filter
 
     End Sub
 
+
+#Region "Treeviews"
+
     Friend Sub LoadFiltersNode(ByRef node As Windows.Forms.TreeNode, _
                              ByRef axis_id As UInt32)
 
@@ -297,6 +300,33 @@ Friend Class Filter
 
     End Sub
 
+    Friend Sub LoadFiltersNode(ByRef node As VIBlend.WinForms.Controls.vTreeNode, _
+                               ByRef axis_id As UInt32)
+
+        Dim tmp_ht As New Hashtable
+        For Each id As Int32 In filters_hash.Keys
+            If filters_hash(id)(FILTER_AXIS_ID_VARIABLE) = axis_id Then
+                tmp_ht(id) = filters_hash(id)
+            End If
+        Next
+        VTreeViewUtil.LoadTreenode(node, tmp_ht)
+
+    End Sub
+
+    Friend Sub LoadFiltersTV(ByRef TV As VIBlend.WinForms.Controls.vTreeView, _
+                             ByRef axis_id As UInt32)
+
+        Dim tmp_ht As New Hashtable
+        For Each id As Int32 In filters_hash.Keys
+            If filters_hash(id)(FILTER_AXIS_ID_VARIABLE) = axis_id Then
+                tmp_ht(id) = filters_hash(id)
+            End If
+        Next
+        VTreeViewUtil.LoadTreeview(TV, tmp_ht)
+
+    End Sub
+
+#End Region
 
     ' should load treenode instead ? => filters tv not displayed - priority normal (function to be implemented) !
     Friend Function IsNameValid(ByRef name As String) As Boolean

@@ -58,7 +58,7 @@ Friend Class DataGridViewsUtil
 #End Region
 
 
-    Protected Friend Sub New()
+    Friend Sub New()
 
         EntitiesTokenNamesDict = GlobalVariables.Entities.GetEntitiesDictionary(ID_VARIABLE, NAME_VARIABLE)
         AccountNamesKeysDic = GlobalVariables.Accounts.GetAccountsDictionary(NAME_VARIABLE, ID_VARIABLE)
@@ -71,7 +71,7 @@ Friend Class DataGridViewsUtil
 
     ' vDgv DISPLAY Initialization
     Friend Shared Sub InitDisplayVDataGridView(ByRef vDataGridView As vDataGridView, _
-                                                         ByRef theme As VIBLEND_THEME)
+                                               ByRef theme As VIBLEND_THEME)
 
         With vDataGridView
             .VIBlendTheme = theme

@@ -16,7 +16,7 @@ Imports System.Collections
 '
 ' Author: Julien Monnereau Julien
 ' Created: 17/07/2015
-' Last modified: 11/08/2015
+' Last modified: 14/08/2015
 
 
 Friend Class Computer
@@ -43,13 +43,12 @@ Friend Class Computer
     Private filterToken As String
     Private periodIdentifier As Char
     Private periodsTokenDict As Dictionary(Of String, String)
-    Private filterCode As String
-    Private filtersDict As New Hashtable
+    Private filtersDict As New Dictionary(Of String, Int32)
 
     ' Constants
     Friend Const FILTERS_DECOMPOSITION_IDENTIFIER As Char = "F"
     Friend Const AXIS_DECOMPOSITION_IDENTIFIER As Char = "A"
-    Friend Const FILTERS_TOKEN_SEPARATOR As Char = "#"
+    Friend Const TOKEN_SEPARATOR As Char = "#"
     Friend Const YEAR_PERIOD_IDENTIFIER As Char = "y"
     Friend Const MONTH_PERIOD_IDENTIFIER As Char = "m"
 
@@ -181,6 +180,7 @@ Friend Class Computer
 
     Private Sub FillResultData(ByRef packet As ByteBuffer)
 
+        Dim filterCode As String = ""
         isFiltered = packet.ReadBool()
         If isFiltered = True Then
             axisId = packet.ReadUint8()
@@ -194,52 +194,50 @@ Friend Class Computer
             End If
 
         End If
-        'System.Diagnostics.Debug.WriteLine("Filter code: " & filterCode)
+
+        filterToken = GetFiltersToken(filtersDict)
+        ' System.Diagnostics.Debug.WriteLine("filter Token:" & filterToken)
+
         FillEntityData(packet)
 
         For child_result_index As Int32 = 1 To packet.ReadUint32()
             FillResultData(packet)
         Next
 
-        If isFiltered = True Then filtersDict.Remove(filterCode)
-        ' here is it ok ?!!! -> priority high !!!
+        If isFiltered = True Then
+           filtersDict.Remove(filterCode)
+        End If
 
     End Sub
 
     Private Sub FillEntityData(ByRef packet As ByteBuffer)
 
-        filterToken = GetFiltersToken(filtersDict)
-        '  System.Diagnostics.Debug.Write("filter Token:" & filterToken & Chr(13))
-
         entityId = packet.ReadUint32()
-        '     System.Diagnostics.Debug.Write("entityId:" & entityId & Chr(13))
+        ' System.Diagnostics.Debug.WriteLine("entityId:" & entityId)
 
         For account_index As Int32 = 1 To packet.ReadUint32()
             accountId = packet.ReadUint32()
 
             ' Non aggregated data
             For period_index As Int16 = 0 To packet.ReadUint16() - 1
-                dataMap(versionId & _
-                        filterToken & _
-                        entityId & _
-                        accountId & _
+                dataMap(versionId & TOKEN_SEPARATOR & _
+                        filterToken & TOKEN_SEPARATOR & _
+                        entityId & TOKEN_SEPARATOR & _
+                        accountId & TOKEN_SEPARATOR & _
                         periodsTokenDict(periodIdentifier & period_index)) _
                         = packet.ReadDouble()
             Next
 
             ' Aggreagted data
             For aggregationIndex As Int32 = 0 To packet.ReadUint32() - 1
-                dataMap(versionId & _
-                        filterToken & _
-                        entityId & _
-                        accountId & _
+                dataMap(versionId & TOKEN_SEPARATOR & _
+                        filterToken & TOKEN_SEPARATOR & _
+                        entityId & TOKEN_SEPARATOR & _
+                        accountId & TOKEN_SEPARATOR & _
                         periodsTokenDict(YEAR_PERIOD_IDENTIFIER & aggregationIndex)) _
                         = packet.ReadDouble()
             Next
         Next
-
-        ' Clean filter code out after ? !! 
-        ' priority high
 
         ' Dim nb_children_entities As UInt32 = 
         For children_index As Int32 = 1 To packet.ReadUint32()
@@ -289,12 +287,12 @@ Friend Class Computer
 
     End Function
 
-    Friend Shared Function GetFiltersToken(ByRef dict As Hashtable) As String
+    Friend Shared Function GetFiltersToken(ByRef dict As Dictionary(Of String, Int32)) As String
 
         Dim token As String = ""
         If dict.Count > 0 Then
             For Each filter_code As String In dict.Keys
-                token = token & filter_code & dict(filter_code) & FILTERS_TOKEN_SEPARATOR
+                token = token & filter_code & dict(filter_code) & TOKEN_SEPARATOR
             Next
             Return Left(token, Len(token) - 1)
         Else

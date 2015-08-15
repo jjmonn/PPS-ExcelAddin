@@ -7,7 +7,7 @@
 '
 ' Author: Julien Monnereau
 ' Created: 16/07/2015
-' Last modified: 17/07/2015
+' Last modified: 15/08/2015
 
 
 Imports System.Collections
@@ -261,6 +261,12 @@ Friend Class Account
     Friend Sub LoadAccountsTV(ByRef TV As Windows.Forms.TreeView)
 
         TreeViewsUtilities.LoadTreeview(TV, accounts_hash)
+
+    End Sub
+
+    Friend Sub LoadAccountsTV(ByRef TV As VIBlend.WinForms.Controls.vTreeView)
+
+        VTreeViewUtil.LoadTreeview(TV, accounts_hash)
 
     End Sub
 

@@ -7,7 +7,7 @@
 '
 ' Author: Julien Monnereau
 ' Created: 29/07/2015
-' Last modified: 11/08/2015
+' Last modified: 15/08/2015
 
 
 Imports System.Collections
@@ -342,6 +342,12 @@ Friend Class FactsVersion
     Friend Sub LoadVersionsTV(ByRef TV As Windows.Forms.TreeView)
 
         TreeViewsUtilities.LoadTreeview(TV, versions_hash)
+
+    End Sub
+
+    Friend Sub LoadVersionsTV(ByRef TV As VIBlend.WinForms.Controls.vTreeView)
+
+        VTreeViewUtil.LoadTreeview(TV, versions_hash)
 
     End Sub
 

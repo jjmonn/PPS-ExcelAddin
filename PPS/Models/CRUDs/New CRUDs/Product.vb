@@ -11,7 +11,7 @@ Imports System.Collections.Generic
 '
 ' Author: Julien Monnereau
 ' Created: 24/07/2015
-' Last modified: 03/08/2015
+' Last modified: 15/08/2015
 
 
 
@@ -237,31 +237,7 @@ Friend Class Product
 
     End Sub
 
-    Friend Sub LoadProductsTree(ByRef TV As Windows.Forms.TreeView)
-
-        TV.Nodes.Clear()
-        For Each id As Int32 In products_hash.Keys
-            Dim node As Windows.Forms.TreeNode = TV.Nodes.Add(CStr(id), _
-                                                              products_hash(id)(NAME_VARIABLE), _
-                                                              0, 0)
-            node.Checked = True
-        Next
-
-    End Sub
-
-    Friend Sub LoadProductsTree(ByRef TV As Windows.Forms.TreeView, _
-                                ByRef filter_list As List(Of UInt32))
-
-        TV.Nodes.Clear()
-        For Each id As Int32 In products_hash.Keys
-            Dim node As Windows.Forms.TreeNode = TV.Nodes.Add(CStr(id), _
-                                                              products_hash(id)(NAME_VARIABLE), _
-                                                              0, 0)
-            node.Checked = True
-        Next
-
-    End Sub
-
+   
     Friend Function IsNameValid(ByRef name As String) As Boolean
 
         If name.Length > NAMES_MAX_LENGTH Then Return False
@@ -277,5 +253,29 @@ Friend Class Product
 #End Region
 
 
+#Region "TV Loading"
+
+    Friend Sub LoadproductsTree(ByRef TV As VIBlend.WinForms.Controls.vTreeView)
+
+        TV.Nodes.Clear()
+        For Each id As Int32 In products_hash.Keys
+            Dim node As VIBlend.WinForms.Controls.vTreeNode = VTreeViewUtil.AddNode(id, products_hash(id)(NAME_VARIABLE), TV, 0)
+            node.Checked = True
+        Next
+
+    End Sub
+
+    Friend Sub LoadproductsTree(ByRef TV As VIBlend.WinForms.Controls.vTreeView, _
+                               ByRef filter_list As List(Of UInt32))
+
+        TV.Nodes.Clear()
+        For Each id As Int32 In products_hash.Keys
+            Dim node As VIBlend.WinForms.Controls.vTreeNode = VTreeViewUtil.AddNode(id, products_hash(id)(NAME_VARIABLE), TV, 0)
+            node.Checked = True
+        Next
+
+    End Sub
+
+#End Region
 
 End Class

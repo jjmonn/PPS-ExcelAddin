@@ -9,7 +9,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 13/08/2015
+' Last modified: 14/08/2015
 
 
 Imports System.Windows.Forms
@@ -48,7 +48,7 @@ Friend Class ControllingUI_2
 
 #Region "Variables"
 
-    Private right_clicked_node As TreeNode
+    Private right_clicked_node As vTreeNode
     Private current_DGV_cell As GridCell
     Private rows_list_dic As New Dictionary(Of String, List(Of HierarchyItem))
     Private columns_list_dic As New Dictionary(Of String, List(Of HierarchyItem))
@@ -60,17 +60,17 @@ Friend Class ControllingUI_2
 
 #Region "Treeviews"
 
-    Friend accountsTV As New TreeView
-    Friend entitiesTV As New TreeView
-    Friend entitiesFiltersTV As New TreeView
-    Friend adjustmentsTV As New TreeView
-    Friend adjustmentsFiltersTV As New TreeView
-    Friend clientsTV As New TreeView
-    Friend clientsFiltersTV As New TreeView
-    Friend productsTV As New TreeView
-    Friend productsFiltersTV As New TreeView
+    Friend accountsTV As New vTreeView
+    Friend entitiesTV As New vTreeView
+    Friend entitiesFiltersTV As New vTreeView
+    Friend adjustmentsTV As New vTreeView
+    Friend adjustmentsFiltersTV As New vTreeView
+    Friend clientsTV As New vTreeView
+    Friend clientsFiltersTV As New vTreeView
+    Friend productsTV As New vTreeView
+    Friend productsFiltersTV As New vTreeView
     Private periodsCLB As New CheckedListBox
-    Friend versionsTV As New TreeView
+    Friend versionsTV As New vTreeView
     Friend CurrenciesCLB As New CheckedListBox
 
     Private SP1Distance As Single = 230
@@ -139,10 +139,10 @@ Friend Class ControllingUI_2
         periodsCLB.CheckOnClick = True
 
         ' Init TabControl
-        For Each node As TreeNode In accountsTV.Nodes
+        For Each node As vTreeNode In accountsTV.Nodes
             Dim newTab As New vTabPage
             newTab.Text = node.Text
-            newTab.Name = node.Name
+            newTab.Name = node.Value
             tabControl1.TabPages.Add(newTab)
         Next
         InitializeChartsTab()
@@ -152,8 +152,9 @@ Friend Class ControllingUI_2
         CollapseSP1Pane1()
         DisplayFirstTreeOnly()          ' TV Table Layout
 
-        If versionsTV.Nodes.Find(My.Settings.version_id, True).Length > 0 Then
-            versionsTV.Nodes.Find(My.Settings.version_id, True)(0).Checked = True
+        Dim vNode As vTreeNode = VTreeViewUtil.FindNode(versionsTV, My.Settings.version_id)
+        If Not vNode Is Nothing Then
+            vNode.Checked = CheckState.Checked
         End If
 
     End Sub
@@ -184,17 +185,24 @@ Friend Class ControllingUI_2
         TVSetup(clientsFiltersTV, 2, CategoriesIL)
         TVSetup(productsFiltersTV, 2, CategoriesIL)
 
-        TreeViewsUtilities.set_TV_basics_icon_index(entitiesTV)
+        VTreeViewUtil.InitTVFormat(entitiesTV)
+        VTreeViewUtil.InitTVFormat(clientsTV)
+        VTreeViewUtil.InitTVFormat(productsTV)
+        VTreeViewUtil.InitTVFormat(adjustmentsTV)
+        VTreeViewUtil.InitTVFormat(versionsTV)
+        VTreeViewUtil.InitTVFormat(entitiesFiltersTV)
+        VTreeViewUtil.InitTVFormat(clientsFiltersTV)
+        VTreeViewUtil.InitTVFormat(productsFiltersTV)
+      
+
+        VTreeViewUtil.SeEntitiesTVImageIndexes(entitiesTV)
         LoadCurrencies()
 
         ' Add TVs events for categories clients / products !!
-        AddHandler entitiesTV.NodeMouseDoubleClick, AddressOf EntitiesTV_NodeMouseDoubleClick
+        AddHandler entitiesTV.MouseDoubleClick, AddressOf EntitiesTV_NodeMouseDoubleClick
         AddHandler entitiesTV.KeyDown, AddressOf EntitiesTV_KeyDown
-        AddHandler entitiesTV.AfterCheck, AddressOf entitiesTV_AfterCheck
-        AddHandler entitiesTV.NodeMouseClick, AddressOf EntitiesTV_NodeMouseClick
-        AddHandler entitiesFiltersTV.AfterCheck, AddressOf entitiesCategory_AfterCheck
-        AddHandler clientsFiltersTV.AfterCheck, AddressOf clientsCategory_AfterCheck
-        AddHandler productsFiltersTV.AfterCheck, AddressOf productsCategory_AfterCheck
+        AddHandler entitiesTV.NodeChecked, AddressOf entitiesTV_AfterCheck
+        AddHandler entitiesTV.MouseClick, AddressOf EntitiesTV_NodeMouseClick
         AddHandler CurrenciesCLB.ItemCheck, AddressOf currenciesCLB_ItemCheck
         AddHandler periodsCLB.ItemCheck, AddressOf periodsCLB_ItemCheck
 
@@ -204,7 +212,7 @@ Friend Class ControllingUI_2
 
     End Sub
 
-    Private Sub TVSetup(ByRef TV As TreeView, _
+    Private Sub TVSetup(ByRef TV As Object, _
                         ByRef row_index As Int32, _
                         Optional ByRef image_list As ImageList = Nothing)
 
@@ -228,7 +236,8 @@ Friend Class ControllingUI_2
         currenciesList.Add(1) '
         currenciesList.Add(2)
         currenciesList.Add(3)
-        ' -------------------------- priotiy high !!!!!!!
+        ' use name property to set id !!! 
+        ' -------------------------- priority high !!!!!!!
 
         For Each currency_ As String In currenciesList
             CurrenciesCLB.Items.Add(currency_, False)
@@ -245,28 +254,21 @@ Friend Class ControllingUI_2
         'PBar.Top = (Me.Height - PBar.Height) / 2        ' Progress Bar
 
         For Each tab_ As vTabPage In tabControl1.TabPages
-
             tabControl1.SelectedTab = tab_
-            tab_.ImageIndex = 0
-
             Dim DGV As New vDataGridView
-            DataGridViewsUtil.InitDisplayVDataGridView(DGV, DGV_THEME)
+            DGV.VIBlendTheme = DGV_THEME
             DGV.Name = tab_.Name
             DGV.Dock = DockStyle.Fill
             DGV.Left = INNER_MARGIN
             DGV.Top = INNER_MARGIN
             DGV.BackColor = SystemColors.Control
-            DGV.RowsHierarchy.CompactStyleRenderingEnabled = True
             DGV.ContextMenuStrip = DGVsRCM
-            AddHandler DGV.CellMouseClick, AddressOf DGV_CellMouseClick
-            AddHandler DGV.HierarchyItemExpanded, AddressOf Controller.DGV_Hierarchy_Expanded
-            'AddHandler DGV.HierarchyItemCollapsed
             tab_.Controls.Add(DGV)
-
+            AddHandler DGV.CellMouseClick, AddressOf DGV_CellMouseClick
         Next
 
-        If Not IsNothing(TabControl1.TabPages(0)) Then
-            TabControl1.SelectedTab = TabControl1.TabPages(0)
+        If Not IsNothing(tabControl1.TabPages(0)) Then
+            tabControl1.SelectedTab = tabControl1.TabPages(0)
         End If
         Me.WindowState = FormWindowState.Maximized
 
@@ -292,8 +294,8 @@ Friend Class ControllingUI_2
                                                                ENTITIES_CODE, _
                                                                analysis_axis_tv)
 
-        For Each entity_node As TreeNode In entitiesFiltersTV.Nodes
-            VTreeViewUtil.AddNode(Computer.FILTERS_DECOMPOSITION_IDENTIFIER & entity_node.Name, _
+        For Each entity_node As vTreeNode In entitiesFiltersTV.Nodes
+            VTreeViewUtil.AddNode(Computer.FILTERS_DECOMPOSITION_IDENTIFIER & entity_node.Value, _
                                   entity_node.Text, _
                                   entities_node)
         Next
@@ -304,19 +306,19 @@ Friend Class ControllingUI_2
 
         ' Clients Analysis Axis and Categories Nodes
         Dim clientsNode As vTreeNode = VTreeViewUtil.AddNode(Computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.CLIENTS, CLIENTS_CODE, analysis_axis_tv)
-        For Each client_category_node As TreeNode In clientsFiltersTV.Nodes
-            VTreeViewUtil.AddNode(Computer.FILTERS_DECOMPOSITION_IDENTIFIER & client_category_node.Name, _
+        For Each client_category_node As vTreeNode In clientsFiltersTV.Nodes
+            VTreeViewUtil.AddNode(Computer.FILTERS_DECOMPOSITION_IDENTIFIER & client_category_node.Value, _
                                   client_category_node.Text, _
                                   clientsNode)
-          Next
+        Next
 
         ' Products Analysis Axis and Categories Nodes
         Dim products_node As vTreeNode = VTreeViewUtil.AddNode(Computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.PRODUCTS,
                                                                PRODUCTS_CODE, _
                                                                analysis_axis_tv)
 
-        For Each product_category_node As TreeNode In productsFiltersTV.Nodes
-            VTreeViewUtil.AddNode(Computer.FILTERS_DECOMPOSITION_IDENTIFIER & product_category_node.Name, _
+        For Each product_category_node As vTreeNode In productsFiltersTV.Nodes
+            VTreeViewUtil.AddNode(Computer.FILTERS_DECOMPOSITION_IDENTIFIER & product_category_node.Value, _
                                   product_category_node.Text, _
                                   products_node)
         Next
@@ -340,20 +342,26 @@ Friend Class ControllingUI_2
 
 #Region "Interface"
 
-    Private Sub RefreshData(ByRef entityNode As TreeNode, _
+    Private Sub RefreshData(Optional ByRef entityNode As vTreeNode = Nothing, _
                             Optional ByRef useCache As Boolean = False)
 
         ' check that 1 version is selected at least 
 
         ' + attention => it seems that we can select folder versions !! 
         ' priority high !!! 
-
-        Controller.EntityNode = entityNode ' inverser to be put in controller  !! priority normal 
-        ' Computing
-        Controller.Compute()
+        If entityNode Is Nothing Then
+            If entitiesTV.Nodes.Count > 0 Then
+                entityNode = entitiesTV.Nodes(0)
+            Else
+                MsgBox("No Entity set up.")
+                Exit Sub
+            End If
+        Else
+            Controller.EntityNode = entityNode ' inverser to be put in controller  !! priority normal 
+            Controller.Compute()
+        End If
 
     End Sub
-
 
 #End Region
 
@@ -400,67 +408,34 @@ Friend Class ControllingUI_2
     Private Sub EntitiesTV_KeyDown(sender As Object, e As Windows.Forms.KeyEventArgs)
 
         If e.KeyCode = Keys.Enter Then
-            If Not entitiesTV.SelectedNode Is Nothing Then RefreshData(entitiesTV.SelectedNode)
+            If Not entitiesTV.SelectedNode Is Nothing Then
+                RefreshData(entitiesTV.SelectedNode)
+            Else
+                RefreshData()
+            End If
         End If
 
     End Sub
 
-    Private Sub entitiesTV_AfterCheck(ByVal sender As Object, ByVal e As TreeViewEventArgs)
+    Private Sub entitiesTV_AfterCheck(ByVal sender As Object, ByVal e As vTreeViewEventArgs)
 
-        For Each node As TreeNode In e.Node.Nodes
+        For Each node As vTreeNode In e.Node.Nodes
             node.Checked = e.Node.Checked
         Next
 
     End Sub
 
-    Private Sub EntitiesTV_NodeMouseClick(sender As Object, e As TreeNodeMouseClickEventArgs)
+    Private Sub EntitiesTV_NodeMouseClick(sender As Object, e As MouseEventArgs)
 
-        If e.Button = Windows.Forms.MouseButtons.Right Then right_clicked_node = e.Node
+        If e.Button = Windows.Forms.MouseButtons.Right  Then
+            right_clicked_node = entitiesTV.HitTest(e.Location)
+        End If
 
     End Sub
 
 
 #End Region
 
-    Private Sub entitiesCategory_AfterCheck(sender As Object, e As TreeViewEventArgs)
-
-        If IsUpdatingChildrenCategory = False Then
-            updateChildrenCheckedState(e.Node)
-            Controller.EntitiesCategoriesUpdate()
-        End If
-
-    End Sub
-
-    Private Sub clientsCategory_AfterCheck(sender As Object, e As TreeViewEventArgs)
-
-        If IsUpdatingChildrenCategory = False Then
-            updateChildrenCheckedState(e.Node)
-            Controller.ClientsCategoriesUpdate()
-        End If
-
-    End Sub
-
-    Private Sub productsCategory_AfterCheck(sender As Object, e As TreeViewEventArgs)
-
-        If IsUpdatingChildrenCategory = False Then
-            updateChildrenCheckedState(e.Node)
-            Controller.ProductsCategoriesUpdate()
-        End If
-
-    End Sub
-
-    Private Sub updateChildrenCheckedState(ByRef node As TreeNode)
-
-        If node.Parent Is Nothing Then
-            Dim state As Boolean = node.Checked
-            IsUpdatingChildrenCategory = True
-            For Each child_node As TreeNode In node.Nodes
-                child_node.Checked = state
-            Next
-            IsUpdatingChildrenCategory = False
-        End If
-
-    End Sub
 
     ' CurrenciesCLB check item event handler
     Private Sub currenciesCLB_ItemCheck(sender As Object, e As ItemCheckEventArgs)
@@ -783,11 +758,10 @@ Friend Class ControllingUI_2
 
     Private Sub Refresh_Click(sender As Object, e As EventArgs) Handles RefreshMenuBT.Click, RefreshMenuBT2.Click
 
-        If Not entitiesTV.SelectedNode Is Nothing Then
-            RefreshData(entitiesTV.SelectedNode)
+        If entitiesTV.SelectedNode Is Nothing Then
+            RefreshData()
         Else
-            MsgBox("An Entity level must be selected in order to refresh " + Chr(13) + Chr(13) + _
-                   " Please select an entity")
+            RefreshData(entitiesTV.SelectedNode)
         End If
 
     End Sub
@@ -915,7 +889,7 @@ Friend Class ControllingUI_2
 
     Private Sub SetAdjustmentsSelection(ByRef state As Boolean)
 
-        For Each node As TreeNode In adjustmentsTV.Nodes
+        For Each node As vTreeNode In adjustmentsTV.Nodes
             node.Checked = state
         Next
 
@@ -1109,7 +1083,7 @@ Friend Class ControllingUI_2
 #End Region
 
 
-#Region "Background Workers"
+#Region "ThreadSafe"
 
     Delegate Sub AfterDisplayAttemp_Delegate()
 
@@ -1131,6 +1105,28 @@ Friend Class ControllingUI_2
         End If
 
     End Sub
+
+    Delegate Sub DGVFormattingAttemp_Delegate()
+
+    Friend Sub FormatDGV_ThreadSafe()
+
+        If InvokeRequired Then
+            Dim MyDelegate As New DGVFormattingAttemp_Delegate(AddressOf FormatDGV_ThreadSafe)
+            Me.Invoke(MyDelegate, New Object() {})
+        Else
+            For Each tab_ As vTabPage In tabControl1.TabPages
+                Dim dgv As vDataGridView = tab_.Controls(0)
+                dgv.GroupingDefaultHeaderTextVisible = True
+                dgv.BackColor = Color.White
+                dgv.GridLinesDisplayMode = GridLinesDisplayMode.DISPLAY_NONE
+                dgv.ColumnsHierarchy.AutoResize(AutoResizeMode.FIT_ALL)
+                dgv.RowsHierarchy.CompactStyleRenderingEnabled = True
+                dgv.Refresh()
+            Next
+        End If
+
+    End Sub
+
 
 #End Region
 

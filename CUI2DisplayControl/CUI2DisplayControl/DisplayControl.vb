@@ -9,7 +9,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 12/08/2015
+' Last modified: 14/08/2015
 
 
 
@@ -87,6 +87,21 @@ Public Class DisplayControl
         AddHandler columnsDisplayList.ItemDragStarting, AddressOf columnsDisplayList_ItemDragStarting
         AddHandler rowsDisplayList.MouseLeave, AddressOf rowsDisplayList_MouseLeave
         AddHandler columnsDisplayList.MouseLeave, AddressOf columnsDisplayList_MouseLeave
+
+    End Sub
+
+    Public Function DimensionsListContainsItem(ByRef item As String) As Boolean
+
+        Return dimensionsList.Contains(item)
+
+    End Function
+
+    Public Sub AddItemToColumnsHierarchy(ByRef text As String,
+                                         ByRef id As String)
+
+        Dim item = columnsDisplayList.Items.Add(text)
+        item.Value = id
+        dimensionsList.Add(id)
 
     End Sub
 
@@ -237,6 +252,7 @@ Public Class DisplayControl
             If dimensionsList.Contains(dropNode.Value) = False Then
                 Dim item = selectedListBox.Items.Add(dropNode.Text)
                 item.Value = dropNode.Value
+                dimensionsList.Add(dropNode.Value)
             End If
         End If
 
