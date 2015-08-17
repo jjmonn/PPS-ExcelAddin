@@ -86,17 +86,17 @@ Partial Class DisplayControl
         'Label2
         '
         Me.Label2.AutoSize = True
-        Me.Label2.Dock = System.Windows.Forms.DockStyle.Bottom
+        Me.Label2.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Label2.ForeColor = System.Drawing.Color.Black
-        Me.Label2.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.Label2.ImageAlign = System.Drawing.ContentAlignment.BottomLeft
         Me.Label2.ImageKey = "table_selection_row.ico"
         Me.Label2.ImageList = Me.ImageList2
-        Me.Label2.Location = New System.Drawing.Point(3, 134)
+        Me.Label2.Location = New System.Drawing.Point(3, 20)
         Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(125, 15)
+        Me.Label2.Size = New System.Drawing.Size(125, 129)
         Me.Label2.TabIndex = 4
         Me.Label2.Text = "Rows Labels"
-        Me.Label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.Label2.TextAlign = System.Drawing.ContentAlignment.BottomRight
         '
         'ImageList2
         '
@@ -109,14 +109,14 @@ Partial Class DisplayControl
         'Label1
         '
         Me.Label1.AutoSize = True
-        Me.Label1.Dock = System.Windows.Forms.DockStyle.Bottom
+        Me.Label1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Label1.ForeColor = System.Drawing.Color.Black
         Me.Label1.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
         Me.Label1.ImageKey = "table_selection_column.ico"
         Me.Label1.ImageList = Me.ImageList2
-        Me.Label1.Location = New System.Drawing.Point(134, 5)
+        Me.Label1.Location = New System.Drawing.Point(134, 0)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(125, 15)
+        Me.Label1.Size = New System.Drawing.Size(125, 20)
         Me.Label1.TabIndex = 3
         Me.Label1.Text = "Columns Labels"
         Me.Label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight

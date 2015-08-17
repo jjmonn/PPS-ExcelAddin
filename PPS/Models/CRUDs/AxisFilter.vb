@@ -8,7 +8,7 @@ Imports VIBlend.WinForms.Controls
 '
 ' Author: Julien Monnereau
 ' Created: 27/07/2015
-' Modified: 15/08/2015
+' Modified: 17/08/2015
 
 
 Friend Class AxisFilter
@@ -54,25 +54,47 @@ Friend Class AxisFilter
     End Sub
 
     Friend Shared Sub LoadFiltersValues(ByRef filterNode As TreeNode, _
-                                        ByRef FvTvNode As TreeNode)
+                                        ByRef FvTvNode As TreeNode, _
+                                        Optional ByVal firstLevelFlag As Boolean = True)
 
         Dim filtersValuesIdDict = GlobalVariables.FiltersValues.GetFiltervaluesDictionary(CInt(filterNode.Name), _
                                                                                           ID_VARIABLE, NAME_VARIABLE)
         For Each filterValueId As UInt32 In filtersValuesIdDict.Keys
-            FvTvNode.Nodes.Add(filterValueId, filtersValuesIdDict(filterValueId))
-            If filterNode.Nodes.Count > 0 Then LoadFiltersValues(filterNode.Nodes(0), FvTvNode)
+            If firstLevelFlag = True Then
+
+                FvTvNode.Nodes.Add(filterValueId, filtersValuesIdDict(filterValueId))
+                If filterNode.Nodes.Count > 0 Then LoadFiltersValues(filterNode.Nodes(0), FvTvNode)
+
+            ElseIf GlobalVariables.FiltersValues.filtervalues_hash(filterValueId)(PARENT_FILTER_VALUE_ID_VARIABLE) = FvTvNode.Name Then
+
+                FvTvNode.Nodes.Add(filterValueId, filtersValuesIdDict(filterValueId))
+                If filterNode.Nodes.Count > 0 Then LoadFiltersValues(filterNode.Nodes(0), FvTvNode)
+
+            End If
         Next
 
     End Sub
 
     Friend Shared Sub LoadFiltersValues(ByRef filterNode As vTreeNode, _
-                                       ByRef FvTvNode As vTreeNode)
+                                        ByRef FvTvNode As vTreeNode, _
+                                        Optional ByVal firstLevelFlag As Boolean = True)
 
         Dim filtersValuesIdDict = GlobalVariables.FiltersValues.GetFiltervaluesDictionary(CInt(filterNode.Value), _
                                                                                           ID_VARIABLE, NAME_VARIABLE)
         For Each filterValueId As UInt32 In filtersValuesIdDict.Keys
-            VTreeViewUtil.AddNode(filterValueId, filtersValuesIdDict(filterValueId), FvTvNode)
-            If filterNode.Nodes.Count > 0 Then LoadFiltersValues(filterNode.Nodes(0), FvTvNode)
+            If firstLevelFlag = True Then
+
+                Dim valueNode As vTreeNode = VTreeViewUtil.AddNode(filterValueId, filtersValuesIdDict(filterValueId), FvTvNode)
+                If filterNode.Nodes.Count > 0 Then
+                    LoadFiltersValues(filterNode.Nodes(0), valueNode, False)
+                End If
+
+            ElseIf GlobalVariables.FiltersValues.filtervalues_hash(filterValueId)(PARENT_FILTER_VALUE_ID_VARIABLE) = FvTvNode.Value Then
+                Dim valueNode As vTreeNode = VTreeViewUtil.AddNode(filterValueId, filtersValuesIdDict(filterValueId), FvTvNode)
+                If filterNode.Nodes.Count > 0 Then
+                    LoadFiltersValues(filterNode.Nodes(0), valueNode, False)
+                End If
+            End If
         Next
 
     End Sub

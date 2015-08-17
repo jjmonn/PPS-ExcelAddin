@@ -95,9 +95,8 @@ Public Class VTreeViewUtil
 
     End Sub
 
- 
     Public Shared Sub CopySubNodes(ByRef or_node As vTreeNode, _
-                         ByRef des_node As vTreeNode)
+                                   ByRef des_node As Object)
 
         Dim subNode As vTreeNode = VTreeViewUtil.AddNode(or_node.Value, or_node.Text, des_node)
         For Each node In or_node.Nodes
@@ -122,11 +121,24 @@ Public Class VTreeViewUtil
 
         Dim tmpList As New List(Of Int32)
         For Each node As vTreeNode In TV.GetNodes
-            If node.Checked = True Then tmpList.Add(CInt(node.Value))
+            If node.Checked = Windows.Forms.CheckState.Checked Then tmpList.Add(CInt(node.Value))
         Next
         Return tmpList
 
     End Function
+
+    Public Shared Sub CheckStateAllNodes(ByRef TV As vTreeView, ByRef state As Boolean)
+
+        For Each node As vTreeNode In TV.GetNodes
+            If state = True Then
+                node.Checked = Windows.Forms.CheckState.Checked
+            Else
+                node.Checked = Windows.Forms.CheckState.Unchecked
+            End If
+        Next
+
+    End Sub
+
 
 #Region "TV loading"
 
@@ -179,7 +191,6 @@ Public Class VTreeViewUtil
                                            items_attributes(orphan_id)(NAME_VARIABLE),
                                            parent_node, _
                                            image_index)
-
                     solved_orphans_list.Add(orphan_id)
                 End If
             End If
@@ -240,7 +251,6 @@ Public Class VTreeViewUtil
                                            items_attributes(orphan_id)(NAME_VARIABLE),
                                            parent_node, _
                                            image_index)
-
                     solved_orphans_list.Add(orphan_id)
                 End If
             End If
@@ -251,7 +261,6 @@ Public Class VTreeViewUtil
                                                                                         solved_orphans_list)
 
     End Sub
-
 
 #End Region
 

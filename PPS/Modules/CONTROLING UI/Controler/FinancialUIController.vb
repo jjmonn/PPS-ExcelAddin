@@ -3,14 +3,14 @@
 ' Controlling User iterface: Compurte/ Display data and consolidated data
 '
 ' To do:
-'      - 
+'      - Keep track of hidden hierarchy items and provide right click option to hide/ unhide 
 '   
 '
 ' Known bugs:
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 15/08/2015
+' Last modified: 17/08/2015
 
 
 Imports System.Windows.Forms
@@ -125,24 +125,27 @@ Friend Class FinancialUIController
         columnsHierarchyNode.Nodes.Clear()
 
         ' Versions init
-        Dim versionIDs() As Int32 = VTreeViewUtil.GetCheckedNodesIds(View.versionsTV).ToArray
+        Dim versionIDs() As Int32 = VTreeViewUtil.GetCheckedNodesIds(View.leftPane_control.versionsTV).ToArray
         versionsDict.Clear()
+        ' ' versions presence check before launching the 
+        ' priority high
+        ' + take off folder versions from list
         For Each version_Id As Int32 In versionIDs
-            Dim versionNode As vTreeNode = VTreeViewUtil.FindNode(View.versionsTV, version_Id)
+            Dim versionNode As vTreeNode = VTreeViewUtil.FindNode(View.leftPane_control.versionsTV, version_Id)
             versionsDict.Add(versionNode.Value, versionNode.Text)
         Next
 
         If versionsDict.Count > 1 _
-        AndAlso View.display_control.DimensionsListContainsItem(Computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.VERSIONS) = False Then
-            View.display_control.AddItemToColumnsHierarchy(ControllingUI_2.VERSIONS_CODE, _
+        AndAlso View.rightPane_Control.DimensionsListContainsItem(Computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.VERSIONS) = False Then
+            View.rightPane_Control.AddItemToColumnsHierarchy(ControllingUI_2.VERSIONS_CODE, _
                                                            Computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.VERSIONS)
         End If
 
         initDisplayFlag = False
-        For Each item In View.display_control.rowsDisplayList.Items
+        For Each item In View.rightPane_Control.rowsDisplayList.Items
             VTreeViewUtil.AddNode(item.Value, item.Text, rowsHierarchyNode)
         Next
-        For Each item In View.display_control.columnsDisplayList.Items
+        For Each item In View.rightPane_Control.columnsDisplayList.Items
             VTreeViewUtil.AddNode(item.Value, item.Text, columnsHierarchyNode)
         Next
 
@@ -196,14 +199,13 @@ Friend Class FinancialUIController
 
         ' Redraw hierarchy Items
         InitDisplay()
+        FillUIHeader()
 
         ' Launch waiting CP
         View.CP = New CircularProgressUI(System.Drawing.Color.Blue, "Computing")
         View.CP.Show()
 
-        ' -> fill UI header not here !! priority normal
-        '  FillUIHeader()
-
+        
     End Sub
 
     Private Function CheckCache(ByRef currencyId As Int32, _
@@ -213,7 +215,7 @@ Friend Class FinancialUIController
                                 ByRef axisFilters As Dictionary(Of Int32, List(Of Int32))) As Boolean
 
         ' entityId => included in current scope
-        Dim cacheEntityNode As vTreeNode = VTreeViewUtil.FindNode(View.entitiesTV, cacheEntityID)
+        Dim cacheEntityNode As vTreeNode = VTreeViewUtil.FindNode(View.leftPane_control.entitiesTV, cacheEntityID)
         If VTreeViewUtil.FindNode(cacheEntityNode, EntityNode.value) Is Nothing Then Return False
         If cacheCurrencyId <> currencyId Then Return False
         For Each versionId In versionIds
@@ -333,7 +335,7 @@ Friend Class FinancialUIController
 
                 Case Computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.VERSIONS
                     For Each version_id In versionsDict.Keys
-                        node.Nodes.Add(version_id, versionsDict(version_id))
+                        VTreeViewUtil.AddNode(version_id, versionsDict(version_id), node)
                     Next
                     If versionsDict.Count = 2 Then
                         VTreeViewUtil.AddNode(versionsDict.Keys(0) & Computer.TOKEN_SEPARATOR & versionsDict.Keys(1), _
@@ -347,6 +349,7 @@ Friend Class FinancialUIController
                     For Each yearId As Int32 In GlobalVariables.Versions.GetYears(versionsDict)
                         VTreeViewUtil.AddNode(Computer.YEAR_PERIOD_IDENTIFIER & yearId, Format(Date.FromOADate(yearId), "yyyy"), node)
                     Next
+                    View.leftPane_control.SetupPeriodsTV(node)
 
                 Case Computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.MONTHS
                     Dim monthsDict = GlobalVariables.Versions.GetMonths(versionsDict)
@@ -355,6 +358,7 @@ Friend Class FinancialUIController
                             VTreeViewUtil.AddNode(Computer.MONTH_PERIOD_IDENTIFIER & monthId, Format(Date.FromOADate(monthId), "MMM yyyy"), node)
                         Next
                     Next
+                    View.leftPane_control.SetupPeriodsTV(node)
 
                 Case Computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.YMONTHS
                     Dim monthsDict = GlobalVariables.Versions.GetMonths(versionsDict)
@@ -366,6 +370,7 @@ Friend Class FinancialUIController
                             VTreeViewUtil.AddNode(Computer.MONTH_PERIOD_IDENTIFIER & monthId, Format(Date.FromOADate(monthId), "MMM yyyy"), yearNode)
                         Next
                     Next
+                    View.leftPane_control.SetupPeriodsTV(node)
 
                 Case Else
                     For Each value_node As vTreeNode In VTreeViewUtil.FindNode(filtersNodes, node.Value).Nodes
@@ -643,7 +648,7 @@ Friend Class FinancialUIController
 #End Region
 
 
-#Region "Versions Comparison"
+#Region "Versions Comparison and Periods Display"
 
     Private Sub HideHiearchyItemIfVComp(ByRef item As HierarchyItem, _
                                        ByRef dimensionNode As vTreeNode, _
@@ -700,36 +705,64 @@ Friend Class FinancialUIController
 
     End Sub
 
+    Friend Sub PeriodsSelectionFilter(ByRef periodsSelectionDict As Dictionary(Of String, Boolean))
+
+        For Each tab_ As vTabPage In View.tabControl1.TabPages
+            Dim DGV As vDataGridView = tab_.Controls(0)
+
+            For Each col As HierarchyItem In DGV.ColumnsHierarchy.Items
+                FilterSubHierarchyItems(col, periodsSelectionDict)
+            Next
+            For Each row As HierarchyItem In DGV.RowsHierarchy.Items
+                FilterSubHierarchyItems(row, periodsSelectionDict)
+            Next
+        Next
+
+    End Sub
+     
+    Private Sub FilterSubHierarchyItems(ByRef item As HierarchyItem, _
+                                        ByRef periodsSelectionDict As Dictionary(Of String, Boolean))
+
+        If periodsSelectionDict.Keys.Contains(item.Caption) Then
+            If periodsSelectionDict(item.Caption) = False Then
+                item.Hidden = True
+            Else
+                item.Hidden = False
+            End If
+        End If
+        For Each subItem As HierarchyItem In item.Items
+            FilterSubHierarchyItems(subItem, periodsSelectionDict)
+        Next
+
+    End Sub
+
 #End Region
 
 
 #Region "Utilities"
 
-    Private Sub CopySubNodes(ByRef or_node As TreeNode, _
-                             ByRef des_node As TreeNode)
+    'Private Sub CopySubNodes(ByRef or_node As TreeNode, _
+    '                         ByRef des_node As TreeNode)
 
-        Dim subNode As TreeNode = des_node.Nodes.Add(or_node.Name, or_node.Text)
-        For Each node In or_node.Nodes
-            CopySubNodes(node, subNode)
-        Next
+    '    Dim subNode As TreeNode = des_node.Nodes.Add(or_node.Name, or_node.Text)
+    '    For Each node In or_node.Nodes
+    '        CopySubNodes(node, subNode)
+    '    Next
 
-    End Sub
+    'End Sub
 
- 
     Private Sub FillUIHeader()
 
         ' View.PBar.EndProgress()
 
         ' Entities Textbox
         View.EntityTB.Text = EntityNode.Text
-        View.EntityTB2.Text = EntityNode.Text
-        View.EntityTB3.Text = EntityNode.Text
 
         ' Currencies textbox
-        View.CurrencyTB.Text = View.CurrenciesCLB.CheckedItems(0)
-        View.CurrencyTB2.Text = View.CurrencyTB.Text
-        View.CurrencyTB3.Text = View.CurrencyTB.Text
 
+        ' follow check changed in view
+        '    View.CurrencyTB.Text = View.selectedCurrencyItem.Text
+   
         ' Versions Textbox
         ' Get versions name from ids
         'Dim versions_ids(categories_values_dict(VERSIONS_CODE).Keys.Count) As String
@@ -739,9 +772,8 @@ Friend Class FinancialUIController
         '    i = i + 1
         'Next
         ' fill textbox
-        '      View.VersionTB.Text = String.Join(" ; ", versions_ids)
-        View.VersionTB2.Text = View.VersionTB.Text
-        View.VersionTB3.Text = View.VersionTB.Text
+        View.VersionTB.Text = String.Join(" ; ", versionsDict.Values)
+    
 
     End Sub
 

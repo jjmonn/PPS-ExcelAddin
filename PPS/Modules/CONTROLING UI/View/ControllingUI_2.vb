@@ -9,7 +9,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 14/08/2015
+' Last modified: 17/08/2015
 
 
 Imports System.Windows.Forms
@@ -23,7 +23,6 @@ Imports System.Collections.Generic
 Imports System.Collections
 Imports VIBlend.WinForms.DataGridView.Filters
 Imports System.Windows.Forms.DataVisualization.Charting
-Imports PPSFBIControls
 Imports System.ComponentModel
 Imports VIBlend.WinForms.Controls
 
@@ -38,40 +37,28 @@ Friend Class ControllingUI_2
     Private Controller As FinancialUIController
     Friend DGVUTIL As New DataGridViewsUtil
     '  Friend PBar As New ProgressBarControl
-    Friend display_control As DisplayControl
+    Friend rightPane_Control As CUI2RightPane
+    Friend leftPane_control As CUI2LeftPane
     Private leftSplitContainer As SplitContainer
     Private rightSplitContainer As SplitContainer
     Private Accounts As New Account
     Friend CP As CircularProgressUI
+    Private leftPaneExpandBT As vButton
+    Private rightPaneExpandBT As vButton
 
 #End Region
 
 #Region "Variables"
 
+    Friend selectedCurrencyItem As ListItem = Nothing
     Private right_clicked_node As vTreeNode
     Private current_DGV_cell As GridCell
     Private rows_list_dic As New Dictionary(Of String, List(Of HierarchyItem))
     Private columns_list_dic As New Dictionary(Of String, List(Of HierarchyItem))
     Private row_index As Int32
     Private column_index As Int32
-
-
-#End Region
-
-#Region "Treeviews"
-
     Friend accountsTV As New vTreeView
-    Friend entitiesTV As New vTreeView
-    Friend entitiesFiltersTV As New vTreeView
-    Friend adjustmentsTV As New vTreeView
-    Friend adjustmentsFiltersTV As New vTreeView
-    Friend clientsTV As New vTreeView
-    Friend clientsFiltersTV As New vTreeView
-    Friend productsTV As New vTreeView
-    Friend productsFiltersTV As New vTreeView
-    Private periodsCLB As New CheckedListBox
-    Friend versionsTV As New vTreeView
-    Friend CurrenciesCLB As New CheckedListBox
+
 
     Private SP1Distance As Single = 230
     Private SP2Distance As Single = 900
@@ -83,19 +70,8 @@ Friend Class ControllingUI_2
     Private isUpdatingPeriodsCheckList As Boolean
     Private isVersionComparisonDisplayed As Boolean
     Private IsUpdatingChildrenCategory As Boolean
-
-    Private EntitiesFlag As Boolean
-    Private EntitiesCategoriesFlag As Boolean
-    Private ClientsFlag As Boolean
-    Private ClientsCategoriesFlag As Boolean
-    Private productsFlag As Boolean
-    Private productsCategoriesFlag As Boolean
-
-    Private adjustments_flag As Boolean
-    Private CurrenciesFlag As Boolean
-    Private VersionsFlag As Boolean
-    Private PeriodsFlag As Boolean
-    Private displayControlFlag As Boolean = True
+    Private displayControlFlag As Boolean
+    Private leftPaneExpandedFlag As Boolean
 
 #End Region
 
@@ -132,11 +108,9 @@ Friend Class ControllingUI_2
         InitializeComponent()
 
         ' Add any initialization after the InitializeComponent() call. 
+        LeftPaneSetup()
         Controller = New FinancialUIController(Me)
-        LoadTrees()
-
-        periodsCLB.Dock = DockStyle.Fill
-        periodsCLB.CheckOnClick = True
+        GlobalVariables.Accounts.LoadAccountsTV(accountsTV)
 
         ' Init TabControl
         For Each node As vTreeNode In accountsTV.Nodes
@@ -147,103 +121,44 @@ Friend Class ControllingUI_2
         Next
         InitializeChartsTab()
         DimensionsDisplayPaneSetup()
-        TVTableLayout.Controls.Add(periodsCLB, 0, 1)
-        HideAllMenusItems()
-        CollapseSP1Pane1()
-        DisplayFirstTreeOnly()          ' TV Table Layout
 
-        Dim vNode As vTreeNode = VTreeViewUtil.FindNode(versionsTV, My.Settings.version_id)
+    End Sub
+
+    Private Sub LeftPaneSetup()
+
+        leftPane_control = New CUI2LeftPane
+        Me.SplitContainer1.Panel1.Controls.Add(leftPane_control)
+        leftPane_control.Dock = DockStyle.Fill
+
+        leftPaneExpandBT = New vButton
+        leftPaneExpandBT.Width = 19
+        leftPaneExpandBT.Height = 19
+        leftPaneExpandBT.ImageList = expansionIL
+        leftPaneExpandBT.ImageIndex = 2
+        leftPaneExpandBT.Text = ""
+        leftPaneExpandBT.FlatStyle = FlatStyle.Flat
+        leftPaneExpandBT.FlatAppearance.BorderSize = 0
+        leftPaneExpandBT.PaintBorder = False
+        leftPaneExpandBT.ImageAlign = Drawing.ContentAlignment.MiddleCenter
+        leftPaneExpandBT.Visible = False
+        Me.SplitContainer1.Panel1.Controls.Add(leftPaneExpandBT)
+
+        AddHandler leftPane_control.entitiesTV.KeyDown, AddressOf EntitiesTV_KeyDown
+        AddHandler leftPane_control.entitiesTV.MouseClick, AddressOf EntitiesTV_NodeMouseClick
+        AddHandler leftPane_control.periodsTV.NodeChecked, AddressOf periodsTV_ItemCheck
+        AddHandler leftPane_control.currenciesCLB.ItemChecked, AddressOf CurrenciesCLB_ItemChecked
+        AddHandler leftPane_control.PanelCollapseBT.Click, AddressOf CollapseSP1Pane1
+        AddHandler leftPaneExpandBT.Click, AddressOf ExpandSP1Pane1
+
+        leftPane_control.entitiesTV.ContextMenuStrip = entitiesRightClickMenu
+        leftPane_control.adjustmentsTV.ContextMenuStrip = AdjustmentsRCM
+        leftPane_control.periodsTV.ContextMenuStrip = periodsRightClickMenu
+
+        Dim vNode As vTreeNode = VTreeViewUtil.FindNode(leftPane_control.versionsTV, My.Settings.version_id)
         If Not vNode Is Nothing Then
-            vNode.Checked = CheckState.Checked
+            vNode.Checked = Windows.Forms.CheckState.Checked
         End If
 
-    End Sub
-
-    Private Sub LoadTrees()
-
-        ' controller actions !!!!!! priority high
-
-        GlobalVariables.Entities.LoadEntitiesTV(entitiesTV)
-        GlobalVariables.Clients.LoadClientsTree(clientsTV)
-        GlobalVariables.Products.LoadProductsTree(productsTV)
-        GlobalVariables.Accounts.LoadAccountsTV(accountsTV)
-        GlobalVariables.Adjustments.LoadAdjustmentsTree(adjustmentsTV)
-
-        AxisFilter.LoadFvTv(entitiesFiltersTV, GlobalEnums.AnalysisAxis.ENTITIES)
-        AxisFilter.LoadFvTv(clientsFiltersTV, GlobalEnums.AnalysisAxis.CLIENTS)
-        AxisFilter.LoadFvTv(productsFiltersTV, GlobalEnums.AnalysisAxis.PRODUCTS)
-        AxisFilter.LoadFvTv(adjustmentsFiltersTV, GlobalEnums.AnalysisAxis.ADJUSTMENTS)
-
-        GlobalVariables.Versions.LoadVersionsTV(versionsTV)
-
-        TVSetup(entitiesTV, 1, EntitiesTVImageList)
-        TVSetup(clientsTV, 1)
-        TVSetup(productsTV, 1)
-        TVSetup(adjustmentsTV, 1)
-        TVSetup(versionsTV, 1, VersionsIL)
-        TVSetup(entitiesFiltersTV, 2, CategoriesIL)
-        TVSetup(clientsFiltersTV, 2, CategoriesIL)
-        TVSetup(productsFiltersTV, 2, CategoriesIL)
-
-        VTreeViewUtil.InitTVFormat(entitiesTV)
-        VTreeViewUtil.InitTVFormat(clientsTV)
-        VTreeViewUtil.InitTVFormat(productsTV)
-        VTreeViewUtil.InitTVFormat(adjustmentsTV)
-        VTreeViewUtil.InitTVFormat(versionsTV)
-        VTreeViewUtil.InitTVFormat(entitiesFiltersTV)
-        VTreeViewUtil.InitTVFormat(clientsFiltersTV)
-        VTreeViewUtil.InitTVFormat(productsFiltersTV)
-      
-
-        VTreeViewUtil.SeEntitiesTVImageIndexes(entitiesTV)
-        LoadCurrencies()
-
-        ' Add TVs events for categories clients / products !!
-        AddHandler entitiesTV.MouseDoubleClick, AddressOf EntitiesTV_NodeMouseDoubleClick
-        AddHandler entitiesTV.KeyDown, AddressOf EntitiesTV_KeyDown
-        AddHandler entitiesTV.NodeChecked, AddressOf entitiesTV_AfterCheck
-        AddHandler entitiesTV.MouseClick, AddressOf EntitiesTV_NodeMouseClick
-        AddHandler CurrenciesCLB.ItemCheck, AddressOf currenciesCLB_ItemCheck
-        AddHandler periodsCLB.ItemCheck, AddressOf periodsCLB_ItemCheck
-
-        entitiesTV.ContextMenuStrip = entitiesRightClickMenu
-        adjustmentsTV.ContextMenuStrip = AdjustmentsRCM
-        periodsCLB.ContextMenuStrip = periodsRightClickMenu
-
-    End Sub
-
-    Private Sub TVSetup(ByRef TV As Object, _
-                        ByRef row_index As Int32, _
-                        Optional ByRef image_list As ImageList = Nothing)
-
-        TVTableLayout.Controls.Add(TV, 0, row_index)
-        TV.Dock = DockStyle.Fill
-        TV.CheckBoxes = True
-        If Not image_list Is Nothing Then TV.ImageList = image_list
-
-    End Sub
-
-    Private Sub LoadCurrencies()
-
-        TVTableLayout.Controls.Add(CurrenciesCLB, 0, 1)
-        CurrenciesCLB.Dock = DockStyle.Fill
-        CurrenciesCLB.CheckOnClick = True
-        CurrenciesCLB.SelectionMode = SelectionMode.One
-
-        Dim currenciesList As New List(Of UInt32)
-        ' STUB !!!!!!!!!!
-        ' GlobalVariables.Currencies.currencies_hash.Keys
-        currenciesList.Add(1) '
-        currenciesList.Add(2)
-        currenciesList.Add(3)
-        ' use name property to set id !!! 
-        ' -------------------------- priority high !!!!!!!
-
-        For Each currency_ As String In currenciesList
-            CurrenciesCLB.Items.Add(currency_, False)
-        Next
-        CurrenciesCLB.SetItemChecked(CurrenciesCLB.FindString(My.Settings.mainCurrency), True)
-        CurrenciesCLB.SelectedItem = My.Settings.mainCurrency
 
     End Sub
 
@@ -283,18 +198,19 @@ Friend Class ControllingUI_2
 
     Private Sub DimensionsDisplayPaneSetup()
 
-        ' This initialization should go into controller ?!!
+        ' This initialization should go into right pane !!!!!!!!!!
+        ' ///////////////////////////////////////////
         ' priority high
         Dim analysis_axis_tv As New vTreeView
         VTreeViewUtil.InitTVFormat(analysis_axis_tv)
-         VTreeViewUtil.AddNode(Computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.ACCOUNTS, ACCOUNTS_CODE, analysis_axis_tv)
+        VTreeViewUtil.AddNode(Computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.ACCOUNTS, ACCOUNTS_CODE, analysis_axis_tv)
 
         ' Entities Analysis Axis and Categories Nodes
         Dim entities_node As vTreeNode = VTreeViewUtil.AddNode(Computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.ENTITIES, _
                                                                ENTITIES_CODE, _
                                                                analysis_axis_tv)
 
-        For Each entity_node As vTreeNode In entitiesFiltersTV.Nodes
+        For Each entity_node As vTreeNode In leftPane_control.entitiesFiltersTV.Nodes
             VTreeViewUtil.AddNode(Computer.FILTERS_DECOMPOSITION_IDENTIFIER & entity_node.Value, _
                                   entity_node.Text, _
                                   entities_node)
@@ -306,7 +222,7 @@ Friend Class ControllingUI_2
 
         ' Clients Analysis Axis and Categories Nodes
         Dim clientsNode As vTreeNode = VTreeViewUtil.AddNode(Computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.CLIENTS, CLIENTS_CODE, analysis_axis_tv)
-        For Each client_category_node As vTreeNode In clientsFiltersTV.Nodes
+        For Each client_category_node As vTreeNode In leftPane_control.clientsFiltersTV.Nodes
             VTreeViewUtil.AddNode(Computer.FILTERS_DECOMPOSITION_IDENTIFIER & client_category_node.Value, _
                                   client_category_node.Text, _
                                   clientsNode)
@@ -317,7 +233,7 @@ Friend Class ControllingUI_2
                                                                PRODUCTS_CODE, _
                                                                analysis_axis_tv)
 
-        For Each product_category_node As vTreeNode In productsFiltersTV.Nodes
+        For Each product_category_node As vTreeNode In leftPane_control.productsFiltersTV.Nodes
             VTreeViewUtil.AddNode(Computer.FILTERS_DECOMPOSITION_IDENTIFIER & product_category_node.Value, _
                                   product_category_node.Text, _
                                   products_node)
@@ -326,16 +242,34 @@ Friend Class ControllingUI_2
         VTreeViewUtil.AddNode(Computer.AXIS_DECOMPOSITION_IDENTIFIER _
                               & GlobalEnums.AnalysisAxis.ADJUSTMENTS, _
                               ADJUSTMENT_CODE, analysis_axis_tv)
-      
-        display_control = New DisplayControl(analysis_axis_tv)
-        SplitContainer2.Panel2.Controls.Add(display_control)
-        display_control.Dock = DockStyle.Fill
 
-        AddHandler display_control.RefreshOrder, AddressOf RefreshFromRightPane
-        AddHandler display_control.HideControl, AddressOf HideRightPane
+        rightPane_Control = New CUI2RightPane(analysis_axis_tv)
+        SplitContainer2.Panel2.Controls.Add(rightPane_Control)
+        rightPane_Control.Dock = DockStyle.Fill
+
+        rightPane_Control.CollapseRightPaneBT.ImageList = expansionIL
+        rightPane_Control.CollapseRightPaneBT.ImageKey = "expand_right"
+
+        AddHandler rightPane_Control.UpdateBT.Click, AddressOf RefreshFromRightPane
+        AddHandler rightPane_Control.CollapseRightPaneBT.Click, AddressOf CollapseSP2Pane2
+
+        ' go into 
+
+        rightPaneExpandBT = New vButton
+        rightPaneExpandBT.Width = 19
+        rightPaneExpandBT.Height = 19
+        rightPaneExpandBT.ImageList = expansionIL
+        rightPaneExpandBT.Margin = New Padding(3, 5, 3, 3)
+        rightPaneExpandBT.ImageKey = "expand_left"
+        rightPaneExpandBT.Text = ""
+        rightPaneExpandBT.FlatStyle = FlatStyle.Flat
+        rightPaneExpandBT.PaintBorder = False
+        ' rightPaneExpandBT.ImageAlign = Drawing.ContentAlignment.MiddleCenter
+        rightPaneExpandBT.Visible = False
+        Me.SplitContainer2.Panel2.Controls.Add(rightPaneExpandBT)
+        AddHandler rightPaneExpandBT.Click, AddressOf ExpandSP2Pane2
 
     End Sub
-
 
 #End Region
 
@@ -350,8 +284,8 @@ Friend Class ControllingUI_2
         ' + attention => it seems that we can select folder versions !! 
         ' priority high !!! 
         If entityNode Is Nothing Then
-            If entitiesTV.Nodes.Count > 0 Then
-                entityNode = entitiesTV.Nodes(0)
+            If leftPane_control.entitiesTV.Nodes.Count > 0 Then
+                entityNode = leftPane_control.entitiesTV.Nodes(0)
             Else
                 MsgBox("No Entity set up.")
                 Exit Sub
@@ -363,33 +297,17 @@ Friend Class ControllingUI_2
 
     End Sub
 
-#End Region
+    Private Sub RefreshFromRightPane()
 
-
-#Region "Formatting"
-
-    Private Sub FormatVIEWDataDisplay()
-
-        ' to be reimplemented priority high !!!!!!
-
-        'DGVUTIL.FormatDGVs(TabControl1, CurrencyTB.Text)
-        'If Not IsNothing(TabControl1.TabPages(0)) Then TabControl1.SelectedTab = TabControl1.TabPages(0)
-        'Me.Update()
-
-    End Sub
-
-    Private Sub InitializeMenuPeriodsCB()
-
-        periodsCLB.Items.Clear()
-        Dim dgv As vDataGridView = TabControl1.TabPages(0).Controls(0)
-        Dim i As Int32
-        isUpdatingPeriodsCheckList = True
-        For Each item As HierarchyItem In dgv.ColumnsHierarchy.Items
-            periodsCLB.Items.Add(item.Caption)
-            periodsCLB.SetItemChecked(i, True)
-            i = i + 1
-        Next
-        isUpdatingPeriodsCheckList = False
+        If Not Controller.EntityNode Is Nothing Then
+            RefreshData(Controller.EntityNode, True)
+        Else
+            If Not leftPane_control.entitiesTV.SelectedNode Is Nothing Then
+                RefreshData(leftPane_control.entitiesTV.SelectedNode, True)
+            Else
+                MsgBox("Please select an Entity to refresh")
+            End If
+        End If
 
     End Sub
 
@@ -398,18 +316,11 @@ Friend Class ControllingUI_2
 
 #Region "Events"
 
-#Region "Entities TreeView"
-
-    Private Sub EntitiesTV_NodeMouseDoubleClick(sender As Object, e As TreeNodeMouseClickEventArgs)
-
-
-    End Sub
-
     Private Sub EntitiesTV_KeyDown(sender As Object, e As Windows.Forms.KeyEventArgs)
 
         If e.KeyCode = Keys.Enter Then
-            If Not entitiesTV.SelectedNode Is Nothing Then
-                RefreshData(entitiesTV.SelectedNode)
+            If Not leftPane_control.entitiesTV.SelectedNode Is Nothing Then
+                RefreshData(leftPane_control.entitiesTV.SelectedNode)
             Else
                 RefreshData()
             End If
@@ -417,48 +328,28 @@ Friend Class ControllingUI_2
 
     End Sub
 
-    Private Sub entitiesTV_AfterCheck(ByVal sender As Object, ByVal e As vTreeViewEventArgs)
-
-        For Each node As vTreeNode In e.Node.Nodes
-            node.Checked = e.Node.Checked
-        Next
-
-    End Sub
-
     Private Sub EntitiesTV_NodeMouseClick(sender As Object, e As MouseEventArgs)
 
-        If e.Button = Windows.Forms.MouseButtons.Right  Then
-            right_clicked_node = entitiesTV.HitTest(e.Location)
+        If e.Button = Windows.Forms.MouseButtons.Right Then
+            right_clicked_node = leftPane_control.entitiesTV.HitTest(e.Location)
         End If
 
     End Sub
 
-
-#End Region
-
-
-    ' CurrenciesCLB check item event handler
-    Private Sub currenciesCLB_ItemCheck(sender As Object, e As ItemCheckEventArgs)
-
-        For i As Int32 = 0 To CurrenciesCLB.Items.Count - 1
-            If i <> e.Index Then CurrenciesCLB.SetItemChecked(i, False)
-        Next
-
-    End Sub
-
     ' Periods filter when unchecked
-    Private Sub periodsCLB_ItemCheck(sender As Object, e As ItemCheckEventArgs)
+    Private Sub periodsTV_ItemCheck(sender As Object, e As vTreeViewEventArgs)
 
         If isUpdatingPeriodsCheckList = False Then
-            Dim selectedList As New List(Of Int32)
-            For i = 0 To periodsCLB.Items.Count - 1
-                If i = e.Index Then
-                    If e.NewValue = CheckState.Checked Then selectedList.Add(i)
+            Dim periodSelectionDict As New Dictionary(Of String, Boolean)
+
+            For Each node As vTreeNode In leftPane_control.periodsTV.GetNodes
+                If node.Checked = CheckState.Checked Then
+                    periodSelectionDict.Add(node.Text, True)
                 Else
-                    If periodsCLB.GetItemCheckState(i) = CheckState.Checked Then selectedList.Add(i)
+                    periodSelectionDict.Add(node.Text, False)
                 End If
             Next
-            DisplaySelectedPeriods(selectedList)
+            Controller.PeriodsSelectionFilter(periodSelectionDict)
         End If
 
     End Sub
@@ -469,22 +360,12 @@ Friend Class ControllingUI_2
 
     End Sub
 
-    'Private Sub displayControlDisplayTVs_KeyDown(sender As Object, e As KeyEventArgs)
+    Private Sub CurrenciesCLB_ItemChecked(sender As Object, e As ItemCheckChangedEventArgs)
 
-    '    Select Case e.KeyCode
-    '        Case Keys.Delete : sender.SelectedNode.Remove()
+        selectedCurrencyItem = e.Item
 
-    '        Case Keys.Up
-    '            If e.Control Then
-    '                TreeViewsUtilities.MoveNodeUp(sender.SelectedNode)
-    '            End If
-    '        Case Keys.Down
-    '            If e.Control Then
-    '                TreeViewsUtilities.MoveNodeDown(sender.SelectedNode)
-    '            End If
-    '    End Select
+    End Sub
 
-    'End Sub
 
 #End Region
 
@@ -493,284 +374,7 @@ Friend Class ControllingUI_2
 
 #Region "Main Menu Calls Backs"
 
-#Region "Home Menu"
-
-    Private Sub EntitiesMenuBTClick(sender As Object, e As EventArgs) Handles EntitiesMenuBT1.Click, SelectionToolStripMenuItem.Click
-
-        If EntitiesFlag = False Then
-            entitiesTV.Select()
-            ExpandSP1Pane1()
-            Dim show_entities_categories As Boolean = EntitiesCategoriesFlag
-            HideAllMenusItems()
-
-            entitiesTV.Visible = True
-            EntitiesFlag = True
-
-            If show_entities_categories = True Then
-                entitiesFiltersTV.Visible = True
-                EntitiesCategoriesFlag = True
-                DisplayTwoTrees()
-                TVTableLayout.SetRow(entitiesTV, 2)
-            Else
-                TVTableLayout.SetRow(entitiesTV, 1)
-            End If
-        Else
-            If TVTableLayout.GetRow(entitiesTV) = 1 Then
-                CollapseSP1Pane1()
-            Else
-                DisplayFirstTreeOnly()
-            End If
-            entitiesTV.Visible = False
-            EntitiesFlag = False
-        End If
-
-    End Sub
-
-    Private Sub DisplayMenuBTClick(sender As Object, e As EventArgs) Handles DisplayBT.Click, displayLabel.Click, _
-                                                                             DisplayBT2.Click, DisplayLabel2.Click, _
-                                                                             DisplayBT3.Click, DisplayLabel3.Click
-
-        If displayControlFlag = False Then
-            ExpandSP2Pane2()
-            displayControlFlag = True
-        Else
-            CollapseSP2Pane2()
-            displayControlFlag = False
-        End If
-
-    End Sub
-
-#Region "Selection"
-
-    Private Sub entitiesCategoriesMenuClick(sender As Object, e As EventArgs) Handles entitiesCategoriesMenuBT.Click
-
-        If EntitiesCategoriesFlag = False Then
-            ExpandSP1Pane1()
-            Dim show_entities As Boolean = EntitiesFlag
-            HideAllMenusItems()
-            entitiesFiltersTV.Visible = True
-            EntitiesCategoriesFlag = True
-
-            If show_entities = True Then
-                entitiesTV.Visible = True
-                EntitiesFlag = True
-                DisplayTwoTrees()
-                TVTableLayout.SetRow(entitiesFiltersTV, 2)
-            Else
-                TVTableLayout.SetRow(entitiesFiltersTV, 1)
-            End If
-        Else
-            If TVTableLayout.GetRow(entitiesFiltersTV) = 1 Then
-                CollapseSP1Pane1()
-            Else
-                DisplayFirstTreeOnly()
-            End If
-            entitiesFiltersTV.Visible = False
-            EntitiesCategoriesFlag = False
-        End If
-
-    End Sub
-
-    Private Sub ClientsMenuBT_Click(sender As Object, e As EventArgs) Handles ClientsSelectionToolStripMenuItem.Click
-
-        If ClientsFlag = False Then
-            clientsTV.Select()
-            ExpandSP1Pane1()
-            Dim show_clients_categories As Boolean = ClientsCategoriesFlag
-            HideAllMenusItems()
-
-            clientsTV.Visible = True
-            ClientsFlag = True
-
-            If show_clients_categories = True Then
-                clientsFiltersTV.Visible = True
-                ClientsCategoriesFlag = True
-                DisplayTwoTrees()
-                TVTableLayout.SetRow(clientsTV, 2)
-            Else
-                TVTableLayout.SetRow(clientsTV, 1)
-            End If
-        Else
-            If TVTableLayout.GetRow(clientsTV) = 1 Then
-                CollapseSP1Pane1()
-            Else
-                DisplayFirstTreeOnly()
-            End If
-            clientsTV.Visible = False
-            ClientsFlag = False
-        End If
-
-    End Sub
-
-    Private Sub clientsCategoriesMenuBT_Click(sender As Object, e As EventArgs) Handles clientsCategoriesMenuBT.Click
-
-        If ClientsCategoriesFlag = False Then
-            ExpandSP1Pane1()
-            Dim show_clients As Boolean = ClientsFlag
-            HideAllMenusItems()
-            clientsFiltersTV.Visible = True
-            ClientsCategoriesFlag = True
-
-            If show_clients = True Then
-                clientsTV.Visible = True
-                ClientsFlag = True
-                DisplayTwoTrees()
-                TVTableLayout.SetRow(clientsFiltersTV, 2)
-            Else
-                TVTableLayout.SetRow(clientsFiltersTV, 1)
-            End If
-        Else
-            If TVTableLayout.GetRow(clientsFiltersTV) = 1 Then
-                CollapseSP1Pane1()
-            Else
-                DisplayFirstTreeOnly()
-            End If
-            clientsFiltersTV.Visible = False
-            ClientsCategoriesFlag = False
-        End If
-
-    End Sub
-
-    Private Sub ProductsMenuBT_Click(sender As Object, e As EventArgs) Handles ProductsFilterToolStripMenuItem.Click
-
-        If productsFlag = False Then
-            productsTV.Select()
-            ExpandSP1Pane1()
-            Dim show_products_categories As Boolean = productsCategoriesFlag
-            HideAllMenusItems()
-
-            productsTV.Visible = True
-            productsFlag = True
-
-            If show_products_categories = True Then
-                productsFiltersTV.Visible = True
-                productsCategoriesFlag = True
-                DisplayTwoTrees()
-                TVTableLayout.SetRow(productsTV, 2)
-            Else
-                TVTableLayout.SetRow(productsTV, 1)
-            End If
-        Else
-            If TVTableLayout.GetRow(productsTV) = 1 Then
-                CollapseSP1Pane1()
-            Else
-                DisplayFirstTreeOnly()
-            End If
-            productsTV.Visible = False
-            productsFlag = False
-        End If
-
-    End Sub
-
-    Private Sub productsCategoriesMenuBT_Click(sender As Object, e As EventArgs) Handles productsCategoriesMenuBT.Click
-
-        If productsCategoriesFlag = False Then
-            ExpandSP1Pane1()
-            Dim show_products As Boolean = productsFlag
-            HideAllMenusItems()
-            productsFiltersTV.Visible = True
-            productsCategoriesFlag = True
-
-            If show_products = True Then
-                productsTV.Visible = True
-                productsFlag = True
-                DisplayTwoTrees()
-                TVTableLayout.SetRow(productsFiltersTV, 2)
-            Else
-                TVTableLayout.SetRow(productsFiltersTV, 1)
-            End If
-        Else
-            If TVTableLayout.GetRow(productsFiltersTV) = 1 Then
-                CollapseSP1Pane1()
-            Else
-                DisplayFirstTreeOnly()
-            End If
-            productsFiltersTV.Visible = False
-            productsCategoriesFlag = False
-        End If
-
-    End Sub
-
-    Private Sub AdjustmentsMenuBT_Click(sender As Object, e As EventArgs) Handles AdjustmentsMenuBT.Click
-
-        If adjustments_flag = False Then
-            ExpandSP1Pane1()
-            HideAllMenusItems()
-            adjustmentsTV.Visible = True
-            adjustments_flag = True
-        Else
-            CollapseSP1Pane1()
-            adjustmentsTV.Visible = False
-            adjustments_flag = False
-        End If
-
-    End Sub
-
-    Private Sub CurrenciesMenuClick(sender As Object, e As EventArgs) Handles CurrenciesMenuBT.Click
-
-        If CurrenciesFlag = False Then
-            ExpandSP1Pane1()
-            HideAllMenusItems()
-            CurrenciesCLB.Visible = True
-            CurrenciesFlag = True
-            DisplayTwoTrees()
-
-        Else
-            CollapseSP1Pane1()
-            CurrenciesCLB.Visible = False
-            CurrenciesFlag = False
-            DisplayFirstTreeOnly()
-        End If
-
-    End Sub
-
-    Private Sub PeriodsMenuClick(sender As Object, e As EventArgs) Handles PeriodsMenuBT.Click
-
-        If PeriodsFlag = False Then
-            ExpandSP1Pane1()
-            HideAllMenusItems()
-            periodsCLB.Visible = True
-            PeriodsFlag = True
-        Else
-            CollapseSP1Pane1()
-            periodsCLB.Visible = False
-            PeriodsFlag = False
-        End If
-
-    End Sub
-
-    Private Sub VersionsMenuClick(sender As Object, e As EventArgs) Handles VersionsMenuBT.Click
-
-        If VersionsFlag = False Then
-            ExpandSP1Pane1()
-            HideAllMenusItems()
-            versionsTV.Visible = True
-            VersionsFlag = True
-        Else
-            CollapseSP1Pane1()
-            versionsTV.Visible = False
-            VersionsFlag = False
-        End If
-
-    End Sub
-
-#End Region
-
-    Private Sub Refresh_Click(sender As Object, e As EventArgs) Handles RefreshMenuBT.Click, RefreshMenuBT2.Click
-
-        If entitiesTV.SelectedNode Is Nothing Then
-            RefreshData()
-        Else
-            RefreshData(entitiesTV.SelectedNode)
-        End If
-
-    End Sub
-
-#End Region
-
-#Region "Business Control"
-
-    Private Sub AddVersionsComparisonToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles versionComparisonBT.Click
+    Private Sub VersionsComparisonToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles VersionsComparisonToolStripMenuItem.Click
 
         If isVersionComparisonDisplayed = True Then
             Controller.VersionsCompDisplay(False)
@@ -786,13 +390,11 @@ Friend Class ControllingUI_2
 
     End Sub
 
-    Private Sub SwitchVersionsOrderToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles switchVersionsBT.Click
-
+    Private Sub SwitchVersionsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles SwitchVersionsToolStripMenuItem.Click
         Controller.ReverseVersionsComparison()
-
     End Sub
 
-    Private Sub RemoveVersionsComparisonToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles deleteComparisonBT.Click
+    Private Sub HideVersionsComparisonToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles HideVersionsComparisonToolStripMenuItem.Click
 
         If isVersionComparisonDisplayed Then
             For Each tab_ As vTabPage In tabControl1.TabPages
@@ -804,17 +406,20 @@ Friend Class ControllingUI_2
 
     End Sub
 
-#End Region
-
-#Region "Excel"
-
-    Private Sub DropDrillDown_Click(sender As Object, e As EventArgs) Handles SendBreakDownBT.Click
-
+    Private Sub ExcelToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ExcelToolStripMenuItem.Click
         Controller.dropOnExcel()
+    End Sub
+
+    Private Sub RefreshToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles RefreshToolStripMenuItem.Click
+
+        If leftPane_control.entitiesTV.SelectedNode Is Nothing Then
+            RefreshData()
+        Else
+            RefreshData(leftPane_control.entitiesTV.SelectedNode)
+        End If
 
     End Sub
 
-#End Region
 
 #End Region
 
@@ -827,33 +432,25 @@ Friend Class ControllingUI_2
 
     End Sub
 
-#Region "Periods Right Click Menu"
-
     Private Sub SelectAllToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles SelectAllToolStripMenuItem.Click
 
-        SetPeriodsSelection(True)
+        isUpdatingPeriodsCheckList = True
+        VTreeViewUtil.CheckStateAllNodes(leftPane_control.periodsTV, True)
+        isUpdatingPeriodsCheckList = False
+        periodsTV_ItemCheck(sender, New vTreeViewEventArgs(leftPane_control.periodsTV.SelectedNode, vTreeViewAction.Unknown))
 
     End Sub
 
     Private Sub UnselectAllToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles UnselectAllToolStripMenuItem.Click
 
-        SetPeriodsSelection(False)
-
-    End Sub
-
-    Private Sub SetPeriodsSelection(ByRef state As Boolean)
-
         isUpdatingPeriodsCheckList = True
-        For i = 0 To periodsCLB.Items.Count - 2
-            periodsCLB.SetItemChecked(i, state)
-        Next
+        VTreeViewUtil.CheckStateAllNodes(leftPane_control.periodsTV, False)
         isUpdatingPeriodsCheckList = False
-        periodsCLB.SetItemChecked(periodsCLB.Items.Count - 1, state)
+        periodsTV_ItemCheck(sender, New vTreeViewEventArgs(leftPane_control.periodsTV.SelectedNode, vTreeViewAction.Unknown))
+
 
     End Sub
 
-
-#End Region
 
 #Region "DGVs RCM"
 
@@ -889,7 +486,7 @@ Friend Class ControllingUI_2
 
     Private Sub SetAdjustmentsSelection(ByRef state As Boolean)
 
-        For Each node As vTreeNode In adjustmentsTV.Nodes
+        For Each node As vTreeNode In leftPane_control.adjustmentsTV.Nodes
             node.Checked = state
         Next
 
@@ -948,53 +545,30 @@ Friend Class ControllingUI_2
 #End Region
 
 
-#Region "Utilities"
-
-    Private Sub DisplaySelectedPeriods(ByRef selectionList As List(Of Int32))
-
-        For Each tab_ As vTabPage In tabControl1.TabPages
-            Dim DGV As vDataGridView = tab_.Controls(0)
-
-            For Each col As HierarchyItem In DGV.ColumnsHierarchy.Items
-                If selectionList.Contains(col.ItemIndex) Then
-                    col.Hidden = False
-                Else
-                    col.Hidden = True
-                End If
-            Next
-        Next
-
-    End Sub
-
-    Private Sub ControllingUI_2_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
-
-
-    End Sub
-
-#End Region
-
-
 #Region "Left Pane Expansion/ Collapse"
-
-    Private Sub CollapseSP2Pane2()
-
-        SP2Distance = SplitContainer2.SplitterDistance
-        SplitContainer2.SplitterDistance = SplitContainer2.Width
-        SplitContainer2.Panel2.Hide()
-
-    End Sub
 
     Private Sub ExpandSP2Pane2()
 
         SplitContainer2.SplitterDistance = SP2Distance
-        SplitContainer2.Panel2.Show()
+        rightPane_Control.Visible = True
+        rightPaneExpandBT.Visible = False
+
+    End Sub
+
+    Private Sub CollapseSP2Pane2()
+
+        SP2Distance = SplitContainer2.SplitterDistance
+        SplitContainer2.SplitterDistance = SplitContainer2.Width - 27
+        rightPane_Control.Visible = False
+        rightPaneExpandBT.Visible = True
 
     End Sub
 
     Private Sub CollapseSP1Pane1()
 
-        SplitContainer1.SplitterDistance = 0
-        SplitContainer1.Panel1.Hide()
+        SplitContainer1.SplitterDistance = 25
+        leftPane_control.Visible = False
+        leftPaneExpandBT.Visible = True
 
     End Sub
 
@@ -1002,80 +576,11 @@ Friend Class ControllingUI_2
 
         SplitContainer1.SplitterDistance = SP1Distance
         SplitContainer1.Panel1.Show()
+        leftPane_control.Visible = True
+        leftPaneExpandBT.Visible = False
 
     End Sub
 
-    Private Sub HideAllMenusItems()
-
-        DisplayFirstTreeOnly()
-
-        entitiesTV.Visible = False
-        entitiesFiltersTV.Visible = False
-        clientsTV.Visible = False
-        clientsFiltersTV.Visible = False
-        productsTV.Visible = False
-        productsFiltersTV.Visible = False
-        adjustmentsTV.Visible = False
-        CurrenciesCLB.Visible = False
-        periodsCLB.Visible = False
-        versionsTV.Visible = False
-
-        EntitiesFlag = False
-        EntitiesCategoriesFlag = False
-        ClientsFlag = False
-        ClientsCategoriesFlag = False
-        productsFlag = False
-        productsCategoriesFlag = False
-        adjustments_flag = False
-        CurrenciesFlag = False
-        PeriodsFlag = False
-        VersionsFlag = False
-
-    End Sub
-
-    Private Sub DisplayFirstTreeOnly()
-
-        TVTableLayout.RowStyles.Item(1).SizeType = SizeType.Percent
-        TVTableLayout.RowStyles.Item(2).SizeType = SizeType.Percent
-        TVTableLayout.RowStyles.Item(1).Height = 100
-        TVTableLayout.RowStyles.Item(2).Height = 0
-
-    End Sub
-
-    Private Sub DisplayTwoTrees()
-
-        TVTableLayout.RowStyles.Item(0).SizeType = SizeType.Percent
-        TVTableLayout.RowStyles.Item(1).SizeType = SizeType.Percent
-        TVTableLayout.RowStyles.Item(0).Height = 50
-        TVTableLayout.RowStyles.Item(1).Height = 50
-
-    End Sub
-
-#End Region
-
-
-#Region "Dimension Right Pane Call Backs"
-
-    Private Sub HideRightPane()
-
-        CollapseSP2Pane2()
-
-    End Sub
-
-    Private Sub RefreshFromRightPane()
-
-        If Not Controller.EntityNode Is Nothing Then
-            RefreshData(Controller.EntityNode, True)
-        Else
-            If Not entitiesTV.SelectedNode Is Nothing Then
-                RefreshData(entitiesTV.SelectedNode, True)
-            Else
-                MsgBox("Please select an Entity to refresh")
-            End If
-        End If
-       
-
-    End Sub
 
 #End Region
 
@@ -1129,6 +634,7 @@ Friend Class ControllingUI_2
 
 
 #End Region
+
 
 
 

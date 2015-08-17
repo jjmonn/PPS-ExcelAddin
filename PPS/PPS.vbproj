@@ -51,10 +51,6 @@
     <Reference Include="AddinExpress.XL.2005, Version=7.5.4072.2005, Culture=neutral, PublicKeyToken=e69a7e0f3592d2b8, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
     </Reference>
-    <Reference Include="CUI2DisplayControl, Version=1.0.5701.31140, Culture=neutral, PublicKeyToken=888daf071761e3c2, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\CUI2DisplayControl\CUI2DisplayControl\bin\Debug\CUI2DisplayControl.dll</HintPath>
-    </Reference>
     <Reference Include="GaugeThis">
       <HintPath>..\..\..\..\..\Google Drive\OPERATIONS DEPARTMENT\Libraries\ProGauge\ProGauge\bin\Debug\GaugeThis.dll</HintPath>
     </Reference>
@@ -138,6 +134,18 @@
     <Compile Include="Models\CRUDs\New CRUDs\FactsVersion.vb" />
     <Compile Include="Models\CRUDs\New CRUDs\SuperCRUD.vb" />
     <Compile Include="Models\Mappings\CurrenciesSymbolsMapping.vb" />
+    <Compile Include="Modules\CONTROLING UI\View\CUI2LeftPane.Designer.vb">
+      <DependentUpon>CUI2LeftPane.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Modules\CONTROLING UI\View\CUI2LeftPane.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Modules\CONTROLING UI\View\CUI2RightPane.designer.vb">
+      <DependentUpon>CUI2RightPane.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Modules\CONTROLING UI\View\CUI2RightPane.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Modules\MODELING\FINANCIAL MODELLING\Views\Controls\FModelingInputsControl.Designer.vb">
       <DependentUpon>FModelingInputsControl.vb</DependentUpon>
     </Compile>
@@ -623,6 +631,12 @@
   <ItemGroup>
     <EmbeddedResource Include="AddinModule.resx">
       <DependentUpon>AddinModule.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Modules\CONTROLING UI\View\CUI2LeftPane.resx">
+      <DependentUpon>CUI2LeftPane.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Modules\CONTROLING UI\View\CUI2RightPane.resx">
+      <DependentUpon>CUI2RightPane.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Modules\MODELING\FINANCIAL MODELLING\Views\Controls\FModelingInputsControl.resx">
       <DependentUpon>FModelingInputsControl.vb</DependentUpon>
@@ -1222,6 +1236,15 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\tablet_computer2.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Excel dark 24 24.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\tablet_computer3.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\refresh.png" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.

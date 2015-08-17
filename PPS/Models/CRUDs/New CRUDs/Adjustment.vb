@@ -236,7 +236,7 @@ Friend Class Adjustment
         TV.Nodes.Clear()
         For Each id As Int32 In adjustments_hash.Keys
             Dim node As VIBlend.WinForms.Controls.vTreeNode = VTreeViewUtil.AddNode(id, adjustments_hash(id)(NAME_VARIABLE), TV, 0)
-            node.Checked = True
+            node.Checked = Windows.Forms.CheckState.Checked
         Next
 
     End Sub
@@ -247,7 +247,7 @@ Friend Class Adjustment
         TV.Nodes.Clear()
         For Each id As Int32 In adjustments_hash.Keys
             Dim node As VIBlend.WinForms.Controls.vTreeNode = VTreeViewUtil.AddNode(id, adjustments_hash(id)(NAME_VARIABLE), TV, 0)
-            node.Checked = True
+            node.Checked = Windows.Forms.CheckState.Checked
         Next
 
     End Sub

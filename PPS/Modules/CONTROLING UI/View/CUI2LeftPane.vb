@@ -1,0 +1,278 @@
+﻿Imports VIBlend.WinForms.Controls
+Imports System.Windows.Forms
+
+' CUI2LeftPane.vb
+'
+' Control for entities and other selections
+'
+'
+'
+'
+'
+' Created on : 15/08/2015
+' Last modified: 17/08/2015
+
+
+Public Class CUI2LeftPane
+
+
+#Region "Instance variables"
+
+    ' Objects
+    Private ExpandSelectionPaneBT As New vButton
+    Friend entitiesTV As New vTreeView
+    Friend entitiesFiltersTV As New vTreeView
+    Friend adjustmentsTV As New vTreeView
+    Friend adjustmentsFiltersTV As New vTreeView
+    Friend clientsTV As New vTreeView
+    Friend clientsFiltersTV As New vTreeView
+    Friend productsTV As New vTreeView
+    Friend productsFiltersTV As New vTreeView
+    Friend versionsTV As New vTreeView
+    Friend periodsTV As New vTreeView
+    Friend currenciesCLB As New vCheckedListBox
+
+    ' Variables
+    Private selectionPaneExpandedFlag As Boolean
+    Private SPDistance As Single = 250
+
+    ' Constants
+    Private Const ENTITIES_FILTERS_STR As String = "Entities Categories"
+    Private Const CLIENTS_STR As String = "Clients"
+    Private Const CLIENTS_FILTERS_STR As String = "Clients Categories"
+    Private Const PRODUCTS_STR As String = "Products"
+    Private Const PRODUCTS_FILTERS_STR As String = "Products Categories"
+    Private Const ADJUSTMENTS_STR As String = "Adjustments "
+    Private Const ADJUSTMENTS_FILTERS_STR As String = "Adjustments Categories"
+    Private Const PERIODS_STR As String = "Periods"
+    Private Const VERSIONS_STR As String = "Versions"
+    Private Const CURRENCIES_STR As String = "Currencies"
+
+#End Region
+
+
+#Region "Initialize"
+
+    ' init tv here and belong here ?! priority high
+
+    Public Sub New()
+
+        ' This call is required by the designer.
+        InitializeComponent()
+
+        ' Add any initialization after the InitializeComponent() call.
+        SplitContainer.Panel1.Controls.Add(entitiesTV)
+        entitiesTV.Dock = DockStyle.Fill
+        entitiesTV.CheckBoxes = True
+
+        LoadTvs()
+        InitCurrenciesCLB()
+        InitSelectionCB()
+        InitButton()
+
+    End Sub
+
+    Private Sub LoadTvs()
+
+        GlobalVariables.Entities.LoadEntitiesTV(entitiesTV)
+        GlobalVariables.Clients.LoadClientsTree(clientsTV)
+        GlobalVariables.Products.LoadproductsTree(productsTV)
+        GlobalVariables.Adjustments.LoadadjustmentsTree(adjustmentsTV)
+
+        AxisFilter.LoadFvTv(entitiesFiltersTV, GlobalEnums.AnalysisAxis.ENTITIES)
+        AxisFilter.LoadFvTv(clientsFiltersTV, GlobalEnums.AnalysisAxis.CLIENTS)
+        AxisFilter.LoadFvTv(productsFiltersTV, GlobalEnums.AnalysisAxis.PRODUCTS)
+        AxisFilter.LoadFvTv(adjustmentsFiltersTV, GlobalEnums.AnalysisAxis.ADJUSTMENTS)
+
+        GlobalVariables.Versions.LoadVersionsTV(versionsTV)
+
+        VTreeViewUtil.InitTVFormat(entitiesTV)
+        VTreeViewUtil.InitTVFormat(clientsTV)
+        VTreeViewUtil.InitTVFormat(productsTV)
+        VTreeViewUtil.InitTVFormat(adjustmentsTV)
+        VTreeViewUtil.InitTVFormat(versionsTV)
+        VTreeViewUtil.InitTVFormat(entitiesFiltersTV)
+        VTreeViewUtil.InitTVFormat(clientsFiltersTV)
+        VTreeViewUtil.InitTVFormat(productsFiltersTV)
+        VTreeViewUtil.InitTVFormat(periodsTV)
+        VTreeViewUtil.SeEntitiesTVImageIndexes(entitiesTV)
+
+        InitTV(entitiesFiltersTV)
+        InitTV(clientsTV)
+        InitTV(clientsFiltersTV)
+        InitTV(productsTV)
+        InitTV(productsFiltersTV)
+        InitTV(adjustmentsTV)
+        InitTV(adjustmentsFiltersTV)
+        InitTV(versionsTV)
+        InitTV(periodsTV)
+
+        versionsTV.ImageList = VersionsIL
+        entitiesTV.ImageList = EntitiesTVImageList
+
+    End Sub
+
+    Private Sub InitSelectionCB()
+
+        SelectionCB.Items.Add(ENTITIES_FILTERS_STR)
+        SelectionCB.Items.Add(CLIENTS_STR)
+        SelectionCB.Items.Add(CLIENTS_FILTERS_STR)
+        SelectionCB.Items.Add(PRODUCTS_STR)
+        SelectionCB.Items.Add(PRODUCTS_FILTERS_STR)
+        SelectionCB.Items.Add(ADJUSTMENTS_STR)
+        SelectionCB.Items.Add(ADJUSTMENTS_FILTERS_STR)
+        SelectionCB.Items.Add(PERIODS_STR)
+        SelectionCB.Items.Add(VERSIONS_STR)
+        SelectionCB.Items.Add(CURRENCIES_STR)
+
+    End Sub
+
+    Private Sub InitTV(ByRef TV As vTreeView)
+
+        SelectionTVTableLayout.Controls.Add(TV, 0, 1)
+        TV.Dock = DockStyle.Fill
+        TV.CheckBoxes = True
+        TV.Visible = False
+
+    End Sub
+
+    Private Sub InitCurrenciesCLB()
+
+        Dim currenciesList As New Collections.Generic.List(Of UInt32)
+        ' STUB !!!!!!!!!!
+        ' GlobalVariables.Currencies.currencies_hash.Keys
+        currenciesList.Add(1) '
+        currenciesList.Add(2)
+        currenciesList.Add(3)
+        ' use name property to set id !!! 
+        ' -------------------------- priority high !!!!!!!
+
+        For Each currency_ As String In currenciesList
+
+            ' use value => id
+            '     text  => name
+            ' priority normal
+
+            Dim li = currenciesCLB.Items.Add(currency_)
+            'li.Value = id
+            ' li.IsChecked = True
+
+        Next
+        ' for each item => if value = my.settings.currency then item = checked
+        ' priority normal
+
+
+        SelectionTVTableLayout.Controls.Add(currenciesCLB)
+        currenciesCLB.Dock = DockStyle.Fill
+        currenciesCLB.CheckOnClick = True
+        currenciesCLB.SelectionMode = SelectionMode.One
+        currenciesCLB.Visible = False
+
+    End Sub
+
+    Private Sub InitButton()
+
+        ExpandSelectionPaneBT.Width = 19
+        ExpandSelectionPaneBT.Height = 19
+        ExpandSelectionPaneBT.ImageList = expansionIL
+        ExpandSelectionPaneBT.ImageKey = "expand_up"
+        ExpandSelectionPaneBT.Text = ""
+        ExpandSelectionPaneBT.PaintBorder = False
+        ExpandSelectionPaneBT.FlatStyle = FlatStyle.Flat
+        ExpandSelectionPaneBT.Visible = False
+        AddHandler ExpandSelectionPaneBT.Click, AddressOf ExpandSelectionBT_Click
+        SplitContainer.Panel2.Controls.Add(ExpandSelectionPaneBT)
+
+    End Sub
+
+#End Region
+
+
+#Region "interface"
+
+    Friend Sub SetupPeriodsTV(ByRef periodsNodes As vTreeNode)
+
+        periodsTV.Nodes.Clear()
+        For Each node As vTreeNode In periodsNodes.Nodes
+            VTreeViewUtil.CopySubNodes(node, periodsTV)
+        Next
+
+    End Sub
+
+
+#End Region
+
+
+#Region "Events and Call Backs"
+
+    Private Sub SelectionCB_SelectedValueChanged(sender As Object, e As EventArgs) Handles SelectionCB.SelectedValueChanged
+
+        HideAllTVs()
+        Select Case SelectionCB.SelectedItem.Text
+            Case ENTITIES_FILTERS_STR : entitiesFiltersTV.Visible = True
+            Case CLIENTS_STR : clientsTV.Visible = True
+            Case CLIENTS_FILTERS_STR : clientsFiltersTV.Visible = True
+            Case PRODUCTS_STR : productsTV.Visible = True
+            Case PRODUCTS_FILTERS_STR : productsFiltersTV.Visible = True
+            Case ADJUSTMENTS_STR : adjustmentsTV.Visible = True
+            Case ADJUSTMENTS_FILTERS_STR : adjustmentsFiltersTV.Visible = True
+            Case PERIODS_STR : periodsTV.Visible = True
+            Case VERSIONS_STR : versionsTV.Visible = True
+            Case CURRENCIES_STR : currenciesCLB.Visible = True
+        End Select
+
+    End Sub
+
+    Private Sub CollapseSelectionBT_Click(sender As Object, e As EventArgs) Handles CollapseSelectionBT.Click
+
+        CollapseSelectionPane()
+
+    End Sub
+
+    Private Sub ExpandSelectionBT_Click(sender As Object, e As EventArgs)
+
+        ExpandSelectionPane()
+
+    End Sub
+
+#End Region
+
+
+#Region "Utilities"
+
+    Private Sub ExpandSelectionPane()
+
+        SplitContainer.SplitterDistance = SPDistance
+        ExpandSelectionPaneBT.Visible = False
+        SelectionTVTableLayout.Visible = True
+
+    End Sub
+
+    Private Sub CollapseSelectionPane()
+
+        SPDistance = SplitContainer.SplitterDistance
+        SplitContainer.SplitterDistance = SplitContainer.Height
+        SelectionTVTableLayout.Visible = False
+        ExpandSelectionPaneBT.Visible = True
+
+    End Sub
+
+    Private Sub HideAllTVs()
+
+        Me.clientsTV.Visible = False
+        Me.clientsFiltersTV.Visible = False
+        Me.productsTV.Visible = False
+        Me.productsFiltersTV.Visible = False
+        Me.adjustmentsTV.Visible = False
+        Me.adjustmentsFiltersTV.Visible = False
+        Me.versionsTV.Visible = False
+        Me.periodsTV.Visible = False
+        Me.currenciesCLB.Visible = False
+
+    End Sub
+
+#End Region
+
+
+
+End Class

@@ -76,6 +76,12 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CUI2LeftPane.Designer.vb">
+      <DependentUpon>CUI2LeftPane.vb</DependentUpon>
+    </Compile>
+    <Compile Include="CUI2LeftPane.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
       <DependentUpon>Application.myapp</DependentUpon>
@@ -99,6 +105,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="CUI2LeftPane.resx">
+      <DependentUpon>CUI2LeftPane.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="My Project\Resources.resx">
       <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.vb</LastGenOutput>
@@ -110,11 +119,9 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <None Include="ccc.pfx" />
     <None Include="ccc2.pfx" />
     <None Include="CUI2DisplaConfig.pfx" />
     <None Include="CUI2DisplayMGT.pfx" />
-    <None Include="displaycontrol.pfx" />
     <None Include="My Project\Application.myapp">
       <Generator>MyApplicationCodeGenerator</Generator>
       <LastGenOutput>Application.Designer.vb</LastGenOutput>
