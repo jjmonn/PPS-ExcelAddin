@@ -377,7 +377,7 @@ Partial Class MarketPricesUI
         '
         'AddNewIndexToolStripMenuItem
         '
-        Me.AddNewIndexToolStripMenuItem.Image = Global.PPS.My.Resources.Resources.add
+        Me.AddNewIndexToolStripMenuItem.Image = Global.PPS.My.Resources.Resources.add1
         Me.AddNewIndexToolStripMenuItem.Name = "AddNewIndexToolStripMenuItem"
         Me.AddNewIndexToolStripMenuItem.Size = New System.Drawing.Size(154, 22)
         Me.AddNewIndexToolStripMenuItem.Text = "Add New Index"

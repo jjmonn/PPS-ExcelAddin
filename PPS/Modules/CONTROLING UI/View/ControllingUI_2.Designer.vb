@@ -24,27 +24,28 @@ Partial Class ControllingUI_2
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(ControllingUI_2))
-        Me.entitiesRightClickMenu = New System.Windows.Forms.ContextMenuStrip(Me.components)
+        Me.EntitiesRCMenu = New System.Windows.Forms.ContextMenuStrip(Me.components)
+        Me.compute_complete = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
         Me.SelectAllSubEntitiesToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.UnselectAllSubEntitiesToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.periodsRightClickMenu = New System.Windows.Forms.ContextMenuStrip(Me.components)
+        Me.PeriodsRCMenu = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.SelectAllToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.UnselectAllToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.DGVsRCM = New System.Windows.Forms.ContextMenuStrip(Me.components)
+        Me.DataGridViewsRCMenu = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.DisplayAdjustmensRCM = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator()
         Me.DisplayDataTrackingToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator4 = New System.Windows.Forms.ToolStripSeparator()
-        Me.AdjustmentsRCM = New System.Windows.Forms.ContextMenuStrip(Me.components)
+        Me.FormatsRCMBT = New System.Windows.Forms.ToolStripMenuItem()
+        Me.AdjustmentsRCMenu = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.SelectAllToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
         Me.UnselectAllToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
         Me.SplitContainer1 = New System.Windows.Forms.SplitContainer()
         Me.tabControl1 = New VIBlend.WinForms.Controls.vTabControl()
-        Me.BTIL = New System.Windows.Forms.ImageList(Me.components)
-        Me.MenuIL = New System.Windows.Forms.ImageList(Me.components)
+        Me.ButtonsImageList = New System.Windows.Forms.ImageList(Me.components)
+        Me.MenuImageList = New System.Windows.Forms.ImageList(Me.components)
         Me.SplitContainer2 = New System.Windows.Forms.SplitContainer()
-        Me.ImageList1 = New System.Windows.Forms.ImageList(Me.components)
         Me.Panel1 = New System.Windows.Forms.Panel()
         Me.VersionTB = New VIBlend.WinForms.Controls.vTextBox()
         Me.CurrencyTB = New VIBlend.WinForms.Controls.vTextBox()
@@ -53,20 +54,18 @@ Partial Class ControllingUI_2
         Me.Label2 = New System.Windows.Forms.Label()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.MainMenu = New System.Windows.Forms.MenuStrip()
-        Me.expansionIL = New System.Windows.Forms.ImageList(Me.components)
+        Me.ExcelToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.DropOnExcelToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.BusinessControlToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.VersionsComparisonToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.SwitchVersionsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.HideVersionsComparisonToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ExcelToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.DropOnExcelToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.RefreshToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.compute_complete = New System.Windows.Forms.ToolStripMenuItem()
-        Me.FormatsRCMBT = New System.Windows.Forms.ToolStripMenuItem()
-        Me.entitiesRightClickMenu.SuspendLayout()
-        Me.periodsRightClickMenu.SuspendLayout()
-        Me.DGVsRCM.SuspendLayout()
-        Me.AdjustmentsRCM.SuspendLayout()
+        Me.ExpansionImageList = New System.Windows.Forms.ImageList(Me.components)
+        Me.EntitiesRCMenu.SuspendLayout()
+        Me.PeriodsRCMenu.SuspendLayout()
+        Me.DataGridViewsRCMenu.SuspendLayout()
+        Me.AdjustmentsRCMenu.SuspendLayout()
         CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SplitContainer1.Panel2.SuspendLayout()
         Me.SplitContainer1.SuspendLayout()
@@ -77,11 +76,18 @@ Partial Class ControllingUI_2
         Me.MainMenu.SuspendLayout()
         Me.SuspendLayout()
         '
-        'entitiesRightClickMenu
+        'EntitiesRCMenu
         '
-        Me.entitiesRightClickMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.compute_complete, Me.ToolStripSeparator1, Me.SelectAllSubEntitiesToolStripMenuItem, Me.UnselectAllSubEntitiesToolStripMenuItem})
-        Me.entitiesRightClickMenu.Name = "ContextMenuStripEntitiesNodes"
-        Me.entitiesRightClickMenu.Size = New System.Drawing.Size(225, 82)
+        Me.EntitiesRCMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.compute_complete, Me.ToolStripSeparator1, Me.SelectAllSubEntitiesToolStripMenuItem, Me.UnselectAllSubEntitiesToolStripMenuItem})
+        Me.EntitiesRCMenu.Name = "ContextMenuStripEntitiesNodes"
+        Me.EntitiesRCMenu.Size = New System.Drawing.Size(225, 82)
+        '
+        'compute_complete
+        '
+        Me.compute_complete.Image = Global.PPS.My.Resources.Resources.Refresh_DB_16
+        Me.compute_complete.Name = "compute_complete"
+        Me.compute_complete.Size = New System.Drawing.Size(224, 24)
+        Me.compute_complete.Text = "Refresh"
         '
         'ToolStripSeparator1
         '
@@ -100,11 +106,11 @@ Partial Class ControllingUI_2
         Me.UnselectAllSubEntitiesToolStripMenuItem.Size = New System.Drawing.Size(224, 24)
         Me.UnselectAllSubEntitiesToolStripMenuItem.Text = "Unselect All Sub Entities"
         '
-        'periodsRightClickMenu
+        'PeriodsRCMenu
         '
-        Me.periodsRightClickMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.SelectAllToolStripMenuItem, Me.UnselectAllToolStripMenuItem})
-        Me.periodsRightClickMenu.Name = "periodsRightClickMenu"
-        Me.periodsRightClickMenu.Size = New System.Drawing.Size(150, 52)
+        Me.PeriodsRCMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.SelectAllToolStripMenuItem, Me.UnselectAllToolStripMenuItem})
+        Me.PeriodsRCMenu.Name = "periodsRightClickMenu"
+        Me.PeriodsRCMenu.Size = New System.Drawing.Size(150, 52)
         '
         'SelectAllToolStripMenuItem
         '
@@ -118,11 +124,11 @@ Partial Class ControllingUI_2
         Me.UnselectAllToolStripMenuItem.Size = New System.Drawing.Size(149, 24)
         Me.UnselectAllToolStripMenuItem.Text = "Unselect All"
         '
-        'DGVsRCM
+        'DataGridViewsRCMenu
         '
-        Me.DGVsRCM.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.DisplayAdjustmensRCM, Me.ToolStripSeparator2, Me.DisplayDataTrackingToolStripMenuItem, Me.ToolStripSeparator4, Me.FormatsRCMBT})
-        Me.DGVsRCM.Name = "DGVsRCM"
-        Me.DGVsRCM.Size = New System.Drawing.Size(210, 88)
+        Me.DataGridViewsRCMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.DisplayAdjustmensRCM, Me.ToolStripSeparator2, Me.DisplayDataTrackingToolStripMenuItem, Me.ToolStripSeparator4, Me.FormatsRCMBT})
+        Me.DataGridViewsRCMenu.Name = "DGVsRCM"
+        Me.DataGridViewsRCMenu.Size = New System.Drawing.Size(210, 88)
         '
         'DisplayAdjustmensRCM
         '
@@ -146,11 +152,18 @@ Partial Class ControllingUI_2
         Me.ToolStripSeparator4.Name = "ToolStripSeparator4"
         Me.ToolStripSeparator4.Size = New System.Drawing.Size(206, 6)
         '
-        'AdjustmentsRCM
+        'FormatsRCMBT
         '
-        Me.AdjustmentsRCM.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.SelectAllToolStripMenuItem1, Me.UnselectAllToolStripMenuItem1})
-        Me.AdjustmentsRCM.Name = "AdjustmentsRCM"
-        Me.AdjustmentsRCM.Size = New System.Drawing.Size(150, 52)
+        Me.FormatsRCMBT.Image = Global.PPS.My.Resources.Resources.favicon_13_
+        Me.FormatsRCMBT.Name = "FormatsRCMBT"
+        Me.FormatsRCMBT.Size = New System.Drawing.Size(209, 24)
+        Me.FormatsRCMBT.Text = "Display Options"
+        '
+        'AdjustmentsRCMenu
+        '
+        Me.AdjustmentsRCMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.SelectAllToolStripMenuItem1, Me.UnselectAllToolStripMenuItem1})
+        Me.AdjustmentsRCMenu.Name = "AdjustmentsRCM"
+        Me.AdjustmentsRCMenu.Size = New System.Drawing.Size(150, 52)
         '
         'SelectAllToolStripMenuItem1
         '
@@ -195,20 +208,20 @@ Partial Class ControllingUI_2
         Me.tabControl1.TitleHeight = 25
         Me.tabControl1.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.OFFICESILVER
         '
-        'BTIL
+        'ButtonsImageList
         '
-        Me.BTIL.ImageStream = CType(resources.GetObject("BTIL.ImageStream"), System.Windows.Forms.ImageListStreamer)
-        Me.BTIL.TransparentColor = System.Drawing.Color.Transparent
-        Me.BTIL.Images.SetKeyName(0, "tablet_computer.ico")
+        Me.ButtonsImageList.ImageStream = CType(resources.GetObject("ButtonsImageList.ImageStream"), System.Windows.Forms.ImageListStreamer)
+        Me.ButtonsImageList.TransparentColor = System.Drawing.Color.Transparent
+        Me.ButtonsImageList.Images.SetKeyName(0, "tablet_computer.ico")
         '
-        'MenuIL
+        'MenuImageList
         '
-        Me.MenuIL.ImageStream = CType(resources.GetObject("MenuIL.ImageStream"), System.Windows.Forms.ImageListStreamer)
-        Me.MenuIL.TransparentColor = System.Drawing.Color.Transparent
-        Me.MenuIL.Images.SetKeyName(0, "elements.ico")
-        Me.MenuIL.Images.SetKeyName(1, "favicon(2).ico")
-        Me.MenuIL.Images.SetKeyName(2, "element_branch2.ico")
-        Me.MenuIL.Images.SetKeyName(3, "tablet_computer.ico")
+        Me.MenuImageList.ImageStream = CType(resources.GetObject("MenuImageList.ImageStream"), System.Windows.Forms.ImageListStreamer)
+        Me.MenuImageList.TransparentColor = System.Drawing.Color.Transparent
+        Me.MenuImageList.Images.SetKeyName(0, "elements.ico")
+        Me.MenuImageList.Images.SetKeyName(1, "favicon(2).ico")
+        Me.MenuImageList.Images.SetKeyName(2, "element_branch2.ico")
+        Me.MenuImageList.Images.SetKeyName(3, "tablet_computer.ico")
         '
         'SplitContainer2
         '
@@ -225,12 +238,6 @@ Partial Class ControllingUI_2
         Me.SplitContainer2.Size = New System.Drawing.Size(881, 375)
         Me.SplitContainer2.SplitterDistance = 701
         Me.SplitContainer2.TabIndex = 8
-        '
-        'ImageList1
-        '
-        Me.ImageList1.ColorDepth = System.Windows.Forms.ColorDepth.Depth8Bit
-        Me.ImageList1.ImageSize = New System.Drawing.Size(16, 16)
-        Me.ImageList1.TransparentColor = System.Drawing.Color.Transparent
         '
         'Panel1
         '
@@ -347,18 +354,25 @@ Partial Class ControllingUI_2
         Me.MainMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ExcelToolStripMenuItem, Me.BusinessControlToolStripMenuItem, Me.RefreshToolStripMenuItem})
         Me.MainMenu.Location = New System.Drawing.Point(0, 0)
         Me.MainMenu.Name = "MainMenu"
-        Me.MainMenu.Size = New System.Drawing.Size(247, 59)
+        Me.MainMenu.Size = New System.Drawing.Size(339, 59)
         Me.MainMenu.TabIndex = 0
         Me.MainMenu.Text = "MenuStrip1"
         '
-        'expansionIL
+        'ExcelToolStripMenuItem
         '
-        Me.expansionIL.ImageStream = CType(resources.GetObject("expansionIL.ImageStream"), System.Windows.Forms.ImageListStreamer)
-        Me.expansionIL.TransparentColor = System.Drawing.Color.Transparent
-        Me.expansionIL.Images.SetKeyName(0, "expand_down")
-        Me.expansionIL.Images.SetKeyName(1, "expand_up")
-        Me.expansionIL.Images.SetKeyName(2, "expand_right")
-        Me.expansionIL.Images.SetKeyName(3, "expand_left")
+        Me.ExcelToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.DropOnExcelToolStripMenuItem})
+        Me.ExcelToolStripMenuItem.Image = Global.PPS.My.Resources.Resources.Excel_dark_24_24
+        Me.ExcelToolStripMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
+        Me.ExcelToolStripMenuItem.Name = "ExcelToolStripMenuItem"
+        Me.ExcelToolStripMenuItem.Size = New System.Drawing.Size(50, 55)
+        Me.ExcelToolStripMenuItem.Text = "Excel"
+        Me.ExcelToolStripMenuItem.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
+        '
+        'DropOnExcelToolStripMenuItem
+        '
+        Me.DropOnExcelToolStripMenuItem.Name = "DropOnExcelToolStripMenuItem"
+        Me.DropOnExcelToolStripMenuItem.Size = New System.Drawing.Size(162, 24)
+        Me.DropOnExcelToolStripMenuItem.Text = "Drop on Excel"
         '
         'BusinessControlToolStripMenuItem
         '
@@ -388,97 +402,75 @@ Partial Class ControllingUI_2
         Me.HideVersionsComparisonToolStripMenuItem.Size = New System.Drawing.Size(239, 24)
         Me.HideVersionsComparisonToolStripMenuItem.Text = "Hide Versions Comparison"
         '
-        'ExcelToolStripMenuItem
-        '
-        Me.ExcelToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.DropOnExcelToolStripMenuItem})
-        Me.ExcelToolStripMenuItem.Image = Global.PPS.My.Resources.Resources.Excel_dark_24_24
-        Me.ExcelToolStripMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
-        Me.ExcelToolStripMenuItem.Name = "ExcelToolStripMenuItem"
-        Me.ExcelToolStripMenuItem.Size = New System.Drawing.Size(50, 55)
-        Me.ExcelToolStripMenuItem.Text = "Excel"
-        Me.ExcelToolStripMenuItem.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
-        '
-        'DropOnExcelToolStripMenuItem
-        '
-        Me.DropOnExcelToolStripMenuItem.Name = "DropOnExcelToolStripMenuItem"
-        Me.DropOnExcelToolStripMenuItem.Size = New System.Drawing.Size(162, 24)
-        Me.DropOnExcelToolStripMenuItem.Text = "Drop on Excel"
-        '
         'RefreshToolStripMenuItem
         '
-        Me.RefreshToolStripMenuItem.Image = Global.PPS.My.Resources.Resources.refresh_db_32
+        Me.RefreshToolStripMenuItem.Image = Global.PPS.My.Resources.Resources.Refresh_DB_32
         Me.RefreshToolStripMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
         Me.RefreshToolStripMenuItem.Name = "RefreshToolStripMenuItem"
         Me.RefreshToolStripMenuItem.Size = New System.Drawing.Size(66, 55)
         Me.RefreshToolStripMenuItem.Text = "Refresh"
         Me.RefreshToolStripMenuItem.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
         '
-        'compute_complete
+        'ExpansionImageList
         '
-        Me.compute_complete.Image = Global.PPS.My.Resources.Resources.refresh_db_32
-        Me.compute_complete.Name = "compute_complete"
-        Me.compute_complete.Size = New System.Drawing.Size(224, 24)
-        Me.compute_complete.Text = "Refresh"
-        '
-        'FormatsRCMBT
-        '
-        Me.FormatsRCMBT.Image = Global.PPS.My.Resources.Resources.favicon_13_
-        Me.FormatsRCMBT.Name = "FormatsRCMBT"
-        Me.FormatsRCMBT.Size = New System.Drawing.Size(209, 24)
-        Me.FormatsRCMBT.Text = "Display Options"
+        Me.ExpansionImageList.ImageStream = CType(resources.GetObject("ExpansionImageList.ImageStream"), System.Windows.Forms.ImageListStreamer)
+        Me.ExpansionImageList.TransparentColor = System.Drawing.Color.Transparent
+        Me.ExpansionImageList.Images.SetKeyName(0, "expand_down")
+        Me.ExpansionImageList.Images.SetKeyName(1, "expand_up")
+        Me.ExpansionImageList.Images.SetKeyName(2, "expand_right")
+        Me.ExpansionImageList.Images.SetKeyName(3, "expand_left")
         '
         'ControllingUI_2
         '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(6!, 13!)
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.BackColor = System.Drawing.Color.FromArgb(CType(CType(207,Byte),Integer), CType(CType(212,Byte),Integer), CType(CType(221,Byte),Integer))
+        Me.BackColor = System.Drawing.Color.FromArgb(CType(CType(207, Byte), Integer), CType(CType(212, Byte), Integer), CType(CType(221, Byte), Integer))
         Me.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
         Me.ClientSize = New System.Drawing.Size(881, 437)
         Me.Controls.Add(Me.Panel1)
         Me.Controls.Add(Me.SplitContainer2)
-        Me.Icon = CType(resources.GetObject("$this.Icon"),System.Drawing.Icon)
+        Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Margin = New System.Windows.Forms.Padding(2)
         Me.Name = "ControllingUI_2"
         Me.Text = "Financials"
-        Me.entitiesRightClickMenu.ResumeLayout(false)
-        Me.periodsRightClickMenu.ResumeLayout(false)
-        Me.DGVsRCM.ResumeLayout(false)
-        Me.AdjustmentsRCM.ResumeLayout(false)
-        Me.SplitContainer1.Panel2.ResumeLayout(false)
-        CType(Me.SplitContainer1,System.ComponentModel.ISupportInitialize).EndInit
-        Me.SplitContainer1.ResumeLayout(false)
-        Me.SplitContainer2.Panel1.ResumeLayout(false)
-        CType(Me.SplitContainer2,System.ComponentModel.ISupportInitialize).EndInit
-        Me.SplitContainer2.ResumeLayout(false)
-        Me.Panel1.ResumeLayout(false)
-        Me.Panel1.PerformLayout
-        Me.MainMenu.ResumeLayout(false)
-        Me.MainMenu.PerformLayout
-        Me.ResumeLayout(false)
+        Me.EntitiesRCMenu.ResumeLayout(False)
+        Me.PeriodsRCMenu.ResumeLayout(False)
+        Me.DataGridViewsRCMenu.ResumeLayout(False)
+        Me.AdjustmentsRCMenu.ResumeLayout(False)
+        Me.SplitContainer1.Panel2.ResumeLayout(False)
+        CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.SplitContainer1.ResumeLayout(False)
+        Me.SplitContainer2.Panel1.ResumeLayout(False)
+        CType(Me.SplitContainer2, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.SplitContainer2.ResumeLayout(False)
+        Me.Panel1.ResumeLayout(False)
+        Me.Panel1.PerformLayout()
+        Me.MainMenu.ResumeLayout(False)
+        Me.MainMenu.PerformLayout()
+        Me.ResumeLayout(False)
 
-End Sub
-    Friend WithEvents entitiesRightClickMenu As System.Windows.Forms.ContextMenuStrip
+    End Sub
+    Friend WithEvents EntitiesRCMenu As System.Windows.Forms.ContextMenuStrip
     Friend WithEvents ToolStripSeparator1 As System.Windows.Forms.ToolStripSeparator
     Friend WithEvents SelectAllSubEntitiesToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents UnselectAllSubEntitiesToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents periodsRightClickMenu As System.Windows.Forms.ContextMenuStrip
+    Friend WithEvents PeriodsRCMenu As System.Windows.Forms.ContextMenuStrip
     Friend WithEvents SelectAllToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents UnselectAllToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents compute_complete As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents DGVsRCM As System.Windows.Forms.ContextMenuStrip
+    Friend WithEvents DataGridViewsRCMenu As System.Windows.Forms.ContextMenuStrip
     Friend WithEvents DisplayDataTrackingToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents DisplayAdjustmensRCM As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ToolStripSeparator2 As System.Windows.Forms.ToolStripSeparator
-    Friend WithEvents AdjustmentsRCM As System.Windows.Forms.ContextMenuStrip
+    Friend WithEvents AdjustmentsRCMenu As System.Windows.Forms.ContextMenuStrip
     Friend WithEvents SelectAllToolStripMenuItem1 As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents UnselectAllToolStripMenuItem1 As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ToolStripSeparator4 As System.Windows.Forms.ToolStripSeparator
     Friend WithEvents FormatsRCMBT As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents SplitContainer1 As System.Windows.Forms.SplitContainer
-    Friend WithEvents MenuIL As System.Windows.Forms.ImageList
+    Friend WithEvents MenuImageList As System.Windows.Forms.ImageList
     Friend WithEvents SplitContainer2 As System.Windows.Forms.SplitContainer
-    Friend WithEvents BTIL As System.Windows.Forms.ImageList
-    Friend WithEvents ImageList1 As System.Windows.Forms.ImageList
+    Friend WithEvents ButtonsImageList As System.Windows.Forms.ImageList
     Friend WithEvents tabControl1 As VIBlend.WinForms.Controls.vTabControl
     Friend WithEvents Panel1 As System.Windows.Forms.Panel
     Friend WithEvents MainMenu As System.Windows.Forms.MenuStrip
@@ -495,5 +487,5 @@ End Sub
     Friend WithEvents VersionTB As VIBlend.WinForms.Controls.vTextBox
     Friend WithEvents CurrencyTB As VIBlend.WinForms.Controls.vTextBox
     Friend WithEvents EntityTB As VIBlend.WinForms.Controls.vTextBox
-    Public WithEvents expansionIL As System.Windows.Forms.ImageList
+    Public WithEvents ExpansionImageList As System.Windows.Forms.ImageList
 End Class

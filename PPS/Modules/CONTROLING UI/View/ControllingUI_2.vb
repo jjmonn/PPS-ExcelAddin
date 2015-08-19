@@ -133,7 +133,7 @@ Friend Class ControllingUI_2
         leftPaneExpandBT = New vButton
         leftPaneExpandBT.Width = 19
         leftPaneExpandBT.Height = 19
-        leftPaneExpandBT.ImageList = expansionIL
+        leftPaneExpandBT.ImageList = ExpansionImageList
         leftPaneExpandBT.ImageIndex = 2
         leftPaneExpandBT.Text = ""
         leftPaneExpandBT.FlatStyle = FlatStyle.Flat
@@ -150,9 +150,9 @@ Friend Class ControllingUI_2
         AddHandler leftPane_control.PanelCollapseBT.Click, AddressOf CollapseSP1Pane1
         AddHandler leftPaneExpandBT.Click, AddressOf ExpandSP1Pane1
 
-        leftPane_control.entitiesTV.ContextMenuStrip = entitiesRightClickMenu
-        leftPane_control.adjustmentsTV.ContextMenuStrip = AdjustmentsRCM
-        leftPane_control.periodsTV.ContextMenuStrip = periodsRightClickMenu
+        leftPane_control.entitiesTV.ContextMenuStrip = EntitiesRCMenu
+        leftPane_control.adjustmentsTV.ContextMenuStrip = AdjustmentsRCMenu
+        leftPane_control.periodsTV.ContextMenuStrip = PeriodsRCMenu
 
         Dim vNode As vTreeNode = VTreeViewUtil.FindNode(leftPane_control.versionsTV, My.Settings.version_id)
         If Not vNode Is Nothing Then
@@ -177,7 +177,7 @@ Friend Class ControllingUI_2
             DGV.Left = INNER_MARGIN
             DGV.Top = INNER_MARGIN
             DGV.BackColor = SystemColors.Control
-            DGV.ContextMenuStrip = DGVsRCM
+            DGV.ContextMenuStrip = DataGridViewsRCMenu
             tab_.Controls.Add(DGV)
             AddHandler DGV.CellMouseClick, AddressOf DGV_CellMouseClick
         Next
@@ -247,7 +247,7 @@ Friend Class ControllingUI_2
         SplitContainer2.Panel2.Controls.Add(rightPane_Control)
         rightPane_Control.Dock = DockStyle.Fill
 
-        rightPane_Control.CollapseRightPaneBT.ImageList = expansionIL
+        rightPane_Control.CollapseRightPaneBT.ImageList = ExpansionImageList
         rightPane_Control.CollapseRightPaneBT.ImageKey = "expand_right"
 
         AddHandler rightPane_Control.UpdateBT.Click, AddressOf RefreshFromRightPane
@@ -258,7 +258,7 @@ Friend Class ControllingUI_2
         rightPaneExpandBT = New vButton
         rightPaneExpandBT.Width = 19
         rightPaneExpandBT.Height = 19
-        rightPaneExpandBT.ImageList = expansionIL
+        rightPaneExpandBT.ImageList = ExpansionImageList
         rightPaneExpandBT.Margin = New Padding(3, 5, 3, 3)
         rightPaneExpandBT.ImageKey = "expand_left"
         rightPaneExpandBT.Text = ""
