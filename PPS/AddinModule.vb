@@ -1387,7 +1387,7 @@ Public Class AddinModule
 
     Private Sub VersionBT_OnClick_1(sender As Object, control As IRibbonControl, pressed As Boolean) Handles VersionBT.OnClick
 
-        If GlobalVariables.ConnectionState = False Then
+        If GlobalVariables.AuthenticationFlag = False Then
             ConnectionBT_OnClick(sender, control, pressed)
         Else
             LaunchVersionSelection()
@@ -1404,7 +1404,7 @@ Public Class AddinModule
                                  control As AddinExpress.MSO.IRibbonControl,
                                  pressed As System.Boolean) Handles UploadBT.OnClick
 
-       If GlobalVariables.ConnectionState = False Then
+        If GlobalVariables.AuthenticationFlag = False Then
             ConnectionBT_OnClick(sender, control, pressed)
         Else
             If GRSControlersDictionary.ContainsKey(GlobalVariables.APPS.ActiveSheet) Then
@@ -1423,7 +1423,7 @@ Public Class AddinModule
                                   control As AddinExpress.MSO.IRibbonControl,
                                   pressed As System.Boolean) Handles WSUplaodBT.OnClick
 
-         If GlobalVariables.ConnectionState = False Then
+        If GlobalVariables.AuthenticationFlag = False Then
             ConnectionBT_OnClick(sender, control, pressed)
         Else
             '    Dim DSDUI As New SubmissionControlUI
@@ -1434,7 +1434,7 @@ Public Class AddinModule
 
     Private Sub WBUploadBT_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) Handles WBUplaodBT.OnClick
 
-       If GlobalVariables.ConnectionState = False Then
+        If GlobalVariables.AuthenticationFlag = False Then
             ConnectionBT_OnClick(sender, control, pressed)
         Else
             Dim MSA As New MultipleSheetsAcquisition
@@ -1449,7 +1449,7 @@ Public Class AddinModule
 
     Private Sub InputReportLaunchBT_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) Handles InputReportLaunchBT.OnClick
 
-         If GlobalVariables.ConnectionState = False Then
+        If GlobalVariables.AuthenticationFlag = False Then
             ConnectionBT_OnClick(sender, control, pressed)
         Else
             If CDbl(GlobalVariables.APPS.Version.Replace(".", ",")) > EXCEL_MIN_VERSION Then
@@ -1506,7 +1506,7 @@ Public Class AddinModule
                                         control As AddinExpress.MSO.IRibbonControl,
                                         pressed As System.Boolean) Handles ControlingUI2BT.OnClick
 
-       If GlobalVariables.ConnectionState = False Then
+        If GlobalVariables.AuthenticationFlag = False Then
             ConnectionBT_OnClick(sender, control, pressed)
         Else
             Dim CONTROLLING As New ControllingUI_2
@@ -1520,7 +1520,7 @@ Public Class AddinModule
 
     Private Sub AdxRibbonSplitButton1_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) Handles RefreshBT.OnClick, RefreshWorksheetBT.OnClick
 
-       If GlobalVariables.ConnectionState = False Then
+        If GlobalVariables.AuthenticationFlag = False Then
             ConnectionBT_OnClick(sender, control, pressed)
         Else
             If Not GRSControlersDictionary.ContainsKey(GlobalVariables.APPS.ActiveSheet) Then
@@ -1536,7 +1536,7 @@ Public Class AddinModule
 
     Private Sub RefreshSelectionBT_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) Handles RefreshSelectionBT.OnClick
 
-       If GlobalVariables.ConnectionState = False Then
+        If GlobalVariables.AuthenticationFlag = False Then
             ConnectionBT_OnClick(sender, control, pressed)
         Else
             If Not GRSControlersDictionary.ContainsKey(GlobalVariables.APPS.ActiveSheet) Then
@@ -1577,7 +1577,7 @@ Public Class AddinModule
                                     control As AddinExpress.MSO.IRibbonControl,
                                     pressed As System.Boolean) Handles FunctionDesigner.OnClick
 
-       If GlobalVariables.ConnectionState = False Then
+        If GlobalVariables.AuthenticationFlag = False Then
             ConnectionBT_OnClick(sender, control, pressed)
         Else
             Dim PPSBI As New PPSBI_UI
@@ -1594,7 +1594,7 @@ Public Class AddinModule
 
     Private Sub SubmissionsControlBT_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) Handles SubmissionControlBT.OnClick
 
-         If GlobalVariables.ConnectionState = False Then
+        If GlobalVariables.AuthenticationFlag = False Then
             ConnectionBT_OnClick(sender, control, pressed)
         Else
             Dim SubmissionControl As New SubmissionsControlsController
@@ -1604,7 +1604,7 @@ Public Class AddinModule
 
     Private Sub LogBT_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) Handles LogBT.OnClick
 
-          If GlobalVariables.ConnectionState = False Then
+        If GlobalVariables.AuthenticationFlag = False Then
             ConnectionBT_OnClick(sender, control, pressed)
         Else
             Dim logController As New LogController
@@ -1619,7 +1619,7 @@ Public Class AddinModule
 
     Private Sub FModelingBT_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) Handles financialModelingBT.OnClick
 
-       If GlobalVariables.ConnectionState = False Then
+        If GlobalVariables.AuthenticationFlag = False Then
             ConnectionBT_OnClick(sender, control, pressed)
         Else
             Dim FModellingui2 As New FModelingUI2
@@ -1630,7 +1630,7 @@ Public Class AddinModule
 
     Private Sub AlternativeScenariosBT_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) Handles AdvancedModelingBT.OnClick
 
-         If GlobalVariables.ConnectionState = False Then
+        If GlobalVariables.AuthenticationFlag = False Then
             ConnectionBT_OnClick(sender, control, pressed)
         Else
             Dim ASController As New AlternativeScenariosController
@@ -1642,7 +1642,7 @@ Public Class AddinModule
 
     Private Sub MarketPricesMGT_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) Handles MarketPricesMGT.OnClick
 
-        If GlobalVariables.ConnectionState = False Then
+        If GlobalVariables.AuthenticationFlag = False Then
             ConnectionBT_OnClick(sender, control, pressed)
         Else
             Dim MarketPricesMGT As New MarketPricesController
@@ -1652,7 +1652,7 @@ Public Class AddinModule
 
     Private Sub ASReportsMGTBT_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) Handles ASReportsMGTBT.OnClick
 
-          If GlobalVariables.ConnectionState = False Then
+        If GlobalVariables.AuthenticationFlag = False Then
             ConnectionBT_OnClick(sender, control, pressed)
         Else
             Dim ReportDesigner As New ReportsDesignerController(GDF_AS_REPORTS_TABLE, GDFSUEZASAccountsMapping.GetAlternativeScenarioAccountsList)
@@ -1662,7 +1662,7 @@ Public Class AddinModule
 
     Private Sub ASEntitiesAttributesTabBT_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) Handles ASEntitiesAttributesTabBT.OnClick
 
-       If GlobalVariables.ConnectionState = False Then
+        If GlobalVariables.AuthenticationFlag = False Then
             ConnectionBT_OnClick(sender, control, pressed)
         Else
             Dim EntitiesAttributesMGT As New ASEntitiesAttributesController
@@ -1679,7 +1679,7 @@ Public Class AddinModule
 
     Private Sub ConfigurationRibbonBT_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) Handles ConfigurationRibbonBT.OnClick
 
-        If GlobalVariables.ConnectionState = False Then
+        If GlobalVariables.AuthenticationFlag = False Then
             ConnectionBT_OnClick(sender, control, pressed)
         Else
             Dim MGTUI As New PlatformMGTGeneralUI
@@ -1819,7 +1819,7 @@ Public Class AddinModule
 
     Private Sub VersionBT2_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) Handles VersionBT2.OnClick
 
-        If GlobalVariables.ConnectionState = False Then
+        If GlobalVariables.AuthenticationFlag = False Then
             ConnectionBT_OnClick(sender, control, pressed)
         Else
             LaunchVersionSelection()

@@ -10,7 +10,7 @@
 '
 '
 '
-' Last modified: 17/08/2015
+' Last modified: 19/08/2015
 ' Author: Julien Monnereau
 
 
@@ -272,6 +272,7 @@ Friend Class ConnectionsFunctions
         For Each value As Boolean In globalVariablesInitFlags.Values
             If value = False Then Return False
         Next
+        GlobalVariables.AuthenticationFlag = True
         System.Diagnostics.Debug.WriteLine("Global variables initialized")
         Return True
 

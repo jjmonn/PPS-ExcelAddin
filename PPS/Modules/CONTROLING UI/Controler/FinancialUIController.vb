@@ -575,7 +575,7 @@ Friend Class FinancialUIController
 
     Private Sub DGVs_CellValueNeeded(ByVal sender As Object, ByVal args As CellValueNeededEventArgs)
 
-        On Error GoTo errH1
+        '    On Error GoTo errH1
         Dim accountId As Int32 = 0
         Dim entityId As Int32 = 0
         Dim periodId As String = ""
@@ -634,8 +634,8 @@ Friend Class FinancialUIController
             End If
         End If
 
-errH1:
-        args.CellValue = ""
+        'errH1:
+        '        args.CellValue = ""
 
     End Sub
 
@@ -796,7 +796,7 @@ errH1:
 
         Dim tmpDict As Dictionary(Of Int32, List(Of Int32)) = FiltersReader.GetFiltersValuesDict(TV, axis_id)
         For Each filterId As Int32 In tmpDict.Keys
-            filtersDict.Add(Computer.FILTERS_DECOMPOSITION_IDENTIFIER & filterId, tmpDict(filterId))
+            filtersDict.Add(filterId, tmpDict(filterId))
         Next
 
     End Sub

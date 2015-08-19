@@ -18,6 +18,7 @@ Friend Class GlobalVariables
     'Friend Shared Connection As ADODB.Connection
     Friend Shared NetworkConnect As NetworkLauncher
     Friend Shared ConnectionState As Boolean = False
+    Friend Shared AuthenticationFlag As Boolean = False
     Friend Shared database As String = My.Settings.database
     Friend Shared timeOut As UInt16 = 5
 

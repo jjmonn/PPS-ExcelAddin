@@ -103,6 +103,9 @@ Friend Class FiltersReader
         Dim filterId As Int32 = GlobalVariables.FiltersValues.filtervalues_hash(CInt(valueNode.Value))(FILTER_ID_VARIABLE)
         If filterIdsList.Contains(filterId) _
          AndAlso valueNode.Checked = CheckState.Checked Then
+            If selectionDictionary.ContainsKey(filterId) = False Then
+                selectionDictionary.Add(filterId, New List(Of Int32))
+            End If
             selectionDictionary(filterId).Add(valueNode.Value)
         End If
 
