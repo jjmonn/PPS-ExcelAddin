@@ -139,14 +139,17 @@
   <data name="refresh0.1" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\refresh0.1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Actions-format-stroke-color-icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Actions-format-stroke-color-icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="tablet_computer" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\tablet_computer.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="checkbox3" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\checkbox3.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="favicon(217)" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\favicon(217).ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="refresh" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\refresh.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="barcode_delete" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\barcode_delete.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -187,6 +190,12 @@
   <data name="registry2" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\registry2.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="sizes" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\sizes.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="refresh dark blue small" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\refresh dark blue small.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="favicon(81)" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\favicon(81).ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -226,9 +235,6 @@
   <data name="folder2" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\folder2.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="arrow 1" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\arrow 1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="elements31" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\elements31.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -238,11 +244,11 @@
   <data name="users_relation2_delete" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\users_relation2_delete.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="tablet_computer" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\tablet_computer.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="favicon(249)" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\favicon(249).ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="tablet_computer1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\tablet_computer1.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="config circle green" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\config circle green.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -301,11 +307,14 @@
   <data name="elements3_delete" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\elements3_delete.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="sizes" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\sizes.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="arrow 1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\arrow 1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="add3" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\add.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="registry_add" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\registry_add.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Add file" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Add file.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -358,14 +367,8 @@
   <data name="element_branch24" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\element_branch24.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="tablet_computer1" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\tablet_computer1.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="imageres_89" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\imageres_89.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="add2" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\add2.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="element_branch2_delete" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\element_branch2_delete.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -394,8 +397,8 @@
   <data name="folder_open_add" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\folder_open_add.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="breakpoints" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\breakpoints.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="add2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\add2.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="user" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\user.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -421,8 +424,8 @@
   <data name="refresh greay bcgd" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\refresh greay bcgd.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="registry_add" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\registry_add.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="breakpoints" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\breakpoints.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="constraint" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\constraint.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -430,7 +433,7 @@
   <data name="element_branch2" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\element_branch2.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="refresh" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\refresh.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="refresh db 32" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\refresh db 32.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

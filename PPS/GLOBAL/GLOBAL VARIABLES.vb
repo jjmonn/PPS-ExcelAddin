@@ -80,7 +80,7 @@ Friend Class GlobalVariables
     Friend Shared ProductsFilters As ProductsFilter
     Friend Shared AdjustmentsFilters As AdjustmentFilter
     Friend Shared Versions As FactsVersion
-    Friend Shared Currencies As Currency2
+    Friend Shared Currencies As Currency
 
 #End Region
 

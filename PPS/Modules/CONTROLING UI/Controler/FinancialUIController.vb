@@ -10,7 +10,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 17/08/2015
+' Last modified: 19/08/2015
 
 
 Imports System.Windows.Forms
@@ -119,17 +119,17 @@ Friend Class FinancialUIController
 
 #Region "Computing"
 
-    Friend Sub Compute(Optional ByRef useCache As Boolean = False)
+    Friend Sub Compute(ByRef versionIDs() As Int32, _
+                       ByRef inputEntityNode As vTreeNode, _
+                       Optional ByRef useCache As Boolean = False)
+
+        EntityNode = inputEntityNode
 
         rowsHierarchyNode.Nodes.Clear()
         columnsHierarchyNode.Nodes.Clear()
 
         ' Versions init
-        Dim versionIDs() As Int32 = VTreeViewUtil.GetCheckedNodesIds(View.leftPane_control.versionsTV).ToArray
         versionsDict.Clear()
-        ' ' versions presence check before launching the 
-        ' priority high
-        ' + take off folder versions from list
         For Each version_Id As Int32 In versionIDs
             Dim versionNode As vTreeNode = VTreeViewUtil.FindNode(View.leftPane_control.versionsTV, version_Id)
             versionsDict.Add(versionNode.Value, versionNode.Text)
@@ -149,23 +149,17 @@ Friend Class FinancialUIController
             VTreeViewUtil.AddNode(item.Value, item.Text, columnsHierarchyNode)
         Next
 
-        ' ------------------------------------------
         ' Filters and axis Filters Build
-        Dim filters As New Dictionary(Of Int32, List(Of Int32))
-        ' Use Generic Selection Builder
-        Dim axisFilters As New Dictionary(Of Int32, List(Of Int32))
-        ' Use tv checkboxes
-        '   -> to be implemented priority high !!
-        ' ------------------------------------------
+        Dim filters As Dictionary(Of Int32, List(Of Int32)) = GetFilters()
+        Dim axisFilters As Dictionary(Of Int32, List(Of Int32)) = GetAxisFilters()
 
         ' Decomposition Hierarchy build
         Dim computingHierarchyList As New List(Of String)
         IncrementComputingHierarchy(rowsHierarchyNode, computingHierarchyList)
         IncrementComputingHierarchy(columnsHierarchyNode, computingHierarchyList)
 
-        ' Currency setting
-        ' STUBS !!!!!!!!!!!!! priority high
-        Dim currencyId As Int32 = 3 '  'CInt(View.CurrenciesCLB.Name)
+        ' stub !! priotity high!!!
+        Dim currencyId As Int32 = 3 'CInt(View.leftPane_control.currenciesCLB.SelectedItem.Value)
 
         ' Computing order
         Dim mustCompute As Boolean = True
@@ -177,12 +171,8 @@ Friend Class FinancialUIController
         If mustCompute = True Then
 
             If computingHierarchyList.Count = 0 Then computingHierarchyList = Nothing
-            filters = Nothing
-            axisFilters = Nothing
-            ' STUB -> priority HIGH !!!!!!!!
-
             Computer.CMSG_COMPUTE_REQUEST(versionIDs, _
-                                    CInt(EntityNode.value), _
+                                    CInt(entityNode.Value), _
                                     currencyId, _
                                     filters, _
                                     axisFilters, _
@@ -190,7 +180,7 @@ Friend Class FinancialUIController
         End If
 
         ' Cache registering
-        cacheEntityID = CInt(EntityNode.value)
+        cacheEntityID = CInt(entityNode.Value)
         cacheCurrencyId = currencyId
         cacheVersions = versionIDs
         cacheComputingHierarchyList = computingHierarchyList
@@ -205,7 +195,7 @@ Friend Class FinancialUIController
         View.CP = New CircularProgressUI(System.Drawing.Color.Blue, "Computing")
         View.CP.Show()
 
-        
+
     End Sub
 
     Private Function CheckCache(ByRef currencyId As Int32, _
@@ -585,6 +575,7 @@ Friend Class FinancialUIController
 
     Private Sub DGVs_CellValueNeeded(ByVal sender As Object, ByVal args As CellValueNeededEventArgs)
 
+        On Error GoTo errH1
         Dim accountId As Int32 = 0
         Dim entityId As Int32 = 0
         Dim periodId As String = ""
@@ -642,6 +633,9 @@ Friend Class FinancialUIController
                 args.CellValue = ""
             End If
         End If
+
+errH1:
+        args.CellValue = ""
 
     End Sub
 
@@ -739,41 +733,85 @@ Friend Class FinancialUIController
 #End Region
 
 
+#Region "Filters Reading"
+
+    Private Function GetAxisFilters() As Dictionary(Of Int32, List(Of Int32))
+
+        Dim axisFilters As New Dictionary(Of Int32, List(Of Int32))
+
+        AddAxisFilterFromTV(View.leftPane_control.entitiesTV, GlobalEnums.AnalysisAxis.ENTITIES, axisFilters)
+        AddAxisFilterFromTV(View.leftPane_control.clientsTV, GlobalEnums.AnalysisAxis.CLIENTS, axisFilters)
+        AddAxisFilterFromTV(View.leftPane_control.productsTV, GlobalEnums.AnalysisAxis.PRODUCTS, axisFilters)
+        AddAxisFilterFromTV(View.leftPane_control.adjustmentsTV, GlobalEnums.AnalysisAxis.ADJUSTMENTS, axisFilters)
+
+        If axisFilters.Count = 0 Then
+            Return Nothing
+        Else
+            Return axisFilters
+        End If
+
+    End Function
+
+    Private Sub AddAxisFilterFromTV(ByRef TV As vTreeView, _
+                                    ByRef axisId As Int32, _
+                                    ByRef axisFilters As Dictionary(Of Int32, List(Of Int32)))
+
+        If FiltersReader.IsAxisFiltered(TV) Then
+            axisFilters.Add(axisId, New List(Of Int32))
+            For Each axisValueId As Int32 In VTreeViewUtil.GetCheckedNodesIds(TV)
+                axisFilters(axisId).Add(axisValueId)
+            Next
+        End If
+
+    End Sub
+
+    Private Function GetFilters() As Dictionary(Of Int32, List(Of Int32))
+
+        Dim filters As New Dictionary(Of Int32, List(Of Int32))
+
+        AddFiltersFromTV(View.leftPane_control.entitiesFiltersTV, _
+                         GlobalEnums.AnalysisAxis.ENTITIES, _
+                         filters)
+        AddFiltersFromTV(View.leftPane_control.clientsFiltersTV, _
+                         GlobalEnums.AnalysisAxis.CLIENTS, _
+                         filters)
+        AddFiltersFromTV(View.leftPane_control.productsFiltersTV, _
+                         GlobalEnums.AnalysisAxis.PRODUCTS, _
+                         filters)
+        AddFiltersFromTV(View.leftPane_control.adjustmentsFiltersTV, _
+                         GlobalEnums.AnalysisAxis.ADJUSTMENTS, _
+                         filters)
+
+        If filters.Count = 0 Then
+            Return Nothing
+        Else
+            Return filters
+        End If
+ 
+    End Function
+
+    Private Sub AddFiltersFromTV(ByRef TV As vTreeView, _
+                                 ByRef axis_id As Int32, _
+                                 ByRef filtersDict As Dictionary(Of Int32, List(Of Int32)))
+
+        Dim tmpDict As Dictionary(Of Int32, List(Of Int32)) = FiltersReader.GetFiltersValuesDict(TV, axis_id)
+        For Each filterId As Int32 In tmpDict.Keys
+            filtersDict.Add(Computer.FILTERS_DECOMPOSITION_IDENTIFIER & filterId, tmpDict(filterId))
+        Next
+
+    End Sub
+
+
+#End Region
+
+
 #Region "Utilities"
-
-    'Private Sub CopySubNodes(ByRef or_node As TreeNode, _
-    '                         ByRef des_node As TreeNode)
-
-    '    Dim subNode As TreeNode = des_node.Nodes.Add(or_node.Name, or_node.Text)
-    '    For Each node In or_node.Nodes
-    '        CopySubNodes(node, subNode)
-    '    Next
-
-    'End Sub
 
     Private Sub FillUIHeader()
 
-        ' View.PBar.EndProgress()
-
-        ' Entities Textbox
         View.EntityTB.Text = EntityNode.Text
-
-        ' Currencies textbox
-
-        ' follow check changed in view
-        '    View.CurrencyTB.Text = View.selectedCurrencyItem.Text
-   
-        ' Versions Textbox
-        ' Get versions name from ids
-        'Dim versions_ids(categories_values_dict(VERSIONS_CODE).Keys.Count) As String
-        'Dim i = 0
-        'For Each id As String In categories_values_dict(VERSIONS_CODE).Keys
-        '    versions_ids(i) = versions_dict(id)(NAME_VARIABLE)
-        '    i = i + 1
-        'Next
-        ' fill textbox
+        '   View.CurrencyTB.Text = View.selectedCurrencyItem.Text stub to be reimplmented priority high !!!!!
         View.VersionTB.Text = String.Join(" ; ", versionsDict.Values)
-    
 
     End Sub
 
@@ -782,6 +820,7 @@ Friend Class FinancialUIController
         ' should be elsewhere !!!! 
         ' priority normal
         ' Maybe issue if nothing in the DGV ? !
+        ' reimplement ??  priority normal
         If Not EntityNode.Text Is Nothing Then
             Dim destination As Microsoft.Office.Interop.Excel.Range = WorksheetWrittingFunctions.CreateReceptionWS(EntityNode.Text, _
                                                                                            {"Entity", "Version", "Currency"}, _

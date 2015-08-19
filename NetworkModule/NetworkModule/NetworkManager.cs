@@ -7,6 +7,7 @@ using System.Net.Sockets;
 using System.Collections;
 using System.Threading;
 using System.IO;
+using System.Diagnostics;
 using System.Reflection;
 
 public class NetworkManager
@@ -82,22 +83,26 @@ public class NetworkManager
         l_size = m_Sock.GetStream().Read(l_buffer, 0, 8);
         if (l_size < 8)
         {
-            Console.WriteLine("Invalid packet received");
-            System.Diagnostics.Debug.Write("Invalid packet received");
-            return (null);
+           // Console.WriteLine("Invalid packet received");
+            System.Diagnostics.Debug.WriteLine("Invalid packet received");
+             return (null);
         }
         l_sizeBuffer = l_buffer[3] << 24 | l_buffer[2] << 16 | l_buffer[1] << 8 | l_buffer[0];
         l_realSize = l_buffer[7] << 24 | l_buffer[6] << 16 | l_buffer[5] << 8 | l_buffer[4];
         l_buffer = new byte[l_sizeBuffer];
 
+        Debug.WriteLine("Receive packet of size " + l_sizeBuffer);
         do
         {
             int sock = m_Sock.GetStream().Read(l_buffer, l_byteReaded, l_sizeBuffer - l_byteReaded);
+
+            if (sock == 0)
+                break;
             l_byteReaded += sock;
         }
         while (l_byteReaded != l_sizeBuffer);
 
-        l_byteBuffer.Write(l_buffer, 0, l_sizeBuffer);
+        l_byteBuffer.Write(l_buffer, 0, l_byteReaded);
         l_byteBuffer.Uncompress(l_realSize);
         return (l_byteBuffer);
     }
@@ -127,13 +132,13 @@ public class NetworkManager
             l_opcode = l_packet.ReadUint16();
             if ((l_callback = this.GetCallback(l_opcode)) == null)
             {
-                Console.WriteLine("Undefined packet type " + l_opcode.ToString("X2"));
-                System.Diagnostics.Debug.Write("Undefined packet type " + l_opcode.ToString("X2"));
+               // Console.WriteLine("Undefined packet type " + l_opcode.ToString("X2"));
+                System.Diagnostics.Debug.WriteLine("Undefined packet type " + l_opcode.ToString("X2"));
             }
             else
             {
-                Console.WriteLine("Receive defined " + l_opcode.ToString("X2"));
-                System.Diagnostics.Debug.Write("Receive defined " + l_opcode.ToString("X2"));
+               // Console.WriteLine("Receive defined " + l_opcode.ToString("X2"));
+                System.Diagnostics.Debug.WriteLine("Receive defined " + l_opcode.ToString("X2"));
                 for (int i = 0; i < l_callback.Count; i++)
                     l_callback.ElementAt(i)(l_packet);
             }

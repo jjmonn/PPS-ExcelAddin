@@ -8,7 +8,7 @@ Imports VIBlend.WinForms.Controls
 '
 ' Author: Julien Monnereau
 ' Created: 27/07/2015
-' Modified: 17/08/2015
+' Modified: 18/08/2015
 
 
 Friend Class AxisFilter
@@ -22,7 +22,7 @@ Friend Class AxisFilter
     End Sub
 
     Friend Shared Sub LoadFvTv(ByRef FvTv As vTreeView, _
-                               ByRef axis_id As UInt32)
+                               ByRef axis_id As Int32)
 
         Dim filtersNode As New VIBlend.WinForms.Controls.vTreeNode
         LoadFvTv(FvTv, filtersNode, axis_id)
@@ -31,7 +31,7 @@ Friend Class AxisFilter
 
     Friend Shared Sub LoadFvTv(ByRef FvTv As TreeView, _
                                ByRef filtersNode As TreeNode, _
-                               ByRef axis_id As UInt32)
+                               ByRef axis_id As Int32)
 
         GlobalVariables.Filters.LoadFiltersNode(filtersNode, axis_id)
         For Each filterNode As TreeNode In filtersNode.Nodes
@@ -59,7 +59,7 @@ Friend Class AxisFilter
 
         Dim filtersValuesIdDict = GlobalVariables.FiltersValues.GetFiltervaluesDictionary(CInt(filterNode.Name), _
                                                                                           ID_VARIABLE, NAME_VARIABLE)
-        For Each filterValueId As UInt32 In filtersValuesIdDict.Keys
+        For Each filterValueId As Int32 In filtersValuesIdDict.Keys
             If firstLevelFlag = True Then
 
                 FvTvNode.Nodes.Add(filterValueId, filtersValuesIdDict(filterValueId))
@@ -81,7 +81,7 @@ Friend Class AxisFilter
 
         Dim filtersValuesIdDict = GlobalVariables.FiltersValues.GetFiltervaluesDictionary(CInt(filterNode.Value), _
                                                                                           ID_VARIABLE, NAME_VARIABLE)
-        For Each filterValueId As UInt32 In filtersValuesIdDict.Keys
+        For Each filterValueId As Int32 In filtersValuesIdDict.Keys
             If firstLevelFlag = True Then
 
                 Dim valueNode As vTreeNode = VTreeViewUtil.AddNode(filterValueId, filtersValuesIdDict(filterValueId), FvTvNode)

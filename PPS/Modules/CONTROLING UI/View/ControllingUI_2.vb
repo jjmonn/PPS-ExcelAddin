@@ -9,7 +9,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 17/08/2015
+' Last modified: 19/08/2015
 
 
 Imports System.Windows.Forms
@@ -200,7 +200,7 @@ Friend Class ControllingUI_2
 
         ' This initialization should go into right pane !!!!!!!!!!
         ' ///////////////////////////////////////////
-        ' priority high
+        ' priority high !!! 
         Dim analysis_axis_tv As New vTreeView
         VTreeViewUtil.InitTVFormat(analysis_axis_tv)
         VTreeViewUtil.AddNode(Computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.ACCOUNTS, ACCOUNTS_CODE, analysis_axis_tv)
@@ -279,10 +279,13 @@ Friend Class ControllingUI_2
     Private Sub RefreshData(Optional ByRef entityNode As vTreeNode = Nothing, _
                             Optional ByRef useCache As Boolean = False)
 
-        ' check that 1 version is selected at least 
-
-        ' + attention => it seems that we can select folder versions !! 
-        ' priority high !!! 
+        Dim versionsIds As New List(Of Int32)
+        For Each versionId In VTreeViewUtil.GetCheckedNodesIds(leftPane_control.versionsTV)
+            If GlobalVariables.Versions.versions_hash(versionId)(is_folder_variable) = False Then
+                versionsIds.Add(versionId)
+            End If
+        Next
+       
         If entityNode Is Nothing Then
             If leftPane_control.entitiesTV.Nodes.Count > 0 Then
                 entityNode = leftPane_control.entitiesTV.Nodes(0)
@@ -291,8 +294,11 @@ Friend Class ControllingUI_2
                 Exit Sub
             End If
         Else
-            Controller.EntityNode = entityNode ' inverser to be put in controller  !! priority normal 
-            Controller.Compute()
+            If versionsIds.Count > 0 Then
+                Controller.Compute(versionsIds.ToArray, entityNode)
+            Else
+                MsgBox("At least one version must be selected.")
+            End If
         End If
 
     End Sub
@@ -316,7 +322,12 @@ Friend Class ControllingUI_2
 
 #Region "Events"
 
-    Private Sub EntitiesTV_KeyDown(sender As Object, e As Windows.Forms.KeyEventArgs)
+
+    'Private Sub VTreeView1_KeyDown(sender As Object, e As Windows.Forms.KeyEventArgs) Handles VTreeView1.KeyDown
+
+    'End Sub
+
+    Private Sub EntitiesTV_KeyDown(sender As Object, e As KeyEventArgs)
 
         If e.KeyCode = Keys.Enter Then
             If Not leftPane_control.entitiesTV.SelectedNode Is Nothing Then

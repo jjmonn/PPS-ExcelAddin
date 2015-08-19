@@ -11,7 +11,7 @@ Imports System.Collections.Generic
 '
 ' Author: Julien Monnereau
 ' Created: 23/07/2015
-' Last modified: 03/08/2015
+' Last modified: 17/08/2015
 
 
 
@@ -24,14 +24,14 @@ Friend Class FilterValue
     Friend state_flag As Boolean
     Friend server_response_flag As Boolean
     Friend filtervalues_hash As New Hashtable
-    Private request_id As Dictionary(Of UInt32, Boolean)
+    Private request_id As Dictionary(Of Int32, Boolean)
 
     ' Events
     Public Event ObjectInitialized()
     Public Event FilterValueCreationEvent(ByRef attributes As Hashtable)
     Public Shared Event FilterValueRead(ByRef attributes As Hashtable)
     Public Event FilterValueUpdateEvent()
-    Public Event FilterValueDeleteEvent(ByRef id As UInt32)
+    Public Event FilterValueDeleteEvent(ByRef id As Int32)
 
 
 #End Region
@@ -60,7 +60,7 @@ Friend Class FilterValue
             For i As Int32 = 1 To packet.ReadInt32()
                 Dim tmp_ht As New Hashtable
                 GetFilterValueHTFromPacket(packet, tmp_ht)
-                filtervalues_hash(tmp_ht(ID_VARIABLE)) = tmp_ht
+                filtervalues_hash(CInt(tmp_ht(ID_VARIABLE))) = tmp_ht
             Next
             NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_LIST_FILTER_VALUE_ANSWER, AddressOf SMSG_LIST_FILTER_VALUE_ANSWER)
             server_response_flag = True
@@ -101,7 +101,7 @@ Friend Class FilterValue
 
     End Sub
 
-    Friend Shared Sub CMSG_READ_FILTER_VALUE(ByRef id As UInt32)
+    Friend Shared Sub CMSG_READ_FILTER_VALUE(ByRef id As Int32)
 
         NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_READ_FILTERS_VALUE_ANSWER, AddressOf SMSG_READ_FILTER_VALUE_ANSWER)
         Dim packet As New ByteBuffer(CType(ClientMessage.CMSG_CREATE_FILTER_VALUE, UShort))
@@ -136,7 +136,7 @@ Friend Class FilterValue
 
     End Sub
 
-    Friend Sub CMSG_UPDATE_FILTER_VALUE(ByRef id As UInt32, _
+    Friend Sub CMSG_UPDATE_FILTER_VALUE(ByRef id As Int32, _
                                   ByRef updated_var As String, _
                                   ByRef new_value As String)
 
@@ -175,7 +175,7 @@ Friend Class FilterValue
 
     End Sub
 
-    Friend Sub CMSG_DELETE_FILTER_VALUE(ByRef id As UInt32)
+    Friend Sub CMSG_DELETE_FILTER_VALUE(ByRef id As Int32)
 
         NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_DELETE_FILTERS_VALUE_ANSWER, AddressOf SMSG_DELETE_FILTER_VALUE_ANSWER)
         Dim packet As New ByteBuffer(CType(ClientMessage.CMSG_DELETE_FILTER_VALUE, UShort))
@@ -210,7 +210,7 @@ Friend Class FilterValue
 
     End Function
 
-    Friend Function GetFiltervaluesList(ByRef filter_id As UInt32, _
+    Friend Function GetFiltervaluesList(ByRef filter_id As Int32, _
                                         ByRef variable As String) As List(Of Object)
 
         Dim tmp_list As New List(Of Object)
@@ -223,20 +223,20 @@ Friend Class FilterValue
 
     End Function
 
-    Friend Sub GetMostNestedFilterValuesDict(ByRef filter_id As UInt32, _
-                                             ByRef filter_value_id As UInt32, _
-                                             ByRef result_dict As Dictionary(Of UInt32, List(Of UInt32)))
+    Friend Sub GetMostNestedFilterValuesDict(ByRef filter_id As Int32, _
+                                             ByRef filter_value_id As Int32, _
+                                             ByRef result_dict As Dictionary(Of Int32, List(Of Int32)))
 
-        Dim children_filter_value_id As Dictionary(Of UInt32, UInt32) = GetFilterValueIDChildren(filter_value_id)
+        Dim children_filter_value_id As Dictionary(Of Int32, Int32) = GetFilterValueIDChildren(filter_value_id)
         If children_filter_value_id.Count > 0 Then
-            For Each id As UInt32 In children_filter_value_id.Keys
+            For Each id As Int32 In children_filter_value_id.Keys
                 GetMostNestedFilterValuesDict(children_filter_value_id(id), _
                                               ID_VARIABLE, _
                                               result_dict)
             Next
         Else
             If result_dict.ContainsKey(filter_id) = False Then
-                Dim tmp_list As New List(Of UInt32)
+                Dim tmp_list As New List(Of Int32)
                 result_dict.Add(filter_id, tmp_list)
             End If
             result_dict(filter_id).Add(filter_value_id)
@@ -244,13 +244,13 @@ Friend Class FilterValue
 
     End Sub
 
-    Friend Function GetFiltervaluesDictionary(ByRef filter_id As UInt32, _
+    Friend Function GetFiltervaluesDictionary(ByRef filter_id As Int32, _
                                               ByRef Key As String, _
                                               ByRef Value As String) As Hashtable
 
         Dim tmpHT As New Hashtable
         For Each id In filtervalues_hash.Keys
-            If filtervalues_hash(id)(FILTER_ID_VARIABLE) = filter_id Then tmpHT(filtervalues_hash(id)(Key)) = filtervalues_hash(id)(Value)
+            If filtervalues_hash(id)(FILTER_ID_VARIABLE) = filter_id Then tmpHT(CInt(filtervalues_hash(id)(Key))) = filtervalues_hash(id)(Value)
         Next
         Return tmpHT
 
@@ -284,10 +284,10 @@ Friend Class FilterValue
 
     End Sub
 
-    Private Function GetFilterValueIDChildren(ByRef filter_value_id As UInt32) As Dictionary(Of UInt32, UInt32)
+    Private Function GetFilterValueIDChildren(ByRef filter_value_id As Int32) As Dictionary(Of Int32, Int32)
 
-        Dim children_filters_values_id As New Dictionary(Of UInt32, UInt32)
-        For Each id As UInt32 In filtervalues_hash.Keys
+        Dim children_filters_values_id As New Dictionary(Of Int32, Int32)
+        For Each id As Int32 In filtervalues_hash.Keys
             If filtervalues_hash(id)(PARENT_FILTER_VALUE_ID_VARIABLE) = filter_value_id Then
                 children_filters_values_id.Add(id, filtervalues_hash(id)(FILTER_ID_VARIABLE))
             End If

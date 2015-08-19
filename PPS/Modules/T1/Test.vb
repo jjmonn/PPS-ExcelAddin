@@ -59,4 +59,12 @@
 
 
 
+ 
+  
+
+    Private Sub VTreeView1_KeyDown(sender As Object, e As Windows.Forms.KeyEventArgs) Handles VTreeView1.KeyDown
+        MsgBox("key down worked")
+    End Sub
+
+
 End Class

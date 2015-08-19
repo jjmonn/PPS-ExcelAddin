@@ -307,14 +307,14 @@ Friend Class FactsVersion
         version_ht(NAME_VARIABLE) = packet.ReadString()
         version_ht(VERSIONS_LOCKED_VARIABLE) = packet.ReadBool()
         version_ht(VERSIONS_LOCKED_DATE_VARIABLE) = packet.ReadString()
-        version_ht(VERSIONS_IS_FOLDER_VARIABLE) = packet.ReadBool()
+        version_ht(IS_FOLDER_VARIABLE) = packet.ReadBool()
         version_ht(ITEMS_POSITIONS) = packet.ReadUint32()
         version_ht(VERSIONS_TIME_CONFIG_VARIABLE) = packet.ReadUint32()
         version_ht(VERSIONS_RATES_VERSION_ID_VAR) = packet.ReadUint32()
         version_ht(VERSIONS_START_PERIOD_VAR) = packet.ReadUint32()
         version_ht(VERSIONS_NB_PERIODS_VAR) = packet.ReadUint16()
         version_ht(VERSIONS_CREATION_DATE_VARIABLE) = packet.ReadString()
-        If version_ht(VERSIONS_IS_FOLDER_VARIABLE) = True Then
+        If version_ht(IS_FOLDER_VARIABLE) = True Then
             version_ht(IMAGE_VARIABLE) = 1
         Else
             version_ht(IMAGE_VARIABLE) = 0
@@ -329,7 +329,7 @@ Friend Class FactsVersion
         packet.WriteString(attributes(NAME_VARIABLE))
         packet.WriteUint8(attributes(VERSIONS_LOCKED_VARIABLE))
         packet.WriteString(attributes(VERSIONS_LOCKED_DATE_VARIABLE))
-        packet.WriteUint8(attributes(VERSIONS_IS_FOLDER_VARIABLE))
+        packet.WriteUint8(attributes(IS_FOLDER_VARIABLE))
         packet.WriteUint32(attributes(ITEMS_POSITIONS))
         packet.WriteUint32(attributes(VERSIONS_TIME_CONFIG_VARIABLE))
         packet.WriteUint32(attributes(VERSIONS_RATES_VERSION_ID_VAR))

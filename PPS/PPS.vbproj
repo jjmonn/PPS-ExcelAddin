@@ -133,7 +133,6 @@
     <Compile Include="Models\CRUDs\New CRUDs\ProductsFilter.vb" />
     <Compile Include="Models\CRUDs\New CRUDs\FactsVersion.vb" />
     <Compile Include="Models\CRUDs\New CRUDs\SuperCRUD.vb" />
-    <Compile Include="Models\Mappings\CurrenciesSymbolsMapping.vb" />
     <Compile Include="Modules\CONTROLING UI\View\CUI2LeftPane.Designer.vb">
       <DependentUpon>CUI2LeftPane.vb</DependentUpon>
     </Compile>
@@ -201,6 +200,11 @@
     <Compile Include="Modules\T1\Test.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="My Project\Resources.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Utilities\ChartsUtilities.vb" />
     <Compile Include="Models\CRUDs\Old CRUDs\MarketIndex.vb" />
     <Compile Include="Models\CRUDs\Old CRUDs\Control.vb" />
@@ -228,7 +232,7 @@
     <Compile Include="Modules\MODELING\PS MODELING\View\AlternativeScenariosUI.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Models\GenericSelectionBuilder.vb" />
+    <Compile Include="Models\FiltersReader.vb" />
     <Compile Include="Modules\CONTROLING UI\Controler\FinancialUIController.vb" />
     <Compile Include="Modules\CONTROLING UI\View\ControllingUIChartsConfig.Designer.vb">
       <DependentUpon>ControllingUIChartsConfig.vb</DependentUpon>
@@ -447,7 +451,6 @@
     </Compile>
     <Compile Include="Models\CRUDs\New CRUDs\Currency.vb" />
     <Compile Include="Models\CRUDs\Old CRUDs\RateVersion.vb" />
-    <Compile Include="Models\Mappings\ExtraDataMapping.vb" />
     <Compile Include="Models\Mappings\FormulaTypesMapping.vb" />
     <Compile Include="Transactions\SQLLog.vb" />
     <Compile Include="Modules\PLATFORM MANAGEMENT\Axis Super Classes\Views\AnalysisAxisDGV.Designer.vb">
@@ -479,10 +482,10 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
-    <Compile Include="Views\Task Panes\ConnectionTP.Designer.vb">
+    <Compile Include="Modules\CONNECTIONS\Views\ConnectionTP.Designer.vb">
       <DependentUpon>ConnectionTP.vb</DependentUpon>
     </Compile>
-    <Compile Include="Views\Task Panes\ConnectionTP.vb">
+    <Compile Include="Modules\CONNECTIONS\Views\ConnectionTP.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Views\Task Panes\EntitySelectionTP.Designer.vb">
@@ -515,19 +518,12 @@
     <Compile Include="GLOBAL\Constants Data Tables.vb" />
     <Compile Include="GLOBAL\Constants Display.vb" />
     <Compile Include="GLOBAL\Global Variables.vb" />
-    <Compile Include="Modules\CONNECTIONS\Views\ChangePasswordUI.Designer.vb">
-      <DependentUpon>ChangePasswordUI.vb</DependentUpon>
-    </Compile>
-    <Compile Include="Modules\CONNECTIONS\Views\ChangePasswordUI.vb">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="Modules\CONNECTIONS\Views\ConnectionUI.Designer.vb">
       <DependentUpon>ConnectionUI.vb</DependentUpon>
     </Compile>
     <Compile Include="Modules\CONNECTIONS\Views\ConnectionUI.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Modules\CONNECTIONS\Models\SMTPConnection.vb" />
     <Compile Include="Transactions\DataBaseDataUploader.vb" />
     <Compile Include="Controllers\GloablInstancesRestartModule.vb" />
     <Compile Include="Modules\PLATFORM MANAGEMENT\Currencies\Views\RatesView.vb" />
@@ -610,7 +606,6 @@
     <Compile Include="Modules\REPORTS UPLOAD\MODEL\CDataModificationsTracking.vb" />
     <Compile Include="Modules\REPORTS UPLOAD\MODEL\ModelDataSet.vb" />
     <Compile Include="Modules\CONNECTIONS\ConnectionsFunctions.vb" />
-    <Compile Include="Utilities\DataTables_Functions.vb" />
     <Compile Include="Utilities\TreeViewsUtilities.vb" />
     <Compile Include="Utilities\Utilities_Functions.vb" />
     <Compile Include="Views\Utilities\CExcelFormatting.vb" />
@@ -621,11 +616,6 @@
     <Compile Include="Views\Utilities\UIs Events\DragAndDrop.vb" />
     <Compile Include="Views\Utilities\WorksheetWrittingFunctions.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
-    <Compile Include="My Project\Resources.Designer.vb">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
     <Compile Include="Modules\PPSBI\Controller\PPSBIController.vb" />
   </ItemGroup>
   <ItemGroup>
@@ -767,7 +757,7 @@
     <EmbeddedResource Include="Views\PPS Controls\ProgressBarControl.resx">
       <DependentUpon>ProgressBarControl.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Views\Task Panes\ConnectionTP.resx">
+    <EmbeddedResource Include="Modules\CONNECTIONS\Views\ConnectionTP.resx">
       <DependentUpon>ConnectionTP.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\Task Panes\EntitySelectionTP.resx">
@@ -781,9 +771,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ExcelAddinModule1.resx">
       <DependentUpon>ExcelAddinModule1.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Modules\CONNECTIONS\Views\ChangePasswordUI.resx">
-      <DependentUpon>ChangePasswordUI.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Modules\CONNECTIONS\Views\ConnectionUI.resx">
       <DependentUpon>ConnectionUI.vb</DependentUpon>
@@ -1245,6 +1232,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\refresh.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\refresh.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.

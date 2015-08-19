@@ -2,29 +2,14 @@
 <SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="My" GeneratedClassName="MySettings" UseMySettingsClassName="true">
   <Profiles />
   <Settings>
-    <Setting Name="serverIp" Type="System.String" Scope="User">
-      <Value Profile="(Default)">52.18.212.167</Value>
-    </Setting>
     <Setting Name="version_id" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">5</Value>
-    </Setting>
-    <Setting Name="user" Type="System.String" Scope="User">
-      <Value Profile="(Default)">user2</Value>
     </Setting>
     <Setting Name="port_number" Type="System.String" Scope="User">
       <Value Profile="(Default)">4242</Value>
     </Setting>
-    <Setting Name="certificatespath" Type="System.String" Scope="User">
-      <Value Profile="(Default)">C:\Users\PPS\Documents\Purple Sun\CA</Value>
-    </Setting>
     <Setting Name="database" Type="System.String" Scope="User">
       <Value Profile="(Default)">ppsbi_engie</Value>
-    </Setting>
-    <Setting Name="oldIp" Type="System.String" Scope="User">
-      <Value Profile="(Default)">localhost</Value>
-    </Setting>
-    <Setting Name="oldPort" Type="System.String" Scope="User">
-      <Value Profile="(Default)">3306</Value>
     </Setting>
     <Setting Name="tablesFontSize" Type="System.UInt32" Scope="User">
       <Value Profile="(Default)">8</Value>
@@ -32,11 +17,14 @@
     <Setting Name="mainCurrency" Type="System.UInt32" Scope="User">
       <Value Profile="(Default)">3</Value>
     </Setting>
-    <Setting Name="mainCurrencyName" Type="System.String" Scope="User">
-      <Value Profile="(Default)">EUR</Value>
-    </Setting>
     <Setting Name="dgvFontSize" Type="System.Single" Scope="User">
       <Value Profile="(Default)">8.5</Value>
+    </Setting>
+    <Setting Name="serverIp" Type="System.String" Scope="User">
+      <Value Profile="(Default)">52.18.28.79</Value>
+    </Setting>
+    <Setting Name="user" Type="System.String" Scope="User">
+      <Value Profile="(Default)">root</Value>
     </Setting>
   </Settings>
 </SettingsFile>

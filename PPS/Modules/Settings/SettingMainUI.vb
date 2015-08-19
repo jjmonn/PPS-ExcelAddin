@@ -13,7 +13,7 @@
 '
 '
 '
-' Last modified: 625/06/2015
+' Last modified: 18/08/2015
 ' Author: Julien Monnereau
 
 
@@ -43,69 +43,15 @@ Friend Class SettingMainUI
         ServerAddressTB.Text = My.Settings.serverIp
         PortTB.Text = My.Settings.port_number
         IDTB.Text = My.Settings.user
-        CertificatesPathTB.Text = My.Settings.certificatespath
-        'For Each db In getDatabasesList()
-        '    databasesCB.Items.Add(db)
-        'Next
-
-        'If databasesCB.Items.Contains(My.Settings.database) Then
-        '    databasesCB.SelectedItem = My.Settings.database
-        'End If
-
+      
 
     End Sub
 
-    Friend Function getDatabasesList() As List(Of String)
-
-        'Dim tmp_list As New List(Of String)
-
-        'Dim srv As New ModelServer
-        'srv.openRstSQL("SHOW DATABASES", ModelServer.STATIC_CURSOR)
-        'While srv.rst.EOF = False
-        '    tmp_list.Add(srv.rst.Fields(0).Value)
-        '    srv.rst.MoveNext()
-        'End While
-        'Return tmp_list
-
-    End Function
-
+   
 #End Region
 
 
 #Region "Call backs"
-
-
-#Region "Connection Tab"
-
-    Private Sub ConnectionBT_Click(sender As Object, e As EventArgs) Handles ConnectionBT.Click
-
-        ' to be reimplemented -> launch pane
-
-    End Sub
-
-    Private Sub DiconnectBT_Click(sender As Object, e As EventArgs) Handles DiconnectBT.Click
-
-        ConnectionsFunctions.CloseConnection()
-
-    End Sub
-
-    Private Sub ReinitPwdBT_Click(sender As Object, e As EventArgs) Handles ReinitPwdBT.Click
-
-        Dim CHANGEPWD As New ChangePasswordUI
-        CHANGEPWD.Show()
-
-    End Sub
-
-    Private Sub CertificatesBT_Click(sender As Object, e As EventArgs) Handles CertificatesBT.Click
-
-        If FolderBrowserDialog1.ShowDialog() = DialogResult.OK Then
-            CertificatesPathTB.Text = FolderBrowserDialog1.SelectedPath
-        End If
-
-    End Sub
-
-#End Region
-
 
     Private Sub CloseBT_Click(sender As Object, e As EventArgs)
 
@@ -138,13 +84,7 @@ Friend Class SettingMainUI
         g.DrawString(sText, ctlTab.Font, Brushes.Black, iX, iY)
     End Sub
 
-    Private Sub CertificatesPathTB_TextChanged(sender As Object, e As EventArgs) Handles CertificatesPathTB.TextChanged
-
-        My.Settings.certificatespath = CertificatesPathTB.Text
-        My.Settings.Save()
-
-    End Sub
-
+ 
     Private Sub PortTB_TextChanged(sender As Object, e As EventArgs) Handles PortTB.TextChanged
 
         My.Settings.port_number = PortTB.Text
@@ -159,19 +99,10 @@ Friend Class SettingMainUI
 
     End Sub
 
-    Private Sub ServerAddressTB_Validated(sender As Object, e As EventArgs) Handles ServerAddressTB.Validated
+    Private Sub ServerAddressTB_TextChanged(sender As Object, e As EventArgs) Handles ServerAddressTB.TextChanged
 
         My.Settings.serverIp = ServerAddressTB.Text
         My.Settings.Save()
-
-    End Sub
-
-    Private Sub ServerAddressTB_KeyDown(sender As Object, e As KeyEventArgs) Handles ServerAddressTB.KeyDown
-
-        If e.KeyCode = Keys.Enter Or e.KeyCode = Keys.Tab Then
-            My.Settings.serverIp = ServerAddressTB.Text
-            My.Settings.Save()
-        End If
 
     End Sub
 

@@ -82,7 +82,7 @@ Friend Class RateVersion
         While RST.EOF = False
             Dim hash As New Hashtable
             hash.Add(NAME_VARIABLE, RST.Fields(NAME_VARIABLE).Value)
-            hash.Add(RATES_VERSIONS_IS_FOLDER_VARIABLE, RST.Fields(RATES_VERSIONS_IS_FOLDER_VARIABLE).Value)
+            hash.Add(RATES_IS_FOLDER_VARIABLE, RST.Fields(RATES_IS_FOLDER_VARIABLE).Value)
             If IsDBNull(RST.Fields(RATES_parent_id).Value) Then
                 hash.Add(RATES_parent_id, "")
             Else
@@ -164,14 +164,14 @@ Friend Class RateVersion
                 If IsDBNull(rst.Fields(RATES_parent_id).Value) Then
                     nodeX = TV.Nodes.Add(Trim(rst.Fields(RATES_VERSIONS_ID_VARIABLE).Value), _
                                          Trim(rst.Fields(NAME_VARIABLE).Value), _
-                                         rst.Fields(RATES_VERSIONS_IS_FOLDER_VARIABLE).Value, _
-                                         rst.Fields(RATES_VERSIONS_IS_FOLDER_VARIABLE).Value)
+                                         rst.Fields(RATES_IS_FOLDER_VARIABLE).Value, _
+                                         rst.Fields(RATES_IS_FOLDER_VARIABLE).Value)
                 Else
                     ParentNode = TV.Nodes.Find(Trim(rst.Fields(RATES_parent_id).Value), True)
                     nodeX = ParentNode(0).Nodes.Add(Trim(rst.Fields(RATES_VERSIONS_ID_VARIABLE).Value), _
                                                     Trim(rst.Fields(NAME_VARIABLE).Value), _
-                                                    rst.Fields(RATES_VERSIONS_IS_FOLDER_VARIABLE).Value, _
-                                                    rst.Fields(RATES_VERSIONS_IS_FOLDER_VARIABLE).Value)
+                                                    rst.Fields(RATES_IS_FOLDER_VARIABLE).Value, _
+                                                    rst.Fields(RATES_IS_FOLDER_VARIABLE).Value)
                 End If
                 nodeX.EnsureVisible()
                 rst.MoveNext()
@@ -184,7 +184,7 @@ Friend Class RateVersion
     Protected Friend Function GetRatesVersionsList(field As String) As List(Of String)
 
         Dim tmpList As New List(Of String)
-        RST.Filter = RATES_VERSIONS_IS_FOLDER_VARIABLE + "= 0"
+        RST.Filter = RATES_IS_FOLDER_VARIABLE + "= 0"
         If RST.EOF = False And RST.BOF = False Then
             RST.MoveFirst()
             Do While RST.EOF = False

@@ -1,4 +1,4 @@
-﻿' currency2.vb
+﻿' currency.vb
 '
 ' CRUD for currencies table - relation with c++ server
 '
@@ -7,7 +7,7 @@
 '
 ' Author: Julien Monnereau
 ' Created: 03/08/2015
-' Last modified: 03/08/2015
+' Last modified: 17/08/2015
 
 
 Imports System.Collections
@@ -15,7 +15,7 @@ Imports System.Collections.Generic
 
 
 
-Friend Class Currency2
+Friend Class Currency
 
 #Region "Instance variables"
 
@@ -40,36 +40,45 @@ Friend Class Currency2
     Friend Sub New()
 
         state_flag = False
-        ' LoadCurrencyTable()
+        LoadCurrencyTable()
 
     End Sub
 
-    'Friend Sub LoadCurrencyTable()
+    Friend Sub LoadCurrencyTable()
 
-    '    NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_LIST_CURRENCY_ANSWER, AddressOf SMSG_LIST_CURRENCY_ANSWER)
-    '    Dim packet As New ByteBuffer(CType(ClientMessage.CMSG_LIST_CURRENCY, UShort))
-    '    packet.Release()
-    '    NetworkManager.GetInstance().Send(packet)
+        NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_LIST_CURRENCY_ANSWER, AddressOf SMSG_LIST_CURRENCY_ANSWER)
+        Dim packet As New ByteBuffer(CType(ClientMessage.CMSG_LIST_CURRENCY, UShort))
+        packet.Release()
+        NetworkManager.GetInstance().Send(packet)
 
-    'End Sub
+    End Sub
 
-    'Private Sub SMSG_LIST_CURRENCY_ANSWER(packet As ByteBuffer)
+    Private Sub SMSG_LIST_CURRENCY_ANSWER(packet As ByteBuffer)
 
-    '    If packet.ReadInt32() = 0 Then
-    '        Dim nb_currencies = packet.ReadInt32()
-    '        For i As Int32 = 1 To nb_currencies
-    '            Dim tmp_ht As New Hashtable
-    '            GetcurrencyHTFromPacket(packet, tmp_ht)
-    '            currencies_hash(CInt(tmp_ht(ID_VARIABLE))) = tmp_ht
-    '        Next
-    '        NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_LIST_CURRENCY_ANSWER, AddressOf SMSG_LIST_CURRENCY_ANSWER)
-    '        server_response_flag = True
-    '        RaiseEvent ObjectInitialized()
-    '    Else
-    '        server_response_flag = False
-    '    End If
+        If packet.ReadInt32() = 0 Then
+            Dim nb_currencies = packet.ReadInt32()
+            For i As Int32 = 1 To nb_currencies
+                Dim tmp_ht As New Hashtable
+                GetcurrencyHTFromPacket(packet, tmp_ht)
+                currencies_hash(CInt(tmp_ht(ID_VARIABLE))) = tmp_ht
+            Next
+            NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_LIST_CURRENCY_ANSWER, AddressOf SMSG_LIST_CURRENCY_ANSWER)
+            server_response_flag = True
 
-    'End Sub
+            ' Stub
+            ' to be reviewed server response Nath !! priority high
+            Dim ht As New Hashtable
+            ht(ID_VARIABLE) = 3
+            ht(NAME_VARIABLE) = "EUR"
+            ht(CURRENCY_SYMBOL_VARIABLE) = "€"
+            currencies_hash(3) = ht
+
+            RaiseEvent ObjectInitialized()
+        Else
+            server_response_flag = False
+        End If
+
+    End Sub
 
 #End Region
 
@@ -78,11 +87,11 @@ Friend Class Currency2
 
     Friend Sub CMSG_CREATE_CURRENCY(ByRef attributes As Hashtable)
 
-        '   NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_CREATE_CURRENCY_ANSWER, AddressOf SMSG_CREATE_CURRENCY_ANSWER)
-        '   Dim packet As New ByteBuffer(CType(ClientMessage.CMSG_CREATE_CURRENCY, UShort))
-        'WritecurrencyPacket(packet, attributes)
-        'packet.Release()
-        'NetworkManager.GetInstance().Send(packet)
+        NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_CREATE_CURRENCY_ANSWER, AddressOf SMSG_CREATE_CURRENCY_ANSWER)
+        Dim packet As New ByteBuffer(CType(ClientMessage.CMSG_CREATE_CURRENCY, UShort))
+        WritecurrencyPacket(packet, attributes)
+        packet.Release()
+        NetworkManager.GetInstance().Send(packet)
 
     End Sub
 
@@ -92,10 +101,10 @@ Friend Class Currency2
             Dim tmp_ht As New Hashtable
             GetcurrencyHTFromPacket(packet, tmp_ht)
             currencies_hash(tmp_ht(ID_VARIABLE)) = tmp_ht
-            'NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_CREATE_CURRENCY_ANSWER, AddressOf SMSG_CREATE_CURRENCY_ANSWER)
+            NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_CREATE_CURRENCY_ANSWER, AddressOf SMSG_CREATE_CURRENCY_ANSWER)
             RaiseEvent currencyCreationEvent(tmp_ht)
         Else
-            '
+            ' priority high every CRUD !!
             '
         End If
 
@@ -103,10 +112,10 @@ Friend Class Currency2
 
     Friend Shared Sub CMSG_READ_CURRENCY(ByRef id As UInt32)
 
-        '        NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_READ_CURRENCY_ANSWER, AddressOf SMSG_READ_CURRENCY_ANSWER)
-        '       Dim packet As New ByteBuffer(CType(ClientMessage.CMSG_CREATE_CURRENCY, UShort))
-        '   packet.Release()
-        '  NetworkManager.GetInstance().Send(packet)
+        NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_READ_CURRENCY_ANSWER, AddressOf SMSG_READ_CURRENCY_ANSWER)
+        Dim packet As New ByteBuffer(CType(ClientMessage.CMSG_CREATE_CURRENCY, UShort))
+        packet.Release()
+        NetworkManager.GetInstance().Send(packet)
 
     End Sub
 
@@ -115,7 +124,7 @@ Friend Class Currency2
         If packet.ReadInt32() = 0 Then
             Dim ht As New Hashtable
             GetcurrencyHTFromPacket(packet, ht)
-            '       NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_CREATE_CURRENCY_ANSWER, AddressOf SMSG_READ_CURRENCY_ANSWER)
+            NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_CREATE_CURRENCY_ANSWER, AddressOf SMSG_READ_CURRENCY_ANSWER)
             ' Send the ht to the object which demanded it
         Else
 
@@ -125,11 +134,11 @@ Friend Class Currency2
 
     Friend Sub CMSG_UPDATE_CURRENCY(ByRef attributes As Hashtable)
 
-        'NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_UPDATE_CURRENCY_ANSWER, AddressOf SMSG_UPDATE_CURRENCY_ANSWER)
-        'Dim packet As New ByteBuffer(CType(ClientMessage.CMSG_UPDATE_CURRENCY, UShort))
-        'WritecurrencyPacket(packet, attributes)
-        'packet.Release()
-        'NetworkManager.GetInstance().Send(packet)
+        NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_UPDATE_CURRENCY_ANSWER, AddressOf SMSG_UPDATE_CURRENCY_ANSWER)
+        Dim packet As New ByteBuffer(CType(ClientMessage.CMSG_UPDATE_CURRENCY, UShort))
+        WritecurrencyPacket(packet, attributes)
+        packet.Release()
+        NetworkManager.GetInstance().Send(packet)
 
     End Sub
 
@@ -139,7 +148,7 @@ Friend Class Currency2
             Dim ht As New Hashtable
             GetcurrencyHTFromPacket(packet, ht)
             currencies_hash(ht(ID_VARIABLE)) = ht
-            '      NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_UPDATE_CURRENCY_ANSWER, AddressOf SMSG_UPDATE_CURRENCY_ANSWER)
+            NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_UPDATE_CURRENCY_ANSWER, AddressOf SMSG_UPDATE_CURRENCY_ANSWER)
             RaiseEvent currencyUpdateEvent(ht)
         Else
 
@@ -149,11 +158,11 @@ Friend Class Currency2
 
     Friend Sub CMSG_DELETE_CURRENCY(ByRef id As UInt32)
 
-        'NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_DELETE_CURRENCY_ANSWER, AddressOf SMSG_DELETE_CURRENCY_ANSWER)
-        'Dim packet As New ByteBuffer(CType(ClientMessage.CMSG_DELETE_CURRENCY, UShort))
-        'packet.WriteUint32(id)
-        'packet.Release()
-        'NetworkManager.GetInstance().Send(packet)
+        NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_DELETE_CURRENCY_ANSWER, AddressOf SMSG_DELETE_CURRENCY_ANSWER)
+        Dim packet As New ByteBuffer(CType(ClientMessage.CMSG_DELETE_CURRENCY, UShort))
+        packet.WriteUint32(id)
+        packet.Release()
+        NetworkManager.GetInstance().Send(packet)
 
     End Sub
 
@@ -168,7 +177,7 @@ Friend Class Currency2
         'End If
 
         Dim id As UInt32  ' packet.ReadInt32
-        '   NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_DELETE_CURRENCY_ANSWER, AddressOf SMSG_DELETE_CURRENCY_ANSWER)
+        NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_DELETE_CURRENCY_ANSWER, AddressOf SMSG_DELETE_CURRENCY_ANSWER)
         RaiseEvent currencyDeleteEvent(id)
 
     End Sub
@@ -181,16 +190,9 @@ Friend Class Currency2
     Friend Function GetCurrencyNameList() As List(Of String)
 
         Dim tmp_list As New List(Of String)
-
         For Each id In currencies_hash.Keys
             tmp_list.Add(currencies_hash(id)(NAME_VARIABLE))
         Next
-
-        ' STUB !!!
-        ' implement priority high !!!!!!!!!!!!!!!!!!!!
-        tmp_list.Add("EUR")
-        tmp_list.Add("USD")
-        tmp_list.Add("GBP")
         Return tmp_list
 
     End Function
@@ -205,7 +207,6 @@ Friend Class Currency2
 
     End Function
 
-
 #End Region
 
 
@@ -213,9 +214,9 @@ Friend Class Currency2
 
     Friend Shared Sub GetcurrencyHTFromPacket(ByRef packet As ByteBuffer, ByRef currency_ht As Hashtable)
 
-        currency_ht(ID_VARIABLE) = packet.ReadInt32()
+        currency_ht(ID_VARIABLE) = packet.ReadUint32()
         currency_ht(NAME_VARIABLE) = packet.ReadString()
-
+        currency_ht(CURRENCY_SYMBOL_VARIABLE) = packet.ReadString()
 
     End Sub
 
@@ -223,6 +224,7 @@ Friend Class Currency2
 
         If attributes.ContainsKey(ID_VARIABLE) Then packet.WriteInt32(attributes(ID_VARIABLE))
         packet.WriteString(attributes(NAME_VARIABLE))
+        packet.WriteString(attributes(CURRENCY_SYMBOL_VARIABLE))
 
     End Sub
 

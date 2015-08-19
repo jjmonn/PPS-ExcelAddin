@@ -92,7 +92,7 @@ Friend Class VersionsControl
 
     Private Sub Display(ByRef inputNode As TreeNode)
 
-        If GlobalVariables.Versions.versions_hash(CInt(inputNode.Name))(VERSIONS_IS_FOLDER_VARIABLE) = 1 Then
+        If GlobalVariables.Versions.versions_hash(CInt(inputNode.Name))(IS_FOLDER_VARIABLE) = 1 Then
             NameTB.Text = ""
             CreationTB.Text = ""
             lockedCB.Checked = False

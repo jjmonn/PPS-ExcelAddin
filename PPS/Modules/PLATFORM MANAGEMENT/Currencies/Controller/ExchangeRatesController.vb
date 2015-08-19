@@ -137,7 +137,7 @@ Friend Class ExchangeRatesController
         If currencies_list.Contains(curr) Then
             MsgBox("This currency already exists. Please enter a currency which name isn't already in the list")
         Else
-            If TypeOf (curr) Is String AndAlso Len(curr) = CURRENCIES_TOKEN_SIZE Then
+            If TypeOf (curr) Is String AndAlso Len(curr) = NAMES_MAX_LENGTH Then
                 ' to be reimplemented !!
                 ' priority normal
                 'GlobalVariables.Currencies.CMSG_CREATE_CURRENCY(curr)
@@ -175,9 +175,9 @@ Friend Class ExchangeRatesController
 
         If parent_node Is Nothing Then tmpHT.Add(RATES_parent_id, DBNull.Value) Else tmpHT.Add(RATES_parent_id, parent_node.Name)
         If isFolder = True Then
-            tmpHT.Add(RATES_VERSIONS_IS_FOLDER_VARIABLE, 1)
+            tmpHT.Add(RATES_IS_FOLDER_VARIABLE, 1)
         Else
-            tmpHT.Add(RATES_VERSIONS_IS_FOLDER_VARIABLE, 0)
+            tmpHT.Add(RATES_IS_FOLDER_VARIABLE, 0)
             tmpHT.Add(RATES_VERSIONS_START_PERIOD_VAR, start_period)
             tmpHT.Add(RATES_VERSIONS_NB_PERIODS_VAR, nb_periods)
         End If
@@ -205,7 +205,7 @@ Friend Class ExchangeRatesController
         Dim versions_list = TreeViewsUtilities.GetNodesKeysList(version_node)
         versions_list.Reverse()
         For Each version_id In versions_list
-            If RatesVersions.ReadVersion(version_id, RATES_VERSIONS_IS_FOLDER_VARIABLE) = 0 Then
+            If RatesVersions.ReadVersion(version_id, RATES_IS_FOLDER_VARIABLE) = 0 Then
                 If DeleteVersion(version_id) = True Then
                     DeleteFromTreeAndModel(version_id)
                 Else
@@ -248,7 +248,7 @@ Friend Class ExchangeRatesController
 
     Friend Function IsFolderVersion(ByRef versionKey As String) As Boolean
 
-        If RatesVersions.ReadVersion(versionKey, RATES_VERSIONS_IS_FOLDER_VARIABLE) = 1 Then
+        If RatesVersions.ReadVersion(versionKey, RATES_IS_FOLDER_VARIABLE) = 1 Then
             Return True
         Else
             Return False

@@ -30,7 +30,7 @@ Friend Class UsersController
     Private NewUserUI As NewUserUI
     Private usersTV As New TreeView
     Private PasswordGenerator As New PasswordGenerator
-    Private SMTPConnection As New SMTPConnection
+    ' Private SMTPConnection As New SMTPConnection
     Private PlatformMGTUI As PlatformMGTGeneralUI
 
 #End Region

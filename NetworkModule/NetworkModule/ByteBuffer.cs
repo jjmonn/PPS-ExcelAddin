@@ -129,15 +129,18 @@ public class ByteBuffer : MemoryStream
     {
         List<Byte> l_Bytes = new List<Byte>();
         Byte l_Byte;
+        int count = 0;
 
         do
         {
             l_Byte = ReadUint8();
             l_Bytes.Add(l_Byte);
+            count++;
         }
         while (l_Byte != 0x00);
         l_Bytes.RemoveAt(l_Bytes.Count - 1);
 
+     //   System.Diagnostics.Debug.WriteLine("Read " + count + " characters for string \"" + System.Text.Encoding.UTF8.GetString(l_Bytes.ToArray()) + "\"");
         return System.Text.Encoding.UTF8.GetString(l_Bytes.ToArray());
     }
 

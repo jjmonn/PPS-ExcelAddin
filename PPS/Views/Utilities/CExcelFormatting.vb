@@ -48,7 +48,7 @@ Friend Class CExcelFormatting
         Dim AccountsNameFormatDictionary As Hashtable = globalvariables.accounts.GetAccountsDictionary(NAME_VARIABLE, ACCOUNT_FORMAT_VARIABLE)
         Dim AccountsNameTypeDict As Hashtable = globalvariables.accounts.GetAccountsDictionary(NAME_VARIABLE, ACCOUNT_TYPE_VARIABLE)
         Dim currentFormatsDictionary As Dictionary(Of String, Dictionary(Of String, Object))
-        Dim currencies_symbol_dict As Hashtable = GlobalVariables.Currencies.GetCurrenciesDict(CURRENCIES_KEY_VARIABLE, CURRENCIES_SYMBOL_VARIABLE)
+        Dim currencies_symbol_dict As Hashtable = GlobalVariables.Currencies.GetCurrenciesDict(ID_VARIABLE, CURRENCY_SYMBOL_VARIABLE)
         Select Case reportFormat
             Case REPORT_FORMAT_CODE : currentFormatsDictionary = FormatsMapping.GetFormatTable(REPORT_FORMAT_CODE)
             Case INPUT_FORMAT_CODE : currentFormatsDictionary = FormatsMapping.GetFormatTable(INPUT_FORMAT_CODE)

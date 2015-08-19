@@ -109,7 +109,7 @@ Friend Class DataVersionsController
                             Optional parent_node As TreeNode = Nothing)
 
         Dim hash As New Hashtable
-        hash.Add(VERSIONS_IS_FOLDER_VARIABLE, 1)
+        hash.Add(IS_FOLDER_VARIABLE, 1)
         hash.Add(ITEMS_POSITIONS, 1)
         If Not parent_node Is Nothing Then hash.Add(PARENT_ID_VARIABLE, parent_node.Name)
 
@@ -208,7 +208,7 @@ Friend Class DataVersionsController
 
     Friend Function IsFolder(ByRef version_id As String) As Boolean
 
-        If GlobalVariables.Versions.versions_hash(version_id)(VERSIONS_IS_FOLDER_VARIABLE) = 1 Then Return True
+        If GlobalVariables.Versions.versions_hash(version_id)(IS_FOLDER_VARIABLE) = 1 Then Return True
         Return False
 
     End Function

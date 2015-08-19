@@ -26,14 +26,14 @@ Partial Class ConnectionUI
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(ConnectionUI))
         Me.mainPanel = New System.Windows.Forms.Panel()
         Me.IDsPanel = New System.Windows.Forms.Panel()
-        Me.CloseBT = New System.Windows.Forms.Button()
-        Me.ButtonIcons = New System.Windows.Forms.ImageList(Me.components)
-        Me.BackgroundWorker1 = New System.ComponentModel.BackgroundWorker()
         Me.Label1 = New System.Windows.Forms.Label()
-        Me.IDTB = New System.Windows.Forms.TextBox()
+        Me.userNameTextBox = New System.Windows.Forms.TextBox()
         Me.ConnectionBT = New System.Windows.Forms.Button()
-        Me.PWDTB = New System.Windows.Forms.TextBox()
+        Me.ButtonIcons = New System.Windows.Forms.ImageList(Me.components)
+        Me.passwordTextBox = New System.Windows.Forms.TextBox()
         Me.Label2 = New System.Windows.Forms.Label()
+        Me.CloseBT = New System.Windows.Forms.Button()
+        Me.BackgroundWorker1 = New System.ComponentModel.BackgroundWorker()
         Me.mainPanel.SuspendLayout()
         Me.IDsPanel.SuspendLayout()
         Me.SuspendLayout()
@@ -51,14 +51,69 @@ Partial Class ConnectionUI
         'IDsPanel
         '
         Me.IDsPanel.Controls.Add(Me.Label1)
-        Me.IDsPanel.Controls.Add(Me.IDTB)
+        Me.IDsPanel.Controls.Add(Me.userNameTextBox)
         Me.IDsPanel.Controls.Add(Me.ConnectionBT)
-        Me.IDsPanel.Controls.Add(Me.PWDTB)
+        Me.IDsPanel.Controls.Add(Me.passwordTextBox)
         Me.IDsPanel.Controls.Add(Me.Label2)
         Me.IDsPanel.Location = New System.Drawing.Point(35, 53)
         Me.IDsPanel.Name = "IDsPanel"
         Me.IDsPanel.Size = New System.Drawing.Size(315, 161)
         Me.IDsPanel.TabIndex = 10
+        '
+        'Label1
+        '
+        Me.Label1.AutoSize = True
+        Me.Label1.Location = New System.Drawing.Point(16, 34)
+        Me.Label1.Name = "Label1"
+        Me.Label1.Size = New System.Drawing.Size(48, 15)
+        Me.Label1.TabIndex = 16
+        Me.Label1.Text = "User ID"
+        '
+        'userNameTextBox
+        '
+        Me.userNameTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.userNameTextBox.Location = New System.Drawing.Point(103, 31)
+        Me.userNameTextBox.Name = "userNameTextBox"
+        Me.userNameTextBox.Size = New System.Drawing.Size(196, 20)
+        Me.userNameTextBox.TabIndex = 13
+        '
+        'ConnectionBT
+        '
+        Me.ConnectionBT.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.ConnectionBT.ImageIndex = 1
+        Me.ConnectionBT.ImageList = Me.ButtonIcons
+        Me.ConnectionBT.Location = New System.Drawing.Point(208, 116)
+        Me.ConnectionBT.Name = "ConnectionBT"
+        Me.ConnectionBT.Size = New System.Drawing.Size(91, 31)
+        Me.ConnectionBT.TabIndex = 15
+        Me.ConnectionBT.Text = "Connect"
+        Me.ConnectionBT.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.ConnectionBT.UseVisualStyleBackColor = True
+        '
+        'ButtonIcons
+        '
+        Me.ButtonIcons.ImageStream = CType(resources.GetObject("ButtonIcons.ImageStream"), System.Windows.Forms.ImageListStreamer)
+        Me.ButtonIcons.TransparentColor = System.Drawing.Color.Transparent
+        Me.ButtonIcons.Images.SetKeyName(0, "Close_Box_Red.ico")
+        Me.ButtonIcons.Images.SetKeyName(1, "cloud.ico")
+        '
+        'passwordTextBox
+        '
+        Me.passwordTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.passwordTextBox.Location = New System.Drawing.Point(103, 74)
+        Me.passwordTextBox.Name = "passwordTextBox"
+        Me.passwordTextBox.Size = New System.Drawing.Size(196, 20)
+        Me.passwordTextBox.TabIndex = 14
+        Me.passwordTextBox.UseSystemPasswordChar = True
+        '
+        'Label2
+        '
+        Me.Label2.AutoSize = True
+        Me.Label2.Location = New System.Drawing.Point(23, 77)
+        Me.Label2.Name = "Label2"
+        Me.Label2.Size = New System.Drawing.Size(61, 15)
+        Me.Label2.TabIndex = 17
+        Me.Label2.Text = "Password"
         '
         'CloseBT
         '
@@ -75,64 +130,9 @@ Partial Class ConnectionUI
         Me.CloseBT.TabIndex = 9
         Me.CloseBT.UseVisualStyleBackColor = True
         '
-        'ButtonIcons
-        '
-        Me.ButtonIcons.ImageStream = CType(resources.GetObject("ButtonIcons.ImageStream"), System.Windows.Forms.ImageListStreamer)
-        Me.ButtonIcons.TransparentColor = System.Drawing.Color.Transparent
-        Me.ButtonIcons.Images.SetKeyName(0, "Close_Box_Red.ico")
-        Me.ButtonIcons.Images.SetKeyName(1, "cloud.ico")
-        '
         'BackgroundWorker1
         '
         Me.BackgroundWorker1.WorkerReportsProgress = True
-        '
-        'Label1
-        '
-        Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(16, 34)
-        Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(48, 15)
-        Me.Label1.TabIndex = 16
-        Me.Label1.Text = "User ID"
-        '
-        'IDTB
-        '
-        Me.IDTB.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.IDTB.Location = New System.Drawing.Point(103, 31)
-        Me.IDTB.Name = "IDTB"
-        Me.IDTB.Size = New System.Drawing.Size(196, 20)
-        Me.IDTB.TabIndex = 13
-        '
-        'ConnectionBT
-        '
-        Me.ConnectionBT.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
-        Me.ConnectionBT.ImageIndex = 1
-        Me.ConnectionBT.ImageList = Me.ButtonIcons
-        Me.ConnectionBT.Location = New System.Drawing.Point(208, 116)
-        Me.ConnectionBT.Name = "ConnectionBT"
-        Me.ConnectionBT.Size = New System.Drawing.Size(91, 31)
-        Me.ConnectionBT.TabIndex = 15
-        Me.ConnectionBT.Text = "Connect"
-        Me.ConnectionBT.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.ConnectionBT.UseVisualStyleBackColor = True
-        '
-        'PWDTB
-        '
-        Me.PWDTB.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.PWDTB.Location = New System.Drawing.Point(103, 74)
-        Me.PWDTB.Name = "PWDTB"
-        Me.PWDTB.Size = New System.Drawing.Size(196, 20)
-        Me.PWDTB.TabIndex = 14
-        Me.PWDTB.UseSystemPasswordChar = True
-        '
-        'Label2
-        '
-        Me.Label2.AutoSize = True
-        Me.Label2.Location = New System.Drawing.Point(23, 77)
-        Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(61, 15)
-        Me.Label2.TabIndex = 17
-        Me.Label2.Text = "Password"
         '
         'ConnectionUI
         '
@@ -154,8 +154,8 @@ Partial Class ConnectionUI
     Friend WithEvents IDsPanel As System.Windows.Forms.Panel
     Friend WithEvents BackgroundWorker1 As System.ComponentModel.BackgroundWorker
     Friend WithEvents Label1 As System.Windows.Forms.Label
-    Friend WithEvents IDTB As System.Windows.Forms.TextBox
+    Friend WithEvents userNameTextBox As System.Windows.Forms.TextBox
     Friend WithEvents ConnectionBT As System.Windows.Forms.Button
-    Friend WithEvents PWDTB As System.Windows.Forms.TextBox
+    Friend WithEvents passwordTextBox As System.Windows.Forms.TextBox
     Friend WithEvents Label2 As System.Windows.Forms.Label
 End Class

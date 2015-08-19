@@ -106,7 +106,7 @@ Friend Class RatesView
 
     Private Sub AddColumn(ByRef currencyId As UInt32)
 
-        Dim col As HierarchyItem = DGV.ColumnsHierarchy.Items.Add(My.Settings.mainCurrencyName & "/" & currencyId)
+        Dim col As HierarchyItem = DGV.ColumnsHierarchy.Items.Add(GlobalVariables.Currencies.currencies_hash(My.Settings.mainCurrency)(NAME_VARIABLE) & "/" & currencyId)
         Dim token As String = ExchangeRate2.TokenizeRateCurrencies(My.Settings.mainCurrency, _
                                                                    currencyId)
         columnIDKeyDictionary.Add(col.GetUniqueID, token)

@@ -30,7 +30,7 @@ Public Class RateVersionsMapping
         Dim srv As New ModelServer
         Dim tmpList As New List(Of String)
         srv.openRst(GlobalVariables.database + "." + RATES_VERSIONS_TABLE, ModelServer.FWD_CURSOR)
-        srv.rst.Filter = RATES_VERSIONS_IS_FOLDER_VARIABLE + "= 0"
+        srv.rst.Filter = RATES_IS_FOLDER_VARIABLE + "= 0"
 
         If srv.rst.EOF = False And srv.rst.BOF = False Then
             srv.rst.MoveFirst()
@@ -53,7 +53,7 @@ Public Class RateVersionsMapping
         Dim srv As New ModelServer
         Dim tmpHT As New Dictionary(Of String, String)
         srv.OpenRst(GlobalVariables.database + "." + RATES_VERSIONS_TABLE, ModelServer.FWD_CURSOR)
-        srv.rst.Filter = RATES_VERSIONS_IS_FOLDER_VARIABLE + "= 0"
+        srv.rst.Filter = RATES_IS_FOLDER_VARIABLE + "= 0"
 
         If srv.rst.EOF = False And srv.rst.BOF = False Then
             srv.rst.MoveFirst()

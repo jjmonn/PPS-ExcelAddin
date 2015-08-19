@@ -31,6 +31,7 @@ Public Class VTreeViewUtil
         TV.EnableIndicatorsAnimation = False
         TV.PaintNodesDefaultBorder = False
         TV.PaintNodesDefaultFill = False
+        TV.BackColor = Color.White
 
     End Sub
 

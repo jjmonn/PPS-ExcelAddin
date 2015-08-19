@@ -93,6 +93,7 @@
         PRODUCTSFILTERS
         ADJUSTMENTSFILTERS
         FACTSVERSIONS
+        CURRENCIES
 
 
     End Enum

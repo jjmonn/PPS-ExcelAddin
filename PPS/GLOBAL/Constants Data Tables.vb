@@ -7,7 +7,7 @@
 ' To do: 
 '      
 '
-' Last modified: 25/06/2015
+' Last modified: 19/08/2015
 ' Author: Julien Monnereau
 
 
@@ -24,6 +24,7 @@ Module Data_Tables_Constants
     Friend Const PARENT_ID_VARIABLE As String = "parent_id"
     Friend Const NAME_VARIABLE As String = "name"
     Friend Const IMAGE_VARIABLE As String = "image"
+    Friend Const IS_FOLDER_VARIABLE = "is_folder"
 
 
 #End Region
@@ -97,13 +98,8 @@ Module Data_Tables_Constants
 
 #Region "Currencies and Currencies Symbol Tables"
 
-    Friend Const CURRENCIES_TABLE_NAME As String = "currencies"
-    Friend Const CURRENCIES_SYMBOLS_TABLE_NAME As String = "currencies_symbols"
-    Friend Const CURRENCIES_KEY_VARIABLE As String = "id"
-    Friend Const CURRENCIES_SYMBOL_VARIABLE As String = "symbol"
-    Friend Const CURRENCIES_NAME_VARIABLE As String = "name"
-    Friend Const CURRENCIES_TOKEN_SIZE As Int32 = 3
-
+    Friend Const CURRENCY_SYMBOL_VARIABLE As String = "symbol"
+   
 
 #End Region
 
@@ -124,7 +120,7 @@ Module Data_Tables_Constants
     Friend Const RATES_VERSIONS_TABLE As String = "exchange_rates_versions"
     Friend Const RATES_VERSIONS_ID_VARIABLE As String = "id"
     Friend Const RATES_VERSIONS_NAME_VARIABLE As String = "name"
-    Friend Const RATES_VERSIONS_IS_FOLDER_VARIABLE As String = "is_folder"
+    Friend Const RATES_IS_FOLDER_VARIABLE As String = "is_folder"
     Friend Const RATES_parent_id As String = "parent_id"
 
     Friend Const RATES_VERSIONS_START_PERIOD_VAR As String = "start_period"
@@ -133,15 +129,6 @@ Module Data_Tables_Constants
 
 
 #End Region
-
-#End Region
-
-
-#Region "ExtraData table"
-
-    Friend Const EXTRA_DATA_TABLE_NAME = "extradatas"
-    Friend Const EXTRA_DATA_KEY_VARIABLE = "variable"
-    Friend Const EXTRA_DATA_VALUE_VARIABLE = "stored_value"
 
 #End Region
 
@@ -179,8 +166,7 @@ Module Data_Tables_Constants
     Friend Const VERSIONS_CREATION_DATE_VARIABLE = "created_at"
     Friend Const VERSIONS_LOCKED_VARIABLE = "locked"
     Friend Const VERSIONS_LOCKED_DATE_VARIABLE = "locked_date"
-    Friend Const VERSIONS_IS_FOLDER_VARIABLE = "is_folder"
-    Friend Const VERSIONS_TIME_CONFIG_VARIABLE = "time_config"
+     Friend Const VERSIONS_TIME_CONFIG_VARIABLE = "time_config"
     Friend Const VERSIONS_RATES_VERSION_ID_VAR = "rates_version_id"
     Friend Const VERSIONS_START_PERIOD_VAR = "start_period"
     Friend Const VERSIONS_NB_PERIODS_VAR = "nb_periods"
@@ -359,9 +345,7 @@ Module Data_Tables_Constants
 
 #Region "ACF_Data"
 
-    ' Stores the data tables
-
-
+ 
 #Region "Data Tables"
 
     Friend Const DATA_ENTITY_ID_VARIABLE = "entity_id"
@@ -446,20 +430,11 @@ Module Data_Tables_Constants
 
 #End Region
 
-    ' DATASET ARRAY COLUMNS INDEXING - 
-#Region "DataSet DataArray indexes"
-
-    Friend Const DATA_ARRAY_ASSET_COLUMN = 0
-    Friend Const DATA_ARRAY_ACCOUNT_COLUMN = 1
-    Friend Const DATA_ARRAY_PERIOD_COLUMN = 2
-    Friend Const DATA_ARRAY_DATA_COLUMN = 3
-
-#End Region
-
+   
 
 
     ' Snapshot DataTable
-    Friend Const SELECTION_COLUMN_TITLE = "Selection"
+    ' Friend Const SELECTION_COLUMN_TITLE = "Selection"
 
 
    

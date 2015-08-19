@@ -63,16 +63,6 @@ Namespace My.Resources
         '''<summary>
         '''  Looks up a localized resource of type System.Drawing.Bitmap.
         '''</summary>
-        Friend ReadOnly Property Actions_format_stroke_color_icon() As System.Drawing.Bitmap
-            Get
-                Dim obj As Object = ResourceManager.GetObject("Actions-format-stroke-color-icon", resourceCulture)
-                Return CType(obj,System.Drawing.Bitmap)
-            End Get
-        End Property
-        
-        '''<summary>
-        '''  Looks up a localized resource of type System.Drawing.Bitmap.
-        '''</summary>
         Friend ReadOnly Property add() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("add", resourceCulture)
@@ -826,6 +816,26 @@ Namespace My.Resources
         Friend ReadOnly Property Refresh_blue_32x32() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("Refresh blue 32x32", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized resource of type System.Drawing.Bitmap.
+        '''</summary>
+        Friend ReadOnly Property refresh_dark_blue_small() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("refresh dark blue small", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized resource of type System.Drawing.Bitmap.
+        '''</summary>
+        Friend ReadOnly Property refresh_db_32() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("refresh db 32", resourceCulture)
                 Return CType(obj,System.Drawing.Bitmap)
             End Get
         End Property

@@ -1,5 +1,6 @@
 ﻿Imports VIBlend.WinForms.Controls
 Imports System.Windows.Forms
+Imports System.Collections.Generic
 
 ' CUI2LeftPane.vb
 '
@@ -10,7 +11,7 @@ Imports System.Windows.Forms
 '
 '
 ' Created on : 15/08/2015
-' Last modified: 17/08/2015
+' Last modified: 18/08/2015
 
 
 Public Class CUI2LeftPane
@@ -84,6 +85,20 @@ Public Class CUI2LeftPane
         AxisFilter.LoadFvTv(productsFiltersTV, GlobalEnums.AnalysisAxis.PRODUCTS)
         AxisFilter.LoadFvTv(adjustmentsFiltersTV, GlobalEnums.AnalysisAxis.ADJUSTMENTS)
 
+        VTreeViewUtil.CheckStateAllNodes(entitiesTV, True)
+        VTreeViewUtil.CheckStateAllNodes(clientsTV, True)
+        VTreeViewUtil.CheckStateAllNodes(productsTV, True)
+        VTreeViewUtil.CheckStateAllNodes(adjustmentsTV, True)
+        VTreeViewUtil.CheckStateAllNodes(entitiesFiltersTV, True)
+        VTreeViewUtil.CheckStateAllNodes(clientsFiltersTV, True)
+        VTreeViewUtil.CheckStateAllNodes(productsFiltersTV, True)
+        VTreeViewUtil.CheckStateAllNodes(adjustmentsFiltersTV, True)
+
+        entitiesFiltersTV.TriStateMode = True
+        clientsFiltersTV.TriStateMode = True
+        productsFiltersTV.TriStateMode = True
+        adjustmentsFiltersTV.TriStateMode = True
+
         GlobalVariables.Versions.LoadVersionsTV(versionsTV)
 
         VTreeViewUtil.InitTVFormat(entitiesTV)
@@ -139,28 +154,16 @@ Public Class CUI2LeftPane
     Private Sub InitCurrenciesCLB()
 
         Dim currenciesList As New Collections.Generic.List(Of UInt32)
-        ' STUB !!!!!!!!!!
-        ' GlobalVariables.Currencies.currencies_hash.Keys
-        currenciesList.Add(1) '
-        currenciesList.Add(2)
-        currenciesList.Add(3)
-        ' use name property to set id !!! 
-        ' -------------------------- priority high !!!!!!!
-
-        For Each currency_ As String In currenciesList
-
-            ' use value => id
-            '     text  => name
-            ' priority normal
-
-            Dim li = currenciesCLB.Items.Add(currency_)
-            'li.Value = id
-            ' li.IsChecked = True
-
+        For Each currencyId As Int32 In GlobalVariables.Currencies.currencies_hash.Keys
+            Dim li As New ListItem
+            li.Value = currencyId
+            li.Text = GlobalVariables.Currencies.currencies_hash(currencyId)(NAME_VARIABLE)
+            If li.Value = My.Settings.mainCurrency Then
+                li.IsChecked = True
+                currenciesCLB.SelectedItem = li
+            End If
+            currenciesCLB.Items.Add(li)
         Next
-        ' for each item => if value = my.settings.currency then item = checked
-        ' priority normal
-
 
         SelectionTVTableLayout.Controls.Add(currenciesCLB)
         currenciesCLB.Dock = DockStyle.Fill
@@ -236,6 +239,7 @@ Public Class CUI2LeftPane
     End Sub
 
 #End Region
+
 
 
 #Region "Utilities"

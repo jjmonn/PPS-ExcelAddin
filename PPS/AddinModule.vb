@@ -1175,7 +1175,7 @@ Public Class AddinModule
             Or AddinExpress.XL.ADXExcelAllowedDropPositions.Left), AddinExpress.XL.ADXExcelAllowedDropPositions)
         Me.ConnectionTaskPaneItem.AlwaysShowHeader = True
         Me.ConnectionTaskPaneItem.CloseButton = True
-        Me.ConnectionTaskPaneItem.Position = AddinExpress.XL.ADXExcelTaskPanePosition.Right
+        Me.ConnectionTaskPaneItem.Position = AddinExpress.XL.ADXExcelTaskPanePosition.Left
         Me.ConnectionTaskPaneItem.TaskPaneClassName = "ConnectionTP"
         Me.ConnectionTaskPaneItem.UseOfficeThemeForBackground = True
         '

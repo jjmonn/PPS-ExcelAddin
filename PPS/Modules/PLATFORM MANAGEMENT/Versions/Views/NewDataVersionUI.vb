@@ -101,7 +101,7 @@ Friend Class NewDataVersionUI
             Dim hash As New Hashtable
             hash.Add(NAME_VARIABLE, name)
             hash.Add(VERSIONS_CREATION_DATE_VARIABLE, Format(Now, "short Date"))
-            hash.Add(VERSIONS_IS_FOLDER_VARIABLE, 0)
+            hash.Add(IS_FOLDER_VARIABLE, 0)
             hash.Add(VERSIONS_LOCKED_VARIABLE, 0)
             hash.Add(VERSIONS_TIME_CONFIG_VARIABLE, TimeConfigCB.Text)
             hash.Add(VERSIONS_START_PERIOD_VAR, StartingPeriodNUD.Text)
