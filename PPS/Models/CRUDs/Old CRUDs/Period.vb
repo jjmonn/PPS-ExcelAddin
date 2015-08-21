@@ -14,7 +14,7 @@
 '
 '
 ' Auhtor: Julien Monnereau
-' Last modified: 10/08/2015
+' Last modified: 21/08/2015
 
 
 Imports System.Collections.Generic
@@ -94,18 +94,18 @@ Friend Class Period
     End Function
 
     '' yearId: "31/12/N" au format INT
-    'Friend Shared Function GetMonthsIdsInYear(ByRef yearId As UInt32) As UInt32()
+    Friend Shared Function GetMonthsIdsInYear(ByRef yearId As UInt32) As Int32()
 
-    '    Dim nbDaysinMonth As Int32
-    '    Dim monthsIds(12) As UInt32
-    '    Dim year_ As Int32 = Year(Date.FromOADate(yearId))
-    '    For i = 1 To 12
-    '        nbDaysinMonth = DateTime.DaysInMonth(year_, i)
-    '        monthsIds(i - 1) = (Int(CDbl(DateSerial(year_, i, nbDaysinMonth).ToOADate())))
-    '    Next
-    '    Return monthsIds
+        Dim nbDaysinMonth As Int32
+        Dim monthsIds(12) As Int32
+        Dim year_ As Int32 = Year(Date.FromOADate(yearId))
+        For i = 1 To 12
+            nbDaysinMonth = DateTime.DaysInMonth(year_, i)
+            monthsIds(i - 1) = (Int(CDbl(DateSerial(year_, i, nbDaysinMonth).ToOADate())))
+        Next
+        Return monthsIds
 
-    'End Function
+    End Function
 
 #End Region
 

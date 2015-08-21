@@ -186,7 +186,7 @@ Friend Class PPSBIController
             version_id = GlobalVariables.Versions.GetVersionsIDFromName(versionString)
             If version_id <> "" Then Return True Else Return False
         Else
-            version_id = GlobalVariables.GLOBALCurrentVersionCode
+            version_id = My.Settings.version_id
             Return True
         End If
 

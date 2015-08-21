@@ -119,6 +119,7 @@
     </Compile>
     <Compile Include="GLOBAL\GlobalEnums.vb" />
     <Compile Include="Models\Computing\Computer.vb" />
+    <Compile Include="Models\Computing\ComputerInputEntity.vb" />
     <Compile Include="Models\CRUDs\New CRUDs\Account.vb" />
     <Compile Include="Models\CRUDs\New CRUDs\Adjustment.vb" />
     <Compile Include="Models\CRUDs\New CRUDs\AdjustmentsFilter.vb" />
@@ -630,6 +631,7 @@
   <ItemGroup>
     <EmbeddedResource Include="AddinModule.resx">
       <DependentUpon>AddinModule.vb</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Modules\CONTROLING UI\View\CUI2LeftPane.resx">
       <DependentUpon>CUI2LeftPane.vb</DependentUpon>

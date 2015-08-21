@@ -181,27 +181,31 @@ Friend Class Account
     Friend Function GetAccountsList(ByRef LookupOption As String, ByRef variable As String)
 
         Dim tmp_list As New List(Of String)
-        Dim selection() As String = {}
+        Dim selection As New List(Of String)
         Select Case LookupOption
-            Case GlobalEnums.AccountsLookupOptions.LOOKUP_ALL : selection = {GlobalEnums.FormulaTypes.AGGREGATION_OF_SUB_ACCOUNTS, _
-                                                                            GlobalEnums.FormulaTypes.FIRST_PERIOD_INPUT, _
-                                                                            GlobalEnums.FormulaTypes.FORMULA, _
-                                                                            GlobalEnums.FormulaTypes.HARD_VALUE_INPUT}
+            Case GlobalEnums.AccountsLookupOptions.LOOKUP_ALL
+                selection.Add(GlobalEnums.FormulaTypes.AGGREGATION_OF_SUB_ACCOUNTS)
+                selection.Add(GlobalEnums.FormulaTypes.FIRST_PERIOD_INPUT)
+                selection.Add(GlobalEnums.FormulaTypes.FORMULA)
+                selection.Add(GlobalEnums.FormulaTypes.HARD_VALUE_INPUT)
 
-            Case GlobalEnums.AccountsLookupOptions.LOOKUP_INPUTS : selection = {GlobalEnums.FormulaTypes.FIRST_PERIOD_INPUT, _
-                                                                                GlobalEnums.FormulaTypes.HARD_VALUE_INPUT}
+            Case GlobalEnums.AccountsLookupOptions.LOOKUP_INPUTS
+                selection.Add(GlobalEnums.FormulaTypes.FIRST_PERIOD_INPUT)
+                selection.Add(GlobalEnums.FormulaTypes.HARD_VALUE_INPUT)
 
-            Case GlobalEnums.AccountsLookupOptions.LOOKUP_OUTPUTS : selection = {GlobalEnums.FormulaTypes.AGGREGATION_OF_SUB_ACCOUNTS, _
-                                                                                 GlobalEnums.FormulaTypes.FIRST_PERIOD_INPUT, _
-                                                                                 GlobalEnums.FormulaTypes.FORMULA}
+            Case GlobalEnums.AccountsLookupOptions.LOOKUP_OUTPUTS
+                selection.Add(GlobalEnums.FormulaTypes.AGGREGATION_OF_SUB_ACCOUNTS)
+                selection.Add(GlobalEnums.FormulaTypes.FIRST_PERIOD_INPUT)
+                selection.Add(GlobalEnums.FormulaTypes.FORMULA)
 
-            Case GlobalEnums.AccountsLookupOptions.LOOKUP_TITLES : selection = {GlobalEnums.FormulaTypes.AGGREGATION_OF_SUB_ACCOUNTS, _
-                                                                                 GlobalEnums.FormulaTypes.FIRST_PERIOD_INPUT, _
-                                                                                 GlobalEnums.FormulaTypes.FORMULA}
+            Case GlobalEnums.AccountsLookupOptions.LOOKUP_TITLES
+                selection.Add(GlobalEnums.FormulaTypes.AGGREGATION_OF_SUB_ACCOUNTS)
+                selection.Add(GlobalEnums.FormulaTypes.FIRST_PERIOD_INPUT)
+                selection.Add(GlobalEnums.FormulaTypes.FORMULA)
         End Select
 
         For Each id In accounts_hash.Keys
-            If selection.ToString.Contains(accounts_hash(id)(ACCOUNT_FORMULA_TYPE_VARIABLE)) Then
+            If selection.Contains(accounts_hash(id)(ACCOUNT_FORMULA_TYPE_VARIABLE)) Then
                 tmp_list.Add(accounts_hash(id)(variable))
             End If
         Next

@@ -67,16 +67,17 @@ Friend Class PPSBI_UI
         ' Add any initialization after the InitializeComponent() call.
         destination = GlobalVariables.apps.ActiveCell
 
-        Dim currencies As List(Of String) = GlobalVariables.Currencies.currencies_hash.Keys
-        For Each currency_ As String In currencies
+        Dim currencies As List(Of Int32) = GlobalVariables.Currencies.currencies_hash.Keys
+        For Each currency_ As Int32 In currencies
+            ' replace by currencyCLB => vlisbox !!! 
             CurrencyCB.Items.Add(currency_)
         Next
 
         CurrencyCB.SelectedItem = my.settings.mainCurrency
         TreeviewsInitialization()
         InitializeAdjustmentsCB()
-        versionsTB.Text = versionsTV.Nodes.Find(GlobalVariables.GLOBALCurrentVersionCode, True)(0).Text
-        InitializeTimePeriodsSelection(GlobalVariables.GLOBALCurrentVersionCode)
+        versionsTB.Text = versionsTV.Nodes.Find(My.Settings.version_id, True)(0).Text
+        InitializeTimePeriodsSelection(My.Settings.version_id)
         CategoriesControlTabInitialization()
         expandedControlWidth = EXPANDED_CONTROL_WIDTH  'NON_EXPANDED_CONTROL_WIDTH + categoriesTabControlWidth + EXPANSION_CONTROL_MARGIN
         categoriesSelectionGroupBox.Width = categoriesTabControlWidth + 2

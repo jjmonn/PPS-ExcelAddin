@@ -112,6 +112,7 @@ public enum ServerMessage : byte
       SMSG_GET_GROUP_ENTITIES_ANSWER,
       SMSG_LIST_USERS,
       SMSG_SET_USER_GROUP_ANSWER,
+    SMSG_SOURCED_COMPUTE_RESULT,
 
     OpcodeMax
 }

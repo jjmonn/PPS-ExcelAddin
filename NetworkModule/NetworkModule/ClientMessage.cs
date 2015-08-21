@@ -93,6 +93,7 @@ public enum ClientMessage : ushort
     CMSG_GET_GROUP_ENTITIES,
     CMSG_LIST_USERS,
     CMSG_SET_USER_GROUP,
+    CMSG_SOURCED_COMPUTE,
 
     OpcodeMax
 

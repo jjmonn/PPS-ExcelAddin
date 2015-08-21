@@ -9,7 +9,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 19/08/2015
+' Last modified: 20/08/2015
 
 
 Imports System.Windows.Forms
@@ -25,6 +25,7 @@ Imports VIBlend.WinForms.DataGridView.Filters
 Imports System.Windows.Forms.DataVisualization.Charting
 Imports System.ComponentModel
 Imports VIBlend.WinForms.Controls
+Imports VIBlend.Utilities
 
 
 Friend Class ControllingUI_2
@@ -36,7 +37,6 @@ Friend Class ControllingUI_2
 
     Private Controller As FinancialUIController
     Friend DGVUTIL As New DataGridViewsUtil
-    '  Friend PBar As New ProgressBarControl
     Friend rightPane_Control As CUI2RightPane
     Friend leftPane_control As CUI2LeftPane
     Private leftSplitContainer As SplitContainer
@@ -50,7 +50,6 @@ Friend Class ControllingUI_2
 
 #Region "Variables"
 
-    Friend selectedCurrencyItem As ListItem = Nothing
     Private right_clicked_node As vTreeNode
     Private current_DGV_cell As GridCell
     Private rows_list_dic As New Dictionary(Of String, List(Of HierarchyItem))
@@ -59,6 +58,10 @@ Friend Class ControllingUI_2
     Private column_index As Int32
     Friend accountsTV As New vTreeView
 
+    Private hierarchyItemNormalStyle As HierarchyItemStyle
+    Private hierarchyItemSelectedStyle As HierarchyItemStyle
+    Private hierarchyItemDisabledStyle As HierarchyItemStyle
+    Private CEStyle As GridCellStyle
 
     Private SP1Distance As Single = 230
     Private SP2Distance As Single = 900
@@ -117,10 +120,17 @@ Friend Class ControllingUI_2
             Dim newTab As New vTabPage
             newTab.Text = node.Text
             newTab.Name = node.Value
-            tabControl1.TabPages.Add(newTab)
+            DGVsControlTab.TabPages.Add(newTab)
         Next
         InitializeChartsTab()
         DimensionsDisplayPaneSetup()
+
+        hierarchyItemNormalStyle = GridTheme.GetDefaultTheme(DGV_THEME).HierarchyItemStyleNormal
+        hierarchyItemSelectedStyle = GridTheme.GetDefaultTheme(DGV_THEME).HierarchyItemStyleNormal
+        hierarchyItemDisabledStyle = GridTheme.GetDefaultTheme(DGV_THEME).HierarchyItemStyleNormal
+
+        CEStyle = GridTheme.GetDefaultTheme(DGV_THEME).GridCellStyle
+
 
     End Sub
 
@@ -146,7 +156,6 @@ Friend Class ControllingUI_2
         AddHandler leftPane_control.entitiesTV.KeyDown, AddressOf EntitiesTV_KeyDown
         AddHandler leftPane_control.entitiesTV.MouseClick, AddressOf EntitiesTV_NodeMouseClick
         AddHandler leftPane_control.periodsTV.NodeChecked, AddressOf periodsTV_ItemCheck
-        AddHandler leftPane_control.currenciesCLB.ItemChecked, AddressOf CurrenciesCLB_ItemChecked
         AddHandler leftPane_control.PanelCollapseBT.Click, AddressOf CollapseSP1Pane1
         AddHandler leftPaneExpandBT.Click, AddressOf ExpandSP1Pane1
 
@@ -164,12 +173,8 @@ Friend Class ControllingUI_2
 
     Private Sub DataMiningUI_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 
-        'Me.Controls.Add(PBar)                           ' Progress Bar
-        'PBar.Left = (Me.Width - PBar.Width) / 2         ' Progress Bar
-        'PBar.Top = (Me.Height - PBar.Height) / 2        ' Progress Bar
-
-        For Each tab_ As vTabPage In tabControl1.TabPages
-            tabControl1.SelectedTab = tab_
+        For Each tab_ As vTabPage In DGVsControlTab.TabPages
+            DGVsControlTab.SelectedTab = tab_
             Dim DGV As New vDataGridView
             DGV.VIBlendTheme = DGV_THEME
             DGV.Name = tab_.Name
@@ -180,10 +185,11 @@ Friend Class ControllingUI_2
             DGV.ContextMenuStrip = DataGridViewsRCMenu
             tab_.Controls.Add(DGV)
             AddHandler DGV.CellMouseClick, AddressOf DGV_CellMouseClick
+            CEStyle.Font = New System.Drawing.Font(DGV.Font.FontFamily, My.Settings.dgvFontSize)
         Next
 
-        If Not IsNothing(tabControl1.TabPages(0)) Then
-            tabControl1.SelectedTab = tabControl1.TabPages(0)
+        If Not IsNothing(DGVsControlTab.TabPages(0)) Then
+            DGVsControlTab.SelectedTab = DGVsControlTab.TabPages(0)
         End If
         Me.WindowState = FormWindowState.Maximized
 
@@ -281,11 +287,11 @@ Friend Class ControllingUI_2
 
         Dim versionsIds As New List(Of Int32)
         For Each versionId In VTreeViewUtil.GetCheckedNodesIds(leftPane_control.versionsTV)
-            If GlobalVariables.Versions.versions_hash(versionId)(is_folder_variable) = False Then
+            If GlobalVariables.Versions.versions_hash(versionId)(IS_FOLDER_VARIABLE) = False Then
                 versionsIds.Add(versionId)
             End If
         Next
-       
+
         If entityNode Is Nothing Then
             If leftPane_control.entitiesTV.Nodes.Count > 0 Then
                 entityNode = leftPane_control.entitiesTV.Nodes(0)
@@ -313,6 +319,25 @@ Friend Class ControllingUI_2
             Else
                 MsgBox("Please select an Entity to refresh")
             End If
+        End If
+
+    End Sub
+
+    Friend Sub FormatDGVItem(ByRef item As HierarchyItem)
+
+        item.HierarchyItemStyleNormal = hierarchyItemNormalStyle
+        item.HierarchyItemStyleSelected = hierarchyItemSelectedStyle
+        item.HierarchyItemStyleDisabled = hierarchyItemDisabledStyle
+
+        item.CellsStyle = CEStyle
+        item.CellsTextAlignment = System.Drawing.ContentAlignment.MiddleRight
+
+        ' Manage cells formats according to account type, currencies and units
+        'priority normal
+
+        If item.IsColumnsHierarchyItem _
+       AndAlso item.Caption.Length > 20 Then
+            item.TextWrap = True
         End If
 
     End Sub
@@ -371,17 +396,58 @@ Friend Class ControllingUI_2
 
     End Sub
 
-    Private Sub CurrenciesCLB_ItemChecked(sender As Object, e As ItemCheckChangedEventArgs)
+    Private Sub tabControl1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles DGVsControlTab.SelectedIndexChanged
 
-        selectedCurrencyItem = e.Item
+        Controller.cellsUpdateNeeded = True
+
+    End Sub
+
+#End Region
+
+
+#Region "Calls Backs"
+
+#Region "Data Grid View Righ Click Menu Calls backs"
+
+    Private Sub compute_Click(sender As Object, e As EventArgs) Handles RefreshRightClick.Click
+
+        RefreshData(right_clicked_node)
+
+    End Sub
+
+
+    Private Sub ColumnsAutoFitBT_Click(sender As Object, e As EventArgs) Handles ColumnsAutoFitBT.Click
+
+        My.Settings.controllingUIResizeTofitGrid = ColumnsAutoFitBT.Checked
+        My.Settings.Save()
+
+    End Sub
+
+    Private Sub ColumnsAutoSize_Click(sender As Object, e As EventArgs) Handles ColumnsAutoSize.Click
+
+        Dim dgv As vDataGridView = DGVsControlTab.SelectedTab.Controls(0)
+        dgv.ColumnsHierarchy.AutoResize(AutoResizeMode.FIT_ALL)
+        dgv.Refresh()
+        dgv.Select()
+
+    End Sub
+
+    Private Sub DisplayDataTrackingToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles DisplayDataTrackingToolStripMenuItem.Click
+
+        If Not current_DGV_cell Is Nothing Then
+            ' to be implemented -> quid -> find cell's account, entity, period, version from nothing...
+        End If
+
+    End Sub
+
+    Private Sub FormatsRCMBT_Click(sender As Object, e As EventArgs) Handles DGVFormatsButton.Click
+
+        Dim formatsController As New FormatsController
 
     End Sub
 
 
 #End Region
-
-
-#Region "Menus and Display Management"
 
 #Region "Main Menu Calls Backs"
 
@@ -408,7 +474,7 @@ Friend Class ControllingUI_2
     Private Sub HideVersionsComparisonToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles HideVersionsComparisonToolStripMenuItem.Click
 
         If isVersionComparisonDisplayed Then
-            For Each tab_ As vTabPage In tabControl1.TabPages
+            For Each tab_ As vTabPage In DGVsControlTab.TabPages
                 Dim DGV As vDataGridView = tab_.Controls(0)
                 DGVUTIL.RemoveVersionsComparison(DGV)
             Next
@@ -434,14 +500,7 @@ Friend Class ControllingUI_2
 
 #End Region
 
-
-#Region "Right Click Menus"
-
-    Private Sub compute_complete_Click(sender As Object, e As EventArgs) Handles compute_complete.Click
-
-        RefreshData(right_clicked_node)
-
-    End Sub
+#Region "Periods Checked List Box Call backs"
 
     Private Sub SelectAllToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles SelectAllToolStripMenuItem.Click
 
@@ -462,24 +521,8 @@ Friend Class ControllingUI_2
 
     End Sub
 
-
-#Region "DGVs RCM"
-
-    Private Sub DisplayDataTrackingToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles DisplayDataTrackingToolStripMenuItem.Click
-
-        If Not current_DGV_cell Is Nothing Then
-            ' to be implemented -> quid -> find cell's account, entity, period, version from nothing...
-        End If
-
-    End Sub
-
-    Private Sub FormatsRCMBT_Click(sender As Object, e As EventArgs) Handles FormatsRCMBT.Click
-
-        Dim formatsController As New FormatsController
-
-    End Sub
-
 #End Region
+
 
 #Region "Adjustments RCM"
 
@@ -503,8 +546,6 @@ Friend Class ControllingUI_2
 
     End Sub
 
-
-#End Region
 
 #End Region
 
@@ -610,12 +651,15 @@ Friend Class ControllingUI_2
             Me.Invoke(MyDelegate, New Object() {})
         Else
             CP.Dispose()
-            For Each tab_ As vTabPage In tabControl1.TabPages
+            For Each tab_ As vTabPage In DGVsControlTab.TabPages
                 Dim dgv As vDataGridView = tab_.Controls(0)
                 dgv.RowsHierarchy.AutoResize(AutoResizeMode.FIT_ALL)
                 dgv.ColumnsHierarchy.AutoResize(AutoResizeMode.FIT_ALL)
                 On Error Resume Next
+                dgv.Select()
                 dgv.Refresh()
+                dgv.Update()
+                dgv.ColumnsHierarchy.ExpandAllItems()
             Next
 
         End If
@@ -630,7 +674,7 @@ Friend Class ControllingUI_2
             Dim MyDelegate As New DGVFormattingAttemp_Delegate(AddressOf FormatDGV_ThreadSafe)
             Me.Invoke(MyDelegate, New Object() {})
         Else
-            For Each tab_ As vTabPage In tabControl1.TabPages
+            For Each tab_ As vTabPage In DGVsControlTab.TabPages
                 Dim dgv As vDataGridView = tab_.Controls(0)
                 dgv.GroupingDefaultHeaderTextVisible = True
                 dgv.BackColor = Color.White
@@ -649,4 +693,5 @@ Friend Class ControllingUI_2
 
 
 
+   
 End Class

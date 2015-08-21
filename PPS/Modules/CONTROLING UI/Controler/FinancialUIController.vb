@@ -57,7 +57,7 @@ Friend Class FinancialUIController
 
     ' Virtual binding
     Private itemsDimensionsDict As Dictionary(Of HierarchyItem, Hashtable)
-
+    Friend cellsUpdateNeeded As Boolean = True
 
 #End Region
 
@@ -158,8 +158,8 @@ Friend Class FinancialUIController
         IncrementComputingHierarchy(rowsHierarchyNode, computingHierarchyList)
         IncrementComputingHierarchy(columnsHierarchyNode, computingHierarchyList)
 
-        ' stub !! priotity high!!!
-        Dim currencyId As Int32 = 3 'CInt(View.leftPane_control.currenciesCLB.SelectedItem.Value)
+        ' Currency Setup
+        Dim currencyId As Int32 = CInt(View.leftPane_control.currenciesCLB.SelectedItem.Value)
 
         ' Computing order
         Dim mustCompute As Boolean = True
@@ -172,11 +172,11 @@ Friend Class FinancialUIController
 
             If computingHierarchyList.Count = 0 Then computingHierarchyList = Nothing
             Computer.CMSG_COMPUTE_REQUEST(versionIDs, _
-                                    CInt(entityNode.Value), _
-                                    currencyId, _
-                                    filters, _
-                                    axisFilters, _
-                                    computingHierarchyList)
+                                          CInt(EntityNode.Value), _
+                                          currencyId, _
+                                          filters, _
+                                          axisFilters, _
+                                          computingHierarchyList)
         End If
 
         ' Cache registering
@@ -188,10 +188,14 @@ Friend Class FinancialUIController
         cacheAxisFilters = axisFilters
 
         ' Redraw hierarchy Items
+        Dim t1 As Date = Date.Now
         InitDisplay()
+        System.Diagnostics.Debug.WriteLine("********Display Init Time: " & (Date.Now - t1).Seconds & " **********")
+
         FillUIHeader()
 
         ' Launch waiting CP
+        System.Diagnostics.Debug.WriteLine(Date.Now)
         View.CP = New CircularProgressUI(System.Drawing.Color.Blue, "Computing")
         View.CP.Show()
 
@@ -227,6 +231,7 @@ Friend Class FinancialUIController
 
     Private Sub AfterCompute()
 
+        System.Diagnostics.Debug.WriteLine(Date.Now)
         While initDisplayFlag = False
         End While
         dataMap = Computer.GetData()
@@ -263,8 +268,8 @@ Friend Class FinancialUIController
         FillHierarchy(rowsHierarchyNode)
         FillHierarchy(columnsHierarchyNode)
 
-        For Each tab_ As VIBlend.WinForms.Controls.vTabPage In View.tabControl1.TabPages
-            View.tabControl1.SelectedTab = tab_
+        For Each tab_ As VIBlend.WinForms.Controls.vTabPage In View.DGVsControlTab.TabPages
+            View.DGVsControlTab.SelectedTab = tab_
             Dim DGV As vDataGridView = tab_.Controls(0)
             RemoveHandler DGV.CellValueNeeded, AddressOf DGVs_CellValueNeeded
             DGV.Clear()
@@ -289,9 +294,11 @@ Friend Class FinancialUIController
             DGV.ColumnsHierarchy.Clear()
             If columnsHierarchyNode.Nodes.Count > 0 Then CreateColumn(DGV, columnsHierarchyNode.Nodes(0))
             If rowsHierarchyNode.Nodes.Count > 0 Then CreateRow(DGV, rowsHierarchyNode.Nodes(0))
+            DGV.ColumnsHierarchy.AutoStretchColumns = True
             AddHandler DGV.CellValueNeeded, AddressOf DGVs_CellValueNeeded
         Next
         initDisplayFlag = True
+        cellsUpdateNeeded = True
 
     End Sub
 
@@ -392,10 +399,10 @@ Friend Class FinancialUIController
                     ' if years before months => only keep months but with special code
                     Dim monthsNode As vTreeNode = VTreeViewUtil.FindNode(hierarchyNode, Computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.MONTHS)
                     monthsNode.Value = Computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.YMONTHS
-                    VTreeViewUtil.FindNode(hierarchyNode, Computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.YEARS).Remove()
+                    hierarchyNode.Nodes.Remove(VTreeViewUtil.FindNode(hierarchyNode, Computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.YEARS))
                 Case "21"
                     ' if years after months => delete years
-                    VTreeViewUtil.FindNode(hierarchyNode, Computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.YEARS).Remove()
+                    hierarchyNode.Nodes.Remove(VTreeViewUtil.FindNode(hierarchyNode, Computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.YEARS))
             End Select
         End If
 
@@ -428,11 +435,9 @@ Friend Class FinancialUIController
 
                 ' Style => will go in utilities !!! priority normal
                 ' ------------------------------------------------------------------------------
+                '  DataGridViewsUtil.FormatDGVItem(subColumn)
                 subColumn.CellsFormatString = "{0:N}"
-                Dim CEStyle As GridCellStyle = GridTheme.GetDefaultTheme(dgv.VIBlendTheme).GridCellStyle
-                CEStyle.Font = New System.Drawing.Font(dgv.Font.FontFamily, My.Settings.dgvFontSize)
-                subColumn.CellsStyle = CEStyle
-                subColumn.CellsTextAlignment = Drawing.ContentAlignment.MiddleRight
+                subColumn.TextAlignment = Drawing.ContentAlignment.MiddleCenter
                 RegisterHierarchyItemDimensions(subColumn)
                 ' ------------------------------------------------------------------------------
 
@@ -473,9 +478,7 @@ Friend Class FinancialUIController
                     subRow = row.Items.Add(valueNode.Text)
                 End If
                 subRow.CellsDataSource = GridCellDataSource.Virtual
-                'For Each column As HierarchyItem In dgv.ColumnsHierarchy.Items
-                '    SetHierarchyVirtualDataSource(subRow, column)
-                'Next
+                '   DataGridViewsUtil.FormatDGVItem(subRow)
                 HideHiearchyItemIfVComp(subRow, _
                                         dimensionNode, _
                                         valueNode)
@@ -575,65 +578,80 @@ Friend Class FinancialUIController
 
     Private Sub DGVs_CellValueNeeded(ByVal sender As Object, ByVal args As CellValueNeededEventArgs)
 
-        '    On Error GoTo errH1
-        Dim accountId As Int32 = 0
-        Dim entityId As Int32 = 0
-        Dim periodId As String = ""
-        Dim versionId As String = 0
-        Dim filterId As String = "0"
+        ' priority high -> no update if alraedy displayed !!!! 
+        '---------------------------------------------------------
+        If Not dataMap Is Nothing Then
 
-        Dim items() As HierarchyItem = {args.RowItem, args.ColumnItem}
-        For Each item As HierarchyItem In items
-            Dim ht As Hashtable = itemsDimensionsDict(item)
-            For Each dimension In ht.Keys
-                Dim value = ht(dimension)
-                If Not TypeOf (dimension) Is Char Then
-                    Select Case dimension
-                        Case GlobalEnums.DataMapAxis.ACCOUNTS
-                            If value <> 0 Then accountId = value
-                        Case GlobalEnums.DataMapAxis.ENTITIES
-                            If value <> 0 Then
-                                Select Case entityId
-                                    Case 0
-                                        entityId = value
-                                    Case Else
-                                        If entityId = CInt(EntityNode.value) Then entityId = value
-                                End Select
-                            End If
-                        Case GlobalEnums.DataMapAxis.PERIODS
-                            If value <> "" Then periodId = value
-                        Case GlobalEnums.DataMapAxis.VERSIONS
-                            If value <> "0" Then versionId = value
-                        Case GlobalEnums.DataMapAxis.FILTERS
-                            If value <> "0" Then filterId = value
-                    End Select
-                End If
+            '    On Error GoTo errH1
+            Dim accountId As Int32 = 0
+            Dim entityId As Int32 = 0
+            Dim periodId As String = ""
+            Dim versionId As String = 0
+            Dim filterId As String = "0"
+
+            Dim items() As HierarchyItem = {args.RowItem, args.ColumnItem}
+            For Each item As HierarchyItem In items
+                Dim ht As Hashtable = itemsDimensionsDict(item)
+                For Each dimension In ht.Keys
+                    Dim value = ht(dimension)
+                    If Not TypeOf (dimension) Is Char Then
+                        Select Case dimension
+                            Case GlobalEnums.DataMapAxis.ACCOUNTS
+                                If value <> 0 Then accountId = value
+                            Case GlobalEnums.DataMapAxis.ENTITIES
+                                If value <> 0 Then
+                                    Select Case entityId
+                                        Case 0
+                                            entityId = value
+                                        Case Else
+                                            If entityId = CInt(EntityNode.Value) Then entityId = value
+                                    End Select
+                                End If
+                            Case GlobalEnums.DataMapAxis.PERIODS
+                                If value <> "" Then periodId = value
+                            Case GlobalEnums.DataMapAxis.VERSIONS
+                                If value <> "0" Then versionId = value
+                            Case GlobalEnums.DataMapAxis.FILTERS
+                                If value <> "0" Then filterId = value
+                        End Select
+                    End If
+                Next
             Next
-        Next
 
-        Dim token As String = Computer.TOKEN_SEPARATOR & _
-                              filterId & Computer.TOKEN_SEPARATOR & _
-                              entityId & Computer.TOKEN_SEPARATOR & _
-                              accountId & Computer.TOKEN_SEPARATOR & _
-                              periodId
-        If versionId.Contains(Computer.TOKEN_SEPARATOR) Then
-            Dim v1 As Int32 = GetFirstVersionId(versionId)
-            Dim v2 As Int32 = GetSecondVersionId(versionId)
+            Dim token As String = Computer.TOKEN_SEPARATOR & _
+                                  filterId & Computer.TOKEN_SEPARATOR & _
+                                  entityId & Computer.TOKEN_SEPARATOR & _
+                                  accountId & Computer.TOKEN_SEPARATOR & _
+                                  periodId
+            If versionId.Contains(Computer.TOKEN_SEPARATOR) Then
+                Dim v1 As Int32 = GetFirstVersionId(versionId)
+                Dim v2 As Int32 = GetSecondVersionId(versionId)
 
-            If dataMap.ContainsKey(v1 & token) _
-            AndAlso dataMap.ContainsKey(v2 & token) Then
-                args.CellValue = dataMap(v1 & token) - dataMap(v2 & token)
+                If dataMap.ContainsKey(v1 & token) _
+                AndAlso dataMap.ContainsKey(v2 & token) Then
+                    args.CellValue = dataMap(v1 & token) - dataMap(v2 & token)
+                    If My.Settings.controllingUIResizeTofitGrid = True Then
+                        args.ColumnItem.DataGridView.ColumnsHierarchy.ResizeColumnsToFitGridWidth()
+                        ' args.ColumnItem.AutoResize(AutoResizeMode.FIT_ALL)
+                    End If
+                Else
+                    args.CellValue = ""
+                End If
             Else
-                args.CellValue = ""
-            End If
-        Else
-            If dataMap.ContainsKey(versionId & token) Then
-                args.CellValue = dataMap(versionId & token)
-            Else
-                args.CellValue = ""
+                If dataMap.ContainsKey(versionId & token) Then
+                    args.CellValue = dataMap(versionId & token)
+                    If My.Settings.controllingUIResizeTofitGrid = True Then
+                        args.ColumnItem.DataGridView.ColumnsHierarchy.ResizeColumnsToFitGridWidth()
+                        ' args.ColumnItem.AutoResize(AutoResizeMode.FIT_ALL)
+                    End If
+                Else
+                    args.CellValue = ""
+                End If
+
+                '  args.RowItem.GetHashCode(
+
             End If
         End If
-
         'errH1:
         '        args.CellValue = ""
 
@@ -657,7 +675,7 @@ Friend Class FinancialUIController
 
     Friend Sub VersionsCompDisplay(ByVal display As Boolean)
 
-        For Each tab_ As VIBlend.WinForms.Controls.vTabPage In View.tabControl1.TabPages
+        For Each tab_ As VIBlend.WinForms.Controls.vTabPage In View.DGVsControlTab.TabPages
             Dim DGV As vDataGridView = tab_.Controls(0)
             For Each row As HierarchyItem In DGV.RowsHierarchy.Items
                 DisplayVCompHierarchy(row, display)
@@ -701,7 +719,7 @@ Friend Class FinancialUIController
 
     Friend Sub PeriodsSelectionFilter(ByRef periodsSelectionDict As Dictionary(Of String, Boolean))
 
-        For Each tab_ As vTabPage In View.tabControl1.TabPages
+        For Each tab_ As vTabPage In View.DGVsControlTab.TabPages
             Dim DGV As vDataGridView = tab_.Controls(0)
 
             For Each col As HierarchyItem In DGV.ColumnsHierarchy.Items
@@ -713,7 +731,7 @@ Friend Class FinancialUIController
         Next
 
     End Sub
-     
+
     Private Sub FilterSubHierarchyItems(ByRef item As HierarchyItem, _
                                         ByRef periodsSelectionDict As Dictionary(Of String, Boolean))
 
@@ -787,7 +805,7 @@ Friend Class FinancialUIController
         Else
             Return filters
         End If
- 
+
     End Function
 
     Private Sub AddFiltersFromTV(ByRef TV As vTreeView, _
@@ -810,7 +828,7 @@ Friend Class FinancialUIController
     Private Sub FillUIHeader()
 
         View.EntityTB.Text = EntityNode.Text
-        '   View.CurrencyTB.Text = View.selectedCurrencyItem.Text stub to be reimplmented priority high !!!!!
+        View.CurrencyTB.Text = View.leftPane_control.currenciesCLB.SelectedItem.Text
         View.VersionTB.Text = String.Join(" ; ", versionsDict.Values)
 
     End Sub
@@ -826,7 +844,7 @@ Friend Class FinancialUIController
                                                                                            {"Entity", "Version", "Currency"}, _
                                                                                            {EntityNode.Text, View.VersionTB.Text, View.CurrencyTB.Text})
             Dim i As Int32 = 1
-            For Each tab_ As VIBlend.WinForms.Controls.vTabPage In View.tabControl1.TabPages
+            For Each tab_ As VIBlend.WinForms.Controls.vTabPage In View.DGVsControlTab.TabPages
                 Dim DGV As VIBlend.WinForms.DataGridView.vDataGridView = tab_.Controls(0)
                 DataGridViewsUtil.CopyDGVToExcelGeneric(DGV, destination, i)
             Next

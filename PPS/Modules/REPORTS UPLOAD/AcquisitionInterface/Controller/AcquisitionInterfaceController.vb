@@ -34,7 +34,7 @@ Friend Class AcquisitionInterfaceController
     Private isStandAlone As Boolean
     Friend currentDGVOrientationFlag As String
     Friend currentCurrency As String
-    Friend currentEntity As String
+    Friend currentEntityName As String  ' caution to be initialized !!! 
 
     ' DGV Dictionaries
     Friend rowsKeyItemDictionary As New Dictionary(Of String, HierarchyItem)
@@ -125,47 +125,51 @@ Friend Class AcquisitionInterfaceController
 #Region "Accounts and Periods"
 
     ' Initializes a DGV with accounts in rows and period in column for a given entity
-    Friend Sub ConfigDGVAcPe(ByRef entity As String)
+    Friend Sub ConfigDGVAcPe(ByRef entityName As String)
 
         ClearDGVandDictionaries()
-        ACQUMODEL.DownloadDBInputs(entity, _
+        ACQUMODEL.downloadDBInputs(entityName, _
                                    GlobalVariables.ClientsIDDropDown.SelectedItemId, _
                                    GlobalVariables.ProductsIDDropDown.SelectedItemId, _
                                    GlobalVariables.AdjustmentIDDropDown.SelectedItemId)
-        ACQUI.LoadAccountsToHierarchy(ACQUI.DGV.RowsHierarchy, entity, ACQUMODEL.accountsTV)
-        ACQUI.LoadPeriodsToHierarchy(ACQUI.DGV.ColumnsHierarchy, entity, GetRandomAccount(entity), ACQUMODEL.currentPeriodlist, ACQUMODEL.versionsTimeConfigDict(ACQUMODEL.current_version_id))
+        ACQUI.LoadAccountsToHierarchy(ACQUI.DGV.RowsHierarchy, entityName, ACQUMODEL.accountsTV)
+        ACQUI.LoadPeriodsToHierarchy(ACQUI.DGV.ColumnsHierarchy, _
+                                     entityName, _
+                                     GetRandomAccount(entityName), _
+                                     ACQUMODEL.currentPeriodList, _
+                                     GlobalVariables.Versions.versions_hash(ACQUMODEL.current_version_id)(VERSIONS_TIME_CONFIG_VARIABLE))
 
         For Each account In ACQUI.DGV.RowsHierarchy.Items
-            FillInSubItemAcPe(account, ACQUI.DGV.ColumnsHierarchy, entity, ModelDataSet.DATASET_ACCOUNTS_PERIODS_OR)
+            FillInSubItemAcPe(account, ACQUI.DGV.ColumnsHierarchy, entityName, ModelDataSet.DATASET_ACCOUNTS_PERIODS_OR)
         Next
         currentDGVOrientationFlag = ModelDataSet.DATASET_ACCOUNTS_PERIODS_OR
 
-        ACQUMODEL.ComputeCalculatedItems(entity)
+        ACQUMODEL.ComputeCalculatedItems(entityName)
         For Each account In ACQUI.DGV.RowsHierarchy.Items
-            FillInCalculatedSubItemsAcPe(account, ACQUI.DGV.ColumnsHierarchy, entity, ModelDataSet.DATASET_ACCOUNTS_PERIODS_OR)
+            FillInCalculatedSubItemsAcPe(account, ACQUI.DGV.ColumnsHierarchy, entityName, ModelDataSet.DATASET_ACCOUNTS_PERIODS_OR)
         Next
 
     End Sub
 
     ' Set up Periods in rows, accounts in columns configurations 
-    Friend Sub ConfigDGVPeAc(ByRef entity As String)
+    Friend Sub ConfigDGVPeAc(ByRef entityName As String)
 
         ClearDGVandDictionaries()
-        ACQUI.LoadAccountsToHierarchy(ACQUI.DGV.ColumnsHierarchy, entity, ACQUMODEL.accountsTV)
-        ACQUI.LoadPeriodsToHierarchy(ACQUI.DGV.RowsHierarchy, entity, GetRandomAccount(entity), ACQUMODEL.currentPeriodlist, ACQUMODEL.versionsTimeConfigDict(ACQUMODEL.current_version_id))
-        ACQUMODEL.DownloadDBInputs(entity, _
+        ACQUI.LoadAccountsToHierarchy(ACQUI.DGV.ColumnsHierarchy, entityName, ACQUMODEL.accountsTV)
+        ACQUI.LoadPeriodsToHierarchy(ACQUI.DGV.RowsHierarchy, entityName, GetRandomAccount(entityName), ACQUMODEL.currentPeriodList, GlobalVariables.Versions.versions_hash(ACQUMODEL.current_version_id)(VERSIONS_TIME_CONFIG_VARIABLE))
+        ACQUMODEL.downloadDBInputs(entityName, _
                                    GlobalVariables.ClientsIDDropDown.SelectedItemId, _
                                    GlobalVariables.ProductsIDDropDown.SelectedItemId, _
                                    GlobalVariables.AdjustmentIDDropDown.SelectedItemId)
 
         For Each account In ACQUI.DGV.ColumnsHierarchy.Items
-            FillInSubItemAcPe(account, ACQUI.DGV.RowsHierarchy, entity, ModelDataSet.DATASET_PERIODS_ACCOUNTS_OR)
+            FillInSubItemAcPe(account, ACQUI.DGV.RowsHierarchy, entityName, ModelDataSet.DATASET_PERIODS_ACCOUNTS_OR)
         Next
         currentDGVOrientationFlag = ModelDataSet.DATASET_PERIODS_ACCOUNTS_OR
 
-        ACQUMODEL.ComputeCalculatedItems(entity)
+        ACQUMODEL.ComputeCalculatedItems(entityName)
         For Each account In ACQUI.DGV.ColumnsHierarchy.Items
-            FillInCalculatedSubItemsAcPe(account, ACQUI.DGV.RowsHierarchy, entity, ModelDataSet.DATASET_PERIODS_ACCOUNTS_OR)
+            FillInCalculatedSubItemsAcPe(account, ACQUI.DGV.RowsHierarchy, entityName, ModelDataSet.DATASET_PERIODS_ACCOUNTS_OR)
         Next
 
     End Sub
@@ -216,7 +220,7 @@ Friend Class AcquisitionInterfaceController
         ACQUI.DGV.Clear()
         ACQUI.LoadEntitiesToHierarchy(ACQUI.DGV.RowsHierarchy)
         Dim currentEntity As String = ACQUI.DGV.RowsHierarchy.Items(0).Caption
-        ACQUI.LoadPeriodsToHierarchy(ACQUI.DGV.ColumnsHierarchy, currentEntity, account, ACQUMODEL.currentPeriodlist, ACQUMODEL.versionsTimeConfigDict(ACQUMODEL.current_version_id))
+        ACQUI.LoadPeriodsToHierarchy(ACQUI.DGV.ColumnsHierarchy, currentEntity, account, ACQUMODEL.currentPeriodlist, GlobalVariables.Versions.versions_hash(ACQUMODEL.current_version_id)(VERSIONS_TIME_CONFIG_VARIABLE))
 
         ' -> download DBInputs -> for all entities 
         Dim entitiesList As New List(Of String)
@@ -239,7 +243,7 @@ Friend Class AcquisitionInterfaceController
         ACQUI.DGV.Clear()
         ACQUI.LoadEntitiesToHierarchy(ACQUI.DGV.ColumnsHierarchy)
         Dim currentEntity As String = ACQUI.DGV.ColumnsHierarchy.Items(0).Caption
-        ACQUI.LoadPeriodsToHierarchy(ACQUI.DGV.RowsHierarchy, currentEntity, account, ACQUMODEL.currentPeriodlist, ACQUMODEL.versionsTimeConfigDict(ACQUMODEL.current_version_id))
+        ACQUI.LoadPeriodsToHierarchy(ACQUI.DGV.RowsHierarchy, currentEntity, account, ACQUMODEL.currentPeriodlist, GlobalVariables.Versions.versions_hash(ACQUMODEL.current_version_id)(VERSIONS_TIME_CONFIG_VARIABLE))
 
         ' -> download DBInputs -> for all entities 
         Dim entitiesList As New List(Of String)
@@ -277,9 +281,9 @@ Friend Class AcquisitionInterfaceController
             periodAsInt = periodsItemIDPeriodCodeDict(period.GetUniqueID)
             If DATASET.dataSetDictionary(currentEntity).ContainsKey(account.Caption) Then
                 value = DATASET.dataSetDictionary(currentEntity)(account.Caption)(periodAsInt)
-            ElseIf ACQUMODEL.DBInputsDictionary(currentEntity).ContainsKey(account.Caption) AndAlso _
-                   ACQUMODEL.DBInputsDictionary(currentEntity)(account.Caption).ContainsKey(periodAsInt) Then
-                value = ACQUMODEL.DBInputsDictionary(currentEntity)(account.Caption)(periodAsInt)
+            ElseIf ACQUMODEL.dataBaseInputsDictionary(currentEntity).ContainsKey(account.Caption) AndAlso _
+                   ACQUMODEL.dataBaseInputsDictionary(currentEntity)(account.Caption).ContainsKey(periodAsInt) Then
+                value = ACQUMODEL.dataBaseInputsDictionary(currentEntity)(account.Caption)(periodAsInt)
             Else
                 value = Nothing
             End If
@@ -353,7 +357,7 @@ Friend Class AcquisitionInterfaceController
         If ACQUMODEL.outputsList.Contains(account.Caption) Then
             accKey = DATASET.AccountsNameKeyDictionary(account.Caption)
             For Each period In periodHierarchy.Items
-                value = ACQUMODEL.GetCalculatedValue(accKey, periodsItemIDPeriodCodeDict(period.GetUniqueID))
+                value = ACQUMODEL.GetCalculatedValue(currentEntityName, accKey, periodsItemIDPeriodCodeDict(period.GetUniqueID))
                 Select Case configCode
                     Case ModelDataSet.DATASET_ACCOUNTS_PERIODS_OR : account.DataGridView.CellsArea.SetCellValue(account, period, value)
                     Case ModelDataSet.DATASET_PERIODS_ACCOUNTS_OR : account.DataGridView.CellsArea.SetCellValue(period, account, value)

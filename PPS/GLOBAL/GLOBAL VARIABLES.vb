@@ -29,8 +29,6 @@ Friend Class GlobalVariables
     Friend Shared Version_Label As ADXRibbonLabel
     Friend Shared Version_label_Sub_Ribbon As ADXRibbonEditBox
     Friend Shared Rates_Version_Label As ADXRibbonLabel
-    Friend Shared GLOBALCurrentVersionCode As String
-    Friend Shared GLOBALCurrentRatesVersionCode As String
 
 #End Region
 
@@ -51,11 +49,6 @@ Friend Class GlobalVariables
 
 #End Region
 
-#Region "Credentials"
-
-    Friend Shared Current_User_ID As String            ' Current user ID
-
-#End Region
 
 #Region "Submission Process Global Variables"
 

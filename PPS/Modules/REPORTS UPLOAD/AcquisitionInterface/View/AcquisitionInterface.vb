@@ -7,8 +7,9 @@
 '
 ' To do:
 '       - cells select next cell by moving keys
-'       -
-'
+'       - To be renewed completely !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+'          => priority normal
+'          => simplify
 '
 ' Known bugs:
 '       - 
@@ -16,7 +17,7 @@
 '
 ' 
 ' Author: Julien Monnereau
-' Last modified: 22/10/2014
+' Last modified: 21/08/2015
 
 
 Imports System.Collections.Generic
@@ -141,11 +142,10 @@ Friend Class AcquisitionInterface
     Friend Sub LoadPeriodsToHierarchy(ByRef hierarchy As Hierarchy, _
                                        ByRef currentEntity As String, _
                                        ByRef currentAccount As String, _
-                                       ByRef currentPeriodList As List(Of UInt32), _
+                                       ByRef currentPeriodList() As Int32, _
                                        ByRef time_config As String)
 
         ClearHierarchyDictionary(hierarchy)
-        currentPeriodList.Clear()
         Dim formatStr As String = ""
 
         Select Case time_config
@@ -156,7 +156,6 @@ Friend Class AcquisitionInterface
         For Each period As String In DATASET.dataSetDictionary(currentEntity)(currentAccount).Keys
             Dim item As HierarchyItem = AddItemToHierarchyAndDictionaries(hierarchy, period, Format(DateTime.FromOADate(period), formatStr))
             Controller.periodsItemIDPeriodCodeDict.Add(item.GetUniqueID, period)
-            currentPeriodList.Add(CInt(period))
         Next
 
     End Sub

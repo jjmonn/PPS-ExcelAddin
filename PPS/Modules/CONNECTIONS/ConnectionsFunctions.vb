@@ -33,17 +33,17 @@ Friend Class ConnectionsFunctions
 
 
     Friend Function NetworkConnection(ByRef p_hostname As String, _
-                                     ByVal p_port As UShort, _
-                                     ByRef p_userName As String, _
-                                     ByVal p_pwd As String) As Boolean
+                                      ByVal p_port As UShort, _
+                                      ByRef p_userName As String, _
+                                      ByVal p_pwd As String) As Boolean
 
         userName = p_userName
         pwd = p_pwd
 
-         globalVariablesInitFlags.Clear()
+        globalVariablesInitFlags.Clear()
         globalInitFlag = False
         If GlobalVariables.ConnectionState = True Then
-            GlobalVariables.NetworkConnect.Stop()
+            CloseNetworkConnection()
         End If
         GlobalVariables.NetworkConnect = New NetworkLauncher()
         GlobalVariables.ConnectionState = (GlobalVariables.NetworkConnect.Launch(p_hostname, p_port))
@@ -57,6 +57,7 @@ Friend Class ConnectionsFunctions
             System.Diagnostics.Debug.WriteLine("Authtoken requested")
             Return True
         Else
+            CloseNetworkConnection()
             System.Diagnostics.Debug.WriteLine("The system did not respond")
             Return False
         End If
@@ -86,6 +87,7 @@ Friend Class ConnectionsFunctions
             System.Diagnostics.Debug.WriteLine("Authentication asked")
         Else
             System.Diagnostics.Debug.WriteLine("The server did not reply to the authentication request.")
+            CloseNetworkConnection()
             RaiseEvent ConnectionFailedEvent()
         End If
         NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_AUTH_REQUEST_ANSWER, AddressOf SMSG_AUTH_REQUEST_ANSWER)
@@ -100,6 +102,7 @@ Friend Class ConnectionsFunctions
                 System.Diagnostics.Debug.WriteLine("Authentication suceed")
             Else
                 System.Diagnostics.Debug.WriteLine("Authentication Failed!")
+                CloseNetworkConnection()
                 '    MsgBox("Authentication failed. Please review your ID and password.")
                 RaiseEvent ConnectionFailedEvent()
             End If
@@ -159,6 +162,7 @@ Friend Class ConnectionsFunctions
         GlobalVariables.NetworkConnect.Stop()
         GlobalVariables.Connection_Toggle_Button.Image = 0
         GlobalVariables.Connection_Toggle_Button.Caption = "Not connected"
+        GlobalVariables.ConnectionState = True
 
     End Sub
 

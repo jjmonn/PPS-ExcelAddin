@@ -5,13 +5,14 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 18/08/2015
+' Last modified: 19/08/2015
 
 Imports System.Runtime.InteropServices
 Imports AddinExpress.XL
 
 
 Public Class ConnectionTP
+
 
 #Region "Instance Variables"
 
@@ -33,6 +34,16 @@ Public Class ConnectionTP
 
         InitializeComponent()
         CancelBT.Visible = False
+        CP = New ProgressControls.ProgressIndicator
+        CP.CircleColor = Drawing.Color.Blue
+        CP.NumberOfCircles = 12
+        CP.NumberOfVisibleCircles = 8
+        CP.AnimationSpeed = 75
+        CP.CircleSize = 0.7
+        CPPanel.Controls.Add(CP)
+        CP.Width = 79
+        CP.Height = 79
+        CP.Visible = False
 
     End Sub
 
@@ -55,19 +66,10 @@ Public Class ConnectionTP
         BackgroundWorker1.WorkerSupportsCancellation = True
 
         If isConnecting = False Then
-            CP = New ProgressControls.ProgressIndicator
-            CP.CircleColor = Drawing.Color.Blue
-            CP.NumberOfCircles = 12
-            CP.NumberOfVisibleCircles = 8
-            CP.AnimationSpeed = 75
-            CP.CircleSize = 0.7
-            CPPanel.Controls.Add(CP)
-            CP.Width = 79
-            CP.Height = 79
-              CP.Start()
+            CP.Start()
             CP.Show()
-            ' ConnectionBT.visible =False
-
+            ConnectionBT.Visible = False
+            CP.Visible = True
             id = Me.userNameTextBox.Text
             pwd = Me.passwordTextBox.Text
             CancelBT.Visible = True
@@ -107,11 +109,10 @@ Public Class ConnectionTP
             start_time = Now
             Do While connectionFunction.globalInitFlag = False
                 secs = DateDiff("s", start_time, Now)
-                '  If secs > 6 Then Exit Do
+                If secs > 6 Then Exit Do
             Loop
-            '       MsgBox("Initialization did not success. Please try again.")
-            'Else
-            '   '   MsgBox("The server did not respond")
+        Else
+            ConnectionsFunctions.CloseNetworkConnection()
         End If
         If connectionFunction.globalInitFlag = False Then
             connectionFailed = True
@@ -143,10 +144,11 @@ Public Class ConnectionTP
         Else
             isConnecting = False
             CancelBT.Visible = False
+            CP.Visible = False
             ConnectionBT.Visible = True
             id = ""
             pwd = ""
-            CP.Dispose()
+            CP.Stop()
 
             If connectionFailed = False Then
                 GlobalVariables.Connection_Toggle_Button.Image = 1
@@ -182,7 +184,7 @@ Public Class ConnectionTP
 
     Private Sub ConnectionPane_FormClosing(sender As Object, e As Windows.Forms.FormClosingEventArgs) Handles MyBase.FormClosing
 
-        If Not CP Is Nothing Then CP.Dispose()
+        If Not CP Is Nothing Then CP.Stop()
            passwordTextBox.Clear()
         CPPanel.Controls.Clear()
         e.Cancel = True

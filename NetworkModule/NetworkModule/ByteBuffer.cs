@@ -140,7 +140,7 @@ public class ByteBuffer : MemoryStream
         while (l_Byte != 0x00);
         l_Bytes.RemoveAt(l_Bytes.Count - 1);
 
-     //   System.Diagnostics.Debug.WriteLine("Read " + count + " characters for string \"" + System.Text.Encoding.UTF8.GetString(l_Bytes.ToArray()) + "\"");
+      //  System.Diagnostics.Debug.WriteLine("Read " + count + " characters for string \"" + System.Text.Encoding.UTF8.GetString(l_Bytes.ToArray()) + "\"");
         return System.Text.Encoding.UTF8.GetString(l_Bytes.ToArray());
     }
 

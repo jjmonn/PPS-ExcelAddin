@@ -62,7 +62,7 @@ Friend Class VersionSelection
         AndAlso versions_id_list.Contains(versionsTV.SelectedNode.Name) Then
 
             Dim version_id = versionsTV.SelectedNode.Name
-            GlobalVariables.GLOBALCurrentVersionCode = version_id
+            My.Settings.version_id = version_id
             GlobalVariables.Version_Label.Caption = versionsTV.SelectedNode.Text
             GlobalVariables.Version_label_Sub_Ribbon.Text = versionsTV.SelectedNode.Text
             If My.Settings.version_id <> version_id Then My.Settings.version_id = version_id
@@ -84,9 +84,10 @@ Friend Class VersionSelection
 
     Private Sub SetAssociatedRatesVersion_id(ByRef version_id As UInt32)
 
-        GlobalVariables.GLOBALCurrentRatesVersionCode = GlobalVariables.Versions.versions_hash(version_id)(VERSIONS_RATES_VERSION_ID_VAR)
-        Dim RatesVersions As New RateVersion
-        GlobalVariables.Rates_Version_Label.Caption = RatesVersions.ReadVersion(GlobalVariables.GLOBALCurrentRatesVersionCode, NAME_VARIABLE)
+          Dim RatesVersions As New RateVersion
+        Dim ratesVersionsId As Int32 = GlobalVariables.Versions.versions_hash(My.Settings.version_id)(EX_RATES_RATE_VERSION)
+        Dim ratesVersionsName As String = "" ' stub to be implemented once CRUD exchange rates versions implemented !!!!!!!!
+        GlobalVariables.Rates_Version_Label.Caption = RatesVersions.ReadVersion(ratesVersionsName, NAME_VARIABLE)
         RatesVersions = Nothing
 
     End Sub

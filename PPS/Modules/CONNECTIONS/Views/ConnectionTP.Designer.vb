@@ -41,7 +41,7 @@ Partial Class ConnectionTP
         Me.Label1.Location = New System.Drawing.Point(99, 58)
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(48, 15)
-        Me.Label1.TabIndex = 11
+        Me.Label1.TabIndex = 1
         Me.Label1.Text = "User ID"
         '
         'userNameTextBox
@@ -50,7 +50,7 @@ Partial Class ConnectionTP
         Me.userNameTextBox.Location = New System.Drawing.Point(53, 90)
         Me.userNameTextBox.Name = "userNameTextBox"
         Me.userNameTextBox.Size = New System.Drawing.Size(140, 21)
-        Me.userNameTextBox.TabIndex = 1
+        Me.userNameTextBox.TabIndex = 2
         '
         'ImageList1
         '
@@ -67,7 +67,7 @@ Partial Class ConnectionTP
         Me.passwordTextBox.Location = New System.Drawing.Point(53, 168)
         Me.passwordTextBox.Name = "passwordTextBox"
         Me.passwordTextBox.Size = New System.Drawing.Size(140, 21)
-        Me.passwordTextBox.TabIndex = 2
+        Me.passwordTextBox.TabIndex = 3
         Me.passwordTextBox.UseSystemPasswordChar = True
         '
         'Label2
@@ -76,15 +76,15 @@ Partial Class ConnectionTP
         Me.Label2.Location = New System.Drawing.Point(93, 136)
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(61, 15)
-        Me.Label2.TabIndex = 12
+        Me.Label2.TabIndex = 6
         Me.Label2.Text = "Password"
         '
         'CPPanel
         '
-        Me.CPPanel.Location = New System.Drawing.Point(81, 319)
+        Me.CPPanel.Location = New System.Drawing.Point(81, 223)
         Me.CPPanel.Name = "CPPanel"
         Me.CPPanel.Size = New System.Drawing.Size(85, 85)
-        Me.CPPanel.TabIndex = 13
+        Me.CPPanel.TabIndex = 7
         '
         'Panel1
         '
@@ -112,7 +112,7 @@ Partial Class ConnectionTP
         Me.ConnectionBT.Name = "ConnectionBT"
         Me.ConnectionBT.RoundedCornersMask = CType(15, Byte)
         Me.ConnectionBT.Size = New System.Drawing.Size(100, 47)
-        Me.ConnectionBT.TabIndex = 15
+        Me.ConnectionBT.TabIndex = 4
         Me.ConnectionBT.Text = "Connection"
         Me.ConnectionBT.TextAlign = System.Drawing.ContentAlignment.BottomCenter
         Me.ConnectionBT.UseVisualStyleBackColor = False
@@ -125,11 +125,11 @@ Partial Class ConnectionTP
         Me.CancelBT.ImageAlign = System.Drawing.ContentAlignment.TopCenter
         Me.CancelBT.ImageKey = "delete.ico"
         Me.CancelBT.ImageList = Me.ImageList1
-        Me.CancelBT.Location = New System.Drawing.Point(73, 437)
+        Me.CancelBT.Location = New System.Drawing.Point(73, 357)
         Me.CancelBT.Name = "CancelBT"
         Me.CancelBT.RoundedCornersMask = CType(15, Byte)
         Me.CancelBT.Size = New System.Drawing.Size(100, 47)
-        Me.CancelBT.TabIndex = 14
+        Me.CancelBT.TabIndex = 5
         Me.CancelBT.Text = "Cancel"
         Me.CancelBT.TextAlign = System.Drawing.ContentAlignment.BottomCenter
         Me.CancelBT.UseVisualStyleBackColor = False

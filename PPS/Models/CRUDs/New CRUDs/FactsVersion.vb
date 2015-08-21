@@ -7,7 +7,7 @@
 '
 ' Author: Julien Monnereau
 ' Created: 29/07/2015
-' Last modified: 15/08/2015
+' Last modified: 21/08/2015
 
 
 Imports System.Collections
@@ -294,6 +294,35 @@ Friend Class FactsVersion
         Return periodsTokens
 
     End Function
+
+    Friend Function GetPeriodsDictionary(ByRef versionId As Int32) As Dictionary(Of Int32, List(Of Int32))
+
+        Dim periodsDict As New Dictionary(Of Int32, List(Of Int32))
+        Select Case versions_hash(versionId)(VERSIONS_TIME_CONFIG_VARIABLE)
+            Case GlobalEnums.TimeConfig.YEARS
+                ' Years only
+                For Each periodId As UInt32 In GetPeriodsList(versionId)
+                    periodsDict.Add(periodId, New List(Of Int32))
+                Next
+
+            Case GlobalEnums.TimeConfig.MONTHS
+                ' Years
+                For Each yearId As Int32 In Period.GetYearsList(versions_hash(versionId)(VERSIONS_START_PERIOD_VAR), _
+                                                                versions_hash(versionId)(VERSIONS_NB_PERIODS_VAR), _
+                                                                versions_hash(versionId)(VERSIONS_TIME_CONFIG_VARIABLE))
+                    periodsDict.Add(yearId, New List(Of Int32))
+
+                    ' Months
+                    For Each monthId As Int32 In Period.GetMonthsIdsInYear(yearId)
+                        periodsDict(yearId).Add(monthId)
+                    Next
+                Next
+        End Select
+        Return periodsDict
+
+    End Function
+
+
 
 #End Region
 

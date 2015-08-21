@@ -55,7 +55,7 @@ Friend Class ExchangeRatesController
             object_is_alive = True
             View = New CurrenciesControl(Me, rates_versionsTV)
             RateVersion.load_rates_version_tv(rates_versionsTV)
-            current_version = GlobalVariables.GLOBALCurrentRatesVersionCode
+            current_version = GlobalVariables.Versions.versions_hash(My.Settings.version_id)(EX_RATES_RATE_VERSION)
             currencies_list = GlobalVariables.Currencies.currencies_hash.Keys
             NewRatesVersionUI = New NewRatesVersionUI(Me)
             If Not current_version Is Nothing Then ChangeVersion(current_version)
@@ -215,7 +215,10 @@ Friend Class ExchangeRatesController
                 DeleteFromTreeAndModel(version_id)
             End If
         Next
-        If versions_list.Contains(GlobalVariables.GLOBALCurrentRatesVersionCode) Then GlobalVariables.APPS.COMAddIns.Item("PPS.AddinModule").Object.LaunchVersionSelection(2)
+
+        ' ---------------------------------------------------------------------------------------------------
+        ' caution PRIORITY HIGH => rule : cannot delete exchange rates version if binded to a fact verions !!!!!!!!!!!
+        ' ---------------------------------------------------------------------------------------------------
 
     End Sub
 

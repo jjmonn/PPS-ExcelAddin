@@ -50,7 +50,7 @@ Friend Class SubmissionsControlsController
         entities_id_list = TreeViewsUtilities.GetNodesKeysList(EntitiesTV)
         InitializeChartsDictionary()
         View = New SubmissionsControlUI(Me, EntitiesTV, charts_dic)
-        version_id = GlobalVariables.GLOBALCurrentVersionCode
+        version_id = My.Settings.version_id
         View.Show()
 
     End Sub

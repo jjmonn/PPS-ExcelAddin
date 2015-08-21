@@ -1302,7 +1302,7 @@ Public Class AddinModule
 
         Application.EnableVisualStyles()
         'This call is required by the Component Designer
-        VIBlend.Utilities.Licensing.LicenseContent = "0g1g635664091223436417g90e96c0507a72043860957103d347f6e2aff|FAm4zjmJK8JlBTfmliEZJprE1CQtP5o4nLEaO1P8Jg1Ruvdu29b8pYhiy1w6gs7VuzD3JFAdcGgdcXLAmYbK7P4suihb6MdQLW6pYShfS/hp1VldcuSxmveQnpm0mVnbpoub6Zf9uU4f4Tz9kiMVIdiQHtri4VQC73nxfJF7tLw="
+        VIBlend.Utilities.Licensing.LicenseContent = "0g0g635756920818516203geeae134609ccc047560baf100768868d8abc|P20sP8MuxE14HfXpiO3X3PueOBIpfMynKjd9/ifkWaAwYrH/u0NNk7rqh77rOQs3OmrTem7ghz4hnkVM+Bdu9Fzt6u6rne35u/o5JPTC00BzjTUNUXP7f/xplMNliHELbbHfixl1O/3/E6uDNHDVKJc6sRHHTOYPBnao09omX4s="
         InitializeComponent()
 
         'Please add any initialization code to the AddinInitialize event handler
@@ -1846,31 +1846,32 @@ Public Class AddinModule
     Friend Shared Sub loadDropDownsSubmissionButtons()
 
         GlobalVariables.ClientsIDDropDown.Items.Clear()
-        Dim clients_dict = GlobalVariables.Clients.GetClientsDictionary(ID_VARIABLE, NAME_VARIABLE)
-        For Each key As String In clients_dict.Keys
+        For Each client_id As Int32 In GlobalVariables.Clients.clients_hash.Keys
             AddButtonToDropDown(GlobalVariables.ClientsIDDropDown, _
-                                key, _
-                                clients_dict(key))
+                                client_id, _
+                                GlobalVariables.Clients.clients_hash(client_id)(NAME_VARIABLE))
         Next
         GlobalVariables.ClientsIDDropDown.SelectedItemId = DEFAULT_ANALYSIS_AXIS_ID
+        GlobalVariables.ClientsIDDropDown.ScreenTip = "screentip"
+        '  GlobalVariables.ClientsIDDropDown. = GlobalVariables.Clients.clients_hash(DEFAULT_ANALYSIS_AXIS_ID)(NAME_VARIABLE)
 
         GlobalVariables.ProductsIDDropDown.Items.Clear()
-        Dim products_dict = GlobalVariables.Products.GetProductsDictionary(ID_VARIABLE, NAME_VARIABLE)
-        For Each key As String In products_dict.Keys
+        For Each product_id As Int32 In GlobalVariables.Products.products_hash.Keys
             AddButtonToDropDown(GlobalVariables.ProductsIDDropDown, _
-                                key, _
-                                products_dict(key))
+                                product_id, _
+                                GlobalVariables.Products.products_hash(product_id)(NAME_VARIABLE))
         Next
         GlobalVariables.ProductsIDDropDown.SelectedItemId = DEFAULT_ANALYSIS_AXIS_ID
+        '    GlobalVariables.ProductsIDDropDown.Caption = GlobalVariables.Products.products_hash(DEFAULT_ANALYSIS_AXIS_ID)(NAME_VARIABLE)
 
         GlobalVariables.AdjustmentIDDropDown.Items.Clear()
-        Dim adjustments_dict = GlobalVariables.Adjustments.GetAdjustmentsDictionary(ID_VARIABLE, NAME_VARIABLE)
-        For Each key As String In adjustments_dict.Keys
+        For Each adjustment_id As Int32 In GlobalVariables.Adjustments.adjustments_hash.Keys
             AddButtonToDropDown(GlobalVariables.AdjustmentIDDropDown, _
-                                key, _
-                                adjustments_dict(key))
+                                adjustment_id, _
+                                GlobalVariables.Adjustments.adjustments_hash(adjustment_id)((NAME_VARIABLE)))
         Next
         GlobalVariables.AdjustmentIDDropDown.SelectedItemId = DEFAULT_ANALYSIS_AXIS_ID
+        '  GlobalVariables.AdjustmentIDDropDown.Caption = GlobalVariables.Adjustments.adjustments_hash(DEFAULT_ANALYSIS_AXIS_ID)(NAME_VARIABLE)
 
     End Sub
 
@@ -1960,28 +1961,27 @@ Public Class AddinModule
 
         ' circular progress !!!
         GlobalVariables.APPS.ScreenUpdating = False
-        Dim entity_id As String = Me.InputReportTaskPane.EntitiesTV.SelectedNode.Name
+        Dim entity_id As Int32 = Me.InputReportTaskPane.EntitiesTV.SelectedNode.Name
         Dim entity_name As String = Me.InputReportTaskPane.EntitiesTV.SelectedNode.Text
-        Dim currency As String = GlobalVariables.Entities.entities_hash(entity_id)(ENTITIES_CURRENCY_VARIABLE)
+        Dim currencyId As Int32 = GlobalVariables.Entities.entities_hash(entity_id)(ENTITIES_CURRENCY_VARIABLE)
         Dim currentcell As Excel.Range = WorksheetWrittingFunctions.CreateReceptionWS(entity_name, _
                                                                                        {"Entity", "Currency", "Version"}, _
-                                                                                       {entity_name, currency, GlobalVariables.Version_Label.Caption})
+                                                                                       {entity_name, currencyId, GlobalVariables.Version_Label.Caption})
 
-        Dim timeConfig As UInt32 = GlobalVariables.Versions.versions_hash(GlobalVariables.GLOBALCurrentVersionCode)(VERSIONS_TIME_CONFIG_VARIABLE)
-        Dim periodlist As Int32() = GlobalVariables.Versions.GetPeriodsList(GlobalVariables.GLOBALCurrentVersionCode)
+        Dim timeConfig As UInt32 = GlobalVariables.Versions.versions_hash(My.Settings.version_id)(VERSIONS_TIME_CONFIG_VARIABLE)
+        Dim periodlist As Int32() = GlobalVariables.Versions.GetPeriodsList(My.Settings.version_id)
         WorksheetWrittingFunctions.InsertInputReportOnWS(currentcell, _
                                                           periodlist, _
                                                           timeConfig)
 
         Me.InputReportTaskPane.Hide()
         Me.InputReportTaskPane.Close()
-        CExcelFormatting.FormatExcelRange(currentcell, INPUT_FORMAT_CODE, currency, Date.FromOADate(periodlist(0)))
+        ' priority normal => implement format CRUD
+        '       CExcelFormatting.FormatExcelRange(currentcell, INPUT_FORMAT_CODE, currencyId, Date.FromOADate(periodlist(0)))
         GlobalVariables.APPS.ScreenUpdating = True
         AssociateGRSControler(True)
 
     End Sub
-
-
 
 
 #Region "Version Selection"
@@ -2072,7 +2072,7 @@ Public Class AddinModule
 
         GlobalVariables.Version_Label.Caption = versionName
         GlobalVariables.Version_label_Sub_Ribbon.Text = versionName
-        GlobalVariables.GLOBALCurrentVersionCode = versionCode
+        My.Settings.version_id = versionCode
 
     End Sub
 
@@ -2085,9 +2085,6 @@ Public Class AddinModule
         testHTTPUI.Show()
 
     End Sub
-
-
-
 
     Private Sub AdxRibbonButton5_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) Handles AdxRibbonButton5.OnClick
 

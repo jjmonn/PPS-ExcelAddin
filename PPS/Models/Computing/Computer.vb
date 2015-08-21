@@ -16,7 +16,7 @@ Imports System.Collections
 '
 ' Author: Julien Monnereau Julien
 ' Created: 17/07/2015
-' Last modified: 14/08/2015
+' Last modified: 20/08/2015
 
 
 Friend Class Computer
@@ -25,12 +25,13 @@ Friend Class Computer
 #Region "Intance Variables"
 
     ' Events
-    Public Event ComputationAnswered()
+    Public Event ComputationAnswered(ByRef entityId As String, ByRef status As Boolean)
 
     ' Variables
     Private dataMap As Dictionary(Of String, Double)
     Private versions_comp_flag As New Collections.Generic.Dictionary(Of UInt32, Boolean)
     Private requestIdVersionIdDict As New Dictionary(Of UInt32, UInt32)
+    Private requestIdEntityIdDict As New Dictionary(Of UInt32, UInt32)
 
     ' Computing
     Private isAxis As Boolean
@@ -56,10 +57,15 @@ Friend Class Computer
 #End Region
 
 
-#Region "Interface"
+    ' dataMap: [version_id][filter_id][entity_id][account_id][period]
+    Friend Function GetData() As Dictionary(Of String, Double)
+        Return dataMap
+    End Function
 
-    ' manage request IDs !!!!! -> binded with versions
-    ' à vérifier avec la méthode de réception nath !! priority high
+
+#Region "Computation Query Interfaces"
+
+    ' Query
     Friend Sub CMSG_COMPUTE_REQUEST(ByRef versions_id As Int32(), _
                                     ByRef entity_id As Int32, _
                                     ByRef currency_id As Int32, _
@@ -68,7 +74,7 @@ Friend Class Computer
                                     Optional ByRef hierarchy As List(Of String) = Nothing)
 
         dataMap = New Dictionary(Of String, Double)
-       requestIdVersionIdDict.Clear()
+        requestIdVersionIdDict.Clear()
         versions_comp_flag.Clear()
         For Each id In versions_id
             versions_comp_flag.Add(id, False)
@@ -78,7 +84,9 @@ Friend Class Computer
 
             NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_COMPUTE_RESULT, AddressOf SMSG_COMPUTE_RESULT)
             Dim packet As New ByteBuffer(CType(ClientMessage.CMSG_COMPUTE_REQUEST, UShort))
-            requestIdVersionIdDict.Add(packet.AssignRequestId(), version_id)
+            Dim requestId As Int32 = packet.AssignRequestId()
+            requestIdVersionIdDict.Add(requestId, version_id)
+            requestIdEntityIdDict.Add(requestId, entity_id)
             packet.WriteUint32(version_id)                                               ' version_id
             packet.WriteUint32(entity_id)                                                ' entity_id
             packet.WriteUint32(currency_id)                                              ' currency_id
@@ -135,18 +143,7 @@ Friend Class Computer
 
     End Sub
 
-    Friend Function GetData() As Dictionary(Of String, Double)
-
-        Return dataMap
-
-    End Function
-
-#End Region
-
-
-#Region "Computing Response"
-
-    ' dataMap: [version_id][filter_id][entity_id][account_id][period]
+    ' Server Answer
     Private Sub SMSG_COMPUTE_RESULT(packet As ByteBuffer)
 
         If packet.ReadInt32() = 0 Then
@@ -156,7 +153,6 @@ Friend Class Computer
 
             filtersDict.Clear()
 
-            Dim timeStamp = Date.Now
             periodsTokenDict = GlobalVariables.Versions.GetPeriodTokensDict(versionId)
 
             Select Case GlobalVariables.Versions.versions_hash(versionId)(VERSIONS_TIME_CONFIG_VARIABLE)
@@ -169,14 +165,19 @@ Friend Class Computer
             versions_comp_flag(versionId) = True
             If AreAllVersionsComputed() = True Then
                 NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_COMPUTE_RESULT, AddressOf SMSG_COMPUTE_RESULT)
-                RaiseEvent ComputationAnswered()
+                RaiseEvent ComputationAnswered(requestIdEntityIdDict(request_id), True)
+                requestIdEntityIdDict.Remove(request_id)
             End If
         Else
-            ' server answered error
+            RaiseEvent ComputationAnswered("", False)
         End If
 
-
     End Sub
+
+#End Region
+
+
+#Region "DataMap Filling"
 
     Private Sub FillResultData(ByRef packet As ByteBuffer)
 
@@ -205,7 +206,7 @@ Friend Class Computer
         Next
 
         If isFiltered = True Then
-           filtersDict.Remove(filterCode)
+            filtersDict.Remove(filterCode)
         End If
 
     End Sub

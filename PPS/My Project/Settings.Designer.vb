@@ -149,6 +149,18 @@ Namespace My
                 Me("user") = value
             End Set
         End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("True")>  _
+        Public Property controllingUIResizeTofitGrid() As Boolean
+            Get
+                Return CType(Me("controllingUIResizeTofitGrid"),Boolean)
+            End Get
+            Set
+                Me("controllingUIResizeTofitGrid") = value
+            End Set
+        End Property
     End Class
 End Namespace
 

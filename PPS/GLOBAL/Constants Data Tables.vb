@@ -14,8 +14,7 @@
 
 Module Data_Tables_Constants
 
-    Friend Const ITEMS_POSITIONS As String = "item_position"
-    Friend Const NAMES_MAX_LENGTH As Int32 = 100
+
 
 
 #Region "Common All Tables"
@@ -25,15 +24,11 @@ Module Data_Tables_Constants
     Friend Const NAME_VARIABLE As String = "name"
     Friend Const IMAGE_VARIABLE As String = "image"
     Friend Const IS_FOLDER_VARIABLE = "is_folder"
-
+    Friend Const ITEMS_POSITIONS As String = "item_position"
+    Friend Const NAMES_MAX_LENGTH As Int32 = 100
 
 #End Region
 
-
-#Region "ACF_Config Database"
-
-    ' Stores the model definition tables
-  
 
 #Region "Operational and Financials Items"
 
@@ -96,22 +91,13 @@ Module Data_Tables_Constants
 
 #Region "Currencies and Exchange Rates"
 
-#Region "Currencies and Currencies Symbol Tables"
-
     Friend Const CURRENCY_SYMBOL_VARIABLE As String = "symbol"
-   
-
-#End Region
-
-
-#Region "Exchange Rates table"
-
     Friend Const EX_RATES_ORIGIN_CURR_VAR As String = "origin_currency"
     Friend Const EX_RATES_DEST_CURR_VAR As String = "dest_currency"
     Friend Const EX_RATES_RATE_VERSION As String = "rate_version_id"
     Friend Const EX_RATES_PERIOD_VARIABLE As String = "rate_period"
     Friend Const EX_RATES_RATE_VARIABLE As String = "rate_value"
-    
+
 #End Region
 
 
@@ -130,7 +116,6 @@ Module Data_Tables_Constants
 
 #End Region
 
-#End Region
 
 
 #Region "Formats table"
@@ -340,9 +325,6 @@ Module Data_Tables_Constants
 #End Region
 
 
-#End Region
-
-
 #Region "ACF_Data"
 
  
@@ -406,7 +388,7 @@ Module Data_Tables_Constants
     Friend Const PARENT_FILTER_VALUE_ID_VARIABLE As String = "parent_filter_value_id"
 
     Friend Const AXIS_NAME_FORBIDEN_CHARS = ","
-    Friend Const DEFAULT_ANALYSIS_AXIS_ID As String = "aaa"
+    Friend Const DEFAULT_ANALYSIS_AXIS_ID As Int32 = 1
 
 
 #End Region

@@ -28,31 +28,33 @@ Friend Class CExcelFormatting
 
     ' Identify the current range and 
     ' Param: REPORT_FORMAT_CODE or INPUT_FORMAT_CODE
-    Protected Friend Shared Sub FormatExcelRange(ByRef first_range_cell As Excel.Range, _
-                                                ByRef format As String, _
-                                                ByRef currency As String, _
-                                                Optional ByRef startingDate As Date = Nothing)
+    Friend Shared Sub FormatExcelRange(ByRef first_range_cell As Excel.Range, _
+                                        ByRef format As String, _
+                                        ByRef currency As String, _
+                                        Optional ByRef startingDate As Date = Nothing)
 
         Dim ws As Excel.Worksheet = first_range_cell.Worksheet
         Dim tmpRange As Excel.Range
         tmpRange = ws.Range(first_range_cell, Utilities_Functions.GetRealLastCell(ws))
-        FormatExcelRangeAs(tmpRange, format, Currency, startingDate)
+        FormatExcelRangeAs(tmpRange, format, currency, startingDate)
 
     End Sub
 
-    Protected Friend Shared Sub FormatExcelRangeAs(ByRef inputRange As Excel.Range, _
-                                                  ByRef reportFormat As String, _
-                                                  ByRef currency As String, _
-                                                  Optional ByRef startingDate As Date = Nothing)
+    Friend Shared Sub FormatExcelRangeAs(ByRef inputRange As Excel.Range, _
+                                                 ByRef reportFormat As String, _
+                                                 ByRef currency As String, _
+                                                 Optional ByRef startingDate As Date = Nothing)
 
         Dim AccountsNameFormatDictionary As Hashtable = globalvariables.accounts.GetAccountsDictionary(NAME_VARIABLE, ACCOUNT_FORMAT_VARIABLE)
         Dim AccountsNameTypeDict As Hashtable = globalvariables.accounts.GetAccountsDictionary(NAME_VARIABLE, ACCOUNT_TYPE_VARIABLE)
         Dim currentFormatsDictionary As Dictionary(Of String, Dictionary(Of String, Object))
         Dim currencies_symbol_dict As Hashtable = GlobalVariables.Currencies.GetCurrenciesDict(ID_VARIABLE, CURRENCY_SYMBOL_VARIABLE)
-        Select Case reportFormat
-            Case REPORT_FORMAT_CODE : currentFormatsDictionary = FormatsMapping.GetFormatTable(REPORT_FORMAT_CODE)
-            Case INPUT_FORMAT_CODE : currentFormatsDictionary = FormatsMapping.GetFormatTable(INPUT_FORMAT_CODE)
-        End Select
+
+        ' priority normal => implement format CRUD
+        'Select Case reportFormat
+        '    Case REPORT_FORMAT_CODE : currentFormatsDictionary = FormatsMapping.GetFormatTable(REPORT_FORMAT_CODE)
+        '    Case INPUT_FORMAT_CODE : currentFormatsDictionary = FormatsMapping.GetFormatTable(INPUT_FORMAT_CODE)
+        'End Select
 
         Dim formatCode As String
         For Each row As Excel.Range In inputRange.Rows
@@ -101,13 +103,13 @@ Friend Class CExcelFormatting
                                                                                   currentFormatsDictionary.Item(HV_FORMAT_CODE).Item(FORMAT_BCKGD_VARIABLE), _
                                                                                   startingDate)
         inputRange.Columns.AutoFit()
-      
+
     End Sub
 
-    Protected Friend Shared Sub ApplyBackGroundColorToInputCells(ByRef inputRange As Excel.Range,
-                                                                 ByRef text_color As Object, _
-                                                                 ByRef bckgd_color As Object, _
-                                                                 Optional ByRef startingDate As Date = Nothing)
+    Friend Shared Sub ApplyBackGroundColorToInputCells(ByRef inputRange As Excel.Range,
+                                                                ByRef text_color As Object, _
+                                                                ByRef bckgd_color As Object, _
+                                                                Optional ByRef startingDate As Date = Nothing)
 
         Dim fType As String
         Dim StartingDateColumn As Int32

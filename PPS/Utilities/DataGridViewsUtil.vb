@@ -88,7 +88,8 @@ Friend Class DataGridViewsUtil
     Friend Sub FormatDGVs(ByRef tabsControl As TabControl, _
                                     ByRef currency As String)
 
-        Dim InputsFormatsDictionary = FormatsMapping.GetFormatTable(INPUT_FORMAT_CODE)
+        ' priority normal => implement format CRUD
+        '     Dim InputsFormatsDictionary = FormatsMapping.GetFormatTable(INPUT_FORMAT_CODE)
         Dim formatCode, account_id, fmtStr As String
         Dim indent As Int32
         For Each tab_ As TabPage In tabsControl.TabPages
@@ -111,24 +112,26 @@ Friend Class DataGridViewsUtil
                 CAStyle.Font = New System.Drawing.Font(vDgv.Font.FontFamily, BASIC_DGV_REPORT_FONT_SIZE)
                 CEStyle.Font = New System.Drawing.Font(vDgv.Font.FontFamily, BASIC_DGV_REPORT_FONT_SIZE)
 
-                If InputsFormatsDictionary(formatCode)(FORMAT_BOLD_VARIABLE) = 1 Then
-                    HANStyle.Font = New System.Drawing.Font(HANStyle.Font.FontFamily, BASIC_DGV_REPORT_FONT_SIZE, FontStyle.Bold)
-                    HASStyle.Font = New System.Drawing.Font(HASStyle.Font.FontFamily, BASIC_DGV_REPORT_FONT_SIZE, FontStyle.Bold)
-                    CAStyle.Font = New System.Drawing.Font(CAStyle.Font.FontFamily, BASIC_DGV_REPORT_FONT_SIZE, FontStyle.Bold)
-                End If
-                If InputsFormatsDictionary(formatCode)(FORMAT_ITALIC_VARIABLE) = 1 Then
-                    HANStyle.Font = New System.Drawing.Font(HANStyle.Font.FontFamily, BASIC_DGV_REPORT_FONT_SIZE, FontStyle.Italic)
-                    HASStyle.Font = New System.Drawing.Font(HASStyle.Font.FontFamily, BASIC_DGV_REPORT_FONT_SIZE, FontStyle.Italic)
-                    CAStyle.Font = New System.Drawing.Font(CAStyle.Font.FontFamily, BASIC_DGV_REPORT_FONT_SIZE, FontStyle.Italic)
-                End If
+                ' priority normal => implement format CRUD
+                'priority high !!!!!!!!!!!!!!!!!!!!
+                'If InputsFormatsDictionary(formatCode)(FORMAT_BOLD_VARIABLE) = 1 Then
+                '    HANStyle.Font = New System.Drawing.Font(HANStyle.Font.FontFamily, BASIC_DGV_REPORT_FONT_SIZE, FontStyle.Bold)
+                '    HASStyle.Font = New System.Drawing.Font(HASStyle.Font.FontFamily, BASIC_DGV_REPORT_FONT_SIZE, FontStyle.Bold)
+                '    CAStyle.Font = New System.Drawing.Font(CAStyle.Font.FontFamily, BASIC_DGV_REPORT_FONT_SIZE, FontStyle.Bold)
+                'End If
+                'If InputsFormatsDictionary(formatCode)(FORMAT_ITALIC_VARIABLE) = 1 Then
+                '    HANStyle.Font = New System.Drawing.Font(HANStyle.Font.FontFamily, BASIC_DGV_REPORT_FONT_SIZE, FontStyle.Italic)
+                '    HASStyle.Font = New System.Drawing.Font(HASStyle.Font.FontFamily, BASIC_DGV_REPORT_FONT_SIZE, FontStyle.Italic)
+                '    CAStyle.Font = New System.Drawing.Font(CAStyle.Font.FontFamily, BASIC_DGV_REPORT_FONT_SIZE, FontStyle.Italic)
+                'End If
 
-                ' Colors 
-                If Not IsDBNull(InputsFormatsDictionary(formatCode)(FORMAT_TEXT_COLOR_VARIABLE)) Then
-                    CAStyle.TextColor = System.Drawing.Color.FromArgb(InputsFormatsDictionary(formatCode)(FORMAT_TEXT_COLOR_VARIABLE))
-                End If
-                If Not IsDBNull(InputsFormatsDictionary(formatCode)(FORMAT_BCKGD_VARIABLE)) Then
-                    CAStyle.FillStyle = New FillStyleSolid(System.Drawing.Color.FromArgb(InputsFormatsDictionary(formatCode)(FORMAT_BCKGD_VARIABLE)))
-                End If
+                '' Colors 
+                'If Not IsDBNull(InputsFormatsDictionary(formatCode)(FORMAT_TEXT_COLOR_VARIABLE)) Then
+                '    CAStyle.TextColor = System.Drawing.Color.FromArgb(InputsFormatsDictionary(formatCode)(FORMAT_TEXT_COLOR_VARIABLE))
+                'End If
+                'If Not IsDBNull(InputsFormatsDictionary(formatCode)(FORMAT_BCKGD_VARIABLE)) Then
+                '    CAStyle.FillStyle = New FillStyleSolid(System.Drawing.Color.FromArgb(InputsFormatsDictionary(formatCode)(FORMAT_BCKGD_VARIABLE)))
+                'End If
 
                 Select Case (GlobalVariables.Accounts.accounts_hash(account_id)(ACCOUNT_TYPE_VARIABLE))
                     ' nombe de chiffres après la virgule à variabiliser -> settings !!!!
@@ -139,7 +142,7 @@ Friend Class DataGridViewsUtil
                     Case Else : fmtStr = "{0:C0}"
                 End Select
 
-                indent = InputsFormatsDictionary(formatCode)(FORMAT_INDENT_VARIABLE)
+                '      indent = InputsFormatsDictionary(formatCode)(FORMAT_INDENT_VARIABLE)
                 If row.ParentItem Is Nothing Then
                     format_row(row, formatCode, fmtStr, CAStyle, HANStyle, HASStyle, indent, CAStyle, CEStyle, HANStyle, HASStyle, HENStyle, HESStyle)
                 Else

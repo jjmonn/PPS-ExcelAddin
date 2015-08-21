@@ -93,15 +93,21 @@ Friend Class SubmissionWSController
     Friend Sub updateCalculatedItemsOnWS(ByRef entityName As String)
 
         For Each accountName In AcquisitionModel.outputsList
-            For Each period In AcquisitionModel.currentPeriodlist
-                Dim value As Double = AcquisitionModel.GetCalculatedValue(DataSet.AccountsNameKeyDictionary(accountName), period)
+            For Each period In AcquisitionModel.currentPeriodList
+
+                ' below: adapt case monthly config => display years aggreg as well
+                ' priority normal !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+                Dim value As Double = AcquisitionModel.GetCalculatedValue(entityName, _
+                                                                          DataSet.AccountsNameKeyDictionary(accountName), _
+                                                                          AcquisitionModel.periodsIdentifyer & period)
                 UpdateExcelWS(entityName, accountName, period, value)
             Next
         Next
 
     End Sub
 
-    Protected Friend Sub updateInputsOnWS(ByRef entityName As String)
+    Friend Sub updateInputsOnWS()
 
         For Each EntityAddress As String In DataSet.EntitiesAddressValuesDictionary.Keys
             Dim entity_name As String = DataSet.EntitiesAddressValuesDictionary(EntityAddress)
@@ -112,10 +118,13 @@ Friend Class SubmissionWSController
 
                     For Each PeriodAddress As String In DataSet.periodsAddressValuesDictionary.Keys
                         Dim period = DataSet.periodsAddressValuesDictionary(PeriodAddress)
-                        DataSet.UpdateExcelCell(EntityAddress, _
-                                                AccountAddress, _
-                                                PeriodAddress, _
-                                                AcquisitionModel.DBInputsDictionary(entity_name)(account_name)(period), False)
+                        Dim periodToken As String = AcquisitionModel.periodsIdentifyer & period
+                        If AcquisitionModel.dataBaseInputsDictionary(entity_name)(account_name).ContainsKey(periodToken) Then
+                            DataSet.UpdateExcelCell(EntityAddress, _
+                                                    AccountAddress, _
+                                                    PeriodAddress, _
+                                                    AcquisitionModel.dataBaseInputsDictionary(entity_name)(account_name)(periodToken), False)
+                        End If
                     Next
                 End If
             Next

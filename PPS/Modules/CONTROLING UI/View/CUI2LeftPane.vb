@@ -158,11 +158,11 @@ Public Class CUI2LeftPane
             Dim li As New ListItem
             li.Value = currencyId
             li.Text = GlobalVariables.Currencies.currencies_hash(currencyId)(NAME_VARIABLE)
+            currenciesCLB.Items.Add(li)
             If li.Value = My.Settings.mainCurrency Then
                 li.IsChecked = True
                 currenciesCLB.SelectedItem = li
             End If
-            currenciesCLB.Items.Add(li)
         Next
 
         SelectionTVTableLayout.Controls.Add(currenciesCLB)

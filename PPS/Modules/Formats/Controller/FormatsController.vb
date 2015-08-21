@@ -33,7 +33,8 @@ Friend Class FormatsController
 
     Protected Friend Sub New()
 
-        formats_name_id_dic = FormatsMapping.GetFormatsDictionary(FORMAT_NAME_VARIABLE, FORMAT_CODE_VARIABLE, INPUT_FORMAT_CODE)
+        ' priority normal => implement format CRUD
+        '   formats_name_id_dic = FormatsMapping.GetFormatsDictionary(FORMAT_NAME_VARIABLE, FORMAT_CODE_VARIABLE, INPUT_FORMAT_CODE)
         view = New FormatMGTUI(Me, formats_name_id_dic)
         InitializeView()
         view.Show()

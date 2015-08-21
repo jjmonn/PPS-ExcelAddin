@@ -32,7 +32,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 08/06/2015
+' Last modified: 20/08/2015
 
 
 Imports Microsoft.Office.Interop
@@ -73,26 +73,30 @@ Friend Class GeneralSubmissionControler
     Private uploadState As Boolean
     Private originalValue As Double
     Friend isUpdating As Boolean
+    Private mustUpdateExcelWorksheetFromDataBase As Boolean
 
 #End Region
 
 
 #Region "Initialize"
 
-    Protected Friend Sub New(ByRef inputWSCB As ADXRibbonItem, _
-                             ByRef inputAddIn As AddinModule)
+    Friend Sub New(ByRef inputWSCB As ADXRibbonItem, _
+                   ByRef inputAddIn As AddinModule)
 
         ADDIN = inputAddIn
         wsComboboxMenuItem = inputWSCB
         associatedWorksheet = GlobalVariables.APPS.ActiveSheet
 
         Dataset = New ModelDataSet(associatedWorksheet)
+        Model = New AcquisitionModel(Dataset)
         DBUploader = New DataBaseDataUploader()
         DBUploader.SetUpDictionaries(Dataset.EntitiesNameKeyDictionary, _
                                      Dataset.AccountsNameKeyDictionary)
         DataModificationsTracker = New CDataModificationsTracking(Dataset)
-   
+
         BCKGW.WorkerReportsProgress = True
+        AddHandler Model.AfterInputsDownloaded, AddressOf AfterDataBaseInputsDowloaded
+        AddHandler Model.AfterOutputsComputed, AddressOf AfterOutputsComputed
         AddHandler BCKGW.DoWork, AddressOf BCKGW_DoWork
         AddHandler BCKGW.RunWorkerCompleted, AddressOf BCKGW_RunWorkerCompleted
         AddHandler BCKGW.ProgressChanged, AddressOf BCKGW_ProgressChanged
@@ -148,7 +152,7 @@ Friend Class GeneralSubmissionControler
     ' General Initialize and Set up display Ribbon
     Private Sub RefreshDataSetAndSetUpDisplay()
 
-        DataModificationsTracker.IdentifyDifferencesBtwDataSetAndDB(Model.DBInputsDictionary)
+        DataModificationsTracker.IdentifyDifferencesBtwDataSetAndDB(Model.dataBaseInputsDictionary)
         If snapshotSuccess = False Then
             snapshotSuccess = True
             ADDIN.GetRibbonControlEnabled(True)
@@ -172,14 +176,14 @@ Friend Class GeneralSubmissionControler
 
 #Region "Ribbon Interface"
 
-    Protected Friend Sub UpdateRibbon()
+    Friend Sub UpdateRibbon()
 
         If Dataset.pAssetFlag = 1 Then FillInEntityAndCurrencyTB(Dataset.EntitiesAddressValuesDictionary.ElementAt(0).Value)
         ' Check that the Dataset is still the same ?
 
     End Sub
 
-    Protected Friend Sub Submit()
+    Friend Sub Submit()
 
         If Dataset.GlobalOrientationFlag <> ORIENTATION_ERROR_FLAG Then
             uploadTimeStamp = Now
@@ -197,7 +201,7 @@ Friend Class GeneralSubmissionControler
 
     End Sub
 
-    Protected Friend Sub HighlightItemsAndDataRegions()
+    Friend Sub HighlightItemsAndDataRegions()
 
         If itemsHighlightFlag = False Then
             DataModificationsTracker.HighlightItemsAndDataRanges()
@@ -209,7 +213,7 @@ Friend Class GeneralSubmissionControler
 
     End Sub
 
-    Protected Friend Sub ChangeCurrentEntity(ByRef entityname As String)
+    Friend Sub ChangeCurrentEntity(ByRef entityname As String)
 
         Dim entityCellAddress As String = Dataset.EntitiesAddressValuesDictionary.ElementAt(0).Key
         associatedWorksheet.Range(entityCellAddress).Value2 = entityname
@@ -218,7 +222,7 @@ Friend Class GeneralSubmissionControler
 
     End Sub
 
-    Protected Friend Sub DisplayUploadStatusAndErrorsUI()
+    Friend Sub DisplayUploadStatusAndErrorsUI()
 
         Dim UploadStatusUI As New UploadingHistoryUI(uploadState, _
                                                      uploadTimeStamp, _
@@ -227,7 +231,7 @@ Friend Class GeneralSubmissionControler
 
     End Sub
 
-    Protected Friend Sub CloseInstance()
+    Friend Sub CloseInstance()
 
         If Not Dataset Is Nothing Then Dataset = Nothing
         If Not DataModificationsTracker Is Nothing Then DataModificationsTracker = Nothing
@@ -251,27 +255,36 @@ Friend Class GeneralSubmissionControler
 
     End Sub
 
-    Protected Friend Sub RangeEdition()
+    Friend Sub RangeEdition()
 
         Dim RNGEDITION As New ManualRangesSelectionUI(Me, Dataset)
         RNGEDITION.Show()
 
     End Sub
 
-    Protected Friend Sub UpdateAfterAnalysisAxisChanged(ByVal client_id As String, _
-                                                        ByVal product_id As String, _
-                                                        ByVal adjustment_id As String, _
-                                                        Optional ByRef update_inputs_from_DB As Boolean = False)
+    Friend Sub UpdateAfterAnalysisAxisChanged(ByVal client_id As String, _
+                                              ByVal product_id As String, _
+                                              ByVal adjustment_id As String, _
+                                              Optional ByRef update_inputs_from_DB As Boolean = False)
 
         isUpdating = True
+        mustUpdateExcelWorksheetFromDataBase = update_inputs_from_DB
         ' PB: Ceci ne marche que pour le cas orientation "AcDa"  !!! 
-        Model.DownloadDBInputs(current_entity_name, _
+        ' option: select case on orientation 
+        ' (possibility to download inputs from multiple entities => function ready in model)
+        ' priority normal
+
+        Model.downloadDBInputs(current_entity_name, _
                                client_id, _
                                product_id, _
                                adjustment_id)
 
-        If update_inputs_from_DB = True Then
-            updateInputs(current_entity_name)
+    End Sub
+
+    Private Sub AfterDataBaseInputsDowloaded()
+
+        If mustUpdateExcelWorksheetFromDataBase = True Then
+            updateInputs()
         End If
         Dataset.getDataSet()
         RefreshDataSetAndSetUpDisplay()
@@ -297,11 +310,10 @@ Friend Class GeneralSubmissionControler
 
     End Sub
 
-
-    Friend Sub updateInputs(ByRef entityName As String)
+    Friend Sub updateInputs()
 
         isUpdating = True
-        SubmissionWSController.updateInputsOnWS(entityName)
+        SubmissionWSController.updateInputsOnWS()
         ' Update DGV in acquisitionInterface !!
         isUpdating = False
 
@@ -309,8 +321,13 @@ Friend Class GeneralSubmissionControler
 
     Friend Sub UpdateCalculatedItems(ByRef entityName As String)
 
-        isUpdating = True
         Model.ComputeCalculatedItems(entityName)
+
+    End Sub
+
+    Private Sub AfterOutputsComputed(ByRef entityName As String)
+
+        isUpdating = True
         SubmissionWSController.updateCalculatedItemsOnWS(entityName)
         isUpdating = False
 
@@ -425,16 +442,15 @@ Friend Class GeneralSubmissionControler
 
     End Function
 
+    Friend Function GetPeriodsList() As Int32()
 
-    Protected Friend Function GetPeriodsList() As List(Of UInt32)
-
-        Return Model.currentPeriodlist
+        Return Model.currentPeriodList
 
     End Function
 
-    Protected Friend Function GetTimeConfig() As String
+    Friend Function GetTimeConfig() As String
 
-        Return Model.versionsTimeConfigDict(Model.current_version_id)
+        Return GlobalVariables.Versions.versions_hash(Model.current_version_id)(VERSIONS_TIME_CONFIG_VARIABLE)
 
     End Function
 

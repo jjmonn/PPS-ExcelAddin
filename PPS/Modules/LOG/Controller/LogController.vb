@@ -57,7 +57,7 @@ Friend Class LogController
 
     Protected Friend Sub ChangeVersionID()
 
-        current_version_id = GlobalVariables.GLOBALCurrentVersionCode
+        current_version_id = My.Settings.version_id
         period_list = Model.GetPeriodList(current_version_id)
         View.InitializeDGVColumns(current_version_id, period_list, Model.GetTimeConfig(current_version_id))
 

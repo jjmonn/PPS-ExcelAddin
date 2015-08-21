@@ -66,8 +66,9 @@ Friend Class AccountsControl
         Controller = input_controller
         AccountsTV = input_accountTV
 
-        formatsNameKeyDictionary = FormatsMapping.GetFormatsDictionary(FORMAT_NAME_VARIABLE, FORMAT_CODE_VARIABLE, INPUT_FORMAT_CODE)
-        formatKeyNameDictionary = FormatsMapping.GetFormatsDictionary(FORMAT_CODE_VARIABLE, FORMAT_NAME_VARIABLE, INPUT_FORMAT_CODE)
+        ' priority normal => implement format CRUD
+        '   formatsNameKeyDictionary = FormatsMapping.GetFormatsDictionary(FORMAT_NAME_VARIABLE, FORMAT_CODE_VARIABLE, INPUT_FORMAT_CODE)
+        '   formatKeyNameDictionary = FormatsMapping.GetFormatsDictionary(FORMAT_CODE_VARIABLE, FORMAT_NAME_VARIABLE, INPUT_FORMAT_CODE)
         fTypesCodesRequiringFormulas = FormulaTypesMapping.GetFTypesKeysNeedingFormula
 
         AccountsTVInit()

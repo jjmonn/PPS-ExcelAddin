@@ -240,19 +240,28 @@ Friend Class CDataModificationsTracking
     ' Param: DBInputsDictionary (from ACQMODEL-> (entity)(account)(period))
     Friend Sub IdentifyDifferencesBtwDataSetAndDB(ByRef DBInputsDictionary As Dictionary(Of String, Dictionary(Of String, Dictionary(Of String, Double))))
 
-        Dim accountsNameTypeDict As Hashtable = globalvariables.accounts.GetAccountsDictionary(NAME_VARIABLE, ACCOUNT_FORMULA_TYPE_VARIABLE)
+        Dim periodIdentifyer As String = ""
+        Select Case GlobalVariables.Versions.versions_hash(DATASET.currentVersionCode)(VERSIONS_TIME_CONFIG_VARIABLE)
+            Case GlobalEnums.TimeConfig.YEARS : periodIdentifyer = Computer.YEAR_PERIOD_IDENTIFIER
+            Case GlobalEnums.TimeConfig.MONTHS : periodIdentifyer = Computer.MONTH_PERIOD_IDENTIFIER
+        End Select
+
+        Dim accountsNameTypeDict As Hashtable = GlobalVariables.Accounts.GetAccountsDictionary(NAME_VARIABLE, ACCOUNT_FORMULA_TYPE_VARIABLE)
         For Each entity As String In DATASET.dataSetDictionary.Keys
             For Each account As String In DATASET.dataSetDictionary(entity).Keys
 
                 Select Case accountsNameTypeDict(account)
                     Case GlobalEnums.FormulaTypes.FIRST_PERIOD_INPUT
-                        Dim period As Integer = CInt(CDbl(DATASET.periodsDatesList(0).ToOADate))        ' date from dataset converted to integer to meet DB integer date storage
-                        If DATASET.dataSetDictionary(entity)(account)(period) <> DBInputsDictionary(entity)(account)(period) Then _
+                        Dim period As Integer = CInt(CDbl(DATASET.periodsDatesList(0).ToOADate))
+                        ' date from dataset converted to integer to meet DB integer date storage
+                        If DATASET.dataSetDictionary(entity)(account)(period) <> DBInputsDictionary(entity)(account)(periodIdentifyer & period) Then _
                            RegisterModification(GetExcelCell(entity, account, period).Address)
 
                     Case Else
                         For Each period As String In DATASET.dataSetDictionary(entity)(account).Keys
-                            If DATASET.dataSetDictionary(entity)(account)(period) <> DBInputsDictionary(entity)(account)(period) Then
+                            Dim periodToken As String = ""
+
+                            If DATASET.dataSetDictionary(entity)(account)(period) <> DBInputsDictionary(entity)(account)(periodIdentifyer & period) Then
                                 RegisterModification(GetExcelCell(entity, account, period).Address)
                             End If
                         Next

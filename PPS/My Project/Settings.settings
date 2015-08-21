@@ -26,5 +26,8 @@
     <Setting Name="user" Type="System.String" Scope="User">
       <Value Profile="(Default)">root</Value>
     </Setting>
+    <Setting Name="controllingUIResizeTofitGrid" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

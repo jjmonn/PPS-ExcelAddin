@@ -53,7 +53,7 @@ Friend Class ModelDataSet
 #Region "Lists and Dictionaries"
 
     Friend assetsList As List(Of String)                                    ' String array containing the list of assets
-    Friend periodsDatesList As List(Of Date)
+    Friend periodsDatesList As New List(Of Date)
     Friend inputsAccountsList As List(Of String)
     Friend EntitiesNameKeyDictionary As Hashtable
     Friend AccountsNameKeyDictionary As Hashtable
@@ -63,7 +63,7 @@ Friend Class ModelDataSet
     Friend EntitiesAddressValuesDictionary As New Dictionary(Of String, String)
     Friend CellsAddressItemsDictionary As New Dictionary(Of String, Hashtable)
     Friend OutputCellsAddressValuesDictionary As New Dictionary(Of String, Double)
-    Friend currentVersionCode As String
+    Friend currentVersionCode As Int32
 
 #End Region
 
@@ -131,7 +131,7 @@ Friend Class ModelDataSet
     ' Lookup for Versions, Accounts, Periods and Entities
     Friend Sub SnapshotWS()
 
-        If Not VersionsIdentify() Then currentVersionCode = GlobalVariables.GLOBALCurrentVersionCode
+        If Not VersionsIdentify() Then currentVersionCode = My.Settings.version_id
         DatesIdentify()
         AccountsIdentify()
         EntitiesIdentify()
@@ -184,6 +184,7 @@ Friend Class ModelDataSet
     ' Look for date in the spreasheet, and populate periodsAddressValuesDictionary
     Private Sub DatesIdentify()
 
+        periodsDatesList.Clear()
         For Each periodId As UInt32 In GlobalVariables.Versions.GetPeriodsList(currentVersionCode)
             periodsDatesList.Add(Date.FromOADate(periodId))
         Next
@@ -214,7 +215,7 @@ Friend Class ModelDataSet
     End Sub
 
     ' Identify the mapped accounts in the WS  | CURRENTLY NOT using the Accounts Search Algo
-    Protected Friend Sub AccountsIdentify()
+    Friend Sub AccountsIdentify()
 
         Dim i, j, nbWords As Integer
         inputsAccountsList = GlobalVariables.Accounts.GetAccountsList(GlobalEnums.AccountsLookupOptions.LOOKUP_INPUTS, NAME_VARIABLE)
@@ -246,7 +247,7 @@ Friend Class ModelDataSet
                         '            AccountsAddressValuesDictionary.add(Split(Columns(j).Address(ColumnAbsolute:=False), ":")(1) + i, CStr(GlobalScreenShot(i, j)))
                         '            GlobalScreenShotFlag(i, j) = account_flag
                     End If
-                   GlobalScreenShotFlag(i, j) = string_flag                                       ' Flag for assets lookup
+                    GlobalScreenShotFlag(i, j) = string_flag                                       ' Flag for assets lookup
 
                 End If
             Next j

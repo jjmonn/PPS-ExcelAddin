@@ -18,7 +18,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 17/07/2015
+' Last modified: 20/07/2015
 
 
 Imports VIBlend.WinForms.DataGridView
@@ -28,6 +28,7 @@ Imports System.Collections
 Imports VIBlend.Utilities
 Imports System.Drawing
 Imports Microsoft.Office.Interop
+Imports System.Linq
 
 
 Friend Class AcquisitionModel
@@ -36,22 +37,31 @@ Friend Class AcquisitionModel
 #Region "Instance Variables"
 
     ' Objects
+    Private Computer As New Computer
+    Private SingleComputer As New ComputerInputEntity
     Private DATASET As ModelDataSet
  
     ' Variables
-    Friend DBInputsDictionary As New Dictionary(Of String, Dictionary(Of String, Dictionary(Of String, Double)))    '(entities)(accounts)(periods) -> values
-    Friend currentPeriodlist As New List(Of UInt32)
+    '(entity_name)(account_name)(period_token) => values
+    Friend dataBaseInputsDictionary As New Dictionary(Of String, Dictionary(Of String, Dictionary(Of String, Double)))
+    Private computationDataMap As New Dictionary(Of Int32, Dictionary(Of Int32, Dictionary(Of String, Double)))
+    Friend currentPeriodDict As Dictionary(Of Int32, List(Of Int32))
+    Friend currentPeriodList() As Int32
     Friend outputsList As List(Of String)
-    Protected Friend versionsTimeConfigDict As Hashtable
     Friend accountsTV As New TreeView
     Private accountsNamesFormulaTypeDict As Hashtable
-
-    Protected Friend current_version_id As String
+    Private entitiesNameIdDict As Hashtable
+    Friend current_version_id As Int32
+    Friend periodsIdentifyer As String
     
     ' Dll computation related
-    Private accKeysArray() As String
-    Private periodsArray() As Integer
+    Private accKeysArray() As Int32
+    Private periodsArray() As Int32
     Private valuesArray() As Double
+
+    ' Events
+    Public Event AfterInputsDownloaded()
+    Public Event AfterOutputsComputed(ByRef entityName As String)
 
 #End Region
 
@@ -62,53 +72,30 @@ Friend Class AcquisitionModel
 
         GlobalVariables.Accounts.LoadAccountsTV(accountsTV)
         DATASET = inputDataSet
-     
-        versionsTimeConfigDict = GlobalVariables.Versions.GetVersionsDictionary(ID_VARIABLE, VERSIONS_TIME_CONFIG_VARIABLE)
+        entitiesNameIdDict = inputDataSet.EntitiesNameKeyDictionary
+
         accountsNamesFormulaTypeDict = globalvariables.accounts.GetAccountsDictionary(NAME_VARIABLE, ACCOUNT_FORMULA_TYPE_VARIABLE)
         outputsList = GlobalVariables.Accounts.GetAccountsList(GlobalEnums.AccountsLookupOptions.LOOKUP_OUTPUTS, NAME_VARIABLE)
 
+        AddHandler Computer.ComputationAnswered, AddressOf AfterInputsComputation
+        AddHandler SingleComputer.ComputationAnswered, AddressOf AfterOuptutsComputed
+      
     End Sub
 
 #End Region
 
 
-#Region "Interface"
-
-    Friend Sub DownloadDBInputs(ByRef entityName As String, _
-                                ByRef client_id As String, _
-                                ByRef product_id As String, _
-                                ByRef adjustment_id As String)
-
-        ' -> we shouldn't use dataset  in the model !
-        '
-        Dim entityKey As String = DATASET.EntitiesNameKeyDictionary(entityName)
-        current_version_id = GlobalVariables.GLOBALCurrentVersionCode
-
-        currentPeriodlist.Clear()
-        For Each periodId In GlobalVariables.Versions.GetPeriodsList(current_version_id)
-            currentPeriodlist.Add(periodId)
-        Next
-
-        Dim viewName = current_version_id
-
-        ' -> ask nathanael a method returning the inputs for an entity !!
-
-        'DBDownloader.GetEntityInputsNonConverted(entityKey, _
-        '                                         viewName, _
-        '                                         Utilities_Functions.getStringsList({client_id}), _
-        '                                         Utilities_Functions.getStringsList({product_id}), _
-        '                                         Utilities_Functions.getStringsList({adjustment_id}))
-        LoadDBInputsDictionary(entityName)
-
-    End Sub
+#Region "Inputs Download"
 
     Friend Sub downloadDBInputs(ByRef entitiesList As List(Of String), _
                                 ByRef client_id As String, _
                                 ByRef product_id As String, _
                                 ByVal adjustment_id As String)
 
+        ' caution !! priority high => if used duplication of peirods setup / versions in 
+        ' !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         For Each entityName As String In entitiesList
-            DownloadDBInputs(entityName, _
+            downloadDBInputs(entityName, _
                              client_id, _
                              product_id, _
                              adjustment_id)
@@ -116,10 +103,233 @@ Friend Class AcquisitionModel
 
     End Sub
 
-    Friend Function GetCalculatedValue(ByRef accKey As String, _
-                                       ByRef PeriodInt As Integer) As Double
+    Friend Sub DownloadDBInputs(ByRef entityName As String, _
+                                ByRef client_id As Int32, _
+                                ByRef product_id As Int32, _
+                                ByRef adjustment_id As Int32)
 
-        ' Return CCOMPUTERINT.GetDataFromComputer(accKey, PeriodInt)
+        Dim entity_id As Int32 = entitiesNameIdDict(entityName)
+        current_version_id = My.Settings.version_id
+        currentPeriodDict = GlobalVariables.Versions.GetPeriodsDictionary(current_version_id)
+        currentPeriodList = GlobalVariables.Versions.GetPeriodsList(current_version_id)
+        Select Case GlobalVariables.Versions.versions_hash(current_version_id)(VERSIONS_TIME_CONFIG_VARIABLE)
+            Case GlobalEnums.TimeConfig.YEARS : periodsIdentifyer = Computer.YEAR_PERIOD_IDENTIFIER
+            Case GlobalEnums.TimeConfig.MONTHS : periodsIdentifyer = Computer.MONTH_PERIOD_IDENTIFIER
+        End Select
+
+        ' Axis filters creation
+        Dim axisFilters As New Dictionary(Of Int32, List(Of Int32))
+        axisFilters.Add(GlobalEnums.AnalysisAxis.CLIENTS, New List(Of Int32))
+        axisFilters.Add(GlobalEnums.AnalysisAxis.PRODUCTS, New List(Of Int32))
+        axisFilters.Add(GlobalEnums.AnalysisAxis.ADJUSTMENTS, New List(Of Int32))
+        axisFilters(GlobalEnums.AnalysisAxis.CLIENTS).Add(client_id)
+        axisFilters(GlobalEnums.AnalysisAxis.PRODUCTS).Add(product_id)
+        axisFilters(GlobalEnums.AnalysisAxis.ADJUSTMENTS).Add(adjustment_id)
+
+        ' Computation order
+        Computer.CMSG_COMPUTE_REQUEST({current_version_id}, _
+                                      entity_id, _
+                                      GlobalVariables.Entities.entities_hash(entity_id)(ENTITIES_CURRENCY_VARIABLE), _
+                                      Nothing, _
+                                      axisFilters, _
+                                      Nothing)
+
+    End Sub
+
+    Private Sub AfterInputsComputation(ByRef entityId As Int32, ByRef status As Boolean)
+
+        If status = True Then
+            Dim entityName As String = GlobalVariables.Entities.entities_hash(entityId)(NAME_VARIABLE)
+            If dataBaseInputsDictionary.ContainsKey(entityName) Then
+                dataBaseInputsDictionary(entityName) = LoadDataMapIntoInputsDict(entityId, entityName, Computer.GetData)
+            Else
+                dataBaseInputsDictionary.Add(entityName, LoadDataMapIntoInputsDict(entityId, entityName, Computer.GetData))
+            End If
+            RaiseEvent AfterInputsDownloaded()
+            ' Quid priority high -> do not raise event if all entities have not been downloaded !
+        Else
+            ' ? priority normal
+        End If
+
+    End Sub
+
+    Private Function LoadDataMapIntoInputsDict(ByRef entityId As Int32, _
+                                               ByRef entityName As String, _
+                                               ByRef dataMap As Dictionary(Of String, Double)) As Dictionary(Of String, Dictionary(Of String, Double))
+
+        Dim dataMapToken As String
+        Dim dataDict As New Dictionary(Of String, Dictionary(Of String, Double))
+        Dim fixed_left_token As String = current_version_id & _
+                                         Computer.TOKEN_SEPARATOR & _
+                                         "0" & _
+                                         Computer.TOKEN_SEPARATOR & _
+                                         entityId
+
+        ' select case input/ FPI
+        For Each accountId As Int32 In TreeViewsUtilities.GetNodesKeysList(accountsTV)
+
+            Select GlobalVariables.Accounts.accounts_hash(accountId)(ACCOUNT_FORMULA_TYPE_VARIABLE)
+
+                Case GlobalEnums.FormulaTypes.HARD_VALUE_INPUT
+
+                    Dim accountName As String = GlobalVariables.Accounts.accounts_hash(accountId)(NAME_VARIABLE)
+                    dataDict.Add(accountName, New Dictionary(Of String, Double))
+
+                    ' Years
+                    For Each yearId As Int32 In currentPeriodDict.Keys
+                        dataMapToken = fixed_left_token & Computer.TOKEN_SEPARATOR & _
+                                        accountId & Computer.TOKEN_SEPARATOR & _
+                                       Computer.YEAR_PERIOD_IDENTIFIER & yearId
+
+                        If dataMap.ContainsKey(dataMapToken) Then
+                            dataDict(accountName).Add(Computer.YEAR_PERIOD_IDENTIFIER & yearId, dataMap(dataMapToken))
+                        Else
+                            ' ? priority high
+                            System.Diagnostics.Debug.WriteLine("DB inputs build: token not found, token = " & dataMapToken)
+                        End If
+
+                        ' Months
+                        For Each monthId As Int32 In currentPeriodDict(yearId)
+                            dataMapToken = fixed_left_token & Computer.TOKEN_SEPARATOR & _
+                                           Computer.MONTH_PERIOD_IDENTIFIER & monthId
+
+                            If dataMap.ContainsKey(dataMapToken) Then
+                                dataDict(accountName).Add(Computer.MONTH_PERIOD_IDENTIFIER & monthId, dataMap(dataMapToken))
+                            Else
+                                System.Diagnostics.Debug.WriteLine("DB inputs build: token not found, token = " & dataMapToken)
+                                ' ? priority high
+                            End If
+                        Next
+                    Next
+
+                Case GlobalEnums.FormulaTypes.FIRST_PERIOD_INPUT
+                    Dim accountName As String = GlobalVariables.Accounts.accounts_hash(accountId)(NAME_VARIABLE)
+                    dataDict.Add(accountName, New Dictionary(Of String, Double))
+                    Dim periodToken As String = ""
+
+                    Select Case periodsIdentifyer
+                        Case Computer.YEAR_PERIOD_IDENTIFIER
+                            periodToken = Computer.YEAR_PERIOD_IDENTIFIER & currentPeriodDict.ElementAt(0).Key
+                            dataMapToken = fixed_left_token & Computer.TOKEN_SEPARATOR & _
+                                                              accountId & Computer.TOKEN_SEPARATOR & _
+                                                                periodToken
+
+                        Case Computer.MONTH_PERIOD_IDENTIFIER
+                            dataMapToken = fixed_left_token & Computer.TOKEN_SEPARATOR & _
+                                                              accountId & Computer.TOKEN_SEPARATOR & _
+                                                              Computer.YEAR_PERIOD_IDENTIFIER & currentPeriodDict.ElementAt(0).Value(0)
+                    End Select
+                    If dataMap.ContainsKey(dataMapToken) Then
+                        dataDict(accountName).Add(periodToken, dataMap(dataMapToken))
+                    Else
+                        ' ? priority high
+                        System.Diagnostics.Debug.WriteLine("DB inputs build: token not found, token = " & dataMapToken)
+                    End If
+            End Select
+        Next
+        Return dataDict
+
+    End Function
+
+    'Private Sub LoaddataBaseInputsDictionary(ByRef entityName As String)
+
+    '    If Not dataBaseInputsDictionary.ContainsKey(entityName) Then
+    '        Dim tmpDict As New Dictionary(Of Int32, Dictionary(Of String, Double))
+    '        dataBaseInputsDictionary.Add(entityName, tmpDict)
+    '    Else
+    '        dataBaseInputsDictionary(entityName).Clear()
+    '    End If
+
+
+    'End Sub
+
+#End Region
+
+
+#Region "Outputs Computations"
+
+    ' Launch Single Computation
+    Friend Sub ComputeCalculatedItems(ByRef entityName As String)
+
+        Dim entityId As Int32 = entitiesNameIdDict(entityName)
+        BuildInputsArrays(entityName)
+        SingleComputer.CMSG_SOURCED_COMPUTE(current_version_id, _
+                                            entityId, _
+                                            GlobalVariables.Entities.entities_hash(entityId)(ENTITIES_CURRENCY_VARIABLE), _
+                                            accKeysArray, _
+                                            periodsArray, _
+                                            valuesArray)
+
+    End Sub
+
+    Private Sub AfterOuptutsComputed(ByRef entityId As Int32, ByRef status As Boolean)
+
+        If computationDataMap.ContainsKey(entityId) Then
+            computationDataMap(entityId) = SingleComputer.GetDataMap
+        Else
+            computationDataMap.Add(entityId, SingleComputer.GetDataMap)
+        End If
+        RaiseEvent AfterOutputsComputed(GlobalVariables.Entities.entities_hash(entityId)(NAME_VARIABLE))
+
+    End Sub
+
+    ' Build datasource arrays (accKeys, periods, values)
+    Private Sub BuildInputsArrays(ByRef entity)
+
+        Dim i As Integer
+        ReDim accKeysArray(DATASET.inputsAccountsList.Count * currentPeriodList.Length)
+        ReDim periodsArray(DATASET.inputsAccountsList.Count * currentPeriodList.Length)
+        ReDim valuesArray(DATASET.inputsAccountsList.Count * currentPeriodList.Length) 'legnth periods to be checked
+
+        For Each inputAccount As String In DATASET.inputsAccountsList
+            For Each period In currentPeriodlist
+
+                accKeysArray(i) = DATASET.AccountsNameKeyDictionary(inputAccount)
+                periodsArray(i) = period
+
+                If DATASET.dataSetDictionary.ContainsKey(entity) _
+                AndAlso DATASET.dataSetDictionary(entity).ContainsKey(inputAccount) _
+                AndAlso DATASET.dataSetDictionary(entity)(inputAccount).ContainsKey(Trim(CStr(period))) Then
+                    valuesArray(i) = DATASET.dataSetDictionary(entity)(inputAccount)(Trim(CStr(period)))
+                ElseIf dataBaseInputsDictionary(entity).ContainsKey(inputAccount) _
+                AndAlso dataBaseInputsDictionary(entity)(inputAccount).ContainsKey(Trim(CStr(period))) Then
+                    valuesArray(i) = dataBaseInputsDictionary(entity)(inputAccount)(Trim(CStr(period)))
+                Else
+                    valuesArray(i) = 0
+                End If
+                i = i + 1
+            Next
+        Next
+
+        ReDim Preserve accKeysArray(i - 1)
+        ReDim Preserve periodsArray(i - 1)
+        ReDim Preserve valuesArray(i - 1)
+
+    End Sub
+
+
+#End Region
+
+
+#Region "Interface"
+
+    Friend Function GetCalculatedValue(ByRef entityName As String, _
+                                       ByRef accountId As String, _
+                                       ByRef Period_token As String) As Double
+
+        ' dataMap: [account_id][period_token] => value
+        ' manage case where value not found ?
+        On Error GoTo errorHandler1
+        Return computationDataMap(entitiesNameIdDict(entityName))(accountId)(Period_token)
+
+errorHandler1:
+        System.Diagnostics.Debug.WriteLine("output not found in dictionary" & Chr(13) & _
+                                           "entity: " & entityName & Chr(13) & _
+                                           "account: " & accountId & Chr(13) & _
+                                           "period: " & Period_token)
+        Return 0
+        ' cuation priority high !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
 
     End Function
 
@@ -132,110 +342,11 @@ Friend Class AcquisitionModel
         If DATASET.dataSetDictionary(entityName).ContainsKey(accountName) Then
             DATASET.dataSetDictionary(entityName)(accountName)(periodInt) = value
         End If
-        If DBInputsDictionary(entityName)(accountName).ContainsKey(periodInt) Then
-            DBInputsDictionary(entityName)(accountName)(periodInt) = value
+        If dataBaseInputsDictionary(entityName)(accountName).ContainsKey(periodInt) Then
+            dataBaseInputsDictionary(entityName)(accountName)(periodInt) = value
         Else
-            DBInputsDictionary(entityName)(accountName).Add(periodInt, value)
+            dataBaseInputsDictionary(entityName)(accountName).Add(periodInt, value)
         End If
-
-    End Sub
-
-#End Region
-
-
-#Region "Computation"
-
-    Private Sub LoadDBInputsDictionary(ByRef entityName As String)
-
-        If Not DBInputsDictionary.ContainsKey(entityName) Then
-            Dim tmpDict As New Dictionary(Of String, Dictionary(Of String, Double))
-            DBInputsDictionary.Add(entityName, tmpDict)
-        Else
-            DBInputsDictionary(entityName).Clear()
-        End If
-
-
-        ' replace DBDownloader by a server relation object dedicated to loading inputs !! priority high
-        ' If Not DBDownloader.AccKeysArray Is Nothing Then
-        'For i As Int32 = 0 To DBDownloader.AccKeysArray.Length - 1
-        'Dim accountName As String = accountsTV.Nodes.Find(DBDownloader.AccKeysArray(i), True)(0).Text
-
-        'If Not DBInputsDictionary(entityName).ContainsKey(accountName) Then
-        'Dim tmpDict As New Dictionary(Of String, Double)
-        'DBInputsDictionary(entityName).Add(accountName, tmpDict)
-        'End If
-        ' Objectif -> remplir Inputs dictionary !
-        '         DBInputsDictionary(entityName)(accountName).Add(CStr(DBDownloader.PeriodArray(i)), DBDownloader.ValuesArray(i))
-        'Next
-        'End If
-        FillInWithZeroValuesItemsNotPresentInDB(entityName)
-
-    End Sub
-
-    ' Complete DBInputsDcitionary with null values where data not in data base
-    Private Sub FillInWithZeroValuesItemsNotPresentInDB(ByRef entity As String)
-
-        For Each account As String In DATASET.inputsAccountsList
-            If DBInputsDictionary(entity).ContainsKey(account) Then
-                For Each period As String In currentPeriodlist
-                    If Not DBInputsDictionary(entity)(account).ContainsKey(period) Then
-                        DBInputsDictionary(entity)(account).Add(period, 0)
-                    End If
-                Next
-            Else
-                Dim tmpDic As New Dictionary(Of String, Double)
-                For Each period As String In currentPeriodlist
-                    tmpDic.Add(period, 0)
-                Next
-                DBInputsDictionary(entity).Add(account, tmpDic)
-            End If
-        Next
-
-    End Sub
-
-    ' Launch dll computation - Reinit periods if periods configuration is different
-    Friend Sub ComputeCalculatedItems(ByRef entity As String)
-
-        Dim entityKey As String = DATASET.EntitiesNameKeyDictionary(entity)
-        BuildInputsArrays(entity)
-
-        ' launch computer.vb computation
-        ' wait for server answer
-        ' priority high
-
-    End Sub
-
-    ' Build datasource arrays (accKeys, periods, values)
-    Private Sub BuildInputsArrays(ByRef entity)
-
-        Dim i As Integer
-        ReDim accKeysArray(DATASET.inputsAccountsList.Count * currentPeriodlist.Count + 1)
-        ReDim periodsArray(DATASET.inputsAccountsList.Count * currentPeriodlist.Count + 1)
-        ReDim valuesArray(DATASET.inputsAccountsList.Count * currentPeriodlist.Count + 1)
-
-        For Each inputAccount As String In DATASET.inputsAccountsList
-            For Each period In currentPeriodlist
-
-                accKeysArray(i) = DATASET.AccountsNameKeyDictionary(inputAccount)
-                periodsArray(i) = period
-
-                If DATASET.dataSetDictionary.ContainsKey(entity) _
-                AndAlso DATASET.dataSetDictionary(entity).ContainsKey(inputAccount) _
-                AndAlso DATASET.dataSetDictionary(entity)(inputAccount).ContainsKey(Trim(CStr(period))) Then
-                    valuesArray(i) = DATASET.dataSetDictionary(entity)(inputAccount)(Trim(CStr(period)))
-                ElseIf DBInputsDictionary(entity).ContainsKey(inputAccount) _
-                AndAlso DBInputsDictionary(entity)(inputAccount).ContainsKey(Trim(CStr(period))) Then
-                    valuesArray(i) = DBInputsDictionary(entity)(inputAccount)(Trim(CStr(period)))
-                Else
-                    valuesArray(i) = 0
-                End If
-                i = i + 1
-            Next
-        Next
-
-        ReDim Preserve accKeysArray(i - 1)
-        ReDim Preserve periodsArray(i - 1)
-        ReDim Preserve valuesArray(i - 1)
 
     End Sub
 
