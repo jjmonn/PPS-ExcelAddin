@@ -9,10 +9,14 @@ using System.Threading;
 using System.IO;
 using System.Diagnostics;
 using System.Reflection;
+using System.Security.Authentication;
+using System.Security.Cryptography.X509Certificates;
+using System.Net.Security;
 
 public class NetworkManager
 {
     TcpClient m_Sock;
+    SslStream m_StreamSSL;
     static NetworkManager s_networkMgr = null;
     List<Action<ByteBuffer>>[] m_callback;
 
@@ -20,6 +24,16 @@ public class NetworkManager
     {
         m_Sock = new TcpClient();
         m_callback = new List<Action<ByteBuffer>>[(byte)ServerMessage.OpcodeMax];
+    }
+
+    public static bool ValidateServerCertificate(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)
+    {
+      return true;
+      if (sslPolicyErrors == SslPolicyErrors.None)
+        return true;
+
+      Debug.WriteLine("Certificate error: " + sslPolicyErrors);
+      return false;
     }
 
     public void SetCallback(UInt16 p_opcodeId, Action<ByteBuffer> p_newCallback)
@@ -53,22 +67,40 @@ public class NetworkManager
 
     public bool Connect(String p_ip, int p_port)
     {
-        Console.WriteLine("Connecting to server...");
+        Debug.WriteLine("Connecting to server...");
         try
         {
             m_Sock.Connect(p_ip, p_port);
         }
         catch
         {
-            Console.WriteLine("Server unavailable.");
+          Debug.WriteLine("Server unavailable.");
             return (false);
+        }
+        m_StreamSSL = new SslStream(m_Sock.GetStream(), false,
+                  new RemoteCertificateValidationCallback(ValidateServerCertificate),
+                  null);
+        try
+        {
+          m_StreamSSL.AuthenticateAsClient("ppsdev");
+        }
+        catch (AuthenticationException e)
+        {
+          Debug.WriteLine(e.Message);
+          if (e.InnerException != null)
+          {
+            Debug.WriteLine(e.InnerException.Message);
+          }
+          Debug.WriteLine("SSL authentication failed");
+          return (false);
         }
         return (true);
     }
 
     public void Send(ByteBuffer p_data)
     {
-        m_Sock.GetStream().Write(p_data.GetBuffer(), 0, (int)p_data.Length);
+      m_StreamSSL.Write(p_data.GetBuffer(), 0, (int)p_data.Length);
+      m_StreamSSL.Flush();
     }
 
     public ByteBuffer Receive()
@@ -80,7 +112,7 @@ public class NetworkManager
         int l_realSize;
         int l_byteReaded = 0;
 
-        l_size = m_Sock.GetStream().Read(l_buffer, 0, 8);
+        l_size = m_StreamSSL.Read(l_buffer, 0, 8);
         if (l_size < 8)
         {
            // Console.WriteLine("Invalid packet received");
@@ -94,7 +126,7 @@ public class NetworkManager
         Debug.WriteLine("Receive packet of size " + l_sizeBuffer);
         do
         {
-            int sock = m_Sock.GetStream().Read(l_buffer, l_byteReaded, l_sizeBuffer - l_byteReaded);
+          int sock = m_StreamSSL.Read(l_buffer, l_byteReaded, l_sizeBuffer - l_byteReaded);
 
             if (sock == 0)
                 break;
@@ -117,7 +149,7 @@ public class NetworkManager
     {
         if (m_Sock.Connected == false)
         {
-            Console.WriteLine("Disconnected by remote server");
+          Debug.WriteLine("Disconnected by remote server");
             return (false);
         }
         if (m_Sock.Available > 0)

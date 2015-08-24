@@ -13,3 +13,4 @@ C:\Users\PPS\Documents\PPS-Repo\NetworkModule\NetworkModule\bin\Debug\Ionic.Zlib
 C:\Users\PPS\Documents\PPS-Repo\NetworkModule\NetworkModule\obj\Debug\NetworkModule.csprojResolveAssemblyReference.cache
 C:\Users\PPS\Documents\PPS-Repo\NetworkModule\NetworkModule\obj\Debug\NetworkModule.dll
 C:\Users\PPS\Documents\PPS-Repo\NetworkModule\NetworkModule\obj\Debug\NetworkModule.pdb
+C:\Users\PPS Bi\Documents\PPS-Repo\NetworkModule\NetworkModule\obj\Debug\NetworkModule.csprojResolveAssemblyReference.cache
