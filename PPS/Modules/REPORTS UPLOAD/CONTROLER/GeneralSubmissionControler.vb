@@ -116,7 +116,7 @@ Friend Class GeneralSubmissionControler
             If Dataset.GlobalOrientationFlag <> ORIENTATION_ERROR_FLAG _
             AndAlso Dataset.EntitiesAddressValuesDictionary.Count > 0 Then
 
-                ' Attention crash si entity not identified !!!
+                ' Attention crash si entity not identified !!! priority high
 
                 snapshotSuccess = True
                 FillInEntityAndCurrencyTB(Dataset.EntitiesAddressValuesDictionary.ElementAt(0).Value)
@@ -132,6 +132,7 @@ Friend Class GeneralSubmissionControler
                 If Dataset.pAssetFlag = 0 AndAlso _
                    Dataset.pAccountFlag <> 0 AndAlso _
                    Dataset.pDateFlag <> 0 Then
+                    ' priority high
                     ' Initialize AcVPe or PeVAc + necessary to choose an Entity
                     ' Need a call from entity selection (which will launch initialize and addHandler, if cancel suppr GRS)
                     snapshotSuccess = False

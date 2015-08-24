@@ -233,16 +233,37 @@ Friend Class FactsVersion
 
     End Function
 
-    Friend Function GetMonths(ByRef versionsIdDict As Dictionary(Of Int32, String)) As Dictionary(Of Int32, List(Of Int32))
+    ' reimplement get months / like get years
+    Friend Function GetMonths(ByRef versionsIdDict As Dictionary(Of Int32, String)) As List(Of Int32)
 
-        Dim monthsDict As New Dictionary(Of Int32, List(Of Int32))
-        For Each yearId As Int32 In GetYears(versionsIdDict)
-            monthsDict.Add(yearId, New List(Of Int32))
-            For Each monthId As Int32 In Period.GetMonthsList(yearId, 12)
-                monthsDict(yearId).Add(monthId)
-            Next
+        Dim monthsList As New List(Of Int32)
+
+        For Each versionId As Int32 In versionsIdDict.Keys
+            Dim startPeriod As Int32 = versions_hash(versionId)(VERSIONS_START_PERIOD_VAR)
+            Dim nbPeriods As UInt16 = versions_hash(versionId)(VERSIONS_NB_PERIODS_VAR)
+            Dim timeConfig As UInt16 = versions_hash(versionId)(VERSIONS_TIME_CONFIG_VARIABLE)
+
+            Select Case timeConfig
+                Case GlobalEnums.TimeConfig.YEARS
+                    For Each yearId As Int32 In Period.GetYearsList(startPeriod, nbPeriods, timeConfig)
+                        For Each monthId As Int32 In Period.GetMonthsIdsInYear(yearId)
+                            If monthsList.Contains(monthId) = False Then
+                                monthsList.Add(monthId)
+                            End If
+                        Next
+                    Next
+
+                Case GlobalEnums.TimeConfig.MONTHS
+                    For Each monthId As Int32 In Period.GetMonthsList(startPeriod, nbPeriods)
+                        If monthsList.Contains(monthId) = False Then
+                            monthsList.Add(monthId)
+                        End If
+                    Next
+
+            End Select
         Next
-        Return monthsDict
+        monthsList.Sort()
+        Return monthsList
 
     End Function
 
@@ -311,17 +332,54 @@ Friend Class FactsVersion
                                                                 versions_hash(versionId)(VERSIONS_NB_PERIODS_VAR), _
                                                                 versions_hash(versionId)(VERSIONS_TIME_CONFIG_VARIABLE))
                     periodsDict.Add(yearId, New List(Of Int32))
-
-                    ' Months
-                    For Each monthId As Int32 In Period.GetMonthsIdsInYear(yearId)
-                        periodsDict(yearId).Add(monthId)
-                    Next
                 Next
+
+                ' Months
+                For Each monthId As Int32 In GetPeriodsList(versionId)
+                    periodsDict(Period.GetYearIdFromMonthID(monthId)).Add(monthId)
+                Next
+
         End Select
         Return periodsDict
 
     End Function
 
+    Friend Function GetPeriodsDictionary(ByRef versionsIdDict As Dictionary(Of Int32, String)) As Dictionary(Of Int32, List(Of Int32))
+
+        Dim periodsDict As New Dictionary(Of Int32, List(Of Int32))
+        For Each versionId As Int32 In versionsIdDict.Keys
+
+            Select Case versions_hash(versionId)(VERSIONS_TIME_CONFIG_VARIABLE)
+                Case GlobalEnums.TimeConfig.YEARS
+                    For Each periodId As UInt32 In GetPeriodsList(versionId)
+                        If periodsDict.ContainsKey(periodId) = False Then
+                            periodsDict.Add(periodId, New List(Of Int32))
+                        End If
+                    Next
+
+                Case GlobalEnums.TimeConfig.MONTHS
+                    ' Years
+                    For Each yearId As Int32 In Period.GetYearsList(versions_hash(versionId)(VERSIONS_START_PERIOD_VAR), _
+                                                                    versions_hash(versionId)(VERSIONS_NB_PERIODS_VAR), _
+                                                                    versions_hash(versionId)(VERSIONS_TIME_CONFIG_VARIABLE))
+                        If periodsDict.ContainsKey(yearId) = False Then
+                            periodsDict.Add(yearId, New List(Of Int32))
+                        End If
+                    Next
+
+                    ' Months
+                    For Each monthId As Int32 In GetPeriodsList(versionId)
+                        Dim yearId As Int32 = Period.GetYearIdFromMonthID(monthId)
+                        If periodsDict(yearId).Contains(monthId) = False Then
+                            periodsDict(yearId).Add(monthId)
+                        End If
+                    Next
+
+            End Select
+        Next
+        Return periodsDict
+
+    End Function
 
 
 #End Region

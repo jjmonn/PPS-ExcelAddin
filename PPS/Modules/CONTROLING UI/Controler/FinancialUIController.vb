@@ -4,13 +4,13 @@
 '
 ' To do:
 '      - Keep track of hidden hierarchy items and provide right click option to hide/ unhide 
-'   
+'      - Option accounts/entities hierarchy display -> priority normal  !
 '
 ' Known bugs:
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 19/08/2015
+' Last modified: 24/08/2015
 
 
 Imports System.Windows.Forms
@@ -188,10 +188,7 @@ Friend Class FinancialUIController
         cacheAxisFilters = axisFilters
 
         ' Redraw hierarchy Items
-        Dim t1 As Date = Date.Now
         InitDisplay()
-        System.Diagnostics.Debug.WriteLine("********Display Init Time: " & (Date.Now - t1).Seconds & " **********")
-
         FillUIHeader()
 
         ' Launch waiting CP
@@ -349,21 +346,18 @@ Friend Class FinancialUIController
                     View.leftPane_control.SetupPeriodsTV(node)
 
                 Case Computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.MONTHS
-                    Dim monthsDict = GlobalVariables.Versions.GetMonths(versionsDict)
-                    For Each yearId As Int32 In monthsDict.Keys
-                        For Each monthId As Int32 In monthsDict(yearId)
-                            VTreeViewUtil.AddNode(Computer.MONTH_PERIOD_IDENTIFIER & monthId, Format(Date.FromOADate(monthId), "MMM yyyy"), node)
-                        Next
+                    For Each monthId As Int32 In GlobalVariables.Versions.GetMonths(versionsDict)
+                        VTreeViewUtil.AddNode(Computer.MONTH_PERIOD_IDENTIFIER & monthId, Format(Date.FromOADate(monthId), "MMM yyyy"), node)
                     Next
                     View.leftPane_control.SetupPeriodsTV(node)
 
                 Case Computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.YMONTHS
-                    Dim monthsDict = GlobalVariables.Versions.GetMonths(versionsDict)
-                    For Each yearId As Int32 In monthsDict.Keys
+                    Dim periodsDict = GlobalVariables.Versions.GetPeriodsDictionary(versionsDict)
+                    For Each yearId As Int32 In periodsDict.Keys
                         Dim yearNode As vTreeNode = VTreeViewUtil.AddNode(Computer.YEAR_PERIOD_IDENTIFIER & yearId, _
                                                                           Format(Date.FromOADate(yearId), "yyyy"), _
                                                                           node)
-                        For Each monthId As Int32 In monthsDict(yearId)
+                        For Each monthId As Int32 In periodsDict(yearId)
                             VTreeViewUtil.AddNode(Computer.MONTH_PERIOD_IDENTIFIER & monthId, Format(Date.FromOADate(monthId), "MMM yyyy"), yearNode)
                         Next
                     Next

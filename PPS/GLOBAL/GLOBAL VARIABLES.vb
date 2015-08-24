@@ -4,7 +4,7 @@
 '     
 '
 ' Author: Julien Monnereau
-' Last modified: 05/08/2015
+' Last modified: 24/08/2015
 
 
 Imports AddinExpress.MSO
@@ -75,6 +75,7 @@ Friend Class GlobalVariables
     Friend Shared AdjustmentsFilters As AdjustmentFilter
     Friend Shared Versions As FactsVersion
     Friend Shared Currencies As Currency
+    Friend Shared RatesVersions As RatesVersion
 
 #End Region
 

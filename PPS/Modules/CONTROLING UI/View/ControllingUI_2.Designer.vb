@@ -26,9 +26,6 @@ Partial Class ControllingUI_2
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(ControllingUI_2))
         Me.EntitiesRCMenu = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.RefreshRightClick = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
-        Me.SelectAllSubEntitiesToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.UnselectAllSubEntitiesToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.PeriodsRCMenu = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.SelectAllToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.UnselectAllToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -80,33 +77,16 @@ Partial Class ControllingUI_2
         '
         'EntitiesRCMenu
         '
-        Me.EntitiesRCMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.RefreshRightClick, Me.ToolStripSeparator1, Me.SelectAllSubEntitiesToolStripMenuItem, Me.UnselectAllSubEntitiesToolStripMenuItem})
+        Me.EntitiesRCMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.RefreshRightClick})
         Me.EntitiesRCMenu.Name = "ContextMenuStripEntitiesNodes"
-        Me.EntitiesRCMenu.Size = New System.Drawing.Size(225, 82)
+        Me.EntitiesRCMenu.Size = New System.Drawing.Size(153, 50)
         '
         'RefreshRightClick
         '
         Me.RefreshRightClick.Image = CType(resources.GetObject("RefreshRightClick.Image"), System.Drawing.Image)
         Me.RefreshRightClick.Name = "RefreshRightClick"
-        Me.RefreshRightClick.Size = New System.Drawing.Size(224, 24)
+        Me.RefreshRightClick.Size = New System.Drawing.Size(152, 24)
         Me.RefreshRightClick.Text = "Refresh"
-        '
-        'ToolStripSeparator1
-        '
-        Me.ToolStripSeparator1.Name = "ToolStripSeparator1"
-        Me.ToolStripSeparator1.Size = New System.Drawing.Size(221, 6)
-        '
-        'SelectAllSubEntitiesToolStripMenuItem
-        '
-        Me.SelectAllSubEntitiesToolStripMenuItem.Name = "SelectAllSubEntitiesToolStripMenuItem"
-        Me.SelectAllSubEntitiesToolStripMenuItem.Size = New System.Drawing.Size(224, 24)
-        Me.SelectAllSubEntitiesToolStripMenuItem.Text = "Select All Sub Entities"
-        '
-        'UnselectAllSubEntitiesToolStripMenuItem
-        '
-        Me.UnselectAllSubEntitiesToolStripMenuItem.Name = "UnselectAllSubEntitiesToolStripMenuItem"
-        Me.UnselectAllSubEntitiesToolStripMenuItem.Size = New System.Drawing.Size(224, 24)
-        Me.UnselectAllSubEntitiesToolStripMenuItem.Text = "Unselect All Sub Entities"
         '
         'PeriodsRCMenu
         '
@@ -468,9 +448,6 @@ Partial Class ControllingUI_2
 
     End Sub
     Friend WithEvents EntitiesRCMenu As System.Windows.Forms.ContextMenuStrip
-    Friend WithEvents ToolStripSeparator1 As System.Windows.Forms.ToolStripSeparator
-    Friend WithEvents SelectAllSubEntitiesToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents UnselectAllSubEntitiesToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents PeriodsRCMenu As System.Windows.Forms.ContextMenuStrip
     Friend WithEvents SelectAllToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents UnselectAllToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem

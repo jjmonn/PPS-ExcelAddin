@@ -13,17 +13,17 @@ Imports System.Collections.Generic
 '
 ' Author: Julien Monnereau
 ' Created: 05/08/2015
-' Last modified: 05/08/2015
+' Last modified: 24/08/2015
 
 
 
-Friend Class ExchangeRate2
+Friend Class ExchangeRate
 
 #Region "Instance variables"
 
     ' Variables
     Friend server_response_flag As Boolean
-    Friend exchangeRates_hash As New Hashtable
+    Friend exchangeRatesDict As New Dictionary(Of String, Double)
     Private request_id As Dictionary(Of UInt32, Boolean)
 
     ' Events
@@ -56,22 +56,18 @@ Friend Class ExchangeRate2
 
     End Sub
 
-    ' exchangeRates_hash: [rateVersionId][token][period] => rateValue
+    ' exchangeRates_hash: [currency#ratesVersion#period] => rateValue
     Private Sub SMSG_LIST_EXCHANGE_RATE_ANSWER(packet As ByteBuffer)
 
         If packet.ReadInt32() = 0 Then
-            exchangeRates_hash.Clear()
-
+            exchangeRatesDict.Clear()
             For i As Int32 = 1 To packet.ReadInt32()
-
                 Dim tmp_ht As New Hashtable
                 GetExchangeRateHTFromPacket(packet, tmp_ht)
-                Dim rateCurrenciesToken As String = TokenizeRateCurrencies(tmp_ht(EX_RATES_ORIGIN_CURR_VAR), _
-                                                                           tmp_ht(EX_RATES_DEST_CURR_VAR))
-                exchangeRates_hash(tmp_ht(EX_RATES_RATE_VARIABLE)) _
-                                  (rateCurrenciesToken) _
-                                  (tmp_ht(EX_RATES_PERIOD_VARIABLE)) = tmp_ht(EX_RATES_RATE_VARIABLE)
-
+                exchangeRatesDict(tmp_ht(EX_RATES_LOCAL_CURR_VAR) & Computer.TOKEN_SEPARATOR & _
+                                  tmp_ht(EX_RATES_RATE_VARIABLE) & Computer.TOKEN_SEPARATOR & _
+                                  tmp_ht(EX_RATES_PERIOD_VARIABLE)) = _
+                                  tmp_ht(EX_RATES_RATE_VARIABLE)
             Next
             NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_LIST_EXCHANGE_RATE_ANSWER, AddressOf SMSG_LIST_EXCHANGE_RATE_ANSWER)
             server_response_flag = True
@@ -103,7 +99,10 @@ Friend Class ExchangeRate2
             MsgBox(packet.ReadString())
             Dim tmp_ht As New Hashtable
             GetExchangeRateHTFromPacket(packet, tmp_ht)
-            exchangeRates_hash(tmp_ht(ID_VARIABLE)) = tmp_ht
+
+            ' to be reviewed !
+            '  exchangeRatesDict(tmp_ht(ID_VARIABLE)) = tmp_ht
+
             NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_CREATE_EXCHANGE_RATE_ANSWER, AddressOf SMSG_CREATE_EXCHANGE_RATE_ANSWER)
             RaiseEvent ExchangeRateCreationEvent(tmp_ht)
         Else
@@ -151,14 +150,15 @@ Friend Class ExchangeRate2
                                   ByRef updated_var As String, _
                                   ByRef new_value As String)
 
-        Dim tmp_ht As Hashtable = exchangeRates_hash(id).clone ' check clone !!!!
-        tmp_ht(updated_var) = new_value
+        ' to be reviewed priority high
+        '     Dim tmp_ht As Hashtable = exchangeRatesDict(id).clone ' check clone !!!!
+        'tmp_ht(updated_var) = new_value
 
-        NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_UPDATE_EXCHANGE_RATE_ANSWER, AddressOf SMSG_UPDATE_EXCHANGE_RATE_ANSWER)
-        Dim packet As New ByteBuffer(CType(ClientMessage.CMSG_UPDATE_EXCHANGE_RATE, UShort))
-        WriteExchangeRatePacket(packet, tmp_ht)
-        packet.Release()
-        NetworkManager.GetInstance().Send(packet)
+        'NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_UPDATE_EXCHANGE_RATE_ANSWER, AddressOf SMSG_UPDATE_EXCHANGE_RATE_ANSWER)
+        'Dim packet As New ByteBuffer(CType(ClientMessage.CMSG_UPDATE_EXCHANGE_RATE, UShort))
+        'WriteExchangeRatePacket(packet, tmp_ht)
+        'packet.Release()
+        'NetworkManager.GetInstance().Send(packet)
 
     End Sub
 
@@ -177,18 +177,17 @@ Friend Class ExchangeRate2
         If packet.ReadInt32() = 0 Then
             Dim ht As New Hashtable
             GetExchangeRateHTFromPacket(packet, ht)
-            exchangeRates_hash(ht(ID_VARIABLE)) = ht
             NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_UPDATE_EXCHANGE_RATE_ANSWER, AddressOf SMSG_UPDATE_EXCHANGE_RATE_ANSWER)
+
+            ' inform update ok 
+            '   exchangeRatesDict(ht(ID_VARIABLE)) = ht
+            ' still here ??? priority normal
+
+
             RaiseEvent ExchangeRateUpdateEvent(ht)
         Else
 
         End If
-
-    End Sub
-
-    Friend Sub DeleteAllRatesForVersion(ByRef fxVerionsId As UInt32)
-
-        ' to be implemented priority normal
 
     End Sub
 
@@ -215,27 +214,11 @@ Friend Class ExchangeRate2
 #End Region
 
 
-#Region "Mappings"
-
-    Friend Function GetExchangeRatesDictionary(ByRef Key As String, ByRef Value As String) As Hashtable
-
-        Dim tmpHT As New Hashtable
-        For Each id In exchangeRates_hash.Keys
-            tmpHT(exchangeRates_hash(id)(Key)) = exchangeRates_hash(id)(Value)
-        Next
-        Return tmpHT
-
-    End Function
-
-#End Region
-
-
 #Region "Utilities"
 
     Friend Shared Sub GetExchangeRateHTFromPacket(ByRef packet As ByteBuffer, ByRef exchangeRate_ht As Hashtable)
 
-        exchangeRate_ht(EX_RATES_ORIGIN_CURR_VAR) = packet.ReadUint32()
-        exchangeRate_ht(EX_RATES_DEST_CURR_VAR) = packet.ReadUint32()
+        exchangeRate_ht(EX_RATES_LOCAL_CURR_VAR) = packet.ReadUint32()
         exchangeRate_ht(EX_RATES_RATE_VERSION) = packet.ReadUint32()
         exchangeRate_ht(EX_RATES_PERIOD_VARIABLE) = packet.ReadUint32()
         exchangeRate_ht(EX_RATES_RATE_VARIABLE) = packet.ReadDouble()
@@ -244,45 +227,17 @@ Friend Class ExchangeRate2
 
     Private Sub WriteExchangeRatePacket(ByRef packet As ByteBuffer, ByRef attributes As Hashtable)
 
-        packet.WriteUint32(attributes(EX_RATES_ORIGIN_CURR_VAR))
-        packet.WriteUint32(attributes(EX_RATES_DEST_CURR_VAR))
+        packet.WriteUint32(attributes(EX_RATES_LOCAL_CURR_VAR))
         packet.WriteUint32(attributes(EX_RATES_RATE_VERSION))
         packet.WriteUint32(attributes(EX_RATES_PERIOD_VARIABLE))
         packet.WriteDouble(attributes(EX_RATES_RATE_VARIABLE))
-      
+
     End Sub
 
-    Public Shared Function TokenizeRateCurrencies(ByRef originCurrencyId As UInt32, _
-                                                  ByRef destinationCurrencyId As UInt32) As String
-
-        Return originCurrencyId & RATES_CURRENCIES_TOKEN_SEPARATOR & destinationCurrencyId
-
-    End Function
-
-    Public Shared Function GetOriginCurrencyIdFromToken(ByRef token As String) As UInt32
-
-        Dim sepPosition As UInt16 = token.IndexOf(RATES_CURRENCIES_TOKEN_SEPARATOR)
-        Return Left(token, sepPosition)
-
-    End Function
-
-    Public Shared Function GetDestinationCurrencyIdFromToken(ByRef token As String) As UInt32
-
-        Dim sepPosition As UInt16 = token.IndexOf(RATES_CURRENCIES_TOKEN_SEPARATOR)
-        Return Right(token, Len(token) - sepPosition)
-
-    End Function
 
 #End Region
 
 
-    Public Shared Function ReverseToken(ByRef token As String) As String
-
-        Return GetDestinationCurrencyIdFromToken(token) _
-               & RATES_CURRENCIES_TOKEN_SEPARATOR _
-               & GetOriginCurrencyIdFromToken(token)
-
-    End Function
 
 
 End Class

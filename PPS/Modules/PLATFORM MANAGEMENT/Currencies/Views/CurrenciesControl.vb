@@ -6,13 +6,15 @@
 ' To do:
 '       - Chart automatically reload when changing version
 '       - Add rename rate version
+'       - PRIORITY HIGH / SIMPLIFY (NO CURRENCY MANAGEMENT here) + right click node won t work with vtreeview
+'
 '
 ' Known bugs:
 '
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 03/05/2015
+' Last modified: 24/08/2015
 
 
 Imports System.Collections.Generic
@@ -20,6 +22,7 @@ Imports VIBlend.WinForms.DataGridView
 Imports System.Collections
 Imports System.Windows.Forms
 Imports System.Windows.Forms.DataVisualization.Charting
+Imports VIBlend.WinForms.Controls
 
 
 Friend Class CurrenciesControl
@@ -29,7 +32,7 @@ Friend Class CurrenciesControl
 
     ' Objects
     Friend Controller As ExchangeRatesController
-    Private rates_versionsTV As TreeView
+    Private rates_versionsTV As vTreeView
     Friend ratesView As RatesView
     Protected Friend rates_DGV As New vDataGridView
     Private chart As Chart
@@ -38,7 +41,7 @@ Friend Class CurrenciesControl
     Private mainMenuFlag As Boolean
     Private currenciesMenuFlag As Boolean
     Private VersionsMenuFlag As Boolean = True
-    Private right_clicked_node As TreeNode
+    Private right_clicked_node As vTreeNode
 
     ' Menu
     Private version_splitter_distance As Double = 240
@@ -51,8 +54,8 @@ Friend Class CurrenciesControl
 
 #Region "Initialize"
 
-    Protected Friend Sub New(ByRef input_controller As ExchangeRatesController, _
-                             ByRef input_rates_versionsTV As TreeView)
+    Friend Sub New(ByRef input_controller As ExchangeRatesController, _
+                   ByRef input_rates_versionsTV As vTreeView)
 
         ' This call is required by the designer.
         InitializeComponent()
@@ -74,16 +77,12 @@ Friend Class CurrenciesControl
         chart.BorderlineColor = Drawing.Color.Gray
         chart.BorderlineWidth = 1
         ratesView = New RatesView(rates_DGV, chart)
-        If Controller.object_is_alive = False Then
-            MsgBox("There seems to be a network connection issue. You should try again and contact the PPS team if the error persist.")
-            Me.Dispose()
-        End If
         ratesView.AttributeController(Controller)
 
         rates_versionsTV.ContextMenuStrip = VersionsRCMenu
-        AddHandler rates_versionsTV.NodeMouseClick, AddressOf rates_version_MouseClick
+        AddHandler rates_versionsTV.MouseClick, AddressOf rates_version_MouseClick
         AddHandler rates_versionsTV.KeyPress, AddressOf rates_versionsTV_KeyPress
-        AddHandler rates_versionsTV.NodeMouseDoubleClick, AddressOf rates_versionsTV_NodeMouseDoubleClick
+        AddHandler rates_versionsTV.MouseDoubleClick, AddressOf rates_versionsTV_NodeMouseDoubleClick
 
     End Sub
 
@@ -99,7 +98,7 @@ Friend Class CurrenciesControl
 
     End Sub
 
-    Protected Friend Sub closeControl()
+    Friend Sub closeControl()
 
 
     End Sub
@@ -142,29 +141,11 @@ Friend Class CurrenciesControl
 
 #End Region
 
-#Region "Currencies Call backs"
-
-    ' New currency call back
-    Private Sub NewCurrencyBT_Click(sender As Object, e As EventArgs) Handles AddCurrencyToolStripMenuItem.Click
-
-        Controller.AddNewCurrency()
-
-    End Sub
-
-    ' Delete currency -> Managed by PPS Team
-    'Dim confirm As Integer = MessageBox.Show("Careful, you are about to delete the currency " + Chr(13) + Chr(13) + _
-    '                                      curr + Chr(13) + Chr(13), _
-    '                                      "Currency deletion confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
-    'If confirm = DialogResult.Yes Then
-
-
-#End Region
-
 #Region "Versions Right Click Menu"
 
     Private Sub select_version_Click(sender As Object, e As EventArgs) Handles select_version.Click
 
-        If right_clicked_node.SelectedImageIndex = 0 Then Controller.ChangeVersion(right_clicked_node.Name)
+        If Controller.IsFolderVersion(right_clicked_node.Value) = False Then Controller.ChangeVersion(right_clicked_node.Value)
 
     End Sub
 
@@ -173,7 +154,7 @@ Friend Class CurrenciesControl
         If Not right_clicked_node Is Nothing Then
             If right_clicked_node.SelectedImageIndex = 1 Then
                 Dim name As String = InputBox("Please enter a name for the new Folder")
-                If Len(name) < 50 Then Controller.CreateVersion(name, 1, , , right_clicked_node) Else MsgBox("The name cannot exceed 50 characters")
+                If Len(name) < 50 Then Controller.CreateVersion(name, 1, , , right_clicked_node.Value) Else MsgBox("The name cannot exceed 50 characters")
             Else
                 MsgBox("A folder can only be added to another folder")
             End If
@@ -187,7 +168,7 @@ Friend Class CurrenciesControl
     Private Sub AddRatesVersionRCM_Click(sender As Object, e As EventArgs) Handles AddRatesVersionRCM.Click
 
         If Not right_clicked_node Is Nothing Then
-            If Controller.IsFolderVersion(right_clicked_node.Name) = True Then
+            If Controller.IsFolderVersion(right_clicked_node.Value) = True Then
                 Controller.ShowNewRatesVersion(right_clicked_node)
             Else
                 MsgBox("A Version can only be added under a folder")
@@ -206,7 +187,7 @@ Friend Class CurrenciesControl
                                                       "This version and all sub versions will be deleted, do you confirm?" + Chr(13) + Chr(13), _
                                                       "Version deletion confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
             If confirm = DialogResult.Yes Then
-                Controller.DeleteVersionsOrFolder(right_clicked_node)
+                Controller.DeleteRatesVersion(right_clicked_node.value)
             End If
         End If
 
@@ -258,7 +239,7 @@ Friend Class CurrenciesControl
     Private Sub rates_versionsTV_KeyPress(sender As Object, e As KeyPressEventArgs)
 
         If e.KeyChar = Chr(13) AndAlso Not rates_versionsTV.SelectedNode Is Nothing _
-        AndAlso rates_versionsTV.SelectedNode.SelectedImageIndex = 0 Then Controller.ChangeVersion(rates_versionsTV.SelectedNode.Name)
+        AndAlso rates_versionsTV.SelectedNode.SelectedImageIndex = 0 Then Controller.ChangeVersion(rates_versionsTV.SelectedNode.Value)
 
         '   If e.KeyChar = Chr(10) Then DeleteVersionBT_Click(sender, e)
 
@@ -266,7 +247,12 @@ Friend Class CurrenciesControl
 
     Private Sub rates_versionsTV_NodeMouseClick(sender As Object, e As TreeNodeMouseClickEventArgs)
 
-        If e.Button = Windows.Forms.MouseButtons.Right Then right_clicked_node = e.Node Else right_clicked_node = Nothing
+        If e.Button = Windows.Forms.MouseButtons.Right _
+        AndAlso Not rates_versionsTV.HitTest(e.Location) Is Nothing Then
+            right_clicked_node = rates_versionsTV.HitTest(e.Location)
+        Else
+            right_clicked_node = Nothing
+        End If
 
     End Sub
 
@@ -312,5 +298,5 @@ Friend Class CurrenciesControl
 #End Region
 
 
-   
+
 End Class

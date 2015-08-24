@@ -10,7 +10,7 @@
 '
 '
 '
-' Last modified: 19/08/2015
+' Last modified: 24/08/2015
 ' Author: Julien Monnereau
 
 
@@ -126,6 +126,7 @@ Friend Class ConnectionsFunctions
         GlobalVariables.AdjustmentsFilters = New AdjustmentFilter
         GlobalVariables.Versions = New FactsVersion
         GlobalVariables.Currencies = New Currency
+        GlobalVariables.RatesVersions = New RatesVersion
 
         AddHandler GlobalVariables.Accounts.ObjectInitialized, AddressOf AfterAccountsInit
         AddHandler GlobalVariables.Entities.ObjectInitialized, AddressOf AfterEntitiesInit
@@ -140,6 +141,7 @@ Friend Class ConnectionsFunctions
         AddHandler GlobalVariables.AdjustmentsFilters.ObjectInitialized, AddressOf AfterAdjustmentsFiltersInit
         AddHandler GlobalVariables.Versions.ObjectInitialized, AddressOf AfterFactsVersionsInit
         AddHandler GlobalVariables.Currencies.ObjectInitialized, AddressOf AfterCurrenciesInit
+        AddHandler GlobalVariables.RatesVersions.ObjectInitialized, AddressOf AfterRatesVersionsInit
 
         globalVariablesInitFlags.Add(GlobalEnums.GlobalModels.ACCOUNTS, False)
         globalVariablesInitFlags.Add(GlobalEnums.GlobalModels.ENTITIES, False)
@@ -154,6 +156,7 @@ Friend Class ConnectionsFunctions
         globalVariablesInitFlags.Add(GlobalEnums.GlobalModels.ADJUSTMENTSFILTERS, False)
         globalVariablesInitFlags.Add(GlobalEnums.GlobalModels.FACTSVERSIONS, False)
         globalVariablesInitFlags.Add(GlobalEnums.GlobalModels.CURRENCIES, False)
+        globalVariablesInitFlags.Add(GlobalEnums.GlobalModels.RATESVERSIONS, False)
 
     End Sub
 
@@ -260,10 +263,12 @@ Friend Class ConnectionsFunctions
   
     End Sub
 
-    ' exchange rates
+    Private Sub AfterRatesVersionsInit()
 
-    ' exchange rates versions
+        globalVariablesInitFlags(GlobalEnums.GlobalModels.RATESVERSIONS) = True
+        globalInitFlag = CheckGlobalVariablesInitFlag()
 
+    End Sub
 
 
 #End Region

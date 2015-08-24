@@ -16,7 +16,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 05/08/2015
+' Last modified: 24/08/2015
 
 
 Imports VIBlend.WinForms.DataGridView
@@ -34,7 +34,7 @@ Friend Class RatesView
 
     ' Objects
     Private DGV As vDataGridView
-    Private CONTROLLER As ExchangeRatesController
+    Private controller As ExchangeRatesController
     Private chart As New Chart
 
     ' Variables
@@ -68,7 +68,7 @@ Friend Class RatesView
 
     Friend Sub AttributeController(ByRef inputController As ExchangeRatesController)
 
-        CONTROLLER = inputController
+        controller = inputController
 
     End Sub
 
@@ -80,14 +80,14 @@ Friend Class RatesView
 #Region "Initialize DGV Display"
 
     Friend Sub InitializeDGV(ByRef currenciesList As List(Of UInt32), _
-                             ByRef globalPeriodsDictionary As Dictionary(Of Int32, List(Of Int32)))
+                             ByRef monthsIdList As List(Of Int32))
 
 
         ClearDictionaries()
         DGV.ColumnsHierarchy.Clear()
         DGV.RowsHierarchy.Clear()
         InitColumns(currenciesList)
-        InitRows(globalPeriodsDictionary)
+        InitRows(monthsIdList)
         DataGridViewsUtil.DGVSetHiearchyFontSize(DGV, My.Settings.tablesFontSize, My.Settings.tablesFontSize)
         DGV.ColumnsHierarchy.AutoResize(AutoResizeMode.FIT_ALL)
         DataGridViewsUtil.FormatDGVRowsHierarchy(DGV)
@@ -107,113 +107,66 @@ Friend Class RatesView
     Private Sub AddColumn(ByRef currencyId As UInt32)
 
         Dim col As HierarchyItem = DGV.ColumnsHierarchy.Items.Add(GlobalVariables.Currencies.currencies_hash(My.Settings.mainCurrency)(NAME_VARIABLE) & "/" & currencyId)
-        Dim token As String = ExchangeRate2.TokenizeRateCurrencies(My.Settings.mainCurrency, _
-                                                                   currencyId)
-        columnIDKeyDictionary.Add(col.GetUniqueID, token)
-        columnsKeyItemDictionary.Add(token, col)
+        columnIDKeyDictionary.Add(col.GetUniqueID, currencyId)
+        columnsKeyItemDictionary.Add(currencyId, col)
 
     End Sub
 
-    Private Sub InitRows(ByRef globalPeriodsDictionary As Dictionary(Of Int32, List(Of Int32)))
+    Private Sub InitRows(ByRef monthsIdList As List(Of Int32))
 
         charts_periods.Clear()
-        For Each yearAsInteger As Integer In globalPeriodsDictionary.Keys
-            Dim row As HierarchyItem = DGV.RowsHierarchy.Items.Add(Year(Date.FromOADate(yearAsInteger)))
-            For Each monthDateInteger As Integer In globalPeriodsDictionary(yearAsInteger)
-                Dim period As Date = Date.FromOADate(monthDateInteger)
-                AddSubRow(row, Format(period, "MMM yyyy"), monthDateInteger)
-                charts_periods.Add(Format(period, "MMM yyyy"))
-            Next
+        For Each monthId As Int32 In monthsIdList
+            Dim period As Date = Date.FromOADate(monthId)
+            Dim row As HierarchyItem = DGV.RowsHierarchy.Items.Add(Format(period, "MMM yyyy"))
+            rowIDKeyDictionary.Add(row.GetUniqueID, monthId)
+            rowsKeyItemDictionary.Add(monthId, row)
+            Dim currencyTextBoxEditor As New TextBoxEditor()
+            currencyTextBoxEditor.ActivationFlags = EditorActivationFlags.KEY_PRESS_ENTER
+            currencyTextBoxEditor.ActivationFlags = EditorActivationFlags.MOUSE_CLICK_SELECTED_CELL
+            row.CellsEditor = currencyTextBoxEditor
+            charts_periods.Add(Format(period, "MMM yyyy"))
         Next
-
-    End Sub
-
-    Private Function AddRowItem(ByRef dateStr As String, _
-                                ByRef DateInt As Integer) _
-                                As HierarchyItem
-
-        Dim row As HierarchyItem = DGV.RowsHierarchy.Items.Add(dateStr)
-        rowIDKeyDictionary.Add(row.GetUniqueID, DateInt)
-        rowsKeyItemDictionary.Add(DateInt, row)
-        Return row
-
-    End Function
-
-    Private Sub AddSubRow(ByRef item As HierarchyItem, _
-                          ByRef dateStr As String, _
-                          ByRef DateInt As Integer)
-
-        Dim row As HierarchyItem = item.Items.Add(dateStr)
-        rowIDKeyDictionary.Add(row.GetUniqueID, DateInt)
-        rowsKeyItemDictionary.Add(DateInt, row)
-        Dim currencyTextBoxEditor As New TextBoxEditor()
-        currencyTextBoxEditor.ActivationFlags = EditorActivationFlags.KEY_PRESS_ENTER
-        currencyTextBoxEditor.ActivationFlags = EditorActivationFlags.MOUSE_CLICK_SELECTED_CELL
-        row.CellsEditor = currencyTextBoxEditor
 
     End Sub
 
 #End Region
 
-    Friend Sub DisplayRatesVersionValuesinDGV(ByRef ExchangeRatesDictionary As Hashtable)
+    Friend Sub DisplayRatesVersionValuesinDGV(ByRef exchangeRatesDict As Dictionary(Of String, Double))
 
         is_filling_cells = True
-        Dim rateToken As String
+        Dim currencyId As String
         For Each column As HierarchyItem In DGV.ColumnsHierarchy.Items
-            rateToken = columnIDKeyDictionary(column.GetUniqueID)
+            currencyId = columnIDKeyDictionary(column.GetUniqueID)
 
-            If ExchangeRatesDictionary.ContainsKey(rateToken) Then
-                DisplayRatesColumn(ExchangeRatesDictionary, _
-                   rateToken, _
-                   column)
-            Else
-                rateToken = ExchangeRate2.ReverseToken(rateToken)
-                If ExchangeRatesDictionary.ContainsKey(rateToken) Then
-                    DisplayRatesColumn(ExchangeRatesDictionary, _
-                       rateToken, _
-                       column)
+            For Each row As HierarchyItem In DGV.RowsHierarchy.Items
+                Dim period As Integer = rowIDKeyDictionary(row.GetUniqueID)
+
+                Dim rateToken As String = currencyId & Computer.TOKEN_SEPARATOR & _
+                                          controller.currentRatesVersionId & Computer.TOKEN_SEPARATOR & _
+                                          period
+
+                If exchangeRatesDict.ContainsKey(rateToken) Then
+                    DGV.CellsArea.SetCellValue(row, column, exchangeRatesDict(rateToken))
+                Else
+                    DGV.CellsArea.SetCellValue(row, column, 0)
                 End If
-            End If
+
+            Next
+            '    DisplayPriceCurve(currencyId, GetValuesFromPeriodsHT(ExchangeRatesDictionary(rateToken)), column.ItemIndex)
+            ' reimplmement charting priority low
         Next
         is_filling_cells = False
         DGV.Refresh()
 
     End Sub
 
-    Private Sub DisplayRatesColumn(ByRef ExchangeRatesDictionary As Hashtable, _
-                                   ByRef rateToken As String, _
-                                   ByRef column As HierarchyItem)
+    Friend Sub UpdateCell(ByRef currencyId As Int32, _
+                          ByRef period As Int32, _
+                          ByRef value As Double)
 
-        For Each row As HierarchyItem In DGV.RowsHierarchy.Items
-            For Each subRow As HierarchyItem In row.Items
-                FillInGridCell(ExchangeRatesDictionary, subRow, _
-                               rateToken, column)
-            Next
-        Next
-        DisplayPriceCurve(rateToken, GetValuesFromPeriodsHT(ExchangeRatesDictionary(rateToken)), column.ItemIndex)
-
-    End Sub
-
-    Private Sub FillInGridCell(ByRef exchangeRatesDictionary As Hashtable, _
-                               ByRef row As HierarchyItem, _
-                               ByRef rateToken As String, _
-                               ByRef column As HierarchyItem)
-
-        Dim value As Double
-        Dim period As Integer = rowIDKeyDictionary(row.GetUniqueID)
-
-        If exchangeRatesDictionary(rateToken).ContainsKey(period) Then
-            value = exchangeRatesDictionary(rateToken)(period)
-        Else
-            value = 1
-        End If
-        DGV.CellsArea.SetCellValue(row, column, value)
-
-    End Sub
-
-    Friend Sub UpdateCell(ByRef curr As String, ByRef period As Integer, ByRef value As Double)
-
-        DGV.CellsArea.SetCellValue(rowsKeyItemDictionary(period), columnsKeyItemDictionary(curr), value)
+        DGV.CellsArea.SetCellValue(rowsKeyItemDictionary(period), _
+                                   columnsKeyItemDictionary(currencyId), _
+                                   value)
 
     End Sub
 
@@ -286,7 +239,7 @@ Friend Class RatesView
             Else
                 Dim curr As String = columnIDKeyDictionary(args.Cell.ColumnItem.GetUniqueID)
                 Dim period As String = rowIDKeyDictionary(args.Cell.RowItem.GetUniqueID)
-                CONTROLLER.UpdateRate(curr, period, args.NewValue)
+                controller.UpdateRate(curr, period, args.NewValue)
                 If is_copying_value_down = False Then UpdateSerie(curr, args.Cell.ColumnItem.ItemIndex)
             End If
         End If
@@ -321,19 +274,7 @@ Friend Class RatesView
 
     End Sub
 
-    Private Function GetValuesFromPeriodsHT(ByRef ht As Hashtable) As Double()
-
-        Dim tmp_array(charts_periods.Count - 1) As Double
-        Dim i As Int32 = 0
-        For Each row As HierarchyItem In DGV.RowsHierarchy.Items
-            For Each sub_row As HierarchyItem In row.Items
-                tmp_array(i) = ht(rowIDKeyDictionary(sub_row.GetUniqueID))
-                i = i + 1
-            Next
-        Next
-        Return tmp_array
-
-    End Function
+  
 
 #End Region
 

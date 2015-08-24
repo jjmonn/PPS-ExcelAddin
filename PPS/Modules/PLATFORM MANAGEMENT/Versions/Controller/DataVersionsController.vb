@@ -28,13 +28,12 @@ Friend Class DataVersionsController
     Private View As VersionsControl
     Private NewVersionUI As NewDataVersionUI
     Private PlatformMGTUI As PlatformMGTGeneralUI
-
+ 
     ' Variables
     Private versionsTV As New TreeView
     Friend versionsNamesList As New List(Of String)
-    Friend positions_dictionary As New Dictionary(Of String, Double)
-    Friend rates_versions_id_name_dic As Dictionary(Of String, String)
-    Friend rates_versions_name_id_dic As Dictionary(Of String, String)
+    Friend positions_dictionary As New Dictionary(Of Int32, Int32)
+    Friend rates_versions_name_id_dic As Hashtable
 
     Private tmpVersionName As String = ""
 
@@ -50,12 +49,13 @@ Friend Class DataVersionsController
     Friend Sub New()
 
         GlobalVariables.Versions.LoadVersionsTV(versionsTV)
-        rates_versions_id_name_dic = RateVersionsMapping.GetRatesVersionDictionary(RATES_VERSIONS_ID_VARIABLE, NAME_VARIABLE)
-        rates_versions_name_id_dic = RateVersionsMapping.GetRatesVersionDictionary(NAME_VARIABLE, RATES_VERSIONS_ID_VARIABLE)
+        rates_versions_name_id_dic = RatesVersions.GetRateVersionsDictionary(NAME_VARIABLE, ID_VARIABLE)
         View = New VersionsControl(Me, versionsTV)
         versionsNamesList = TreeViewsUtilities.GetNodesTextsList(versionsTV)
         NewVersionUI = New NewDataVersionUI(Me)
-        positions_dictionary = TreeViewsUtilities.GeneratePositionsDictionary(versionsTV)
+        '    positions_dictionary = TreeViewsUtilities.GeneratePositionsDictionary(versionsTV)
+        ' to be treated priority high
+        ' change version tv to vtv
 
         AddHandler GlobalVariables.Versions.VersionCreationEvent, AddressOf AfterCreate
         AddHandler GlobalVariables.Versions.VersionUpdateEvent, AddressOf AfterUpdate
@@ -242,9 +242,8 @@ Friend Class DataVersionsController
                                                  ByRef nb_periods As Int32, _
                                                  ByRef rates_version_id As String) As Boolean
 
-        Dim RatesVersions As New RateVersion
-        Dim rates_version_start_period As Int32 = RatesVersions.ReadVersion(rates_version_id, RATES_VERSIONS_START_PERIOD_VAR)
-        Dim rates_version_nb_periods As Int32 = RatesVersions.ReadVersion(rates_version_id, RATES_VERSIONS_NB_PERIODS_VAR)
+        Dim rates_version_start_period As Int32 = RatesVersions.rate_versions_hash(rates_version_id)(VERSIONS_START_PERIOD_VAR)
+        Dim rates_version_nb_periods As Int32 = RatesVersions.rate_versions_hash(rates_version_id)(VERSIONS_NB_PERIODS_VAR)
         If start_period >= rates_version_start_period AndAlso _
            nb_periods <= rates_version_nb_periods Then
             Return True
@@ -276,6 +275,11 @@ Friend Class DataVersionsController
 
     End Sub
 
+    Friend Function GetRatesVersionNameFromId(ByRef rateVersionId As Int32) As String
+
+        Return RatesVersions.rate_versions_hash(rateVersionId)(NAME_VARIABLE)
+
+    End Function
 
 #End Region
 

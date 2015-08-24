@@ -105,11 +105,7 @@ Friend Class CRangeHighlighter
 #End Region
 
 
-   
-   
 
-
- 
 
 
 End Class

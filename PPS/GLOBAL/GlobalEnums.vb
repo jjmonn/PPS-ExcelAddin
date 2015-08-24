@@ -94,6 +94,7 @@
         ADJUSTMENTSFILTERS
         FACTSVERSIONS
         CURRENCIES
+        RATESVERSIONS
 
 
     End Enum

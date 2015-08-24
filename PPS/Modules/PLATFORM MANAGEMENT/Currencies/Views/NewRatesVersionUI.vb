@@ -4,10 +4,11 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 21/01/2015
+' Last modified: 24/08/2015
 
 
 Imports System.Windows.Forms
+Imports VIBlend.WinForms.Controls
 
 
 Friend Class NewRatesVersionUI
@@ -16,7 +17,7 @@ Friend Class NewRatesVersionUI
 #Region "Instance Variables"
 
     Private Controller As ExchangeRatesController
-    Protected Friend parent_node As TreeNode = Nothing
+    Protected Friend parent_node As vTreeNode = Nothing
 
 #End Region
 
@@ -46,7 +47,7 @@ Friend Class NewRatesVersionUI
             Controller.CreateVersion(name, 0, _
                                      StartPeriodNUD.Value, _
                                      NBPeriodsNUD.Value, _
-                                     parent_node)
+                                     parent_node.Value)
             Me.Hide()
         Else
             MsgBox("The Name cannot exceed " & NAMES_MAX_LENGTH & " characters")

@@ -126,7 +126,7 @@ Friend Class PPSBI_UI
         ' Versions
         versionsTV.ImageList = VersionsTVIcons
         GlobalVariables.Versions.LoadVersionsTV(versionsTV)
-        versions_name_id = GlobalVariables.Versions.GetVersionsDictionary(NAME_VARIABLE, RATES_VERSIONS_ID_VARIABLE)
+        versions_name_id = GlobalVariables.Versions.GetVersionsDictionary(NAME_VARIABLE, ID_VARIABLE)
         versionsTV.CollapseAll()
         versionsTV.Dock = DockStyle.Fill
         AddHandler versionsTV.KeyDown, AddressOf versionsTV_KeyDown

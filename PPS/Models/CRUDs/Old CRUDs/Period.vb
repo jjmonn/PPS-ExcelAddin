@@ -223,6 +223,12 @@ Friend Class Period
 
     End Function
 
+    Friend Shared Function GetYearIdFromMonthID(ByRef monthId As Int32) As Int32
+
+        Dim year_ As Int32 = Year(Date.FromOADate(monthId))
+        Return Int(CDbl(DateSerial(year_, 12, 31).ToOADate()))
+
+    End Function
 
 #End Region
 

@@ -267,4 +267,17 @@ Public Class VTreeViewUtil
 #End Region
 
 
+    Public Shared Function GeneratePositionsDictionary(ByRef TV As vTreeView) As Dictionary(Of Int32, Int32)
+
+        Dim positionsDictionary As New Dictionary(Of Int32, Int32)
+        Dim currentPosition As Int32 = 0
+        For Each node As vTreeNode In TV.GetNodes
+            positionsDictionary.Add(node.Value, currentPosition)
+            currentPosition += 1
+        Next
+        Return positionsDictionary
+
+    End Function
+
+
 End Class

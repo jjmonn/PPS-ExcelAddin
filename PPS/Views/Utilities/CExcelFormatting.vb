@@ -107,13 +107,13 @@ Friend Class CExcelFormatting
     End Sub
 
     Friend Shared Sub ApplyBackGroundColorToInputCells(ByRef inputRange As Excel.Range,
-                                                                ByRef text_color As Object, _
-                                                                ByRef bckgd_color As Object, _
-                                                                Optional ByRef startingDate As Date = Nothing)
+                                                        ByRef text_color As Object, _
+                                                        ByRef bckgd_color As Object, _
+                                                        Optional ByRef startingDate As Date = Nothing)
 
         Dim fType As String
         Dim StartingDateColumn As Int32
-        Dim accountsNamesFTypesDictionary As Hashtable = globalvariables.accounts.GetAccountsDictionary(NAME_VARIABLE, ACCOUNT_FORMULA_TYPE_VARIABLE)
+        Dim accountsNamesFTypesDictionary As Hashtable = GlobalVariables.Accounts.GetAccountsDictionary(NAME_VARIABLE, ACCOUNT_FORMULA_TYPE_VARIABLE)
 
         '    If IsDate(startingDate) Then StartingDateColumn = GetStaringPeriodColumn(inputRange, startingDate)
 

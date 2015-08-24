@@ -693,7 +693,6 @@ Friend Class TreeViewsUtilities
     End Sub
 
 
-
 #Region "Move nodes up and down into hierarchy Procedure"
 
     Friend Shared Sub MoveNodeUp(ByRef inputNode As TreeNode)

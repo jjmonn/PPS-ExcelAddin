@@ -13,7 +13,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 20/01/2015
+' Last modified: 24/08/2015
 
 
 Imports System.Windows.Forms
@@ -84,10 +84,10 @@ Friend Class VersionSelection
 
     Private Sub SetAssociatedRatesVersion_id(ByRef version_id As UInt32)
 
-          Dim RatesVersions As New RateVersion
+        Dim RatesVersions As New RatesVersion
         Dim ratesVersionsId As Int32 = GlobalVariables.Versions.versions_hash(My.Settings.version_id)(EX_RATES_RATE_VERSION)
-        Dim ratesVersionsName As String = "" ' stub to be implemented once CRUD exchange rates versions implemented !!!!!!!!
-        GlobalVariables.Rates_Version_Label.Caption = RatesVersions.ReadVersion(ratesVersionsName, NAME_VARIABLE)
+        Dim ratesVersionsName As String = GlobalVariables.RatesVersions.rate_versions_hash(ratesVersionsId)(NAME_VARIABLE)
+        GlobalVariables.Rates_Version_Label.Caption = ratesVersionsName
         RatesVersions = Nothing
 
     End Sub

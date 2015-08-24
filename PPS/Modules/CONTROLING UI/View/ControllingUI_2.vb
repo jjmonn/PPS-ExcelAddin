@@ -9,7 +9,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 20/08/2015
+' Last modified: 24/08/2015
 
 
 Imports System.Windows.Forms
@@ -50,7 +50,6 @@ Friend Class ControllingUI_2
 
 #Region "Variables"
 
-    Private right_clicked_node As vTreeNode
     Private current_DGV_cell As GridCell
     Private rows_list_dic As New Dictionary(Of String, List(Of HierarchyItem))
     Private columns_list_dic As New Dictionary(Of String, List(Of HierarchyItem))
@@ -154,7 +153,6 @@ Friend Class ControllingUI_2
         Me.SplitContainer1.Panel1.Controls.Add(leftPaneExpandBT)
 
         AddHandler leftPane_control.entitiesTV.KeyDown, AddressOf EntitiesTV_KeyDown
-        AddHandler leftPane_control.entitiesTV.MouseClick, AddressOf EntitiesTV_NodeMouseClick
         AddHandler leftPane_control.periodsTV.NodeChecked, AddressOf periodsTV_ItemCheck
         AddHandler leftPane_control.PanelCollapseBT.Click, AddressOf CollapseSP1Pane1
         AddHandler leftPaneExpandBT.Click, AddressOf ExpandSP1Pane1
@@ -295,6 +293,11 @@ Friend Class ControllingUI_2
         If entityNode Is Nothing Then
             If leftPane_control.entitiesTV.Nodes.Count > 0 Then
                 entityNode = leftPane_control.entitiesTV.Nodes(0)
+                If versionsIds.Count > 0 Then
+                    Controller.Compute(versionsIds.ToArray, entityNode)
+                Else
+                    MsgBox("At least one version must be selected.")
+                End If
             Else
                 MsgBox("No Entity set up.")
                 Exit Sub
@@ -364,13 +367,6 @@ Friend Class ControllingUI_2
 
     End Sub
 
-    Private Sub EntitiesTV_NodeMouseClick(sender As Object, e As MouseEventArgs)
-
-        If e.Button = Windows.Forms.MouseButtons.Right Then
-            right_clicked_node = leftPane_control.entitiesTV.HitTest(e.Location)
-        End If
-
-    End Sub
 
     ' Periods filter when unchecked
     Private Sub periodsTV_ItemCheck(sender As Object, e As vTreeViewEventArgs)
@@ -411,7 +407,7 @@ Friend Class ControllingUI_2
 
     Private Sub compute_Click(sender As Object, e As EventArgs) Handles RefreshRightClick.Click
 
-        RefreshData(right_clicked_node)
+        RefreshData(leftPane_control.entitiesTV.SelectedNode)
 
     End Sub
 
