@@ -60,19 +60,10 @@ Friend Class Currency
             For i As Int32 = 1 To nb_currencies
                 Dim tmp_ht As New Hashtable
                 GetcurrencyHTFromPacket(packet, tmp_ht)
-                currencies_hash(CInt(tmp_ht(ID_VARIABLE))) = tmp_ht
+                If tmp_ht(CURRENCY_IN_USE_VARIABLE) = True Then currencies_hash(CInt(tmp_ht(ID_VARIABLE))) = tmp_ht
             Next
             NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_LIST_CURRENCY_ANSWER, AddressOf SMSG_LIST_CURRENCY_ANSWER)
             server_response_flag = True
-
-            ' Stub
-            ' to be reviewed server response Nath !! priority high
-            Dim ht As New Hashtable
-            ht(ID_VARIABLE) = 3
-            ht(NAME_VARIABLE) = "EUR"
-            ht(CURRENCY_SYMBOL_VARIABLE) = "€"
-            currencies_hash(3) = ht
-
             RaiseEvent ObjectInitialized()
         Else
             server_response_flag = False
@@ -217,7 +208,8 @@ Friend Class Currency
         currency_ht(ID_VARIABLE) = packet.ReadUint32()
         currency_ht(NAME_VARIABLE) = packet.ReadString()
         currency_ht(CURRENCY_SYMBOL_VARIABLE) = packet.ReadString()
-
+        currency_ht(CURRENCY_IN_USE_VARIABLE) = packet.ReadBool()
+     
     End Sub
 
     Private Sub WritecurrencyPacket(ByRef packet As ByteBuffer, ByRef attributes As Hashtable)
@@ -225,6 +217,7 @@ Friend Class Currency
         If attributes.ContainsKey(ID_VARIABLE) Then packet.WriteInt32(attributes(ID_VARIABLE))
         packet.WriteString(attributes(NAME_VARIABLE))
         packet.WriteString(attributes(CURRENCY_SYMBOL_VARIABLE))
+        packet.WriteUint8(attributes(CURRENCY_IN_USE_VARIABLE))
 
     End Sub
 

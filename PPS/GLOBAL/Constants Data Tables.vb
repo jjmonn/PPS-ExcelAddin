@@ -92,6 +92,7 @@ Module Data_Tables_Constants
 #Region "Currencies and Exchange Rates"
 
     Friend Const CURRENCY_SYMBOL_VARIABLE As String = "symbol"
+    Friend Const CURRENCY_IN_USE_VARIABLE As String = "in_use"
     Friend Const EX_RATES_ORIGIN_CURR_VAR As String = "origin_currency"
     Friend Const EX_RATES_DEST_CURR_VAR As String = "dest_currency"
     Friend Const EX_RATES_RATE_VERSION As String = "rate_version_id"

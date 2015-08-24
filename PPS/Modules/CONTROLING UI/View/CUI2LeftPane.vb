@@ -11,7 +11,7 @@ Imports System.Collections.Generic
 '
 '
 ' Created on : 15/08/2015
-' Last modified: 18/08/2015
+' Last modified: 24/08/2015
 
 
 Public Class CUI2LeftPane
@@ -31,7 +31,7 @@ Public Class CUI2LeftPane
     Friend productsFiltersTV As New vTreeView
     Friend versionsTV As New vTreeView
     Friend periodsTV As New vTreeView
-    Friend currenciesCLB As New vCheckedListBox
+    Friend currenciesCLB As New vRadioListBox
 
     ' Variables
     Private selectionPaneExpandedFlag As Boolean
