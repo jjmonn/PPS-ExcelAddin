@@ -129,6 +129,7 @@
     <Compile Include="Models\CRUDs\New CRUDs\EntitiesFilter.vb" />
     <Compile Include="Models\CRUDs\New CRUDs\Entity.vb" />
     <Compile Include="Models\CRUDs\New CRUDs\ExchangeRates.vb" />
+    <Compile Include="Models\CRUDs\New CRUDs\RatesVersion.vb" />
     <Compile Include="Models\CRUDs\New CRUDs\Filter.vb" />
     <Compile Include="Models\CRUDs\New CRUDs\FilterValue.vb" />
     <Compile Include="Models\CRUDs\New CRUDs\Product.vb" />
@@ -460,7 +461,6 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Models\CRUDs\New CRUDs\Currency.vb" />
-    <Compile Include="Models\CRUDs\Old CRUDs\RateVersion.vb" />
     <Compile Include="Models\Mappings\FormulaTypesMapping.vb" />
     <Compile Include="Transactions\SQLLog.vb" />
     <Compile Include="Modules\PLATFORM MANAGEMENT\Axis Super Classes\Views\AnalysisAxisDGV.Designer.vb">
@@ -543,7 +543,6 @@
     <Compile Include="Modules\PLATFORM MANAGEMENT\Entities\VIEW\NewEntityUI.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Models\Mappings\RateVersionsMapping.vb" />
     <Compile Include="Modules\PLATFORM MANAGEMENT\Users\Views\NewUserUI.Designer.vb">
       <DependentUpon>NewUserUI.vb</DependentUpon>
     </Compile>

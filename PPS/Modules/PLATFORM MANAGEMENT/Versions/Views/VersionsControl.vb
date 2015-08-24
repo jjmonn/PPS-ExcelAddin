@@ -107,7 +107,7 @@ Friend Class VersionsControl
             TimeConfigTB.Text = GlobalVariables.Versions.versions_hash(CInt(inputNode.Name))(VERSIONS_TIME_CONFIG_VARIABLE)
             StartPeriodTB.Text = GlobalVariables.Versions.versions_hash(CInt(inputNode.Name))(VERSIONS_START_PERIOD_VAR)
             NBPeriodsTB.Text = GlobalVariables.Versions.versions_hash(CInt(inputNode.Name))(VERSIONS_NB_PERIODS_VAR)
-            RatesVersionCB.SelectedItem = Controller.rates_versions_id_name_dic(GlobalVariables.Versions.versions_hash(CInt(inputNode.Name))(VERSIONS_RATES_VERSION_ID_VAR))
+            RatesVersionCB.SelectedItem = Controller.GetRatesVersionNameFromId(GlobalVariables.Versions.versions_hash(CInt(inputNode.Name))(VERSIONS_RATES_VERSION_ID_VAR))
             If GlobalVariables.Versions.versions_hash(CInt(inputNode.Name))(VERSIONS_LOCKED_VARIABLE) = 1 Then
                 lockedCB.Checked = True
                 LockedDateT.Text = GlobalVariables.Versions.versions_hash(CInt(inputNode.Name))(VERSIONS_LOCKED_DATE_VARIABLE)

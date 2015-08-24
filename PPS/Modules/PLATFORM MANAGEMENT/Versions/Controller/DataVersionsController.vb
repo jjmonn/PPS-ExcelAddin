@@ -30,7 +30,7 @@ Friend Class DataVersionsController
     Private PlatformMGTUI As PlatformMGTGeneralUI
  
     ' Variables
-    Private versionsTV As New TreeView
+    Private versionsTV As New VIBlend.WinForms.Controls.vTreeView
     Friend versionsNamesList As New List(Of String)
     Friend positions_dictionary As New Dictionary(Of Int32, Int32)
     Friend rates_versions_name_id_dic As Hashtable
@@ -49,7 +49,7 @@ Friend Class DataVersionsController
     Friend Sub New()
 
         GlobalVariables.Versions.LoadVersionsTV(versionsTV)
-        rates_versions_name_id_dic = RatesVersions.GetRateVersionsDictionary(NAME_VARIABLE, ID_VARIABLE)
+        rates_versions_name_id_dic = GlobalVariables.RatesVersions.GetRateVersionsDictionary(NAME_VARIABLE, ID_VARIABLE)
         View = New VersionsControl(Me, versionsTV)
         versionsNamesList = TreeViewsUtilities.GetNodesTextsList(versionsTV)
         NewVersionUI = New NewDataVersionUI(Me)
@@ -242,8 +242,8 @@ Friend Class DataVersionsController
                                                  ByRef nb_periods As Int32, _
                                                  ByRef rates_version_id As String) As Boolean
 
-        Dim rates_version_start_period As Int32 = RatesVersions.rate_versions_hash(rates_version_id)(VERSIONS_START_PERIOD_VAR)
-        Dim rates_version_nb_periods As Int32 = RatesVersions.rate_versions_hash(rates_version_id)(VERSIONS_NB_PERIODS_VAR)
+        Dim rates_version_start_period As Int32 = GlobalVariables.RatesVersions.rate_versions_hash(rates_version_id)(VERSIONS_START_PERIOD_VAR)
+        Dim rates_version_nb_periods As Int32 = GlobalVariables.RatesVersions.rate_versions_hash(rates_version_id)(VERSIONS_NB_PERIODS_VAR)
         If start_period >= rates_version_start_period AndAlso _
            nb_periods <= rates_version_nb_periods Then
             Return True
@@ -277,7 +277,7 @@ Friend Class DataVersionsController
 
     Friend Function GetRatesVersionNameFromId(ByRef rateVersionId As Int32) As String
 
-        Return RatesVersions.rate_versions_hash(rateVersionId)(NAME_VARIABLE)
+        Return GlobalVariables.RatesVersions.rate_versions_hash(rateVersionId)(NAME_VARIABLE)
 
     End Function
 

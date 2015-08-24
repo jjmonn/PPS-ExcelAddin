@@ -32,7 +32,6 @@ Friend Class ExchangeRatesController
     ' Objects
     Private View As CurrenciesControl
     Private ExchangeRates As New ExchangeRate
-    Private RatesVersions As New RatesVersion
     Private rates_versionsTV As New vTreeView
     Private NewRatesVersionUI As NewRatesVersionUI
     Private ExcelImport As ExcelRatesImportUI
@@ -56,9 +55,9 @@ Friend Class ExchangeRatesController
         NewRatesVersionUI = New NewRatesVersionUI(Me)
 
         AddHandler ExchangeRates.ExchangeRateUpdateEvent, AddressOf AfterRateUpdate
-        AddHandler RatesVersions.rate_versionCreationEvent, AddressOf AfterVersionCreate
-        AddHandler RatesVersions.rate_versionUpdateEvent, AddressOf AfterVersionUpdate
-        AddHandler RatesVersions.rate_versionDeleteEvent, AddressOf AfterVersionDelete
+        AddHandler GlobalVariables.RatesVersions.rate_versionCreationEvent, AddressOf AfterVersionCreate
+        AddHandler GlobalVariables.RatesVersions.rate_versionUpdateEvent, AddressOf AfterVersionUpdate
+        AddHandler GlobalVariables.RatesVersions.rate_versionDeleteEvent, AddressOf AfterVersionDelete
 
 
     End Sub
@@ -103,11 +102,11 @@ Friend Class ExchangeRatesController
     Friend Sub ChangeVersion(ByRef versionId As Int32)
 
         currentRatesVersionId = versionId
-        monthsIdList = RatesVersions.GetMonthsList(versionId)
+        monthsIdList = GlobalVariables.RatesVersions.GetMonthsList(versionId)
         View.ratesView.InitializeDGV(GlobalVariables.Currencies.currencies_hash.Keys, _
                                      monthsIdList)
         View.ratesView.DisplayRatesVersionValuesinDGV(ExchangeRates.exchangeRatesDict)
-        View.rates_version_TB.Text = RatesVersions.rate_versions_hash(currentRatesVersionId)(NAME_VARIABLE)
+        View.rates_version_TB.Text = GlobalVariables.RatesVersions.rate_versions_hash(currentRatesVersionId)(NAME_VARIABLE)
 
     End Sub
 
@@ -128,13 +127,13 @@ Friend Class ExchangeRatesController
                              ByRef isFolder As Boolean, _
                              Optional ByRef start_period As Int32 = 0, _
                              Optional ByRef nb_periods As Int32 = 0, _
-                             Optional ByRef parent_node As TreeNode = Nothing)
+                             Optional ByRef parentId As Int32 = 0)
 
         Dim tmpHT As New Hashtable
         tmpHT.Add(NAME_VARIABLE, name)
         tmpHT.Add(ITEMS_POSITIONS, 1)
 
-        If parent_node Is Nothing Then tmpHT.Add(PARENT_ID_VARIABLE, 0) Else tmpHT.Add(PARENT_ID_VARIABLE, parent_node.Name)
+        If parentId <> 0 Then tmpHT.Add(PARENT_ID_VARIABLE, 0) Else tmpHT.Add(PARENT_ID_VARIABLE, parentId)
         If isFolder = True Then
             tmpHT.Add(IS_FOLDER_VARIABLE, 1)
         Else
@@ -143,7 +142,7 @@ Friend Class ExchangeRatesController
             tmpHT.Add(VERSIONS_NB_PERIODS_VAR, nb_periods)
         End If
 
-        RatesVersions.CMSG_CREATE_RATE_VERSION(tmpHT)
+        GlobalVariables.RatesVersions.CMSG_CREATE_RATE_VERSION(tmpHT)
 
     End Sub
 
@@ -164,10 +163,9 @@ Friend Class ExchangeRatesController
 
     End Sub
 
-
     Friend Sub UpdateVersionName(ByRef version_id As Int32, ByRef name As String)
 
-        '  RatesVersions.UpdateVersion(version_id, NAME_VARIABLE, name)
+        '  GlobalVariables.RatesVersions.UpdateVersion(version_id, NAME_VARIABLE, name)
 
     End Sub
 
@@ -190,7 +188,7 @@ Friend Class ExchangeRatesController
             View.ratesView.InitializeDGV(GlobalVariables.Currencies.currencies_hash.Keys, _
                                          monthsIdList)
         End If
-        RatesVersions.CMSG_DELETE_RATE_VERSION(version_id)
+        GlobalVariables.RatesVersions.CMSG_DELETE_RATE_VERSION(version_id)
         Return True
 
     End Function
@@ -203,7 +201,7 @@ Friend Class ExchangeRatesController
         If Not nodeToBeRemoved Is Nothing Then
             nodeToBeRemoved.Remove()
         End If
-  
+
     End Sub
 
 
@@ -213,14 +211,14 @@ Friend Class ExchangeRatesController
 #Region "Utilities"
 
     Friend Function IsFolderVersion(ByRef versionId As Int32) As Boolean
-        Return RatesVersions.rate_versions_hash(versionId)(IS_FOLDER_VARIABLE) = True
+        Return GlobalVariables.RatesVersions.rate_versions_hash(versionId)(IS_FOLDER_VARIABLE) = True
     End Function
 
     Private Sub UpdateVersionsPositions()
 
         Dim positions_dic = VTreeViewUtil.GeneratePositionsDictionary(rates_versionsTV)
         For Each id In positions_dic.Keys
-            RatesVersions.CMSG_UPDATE_RATE_VERSION(id, ITEMS_POSITIONS, positions_dic(id))
+            GlobalVariables.RatesVersions.CMSG_UPDATE_RATE_VERSION(id, ITEMS_POSITIONS, positions_dic(id))
         Next
 
     End Sub
@@ -245,7 +243,7 @@ Friend Class ExchangeRatesController
 
 #End Region
 
-    Friend Sub ShowNewRatesVersion(Optional ByRef parent_node As TreeNode = Nothing)
+    Friend Sub ShowNewRatesVersion(Optional ByRef parent_node As vTreeNode = Nothing)
 
         NewRatesVersionUI.parent_node = parent_node
         NewRatesVersionUI.Show()

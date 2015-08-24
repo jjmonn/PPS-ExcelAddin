@@ -101,22 +101,6 @@ Module Data_Tables_Constants
 #End Region
 
 
-#Region "Exchange Rates Versions Table"
-
-    Friend Const RATES_VERSIONS_TABLE As String = "exchange_rates_versions"
-    Friend Const RATES_VERSIONS_ID_VARIABLE As String = "id"
-    Friend Const RATES_VERSIONS_NAME_VARIABLE As String = "name"
-    Friend Const RATES_IS_FOLDER_VARIABLE As String = "is_folder"
-    Friend Const RATES_parent_id As String = "parent_id"
-
-    Friend Const RATES_VERSIONS_START_PERIOD_VAR As String = "start_period"
-    Friend Const RATES_VERSIONS_NB_PERIODS_VAR As String = "nb_periods"
-    Friend Const RATES_VERSIONS_TOKEN_SIZE As Int32 = 3
-
-
-#End Region
-
-
 
 #Region "Formats table"
 
