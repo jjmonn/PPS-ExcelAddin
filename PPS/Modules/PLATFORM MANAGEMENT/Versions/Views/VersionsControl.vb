@@ -24,6 +24,7 @@ Imports System.Collections.Generic
 Imports System.Windows.Forms
 Imports System.Collections
 Imports System.Drawing
+'Imports VIBlend.WinForms.Controls
 
 
 
@@ -34,11 +35,11 @@ Friend Class VersionsControl
 
     ' Objects
     Private Controller As DataVersionsController
-    Private VersionsTV As TreeView
+    Private VersionsTV As VIBlend.WinForms.Controls.vTreeView
     Private CP As CircularProgressUI
 
     ' Variables
-    Private current_node As TreeNode
+    Private current_node As VIBlend.WinForms.Controls.vTreeNode
     Private creationFlag As String
     Private isDisplaying As Boolean
 
@@ -48,7 +49,7 @@ Friend Class VersionsControl
 #Region "Initialization"
 
     Friend Sub New(ByRef input_controller As DataVersionsController, _
-                   ByRef input_versionsTV As TreeView)
+                   ByRef input_versionsTV As VIBlend.WinForms.Controls.vTreeView)
 
         ' This call is required by the designer.
         InitializeComponent()
@@ -64,8 +65,11 @@ Friend Class VersionsControl
 
         AddHandler VersionsTV.AfterSelect, AddressOf VersionsTV_AfterSelect
         AddHandler VersionsTV.KeyDown, AddressOf CategoriesTV_KeyDown
-        AddHandler VersionsTV.NodeMouseClick, AddressOf tv_node_mouse_click
-        AddHandler VersionsTV.ItemDrag, AddressOf versionsTV_ItemDrag
+        AddHandler VersionsTV.MouseClick, AddressOf tv_mouse_click
+
+        ' implement tv drag and drop -> common for all
+
+        '   AddHandler VersionsTV.drag, AddressOf versionsTV_ItemDrag
         AddHandler VersionsTV.DragEnter, AddressOf versionsTV_DragEnter
         AddHandler VersionsTV.DragOver, AddressOf versionsTV_DragOver
         AddHandler VersionsTV.DragDrop, AddressOf versionsTV_DragDrop
@@ -90,9 +94,9 @@ Friend Class VersionsControl
 
 #Region "Interface"
 
-    Private Sub Display(ByRef inputNode As TreeNode)
+    Private Sub Display(ByRef inputNode As VIBlend.WinForms.Controls.vTreeNode)
 
-        If GlobalVariables.Versions.versions_hash(CInt(inputNode.Name))(IS_FOLDER_VARIABLE) = 1 Then
+        If GlobalVariables.Versions.versions_hash(CInt(inputNode.Value))(IS_FOLDER_VARIABLE) = 1 Then
             NameTB.Text = ""
             CreationTB.Text = ""
             lockedCB.Checked = False
@@ -103,14 +107,14 @@ Friend Class VersionsControl
             RatesVersionCB.Text = ""
         Else
             NameTB.Text = inputNode.Text
-            CreationTB.Text = GlobalVariables.Versions.versions_hash(CInt(inputNode.Name))(VERSIONS_CREATION_DATE_VARIABLE)
-            TimeConfigTB.Text = GlobalVariables.Versions.versions_hash(CInt(inputNode.Name))(VERSIONS_TIME_CONFIG_VARIABLE)
-            StartPeriodTB.Text = GlobalVariables.Versions.versions_hash(CInt(inputNode.Name))(VERSIONS_START_PERIOD_VAR)
-            NBPeriodsTB.Text = GlobalVariables.Versions.versions_hash(CInt(inputNode.Name))(VERSIONS_NB_PERIODS_VAR)
-            RatesVersionCB.SelectedItem = Controller.GetRatesVersionNameFromId(GlobalVariables.Versions.versions_hash(CInt(inputNode.Name))(VERSIONS_RATES_VERSION_ID_VAR))
-            If GlobalVariables.Versions.versions_hash(CInt(inputNode.Name))(VERSIONS_LOCKED_VARIABLE) = 1 Then
+            CreationTB.Text = GlobalVariables.Versions.versions_hash(CInt(inputNode.Value))(VERSIONS_CREATION_DATE_VARIABLE)
+            TimeConfigTB.Text = GlobalVariables.Versions.versions_hash(CInt(inputNode.Value))(VERSIONS_TIME_CONFIG_VARIABLE)
+            StartPeriodTB.Text = GlobalVariables.Versions.versions_hash(CInt(inputNode.Value))(VERSIONS_START_PERIOD_VAR)
+            NBPeriodsTB.Text = GlobalVariables.Versions.versions_hash(CInt(inputNode.Value))(VERSIONS_NB_PERIODS_VAR)
+            RatesVersionCB.SelectedItem = Controller.GetRatesVersionNameFromId(GlobalVariables.Versions.versions_hash(CInt(inputNode.Value))(VERSIONS_RATES_VERSION_ID_VAR))
+            If GlobalVariables.Versions.versions_hash(CInt(inputNode.Value))(VERSIONS_LOCKED_VARIABLE) = 1 Then
                 lockedCB.Checked = True
-                LockedDateT.Text = GlobalVariables.Versions.versions_hash(CInt(inputNode.Name))(VERSIONS_LOCKED_DATE_VARIABLE)
+                LockedDateT.Text = GlobalVariables.Versions.versions_hash(CInt(inputNode.Value))(VERSIONS_LOCKED_DATE_VARIABLE)
             Else
                 lockedCB.Checked = False
                 LockedDateT.Text = "Version not locked"
@@ -141,7 +145,7 @@ Friend Class VersionsControl
 
 #Region "TV Events"
 
-    Private Sub VersionsTV_AfterSelect(sender As Object, e As TreeViewEventArgs)
+    Private Sub VersionsTV_AfterSelect(sender As Object, e As VIBlend.WinForms.Controls.vTreeViewEventArgs)
 
         current_node = e.Node
         isDisplaying = True
@@ -150,26 +154,27 @@ Friend Class VersionsControl
 
     End Sub
 
-    Private Sub tv_node_mouse_click(sender As Object, e As TreeNodeMouseClickEventArgs)
+    Private Sub tv_mouse_click(sender As Object, e As MouseEventArgs)
 
-        current_node = e.Node
+        current_node = VersionsTV.HitTest(e.Location)
 
     End Sub
 
     Private Sub CategoriesTV_KeyDown(sender As Object, e As KeyEventArgs)
 
+        ' priority high -> keydown sur le TV à ctacher !!
         Select Case e.KeyCode
             Case Keys.Delete : delete_bt_Click(sender, e)
             Case Keys.Up
                 If e.Control Then
                     If Not current_node Is Nothing Then
-                        TreeViewsUtilities.MoveNodeUp(current_node)
+                        VTreeViewUtil.MoveNodeUp(current_node)
                     End If
                 End If
             Case Keys.Down
                 If e.Control Then
                     If Not current_node Is Nothing Then
-                        TreeViewsUtilities.MoveNodeDown(current_node)
+                        VTreeViewUtil.MoveNodeDown(current_node)
                     End If
                 End If
         End Select
@@ -262,8 +267,8 @@ Friend Class VersionsControl
         ' only if not folder ?
         If Not VersionsTV.SelectedNode Is Nothing AndAlso isDisplaying = False Then
             Select Case lockedCB.Checked
-                Case True : Controller.LockVersion(VersionsTV.SelectedNode.Name)
-                Case False : Controller.UnlockVersion(VersionsTV.SelectedNode.Name)
+                Case True : Controller.LockVersion(VersionsTV.SelectedNode.value)
+                Case False : Controller.UnlockVersion(VersionsTV.SelectedNode.value)
             End Select
         End If
 
@@ -272,7 +277,7 @@ Friend Class VersionsControl
     Private Sub RatesVersionCB_SelectedValueChanged(sender As Object, e As EventArgs)
 
         If Not VersionsTV.SelectedNode Is Nothing AndAlso isDisplaying = False Then
-            Dim version_id As String = VersionsTV.SelectedNode.Name
+            Dim version_id As String = VersionsTV.SelectedNode.value
             Dim rates_version_id As String = Controller.rates_versions_name_id_dic(RatesVersionCB.Text)
             If Controller.IsRatesVersionValid(StartPeriodTB.Text, NBPeriodsTB.Text, rates_version_id) Then
                 Controller.UpdateRatesVersion_id(version_id, rates_version_id)
@@ -291,7 +296,7 @@ Friend Class VersionsControl
     Private Sub new_version_bt_Click(sender As Object, e As EventArgs) Handles new_version_bt.Click, NewVersionMenuBT.Click
 
         If Not current_node Is Nothing Then
-            If Controller.IsFolder(current_node.Name) Then
+            If Controller.IsFolder(current_node.Value) Then
                 Controller.ShowNewVersionUI(current_node)
             Else
                 Controller.ShowNewVersionUI()
@@ -305,13 +310,14 @@ Friend Class VersionsControl
     Private Sub new_folder_bt_Click(sender As Object, e As EventArgs) Handles new_folder_bt.Click, NewFolderMenuBT.Click
 
         Dim name = InputBox("Please enter the new Folder Name")
+        Dim ht As New Hashtable
         If name <> "" Then
             If Controller.IsNameValid(name) = True Then
+                ht(NAME_VARIABLE) = name
                 If Not current_node Is Nothing Then
-                    Controller.CreateFolder(name, current_node)
-                Else
-                    Controller.CreateFolder(name)
+                    ht.Add(PARENT_ID_VARIABLE, current_node.Value)
                 End If
+                Controller.CreateVersion(ht)
             Else
                 MsgBox("Invalid Name.")
             End If
@@ -331,7 +337,7 @@ Friend Class VersionsControl
             Dim name As String = InputBox("Enter the new Name: ")
             If name <> "" Then
                 If Controller.IsNameValid(name) Then
-                    Controller.UpdateName(current_node.Name, name)
+                    Controller.UpdateName(current_node.Value, name)
                     current_node.Text = name
                 Else
                     MsgBox("This Name is not valid. Either it already exists or contains forbidden characters. Please Try with another Name.")

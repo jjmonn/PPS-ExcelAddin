@@ -3,14 +3,13 @@
 ' VersionsTable/ UI interface support functions
 '
 ' To do:
-'       - Improve process on Creation/ delete -> if one step fails !
-'      
+'     - 
 '
 '
 ' Known bugs:
 '
 ' 
-' Last modified: 03/08/2015
+' Last modified: 24/08/2015
 ' Author: Julien Monnereau
 
 
@@ -35,7 +34,7 @@ Friend Class DataVersionsController
     Friend positions_dictionary As New Dictionary(Of Int32, Int32)
     Friend rates_versions_name_id_dic As Hashtable
 
-    Private tmpVersionName As String = ""
+    Private deletedVersionId As Int32 = 0
 
     ' Constants
     Private FORBIDEN_CHARS As String() = {","}
@@ -51,11 +50,9 @@ Friend Class DataVersionsController
         GlobalVariables.Versions.LoadVersionsTV(versionsTV)
         rates_versions_name_id_dic = GlobalVariables.RatesVersions.GetRateVersionsDictionary(NAME_VARIABLE, ID_VARIABLE)
         View = New VersionsControl(Me, versionsTV)
-        versionsNamesList = TreeViewsUtilities.GetNodesTextsList(versionsTV)
+        versionsNamesList = GlobalVariables.Versions.GetVersionsNameList(NAME_VARIABLE)
         NewVersionUI = New NewDataVersionUI(Me)
-        '    positions_dictionary = TreeViewsUtilities.GeneratePositionsDictionary(versionsTV)
-        ' to be treated priority high
-        ' change version tv to vtv
+        positions_dictionary = VTreeViewUtil.GeneratePositionsDictionary(versionsTV)
 
         AddHandler GlobalVariables.Versions.VersionCreationEvent, AddressOf AfterCreate
         AddHandler GlobalVariables.Versions.VersionUpdateEvent, AddressOf AfterUpdate
@@ -92,14 +89,11 @@ Friend Class DataVersionsController
 #Region "Interface"
 
     Friend Sub CreateVersion(ByRef hash As Hashtable, _
-                             Optional ByRef parent_node As TreeNode = Nothing, _
+                             Optional ByRef parent_node As VIBlend.WinForms.Controls.vTreeNode = Nothing, _
                              Optional ByRef origin_version_id As String = "")
 
-        ' quid ratesversion id 
-        ' 
-
+        ' quid ratesversion id priority high
         hash.Add(ITEMS_POSITIONS, 1)
-
         GlobalVariables.Versions.CMSG_CREATE_VERSION(hash)
         NewVersionUI.Hide()
 
@@ -114,17 +108,18 @@ Friend Class DataVersionsController
         If Not parent_node Is Nothing Then hash.Add(PARENT_ID_VARIABLE, parent_node.Name)
 
         GlobalVariables.Versions.CMSG_CREATE_VERSION(hash)
-       
+
     End Sub
 
     Private Sub AfterCreate(ByRef ht As Hashtable)
 
-        Dim parentNode As TreeNode = Nothing
         If ht(PARENT_ID_VARIABLE) <> 0 Then
-            parentNode = versionsTV.Nodes.Find(ht(PARENT_ID_VARIABLE), True)(0)
+            Dim parentNode As VIBlend.WinForms.Controls.vTreeNode = Nothing
+            parentNode = VTreeViewUtil.FindNode(versionsTV, ht(PARENT_ID_VARIABLE))
+            VTreeViewUtil.AddNode(ht(ID_VARIABLE), ht(NAME_VARIABLE), parentNode)
+        Else
+            VTreeViewUtil.AddNode(ht(ID_VARIABLE), ht(NAME_VARIABLE), versionsTV)
         End If
-        AddNode(ht(ID_VARIABLE), ht(NAME_VARIABLE), 0, parentNode)
-
 
     End Sub
 
@@ -153,32 +148,30 @@ Friend Class DataVersionsController
 
     End Sub
 
-    Friend Sub DeleteVersions(ByRef node As TreeNode)
+    Friend Sub DeleteVersions(ByRef node As VIBlend.WinForms.Controls.vTreeNode)
 
-        Dim versions_to_delete = TreeViewsUtilities.GetNodesKeysList(node)
-        versions_to_delete.Reverse()
-        For Each version_id In versions_to_delete
-            DeleteVersion(version_id)
-        Next
+        ' priority high 
+        ' ask for confirmation (deletion of all subversions)
 
-    End Sub
-
-    Private Sub DeleteVersion(ByRef version_id As String)
-
-        tmpVersionName = GlobalVariables.Versions.versions_hash(version_id)(NAME_VARIABLE)
-        GlobalVariables.Versions.CMSG_DELETE_VERSION(version_id)
+        deletedVersionId = node.Value
+        GlobalVariables.Versions.CMSG_DELETE_VERSION(node.Value)
 
     End Sub
 
-    
     Private Sub AfterDelete(ByRef id As UInt32)
 
-        If versionsNamesList.Contains(tmpVersionName) Then
-            versionsNamesList.Remove(tmpVersionName)
+        ' ask to change current version if deleted
+        ' priority high
+        Dim deletedVersionName = GlobalVariables.Versions.versions_hash(deletedVersionId)(NAME_VARIABLE)
+        If My.Settings.version_id = deletedVersionId Then
+            ' change current version 
         End If
-        Dim nodes() As TreeNode = versionsTV.Nodes.Find(id, True)
-        If nodes.Length > 0 Then
-            nodes(0).Remove()
+        If versionsNamesList.Contains(deletedVersionName) Then
+            versionsNamesList.Remove(deletedVersionName)
+        End If
+        Dim node As VIBlend.WinForms.Controls.vTreeNode = VTreeViewUtil.FindNode(versionsTV, id)
+        If Not node Is Nothing Then
+            node.Remove()
         End If
 
     End Sub
@@ -219,7 +212,7 @@ Friend Class DataVersionsController
 
     End Sub
 
-    Friend Sub ShowNewVersionUI(Optional ByRef input_parent_node As TreeNode = Nothing)
+    Friend Sub ShowNewVersionUI(Optional ByRef input_parent_node As VIBlend.WinForms.Controls.vTreeNode = Nothing)
 
         NewVersionUI.PreFill(input_parent_node)
         NewVersionUI.Show()
@@ -253,22 +246,22 @@ Friend Class DataVersionsController
     End Function
 
     Friend Sub AddNode(ByRef id As String, _
-                                ByRef name As String, _
-                                ByRef is_folder As Int32, _
-                                Optional ByRef parent_node As TreeNode = Nothing)
+                        ByRef name As String, _
+                        ByRef is_folder As Int32, _
+                        Optional ByRef parent_node As TreeNode = Nothing)
 
         If parent_node Is Nothing Then
-            versionsTV.Nodes.Add(id, name, is_folder, is_folder)
+            VTreeViewUtil.AddNode(id, name, versionsTV, is_folder)
         Else
-            parent_node.Nodes.Add(id, name, is_folder, is_folder)
+            VTreeViewUtil.AddNode(id, name, parent_node, is_folder)
         End If
-        positions_dictionary = TreeViewsUtilities.GeneratePositionsDictionary(versionsTV)
-      
+    
     End Sub
 
     Friend Sub SendNewPositionsToModel()
 
-        positions_dictionary = TreeViewsUtilities.GeneratePositionsDictionary(versionsTV)
+        ' Caution: to be sent only once -> transaction intensive
+        positions_dictionary = VTreeViewUtil.GeneratePositionsDictionary(versionsTV)
         For Each category_id In positions_dictionary.Keys
             GlobalVariables.Versions.CMSG_UPDATE_VERSION(category_id, ITEMS_POSITIONS, positions_dictionary(category_id))
         Next

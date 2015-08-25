@@ -280,4 +280,49 @@ Public Class VTreeViewUtil
     End Function
 
 
+#Region "Move nodes up and down into hierarchy Procedure"
+
+    Friend Shared Sub MoveNodeUp(ByRef inputNode As vTreeNode)
+
+        ' below to be checked priority normal
+        Dim index = inputNode.TreeView.Nodes.IndexOf(inputNode)
+        Try
+            If Not (inputNode.PrevNode Is Nothing) Then
+                Dim prev_node = inputNode.PrevNode
+                If inputNode.Parent Is Nothing Then
+                    inputNode.TreeView.Nodes.Insert(index - 1, CType(inputNode.Clone, vTreeNode))
+                Else
+                    inputNode.Parent.Nodes.Insert(index - 1, CType(inputNode.Clone, vTreeNode))
+                End If
+                inputNode.Remove()
+                prev_node.TreeView.SelectedNode = prev_node.PrevNode
+            End If
+        Catch ex As Exception
+        End Try
+
+    End Sub
+
+    Friend Shared Sub MoveNodeDown(ByRef inputNode As vTreeNode)
+
+        ' below to be checked priority normal
+        Dim index = inputNode.TreeView.Nodes.IndexOf(inputNode)
+        Try
+            If Not (inputNode.NextNode Is Nothing) Then
+                Dim nextnode = inputNode.NextNode
+                If inputNode.Parent Is Nothing Then
+                    inputNode.TreeView.Nodes.Insert(index + 2, CType(inputNode.Clone, vTreeNode))
+                Else
+                    inputNode.Parent.Nodes.Insert(index + 2, CType(inputNode.Clone, vTreeNode))
+                End If
+                inputNode.Remove()
+                nextnode.TreeView.SelectedNode = nextnode.NextNode
+            End If
+        Catch ex As Exception
+        End Try
+
+    End Sub
+
+#End Region
+
+
 End Class
