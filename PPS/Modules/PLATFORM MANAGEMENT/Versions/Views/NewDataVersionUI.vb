@@ -8,11 +8,12 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 20/01/2015
+' Last modified: 25/08/2015
 
 
 Imports System.Windows.Forms
 Imports System.Collections
+Imports VIBlend.WinForms.Controls
 
 
 Friend Class NewDataVersionUI
@@ -24,10 +25,10 @@ Friend Class NewDataVersionUI
     Private Controller As DataVersionsController
 
     ' Variables
-    Private versionsTV As New TreeView
+    Private versionsTV As New vTreeView
     Private isFormExpanded As Boolean
-    Private reference_node As TreeNode
-    Private parent_node As TreeNode
+    Private reference_node As vTreeNode
+    Private parent_node As vTreeNode
 
     ' Expansion Display Constants
     Private Const COLLAPSED_WIDTH As Int32 = 660
@@ -53,7 +54,7 @@ Friend Class NewDataVersionUI
         InitializeCBs()
         Panel1.Controls.Add(versionsTV)
         versionsTV.Dock = DockStyle.Fill
-        AddHandler versionsTV.NodeMouseClick, AddressOf versionsTV_NodeMouseClick
+        AddHandler versionsTV.MouseClick, AddressOf versionsTV_NodeMouseClick
         AddHandler versionsTV.KeyDown, AddressOf versionsTV_KeyDown
 
     End Sub
@@ -79,7 +80,7 @@ Friend Class NewDataVersionUI
 
 #Region "Interface"
 
-    Protected Friend Sub PreFill(Optional ByRef input_parent_node As TreeNode = Nothing)
+    Protected Friend Sub PreFill(Optional ByRef input_parent_node As vTreeNode = Nothing)
 
         parent_node = input_parent_node
         reference_node = Nothing
@@ -107,19 +108,19 @@ Friend Class NewDataVersionUI
             hash.Add(VERSIONS_START_PERIOD_VAR, StartingPeriodNUD.Text)
             hash.Add(VERSIONS_NB_PERIODS_VAR, NbPeriodsNUD.Text)
             hash.Add(VERSIONS_RATES_VERSION_ID_VAR, Controller.rates_versions_name_id_dic(RatesVersionCB.Text))
-            If Not parent_node Is Nothing Then hash.Add(PARENT_ID_VARIABLE, parent_node.Name)
+            If Not parent_node Is Nothing Then hash.Add(PARENT_ID_VARIABLE, parent_node.Value)
 
             If CreateCopyBT.Checked = True AndAlso _
             ReferenceTB.Text <> "" AndAlso _
             reference_node.Text = ReferenceTB.Text AndAlso
-            Controller.IsFolder(reference_node.Name) = False Then
-                Dim id As UInt32 = reference_node.Name
+            Controller.IsFolder(reference_node.Value) = False Then
+                Dim id As UInt32 = reference_node.Value
                 hash(VERSIONS_TIME_CONFIG_VARIABLE) = GlobalVariables.Versions.versions_hash(id)(VERSIONS_TIME_CONFIG_VARIABLE)
                 hash(VERSIONS_START_PERIOD_VAR) = GlobalVariables.Versions.versions_hash(id)(VERSIONS_START_PERIOD_VAR)
                 hash(VERSIONS_NB_PERIODS_VAR) = GlobalVariables.Versions.versions_hash(id)(VERSIONS_NB_PERIODS_VAR)
-                Controller.CreateVersion(hash, parent_node, reference_node.Name)
+                Controller.CreateVersion(hash, reference_node.Value)
             Else
-                Controller.CreateVersion(hash, parent_node)
+                Controller.CreateVersion(hash)
             End If
         End If
 
@@ -148,7 +149,7 @@ Friend Class NewDataVersionUI
         Select Case e.Node.Nodes.Count
             Case 0
                 ReferenceTB.Text = e.Node.Text
-                reference_node = e.Node
+                reference_node = versionsTV.HitTest(e.Location)
                 HideVersionsTV()
         End Select
 
@@ -169,11 +170,11 @@ Friend Class NewDataVersionUI
 
         If CreateCopyBT.Checked = True AndAlso ReferenceTB.Text <> "" AndAlso _
         reference_node.Text = ReferenceTB.Text AndAlso
-        Controller.IsFolder(reference_node.Name) = False Then
+        Controller.IsFolder(reference_node.Value) = False Then
 
-            TimeConfigCB.SelectedText = GlobalVariables.Versions.versions_hash(reference_node.Name)(VERSIONS_TIME_CONFIG_VARIABLE)
-            StartingPeriodNUD.Value = GlobalVariables.Versions.versions_hash(reference_node.Name)(VERSIONS_START_PERIOD_VAR)
-            NbPeriodsNUD = GlobalVariables.Versions.versions_hash(reference_node.Name)(VERSIONS_NB_PERIODS_VAR)
+            TimeConfigCB.SelectedText = GlobalVariables.Versions.versions_hash(reference_node.Value)(VERSIONS_TIME_CONFIG_VARIABLE)
+            StartingPeriodNUD.Value = GlobalVariables.Versions.versions_hash(reference_node.Value)(VERSIONS_START_PERIOD_VAR)
+            NbPeriodsNUD = GlobalVariables.Versions.versions_hash(reference_node.Value)(VERSIONS_NB_PERIODS_VAR)
 
         End If
 

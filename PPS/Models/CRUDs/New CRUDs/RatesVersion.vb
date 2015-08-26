@@ -7,7 +7,7 @@
 '
 ' Author: Julien Monnereau
 ' Created: 24/08/2015
-' Last modified: 24/08/2015
+' Last modified: 25/08/2015
 
 
 Imports System.Collections
@@ -26,9 +26,9 @@ Public Class RatesVersion
 
     ' Events
     Public Event ObjectInitialized()
-    Public Event rate_versionCreationEvent(ByRef attributes As Hashtable)
-    Public Event rate_versionUpdateEvent(ByRef attributes As Hashtable)
-    Public Event rate_versionDeleteEvent(ByRef id As UInt32)
+    Public Event rate_versionCreationEvent(ByRef status As Boolean, ByRef attributes As Hashtable)
+    Public Event rate_versionUpdateEvent(ByRef status As Boolean, ByRef attributes As Hashtable)
+    Public Event rate_versionDeleteEvent(ByRef status As Boolean, ByRef id As UInt32)
 
 
 #End Region
@@ -39,6 +39,7 @@ Public Class RatesVersion
     Friend Sub New()
 
         NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_READ_RATE_VERSION_ANSWER, AddressOf SMSG_READ_RATE_VERSION_ANSWER)
+        NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_DELETE_RATE_VERSION_ANSWER, AddressOf SMSG_DELETE_RATE_VERSION_ANSWER)
         LoadRateVersionsTable()
 
     End Sub
@@ -61,12 +62,12 @@ Public Class RatesVersion
                 GetRateVersionHTFromPacket(packet, tmp_ht)
                 rate_versions_hash(CInt(tmp_ht(ID_VARIABLE))) = tmp_ht
             Next
-            NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_LIST_RATE_VERSION_ANSWER, AddressOf SMSG_LIST_rate_version_ANSWER)
             state_flag = True
             RaiseEvent ObjectInitialized()
         Else
             state_flag = False
         End If
+        NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_LIST_RATE_VERSION_ANSWER, AddressOf SMSG_LIST_rate_version_ANSWER)
 
     End Sub
 
@@ -90,12 +91,11 @@ Public Class RatesVersion
         If packet.ReadInt32() = 0 Then
             Dim tmp_ht As New Hashtable
             GetRateVersionHTFromPacket(packet, tmp_ht)
-            rate_versions_hash(tmp_ht(ID_VARIABLE)) = tmp_ht
-            NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_CREATE_RATE_VERSION_ANSWER, AddressOf SMSG_CREATE_RATE_VERSION_ANSWER)
-            RaiseEvent rate_versionCreationEvent(tmp_ht)
+            RaiseEvent rate_versionCreationEvent(True, tmp_ht)
         Else
-
+            RaiseEvent rate_versionCreationEvent(False, Nothing)
         End If
+        NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_CREATE_RATE_VERSION_ANSWER, AddressOf SMSG_CREATE_RATE_VERSION_ANSWER)
 
     End Sub
 
@@ -112,14 +112,8 @@ Public Class RatesVersion
         If packet.ReadInt32() = 0 Then
             Dim ht As New Hashtable
             GetRateVersionHTFromPacket(packet, ht)
-
-            ' update hash => to be applied in all CRUDs priority high
-            ' + take off callback at the closing of the object
-            GetRateVersionHTFromPacket(packet, ht)
             rate_versions_hash(ht(ID_VARIABLE)) = ht
-
         Else
-
         End If
 
     End Sub
@@ -152,24 +146,18 @@ Public Class RatesVersion
     Private Sub SMSG_UPDATE_RATE_VERSION_ANSWER(packet As ByteBuffer)
 
         If packet.ReadInt32() = 0 Then
-            ' Confirmation => return rate_version
             Dim ht As New Hashtable
-            '**********************************************
-            ' l'update ne se fait pas ici mais dans le READ => synchro CLIENT/ SERVER FOR ALL CLIENTS
-            ' priority high 
-            '**********************************************
-
-            NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_UPDATE_RATE_VERSION_ANSWER, AddressOf SMSG_UPDATE_RATE_VERSION_ANSWER)
-            RaiseEvent rate_versionUpdateEvent(ht)
+            GetRateVersionHTFromPacket(packet, ht)
+            RaiseEvent rate_versionUpdateEvent(True, ht)
         Else
-
+            RaiseEvent rate_versionUpdateEvent(False, Nothing)
         End If
+        NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_UPDATE_RATE_VERSION_ANSWER, AddressOf SMSG_UPDATE_RATE_VERSION_ANSWER)
 
     End Sub
 
     Friend Sub CMSG_DELETE_RATE_VERSION(ByRef id As UInt32)
 
-        NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_DELETE_RATE_VERSION_ANSWER, AddressOf SMSG_DELETE_RATE_VERSION_ANSWER)
         Dim packet As New ByteBuffer(CType(ClientMessage.CMSG_DELETE_RATE_VERSION, UShort))
         packet.WriteUint32(id)
         packet.Release()
@@ -181,10 +169,10 @@ Public Class RatesVersion
 
         If packet.ReadInt32() = 0 Then
             Dim id As UInt32 = packet.ReadUint32
-            NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_DELETE_RATE_VERSION_ANSWER, AddressOf SMSG_DELETE_RATE_VERSION_ANSWER)
-            RaiseEvent rate_versionDeleteEvent(id)
+            rate_versions_hash.Remove(id)
+            RaiseEvent rate_versionDeleteEvent(True, id)
         Else
-
+            RaiseEvent rate_versionDeleteEvent(False, 0)
         End If
 
     End Sub
@@ -287,10 +275,10 @@ Public Class RatesVersion
 #End Region
 
 
-    ' below to be copied in all curezd
     Protected Overrides Sub finalize()
 
-        NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_CREATE_RATE_VERSION_ANSWER, AddressOf SMSG_READ_RATE_VERSION_ANSWER)
+        NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_READ_RATE_VERSION_ANSWER, AddressOf SMSG_READ_RATE_VERSION_ANSWER)
+        NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_DELETE_RATE_VERSION_ANSWER, AddressOf SMSG_DELETE_RATE_VERSION_ANSWER)
         MyBase.Finalize()
 
     End Sub

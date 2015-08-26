@@ -177,8 +177,8 @@ Public Class CUI2LeftPane
 
         ExpandSelectionPaneBT.Width = 19
         ExpandSelectionPaneBT.Height = 19
-        ExpandSelectionPaneBT.ImageList = expansionIL
-        ExpandSelectionPaneBT.ImageKey = "expand_up"
+        ExpandSelectionPaneBT.ImageList = ExpansionImageList
+        ExpandSelectionPaneBT.ImageKey = "menu"
         ExpandSelectionPaneBT.Text = ""
         ExpandSelectionPaneBT.PaintBorder = False
         ExpandSelectionPaneBT.FlatStyle = FlatStyle.Flat

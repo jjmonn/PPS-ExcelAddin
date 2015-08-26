@@ -36,28 +36,28 @@ Partial Class CUI2LeftPane
         Me.CategoriesIL = New System.Windows.Forms.ImageList(Me.components)
         Me.EntitiesTVImageList = New System.Windows.Forms.ImageList(Me.components)
         Me.VersionsIL = New System.Windows.Forms.ImageList(Me.components)
-        Me.expansionIL = New System.Windows.Forms.ImageList(Me.components)
-        Me.MainTableLayout.SuspendLayout
-        CType(Me.SplitContainer,System.ComponentModel.ISupportInitialize).BeginInit
-        Me.SplitContainer.Panel2.SuspendLayout
-        Me.SplitContainer.SuspendLayout
-        Me.SelectionTVTableLayout.SuspendLayout
-        Me.TableLayoutPanel2.SuspendLayout
-        Me.Panel1.SuspendLayout
-        Me.SuspendLayout
+        Me.ExpansionImageList = New System.Windows.Forms.ImageList(Me.components)
+        Me.MainTableLayout.SuspendLayout()
+        CType(Me.SplitContainer, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.SplitContainer.Panel2.SuspendLayout()
+        Me.SplitContainer.SuspendLayout()
+        Me.SelectionTVTableLayout.SuspendLayout()
+        Me.TableLayoutPanel2.SuspendLayout()
+        Me.Panel1.SuspendLayout()
+        Me.SuspendLayout()
         '
         'MainTableLayout
         '
         Me.MainTableLayout.ColumnCount = 1
-        Me.MainTableLayout.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100!))
+        Me.MainTableLayout.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
         Me.MainTableLayout.Controls.Add(Me.SplitContainer, 0, 1)
         Me.MainTableLayout.Controls.Add(Me.Panel1, 0, 0)
         Me.MainTableLayout.Dock = System.Windows.Forms.DockStyle.Fill
         Me.MainTableLayout.Location = New System.Drawing.Point(0, 0)
         Me.MainTableLayout.Name = "MainTableLayout"
         Me.MainTableLayout.RowCount = 2
-        Me.MainTableLayout.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25!))
-        Me.MainTableLayout.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100!))
+        Me.MainTableLayout.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25.0!))
+        Me.MainTableLayout.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
         Me.MainTableLayout.Size = New System.Drawing.Size(270, 671)
         Me.MainTableLayout.TabIndex = 3
         '
@@ -78,22 +78,22 @@ Partial Class CUI2LeftPane
         'SelectionTVTableLayout
         '
         Me.SelectionTVTableLayout.ColumnCount = 1
-        Me.SelectionTVTableLayout.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100!))
+        Me.SelectionTVTableLayout.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
         Me.SelectionTVTableLayout.Controls.Add(Me.TableLayoutPanel2, 0, 0)
         Me.SelectionTVTableLayout.Dock = System.Windows.Forms.DockStyle.Fill
         Me.SelectionTVTableLayout.Location = New System.Drawing.Point(0, 0)
         Me.SelectionTVTableLayout.Name = "SelectionTVTableLayout"
         Me.SelectionTVTableLayout.RowCount = 2
-        Me.SelectionTVTableLayout.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25!))
-        Me.SelectionTVTableLayout.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100!))
+        Me.SelectionTVTableLayout.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25.0!))
+        Me.SelectionTVTableLayout.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
         Me.SelectionTVTableLayout.Size = New System.Drawing.Size(264, 339)
         Me.SelectionTVTableLayout.TabIndex = 0
         '
         'TableLayoutPanel2
         '
         Me.TableLayoutPanel2.ColumnCount = 2
-        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100!))
-        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 25!))
+        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
+        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 25.0!))
         Me.TableLayoutPanel2.Controls.Add(Me.SelectionCB, 0, 0)
         Me.TableLayoutPanel2.Controls.Add(Me.CollapseSelectionBT, 1, 0)
         Me.TableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill
@@ -101,7 +101,7 @@ Partial Class CUI2LeftPane
         Me.TableLayoutPanel2.Margin = New System.Windows.Forms.Padding(0)
         Me.TableLayoutPanel2.Name = "TableLayoutPanel2"
         Me.TableLayoutPanel2.RowCount = 1
-        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100!))
+        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
         Me.TableLayoutPanel2.Size = New System.Drawing.Size(264, 25)
         Me.TableLayoutPanel2.TabIndex = 1
         '
@@ -116,23 +116,23 @@ Partial Class CUI2LeftPane
         Me.SelectionCB.DropDownWidth = 233
         Me.SelectionCB.Location = New System.Drawing.Point(3, 3)
         Me.SelectionCB.Name = "SelectionCB"
-        Me.SelectionCB.RoundedCornersMaskListItem = CType(15,Byte)
+        Me.SelectionCB.RoundedCornersMaskListItem = CType(15, Byte)
         Me.SelectionCB.Size = New System.Drawing.Size(233, 19)
         Me.SelectionCB.TabIndex = 0
         Me.SelectionCB.Text = "Selection"
-        Me.SelectionCB.UseThemeBackColor = false
-        Me.SelectionCB.UseThemeDropDownArrowColor = true
+        Me.SelectionCB.UseThemeBackColor = False
+        Me.SelectionCB.UseThemeDropDownArrowColor = True
         Me.SelectionCB.ValueMember = ""
         Me.SelectionCB.VIBlendScrollBarsTheme = VIBlend.Utilities.VIBLEND_THEME.OFFICESILVER
         Me.SelectionCB.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.OFFICESILVER
         '
         'CollapseSelectionBT
         '
-        Me.CollapseSelectionBT.AllowAnimations = true
+        Me.CollapseSelectionBT.AllowAnimations = True
         Me.CollapseSelectionBT.BackColor = System.Drawing.Color.Transparent
         Me.CollapseSelectionBT.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.CollapseSelectionBT.ImageKey = "expand_down"
-        Me.CollapseSelectionBT.ImageList = Me.expansionIL
+        Me.CollapseSelectionBT.ImageKey = "minus"
+        Me.CollapseSelectionBT.ImageList = Me.ExpansionImageList
         Me.CollapseSelectionBT.Location = New System.Drawing.Point(242, 3)
         Me.CollapseSelectionBT.Name = "CollapseSelectionBT"
         Me.CollapseSelectionBT.PaintBorder = False
@@ -159,23 +159,23 @@ Partial Class CUI2LeftPane
         Me.PanelCollapseBT.AllowAnimations = True
         Me.PanelCollapseBT.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.PanelCollapseBT.BackColor = System.Drawing.Color.Transparent
+        Me.PanelCollapseBT.BorderStyle = VIBlend.WinForms.Controls.ButtonBorderStyle.NONE
         Me.PanelCollapseBT.FlatAppearance.BorderSize = 0
-        Me.PanelCollapseBT.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.PanelCollapseBT.ImageKey = "expand_left"
-        Me.PanelCollapseBT.ImageList = Me.expansionIL
+        Me.PanelCollapseBT.ImageKey = "minus"
+        Me.PanelCollapseBT.ImageList = Me.ExpansionImageList
         Me.PanelCollapseBT.Location = New System.Drawing.Point(247, 3)
         Me.PanelCollapseBT.Name = "PanelCollapseBT"
-        Me.PanelCollapseBT.PaintBorder = false
-        Me.PanelCollapseBT.RoundedCornersMask = CType(15,Byte)
+        Me.PanelCollapseBT.PaintBorder = False
+        Me.PanelCollapseBT.RoundedCornersMask = CType(15, Byte)
         Me.PanelCollapseBT.Size = New System.Drawing.Size(19, 19)
         Me.PanelCollapseBT.TabIndex = 2
         Me.PanelCollapseBT.Text = " "
-        Me.PanelCollapseBT.UseVisualStyleBackColor = false
+        Me.PanelCollapseBT.UseVisualStyleBackColor = False
         Me.PanelCollapseBT.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
         '
         'Label1
         '
-        Me.Label1.AutoSize = true
+        Me.Label1.AutoSize = True
         Me.Label1.Location = New System.Drawing.Point(3, 5)
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(101, 15)
@@ -185,33 +185,31 @@ Partial Class CUI2LeftPane
         '
         'CategoriesIL
         '
-        Me.CategoriesIL.ImageStream = CType(resources.GetObject("CategoriesIL.ImageStream"),System.Windows.Forms.ImageListStreamer)
+        Me.CategoriesIL.ImageStream = CType(resources.GetObject("CategoriesIL.ImageStream"), System.Windows.Forms.ImageListStreamer)
         Me.CategoriesIL.TransparentColor = System.Drawing.Color.Transparent
         Me.CategoriesIL.Images.SetKeyName(0, "elements.ico")
         Me.CategoriesIL.Images.SetKeyName(1, "favicon(81).ico")
         '
         'EntitiesTVImageList
         '
-        Me.EntitiesTVImageList.ImageStream = CType(resources.GetObject("EntitiesTVImageList.ImageStream"),System.Windows.Forms.ImageListStreamer)
+        Me.EntitiesTVImageList.ImageStream = CType(resources.GetObject("EntitiesTVImageList.ImageStream"), System.Windows.Forms.ImageListStreamer)
         Me.EntitiesTVImageList.TransparentColor = System.Drawing.Color.Transparent
         Me.EntitiesTVImageList.Images.SetKeyName(0, "favicon(81).ico")
         Me.EntitiesTVImageList.Images.SetKeyName(1, "relation blue.png")
         '
         'VersionsIL
         '
-        Me.VersionsIL.ImageStream = CType(resources.GetObject("VersionsIL.ImageStream"),System.Windows.Forms.ImageListStreamer)
+        Me.VersionsIL.ImageStream = CType(resources.GetObject("VersionsIL.ImageStream"), System.Windows.Forms.ImageListStreamer)
         Me.VersionsIL.TransparentColor = System.Drawing.Color.Transparent
         Me.VersionsIL.Images.SetKeyName(0, "versions.ico")
         Me.VersionsIL.Images.SetKeyName(1, "favicon(81).ico")
         '
-        'expansionIL
+        'ExpansionImageList
         '
-        Me.expansionIL.ImageStream = CType(resources.GetObject("expansionIL.ImageStream"),System.Windows.Forms.ImageListStreamer)
-        Me.expansionIL.TransparentColor = System.Drawing.Color.Transparent
-        Me.expansionIL.Images.SetKeyName(0, "expand_down")
-        Me.expansionIL.Images.SetKeyName(1, "expand_up")
-        Me.expansionIL.Images.SetKeyName(2, "expand_right")
-        Me.expansionIL.Images.SetKeyName(3, "expand_left")
+        Me.ExpansionImageList.ImageStream = CType(resources.GetObject("ExpansionImageList.ImageStream"), System.Windows.Forms.ImageListStreamer)
+        Me.ExpansionImageList.TransparentColor = System.Drawing.Color.Transparent
+        Me.ExpansionImageList.Images.SetKeyName(0, "menu")
+        Me.ExpansionImageList.Images.SetKeyName(1, "minus")
         '
         'CUI2LeftPane
         '
@@ -244,6 +242,6 @@ End Sub
     Friend WithEvents VersionsIL As System.Windows.Forms.ImageList
     Friend WithEvents Panel1 As System.Windows.Forms.Panel
     Friend WithEvents PanelCollapseBT As VIBlend.WinForms.Controls.vButton
-    Public WithEvents expansionIL As System.Windows.Forms.ImageList
+    Public WithEvents ExpansionImageList As System.Windows.Forms.ImageList
 
 End Class

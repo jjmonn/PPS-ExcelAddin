@@ -4,7 +4,6 @@
 ' Displays versions attributes
 '
 ' to do : 
-'       - new folder -> check position on tree
 '       - copy version folder selection process to be reviewed
 '       - drag and drop ?
 '       - Merge the two "Delete" Buttons ?
@@ -16,7 +15,7 @@
 ' Known bugs:
 '       
 '
-' Last modified: 20/04/2015
+' Last modified: 25/08/2015
 ' Author: Julien Monnereau
 
 

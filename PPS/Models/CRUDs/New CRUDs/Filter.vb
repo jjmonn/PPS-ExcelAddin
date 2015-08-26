@@ -11,7 +11,7 @@ Imports System.Collections.Generic
 '
 ' Author: Julien Monnereau
 ' Created: 22/07/2015
-' Last modified: 15/08/2015
+' Last modified: 26/08/2015
 
 
 
@@ -21,8 +21,7 @@ Friend Class Filter
 
 
     ' Variables
-    Friend state_flag As Boolean
-    Friend server_response_flag As Boolean
+    Friend state_flag As Boolean = False
     Friend filters_hash As New Hashtable
     Private request_id As Dictionary(Of UInt32, Boolean)
 
@@ -32,10 +31,9 @@ Friend Class Filter
 
     ' Events
     Public Event ObjectInitialized()
-    Public Event FilterCreationEvent(ByRef attributes As Hashtable)
-    Public Shared Event FilterRead(ByRef attributes As Hashtable)
-    Public Event FilterUpdateEvent()
-    Public Event FilterDeleteEvent(ByRef id As UInt32)
+    Public Event FilterCreationEvent(ByRef status As Boolean, ByRef attributes As Hashtable)
+    Public Event FilterUpdateEvent(ByRef status As Boolean, ByRef attributes As Hashtable)
+    Public Event FilterDeleteEvent(ByRef status As Boolean, ByRef id As UInt32)
 
 
 #End Region
@@ -45,6 +43,8 @@ Friend Class Filter
 
     Friend Sub New()
 
+        NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_READ_FILTER_ANSWER, AddressOf SMSG_READ_FILTER_ANSWER)
+        NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_DELETE_FILTER_ANSWER, AddressOf SMSG_DELETE_FILTER_ANSWER)
         LoadFiltersTable()
 
     End Sub
@@ -66,12 +66,12 @@ Friend Class Filter
                 GetFilterHTFromPacket(packet, tmp_ht)
                 filters_hash(CInt(tmp_ht(ID_VARIABLE))) = tmp_ht
             Next
-            NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_LIST_FILTER_ANSWER, AddressOf SMSG_LIST_FILTER_ANSWER)
-            server_response_flag = True
+            state_flag = True
             RaiseEvent ObjectInitialized()
         Else
-            server_response_flag = False
+            state_flag = False
         End If
+        NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_LIST_FILTER_ANSWER, AddressOf SMSG_LIST_FILTER_ANSWER)
 
     End Sub
 
@@ -96,33 +96,29 @@ Friend Class Filter
             MsgBox(packet.ReadString())
             Dim tmp_ht As New Hashtable
             GetFilterHTFromPacket(packet, tmp_ht)
-            filters_hash(tmp_ht(ID_VARIABLE)) = tmp_ht
-            NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_CREATE_FILTER_ANSWER, AddressOf SMSG_CREATE_FILTER_ANSWER)
-            RaiseEvent FilterCreationEvent(tmp_ht)
+            RaiseEvent FilterCreationEvent(True, tmp_ht)
         Else
-
+            RaiseEvent FilterCreationEvent(False, Nothing)
         End If
+        NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_CREATE_FILTER_ANSWER, AddressOf SMSG_CREATE_FILTER_ANSWER)
 
     End Sub
 
-    Friend Shared Sub CMSG_READ_FILTER(ByRef id As UInt32)
+    Friend Sub CMSG_READ_FILTER(ByRef id As UInt32)
 
-        NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_READ_FILTER_ANSWER, AddressOf SMSG_READ_FILTER_ANSWER)
         Dim packet As New ByteBuffer(CType(ClientMessage.CMSG_CREATE_FILTER, UShort))
         packet.Release()
         NetworkManager.GetInstance().Send(packet)
 
     End Sub
 
-    Friend Shared Sub SMSG_READ_FILTER_ANSWER(packet As ByteBuffer)
+    Private Sub SMSG_READ_FILTER_ANSWER(packet As ByteBuffer)
 
         If packet.ReadInt32() = 0 Then
             Dim ht As New Hashtable
             GetFilterHTFromPacket(packet, ht)
-            NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_CREATE_FILTER_ANSWER, AddressOf SMSG_READ_FILTER_ANSWER)
-            RaiseEvent FilterRead(ht)
+            filters_hash(ht(ID_VARIABLE)) = ht
         Else
-
         End If
 
     End Sub
@@ -170,18 +166,16 @@ Friend Class Filter
         If packet.ReadInt32() = 0 Then
             Dim ht As New Hashtable
             GetFilterHTFromPacket(packet, ht)
-            filters_hash(ht(ID_VARIABLE)) = ht
-            NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_UPDATE_FILTER_ANSWER, AddressOf SMSG_UPDATE_FILTER_ANSWER)
-            RaiseEvent FilterUpdateEvent()
+            RaiseEvent FilterUpdateEvent(True, ht)
         Else
-
+            RaiseEvent FilterUpdateEvent(False, Nothing)
         End If
+        NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_UPDATE_FILTER_ANSWER, AddressOf SMSG_UPDATE_FILTER_ANSWER)
 
     End Sub
 
     Friend Sub CMSG_DELETE_FILTER(ByRef id As UInt32)
 
-        NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_DELETE_FILTER_ANSWER, AddressOf SMSG_DELETE_FILTER_ANSWER)
         Dim packet As New ByteBuffer(CType(ClientMessage.CMSG_DELETE_FILTER, UShort))
         packet.WriteUint32(id)
         packet.Release()
@@ -189,16 +183,15 @@ Friend Class Filter
 
     End Sub
 
-    Private Sub SMSG_DELETE_FILTER_ANSWER()
+    Private Sub SMSG_DELETE_FILTER_ANSWER(packet As ByteBuffer)
 
-        '  If packet.ReadInt32() = 0 Then
-
-        Dim id As UInt32
-        NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_DELETE_FILTER_ANSWER, AddressOf SMSG_DELETE_FILTER_ANSWER)
-        RaiseEvent FilterDeleteEvent(id)
-        'Else
-
-        'End If
+        If packet.ReadInt32() = 0 Then
+            Dim id As UInt32 = packet.ReadInt32
+            filters_hash.Remove(id)
+            RaiseEvent FilterDeleteEvent(True, id)
+        Else
+            RaiseEvent FilterDeleteEvent(False, 0)
+        End If
 
     End Sub
 
@@ -343,5 +336,14 @@ Friend Class Filter
 
 #End Region
 
+
+    Protected Overrides Sub finalize()
+
+        NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_READ_FILTER_ANSWER, AddressOf SMSG_READ_FILTER_ANSWER)
+        NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_DELETE_FILTER_ANSWER, AddressOf SMSG_DELETE_FILTER_ANSWER)
+        MyBase.Finalize()
+
+    End Sub
+    
 
 End Class

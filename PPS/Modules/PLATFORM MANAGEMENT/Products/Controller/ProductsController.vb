@@ -96,7 +96,7 @@ Friend Class ProductsController
 
     End Sub
 
-    Private Sub AfterProductCreation(ByRef ht As Hashtable)
+    Private Sub AfterProductCreation(ByRef status As Boolean, ByRef ht As Hashtable)
 
         ' to be validated/ reviewed
         ' priority normal !!! 
@@ -118,7 +118,7 @@ Friend Class ProductsController
 
     End Function
 
-    Private Sub AfterProductUpdate(ByRef ht As Hashtable)
+    Private Sub AfterProductUpdate(ByRef status As Boolean, ByRef ht As Hashtable)
 
         ' to be reviewed -> priority normal !
 
@@ -138,7 +138,7 @@ Friend Class ProductsController
 
     End Sub
 
-    Private Sub AfterproductDelete(ByRef id As UInt32)
+    Private Sub AfterproductDelete(ByRef status As Boolean, ByRef id As UInt32)
 
         ' to be implemented
         ' priority normal

@@ -110,7 +110,7 @@ Friend Class ExchangeRatesController
 
     End Sub
 
-    Private Sub AfterRateUpdate(ByRef ht As Hashtable)
+    Private Sub AfterRateUpdate(ByRef status As Boolean, ByRef ht As Hashtable)
 
         ' to be implemented priority normal
 
@@ -146,7 +146,7 @@ Friend Class ExchangeRatesController
 
     End Sub
 
-    Private Sub AfterVersionCreate(ByRef ht As Hashtable)
+    Private Sub AfterVersionCreate(ByRef status As Boolean, ByRef ht As Hashtable)
 
         If ht(PARENT_ID_VARIABLE) = 0 Then
             VTreeViewUtil.AddNode(ht(ID_VARIABLE), ht(NAME_VARIABLE), rates_versionsTV)
@@ -169,7 +169,7 @@ Friend Class ExchangeRatesController
 
     End Sub
 
-    Private Sub AfterVersionUpdate(ByRef ht As Hashtable)
+    Private Sub AfterVersionUpdate(ByRef status As Boolean, ByRef ht As Hashtable)
 
         ' to be implemented -> priority normal
 
@@ -193,7 +193,7 @@ Friend Class ExchangeRatesController
 
     End Function
 
-    Private Sub AfterVersionDelete(ByRef id As Int32)
+    Private Sub AfterVersionDelete(ByRef status As Boolean, ByRef id As Int32)
 
         ' if version is currently displayed -> set another one
         ' priority high

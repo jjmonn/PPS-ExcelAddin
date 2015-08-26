@@ -11,27 +11,25 @@ Imports System.Collections.Generic
 '
 ' Author: Julien Monnereau
 ' Created: 24/07/2015
-' Last modified: 15/08/2015
+' Last modified: 26/08/2015
 
 
 
 Friend Class Adjustment
 
+
 #Region "Instance variables"
 
     ' Variables
     Friend state_flag As Boolean
-    Friend server_response_flag As Boolean
     Friend adjustments_hash As New Hashtable
-    Private request_id As Dictionary(Of UInt32, Boolean)
-
+    
     ' Events
-    Public Event ObjectInitialized()
-    Public Event AdjustmentCreationEvent(ByRef attributes As Hashtable)
+    Public Event ObjectInitialized(ByRef status As Boolean)
+    Public Event AdjustmentCreationEvent(ByRef status As Boolean, ByRef attributes As Hashtable)
+    Public Event AdjustmentDeleteEvent(ByRef status As Boolean, ByRef id As UInt32)
+    Public Event AdjustmentUpdateEvent(ByRef status As Boolean, ByRef attributes As Hashtable)
     Public Shared Event AdjustmentRead(ByRef attributes As Hashtable)
-    Public Event AdjustmentUpdateEvent()
-    Public Event AdjustmentDeleteEvent(ByRef id As UInt32)
-
 
 #End Region
 
@@ -40,6 +38,9 @@ Friend Class Adjustment
 
     Friend Sub New()
 
+        NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_READ_ADJUSTMENT_ANSWER, AddressOf SMSG_READ_ADJUSTMENT_ANSWER)
+        NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_DELETE_ADJUSTMENT_ANSWER, AddressOf SMSG_DELETE_ADJUSTMENT_ANSWER)
+        state_flag = False
         LoadAdjustmentsTable()
 
     End Sub
@@ -61,12 +62,13 @@ Friend Class Adjustment
                 GetAdjustmentHTFromPacket(packet, tmp_ht)
                 adjustments_hash(CInt(tmp_ht(ID_VARIABLE))) = tmp_ht
             Next
-            NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_LIST_ADJUSTMENT_ANSWER, AddressOf SMSG_LIST_ADJUSTMENT_ANSWER)
-            server_response_flag = True
-            RaiseEvent ObjectInitialized()
+            RaiseEvent ObjectInitialized(True)
+            state_flag = True
         Else
-            server_response_flag = False
+            RaiseEvent ObjectInitialized(False)
+            state_flag = False
         End If
+        NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_LIST_ADJUSTMENT_ANSWER, AddressOf SMSG_LIST_ADJUSTMENT_ANSWER)
 
     End Sub
 
@@ -88,33 +90,30 @@ Friend Class Adjustment
     Private Sub SMSG_CREATE_ADJUSTMENT_ANSWER(packet As ByteBuffer)
 
         If packet.ReadInt32() = 0 Then
-            MsgBox(packet.ReadString())
             Dim tmp_ht As New Hashtable
             GetAdjustmentHTFromPacket(packet, tmp_ht)
-            adjustments_hash(tmp_ht(ID_VARIABLE)) = tmp_ht
-            NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_CREATE_ADJUSTMENT_ANSWER, AddressOf SMSG_CREATE_ADJUSTMENT_ANSWER)
-            RaiseEvent AdjustmentCreationEvent(tmp_ht)
+            RaiseEvent AdjustmentCreationEvent(True, tmp_ht)
         Else
-
+            RaiseEvent AdjustmentCreationEvent(False, Nothing)
         End If
+        NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_CREATE_ADJUSTMENT_ANSWER, AddressOf SMSG_CREATE_ADJUSTMENT_ANSWER)
 
     End Sub
 
     Friend Shared Sub CMSG_READ_ADJUSTMENT(ByRef id As UInt32)
 
-        NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_READ_ADJUSTMENT_ANSWER, AddressOf SMSG_READ_ADJUSTMENT_ANSWER)
-        Dim packet As New ByteBuffer(CType(ClientMessage.CMSG_CREATE_ADJUSTMENT, UShort))
+        Dim packet As New ByteBuffer(CType(ClientMessage.CMSG_READ_ADJUSTMENT, UShort))
         packet.Release()
         NetworkManager.GetInstance().Send(packet)
 
     End Sub
 
-    Friend Shared Sub SMSG_READ_ADJUSTMENT_ANSWER(packet As ByteBuffer)
+    Private Sub SMSG_READ_ADJUSTMENT_ANSWER(packet As ByteBuffer)
 
         If packet.ReadInt32() = 0 Then
             Dim ht As New Hashtable
             GetAdjustmentHTFromPacket(packet, ht)
-            NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_CREATE_ADJUSTMENT_ANSWER, AddressOf SMSG_READ_ADJUSTMENT_ANSWER)
+            adjustments_hash(ht(ID_VARIABLE)) = ht
             RaiseEvent AdjustmentRead(ht)
         Else
 
@@ -123,12 +122,11 @@ Friend Class Adjustment
     End Sub
 
     Friend Sub CMSG_UPDATE_ADJUSTMENT(ByRef id As UInt32, _
-                                  ByRef updated_var As String, _
-                                  ByRef new_value As String)
+                                      ByRef updated_var As String, _
+                                      ByRef new_value As String)
 
         Dim tmp_ht As Hashtable = adjustments_hash(id).clone ' check clone !!!!
         tmp_ht(updated_var) = new_value
-
         NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_UPDATE_ADJUSTMENT_ANSWER, AddressOf SMSG_UPDATE_ADJUSTMENT_ANSWER)
         Dim packet As New ByteBuffer(CType(ClientMessage.CMSG_UPDATE_ADJUSTMENT, UShort))
         WriteAdjustmentPacket(packet, tmp_ht)
@@ -152,18 +150,16 @@ Friend Class Adjustment
         If packet.ReadInt32() = 0 Then
             Dim ht As New Hashtable
             GetAdjustmentHTFromPacket(packet, ht)
-            adjustments_hash(ht(ID_VARIABLE)) = ht
-            NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_UPDATE_ADJUSTMENT_ANSWER, AddressOf SMSG_UPDATE_ADJUSTMENT_ANSWER)
-            RaiseEvent AdjustmentUpdateEvent()
+            RaiseEvent AdjustmentUpdateEvent(True, ht)
         Else
-
+            RaiseEvent AdjustmentUpdateEvent(False, Nothing)
         End If
+        NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_UPDATE_ADJUSTMENT_ANSWER, AddressOf SMSG_UPDATE_ADJUSTMENT_ANSWER)
 
     End Sub
 
     Friend Sub CMSG_DELETE_ADJUSTMENT(ByRef id As UInt32)
 
-        NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_DELETE_ADJUSTMENT_ANSWER, AddressOf SMSG_DELETE_ADJUSTMENT_ANSWER)
         Dim packet As New ByteBuffer(CType(ClientMessage.CMSG_DELETE_ADJUSTMENT, UShort))
         packet.WriteUint32(id)
         packet.Release()
@@ -171,14 +167,16 @@ Friend Class Adjustment
 
     End Sub
 
-    Private Sub SMSG_DELETE_ADJUSTMENT_ANSWER()
+    Private Sub SMSG_DELETE_ADJUSTMENT_ANSWER(packet As ByteBuffer)
 
-        '  If packet.ReadInt32() = 0 Then
-        Dim id As UInt32
-        ' get id from request_id ?
-        NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_DELETE_ADJUSTMENT_ANSWER, AddressOf SMSG_DELETE_ADJUSTMENT_ANSWER)
-        RaiseEvent AdjustmentDeleteEvent(id)
-
+        If packet.ReadInt32() = 0 Then
+            Dim id As UInt32 = packet.ReadInt32
+            adjustments_hash.Remove(id)
+            RaiseEvent AdjustmentDeleteEvent(True, id)
+        Else
+            RaiseEvent AdjustmentDeleteEvent(False, 0)
+        End If
+  
     End Sub
 
 #End Region
@@ -253,5 +251,15 @@ Friend Class Adjustment
     End Sub
 
 #End Region
+
+
+    Protected Overrides Sub finalize()
+
+        NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_READ_ADJUSTMENT_ANSWER, AddressOf SMSG_READ_ADJUSTMENT_ANSWER)
+        NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_DELETE_ADJUSTMENT_ANSWER, AddressOf SMSG_DELETE_ADJUSTMENT_ANSWER)
+        MyBase.Finalize()
+
+    End Sub
+    
 
 End Class

@@ -93,7 +93,7 @@ Friend Class ClientsController
 
     End Sub
 
-    Private Sub AfterClientCreation(ByRef ht As Hashtable)
+    Private Sub AfterClientCreation(ByRef status As Boolean, ByRef ht As Hashtable)
 
 
 
@@ -112,7 +112,7 @@ Friend Class ClientsController
 
     End Function
 
-    Private Sub AfterClientUpdate(ByRef ht As Hashtable)
+    Private Sub AfterClientUpdate(ByRef status As Boolean, ByRef ht As Hashtable)
 
 
         ' to be implemented priority normal !!
@@ -134,7 +134,7 @@ Friend Class ClientsController
 
     End Sub
 
-    Private Sub AfterClientDelete(ByRef id As UInt32)
+    Private Sub AfterClientDelete(ByRef status As Boolean, ByRef id As UInt32)
 
         ' to be implemented priority normal !!
 

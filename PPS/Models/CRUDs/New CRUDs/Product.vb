@@ -11,7 +11,7 @@ Imports System.Collections.Generic
 '
 ' Author: Julien Monnereau
 ' Created: 24/07/2015
-' Last modified: 15/08/2015
+' Last modified: 26/08/2015
 
 
 
@@ -20,16 +20,15 @@ Friend Class Product
 #Region "Instance variables"
 
     ' Variables
-    Friend server_response_flag As Boolean
+    Friend state_flag As Boolean = False
     Friend products_hash As New Hashtable
     Private request_id As Dictionary(Of UInt32, Boolean)
 
     ' Events
     Public Event ObjectInitialized()
-    Public Event ProductCreationEvent(ByRef attributes As Hashtable)
-    Public Shared Event ProductRead(ByRef attributes As Hashtable)
-    Public Event ProductUpdateEvent(ByRef ht As Hashtable)
-    Public Event ProductDeleteEvent(ByRef id As UInt32)
+    Public Event ProductCreationEvent(ByRef status As Boolean, ByRef attributes As Hashtable)
+    Public Event ProductUpdateEvent(ByRef status As Boolean, ByRef ht As Hashtable)
+    Public Event ProductDeleteEvent(ByRef status As Boolean, ByRef id As UInt32)
 
 
 #End Region
@@ -39,6 +38,8 @@ Friend Class Product
 
     Friend Sub New()
 
+        NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_READ_PRODUCT_ANSWER, AddressOf SMSG_READ_PRODUCT_ANSWER)
+        NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_DELETE_PRODUCT_ANSWER, AddressOf SMSG_DELETE_PRODUCT_ANSWER)
         LoadProductsTable()
 
     End Sub
@@ -60,12 +61,12 @@ Friend Class Product
                 GetProductHTFromPacket(packet, tmp_ht)
                 products_hash(CInt(tmp_ht(ID_VARIABLE))) = tmp_ht
             Next
-            NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_LIST_PRODUCT_ANSWER, AddressOf SMSG_LIST_PRODUCT_ANSWER)
-            server_response_flag = True
+            state_flag = True
             RaiseEvent ObjectInitialized()
         Else
-            server_response_flag = False
+            state_flag = False
         End If
+        NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_LIST_PRODUCT_ANSWER, AddressOf SMSG_LIST_PRODUCT_ANSWER)
 
     End Sub
 
@@ -90,33 +91,29 @@ Friend Class Product
             MsgBox(packet.ReadString())
             Dim tmp_ht As New Hashtable
             GetProductHTFromPacket(packet, tmp_ht)
-            products_hash(tmp_ht(ID_VARIABLE)) = tmp_ht
-            NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_CREATE_PRODUCT_ANSWER, AddressOf SMSG_CREATE_PRODUCT_ANSWER)
-            RaiseEvent ProductCreationEvent(tmp_ht)
+            RaiseEvent ProductCreationEvent(True, tmp_ht)
         Else
-
+            RaiseEvent ProductCreationEvent(False, Nothing)
         End If
+        NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_CREATE_PRODUCT_ANSWER, AddressOf SMSG_CREATE_PRODUCT_ANSWER)
 
     End Sub
 
-    Friend Shared Sub CMSG_READ_PRODUCT(ByRef id As UInt32)
+    Friend Sub CMSG_READ_PRODUCT(ByRef id As UInt32)
 
-        NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_READ_PRODUCT_ANSWER, AddressOf SMSG_READ_PRODUCT_ANSWER)
         Dim packet As New ByteBuffer(CType(ClientMessage.CMSG_CREATE_PRODUCT, UShort))
         packet.Release()
         NetworkManager.GetInstance().Send(packet)
 
     End Sub
 
-    Friend Shared Sub SMSG_READ_PRODUCT_ANSWER(packet As ByteBuffer)
+    Private Sub SMSG_READ_PRODUCT_ANSWER(packet As ByteBuffer)
 
         If packet.ReadInt32() = 0 Then
             Dim ht As New Hashtable
             GetProductHTFromPacket(packet, ht)
-            NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_CREATE_PRODUCT_ANSWER, AddressOf SMSG_READ_PRODUCT_ANSWER)
-            RaiseEvent ProductRead(ht)
+            products_hash(ht(ID_VARIABLE)) = ht
         Else
-
         End If
 
     End Sub
@@ -164,18 +161,16 @@ Friend Class Product
         If packet.ReadInt32() = 0 Then
             Dim ht As New Hashtable
             GetProductHTFromPacket(packet, ht)
-            products_hash(ht(ID_VARIABLE)) = ht
-            NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_UPDATE_PRODUCT_ANSWER, AddressOf SMSG_UPDATE_PRODUCT_ANSWER)
-            RaiseEvent ProductUpdateEvent(ht)
+            RaiseEvent ProductUpdateEvent(True, ht)
         Else
-
+            RaiseEvent ProductUpdateEvent(False, Nothing)
         End If
+        NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_UPDATE_PRODUCT_ANSWER, AddressOf SMSG_UPDATE_PRODUCT_ANSWER)
 
     End Sub
 
     Friend Sub CMSG_DELETE_PRODUCT(ByRef id As UInt32)
 
-        NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_DELETE_PRODUCT_ANSWER, AddressOf SMSG_DELETE_PRODUCT_ANSWER)
         Dim packet As New ByteBuffer(CType(ClientMessage.CMSG_DELETE_PRODUCT, UShort))
         packet.WriteUint32(id)
         packet.Release()
@@ -183,13 +178,15 @@ Friend Class Product
 
     End Sub
 
-    Private Sub SMSG_DELETE_PRODUCT_ANSWER()
+    Private Sub SMSG_DELETE_PRODUCT_ANSWER(packet As ByteBuffer)
 
-        '   If packet.ReadInt32() = 0 Then
-        Dim id As UInt32
-        ' get id from request_id ?
-        NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_DELETE_PRODUCT_ANSWER, AddressOf SMSG_DELETE_PRODUCT_ANSWER)
-        RaiseEvent ProductDeleteEvent(id)
+        If packet.ReadInt32() = 0 Then
+            Dim id As UInt32 = packet.ReadInt32
+            products_hash.Remove(id)
+            RaiseEvent ProductDeleteEvent(True, id)
+        Else
+            RaiseEvent ProductDeleteEvent(False, 0)
+        End If
 
     End Sub
 
@@ -237,7 +234,7 @@ Friend Class Product
 
     End Sub
 
-   
+
     Friend Function IsNameValid(ByRef name As String) As Boolean
 
         If name.Length > NAMES_MAX_LENGTH Then Return False
@@ -277,5 +274,15 @@ Friend Class Product
     End Sub
 
 #End Region
+
+
+    Protected Overrides Sub finalize()
+
+        NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_READ_PRODUCT_ANSWER, AddressOf SMSG_READ_PRODUCT_ANSWER)
+        NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_DELETE_PRODUCT_ANSWER, AddressOf SMSG_DELETE_PRODUCT_ANSWER)
+        MyBase.Finalize()
+
+    End Sub
+
 
 End Class

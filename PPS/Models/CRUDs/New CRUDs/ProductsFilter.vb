@@ -11,7 +11,7 @@ Imports System.Collections.Generic
 '
 ' Author: Julien Monnereau
 ' Created: 23/07/2015
-' Last modified: 05/08/2015
+' Last modified: 26/08/2015
 
 
 
@@ -19,20 +19,16 @@ Friend Class ProductsFilter
 
 #Region "Instance variables"
 
-
     ' Variables
-    Friend state_flag As Boolean
-    Friend server_response_flag As Boolean
-    Friend productsFilters_list As New List(Of Hashtable)
-    Private fIdFvDict As New Dictionary(Of String, UInt32)
+    Friend state_flag As Boolean = False
+    Friend productsFiltersHash As New Dictionary(Of Int32, Dictionary(Of Int32, Int32))
     Private request_id As Dictionary(Of UInt32, Boolean)
 
     ' Events
     Public Event ObjectInitialized()
-    Public Event ProductFilterCreationEvent(ByRef attributes As Hashtable)
-    Public Shared Event ProductFilterRead(ByRef attributes As Hashtable)
-    Public Event ProductFilterUpdateEvent()
-    Public Event ProductFilterDeleteEvent(ByRef id As UInt32)
+    Public Event ProductFilterCreationEvent(ByRef status As Boolean, ByRef attributes As Hashtable)
+    Public Event ProductFilterUpdateEvent(ByRef status As Boolean, ByRef attributes As Hashtable)
+    Public Event ProductFilterDeleteEvent(ByRef status As Boolean, ByRef productId As UInt32, ByRef filterId As UInt32)
 
 #End Region
 
@@ -40,6 +36,8 @@ Friend Class ProductsFilter
 #Region "Init"
 
     Friend Sub New()
+
+        NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_READ_PRODUCT_FILTER_ANSWER, AddressOf SMSG_READ_PRODUCT_FILTER_ANSWER)
 
         LoadProductFiltersTable()
 
@@ -60,15 +58,17 @@ Friend Class ProductsFilter
             For i As Int32 = 1 To packet.ReadInt32()
                 Dim tmp_ht As New Hashtable
                 GetProductFilterHTFromPacket(packet, tmp_ht)
-                productsFilters_list.Add(tmp_ht)
-                fIdFvDict.Add(tmp_ht(PRODUCT_ID_VARIABLE) & tmp_ht(FILTER_ID_VARIABLE), tmp_ht(FILTER_VALUE_ID_VARIABLE))
+
+                AddRecordToproductsFiltersHash(tmp_ht(PRODUCT_ID_VARIABLE), _
+                                                tmp_ht(FILTER_ID_VARIABLE), _
+                                                tmp_ht(FILTER_VALUE_ID_VARIABLE))
             Next
-            NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_LIST_PRODUCT_FILTER_ANSWER, AddressOf SMSG_LIST_PRODUCT_FILTER_ANSWER)
-            server_response_flag = True
+            state_flag = True
             RaiseEvent ObjectInitialized()
         Else
-            server_response_flag = False
+            state_flag = False
         End If
+        NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_LIST_PRODUCT_FILTER_ANSWER, AddressOf SMSG_LIST_PRODUCT_FILTER_ANSWER)
 
     End Sub
 
@@ -90,60 +90,46 @@ Friend Class ProductsFilter
     Private Sub SMSG_CREATE_PRODUCT_FILTER_ANSWER(packet As ByteBuffer)
 
         If packet.ReadInt32() = 0 Then
-            MsgBox(packet.ReadString())
             Dim tmp_ht As New Hashtable
             GetProductFilterHTFromPacket(packet, tmp_ht)
-            productsFilters_list.Add(tmp_ht)
-            NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_CREATE_PRODUCT_FILTER_ANSWER, AddressOf SMSG_CREATE_PRODUCT_FILTER_ANSWER)
-            RaiseEvent ProductFilterCreationEvent(tmp_ht)
+            RaiseEvent ProductFilterCreationEvent(True, tmp_ht)
         Else
-
+            RaiseEvent ProductFilterCreationEvent(False, Nothing)
         End If
+        NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_CREATE_PRODUCT_FILTER_ANSWER, AddressOf SMSG_CREATE_PRODUCT_FILTER_ANSWER)
 
     End Sub
 
-    Friend Shared Sub CMSG_READ_PRODUCT_FILTER(ByRef id As UInt32)
+    Friend Sub CMSG_READ_PRODUCT_FILTER(ByRef id As UInt32)
 
-        NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_READ_PRODUCT_FILTER_ANSWER, AddressOf SMSG_READ_PRODUCT_FILTER_ANSWER)
         Dim packet As New ByteBuffer(CType(ClientMessage.CMSG_CREATE_PRODUCTS_FILTER, UShort))
         packet.Release()
         NetworkManager.GetInstance().Send(packet)
 
     End Sub
 
-    Friend Shared Sub SMSG_READ_PRODUCT_FILTER_ANSWER(packet As ByteBuffer)
+    Private Sub SMSG_READ_PRODUCT_FILTER_ANSWER(packet As ByteBuffer)
 
         If packet.ReadInt32() = 0 Then
             Dim ht As New Hashtable
             GetProductFilterHTFromPacket(packet, ht)
-            NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_CREATE_PRODUCT_FILTER_ANSWER, AddressOf SMSG_READ_PRODUCT_FILTER_ANSWER)
-            RaiseEvent ProductFilterRead(ht)
+            AddRecordToproductsFiltersHash(ht(PRODUCT_ID_VARIABLE), _
+                                           ht(FILTER_ID_VARIABLE), _
+                                           ht(FILTER_VALUE_ID_VARIABLE))
         Else
-
         End If
 
     End Sub
 
-    Friend Sub CMSG_UPDATE_PRODUCT_FILTER(ByRef id As UInt32, _
-                                  ByRef updated_var As String, _
-                                  ByRef new_value As String)
-
-        Dim tmp_ht As Hashtable = productsFilters_list(id).clone ' check clone !!!!
-        tmp_ht(updated_var) = new_value
+    Friend Sub CMSG_UPDATE_PRODUCT_FILTER(ByRef productId As Int32, _
+                                             ByRef filterId As Int32, _
+                                             ByRef filterValueId As Int32)
 
         NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_UPDATE_PRODUCT_FILTER_ANSWER, AddressOf SMSG_UPDATE_PRODUCT_FILTER_ANSWER)
         Dim packet As New ByteBuffer(CType(ClientMessage.CMSG_UPDATE_PRODUCTS_FILTER, UShort))
-        WriteProductFilterPacket(packet, tmp_ht)
-        packet.Release()
-        NetworkManager.GetInstance().Send(packet)
-
-    End Sub
-
-    Friend Sub CMSG_UPDATE_PRODUCT_FILTER(ByRef attributes As Hashtable)
-
-        NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_UPDATE_PRODUCT_FILTER_ANSWER, AddressOf SMSG_UPDATE_PRODUCT_FILTER_ANSWER)
-        Dim packet As New ByteBuffer(CType(ClientMessage.CMSG_UPDATE_PRODUCTS_FILTER, UShort))
-        WriteProductFilterPacket(packet, attributes)
+        packet.WriteUint32(productId)
+        packet.WriteUint32(filterId)
+        packet.WriteUint32(filterValueId)
         packet.Release()
         NetworkManager.GetInstance().Send(packet)
 
@@ -154,12 +140,11 @@ Friend Class ProductsFilter
         If packet.ReadInt32() = 0 Then
             Dim ht As New Hashtable
             GetProductFilterHTFromPacket(packet, ht)
-            productsFilters_list(ht(ID_VARIABLE)) = ht
-            NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_UPDATE_PRODUCT_FILTER_ANSWER, AddressOf SMSG_UPDATE_PRODUCT_FILTER_ANSWER)
-            RaiseEvent ProductFilterUpdateEvent()
+            RaiseEvent ProductFilterUpdateEvent(True, ht)
         Else
-
+            RaiseEvent ProductFilterUpdateEvent(False, Nothing)
         End If
+        NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_UPDATE_PRODUCT_FILTER_ANSWER, AddressOf SMSG_UPDATE_PRODUCT_FILTER_ANSWER)
 
     End Sub
 
@@ -173,13 +158,16 @@ Friend Class ProductsFilter
 
     End Sub
 
-    Private Sub SMSG_DELETE_PRODUCT_FILTER_ANSWER()
+    Private Sub SMSG_DELETE_PRODUCT_FILTER_ANSWER(packet As ByteBuffer)
 
-        '   If packet.ReadInt32() = 0 Then
-        Dim id As UInt32
-        ' get id from request_id ?
-        NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_DELETE_PRODUCT_FILTER_ANSWER, AddressOf SMSG_DELETE_PRODUCT_FILTER_ANSWER)
-        RaiseEvent ProductFilterDeleteEvent(id)
+        If packet.ReadInt32() = 0 Then
+            Dim productId As UInt32 = packet.ReadInt32
+            Dim filterId As UInt32 = packet.ReadInt32
+            RemoveRecordFromFiltersHash(productId, filterId)
+            RaiseEvent ProductFilterDeleteEvent(True, productId, filterId)
+        Else
+            RaiseEvent ProductFilterDeleteEvent(False, 0, 0)
+        End If
 
     End Sub
 
@@ -192,20 +180,12 @@ Friend Class ProductsFilter
                                          ByRef filter_value_id As UInt32) As List(Of UInt32)
 
         Dim products_list As New List(Of UInt32)
-        For Each ht In productsFilters_list
-            If ht(FILTER_ID_VARIABLE) = filter_id _
-            AndAlso ht(FILTER_VALUE_ID_VARIABLE) = filter_value_id Then
-                products_list.Add(ht(PRODUCT_ID_VARIABLE))
+        For Each productId As Int32 In productsFiltersHash.Keys
+            If productsFiltersHash(productId)(filter_id) = filter_value_id Then
+                products_list.Add(productId)
             End If
         Next
         Return products_list
-
-    End Function
-
-    Friend Function GetFilterValue(ByRef product_id As UInt32, _
-                                   ByRef filter_id As UInt32)
-
-        Return fIdFvDict(product_id & filter_id)
 
     End Function
 
@@ -213,6 +193,31 @@ Friend Class ProductsFilter
 
 
 #Region "Utilities"
+
+    Private Sub AddRecordToproductsFiltersHash(ByRef productId As Int32, _
+                                            ByRef filterId As Int32, _
+                                            ByRef filterValueId As Int32)
+
+        If productsFiltersHash.ContainsKey(productId) Then
+            If productsFiltersHash(productId).ContainsKey(filterId) Then
+                productsFiltersHash(productId)(filterId) = filterValueId
+            Else
+                productsFiltersHash(productId).Add(filterId, filterValueId)
+            End If
+        Else
+            productsFiltersHash.Add(productId, New Dictionary(Of Int32, Int32))
+            productsFiltersHash(productId).Add(filterId, filterValueId)
+        End If
+
+    End Sub
+
+    Private Sub RemoveRecordFromFiltersHash(ByRef productId As Int32, _
+                                            ByRef filterId As Int32)
+
+        On Error Resume Next
+        productsFiltersHash(productId).Remove(filterId)
+
+    End Sub
 
     Friend Shared Sub GetProductFilterHTFromPacket(ByRef packet As ByteBuffer, _
                                                   ByRef productFilter_ht As Hashtable)
@@ -234,6 +239,15 @@ Friend Class ProductsFilter
 
 
 #End Region
+
+
+    Protected Overrides Sub finalize()
+
+        NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_READ_PRODUCT_FILTER_ANSWER, AddressOf SMSG_READ_PRODUCT_FILTER_ANSWER)
+        NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_DELETE_PRODUCT_FILTER_ANSWER, AddressOf SMSG_DELETE_PRODUCT_FILTER_ANSWER)
+        MyBase.Finalize()
+
+    End Sub
 
 
 

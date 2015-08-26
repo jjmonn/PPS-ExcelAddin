@@ -131,7 +131,7 @@ Friend Class EntitiesController
     End Sub
 
     ' Triggered by CRUD model creation confirmation 
-    Private Sub AfterEntityCreation(ByRef entity_ht As Hashtable)
+    Private Sub AfterEntityCreation(ByRef status As Boolean, ByRef entity_ht As Hashtable)
 
         Dim parent_node As TreeNode = entitiesTV.Nodes.Find(entity_ht(PARENT_ID_VARIABLE), True)(0)
         AddNodeAndRow(entity_ht, parent_node)
@@ -190,7 +190,7 @@ Friend Class EntitiesController
 
     End Sub
 
-    Private Sub AfterEntityDeletion(ByRef id As UInt32)
+    Private Sub AfterEntityDeletion(ByRef status As Boolean, ByRef id As UInt32)
 
         ' remove node/ row
 

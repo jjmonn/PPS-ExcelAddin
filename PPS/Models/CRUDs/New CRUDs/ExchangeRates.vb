@@ -7,32 +7,29 @@ Imports System.Collections.Generic
 ' CRUD for exchangeRates table - relation with c++ server
 '
 ' To do:
-'       - CRUD event put server response success as param !! priority high !!
-'
+'       - Quid update / listen call backs... priority high
 '
 '
 ' Author: Julien Monnereau
 ' Created: 05/08/2015
-' Last modified: 24/08/2015
+' Last modified: 26/08/2015
 
 
 
 Friend Class ExchangeRate
 
+
 #Region "Instance variables"
 
     ' Variables
-    Friend server_response_flag As Boolean
+    Friend state_flag As Boolean
     Friend exchangeRatesDict As New Dictionary(Of String, Double)
     Private request_id As Dictionary(Of UInt32, Boolean)
 
     ' Events
-    Public Event ObjectInitialized()
-    Public Event ExchangeRateCreationEvent(ByRef attributes As Hashtable)
-    Public Shared Event ExchangeRateRead(ByRef attributes As Hashtable)
-    Public Event ExchangeRateUpdateEvent(ByRef ht As Hashtable)
-    Public Event ExchangeRateDeleteEvent(ByRef id As UInt32)
-
+    Public Event ObjectInitialized(ByRef status As Boolean)
+    Public Event ExchangeRateUpdateEvent(ByRef status As Boolean, ByRef ht As Hashtable)
+   
     ' Constants
     Friend Const RATES_CURRENCIES_TOKEN_SEPARATOR As Char = "#"
 
@@ -43,6 +40,7 @@ Friend Class ExchangeRate
 
     Friend Sub New()
 
+        state_flag = False
         LoadExchangeRatesTable()
 
     End Sub
@@ -56,7 +54,7 @@ Friend Class ExchangeRate
 
     End Sub
 
-    ' exchangeRates_hash: [currency#ratesVersion#period] => rateValue
+    ' ExchangeRates_hash: [currency#ratesVersion#period] => rateValue
     Private Sub SMSG_LIST_EXCHANGE_RATE_ANSWER(packet As ByteBuffer)
 
         If packet.ReadInt32() = 0 Then
@@ -69,12 +67,12 @@ Friend Class ExchangeRate
                                   tmp_ht(EX_RATES_PERIOD_VARIABLE)) = _
                                   tmp_ht(EX_RATES_RATE_VARIABLE)
             Next
-            NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_LIST_EXCHANGE_RATE_ANSWER, AddressOf SMSG_LIST_EXCHANGE_RATE_ANSWER)
-            server_response_flag = True
-            RaiseEvent ObjectInitialized()
+            RaiseEvent ObjectInitialized(True)
         Else
-            server_response_flag = False
+            state_flag = False
+            RaiseEvent ObjectInitialized(True)
         End If
+        NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_LIST_EXCHANGE_RATE_ANSWER, AddressOf SMSG_LIST_EXCHANGE_RATE_ANSWER)
 
     End Sub
 
@@ -83,68 +81,9 @@ Friend Class ExchangeRate
 
 #Region "CRUD"
 
-    Friend Sub CMSG_CREATE_EXCHANGE_RATE(ByRef attributes As Hashtable)
+    ' add read => must listen in case somebody is already editing
+    ' or block any CRUD editing when someone is already editing ?!
 
-        NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_CREATE_EXCHANGE_RATE_ANSWER, AddressOf SMSG_CREATE_EXCHANGE_RATE_ANSWER)
-        Dim packet As New ByteBuffer(CType(ClientMessage.CMSG_CREATE_EXCHANGE_RATE, UShort))
-        WriteExchangeRatePacket(packet, attributes)
-        packet.Release()
-        NetworkManager.GetInstance().Send(packet)
-
-    End Sub
-
-    Private Sub SMSG_CREATE_EXCHANGE_RATE_ANSWER(packet As ByteBuffer)
-
-        If packet.ReadInt32() = 0 Then
-            MsgBox(packet.ReadString())
-            Dim tmp_ht As New Hashtable
-            GetExchangeRateHTFromPacket(packet, tmp_ht)
-
-            ' to be reviewed !
-            '  exchangeRatesDict(tmp_ht(ID_VARIABLE)) = tmp_ht
-
-            NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_CREATE_EXCHANGE_RATE_ANSWER, AddressOf SMSG_CREATE_EXCHANGE_RATE_ANSWER)
-            RaiseEvent ExchangeRateCreationEvent(tmp_ht)
-        Else
-
-        End If
-
-    End Sub
-
-    Friend Shared Sub CMSG_READ_EXCHANGE_RATE(ByRef id As UInt32)
-
-        NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_READ_EXCHANGE_RATE_ANSWER, AddressOf SMSG_READ_EXCHANGE_RATE_ANSWER)
-        Dim packet As New ByteBuffer(CType(ClientMessage.CMSG_CREATE_EXCHANGE_RATE, UShort))
-        packet.Release()
-        NetworkManager.GetInstance().Send(packet)
-
-    End Sub
-
-    Friend Shared Sub SMSG_READ_EXCHANGE_RATE_ANSWER(packet As ByteBuffer)
-
-        If packet.ReadInt32() = 0 Then
-            Dim ht As New Hashtable
-            GetExchangeRateHTFromPacket(packet, ht)
-            NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_CREATE_EXCHANGE_RATE_ANSWER, AddressOf SMSG_READ_EXCHANGE_RATE_ANSWER)
-            RaiseEvent ExchangeRateRead(ht)
-        Else
-
-        End If
-
-    End Sub
-
-    Friend Sub UpdateBatch(ByRef updates As List(Of Object()))
-
-        ' to be implemented !!!! priority normal
-
-        request_id.Clear()
-        For Each update As Object() In updates
-
-
-        Next
-
-
-    End Sub
 
     Friend Sub CMSG_UPDATE_EXCHANGE_RATE(ByRef id As UInt32, _
                                   ByRef updated_var As String, _
@@ -179,35 +118,15 @@ Friend Class ExchangeRate
             GetExchangeRateHTFromPacket(packet, ht)
             NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_UPDATE_EXCHANGE_RATE_ANSWER, AddressOf SMSG_UPDATE_EXCHANGE_RATE_ANSWER)
 
-            ' inform update ok 
-            '   exchangeRatesDict(ht(ID_VARIABLE)) = ht
-            ' still here ??? priority normal
+            exchangeRatesDict(ht(EX_RATES_LOCAL_CURR_VAR) & Computer.TOKEN_SEPARATOR & _
+                              ht(EX_RATES_RATE_VARIABLE) & Computer.TOKEN_SEPARATOR & _
+                              ht(EX_RATES_PERIOD_VARIABLE)) = _
+                              ht(EX_RATES_RATE_VARIABLE)
 
-
-            RaiseEvent ExchangeRateUpdateEvent(ht)
+            RaiseEvent ExchangeRateUpdateEvent(True, ht)
         Else
-
+            RaiseEvent ExchangeRateUpdateEvent(False, Nothing)
         End If
-
-    End Sub
-
-    Friend Sub CMSG_DELETE_EXCHANGE_RATE(ByRef id As UInt32)
-
-        NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_DELETE_EXCHANGE_RATE_ANSWER, AddressOf SMSG_DELETE_EXCHANGE_RATE_ANSWER)
-        Dim packet As New ByteBuffer(CType(ClientMessage.CMSG_DELETE_EXCHANGE_RATE, UShort))
-        packet.WriteUint32(id)
-        packet.Release()
-        NetworkManager.GetInstance().Send(packet)
-
-    End Sub
-
-    Private Sub SMSG_DELETE_EXCHANGE_RATE_ANSWER()
-
-        '   If packet.ReadInt32() = 0 Then
-        Dim id As UInt32
-        ' get id from request_id ?
-        NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_DELETE_EXCHANGE_RATE_ANSWER, AddressOf SMSG_DELETE_EXCHANGE_RATE_ANSWER)
-        RaiseEvent ExchangeRateDeleteEvent(id)
 
     End Sub
 
@@ -236,8 +155,6 @@ Friend Class ExchangeRate
 
 
 #End Region
-
-
 
 
 End Class

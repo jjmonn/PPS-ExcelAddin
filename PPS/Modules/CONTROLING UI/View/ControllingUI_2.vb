@@ -143,7 +143,7 @@ Friend Class ControllingUI_2
         leftPaneExpandBT.Width = 19
         leftPaneExpandBT.Height = 19
         leftPaneExpandBT.ImageList = ExpansionImageList
-        leftPaneExpandBT.ImageIndex = 2
+        leftPaneExpandBT.ImageKey = "menu"
         leftPaneExpandBT.Text = ""
         leftPaneExpandBT.FlatStyle = FlatStyle.Flat
         leftPaneExpandBT.FlatAppearance.BorderSize = 0
@@ -252,7 +252,7 @@ Friend Class ControllingUI_2
         rightPane_Control.Dock = DockStyle.Fill
 
         rightPane_Control.CollapseRightPaneBT.ImageList = ExpansionImageList
-        rightPane_Control.CollapseRightPaneBT.ImageKey = "expand_right"
+        rightPane_Control.CollapseRightPaneBT.ImageKey = "minus"
 
         AddHandler rightPane_Control.UpdateBT.Click, AddressOf RefreshFromRightPane
         AddHandler rightPane_Control.CollapseRightPaneBT.Click, AddressOf CollapseSP2Pane2
@@ -264,7 +264,7 @@ Friend Class ControllingUI_2
         rightPaneExpandBT.Height = 19
         rightPaneExpandBT.ImageList = ExpansionImageList
         rightPaneExpandBT.Margin = New Padding(3, 5, 3, 3)
-        rightPaneExpandBT.ImageKey = "expand_left"
+        rightPaneExpandBT.ImageKey = "menu"
         rightPaneExpandBT.Text = ""
         rightPaneExpandBT.FlatStyle = FlatStyle.Flat
         rightPaneExpandBT.PaintBorder = False

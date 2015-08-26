@@ -135,7 +135,6 @@
     <Compile Include="Models\CRUDs\New CRUDs\Product.vb" />
     <Compile Include="Models\CRUDs\New CRUDs\ProductsFilter.vb" />
     <Compile Include="Models\CRUDs\New CRUDs\FactsVersion.vb" />
-    <Compile Include="Models\CRUDs\New CRUDs\SuperCRUD.vb" />
     <Compile Include="Modules\CONTROLING UI\View\CUI2LeftPane.Designer.vb">
       <DependentUpon>CUI2LeftPane.vb</DependentUpon>
     </Compile>

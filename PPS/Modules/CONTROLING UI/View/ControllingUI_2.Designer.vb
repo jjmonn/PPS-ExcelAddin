@@ -79,13 +79,13 @@ Partial Class ControllingUI_2
         '
         Me.EntitiesRCMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.RefreshRightClick})
         Me.EntitiesRCMenu.Name = "ContextMenuStripEntitiesNodes"
-        Me.EntitiesRCMenu.Size = New System.Drawing.Size(153, 50)
+        Me.EntitiesRCMenu.Size = New System.Drawing.Size(124, 28)
         '
         'RefreshRightClick
         '
         Me.RefreshRightClick.Image = CType(resources.GetObject("RefreshRightClick.Image"), System.Drawing.Image)
         Me.RefreshRightClick.Name = "RefreshRightClick"
-        Me.RefreshRightClick.Size = New System.Drawing.Size(152, 24)
+        Me.RefreshRightClick.Size = New System.Drawing.Size(123, 24)
         Me.RefreshRightClick.Text = "Refresh"
         '
         'PeriodsRCMenu
@@ -412,10 +412,8 @@ Partial Class ControllingUI_2
         '
         Me.ExpansionImageList.ImageStream = CType(resources.GetObject("ExpansionImageList.ImageStream"), System.Windows.Forms.ImageListStreamer)
         Me.ExpansionImageList.TransparentColor = System.Drawing.Color.Transparent
-        Me.ExpansionImageList.Images.SetKeyName(0, "expand_down")
-        Me.ExpansionImageList.Images.SetKeyName(1, "expand_up")
-        Me.ExpansionImageList.Images.SetKeyName(2, "expand_right")
-        Me.ExpansionImageList.Images.SetKeyName(3, "expand_left")
+        Me.ExpansionImageList.Images.SetKeyName(0, "menu")
+        Me.ExpansionImageList.Images.SetKeyName(1, "minus")
         '
         'ControllingUI_2
         '

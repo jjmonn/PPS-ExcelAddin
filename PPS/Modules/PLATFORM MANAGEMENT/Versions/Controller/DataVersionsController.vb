@@ -89,29 +89,17 @@ Friend Class DataVersionsController
 #Region "Interface"
 
     Friend Sub CreateVersion(ByRef hash As Hashtable, _
-                             Optional ByRef parent_node As VIBlend.WinForms.Controls.vTreeNode = Nothing, _
                              Optional ByRef origin_version_id As String = "")
 
+        ' implement copy creation 
+        ' priority high
         ' quid ratesversion id priority high
-        hash.Add(ITEMS_POSITIONS, 1)
         GlobalVariables.Versions.CMSG_CREATE_VERSION(hash)
         NewVersionUI.Hide()
 
     End Sub
 
-    Friend Sub CreateFolder(ByRef folder_name As String, _
-                            Optional parent_node As TreeNode = Nothing)
-
-        Dim hash As New Hashtable
-        hash.Add(IS_FOLDER_VARIABLE, 1)
-        hash.Add(ITEMS_POSITIONS, 1)
-        If Not parent_node Is Nothing Then hash.Add(PARENT_ID_VARIABLE, parent_node.Name)
-
-        GlobalVariables.Versions.CMSG_CREATE_VERSION(hash)
-
-    End Sub
-
-    Private Sub AfterCreate(ByRef ht As Hashtable)
+    Private Sub AfterCreate(ByRef status As Boolean, ByRef ht As Hashtable)
 
         If ht(PARENT_ID_VARIABLE) <> 0 Then
             Dim parentNode As VIBlend.WinForms.Controls.vTreeNode = Nothing
@@ -141,7 +129,7 @@ Friend Class DataVersionsController
 
     End Sub
 
-    Private Sub AfterUpdate(ByRef ht As Hashtable)
+    Private Sub AfterUpdate(ByRef status As Boolean, ByRef ht As Hashtable)
 
         ' to be implemented
         ' priority normal
@@ -158,7 +146,7 @@ Friend Class DataVersionsController
 
     End Sub
 
-    Private Sub AfterDelete(ByRef id As UInt32)
+    Private Sub AfterDelete(ByRef status As Boolean, ByRef id As UInt32)
 
         ' ask to change current version if deleted
         ' priority high

@@ -473,7 +473,7 @@ Friend Class AccountsController
 
 #Region "Events"
 
-    Private Sub AccountCreateConfirmation(ByRef attributes As Hashtable)
+    Private Sub AccountCreateConfirmation(ByRef status As Boolean, ByRef attributes As Hashtable)
 
         accountsNameKeysDictionary.Add(attributes(NAME_VARIABLE), attributes(ID_VARIABLE))
         If IsNumeric(attributes(PARENT_ID_VARIABLE)) Then

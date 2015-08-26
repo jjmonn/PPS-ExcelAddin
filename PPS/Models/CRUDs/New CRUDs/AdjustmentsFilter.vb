@@ -11,28 +11,25 @@ Imports System.Collections.Generic
 '
 ' Author: Julien Monnereau
 ' Created: 23/07/2015
-' Last modified: 05/08/2015
+' Last modified: 26/08/2015
 
 
 
 Friend Class AdjustmentFilter
 
-#Region "Instance variables"
 
+#Region "Instance variables"
 
     ' Variables
     Friend state_flag As Boolean
-    Friend server_response_flag As Boolean
-    Friend adjustmentsFilters_list As New List(Of Hashtable)
-    Private request_id As Dictionary(Of UInt32, Boolean)
-    Private fIdFvDict As New Dictionary(Of String, UInt32)
+    Friend adjustmentsFiltersHash As New Dictionary(Of Int32, Dictionary(Of Int32, Int32))
 
     ' Events
-    Public Event ObjectInitialized()
-    Public Event AdjustmentFilterCreationEvent(ByRef attributes As Hashtable)
-    Public Shared Event AdjustmentFilterRead(ByRef attributes As Hashtable)
-    Public Event AdjustmentFilterUpdateEvent()
-    Public Event AdjustmentFilterDeleteEvent(ByRef id As UInt32)
+    Public Event ObjectInitialized(ByRef status As Boolean)
+    Public Event AdjustmentFilterCreationEvent(ByRef status As Boolean, ByRef attributes As Hashtable)
+    Public Event AdjustmentFilterDeleteEvent(ByRef status As Boolean, ByRef adjustmentId As UInt32, ByRef filterId As UInt32)
+    Public Event AdjustmentFilterUpdateEvent(ByRef status As Boolean, ByRef attributes As Hashtable)
+
 
 #End Region
 
@@ -41,6 +38,9 @@ Friend Class AdjustmentFilter
 
     Friend Sub New()
 
+        NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_READ_ADJUSTMENT_FILTER_ANSWER, AddressOf SMSG_READ_ADJUSTMENT_FILTER_ANSWER)
+        NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_DELETE_ADJUSTMENT_FILTER_ANSWER, AddressOf SMSG_DELETE_ADJUSTMENT_FILTER_ANSWER)
+        state_flag = False
         LoadAdjustmentFiltersTable()
 
     End Sub
@@ -60,17 +60,20 @@ Friend Class AdjustmentFilter
             For i As Int32 = 1 To packet.ReadInt32()
                 Dim tmp_ht As New Hashtable
                 GetAdjustmentFilterHTFromPacket(packet, tmp_ht)
-                adjustmentsFilters_list.Add(tmp_ht)
-                fIdFvDict.Add(tmp_ht(ADJUSTMENT_ID_VARIABLE) & tmp_ht(FILTER_ID_VARIABLE), tmp_ht(FILTER_VALUE_ID_VARIABLE))
+    
+                AddRecordToAdjustmentsFiltersHash(tmp_ht(ADJUSTMENT_ID_VARIABLE), _
+                                                tmp_ht(FILTER_ID_VARIABLE), _
+                                                tmp_ht(FILTER_VALUE_ID_VARIABLE))
             Next
-            NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_LIST_ADJUSTMENT_FILTER_ANSWER, AddressOf SMSG_LIST_ADJUSTMENT_FILTER_ANSWER)
-            server_response_flag = True
-            RaiseEvent ObjectInitialized()
+            state_flag = True
+            RaiseEvent ObjectInitialized(True)
         Else
-            server_response_flag = False
+            state_flag = False
         End If
+        NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_LIST_ADJUSTMENT_FILTER_ANSWER, AddressOf SMSG_LIST_ADJUSTMENT_FILTER_ANSWER)
 
     End Sub
+
 
 #End Region
 
@@ -91,81 +94,67 @@ Friend Class AdjustmentFilter
 
         If packet.ReadInt32() = 0 Then
             MsgBox(packet.ReadString())
-            Dim tmp_ht As New Hashtable
-            GetAdjustmentFilterHTFromPacket(packet, tmp_ht)
-            adjustmentsFilters_list.Add(tmp_ht)
-            NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_CREATE_ADJUSTMENT_FILTER_ANSWER, AddressOf SMSG_CREATE_ADJUSTMENT_FILTER_ANSWER)
-            RaiseEvent AdjustmentFilterCreationEvent(tmp_ht)
+            Dim ht As New Hashtable
+            GetAdjustmentFilterHTFromPacket(packet, ht)
+            RaiseEvent AdjustmentFilterCreationEvent(True, ht)
         Else
-
+            RaiseEvent AdjustmentFilterCreationEvent(False, Nothing)
         End If
+        NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_CREATE_ADJUSTMENT_FILTER_ANSWER, AddressOf SMSG_CREATE_ADJUSTMENT_FILTER_ANSWER)
 
     End Sub
 
-    Friend Shared Sub CMSG_READ_ADJUSTMENT_FILTER(ByRef id As UInt32)
+    Friend Sub CMSG_READ_ADJUSTMENT_FILTER(ByRef id As UInt32)
 
-        NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_READ_ADJUSTMENT_FILTER_ANSWER, AddressOf SMSG_READ_ADJUSTMENT_FILTER_ANSWER)
-        Dim packet As New ByteBuffer(CType(ClientMessage.CMSG_CREATE_ADJUSTMENTS_FILTER, UShort))
+        Dim packet As New ByteBuffer(CType(ClientMessage.CMSG_READ_ADJUSTMENTS_FILTER, UShort))
         packet.Release()
         NetworkManager.GetInstance().Send(packet)
 
     End Sub
 
-    Friend Shared Sub SMSG_READ_ADJUSTMENT_FILTER_ANSWER(packet As ByteBuffer)
+    Private Sub SMSG_READ_ADJUSTMENT_FILTER_ANSWER(packet As ByteBuffer)
 
         If packet.ReadInt32() = 0 Then
             Dim ht As New Hashtable
             GetAdjustmentFilterHTFromPacket(packet, ht)
-            NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_CREATE_ADJUSTMENT_FILTER_ANSWER, AddressOf SMSG_READ_ADJUSTMENT_FILTER_ANSWER)
-            RaiseEvent AdjustmentFilterRead(ht)
+            AddRecordToAdjustmentsFiltersHash(ht(ADJUSTMENT_ID_VARIABLE), _
+                                              ht(FILTER_ID_VARIABLE), _
+                                              ht(FILTER_VALUE_ID_VARIABLE))
         Else
-
         End If
 
     End Sub
 
-    Friend Sub CMSG_UPDATE_ADJUSTMENT_FILTER(ByRef id As UInt32, _
-                                  ByRef updated_var As String, _
-                                  ByRef new_value As String)
-
-        Dim tmp_ht As Hashtable = adjustmentsFilters_list(id).Clone ' check clone !!!!
-        tmp_ht(updated_var) = new_value
+    Friend Sub CMSG_UPDATE_ADJUSTMENT_FILTER(ByRef adjustmentId As Int32, _
+                                             ByRef filterId As Int32, _
+                                             ByRef filterValueId As Int32)
 
         NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_UPDATE_ADJUSTMENT_FILTER_ANSWER, AddressOf SMSG_UPDATE_ADJUSTMENT_FILTER_ANSWER)
         Dim packet As New ByteBuffer(CType(ClientMessage.CMSG_UPDATE_ADJUSTMENTS_FILTER, UShort))
-        WriteAdjustmentFilterPacket(packet, tmp_ht)
+        packet.WriteUint32(adjustmentId)
+        packet.WriteUint32(filterId)
+        packet.WriteUint32(filterValueId)
         packet.Release()
         NetworkManager.GetInstance().Send(packet)
 
     End Sub
 
-    Friend Sub CMSG_UPDATE_ADJUSTMENT_FILTER(ByRef attributes As Hashtable)
-
-        NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_UPDATE_ADJUSTMENT_FILTER_ANSWER, AddressOf SMSG_UPDATE_ADJUSTMENT_FILTER_ANSWER)
-        Dim packet As New ByteBuffer(CType(ClientMessage.CMSG_UPDATE_ADJUSTMENTS_FILTER, UShort))
-        WriteAdjustmentFilterPacket(packet, attributes)
-        packet.Release()
-        NetworkManager.GetInstance().Send(packet)
-
-    End Sub
 
     Private Sub SMSG_UPDATE_ADJUSTMENT_FILTER_ANSWER(packet As ByteBuffer)
 
         If packet.ReadInt32() = 0 Then
             Dim ht As New Hashtable
             GetAdjustmentFilterHTFromPacket(packet, ht)
-            adjustmentsFilters_list(ht(ID_VARIABLE)) = ht
-            NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_UPDATE_ADJUSTMENT_FILTER_ANSWER, AddressOf SMSG_UPDATE_ADJUSTMENT_FILTER_ANSWER)
-            RaiseEvent AdjustmentFilterUpdateEvent()
+            RaiseEvent AdjustmentFilterUpdateEvent(True, ht)
         Else
-
+            RaiseEvent AdjustmentFilterUpdateEvent(False, Nothing)
         End If
+        NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_UPDATE_ADJUSTMENT_FILTER_ANSWER, AddressOf SMSG_UPDATE_ADJUSTMENT_FILTER_ANSWER)
 
     End Sub
 
     Friend Sub CMSG_DELETE_ADJUSTMENT_FILTER(ByRef id As UInt32)
 
-        NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_DELETE_ADJUSTMENT_FILTER_ANSWER, AddressOf SMSG_DELETE_ADJUSTMENT_FILTER_ANSWER)
         Dim packet As New ByteBuffer(CType(ClientMessage.CMSG_DELETE_ADJUSTMENTS_FILTER, UShort))
         packet.WriteUint32(id)
         packet.Release()
@@ -173,13 +162,16 @@ Friend Class AdjustmentFilter
 
     End Sub
 
-    Private Sub SMSG_DELETE_ADJUSTMENT_FILTER_ANSWER()
+    Private Sub SMSG_DELETE_ADJUSTMENT_FILTER_ANSWER(packet As ByteBuffer)
 
-        '   If packet.ReadInt32() = 0 Then
-        Dim id As UInt32
-        ' get id from request_id ?
-        NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_DELETE_ADJUSTMENT_FILTER_ANSWER, AddressOf SMSG_DELETE_ADJUSTMENT_FILTER_ANSWER)
-        RaiseEvent AdjustmentFilterDeleteEvent(id)
+        If packet.ReadInt32() = 0 Then
+            Dim adjustmentId As UInt32 = packet.ReadInt32
+            Dim filterId As UInt32 = packet.ReadInt32
+            RemoveRecordFromFiltersHash(adjustmentId, filterId)
+            RaiseEvent AdjustmentFilterDeleteEvent(True, adjustmentId, filterId)
+        Else
+            RaiseEvent AdjustmentFilterDeleteEvent(False, 0, 0)
+        End If
 
     End Sub
 
@@ -192,20 +184,12 @@ Friend Class AdjustmentFilter
                                          ByRef filter_value_id As UInt32) As List(Of UInt32)
 
         Dim adjustments_list As New List(Of UInt32)
-        For Each ht In adjustmentsFilters_list
-            If ht(FILTER_ID_VARIABLE) = filter_id _
-            AndAlso ht(FILTER_VALUE_ID_VARIABLE) = filter_value_id Then
-                adjustments_list.Add(ht(ADJUSTMENT_ID_VARIABLE))
+        For Each adjustmentId As Int32 In adjustmentsFiltersHash.Keys
+            If adjustmentsFiltersHash(adjustmentId)(filter_id) = filter_value_id Then
+                adjustments_list.Add(adjustmentId)
             End If
         Next
         Return adjustments_list
-
-    End Function
-
-    Friend Function GetFilterValue(ByRef adjustment_id As UInt32, _
-                                   ByRef filter_id As UInt32)
-
-        Return fIdFvDict(adjustment_id & filter_id)
 
     End Function
 
@@ -214,6 +198,31 @@ Friend Class AdjustmentFilter
 
 
 #Region "Utilities"
+
+    Private Sub AddRecordToAdjustmentsFiltersHash(ByRef adjustmentId As Int32, _
+                                              ByRef filterId As Int32, _
+                                              ByRef filterValueId As Int32)
+
+        If adjustmentsFiltersHash.ContainsKey(adjustmentId) Then
+            If adjustmentsFiltersHash(adjustmentId).ContainsKey(filterId) Then
+                adjustmentsFiltersHash(adjustmentId)(filterId) = filterValueId
+            Else
+                adjustmentsFiltersHash(adjustmentId).Add(filterId, filterValueId)
+            End If
+        Else
+            adjustmentsFiltersHash.Add(adjustmentId, New Dictionary(Of Int32, Int32))
+            adjustmentsFiltersHash(adjustmentId).Add(filterId, filterValueId)
+        End If
+
+    End Sub
+
+    Private Sub RemoveRecordFromFiltersHash(ByRef adjustmentId As Int32, _
+                                           ByRef filterId As Int32)
+
+        On Error Resume Next
+        adjustmentsFiltersHash(adjustmentId).Remove(filterId)
+
+    End Sub
 
     Friend Shared Sub GetAdjustmentFilterHTFromPacket(ByRef packet As ByteBuffer, _
                                                   ByRef adjustmentFilter_ht As Hashtable)
@@ -235,6 +244,15 @@ Friend Class AdjustmentFilter
 
 
 #End Region
+
+
+    Protected Overrides Sub finalize()
+
+        NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_READ_ADJUSTMENT_FILTER_ANSWER, AddressOf SMSG_READ_ADJUSTMENT_FILTER_ANSWER)
+        NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_DELETE_ADJUSTMENT_FILTER_ANSWER, AddressOf SMSG_DELETE_ADJUSTMENT_FILTER_ANSWER)
+        MyBase.Finalize()
+
+    End Sub
 
 
 

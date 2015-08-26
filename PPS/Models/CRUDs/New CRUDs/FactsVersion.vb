@@ -7,7 +7,7 @@
 '
 ' Author: Julien Monnereau
 ' Created: 29/07/2015
-' Last modified: 21/08/2015
+' Last modified: 26/08/2015
 
 
 Imports System.Collections
@@ -27,9 +27,9 @@ Friend Class FactsVersion
 
     ' Events
     Public Event ObjectInitialized()
-    Public Event VersionCreationEvent(ByRef attributes As Hashtable)
-    Public Event VersionUpdateEvent(ByRef attributes As Hashtable)
-    Public Event VersionDeleteEvent(ByRef id As UInt32)
+    Public Event VersionCreationEvent(ByRef status As Boolean, ByRef attributes As Hashtable)
+    Public Event VersionUpdateEvent(ByRef status As Boolean, ByRef attributes As Hashtable)
+    Public Event VersionDeleteEvent(ByRef status As Boolean, ByRef id As UInt32)
 
 
 #End Region
@@ -39,6 +39,8 @@ Friend Class FactsVersion
 
     Friend Sub New()
 
+        NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_READ_VERSION_ANSWER, AddressOf SMSG_READ_VERSION_ANSWER)
+        NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_DELETE_VERSION_ANSWER, AddressOf SMSG_DELETE_VERSION_ANSWER)
         LoadVersionsTable()
 
     End Sub
@@ -61,12 +63,12 @@ Friend Class FactsVersion
                 GetVersionHTFromPacket(packet, tmp_ht)
                 versions_hash(CInt(tmp_ht(ID_VARIABLE))) = tmp_ht
             Next
-            NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_LIST_VERSION_ANSWER, AddressOf SMSG_LIST_VERSION_ANSWER)
             state_flag = True
             RaiseEvent ObjectInitialized()
         Else
             state_flag = False
         End If
+        NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_LIST_VERSION_ANSWER, AddressOf SMSG_LIST_VERSION_ANSWER)
 
     End Sub
 
@@ -90,33 +92,29 @@ Friend Class FactsVersion
         If packet.ReadInt32() = 0 Then
             Dim tmp_ht As New Hashtable
             GetVersionHTFromPacket(packet, tmp_ht)
-            versions_hash(tmp_ht(ID_VARIABLE)) = tmp_ht
-            NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_CREATE_VERSION_ANSWER, AddressOf SMSG_CREATE_VERSION_ANSWER)
-            RaiseEvent VersionCreationEvent(tmp_ht)
+            RaiseEvent VersionCreationEvent(True, tmp_ht)
         Else
-
+            RaiseEvent VersionCreationEvent(False, Nothing)
         End If
+        NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_CREATE_VERSION_ANSWER, AddressOf SMSG_CREATE_VERSION_ANSWER)
 
     End Sub
 
-    Friend Shared Sub CMSG_READ_VERSION(ByRef id As UInt32)
+    Friend Sub CMSG_READ_VERSION(ByRef id As UInt32)
 
-        NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_READ_VERSION_ANSWER, AddressOf SMSG_READ_VERSION_ANSWER)
-        Dim packet As New ByteBuffer(CType(ClientMessage.CMSG_CREATE_VERSION, UShort))
+        Dim packet As New ByteBuffer(CType(ClientMessage.CMSG_READ_VERSION, UShort))
         packet.Release()
         NetworkManager.GetInstance().Send(packet)
 
     End Sub
 
-    Friend Shared Sub SMSG_READ_VERSION_ANSWER(packet As ByteBuffer)
+    Private Sub SMSG_READ_VERSION_ANSWER(packet As ByteBuffer)
 
         If packet.ReadInt32() = 0 Then
             Dim ht As New Hashtable
             GetVersionHTFromPacket(packet, ht)
-            NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_CREATE_VERSION_ANSWER, AddressOf SMSG_READ_VERSION_ANSWER)
-            ' Send the ht to the object which demanded it
+            versions_hash(ht(ID_VARIABLE)) = ht
         Else
-
         End If
 
     End Sub
@@ -149,21 +147,18 @@ Friend Class FactsVersion
     Private Sub SMSG_UPDATE_VERSION_ANSWER(packet As ByteBuffer)
 
         If packet.ReadInt32() = 0 Then
-            ' Confirmation => return version
             Dim ht As New Hashtable
             GetVersionHTFromPacket(packet, ht)
-            versions_hash(ht(ID_VARIABLE)) = ht
-            NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_UPDATE_VERSION_ANSWER, AddressOf SMSG_UPDATE_VERSION_ANSWER)
-            RaiseEvent VersionUpdateEvent(ht)
+            RaiseEvent VersionUpdateEvent(True, ht)
         Else
-
+            RaiseEvent VersionUpdateEvent(False, Nothing)
         End If
+        NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_UPDATE_VERSION_ANSWER, AddressOf SMSG_UPDATE_VERSION_ANSWER)
 
     End Sub
 
     Friend Sub CMSG_DELETE_VERSION(ByRef id As UInt32)
 
-        NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_DELETE_VERSION_ANSWER, AddressOf SMSG_DELETE_VERSION_ANSWER)
         Dim packet As New ByteBuffer(CType(ClientMessage.CMSG_DELETE_VERSION, UShort))
         packet.WriteUint32(id)
         packet.Release()
@@ -175,10 +170,10 @@ Friend Class FactsVersion
 
         If packet.ReadInt32() = 0 Then
             Dim id As UInt32 = packet.ReadUint32
-            NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_DELETE_VERSION_ANSWER, AddressOf SMSG_DELETE_VERSION_ANSWER)
-            RaiseEvent VersionDeleteEvent(id)
+            versions_hash.Remove(id)
+            RaiseEvent VersionDeleteEvent(True, id)
         Else
-
+            RaiseEvent VersionDeleteEvent(False, 0)
         End If
 
     End Sub
@@ -475,6 +470,16 @@ Friend Class FactsVersion
     'End Function
 
 #End Region
+
+
+    Protected Overrides Sub finalize()
+
+        NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_READ_VERSION_ANSWER, AddressOf SMSG_READ_VERSION_ANSWER)
+        NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_DELETE_VERSION_ANSWER, AddressOf SMSG_DELETE_VERSION_ANSWER)
+        MyBase.Finalize()
+
+    End Sub
+
 
 
 
