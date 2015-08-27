@@ -12,7 +12,7 @@
 '       - 
 '
 '
-' Last modified: 17/07/2015
+' Last modified: 27/08/2015
 ' Author: Julien Monnereau
 
 
@@ -67,17 +67,14 @@ Friend Class NewAccountUI
 
     Private Sub ComboBoxesInitialize()
 
-        For Each item In AccountsView.formatsCB.Items
+        For Each item In AccountsView.FormatComboBox.Items
             formatCB.Items.Add(item)
         Next
 
-        For Each item In AccountsView.formulaTypeCB.Items
+        For Each item In AccountsView.FormulaTypeComboBox.Items
             formulaCB.Items.Add(item)
         Next
 
-        For Each item In AccountsView.TypeCB.Items
-            typeCB.Items.Add(item)
-        Next
 
     End Sub
 
@@ -105,19 +102,18 @@ Friend Class NewAccountUI
         If IsFormValid() = True Then
             Dim TempHT As New Hashtable
             TempHT.Add(NAME_VARIABLE, nameTB.Text)
-            TempHT.Add(ACCOUNT_FORMULA_TYPE_VARIABLE, AccountsView.fTypeNameCodeDictionary(formulaCB.Text))
+            TempHT.Add(ACCOUNT_FORMULA_TYPE_VARIABLE, formulaCB.SelectedItem.value)
             If TempHT(ACCOUNT_FORMULA_TYPE_VARIABLE) = AGGREGATION_F_TYPE_CODE Then
                 TempHT.Add(ACCOUNT_FORMULA_VARIABLE, AGGREGATION_F_TYPE_CODE)
             Else
                 TempHT.Add(ACCOUNT_FORMULA_VARIABLE, "")
             End If
-            TempHT.Add(ACCOUNT_FORMAT_VARIABLE, AccountsView.formatsNameKeyDictionary(formatCB.Text))
-            TempHT.Add(ACCOUNT_TYPE_VARIABLE, AccountsView.accountsTypeNameKeyDictionary(typeCB.Text))
+            TempHT.Add(ACCOUNT_TYPE_VARIABLE, formatCB.SelectedItem.value)
             TempHT.Add(ACCOUNT_IMAGE_VARIABLE, TempHT(ACCOUNT_FORMULA_TYPE_VARIABLE))
             TempHT.Add(ACCOUNT_SELECTED_IMAGE_VARIABLE, TempHT(ACCOUNT_FORMULA_TYPE_VARIABLE))
             If aggregation_RB.Checked = True Then TempHT.Add(ACCOUNT_CONSOLIDATION_OPTION_VARIABLE, GlobalEnums.ConsolidationOptions.AGGREGATION)
             If recompute_RB.Checked = True Then TempHT.Add(ACCOUNT_CONSOLIDATION_OPTION_VARIABLE, GlobalEnums.ConsolidationOptions.RECOMPUTATION)
-            If flux_RB.Checked = True Then TempHT.Add(ACCOUNT_CONVERSION_OPTION_VARIABLE, GlobalEnums.ConversionOptions.AVERAGE_PERIOD_RATE)
+            If flux_RB.Checked = True Then TempHT.Add(ACCOUNT_CONVERSION_OPTION_VARIABLE, GlobalEnums.ConversionOptions.AVERAGE_RATE)
             If bs_item_RB.Checked = True Then TempHT.Add(ACCOUNT_CONVERSION_OPTION_VARIABLE, GlobalEnums.ConversionOptions.END_OF_PERIOD_RATE)
 
             Controller.CreateAccount(TempHT, parent_node)

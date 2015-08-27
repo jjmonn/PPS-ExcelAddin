@@ -320,7 +320,7 @@ Friend Class AcquisitionModel
         ' dataMap: [account_id][period_token] => value
         ' manage case where value not found ?
         On Error GoTo errorHandler1
-        Return computationDataMap(entitiesNameIdDict(entityName))(accountId)(Period_token)
+        Return computationDataMap(CInt(entitiesNameIdDict(entityName)))(accountId)(Period_token)
 
 errorHandler1:
         System.Diagnostics.Debug.WriteLine("output not found in dictionary" & Chr(13) & _

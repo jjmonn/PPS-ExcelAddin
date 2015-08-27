@@ -14,13 +14,14 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 23/10/2014
+' Last modified: 26/08/2015
 
 
 Imports Microsoft.Office.Interop
 
 
 Public Class ManualRangesSelectionUI
+
 
 #Region "Instance Variables"
 
@@ -32,6 +33,7 @@ Public Class ManualRangesSelectionUI
     Private rangesModifiedFlag As Boolean
 
 #End Region
+
 
 #Region "Initialize"
 
@@ -48,7 +50,8 @@ Public Class ManualRangesSelectionUI
     End Sub
 
 #End Region
-    
+
+
 #Region "Call Backs"
 
     ' Launch Accounts Range Selection
@@ -128,7 +131,7 @@ Public Class ManualRangesSelectionUI
     Private Sub Validate_Cmd_Click(sender As Object, e As EventArgs) Handles Validate_Cmd.Click
 
         If rangesModifiedFlag = True Then
-            GRS.UpdateDataSet()
+            GRS.RefreshSnapshot(False)
         End If
         Me.Dispose()
         Me.Close()
@@ -147,7 +150,4 @@ Public Class ManualRangesSelectionUI
 #End Region
 
 
-   
-
-  
 End Class

@@ -12,7 +12,7 @@
 '
 '
 '
-' Last Modified: 17/07/2015
+' Last Modified: 27/08/2015
 ' Author: Julien Monnereau
 
 
@@ -29,29 +29,34 @@ Friend Class AccountsController
 
     ' Objects
     Private formulasMGT As ModelFormulasMGT
+    Private FormulasTranslator As FormulasTranslations
     Private View As AccountsControl
     Private NewAccountView As NewAccountUI
     Private AccountsTV As New TreeView
     Private PlatformMGTUI As PlatformMGTGeneralUI
 
+
     ' Variables
     Friend accountsNameKeysDictionary As Hashtable
     Friend positionsDictionary As New Dictionary(Of String, Double)
     Private dependant_account_id As String
-    
+    Friend FTypesToBeTested As New List(Of Int32)
+      
 #End Region
 
 
 #Region "Initialization and Closing"
 
-    Protected Friend Sub New()
+    Friend Sub New()
 
         accountsNameKeysDictionary = GlobalVariables.Accounts.GetAccountsDictionary(NAME_VARIABLE, ID_VARIABLE)
         GlobalVariables.Accounts.LoadAccountsTV(AccountsTV)
         View = New AccountsControl(Me, AccountsTV)
         NewAccountView = New NewAccountUI(View, Me)
-        formulasMGT = New ModelFormulasMGT(accountsNameKeysDictionary, AccountsTV)
+        FormulasTranslator = New FormulasTranslations(accountsNameKeysDictionary)
         positionsDictionary = TreeViewsUtilities.GeneratePositionsDictionary(AccountsTV)
+        FTypesToBeTested.Add(GlobalEnums.FormulaTypes.FIRST_PERIOD_INPUT)
+        FTypesToBeTested.Add(GlobalEnums.FormulaTypes.FORMULA)
 
         AddHandler globalvariables.accounts.AccountCreationEvent, AddressOf AccountCreateConfirmation
         AddHandler globalvariables.accounts.AccountUpdateEvent, AddressOf AccountUpdateConfirmation
@@ -74,7 +79,7 @@ Friend Class AccountsController
 
     End Sub
 
-    Protected Friend Sub sendCloseOrder()
+    Friend Sub sendCloseOrder()
 
         View.Dispose()
         PlatformMGTUI.displayControl()
@@ -164,6 +169,15 @@ Friend Class AccountsController
     Friend Sub UpdateFormula(ByRef id As String, ByRef formulaStr As String)
 
         If formulaStr <> "" Then
+
+            FormulasTranslator.GetDBFormulaFromHumanFormula(formulaStr)
+
+
+            '  to be reviewed/ remimplemented priority high
+
+            ' -> priority => periods 
+
+
             formulasMGT.convertFormulaFromNamesToKeys(formulaStr)
             If formulasMGT.errorList.Count = 0 Then
                 If formulasMGT.testFormula() = True _
@@ -193,6 +207,7 @@ Friend Class AccountsController
                 tmp_ht(ACCOUNT_FORMULA_VARIABLE) = ""
                 UpdateAccount(id, tmp_ht)
             End If
+
         End If
 
     End Sub
@@ -411,7 +426,7 @@ Friend Class AccountsController
     Friend Function FormulasTypesChecks() As Boolean
 
         Dim accountsNamesFormulaErrorList As New List(Of String)
-        Dim FTypesToBeTested As List(Of String) = FormulaTypesMapping.GetFTypesKeysNeedingFormula
+      
         For Each accountKey In positionsDictionary.Keys
             If FTypesToBeTested.Contains(globalvariables.accounts.accounts_hash(accountKey)(ACCOUNT_FORMULA_TYPE_VARIABLE)) Then
                 If globalvariables.accounts.accounts_hash(accountKey)(ACCOUNT_FORMULA_VARIABLE) = "" Then _

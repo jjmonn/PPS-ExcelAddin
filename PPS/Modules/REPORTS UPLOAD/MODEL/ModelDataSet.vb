@@ -19,7 +19,7 @@
 '       - if data = period -> bug
 '
 '
-' Last modified: 29/08/2014
+' Last modified: 26/08/2014
 ' Author: Julien Monnereau
 
 
@@ -107,17 +107,7 @@ Friend Class ModelDataSet
     Public Sub New(inputWS As Excel.Worksheet)
 
         Me.WS = inputWS
-        lastCell = Utilities_Functions.GetRealLastCell(inputWS)  'import function here ? !!
-
-        If IsNothing(lastCell) Then
-            MsgBox("The worksheet is empty")
-            GlobalScreenShot = Nothing
-            Exit Sub
-        End If
-
-        GlobalScreenShot = WS.Range(WS.Cells(1, 1), lastCell).Value
-        ReDim GlobalScreenShotFlag(UBound(GlobalScreenShot, 1), UBound(GlobalScreenShot, 2))
-
+       
         EntitiesNameKeyDictionary = GlobalVariables.Entities.GetEntitiesDictionary(NAME_VARIABLE, ID_VARIABLE)
         AccountsNameKeyDictionary = globalvariables.accounts.GetAccountsDictionary(NAME_VARIABLE, ID_VARIABLE)
 
@@ -128,8 +118,28 @@ Friend Class ModelDataSet
 
 #Region " Interface"
 
+    Friend Function WsScreenshot() As Boolean
+
+        lastCell = Utilities_Functions.GetRealLastCell(WS)
+        If IsNothing(lastCell) Then
+            MsgBox("The worksheet is empty")
+            GlobalScreenShot = Nothing
+            Return False
+        End If
+
+        GlobalScreenShot = WS.Range(WS.Cells(1, 1), lastCell).Value
+        ReDim GlobalScreenShotFlag(UBound(GlobalScreenShot, 1), UBound(GlobalScreenShot, 2))
+        Return True
+
+    End Function
+
     ' Lookup for Versions, Accounts, Periods and Entities
     Friend Sub SnapshotWS()
+
+        AccountsAddressValuesDictionary.Clear()
+        OutputsAccountsAddressvaluesDictionary.Clear()
+        periodsAddressValuesDictionary.Clear()
+        EntitiesAddressValuesDictionary.Clear()
 
         If Not VersionsIdentify() Then currentVersionCode = My.Settings.version_id
         DatesIdentify()

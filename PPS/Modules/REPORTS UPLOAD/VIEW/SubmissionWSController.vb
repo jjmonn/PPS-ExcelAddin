@@ -10,7 +10,7 @@
 '       - 
 '
 ' Author: Julien Monnereau
-' Last modified: 09/05/2015
+' Last modified: 28/08/2015
 
 
 Imports System.Collections.Generic
@@ -29,11 +29,16 @@ Friend Class SubmissionWSController
     ' Objects
     Private DataSet As ModelDataSet
     Private AcquisitionModel As AcquisitionModel
-    Private DataModificationsTracker As CDataModificationsTracking
+    Private DataModificationsTracker As DataModificationsTracking
     Private GeneralSubmissionController As GeneralSubmissionControler
+
 
     ' Variables
     Private disableWSChange As Boolean
+    Friend ws As Excel.Worksheet
+
+    ' const 
+    Private MAX_NB_ROWS As UInt16 = 16384
 
 #End Region
 
@@ -43,7 +48,7 @@ Friend Class SubmissionWSController
     Friend Sub New(ByRef inputGeneralSubmissionController As GeneralSubmissionControler, _
                    ByRef inputDataSet As ModelDataSet, _
                    ByRef inputAcquisitionModel As AcquisitionModel, _
-                   ByRef inputDataModificationTracker As CDataModificationsTracking)
+                   ByRef inputDataModificationTracker As DataModificationsTracking)
 
         GeneralSubmissionController = inputGeneralSubmissionController
         DataSet = inputDataSet
@@ -56,6 +61,21 @@ Friend Class SubmissionWSController
 
         AddHandler WS.Change, AddressOf Worksheet_Change
         AddHandler WS.BeforeRightClick, AddressOf Worksheet_BeforeRightClick
+        Me.ws = WS
+
+        ' AddHandler thisworkbook.SheetSelectionChange, AddressOf Worksheet_SelectionChange
+        'WS.Protect(DrawingObjects:=False, _
+        '           Contents:=True, _
+        '           Scenarios:= _
+        '           False, _
+        '           AllowFormattingCells:=True, _
+        '           AllowFormattingColumns:=True, _
+        '           AllowFormattingRows:=True, _
+        '           AllowInsertingHyperlinks:=True, _
+        '           AllowSorting:= _
+        '           True, _
+        '           AllowFiltering:=True, _
+        '           AllowUsingPivotTables:=True)
 
     End Sub
 
@@ -140,6 +160,12 @@ Friend Class SubmissionWSController
     ' Listen to changes in associated worksheet
     Friend Sub Worksheet_Change(ByVal Target As Excel.Range)
 
+        ' If row or column insertion then exit and relaunch dataset snapshot
+        If Target.Count > MAX_NB_ROWS Then
+            GeneralSubmissionController.RefreshSnapshot(False)
+            Exit Sub
+        End If
+
         Dim modelUpdateFlag As Boolean = False
         Dim cell_itemsHT As Hashtable
         Dim dependents_cells As Excel.Range = Nothing
@@ -220,6 +246,22 @@ Friend Class SubmissionWSController
 
         MsgBox("account(s detail")
 
+
+    End Sub
+
+    Friend Sub Worksheet_SelectionChange(ByVal Sh As Object, ByVal Target As Excel.Range)
+
+        ' doea not work yet : error in addin express Get Thisworkbook function
+        Dim ws As Excel.Worksheet = CType(Sh, Excel.Worksheet)
+        MsgBox("worksheet changed: " & ws.Name)
+
+        ' if ok 
+        '  -> change active GRS in addin ()
+        '  -> update ribbon
+        ' Entity
+        ' Currency 
+        ' Product
+        ' Client
 
     End Sub
 

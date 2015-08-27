@@ -38,20 +38,16 @@ Partial Class AccountsControl
         Me.submit_cmd = New System.Windows.Forms.Button()
         Me.formula_TB = New System.Windows.Forms.TextBox()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
-        Me.GroupBox4 = New System.Windows.Forms.GroupBox()
-        Me.flux_RB = New System.Windows.Forms.RadioButton()
-        Me.bs_item_RB = New System.Windows.Forms.RadioButton()
-        Me.GroupBox2 = New System.Windows.Forms.GroupBox()
-        Me.recompute_RB = New System.Windows.Forms.RadioButton()
-        Me.aggregation_RB = New System.Windows.Forms.RadioButton()
-        Me.formulaTypeCB = New System.Windows.Forms.ComboBox()
-        Me.Label3 = New System.Windows.Forms.Label()
-        Me.TypeCB = New System.Windows.Forms.ComboBox()
-        Me.formatsCB = New System.Windows.Forms.ComboBox()
-        Me.Label2 = New System.Windows.Forms.Label()
-        Me.Label5 = New System.Windows.Forms.Label()
+        Me.VLabel5 = New VIBlend.WinForms.Controls.vLabel()
+        Me.VLabel4 = New VIBlend.WinForms.Controls.vLabel()
+        Me.VLabel2 = New VIBlend.WinForms.Controls.vLabel()
+        Me.VLabel3 = New VIBlend.WinForms.Controls.vLabel()
+        Me.VLabel1 = New VIBlend.WinForms.Controls.vLabel()
+        Me.ConsolidationOptionRadioListBox = New VIBlend.WinForms.Controls.vRadioListBox()
+        Me.CurrencyConversionRadioListBox = New VIBlend.WinForms.Controls.vRadioListBox()
+        Me.FormulaTypeComboBox = New VIBlend.WinForms.Controls.vComboBox()
+        Me.FormatComboBox = New VIBlend.WinForms.Controls.vComboBox()
         Me.Name_TB = New System.Windows.Forms.TextBox()
-        Me.Label1 = New System.Windows.Forms.Label()
         Me.accountsIL = New System.Windows.Forms.ImageList(Me.components)
         Me.TVRCM = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.AddSubAccountToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -79,8 +75,6 @@ Partial Class AccountsControl
         Me.GroupBox5.SuspendLayout()
         Me.GroupBox3.SuspendLayout()
         Me.GroupBox1.SuspendLayout()
-        Me.GroupBox4.SuspendLayout()
-        Me.GroupBox2.SuspendLayout()
         Me.TVRCM.SuspendLayout()
         Me.MainMenu.SuspendLayout()
         Me.SuspendLayout()
@@ -98,8 +92,8 @@ Partial Class AccountsControl
         'SplitContainer1.Panel2
         '
         Me.SplitContainer1.Panel2.Controls.Add(Me.TableLayoutPanel2)
-        Me.SplitContainer1.Size = New System.Drawing.Size(926, 652)
-        Me.SplitContainer1.SplitterDistance = 229
+        Me.SplitContainer1.Size = New System.Drawing.Size(844, 652)
+        Me.SplitContainer1.SplitterDistance = 208
         Me.SplitContainer1.TabIndex = 23
         '
         'TableLayoutPanel1
@@ -114,7 +108,7 @@ Partial Class AccountsControl
         Me.TableLayoutPanel1.RowCount = 2
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25.0!))
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TableLayoutPanel1.Size = New System.Drawing.Size(229, 652)
+        Me.TableLayoutPanel1.Size = New System.Drawing.Size(208, 652)
         Me.TableLayoutPanel1.TabIndex = 0
         '
         'Panel1
@@ -123,7 +117,7 @@ Partial Class AccountsControl
         Me.Panel1.Location = New System.Drawing.Point(1, 1)
         Me.Panel1.Margin = New System.Windows.Forms.Padding(1)
         Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(227, 23)
+        Me.Panel1.Size = New System.Drawing.Size(206, 23)
         Me.Panel1.TabIndex = 1
         '
         'AccountsTVPanel
@@ -132,7 +126,7 @@ Partial Class AccountsControl
         Me.AccountsTVPanel.Location = New System.Drawing.Point(1, 26)
         Me.AccountsTVPanel.Margin = New System.Windows.Forms.Padding(1)
         Me.AccountsTVPanel.Name = "AccountsTVPanel"
-        Me.AccountsTVPanel.Size = New System.Drawing.Size(227, 625)
+        Me.AccountsTVPanel.Size = New System.Drawing.Size(206, 625)
         Me.AccountsTVPanel.TabIndex = 2
         '
         'TableLayoutPanel2
@@ -147,10 +141,10 @@ Partial Class AccountsControl
         Me.TableLayoutPanel2.Name = "TableLayoutPanel2"
         Me.TableLayoutPanel2.RowCount = 4
         Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25.0!))
-        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 297.0!))
-        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
-        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
-        Me.TableLayoutPanel2.Size = New System.Drawing.Size(693, 652)
+        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 285.0!))
+        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 54.77032!))
+        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 45.22968!))
+        Me.TableLayoutPanel2.Size = New System.Drawing.Size(632, 652)
         Me.TableLayoutPanel2.TabIndex = 1
         '
         'GroupBox5
@@ -158,9 +152,9 @@ Partial Class AccountsControl
         Me.GroupBox5.Controls.Add(Me.SaveDescriptionBT)
         Me.GroupBox5.Controls.Add(Me.DescriptionTB)
         Me.GroupBox5.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.GroupBox5.Location = New System.Drawing.Point(3, 490)
+        Me.GroupBox5.Location = New System.Drawing.Point(3, 500)
         Me.GroupBox5.Name = "GroupBox5"
-        Me.GroupBox5.Size = New System.Drawing.Size(687, 159)
+        Me.GroupBox5.Size = New System.Drawing.Size(626, 149)
         Me.GroupBox5.TabIndex = 20
         Me.GroupBox5.TabStop = False
         Me.GroupBox5.Text = "Account's Description"
@@ -171,10 +165,10 @@ Partial Class AccountsControl
         Me.SaveDescriptionBT.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
         Me.SaveDescriptionBT.ImageKey = "1420498403_340208.ico"
         Me.SaveDescriptionBT.ImageList = Me.EditButtonsImagelist
-        Me.SaveDescriptionBT.Location = New System.Drawing.Point(556, 119)
+        Me.SaveDescriptionBT.Location = New System.Drawing.Point(457, 109)
         Me.SaveDescriptionBT.Margin = New System.Windows.Forms.Padding(2)
         Me.SaveDescriptionBT.Name = "SaveDescriptionBT"
-        Me.SaveDescriptionBT.Size = New System.Drawing.Size(111, 28)
+        Me.SaveDescriptionBT.Size = New System.Drawing.Size(135, 28)
         Me.SaveDescriptionBT.TabIndex = 7
         Me.SaveDescriptionBT.Text = "Save Description"
         Me.SaveDescriptionBT.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
@@ -194,11 +188,11 @@ Partial Class AccountsControl
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.DescriptionTB.BackColor = System.Drawing.SystemColors.HighlightText
-        Me.DescriptionTB.Location = New System.Drawing.Point(20, 30)
+        Me.DescriptionTB.Location = New System.Drawing.Point(6, 30)
         Me.DescriptionTB.Margin = New System.Windows.Forms.Padding(2)
         Me.DescriptionTB.Multiline = True
         Me.DescriptionTB.Name = "DescriptionTB"
-        Me.DescriptionTB.Size = New System.Drawing.Size(647, 85)
+        Me.DescriptionTB.Size = New System.Drawing.Size(586, 75)
         Me.DescriptionTB.TabIndex = 6
         '
         'GroupBox3
@@ -207,9 +201,9 @@ Partial Class AccountsControl
         Me.GroupBox3.Controls.Add(Me.submit_cmd)
         Me.GroupBox3.Controls.Add(Me.formula_TB)
         Me.GroupBox3.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.GroupBox3.Location = New System.Drawing.Point(3, 325)
+        Me.GroupBox3.Location = New System.Drawing.Point(3, 313)
         Me.GroupBox3.Name = "GroupBox3"
-        Me.GroupBox3.Size = New System.Drawing.Size(687, 159)
+        Me.GroupBox3.Size = New System.Drawing.Size(626, 181)
         Me.GroupBox3.TabIndex = 19
         Me.GroupBox3.TabStop = False
         Me.GroupBox3.Text = "Account's Formula"
@@ -222,9 +216,9 @@ Partial Class AccountsControl
         Me.formulaEdit.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
         Me.formulaEdit.ImageKey = "config circle purple.ico"
         Me.formulaEdit.ImageList = Me.EditButtonsImagelist
-        Me.formulaEdit.Location = New System.Drawing.Point(20, 23)
+        Me.formulaEdit.Location = New System.Drawing.Point(6, 21)
         Me.formulaEdit.Name = "formulaEdit"
-        Me.formulaEdit.Size = New System.Drawing.Size(93, 23)
+        Me.formulaEdit.Size = New System.Drawing.Size(105, 25)
         Me.formulaEdit.TabIndex = 5
         Me.formulaEdit.Text = "Edit Formula      "
         Me.formulaEdit.UseVisualStyleBackColor = True
@@ -235,10 +229,10 @@ Partial Class AccountsControl
         Me.submit_cmd.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
         Me.submit_cmd.ImageKey = "1420498403_340208.ico"
         Me.submit_cmd.ImageList = Me.EditButtonsImagelist
-        Me.submit_cmd.Location = New System.Drawing.Point(556, 126)
+        Me.submit_cmd.Location = New System.Drawing.Point(458, 140)
         Me.submit_cmd.Margin = New System.Windows.Forms.Padding(2)
         Me.submit_cmd.Name = "submit_cmd"
-        Me.submit_cmd.Size = New System.Drawing.Size(111, 28)
+        Me.submit_cmd.Size = New System.Drawing.Size(134, 28)
         Me.submit_cmd.TabIndex = 7
         Me.submit_cmd.Text = "Validate Formula"
         Me.submit_cmd.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
@@ -255,174 +249,182 @@ Partial Class AccountsControl
         Me.formula_TB.Margin = New System.Windows.Forms.Padding(2)
         Me.formula_TB.Multiline = True
         Me.formula_TB.Name = "formula_TB"
-        Me.formula_TB.Size = New System.Drawing.Size(662, 63)
+        Me.formula_TB.Size = New System.Drawing.Size(587, 85)
         Me.formula_TB.TabIndex = 6
         '
         'GroupBox1
         '
-        Me.GroupBox1.Controls.Add(Me.GroupBox4)
-        Me.GroupBox1.Controls.Add(Me.GroupBox2)
-        Me.GroupBox1.Controls.Add(Me.formulaTypeCB)
-        Me.GroupBox1.Controls.Add(Me.Label3)
-        Me.GroupBox1.Controls.Add(Me.TypeCB)
-        Me.GroupBox1.Controls.Add(Me.formatsCB)
-        Me.GroupBox1.Controls.Add(Me.Label2)
-        Me.GroupBox1.Controls.Add(Me.Label5)
+        Me.GroupBox1.Controls.Add(Me.VLabel5)
+        Me.GroupBox1.Controls.Add(Me.VLabel4)
+        Me.GroupBox1.Controls.Add(Me.VLabel2)
+        Me.GroupBox1.Controls.Add(Me.VLabel3)
+        Me.GroupBox1.Controls.Add(Me.VLabel1)
+        Me.GroupBox1.Controls.Add(Me.ConsolidationOptionRadioListBox)
+        Me.GroupBox1.Controls.Add(Me.CurrencyConversionRadioListBox)
+        Me.GroupBox1.Controls.Add(Me.FormulaTypeComboBox)
+        Me.GroupBox1.Controls.Add(Me.FormatComboBox)
         Me.GroupBox1.Controls.Add(Me.Name_TB)
-        Me.GroupBox1.Controls.Add(Me.Label1)
         Me.GroupBox1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.GroupBox1.FlatStyle = System.Windows.Forms.FlatStyle.Popup
         Me.GroupBox1.Location = New System.Drawing.Point(2, 27)
         Me.GroupBox1.Margin = New System.Windows.Forms.Padding(2)
         Me.GroupBox1.Name = "GroupBox1"
         Me.GroupBox1.Padding = New System.Windows.Forms.Padding(2)
-        Me.GroupBox1.Size = New System.Drawing.Size(689, 293)
+        Me.GroupBox1.Size = New System.Drawing.Size(628, 281)
         Me.GroupBox1.TabIndex = 17
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "Account's information"
         '
-        'GroupBox4
+        'VLabel5
         '
-        Me.GroupBox4.Controls.Add(Me.flux_RB)
-        Me.GroupBox4.Controls.Add(Me.bs_item_RB)
-        Me.GroupBox4.Location = New System.Drawing.Point(39, 224)
-        Me.GroupBox4.Name = "GroupBox4"
-        Me.GroupBox4.Size = New System.Drawing.Size(479, 45)
-        Me.GroupBox4.TabIndex = 27
-        Me.GroupBox4.TabStop = False
-        Me.GroupBox4.Text = "Currency Conversion"
+        Me.VLabel5.BackColor = System.Drawing.Color.Transparent
+        Me.VLabel5.DisplayStyle = VIBlend.WinForms.Controls.LabelItemStyle.TextOnly
+        Me.VLabel5.Ellipsis = False
+        Me.VLabel5.ImageAlignment = System.Drawing.ContentAlignment.TopLeft
+        Me.VLabel5.Location = New System.Drawing.Point(39, 41)
+        Me.VLabel5.Multiline = True
+        Me.VLabel5.Name = "VLabel5"
+        Me.VLabel5.Size = New System.Drawing.Size(129, 25)
+        Me.VLabel5.TabIndex = 45
+        Me.VLabel5.Text = "Account's Name"
+        Me.VLabel5.TextAlignment = System.Drawing.ContentAlignment.TopLeft
+        Me.VLabel5.UseMnemonics = True
+        Me.VLabel5.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
         '
-        'flux_RB
+        'VLabel4
         '
-        Me.flux_RB.AutoSize = True
-        Me.flux_RB.Location = New System.Drawing.Point(140, 19)
-        Me.flux_RB.Name = "flux_RB"
-        Me.flux_RB.Size = New System.Drawing.Size(107, 17)
-        Me.flux_RB.TabIndex = 24
-        Me.flux_RB.TabStop = True
-        Me.flux_RB.Text = "Average FX Rate"
-        Me.flux_RB.UseVisualStyleBackColor = True
+        Me.VLabel4.BackColor = System.Drawing.Color.Transparent
+        Me.VLabel4.DisplayStyle = VIBlend.WinForms.Controls.LabelItemStyle.TextOnly
+        Me.VLabel4.Ellipsis = False
+        Me.VLabel4.ImageAlignment = System.Drawing.ContentAlignment.TopLeft
+        Me.VLabel4.Location = New System.Drawing.Point(39, 78)
+        Me.VLabel4.Multiline = True
+        Me.VLabel4.Name = "VLabel4"
+        Me.VLabel4.Size = New System.Drawing.Size(129, 25)
+        Me.VLabel4.TabIndex = 44
+        Me.VLabel4.Text = "Formula Type"
+        Me.VLabel4.TextAlignment = System.Drawing.ContentAlignment.TopLeft
+        Me.VLabel4.UseMnemonics = True
+        Me.VLabel4.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
         '
-        'bs_item_RB
+        'VLabel2
         '
-        Me.bs_item_RB.AutoSize = True
-        Me.bs_item_RB.Location = New System.Drawing.Point(275, 19)
-        Me.bs_item_RB.Name = "bs_item_RB"
-        Me.bs_item_RB.Size = New System.Drawing.Size(131, 17)
-        Me.bs_item_RB.TabIndex = 25
-        Me.bs_item_RB.TabStop = True
-        Me.bs_item_RB.Text = "End of Period FX Rate"
-        Me.bs_item_RB.UseVisualStyleBackColor = True
+        Me.VLabel2.BackColor = System.Drawing.Color.Transparent
+        Me.VLabel2.DisplayStyle = VIBlend.WinForms.Controls.LabelItemStyle.TextOnly
+        Me.VLabel2.Ellipsis = False
+        Me.VLabel2.ImageAlignment = System.Drawing.ContentAlignment.TopLeft
+        Me.VLabel2.Location = New System.Drawing.Point(39, 117)
+        Me.VLabel2.Multiline = True
+        Me.VLabel2.Name = "VLabel2"
+        Me.VLabel2.Size = New System.Drawing.Size(129, 25)
+        Me.VLabel2.TabIndex = 43
+        Me.VLabel2.Text = "Format"
+        Me.VLabel2.TextAlignment = System.Drawing.ContentAlignment.TopLeft
+        Me.VLabel2.UseMnemonics = True
+        Me.VLabel2.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
         '
-        'GroupBox2
+        'VLabel3
         '
-        Me.GroupBox2.Controls.Add(Me.recompute_RB)
-        Me.GroupBox2.Controls.Add(Me.aggregation_RB)
-        Me.GroupBox2.Location = New System.Drawing.Point(39, 174)
-        Me.GroupBox2.Name = "GroupBox2"
-        Me.GroupBox2.Size = New System.Drawing.Size(479, 45)
-        Me.GroupBox2.TabIndex = 26
-        Me.GroupBox2.TabStop = False
-        Me.GroupBox2.Text = "Consolidation Option"
+        Me.VLabel3.BackColor = System.Drawing.Color.Transparent
+        Me.VLabel3.DisplayStyle = VIBlend.WinForms.Controls.LabelItemStyle.TextOnly
+        Me.VLabel3.Ellipsis = False
+        Me.VLabel3.ImageAlignment = System.Drawing.ContentAlignment.TopLeft
+        Me.VLabel3.Location = New System.Drawing.Point(36, 198)
+        Me.VLabel3.Multiline = True
+        Me.VLabel3.Name = "VLabel3"
+        Me.VLabel3.Size = New System.Drawing.Size(129, 25)
+        Me.VLabel3.TabIndex = 42
+        Me.VLabel3.Text = "Consolidation Option"
+        Me.VLabel3.TextAlignment = System.Drawing.ContentAlignment.TopLeft
+        Me.VLabel3.UseMnemonics = True
+        Me.VLabel3.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
         '
-        'recompute_RB
+        'VLabel1
         '
-        Me.recompute_RB.AutoSize = True
-        Me.recompute_RB.Location = New System.Drawing.Point(275, 20)
-        Me.recompute_RB.Name = "recompute_RB"
-        Me.recompute_RB.Size = New System.Drawing.Size(97, 17)
-        Me.recompute_RB.TabIndex = 21
-        Me.recompute_RB.TabStop = True
-        Me.recompute_RB.Text = "Recomputation"
-        Me.recompute_RB.UseVisualStyleBackColor = True
+        Me.VLabel1.BackColor = System.Drawing.Color.Transparent
+        Me.VLabel1.DisplayStyle = VIBlend.WinForms.Controls.LabelItemStyle.TextOnly
+        Me.VLabel1.Ellipsis = False
+        Me.VLabel1.ImageAlignment = System.Drawing.ContentAlignment.TopLeft
+        Me.VLabel1.Location = New System.Drawing.Point(36, 158)
+        Me.VLabel1.Multiline = True
+        Me.VLabel1.Name = "VLabel1"
+        Me.VLabel1.Size = New System.Drawing.Size(129, 25)
+        Me.VLabel1.TabIndex = 41
+        Me.VLabel1.Text = "Currencies Conversion"
+        Me.VLabel1.TextAlignment = System.Drawing.ContentAlignment.TopLeft
+        Me.VLabel1.UseMnemonics = True
+        Me.VLabel1.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
         '
-        'aggregation_RB
+        'ConsolidationOptionRadioListBox
         '
-        Me.aggregation_RB.AutoSize = True
-        Me.aggregation_RB.Location = New System.Drawing.Point(140, 17)
-        Me.aggregation_RB.Name = "aggregation_RB"
-        Me.aggregation_RB.Size = New System.Drawing.Size(82, 17)
-        Me.aggregation_RB.TabIndex = 20
-        Me.aggregation_RB.TabStop = True
-        Me.aggregation_RB.Text = "Aggregation"
-        Me.aggregation_RB.UseVisualStyleBackColor = True
+        Me.ConsolidationOptionRadioListBox.CheckOnClick = False
+        Me.ConsolidationOptionRadioListBox.Location = New System.Drawing.Point(207, 198)
+        Me.ConsolidationOptionRadioListBox.Name = "ConsolidationOptionRadioListBox"
+        Me.ConsolidationOptionRadioListBox.RoundedCornersMaskListItem = CType(15, Byte)
+        Me.ConsolidationOptionRadioListBox.SelectionMode = System.Windows.Forms.SelectionMode.One
+        Me.ConsolidationOptionRadioListBox.Size = New System.Drawing.Size(216, 20)
+        Me.ConsolidationOptionRadioListBox.TabIndex = 40
+        Me.ConsolidationOptionRadioListBox.VIBlendScrollBarsTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
+        Me.ConsolidationOptionRadioListBox.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
         '
-        'formulaTypeCB
+        'CurrencyConversionRadioListBox
         '
-        Me.formulaTypeCB.FormattingEnabled = True
-        Me.formulaTypeCB.Location = New System.Drawing.Point(179, 67)
-        Me.formulaTypeCB.Margin = New System.Windows.Forms.Padding(2)
-        Me.formulaTypeCB.Name = "formulaTypeCB"
-        Me.formulaTypeCB.Size = New System.Drawing.Size(339, 21)
-        Me.formulaTypeCB.TabIndex = 2
+        Me.CurrencyConversionRadioListBox.CheckOnClick = False
+        Me.CurrencyConversionRadioListBox.Location = New System.Drawing.Point(207, 156)
+        Me.CurrencyConversionRadioListBox.Name = "CurrencyConversionRadioListBox"
+        Me.CurrencyConversionRadioListBox.RoundedCornersMaskListItem = CType(15, Byte)
+        Me.CurrencyConversionRadioListBox.SelectionMode = System.Windows.Forms.SelectionMode.One
+        Me.CurrencyConversionRadioListBox.Size = New System.Drawing.Size(216, 20)
+        Me.CurrencyConversionRadioListBox.TabIndex = 38
+        Me.CurrencyConversionRadioListBox.VIBlendScrollBarsTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
+        Me.CurrencyConversionRadioListBox.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
         '
-        'Label3
+        'FormulaTypeComboBox
         '
-        Me.Label3.AutoSize = True
-        Me.Label3.Location = New System.Drawing.Point(36, 71)
-        Me.Label3.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
-        Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(76, 13)
-        Me.Label3.TabIndex = 19
-        Me.Label3.Text = "Formula/ Input"
+        Me.FormulaTypeComboBox.BackColor = System.Drawing.Color.White
+        Me.FormulaTypeComboBox.DisplayMember = ""
+        Me.FormulaTypeComboBox.DropDownMaximumSize = New System.Drawing.Size(1000, 1000)
+        Me.FormulaTypeComboBox.DropDownMinimumSize = New System.Drawing.Size(10, 10)
+        Me.FormulaTypeComboBox.DropDownResizeDirection = VIBlend.WinForms.Controls.SizingDirection.Both
+        Me.FormulaTypeComboBox.DropDownWidth = 216
+        Me.FormulaTypeComboBox.Location = New System.Drawing.Point(207, 78)
+        Me.FormulaTypeComboBox.Name = "FormulaTypeComboBox"
+        Me.FormulaTypeComboBox.RoundedCornersMaskListItem = CType(15, Byte)
+        Me.FormulaTypeComboBox.Size = New System.Drawing.Size(216, 20)
+        Me.FormulaTypeComboBox.TabIndex = 32
+        Me.FormulaTypeComboBox.UseThemeBackColor = False
+        Me.FormulaTypeComboBox.UseThemeDropDownArrowColor = True
+        Me.FormulaTypeComboBox.ValueMember = ""
+        Me.FormulaTypeComboBox.VIBlendScrollBarsTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
+        Me.FormulaTypeComboBox.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
         '
-        'TypeCB
+        'FormatComboBox
         '
-        Me.TypeCB.FormattingEnabled = True
-        Me.TypeCB.Location = New System.Drawing.Point(179, 138)
-        Me.TypeCB.Margin = New System.Windows.Forms.Padding(2)
-        Me.TypeCB.Name = "TypeCB"
-        Me.TypeCB.Size = New System.Drawing.Size(339, 21)
-        Me.TypeCB.TabIndex = 4
-        '
-        'formatsCB
-        '
-        Me.formatsCB.BackColor = System.Drawing.SystemColors.ButtonHighlight
-        Me.formatsCB.FormattingEnabled = True
-        Me.formatsCB.Location = New System.Drawing.Point(179, 102)
-        Me.formatsCB.Margin = New System.Windows.Forms.Padding(2)
-        Me.formatsCB.Name = "formatsCB"
-        Me.formatsCB.Size = New System.Drawing.Size(339, 21)
-        Me.formatsCB.TabIndex = 3
-        '
-        'Label2
-        '
-        Me.Label2.AutoSize = True
-        Me.Label2.Location = New System.Drawing.Point(36, 105)
-        Me.Label2.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
-        Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(39, 13)
-        Me.Label2.TabIndex = 15
-        Me.Label2.Text = "Format"
-        '
-        'Label5
-        '
-        Me.Label5.AutoSize = True
-        Me.Label5.Location = New System.Drawing.Point(36, 142)
-        Me.Label5.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
-        Me.Label5.Name = "Label5"
-        Me.Label5.Size = New System.Drawing.Size(113, 13)
-        Me.Label5.TabIndex = 12
-        Me.Label5.Text = "Monetary/ Operational"
+        Me.FormatComboBox.BackColor = System.Drawing.Color.White
+        Me.FormatComboBox.DisplayMember = ""
+        Me.FormatComboBox.DropDownMaximumSize = New System.Drawing.Size(1000, 1000)
+        Me.FormatComboBox.DropDownMinimumSize = New System.Drawing.Size(10, 10)
+        Me.FormatComboBox.DropDownResizeDirection = VIBlend.WinForms.Controls.SizingDirection.Both
+        Me.FormatComboBox.DropDownWidth = 216
+        Me.FormatComboBox.Location = New System.Drawing.Point(207, 117)
+        Me.FormatComboBox.Name = "FormatComboBox"
+        Me.FormatComboBox.RoundedCornersMaskListItem = CType(15, Byte)
+        Me.FormatComboBox.Size = New System.Drawing.Size(216, 20)
+        Me.FormatComboBox.TabIndex = 31
+        Me.FormatComboBox.UseThemeBackColor = False
+        Me.FormatComboBox.UseThemeDropDownArrowColor = True
+        Me.FormatComboBox.ValueMember = ""
+        Me.FormatComboBox.VIBlendScrollBarsTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
+        Me.FormatComboBox.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
         '
         'Name_TB
         '
         Me.Name_TB.BackColor = System.Drawing.SystemColors.ButtonHighlight
-        Me.Name_TB.Location = New System.Drawing.Point(179, 33)
+        Me.Name_TB.Location = New System.Drawing.Point(207, 41)
         Me.Name_TB.Margin = New System.Windows.Forms.Padding(2)
         Me.Name_TB.Name = "Name_TB"
-        Me.Name_TB.Size = New System.Drawing.Size(339, 20)
+        Me.Name_TB.Size = New System.Drawing.Size(360, 20)
         Me.Name_TB.TabIndex = 1
-        '
-        'Label1
-        '
-        Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(36, 37)
-        Me.Label1.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
-        Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(83, 13)
-        Me.Label1.TabIndex = 8
-        Me.Label1.Text = "Account's name"
         '
         'accountsIL
         '
@@ -439,40 +441,40 @@ Partial Class AccountsControl
         '
         Me.TVRCM.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.AddSubAccountToolStripMenuItem, Me.AddCategoryToolStripMenuItem, Me.DeleteAccountToolStripMenuItem, Me.DropHierarchyToExcelToolStripMenuItem, Me.ToolStripSeparator1})
         Me.TVRCM.Name = "ContextMenuStripTV"
-        Me.TVRCM.Size = New System.Drawing.Size(198, 98)
+        Me.TVRCM.Size = New System.Drawing.Size(222, 106)
         '
         'AddSubAccountToolStripMenuItem
         '
         Me.AddSubAccountToolStripMenuItem.Image = Global.PPS.My.Resources.Resources.registry_add
         Me.AddSubAccountToolStripMenuItem.Name = "AddSubAccountToolStripMenuItem"
-        Me.AddSubAccountToolStripMenuItem.Size = New System.Drawing.Size(197, 22)
+        Me.AddSubAccountToolStripMenuItem.Size = New System.Drawing.Size(221, 24)
         Me.AddSubAccountToolStripMenuItem.Text = "Add Sub Account"
         '
         'AddCategoryToolStripMenuItem
         '
         Me.AddCategoryToolStripMenuItem.Image = Global.PPS.My.Resources.Resources.favicon_81_
         Me.AddCategoryToolStripMenuItem.Name = "AddCategoryToolStripMenuItem"
-        Me.AddCategoryToolStripMenuItem.Size = New System.Drawing.Size(197, 22)
+        Me.AddCategoryToolStripMenuItem.Size = New System.Drawing.Size(221, 24)
         Me.AddCategoryToolStripMenuItem.Text = "Add Category"
         '
         'DeleteAccountToolStripMenuItem
         '
         Me.DeleteAccountToolStripMenuItem.Image = Global.PPS.My.Resources.Resources.registry_delete
         Me.DeleteAccountToolStripMenuItem.Name = "DeleteAccountToolStripMenuItem"
-        Me.DeleteAccountToolStripMenuItem.Size = New System.Drawing.Size(197, 22)
+        Me.DeleteAccountToolStripMenuItem.Size = New System.Drawing.Size(221, 24)
         Me.DeleteAccountToolStripMenuItem.Text = "Delete Account"
         '
         'DropHierarchyToExcelToolStripMenuItem
         '
         Me.DropHierarchyToExcelToolStripMenuItem.Image = Global.PPS.My.Resources.Resources.Excel_Blue_32x32
         Me.DropHierarchyToExcelToolStripMenuItem.Name = "DropHierarchyToExcelToolStripMenuItem"
-        Me.DropHierarchyToExcelToolStripMenuItem.Size = New System.Drawing.Size(197, 22)
+        Me.DropHierarchyToExcelToolStripMenuItem.Size = New System.Drawing.Size(221, 24)
         Me.DropHierarchyToExcelToolStripMenuItem.Text = "Drop Hierarchy to Excel"
         '
         'ToolStripSeparator1
         '
         Me.ToolStripSeparator1.Name = "ToolStripSeparator1"
-        Me.ToolStripSeparator1.Size = New System.Drawing.Size(194, 6)
+        Me.ToolStripSeparator1.Size = New System.Drawing.Size(218, 6)
         '
         'MainMenu
         '
@@ -480,7 +482,7 @@ Partial Class AccountsControl
         Me.MainMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.NewToolStripMenuItem, Me.DropHierarchyToExcelToolStripMenuItem1, Me.HelpToolStripMenuItem})
         Me.MainMenu.Location = New System.Drawing.Point(0, 0)
         Me.MainMenu.Name = "MainMenu"
-        Me.MainMenu.Size = New System.Drawing.Size(926, 24)
+        Me.MainMenu.Size = New System.Drawing.Size(844, 27)
         Me.MainMenu.TabIndex = 25
         Me.MainMenu.Text = "MenuStrip1"
         '
@@ -488,60 +490,60 @@ Partial Class AccountsControl
         '
         Me.NewToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.CreateANewAccountToolStripMenuItem, Me.CreateANewCategoryToolStripMenuItem, Me.DeleteAccountToolStripMenuItem1, Me.ToolStripSeparator2})
         Me.NewToolStripMenuItem.Name = "NewToolStripMenuItem"
-        Me.NewToolStripMenuItem.Size = New System.Drawing.Size(64, 20)
+        Me.NewToolStripMenuItem.Size = New System.Drawing.Size(71, 23)
         Me.NewToolStripMenuItem.Text = "Account"
         '
         'CreateANewAccountToolStripMenuItem
         '
         Me.CreateANewAccountToolStripMenuItem.Image = Global.PPS.My.Resources.Resources.registry_add
         Me.CreateANewAccountToolStripMenuItem.Name = "CreateANewAccountToolStripMenuItem"
-        Me.CreateANewAccountToolStripMenuItem.Size = New System.Drawing.Size(193, 22)
+        Me.CreateANewAccountToolStripMenuItem.Size = New System.Drawing.Size(218, 24)
         Me.CreateANewAccountToolStripMenuItem.Text = "Create a new Account"
         '
         'CreateANewCategoryToolStripMenuItem
         '
         Me.CreateANewCategoryToolStripMenuItem.Image = Global.PPS.My.Resources.Resources.favicon_81_
         Me.CreateANewCategoryToolStripMenuItem.Name = "CreateANewCategoryToolStripMenuItem"
-        Me.CreateANewCategoryToolStripMenuItem.Size = New System.Drawing.Size(193, 22)
+        Me.CreateANewCategoryToolStripMenuItem.Size = New System.Drawing.Size(218, 24)
         Me.CreateANewCategoryToolStripMenuItem.Text = "Create a new Category"
         '
         'DeleteAccountToolStripMenuItem1
         '
         Me.DeleteAccountToolStripMenuItem1.Image = Global.PPS.My.Resources.Resources.registry_delete
         Me.DeleteAccountToolStripMenuItem1.Name = "DeleteAccountToolStripMenuItem1"
-        Me.DeleteAccountToolStripMenuItem1.Size = New System.Drawing.Size(193, 22)
+        Me.DeleteAccountToolStripMenuItem1.Size = New System.Drawing.Size(218, 24)
         Me.DeleteAccountToolStripMenuItem1.Text = "Delete Account"
         '
         'ToolStripSeparator2
         '
         Me.ToolStripSeparator2.Name = "ToolStripSeparator2"
-        Me.ToolStripSeparator2.Size = New System.Drawing.Size(190, 6)
+        Me.ToolStripSeparator2.Size = New System.Drawing.Size(215, 6)
         '
         'DropHierarchyToExcelToolStripMenuItem1
         '
         Me.DropHierarchyToExcelToolStripMenuItem1.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.DropAllAccountsHierarchyToExcelToolStripMenuItem, Me.DropSelectedAccountHierarchyToExcelToolStripMenuItem})
         Me.DropHierarchyToExcelToolStripMenuItem1.Name = "DropHierarchyToExcelToolStripMenuItem1"
-        Me.DropHierarchyToExcelToolStripMenuItem1.Size = New System.Drawing.Size(45, 20)
+        Me.DropHierarchyToExcelToolStripMenuItem1.Size = New System.Drawing.Size(50, 23)
         Me.DropHierarchyToExcelToolStripMenuItem1.Text = "Excel"
         '
         'DropAllAccountsHierarchyToExcelToolStripMenuItem
         '
         Me.DropAllAccountsHierarchyToExcelToolStripMenuItem.Image = Global.PPS.My.Resources.Resources.Excel_Blue_32x32
         Me.DropAllAccountsHierarchyToExcelToolStripMenuItem.Name = "DropAllAccountsHierarchyToExcelToolStripMenuItem"
-        Me.DropAllAccountsHierarchyToExcelToolStripMenuItem.Size = New System.Drawing.Size(291, 22)
+        Me.DropAllAccountsHierarchyToExcelToolStripMenuItem.Size = New System.Drawing.Size(328, 24)
         Me.DropAllAccountsHierarchyToExcelToolStripMenuItem.Text = "Drop all Accounts Hierarchy to Excel"
         '
         'DropSelectedAccountHierarchyToExcelToolStripMenuItem
         '
         Me.DropSelectedAccountHierarchyToExcelToolStripMenuItem.Image = Global.PPS.My.Resources.Resources.Excel_Green_32x32
         Me.DropSelectedAccountHierarchyToExcelToolStripMenuItem.Name = "DropSelectedAccountHierarchyToExcelToolStripMenuItem"
-        Me.DropSelectedAccountHierarchyToExcelToolStripMenuItem.Size = New System.Drawing.Size(291, 22)
+        Me.DropSelectedAccountHierarchyToExcelToolStripMenuItem.Size = New System.Drawing.Size(328, 24)
         Me.DropSelectedAccountHierarchyToExcelToolStripMenuItem.Text = "Drop selected Account Hierarchy to Excel"
         '
         'HelpToolStripMenuItem
         '
         Me.HelpToolStripMenuItem.Name = "HelpToolStripMenuItem"
-        Me.HelpToolStripMenuItem.Size = New System.Drawing.Size(44, 20)
+        Me.HelpToolStripMenuItem.Size = New System.Drawing.Size(49, 23)
         Me.HelpToolStripMenuItem.Text = "Help"
         '
         'BackgroundWorker1
@@ -554,7 +556,7 @@ Partial Class AccountsControl
         Me.Controls.Add(Me.MainMenu)
         Me.Controls.Add(Me.SplitContainer1)
         Me.Name = "AccountsControl"
-        Me.Size = New System.Drawing.Size(926, 652)
+        Me.Size = New System.Drawing.Size(844, 652)
         Me.SplitContainer1.Panel1.ResumeLayout(False)
         Me.SplitContainer1.Panel2.ResumeLayout(False)
         CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).EndInit()
@@ -567,10 +569,6 @@ Partial Class AccountsControl
         Me.GroupBox3.PerformLayout()
         Me.GroupBox1.ResumeLayout(False)
         Me.GroupBox1.PerformLayout()
-        Me.GroupBox4.ResumeLayout(False)
-        Me.GroupBox4.PerformLayout()
-        Me.GroupBox2.ResumeLayout(False)
-        Me.GroupBox2.PerformLayout()
         Me.TVRCM.ResumeLayout(False)
         Me.MainMenu.ResumeLayout(False)
         Me.MainMenu.PerformLayout()
@@ -584,20 +582,7 @@ Partial Class AccountsControl
     Friend WithEvents AccountsTVPanel As System.Windows.Forms.Panel
     Friend WithEvents TableLayoutPanel2 As System.Windows.Forms.TableLayoutPanel
     Friend WithEvents GroupBox1 As System.Windows.Forms.GroupBox
-    Friend WithEvents GroupBox4 As System.Windows.Forms.GroupBox
-    Friend WithEvents flux_RB As System.Windows.Forms.RadioButton
-    Friend WithEvents bs_item_RB As System.Windows.Forms.RadioButton
-    Friend WithEvents GroupBox2 As System.Windows.Forms.GroupBox
-    Friend WithEvents recompute_RB As System.Windows.Forms.RadioButton
-    Friend WithEvents aggregation_RB As System.Windows.Forms.RadioButton
-    Friend WithEvents formulaTypeCB As System.Windows.Forms.ComboBox
-    Friend WithEvents Label3 As System.Windows.Forms.Label
-    Friend WithEvents TypeCB As System.Windows.Forms.ComboBox
-    Friend WithEvents formatsCB As System.Windows.Forms.ComboBox
-    Friend WithEvents Label2 As System.Windows.Forms.Label
-    Friend WithEvents Label5 As System.Windows.Forms.Label
     Friend WithEvents Name_TB As System.Windows.Forms.TextBox
-    Friend WithEvents Label1 As System.Windows.Forms.Label
     Friend WithEvents GroupBox3 As System.Windows.Forms.GroupBox
     Friend WithEvents formulaEdit As System.Windows.Forms.CheckBox
     Friend WithEvents submit_cmd As System.Windows.Forms.Button
@@ -624,5 +609,14 @@ Partial Class AccountsControl
     Friend WithEvents GroupBox5 As System.Windows.Forms.GroupBox
     Friend WithEvents SaveDescriptionBT As System.Windows.Forms.Button
     Friend WithEvents DescriptionTB As System.Windows.Forms.TextBox
+    Friend WithEvents FormulaTypeComboBox As VIBlend.WinForms.Controls.vComboBox
+    Friend WithEvents FormatComboBox As VIBlend.WinForms.Controls.vComboBox
+    Friend WithEvents VLabel3 As VIBlend.WinForms.Controls.vLabel
+    Friend WithEvents VLabel1 As VIBlend.WinForms.Controls.vLabel
+    Friend WithEvents ConsolidationOptionRadioListBox As VIBlend.WinForms.Controls.vRadioListBox
+    Friend WithEvents CurrencyConversionRadioListBox As VIBlend.WinForms.Controls.vRadioListBox
+    Friend WithEvents VLabel5 As VIBlend.WinForms.Controls.vLabel
+    Friend WithEvents VLabel4 As VIBlend.WinForms.Controls.vLabel
+    Friend WithEvents VLabel2 As VIBlend.WinForms.Controls.vLabel
 
 End Class

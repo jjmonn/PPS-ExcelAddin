@@ -19,17 +19,18 @@
 
     End Enum
 
+    Enum ConversionOptions
+
+        NO_CONVERSION = 1
+        AVERAGE_RATE
+        END_OF_PERIOD_RATE
+
+    End Enum
+
     Enum ConsolidationOptions
 
         AGGREGATION = 1
         RECOMPUTATION
-
-    End Enum
-
-    Enum ConversionOptions
-
-        AVERAGE_PERIOD_RATE = 1
-        END_OF_PERIOD_RATE
 
     End Enum
 
@@ -99,5 +100,15 @@
 
     End Enum
 
+    Enum AccountFormat
+
+        MONETARY = 1
+        NUMBER
+        PERCENTAGE
+        DATE_
+
+    End Enum
+
+  
 
 End Class

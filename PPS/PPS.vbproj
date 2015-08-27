@@ -120,6 +120,7 @@
     <Compile Include="GLOBAL\GlobalEnums.vb" />
     <Compile Include="Models\Computing\Computer.vb" />
     <Compile Include="Models\Computing\ComputerInputEntity.vb" />
+    <Compile Include="Models\Computing\formulasTranslation.vb" />
     <Compile Include="Models\CRUDs\New CRUDs\Account.vb" />
     <Compile Include="Models\CRUDs\New CRUDs\Adjustment.vb" />
     <Compile Include="Models\CRUDs\New CRUDs\AdjustmentsFilter.vb" />
@@ -224,7 +225,6 @@
     <Compile Include="Models\CRUDs\Old CRUDs\MarketPrice.vb" />
     <Compile Include="Models\dll Interfaces\FDLL_Interface.vb" />
     <Compile Include="Models\dll Interfaces\PSDLLL_Interface.vb" />
-    <Compile Include="Models\Mappings\AccountTypesMapping.vb" />
     <Compile Include="Models\Mappings\ControlOptionsMapping.vb" />
     <Compile Include="Models\Mappings\ControlsMapping.vb" />
     <Compile Include="Models\Mappings\FModelingAccountsMapping.vb" />
@@ -460,7 +460,6 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Models\CRUDs\New CRUDs\Currency.vb" />
-    <Compile Include="Models\Mappings\FormulaTypesMapping.vb" />
     <Compile Include="Transactions\SQLLog.vb" />
     <Compile Include="Modules\PLATFORM MANAGEMENT\Axis Super Classes\Views\AnalysisAxisDGV.Designer.vb">
       <DependentUpon>AnalysisAxisDGV.vb</DependentUpon>
@@ -564,7 +563,6 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Modules\PLATFORM MANAGEMENT\Versions\Controller\DataVersionsController.vb" />
-    <Compile Include="Models\Mappings\FormatsMapping.vb" />
     <Compile Include="Transactions\DataBaseDataDownloader.vb" />
     <Compile Include="Modules\CONNECTIONS\Models\ModelServer.vb" />
     <Compile Include="Models\Computing\RefreshGetDataBatch.vb" />
@@ -611,13 +609,13 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Modules\REPORTS UPLOAD\MODEL\AcquisitionModel.vb" />
-    <Compile Include="Modules\REPORTS UPLOAD\MODEL\CDataModificationsTracking.vb" />
+    <Compile Include="Modules\REPORTS UPLOAD\MODEL\DataModificationsTracking.vb" />
     <Compile Include="Modules\REPORTS UPLOAD\MODEL\ModelDataSet.vb" />
     <Compile Include="Modules\CONNECTIONS\ConnectionsFunctions.vb" />
     <Compile Include="Utilities\TreeViewsUtilities.vb" />
     <Compile Include="Utilities\Utilities_Functions.vb" />
     <Compile Include="Views\Utilities\CExcelFormatting.vb" />
-    <Compile Include="Modules\REPORTS UPLOAD\VIEW\CRangeHighlighter.vb" />
+    <Compile Include="Modules\REPORTS UPLOAD\VIEW\RangeHighlighter.vb" />
     <Compile Include="Views\Utilities\UIs Events\ControlButtonsHover.vb" />
     <Compile Include="Views\Utilities\UIs Events\FormsMove.vb" />
     <Compile Include="Views\Utilities\UIs Events\Panel1.vb" />

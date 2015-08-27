@@ -11,7 +11,7 @@
 '       -
 '        
 '
-' Last modified: 17/07/2015
+' Last modified: 27/08/2015
 ' Author: Julien Monnereau
 
 
@@ -20,6 +20,7 @@ Imports System.Windows.Forms
 Imports System.Collections
 Imports System.Collections.Generic
 Imports System.ComponentModel
+Imports VIBlend.WinForms.Controls
 
 
 
@@ -35,13 +36,11 @@ Friend Class AccountsControl
     Friend current_node As TreeNode
 
     ' Variables
-    Friend accountsTypesKeyNameDict As Dictionary(Of String, String)
-    Friend accountsTypeNameKeyDictionary As Dictionary(Of String, String)
-    Friend formatsNameKeyDictionary As Hashtable
-    Friend formatKeyNameDictionary As Hashtable
-    Friend fTypeCodeNameDictionary As Dictionary(Of String, String)
-    Friend fTypeNameCodeDictionary As Dictionary(Of String, String)
-    Private fTypesCodesRequiringFormulas As List(Of String)
+    Private formulasTypesIdItemDict As New Dictionary(Of Int32, ListItem)
+    Private formatsIdItemDict As New Dictionary(Of Int32, ListItem)
+    Private currenciesConversionIdItemDict As New Dictionary(Of Int32, ListItem)
+    Private consoOptionIdItemDict As New Dictionary(Of Int32, ListItem)
+
     Private isDisplayingAttributes As Boolean
     Private drag_and_drop As Boolean = False
 
@@ -57,7 +56,7 @@ Friend Class AccountsControl
 #Region "Initialization"
 
     Friend Sub New(ByRef input_controller As AccountsController, _
-                              ByRef input_accountTV As TreeView)
+                   ByRef input_accountTV As TreeView)
 
         ' This call is required by the designer.
         InitializeComponent()
@@ -65,15 +64,8 @@ Friend Class AccountsControl
         ' Add any initialization after the InitializeComponent() call.
         Controller = input_controller
         AccountsTV = input_accountTV
-
-        ' priority normal => implement format CRUD
-        '   formatsNameKeyDictionary = FormatsMapping.GetFormatsDictionary(FORMAT_NAME_VARIABLE, FORMAT_CODE_VARIABLE, INPUT_FORMAT_CODE)
-        '   formatKeyNameDictionary = FormatsMapping.GetFormatsDictionary(FORMAT_CODE_VARIABLE, FORMAT_NAME_VARIABLE, INPUT_FORMAT_CODE)
-        fTypesCodesRequiringFormulas = FormulaTypesMapping.GetFTypesKeysNeedingFormula
-
         AccountsTVInit()
         ComboBoxesInit()
-
 
     End Sub
 
@@ -100,22 +92,95 @@ Friend Class AccountsControl
 
     Private Sub ComboBoxesInit()
 
-        accountsTypeNameKeyDictionary = AccountTypesMapping.GetAccountTypesDic(ACCOUNT_TYPE_NAME_VARIABLE, ACCOUNT_TYPE_CODE_VARIABLE)
-        accountsTypesKeyNameDict = AccountTypesMapping.GetAccountTypesDic(ACCOUNT_TYPE_CODE_VARIABLE, ACCOUNT_TYPE_NAME_VARIABLE)
+        ' Formulas 
+        Dim InputListItem As New ListItem
+        InputListItem.Text = "Input"
+        InputListItem.Value = GlobalEnums.FormulaTypes.HARD_VALUE_INPUT
+        FormulaTypeComboBox.Items.Add(InputListItem)
+        formulasTypesIdItemDict.Add(InputListItem.Value, InputListItem)
 
-        For Each format_name In formatsNameKeyDictionary.Keys
-            formatsCB.Items.Add(format_name)
-        Next
+        Dim FormulaListItem As New ListItem
+        FormulaListItem.Text = "Formula"
+        FormulaListItem.Value = GlobalEnums.FormulaTypes.FORMULA
+        FormulaTypeComboBox.Items.Add(FormulaListItem)
+        formulasTypesIdItemDict.Add(FormulaListItem.Value, FormulaListItem)
 
-        For Each key In accountsTypesKeyNameDict.Keys
-            TypeCB.Items.Add(accountsTypesKeyNameDict.Item(key))
-        Next
+        Dim AggregationListItem As New ListItem
+        AggregationListItem.Text = "Aggregation of Sub Accounts"
+        AggregationListItem.Value = GlobalEnums.FormulaTypes.AGGREGATION_OF_SUB_ACCOUNTS
+        FormulaTypeComboBox.Items.Add(AggregationListItem)
+        formulasTypesIdItemDict.Add(AggregationListItem.Value, AggregationListItem)
 
-        fTypeNameCodeDictionary = FormulaTypesMapping.GetFormulaTypesDictionary(FORMULA_TYPES_NAME_VARIABLE, FORMULA_TYPES_CODE_VARIABLE)
-        fTypeCodeNameDictionary = FormulaTypesMapping.GetFormulaTypesDictionary(FORMULA_TYPES_CODE_VARIABLE, FORMULA_TYPES_NAME_VARIABLE)
-        For Each item In fTypeNameCodeDictionary.Keys
-            formulaTypeCB.Items.Add(item)
-        Next
+        Dim FirstPeriodInputListItem As New ListItem
+        FirstPeriodInputListItem.Text = "First Period Input"
+        FirstPeriodInputListItem.Value = GlobalEnums.FormulaTypes.FIRST_PERIOD_INPUT
+        FormulaTypeComboBox.Items.Add(FirstPeriodInputListItem)
+        formulasTypesIdItemDict.Add(FirstPeriodInputListItem.Value, FirstPeriodInputListItem)
+
+        Dim TitleListItem As New ListItem
+        TitleListItem.Text = "Title"
+        TitleListItem.Value = GlobalEnums.FormulaTypes.TITLE
+        FormulaTypeComboBox.Items.Add(TitleListItem)
+        formulasTypesIdItemDict.Add(TitleListItem.Value, TitleListItem)
+
+        ' Formats
+        Dim MonetaryFormatLI As New ListItem
+        MonetaryFormatLI.Text = "Monetary"
+        MonetaryFormatLI.Value = GlobalEnums.AccountFormat.MONETARY
+        FormatComboBox.Items.Add(MonetaryFormatLI)
+        formatsIdItemDict.Add(MonetaryFormatLI.Value, MonetaryFormatLI)
+
+        Dim NormalFormatLI As New ListItem
+        NormalFormatLI.Text = "Number"
+        NormalFormatLI.Value = GlobalEnums.AccountFormat.NUMBER
+        FormatComboBox.Items.Add(NormalFormatLI)
+        formatsIdItemDict.Add(NormalFormatLI.Value, NormalFormatLI)
+
+        Dim percentageFormatLI As New ListItem
+        percentageFormatLI.Text = "Percentage"
+        percentageFormatLI.Value = GlobalEnums.AccountFormat.PERCENTAGE
+        FormatComboBox.Items.Add(percentageFormatLI)
+        formatsIdItemDict.Add(percentageFormatLI.Value, percentageFormatLI)
+
+        Dim DateFormatLI As New ListItem
+        DateFormatLI.Text = "Date"
+        DateFormatLI.Value = GlobalEnums.AccountFormat.DATE_
+        FormatComboBox.Items.Add(DateFormatLI)
+        formatsIdItemDict.Add(DateFormatLI.Value, DateFormatLI)
+
+
+        ' Currencies Conversion
+        Dim NoConversionLI As New ListItem
+        NoConversionLI.Text = "Non Converted"
+        NoConversionLI.Value = GlobalEnums.ConversionOptions.NO_CONVERSION
+        CurrencyConversionRadioListBox.Items.Add(NoConversionLI)
+        currenciesConversionIdItemDict.Add(NoConversionLI.Value, NoConversionLI)
+
+        Dim AverageRateLI As New ListItem
+        AverageRateLI.Text = "Average Exchange Rate"
+        AverageRateLI.Value = GlobalEnums.ConversionOptions.AVERAGE_RATE
+        CurrencyConversionRadioListBox.Items.Add(AverageRateLI)
+        currenciesConversionIdItemDict.Add(AverageRateLI.Value, AverageRateLI)
+
+        Dim EndOfPeriodRateLI As New ListItem
+        EndOfPeriodRateLI.Text = "End of Period Exchange Rate"
+        EndOfPeriodRateLI.Value = GlobalEnums.ConversionOptions.END_OF_PERIOD_RATE
+        CurrencyConversionRadioListBox.Items.Add(EndOfPeriodRateLI)
+        currenciesConversionIdItemDict.Add(EndOfPeriodRateLI.Value, EndOfPeriodRateLI)
+
+
+        ' Recomputation Option
+        Dim AggregatedLI As New ListItem
+        AggregatedLI.Text = "Aggregated"
+        AggregatedLI.Value = GlobalEnums.ConsolidationOptions.AGGREGATION
+        ConsolidationOptionRadioListBox.Items.Add(AggregatedLI)
+        consoOptionIdItemDict.Add(AggregatedLI.Value, AggregatedLI)
+
+        Dim RecomputedLI As New ListItem
+        RecomputedLI.Text = "Recomputed"
+        RecomputedLI.Value = GlobalEnums.ConsolidationOptions.RECOMPUTATION
+        ConsolidationOptionRadioListBox.Items.Add(RecomputedLI)
+        consoOptionIdItemDict.Add(RecomputedLI.Value, RecomputedLI)
 
     End Sub
 
@@ -229,8 +294,8 @@ Friend Class AccountsControl
 
         ' !! to be reimplemented ? !!
         formulaEdit.Checked = False
-        Dim ActiveWS As Excel.Worksheet = GlobalVariables.apps.ActiveSheet
-        Dim RNG As Excel.Range = GlobalVariables.apps.Application.ActiveCell
+        Dim ActiveWS As Excel.Worksheet = GlobalVariables.APPS.ActiveSheet
+        Dim RNG As Excel.Range = GlobalVariables.APPS.Application.ActiveCell
         Dim Response As MsgBoxResult
 
         If IsNothing(RNG) Then
@@ -398,12 +463,12 @@ Friend Class AccountsControl
 
         If formulaEdit.Checked = False Then
             If Not current_node Is Nothing Then
-                If fTypesCodesRequiringFormulas.Contains(Controller.ReadAccount(current_node.Name, ACCOUNT_FORMULA_TYPE_VARIABLE)) Then
+                If Controller.FTypesToBeTested.Contains(Controller.ReadAccount(current_node.Name, ACCOUNT_FORMULA_TYPE_VARIABLE)) Then
                     formulaEdit.Checked = True
                 Else
                     MsgBox("This Account has no editable Formula. Please change the Formula Type or select another accounts " _
                            + "in order to edit the formula.")
-                    formulaTypeCB.Focus()
+                    FormulaTypeComboBox.Focus()
                 End If
             Else
                 MsgBox("An Accounts must be selected in order to edit its formula.")
@@ -450,7 +515,7 @@ Friend Class AccountsControl
 
         If formulaEdit.Checked = True Then
             formula_TB.Text = formula_TB.Text + AccountsTV.SelectedNode.Text
-            ' formula_TB.Focus()
+            formula_TB.Focus()
         End If
 
     End Sub
@@ -514,84 +579,71 @@ Friend Class AccountsControl
 
     Private Sub Name_TB_KeyDown(sender As Object, e As KeyEventArgs) Handles Name_TB.KeyDown
 
-        If e.KeyCode = Keys.Enter Then formulaTypeCB.Focus()
+        If e.KeyCode = Keys.Enter Then FormulaTypeComboBox.Focus()
 
     End Sub
 
-    Private Sub formatsCB_SelectedValueChanged(sender As Object, e As EventArgs) Handles formatsCB.SelectedValueChanged
+    Private Sub formulaTypeCB_SelectedValueChanged(sender As Object, e As EventArgs)
 
+        Dim li = FormulaTypeComboBox.SelectedItem
         If Not IsNothing(current_node) _
         AndAlso isDisplayingAttributes = False Then
-            Dim tmpHT As New Hashtable
-            tmpHT.Add(ACCOUNT_FORMAT_VARIABLE, formatsNameKeyDictionary(formatsCB.Text))
-            Controller.UpdateAccount(current_node.Name, tmpHT)
+            Controller.UpdateFormulaType(current_node.Name, li.Value)          
+        End If
+
+        If li.Value = GlobalEnums.FormulaTypes.TITLE Then
+            CurrencyConversionRadioListBox.SelectedValue = GlobalEnums.ConversionOptions.NO_CONVERSION
+            FormatComboBox.Enabled = False
+            CurrencyConversionRadioListBox.Enabled = False
+            ConsolidationOptionRadioListBox.Enabled = False
+        Else
+            FormatComboBox.Enabled = True
+            CurrencyConversionRadioListBox.Enabled = True
+            ConsolidationOptionRadioListBox.Enabled = True
         End If
 
     End Sub
 
-    Private Sub TypeCB_SelectedValueChanged(sender As Object, e As EventArgs) Handles TypeCB.SelectedValueChanged
+    Private Sub formatsCB_SelectedItemChanged(sender As Object, e As EventArgs) Handles FormatComboBox.SelectedItemChanged
 
+        Dim li = FormatComboBox.SelectedItem
         If Not IsNothing(current_node) _
         AndAlso isDisplayingAttributes = False Then
-            Dim type As String = accountsTypeNameKeyDictionary(TypeCB.Text)
-            Controller.UpdateAccount(current_node.Name, ACCOUNT_TYPE_VARIABLE, type)
-            If type = MONETARY_ACCOUNT_TYPE Then
-                EnableConversionOptions()
-            Else
-                DisableConversionOptions()
-            End If
+            Controller.UpdateAccount(current_node.Name, ACCOUNT_TYPE_VARIABLE, li.Value)
+        End If
+        If li.Value = GlobalEnums.AccountFormat.MONETARY Then
+            CurrencyConversionRadioListBox.Enabled = True
+            CurrencyConversionRadioListBox.SelectedValue = GlobalEnums.ConversionOptions.AVERAGE_RATE
+        Else
+            CurrencyConversionRadioListBox.Enabled = False ' check if selected value <=> selected item
+            CurrencyConversionRadioListBox.SelectedValue = GlobalEnums.ConversionOptions.NO_CONVERSION
         End If
 
     End Sub
 
-    Private Sub formulaTypeCB_SelectedValueChanged(sender As Object, e As EventArgs) Handles formulaTypeCB.SelectedValueChanged
+    Private Sub CurrencyConversionRadioListBox_SelectedItemChanged(sender As Object, e As EventArgs) Handles CurrencyConversionRadioListBox.SelectedItemChanged
 
+        Dim li = CurrencyConversionRadioListBox.SelectedItem
         If Not IsNothing(current_node) _
         AndAlso isDisplayingAttributes = False Then
-            Dim f_type = fTypeNameCodeDictionary(formulaTypeCB.Text)
-            Controller.UpdateFormulaType(current_node.Name, f_type)
-            If f_type = TITLE_FORMAT_CODE Then DisableRecomputationOPtions() Else EnableRecomputationOPtions()
+            Select Case li.Value
+                Case GlobalEnums.ConversionOptions.AVERAGE_RATE, _
+                     GlobalEnums.ConversionOptions.END_OF_PERIOD_RATE
+                    Controller.UpdateAccount(current_node.Name, ACCOUNT_CONVERSION_OPTION_VARIABLE, li.Value)
+            End Select
         End If
 
     End Sub
 
-    Private Sub aggregation_RB_CheckedChanged(sender As Object, e As EventArgs) Handles aggregation_RB.CheckedChanged
+    Private Sub ConsolidationOptionRadioListBox_SelectedItemChanged(sender As Object, e As EventArgs) Handles ConsolidationOptionRadioListBox.SelectedItemChanged
 
+        Dim li = ConsolidationOptionRadioListBox.SelectedItem
         If Not IsNothing(current_node) _
         AndAlso isDisplayingAttributes = False Then
-            If aggregation_RB.Checked = True Then
-                Controller.UpdateAccount(current_node.Name, ACCOUNT_CONSOLIDATION_OPTION_VARIABLE, GlobalEnums.ConsolidationOptions.AGGREGATION)
-            Else
-                Controller.UpdateAccount(current_node.Name, ACCOUNT_CONSOLIDATION_OPTION_VARIABLE, GlobalEnums.ConsolidationOptions.RECOMPUTATION)
-            End If
+            Controller.UpdateAccount(current_node.Name, ACCOUNT_CONSOLIDATION_OPTION_VARIABLE, li.value)
         End If
 
     End Sub
-
-    Private Sub flux_RB_CheckedChanged(sender As Object, e As EventArgs) Handles flux_RB.CheckedChanged
-
-        If Not IsNothing(current_node) _
-        AndAlso isDisplayingAttributes = False Then
-            If flux_RB.Checked = True Then
-                Controller.UpdateAccount(current_node.Name, ACCOUNT_CONVERSION_OPTION_VARIABLE, GlobalEnums.ConversionOptions.AVERAGE_PERIOD_RATE)
-            Else
-                Controller.UpdateAccount(current_node.Name, ACCOUNT_CONVERSION_OPTION_VARIABLE, GlobalEnums.ConversionOptions.END_OF_PERIOD_RATE)
-            End If
-
-        End If
-
-    End Sub
-
-    'Private Sub TypeCB_SelectedIndexChanged(sender As Object, e As EventArgs) Handles TypeCB.SelectedIndexChanged
-
-    '    If TypeCB.SelectedItem = fTypeCodeNameDictionary(MONETARY_ACCOUNT_TYPE) _
-    '    AndAlso isDisplayingAttributes = False Then
-    '        EnableConversionOptions()
-    '    Else
-    '        DisableConversionOptions()
-    '    End If
-
-    'End Sub
 
 #End Region
 
@@ -635,27 +687,28 @@ Friend Class AccountsControl
         AndAlso formulaEdit.Checked = False Then
 
             isDisplayingAttributes = True
-            Dim key As String = current_node.Name
-            Dim f_type As String = Controller.ReadAccount(key, ACCOUNT_FORMULA_TYPE_VARIABLE)
-            Dim type As String = Controller.ReadAccount(key, ACCOUNT_TYPE_VARIABLE)
+            Dim account_id As Int32 = current_node.Name
             Name_TB.Text = current_node.Text
-            formatsCB.Text = formatKeyNameDictionary(Controller.ReadAccount(key, ACCOUNT_FORMAT_VARIABLE))
-            TypeCB.Text = accountsTypesKeyNameDict(type)
-            formulaTypeCB.Text = fTypeCodeNameDictionary(f_type)
 
-            If f_type = GlobalEnums.FormulaTypes.TITLE Then DisableRecomputationOPtions() Else EnableRecomputationOPtions()
-            If Controller.ReadAccount(key, ACCOUNT_CONSOLIDATION_OPTION_VARIABLE) = GlobalEnums.ConsolidationOptions.RECOMPUTATION Then recompute_RB.Checked = True
-            If Controller.ReadAccount(key, ACCOUNT_CONSOLIDATION_OPTION_VARIABLE) = GlobalEnums.ConsolidationOptions.AGGREGATION Then aggregation_RB.Checked = True
-            If type = MONETARY_ACCOUNT_TYPE Then
-                EnableConversionOptions()
-                If Controller.ReadAccount(key, ACCOUNT_CONVERSION_OPTION_VARIABLE) = GlobalEnums.ConversionOptions.AVERAGE_PERIOD_RATE Then flux_RB.Checked = True
-                If Controller.ReadAccount(key, ACCOUNT_CONVERSION_OPTION_VARIABLE) = GlobalEnums.ConversionOptions.END_OF_PERIOD_RATE Then bs_item_RB.Checked = True
-            Else
-                DisableConversionOptions()
-            End If
+            ' Formula Type ComboBox
+            Dim formulaTypeLI = formulasTypesIdItemDict(Controller.ReadAccount(account_id, ACCOUNT_FORMULA_TYPE_VARIABLE))
+            FormulaTypeComboBox.SelectedItem = formulaTypeLI
 
-            If fTypesCodesRequiringFormulas.Contains(Controller.ReadAccount(key, ACCOUNT_FORMULA_TYPE_VARIABLE)) Then
-                formula_TB.Text = Controller.GetFormulaText(key)
+            ' Format ComboBox
+            Dim formatLI = formatsIdItemDict(Controller.ReadAccount(account_id, ACCOUNT_TYPE_VARIABLE))
+            FormatComboBox.SelectedItem = formatLI
+
+            ' Currency Conversion
+            Dim conversionLI = currenciesConversionIdItemDict(Controller.ReadAccount(account_id, ACCOUNT_CONVERSION_OPTION_VARIABLE))
+            CurrencyConversionRadioListBox.SelectedItem = conversionLI
+
+            ' Consolidation Option
+            Dim consolidationLI = consoOptionIdItemDict(Controller.ReadAccount(account_id, ACCOUNT_CONSOLIDATION_OPTION_VARIABLE))
+            ConsolidationOptionRadioListBox.SelectedItem = consolidationLI
+
+            ' Formula TB
+            If Controller.FTypesToBeTested.Contains(Controller.ReadAccount(account_id, ACCOUNT_FORMULA_TYPE_VARIABLE)) Then
+                formula_TB.Text = Controller.GetFormulaText(account_id)
             Else
                 formula_TB.Text = ""
             End If
@@ -672,40 +725,12 @@ Friend Class AccountsControl
 
     End Sub
 
-#Region "Radio Groups Utilities"
-
-    Private Sub EnableRecomputationOPtions()
-
-        recompute_RB.Enabled = True
-        aggregation_RB.Enabled = True
-
-    End Sub
-
-    Private Sub DisableRecomputationOPtions()
-
-        recompute_RB.Enabled = False
-        aggregation_RB.Enabled = False
-
-    End Sub
-
-    Private Sub EnableConversionOptions()
-
-        bs_item_RB.Enabled = True
-        flux_RB.Enabled = True
-
-    End Sub
-
-    Private Sub DisableConversionOptions()
-
-        bs_item_RB.Enabled = False
-        flux_RB.Enabled = False
-
-    End Sub
-
-#End Region
-
 #End Region
 
 
 
+
+    
+    
+  
 End Class

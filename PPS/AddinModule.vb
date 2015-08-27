@@ -16,7 +16,7 @@
 '
 '
 ' Author: Julien Monnereau/ Addin Express automated code
-' Last modified: 24/07/2015
+' Last modified: 26/08/2015
 
 
 Imports System.Runtime.InteropServices
@@ -1476,7 +1476,7 @@ Public Class AddinModule
         ctrlsTextWSDictionary.Add(ctrl.Caption, GlobalVariables.APPS.ActiveSheet)
         CurrentGRSControler = CGRSControlerInstance
 
-        CurrentGRSControler.LaunchDatasetSnapshotAndAssociateModel(update_inputs)
+        CurrentGRSControler.RefreshSnapshot(update_inputs)
         SubmissionModeRibbon.Visible = True
         SubmissionModeRibbon.Activate()
         WSCB.SelectedItemId = ctrl.Id
