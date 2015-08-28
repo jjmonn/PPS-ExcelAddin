@@ -7,7 +7,7 @@
 ' To do: 
 '      
 '
-' Last modified: 19/08/2015
+' Last modified: 26/08/2015
 ' Author: Julien Monnereau
 
 
@@ -128,33 +128,21 @@ Module Data_Tables_Constants
 
 #Region "Versioning Table"
 
-    Friend Const VERSIONS_CREATION_DATE_VARIABLE = "created_at"
-    Friend Const VERSIONS_LOCKED_VARIABLE = "locked"
-    Friend Const VERSIONS_LOCKED_DATE_VARIABLE = "locked_date"
-     Friend Const VERSIONS_TIME_CONFIG_VARIABLE = "time_config"
-    Friend Const VERSIONS_RATES_VERSION_ID_VAR = "rates_version_id"
-    Friend Const VERSIONS_START_PERIOD_VAR = "start_period"
-    Friend Const VERSIONS_NB_PERIODS_VAR = "nb_periods"
+    Friend Const VERSIONS_CREATION_DATE_VARIABLE As String = "created_at"
+    Friend Const VERSIONS_LOCKED_VARIABLE As String = "locked"
+    Friend Const VERSIONS_LOCKED_DATE_VARIABLE As String = "locked_date"
+    Friend Const VERSIONS_TIME_CONFIG_VARIABLE As String = "time_config"
+    Friend Const VERSIONS_RATES_VERSION_ID_VAR As String = "rates_version_id"
+    Friend Const VERSIONS_START_PERIOD_VAR As String = "start_period"
+    Friend Const VERSIONS_NB_PERIODS_VAR As String = "nb_periods"
+    Friend Const VERSIONS_GLOBAL_FACT_VERSION_ID As String = "global_fact_version_id"
 
 
     ' Associated constants values
-    Friend Const VERSIONS_TOKEN_SIZE As Int32 = 3
-    Friend Const YEARLY_TIME_CONFIGURATION = "years"
-    Friend Const MONTHLY_TIME_CONFIGURATION = "months"
+    Friend Const YEARLY_TIME_CONFIGURATION As String = "years"
+    Friend Const MONTHLY_TIME_CONFIGURATION As String = "months"
   
-    ' Table information: Holds information on data versioning.
-    '          
-    ' Primary key: version_Name
-    '
-    ' Each version corresponds to a copy of a Data Table
-    ' 
-    ' Privileges: 
-    '       a) Write: only databases administrator have writting privilege on this table
-    '       b) Read: reading is granted for everybody
-    '
-    ' 
-    ' VIEWS : no views
-
+ 
 
 #End Region
 

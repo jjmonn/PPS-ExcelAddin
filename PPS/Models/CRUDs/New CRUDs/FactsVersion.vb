@@ -7,7 +7,7 @@
 '
 ' Author: Julien Monnereau
 ' Created: 29/07/2015
-' Last modified: 26/08/2015
+' Last modified: 28/08/2015
 
 
 Imports System.Collections
@@ -396,11 +396,13 @@ Friend Class FactsVersion
         version_ht(VERSIONS_START_PERIOD_VAR) = packet.ReadUint32()
         version_ht(VERSIONS_NB_PERIODS_VAR) = packet.ReadUint16()
         version_ht(VERSIONS_CREATION_DATE_VARIABLE) = packet.ReadString()
+        version_ht(VERSIONS_GLOBAL_FACT_VERSION_ID) = packet.ReadUint32()
         If version_ht(IS_FOLDER_VARIABLE) = True Then
             version_ht(IMAGE_VARIABLE) = 1
         Else
             version_ht(IMAGE_VARIABLE) = 0
         End If
+
 
     End Sub
 
@@ -418,6 +420,7 @@ Friend Class FactsVersion
         packet.WriteUint32(attributes(VERSIONS_START_PERIOD_VAR))
         packet.WriteUint16(attributes(VERSIONS_NB_PERIODS_VAR))
         packet.WriteString(attributes(VERSIONS_CREATION_DATE_VARIABLE))
+        packet.WriteUint32(attributes(VERSIONS_GLOBAL_FACT_VERSION_ID))
 
     End Sub
 
