@@ -8,7 +8,7 @@
 '       - priority high: FPI -> only first period highlighted !! 
 '
 '
-' Last modified: 13/07/2015
+' Last modified: 28/08/2015
 ' Author: Julien Monnereau
 '
 
@@ -30,6 +30,8 @@ Friend Class RangeHighlighter
 
     ' Variables
     Private original_cells_format As New Dictionary(Of String, Hashtable)
+    Friend inputCellsAddresses As New List(Of String)
+    Friend outputCellsAddresses As New List(Of String)
 
     ' Constants
     Private Const LINE_WEIGHT As Double = 1
@@ -61,11 +63,9 @@ Friend Class RangeHighlighter
 
 #Region "Initialize"
 
-
     Public Sub New(ByRef inputWS As Excel.Worksheet)
         WS = inputWS
     End Sub
-
 
 #End Region
 
@@ -74,7 +74,7 @@ Friend Class RangeHighlighter
 
     Friend Sub ColorRangeGreen(ByRef cellAddress As String)
 
-        If original_cells_format.ContainsKey(cellAddress) = False Then SaveCellFormat(WS.Range(cellAddress))
+        '     If original_cells_format.ContainsKey(cellAddress) = False Then SaveCellFormat(WS.Range(cellAddress))
         WS.Range(cellAddress).Interior.Color = GREEN_BKG_COLOR
         WS.Range(cellAddress).Font.Color = GREEN_TXT_COLOR
 
@@ -82,7 +82,7 @@ Friend Class RangeHighlighter
 
     Friend Sub ColorRangeRed(ByRef cellAddress As String)
 
-        If original_cells_format.ContainsKey(cellAddress) = False Then SaveCellFormat(WS.Range(cellAddress))
+        '    If original_cells_format.ContainsKey(cellAddress) = False Then SaveCellFormat(WS.Range(cellAddress))
         WS.Range(cellAddress).Interior.Color = RED_BKG_COLOR
         WS.Range(cellAddress).Font.Color = RED_TXT_COLOR
 
@@ -93,6 +93,7 @@ Friend Class RangeHighlighter
         If original_cells_format.ContainsKey(cellAddress) = False Then SaveCellFormat(WS.Range(cellAddress))
         WS.Range(cellAddress).Interior.Color = INPUT_BLUE_BKG_COLOR
         WS.Range(cellAddress).Font.Color = INPUT_BLUE_TXT_COLOR
+        If inputCellsAddresses.Contains(cellAddress) = False Then inputCellsAddresses.Add(cellAddress)
 
     End Sub
 
@@ -110,6 +111,8 @@ Friend Class RangeHighlighter
             c.Borders(Excel.XlBordersIndex.xlEdgeBottom).Color = System.Drawing.Color.LightBlue
             c.Borders(Excel.XlBordersIndex.xlEdgeBottom).TintAndShade = 0.799981688894314
             c.Borders(Excel.XlBordersIndex.xlEdgeBottom).Weight = Excel.XlBorderWeight.xlHairline
+
+            If outputCellsAddresses.Contains(c.Address) = False Then outputCellsAddresses.Add(c.Address)
         Next
 
     End Sub

@@ -208,7 +208,7 @@ Friend Class NewDataVersionUI
                 Return False
             End If
         Else
-            MsgBox("The name is not valid. The name must not exceed " & VERSIONS_TOKEN_SIZE & " characters.")
+            MsgBox("The name is not valid. The name must not exceed " & NAMES_MAX_LENGTH & " characters.")
             Return False
         End If
 

@@ -32,7 +32,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 26/08/2015
+' Last modified: 28/08/2015
 
 
 Imports Microsoft.Office.Interop
@@ -283,6 +283,7 @@ Friend Class GeneralSubmissionControler
 
         isUpdating = True
         mustUpdateExcelWorksheetFromDataBase = update_inputs_from_DB
+        DataModificationsTracker.DiscardModifications()
         ' PB: Ceci ne marche que pour le cas orientation "AcDa"  !!! 
         ' option: select case on orientation 
         ' (possibility to download inputs from multiple entities => function ready in model)

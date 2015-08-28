@@ -19,7 +19,7 @@
 '       - if data = period -> bug
 '
 '
-' Last modified: 26/08/2014
+' Last modified: 28/08/2014
 ' Author: Julien Monnereau
 
 
@@ -57,10 +57,17 @@ Friend Class ModelDataSet
     Friend inputsAccountsList As List(Of String)
     Friend EntitiesNameKeyDictionary As Hashtable
     Friend AccountsNameKeyDictionary As Hashtable
+
     Friend periodsAddressValuesDictionary As New Dictionary(Of String, String)
     Friend AccountsAddressValuesDictionary As New Dictionary(Of String, String)
     Friend OutputsAccountsAddressvaluesDictionary As New Dictionary(Of String, String)
     Friend EntitiesAddressValuesDictionary As New Dictionary(Of String, String)
+
+    Friend periodsValuesAddressDict As New Dictionary(Of String, String)
+    Friend AccountsValuesAddressDict As New Dictionary(Of String, String)
+    Friend OutputsValuesAddressDict As New Dictionary(Of String, String)
+    Friend EntitiesValuesAddressDict As New Dictionary(Of String, String)
+
     Friend CellsAddressItemsDictionary As New Dictionary(Of String, Hashtable)
     Friend OutputCellsAddressValuesDictionary As New Dictionary(Of String, Double)
     Friend currentVersionCode As Int32
@@ -141,6 +148,11 @@ Friend Class ModelDataSet
         periodsAddressValuesDictionary.Clear()
         EntitiesAddressValuesDictionary.Clear()
 
+        AccountsValuesAddressDict.Clear()
+        OutputsValuesAddressDict.Clear()
+        periodsValuesAddressDict.Clear()
+        EntitiesValuesAddressDict.Clear()
+
         If Not VersionsIdentify() Then currentVersionCode = My.Settings.version_id
         DatesIdentify()
         AccountsIdentify()
@@ -208,6 +220,7 @@ Friend Class ModelDataSet
                     AndAlso Not periodsAddressValuesDictionary.ContainsValue(periodStoredAsInt) Then
 
                         periodsAddressValuesDictionary.Add(Split(WS.Columns(j).Address(ColumnAbsolute:=False), ":")(1) & i, periodStoredAsInt)
+                        periodsValuesAddressDict.Add(periodStoredAsInt, Split(WS.Columns(j).Address(ColumnAbsolute:=False), ":")(1) & i)
                         GlobalScreenShotFlag(i, j) = period_flag
 
                     End If
@@ -242,14 +255,16 @@ Friend Class ModelDataSet
                     AndAlso Not AccountsAddressValuesDictionary.ContainsValue(CStr(GlobalScreenShot(i, j))) Then
 
                         AccountsAddressValuesDictionary.Add(Split(WS.Columns(j).Address(ColumnAbsolute:=False), ":")(1) & i, _
-                                                 CStr(GlobalScreenShot(i, j)))
+                                                            CStr(GlobalScreenShot(i, j)))
+                        AccountsValuesAddressDict.Add(CStr(GlobalScreenShot(i, j)), Split(WS.Columns(j).Address(ColumnAbsolute:=False), ":")(1) & i)
                         GlobalScreenShotFlag(i, j) = account_flag
 
                     ElseIf outputsAccountsList.Contains(CStr(GlobalScreenShot(i, j))) _
                     AndAlso Not AccountsAddressValuesDictionary.ContainsValue(CStr(GlobalScreenShot(i, j))) Then
 
                         OutputsAccountsAddressvaluesDictionary.Add(Split(WS.Columns(j).Address(ColumnAbsolute:=False), ":")(1) & i, _
-                                            CStr(GlobalScreenShot(i, j)))
+                                                                   CStr(GlobalScreenShot(i, j)))
+                        OutputsValuesAddressDict.Add(CStr(GlobalScreenShot(i, j)), Split(WS.Columns(j).Address(ColumnAbsolute:=False), ":")(1) & i)
                         GlobalScreenShotFlag(i, j) = account_flag
 
                         '         ElseIf AccountSearchAlgo(GlobalScreenShot(i, j)) = True Then           'Repeated procedure but faster...
@@ -287,7 +302,8 @@ Friend Class ModelDataSet
                         AndAlso Not EntitiesAddressValuesDictionary.ContainsValue(CStr(GlobalScreenShot(i, j))) Then
 
                             EntitiesAddressValuesDictionary.Add(Split(WS.Columns(j).Address(ColumnAbsolute:=False), ":")(1) & i, _
-                                                   CStr(GlobalScreenShot(i, j)))
+                                                                CStr(GlobalScreenShot(i, j)))
+                            EntitiesValuesAddressDict.Add(CStr(GlobalScreenShot(i, j)), Split(WS.Columns(j).Address(ColumnAbsolute:=False), ":")(1) & i)
 
                             'ElseIf AssetResearchAlgo(GlobalScreenShot(i, j)) Then
                             '    EntitiesAddressValuesDictionary.Add(Split(WS.Columns(j).Address(ColumnAbsolute:=False), ":")(1) & i, _
@@ -828,17 +844,20 @@ Friend Class ModelDataSet
 
     ' Write param value in cell(param row address, param column address)
 
-    Protected Friend Sub UpdateExcelCell(ByRef entityAddress As String, _
-                                         ByRef accountAddress As String, _
-                                         ByRef periodAddress As String, _
-                                         ByRef value As Double, _
-                                         ByRef record_in_output_cells_address_dict As Boolean)
+    Friend Function UpdateExcelCell(ByRef entityAddress As String, _
+                                ByRef accountAddress As String, _
+                                ByRef periodAddress As String, _
+                                ByRef value As Double, _
+                                ByRef record_in_output_cells_address_dict As Boolean) As Excel.Range
 
         Dim cell As Excel.Range = GetCellFromItem(entityAddress, accountAddress, periodAddress)
         cell.Value2 = value
-        If record_in_output_cells_address_dict = True Then OutputCellsAddressValuesDictionary(cell.Address) = value
+        If record_in_output_cells_address_dict = True Then
+            OutputCellsAddressValuesDictionary(cell.Address) = value
+        End If
+        Return cell
 
-    End Sub
+    End Function
 
 
 #End Region

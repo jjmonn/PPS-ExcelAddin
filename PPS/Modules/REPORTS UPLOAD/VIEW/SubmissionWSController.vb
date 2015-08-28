@@ -19,6 +19,7 @@ Imports Microsoft.Office.Interop.Excel
 Imports Microsoft.Office.Core
 Imports VIBlend.WinForms.DataGridView
 Imports System.Collections
+Imports System.Linq
 
 
 Friend Class SubmissionWSController
@@ -84,40 +85,11 @@ Friend Class SubmissionWSController
 
 #Region "Update Worksheet"
 
-    ' Update the value on the excel worksheet
-    Friend Function UpdateExcelWS(ByRef entity As String, _
-                                  ByRef account As String, _
-                                  ByRef period As String, _
-                                  ByRef value As Double) As Excel.Range
-
-        Dim entityAddress, accountAddress, periodAddress As String
-        If DataSet.EntitiesAddressValuesDictionary.ContainsValue(entity) Then entityAddress = GetDictionaryKeyFromValue(DataSet.EntitiesAddressValuesDictionary, entity)
-        If DataSet.AccountsAddressValuesDictionary.ContainsValue(account) Then
-            accountAddress = GetDictionaryKeyFromValue(DataSet.AccountsAddressValuesDictionary, account)
-        ElseIf DataSet.OutputsAccountsAddressvaluesDictionary.ContainsValue(account) Then
-            accountAddress = GetDictionaryKeyFromValue(DataSet.OutputsAccountsAddressvaluesDictionary, account)
-        End If
-
-        If DataSet.periodsAddressValuesDictionary.ContainsValue(period) Then periodAddress = GetDictionaryKeyFromValue(DataSet.periodsAddressValuesDictionary, period)
-
-        If Not entityAddress Is Nothing AndAlso Not accountAddress Is Nothing AndAlso Not periodAddress Is Nothing Then
-            DataSet.UpdateExcelCell(entityAddress, accountAddress, periodAddress, value, True)
-            Return DataSet.GetCellFromItem(entityAddress, accountAddress, periodAddress)
-        Else
-            ' PPS Error tracking
-            Return Nothing
-        End If
-
-    End Function
-
     Friend Sub updateCalculatedItemsOnWS(ByRef entityName As String)
 
         Dim t1 = Date.Now
         For Each accountName In AcquisitionModel.outputsList
             For Each period In AcquisitionModel.currentPeriodList
-
-                ' below: adapt case monthly config => display years aggreg as well
-                ' priority normal !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
                 Dim value As Double = AcquisitionModel.GetCalculatedValue(entityName, _
                                                                           DataSet.AccountsNameKeyDictionary(accountName), _
@@ -128,6 +100,31 @@ Friend Class SubmissionWSController
         System.Diagnostics.Debug.WriteLine("update excel computed value => " & (Date.Now - t1).Milliseconds & " ms")
 
     End Sub
+
+    ' Update the value on the excel worksheet
+    Friend Function UpdateExcelWS(ByRef entity As String, _
+                                  ByRef account As String, _
+                                  ByRef period As String, _
+                                  ByRef value As Double) As Excel.Range
+
+        Dim entityAddress, accountAddress, periodAddress As String
+        Try
+            entityAddress = DataSet.EntitiesValuesAddressDict(entity)
+            periodAddress = DataSet.periodsValuesAddressDict(period)
+            If DataSet.AccountsValuesAddressDict.ContainsKey(account) Then
+                accountAddress = DataSet.AccountsValuesAddressDict(account)
+            Else
+                accountAddress = DataSet.OutputsValuesAddressDict(account)
+            End If
+            Return DataSet.UpdateExcelCell(entityAddress, accountAddress, periodAddress, value, True)
+        Catch ex As Exception
+            System.Diagnostics.Debug.WriteLine("Update Excel Worksheet for outputs raised an error: an name was not found in dataset values address dictionary.")
+            Return Nothing
+        End Try
+
+        ' PPS Error tracking priority normal
+
+    End Function
 
     Friend Sub updateInputsOnWS()
 
@@ -281,16 +278,6 @@ Friend Class SubmissionWSController
         Return ht
 
     End Function
-
-    Public Shared Function GetDictionaryKeyFromValue(ByRef dic As Dictionary(Of String, String), ByRef value As String) As String
-
-        For Each key As String In dic.Keys
-            If dic(key) = value Then Return key
-        Next
-        Return Nothing
-
-    End Function
-
 
 #End Region
 

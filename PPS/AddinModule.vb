@@ -16,7 +16,7 @@
 '
 '
 ' Author: Julien Monnereau/ Addin Express automated code
-' Last modified: 26/08/2015
+' Last modified: 28/08/2015
 
 
 Imports System.Runtime.InteropServices
@@ -989,7 +989,7 @@ Public Class AddinModule
         Me.AdjustmentDropDown.ImageList = Me.NewICOs
         Me.AdjustmentDropDown.ImageTransparentColor = System.Drawing.Color.Transparent
         Me.AdjustmentDropDown.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
-        Me.AdjustmentDropDown.SelectedItemIndex = 0
+        Me.AdjustmentDropDown.SelectedItemId = "1"
         '
         'ClientsDropDown
         '
@@ -997,6 +997,7 @@ Public Class AddinModule
         Me.ClientsDropDown.Id = "adxRibbonDropDown_432cc9be8ce74aeebdf0fc7c1c9a0f81"
         Me.ClientsDropDown.ImageTransparentColor = System.Drawing.Color.Transparent
         Me.ClientsDropDown.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
+        Me.ClientsDropDown.SelectedItemId = "1"
         '
         'ProductsDropDown
         '
@@ -1004,6 +1005,7 @@ Public Class AddinModule
         Me.ProductsDropDown.Id = "adxRibbonDropDown_dcb69c26dbd748ba85a3a85aa9199939"
         Me.ProductsDropDown.ImageTransparentColor = System.Drawing.Color.Transparent
         Me.ProductsDropDown.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
+        Me.ProductsDropDown.SelectedItemId = "1"
         '
         'EditSelectionGroup
         '
@@ -1852,6 +1854,7 @@ Public Class AddinModule
                                 GlobalVariables.Clients.clients_hash(client_id)(NAME_VARIABLE))
         Next
         GlobalVariables.ClientsIDDropDown.SelectedItemId = DEFAULT_ANALYSIS_AXIS_ID
+        GlobalVariables.ClientsIDDropDown.Invalidate()
         GlobalVariables.ClientsIDDropDown.ScreenTip = "screentip"
         '  GlobalVariables.ClientsIDDropDown. = GlobalVariables.Clients.clients_hash(DEFAULT_ANALYSIS_AXIS_ID)(NAME_VARIABLE)
 

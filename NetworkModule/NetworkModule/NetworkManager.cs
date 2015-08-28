@@ -99,8 +99,15 @@ public class NetworkManager
 
     public void Send(ByteBuffer p_data)
     {
-      m_StreamSSL.Write(p_data.GetBuffer(), 0, (int)p_data.Length);
-      m_StreamSSL.Flush();
+        try
+        {
+            m_StreamSSL.Write(p_data.GetBuffer(), 0, (int)p_data.Length);
+            m_StreamSSL.Flush();
+        }
+        catch (Exception e)
+        {
+            // 
+        }
     }
 
     public ByteBuffer Receive()

@@ -14,7 +14,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 26/08/2015
+' Last modified: 28/08/2015
 
 
 Imports Microsoft.Office.Interop
@@ -135,6 +135,20 @@ Friend Class DataModificationsTracking
 
         For Each cellAddress As String In modifiedCellsList
             RangeHighlighter.ColorRangeGreen(cellAddress)
+        Next
+        modifiedCellsList.Clear()
+
+    End Sub
+
+    ' Revert to input/ output color
+    Friend Sub DiscardModifications()
+
+        For Each cellAddress As String In modifiedCellsList
+             If RangeHighlighter.outputCellsAddresses.Contains(cellAddress) Then
+                RangeHighlighter.ColorOutputRange(cellAddress)
+            Else
+                RangeHighlighter.ColorRangeInputBlue(cellAddress)
+            End If
         Next
         modifiedCellsList.Clear()
 
@@ -283,20 +297,23 @@ Friend Class DataModificationsTracking
     Friend Function GetExcelCell(ByRef entity As String, ByRef account As String, ByRef period As String) As Excel.Range
 
         Dim entityAddress, accountAddress, periodAddress As String
-        If Dataset.EntitiesAddressValuesDictionary.ContainsValue(entity) Then entityAddress = SubmissionWSController.GetDictionaryKeyFromValue(Dataset.EntitiesAddressValuesDictionary, entity)
-        If Dataset.AccountsAddressValuesDictionary.ContainsValue(account) Then
-            accountAddress = SubmissionWSController.GetDictionaryKeyFromValue(Dataset.AccountsAddressValuesDictionary, account)
-        ElseIf Dataset.OutputsAccountsAddressvaluesDictionary.ContainsValue(account) Then
-            accountAddress = SubmissionWSController.GetDictionaryKeyFromValue(Dataset.OutputsAccountsAddressvaluesDictionary, account)
-        End If
-        If Dataset.periodsAddressValuesDictionary.ContainsValue(period) Then periodAddress = SubmissionWSController.GetDictionaryKeyFromValue(Dataset.periodsAddressValuesDictionary, period)
+        On Error GoTo errorHandler
 
-        If Not entityAddress Is Nothing AndAlso Not accountAddress Is Nothing AndAlso Not periodAddress Is Nothing Then
-            Return Dataset.GetCellFromItem(entityAddress, accountAddress, periodAddress)
+        entityAddress = Dataset.EntitiesValuesAddressDict(entity)
+        periodAddress = Dataset.periodsValuesAddressDict(period)
+        If Dataset.AccountsValuesAddressDict.ContainsKey(account) Then
+            accountAddress = Dataset.AccountsValuesAddressDict(account)
         Else
-            ' PPS Error tracking
-            Return Nothing
+            accountAddress = Dataset.OutputsValuesAddressDict(account)
         End If
+        Return Dataset.GetCellFromItem(entityAddress, accountAddress, periodAddress)
+        ' PPS Error tracking ' priority normal
+        ' function could be merged with SubmissionWSController UpdateExcelCell
+
+errorHandler:
+        System.Diagnostics.Debug.WriteLine("DataModification Tacking Get Excel Cell raised an error: an name was not found in dataset values address dictionary.")
+        Return Nothing
+
 
     End Function
 
