@@ -153,19 +153,19 @@ Friend Class AccountsControl
         Dim NoConversionLI As New ListItem
         NoConversionLI.Text = "Non Converted"
         NoConversionLI.Value = GlobalEnums.ConversionOptions.NO_CONVERSION
-        CurrencyConversionRadioListBox.Items.Add(NoConversionLI)
+        CurrencyConversionComboBox.Items.Add(NoConversionLI)
         currenciesConversionIdItemDict.Add(NoConversionLI.Value, NoConversionLI)
 
         Dim AverageRateLI As New ListItem
         AverageRateLI.Text = "Average Exchange Rate"
         AverageRateLI.Value = GlobalEnums.ConversionOptions.AVERAGE_RATE
-        CurrencyConversionRadioListBox.Items.Add(AverageRateLI)
+        CurrencyConversionComboBox.Items.Add(AverageRateLI)
         currenciesConversionIdItemDict.Add(AverageRateLI.Value, AverageRateLI)
 
         Dim EndOfPeriodRateLI As New ListItem
         EndOfPeriodRateLI.Text = "End of Period Exchange Rate"
         EndOfPeriodRateLI.Value = GlobalEnums.ConversionOptions.END_OF_PERIOD_RATE
-        CurrencyConversionRadioListBox.Items.Add(EndOfPeriodRateLI)
+        CurrencyConversionComboBox.Items.Add(EndOfPeriodRateLI)
         currenciesConversionIdItemDict.Add(EndOfPeriodRateLI.Value, EndOfPeriodRateLI)
 
 
@@ -173,13 +173,13 @@ Friend Class AccountsControl
         Dim AggregatedLI As New ListItem
         AggregatedLI.Text = "Aggregated"
         AggregatedLI.Value = GlobalEnums.ConsolidationOptions.AGGREGATION
-        ConsolidationOptionRadioListBox.Items.Add(AggregatedLI)
+        ConsolidationOptionComboBox.Items.Add(AggregatedLI)
         consoOptionIdItemDict.Add(AggregatedLI.Value, AggregatedLI)
 
         Dim RecomputedLI As New ListItem
         RecomputedLI.Text = "Recomputed"
         RecomputedLI.Value = GlobalEnums.ConsolidationOptions.RECOMPUTATION
-        ConsolidationOptionRadioListBox.Items.Add(RecomputedLI)
+        ConsolidationOptionComboBox.Items.Add(RecomputedLI)
         consoOptionIdItemDict.Add(RecomputedLI.Value, RecomputedLI)
 
     End Sub
@@ -205,6 +205,7 @@ Friend Class AccountsControl
 
     Friend Sub StopCP()
 
+        ' set thread safe priority high
         CP.Dispose()
 
     End Sub
@@ -229,6 +230,7 @@ Friend Class AccountsControl
     Private Sub newCategoryBT_Click(sender As Object, e As EventArgs) Handles CreateANewCategoryToolStripMenuItem.Click, _
                                                                               AddCategoryToolStripMenuItem.Click
 
+        ' to be reveiwed priority high !!!!!!!!
         formulaEdit.Checked = False
         Dim newCategoryName As String = InputBox("Name of the New Category: ", "New Category Creation", "")
         If newCategoryName <> "" Then
@@ -245,7 +247,7 @@ Friend Class AccountsControl
                 TempHT.Add(ACCOUNT_IMAGE_VARIABLE, 0)
                 TempHT.Add(ACCOUNT_SELECTED_IMAGE_VARIABLE, 0)
                 TempHT.Add(ITEMS_POSITIONS, 1)
-                Controller.CreateAccount(TempHT)
+                Controller.CreateAccountTab()
             End If
         End If
 
@@ -588,18 +590,18 @@ Friend Class AccountsControl
         Dim li = FormulaTypeComboBox.SelectedItem
         If Not IsNothing(current_node) _
         AndAlso isDisplayingAttributes = False Then
-            Controller.UpdateFormulaType(current_node.Name, li.Value)          
+            Controller.UpdateFormulaType(current_node.Name, li.Value)
         End If
 
         If li.Value = GlobalEnums.FormulaTypes.TITLE Then
-            CurrencyConversionRadioListBox.SelectedValue = GlobalEnums.ConversionOptions.NO_CONVERSION
+            CurrencyConversionComboBox.SelectedValue = GlobalEnums.ConversionOptions.NO_CONVERSION
             FormatComboBox.Enabled = False
-            CurrencyConversionRadioListBox.Enabled = False
-            ConsolidationOptionRadioListBox.Enabled = False
+            CurrencyConversionComboBox.Enabled = False
+            ConsolidationOptionComboBox.Enabled = False
         Else
             FormatComboBox.Enabled = True
-            CurrencyConversionRadioListBox.Enabled = True
-            ConsolidationOptionRadioListBox.Enabled = True
+            CurrencyConversionComboBox.Enabled = True
+            ConsolidationOptionComboBox.Enabled = True
         End If
 
     End Sub
@@ -612,18 +614,18 @@ Friend Class AccountsControl
             Controller.UpdateAccount(current_node.Name, ACCOUNT_TYPE_VARIABLE, li.Value)
         End If
         If li.Value = GlobalEnums.AccountFormat.MONETARY Then
-            CurrencyConversionRadioListBox.Enabled = True
-            CurrencyConversionRadioListBox.SelectedValue = GlobalEnums.ConversionOptions.AVERAGE_RATE
+            CurrencyConversionComboBox.Enabled = True
+            CurrencyConversionComboBox.SelectedValue = GlobalEnums.ConversionOptions.AVERAGE_RATE
         Else
-            CurrencyConversionRadioListBox.Enabled = False ' check if selected value <=> selected item
-            CurrencyConversionRadioListBox.SelectedValue = GlobalEnums.ConversionOptions.NO_CONVERSION
+            CurrencyConversionComboBox.Enabled = False ' check if selected value <=> selected item
+            CurrencyConversionComboBox.SelectedValue = GlobalEnums.ConversionOptions.NO_CONVERSION
         End If
 
     End Sub
 
-    Private Sub CurrencyConversionRadioListBox_SelectedItemChanged(sender As Object, e As EventArgs) Handles CurrencyConversionRadioListBox.SelectedItemChanged
+    Private Sub CurrencyConversionComboBox_SelectedItemChanged(sender As Object, e As EventArgs) Handles CurrencyConversionComboBox.SelectedItemChanged
 
-        Dim li = CurrencyConversionRadioListBox.SelectedItem
+        Dim li = CurrencyConversionComboBox.SelectedItem
         If Not IsNothing(current_node) _
         AndAlso isDisplayingAttributes = False Then
             Select Case li.Value
@@ -635,12 +637,12 @@ Friend Class AccountsControl
 
     End Sub
 
-    Private Sub ConsolidationOptionRadioListBox_SelectedItemChanged(sender As Object, e As EventArgs) Handles ConsolidationOptionRadioListBox.SelectedItemChanged
+    Private Sub ConsolidationOptionComboBox_SelectedItemChanged(sender As Object, e As EventArgs) Handles ConsolidationOptionComboBox.SelectedItemChanged
 
-        Dim li = ConsolidationOptionRadioListBox.SelectedItem
+        Dim li = ConsolidationOptionComboBox.SelectedItem
         If Not IsNothing(current_node) _
         AndAlso isDisplayingAttributes = False Then
-            Controller.UpdateAccount(current_node.Name, ACCOUNT_CONSOLIDATION_OPTION_VARIABLE, li.value)
+            Controller.UpdateAccount(current_node.Name, ACCOUNT_CONSOLIDATION_OPTION_VARIABLE, li.Value)
         End If
 
     End Sub
@@ -700,11 +702,11 @@ Friend Class AccountsControl
 
             ' Currency Conversion
             Dim conversionLI = currenciesConversionIdItemDict(Controller.ReadAccount(account_id, ACCOUNT_CONVERSION_OPTION_VARIABLE))
-            CurrencyConversionRadioListBox.SelectedItem = conversionLI
+            CurrencyConversionComboBox.SelectedItem = conversionLI
 
             ' Consolidation Option
             Dim consolidationLI = consoOptionIdItemDict(Controller.ReadAccount(account_id, ACCOUNT_CONSOLIDATION_OPTION_VARIABLE))
-            ConsolidationOptionRadioListBox.SelectedItem = consolidationLI
+            ConsolidationOptionComboBox.SelectedItem = consolidationLI
 
             ' Formula TB
             If Controller.FTypesToBeTested.Contains(Controller.ReadAccount(account_id, ACCOUNT_FORMULA_TYPE_VARIABLE)) Then

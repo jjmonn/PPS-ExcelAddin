@@ -112,6 +112,7 @@ Friend Class SubmissionWSController
 
     Friend Sub updateCalculatedItemsOnWS(ByRef entityName As String)
 
+        Dim t1 = Date.Now
         For Each accountName In AcquisitionModel.outputsList
             For Each period In AcquisitionModel.currentPeriodList
 
@@ -124,6 +125,7 @@ Friend Class SubmissionWSController
                 UpdateExcelWS(entityName, accountName, period, value)
             Next
         Next
+        System.Diagnostics.Debug.WriteLine("update excel computed value => " & (Date.Now - t1).Milliseconds & " ms")
 
     End Sub
 

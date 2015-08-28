@@ -12,7 +12,7 @@
 '
 '
 '
-' Last Modified: 27/08/2015
+' Last Modified: 28/08/2015
 ' Author: Julien Monnereau
 
 
@@ -54,6 +54,7 @@ Friend Class AccountsController
         View = New AccountsControl(Me, AccountsTV)
         NewAccountView = New NewAccountUI(View, Me)
         FormulasTranslator = New FormulasTranslations(accountsNameKeysDictionary)
+        formulasMGT = New ModelFormulasMGT(accountsNameKeysDictionary, AccountsTV)
         positionsDictionary = TreeViewsUtilities.GeneratePositionsDictionary(AccountsTV)
         FTypesToBeTested.Add(GlobalEnums.FormulaTypes.FIRST_PERIOD_INPUT)
         FTypesToBeTested.Add(GlobalEnums.FormulaTypes.FORMULA)
@@ -91,32 +92,51 @@ Friend Class AccountsController
 
 #Region "CRUD Interface"
 
-    Friend Function ReadAccount(ByRef accountKey As String, ByRef field As String) As Object
+    Friend Function ReadAccount(ByRef accountKey As Int32, ByRef field As String) As Object
 
         Return GlobalVariables.Accounts.accounts_hash(accountKey)(field)
 
     End Function
 
-    Friend Sub CreateAccount(ByRef attributes As Hashtable, _
-                                       Optional ByRef parent_node As TreeNode = Nothing)
+    Friend Sub CreateAccount()
 
-        If Not parent_node Is Nothing Then
-            attributes.Add(PARENT_ID_VARIABLE, parent_node.Name)
+        Dim TempHT As New Hashtable
+        TempHT.Add(NAME_VARIABLE, NewAccountView.nameTB.Text)
+        TempHT.Add(ACCOUNT_FORMULA_TYPE_VARIABLE, NewAccountView.formulaCB.SelectedItem.value)
+        TempHT.Add(ACCOUNT_FORMULA_VARIABLE, "")
+        TempHT.Add(ACCOUNT_TYPE_VARIABLE, NewAccountView.formatCB.SelectedItem.value)
+        TempHT.Add(ACCOUNT_IMAGE_VARIABLE, TempHT(ACCOUNT_FORMULA_TYPE_VARIABLE))   ' dumb to be takenoff priotiy normal
+        If NewAccountView.aggregation_RB.Checked = True Then TempHT.Add(ACCOUNT_CONSOLIDATION_OPTION_VARIABLE, GlobalEnums.ConsolidationOptions.AGGREGATION)
+        If NewAccountView.recompute_RB.Checked = True Then TempHT.Add(ACCOUNT_CONSOLIDATION_OPTION_VARIABLE, GlobalEnums.ConsolidationOptions.RECOMPUTATION)
+        If NewAccountView.flux_RB.Checked = True Then TempHT.Add(ACCOUNT_CONVERSION_OPTION_VARIABLE, GlobalEnums.ConversionOptions.AVERAGE_RATE)
+        If NewAccountView.bs_item_RB.Checked = True Then TempHT.Add(ACCOUNT_CONVERSION_OPTION_VARIABLE, GlobalEnums.ConversionOptions.END_OF_PERIOD_RATE)
+        If Not NewAccountView.parent_node Is Nothing Then
+            TempHT.Add(PARENT_ID_VARIABLE, NewAccountView.parent_node.Name)
         Else
-            attributes.Add(PARENT_ID_VARIABLE, DBNull.Value)  ' Attention !! ok server ? 
+            TempHT.Add(PARENT_ID_VARIABLE, 0)
         End If
-        attributes.Add(ITEMS_POSITIONS, 1)
-        attributes.Add(ACCOUNT_TAB_VARIABLE, globalvariables.accounts.accounts_hash(parent_node.Name)(ACCOUNT_TAB_VARIABLE))
-        globalvariables.accounts.CMSG_CREATE_ACCOUNT(attributes)
+        TempHT.Add(ITEMS_POSITIONS, 1)
+        TempHT.Add(ACCOUNT_TAB_VARIABLE, GlobalVariables.Accounts.accounts_hash(CInt(NewAccountView.parent_node.Name))(ACCOUNT_TAB_VARIABLE))
+        TempHT.Add(ACCOUNT_FORMAT_VARIABLE, "n") ' dumb to be takenoff priotiy normal
+
+        GlobalVariables.Accounts.CMSG_CREATE_ACCOUNT(TempHT)
         View.LaunchCP()
 
     End Sub
 
-    Friend Sub UpdateAccount(ByRef id As String, ByRef variable As String, ByVal value As Object)
+    Friend Sub CreateAccountTab()
 
-        Dim ht As Hashtable = globalvariables.accounts.accounts_hash(id)
+        ' to be reimplemented priority high !! 
+
+
+    End Sub
+
+
+    Friend Sub UpdateAccount(ByRef id As Int32, ByRef variable As String, ByVal value As Object)
+
+        Dim ht As Hashtable = GlobalVariables.Accounts.accounts_hash(id)
         ht(variable) = value
-        globalvariables.accounts.CMSG_UPDATE_ACCOUNT(ht)
+        GlobalVariables.Accounts.CMSG_UPDATE_ACCOUNT(ht)
         View.LaunchCP()
 
     End Sub
@@ -155,18 +175,18 @@ Friend Class AccountsController
 
     End Function
 
-    Friend Sub UpdateName(ByRef account_id As String, _
+    Friend Sub UpdateName(ByRef account_id As Int32, _
                           ByRef new_name As String)
 
         ' below -> may raise issue if pb on update!(priority: low)
-        Dim old_name = globalvariables.accounts.accounts_hash(account_id)(NAME_VARIABLE)
+        Dim old_name = GlobalVariables.Accounts.accounts_hash(account_id)(NAME_VARIABLE)
         accountsNameKeysDictionary.Remove(old_name)
         accountsNameKeysDictionary.Add(new_name, account_id)
         UpdateAccount(account_id, NAME_VARIABLE, new_name)
 
     End Sub
 
-    Friend Sub UpdateFormula(ByRef id As String, ByRef formulaStr As String)
+    Friend Sub UpdateFormula(ByRef id As Int32, ByRef formulaStr As String)
 
         If formulaStr <> "" Then
 
@@ -212,9 +232,9 @@ Friend Class AccountsController
 
     End Sub
 
-    Friend Sub UpdateFormulaType(ByRef id As String, ByRef ftype As String)
+    Friend Sub UpdateFormulaType(ByRef id As Int32, ByRef ftype As String)
 
-        ' A revoir !!
+        ' A revoir !! priority high
         'Dim tmp_ht As New Hashtable
         'tmp_ht(ACCOUNT_FORMULA_TYPE_VARIABLE) = ftype
         'tmp_ht(ACCOUNT_IMAGE_VARIABLE) = View.ftype_icon_dic(ftype)
@@ -231,15 +251,15 @@ Friend Class AccountsController
 
     End Sub
 
-    Friend Function GetFormulaText(ByRef accountKey As String) As String
+    Friend Function GetFormulaText(ByRef accountId As Int32) As String
 
-        Return formulasMGT.convertFormulaFromKeysToNames(ReadAccount(accountKey, ACCOUNT_FORMULA_VARIABLE))
+        Return formulasMGT.convertFormulaFromKeysToNames(ReadAccount(accountId, ACCOUNT_FORMULA_VARIABLE))
 
     End Function
 
     Friend Sub SendNewPositionsToModel()
 
-        ' dans l'idéal trouver une autre solution !!
+        ' dans l'idéal trouver une autre solution !! priority high
         positionsDictionary = TreeViewsUtilities.GeneratePositionsDictionary(AccountsTV)
         For Each account In positionsDictionary.Keys
             UpdateAccount(account, ITEMS_POSITIONS, positionsDictionary(account))

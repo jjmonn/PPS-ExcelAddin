@@ -21,9 +21,9 @@
 
     Enum ConversionOptions
 
-        NO_CONVERSION = 1
-        AVERAGE_RATE
+        AVERAGE_RATE = 1
         END_OF_PERIOD_RATE
+        NO_CONVERSION
 
     End Enum
 

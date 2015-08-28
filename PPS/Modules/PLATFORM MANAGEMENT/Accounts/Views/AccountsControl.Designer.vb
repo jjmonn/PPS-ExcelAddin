@@ -43,8 +43,6 @@ Partial Class AccountsControl
         Me.VLabel2 = New VIBlend.WinForms.Controls.vLabel()
         Me.VLabel3 = New VIBlend.WinForms.Controls.vLabel()
         Me.VLabel1 = New VIBlend.WinForms.Controls.vLabel()
-        Me.ConsolidationOptionRadioListBox = New VIBlend.WinForms.Controls.vRadioListBox()
-        Me.CurrencyConversionRadioListBox = New VIBlend.WinForms.Controls.vRadioListBox()
         Me.FormulaTypeComboBox = New VIBlend.WinForms.Controls.vComboBox()
         Me.FormatComboBox = New VIBlend.WinForms.Controls.vComboBox()
         Me.Name_TB = New System.Windows.Forms.TextBox()
@@ -66,6 +64,8 @@ Partial Class AccountsControl
         Me.DropSelectedAccountHierarchyToExcelToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.HelpToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.BackgroundWorker1 = New System.ComponentModel.BackgroundWorker()
+        Me.CurrencyConversionComboBox = New VIBlend.WinForms.Controls.vComboBox()
+        Me.ConsolidationOptionComboBox = New VIBlend.WinForms.Controls.vComboBox()
         CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SplitContainer1.Panel1.SuspendLayout()
         Me.SplitContainer1.Panel2.SuspendLayout()
@@ -254,13 +254,13 @@ Partial Class AccountsControl
         '
         'GroupBox1
         '
+        Me.GroupBox1.Controls.Add(Me.ConsolidationOptionComboBox)
+        Me.GroupBox1.Controls.Add(Me.CurrencyConversionComboBox)
         Me.GroupBox1.Controls.Add(Me.VLabel5)
         Me.GroupBox1.Controls.Add(Me.VLabel4)
         Me.GroupBox1.Controls.Add(Me.VLabel2)
         Me.GroupBox1.Controls.Add(Me.VLabel3)
         Me.GroupBox1.Controls.Add(Me.VLabel1)
-        Me.GroupBox1.Controls.Add(Me.ConsolidationOptionRadioListBox)
-        Me.GroupBox1.Controls.Add(Me.CurrencyConversionRadioListBox)
         Me.GroupBox1.Controls.Add(Me.FormulaTypeComboBox)
         Me.GroupBox1.Controls.Add(Me.FormatComboBox)
         Me.GroupBox1.Controls.Add(Me.Name_TB)
@@ -354,30 +354,6 @@ Partial Class AccountsControl
         Me.VLabel1.TextAlignment = System.Drawing.ContentAlignment.TopLeft
         Me.VLabel1.UseMnemonics = True
         Me.VLabel1.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
-        '
-        'ConsolidationOptionRadioListBox
-        '
-        Me.ConsolidationOptionRadioListBox.CheckOnClick = False
-        Me.ConsolidationOptionRadioListBox.Location = New System.Drawing.Point(207, 198)
-        Me.ConsolidationOptionRadioListBox.Name = "ConsolidationOptionRadioListBox"
-        Me.ConsolidationOptionRadioListBox.RoundedCornersMaskListItem = CType(15, Byte)
-        Me.ConsolidationOptionRadioListBox.SelectionMode = System.Windows.Forms.SelectionMode.One
-        Me.ConsolidationOptionRadioListBox.Size = New System.Drawing.Size(216, 20)
-        Me.ConsolidationOptionRadioListBox.TabIndex = 40
-        Me.ConsolidationOptionRadioListBox.VIBlendScrollBarsTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
-        Me.ConsolidationOptionRadioListBox.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
-        '
-        'CurrencyConversionRadioListBox
-        '
-        Me.CurrencyConversionRadioListBox.CheckOnClick = False
-        Me.CurrencyConversionRadioListBox.Location = New System.Drawing.Point(207, 156)
-        Me.CurrencyConversionRadioListBox.Name = "CurrencyConversionRadioListBox"
-        Me.CurrencyConversionRadioListBox.RoundedCornersMaskListItem = CType(15, Byte)
-        Me.CurrencyConversionRadioListBox.SelectionMode = System.Windows.Forms.SelectionMode.One
-        Me.CurrencyConversionRadioListBox.Size = New System.Drawing.Size(216, 20)
-        Me.CurrencyConversionRadioListBox.TabIndex = 38
-        Me.CurrencyConversionRadioListBox.VIBlendScrollBarsTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
-        Me.CurrencyConversionRadioListBox.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
         '
         'FormulaTypeComboBox
         '
@@ -549,6 +525,44 @@ Partial Class AccountsControl
         'BackgroundWorker1
         '
         '
+        'CurrencyConversionComboBox
+        '
+        Me.CurrencyConversionComboBox.BackColor = System.Drawing.Color.White
+        Me.CurrencyConversionComboBox.DisplayMember = ""
+        Me.CurrencyConversionComboBox.DropDownMaximumSize = New System.Drawing.Size(1000, 1000)
+        Me.CurrencyConversionComboBox.DropDownMinimumSize = New System.Drawing.Size(10, 10)
+        Me.CurrencyConversionComboBox.DropDownResizeDirection = VIBlend.WinForms.Controls.SizingDirection.Both
+        Me.CurrencyConversionComboBox.DropDownWidth = 216
+        Me.CurrencyConversionComboBox.Location = New System.Drawing.Point(207, 158)
+        Me.CurrencyConversionComboBox.Name = "CurrencyConversionComboBox"
+        Me.CurrencyConversionComboBox.RoundedCornersMaskListItem = CType(15, Byte)
+        Me.CurrencyConversionComboBox.Size = New System.Drawing.Size(216, 20)
+        Me.CurrencyConversionComboBox.TabIndex = 46
+        Me.CurrencyConversionComboBox.UseThemeBackColor = False
+        Me.CurrencyConversionComboBox.UseThemeDropDownArrowColor = True
+        Me.CurrencyConversionComboBox.ValueMember = ""
+        Me.CurrencyConversionComboBox.VIBlendScrollBarsTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
+        Me.CurrencyConversionComboBox.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
+        '
+        'ConsolidationOptionComboBox
+        '
+        Me.ConsolidationOptionComboBox.BackColor = System.Drawing.Color.White
+        Me.ConsolidationOptionComboBox.DisplayMember = ""
+        Me.ConsolidationOptionComboBox.DropDownMaximumSize = New System.Drawing.Size(1000, 1000)
+        Me.ConsolidationOptionComboBox.DropDownMinimumSize = New System.Drawing.Size(10, 10)
+        Me.ConsolidationOptionComboBox.DropDownResizeDirection = VIBlend.WinForms.Controls.SizingDirection.Both
+        Me.ConsolidationOptionComboBox.DropDownWidth = 216
+        Me.ConsolidationOptionComboBox.Location = New System.Drawing.Point(206, 198)
+        Me.ConsolidationOptionComboBox.Name = "ConsolidationOptionComboBox"
+        Me.ConsolidationOptionComboBox.RoundedCornersMaskListItem = CType(15, Byte)
+        Me.ConsolidationOptionComboBox.Size = New System.Drawing.Size(216, 20)
+        Me.ConsolidationOptionComboBox.TabIndex = 32
+        Me.ConsolidationOptionComboBox.UseThemeBackColor = False
+        Me.ConsolidationOptionComboBox.UseThemeDropDownArrowColor = True
+        Me.ConsolidationOptionComboBox.ValueMember = ""
+        Me.ConsolidationOptionComboBox.VIBlendScrollBarsTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
+        Me.ConsolidationOptionComboBox.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
+        '
         'AccountsControl
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -613,10 +627,10 @@ Partial Class AccountsControl
     Friend WithEvents FormatComboBox As VIBlend.WinForms.Controls.vComboBox
     Friend WithEvents VLabel3 As VIBlend.WinForms.Controls.vLabel
     Friend WithEvents VLabel1 As VIBlend.WinForms.Controls.vLabel
-    Friend WithEvents ConsolidationOptionRadioListBox As VIBlend.WinForms.Controls.vRadioListBox
-    Friend WithEvents CurrencyConversionRadioListBox As VIBlend.WinForms.Controls.vRadioListBox
     Friend WithEvents VLabel5 As VIBlend.WinForms.Controls.vLabel
     Friend WithEvents VLabel4 As VIBlend.WinForms.Controls.vLabel
     Friend WithEvents VLabel2 As VIBlend.WinForms.Controls.vLabel
+    Friend WithEvents ConsolidationOptionComboBox As VIBlend.WinForms.Controls.vComboBox
+    Friend WithEvents CurrencyConversionComboBox As VIBlend.WinForms.Controls.vComboBox
 
 End Class

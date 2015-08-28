@@ -238,7 +238,7 @@ Friend Class Account
     Private Sub WriteAccountPacket(ByRef packet As ByteBuffer, ByRef attributes As Hashtable)
 
         If attributes.ContainsKey(ID_VARIABLE) Then packet.WriteInt32(attributes(ID_VARIABLE))
-        packet.WriteInt32(attributes(PARENT_ID_VARIABLE))
+        packet.WriteUint32(attributes(PARENT_ID_VARIABLE))
         packet.WriteString(attributes(NAME_VARIABLE))
         packet.WriteInt32(attributes(ACCOUNT_FORMULA_TYPE_VARIABLE))
         packet.WriteString(attributes(ACCOUNT_FORMULA_VARIABLE))
@@ -246,7 +246,7 @@ Friend Class Account
         packet.WriteInt32(attributes(ACCOUNT_CONSOLIDATION_OPTION_VARIABLE))
         packet.WriteInt32(attributes(ACCOUNT_CONVERSION_OPTION_VARIABLE))
         packet.WriteString(attributes(ACCOUNT_FORMAT_VARIABLE))
-        packet.WriteInt32(attributes(ACCOUNT_IMAGE_VARIABLE))
+        packet.WriteUint32(attributes(ACCOUNT_IMAGE_VARIABLE))
         packet.WriteInt32(attributes(ITEMS_POSITIONS))
         packet.WriteInt32(attributes(ACCOUNT_TAB_VARIABLE))
 

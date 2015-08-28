@@ -70,10 +70,6 @@ Module Data_Tables_Constants
     Friend Const FORMULA_TYPES_MODEL_INCLUSION As String = "included_in_modeling"
     Friend Const FORMULA_TYPES_MUST_HAVE_F As String = "must_contain_formula"
 
-    ' constant to be stored in extra data table -> below = STUB !!
-    Friend Const DEFAULT_F_TYPE_ACC_CREATION As String = "Hard Value Input"
-    Friend Const AGGREGATION_F_TYPE_CODE As String = "SOAC"
-    Friend Const HARD_VALUE_F_TYPE_CODE As String = "HV"
 
 #End Region
 

@@ -12,7 +12,7 @@
 '       - 
 '
 '
-' Last modified: 27/08/2015
+' Last modified: 28/08/2015
 ' Author: Julien Monnereau
 
 
@@ -32,7 +32,7 @@ Friend Class NewAccountUI
     Private accountsTV As New TreeView
 
     ' Variables
-    Private parent_node As TreeNode
+    Friend parent_node As TreeNode
     Private isFormExpanded As Boolean
 
     ' Constants
@@ -47,8 +47,8 @@ Friend Class NewAccountUI
 
 #Region "Initialize"
 
-    Protected Friend Sub New(ByRef input_accountsView As AccountsControl, _
-                             ByRef input_controller As AccountsController)
+    Friend Sub New(ByRef input_accountsView As AccountsControl, _
+                   ByRef input_controller As AccountsController)
 
         ' This call is required by the designer.
         InitializeComponent()
@@ -78,7 +78,6 @@ Friend Class NewAccountUI
 
     End Sub
 
-
 #End Region
 
 
@@ -97,33 +96,7 @@ Friend Class NewAccountUI
 
     End Sub
 
-    Private Function CreateNewAccount() As Boolean
-
-        If IsFormValid() = True Then
-            Dim TempHT As New Hashtable
-            TempHT.Add(NAME_VARIABLE, nameTB.Text)
-            TempHT.Add(ACCOUNT_FORMULA_TYPE_VARIABLE, formulaCB.SelectedItem.value)
-            If TempHT(ACCOUNT_FORMULA_TYPE_VARIABLE) = AGGREGATION_F_TYPE_CODE Then
-                TempHT.Add(ACCOUNT_FORMULA_VARIABLE, AGGREGATION_F_TYPE_CODE)
-            Else
-                TempHT.Add(ACCOUNT_FORMULA_VARIABLE, "")
-            End If
-            TempHT.Add(ACCOUNT_TYPE_VARIABLE, formatCB.SelectedItem.value)
-            TempHT.Add(ACCOUNT_IMAGE_VARIABLE, TempHT(ACCOUNT_FORMULA_TYPE_VARIABLE))
-            TempHT.Add(ACCOUNT_SELECTED_IMAGE_VARIABLE, TempHT(ACCOUNT_FORMULA_TYPE_VARIABLE))
-            If aggregation_RB.Checked = True Then TempHT.Add(ACCOUNT_CONSOLIDATION_OPTION_VARIABLE, GlobalEnums.ConsolidationOptions.AGGREGATION)
-            If recompute_RB.Checked = True Then TempHT.Add(ACCOUNT_CONSOLIDATION_OPTION_VARIABLE, GlobalEnums.ConsolidationOptions.RECOMPUTATION)
-            If flux_RB.Checked = True Then TempHT.Add(ACCOUNT_CONVERSION_OPTION_VARIABLE, GlobalEnums.ConversionOptions.AVERAGE_RATE)
-            If bs_item_RB.Checked = True Then TempHT.Add(ACCOUNT_CONVERSION_OPTION_VARIABLE, GlobalEnums.ConversionOptions.END_OF_PERIOD_RATE)
-
-            Controller.CreateAccount(TempHT, parent_node)
-            Return True
-        Else
-            Return False
-        End If
-
-    End Function
-
+  
 #End Region
 
 
@@ -141,7 +114,8 @@ Friend Class NewAccountUI
 
     Private Sub CreateAccountBT_Click(sender As Object, e As EventArgs) Handles CreateAccountBT.Click
 
-        If CreateNewAccount() = True Then
+        If IsFormValid() = True Then
+            Controller.CreateAccount()
             Controller.DisplayAcountsView()
         End If
 
@@ -190,8 +164,16 @@ Friend Class NewAccountUI
 
     Private Function IsFormValid() As Boolean
 
-        If controller.AccountNameCheck(nameTB.Text) = False Then Return False
-        If ComboBoxesSelectionCheck() = False Then Return False
+        If Controller.AccountNameCheck(nameTB.Text) = False Then
+            MsgBox("The Account Name must not be empty.")
+            Return False
+        End If
+
+        If ComboBoxesSelectionCheck() = False Then
+            MsgBox("Account's Format and Formula type must be populated.")
+            Return False
+        End If
+
         Return True
 
     End Function
@@ -200,7 +182,6 @@ Friend Class NewAccountUI
 
         If formatCB.SelectedItem Is Nothing Then Return False
         If formulaCB.SelectedItem Is Nothing Then Return False
-        If typeCB.SelectedItem Is Nothing Then Return False
         Return True
 
     End Function
@@ -234,6 +215,7 @@ Friend Class NewAccountUI
     End Sub
   
 #End Region
+
 
 
 End Class
