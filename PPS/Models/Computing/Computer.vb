@@ -122,17 +122,17 @@ Friend Class Computer
                 packet.WriteUint32(hierarchy.Count)                                      ' decomposition hierarchy size
                 For Each item In hierarchy
                     Dim axis_id As UInt32
-                    Dim isAxis As Boolean
                     Dim query_type As UInt32 = GetDecompositionQueryType(item)
                     If query_type = GlobalEnums.DecompositionQueryType.AXIS Then
                         axis_id = GetItemID(item)
-                        isAxis = True
+                        packet.WriteInt32(axis_id)
+                        packet.WriteUint8(True)
                     Else
                         axis_id = GlobalVariables.Filters.filters_hash(GetItemID(item))(FILTER_AXIS_ID_VARIABLE)
-                        isAxis = False
+                        packet.WriteInt32(axis_id)
+                        packet.WriteUint8(False)
+                        packet.WriteUint32(GetItemID(item))
                     End If
-                    packet.WriteUint32(axis_id)                                          ' axis_id
-                    packet.WriteUint8(isAxis)                                            ' is axis ?
                 Next
             Else
                 packet.WriteUint32(0)                                                    ' decomposition hierarchy size = 0

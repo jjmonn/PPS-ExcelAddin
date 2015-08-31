@@ -845,10 +845,10 @@ Friend Class ModelDataSet
     ' Write param value in cell(param row address, param column address)
 
     Friend Function UpdateExcelCell(ByRef entityAddress As String, _
-                                ByRef accountAddress As String, _
-                                ByRef periodAddress As String, _
-                                ByRef value As Double, _
-                                ByRef record_in_output_cells_address_dict As Boolean) As Excel.Range
+                                    ByRef accountAddress As String, _
+                                    ByRef periodAddress As String, _
+                                    ByRef value As Double, _
+                                    ByRef record_in_output_cells_address_dict As Boolean) As Excel.Range
 
         Dim cell As Excel.Range = GetCellFromItem(entityAddress, accountAddress, periodAddress)
         cell.Value2 = value

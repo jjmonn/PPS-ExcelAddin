@@ -11,7 +11,7 @@ Imports System.Windows.Forms
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 17/08/2015
+' Last modified: 31/08/2015
 
 
 
@@ -21,23 +21,32 @@ Public Class CUI2RightPane
 #Region "Instance Variables"
 
     ' Objects
-    Private analysis_axis_tv As vTreeView
+    Private analysis_axis_tv As New vTreeView
     Private dimensionsList As New List(Of String)
-   
+
+
+
 #End Region
 
 
-#Region "Interface"
+#Region "Initialization"
 
-    Public Sub New(ByRef analysis_axis_tv As vTreeView)
+    Public Sub New(ByRef p_entitiesFiltersTV As vTreeView, _
+                    ByRef p_clientsFiltersTV As vTreeView, _
+                    ByRef p_productsFiltersTV As vTreeView, _
+                    ByRef p_adjustmentsFiltersTV As vTreeView)
 
         ' This call is required by the designer.
         InitializeComponent()
 
         ' Add any initialization after the InitializeComponent() call.
-        Me.analysis_axis_tv = analysis_axis_tv
         DimensionsTVPanel.Controls.Add(analysis_axis_tv)
         analysis_axis_tv.Dock = DockStyle.Fill
+
+        DimensionsDisplayPaneSetup(p_entitiesFiltersTV, _
+                                      p_clientsFiltersTV, _
+                                      p_productsFiltersTV, _
+                                      p_adjustmentsFiltersTV)
 
         ' Init listboxes
         rowsDisplayList.ItemHeight = 17
@@ -89,6 +98,75 @@ Public Class CUI2RightPane
         AddHandler columnsDisplayList.MouseLeave, AddressOf columnsDisplayList_MouseLeave
 
     End Sub
+
+    Private Sub DimensionsDisplayPaneSetup(ByRef p_entitiesFilterTV As vTreeView, _
+                                           ByRef p_clientsFiltersTV As vTreeView, _
+                                           ByRef p_productsFiltersTV As vTreeView, _
+                                           ByRef p_adjustmentFiltersTV As vTreeView)
+
+        VTreeViewUtil.InitTVFormat(analysis_axis_tv)
+        VTreeViewUtil.AddNode(Computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.ACCOUNTS, ControllingUI_2.ACCOUNTS_CODE, analysis_axis_tv)
+
+        ' Entities Analysis Axis and Categories Nodes
+        Dim entities_node As vTreeNode = VTreeViewUtil.AddNode(Computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.ENTITIES, _
+                                                               ControllingUI_2.ENTITIES_CODE, _
+                                                               analysis_axis_tv)
+
+        For Each entity_node As vTreeNode In p_entitiesFilterTV.Nodes
+            VTreeViewUtil.AddNode(Computer.FILTERS_DECOMPOSITION_IDENTIFIER & entity_node.Value, _
+                                  entity_node.Text, _
+                                  entities_node)
+        Next
+
+        VTreeViewUtil.AddNode(Computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.YEARS, ControllingUI_2.YEARS_CODE, analysis_axis_tv)
+        VTreeViewUtil.AddNode(Computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.MONTHS, ControllingUI_2.MONTHS_CODE, analysis_axis_tv)
+        VTreeViewUtil.AddNode(Computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.VERSIONS, ControllingUI_2.VERSIONS_CODE, analysis_axis_tv)
+
+        ' Clients Analysis Axis and Categories Nodes
+        Dim clientsNode As vTreeNode = VTreeViewUtil.AddNode(Computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.CLIENTS, _
+                                                             ControllingUI_2.CLIENTS_CODE, _
+                                                             analysis_axis_tv)
+        For Each client_category_node As vTreeNode In p_clientsFiltersTV.Nodes
+            FiltersNodeSubCategoriesInit(client_category_node, clientsNode)
+        Next
+
+        ' Products Analysis Axis and Categories Nodes
+        Dim products_node As vTreeNode = VTreeViewUtil.AddNode(Computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.PRODUCTS,
+                                                               ControllingUI_2.PRODUCTS_CODE, _
+                                                               analysis_axis_tv)
+
+        For Each product_category_node As vTreeNode In p_productsFiltersTV.Nodes
+            FiltersNodeSubCategoriesInit(product_category_node, products_node)
+        Next
+
+        Dim adjustment_node As vTreeNode = VTreeViewUtil.AddNode(Computer.AXIS_DECOMPOSITION_IDENTIFIER _
+                              & GlobalEnums.AnalysisAxis.ADJUSTMENTS, _
+                              ControllingUI_2.ADJUSTMENT_CODE, analysis_axis_tv)
+
+        For Each adjustment_category_node As vTreeNode In p_adjustmentFiltersTV.Nodes
+            FiltersNodeSubCategoriesInit(adjustment_category_node, adjustment_node)
+        Next
+
+
+    End Sub
+
+    Private Sub FiltersNodeSubCategoriesInit(ByRef originNode As vTreeNode, _
+                                             ByRef destinationNode As vTreeNode)
+
+        Dim destSubNode As vTreeNode = VTreeViewUtil.AddNode(Computer.FILTERS_DECOMPOSITION_IDENTIFIER & originNode.Value, _
+                                                             originNode.Text, _
+                                                             destinationNode)
+
+        For Each originSubNode As vTreeNode In originNode.Nodes
+            FiltersNodeSubCategoriesInit(originSubNode, destSubNode)
+        Next
+
+    End Sub
+
+#End Region
+
+
+#Region "Interface"
 
     Public Function DimensionsListContainsItem(ByRef item As String) As Boolean
 

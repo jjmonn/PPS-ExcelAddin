@@ -36,14 +36,14 @@ Friend Class ControllingUI_2
 
 #Region "Objects"
 
-    Private Controller As FinancialUIController
+    Private Controller As ControllingUIController
     Friend DGVUTIL As New DataGridViewsUtil
     Friend rightPane_Control As CUI2RightPane
     Friend leftPane_control As CUI2LeftPane
     Private leftSplitContainer As SplitContainer
     Private rightSplitContainer As SplitContainer
     Private Accounts As New Account
-    Friend CircularProgress As New ProgressIndicator
+    Friend CircularProgress As ProgressIndicator
     Private leftPaneExpandBT As vButton
     Private rightPaneExpandBT As vButton
     Friend BackgroundWorker1 As New BackgroundWorker
@@ -84,7 +84,7 @@ Friend Class ControllingUI_2
     Private Const MARGIN_SIZE As Double = 25
     Private Const INNER_MARGIN As Integer = 0
     Private Const EXCEL_SHEET_NAME_MAX_LENGHT = 31
-    Private Const DGV_THEME As Int32 = VIBlend.Utilities.VIBLEND_THEME.OFFICESILVER
+    Private Const DGV_THEME As Int32 = VIBlend.Utilities.VIBLEND_THEME.OFFICE2010SILVER
     Friend Const TOP_LEFT_CHART_POSITION As String = "tl"
     Friend Const TOP_RIGHT_CHART_POSITION As String = "tr"
     Friend Const BOTTOM_LEFT_CHART_POSITION As String = "bl"
@@ -113,10 +113,10 @@ Friend Class ControllingUI_2
 
         ' Add any initialization after the InitializeComponent() call. 
         LeftPaneSetup()
-        Controller = New FinancialUIController(Me)
+        RightPaneSetup()
+        Controller = New ControllingUIController(Me)
         GlobalVariables.Accounts.LoadAccountsTV(accountsTV)
         BackgroundWorker1.WorkerSupportsCancellation = True
-
 
         ' Init TabControl
         For Each node As vTreeNode In accountsTV.Nodes
@@ -125,15 +125,6 @@ Friend Class ControllingUI_2
             newTab.Name = node.Value
             DGVsControlTab.TabPages.Add(newTab)
         Next
-        InitializeChartsTab()
-        DimensionsDisplayPaneSetup()
-        CircularProgressInit()
-
-        hierarchyItemNormalStyle = GridTheme.GetDefaultTheme(DGV_THEME).HierarchyItemStyleNormal
-        hierarchyItemSelectedStyle = GridTheme.GetDefaultTheme(DGV_THEME).HierarchyItemStyleNormal
-        hierarchyItemDisabledStyle = GridTheme.GetDefaultTheme(DGV_THEME).HierarchyItemStyleNormal
-
-        CEStyle = GridTheme.GetDefaultTheme(DGV_THEME).GridCellStyle
 
         AddHandler BackgroundWorker1.DoWork, AddressOf BackgroundWorker1_DoWork
         AddHandler BackgroundWorker1.RunWorkerCompleted, AddressOf AfterWorkDoneAttemp_ThreadSafe
@@ -176,7 +167,43 @@ Friend Class ControllingUI_2
 
     End Sub
 
+    Private Sub RightPaneSetup()
+
+        rightPane_Control = New CUI2RightPane(leftPane_control.entitiesFiltersTV, _
+                                              leftPane_control.clientsFiltersTV, _
+                                              leftPane_control.productsFiltersTV, _
+                                              leftPane_control.adjustmentsFiltersTV)
+
+        SplitContainer2.Panel2.Controls.Add(rightPane_Control)
+        rightPane_Control.Dock = DockStyle.Fill
+
+        Me.SplitContainer2.Panel2.Controls.Add(rightPaneExpandBT)
+
+        rightPane_Control.CollapseRightPaneBT.ImageList = ExpansionImageList
+        rightPane_Control.CollapseRightPaneBT.ImageKey = "minus"
+
+        rightPaneExpandBT = New vButton
+        rightPaneExpandBT.Width = 19
+        rightPaneExpandBT.Height = 19
+        rightPaneExpandBT.ImageList = ExpansionImageList
+        rightPaneExpandBT.Margin = New Padding(3, 5, 3, 3)
+        rightPaneExpandBT.ImageKey = "menu"
+        rightPaneExpandBT.Text = ""
+        rightPaneExpandBT.FlatStyle = FlatStyle.Flat
+        rightPaneExpandBT.PaintBorder = False
+        ' rightPaneExpandBT.ImageAlign = Drawing.ContentAlignment.MiddleCenter
+        rightPaneExpandBT.Visible = False
+
+        AddHandler rightPane_Control.UpdateBT.Click, AddressOf RefreshFromRightPane
+        AddHandler rightPane_Control.CollapseRightPaneBT.Click, AddressOf CollapseSP2Pane2
+        AddHandler rightPaneExpandBT.Click, AddressOf ExpandSP2Pane2
+
+    End Sub
+
     Private Sub DataMiningUI_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+
+        CEStyle = GridTheme.GetDefaultTheme(DGV_THEME).GridCellStyle
+        CEStyle.Font = New System.Drawing.Font(CEStyle.Font.FontFamily, My.Settings.dgvFontSize)
 
         For Each tab_ As vTabPage In DGVsControlTab.TabPages
             DGVsControlTab.SelectedTab = tab_
@@ -190,7 +217,6 @@ Friend Class ControllingUI_2
             DGV.ContextMenuStrip = DataGridViewsRCMenu
             tab_.Controls.Add(DGV)
             AddHandler DGV.CellMouseClick, AddressOf DGV_CellMouseClick
-            CEStyle.Font = New System.Drawing.Font(DGV.Font.FontFamily, My.Settings.dgvFontSize)
         Next
 
         If Not IsNothing(DGVsControlTab.TabPages(0)) Then
@@ -198,105 +224,13 @@ Friend Class ControllingUI_2
         End If
         Me.WindowState = FormWindowState.Maximized
 
-    End Sub
+        hierarchyItemNormalStyle = GridTheme.GetDefaultTheme(DGV_THEME).HierarchyItemStyleNormal
+        hierarchyItemSelectedStyle = GridTheme.GetDefaultTheme(DGV_THEME).HierarchyItemStyleNormal
+        hierarchyItemDisabledStyle = GridTheme.GetDefaultTheme(DGV_THEME).HierarchyItemStyleNormal
+        hierarchyItemNormalStyle.Font = New System.Drawing.Font(hierarchyItemNormalStyle.Font.FontFamily, My.Settings.dgvFontSize)
+        hierarchyItemSelectedStyle.Font = New System.Drawing.Font(hierarchyItemSelectedStyle.Font.FontFamily, My.Settings.dgvFontSize)
+        hierarchyItemDisabledStyle.Font = New System.Drawing.Font(hierarchyItemDisabledStyle.Font.FontFamily, My.Settings.dgvFontSize)
 
-    Private Sub InitializeChartsTab()
-
-
-
-
-    End Sub
-
-    Private Sub DimensionsDisplayPaneSetup()
-
-        ' This initialization should go into right pane !!!!!!!!!!
-        ' ///////////////////////////////////////////
-        ' priority high !!! 
-        Dim analysis_axis_tv As New vTreeView
-        VTreeViewUtil.InitTVFormat(analysis_axis_tv)
-        VTreeViewUtil.AddNode(Computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.ACCOUNTS, ACCOUNTS_CODE, analysis_axis_tv)
-
-        ' Entities Analysis Axis and Categories Nodes
-        Dim entities_node As vTreeNode = VTreeViewUtil.AddNode(Computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.ENTITIES, _
-                                                               ENTITIES_CODE, _
-                                                               analysis_axis_tv)
-
-        For Each entity_node As vTreeNode In leftPane_control.entitiesFiltersTV.Nodes
-            VTreeViewUtil.AddNode(Computer.FILTERS_DECOMPOSITION_IDENTIFIER & entity_node.Value, _
-                                  entity_node.Text, _
-                                  entities_node)
-        Next
-
-        VTreeViewUtil.AddNode(Computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.YEARS, YEARS_CODE, analysis_axis_tv)
-        VTreeViewUtil.AddNode(Computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.MONTHS, MONTHS_CODE, analysis_axis_tv)
-        VTreeViewUtil.AddNode(Computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.VERSIONS, VERSIONS_CODE, analysis_axis_tv)
-
-        ' Clients Analysis Axis and Categories Nodes
-        Dim clientsNode As vTreeNode = VTreeViewUtil.AddNode(Computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.CLIENTS, CLIENTS_CODE, analysis_axis_tv)
-        For Each client_category_node As vTreeNode In leftPane_control.clientsFiltersTV.Nodes
-            VTreeViewUtil.AddNode(Computer.FILTERS_DECOMPOSITION_IDENTIFIER & client_category_node.Value, _
-                                  client_category_node.Text, _
-                                  clientsNode)
-        Next
-
-        ' Products Analysis Axis and Categories Nodes
-        Dim products_node As vTreeNode = VTreeViewUtil.AddNode(Computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.PRODUCTS,
-                                                               PRODUCTS_CODE, _
-                                                               analysis_axis_tv)
-
-        For Each product_category_node As vTreeNode In leftPane_control.productsFiltersTV.Nodes
-            VTreeViewUtil.AddNode(Computer.FILTERS_DECOMPOSITION_IDENTIFIER & product_category_node.Value, _
-                                  product_category_node.Text, _
-                                  products_node)
-        Next
-
-        VTreeViewUtil.AddNode(Computer.AXIS_DECOMPOSITION_IDENTIFIER _
-                              & GlobalEnums.AnalysisAxis.ADJUSTMENTS, _
-                              ADJUSTMENT_CODE, analysis_axis_tv)
-
-        rightPane_Control = New CUI2RightPane(analysis_axis_tv)
-        SplitContainer2.Panel2.Controls.Add(rightPane_Control)
-        rightPane_Control.Dock = DockStyle.Fill
-
-        rightPane_Control.CollapseRightPaneBT.ImageList = ExpansionImageList
-        rightPane_Control.CollapseRightPaneBT.ImageKey = "minus"
-
-        AddHandler rightPane_Control.UpdateBT.Click, AddressOf RefreshFromRightPane
-        AddHandler rightPane_Control.CollapseRightPaneBT.Click, AddressOf CollapseSP2Pane2
-
-        ' go into 
-
-        rightPaneExpandBT = New vButton
-        rightPaneExpandBT.Width = 19
-        rightPaneExpandBT.Height = 19
-        rightPaneExpandBT.ImageList = ExpansionImageList
-        rightPaneExpandBT.Margin = New Padding(3, 5, 3, 3)
-        rightPaneExpandBT.ImageKey = "menu"
-        rightPaneExpandBT.Text = ""
-        rightPaneExpandBT.FlatStyle = FlatStyle.Flat
-        rightPaneExpandBT.PaintBorder = False
-        ' rightPaneExpandBT.ImageAlign = Drawing.ContentAlignment.MiddleCenter
-        rightPaneExpandBT.Visible = False
-        Me.SplitContainer2.Panel2.Controls.Add(rightPaneExpandBT)
-        AddHandler rightPaneExpandBT.Click, AddressOf ExpandSP2Pane2
-
-    End Sub
-
-    Private Sub CircularProgressInit()
-
-        CircularProgress.CircleColor = Drawing.Color.Purple
-        CircularProgress.NumberOfCircles = 12
-        CircularProgress.NumberOfVisibleCircles = 8
-        CircularProgress.AnimationSpeed = 75
-        CircularProgress.CircleSize = 0.7
-        CircularProgress.Width = 79
-        CircularProgress.Height = 79
-
-        CircularProgress.Left = (Me.Width - CircularProgress.Width) / 2
-        CircularProgress.Top = (Me.Height - CircularProgress.Height) / 2
-        SplitContainer1.Panel2.Controls.Add(CircularProgress)
-
-        CircularProgress.Visible = False
 
     End Sub
 
@@ -310,8 +244,8 @@ Friend Class ControllingUI_2
                             Optional ByRef useCache As Boolean = False)
 
         DGVsControlTab.Visible = False
-        CircularProgress.Visible = True
-        CircularProgress.Focus()
+        'CircularProgressInit()
+        'CircularProgress.Visible = True
         BackgroundWorker1.RunWorkerAsync()
 
         Dim versionsIds As New List(Of Int32)
@@ -469,7 +403,7 @@ Friend Class ControllingUI_2
 
     End Sub
 
-    Private Sub DisplayDataTrackingToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles DisplayDataTrackingToolStripMenuItem.Click
+    Private Sub DisplayDataTrackingToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles LogRightClick.Click
 
         If Not current_DGV_cell Is Nothing Then
             ' to be implemented -> quid -> find cell's account, entity, period, version from nothing...
@@ -485,6 +419,7 @@ Friend Class ControllingUI_2
 
 
 #End Region
+
 
 #Region "Main Menu Calls Backs"
 
@@ -537,6 +472,7 @@ Friend Class ControllingUI_2
 
 #End Region
 
+
 #Region "Periods Checked List Box Call backs"
 
     Private Sub SelectAllToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles SelectAllToolStripMenuItem.Click
@@ -561,7 +497,7 @@ Friend Class ControllingUI_2
 #End Region
 
 
-#Region "Adjustments RCM"
+#Region "Right Click Menu"
 
     Private Sub SelectAllToolStripMenuItem1_Click(sender As Object, e As EventArgs) Handles SelectAllToolStripMenuItem1.Click
 
@@ -581,6 +517,16 @@ Friend Class ControllingUI_2
             node.Checked = state
         Next
 
+    End Sub
+
+    Private Sub CollapseAllRightClick_Click(sender As Object, e As EventArgs) Handles CollapseAllRightClick.Click
+        Dim dgv As vDataGridView = DGVsControlTab.SelectedTab.Controls(0)
+        dgv.RowsHierarchy.CollapseAllItems()
+    End Sub
+
+    Private Sub ExpandAllRightClick_Click(sender As Object, e As EventArgs) Handles ExpandAllRightClick.Click
+        Dim dgv As vDataGridView = DGVsControlTab.SelectedTab.Controls(0)
+        dgv.RowsHierarchy.ExpandAllItems()
     End Sub
 
 
@@ -681,10 +627,39 @@ Friend Class ControllingUI_2
 
     Private Sub BackgroundWorker1_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs)
 
-        CircularProgress.Start()
+        'CircularProgress.Visible = True
+        '     CircularProgressInit()
+        CircularProgress = New ProgressIndicator
+        CircularProgressInit()
+     
         Do While Controller.computedFlag = False
-            ' set cancel button !! priority high !!!
         Loop
+        ' set cancel button !! priority high !!!
+
+    End Sub
+
+    Delegate Sub CircularProgressInit_Delegate()
+    Private Sub CircularProgressInit()
+
+        If InvokeRequired Then
+            Dim MyDelegate As New CircularProgressInit_Delegate(AddressOf CircularProgressInit)
+            Me.Invoke(MyDelegate, New Object() {})
+        Else
+            CircularProgress.CircleColor = Drawing.Color.Purple
+            CircularProgress.NumberOfCircles = 12
+            CircularProgress.NumberOfVisibleCircles = 8
+            CircularProgress.AnimationSpeed = 75
+            CircularProgress.CircleSize = 0.7
+            CircularProgress.Width = 79
+            CircularProgress.Height = 79
+
+            CircularProgress.Left = (SplitContainer1.Panel2.Width - CircularProgress.Width) / 2
+            CircularProgress.Top = (SplitContainer1.Panel2.Height - CircularProgress.Height) / 2
+            SplitContainer1.Panel2.Controls.Add(CircularProgress)
+
+            CircularProgress.Visible = True
+            CircularProgress.Start()
+        End If
 
     End Sub
 
@@ -695,12 +670,28 @@ Friend Class ControllingUI_2
             Dim MyDelegate As New AfterWorkDoneAttemp_Delegate(AddressOf AfterWorkDoneAttemp_ThreadSafe)
             Me.Invoke(MyDelegate, New Object() {})
         Else
-            CircularProgress.Stop()
-            CircularProgress.Visible = False
-            DGVsControlTab.Visible = True
+            If Not CircularProgress Is Nothing Then
+                CircularProgress.Stop()
+                CircularProgress.Dispose()
+                DGVsControlTab.Visible = True
+            End If
         End If
 
     End Sub
+
+    Delegate Sub TerminateCircularProgress_Delegate()
+    Friend Sub TerminateCircularProgress()
+
+        If InvokeRequired Then
+            Dim MyDelegate As New TerminateCircularProgress_Delegate(AddressOf TerminateCircularProgress)
+            Me.Invoke(MyDelegate, New Object() {})
+        Else
+            BackgroundWorker1.CancelAsync()
+            AfterWorkDoneAttemp_ThreadSafe()
+        End If
+
+    End Sub
+
 
     Delegate Sub DGVFormattingAttemp_Delegate()
     Friend Sub FormatDGV_ThreadSafe()
@@ -719,6 +710,7 @@ Friend Class ControllingUI_2
                 dgv.RowsHierarchy.AutoResize(AutoResizeMode.FIT_ALL)
                 '    dgv.RowsHierarchy.AllowResize = False
                 dgv.RowsHierarchy.CompactStyleRenderingEnabled = True
+                dgv.ColumnsHierarchy.AutoStretchColumns = True
                 dgv.ColumnsHierarchy.ExpandAllItems()
                 dgv.Update()
                 dgv.Refresh()
@@ -728,7 +720,6 @@ Friend Class ControllingUI_2
     End Sub
 
 #End Region
-
 
 
 End Class

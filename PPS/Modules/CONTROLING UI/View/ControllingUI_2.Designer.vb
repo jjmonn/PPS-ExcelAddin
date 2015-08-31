@@ -30,9 +30,10 @@ Partial Class ControllingUI_2
         Me.SelectAllToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.UnselectAllToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.DataGridViewsRCMenu = New System.Windows.Forms.ContextMenuStrip(Me.components)
-        Me.DisplayAdjustmensRCM = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ExpandAllRightClick = New System.Windows.Forms.ToolStripMenuItem()
+        Me.CollapseAllRightClick = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator()
-        Me.DisplayDataTrackingToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.LogRightClick = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator4 = New System.Windows.Forms.ToolStripSeparator()
         Me.DGVFormatsButton = New System.Windows.Forms.ToolStripMenuItem()
         Me.ColumnsAutoSize = New System.Windows.Forms.ToolStripMenuItem()
@@ -108,26 +109,32 @@ Partial Class ControllingUI_2
         '
         'DataGridViewsRCMenu
         '
-        Me.DataGridViewsRCMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.DisplayAdjustmensRCM, Me.ToolStripSeparator2, Me.DisplayDataTrackingToolStripMenuItem, Me.ToolStripSeparator4, Me.DGVFormatsButton, Me.ColumnsAutoSize, Me.ColumnsAutoFitBT})
+        Me.DataGridViewsRCMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ExpandAllRightClick, Me.CollapseAllRightClick, Me.ToolStripSeparator2, Me.LogRightClick, Me.ToolStripSeparator4, Me.DGVFormatsButton, Me.ColumnsAutoSize, Me.ColumnsAutoFitBT})
         Me.DataGridViewsRCMenu.Name = "DGVsRCM"
-        Me.DataGridViewsRCMenu.Size = New System.Drawing.Size(275, 136)
+        Me.DataGridViewsRCMenu.Size = New System.Drawing.Size(275, 160)
         '
-        'DisplayAdjustmensRCM
+        'ExpandAllRightClick
         '
-        Me.DisplayAdjustmensRCM.Name = "DisplayAdjustmensRCM"
-        Me.DisplayAdjustmensRCM.Size = New System.Drawing.Size(274, 24)
-        Me.DisplayAdjustmensRCM.Text = "Display Adjustments"
+        Me.ExpandAllRightClick.Name = "ExpandAllRightClick"
+        Me.ExpandAllRightClick.Size = New System.Drawing.Size(274, 24)
+        Me.ExpandAllRightClick.Text = "Expand All"
+        '
+        'CollapseAllRightClick
+        '
+        Me.CollapseAllRightClick.Name = "CollapseAllRightClick"
+        Me.CollapseAllRightClick.Size = New System.Drawing.Size(274, 24)
+        Me.CollapseAllRightClick.Text = "Collapse All"
         '
         'ToolStripSeparator2
         '
         Me.ToolStripSeparator2.Name = "ToolStripSeparator2"
         Me.ToolStripSeparator2.Size = New System.Drawing.Size(271, 6)
         '
-        'DisplayDataTrackingToolStripMenuItem
+        'LogRightClick
         '
-        Me.DisplayDataTrackingToolStripMenuItem.Name = "DisplayDataTrackingToolStripMenuItem"
-        Me.DisplayDataTrackingToolStripMenuItem.Size = New System.Drawing.Size(274, 24)
-        Me.DisplayDataTrackingToolStripMenuItem.Text = "Display Data Tracking"
+        Me.LogRightClick.Name = "LogRightClick"
+        Me.LogRightClick.Size = New System.Drawing.Size(274, 24)
+        Me.LogRightClick.Text = "Log"
         '
         'ToolStripSeparator4
         '
@@ -451,8 +458,7 @@ Partial Class ControllingUI_2
     Friend WithEvents UnselectAllToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents RefreshRightClick As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents DataGridViewsRCMenu As System.Windows.Forms.ContextMenuStrip
-    Friend WithEvents DisplayDataTrackingToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents DisplayAdjustmensRCM As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents LogRightClick As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ToolStripSeparator2 As System.Windows.Forms.ToolStripSeparator
     Friend WithEvents AdjustmentsRCMenu As System.Windows.Forms.ContextMenuStrip
     Friend WithEvents SelectAllToolStripMenuItem1 As System.Windows.Forms.ToolStripMenuItem
@@ -482,4 +488,6 @@ Partial Class ControllingUI_2
     Public WithEvents ExpansionImageList As System.Windows.Forms.ImageList
     Friend WithEvents ColumnsAutoFitBT As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ColumnsAutoSize As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ExpandAllRightClick As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents CollapseAllRightClick As System.Windows.Forms.ToolStripMenuItem
 End Class
