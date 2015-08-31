@@ -36,22 +36,13 @@ Public Class RatesVersion
 
 #Region "Init"
 
-    Friend Sub New()
+  Friend Sub New()
 
-        NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_READ_RATE_VERSION_ANSWER, AddressOf SMSG_READ_RATE_VERSION_ANSWER)
-        NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_DELETE_RATE_VERSION_ANSWER, AddressOf SMSG_DELETE_RATE_VERSION_ANSWER)
-        LoadRateVersionsTable()
+    NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_READ_RATE_VERSION_ANSWER, AddressOf SMSG_READ_RATE_VERSION_ANSWER)
+    NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_DELETE_RATE_VERSION_ANSWER, AddressOf SMSG_DELETE_RATE_VERSION_ANSWER)
+    NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_LIST_RATE_VERSION_ANSWER, AddressOf SMSG_LIST_rate_version_ANSWER)
 
-    End Sub
-
-    Friend Sub LoadRateVersionsTable()
-
-        NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_LIST_RATE_VERSION_ANSWER, AddressOf SMSG_LIST_rate_version_ANSWER)
-        Dim packet As New ByteBuffer(CType(ClientMessage.CMSG_LIST_RATE_VERSION, UShort))
-        packet.Release()
-        NetworkManager.GetInstance().Send(packet)
-
-    End Sub
+  End Sub
 
     Private Sub SMSG_LIST_rate_version_ANSWER(packet As ByteBuffer)
 
@@ -67,7 +58,6 @@ Public Class RatesVersion
         Else
             state_flag = False
         End If
-        NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_LIST_RATE_VERSION_ANSWER, AddressOf SMSG_LIST_rate_version_ANSWER)
 
     End Sub
 
@@ -275,13 +265,14 @@ Public Class RatesVersion
 #End Region
 
 
-    Protected Overrides Sub finalize()
+  Protected Overrides Sub finalize()
 
-        NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_READ_RATE_VERSION_ANSWER, AddressOf SMSG_READ_RATE_VERSION_ANSWER)
-        NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_DELETE_RATE_VERSION_ANSWER, AddressOf SMSG_DELETE_RATE_VERSION_ANSWER)
-        MyBase.Finalize()
+    NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_LIST_RATE_VERSION_ANSWER, AddressOf SMSG_LIST_rate_version_ANSWER)
+    NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_READ_RATE_VERSION_ANSWER, AddressOf SMSG_READ_RATE_VERSION_ANSWER)
+    NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_DELETE_RATE_VERSION_ANSWER, AddressOf SMSG_DELETE_RATE_VERSION_ANSWER)
+    MyBase.Finalize()
 
-    End Sub
+  End Sub
 
 
 End Class

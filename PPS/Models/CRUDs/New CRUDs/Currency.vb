@@ -36,23 +36,14 @@ Friend Class Currency
 
 #Region "Init"
 
-    Friend Sub New()
+  Friend Sub New()
 
-        NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_READ_CURRENCY_ANSWER, AddressOf SMSG_READ_CURRENCY_ANSWER)
-        NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_DELETE_CURRENCY_ANSWER, AddressOf SMSG_DELETE_CURRENCY_ANSWER)
-        state_flag = False
-        LoadCurrencyTable()
+    NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_LIST_CURRENCY_ANSWER, AddressOf SMSG_LIST_CURRENCY_ANSWER)
+    NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_READ_CURRENCY_ANSWER, AddressOf SMSG_READ_CURRENCY_ANSWER)
+    NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_DELETE_CURRENCY_ANSWER, AddressOf SMSG_DELETE_CURRENCY_ANSWER)
+    state_flag = False
 
-    End Sub
-
-    Friend Sub LoadCurrencyTable()
-
-        NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_LIST_CURRENCY_ANSWER, AddressOf SMSG_LIST_CURRENCY_ANSWER)
-        Dim packet As New ByteBuffer(CType(ClientMessage.CMSG_LIST_CURRENCY, UShort))
-        packet.Release()
-        NetworkManager.GetInstance().Send(packet)
-
-    End Sub
+  End Sub
 
     Private Sub SMSG_LIST_CURRENCY_ANSWER(packet As ByteBuffer)
 
@@ -68,7 +59,6 @@ Friend Class Currency
         Else
             state_flag = False
         End If
-        NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_LIST_CURRENCY_ANSWER, AddressOf SMSG_LIST_CURRENCY_ANSWER)
 
     End Sub
 
@@ -216,13 +206,14 @@ Friend Class Currency
 #End Region
 
 
-    Protected Overrides Sub finalize()
+  Protected Overrides Sub finalize()
 
-        NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_READ_CURRENCY_ANSWER, AddressOf SMSG_READ_CURRENCY_ANSWER)
-        NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_DELETE_CURRENCY_ANSWER, AddressOf SMSG_DELETE_CURRENCY_ANSWER)
-        MyBase.Finalize()
+    NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_LIST_CURRENCY_ANSWER, AddressOf SMSG_LIST_CURRENCY_ANSWER)
+    NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_READ_CURRENCY_ANSWER, AddressOf SMSG_READ_CURRENCY_ANSWER)
+    NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_DELETE_CURRENCY_ANSWER, AddressOf SMSG_DELETE_CURRENCY_ANSWER)
+    MyBase.Finalize()
 
-    End Sub
+  End Sub
 
 
 

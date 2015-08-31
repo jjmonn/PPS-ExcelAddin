@@ -40,16 +40,7 @@ Friend Class Product
 
         NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_READ_PRODUCT_ANSWER, AddressOf SMSG_READ_PRODUCT_ANSWER)
         NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_DELETE_PRODUCT_ANSWER, AddressOf SMSG_DELETE_PRODUCT_ANSWER)
-        LoadProductsTable()
-
-    End Sub
-
-    Friend Sub LoadProductsTable()
-
-        NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_LIST_PRODUCT_ANSWER, AddressOf SMSG_LIST_PRODUCT_ANSWER)
-        Dim packet As New ByteBuffer(CType(ClientMessage.CMSG_LIST_PRODUCT, UShort))
-        packet.Release()
-        NetworkManager.GetInstance().Send(packet)
+    NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_LIST_PRODUCT_ANSWER, AddressOf SMSG_LIST_PRODUCT_ANSWER)
 
     End Sub
 
@@ -66,7 +57,6 @@ Friend Class Product
         Else
             state_flag = False
         End If
-        NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_LIST_PRODUCT_ANSWER, AddressOf SMSG_LIST_PRODUCT_ANSWER)
 
     End Sub
 
@@ -276,13 +266,14 @@ Friend Class Product
 #End Region
 
 
-    Protected Overrides Sub finalize()
+  Protected Overrides Sub finalize()
 
-        NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_READ_PRODUCT_ANSWER, AddressOf SMSG_READ_PRODUCT_ANSWER)
-        NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_DELETE_PRODUCT_ANSWER, AddressOf SMSG_DELETE_PRODUCT_ANSWER)
-        MyBase.Finalize()
+    NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_LIST_PRODUCT_ANSWER, AddressOf SMSG_LIST_PRODUCT_ANSWER)
+    NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_READ_PRODUCT_ANSWER, AddressOf SMSG_READ_PRODUCT_ANSWER)
+    NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_DELETE_PRODUCT_ANSWER, AddressOf SMSG_DELETE_PRODUCT_ANSWER)
+    MyBase.Finalize()
 
-    End Sub
+  End Sub
 
 
 End Class

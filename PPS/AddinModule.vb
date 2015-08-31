@@ -30,9 +30,7 @@ Imports System.Collections.Generic
 'Add-in Express Add-in Module"
 <GuidAttribute("C5985605-3A21-426D-8DC3-B38EEBDA50C8"), ProgIdAttribute("PPS.AddinModule")> _
 Public Class AddinModule
-
     Inherits AddinExpress.MSO.ADXAddinModule
-
 
 #Region "instance Variables"
 
@@ -1339,7 +1337,22 @@ Public Class AddinModule
         GlobalVariables.Version_label_Sub_Ribbon = VersionTBSubRibbon
         GlobalVariables.ClientsIDDropDown = ClientsDropDown
         GlobalVariables.ProductsIDDropDown = ProductsDropDown
-        GlobalVariables.AdjustmentIDDropDown = AdjustmentDropDown
+    GlobalVariables.AdjustmentIDDropDown = AdjustmentDropDown
+
+    GlobalVariables.Accounts = New Account
+    GlobalVariables.Entities = New Entity
+    GlobalVariables.Filters = New Filter
+    GlobalVariables.FiltersValues = New FilterValue
+    GlobalVariables.Clients = New Client
+    GlobalVariables.Products = New Product
+    GlobalVariables.Adjustments = New Adjustment
+    GlobalVariables.EntitiesFilters = New EntitiesFilter
+    GlobalVariables.ClientsFilters = New ClientsFilter
+    GlobalVariables.ProductsFilters = New ProductsFilter
+    GlobalVariables.AdjustmentsFilters = New AdjustmentFilter
+    GlobalVariables.Versions = New FactsVersion
+    GlobalVariables.Currencies = New Currency
+    GlobalVariables.RatesVersions = New RatesVersion
 
     End Sub
 

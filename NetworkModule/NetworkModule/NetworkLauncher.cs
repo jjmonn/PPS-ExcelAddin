@@ -28,9 +28,12 @@ public class NetworkLauncher
 
     public void Stop()
     {
-        m_state = ClientState.shuting_down;
-        if (m_thread != null)
-            m_thread.Join();
+      if (m_state != ClientState.running)
+        return;
+      m_netMgr.Disconnect();
+      m_state = ClientState.shuting_down;
+      if (m_thread != null)
+        m_thread.Join();
     }
 
     void HandleLoop()

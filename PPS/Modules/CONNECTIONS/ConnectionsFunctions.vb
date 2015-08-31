@@ -26,7 +26,9 @@ Friend Class ConnectionsFunctions
     Private pwd As String
 
     ' Flags
-     Friend globalInitFlag As Boolean = False
+  Friend globalInitFlag As Boolean = False
+  Friend globalAuthenticated As Boolean = False
+
     Private globalVariablesInitFlags As New Collections.Generic.Dictionary(Of UInt32, Boolean)
 
 #End Region
@@ -41,10 +43,12 @@ Friend Class ConnectionsFunctions
         pwd = p_pwd
 
         globalVariablesInitFlags.Clear()
-        globalInitFlag = False
+    globalInitFlag = False
+    globalAuthenticated = False
+    InitializeGlobalModels()
         If GlobalVariables.ConnectionState = True Then
             CloseNetworkConnection()
-        End If
+    End If
         GlobalVariables.NetworkConnect = New NetworkLauncher()
         GlobalVariables.ConnectionState = (GlobalVariables.NetworkConnect.Launch(p_hostname, p_port))
 
@@ -82,7 +86,8 @@ Friend Class ConnectionsFunctions
             Dim answer As New ByteBuffer(CType(ClientMessage.CMSG_AUTHENTIFICATION, UShort))
             answer.WriteString(userName)
             answer.WriteString(Utilities_Functions.getSHA1Hash(Utilities_Functions.getSHA1Hash(pwd & userName) & authToken))
-            answer.Release()
+      answer.Release()
+
             NetworkManager.GetInstance().Send(answer)
             System.Diagnostics.Debug.WriteLine("Authentication asked")
         Else
@@ -98,36 +103,21 @@ Friend Class ConnectionsFunctions
 
         If packet.ReadInt32() = 0 Then
             If packet.ReadBool() = True Then
-                InitializeGlobalModels()
-                System.Diagnostics.Debug.WriteLine("Authentication suceed")
-            Else
-                System.Diagnostics.Debug.WriteLine("Authentication Failed!")
-                CloseNetworkConnection()
-                '    MsgBox("Authentication failed. Please review your ID and password.")
-                RaiseEvent ConnectionFailedEvent()
+        System.Diagnostics.Debug.WriteLine("Authentication suceed")
+        globalAuthenticated = True
+      Else
+        globalInitFlag = True
+        System.Diagnostics.Debug.WriteLine("Authentication Failed!")
+        CloseNetworkConnection()
+        '    MsgBox("Authentication failed. Please review your ID and password.")
+        RaiseEvent ConnectionFailedEvent()
             End If
         End If
         NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_AUTH_ANSWER, AddressOf SMSG_AUTH_ANSWER)
 
-    End Sub
+  End Sub
 
     Private Sub InitializeGlobalModels()
-
-        GlobalVariables.Accounts = New Account
-        GlobalVariables.Entities = New Entity
-        GlobalVariables.Filters = New Filter
-        GlobalVariables.FiltersValues = New FilterValue
-        GlobalVariables.Clients = New Client
-        GlobalVariables.Products = New Product
-        GlobalVariables.Adjustments = New Adjustment
-        GlobalVariables.EntitiesFilters = New EntitiesFilter
-        GlobalVariables.ClientsFilters = New ClientsFilter
-        GlobalVariables.ProductsFilters = New ProductsFilter
-        GlobalVariables.AdjustmentsFilters = New AdjustmentFilter
-        GlobalVariables.Versions = New FactsVersion
-        GlobalVariables.Currencies = New Currency
-        GlobalVariables.RatesVersions = New RatesVersion
-
         AddHandler GlobalVariables.Accounts.ObjectInitialized, AddressOf AfterAccountsInit
         AddHandler GlobalVariables.Entities.ObjectInitialized, AddressOf AfterEntitiesInit
         AddHandler GlobalVariables.Filters.ObjectInitialized, AddressOf AfterFiltersInit

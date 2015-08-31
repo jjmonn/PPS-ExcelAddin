@@ -150,6 +150,7 @@ public class NetworkManager
     {
         m_Sock.GetStream().Close();
         m_Sock.Close();
+        m_Sock = new TcpClient();
     }
 
     public bool HandlePacket()

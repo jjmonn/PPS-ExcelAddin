@@ -16,7 +16,7 @@ Friend Class GlobalVariables
 #Region "Connections and Server"
 
     'Friend Shared Connection As ADODB.Connection
-    Friend Shared NetworkConnect As NetworkLauncher
+  Friend Shared NetworkConnect As NetworkLauncher
     Friend Shared ConnectionState As Boolean = False
     Friend Shared AuthenticationFlag As Boolean = False
     Friend Shared database As String = My.Settings.database

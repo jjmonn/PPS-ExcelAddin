@@ -39,250 +39,242 @@ Friend Class Client
     Friend Sub New()
 
         NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_READ_CLIENT_ANSWER, AddressOf SMSG_READ_CLIENT_ANSWER)
-        NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_DELETE_CLIENT_ANSWER, AddressOf SMSG_DELETE_CLIENT_ANSWER)
+    NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_DELETE_CLIENT_ANSWER, AddressOf SMSG_DELETE_CLIENT_ANSWER)
+    NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_LIST_CLIENT_ANSWER, AddressOf SMSG_LIST_CLIENT_ANSWER)
+
         state_flag = False
-        LoadClientsTable()
 
     End Sub
 
-    Friend Sub LoadClientsTable()
+  Private Sub SMSG_LIST_CLIENT_ANSWER(packet As ByteBuffer)
 
-        NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_LIST_CLIENT_ANSWER, AddressOf SMSG_LIST_CLIENT_ANSWER)
-        Dim packet As New ByteBuffer(CType(ClientMessage.CMSG_LIST_CLIENT, UShort))
-        packet.Release()
-        NetworkManager.GetInstance().Send(packet)
+    If packet.ReadInt32() = 0 Then
+      For i As Int32 = 1 To packet.ReadInt32()
+        Dim tmp_ht As New Hashtable
+        GetClientHTFromPacket(packet, tmp_ht)
+        clients_hash(CInt(tmp_ht(ID_VARIABLE))) = tmp_ht
+      Next
+      state_flag = True
+      RaiseEvent ObjectInitialized()
+    Else
+      state_flag = False
+    End If
 
-    End Sub
-
-    Private Sub SMSG_LIST_CLIENT_ANSWER(packet As ByteBuffer)
-
-        If packet.ReadInt32() = 0 Then
-            For i As Int32 = 1 To packet.ReadInt32()
-                Dim tmp_ht As New Hashtable
-                GetClientHTFromPacket(packet, tmp_ht)
-                clients_hash(CInt(tmp_ht(ID_VARIABLE))) = tmp_ht
-            Next
-            state_flag = True
-            RaiseEvent ObjectInitialized()
-        Else
-            state_flag = False
-        End If
-        NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_LIST_CLIENT_ANSWER, AddressOf SMSG_LIST_CLIENT_ANSWER)
-
-    End Sub
+  End Sub
 
 #End Region
 
 
 #Region "CRUD"
 
-    Friend Sub CMSG_CREATE_CLIENT(ByRef attributes As Hashtable)
+  Friend Sub CMSG_CREATE_CLIENT(ByRef attributes As Hashtable)
 
-        NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_CREATE_CLIENT_ANSWER, AddressOf SMSG_CREATE_CLIENT_ANSWER)
-        Dim packet As New ByteBuffer(CType(ClientMessage.CMSG_CREATE_CLIENT, UShort))
-        WriteClientPacket(packet, attributes)
-        packet.Release()
-        NetworkManager.GetInstance().Send(packet)
+    NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_CREATE_CLIENT_ANSWER, AddressOf SMSG_CREATE_CLIENT_ANSWER)
+    Dim packet As New ByteBuffer(CType(ClientMessage.CMSG_CREATE_CLIENT, UShort))
+    WriteClientPacket(packet, attributes)
+    packet.Release()
+    NetworkManager.GetInstance().Send(packet)
 
-    End Sub
+  End Sub
 
-    Private Sub SMSG_CREATE_CLIENT_ANSWER(packet As ByteBuffer)
+  Private Sub SMSG_CREATE_CLIENT_ANSWER(packet As ByteBuffer)
 
-        If packet.ReadInt32() = 0 Then
-            Dim tmp_ht As New Hashtable
-            GetClientHTFromPacket(packet, tmp_ht)
-            RaiseEvent ClientCreationEvent(True, tmp_ht)
-        Else
-            RaiseEvent ClientCreationEvent(False, Nothing)
-        End If
-        NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_CREATE_CLIENT_ANSWER, AddressOf SMSG_CREATE_CLIENT_ANSWER)
+    If packet.ReadInt32() = 0 Then
+      Dim tmp_ht As New Hashtable
+      GetClientHTFromPacket(packet, tmp_ht)
+      RaiseEvent ClientCreationEvent(True, tmp_ht)
+    Else
+      RaiseEvent ClientCreationEvent(False, Nothing)
+    End If
+    NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_CREATE_CLIENT_ANSWER, AddressOf SMSG_CREATE_CLIENT_ANSWER)
 
-    End Sub
+  End Sub
 
-    Friend Sub CMSG_READ_CLIENT(ByRef id As UInt32)
+  Friend Sub CMSG_READ_CLIENT(ByRef id As UInt32)
 
-        Dim packet As New ByteBuffer(CType(ClientMessage.CMSG_READ_CLIENT, UShort))
-        packet.Release()
-        NetworkManager.GetInstance().Send(packet)
+    Dim packet As New ByteBuffer(CType(ClientMessage.CMSG_READ_CLIENT, UShort))
+    packet.Release()
+    NetworkManager.GetInstance().Send(packet)
 
-    End Sub
+  End Sub
 
-    Private Sub SMSG_READ_CLIENT_ANSWER(packet As ByteBuffer)
+  Private Sub SMSG_READ_CLIENT_ANSWER(packet As ByteBuffer)
 
-        If packet.ReadInt32() = 0 Then
-            Dim ht As New Hashtable
-            GetClientHTFromPacket(packet, ht)
-            clients_hash(ht(ID_VARIABLE)) = ht
-            ' qui delete !!! priority high nath server ?
-        Else
-        End If
+    If packet.ReadInt32() = 0 Then
+      Dim ht As New Hashtable
+      GetClientHTFromPacket(packet, ht)
+      clients_hash(ht(ID_VARIABLE)) = ht
+      ' qui delete !!! priority high nath server ?
+    Else
+    End If
 
-    End Sub
+  End Sub
 
-    Friend Sub UpdateBatch(ByRef updates As List(Of Object()))
+  Friend Sub UpdateBatch(ByRef updates As List(Of Object()))
 
-        ' to be implemented !!!! priority normal
+    ' to be implemented !!!! priority normal
 
-        request_id.Clear()
-        For Each update As Object() In updates
-
-
-        Next
+    request_id.Clear()
+    For Each update As Object() In updates
 
 
-    End Sub
+    Next
 
-    Friend Sub CMSG_UPDATE_CLIENT(ByRef id As UInt32, _
-                                  ByRef updated_var As String, _
-                                  ByRef new_value As String)
 
-        Dim tmp_ht As Hashtable = clients_hash(id).clone ' check clone !!!!
-        tmp_ht(updated_var) = new_value
+  End Sub
 
-        NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_UPDATE_CLIENT_ANSWER, AddressOf SMSG_UPDATE_CLIENT_ANSWER)
-        Dim packet As New ByteBuffer(CType(ClientMessage.CMSG_UPDATE_CLIENT, UShort))
-        WriteClientPacket(packet, tmp_ht)
-        packet.Release()
-        NetworkManager.GetInstance().Send(packet)
+  Friend Sub CMSG_UPDATE_CLIENT(ByRef id As UInt32, _
+                                ByRef updated_var As String, _
+                                ByRef new_value As String)
 
-    End Sub
+    Dim tmp_ht As Hashtable = clients_hash(id).clone ' check clone !!!!
+    tmp_ht(updated_var) = new_value
 
-    Friend Sub CMSG_UPDATE_CLIENT(ByRef attributes As Hashtable)
+    NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_UPDATE_CLIENT_ANSWER, AddressOf SMSG_UPDATE_CLIENT_ANSWER)
+    Dim packet As New ByteBuffer(CType(ClientMessage.CMSG_UPDATE_CLIENT, UShort))
+    WriteClientPacket(packet, tmp_ht)
+    packet.Release()
+    NetworkManager.GetInstance().Send(packet)
 
-        NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_UPDATE_CLIENT_ANSWER, AddressOf SMSG_UPDATE_CLIENT_ANSWER)
-        Dim packet As New ByteBuffer(CType(ClientMessage.CMSG_UPDATE_CLIENT, UShort))
-        WriteClientPacket(packet, attributes)
-        packet.Release()
-        NetworkManager.GetInstance().Send(packet)
+  End Sub
 
-    End Sub
+  Friend Sub CMSG_UPDATE_CLIENT(ByRef attributes As Hashtable)
 
-    Private Sub SMSG_UPDATE_CLIENT_ANSWER(packet As ByteBuffer)
+    NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_UPDATE_CLIENT_ANSWER, AddressOf SMSG_UPDATE_CLIENT_ANSWER)
+    Dim packet As New ByteBuffer(CType(ClientMessage.CMSG_UPDATE_CLIENT, UShort))
+    WriteClientPacket(packet, attributes)
+    packet.Release()
+    NetworkManager.GetInstance().Send(packet)
 
-        If packet.ReadInt32() = 0 Then
-            Dim ht As New Hashtable
-            GetClientHTFromPacket(packet, ht)
-            RaiseEvent ClientUpdateEvent(True, ht)
-        Else
-            RaiseEvent ClientUpdateEvent(False, Nothing)
-        End If
-        NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_UPDATE_CLIENT_ANSWER, AddressOf SMSG_UPDATE_CLIENT_ANSWER)
+  End Sub
 
-    End Sub
+  Private Sub SMSG_UPDATE_CLIENT_ANSWER(packet As ByteBuffer)
 
-    Friend Sub CMSG_DELETE_CLIENT(ByRef id As UInt32)
+    If packet.ReadInt32() = 0 Then
+      Dim ht As New Hashtable
+      GetClientHTFromPacket(packet, ht)
+      RaiseEvent ClientUpdateEvent(True, ht)
+    Else
+      RaiseEvent ClientUpdateEvent(False, Nothing)
+    End If
+    NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_UPDATE_CLIENT_ANSWER, AddressOf SMSG_UPDATE_CLIENT_ANSWER)
 
-        Dim packet As New ByteBuffer(CType(ClientMessage.CMSG_DELETE_CLIENT, UShort))
-        packet.WriteUint32(id)
-        packet.Release()
-        NetworkManager.GetInstance().Send(packet)
+  End Sub
 
-    End Sub
+  Friend Sub CMSG_DELETE_CLIENT(ByRef id As UInt32)
 
-    Private Sub SMSG_DELETE_CLIENT_ANSWER(packet As ByteBuffer)
+    Dim packet As New ByteBuffer(CType(ClientMessage.CMSG_DELETE_CLIENT, UShort))
+    packet.WriteUint32(id)
+    packet.Release()
+    NetworkManager.GetInstance().Send(packet)
 
-        If packet.ReadInt32() = 0 Then
-            Dim id As UInt32 = packet.ReadInt32
-            clients_hash.Remove(id)
-            RaiseEvent ClientDeleteEvent(True, id)
-        Else
-            RaiseEvent ClientDeleteEvent(False, 0)
-        End If
-      
-    End Sub
+  End Sub
+
+  Private Sub SMSG_DELETE_CLIENT_ANSWER(packet As ByteBuffer)
+
+    If packet.ReadInt32() = 0 Then
+      Dim id As UInt32 = packet.ReadInt32
+      clients_hash.Remove(id)
+      RaiseEvent ClientDeleteEvent(True, id)
+    Else
+      RaiseEvent ClientDeleteEvent(False, 0)
+    End If
+
+  End Sub
 
 #End Region
 
 
 #Region "Mappings"
 
-    Friend Function GetClientsNameList() As List(Of String)
+  Friend Function GetClientsNameList() As List(Of String)
 
-        Dim tmp_list As New List(Of String)
-        For Each id In clients_hash.Keys
-            tmp_list.Add(clients_hash(id)(NAME_VARIABLE))
-        Next
-        Return tmp_list
+    Dim tmp_list As New List(Of String)
+    For Each id In clients_hash.Keys
+      tmp_list.Add(clients_hash(id)(NAME_VARIABLE))
+    Next
+    Return tmp_list
 
-    End Function
+  End Function
 
-    Friend Function GetClientsDictionary(ByRef Key As String, ByRef Value As String) As Hashtable
+  Friend Function GetClientsDictionary(ByRef Key As String, ByRef Value As String) As Hashtable
 
-        Dim tmpHT As New Hashtable
-        For Each id In clients_hash.Keys
-            tmpHT(clients_hash(id)(Key)) = clients_hash(id)(Value)
-        Next
-        Return tmpHT
+    Dim tmpHT As New Hashtable
+    For Each id In clients_hash.Keys
+      tmpHT(clients_hash(id)(Key)) = clients_hash(id)(Value)
+    Next
+    Return tmpHT
 
-    End Function
+  End Function
 
 #End Region
 
 
 #Region "Utilities"
 
-    Friend Shared Sub GetClientHTFromPacket(ByRef packet As ByteBuffer, ByRef client_ht As Hashtable)
+  Friend Shared Sub GetClientHTFromPacket(ByRef packet As ByteBuffer, ByRef client_ht As Hashtable)
 
-        client_ht(ID_VARIABLE) = packet.ReadUint32()
-        client_ht(NAME_VARIABLE) = packet.ReadString()
+    client_ht(ID_VARIABLE) = packet.ReadUint32()
+    client_ht(NAME_VARIABLE) = packet.ReadString()
 
-    End Sub
+  End Sub
 
-    Private Sub WriteClientPacket(ByRef packet As ByteBuffer, ByRef attributes As Hashtable)
+  Private Sub WriteClientPacket(ByRef packet As ByteBuffer, ByRef attributes As Hashtable)
 
-        If attributes.ContainsKey(ID_VARIABLE) Then packet.WriteUint32(attributes(ID_VARIABLE))
-        packet.WriteString(attributes(NAME_VARIABLE))
+    If attributes.ContainsKey(ID_VARIABLE) Then packet.WriteUint32(attributes(ID_VARIABLE))
+    packet.WriteString(attributes(NAME_VARIABLE))
 
-    End Sub
+  End Sub
 
-    Friend Function IsNameValid(ByRef name As String) As Boolean
+  Friend Function IsNameValid(ByRef name As String) As Boolean
 
-        If name.Length > NAMES_MAX_LENGTH Then Return False
-        For Each char_ As Char In AXIS_NAME_FORBIDEN_CHARS
-            If name.Contains(char_) Then Return False
-        Next
-        If name = "" Then Return False
-        If GetClientsNameList(NAME_VARIABLE).Contains(name) Then Return False
-        Return True
+    If name.Length > NAMES_MAX_LENGTH Then Return False
+    For Each char_ As Char In AXIS_NAME_FORBIDEN_CHARS
+      If name.Contains(char_) Then Return False
+    Next
+    If name = "" Then Return False
+    If GetClientsNameList(NAME_VARIABLE).Contains(name) Then Return False
+    Return True
 
-    End Function
+  End Function
 
 #End Region
 
 
 #Region "TV Loading"
 
-    Friend Sub LoadClientsTree(ByRef TV As VIBlend.WinForms.Controls.vTreeView)
+  Friend Sub LoadClientsTree(ByRef TV As VIBlend.WinForms.Controls.vTreeView)
 
-        TV.Nodes.Clear()
-        For Each id As Int32 In clients_hash.Keys
-            Dim node As VIBlend.WinForms.Controls.vTreeNode = VTreeViewUtil.AddNode(id, clients_hash(id)(NAME_VARIABLE), TV, 0)
-            node.Checked = Windows.Forms.CheckState.Checked
-        Next
+    TV.Nodes.Clear()
+    For Each id As Int32 In clients_hash.Keys
+      Dim node As VIBlend.WinForms.Controls.vTreeNode = VTreeViewUtil.AddNode(id, clients_hash(id)(NAME_VARIABLE), TV, 0)
+      node.Checked = Windows.Forms.CheckState.Checked
+    Next
 
-    End Sub
+  End Sub
 
-    Friend Sub LoadClientsTree(ByRef TV As VIBlend.WinForms.Controls.vTreeView, _
-                               ByRef filter_list As List(Of UInt32))
+  Friend Sub LoadClientsTree(ByRef TV As VIBlend.WinForms.Controls.vTreeView, _
+                             ByRef filter_list As List(Of UInt32))
 
-        TV.Nodes.Clear()
-        For Each id As Int32 In clients_hash.Keys
-            Dim node As VIBlend.WinForms.Controls.vTreeNode = VTreeViewUtil.AddNode(id, clients_hash(id)(NAME_VARIABLE), TV, 0)
-            node.Checked = Windows.Forms.CheckState.Checked
-        Next
+    TV.Nodes.Clear()
+    For Each id As Int32 In clients_hash.Keys
+      Dim node As VIBlend.WinForms.Controls.vTreeNode = VTreeViewUtil.AddNode(id, clients_hash(id)(NAME_VARIABLE), TV, 0)
+      node.Checked = Windows.Forms.CheckState.Checked
+    Next
 
-    End Sub
+  End Sub
 
 #End Region
 
 
-    Protected Overrides Sub finalize()
+  Protected Overrides Sub finalize()
 
-        NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_READ_CLIENT_ANSWER, AddressOf SMSG_READ_CLIENT_ANSWER)
-        NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_DELETE_CLIENT_ANSWER, AddressOf SMSG_DELETE_CLIENT_ANSWER)
-        MyBase.Finalize()
+    NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_READ_CLIENT_ANSWER, AddressOf SMSG_READ_CLIENT_ANSWER)
+    NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_DELETE_CLIENT_ANSWER, AddressOf SMSG_DELETE_CLIENT_ANSWER)
+    NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_LIST_CLIENT_ANSWER, AddressOf SMSG_LIST_CLIENT_ANSWER)
+    MyBase.Finalize()
 
-    End Sub
+  End Sub
 
 
 

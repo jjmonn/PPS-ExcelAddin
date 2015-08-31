@@ -44,17 +44,8 @@ Friend Class Filter
     Friend Sub New()
 
         NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_READ_FILTER_ANSWER, AddressOf SMSG_READ_FILTER_ANSWER)
-        NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_DELETE_FILTER_ANSWER, AddressOf SMSG_DELETE_FILTER_ANSWER)
-        LoadFiltersTable()
-
-    End Sub
-
-    Friend Sub LoadFiltersTable()
-
-        NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_LIST_FILTER_ANSWER, AddressOf SMSG_LIST_FILTER_ANSWER)
-        Dim packet As New ByteBuffer(CType(ClientMessage.CMSG_LIST_FILTER, UShort))
-        packet.Release()
-        NetworkManager.GetInstance().Send(packet)
+    NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_DELETE_FILTER_ANSWER, AddressOf SMSG_DELETE_FILTER_ANSWER)
+    NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_LIST_FILTER_ANSWER, AddressOf SMSG_LIST_FILTER_ANSWER)
 
     End Sub
 
@@ -71,7 +62,6 @@ Friend Class Filter
         Else
             state_flag = False
         End If
-        NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_LIST_FILTER_ANSWER, AddressOf SMSG_LIST_FILTER_ANSWER)
 
     End Sub
 
@@ -340,7 +330,8 @@ Friend Class Filter
     Protected Overrides Sub finalize()
 
         NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_READ_FILTER_ANSWER, AddressOf SMSG_READ_FILTER_ANSWER)
-        NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_DELETE_FILTER_ANSWER, AddressOf SMSG_DELETE_FILTER_ANSWER)
+    NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_DELETE_FILTER_ANSWER, AddressOf SMSG_DELETE_FILTER_ANSWER)
+    NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_LIST_FILTER_ANSWER, AddressOf SMSG_LIST_FILTER_ANSWER)
         MyBase.Finalize()
 
     End Sub

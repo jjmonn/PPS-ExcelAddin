@@ -35,22 +35,12 @@ Friend Class ProductsFilter
 
 #Region "Init"
 
-    Friend Sub New()
+  Friend Sub New()
 
-        NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_READ_PRODUCT_FILTER_ANSWER, AddressOf SMSG_READ_PRODUCT_FILTER_ANSWER)
+    NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_READ_PRODUCT_FILTER_ANSWER, AddressOf SMSG_READ_PRODUCT_FILTER_ANSWER)
+    NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_LIST_PRODUCT_FILTER_ANSWER, AddressOf SMSG_LIST_PRODUCT_FILTER_ANSWER)
 
-        LoadProductFiltersTable()
-
-    End Sub
-
-    Friend Sub LoadProductFiltersTable()
-
-        NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_LIST_PRODUCT_FILTER_ANSWER, AddressOf SMSG_LIST_PRODUCT_FILTER_ANSWER)
-        Dim packet As New ByteBuffer(CType(ClientMessage.CMSG_LIST_PRODUCTS_FILTER, UShort))
-        packet.Release()
-        NetworkManager.GetInstance().Send(packet)
-
-    End Sub
+  End Sub
 
     Private Sub SMSG_LIST_PRODUCT_FILTER_ANSWER(packet As ByteBuffer)
 
@@ -68,7 +58,6 @@ Friend Class ProductsFilter
         Else
             state_flag = False
         End If
-        NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_LIST_PRODUCT_FILTER_ANSWER, AddressOf SMSG_LIST_PRODUCT_FILTER_ANSWER)
 
     End Sub
 
@@ -241,13 +230,14 @@ Friend Class ProductsFilter
 #End Region
 
 
-    Protected Overrides Sub finalize()
+  Protected Overrides Sub finalize()
 
-        NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_READ_PRODUCT_FILTER_ANSWER, AddressOf SMSG_READ_PRODUCT_FILTER_ANSWER)
-        NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_DELETE_PRODUCT_FILTER_ANSWER, AddressOf SMSG_DELETE_PRODUCT_FILTER_ANSWER)
-        MyBase.Finalize()
+    NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_LIST_PRODUCT_FILTER_ANSWER, AddressOf SMSG_LIST_PRODUCT_FILTER_ANSWER)
+    NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_READ_PRODUCT_FILTER_ANSWER, AddressOf SMSG_READ_PRODUCT_FILTER_ANSWER)
+    NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_DELETE_PRODUCT_FILTER_ANSWER, AddressOf SMSG_DELETE_PRODUCT_FILTER_ANSWER)
+    MyBase.Finalize()
 
-    End Sub
+  End Sub
 
 
 
