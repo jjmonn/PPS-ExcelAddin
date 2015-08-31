@@ -270,7 +270,7 @@ Friend Class Computer
 
     End Function
 
-    Friend Shared Function GetItemID(ByRef str As String) As UInt32
+    Friend Shared Function GetItemID(ByRef str As String) As Int32
 
         Return CInt(Right(str, Len(str) - 1))
 
