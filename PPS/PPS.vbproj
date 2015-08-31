@@ -243,7 +243,7 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Models\FiltersReader.vb" />
-    <Compile Include="Modules\CONTROLING UI\Controler\FinancialUIController.vb" />
+    <Compile Include="Modules\CONTROLING UI\Controler\ControllingUIController.vb" />
     <Compile Include="Modules\CONTROLING UI\View\ControllingUIChartsConfig.Designer.vb">
       <DependentUpon>ControllingUIChartsConfig.vb</DependentUpon>
     </Compile>
@@ -631,6 +631,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Modules\CONTROLING UI\View\CUI2LeftPane.resx">
       <DependentUpon>CUI2LeftPane.vb</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Modules\CONTROLING UI\View\CUI2RightPane.resx">
       <DependentUpon>CUI2RightPane.vb</DependentUpon>
