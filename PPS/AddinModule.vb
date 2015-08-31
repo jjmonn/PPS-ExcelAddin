@@ -16,7 +16,7 @@
 '
 '
 ' Author: Julien Monnereau/ Addin Express automated code
-' Last modified: 28/08/2015
+' Last modified: 31/08/2015
 
 
 Imports System.Runtime.InteropServices
@@ -1337,22 +1337,23 @@ Public Class AddinModule
         GlobalVariables.Version_label_Sub_Ribbon = VersionTBSubRibbon
         GlobalVariables.ClientsIDDropDown = ClientsDropDown
         GlobalVariables.ProductsIDDropDown = ProductsDropDown
-    GlobalVariables.AdjustmentIDDropDown = AdjustmentDropDown
+        GlobalVariables.AdjustmentIDDropDown = AdjustmentDropDown
 
-    GlobalVariables.Accounts = New Account
-    GlobalVariables.Entities = New Entity
-    GlobalVariables.Filters = New Filter
-    GlobalVariables.FiltersValues = New FilterValue
-    GlobalVariables.Clients = New Client
-    GlobalVariables.Products = New Product
-    GlobalVariables.Adjustments = New Adjustment
-    GlobalVariables.EntitiesFilters = New EntitiesFilter
-    GlobalVariables.ClientsFilters = New ClientsFilter
-    GlobalVariables.ProductsFilters = New ProductsFilter
-    GlobalVariables.AdjustmentsFilters = New AdjustmentFilter
-    GlobalVariables.Versions = New FactsVersion
-    GlobalVariables.Currencies = New Currency
-    GlobalVariables.RatesVersions = New RatesVersion
+        ' CRUDs
+        GlobalVariables.Accounts = New Account
+        GlobalVariables.Entities = New Entity
+        GlobalVariables.Filters = New Filter
+        GlobalVariables.FiltersValues = New FilterValue
+        GlobalVariables.Clients = New Client
+        GlobalVariables.Products = New Product
+        GlobalVariables.Adjustments = New Adjustment
+        GlobalVariables.EntitiesFilters = New EntitiesFilter
+        GlobalVariables.ClientsFilters = New ClientsFilter
+        GlobalVariables.ProductsFilters = New ProductsFilter
+        GlobalVariables.AdjustmentsFilters = New AdjustmentFilter
+        GlobalVariables.Versions = New FactsVersion
+        GlobalVariables.Currencies = New Currency
+        GlobalVariables.RatesVersions = New RatesVersion
 
     End Sub
 
