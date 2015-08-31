@@ -9,7 +9,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 24/08/2015
+' Last modified: 31/08/2015
 
 
 Imports System.Windows.Forms
@@ -26,6 +26,7 @@ Imports System.Windows.Forms.DataVisualization.Charting
 Imports System.ComponentModel
 Imports VIBlend.WinForms.Controls
 Imports VIBlend.Utilities
+Imports ProgressControls
 
 
 Friend Class ControllingUI_2
@@ -42,9 +43,10 @@ Friend Class ControllingUI_2
     Private leftSplitContainer As SplitContainer
     Private rightSplitContainer As SplitContainer
     Private Accounts As New Account
-    Friend CP As CircularProgressUI
+    Friend CircularProgress As New ProgressIndicator
     Private leftPaneExpandBT As vButton
     Private rightPaneExpandBT As vButton
+    Friend BackgroundWorker1 As New BackgroundWorker
 
 #End Region
 
@@ -113,6 +115,8 @@ Friend Class ControllingUI_2
         LeftPaneSetup()
         Controller = New FinancialUIController(Me)
         GlobalVariables.Accounts.LoadAccountsTV(accountsTV)
+        BackgroundWorker1.WorkerSupportsCancellation = True
+
 
         ' Init TabControl
         For Each node As vTreeNode In accountsTV.Nodes
@@ -123,6 +127,7 @@ Friend Class ControllingUI_2
         Next
         InitializeChartsTab()
         DimensionsDisplayPaneSetup()
+        CircularProgressInit()
 
         hierarchyItemNormalStyle = GridTheme.GetDefaultTheme(DGV_THEME).HierarchyItemStyleNormal
         hierarchyItemSelectedStyle = GridTheme.GetDefaultTheme(DGV_THEME).HierarchyItemStyleNormal
@@ -130,6 +135,8 @@ Friend Class ControllingUI_2
 
         CEStyle = GridTheme.GetDefaultTheme(DGV_THEME).GridCellStyle
 
+        AddHandler BackgroundWorker1.DoWork, AddressOf BackgroundWorker1_DoWork
+        AddHandler BackgroundWorker1.RunWorkerCompleted, AddressOf AfterWorkDoneAttemp_ThreadSafe
 
     End Sub
 
@@ -275,6 +282,25 @@ Friend Class ControllingUI_2
 
     End Sub
 
+    Private Sub CircularProgressInit()
+
+        CircularProgress.CircleColor = Drawing.Color.Purple
+        CircularProgress.NumberOfCircles = 12
+        CircularProgress.NumberOfVisibleCircles = 8
+        CircularProgress.AnimationSpeed = 75
+        CircularProgress.CircleSize = 0.7
+        CircularProgress.Width = 79
+        CircularProgress.Height = 79
+
+        CircularProgress.Left = (Me.Width - CircularProgress.Width) / 2
+        CircularProgress.Top = (Me.Height - CircularProgress.Height) / 2
+        SplitContainer1.Panel2.Controls.Add(CircularProgress)
+
+        CircularProgress.Visible = False
+
+    End Sub
+
+
 #End Region
 
 
@@ -282,6 +308,11 @@ Friend Class ControllingUI_2
 
     Private Sub RefreshData(Optional ByRef entityNode As vTreeNode = Nothing, _
                             Optional ByRef useCache As Boolean = False)
+
+        DGVsControlTab.Visible = False
+        CircularProgress.Visible = True
+        CircularProgress.Focus()
+        BackgroundWorker1.RunWorkerAsync()
 
         Dim versionsIds As New List(Of Int32)
         For Each versionId In VTreeViewUtil.GetCheckedNodesIds(leftPane_control.versionsTV)
@@ -294,6 +325,7 @@ Friend Class ControllingUI_2
             If leftPane_control.entitiesTV.Nodes.Count > 0 Then
                 entityNode = leftPane_control.entitiesTV.Nodes(0)
                 If versionsIds.Count > 0 Then
+                    ' Launch Computation
                     Controller.Compute(versionsIds.ToArray, entityNode)
                 Else
                     MsgBox("At least one version must be selected.")
@@ -304,11 +336,13 @@ Friend Class ControllingUI_2
             End If
         Else
             If versionsIds.Count > 0 Then
+                ' Launch Computation
                 Controller.Compute(versionsIds.ToArray, entityNode)
             Else
                 MsgBox("At least one version must be selected.")
             End If
         End If
+
 
     End Sub
 
@@ -344,6 +378,13 @@ Friend Class ControllingUI_2
         End If
 
     End Sub
+
+    'Friend Sub ClearDGVs()
+
+    '    Dim dgv As vDataGridView = DGVsControlTab.SelectedTab.Controls(0)
+    '    dgv.Clear()
+
+    'End Sub
 
 #End Region
 
@@ -638,32 +679,30 @@ Friend Class ControllingUI_2
 
 #Region "ThreadSafe"
 
-    Delegate Sub AfterDisplayAttemp_Delegate()
+    Private Sub BackgroundWorker1_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs)
 
-    Friend Sub AfterDisplayAttemp_ThreadSafe()
+        CircularProgress.Start()
+        Do While Controller.computedFlag = False
+            ' set cancel button !! priority high !!!
+        Loop
+
+    End Sub
+
+    Delegate Sub AfterWorkDoneAttemp_Delegate()
+    Friend Sub AfterWorkDoneAttemp_ThreadSafe()
 
         If InvokeRequired Then
-            Dim MyDelegate As New AfterDisplayAttemp_Delegate(AddressOf AfterDisplayAttemp_ThreadSafe)
+            Dim MyDelegate As New AfterWorkDoneAttemp_Delegate(AddressOf AfterWorkDoneAttemp_ThreadSafe)
             Me.Invoke(MyDelegate, New Object() {})
         Else
-            CP.Dispose()
-            For Each tab_ As vTabPage In DGVsControlTab.TabPages
-                Dim dgv As vDataGridView = tab_.Controls(0)
-                dgv.RowsHierarchy.AutoResize(AutoResizeMode.FIT_ALL)
-                dgv.ColumnsHierarchy.AutoResize(AutoResizeMode.FIT_ALL)
-                On Error Resume Next
-                dgv.Select()
-                dgv.Refresh()
-                dgv.Update()
-                dgv.ColumnsHierarchy.ExpandAllItems()
-            Next
-
+            CircularProgress.Stop()
+            CircularProgress.Visible = False
+            DGVsControlTab.Visible = True
         End If
 
     End Sub
 
     Delegate Sub DGVFormattingAttemp_Delegate()
-
     Friend Sub FormatDGV_ThreadSafe()
 
         If InvokeRequired Then
@@ -672,22 +711,24 @@ Friend Class ControllingUI_2
         Else
             For Each tab_ As vTabPage In DGVsControlTab.TabPages
                 Dim dgv As vDataGridView = tab_.Controls(0)
+                dgv.Select()
                 dgv.GroupingDefaultHeaderTextVisible = True
                 dgv.BackColor = Color.White
                 dgv.GridLinesDisplayMode = GridLinesDisplayMode.DISPLAY_NONE
                 dgv.ColumnsHierarchy.AutoResize(AutoResizeMode.FIT_ALL)
+                dgv.RowsHierarchy.AutoResize(AutoResizeMode.FIT_ALL)
+                '    dgv.RowsHierarchy.AllowResize = False
                 dgv.RowsHierarchy.CompactStyleRenderingEnabled = True
+                dgv.ColumnsHierarchy.ExpandAllItems()
+                dgv.Update()
                 dgv.Refresh()
             Next
         End If
 
     End Sub
 
-
 #End Region
 
 
 
-
-   
 End Class

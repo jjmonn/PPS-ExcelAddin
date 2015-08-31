@@ -46,6 +46,7 @@ Friend Class FinancialUIController
     Private VersionsTV As New vTreeView
     Friend versionsDict As New Dictionary(Of Int32, String)
     Friend initDisplayFlag As Boolean = False
+    Friend computedFlag As Boolean = False
 
     ' Cache
     Private cacheEntityID As Int32
@@ -123,8 +124,11 @@ Friend Class FinancialUIController
                        ByRef inputEntityNode As vTreeNode, _
                        Optional ByRef useCache As Boolean = False)
 
+        computedFlag = False
+        If Not dataMap Is Nothing Then dataMap.Clear()
+        dataMap = Nothing
         EntityNode = inputEntityNode
-
+        ' View.ClearDGVs()
         rowsHierarchyNode.Nodes.Clear()
         columnsHierarchyNode.Nodes.Clear()
 
@@ -191,12 +195,6 @@ Friend Class FinancialUIController
         InitDisplay()
         FillUIHeader()
 
-        ' Launch waiting CP
-        System.Diagnostics.Debug.WriteLine(Date.Now)
-        View.CP = New CircularProgressUI(System.Drawing.Color.Blue, "Computing")
-        View.CP.Show()
-
-
     End Sub
 
     Private Function CheckCache(ByRef currencyId As Int32, _
@@ -228,12 +226,11 @@ Friend Class FinancialUIController
 
     Private Sub AfterCompute()
 
-        System.Diagnostics.Debug.WriteLine(Date.Now)
-        While initDisplayFlag = False
-        End While
-        dataMap = Computer.GetData()
+        'While initDisplayFlag = False
+        'End While
         View.FormatDGV_ThreadSafe()
-        View.AfterDisplayAttemp_ThreadSafe()
+        dataMap = Computer.GetData()
+        computedFlag = True
 
     End Sub
 
@@ -266,7 +263,7 @@ Friend Class FinancialUIController
         FillHierarchy(columnsHierarchyNode)
 
         For Each tab_ As VIBlend.WinForms.Controls.vTabPage In View.DGVsControlTab.TabPages
-            View.DGVsControlTab.SelectedTab = tab_
+            '  View.DGVsControlTab.SelectedTab = tab_
             Dim DGV As vDataGridView = tab_.Controls(0)
             RemoveHandler DGV.CellValueNeeded, AddressOf DGVs_CellValueNeeded
             DGV.Clear()
@@ -278,7 +275,7 @@ Friend Class FinancialUIController
             display_axis_ht(GlobalEnums.DataMapAxis.ACCOUNTS) = 0
             display_axis_ht(GlobalEnums.DataMapAxis.PERIODS) = ""
             display_axis_ht(GlobalEnums.DataMapAxis.FILTERS) = "0"
-            display_axis_ht(GlobalEnums.DataMapAxis.ENTITIES) = CInt(EntityNode.value)
+            display_axis_ht(GlobalEnums.DataMapAxis.ENTITIES) = CInt(EntityNode.Value)
             If versionsDict.Keys.Count = 1 Then
                 display_axis_ht(GlobalEnums.DataMapAxis.VERSIONS) = CInt(versionsDict.Keys(0))
             Else
@@ -294,8 +291,8 @@ Friend Class FinancialUIController
             DGV.ColumnsHierarchy.AutoStretchColumns = True
             AddHandler DGV.CellValueNeeded, AddressOf DGVs_CellValueNeeded
         Next
-        initDisplayFlag = True
-        cellsUpdateNeeded = True
+        '  initDisplayFlag = True
+        ' cellsUpdateNeeded = True
 
     End Sub
 
@@ -429,7 +426,7 @@ Friend Class FinancialUIController
 
                 ' Style => will go in utilities !!! priority normal
                 ' ------------------------------------------------------------------------------
-                '  DataGridViewsUtil.FormatDGVItem(subColumn)
+                View.FormatDGVItem(subColumn)
                 subColumn.CellsFormatString = "{0:N}"
                 subColumn.TextAlignment = Drawing.ContentAlignment.MiddleCenter
                 RegisterHierarchyItemDimensions(subColumn)
@@ -570,13 +567,12 @@ Friend Class FinancialUIController
 
 #Region "Events"
 
-    Private Sub DGVs_CellValueNeeded(ByVal sender As Object, ByVal args As CellValueNeededEventArgs)
+    Friend Sub DGVs_CellValueNeeded(ByVal sender As Object, ByVal args As CellValueNeededEventArgs)
 
         ' priority high -> no update if alraedy displayed !!!! 
         '---------------------------------------------------------
         If Not dataMap Is Nothing Then
 
-            '    On Error GoTo errH1
             Dim accountId As Int32 = 0
             Dim entityId As Int32 = 0
             Dim periodId As String = ""
@@ -585,6 +581,7 @@ Friend Class FinancialUIController
 
             Dim items() As HierarchyItem = {args.RowItem, args.ColumnItem}
             For Each item As HierarchyItem In items
+                '  If itemsDimensionsDict(item).Count = 0 then Exit sub
                 Dim ht As Hashtable = itemsDimensionsDict(item)
                 For Each dimension In ht.Keys
                     Dim value = ht(dimension)
