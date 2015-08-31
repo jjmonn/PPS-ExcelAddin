@@ -10,7 +10,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 24/08/2015
+' Last modified: 31/08/2015
 
 
 Imports System.Windows.Forms
@@ -22,7 +22,7 @@ Imports VIBlend.Utilities
 Imports VIBlend.WinForms.Controls
 
 
-Friend Class FinancialUIController
+Friend Class ControllingUIController
 
 
 #Region "Instance Variable"
@@ -84,9 +84,12 @@ Friend Class FinancialUIController
             Dim filterValuesDict As Hashtable = GlobalVariables.FiltersValues.GetFiltervaluesDictionary(filterId, _
                                                                                                         ID_VARIABLE, _
                                                                                                         NAME_VARIABLE)
-            For Each filterValueId As UInt32 In filterValuesDict.Keys
+            For Each filterValueId As Int32 In filterValuesDict.Keys
                 VTreeViewUtil.AddNode(filterValueId, filterValuesDict(filterValueId), filterNode)
             Next
+
+
+
         Next
 
         ' Load Clients Nodes
@@ -125,6 +128,7 @@ Friend Class FinancialUIController
                        Optional ByRef useCache As Boolean = False)
 
         computedFlag = False
+
         If Not dataMap Is Nothing Then dataMap.Clear()
         dataMap = Nothing
         EntityNode = inputEntityNode
@@ -226,11 +230,12 @@ Friend Class FinancialUIController
 
     Private Sub AfterCompute()
 
-        'While initDisplayFlag = False
-        'End While
+        While initDisplayFlag = False
+        End While
         View.FormatDGV_ThreadSafe()
         dataMap = Computer.GetData()
         computedFlag = True
+        View.TerminateCircularProgress()
 
     End Sub
 
@@ -291,7 +296,7 @@ Friend Class FinancialUIController
             DGV.ColumnsHierarchy.AutoStretchColumns = True
             AddHandler DGV.CellValueNeeded, AddressOf DGVs_CellValueNeeded
         Next
-        '  initDisplayFlag = True
+        initDisplayFlag = True
         ' cellsUpdateNeeded = True
 
     End Sub
@@ -469,7 +474,7 @@ Friend Class FinancialUIController
                     subRow = row.Items.Add(valueNode.Text)
                 End If
                 subRow.CellsDataSource = GridCellDataSource.Virtual
-                '   DataGridViewsUtil.FormatDGVItem(subRow)
+                View.FormatDGVItem(subRow)
                 HideHiearchyItemIfVComp(subRow, _
                                         dimensionNode, _
                                         valueNode)
