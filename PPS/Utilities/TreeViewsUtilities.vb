@@ -671,9 +671,9 @@ Friend Class TreeViewsUtilities
 
 #Region "Position Management"
 
-    Friend Shared Function GeneratePositionsDictionary(ByRef TV As TreeView) As Dictionary(Of String, Double)
+    Friend Shared Function GeneratePositionsDictionary(ByRef TV As TreeView) As Dictionary(Of Int32, Double)
 
-        Dim positionsDictionary As New Dictionary(Of String, Double)
+        Dim positionsDictionary As New Dictionary(Of Int32, Double)
         Dim currentPosition As Int32 = 0
         For Each node As TreeNode In TV.Nodes
             AddNodeToPositionDictionary(node, currentPosition, positionsDictionary)
@@ -684,7 +684,7 @@ Friend Class TreeViewsUtilities
 
     Friend Shared Sub AddNodeToPositionDictionary(ByRef inputNode As TreeNode, _
                                                  ByRef currentPosition As Int32, _
-                                                 ByRef positionsDictionary As Dictionary(Of String, Double))
+                                                 ByRef positionsDictionary As Dictionary(Of Int32, Double))
 
         positionsDictionary.Add(inputNode.Name, currentPosition)
         currentPosition = currentPosition + 1

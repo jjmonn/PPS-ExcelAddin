@@ -24,7 +24,7 @@ Friend Class ChartsControlsController
     Private ChartsTV As New TreeView
 
     ' Variables
-    Private positions_dictionary As New Dictionary(Of String, Double)
+    Private positions_dictionary As New Dictionary(Of Int32, Double)
 
 
 #End Region

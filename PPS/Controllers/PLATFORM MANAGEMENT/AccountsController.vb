@@ -38,7 +38,7 @@ Friend Class AccountsController
 
     ' Variables
     Friend accountsNameKeysDictionary As Hashtable
-    Friend positionsDictionary As New Dictionary(Of String, Double)
+    Friend positionsDictionary As New Dictionary(Of Int32, Double)
     Private dependant_account_id As String
     Friend FTypesToBeTested As New List(Of Int32)
       

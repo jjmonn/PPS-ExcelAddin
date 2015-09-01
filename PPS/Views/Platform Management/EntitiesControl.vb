@@ -47,7 +47,6 @@ Friend Class EntitiesControl
 #Region "Initialization"
 
     Protected Friend Sub New(ByRef input_controller As EntitiesController, _
-                            ByRef entities_dict As Hashtable, _
                             ByRef input_entitiesTV As TreeView, _
                             ByRef input_entitiesNameKeyDic As Hashtable, _
                             ByRef input_categoriesNameKeyDic As Hashtable, _
@@ -61,7 +60,7 @@ Friend Class EntitiesControl
         entitiesTV = input_entitiesTV
         entitiesNameKeyDic = input_entitiesNameKeyDic
         categoriesNameKeyDic = input_categoriesNameKeyDic
-        EntitiesDGV = New EntitiesDGV(entitiesTV, categoriesTV, entities_dict, input_categoriesNameKeyDic)
+        EntitiesDGV = New EntitiesDGV(entitiesTV, categoriesTV, input_categoriesNameKeyDic)
 
         Me.TableLayoutPanel1.Controls.Add(EntitiesDGV.DGV, 0, 1)
         EntitiesDGV.DGV.Dock = DockStyle.Fill

@@ -38,7 +38,7 @@ Friend Class EntitiesController
     ' Variables
     Friend categoriesNameKeyDic As Hashtable
     Private entitiesNameKeyDic As Hashtable
-    Private positionsDictionary As New Dictionary(Of String, Double)
+    Private positionsDictionary As New Dictionary(Of Int32, Double)
 
 #End Region
 
@@ -54,7 +54,7 @@ Friend Class EntitiesController
         entitiesNameKeyDic = GlobalVariables.Entities.GetEntitiesDictionary(NAME_VARIABLE, ID_VARIABLE)
         categoriesNameKeyDic = GlobalVariables.Filters.GetFiltersDictionary(GlobalEnums.AnalysisAxis.ENTITIES, NAME_VARIABLE, ID_VARIABLE)
 
-        View = New EntitiesControl(Me, getEntitiesDict(), entitiesTV, entitiesNameKeyDic, categoriesNameKeyDic, categoriesTV)
+        View = New EntitiesControl(Me, entitiesTV, entitiesNameKeyDic, categoriesNameKeyDic, categoriesTV)
         NewEntityView = New NewEntityUI(Me, entitiesTV, categoriesTV, categoriesNameKeyDic)
 
         AddHandler GlobalVariables.Entities.EntityCreationEvent, AddressOf AfterEntityCreation
@@ -62,26 +62,6 @@ Friend Class EntitiesController
         ' handler after update !! priority normal
 
     End Sub
-
-    Private Function getEntitiesDict() As Hashtable
-
-        ' function to be placed elsewhere (filters values ?)
-        ' priority normal !! !
-
-        Dim fullEntitiesHash As Hashtable = GlobalVariables.Entities.entities_hash.Clone
-        Dim filtersNode As New TreeNode
-        GlobalVariables.Filters.LoadFiltersNode(filtersNode, GlobalEnums.AnalysisAxis.ENTITIES)
-
-        For Each entity_id As UInt32 In GlobalVariables.Entities.entities_hash.Keys
-            For Each mostNestedFilterId As UInt32 In TreeViewsUtilities.GetNoChildrenNodesList(filtersNode)
-
-
-
-            Next
-        Next
-        Return fullEntitiesHash
-
-    End Function
 
     Private Sub AssignFilterValue(ByRef fullEntitiesHash As Hashtable, _
                                   ByRef filter_id As UInt32, _
@@ -183,14 +163,14 @@ Friend Class EntitiesController
 
     End Sub
 
-    Private Sub DeleteEntity(ByRef entity_id As String)
+    Private Sub DeleteEntity(ByRef entity_id As Int32)
 
         '  EntitiesDeletion.DeleteEntityFromPlatform(entity_id)
         GlobalVariables.Entities.CMSG_DELETE_ENTITY(entity_id)
 
     End Sub
 
-    Private Sub AfterEntityDeletion(ByRef status As Boolean, ByRef id As UInt32)
+    Private Sub AfterEntityDeletion(ByRef status As Boolean, ByRef id As Int32)
 
         ' remove node/ row
 
@@ -206,7 +186,7 @@ Friend Class EntitiesController
 
         Dim current_node As TreeNode = Nothing
         If Not View.getCurrentRowItem Is Nothing Then
-            Dim entity_id As String = entitiesNameKeyDic(View.getCurrentEntityName())
+            Dim entity_id As Int32 = entitiesNameKeyDic(View.getCurrentEntityName())
             current_node = entitiesTV.Nodes.Find(entity_id, True)(0)
             entitiesTV.SelectedNode = current_node
 

@@ -32,7 +32,7 @@ Friend Class AxisFiltersController
     Private PlatformMGTUI As PlatformMGTGeneralUI
 
     ' Variables
-    Friend positions_dictionary As New Dictionary(Of String, Double)
+    Friend positions_dictionary As New Dictionary(Of Int32, Double)
     Private filters_names_list As List(Of String)
 
 #End Region

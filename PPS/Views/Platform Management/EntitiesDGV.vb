@@ -21,6 +21,7 @@ Imports System.Drawing
 Imports System.Collections
 Imports Microsoft.Office.Interop
 Imports VIBlend.WinForms.DataGridView.Filters
+Imports System.Linq
 
 
 
@@ -40,7 +41,6 @@ Friend Class EntitiesDGV
     Protected Friend rows_id_item_dic As New Dictionary(Of String, HierarchyItem)
     Private DGVArray(,) As String
     Private filterGroup As New FilterGroup(Of String)()
-    Protected Friend currenciesList As List(Of String)
     Protected Friend currentRowItem As HierarchyItem
     Protected Friend isFillingDGV As Boolean
 
@@ -58,17 +58,15 @@ Friend Class EntitiesDGV
 
     Protected Friend Sub New(ByRef entitiesTV As TreeView, _
                              ByRef input_categoriesTV As TreeView, _
-                             ByRef entities_dict As Hashtable, _
                              ByRef input_categoriesKeyNameDic As Hashtable)
 
-        currenciesList = GlobalVariables.Currencies.currencies_hash.Keys
         categoriesTV = input_categoriesTV
 
         initFilters()
         InitializeDGVDisplay()
         DGVColumnsInitialize()
         DGVRowsInitialize(entitiesTV)
-        fillDGV(entities_dict)
+        fillDGV()
 
         AddHandler DGV.CellMouseClick, AddressOf dataGridView_CellMouseClick
         AddHandler DGV.HierarchyItemMouseClick, AddressOf dataGridView_HierarchyItemMouseClick
@@ -209,7 +207,7 @@ Friend Class EntitiesDGV
         Dim comboBox As New ComboBoxEditor()
         comboBox.DropDownHeight = comboBox.ItemHeight * CB_NB_ITEMS_DISPLAYED
         comboBox.DropDownWidth = CB_WIDTH
-        For Each currency_ As String In currenciesList
+        For Each currency_ As Int32 In GlobalVariables.Currencies.currencies_hash.Keys
             comboBox.Items.Add(currency_)
         Next
 
@@ -220,11 +218,11 @@ Friend Class EntitiesDGV
 
 #End Region
 
-    Private Sub fillDGV(ByRef entities_dict As Hashtable)
+    Private Sub fillDGV()
 
         isFillingDGV = True
-        For Each entity_id In entities_dict.Keys
-            fillRow(entity_id, entities_dict(entity_id))
+        For Each entity_id In GlobalVariables.Entities.entities_hash.Keys
+            fillRow(entity_id, GlobalVariables.Entities.entities_hash(entity_id))
         Next
         isFillingDGV = False
         updateDGVFormat()
