@@ -31,7 +31,7 @@ Friend Class EntitiesController
     ' Objects
     Private View As EntitiesControl
     Private entitiesTV As New TreeView
-    Private categoriesTV As New TreeView
+    Private entitiesFilterTV As New TreeView
     Private NewEntityView As NewEntityUI
     Private PlatformMGTUI As PlatformMGTGeneralUI
 
@@ -49,13 +49,13 @@ Friend Class EntitiesController
 
         Globalvariables.Entities.LoadEntitiesTV(entitiesTV)   ' can be replaced by a treenode instead !
 
-        GlobalVariables.Filters.LoadFiltersTV(categoriesTV, GlobalEnums.AnalysisAxis.ENTITIES)
+        GlobalVariables.Filters.LoadFiltersTV(entitiesFilterTV, GlobalEnums.AnalysisAxis.ENTITIES)
 
         entitiesNameKeyDic = GlobalVariables.Entities.GetEntitiesDictionary(NAME_VARIABLE, ID_VARIABLE)
         categoriesNameKeyDic = GlobalVariables.Filters.GetFiltersDictionary(GlobalEnums.AnalysisAxis.ENTITIES, NAME_VARIABLE, ID_VARIABLE)
 
-        View = New EntitiesControl(Me, entitiesTV, entitiesNameKeyDic, categoriesNameKeyDic, categoriesTV)
-        NewEntityView = New NewEntityUI(Me, entitiesTV, categoriesTV, categoriesNameKeyDic)
+        View = New EntitiesControl(Me, entitiesTV, entitiesNameKeyDic, categoriesNameKeyDic, entitiesFilterTV)
+        NewEntityView = New NewEntityUI(Me, entitiesTV, entitiesFilterTV, categoriesNameKeyDic)
 
         AddHandler GlobalVariables.Entities.EntityCreationEvent, AddressOf AfterEntityCreation
         AddHandler GlobalVariables.Entities.EntityDeleteEvent, AddressOf AfterEntityDeletion

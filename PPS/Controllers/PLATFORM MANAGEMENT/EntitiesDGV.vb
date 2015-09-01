@@ -34,7 +34,7 @@ Friend Class EntitiesDGV
     Protected Friend DGV As New vDataGridView
 
     ' Variables
-    Private categoriesTV As TreeView
+    Private entitiesFilterTV As TreeView
     Private categoriesNameKeyDic As Hashtable
     Protected Friend columnsDictionary As New Dictionary(Of String, HierarchyItem)
     Protected Friend columnsCaptionID As New Dictionary(Of String, String)
@@ -60,7 +60,7 @@ Friend Class EntitiesDGV
                              ByRef input_categoriesTV As TreeView, _
                              ByRef input_categoriesKeyNameDic As Hashtable)
 
-        categoriesTV = input_categoriesTV
+        entitiesFilterTV = input_categoriesTV
 
         initFilters()
         InitializeDGVDisplay()
@@ -104,7 +104,7 @@ Friend Class EntitiesDGV
         col1.AllowFiltering = True
         ' CreateFilter(col1)
 
-        For Each rootNode As TreeNode In categoriesTV.Nodes
+        For Each rootNode As TreeNode In entitiesFilterTV.Nodes
             Dim col As HierarchyItem = DGV.ColumnsHierarchy.Items.Add(rootNode.Text)
             columnsDictionary.Add(rootNode.Name, col)
             columnsCaptionID.Add(rootNode.Text, rootNode.Name)
@@ -229,19 +229,20 @@ Friend Class EntitiesDGV
 
     End Sub
 
-    Friend Sub fillRow(ByVal entity_id As String, _
+    Friend Sub fillRow(ByVal entity_id As Int32, _
                        ByVal entity_ht As Hashtable)
 
         Dim column As HierarchyItem
-        Dim category_value As String
+        Dim filter_value As String
 
         Dim rowItem = rows_id_item_dic(entity_id)
         column = columnsDictionary(ENTITIES_CURRENCY_VARIABLE)
         DGV.CellsArea.SetCellValue(rowItem, column, entity_ht(ENTITIES_CURRENCY_VARIABLE))
-        For Each root_category_node As TreeNode In categoriesTV.Nodes
+        For Each root_category_node As TreeNode In entitiesFilterTV.Nodes
             column = columnsDictionary(root_category_node.Name)
-            category_value = categoriesTV.Nodes.Find((entity_ht(root_category_node.Name)), True)(0).Text
-            DGV.CellsArea.SetCellValue(rowItem, column, category_value)
+            Dim filterValueId = GlobalVariables.EntitiesFilters.entitiesFiltersHash(entity_id)(CInt(root_category_node.Name))
+            filter_value = entitiesFilterTV.Nodes.Find(filterValueId, True)(0).Text
+            DGV.CellsArea.SetCellValue(rowItem, column, filter_value)
         Next
         If entity_ht(ENTITIES_ALLOW_EDITION_VARIABLE) = 0 Then rowItem.ImageIndex = 0 Else rowItem.ImageIndex = 1
 
