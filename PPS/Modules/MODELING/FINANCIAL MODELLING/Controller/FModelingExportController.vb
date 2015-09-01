@@ -4,10 +4,13 @@
 '
 '
 '    stub on adjustments ID selection to be implemented correctly !! simple
+'   - reimplement export priority high !!!!
+'
+'
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 11/05/2015
+' Last modified: 01/09/2015
 
 
 Imports System.Windows.Forms
@@ -125,7 +128,9 @@ Friend Class FModelingExportController
 
         Dim version_id As String = MainView.getVersion_id()
         Dim dataDict As Dictionary(Of String, Double()) = MainView.getDataDictionary()
-        Dim DBUploader As New DataBaseDataUploader
+        '   Dim DBUploader As New DataBaseDataUploader
+        ' to be reimplemented priority high !!!!!!
+
         InitializePBar()
 
         For Each export_id In exports_id_list

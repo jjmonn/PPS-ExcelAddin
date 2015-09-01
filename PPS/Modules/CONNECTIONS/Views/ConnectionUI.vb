@@ -40,14 +40,9 @@ Friend Class ConnectionUI
 
         ' Add any initialization after the InitializeComponent() call.
         ADDIN = inputAddIn
-        Me.FormBorderStyle = Windows.Forms.FormBorderStyle.None
         BackgroundWorker1.WorkerReportsProgress = True
         BackgroundWorker1.WorkerSupportsCancellation = True
 
-        AddHandler mainPanel.Paint, AddressOf Panel1_Paint
-        AddHandler mainPanel.MouseMove, AddressOf panel1_MouseMove
-        AddHandler mainPanel.MouseDown, AddressOf form_MouseDown
-        AddHandler mainPanel.MouseUp, AddressOf form_MouseUp
         userNameTextBox.Text = My.Settings.user
         passwordTextBox.Select()
 

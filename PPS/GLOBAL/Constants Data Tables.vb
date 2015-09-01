@@ -7,7 +7,7 @@
 ' To do: 
 '      
 '
-' Last modified: 26/08/2015
+' Last modified: 01/09/2015
 ' Author: Julien Monnereau
 
 
@@ -293,37 +293,24 @@ Module Data_Tables_Constants
 #End Region
 
 
-#Region "ACF_Data"
-
- 
 #Region "Data Tables"
 
-    Friend Const DATA_ENTITY_ID_VARIABLE = "entity_id"
-    Friend Const DATA_ACCOUNT_ID_VARIABLE = "account_id"
-    Friend Const DATA_PERIOD_VARIABLE = "period"
-    Friend Const DATA_VALUE_VARIABLE = "value"
-    Friend Const DATA_ADJUSTMENT_ID_VARIABLE = "adjustment_id"
-    Friend Const DATA_CLIENT_ID_VARIABLE = "client_id"
-    Friend Const DATA_PRODUCT_ID_VARIABLE = "product_id"
+    Friend Const ENTITY_ID_VARIABLE = "entity_id"
+    Friend Const ACCOUNT_ID_VARIABLE = "account_id"
+    Friend Const PERIOD_VARIABLE = "period"
+    Friend Const VERSION_ID_VARIABLE = "version_id"
+    Friend Const CLIENT_ID_VARIABLE = "client_id"
+    Friend Const PRODUCT_ID_VARIABLE = "product_id"
+    Friend Const ADJUSTMENT_ID_VARIABLE = "adjustment_id"
+    Friend Const VALUE_VARIABLE = "value"
 
 #End Region
+
 
 #Region "Log Table"
 
-    Friend Const LOG_TABLE_NAME As String = "datalog"
     Friend Const LOG_TIME_VARIABLE As String = "date_time"
     Friend Const LOG_USER_ID_VARIABLE As String = "user_id"
-    Friend Const LOG_VERSION_ID_VARIABLE As String = "version_id"
-    Friend Const LOG_VALUE_VARIABLE As String = "value"
-    Friend Const LOG_ENTITY_ID_VARIABLE As String = "entity_id"
-    Friend Const LOG_ACCOUNT_ID_VARIABLE As String = "account_id"
-    Friend Const LOG_ADJUSTMENT_ID_VARIABLE As String = "adjustment_id"
-    Friend Const LOG_CLIENT_ID_VARIABLE As String = "client_id"
-    Friend Const LOG_PRODUCT_ID_VARIABLE As String = "product_id"
-    Friend Const LOG_PERIOD_VARIABLE As String = "period"
-
-
-#End Region
 
 
 #End Region
@@ -340,11 +327,7 @@ Module Data_Tables_Constants
     Friend Const PRODUCTS_TABLE As String = "products"
 
     Friend Const FILTER_VALUE_ID_VARIABLE As String = "filter_value_id"
-    Friend Const ENTITY_ID_VARIABLE As String = "entity_id"
-    Friend Const CLIENT_ID_VARIABLE As String = "client_id"
-    Friend Const PRODUCT_ID_VARIABLE As String = "product_id"
-    Friend Const ADJUSTMENT_ID_VARIABLE As String = "adjustment_id"
-
+ 
 
     ' filters
     Friend Const FILTER_AXIS_ID_VARIABLE As String = "axis_id"

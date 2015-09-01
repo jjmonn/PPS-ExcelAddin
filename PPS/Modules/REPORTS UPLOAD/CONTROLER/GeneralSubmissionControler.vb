@@ -53,15 +53,14 @@ Friend Class GeneralSubmissionControler
 
     ' Objects
     Private ADDIN As AddinModule
+    Private Fact As New Facts
     Private Dataset As ModelDataSet
     Private DataModificationsTracker As DataModificationsTracking
     Private Model As AcquisitionModel
     Private SubmissionWSController As SubmissionWSController
     Friend associatedWorksheet As Excel.Worksheet
     Friend wsComboboxMenuItem As ADXRibbonItem
-    Friend PBar As PBarUI
-    Private BCKGW As New BackgroundWorker
-
+  
     ' Variables
     Private current_entity_name As String
     Friend snapshotSuccess As Boolean
@@ -90,60 +89,11 @@ Friend Class GeneralSubmissionControler
         Model = New AcquisitionModel(Dataset)
         DataModificationsTracker = New DataModificationsTracking(Dataset)
 
-        BCKGW.WorkerReportsProgress = True
         AddHandler Model.AfterInputsDownloaded, AddressOf AfterDataBaseInputsDowloaded
         AddHandler Model.AfterOutputsComputed, AddressOf AfterOutputsComputed
-        AddHandler BCKGW.DoWork, AddressOf BCKGW_DoWork
-        AddHandler BCKGW.RunWorkerCompleted, AddressOf BCKGW_RunWorkerCompleted
-        AddHandler BCKGW.ProgressChanged, AddressOf BCKGW_ProgressChanged
+        AddHandler Fact.FactsCommitted, AddressOf AfterCommit
 
     End Sub
-
-    '' Snapshot WS and initializes ACQMODEL accordingly
-    'Friend Sub LaunchDatasetSnapshotAndAssociateModel(ByRef update_inputs As Boolean)
-
-    '    If Not Dataset.GlobalScreenShot Is Nothing Then
-    '        Dataset.SnapshotWS()
-    '        Dataset.getOrientations()
-    '        ' Dataset.RefreshAll -> possible evolution (take off refreshdatabatch in addin and set excel formatting here)
-    '        DataModificationsTracker.InitializeDataSetRegion()
-    '        DataModificationsTracker.InitializeOutputsRegion()
-
-    '        If Dataset.GlobalOrientationFlag <> ORIENTATION_ERROR_FLAG _
-    '        AndAlso Dataset.EntitiesAddressValuesDictionary.Count > 0 Then
-
-    '            ' Attention crash si entity not identified !!! priority high
-
-    '            snapshotSuccess = True
-    '            FillInEntityAndCurrencyTB(Dataset.EntitiesAddressValuesDictionary.ElementAt(0).Value)
-    '            SubmissionWSController = New SubmissionWSController(Me, Dataset, Model, DataModificationsTracker)
-    '            HighlightItemsAndDataRegions()
-    '            UpdateAfterAnalysisAxisChanged(GlobalVariables.ClientsIDDropDown.SelectedItemId, _
-    '                                           GlobalVariables.ProductsIDDropDown.SelectedItemId, _
-    '                                           GlobalVariables.AdjustmentIDDropDown.SelectedItemId, _
-    '                                           update_inputs)
-    '            SubmissionWSController.AssociateWS(associatedWorksheet)
-    '        Else
-    '            SnapshotError()
-    '        End If
-    '        ADDIN.modifySubmissionControlsStatus(snapshotSuccess)
-    '    Else
-    '        MsgBox("Empty Worksheet")
-    '    End If
-
-    'End Sub
-
-    '' General Initialize and Set up display Ribbon
-    'Private Sub RefreshDataSetAndSetUpDisplay()
-
-    '    DataModificationsTracker.IdentifyDifferencesBtwDataSetAndDB(Model.dataBaseInputsDictionary)
-    '    If snapshotSuccess = False Then
-    '        snapshotSuccess = True
-    '        ADDIN.GetRibbonControlEnabled(True)
-    '    End If
-
-    'End Sub
-
 
     ' Display the entity name and currency in the ribbons Corresponding edit boxes
     Friend Sub FillInEntityAndCurrencyTB(ByRef entity As String)
@@ -168,14 +118,11 @@ Friend Class GeneralSubmissionControler
 
     End Sub
 
-    Friend Sub Submit()
+    Friend Sub DataSubmission()
 
         If Dataset.GlobalOrientationFlag <> ORIENTATION_ERROR_FLAG Then
             errorsList.Clear()
-            PBar = New PBarUI
-            PBar.ProgressBarControl1.Launch(1, DataModificationsTracker.modifiedCellsList.Count())
-            PBar.Show()
-            BCKGW.RunWorkerAsync()
+            Submit()
         Else
             GlobalVariables.SubmissionStatusButton.Image = 2
             errorsList.Add("The worksheet recognition was not set up properly.")
@@ -335,86 +282,77 @@ Friend Class GeneralSubmissionControler
 
     Friend Sub UpdateCalculatedItems(ByRef entityName As String)
 
-        Model.ComputeCalculatedItems(entityName)
+        ' Update Computer order
+        Model.ComputeCalculatedItems(entityName)   
 
     End Sub
 
+    ' Worksheet display update
     Private Sub AfterOutputsComputed(ByRef entityName As String)
 
         isUpdating = True
+        GlobalVariables.APPS.ScreenUpdating = False
         SubmissionWSController.updateCalculatedItemsOnWS(entityName)
+        GlobalVariables.APPS.ScreenUpdating = True
+        GlobalVariables.APPS.Interactive = True
         isUpdating = False
 
     End Sub
 
+
 #End Region
 
 
-#Region "Submission Background Worker"
+#Region "Data Submission"
 
-    ' Implies type of cell checked before -> only double
-    Private Sub BCKGW_DoWork(sender As Object, e As ComponentModel.DoWorkEventArgs)
+    Private Sub Submit()
 
-        ' to be reimplemented with Facts CRUD !! 
+        Dim factsList As New List(Of Hashtable)
+        For Each cellAddress In DataModificationsTracker.GetModificationsListCopy
+            ' Implies type of cell checked before -> only double -> check if we can enter anything else !!!
+            Dim ht As New Hashtable
+            ht(ENTITY_ID_VARIABLE) = Model.entitiesNameIdDict(Dataset.CellsAddressItemsDictionary(cellAddress)(ModelDataSet.ENTITY_ITEM))
+            ht(ACCOUNT_ID_VARIABLE) = Model.accountsNamesFormulaTypeDict(Dataset.CellsAddressItemsDictionary(cellAddress)(ModelDataSet.ACCOUNT_ITEM))
+            ht(PERIOD_VARIABLE) = Dataset.CellsAddressItemsDictionary(cellAddress)(ModelDataSet.PERIOD_ITEM)
+            ht(VERSION_ID_VARIABLE) = Model.current_version_id
+            ht(CLIENT_ID_VARIABLE) = GlobalVariables.ClientsIDDropDown.SelectedItemId
+            ht(PRODUCT_ID_VARIABLE) = GlobalVariables.ProductsIDDropDown.SelectedItemId
+            ht(ADJUSTMENT_ID_VARIABLE) = GlobalVariables.AdjustmentIDDropDown.SelectedItemId
+            ht(VALUE_VARIABLE) = GlobalVariables.APPS.ActiveSheet.range(cellAddress).value
 
-        'DBUploader.mStartingPeriod = CInt(Dataset.periodsDatesList(0).ToOADate)
-        'Dim tmpList As New List(Of String)
-        'For Each cellAddress In DataModificationsTracker.GetModificationsListCopy
-        '    If DBUploader.CheckAndUpdateSingleValueFromNames(Dataset.CellsAddressItemsDictionary(cellAddress)(ModelDataSet.ENTITY_ITEM), _
-        '                                                     Dataset.CellsAddressItemsDictionary(cellAddress)(ModelDataSet.ACCOUNT_ITEM), _
-        '                                                     Dataset.CellsAddressItemsDictionary(cellAddress)(ModelDataSet.PERIOD_ITEM), _
-        '                                                     GlobalVariables.APPS.ActiveSheet.range(cellAddress).value, _
-        '                                                     Dataset.currentVersionCode, _
-        '                                                     GlobalVariables.ClientsIDDropDown.SelectedItemId, _
-        '                                                     GlobalVariables.ProductsIDDropDown.SelectedItemId, _
-        '                                                     GlobalVariables.AdjustmentIDDropDown.SelectedItemId) = False Then
-
-        '        errorsList.Add("Error during upload of Entity: " & Dataset.CellsAddressItemsDictionary(cellAddress)(ModelDataSet.ENTITY_ITEM) _
-        '                       & " Account: " & Dataset.CellsAddressItemsDictionary(cellAddress)(ModelDataSet.ACCOUNT_ITEM) _
-        '                       & " Period: " & Dataset.CellsAddressItemsDictionary(cellAddress)(ModelDataSet.PERIOD_ITEM) _
-        '                       & " Value: " & GlobalVariables.APPS.ActiveSheet.range(cellAddress).value)
-        '    Else
-        '        DataModificationsTracker.UnregisterSingleModification(cellAddress)
-        '    End If
-        '    BCKGW.ReportProgress(1)
-        'Next
+            factsList.Add(ht)
+        Next
+        Fact.CMSG_UPDATE_FACT(factsList)
 
     End Sub
 
-    Private Sub BCKGW_ProgressChanged(sender As Object, e As ComponentModel.ProgressChangedEventArgs)
+    Private Sub AfterCommit(ByRef status As Boolean, ByRef commitResults() As Boolean)
 
-        PBar.ProgressBarControl1.AddProgress()
-
-    End Sub
-
-    Private Sub BCKGW_RunWorkerCompleted(sender As Object, e As ComponentModel.RunWorkerCompletedEventArgs)
-
-        PBar.ProgressBarControl1.EndProgress()
-        PBar.Close()
-        If errorsList.Count = 0 Then
-            uploadState = True
-            GlobalVariables.SubmissionStatusButton.Image = 1
+        If status = True Then
+            Dim i As UInt32
+            For Each cellAddress In DataModificationsTracker.GetModificationsListCopy
+                If commitResults(i) = True Then
+                    DataModificationsTracker.UnregisterSingleModification(cellAddress)
+                Else
+                    errorsList.Add("Error during upload of Entity: " & Dataset.CellsAddressItemsDictionary(cellAddress)(ModelDataSet.ENTITY_ITEM) _
+                                    & " Account: " & Dataset.CellsAddressItemsDictionary(cellAddress)(ModelDataSet.ACCOUNT_ITEM) _
+                                    & " Period: " & Dataset.CellsAddressItemsDictionary(cellAddress)(ModelDataSet.PERIOD_ITEM) _
+                                    & " Value: " & GlobalVariables.APPS.ActiveSheet.range(cellAddress).value)
+                End If
+                i += 1
+            Next
+            If errorsList.Count = 0 Then
+                uploadState = True
+                GlobalVariables.SubmissionStatusButton.Image = 1
+            Else
+                uploadState = False
+                GlobalVariables.SubmissionStatusButton.Image = 2
+            End If
         Else
-            uploadState = False
-            GlobalVariables.SubmissionStatusButton.Image = 2
+            MsgBox("Commit failed. Check network connection and try again." & Chr(13) & "If the error persists, please contact your administrator or the Financial BI team.")
         End If
 
     End Sub
-
-    ' Used only in the case where total cModelDataset.Dataset is sent to be updated by DBUploader
-    'Friend Sub UpdateUploadResult(ByRef uploadSuccessfull As Boolean)
-
-    '    DBUploader.PBar.ProgressBarControl1.EndProgress()
-    '    DBUploader.PBar.Close()
-    '    If uploadSuccessfull = True Then
-    '        DataModificationsTracker.UnregisterModifications()
-    '        GlobalVariables.SubmissionStatusButton.Image = 1
-    '    Else
-    '        GlobalVariables.SubmissionStatusButton.Image = 2
-    '    End If
-    '    ' -> should track error if not successfull (display details by clicking on red button upload)
-
-    'End Sub
 
 
 #End Region

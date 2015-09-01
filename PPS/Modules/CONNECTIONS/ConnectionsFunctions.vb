@@ -10,7 +10,7 @@
 '
 '
 '
-' Last modified: 24/08/2015
+' Last modified: 31/08/2015
 ' Author: Julien Monnereau
 
 
@@ -73,15 +73,6 @@ Friend Class ConnectionsFunctions
         If packet.ReadInt32() = 0 Then
 
             Dim authToken As String = packet.ReadString()
-
-            ' Authentication
-            'MsgBox("before auth, user name: " & userName & Chr(13) & _
-            '       " pwd: " & pwd & Chr(13) & _
-            '       " received authtoken: " & authToken)
-            System.Diagnostics.Debug.WriteLine("user: " & userName)
-            System.Diagnostics.Debug.WriteLine("pwd: " & pwd)
-            System.Diagnostics.Debug.WriteLine("authtoken: " & authToken)
-
             NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_AUTH_ANSWER, AddressOf SMSG_AUTH_ANSWER)
             Dim answer As New ByteBuffer(CType(ClientMessage.CMSG_AUTHENTIFICATION, UShort))
             answer.WriteString(userName)
@@ -103,7 +94,7 @@ Friend Class ConnectionsFunctions
 
         If packet.ReadInt32() = 0 Then
             If packet.ReadBool() = True Then
-                System.Diagnostics.Debug.WriteLine("Authentication suceed")
+                System.Diagnostics.Debug.WriteLine("Authentication succeeded")
                 globalAuthenticated = True
             Else
                 globalInitFlag = True
@@ -118,6 +109,7 @@ Friend Class ConnectionsFunctions
     End Sub
 
     Private Sub InitializeGlobalModels()
+
         AddHandler GlobalVariables.Accounts.ObjectInitialized, AddressOf AfterAccountsInit
         AddHandler GlobalVariables.Entities.ObjectInitialized, AddressOf AfterEntitiesInit
         AddHandler GlobalVariables.Filters.ObjectInitialized, AddressOf AfterFiltersInit

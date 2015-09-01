@@ -17,12 +17,13 @@ Public Class ConnectionTP
 #Region "Instance Variables"
 
   ' Objects
-  Private Addin As AddinModule
-  Private CP As ProgressControls.ProgressIndicator
-  Private isConnecting As Boolean
-  Private id As String
-  Private pwd As String
-  Private connectionFailed As Boolean
+    Private Addin As AddinModule
+    Private CP As ProgressControls.ProgressIndicator
+    Private isConnecting As Boolean
+    Private id As String
+    Private pwd As String
+    Private connectionFailed As Boolean
+    Private connectionFunction As New ConnectionsFunctions
 
 #End Region
 
@@ -91,7 +92,7 @@ Public Class ConnectionTP
 
 
 #Region "Background Worker 1"
-    Dim connectionFunction As New ConnectionsFunctions
+
 
   Private Sub BackgroundWorker1_DoWork(sender As Object, e As ComponentModel.DoWorkEventArgs)
 
@@ -114,9 +115,9 @@ Public Class ConnectionTP
     Else
       ConnectionsFunctions.CloseNetworkConnection()
     End If
-    If connectionFunction.globalAuthenticated = False Then
-      connectionFailed = True
-    End If
+        'If connectionFunction.globalAuthenticated = False Then
+        '  connectionFailed = True
+        'End If
 
   End Sub
 

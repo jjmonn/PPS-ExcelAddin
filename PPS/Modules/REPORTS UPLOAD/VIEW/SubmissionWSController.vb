@@ -10,7 +10,7 @@
 '       - 
 '
 ' Author: Julien Monnereau
-' Last modified: 28/08/2015
+' Last modified: 01/09/2015
 
 
 Imports System.Collections.Generic
@@ -88,24 +88,28 @@ Friend Class SubmissionWSController
     Friend Sub updateCalculatedItemsOnWS(ByRef entityName As String)
 
         Dim t1 = Date.Now
+        ' for each AcquisitionModel. EntitiesList ?! priority normal
         For Each accountName In AcquisitionModel.outputsList
             For Each period In AcquisitionModel.currentPeriodList
 
                 Dim value As Double = AcquisitionModel.GetCalculatedValue(entityName, _
                                                                           DataSet.AccountsNameKeyDictionary(accountName), _
                                                                           AcquisitionModel.periodsIdentifyer & period)
+                If Double.IsNaN(value) Then
+                    value = 0
+                End If
                 UpdateExcelWS(entityName, accountName, period, value)
             Next
         Next
-        System.Diagnostics.Debug.WriteLine("update excel computed value => " & (Date.Now - t1).Milliseconds & " ms")
+        System.Diagnostics.Debug.WriteLine("Update excel computed values => " & (Date.Now - t1).Milliseconds & " ms")
 
     End Sub
 
     ' Update the value on the excel worksheet
-    Friend Function UpdateExcelWS(ByRef entity As String, _
-                                  ByRef account As String, _
-                                  ByRef period As String, _
-                                  ByRef value As Double) As Excel.Range
+    Friend Sub UpdateExcelWS(ByRef entity As String, _
+                             ByRef account As String, _
+                             ByRef period As String, _
+                             ByRef value As Double)
 
         Dim entityAddress, accountAddress, periodAddress As String
         '    Try
@@ -116,7 +120,7 @@ Friend Class SubmissionWSController
         Else
             accountAddress = DataSet.OutputsValuesAddressDict(account)
         End If
-        Return DataSet.UpdateExcelCell(entityAddress, accountAddress, periodAddress, value, True)
+        DataSet.UpdateExcelCell(entityAddress, accountAddress, periodAddress, value, True)
         'Catch ex As Exception
         '    System.Diagnostics.Debug.WriteLine("Update Excel Worksheet for outputs raised an error: a name was not found in dataset values address dictionary.")
         '    Return Nothing
@@ -124,7 +128,7 @@ Friend Class SubmissionWSController
 
         ' PPS Error tracking priority normal
 
-    End Function
+    End Sub
 
     Friend Sub updateInputsOnWS()
 
@@ -203,7 +207,7 @@ Friend Class SubmissionWSController
                                     End If
                                 Next
                             End If
-                            If GeneralSubmissionController.autoCommitFlag = True Then GeneralSubmissionController.Submit()
+                            If GeneralSubmissionController.autoCommitFlag = True Then GeneralSubmissionController.DataSubmission()
 
                         End If
                     Else
@@ -222,7 +226,10 @@ Friend Class SubmissionWSController
                     End If
                 End If
             Next
-            If modelUpdateFlag = True Then GeneralSubmissionController.UpdateCalculatedItems(cell_itemsHT(ModelDataSet.ENTITY_ITEM))
+            If modelUpdateFlag = True Then
+                GlobalVariables.APPS.Interactive = False
+                GeneralSubmissionController.UpdateCalculatedItems(cell_itemsHT(ModelDataSet.ENTITY_ITEM))
+            End If
         End If
 
     End Sub
