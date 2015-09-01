@@ -9,7 +9,7 @@
 '           -> will be an issue in implementing no categories value for conso entities
 '
 '
-' Last modified: 08/05/2014
+' Last modified: 01/09/2015
 ' Author: Julien Monnereau
 
 
@@ -31,22 +31,23 @@ Friend Class EntitiesDGV
 #Region "Instance Variables"
 
     ' Objects
-    Protected Friend DGV As New vDataGridView
+    Friend DGV As New vDataGridView
 
     ' Variables
     Private entitiesFilterTV As TreeView
     Private categoriesNameKeyDic As Hashtable
-    Protected Friend columnsDictionary As New Dictionary(Of String, HierarchyItem)
-    Protected Friend columnsCaptionID As New Dictionary(Of String, String)
-    Protected Friend rows_id_item_dic As New Dictionary(Of String, HierarchyItem)
+    Friend columnsDictionary As New Dictionary(Of String, HierarchyItem)
+    Friend columnsCaptionID As New Dictionary(Of String, String)
+    Friend rows_id_item_dic As New Dictionary(Of Int32, HierarchyItem)
+
     Private DGVArray(,) As String
     Private filterGroup As New FilterGroup(Of String)()
-    Protected Friend currentRowItem As HierarchyItem
-    Protected Friend isFillingDGV As Boolean
+    Friend currentRowItem As HierarchyItem
+    Friend isFillingDGV As Boolean
 
     ' Constants
     Private Const DGV_VI_BLEND_STYLE As VIBLEND_THEME = VIBLEND_THEME.OFFICE2010SILVER
-    Protected Friend Const CURRENCY_COLUMN_NAME As String = "Currency"
+    Friend Const CURRENCY_COLUMN_NAME As String = "Currency"
     Private Const NAME_COLUMN_NAME As String = "Name"
     Private Const CB_WIDTH As Double = 20
     Private Const CB_NB_ITEMS_DISPLAYED As Int32 = 7
@@ -56,11 +57,11 @@ Friend Class EntitiesDGV
 
 #Region "Initialize"
 
-    Protected Friend Sub New(ByRef entitiesTV As TreeView, _
-                             ByRef input_categoriesTV As TreeView, _
-                             ByRef input_categoriesKeyNameDic As Hashtable)
+    Friend Sub New(ByRef entitiesTV As TreeView, _
+                    ByRef input_entitiesFilterTV As TreeView, _
+                    ByRef input_categoriesKeyNameDic As Hashtable)
 
-        entitiesFilterTV = input_categoriesTV
+        entitiesFilterTV = input_entitiesFilterTV
 
         initFilters()
         InitializeDGVDisplay()
@@ -164,7 +165,7 @@ Friend Class EntitiesDGV
             row = parent_row.Items.Add("")
         End If
         DGV.CellsArea.SetCellValue(row, DGV.ColumnsHierarchy.Items(0), node.Text)
-        FormatRow(row, node.Name)
+        FormatRow(row, CInt(node.Name))
         For Each child_node In node.Nodes
             addRow(child_node, row)
         Next
@@ -172,7 +173,7 @@ Friend Class EntitiesDGV
 
     End Sub
 
-    Private Sub FormatRow(ByRef row As HierarchyItem, ByRef row_id As String)
+    Private Sub FormatRow(ByRef row As HierarchyItem, ByRef row_id As Int32)
 
         rows_id_item_dic.Add(row_id, row)
         row.TextAlignment = ContentAlignment.MiddleLeft
@@ -233,16 +234,17 @@ Friend Class EntitiesDGV
                        ByVal entity_ht As Hashtable)
 
         Dim column As HierarchyItem
-        Dim filter_value As String
+        Dim filter_value_name As String
 
         Dim rowItem = rows_id_item_dic(entity_id)
         column = columnsDictionary(ENTITIES_CURRENCY_VARIABLE)
         DGV.CellsArea.SetCellValue(rowItem, column, entity_ht(ENTITIES_CURRENCY_VARIABLE))
         For Each root_category_node As TreeNode In entitiesFilterTV.Nodes
             column = columnsDictionary(root_category_node.Name)
-            Dim filterValueId = GlobalVariables.EntitiesFilters.entitiesFiltersHash(entity_id)(CInt(root_category_node.Name))
-            filter_value = entitiesFilterTV.Nodes.Find(filterValueId, True)(0).Text
-            DGV.CellsArea.SetCellValue(rowItem, column, filter_value)
+            Dim filter_id As Int32 = GlobalVariables.Filters.GetMostNestedFilterId(CInt(root_category_node.Name))
+            Dim filterValueId = GlobalVariables.EntitiesFilters.entitiesFiltersHash(entity_id)(filter_id)
+            filter_value_name = GlobalVariables.FiltersValues.filtervalues_hash(filterValueId)(NAME_VARIABLE)
+            DGV.CellsArea.SetCellValue(rowItem, column, filter_value_name)
         Next
         If entity_ht(ENTITIES_ALLOW_EDITION_VARIABLE) = 0 Then rowItem.ImageIndex = 0 Else rowItem.ImageIndex = 1
 

@@ -13,7 +13,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 22/07/2015
+' Last modified: 01/09/2015
 
 
 Imports System.Windows.Forms
@@ -32,11 +32,12 @@ Friend Class EntitiesController
     Private View As EntitiesControl
     Private entitiesTV As New TreeView
     Private entitiesFilterTV As New TreeView
+    Private entitiesFilterValuesTV As New TreeView
     Private NewEntityView As NewEntityUI
     Private PlatformMGTUI As PlatformMGTGeneralUI
 
     ' Variables
-    Friend categoriesNameKeyDic As Hashtable
+    Friend entitiesFilterValuesNameIdDict As Hashtable
     Private entitiesNameKeyDic As Hashtable
     Private positionsDictionary As New Dictionary(Of Int32, Double)
 
@@ -48,14 +49,13 @@ Friend Class EntitiesController
     Friend Sub New()
 
         Globalvariables.Entities.LoadEntitiesTV(entitiesTV)   ' can be replaced by a treenode instead !
-
         GlobalVariables.Filters.LoadFiltersTV(entitiesFilterTV, GlobalEnums.AnalysisAxis.ENTITIES)
-
+        AxisFilter.LoadFvTv(entitiesFilterValuesTV, GlobalEnums.AnalysisAxis.ENTITIES)
         entitiesNameKeyDic = GlobalVariables.Entities.GetEntitiesDictionary(NAME_VARIABLE, ID_VARIABLE)
-        categoriesNameKeyDic = GlobalVariables.Filters.GetFiltersDictionary(GlobalEnums.AnalysisAxis.ENTITIES, NAME_VARIABLE, ID_VARIABLE)
+        entitiesFilterValuesNameIdDict = GlobalVariables.Filters.GetFiltersDictionary(GlobalEnums.AnalysisAxis.ENTITIES, NAME_VARIABLE, ID_VARIABLE)
 
-        View = New EntitiesControl(Me, entitiesTV, entitiesNameKeyDic, categoriesNameKeyDic, entitiesFilterTV)
-        NewEntityView = New NewEntityUI(Me, entitiesTV, entitiesFilterTV, categoriesNameKeyDic)
+        View = New EntitiesControl(Me, entitiesTV, entitiesNameKeyDic, entitiesFilterValuesNameIdDict, entitiesFilterTV)
+        NewEntityView = New NewEntityUI(Me, entitiesTV, entitiesFilterTV, entitiesFilterValuesNameIdDict)
 
         AddHandler GlobalVariables.Entities.EntityCreationEvent, AddressOf AfterEntityCreation
         AddHandler GlobalVariables.Entities.EntityDeleteEvent, AddressOf AfterEntityDeletion
@@ -73,7 +73,6 @@ Friend Class EntitiesController
 
 
     End Sub
-
 
     Public Sub addControlToPanel(ByRef dest_panel As Panel, _
                                  ByRef PlatformMGTUI As PlatformMGTGeneralUI)
@@ -182,7 +181,7 @@ Friend Class EntitiesController
 
 #Region "Utilities"
 
-    Protected Friend Sub ShowNewEntityUI()
+    Friend Sub ShowNewEntityUI()
 
         Dim current_node As TreeNode = Nothing
         If Not View.getCurrentRowItem Is Nothing Then
@@ -201,7 +200,7 @@ Friend Class EntitiesController
 
     End Sub
 
-    Protected Friend Sub ShowEntitiesMGT()
+    Friend Sub ShowEntitiesMGT()
 
         View.Show()
 

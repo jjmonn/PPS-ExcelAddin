@@ -254,7 +254,6 @@ Friend Class Filter
 
     End Sub
 
-
 #Region "Treeviews"
 
     Friend Sub LoadFiltersNode(ByRef node As Windows.Forms.TreeNode, _
@@ -310,6 +309,27 @@ Friend Class Filter
     End Sub
 
 #End Region
+
+    ' Recursive
+    Friend Function GetMostNestedFilterId(ByRef filter_id As Int32) As Int32
+
+        Dim children_filter_id As Int32 = GetFilterChild(filter_id)
+        If children_filter_id = -1 Then
+            Return filter_id
+        Else
+            Return GetMostNestedFilterId(children_filter_id)
+        End If
+
+    End Function
+
+    Private Function GetFilterChild(ByRef filter_id As Int32) As Int32
+
+        For Each id As Int32 In filters_hash.Keys
+            If filters_hash(id)(PARENT_ID_VARIABLE) = filter_id Then Return id
+        Next
+        Return -1
+
+    End Function
 
     ' should load treenode instead ? => filters tv not displayed - priority normal (function to be implemented) !
     Friend Function IsNameValid(ByRef name As String) As Boolean

@@ -7,7 +7,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 28/05/2015
+' Last modified: 01/09/2015
 
 
 Imports System.Windows.Forms.DataVisualization.Charting

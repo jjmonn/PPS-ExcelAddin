@@ -175,7 +175,7 @@ Friend Class EntitiesControl
 
 #Region "Utilities"
 
-    Protected Friend Function getDGVRowsIDItemsDict() As Dictionary(Of String, HierarchyItem)
+    Protected Friend Function getDGVRowsIDItemsDict() As Dictionary(Of Int32, HierarchyItem)
 
         Return EntitiesDGV.rows_id_item_dic
 
