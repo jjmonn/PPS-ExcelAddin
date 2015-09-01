@@ -26,8 +26,8 @@ Friend Class ConnectionsFunctions
     Private pwd As String
 
     ' Flags
-  Friend globalInitFlag As Boolean = False
-  Friend globalAuthenticated As Boolean = False
+    Friend globalInitFlag As Boolean = False
+    Friend globalAuthenticated As Boolean = False
 
     Private globalVariablesInitFlags As New Collections.Generic.Dictionary(Of UInt32, Boolean)
 
@@ -43,12 +43,12 @@ Friend Class ConnectionsFunctions
         pwd = p_pwd
 
         globalVariablesInitFlags.Clear()
-    globalInitFlag = False
-    globalAuthenticated = False
-    InitializeGlobalModels()
+        globalInitFlag = False
+        globalAuthenticated = False
+        InitializeGlobalModels()
         If GlobalVariables.ConnectionState = True Then
             CloseNetworkConnection()
-    End If
+        End If
         GlobalVariables.NetworkConnect = New NetworkLauncher()
         GlobalVariables.ConnectionState = (GlobalVariables.NetworkConnect.Launch(p_hostname, p_port))
 
@@ -86,7 +86,7 @@ Friend Class ConnectionsFunctions
             Dim answer As New ByteBuffer(CType(ClientMessage.CMSG_AUTHENTIFICATION, UShort))
             answer.WriteString(userName)
             answer.WriteString(Utilities_Functions.getSHA1Hash(Utilities_Functions.getSHA1Hash(pwd & userName) & authToken))
-      answer.Release()
+            answer.Release()
 
             NetworkManager.GetInstance().Send(answer)
             System.Diagnostics.Debug.WriteLine("Authentication asked")
@@ -103,19 +103,19 @@ Friend Class ConnectionsFunctions
 
         If packet.ReadInt32() = 0 Then
             If packet.ReadBool() = True Then
-        System.Diagnostics.Debug.WriteLine("Authentication suceed")
-        globalAuthenticated = True
-      Else
-        globalInitFlag = True
-        System.Diagnostics.Debug.WriteLine("Authentication Failed!")
-        CloseNetworkConnection()
-        '    MsgBox("Authentication failed. Please review your ID and password.")
-        RaiseEvent ConnectionFailedEvent()
+                System.Diagnostics.Debug.WriteLine("Authentication suceed")
+                globalAuthenticated = True
+            Else
+                globalInitFlag = True
+                System.Diagnostics.Debug.WriteLine("Authentication Failed!")
+                CloseNetworkConnection()
+                '    MsgBox("Authentication failed. Please review your ID and password.")
+                RaiseEvent ConnectionFailedEvent()
             End If
         End If
         NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_AUTH_ANSWER, AddressOf SMSG_AUTH_ANSWER)
 
-  End Sub
+    End Sub
 
     Private Sub InitializeGlobalModels()
         AddHandler GlobalVariables.Accounts.ObjectInitialized, AddressOf AfterAccountsInit
@@ -166,35 +166,35 @@ Friend Class ConnectionsFunctions
 
         globalVariablesInitFlags(GlobalEnums.GlobalModels.ACCOUNTS) = True
         globalInitFlag = CheckGlobalVariablesInitFlag()
-      
+
     End Sub
 
     Private Sub AfterEntitiesInit()
 
         globalVariablesInitFlags(GlobalEnums.GlobalModels.ENTITIES) = True
         globalInitFlag = CheckGlobalVariablesInitFlag()
-        
+
     End Sub
 
     Private Sub AfterFiltersInit()
 
         globalVariablesInitFlags(GlobalEnums.GlobalModels.FILTERS) = True
         globalInitFlag = CheckGlobalVariablesInitFlag()
-       
+
     End Sub
 
     Private Sub AfterFiltersValuesInit()
 
         globalVariablesInitFlags(GlobalEnums.GlobalModels.FILTERSVALUES) = True
         globalInitFlag = CheckGlobalVariablesInitFlag()
-    
+
     End Sub
 
     Private Sub AfterClientsInit()
 
         globalVariablesInitFlags(GlobalEnums.GlobalModels.CLIENTS) = True
         globalInitFlag = CheckGlobalVariablesInitFlag()
-      
+
     End Sub
 
     Private Sub AfterProductsInit()
@@ -208,49 +208,49 @@ Friend Class ConnectionsFunctions
 
         globalVariablesInitFlags(GlobalEnums.GlobalModels.ADJUSTMENTS) = True
         globalInitFlag = CheckGlobalVariablesInitFlag()
-    
+
     End Sub
 
     Private Sub AfterEntitiesFiltersInit()
 
         globalVariablesInitFlags(GlobalEnums.GlobalModels.ENTITIESFILTERS) = True
         globalInitFlag = CheckGlobalVariablesInitFlag()
-   
+
     End Sub
 
     Private Sub AfterClientsFiltersInit()
 
         globalVariablesInitFlags(GlobalEnums.GlobalModels.CLIENTSFILTERS) = True
         globalInitFlag = CheckGlobalVariablesInitFlag()
-  
+
     End Sub
 
     Private Sub AfterProductsFiltersInit()
 
         globalVariablesInitFlags(GlobalEnums.GlobalModels.PRODUCTSFILTERS) = True
         globalInitFlag = CheckGlobalVariablesInitFlag()
- 
+
     End Sub
 
     Private Sub AfterAdjustmentsFiltersInit()
 
         globalVariablesInitFlags(GlobalEnums.GlobalModels.ADJUSTMENTSFILTERS) = True
         globalInitFlag = CheckGlobalVariablesInitFlag()
- 
+
     End Sub
 
     Private Sub AfterFactsVersionsInit()
 
         globalVariablesInitFlags(GlobalEnums.GlobalModels.FACTSVERSIONS) = True
         globalInitFlag = CheckGlobalVariablesInitFlag()
-   
+
     End Sub
 
     Private Sub AfterCurrenciesInit()
 
         globalVariablesInitFlags(GlobalEnums.GlobalModels.CURRENCIES) = True
         globalInitFlag = CheckGlobalVariablesInitFlag()
-  
+
     End Sub
 
     Private Sub AfterRatesVersionsInit()
@@ -277,7 +277,7 @@ Friend Class ConnectionsFunctions
 
     End Function
 
-  
+
 #End Region
 
 

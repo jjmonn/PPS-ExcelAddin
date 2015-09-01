@@ -18,6 +18,19 @@ public class ByteBuffer : MemoryStream
 
     public ByteBuffer() { }
 
+    public ByteBuffer Clone()
+    {
+      ByteBuffer clone = new ByteBuffer();
+      long pos = Position;
+
+      clone.m_requestId = m_requestId;
+      Position = 0;
+      CopyTo(clone);
+      clone.Position = pos;
+      Position = pos;
+      return (clone);
+    }
+
     public void Release()
     {
         this.ReplaceUint32((UInt32)this.Length - 4, 0);
