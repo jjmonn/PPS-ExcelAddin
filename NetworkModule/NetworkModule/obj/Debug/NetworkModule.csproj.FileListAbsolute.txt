@@ -14,3 +14,11 @@ C:\Users\PPS\Documents\PPS-Repo\NetworkModule\NetworkModule\obj\Debug\NetworkMod
 C:\Users\PPS\Documents\PPS-Repo\NetworkModule\NetworkModule\obj\Debug\NetworkModule.dll
 C:\Users\PPS\Documents\PPS-Repo\NetworkModule\NetworkModule\obj\Debug\NetworkModule.pdb
 C:\Users\PPS Bi\Documents\PPS-Repo\NetworkModule\NetworkModule\obj\Debug\NetworkModule.csprojResolveAssemblyReference.cache
+C:\Users\PPS\Documents\GitHub\PPS Client Addin\NetworkModule\NetworkModule\bin\Debug\NetworkModule.dll
+C:\Users\PPS\Documents\GitHub\PPS Client Addin\NetworkModule\NetworkModule\bin\Debug\NetworkModule.pdb
+C:\Users\PPS\Documents\GitHub\PPS Client Addin\NetworkModule\NetworkModule\bin\Debug\Ionic.Zlib.dll
+C:\Users\PPS\Documents\GitHub\PPS Client Addin\NetworkModule\NetworkModule\bin\Debug\Ionic.Zlib.pdb
+C:\Users\PPS\Documents\GitHub\PPS Client Addin\NetworkModule\NetworkModule\bin\Debug\Ionic.Zlib.xml
+C:\Users\PPS\Documents\GitHub\PPS Client Addin\NetworkModule\NetworkModule\obj\Debug\NetworkModule.csprojResolveAssemblyReference.cache
+C:\Users\PPS\Documents\GitHub\PPS Client Addin\NetworkModule\NetworkModule\obj\Debug\NetworkModule.dll
+C:\Users\PPS\Documents\GitHub\PPS Client Addin\NetworkModule\NetworkModule\obj\Debug\NetworkModule.pdb
