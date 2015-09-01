@@ -122,17 +122,17 @@
 '    Private Function DataAggregationQuery(ByRef version_id As String, _
 '                                          ByRef sql_where_clause As String) As Boolean
 
-'        Dim strSQL As String = "SELECT " & "D." & DATA_PERIOD_VARIABLE & "," _
-'                             & "D." & DATA_ACCOUNT_ID_VARIABLE & "," _
+'        Dim strSQL As String = "SELECT " & "D." & PERIOD_VARIABLE & "," _
+'                             & "D." & ACCOUNT_ID_VARIABLE & "," _
 '                             & "SUM(" & DATA_VALUE_VARIABLE & ") AS " & DATA_VALUE_VARIABLE & "," _
 '                             & "A." & ENTITIES_CURRENCY_VARIABLE _
 '                             & " FROM " & GlobalVariables.database & "." & version_id & " D" & ", " & GlobalVariables.database & "." & ENTITIES_TABLE & " A" _
-'                             & " WHERE " & "D." & DATA_ENTITY_ID_VARIABLE & "=" & "A." & ID_VARIABLE
+'                             & " WHERE " & "D." & ENTITY_ID_VARIABLE & "=" & "A." & ID_VARIABLE
 
 '        If sql_where_clause <> "" Then strSQL = strSQL & " AND " & sql_where_clause
 
-'        strSQL = strSQL & " GROUP BY " & "D." & DATA_PERIOD_VARIABLE & "," & _
-'                                         "D." & DATA_ACCOUNT_ID_VARIABLE & "," & _
+'        strSQL = strSQL & " GROUP BY " & "D." & PERIOD_VARIABLE & "," & _
+'                                         "D." & ACCOUNT_ID_VARIABLE & "," & _
 '                                         "A." & ENTITIES_CURRENCY_VARIABLE
 
 '        srv.openRstSQL(strSQL, ModelServer.FWD_CURSOR)
@@ -157,20 +157,20 @@
 '        = GetExchangeRatesDictionary(version_id, destination_currency, entities_id_List)
 
 '        Do While srv.rst.EOF = False AndAlso srv.rst.BOF = False
-'            account_id = srv.rst.Fields(DATA_ACCOUNT_ID_VARIABLE).Value
+'            account_id = srv.rst.Fields(ACCOUNT_ID_VARIABLE).Value
 '            value = srv.rst.Fields(DATA_VALUE_VARIABLE).Value
 '            currency_ = srv.rst.Fields(ENTITIES_CURRENCY_VARIABLE).Value
 
 '            If currency_ <> destination_currency AndAlso typesDict(account_id) = MONETARY_ACCOUNT_TYPE Then
 '                If conversion_flagDict(account_id) = FLUX_CONVERSION Then rate_type = ExchangeRate.AVERAGE_RATE Else rate_type = ExchangeRate.CLOSING_RATE
 '                currency_token = currency_ & CURRENCIES_SEPARATOR & destination_currency
-'                value = value * exchange_rates_dictionary(currency_token)(srv.rst.Fields(DATA_PERIOD_VARIABLE).Value)(rate_type)
+'                value = value * exchange_rates_dictionary(currency_token)(srv.rst.Fields(PERIOD_VARIABLE).Value)(rate_type)
 '            End If
 '            AddValueToAggregatedConvertedValuesHash(values_dict, _
 '                                                    accounts_list, _
 '                                                    periods_list, _
 '                                                    account_id, _
-'                                                    srv.rst.Fields(DATA_PERIOD_VARIABLE).Value, _
+'                                                    srv.rst.Fields(PERIOD_VARIABLE).Value, _
 '                                                    value)
 '            srv.rst.MoveNext()
 '        Loop
@@ -238,19 +238,19 @@
 
 '    Friend Function BuildDataRSTForEntityLoop(ByRef data_view_name As String) As Boolean
 
-'        Dim strSQL As String = "SELECT " + "D." + DATA_PERIOD_VARIABLE + "," _
-'                             + "D." + DATA_ACCOUNT_ID_VARIABLE + "," _
+'        Dim strSQL As String = "SELECT " + "D." + PERIOD_VARIABLE + "," _
+'                             + "D." + ACCOUNT_ID_VARIABLE + "," _
 '                             + "SUM(" + DATA_VALUE_VARIABLE + ") AS value," _
-'                             + DATA_ENTITY_ID_VARIABLE _
+'                             + ENTITY_ID_VARIABLE _
 '                             + " FROM " + GlobalVariables.database + "." + data_view_name + " D" + ", " + GlobalVariables.database + "." + ENTITIES_TABLE + " A" _
-'                             + " WHERE " + DATA_ENTITY_ID_VARIABLE + "=" + ID_VARIABLE
+'                             + " WHERE " + ENTITY_ID_VARIABLE + "=" + ID_VARIABLE
 
 '        Dim additional_where_clause As String = GetAdditionnalWhereClauseFromFilters()
 '        If additional_where_clause <> "" Then strSQL = strSQL & " AND " & additional_where_clause
 
-'        Dim str_sql_group As String = " GROUP BY " + DATA_PERIOD_VARIABLE + "," + _
-'                                                     DATA_ACCOUNT_ID_VARIABLE + "," + _
-'                                                     DATA_ENTITY_ID_VARIABLE
+'        Dim str_sql_group As String = " GROUP BY " + PERIOD_VARIABLE + "," + _
+'                                                     ACCOUNT_ID_VARIABLE + "," + _
+'                                                     ENTITY_ID_VARIABLE
 '        strSQL = strSQL + str_sql_group
 
 '        srv.openRstSQL(strSQL, ModelServer.FWD_CURSOR)
@@ -265,7 +265,7 @@
 
 '    Private Function StoreEntityData(ByRef entity_id As String)
 
-'        srv.rst.Filter = DATA_ENTITY_ID_VARIABLE & "='" & entity_id & "'"
+'        srv.rst.Filter = ENTITY_ID_VARIABLE & "='" & entity_id & "'"
 '        If srv.rst.BOF = True Or srv.rst.EOF = True Then
 '            srv.rst.Filter = ""
 '            Return False
@@ -295,7 +295,7 @@
 
 '    Friend Function FilterOnEntityID(ByRef entityID As String) As Boolean
 
-'        srv.rst.Filter = DATA_ENTITY_ID_VARIABLE & "='" & entityID & "'"
+'        srv.rst.Filter = ENTITY_ID_VARIABLE & "='" & entityID & "'"
 '        If srv.rst.BOF = True Or srv.rst.EOF = True Then
 '            srv.rst.Filter = ""
 '            Return False
@@ -320,11 +320,11 @@
 '                                                          Optional ByRef products_id_list As List(Of String) = Nothing, _
 '                                                          Optional ByRef adjustments_id_list As List(Of String) = Nothing) As Boolean
 
-'        Dim strSql As String = "SELECT " & DATA_PERIOD_VARIABLE & ", " _
-'                             & DATA_ACCOUNT_ID_VARIABLE & ", " _
+'        Dim strSql As String = "SELECT " & PERIOD_VARIABLE & ", " _
+'                             & ACCOUNT_ID_VARIABLE & ", " _
 '                             & DATA_VALUE_VARIABLE _
 '                             & " FROM " & GlobalVariables.database & "." & ViewName _
-'                             & " WHERE " & DATA_ENTITY_ID_VARIABLE & "='" & entityKey & "'"
+'                             & " WHERE " & ENTITY_ID_VARIABLE & "='" & entityKey & "'"
 
 '        Dim additional_where_clause As String = GetWhereClause(, clients_id_list, _
 '                                                               products_id_list, _
@@ -403,15 +403,15 @@
 
 '        Dim entities_ids As String = "'" + Join(entitiesIDList, "','") + "'"
 
-'        Dim strSQL As String = "SELECT D." & DATA_PERIOD_VARIABLE & "," _
-'                             & " D." & DATA_ACCOUNT_ID_VARIABLE & "," _
+'        Dim strSQL As String = "SELECT D." & PERIOD_VARIABLE & "," _
+'                             & " D." & ACCOUNT_ID_VARIABLE & "," _
 '                             & " D." & DATA_VALUE_VARIABLE & "," _
-'                             & " D." & DATA_ENTITY_ID_VARIABLE & "," _
+'                             & " D." & ENTITY_ID_VARIABLE & "," _
 '                             & " D." & DATA_ADJUSTMENT_ID_VARIABLE & "," _
 '                             & " A." & ENTITIES_CURRENCY_VARIABLE _
 '                             & " FROM " & GlobalVariables.database & "." & version_id & " D" & ", " & GlobalVariables.database + "." & ENTITIES_TABLE + " A" _
-'                             & " WHERE " & "D." & DATA_ENTITY_ID_VARIABLE & "=" & "A." & ID_VARIABLE _
-'                             & " AND " & DATA_ENTITY_ID_VARIABLE & " IN " & "(" & entities_ids & ")" _
+'                             & " WHERE " & "D." & ENTITY_ID_VARIABLE & "=" & "A." & ID_VARIABLE _
+'                             & " AND " & ENTITY_ID_VARIABLE & " IN " & "(" & entities_ids & ")" _
 '                             & " AND " & DATA_CLIENT_ID_VARIABLE & " ='aaa'" _
 '                             & " AND " & DATA_PRODUCT_ID_VARIABLE & " ='aaa'"
 
@@ -441,7 +441,7 @@
 '        = GetExchangeRatesDictionary(version_id, destination_currency, entities_id_List)
 
 '        Do While srv.rst.EOF = False AndAlso srv.rst.BOF = False
-'            account_id = srv.rst.Fields(DATA_ACCOUNT_ID_VARIABLE).Value
+'            account_id = srv.rst.Fields(ACCOUNT_ID_VARIABLE).Value
 '            value = srv.rst.Fields(DATA_VALUE_VARIABLE).Value
 '            currency_ = srv.rst.Fields(ENTITIES_CURRENCY_VARIABLE).Value
 
@@ -449,13 +449,13 @@
 
 '                If conversion_flagDict(account_id) = FLUX_CONVERSION Then rate_type = ExchangeRate.AVERAGE_RATE Else rate_type = ExchangeRate.CLOSING_RATE
 '                currency_token = currency_ & CURRENCIES_SEPARATOR & destination_currency
-'                value = value * exchange_rates_dictionary(currency_token)(srv.rst.Fields(DATA_PERIOD_VARIABLE).Value)(rate_type)
+'                value = value * exchange_rates_dictionary(currency_token)(srv.rst.Fields(PERIOD_VARIABLE).Value)(rate_type)
 
 '            End If
 '            AddAdjustmentToDictionary(adjustments_dic, _
-'                               srv.rst.Fields(DATA_ENTITY_ID_VARIABLE).Value, _
+'                               srv.rst.Fields(ENTITY_ID_VARIABLE).Value, _
 '                               account_id, _
-'                               srv.rst.Fields(DATA_PERIOD_VARIABLE).Value, _
+'                               srv.rst.Fields(PERIOD_VARIABLE).Value, _
 '                               srv.rst.Fields(DATA_ADJUSTMENT_ID_VARIABLE).Value, _
 '                               value)
 '            srv.rst.MoveNext()
@@ -515,9 +515,9 @@
 '        Dim srv As New ModelServer
 '        srv.OpenRst(GlobalVariables.database & "." & version_id, ModelServer.FWD_CURSOR)
 
-'        Dim str_filter As String = DATA_ACCOUNT_ID_VARIABLE & "='" & account_id & "' AND " & _
-'                                   DATA_ENTITY_ID_VARIABLE & "='" & entity_id & "' AND " & _
-'                                   DATA_PERIOD_VARIABLE & "=" & period
+'        Dim str_filter As String = ACCOUNT_ID_VARIABLE & "='" & account_id & "' AND " & _
+'                                   ENTITY_ID_VARIABLE & "='" & entity_id & "' AND " & _
+'                                   PERIOD_VARIABLE & "=" & period
 
 '        If client_id <> "" Then str_filter = str_filter & " AND " & DATA_CLIENT_ID_VARIABLE & "='" & client_id & "'"
 '        If product_id <> "" Then str_filter = str_filter & " AND " & DATA_PRODUCT_ID_VARIABLE & "='" & client_id & "'"
@@ -637,7 +637,7 @@
 '    Private Function GetAdditionnalWhereClauseFromFilters() As String
 
 '        Dim str_SQL As String = ""
-'        Dim entities_sql_filter As String = DATA_ENTITY_ID_VARIABLE & " IN ('" + Join(entities_id_filter_list.ToArray, "','") + "')"
+'        Dim entities_sql_filter As String = ENTITY_ID_VARIABLE & " IN ('" + Join(entities_id_filter_list.ToArray, "','") + "')"
 '        Dim clients_sql_filter As String = DATA_CLIENT_ID_VARIABLE & " IN ('" + Join(clients_id_filter_list.ToArray, "','") + "')"
 '        Dim products_sql_filter As String = DATA_PRODUCT_ID_VARIABLE & " IN ('" + Join(products_id_filter_list.ToArray, "','") + "')"
 '        Dim adjustments_sql_filter As String = DATA_ADJUSTMENT_ID_VARIABLE & " IN ('" + Join(adjustments_id_filter_list.ToArray, "','") + "')"
@@ -663,7 +663,7 @@
 
 '        Dim str_SQL As String = ""
 '        If Not input_entities_id_list Is Nothing _
-'        AndAlso input_entities_id_list.Count > 0 Then str_SQL = str_SQL & " AND " & DATA_ENTITY_ID_VARIABLE & " IN ('" + Join(input_entities_id_list.ToArray, "','") + "')"
+'        AndAlso input_entities_id_list.Count > 0 Then str_SQL = str_SQL & " AND " & ENTITY_ID_VARIABLE & " IN ('" + Join(input_entities_id_list.ToArray, "','") + "')"
 
 '        If Not input_clients_id_list Is Nothing _
 '        AndAlso input_clients_id_list.Count > 0 Then str_SQL = str_SQL & " AND " & DATA_CLIENT_ID_VARIABLE & " IN ('" + Join(input_clients_id_list.ToArray, "','") + "')"

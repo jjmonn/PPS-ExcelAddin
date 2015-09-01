@@ -12,7 +12,7 @@ Imports System.Collections.Generic
 '
 ' Author: Julien Monnereau
 ' Created: 05/08/2015
-' Last modified: 26/08/2015
+' Last modified: 01/09/2015
 
 
 
@@ -86,8 +86,8 @@ Friend Class ExchangeRate
 
 
     Friend Sub CMSG_UPDATE_EXCHANGE_RATE(ByRef id As UInt32, _
-                                  ByRef updated_var As String, _
-                                  ByRef new_value As String)
+                                          ByRef updated_var As String, _
+                                          ByRef new_value As String)
 
         ' to be reviewed priority high
         '     Dim tmp_ht As Hashtable = exchangeRatesDict(id).clone ' check clone !!!!

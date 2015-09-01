@@ -63,7 +63,7 @@ Friend Class LogController
 
     End Sub
 
-    Protected Friend Sub LaunchComputation(ByRef entity_node As TreeNode)
+    Friend Sub LaunchComputation(ByRef entity_node As TreeNode)
 
         Model.ComputeEntity(entity_node, current_version_id)
         DisplayResults()
@@ -72,21 +72,23 @@ Friend Class LogController
 
     End Sub
 
-    Protected Friend Sub DisplayDataHistory(ByRef account_id As String, _
+    Friend Sub DisplayDataHistory(ByRef account_id As String, _
                                             ByRef period As Int32, _
                                             ByRef cell As GridCell)
 
-        Dim DataHistory As New DataHistoryUI(SQLLog.GetValueHistory(current_entity_id, _
-                                                                    current_version_id, _
-                                                                    account_id, _
-                                                                    period), _
-                                            client_id_name_dict, _
-                                            product_id_name_dict, _
-                                            adjustment_id_name_dict)
 
-        Dim p As New Point(cell.Bounds.Left + View.DGVTabControl.Left, cell.Bounds.Top + View.DGVTabControl.Top)
-        DataHistory.Location = p
-        DataHistory.Show()
+        ' to be reimplemented !!! priority high
+        'Dim DataHistory As New DataHistoryUI(SQLLog.GetValueHistory(current_entity_id, _
+        '                                                            current_version_id, _
+        '                                                            account_id, _
+        '                                                            period), _
+        '                                    client_id_name_dict, _
+        '                                    product_id_name_dict, _
+        '                                    adjustment_id_name_dict)
+
+        'Dim p As New Point(cell.Bounds.Left + View.DGVTabControl.Left, cell.Bounds.Top + View.DGVTabControl.Top)
+        'DataHistory.Location = p
+        'DataHistory.Show()
 
     End Sub
 

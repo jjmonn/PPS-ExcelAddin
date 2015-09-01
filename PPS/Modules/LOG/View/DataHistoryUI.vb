@@ -46,10 +46,10 @@ Friend Class DataHistoryUI
                 Dim row As HierarchyItem = DGV.RowsHierarchy.Items.Add("")
                 DGV.CellsArea.SetCellValue(row, DGV.ColumnsHierarchy.Items(0), ht(LOG_TIME_VARIABLE))
                 DGV.CellsArea.SetCellValue(row, DGV.ColumnsHierarchy.Items(1), ht(LOG_USER_ID_VARIABLE))
-                DGV.CellsArea.SetCellValue(row, DGV.ColumnsHierarchy.Items(2), client_id_name_dict(ht(LOG_CLIENT_ID_VARIABLE)))
-                DGV.CellsArea.SetCellValue(row, DGV.ColumnsHierarchy.Items(3), product_id_name_dict(ht(LOG_PRODUCT_ID_VARIABLE)))
-                DGV.CellsArea.SetCellValue(row, DGV.ColumnsHierarchy.Items(4), adjustment_id_name_dict(ht(LOG_ADJUSTMENT_ID_VARIABLE)))
-                DGV.CellsArea.SetCellValue(row, DGV.ColumnsHierarchy.Items(5), ht(LOG_VALUE_VARIABLE))
+                DGV.CellsArea.SetCellValue(row, DGV.ColumnsHierarchy.Items(2), client_id_name_dict(ht(CLIENT_ID_VARIABLE)))
+                DGV.CellsArea.SetCellValue(row, DGV.ColumnsHierarchy.Items(3), product_id_name_dict(ht(PRODUCT_ID_VARIABLE)))
+                DGV.CellsArea.SetCellValue(row, DGV.ColumnsHierarchy.Items(4), adjustment_id_name_dict(ht(ADJUSTMENT_ID_VARIABLE)))
+                DGV.CellsArea.SetCellValue(row, DGV.ColumnsHierarchy.Items(5), ht(VALUE_VARIABLE))
             Next
             DGV.ColumnsHierarchy.AutoResize(AutoResizeMode.FIT_ALL)
             DGV.ColumnsHierarchy.AutoStretchColumns = True
