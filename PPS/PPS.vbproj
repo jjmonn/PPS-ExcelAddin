@@ -422,12 +422,6 @@
     </Compile>
     <Compile Include="Modules\PLATFORM MANAGEMENT\Categories\Controller\EntitiesCategoriesController.vb" />
     <Compile Include="Utilities\VTreeViewUtil.vb" />
-    <Compile Include="Views\GenericView.Designer.vb">
-      <DependentUpon>GenericView.vb</DependentUpon>
-    </Compile>
-    <Compile Include="Views\GenericView.vb">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="Modules\PLATFORM MANAGEMENT\Currencies\Views\ExcelRatesImportUI.Designer.vb">
       <DependentUpon>ExcelRatesImportUI.vb</DependentUpon>
     </Compile>
@@ -466,6 +460,12 @@
     </Compile>
     <Compile Include="Modules\PLATFORM MANAGEMENT\Axis Super Classes\Views\AnalysisAxisDGV.vb">
       <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Views\GenericView.Designer.vb">
+      <DependentUpon>GenericView.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Views\GenericView.vb">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="Views\PPS Controls\CircularProgressUI.Designer.vb">
       <DependentUpon>CircularProgressUI.vb</DependentUpon>
@@ -517,10 +517,6 @@
     <Compile Include="ExcelAddinModule1.vb">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="EXTERNAL\cDataGridView.vb" />
-    <Compile Include="EXTERNAL\DataGridViewCustom.vb" />
-    <Compile Include="EXTERNAL\DataGridViewDisableButtonCell.vb" />
-    <Compile Include="EXTERNAL\DataGridViewDisableButtonColumn.vb" />
     <Compile Include="GLOBAL\Constants Connection.vb" />
     <Compile Include="GLOBAL\Constants.vb" />
     <Compile Include="GLOBAL\Constants Data Tables.vb" />
@@ -562,7 +558,6 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Modules\PLATFORM MANAGEMENT\Versions\Controller\DataVersionsController.vb" />
-    <Compile Include="Transactions\DataBaseDataDownloader.vb" />
     <Compile Include="Modules\CONNECTIONS\Models\ModelServer.vb" />
     <Compile Include="Models\Computing\RefreshGetDataBatch.vb" />
     <Compile Include="Modules\PPSBI\Views\PPSBIUI.Designer.vb">
@@ -592,7 +587,7 @@
     <Compile Include="Modules\CONTROLING UI\View\ControllingUI_2.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Views\Utilities\ExcelEntitiesReportFormatting.vb" />
+    <Compile Include="Utilities\ExcelFormatting.vb" />
     <Compile Include="Utilities\DataGridViewsUtil.vb" />
     <Compile Include="Modules\REPORTS UPLOAD\CONTROLER\GeneralSubmissionControler.vb" />
     <Compile Include="Modules\REPORTS UPLOAD\AcquisitionInterface\View\AcquisitionInterface.Designer.vb">
@@ -613,13 +608,8 @@
     <Compile Include="Modules\CONNECTIONS\ConnectionsFunctions.vb" />
     <Compile Include="Utilities\TreeViewsUtilities.vb" />
     <Compile Include="Utilities\Utilities_Functions.vb" />
-    <Compile Include="Views\Utilities\CExcelFormatting.vb" />
     <Compile Include="Modules\REPORTS UPLOAD\VIEW\RangeHighlighter.vb" />
-    <Compile Include="Views\Utilities\UIs Events\ControlButtonsHover.vb" />
-    <Compile Include="Views\Utilities\UIs Events\FormsMove.vb" />
-    <Compile Include="Views\Utilities\UIs Events\Panel1.vb" />
-    <Compile Include="Views\Utilities\UIs Events\DragAndDrop.vb" />
-    <Compile Include="Views\Utilities\WorksheetWrittingFunctions.vb" />
+    <Compile Include="Utilities\WorksheetWrittingFunctions.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="Modules\PPSBI\Controller\PPSBIController.vb" />
   </ItemGroup>
@@ -730,9 +720,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Modules\T1\Test.resx">
       <DependentUpon>Test.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Views\GenericView.resx">
-      <DependentUpon>GenericView.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Modules\PLATFORM MANAGEMENT\Currencies\Views\ExcelRatesImportUI.resx">
       <DependentUpon>ExcelRatesImportUI.vb</DependentUpon>

@@ -16,7 +16,7 @@
 '
 '
 ' Author: Julien Monnereau/ Addin Express automated code
-' Last modified: 31/08/2015
+' Last modified: 01/09/2015
 
 
 Imports System.Runtime.InteropServices
@@ -1797,7 +1797,7 @@ Public Class AddinModule
 
     Private Sub SubmitBT2_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) Handles SubmitBT2.OnClick
 
-        CurrentGRSControler.Submit()
+        CurrentGRSControler.DataSubmission()
 
     End Sub
 
