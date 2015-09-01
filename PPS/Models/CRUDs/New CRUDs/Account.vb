@@ -41,6 +41,7 @@ Friend Class Account
         NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_READ_ACCOUNT_ANSWER, AddressOf SMSG_READ_ACCOUNT_ANSWER)
         NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_DELETE_ACCOUNT_ANSWER, AddressOf SMSG_DELETE_ACCOUNT_ANSWER)
         NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_LIST_ACCOUNT_ANSWER, AddressOf SMSG_LIST_ACCOUNT_ANSWER)
+
         state_flag = False
 
     End Sub
@@ -143,14 +144,14 @@ Friend Class Account
 
     Private Sub SMSG_DELETE_ACCOUNT_ANSWER(packet As ByteBuffer)
 
-       If packet.ReadInt32() = 0 Then
+        If packet.ReadInt32() = 0 Then
             Dim id As UInt32 = packet.ReadInt32
             accounts_hash.Remove(id)
             RaiseEvent AccountDeleteEvent(True, id)
         Else
             RaiseEvent AccountDeleteEvent(False, 0)
         End If
- 
+
     End Sub
 
 #End Region

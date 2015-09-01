@@ -1,8 +1,0 @@
-C:\Users\PPS\Documents\PPS-Repo\NetworkModule\NetworkModule\bin\Release\NetworkModule.dll
-C:\Users\PPS\Documents\PPS-Repo\NetworkModule\NetworkModule\bin\Release\NetworkModule.pdb
-C:\Users\PPS\Documents\PPS-Repo\NetworkModule\NetworkModule\bin\Release\Ionic.Zlib.dll
-C:\Users\PPS\Documents\PPS-Repo\NetworkModule\NetworkModule\bin\Release\Ionic.Zlib.pdb
-C:\Users\PPS\Documents\PPS-Repo\NetworkModule\NetworkModule\bin\Release\Ionic.Zlib.xml
-C:\Users\PPS\Documents\PPS-Repo\NetworkModule\NetworkModule\obj\Release\NetworkModule.csprojResolveAssemblyReference.cache
-C:\Users\PPS\Documents\PPS-Repo\NetworkModule\NetworkModule\obj\Release\NetworkModule.dll
-C:\Users\PPS\Documents\PPS-Repo\NetworkModule\NetworkModule\obj\Release\NetworkModule.pdb

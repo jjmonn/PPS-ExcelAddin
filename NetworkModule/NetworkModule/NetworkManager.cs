@@ -180,7 +180,7 @@ public class NetworkManager
                // Console.WriteLine("Receive defined " + l_opcode.ToString("X2"));
                 System.Diagnostics.Debug.WriteLine("Receive defined " + l_opcode.ToString("X2"));
                 for (int i = 0; i < l_callback.Count; i++)
-                    l_callback.ElementAt(i)(l_packet);
+                    l_callback.ElementAt(i)(l_packet.Clone());
             }
         }
         return (true);
