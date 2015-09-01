@@ -130,6 +130,7 @@
     <Compile Include="Models\CRUDs\New CRUDs\EntitiesFilter.vb" />
     <Compile Include="Models\CRUDs\New CRUDs\Entity.vb" />
     <Compile Include="Models\CRUDs\New CRUDs\ExchangeRates.vb" />
+    <Compile Include="Models\CRUDs\New CRUDs\Facts.vb" />
     <Compile Include="Models\CRUDs\New CRUDs\RatesVersion.vb" />
     <Compile Include="Models\CRUDs\New CRUDs\Filter.vb" />
     <Compile Include="Models\CRUDs\New CRUDs\FilterValue.vb" />
@@ -460,7 +461,6 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Models\CRUDs\New CRUDs\Currency.vb" />
-    <Compile Include="Transactions\SQLLog.vb" />
     <Compile Include="Modules\PLATFORM MANAGEMENT\Axis Super Classes\Views\AnalysisAxisDGV.Designer.vb">
       <DependentUpon>AnalysisAxisDGV.vb</DependentUpon>
     </Compile>
@@ -532,7 +532,6 @@
     <Compile Include="Modules\CONNECTIONS\Views\ConnectionUI.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Transactions\DataBaseDataUploader.vb" />
     <Compile Include="Controllers\GloablInstancesRestartModule.vb" />
     <Compile Include="Modules\PLATFORM MANAGEMENT\Currencies\Views\RatesView.vb" />
     <Compile Include="Modules\PLATFORM MANAGEMENT\Entities\VIEW\NewEntityUI.Designer.vb">
