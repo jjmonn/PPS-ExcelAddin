@@ -32,10 +32,9 @@ Friend Class NewEntityUI
     Private entitiesTV As TreeView
     Private categoriesTV As TreeView
     Private categoriesNamesKeysDict As Hashtable
-    Private currenciesList As List(Of String)
     Private parentTB As New TextBox
     Private isFormExpanded As Boolean
-    Private current_parent_entity_id As String
+    Private current_parent_entity_id As Int32
 
     ' Constants
     Private Const FIXED_ATTRIBUTES_NUMBER As Int32 = 3
@@ -71,7 +70,6 @@ Friend Class NewEntityUI
         ' Add any initialization after the InitializeComponent() call.
         Controller = input_controller
         entitiesTV = input_entities_TV
-        currenciesList = GlobalVariables.Currencies.currencies_hash.Keys
         categoriesTV = input_categories_tree
         categoriesNamesKeysDict = input_categories_name_key_dic
 
@@ -146,7 +144,7 @@ Friend Class NewEntityUI
         Dim currenciesCombobox As New ComboBox
         currenciesCombobox.DropDownStyle = ComboBoxStyle.DropDownList
         currenciesCombobox.Name = CURRENCIES_CB_NAME
-        For Each curr As String In currenciesList
+        For Each curr As Int32 In GlobalVariables.Currencies.currencies_hash.Keys
             currenciesCombobox.Items.Add(curr)
         Next
         AddControl(2, 1, currenciesCombobox)

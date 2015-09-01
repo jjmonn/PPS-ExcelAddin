@@ -282,6 +282,19 @@ Friend Class FilterValue
 
     End Function
 
+    Friend Function GetFilterValueId(ByVal mostNestedFilterValueId As Int32, _
+                                     ByRef filterId As Int32) As Int32
+
+        If filtervalues_hash(mostNestedFilterValueId)(FILTER_ID_VARIABLE) = filterId Then
+            Return mostNestedFilterValueId
+        Else
+            mostNestedFilterValueId = filtervalues_hash(mostNestedFilterValueId)(PARENT_FILTER_VALUE_ID_VARIABLE)
+            Return GetFilterValueId(mostNestedFilterValueId, filterId)
+        End If
+
+    End Function
+
+
     Friend Function IsNameAvailable(ByRef name As String) As Boolean
 
         If GetFiltervaluesList(NAME_VARIABLE).Contains(name) = True Then Return False

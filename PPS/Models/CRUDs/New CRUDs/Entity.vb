@@ -124,7 +124,7 @@ Friend Class Entity
 
     End Sub
 
-    Friend Sub CMSG_UPDATE_ENTITY(ByRef id As UInt32, _
+    Friend Sub CMSG_UPDATE_ENTITY(ByRef id As Int32, _
                                   ByRef updated_var As String, _
                                   ByRef new_value As String)
 

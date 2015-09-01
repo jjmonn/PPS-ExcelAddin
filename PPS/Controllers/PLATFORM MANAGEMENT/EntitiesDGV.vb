@@ -106,14 +106,21 @@ Friend Class EntitiesDGV
         ' CreateFilter(col1)
 
         For Each rootNode As TreeNode In entitiesFilterTV.Nodes
-            Dim col As HierarchyItem = DGV.ColumnsHierarchy.Items.Add(rootNode.Text)
-            columnsDictionary.Add(rootNode.Name, col)
-            columnsCaptionID.Add(rootNode.Text, rootNode.Name)
-            InitComboBox(col, rootNode)
-            col.AllowFiltering = True
+            CreateSubFilters(rootNode)
             '   CreateFilter(col)
         Next
 
+    End Sub
+
+    Private Sub CreateSubFilters(ByRef node As TreeNode)
+        Dim col As HierarchyItem = DGV.ColumnsHierarchy.Items.Add(node.Text)
+        columnsDictionary.Add(node.Name, col)
+        columnsCaptionID.Add(node.Text, node.Name)
+        InitComboBox(col, node)
+        col.AllowFiltering = True
+        For Each childNode As TreeNode In node.Nodes
+            CreateSubFilters(childNode)
+        Next
     End Sub
 
     Private Sub CreateFilter(ByRef column As HierarchyItem)
@@ -232,22 +239,29 @@ Friend Class EntitiesDGV
 
     Friend Sub fillRow(ByVal entity_id As Int32, _
                        ByVal entity_ht As Hashtable)
-
-        Dim column As HierarchyItem
-        Dim filter_value_name As String
-
         Dim rowItem = rows_id_item_dic(entity_id)
-        column = columnsDictionary(ENTITIES_CURRENCY_VARIABLE)
-        DGV.CellsArea.SetCellValue(rowItem, column, entity_ht(ENTITIES_CURRENCY_VARIABLE))
+        Dim column As HierarchyItem = columnsDictionary(ENTITIES_CURRENCY_VARIABLE)
+        DGV.CellsArea.SetCellValue(rowItem, column, GlobalVariables.Currencies.currencies_hash(CInt(entity_ht(ENTITIES_CURRENCY_VARIABLE)))(NAME_VARIABLE))
         For Each root_category_node As TreeNode In entitiesFilterTV.Nodes
-            column = columnsDictionary(root_category_node.Name)
-            Dim filter_id As Int32 = GlobalVariables.Filters.GetMostNestedFilterId(CInt(root_category_node.Name))
-            Dim filterValueId = GlobalVariables.EntitiesFilters.entitiesFiltersHash(entity_id)(filter_id)
-            filter_value_name = GlobalVariables.FiltersValues.filtervalues_hash(filterValueId)(NAME_VARIABLE)
-            DGV.CellsArea.SetCellValue(rowItem, column, filter_value_name)
+            FillSubFilters(root_category_node, entity_id, rowItem)
         Next
         If entity_ht(ENTITIES_ALLOW_EDITION_VARIABLE) = 0 Then rowItem.ImageIndex = 0 Else rowItem.ImageIndex = 1
 
+    End Sub
+
+    Private Sub FillSubFilters(ByRef node As TreeNode, ByRef entity_id As Int32, ByRef rowItem As HierarchyItem)
+        Dim filter_value_name As String
+        Dim column As HierarchyItem = columnsDictionary(node.Name)
+        Dim filter_id As Int32 = CInt(node.Name)
+        Dim mostNestedFilterId = GlobalVariables.Filters.GetMostNestedFilterId(CInt(node.Name))
+        Dim mostNestedFilterValueId = GlobalVariables.EntitiesFilters.entitiesFiltersHash(entity_id)(mostNestedFilterId)
+        Dim filterValueId = GlobalVariables.FiltersValues.GetFilterValueId(mostNestedFilterValueId, filter_id)
+        filter_value_name = GlobalVariables.FiltersValues.filtervalues_hash(filterValueId)(NAME_VARIABLE)
+        DGV.CellsArea.SetCellValue(rowItem, column, filter_value_name)
+
+        For Each childNode As TreeNode In node.Nodes
+            FillSubFilters(childNode, entity_id, rowItem)
+        Next
     End Sub
 
     Private Sub updateDGVFormat()
@@ -298,7 +312,7 @@ Friend Class EntitiesDGV
             Dim row As HierarchyItem = DGV.CellsArea.SelectedCells(0).RowItem
             Dim column As HierarchyItem = DGV.CellsArea.SelectedCells(0).ColumnItem
             Dim value As String = DGV.CellsArea.SelectedCells(0).Value
-            If row.Items.Count > 0 Then SetValueToChildrenItems(row, column, value) Else  SetValueToSibbling(row, column, value)
+            If row.Items.Count > 0 Then SetValueToChildrenItems(row, column, value) Else SetValueToSibbling(row, column, value)
             DGV.Refresh()
             DGV.Select()
         End If
