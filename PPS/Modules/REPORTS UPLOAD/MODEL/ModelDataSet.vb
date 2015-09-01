@@ -19,7 +19,7 @@
 '       - if data = period -> bug
 '
 '
-' Last modified: 28/08/2014
+' Last modified: 01/09/2015
 ' Author: Julien Monnereau
 
 
@@ -844,20 +844,23 @@ Friend Class ModelDataSet
 
     ' Write param value in cell(param row address, param column address)
 
-    Friend Function UpdateExcelCell(ByRef entityAddress As String, _
-                                    ByRef accountAddress As String, _
-                                    ByRef periodAddress As String, _
-                                    ByRef value As Double, _
-                                    ByRef record_in_output_cells_address_dict As Boolean) As Excel.Range
+    Friend Sub UpdateExcelCell(ByRef entityAddress As String, _
+                                ByRef accountAddress As String, _
+                                ByRef periodAddress As String, _
+                                ByRef value As Double, _
+                                ByRef record_in_output_cells_address_dict As Boolean)
 
-        Dim cell As Excel.Range = GetCellFromItem(entityAddress, accountAddress, periodAddress)
-        cell.Value2 = value
-        If record_in_output_cells_address_dict = True Then
-            OutputCellsAddressValuesDictionary(cell.Address) = value
+        Dim cellAddress As String = GetCellAddress(entityAddress, accountAddress, periodAddress)
+        If cellAddress = "" Then
+            System.Diagnostics.Debug.WriteLine("ModelDataSet UpdateExcelCell - Error: cell address not found.")
+            Exit Sub
         End If
-        Return cell
+        WS.Range(cellAddress).Value = value
+        If record_in_output_cells_address_dict = True Then
+            OutputCellsAddressValuesDictionary(cellAddress) = value
+        End If
 
-    End Function
+    End Sub
 
 
 #End Region
@@ -877,11 +880,30 @@ Friend Class ModelDataSet
             Case DATASET_PERIODS_ENTITIES_OR : Return WS.Cells(WS.Range(periodAddress).Row, WS.Range(entityAddress).Column)
             Case DATASET_ENTITIES_PERIODS_OR : Return WS.Cells(WS.Range(entityAddress).Row, WS.Range(periodAddress).Column)
             Case Else
-                'PPS Error tracking
+                System.Diagnostics.Debug.WriteLine("Model DataSet - GetCellFromItem() Error: GlobalOrientationFlag non valid or non initialized.")
                 Return Nothing
         End Select
 
     End Function
+
+    Friend Function GetCellAddress(ByRef entityAddress As String, _
+                                    ByRef accountAddress As String, _
+                                    ByRef periodAddress As String) As String
+
+        Select Case GlobalOrientationFlag
+            Case DATASET_ACCOUNTS_PERIODS_OR : Return WS.Cells(WS.Range(accountAddress).Row, WS.Range(periodAddress).Column).address
+            Case DATASET_PERIODS_ACCOUNTS_OR : Return WS.Cells(WS.Range(periodAddress).Row, WS.Range(accountAddress).Column).address
+            Case DATASET_ACCOUNTS_ENTITIES_OR : Return WS.Cells(WS.Range(accountAddress).Row, WS.Range(entityAddress).Column).address
+            Case DATASET_ENTITIES_ACCOUNTS_OR : Return WS.Cells(WS.Range(entityAddress).Row, WS.Range(accountAddress).Column).address
+            Case DATASET_PERIODS_ENTITIES_OR : Return WS.Cells(WS.Range(periodAddress).Row, WS.Range(entityAddress).Column).address
+            Case DATASET_ENTITIES_PERIODS_OR : Return WS.Cells(WS.Range(entityAddress).Row, WS.Range(periodAddress).Column).address
+            Case Else
+                System.Diagnostics.Debug.WriteLine("Model DataSet - GetCellFromItem() Error: GlobalOrientationFlag non valid or non initialized.")
+                Return Nothing
+        End Select
+
+    End Function
+
 
     ' Register a cell into the cellsAddressItemsDictionary
     Private Sub RegisterCellAddressItems(ByRef stackDict As Dictionary(Of String, Hashtable), _

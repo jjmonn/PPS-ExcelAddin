@@ -18,7 +18,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 20/07/2015
+' Last modified: 01/09/2015
 
 
 Imports VIBlend.WinForms.DataGridView
@@ -49,11 +49,11 @@ Friend Class AcquisitionModel
     Friend currentPeriodList() As Int32
     Friend outputsList As List(Of String)
     Friend accountsTV As New TreeView
-    Private accountsNamesFormulaTypeDict As Hashtable
-    Private entitiesNameIdDict As Hashtable
+    Friend accountsNamesFormulaTypeDict As Hashtable
+    Friend entitiesNameIdDict As Hashtable
     Friend current_version_id As Int32
     Friend periodsIdentifyer As String
-    
+
     ' Dll computation related
     Private accKeysArray() As Int32
     Private periodsArray() As Int32
@@ -270,7 +270,7 @@ Friend Class AcquisitionModel
             computationDataMap.Add(entityId, SingleComputer.GetDataMap)
         End If
         RaiseEvent AfterOutputsComputed(GlobalVariables.Entities.entities_hash(entityId)(NAME_VARIABLE))
-
+   
     End Sub
 
     ' Build datasource arrays (accKeys, periods, values)
