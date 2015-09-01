@@ -47,14 +47,8 @@
     <Setting Name="importantFontColor" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">-16777216</Value>
     </Setting>
-    <Setting Name="importantFontBold" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">true</Value>
-    </Setting>
     <Setting Name="importantFontItalic" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
-    </Setting>
-    <Setting Name="importantFontBorder" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">true</Value>
     </Setting>
     <Setting Name="importantBackColor" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">0</Value>
@@ -74,9 +68,6 @@
     <Setting Name="detailFontBold" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
-    <Setting Name="detailFontItalic" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">true</Value>
-    </Setting>
     <Setting Name="detailFontBorder" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
@@ -94,9 +85,6 @@
     </Setting>
     <Setting Name="titleFontColor" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">-16777216</Value>
-    </Setting>
-    <Setting Name="titleFontBold" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">true</Value>
     </Setting>
     <Setting Name="titleFontItalic" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
@@ -124,6 +112,18 @@
     </Setting>
     <Setting Name="normalBottomColor" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="importantFontBold" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="importantFontBorder" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="detailFontItalic" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="titleFontBold" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
     </Setting>
   </Settings>
 </SettingsFile>

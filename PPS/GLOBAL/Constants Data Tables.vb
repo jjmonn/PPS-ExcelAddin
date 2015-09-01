@@ -364,11 +364,18 @@ Module Data_Tables_Constants
 #End Region
 
    
+    Friend Const REPORTS_AXIS1_NAME_VAR As String = "report_axis1_name"
+    Friend Const REPORTS_AXIS2_NAME_VAR As String = "report_axis2_name"
 
-
-    ' Snapshot DataTable
-    ' Friend Const SELECTION_COLUMN_TITLE = "Selection"
-
+    Friend Const REPORTS_PALETTE_VAR As String = "palette_var"
+    Friend Const REPORTS_DISPLAY_VALUES_VAR As String = "display_values_var"
+    Friend Const REPORTS_SERIE_WIDTH_VAR As String = "serie_width_var"
+    Friend Const REPORTS_SERIE_AXIS_VAR As String = "serie_axis_var"
+    Friend Const REPORTS_TYPE_VAR As String = "report_type_var"
+    Friend Const REPORTS_COLOR_VAR As String = "report_color_var"
+    Friend Const REPORTS_SERIE_UNIT_VAR As String = "serie_unit_var"
+    Friend Const CHART_REPORT_TYPE As String = "chart_report_type_var"
+    Friend Const TABLE_REPORT_TYPE As String = "table_report_type_var"
 
    
 

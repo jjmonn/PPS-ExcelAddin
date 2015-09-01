@@ -46,8 +46,6 @@ Public Class AddinModule
     Friend WithEvents UplodBT1 As AddinExpress.MSO.ADXRibbonMenu
     Friend WithEvents WBUplaodBT As AddinExpress.MSO.ADXRibbonButton
     Friend WithEvents SettingsBT As AddinExpress.MSO.ADXRibbonButton
-    Friend WithEvents AdvancedModelingBT As AddinExpress.MSO.ADXRibbonSplitButton
-    Friend WithEvents AdxRibbonMenu2 As AddinExpress.MSO.ADXRibbonMenu
     Friend WithEvents BreakLinksBT As AddinExpress.MSO.ADXRibbonButton
     Friend WithEvents AdxRibbonGroup6 As AddinExpress.MSO.ADXRibbonGroup
     Friend WithEvents LightsImageList As System.Windows.Forms.ImageList
@@ -88,20 +86,12 @@ Public Class AddinModule
     Friend WithEvents VersionSelectionTaskPaneItem As AddinExpress.XL.ADXExcelTaskPanesCollectionItem
     Friend WithEvents EntitySelectionTaskPaneItem As AddinExpress.XL.ADXExcelTaskPanesCollectionItem
     Friend WithEvents Addin_rates_version_label As AddinExpress.MSO.ADXRibbonLabel
-    Friend WithEvents LogBT As AddinExpress.MSO.ADXRibbonButton
-    Friend WithEvents SubmissionControlBT As AddinExpress.MSO.ADXRibbonSplitButton
-    Friend WithEvents AdxRibbonMenu3 As AddinExpress.MSO.ADXRibbonMenu
     Friend WithEvents FunctionDesigner As AddinExpress.MSO.ADXRibbonSplitButton
     Friend WithEvents AdxRibbonMenu1 As AddinExpress.MSO.ADXRibbonMenu
     Friend WithEvents AdjustmentDropDown As AddinExpress.MSO.ADXRibbonDropDown
     Friend WithEvents MainTabImageList As System.Windows.Forms.ImageList
     Friend WithEvents InputReportLaunchBT As AddinExpress.MSO.ADXRibbonSplitButton
     Friend WithEvents AdxRibbonMenu7 As AddinExpress.MSO.ADXRibbonMenu
-    Friend WithEvents ModellingConfigBT As AddinExpress.MSO.ADXRibbonSplitButton
-    Friend WithEvents AdxRibbonMenu8 As AddinExpress.MSO.ADXRibbonMenu
-    Friend WithEvents MarketPricesMGT As AddinExpress.MSO.ADXRibbonButton
-    Friend WithEvents ASReportsMGTBT As AddinExpress.MSO.ADXRibbonButton
-    Friend WithEvents ASEntitiesAttributesTabBT As AddinExpress.MSO.ADXRibbonButton
     Friend WithEvents ConfigImageList As System.Windows.Forms.ImageList
     Friend WithEvents SubmissionOptionsBT As AddinExpress.MSO.ADXRibbonSplitButton
     Friend WithEvents AdxRibbonMenu5 As AddinExpress.MSO.ADXRibbonMenu
@@ -129,6 +119,8 @@ Public Class AddinModule
     Friend WithEvents AdxRibbonButton5 As AddinExpress.MSO.ADXRibbonButton
     Friend WithEvents Menu3 As System.Windows.Forms.ImageList
     Friend WithEvents AdxRibbonSeparator2 As AddinExpress.MSO.ADXRibbonSeparator
+    Friend WithEvents AdxRibbonMenu3 As AddinExpress.MSO.ADXRibbonMenu
+    Friend WithEvents SubmissionControlBT As AddinExpress.MSO.ADXRibbonSplitButton
 
 
 #End Region
@@ -174,18 +166,8 @@ Public Class AddinModule
         Me.AdxRibbonMenu1 = New AddinExpress.MSO.ADXRibbonMenu(Me.components)
         Me.BreakLinksBT = New AddinExpress.MSO.ADXRibbonButton(Me.components)
         Me.MainTabImageList = New System.Windows.Forms.ImageList(Me.components)
-        Me.SubmissionControlBT = New AddinExpress.MSO.ADXRibbonSplitButton(Me.components)
-        Me.AdxRibbonMenu3 = New AddinExpress.MSO.ADXRibbonMenu(Me.components)
-        Me.LogBT = New AddinExpress.MSO.ADXRibbonButton(Me.components)
         Me.AdxRibbonSeparator2 = New AddinExpress.MSO.ADXRibbonSeparator(Me.components)
         Me.financialModelingBT = New AddinExpress.MSO.ADXRibbonButton(Me.components)
-        Me.AdvancedModelingBT = New AddinExpress.MSO.ADXRibbonSplitButton(Me.components)
-        Me.AdxRibbonMenu2 = New AddinExpress.MSO.ADXRibbonMenu(Me.components)
-        Me.ModellingConfigBT = New AddinExpress.MSO.ADXRibbonSplitButton(Me.components)
-        Me.AdxRibbonMenu8 = New AddinExpress.MSO.ADXRibbonMenu(Me.components)
-        Me.MarketPricesMGT = New AddinExpress.MSO.ADXRibbonButton(Me.components)
-        Me.ASReportsMGTBT = New AddinExpress.MSO.ADXRibbonButton(Me.components)
-        Me.ASEntitiesAttributesTabBT = New AddinExpress.MSO.ADXRibbonButton(Me.components)
         Me.NewIcosSmall = New System.Windows.Forms.ImageList(Me.components)
         Me.AdxRibbonGroup3 = New AddinExpress.MSO.ADXRibbonGroup(Me.components)
         Me.ConfigurationRibbonBT = New AddinExpress.MSO.ADXRibbonButton(Me.components)
@@ -237,6 +219,8 @@ Public Class AddinModule
         Me.EntitySelectionTaskPaneItem = New AddinExpress.XL.ADXExcelTaskPanesCollectionItem(Me.components)
         Me.ConnectionTaskPaneItem = New AddinExpress.XL.ADXExcelTaskPanesCollectionItem(Me.components)
         Me.AdxRibbonLabel1 = New AddinExpress.MSO.ADXRibbonLabel(Me.components)
+        Me.AdxRibbonMenu3 = New AddinExpress.MSO.ADXRibbonMenu(Me.components)
+        Me.SubmissionControlBT = New AddinExpress.MSO.ADXRibbonSplitButton(Me.components)
         '
         'MaintTab
         '
@@ -515,10 +499,8 @@ Public Class AddinModule
         Me.AdxRibbonGroup2.Caption = " "
         Me.AdxRibbonGroup2.Controls.Add(Me.ControlingUI2BT)
         Me.AdxRibbonGroup2.Controls.Add(Me.FunctionDesigner)
-        Me.AdxRibbonGroup2.Controls.Add(Me.SubmissionControlBT)
         Me.AdxRibbonGroup2.Controls.Add(Me.AdxRibbonSeparator2)
         Me.AdxRibbonGroup2.Controls.Add(Me.financialModelingBT)
-        Me.AdxRibbonGroup2.Controls.Add(Me.AdvancedModelingBT)
         Me.AdxRibbonGroup2.Id = "adxRibbonGroup_13e7ba6b0acf4975af1793d5cfec00ed"
         Me.AdxRibbonGroup2.ImageTransparentColor = System.Drawing.Color.Transparent
         Me.AdxRibbonGroup2.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
@@ -594,32 +576,6 @@ Public Class AddinModule
         Me.MainTabImageList.Images.SetKeyName(24, "favicon(15).ico")
         Me.MainTabImageList.Images.SetKeyName(25, "symbol_dollar_euro.ico")
         '
-        'SubmissionControlBT
-        '
-        Me.SubmissionControlBT.Caption = "Controls"
-        Me.SubmissionControlBT.Controls.Add(Me.AdxRibbonMenu3)
-        Me.SubmissionControlBT.Id = "adxRibbonSplitButton_c948ce7f779a4f6cbe647f9de2d15b60"
-        Me.SubmissionControlBT.Image = 22
-        Me.SubmissionControlBT.ImageList = Me.Menu3
-        Me.SubmissionControlBT.ImageTransparentColor = System.Drawing.Color.Transparent
-        Me.SubmissionControlBT.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
-        Me.SubmissionControlBT.Size = AddinExpress.MSO.ADXRibbonXControlSize.Large
-        '
-        'AdxRibbonMenu3
-        '
-        Me.AdxRibbonMenu3.Caption = "AdxRibbonMenu3"
-        Me.AdxRibbonMenu3.Controls.Add(Me.LogBT)
-        Me.AdxRibbonMenu3.Id = "adxRibbonMenu_d792f3eb075e45e5b8f825e6af002b3c"
-        Me.AdxRibbonMenu3.ImageTransparentColor = System.Drawing.Color.Transparent
-        Me.AdxRibbonMenu3.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
-        '
-        'LogBT
-        '
-        Me.LogBT.Caption = "Log"
-        Me.LogBT.Id = "adxRibbonButton_545fba9d563749dbbafe3968577cf15d"
-        Me.LogBT.ImageTransparentColor = System.Drawing.Color.Transparent
-        Me.LogBT.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
-        '
         'AdxRibbonSeparator2
         '
         Me.AdxRibbonSeparator2.Id = "adxRibbonSeparator_8edf3ca9f7bb41ea82f576292d634286"
@@ -634,70 +590,6 @@ Public Class AddinModule
         Me.financialModelingBT.ImageTransparentColor = System.Drawing.Color.Transparent
         Me.financialModelingBT.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
         Me.financialModelingBT.Size = AddinExpress.MSO.ADXRibbonXControlSize.Large
-        '
-        'AdvancedModelingBT
-        '
-        Me.AdvancedModelingBT.Caption = "Modeling"
-        Me.AdvancedModelingBT.Controls.Add(Me.AdxRibbonMenu2)
-        Me.AdvancedModelingBT.Id = "adxRibbonSplitButton_48193c7e13704758a3814aa6156d5aee"
-        Me.AdvancedModelingBT.Image = 1
-        Me.AdvancedModelingBT.ImageList = Me.Menu3
-        Me.AdvancedModelingBT.ImageTransparentColor = System.Drawing.Color.Transparent
-        Me.AdvancedModelingBT.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
-        Me.AdvancedModelingBT.Size = AddinExpress.MSO.ADXRibbonXControlSize.Large
-        '
-        'AdxRibbonMenu2
-        '
-        Me.AdxRibbonMenu2.Caption = "Menu1"
-        Me.AdxRibbonMenu2.Controls.Add(Me.ModellingConfigBT)
-        Me.AdxRibbonMenu2.Id = "adxRibbonMenu_e6e084f75db842218b137a40a859729b"
-        Me.AdxRibbonMenu2.ImageMso = "EquationInsertGallery"
-        Me.AdxRibbonMenu2.ImageTransparentColor = System.Drawing.Color.Transparent
-        Me.AdxRibbonMenu2.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
-        Me.AdxRibbonMenu2.Size = AddinExpress.MSO.ADXRibbonXControlSize.Large
-        '
-        'ModellingConfigBT
-        '
-        Me.ModellingConfigBT.Caption = "Configuration"
-        Me.ModellingConfigBT.Controls.Add(Me.AdxRibbonMenu8)
-        Me.ModellingConfigBT.Id = "adxRibbonSplitButton_275360996f3a4611ad07fb3f83b0eda5"
-        Me.ModellingConfigBT.Image = 2
-        Me.ModellingConfigBT.ImageList = Me.NewIcosSmall
-        Me.ModellingConfigBT.ImageTransparentColor = System.Drawing.Color.Transparent
-        Me.ModellingConfigBT.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
-        '
-        'AdxRibbonMenu8
-        '
-        Me.AdxRibbonMenu8.Caption = "AdxRibbonMenu8"
-        Me.AdxRibbonMenu8.Controls.Add(Me.MarketPricesMGT)
-        Me.AdxRibbonMenu8.Controls.Add(Me.ASReportsMGTBT)
-        Me.AdxRibbonMenu8.Controls.Add(Me.ASEntitiesAttributesTabBT)
-        Me.AdxRibbonMenu8.Id = "adxRibbonMenu_135b85f63a8d4b47a0cd17f0a349474e"
-        Me.AdxRibbonMenu8.ImageTransparentColor = System.Drawing.Color.Transparent
-        Me.AdxRibbonMenu8.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
-        '
-        'MarketPricesMGT
-        '
-        Me.MarketPricesMGT.Caption = "Market Prices"
-        Me.MarketPricesMGT.Id = "adxRibbonButton_0f92ce9b8e174002914213df4f0e9695"
-        Me.MarketPricesMGT.Image = 2
-        Me.MarketPricesMGT.ImageList = Me.MainTabImageList
-        Me.MarketPricesMGT.ImageTransparentColor = System.Drawing.Color.Transparent
-        Me.MarketPricesMGT.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
-        '
-        'ASReportsMGTBT
-        '
-        Me.ASReportsMGTBT.Caption = "Reports"
-        Me.ASReportsMGTBT.Id = "adxRibbonButton_8831fac669b747eaad49c81f3aac35d3"
-        Me.ASReportsMGTBT.ImageTransparentColor = System.Drawing.Color.Transparent
-        Me.ASReportsMGTBT.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
-        '
-        'ASEntitiesAttributesTabBT
-        '
-        Me.ASEntitiesAttributesTabBT.Caption = "Formulas and Tax rates"
-        Me.ASEntitiesAttributesTabBT.Id = "adxRibbonButton_e576c2ab0d484106a08b784c65084217"
-        Me.ASEntitiesAttributesTabBT.ImageTransparentColor = System.Drawing.Color.Transparent
-        Me.ASEntitiesAttributesTabBT.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
         '
         'NewIcosSmall
         '
@@ -1185,6 +1077,24 @@ Public Class AddinModule
         Me.AdxRibbonLabel1.Id = "adxRibbonLabel_f8272bc6694448f6955f882ef772da9e"
         Me.AdxRibbonLabel1.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
         '
+        'AdxRibbonMenu3
+        '
+        Me.AdxRibbonMenu3.Caption = "AdxRibbonMenu3"
+        Me.AdxRibbonMenu3.Id = "adxRibbonMenu_d792f3eb075e45e5b8f825e6af002b3c"
+        Me.AdxRibbonMenu3.ImageTransparentColor = System.Drawing.Color.Transparent
+        Me.AdxRibbonMenu3.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
+        '
+        'SubmissionControlBT
+        '
+        Me.SubmissionControlBT.Caption = "Controls"
+        Me.SubmissionControlBT.Controls.Add(Me.AdxRibbonMenu3)
+        Me.SubmissionControlBT.Id = "adxRibbonSplitButton_c948ce7f779a4f6cbe647f9de2d15b60"
+        Me.SubmissionControlBT.Image = 22
+        Me.SubmissionControlBT.ImageList = Me.Menu3
+        Me.SubmissionControlBT.ImageTransparentColor = System.Drawing.Color.Transparent
+        Me.SubmissionControlBT.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
+        Me.SubmissionControlBT.Size = AddinExpress.MSO.ADXRibbonXControlSize.Large
+        '
         'AddinModule
         '
         Me.AddinName = "PPS"
@@ -1448,17 +1358,6 @@ Public Class AddinModule
 
     End Sub
 
-    Private Sub WBUploadBT_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) Handles WBUplaodBT.OnClick
-
-        If GlobalVariables.AuthenticationFlag = False Then
-            ConnectionBT_OnClick(sender, control, pressed)
-        Else
-            Dim MSA As New MultipleSheetsAcquisition
-            MSA.Show()
-        End If
-
-    End Sub
-
     Private Sub CurrentLinkedWSBT_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) Handles CurrentLinkedWSBT.OnClick
 
     End Sub
@@ -1618,16 +1517,6 @@ Public Class AddinModule
 
     End Sub
 
-    Private Sub LogBT_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) Handles LogBT.OnClick
-
-        If GlobalVariables.AuthenticationFlag = False Then
-            ConnectionBT_OnClick(sender, control, pressed)
-        Else
-            Dim logController As New LogController
-        End If
-
-
-    End Sub
 
 #End Region
 
@@ -1644,19 +1533,10 @@ Public Class AddinModule
 
     End Sub
 
-    Private Sub AlternativeScenariosBT_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) Handles AdvancedModelingBT.OnClick
-
-        If GlobalVariables.AuthenticationFlag = False Then
-            ConnectionBT_OnClick(sender, control, pressed)
-        Else
-            Dim ASController As New AlternativeScenariosController
-        End If
-
-    End Sub
 
 #Region "Configuration"
 
-    Private Sub MarketPricesMGT_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) Handles MarketPricesMGT.OnClick
+    Private Sub MarketPricesMGT_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean)
 
         If GlobalVariables.AuthenticationFlag = False Then
             ConnectionBT_OnClick(sender, control, pressed)
@@ -1666,26 +1546,7 @@ Public Class AddinModule
 
     End Sub
 
-    Private Sub ASReportsMGTBT_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) Handles ASReportsMGTBT.OnClick
-
-        If GlobalVariables.AuthenticationFlag = False Then
-            ConnectionBT_OnClick(sender, control, pressed)
-        Else
-            Dim ReportDesigner As New ReportsDesignerController(GDF_AS_REPORTS_TABLE, GDFSUEZASAccountsMapping.GetAlternativeScenarioAccountsList)
-        End If
-
-    End Sub
-
-    Private Sub ASEntitiesAttributesTabBT_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) Handles ASEntitiesAttributesTabBT.OnClick
-
-        If GlobalVariables.AuthenticationFlag = False Then
-            ConnectionBT_OnClick(sender, control, pressed)
-        Else
-            Dim EntitiesAttributesMGT As New ASEntitiesAttributesController
-        End If
-
-    End Sub
-
+  
 #End Region
 
 

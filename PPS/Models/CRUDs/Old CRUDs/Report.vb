@@ -61,7 +61,7 @@ Friend Class Report
 
     Protected Friend Function ReadReport(ByRef report_id As String, ByRef field As String) As Object
 
-        RST.Filter = REPORTS_ID_VAR + "='" + report_id + "'"
+        RST.Filter = id_variable + "='" + report_id + "'"
         If RST.EOF Then Return Nothing
         Return RST.Fields(field).Value
 
@@ -72,18 +72,18 @@ Friend Class Report
         Dim ht As New Hashtable
         RST.Filter = CONTROL_CHART_ID_VARIABLE + "='" + controlchart_id + "'"
         If RST.EOF Then Return Nothing
-        ht.Add(REPORTS_PARENT_ID_VAR, SRV.rst.Fields(REPORTS_PARENT_ID_VAR).Value)
-        ht.Add(REPORTS_NAME_VAR, SRV.rst.Fields(REPORTS_NAME_VAR).Value)
-        ht.Add(REPORTS_ACCOUNT_ID, SRV.rst.Fields(REPORTS_ACCOUNT_ID).Value)
-        ht.Add(REPORTS_TYPE_VAR, SRV.rst.Fields(REPORTS_TYPE_VAR).Value)
-        ht.Add(REPORTS_COLOR_VAR, SRV.rst.Fields(REPORTS_COLOR_VAR).Value)
-        ht.Add(REPORTS_PALETTE_VAR, SRV.rst.Fields(REPORTS_PALETTE_VAR).Value)
-        ht.Add(REPORTS_AXIS1_NAME_VAR, SRV.rst.Fields(REPORTS_AXIS1_NAME_VAR).Value)
-        ht.Add(REPORTS_AXIS2_NAME_VAR, SRV.rst.Fields(REPORTS_AXIS2_NAME_VAR).Value)
-        ht.Add(REPORTS_SERIE_AXIS_VAR, SRV.rst.Fields(REPORTS_SERIE_AXIS_VAR).Value)
-        ht.Add(REPORTS_SERIE_UNIT_VAR, SRV.rst.Fields(REPORTS_SERIE_UNIT_VAR).Value)
-        ht.Add(REPORTS_DISPLAY_VALUES_VAR, SRV.rst.Fields(REPORTS_DISPLAY_VALUES_VAR).Value)
-        ht.Add(REPORTS_SERIE_WIDTH_VAR, SRV.rst.Fields(REPORTS_SERIE_WIDTH_VAR).Value)
+        ht.Add(parent_id_variable, SRV.rst.Fields(parent_id_variable).Value)
+        ht.Add(name_variable, SRV.rst.Fields(name_variable).Value)
+        ht.Add(account_id_variable, SRV.rst.Fields(account_id_variable).Value)
+        'ht.Add(REPORTS_TYPE_VAR, SRV.rst.Fields(REPORTS_TYPE_VAR).Value)
+        'ht.Add(REPORTS_COLOR_VAR, SRV.rst.Fields(REPORTS_COLOR_VAR).Value)
+        'ht.Add(REPORTS_PALETTE_VAR, SRV.rst.Fields(REPORTS_PALETTE_VAR).Value)
+        'ht.Add(REPORTS_AXIS1_NAME_VAR, SRV.rst.Fields(REPORTS_AXIS1_NAME_VAR).Value)
+        'ht.Add(REPORTS_AXIS2_NAME_VAR, SRV.rst.Fields(REPORTS_AXIS2_NAME_VAR).Value)
+        'ht.Add(REPORTS_SERIE_AXIS_VAR, SRV.rst.Fields(REPORTS_SERIE_AXIS_VAR).Value)
+        'ht.Add(REPORTS_SERIE_UNIT_VAR, SRV.rst.Fields(REPORTS_SERIE_UNIT_VAR).Value)
+        'ht.Add(REPORTS_DISPLAY_VALUES_VAR, SRV.rst.Fields(REPORTS_DISPLAY_VALUES_VAR).Value)
+        'ht.Add(REPORTS_SERIE_WIDTH_VAR, SRV.rst.Fields(REPORTS_SERIE_WIDTH_VAR).Value)
         Return ht
 
     End Function
@@ -92,7 +92,7 @@ Friend Class Report
                                       ByRef field As String, _
                                       ByVal value As Object)
 
-        RST.Filter = REPORTS_ID_VAR + "='" + report_id + "'"
+        RST.Filter = id_variable + "='" + report_id + "'"
         If RST.EOF = False AndAlso RST.BOF = False Then
             If IsDBNull(RST.Fields(field).Value) Then
                 If Not IsNumeric(value) AndAlso value <> "" Then
@@ -110,13 +110,13 @@ Friend Class Report
                 End If
                 RST.Update()
             End If
-            End If
+        End If
 
     End Sub
 
     Protected Friend Sub DeleteReport(ByRef report_id As String)
 
-        RST.Filter = REPORTS_ID_VAR + "='" + report_id + "'"
+        RST.Filter = id_variable + "='" + report_id + "'"
         If RST.EOF = False Then
             RST.Delete()
             RST.Update()
@@ -131,65 +131,44 @@ Friend Class Report
 
     Protected Friend Shared Sub LoadReportsTV(ByRef TV As TreeView)
 
-        Dim srv As New ModelServer
-        Dim q_result As Boolean = srv.OpenRst(GlobalVariables.database & "." & GDF_AS_REPORTS_TABLE, ModelServer.FWD_CURSOR)
-        If q_result = True Then
-
-            Dim currentNode, ParentNode() As TreeNode
-            Dim image_index As Int32
-            TV.Nodes.Clear()
-            srv.rst.Sort = ITEMS_POSITIONS
-
-            Do While srv.rst.EOF = False
-                If IsDBNull(srv.rst.Fields(REPORTS_PARENT_ID_VAR).Value) Then
-                    If srv.rst.Fields(REPORTS_TYPE_VAR).Value = TABLE_REPORT_TYPE Then image_index = 2 Else image_index = 0
-                    currentNode = TV.Nodes.Add(Trim(srv.rst.Fields(REPORTS_ID_VAR).Value), _
-                                                Trim(srv.rst.Fields(REPORTS_NAME_VAR).Value), image_index, image_index)
-                Else
-                    ParentNode = TV.Nodes.Find(Trim(srv.rst.Fields(REPORTS_PARENT_ID_VAR).Value), True)
-                    If ParentNode(0).ImageIndex = 0 Then image_index = 1 Else image_index = 3
-                    currentNode = ParentNode(0).Nodes.Add(Trim(srv.rst.Fields(REPORTS_ID_VAR).Value), _
-                                                                Trim(srv.rst.Fields(REPORTS_NAME_VAR).Value), image_index, image_index)
-                End If
-                currentNode.EnsureVisible()
-                srv.rst.MoveNext()
-            Loop
-            srv.rst.Close()
-        End If
+        'To be reimplemented -> new crud priority low 
 
     End Sub
 
     Protected Friend Shared Function GetReportsSettingsDictionary(Optional ByRef srv As ModelServer = Nothing) As Dictionary(Of String, Hashtable)
 
-        If SRV Is Nothing Then SRV = New ModelServer
-        Dim reports_dict As New Dictionary(Of String, Hashtable)
-        SRV.OpenRst(GlobalVariables.database + "." + GDF_AS_REPORTS_TABLE, ModelServer.FWD_CURSOR)
+        ' To be reimplemented -> priotiy low
 
-        If SRV.rst.EOF = False And SRV.rst.BOF = False Then
-            SRV.rst.MoveFirst()
-            Do While SRV.rst.EOF = False
 
-                Dim ht As New Hashtable
-                ht.Add(REPORTS_PARENT_ID_VAR, SRV.rst.Fields(REPORTS_PARENT_ID_VAR).Value)
-                ht.Add(REPORTS_NAME_VAR, SRV.rst.Fields(REPORTS_NAME_VAR).Value)
-                ht.Add(REPORTS_ACCOUNT_ID, SRV.rst.Fields(REPORTS_ACCOUNT_ID).Value)
-                ht.Add(REPORTS_TYPE_VAR, SRV.rst.Fields(REPORTS_TYPE_VAR).Value)
-                ht.Add(REPORTS_COLOR_VAR, SRV.rst.Fields(REPORTS_COLOR_VAR).Value)
-                ht.Add(REPORTS_PALETTE_VAR, SRV.rst.Fields(REPORTS_PALETTE_VAR).Value)
-                ht.Add(REPORTS_AXIS1_NAME_VAR, srv.rst.Fields(REPORTS_AXIS1_NAME_VAR).Value)
-                ht.Add(REPORTS_AXIS2_NAME_VAR, srv.rst.Fields(REPORTS_AXIS2_NAME_VAR).Value)
-                ht.Add(REPORTS_SERIE_AXIS_VAR, SRV.rst.Fields(REPORTS_SERIE_AXIS_VAR).Value)
-                ht.Add(REPORTS_SERIE_UNIT_VAR, SRV.rst.Fields(REPORTS_SERIE_UNIT_VAR).Value)
-                ht.Add(REPORTS_DISPLAY_VALUES_VAR, SRV.rst.Fields(REPORTS_DISPLAY_VALUES_VAR).Value)
-                ht.Add(REPORTS_SERIE_WIDTH_VAR, SRV.rst.Fields(REPORTS_SERIE_WIDTH_VAR).Value)
+        'If SRV Is Nothing Then SRV = New ModelServer
+        'Dim reports_dict As New Dictionary(Of String, Hashtable)
+        'SRV.OpenRst(GlobalVariables.database + "." + GDF_AS_REPORTS_TABLE, ModelServer.FWD_CURSOR)
 
-                reports_dict.Add(SRV.rst.Fields(REPORTS_ID_VAR).Value, ht)
-                SRV.rst.MoveNext()
-            Loop
-        End If
-        SRV.rst.Close()
-        SRV = Nothing
-        Return reports_dict
+        'If SRV.rst.EOF = False And SRV.rst.BOF = False Then
+        '    SRV.rst.MoveFirst()
+        '    Do While SRV.rst.EOF = False
+
+        '        Dim ht As New Hashtable
+        '        ht.Add(parent_id_variable, SRV.rst.Fields(parent_id_variable).Value)
+        '        ht.Add(name_variable, SRV.rst.Fields(name_variable).Value)
+        '        ht.Add(account_id_variable, SRV.rst.Fields(account_id_variable).Value)
+        '        ht.Add(REPORTS_TYPE_VAR, SRV.rst.Fields(REPORTS_TYPE_VAR).Value)
+        '        ht.Add(REPORTS_COLOR_VAR, SRV.rst.Fields(REPORTS_COLOR_VAR).Value)
+        '        ht.Add(REPORTS_PALETTE_VAR, SRV.rst.Fields(REPORTS_PALETTE_VAR).Value)
+        '        ht.Add(REPORTS_AXIS1_NAME_VAR, srv.rst.Fields(REPORTS_AXIS1_NAME_VAR).Value)
+        '        ht.Add(REPORTS_AXIS2_NAME_VAR, srv.rst.Fields(REPORTS_AXIS2_NAME_VAR).Value)
+        '        ht.Add(REPORTS_SERIE_AXIS_VAR, SRV.rst.Fields(REPORTS_SERIE_AXIS_VAR).Value)
+        '        ht.Add(REPORTS_SERIE_UNIT_VAR, SRV.rst.Fields(REPORTS_SERIE_UNIT_VAR).Value)
+        '        ht.Add(REPORTS_DISPLAY_VALUES_VAR, SRV.rst.Fields(REPORTS_DISPLAY_VALUES_VAR).Value)
+        '        ht.Add(REPORTS_SERIE_WIDTH_VAR, SRV.rst.Fields(REPORTS_SERIE_WIDTH_VAR).Value)
+
+        '        reports_dict.Add(SRV.rst.Fields(id_variable).Value, ht)
+        '        SRV.rst.MoveNext()
+        '    Loop
+        'End If
+        'SRV.rst.Close()
+        'SRV = Nothing
+        'Return reports_dict
 
     End Function
 

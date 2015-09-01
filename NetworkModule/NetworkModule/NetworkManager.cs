@@ -106,7 +106,7 @@ public class NetworkManager
         }
         catch (Exception e)
         {
-            // 
+            System.Diagnostics.Debug.WriteLine(e.Message);
         }
     }
 

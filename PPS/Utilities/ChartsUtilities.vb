@@ -28,6 +28,9 @@ Friend Class ChartsUtilities
     Friend Const DEFAULT_LABELS_FORMAT As String = "{0:N0}"
     Friend Const CHARTS_X_AXIS_ANGLE As Int32 = -45
 
+  
+
+
 #End Region
 
 
@@ -73,7 +76,7 @@ Friend Class ChartsUtilities
 
 
         ' Title
-        new_chart.Titles.Add(reportHT(REPORTS_NAME_VAR))
+        new_chart.Titles.Add(reportHT(name_variable))
         new_chart.Titles(0).Font = New Drawing.Font("Arial", CHART_TITLE_FONT_SIZE, Drawing.FontStyle.Bold)
 
         ' Borders

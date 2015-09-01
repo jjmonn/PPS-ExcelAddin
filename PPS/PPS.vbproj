@@ -117,6 +117,19 @@
     <Compile Include="AddinModule.vb">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Controllers\PLATFORM MANAGEMENT\AccountsController.vb" />
+    <Compile Include="Controllers\PLATFORM MANAGEMENT\AxisFiltersController.vb" />
+    <Compile Include="Controllers\PLATFORM MANAGEMENT\ClientsCategoriesController.vb" />
+    <Compile Include="Controllers\PLATFORM MANAGEMENT\EntitiesCategoriesController.vb" />
+    <Compile Include="Controllers\PLATFORM MANAGEMENT\ProductsCategoryController.vb" />
+    <Compile Include="Controllers\PLATFORM MANAGEMENT\ClientsController.vb" />
+    <Compile Include="Controllers\PLATFORM MANAGEMENT\ChartsControlsController.vb" />
+    <Compile Include="Controllers\PLATFORM MANAGEMENT\ControlsController.vb" />
+    <Compile Include="Controllers\PLATFORM MANAGEMENT\ExchangeRatesController.vb" />
+    <Compile Include="Controllers\PLATFORM MANAGEMENT\EntitiesController.vb" />
+    <Compile Include="Controllers\PLATFORM MANAGEMENT\ProductsController.vb" />
+    <Compile Include="Controllers\PLATFORM MANAGEMENT\UsersController.vb" />
+    <Compile Include="Controllers\PLATFORM MANAGEMENT\DataVersionsController.vb" />
     <Compile Include="GLOBAL\GlobalEnums.vb" />
     <Compile Include="Models\Computing\Computer.vb" />
     <Compile Include="Models\Computing\ComputerInputEntity.vb" />
@@ -137,71 +150,76 @@
     <Compile Include="Models\CRUDs\New CRUDs\Product.vb" />
     <Compile Include="Models\CRUDs\New CRUDs\ProductsFilter.vb" />
     <Compile Include="Models\CRUDs\New CRUDs\FactsVersion.vb" />
-    <Compile Include="Modules\CONTROLING UI\View\CUI2LeftPane.Designer.vb">
+    <Compile Include="Views\Controlling UI\CUI2LeftPane.Designer.vb">
       <DependentUpon>CUI2LeftPane.vb</DependentUpon>
     </Compile>
-    <Compile Include="Modules\CONTROLING UI\View\CUI2LeftPane.vb">
+    <Compile Include="Views\Controlling UI\CUI2LeftPane.vb">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Modules\CONTROLING UI\View\CUI2RightPane.designer.vb">
+    <Compile Include="Views\Controlling UI\CUI2RightPane.designer.vb">
       <DependentUpon>CUI2RightPane.vb</DependentUpon>
     </Compile>
-    <Compile Include="Modules\CONTROLING UI\View\CUI2RightPane.vb">
+    <Compile Include="Views\Controlling UI\CUI2RightPane.vb">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Modules\MODELING\FINANCIAL MODELLING\Views\Controls\FModelingInputsControl.Designer.vb">
+    <Compile Include="Views\Modeling\FModelingInputsControl.Designer.vb">
       <DependentUpon>FModelingInputsControl.vb</DependentUpon>
     </Compile>
-    <Compile Include="Modules\MODELING\FINANCIAL MODELLING\Views\Controls\FModelingInputsControl.vb">
+    <Compile Include="Views\Modeling\FModelingInputsControl.vb">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Modules\MODELING\FINANCIAL MODELLING\Views\Controls\FModelingExportControl.Designer.vb">
+    <Compile Include="Views\Modeling\FModelingExportControl.Designer.vb">
       <DependentUpon>FModelingExportControl.vb</DependentUpon>
     </Compile>
-    <Compile Include="Modules\MODELING\FINANCIAL MODELLING\Views\Controls\FModelingExportControl.vb">
+    <Compile Include="Views\Modeling\FModelingExportControl.vb">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Modules\MODELING\FINANCIAL MODELLING\Views\Controls\FModelingSimulationControl.Designer.vb">
+    <Compile Include="Views\Modeling\FModelingSimulationControl.Designer.vb">
       <DependentUpon>FModelingSimulationControl.vb</DependentUpon>
     </Compile>
-    <Compile Include="Modules\MODELING\FINANCIAL MODELLING\Views\Controls\FModelingSimulationControl.vb">
+    <Compile Include="Views\Modeling\FModelingSimulationControl.vb">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Modules\MODELING\FINANCIAL MODELLING\Views\FModelingUI2.Designer.vb">
+    <Compile Include="Views\Modeling\FModelingUI2.Designer.vb">
       <DependentUpon>FModelingUI2.vb</DependentUpon>
     </Compile>
-    <Compile Include="Modules\MODELING\FINANCIAL MODELLING\Views\FModelingUI2.vb">
+    <Compile Include="Views\Modeling\FModelingUI2.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Modules\PLATFORM MANAGEMENT\Axis Super Classes\Controllers\AxisFiltersController.vb" />
-    <Compile Include="Modules\PLATFORM MANAGEMENT\Axis Super Classes\Views\NewAnalysisAxisUI.Designer.vb">
+    <Compile Include="Views\Platform Management\ClientsControl.Designer.vb">
+      <DependentUpon>ClientsControl.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Platform Management\ClientsControl.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Views\Platform Management\NewAnalysisAxisUI.Designer.vb">
       <DependentUpon>NewAnalysisAxisUI.vb</DependentUpon>
     </Compile>
-    <Compile Include="Modules\PLATFORM MANAGEMENT\Axis Super Classes\Views\NewAnalysisAxisUI.vb">
+    <Compile Include="Views\Platform Management\NewAnalysisAxisUI.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Modules\MODELING\PS MODELING\Configuration\Controllers\ASEntitiesAttributesController.vb" />
-    <Compile Include="Modules\MODELING\PS MODELING\Configuration\Models\CRUDs\GDFSUEZEntitiesAttribute.vb" />
-    <Compile Include="Modules\MODELING\PS MODELING\Configuration\Models\Mappings\GDFSUEZASAccountsMapping.vb" />
-    <Compile Include="Modules\MODELING\PS MODELING\Configuration\Models\CRUDs\GDFSUEZASExport.vb" />
+    <Compile Include="Models\CRUDs\Old CRUDs\AlternativeScenarioEntitiesAttribute.vb" />
+    <Compile Include="Models\CRUDs\Old CRUDs\AlternativeScenarioExport.vb" />
     <Compile Include="Models\Computing\FormulasGenericCheck.vb" />
-    <Compile Include="Modules\MODELING\PS MODELING\Configuration\Views\ASEntitiesAttributesUI.Designer.vb">
+    <Compile Include="Views\Modeling\ASEntitiesAttributesUI.Designer.vb">
       <DependentUpon>ASEntitiesAttributesUI.vb</DependentUpon>
     </Compile>
-    <Compile Include="Modules\MODELING\PS MODELING\Configuration\Views\ASEntitiesAttributesUI.vb">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Views\Modeling\ASEntitiesAttributesUI.vb" />
     <Compile Include="Models\CRUDs\Old CRUDs\FormatM.vb" />
     <Compile Include="Models\CRUDs\Old CRUDs\Report.vb" />
-    <Compile Include="Modules\MODELING\PS MODELING\Configuration\Models\Mappings\GDFSUEZEntitiesAttributesMapping.vb" />
-    <Compile Include="Modules\MODELING\PS MODELING\Configuration\Models\Mappings\GDFSUEZSensitivitiesMapping.vb" />
-    <Compile Include="Modules\MODELING\PS MODELING\Controller\AlternativeScenariosController.vb" />
-    <Compile Include="Modules\MODELING\PS MODELING\Controller\ASInputsController.vb" />
-    <Compile Include="Modules\MODELING\PS MODELING\Model\AlternativeScenarioModel.vb" />
-    <Compile Include="Modules\T1\Test.Designer.vb">
+    <Compile Include="Controllers\Modeling\AlternativeScenariosController.vb" />
+    <Compile Include="Controllers\Modeling\ASInputsController.vb" />
+    <Compile Include="Models\AlternativeScenarioModel.vb" />
+    <Compile Include="Views\Platform Management\ProductsControl.Designer.vb">
+      <DependentUpon>ProductsControl.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Platform Management\ProductsControl.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Views\Test.Designer.vb">
       <DependentUpon>Test.vb</DependentUpon>
     </Compile>
-    <Compile Include="Modules\T1\Test.vb">
+    <Compile Include="Views\Test.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="My Project\Application.Designer.vb">
@@ -236,229 +254,188 @@
     <Compile Include="Models\Mappings\PalettesMapping.vb" />
     <Compile Include="Models\Mappings\pps_colorsMapping.vb" />
     <Compile Include="Models\Mappings\SeriesMapping.vb" />
-    <Compile Include="Modules\MODELING\PS MODELING\Configuration\Models\gdfsuezAlternativeScenarios.vb" />
-    <Compile Include="Modules\MODELING\PS MODELING\View\AlternativeScenariosUI.Designer.vb">
+    <Compile Include="Views\Modeling\AlternativeScenariosUI.Designer.vb">
       <DependentUpon>AlternativeScenariosUI.vb</DependentUpon>
     </Compile>
-    <Compile Include="Modules\MODELING\PS MODELING\View\AlternativeScenariosUI.vb">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Views\Modeling\AlternativeScenariosUI.vb" />
     <Compile Include="Models\FiltersReader.vb" />
-    <Compile Include="Modules\CONTROLING UI\Controler\ControllingUIController.vb" />
-    <Compile Include="Modules\CONTROLING UI\View\ControllingUIChartsConfig.Designer.vb">
+    <Compile Include="Controllers\ControllingUIController.vb" />
+    <Compile Include="Views\Controlling UI\ControllingUIChartsConfig.Designer.vb">
       <DependentUpon>ControllingUIChartsConfig.vb</DependentUpon>
     </Compile>
-    <Compile Include="Modules\CONTROLING UI\View\ControllingUIChartsConfig.vb">
+    <Compile Include="Views\Controlling UI\ControllingUIChartsConfig.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Modules\CUBE\CubeView.Designer.vb">
-      <DependentUpon>CubeView.vb</DependentUpon>
-    </Compile>
-    <Compile Include="Modules\CUBE\CubeView.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Modules\Formats\Controller\FormatsController.vb" />
-    <Compile Include="Modules\Formats\Views\FormatMGTUI.Designer.vb">
-      <DependentUpon>FormatMGTUI.vb</DependentUpon>
-    </Compile>
-    <Compile Include="Modules\Formats\Views\FormatMGTUI.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Modules\MODELING\CONFIGURATION\FModeling Accounts\Controller\FModellingAccountsController.vb" />
-    <Compile Include="Modules\MODELING\CONFIGURATION\FModeling Accounts\View\FModelingAccountsMGTUI.Designer.vb">
+    <Compile Include="Controllers\Modeling\FModellingAccountsController.vb" />
+    <Compile Include="Views\Modeling\FModelingAccountsMGTUI.Designer.vb">
       <DependentUpon>FModelingAccountsMGTUI.vb</DependentUpon>
     </Compile>
-    <Compile Include="Modules\MODELING\CONFIGURATION\FModeling Accounts\View\FModelingAccountsMGTUI.vb">
+    <Compile Include="Views\Modeling\FModelingAccountsMGTUI.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Modules\MODELING\PS MODELING\Configuration\Market Prices Config\Controller\MarketPricesController.vb" />
-    <Compile Include="Modules\MODELING\PS MODELING\Configuration\Market Prices Config\Views\MarketPricesUI.Designer.vb">
+    <Compile Include="Controllers\PLATFORM MANAGEMENT\MarketPricesController.vb" />
+    <Compile Include="Views\Modeling\MarketPricesUI.Designer.vb">
       <DependentUpon>MarketPricesUI.vb</DependentUpon>
     </Compile>
-    <Compile Include="Modules\MODELING\PS MODELING\Configuration\Market Prices Config\Views\MarketPricesUI.vb">
+    <Compile Include="Views\Modeling\MarketPricesUI.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Modules\MODELING\PS MODELING\Configuration\Market Prices Config\Views\MarketPricesView.vb" />
-    <Compile Include="Modules\MODELING\PS MODELING\Configuration\Market Prices Config\Views\NewPricesVersionUI.Designer.vb">
+    <Compile Include="Views\Modeling\MarketPricesView.vb" />
+    <Compile Include="Views\Modeling\NewPricesVersionUI.Designer.vb">
       <DependentUpon>NewPricesVersionUI.vb</DependentUpon>
     </Compile>
-    <Compile Include="Modules\MODELING\PS MODELING\Configuration\Market Prices Config\Views\NewPricesVersionUI.vb">
+    <Compile Include="Views\Modeling\NewPricesVersionUI.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Modules\MODELING\FINANCIAL MODELLING\Controller\FModelingExportController.vb" />
-    <Compile Include="Modules\MODELING\FINANCIAL MODELLING\Controller\FModelingInputsController.vb" />
-    <Compile Include="Modules\MODELING\FINANCIAL MODELLING\Controller\FModelingSimulationController.vb" />
-    <Compile Include="Modules\MODELING\FINANCIAL MODELLING\Model\Scenario.vb" />
-    <Compile Include="Modules\MODELING\PS MODELING\Configuration\Views\ASConfigurationPanel.Designer.vb">
+    <Compile Include="Controllers\Modeling\FModelingExportController.vb" />
+    <Compile Include="Controllers\Modeling\FModelingInputsController.vb" />
+    <Compile Include="Controllers\Modeling\FModelingSimulationController.vb" />
+    <Compile Include="Models\Scenario.vb" />
+    <Compile Include="Views\Modeling\ASConfigurationPanel.Designer.vb">
       <DependentUpon>ASConfigurationPanel.vb</DependentUpon>
     </Compile>
-    <Compile Include="Modules\MODELING\PS MODELING\Configuration\Views\ASConfigurationPanel.vb">
+    <Compile Include="Views\Modeling\ASConfigurationPanel.vb">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Modules\LOG\Controller\LogController.vb" />
-    <Compile Include="Modules\LOG\Model\LogModel.vb" />
-    <Compile Include="Modules\LOG\View\LogUI.Designer.vb">
+    <Compile Include="Controllers\LogController.vb" />
+    <Compile Include="Views\LogUI.Designer.vb">
       <DependentUpon>LogUI.vb</DependentUpon>
     </Compile>
-    <Compile Include="Modules\LOG\View\LogUI.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Modules\LOG\View\DataHistoryUI.Designer.vb">
+    <Compile Include="Views\LogUI.vb" />
+    <Compile Include="Views\DataHistoryUI.Designer.vb">
       <DependentUpon>DataHistoryUI.vb</DependentUpon>
     </Compile>
-    <Compile Include="Modules\LOG\View\DataHistoryUI.vb">
+    <Compile Include="Views\DataHistoryUI.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Modules\MODELING\FINANCIAL MODELLING\Views\NewConstraintUI.Designer.vb">
+    <Compile Include="Views\Modeling\NewConstraintUI.Designer.vb">
       <DependentUpon>NewConstraintUI.vb</DependentUpon>
     </Compile>
-    <Compile Include="Modules\MODELING\FINANCIAL MODELLING\Views\NewConstraintUI.vb">
+    <Compile Include="Views\Modeling\NewConstraintUI.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Modules\PLATFORM MANAGEMENT\Accounts\Views\AccountsControl.Designer.vb">
+    <Compile Include="Views\Platform Management\AccountsControl.Designer.vb">
       <DependentUpon>AccountsControl.vb</DependentUpon>
     </Compile>
-    <Compile Include="Modules\PLATFORM MANAGEMENT\Accounts\Views\AccountsControl.vb">
+    <Compile Include="Views\Platform Management\AccountsControl.vb">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Modules\PLATFORM MANAGEMENT\Categories\Controller\ClientsCategoriesController.vb" />
-    <Compile Include="Modules\PLATFORM MANAGEMENT\Categories\Controller\ProductsCategoryController.vb" />
-    <Compile Include="Modules\PLATFORM MANAGEMENT\Clients\Controller\ClientsController.vb" />
-    <Compile Include="Modules\PLATFORM MANAGEMENT\Clients\Views\ClientsControl.Designer.vb">
-      <DependentUpon>ClientsControl.vb</DependentUpon>
-    </Compile>
-    <Compile Include="Modules\PLATFORM MANAGEMENT\Clients\Views\ClientsControl.vb">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Modules\PLATFORM MANAGEMENT\Controls\Controller\ChartsControlsController.vb" />
-    <Compile Include="Modules\PLATFORM MANAGEMENT\Controls\View\ControlsControl.Designer.vb">
+    <Compile Include="Views\Platform Management\ControlsControl.Designer.vb">
       <DependentUpon>ControlsControl.vb</DependentUpon>
     </Compile>
-    <Compile Include="Modules\PLATFORM MANAGEMENT\Controls\View\ControlsControl.vb">
+    <Compile Include="Views\Platform Management\ControlsControl.vb">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Modules\PLATFORM MANAGEMENT\Currencies\Views\CurrenciesControl.Designer.vb">
+    <Compile Include="Views\Platform Management\CurrenciesControl.Designer.vb">
       <DependentUpon>CurrenciesControl.vb</DependentUpon>
     </Compile>
-    <Compile Include="Modules\PLATFORM MANAGEMENT\Currencies\Views\CurrenciesControl.vb">
+    <Compile Include="Views\Platform Management\CurrenciesControl.vb">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Modules\PLATFORM MANAGEMENT\Currencies\Views\NewRatesVersionUI.Designer.vb">
+    <Compile Include="Views\Platform Management\NewRatesVersionUI.Designer.vb">
       <DependentUpon>NewRatesVersionUI.vb</DependentUpon>
     </Compile>
-    <Compile Include="Modules\PLATFORM MANAGEMENT\Currencies\Views\NewRatesVersionUI.vb">
+    <Compile Include="Views\Platform Management\NewRatesVersionUI.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Modules\PLATFORM MANAGEMENT\Axis Super Classes\Views\AnalysisCategoriesControl.Designer.vb">
+    <Compile Include="Views\Platform Management\AnalysisCategoriesControl.Designer.vb">
       <DependentUpon>AnalysisCategoriesControl.vb</DependentUpon>
     </Compile>
-    <Compile Include="Modules\PLATFORM MANAGEMENT\Axis Super Classes\Views\AnalysisCategoriesControl.vb">
+    <Compile Include="Views\Platform Management\AnalysisCategoriesControl.vb">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Modules\PLATFORM MANAGEMENT\Entities\VIEW\EntitiesControl.Designer.vb">
+    <Compile Include="Views\Platform Management\EntitiesControl.Designer.vb">
       <DependentUpon>EntitiesControl.vb</DependentUpon>
     </Compile>
-    <Compile Include="Modules\PLATFORM MANAGEMENT\Entities\VIEW\EntitiesControl.vb">
+    <Compile Include="Views\Platform Management\EntitiesControl.vb">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Modules\PLATFORM MANAGEMENT\PlatformMGTGeneralUI.Designer.vb">
+    <Compile Include="Views\Platform Management\PlatformMGTGeneralUI.Designer.vb">
       <DependentUpon>PlatformMGTGeneralUI.vb</DependentUpon>
     </Compile>
-    <Compile Include="Modules\PLATFORM MANAGEMENT\PlatformMGTGeneralUI.vb">
+    <Compile Include="Views\Platform Management\PlatformMGTGeneralUI.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Modules\PLATFORM MANAGEMENT\Products\Controller\ProductsController.vb" />
-    <Compile Include="Modules\PLATFORM MANAGEMENT\Products\Views\ProductsControl.Designer.vb">
-      <DependentUpon>ProductsControl.vb</DependentUpon>
-    </Compile>
-    <Compile Include="Modules\PLATFORM MANAGEMENT\Products\Views\ProductsControl.vb">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Modules\PLATFORM MANAGEMENT\Users\Views\UsersControl.Designer.vb">
+    <Compile Include="Views\Platform Management\UsersControl.Designer.vb">
       <DependentUpon>UsersControl.vb</DependentUpon>
     </Compile>
-    <Compile Include="Modules\PLATFORM MANAGEMENT\Users\Views\UsersControl.vb">
+    <Compile Include="Views\Platform Management\UsersControl.vb">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Modules\PLATFORM MANAGEMENT\Versions\Views\NewDataVersionUI.Designer.vb">
+    <Compile Include="Views\Platform Management\NewDataVersionUI.Designer.vb">
       <DependentUpon>NewDataVersionUI.vb</DependentUpon>
     </Compile>
-    <Compile Include="Modules\PLATFORM MANAGEMENT\Versions\Views\NewDataVersionUI.vb">
+    <Compile Include="Views\Platform Management\NewDataVersionUI.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Modules\PLATFORM MANAGEMENT\Controls\Controller\ControlsController.vb" />
-    <Compile Include="Modules\PLATFORM MANAGEMENT\Versions\Views\VersionsControl.Designer.vb">
+    <Compile Include="Views\Platform Management\VersionsControl.Designer.vb">
       <DependentUpon>VersionsControl.vb</DependentUpon>
     </Compile>
-    <Compile Include="Modules\PLATFORM MANAGEMENT\Versions\Views\VersionsControl.vb">
+    <Compile Include="Views\Platform Management\VersionsControl.vb">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Modules\REPORTS DESIGNER\Controller\ReportsDesignerController.vb" />
-    <Compile Include="Modules\REPORTS DESIGNER\Views\ReportsDesignerUI.Designer.vb">
+    <Compile Include="Controllers\ReportsDesignerController.vb" />
+    <Compile Include="Views\ReportsDesignerUI.Designer.vb">
       <DependentUpon>ReportsDesignerUI.vb</DependentUpon>
     </Compile>
-    <Compile Include="Modules\REPORTS DESIGNER\Views\ReportsDesignerUI.vb">
+    <Compile Include="Views\ReportsDesignerUI.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Modules\Settings\SettingMainUI.Designer.vb">
+    <Compile Include="Views\SettingMainUI.Designer.vb">
       <DependentUpon>SettingMainUI.vb</DependentUpon>
     </Compile>
-    <Compile Include="Modules\Settings\SettingMainUI.vb">
+    <Compile Include="Views\SettingMainUI.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Modules\SUBMISSIONS CONTROLS\Controller\SubmissionsControlsController.vb" />
-    <Compile Include="Modules\SUBMISSIONS CONTROLS\Model\SubmissionControlModel.vb" />
-    <Compile Include="Modules\PLATFORM MANAGEMENT\Controls\View\NewControlUI.Designer.vb">
+    <Compile Include="Controllers\SubmissionsControlsController.vb" />
+    <Compile Include="Models\SubmissionControlModel.vb" />
+    <Compile Include="Views\Platform Management\NewControlUI.Designer.vb">
       <DependentUpon>NewControlUI.vb</DependentUpon>
     </Compile>
-    <Compile Include="Modules\PLATFORM MANAGEMENT\Controls\View\NewControlUI.vb">
+    <Compile Include="Views\Platform Management\NewControlUI.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Modules\SUBMISSIONS CONTROLS\View\SubmissionsControlUI.Designer.vb">
+    <Compile Include="Views\SubmissionsControlUI.Designer.vb">
       <DependentUpon>SubmissionsControlUI.vb</DependentUpon>
     </Compile>
-    <Compile Include="Modules\SUBMISSIONS CONTROLS\View\SubmissionsControlUI.vb">
+    <Compile Include="Views\SubmissionsControlUI.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Modules\PLATFORM MANAGEMENT\Categories\Controller\EntitiesCategoriesController.vb" />
     <Compile Include="Utilities\VTreeViewUtil.vb" />
-    <Compile Include="Modules\PLATFORM MANAGEMENT\Currencies\Views\ExcelRatesImportUI.Designer.vb">
+    <Compile Include="Views\Platform Management\ExcelRatesImportUI.Designer.vb">
       <DependentUpon>ExcelRatesImportUI.vb</DependentUpon>
     </Compile>
-    <Compile Include="Modules\PLATFORM MANAGEMENT\Currencies\Views\ExcelRatesImportUI.vb">
+    <Compile Include="Views\Platform Management\ExcelRatesImportUI.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Modules\PLATFORM MANAGEMENT\Users\Views\UsersTGV.vb" />
-    <Compile Include="Modules\REPORTS UPLOAD\AcquisitionInterface\Controller\AcquisitionInterfaceController.vb" />
-    <Compile Include="Modules\REPORTS UPLOAD\VIEW\SubmissionWSController.vb" />
-    <Compile Include="Modules\CONTROLING UI\View\UploadingHistoryUI.Designer.vb">
+    <Compile Include="Views\Platform Management\UsersTGV.vb" />
+    <Compile Include="Models\Report Upload\AcquisitionInterfaceController.vb" />
+    <Compile Include="Views\Report Upload\SubmissionWSController.vb" />
+    <Compile Include="Views\Controlling UI\UploadingHistoryUI.Designer.vb">
       <DependentUpon>UploadingHistoryUI.vb</DependentUpon>
     </Compile>
-    <Compile Include="Modules\CONTROLING UI\View\UploadingHistoryUI.vb">
+    <Compile Include="Views\Controlling UI\UploadingHistoryUI.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Modules\CUBE\HTTP test.Designer.vb">
+    <Compile Include="Views\HTTP test.Designer.vb">
       <DependentUpon>HTTP test.vb</DependentUpon>
     </Compile>
-    <Compile Include="Modules\CUBE\HTTP test.vb">
+    <Compile Include="Views\HTTP test.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Modules\PLATFORM MANAGEMENT\Currencies\Controller\ExchangeRatesController.vb" />
-    <Compile Include="Modules\Versions Selection\Controler\VersionSelection.vb" />
+    <Compile Include="Controllers\VersionSelection.vb" />
     <Compile Include="Models\CRUDs\Old CRUDs\Period.vb" />
-    <Compile Include="Modules\PLATFORM MANAGEMENT\Entities\CONTROLER\EntitiesController.vb" />
-    <Compile Include="Modules\PLATFORM MANAGEMENT\Accounts\Controller\AccountsController.vb" />
-    <Compile Include="Modules\PLATFORM MANAGEMENT\Accounts\Views\NewAccountUI.Designer.vb">
+    <Compile Include="Views\Platform Management\NewAccountUI.Designer.vb">
       <DependentUpon>NewAccountUI.vb</DependentUpon>
     </Compile>
-    <Compile Include="Modules\PLATFORM MANAGEMENT\Accounts\Views\NewAccountUI.vb">
+    <Compile Include="Views\Platform Management\NewAccountUI.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Models\CRUDs\New CRUDs\Currency.vb" />
-    <Compile Include="Modules\PLATFORM MANAGEMENT\Axis Super Classes\Views\AnalysisAxisDGV.Designer.vb">
+    <Compile Include="Views\Platform Management\AnalysisAxisDGV.Designer.vb">
       <DependentUpon>AnalysisAxisDGV.vb</DependentUpon>
     </Compile>
-    <Compile Include="Modules\PLATFORM MANAGEMENT\Axis Super Classes\Views\AnalysisAxisDGV.vb">
+    <Compile Include="Views\Platform Management\AnalysisAxisDGV.vb">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Views\GenericView.Designer.vb">
@@ -490,10 +467,10 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
-    <Compile Include="Modules\CONNECTIONS\Views\ConnectionTP.Designer.vb">
+    <Compile Include="Views\Connection\ConnectionTP.Designer.vb">
       <DependentUpon>ConnectionTP.vb</DependentUpon>
     </Compile>
-    <Compile Include="Modules\CONNECTIONS\Views\ConnectionTP.vb">
+    <Compile Include="Views\Connection\ConnectionTP.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Views\Task Panes\EntitySelectionTP.Designer.vb">
@@ -522,225 +499,212 @@
     <Compile Include="GLOBAL\Constants Data Tables.vb" />
     <Compile Include="GLOBAL\Constants Display.vb" />
     <Compile Include="GLOBAL\Global Variables.vb" />
-    <Compile Include="Modules\CONNECTIONS\Views\ConnectionUI.Designer.vb">
+    <Compile Include="Views\Connection\ConnectionUI.Designer.vb">
       <DependentUpon>ConnectionUI.vb</DependentUpon>
     </Compile>
-    <Compile Include="Modules\CONNECTIONS\Views\ConnectionUI.vb">
+    <Compile Include="Views\Connection\ConnectionUI.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Controllers\GloablInstancesRestartModule.vb" />
-    <Compile Include="Modules\PLATFORM MANAGEMENT\Currencies\Views\RatesView.vb" />
-    <Compile Include="Modules\PLATFORM MANAGEMENT\Entities\VIEW\NewEntityUI.Designer.vb">
+    <Compile Include="Views\Platform Management\RatesView.vb" />
+    <Compile Include="Views\Platform Management\NewEntityUI.Designer.vb">
       <DependentUpon>NewEntityUI.vb</DependentUpon>
     </Compile>
-    <Compile Include="Modules\PLATFORM MANAGEMENT\Entities\VIEW\NewEntityUI.vb">
+    <Compile Include="Views\Platform Management\NewEntityUI.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Modules\PLATFORM MANAGEMENT\Users\Views\NewUserUI.Designer.vb">
+    <Compile Include="Views\Platform Management\NewUserUI.Designer.vb">
       <DependentUpon>NewUserUI.vb</DependentUpon>
     </Compile>
-    <Compile Include="Modules\PLATFORM MANAGEMENT\Users\Views\NewUserUI.vb">
+    <Compile Include="Views\Platform Management\NewUserUI.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Modules\PLATFORM MANAGEMENT\Entities\VIEW\EntitiesDGV.vb" />
+    <Compile Include="Views\Platform Management\EntitiesDGV.vb" />
     <Compile Include="Utilities\PasswordGenerator.vb" />
-    <Compile Include="Modules\PLATFORM MANAGEMENT\Users\Controller\UsersController.vb" />
-    <Compile Include="Modules\PLATFORM MANAGEMENT\Users\Views\EntitySelectionForUsersMGT.Designer.vb">
+    <Compile Include="Views\Platform Management\EntitySelectionForUsersMGT.Designer.vb">
       <DependentUpon>EntitySelectionForUsersMGT.vb</DependentUpon>
     </Compile>
-    <Compile Include="Modules\PLATFORM MANAGEMENT\Users\Views\EntitySelectionForUsersMGT.vb">
+    <Compile Include="Views\Platform Management\EntitySelectionForUsersMGT.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Modules\Versions Selection\Views\VersionSelectionUI.Designer.vb">
+    <Compile Include="Views\VersionSelectionUI.Designer.vb">
       <DependentUpon>VersionSelectionUI.vb</DependentUpon>
     </Compile>
-    <Compile Include="Modules\Versions Selection\Views\VersionSelectionUI.vb">
+    <Compile Include="Views\VersionSelectionUI.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Modules\PLATFORM MANAGEMENT\Versions\Controller\DataVersionsController.vb" />
-    <Compile Include="Modules\CONNECTIONS\Models\ModelServer.vb" />
+    <Compile Include="Models\ModelServer.vb" />
     <Compile Include="Models\Computing\RefreshGetDataBatch.vb" />
-    <Compile Include="Modules\PPSBI\Views\PPSBIUI.Designer.vb">
+    <Compile Include="Views\PPSBIUI.Designer.vb">
       <DependentUpon>PPSBIUI.vb</DependentUpon>
     </Compile>
-    <Compile Include="Modules\PPSBI\Views\PPSBIUI.vb">
+    <Compile Include="Views\PPSBIUI.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Controllers\Data Acquisition\SimpleDisplaySnapshotUI.Designer.vb">
-      <DependentUpon>SimpleDisplaySnapshotUI.vb</DependentUpon>
-    </Compile>
-    <Compile Include="Controllers\Data Acquisition\SimpleDisplaySnapshotUI.vb" />
-    <Compile Include="Controllers\Data Acquisition\MultipleSheetsAcquisition.Designer.vb">
-      <DependentUpon>MultipleSheetsAcquisition.vb</DependentUpon>
-    </Compile>
-    <Compile Include="Controllers\Data Acquisition\MultipleSheetsAcquisition.vb" />
-    <Compile Include="Modules\REPORTS UPLOAD\VIEW\ManualRangesSelectionUI.Designer.vb">
+    <Compile Include="Views\Report Upload\ManualRangesSelectionUI.Designer.vb">
       <DependentUpon>ManualRangesSelectionUI.vb</DependentUpon>
     </Compile>
-    <Compile Include="Modules\REPORTS UPLOAD\VIEW\ManualRangesSelectionUI.vb">
+    <Compile Include="Views\Report Upload\ManualRangesSelectionUI.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Models\Computing\ModelFormulasMGT.vb" />
-    <Compile Include="Modules\CONTROLING UI\View\ControllingUI_2.Designer.vb">
+    <Compile Include="Views\Controlling UI\ControllingUI_2.Designer.vb">
       <DependentUpon>ControllingUI_2.vb</DependentUpon>
     </Compile>
-    <Compile Include="Modules\CONTROLING UI\View\ControllingUI_2.vb">
+    <Compile Include="Views\Controlling UI\ControllingUI_2.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Utilities\ExcelFormatting.vb" />
     <Compile Include="Utilities\DataGridViewsUtil.vb" />
-    <Compile Include="Modules\REPORTS UPLOAD\CONTROLER\GeneralSubmissionControler.vb" />
-    <Compile Include="Modules\REPORTS UPLOAD\AcquisitionInterface\View\AcquisitionInterface.Designer.vb">
+    <Compile Include="Controllers\GeneralSubmissionControler.vb" />
+    <Compile Include="Views\Report Upload\AcquisitionInterface.Designer.vb">
       <DependentUpon>AcquisitionInterface.vb</DependentUpon>
     </Compile>
-    <Compile Include="Modules\REPORTS UPLOAD\AcquisitionInterface\View\AcquisitionInterface.vb">
+    <Compile Include="Views\Report Upload\AcquisitionInterface.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Modules\REPORTS UPLOAD\VIEW\StatusReportInterfaceUI.Designer.vb">
+    <Compile Include="Views\Report Upload\StatusReportInterfaceUI.Designer.vb">
       <DependentUpon>StatusReportInterfaceUI.vb</DependentUpon>
     </Compile>
-    <Compile Include="Modules\REPORTS UPLOAD\VIEW\StatusReportInterfaceUI.vb">
+    <Compile Include="Views\Report Upload\StatusReportInterfaceUI.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Modules\REPORTS UPLOAD\MODEL\AcquisitionModel.vb" />
-    <Compile Include="Modules\REPORTS UPLOAD\MODEL\DataModificationsTracking.vb" />
-    <Compile Include="Modules\REPORTS UPLOAD\MODEL\ModelDataSet.vb" />
-    <Compile Include="Modules\CONNECTIONS\ConnectionsFunctions.vb" />
+    <Compile Include="Models\Report Upload\AcquisitionModel.vb" />
+    <Compile Include="Models\Report Upload\DataModificationsTracking.vb" />
+    <Compile Include="Models\Report Upload\ModelDataSet.vb" />
+    <Compile Include="Controllers\ConnectionsFunctions.vb" />
     <Compile Include="Utilities\TreeViewsUtilities.vb" />
     <Compile Include="Utilities\Utilities_Functions.vb" />
-    <Compile Include="Modules\REPORTS UPLOAD\VIEW\RangeHighlighter.vb" />
+    <Compile Include="Views\Report Upload\RangeHighlighter.vb" />
     <Compile Include="Utilities\WorksheetWrittingFunctions.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
-    <Compile Include="Modules\PPSBI\Controller\PPSBIController.vb" />
+    <Compile Include="Controllers\PPSBIController.vb" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="AddinModule.resx">
       <DependentUpon>AddinModule.vb</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Modules\CONTROLING UI\View\CUI2LeftPane.resx">
+    <EmbeddedResource Include="Views\Controlling UI\CUI2LeftPane.resx">
       <DependentUpon>CUI2LeftPane.vb</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Modules\CONTROLING UI\View\CUI2RightPane.resx">
+    <EmbeddedResource Include="Views\Controlling UI\CUI2RightPane.resx">
       <DependentUpon>CUI2RightPane.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Modules\MODELING\FINANCIAL MODELLING\Views\Controls\FModelingInputsControl.resx">
+    <EmbeddedResource Include="Views\Modeling\FModelingInputsControl.resx">
       <DependentUpon>FModelingInputsControl.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Modules\MODELING\FINANCIAL MODELLING\Views\Controls\FModelingExportControl.resx">
+    <EmbeddedResource Include="Views\Modeling\FModelingExportControl.resx">
       <DependentUpon>FModelingExportControl.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Modules\MODELING\FINANCIAL MODELLING\Views\Controls\FModelingSimulationControl.resx">
+    <EmbeddedResource Include="Views\Modeling\FModelingSimulationControl.resx">
       <DependentUpon>FModelingSimulationControl.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Modules\MODELING\FINANCIAL MODELLING\Views\FModelingUI2.resx">
+    <EmbeddedResource Include="Views\Modeling\FModelingUI2.resx">
       <DependentUpon>FModelingUI2.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Modules\PLATFORM MANAGEMENT\Axis Super Classes\Views\NewAnalysisAxisUI.resx">
-      <DependentUpon>NewAnalysisAxisUI.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Modules\MODELING\PS MODELING\Configuration\Views\ASEntitiesAttributesUI.resx">
-      <DependentUpon>ASEntitiesAttributesUI.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Modules\MODELING\PS MODELING\View\AlternativeScenariosUI.resx">
-      <DependentUpon>AlternativeScenariosUI.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Modules\CONTROLING UI\View\ControllingUIChartsConfig.resx">
-      <DependentUpon>ControllingUIChartsConfig.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Modules\CONTROLING UI\View\UploadingHistoryUI.resx">
-      <DependentUpon>UploadingHistoryUI.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Modules\CUBE\CubeView.resx">
-      <DependentUpon>CubeView.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Modules\CUBE\HTTP test.resx">
-      <DependentUpon>HTTP test.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Modules\Formats\Views\FormatMGTUI.resx">
-      <DependentUpon>FormatMGTUI.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Modules\MODELING\CONFIGURATION\FModeling Accounts\View\FModelingAccountsMGTUI.resx">
-      <DependentUpon>FModelingAccountsMGTUI.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Modules\MODELING\PS MODELING\Configuration\Market Prices Config\Views\MarketPricesUI.resx">
-      <DependentUpon>MarketPricesUI.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Modules\MODELING\PS MODELING\Configuration\Market Prices Config\Views\NewPricesVersionUI.resx">
-      <DependentUpon>NewPricesVersionUI.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Modules\MODELING\PS MODELING\Configuration\Views\ASConfigurationPanel.resx">
-      <DependentUpon>ASConfigurationPanel.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Modules\LOG\View\LogUI.resx">
-      <DependentUpon>LogUI.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Modules\LOG\View\DataHistoryUI.resx">
-      <DependentUpon>DataHistoryUI.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Modules\MODELING\FINANCIAL MODELLING\Views\NewConstraintUI.resx">
-      <DependentUpon>NewConstraintUI.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Modules\PLATFORM MANAGEMENT\Accounts\Views\AccountsControl.resx">
-      <DependentUpon>AccountsControl.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Modules\PLATFORM MANAGEMENT\Clients\Views\ClientsControl.resx">
+    <EmbeddedResource Include="Views\Platform Management\ClientsControl.resx">
       <DependentUpon>ClientsControl.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Modules\PLATFORM MANAGEMENT\Controls\View\ControlsControl.resx">
+    <EmbeddedResource Include="Views\Platform Management\NewAnalysisAxisUI.resx">
+      <DependentUpon>NewAnalysisAxisUI.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\Modeling\ASEntitiesAttributesUI.resx">
+      <DependentUpon>ASEntitiesAttributesUI.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\Modeling\AlternativeScenariosUI.resx">
+      <DependentUpon>AlternativeScenariosUI.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\Controlling UI\ControllingUIChartsConfig.resx">
+      <DependentUpon>ControllingUIChartsConfig.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\Controlling UI\UploadingHistoryUI.resx">
+      <DependentUpon>UploadingHistoryUI.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\HTTP test.resx">
+      <DependentUpon>HTTP test.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\Modeling\FModelingAccountsMGTUI.resx">
+      <DependentUpon>FModelingAccountsMGTUI.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\Modeling\MarketPricesUI.resx">
+      <DependentUpon>MarketPricesUI.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\Modeling\NewPricesVersionUI.resx">
+      <DependentUpon>NewPricesVersionUI.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\Modeling\ASConfigurationPanel.resx">
+      <DependentUpon>ASConfigurationPanel.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\LogUI.resx">
+      <DependentUpon>LogUI.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\DataHistoryUI.resx">
+      <DependentUpon>DataHistoryUI.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\Modeling\NewConstraintUI.resx">
+      <DependentUpon>NewConstraintUI.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\Platform Management\AccountsControl.resx">
+      <DependentUpon>AccountsControl.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\Platform Management\ControlsControl.resx">
       <DependentUpon>ControlsControl.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Modules\PLATFORM MANAGEMENT\Currencies\Views\CurrenciesControl.resx">
+    <EmbeddedResource Include="Views\Platform Management\CurrenciesControl.resx">
       <DependentUpon>CurrenciesControl.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Modules\PLATFORM MANAGEMENT\Axis Super Classes\Views\AnalysisCategoriesControl.resx">
+    <EmbeddedResource Include="Views\Platform Management\AnalysisCategoriesControl.resx">
       <DependentUpon>AnalysisCategoriesControl.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Modules\PLATFORM MANAGEMENT\Entities\VIEW\EntitiesControl.resx">
+    <EmbeddedResource Include="Views\Platform Management\EntitiesControl.resx">
       <DependentUpon>EntitiesControl.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Modules\PLATFORM MANAGEMENT\PlatformMGTGeneralUI.resx">
+    <EmbeddedResource Include="Views\Platform Management\PlatformMGTGeneralUI.resx">
       <DependentUpon>PlatformMGTGeneralUI.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Modules\PLATFORM MANAGEMENT\Products\Views\ProductsControl.resx">
-      <DependentUpon>ProductsControl.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Modules\PLATFORM MANAGEMENT\Users\Views\UsersControl.resx">
+    <EmbeddedResource Include="Views\Platform Management\UsersControl.resx">
       <DependentUpon>UsersControl.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Modules\PLATFORM MANAGEMENT\Versions\Views\VersionsControl.resx">
+    <EmbeddedResource Include="Views\Platform Management\VersionsControl.resx">
       <DependentUpon>VersionsControl.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Modules\REPORTS DESIGNER\Views\ReportsDesignerUI.resx">
+    <EmbeddedResource Include="Views\Platform Management\ProductsControl.resx">
+      <DependentUpon>ProductsControl.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\ReportsDesignerUI.resx">
       <DependentUpon>ReportsDesignerUI.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Modules\Settings\SettingMainUI.resx">
+    <EmbeddedResource Include="Views\SettingMainUI.resx">
       <DependentUpon>SettingMainUI.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Modules\T1\Test.resx">
+    <EmbeddedResource Include="Views\Test.resx">
       <DependentUpon>Test.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Modules\PLATFORM MANAGEMENT\Currencies\Views\ExcelRatesImportUI.resx">
+    <EmbeddedResource Include="Views\Platform Management\ExcelRatesImportUI.resx">
       <DependentUpon>ExcelRatesImportUI.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Modules\PLATFORM MANAGEMENT\Accounts\Views\NewAccountUI.resx">
+    <EmbeddedResource Include="Views\Platform Management\NewAccountUI.resx">
       <DependentUpon>NewAccountUI.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Modules\PLATFORM MANAGEMENT\Currencies\Views\NewRatesVersionUI.resx">
+    <EmbeddedResource Include="Views\Platform Management\NewRatesVersionUI.resx">
       <DependentUpon>NewRatesVersionUI.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Modules\PLATFORM MANAGEMENT\Versions\Views\NewDataVersionUI.resx">
+    <EmbeddedResource Include="Views\Platform Management\NewDataVersionUI.resx">
       <DependentUpon>NewDataVersionUI.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Modules\PLATFORM MANAGEMENT\Controls\View\NewControlUI.resx">
+    <EmbeddedResource Include="Views\Platform Management\NewControlUI.resx">
       <DependentUpon>NewControlUI.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Modules\SUBMISSIONS CONTROLS\View\SubmissionsControlUI.resx">
+    <EmbeddedResource Include="Views\SubmissionsControlUI.resx">
       <DependentUpon>SubmissionsControlUI.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Modules\PLATFORM MANAGEMENT\Axis Super Classes\Views\AnalysisAxisDGV.resx">
+    <EmbeddedResource Include="Views\Platform Management\AnalysisAxisDGV.resx">
       <DependentUpon>AnalysisAxisDGV.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\GenericView.resx">
+      <DependentUpon>GenericView.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\PPS Controls\CircularProgressUI.resx">
       <DependentUpon>CircularProgressUI.vb</DependentUpon>
@@ -751,7 +715,7 @@
     <EmbeddedResource Include="Views\PPS Controls\ProgressBarControl.resx">
       <DependentUpon>ProgressBarControl.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Modules\CONNECTIONS\Views\ConnectionTP.resx">
+    <EmbeddedResource Include="Views\Connection\ConnectionTP.resx">
       <DependentUpon>ConnectionTP.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\Task Panes\EntitySelectionTP.resx">
@@ -766,34 +730,28 @@
     <EmbeddedResource Include="ExcelAddinModule1.resx">
       <DependentUpon>ExcelAddinModule1.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Modules\CONNECTIONS\Views\ConnectionUI.resx">
+    <EmbeddedResource Include="Views\Connection\ConnectionUI.resx">
       <DependentUpon>ConnectionUI.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Modules\PLATFORM MANAGEMENT\Entities\VIEW\NewEntityUI.resx">
+    <EmbeddedResource Include="Views\Platform Management\NewEntityUI.resx">
       <DependentUpon>NewEntityUI.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Modules\PLATFORM MANAGEMENT\Users\Views\EntitySelectionForUsersMGT.resx">
+    <EmbeddedResource Include="Views\Platform Management\EntitySelectionForUsersMGT.resx">
       <DependentUpon>EntitySelectionForUsersMGT.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Modules\PLATFORM MANAGEMENT\Users\Views\NewUserUI.resx">
+    <EmbeddedResource Include="Views\Platform Management\NewUserUI.resx">
       <DependentUpon>NewUserUI.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Modules\PPSBI\Views\PPSBIUI.resx">
+    <EmbeddedResource Include="Views\PPSBIUI.resx">
       <DependentUpon>PPSBIUI.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Controllers\Data Acquisition\SimpleDisplaySnapshotUI.resx">
-      <DependentUpon>SimpleDisplaySnapshotUI.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Controllers\Data Acquisition\MultipleSheetsAcquisition.resx">
-      <DependentUpon>MultipleSheetsAcquisition.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Modules\REPORTS UPLOAD\VIEW\ManualRangesSelectionUI.resx">
+    <EmbeddedResource Include="Views\Report Upload\ManualRangesSelectionUI.resx">
       <DependentUpon>ManualRangesSelectionUI.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Modules\Versions Selection\Views\VersionSelectionUI.resx">
+    <EmbeddedResource Include="Views\VersionSelectionUI.resx">
       <DependentUpon>VersionSelectionUI.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Modules\CONTROLING UI\View\ControllingUI_2.resx">
+    <EmbeddedResource Include="Views\Controlling UI\ControllingUI_2.resx">
       <DependentUpon>ControllingUI_2.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="My Project\Resources.resx">
@@ -802,10 +760,10 @@
       <SubType>Designer</SubType>
       <LastGenOutput>Resources.Designer.vb</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="Modules\REPORTS UPLOAD\AcquisitionInterface\View\AcquisitionInterface.resx">
+    <EmbeddedResource Include="Views\Report Upload\AcquisitionInterface.resx">
       <DependentUpon>AcquisitionInterface.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Modules\REPORTS UPLOAD\VIEW\StatusReportInterfaceUI.resx">
+    <EmbeddedResource Include="Views\Report Upload\StatusReportInterfaceUI.resx">
       <DependentUpon>StatusReportInterfaceUI.vb</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
@@ -1003,9 +961,7 @@
   <ItemGroup>
     <None Include="Resources\favicon%28239%29.ico" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Modules\MODELING\PS MODELING\Configuration\Market Prices Config\Model\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <None Include="Resources\excel.png" />
   </ItemGroup>

@@ -236,18 +236,6 @@ Namespace My
         
         <Global.System.Configuration.UserScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("true")>  _
-        Public Property importantFontBold() As Boolean
-            Get
-                Return CType(Me("importantFontBold"),Boolean)
-            End Get
-            Set
-                Me("importantFontBold") = value
-            End Set
-        End Property
-        
-        <Global.System.Configuration.UserScopedSettingAttribute(),  _
-         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
         Public Property importantFontItalic() As Boolean
             Get
@@ -255,18 +243,6 @@ Namespace My
             End Get
             Set
                 Me("importantFontItalic") = value
-            End Set
-        End Property
-        
-        <Global.System.Configuration.UserScopedSettingAttribute(),  _
-         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("true")>  _
-        Public Property importantFontBorder() As Boolean
-            Get
-                Return CType(Me("importantFontBorder"),Boolean)
-            End Get
-            Set
-                Me("importantFontBorder") = value
             End Set
         End Property
         
@@ -344,18 +320,6 @@ Namespace My
         
         <Global.System.Configuration.UserScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("true")>  _
-        Public Property detailFontItalic() As Boolean
-            Get
-                Return CType(Me("detailFontItalic"),Boolean)
-            End Get
-            Set
-                Me("detailFontItalic") = value
-            End Set
-        End Property
-        
-        <Global.System.Configuration.UserScopedSettingAttribute(),  _
-         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
         Public Property detailFontBorder() As Boolean
             Get
@@ -423,18 +387,6 @@ Namespace My
             End Get
             Set
                 Me("titleFontColor") = value
-            End Set
-        End Property
-        
-        <Global.System.Configuration.UserScopedSettingAttribute(),  _
-         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("true")>  _
-        Public Property titleFontBold() As Boolean
-            Get
-                Return CType(Me("titleFontBold"),Boolean)
-            End Get
-            Set
-                Me("titleFontBold") = value
             End Set
         End Property
         
@@ -543,6 +495,54 @@ Namespace My
             End Get
             Set
                 Me("normalBottomColor") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("True")>  _
+        Public Property importantFontBold() As Boolean
+            Get
+                Return CType(Me("importantFontBold"),Boolean)
+            End Get
+            Set
+                Me("importantFontBold") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("True")>  _
+        Public Property importantFontBorder() As Boolean
+            Get
+                Return CType(Me("importantFontBorder"),Boolean)
+            End Get
+            Set
+                Me("importantFontBorder") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("True")>  _
+        Public Property detailFontItalic() As Boolean
+            Get
+                Return CType(Me("detailFontItalic"),Boolean)
+            End Get
+            Set
+                Me("detailFontItalic") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("True")>  _
+        Public Property titleFontBold() As Boolean
+            Get
+                Return CType(Me("titleFontBold"),Boolean)
+            End Get
+            Set
+                Me("titleFontBold") = value
             End Set
         End Property
     End Class
