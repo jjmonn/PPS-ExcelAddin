@@ -115,7 +115,11 @@ Friend Class NewAccountUI
     Private Sub CreateAccountBT_Click(sender As Object, e As EventArgs) Handles CreateAccountBT.Click
 
         If IsFormValid() = True Then
-            Dim parent_id, conso_option, conversion_option, account_tab As Int32
+            Dim parent_id As Int32 = 0
+            Dim conso_option As Int32 = 0
+            Dim conversion_option As Int32 = 0
+            Dim account_tab As Int32
+
             If Not parent_node Is Nothing Then
                 parent_id = CInt(parent_node.Name)
                 account_tab = GlobalVariables.Accounts.accounts_hash(CInt(parent_node.Name))(ACCOUNT_TAB_VARIABLE)
