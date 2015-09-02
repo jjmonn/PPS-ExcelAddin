@@ -146,7 +146,7 @@ Friend Class Entity
 
         If packet.ReadInt32() = 0 Then
             Dim id As UInt32 = packet.ReadInt32
-            entities_hash.Remove(id)
+            entities_hash.Remove(CInt(id))
             RaiseEvent DeleteEvent(True, id)
         Else
             RaiseEvent DeleteEvent(False, 0)

@@ -224,7 +224,7 @@ Friend Class ClientsFilter
                                             ByRef filterId As Int32)
 
         On Error Resume Next
-        clientsFiltersHash(clientId).Remove(filterId)
+        clientsFiltersHash(CInt(clientId)).Remove(CInt(filterId))
 
     End Sub
 
