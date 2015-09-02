@@ -52,9 +52,9 @@ Friend Class ClientsController
                                    clients.clients_hash, _
                                    categoriesNameKeyDic)
 
-        AddHandler GlobalVariables.Clients.ClientCreationEvent, AddressOf AfterClientCreation
-        AddHandler GlobalVariables.Clients.ClientUpdateEvent, AddressOf AfterClientUpdate
-        AddHandler GlobalVariables.Clients.ClientDeleteEvent, AddressOf AfterClientDelete
+        AddHandler GlobalVariables.Clients.CreationEvent, AddressOf AfterClientCreation
+        AddHandler GlobalVariables.Clients.UpdateEvent, AddressOf AfterClientUpdate
+        AddHandler GlobalVariables.Clients.DeleteEvent, AddressOf AfterClientDelete
 
     End Sub
 
@@ -93,17 +93,19 @@ Friend Class ClientsController
 
     End Sub
 
-    Private Sub AfterClientCreation(ByRef status As Boolean, ByRef ht As Hashtable)
+    Private Sub AfterClientCreation(ByRef status As Boolean, ByRef id As Int32)
 
 
 
     End Sub
 
-    Friend Function updateclientName(ByRef item_id As String, _
-                                      ByRef value As String) As Boolean
+    Friend Function UpdateClientName(ByRef client_id As Int32, _
+                                      ByRef new_name As String) As Boolean
 
-        If clients.IsNameValid(value) = True Then
-            GlobalVariables.Clients.CMSG_UPDATE_CLIENT(item_id, NAME_VARIABLE, value)
+        If clients.IsNameValid(new_name) = True Then
+            Dim ht As Hashtable = GlobalVariables.Clients.clients_hash(client_id)
+            ht(NAME_VARIABLE) = new_name
+            GlobalVariables.Clients.CMSG_UPDATE_CLIENT(ht)
             Return True
         Else
             MsgBox("Invalid Name. Names must be unique and not empty.")
@@ -112,7 +114,7 @@ Friend Class ClientsController
 
     End Function
 
-    Private Sub AfterClientUpdate(ByRef status As Boolean, ByRef ht As Hashtable)
+    Private Sub AfterClientUpdate(ByRef status As Boolean, ByRef id As Int32)
 
 
         ' to be implemented priority normal !!
@@ -120,11 +122,19 @@ Friend Class ClientsController
 
     End Sub
 
-    Friend Sub updateclientCategory(ByRef item_id As String, _
-                                               ByRef category_id As String, _
-                                               ByRef value As String)
+    Friend Sub UpdateclientFilter(ByRef item_id As String, _
+                                  ByRef category_id As String, _
+                                  ByRef value As String)
 
-        GlobalVariables.Clients.CMSG_UPDATE_CLIENT(item_id, category_id, value)
+        ' to be implemented 
+        ' caution: clientsfilters table must only be updated with the most nested filter_id
+
+        ' decide whether users can change regions or only sub filters (with upper filters updated automatically)
+        ' do this in entities first
+
+        ' 1) find the most nested
+
+        'GlobalVariables.Clients.CMSG_UPDATE_CLIENT(item_id, category_id, value)
 
     End Sub
 

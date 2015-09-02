@@ -7,7 +7,7 @@
 '
 ' Author: Julien Monnereau
 ' Created: 16/07/2015
-' Last modified: 01/09/2015
+' Last modified: 02/09/2015
 
 
 Imports System.Collections
@@ -273,7 +273,7 @@ Friend Class Account
 
         NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_READ_ACCOUNT_ANSWER, AddressOf SMSG_READ_ACCOUNT_ANSWER)
         NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_DELETE_ACCOUNT_ANSWER, AddressOf SMSG_DELETE_ACCOUNT_ANSWER)
-        NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_LIST_ACCOUNT_ANSWER, AddressOf SMSG_LIST_ACCOUNT_ANSWER)
+        NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_LIST_ACCOUNT_ANSWER, AddressOf SMSG_LIST_ACCOUNT_ANSWER)
         MyBase.Finalize()
 
     End Sub

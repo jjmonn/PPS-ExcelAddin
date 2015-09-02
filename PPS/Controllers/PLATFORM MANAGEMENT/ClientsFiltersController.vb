@@ -30,7 +30,7 @@
 
 '#Region "Interface"
 
-'    Protected Friend Overrides Function CreateCategory(ByRef category_name As String) As Boolean
+'    Protected Friend Overrides Function CreateFilter(ByRef category_name As String) As Boolean
 
 '        If MyBase.Categories.isNameValid(category_name) = False Then Return False
 '        Dim new_category_id As String = MyBase.Categories.getNewId()

@@ -42,9 +42,9 @@ Friend Class ProductsController
                                    getProductsHash(), _
                                    categoriesNameKeyDic)
 
-        AddHandler GlobalVariables.Products.ProductCreationEvent, AddressOf AfterProductCreation
-        AddHandler GlobalVariables.Products.ProductUpdateEvent, AddressOf AfterProductUpdate
-        AddHandler GlobalVariables.Products.ProductDeleteEvent, AddressOf AfterproductDelete
+        AddHandler GlobalVariables.Products.CreationEvent, AddressOf AfterProductCreation
+        AddHandler GlobalVariables.Products.UpdateEvent, AddressOf AfterProductUpdate
+        AddHandler GlobalVariables.Products.DeleteEvent, AddressOf AfterproductDelete
 
 
     End Sub
@@ -96,11 +96,11 @@ Friend Class ProductsController
 
     End Sub
 
-    Private Sub AfterProductCreation(ByRef status As Boolean, ByRef ht As Hashtable)
+    Private Sub AfterProductCreation(ByRef status As Boolean, ByRef id As Int32)
 
         ' to be validated/ reviewed
         ' priority normal !!! 
-        view.addProductRow(ht(ID_VARIABLE), ht)
+        ' view.addProductRow(ht(ID_VARIABLE), ht)
 
     End Sub
 
@@ -109,7 +109,7 @@ Friend Class ProductsController
                                       ByRef value As String) As Boolean
 
         If GlobalVariables.Products.IsNameValid(value) = True Then
-            GlobalVariables.Products.CMSG_UPDATE_PRODUCT(item_id, NAME_VARIABLE, value)
+            Update(item_id, NAME_VARIABLE, value)
             Return True
         Else
             MsgBox("Invalid Name. Names must be unique and not empty.")
@@ -118,7 +118,18 @@ Friend Class ProductsController
 
     End Function
 
-    Private Sub AfterProductUpdate(ByRef status As Boolean, ByRef ht As Hashtable)
+    Private Sub Update(ByRef id As Int32, _
+                     ByRef variable As String, _
+                     ByRef value As Object)
+
+        Dim ht As Hashtable = GlobalVariables.Products.products_hash(id)
+        ht(variable) = value
+        GlobalVariables.Products.CMSG_UPDATE_PRODUCT(ht)
+
+    End Sub
+
+
+    Private Sub AfterProductUpdate(ByRef status As Boolean, ByRef id As Int32)
 
         ' to be reviewed -> priority normal !
 
@@ -128,7 +139,8 @@ Friend Class ProductsController
                                      ByRef category_id As String, _
                                      ByRef value As String)
 
-        GlobalVariables.Products.CMSG_UPDATE_PRODUCT(item_id, category_id, value)
+        ' attention only update most nested filter
+        Update(item_id, category_id, value)
 
     End Sub
 

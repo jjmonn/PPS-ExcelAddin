@@ -110,6 +110,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="ClassDiagram1.cd" />
     <None Include="Loader\adxloader.dll.manifest" />
     <!-- <None Include="PPS.snk" /> -->
   </ItemGroup>
@@ -119,15 +120,15 @@
     </Compile>
     <Compile Include="Controllers\PLATFORM MANAGEMENT\AccountsController.vb" />
     <Compile Include="Controllers\PLATFORM MANAGEMENT\AxisFiltersController.vb" />
-    <Compile Include="Controllers\PLATFORM MANAGEMENT\ClientsCategoriesController.vb" />
-    <Compile Include="Controllers\PLATFORM MANAGEMENT\EntitiesCategoriesController.vb" />
-    <Compile Include="Controllers\PLATFORM MANAGEMENT\ProductsCategoryController.vb" />
     <Compile Include="Controllers\PLATFORM MANAGEMENT\ClientsController.vb" />
     <Compile Include="Controllers\PLATFORM MANAGEMENT\ChartsControlsController.vb" />
+    <Compile Include="Controllers\PLATFORM MANAGEMENT\ClientsFiltersController.vb" />
     <Compile Include="Controllers\PLATFORM MANAGEMENT\ControlsController.vb" />
+    <Compile Include="Controllers\PLATFORM MANAGEMENT\EntitiesFiltersController.vb" />
     <Compile Include="Controllers\PLATFORM MANAGEMENT\ExchangeRatesController.vb" />
     <Compile Include="Controllers\PLATFORM MANAGEMENT\EntitiesController.vb" />
     <Compile Include="Controllers\PLATFORM MANAGEMENT\ProductsController.vb" />
+    <Compile Include="Controllers\PLATFORM MANAGEMENT\ProductsFiltersController.vb" />
     <Compile Include="Controllers\PLATFORM MANAGEMENT\UsersController.vb" />
     <Compile Include="Controllers\PLATFORM MANAGEMENT\DataVersionsController.vb" />
     <Compile Include="GLOBAL\GlobalEnums.vb" />

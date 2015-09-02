@@ -26,7 +26,7 @@ Friend Class AxisFiltersController
 #Region "Instance Variables"
 
     ' Objects
-    Private View As AnalysisCategoriesControl
+    Protected View As AnalysisCategoriesControl
     Private filtersNodes As New TreeNode
     Private FvTv As New TreeView
     Private PlatformMGTUI As PlatformMGTGeneralUI
@@ -81,7 +81,7 @@ Friend Class AxisFiltersController
 
 #Region "Interface"
 
-    Friend Function CreateFilter(ByRef filter_name As String) As Boolean
+    Protected Friend Function CreateFilter(ByRef filter_name As String) As Boolean
 
         ' check if name is valid
 
@@ -89,13 +89,13 @@ Friend Class AxisFiltersController
 
     End Function
 
-    Friend Sub DeleteFilter(ByRef node As TreeNode)
+    Protected Friend Sub DeleteFilter(ByRef node As TreeNode)
 
 
     End Sub
 
 
-    Friend Sub DeleteFilterValue(ByRef node As TreeNode)
+    Protected Friend Sub DeleteFilterValue(ByRef node As TreeNode)
 
 
     End Sub
@@ -132,12 +132,17 @@ Friend Class AxisFiltersController
 
     End Sub
 
-    Friend Function RenameFilterValue(ByRef filter_value_id As String, _
+    Friend Function RenameFilterValue(ByRef filter_value_id As Int32, _
                                       ByRef new_name As String) As Boolean
 
-        If GlobalVariables.Filters.IsNameValid(new_name) = False Then Return False
-        GlobalVariables.Filters.CMSG_UPDATE_FILTER(filter_value_id, NAME_VARIABLE, new_name)
-        Return True
+        If GlobalVariables.Filters.IsNameValid(new_name) = True Then
+            Dim ht As Hashtable = GlobalVariables.Filters.filters_hash(filter_value_id)
+            ht(NAME_VARIABLE) = new_name
+            GlobalVariables.Filters.CMSG_UPDATE_FILTER(ht)
+            Return True
+        Else
+            Return False
+        End If
 
     End Function
 

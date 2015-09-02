@@ -57,8 +57,8 @@ Friend Class EntitiesController
         View = New EntitiesControl(Me, entitiesTV, entitiesNameKeyDic, entitiesFilterValuesNameIdDict, entitiesFilterTV)
         NewEntityView = New NewEntityUI(Me, entitiesTV, entitiesFilterTV, entitiesFilterValuesNameIdDict)
 
-        AddHandler GlobalVariables.Entities.EntityCreationEvent, AddressOf AfterEntityCreation
-        AddHandler GlobalVariables.Entities.EntityDeleteEvent, AddressOf AfterEntityDeletion
+        AddHandler GlobalVariables.Entities.CreationEvent, AddressOf AfterEntityCreation
+        AddHandler GlobalVariables.Entities.DeleteEvent, AddressOf AfterEntityDeletion
         ' handler after update !! priority normal
 
     End Sub
@@ -110,40 +110,45 @@ Friend Class EntitiesController
     End Sub
 
     ' Triggered by CRUD model creation confirmation 
-    Private Sub AfterEntityCreation(ByRef status As Boolean, ByRef entity_ht As Hashtable)
+    Private Sub AfterEntityCreation(ByRef status As Boolean, ByRef id As Int32)
 
-        Dim parent_node As TreeNode = entitiesTV.Nodes.Find(entity_ht(PARENT_ID_VARIABLE), True)(0)
-        AddNodeAndRow(entity_ht, parent_node)
+        'Dim parent_node As TreeNode = entitiesTV.Nodes.Find(entity_ht(PARENT_ID_VARIABLE), True)(0)
+        'AddNodeAndRow(entity_ht, parent_node)
 
-        If GlobalVariables.Entities.entities_hash(CInt(parent_node.Name))(ENTITIES_ALLOW_EDITION_VARIABLE) = 1 Then
+        'If GlobalVariables.Entities.entities_hash(CInt(parent_node.Name))(ENTITIES_ALLOW_EDITION_VARIABLE) = 1 Then
 
-            ' priority normal
+        '    ' priority normal
 
-            'Entities.UpdateEntity(parent_node.Name, ENTITIES_ALLOW_EDITION_VARIABLE, 0)
+        '    'Entities.UpdateEntity(parent_node.Name, ENTITIES_ALLOW_EDITION_VARIABLE, 0)
 
-            ' attention dans ce cas les données précédemment soumises sur cette entités sont orphelines !!!
-            '  -> Triggers creation entity_name & "CORP"
-            '  -> Transfert des facts
-            ' ceci peut être codé au niveau du serveur ?
+        '    ' attention dans ce cas les données précédemment soumises sur cette entités sont orphelines !!!
+        '    '  -> Triggers creation entity_name & "CORP"
+        '    '  -> Transfert des facts
+        '    ' ceci peut être codé au niveau du serveur ?
 
-            MsgBox(entity_ht(NAME_VARIABLE) & " was previously an editable entity. Adding children entities change its status to not editable. " & Chr(13) _
-                   & "A CORP level has been created and the data previsoulsy submitted on this entity has been transfered to the CORP entity")
+        '    MsgBox(entity_ht(NAME_VARIABLE) & " was previously an editable entity. Adding children entities change its status to not editable. " & Chr(13) _
+        '           & "A CORP level has been created and the data previsoulsy submitted on this entity has been transfered to the CORP entity")
 
-            parent_node.StateImageIndex = 0
-        End If
+        '    parent_node.StateImageIndex = 0
+        'End If
 
     End Sub
 
+    Friend Sub UpdateEntity(ByRef id As Int32, ByRef variable As String, ByVal value As Object)
 
-    Friend Sub UpdateValue(ByRef entity_id As UInt32, _
-                           ByRef field As String, _
-                           ByRef value As Object)
+        Dim ht As Hashtable = GlobalVariables.Entities.entities_hash(id)
+        ht(variable) = value
+        GlobalVariables.Entities.CMSG_UPDATE_ENTITY(ht)
+     
+    End Sub
 
-        GlobalVariables.Entities.CMSG_UPDATE_ENTITY(entity_id, field, value)
-        ' si pas d'attente de confirmation serveur il peut y avoir une diff entre display et DB
-        ' le display est updated directement, l'ordre d'update serveur envoyé après
-        ' voir avec nath best practice 
-        ' priority high
+    Friend Sub UpdateEntity(ByRef id As String, ByRef entity_attributes As Hashtable)
+
+        Dim ht As Hashtable = GlobalVariables.Entities.entities_hash(id)
+        For Each attribute As String In entity_attributes
+            ht(attribute) = entity_attributes(attribute)
+        Next
+        GlobalVariables.Entities.CMSG_UPDATE_ENTITY(ht)
 
     End Sub
 
@@ -174,6 +179,13 @@ Friend Class EntitiesController
         ' remove node/ row
 
     End Sub
+
+
+#End Region
+
+#Region "Events"
+
+
 
 
 #End Region
@@ -228,7 +240,7 @@ Friend Class EntitiesController
         For Each entity_id In positionsDictionary.Keys
             batch_update.Add({entity_id, ITEMS_POSITIONS, positionsDictionary(entity_id)})
         Next
-        GlobalVariables.Entities.UpdateBatch(batch_update)
+
         ' CP while updating
         ' review ! priority normal
 

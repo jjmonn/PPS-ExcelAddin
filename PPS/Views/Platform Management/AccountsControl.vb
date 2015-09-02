@@ -11,7 +11,7 @@
 '       -
 '        
 '
-' Last modified: 27/08/2015
+' Last modified: 02/09/2015
 ' Author: Julien Monnereau
 
 
@@ -32,7 +32,7 @@ Friend Class AccountsControl
     ' Objects
     Friend Controller As AccountsController
     Private CP As CircularProgressUI
-    Private AccountsTV As TreeView
+    Friend AccountsTV As TreeView
     Friend current_node As TreeNode
 
     ' Variables

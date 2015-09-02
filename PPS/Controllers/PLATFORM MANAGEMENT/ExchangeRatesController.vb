@@ -54,10 +54,10 @@ Friend Class ExchangeRatesController
         currentRatesVersionId = GlobalVariables.Versions.versions_hash(My.Settings.version_id)(EX_RATES_RATE_VERSION)
         NewRatesVersionUI = New NewRatesVersionUI(Me)
 
-        AddHandler ExchangeRates.ExchangeRateUpdateEvent, AddressOf AfterRateUpdate
-        AddHandler GlobalVariables.RatesVersions.rate_versionCreationEvent, AddressOf AfterVersionCreate
-        AddHandler GlobalVariables.RatesVersions.rate_versionUpdateEvent, AddressOf AfterVersionUpdate
-        AddHandler GlobalVariables.RatesVersions.rate_versionDeleteEvent, AddressOf AfterVersionDelete
+        AddHandler ExchangeRates.UpdateEvent, AddressOf AfterRateUpdate
+        AddHandler GlobalVariables.RatesVersions.CreationEvent, AddressOf AfterVersionCreate
+        AddHandler GlobalVariables.RatesVersions.UpdateEvent, AddressOf AfterVersionUpdate
+        AddHandler GlobalVariables.RatesVersions.DeleteEvent, AddressOf AfterVersionDelete
 
 
     End Sub
@@ -110,7 +110,10 @@ Friend Class ExchangeRatesController
 
     End Sub
 
-    Private Sub AfterRateUpdate(ByRef status As Boolean, ByRef ht As Hashtable)
+    Private Sub AfterRateUpdate(ByRef status As Boolean, _
+                                ByRef destination_currency_id As Int32, _
+                                ByRef rates_version_id As Int32, _
+                                ByRef period As Int32)
 
         ' to be implemented priority normal
 
@@ -146,20 +149,23 @@ Friend Class ExchangeRatesController
 
     End Sub
 
-    Private Sub AfterVersionCreate(ByRef status As Boolean, ByRef ht As Hashtable)
+    Private Sub AfterVersionCreate(ByRef status As Boolean, ByRef id As Int32)
 
-        If ht(PARENT_ID_VARIABLE) = 0 Then
-            VTreeViewUtil.AddNode(ht(ID_VARIABLE), ht(NAME_VARIABLE), rates_versionsTV)
-        Else
-            Dim parentNode As vTreeNode = VTreeViewUtil.FindNode(rates_versionsTV, ht(PARENT_ID_VARIABLE))
-            If Not parentNode Is Nothing Then
-                VTreeViewUtil.AddNode(ht(ID_VARIABLE), ht(NAME_VARIABLE), parentNode)
-            End If
-        End If
+        ' to be reimplemented priority high
 
-        If ht(IS_FOLDER_VARIABLE) = False Then
-            ChangeVersion(ht(ID_VARIABLE))
-        End If
+
+        'If ht(PARENT_ID_VARIABLE) = 0 Then
+        '    VTreeViewUtil.AddNode(ht(ID_VARIABLE), ht(NAME_VARIABLE), rates_versionsTV)
+        'Else
+        '    Dim parentNode As vTreeNode = VTreeViewUtil.FindNode(rates_versionsTV, ht(PARENT_ID_VARIABLE))
+        '    If Not parentNode Is Nothing Then
+        '        VTreeViewUtil.AddNode(ht(ID_VARIABLE), ht(NAME_VARIABLE), parentNode)
+        '    End If
+        'End If
+
+        'If ht(IS_FOLDER_VARIABLE) = False Then
+        '    ChangeVersion(ht(ID_VARIABLE))
+        'End If
 
     End Sub
 
@@ -169,7 +175,19 @@ Friend Class ExchangeRatesController
 
     End Sub
 
-    Private Sub AfterVersionUpdate(ByRef status As Boolean, ByRef ht As Hashtable)
+    Private Sub Update(ByRef id As Int32, _
+                       ByRef variable As String, _
+                       ByRef value As Object)
+
+        Dim ht As Hashtable = GlobalVariables.RatesVersions.rate_versions_hash(id)
+        ht(variable) = value
+        GlobalVariables.RatesVersions.CMSG_UPDATE_RATE_VERSION(ht)
+
+    End Sub
+
+
+
+    Private Sub AfterVersionUpdate(ByRef status As Boolean, ByRef id As Int32)
 
         ' to be implemented -> priority normal
 
@@ -218,7 +236,7 @@ Friend Class ExchangeRatesController
 
         Dim positions_dic = VTreeViewUtil.GeneratePositionsDictionary(rates_versionsTV)
         For Each id In positions_dic.Keys
-            GlobalVariables.RatesVersions.CMSG_UPDATE_RATE_VERSION(id, ITEMS_POSITIONS, positions_dic(id))
+            Update(id, ITEMS_POSITIONS, positions_dic(id))
         Next
 
     End Sub

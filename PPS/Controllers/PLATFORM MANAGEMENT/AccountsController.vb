@@ -12,7 +12,7 @@
 '
 '
 '
-' Last Modified: 28/08/2015
+' Last Modified: 02/09/2015
 ' Author: Julien Monnereau
 
 
@@ -41,7 +41,8 @@ Friend Class AccountsController
     Friend positionsDictionary As New Dictionary(Of Int32, Double)
     Private dependant_account_id As String
     Friend FTypesToBeTested As New List(Of Int32)
-      
+    Private isClosing As Boolean = False
+
 #End Region
 
 
@@ -49,19 +50,27 @@ Friend Class AccountsController
 
     Friend Sub New()
 
-        accountsNameKeysDictionary = GlobalVariables.Accounts.GetAccountsDictionary(NAME_VARIABLE, ID_VARIABLE)
-        GlobalVariables.Accounts.LoadAccountsTV(AccountsTV)
         View = New AccountsControl(Me, AccountsTV)
-        NewAccountView = New NewAccountUI(View, Me)
-        FormulasTranslator = New FormulasTranslations(accountsNameKeysDictionary)
-        formulasMGT = New ModelFormulasMGT(accountsNameKeysDictionary, AccountsTV)
+        InstanceVariablesLoading()
         positionsDictionary = TreeViewsUtilities.GeneratePositionsDictionary(AccountsTV)
         FTypesToBeTested.Add(GlobalEnums.FormulaTypes.FIRST_PERIOD_INPUT)
         FTypesToBeTested.Add(GlobalEnums.FormulaTypes.FORMULA)
 
-        AddHandler globalvariables.accounts.AccountCreationEvent, AddressOf AccountCreateConfirmation
-        AddHandler globalvariables.accounts.AccountUpdateEvent, AddressOf AccountUpdateConfirmation
-        AddHandler globalvariables.accounts.AccountDeleteEvent, AddressOf AccountDeleteConfirmation
+        AddHandler GlobalVariables.Accounts.Read, AddressOf AccountUpdateFromServer
+        AddHandler GlobalVariables.Accounts.DeleteEvent, AddressOf AccountDeleteFromServer
+        AddHandler GlobalVariables.Accounts.CreationEvent, AddressOf AccountCreateConfirmation
+        AddHandler GlobalVariables.Accounts.UpdateEvent, AddressOf AccountUpdateConfirmation
+
+    End Sub
+
+    Private Sub InstanceVariablesLoading()
+
+        accountsNameKeysDictionary = GlobalVariables.Accounts.GetAccountsDictionary(NAME_VARIABLE, ID_VARIABLE)
+        GlobalVariables.Accounts.LoadAccountsTV(AccountsTV)
+        NewAccountView = New NewAccountUI(View, Me)
+        FormulasTranslator = New FormulasTranslations(accountsNameKeysDictionary)
+        formulasMGT = New ModelFormulasMGT(accountsNameKeysDictionary, AccountsTV)
+        View.AccountsTV.Refresh()
 
     End Sub
 
@@ -126,11 +135,11 @@ Friend Class AccountsController
 
     Friend Sub CreateAccountTab()
 
-        ' to be reimplemented priority high !! 
+        ' to be reimplemented 
+        'priority high !! 
 
 
     End Sub
-
 
     Friend Sub UpdateAccount(ByRef id As Int32, ByRef variable As String, ByVal value As Object)
 
@@ -143,11 +152,11 @@ Friend Class AccountsController
 
     Friend Sub UpdateAccount(ByRef id As String, ByRef account_attributes As Hashtable)
 
-        Dim ht As Hashtable = globalvariables.accounts.accounts_hash(id)
+        Dim ht As Hashtable = GlobalVariables.Accounts.accounts_hash(id)
         For Each attribute As String In account_attributes
             ht(attribute) = account_attributes(attribute)
         Next
-        globalvariables.accounts.CMSG_UPDATE_ACCOUNT(ht)
+        GlobalVariables.Accounts.CMSG_UPDATE_ACCOUNT(ht)
         View.LaunchCP()
 
     End Sub
@@ -178,10 +187,12 @@ Friend Class AccountsController
     Friend Sub UpdateName(ByRef account_id As Int32, _
                           ByRef new_name As String)
 
-        ' below -> may raise issue if pb on update!(priority: low)
+        ' below -> may raise issue if pb on update!(priority: high)
         Dim old_name = GlobalVariables.Accounts.accounts_hash(account_id)(NAME_VARIABLE)
         accountsNameKeysDictionary.Remove(old_name)
         accountsNameKeysDictionary.Add(new_name, account_id)
+        ' -> update those dict on update from server priority high
+
         UpdateAccount(account_id, NAME_VARIABLE, new_name)
 
     End Sub
@@ -257,17 +268,6 @@ Friend Class AccountsController
 
     End Function
 
-    Friend Sub SendNewPositionsToModel()
-
-        ' dans l'idéal trouver une autre solution !! priority high
-        positionsDictionary = TreeViewsUtilities.GeneratePositionsDictionary(AccountsTV)
-        For Each account In positionsDictionary.Keys
-            UpdateAccount(account, ITEMS_POSITIONS, positionsDictionary(account))
-        Next
-
-    End Sub
-
-
 #End Region
 
 
@@ -333,15 +333,48 @@ Friend Class AccountsController
 
     End Function
 
-    
-
     Private Sub RemoveAccount(ByRef accountsList As List(Of Int32), ByRef node As TreeNode)
 
         For Each id In accountsList
             GlobalVariables.Accounts.CMSG_DELETE_ACCOUNT(id)
             ' -> must wait for confirmation !!
-            accountsNameKeysDictionary.Remove(GlobalVariables.Accounts.accounts_hash(id)(NAME_VARIABLE))
+            '     accountsNameKeysDictionary.Remove(GlobalVariables.Accounts.accounts_hash(id)(NAME_VARIABLE))
         Next
+
+    End Sub
+
+#End Region
+
+
+#Region "Events"
+
+    Private Sub AccountUpdateFromServer(ByRef status As Boolean, ByRef accountsAttributes As Hashtable)
+
+        If status = True _
+        AndAlso isClosing = False Then
+            InstanceVariablesLoading()
+        End If
+
+    End Sub
+
+    Private Sub AccountDeleteFromServer(ByRef status As Boolean, ByRef id As UInt32)
+
+        If status = True _
+        AndAlso isClosing = False Then
+            InstanceVariablesLoading()
+        End If
+
+    End Sub
+
+    Private Sub AccountCreateConfirmation(ByRef status As Boolean, ByRef id As Int32)
+
+        View.StopCP()
+
+    End Sub
+
+    Private Sub AccountUpdateConfirmation()
+
+        View.StopCP()
 
     End Sub
 
@@ -392,7 +425,7 @@ Friend Class AccountsController
         Dim dependancies_dict As New Dictionary(Of String, List(Of String))
         Dim accounts_list = TreeViewsUtilities.GetNodesKeysList(AccountsTV)
         For Each account_id In accounts_list
-            Dim ftype As String = globalvariables.accounts.accounts_hash(account_id)(ACCOUNT_FORMULA_TYPE_VARIABLE)
+            Dim ftype As String = GlobalVariables.Accounts.accounts_hash(account_id)(ACCOUNT_FORMULA_TYPE_VARIABLE)
             If ftype <> GlobalEnums.FormulaTypes.HARD_VALUE_INPUT _
             AndAlso ftype <> GlobalEnums.FormulaTypes.TITLE Then
                 If dependancies_dict.ContainsKey(account_id) = False Then AddDependantToDependanciesDict(account_id, dependancies_dict)
@@ -446,11 +479,11 @@ Friend Class AccountsController
     Friend Function FormulasTypesChecks() As Boolean
 
         Dim accountsNamesFormulaErrorList As New List(Of String)
-      
+
         For Each accountKey In positionsDictionary.Keys
-            If FTypesToBeTested.Contains(globalvariables.accounts.accounts_hash(accountKey)(ACCOUNT_FORMULA_TYPE_VARIABLE)) Then
-                If globalvariables.accounts.accounts_hash(accountKey)(ACCOUNT_FORMULA_VARIABLE) = "" Then _
-                    accountsNamesFormulaErrorList.Add(globalvariables.accounts.accounts_hash(accountKey)(NAME_VARIABLE))
+            If FTypesToBeTested.Contains(GlobalVariables.Accounts.accounts_hash(accountKey)(ACCOUNT_FORMULA_TYPE_VARIABLE)) Then
+                If GlobalVariables.Accounts.accounts_hash(accountKey)(ACCOUNT_FORMULA_VARIABLE) = "" Then _
+                    accountsNamesFormulaErrorList.Add(GlobalVariables.Accounts.accounts_hash(accountKey)(NAME_VARIABLE))
             End If
         Next
 
@@ -502,45 +535,19 @@ Friend Class AccountsController
 
     End Sub
 
+    Friend Sub SendNewPositionsToModel()
 
-#End Region
-
-
-#Region "Events"
-
-    Private Sub AccountCreateConfirmation(ByRef status As Boolean, ByRef attributes As Hashtable)
-
-        accountsNameKeysDictionary.Add(attributes(NAME_VARIABLE), attributes(ID_VARIABLE))
-        If IsNumeric(attributes(PARENT_ID_VARIABLE)) Then
-            Dim parent_node As TreeNode = AccountsTV.Nodes.Find(attributes(ID_VARIABLE), True)(0)
-            parent_node.Nodes.Add(attributes(ID_VARIABLE), _
-                                  attributes(NAME_VARIABLE), _
-                                  attributes(IMAGE_VARIABLE), _
-                                  attributes(IMAGE_VARIABLE))
-        Else
-            AccountsTV.Nodes.Add(attributes(ID_VARIABLE), _
-                                attributes(NAME_VARIABLE), _
-                                attributes(IMAGE_VARIABLE), _
-                                attributes(IMAGE_VARIABLE))
-        End If
-        View.StopCP()
-
-    End Sub
-
-    Private Sub AccountUpdateConfirmation()
-
-        View.StopCP()
-
-    End Sub
-
-    Private Sub AccountDeleteConfirmation()
-
-        View.StopCP()
+        ' dans l'idéal trouver une autre solution !! priority high
+        positionsDictionary = TreeViewsUtilities.GeneratePositionsDictionary(AccountsTV)
+        For Each account In positionsDictionary.Keys
+            UpdateAccount(account, ITEMS_POSITIONS, positionsDictionary(account))
+        Next
 
     End Sub
 
 
 #End Region
+
 
 
 End Class

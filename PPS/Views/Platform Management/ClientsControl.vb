@@ -98,7 +98,7 @@ Friend Class ClientsControl
                 Case Else
                     If categoriesNameKeyDic.ContainsKey(args.Cell.Editor.EditorValue) = True Then
                         value = categoriesNameKeyDic(args.Cell.Editor.EditorValue)
-                        controller.updateclientCategory(args.Cell.RowItem.Caption, _
+                        controller.UpdateclientFilter(args.Cell.RowItem.Caption, _
                                                          clientsDGV.columnsCaptionIDDict(args.Cell.ColumnItem.Caption), _
                                                          value)
                     Else

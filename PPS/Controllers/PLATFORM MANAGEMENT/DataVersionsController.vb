@@ -54,9 +54,9 @@ Friend Class DataVersionsController
         NewVersionUI = New NewDataVersionUI(Me)
         positions_dictionary = VTreeViewUtil.GeneratePositionsDictionary(versionsTV)
 
-        AddHandler GlobalVariables.Versions.VersionCreationEvent, AddressOf AfterCreate
-        AddHandler GlobalVariables.Versions.VersionUpdateEvent, AddressOf AfterUpdate
-        AddHandler GlobalVariables.Versions.VersionDeleteEvent, AddressOf AfterDelete
+        AddHandler GlobalVariables.Versions.CreationEvent, AddressOf AfterCreate
+        AddHandler GlobalVariables.Versions.UpdateEvent, AddressOf AfterUpdate
+        AddHandler GlobalVariables.Versions.DeleteEvent, AddressOf AfterDelete
 
     End Sub
 
@@ -99,37 +99,52 @@ Friend Class DataVersionsController
 
     End Sub
 
-    Private Sub AfterCreate(ByRef status As Boolean, ByRef ht As Hashtable)
+    Private Sub AfterCreate(ByRef status As Boolean, ByRef id As Int32)
 
-        If ht(PARENT_ID_VARIABLE) <> 0 Then
-            Dim parentNode As VIBlend.WinForms.Controls.vTreeNode = Nothing
-            parentNode = VTreeViewUtil.FindNode(versionsTV, ht(PARENT_ID_VARIABLE))
-            VTreeViewUtil.AddNode(ht(ID_VARIABLE), ht(NAME_VARIABLE), parentNode)
-        Else
-            VTreeViewUtil.AddNode(ht(ID_VARIABLE), ht(NAME_VARIABLE), versionsTV)
-        End If
+        ' not here -> deplaced in after update from server priority high
+
+        'If ht(PARENT_ID_VARIABLE) <> 0 Then
+        '    Dim parentNode As VIBlend.WinForms.Controls.vTreeNode = Nothing
+        '    parentNode = VTreeViewUtil.FindNode(versionsTV, ht(PARENT_ID_VARIABLE))
+        '    VTreeViewUtil.AddNode(ht(ID_VARIABLE), ht(NAME_VARIABLE), parentNode)
+        'Else
+        '    VTreeViewUtil.AddNode(ht(ID_VARIABLE), ht(NAME_VARIABLE), versionsTV)
+        'End If
 
     End Sub
 
     Friend Sub UpdateParent(ByRef version_id As String, ByRef parent_id As Object)
 
-        GlobalVariables.Versions.CMSG_UPDATE_VERSION(version_id, PARENT_ID_VARIABLE, parent_id)
+        Update(version_id, PARENT_ID_VARIABLE, parent_id)
 
     End Sub
 
     Friend Sub UpdateName(ByRef version_id As String, ByRef name As String)
 
-        GlobalVariables.Versions.CMSG_UPDATE_VERSION(version_id, NAME_VARIABLE, name)
+        ' set the names check every where at the same place priority high
+        Update(version_id, NAME_VARIABLE, name)
 
     End Sub
 
     Friend Sub UpdateRatesVersion_id(ByRef version_id As UInt32, ByRef rates_version_id As UInt32)
 
-        GlobalVariables.Versions.CMSG_UPDATE_VERSION(version_id, VERSIONS_RATES_VERSION_ID_VAR, rates_version_id)
+        Update(version_id, VERSIONS_RATES_VERSION_ID_VAR, rates_version_id)
 
     End Sub
 
-    Private Sub AfterUpdate(ByRef status As Boolean, ByRef ht As Hashtable)
+    Private Sub Update(ByRef id As Int32, _
+                       ByRef variable As String, _
+                       ByRef value As Object)
+
+
+        Dim ht As Hashtable = GlobalVariables.Versions.versions_hash(id)
+        ht(variable) = value
+        GlobalVariables.Versions.CMSG_UPDATE_VERSION(ht)
+
+    End Sub
+
+
+    Private Sub AfterUpdate(ByRef status As Boolean, ByRef id As Int32)
 
         ' to be implemented
         ' priority normal
@@ -168,17 +183,21 @@ Friend Class DataVersionsController
 
         ' lock version ? 
         ' priority normal => nath server
-        GlobalVariables.Versions.CMSG_UPDATE_VERSION(version_id, VERSIONS_LOCKED_VARIABLE, 1)
-        GlobalVariables.Versions.CMSG_UPDATE_VERSION(version_id, VERSIONS_LOCKED_DATE_VARIABLE, Format(Now, "short Date"))
-
+        Dim ht As Hashtable = GlobalVariables.Versions.versions_hash(version_id)
+        ht(VERSIONS_LOCKED_VARIABLE) = 1
+        ht(VERSIONS_LOCKED_DATE_VARIABLE) = Format(Now, "short Date")
+        GlobalVariables.Versions.CMSG_UPDATE_VERSION(ht)
+  
     End Sub
 
     Friend Sub UnlockVersion(ByRef version_id As UInt32)
 
         ' lock version ? 
         ' priority normal => nath server
-        GlobalVariables.Versions.CMSG_UPDATE_VERSION(version_id, VERSIONS_LOCKED_VARIABLE, 0)
-        GlobalVariables.Versions.CMSG_UPDATE_VERSION(version_id, VERSIONS_LOCKED_DATE_VARIABLE, "NA")
+        Dim ht As Hashtable = GlobalVariables.Versions.versions_hash(version_id)
+        ht(VERSIONS_LOCKED_VARIABLE) = 0
+        ht(VERSIONS_LOCKED_DATE_VARIABLE) = "NA"
+        GlobalVariables.Versions.CMSG_UPDATE_VERSION(ht)
 
     End Sub
 
@@ -249,9 +268,10 @@ Friend Class DataVersionsController
     Friend Sub SendNewPositionsToModel()
 
         ' Caution: to be sent only once -> transaction intensive
+        ' -> + ill refresh view each time !!!!! 
         positions_dictionary = VTreeViewUtil.GeneratePositionsDictionary(versionsTV)
         For Each category_id In positions_dictionary.Keys
-            GlobalVariables.Versions.CMSG_UPDATE_VERSION(category_id, ITEMS_POSITIONS, positions_dictionary(category_id))
+            Update(category_id, ITEMS_POSITIONS, positions_dictionary(category_id))
         Next
 
     End Sub
