@@ -354,6 +354,7 @@ Friend Class AccountsController
     Private Sub AccountUpdateFromServer(ByRef status As Boolean, ByRef accountsAttributes As Hashtable)
 
         If status = True _
+        AndAlso GlobalVariables.Accounts.accounts_hash.ContainsKey(accountsAttributes(ID_VARIABLE)) = False _
         AndAlso isClosing = False Then
             View.TVUpdate(accountsAttributes(ID_VARIABLE), _
                           accountsAttributes(PARENT_ID_VARIABLE), _
@@ -385,8 +386,13 @@ Friend Class AccountsController
 
     End Sub
 
-    Private Sub AccountUpdateConfirmation()
+    Private Sub AccountUpdateConfirmation(ByRef status As Boolean, ByRef id As Int32)
 
+        If status = False Then
+            MsgBox("The account could not be created." & Chr(13) & _
+                   "Error " & "")
+            ' display error from error (to be catched in account) priority normal 
+        End If
 
 
     End Sub
