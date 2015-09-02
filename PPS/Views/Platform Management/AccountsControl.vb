@@ -197,10 +197,16 @@ Friend Class AccountsControl
 
 #Region "Interface"
 
+    Delegate Sub LaunchCP_Delegate()
     Friend Sub LaunchCP()
 
-        CP = New CircularProgressUI(Drawing.Color.Blue, "Saving")
-        CP.Show()
+        If InvokeRequired Then
+            Dim MyDelegate As New LaunchCP_Delegate(AddressOf LaunchCP)
+            Me.Invoke(MyDelegate, New Object() {})
+        Else
+            CP = New CircularProgressUI(Drawing.Color.Blue, "Saving")
+            CP.Show()
+        End If
 
     End Sub
 
