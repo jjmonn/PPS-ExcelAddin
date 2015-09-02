@@ -23,6 +23,7 @@ Friend Class Currency
     ' Variables
     Friend state_flag As Boolean
     Friend currencies_hash As New Hashtable
+    Friend mainCurrency As UInt32
 
     ' Events
     Public Event ObjectInitialized()
@@ -30,6 +31,7 @@ Friend Class Currency
     Public Event CreationEvent(ByRef status As Boolean, ByRef id As Int32)
     Public Event UpdateEvent(ByRef status As Boolean, ByRef id As Int32)
     Public Event DeleteEvent(ByRef status As Boolean, ByRef id As UInt32)
+    Public Event GetMainCurrency(ByRef status As Boolean, ByRef id As UInt32)
 
 
 #End Region
@@ -37,14 +39,23 @@ Friend Class Currency
 
 #Region "Init"
 
-  Friend Sub New()
+    Friend Sub New()
 
-    NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_LIST_CURRENCY_ANSWER, AddressOf SMSG_LIST_CURRENCY_ANSWER)
-    NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_READ_CURRENCY_ANSWER, AddressOf SMSG_READ_CURRENCY_ANSWER)
-    NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_DELETE_CURRENCY_ANSWER, AddressOf SMSG_DELETE_CURRENCY_ANSWER)
-    state_flag = False
+        NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_LIST_CURRENCY_ANSWER, AddressOf SMSG_LIST_CURRENCY_ANSWER)
+        NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_READ_CURRENCY_ANSWER, AddressOf SMSG_READ_CURRENCY_ANSWER)
+        NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_DELETE_CURRENCY_ANSWER, AddressOf SMSG_DELETE_CURRENCY_ANSWER)
+        NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_GET_MAIN_CURRENCY_ANSWER, AddressOf SMSG_GET_MAIN_CURRENCY_ANSWER)
+        NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_SET_MAIN_CURRENCY_ANSWER, AddressOf SMSG_SET_MAIN_CURRENCY_ANSWER)
 
-  End Sub
+        state_flag = False
+
+    End Sub
+
+#End Region
+
+
+#Region "CRUD"
+
 
     Private Sub SMSG_LIST_CURRENCY_ANSWER(packet As ByteBuffer)
 
@@ -62,11 +73,6 @@ Friend Class Currency
         End If
 
     End Sub
-
-#End Region
-
-
-#Region "CRUD"
 
     Friend Sub CMSG_CREATE_CURRENCY(ByRef attributes As Hashtable)
 
@@ -152,6 +158,27 @@ Friend Class Currency
 
     End Sub
 
+    Private Sub SMSG_GET_MAIN_CURRENCY_ANSWER(packet As ByteBuffer)
+        packet.ReadInt32()
+
+        mainCurrency = packet.ReadUint32()
+        RaiseEvent GetMainCurrency(True, mainCurrency)
+    End Sub
+
+    Private Sub SMSG_SET_MAIN_CURRENCY_ANSWER(packet As ByteBuffer)
+        If packet.ReadInt32() = 0 Then
+            RaiseEvent GetMainCurrency(False, 0)
+        Else
+            RaiseEvent GetMainCurrency(True, packet.ReadUint32())
+        End If
+    End Sub
+
+    Friend Sub CMSG_SET_MAIN_CURRENCY(ByRef id As UInt32)
+        Dim packet As New ByteBuffer(CType(ClientMessage.CMSG_GET_MAIN_CURRENCY, UShort))
+        packet.WriteUint32(id)
+        packet.Release()
+        NetworkManager.GetInstance().Send(packet)
+    End Sub
 #End Region
 
 
@@ -205,14 +232,17 @@ Friend Class Currency
 #End Region
 
 
-  Protected Overrides Sub finalize()
+    Protected Overrides Sub finalize()
 
-    NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_LIST_CURRENCY_ANSWER, AddressOf SMSG_LIST_CURRENCY_ANSWER)
-    NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_READ_CURRENCY_ANSWER, AddressOf SMSG_READ_CURRENCY_ANSWER)
-    NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_DELETE_CURRENCY_ANSWER, AddressOf SMSG_DELETE_CURRENCY_ANSWER)
-    MyBase.Finalize()
+        NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_LIST_CURRENCY_ANSWER, AddressOf SMSG_LIST_CURRENCY_ANSWER)
+        NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_READ_CURRENCY_ANSWER, AddressOf SMSG_READ_CURRENCY_ANSWER)
+        NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_DELETE_CURRENCY_ANSWER, AddressOf SMSG_DELETE_CURRENCY_ANSWER)
+        NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_GET_MAIN_CURRENCY_ANSWER, AddressOf SMSG_GET_MAIN_CURRENCY_ANSWER)
+        NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_SET_MAIN_CURRENCY_ANSWER, AddressOf SMSG_SET_MAIN_CURRENCY_ANSWER)
 
-  End Sub
+        MyBase.Finalize()
+
+    End Sub
 
 
 
