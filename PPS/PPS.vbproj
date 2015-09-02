@@ -148,6 +148,7 @@
     <Compile Include="Models\CRUDs\New CRUDs\ExchangeRates.vb" />
     <Compile Include="Models\CRUDs\New CRUDs\Facts.vb" />
     <Compile Include="Models\CRUDs\New CRUDs\FactLog.vb" />
+    <Compile Include="Models\CRUDs\New CRUDs\GlobalFactVersion.vb" />
     <Compile Include="Models\CRUDs\New CRUDs\RatesVersion.vb" />
     <Compile Include="Models\CRUDs\New CRUDs\Filter.vb" />
     <Compile Include="Models\CRUDs\New CRUDs\FilterValue.vb" />
