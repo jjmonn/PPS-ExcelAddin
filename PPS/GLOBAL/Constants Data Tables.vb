@@ -314,6 +314,7 @@ Module Data_Tables_Constants
     Friend Const PRODUCT_ID_VARIABLE = "product_id"
     Friend Const ADJUSTMENT_ID_VARIABLE = "adjustment_id"
     Friend Const VALUE_VARIABLE = "value"
+    Friend Const GLOBAL_FACT_ID_VARIABLE = "global_fact_id"
 
 #End Region
 

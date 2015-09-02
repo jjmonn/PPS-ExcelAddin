@@ -5,8 +5,8 @@ Public Class FactLog
 
 #Region "Instance variables"
 
-    Friend state_flag As Boolean = False
     Public Event Read(Status As Boolean, factlog_list As List(Of Hashtable))
+
 #End Region
 
 #Region "CRUD"
