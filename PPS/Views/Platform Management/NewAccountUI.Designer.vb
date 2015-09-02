@@ -35,7 +35,7 @@ Partial Class NewAccountUI
         Me.parentTB = New System.Windows.Forms.TextBox()
         Me.nameTB = New System.Windows.Forms.TextBox()
         Me.formulaCB = New System.Windows.Forms.ComboBox()
-        Me.formatCB = New System.Windows.Forms.ComboBox()
+        Me.TypeCB = New System.Windows.Forms.ComboBox()
         Me.Label6 = New System.Windows.Forms.Label()
         Me.Label3 = New System.Windows.Forms.Label()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
@@ -126,7 +126,7 @@ Partial Class NewAccountUI
         Me.TableLayoutPanel1.Controls.Add(Me.parentTB, 1, 0)
         Me.TableLayoutPanel1.Controls.Add(Me.nameTB, 1, 1)
         Me.TableLayoutPanel1.Controls.Add(Me.formulaCB, 1, 2)
-        Me.TableLayoutPanel1.Controls.Add(Me.formatCB, 1, 3)
+        Me.TableLayoutPanel1.Controls.Add(Me.TypeCB, 1, 3)
         Me.TableLayoutPanel1.Controls.Add(Me.Label6, 0, 2)
         Me.TableLayoutPanel1.Controls.Add(Me.Label3, 0, 3)
         Me.TableLayoutPanel1.Controls.Add(Me.GroupBox1, 1, 4)
@@ -190,14 +190,14 @@ Partial Class NewAccountUI
         Me.formulaCB.Size = New System.Drawing.Size(408, 21)
         Me.formulaCB.TabIndex = 7
         '
-        'formatCB
+        'TypeCB
         '
-        Me.formatCB.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.formatCB.FormattingEnabled = True
-        Me.formatCB.Location = New System.Drawing.Point(222, 105)
-        Me.formatCB.Name = "formatCB"
-        Me.formatCB.Size = New System.Drawing.Size(408, 21)
-        Me.formatCB.TabIndex = 9
+        Me.TypeCB.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.TypeCB.FormattingEnabled = True
+        Me.TypeCB.Location = New System.Drawing.Point(222, 105)
+        Me.TypeCB.Name = "TypeCB"
+        Me.TypeCB.Size = New System.Drawing.Size(408, 21)
+        Me.TypeCB.TabIndex = 9
         '
         'Label6
         '
@@ -394,7 +394,7 @@ Partial Class NewAccountUI
     Friend WithEvents parentTB As System.Windows.Forms.TextBox
     Friend WithEvents nameTB As System.Windows.Forms.TextBox
     Friend WithEvents formulaCB As System.Windows.Forms.ComboBox
-    Friend WithEvents formatCB As System.Windows.Forms.ComboBox
+    Friend WithEvents TypeCB As System.Windows.Forms.ComboBox
     Friend WithEvents selectParentBT As System.Windows.Forms.Button
     Friend WithEvents accountsIL As System.Windows.Forms.ImageList
     Friend WithEvents accountsTVPanel As System.Windows.Forms.Panel

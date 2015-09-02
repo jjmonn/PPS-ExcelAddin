@@ -68,7 +68,7 @@ Friend Class NewAccountUI
     Private Sub ComboBoxesInitialize()
 
         For Each item In AccountsView.FormatComboBox.Items
-            formatCB.Items.Add(item)
+            TypeCB.Items.Add(item)
         Next
 
         For Each item In AccountsView.FormulaTypeComboBox.Items
@@ -96,7 +96,7 @@ Friend Class NewAccountUI
 
     End Sub
 
-  
+
 #End Region
 
 
@@ -115,7 +115,30 @@ Friend Class NewAccountUI
     Private Sub CreateAccountBT_Click(sender As Object, e As EventArgs) Handles CreateAccountBT.Click
 
         If IsFormValid() = True Then
-            Controller.CreateAccount()
+            Dim parent_id, conso_option, conversion_option, account_tab As Int32
+            If Not parent_node Is Nothing Then
+                parent_id = CInt(parent_node.Name)
+                account_tab = GlobalVariables.Accounts.accounts_hash(CInt(parent_node.Name))(ACCOUNT_TAB_VARIABLE)
+            Else
+                parent_id = 0
+                account_tab = accountsTV.Nodes.Count
+            End If
+            If aggregation_RB.Checked = True Then conso_option = GlobalEnums.ConsolidationOptions.AGGREGATION
+            If recompute_RB.Checked = True Then conso_option = GlobalEnums.ConsolidationOptions.RECOMPUTATION
+            If flux_RB.Checked = True Then conversion_option = GlobalEnums.ConversionOptions.AVERAGE_RATE
+            If bs_item_RB.Checked = True Then conversion_option = GlobalEnums.ConversionOptions.END_OF_PERIOD_RATE
+
+            Controller.CreateAccount(parent_id, _
+                                     nameTB.Text, _
+                                     formulaCB.SelectedItem.value, _
+                                     "", _
+                                     TypeCB.SelectedItem.value, _
+                                     conso_option, _
+                                     conversion_option, _
+                                     "n", _
+                                     formulaCB.SelectedItem.value, _
+                                     1, _
+                                     account_tab)   
             Controller.DisplayAcountsView()
         End If
 
@@ -180,7 +203,7 @@ Friend Class NewAccountUI
 
     Private Function ComboBoxesSelectionCheck() As Boolean
 
-        If formatCB.SelectedItem Is Nothing Then Return False
+        If TypeCB.SelectedItem Is Nothing Then Return False
         If formulaCB.SelectedItem Is Nothing Then Return False
         Return True
 
