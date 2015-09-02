@@ -281,24 +281,22 @@ Friend Class AccountsControl
     Private Sub newCategoryBT_Click(sender As Object, e As EventArgs) Handles CreateANewCategoryToolStripMenuItem.Click, _
                                                                               AddCategoryToolStripMenuItem.Click
 
-        ' to be reveiwed priority high !!!!!!!!
         formulaEdit.Checked = False
-        Dim newCategoryName As String = InputBox("Name of the New Category: ", "New Category Creation", "")
+        Dim newCategoryName As String = InputBox("Name of the New Tab: ", "Account Tab Creation", "")
         If newCategoryName <> "" Then
 
             If Controller.AccountNameCheck(newCategoryName) = True Then
-                Dim TempHT As New Hashtable
-                TempHT.Add(NAME_VARIABLE, newCategoryName)
-                TempHT.Add(PARENT_ID_VARIABLE, DBNull.Value)
-                TempHT.Add(ACCOUNT_FORMULA_TYPE_VARIABLE, GlobalEnums.FormulaTypes.TITLE)
-                TempHT.Add(ACCOUNT_FORMULA_VARIABLE, "")
-                TempHT.Add(ACCOUNT_FORMAT_VARIABLE, TITLE_FORMAT_CODE)
-                TempHT.Add(ACCOUNT_TYPE_VARIABLE, NORMAL_ACCOUNT_TYPE)
-                TempHT.Add(ACCOUNT_TAB_VARIABLE, AccountsTV.Nodes.Count)
-                TempHT.Add(ACCOUNT_IMAGE_VARIABLE, 0)
-                TempHT.Add(ACCOUNT_SELECTED_IMAGE_VARIABLE, 0)
-                TempHT.Add(ITEMS_POSITIONS, 1)
-                Controller.CreateAccountTab()
+                Controller.CreateAccount(0, _
+                                         newCategoryName, _
+                                         GlobalEnums.FormulaTypes.TITLE, _
+                                         "", _
+                                         GlobalEnums.AccountFormat.DATE_, _
+                                         1, _
+                                         1, _
+                                         TITLE_FORMAT_CODE, _
+                                         GlobalEnums.FormulaTypes.TITLE, _
+                                         1, _
+                                         AccountsTV.Nodes.Count)
             End If
         End If
 

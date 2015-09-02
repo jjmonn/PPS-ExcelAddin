@@ -137,14 +137,6 @@ Friend Class AccountsController
 
     End Sub
 
-    Friend Sub CreateAccountTab()
-
-        ' to be reimplemented 
-        'priority high !! 
-
-
-    End Sub
-
     Friend Sub UpdateAccount(ByRef id As Int32, ByRef variable As String, ByVal value As Object)
 
         Dim ht As Hashtable = GlobalVariables.Accounts.accounts_hash(id)
@@ -354,7 +346,7 @@ Friend Class AccountsController
     Private Sub AccountUpdateFromServer(ByRef status As Boolean, ByRef accountsAttributes As Hashtable)
 
         If status = True _
-        AndAlso GlobalVariables.Accounts.accounts_hash.ContainsKey(accountsAttributes(ID_VARIABLE)) = False _
+        AndAlso AccountsTV.Nodes.Find(accountsAttributes(ID_VARIABLE), True).Length = 0 _
         AndAlso isClosing = False Then
             View.TVUpdate(accountsAttributes(ID_VARIABLE), _
                           accountsAttributes(PARENT_ID_VARIABLE), _
