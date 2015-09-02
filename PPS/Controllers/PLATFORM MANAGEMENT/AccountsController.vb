@@ -50,6 +50,7 @@ Friend Class AccountsController
 
     Friend Sub New()
 
+        GlobalVariables.Accounts.LoadAccountsTV(AccountsTV)
         View = New AccountsControl(Me, AccountsTV)
         InstanceVariablesLoading()
         positionsDictionary = TreeViewsUtilities.GeneratePositionsDictionary(AccountsTV)
@@ -66,11 +67,9 @@ Friend Class AccountsController
     Private Sub InstanceVariablesLoading()
 
         accountsNameKeysDictionary = GlobalVariables.Accounts.GetAccountsDictionary(NAME_VARIABLE, ID_VARIABLE)
-        GlobalVariables.Accounts.LoadAccountsTV(AccountsTV)
         NewAccountView = New NewAccountUI(View, Me)
         FormulasTranslator = New FormulasTranslations(accountsNameKeysDictionary)
         formulasMGT = New ModelFormulasMGT(accountsNameKeysDictionary, AccountsTV)
-        View.AccountsTV.Refresh()
 
     End Sub
 
@@ -107,26 +106,30 @@ Friend Class AccountsController
 
     End Function
 
-    Friend Sub CreateAccount()
+    Friend Sub CreateAccount(ByRef account_parent_id As Int32, _
+                             ByRef account_name As String, _
+                             ByRef account_formula_type As Int32, _
+                             ByRef account_formula As String, _
+                             ByRef account_type As Int32, _
+                             ByRef account_consolidation_option As Int32, _
+                             ByRef account_conversion_option As Int32, _
+                             ByRef account_format As String, _
+                             ByRef account_image As Int32, _
+                             ByRef account_position As Int32, _
+                             ByRef account_tab As Int32)
 
         Dim TempHT As New Hashtable
-        TempHT.Add(NAME_VARIABLE, NewAccountView.nameTB.Text)
-        TempHT.Add(ACCOUNT_FORMULA_TYPE_VARIABLE, NewAccountView.formulaCB.SelectedItem.value)
-        TempHT.Add(ACCOUNT_FORMULA_VARIABLE, "")
-        TempHT.Add(ACCOUNT_TYPE_VARIABLE, NewAccountView.formatCB.SelectedItem.value)
-        TempHT.Add(ACCOUNT_IMAGE_VARIABLE, TempHT(ACCOUNT_FORMULA_TYPE_VARIABLE))   ' dumb to be takenoff priotiy normal
-        If NewAccountView.aggregation_RB.Checked = True Then TempHT.Add(ACCOUNT_CONSOLIDATION_OPTION_VARIABLE, GlobalEnums.ConsolidationOptions.AGGREGATION)
-        If NewAccountView.recompute_RB.Checked = True Then TempHT.Add(ACCOUNT_CONSOLIDATION_OPTION_VARIABLE, GlobalEnums.ConsolidationOptions.RECOMPUTATION)
-        If NewAccountView.flux_RB.Checked = True Then TempHT.Add(ACCOUNT_CONVERSION_OPTION_VARIABLE, GlobalEnums.ConversionOptions.AVERAGE_RATE)
-        If NewAccountView.bs_item_RB.Checked = True Then TempHT.Add(ACCOUNT_CONVERSION_OPTION_VARIABLE, GlobalEnums.ConversionOptions.END_OF_PERIOD_RATE)
-        If Not NewAccountView.parent_node Is Nothing Then
-            TempHT.Add(PARENT_ID_VARIABLE, NewAccountView.parent_node.Name)
-        Else
-            TempHT.Add(PARENT_ID_VARIABLE, 0)
-        End If
-        TempHT.Add(ITEMS_POSITIONS, 1)
-        TempHT.Add(ACCOUNT_TAB_VARIABLE, GlobalVariables.Accounts.accounts_hash(CInt(NewAccountView.parent_node.Name))(ACCOUNT_TAB_VARIABLE))
-        TempHT.Add(ACCOUNT_FORMAT_VARIABLE, "n") ' dumb to be takenoff priotiy normal
+        TempHT.Add(PARENT_ID_VARIABLE, account_parent_id)
+        TempHT.Add(NAME_VARIABLE, account_name)
+        TempHT.Add(ACCOUNT_FORMULA_TYPE_VARIABLE, account_formula_type)
+        TempHT.Add(ACCOUNT_FORMULA_VARIABLE, account_formula)
+        TempHT.Add(ACCOUNT_TYPE_VARIABLE, account_type)
+        TempHT.Add(ACCOUNT_CONSOLIDATION_OPTION_VARIABLE, account_consolidation_option)
+        TempHT.Add(ACCOUNT_CONVERSION_OPTION_VARIABLE, account_conversion_option)
+        TempHT.Add(ACCOUNT_FORMAT_VARIABLE, account_format)
+        TempHT.Add(ACCOUNT_IMAGE_VARIABLE, TempHT(ACCOUNT_FORMULA_TYPE_VARIABLE))                   ' dumb to be takenoff priotiy normal
+        TempHT.Add(ITEMS_POSITIONS, account_position)                                                              ' Dumb
+        TempHT.Add(ACCOUNT_TAB_VARIABLE, account_tab)
 
         GlobalVariables.Accounts.CMSG_CREATE_ACCOUNT(TempHT)
         View.LaunchCP()
@@ -352,6 +355,10 @@ Friend Class AccountsController
 
         If status = True _
         AndAlso isClosing = False Then
+            View.TVUpdate(accountsAttributes(ID_VARIABLE), _
+                          accountsAttributes(PARENT_ID_VARIABLE), _
+                          accountsAttributes(NAME_VARIABLE), _
+                          accountsAttributes(IMAGE_VARIABLE))
             InstanceVariablesLoading()
         End If
 
@@ -361,6 +368,7 @@ Friend Class AccountsController
 
         If status = True _
         AndAlso isClosing = False Then
+            View.TVNodeDelete(id)
             InstanceVariablesLoading()
         End If
 
@@ -368,13 +376,13 @@ Friend Class AccountsController
 
     Private Sub AccountCreateConfirmation(ByRef status As Boolean, ByRef id As Int32)
 
-        View.StopCP()
+        View.CircularProgressStop()
 
     End Sub
 
     Private Sub AccountUpdateConfirmation()
 
-        View.StopCP()
+        View.CircularProgressStop()
 
     End Sub
 

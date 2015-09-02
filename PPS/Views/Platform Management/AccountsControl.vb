@@ -71,6 +71,7 @@ Friend Class AccountsControl
 
     Private Sub AccountsTVInit()
 
+
         AccountsTVPanel.Controls.Add(AccountsTV)
         AccountsTV.ContextMenuStrip = TVRCM
         AccountsTV.Dock = DockStyle.Fill
@@ -203,12 +204,62 @@ Friend Class AccountsControl
 
     End Sub
 
-    Friend Sub StopCP()
+    Delegate Sub CircularProgressStop_Delegate()
+    Friend Sub CircularProgressStop()
 
-        ' set thread safe priority high
-        CP.Dispose()
+        If InvokeRequired Then
+            Dim MyDelegate As New CircularProgressStop_Delegate(AddressOf CircularProgressStop)
+            Me.Invoke(MyDelegate, New Object() {})
+        Else
+            CP.Dispose()
+        End If
 
     End Sub
+
+    Delegate Sub TVUpdate_Delegate(ByRef account_id As Int32, _
+                                   ByRef account_parent_id As Int32, _
+                                   ByRef account_name As String, _
+                                   ByRef account_image As Int32)
+    Friend Sub TVUpdate(ByRef account_id As Int32, _
+                        ByRef account_parent_id As Int32, _
+                        ByRef account_name As String, _
+                        ByRef account_image As Int32)
+
+        If InvokeRequired Then
+            Dim MyDelegate As New TVUpdate_Delegate(AddressOf TVUpdate)
+            Me.Invoke(MyDelegate, New Object() {account_id, account_parent_id, account_name, account_image})
+        Else
+            If account_parent_id = 0 Then
+                Dim new_node As TreeNode = AccountsTV.Nodes.Add(CStr(account_id), account_name, account_image, account_image)
+                new_node.EnsureVisible()
+            Else
+                Dim accounts() As TreeNode = AccountsTV.Nodes.Find(account_parent_id, True)
+                If accounts.Length = 1 Then
+                    Dim new_node As TreeNode = accounts(0).Nodes.Add(CStr(account_id), account_name, account_image, account_image)
+                    new_node.EnsureVisible()
+                End If
+            End If
+            AccountsTV.Refresh()
+        End If
+
+    End Sub
+
+    Delegate Sub TVNodeDelete_Delegate(ByRef account_id As Int32)
+    Friend Sub TVNodeDelete(ByRef account_id As Int32)
+
+        If InvokeRequired Then
+            Dim MyDelegate As New TVNodeDelete_Delegate(AddressOf TVNodeDelete)
+            Me.Invoke(MyDelegate, New Object() {account_id})
+        Else
+            Dim accountsNodes() As TreeNode = AccountsTV.Nodes.Find(account_id, True)
+            If accountsNodes.Length = 1 Then
+                accountsNodes(0).Remove()
+                AccountsTV.Refresh()
+            End If
+        End If
+
+    End Sub
+
 
 #End Region
 
@@ -654,6 +705,7 @@ Friend Class AccountsControl
 
     Private Sub BackgroundWorker1_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles BackgroundWorker1.DoWork
 
+        'CP = New CircularProgressUI(System.Drawing.Color.Purple, "")
         Controller.SendNewPositionsToModel()
 
     End Sub
@@ -665,7 +717,6 @@ Friend Class AccountsControl
     End Sub
 
     Delegate Sub AfterClosing_Delegate()
-
     Private Sub AfterClosingAttemp_ThreadSafe()
 
         If InvokeRequired Then
@@ -730,9 +781,4 @@ Friend Class AccountsControl
 #End Region
 
 
-
-
-    
-    
-  
 End Class
