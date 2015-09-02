@@ -126,6 +126,9 @@ Friend Class ConnectionsFunctions
         AddHandler GlobalVariables.Versions.ObjectInitialized, AddressOf AfterFactsVersionsInit
         AddHandler GlobalVariables.Currencies.ObjectInitialized, AddressOf AfterCurrenciesInit
         AddHandler GlobalVariables.RatesVersions.ObjectInitialized, AddressOf AfterRatesVersionsInit
+        AddHandler GlobalVariables.GlobalFacts.ObjectInitialized, AddressOf AfterGlobalFactsInit
+        AddHandler GlobalVariables.GlobalFactsDatas.ObjectInitialized, AddressOf AfterGlobalFactsDataInit
+        AddHandler GlobalVariables.GlobalFactsVersions.ObjectInitialized, AddressOf AfterGlobalFactsVersionInit
 
         globalVariablesInitFlags.Add(GlobalEnums.GlobalModels.ACCOUNTS, False)
         globalVariablesInitFlags.Add(GlobalEnums.GlobalModels.ENTITIES, False)
@@ -141,6 +144,9 @@ Friend Class ConnectionsFunctions
         globalVariablesInitFlags.Add(GlobalEnums.GlobalModels.FACTSVERSIONS, False)
         globalVariablesInitFlags.Add(GlobalEnums.GlobalModels.CURRENCIES, False)
         globalVariablesInitFlags.Add(GlobalEnums.GlobalModels.RATESVERSIONS, False)
+        globalVariablesInitFlags.Add(GlobalEnums.GlobalModels.GLOBALFACT, False)
+        globalVariablesInitFlags.Add(GlobalEnums.GlobalModels.GLOBALFACTSDATA, False)
+        globalVariablesInitFlags.Add(GlobalEnums.GlobalModels.GLOBALFACTSVERSION, False)
 
     End Sub
 
@@ -254,7 +260,20 @@ Friend Class ConnectionsFunctions
 
     End Sub
 
+    Private Sub AfterGlobalFactsInit()
+        globalVariablesInitFlags(GlobalEnums.GlobalModels.GLOBALFACT) = True
+        globalInitFlag = CheckGlobalVariablesInitFlag()
+    End Sub
 
+    Private Sub AfterGlobalFactsDataInit()
+        globalVariablesInitFlags(GlobalEnums.GlobalModels.GLOBALFACTSDATA) = True
+        globalInitFlag = CheckGlobalVariablesInitFlag()
+    End Sub
+
+    Private Sub AfterGlobalFactsVersionInit()
+        globalVariablesInitFlags(GlobalEnums.GlobalModels.GLOBALFACTSVERSION) = True
+        globalInitFlag = CheckGlobalVariablesInitFlag()
+    End Sub
 #End Region
 
 
