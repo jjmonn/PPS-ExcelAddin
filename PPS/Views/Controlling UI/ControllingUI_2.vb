@@ -118,6 +118,7 @@ Friend Class ControllingUI_2
         GlobalVariables.Accounts.LoadAccountsTV(accountsTV)
         BackgroundWorker1.WorkerSupportsCancellation = True
 
+
         ' Init TabControl
         For Each node As vTreeNode In accountsTV.Nodes
             Dim newTab As New vTabPage
