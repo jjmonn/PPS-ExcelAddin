@@ -49,7 +49,10 @@ Friend Class ConnectionsFunctions
             CloseNetworkConnection()
         End If
         GlobalVariables.NetworkConnect = New NetworkLauncher()
-        GlobalVariables.ConnectionState = (GlobalVariables.NetworkConnect.Launch(p_hostname, p_port, Function() AddinModule.DisplayConnectionStatus(False)))
+        GlobalVariables.ConnectionState = GlobalVariables.NetworkConnect.Launch(p_hostname, p_port, Function()
+                                                                                                        AddinModule.DisplayConnectionStatus(False)
+                                                                                                        MsgBox("Connection lost")
+                                                                                                    End Function)
 
         If GlobalVariables.ConnectionState = True Then
             ' request auth token

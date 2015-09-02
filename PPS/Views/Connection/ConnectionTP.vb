@@ -116,6 +116,7 @@ Public Class ConnectionTP
       ConnectionsFunctions.CloseNetworkConnection()
     End If
         If connectionFunction.globalAuthenticated = False Then
+            MsgBox("Connection failed")
             connectionFailed = True
         End If
 
@@ -123,7 +124,7 @@ Public Class ConnectionTP
 
   Private Sub ConnectionFailedMethod() Handles CancelBT.Click
 
-    connectionFailed = True
+        connectionFailed = True
     BackgroundWorker1.CancelAsync()
     AfterConnectionAttemp_ThreadSafe()
 
