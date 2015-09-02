@@ -2,12 +2,12 @@
 '
 ' CRUD for currencies table - relation with c++ server
 '
-'
+'   change list method => be able to take all currencies or only in_use !! priority high
 '
 '
 ' Author: Julien Monnereau
 ' Created: 03/08/2015
-' Last modified: 26/08/2015
+' Last modified: 02/09/2015
 
 
 Imports System.Collections
@@ -26,9 +26,10 @@ Friend Class Currency
 
     ' Events
     Public Event ObjectInitialized()
-    Public Event currencyCreationEvent(ByRef status As Boolean, ByRef attributes As Hashtable)
-    Public Event currencyUpdateEvent(ByRef status As Boolean, ByRef attributes As Hashtable)
-    Public Event currencyDeleteEvent(ByRef status As Boolean, ByRef id As UInt32)
+    Public Event Read(ByRef status As Boolean, ByRef attributes As Hashtable)
+    Public Event CreationEvent(ByRef status As Boolean, ByRef id As Int32)
+    Public Event UpdateEvent(ByRef status As Boolean, ByRef id As Int32)
+    Public Event DeleteEvent(ByRef status As Boolean, ByRef id As UInt32)
 
 
 #End Region
@@ -80,11 +81,9 @@ Friend Class Currency
     Private Sub SMSG_CREATE_CURRENCY_ANSWER(packet As ByteBuffer)
 
         If packet.ReadInt32() = 0 Then
-            Dim tmp_ht As New Hashtable
-            GetcurrencyHTFromPacket(packet, tmp_ht)
-            RaiseEvent currencyCreationEvent(True, tmp_ht)
+            RaiseEvent CreationEvent(True, packet.ReadUint32())
         Else
-            RaiseEvent currencyCreationEvent(False, Nothing)
+            RaiseEvent CreationEvent(False, Nothing)
         End If
         NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_CREATE_CURRENCY_ANSWER, AddressOf SMSG_CREATE_CURRENCY_ANSWER)
 
@@ -104,7 +103,9 @@ Friend Class Currency
             Dim ht As New Hashtable
             GetcurrencyHTFromPacket(packet, ht)
             currencies_hash(ht(ID_VARIABLE)) = ht
+            RaiseEvent Read(True, ht)
         Else
+            RaiseEvent Read(False, Nothing)
         End If
 
     End Sub
@@ -122,11 +123,9 @@ Friend Class Currency
     Private Sub SMSG_UPDATE_CURRENCY_ANSWER(packet As ByteBuffer)
 
         If packet.ReadInt32() = 0 Then
-            Dim ht As New Hashtable
-            GetcurrencyHTFromPacket(packet, ht)
-            RaiseEvent currencyUpdateEvent(True, ht)
+            RaiseEvent UpdateEvent(True, packet.ReadUint32())
         Else
-            RaiseEvent currencyUpdateEvent(False, Nothing)
+            RaiseEvent UpdateEvent(False, Nothing)
         End If
         NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_UPDATE_CURRENCY_ANSWER, AddressOf SMSG_UPDATE_CURRENCY_ANSWER)
 
@@ -146,9 +145,9 @@ Friend Class Currency
         If packet.ReadInt32() = 0 Then
             Dim id As UInt32 = packet.ReadInt32
             currencies_hash.Remove(id)
-            RaiseEvent currencyDeleteEvent(True, id)
+            RaiseEvent DeleteEvent(True, id)
         Else
-            RaiseEvent currencyDeleteEvent(False, 0)
+            RaiseEvent DeleteEvent(False, 0)
         End If
 
     End Sub

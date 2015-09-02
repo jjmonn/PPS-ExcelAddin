@@ -7,7 +7,7 @@
 '
 ' Author: Julien Monnereau
 ' Created: 16/07/2015
-' Last modified: 31/08/2015
+' Last modified: 01/09/2015
 
 
 Imports System.Collections
@@ -26,9 +26,10 @@ Friend Class Account
 
     ' Events
     Public Event ObjectInitialized()
-    Public Event AccountCreationEvent(ByRef status As Boolean, ByRef attributes As Hashtable)
-    Public Event AccountUpdateEvent(ByRef status As Boolean, ByRef attributes As Hashtable)
-    Public Event AccountDeleteEvent(ByRef status As Boolean, ByRef id As UInt32)
+    Public Event Read(ByRef status As Boolean, ByRef attributes As Hashtable)
+    Public Event CreationEvent(ByRef status As Boolean, ByRef id As Int32)
+    Public Event UpdateEvent(ByRef status As Boolean, ByRef id As Int32)
+    Public Event DeleteEvent(ByRef status As Boolean, ByRef id As UInt32)
 
 
 #End Region
@@ -81,11 +82,9 @@ Friend Class Account
     Private Sub SMSG_CREATE_ACCOUNT_ANSWER(packet As ByteBuffer)
 
         If packet.ReadInt32() = 0 Then
-            Dim tmp_ht As New Hashtable
-            GetAccountHTFromPacket(packet, tmp_ht)
-            RaiseEvent AccountCreationEvent(True, tmp_ht)
+            RaiseEvent CreationEvent(True, CInt(packet.ReadUint32()))
         Else
-            RaiseEvent AccountCreationEvent(False, Nothing)
+            RaiseEvent CreationEvent(False, Nothing)
         End If
         NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_CREATE_ACCOUNT_ANSWER, AddressOf SMSG_CREATE_ACCOUNT_ANSWER)
 
@@ -105,7 +104,9 @@ Friend Class Account
             Dim ht As New Hashtable
             GetAccountHTFromPacket(packet, ht)
             accounts_hash(ht(ID_VARIABLE)) = ht
+            RaiseEvent Read(True, ht)
         Else
+            RaiseEvent Read(False, Nothing)
         End If
 
     End Sub
@@ -123,11 +124,9 @@ Friend Class Account
     Private Sub SMSG_UPDATE_ACCOUNT_ANSWER(packet As ByteBuffer)
 
         If packet.ReadInt32() = 0 Then
-            Dim ht As New Hashtable
-            GetAccountHTFromPacket(packet, ht)
-            RaiseEvent AccountUpdateEvent(True, ht)
+            RaiseEvent UpdateEvent(True, CInt(packet.ReadUint32()))
         Else
-            RaiseEvent AccountUpdateEvent(False, Nothing)
+            RaiseEvent UpdateEvent(False, Nothing)
         End If
         NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_UPDATE_ACCOUNT_ANSWER, AddressOf SMSG_UPDATE_ACCOUNT_ANSWER)
 
@@ -147,9 +146,9 @@ Friend Class Account
         If packet.ReadInt32() = 0 Then
             Dim id As UInt32 = packet.ReadInt32
             accounts_hash.Remove(id)
-            RaiseEvent AccountDeleteEvent(True, id)
+            RaiseEvent DeleteEvent(True, id)
         Else
-            RaiseEvent AccountDeleteEvent(False, 0)
+            RaiseEvent DeleteEvent(False, 0)
         End If
 
     End Sub

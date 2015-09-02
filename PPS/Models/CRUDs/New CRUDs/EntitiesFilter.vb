@@ -11,7 +11,7 @@ Imports System.Collections.Generic
 '
 ' Author: Julien Monnereau
 ' Created: 23/07/2015
-' Last modified: 26/08/2015
+' Last modified: 02/09/2015
 
 
 
@@ -28,9 +28,10 @@ Friend Class EntitiesFilter
 
     ' Events
     Public Event ObjectInitialized()
-    Public Event EntityFilterCreationEvent(ByRef status As Boolean, ByRef attributes As Hashtable)
-    Public Event EntityFilterUpdateEvent(ByRef status As Boolean, ByRef attributes As Hashtable)
-    Public Event EntityFilterDeleteEvent(ByRef status As Boolean, ByRef entityId As UInt32, ByRef filterId As UInt32)
+    Public Event Read(ByRef status As Boolean, ByRef attributes As Hashtable)
+    Public Event CreationEvent(ByRef status As Boolean, ByRef entity_id As Int32, ByRef filter_id As Int32, filter_value_id As Int32)
+    Public Event UpdateEvent(ByRef status As Boolean, ByRef entity_id As Int32, ByRef filter_id As Int32, filter_value_id As Int32)
+    Public Event DeleteEvent(ByRef status As Boolean, ByRef entity_id As Int32, filter_id As Int32)
 
 #End Region
 
@@ -84,11 +85,12 @@ Friend Class EntitiesFilter
     Private Sub SMSG_CREATE_ENTITY_FILTER_ANSWER(packet As ByteBuffer)
 
         If packet.ReadInt32() = 0 Then
-            Dim tmp_ht As New Hashtable
-            GetEntityFilterHTFromPacket(packet, tmp_ht)
-            RaiseEvent EntityFilterCreationEvent(True, tmp_ht)
+            Dim entity_id As Int32 = packet.ReadUint32()
+            Dim filter_id As Int32 = packet.ReadUint32()
+            Dim filter_value_id As Int32 = packet.ReadUint32()
+            RaiseEvent CreationEvent(True, entity_id, filter_id, filter_value_id)
         Else
-            RaiseEvent EntityFilterCreationEvent(False, Nothing)
+            RaiseEvent CreationEvent(False, 0, 0, 0)
         End If
         NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_CREATE_ENTITY_FILTER_ANSWER, AddressOf SMSG_CREATE_ENTITY_FILTER_ANSWER)
 
@@ -110,7 +112,9 @@ Friend Class EntitiesFilter
             AddRecordToEntitiesFiltersHash(ht(ENTITY_ID_VARIABLE), _
                                            ht(FILTER_ID_VARIABLE), _
                                            ht(FILTER_VALUE_ID_VARIABLE))
+            RaiseEvent Read(True, ht)
         Else
+            RaiseEvent Read(False, Nothing)
         End If
 
     End Sub
@@ -129,24 +133,15 @@ Friend Class EntitiesFilter
 
     End Sub
 
-    Friend Sub CMSG_UPDATE_ENTITY_FILTER(ByRef attributes As Hashtable)
-
-        NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_UPDATE_ENTITY_FILTER_ANSWER, AddressOf SMSG_UPDATE_ENTITY_FILTER_ANSWER)
-        Dim packet As New ByteBuffer(CType(ClientMessage.CMSG_UPDATE_ENTITY_FILTER, UShort))
-        WriteEntityFilterPacket(packet, attributes)
-        packet.Release()
-        NetworkManager.GetInstance().Send(packet)
-
-    End Sub
-
     Private Sub SMSG_UPDATE_ENTITY_FILTER_ANSWER(packet As ByteBuffer)
 
         If packet.ReadInt32() = 0 Then
-            Dim ht As New Hashtable
-            GetEntityFilterHTFromPacket(packet, ht)
-            RaiseEvent EntityFilterUpdateEvent(True, ht)
+            Dim entity_id As Int32 = packet.ReadUint32()
+            Dim filter_id As Int32 = packet.ReadUint32()
+            Dim filter_value_id As Int32 = packet.ReadUint32()
+            RaiseEvent UpdateEvent(True, entity_id, filter_id, filter_value_id)
         Else
-            RaiseEvent EntityFilterUpdateEvent(False, Nothing)
+            RaiseEvent UpdateEvent(False, 0, 0, 0)
         End If
         NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_UPDATE_ENTITY_FILTER_ANSWER, AddressOf SMSG_UPDATE_ENTITY_FILTER_ANSWER)
 
@@ -167,9 +162,9 @@ Friend Class EntitiesFilter
             Dim entityId As UInt32 = packet.ReadInt32
             Dim filterId As UInt32 = packet.ReadInt32
             RemoveRecordFromFiltersHash(entityId, filterId)
-            RaiseEvent EntityFilterDeleteEvent(True, entityId, filterId)
+            RaiseEvent DeleteEvent(True, entityId, filterId)
         Else
-            RaiseEvent EntityFilterDeleteEvent(False, 0, 0)
+            RaiseEvent DeleteEvent(False, 0, 0)
         End If
 
     End Sub

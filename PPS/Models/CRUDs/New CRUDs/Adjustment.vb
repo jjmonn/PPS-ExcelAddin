@@ -11,7 +11,7 @@ Imports System.Collections.Generic
 '
 ' Author: Julien Monnereau
 ' Created: 24/07/2015
-' Last modified: 31/08/2015
+' Last modified: 02/09/2015
 
 
 
@@ -26,10 +26,10 @@ Friend Class Adjustment
     
     ' Events
     Public Event ObjectInitialized(ByRef status As Boolean)
-    Public Event AdjustmentCreationEvent(ByRef status As Boolean, ByRef attributes As Hashtable)
-    Public Event AdjustmentDeleteEvent(ByRef status As Boolean, ByRef id As UInt32)
-    Public Event AdjustmentUpdateEvent(ByRef status As Boolean, ByRef attributes As Hashtable)
-    Public Shared Event AdjustmentRead(ByRef attributes As Hashtable)
+    Public Event Read(ByRef status As Boolean, ByRef attributes As Hashtable)
+    Public Event CreationEvent(ByRef status As Boolean, ByRef id As Int32)
+    Public Event UpdateEvent(ByRef status As Boolean, ByRef id As Int32)
+    Public Event DeleteEvent(ByRef status As Boolean, ByRef id As UInt32)
 
 #End Region
 
@@ -80,11 +80,9 @@ Friend Class Adjustment
     Private Sub SMSG_CREATE_ADJUSTMENT_ANSWER(packet As ByteBuffer)
 
         If packet.ReadInt32() = 0 Then
-            Dim tmp_ht As New Hashtable
-            GetAdjustmentHTFromPacket(packet, tmp_ht)
-            RaiseEvent AdjustmentCreationEvent(True, tmp_ht)
+            RaiseEvent CreationEvent(True, packet.ReadUint32())
         Else
-            RaiseEvent AdjustmentCreationEvent(False, Nothing)
+            RaiseEvent CreationEvent(False, Nothing)
         End If
         NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_CREATE_ADJUSTMENT_ANSWER, AddressOf SMSG_CREATE_ADJUSTMENT_ANSWER)
 
@@ -104,24 +102,10 @@ Friend Class Adjustment
             Dim ht As New Hashtable
             GetAdjustmentHTFromPacket(packet, ht)
             adjustments_hash(ht(ID_VARIABLE)) = ht
-            RaiseEvent AdjustmentRead(ht)
+            RaiseEvent Read(True, ht)
         Else
-
+            RaiseEvent Read(False, Nothing)
         End If
-
-    End Sub
-
-    Friend Sub CMSG_UPDATE_ADJUSTMENT(ByRef id As UInt32, _
-                                      ByRef updated_var As String, _
-                                      ByRef new_value As String)
-
-        Dim tmp_ht As Hashtable = adjustments_hash(id).clone ' check clone !!!!
-        tmp_ht(updated_var) = new_value
-        NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_UPDATE_ADJUSTMENT_ANSWER, AddressOf SMSG_UPDATE_ADJUSTMENT_ANSWER)
-        Dim packet As New ByteBuffer(CType(ClientMessage.CMSG_UPDATE_ADJUSTMENT, UShort))
-        WriteAdjustmentPacket(packet, tmp_ht)
-        packet.Release()
-        NetworkManager.GetInstance().Send(packet)
 
     End Sub
 
@@ -138,11 +122,9 @@ Friend Class Adjustment
     Private Sub SMSG_UPDATE_ADJUSTMENT_ANSWER(packet As ByteBuffer)
 
         If packet.ReadInt32() = 0 Then
-            Dim ht As New Hashtable
-            GetAdjustmentHTFromPacket(packet, ht)
-            RaiseEvent AdjustmentUpdateEvent(True, ht)
+            RaiseEvent UpdateEvent(True, packet.ReadUint32())
         Else
-            RaiseEvent AdjustmentUpdateEvent(False, Nothing)
+            RaiseEvent UpdateEvent(False, Nothing)
         End If
         NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_UPDATE_ADJUSTMENT_ANSWER, AddressOf SMSG_UPDATE_ADJUSTMENT_ANSWER)
 
@@ -162,9 +144,9 @@ Friend Class Adjustment
         If packet.ReadInt32() = 0 Then
             Dim id As UInt32 = packet.ReadInt32
             adjustments_hash.Remove(id)
-            RaiseEvent AdjustmentDeleteEvent(True, id)
+            RaiseEvent DeleteEvent(True, id)
         Else
-            RaiseEvent AdjustmentDeleteEvent(False, 0)
+            RaiseEvent DeleteEvent(False, 0)
         End If
   
     End Sub

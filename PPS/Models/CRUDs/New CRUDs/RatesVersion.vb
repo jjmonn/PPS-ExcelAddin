@@ -7,7 +7,7 @@
 '
 ' Author: Julien Monnereau
 ' Created: 24/08/2015
-' Last modified: 25/08/2015
+' Last modified: 01/09/2015
 
 
 Imports System.Collections
@@ -26,9 +26,10 @@ Public Class RatesVersion
 
     ' Events
     Public Event ObjectInitialized()
-    Public Event rate_versionCreationEvent(ByRef status As Boolean, ByRef attributes As Hashtable)
-    Public Event rate_versionUpdateEvent(ByRef status As Boolean, ByRef attributes As Hashtable)
-    Public Event rate_versionDeleteEvent(ByRef status As Boolean, ByRef id As UInt32)
+    Public Event Read(ByRef status As Boolean, ByRef attributes As Hashtable)
+    Public Event CreationEvent(ByRef status As Boolean, ByRef id As Int32)
+    Public Event UpdateEvent(ByRef status As Boolean, ByRef id As Int32)
+    Public Event DeleteEvent(ByRef status As Boolean, ByRef id As UInt32)
 
 
 #End Region
@@ -79,11 +80,9 @@ Public Class RatesVersion
     Private Sub SMSG_CREATE_RATE_VERSION_ANSWER(packet As ByteBuffer)
 
         If packet.ReadInt32() = 0 Then
-            Dim tmp_ht As New Hashtable
-            GetRateVersionHTFromPacket(packet, tmp_ht)
-            RaiseEvent rate_versionCreationEvent(True, tmp_ht)
+            RaiseEvent CreationEvent(True, packet.ReadUint32())
         Else
-            RaiseEvent rate_versionCreationEvent(False, Nothing)
+            RaiseEvent CreationEvent(False, Nothing)
         End If
         NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_CREATE_RATE_VERSION_ANSWER, AddressOf SMSG_CREATE_RATE_VERSION_ANSWER)
 
@@ -103,23 +102,10 @@ Public Class RatesVersion
             Dim ht As New Hashtable
             GetRateVersionHTFromPacket(packet, ht)
             rate_versions_hash(ht(ID_VARIABLE)) = ht
+            RaiseEvent Read(True, ht)
         Else
+            RaiseEvent Read(False, Nothing)
         End If
-
-    End Sub
-
-    Friend Sub CMSG_UPDATE_RATE_VERSION(ByRef id As UInt32, _
-                                        ByRef variable As String, _
-                                        ByRef value As String)
-
-        Dim attributes As Hashtable = rate_versions_hash(id)
-        attributes(variable) = value
-
-        NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_UPDATE_RATE_VERSION_ANSWER, AddressOf SMSG_UPDATE_RATE_VERSION_ANSWER)
-        Dim packet As New ByteBuffer(CType(ClientMessage.CMSG_UPDATE_RATE_VERSION, UShort))
-        WriteRateVersionPacket(packet, attributes)
-        packet.Release()
-        NetworkManager.GetInstance().Send(packet)
 
     End Sub
 
@@ -136,11 +122,9 @@ Public Class RatesVersion
     Private Sub SMSG_UPDATE_RATE_VERSION_ANSWER(packet As ByteBuffer)
 
         If packet.ReadInt32() = 0 Then
-            Dim ht As New Hashtable
-            GetRateVersionHTFromPacket(packet, ht)
-            RaiseEvent rate_versionUpdateEvent(True, ht)
+            RaiseEvent UpdateEvent(True, packet.ReadUint32())
         Else
-            RaiseEvent rate_versionUpdateEvent(False, Nothing)
+            RaiseEvent UpdateEvent(False, Nothing)
         End If
         NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_UPDATE_RATE_VERSION_ANSWER, AddressOf SMSG_UPDATE_RATE_VERSION_ANSWER)
 
@@ -160,9 +144,9 @@ Public Class RatesVersion
         If packet.ReadInt32() = 0 Then
             Dim id As UInt32 = packet.ReadUint32
             rate_versions_hash.Remove(id)
-            RaiseEvent rate_versionDeleteEvent(True, id)
+            RaiseEvent DeleteEvent(True, id)
         Else
-            RaiseEvent rate_versionDeleteEvent(False, 0)
+            RaiseEvent DeleteEvent(False, 0)
         End If
 
     End Sub

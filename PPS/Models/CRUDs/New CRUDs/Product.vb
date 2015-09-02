@@ -11,7 +11,7 @@ Imports System.Collections.Generic
 '
 ' Author: Julien Monnereau
 ' Created: 24/07/2015
-' Last modified: 26/08/2015
+' Last modified: 02/09/2015
 
 
 
@@ -26,9 +26,10 @@ Friend Class Product
 
     ' Events
     Public Event ObjectInitialized()
-    Public Event ProductCreationEvent(ByRef status As Boolean, ByRef attributes As Hashtable)
-    Public Event ProductUpdateEvent(ByRef status As Boolean, ByRef ht As Hashtable)
-    Public Event ProductDeleteEvent(ByRef status As Boolean, ByRef id As UInt32)
+    Public Event Read(ByRef status As Boolean, ByRef attributes As Hashtable)
+    Public Event CreationEvent(ByRef status As Boolean, ByRef id As Int32)
+    Public Event UpdateEvent(ByRef status As Boolean, ByRef id As Int32)
+    Public Event DeleteEvent(ByRef status As Boolean, ByRef id As UInt32)
 
 
 #End Region
@@ -40,7 +41,7 @@ Friend Class Product
 
         NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_READ_PRODUCT_ANSWER, AddressOf SMSG_READ_PRODUCT_ANSWER)
         NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_DELETE_PRODUCT_ANSWER, AddressOf SMSG_DELETE_PRODUCT_ANSWER)
-    NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_LIST_PRODUCT_ANSWER, AddressOf SMSG_LIST_PRODUCT_ANSWER)
+        NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_LIST_PRODUCT_ANSWER, AddressOf SMSG_LIST_PRODUCT_ANSWER)
 
     End Sub
 
@@ -78,12 +79,9 @@ Friend Class Product
     Private Sub SMSG_CREATE_PRODUCT_ANSWER(packet As ByteBuffer)
 
         If packet.ReadInt32() = 0 Then
-            MsgBox(packet.ReadString())
-            Dim tmp_ht As New Hashtable
-            GetProductHTFromPacket(packet, tmp_ht)
-            RaiseEvent ProductCreationEvent(True, tmp_ht)
+            RaiseEvent CreationEvent(True, packet.ReadUint32())
         Else
-            RaiseEvent ProductCreationEvent(False, Nothing)
+            RaiseEvent CreationEvent(False, Nothing)
         End If
         NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_CREATE_PRODUCT_ANSWER, AddressOf SMSG_CREATE_PRODUCT_ANSWER)
 
@@ -103,36 +101,10 @@ Friend Class Product
             Dim ht As New Hashtable
             GetProductHTFromPacket(packet, ht)
             products_hash(ht(ID_VARIABLE)) = ht
+            RaiseEvent Read(True, ht)
         Else
+            RaiseEvent Read(False, Nothing)
         End If
-
-    End Sub
-
-    Friend Sub UpdateBatch(ByRef updates As List(Of Object()))
-
-        ' to be implemented !!!! priority normal
-
-        request_id.Clear()
-        For Each update As Object() In updates
-
-
-        Next
-
-
-    End Sub
-
-    Friend Sub CMSG_UPDATE_PRODUCT(ByRef id As UInt32, _
-                                  ByRef updated_var As String, _
-                                  ByRef new_value As String)
-
-        Dim tmp_ht As Hashtable = products_hash(id).clone ' check clone !!!!
-        tmp_ht(updated_var) = new_value
-
-        NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_UPDATE_PRODUCT_ANSWER, AddressOf SMSG_UPDATE_PRODUCT_ANSWER)
-        Dim packet As New ByteBuffer(CType(ClientMessage.CMSG_UPDATE_PRODUCT, UShort))
-        WriteProductPacket(packet, tmp_ht)
-        packet.Release()
-        NetworkManager.GetInstance().Send(packet)
 
     End Sub
 
@@ -149,11 +121,9 @@ Friend Class Product
     Private Sub SMSG_UPDATE_PRODUCT_ANSWER(packet As ByteBuffer)
 
         If packet.ReadInt32() = 0 Then
-            Dim ht As New Hashtable
-            GetProductHTFromPacket(packet, ht)
-            RaiseEvent ProductUpdateEvent(True, ht)
+            RaiseEvent UpdateEvent(True, packet.ReadUint32())
         Else
-            RaiseEvent ProductUpdateEvent(False, Nothing)
+            RaiseEvent UpdateEvent(False, Nothing)
         End If
         NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_UPDATE_PRODUCT_ANSWER, AddressOf SMSG_UPDATE_PRODUCT_ANSWER)
 
@@ -173,9 +143,9 @@ Friend Class Product
         If packet.ReadInt32() = 0 Then
             Dim id As UInt32 = packet.ReadInt32
             products_hash.Remove(id)
-            RaiseEvent ProductDeleteEvent(True, id)
+            RaiseEvent DeleteEvent(True, id)
         Else
-            RaiseEvent ProductDeleteEvent(False, 0)
+            RaiseEvent DeleteEvent(False, 0)
         End If
 
     End Sub

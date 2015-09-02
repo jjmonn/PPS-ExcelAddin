@@ -12,7 +12,7 @@ Imports System.Collections.Generic
 '
 ' Author: Julien Monnereau
 ' Created: 05/08/2015
-' Last modified: 01/09/2015
+' Last modified: 02/09/2015
 
 
 
@@ -28,8 +28,13 @@ Friend Class ExchangeRate
 
     ' Events
     Public Event ObjectInitialized(ByRef status As Boolean)
-    Public Event ExchangeRateUpdateEvent(ByRef status As Boolean, ByRef ht As Hashtable)
-   
+    Public Event Read(ByRef status As Boolean, ByRef attributes As Hashtable)
+    Public Event UpdateEvent(ByRef status As Boolean, _
+                             ByRef destinationCurrency As Int32, _
+                             ByRef ratesVersion As Int32, _
+                             ByRef period As Int32)
+
+
     ' Constants
     Friend Const RATES_CURRENCIES_TOKEN_SEPARATOR As Char = "#"
 
@@ -40,6 +45,7 @@ Friend Class ExchangeRate
 
     Friend Sub New()
 
+        NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_READ_EXCHANGE_RATE_ANSWER, AddressOf SMSG_READ_EXCHANGE_RATE_ANSWER)
         state_flag = False
         LoadExchangeRatesTable()
 
@@ -84,6 +90,22 @@ Friend Class ExchangeRate
     ' add read => must listen in case somebody is already editing
     ' or block any CRUD editing when someone is already editing ?!
 
+    Friend Sub SMSG_READ_EXCHANGE_RATE_ANSWER(packet As ByteBuffer)
+
+        If packet.ReadInt32() = 0 Then
+            Dim ht As New Hashtable
+            GetExchangeRateHTFromPacket(packet, ht)
+            exchangeRatesDict(ht(EX_RATES_LOCAL_CURR_VAR) & Computer.TOKEN_SEPARATOR & _
+                                ht(EX_RATES_RATE_VARIABLE) & Computer.TOKEN_SEPARATOR & _
+                                ht(EX_RATES_PERIOD_VARIABLE)) = _
+                                ht(EX_RATES_RATE_VARIABLE)
+            RaiseEvent Read(True, ht)
+        Else
+            RaiseEvent Read(False, Nothing)
+        End If
+
+    End Sub
+
 
     Friend Sub CMSG_UPDATE_EXCHANGE_RATE(ByRef id As UInt32, _
                                           ByRef updated_var As String, _
@@ -114,19 +136,14 @@ Friend Class ExchangeRate
     Private Sub SMSG_UPDATE_EXCHANGE_RATE_ANSWER(packet As ByteBuffer)
 
         If packet.ReadInt32() = 0 Then
-            Dim ht As New Hashtable
-            GetExchangeRateHTFromPacket(packet, ht)
-            NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_UPDATE_EXCHANGE_RATE_ANSWER, AddressOf SMSG_UPDATE_EXCHANGE_RATE_ANSWER)
-
-            exchangeRatesDict(ht(EX_RATES_LOCAL_CURR_VAR) & Computer.TOKEN_SEPARATOR & _
-                              ht(EX_RATES_RATE_VARIABLE) & Computer.TOKEN_SEPARATOR & _
-                              ht(EX_RATES_PERIOD_VARIABLE)) = _
-                              ht(EX_RATES_RATE_VARIABLE)
-
-            RaiseEvent ExchangeRateUpdateEvent(True, ht)
+            Dim destinationCurrency As Int32 = packet.ReadUint32()
+            Dim ratesVersion As Int32 = packet.ReadUint32()
+            Dim period As Int32 = packet.ReadUint32()
+            RaiseEvent UpdateEvent(True, destinationCurrency, ratesVersion, period)
         Else
-            RaiseEvent ExchangeRateUpdateEvent(False, Nothing)
+            RaiseEvent UpdateEvent(False, 0, 0, 0)
         End If
+        NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_UPDATE_EXCHANGE_RATE_ANSWER, AddressOf SMSG_UPDATE_EXCHANGE_RATE_ANSWER)
 
     End Sub
 
@@ -155,6 +172,15 @@ Friend Class ExchangeRate
 
 
 #End Region
+
+
+    Protected Overrides Sub finalize()
+
+        NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_UPDATE_EXCHANGE_RATE_ANSWER, AddressOf SMSG_UPDATE_EXCHANGE_RATE_ANSWER)
+
+    End Sub
+
+
 
 
 End Class

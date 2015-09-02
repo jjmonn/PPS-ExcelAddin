@@ -11,7 +11,7 @@ Imports System.Collections.Generic
 '
 ' Author: Julien Monnereau
 ' Created: 21/07/2015
-' Last modified: 26/08/2015
+' Last modified: 02/09/2015
 
 
 
@@ -28,9 +28,10 @@ Friend Class Entity
 
     ' Events
     Public Event ObjectInitialized()
-    Public Event EntityCreationEvent(ByRef status As Boolean, ByRef attributes As Hashtable)
-    Public Event EntityUpdateEvent(ByRef status As Boolean, ByRef attributes As Hashtable)
-    Public Event EntityDeleteEvent(ByRef status As Boolean, ByRef id As UInt32)
+    Public Event Read(ByRef status As Boolean, ByRef attributes As Hashtable)
+    Public Event CreationEvent(ByRef status As Boolean, ByRef id As Int32)
+    Public Event UpdateEvent(ByRef status As Boolean, ByRef id As Int32)
+    Public Event DeleteEvent(ByRef status As Boolean, ByRef id As UInt32)
 
 
 #End Region
@@ -41,8 +42,8 @@ Friend Class Entity
     Friend Sub New()
 
         NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_READ_ENTITY_ANSWER, AddressOf SMSG_READ_ENTITY_ANSWER)
-    NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_DELETE_ENTITY_ANSWER, AddressOf SMSG_DELETE_ENTITY_ANSWER)
-    NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_LIST_ENTITY_ANSWER, AddressOf SMSG_LIST_ENTITY_ANSWER)
+        NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_DELETE_ENTITY_ANSWER, AddressOf SMSG_DELETE_ENTITY_ANSWER)
+        NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_LIST_ENTITY_ANSWER, AddressOf SMSG_LIST_ENTITY_ANSWER)
 
         state_flag = False
 
@@ -82,11 +83,9 @@ Friend Class Entity
     Private Sub SMSG_CREATE_ENTITY_ANSWER(packet As ByteBuffer)
 
         If packet.ReadInt32() = 0 Then
-            Dim tmp_ht As New Hashtable
-            GetEntityHTFromPacket(packet, tmp_ht)
-            RaiseEvent EntityCreationEvent(True, tmp_ht)
+            RaiseEvent CreationEvent(True, packet.ReadUint32())
         Else
-            RaiseEvent EntityCreationEvent(False, Nothing)
+            RaiseEvent CreationEvent(False, Nothing)
         End If
         NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_CREATE_ENTITY_ANSWER, AddressOf SMSG_CREATE_ENTITY_ANSWER)
 
@@ -106,36 +105,10 @@ Friend Class Entity
             Dim ht As New Hashtable
             GetEntityHTFromPacket(packet, ht)
             entities_hash(ht(ID_VARIABLE)) = ht
+            RaiseEvent Read(True, ht)
         Else
+            RaiseEvent Read(False, Nothing)
         End If
-
-    End Sub
-
-    Friend Sub UpdateBatch(ByRef updates As List(Of Object()))
-
-        ' to be implemented !!!! priority normal
-
-        request_id.Clear()
-        For Each update As Object() In updates
-
-
-        Next
-
-
-    End Sub
-
-    Friend Sub CMSG_UPDATE_ENTITY(ByRef id As Int32, _
-                                  ByRef updated_var As String, _
-                                  ByRef new_value As String)
-
-        Dim tmp_ht As Hashtable = entities_hash(id).clone ' check clone !!!!
-        tmp_ht(updated_var) = new_value
-
-        NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_UPDATE_ENTITY_ANSWER, AddressOf SMSG_UPDATE_ENTITY_ANSWER)
-        Dim packet As New ByteBuffer(CType(ClientMessage.CMSG_UPDATE_ENTITY, UShort))
-        WriteEntityPacket(packet, tmp_ht)
-        packet.Release()
-        NetworkManager.GetInstance().Send(packet)
 
     End Sub
 
@@ -152,11 +125,9 @@ Friend Class Entity
     Private Sub SMSG_UPDATE_ENTITY_ANSWER(packet As ByteBuffer)
 
         If packet.ReadInt32() = 0 Then
-            Dim ht As New Hashtable
-            GetEntityHTFromPacket(packet, ht)
-            RaiseEvent EntityUpdateEvent(True, ht)
+            RaiseEvent UpdateEvent(True, packet.ReadUint32())
         Else
-            RaiseEvent EntityUpdateEvent(False, Nothing)
+            RaiseEvent UpdateEvent(False, Nothing)
         End If
         NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_UPDATE_ENTITY_ANSWER, AddressOf SMSG_UPDATE_ENTITY_ANSWER)
 
@@ -176,9 +147,9 @@ Friend Class Entity
         If packet.ReadInt32() = 0 Then
             Dim id As UInt32 = packet.ReadInt32
             entities_hash.Remove(id)
-            RaiseEvent EntityDeleteEvent(True, id)
+            RaiseEvent DeleteEvent(True, id)
         Else
-            RaiseEvent EntityDeleteEvent(False, 0)
+            RaiseEvent DeleteEvent(False, 0)
         End If
 
     End Sub
@@ -287,8 +258,8 @@ Friend Class Entity
     Protected Overrides Sub finalize()
 
         NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_READ_ENTITY_ANSWER, AddressOf SMSG_READ_ENTITY_ANSWER)
-    NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_DELETE_ENTITY_ANSWER, AddressOf SMSG_DELETE_ENTITY_ANSWER)
-    NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_LIST_ENTITY_ANSWER, AddressOf SMSG_LIST_ENTITY_ANSWER)
+        NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_DELETE_ENTITY_ANSWER, AddressOf SMSG_DELETE_ENTITY_ANSWER)
+        NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_LIST_ENTITY_ANSWER, AddressOf SMSG_LIST_ENTITY_ANSWER)
         MyBase.Finalize()
 
     End Sub
