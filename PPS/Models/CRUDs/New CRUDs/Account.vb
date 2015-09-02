@@ -30,7 +30,7 @@ Friend Class Account
     Public Event CreationEvent(ByRef status As Boolean, ByRef id As Int32)
     Public Event UpdateEvent(ByRef status As Boolean, ByRef id As Int32)
     Public Event DeleteEvent(ByRef status As Boolean, ByRef id As UInt32)
-
+    Public Event UpdateListEvent(ByRef status As Boolean, ByRef updateResults As List(Of Boolean))
 
 #End Region
 
@@ -129,6 +129,34 @@ Friend Class Account
             RaiseEvent UpdateEvent(False, Nothing)
         End If
         NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_UPDATE_ACCOUNT_ANSWER, AddressOf SMSG_UPDATE_ACCOUNT_ANSWER)
+
+    End Sub
+
+    Friend Sub CMSG_UPDATE_LIST_ACCOUNT(ByRef accountsAttributes As List(Of Hashtable))
+
+        NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_UPDATE_ACCOUNT_LIST_ANSWER, AddressOf SMSG_UPDATE_ACCOUNT_LIST_ANSWER)
+        Dim packet As New ByteBuffer(CType(ClientMessage.CMSG_UPDATE_ACCOUNT_LIST, UShort))
+        packet.WriteUint32(accountsAttributes.Count)
+        For Each ht As Hashtable In accountsAttributes
+            WriteAccountPacket(packet, ht)
+        Next
+        packet.Release()
+        NetworkManager.GetInstance().Send(packet)
+
+    End Sub
+
+    Friend Sub SMSG_UPDATE_ACCOUNT_LIST_ANSWER(packet As ByteBuffer)
+
+        If packet.ReadInt32() = 0 Then
+            Dim updatesStatus As New List(Of Boolean)
+            For i As Int32 = 0 To packet.ReadUint32()
+                updatesStatus.Add(packet.ReadBool())
+            Next
+            RaiseEvent UpdateListEvent(True, updatesStatus)
+        Else
+            RaiseEvent UpdateListEvent(False, Nothing)
+        End If
+        NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_UPDATE_ACCOUNT_LIST_ANSWER, AddressOf SMSG_UPDATE_ACCOUNT_LIST_ANSWER)
 
     End Sub
 

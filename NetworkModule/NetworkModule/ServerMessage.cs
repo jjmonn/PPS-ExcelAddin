@@ -136,5 +136,7 @@ public enum ServerMessage : byte
       SMSG_DELETE_GLOBAL_FACT_VERSION_ANSWER,
       SMSG_LIST_GLOBAL_FACT_VERSION_ANSWER,
 
+     SMSG_UPDATE_ACCOUNT_LIST_ANSWER,
+
     OpcodeMax
 }

@@ -147,7 +147,7 @@ Friend Class Computer
     Private Sub SMSG_COMPUTE_RESULT(packet As ByteBuffer)
 
         If packet.ReadInt32() = 0 Then
-            Dim request_id = packet.GetRequestId()
+            Dim request_id As Int32 = packet.GetRequestId()
             versionId = requestIdVersionIdDict(request_id)
             requestIdVersionIdDict.Remove(request_id)
 

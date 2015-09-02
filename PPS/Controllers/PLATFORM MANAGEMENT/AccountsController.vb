@@ -70,8 +70,7 @@ Friend Class AccountsController
         NewAccountView = New NewAccountUI(View, Me)
         FormulasTranslator = New FormulasTranslations(accountsNameKeysDictionary)
         formulasMGT = New ModelFormulasMGT(accountsNameKeysDictionary, AccountsTV)
-        positionsDictionary = TreeViewsUtilities.GeneratePositionsDictionary(AccountsTV)
-
+     
     End Sub
 
     Public Sub addControlToPanel(ByRef dest_panel As Panel, _
@@ -140,7 +139,7 @@ Friend Class AccountsController
 
     Friend Sub UpdateAccount(ByRef id As Int32, ByRef variable As String, ByVal value As Object)
 
-        Dim ht As Hashtable = GlobalVariables.Accounts.accounts_hash(id)
+        Dim ht As Hashtable = GlobalVariables.Accounts.accounts_hash(id).clone
         ht(variable) = value
         GlobalVariables.Accounts.CMSG_UPDATE_ACCOUNT(ht)
 
@@ -148,7 +147,7 @@ Friend Class AccountsController
 
     Friend Sub UpdateAccount(ByRef id As String, ByRef account_attributes As Hashtable)
 
-        Dim ht As Hashtable = GlobalVariables.Accounts.accounts_hash(id)
+        Dim ht As Hashtable = GlobalVariables.Accounts.accounts_hash(id).clone
         For Each attribute As String In account_attributes
             ht(attribute) = account_attributes(attribute)
         Next
@@ -157,14 +156,20 @@ Friend Class AccountsController
 
     End Sub
 
+    Friend Sub UpdateBatch(ByRef accountsUpdates As List(Of Tuple(Of Int32, String, Int32)))
+
+        Dim accountsHTUpdates As New List(Of Hashtable)
+        For Each tuple_ As Tuple(Of Int32, String, Int32) In accountsUpdates
+            Dim ht As Hashtable = GlobalVariables.Accounts.accounts_hash(tuple_.Item1).clone
+            ht(tuple_.Item2) = tuple_.Item3
+            accountsHTUpdates.Add(ht)
+        Next
+        GlobalVariables.Accounts.CMSG_UPDATE_LIST_ACCOUNT(accountsHTUpdates)
+
+    End Sub
+
     Friend Sub UpdateName(ByRef account_id As Int32, _
                            ByRef new_name As String)
-
-        ' below -> may raise issue if pb on update!(priority: high)
-        Dim old_name = GlobalVariables.Accounts.accounts_hash(account_id)(NAME_VARIABLE)
-        accountsNameKeysDictionary.Remove(old_name)
-        accountsNameKeysDictionary.Add(new_name, account_id)
-        ' -> update those dict on update from server priority high
 
         UpdateAccount(account_id, NAME_VARIABLE, new_name)
 
@@ -235,21 +240,16 @@ Friend Class AccountsController
 
     End Sub
 
-
-
     Friend Sub DeleteAccount(ByRef account_id As Int32)
 
         GlobalVariables.Accounts.CMSG_DELETE_ACCOUNT(account_id)
 
     End Sub
 
-
-
 #End Region
 
 
 #Region "Check"
-
 
     Friend Function ExistingDependantAccounts(ByRef node As TreeNode) As String()
 
@@ -283,10 +283,10 @@ Friend Class AccountsController
     ' Looks for the param accountKey in Accounts formulas
     Private Sub CheckForDependencies(ByRef accountKey As String, dependenciesList As List(Of Int32))
 
-        For Each currentKey As Int32 In positionsDictionary.Keys
-            Dim formula As String = GlobalVariables.Accounts.accounts_hash(currentKey)(ACCOUNT_FORMULA_VARIABLE)
+        For Each accountId As Int32 In GlobalVariables.Accounts.accounts_hash.Keys
+            Dim formula As String = GlobalVariables.Accounts.accounts_hash(accountId)(ACCOUNT_FORMULA_VARIABLE)
             If Not formula Is Nothing AndAlso formula.Contains(accountKey) Then _
-                dependenciesList.Add(currentKey)
+                dependenciesList.Add(accountId)
         Next
 
     End Sub
@@ -325,33 +325,6 @@ Friend Class AccountsController
         Return True
 
     End Function
-
-
-    'Friend Function FormulasTypesChecks() As Boolean
-
-    '    Dim accountsNamesFormulaErrorList As New List(Of String)
-
-    '    For Each accountKey In positionsDictionary.Keys
-    '        If FTypesToBeTested.Contains(GlobalVariables.Accounts.accounts_hash(accountKey)(ACCOUNT_FORMULA_TYPE_VARIABLE)) Then
-    '            If GlobalVariables.Accounts.accounts_hash(accountKey)(ACCOUNT_FORMULA_VARIABLE) = "" Then _
-    '                accountsNamesFormulaErrorList.Add(GlobalVariables.Accounts.accounts_hash(accountKey)(NAME_VARIABLE))
-    '        End If
-    '    Next
-
-    '    If accountsNamesFormulaErrorList.Count > 0 Then
-    '        Dim errorStr As String = "-"
-    '        For Each account In accountsNamesFormulaErrorList
-    '            errorStr = errorStr + account + Chr(13) + "-"
-    '        Next
-    '        errorStr = Strings.Left(errorStr, errorStr.Length - 1)
-    '        MsgBox("The following accounts need to have a valid formula: " + Chr(13) + errorStr + Chr(13) + _
-    '               "In order for these accounts to be calculated a valid formula must be given.")
-    '        Return False
-    '    Else
-    '        Return True
-    '    End If
-
-    'End Function
 
 
 #Region "Formulas Interdependancies checks"
@@ -409,7 +382,6 @@ Friend Class AccountsController
 
 
 #End Region
-
 
 #End Region
 
@@ -485,13 +457,16 @@ Friend Class AccountsController
     Friend Sub SendNewPositionsToModel()
 
         Dim position As Int32
+        Dim accountsUpdates As New List(Of Tuple(Of Int32, String, Int32))
         positionsDictionary = TreeViewsUtilities.GeneratePositionsDictionary(AccountsTV)
         For Each account_id As Int32 In positionsDictionary.Keys
             position = positionsDictionary(account_id)
             If position <> GlobalVariables.Accounts.accounts_hash(account_id)(ITEMS_POSITIONS) Then
-                UpdateAccount(account_id, ITEMS_POSITIONS, position)
+                Dim tuple_ As New Tuple(Of Int32, String, Int32)(account_id, ITEMS_POSITIONS, position)
+                accountsUpdates.Add(tuple_)
             End If
         Next
+        UpdateBatch(accountsUpdates)
 
     End Sub
 
