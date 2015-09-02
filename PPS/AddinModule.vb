@@ -1264,6 +1264,9 @@ Public Class AddinModule
         GlobalVariables.Versions = New FactsVersion
         GlobalVariables.Currencies = New Currency
         GlobalVariables.RatesVersions = New RatesVersion
+        GlobalVariables.GlobalFacts = New GlobalFact
+        GlobalVariables.GlobalFactsDatas = New GlobalFactData
+        GlobalVariables.GlobalFactsVersions = New GlobalFactVersion
 
     End Sub
 

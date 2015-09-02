@@ -76,6 +76,9 @@ Friend Class GlobalVariables
     Friend Shared Versions As FactsVersion
     Friend Shared Currencies As Currency
     Friend Shared RatesVersions As RatesVersion
+    Friend Shared GlobalFacts As GlobalFact
+    Friend Shared GlobalFactsDatas As GlobalFactData
+    Friend Shared GlobalFactsVersions As GlobalFactVersion
 
 #End Region
 
