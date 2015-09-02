@@ -143,7 +143,7 @@ Friend Class Client
 
         If packet.ReadInt32() = 0 Then
             Dim id As UInt32 = packet.ReadInt32
-            clients_hash.Remove(id)
+            clients_hash.Remove(CInt(id))
             RaiseEvent DeleteEvent(True, id)
         Else
             RaiseEvent DeleteEvent(False, 0)

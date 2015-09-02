@@ -106,7 +106,6 @@ Friend Class ExchangeRate
 
     End Sub
 
-
     Friend Sub CMSG_UPDATE_EXCHANGE_RATE(ByRef id As UInt32, _
                                           ByRef updated_var As String, _
                                           ByRef new_value As String)

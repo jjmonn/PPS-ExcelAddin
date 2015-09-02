@@ -215,7 +215,7 @@ Friend Class EntitiesFilter
                                            ByRef filterId As Int32)
 
         On Error Resume Next
-        entitiesFiltersHash(entityId).Remove(filterId)
+        entitiesFiltersHash(CInt(entityId)).Remove(CInt(filterId))
 
     End Sub
 

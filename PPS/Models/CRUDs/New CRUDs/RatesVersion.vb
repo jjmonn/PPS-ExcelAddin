@@ -143,7 +143,7 @@ Public Class RatesVersion
 
         If packet.ReadInt32() = 0 Then
             Dim id As UInt32 = packet.ReadUint32
-            rate_versions_hash.Remove(id)
+            rate_versions_hash.Remove(CInt(id))
             RaiseEvent DeleteEvent(True, id)
         Else
             RaiseEvent DeleteEvent(False, 0)

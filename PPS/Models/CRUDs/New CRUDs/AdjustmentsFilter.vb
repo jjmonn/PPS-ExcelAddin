@@ -212,7 +212,7 @@ Friend Class AdjustmentFilter
                                            ByRef filterId As Int32)
 
         On Error Resume Next
-        adjustmentsFiltersHash(adjustmentId).Remove(filterId)
+        adjustmentsFiltersHash(CInt(adjustmentId)).Remove(CInt(filterId))
 
     End Sub
 
