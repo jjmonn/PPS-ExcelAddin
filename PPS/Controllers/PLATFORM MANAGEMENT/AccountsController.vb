@@ -84,6 +84,7 @@ Friend Class AccountsController
 
     Public Sub close()
 
+        isClosing = True
         View.closeControl()
 
     End Sub
@@ -149,7 +150,6 @@ Friend Class AccountsController
         Dim ht As Hashtable = GlobalVariables.Accounts.accounts_hash(id)
         ht(variable) = value
         GlobalVariables.Accounts.CMSG_UPDATE_ACCOUNT(ht)
-        View.LaunchCP()
 
     End Sub
 
@@ -377,12 +377,17 @@ Friend Class AccountsController
     Private Sub AccountCreateConfirmation(ByRef status As Boolean, ByRef id As Int32)
 
         View.CircularProgressStop()
+        If status = False Then
+            MsgBox("The account could not be created." & Chr(13) & _
+                   "Error " & "")
+            ' display error from error (to be catched in account) priority normal 
+        End If
 
     End Sub
 
     Private Sub AccountUpdateConfirmation()
 
-        View.CircularProgressStop()
+
 
     End Sub
 
@@ -545,10 +550,13 @@ Friend Class AccountsController
 
     Friend Sub SendNewPositionsToModel()
 
-        ' dans l'idéal trouver une autre solution !! priority high
+        Dim position As Int32
         positionsDictionary = TreeViewsUtilities.GeneratePositionsDictionary(AccountsTV)
-        For Each account In positionsDictionary.Keys
-            UpdateAccount(account, ITEMS_POSITIONS, positionsDictionary(account))
+        For Each account_id As Int32 In positionsDictionary.Keys
+            position = positionsDictionary(account_id)
+            If position <> GlobalVariables.Accounts.accounts_hash(account_id)(ITEMS_POSITIONS) Then
+                UpdateAccount(account_id, ITEMS_POSITIONS, position)
+            End If
         Next
 
     End Sub
