@@ -41,7 +41,6 @@ Friend Class ConnectionsFunctions
 
         userName = p_userName
         pwd = p_pwd
-
         globalVariablesInitFlags.Clear()
         globalInitFlag = False
         globalAuthenticated = False
@@ -50,7 +49,7 @@ Friend Class ConnectionsFunctions
             CloseNetworkConnection()
         End If
         GlobalVariables.NetworkConnect = New NetworkLauncher()
-        GlobalVariables.ConnectionState = (GlobalVariables.NetworkConnect.Launch(p_hostname, p_port))
+        GlobalVariables.ConnectionState = (GlobalVariables.NetworkConnect.Launch(p_hostname, p_port, Function() AddinModule.DisplayConnectionStatus(False)))
 
         If GlobalVariables.ConnectionState = True Then
             ' request auth token

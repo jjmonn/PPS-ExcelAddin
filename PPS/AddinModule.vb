@@ -1959,6 +1959,19 @@ Public Class AddinModule
 
 #End Region
 
+#Region "Interface"
+    Public Shared Function DisplayConnectionStatus(ByRef connected As Boolean) As Int32
+        If connected = True Then
+            GlobalVariables.Connection_Toggle_Button.Image = 1
+            GlobalVariables.Connection_Toggle_Button.Caption = "Connected"
+        Else
+            GlobalVariables.Connection_Toggle_Button.Image = 0
+            GlobalVariables.Connection_Toggle_Button.Caption = "Not connected"
+        End If
+        Return 0
+    End Function
+#End Region
+
 
     Private Sub PPTExportBT_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean)
 

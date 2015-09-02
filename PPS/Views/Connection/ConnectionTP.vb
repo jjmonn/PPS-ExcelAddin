@@ -16,7 +16,7 @@ Public Class ConnectionTP
 
 #Region "Instance Variables"
 
-  ' Objects
+    ' Objects
     Private Addin As AddinModule
     Private CP As ProgressControls.ProgressIndicator
     Private isConnecting As Boolean
@@ -30,23 +30,23 @@ Public Class ConnectionTP
 
 #Region "Initialization"
 
-  Public Sub New()
-    MyBase.New()
+    Public Sub New()
 
-    InitializeComponent()
-    CancelBT.Visible = False
-    CP = New ProgressControls.ProgressIndicator
-    CP.CircleColor = Drawing.Color.Blue
-    CP.NumberOfCircles = 12
-    CP.NumberOfVisibleCircles = 8
-    CP.AnimationSpeed = 75
-    CP.CircleSize = 0.7
-    CPPanel.Controls.Add(CP)
-    CP.Width = 79
-    CP.Height = 79
-    CP.Visible = False
+        MyBase.New()
+        InitializeComponent()
+        CancelBT.Visible = False
+        CP = New ProgressControls.ProgressIndicator
+        CP.CircleColor = Drawing.Color.Blue
+        CP.NumberOfCircles = 12
+        CP.NumberOfVisibleCircles = 8
+        CP.AnimationSpeed = 75
+        CP.CircleSize = 0.7
+        CPPanel.Controls.Add(CP)
+        CP.Width = 79
+        CP.Height = 79
+        CP.Visible = False
 
-  End Sub
+    End Sub
 
   Public Sub Init(ByRef addin As AddinModule)
 
@@ -137,33 +137,26 @@ Public Class ConnectionTP
 
   Delegate Sub AfterConnectionAttemp_Delegate()
 
-  Private Sub AfterConnectionAttemp_ThreadSafe()
+    Private Sub AfterConnectionAttemp_ThreadSafe()
 
-    If InvokeRequired Then
-      Dim MyDelegate As New AfterConnectionAttemp_Delegate(AddressOf AfterConnectionAttemp_ThreadSafe)
-      Me.Invoke(MyDelegate, New Object() {})
-    Else
-      isConnecting = False
-      CancelBT.Visible = False
-      CP.Visible = False
-      ConnectionBT.Visible = True
-      id = ""
-      pwd = ""
-      CP.Stop()
+        If InvokeRequired Then
+            Dim MyDelegate As New AfterConnectionAttemp_Delegate(AddressOf AfterConnectionAttemp_ThreadSafe)
+            Me.Invoke(MyDelegate, New Object() {})
+        Else
+            isConnecting = False
+            CancelBT.Visible = False
+            CP.Visible = False
+            ConnectionBT.Visible = True
+            id = ""
+            pwd = ""
+            CP.Stop()
+            AddinModule.DisplayConnectionStatus(connectionFailed = False)
+            BackgroundWorker1 = Nothing
+            passwordTextBox.Clear()
+            Me.Hide()
+        End If
 
-      If connectionFailed = False Then
-        GlobalVariables.Connection_Toggle_Button.Image = 1
-        GlobalVariables.Connection_Toggle_Button.Caption = "Connected"
-      Else
-        GlobalVariables.Connection_Toggle_Button.Image = 0
-        GlobalVariables.Connection_Toggle_Button.Caption = "Not connected"
-      End If
-      BackgroundWorker1 = Nothing
-      passwordTextBox.Clear()
-      Me.Hide()
-    End If
-
-  End Sub
+    End Sub
 
 #End Region
 

@@ -15,14 +15,13 @@ using System.Net.Security;
 
 public class NetworkManager
 {
-    TcpClient m_Sock;
+    Socket m_Sock;
     SslStream m_StreamSSL;
     static NetworkManager s_networkMgr = null;
     List<Action<ByteBuffer>>[] m_callback;
 
     public NetworkManager()
     {
-        m_Sock = new TcpClient();
         m_callback = new List<Action<ByteBuffer>>[(byte)ServerMessage.OpcodeMax];
     }
 
@@ -67,38 +66,54 @@ public class NetworkManager
 
     public bool Connect(String p_ip, int p_port)
     {
-        Debug.WriteLine("Connecting to server...");
-        try
+      Debug.WriteLine("Connecting to server...");
+      try
+      {
+        IPHostEntry hostEntry = Dns.GetHostByName(p_ip);
+        foreach (IPAddress address in hostEntry.AddressList)
         {
-            m_Sock.Connect(p_ip, p_port);
+          IPEndPoint ipe = new IPEndPoint(address, p_port);
+
+          m_Sock = new Socket(ipe.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+          m_Sock.Connect(ipe);
+          if (m_Sock.Connected)
+            break;
         }
-        catch
+      }
+      catch (Exception e)
+      {
+        Debug.WriteLine("Server unavailable: " + e.Message);
+        return (false);
+      }
+      if (m_Sock == null)
+      {
+        Debug.WriteLine("No valid entry point found.");
+        return (false);
+      }
+      m_StreamSSL = new SslStream(new NetworkStream(m_Sock), false,
+                new RemoteCertificateValidationCallback(ValidateServerCertificate),
+                null);
+      try
+      {
+        m_StreamSSL.AuthenticateAsClient("ppsdev");
+      }
+      catch (AuthenticationException e)
+      {
+        Debug.WriteLine(e.Message);
+        if (e.InnerException != null)
         {
-          Debug.WriteLine("Server unavailable.");
-            return (false);
+          Debug.WriteLine(e.InnerException.Message);
         }
-        m_StreamSSL = new SslStream(m_Sock.GetStream(), false,
-                  new RemoteCertificateValidationCallback(ValidateServerCertificate),
-                  null);
-        try
-        {
-          m_StreamSSL.AuthenticateAsClient("ppsdev");
-        }
-        catch (AuthenticationException e)
-        {
-          Debug.WriteLine(e.Message);
-          if (e.InnerException != null)
-          {
-            Debug.WriteLine(e.InnerException.Message);
-          }
-          Debug.WriteLine("SSL authentication failed");
-          return (false);
-        }
-        return (true);
+        Debug.WriteLine("SSL authentication failed");
+        return (false);
+      }
+      return (true);
     }
 
     public void Send(ByteBuffer p_data)
     {
+      if (m_Sock.Connected == false)
+        return;
         try
         {
             m_StreamSSL.Write(p_data.GetBuffer(), 0, (int)p_data.Length);
@@ -106,6 +121,7 @@ public class NetworkManager
         }
         catch (Exception e)
         {
+            m_Sock.Close();
             System.Diagnostics.Debug.WriteLine(e.Message);
         }
     }
@@ -148,14 +164,22 @@ public class NetworkManager
 
     public void Disconnect()
     {
-        m_Sock.GetStream().Close();
+        m_StreamSSL.Close();
         m_Sock.Close();
-        m_Sock = new TcpClient();
+    }
+
+    public bool IsConnected()
+    {
+      try
+      {
+        return !(m_Sock.Poll(1, SelectMode.SelectRead) && m_Sock.Available == 0);
+      }
+      catch (SocketException) { return false; }
     }
 
     public bool HandlePacket()
     {
-        if (m_Sock.Connected == false)
+        if (IsConnected() == false)
         {
           Debug.WriteLine("Disconnected by remote server");
             return (false);
