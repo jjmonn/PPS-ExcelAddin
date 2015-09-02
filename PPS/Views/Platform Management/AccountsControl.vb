@@ -324,18 +324,27 @@ Friend Class AccountsControl
                                                                                 DeleteAccountToolStripMenuItem1.Click
 
         If Not current_node Is Nothing Then
-
             formulaEdit.Checked = False
-            Dim confirm As Integer = MessageBox.Show("Careful, you are about to delete account " + Chr(13) + Chr(13) + Name_TB.Text + Chr(13) + "Do you confirm?" + Chr(13) + Chr(13) + _
-                                                 "This Account and all its Sub Accounts will be deleted.", _
-                                                 "Account deletion confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
-            If confirm = DialogResult.Yes Then
-                If Controller.DeleteAccount(current_node) = True Then
-                    current_node.Remove()
-                    current_node = Nothing
-                End If
+            Dim dependantAccountslist() As String = Controller.ExistingDependantAccounts(current_node)
+            If dependantAccountslist.Length > 0 Then
+
+                Dim listStr As String = ""
+                For Each accountName In dependantAccountslist
+                    listStr = listStr & " - " & accountName & Chr(13)
+                Next
+                MsgBox("The following Accounts formula are dependant on some accounts you want to delete: " & Chr(13) & _
+                       listStr & Chr(13) & _
+                       "Those formulas must first be changed before the Selected Accounts can be deleted.")
+                Exit Sub
             End If
 
+            Dim confirm As Integer = MessageBox.Show("Careful, you are about to delete account " + Chr(13) + Chr(13) + Name_TB.Text + Chr(13) + "Do you confirm?" + Chr(13) + Chr(13) + _
+                                                     "This Account and all its Sub Accounts will be deleted.", _
+                                                     "Account deletion confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+            If confirm = DialogResult.Yes Then
+                Controller.DeleteAccount(CInt(current_node.Name))
+                current_node = Nothing
+            End If
         End If
 
     End Sub

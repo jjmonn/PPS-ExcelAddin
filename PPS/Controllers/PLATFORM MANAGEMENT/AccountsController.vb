@@ -70,6 +70,7 @@ Friend Class AccountsController
         NewAccountView = New NewAccountUI(View, Me)
         FormulasTranslator = New FormulasTranslations(accountsNameKeysDictionary)
         formulasMGT = New ModelFormulasMGT(accountsNameKeysDictionary, AccountsTV)
+        positionsDictionary = TreeViewsUtilities.GeneratePositionsDictionary(AccountsTV)
 
     End Sub
 
@@ -156,31 +157,8 @@ Friend Class AccountsController
 
     End Sub
 
-    Friend Function DeleteAccount(ByRef node As TreeNode) As Boolean
-
-        Dim accountsKeyList As List(Of Int32) = TreeViewsUtilities.GetNodesKeysList(node)
-        accountsKeyList.Reverse()
-        If AccountsDependenciesCheck(accountsKeyList) = False Then Return False
-
-        Dim accountsToBeDeleted = AccountsVersionsCheck(accountsKeyList)
-        If accountsToBeDeleted.Count > 0 Then
-            Dim confirm As Integer = MessageBox.Show("The data corresponding to the accounts will be deleted permanetly, do you confirm?", _
-                                                     "Accounts deletion validation", _
-                                                       MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question)
-            If confirm = DialogResult.Yes Then
-                RemoveAccount(accountsKeyList, node)
-            Else
-                Return False
-            End If
-        Else
-            RemoveAccount(accountsKeyList, node)
-        End If
-        Return True
-
-    End Function
-
     Friend Sub UpdateName(ByRef account_id As Int32, _
-                          ByRef new_name As String)
+                           ByRef new_name As String)
 
         ' below -> may raise issue if pb on update!(priority: high)
         Dim old_name = GlobalVariables.Accounts.accounts_hash(account_id)(NAME_VARIABLE)
@@ -257,32 +235,34 @@ Friend Class AccountsController
 
     End Sub
 
-    Friend Function GetFormulaText(ByRef accountId As Int32) As String
 
-        Return formulasMGT.convertFormulaFromKeysToNames(ReadAccount(accountId, ACCOUNT_FORMULA_VARIABLE))
 
-    End Function
+    Friend Sub DeleteAccount(ByRef account_id As Int32)
+
+        GlobalVariables.Accounts.CMSG_DELETE_ACCOUNT(account_id)
+
+    End Sub
+
+
 
 #End Region
 
 
-#Region "Accounts Deletion"
+#Region "Check"
 
-    Private Function AccountsDependenciesCheck(ByRef accountsKeyList As List(Of Int32)) As Boolean
 
-        Dim dependenciesList As List(Of Int32) = DependenciesLoopCheck(accountsKeyList)
-        If dependenciesList.Count > 0 Then
-            Dim listStr As String = ""
-            For Each accountName In dependenciesList
-                listStr = listStr & " - " & accountName & Chr(13)
-            Next
-            MsgBox("The following Accounts formula are dependant on some accounts you want to delete: " & Chr(13) & _
-                   listStr & Chr(13) & _
-                   "Those formulas must first be changed before the Selected Accounts can be deleted.")
-            Return False
-        Else
-            Return True
-        End If
+    Friend Function ExistingDependantAccounts(ByRef node As TreeNode) As String()
+
+        Dim dependantAccountsNames As New List(Of String)
+        Dim accountsKeyList As List(Of Int32) = TreeViewsUtilities.GetNodesKeysList(node)
+        accountsKeyList.Reverse()
+
+        Dim dependantAccountsId() As Int32 = DependenciesLoopCheck(accountsKeyList).ToArray
+        For Each dependantAccountId As Int32 In dependantAccountsId
+            dependantAccountsNames.Add(GlobalVariables.Accounts.accounts_hash(dependantAccountId)(NAME_VARIABLE))
+        Next
+
+        Return dependantAccountsNames.ToArray
 
     End Function
 
@@ -300,101 +280,16 @@ Friend Class AccountsController
 
     End Function
 
-    Private Function AccountsVersionsCheck(ByRef accountsKeyList As List(Of Int32)) As List(Of Int32)
+    ' Looks for the param accountKey in Accounts formulas
+    Private Sub CheckForDependencies(ByRef accountKey As String, dependenciesList As List(Of Int32))
 
-        ' display accounts ids to users !!
-        ' priority normal
-        ' a priori implémenté au niveau server on account deletion ?
-        ' to be validated/ reviewed
-
-        ' ------------------------------------
-        ' 
-        ' ask server for the list of accounts !
-        '
-        '-------------------------------------
-
-        'If accountsDictionaries.Count > 0 Then
-        '    Dim resultStr As String = "The following Accounts were found in the databases: " + Chr(13)
-        '    For Each account In accountsDictionaries.Keys
-        '        resultStr = resultStr & "- " & account & " found in: " + Chr(13)
-        '        For Each versionName In accountsDictionaries(account)
-        '            resultStr = resultStr + "  - " + versionName + Chr(13)
-        '        Next
-        '    Next
-        '    MsgBox(resultStr)
-        'End If
-
-
-
-    End Function
-
-    Private Sub RemoveAccount(ByRef accountsList As List(Of Int32), ByRef node As TreeNode)
-
-        For Each id In accountsList
-            GlobalVariables.Accounts.CMSG_DELETE_ACCOUNT(id)
-            ' -> must wait for confirmation !!
-            '     accountsNameKeysDictionary.Remove(GlobalVariables.Accounts.accounts_hash(id)(NAME_VARIABLE))
+        For Each currentKey As Int32 In positionsDictionary.Keys
+            Dim formula As String = GlobalVariables.Accounts.accounts_hash(currentKey)(ACCOUNT_FORMULA_VARIABLE)
+            If Not formula Is Nothing AndAlso formula.Contains(accountKey) Then _
+                dependenciesList.Add(currentKey)
         Next
 
     End Sub
-
-#End Region
-
-
-#Region "Events"
-
-    Private Sub AccountUpdateFromServer(ByRef status As Boolean, ByRef accountsAttributes As Hashtable)
-
-        If status = True _
-        AndAlso AccountsTV.Nodes.Find(accountsAttributes(ID_VARIABLE), True).Length = 0 _
-        AndAlso isClosing = False Then
-            View.TVUpdate(accountsAttributes(ID_VARIABLE), _
-                          accountsAttributes(PARENT_ID_VARIABLE), _
-                          accountsAttributes(NAME_VARIABLE), _
-                          accountsAttributes(IMAGE_VARIABLE))
-            InstanceVariablesLoading()
-        End If
-
-    End Sub
-
-    Private Sub AccountDeleteFromServer(ByRef status As Boolean, ByRef id As UInt32)
-
-        If status = True _
-        AndAlso isClosing = False Then
-            View.TVNodeDelete(id)
-            InstanceVariablesLoading()
-        End If
-
-    End Sub
-
-    Private Sub AccountCreateConfirmation(ByRef status As Boolean, ByRef id As Int32)
-
-        View.CircularProgressStop()
-        If status = False Then
-            MsgBox("The account could not be created." & Chr(13) & _
-                   "Error " & "")
-            ' display error from error (to be catched in account) priority normal 
-        End If
-
-    End Sub
-
-    Private Sub AccountUpdateConfirmation(ByRef status As Boolean, ByRef id As Int32)
-
-        If status = False Then
-            MsgBox("The account could not be created." & Chr(13) & _
-                   "Error " & "")
-            ' display error from error (to be catched in account) priority normal 
-        End If
-
-
-    End Sub
-
-#End Region
-
-
-#Region "Checks"
-
-#Region "Accounts checks"
 
     Friend Function AccountNameCheck(ByRef nameStr As String) As Boolean
 
@@ -430,6 +325,36 @@ Friend Class AccountsController
         Return True
 
     End Function
+
+
+    'Friend Function FormulasTypesChecks() As Boolean
+
+    '    Dim accountsNamesFormulaErrorList As New List(Of String)
+
+    '    For Each accountKey In positionsDictionary.Keys
+    '        If FTypesToBeTested.Contains(GlobalVariables.Accounts.accounts_hash(accountKey)(ACCOUNT_FORMULA_TYPE_VARIABLE)) Then
+    '            If GlobalVariables.Accounts.accounts_hash(accountKey)(ACCOUNT_FORMULA_VARIABLE) = "" Then _
+    '                accountsNamesFormulaErrorList.Add(GlobalVariables.Accounts.accounts_hash(accountKey)(NAME_VARIABLE))
+    '        End If
+    '    Next
+
+    '    If accountsNamesFormulaErrorList.Count > 0 Then
+    '        Dim errorStr As String = "-"
+    '        For Each account In accountsNamesFormulaErrorList
+    '            errorStr = errorStr + account + Chr(13) + "-"
+    '        Next
+    '        errorStr = Strings.Left(errorStr, errorStr.Length - 1)
+    '        MsgBox("The following accounts need to have a valid formula: " + Chr(13) + errorStr + Chr(13) + _
+    '               "In order for these accounts to be calculated a valid formula must be given.")
+    '        Return False
+    '    Else
+    '        Return True
+    '    End If
+
+    'End Function
+
+
+#Region "Formulas Interdependancies checks"
 
     Private Function InterdependancyTest() As Boolean
 
@@ -485,46 +410,57 @@ Friend Class AccountsController
 
 #End Region
 
-#Region "Formulas Checks"
 
-    Friend Function FormulasTypesChecks() As Boolean
+#End Region
 
-        Dim accountsNamesFormulaErrorList As New List(Of String)
 
-        For Each accountKey In positionsDictionary.Keys
-            If FTypesToBeTested.Contains(GlobalVariables.Accounts.accounts_hash(accountKey)(ACCOUNT_FORMULA_TYPE_VARIABLE)) Then
-                If GlobalVariables.Accounts.accounts_hash(accountKey)(ACCOUNT_FORMULA_VARIABLE) = "" Then _
-                    accountsNamesFormulaErrorList.Add(GlobalVariables.Accounts.accounts_hash(accountKey)(NAME_VARIABLE))
-            End If
-        Next
+#Region "Events"
 
-        If accountsNamesFormulaErrorList.Count > 0 Then
-            Dim errorStr As String = "-"
-            For Each account In accountsNamesFormulaErrorList
-                errorStr = errorStr + account + Chr(13) + "-"
-            Next
-            errorStr = Strings.Left(errorStr, errorStr.Length - 1)
-            MsgBox("The following accounts need to have a valid formula: " + Chr(13) + errorStr + Chr(13) + _
-                   "In order for these accounts to be calculated a valid formula must be given.")
-            Return False
-        Else
-            Return True
+    Private Sub AccountUpdateFromServer(ByRef status As Boolean, ByRef accountsAttributes As Hashtable)
+
+        If status = True _
+        AndAlso AccountsTV.Nodes.Find(accountsAttributes(ID_VARIABLE), True).Length = 0 _
+        AndAlso isClosing = False Then
+            View.TVUpdate(accountsAttributes(ID_VARIABLE), _
+                          accountsAttributes(PARENT_ID_VARIABLE), _
+                          accountsAttributes(NAME_VARIABLE), _
+                          accountsAttributes(IMAGE_VARIABLE))
+            InstanceVariablesLoading()
         End If
-
-    End Function
-
-    ' Looks for the param accountKey in Accounts formulas
-    Private Sub CheckForDependencies(ByRef accountKey As String, dependenciesList As List(Of Int32))
-
-        For Each currentKey In positionsDictionary.Keys
-            Dim formula As String = GlobalVariables.Accounts.accounts_hash(currentKey)(ACCOUNT_FORMULA_VARIABLE)
-            If Not formula Is Nothing AndAlso formula.Contains(accountKey) Then _
-                dependenciesList.Add(GlobalVariables.Accounts.accounts_hash(currentKey)(NAME_VARIABLE))
-        Next
 
     End Sub
 
-#End Region
+    Private Sub AccountDeleteFromServer(ByRef status As Boolean, ByRef id As UInt32)
+
+        If status = True _
+        AndAlso isClosing = False Then
+            View.TVNodeDelete(id)
+            InstanceVariablesLoading()
+        End If
+
+    End Sub
+
+    Private Sub AccountCreateConfirmation(ByRef status As Boolean, ByRef id As Int32)
+
+        View.CircularProgressStop()
+        If status = False Then
+            MsgBox("The account could not be created." & Chr(13) & _
+                   "Error " & "")
+            ' display error from error (to be catched in account) priority normal 
+        End If
+
+    End Sub
+
+    Private Sub AccountUpdateConfirmation(ByRef status As Boolean, ByRef id As Int32)
+
+        If status = False Then
+            MsgBox("The account could not be created." & Chr(13) & _
+                   "Error " & "")
+            ' display error from error (to be catched in account) priority normal 
+        End If
+
+
+    End Sub
 
 #End Region
 
@@ -559,6 +495,11 @@ Friend Class AccountsController
 
     End Sub
 
+    Friend Function GetFormulaText(ByRef accountId As Int32) As String
+
+        Return formulasMGT.convertFormulaFromKeysToNames(ReadAccount(accountId, ACCOUNT_FORMULA_VARIABLE))
+
+    End Function
 
 #End Region
 
