@@ -45,6 +45,17 @@ Module Data_Tables_Constants
     Friend Const ACCOUNT_CONSOLIDATION_OPTION_VARIABLE = "computation_option"
     Friend Const ACCOUNT_CONVERSION_OPTION_VARIABLE = "conversion_flag"
 
+#End Region
+
+#Region "FactLog Table"
+
+    ' Accounts table
+    Friend Const FACTLOG_USER_VARIABLE = "factlog_user"
+    Friend Const FACTLOG_DATE_VARIABLE = "factlog_date"
+    Friend Const FACTLOG_CLIENT_ID_VARIABLE = "factlog_client_id"
+    Friend Const FACTLOG_PRODUCT_ID_VARIABLE = "factlog_product_id"
+    Friend Const FACTLOG_ADJUSTMENT_ID_VARIABLE = "factlog_adjustment_id"
+    Friend Const FACTLOG_VALUE_VARIABLE = "factlog_value"
 
 #End Region
 
