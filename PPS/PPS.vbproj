@@ -57,7 +57,7 @@
     <Reference Include="JacksonSoft.CustomTabControl">
       <HintPath>..\..\..\..\..\Google Drive\OPERATIONS DEPARTMENT\Libraries\JacksonSoft.CustomTabControl.dll</HintPath>
     </Reference>
-    <Reference Include="NetworkModule, Version=1.0.0.0, Culture=neutral, PublicKeyToken=32e2d6a2d1db8114, processorArchitecture=MSIL">
+    <Reference Include="NetworkModule, Version=1.0.0.0, Culture=neutral, PublicKeyToken=12ac9f4dc3886644, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\NetworkModule\NetworkModule\bin\Debug\NetworkModule.dll</HintPath>
     </Reference>
@@ -110,7 +110,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <None Include="ClassDiagram1.cd" />
     <None Include="Loader\adxloader.dll.manifest" />
     <!-- <None Include="PPS.snk" /> -->
   </ItemGroup>
@@ -134,7 +133,7 @@
     <Compile Include="GLOBAL\GlobalEnums.vb" />
     <Compile Include="Models\Computing\Computer.vb" />
     <Compile Include="Models\Computing\ComputerInputEntity.vb" />
-    <Compile Include="Models\Computing\formulasTranslation.vb" />
+    <Compile Include="Models\Computing\FormulasTranslation.vb" />
     <Compile Include="Models\CRUDs\New CRUDs\GlobalFactData.vb" />
     <Compile Include="Models\CRUDs\New CRUDs\GlobalFact.vb" />
     <Compile Include="Models\CRUDs\New CRUDs\Account.vb" />
@@ -552,7 +551,6 @@
     <Compile Include="Views\Report Upload\ManualRangesSelectionUI.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Models\Computing\ModelFormulasMGT.vb" />
     <Compile Include="Views\Controlling UI\ControllingUI_2.Designer.vb">
       <DependentUpon>ControllingUI_2.vb</DependentUpon>
     </Compile>
