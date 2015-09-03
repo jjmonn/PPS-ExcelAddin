@@ -183,6 +183,15 @@ Friend Class ProductsFilter
 
     End Function
 
+    Friend Function GetFilterValueId(ByRef filterId As Int32, _
+                                    ByRef productId As Int32) As Int32
+
+        Dim mostNestedFilterId = GlobalVariables.Filters.GetMostNestedFilterId(filterId)
+        Dim mostNestedFilterValueId = GlobalVariables.ProductsFilters.productsFiltersHash(productId)(mostNestedFilterId)
+        Return GlobalVariables.FiltersValues.GetFilterValueId(mostNestedFilterValueId, filterId)
+
+    End Function
+
 #End Region
 
 

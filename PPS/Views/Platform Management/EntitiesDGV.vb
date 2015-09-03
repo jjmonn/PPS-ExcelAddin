@@ -36,8 +36,9 @@ Friend Class EntitiesDGV
 
     ' Variables
     Private entitiesFilterTV As TreeView
+    Private entitiesFilterValuesTV As TreeView
     Private categoriesNameKeyDic As Hashtable
-    Friend columnsDictionary As New Dictionary(Of String, HierarchyItem)
+    Friend columnsVariableItemDictionary As New Dictionary(Of String, HierarchyItem)
     Friend rows_id_item_dic As New Dictionary(Of Int32, HierarchyItem)
 
     Private DGVArray(,) As String
@@ -58,10 +59,12 @@ Friend Class EntitiesDGV
 #Region "Initialize"
 
     Friend Sub New(ByRef entitiesTV As TreeView, _
-                    ByRef input_entitiesFilterTV As TreeView, _
-                    ByRef input_categoriesKeyNameDic As Hashtable)
+                   ByRef input_entitiesFilterTV As TreeView, _
+                   ByRef p_entitiesFilterValuesTV As TreeView, _
+                   ByRef input_categoriesKeyNameDic As Hashtable)
 
         entitiesFilterTV = input_entitiesFilterTV
+        entitiesFilterValuesTV = p_entitiesFilterValuesTV
 
         initFilters()
         InitializeDGVDisplay()
@@ -90,26 +93,40 @@ Friend Class EntitiesDGV
 
     End Sub
 
+    Private Sub fillDGV()
+
+        isFillingDGV = True
+        For Each entity_id In GlobalVariables.Entities.entities_hash.Keys
+            fillRow(entity_id, GlobalVariables.Entities.entities_hash(entity_id))
+        Next
+        isFillingDGV = False
+        updateDGVFormat()
+
+    End Sub
+
+
 #Region "Columns Initialization"
 
     Private Sub DGVColumnsInitialize()
 
         DGV.ColumnsHierarchy.Clear()
-        columnsDictionary.Clear()
+        columnsVariableItemDictionary.Clear()
 
+        ' Entities Name Column
         Dim nameColumn As HierarchyItem = DGV.ColumnsHierarchy.Items.Add("Entity")
+        nameColumn.ItemValue = NAME_VARIABLE
+
         Dim nameTextBox As New TextBoxEditor()
         nameTextBox.ActivationFlags = EditorActivationFlags.KEY_PRESS_ENTER
-
         nameColumn.CellsEditor = nameTextBox
-        nameColumn.ItemValue = NAME_VARIABLE
-        columnsDictionary.Add(NAME_VARIABLE, nameColumn)
+        columnsVariableItemDictionary.Add(NAME_VARIABLE, nameColumn)
 
-        Dim col1 As HierarchyItem = DGV.ColumnsHierarchy.Items.Add(CURRENCY_COLUMN_NAME)
-        columnsDictionary.Add(ENTITIES_CURRENCY_VARIABLE, col1)
-        col1.ItemValue = ENTITIES_CURRENCY_VARIABLE
-        InitCurrenciesCB()
-        col1.AllowFiltering = True
+        ' Entities Currency Column
+        Dim currencyColumn As HierarchyItem = DGV.ColumnsHierarchy.Items.Add(CURRENCY_COLUMN_NAME)
+        columnsVariableItemDictionary.Add(ENTITIES_CURRENCY_VARIABLE, currencyColumn)
+        currencyColumn.ItemValue = ENTITIES_CURRENCY_VARIABLE
+        InitCurrenciesComboBox()
+        currencyColumn.AllowFiltering = True
         ' CreateFilter(col1)
 
         For Each rootNode As TreeNode In entitiesFilterTV.Nodes
@@ -120,24 +137,27 @@ Friend Class EntitiesDGV
     End Sub
 
     Private Sub CreateSubFilters(ByRef node As TreeNode)
+
         Dim col As HierarchyItem = DGV.ColumnsHierarchy.Items.Add(node.Text)
-        columnsDictionary.Add(node.Name, col)
+
+        columnsVariableItemDictionary.Add(node.Name, col)
         col.ItemValue = node.Name
-        InitComboBox(col, node)
         col.AllowFiltering = True
+
         For Each childNode As TreeNode In node.Nodes
             CreateSubFilters(childNode)
         Next
-    End Sub
-
-    Private Sub CreateFilter(ByRef column As HierarchyItem)
-
-        Dim filter As New HierarchyItemFilter()
-        filter.Item = column
-        filter.Filter = filterGroup
-        DGV.RowsHierarchy.Filters.Add(filter)
 
     End Sub
+
+    'Private Sub CreateFilter(ByRef column As HierarchyItem)
+
+    '    Dim filter As New HierarchyItemFilter()
+    '    filter.Item = column
+    '    filter.Filter = filterGroup
+    '    DGV.RowsHierarchy.Filters.Add(filter)
+
+    'End Sub
 
     Private Sub initFilters()
 
@@ -155,6 +175,7 @@ Friend Class EntitiesDGV
     End Sub
 
 #End Region
+
 
 #Region "Rows Initialization"
 
@@ -201,91 +222,97 @@ Friend Class EntitiesDGV
 
 #End Region
 
+
 #Region "ComboBoxes Utilities"
 
-    Private Sub InitComboBox(ByRef columnHierarchyItem As HierarchyItem, _
-                             ByRef inputNode As TreeNode)
+    'Private Sub InitComboBox(ByRef columnHierarchyItem As HierarchyItem, _
+    '                         ByRef inputNode As TreeNode)
 
+    '    Dim comboBox As New ComboBoxEditor()
+    '    comboBox.DropDownHeight = comboBox.ItemHeight * CB_NB_ITEMS_DISPLAYED
+    '    comboBox.DropDownWidth = CB_WIDTH
 
-        Dim comboBox As New ComboBoxEditor()
-        comboBox.DropDownHeight = comboBox.ItemHeight * CB_NB_ITEMS_DISPLAYED
-        comboBox.DropDownWidth = CB_WIDTH
+    '    For Each node As TreeNode In inputNode.Nodes
+    '        comboBox.Items.Add(node.Text)
+    '    Next
 
-        Dim tmpDictionary As New Dictionary(Of String, String)
-        For Each node As TreeNode In inputNode.Nodes
-            comboBox.Items.Add(node.Text)
-            tmpDictionary.Add(node.Text, node.Name)
-        Next
+    '    columnHierarchyItem.CellsEditor = comboBox
+    '    AddHandler comboBox.EditBase.TextBox.KeyDown, AddressOf comboTextBox_KeyDown
 
-        columnHierarchyItem.CellsEditor = comboBox
-        AddHandler comboBox.EditBase.TextBox.KeyDown, AddressOf comboTextBox_KeyDown
+    'End Sub
 
-    End Sub
-
-    Private Sub InitCurrenciesCB()
+    Private Sub InitCurrenciesComboBox()
 
         Dim comboBox As New ComboBoxEditor()
+        comboBox.DropDownList = True
         comboBox.DropDownHeight = comboBox.ItemHeight * CB_NB_ITEMS_DISPLAYED
         comboBox.DropDownWidth = CB_WIDTH
         For Each currencyId As Int32 In GlobalVariables.Currencies.currencies_hash.Keys
-            Dim list_item As New ListItem
-
-            list_item.Value = currencyId
-            list_item.Text = GlobalVariables.Currencies.currencies_hash(currencyId)(NAME_VARIABLE)
-            comboBox.Items.Add(list_item)
+            comboBox.Items.Add(GlobalVariables.Currencies.currencies_hash(currencyId)(NAME_VARIABLE))
         Next
 
-        columnsDictionary(ENTITIES_CURRENCY_VARIABLE).CellsEditor = comboBox
+        columnsVariableItemDictionary(ENTITIES_CURRENCY_VARIABLE).CellsEditor = comboBox
         AddHandler comboBox.EditBase.TextBox.KeyDown, AddressOf comboTextBox_KeyDown
 
     End Sub
 
 #End Region
 
-    Private Sub fillDGV()
+   
+#End Region
 
-        isFillingDGV = True
-        For Each entity_id In GlobalVariables.Entities.entities_hash.Keys
-            fillRow(entity_id, GlobalVariables.Entities.entities_hash(entity_id))
-        Next
-        isFillingDGV = False
-        updateDGVFormat()
 
-    End Sub
+#Region "DGV Filling"
 
-    Friend Sub fillRow(ByVal entity_id As Int32, _
+    Friend Sub FillRow(ByVal entity_id As Int32, _
                        ByVal entity_ht As Hashtable)
+
         Dim rowItem = rows_id_item_dic(entity_id)
-        Dim column As HierarchyItem = columnsDictionary(ENTITIES_CURRENCY_VARIABLE)
-        DGV.CellsArea.SetCellValue(rowItem, columnsDictionary(NAME_VARIABLE), entity_ht(NAME_VARIABLE))
+        Dim column As HierarchyItem = columnsVariableItemDictionary(ENTITIES_CURRENCY_VARIABLE)
+        DGV.CellsArea.SetCellValue(rowItem, columnsVariableItemDictionary(NAME_VARIABLE), entity_ht(NAME_VARIABLE))
         DGV.CellsArea.SetCellValue(rowItem, column, GlobalVariables.Currencies.currencies_hash(CInt(entity_ht(ENTITIES_CURRENCY_VARIABLE)))(NAME_VARIABLE))
-        For Each root_category_node As TreeNode In entitiesFilterTV.Nodes
-            FillSubFilters(root_category_node, entity_id, rowItem)
+        For Each filterNode As TreeNode In entitiesFilterTV.Nodes
+            FillSubFilters(filterNode, entity_id, rowItem)
         Next
         If entity_ht(ENTITIES_ALLOW_EDITION_VARIABLE) = 0 Then rowItem.ImageIndex = 0 Else rowItem.ImageIndex = 1
 
     End Sub
 
-    Private Sub FillSubFilters(ByRef node As TreeNode, ByRef entity_id As Int32, ByRef rowItem As HierarchyItem)
-        Dim filter_value_name As String
-        Dim column As HierarchyItem = columnsDictionary(node.Name)
-        Dim filter_id As Int32 = CInt(node.Name)
-        Dim mostNestedFilterId = GlobalVariables.Filters.GetMostNestedFilterId(CInt(node.Name))
-        Dim mostNestedFilterValueId = GlobalVariables.EntitiesFilters.entitiesFiltersHash(entity_id)(mostNestedFilterId)
-        Dim filterValueId = GlobalVariables.FiltersValues.GetFilterValueId(mostNestedFilterValueId, filter_id)
-        filter_value_name = GlobalVariables.FiltersValues.filtervalues_hash(filterValueId)(NAME_VARIABLE)
-        DGV.CellsArea.SetCellValue(rowItem, column, filter_value_name)
+    Private Sub FillSubFilters(ByRef filterNode As TreeNode, _
+                               ByRef entity_id As Int32, _
+                               ByRef rowItem As HierarchyItem)
 
         Dim combobox As New ComboBoxEditor
+        combobox.DropDownList = True
+        Dim columnItem As HierarchyItem = columnsVariableItemDictionary(filterNode.Name)
+        Dim filterValueId = GlobalVariables.EntitiesFilters.GetFilterValueId(CInt(filterNode.Name), entity_id)
+        Dim filter_value_name = GlobalVariables.FiltersValues.filtervalues_hash(filterValueId)(NAME_VARIABLE)
+        DGV.CellsArea.SetCellValue(rowItem, columnItem, filter_value_name)
 
-        For Each filterValueName As String In GlobalVariables.FiltersValues.GetFiltervaluesList(filter_id, NAME_VARIABLE)
-            combobox.Items.Add(filterValueName)
+        ' Filters Choices Setup
+        If filterNode.Parent Is Nothing Then
+            ' Root Filter
+            Dim valuesNames = GlobalVariables.FiltersValues.GetFiltervaluesList(filterNode.Name, NAME_VARIABLE)
+            For Each valueName As String In valuesNames
+                combobox.Items.Add(valueName)
+            Next
+        Else
+            ' Child Filter
+            Dim parentFilterFilterValueId As Int32 = GlobalVariables.EntitiesFilters.GetFilterValueId(filterNode.Parent.Name, entity_id)     ' Child Filter Id
+            Dim filterValuesIds = GlobalVariables.FiltersValues.GetFilterValueIDChildren(parentFilterFilterValueId).Keys
+            For Each Id As Int32 In filterValuesIds
+                combobox.Items.Add(GlobalVariables.FiltersValues.filtervalues_hash(Id)(NAME_VARIABLE))
+            Next
+        End If
+     
+        ' Add ComboBoxEditor to Cell
+        DGV.CellsArea.SetCellEditor(rowItem, columnItem, combobox)
+
+        ' Recursive if Filters Children exist
+        For Each childFilterNode As TreeNode In filterNode.Nodes
+            FillSubFilters(childFilterNode, entity_id, rowItem)
         Next
 
-        DGV.CellsArea.SetCellEditor(rowItem, column, combobox)
-        For Each childNode As TreeNode In node.Nodes
-            FillSubFilters(childNode, entity_id, rowItem)
-        Next
     End Sub
 
     Private Sub updateDGVFormat()
@@ -367,7 +394,6 @@ Friend Class EntitiesDGV
         End While
 
     End Sub
-
 
 #End Region
 

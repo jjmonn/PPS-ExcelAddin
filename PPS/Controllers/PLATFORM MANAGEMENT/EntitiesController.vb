@@ -3,7 +3,6 @@
 ' Controller for entities 
 '
 ' To do:
-'       - new entity -> put the parent entity's credential else 0 -> check !!       
 '       - implement rows up down ?
 '       - 
 '   
@@ -13,7 +12,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 01/09/2015
+' Last modified: 03/09/2015
 
 
 Imports System.Windows.Forms
@@ -38,7 +37,6 @@ Friend Class EntitiesController
 
     ' Variables
     Friend entitiesFilterValuesNameIdDict As Hashtable
-    Private entitiesNameKeyDic As Hashtable
     Private positionsDictionary As New Dictionary(Of Int32, Double)
 
 #End Region
@@ -48,20 +46,28 @@ Friend Class EntitiesController
 
     Friend Sub New()
 
-        Globalvariables.Entities.LoadEntitiesTV(entitiesTV)   ' can be replaced by a treenode instead !
-        GlobalVariables.Filters.LoadFiltersTV(entitiesFilterTV, GlobalEnums.AnalysisAxis.ENTITIES)
-        AxisFilter.LoadFvTv(entitiesFilterValuesTV, GlobalEnums.AnalysisAxis.ENTITIES)
-        entitiesNameKeyDic = GlobalVariables.Entities.GetEntitiesDictionary(NAME_VARIABLE, ID_VARIABLE)
-        entitiesFilterValuesNameIdDict = GlobalVariables.Filters.GetFiltersDictionary(GlobalEnums.AnalysisAxis.ENTITIES, NAME_VARIABLE, ID_VARIABLE)
-
-        View = New EntitiesControl(Me, entitiesTV, entitiesNameKeyDic, entitiesFilterValuesNameIdDict, entitiesFilterTV)
+        LoadInstanceVariables()
+        View = New EntitiesControl(Me, entitiesTV, entitiesFilterValuesTV, entitiesFilterValuesNameIdDict, entitiesFilterTV)
         NewEntityView = New NewEntityUI(Me, entitiesTV, entitiesFilterTV, entitiesFilterValuesNameIdDict)
 
+        ' Entities CRUD Events
         AddHandler GlobalVariables.Entities.CreationEvent, AddressOf AfterEntityCreation
         AddHandler GlobalVariables.Entities.DeleteEvent, AddressOf AfterEntityDeletion
         AddHandler GlobalVariables.Entities.UpdateEvent, AddressOf AfterEntityUpdate
         AddHandler GlobalVariables.Entities.Read, AddressOf AfterEntityRead
-        ' handler after update !! priority normal
+
+        ' Entities Filters CRUD Events
+        AddHandler GlobalVariables.EntitiesFilters.Read, AddressOf AfterEntityFilterRead
+
+
+    End Sub
+
+    Private Sub LoadInstanceVariables()
+
+        GlobalVariables.Entities.LoadEntitiesTV(entitiesTV)
+        GlobalVariables.Filters.LoadFiltersTV(entitiesFilterTV, GlobalEnums.AnalysisAxis.ENTITIES)
+        AxisFilter.LoadFvTv(entitiesFilterValuesTV, GlobalEnums.AnalysisAxis.ENTITIES)
+        entitiesFilterValuesNameIdDict = GlobalVariables.Filters.GetFiltersDictionary(GlobalEnums.AnalysisAxis.ENTITIES, NAME_VARIABLE, ID_VARIABLE)
 
     End Sub
 
@@ -153,16 +159,26 @@ Friend Class EntitiesController
 
 #End Region
 
+
 #Region "Events"
 
     Private Sub AfterEntityRead(ByRef status As Boolean, ByRef ht As Hashtable)
 
         If (status = True) Then
             View.UpdateEntity(ht)
+            LoadInstanceVariables()
         End If
 
     End Sub
 
+    Private Sub AfterEntityDeletion(ByRef status As Boolean, ByRef id As Int32)
+
+        If status = True Then
+            View.DeleteEntity(id)
+            LoadInstanceVariables()
+        End If
+
+    End Sub
 
     Private Sub AfterEntityUpdate(ByRef status As Boolean, ByRef id As Int32)
 
@@ -173,13 +189,6 @@ Friend Class EntitiesController
 
     End Sub
 
-    Private Sub AfterEntityDeletion(ByRef status As Boolean, ByRef id As Int32)
-
-        ' remove node/ row
-
-    End Sub
-
-    ' Triggered by CRUD model creation confirmation 
     Private Sub AfterEntityCreation(ByRef status As Boolean, ByRef id As Int32)
 
         'Dim parent_node As TreeNode = entitiesTV.Nodes.Find(entity_ht(PARENT_ID_VARIABLE), True)(0)
@@ -203,6 +212,16 @@ Friend Class EntitiesController
         'End If
 
     End Sub
+
+    Private Sub AfterEntityFilterRead(ByRef status As Boolean, ByRef entityFilterHT As Hashtable)
+
+        If (status = True) Then
+            LoadInstanceVariables()
+            ' refill all entities dgv ?
+        End If
+
+    End Sub
+
 #End Region
 
 
@@ -212,7 +231,7 @@ Friend Class EntitiesController
 
         Dim current_node As TreeNode = Nothing
         If Not View.getCurrentRowItem Is Nothing Then
-            Dim entity_id As Int32 = entitiesNameKeyDic(View.getCurrentEntityName())
+            Dim entity_id As Int32 = GetEntityId(View.getCurrentEntityName())
             current_node = entitiesTV.Nodes.Find(entity_id, True)(0)
             entitiesTV.SelectedNode = current_node
 
@@ -233,20 +252,11 @@ Friend Class EntitiesController
 
     End Sub
 
-    Private Sub AddNodeAndRow(ByRef ht As Hashtable, _
-                              ByRef parent_node As TreeNode)
+    Friend Function GetEntityId(ByRef name As String) As Int32
 
-        If Not parent_node Is Nothing Then
-            Dim node As TreeNode = parent_node.Nodes.Add(ht(ID_VARIABLE), ht(NAME_VARIABLE), 1, 1)
-            View.EntitiesDGV.addRow(node, View.EntitiesDGV.rows_id_item_dic(parent_node.Name))
-        Else
-            Dim node As TreeNode = entitiesTV.Nodes.Add(ht(ID_VARIABLE), ht(NAME_VARIABLE), 1, 1)
-            View.EntitiesDGV.addRow(node)
-        End If
-        View.EntitiesDGV.fillRow(ht(ID_VARIABLE), ht)
-        entitiesNameKeyDic(ht(NAME_VARIABLE)) = ht(ID_VARIABLE)
+        Return GlobalVariables.Entities.GetEntityId(name)
 
-    End Sub
+    End Function
 
     Friend Sub SendNewPositionsToModel()
 

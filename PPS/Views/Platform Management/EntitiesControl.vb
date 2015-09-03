@@ -8,7 +8,7 @@
 '
 '
 '
-' Last modified: 08/05/2014
+' Last modified: 03/09/2015
 ' Author: Julien Monnereau
 
 
@@ -34,8 +34,7 @@ Friend Class EntitiesControl
     Private CP As CircularProgressUI
 
     ' Variables
-    Protected Friend entitiesNameKeyDic As Hashtable
-    Private categoriesNameKeyDic As Hashtable
+    Private entitiesFiltersNameIdDict As Hashtable
     Private tmpSplitterDistance As Double
     Private menuFlag As Boolean
     Private selectionFlag As Boolean
@@ -48,9 +47,9 @@ Friend Class EntitiesControl
 
     Protected Friend Sub New(ByRef input_controller As EntitiesController, _
                             ByRef input_entitiesTV As TreeView, _
-                            ByRef input_entitiesNameKeyDic As Hashtable, _
-                            ByRef input_categoriesNameKeyDic As Hashtable, _
-                            ByRef categoriesTV As TreeView)
+                            ByRef p_entitiesFilterValuesTV As TreeView, _
+                            ByRef input_entitiesFiltersNameIdDict As Hashtable, _
+                            ByRef entitiesFiltersTV As TreeView)
 
         ' This call is required by the designer.
         InitializeComponent()
@@ -58,9 +57,8 @@ Friend Class EntitiesControl
         ' Add any initialization after the InitializeComponent() call.
         Controller = input_controller
         entitiesTV = input_entitiesTV
-        entitiesNameKeyDic = input_entitiesNameKeyDic
-        categoriesNameKeyDic = input_categoriesNameKeyDic
-        EntitiesDGV = New EntitiesDGV(entitiesTV, categoriesTV, input_categoriesNameKeyDic)
+        entitiesFiltersNameIdDict = input_entitiesFiltersNameIdDict
+        EntitiesDGV = New EntitiesDGV(entitiesTV, entitiesFiltersTV, p_entitiesFilterValuesTV, input_entitiesFiltersNameIdDict)
 
         Me.TableLayoutPanel1.Controls.Add(EntitiesDGV.DGV, 0, 1)
         EntitiesDGV.DGV.Dock = DockStyle.Fill
@@ -81,6 +79,7 @@ Friend Class EntitiesControl
 
 #End Region
 
+
 #Region "Interface"
 
     Friend Sub UpdateEntity(ByRef ht As Hashtable)
@@ -90,7 +89,14 @@ Friend Class EntitiesControl
         EntitiesDGV.isFillingDGV = False
     End Sub
 
+    Friend Sub DeleteEntity(ByRef id As Int32)
+
+        EntitiesDGV.rows_id_item_dic(id).Delete()
+
+    End Sub
+
 #End Region
+
 
 #Region "Calls Back"
 
@@ -109,7 +115,7 @@ Friend Class EntitiesControl
                                                      "This entity and all sub entities will be deleted, do you confirm?" + Chr(13) + Chr(13), _
                                                      "Entity deletion confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
             If confirm = DialogResult.Yes Then
-                Dim entity_id As String = entitiesNameKeyDic(EntitiesDGV.DGV.CellsArea.GetCellValue(EntitiesDGV.currentRowItem, EntitiesDGV.DGV.ColumnsHierarchy.Items(0)))
+                Dim entity_id As String = Controller.GetEntityId(EntitiesDGV.DGV.CellsArea.GetCellValue(EntitiesDGV.currentRowItem, EntitiesDGV.DGV.ColumnsHierarchy.Items(0)))
                 Controller.DeleteEntities(entitiesTV.Nodes.Find(entity_id, True)(0))
             End If
         Else
@@ -175,8 +181,8 @@ Friend Class EntitiesControl
 
             If (Not args.Cell.Value Is Nothing) Then
                 Select Case args.Cell.ColumnItem.ItemValue
-                    Case ENTITIES_CURRENCY_VARIABLE
 
+                    Case ENTITIES_CURRENCY_VARIABLE
                         value = GlobalVariables.Currencies.GetCurrencyId(args.Cell.Value)
                         If (value = 0) Then
                             MsgBox("Currency " & args.Cell.Value & " not found.")
@@ -184,11 +190,11 @@ Friend Class EntitiesControl
                         End If
 
                     Case NAME_VARIABLE
-
                         value = args.Cell.Value
 
                     Case Else
-                        value = categoriesNameKeyDic(args.Cell.Value)
+                        value = entitiesFiltersNameIdDict(args.Cell.Value)
+
                 End Select
 
                 Controller.UpdateEntity(args.Cell.RowItem.ItemValue, _
@@ -204,19 +210,19 @@ Friend Class EntitiesControl
 
 #Region "Utilities"
 
-    Protected Friend Function getDGVRowsIDItemsDict() As Dictionary(Of Int32, HierarchyItem)
+    Friend Function getDGVRowsIDItemsDict() As Dictionary(Of Int32, HierarchyItem)
 
         Return EntitiesDGV.rows_id_item_dic
 
     End Function
 
-    Protected Friend Function getCurrentEntityName() As String
+    Friend Function getCurrentEntityName() As String
 
         Return EntitiesDGV.DGV.CellsArea.GetCellValue(EntitiesDGV.currentRowItem, EntitiesDGV.DGV.ColumnsHierarchy.Items(0))
 
     End Function
 
-    Protected Friend Function getCurrentRowItem() As HierarchyItem
+    Friend Function getCurrentRowItem() As HierarchyItem
 
         Return EntitiesDGV.currentRowItem
 
@@ -256,12 +262,5 @@ Friend Class EntitiesControl
 #End Region
 
 
-    Private Sub RCM_TGV_Opening(sender As Object, e As CancelEventArgs) Handles RCM_TGV.Opening
-
-    End Sub
-
-    Private Sub RenameEntity_Click(sender As Object, e As EventArgs)
-        MsgBox("Not implemented")
-    End Sub
-
+  
 End Class

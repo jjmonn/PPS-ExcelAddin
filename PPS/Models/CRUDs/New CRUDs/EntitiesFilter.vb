@@ -174,7 +174,6 @@ Friend Class EntitiesFilter
 
 #Region "Mappings"
 
-
     Friend Function GetFilteredEntityIDs(ByRef filter_id As UInt32, _
                                          ByRef filter_value_id As UInt32) As List(Of UInt32)
 
@@ -185,6 +184,15 @@ Friend Class EntitiesFilter
             End If
         Next
         Return entities_list
+
+    End Function
+
+    Friend Function GetFilterValueId(ByRef filterId As Int32, _
+                                     ByRef entityId As Int32) As Int32
+
+        Dim mostNestedFilterId = GlobalVariables.Filters.GetMostNestedFilterId(filterId)
+        Dim mostNestedFilterValueId = GlobalVariables.EntitiesFilters.entitiesFiltersHash(entityId)(mostNestedFilterId)
+        Return GlobalVariables.FiltersValues.GetFilterValueId(mostNestedFilterValueId, filterId)
 
     End Function
 

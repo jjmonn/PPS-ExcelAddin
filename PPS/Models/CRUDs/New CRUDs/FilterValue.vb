@@ -239,11 +239,11 @@ Friend Class FilterValue
 
     End Sub
 
-    Private Function GetFilterValueIDChildren(ByRef filter_value_id As Int32) As Dictionary(Of Int32, Int32)
+    Friend Function GetFilterValueIDChildren(ByRef parent_filter_value_id As Int32) As Dictionary(Of Int32, Int32)
 
         Dim children_filters_values_id As New Dictionary(Of Int32, Int32)
         For Each id As Int32 In filtervalues_hash.Keys
-            If filtervalues_hash(id)(PARENT_FILTER_VALUE_ID_VARIABLE) = filter_value_id Then
+            If filtervalues_hash(id)(PARENT_FILTER_VALUE_ID_VARIABLE) = parent_filter_value_id Then
                 children_filters_values_id.Add(id, filtervalues_hash(id)(FILTER_ID_VARIABLE))
             End If
         Next
@@ -262,7 +262,6 @@ Friend Class FilterValue
         End If
 
     End Function
-
 
     Friend Function IsNameAvailable(ByRef name As String) As Boolean
 

@@ -181,6 +181,16 @@ Friend Class Entity
 
     End Function
 
+    Friend Function GetEntityId(ByRef name As String) As Int32
+
+        For Each id As Int32 In entities_hash.Keys
+            If name = entities_hash(id)(NAME_VARIABLE) Then Return id
+        Next
+        Return 0
+
+    End Function
+
+
 #End Region
 
 

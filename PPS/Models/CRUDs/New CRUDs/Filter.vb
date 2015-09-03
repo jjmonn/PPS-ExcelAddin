@@ -227,7 +227,7 @@ Friend Class Filter
 #Region "Treeviews"
 
     Friend Sub LoadFiltersNode(ByRef node As Windows.Forms.TreeNode, _
-                             ByRef axis_id As UInt32)
+                               ByRef axis_id As UInt32)
 
         Dim tmp_ht As New Hashtable
         For Each id As Int32 In filters_hash.Keys

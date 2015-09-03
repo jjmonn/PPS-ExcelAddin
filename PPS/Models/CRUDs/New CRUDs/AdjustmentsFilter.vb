@@ -185,6 +185,15 @@ Friend Class AdjustmentFilter
 
     End Function
 
+    Friend Function GetFilterValueId(ByRef filterId As Int32, _
+                                     ByRef adjustmentId As Int32) As Int32
+
+        Dim mostNestedFilterId = GlobalVariables.Filters.GetMostNestedFilterId(filterId)
+        Dim mostNestedFilterValueId = GlobalVariables.AdjustmentsFilters.adjustmentsFiltersHash(adjustmentId)(mostNestedFilterId)
+        Return GlobalVariables.FiltersValues.GetFilterValueId(mostNestedFilterValueId, filterId)
+
+    End Function
+
 
 #End Region
 
