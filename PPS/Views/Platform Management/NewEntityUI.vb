@@ -144,7 +144,7 @@ Friend Class NewEntityUI
         Dim currenciesCombobox As New ComboBox
         currenciesCombobox.DropDownStyle = ComboBoxStyle.DropDownList
         currenciesCombobox.Name = CURRENCIES_CB_NAME
-        For Each curr As Int32 In GlobalVariables.Currencies.currencies_hash.Keys
+        For Each curr As String In GlobalVariables.Currencies.GetCurrencyNameList()
             currenciesCombobox.Items.Add(curr)
         Next
         AddControl(2, 1, currenciesCombobox)

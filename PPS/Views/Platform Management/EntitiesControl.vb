@@ -162,11 +162,28 @@ Friend Class EntitiesControl
 
         If EntitiesDGV.isFillingDGV = False Then
             Dim value As Object
-            If (Not args.Cell.Value is Nothing) Then
-            If args.Cell.ColumnItem.Caption <> EntitiesDGV.CURRENCY_COLUMN_NAME Then value = categoriesNameKeyDic(args.Cell.Value) Else value = args.Cell.Value
-                Controller.UpdateEntity(entitiesNameKeyDic(EntitiesDGV.DGV.CellsArea.GetCellValue(args.Cell.RowItem, EntitiesDGV.DGV.ColumnsHierarchy.Items(0))), _
-                EntitiesDGV.columnsCaptionID(args.Cell.ColumnItem.Caption), _
-              value)
+
+            If (Not args.Cell.Value Is Nothing) Then
+                Select Case args.Cell.ColumnItem.ItemValue
+                    Case ENTITIES_CURRENCY_VARIABLE
+
+                        value = GlobalVariables.Currencies.GetCurrencyId(args.Cell.Value)
+                        If (value = 0) Then
+                            MsgBox("Currency " & args.Cell.Value & " not found.")
+                            Exit Sub
+                        End If
+
+                    Case NAME_VARIABLE
+
+                        value = args.Cell.Value
+
+                    Case Else
+                        value = categoriesNameKeyDic(args.Cell.Value)
+                End Select
+
+                Controller.UpdateEntity(args.Cell.RowItem.ItemValue, _
+                                        args.Cell.ColumnItem.ItemValue, _
+                                        value)
             End If
         End If
 
@@ -228,5 +245,13 @@ Friend Class EntitiesControl
 
 #End Region
 
+
+    Private Sub RCM_TGV_Opening(sender As Object, e As CancelEventArgs) Handles RCM_TGV.Opening
+
+    End Sub
+
+    Private Sub RenameEntity_Click(sender As Object, e As EventArgs)
+        MsgBox("Not implemented")
+    End Sub
 
 End Class
