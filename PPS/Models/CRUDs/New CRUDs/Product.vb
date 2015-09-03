@@ -100,7 +100,7 @@ Friend Class Product
         If packet.ReadInt32() = 0 Then
             Dim ht As New Hashtable
             GetProductHTFromPacket(packet, ht)
-            products_hash(ht(ID_VARIABLE)) = ht
+            products_hash(CInt(ht(ID_VARIABLE))) = ht
             RaiseEvent Read(True, ht)
         Else
             RaiseEvent Read(False, Nothing)

@@ -686,7 +686,12 @@ Friend Class TreeViewsUtilities
                                                  ByRef currentPosition As Int32, _
                                                  ByRef positionsDictionary As Dictionary(Of Int32, Double))
 
-        positionsDictionary.Add(inputNode.Name, currentPosition)
+        If (positionsDictionary.ContainsKey(inputNode.Name)) Then
+            positionsDictionary(inputNode.Name) = currentPosition
+        Else
+            positionsDictionary.Add(inputNode.Name, currentPosition)
+        End If
+
         currentPosition = currentPosition + 1
         For Each subNode As TreeNode In inputNode.Nodes
             AddNodeToPositionDictionary(subNode, currentPosition, positionsDictionary)

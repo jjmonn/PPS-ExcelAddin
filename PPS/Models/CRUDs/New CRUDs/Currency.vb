@@ -108,7 +108,7 @@ Friend Class Currency
         If packet.ReadInt32() = 0 Then
             Dim ht As New Hashtable
             GetcurrencyHTFromPacket(packet, ht)
-            currencies_hash(ht(ID_VARIABLE)) = ht
+            currencies_hash(CInt(ht(ID_VARIABLE))) = ht
             RaiseEvent Read(True, ht)
         Else
             RaiseEvent Read(False, Nothing)

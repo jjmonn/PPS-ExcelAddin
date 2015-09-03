@@ -182,7 +182,11 @@ Friend Class EntitiesDGV
 
     Private Sub FormatRow(ByRef row As HierarchyItem, ByRef row_id As Int32)
 
-        rows_id_item_dic.Add(row_id, row)
+        If rows_id_item_dic.ContainsKey(row_id) Then
+            rows_id_item_dic(row_id) = row
+        Else
+            rows_id_item_dic.Add(row_id, row)
+        End If
         row.TextAlignment = ContentAlignment.MiddleLeft
 
     End Sub

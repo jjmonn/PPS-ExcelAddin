@@ -70,7 +70,7 @@ Friend Class AccountsController
         NewAccountView = New NewAccountUI(View, Me)
         FormulasTranslator = New FormulasTranslations(accountsNameKeysDictionary)
         formulasMGT = New ModelFormulasMGT(accountsNameKeysDictionary, AccountsTV)
-     
+
     End Sub
 
     Public Sub addControlToPanel(ByRef dest_panel As Panel, _

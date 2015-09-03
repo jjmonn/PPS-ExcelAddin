@@ -37,7 +37,6 @@ Friend Class Adjustment
 #Region "Init"
 
   Friend Sub New()
-
     NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_LIST_ADJUSTMENT_ANSWER, AddressOf SMSG_LIST_ADJUSTMENT_ANSWER)
     NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_READ_ADJUSTMENT_ANSWER, AddressOf SMSG_READ_ADJUSTMENT_ANSWER)
     NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_DELETE_ADJUSTMENT_ANSWER, AddressOf SMSG_DELETE_ADJUSTMENT_ANSWER)
@@ -101,7 +100,7 @@ Friend Class Adjustment
         If packet.ReadInt32() = 0 Then
             Dim ht As New Hashtable
             GetAdjustmentHTFromPacket(packet, ht)
-            adjustments_hash(ht(ID_VARIABLE)) = ht
+            adjustments_hash(CInt(ht(ID_VARIABLE))) = ht
             RaiseEvent Read(True, ht)
         Else
             RaiseEvent Read(False, Nothing)

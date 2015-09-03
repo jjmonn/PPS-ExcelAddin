@@ -100,7 +100,7 @@ Friend Class FilterValue
         If packet.ReadInt32() = 0 Then
             Dim ht As New Hashtable
             GetFilterValueHTFromPacket(packet, ht)
-            filtervalues_hash(ht(ID_VARIABLE)) = ht
+            filtervalues_hash(CInt(ht(ID_VARIABLE))) = ht
             RaiseEvent Read(True, ht)
         Else
             RaiseEvent Read(False, Nothing)

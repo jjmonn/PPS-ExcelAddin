@@ -102,7 +102,7 @@ Friend Class FactsVersion
         If packet.ReadInt32() = 0 Then
             Dim ht As New Hashtable
             GetVersionHTFromPacket(packet, ht)
-            versions_hash(ht(ID_VARIABLE)) = ht
+            versions_hash(CInt(ht(ID_VARIABLE))) = ht
             RaiseEvent Read(True, ht)
         Else
             RaiseEvent Read(False, Nothing)
