@@ -89,7 +89,7 @@ Public Class GlobalFactVersion
         If packet.ReadInt32() = 0 Then
             Dim ht As New Hashtable
             GetGlobalFactVersionHTFromPacket(packet, ht)
-            globalFact_versions_hash(ht(ID_VARIABLE)) = ht
+            globalFact_versions_hash(CInt(ht(ID_VARIABLE))) = ht
             RaiseEvent Read(True, ht)
         Else
             RaiseEvent Read(False, Nothing)

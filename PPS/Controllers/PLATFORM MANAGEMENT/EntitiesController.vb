@@ -136,7 +136,7 @@ Friend Class EntitiesController
 
     Friend Sub UpdateEntity(ByRef id As Int32, ByRef variable As String, ByVal value As Object)
 
-        Dim ht As Hashtable = GlobalVariables.Entities.entities_hash(id)
+        Dim ht As Hashtable = GlobalVariables.Entities.entities_hash(id).Clone()
         ht(variable) = value
         GlobalVariables.Entities.CMSG_UPDATE_ENTITY(ht)
      
@@ -144,7 +144,7 @@ Friend Class EntitiesController
 
     Friend Sub UpdateEntity(ByRef id As String, ByRef entity_attributes As Hashtable)
 
-        Dim ht As Hashtable = GlobalVariables.Entities.entities_hash(id)
+        Dim ht As Hashtable = GlobalVariables.Entities.entities_hash(id).Clone()
         For Each attribute As String In entity_attributes
             ht(attribute) = entity_attributes(attribute)
         Next

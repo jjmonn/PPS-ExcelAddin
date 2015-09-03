@@ -104,7 +104,7 @@ Friend Class Entity
         If packet.ReadInt32() = 0 Then
             Dim ht As New Hashtable
             GetEntityHTFromPacket(packet, ht)
-            entities_hash(ht(ID_VARIABLE)) = ht
+            entities_hash(CInt(ht(ID_VARIABLE))) = ht
             RaiseEvent Read(True, ht)
         Else
             RaiseEvent Read(False, Nothing)

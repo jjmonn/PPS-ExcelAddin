@@ -103,7 +103,7 @@ Friend Class Account
         If packet.ReadInt32() = 0 Then
             Dim ht As New Hashtable
             GetAccountHTFromPacket(packet, ht)
-            accounts_hash(ht(ID_VARIABLE)) = ht
+            accounts_hash(CInt(ht(ID_VARIABLE))) = ht
             RaiseEvent Read(True, ht)
         Else
             RaiseEvent Read(False, Nothing)

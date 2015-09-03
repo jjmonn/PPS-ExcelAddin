@@ -162,10 +162,12 @@ Friend Class EntitiesControl
 
         If EntitiesDGV.isFillingDGV = False Then
             Dim value As Object
+            If (Not args.Cell.Value is Nothing) Then
             If args.Cell.ColumnItem.Caption <> EntitiesDGV.CURRENCY_COLUMN_NAME Then value = categoriesNameKeyDic(args.Cell.Value) Else value = args.Cell.Value
-            Controller.UpdateEntity(entitiesNameKeyDic(EntitiesDGV.DGV.CellsArea.GetCellValue(args.Cell.RowItem, EntitiesDGV.DGV.ColumnsHierarchy.Items(0))), _
-            EntitiesDGV.columnsCaptionID(args.Cell.ColumnItem.Caption), _
-          value)
+                Controller.UpdateEntity(entitiesNameKeyDic(EntitiesDGV.DGV.CellsArea.GetCellValue(args.Cell.RowItem, EntitiesDGV.DGV.ColumnsHierarchy.Items(0))), _
+                EntitiesDGV.columnsCaptionID(args.Cell.ColumnItem.Caption), _
+              value)
+            End If
         End If
 
     End Sub

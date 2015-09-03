@@ -72,7 +72,7 @@ Friend Class AccountsController
         accountsNameKeysDictionary = GlobalVariables.Accounts.GetAccountsDictionary(NAME_VARIABLE, ID_VARIABLE)
         NewAccountView = New NewAccountUI(View, Me)
         FormulasTranslator = New FormulasTranslations(accountsNameKeysDictionary)
-   
+
     End Sub
 
     Public Sub addControlToPanel(ByRef dest_panel As Panel, _

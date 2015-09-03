@@ -90,7 +90,7 @@ Friend Class GlobalFact
         If packet.ReadInt32() = 0 Then
             Dim ht As New Hashtable
             GetGlobalFactHTFromPacket(packet, ht)
-            globalFact_hash(ht(ID_VARIABLE)) = ht
+            globalFact_hash(CInt(ht(ID_VARIABLE))) = ht
             RaiseEvent Read(True, ht)
         Else
             RaiseEvent Read(False, Nothing)

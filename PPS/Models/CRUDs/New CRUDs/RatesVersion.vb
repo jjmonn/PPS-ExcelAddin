@@ -101,7 +101,7 @@ Public Class RatesVersion
         If packet.ReadInt32() = 0 Then
             Dim ht As New Hashtable
             GetRateVersionHTFromPacket(packet, ht)
-            rate_versions_hash(ht(ID_VARIABLE)) = ht
+            rate_versions_hash(CInt(ht(ID_VARIABLE))) = ht
             RaiseEvent Read(True, ht)
         Else
             RaiseEvent Read(False, Nothing)
