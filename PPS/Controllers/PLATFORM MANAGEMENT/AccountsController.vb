@@ -12,7 +12,7 @@
 '
 '
 '
-' Last Modified: 02/09/2015
+' Last Modified: 03/09/2015
 ' Author: Julien Monnereau
 
 
@@ -28,7 +28,7 @@ Friend Class AccountsController
 #Region "Instance Variables"
 
     ' Objects
-    Private formulasMGT As ModelFormulasMGT
+    Private formulasMGT As FormulasParser
     Private FormulasTranslator As FormulasTranslations
     Private View As AccountsControl
     Private NewAccountView As NewAccountUI
@@ -69,7 +69,6 @@ Friend Class AccountsController
         accountsNameKeysDictionary = GlobalVariables.Accounts.GetAccountsDictionary(NAME_VARIABLE, ID_VARIABLE)
         NewAccountView = New NewAccountUI(View, Me)
         FormulasTranslator = New FormulasTranslations(accountsNameKeysDictionary)
-        formulasMGT = New ModelFormulasMGT(accountsNameKeysDictionary, AccountsTV)
 
     End Sub
 
@@ -175,71 +174,6 @@ Friend Class AccountsController
 
     End Sub
 
-    Friend Sub UpdateFormula(ByRef id As Int32, ByRef formulaStr As String)
-
-        If formulaStr <> "" Then
-
-            FormulasTranslator.GetDBFormulaFromHumanFormula(formulaStr)
-
-
-            '  to be reviewed/ remimplemented priority high
-
-            ' -> priority => periods 
-
-
-            formulasMGT.convertFormulaFromNamesToKeys(formulaStr)
-            If formulasMGT.errorList.Count = 0 Then
-                If formulasMGT.testFormula() = True _
-                AndAlso InterdependancyTest() = True Then
-                    Dim tmp_ht As New Hashtable
-                    tmp_ht(ACCOUNT_FORMULA_TYPE_VARIABLE) = GlobalEnums.FormulaTypes.FORMULA
-                    tmp_ht(ACCOUNT_FORMULA_VARIABLE) = formulasMGT.keysFormulaString.Replace(",", ".")
-                    UpdateAccount(id, tmp_ht)
-                Else
-                    MsgBox("The formula is not valid and could not be saved.")
-                End If
-            Else
-                Dim errors As String = ""
-                For Each errorItem In formulasMGT.errorList
-                    errors = errors + errorItem + Chr(13)
-                Next
-                MsgBox("The following items are not mapped accounts or invalid items in a formula: " + Chr(13) _
-                    + errors)
-            End If
-        Else
-            Dim confirm2 As Integer = MessageBox.Show("The formula is empty, do you want to save it?", _
-                                                      "Formula validation", _
-                                                       MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question)
-            If confirm2 = DialogResult.Yes Then
-                Dim tmp_ht As New Hashtable
-                tmp_ht(ACCOUNT_FORMULA_TYPE_VARIABLE) = GlobalEnums.FormulaTypes.FORMULA
-                tmp_ht(ACCOUNT_FORMULA_VARIABLE) = ""
-                UpdateAccount(id, tmp_ht)
-            End If
-
-        End If
-
-    End Sub
-
-    Friend Sub UpdateFormulaType(ByRef id As Int32, ByRef ftype As String)
-
-        ' A revoir !! priority high
-        'Dim tmp_ht As New Hashtable
-        'tmp_ht(ACCOUNT_FORMULA_TYPE_VARIABLE) = ftype
-        'tmp_ht(ACCOUNT_IMAGE_VARIABLE) = View.ftype_icon_dic(ftype)
-        'tmp_ht(ACCOUNT_SELECTED_IMAGE_VARIABLE) = View.ftype_icon_dic(ftype)
-        'tmp_ht(ACCOUNT_FORMULA_VARIABLE) = "" ' ?????!!!!!!!
-        'UpdateAccount(id, tmp_ht)
-
-        'View.current_node.ImageIndex = View.ftype_icon_dic(ftype)
-        'View.current_node.SelectedImageIndex = View.ftype_icon_dic(ftype)
-        'View.formula_TB.Text = ""
-        'AccountsTV.Invalidate()
-        'AccountsTV.Update()
-        'AccountsTV.Refresh()
-
-    End Sub
-
     Friend Sub DeleteAccount(ByRef account_id As Int32)
 
         GlobalVariables.Accounts.CMSG_DELETE_ACCOUNT(account_id)
@@ -249,7 +183,7 @@ Friend Class AccountsController
 #End Region
 
 
-#Region "Check"
+#Region "Checks"
 
     Friend Function ExistingDependantAccounts(ByRef node As TreeNode) As String()
 
@@ -319,17 +253,35 @@ Friend Class AccountsController
 
     Private Function CheckAccountNameForForbiddenCharacters(ByRef NameStr As String) As Boolean
 
-        For Each specialCharacter As String In ModelFormulasMGT.FORMULAS_TOKEN_CHARACTERS
+        For Each specialCharacter As Char In FormulasTranslations.FORMULAS_TOKEN_CHARACTERS
             If NameStr.Contains(specialCharacter) Then Return False
         Next
         Return True
 
     End Function
 
+    Friend Function GetCurrentParsedFormula() As String
 
-#Region "Formulas Interdependancies checks"
+        Return formulasMGT.keysFormulaString
 
-    Private Function InterdependancyTest() As Boolean
+    End Function
+
+    ' 1. Tokens check
+    Friend Function CheckFormulaForUnkonwnTokens(ByRef str As String) As List(Of String)
+
+        Return FormulasTranslator.GetDBFormulaFromHumanFormula(str)
+
+    End Function
+
+    ' 2. Formula syntax validity
+    Friend Function CheckFormulaValidity(ByRef str As String)
+
+        Return formulasMGT.testFormula()
+
+    End Function
+
+    ' 3. interdependancies 
+    Friend Function InterdependancyTest() As Boolean
 
         Dim dependancies_dict As New Dictionary(Of String, List(Of String))
         Dim accounts_list = TreeViewsUtilities.GetNodesKeysList(AccountsTV)
@@ -351,6 +303,9 @@ Friend Class AccountsController
         Return True
 
     End Function
+
+
+#Region "Formulas Interdependancies checks"
 
     Private Function CheckDependantsInterdependancy(ByRef account_id As String, _
                                                     ByRef dependant_id As String, _
@@ -380,8 +335,21 @@ Friend Class AccountsController
 
     End Sub
 
-
 #End Region
+
+    Friend Function FormulaTypeChangeImpliesFactsDeletion(ByRef account_id As Int32, ByRef new_formula_type As Int32) As Boolean
+
+        Dim currentFType As Int32 = GlobalVariables.Accounts.accounts_hash(account_id)(ACCOUNT_FORMULA_TYPE_VARIABLE)
+        If currentFType = GlobalEnums.FormulaTypes.HARD_VALUE_INPUT _
+        Or currentFType = GlobalEnums.FormulaTypes.FIRST_PERIOD_INPUT Then
+            If new_formula_type = GlobalEnums.FormulaTypes.AGGREGATION_OF_SUB_ACCOUNTS _
+            Or new_formula_type = GlobalEnums.FormulaTypes.FORMULA Then
+                Return True
+            End If
+        End If
+        Return False
+
+    End Function
 
 #End Region
 
@@ -397,6 +365,9 @@ Friend Class AccountsController
                           accountsAttributes(PARENT_ID_VARIABLE), _
                           accountsAttributes(NAME_VARIABLE), _
                           accountsAttributes(IMAGE_VARIABLE))
+
+            ' -> view update attributes view -> 
+
             InstanceVariablesLoading()
         End If
 
@@ -472,7 +443,7 @@ Friend Class AccountsController
 
     Friend Function GetFormulaText(ByRef accountId As Int32) As String
 
-        Return formulasMGT.convertFormulaFromKeysToNames(ReadAccount(accountId, ACCOUNT_FORMULA_VARIABLE))
+        Return FormulasTranslator.GetHumanFormulaFromDB(ReadAccount(accountId, ACCOUNT_FORMULA_VARIABLE))
 
     End Function
 

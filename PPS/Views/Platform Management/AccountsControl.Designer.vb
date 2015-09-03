@@ -38,6 +38,8 @@ Partial Class AccountsControl
         Me.submit_cmd = New System.Windows.Forms.Button()
         Me.formula_TB = New System.Windows.Forms.TextBox()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
+        Me.ConsolidationOptionComboBox = New VIBlend.WinForms.Controls.vComboBox()
+        Me.CurrencyConversionComboBox = New VIBlend.WinForms.Controls.vComboBox()
         Me.VLabel5 = New VIBlend.WinForms.Controls.vLabel()
         Me.VLabel4 = New VIBlend.WinForms.Controls.vLabel()
         Me.VLabel2 = New VIBlend.WinForms.Controls.vLabel()
@@ -64,8 +66,6 @@ Partial Class AccountsControl
         Me.DropSelectedAccountHierarchyToExcelToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.HelpToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.BackgroundWorker1 = New System.ComponentModel.BackgroundWorker()
-        Me.CurrencyConversionComboBox = New VIBlend.WinForms.Controls.vComboBox()
-        Me.ConsolidationOptionComboBox = New VIBlend.WinForms.Controls.vComboBox()
         CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SplitContainer1.Panel1.SuspendLayout()
         Me.SplitContainer1.Panel2.SuspendLayout()
@@ -275,6 +275,44 @@ Partial Class AccountsControl
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "Account's information"
         '
+        'ConsolidationOptionComboBox
+        '
+        Me.ConsolidationOptionComboBox.BackColor = System.Drawing.Color.White
+        Me.ConsolidationOptionComboBox.DisplayMember = ""
+        Me.ConsolidationOptionComboBox.DropDownMaximumSize = New System.Drawing.Size(1000, 1000)
+        Me.ConsolidationOptionComboBox.DropDownMinimumSize = New System.Drawing.Size(10, 10)
+        Me.ConsolidationOptionComboBox.DropDownResizeDirection = VIBlend.WinForms.Controls.SizingDirection.Both
+        Me.ConsolidationOptionComboBox.DropDownWidth = 216
+        Me.ConsolidationOptionComboBox.Location = New System.Drawing.Point(206, 198)
+        Me.ConsolidationOptionComboBox.Name = "ConsolidationOptionComboBox"
+        Me.ConsolidationOptionComboBox.RoundedCornersMaskListItem = CType(15, Byte)
+        Me.ConsolidationOptionComboBox.Size = New System.Drawing.Size(216, 20)
+        Me.ConsolidationOptionComboBox.TabIndex = 32
+        Me.ConsolidationOptionComboBox.UseThemeBackColor = False
+        Me.ConsolidationOptionComboBox.UseThemeDropDownArrowColor = True
+        Me.ConsolidationOptionComboBox.ValueMember = ""
+        Me.ConsolidationOptionComboBox.VIBlendScrollBarsTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
+        Me.ConsolidationOptionComboBox.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
+        '
+        'CurrencyConversionComboBox
+        '
+        Me.CurrencyConversionComboBox.BackColor = System.Drawing.Color.White
+        Me.CurrencyConversionComboBox.DisplayMember = ""
+        Me.CurrencyConversionComboBox.DropDownMaximumSize = New System.Drawing.Size(1000, 1000)
+        Me.CurrencyConversionComboBox.DropDownMinimumSize = New System.Drawing.Size(10, 10)
+        Me.CurrencyConversionComboBox.DropDownResizeDirection = VIBlend.WinForms.Controls.SizingDirection.Both
+        Me.CurrencyConversionComboBox.DropDownWidth = 216
+        Me.CurrencyConversionComboBox.Location = New System.Drawing.Point(207, 158)
+        Me.CurrencyConversionComboBox.Name = "CurrencyConversionComboBox"
+        Me.CurrencyConversionComboBox.RoundedCornersMaskListItem = CType(15, Byte)
+        Me.CurrencyConversionComboBox.Size = New System.Drawing.Size(216, 20)
+        Me.CurrencyConversionComboBox.TabIndex = 46
+        Me.CurrencyConversionComboBox.UseThemeBackColor = False
+        Me.CurrencyConversionComboBox.UseThemeDropDownArrowColor = True
+        Me.CurrencyConversionComboBox.ValueMember = ""
+        Me.CurrencyConversionComboBox.VIBlendScrollBarsTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
+        Me.CurrencyConversionComboBox.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
+        '
         'VLabel5
         '
         Me.VLabel5.BackColor = System.Drawing.Color.Transparent
@@ -406,12 +444,12 @@ Partial Class AccountsControl
         '
         Me.accountsIL.ImageStream = CType(resources.GetObject("accountsIL.ImageStream"), System.Windows.Forms.ImageListStreamer)
         Me.accountsIL.TransparentColor = System.Drawing.Color.Transparent
-        Me.accountsIL.Images.SetKeyName(0, "favicon(81).ico")
-        Me.accountsIL.Images.SetKeyName(1, "sum purple.png")
-        Me.accountsIL.Images.SetKeyName(2, "config blue circle.png")
-        Me.accountsIL.Images.SetKeyName(3, "func.png")
+        Me.accountsIL.Images.SetKeyName(0, "WC blue.png")
+        Me.accountsIL.Images.SetKeyName(1, "config blue circle.png")
+        Me.accountsIL.Images.SetKeyName(2, "func.png")
+        Me.accountsIL.Images.SetKeyName(3, "sum purple.png")
         Me.accountsIL.Images.SetKeyName(4, "BS Blue.png")
-        Me.accountsIL.Images.SetKeyName(5, "WC blue.png")
+        Me.accountsIL.Images.SetKeyName(5, "favicon(81).ico")
         '
         'TVRCM
         '
@@ -524,44 +562,6 @@ Partial Class AccountsControl
         '
         'BackgroundWorker1
         '
-        '
-        'CurrencyConversionComboBox
-        '
-        Me.CurrencyConversionComboBox.BackColor = System.Drawing.Color.White
-        Me.CurrencyConversionComboBox.DisplayMember = ""
-        Me.CurrencyConversionComboBox.DropDownMaximumSize = New System.Drawing.Size(1000, 1000)
-        Me.CurrencyConversionComboBox.DropDownMinimumSize = New System.Drawing.Size(10, 10)
-        Me.CurrencyConversionComboBox.DropDownResizeDirection = VIBlend.WinForms.Controls.SizingDirection.Both
-        Me.CurrencyConversionComboBox.DropDownWidth = 216
-        Me.CurrencyConversionComboBox.Location = New System.Drawing.Point(207, 158)
-        Me.CurrencyConversionComboBox.Name = "CurrencyConversionComboBox"
-        Me.CurrencyConversionComboBox.RoundedCornersMaskListItem = CType(15, Byte)
-        Me.CurrencyConversionComboBox.Size = New System.Drawing.Size(216, 20)
-        Me.CurrencyConversionComboBox.TabIndex = 46
-        Me.CurrencyConversionComboBox.UseThemeBackColor = False
-        Me.CurrencyConversionComboBox.UseThemeDropDownArrowColor = True
-        Me.CurrencyConversionComboBox.ValueMember = ""
-        Me.CurrencyConversionComboBox.VIBlendScrollBarsTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
-        Me.CurrencyConversionComboBox.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
-        '
-        'ConsolidationOptionComboBox
-        '
-        Me.ConsolidationOptionComboBox.BackColor = System.Drawing.Color.White
-        Me.ConsolidationOptionComboBox.DisplayMember = ""
-        Me.ConsolidationOptionComboBox.DropDownMaximumSize = New System.Drawing.Size(1000, 1000)
-        Me.ConsolidationOptionComboBox.DropDownMinimumSize = New System.Drawing.Size(10, 10)
-        Me.ConsolidationOptionComboBox.DropDownResizeDirection = VIBlend.WinForms.Controls.SizingDirection.Both
-        Me.ConsolidationOptionComboBox.DropDownWidth = 216
-        Me.ConsolidationOptionComboBox.Location = New System.Drawing.Point(206, 198)
-        Me.ConsolidationOptionComboBox.Name = "ConsolidationOptionComboBox"
-        Me.ConsolidationOptionComboBox.RoundedCornersMaskListItem = CType(15, Byte)
-        Me.ConsolidationOptionComboBox.Size = New System.Drawing.Size(216, 20)
-        Me.ConsolidationOptionComboBox.TabIndex = 32
-        Me.ConsolidationOptionComboBox.UseThemeBackColor = False
-        Me.ConsolidationOptionComboBox.UseThemeDropDownArrowColor = True
-        Me.ConsolidationOptionComboBox.ValueMember = ""
-        Me.ConsolidationOptionComboBox.VIBlendScrollBarsTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
-        Me.ConsolidationOptionComboBox.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
         '
         'AccountsControl
         '

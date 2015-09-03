@@ -40,7 +40,7 @@ Friend Class AccountsControl
     Private formatsIdItemDict As New Dictionary(Of Int32, ListItem)
     Private currenciesConversionIdItemDict As New Dictionary(Of Int32, ListItem)
     Private consoOptionIdItemDict As New Dictionary(Of Int32, ListItem)
-
+    Private isRevertingFType As Boolean = False
     Private isDisplayingAttributes As Boolean
     Private drag_and_drop As Boolean = False
 
@@ -310,17 +310,51 @@ Friend Class AccountsControl
 
     Private Sub Submit_Formula_Click(sender As Object, e As EventArgs) Handles submit_cmd.Click
 
-        Dim confirm As Integer = MessageBox.Show("Careful, you are about to update the formula for Account: " + Chr(13) + Name_TB.Text + Chr(13) + "Do you confirm?", _
+        Dim formulastr As String = formula_TB.Text
+        If formulastr = "" Then
+            Dim confirm2 As Integer = MessageBox.Show("The formula is empty, do you want to save it?", _
+                                                      "Formula validation", _
+                                                      MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question)
+            If confirm2 = DialogResult.Yes Then
+                GoTo TokensCheck
+            Else
+                Exit Sub
+            End If
+        Else
+            GoTo TokensCheck
+        End If
+
+TokensCheck:
+        Dim errorsList = Controller.CheckFormulaForUnkonwnTokens(formulastr)
+        If errorsList.Count > 0 Then
+            Dim errorsStr As String = ""
+            For Each errorItem As String In errorsList
+                errorsStr = errorsStr & errorItem & Chr(13)
+            Next
+            MsgBox("The following items are not mapped accounts or invalid items in a formula: " + Chr(13) & errorsStr)
+            Exit Sub
+        Else
+            GoTo DependanciesCheck
+        End If
+      
+DependanciesCheck:
+        If Controller.InterdependancyTest = True Then
+            GoTo SubmitFormula
+        Else
+            Exit Sub
+        End If
+
+SubmitFormula:
+        Dim confirm As Integer = MessageBox.Show("You are about to update the formula for Account: " + Chr(13) + Name_TB.Text + Chr(13) + "Do you confirm?", _
                                                  "DataBase submission confirmation", _
                                                   MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question)
-
         If confirm = DialogResult.Yes Then
             If Controller.accountsNameKeysDictionary.ContainsKey(Name_TB.Text) Then
-
                 formulaEdit.Checked = False
-                Dim accountKey As String = Controller.accountsNameKeysDictionary.Item(Name_TB.Text)
-                Controller.UpdateFormula(accountKey, formula_TB.Text)
-
+                Dim accountId As Int32 = Controller.accountsNameKeysDictionary.Item(Name_TB.Text)
+                MsgBox("check only authorized formulas edition => account control -> submit_formula !!")
+                ' only if authorized => "F" or "FPI" formula type priotity high
+                Controller.UpdateAccount(accountId, ACCOUNT_FORMULA_VARIABLE, Controller.GetCurrentParsedFormula)
             End If
         End If
 
@@ -653,9 +687,27 @@ Friend Class AccountsControl
 
         Dim li = FormulaTypeComboBox.SelectedItem
         If Not IsNothing(current_node) _
-        AndAlso isDisplayingAttributes = False Then
-            Controller.UpdateFormulaType(current_node.Name, li.Value)
+        AndAlso isDisplayingAttributes = False _
+        AndAlso isRevertingFType = False Then
+            If Controller.FormulaTypeChangeImpliesFactsDeletion(CInt(current_node.Name), li.Value) = True Then
+                Dim confirm As Integer = MessageBox.Show("Changing the Formula Type of this account may imply the loss of inputs, do you confirm you want to convert this account into a formula?", _
+                                                         "Formula Type Upadte Confirmation", _
+                                                         MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question)
+                If confirm = DialogResult.Yes Then
+                    GoTo UdpateFormulaType
+                Else
+                    isRevertingFType = True
+                    FormulaTypeComboBox.SelectedValue = Controller.ReadAccount(current_node.Name, ACCOUNT_FORMULA_TYPE_VARIABLE)
+                    isRevertingFType = False
+                    Exit Sub
+                End If
+            Else
+                GoTo UdpateFormulaType
+            End If
         End If
+
+        ' below -> not clean -> must happen after update'
+        ' at display time priority high
 
         If li.Value = GlobalEnums.FormulaTypes.TITLE Then
             CurrencyConversionComboBox.SelectedValue = GlobalEnums.ConversionOptions.NO_CONVERSION
@@ -667,6 +719,9 @@ Friend Class AccountsControl
             CurrencyConversionComboBox.Enabled = True
             ConsolidationOptionComboBox.Enabled = True
         End If
+
+UdpateFormulaType:
+        Controller.UpdateAccount(current_node.Name, ACCOUNT_FORMULA_TYPE_VARIABLE, li.Value)
 
     End Sub
 
@@ -760,6 +815,12 @@ Friend Class AccountsControl
             Dim formulaTypeLI = formulasTypesIdItemDict(Controller.ReadAccount(account_id, ACCOUNT_FORMULA_TYPE_VARIABLE))
             FormulaTypeComboBox.SelectedItem = formulaTypeLI
 
+            If formulaTypeLI.Value = GlobalEnums.FormulaTypes.TITLE Then
+                SetEnableStatusEdition(False)
+            Else
+                SetEnableStatusEdition(True)
+            End If
+
             ' Format ComboBox
             Dim formatLI = formatsIdItemDict(Controller.ReadAccount(account_id, ACCOUNT_TYPE_VARIABLE))
             FormatComboBox.SelectedItem = formatLI
@@ -784,12 +845,16 @@ Friend Class AccountsControl
 
     End Sub
 
-    Private Sub ReloadAccountsTree(ByRef expansionDic As Dictionary(Of String, Boolean))
+    Private Sub SetEnableStatusEdition(ByRef status As Boolean)
 
-        GlobalVariables.Accounts.LoadAccountsTV(AccountsTV)
-        TreeViewsUtilities.ResumeExpansionsLevel(AccountsTV, expansionDic)
+        FormulaTypeComboBox.Enabled = status
+        FormatComboBox.Enabled = status
+        CurrencyConversionComboBox.Enabled = status
+        ConsolidationOptionComboBox.Enabled = status
+        formula_TB.Enabled = status
 
     End Sub
+
 
 #End Region
 

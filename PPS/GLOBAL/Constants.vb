@@ -11,7 +11,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 23/02/2015
+' Last modified: 03/09/2015
 
 
 
@@ -36,7 +36,7 @@ Module Constants
 
 #Region "Security"
 
-    Friend Const SNOW_KEY As String = "9!yh_U"
+    '   Friend Const SNOW_KEY As String = "9!yh_U"
     Friend Const ANSII_FLOOR_TOKEN_CHAR = 97
     Friend Const ANSII_CEILING_TOKEN_CHAR = 122
     Friend Const ANSII_FLOOR_PWD_CHAR = 64
@@ -52,35 +52,32 @@ Module Constants
     Friend Const EPSILON_MINUS = 10                                         'Dates search range -
 
     ' Look up Functions 
-    Friend Const FORMULA_SEPARATOR = "|"
-    Friend Const REFRESH_WAITING_TEXT = "#REFRESHING"
+      Friend Const REFRESH_WAITING_TEXT = "#REFRESHING"
 
 
    
     '---------------------------------------------------
     ' --> Others <--
     '---------------------------------------------------
-    Friend Const MONTHLY_TIME_PERIOD_FORMAT As String = ""
-    Friend Const YEARLY_TIME_PERIOD_FORMAT As String = ""
-
-    Friend Const Addin_Name = "ExcelAddIn2"
-    Friend Const VALUE_FLAG = "V"
-    Friend Const ADDRESS_FLAG = "A"
-    Friend Const ACCOUNT_FLAG = "Account"
-    Friend Const ASSET_FLAG = "Entity"
-    Friend Const PERIOD_FLAG = "Period"
-    Friend Const VERSION_FLAG = "Version"
-    Friend Const ORIENTATION_ERROR_FLAG = "Orientation_error"
+    
+    '  Friend Const Addin_Name As String = "ExcelAddIn2"
+    'Friend Const VALUE_FLAG = "V"
+    'Friend Const ADDRESS_FLAG = "A"
+    Friend Const ACCOUNT_FLAG As String = "Account"
+    Friend Const ASSET_FLAG As String = "Entity"
+    Friend Const PERIOD_FLAG As String = "Period"
+    Friend Const VERSION_FLAG As String = "Version"
+    Friend Const ORIENTATION_ERROR_FLAG As String = "Orientation_error"
 
     Friend Const CIRCULAR_ERROR = 35614
 
-    Friend Const OPERATORS_FLAG = "OPERATORFlag"
-    Friend Const OPERANDS_FLAG = "OPERANDFlag"
-    Friend Const CURRENCIES_SEPARATOR = "/"
-    Friend Const INDEX_SEPARATOR = "."
+    'Friend Const OPERATORS_FLAG As String = "OPERATORFlag"
+    'Friend Const OPERANDS_FLAG As String = "OPERANDFlag"
+    Friend Const CURRENCIES_SEPARATOR As Char = "/"
+    Friend Const INDEX_SEPARATOR As Char = "."
 
-    Friend Const QUERY_FLAG_FIND_PARENT = "withParent"
-    Friend Const QUERY_FLAG_FIND_ID = "withoutParent"
+    'Friend Const QUERY_FLAG_FIND_PARENT As String = "withParent"
+    'Friend Const QUERY_FLAG_FIND_ID As String = "withoutParent"
     Friend Const PPSBI_FORMULA_CATEGORIES_SEPARATOR As String = ","
 
 
@@ -89,13 +86,13 @@ Module Constants
     ' -->  PPSBI FORMULA ARRAY INDEXES <--
     '-------------------------------------------------------------
 
-    Friend Const FBI_FORMULA_ENTITY_INDEX As Integer = 1
-    Friend Const FBI_FORMULA_ACCOUNT_INDEX As Integer = 2
-    Friend Const FBI_FORMULA_PERIOD_INDEX As Integer = 3
-    Friend Const FBI_FORMULA_CURRENCY_INDEX As Integer = 4
+    'Friend Const FBI_FORMULA_ENTITY_INDEX As Integer = 1
+    'Friend Const FBI_FORMULA_ACCOUNT_INDEX As Integer = 2
+    'Friend Const FBI_FORMULA_PERIOD_INDEX As Integer = 3
+    'Friend Const FBI_FORMULA_CURRENCY_INDEX As Integer = 4
 
     Friend Const UDF_FORMULA_GET_DATA_NAME As String = "PPSBI"
-    Friend Const NB_MONTHS = 12
+    '  Friend Const NB_MONTHS = 12
 
     '-------------------------------------------------------------
     '               ERRORS
