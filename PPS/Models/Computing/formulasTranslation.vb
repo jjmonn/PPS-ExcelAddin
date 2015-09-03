@@ -25,7 +25,6 @@ Friend Class FormulasTranslations
 #Region "Common"
 
     ' Variables
-    '  Friend operators As New List(Of Char)
     Friend parser_functions As New List(Of String)
     Friend error_tokens As List(Of String)
  
@@ -33,6 +32,7 @@ Friend Class FormulasTranslations
     Friend Const FORMULA_SEPARATOR As Char = "#" ' to be checkek if ok
     Friend Const ACCOUNT_IDENTIFIER As String = "acc"
     Friend Const PARSER_FORMULAS As String = "if,sin,cos,tan,log2,log10,log,ln,exp,sqrt,sign,rint,abs,min,max,sum,avg" ' to be reviewed + case insensitive !! priority high
+    Friend Const ACCOUNTS_HUMAN_IDENTIFIYER As Char = "'"
 
     ' Periods
     Friend Const PERIODS_SEPARATOR_START As Char = "["
@@ -41,7 +41,7 @@ Friend Class FormulasTranslations
     Friend Const RELATIVE_PERIODS_IDENTIFIER As Char = "n"
     Friend Const PERIODS_DB_PLUS As Char = "p"
     Friend Const PERIODS_DB_MINUS As Char = "m"
-    Friend Const PERIODS_AGGREGATION_IDENTIFIER As Char = "I"
+    Friend Const PERIODS_DB_AGGREGATION_IDENTIFIER As Char = "I"
     Private Const PERIOD_REGEX_GROUP As UInt16 = 5
     Friend Const PERIODS_HUMAN_AGG_IDENTIFIER As Char = ":"
 
@@ -58,6 +58,8 @@ Friend Class FormulasTranslations
     Private regexOperatorsStr As String = "/\(\)\+\-\*\=\<\>\^\?\:\;\!"
     Private accRegexStr As String = "([^\[" & regexOperatorsStr & "][\w\s]+)\[?[^\]" & regexOperatorsStr & "]"  ' & OPERATORS & "\w]"
     Private accountsHumanToDBRegex As Regex = New Regex(accRegexStr, RegexOptions.IgnoreCase)
+    Private accGuillemetStr As String = ACCOUNTS_HUMAN_IDENTIFIYER & "([\w\s]+)" & ACCOUNTS_HUMAN_IDENTIFIYER & "\[?"
+    Private guillemetsHumanToDBRegex As Regex = New Regex(accGuillemetStr, RegexOptions.IgnoreCase)
 
     ' Periods Regex
     Private period_str_regex As String = "[^\[\]]*(((?'Open'\[)[^\[\]]*)+((?'Close-Open'\])[^\[\]]*)+)*(?(Open)(?!))"
@@ -81,7 +83,7 @@ Friend Class FormulasTranslations
                                    RELATIVE_PERIODS_IDENTIFIER & _
                                    PERIODS_DB_PLUS & _
                                    PERIODS_DB_MINUS & _
-                                   PERIODS_AGGREGATION_IDENTIFIER & _
+                                   PERIODS_DB_AGGREGATION_IDENTIFIER & _
                                    "0-9]+)"
     Private periodsDBToHumanRegex As Regex = New Regex(periodsStr, RegexOptions.IgnoreCase)
 
@@ -137,9 +139,10 @@ Friend Class FormulasTranslations
         Dim tmpStr As String = human_formula
         Dim matchStr As String
         Dim accountName, accountId As String
-        Dim m As Match = accountsHumanToDBRegex.Match(tmpStr)
+        Dim m As Match = guillemetsHumanToDBRegex.Match(tmpStr)
         If (m.Success) Then
             While m.Success
+
                 matchStr = m.Groups(0).Value
                 accountName = m.Groups(1).Value
                 If AccountsNameKeyDictionary.ContainsKey(accountName) Then
@@ -147,7 +150,7 @@ Friend Class FormulasTranslations
 
                     If matchStr.IndexOf(PERIODS_SEPARATOR_START, 0) > 0 Then
                         ' human_formula = human_formula.Replace(accountName, ACCOUNT_IDENTIFIER & accountId)
-                        human_formula = Replace(human_formula, accountName, ACCOUNT_IDENTIFIER & accountId, 1, 1)
+                        human_formula = Replace(human_formula, matchStr, ACCOUNT_IDENTIFIER & accountId & PERIODS_SEPARATOR_START, 1, 1)
                     Else
                         human_formula = Replace(human_formula, _
                                                 matchStr, _
@@ -179,9 +182,11 @@ Friend Class FormulasTranslations
             For Each cap As Capture In m.Groups(PERIOD_REGEX_GROUP).Captures
                 Dim tmp_val As String = cap.Value.Replace("+", PERIODS_DB_PLUS)
                 tmp_val = tmp_val.Replace("-", PERIODS_DB_MINUS)
+                tmp_val = tmp_val.Replace(PERIODS_HUMAN_AGG_IDENTIFIER, PERIODS_DB_AGGREGATION_IDENTIFIER)
                 str = Replace(str, _
                               PERIODS_SEPARATOR_START & cap.Value & PERIODS_SEPARATOR_END, _
-                              PERIODS_SEPARATOR_START & tmp_val & PERIODS_SEPARATOR_END)
+                              PERIODS_SEPARATOR_START & tmp_val & PERIODS_SEPARATOR_END, _
+                              1, 1)
             Next
         End If
         str = Replace(str, PERIODS_SEPARATOR_START, PERIODS_DB_SEPARATOR)
@@ -219,7 +224,10 @@ Friend Class FormulasTranslations
                 End If
                 accountId = m.Groups(1).Captures(0).Value
                 accountName = GlobalVariables.Accounts.accounts_hash(accountId)(NAME_VARIABLE)
-                formulaStr = Replace(formulaStr, m.Groups(0).Value, accountName & PERIODS_SEPARATOR_START)
+                formulaStr = Replace(formulaStr, m.Groups(0).Value, ACCOUNTS_HUMAN_IDENTIFIYER & _
+                                                                    accountName & _
+                                                                    ACCOUNTS_HUMAN_IDENTIFIYER & _
+                                                                    PERIODS_SEPARATOR_START)
                 m = m.NextMatch
             End While
         End If
@@ -236,7 +244,7 @@ Friend Class FormulasTranslations
                 tmpStr = m.Groups(1).Value
                 tmpStr = Replace(tmpStr, PERIODS_DB_PLUS, "+")
                 tmpStr = Replace(tmpStr, PERIODS_DB_MINUS, "-")
-                tmpStr = Replace(tmpStr, PERIODS_AGGREGATION_IDENTIFIER, PERIODS_HUMAN_AGG_IDENTIFIER)
+                tmpStr = Replace(tmpStr, PERIODS_DB_AGGREGATION_IDENTIFIER, PERIODS_HUMAN_AGG_IDENTIFIER)
                 formulaStr = Replace(formulaStr, m.Groups(0).Value, PERIODS_SEPARATOR_START & tmpStr & PERIODS_SEPARATOR_END, 1, 1)
                 m = m.NextMatch
             End While

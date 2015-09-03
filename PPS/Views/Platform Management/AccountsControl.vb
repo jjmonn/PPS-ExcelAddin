@@ -614,7 +614,9 @@ SubmitFormula:
     Private Sub AccountsTV_NodeMouseDoubleClick(sender As Object, e As Windows.Forms.TreeNodeMouseClickEventArgs)
 
         If formulaEdit.Checked = True Then
-            formula_TB.Text = formula_TB.Text + AccountsTV.SelectedNode.Text
+            formula_TB.Text = formula_TB.Text & FormulasTranslations.ACCOUNTS_HUMAN_IDENTIFIYER & _
+                              AccountsTV.SelectedNode.Text & _
+                              FormulasTranslations.ACCOUNTS_HUMAN_IDENTIFIYER
             formula_TB.Focus()
         End If
 
@@ -648,7 +650,9 @@ SubmitFormula:
         Dim dropNode As TreeNode = CType(e.Data.GetData("System.Windows.Forms.TreeNode"), TreeNode)
 
         ' Add the node and childs node to the selected list view
-        formula_TB.Text = formula_TB.Text + dropNode.Text
+        formula_TB.Text = formula_TB.Text & FormulasTranslations.ACCOUNTS_HUMAN_IDENTIFIYER & _
+                          AccountsTV.SelectedNode.Text & _
+                          FormulasTranslations.ACCOUNTS_HUMAN_IDENTIFIYER
         formula_TB.Focus()
 
     End Sub
