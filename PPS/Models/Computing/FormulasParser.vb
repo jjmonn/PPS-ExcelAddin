@@ -16,7 +16,7 @@ Imports System.Windows.Forms
 Imports System.Collections.Generic
 
 
-Friend Class ModelFormulasMGT
+Friend Class FormulasParser
 
 
 #Region "Instance Variables"
@@ -33,7 +33,7 @@ Friend Class ModelFormulasMGT
     Private formula_array() As String
 
     ' Constants
-    Protected Friend Shared ReadOnly FORMULAS_TOKEN_CHARACTERS As String() = {"(", ")", "+", "-", "*", "/", "=", "<", ">", "^", "?", ":", ";", "!"}
+    Friend Shared ReadOnly FORMULAS_TOKEN_CHARACTERS As String() = {"(", ")", "+", "-", "*", "/", "=", "<", ">", "^", "?", ":", ";", "!"}
 
 
 #End Region
@@ -58,66 +58,8 @@ Friend Class ModelFormulasMGT
 
 #Region "Interface"
 
-    ' Convert a formula stored with accounts keys to accounts names
-    Protected Friend Function convertFormulaFromKeysToNames(formulaKeys As String) As String
-
-        Dim formulaArray() As String
-        Dim i As Integer
-
-        formulaArray = Split(Utilities_Functions.DivideFormula(formulaKeys), FORMULA_SEPARATOR)         ' Generate array from formula
-        For Each item In formulaArray
-            If accountsTV.Nodes.Find(item, True).Length > 0 Then formulaArray(i) = accountsTV.Nodes.Find(item, True)(0).Text
-            i = i + 1
-        Next
-        Return Join(formulaArray, "")
-
-    End Function
-
-    ' Convert a formula stored with accounts names to accounts keys
-    Protected Friend Sub convertFormulaFromNamesToKeys(formulaNames As String)
-
-        errorList.Clear()
-        Dim accountKey As String
-        Dim i As Integer
-
-        formula_array = Split(Utilities_Functions.DivideFormula(formulaNames), FORMULA_SEPARATOR)         ' Generate array from formula
-
-        For Each item In formula_array
-            If IsNumeric(Replace(item, ".", ",")) Then
-                item = Replace(item, ".", ",")
-                formula_array(i) = item
-                i = i + 1
-            End If
-            If Not tokensList.Contains(item) Then
-                If Not IsNumeric(item) Then
-                    item = LTrim(item)
-                    item = RTrim(item)
-                    If Not item = "" Then
-                        accountKey = AccountsNameKeyDictionary.Item(item)
-                        If accountKey = "" Then
-                            errorList.Add(item)
-                        Else
-                            formula_array(i) = accountKey
-                            i = i + 1
-                        End If
-                    End If
-                End If
-            Else
-                formula_array(i) = item
-                i = i + 1
-            End If
-        Next
-        ReDim Preserve formula_array(i - 1)
-
-        keysFormulaString = ""
-        For Each item In formula_array
-            If Not item = " " Then keysFormulaString = keysFormulaString & item
-        Next
-
-    End Sub
-
-    ' Check the validity of a formula
-    Protected Friend Function testFormula() As Boolean
+ 
+    Friend Function testFormula() As Boolean
 
         'buildTestFormulaString()
         'Return GlobalVariables.GenericGlobalSingleEntityComputer.CheckParserFormula(formulaStringTest)
@@ -132,7 +74,7 @@ Friend Class ModelFormulasMGT
         Dim accountKey As String
         Dim i As Integer
 
-        formulaArray = Split(Utilities_Functions.DivideFormula(formula_str), FORMULA_SEPARATOR)         ' Generate array from formula
+        formulaArray = Split(Utilities_Functions.DivideFormula(formula_str), FormulasTranslations.FORMULA_SEPARATOR)         ' Generate array from formula
         For Each item In formulaArray
             If Not tokensList.Contains(item) AndAlso Not IsNumeric(item) AndAlso item <> "" Then
                 item = LTrim(item)
@@ -148,7 +90,7 @@ Friend Class ModelFormulasMGT
 
     End Function
 
-    '  Uses the evalauate function of the application to see whether we can compute or not
+    ' Uses the evalauate function of the application to see whether we can compute or not
     Private Function Eval(Ref As String) As Object
 
         Ref = Replace(Ref, ",", ".")
@@ -163,7 +105,7 @@ Friend Class ModelFormulasMGT
 #Region "Utilities"
 
     ' Replace accounts by random values in order to build a test expression
-    Protected Friend Sub buildTestFormulaString()
+    Friend Sub buildTestFormulaString()
 
         Dim i As Int32 = 0
         For Each item In formula_array

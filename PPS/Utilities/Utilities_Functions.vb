@@ -192,7 +192,7 @@ errorHandler:
 #Region "Strings Utilities"
 
     ' Transforms an array of accounts strings into a new array of words separated by special characters( (),.;:=+-*/)
-    Protected Friend Shared Function StringClean(inputArray() As String) As String()
+    Friend Shared Function StringClean(inputArray() As String) As String()
 
         Dim j As Integer
         Dim word As Integer
@@ -202,7 +202,7 @@ errorHandler:
         finalIndex = 0
 
         For word = LBound(inputArray) To UBound(inputArray)                                 ' Loop in each word of the input array
-            For Each specialCharacter In ModelFormulasMGT.FORMULAS_TOKEN_CHARACTERS
+            For Each specialCharacter In FormulasParser.FORMULAS_TOKEN_CHARACTERS
 
                 If InStr(1, inputArray(word), specialCharacter) Then                        ' If special character found then
                     tempWordsArray = Split(inputArray(word), specialCharacter)              ' Subsplit the word into array of cleaner words
@@ -275,14 +275,14 @@ nextWord:
 
     ' Recursive function returning a string describing the formula
     ' Return a string which divides operands and operators by the FORMULA_SEPARATOR
-    Protected Friend Shared Function DivideFormula(initialStr As String) As String
+    Friend Shared Function DivideFormula(initialStr As String) As String
 
         '1. Loook for operators
         Dim substring1, substring2, operator1 As String
         Dim flag As Boolean
         Dim OperatorPosition, index As Integer
         Dim operatorsList As New List(Of String)
-        For Each character In ModelFormulasMGT.FORMULAS_TOKEN_CHARACTERS
+        For Each character In FormulasTranslations.FORMULAS_TOKEN_CHARACTERS
             operatorsList.Add(character)
         Next
 
@@ -301,7 +301,7 @@ nextWord:
 
             substring1 = Left(initialStr, OperatorPosition)
             substring2 = Right(initialStr, Len(initialStr) - OperatorPosition - 1)
-            Return DivideFormula(substring1) + FORMULA_SEPARATOR + operator1 + FORMULA_SEPARATOR + DivideFormula(substring2)
+            Return DivideFormula(substring1) + FormulasTranslations.FORMULA_SEPARATOR + operator1 + FormulasTranslations.FORMULA_SEPARATOR + DivideFormula(substring2)
 
             'c. nothing found
         Else
@@ -317,7 +317,7 @@ nextWord:
 
         Dim Operator1 As String
         Dim charPosition As Integer
-        For Each specialCharacter As String In ModelFormulasMGT.FORMULAS_TOKEN_CHARACTERS
+        For Each specialCharacter As String In FormulasParser.FORMULAS_TOKEN_CHARACTERS
 
             On Error Resume Next
             charPosition = GlobalVariables.APPS.WorksheetFunction.Find(specialCharacter, str)

@@ -4,11 +4,10 @@
 '
 '
 'To do:
-'   - Replace "<>" by "!="
 '
 '
 'Author: Julien Monnereau
-'Last modified: 06/07/2015
+'Last modified: 03/09/2015
 
 
 Imports System.Collections
@@ -22,42 +21,62 @@ Friend Class FormulasTranslations
 
 #Region "Instance Variables and constants"
 
-    ' Objects
-    Private if_reg As Regex = New Regex("if\(([^\(\)]*);([^\(\)]*);([^\(\)]*)\)", RegexOptions.IgnoreCase)
-    Private inner_str As String = "((?'Open'\()[^\(\)]*)+(?'Close-Open'\)[^\(\)]*)+)*(?(Open)(?!)"
-    Private outer_str As String = "if\(" & _
-                                        "(" & inner_str & "|[^\(\)]*)" & _
-                                        "(" & inner_str & "|[^\(\)]*)" & _
-                                        "(" & inner_str & "|[^\(\)]*)" & _
-                                      "\)"
-    Private outer_reg As Regex = New Regex(outer_str, RegexOptions.IgnoreCase)
-    Private period_str_regex As String = "[^\[\]]*(((?'Open'\[)[^\[\]]*)+((?'Close-Open'\])[^\[\]]*)+)*(?(Open)(?!))"
-    Private Const NESTED_IF_GROUP_INDEX As UInt16 = 8
 
-    Dim periods_regex As Regex = New Regex(period_str_regex, RegexOptions.IgnoreCase)
+#Region "Common"
 
     ' Variables
-    Private AccountsNameKeyDictionary As Hashtable
     Friend operators As New List(Of Char)
     Friend parser_functions As New List(Of String)
     Friend error_tokens As List(Of String)
 
     ' Constants
-    Friend Const FORMULA_SEPARATOR As String = "|" ' NOT OK !!!!!! -> "or" operator !!!!!!!!!!
+    Friend Const FORMULA_SEPARATOR As Char = "#" ' to be checkek if ok
     Friend Const ACCOUNT_IDENTIFIER As String = "acc"
-    Private Const TERNARY_SEPRATOR_1 As String = "?"
-    Private Const TERNARY_SEPRATOR_2 As String = ":"
-    Friend Const FORMULAS_TOKEN_CHARACTERS As String = "()+-*/=<>^?:;!"
-    Friend Const PARSER_FORMULAS As String = "if,sin,cos,tan,log2,log10,log,ln,exp,sqrt,sign,rint,abs,min,max,sum,avg"
+    Friend Const FORMULAS_TOKEN_CHARACTERS As String = "()+-*/=<>^?:;!" ' to be reviewed - 
+    Friend Const PARSER_FORMULAS As String = "if,sin,cos,tan,log2,log10,log,ln,exp,sqrt,sign,rint,abs,min,max,sum,avg" ' to be reviewed + case insensitive !! priority high
 
     ' Periods
-    Friend Const PERIODS_SEPARATOR_START As String = "["
-    Friend Const PERIODS_SEPARATOR_END As String = "]"
-    Friend Const PERIODS_DB_SEPARATOR As String = "#"
-    Friend Const RELATIVE_PERIODS_IDENTIFIER As String = "n"
-    Friend Const PERIODS_DB_PLUS As String = "p"
-    Friend Const PERIODS_DB_MINUS As String = "m"
+    Friend Const PERIODS_SEPARATOR_START As Char = "["
+    Friend Const PERIODS_SEPARATOR_END As Char = "]"
+    Friend Const PERIODS_DB_SEPARATOR As Char = "T"
+    Friend Const RELATIVE_PERIODS_IDENTIFIER As Char = "n"
+    Friend Const PERIODS_DB_PLUS As Char = "p"
+    Friend Const PERIODS_DB_MINUS As Char = "m"
+    Friend Const PERIODS_AGGREGATION_IDENTIFIER As Char = "I"
     Private Const PERIOD_REGEX_GROUP As UInt16 = 5
+
+    Friend Const PERIODS_HUMAN_AGG_IDENTIFIER As Char = ":"
+
+
+#End Region
+
+
+#Region "From Human to DataBase"
+
+    Private period_str_regex As String = "[^\[\]]*(((?'Open'\[)[^\[\]]*)+((?'Close-Open'\])[^\[\]]*)+)*(?(Open)(?!))"
+    Private periods_regex As Regex = New Regex(period_str_regex, RegexOptions.IgnoreCase)
+    Private AccountsNameKeyDictionary As Hashtable
+
+#End Region
+
+
+#Region "From DB to Human"
+
+    ' Accounts parsing
+    Private accStr As String = ACCOUNT_IDENTIFIER & "([0-9]+)\" & PERIODS_SEPARATOR_START
+    Private accountsTokenRegex As Regex = New Regex(accStr, RegexOptions.IgnoreCase)
+
+    ' Periods parsing
+    Private periodsStr As String = PERIODS_DB_SEPARATOR & _
+                                   "([" & _
+                                   RELATIVE_PERIODS_IDENTIFIER & _
+                                   PERIODS_DB_PLUS & _
+                                   PERIODS_DB_MINUS & _
+                                   PERIODS_AGGREGATION_IDENTIFIER & _
+                                   "0-9]+)"
+    Private periodsTokenRegex As Regex = New Regex(periodsStr, RegexOptions.IgnoreCase)
+
+#End Region
 
 
 #End Region
@@ -77,116 +96,37 @@ Friend Class FormulasTranslations
             parser_functions.Add(item)
         Next
 
-
     End Sub
 
 #End Region
 
 
-    Friend Function GetDBFormulaFromHumanFormula(ByRef h_formula As String) As Boolean
+#Region "Parsing From Human to DB"
+
+    Friend Function GetDBFormulaFromHumanFormula(ByRef h_formula As String) As List(Of String)
 
         error_tokens = New List(Of String)
         If h_formula.Count(Function(c As Char) c = "(") <> h_formula.Count(Function(c As Char) c = "(") Then
             MsgBox("There is an error with parentheses in your function.")
-            Return False
+            Return error_tokens
         End If
         If h_formula.Count(Function(c As Char) c = "[") <> h_formula.Count(Function(c As Char) c = "]") Then
             MsgBox("There is an error with periods braces in your function.")
-            Return False
+            Return error_tokens
         End If
 
         ParsePeriods(h_formula)
         TokensIdentifier(h_formula)
-        If error_tokens.Count > 0 Then Return False
-        TransformTernaryOperator(h_formula)
-        Return True
+        Return error_tokens
 
     End Function
-
-
-#Region "Ternary operator Parsing"
-
-    Private Sub TransformTernaryOperator(ByRef global_str As String)
-
-        ' attention only for nested if()s?
-
-        Dim previous_cap_values As String() = {"", ""}
-        Dim m As Match = outer_reg.Match(global_str)
-        If (m.Success) Then
-            While m.Success
-                Dim cap_index As UInt16 = 0
-                Dim grp As Group = m.Groups(NESTED_IF_GROUP_INDEX)
-                For Each cap As Capture In grp.Captures
-
-                    Dim capture_value_copy As String = cap.Value        ' is overwritten if parsed
-
-                    Dim parsing_result As Boolean = ParseInnerFormula(capture_value_copy, _
-                                              global_str, _
-                                              previous_cap_values)
-                    If cap_index + 1 < grp.Captures.Count _
-                    AndAlso grp.Captures(cap_index + 1).Value.Contains(cap.Value) _
-                    AndAlso parsing_result = True Then
-                        ' Current capture is nested in next capture
-                        previous_cap_values = {"if(" & cap.Value & ")", capture_value_copy}
-                    Else
-                        ' Current capture is stand alone
-                        previous_cap_values = {"", ""}
-                    End If
-
-                    cap_index += 1
-                Next
-                m = m.NextMatch
-            End While
-        End If
-        global_str = ParseIfFormula(global_str)
-
-    End Sub
-
-    ' Input: if() function
-    Private Function ParseInnerFormula(ByRef str As String, _
-                                       ByRef global_str As String, _
-                                       ByRef previous_cap_values As String()) As Boolean
-
-        Dim base_str As String = "if(" & str & ")"
-        If previous_cap_values(0) <> "" Then
-            base_str = Replace(base_str, previous_cap_values(0), previous_cap_values(1))
-        End If
-        Dim new_str As String = ParseIfFormula(base_str)
-        If base_str <> new_str _
-        AndAlso base_str.Contains(base_str) Then
-            global_str = Replace(global_str, base_str, new_str)
-            str = new_str
-            Return True
-        Else
-            Return False
-        End If
-
-    End Function
-
-    ' Transform a formula from 'if(;;)' to '?:' 
-    ' Non recursive, input must be the most nested
-    Private Function ParseIfFormula(str) As String
-
-        Dim m As Match = if_reg.Match(str)
-        Do While m.Success
-            str = Replace(str, m.Value, m.Groups(1).Value & "?" & _
-                                        m.Groups(2).Value & ":" & _
-                                        m.Groups(3).Value)
-            m = m.NextMatch
-        Loop
-        Return str
-
-    End Function
-
-#End Region
-
 
 #Region "Tokens Creation"
 
     Private Sub TokensIdentifier(ByRef human_formula As String)
 
         Dim i As Integer
-        Dim parsed_account As String
+        Dim parsed_account As String = ""
         Dim human_formula_array As String() = Split(Utilities_Functions.DivideFormula(human_formula), FORMULA_SEPARATOR)         ' Generate array from formula
         For Each item In human_formula_array
             If operators.Contains(item) = False _
@@ -246,18 +186,63 @@ Friend Class FormulasTranslations
 
     End Sub
 
-    '' Input:    "" , "[n+1]" , "[n-1]" , "[0]" , "[n:n+11]" 
-    '' Output: "#n" , "#np1"  , "#nm1"  , "#0"  , "#n#np11"
-    'Private Sub ParsePeriodReference(ByRef period_str As String)
-
-    '        Replace(period_str, "+", PERIODS_DB_PLUS)
-    '        Replace(period_str, "-", PERIODS_DB_MINUS)
-    '        Replace(period_str, ":", PERIODS_DB_SEPARATOR)
-
-    'End Sub
-
+ 
+#End Region
 
 #End Region
+
+
+#Region "Parsing From DB to Human"
+
+    Friend Function GetHumanFormulaFromDB(ByVal formulaStr As String) As String
+
+        If formulaStr = "" Then Return ""
+        ParsePeriodsTokenFromDB(formulaStr)
+        ParseAccountsTokenFromDB(formulaStr)
+        Return formulaStr
+
+    End Function
+
+    Private Sub ParseAccountsTokenFromDB(ByRef formulaStr As String)
+
+        Dim accountId As Int32
+        Dim accountName As String
+        Dim str_copy As String = formulaStr
+        Dim m As Match = accountsTokenRegex.Match(str_copy)
+        If (m.Success) Then
+            While m.Success
+                If m.Groups(1).Captures.Count > 1 Then
+                    System.Diagnostics.Debug.Write("Error in regex parsing from DB to Human: Identified several Accounts IDs.")
+                End If
+                accountId = m.Groups(1).Captures(0).Value
+                accountName = GlobalVariables.Accounts.accounts_hash(accountId)(NAME_VARIABLE)
+                formulaStr = Replace(formulaStr, m.Groups(0).Value, accountName & PERIODS_SEPARATOR_START)
+                m = m.NextMatch
+            End While
+        End If
+
+    End Sub
+
+    Private Sub ParsePeriodsTokenFromDB(ByRef formulaStr As String)
+
+        Dim str_copy As String = formulaStr
+        Dim tmpStr As String
+        Dim m As Match = periodsTokenRegex.Match(str_copy)
+        If (m.Success) Then
+            While m.Success
+                tmpStr = m.Groups(1).Value
+                tmpStr = Replace(tmpStr, PERIODS_DB_PLUS, "+")
+                tmpStr = Replace(tmpStr, PERIODS_DB_MINUS, "-")
+                tmpStr = Replace(tmpStr, PERIODS_AGGREGATION_IDENTIFIER, PERIODS_HUMAN_AGG_IDENTIFIER)
+                formulaStr = Replace(formulaStr, m.Groups(0).Value, PERIODS_SEPARATOR_START & tmpStr & PERIODS_SEPARATOR_END)
+                m = m.NextMatch
+            End While
+        End If
+
+    End Sub
+
+#End Region
+
 
 
 End Class
