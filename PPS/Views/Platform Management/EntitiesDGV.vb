@@ -103,6 +103,7 @@ Friend Class EntitiesDGV
 
         nameColumn.CellsEditor = nameTextBox
         nameColumn.ItemValue = NAME_VARIABLE
+        columnsDictionary.Add(NAME_VARIABLE, nameColumn)
 
         Dim col1 As HierarchyItem = DGV.ColumnsHierarchy.Items.Add(CURRENCY_COLUMN_NAME)
         columnsDictionary.Add(ENTITIES_CURRENCY_VARIABLE, col1)
@@ -256,6 +257,7 @@ Friend Class EntitiesDGV
                        ByVal entity_ht As Hashtable)
         Dim rowItem = rows_id_item_dic(entity_id)
         Dim column As HierarchyItem = columnsDictionary(ENTITIES_CURRENCY_VARIABLE)
+        DGV.CellsArea.SetCellValue(rowItem, columnsDictionary(NAME_VARIABLE), entity_ht(NAME_VARIABLE))
         DGV.CellsArea.SetCellValue(rowItem, column, GlobalVariables.Currencies.currencies_hash(CInt(entity_ht(ENTITIES_CURRENCY_VARIABLE)))(NAME_VARIABLE))
         For Each root_category_node As TreeNode In entitiesFilterTV.Nodes
             FillSubFilters(root_category_node, entity_id, rowItem)
@@ -274,6 +276,13 @@ Friend Class EntitiesDGV
         filter_value_name = GlobalVariables.FiltersValues.filtervalues_hash(filterValueId)(NAME_VARIABLE)
         DGV.CellsArea.SetCellValue(rowItem, column, filter_value_name)
 
+        Dim combobox As New ComboBoxEditor
+
+        For Each filterValueName As String In GlobalVariables.FiltersValues.GetFiltervaluesList(filter_id, NAME_VARIABLE)
+            combobox.Items.Add(filterValueName)
+        Next
+
+        DGV.CellsArea.SetCellEditor(rowItem, column, combobox)
         For Each childNode As TreeNode In node.Nodes
             FillSubFilters(childNode, entity_id, rowItem)
         Next

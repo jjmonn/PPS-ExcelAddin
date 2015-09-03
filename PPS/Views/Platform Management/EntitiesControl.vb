@@ -81,6 +81,16 @@ Friend Class EntitiesControl
 
 #End Region
 
+#Region "Interface"
+
+    Friend Sub UpdateEntity(ByRef ht As Hashtable)
+
+        EntitiesDGV.isFillingDGV = True
+        EntitiesDGV.fillRow(ht(ID_VARIABLE), ht)
+        EntitiesDGV.isFillingDGV = False
+    End Sub
+
+#End Region
 
 #Region "Calls Back"
 

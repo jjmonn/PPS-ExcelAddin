@@ -59,6 +59,8 @@ Friend Class EntitiesController
 
         AddHandler GlobalVariables.Entities.CreationEvent, AddressOf AfterEntityCreation
         AddHandler GlobalVariables.Entities.DeleteEvent, AddressOf AfterEntityDeletion
+        AddHandler GlobalVariables.Entities.UpdateEvent, AddressOf AfterEntityUpdate
+        AddHandler GlobalVariables.Entities.Read, AddressOf AfterEntityRead
         ' handler after update !! priority normal
 
     End Sub
@@ -109,31 +111,6 @@ Friend Class EntitiesController
 
     End Sub
 
-    ' Triggered by CRUD model creation confirmation 
-    Private Sub AfterEntityCreation(ByRef status As Boolean, ByRef id As Int32)
-
-        'Dim parent_node As TreeNode = entitiesTV.Nodes.Find(entity_ht(PARENT_ID_VARIABLE), True)(0)
-        'AddNodeAndRow(entity_ht, parent_node)
-
-        'If GlobalVariables.Entities.entities_hash(CInt(parent_node.Name))(ENTITIES_ALLOW_EDITION_VARIABLE) = 1 Then
-
-        '    ' priority normal
-
-        '    'Entities.UpdateEntity(parent_node.Name, ENTITIES_ALLOW_EDITION_VARIABLE, 0)
-
-        '    ' attention dans ce cas les données précédemment soumises sur cette entités sont orphelines !!!
-        '    '  -> Triggers creation entity_name & "CORP"
-        '    '  -> Transfert des facts
-        '    ' ceci peut être codé au niveau du serveur ?
-
-        '    MsgBox(entity_ht(NAME_VARIABLE) & " was previously an editable entity. Adding children entities change its status to not editable. " & Chr(13) _
-        '           & "A CORP level has been created and the data previsoulsy submitted on this entity has been transfered to the CORP entity")
-
-        '    parent_node.StateImageIndex = 0
-        'End If
-
-    End Sub
-
     Friend Sub UpdateEntity(ByRef id As Int32, ByRef variable As String, ByVal value As Object)
 
         Dim ht As Hashtable = GlobalVariables.Entities.entities_hash(id).Clone()
@@ -174,20 +151,58 @@ Friend Class EntitiesController
 
     End Sub
 
+#End Region
+
+#Region "Events"
+
+    Private Sub AfterEntityRead(ByRef status As Boolean, ByRef ht As Hashtable)
+
+        If (status = True) Then
+            View.UpdateEntity(ht)
+        End If
+
+    End Sub
+
+
+    Private Sub AfterEntityUpdate(ByRef status As Boolean, ByRef id As Int32)
+
+        If (status = False) Then
+            View.UpdateEntity(GlobalVariables.Entities.entities_hash(id))
+            MsgBox("Invalid parameter")
+        End If
+
+    End Sub
+
     Private Sub AfterEntityDeletion(ByRef status As Boolean, ByRef id As Int32)
 
         ' remove node/ row
 
     End Sub
 
+    ' Triggered by CRUD model creation confirmation 
+    Private Sub AfterEntityCreation(ByRef status As Boolean, ByRef id As Int32)
 
-#End Region
+        'Dim parent_node As TreeNode = entitiesTV.Nodes.Find(entity_ht(PARENT_ID_VARIABLE), True)(0)
+        'AddNodeAndRow(entity_ht, parent_node)
 
-#Region "Events"
+        'If GlobalVariables.Entities.entities_hash(CInt(parent_node.Name))(ENTITIES_ALLOW_EDITION_VARIABLE) = 1 Then
 
+        '    ' priority normal
 
+        '    'Entities.UpdateEntity(parent_node.Name, ENTITIES_ALLOW_EDITION_VARIABLE, 0)
 
+        '    ' attention dans ce cas les données précédemment soumises sur cette entités sont orphelines !!!
+        '    '  -> Triggers creation entity_name & "CORP"
+        '    '  -> Transfert des facts
+        '    ' ceci peut être codé au niveau du serveur ?
 
+        '    MsgBox(entity_ht(NAME_VARIABLE) & " was previously an editable entity. Adding children entities change its status to not editable. " & Chr(13) _
+        '           & "A CORP level has been created and the data previsoulsy submitted on this entity has been transfered to the CORP entity")
+
+        '    parent_node.StateImageIndex = 0
+        'End If
+
+    End Sub
 #End Region
 
 

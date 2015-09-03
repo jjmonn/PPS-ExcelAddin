@@ -127,7 +127,7 @@ Friend Class Entity
         If packet.ReadInt32() = 0 Then
             RaiseEvent UpdateEvent(True, packet.ReadUint32())
         Else
-            RaiseEvent UpdateEvent(False, Nothing)
+            RaiseEvent UpdateEvent(False, packet.ReadUint32())
         End If
         NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_UPDATE_ENTITY_ANSWER, AddressOf SMSG_UPDATE_ENTITY_ANSWER)
 
