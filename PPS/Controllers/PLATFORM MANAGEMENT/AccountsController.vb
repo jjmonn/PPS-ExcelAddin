@@ -28,7 +28,6 @@ Friend Class AccountsController
 #Region "Instance Variables"
 
     ' Objects
-    Private formulasMGT As FormulasParser
     Private FormulasTranslator As FormulasTranslations
     Private View As AccountsControl
     Private NewAccountView As NewAccountUI
@@ -42,6 +41,10 @@ Friend Class AccountsController
     Private dependant_account_id As String
     Friend FTypesToBeTested As New List(Of Int32)
     Private isClosing As Boolean = False
+
+    ' Constants
+    Friend Const ACCOUNTS_FORBIDDEN_CHARACTERS As String = "()+-*/=<>^?:;![]" ' to be reviewed - 
+
 
 #End Region
 
@@ -69,8 +72,7 @@ Friend Class AccountsController
         accountsNameKeysDictionary = GlobalVariables.Accounts.GetAccountsDictionary(NAME_VARIABLE, ID_VARIABLE)
         NewAccountView = New NewAccountUI(View, Me)
         FormulasTranslator = New FormulasTranslations(accountsNameKeysDictionary)
-        formulasMGT = New FormulasParser(accountsNameKeysDictionary, AccountsTV)
-
+   
     End Sub
 
     Public Sub addControlToPanel(ByRef dest_panel As Panel, _
@@ -254,7 +256,7 @@ Friend Class AccountsController
 
     Private Function CheckAccountNameForForbiddenCharacters(ByRef NameStr As String) As Boolean
 
-        For Each specialCharacter As Char In FormulasTranslations.FORMULAS_TOKEN_CHARACTERS
+        For Each specialCharacter As Char In ACCOUNTS_FORBIDDEN_CHARACTERS
             If NameStr.Contains(specialCharacter) Then Return False
         Next
         Return True
@@ -263,7 +265,7 @@ Friend Class AccountsController
 
     Friend Function GetCurrentParsedFormula() As String
 
-        Return formulasMGT.keysFormulaString
+        Return FormulasTranslator.currentDBFormula
 
     End Function
 
@@ -277,14 +279,14 @@ Friend Class AccountsController
     ' 2. Formula syntax validity
     Friend Function CheckFormulaValidity(ByRef str As String)
 
-        Return formulasMGT.testFormula()
+        Return FormulasTranslator.testFormula()
 
     End Function
 
     ' 3. interdependancies 
     Friend Function InterdependancyTest() As Boolean
 
-        Dim dependancies_dict As New Dictionary(Of String, List(Of String))
+        Dim dependancies_dict As New Dictionary(Of Int32, List(Of Int32))
         Dim accounts_list = TreeViewsUtilities.GetNodesKeysList(AccountsTV)
         For Each account_id In accounts_list
             Dim ftype As String = GlobalVariables.Accounts.accounts_hash(account_id)(ACCOUNT_FORMULA_TYPE_VARIABLE)
@@ -310,7 +312,7 @@ Friend Class AccountsController
 
     Private Function CheckDependantsInterdependancy(ByRef account_id As String, _
                                                     ByRef dependant_id As String, _
-                                                    ByRef dependancies_dict As Dictionary(Of String, List(Of String))) _
+                                                    ByRef dependancies_dict As Dictionary(Of Int32, List(Of Int32))) _
                                                     As Boolean
 
         If dependant_id = account_id Then Return False
@@ -325,13 +327,13 @@ Friend Class AccountsController
 
     End Function
 
-    Private Sub AddDependantToDependanciesDict(ByRef dependant_id As String, _
-                                               ByRef dependancies_dict As Dictionary(Of String, List(Of String)))
+    Private Sub AddDependantToDependanciesDict(ByRef dependant_id As Int32, _
+                                               ByRef dependancies_dict As Dictionary(Of Int32, List(Of Int32)))
 
         If GlobalVariables.Accounts.accounts_hash(dependant_id)(ACCOUNT_FORMULA_TYPE_VARIABLE) = GlobalEnums.FormulaTypes.AGGREGATION_OF_SUB_ACCOUNTS Then
             dependancies_dict.Add(dependant_id, TreeViewsUtilities.GetChildrenIDList(AccountsTV.Nodes.Find(dependant_id, True)(0)))
         Else
-            dependancies_dict.Add(dependant_id, formulasMGT.GetFormulaDependantsLIst(dependant_id))
+            dependancies_dict.Add(dependant_id, FormulasTranslator.GetFormulaDependantsLIst(dependant_id))
         End If
 
     End Sub

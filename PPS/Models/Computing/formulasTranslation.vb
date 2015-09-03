@@ -25,14 +25,13 @@ Friend Class FormulasTranslations
 #Region "Common"
 
     ' Variables
-    Friend operators As New List(Of Char)
+    '  Friend operators As New List(Of Char)
     Friend parser_functions As New List(Of String)
     Friend error_tokens As List(Of String)
-
+ 
     ' Constants
     Friend Const FORMULA_SEPARATOR As Char = "#" ' to be checkek if ok
     Friend Const ACCOUNT_IDENTIFIER As String = "acc"
-    Friend Const FORMULAS_TOKEN_CHARACTERS As String = "()+-*/=<>^?:;!" ' to be reviewed - 
     Friend Const PARSER_FORMULAS As String = "if,sin,cos,tan,log2,log10,log,ln,exp,sqrt,sign,rint,abs,min,max,sum,avg" ' to be reviewed + case insensitive !! priority high
 
     ' Periods
@@ -44,7 +43,6 @@ Friend Class FormulasTranslations
     Friend Const PERIODS_DB_MINUS As Char = "m"
     Friend Const PERIODS_AGGREGATION_IDENTIFIER As Char = "I"
     Private Const PERIOD_REGEX_GROUP As UInt16 = 5
-
     Friend Const PERIODS_HUMAN_AGG_IDENTIFIER As Char = ":"
 
 
@@ -53,9 +51,17 @@ Friend Class FormulasTranslations
 
 #Region "From Human to DataBase"
 
-    Private period_str_regex As String = "[^\[\]]*(((?'Open'\[)[^\[\]]*)+((?'Close-Open'\])[^\[\]]*)+)*(?(Open)(?!))"
-    Private periods_regex As Regex = New Regex(period_str_regex, RegexOptions.IgnoreCase)
+    Friend currentDBFormula As String
     Private AccountsNameKeyDictionary As Hashtable
+
+    ' Accounts Regex
+    Private regexOperatorsStr As String = "/\(\)\+\-\*\=\<\>\^\?\:\;\!"
+    Private accRegexStr As String = "([^\[" & regexOperatorsStr & "][\w\s]+)\[?[^\]" & regexOperatorsStr & "]"  ' & OPERATORS & "\w]"
+    Private accountsHumanToDBRegex As Regex = New Regex(accRegexStr, RegexOptions.IgnoreCase)
+
+    ' Periods Regex
+    Private period_str_regex As String = "[^\[\]]*(((?'Open'\[)[^\[\]]*)+((?'Close-Open'\])[^\[\]]*)+)*(?(Open)(?!))"
+    Private periodsHumanToDBregex As Regex = New Regex(period_str_regex, RegexOptions.IgnoreCase)
 
 #End Region
 
@@ -64,7 +70,10 @@ Friend Class FormulasTranslations
 
     ' Accounts parsing
     Private accStr As String = ACCOUNT_IDENTIFIER & "([0-9]+)\" & PERIODS_SEPARATOR_START
-    Private accountsTokenRegex As Regex = New Regex(accStr, RegexOptions.IgnoreCase)
+    Private accountsDBToHumanRegex As Regex = New Regex(accStr, RegexOptions.IgnoreCase)
+
+    Private dependanciesCheckStr As String = ACCOUNT_IDENTIFIER & "([0-9]+)" & PERIODS_DB_SEPARATOR
+    Private dependanciesCheckRegex As Regex = New Regex(dependanciesCheckStr, RegexOptions.IgnoreCase)
 
     ' Periods parsing
     Private periodsStr As String = PERIODS_DB_SEPARATOR & _
@@ -74,7 +83,7 @@ Friend Class FormulasTranslations
                                    PERIODS_DB_MINUS & _
                                    PERIODS_AGGREGATION_IDENTIFIER & _
                                    "0-9]+)"
-    Private periodsTokenRegex As Regex = New Regex(periodsStr, RegexOptions.IgnoreCase)
+    Private periodsDBToHumanRegex As Regex = New Regex(periodsStr, RegexOptions.IgnoreCase)
 
 #End Region
 
@@ -87,10 +96,8 @@ Friend Class FormulasTranslations
     Friend Sub New(ByRef inputAccountsNameKeysDictionary As Hashtable)
 
         AccountsNameKeyDictionary = inputAccountsNameKeysDictionary
-        For Each item As Char In FORMULAS_TOKEN_CHARACTERS
-            operators.Add(item)
-        Next
 
+        ' caution => accounts name/ parser functions !!! priority high
         Dim parsers_functions_array As String() = Split(PARSER_FORMULAS, ",")
         For Each item As String In parsers_functions_array
             parser_functions.Add(item)
@@ -103,8 +110,9 @@ Friend Class FormulasTranslations
 
 #Region "Parsing From Human to DB"
 
-    Friend Function GetDBFormulaFromHumanFormula(ByRef h_formula As String) As List(Of String)
+    Friend Function GetDBFormulaFromHumanFormula(ByVal h_formula As String) As List(Of String)
 
+        currentDBFormula = ""
         error_tokens = New List(Of String)
         If h_formula.Count(Function(c As Char) c = "(") <> h_formula.Count(Function(c As Char) c = "(") Then
             MsgBox("There is an error with parentheses in your function.")
@@ -115,8 +123,9 @@ Friend Class FormulasTranslations
             Return error_tokens
         End If
 
-        ParsePeriods(h_formula)
         TokensIdentifier(h_formula)
+        ParsePeriods(h_formula)
+        currentDBFormula = h_formula
         Return error_tokens
 
     End Function
@@ -125,52 +134,46 @@ Friend Class FormulasTranslations
 
     Private Sub TokensIdentifier(ByRef human_formula As String)
 
-        Dim i As Integer
-        Dim parsed_account As String = ""
-        Dim human_formula_array As String() = Split(Utilities_Functions.DivideFormula(human_formula), FORMULA_SEPARATOR)         ' Generate array from formula
-        For Each item In human_formula_array
-            If operators.Contains(item) = False _
-            AndAlso parser_functions.Contains(item) = False _
-            AndAlso Not IsNumeric(item) _
-            AndAlso item <> "" Then
-                human_formula_array(i) = BuildAccountPeriodToken(item)
-            End If
-            i = i + 1
-        Next
+        Dim tmpStr As String = human_formula
+        Dim matchStr As String
+        Dim accountName, accountId As String
+        Dim m As Match = accountsHumanToDBRegex.Match(tmpStr)
+        If (m.Success) Then
+            While m.Success
+                matchStr = m.Groups(0).Value
+                accountName = m.Groups(1).Value
+                If AccountsNameKeyDictionary.ContainsKey(accountName) Then
+                    accountId = AccountsNameKeyDictionary(accountName)
 
-        human_formula = ""
-        For Each item In human_formula_array
-            If Not item = " " Then human_formula = human_formula & item
-        Next
+                    If matchStr.IndexOf(PERIODS_SEPARATOR_START, 0) > 0 Then
+                        ' human_formula = human_formula.Replace(accountName, ACCOUNT_IDENTIFIER & accountId)
+                        human_formula = Replace(human_formula, accountName, ACCOUNT_IDENTIFIER & accountId, 1, 1)
+                    Else
+                        human_formula = Replace(human_formula, _
+                                                matchStr, _
+                                                ACCOUNT_IDENTIFIER & accountId & _
+                                                PERIODS_SEPARATOR_START & _
+                                                RELATIVE_PERIODS_IDENTIFIER & _
+                                                PERIODS_SEPARATOR_END, _
+                                                1, 1)
+                        'human_formula = human_formula.Replace(matchStr, _
+                        '                                      ACCOUNT_IDENTIFIER & accountId & _
+                        '                                      PERIODS_SEPARATOR_START & _
+                        '                                      RELATIVE_PERIODS_IDENTIFIER & _
+                        '                                      PERIODS_SEPARATOR_END)
+                    End If
+                Else
+                    error_tokens.Add(accountName)
+                End If
+                m = m.NextMatch
+            End While
+        End If
 
     End Sub
 
-    Private Function BuildAccountPeriodToken(ByVal token As String) As String
-
-        Dim account_token As String
-        Dim period_token As String = ""
-        Dim period_start_position As Int16 = token.IndexOf(PERIODS_DB_SEPARATOR)
-
-        If period_start_position <> -1 Then
-            account_token = Left(token, period_start_position)
-            period_token = Right(token, Len(token) - period_start_position)
-        Else
-            account_token = token
-            period_token = PERIODS_DB_SEPARATOR & RELATIVE_PERIODS_IDENTIFIER
-        End If
-        If AccountsNameKeyDictionary.ContainsKey(account_token) Then
-
-            Return AccountsNameKeyDictionary(account_token) & period_token
-        Else
-            error_tokens.Add(account_token)
-            Return ""
-        End If
-
-    End Function
-
     Private Sub ParsePeriods(ByRef str As String)
 
-        Dim m As Match = periods_regex.Match(str)
+        Dim m As Match = periodsHumanToDBregex.Match(str)
         If (m.Success) Then
             Dim j As UInt16
             For Each cap As Capture In m.Groups(PERIOD_REGEX_GROUP).Captures
@@ -208,7 +211,7 @@ Friend Class FormulasTranslations
         Dim accountId As Int32
         Dim accountName As String
         Dim str_copy As String = formulaStr
-        Dim m As Match = accountsTokenRegex.Match(str_copy)
+        Dim m As Match = accountsDBToHumanRegex.Match(str_copy)
         If (m.Success) Then
             While m.Success
                 If m.Groups(1).Captures.Count > 1 Then
@@ -227,14 +230,14 @@ Friend Class FormulasTranslations
 
         Dim str_copy As String = formulaStr
         Dim tmpStr As String
-        Dim m As Match = periodsTokenRegex.Match(str_copy)
+        Dim m As Match = periodsDBToHumanRegex.Match(str_copy)
         If (m.Success) Then
             While m.Success
                 tmpStr = m.Groups(1).Value
                 tmpStr = Replace(tmpStr, PERIODS_DB_PLUS, "+")
                 tmpStr = Replace(tmpStr, PERIODS_DB_MINUS, "-")
                 tmpStr = Replace(tmpStr, PERIODS_AGGREGATION_IDENTIFIER, PERIODS_HUMAN_AGG_IDENTIFIER)
-                formulaStr = Replace(formulaStr, m.Groups(0).Value, PERIODS_SEPARATOR_START & tmpStr & PERIODS_SEPARATOR_END)
+                formulaStr = Replace(formulaStr, m.Groups(0).Value, PERIODS_SEPARATOR_START & tmpStr & PERIODS_SEPARATOR_END, 1, 1)
                 m = m.NextMatch
             End While
         End If
@@ -243,6 +246,35 @@ Friend Class FormulasTranslations
 
 #End Region
 
+
+#Region "Utilities"
+
+    Friend Function GetFormulaDependantsLIst(ByRef accountid As Int32) As List(Of Int32)
+
+        Dim formula_str As String = GlobalVariables.Accounts.accounts_hash(accountid)(ACCOUNT_FORMULA_VARIABLE)
+        Dim dependantId As Int32
+        Dim dependants_list As New List(Of Int32)
+        Dim m As Match = dependanciesCheckRegex.Match(formula_str)
+        If (m.Success) Then
+            While m.Success
+                dependantId = m.Groups(1).Captures(0).Value
+                If dependantId <> accountid Then dependants_list.Add(dependantId)
+                m = m.NextMatch
+            End While
+        End If
+        Return dependants_list
+
+    End Function
+
+    Friend Function testFormula() As Boolean
+
+        ' to be reimplemented
+        Return True
+
+    End Function
+
+
+#End Region
 
 
 End Class

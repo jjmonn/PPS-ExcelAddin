@@ -452,9 +452,9 @@ Friend Class TreeViewsUtilities
 
     End Function
 
-    Friend Shared Function GetChildrenIDList(ByRef node As TreeNode) As List(Of String)
+    Friend Shared Function GetChildrenIDList(ByRef node As TreeNode) As List(Of Int32)
 
-        Dim children_list As New List(Of String)
+        Dim children_list As New List(Of Int32)
         For Each child In node.Nodes
             children_list.Add(child.name)
         Next

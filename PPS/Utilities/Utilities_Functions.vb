@@ -193,43 +193,43 @@ Err:
 #Region "Strings Utilities"
 
     ' Transforms an array of accounts strings into a new array of words separated by special characters( (),.;:=+-*/)
-    Friend Shared Function StringClean(inputArray() As String) As String()
+    '    Friend Shared Function StringClean(inputArray() As String) As String()
 
-        Dim j As Integer
-        Dim word As Integer
-        Dim finalIndex As Integer
-        Dim tempWordsArray() As String
-        Dim finalWordsArray(0) As String
-        finalIndex = 0
+    '        Dim j As Integer
+    '        Dim word As Integer
+    '        Dim finalIndex As Integer
+    '        Dim tempWordsArray() As String
+    '        Dim finalWordsArray(0) As String
+    '        finalIndex = 0
 
-        For word = LBound(inputArray) To UBound(inputArray)                                 ' Loop in each word of the input array
-            For Each specialCharacter In FormulasParser.FORMULAS_TOKEN_CHARACTERS
+    '        For word = LBound(inputArray) To UBound(inputArray)                                 ' Loop in each word of the input array
+    '            For Each specialCharacter In FormulasParser.FORMULAS_TOKEN_CHARACTERS
 
-                If InStr(1, inputArray(word), specialCharacter) Then                        ' If special character found then
-                    tempWordsArray = Split(inputArray(word), specialCharacter)              ' Subsplit the word into array of cleaner words
-                    tempWordsArray = StringClean(tempWordsArray)                            ' Recursive call
+    '                If InStr(1, inputArray(word), specialCharacter) Then                        ' If special character found then
+    '                    tempWordsArray = Split(inputArray(word), specialCharacter)              ' Subsplit the word into array of cleaner words
+    '                    tempWordsArray = StringClean(tempWordsArray)                            ' Recursive call
 
-                    ReDim Preserve finalWordsArray(UBound(finalWordsArray) + UBound(tempWordsArray))
-                    For j = LBound(tempWordsArray) To UBound(tempWordsArray)                 ' Fill finalWordsArray
-                        finalWordsArray(finalIndex) = tempWordsArray(j)
-                        finalIndex = finalIndex + 1
-                    Next j
+    '                    ReDim Preserve finalWordsArray(UBound(finalWordsArray) + UBound(tempWordsArray))
+    '                    For j = LBound(tempWordsArray) To UBound(tempWordsArray)                 ' Fill finalWordsArray
+    '                        finalWordsArray(finalIndex) = tempWordsArray(j)
+    '                        finalIndex = finalIndex + 1
+    '                    Next j
 
-                    GoTo nextWord                                                            ' Exit for : to be checked
+    '                    GoTo nextWord                                                            ' Exit for : to be checked
 
-                End If
-            Next
+    '                End If
+    '            Next
 
-            finalWordsArray(finalIndex) = inputArray(word)
-            ReDim Preserve finalWordsArray(UBound(finalWordsArray) + 1)
-            finalIndex = finalIndex + 1
+    '            finalWordsArray(finalIndex) = inputArray(word)
+    '            ReDim Preserve finalWordsArray(UBound(finalWordsArray) + 1)
+    '            finalIndex = finalIndex + 1
 
-nextWord:
-        Next word
+    'nextWord:
+    '        Next word
 
-        StringClean = finalWordsArray
+    '        StringClean = finalWordsArray
 
-    End Function
+    '    End Function
 
     ' Levenshtein function
     ' Returns the number of characters to be changed to get sthe strings similar
@@ -276,62 +276,62 @@ nextWord:
 
     ' Recursive function returning a string describing the formula
     ' Return a string which divides operands and operators by the FORMULA_SEPARATOR
-    Friend Shared Function DivideFormula(initialStr As String) As String
+    'Friend Shared Function DivideFormula(initialStr As String) As String
 
-        '1. Loook for operators
-        Dim substring1, substring2, operator1 As String
-        Dim flag As Boolean
-        Dim OperatorPosition, index As Integer
-        Dim operatorsList As New List(Of String)
-        For Each character In FormulasTranslations.FORMULAS_TOKEN_CHARACTERS
-            operatorsList.Add(character)
-        Next
+    '    '1. Loook for operators
+    '    Dim substring1, substring2, operator1 As String
+    '    Dim flag As Boolean
+    '    Dim OperatorPosition, index As Integer
+    '    Dim operatorsList As New List(Of String)
+    '    For Each character In FormulasTranslations.FORMULAS_TOKEN_CHARACTERS
+    '        operatorsList.Add(character)
+    '    Next
 
-        For Each item As String In initialStr
-            If operatorsList.Contains(item) Then
-                OperatorPosition = index
-                operator1 = item
-                flag = True
-                Exit For
-            End If
-            index = index + 1
-        Next
+    '    For Each item As String In initialStr
+    '        If operatorsList.Contains(item) Then
+    '            OperatorPosition = index
+    '            operator1 = item
+    '            flag = True
+    '            Exit For
+    '        End If
+    '        index = index + 1
+    '    Next
 
-        'a. Operator found
-        If flag = True Then
+    '    'a. Operator found
+    '    If flag = True Then
 
-            substring1 = Left(initialStr, OperatorPosition)
-            substring2 = Right(initialStr, Len(initialStr) - OperatorPosition - 1)
-            Return DivideFormula(substring1) + FormulasTranslations.FORMULA_SEPARATOR + operator1 + FormulasTranslations.FORMULA_SEPARATOR + DivideFormula(substring2)
+    '        substring1 = Left(initialStr, OperatorPosition)
+    '        substring2 = Right(initialStr, Len(initialStr) - OperatorPosition - 1)
+    '        Return DivideFormula(substring1) + FormulasTranslations.FORMULA_SEPARATOR + operator1 + FormulasTranslations.FORMULA_SEPARATOR + DivideFormula(substring2)
 
-            'c. nothing found
-        Else
-            Return initialStr
-        End If
+    '        'c. nothing found
+    '    Else
+    '        Return initialStr
+    '    End If
 
-    End Function
+    'End Function
 
     ' Function findOperator()
     ' Returns true if an operator is in the string parameter
     ' and set the instance variable operator to the corresponding operator
-    Protected Friend Shared Function findOperator(str As String) As Integer
+    'Friend Shared Function findOperator(str As String) As Integer
 
-        Dim Operator1 As String
-        Dim charPosition As Integer
-        For Each specialCharacter As String In FormulasParser.FORMULAS_TOKEN_CHARACTERS
+    '    Dim Operator1 As String
+    '    Dim charPosition As Integer
+    '    For Each specialCharacter As String In FormulasParser.FORMULAS_TOKEN_CHARACTERS
 
-            On Error Resume Next
-            charPosition = GlobalVariables.APPS.WorksheetFunction.Find(specialCharacter, str)
-            If Err.Number = 0 And charPosition >= 1 Then
+    '        On Error Resume Next
+    '        charPosition = GlobalVariables.APPS.WorksheetFunction.Find(specialCharacter, str)
+    '        If Err.Number = 0 And charPosition >= 1 Then
 
-                findOperator = charPosition
-                Operator1 = specialCharacter
-                Exit Function
+    '            findOperator = charPosition
+    '            Operator1 = specialCharacter
+    '            Exit Function
 
-            End If
-        Next
+    '        End If
+    '    Next
 
-    End Function
+    '   End Function
 
 
 #End Region
@@ -373,7 +373,7 @@ nextWord:
 
     End Function
 
-   
+
 
 #End Region
 
