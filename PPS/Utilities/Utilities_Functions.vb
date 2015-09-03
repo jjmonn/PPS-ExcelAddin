@@ -120,17 +120,18 @@ Err:
 
         Dim lRealLastRow As Long
         Dim lRealLastColumn As Long
-        On Error GoTo errorHandler
-        lRealLastRow = WS.Cells.Find("*", WS.Cells(1, 1), , , Excel.XlSearchOrder.xlByRows, _
-                                     Excel.XlSearchDirection.xlPrevious).Row
 
-        lRealLastColumn = WS.Cells.Find("*", WS.Cells(1, 1), , , Excel.XlSearchOrder.xlByColumns, _
-                                        Excel.XlSearchDirection.xlPrevious).Column
+        Try
+            lRealLastRow = WS.Cells.Find("*", WS.Cells(1, 1), , , Excel.XlSearchOrder.xlByRows, _
+                             Excel.XlSearchDirection.xlPrevious).Row
 
-        Return WS.Cells(lRealLastRow, lRealLastColumn)
+            lRealLastColumn = WS.Cells.Find("*", WS.Cells(1, 1), , , Excel.XlSearchOrder.xlByColumns, _
+                                            Excel.XlSearchDirection.xlPrevious).Column
 
-errorHandler:
-        Return Nothing
+            Return WS.Cells(lRealLastRow, lRealLastColumn)
+        Catch ex As Exception
+            Return Nothing
+        End Try
 
     End Function
 

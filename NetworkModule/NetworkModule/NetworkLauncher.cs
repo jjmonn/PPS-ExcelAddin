@@ -6,6 +6,7 @@ public class NetworkLauncher
     Thread m_thread;
     NetworkManager m_netMgr;
     ClientState m_state;
+    Action m_diconnectCallback;
 
     public NetworkLauncher()
     {
@@ -13,13 +14,14 @@ public class NetworkLauncher
         m_netMgr = NetworkManager.GetInstance();
     }
 
-    public bool Launch(string p_ip, UInt16 p_port)
+    public bool Launch(string p_ip, UInt16 p_port, Action p_disconnectCallback = null)
     {
         if (m_netMgr.Connect(p_ip, p_port) == true)
         {
             m_state = ClientState.running;
             m_thread = new Thread(new ThreadStart(HandleLoop));
             m_thread.Start();
+            m_diconnectCallback = p_disconnectCallback;
             return (true);
         }
         else
@@ -40,9 +42,13 @@ public class NetworkLauncher
     {
         while (m_state == ClientState.running)
         {
-            if (m_netMgr.HandlePacket() == false)
-                Thread.Sleep(3000);
-            Thread.Sleep(10);
+          if (m_netMgr.HandlePacket() == false)
+          {
+            m_state = ClientState.not_connected;
+            if (m_diconnectCallback != null)
+              m_diconnectCallback();
+          }
+          Thread.Sleep(2);
         }
     }
 

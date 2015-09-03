@@ -39,13 +39,20 @@ Friend Class RefreshGetDataBatch
 
 #Region "Interface"
 
-    Protected Friend Sub RefreshWorksheet(Optional ByRef rng As Excel.Range = Nothing)
+    Friend Sub RefreshWorksheet(Optional ByRef rng As Excel.Range = Nothing)
 
         Dim FormulasRangesCollection As New Dictionary(Of Excel.Range, String)
-     
+
         If rng Is Nothing Then
             Dim ws As Excel.Worksheet = GlobalVariables.APPS.ActiveSheet
-            rng = ws.Range(ws.Cells(1, 1), Utilities_Functions.GetRealLastCell(ws))
+            Dim lastCell As Excel.Range = Utilities_Functions.GetRealLastCell(ws)
+
+            If (lastCell Is Nothing) Then
+                MsgBox("Nothing to refresh")
+                Exit Sub
+            Else
+                rng = ws.Range(ws.Cells(1, 1), lastCell)
+            End If
         End If
 
         If findGetDataFormulaCells(FormulasRangesCollection, rng) Then

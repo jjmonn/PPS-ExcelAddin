@@ -96,7 +96,9 @@
         FACTSVERSIONS
         CURRENCIES
         RATESVERSIONS
-
+        GLOBALFACT
+        GLOBALFACTSDATA
+        GLOBALFACTSVERSION
 
     End Enum
 
