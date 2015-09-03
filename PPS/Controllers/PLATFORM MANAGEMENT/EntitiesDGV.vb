@@ -22,6 +22,7 @@ Imports System.Collections
 Imports Microsoft.Office.Interop
 Imports VIBlend.WinForms.DataGridView.Filters
 Imports System.Linq
+Imports VIBlend.WinForms.Controls
 
 
 
@@ -37,7 +38,6 @@ Friend Class EntitiesDGV
     Private entitiesFilterTV As TreeView
     Private categoriesNameKeyDic As Hashtable
     Friend columnsDictionary As New Dictionary(Of String, HierarchyItem)
-    Friend columnsCaptionID As New Dictionary(Of String, String)
     Friend rows_id_item_dic As New Dictionary(Of Int32, HierarchyItem)
 
     Private DGVArray(,) As String
@@ -48,7 +48,7 @@ Friend Class EntitiesDGV
     ' Constants
     Private Const DGV_VI_BLEND_STYLE As VIBLEND_THEME = VIBLEND_THEME.OFFICE2010SILVER
     Friend Const CURRENCY_COLUMN_NAME As String = "Currency"
-    Private Const NAME_COLUMN_NAME As String = "Name"
+    Friend Const NAME_COLUMN_NAME As String = "Name"
     Private Const CB_WIDTH As Double = 20
     Private Const CB_NB_ITEMS_DISPLAYED As Int32 = 7
 
@@ -97,10 +97,16 @@ Friend Class EntitiesDGV
         DGV.ColumnsHierarchy.Clear()
         columnsDictionary.Clear()
 
-        DGV.ColumnsHierarchy.Items.Add("Entity")
+        Dim nameColumn As HierarchyItem = DGV.ColumnsHierarchy.Items.Add("Entity")
+        Dim nameTextBox As New TextBoxEditor()
+        nameTextBox.ActivationFlags = EditorActivationFlags.KEY_PRESS_ENTER
+
+        nameColumn.CellsEditor = nameTextBox
+        nameColumn.ItemValue = NAME_VARIABLE
+
         Dim col1 As HierarchyItem = DGV.ColumnsHierarchy.Items.Add(CURRENCY_COLUMN_NAME)
         columnsDictionary.Add(ENTITIES_CURRENCY_VARIABLE, col1)
-        columnsCaptionID.Add(CURRENCY_COLUMN_NAME, ENTITIES_CURRENCY_VARIABLE)
+        col1.ItemValue = ENTITIES_CURRENCY_VARIABLE
         InitCurrenciesCB()
         col1.AllowFiltering = True
         ' CreateFilter(col1)
@@ -115,7 +121,7 @@ Friend Class EntitiesDGV
     Private Sub CreateSubFilters(ByRef node As TreeNode)
         Dim col As HierarchyItem = DGV.ColumnsHierarchy.Items.Add(node.Text)
         columnsDictionary.Add(node.Name, col)
-        columnsCaptionID.Add(node.Text, node.Name)
+        col.ItemValue = node.Name
         InitComboBox(col, node)
         col.AllowFiltering = True
         For Each childNode As TreeNode In node.Nodes
@@ -171,6 +177,7 @@ Friend Class EntitiesDGV
         Else
             row = parent_row.Items.Add("")
         End If
+        row.ItemValue = CInt(node.Name)
         DGV.CellsArea.SetCellValue(row, DGV.ColumnsHierarchy.Items(0), node.Text)
         FormatRow(row, CInt(node.Name))
         For Each child_node In node.Nodes
@@ -219,8 +226,12 @@ Friend Class EntitiesDGV
         Dim comboBox As New ComboBoxEditor()
         comboBox.DropDownHeight = comboBox.ItemHeight * CB_NB_ITEMS_DISPLAYED
         comboBox.DropDownWidth = CB_WIDTH
-        For Each currency_ As Int32 In GlobalVariables.Currencies.currencies_hash.Keys
-            comboBox.Items.Add(currency_)
+        For Each currencyId As Int32 In GlobalVariables.Currencies.currencies_hash.Keys
+            Dim list_item As New ListItem
+
+            list_item.Value = currencyId
+            list_item.Text = GlobalVariables.Currencies.currencies_hash(currencyId)(NAME_VARIABLE)
+            comboBox.Items.Add(list_item)
         Next
 
         columnsDictionary(ENTITIES_CURRENCY_VARIABLE).CellsEditor = comboBox

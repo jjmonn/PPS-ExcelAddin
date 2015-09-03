@@ -64,44 +64,44 @@ Partial Class EntitiesControl
         '
         Me.RCM_TGV.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.copy_down_bt, Me.ToolStripSeparator5, Me.drop_to_excel_bt, Me.ToolStripSeparator4, Me.CreateEntityToolStripMenuItem, Me.DeleteEntityToolStripMenuItem2})
         Me.RCM_TGV.Name = "ContextMenuStripTGV"
-        Me.RCM_TGV.Size = New System.Drawing.Size(169, 104)
+        Me.RCM_TGV.Size = New System.Drawing.Size(168, 104)
         '
         'copy_down_bt
         '
         Me.copy_down_bt.Image = Global.PPS.My.Resources.Resources.Download_
         Me.copy_down_bt.Name = "copy_down_bt"
-        Me.copy_down_bt.Size = New System.Drawing.Size(168, 22)
+        Me.copy_down_bt.Size = New System.Drawing.Size(167, 22)
         Me.copy_down_bt.Text = "Copy Value Down"
         '
         'ToolStripSeparator5
         '
         Me.ToolStripSeparator5.Name = "ToolStripSeparator5"
-        Me.ToolStripSeparator5.Size = New System.Drawing.Size(165, 6)
+        Me.ToolStripSeparator5.Size = New System.Drawing.Size(164, 6)
         '
         'drop_to_excel_bt
         '
         Me.drop_to_excel_bt.Image = Global.PPS.My.Resources.Resources.Excel_Blue_32x32
         Me.drop_to_excel_bt.Name = "drop_to_excel_bt"
-        Me.drop_to_excel_bt.Size = New System.Drawing.Size(168, 22)
+        Me.drop_to_excel_bt.Size = New System.Drawing.Size(167, 22)
         Me.drop_to_excel_bt.Text = "Drop To Excel"
         '
         'ToolStripSeparator4
         '
         Me.ToolStripSeparator4.Name = "ToolStripSeparator4"
-        Me.ToolStripSeparator4.Size = New System.Drawing.Size(165, 6)
+        Me.ToolStripSeparator4.Size = New System.Drawing.Size(164, 6)
         '
         'CreateEntityToolStripMenuItem
         '
         Me.CreateEntityToolStripMenuItem.Image = Global.PPS.My.Resources.Resources.element_branch2_add
         Me.CreateEntityToolStripMenuItem.Name = "CreateEntityToolStripMenuItem"
-        Me.CreateEntityToolStripMenuItem.Size = New System.Drawing.Size(168, 22)
+        Me.CreateEntityToolStripMenuItem.Size = New System.Drawing.Size(167, 22)
         Me.CreateEntityToolStripMenuItem.Text = "Create Entity"
         '
         'DeleteEntityToolStripMenuItem2
         '
         Me.DeleteEntityToolStripMenuItem2.Image = Global.PPS.My.Resources.Resources.element_branch2_delete
         Me.DeleteEntityToolStripMenuItem2.Name = "DeleteEntityToolStripMenuItem2"
-        Me.DeleteEntityToolStripMenuItem2.Size = New System.Drawing.Size(168, 22)
+        Me.DeleteEntityToolStripMenuItem2.Size = New System.Drawing.Size(167, 22)
         Me.DeleteEntityToolStripMenuItem2.Text = "Delete Entity"
         '
         'TableLayoutPanel1
@@ -168,6 +168,9 @@ Partial Class EntitiesControl
         Me.SendEntitiesHierarchyToExcelToolStripMenuItem.Name = "SendEntitiesHierarchyToExcelToolStripMenuItem"
         Me.SendEntitiesHierarchyToExcelToolStripMenuItem.Size = New System.Drawing.Size(238, 22)
         Me.SendEntitiesHierarchyToExcelToolStripMenuItem.Text = "Send Entities Hierarchy to Excel"
+        '
+        'BackgroundWorker1
+        '
         '
         'EntitiesControl
         '

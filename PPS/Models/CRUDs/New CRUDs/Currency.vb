@@ -194,6 +194,15 @@ Friend Class Currency
 
     End Function
 
+    Friend Function GetCurrencyId(ByVal name As String) As Int32
+        For Each id In currencies_hash.Keys
+            If (currencies_hash(id)(NAME_VARIABLE) = name) Then
+                Return (id)
+            End If
+        Next
+        Return 0
+    End Function
+
     Friend Function GetCurrenciesDict(ByRef Key As String, ByRef Value As String) As Hashtable
 
         Dim tmpHT As New Hashtable

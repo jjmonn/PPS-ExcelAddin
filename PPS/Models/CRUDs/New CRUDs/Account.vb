@@ -134,7 +134,7 @@ Friend Class Account
 
     Friend Sub CMSG_UPDATE_LIST_ACCOUNT(ByRef accountsAttributes As List(Of Hashtable))
 
-        NetworkManager.GetInstance().SetCallback(ServerMessage.smsg_update_account_list_answer, AddressOf SMSG_UPDATE_ACCOUNT_LIST_ANSWER)
+        NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_UPDATE_ACCOUNT_LIST_ANSWER, AddressOf SMSG_UPDATE_ACCOUNT_LIST_ANSWER)
         Dim packet As New ByteBuffer(CType(ClientMessage.CMSG_UPDATE_ACCOUNT_LIST, UShort))
         packet.WriteUint32(accountsAttributes.Count)
         For Each ht As Hashtable In accountsAttributes
