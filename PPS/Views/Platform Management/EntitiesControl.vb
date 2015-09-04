@@ -116,7 +116,7 @@ Friend Class EntitiesControl
                                                      "Entity deletion confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
             If confirm = DialogResult.Yes Then
                 Dim entity_id As String = Controller.GetEntityId(EntitiesDGV.DGV.CellsArea.GetCellValue(EntitiesDGV.currentRowItem, EntitiesDGV.DGV.ColumnsHierarchy.Items(0)))
-                Controller.DeleteEntities(entitiesTV.Nodes.Find(entity_id, True)(0))
+                Controller.DeleteEntity(entity_id)
             End If
         Else
             MsgBox("An Entity must be selected in order to be deleted")

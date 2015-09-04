@@ -338,9 +338,9 @@ Friend Class EntitiesDGV
 
         ' Update parent filters recursively
         UpdateParentFiltersValues(rows_id_item_dic(entityId), _
-                                  entityId, _
-                                  filterNode, _
-                                  filterValueId)
+                                 entityId, _
+                                 filterNode, _
+                                 filterValueId)
 
         ' Update children filters comboboxes recursively
         For Each childFilterNode As TreeNode In filterNode.Nodes

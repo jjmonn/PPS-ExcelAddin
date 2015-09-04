@@ -63,12 +63,17 @@ Friend Class AxisFilter
             If firstLevelFlag = True Then
 
                 FvTvNode.Nodes.Add(filterValueId, filtersValuesIdDict(filterValueId))
-                If filterNode.Nodes.Count > 0 Then LoadFiltersValues(filterNode.Nodes(0), FvTvNode)
+                If filterNode.Nodes.Count > 0 Then
+                    LoadFiltersValues(filterNode.Nodes(0), FvTvNode, False)
+                End If
+
 
             ElseIf GlobalVariables.FiltersValues.filtervalues_hash(filterValueId)(PARENT_FILTER_VALUE_ID_VARIABLE) = FvTvNode.Name Then
 
                 FvTvNode.Nodes.Add(filterValueId, filtersValuesIdDict(filterValueId))
-                If filterNode.Nodes.Count > 0 Then LoadFiltersValues(filterNode.Nodes(0), FvTvNode)
+                If filterNode.Nodes.Count > 0 Then
+                    LoadFiltersValues(filterNode.Nodes(0), FvTvNode, False)
+                End If
 
             End If
         Next

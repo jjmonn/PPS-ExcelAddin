@@ -128,6 +128,7 @@ Friend Class Computer
                         packet.WriteInt32(axis_id)
                         packet.WriteUint8(True)
                     Else
+                        ' crash if children filter => to be fixed - priority high
                         axis_id = GlobalVariables.Filters.filters_hash(GetItemID(item))(FILTER_AXIS_ID_VARIABLE)
                         packet.WriteInt32(axis_id)
                         packet.WriteUint8(False)

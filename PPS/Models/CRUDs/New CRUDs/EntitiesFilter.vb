@@ -29,9 +29,9 @@ Friend Class EntitiesFilter
     ' Events
     Public Event ObjectInitialized()
     Public Event Read(ByRef status As Boolean, ByRef attributes As Hashtable)
-    Public Event CreationEvent(ByRef status As Boolean, ByRef entity_id As Int32, ByRef filter_id As Int32, filter_value_id As Int32)
-    Public Event UpdateEvent(ByRef status As Boolean, ByRef entity_id As Int32, ByRef filter_id As Int32, filter_value_id As Int32)
-    Public Event DeleteEvent(ByRef status As Boolean, ByRef entity_id As Int32, filter_id As Int32)
+    Public Event CreationEvent(ByRef status As Boolean, ByRef entity_id As Int32, ByRef filter_id As Int32, ByRef filter_value_id As Int32)
+    Public Event UpdateEvent(ByRef status As Boolean, ByRef entity_id As Int32, ByRef filter_id As Int32, ByRef filter_value_id As Int32)
+    Public Event DeleteEvent(ByRef status As Boolean, ByRef entity_id As Int32, ByRef filter_id As Int32)
 
 #End Region
 
