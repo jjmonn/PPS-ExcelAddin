@@ -68,7 +68,6 @@ Friend Class EntitiesController
         GlobalVariables.Filters.LoadFiltersTV(entitiesFilterTV, GlobalEnums.AnalysisAxis.ENTITIES)
         AxisFilter.LoadFvTv(entitiesFilterValuesTV, GlobalEnums.AnalysisAxis.ENTITIES)
         entitiesFilterValuesNameIdDict = GlobalVariables.Filters.GetFiltersDictionary(GlobalEnums.AnalysisAxis.ENTITIES, NAME_VARIABLE, ID_VARIABLE)
-        If Not NewEntityView Is Nothing Then NewEntityView.LoadParentEntitiesTreeviewBox(entitiesTV)
 
     End Sub
 
@@ -257,14 +256,12 @@ ShowNewEntity:
 
     Friend Sub SendNewPositionsToModel()
 
-        positionsDictionary = TreeViewsUtilities.GeneratePositionsDictionary(entitiesTV)
-        Dim batch_update As New List(Of Object())
-        For Each entity_id In positionsDictionary.Keys
-            batch_update.Add({entity_id, ITEMS_POSITIONS, positionsDictionary(entity_id)})
-        Next
-
-        ' CP while updating
-        ' review ! priority normal
+        ' to be reviewed priority normal
+        'positionsDictionary = TreeViewsUtilities.GeneratePositionsDictionary(entitiesTV)
+        'Dim batch_update As New List(Of Object())
+        'For Each entity_id In positionsDictionary.Keys
+        '    batch_update.Add({entity_id, ITEMS_POSITIONS, positionsDictionary(entity_id)})
+        'Next
 
     End Sub
 

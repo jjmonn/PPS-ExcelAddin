@@ -523,7 +523,6 @@
     <Compile Include="Views\Platform Management\NewUserUI.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Views\Platform Management\EntitiesDGV.vb" />
     <Compile Include="Utilities\PasswordGenerator.vb" />
     <Compile Include="Views\Platform Management\EntitySelectionForUsersMGT.Designer.vb">
       <DependentUpon>EntitySelectionForUsersMGT.vb</DependentUpon>

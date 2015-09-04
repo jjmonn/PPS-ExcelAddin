@@ -27,6 +27,7 @@ Friend Class NewEntityUI
 
     ' Objects
     Private Controller As EntitiesController
+    Private entitiesTV As TreeView
 
     ' Variables
     Private parentTB As New TextBox
@@ -49,8 +50,8 @@ Friend Class NewEntityUI
 
         ' Add any initialization after the InitializeComponent() call.
         Controller = p_controller
+        entitiesTV = p_entitiesTV
         LoadCurrencies(p_currenciesHT)
-        LoadParentEntitiesTreeviewBox(p_entitiesTV)
 
     End Sub
 
@@ -65,43 +66,43 @@ Friend Class NewEntityUI
 
     End Sub
 
-    Delegate Sub LoadParentEntitiesTreeviewBox_Delegate(ByRef entitiesTV As TreeView)
-    Friend Sub LoadParentEntitiesTreeviewBox(ByRef entitiesTV As TreeView)
-
-        If InvokeRequired Then
-            Dim MyDelegate As New LoadParentEntitiesTreeviewBox_Delegate(AddressOf LoadParentEntitiesTreeviewBox)
-            Me.Invoke(MyDelegate, New Object() {entitiesTV})
-        Else
-            ParentEntityTreeViewBox.TreeView.Nodes.Clear()
-            For Each node As TreeNode In entitiesTV.Nodes
-                AddNodeToParentEntityTreeviewBox(node)
-            Next
-        End If
-
-    End Sub
-
-    Private Sub AddNodeToParentEntityTreeviewBox(ByRef originNode As TreeNode, _
-                                                 Optional ByRef destinationNode As VIBlend.WinForms.Controls.vTreeNode = Nothing)
-
-        Dim newNode As New VIBlend.WinForms.Controls.vTreeNode
-        newNode.Value = originNode.Name
-        newNode.Text = originNode.Text
-        If destinationNode Is Nothing Then
-            ParentEntityTreeViewBox.TreeView.Nodes.Add(newNode)
-        Else
-            destinationNode.Nodes.Add(newNode)
-        End If
-        For Each subNode As TreeNode In originNode.Nodes
-            AddNodeToParentEntityTreeviewBox(subNode, newNode)
-        Next
-
-    End Sub
-
     Friend Sub SetParentEntityId(ByRef parentEntityId As Int32)
 
         Dim parentEntityNode As VIBlend.WinForms.Controls.vTreeNode = VTreeViewUtil.FindNode(ParentEntityTreeViewBox.TreeView, parentEntityId)
         ParentEntityTreeViewBox.TreeView.SelectedNode = parentEntityNode
-       
+
+    End Sub
+
+    Private Sub NewEntityUI_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+
+        LoadParentEntitiesTreeviewBox()
+
+    End Sub
+
+    Friend Sub LoadParentEntitiesTreeviewBox()
+
+        ParentEntityTreeViewBox.TreeView.Nodes.Clear()
+        For Each node As TreeNode In entitiesTV.Nodes
+            AddNodeToParentEntityTreeviewBox(node, Nothing)
+        Next
+ 
+    End Sub
+
+    Private Sub AddNodeToParentEntityTreeviewBox(ByRef originNode As TreeNode, _
+                                                 ByRef destinationNode As VIBlend.WinForms.Controls.vTreeNode)
+
+            Dim newNode As New VIBlend.WinForms.Controls.vTreeNode
+            newNode.Value = originNode.Name
+            newNode.Text = originNode.Text
+            If destinationNode Is Nothing Then
+                ParentEntityTreeViewBox.TreeView.Nodes.Add(newNode)
+            Else
+                destinationNode.Nodes.Add(newNode)
+            End If
+            For Each subNode As TreeNode In originNode.Nodes
+                AddNodeToParentEntityTreeviewBox(subNode, newNode)
+            Next
+ 
     End Sub
 
 #End Region
@@ -134,7 +135,6 @@ Friend Class NewEntityUI
         Controller.ShowEntitiesMGT()
 
     End Sub
-
 
 #End Region
 
@@ -169,9 +169,6 @@ Friend Class NewEntityUI
 
 
 #End Region
-
-
-
 
 
 End Class

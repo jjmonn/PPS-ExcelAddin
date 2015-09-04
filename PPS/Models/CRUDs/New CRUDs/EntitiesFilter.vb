@@ -196,7 +196,6 @@ Friend Class EntitiesFilter
 
     End Function
 
-
 #End Region
 
 
