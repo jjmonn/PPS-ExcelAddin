@@ -1,4 +1,4 @@
-﻿' EntitiesControl.vb
+﻿' AxisControl.vb
 '
 ' to be reviewed for proper disctinction between DGV and control !!
 '
@@ -23,16 +23,16 @@ Imports System.ComponentModel
 Imports Microsoft.Office.Interop
 
 
-Friend Class EntitiesControl
+Friend Class AxisControl
 
 
 #Region "Instance Variables"
 
     ' Objects
-    Private Controller As EntitiesController
-    Private entitiesTV As TreeView
-    Private entitiesFilterTV As TreeView
-    Private entitiesFilterValuesTV As TreeView
+    Private Controller As AxisController
+    Private axisTV As TreeView
+    Private axisFilterTV As TreeView
+    Private axisFilterValuesTV As TreeView
     Friend DGV As New vDataGridView
     Private CP As CircularProgressUI
 
@@ -57,25 +57,26 @@ Friend Class EntitiesControl
 
 #Region "Initialization"
 
-    Friend Sub New(ByRef p_controller As EntitiesController, _
-                   ByRef p_entitiesTV As TreeView, _
-                   ByRef p_entitiesFilterValuesTV As TreeView, _
-                   ByRef p_entitiesFiltersTV As TreeView)
+    Friend Sub New(ByRef p_controller As AxisController, _
+                   ByRef p_axisHT As Hashtable, _
+                   ByRef p_axisTV As TreeView, _
+                   ByRef p_axisFilterValuesTV As TreeView, _
+                   ByRef p_axisFiltersTV As TreeView)
 
         ' This call is required by the designer.
         InitializeComponent()
 
         ' Add any initialization after the InitializeComponent() call.
         Controller = p_controller
-        entitiesTV = p_entitiesTV
-        entitiesFilterTV = p_entitiesFiltersTV
-        entitiesFilterValuesTV = p_entitiesFilterValuesTV
+        axisTV = p_axisTV
+        axisFilterTV = p_axisFiltersTV
+        axisFilterValuesTV = p_axisFilterValuesTV
 
         initFilters()
         InitializeDGVDisplay()
         DGVColumnsInitialize()
-        DGVRowsInitialize(entitiesTV)
-        fillDGV()
+        DGVRowsInitialize(axisTV)
+        fillDGV(p_axisHT)
 
         Me.TableLayoutPanel1.Controls.Add(DGV, 0, 1)
         DGV.Dock = DockStyle.Fill
@@ -88,17 +89,16 @@ Friend Class EntitiesControl
 
     End Sub
 
-  
 #End Region
 
 
 #Region "Interface"
 
-    Delegate Sub UpdateEntity_Delegate(ByRef ht As Hashtable)
-    Friend Sub UpdateEntity(ByRef ht As Hashtable)
+    Delegate Sub UpdateAxis_Delegate(ByRef ht As Hashtable)
+    Friend Sub UpdateAxis(ByRef ht As Hashtable)
 
         If InvokeRequired Then
-            Dim MyDelegate As New UpdateEntity_Delegate(AddressOf UpdateEntity)
+            Dim MyDelegate As New UpdateAxis_Delegate(AddressOf UpdateAxis)
             Me.Invoke(MyDelegate, New Object() {ht})
         Else
             isFillingDGV = True
@@ -108,11 +108,11 @@ Friend Class EntitiesControl
 
     End Sub
 
-    Delegate Sub DeleteEntity_Delegate(ByRef id As Int32)
-    Friend Sub DeleteEntity(ByRef id As Int32)
+    Delegate Sub DeleteAxis_Delegate(ByRef id As Int32)
+    Friend Sub DeleteAxis(ByRef id As Int32)
 
         If InvokeRequired Then
-            Dim MyDelegate As New DeleteEntity_Delegate(AddressOf DeleteEntity)
+            Dim MyDelegate As New DeleteAxis_Delegate(AddressOf DeleteAxis)
             Me.Invoke(MyDelegate, New Object() {id})
         Else
             rows_id_item_dic(id).Delete()
@@ -126,6 +126,33 @@ Friend Class EntitiesControl
 
 
 #Region "Calls Back"
+
+    Private Sub CreateAxisOrder()
+
+        Dim axisName As String = InputBox("Enter the new Name", "Creation")
+        If axisName <> "" Then
+            Controller.CreateAxis(axisName)
+        End If
+
+    End Sub
+
+    Private Sub DeleteAxisOrder()
+
+        If Not currentRowItem Is Nothing Then
+            Dim confirm As Integer = MessageBox.Show("Careful, you are about to delete the axis " + Chr(13) + Chr(13) + _
+                                                    DGV.CellsArea.GetCellValue(currentRowItem, DGV.ColumnsHierarchy.Items(0)) + Chr(13) + Chr(13) + _
+                                                     "This axis and all sub axis will be deleted, do you confirm?" + Chr(13) + Chr(13), _
+                                                     "Axis deletion confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+            If confirm = DialogResult.Yes Then
+                Dim axis_id As String = Controller.GetAxisId(DGV.CellsArea.GetCellValue(currentRowItem, DGV.ColumnsHierarchy.Items(0)))
+                Controller.DeleteAxis(axis_id)
+            End If
+        Else
+            MsgBox("An Axis must be selected in order to be deleted")
+        End If
+        currentRowItem = Nothing
+
+    End Sub
 
 #Region "DGV Right Click Menu"
 
@@ -142,15 +169,15 @@ Friend Class EntitiesControl
 
     End Sub
 
-    Private Sub CreateEntityToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles CreateEntityToolStripMenuItem.Click
+    Private Sub CreateAxisToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles CreateAxisToolStripMenuItem.Click
 
-        AddEntity_cmd_Click(sender, e)
+        CreateAxisOrder()
 
     End Sub
 
-    Private Sub DeleteEntityToolStripMenuItem2_Click(sender As Object, e As EventArgs) Handles DeleteEntityToolStripMenuItem2.Click
+    Private Sub DeleteAxisToolStripMenuItem2_Click(sender As Object, e As EventArgs) Handles DeleteAxisToolStripMenuItem2.Click
 
-        DeleteEntity_cmd_Click(sender, e)
+        DeleteAxisOrder()
 
     End Sub
 
@@ -158,28 +185,15 @@ Friend Class EntitiesControl
 
 #Region "Main menu"
 
-    Private Sub AddEntity_cmd_Click(sender As Object, e As EventArgs) Handles CreateEntityToolStripMenuItem.Click
+    Private Sub CreateNewToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles CreateNewToolStripMenuItem.Click
 
-        Me.Hide()
-        Controller.ShowNewEntityUI()
+        CreateAxisOrder()
 
     End Sub
 
-    Private Sub DeleteEntity_cmd_Click(sender As Object, e As EventArgs) Handles DeleteEntityToolStripMenuItem.Click
+    Private Sub DeleteAxis_cmd_Click(sender As Object, e As EventArgs) Handles DeleteAxisToolStripMenuItem.Click
 
-        If Not currentRowItem Is Nothing Then
-            Dim confirm As Integer = MessageBox.Show("Careful, you are about to delete the entity " + Chr(13) + Chr(13) + _
-                                                    DGV.CellsArea.GetCellValue(currentRowItem, DGV.ColumnsHierarchy.Items(0)) + Chr(13) + Chr(13) + _
-                                                     "This entity and all sub entities will be deleted, do you confirm?" + Chr(13) + Chr(13), _
-                                                     "Entity deletion confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
-            If confirm = DialogResult.Yes Then
-                Dim entity_id As String = Controller.GetEntityId(DGV.CellsArea.GetCellValue(currentRowItem, DGV.ColumnsHierarchy.Items(0)))
-                Controller.DeleteEntity(entity_id)
-            End If
-        Else
-            MsgBox("An Entity must be selected in order to be deleted")
-        End If
-        currentRowItem = Nothing
+        DeleteAxisOrder()
 
     End Sub
 
@@ -201,22 +215,22 @@ Friend Class EntitiesControl
         DGV.ColumnsHierarchy.AutoResize(AutoResizeMode.FIT_ALL)
         DGV.ColumnsHierarchy.AutoStretchColumns = True
         DGV.ColumnsHierarchy.AllowResize = True
-        DGV.RowsHierarchy.AllowDragDrop = True
+        ' DGV.RowsHierarchy.AllowDragDrop = True
         DGV.RowsHierarchy.CompactStyleRenderingEnabled = True
         DGV.AllowDragDropIndication = True
         DGV.AllowCopyPaste = True
         DGV.FilterDisplayMode = FilterDisplayMode.Custom
         DGV.VIBlendTheme = DGV_VI_BLEND_STYLE
         DGV.BackColor = SystemColors.Control
-        'DGV.ImageList = EntitiesIL
+        'DGV.ImageList = AxisIL
 
     End Sub
 
-    Private Sub fillDGV()
+    Private Sub fillDGV(ByRef axisHT As Hashtable)
 
         isFillingDGV = True
-        For Each entity_id In GlobalVariables.Entities.entities_hash.Keys
-            FillRow(entity_id, GlobalVariables.Entities.entities_hash(entity_id))
+        For Each axis_id In axisHT.Keys
+            FillRow(axis_id, axisHT(axis_id))
         Next
         isFillingDGV = False
         updateDGVFormat()
@@ -231,26 +245,16 @@ Friend Class EntitiesControl
         DGV.ColumnsHierarchy.Clear()
         columnsVariableItemDictionary.Clear()
 
-        ' Entities Name Column
-        Dim nameColumn As HierarchyItem = DGV.ColumnsHierarchy.Items.Add("Entity")
+        ' Axis Name Column
+        Dim nameColumn As HierarchyItem = DGV.ColumnsHierarchy.Items.Add("Axis")
         nameColumn.ItemValue = NAME_VARIABLE
-
         Dim nameTextBox As New TextBoxEditor()
-        nameTextBox.ActivationFlags = EditorActivationFlags.KEY_PRESS_ENTER
+        nameTextBox.ActivationFlags = EditorActivationFlags.MOUSE_CLICK_SELECTED_CELL
         nameColumn.CellsEditor = nameTextBox
         columnsVariableItemDictionary.Add(NAME_VARIABLE, nameColumn)
 
-        ' Entities Currency Column
-        Dim currencyColumn As HierarchyItem = DGV.ColumnsHierarchy.Items.Add(CURRENCY_COLUMN_NAME)
-        columnsVariableItemDictionary.Add(ENTITIES_CURRENCY_VARIABLE, currencyColumn)
-        currencyColumn.ItemValue = ENTITIES_CURRENCY_VARIABLE
-        InitCurrenciesComboBox()
-        currencyColumn.AllowFiltering = True
-        ' CreateFilter(col1)
-
-        For Each rootNode As TreeNode In entitiesFilterTV.Nodes
-            CreateSubFilters(rootNode)
-            '   CreateFilter(col)
+        For Each filterNode As TreeNode In axisFilterTV.Nodes
+            CreateSubFilters(filterNode)
         Next
 
     End Sub
@@ -269,15 +273,6 @@ Friend Class EntitiesControl
 
     End Sub
 
-    'Private Sub CreateFilter(ByRef column As HierarchyItem)
-
-    '    Dim filter As New HierarchyItemFilter()
-    '    filter.Item = column
-    '    filter.Filter = filterGroup
-    '    DGV.RowsHierarchy.Filters.Add(filter)
-
-    'End Sub
-
     Private Sub initFilters()
 
         Dim stringFilter1 As New StringFilter()
@@ -288,8 +283,8 @@ Friend Class EntitiesControl
         stringFilter1.ComparisonOperator = StringFilterComparisonOperator.CONTAINS
         stringFilter1.Value = "a"
 
-        FilterGroup.AddFilter(FilterOperator.AND, stringFilter1)
-        FilterGroup.AddFilter(FilterOperator.AND, stringFilter2)
+        filterGroup.AddFilter(FilterOperator.AND, stringFilter1)
+        filterGroup.AddFilter(FilterOperator.AND, stringFilter2)
 
     End Sub
 
@@ -298,39 +293,24 @@ Friend Class EntitiesControl
 
 #Region "Rows Initialization"
 
-    Private Sub DGVRowsInitialize(ByRef entities_tv As TreeView)
+    Private Sub DGVRowsInitialize(ByRef axis_tv As TreeView)
 
         DGV.RowsHierarchy.Clear()
         rows_id_item_dic.Clear()
-        For Each node In entities_tv.Nodes
-            addRow(node)
-        Next
-
-    End Sub
-
-    Friend Sub addRow(ByRef node As TreeNode, _
-                      Optional ByRef parent_row As HierarchyItem = Nothing)
-
         isFillingDGV = True
-        Dim row As HierarchyItem = CreateRow(node.Name, parent_row)
-        For Each child_node In node.Nodes
-            addRow(child_node, row)
+        For Each node In axis_tv.Nodes
+            Dim row As HierarchyItem = CreateRow(node.Name)
         Next
         isFillingDGV = False
 
     End Sub
 
-    Private Function CreateRow(ByRef entityId As Int32, _
-                               Optional ByRef parentRow As HierarchyItem = Nothing) As HierarchyItem
+    Private Function CreateRow(ByRef axisId As Int32) As HierarchyItem
 
         Dim row As HierarchyItem
-        If parentRow Is Nothing Then
-            row = DGV.RowsHierarchy.Items.Add("")
-        Else
-            row = parentRow.Items.Add("")
-        End If
-        row.ItemValue = entityId
-        FormatRow(row, entityId)
+        row = DGV.RowsHierarchy.Items.Add("")
+        row.ItemValue = axisId
+        FormatRow(row, axisId)
         Return row
 
     End Function
@@ -346,58 +326,35 @@ Friend Class EntitiesControl
 
     End Sub
 
-    Private Sub InitCurrenciesComboBox()
-
-        Dim comboBox As New ComboBoxEditor()
-        comboBox.DropDownList = True
-        comboBox.DropDownHeight = comboBox.ItemHeight * CB_NB_ITEMS_DISPLAYED
-        comboBox.DropDownWidth = CB_WIDTH
-        For Each currencyId As Int32 In GlobalVariables.Currencies.currencies_hash.Keys
-            comboBox.Items.Add(GlobalVariables.Currencies.currencies_hash(currencyId)(NAME_VARIABLE))
-        Next
-
-        columnsVariableItemDictionary(ENTITIES_CURRENCY_VARIABLE).CellsEditor = comboBox
-        AddHandler comboBox.EditBase.TextBox.KeyDown, AddressOf comboTextBox_KeyDown
-
-    End Sub
-
 #End Region
 
 
 #Region "DGV Filling"
 
-    Friend Sub FillRow(ByVal entity_id As Int32, _
-                       ByVal entity_ht As Hashtable)
+    Friend Sub FillRow(ByVal axis_id As Int32, _
+                       ByVal axis_ht As Hashtable)
 
         Dim rowItem As HierarchyItem
-        If rows_id_item_dic.ContainsKey(entity_id) Then
-            rowItem = rows_id_item_dic(entity_id)
+        If rows_id_item_dic.ContainsKey(axis_id) Then
+            rowItem = rows_id_item_dic(axis_id)
         Else
-            Dim parentEntityId As Int32 = entity_ht(PARENT_ID_VARIABLE)
-            If parentEntityId = 0 Then
-                rowItem = CreateRow(entity_id)
-            Else
-                rowItem = CreateRow(entity_id, rows_id_item_dic(parentEntityId))
-            End If
+            rowItem = CreateRow(axis_id)
         End If
-        Dim column As HierarchyItem = columnsVariableItemDictionary(ENTITIES_CURRENCY_VARIABLE)
-        DGV.CellsArea.SetCellValue(rowItem, columnsVariableItemDictionary(NAME_VARIABLE), entity_ht(NAME_VARIABLE))
-        DGV.CellsArea.SetCellValue(rowItem, column, GlobalVariables.Currencies.currencies_hash(CInt(entity_ht(ENTITIES_CURRENCY_VARIABLE)))(NAME_VARIABLE))
-        For Each filterNode As TreeNode In entitiesFilterTV.Nodes
-            FillSubFilters(filterNode, entity_id, rowItem)
+        DGV.CellsArea.SetCellValue(rowItem, columnsVariableItemDictionary(NAME_VARIABLE), axis_ht(NAME_VARIABLE))
+        For Each filterNode As TreeNode In axisFilterTV.Nodes
+            FillSubFilters(filterNode, axis_id, rowItem)
         Next
-        If entity_ht(ENTITIES_ALLOW_EDITION_VARIABLE) = 0 Then rowItem.ImageIndex = 0 Else rowItem.ImageIndex = 1
 
     End Sub
 
     Private Sub FillSubFilters(ByRef filterNode As TreeNode, _
-                               ByRef entity_id As Int32, _
+                               ByRef axis_id As Int32, _
                                ByRef rowItem As HierarchyItem)
 
         Dim combobox As New ComboBoxEditor
         combobox.DropDownList = True
         Dim columnItem As HierarchyItem = columnsVariableItemDictionary(filterNode.Name)
-        Dim filterValueId = GlobalVariables.EntitiesFilters.GetFilterValueId(CInt(filterNode.Name), entity_id)
+        Dim filterValueId = Controller.GetFilterValueId(CInt(filterNode.Name))
         Dim filter_value_name = GlobalVariables.FiltersValues.filtervalues_hash(filterValueId)(NAME_VARIABLE)
         DGV.CellsArea.SetCellValue(rowItem, columnItem, filter_value_name)
 
@@ -410,7 +367,7 @@ Friend Class EntitiesControl
             Next
         Else
             ' Child Filter
-            Dim parentFilterFilterValueId As Int32 = GlobalVariables.EntitiesFilters.GetFilterValueId(filterNode.Parent.Name, entity_id)     ' Child Filter Id
+            Dim parentFilterFilterValueId As Int32 = Controller.GetFilterValueId(CInt(filterNode.Parent.Name))     ' Child Filter Id
             Dim filterValuesIds = GlobalVariables.FiltersValues.GetFilterValueIdsFromParentFilterValueIds({parentFilterFilterValueId})
             For Each Id As Int32 In filterValuesIds
                 combobox.Items.Add(GlobalVariables.FiltersValues.filtervalues_hash(Id)(NAME_VARIABLE))
@@ -422,7 +379,7 @@ Friend Class EntitiesControl
 
         ' Recursive if Filters Children exist
         For Each childFilterNode As TreeNode In filterNode.Nodes
-            FillSubFilters(childFilterNode, entity_id, rowItem)
+            FillSubFilters(childFilterNode, axis_id, rowItem)
         Next
 
     End Sub
@@ -441,22 +398,22 @@ Friend Class EntitiesControl
 #Region "DGV Updates"
 
     ' Update Parents and Children Filters Cells or comboboxes after a filter cell has been edited
-    Friend Sub UpdateEntitiesFiltersAfterEdition(ByRef entityId As Int32, _
+    Friend Sub UpdateAxisFiltersAfterEdition(ByRef axisId As Int32, _
                                                  ByRef filterId As Int32, _
                                                  ByRef filterValueId As Int32)
 
         isFillingDGV = True
-        Dim filterNode As TreeNode = entitiesFilterTV.Nodes.Find(filterId, True)(0)
+        Dim filterNode As TreeNode = axisFilterTV.Nodes.Find(filterId, True)(0)
 
         ' Update parent filters recursively
-        UpdateParentFiltersValues(rows_id_item_dic(entityId), _
-                                 entityId, _
+        UpdateParentFiltersValues(rows_id_item_dic(axisId), _
+                                 axisId, _
                                  filterNode, _
                                  filterValueId)
 
         ' Update children filters comboboxes recursively
         For Each childFilterNode As TreeNode In filterNode.Nodes
-            UpdateChildrenFiltersComboBoxes(rows_id_item_dic(entityId), _
+            UpdateChildrenFiltersComboBoxes(rows_id_item_dic(axisId), _
                                             childFilterNode, _
                                             {filterValueId})
         Next
@@ -465,7 +422,7 @@ Friend Class EntitiesControl
     End Sub
 
     Private Sub UpdateParentFiltersValues(ByRef row As HierarchyItem, _
-                                          ByRef entityId As Int32, _
+                                          ByRef axisId As Int32, _
                                           ByRef filterNode As TreeNode,
                                           ByRef filterValueId As Int32)
 
@@ -478,7 +435,7 @@ Friend Class EntitiesControl
 
             ' Recursively update parent filters
             UpdateParentFiltersValues(row, _
-                                      entityId, _
+                                      axisId, _
                                       parentFilterNode, _
                                       parentFilterValueId)
         End If
@@ -544,7 +501,7 @@ Friend Class EntitiesControl
     Private Sub DGV_KeyDown(sender As Object, e As KeyEventArgs)
 
         Select Case e.KeyCode
-            Case Keys.Delete : DeleteEntity_cmd_Click(sender, e)
+            Case Keys.Delete : DeleteAxis_cmd_Click(sender, e)
         End Select
 
     End Sub
@@ -553,27 +510,15 @@ Friend Class EntitiesControl
 
         If isFillingDGV = False Then
             If (Not args.Cell.Value Is Nothing AndAlso args.Cell.Value <> "") Then
-                Dim entityId As Int32 = args.Cell.RowItem.ItemValue
-
+                Dim axisId As Int32 = args.Cell.RowItem.ItemValue
 
                 Select Case args.Cell.ColumnItem.ItemValue
 
-                    Case ENTITIES_CURRENCY_VARIABLE
-                        Dim currencyId As Int32 = GlobalVariables.Currencies.GetCurrencyId(args.Cell.Value)
-                        If (currencyId = 0) Then
-                            MsgBox("Currency " & args.Cell.Value & " not found.")
-                            Exit Sub
-                        Else
-                            Controller.UpdateEntity(entityId, _
-                                                    args.Cell.ColumnItem.ItemValue, _
-                                                    currencyId)
-                        End If
-
                     Case NAME_VARIABLE
-                        Dim newEntityName As String = args.Cell.Value
-                        Controller.UpdateEntity(entityId, _
+                        Dim newAxisName As String = args.Cell.Value
+                        Controller.UpdateAxis(axisId, _
                                                 args.Cell.ColumnItem.ItemValue, _
-                                                newEntityName)
+                                                newAxisName)
                     Case Else
                         Dim filterValueName As String = args.Cell.Value
                         Dim filterValueId As Int32 = GlobalVariables.FiltersValues.GetFilterValueId(filterValueName)
@@ -582,8 +527,8 @@ Friend Class EntitiesControl
                             Exit Sub
                         End If
                         Dim filterId As Int32 = args.Cell.ColumnItem.ItemValue
-                        UpdateEntitiesFiltersAfterEdition(entityId, filterId, filterValueId)
-                        Controller.UpdateFilterValue(entityId, filterId, filterValueId)
+                        UpdateAxisFiltersAfterEdition(axisId, filterId, filterValueId)
+                        Controller.UpdateFilterValue(axisId, filterId, filterValueId)
                 End Select
 
             End If
@@ -651,8 +596,8 @@ Friend Class EntitiesControl
     ' Drop the current TGV in a new worksheet
     Friend Sub DropInExcel()
 
-        Dim cell As Excel.Range = WorksheetWrittingFunctions.CreateReceptionWS("Entities", _
-                                                                                {"Entities Hierarchy"}, _
+        Dim cell As Excel.Range = WorksheetWrittingFunctions.CreateReceptionWS("Axis", _
+                                                                                {"Axis Hierarchy"}, _
                                                                                 {""})
         Dim nbRows As Int32
         For Each item As HierarchyItem In DGV.RowsHierarchy.Items
@@ -663,8 +608,8 @@ Friend Class EntitiesControl
         ReDim DGVArray(nbRows + 1, nbcols + 2)
         Dim i, j As Int32
 
-        DGVArray(i, 0) = "Entity's Name"
-        DGVArray(i, 1) = "Entity's Affiliate's Name"
+        DGVArray(i, 0) = "Axis's Name"
+        DGVArray(i, 1) = "Axis's Affiliate's Name"
         For j = 0 To nbcols - 1
             DGVArray(i, j + 2) = DGV.ColumnsHierarchy.Items(j).Caption
         Next
@@ -674,7 +619,7 @@ Friend Class EntitiesControl
         Next
 
         WorksheetWrittingFunctions.WriteArray(DGVArray, cell)
-        ExcelFormatting.FormatEntitiesReport(GlobalVariables.APPS.ActiveSheet.range(cell, cell.Offset(UBound(DGVArray, 1), UBound(DGVArray, 2))))
+        'ExcelFormatting.FormatAxisReport(GlobalVariables.APPS.ActiveSheet.range(cell, cell.Offset(UBound(DGVArray, 1), UBound(DGVArray, 2))))
 
     End Sub
 
@@ -717,7 +662,6 @@ Friend Class EntitiesControl
 #End Region
 
 #End Region
-
 
 
 

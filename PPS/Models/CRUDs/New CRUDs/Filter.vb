@@ -167,7 +167,7 @@ Friend Class Filter
         Dim selection() As String = {}
 
         For Each id In filters_hash.Keys
-            If filters_hash(id)(FILTER_AXIS_ID_VARIABLE) = axis_id Then tmp_list.Add(filters_hash(id)(variable))
+            If filters_hash(id)(AXIS_ID_VARIABLE) = axis_id Then tmp_list.Add(filters_hash(id)(variable))
         Next
         Return tmp_list
 
@@ -191,7 +191,7 @@ Friend Class Filter
 
         Dim tmpHT As New Hashtable
         For Each id In filters_hash.Keys
-            If filters_hash(id)(FILTER_AXIS_ID_VARIABLE) = axis_id Then tmpHT(filters_hash(id)(Key)) = filters_hash(id)(Value)
+            If filters_hash(id)(AXIS_ID_VARIABLE) = axis_id Then tmpHT(filters_hash(id)(Key)) = filters_hash(id)(Value)
         Next
         Return tmpHT
 
@@ -206,7 +206,7 @@ Friend Class Filter
 
         filter_ht(ID_VARIABLE) = packet.ReadUint32()
         filter_ht(PARENT_ID_VARIABLE) = packet.ReadUint32()
-        filter_ht(FILTER_AXIS_ID_VARIABLE) = packet.ReadUint32()
+        filter_ht(AXIS_ID_VARIABLE) = packet.ReadUint32()
         filter_ht(FILTER_IS_PARENT_VARIABLE) = packet.ReadBool()
         filter_ht(NAME_VARIABLE) = packet.ReadString()
         filter_ht(ITEMS_POSITIONS) = packet.ReadUint32()
@@ -217,7 +217,7 @@ Friend Class Filter
 
         If attributes.ContainsKey(ID_VARIABLE) Then packet.WriteUint32(attributes(ID_VARIABLE))
         packet.WriteUint32(attributes(PARENT_ID_VARIABLE))
-        packet.WriteUint32(attributes(FILTER_AXIS_ID_VARIABLE))
+        packet.WriteUint32(attributes(AXIS_ID_VARIABLE))
         packet.WriteUint8(attributes(FILTER_IS_PARENT_VARIABLE))
         packet.WriteString(attributes(NAME_VARIABLE))
         packet.WriteUint32(attributes(ITEMS_POSITIONS))
@@ -231,7 +231,7 @@ Friend Class Filter
 
         Dim tmp_ht As New Hashtable
         For Each id As Int32 In filters_hash.Keys
-            If filters_hash(id)(FILTER_AXIS_ID_VARIABLE) = axis_id Then
+            If filters_hash(id)(AXIS_ID_VARIABLE) = axis_id Then
                 tmp_ht(id) = filters_hash(id)
             End If
         Next
@@ -244,7 +244,7 @@ Friend Class Filter
 
         Dim tmp_ht As New Hashtable
         For Each id As Int32 In filters_hash.Keys
-            If filters_hash(id)(FILTER_AXIS_ID_VARIABLE) = axis_id Then
+            If filters_hash(id)(AXIS_ID_VARIABLE) = axis_id Then
                 tmp_ht(id) = filters_hash(id)
             End If
         Next
@@ -257,7 +257,7 @@ Friend Class Filter
 
         Dim tmp_ht As New Hashtable
         For Each id As Int32 In filters_hash.Keys
-            If filters_hash(id)(FILTER_AXIS_ID_VARIABLE) = axis_id Then
+            If filters_hash(id)(AXIS_ID_VARIABLE) = axis_id Then
                 tmp_ht(id) = filters_hash(id)
             End If
         Next
@@ -270,7 +270,7 @@ Friend Class Filter
 
         Dim tmp_ht As New Hashtable
         For Each id As Int32 In filters_hash.Keys
-            If filters_hash(id)(FILTER_AXIS_ID_VARIABLE) = axis_id Then
+            If filters_hash(id)(AXIS_ID_VARIABLE) = axis_id Then
                 tmp_ht(id) = filters_hash(id)
             End If
         Next

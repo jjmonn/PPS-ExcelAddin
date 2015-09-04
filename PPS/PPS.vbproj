@@ -118,22 +118,20 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Controllers\PLATFORM MANAGEMENT\AccountsController.vb" />
+    <Compile Include="Controllers\PLATFORM MANAGEMENT\AxisController.vb" />
     <Compile Include="Controllers\PLATFORM MANAGEMENT\AxisFiltersController.vb" />
-    <Compile Include="Controllers\PLATFORM MANAGEMENT\ClientsController.vb" />
     <Compile Include="Controllers\PLATFORM MANAGEMENT\ChartsControlsController.vb" />
-    <Compile Include="Controllers\PLATFORM MANAGEMENT\ClientsFiltersController.vb" />
     <Compile Include="Controllers\PLATFORM MANAGEMENT\ControlsController.vb" />
     <Compile Include="Controllers\PLATFORM MANAGEMENT\EntitiesFiltersController.vb" />
     <Compile Include="Controllers\PLATFORM MANAGEMENT\ExchangeRatesController.vb" />
     <Compile Include="Controllers\PLATFORM MANAGEMENT\EntitiesController.vb" />
-    <Compile Include="Controllers\PLATFORM MANAGEMENT\ProductsController.vb" />
-    <Compile Include="Controllers\PLATFORM MANAGEMENT\ProductsFiltersController.vb" />
     <Compile Include="Controllers\PLATFORM MANAGEMENT\UsersController.vb" />
     <Compile Include="Controllers\PLATFORM MANAGEMENT\DataVersionsController.vb" />
     <Compile Include="GLOBAL\GlobalEnums.vb" />
     <Compile Include="Models\Computing\Computer.vb" />
     <Compile Include="Models\Computing\ComputerInputEntity.vb" />
     <Compile Include="Models\Computing\FormulasTranslation.vb" />
+    <Compile Include="Models\CRUDs\New CRUDs\SuperAxisFilterCRUD.vb" />
     <Compile Include="Models\CRUDs\New CRUDs\GlobalFactData.vb" />
     <Compile Include="Models\CRUDs\New CRUDs\GlobalFact.vb" />
     <Compile Include="Models\CRUDs\New CRUDs\Account.vb" />
@@ -154,6 +152,7 @@
     <Compile Include="Models\CRUDs\New CRUDs\Product.vb" />
     <Compile Include="Models\CRUDs\New CRUDs\ProductsFilter.vb" />
     <Compile Include="Models\CRUDs\New CRUDs\FactsVersion.vb" />
+    <Compile Include="Models\CRUDs\New CRUDs\SuperAxisCRUD.vb" />
     <Compile Include="Views\Controlling UI\CUI2LeftPane.Designer.vb">
       <DependentUpon>CUI2LeftPane.vb</DependentUpon>
     </Compile>
@@ -190,17 +189,11 @@
     <Compile Include="Views\Modeling\FModelingUI2.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Views\Platform Management\ClientsControl.Designer.vb">
-      <DependentUpon>ClientsControl.vb</DependentUpon>
+    <Compile Include="Views\Platform Management\AxisControl.Designer.vb">
+      <DependentUpon>AxisControl.vb</DependentUpon>
     </Compile>
-    <Compile Include="Views\Platform Management\ClientsControl.vb">
+    <Compile Include="Views\Platform Management\AxisControl.vb">
       <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Views\Platform Management\NewAnalysisAxisUI.Designer.vb">
-      <DependentUpon>NewAnalysisAxisUI.vb</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Platform Management\NewAnalysisAxisUI.vb">
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="Models\CRUDs\Old CRUDs\AlternativeScenarioEntitiesAttribute.vb" />
     <Compile Include="Models\CRUDs\Old CRUDs\AlternativeScenarioExport.vb" />
@@ -217,9 +210,7 @@
     <Compile Include="Views\Platform Management\ProductsControl.Designer.vb">
       <DependentUpon>ProductsControl.vb</DependentUpon>
     </Compile>
-    <Compile Include="Views\Platform Management\ProductsControl.vb">
-      <SubType>UserControl</SubType>
-    </Compile>
+    <Compile Include="Views\Platform Management\ProductsControl.vb" />
     <Compile Include="Views\Test.Designer.vb">
       <DependentUpon>Test.vb</DependentUpon>
     </Compile>
@@ -342,10 +333,10 @@
     <Compile Include="Views\Platform Management\NewRatesVersionUI.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Views\Platform Management\AnalysisCategoriesControl.Designer.vb">
-      <DependentUpon>AnalysisCategoriesControl.vb</DependentUpon>
+    <Compile Include="Views\Platform Management\AxisFiltersControl.Designer.vb">
+      <DependentUpon>AxisFiltersControl.vb</DependentUpon>
     </Compile>
-    <Compile Include="Views\Platform Management\AnalysisCategoriesControl.vb">
+    <Compile Include="Views\Platform Management\AxisFiltersControl.vb">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Views\Platform Management\EntitiesControl.Designer.vb">
@@ -606,11 +597,8 @@
     <EmbeddedResource Include="Views\Modeling\FModelingUI2.resx">
       <DependentUpon>FModelingUI2.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Views\Platform Management\ClientsControl.resx">
-      <DependentUpon>ClientsControl.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Views\Platform Management\NewAnalysisAxisUI.resx">
-      <DependentUpon>NewAnalysisAxisUI.vb</DependentUpon>
+    <EmbeddedResource Include="Views\Platform Management\AxisControl.resx">
+      <DependentUpon>AxisControl.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\Modeling\ASEntitiesAttributesUI.resx">
       <DependentUpon>ASEntitiesAttributesUI.vb</DependentUpon>
@@ -657,8 +645,8 @@
     <EmbeddedResource Include="Views\Platform Management\CurrenciesControl.resx">
       <DependentUpon>CurrenciesControl.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Views\Platform Management\AnalysisCategoriesControl.resx">
-      <DependentUpon>AnalysisCategoriesControl.vb</DependentUpon>
+    <EmbeddedResource Include="Views\Platform Management\AxisFiltersControl.resx">
+      <DependentUpon>AxisFiltersControl.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\Platform Management\EntitiesControl.resx">
       <DependentUpon>EntitiesControl.vb</DependentUpon>
@@ -963,7 +951,9 @@
   <ItemGroup>
     <None Include="Resources\favicon%28239%29.ico" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="Resources\Financial BI dark blue.ico" />
+  </ItemGroup>
   <ItemGroup>
     <None Include="Resources\excel.png" />
   </ItemGroup>
@@ -1197,6 +1187,36 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Refresh DB 322.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\favicon%2815%29.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\users_relation.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\element_branch25.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\barcode1.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\symbol_dollar_euro1.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\user1.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ok.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\elements4.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\elements_hierarchy.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\filter_and_sort.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.

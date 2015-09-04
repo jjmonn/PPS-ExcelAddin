@@ -48,6 +48,7 @@ Friend Class DataVersionsController
     Friend Sub New()
 
         GlobalVariables.Versions.LoadVersionsTV(versionsTV)
+        VTreeViewUtil.InitTVFormat(versionsTV)
         rates_versions_name_id_dic = GlobalVariables.RatesVersions.GetRateVersionsDictionary(NAME_VARIABLE, ID_VARIABLE)
         View = New VersionsControl(Me, versionsTV)
         versionsNamesList = GlobalVariables.Versions.GetVersionsNameList(NAME_VARIABLE)
@@ -72,18 +73,15 @@ Friend Class DataVersionsController
     Public Sub close()
 
         View.closeControl()
-
-    End Sub
-
-    Protected Friend Sub sendCloseOrder()
-
         View.Dispose()
-        PlatformMGTUI.displayControl()
 
     End Sub
-
 
 #End Region
+
+
+    ' implement the update view methods after listening events ;)
+    ' priority normal
 
 
 #Region "Interface"
@@ -134,10 +132,10 @@ Friend Class DataVersionsController
 
     Private Sub Update(ByRef id As Int32, _
                        ByRef variable As String, _
-                       ByRef value As Object)
+                       ByVal value As Object)
 
 
-        Dim ht As Hashtable = GlobalVariables.Versions.versions_hash(id)
+        Dim ht As Hashtable = GlobalVariables.Versions.versions_hash(id).clone()
         ht(variable) = value
         GlobalVariables.Versions.CMSG_UPDATE_VERSION(ht)
 
@@ -267,11 +265,11 @@ Friend Class DataVersionsController
 
     Friend Sub SendNewPositionsToModel()
 
-        ' Caution: to be sent only once -> transaction intensive
-        ' -> + ill refresh view each time !!!!! 
+        ' update batch to be implemented prioritiy normal
+        ' 
         positions_dictionary = VTreeViewUtil.GeneratePositionsDictionary(versionsTV)
-        For Each category_id In positions_dictionary.Keys
-            Update(category_id, ITEMS_POSITIONS, positions_dictionary(category_id))
+        For Each version_id In positions_dictionary.Keys
+            Update(version_id, ITEMS_POSITIONS, positions_dictionary(version_id))
         Next
 
     End Sub

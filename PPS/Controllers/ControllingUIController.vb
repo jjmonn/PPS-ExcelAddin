@@ -96,24 +96,24 @@ Friend Class ControllingUIController
         Dim clientsNode As vTreeNode = VTreeViewUtil.AddNode(Computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.CLIENTS, _
                                                              ControllingUI_2.CLIENTS_CODE, _
                                                              filtersNodes)
-        For Each clientId As Int32 In GlobalVariables.Clients.clients_hash.Keys
-            VTreeViewUtil.AddNode(clientId, GlobalVariables.Clients.clients_hash(clientId)(NAME_VARIABLE), clientsNode)
+        For Each clientId As Int32 In GlobalVariables.Clients.Axis_hash.Keys
+            VTreeViewUtil.AddNode(clientId, GlobalVariables.Clients.Axis_hash(clientId)(NAME_VARIABLE), clientsNode)
         Next
 
         ' Load Products Nodes
         Dim productsNode As vTreeNode = VTreeViewUtil.AddNode(Computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.PRODUCTS, _
                                                               ControllingUI_2.PRODUCTS_CODE, _
                                                               filtersNodes)
-        For Each productId As Int32 In GlobalVariables.Products.products_hash.Keys
-            VTreeViewUtil.AddNode(productId, GlobalVariables.Products.products_hash(productId)(NAME_VARIABLE), productsNode)
+        For Each productId As Int32 In GlobalVariables.Products.Axis_hash.Keys
+            VTreeViewUtil.AddNode(productId, GlobalVariables.Products.Axis_hash(productId)(NAME_VARIABLE), productsNode)
         Next
 
         ' Load Adjustment Nodes
         Dim adjustmentsNode As vTreeNode = VTreeViewUtil.AddNode(Computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.ADJUSTMENTS, _
                                                                  ControllingUI_2.ADJUSTMENT_CODE, _
                                                                  filtersNodes)
-        For Each adjustmentId As Int32 In GlobalVariables.Adjustments.adjustments_hash.Keys
-            VTreeViewUtil.AddNode(adjustmentId, GlobalVariables.Adjustments.adjustments_hash(adjustmentId)(NAME_VARIABLE), adjustmentsNode)
+        For Each adjustmentId As Int32 In GlobalVariables.Adjustments.axis_hash.Keys
+            VTreeViewUtil.AddNode(adjustmentId, GlobalVariables.Adjustments.axis_hash(adjustmentId)(NAME_VARIABLE), adjustmentsNode)
         Next
 
     End Sub

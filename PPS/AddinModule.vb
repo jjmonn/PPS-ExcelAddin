@@ -1726,33 +1726,33 @@ Public Class AddinModule
     Friend Shared Sub loadDropDownsSubmissionButtons()
 
         GlobalVariables.ClientsIDDropDown.Items.Clear()
-        For Each client_id As Int32 In GlobalVariables.Clients.clients_hash.Keys
+        For Each client_id As Int32 In GlobalVariables.Clients.axis_hash.Keys
             AddButtonToDropDown(GlobalVariables.ClientsIDDropDown, _
                                 client_id, _
-                                GlobalVariables.Clients.clients_hash(client_id)(NAME_VARIABLE))
+                                GlobalVariables.Clients.axis_hash(client_id)(NAME_VARIABLE))
         Next
         GlobalVariables.ClientsIDDropDown.SelectedItemId = DEFAULT_ANALYSIS_AXIS_ID
         GlobalVariables.ClientsIDDropDown.Invalidate()
         GlobalVariables.ClientsIDDropDown.ScreenTip = "screentip"
-        '  GlobalVariables.ClientsIDDropDown. = GlobalVariables.Clients.clients_hash(DEFAULT_ANALYSIS_AXIS_ID)(NAME_VARIABLE)
+        '  GlobalVariables.ClientsIDDropDown. = GlobalVariables.Clients.axis_hash(DEFAULT_ANALYSIS_AXIS_ID)(NAME_VARIABLE)
 
         GlobalVariables.ProductsIDDropDown.Items.Clear()
-        For Each product_id As Int32 In GlobalVariables.Products.products_hash.Keys
+        For Each product_id As Int32 In GlobalVariables.Products.Axis_hash.Keys
             AddButtonToDropDown(GlobalVariables.ProductsIDDropDown, _
                                 product_id, _
-                                GlobalVariables.Products.products_hash(product_id)(NAME_VARIABLE))
+                                GlobalVariables.Products.Axis_hash(product_id)(NAME_VARIABLE))
         Next
         GlobalVariables.ProductsIDDropDown.SelectedItemId = DEFAULT_ANALYSIS_AXIS_ID
-        '    GlobalVariables.ProductsIDDropDown.Caption = GlobalVariables.Products.products_hash(DEFAULT_ANALYSIS_AXIS_ID)(NAME_VARIABLE)
+        '    GlobalVariables.ProductsIDDropDown.Caption = GlobalVariables.Products.axis_hash(DEFAULT_ANALYSIS_AXIS_ID)(NAME_VARIABLE)
 
         GlobalVariables.AdjustmentIDDropDown.Items.Clear()
-        For Each adjustment_id As Int32 In GlobalVariables.Adjustments.adjustments_hash.Keys
+        For Each adjustment_id As Int32 In GlobalVariables.Adjustments.Axis_hash.Keys
             AddButtonToDropDown(GlobalVariables.AdjustmentIDDropDown, _
                                 adjustment_id, _
-                                GlobalVariables.Adjustments.adjustments_hash(adjustment_id)((NAME_VARIABLE)))
+                                GlobalVariables.Adjustments.Axis_hash(adjustment_id)((NAME_VARIABLE)))
         Next
         GlobalVariables.AdjustmentIDDropDown.SelectedItemId = DEFAULT_ANALYSIS_AXIS_ID
-        '  GlobalVariables.AdjustmentIDDropDown.Caption = GlobalVariables.Adjustments.adjustments_hash(DEFAULT_ANALYSIS_AXIS_ID)(NAME_VARIABLE)
+        '  GlobalVariables.AdjustmentIDDropDown.Caption = GlobalVariables.Adjustments.axis_hash(DEFAULT_ANALYSIS_AXIS_ID)(NAME_VARIABLE)
 
     End Sub
 

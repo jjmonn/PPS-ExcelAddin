@@ -26,26 +26,26 @@ Friend Class EntitiesFilter
     Friend entitiesFiltersHash As New Dictionary(Of Int32, Dictionary(Of Int32, Int32))
     Private request_id As Dictionary(Of UInt32, Boolean)
 
-    ' Events
     Public Event ObjectInitialized()
     Public Event Read(ByRef status As Boolean, ByRef attributes As Hashtable)
     Public Event CreationEvent(ByRef status As Boolean, ByRef entity_id As Int32, ByRef filter_id As Int32, ByRef filter_value_id As Int32)
     Public Event UpdateEvent(ByRef status As Boolean, ByRef entity_id As Int32, ByRef filter_id As Int32, ByRef filter_value_id As Int32)
     Public Event DeleteEvent(ByRef status As Boolean, ByRef entity_id As Int32, ByRef filter_id As Int32)
 
+
 #End Region
 
 
 #Region "Init"
 
-  Friend Sub New()
+    Friend Sub New()
 
-    NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_LIST_ENTITY_FILTER_ANSWER, AddressOf SMSG_LIST_ENTITY_FILTER_ANSWER)
-    NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_READ_ENTITY_FILTER_ANSWER, AddressOf SMSG_READ_ENTITY_FILTER_ANSWER)
-    NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_DELETE_ENTITY_FILTER_ANSWER, AddressOf SMSG_DELETE_ENTITY_FILTER_ANSWER)
-    state_flag = False
+        NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_LIST_ENTITY_FILTER_ANSWER, AddressOf SMSG_LIST_ENTITY_FILTER_ANSWER)
+        NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_READ_ENTITY_FILTER_ANSWER, AddressOf SMSG_READ_ENTITY_FILTER_ANSWER)
+        NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_DELETE_ENTITY_FILTER_ANSWER, AddressOf SMSG_DELETE_ENTITY_FILTER_ANSWER)
+        state_flag = False
 
-  End Sub
+    End Sub
 
     Private Sub SMSG_LIST_ENTITY_FILTER_ANSWER(packet As ByteBuffer)
 
@@ -248,14 +248,14 @@ Friend Class EntitiesFilter
 #End Region
 
 
-  Protected Overrides Sub finalize()
+    Protected Overrides Sub finalize()
 
-    NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_LIST_ENTITY_FILTER_ANSWER, AddressOf SMSG_LIST_ENTITY_FILTER_ANSWER)
-    NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_READ_ENTITY_FILTER_ANSWER, AddressOf SMSG_READ_ENTITY_FILTER_ANSWER)
-    NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_DELETE_ENTITY_FILTER_ANSWER, AddressOf SMSG_DELETE_ENTITY_FILTER_ANSWER)
-    MyBase.Finalize()
+        NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_LIST_ENTITY_FILTER_ANSWER, AddressOf SMSG_LIST_ENTITY_FILTER_ANSWER)
+        NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_READ_ENTITY_FILTER_ANSWER, AddressOf SMSG_READ_ENTITY_FILTER_ANSWER)
+        NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_DELETE_ENTITY_FILTER_ANSWER, AddressOf SMSG_DELETE_ENTITY_FILTER_ANSWER)
+        MyBase.Finalize()
 
-  End Sub
+    End Sub
 
 
 

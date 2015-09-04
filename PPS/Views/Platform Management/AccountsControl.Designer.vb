@@ -65,7 +65,6 @@ Partial Class AccountsControl
         Me.DropAllAccountsHierarchyToExcelToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.DropSelectedAccountHierarchyToExcelToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.HelpToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.BackgroundWorker1 = New System.ComponentModel.BackgroundWorker()
         CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SplitContainer1.Panel1.SuspendLayout()
         Me.SplitContainer1.Panel2.SuspendLayout()
@@ -560,9 +559,6 @@ Partial Class AccountsControl
         Me.HelpToolStripMenuItem.Size = New System.Drawing.Size(49, 23)
         Me.HelpToolStripMenuItem.Text = "Help"
         '
-        'BackgroundWorker1
-        '
-        '
         'AccountsControl
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -619,7 +615,6 @@ Partial Class AccountsControl
     Friend WithEvents DropAllAccountsHierarchyToExcelToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents DropSelectedAccountHierarchyToExcelToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents HelpToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents BackgroundWorker1 As System.ComponentModel.BackgroundWorker
     Friend WithEvents GroupBox5 As System.Windows.Forms.GroupBox
     Friend WithEvents SaveDescriptionBT As System.Windows.Forms.Button
     Friend WithEvents DescriptionTB As System.Windows.Forms.TextBox

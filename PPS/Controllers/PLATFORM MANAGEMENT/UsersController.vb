@@ -76,8 +76,7 @@ Friend Class UsersController
     Public Sub close()
 
         View.Dispose()
-        PlatformMGTUI.displayControl()
-
+        
     End Sub
 
 #End Region

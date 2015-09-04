@@ -74,8 +74,7 @@ Friend Class ControlsController
         View.closeControl()
         View.Dispose()
         Controls.close()
-        PlatformMGTUI.displayControl()
-
+ 
     End Sub
 
 

@@ -24,34 +24,170 @@ Partial Class PlatformMGTGeneralUI
     Private Sub InitializeComponent()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(PlatformMGTGeneralUI))
         Me.MenuStrip1 = New System.Windows.Forms.MenuStrip()
+        Me.AccountsBT = New System.Windows.Forms.ToolStripMenuItem()
+        Me.EntitiesBT = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ClientsBT = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ProductsBT = New System.Windows.Forms.ToolStripMenuItem()
+        Me.AdjustmentsBT = New System.Windows.Forms.ToolStripMenuItem()
+        Me.VersionsBT = New System.Windows.Forms.ToolStripMenuItem()
+        Me.CurrenciesBT = New System.Windows.Forms.ToolStripMenuItem()
+        Me.UsersBT = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ControlsBT = New System.Windows.Forms.ToolStripMenuItem()
+        Me.CategoriesBT = New System.Windows.Forms.ToolStripMenuItem()
+        Me.EntitiesFiltersBT = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ClientsFiltersBT = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ProductsFiltersBT = New System.Windows.Forms.ToolStripMenuItem()
+        Me.AdjustmentsFiltersBT = New System.Windows.Forms.ToolStripMenuItem()
         Me.Panel1 = New System.Windows.Forms.Panel()
-        Me.FinancialsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.FinancialsAndOperationalItemsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.AdjustmentsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.OrganizationToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.OrganizationToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
-        Me.OrganizationCategoriesToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ClientsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ClientsToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ClientsCategoriesToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ProductsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ProductsToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ProductsCategoriesToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.VersionsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.CurrenciesToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.UsersToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ControlsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.MenuStrip1.SuspendLayout()
         Me.SuspendLayout()
         '
         'MenuStrip1
         '
-        Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.FinancialsToolStripMenuItem, Me.OrganizationToolStripMenuItem, Me.ClientsToolStripMenuItem, Me.ProductsToolStripMenuItem, Me.VersionsToolStripMenuItem, Me.CurrenciesToolStripMenuItem, Me.UsersToolStripMenuItem, Me.ControlsToolStripMenuItem})
+        Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.AccountsBT, Me.EntitiesBT, Me.ClientsBT, Me.ProductsBT, Me.AdjustmentsBT, Me.VersionsBT, Me.CurrenciesBT, Me.UsersBT, Me.ControlsBT, Me.CategoriesBT})
         Me.MenuStrip1.Location = New System.Drawing.Point(0, 0)
         Me.MenuStrip1.Name = "MenuStrip1"
-        Me.MenuStrip1.Size = New System.Drawing.Size(674, 55)
+        Me.MenuStrip1.Size = New System.Drawing.Size(1009, 59)
         Me.MenuStrip1.TabIndex = 0
         Me.MenuStrip1.Text = "MenuStrip1"
+        '
+        'AccountsBT
+        '
+        Me.AccountsBT.CheckOnClick = True
+        Me.AccountsBT.Image = Global.PPS.My.Resources.Resources.favicon_15_
+        Me.AccountsBT.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
+        Me.AccountsBT.Name = "AccountsBT"
+        Me.AccountsBT.Size = New System.Drawing.Size(77, 55)
+        Me.AccountsBT.Text = "Accounts"
+        Me.AccountsBT.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
+        Me.AccountsBT.ToolTipText = "Financial and Operational Accounts Edition  (All changes applied will be availabl" & _
+    "e for all users)"
+        '
+        'EntitiesBT
+        '
+        Me.EntitiesBT.CheckOnClick = True
+        Me.EntitiesBT.Image = Global.PPS.My.Resources.Resources.elements_hierarchy
+        Me.EntitiesBT.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
+        Me.EntitiesBT.Name = "EntitiesBT"
+        Me.EntitiesBT.Size = New System.Drawing.Size(127, 55)
+        Me.EntitiesBT.Text = "Entities Hierarchy"
+        Me.EntitiesBT.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
+        Me.EntitiesBT.ToolTipText = "Legal Organization Hierarchy Ediition  (All changes applied will be available for" & _
+    " all users)"
+        '
+        'ClientsBT
+        '
+        Me.ClientsBT.CheckOnClick = True
+        Me.ClientsBT.Image = Global.PPS.My.Resources.Resources.users_relation
+        Me.ClientsBT.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
+        Me.ClientsBT.Name = "ClientsBT"
+        Me.ClientsBT.Size = New System.Drawing.Size(62, 55)
+        Me.ClientsBT.Text = "Clients"
+        Me.ClientsBT.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
+        Me.ClientsBT.ToolTipText = "Clients Edition  (All changes applied will be available for all users)"
+        '
+        'ProductsBT
+        '
+        Me.ProductsBT.CheckOnClick = True
+        Me.ProductsBT.Image = Global.PPS.My.Resources.Resources.barcode1
+        Me.ProductsBT.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
+        Me.ProductsBT.Name = "ProductsBT"
+        Me.ProductsBT.Size = New System.Drawing.Size(75, 55)
+        Me.ProductsBT.Text = "Products"
+        Me.ProductsBT.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
+        Me.ProductsBT.ToolTipText = "Products Edition  (All changes applied will be available for all users)"
+        '
+        'AdjustmentsBT
+        '
+        Me.AdjustmentsBT.Image = Global.PPS.My.Resources.Resources.elements4
+        Me.AdjustmentsBT.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
+        Me.AdjustmentsBT.Name = "AdjustmentsBT"
+        Me.AdjustmentsBT.Size = New System.Drawing.Size(98, 55)
+        Me.AdjustmentsBT.Text = "Adjustemnts"
+        Me.AdjustmentsBT.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
+        Me.AdjustmentsBT.ToolTipText = "Adjustments Edition  (All changes applied will be available for all users)"
+        '
+        'VersionsBT
+        '
+        Me.VersionsBT.CheckOnClick = True
+        Me.VersionsBT.Image = Global.PPS.My.Resources.Resources.Excel_dark_24_24
+        Me.VersionsBT.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
+        Me.VersionsBT.Name = "VersionsBT"
+        Me.VersionsBT.Size = New System.Drawing.Size(72, 55)
+        Me.VersionsBT.Text = "Versions"
+        Me.VersionsBT.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
+        Me.VersionsBT.ToolTipText = "Versions Edition  (All changes applied will be available for all users)"
+        '
+        'CurrenciesBT
+        '
+        Me.CurrenciesBT.CheckOnClick = True
+        Me.CurrenciesBT.Enabled = False
+        Me.CurrenciesBT.Image = Global.PPS.My.Resources.Resources.symbol_dollar_euro1
+        Me.CurrenciesBT.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
+        Me.CurrenciesBT.Name = "CurrenciesBT"
+        Me.CurrenciesBT.Size = New System.Drawing.Size(85, 55)
+        Me.CurrenciesBT.Text = "Currencies"
+        Me.CurrenciesBT.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
+        Me.CurrenciesBT.ToolTipText = "Currencies Edition (All changes applied will be available for all users)"
+        '
+        'UsersBT
+        '
+        Me.UsersBT.CheckOnClick = True
+        Me.UsersBT.Enabled = False
+        Me.UsersBT.Image = Global.PPS.My.Resources.Resources.user1
+        Me.UsersBT.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
+        Me.UsersBT.Name = "UsersBT"
+        Me.UsersBT.Size = New System.Drawing.Size(55, 55)
+        Me.UsersBT.Text = "Users"
+        Me.UsersBT.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
+        Me.UsersBT.ToolTipText = "Users Edition"
+        '
+        'ControlsBT
+        '
+        Me.ControlsBT.Enabled = False
+        Me.ControlsBT.Image = Global.PPS.My.Resources.Resources.ok
+        Me.ControlsBT.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
+        Me.ControlsBT.Name = "ControlsBT"
+        Me.ControlsBT.Size = New System.Drawing.Size(73, 55)
+        Me.ControlsBT.Text = "Controls"
+        Me.ControlsBT.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
+        Me.ControlsBT.ToolTipText = "Controls Edition  (All changes applied will be available for all users)"
+        '
+        'CategoriesBT
+        '
+        Me.CategoriesBT.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.EntitiesFiltersBT, Me.ClientsFiltersBT, Me.ProductsFiltersBT, Me.AdjustmentsFiltersBT})
+        Me.CategoriesBT.Image = Global.PPS.My.Resources.Resources.filter_and_sort
+        Me.CategoriesBT.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
+        Me.CategoriesBT.Name = "CategoriesBT"
+        Me.CategoriesBT.Size = New System.Drawing.Size(86, 55)
+        Me.CategoriesBT.Text = "Categories"
+        Me.CategoriesBT.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
+        Me.CategoriesBT.ToolTipText = "Entities, Clients, Products and Adjustments Categories Edition  (All changes appl" & _
+    "ied will be available for all users)"
+        '
+        'EntitiesFiltersBT
+        '
+        Me.EntitiesFiltersBT.Name = "EntitiesFiltersBT"
+        Me.EntitiesFiltersBT.Size = New System.Drawing.Size(155, 24)
+        Me.EntitiesFiltersBT.Text = "Entities"
+        '
+        'ClientsFiltersBT
+        '
+        Me.ClientsFiltersBT.Name = "ClientsFiltersBT"
+        Me.ClientsFiltersBT.Size = New System.Drawing.Size(155, 24)
+        Me.ClientsFiltersBT.Text = "Clients"
+        '
+        'ProductsFiltersBT
+        '
+        Me.ProductsFiltersBT.Name = "ProductsFiltersBT"
+        Me.ProductsFiltersBT.Size = New System.Drawing.Size(155, 24)
+        Me.ProductsFiltersBT.Text = "Products"
+        '
+        'AdjustmentsFiltersBT
+        '
+        Me.AdjustmentsFiltersBT.Name = "AdjustmentsFiltersBT"
+        Me.AdjustmentsFiltersBT.Size = New System.Drawing.Size(155, 24)
+        Me.AdjustmentsFiltersBT.Text = "Adjustments"
         '
         'Panel1
         '
@@ -60,161 +196,14 @@ Partial Class PlatformMGTGeneralUI
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Panel1.Location = New System.Drawing.Point(0, 83)
         Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(674, 387)
+        Me.Panel1.Size = New System.Drawing.Size(1009, 432)
         Me.Panel1.TabIndex = 1
-        '
-        'FinancialsToolStripMenuItem
-        '
-        Me.FinancialsToolStripMenuItem.CheckOnClick = True
-        Me.FinancialsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.FinancialsAndOperationalItemsToolStripMenuItem, Me.AdjustmentsToolStripMenuItem})
-        Me.FinancialsToolStripMenuItem.Image = Global.PPS.My.Resources.Resources.registry1
-        Me.FinancialsToolStripMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
-        Me.FinancialsToolStripMenuItem.Name = "FinancialsToolStripMenuItem"
-        Me.FinancialsToolStripMenuItem.Size = New System.Drawing.Size(71, 51)
-        Me.FinancialsToolStripMenuItem.Text = "Financials"
-        Me.FinancialsToolStripMenuItem.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
-        '
-        'FinancialsAndOperationalItemsToolStripMenuItem
-        '
-        Me.FinancialsAndOperationalItemsToolStripMenuItem.Image = Global.PPS.My.Resources.Resources.registry1
-        Me.FinancialsAndOperationalItemsToolStripMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
-        Me.FinancialsAndOperationalItemsToolStripMenuItem.Name = "FinancialsAndOperationalItemsToolStripMenuItem"
-        Me.FinancialsAndOperationalItemsToolStripMenuItem.Size = New System.Drawing.Size(262, 38)
-        Me.FinancialsAndOperationalItemsToolStripMenuItem.Text = "Financials and Operational Items"
-        '
-        'AdjustmentsToolStripMenuItem
-        '
-        Me.AdjustmentsToolStripMenuItem.Image = Global.PPS.My.Resources.Resources.elements1
-        Me.AdjustmentsToolStripMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
-        Me.AdjustmentsToolStripMenuItem.Name = "AdjustmentsToolStripMenuItem"
-        Me.AdjustmentsToolStripMenuItem.Size = New System.Drawing.Size(262, 38)
-        Me.AdjustmentsToolStripMenuItem.Text = "Adjustments"
-        '
-        'OrganizationToolStripMenuItem
-        '
-        Me.OrganizationToolStripMenuItem.CheckOnClick = True
-        Me.OrganizationToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.OrganizationToolStripMenuItem1, Me.OrganizationCategoriesToolStripMenuItem})
-        Me.OrganizationToolStripMenuItem.Image = Global.PPS.My.Resources.Resources.element_branch21
-        Me.OrganizationToolStripMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
-        Me.OrganizationToolStripMenuItem.Name = "OrganizationToolStripMenuItem"
-        Me.OrganizationToolStripMenuItem.Size = New System.Drawing.Size(87, 51)
-        Me.OrganizationToolStripMenuItem.Text = "Organization"
-        Me.OrganizationToolStripMenuItem.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
-        '
-        'OrganizationToolStripMenuItem1
-        '
-        Me.OrganizationToolStripMenuItem1.Image = Global.PPS.My.Resources.Resources.element_branch21
-        Me.OrganizationToolStripMenuItem1.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
-        Me.OrganizationToolStripMenuItem1.Name = "OrganizationToolStripMenuItem1"
-        Me.OrganizationToolStripMenuItem1.Size = New System.Drawing.Size(217, 38)
-        Me.OrganizationToolStripMenuItem1.Text = "Organization"
-        '
-        'OrganizationCategoriesToolStripMenuItem
-        '
-        Me.OrganizationCategoriesToolStripMenuItem.Image = Global.PPS.My.Resources.Resources.elements1
-        Me.OrganizationCategoriesToolStripMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
-        Me.OrganizationCategoriesToolStripMenuItem.Name = "OrganizationCategoriesToolStripMenuItem"
-        Me.OrganizationCategoriesToolStripMenuItem.Size = New System.Drawing.Size(217, 38)
-        Me.OrganizationCategoriesToolStripMenuItem.Text = "Organization Categories"
-        '
-        'ClientsToolStripMenuItem
-        '
-        Me.ClientsToolStripMenuItem.CheckOnClick = True
-        Me.ClientsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ClientsToolStripMenuItem1, Me.ClientsCategoriesToolStripMenuItem})
-        Me.ClientsToolStripMenuItem.Image = Global.PPS.My.Resources.Resources.users_relation21
-        Me.ClientsToolStripMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
-        Me.ClientsToolStripMenuItem.Name = "ClientsToolStripMenuItem"
-        Me.ClientsToolStripMenuItem.Size = New System.Drawing.Size(55, 51)
-        Me.ClientsToolStripMenuItem.Text = "Clients"
-        Me.ClientsToolStripMenuItem.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
-        '
-        'ClientsToolStripMenuItem1
-        '
-        Me.ClientsToolStripMenuItem1.Image = Global.PPS.My.Resources.Resources.users_relation21
-        Me.ClientsToolStripMenuItem1.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
-        Me.ClientsToolStripMenuItem1.Name = "ClientsToolStripMenuItem1"
-        Me.ClientsToolStripMenuItem1.Size = New System.Drawing.Size(185, 38)
-        Me.ClientsToolStripMenuItem1.Text = "Clients"
-        '
-        'ClientsCategoriesToolStripMenuItem
-        '
-        Me.ClientsCategoriesToolStripMenuItem.Image = Global.PPS.My.Resources.Resources.elements1
-        Me.ClientsCategoriesToolStripMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
-        Me.ClientsCategoriesToolStripMenuItem.Name = "ClientsCategoriesToolStripMenuItem"
-        Me.ClientsCategoriesToolStripMenuItem.Size = New System.Drawing.Size(185, 38)
-        Me.ClientsCategoriesToolStripMenuItem.Text = "Clients Categories"
-        '
-        'ProductsToolStripMenuItem
-        '
-        Me.ProductsToolStripMenuItem.CheckOnClick = True
-        Me.ProductsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ProductsToolStripMenuItem1, Me.ProductsCategoriesToolStripMenuItem})
-        Me.ProductsToolStripMenuItem.Image = Global.PPS.My.Resources.Resources.barcode
-        Me.ProductsToolStripMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
-        Me.ProductsToolStripMenuItem.Name = "ProductsToolStripMenuItem"
-        Me.ProductsToolStripMenuItem.Size = New System.Drawing.Size(66, 51)
-        Me.ProductsToolStripMenuItem.Text = "Products"
-        Me.ProductsToolStripMenuItem.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
-        '
-        'ProductsToolStripMenuItem1
-        '
-        Me.ProductsToolStripMenuItem1.Image = Global.PPS.My.Resources.Resources.barcode
-        Me.ProductsToolStripMenuItem1.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
-        Me.ProductsToolStripMenuItem1.Name = "ProductsToolStripMenuItem1"
-        Me.ProductsToolStripMenuItem1.Size = New System.Drawing.Size(196, 38)
-        Me.ProductsToolStripMenuItem1.Text = "Products"
-        '
-        'ProductsCategoriesToolStripMenuItem
-        '
-        Me.ProductsCategoriesToolStripMenuItem.Image = Global.PPS.My.Resources.Resources.elements1
-        Me.ProductsCategoriesToolStripMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
-        Me.ProductsCategoriesToolStripMenuItem.Name = "ProductsCategoriesToolStripMenuItem"
-        Me.ProductsCategoriesToolStripMenuItem.Size = New System.Drawing.Size(196, 38)
-        Me.ProductsCategoriesToolStripMenuItem.Text = "Products Categories"
-        '
-        'VersionsToolStripMenuItem
-        '
-        Me.VersionsToolStripMenuItem.CheckOnClick = True
-        Me.VersionsToolStripMenuItem.Image = Global.PPS.My.Resources.Resources.elements31
-        Me.VersionsToolStripMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
-        Me.VersionsToolStripMenuItem.Name = "VersionsToolStripMenuItem"
-        Me.VersionsToolStripMenuItem.Size = New System.Drawing.Size(63, 51)
-        Me.VersionsToolStripMenuItem.Text = "Versions"
-        Me.VersionsToolStripMenuItem.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
-        '
-        'CurrenciesToolStripMenuItem
-        '
-        Me.CurrenciesToolStripMenuItem.CheckOnClick = True
-        Me.CurrenciesToolStripMenuItem.Image = Global.PPS.My.Resources.Resources.symbol_dollar_euro
-        Me.CurrenciesToolStripMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
-        Me.CurrenciesToolStripMenuItem.Name = "CurrenciesToolStripMenuItem"
-        Me.CurrenciesToolStripMenuItem.Size = New System.Drawing.Size(75, 51)
-        Me.CurrenciesToolStripMenuItem.Text = "Currencies"
-        Me.CurrenciesToolStripMenuItem.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
-        '
-        'UsersToolStripMenuItem
-        '
-        Me.UsersToolStripMenuItem.CheckOnClick = True
-        Me.UsersToolStripMenuItem.Image = Global.PPS.My.Resources.Resources.user
-        Me.UsersToolStripMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
-        Me.UsersToolStripMenuItem.Name = "UsersToolStripMenuItem"
-        Me.UsersToolStripMenuItem.Size = New System.Drawing.Size(47, 51)
-        Me.UsersToolStripMenuItem.Text = "Users"
-        Me.UsersToolStripMenuItem.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
-        '
-        'ControlsToolStripMenuItem
-        '
-        Me.ControlsToolStripMenuItem.Image = Global.PPS.My.Resources.Resources.checkbox2
-        Me.ControlsToolStripMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
-        Me.ControlsToolStripMenuItem.Name = "ControlsToolStripMenuItem"
-        Me.ControlsToolStripMenuItem.Size = New System.Drawing.Size(64, 51)
-        Me.ControlsToolStripMenuItem.Text = "Controls"
-        Me.ControlsToolStripMenuItem.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
         '
         'PlatformMGTGeneralUI
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(674, 470)
+        Me.ClientSize = New System.Drawing.Size(1009, 515)
         Me.Controls.Add(Me.Panel1)
         Me.Controls.Add(Me.MenuStrip1)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
@@ -228,21 +217,19 @@ Partial Class PlatformMGTGeneralUI
 
     End Sub
     Friend WithEvents MenuStrip1 As System.Windows.Forms.MenuStrip
-    Friend WithEvents FinancialsToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents AdjustmentsToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents OrganizationToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents OrganizationCategoriesToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents ClientsToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents ClientsCategoriesToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents ProductsToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents ProductsCategoriesToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents VersionsToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents CurrenciesToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents UsersToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents AccountsBT As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents EntitiesBT As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ClientsBT As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ProductsBT As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents VersionsBT As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents CurrenciesBT As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents UsersBT As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents Panel1 As System.Windows.Forms.Panel
-    Friend WithEvents FinancialsAndOperationalItemsToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents OrganizationToolStripMenuItem1 As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents ClientsToolStripMenuItem1 As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents ProductsToolStripMenuItem1 As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents ControlsToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ControlsBT As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents AdjustmentsBT As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents CategoriesBT As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ClientsFiltersBT As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents EntitiesFiltersBT As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ProductsFiltersBT As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents AdjustmentsFiltersBT As System.Windows.Forms.ToolStripMenuItem
 End Class

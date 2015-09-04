@@ -36,7 +36,6 @@ Friend Class EntitiesController
     Private PlatformMGTUI As PlatformMGTGeneralUI
 
     ' Variables
-    Friend entitiesFilterValuesNameIdDict As Hashtable
     Private positionsDictionary As New Dictionary(Of Int32, Double)
 
 #End Region
@@ -47,7 +46,7 @@ Friend Class EntitiesController
     Friend Sub New()
 
         LoadInstanceVariables()
-        View = New EntitiesControl(Me, entitiesTV, entitiesFilterValuesTV, entitiesFilterValuesNameIdDict, entitiesFilterTV)
+        View = New EntitiesControl(Me, entitiesTV, entitiesFilterValuesTV, entitiesFilterTV)
         NewEntityView = New NewEntityUI(Me, entitiesTV, GlobalVariables.Currencies.currencies_hash)
 
         ' Entities CRUD Events
@@ -67,7 +66,6 @@ Friend Class EntitiesController
         GlobalVariables.Entities.LoadEntitiesTV(entitiesTV)
         GlobalVariables.Filters.LoadFiltersTV(entitiesFilterTV, GlobalEnums.AnalysisAxis.ENTITIES)
         AxisFilter.LoadFvTv(entitiesFilterValuesTV, GlobalEnums.AnalysisAxis.ENTITIES)
-        entitiesFilterValuesNameIdDict = GlobalVariables.Filters.GetFiltersDictionary(GlobalEnums.AnalysisAxis.ENTITIES, NAME_VARIABLE, ID_VARIABLE)
 
     End Sub
 
@@ -93,14 +91,7 @@ Friend Class EntitiesController
 
     Public Sub close()
 
-        View.closeControl()
-
-    End Sub
-
-    Friend Sub sendCloseOrder()
-
         View.Dispose()
-        PlatformMGTUI.displayControl()
 
     End Sub
 

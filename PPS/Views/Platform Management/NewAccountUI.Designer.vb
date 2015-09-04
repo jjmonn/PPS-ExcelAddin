@@ -25,14 +25,10 @@ Partial Class NewAccountUI
         Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(NewAccountUI))
         Me.Panel1 = New System.Windows.Forms.Panel()
-        Me.Label9 = New System.Windows.Forms.Label()
-        Me.accountsTVPanel = New System.Windows.Forms.Panel()
-        Me.selectParentBT = New System.Windows.Forms.Button()
         Me.ButtonsIL = New System.Windows.Forms.ImageList(Me.components)
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
         Me.Label4 = New System.Windows.Forms.Label()
         Me.Label2 = New System.Windows.Forms.Label()
-        Me.parentTB = New System.Windows.Forms.TextBox()
         Me.nameTB = New System.Windows.Forms.TextBox()
         Me.formulaCB = New System.Windows.Forms.ComboBox()
         Me.TypeCB = New System.Windows.Forms.ComboBox()
@@ -51,6 +47,7 @@ Partial Class NewAccountUI
         Me.CreateAccountBT = New System.Windows.Forms.Button()
         Me.ButtonIcons = New System.Windows.Forms.ImageList(Me.components)
         Me.accountsIL = New System.Windows.Forms.ImageList(Me.components)
+        Me.ParentAccountTreeComboBox = New VIBlend.WinForms.Controls.vTreeViewBox()
         Me.Panel1.SuspendLayout()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.GroupBox1.SuspendLayout()
@@ -60,9 +57,6 @@ Partial Class NewAccountUI
         'Panel1
         '
         Me.Panel1.BackColor = System.Drawing.SystemColors.Control
-        Me.Panel1.Controls.Add(Me.Label9)
-        Me.Panel1.Controls.Add(Me.accountsTVPanel)
-        Me.Panel1.Controls.Add(Me.selectParentBT)
         Me.Panel1.Controls.Add(Me.TableLayoutPanel1)
         Me.Panel1.Controls.Add(Me.Label1)
         Me.Panel1.Controls.Add(Me.CancelBT)
@@ -70,42 +64,8 @@ Partial Class NewAccountUI
         Me.Panel1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Panel1.Location = New System.Drawing.Point(0, 0)
         Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(1084, 442)
+        Me.Panel1.Size = New System.Drawing.Size(688, 376)
         Me.Panel1.TabIndex = 20
-        '
-        'Label9
-        '
-        Me.Label9.AutoSize = True
-        Me.Label9.ForeColor = System.Drawing.SystemColors.MenuText
-        Me.Label9.Location = New System.Drawing.Point(731, 42)
-        Me.Label9.Name = "Label9"
-        Me.Label9.Size = New System.Drawing.Size(89, 15)
-        Me.Label9.TabIndex = 26
-        Me.Label9.Text = "Parent Account"
-        '
-        'accountsTVPanel
-        '
-        Me.accountsTVPanel.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.accountsTVPanel.Location = New System.Drawing.Point(733, 61)
-        Me.accountsTVPanel.Name = "accountsTVPanel"
-        Me.accountsTVPanel.Size = New System.Drawing.Size(339, 369)
-        Me.accountsTVPanel.TabIndex = 25
-        '
-        'selectParentBT
-        '
-        Me.selectParentBT.FlatAppearance.BorderColor = System.Drawing.Color.Purple
-        Me.selectParentBT.FlatAppearance.BorderSize = 0
-        Me.selectParentBT.FlatAppearance.MouseDownBackColor = System.Drawing.SystemColors.Control
-        Me.selectParentBT.FlatAppearance.MouseOverBackColor = System.Drawing.SystemColors.Control
-        Me.selectParentBT.ImageKey = "favicon(7).ico"
-        Me.selectParentBT.ImageList = Me.ButtonsIL
-        Me.selectParentBT.Location = New System.Drawing.Point(668, 62)
-        Me.selectParentBT.Name = "selectParentBT"
-        Me.selectParentBT.Size = New System.Drawing.Size(22, 22)
-        Me.selectParentBT.TabIndex = 24
-        Me.selectParentBT.UseVisualStyleBackColor = True
         '
         'ButtonsIL
         '
@@ -123,7 +83,6 @@ Partial Class NewAccountUI
         Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 65.24487!))
         Me.TableLayoutPanel1.Controls.Add(Me.Label4, 0, 1)
         Me.TableLayoutPanel1.Controls.Add(Me.Label2, 0, 0)
-        Me.TableLayoutPanel1.Controls.Add(Me.parentTB, 1, 0)
         Me.TableLayoutPanel1.Controls.Add(Me.nameTB, 1, 1)
         Me.TableLayoutPanel1.Controls.Add(Me.formulaCB, 1, 2)
         Me.TableLayoutPanel1.Controls.Add(Me.TypeCB, 1, 3)
@@ -133,23 +92,24 @@ Partial Class NewAccountUI
         Me.TableLayoutPanel1.Controls.Add(Me.Label7, 0, 4)
         Me.TableLayoutPanel1.Controls.Add(Me.GroupBox2, 1, 5)
         Me.TableLayoutPanel1.Controls.Add(Me.Label8, 0, 5)
+        Me.TableLayoutPanel1.Controls.Add(Me.ParentAccountTreeComboBox, 1, 0)
         Me.TableLayoutPanel1.Location = New System.Drawing.Point(28, 61)
         Me.TableLayoutPanel1.Name = "TableLayoutPanel1"
         Me.TableLayoutPanel1.RowCount = 7
-        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 14.28571!))
-        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 14.28572!))
-        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 14.28572!))
-        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 14.28572!))
-        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 14.28572!))
-        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 14.28572!))
-        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 14.28572!))
+        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
+        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
+        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
+        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
+        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
+        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
+        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.TableLayoutPanel1.Size = New System.Drawing.Size(633, 239)
         Me.TableLayoutPanel1.TabIndex = 23
         '
         'Label4
         '
         Me.Label4.AutoSize = True
-        Me.Label4.Location = New System.Drawing.Point(3, 34)
+        Me.Label4.Location = New System.Drawing.Point(3, 30)
         Me.Label4.Name = "Label4"
         Me.Label4.Size = New System.Drawing.Size(96, 15)
         Me.Label4.TabIndex = 2
@@ -164,19 +124,10 @@ Partial Class NewAccountUI
         Me.Label2.TabIndex = 0
         Me.Label2.Text = "Parent Account"
         '
-        'parentTB
-        '
-        Me.parentTB.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.parentTB.Enabled = False
-        Me.parentTB.Location = New System.Drawing.Point(222, 3)
-        Me.parentTB.Name = "parentTB"
-        Me.parentTB.Size = New System.Drawing.Size(408, 20)
-        Me.parentTB.TabIndex = 5
-        '
         'nameTB
         '
         Me.nameTB.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.nameTB.Location = New System.Drawing.Point(222, 37)
+        Me.nameTB.Location = New System.Drawing.Point(222, 33)
         Me.nameTB.Name = "nameTB"
         Me.nameTB.Size = New System.Drawing.Size(408, 20)
         Me.nameTB.TabIndex = 6
@@ -185,7 +136,7 @@ Partial Class NewAccountUI
         '
         Me.formulaCB.Dock = System.Windows.Forms.DockStyle.Fill
         Me.formulaCB.FormattingEnabled = True
-        Me.formulaCB.Location = New System.Drawing.Point(222, 71)
+        Me.formulaCB.Location = New System.Drawing.Point(222, 63)
         Me.formulaCB.Name = "formulaCB"
         Me.formulaCB.Size = New System.Drawing.Size(408, 21)
         Me.formulaCB.TabIndex = 7
@@ -194,7 +145,7 @@ Partial Class NewAccountUI
         '
         Me.TypeCB.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TypeCB.FormattingEnabled = True
-        Me.TypeCB.Location = New System.Drawing.Point(222, 105)
+        Me.TypeCB.Location = New System.Drawing.Point(222, 93)
         Me.TypeCB.Name = "TypeCB"
         Me.TypeCB.Size = New System.Drawing.Size(408, 21)
         Me.TypeCB.TabIndex = 9
@@ -202,7 +153,7 @@ Partial Class NewAccountUI
         'Label6
         '
         Me.Label6.AutoSize = True
-        Me.Label6.Location = New System.Drawing.Point(3, 68)
+        Me.Label6.Location = New System.Drawing.Point(3, 60)
         Me.Label6.Name = "Label6"
         Me.Label6.Size = New System.Drawing.Size(86, 15)
         Me.Label6.TabIndex = 4
@@ -211,7 +162,7 @@ Partial Class NewAccountUI
         'Label3
         '
         Me.Label3.AutoSize = True
-        Me.Label3.Location = New System.Drawing.Point(3, 102)
+        Me.Label3.Location = New System.Drawing.Point(3, 90)
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(101, 15)
         Me.Label3.TabIndex = 1
@@ -221,10 +172,10 @@ Partial Class NewAccountUI
         '
         Me.GroupBox1.Controls.Add(Me.recompute_RB)
         Me.GroupBox1.Controls.Add(Me.aggregation_RB)
-        Me.GroupBox1.Location = New System.Drawing.Point(219, 136)
+        Me.GroupBox1.Location = New System.Drawing.Point(219, 120)
         Me.GroupBox1.Margin = New System.Windows.Forms.Padding(0)
         Me.GroupBox1.Name = "GroupBox1"
-        Me.GroupBox1.Size = New System.Drawing.Size(414, 34)
+        Me.GroupBox1.Size = New System.Drawing.Size(414, 30)
         Me.GroupBox1.TabIndex = 12
         Me.GroupBox1.TabStop = False
         '
@@ -242,7 +193,7 @@ Partial Class NewAccountUI
         'aggregation_RB
         '
         Me.aggregation_RB.AutoSize = True
-        Me.aggregation_RB.Location = New System.Drawing.Point(21, 11)
+        Me.aggregation_RB.Location = New System.Drawing.Point(39, 11)
         Me.aggregation_RB.Name = "aggregation_RB"
         Me.aggregation_RB.Size = New System.Drawing.Size(91, 19)
         Me.aggregation_RB.TabIndex = 22
@@ -253,7 +204,7 @@ Partial Class NewAccountUI
         'Label7
         '
         Me.Label7.AutoSize = True
-        Me.Label7.Location = New System.Drawing.Point(3, 136)
+        Me.Label7.Location = New System.Drawing.Point(3, 120)
         Me.Label7.Name = "Label7"
         Me.Label7.Size = New System.Drawing.Size(121, 15)
         Me.Label7.TabIndex = 10
@@ -263,10 +214,10 @@ Partial Class NewAccountUI
         '
         Me.GroupBox2.Controls.Add(Me.bs_item_RB)
         Me.GroupBox2.Controls.Add(Me.flux_RB)
-        Me.GroupBox2.Location = New System.Drawing.Point(219, 170)
+        Me.GroupBox2.Location = New System.Drawing.Point(219, 150)
         Me.GroupBox2.Margin = New System.Windows.Forms.Padding(0)
         Me.GroupBox2.Name = "GroupBox2"
-        Me.GroupBox2.Size = New System.Drawing.Size(414, 34)
+        Me.GroupBox2.Size = New System.Drawing.Size(414, 30)
         Me.GroupBox2.TabIndex = 13
         Me.GroupBox2.TabStop = False
         '
@@ -295,7 +246,7 @@ Partial Class NewAccountUI
         'Label8
         '
         Me.Label8.AutoSize = True
-        Me.Label8.Location = New System.Drawing.Point(3, 170)
+        Me.Label8.Location = New System.Drawing.Point(3, 150)
         Me.Label8.Name = "Label8"
         Me.Label8.Size = New System.Drawing.Size(119, 15)
         Me.Label8.TabIndex = 11
@@ -360,11 +311,28 @@ Partial Class NewAccountUI
         Me.accountsIL.Images.SetKeyName(8, "imageres_190.ico")
         Me.accountsIL.Images.SetKeyName(9, "imageres_81.ico")
         '
+        'ParentAccountTreeComboBox
+        '
+        Me.ParentAccountTreeComboBox.BackColor = System.Drawing.Color.White
+        Me.ParentAccountTreeComboBox.BorderColor = System.Drawing.Color.Black
+        Me.ParentAccountTreeComboBox.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.ParentAccountTreeComboBox.DropDownMaximumSize = New System.Drawing.Size(1000, 1000)
+        Me.ParentAccountTreeComboBox.DropDownMinimumSize = New System.Drawing.Size(10, 10)
+        Me.ParentAccountTreeComboBox.DropDownResizeDirection = VIBlend.WinForms.Controls.SizingDirection.Both
+        Me.ParentAccountTreeComboBox.Location = New System.Drawing.Point(222, 3)
+        Me.ParentAccountTreeComboBox.Name = "ParentAccountTreeComboBox"
+        Me.ParentAccountTreeComboBox.Size = New System.Drawing.Size(408, 24)
+        Me.ParentAccountTreeComboBox.TabIndex = 14
+        Me.ParentAccountTreeComboBox.Text = "Select Parent Account"
+        Me.ParentAccountTreeComboBox.UseThemeBackColor = False
+        Me.ParentAccountTreeComboBox.UseThemeDropDownArrowColor = True
+        Me.ParentAccountTreeComboBox.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
+        '
         'NewAccountUI
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(1084, 442)
+        Me.ClientSize = New System.Drawing.Size(688, 376)
         Me.Controls.Add(Me.Panel1)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Name = "NewAccountUI"
@@ -391,13 +359,10 @@ Partial Class NewAccountUI
     Friend WithEvents Label4 As System.Windows.Forms.Label
     Friend WithEvents Label2 As System.Windows.Forms.Label
     Friend WithEvents Label3 As System.Windows.Forms.Label
-    Friend WithEvents parentTB As System.Windows.Forms.TextBox
     Friend WithEvents nameTB As System.Windows.Forms.TextBox
     Friend WithEvents formulaCB As System.Windows.Forms.ComboBox
     Friend WithEvents TypeCB As System.Windows.Forms.ComboBox
-    Friend WithEvents selectParentBT As System.Windows.Forms.Button
     Friend WithEvents accountsIL As System.Windows.Forms.ImageList
-    Friend WithEvents accountsTVPanel As System.Windows.Forms.Panel
     Friend WithEvents Label8 As System.Windows.Forms.Label
     Friend WithEvents Label7 As System.Windows.Forms.Label
     Friend WithEvents GroupBox2 As System.Windows.Forms.GroupBox
@@ -406,5 +371,5 @@ Partial Class NewAccountUI
     Friend WithEvents aggregation_RB As System.Windows.Forms.RadioButton
     Friend WithEvents bs_item_RB As System.Windows.Forms.RadioButton
     Friend WithEvents flux_RB As System.Windows.Forms.RadioButton
-    Friend WithEvents Label9 As System.Windows.Forms.Label
+    Friend WithEvents ParentAccountTreeComboBox As VIBlend.WinForms.Controls.vTreeViewBox
 End Class

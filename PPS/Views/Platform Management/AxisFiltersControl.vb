@@ -10,7 +10,7 @@ Imports System.Windows.Forms
 Imports System.Collections.Generic
 
 
-Friend Class AnalysisCategoriesControl
+Friend Class AxisFiltersControl
 
 
 #Region "Instance Variables"
@@ -27,7 +27,7 @@ Friend Class AnalysisCategoriesControl
 
 #Region "Initialization"
 
-    Protected Friend Sub New(ByRef input_controller As AxisFiltersController, _
+    Friend Sub New(ByRef input_controller As AxisFiltersController, _
                              ByRef input_categories_tv As TreeView)
 
         ' This call is required by the designer.
@@ -46,10 +46,9 @@ Friend Class AnalysisCategoriesControl
 
     End Sub
 
-    Protected Friend Sub closeControl()
+    Friend Sub closeControl()
 
-        CP = New CircularProgressUI(System.Drawing.Color.Yellow, "Saving")
-        BackgroundWorker1.RunWorkerAsync()
+        Controller.SendNewPositionsToModel()
 
     End Sub
 
@@ -191,37 +190,6 @@ Friend Class AnalysisCategoriesControl
 
     End Function
 
-
-#End Region
-
-
-#Region "Background Worker 1"
-
-    Private Sub BackgroundWorker1_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles BackgroundWorker1.DoWork
-
-        Controller.SendNewPositionsToModel()
-
-    End Sub
-
-    Private Sub BackgroundWorker1_RunWorkerCompleted(sender As Object, e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles BackgroundWorker1.RunWorkerCompleted
-
-        AfterClosingAttemp_ThreadSafe()
-
-    End Sub
-
-    Delegate Sub AfterClosing_Delegate()
-
-    Private Sub AfterClosingAttemp_ThreadSafe()
-
-        If InvokeRequired Then
-            Dim MyDelegate As New AfterClosing_Delegate(AddressOf AfterClosingAttemp_ThreadSafe)
-            Me.Invoke(MyDelegate, New Object() {})
-        Else
-            CP.Dispose()
-            Controller.sendCloseOrder()
-        End If
-
-    End Sub
 
 #End Region
 

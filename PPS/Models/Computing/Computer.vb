@@ -96,7 +96,7 @@ Friend Class Computer
                 packet.WriteUint32(GetTotalFiltersDictionariesValues(filters))          ' number of filters_values
                 For Each Filter_id In filters.Keys
                     For Each filter_value_id In filters(Filter_id)
-                        packet.WriteUint32(GlobalVariables.Filters.filters_hash(Filter_id)(FILTER_AXIS_ID_VARIABLE))              ' axis_id 
+                        packet.WriteUint32(GlobalVariables.Filters.filters_hash(Filter_id)(AXIS_ID_VARIABLE))              ' axis_id 
                         packet.WriteUint32(Filter_id)                                   ' filter_id
                         packet.WriteUint32(filter_value_id)                             ' filter_value_id
                     Next
@@ -129,7 +129,7 @@ Friend Class Computer
                         packet.WriteUint8(True)
                     Else
                         ' crash if children filter => to be fixed - priority high
-                        axis_id = GlobalVariables.Filters.filters_hash(GetItemID(item))(FILTER_AXIS_ID_VARIABLE)
+                        axis_id = GlobalVariables.Filters.filters_hash(GetItemID(item))(AXIS_ID_VARIABLE)
                         packet.WriteInt32(axis_id)
                         packet.WriteUint8(False)
                         packet.WriteUint32(GetItemID(item))

@@ -26,7 +26,7 @@ Friend Class AxisFiltersController
 #Region "Instance Variables"
 
     ' Objects
-    Protected View As AnalysisCategoriesControl
+    Protected View As AxisFiltersControl
     Private filtersNodes As New TreeNode
     Private FvTv As New TreeView
     Private PlatformMGTUI As PlatformMGTGeneralUI
@@ -45,7 +45,7 @@ Friend Class AxisFiltersController
         ' apply a filter on axis_id in Filters !!! 
         ' priority normal !
 
-        View = New AnalysisCategoriesControl(Me, FvTv)
+        View = New AxisFiltersControl(Me, FvTv)
         AxisFilter.LoadFvTv(FvTv, filtersNodes, axis_id)
 
         filters_names_list = TreeViewsUtilities.GetNodesTextsList(FvTv)
@@ -66,13 +66,7 @@ Friend Class AxisFiltersController
     Public Sub close()
 
         View.closeControl()
-
-    End Sub
-
-    Friend Sub sendCloseOrder()
-
         View.Dispose()
-        PlatformMGTUI.displayControl()
 
     End Sub
 

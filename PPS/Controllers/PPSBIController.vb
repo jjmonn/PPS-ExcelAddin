@@ -50,7 +50,7 @@ Friend Class PPSBIController
         AccountsNameKeyDictionary = GlobalVariables.Accounts.GetAccountsDictionary(NAME_VARIABLE, ID_VARIABLE)
         EntitiesNameKeyDictionary = GlobalVariables.Entities.GetEntitiesDictionary(NAME_VARIABLE, ID_VARIABLE)
         EntitiesCategoriesNameKeyDictionary = GlobalVariables.FiltersValues.GetFiltervaluesDictionary(GlobalEnums.AnalysisAxis.ENTITIES, NAME_VARIABLE, ID_VARIABLE)
-        Adjustments_name_id_dic = GlobalVariables.Adjustments.GetAdjustmentsDictionary(NAME_VARIABLE, ID_VARIABLE)
+        Adjustments_name_id_dic = GlobalVariables.Adjustments.GetAxisDictionary(NAME_VARIABLE, ID_VARIABLE)
         emptyCellFlag = False
         aggregation_computed_accounts_types.Add(GlobalEnums.FormulaTypes.FORMULA)
         aggregation_computed_accounts_types.Add(GlobalEnums.FormulaTypes.FIRST_PERIOD_INPUT)

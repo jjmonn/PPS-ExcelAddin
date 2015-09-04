@@ -145,7 +145,7 @@ Friend Class PPSBI_UI
     Private Sub InitializeAdjustmentsCB()
 
         AdjustmentCB.Items.Add("")
-        For Each adjustment_name As String In GlobalVariables.Adjustments.GetAdjustmentsNames()
+        For Each adjustment_name As String In GlobalVariables.Adjustments.GetAxisNameList()
             AdjustmentCB.Items.Add(adjustment_name)
         Next
 
