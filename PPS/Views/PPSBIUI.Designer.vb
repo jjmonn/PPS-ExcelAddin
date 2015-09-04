@@ -69,7 +69,7 @@ Partial Class PPSBI_UI
         Me.entitiesTB.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.entitiesTB.Location = New System.Drawing.Point(164, 3)
         Me.entitiesTB.Name = "entitiesTB"
-        Me.entitiesTB.Size = New System.Drawing.Size(289, 20)
+        Me.entitiesTB.Size = New System.Drawing.Size(289, 21)
         Me.entitiesTB.TabIndex = 0
         '
         'entityLabel
@@ -78,7 +78,7 @@ Partial Class PPSBI_UI
         Me.entityLabel.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.entityLabel.Location = New System.Drawing.Point(3, 0)
         Me.entityLabel.Name = "entityLabel"
-        Me.entityLabel.Size = New System.Drawing.Size(33, 13)
+        Me.entityLabel.Size = New System.Drawing.Size(36, 15)
         Me.entityLabel.TabIndex = 1
         Me.entityLabel.Text = "Entity"
         '
@@ -88,7 +88,7 @@ Partial Class PPSBI_UI
         Me.accountLabel.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.accountLabel.Location = New System.Drawing.Point(3, 45)
         Me.accountLabel.Name = "accountLabel"
-        Me.accountLabel.Size = New System.Drawing.Size(47, 13)
+        Me.accountLabel.Size = New System.Drawing.Size(50, 15)
         Me.accountLabel.TabIndex = 3
         Me.accountLabel.Text = "Account"
         '
@@ -97,7 +97,7 @@ Partial Class PPSBI_UI
         Me.accountsTB.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.accountsTB.Location = New System.Drawing.Point(164, 48)
         Me.accountsTB.Name = "accountsTB"
-        Me.accountsTB.Size = New System.Drawing.Size(289, 20)
+        Me.accountsTB.Size = New System.Drawing.Size(289, 21)
         Me.accountsTB.TabIndex = 1
         '
         'Label3
@@ -106,7 +106,7 @@ Partial Class PPSBI_UI
         Me.Label3.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label3.Location = New System.Drawing.Point(3, 135)
         Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(37, 13)
+        Me.Label3.Size = New System.Drawing.Size(43, 15)
         Me.Label3.TabIndex = 6
         Me.Label3.Text = "Period"
         '
@@ -117,7 +117,7 @@ Partial Class PPSBI_UI
         Me.PeriodCB.FormattingEnabled = True
         Me.PeriodCB.Location = New System.Drawing.Point(164, 138)
         Me.PeriodCB.Name = "PeriodCB"
-        Me.PeriodCB.Size = New System.Drawing.Size(288, 21)
+        Me.PeriodCB.Size = New System.Drawing.Size(288, 23)
         Me.PeriodCB.TabIndex = 3
         '
         'CurrencyCB
@@ -127,7 +127,7 @@ Partial Class PPSBI_UI
         Me.CurrencyCB.FormattingEnabled = True
         Me.CurrencyCB.Location = New System.Drawing.Point(164, 183)
         Me.CurrencyCB.Name = "CurrencyCB"
-        Me.CurrencyCB.Size = New System.Drawing.Size(288, 21)
+        Me.CurrencyCB.Size = New System.Drawing.Size(288, 23)
         Me.CurrencyCB.TabIndex = 4
         '
         'Label4
@@ -136,7 +136,7 @@ Partial Class PPSBI_UI
         Me.Label4.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label4.Location = New System.Drawing.Point(3, 180)
         Me.Label4.Name = "Label4"
-        Me.Label4.Size = New System.Drawing.Size(49, 13)
+        Me.Label4.Size = New System.Drawing.Size(55, 15)
         Me.Label4.TabIndex = 8
         Me.Label4.Text = "Currency"
         '
@@ -191,7 +191,7 @@ Partial Class PPSBI_UI
         Me.Label1.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label1.Location = New System.Drawing.Point(3, 225)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(59, 13)
+        Me.Label1.Size = New System.Drawing.Size(68, 15)
         Me.Label1.TabIndex = 16
         Me.Label1.Text = "Adjustment"
         '
@@ -201,7 +201,7 @@ Partial Class PPSBI_UI
         Me.versionLabel.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.versionLabel.Location = New System.Drawing.Point(3, 90)
         Me.versionLabel.Name = "versionLabel"
-        Me.versionLabel.Size = New System.Drawing.Size(42, 13)
+        Me.versionLabel.Size = New System.Drawing.Size(48, 15)
         Me.versionLabel.TabIndex = 13
         Me.versionLabel.Text = "Version"
         '
@@ -254,7 +254,7 @@ Partial Class PPSBI_UI
         Me.versionsTB.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.versionsTB.Location = New System.Drawing.Point(164, 93)
         Me.versionsTB.Name = "versionsTB"
-        Me.versionsTB.Size = New System.Drawing.Size(289, 20)
+        Me.versionsTB.Size = New System.Drawing.Size(289, 21)
         Me.versionsTB.TabIndex = 2
         '
         'VersionSelectionBT
@@ -279,7 +279,7 @@ Partial Class PPSBI_UI
         Me.AdjustmentCB.FormattingEnabled = True
         Me.AdjustmentCB.Location = New System.Drawing.Point(164, 228)
         Me.AdjustmentCB.Name = "AdjustmentCB"
-        Me.AdjustmentCB.Size = New System.Drawing.Size(288, 21)
+        Me.AdjustmentCB.Size = New System.Drawing.Size(288, 23)
         Me.AdjustmentCB.TabIndex = 5
         '
         'validate_cmd

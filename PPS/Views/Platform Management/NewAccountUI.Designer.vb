@@ -25,7 +25,6 @@ Partial Class NewAccountUI
         Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(NewAccountUI))
         Me.Panel1 = New System.Windows.Forms.Panel()
-        Me.ButtonsIL = New System.Windows.Forms.ImageList(Me.components)
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
         Me.Label4 = New System.Windows.Forms.Label()
         Me.Label2 = New System.Windows.Forms.Label()
@@ -42,12 +41,13 @@ Partial Class NewAccountUI
         Me.bs_item_RB = New System.Windows.Forms.RadioButton()
         Me.flux_RB = New System.Windows.Forms.RadioButton()
         Me.Label8 = New System.Windows.Forms.Label()
+        Me.ParentAccountTreeComboBox = New VIBlend.WinForms.Controls.vTreeViewBox()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.CancelBT = New System.Windows.Forms.Button()
+        Me.ButtonsIL = New System.Windows.Forms.ImageList(Me.components)
         Me.CreateAccountBT = New System.Windows.Forms.Button()
         Me.ButtonIcons = New System.Windows.Forms.ImageList(Me.components)
         Me.accountsIL = New System.Windows.Forms.ImageList(Me.components)
-        Me.ParentAccountTreeComboBox = New VIBlend.WinForms.Controls.vTreeViewBox()
         Me.Panel1.SuspendLayout()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.GroupBox1.SuspendLayout()
@@ -66,15 +66,6 @@ Partial Class NewAccountUI
         Me.Panel1.Name = "Panel1"
         Me.Panel1.Size = New System.Drawing.Size(688, 376)
         Me.Panel1.TabIndex = 20
-        '
-        'ButtonsIL
-        '
-        Me.ButtonsIL.ImageStream = CType(resources.GetObject("ButtonsIL.ImageStream"), System.Windows.Forms.ImageListStreamer)
-        Me.ButtonsIL.TransparentColor = System.Drawing.Color.Transparent
-        Me.ButtonsIL.Images.SetKeyName(0, "delete-2-xxl.png")
-        Me.ButtonsIL.Images.SetKeyName(1, "favicon(97).ico")
-        Me.ButtonsIL.Images.SetKeyName(2, "favicon(76).ico")
-        Me.ButtonsIL.Images.SetKeyName(3, "favicon(7).ico")
         '
         'TableLayoutPanel1
         '
@@ -252,6 +243,23 @@ Partial Class NewAccountUI
         Me.Label8.TabIndex = 11
         Me.Label8.Text = "Currency Conversion"
         '
+        'ParentAccountTreeComboBox
+        '
+        Me.ParentAccountTreeComboBox.BackColor = System.Drawing.Color.White
+        Me.ParentAccountTreeComboBox.BorderColor = System.Drawing.Color.Black
+        Me.ParentAccountTreeComboBox.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.ParentAccountTreeComboBox.DropDownMaximumSize = New System.Drawing.Size(1000, 1000)
+        Me.ParentAccountTreeComboBox.DropDownMinimumSize = New System.Drawing.Size(10, 10)
+        Me.ParentAccountTreeComboBox.DropDownResizeDirection = VIBlend.WinForms.Controls.SizingDirection.Both
+        Me.ParentAccountTreeComboBox.Location = New System.Drawing.Point(222, 3)
+        Me.ParentAccountTreeComboBox.Name = "ParentAccountTreeComboBox"
+        Me.ParentAccountTreeComboBox.Size = New System.Drawing.Size(408, 24)
+        Me.ParentAccountTreeComboBox.TabIndex = 14
+        Me.ParentAccountTreeComboBox.Text = "Select Parent Account"
+        Me.ParentAccountTreeComboBox.UseThemeBackColor = False
+        Me.ParentAccountTreeComboBox.UseThemeDropDownArrowColor = True
+        Me.ParentAccountTreeComboBox.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
+        '
         'Label1
         '
         Me.Label1.AutoSize = True
@@ -273,6 +281,15 @@ Partial Class NewAccountUI
         Me.CancelBT.TabIndex = 21
         Me.CancelBT.Text = "Cancel"
         Me.CancelBT.UseVisualStyleBackColor = True
+        '
+        'ButtonsIL
+        '
+        Me.ButtonsIL.ImageStream = CType(resources.GetObject("ButtonsIL.ImageStream"), System.Windows.Forms.ImageListStreamer)
+        Me.ButtonsIL.TransparentColor = System.Drawing.Color.Transparent
+        Me.ButtonsIL.Images.SetKeyName(0, "delete-2-xxl.png")
+        Me.ButtonsIL.Images.SetKeyName(1, "favicon(97).ico")
+        Me.ButtonsIL.Images.SetKeyName(2, "favicon(76).ico")
+        Me.ButtonsIL.Images.SetKeyName(3, "favicon(7).ico")
         '
         'CreateAccountBT
         '
@@ -310,23 +327,6 @@ Partial Class NewAccountUI
         Me.accountsIL.Images.SetKeyName(7, "star1.jpg")
         Me.accountsIL.Images.SetKeyName(8, "imageres_190.ico")
         Me.accountsIL.Images.SetKeyName(9, "imageres_81.ico")
-        '
-        'ParentAccountTreeComboBox
-        '
-        Me.ParentAccountTreeComboBox.BackColor = System.Drawing.Color.White
-        Me.ParentAccountTreeComboBox.BorderColor = System.Drawing.Color.Black
-        Me.ParentAccountTreeComboBox.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.ParentAccountTreeComboBox.DropDownMaximumSize = New System.Drawing.Size(1000, 1000)
-        Me.ParentAccountTreeComboBox.DropDownMinimumSize = New System.Drawing.Size(10, 10)
-        Me.ParentAccountTreeComboBox.DropDownResizeDirection = VIBlend.WinForms.Controls.SizingDirection.Both
-        Me.ParentAccountTreeComboBox.Location = New System.Drawing.Point(222, 3)
-        Me.ParentAccountTreeComboBox.Name = "ParentAccountTreeComboBox"
-        Me.ParentAccountTreeComboBox.Size = New System.Drawing.Size(408, 24)
-        Me.ParentAccountTreeComboBox.TabIndex = 14
-        Me.ParentAccountTreeComboBox.Text = "Select Parent Account"
-        Me.ParentAccountTreeComboBox.UseThemeBackColor = False
-        Me.ParentAccountTreeComboBox.UseThemeDropDownArrowColor = True
-        Me.ParentAccountTreeComboBox.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
         '
         'NewAccountUI
         '

@@ -116,7 +116,7 @@ Partial Class NewControlUI
         Me.Label1.AutoSize = True
         Me.Label1.Location = New System.Drawing.Point(33, 30)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(71, 13)
+        Me.Label1.Size = New System.Drawing.Size(83, 15)
         Me.Label1.TabIndex = 7
         Me.Label1.Text = "Control Name"
         '
@@ -125,7 +125,7 @@ Partial Class NewControlUI
         Me.Label2.AutoSize = True
         Me.Label2.Location = New System.Drawing.Point(33, 91)
         Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(36, 13)
+        Me.Label2.Size = New System.Drawing.Size(41, 15)
         Me.Label2.TabIndex = 8
         Me.Label2.Text = "Item 1"
         '
@@ -134,7 +134,7 @@ Partial Class NewControlUI
         Me.Label3.AutoSize = True
         Me.Label3.Location = New System.Drawing.Point(392, 91)
         Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(36, 13)
+        Me.Label3.Size = New System.Drawing.Size(41, 15)
         Me.Label3.TabIndex = 9
         Me.Label3.Text = "Item 2"
         '
@@ -143,7 +143,7 @@ Partial Class NewControlUI
         Me.Label4.AutoSize = True
         Me.Label4.Location = New System.Drawing.Point(661, 91)
         Me.Label4.Name = "Label4"
-        Me.Label4.Size = New System.Drawing.Size(38, 13)
+        Me.Label4.Size = New System.Drawing.Size(43, 15)
         Me.Label4.TabIndex = 10
         Me.Label4.Text = "Option"
         '

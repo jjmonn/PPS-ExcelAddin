@@ -44,7 +44,7 @@ Partial Class ExcelRatesImportUI
         Me.TableLayoutPanel1.ColumnCount = 3
         Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 34.45122!))
         Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 65.54878!))
-        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 42.0!))
+        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 43.0!))
         Me.TableLayoutPanel1.Controls.Add(Me.periods_RefEdit, 1, 0)
         Me.TableLayoutPanel1.Controls.Add(Me.Label2, 0, 0)
         Me.TableLayoutPanel1.Controls.Add(Me.periods_edit_BT, 2, 0)
@@ -69,7 +69,7 @@ Partial Class ExcelRatesImportUI
         Me.periods_RefEdit.Location = New System.Drawing.Point(124, 2)
         Me.periods_RefEdit.Margin = New System.Windows.Forms.Padding(2)
         Me.periods_RefEdit.Name = "periods_RefEdit"
-        Me.periods_RefEdit.Size = New System.Drawing.Size(230, 20)
+        Me.periods_RefEdit.Size = New System.Drawing.Size(229, 20)
         Me.periods_RefEdit.TabIndex = 1
         '
         'Label2
@@ -79,7 +79,7 @@ Partial Class ExcelRatesImportUI
         Me.Label2.Location = New System.Drawing.Point(2, 0)
         Me.Label2.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(42, 13)
+        Me.Label2.Size = New System.Drawing.Size(49, 15)
         Me.Label2.TabIndex = 7
         Me.Label2.Text = "Periods"
         '
@@ -88,7 +88,7 @@ Partial Class ExcelRatesImportUI
         Me.periods_edit_BT.FlatAppearance.BorderColor = System.Drawing.Color.White
         Me.periods_edit_BT.ImageIndex = 0
         Me.periods_edit_BT.ImageList = Me.ButtonsImageList
-        Me.periods_edit_BT.Location = New System.Drawing.Point(358, 2)
+        Me.periods_edit_BT.Location = New System.Drawing.Point(357, 2)
         Me.periods_edit_BT.Margin = New System.Windows.Forms.Padding(2)
         Me.periods_edit_BT.Name = "periods_edit_BT"
         Me.periods_edit_BT.Size = New System.Drawing.Size(27, 27)
@@ -111,7 +111,7 @@ Partial Class ExcelRatesImportUI
         Me.Label4.Location = New System.Drawing.Point(2, 72)
         Me.Label4.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.Label4.Name = "Label4"
-        Me.Label4.Size = New System.Drawing.Size(49, 13)
+        Me.Label4.Size = New System.Drawing.Size(55, 15)
         Me.Label4.TabIndex = 9
         Me.Label4.Text = "Currency"
         '
@@ -120,7 +120,7 @@ Partial Class ExcelRatesImportUI
         Me.rates_edit_BT.FlatAppearance.BorderColor = System.Drawing.Color.White
         Me.rates_edit_BT.ImageIndex = 0
         Me.rates_edit_BT.ImageList = Me.ButtonsImageList
-        Me.rates_edit_BT.Location = New System.Drawing.Point(358, 38)
+        Me.rates_edit_BT.Location = New System.Drawing.Point(357, 38)
         Me.rates_edit_BT.Margin = New System.Windows.Forms.Padding(2)
         Me.rates_edit_BT.Name = "rates_edit_BT"
         Me.rates_edit_BT.Size = New System.Drawing.Size(27, 27)
@@ -132,7 +132,7 @@ Partial Class ExcelRatesImportUI
         Me.rates_RefEdit.Location = New System.Drawing.Point(124, 38)
         Me.rates_RefEdit.Margin = New System.Windows.Forms.Padding(2)
         Me.rates_RefEdit.Name = "rates_RefEdit"
-        Me.rates_RefEdit.Size = New System.Drawing.Size(230, 20)
+        Me.rates_RefEdit.Size = New System.Drawing.Size(229, 20)
         Me.rates_RefEdit.TabIndex = 3
         '
         'Label3
@@ -142,7 +142,7 @@ Partial Class ExcelRatesImportUI
         Me.Label3.Location = New System.Drawing.Point(2, 36)
         Me.Label3.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(35, 13)
+        Me.Label3.Size = New System.Drawing.Size(39, 15)
         Me.Label3.TabIndex = 8
         Me.Label3.Text = "Rates"
         '
@@ -151,7 +151,7 @@ Partial Class ExcelRatesImportUI
         Me.items_CB.FormattingEnabled = True
         Me.items_CB.Location = New System.Drawing.Point(125, 75)
         Me.items_CB.Name = "items_CB"
-        Me.items_CB.Size = New System.Drawing.Size(228, 21)
+        Me.items_CB.Size = New System.Drawing.Size(227, 21)
         Me.items_CB.TabIndex = 5
         '
         'import_BT
@@ -166,7 +166,7 @@ Partial Class ExcelRatesImportUI
         Me.import_BT.Text = "Import"
         Me.import_BT.UseVisualStyleBackColor = True
         '
-        'InputValuesExcel
+        'ExcelRatesImportUI
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
@@ -174,7 +174,7 @@ Partial Class ExcelRatesImportUI
         Me.Controls.Add(Me.import_BT)
         Me.Controls.Add(Me.TableLayoutPanel1)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
-        Me.Name = "InputValuesExcel"
+        Me.Name = "ExcelRatesImportUI"
         Me.Text = "InputRatesExcel"
         Me.TableLayoutPanel1.ResumeLayout(False)
         Me.TableLayoutPanel1.PerformLayout()

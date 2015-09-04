@@ -31,12 +31,12 @@ Partial Class SettingMainUI
         Me.Label5 = New System.Windows.Forms.Label()
         Me.PortTB = New System.Windows.Forms.TextBox()
         Me.Label4 = New System.Windows.Forms.Label()
-        Me.ButtonIcons = New System.Windows.Forms.ImageList(Me.components)
         Me.ServerAddressTB = New System.Windows.Forms.TextBox()
         Me.Label3 = New System.Windows.Forms.Label()
         Me.IDTB = New System.Windows.Forms.TextBox()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.TabPage2 = New System.Windows.Forms.TabPage()
+        Me.ButtonIcons = New System.Windows.Forms.ImageList(Me.components)
         Me.ControlImages = New System.Windows.Forms.ImageList(Me.components)
         Me.ACFIcon = New System.Windows.Forms.ImageList(Me.components)
         Me.FolderBrowserDialog1 = New System.Windows.Forms.FolderBrowserDialog()
@@ -125,19 +125,6 @@ Partial Class SettingMainUI
         Me.Label4.TabIndex = 15
         Me.Label4.Text = "Port"
         '
-        'ButtonIcons
-        '
-        Me.ButtonIcons.ImageStream = CType(resources.GetObject("ButtonIcons.ImageStream"), System.Windows.Forms.ImageListStreamer)
-        Me.ButtonIcons.TransparentColor = System.Drawing.Color.Transparent
-        Me.ButtonIcons.Images.SetKeyName(0, "imageres_89.ico")
-        Me.ButtonIcons.Images.SetKeyName(1, "favicon(95).ico")
-        Me.ButtonIcons.Images.SetKeyName(2, "submit 1 ok.ico")
-        Me.ButtonIcons.Images.SetKeyName(3, "favicon(97).ico")
-        Me.ButtonIcons.Images.SetKeyName(4, "imageres_99.ico")
-        Me.ButtonIcons.Images.SetKeyName(5, "favicon(70).ico")
-        Me.ButtonIcons.Images.SetKeyName(6, "imageres_82.ico")
-        Me.ButtonIcons.Images.SetKeyName(7, "refresh greay bcgd.bmp")
-        '
         'ServerAddressTB
         '
         Me.ServerAddressTB.Location = New System.Drawing.Point(151, 52)
@@ -175,10 +162,23 @@ Partial Class SettingMainUI
         Me.TabPage2.Location = New System.Drawing.Point(124, 4)
         Me.TabPage2.Name = "TabPage2"
         Me.TabPage2.Padding = New System.Windows.Forms.Padding(3)
-        Me.TabPage2.Size = New System.Drawing.Size(592, 430)
+        Me.TabPage2.Size = New System.Drawing.Size(416, 464)
         Me.TabPage2.TabIndex = 1
-        Me.TabPage2.Text = "TabPage2"
+        Me.TabPage2.Text = "Display"
         Me.TabPage2.UseVisualStyleBackColor = True
+        '
+        'ButtonIcons
+        '
+        Me.ButtonIcons.ImageStream = CType(resources.GetObject("ButtonIcons.ImageStream"), System.Windows.Forms.ImageListStreamer)
+        Me.ButtonIcons.TransparentColor = System.Drawing.Color.Transparent
+        Me.ButtonIcons.Images.SetKeyName(0, "imageres_89.ico")
+        Me.ButtonIcons.Images.SetKeyName(1, "favicon(95).ico")
+        Me.ButtonIcons.Images.SetKeyName(2, "submit 1 ok.ico")
+        Me.ButtonIcons.Images.SetKeyName(3, "favicon(97).ico")
+        Me.ButtonIcons.Images.SetKeyName(4, "imageres_99.ico")
+        Me.ButtonIcons.Images.SetKeyName(5, "favicon(70).ico")
+        Me.ButtonIcons.Images.SetKeyName(6, "imageres_82.ico")
+        Me.ButtonIcons.Images.SetKeyName(7, "refresh greay bcgd.bmp")
         '
         'ControlImages
         '
