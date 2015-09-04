@@ -182,7 +182,7 @@ Friend Class FilterValue
                                              ByRef filter_value_id As Int32, _
                                              ByRef result_dict As Dictionary(Of Int32, List(Of Int32)))
 
-        Dim children_filter_value_id As Dictionary(Of Int32, Int32) = GetFilterValueIDChildren(filter_value_id)
+        Dim children_filter_value_id As Dictionary(Of Int32, Int32) = GetChildrenFilterValueIdsFilterIdDic(filter_value_id)
         If children_filter_value_id.Count > 0 Then
             For Each id As Int32 In children_filter_value_id.Keys
                 GetMostNestedFilterValuesDict(children_filter_value_id(id), _
@@ -211,8 +211,30 @@ Friend Class FilterValue
 
     End Function
 
-    ' load an index like hash based on filter_id/ entity_id au démarrage
-    ' priority normal !! 
+    Friend Function GetFilterValueId(ByRef name As String) As Int32
+
+        For Each id As Int32 In filtervalues_hash.Keys
+            If name = filtervalues_hash(id)(NAME_VARIABLE) Then Return id
+        Next
+        Return 0
+
+    End Function
+
+    Friend Function GetFilterValueIdsFromParentFilterValueIds(ByRef parentFilterValuesIds() As Int32) As Int32()
+
+        Dim filterValuesIdsList As New List(Of Int32)
+
+        For Each parentFilterValueId As Int32 In parentFilterValuesIds
+            For Each id As Int32 In filtervalues_hash.Keys
+                If filtervalues_hash(id)(PARENT_FILTER_VALUE_ID_VARIABLE) = parentFilterValueId Then
+                    filterValuesIdsList.Add(id)
+                End If
+            Next
+        Next
+        Return filterValuesIdsList.ToArray
+
+    End Function
+
 
 #End Region
 
@@ -239,7 +261,7 @@ Friend Class FilterValue
 
     End Sub
 
-    Friend Function GetFilterValueIDChildren(ByRef parent_filter_value_id As Int32) As Dictionary(Of Int32, Int32)
+    Friend Function GetChildrenFilterValueIdsFilterIdDic(ByRef parent_filter_value_id As Int32) As Dictionary(Of Int32, Int32)
 
         Dim children_filters_values_id As New Dictionary(Of Int32, Int32)
         For Each id As Int32 In filtervalues_hash.Keys

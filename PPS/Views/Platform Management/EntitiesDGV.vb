@@ -9,7 +9,7 @@
 '           -> will be an issue in implementing no categories value for conso entities
 '
 '
-' Last modified: 01/09/2015
+' Last modified: 04/09/2015
 ' Author: Julien Monnereau
 
 
@@ -299,7 +299,7 @@ Friend Class EntitiesDGV
         Else
             ' Child Filter
             Dim parentFilterFilterValueId As Int32 = GlobalVariables.EntitiesFilters.GetFilterValueId(filterNode.Parent.Name, entity_id)     ' Child Filter Id
-            Dim filterValuesIds = GlobalVariables.FiltersValues.GetFilterValueIDChildren(parentFilterFilterValueId).Keys
+            Dim filterValuesIds = GlobalVariables.FiltersValues.GetFilterValueIdsFromParentFilterValueIds({parentFilterFilterValueId})
             For Each Id As Int32 In filterValuesIds
                 combobox.Items.Add(GlobalVariables.FiltersValues.filtervalues_hash(Id)(NAME_VARIABLE))
             Next
@@ -320,6 +320,83 @@ Friend Class EntitiesDGV
         DataGridViewsUtil.DGVSetHiearchyFontSize(DGV, My.Settings.dgvFontSize, My.Settings.dgvFontSize)
         DataGridViewsUtil.FormatDGVRowsHierarchy(DGV)
         DGV.Refresh()
+
+    End Sub
+
+#End Region
+
+
+#Region "DGV Updates"
+
+    ' Update Parents and Children Filters Cells or comboboxes after a filter cell has been edited
+    Friend Sub UpdateEntitiesFiltersAfterEdition(ByRef entityId As Int32, _
+                                                 ByRef filterId As Int32, _
+                                                 ByRef filterValueId As Int32)
+
+        isFillingDGV = True
+        Dim filterNode As TreeNode = entitiesFilterTV.Nodes.Find(filterId, True)(0)
+
+        ' Update parent filters recursively
+        UpdateParentFiltersValues(rows_id_item_dic(entityId), _
+                                  entityId, _
+                                  filterNode, _
+                                  filterValueId)
+
+        ' Update children filters comboboxes recursively
+        For Each childFilterNode As TreeNode In filterNode.Nodes
+            UpdateChildrenFiltersComboBoxes(rows_id_item_dic(entityId), _
+                                            childFilterNode, _
+                                            {filterValueId})
+        Next
+        isFillingDGV = False
+
+    End Sub
+
+    Private Sub UpdateParentFiltersValues(ByRef row As HierarchyItem, _
+                                          ByRef entityId As Int32, _
+                                          ByRef filterNode As TreeNode,
+                                          ByRef filterValueId As Int32)
+
+        If Not filterNode.Parent Is Nothing Then
+            Dim parentFilterNode As TreeNode = filterNode.Parent
+            Dim column As HierarchyItem = columnsVariableItemDictionary(parentFilterNode.Name)
+            Dim parentFilterValueId As Int32 = GlobalVariables.FiltersValues.filtervalues_hash(filterValueId)(PARENT_FILTER_VALUE_ID_VARIABLE)
+            Dim filtervaluename = GlobalVariables.FiltersValues.filtervalues_hash(parentFilterValueId)(NAME_VARIABLE)
+            DGV.CellsArea.SetCellValue(row, column, filtervaluename)
+
+            ' Recursively update parent filters
+            UpdateParentFiltersValues(row, _
+                                      entityId, _
+                                      parentFilterNode, _
+                                      parentFilterValueId)
+        End If
+
+    End Sub
+
+    Private Sub UpdateChildrenFiltersComboBoxes(ByRef row As HierarchyItem, _
+                                                ByRef filterNode As TreeNode,
+                                                ByRef parentFilterValueIds() As Int32)
+
+        Dim column As HierarchyItem = columnsVariableItemDictionary(filterNode.Name)
+        Dim comboBox As New ComboBoxEditor
+
+        Dim filterValuesIds As Int32() = GlobalVariables.FiltersValues.GetFilterValueIdsFromParentFilterValueIds(parentFilterValueIds)
+        For Each Id As Int32 In filterValuesIds
+            comboBox.Items.Add(GlobalVariables.FiltersValues.filtervalues_hash(Id)(NAME_VARIABLE))
+        Next
+
+        ' Set Cell value to nothing
+        DGV.CellsArea.SetCellValue(row, column, Nothing)
+
+        ' Add ComboBoxEditor to Cell
+        DGV.CellsArea.SetCellEditor(row, column, comboBox)
+
+        ' Recursivly update children comboboxes
+        For Each childFilterNode As TreeNode In filterNode.Nodes
+            UpdateChildrenFiltersComboBoxes(row, _
+                                            childFilterNode, _
+                                            filterValuesIds)
+        Next
 
     End Sub
 

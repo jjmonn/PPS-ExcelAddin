@@ -177,29 +177,40 @@ Friend Class EntitiesControl
     Private Sub dataGridView_CellValueChanged(sender As Object, args As CellEventArgs)
 
         If EntitiesDGV.isFillingDGV = False Then
-            Dim value As Object
+            If (Not args.Cell.Value Is Nothing AndAlso args.Cell.Value <> "") Then
+                Dim entityId As Int32 = args.Cell.RowItem.ItemValue
 
-            If (Not args.Cell.Value Is Nothing) Then
+
                 Select Case args.Cell.ColumnItem.ItemValue
 
                     Case ENTITIES_CURRENCY_VARIABLE
-                        value = GlobalVariables.Currencies.GetCurrencyId(args.Cell.Value)
-                        If (value = 0) Then
+                        Dim currencyId As Int32 = GlobalVariables.Currencies.GetCurrencyId(args.Cell.Value)
+                        If (currencyId = 0) Then
                             MsgBox("Currency " & args.Cell.Value & " not found.")
                             Exit Sub
+                        Else
+                            Controller.UpdateEntity(entityId, _
+                                                    args.Cell.ColumnItem.ItemValue, _
+                                                    currencyId)
                         End If
 
                     Case NAME_VARIABLE
-                        value = args.Cell.Value
-
+                        Dim newEntityName As String = args.Cell.Value
+                        Controller.UpdateEntity(entityId, _
+                                                args.Cell.ColumnItem.ItemValue, _
+                                                newEntityName)
                     Case Else
-                        value = entitiesFiltersNameIdDict(args.Cell.Value)
-
+                        Dim filterValueName As String = args.Cell.Value
+                        Dim filterValueId As Int32 = GlobalVariables.FiltersValues.GetFilterValueId(filterValueName)
+                        If filterValueId = 0 Then
+                            MsgBox("The Filter Value Name " & filterValueName & " could not be found.")
+                            Exit Sub
+                        End If
+                        Dim filterId As Int32 = args.Cell.ColumnItem.ItemValue
+                        EntitiesDGV.UpdateEntitiesFiltersAfterEdition(entityId, filterId, filterValueId)
+                        Controller.UpdateFilterValue(entityId, filterId, filterValueId)
                 End Select
 
-                Controller.UpdateEntity(args.Cell.RowItem.ItemValue, _
-                                        args.Cell.ColumnItem.ItemValue, _
-                                        value)
             End If
         End If
 

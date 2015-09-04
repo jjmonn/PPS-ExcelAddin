@@ -157,6 +157,17 @@ Friend Class EntitiesController
 
     End Sub
 
+    Friend Sub UpdateFilterValue(ByRef entityId As Int32, _
+                                 ByRef filterId As Int32, _
+                                 ByRef filterValueId As Int32)
+
+        ' if most nested => update entitiesFilter 
+        ' to be implemented 
+        ' priority high
+
+    End Sub
+
+
 #End Region
 
 
