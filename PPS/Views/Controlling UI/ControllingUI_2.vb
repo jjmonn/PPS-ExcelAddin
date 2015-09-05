@@ -170,10 +170,20 @@ Friend Class ControllingUI_2
 
     Private Sub RightPaneSetup()
 
-        rightPane_Control = New CUI2RightPane(leftPane_control.entitiesFiltersTV, _
-                                              leftPane_control.clientsFiltersTV, _
-                                              leftPane_control.productsFiltersTV, _
-                                              leftPane_control.adjustmentsFiltersTV)
+        Dim entitiesFiltersNode As New TreeNode
+        Dim clientsFiltersNode As New TreeNode
+        Dim productsFiltersNode As New TreeNode
+        Dim adjustmentsFiltersNode As New TreeNode
+
+        GlobalVariables.Filters.LoadFiltersNode(entitiesFiltersNode, GlobalEnums.AnalysisAxis.ENTITIES)
+        GlobalVariables.Filters.LoadFiltersNode(clientsFiltersNode, GlobalEnums.AnalysisAxis.CLIENTS)
+        GlobalVariables.Filters.LoadFiltersNode(productsFiltersNode, GlobalEnums.AnalysisAxis.PRODUCTS)
+        GlobalVariables.Filters.LoadFiltersNode(adjustmentsFiltersNode, GlobalEnums.AnalysisAxis.ADJUSTMENTS)
+
+        rightPane_Control = New CUI2RightPane(entitiesFiltersNode, _
+                                              clientsFiltersNode, _
+                                              productsFiltersNode, _
+                                              adjustmentsFiltersNode)
 
         SplitContainer2.Panel2.Controls.Add(rightPane_Control)
         rightPane_Control.Dock = DockStyle.Fill

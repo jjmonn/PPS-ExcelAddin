@@ -120,17 +120,14 @@ Friend Class Computer
 
             If Not hierarchy Is Nothing Then
                 packet.WriteUint32(hierarchy.Count)                                      ' decomposition hierarchy size
+                Dim axis_id As UInt32
                 For Each item In hierarchy
-                    Dim axis_id As UInt32
                     Dim query_type As UInt32 = GetDecompositionQueryType(item)
                     If query_type = GlobalEnums.DecompositionQueryType.AXIS Then
                         axis_id = GetItemID(item)
                         packet.WriteInt32(axis_id)
                         packet.WriteUint8(True)
                     Else
-                        ' crash if children filter => to be fixed - priority high
-                        '  !!!! 
-                        '
                         axis_id = GlobalVariables.Filters.filters_hash(GetItemID(item))(AXIS_ID_VARIABLE)
                         packet.WriteInt32(axis_id)
                         packet.WriteUint8(False)
@@ -200,7 +197,7 @@ Friend Class Computer
         End If
 
         filterToken = GetFiltersToken(filtersDict)
-        ' System.Diagnostics.Debug.WriteLine("filter Token:" & filterToken)
+        System.Diagnostics.Debug.WriteLine("filter Token:" & filterToken)
 
         FillEntityData(packet)
 
