@@ -3,7 +3,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 24/07/2015
+' Last modified: 05/09/2015
 
 
 Imports System.Windows.Forms
@@ -17,7 +17,7 @@ Friend Class AxisFiltersControl
 
     ' Objects
     Private Controller As AxisFiltersController
-    Private CategoriesTV As New TreeView
+    Private FiltersFiltersValuesTV As New TreeView
 
     ' Variables
     Private CP As CircularProgressUI
@@ -27,22 +27,22 @@ Friend Class AxisFiltersControl
 
 #Region "Initialization"
 
-    Friend Sub New(ByRef input_controller As AxisFiltersController, _
-                             ByRef input_categories_tv As TreeView)
+    Friend Sub New(ByRef p_controller As AxisFiltersController, _
+                   ByRef p_filtersFiltersValuesTV As TreeView)
 
         ' This call is required by the designer.
         InitializeComponent()
 
         ' Add any initialization after the InitializeComponent() call.
-        Controller = input_controller
-        CategoriesTV = input_categories_tv
-        TableLayoutPanel1.Controls.Add(CategoriesTV, 0, 1)
-        CategoriesTV.Dock = DockStyle.Fill
-        CategoriesTV.ImageList = ImageList1
-        CategoriesTV.ContextMenuStrip = RCM_TV
+        Controller = p_controller
+        FiltersFiltersValuesTV = p_filtersFiltersValuesTV
+        TableLayoutPanel1.Controls.Add(FiltersFiltersValuesTV, 0, 1)
+        FiltersFiltersValuesTV.Dock = DockStyle.Fill
+        FiltersFiltersValuesTV.ImageList = ImageList1
+        FiltersFiltersValuesTV.ContextMenuStrip = RCM_TV
 
-        AddHandler CategoriesTV.KeyDown, AddressOf CategoriesTV_KeyDown
-        AddHandler CategoriesTV.AfterSelect, AddressOf TV_AfterSelect
+        AddHandler FiltersFiltersValuesTV.KeyDown, AddressOf FiltersFiltersValuesTV_KeyDown
+        AddHandler FiltersFiltersValuesTV.AfterSelect, AddressOf TV_AfterSelect
 
     End Sub
 
@@ -77,9 +77,9 @@ Friend Class AxisFiltersControl
         '   -> enchainer sur demande première valeur ?
 
 
-        'If Not CategoriesTV.SelectedNode Is Nothing Then
-        '    Dim current_node As TreeNode = CategoriesTV.SelectedNode
-        '    If Controller.IsCategory(CategoriesTV.SelectedNode.Name) = False Then current_node = current_node.Parent
+        'If Not FiltersFiltersValuesTV.SelectedNode Is Nothing Then
+        '    Dim current_node As TreeNode = FiltersFiltersValuesTV.SelectedNode
+        '    If Controller.IsCategory(FiltersFiltersValuesTV.SelectedNode.Name) = False Then current_node = current_node.Parent
 
         '    Dim name = InputBox("Please enter the new Category Value Name:")
         '    If Controller.CreateCategoryValue(name, current_node) = False Then
@@ -93,17 +93,21 @@ Friend Class AxisFiltersControl
 
     Private Sub RenameToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles RenameMenuBT.Click, RenameRCM.Click
 
-        If Not CategoriesTV.SelectedNode Is Nothing Then
+        If Not FiltersFiltersValuesTV.SelectedNode Is Nothing Then
 
-            Dim current_node As TreeNode = CategoriesTV.SelectedNode
+            Dim current_node As TreeNode = FiltersFiltersValuesTV.SelectedNode
             If IsNonAttributedValue(current_node) = False Then
                 Dim name = InputBox("Please enter the new Category Value Name:")
                 If name <> "" Then
-                    If Controller.RenameFilterValue(current_node.Name, name) Then
-                        current_node.Text = name
-                    Else
-                        MsgBox("This name is already used or contains forbiden characters.")
-                    End If
+
+                    ' reimplement => update simply
+                    ' the server manage validity
+                    ' priority normal
+                    'If Controller.RenameFilterValue(current_node.Name, name) Then
+                    '    current_node.Text = name
+                    'Else
+                    '    MsgBox("This name is already used or contains forbiden characters.")
+                    'End If
                 End If
             Else
                 MsgBox("Cannot rename a NA value.")
@@ -119,9 +123,9 @@ Friend Class AxisFiltersControl
         ' to be validated 
         ' priority normal 
         ' !!!
-        If Not CategoriesTV.SelectedNode Is Nothing Then
-            Dim current_node As TreeNode = CategoriesTV.SelectedNode
-            If Controller.Isfilter(CategoriesTV.SelectedNode.Name) Then
+        If Not FiltersFiltersValuesTV.SelectedNode Is Nothing Then
+            Dim current_node As TreeNode = FiltersFiltersValuesTV.SelectedNode
+            If Controller.Isfilter(FiltersFiltersValuesTV.SelectedNode.Name) Then
                 ' Delete Category
                 Dim confirm As Integer = MessageBox.Show("Careful, you are about to delete the Category: " + Chr(13) + current_node.Text + Chr(13) + "Do you confirm?", _
                                                          "Category deletion confirmation", _
@@ -153,26 +157,24 @@ Friend Class AxisFiltersControl
 
     Private Sub TV_AfterSelect(sender As Object, e As TreeViewEventArgs)
 
-        CategoriesTV.SelectedNode = e.Node
+        FiltersFiltersValuesTV.SelectedNode = e.Node
 
     End Sub
 
-    Private Sub CategoriesTV_KeyDown(sender As Object, e As KeyEventArgs)
+    Private Sub FiltersFiltersValuesTV_KeyDown(sender As Object, e As KeyEventArgs)
 
         Select Case e.KeyCode
             Case Keys.Delete : DeleteBT_Click(sender, e)
             Case Keys.Up
                 If e.Control Then
-                    If Not CategoriesTV.SelectedNode Is Nothing Then
-                        TreeViewsUtilities.MoveNodeUp(CategoriesTV.SelectedNode)
-                        Controller.positions_dictionary = TreeViewsUtilities.GeneratePositionsDictionary(CategoriesTV)
+                    If Not FiltersFiltersValuesTV.SelectedNode Is Nothing Then
+                        TreeViewsUtilities.MoveNodeUp(FiltersFiltersValuesTV.SelectedNode)
                     End If
                 End If
             Case Keys.Down
                 If e.Control Then
-                    If Not CategoriesTV.SelectedNode Is Nothing Then
-                        TreeViewsUtilities.MoveNodeDown(CategoriesTV.SelectedNode)
-                        Controller.positions_dictionary = TreeViewsUtilities.GeneratePositionsDictionary(CategoriesTV)
+                    If Not FiltersFiltersValuesTV.SelectedNode Is Nothing Then
+                        TreeViewsUtilities.MoveNodeDown(FiltersFiltersValuesTV.SelectedNode)
                     End If
                 End If
         End Select

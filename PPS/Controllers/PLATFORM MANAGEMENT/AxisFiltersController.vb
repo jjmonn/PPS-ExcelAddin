@@ -7,7 +7,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 24/07/2015
+' Last modified: 05/09/2015
 
 
 Imports System.Windows.Forms
@@ -26,38 +26,46 @@ Friend Class AxisFiltersController
 #Region "Instance Variables"
 
     ' Objects
-    Protected View As AxisFiltersControl
+    Private View As AxisFiltersControl
     Private filtersNodes As New TreeNode
-    Private FvTv As New TreeView
-    Private PlatformMGTUI As PlatformMGTGeneralUI
-
+    Private filtersFilterValuesTv As New TreeView
+  
     ' Variables
-    Friend positions_dictionary As New Dictionary(Of Int32, Double)
-    Private filters_names_list As List(Of String)
+    Private axisId As Int32
+
 
 #End Region
 
 
 #Region "Initialization"
 
-    Friend Sub New(ByRef axis_id As UInt32)
+    Friend Sub New(ByRef p_axis_id As UInt32)
 
-        ' apply a filter on axis_id in Filters !!! 
-        ' priority normal !
-
-        View = New AxisFiltersControl(Me, FvTv)
-        AxisFilter.LoadFvTv(FvTv, filtersNodes, axis_id)
-
-        filters_names_list = TreeViewsUtilities.GetNodesTextsList(FvTv)
-        positions_dictionary = TreeViewsUtilities.GeneratePositionsDictionary(FvTv)
+        axisId = p_axis_id
+        LoadinstancesVariables()
+        View = New AxisFiltersControl(Me, filtersFilterValuesTv)
         View.Show()
+
+        AddHandler GlobalVariables.Filters.CreationEvent, AddressOf AfterFilterCreation
+        AddHandler GlobalVariables.Filters.Read, AddressOf AfterFilterRead
+        AddHandler GlobalVariables.Filters.UpdateEvent, AddressOf AfterFilterUpdate
+        AddHandler GlobalVariables.Filters.DeleteEvent, AddressOf AfterFilterDelete
+
+        AddHandler GlobalVariables.FiltersValues.CreationEvent, AddressOf AfterFilterValueCreation
+        AddHandler GlobalVariables.FiltersValues.Read, AddressOf AfterFilterValueRead
+        AddHandler GlobalVariables.FiltersValues.UpdateEvent, AddressOf AfterFilterValueUpdate
+        AddHandler GlobalVariables.FiltersValues.DeleteEvent, AddressOf AfterFilterValueDelete
 
     End Sub
 
-    Public Sub addControlToPanel(ByRef dest_panel As Panel, _
-                                 ByRef PlatformMGTUI As PlatformMGTGeneralUI)
+    Private Sub LoadinstancesVariables()
 
-        Me.PlatformMGTUI = PlatformMGTUI
+        AxisFilter.LoadFvTv(filtersFilterValuesTv, filtersNodes, axisId)
+
+    End Sub
+
+    Public Sub addControlToPanel(ByRef dest_panel As Panel, ByRef PlatformMgtUI As PlatformMGTGeneralUI)
+
         dest_panel.Controls.Add(View)
         View.Dock = Windows.Forms.DockStyle.Fill
 
@@ -75,30 +83,30 @@ Friend Class AxisFiltersController
 
 #Region "Interface"
 
-    Protected Friend Function CreateFilter(ByRef filter_name As String) As Boolean
-
-        ' check if name is valid
-
-
+    ' Filters
+    Friend Function CreateFilter(ByRef filter_name As String) As Boolean
 
     End Function
 
-    Protected Friend Sub DeleteFilter(ByRef node As TreeNode)
+    Friend Sub UpdateFilter(ByRef filter_id As String, ByRef field As String, ByRef value As Object)
+
+        ' value !!!!!!!!!!!! != filter
+        '    GlobalVariables.Filters.CMSG_UPDATE_FILTER(filter_id, field, value)
+
+    End Sub
+
+    Friend Sub DeleteFilter(ByRef node As TreeNode)
 
 
     End Sub
 
 
-    Protected Friend Sub DeleteFilterValue(ByRef node As TreeNode)
-
-
-    End Sub
-
-
+    ' Filters Values
     Friend Function CreateFilterValue(ByRef filter_value_name As String, _
-                                    ByRef parent_node As TreeNode, _
-                                    Optional ByRef new_filter_value_id As String = "") As Boolean
+                                      ByRef parent_node As TreeNode, _
+                                      Optional ByRef new_filter_value_id As String = "") As Boolean
 
+        ' to be reimplemented
         If GlobalVariables.Filters.IsNameValid(filter_value_name) = False Then Return False
         Dim hash As New Hashtable
         hash.Add(PARENT_ID_VARIABLE, CInt(parent_node.Name))
@@ -110,35 +118,65 @@ Friend Class AxisFiltersController
 
     End Function
 
-    Private Sub AfterFilterCreation(ByRef ht As Hashtable)
+    Friend Sub UpdateFilterValue()
 
-        ' how to return false if no answer from server !??
-        ' priority normal
-        ' !!!
+
+    End Sub
+
+    Friend Sub DeleteFilterValue(ByRef node As TreeNode)
+
 
     End Sub
 
 
-    Friend Sub UpdateValue(ByRef filter_id As String, ByRef field As String, ByRef value As Object)
+#End Region
 
-        ' value !!!!!!!!!!!! != filter
-        '    GlobalVariables.Filters.CMSG_UPDATE_FILTER(filter_id, field, value)
+
+#Region "Events"
+
+    Private Sub AfterFilterRead(ByRef status As Boolean, ByRef ht As Hashtable)
 
     End Sub
 
-    Friend Function RenameFilterValue(ByRef filter_value_id As Int32, _
-                                      ByRef new_name As String) As Boolean
+    Private Sub AfterFilterDelete(ByRef status As Boolean, ByRef id As Int32)
 
-        If GlobalVariables.Filters.IsNameValid(new_name) = True Then
-            Dim ht As Hashtable = GlobalVariables.Filters.filters_hash(filter_value_id)
-            ht(NAME_VARIABLE) = new_name
-            GlobalVariables.Filters.CMSG_UPDATE_FILTER(ht)
-            Return True
-        Else
-            Return False
-        End If
 
-    End Function
+    End Sub
+
+    Private Sub AfterFilterCreation(ByRef status As Boolean, ByRef id As Int32)
+
+
+    End Sub
+
+    Private Sub AfterFilterUpdate(ByRef status As Boolean, ByRef id As Int32)
+
+
+    End Sub
+
+    Private Sub AfterFilterValueRead(ByRef status As Boolean, ByRef ht As Hashtable)
+
+    End Sub
+
+    Private Sub AfterFilterValueDelete(ByRef status As Boolean, ByRef id As Int32)
+
+
+    End Sub
+
+    Private Sub AfterFilterValueCreation(ByRef status As Boolean, ByRef id As Int32)
+
+
+    End Sub
+
+    Private Sub AfterFilterValueUpdate(ByRef status As Boolean, ByRef id As Int32)
+
+
+    End Sub
+
+
+#End Region
+
+
+#Region "Utilities"
 
     Friend Function IsFilter(ByRef id As UInt32) As Boolean
 
@@ -147,20 +185,6 @@ Friend Class AxisFiltersController
         Return False
 
     End Function
-
-
-#End Region
-
-
-#Region "Utilities"
-
-    Sub GenerateNewFilterDefaultValue(ByRef parent_node As TreeNode)
-
-        Dim new_filter_value_name As String = parent_node.Text & " -" & NON_ATTRIBUTED_SUFIX
-        Dim new_filter_value_id As String = parent_node.Name & NON_ATTRIBUTED_SUFIX
-        CreateFilterValue(new_filter_value_name, parent_node, new_filter_value_id)
-
-    End Sub
 
     Friend Sub SendNewPositionsToModel()
 

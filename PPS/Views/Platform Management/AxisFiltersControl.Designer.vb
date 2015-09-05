@@ -60,8 +60,9 @@ Partial Class AxisFiltersControl
         '
         Me.ImageList1.ImageStream = CType(resources.GetObject("ImageList1.ImageStream"), System.Windows.Forms.ImageListStreamer)
         Me.ImageList1.TransparentColor = System.Drawing.Color.Transparent
-        Me.ImageList1.Images.SetKeyName(0, "config circle orangev small.png")
-        Me.ImageList1.Images.SetKeyName(1, "favicon(81).ico")
+        Me.ImageList1.Images.SetKeyName(0, "filter_and_sort.ico")
+        Me.ImageList1.Images.SetKeyName(1, "config circle orangev small.png")
+        Me.ImageList1.Images.SetKeyName(2, "favicon(81).ico")
         '
         'MenuStrip1
         '
