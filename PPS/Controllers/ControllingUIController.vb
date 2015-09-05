@@ -644,12 +644,9 @@ Friend Class ControllingUIController
                     args.CellValue = ""
                 End If
 
-                '  args.RowItem.GetHashCode(
-
             End If
         End If
-        'errH1:
-        '        args.CellValue = ""
+        If Double.IsNaN(args.CellValue) Then args.CellValue = "-"
 
     End Sub
 
