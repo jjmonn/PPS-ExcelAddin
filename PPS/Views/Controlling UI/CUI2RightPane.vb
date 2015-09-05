@@ -11,7 +11,7 @@ Imports System.Windows.Forms
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 31/08/2015
+' Last modified: 05/09/2015
 
 
 
@@ -113,9 +113,7 @@ Public Class CUI2RightPane
                                                                analysis_axis_tv)
 
         For Each entity_node As vTreeNode In p_entitiesFilterTV.Nodes
-            VTreeViewUtil.AddNode(Computer.FILTERS_DECOMPOSITION_IDENTIFIER & entity_node.Value, _
-                                  entity_node.Text, _
-                                  entities_node)
+            FiltersNodeSubCategoriesInit(entity_node, entities_node)
         Next
 
         VTreeViewUtil.AddNode(Computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.YEARS, ControllingUI_2.YEARS_CODE, analysis_axis_tv)
