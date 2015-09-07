@@ -191,6 +191,7 @@ Friend Class AcquisitionModel
                         ' Months
                         For Each monthId As Int32 In currentPeriodDict(yearId)
                             dataMapToken = fixed_left_token & Computer.TOKEN_SEPARATOR & _
+                                           accountId & Computer.TOKEN_SEPARATOR & _
                                            Computer.MONTH_PERIOD_IDENTIFIER & monthId
 
                             If dataMap.ContainsKey(dataMapToken) Then
@@ -215,6 +216,7 @@ Friend Class AcquisitionModel
                                                                 periodToken
 
                         Case Computer.MONTH_PERIOD_IDENTIFIER
+                            periodToken = Computer.MONTH_PERIOD_IDENTIFIER & currentPeriodDict.ElementAt(0).Key
                             dataMapToken = fixed_left_token & Computer.TOKEN_SEPARATOR & _
                                                               accountId & Computer.TOKEN_SEPARATOR & _
                                                               Computer.YEAR_PERIOD_IDENTIFIER & currentPeriodDict.ElementAt(0).Value(0)

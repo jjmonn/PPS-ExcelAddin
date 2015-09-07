@@ -72,7 +72,7 @@ Friend Class SubmissionsControlsController
 
 #Region "Interface"
 
-    Protected Friend Sub ControlSubmissions()
+    Friend Sub ControlSubmissions()
 
         ComputeEntities()
         LaunchControls()
@@ -84,7 +84,7 @@ Friend Class SubmissionsControlsController
 
     End Sub
 
-    Protected Friend Sub DisplayEntityControls(ByRef entity_id As String)
+    Friend Sub DisplayEntityControls(ByRef entity_id As String)
 
         View.UpdateControlDGV(successfull_controls_dic(entity_id))
 
