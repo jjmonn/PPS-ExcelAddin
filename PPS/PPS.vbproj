@@ -207,6 +207,12 @@
     <Compile Include="Controllers\Modeling\AlternativeScenariosController.vb" />
     <Compile Include="Controllers\Modeling\ASInputsController.vb" />
     <Compile Include="Models\AlternativeScenarioModel.vb" />
+    <Compile Include="Views\Platform Management\NewFilterUI.Designer.vb">
+      <DependentUpon>NewFilterUI.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Platform Management\NewFilterUI.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Views\Platform Management\ProductsControl.Designer.vb">
       <DependentUpon>ProductsControl.vb</DependentUpon>
     </Compile>
@@ -650,6 +656,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Views\Platform Management\EntitiesControl.resx">
       <DependentUpon>EntitiesControl.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\Platform Management\NewFilterUI.resx">
+      <DependentUpon>NewFilterUI.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\Platform Management\PlatformMGTGeneralUI.resx">
       <DependentUpon>PlatformMGTGeneralUI.vb</DependentUpon>

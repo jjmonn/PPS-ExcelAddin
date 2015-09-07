@@ -39,6 +39,7 @@ Partial Class AxisFiltersControl
         Me.RenameRCM = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
         Me.DeleteRCM = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator3 = New System.Windows.Forms.ToolStripSeparator()
         Me.MenuStrip1.SuspendLayout()
         Me.RCM_TV.SuspendLayout()
         Me.SuspendLayout()
@@ -75,7 +76,7 @@ Partial Class AxisFiltersControl
         '
         'CategoriesToolStripMenuItem
         '
-        Me.CategoriesToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.NewCategoryMenuBT, Me.AddValueMenuBT, Me.RenameMenuBT, Me.DeleteMenuBT})
+        Me.CategoriesToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.NewCategoryMenuBT, Me.AddValueMenuBT, Me.DeleteMenuBT, Me.RenameMenuBT, Me.ToolStripSeparator3})
         Me.CategoriesToolStripMenuItem.Image = Global.PPS.My.Resources.Resources.elements
         Me.CategoriesToolStripMenuItem.Name = "CategoriesToolStripMenuItem"
         Me.CategoriesToolStripMenuItem.Size = New System.Drawing.Size(102, 23)
@@ -92,7 +93,7 @@ Partial Class AxisFiltersControl
         '
         Me.AddValueMenuBT.Name = "AddValueMenuBT"
         Me.AddValueMenuBT.Size = New System.Drawing.Size(165, 24)
-        Me.AddValueMenuBT.Text = "Add Value"
+        Me.AddValueMenuBT.Text = "New Value"
         '
         'RenameMenuBT
         '
@@ -109,9 +110,9 @@ Partial Class AxisFiltersControl
         '
         'RCM_TV
         '
-        Me.RCM_TV.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.CreateCategoryRCM, Me.AddValueRCM, Me.ToolStripSeparator2, Me.RenameRCM, Me.ToolStripSeparator1, Me.DeleteRCM})
+        Me.RCM_TV.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.CreateCategoryRCM, Me.AddValueRCM, Me.ToolStripSeparator2, Me.DeleteRCM, Me.ToolStripSeparator1, Me.RenameRCM})
         Me.RCM_TV.Name = "RCM_TV"
-        Me.RCM_TV.Size = New System.Drawing.Size(179, 112)
+        Me.RCM_TV.Size = New System.Drawing.Size(179, 134)
         '
         'CreateCategoryRCM
         '
@@ -125,7 +126,7 @@ Partial Class AxisFiltersControl
         Me.AddValueRCM.Image = Global.PPS.My.Resources.Resources.elements_add
         Me.AddValueRCM.Name = "AddValueRCM"
         Me.AddValueRCM.Size = New System.Drawing.Size(178, 24)
-        Me.AddValueRCM.Text = "Add Value"
+        Me.AddValueRCM.Text = "Create Value"
         '
         'ToolStripSeparator2
         '
@@ -149,6 +150,11 @@ Partial Class AxisFiltersControl
         Me.DeleteRCM.Name = "DeleteRCM"
         Me.DeleteRCM.Size = New System.Drawing.Size(178, 24)
         Me.DeleteRCM.Text = "Delete"
+        '
+        'ToolStripSeparator3
+        '
+        Me.ToolStripSeparator3.Name = "ToolStripSeparator3"
+        Me.ToolStripSeparator3.Size = New System.Drawing.Size(162, 6)
         '
         'AxisFiltersControl
         '
@@ -180,5 +186,6 @@ Partial Class AxisFiltersControl
     Friend WithEvents RenameRCM As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ToolStripSeparator1 As System.Windows.Forms.ToolStripSeparator
     Friend WithEvents DeleteRCM As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ToolStripSeparator3 As System.Windows.Forms.ToolStripSeparator
 
 End Class

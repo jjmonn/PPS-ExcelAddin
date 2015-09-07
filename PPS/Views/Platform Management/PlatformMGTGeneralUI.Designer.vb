@@ -103,7 +103,7 @@ Partial Class PlatformMGTGeneralUI
         Me.AdjustmentsBT.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
         Me.AdjustmentsBT.Name = "AdjustmentsBT"
         Me.AdjustmentsBT.Size = New System.Drawing.Size(98, 55)
-        Me.AdjustmentsBT.Text = "Adjustemnts"
+        Me.AdjustmentsBT.Text = "Adjustments"
         Me.AdjustmentsBT.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
         Me.AdjustmentsBT.ToolTipText = "Adjustments Edition  (All changes applied will be available for all users)"
         '
@@ -167,24 +167,28 @@ Partial Class PlatformMGTGeneralUI
         '
         'EntitiesFiltersBT
         '
+        Me.EntitiesFiltersBT.Image = Global.PPS.My.Resources.Resources.elements_hierarchy
         Me.EntitiesFiltersBT.Name = "EntitiesFiltersBT"
         Me.EntitiesFiltersBT.Size = New System.Drawing.Size(155, 24)
         Me.EntitiesFiltersBT.Text = "Entities"
         '
         'ClientsFiltersBT
         '
+        Me.ClientsFiltersBT.Image = Global.PPS.My.Resources.Resources.users_relation
         Me.ClientsFiltersBT.Name = "ClientsFiltersBT"
         Me.ClientsFiltersBT.Size = New System.Drawing.Size(155, 24)
         Me.ClientsFiltersBT.Text = "Clients"
         '
         'ProductsFiltersBT
         '
+        Me.ProductsFiltersBT.Image = Global.PPS.My.Resources.Resources.barcode1
         Me.ProductsFiltersBT.Name = "ProductsFiltersBT"
         Me.ProductsFiltersBT.Size = New System.Drawing.Size(155, 24)
         Me.ProductsFiltersBT.Text = "Products"
         '
         'AdjustmentsFiltersBT
         '
+        Me.AdjustmentsFiltersBT.Image = Global.PPS.My.Resources.Resources.elements4
         Me.AdjustmentsFiltersBT.Name = "AdjustmentsFiltersBT"
         Me.AdjustmentsFiltersBT.Size = New System.Drawing.Size(155, 24)
         Me.AdjustmentsFiltersBT.Text = "Adjustments"

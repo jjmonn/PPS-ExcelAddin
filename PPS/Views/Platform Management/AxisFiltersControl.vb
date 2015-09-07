@@ -17,7 +17,10 @@ Friend Class AxisFiltersControl
 
     ' Objects
     Private Controller As AxisFiltersController
+    Private NewFilterUI As NewFilterUI
     Private FiltersFiltersValuesTV As New TreeView
+    Private filtersNode As TreeNode
+    Private axisId As Int32
 
     ' Variables
     Private CP As CircularProgressUI
@@ -28,6 +31,8 @@ Friend Class AxisFiltersControl
 #Region "Initialization"
 
     Friend Sub New(ByRef p_controller As AxisFiltersController, _
+                   ByRef p_filtersNode As TreeNode, _
+                   ByRef p_axidId As Int32, _
                    ByRef p_filtersFiltersValuesTV As TreeView)
 
         ' This call is required by the designer.
@@ -35,7 +40,10 @@ Friend Class AxisFiltersControl
 
         ' Add any initialization after the InitializeComponent() call.
         Controller = p_controller
+        Me.NewFilterUI = New NewFilterUI(p_controller, p_filtersNode)
         FiltersFiltersValuesTV = p_filtersFiltersValuesTV
+        axisId = p_axidId
+        filtersNode = p_filtersNode
         TableLayoutPanel1.Controls.Add(FiltersFiltersValuesTV, 0, 1)
         FiltersFiltersValuesTV.Dock = DockStyle.Fill
         FiltersFiltersValuesTV.ImageList = ImageList1
@@ -55,48 +63,78 @@ Friend Class AxisFiltersControl
 #End Region
 
 
+#Region "Interface"
+
+    Delegate Sub UpdateFiltersValuesTV_Delegate()
+    Friend Sub UpdateFiltersValuesTV()
+
+        If InvokeRequired Then
+            Dim MyDelegate As New UpdateFiltersValuesTV_Delegate(AddressOf UpdateFiltersValuesTV)
+            Me.Invoke(MyDelegate, New Object() {})
+        Else
+            Dim TVExpansionTemp As Dictionary(Of String, Boolean) = TreeViewsUtilities.SaveNodesExpansionsLevel(FiltersFiltersValuesTV)
+            AxisFilter.LoadFvTv(FiltersFiltersValuesTV, filtersNode, axisId)
+            TreeViewsUtilities.ResumeExpansionsLevel(FiltersFiltersValuesTV, TVExpansionTemp)
+            FiltersFiltersValuesTV.Refresh()
+        End If
+
+    End Sub
+
+#End Region
+
+
 #Region "Call backs"
 
     Private Sub CreateCategoryBT_Click(sender As Object, e As EventArgs) Handles NewCategoryMenuBT.Click, CreateCategoryRCM.Click
 
-        Dim name = InputBox("Please enter the name of the New Category :")
-        If Controller.CreateFilter(name) = False Then
-            MsgBox("This name is already used or contains forbiden characters.")
-        End If
+        Me.NewFilterUI.Show()
 
     End Sub
 
     Private Sub AddCategoryValueBT_Click_1(sender As Object, e As EventArgs) Handles AddValueRCM.Click, NewCategoryMenuBT.Click
 
-        ' reimplement: priority normal:
-        '
-        ' if node has already children 
-        '   -> add a child
-        ' else
-        '   -> add filter (ask for filter name) -> does not produce node addition
-        '   -> enchainer sur demande première valeur ?
+        Dim filterId, parentFilterValueId As Int32
+        Dim currentNode As TreeNode = FiltersFiltersValuesTV.SelectedNode
+        If FiltersFiltersValuesTV.SelectedNode Is Nothing Then
+            MsgBox("Please select a Category or a Value.")
+        Else
+            If Controller.IsFilter(currentNode.Name) Then
+                filterId = CInt(currentNode.Name)
+                parentFilterValueId = 0
+                GoTo NewFilterValue
+            End If
 
+            If currentNode.Nodes.Count > 0 Then
+                filterId = GlobalVariables.FiltersValues.filtervalues_hash(CInt(currentNode.Nodes(0).Name))(FILTER_ID_VARIABLE)
+                parentFilterValueId = CInt(currentNode.Name)
+            Else
+                filterId = GlobalVariables.FiltersValues.filtervalues_hash(CInt(currentNode.Name))(FILTER_ID_VARIABLE)
+                If Controller.IsFilter(currentNode.Parent.Name) = True Then
+                    parentFilterValueId = 0
+                Else
+                    parentFilterValueId = CInt(currentNode.Parent.Name)
+                End If
+            End If
+        End If
 
-        'If Not FiltersFiltersValuesTV.SelectedNode Is Nothing Then
-        '    Dim current_node As TreeNode = FiltersFiltersValuesTV.SelectedNode
-        '    If Controller.IsCategory(FiltersFiltersValuesTV.SelectedNode.Name) = False Then current_node = current_node.Parent
-
-        '    Dim name = InputBox("Please enter the new Category Value Name:")
-        '    If Controller.CreateCategoryValue(name, current_node) = False Then
-        '        MsgBox("This name is already used or contains forbiden characters. The length must not exceed 48 characters.")
-        '    End If
-        'Else
-        '    MsgBox("A Category must be selected in order ot Add a Value.")
-        'End If
+NewFilterValue:
+        Dim newFilterValueName As String = InputBox("Enter the name of the New Category Value.", "New Category Value")
+        If newFilterValueName <> "" Then
+            If GlobalVariables.Filters.IsNameValid(newFilterValueName) = True Then
+                Controller.CreateFilterValue(newFilterValueName, _
+                                             filterId, _
+                                             parentFilterValueId)
+            Else
+                MsgBox("This name is already in use.")
+            End If
+        End If
 
     End Sub
 
     Private Sub RenameToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles RenameMenuBT.Click, RenameRCM.Click
 
         If Not FiltersFiltersValuesTV.SelectedNode Is Nothing Then
-
             Dim current_node As TreeNode = FiltersFiltersValuesTV.SelectedNode
-            If IsNonAttributedValue(current_node) = False Then
                 Dim name = InputBox("Please enter the new Category Value Name:")
                 If name <> "" Then
 
@@ -109,9 +147,6 @@ Friend Class AxisFiltersControl
                     '    MsgBox("This name is already used or contains forbiden characters.")
                     'End If
                 End If
-            Else
-                MsgBox("Cannot rename a NA value.")
-            End If
         Else
             MsgBox("A Category must be selected in order ot Add a Value.")
         End If
@@ -125,26 +160,22 @@ Friend Class AxisFiltersControl
         ' !!!
         If Not FiltersFiltersValuesTV.SelectedNode Is Nothing Then
             Dim current_node As TreeNode = FiltersFiltersValuesTV.SelectedNode
-            If Controller.Isfilter(FiltersFiltersValuesTV.SelectedNode.Name) Then
+            If Controller.IsFilter(FiltersFiltersValuesTV.SelectedNode.Name) Then
                 ' Delete Category
                 Dim confirm As Integer = MessageBox.Show("Careful, you are about to delete the Category: " + Chr(13) + current_node.Text + Chr(13) + "Do you confirm?", _
                                                          "Category deletion confirmation", _
                                                          MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question)
                 If confirm = DialogResult.Yes Then
-                    Controller.DeleteFilter(current_node)
+                    Controller.DeleteFilter(current_node.Name)
                 End If
             Else
                 ' Delete Category Value
-                If IsNonAttributedValue(current_node) = False Then
                     Dim confirm As Integer = MessageBox.Show("Careful, you are about to delete the Category value: " + Chr(13) + current_node.Text + Chr(13) + "Do you confirm?", _
                                                              "Category value deletion confirmation", _
                                                              MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question)
                     If confirm = DialogResult.Yes Then
-                        Controller.DeleteFilterValue(current_node)
+                        Controller.DeleteFilterValue(current_node.Name)
                     End If
-                Else
-                    MsgBox("Cannot delete a NA Value.")
-                End If
             End If
         End If
 
@@ -180,18 +211,6 @@ Friend Class AxisFiltersControl
         End Select
 
     End Sub
-
-#End Region
-
-
-#Region "Utilities"
-
-    Private Function IsNonAttributedValue(ByRef node As TreeNode) As Boolean
-
-        If node.Name = node.Parent.Name & NON_ATTRIBUTED_SUFIX Then Return True Else Return False
-
-    End Function
-
 
 #End Region
 

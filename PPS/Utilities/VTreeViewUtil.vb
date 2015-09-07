@@ -328,10 +328,20 @@ Public Class VTreeViewUtil
 #Region "VtreeviewBox Loading"
 
     Friend Shared Sub LoadParentEntitiesTreeviewBox(ByRef TVBox As vTreeViewBox, _
-                                             ByRef originalTV As Windows.Forms.TreeView)
+                                                    ByRef originalTV As Windows.Forms.TreeView)
 
         TVBox.TreeView.Nodes.Clear()
         For Each node As Windows.Forms.TreeNode In originalTV.Nodes
+            AddNodeToParentEntityTreeviewBox(TVBox, node, Nothing)
+        Next
+
+    End Sub
+
+    Friend Shared Sub LoadParentEntitiesTreeviewBox(ByRef TVBox As vTreeViewBox, _
+                                                    ByRef originalNode As Windows.Forms.TreeNode)
+
+        TVBox.TreeView.Nodes.Clear()
+        For Each node As Windows.Forms.TreeNode In originalNode.Nodes
             AddNodeToParentEntityTreeviewBox(TVBox, node, Nothing)
         Next
 

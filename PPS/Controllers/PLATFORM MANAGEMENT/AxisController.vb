@@ -96,8 +96,6 @@ Friend Class AxisController
 
 #Region "Interface"
 
-    ' implies to rename CMSG functions with axis inside rather than CLIENT/ PRODUCTS / ADJUSTMENT priority immediate
-
     Friend Sub CreateAxis(ByRef AxisName As String)
 
         Dim ht As New Hashtable
@@ -201,7 +199,6 @@ Friend Class AxisController
         End If
 
     End Sub
-
 
 #End Region
 

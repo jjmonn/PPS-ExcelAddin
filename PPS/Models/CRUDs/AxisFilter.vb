@@ -33,6 +33,7 @@ Friend Class AxisFilter
                                ByRef filtersNode As TreeNode, _
                                ByRef axis_id As Int32)
 
+        FvTv.Nodes.Clear()
         GlobalVariables.Filters.LoadFiltersNode(filtersNode, axis_id)
         For Each filterNode As TreeNode In filtersNode.Nodes
             Dim NewFvTvNode As TreeNode = FvTv.Nodes.Add(filterNode.Name, filterNode.Text, 0, 0)
@@ -45,6 +46,7 @@ Friend Class AxisFilter
                               ByRef filtersNode As vTreeNode, _
                               ByRef axis_id As UInt32)
 
+        FvTv.Nodes.Clear()
         GlobalVariables.Filters.LoadFiltersNode(filtersNode, axis_id)
         For Each filterNode As vTreeNode In filtersNode.Nodes
             Dim NewFvTvNode As vTreeNode = VTreeViewUtil.AddNode(filterNode.Value, filterNode.Text, FvTv, 0)

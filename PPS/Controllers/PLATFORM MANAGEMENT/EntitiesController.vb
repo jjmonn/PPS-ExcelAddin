@@ -195,8 +195,11 @@ Friend Class EntitiesController
     Private Sub AfterEntityFilterRead(ByRef status As Boolean, ByRef entityFilterHT As Hashtable)
 
         If (status = True) Then
+            Dim entityId As Int32 = entityFilterHT(ENTITY_ID_VARIABLE)
+        If GlobalVariables.Entities.entities_hash.ContainsKey(entityId) Then
             LoadInstanceVariables()
-            View.UpdateEntity(GlobalVariables.Entities.entities_hash(CInt(entityFilterHT(ENTITY_ID_VARIABLE))))
+            View.UpdateEntity(GlobalVariables.Entities.entities_hash(entityId))
+            End If
         End If
 
     End Sub

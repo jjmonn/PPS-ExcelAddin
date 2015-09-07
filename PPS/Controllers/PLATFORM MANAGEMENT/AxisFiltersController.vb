@@ -17,17 +17,12 @@ Imports System.Collections
 
 Friend Class AxisFiltersController
 
-    ' implementation to be finished !!!!
-    ' priority normal 
-    '   -> manage actions triggered by tv events -> filters / filters values creation !
-    '
-    '
 
 #Region "Instance Variables"
 
     ' Objects
     Private View As AxisFiltersControl
-    Private filtersNodes As New TreeNode
+    Private filtersNode As New TreeNode
     Private filtersFilterValuesTv As New TreeView
   
     ' Variables
@@ -42,8 +37,8 @@ Friend Class AxisFiltersController
     Friend Sub New(ByRef p_axis_id As UInt32)
 
         axisId = p_axis_id
-        LoadinstancesVariables()
-        View = New AxisFiltersControl(Me, filtersFilterValuesTv)
+        AxisFilter.LoadFvTv(filtersFilterValuesTv, filtersNode, axisId)
+        View = New AxisFiltersControl(Me, filtersNode, axisId, filtersFilterValuesTv)
         View.Show()
 
         AddHandler GlobalVariables.Filters.CreationEvent, AddressOf AfterFilterCreation
@@ -55,12 +50,6 @@ Friend Class AxisFiltersController
         AddHandler GlobalVariables.FiltersValues.Read, AddressOf AfterFilterValueRead
         AddHandler GlobalVariables.FiltersValues.UpdateEvent, AddressOf AfterFilterValueUpdate
         AddHandler GlobalVariables.FiltersValues.DeleteEvent, AddressOf AfterFilterValueDelete
-
-    End Sub
-
-    Private Sub LoadinstancesVariables()
-
-        AxisFilter.LoadFvTv(filtersFilterValuesTv, filtersNodes, axisId)
 
     End Sub
 
@@ -84,50 +73,81 @@ Friend Class AxisFiltersController
 #Region "Interface"
 
     ' Filters
-    Friend Function CreateFilter(ByRef filter_name As String) As Boolean
+    Friend Function CreateFilter(ByRef filter_name As String, _
+                                 ByRef parentFilterid As Int32) As Boolean
+
+        Dim ht As New Hashtable
+        ht.Add(NAME_VARIABLE, filter_name)
+        ht.Add(PARENT_ID_VARIABLE, parentFilterid)
+        ht.Add(AXIS_ID_VARIABLE, axisId)
+        ht.Add(ITEMS_POSITIONS, 1)
+        ht.Add(FILTER_IS_PARENT_VARIABLE, 0)
+        GlobalVariables.Filters.CMSG_CREATE_FILTER(ht)
 
     End Function
 
-    Friend Sub UpdateFilter(ByRef filter_id As String, ByRef field As String, ByRef value As Object)
+    Friend Sub UpdateFilter(ByRef filterId As Int32, ByRef field As String, ByRef value As Object)
 
-        ' value !!!!!!!!!!!! != filter
-        '    GlobalVariables.Filters.CMSG_UPDATE_FILTER(filter_id, field, value)
+        Dim ht As Hashtable = GlobalVariables.Filters.filters_hash(filterid).clone
+        ht(field) = value
+        GlobalVariables.Filters.CMSG_UPDATE_FILTER(ht)
 
     End Sub
 
-    Friend Sub DeleteFilter(ByRef node As TreeNode)
+    Friend Sub UpdateFiltersBatch()
 
+
+    End Sub
+
+    Friend Sub DeleteFilter(ByRef filterId As Int32)
+
+        GlobalVariables.Filters.CMSG_DELETE_FILTER(filterId)
 
     End Sub
 
 
     ' Filters Values
-    Friend Function CreateFilterValue(ByRef filter_value_name As String, _
-                                      ByRef parent_node As TreeNode, _
-                                      Optional ByRef new_filter_value_id As String = "") As Boolean
+    Friend Sub CreateFilterValue(ByRef filterValueName As String, _
+                                ByRef filterId As Int32, _
+                                ByRef parentFilterValueId As Int32)
 
-        ' to be reimplemented
-        If GlobalVariables.Filters.IsNameValid(filter_value_name) = False Then Return False
-        Dim hash As New Hashtable
-        hash.Add(PARENT_ID_VARIABLE, CInt(parent_node.Name))
-        hash.Add(NAME_VARIABLE, filter_value_name)
-        hash.Add(FILTER_IS_PARENT_VARIABLE, 0)
-        hash.Add(ITEMS_POSITIONS, 1)
-        GlobalVariables.Filters.CMSG_CREATE_FILTER(hash)
-        Return True
-
-    End Function
-
-    Friend Sub UpdateFilterValue()
-
+        Dim ht As New Hashtable
+        ht.Add(NAME_VARIABLE, filterValueName)
+        ht.Add(FILTER_ID_VARIABLE, filterId)
+        ht.Add(PARENT_FILTER_VALUE_ID_VARIABLE, parentFilterValueId)
+        ht.Add(ITEMS_POSITIONS, 1)
+        GlobalVariables.FiltersValues.CMSG_CREATE_FILTER_VALUE(ht)
 
     End Sub
 
-    Friend Sub DeleteFilterValue(ByRef node As TreeNode)
+    Friend Sub UpdateFilterValue(ByRef filterId As Int32, _
+                                 ByRef variable As String, _
+                                 ByRef value As Object)
 
+        Dim ht As Hashtable = GlobalVariables.FiltersValues.filtervalues_hash(filterId).clone
+        ht(variable) = value
+        GlobalVariables.FiltersValues.CMSG_UPDATE_FILTER_VALUE(ht)
 
     End Sub
 
+    Friend Sub UpdateFilterValuesBatch(ByRef filtersValuesUpdates As List(Of Tuple(Of Int32, String, Int32)))
+
+        'Dim filterValuesHTUpdates As New List(Of Hashtable)
+        'For Each tuple_ As Tuple(Of Int32, String, Int32) In filtersValuesUpdates
+        '    Dim ht As Hashtable = GlobalVariables.FiltersValues.filtervalues_hash(tuple_.Item1).clone
+        '    ht(tuple_.Item2) = tuple_.Item3
+        '    filterValuesHTUpdates.Add(ht)
+        'Next
+        '    GlobalVariables.filtervalues.(filterValuesHTUpdates)
+        ' bacth not implemented on server ?
+
+    End Sub
+
+    Friend Sub DeleteFilterValue(ByRef filterValueId As Int32)
+
+        GlobalVariables.FiltersValues.CMSG_DELETE_FILTER_VALUE(filterValueId)
+
+    End Sub
 
 #End Region
 
@@ -136,10 +156,17 @@ Friend Class AxisFiltersController
 
     Private Sub AfterFilterRead(ByRef status As Boolean, ByRef ht As Hashtable)
 
+        If status = True Then
+            View.UpdateFiltersValuesTV()
+        End If
+
     End Sub
 
     Private Sub AfterFilterDelete(ByRef status As Boolean, ByRef id As Int32)
 
+        If status = True Then
+            View.UpdateFiltersValuesTV()
+        End If
 
     End Sub
 
@@ -155,10 +182,17 @@ Friend Class AxisFiltersController
 
     Private Sub AfterFilterValueRead(ByRef status As Boolean, ByRef ht As Hashtable)
 
+        If status = True Then
+            View.UpdateFiltersValuesTV()
+        End If
+
     End Sub
 
     Private Sub AfterFilterValueDelete(ByRef status As Boolean, ByRef id As Int32)
 
+        If status = True Then
+            View.UpdateFiltersValuesTV()
+        End If
 
     End Sub
 
@@ -178,11 +212,13 @@ Friend Class AxisFiltersController
 
 #Region "Utilities"
 
-    Friend Function IsFilter(ByRef id As UInt32) As Boolean
+    Friend Function IsFilter(ByRef id As Int32) As Boolean
 
-        Dim result As TreeNode() = filtersNodes.Nodes.Find(CStr(id), True)
-        If result.Length > 0 Then Return True
-        Return False
+        If GlobalVariables.Filters.filters_hash.ContainsKey(id) = True Then
+            Return True
+        Else
+            Return False
+        End If
 
     End Function
 
@@ -206,7 +242,6 @@ Friend Class AxisFiltersController
     End Sub
 
 #End Region
-
 
 
 

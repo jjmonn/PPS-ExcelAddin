@@ -214,7 +214,7 @@ Friend Class Computer
     Private Sub FillEntityData(ByRef packet As ByteBuffer)
 
         entityId = packet.ReadUint32()
-        ' System.Diagnostics.Debug.WriteLine("entityId:" & entityId)
+        System.Diagnostics.Debug.WriteLine("entityId:" & entityId)
 
         For account_index As Int32 = 1 To packet.ReadUint32()
             accountId = packet.ReadUint32()

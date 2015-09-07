@@ -89,7 +89,7 @@ Friend Class FilterValue
 
     Friend Sub CMSG_READ_FILTER_VALUE(ByRef id As Int32)
 
-        Dim packet As New ByteBuffer(CType(ClientMessage.CMSG_CREATE_FILTER_VALUE, UShort))
+        Dim packet As New ByteBuffer(CType(ClientMessage.CMSG_READ_FILTER_VALUE, UShort))
         packet.Release()
         NetworkManager.GetInstance().Send(packet)
 
