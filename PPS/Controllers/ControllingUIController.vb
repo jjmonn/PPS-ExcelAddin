@@ -626,6 +626,7 @@ Friend Class ControllingUIController
                 If dataMap.ContainsKey(v1 & token) _
                 AndAlso dataMap.ContainsKey(v2 & token) Then
                     args.CellValue = dataMap(v1 & token) - dataMap(v2 & token)
+                    If Double.IsNaN(args.CellValue) Then args.CellValue = "-"
                     If My.Settings.controllingUIResizeTofitGrid = True Then
                         args.ColumnItem.DataGridView.ColumnsHierarchy.ResizeColumnsToFitGridWidth()
                         ' args.ColumnItem.AutoResize(AutoResizeMode.FIT_ALL)
@@ -636,6 +637,7 @@ Friend Class ControllingUIController
             Else
                 If dataMap.ContainsKey(versionId & token) Then
                     args.CellValue = dataMap(versionId & token)
+                    If Double.IsNaN(args.CellValue) Then args.CellValue = "-"
                     If My.Settings.controllingUIResizeTofitGrid = True Then
                         args.ColumnItem.DataGridView.ColumnsHierarchy.ResizeColumnsToFitGridWidth()
                         ' args.ColumnItem.AutoResize(AutoResizeMode.FIT_ALL)
@@ -646,8 +648,7 @@ Friend Class ControllingUIController
 
             End If
         End If
-        If Double.IsNaN(args.CellValue) Then args.CellValue = "-"
-
+    
     End Sub
 
 #End Region
