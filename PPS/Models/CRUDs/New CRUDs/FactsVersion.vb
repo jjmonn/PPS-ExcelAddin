@@ -421,6 +421,17 @@ Friend Class FactsVersion
 
     End Function
 
+    Friend Function IsVersionValid(ByRef versionId As Int32) As Boolean
+
+        If GlobalVariables.Versions.versions_hash.ContainsKey(versionId) _
+       AndAlso GlobalVariables.Versions.versions_hash(versionId)(IS_FOLDER_VARIABLE) = 0 Then
+            Return True
+        Else
+            Return False
+        End If
+
+    End Function
+
 #End Region
 
 

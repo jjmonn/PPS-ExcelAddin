@@ -474,10 +474,10 @@
     <Compile Include="Views\Task Panes\EntitySelectionTP.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Views\Task Panes\VersionSelectionPane.Designer.vb">
+    <Compile Include="Views\Version Selection\VersionSelectionPane.Designer.vb">
       <DependentUpon>VersionSelectionPane.vb</DependentUpon>
     </Compile>
-    <Compile Include="Views\Task Panes\VersionSelectionPane.vb">
+    <Compile Include="Views\Version Selection\VersionSelectionPane.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Views\Task Panes\InputSelectionPane.Designer.vb">
@@ -521,10 +521,10 @@
     <Compile Include="Views\Platform Management\EntitySelectionForUsersMGT.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Views\VersionSelectionUI.Designer.vb">
+    <Compile Include="Views\Version Selection\VersionSelectionUI.Designer.vb">
       <DependentUpon>VersionSelectionUI.vb</DependentUpon>
     </Compile>
-    <Compile Include="Views\VersionSelectionUI.vb">
+    <Compile Include="Views\Version Selection\VersionSelectionUI.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Models\ModelServer.vb" />
@@ -711,7 +711,7 @@
     <EmbeddedResource Include="Views\Task Panes\EntitySelectionTP.resx">
       <DependentUpon>EntitySelectionTP.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Views\Task Panes\VersionSelectionPane.resx">
+    <EmbeddedResource Include="Views\Version Selection\VersionSelectionPane.resx">
       <DependentUpon>VersionSelectionPane.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\Task Panes\InputSelectionPane.resx">
@@ -738,7 +738,7 @@
     <EmbeddedResource Include="Views\Report Upload\ManualRangesSelectionUI.resx">
       <DependentUpon>ManualRangesSelectionUI.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Views\VersionSelectionUI.resx">
+    <EmbeddedResource Include="Views\Version Selection\VersionSelectionUI.resx">
       <DependentUpon>VersionSelectionUI.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\Controlling UI\ControllingUI_2.resx">

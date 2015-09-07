@@ -19,7 +19,7 @@
 '       - if data = period -> bug
 '
 '
-' Last modified: 01/09/2015
+' Last modified: 07/09/2015
 ' Author: Julien Monnereau
 
 
@@ -153,7 +153,18 @@ Friend Class ModelDataSet
         periodsValuesAddressDict.Clear()
         EntitiesValuesAddressDict.Clear()
 
-        If Not VersionsIdentify() Then currentVersionCode = My.Settings.version_id
+        If Not VersionsIdentify() Then
+            If GlobalVariables.Versions.IsVersionValid(My.Settings.version_id) = True Then
+                currentVersionCode = My.Settings.version_id
+            Else
+                MsgBox("A version must be selected or populated in the worksheet.")
+                Dim versionSelectionUI As New VersionSelectionUI
+                versionSelectionUI.Show()
+                ' priority high !!
+                ' idéal = UI version selection en background et doit être filled pour continuer
+            End If
+        End If
+
         DatesIdentify()
         AccountsIdentify()
         EntitiesIdentify()
@@ -194,7 +205,8 @@ Friend Class ModelDataSet
             For j = LBound(GlobalScreenShot, 2) To UBound(GlobalScreenShot, 2)
                 If versionsNameList.Contains(CStr(GlobalScreenShot(i, j))) Then
                     currentVersionCode = versionsNameCodeDictionary(CStr(GlobalScreenShot(i, j)))
-                    AddinModule.SetRibbonVersionName(CStr(GlobalScreenShot(i, j)), currentVersionCode)
+                    ' ask confirmation first -> priority high
+                    AddinModule.SetCurrentVersionId(currentVersionCode)
                     Return True
                 End If
             Next j

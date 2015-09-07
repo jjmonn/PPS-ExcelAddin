@@ -16,7 +16,7 @@
 '
 '
 ' Author: Julien Monnereau/ Addin Express automated code
-' Last modified: 01/09/2015
+' Last modified: 07/09/2015
 
 
 Imports System.Runtime.InteropServices
@@ -265,7 +265,7 @@ Public Class AddinModule
         '
         'VersionBT
         '
-        Me.VersionBT.Caption = "Versions selection"
+        Me.VersionBT.Caption = "Select Version"
         Me.VersionBT.Id = "adxRibbonButton_47a60ea441584fe3b0b975b2829b6ec1"
         Me.VersionBT.ImageList = Me.NewICOs
         Me.VersionBT.ImageTransparentColor = System.Drawing.Color.Transparent
@@ -312,7 +312,7 @@ Public Class AddinModule
         '
         'Addin_Version_label
         '
-        Me.Addin_Version_label.Caption = "Data Version"
+        Me.Addin_Version_label.Caption = " "
         Me.Addin_Version_label.Id = "adxRibbonLabel_b8b0a822a6f6432fb5ed3a82568b76ea"
         Me.Addin_Version_label.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
         '
@@ -1188,9 +1188,10 @@ Public Class AddinModule
         GlobalVariables.APPS = Me.HostApplication
 
         ' Main Ribbon Initialize
+        GlobalVariables.VersionSelectionTaskPane = Me.VersionSelectionTaskPane
         GlobalVariables.SubmissionStatusButton = SubmissionStatus
         GlobalVariables.Connection_Toggle_Button = Me.ConnectionBT
-        GlobalVariables.Version_Label = Me.Addin_Version_label
+        GlobalVariables.Version_Button = Me.VersionBT
         ConnectionBT.Image = 0
 
         ' Submission Ribbon Initialize
@@ -1233,8 +1234,8 @@ Public Class AddinModule
     'End Function
 
     ' Returns the entities View variable
-    Public Function GetVersionLabel() As ADXRibbonLabel
-        Return GlobalVariables.Version_Label
+    Public Function GetVersionButton() As ADXRibbonButton
+        Return GlobalVariables.Version_Button
     End Function
 
 #End Region
@@ -1799,7 +1800,7 @@ Public Class AddinModule
         Dim currencyId As Int32 = GlobalVariables.Entities.entities_hash(entity_id)(ENTITIES_CURRENCY_VARIABLE)
         Dim currentcell As Excel.Range = WorksheetWrittingFunctions.CreateReceptionWS(entity_name, _
                                                                                        {"Entity", "Currency", "Version"}, _
-                                                                                       {entity_name, currencyId, GlobalVariables.Version_Label.Caption})
+                                                                                       {entity_name, currencyId, GlobalVariables.Version_Button.Caption})
 
         Dim timeConfig As UInt32 = GlobalVariables.Versions.versions_hash(My.Settings.version_id)(VERSIONS_TIME_CONFIG_VARIABLE)
         Dim periodlist As Int32() = GlobalVariables.Versions.GetPeriodsList(My.Settings.version_id)
@@ -1825,12 +1826,12 @@ Public Class AddinModule
 
     End Sub
 
-    Public Sub LaunchVersionSelection()
+    Public Shared Sub LaunchVersionSelection()
 
         If CDbl(GlobalVariables.APPS.Version.Replace(".", ",")) > EXCEL_MIN_VERSION Then  ' 
             GlobalVariables.VersionsSelectionPaneVisible = True
-            Me.VersionSelectionTaskPane.Init()
-            Me.VersionSelectionTaskPane.Show()
+            GlobalVariables.VersionSelectionTaskPane.Init()
+            GlobalVariables.VersionSelectionTaskPane.Show()
         Else
             ' Implement settings versions for version selection without panes
             Dim VERSELUI As New VersionSelectionUI
@@ -1901,28 +1902,47 @@ Public Class AddinModule
 
     End Sub
 
-    Public Shared Sub SetRibbonVersionName(ByRef versionName As String, ByRef versionCode As String)
-
-        GlobalVariables.Version_Label.Caption = versionName
-        GlobalVariables.Version_label_Sub_Ribbon.Text = versionName
-        My.Settings.version_id = versionCode
-
-    End Sub
-
+  
 #End Region
 
 
 #Region "Interface"
+
     Public Shared Function DisplayConnectionStatus(ByRef connected As Boolean) As Int32
+
         If connected = True Then
             GlobalVariables.Connection_Toggle_Button.Image = 1
             GlobalVariables.Connection_Toggle_Button.Caption = "Connected"
+            SetCurrentVersionAfterConnection()
         Else
             GlobalVariables.Connection_Toggle_Button.Image = 0
             GlobalVariables.Connection_Toggle_Button.Caption = "Not connected"
         End If
         Return 0
+
     End Function
+
+    Private Shared Sub SetCurrentVersionAfterConnection()
+
+        Dim currentVersionId As Int32 = My.Settings.version_id
+        If GlobalVariables.Versions.IsVersionValid(currentVersionId) = True Then
+            SetCurrentVersionId(currentVersionId)
+        Else
+            LaunchVersionSelection()
+        End If
+
+    End Sub
+
+    Public Shared Sub SetCurrentVersionId(ByRef versionId As Int32)
+
+        GlobalVariables.Version_Button.Caption = GlobalVariables.Versions.versions_hash(versionId)(NAME_VARIABLE)
+        GlobalVariables.Version_label_Sub_Ribbon.Text = GlobalVariables.Versions.versions_hash(versionId)(NAME_VARIABLE)
+        My.Settings.version_id = versionId
+        My.Settings.Save()
+
+    End Sub
+
+
 #End Region
 
 
