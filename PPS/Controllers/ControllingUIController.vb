@@ -32,6 +32,7 @@ Friend Class ControllingUIController
     Private View As ControllingUI_2
     Friend EntityNode As vTreeNode
     Private vCompNode As TreeNode
+    Private computingCache As New ComputingCache(True)
 
     ' Variables
     Private currenciesNameIdDict As Dictionary(Of String, Int32)
@@ -48,14 +49,7 @@ Friend Class ControllingUIController
     Friend initDisplayFlag As Boolean = False
     Friend computedFlag As Boolean = False
 
-    ' Cache
-    Private cacheEntityID As Int32
-    Private cacheCurrencyId As Int32
-    Private cacheVersions() As Int32
-    Private cacheComputingHierarchyList As List(Of String)
-    Private cacheFilters As Dictionary(Of Int32, List(Of Int32))
-    Private cacheAxisFilters As Dictionary(Of Int32, List(Of Int32))
-
+  
     ' Virtual binding
     Private itemsDimensionsDict As Dictionary(Of HierarchyItem, Hashtable)
     Friend cellsUpdateNeeded As Boolean = True
@@ -171,11 +165,12 @@ Friend Class ControllingUIController
 
         ' Computing order
         Dim mustCompute As Boolean = True
-        If useCache = True AndAlso CheckCache(currencyId, _
-                                              versionIDs, _
-                                              computingHierarchyList, _
-                                              filters, _
-                                              axisFilters) = True Then mustCompute = False
+        If useCache = True AndAlso computingCache.CheckCache(EntityNode.Value, _
+                                                             currencyId, _
+                                                              versionIDs, _
+                                                              filters, _
+                                                              axisFilters, _
+                                                              computingHierarchyList) = True Then mustCompute = False
         If mustCompute = True Then
 
             If computingHierarchyList.Count = 0 Then computingHierarchyList = Nothing
@@ -188,12 +183,12 @@ Friend Class ControllingUIController
         End If
 
         ' Cache registering
-        cacheEntityID = CInt(entityNode.Value)
-        cacheCurrencyId = currencyId
-        cacheVersions = versionIDs
-        cacheComputingHierarchyList = computingHierarchyList
-        cacheFilters = filters
-        cacheAxisFilters = axisFilters
+        computingCache.cacheEntityID = CInt(EntityNode.Value)
+        computingCache.cacheCurrencyId = currencyId
+        computingCache.cacheVersions = versionIDs
+        computingCache.cacheComputingHierarchyList = computingHierarchyList
+        computingCache.cacheFilters = filters
+        computingCache.cacheAxisFilters = axisFilters
 
         ' Redraw hierarchy Items
         InitDisplay()
@@ -201,33 +196,7 @@ Friend Class ControllingUIController
 
     End Sub
 
-    Private Function CheckCache(ByRef currencyId As Int32, _
-                                ByRef versionIds() As Int32, _
-                                ByRef computingHierarchyList As List(Of String), _
-                                ByRef filters As Dictionary(Of Int32, List(Of Int32)), _
-                                ByRef axisFilters As Dictionary(Of Int32, List(Of Int32))) As Boolean
-
-        ' entityId => included in current scope
-        Dim cacheEntityNode As vTreeNode = VTreeViewUtil.FindNode(View.leftPane_control.entitiesTV, cacheEntityID)
-        If VTreeViewUtil.FindNode(cacheEntityNode, EntityNode.value) Is Nothing Then Return False
-        If cacheCurrencyId <> currencyId Then Return False
-        For Each versionId In versionIds
-            If cacheVersions.Contains(versionId) = False Then Return False
-        Next
-
-        ' decomposition dimensions
-        For Each dimensionId As String In computingHierarchyList
-            If cacheComputingHierarchyList.Contains(dimensionId) = False Then Return False
-        Next
-
-        ' filters / axis filters
-        If DictsCompare(filters, cacheFilters) = False Then Return False
-        If DictsCompare(axisFilters, cacheAxisFilters) = False Then Return False
-
-        Return True
-
-    End Function
-
+   
     Private Sub AfterCompute()
 
         While initDisplayFlag = False
@@ -848,20 +817,6 @@ Friend Class ControllingUIController
         End If
 
     End Sub
-
-    Private Function DictsCompare(ByRef dict1 As Dictionary(Of Int32, List(Of Int32)), _
-                                  ByRef dict2 As Dictionary(Of Int32, List(Of Int32))) As Boolean
-
-
-        For Each filterId As Int32 In dict1.Keys
-            If dict2.ContainsKey(filterId) = False Then Return False
-            For Each filterValueId As Int32 In dict1(filterId)
-                If dict2(filterId).Contains(filterValueId) = False Then Return False
-            Next
-        Next
-        Return True
-
-    End Function
 
     Private Function GetFirstVersionId(ByRef versionId As String) As Object
 

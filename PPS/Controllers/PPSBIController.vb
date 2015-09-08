@@ -1,14 +1,13 @@
 ﻿' PPSBIController.vb
 ' 
-' - Currently PPSBI user defined function call back
-' - Manage the checks, launch computing and return formula result
+' - PPSBI user defined function call back
+' 
 '
 ' To do:
 '      - Simplification : loop through optional parameters
 '      - Version and currency dllcomputerinstance current checks to add when those params are operationals
 '      - Must be able to identify dates more globally -> regex for example     
-'       - EntitiesTV can be stored in aggregation computer
-'
+'     
 '
 '  Known bugs:
 '      
@@ -31,12 +30,14 @@ Friend Class PPSBIController
 
     ' Objects
     Private Computer As New Computer
+    Private computingCache As New ComputingCache(False)
 
     ' Variables
     Private requestIdComputeFlagDict As New Dictionary(Of Int32, Boolean)
     Private emptyCellFlag As Boolean
     Friend filterList As New List(Of String)
-   
+    Friend mustUpdateFlag As Boolean = False
+
 #End Region
 
 
@@ -45,7 +46,7 @@ Friend Class PPSBIController
     Friend Sub New()
 
         emptyCellFlag = False
-       AddHandler Computer.ComputationAnswered, AddressOf AfterCompute
+        AddHandler Computer.ComputationAnswered, AddressOf AfterCompute
 
     End Sub
 
@@ -56,7 +57,7 @@ Friend Class PPSBIController
 
     ' Stubs in this function - clients/ products adjustments filters should come as param or computed here ?!!!
     ' Period input: date as integer 
-    Friend Function getDataCallBack(ByRef p_entity_str As Object, _
+    Friend Function GetDataCallBack(ByRef p_entity_str As Object, _
                                    ByRef p_account_str As Object, _
                                    ByRef p_period_str As Object, _
                                    ByRef p_currency_str As Object, _
@@ -64,13 +65,12 @@ Friend Class PPSBIController
                                    Optional ByRef p_adjustment_str As Object = Nothing, _
                                    Optional ByRef p_filtersArray As Object = Nothing) As Object
 
-        Dim entityString, accountString, periodString, currencyString, adjustmentString, versionString, error_message As String
-        Dim entity_id, account_id, currency_id, version_id, adjustment_id, period As Int32
+        Dim entityString, accountString, currencyString, adjustmentString, versionString, periodToken, error_message As String
+        Dim entity_id, account_id, currency_id, version_id, adjustment_id As Int32
 
         emptyCellFlag = False
         entityString = ReturnValueFromRange(p_entity_str)
         accountString = ReturnValueFromRange(p_account_str)
-        periodString = ReturnValueFromRange(p_period_str)
         currencyString = ReturnValueFromRange(p_currency_str)
         adjustmentString = ReturnValueFromRange(p_adjustment_str)
         versionString = ReturnValueFromRange(p_version_str)
@@ -96,28 +96,47 @@ Friend Class PPSBIController
         Dim filters As Object = Nothing
         Dim axis_filters As Object = Nothing
 
-        ' check periods to be reimplemented !!
-        'If CheckDate(Period, period_int, GlobalVariables.GenericGlobalSingleEntityComputer.period_list) = False Then
-        '    Return "Invalid Period or Period format"
-        'End If
-        period = "y42004"
+        If CheckDate(p_period_str, periodToken, version_id, error_message) = False Then
+            Return error_message
+        End If
 
         Dim token As String = version_id & Computer.TOKEN_SEPARATOR & _
                                "0" & Computer.TOKEN_SEPARATOR & _
                                entity_id & Computer.TOKEN_SEPARATOR & _
                                account_id & Computer.TOKEN_SEPARATOR & _
-                               period
+                               periodToken
 
-        Dim request_id As Int32 = Computer.CMSG_COMPUTE_REQUEST({version_id}, _
-                                                                 entity_id, _
-                                                                 currency_id, _
-                                                                 filters, _
-                                                                 axis_filters, _
-                                                                 Nothing)
-        requestIdComputeFlagDict.Add(request_id, False)
-        While requestIdComputeFlagDict(request_id) = False
-            ' timeout ?
-        End While
+        ' Computing order
+        If mustUpdateFlag = False _
+        AndAlso computingCache.CheckCache(entity_id, _
+                                          currency_id, _
+                                         {version_id}, _
+                                         filters, _
+                                         axis_filters) = True Then
+
+            Dim request_id As Int32 = Computer.CMSG_COMPUTE_REQUEST({version_id}, _
+                                                                     entity_id, _
+                                                                     currency_id, _
+                                                                     filters, _
+                                                                     axis_filters, _
+                                                                     Nothing)
+            requestIdComputeFlagDict.Add(request_id, False)
+            While requestIdComputeFlagDict(request_id) = False
+                ' timeout ? priority high
+            End While
+            ' Cache registering
+            computingCache.cacheEntityID = entity_id
+            computingCache.cacheCurrencyId = currency_id
+            computingCache.cacheVersions = {version_id}
+            computingCache.cacheFilters = filters
+            computingCache.cacheAxisFilters = axis_filters
+            mustUpdateFlag = False
+            GoTo ReturnData
+        Else
+            GoTo ReturnData
+        End If
+
+ReturnData:
         If Computer.GetData.ContainsKey(token) Then
             Return Computer.GetData(token)
         Else
@@ -184,37 +203,39 @@ Friend Class PPSBIController
             version_id = GlobalVariables.Versions.GetVersionsIDFromName(versionString)
             If version_id <> "" Then Return True Else Return False
         Else
+            ' if my.settings version valid
+            ' else -> error message = "set up version
+            ' priority normal"
             version_id = My.Settings.version_id
             Return True
         End If
 
     End Function
 
-    Private Function CheckDate(ByRef input_period_object As Object, _
-                               ByRef periodInteger As Integer, _
-                               ByRef periodslist As List(Of Int32)) As Boolean
+    Private Function CheckDate(ByRef p_period_str As Object, _
+                               ByRef periodToken As String, _
+                               ByRef versionId As Int32, _
+                               ByRef errorMessage As String) As Boolean
 
-        Dim periodstr As String = ReturnValueFromRange(input_period_object)
+        Dim periodstr As String = ReturnValueFromRange(p_period_str)
         If IsDate(periodstr) Then
-            Dim periodAsDate As Date = CDate(periodstr)
-            If periodslist.Contains(periodAsDate.ToOADate) Then
-                periodInteger = periodAsDate.ToOADate
-                Return True
-            Else
-                Return False
-            End If
-        Else
-            If Not periodslist Is Nothing Then
-                If periodslist.Contains(periodstr) Then
-                    periodInteger = periodstr
+            Dim periodAsInt As Int32 = CDate(periodstr).ToOADate
+            Dim periodsList() As Int32 = GlobalVariables.Versions.GetPeriodsList(versionId)
+            Dim periodIdentifyer As Char
+            Select Case GlobalVariables.Versions.versions_hash(VERSION_ID_VARIABLE)(VERSIONS_TIME_CONFIG_VARIABLE)
+                Case GlobalEnums.TimeConfig.YEARS
+                    periodIdentifyer = Computer.YEAR_PERIOD_IDENTIFIER
+                Case GlobalEnums.TimeConfig.MONTHS
+                    periodIdentifyer = Computer.MONTH_PERIOD_IDENTIFIER
+            End Select
+            For Each p In periodsList
+                If p = periodAsInt Then
+                    periodToken = periodIdentifyer & periodAsInt
                     Return True
-                Else
-
-                    ' period check to be reimplemented !!
-
                 End If
-            End If
+            Next
         End If
+        errorMessage = "Invalid Period or Period format"
         Return False
 
     End Function
@@ -231,26 +252,6 @@ Friend Class PPSBIController
         End If
 
     End Sub
-
-#End Region
-
-
-#Region " Selections Builders"
-
-    'Private Function getEntityNode(ByRef entity_id As String) As TreeNode
-
-    '    Dim entitiesTV As New TreeView      ' Store in computers ?
-    '    ESB.BuildCategoriesFilterFromFilterList(filterList)
-    '    Globalvariables.Entities.LoadEntitiesTV(entitiesTV, ESB.StrSqlQueryForEntitiesUploadFunctions)
-    '    Dim lookup_result As TreeNode() = entitiesTV.Nodes.Find(entity_id, True)
-
-    '    ' !!! Result even if entity_id not in selection ! -> we still have the children !
-
-    '    If lookup_result.Length > 0 Then Return lookup_result(0) Else Return Nothing
-
-    'End Function
-
-
 
 #End Region
 
