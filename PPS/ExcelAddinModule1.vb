@@ -14,7 +14,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 25/06/2015
+' Last modified: 08/09/2015
 
 
 Imports System.Runtime.InteropServices
@@ -62,7 +62,6 @@ Public Class ExcelAddinModule1
 
 #Region "Initialize"
 
-
     Public Sub New()
         MyBase.New()
 
@@ -75,77 +74,51 @@ Public Class ExcelAddinModule1
 
         GlobalVariables.APPS = Me.HostApplication
         If GlobalVariables.apps.COMAddIns.Item("PPS.AddinModule").Object.setupflag = True Then
-
-            InitializeGlobalVariables()
-            InitializeComputer()
-            setUpFlag = True
-
+             setUpFlag = True
         End If
 
     End Sub
 
-    ' Initialize Global Variables
-    Private Function InitializeGlobalVariables() As Boolean
-
-        ' to be reimplemented => priority normal
-
-        'GlobalVariables.Connection = GlobalVariables.APPS.COMAddIns.Item("PPS.AddinModule").Object.GetAddinConnection()
-
-        'GlobalVariables.Version_Label = GlobalVariables.APPS.COMAddIns.Item("PPS.AddinModule").Object.GetVersionLabel()
-        'If GlobalVariables.Connection Is Nothing Then
-        '    Return False
-        'Else
-        '    Return True
-        'End If
-
-    End Function
-
-    ' Initialize the DLL computer instance
     Private Sub InitializeComputer()
 
         GlobalVariables.GlobalPPSBIController = New PPSBIController
 
     End Sub
 
-
 #End Region
 
-    ' To do
-    ' Need for a flag at PPS level raised when model is updated
-    ' before PPSBI below computes need to check for update flag
-    ' if model has been updated -> reinitialize computerInstance !!!
     Public Function PPSBI(ByRef entity As Object, _
-                          ByRef account As Object, _
-                          ByRef period As Object, _
-                          ByRef currency As Object, _
-                          ByRef version As Object, _
-                           ByRef adjustment_filter As Object, _
-                           ByRef filters As Object) As Object
+                        ByRef account As Object, _
+                        ByRef period As Object, _
+                        ByRef currency As Object, _
+                        ByRef version As Object, _
+                        ByRef clients_filters As Object, _
+                        ByRef products_filters As Object, _
+                        ByRef adjustments_filters As Object, _
+                        ByRef filters As Object) As Object
 
         If GlobalVariables.APPS.COMAddIns.Item("PPS.AddinModule").Object.ppsbi_refresh_flag = True Then
             If setUpFlag = False Then
-                '  Version_Label = GlobalVariables.apps.COMAddIns.Item("PPS.AddinModule").Object.GetVersionLabel()
                 If GlobalVariables.GlobalPPSBIController Is Nothing Then
-                    If InitializeGlobalVariables() = True Then
-                        InitializeComputer()
-                        setUpFlag = True
-                    End If
+                    InitializeComputer()
+                    setUpFlag = True
                 End If
             End If
 
-            If GlobalVariables.ConnectionState = False Then
+            If GlobalVariables.AuthenticationFlag = False Then
                 Return "Not connected"
             End If
-
-            Return GlobalVariables.GlobalPPSBIController.getDataCallBack(entity, _
-                                                       account, _
-                                                       period, _
-                                                       currency,
-                                                       version, _
-                                                       adjustment_filter, _
-                                                       filters)
-            Return "Not connected"
+            Return GlobalVariables.GlobalPPSBIController.GetDataCallBack(entity, _
+                                                                       account, _
+                                                                       period, _
+                                                                       currency,
+                                                                       version, _
+                                                                       clients_filters, _
+                                                                       products_filters, _
+                                                                       adjustments_filters, _
+                                                                       filters)
         End If
+        Return "Not connected"
 
     End Function
 

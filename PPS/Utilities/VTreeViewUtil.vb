@@ -50,7 +50,11 @@ Public Class VTreeViewUtil
                                     ByRef value As String, _
                                     Optional ByRef includeSelf As Boolean = False) As vTreeNode
 
-        For Each subNode As vTreeNode In GetAllChildrenNodesList(node)
+        Dim childrenNodesList As List(Of vTreeNode) = GetAllChildrenNodesList(node)
+        If includeSelf = True Then
+            childrenNodesList.Add(node)
+        End If
+        For Each subNode As vTreeNode In childrenNodesList
             If subNode.Value = value Then Return subNode
         Next
         Return Nothing

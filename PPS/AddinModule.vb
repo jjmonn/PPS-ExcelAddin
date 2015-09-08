@@ -32,6 +32,7 @@ Imports System.Collections.Generic
 Public Class AddinModule
     Inherits AddinExpress.MSO.ADXAddinModule
 
+
 #Region "instance Variables"
 
 
@@ -1913,6 +1914,7 @@ Public Class AddinModule
 
     Public Shared Function DisplayConnectionStatus(ByRef connected As Boolean) As Int32
 
+        On Error Resume Next
         If connected = True Then
             GlobalVariables.Connection_Toggle_Button.Image = 1
             GlobalVariables.Connection_Toggle_Button.Caption = "Connected"

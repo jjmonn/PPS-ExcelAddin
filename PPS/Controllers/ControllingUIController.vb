@@ -165,12 +165,12 @@ Friend Class ControllingUIController
 
         ' Computing order
         Dim mustCompute As Boolean = True
-        If useCache = True AndAlso computingCache.CheckCache(EntityNode.Value, _
+        If useCache = True AndAlso computingCache.MustCompute(EntityNode.Value, _
                                                              currencyId, _
                                                               versionIDs, _
                                                               filters, _
                                                               axisFilters, _
-                                                              computingHierarchyList) = True Then mustCompute = False
+                                                              computingHierarchyList) = False Then mustCompute = False
         If mustCompute = True Then
 
             If computingHierarchyList.Count = 0 Then computingHierarchyList = Nothing

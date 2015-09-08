@@ -45,7 +45,7 @@ Public Class ComputingCache
 #End Region
 
 
-    Friend Function CheckCache(ByRef entityId As Int32, _
+    Friend Function MustCompute(ByRef entityId As Int32, _
                                ByRef currencyId As Int32, _
                                ByRef versionIds() As Int32, _
                                ByRef filters As Dictionary(Of Int32, List(Of Int32)), _
@@ -54,24 +54,27 @@ Public Class ComputingCache
 
         ' entityId => included in current scope
         Dim cacheEntityNode As vTreeNode = VTreeViewUtil.FindNode(entitiesTV, cacheEntityID)
-        If VTreeViewUtil.FindNode(cacheEntityNode, entityId) Is Nothing Then Return False
-        If cacheCurrencyId <> currencyId Then Return False
+        If cacheEntityNode Is Nothing Then Return True
+        If VTreeViewUtil.FindNode(cacheEntityNode, entityId, True) Is Nothing Then Return True
+        If cacheCurrencyId <> currencyId Then Return True
         For Each versionId In versionIds
-            If cacheVersions.Contains(versionId) = False Then Return False
+            If cacheVersions.Contains(versionId) = False Then Return True
         Next
 
         ' filters / axis filters
-        If Utilities_Functions.DictsCompare(filters, cacheFilters) = False Then Return False
-        If Utilities_Functions.DictsCompare(axisFilters, cacheAxisFilters) = False Then Return False
+        If Utilities_Functions.DictsCompare(filters, cacheFilters) = False Then Return True
+        If Utilities_Functions.DictsCompare(cacheFilters, filters) = False Then Return True
+        If Utilities_Functions.DictsCompare(axisFilters, cacheAxisFilters) = False Then Return True
+        If Utilities_Functions.DictsCompare(cacheAxisFilters, axisFilters) = False Then Return True
 
         If computingHierarchyCompareFlag = True Then
             ' decomposition dimensions
             For Each dimensionId As String In computingHierarchyList
-                If cacheComputingHierarchyList.Contains(dimensionId) = False Then Return False
+                If cacheComputingHierarchyList.Contains(dimensionId) = False Then Return True
             Next
         End If
 
-        Return True
+        Return False
 
     End Function
 
