@@ -67,7 +67,7 @@ Partial Class ASEntitiesAttributesUI
         '
         'copy_down_bt
         '
-        Me.copy_down_bt.Image = Global.PPS.My.Resources.Resources.Download_
+        Me.copy_down_bt.Image = Global.FinancialBI.My.Resources.Resources.Download_
         Me.copy_down_bt.Name = "copy_down_bt"
         Me.copy_down_bt.Size = New System.Drawing.Size(168, 22)
         Me.copy_down_bt.Text = "Copy Value Down"
@@ -79,7 +79,7 @@ Partial Class ASEntitiesAttributesUI
         '
         'drop_to_excel_bt
         '
-        Me.drop_to_excel_bt.Image = Global.PPS.My.Resources.Resources.Benjigarner_Softdimension_Excel
+        Me.drop_to_excel_bt.Image = Global.FinancialBI.My.Resources.Resources.Benjigarner_Softdimension_Excel
         Me.drop_to_excel_bt.Name = "drop_to_excel_bt"
         Me.drop_to_excel_bt.Size = New System.Drawing.Size(168, 22)
         Me.drop_to_excel_bt.Text = "Drop To Excel"
@@ -91,14 +91,14 @@ Partial Class ASEntitiesAttributesUI
         '
         'CreateEntityToolStripMenuItem
         '
-        Me.CreateEntityToolStripMenuItem.Image = Global.PPS.My.Resources.Resources.checked
+        Me.CreateEntityToolStripMenuItem.Image = Global.FinancialBI.My.Resources.Resources.checked
         Me.CreateEntityToolStripMenuItem.Name = "CreateEntityToolStripMenuItem"
         Me.CreateEntityToolStripMenuItem.Size = New System.Drawing.Size(168, 22)
         Me.CreateEntityToolStripMenuItem.Text = "Create Entity"
         '
         'DeleteEntityToolStripMenuItem2
         '
-        Me.DeleteEntityToolStripMenuItem2.Image = Global.PPS.My.Resources.Resources.imageres_89
+        Me.DeleteEntityToolStripMenuItem2.Image = Global.FinancialBI.My.Resources.Resources.imageres_89
         Me.DeleteEntityToolStripMenuItem2.Name = "DeleteEntityToolStripMenuItem2"
         Me.DeleteEntityToolStripMenuItem2.Size = New System.Drawing.Size(168, 22)
         Me.DeleteEntityToolStripMenuItem2.Text = "Delete Entity"
@@ -130,7 +130,7 @@ Partial Class ASEntitiesAttributesUI
         '
         'SendEntitiesHierarchyToExcelToolStripMenuItem
         '
-        Me.SendEntitiesHierarchyToExcelToolStripMenuItem.Image = Global.PPS.My.Resources.Resources.Benjigarner_Softdimension_Excel
+        Me.SendEntitiesHierarchyToExcelToolStripMenuItem.Image = Global.FinancialBI.My.Resources.Resources.Benjigarner_Softdimension_Excel
         Me.SendEntitiesHierarchyToExcelToolStripMenuItem.Name = "SendEntitiesHierarchyToExcelToolStripMenuItem"
         Me.SendEntitiesHierarchyToExcelToolStripMenuItem.Size = New System.Drawing.Size(238, 22)
         Me.SendEntitiesHierarchyToExcelToolStripMenuItem.Text = "Send Entities Hierarchy to Excel"

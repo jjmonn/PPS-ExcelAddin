@@ -28,7 +28,7 @@ Imports System.Collections.Generic
 
 
 'Add-in Express Add-in Module"
-<GuidAttribute("C5985605-3A21-426D-8DC3-B38EEBDA50C8"), ProgIdAttribute("PPS.AddinModule")> _
+<GuidAttribute("C5985605-3A21-426D-8DC3-B38EEBDA50C8"), ProgIdAttribute("FinancialBI.AddinModule")> _
 Public Class AddinModule
     Inherits AddinExpress.MSO.ADXAddinModule
 
@@ -247,7 +247,7 @@ Public Class AddinModule
         Me.ConnectionBT.ImageList = Me.ConnectionIcons
         Me.ConnectionBT.ImageTransparentColor = System.Drawing.Color.Transparent
         Me.ConnectionBT.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
-        Me.ConnectionBT.ScreenTip = "Click to open the connection with PPS server (your identification and password wi" & _
+        Me.ConnectionBT.ScreenTip = "Click to open the connection with Financial BI server (your identification and password wi" & _
     "ll be required)"
         Me.ConnectionBT.Size = AddinExpress.MSO.ADXRibbonXControlSize.Large
         '
@@ -422,7 +422,7 @@ Public Class AddinModule
         Me.RefreshBT.ImageList = Me.Menu3
         Me.RefreshBT.ImageTransparentColor = System.Drawing.Color.Transparent
         Me.RefreshBT.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
-        Me.RefreshBT.ScreenTip = "Click to Refresh Data in PPS BI Formulas"
+        Me.RefreshBT.ScreenTip = "Click to Refresh Data in Financial BI Formulas"
         Me.RefreshBT.Size = AddinExpress.MSO.ADXRibbonXControlSize.Large
         '
         'RefreshMenu
@@ -593,7 +593,7 @@ Public Class AddinModule
         '
         'SettingsBT
         '
-        Me.SettingsBT.Caption = "PPS Settings"
+        Me.SettingsBT.Caption = "Financial BI Settings"
         Me.SettingsBT.Id = "adxRibbonButton_aa28ec782b5541edb1482374e14ceaa6"
         Me.SettingsBT.Image = 16
         Me.SettingsBT.ImageList = Me.Menu3
@@ -650,7 +650,7 @@ Public Class AddinModule
         '
         'SubmissionModeRibbon
         '
-        Me.SubmissionModeRibbon.Caption = "PPS Bi® Submission"
+        Me.SubmissionModeRibbon.Caption = "Financial BI® Submission"
         Me.SubmissionModeRibbon.Controls.Add(Me.SubmissionnGroup)
         Me.SubmissionModeRibbon.Controls.Add(Me.StateSelectionGroup)
         Me.SubmissionModeRibbon.Controls.Add(Me.EditSelectionGroup)
@@ -1049,7 +1049,7 @@ Public Class AddinModule
         '
         'AddinModule
         '
-        Me.AddinName = "PPS"
+        Me.AddinName = "FinancialBI"
         Me.SupportedApps = AddinExpress.MSO.ADXOfficeHostApp.ohaExcel
 
     End Sub
@@ -1280,7 +1280,7 @@ Public Class AddinModule
 
 #End Region
 
-#Region "PPS Data Acquisition"
+#Region "Financial BI Data Acquisition"
 
     Private Sub snapshotBT_onclick(sender As System.Object,
                                  control As AddinExpress.MSO.IRibbonControl,
@@ -1902,7 +1902,7 @@ Public Class AddinModule
 
     End Sub
 
-  
+
 #End Region
 
 

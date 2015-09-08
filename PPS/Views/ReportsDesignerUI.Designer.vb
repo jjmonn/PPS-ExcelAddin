@@ -600,14 +600,14 @@ Partial Class ReportsDesignerUI
         '
         'NewReportRCM
         '
-        Me.NewReportRCM.Image = Global.PPS.My.Resources.Resources.checked
+        Me.NewReportRCM.Image = Global.FinancialBI.My.Resources.Resources.checked
         Me.NewReportRCM.Name = "NewReportRCM"
         Me.NewReportRCM.Size = New System.Drawing.Size(150, 24)
         Me.NewReportRCM.Text = "New Report"
         '
         'NewSerieRCM
         '
-        Me.NewSerieRCM.Image = Global.PPS.My.Resources.Resources.favicon_233_
+        Me.NewSerieRCM.Image = Global.FinancialBI.My.Resources.Resources.favicon_233_
         Me.NewSerieRCM.Name = "NewSerieRCM"
         Me.NewSerieRCM.Size = New System.Drawing.Size(150, 24)
         Me.NewSerieRCM.Text = "New Serie"
@@ -630,7 +630,7 @@ Partial Class ReportsDesignerUI
         '
         'DeleteRCM
         '
-        Me.DeleteRCM.Image = Global.PPS.My.Resources.Resources.imageres_89
+        Me.DeleteRCM.Image = Global.FinancialBI.My.Resources.Resources.imageres_89
         Me.DeleteRCM.Name = "DeleteRCM"
         Me.DeleteRCM.Size = New System.Drawing.Size(150, 24)
         Me.DeleteRCM.Text = "Delete"

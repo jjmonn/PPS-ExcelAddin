@@ -358,7 +358,8 @@ Partial Class ControllingUI_2
         Me.MainMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ExcelToolStripMenuItem, Me.BusinessControlToolStripMenuItem, Me.RefreshToolStripMenuItem})
         Me.MainMenu.Location = New System.Drawing.Point(0, 0)
         Me.MainMenu.Name = "MainMenu"
-        Me.MainMenu.Size = New System.Drawing.Size(247, 59)
+        Me.MainMenu.ShowItemToolTips = True
+        Me.MainMenu.Size = New System.Drawing.Size(339, 59)
         Me.MainMenu.TabIndex = 0
         Me.MainMenu.Text = "MenuStrip1"
         '
@@ -371,6 +372,7 @@ Partial Class ControllingUI_2
         Me.ExcelToolStripMenuItem.Size = New System.Drawing.Size(50, 55)
         Me.ExcelToolStripMenuItem.Text = "Excel"
         Me.ExcelToolStripMenuItem.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
+        Me.ExcelToolStripMenuItem.ToolTipText = "Drop the Data on the active Excel Worksheet"
         '
         'DropOnExcelToolStripMenuItem
         '
@@ -387,6 +389,7 @@ Partial Class ControllingUI_2
         Me.BusinessControlToolStripMenuItem.Size = New System.Drawing.Size(123, 55)
         Me.BusinessControlToolStripMenuItem.Text = "Business Control"
         Me.BusinessControlToolStripMenuItem.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
+        Me.BusinessControlToolStripMenuItem.ToolTipText = "Versions comparisons functionalities"
         '
         'VersionsComparisonToolStripMenuItem
         '
@@ -411,9 +414,11 @@ Partial Class ControllingUI_2
         Me.RefreshToolStripMenuItem.Image = CType(resources.GetObject("RefreshToolStripMenuItem.Image"), System.Drawing.Image)
         Me.RefreshToolStripMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
         Me.RefreshToolStripMenuItem.Name = "RefreshToolStripMenuItem"
+        Me.RefreshToolStripMenuItem.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.Space), System.Windows.Forms.Keys)
         Me.RefreshToolStripMenuItem.Size = New System.Drawing.Size(66, 55)
         Me.RefreshToolStripMenuItem.Text = "Refresh"
         Me.RefreshToolStripMenuItem.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
+        Me.RefreshToolStripMenuItem.ToolTipText = "Refresh the Data"
         '
         'ExpansionImageList
         '

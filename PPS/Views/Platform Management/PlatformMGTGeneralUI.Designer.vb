@@ -54,7 +54,7 @@ Partial Class PlatformMGTGeneralUI
         'AccountsBT
         '
         Me.AccountsBT.CheckOnClick = True
-        Me.AccountsBT.Image = Global.PPS.My.Resources.Resources.favicon_15_
+        Me.AccountsBT.Image = Global.FinancialBI.My.Resources.Resources.favicon_15_
         Me.AccountsBT.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
         Me.AccountsBT.Name = "AccountsBT"
         Me.AccountsBT.Size = New System.Drawing.Size(77, 55)
@@ -66,7 +66,7 @@ Partial Class PlatformMGTGeneralUI
         'EntitiesBT
         '
         Me.EntitiesBT.CheckOnClick = True
-        Me.EntitiesBT.Image = Global.PPS.My.Resources.Resources.elements_hierarchy
+        Me.EntitiesBT.Image = Global.FinancialBI.My.Resources.Resources.elements_hierarchy
         Me.EntitiesBT.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
         Me.EntitiesBT.Name = "EntitiesBT"
         Me.EntitiesBT.Size = New System.Drawing.Size(127, 55)
@@ -78,7 +78,7 @@ Partial Class PlatformMGTGeneralUI
         'ClientsBT
         '
         Me.ClientsBT.CheckOnClick = True
-        Me.ClientsBT.Image = Global.PPS.My.Resources.Resources.users_relation
+        Me.ClientsBT.Image = Global.FinancialBI.My.Resources.Resources.users_relation
         Me.ClientsBT.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
         Me.ClientsBT.Name = "ClientsBT"
         Me.ClientsBT.Size = New System.Drawing.Size(62, 55)
@@ -89,7 +89,7 @@ Partial Class PlatformMGTGeneralUI
         'ProductsBT
         '
         Me.ProductsBT.CheckOnClick = True
-        Me.ProductsBT.Image = Global.PPS.My.Resources.Resources.barcode1
+        Me.ProductsBT.Image = Global.FinancialBI.My.Resources.Resources.barcode1
         Me.ProductsBT.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
         Me.ProductsBT.Name = "ProductsBT"
         Me.ProductsBT.Size = New System.Drawing.Size(75, 55)
@@ -99,7 +99,7 @@ Partial Class PlatformMGTGeneralUI
         '
         'AdjustmentsBT
         '
-        Me.AdjustmentsBT.Image = Global.PPS.My.Resources.Resources.elements4
+        Me.AdjustmentsBT.Image = Global.FinancialBI.My.Resources.Resources.elements4
         Me.AdjustmentsBT.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
         Me.AdjustmentsBT.Name = "AdjustmentsBT"
         Me.AdjustmentsBT.Size = New System.Drawing.Size(98, 55)
@@ -110,7 +110,7 @@ Partial Class PlatformMGTGeneralUI
         'VersionsBT
         '
         Me.VersionsBT.CheckOnClick = True
-        Me.VersionsBT.Image = Global.PPS.My.Resources.Resources.Excel_dark_24_24
+        Me.VersionsBT.Image = Global.FinancialBI.My.Resources.Resources.Excel_dark_24_24
         Me.VersionsBT.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
         Me.VersionsBT.Name = "VersionsBT"
         Me.VersionsBT.Size = New System.Drawing.Size(72, 55)
@@ -122,7 +122,7 @@ Partial Class PlatformMGTGeneralUI
         '
         Me.CurrenciesBT.CheckOnClick = True
         Me.CurrenciesBT.Enabled = False
-        Me.CurrenciesBT.Image = Global.PPS.My.Resources.Resources.symbol_dollar_euro1
+        Me.CurrenciesBT.Image = Global.FinancialBI.My.Resources.Resources.symbol_dollar_euro1
         Me.CurrenciesBT.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
         Me.CurrenciesBT.Name = "CurrenciesBT"
         Me.CurrenciesBT.Size = New System.Drawing.Size(85, 55)
@@ -134,7 +134,7 @@ Partial Class PlatformMGTGeneralUI
         '
         Me.UsersBT.CheckOnClick = True
         Me.UsersBT.Enabled = False
-        Me.UsersBT.Image = Global.PPS.My.Resources.Resources.user1
+        Me.UsersBT.Image = Global.FinancialBI.My.Resources.Resources.user1
         Me.UsersBT.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
         Me.UsersBT.Name = "UsersBT"
         Me.UsersBT.Size = New System.Drawing.Size(55, 55)
@@ -145,7 +145,7 @@ Partial Class PlatformMGTGeneralUI
         'ControlsBT
         '
         Me.ControlsBT.Enabled = False
-        Me.ControlsBT.Image = Global.PPS.My.Resources.Resources.ok
+        Me.ControlsBT.Image = Global.FinancialBI.My.Resources.Resources.ok
         Me.ControlsBT.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
         Me.ControlsBT.Name = "ControlsBT"
         Me.ControlsBT.Size = New System.Drawing.Size(73, 55)
@@ -156,7 +156,7 @@ Partial Class PlatformMGTGeneralUI
         'CategoriesBT
         '
         Me.CategoriesBT.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.EntitiesFiltersBT, Me.ClientsFiltersBT, Me.ProductsFiltersBT, Me.AdjustmentsFiltersBT})
-        Me.CategoriesBT.Image = Global.PPS.My.Resources.Resources.filter_and_sort
+        Me.CategoriesBT.Image = Global.FinancialBI.My.Resources.Resources.filter_and_sort
         Me.CategoriesBT.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
         Me.CategoriesBT.Name = "CategoriesBT"
         Me.CategoriesBT.Size = New System.Drawing.Size(86, 55)
@@ -167,28 +167,28 @@ Partial Class PlatformMGTGeneralUI
         '
         'EntitiesFiltersBT
         '
-        Me.EntitiesFiltersBT.Image = Global.PPS.My.Resources.Resources.elements_hierarchy
+        Me.EntitiesFiltersBT.Image = Global.FinancialBI.My.Resources.Resources.elements_hierarchy
         Me.EntitiesFiltersBT.Name = "EntitiesFiltersBT"
         Me.EntitiesFiltersBT.Size = New System.Drawing.Size(155, 24)
         Me.EntitiesFiltersBT.Text = "Entities"
         '
         'ClientsFiltersBT
         '
-        Me.ClientsFiltersBT.Image = Global.PPS.My.Resources.Resources.users_relation
+        Me.ClientsFiltersBT.Image = Global.FinancialBI.My.Resources.Resources.users_relation
         Me.ClientsFiltersBT.Name = "ClientsFiltersBT"
         Me.ClientsFiltersBT.Size = New System.Drawing.Size(155, 24)
         Me.ClientsFiltersBT.Text = "Clients"
         '
         'ProductsFiltersBT
         '
-        Me.ProductsFiltersBT.Image = Global.PPS.My.Resources.Resources.barcode1
+        Me.ProductsFiltersBT.Image = Global.FinancialBI.My.Resources.Resources.barcode1
         Me.ProductsFiltersBT.Name = "ProductsFiltersBT"
         Me.ProductsFiltersBT.Size = New System.Drawing.Size(155, 24)
         Me.ProductsFiltersBT.Text = "Products"
         '
         'AdjustmentsFiltersBT
         '
-        Me.AdjustmentsFiltersBT.Image = Global.PPS.My.Resources.Resources.elements4
+        Me.AdjustmentsFiltersBT.Image = Global.FinancialBI.My.Resources.Resources.elements4
         Me.AdjustmentsFiltersBT.Name = "AdjustmentsFiltersBT"
         Me.AdjustmentsFiltersBT.Size = New System.Drawing.Size(155, 24)
         Me.AdjustmentsFiltersBT.Text = "Adjustments"

@@ -61,14 +61,14 @@ Partial Class UsersControl
         '
         'CreateUserToolStripMenuItem
         '
-        Me.CreateUserToolStripMenuItem.Image = Global.PPS.My.Resources.Resources.checked
+        Me.CreateUserToolStripMenuItem.Image = Global.FinancialBI.My.Resources.Resources.checked
         Me.CreateUserToolStripMenuItem.Name = "CreateUserToolStripMenuItem"
         Me.CreateUserToolStripMenuItem.Size = New System.Drawing.Size(183, 22)
         Me.CreateUserToolStripMenuItem.Text = "Create User"
         '
         'CreateFolderToolStripMenuItem
         '
-        Me.CreateFolderToolStripMenuItem.Image = Global.PPS.My.Resources.Resources.folder2
+        Me.CreateFolderToolStripMenuItem.Image = Global.FinancialBI.My.Resources.Resources.folder2
         Me.CreateFolderToolStripMenuItem.Name = "CreateFolderToolStripMenuItem"
         Me.CreateFolderToolStripMenuItem.Size = New System.Drawing.Size(183, 22)
         Me.CreateFolderToolStripMenuItem.Text = "Create Folder"
@@ -80,7 +80,7 @@ Partial Class UsersControl
         '
         'DeleteToolStripMenuItem
         '
-        Me.DeleteToolStripMenuItem.Image = Global.PPS.My.Resources.Resources.imageres_89
+        Me.DeleteToolStripMenuItem.Image = Global.FinancialBI.My.Resources.Resources.imageres_89
         Me.DeleteToolStripMenuItem.Name = "DeleteToolStripMenuItem"
         Me.DeleteToolStripMenuItem.Size = New System.Drawing.Size(183, 22)
         Me.DeleteToolStripMenuItem.Text = "Delete"
@@ -92,7 +92,7 @@ Partial Class UsersControl
         '
         'ReinitializePasswordToolStripMenuItem
         '
-        Me.ReinitializePasswordToolStripMenuItem.Image = Global.PPS.My.Resources.Resources.imageres_59
+        Me.ReinitializePasswordToolStripMenuItem.Image = Global.FinancialBI.My.Resources.Resources.imageres_59
         Me.ReinitializePasswordToolStripMenuItem.Name = "ReinitializePasswordToolStripMenuItem"
         Me.ReinitializePasswordToolStripMenuItem.Size = New System.Drawing.Size(183, 22)
         Me.ReinitializePasswordToolStripMenuItem.Text = "Reinitialize Password"

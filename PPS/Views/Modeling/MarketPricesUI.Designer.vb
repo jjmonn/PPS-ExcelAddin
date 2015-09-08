@@ -102,14 +102,14 @@ Partial Class MarketPricesUI
         '
         'AddIndexToolStripMenuItem
         '
-        Me.AddIndexToolStripMenuItem.Image = Global.PPS.My.Resources.Resources.checked
+        Me.AddIndexToolStripMenuItem.Image = Global.FinancialBI.My.Resources.Resources.checked
         Me.AddIndexToolStripMenuItem.Name = "AddIndexToolStripMenuItem"
         Me.AddIndexToolStripMenuItem.Size = New System.Drawing.Size(138, 22)
         Me.AddIndexToolStripMenuItem.Text = "Add Index"
         '
         'DeleteIndexToolStripMenuItem1
         '
-        Me.DeleteIndexToolStripMenuItem1.Image = Global.PPS.My.Resources.Resources.imageres_89
+        Me.DeleteIndexToolStripMenuItem1.Image = Global.FinancialBI.My.Resources.Resources.imageres_89
         Me.DeleteIndexToolStripMenuItem1.Name = "DeleteIndexToolStripMenuItem1"
         Me.DeleteIndexToolStripMenuItem1.Size = New System.Drawing.Size(138, 22)
         Me.DeleteIndexToolStripMenuItem1.Text = "Delete Index"
@@ -148,7 +148,7 @@ Partial Class MarketPricesUI
         '
         'select_version
         '
-        Me.select_version.Image = Global.PPS.My.Resources.Resources.checked
+        Me.select_version.Image = Global.FinancialBI.My.Resources.Resources.checked
         Me.select_version.Name = "select_version"
         Me.select_version.Size = New System.Drawing.Size(147, 22)
         Me.select_version.Text = "Select Version"
@@ -160,21 +160,21 @@ Partial Class MarketPricesUI
         '
         'AddVersionRCM
         '
-        Me.AddVersionRCM.Image = Global.PPS.My.Resources.Resources.add21
+        Me.AddVersionRCM.Image = Global.FinancialBI.My.Resources.Resources.add21
         Me.AddVersionRCM.Name = "AddVersionRCM"
         Me.AddVersionRCM.Size = New System.Drawing.Size(147, 22)
         Me.AddVersionRCM.Text = "Add Version"
         '
         'AddFolderRCM
         '
-        Me.AddFolderRCM.Image = Global.PPS.My.Resources.Resources.folder2
+        Me.AddFolderRCM.Image = Global.FinancialBI.My.Resources.Resources.folder2
         Me.AddFolderRCM.Name = "AddFolderRCM"
         Me.AddFolderRCM.Size = New System.Drawing.Size(147, 22)
         Me.AddFolderRCM.Text = "Add Folder"
         '
         'DeleteVersionRCM
         '
-        Me.DeleteVersionRCM.Image = Global.PPS.My.Resources.Resources.imageres_89
+        Me.DeleteVersionRCM.Image = Global.FinancialBI.My.Resources.Resources.imageres_89
         Me.DeleteVersionRCM.Name = "DeleteVersionRCM"
         Me.DeleteVersionRCM.Size = New System.Drawing.Size(147, 22)
         Me.DeleteVersionRCM.Text = "Delete"
@@ -292,7 +292,7 @@ Partial Class MarketPricesUI
         '
         'expand_periods
         '
-        Me.expand_periods.Image = Global.PPS.My.Resources.Resources.images
+        Me.expand_periods.Image = Global.FinancialBI.My.Resources.Resources.images
         Me.expand_periods.Name = "expand_periods"
         Me.expand_periods.Size = New System.Drawing.Size(176, 22)
         Me.expand_periods.Text = "Expand all Periods"
@@ -310,7 +310,7 @@ Partial Class MarketPricesUI
         '
         'CopyPriceDown
         '
-        Me.CopyPriceDown.Image = Global.PPS.My.Resources.Resources.Download_
+        Me.CopyPriceDown.Image = Global.FinancialBI.My.Resources.Resources.Download_
         Me.CopyPriceDown.Name = "CopyPriceDown"
         Me.CopyPriceDown.Size = New System.Drawing.Size(176, 22)
         Me.CopyPriceDown.Text = "Copy Value Down"
@@ -377,7 +377,7 @@ Partial Class MarketPricesUI
         '
         'AddNewIndexToolStripMenuItem
         '
-        Me.AddNewIndexToolStripMenuItem.Image = Global.PPS.My.Resources.Resources.add1
+        Me.AddNewIndexToolStripMenuItem.Image = Global.FinancialBI.My.Resources.Resources.add1
         Me.AddNewIndexToolStripMenuItem.Name = "AddNewIndexToolStripMenuItem"
         Me.AddNewIndexToolStripMenuItem.Size = New System.Drawing.Size(154, 22)
         Me.AddNewIndexToolStripMenuItem.Text = "Add New Index"
@@ -395,7 +395,7 @@ Partial Class MarketPricesUI
         '
         'ImportFromExcelToolStripMenuItem
         '
-        Me.ImportFromExcelToolStripMenuItem.Image = Global.PPS.My.Resources.Resources.Benjigarner_Softdimension_Excel
+        Me.ImportFromExcelToolStripMenuItem.Image = Global.FinancialBI.My.Resources.Resources.Benjigarner_Softdimension_Excel
         Me.ImportFromExcelToolStripMenuItem.Name = "ImportFromExcelToolStripMenuItem"
         Me.ImportFromExcelToolStripMenuItem.Size = New System.Drawing.Size(129, 20)
         Me.ImportFromExcelToolStripMenuItem.Text = "Import from Excel"

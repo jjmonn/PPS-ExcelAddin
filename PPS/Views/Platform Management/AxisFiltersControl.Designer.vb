@@ -77,14 +77,14 @@ Partial Class AxisFiltersControl
         'CategoriesToolStripMenuItem
         '
         Me.CategoriesToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.NewCategoryMenuBT, Me.AddValueMenuBT, Me.DeleteMenuBT, Me.RenameMenuBT, Me.ToolStripSeparator3})
-        Me.CategoriesToolStripMenuItem.Image = Global.PPS.My.Resources.Resources.elements
+        Me.CategoriesToolStripMenuItem.Image = Global.FinancialBI.My.Resources.Resources.elements
         Me.CategoriesToolStripMenuItem.Name = "CategoriesToolStripMenuItem"
         Me.CategoriesToolStripMenuItem.Size = New System.Drawing.Size(102, 23)
         Me.CategoriesToolStripMenuItem.Text = "Categories"
         '
         'NewCategoryMenuBT
         '
-        Me.NewCategoryMenuBT.Image = Global.PPS.My.Resources.Resources.elements_add
+        Me.NewCategoryMenuBT.Image = Global.FinancialBI.My.Resources.Resources.elements_add
         Me.NewCategoryMenuBT.Name = "NewCategoryMenuBT"
         Me.NewCategoryMenuBT.Size = New System.Drawing.Size(165, 24)
         Me.NewCategoryMenuBT.Text = "New Category"
@@ -103,7 +103,7 @@ Partial Class AxisFiltersControl
         '
         'DeleteMenuBT
         '
-        Me.DeleteMenuBT.Image = Global.PPS.My.Resources.Resources.elements_delete
+        Me.DeleteMenuBT.Image = Global.FinancialBI.My.Resources.Resources.elements_delete
         Me.DeleteMenuBT.Name = "DeleteMenuBT"
         Me.DeleteMenuBT.Size = New System.Drawing.Size(165, 24)
         Me.DeleteMenuBT.Text = "Delete"
@@ -116,14 +116,14 @@ Partial Class AxisFiltersControl
         '
         'CreateCategoryRCM
         '
-        Me.CreateCategoryRCM.Image = Global.PPS.My.Resources.Resources.folder_open_add
+        Me.CreateCategoryRCM.Image = Global.FinancialBI.My.Resources.Resources.folder_open_add
         Me.CreateCategoryRCM.Name = "CreateCategoryRCM"
         Me.CreateCategoryRCM.Size = New System.Drawing.Size(178, 24)
         Me.CreateCategoryRCM.Text = "Create Category"
         '
         'AddValueRCM
         '
-        Me.AddValueRCM.Image = Global.PPS.My.Resources.Resources.elements_add
+        Me.AddValueRCM.Image = Global.FinancialBI.My.Resources.Resources.elements_add
         Me.AddValueRCM.Name = "AddValueRCM"
         Me.AddValueRCM.Size = New System.Drawing.Size(178, 24)
         Me.AddValueRCM.Text = "Create Value"
@@ -146,7 +146,7 @@ Partial Class AxisFiltersControl
         '
         'DeleteRCM
         '
-        Me.DeleteRCM.Image = Global.PPS.My.Resources.Resources.elements_delete
+        Me.DeleteRCM.Image = Global.FinancialBI.My.Resources.Resources.elements_delete
         Me.DeleteRCM.Name = "DeleteRCM"
         Me.DeleteRCM.Size = New System.Drawing.Size(178, 24)
         Me.DeleteRCM.Text = "Delete"

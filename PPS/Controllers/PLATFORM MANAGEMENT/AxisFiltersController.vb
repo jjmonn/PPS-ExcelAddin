@@ -7,7 +7,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 05/09/2015
+' Last modified: 08/09/2015
 
 
 Imports System.Windows.Forms
@@ -172,11 +172,17 @@ Friend Class AxisFiltersController
 
     Private Sub AfterFilterCreation(ByRef status As Boolean, ByRef id As Int32)
 
+        If status = False Then
+            MsgBox("The Filter could not be created.")
+        End If
 
     End Sub
 
     Private Sub AfterFilterUpdate(ByRef status As Boolean, ByRef id As Int32)
 
+        If status = False Then
+            MsgBox("The Filter could not be updated.")
+        End If
 
     End Sub
 
@@ -198,11 +204,17 @@ Friend Class AxisFiltersController
 
     Private Sub AfterFilterValueCreation(ByRef status As Boolean, ByRef id As Int32)
 
+        If status = False Then
+            MsgBox("The Filter Value could not be created.")
+        End If
 
     End Sub
 
     Private Sub AfterFilterValueUpdate(ByRef status As Boolean, ByRef id As Int32)
 
+        If status = False Then
+            MsgBox("The Filter Value could not be updated.")
+        End If
 
     End Sub
 

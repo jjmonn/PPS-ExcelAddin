@@ -85,13 +85,13 @@ Friend Class AxisFiltersControl
 
 #Region "Call backs"
 
-    Private Sub CreateCategoryBT_Click(sender As Object, e As EventArgs) Handles NewCategoryMenuBT.Click, CreateCategoryRCM.Click
+    Private Sub CreateCFilterBT_Click(sender As Object, e As EventArgs) Handles NewCategoryMenuBT.Click, CreateCategoryRCM.Click
 
         Me.NewFilterUI.Show()
 
     End Sub
 
-    Private Sub AddCategoryValueBT_Click_1(sender As Object, e As EventArgs) Handles AddValueRCM.Click, NewCategoryMenuBT.Click
+    Private Sub CreateFilterValueBT_Click_1(sender As Object, e As EventArgs) Handles AddValueRCM.Click, NewCategoryMenuBT.Click
 
         Dim filterId, parentFilterValueId As Int32
         Dim currentNode As TreeNode = FiltersFiltersValuesTV.SelectedNode

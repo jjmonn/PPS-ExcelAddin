@@ -25,16 +25,6 @@
     <Compile Include="Product.wxs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\PPS.vbproj">
-      <Name>PPS</Name>
-      <Project>{94121FCB-87B2-4A75-B902-DC6CF6EA808F}</Project>
-      <Private>True</Private>
-      <DoNotHarvest>True</DoNotHarvest>
-      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
-      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <WixExtension Include="WixUIExtension">
       <HintPath>$(WixExtDir)\WixUIExtension.dll</HintPath>
       <Name>WixUIExtension</Name>
@@ -44,10 +34,20 @@
       <Name>WixNetFxExtension</Name>
     </WixExtension>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\PPS\FinancialBI.vbproj">
+      <Name>FinancialBI</Name>
+      <Project>{94121fcb-87b2-4a75-b902-dc6cf6ea808f}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(WixTargetsPath)" />
   <Target Name="BeforeBuild">
   </Target>
   <Target Name="AfterBuild">
-    <GenerateBootstrapper ApplicationFile="$(TargetFileName)" ApplicationName="PPS" BootstrapperItems="@(BootstrapperFile)" ComponentsLocation="HomeSite" CopyComponents="False" OutputPath="$(OutputPath)" Path="C:\Program Files (x86)\Microsoft SDKs\Windows\v8.0A\Bootstrapper\" ApplicationRequiresElevation="False"  />
+    <GenerateBootstrapper ApplicationFile="$(TargetFileName)" ApplicationName="PPS" BootstrapperItems="@(BootstrapperFile)" ComponentsLocation="HomeSite" CopyComponents="False" OutputPath="$(OutputPath)" Path="C:\Program Files (x86)\Microsoft SDKs\Windows\v8.0A\Bootstrapper\" ApplicationRequiresElevation="False" />
   </Target>
 </Project>

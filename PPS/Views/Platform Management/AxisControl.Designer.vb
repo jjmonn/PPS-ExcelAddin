@@ -67,7 +67,7 @@ Partial Class AxisControl
         '
         'copy_down_bt
         '
-        Me.copy_down_bt.Image = Global.PPS.My.Resources.Resources.Download_
+        Me.copy_down_bt.Image = Global.FinancialBI.My.Resources.Resources.Download_
         Me.copy_down_bt.Name = "copy_down_bt"
         Me.copy_down_bt.Size = New System.Drawing.Size(187, 24)
         Me.copy_down_bt.Text = "Copy Value Down"
@@ -79,7 +79,7 @@ Partial Class AxisControl
         '
         'drop_to_excel_bt
         '
-        Me.drop_to_excel_bt.Image = Global.PPS.My.Resources.Resources.Excel_Blue_32x32
+        Me.drop_to_excel_bt.Image = Global.FinancialBI.My.Resources.Resources.Excel_Blue_32x32
         Me.drop_to_excel_bt.Name = "drop_to_excel_bt"
         Me.drop_to_excel_bt.Size = New System.Drawing.Size(187, 24)
         Me.drop_to_excel_bt.Text = "Drop To Excel"
@@ -91,14 +91,14 @@ Partial Class AxisControl
         '
         'CreateAxisToolStripMenuItem
         '
-        Me.CreateAxisToolStripMenuItem.Image = Global.PPS.My.Resources.Resources.element_branch2_add
+        Me.CreateAxisToolStripMenuItem.Image = Global.FinancialBI.My.Resources.Resources.element_branch2_add
         Me.CreateAxisToolStripMenuItem.Name = "CreateAxisToolStripMenuItem"
         Me.CreateAxisToolStripMenuItem.Size = New System.Drawing.Size(187, 24)
         Me.CreateAxisToolStripMenuItem.Text = "Create"
         '
         'DeleteAxisToolStripMenuItem2
         '
-        Me.DeleteAxisToolStripMenuItem2.Image = Global.PPS.My.Resources.Resources.element_branch2_delete
+        Me.DeleteAxisToolStripMenuItem2.Image = Global.FinancialBI.My.Resources.Resources.element_branch2_delete
         Me.DeleteAxisToolStripMenuItem2.Name = "DeleteAxisToolStripMenuItem2"
         Me.DeleteAxisToolStripMenuItem2.Size = New System.Drawing.Size(187, 24)
         Me.DeleteAxisToolStripMenuItem2.Text = "Delete"
@@ -130,21 +130,21 @@ Partial Class AxisControl
         'EditToolStripMenuItem
         '
         Me.EditToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.CreateNewToolStripMenuItem, Me.DeleteAxisToolStripMenuItem, Me.ToolStripSeparator2})
-        Me.EditToolStripMenuItem.Image = Global.PPS.My.Resources.Resources.element_branch21
+        Me.EditToolStripMenuItem.Image = Global.FinancialBI.My.Resources.Resources.element_branch21
         Me.EditToolStripMenuItem.Name = "EditToolStripMenuItem"
         Me.EditToolStripMenuItem.Size = New System.Drawing.Size(73, 20)
         Me.EditToolStripMenuItem.Text = "Menu"
         '
         'CreateNewToolStripMenuItem
         '
-        Me.CreateNewToolStripMenuItem.Image = Global.PPS.My.Resources.Resources.element_branch2_add
+        Me.CreateNewToolStripMenuItem.Image = Global.FinancialBI.My.Resources.Resources.element_branch2_add
         Me.CreateNewToolStripMenuItem.Name = "CreateNewToolStripMenuItem"
         Me.CreateNewToolStripMenuItem.Size = New System.Drawing.Size(117, 24)
         Me.CreateNewToolStripMenuItem.Text = "New"
         '
         'DeleteAxisToolStripMenuItem
         '
-        Me.DeleteAxisToolStripMenuItem.Image = Global.PPS.My.Resources.Resources.element_branch2_delete
+        Me.DeleteAxisToolStripMenuItem.Image = Global.FinancialBI.My.Resources.Resources.element_branch2_delete
         Me.DeleteAxisToolStripMenuItem.Name = "DeleteAxisToolStripMenuItem"
         Me.DeleteAxisToolStripMenuItem.Size = New System.Drawing.Size(117, 24)
         Me.DeleteAxisToolStripMenuItem.Text = "Delete"
@@ -163,7 +163,7 @@ Partial Class AxisControl
         '
         'SendEntitiesHierarchyToExcelToolStripMenuItem
         '
-        Me.SendEntitiesHierarchyToExcelToolStripMenuItem.Image = Global.PPS.My.Resources.Resources.Excel_Blue_32x32
+        Me.SendEntitiesHierarchyToExcelToolStripMenuItem.Image = Global.FinancialBI.My.Resources.Resources.Excel_Blue_32x32
         Me.SendEntitiesHierarchyToExcelToolStripMenuItem.Name = "SendEntitiesHierarchyToExcelToolStripMenuItem"
         Me.SendEntitiesHierarchyToExcelToolStripMenuItem.Size = New System.Drawing.Size(268, 24)
         Me.SendEntitiesHierarchyToExcelToolStripMenuItem.Text = "Send Entities Hierarchy to Excel"

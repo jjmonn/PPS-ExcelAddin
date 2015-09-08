@@ -833,7 +833,8 @@ Friend Class ControllingUIController
         ' priority normal
         ' Maybe issue if nothing in the DGV ? !
         ' reimplement ??  priority normal
-        If Not EntityNode.Text Is Nothing Then
+        On Error Resume Next
+        If Not EntityNode Is Nothing Then
             Dim destination As Microsoft.Office.Interop.Excel.Range = WorksheetWrittingFunctions.CreateReceptionWS(EntityNode.Text, _
                                                                                            {"Entity", "Version", "Currency"}, _
                                                                                            {EntityNode.Text, View.VersionTB.Text, View.CurrencyTB.Text})

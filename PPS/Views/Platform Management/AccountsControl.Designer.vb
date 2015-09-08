@@ -458,28 +458,28 @@ Partial Class AccountsControl
         '
         'AddSubAccountToolStripMenuItem
         '
-        Me.AddSubAccountToolStripMenuItem.Image = Global.PPS.My.Resources.Resources.registry_add
+        Me.AddSubAccountToolStripMenuItem.Image = Global.FinancialBI.My.Resources.Resources.registry_add
         Me.AddSubAccountToolStripMenuItem.Name = "AddSubAccountToolStripMenuItem"
         Me.AddSubAccountToolStripMenuItem.Size = New System.Drawing.Size(221, 24)
         Me.AddSubAccountToolStripMenuItem.Text = "Add Sub Account"
         '
         'AddCategoryToolStripMenuItem
         '
-        Me.AddCategoryToolStripMenuItem.Image = Global.PPS.My.Resources.Resources.favicon_81_
+        Me.AddCategoryToolStripMenuItem.Image = Global.FinancialBI.My.Resources.Resources.favicon_81_
         Me.AddCategoryToolStripMenuItem.Name = "AddCategoryToolStripMenuItem"
         Me.AddCategoryToolStripMenuItem.Size = New System.Drawing.Size(221, 24)
         Me.AddCategoryToolStripMenuItem.Text = "Add Category"
         '
         'DeleteAccountToolStripMenuItem
         '
-        Me.DeleteAccountToolStripMenuItem.Image = Global.PPS.My.Resources.Resources.registry_delete
+        Me.DeleteAccountToolStripMenuItem.Image = Global.FinancialBI.My.Resources.Resources.registry_delete
         Me.DeleteAccountToolStripMenuItem.Name = "DeleteAccountToolStripMenuItem"
         Me.DeleteAccountToolStripMenuItem.Size = New System.Drawing.Size(221, 24)
         Me.DeleteAccountToolStripMenuItem.Text = "Delete Account"
         '
         'DropHierarchyToExcelToolStripMenuItem
         '
-        Me.DropHierarchyToExcelToolStripMenuItem.Image = Global.PPS.My.Resources.Resources.Excel_Blue_32x32
+        Me.DropHierarchyToExcelToolStripMenuItem.Image = Global.FinancialBI.My.Resources.Resources.Excel_Blue_32x32
         Me.DropHierarchyToExcelToolStripMenuItem.Name = "DropHierarchyToExcelToolStripMenuItem"
         Me.DropHierarchyToExcelToolStripMenuItem.Size = New System.Drawing.Size(221, 24)
         Me.DropHierarchyToExcelToolStripMenuItem.Text = "Drop Hierarchy to Excel"
@@ -508,21 +508,21 @@ Partial Class AccountsControl
         '
         'CreateANewAccountToolStripMenuItem
         '
-        Me.CreateANewAccountToolStripMenuItem.Image = Global.PPS.My.Resources.Resources.registry_add
+        Me.CreateANewAccountToolStripMenuItem.Image = Global.FinancialBI.My.Resources.Resources.registry_add
         Me.CreateANewAccountToolStripMenuItem.Name = "CreateANewAccountToolStripMenuItem"
         Me.CreateANewAccountToolStripMenuItem.Size = New System.Drawing.Size(218, 24)
         Me.CreateANewAccountToolStripMenuItem.Text = "Create a new Account"
         '
         'CreateANewCategoryToolStripMenuItem
         '
-        Me.CreateANewCategoryToolStripMenuItem.Image = Global.PPS.My.Resources.Resources.favicon_81_
+        Me.CreateANewCategoryToolStripMenuItem.Image = Global.FinancialBI.My.Resources.Resources.favicon_81_
         Me.CreateANewCategoryToolStripMenuItem.Name = "CreateANewCategoryToolStripMenuItem"
         Me.CreateANewCategoryToolStripMenuItem.Size = New System.Drawing.Size(218, 24)
         Me.CreateANewCategoryToolStripMenuItem.Text = "Create a new Category"
         '
         'DeleteAccountToolStripMenuItem1
         '
-        Me.DeleteAccountToolStripMenuItem1.Image = Global.PPS.My.Resources.Resources.registry_delete
+        Me.DeleteAccountToolStripMenuItem1.Image = Global.FinancialBI.My.Resources.Resources.registry_delete
         Me.DeleteAccountToolStripMenuItem1.Name = "DeleteAccountToolStripMenuItem1"
         Me.DeleteAccountToolStripMenuItem1.Size = New System.Drawing.Size(218, 24)
         Me.DeleteAccountToolStripMenuItem1.Text = "Delete Account"
@@ -541,14 +541,14 @@ Partial Class AccountsControl
         '
         'DropAllAccountsHierarchyToExcelToolStripMenuItem
         '
-        Me.DropAllAccountsHierarchyToExcelToolStripMenuItem.Image = Global.PPS.My.Resources.Resources.Excel_Blue_32x32
+        Me.DropAllAccountsHierarchyToExcelToolStripMenuItem.Image = Global.FinancialBI.My.Resources.Resources.Excel_Blue_32x32
         Me.DropAllAccountsHierarchyToExcelToolStripMenuItem.Name = "DropAllAccountsHierarchyToExcelToolStripMenuItem"
         Me.DropAllAccountsHierarchyToExcelToolStripMenuItem.Size = New System.Drawing.Size(328, 24)
         Me.DropAllAccountsHierarchyToExcelToolStripMenuItem.Text = "Drop all Accounts Hierarchy to Excel"
         '
         'DropSelectedAccountHierarchyToExcelToolStripMenuItem
         '
-        Me.DropSelectedAccountHierarchyToExcelToolStripMenuItem.Image = Global.PPS.My.Resources.Resources.Excel_Green_32x32
+        Me.DropSelectedAccountHierarchyToExcelToolStripMenuItem.Image = Global.FinancialBI.My.Resources.Resources.Excel_Green_32x32
         Me.DropSelectedAccountHierarchyToExcelToolStripMenuItem.Name = "DropSelectedAccountHierarchyToExcelToolStripMenuItem"
         Me.DropSelectedAccountHierarchyToExcelToolStripMenuItem.Size = New System.Drawing.Size(328, 24)
         Me.DropSelectedAccountHierarchyToExcelToolStripMenuItem.Text = "Drop selected Account Hierarchy to Excel"

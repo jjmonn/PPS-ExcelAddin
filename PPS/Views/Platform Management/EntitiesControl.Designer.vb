@@ -102,21 +102,21 @@ Partial Class EntitiesControl
         'EditToolStripMenuItem
         '
         Me.EditToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.CreateANewEntityToolStripMenuItem, Me.DeleteEntityToolStripMenuItem, Me.ToolStripSeparator2})
-        Me.EditToolStripMenuItem.Image = Global.PPS.My.Resources.Resources.element_branch23
+        Me.EditToolStripMenuItem.Image = Global.FinancialBI.My.Resources.Resources.element_branch23
         Me.EditToolStripMenuItem.Name = "EditToolStripMenuItem"
         Me.EditToolStripMenuItem.Size = New System.Drawing.Size(117, 20)
         Me.EditToolStripMenuItem.Text = "Legal Entities"
         '
         'CreateANewEntityToolStripMenuItem
         '
-        Me.CreateANewEntityToolStripMenuItem.Image = Global.PPS.My.Resources.Resources.plus
+        Me.CreateANewEntityToolStripMenuItem.Image = Global.FinancialBI.My.Resources.Resources.plus
         Me.CreateANewEntityToolStripMenuItem.Name = "CreateANewEntityToolStripMenuItem"
         Me.CreateANewEntityToolStripMenuItem.Size = New System.Drawing.Size(197, 24)
         Me.CreateANewEntityToolStripMenuItem.Text = "Create a new Entity"
         '
         'DeleteEntityToolStripMenuItem
         '
-        Me.DeleteEntityToolStripMenuItem.Image = Global.PPS.My.Resources.Resources.imageres_89
+        Me.DeleteEntityToolStripMenuItem.Image = Global.FinancialBI.My.Resources.Resources.imageres_89
         Me.DeleteEntityToolStripMenuItem.Name = "DeleteEntityToolStripMenuItem"
         Me.DeleteEntityToolStripMenuItem.Size = New System.Drawing.Size(197, 24)
         Me.DeleteEntityToolStripMenuItem.Text = "Delete Entity"
@@ -129,42 +129,42 @@ Partial Class EntitiesControl
         'ExcelToolStripMenuItem
         '
         Me.ExcelToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.SendEntitiesHierarchyToExcelToolStripMenuItem})
-        Me.ExcelToolStripMenuItem.Image = Global.PPS.My.Resources.Resources.Excel_dark_24_24
+        Me.ExcelToolStripMenuItem.Image = Global.FinancialBI.My.Resources.Resources.Excel_dark_24_24
         Me.ExcelToolStripMenuItem.Name = "ExcelToolStripMenuItem"
         Me.ExcelToolStripMenuItem.Size = New System.Drawing.Size(66, 20)
         Me.ExcelToolStripMenuItem.Text = "Excel"
         '
         'SendEntitiesHierarchyToExcelToolStripMenuItem
         '
-        Me.SendEntitiesHierarchyToExcelToolStripMenuItem.Image = Global.PPS.My.Resources.Resources.Excel_Blue_32x32
+        Me.SendEntitiesHierarchyToExcelToolStripMenuItem.Image = Global.FinancialBI.My.Resources.Resources.Excel_Blue_32x32
         Me.SendEntitiesHierarchyToExcelToolStripMenuItem.Name = "SendEntitiesHierarchyToExcelToolStripMenuItem"
         Me.SendEntitiesHierarchyToExcelToolStripMenuItem.Size = New System.Drawing.Size(268, 24)
         Me.SendEntitiesHierarchyToExcelToolStripMenuItem.Text = "Send Entities Hierarchy to Excel"
         '
         'copy_down_bt
         '
-        Me.copy_down_bt.Image = Global.PPS.My.Resources.Resources.Download_
+        Me.copy_down_bt.Image = Global.FinancialBI.My.Resources.Resources.Download_
         Me.copy_down_bt.Name = "copy_down_bt"
         Me.copy_down_bt.Size = New System.Drawing.Size(187, 24)
         Me.copy_down_bt.Text = "Copy Value Down"
         '
         'drop_to_excel_bt
         '
-        Me.drop_to_excel_bt.Image = Global.PPS.My.Resources.Resources.Excel_Blue_32x32
+        Me.drop_to_excel_bt.Image = Global.FinancialBI.My.Resources.Resources.Excel_Blue_32x32
         Me.drop_to_excel_bt.Name = "drop_to_excel_bt"
         Me.drop_to_excel_bt.Size = New System.Drawing.Size(187, 24)
         Me.drop_to_excel_bt.Text = "Drop To Excel"
         '
         'CreateEntityToolStripMenuItem
         '
-        Me.CreateEntityToolStripMenuItem.Image = Global.PPS.My.Resources.Resources.element_branch2_add
+        Me.CreateEntityToolStripMenuItem.Image = Global.FinancialBI.My.Resources.Resources.element_branch2_add
         Me.CreateEntityToolStripMenuItem.Name = "CreateEntityToolStripMenuItem"
         Me.CreateEntityToolStripMenuItem.Size = New System.Drawing.Size(187, 24)
         Me.CreateEntityToolStripMenuItem.Text = "Create Entity"
         '
         'DeleteEntityToolStripMenuItem2
         '
-        Me.DeleteEntityToolStripMenuItem2.Image = Global.PPS.My.Resources.Resources.element_branch2_delete
+        Me.DeleteEntityToolStripMenuItem2.Image = Global.FinancialBI.My.Resources.Resources.element_branch2_delete
         Me.DeleteEntityToolStripMenuItem2.Name = "DeleteEntityToolStripMenuItem2"
         Me.DeleteEntityToolStripMenuItem2.Size = New System.Drawing.Size(187, 24)
         Me.DeleteEntityToolStripMenuItem2.Text = "Delete Entity"

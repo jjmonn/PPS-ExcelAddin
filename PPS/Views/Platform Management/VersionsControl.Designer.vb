@@ -88,14 +88,14 @@ Partial Class VersionsControl
         '
         'new_version_bt
         '
-        Me.new_version_bt.Image = Global.PPS.My.Resources.Resources.elements3_add
+        Me.new_version_bt.Image = Global.FinancialBI.My.Resources.Resources.elements3_add
         Me.new_version_bt.Name = "new_version_bt"
         Me.new_version_bt.Size = New System.Drawing.Size(150, 22)
         Me.new_version_bt.Text = "Create Version"
         '
         'new_folder_bt
         '
-        Me.new_folder_bt.Image = Global.PPS.My.Resources.Resources.folder2
+        Me.new_folder_bt.Image = Global.FinancialBI.My.Resources.Resources.folder2
         Me.new_folder_bt.Name = "new_folder_bt"
         Me.new_folder_bt.Size = New System.Drawing.Size(150, 22)
         Me.new_folder_bt.Text = "Create Folder"
@@ -118,7 +118,7 @@ Partial Class VersionsControl
         '
         'delete_bt
         '
-        Me.delete_bt.Image = Global.PPS.My.Resources.Resources.elements3_delete
+        Me.delete_bt.Image = Global.FinancialBI.My.Resources.Resources.elements3_delete
         Me.delete_bt.Name = "delete_bt"
         Me.delete_bt.Size = New System.Drawing.Size(150, 22)
         Me.delete_bt.Text = "Delete"
@@ -385,21 +385,21 @@ Partial Class VersionsControl
         '
         'NewVersionMenuBT
         '
-        Me.NewVersionMenuBT.Image = Global.PPS.My.Resources.Resources.elements3_add
+        Me.NewVersionMenuBT.Image = Global.FinancialBI.My.Resources.Resources.elements3_add
         Me.NewVersionMenuBT.Name = "NewVersionMenuBT"
         Me.NewVersionMenuBT.Size = New System.Drawing.Size(149, 22)
         Me.NewVersionMenuBT.Text = "New Version"
         '
         'NewFolderMenuBT
         '
-        Me.NewFolderMenuBT.Image = Global.PPS.My.Resources.Resources.favicon_81_
+        Me.NewFolderMenuBT.Image = Global.FinancialBI.My.Resources.Resources.favicon_81_
         Me.NewFolderMenuBT.Name = "NewFolderMenuBT"
         Me.NewFolderMenuBT.Size = New System.Drawing.Size(149, 22)
         Me.NewFolderMenuBT.Text = "New Folder"
         '
         'DeleteVersionMenuBT
         '
-        Me.DeleteVersionMenuBT.Image = Global.PPS.My.Resources.Resources.elements3_delete
+        Me.DeleteVersionMenuBT.Image = Global.FinancialBI.My.Resources.Resources.elements3_delete
         Me.DeleteVersionMenuBT.Name = "DeleteVersionMenuBT"
         Me.DeleteVersionMenuBT.Size = New System.Drawing.Size(149, 22)
         Me.DeleteVersionMenuBT.Text = "Delete Version"
