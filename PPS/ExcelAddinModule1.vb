@@ -119,8 +119,8 @@ Public Class ExcelAddinModule1
                           ByRef period As Object, _
                           ByRef currency As Object, _
                           ByRef version As Object, _
-                          Optional ByRef adjustment_filter As Object = Nothing, _
-                          Optional ByRef filters As Object = Nothing) As Object
+                           ByRef adjustment_filter As Object, _
+                           ByRef filters As Object) As Object
 
         If GlobalVariables.APPS.COMAddIns.Item("PPS.AddinModule").Object.ppsbi_refresh_flag = True Then
             If setUpFlag = False Then
@@ -134,7 +134,7 @@ Public Class ExcelAddinModule1
             End If
 
             If GlobalVariables.ConnectionState = False Then
-                Return "WAITING FOR CONNECTION"
+                Return "Not connected"
             End If
 
             Return GlobalVariables.GlobalPPSBIController.getDataCallBack(entity, _
@@ -144,6 +144,7 @@ Public Class ExcelAddinModule1
                                                        version, _
                                                        adjustment_filter, _
                                                        filters)
+            Return "Not connected"
         End If
 
     End Function

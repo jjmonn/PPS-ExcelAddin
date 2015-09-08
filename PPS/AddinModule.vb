@@ -1221,6 +1221,9 @@ Public Class AddinModule
         GlobalVariables.GlobalFactsDatas = New GlobalFactData
         GlobalVariables.GlobalFactsVersions = New GlobalFactVersion
 
+        ' Financial Bi User Defined Function
+        GlobalVariables.GlobalPPSBIController = New PPSBIController
+
     End Sub
 
 
@@ -1395,7 +1398,7 @@ Public Class AddinModule
             ConnectionBT_OnClick(sender, control, pressed)
         Else
             If Not GRSControlersDictionary.ContainsKey(GlobalVariables.APPS.ActiveSheet) Then
-                Dim cREFRESH As New RefreshGetDataBatch
+                Dim cREFRESH As New WorksheetRefreshController
                 cREFRESH.RefreshWorksheet()
             Else
                 MsgBox("Cannot Refresh while the worksheet is being edited. " + Chr(13) + _
@@ -1411,7 +1414,7 @@ Public Class AddinModule
             ConnectionBT_OnClick(sender, control, pressed)
         Else
             If Not GRSControlersDictionary.ContainsKey(GlobalVariables.APPS.ActiveSheet) Then
-                Dim cREFRESH As New RefreshGetDataBatch
+                Dim cREFRESH As New WorksheetRefreshController
                 Dim ws As Excel.Worksheet = GlobalVariables.APPS.ActiveSheet
                 cREFRESH.RefreshWorksheet(GlobalVariables.APPS.Selection)
             Else
@@ -1459,7 +1462,7 @@ Public Class AddinModule
 
     Private Sub BreakLinksBT_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) Handles BreakLinksBT.OnClick
 
-        RefreshGetDataBatch.BreakLinks()
+        WorksheetRefreshController.BreakLinks()
 
     End Sub
 

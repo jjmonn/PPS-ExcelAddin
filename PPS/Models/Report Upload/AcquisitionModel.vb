@@ -136,7 +136,7 @@ Friend Class AcquisitionModel
 
     End Sub
 
-    Private Sub AfterInputsComputation(ByRef entityId As Int32, ByRef status As Boolean)
+    Private Sub AfterInputsComputation(ByRef entityId As Int32, ByRef status As Boolean, ByRef requestId As Int32)
 
         If status = True Then
             Dim entityName As String = GlobalVariables.Entities.entities_hash(entityId)(NAME_VARIABLE)

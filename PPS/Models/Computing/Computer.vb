@@ -22,10 +22,10 @@ Imports System.Collections
 Friend Class Computer
 
 
-#Region "Intance Variables"
+#Region "Instance Variables"
 
     ' Events
-    Public Event ComputationAnswered(ByRef entityId As String, ByRef status As Boolean)
+    Public Event ComputationAnswered(ByRef entityId As String, ByRef status As Boolean, ByRef requestId As Int32)
 
     ' Variables
     Private dataMap As Dictionary(Of String, Double)
@@ -66,12 +66,12 @@ Friend Class Computer
 #Region "Computation Query Interfaces"
 
     ' Query
-    Friend Sub CMSG_COMPUTE_REQUEST(ByRef versions_id As Int32(), _
-                                    ByRef entity_id As Int32, _
-                                    ByRef currency_id As Int32, _
-                                    Optional ByRef filters As Dictionary(Of Int32, List(Of Int32)) = Nothing, _
-                                    Optional ByRef axis_filters As Dictionary(Of Int32, List(Of Int32)) = Nothing, _
-                                    Optional ByRef hierarchy As List(Of String) = Nothing)
+    Friend Function CMSG_COMPUTE_REQUEST(ByRef versions_id As Int32(), _
+                                        ByRef entity_id As Int32, _
+                                        ByRef currency_id As Int32, _
+                                        Optional ByRef filters As Dictionary(Of Int32, List(Of Int32)) = Nothing, _
+                                        Optional ByRef axis_filters As Dictionary(Of Int32, List(Of Int32)) = Nothing, _
+                                        Optional ByRef hierarchy As List(Of String) = Nothing) As Int32
 
         dataMap = New Dictionary(Of String, Double)
         requestIdVersionIdDict.Clear()
@@ -139,9 +139,13 @@ Friend Class Computer
             End If
             packet.Release()
             NetworkManager.GetInstance().Send(packet)
+            If versions_id.Length = 1 Then
+                Return requestId
+            End If
         Next
+        Return 0
 
-    End Sub
+    End Function
 
     ' Server Answer
     Private Sub SMSG_COMPUTE_RESULT(packet As ByteBuffer)
@@ -165,11 +169,11 @@ Friend Class Computer
             versions_comp_flag(versionId) = True
             If AreAllVersionsComputed() = True Then
                 NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_COMPUTE_RESULT, AddressOf SMSG_COMPUTE_RESULT)
-                RaiseEvent ComputationAnswered(requestIdEntityIdDict(request_id), True)
+                RaiseEvent ComputationAnswered(requestIdEntityIdDict(request_id), True, request_id)
                 requestIdEntityIdDict.Remove(request_id)
             End If
         Else
-            RaiseEvent ComputationAnswered("", False)
+            RaiseEvent ComputationAnswered("", False, 0)
         End If
 
     End Sub

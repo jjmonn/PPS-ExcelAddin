@@ -232,6 +232,15 @@ Friend Class Account
 
     End Function
 
+    Friend Function GetIdFromName(ByRef name As String) As Int32
+
+        For Each id As Int32 In accounts_hash.Keys
+            If name = accounts_hash(id)(NAME_VARIABLE) Then Return id
+        Next
+        Return 0
+
+    End Function
+
 #End Region
 
 
