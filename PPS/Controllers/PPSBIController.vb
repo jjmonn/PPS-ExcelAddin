@@ -14,7 +14,7 @@
 '      
 '
 ' Author: Julien Monnereau
-' Last modified: 17/07/2015
+' Last modified: 08/09/2015
 '
 
 
@@ -30,16 +30,13 @@ Friend Class PPSBIController
 #Region "Instance Variables"
 
     ' Objects
-  
+    Private Computer As New Computer
+
     ' Variables
-    Private AccountsNameKeyDictionary As Hashtable
-    Private EntitiesNameKeyDictionary As Hashtable
-    Private EntitiesCategoriesNameKeyDictionary As Hashtable
-    Private Adjustments_name_id_dic As Hashtable
+    Private requestIdComputeFlagDict As New Dictionary(Of Int32, Boolean)
     Private emptyCellFlag As Boolean
     Friend filterList As New List(Of String)
-    Private aggregation_computed_accounts_types As New List(Of String)
-
+   
 #End Region
 
 
@@ -47,14 +44,8 @@ Friend Class PPSBIController
 
     Friend Sub New()
 
-        AccountsNameKeyDictionary = GlobalVariables.Accounts.GetAccountsDictionary(NAME_VARIABLE, ID_VARIABLE)
-        EntitiesNameKeyDictionary = GlobalVariables.Entities.GetEntitiesDictionary(NAME_VARIABLE, ID_VARIABLE)
-        EntitiesCategoriesNameKeyDictionary = GlobalVariables.FiltersValues.GetFiltervaluesDictionary(GlobalEnums.AnalysisAxis.ENTITIES, NAME_VARIABLE, ID_VARIABLE)
-        Adjustments_name_id_dic = GlobalVariables.Adjustments.GetAxisDictionary(NAME_VARIABLE, ID_VARIABLE)
         emptyCellFlag = False
-        aggregation_computed_accounts_types.Add(GlobalEnums.FormulaTypes.FORMULA)
-        aggregation_computed_accounts_types.Add(GlobalEnums.FormulaTypes.FIRST_PERIOD_INPUT)
-        aggregation_computed_accounts_types.Add(GlobalEnums.FormulaTypes.AGGREGATION_OF_SUB_ACCOUNTS)
+       AddHandler Computer.ComputationAnswered, AddressOf AfterCompute
 
     End Sub
 
@@ -63,68 +54,78 @@ Friend Class PPSBIController
 
 #Region "Interface"
 
-
     ' Stubs in this function - clients/ products adjustments filters should come as param or computed here ?!!!
     ' Period input: date as integer 
-    Friend Function getDataCallBack(ByRef entity_name As Object, _
-                                    ByRef account As Object, _
-                                    ByRef period As Object, _
-                                    ByRef currency As Object, _
-                                    ByRef version As Object, _
-                                    Optional ByRef adjustment_filter As Object = Nothing, _
-                                    Optional ByRef filtersArray As Object = Nothing) As Object
+    Friend Function getDataCallBack(ByRef p_entity_str As Object, _
+                                   ByRef p_account_str As Object, _
+                                   ByRef p_period_str As Object, _
+                                   ByRef p_currency_str As Object, _
+                                   ByRef p_version_str As Object, _
+                                   Optional ByRef p_adjustment_str As Object = Nothing, _
+                                   Optional ByRef p_filtersArray As Object = Nothing) As Object
 
-        Dim entityString, entity_id, account_id, accountString, periodString, currencyString, version_id, adjustment_string, adjustment_id, error_message As String
+        Dim entityString, accountString, periodString, currencyString, adjustmentString, versionString, error_message As String
+        Dim entity_id, account_id, currency_id, version_id, adjustment_id, period As Int32
+
         emptyCellFlag = False
-        entityString = ReturnValueFromRange(entity_name)
-        accountString = ReturnValueFromRange(account)
-        periodString = ReturnValueFromRange(period)
-        currencyString = ReturnValueFromRange(currency)
-        adjustment_string = ReturnValueFromRange(adjustment_filter)
+        entityString = ReturnValueFromRange(p_entity_str)
+        accountString = ReturnValueFromRange(p_account_str)
+        periodString = ReturnValueFromRange(p_period_str)
+        currencyString = ReturnValueFromRange(p_currency_str)
+        adjustmentString = ReturnValueFromRange(p_adjustment_str)
+        versionString = ReturnValueFromRange(p_version_str)
 
         filterList.Clear()
-        If Not filtersArray Is Nothing Then
-            For Each filter_ In filtersArray
-                If Not filter_ Is Nothing Then AddFilterValueToFiltersList(filter_)
-            Next
-        End If
+        'If Not p_filtersArray Is Nothing Then
+        '    For Each filter_ In p_filtersArray
+        '        If Not filter_ Is Nothing Then AddFilterValueToFiltersList(filter_)
+        '    Next
+        'End If
 
         If CheckParameters(accountString, account_id, _
                            entityString, entity_id, _
-                           adjustment_string, adjustment_id, _
-                           version, version_id, _
+                           adjustmentString, adjustment_id, _
+                           versionString, version_id, _
                            error_message) _
-                           = False Then Return error_message
+                           = False Then
+            Return error_message
+        End If
 
-        ' construction des clients_id_filter
-        '                  proudcts_id_filters
-        ' STUB !!!
-        Dim clients_id_filters As New List(Of String)
-        Dim products_id_filters As New List(Of String)
-        Dim adjustments_id_filters As New List(Of String)
 
-        '   Dim entity_node As TreeNode = getEntityNode(entity_id)
-        '  If entity_node Is Nothing Then Return "Entity not in selection"
+        ' STUB !!! filters priority high !!
+        Dim filters As Object = Nothing
+        Dim axis_filters As Object = Nothing
 
-        'If CheckDate(period, period_int, GlobalVariables.GenericGlobalSingleEntityComputer.period_list) = False Then
+        ' check periods to be reimplemented !!
+        'If CheckDate(Period, period_int, GlobalVariables.GenericGlobalSingleEntityComputer.period_list) = False Then
         '    Return "Invalid Period or Period format"
         'End If
+        period = "y42004"
 
-        ' launch computation => computer.vb
+        Dim token As String = version_id & Computer.TOKEN_SEPARATOR & _
+                               "0" & Computer.TOKEN_SEPARATOR & _
+                               entity_id & Computer.TOKEN_SEPARATOR & _
+                               account_id & Computer.TOKEN_SEPARATOR & _
+                               period
 
-        'ComputeViaAggregationComputer(entity_node, _
-        '                                      account_id, _
-        '                                      version_id, _
-        '                                      currencyString, _
-        '                                      period, _
-        '                                      clients_id_filters, _
-        '                                      products_id_filters, _
-        '                                      adjustments_id_filters)
-       
+        Dim request_id As Int32 = Computer.CMSG_COMPUTE_REQUEST({version_id}, _
+                                                                 entity_id, _
+                                                                 currency_id, _
+                                                                 filters, _
+                                                                 axis_filters, _
+                                                                 Nothing)
+        requestIdComputeFlagDict.Add(request_id, False)
+        While requestIdComputeFlagDict(request_id) = False
+            ' timeout ?
+        End While
+        If Computer.GetData.ContainsKey(token) Then
+            Return Computer.GetData(token)
+        Else
+            Return "Unable to Compute"
+        End If
 
     End Function
 
-  
 #End Region
 
 
@@ -140,24 +141,21 @@ Friend Class PPSBIController
                                      ByRef version_id As String, _
                                      ByRef error_message As String) As Boolean
 
-        If AccountsNameKeyDictionary.ContainsKey(accountstring) Then
-            account_id = AccountsNameKeyDictionary.Item(accountstring)
-        Else
+        account_id = GlobalVariables.Accounts.GetIdFromName(accountstring)
+        If account_id = 0 Then
             error_message = "Invalid Account"
             Return False
         End If
 
-        If EntitiesNameKeyDictionary.ContainsKey(entityString) Then
-            entity_id = EntitiesNameKeyDictionary.Item(entityString)
-        Else
+        entity_id = GlobalVariables.Entities.GetEntityId(entityString)
+        If entity_id = 0 Then
             error_message = "Invalid Entity"
             Return False
         End If
 
         If adjustmentstring <> "" Then
-            If Adjustments_name_id_dic.ContainsKey(adjustmentstring) Then
-                adjustment_id = Adjustments_name_id_dic(adjustmentstring)
-            Else
+            adjustment_id = GlobalVariables.Adjustments.GetAxisId(adjustmentstring)
+            If adjustment_id = 0 Then
                 error_message = "Invalid Adjustment"
                 Return False
             End If
@@ -216,10 +214,23 @@ Friend Class PPSBIController
 
                 End If
             End If
-            End If
+        End If
         Return False
 
     End Function
+
+#End Region
+
+
+#Region "Events"
+
+    Private Sub AfterCompute(ByRef entity_id As Int32, ByRef status As Boolean, ByRef request_id As Int32)
+
+        If status = True Then
+            requestIdComputeFlagDict(request_id) = True
+        End If
+
+    End Sub
 
 #End Region
 
@@ -259,12 +270,12 @@ Friend Class PPSBIController
 
     End Function
 
-    Private Sub AddFilterValueToFiltersList(ByRef filter As Object)
+    'Private Sub AddFilterValueToFiltersList(ByRef filter As Object)
 
-        Dim filterValue As String = ReturnValueFromRange(filter)
-        If Not filterValue Is Nothing AndAlso EntitiesCategoriesNameKeyDictionary.ContainsKey(filterValue) Then filterList.Add(EntitiesCategoriesNameKeyDictionary.Item(filterValue))
-      
-    End Sub
+    '    Dim filterValue As String = ReturnValueFromRange(filter)
+    '    If Not filterValue Is Nothing AndAlso EntitiesCategoriesNameKeyDictionary.ContainsKey(filterValue) Then filterList.Add(EntitiesCategoriesNameKeyDictionary.Item(filterValue))
+
+    'End Sub
 
 #End Region
 
