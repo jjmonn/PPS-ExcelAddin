@@ -241,7 +241,6 @@ Public Class CUI2LeftPane
 #End Region
 
 
-
 #Region "Utilities"
 
     Private Sub ExpandSelectionPane()

@@ -13,11 +13,20 @@ Imports VIBlend.WinForms.Controls
 
 Friend Class AxisFilter
 
+    ' Base Method
     Friend Shared Sub LoadFvTv(ByRef FvTv As TreeView, _
                                ByRef axis_id As UInt32)
 
         Dim filtersNode As New TreeNode
         LoadFvTv(FvTv, filtersNode, axis_id)
+
+    End Sub
+
+    Friend Shared Sub LoadFvTv(ByRef FvNode As vTreeNode, _
+                              ByRef axis_id As UInt32)
+
+        Dim filtersNode As New vTreeNode
+        LoadFvTv(FvNode, filtersNode, axis_id)
 
     End Sub
 
@@ -29,6 +38,8 @@ Friend Class AxisFilter
 
     End Sub
 
+
+    ' Method with Filters Nodes given as param to be filled as well
     Friend Shared Sub LoadFvTv(ByRef FvTv As TreeView, _
                                ByRef filtersNode As TreeNode, _
                                ByRef axis_id As Int32)
@@ -55,6 +66,21 @@ Friend Class AxisFilter
 
     End Sub
 
+    Friend Shared Sub LoadFvTv(ByRef FvNode As vTreeNode, _
+                             ByRef filtersNode As vTreeNode, _
+                             ByRef axis_id As UInt32)
+
+        FvNode.Nodes.Clear()
+        GlobalVariables.Filters.LoadFiltersNode(filtersNode, axis_id)
+        For Each filterNode As vTreeNode In filtersNode.Nodes
+            Dim NewFvTvNode As vTreeNode = VTreeViewUtil.AddNode(filterNode.Value, filterNode.Text, FvNode, 0)
+            LoadFiltersValues(filterNode, NewFvTvNode)
+        Next
+
+    End Sub
+
+
+    ' Load Filters Values Methods
     Friend Shared Sub LoadFiltersValues(ByRef filterNode As TreeNode, _
                                         ByRef FvTvNode As TreeNode, _
                                         Optional ByVal firstLevelFlag As Boolean = True)
@@ -106,9 +132,7 @@ Friend Class AxisFilter
 
     End Sub
 
-    ' load a tv with all filters ids and values as children !
-    '
-    '
+   
 
 
 End Class

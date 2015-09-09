@@ -112,6 +112,17 @@ Public MustInherit Class SuperAxisCRUD
 
     End Sub
 
+    Friend Sub LoadAxisTree(ByRef DestNode As VIBlend.WinForms.Controls.vTreeNode)
+
+        DestNode.Nodes.Clear()
+        For Each id As Int32 In Axis_hash.Keys
+            Dim newNode As VIBlend.WinForms.Controls.vTreeNode = VTreeViewUtil.AddNode(id, Axis_hash(id)(NAME_VARIABLE), DestNode, 0)
+            newNode.Checked = Windows.Forms.CheckState.Checked
+        Next
+
+    End Sub
+
+
     Friend Sub LoadAxisTree(ByRef TV As VIBlend.WinForms.Controls.vTreeView, _
                                ByRef filter_list As List(Of UInt32))
 
