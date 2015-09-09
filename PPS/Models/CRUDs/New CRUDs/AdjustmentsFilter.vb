@@ -11,24 +11,19 @@ Imports System.Collections.Generic
 '
 ' Author: Julien Monnereau
 ' Created: 23/07/2015
-' Last modified: 02/09/2015
+' Last modified: 04/09/2015
 
 
 
-Friend Class AdjustmentFilter
+Friend Class AdjustmentFilter : Inherits SuperAxisFilterCRUD
 
 
 #Region "Instance variables"
 
-    ' Variables
-    Friend state_flag As Boolean
-    Friend adjustmentsFiltersHash As New Dictionary(Of Int32, Dictionary(Of Int32, Int32))
-
+    
     ' Events
     Public Event ObjectInitialized(ByRef status As Boolean)
-    Public Event Read(ByRef status As Boolean, ByRef attributes As Hashtable)
     Public Event CreationEvent(ByRef status As Boolean, ByRef adjustment_id As Int32, ByRef filter_id As Int32, filter_value_id As Int32)
-    Public Event UpdateEvent(ByRef status As Boolean, ByRef adjustment_id As Int32, ByRef filter_id As Int32, filter_value_id As Int32)
     Public Event DeleteEvent(ByRef status As Boolean, ByRef adjustment_id As Int32, filter_id As Int32)
 
 
@@ -37,23 +32,23 @@ Friend Class AdjustmentFilter
 
 #Region "Init"
 
-  Friend Sub New()
+    Friend Sub New()
 
-    NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_READ_ADJUSTMENT_FILTER_ANSWER, AddressOf SMSG_READ_ADJUSTMENT_FILTER_ANSWER)
-    NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_DELETE_ADJUSTMENT_FILTER_ANSWER, AddressOf SMSG_DELETE_ADJUSTMENT_FILTER_ANSWER)
-    NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_LIST_ADJUSTMENT_FILTER_ANSWER, AddressOf SMSG_LIST_ADJUSTMENT_FILTER_ANSWER)
-    state_flag = False
+        NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_READ_ADJUSTMENT_FILTER_ANSWER, AddressOf SMSG_READ_ADJUSTMENT_FILTER_ANSWER)
+        NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_DELETE_ADJUSTMENT_FILTER_ANSWER, AddressOf SMSG_DELETE_ADJUSTMENT_FILTER_ANSWER)
+        NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_LIST_ADJUSTMENT_FILTER_ANSWER, AddressOf SMSG_LIST_ADJUSTMENT_FILTER_ANSWER)
+        state_flag = False
 
-  End Sub
+    End Sub
 
     Private Sub SMSG_LIST_ADJUSTMENT_FILTER_ANSWER(packet As ByteBuffer)
 
         If packet.ReadInt32() = 0 Then
             For i As Int32 = 1 To packet.ReadInt32()
                 Dim tmp_ht As New Hashtable
-                GetAdjustmentFilterHTFromPacket(packet, tmp_ht)
-    
-                AddRecordToAdjustmentsFiltersHash(tmp_ht(ADJUSTMENT_ID_VARIABLE), _
+                GetAxisFilterHTFromPacket(packet, tmp_ht)
+
+                AddRecordToaxisFiltersHash(tmp_ht(AXIS_ID_VARIABLE), _
                                                 tmp_ht(FILTER_ID_VARIABLE), _
                                                 tmp_ht(FILTER_VALUE_ID_VARIABLE))
             Next
@@ -74,7 +69,7 @@ Friend Class AdjustmentFilter
 
         NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_CREATE_ADJUSTMENT_FILTER_ANSWER, AddressOf SMSG_CREATE_ADJUSTMENT_FILTER_ANSWER)
         Dim packet As New ByteBuffer(CType(ClientMessage.CMSG_CREATE_ADJUSTMENTS_FILTER, UShort))
-        WriteAdjustmentFilterPacket(packet, attributes)
+        WriteAxisFilterPacket(packet, attributes)
         packet.Release()
         NetworkManager.GetInstance().Send(packet)
 
@@ -106,20 +101,20 @@ Friend Class AdjustmentFilter
 
         If packet.ReadInt32() = 0 Then
             Dim ht As New Hashtable
-            GetAdjustmentFilterHTFromPacket(packet, ht)
-            AddRecordToAdjustmentsFiltersHash(ht(ADJUSTMENT_ID_VARIABLE), _
+            GetAxisFilterHTFromPacket(packet, ht)
+            AddRecordToaxisFiltersHash(ht(AXIS_ID_VARIABLE), _
                                               ht(FILTER_ID_VARIABLE), _
                                               ht(FILTER_VALUE_ID_VARIABLE))
-            RaiseEvent Read(True, ht)
+            MyBase.OnRead(True, ht)
         Else
-            RaiseEvent Read(False, Nothing)
+            MyBase.OnRead(False, Nothing)
         End If
 
     End Sub
 
-    Friend Sub CMSG_UPDATE_ADJUSTMENT_FILTER(ByRef adjustmentId As Int32, _
-                                             ByRef filterId As Int32, _
-                                             ByRef filterValueId As Int32)
+    Friend Overrides Sub CMSG_UPDATE_AXIS_FILTER(ByRef adjustmentId As Int32, _
+                                                 ByRef filterId As Int32, _
+                                                 ByRef filterValueId As Int32)
 
         NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_UPDATE_ADJUSTMENT_FILTER_ANSWER, AddressOf SMSG_UPDATE_ADJUSTMENT_FILTER_ANSWER)
         Dim packet As New ByteBuffer(CType(ClientMessage.CMSG_UPDATE_ADJUSTMENTS_FILTER, UShort))
@@ -137,9 +132,9 @@ Friend Class AdjustmentFilter
             Dim adjustment_id As Int32 = packet.ReadUint32()
             Dim filter_id As Int32 = packet.ReadUint32()
             Dim filter_value_id As Int32 = packet.ReadUint32()
-            RaiseEvent UpdateEvent(True, adjustment_id, filter_id, filter_value_id)
+            MyBase.OnUpdate(True, adjustment_id, filter_id, filter_value_id)
         Else
-            RaiseEvent UpdateEvent(False, 0, 0, 0)
+            MyBase.OnUpdate(False, 0, 0, 0)
         End If
         NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_UPDATE_ADJUSTMENT_FILTER_ANSWER, AddressOf SMSG_UPDATE_ADJUSTMENT_FILTER_ANSWER)
 
@@ -170,91 +165,14 @@ Friend Class AdjustmentFilter
 #End Region
 
 
-#Region "Mappings"
+    Protected Overrides Sub finalize()
 
-    Friend Function GetFilteredAdjustmentIDs(ByRef filter_id As UInt32, _
-                                         ByRef filter_value_id As UInt32) As List(Of UInt32)
-
-        Dim adjustments_list As New List(Of UInt32)
-        For Each adjustmentId As Int32 In adjustmentsFiltersHash.Keys
-            If adjustmentsFiltersHash(adjustmentId)(filter_id) = filter_value_id Then
-                adjustments_list.Add(adjustmentId)
-            End If
-        Next
-        Return adjustments_list
-
-    End Function
-
-    Friend Function GetFilterValueId(ByRef filterId As Int32, _
-                                     ByRef adjustmentId As Int32) As Int32
-
-        Dim mostNestedFilterId = GlobalVariables.Filters.GetMostNestedFilterId(filterId)
-        Dim mostNestedFilterValueId = GlobalVariables.AdjustmentsFilters.adjustmentsFiltersHash(adjustmentId)(mostNestedFilterId)
-        Return GlobalVariables.FiltersValues.GetFilterValueId(mostNestedFilterValueId, filterId)
-
-    End Function
-
-
-#End Region
-
-
-#Region "Utilities"
-
-    Private Sub AddRecordToAdjustmentsFiltersHash(ByRef adjustmentId As Int32, _
-                                              ByRef filterId As Int32, _
-                                              ByRef filterValueId As Int32)
-
-        If adjustmentsFiltersHash.ContainsKey(adjustmentId) Then
-            If adjustmentsFiltersHash(adjustmentId).ContainsKey(filterId) Then
-                adjustmentsFiltersHash(adjustmentId)(filterId) = filterValueId
-            Else
-                adjustmentsFiltersHash(adjustmentId).Add(filterId, filterValueId)
-            End If
-        Else
-            adjustmentsFiltersHash.Add(adjustmentId, New Dictionary(Of Int32, Int32))
-            adjustmentsFiltersHash(adjustmentId).Add(filterId, filterValueId)
-        End If
+        NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_LIST_ADJUSTMENT_FILTER_ANSWER, AddressOf SMSG_LIST_ADJUSTMENT_FILTER_ANSWER)
+        NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_READ_ADJUSTMENT_FILTER_ANSWER, AddressOf SMSG_READ_ADJUSTMENT_FILTER_ANSWER)
+        NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_DELETE_ADJUSTMENT_FILTER_ANSWER, AddressOf SMSG_DELETE_ADJUSTMENT_FILTER_ANSWER)
+        MyBase.Finalize()
 
     End Sub
-
-    Private Sub RemoveRecordFromFiltersHash(ByRef adjustmentId As Int32, _
-                                           ByRef filterId As Int32)
-
-        On Error Resume Next
-        adjustmentsFiltersHash(CInt(adjustmentId)).Remove(CInt(filterId))
-
-    End Sub
-
-    Friend Shared Sub GetAdjustmentFilterHTFromPacket(ByRef packet As ByteBuffer, _
-                                                  ByRef adjustmentFilter_ht As Hashtable)
-
-        adjustmentFilter_ht(ADJUSTMENT_ID_VARIABLE) = packet.ReadUint32()
-        adjustmentFilter_ht(FILTER_ID_VARIABLE) = packet.ReadUint32()
-        adjustmentFilter_ht(FILTER_VALUE_ID_VARIABLE) = packet.ReadUint32()
-
-    End Sub
-
-    Private Sub WriteAdjustmentFilterPacket(ByRef packet As ByteBuffer, _
-                                            ByRef attributes As Hashtable)
-
-        packet.WriteUint32(attributes(ADJUSTMENT_ID_VARIABLE))
-        packet.WriteUint32(attributes(FILTER_ID_VARIABLE))
-        packet.WriteUint32(attributes(FILTER_VALUE_ID_VARIABLE))
-
-    End Sub
-
-
-#End Region
-
-
-  Protected Overrides Sub finalize()
-
-    NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_LIST_ADJUSTMENT_FILTER_ANSWER, AddressOf SMSG_LIST_ADJUSTMENT_FILTER_ANSWER)
-    NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_READ_ADJUSTMENT_FILTER_ANSWER, AddressOf SMSG_READ_ADJUSTMENT_FILTER_ANSWER)
-    NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_DELETE_ADJUSTMENT_FILTER_ANSWER, AddressOf SMSG_DELETE_ADJUSTMENT_FILTER_ANSWER)
-    MyBase.Finalize()
-
-  End Sub
 
 
 

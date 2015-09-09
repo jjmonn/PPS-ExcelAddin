@@ -10,7 +10,7 @@
 '           -> should have "" and "NS" for each category (hence name-> keys dict in categories should be for each categories)
 '
 '
-' Last modified: 21/04/2015
+' Last modified: 04/09/2015
 ' Author: Julien Monnereau
 
 
@@ -27,216 +27,78 @@ Friend Class NewEntityUI
 
     ' Objects
     Private Controller As EntitiesController
+    Private entitiesTV As TreeView
 
     ' Variables
-    Private entitiesTV As TreeView
-    Private categoriesTV As TreeView
-    Private categoriesNamesKeysDict As Hashtable
     Private parentTB As New TextBox
     Private isFormExpanded As Boolean
-    Private current_parent_entity_id As Int32
 
     ' Constants
     Private Const FIXED_ATTRIBUTES_NUMBER As Int32 = 3
-    Private Const NAME_TEXT_EDITOR_NAME As String = "NameTB"
-    Private Const NAME_LABEL_NAME As String = "NameLabel"
-    Friend Const PARENT_TB_NAME As String = "parentTB"
-    Private Const PARENT_BUTTON_NAME As String = "ParentNameBT"
-    Private Const CURRENCIES_CB_NAME As String = "CurrenciesCB"
-    Private Const CURRENCIES_LABEL_NAME As String = "Currency"
-    Private Const ROWS_HEIGHT As Int32 = 24
-    Private Const PARENT_BUTTON_WIDTH As Int32 = 75
-    Private Const PARENT_BUTTON_HEIGHT As Int32 = 28
-
-    ' Expansion Display Constants
-    Private Const COLLAPSED_WIDTH As Int32 = 710
-    Private Const EXPANDED_WIDTH As Int32 = 1175
-    Private Const COLLAPSED_HEIGHT As Int32 = 500
-    Private Const EXPANDED_HEIGHT As Int32 = 590
 
 #End Region
 
 
 #Region "Initialize"
 
-    Friend Sub New(ByRef input_controller As EntitiesController, _
-                   ByRef input_entities_TV As TreeView, _
-                   ByRef input_categories_tree As TreeView, _
-                   ByRef input_categories_name_key_dic As Hashtable)
+    Friend Sub New(ByRef p_controller As EntitiesController, _
+                   ByRef p_entitiesTV As TreeView, _
+                   ByRef p_currenciesHT As Hashtable)
 
         ' This call is required by the designer.
         InitializeComponent()
 
         ' Add any initialization after the InitializeComponent() call.
-        Controller = input_controller
-        entitiesTV = input_entities_TV
-        categoriesTV = input_categories_tree
-        categoriesNamesKeysDict = input_categories_name_key_dic
+        Controller = p_controller
+        entitiesTV = p_entitiesTV
+        LoadCurrencies(p_currenciesHT)
 
-        TableLayoutInit()
-        InitializeDisplay()
-        HideParentEntitiesTV()
+    End Sub
+
+    Private Sub LoadCurrencies(ByRef currenciesHt As Hashtable)
+
+        For Each currencyId As Int32 In currenciesHt.Keys
+            Dim LI As New VIBlend.WinForms.Controls.ListItem
+            LI.Value = currencyId
+            LI.Text = currenciesHt(currencyId)(NAME_VARIABLE)
+            CurrenciesComboBox1.Items.Add(LI)
+        Next
+
+    End Sub
+
+    Friend Sub SetParentEntityId(ByRef parentEntityId As Int32)
+
+        Dim parentEntityNode As VIBlend.WinForms.Controls.vTreeNode = VTreeViewUtil.FindNode(ParentEntityTreeViewBox.TreeView, parentEntityId)
+        ParentEntityTreeViewBox.TreeView.SelectedNode = parentEntityNode
 
     End Sub
 
     Private Sub NewEntityUI_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 
-        AddEntitiesTV()
-        If Not entitiesTV.SelectedNode Is Nothing Then current_parent_entity_id = entitiesTV.SelectedNode.Name Else current_parent_entity_id = ""
+        VTreeViewUtil.LoadParentEntitiesTreeviewBox(ParentEntityTreeViewBox, entitiesTV)
 
     End Sub
-
-    Protected Friend Sub FillIn(ByRef parent_entity_name As String, ByRef attributes As Hashtable)
-
-        parentTB.Text = parent_entity_name
-        Me.Controls.Find(CURRENCIES_CB_NAME, True)(0).Text = attributes(ENTITIES_CURRENCY_VARIABLE)
-
-        For Each categoryNode As TreeNode In categoriesTV.Nodes
-            Me.Controls.Find(categoryNode.Name + "CB", True)(0).Text = categoriesTV.Nodes.Find(attributes(categoryNode.Name), True)(0).Text
-        Next
-
-    End Sub
-
-
-#Region "Display Init"
-
-    Private Sub TableLayoutInit()
-
-        For Each categoryNode As TreeNode In categoriesTV.Nodes
-            TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(SizeType.Absolute, ROWS_HEIGHT))
-        Next
-
-        AddHandler entitiesTV.NodeMouseClick, AddressOf EntitiesTV_NodeMouseClick
-        AddHandler entitiesTV.KeyDown, AddressOf EntitiesTV_KeyDown
-
-    End Sub
-
-    ' Initialize display (comboboxes and text editors)
-    Private Sub InitializeDisplay()
-
-        ' Entity Name
-        Dim nameTextEditor As New TextBox
-        nameTextEditor.Name = NAME_TEXT_EDITOR_NAME
-        AddControl(0, 1, nameTextEditor)
-        AddLabel(0, NAME_LABEL_NAME)
-
-        ' Parent Entity -> 
-        parentTB.Name = PARENT_TB_NAME
-        parentTB.Enabled = False
-        AddControl(1, 1, parentTB)
-
-        ' Parent entity Button
-        Dim parentEntityBT As New Button
-        parentEntityBT.Name = PARENT_BUTTON_NAME
-        parentEntityBT.Text = "Select"
-        parentEntityBT.ImageList = ButtonsIL
-        parentEntityBT.ImageIndex = 2
-        parentEntityBT.TextAlign = Drawing.ContentAlignment.MiddleLeft
-        parentEntityBT.ImageAlign = Drawing.ContentAlignment.MiddleRight
-        AddControl(1, 0, parentEntityBT)
-        parentEntityBT.Dock = DockStyle.None
-        parentEntityBT.Width = PARENT_BUTTON_WIDTH
-
-        AddHandler parentEntityBT.Click, AddressOf ParentEntitySelection_Click
-        AddHandler parentEntityBT.Enter, AddressOf ParentEntitySelection_Click
-
-        ' currencies -> Combobox
-        Dim currenciesCombobox As New ComboBox
-        currenciesCombobox.DropDownStyle = ComboBoxStyle.DropDownList
-        currenciesCombobox.Name = CURRENCIES_CB_NAME
-        For Each curr As String In GlobalVariables.Currencies.GetCurrencyNameList()
-            currenciesCombobox.Items.Add(curr)
-        Next
-        AddControl(2, 1, currenciesCombobox)
-        AddLabel(2, CURRENCIES_LABEL_NAME)
-
-        AddAttributesComboboxes()
-
-    End Sub
-
-    ' Attributes Dynamic controls Creation
-    Private Sub AddAttributesComboboxes()
-
-        Dim rowIndex As Int32 = 3
-        For Each categoryNode As TreeNode In categoriesTV.Nodes
-
-            ' Dim tmpHT As New Dictionary(Of String, String)
-            Dim newCombobox As New ComboBox
-
-            newCombobox.DropDownStyle = ComboBoxStyle.DropDownList
-            newCombobox.Name = categoryNode.Name + "CB"
-
-            For Each categoryValue As TreeNode In categoryNode.Nodes
-                '     tmpHT.Add(categoryValue.Text, categoryValue.Name)
-                newCombobox.Items.Add(categoryValue.Text)
-            Next
-
-            AddControl(rowIndex, 1, newCombobox)
-            AddLabel(rowIndex, categoryNode.Text)
-            ' categoriesNamesKeysDict.Add(categoryNode.Name, tmpHT)
-            rowIndex = rowIndex + 1
-        Next
-        AddLabel(rowIndex, "")
-
-
-    End Sub
-
-    ' Label creation
-    Private Sub AddLabel(ByRef rowNb As Int32, ByRef labelName As String)
-
-        Dim newLabel As New Label
-        newLabel.Text = labelName
-        newLabel.TextAlign = Drawing.ContentAlignment.MiddleLeft
-        AddControl(rowNb, 0, newLabel)
-
-    End Sub
-
-    ' Add a control to the TableLayoutPanel1
-    Private Sub AddControl(ByRef rowNb As Int32, ByRef colNb As Int32, ByRef control As System.Windows.Forms.Control)
-
-        TableLayoutPanel1.Controls.Add(control)
-        TableLayoutPanel1.SetRow(control, rowNb)
-        TableLayoutPanel1.SetColumn(control, colNb)
-        control.Dock = DockStyle.Fill
-
-    End Sub
-
-
-#End Region
-
 
 #End Region
 
 
 #Region "Call backs"
 
-    Private Sub ParentEntitySelection_Click(sender As Object, e As EventArgs)
-
-        DisplayParentEntitiesTV()
-
-    End Sub
-
     Private Sub CreateEntityBT_Click(sender As Object, e As EventArgs) Handles CreateEntityBT.Click
 
-        Dim new_entity_Name As String = Me.Controls.Find(NAME_TEXT_EDITOR_NAME, True)(0).Text
+        Dim new_entity_Name As String = NameTextBox.Text
         If IsFormValid(new_entity_Name) = True Then
-
-            Dim hash As New Hashtable
-            hash.Add(NAME_VARIABLE, new_entity_Name)
-            If current_parent_entity_id <> "" Then hash.Add(PARENT_ID_VARIABLE, current_parent_entity_id)
-            hash.Add(ENTITIES_CURRENCY_VARIABLE, Me.Controls.Find(CURRENCIES_CB_NAME, True)(0).Text)
-            hash.Add(ENTITIES_ALLOW_EDITION_VARIABLE, 1)
-
-            For Each categoryNode As TreeNode In categoriesTV.Nodes
-                Dim categoryValueText As String = Me.Controls.Find(categoryNode.Name + "CB", True)(0).Text
-                hash.Add(categoryNode.Name, categoriesNamesKeysDict(categoryValueText))
-            Next
-
-            Controller.CreateEntity(hash, entitiesTV.SelectedNode)
+            Dim parentEntityId As Int32 = 0
+            If Not ParentEntityTreeViewBox.TreeView.SelectedNode Is Nothing Then
+                parentEntityId = ParentEntityTreeViewBox.TreeView.SelectedNode.Value
+            End If
+            Controller.CreateEntity(new_entity_Name, _
+                                    CurrenciesComboBox1.SelectedItem.Value, _
+                                    parentEntityId, _
+                                    1, _
+                                    1)
             Me.Hide()
             Controller.ShowEntitiesMGT()
-        Else
-
         End If
 
     End Sub
@@ -248,27 +110,28 @@ Friend Class NewEntityUI
 
     End Sub
 
-
 #End Region
 
 
-#Region "Checks"
+#Region "Utilities"
 
     Private Function IsFormValid(ByRef new_entity_name As String) As Boolean
 
-        Dim names_list = TreeViewsUtilities.GetNodesTextsList(entitiesTV)
-        If names_list.Contains(new_entity_name) Then
-            MsgBox("This Entity name is already in use. Please choose another one.")
+        If new_entity_name = "" Then
+            MsgBox("Please enter a Name for the New Entity")
+        End If
+        ' below -> check is on server 
+        'If names_list.Contains(new_entity_name) Then
+        '    MsgBox("This Entity name is already in use. Please choose another one.")
+        '    Return False
+        'End If
+        If CurrenciesComboBox1.SelectedItem Is Nothing Then
+            MsgBox("A currency must be selected.")
             Return False
         End If
         Return True
 
     End Function
-
-#End Region
-
-
-#Region "Utilities"
 
     Private Sub NewEntityUI_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
 
@@ -278,61 +141,8 @@ Friend Class NewEntityUI
 
     End Sub
 
-    Protected Friend Sub AddEntitiesTV()
-
-        Panel1.Controls.Add(entitiesTV)
-        entitiesTV.Dock = DockStyle.Fill
-
-    End Sub
-
-#Region "Parents Accounts Treeview Utilities"
-
-    Private Sub DisplayParentEntitiesTV()
-
-        Me.Width = EXPANDED_WIDTH
-        Me.Height = EXPANDED_HEIGHT
-        isFormExpanded = True
-
-    End Sub
-
-    Private Sub HideParentEntitiesTV()
-
-        Me.Width = COLLAPSED_WIDTH
-        Me.Height = COLLAPSED_HEIGHT
-        isFormExpanded = False
-
-    End Sub
-
-    Private Sub EntitiesTV_NodeMouseClick(sender As Object, e As TreeNodeMouseClickEventArgs)
-
-        Select Case e.Node.Nodes.Count
-            Case 0
-                parentTB.Text = e.Node.Text
-                current_parent_entity_id = e.Node.Name
-                HideParentEntitiesTV()
-        End Select
-
-    End Sub
-
-    Private Sub EntitiesTV_KeyDown(sender As Object, e As KeyEventArgs)
-
-        If e.KeyCode = Keys.Enter _
-        AndAlso Not entitiesTV.SelectedNode Is Nothing Then
-            parentTB.Text = entitiesTV.SelectedNode.Text
-            current_parent_entity_id = entitiesTV.SelectedNode.Name
-            HideParentEntitiesTV()
-        End If
-
-
-    End Sub
 
 #End Region
-
-
-
-#End Region
-
-
 
 
 End Class

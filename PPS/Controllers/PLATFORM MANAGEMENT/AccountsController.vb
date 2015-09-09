@@ -70,7 +70,7 @@ Friend Class AccountsController
     Private Sub InstanceVariablesLoading()
 
         accountsNameKeysDictionary = GlobalVariables.Accounts.GetAccountsDictionary(NAME_VARIABLE, ID_VARIABLE)
-        NewAccountView = New NewAccountUI(View, Me)
+        NewAccountView = New NewAccountUI(View, Me, AccountsTV)
         FormulasTranslator = New FormulasTranslations(accountsNameKeysDictionary)
 
     End Sub
@@ -88,13 +88,7 @@ Friend Class AccountsController
 
         isClosing = True
         View.closeControl()
-
-    End Sub
-
-    Friend Sub sendCloseOrder()
-
         View.Dispose()
-        PlatformMGTUI.displayControl()
 
     End Sub
 
@@ -306,7 +300,6 @@ Friend Class AccountsController
         Return True
 
     End Function
-
 
 #Region "Formulas Interdependancies checks"
 

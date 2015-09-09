@@ -108,7 +108,6 @@ Module Data_Tables_Constants
 #End Region
 
 
-
 #Region "Formats table"
 
     Friend Const FORMATS_TABLE_NAME = "formats"
@@ -330,19 +329,15 @@ Module Data_Tables_Constants
 
 #Region "Axis and Filters"
 
-    Friend Const ENTITIES_CURRENCY_VARIABLE = "entity_currency"
-    Friend Const ENTITIES_ALLOW_EDITION_VARIABLE = "allow_edition"
-
-
+    Friend Const ENTITIES_CURRENCY_VARIABLE As String = "entity_currency"
+    Friend Const ENTITIES_ALLOW_EDITION_VARIABLE As String = "allow_edition"
     Friend Const ADJUSTMENTS_TABLE As String = "adjustments"
     Friend Const CLIENTS_TABLE As String = "clients"
     Friend Const PRODUCTS_TABLE As String = "products"
-
     Friend Const FILTER_VALUE_ID_VARIABLE As String = "filter_value_id"
  
-
     ' filters
-    Friend Const FILTER_AXIS_ID_VARIABLE As String = "axis_id"
+    Friend Const AXIS_ID_VARIABLE As String = "axis_id"
     Friend Const FILTER_IS_PARENT_VARIABLE As String = "is_parent"
     Friend Const NON_ATTRIBUTED_SUFIX As String = "na"
 

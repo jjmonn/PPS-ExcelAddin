@@ -5,7 +5,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 05/05/2015
+' Last modified: 04/09/2015
 
 
 Imports System.ComponentModel
@@ -20,125 +20,137 @@ Friend Class PlatformMGTGeneralUI
     ' Objects
     Private current_controller As Object
  
-    ' Variables
-    Private controller_index As Int32
-    Friend close_all As Boolean = False
 
 #End Region
 
 
-#Region "Main Menu Call Backs"
+    Private Sub closeCurrentControl()
 
-    Private Sub FinancialsAndOperationalItemsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles FinancialsAndOperationalItemsToolStripMenuItem.Click
-
-        closeCurrentControl(0)
-
-    End Sub
-
-    Private Sub AdjustmentsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles AdjustmentsToolStripMenuItem.Click
-
-        closeCurrentControl(1)
-
-    End Sub
-
-    Private Sub OrganizationToolStripMenuItem1_Click(sender As Object, e As EventArgs) Handles OrganizationToolStripMenuItem1.Click
-
-        closeCurrentControl(2)
-
-    End Sub
-
-    Private Sub OrganizationCategoriesToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles OrganizationCategoriesToolStripMenuItem.Click
-
-        closeCurrentControl(3)
-
-    End Sub
-
-    Private Sub ClientsToolStripMenuItem1_Click(sender As Object, e As EventArgs) Handles ClientsToolStripMenuItem1.Click
-
-        closeCurrentControl(4)
-
-    End Sub
-
-    Private Sub ClientsCategoriesToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ClientsCategoriesToolStripMenuItem.Click
-
-        closeCurrentControl(5)
-
-    End Sub
-
-    Private Sub ProductsToolStripMenuItem1_Click(sender As Object, e As EventArgs) Handles ProductsToolStripMenuItem1.Click
-
-        closeCurrentControl(6)
-
-    End Sub
-
-    Private Sub ProductsCategoriesToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ProductsCategoriesToolStripMenuItem.Click
-
-        closeCurrentControl(7)
-
-    End Sub
-
-    Private Sub VersionsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles VersionsToolStripMenuItem.Click
-
-        closeCurrentControl(8)
-
-    End Sub
-
-    Private Sub CurrenciesToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles CurrenciesToolStripMenuItem.Click
-
-        closeCurrentControl(9)
-
-    End Sub
-
-    Private Sub UsersToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles UsersToolStripMenuItem.Click
-
-        closeCurrentControl(10)
-
-    End Sub
-
-    Private Sub ControlsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ControlsToolStripMenuItem.Click
-
-        closeCurrentControl(11)
-
-    End Sub
-
-
-#End Region
-
-
-#Region "Controls Display"
-
-    Private Sub closeCurrentControl(ByVal index As Int32)
-
-        controller_index = index
         If Not current_controller Is Nothing Then
             current_controller.close()
-        Else
-            displayControl()
         End If
 
     End Sub
 
-    Protected Friend Sub displayControl()
+    Private Sub PlatformMGTGeneralUI_FormClosing(sender As Object, e As Windows.Forms.FormClosingEventArgs) Handles MyBase.FormClosing
 
-        If close_all = True Then Exit Sub
-        If Not current_controller Is Nothing Then current_controller = Nothing
+        If Not current_controller Is Nothing Then
+            current_controller.close()
+        End If
 
-        Select Case controller_index
-            Case 0 : current_controller = New AccountsController()
-            Case 1 ' current_controller = New adjustments()
-            Case 2 : current_controller = New EntitiesController()
-            Case 3 : current_controller = New AxisFiltersController(GlobalEnums.AnalysisAxis.ENTITIES)
-            Case 4 : current_controller = New ClientsController()
-            Case 5 : current_controller = New AxisFiltersController(GlobalEnums.AnalysisAxis.CLIENTS)
-            Case 6 : current_controller = New ProductsController()
-            Case 7 : current_controller = New AxisFiltersController(GlobalEnums.AnalysisAxis.PRODUCTS)
-            Case 8 : current_controller = New DataVersionsController()
-            Case 9 : current_controller = New ExchangeRatesController()
-            Case 10 : current_controller = New UsersController()
-            Case 11 : current_controller = New ControlsController()
+    End Sub
 
-        End Select
-        If Panel1.Controls.Count > 0 Then Panel1.Controls(0).Dispose()
+    Private Sub PlatformMGTGeneralUI_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+
+        '    Me.WindowState = Windows.Forms.FormWindowState.Maximized
+
+    End Sub
+
+
+
+#Region "Main Menu Call Backs"
+
+
+    Private Sub AccountsBT_Click(sender As Object, e As EventArgs) Handles AccountsBT.Click
+
+        closeCurrentControl()
+        current_controller = New AccountsController()
+        current_controller.addControlToPanel(Panel1, Me)
+
+    End Sub
+
+    Private Sub EntitiesBT_Click(sender As Object, e As EventArgs) Handles EntitiesBT.Click
+
+        closeCurrentControl()
+        current_controller = New EntitiesController()
+        current_controller.addControlToPanel(Panel1, Me)
+
+    End Sub
+
+    Private Sub ClientsBT_Click(sender As Object, e As EventArgs) Handles ClientsBT.Click
+
+        closeCurrentControl()
+        current_controller = New AxisController(GlobalVariables.Clients, GlobalVariables.ClientsFilters, GlobalEnums.AnalysisAxis.CLIENTS)
+        current_controller.addControlToPanel(Panel1, Me)
+
+    End Sub
+
+    Private Sub ProductsBT_Click(sender As Object, e As EventArgs) Handles ProductsBT.Click
+
+        closeCurrentControl()
+        current_controller = New AxisController(GlobalVariables.Products, GlobalVariables.ProductsFilters, GlobalEnums.AnalysisAxis.PRODUCTS)
+        current_controller.addControlToPanel(Panel1, Me)
+
+    End Sub
+
+    Private Sub ClientsFiltersBT_Click(sender As Object, e As EventArgs) Handles ClientsFiltersBT.Click
+
+        closeCurrentControl()
+        current_controller = New AxisFiltersController(GlobalEnums.AnalysisAxis.CLIENTS)
+        current_controller.addControlToPanel(Panel1, Me)
+
+    End Sub
+
+    Private Sub EntitiesFiltersBT_Click(sender As Object, e As EventArgs) Handles EntitiesFiltersBT.Click
+
+        closeCurrentControl()
+        current_controller = New AxisFiltersController(GlobalEnums.AnalysisAxis.ENTITIES)
+        current_controller.addControlToPanel(Panel1, Me)
+
+    End Sub
+
+    Private Sub ProductsFiltersBT_Click(sender As Object, e As EventArgs) Handles ProductsFiltersBT.Click
+
+        closeCurrentControl()
+        current_controller = New AxisFiltersController(GlobalEnums.AnalysisAxis.PRODUCTS)
+        current_controller.addControlToPanel(Panel1, Me)
+
+    End Sub
+
+    Private Sub AdjustmentsFiltersBT_Click_1(sender As Object, e As EventArgs) Handles AdjustmentsFiltersBT.Click
+
+        closeCurrentControl()
+        current_controller = New AxisFiltersController(GlobalEnums.AnalysisAxis.ADJUSTMENTS)
+        current_controller.addControlToPanel(Panel1, Me)
+
+    End Sub
+
+    Private Sub AdjustmentsBT_Click(sender As Object, e As EventArgs) Handles AdjustmentsBT.Click
+
+        closeCurrentControl()
+        current_controller = New AxisController(GlobalVariables.Adjustments, GlobalVariables.AdjustmentsFilters, GlobalEnums.AnalysisAxis.ADJUSTMENTS)
+        current_controller.addControlToPanel(Panel1, Me)
+
+    End Sub
+
+    Private Sub VersionsBT_Click(sender As Object, e As EventArgs) Handles VersionsBT.Click
+
+        closeCurrentControl()
+        current_controller = New DataVersionsController()
+        current_controller.addControlToPanel(Panel1, Me)
+
+    End Sub
+
+    Private Sub CurrenciesBT_Click(sender As Object, e As EventArgs) Handles CurrenciesBT.Click
+
+        closeCurrentControl()
+        current_controller = New ExchangeRatesController()
+        current_controller.addControlToPanel(Panel1, Me)
+
+    End Sub
+
+    Private Sub UsersBT_Click(sender As Object, e As EventArgs) Handles UsersBT.Click
+
+        closeCurrentControl()
+        current_controller = New UsersController()
+        current_controller.addControlToPanel(Panel1, Me)
+
+    End Sub
+
+    Private Sub ControlsBT_Click(sender As Object, e As EventArgs) Handles ControlsBT.Click
+
+        closeCurrentControl()
+        current_controller = New ControlsController()
         current_controller.addControlToPanel(Panel1, Me)
 
     End Sub
@@ -147,22 +159,5 @@ Friend Class PlatformMGTGeneralUI
 #End Region
 
 
-    Private Sub PlatformMGTGeneralUI_FormClosing(sender As Object, e As Windows.Forms.FormClosingEventArgs) Handles MyBase.FormClosing
-
-        If Not current_controller Is Nothing Then
-            close_all = True
-            current_controller.close()
-        End If
-
-    End Sub
-
-    Private Sub PlatformMGTGeneralUI_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-
-        Me.WindowState = Windows.Forms.FormWindowState.Maximized
-
-    End Sub
-
-
-  
 
 End Class

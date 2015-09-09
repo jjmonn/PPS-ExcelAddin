@@ -76,9 +76,9 @@ Public Class CUI2LeftPane
     Private Sub LoadTvs()
 
         GlobalVariables.Entities.LoadEntitiesTV(entitiesTV)
-        GlobalVariables.Clients.LoadClientsTree(clientsTV)
-        GlobalVariables.Products.LoadproductsTree(productsTV)
-        GlobalVariables.Adjustments.LoadadjustmentsTree(adjustmentsTV)
+        GlobalVariables.Clients.LoadAxisTree(clientsTV)
+        GlobalVariables.Products.LoadAxisTree(productsTV)
+        GlobalVariables.Adjustments.LoadAxisTree(adjustmentsTV)
 
         AxisFilter.LoadFvTv(entitiesFiltersTV, GlobalEnums.AnalysisAxis.ENTITIES)
         AxisFilter.LoadFvTv(clientsFiltersTV, GlobalEnums.AnalysisAxis.CLIENTS)
@@ -239,7 +239,6 @@ Public Class CUI2LeftPane
     End Sub
 
 #End Region
-
 
 
 #Region "Utilities"

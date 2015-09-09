@@ -193,7 +193,7 @@ Partial Class SubmissionsControlUI
         Me.Label2.AutoSize = True
         Me.Label2.Location = New System.Drawing.Point(3, 6)
         Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(33, 13)
+        Me.Label2.Size = New System.Drawing.Size(36, 15)
         Me.Label2.TabIndex = 0
         Me.Label2.Text = "Entity"
         '
@@ -224,7 +224,7 @@ Partial Class SubmissionsControlUI
         Me.Label1.AutoSize = True
         Me.Label1.Location = New System.Drawing.Point(3, 6)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(41, 13)
+        Me.Label1.Size = New System.Drawing.Size(46, 15)
         Me.Label1.TabIndex = 0
         Me.Label1.Text = "version"
         '
@@ -253,7 +253,7 @@ Partial Class SubmissionsControlUI
         Me.Label3.AutoSize = True
         Me.Label3.Location = New System.Drawing.Point(3, 6)
         Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(49, 13)
+        Me.Label3.Size = New System.Drawing.Size(55, 15)
         Me.Label3.TabIndex = 0
         Me.Label3.Text = "Currency"
         '
@@ -268,12 +268,12 @@ Partial Class SubmissionsControlUI
         '
         Me.TVRCM.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.DisplayEntityControlsToolStripMenuItem})
         Me.TVRCM.Name = "TVRCM"
-        Me.TVRCM.Size = New System.Drawing.Size(194, 26)
+        Me.TVRCM.Size = New System.Drawing.Size(218, 28)
         '
         'DisplayEntityControlsToolStripMenuItem
         '
         Me.DisplayEntityControlsToolStripMenuItem.Name = "DisplayEntityControlsToolStripMenuItem"
-        Me.DisplayEntityControlsToolStripMenuItem.Size = New System.Drawing.Size(193, 22)
+        Me.DisplayEntityControlsToolStripMenuItem.Size = New System.Drawing.Size(217, 24)
         Me.DisplayEntityControlsToolStripMenuItem.Text = "Display Entity Controls"
         '
         'SubmissionsControlUI

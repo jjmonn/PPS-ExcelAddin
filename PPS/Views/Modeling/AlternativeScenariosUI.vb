@@ -71,8 +71,8 @@
 '    Private Sub InitializeAdjustmentsTV()
 
 '        adjustmentsTV = New TreeView
-'        For Each adjustment_id As String In GlobalVariables.Adjustments.adjustments_hash.Keys
-'            adjustmentsTV.Nodes.Add(adjustment_id, GlobalVariables.Adjustments.adjustments_hash(adjustment_id)(NAME_VARIABLE))
+'        For Each adjustment_id As String In GlobalVariables.Adjustments.axis_hash.Keys
+'            adjustmentsTV.Nodes.Add(adjustment_id, GlobalVariables.Adjustments.axis_hash(adjustment_id)(NAME_VARIABLE))
 '        Next
 '        AdjustmentsTVPanel.Controls.Add(adjustmentsTV)
 '        adjustmentsTV.Dock = DockStyle.Fill

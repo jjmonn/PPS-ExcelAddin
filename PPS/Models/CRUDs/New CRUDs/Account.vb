@@ -54,6 +54,7 @@ Friend Class Account
             For i As Int32 = 1 To nb_accounts
                 Dim tmp_ht As New Hashtable
                 GetAccountHTFromPacket(packet, tmp_ht)
+                tmp_ht(IMAGE_VARIABLE) = tmp_ht(ACCOUNT_FORMULA_TYPE_VARIABLE)
                 accounts_hash(CInt(tmp_ht(ID_VARIABLE))) = tmp_ht
             Next
             state_flag = True
@@ -231,12 +232,21 @@ Friend Class Account
 
     End Function
 
+    Friend Function GetIdFromName(ByRef name As String) As Int32
+
+        For Each id As Int32 In accounts_hash.Keys
+            If name = accounts_hash(id)(NAME_VARIABLE) Then Return id
+        Next
+        Return 0
+
+    End Function
+
 #End Region
 
 
 #Region "Utilities"
 
-    Friend Shared Sub GetAccountHTFromPacket(ByRef packet As ByteBuffer, ByRef account_ht As Hashtable)
+    Private Shared Sub GetAccountHTFromPacket(ByRef packet As ByteBuffer, ByRef account_ht As Hashtable)
 
         account_ht(ID_VARIABLE) = packet.ReadInt32()
         account_ht(PARENT_ID_VARIABLE) = packet.ReadUint32()

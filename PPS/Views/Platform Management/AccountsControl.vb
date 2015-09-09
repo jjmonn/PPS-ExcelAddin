@@ -187,8 +187,8 @@ Friend Class AccountsControl
 
     Friend Sub closeControl()
 
-        LaunchCP()
-        BackgroundWorker1.RunWorkerAsync()
+        Controller.SendNewPositionsToModel()
+        ' dispose other if needed priority normal
 
     End Sub
 
@@ -766,37 +766,6 @@ UdpateFormulaType:
         If Not IsNothing(current_node) _
         AndAlso isDisplayingAttributes = False Then
             Controller.UpdateAccount(current_node.Name, ACCOUNT_CONSOLIDATION_OPTION_VARIABLE, li.Value)
-        End If
-
-    End Sub
-
-#End Region
-
-
-#Region "Background Worker 1"
-
-    Private Sub BackgroundWorker1_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles BackgroundWorker1.DoWork
-
-        'CP = New CircularProgressUI(System.Drawing.Color.Purple, "")
-        Controller.SendNewPositionsToModel()
-
-    End Sub
-
-    Private Sub BackgroundWorker1_RunWorkerCompleted(sender As Object, e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles BackgroundWorker1.RunWorkerCompleted
-
-        AfterClosingAttemp_ThreadSafe()
-
-    End Sub
-
-    Delegate Sub AfterClosing_Delegate()
-    Private Sub AfterClosingAttemp_ThreadSafe()
-
-        If InvokeRequired Then
-            Dim MyDelegate As New AfterClosing_Delegate(AddressOf AfterClosingAttemp_ThreadSafe)
-            Me.Invoke(MyDelegate, New Object() {})
-        Else
-            CP.Dispose()
-            Controller.sendCloseOrder()
         End If
 
     End Sub

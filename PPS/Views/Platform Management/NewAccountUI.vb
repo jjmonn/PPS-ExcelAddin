@@ -32,7 +32,6 @@ Friend Class NewAccountUI
     Private accountsTV As New TreeView
 
     ' Variables
-    Friend parent_node As TreeNode
     Private isFormExpanded As Boolean
 
     ' Constants
@@ -48,7 +47,8 @@ Friend Class NewAccountUI
 #Region "Initialize"
 
     Friend Sub New(ByRef input_accountsView As AccountsControl, _
-                   ByRef input_controller As AccountsController)
+                   ByRef input_controller As AccountsController, _
+                   ByRef p_accountsTV As TreeView)
 
         ' This call is required by the designer.
         InitializeComponent()
@@ -56,12 +56,8 @@ Friend Class NewAccountUI
         ' Add any initialization after the InitializeComponent() call.
         AccountsView = input_accountsView
         Controller = input_controller
+        accountsTV = p_accountsTV
         ComboBoxesInitialize()
-
-        accountsTVPanel.Controls.Add(accountsTV)
-        accountsTV.Dock = DockStyle.Fill
-        AddHandler accountsTV.NodeMouseClick, AddressOf AccountsTV_NodeMouseClick
-        AddHandler accountsTV.KeyDown, AddressOf AccountsTV_KeyDown
 
     End Sub
 
@@ -78,16 +74,23 @@ Friend Class NewAccountUI
 
     End Sub
 
+    Private Sub NewEntityUI_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+
+        VTreeViewUtil.LoadParentEntitiesTreeviewBox(ParentAccountTreeComboBox, accountsTV)
+
+    End Sub
+
 #End Region
 
 
 #Region "Interface"
 
-    Protected Friend Sub PrePopulateForm(ByRef inputNode As TreeNode)
+    Friend Sub PrePopulateForm(ByRef inputNode As TreeNode)
 
-        parentTB.Text = inputNode.Text
-        parent_node = inputNode
-        TreeViewsUtilities.TreeviewCopy(inputNode.TreeView, accountsTV)
+        Dim parentNode As VIBlend.WinForms.Controls.vTreeNode = VTreeViewUtil.FindNode(ParentAccountTreeComboBox.TreeView, inputNode.Name)
+        If Not parentNode Is Nothing Then
+            ParentAccountTreeComboBox.TreeView.SelectedNode = parentNode
+        End If
         'Dim parentFormatCode = Controller.ReadAccount(parent_node.Name, ACCOUNT_FORMAT_VARIABLE)
         'formatCB.SelectedItem = AccountsView.formatKeyNameDictionary(parentFormatCode)
         'typeCB.SelectedItem = AccountsView.accountsTypesKeyNameDict(DEFAULT_ACCOUNT_TYPE_VALUE)
@@ -102,16 +105,7 @@ Friend Class NewAccountUI
 
 #Region "Call backs"
 
-    Private Sub selectParentBT_Click(sender As Object, e As EventArgs) Handles selectParentBT.Click
-
-        If isFormExpanded = False Then
-            DisplayParentAccountsTV()
-        Else
-            HideParentAccountsTV()
-        End If
-
-    End Sub
-
+  
     Private Sub CreateAccountBT_Click(sender As Object, e As EventArgs) Handles CreateAccountBT.Click
 
         If IsFormValid() = True Then
@@ -120,9 +114,9 @@ Friend Class NewAccountUI
             Dim conversion_option As Int32 = 0
             Dim account_tab As Int32
 
-            If Not parent_node Is Nothing Then
-                parent_id = CInt(parent_node.Name)
-                account_tab = GlobalVariables.Accounts.accounts_hash(CInt(parent_node.Name))(ACCOUNT_TAB_VARIABLE)
+            If Not ParentAccountTreeComboBox.TreeView.SelectedNode Is Nothing Then
+                parent_id = CInt(ParentAccountTreeComboBox.TreeView.SelectedNode.Value)
+                account_tab = GlobalVariables.Accounts.accounts_hash(parent_id)(ACCOUNT_TAB_VARIABLE)
             Else
                 parent_id = 0
                 account_tab = accountsTV.Nodes.Count
@@ -151,36 +145,6 @@ Friend Class NewAccountUI
     Private Sub CancelBT_Click(sender As Object, e As EventArgs) Handles CancelBT.Click
 
         Controller.DisplayAcountsView()
-
-    End Sub
-
-#End Region
-
-
-#Region "Event"
-
-    Private Sub AccountsTV_NodeMouseClick(sender As Object, e As TreeNodeMouseClickEventArgs)
-
-        If Not accountsTV.SelectedNode Is Nothing Then
-            Select Case accountsTV.SelectedNode.Nodes.Count
-                Case 0
-                    parent_node = e.Node
-                    parentTB.Text = accountsTV.SelectedNode.Text
-                    HideParentAccountsTV()
-            End Select
-        End If
-
-    End Sub
-
-    Private Sub AccountsTV_KeyDown(sender As Object, e As KeyEventArgs)
-
-        If e.KeyCode = Keys.Enter _
-        AndAlso Not accountsTV.SelectedNode Is Nothing Then
-            parent_node = accountsTV.SelectedNode
-            parentTB.Text = accountsTV.SelectedNode.Text
-            HideParentAccountsTV()
-        End If
-
 
     End Sub
 
@@ -216,32 +180,13 @@ Friend Class NewAccountUI
 #End Region
 
 
-#Region "Utilities"
-
-    Private Sub DisplayParentAccountsTV()
-
-        Me.Width = EXPANDED_WIDTH
-        Me.Height = EXPANDED_HEIGHT
-        isFormExpanded = True
-
-    End Sub
-
-    Private Sub HideParentAccountsTV()
-
-        Me.Width = COLLAPSED_WIDTH
-        Me.Height = COLLAPSED_HEIGHT
-        isFormExpanded = False
-
-    End Sub
-
     Private Sub NewAccountUI_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
 
         e.Cancel = True
         Controller.DisplayAcountsView()
 
     End Sub
-  
-#End Region
+
 
 
 

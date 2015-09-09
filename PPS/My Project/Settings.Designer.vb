@@ -128,7 +128,7 @@ Namespace My
         
         <Global.System.Configuration.UserScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("52.18.28.79")>  _
+         Global.System.Configuration.DefaultSettingValueAttribute("52.19.161.163")>  _
         Public Property serverIp() As String
             Get
                 Return CType(Me("serverIp"),String)
@@ -556,9 +556,9 @@ Namespace My
     Friend Module MySettingsProperty
         
         <Global.System.ComponentModel.Design.HelpKeywordAttribute("My.Settings")>  _
-        Friend ReadOnly Property Settings() As Global.PPS.My.MySettings
+        Friend ReadOnly Property Settings() As Global.FinancialBI.My.MySettings
             Get
-                Return Global.PPS.My.MySettings.Default
+                Return Global.FinancialBI.My.MySettings.Default
             End Get
         End Property
     End Module

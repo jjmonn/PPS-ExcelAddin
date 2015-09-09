@@ -260,7 +260,7 @@ Partial Class ReportsDesignerUI
         Me.Label6.AutoSize = True
         Me.Label6.Location = New System.Drawing.Point(3, 96)
         Me.Label6.Name = "Label6"
-        Me.Label6.Size = New System.Drawing.Size(45, 13)
+        Me.Label6.Size = New System.Drawing.Size(49, 15)
         Me.Label6.TabIndex = 21
         Me.Label6.Text = "Axis Y 2"
         '
@@ -269,7 +269,7 @@ Partial Class ReportsDesignerUI
         Me.Label4.AutoSize = True
         Me.Label4.Location = New System.Drawing.Point(3, 72)
         Me.Label4.Name = "Label4"
-        Me.Label4.Size = New System.Drawing.Size(45, 13)
+        Me.Label4.Size = New System.Drawing.Size(49, 15)
         Me.Label4.TabIndex = 19
         Me.Label4.Text = "Axis Y 1"
         '
@@ -278,7 +278,7 @@ Partial Class ReportsDesignerUI
         Me.ChartNameLabel.AutoSize = True
         Me.ChartNameLabel.Location = New System.Drawing.Point(3, 0)
         Me.ChartNameLabel.Name = "ChartNameLabel"
-        Me.ChartNameLabel.Size = New System.Drawing.Size(35, 13)
+        Me.ChartNameLabel.Size = New System.Drawing.Size(41, 15)
         Me.ChartNameLabel.TabIndex = 14
         Me.ChartNameLabel.Text = "Name"
         '
@@ -305,7 +305,7 @@ Partial Class ReportsDesignerUI
         Me.Label3.AutoSize = True
         Me.Label3.Location = New System.Drawing.Point(3, 48)
         Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(70, 13)
+        Me.Label3.Size = New System.Drawing.Size(76, 15)
         Me.Label3.TabIndex = 17
         Me.Label3.Text = "Chart / Table"
         '
@@ -314,7 +314,7 @@ Partial Class ReportsDesignerUI
         Me.Label5.AutoSize = True
         Me.Label5.Location = New System.Drawing.Point(3, 24)
         Me.Label5.Name = "Label5"
-        Me.Label5.Size = New System.Drawing.Size(40, 13)
+        Me.Label5.Size = New System.Drawing.Size(45, 15)
         Me.Label5.TabIndex = 16
         Me.Label5.Text = "Palette"
         '
@@ -376,7 +376,7 @@ Partial Class ReportsDesignerUI
         Me.Label1.AutoSize = True
         Me.Label1.Location = New System.Drawing.Point(3, 0)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(35, 13)
+        Me.Label1.Size = New System.Drawing.Size(41, 15)
         Me.Label1.TabIndex = 4
         Me.Label1.Text = "Name"
         '
@@ -402,7 +402,7 @@ Partial Class ReportsDesignerUI
         Me.Label2.AutoSize = True
         Me.Label2.Location = New System.Drawing.Point(3, 25)
         Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(141, 13)
+        Me.Label2.Size = New System.Drawing.Size(165, 15)
         Me.Label2.TabIndex = 5
         Me.Label2.Text = "Financial or Operational Item"
         '
@@ -475,7 +475,7 @@ Partial Class ReportsDesignerUI
         Me.Label10.AutoSize = True
         Me.Label10.Location = New System.Drawing.Point(3, 50)
         Me.Label10.Name = "Label10"
-        Me.Label10.Size = New System.Drawing.Size(26, 13)
+        Me.Label10.Size = New System.Drawing.Size(29, 15)
         Me.Label10.TabIndex = 10
         Me.Label10.Text = "Axis"
         '
@@ -493,7 +493,7 @@ Partial Class ReportsDesignerUI
         Me.Label11.AutoSize = True
         Me.Label11.Location = New System.Drawing.Point(3, 25)
         Me.Label11.Name = "Label11"
-        Me.Label11.Size = New System.Drawing.Size(31, 13)
+        Me.Label11.Size = New System.Drawing.Size(33, 15)
         Me.Label11.TabIndex = 9
         Me.Label11.Text = "Type"
         '
@@ -502,7 +502,7 @@ Partial Class ReportsDesignerUI
         Me.Label13.AutoSize = True
         Me.Label13.Location = New System.Drawing.Point(3, 0)
         Me.Label13.Name = "Label13"
-        Me.Label13.Size = New System.Drawing.Size(31, 13)
+        Me.Label13.Size = New System.Drawing.Size(36, 15)
         Me.Label13.TabIndex = 8
         Me.Label13.Text = "Color"
         '
@@ -511,7 +511,7 @@ Partial Class ReportsDesignerUI
         Me.Label15.AutoSize = True
         Me.Label15.Location = New System.Drawing.Point(3, 100)
         Me.Label15.Name = "Label15"
-        Me.Label15.Size = New System.Drawing.Size(26, 13)
+        Me.Label15.Size = New System.Drawing.Size(29, 15)
         Me.Label15.TabIndex = 11
         Me.Label15.Text = "Unit"
         '
@@ -520,7 +520,7 @@ Partial Class ReportsDesignerUI
         Me.Label16.AutoSize = True
         Me.Label16.Location = New System.Drawing.Point(3, 75)
         Me.Label16.Name = "Label16"
-        Me.Label16.Size = New System.Drawing.Size(35, 13)
+        Me.Label16.Size = New System.Drawing.Size(38, 15)
         Me.Label16.TabIndex = 12
         Me.Label16.Text = "Width"
         '
@@ -529,7 +529,7 @@ Partial Class ReportsDesignerUI
         Me.Label17.AutoSize = True
         Me.Label17.Location = New System.Drawing.Point(3, 125)
         Me.Label17.Name = "Label17"
-        Me.Label17.Size = New System.Drawing.Size(68, 13)
+        Me.Label17.Size = New System.Drawing.Size(78, 15)
         Me.Label17.TabIndex = 13
         Me.Label17.Text = "Values Label"
         '
@@ -596,43 +596,43 @@ Partial Class ReportsDesignerUI
         '
         Me.TVRCM.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.NewReportRCM, Me.NewSerieRCM, Me.ToolStripSeparator1, Me.RenameRCM, Me.ToolStripSeparator2, Me.DeleteRCM})
         Me.TVRCM.Name = "TVRCM"
-        Me.TVRCM.Size = New System.Drawing.Size(137, 104)
+        Me.TVRCM.Size = New System.Drawing.Size(151, 112)
         '
         'NewReportRCM
         '
-        Me.NewReportRCM.Image = Global.PPS.My.Resources.Resources.checked
+        Me.NewReportRCM.Image = Global.FinancialBI.My.Resources.Resources.checked
         Me.NewReportRCM.Name = "NewReportRCM"
-        Me.NewReportRCM.Size = New System.Drawing.Size(136, 22)
+        Me.NewReportRCM.Size = New System.Drawing.Size(150, 24)
         Me.NewReportRCM.Text = "New Report"
         '
         'NewSerieRCM
         '
-        Me.NewSerieRCM.Image = Global.PPS.My.Resources.Resources.favicon_233_
+        Me.NewSerieRCM.Image = Global.FinancialBI.My.Resources.Resources.favicon_233_
         Me.NewSerieRCM.Name = "NewSerieRCM"
-        Me.NewSerieRCM.Size = New System.Drawing.Size(136, 22)
+        Me.NewSerieRCM.Size = New System.Drawing.Size(150, 24)
         Me.NewSerieRCM.Text = "New Serie"
         '
         'ToolStripSeparator1
         '
         Me.ToolStripSeparator1.Name = "ToolStripSeparator1"
-        Me.ToolStripSeparator1.Size = New System.Drawing.Size(133, 6)
+        Me.ToolStripSeparator1.Size = New System.Drawing.Size(147, 6)
         '
         'RenameRCM
         '
         Me.RenameRCM.Name = "RenameRCM"
-        Me.RenameRCM.Size = New System.Drawing.Size(136, 22)
+        Me.RenameRCM.Size = New System.Drawing.Size(150, 24)
         Me.RenameRCM.Text = "Rename"
         '
         'ToolStripSeparator2
         '
         Me.ToolStripSeparator2.Name = "ToolStripSeparator2"
-        Me.ToolStripSeparator2.Size = New System.Drawing.Size(133, 6)
+        Me.ToolStripSeparator2.Size = New System.Drawing.Size(147, 6)
         '
         'DeleteRCM
         '
-        Me.DeleteRCM.Image = Global.PPS.My.Resources.Resources.imageres_89
+        Me.DeleteRCM.Image = Global.FinancialBI.My.Resources.Resources.imageres_89
         Me.DeleteRCM.Name = "DeleteRCM"
-        Me.DeleteRCM.Size = New System.Drawing.Size(136, 22)
+        Me.DeleteRCM.Size = New System.Drawing.Size(150, 24)
         Me.DeleteRCM.Text = "Delete"
         '
         'ReportsDesignerUI

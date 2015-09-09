@@ -30,13 +30,13 @@ Partial Class CUI2LeftPane
         Me.TableLayoutPanel2 = New System.Windows.Forms.TableLayoutPanel()
         Me.SelectionCB = New VIBlend.WinForms.Controls.vComboBox()
         Me.CollapseSelectionBT = New VIBlend.WinForms.Controls.vButton()
+        Me.ExpansionImageList = New System.Windows.Forms.ImageList(Me.components)
         Me.Panel1 = New System.Windows.Forms.Panel()
         Me.PanelCollapseBT = New VIBlend.WinForms.Controls.vButton()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.CategoriesIL = New System.Windows.Forms.ImageList(Me.components)
         Me.EntitiesTVImageList = New System.Windows.Forms.ImageList(Me.components)
         Me.VersionsIL = New System.Windows.Forms.ImageList(Me.components)
-        Me.ExpansionImageList = New System.Windows.Forms.ImageList(Me.components)
         Me.MainTableLayout.SuspendLayout()
         CType(Me.SplitContainer, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SplitContainer.Panel2.SuspendLayout()
@@ -143,6 +143,13 @@ Partial Class CUI2LeftPane
         Me.CollapseSelectionBT.UseVisualStyleBackColor = False
         Me.CollapseSelectionBT.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
         '
+        'ExpansionImageList
+        '
+        Me.ExpansionImageList.ImageStream = CType(resources.GetObject("ExpansionImageList.ImageStream"), System.Windows.Forms.ImageListStreamer)
+        Me.ExpansionImageList.TransparentColor = System.Drawing.Color.Transparent
+        Me.ExpansionImageList.Images.SetKeyName(0, "menu")
+        Me.ExpansionImageList.Images.SetKeyName(1, "minus")
+        '
         'Panel1
         '
         Me.Panel1.Controls.Add(Me.PanelCollapseBT)
@@ -195,7 +202,7 @@ Partial Class CUI2LeftPane
         Me.EntitiesTVImageList.ImageStream = CType(resources.GetObject("EntitiesTVImageList.ImageStream"), System.Windows.Forms.ImageListStreamer)
         Me.EntitiesTVImageList.TransparentColor = System.Drawing.Color.Transparent
         Me.EntitiesTVImageList.Images.SetKeyName(0, "favicon(81).ico")
-        Me.EntitiesTVImageList.Images.SetKeyName(1, "relation blue.png")
+        Me.EntitiesTVImageList.Images.SetKeyName(1, "elements_branch.ico")
         '
         'VersionsIL
         '
@@ -203,13 +210,6 @@ Partial Class CUI2LeftPane
         Me.VersionsIL.TransparentColor = System.Drawing.Color.Transparent
         Me.VersionsIL.Images.SetKeyName(0, "versions.ico")
         Me.VersionsIL.Images.SetKeyName(1, "favicon(81).ico")
-        '
-        'ExpansionImageList
-        '
-        Me.ExpansionImageList.ImageStream = CType(resources.GetObject("ExpansionImageList.ImageStream"), System.Windows.Forms.ImageListStreamer)
-        Me.ExpansionImageList.TransparentColor = System.Drawing.Color.Transparent
-        Me.ExpansionImageList.Images.SetKeyName(0, "menu")
-        Me.ExpansionImageList.Images.SetKeyName(1, "minus")
         '
         'CUI2LeftPane
         '

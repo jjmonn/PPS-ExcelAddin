@@ -26,10 +26,10 @@ Friend Class GlobalVariables
 
 #Region "Versioning"
 
-    Friend Shared Version_Label As ADXRibbonLabel
+    Friend Shared VersionSelectionTaskPane As VersionSelectionPane
+    Friend Shared Version_Button As ADXRibbonButton
     Friend Shared Version_label_Sub_Ribbon As ADXRibbonEditBox
-    Friend Shared Rates_Version_Label As ADXRibbonLabel
-
+  
 #End Region
 
 #Region "Menu Display"
@@ -41,6 +41,7 @@ Friend Class GlobalVariables
     Friend Shared ConnectionPaneVisible As Boolean
 
 #End Region
+
 
 #Region "Computing"
 
@@ -59,6 +60,7 @@ Friend Class GlobalVariables
     Friend Shared AdjustmentIDDropDown As ADXRibbonDropDown
 
 #End Region
+
 
 #Region "Models"
 
@@ -81,5 +83,7 @@ Friend Class GlobalVariables
     Friend Shared GlobalFactsVersions As GlobalFactVersion
 
 #End Region
+
+
 
 End Class

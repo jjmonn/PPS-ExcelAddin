@@ -441,14 +441,14 @@ Partial Class ControlsControl
         '
         'NewChartRCM
         '
-        Me.NewChartRCM.Image = Global.PPS.My.Resources.Resources.favicon_239_
+        Me.NewChartRCM.Image = Global.FinancialBI.My.Resources.Resources.favicon_239_
         Me.NewChartRCM.Name = "NewChartRCM"
         Me.NewChartRCM.Size = New System.Drawing.Size(130, 22)
         Me.NewChartRCM.Text = "New Chart"
         '
         'NewSerieRCM
         '
-        Me.NewSerieRCM.Image = Global.PPS.My.Resources.Resources.favicon_188_
+        Me.NewSerieRCM.Image = Global.FinancialBI.My.Resources.Resources.favicon_188_
         Me.NewSerieRCM.Name = "NewSerieRCM"
         Me.NewSerieRCM.Size = New System.Drawing.Size(130, 22)
         Me.NewSerieRCM.Text = "New Serie"
@@ -460,7 +460,7 @@ Partial Class ControlsControl
         '
         'RenameRCBT
         '
-        Me.RenameRCBT.Image = Global.PPS.My.Resources.Resources.down_arrow
+        Me.RenameRCBT.Image = Global.FinancialBI.My.Resources.Resources.down_arrow
         Me.RenameRCBT.Name = "RenameRCBT"
         Me.RenameRCBT.Size = New System.Drawing.Size(130, 22)
         Me.RenameRCBT.Text = "Rename"
@@ -472,7 +472,7 @@ Partial Class ControlsControl
         '
         'DeleteRCM
         '
-        Me.DeleteRCM.Image = Global.PPS.My.Resources.Resources.imageres_89
+        Me.DeleteRCM.Image = Global.FinancialBI.My.Resources.Resources.imageres_89
         Me.DeleteRCM.Name = "DeleteRCM"
         Me.DeleteRCM.Size = New System.Drawing.Size(130, 22)
         Me.DeleteRCM.Text = "Delete"

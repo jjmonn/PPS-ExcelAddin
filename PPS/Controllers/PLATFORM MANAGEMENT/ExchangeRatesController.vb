@@ -76,7 +76,6 @@ Friend Class ExchangeRatesController
         View.closeControl()
         View.Dispose()
         View = Nothing
-        PlatformMGTUI.displayControl()
 
     End Sub
 

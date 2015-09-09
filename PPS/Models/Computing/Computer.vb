@@ -22,10 +22,10 @@ Imports System.Collections
 Friend Class Computer
 
 
-#Region "Intance Variables"
+#Region "Instance Variables"
 
     ' Events
-    Public Event ComputationAnswered(ByRef entityId As String, ByRef status As Boolean)
+    Public Event ComputationAnswered(ByRef entityId As String, ByRef status As Boolean, ByRef requestId As Int32)
 
     ' Variables
     Private dataMap As Dictionary(Of String, Double)
@@ -66,12 +66,12 @@ Friend Class Computer
 #Region "Computation Query Interfaces"
 
     ' Query
-    Friend Sub CMSG_COMPUTE_REQUEST(ByRef versions_id As Int32(), _
-                                    ByRef entity_id As Int32, _
-                                    ByRef currency_id As Int32, _
-                                    Optional ByRef filters As Dictionary(Of Int32, List(Of Int32)) = Nothing, _
-                                    Optional ByRef axis_filters As Dictionary(Of Int32, List(Of Int32)) = Nothing, _
-                                    Optional ByRef hierarchy As List(Of String) = Nothing)
+    Friend Function CMSG_COMPUTE_REQUEST(ByRef versions_id As Int32(), _
+                                        ByRef entity_id As Int32, _
+                                        ByRef currency_id As Int32, _
+                                        Optional ByRef filters As Dictionary(Of Int32, List(Of Int32)) = Nothing, _
+                                        Optional ByRef axis_filters As Dictionary(Of Int32, List(Of Int32)) = Nothing, _
+                                        Optional ByRef hierarchy As List(Of String) = Nothing) As Int32
 
         dataMap = New Dictionary(Of String, Double)
         requestIdVersionIdDict.Clear()
@@ -96,7 +96,7 @@ Friend Class Computer
                 packet.WriteUint32(GetTotalFiltersDictionariesValues(filters))          ' number of filters_values
                 For Each Filter_id In filters.Keys
                     For Each filter_value_id In filters(Filter_id)
-                        packet.WriteUint32(GlobalVariables.Filters.filters_hash(Filter_id)(FILTER_AXIS_ID_VARIABLE))              ' axis_id 
+                        packet.WriteUint32(GlobalVariables.Filters.filters_hash(Filter_id)(AXIS_ID_VARIABLE))              ' axis_id 
                         packet.WriteUint32(Filter_id)                                   ' filter_id
                         packet.WriteUint32(filter_value_id)                             ' filter_value_id
                     Next
@@ -120,15 +120,15 @@ Friend Class Computer
 
             If Not hierarchy Is Nothing Then
                 packet.WriteUint32(hierarchy.Count)                                      ' decomposition hierarchy size
+                Dim axis_id As UInt32
                 For Each item In hierarchy
-                    Dim axis_id As UInt32
                     Dim query_type As UInt32 = GetDecompositionQueryType(item)
                     If query_type = GlobalEnums.DecompositionQueryType.AXIS Then
                         axis_id = GetItemID(item)
                         packet.WriteInt32(axis_id)
                         packet.WriteUint8(True)
                     Else
-                        axis_id = GlobalVariables.Filters.filters_hash(GetItemID(item))(FILTER_AXIS_ID_VARIABLE)
+                        axis_id = GlobalVariables.Filters.filters_hash(GetItemID(item))(AXIS_ID_VARIABLE)
                         packet.WriteInt32(axis_id)
                         packet.WriteUint8(False)
                         packet.WriteUint32(GetItemID(item))
@@ -139,9 +139,13 @@ Friend Class Computer
             End If
             packet.Release()
             NetworkManager.GetInstance().Send(packet)
+            If versions_id.Length = 1 Then
+                Return requestId
+            End If
         Next
+        Return 0
 
-    End Sub
+    End Function
 
     ' Server Answer
     Private Sub SMSG_COMPUTE_RESULT(packet As ByteBuffer)
@@ -165,11 +169,11 @@ Friend Class Computer
             versions_comp_flag(versionId) = True
             If AreAllVersionsComputed() = True Then
                 NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_COMPUTE_RESULT, AddressOf SMSG_COMPUTE_RESULT)
-                RaiseEvent ComputationAnswered(requestIdEntityIdDict(request_id), True)
+                RaiseEvent ComputationAnswered(requestIdEntityIdDict(request_id), True, request_id)
                 requestIdEntityIdDict.Remove(request_id)
             End If
         Else
-            RaiseEvent ComputationAnswered("", False)
+            RaiseEvent ComputationAnswered("", False, 0)
         End If
 
     End Sub
@@ -197,7 +201,7 @@ Friend Class Computer
         End If
 
         filterToken = GetFiltersToken(filtersDict)
-        ' System.Diagnostics.Debug.WriteLine("filter Token:" & filterToken)
+        System.Diagnostics.Debug.WriteLine("filter Token:" & filterToken)
 
         FillEntityData(packet)
 
@@ -214,7 +218,7 @@ Friend Class Computer
     Private Sub FillEntityData(ByRef packet As ByteBuffer)
 
         entityId = packet.ReadUint32()
-        ' System.Diagnostics.Debug.WriteLine("entityId:" & entityId)
+        System.Diagnostics.Debug.WriteLine("entityId:" & entityId)
 
         For account_index As Int32 = 1 To packet.ReadUint32()
             accountId = packet.ReadUint32()

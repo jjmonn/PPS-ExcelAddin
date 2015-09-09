@@ -64,7 +64,7 @@ Partial Class NewUserUI
         Me.emailLabel.ImageList = Me.ButtonIcons
         Me.emailLabel.Location = New System.Drawing.Point(441, 87)
         Me.emailLabel.Name = "emailLabel"
-        Me.emailLabel.Size = New System.Drawing.Size(33, 20)
+        Me.emailLabel.Size = New System.Drawing.Size(39, 20)
         Me.emailLabel.TabIndex = 26
         Me.emailLabel.Text = "      "
         Me.emailLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -88,7 +88,7 @@ Partial Class NewUserUI
         Me.Label4.AutoSize = True
         Me.Label4.Location = New System.Drawing.Point(48, 90)
         Me.Label4.Name = "Label4"
-        Me.Label4.Size = New System.Drawing.Size(32, 13)
+        Me.Label4.Size = New System.Drawing.Size(39, 15)
         Me.Label4.TabIndex = 25
         Me.Label4.Text = "Email"
         '
@@ -132,7 +132,7 @@ Partial Class NewUserUI
         Me.Label1.AutoSize = True
         Me.Label1.Location = New System.Drawing.Point(48, 41)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(50, 13)
+        Me.Label1.Size = New System.Drawing.Size(57, 15)
         Me.Label1.TabIndex = 18
         Me.Label1.Text = "User's ID"
         '
@@ -148,7 +148,7 @@ Partial Class NewUserUI
         Me.Label2.AutoSize = True
         Me.Label2.Location = New System.Drawing.Point(48, 142)
         Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(81, 13)
+        Me.Label2.Size = New System.Drawing.Size(92, 15)
         Me.Label2.TabIndex = 21
         Me.Label2.Text = "Credential Type"
         '
@@ -166,7 +166,7 @@ Partial Class NewUserUI
         Me.Label3.AutoSize = True
         Me.Label3.Location = New System.Drawing.Point(48, 199)
         Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(83, 13)
+        Me.Label3.Size = New System.Drawing.Size(95, 15)
         Me.Label3.TabIndex = 23
         Me.Label3.Text = "Credential Level"
         '

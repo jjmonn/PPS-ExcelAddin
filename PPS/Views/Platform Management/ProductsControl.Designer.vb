@@ -94,21 +94,21 @@ Partial Class ProductsControl
         '
         Me.EditToolStripMenuItem.DoubleClickEnabled = True
         Me.EditToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.NewProductMBT, Me.DeleteProductMBT, Me.ToolStripSeparator2})
-        Me.EditToolStripMenuItem.Image = Global.PPS.My.Resources.Resources.barcode
+        Me.EditToolStripMenuItem.Image = Global.FinancialBI.My.Resources.Resources.barcode
         Me.EditToolStripMenuItem.Name = "EditToolStripMenuItem"
         Me.EditToolStripMenuItem.Size = New System.Drawing.Size(82, 20)
         Me.EditToolStripMenuItem.Text = "Products"
         '
         'NewProductMBT
         '
-        Me.NewProductMBT.Image = Global.PPS.My.Resources.Resources.element_branch2_add
+        Me.NewProductMBT.Image = Global.FinancialBI.My.Resources.Resources.element_branch2_add
         Me.NewProductMBT.Name = "NewProductMBT"
         Me.NewProductMBT.Size = New System.Drawing.Size(152, 22)
         Me.NewProductMBT.Text = "New Product"
         '
         'DeleteProductMBT
         '
-        Me.DeleteProductMBT.Image = Global.PPS.My.Resources.Resources.element_branch2_delete
+        Me.DeleteProductMBT.Image = Global.FinancialBI.My.Resources.Resources.element_branch2_delete
         Me.DeleteProductMBT.Name = "DeleteProductMBT"
         Me.DeleteProductMBT.Size = New System.Drawing.Size(152, 22)
         Me.DeleteProductMBT.Text = "Delete Product"
@@ -120,35 +120,35 @@ Partial Class ProductsControl
         '
         'ExcelDropMBT
         '
-        Me.ExcelDropMBT.Image = Global.PPS.My.Resources.Resources.favicon_17_1
+        Me.ExcelDropMBT.Image = Global.FinancialBI.My.Resources.Resources.favicon_17_1
         Me.ExcelDropMBT.Name = "ExcelDropMBT"
         Me.ExcelDropMBT.Size = New System.Drawing.Size(143, 22)
         Me.ExcelDropMBT.Text = "Send to Excel"
         '
         'CopyDownRCMBT
         '
-        Me.CopyDownRCMBT.Image = Global.PPS.My.Resources.Resources.arrow_down
+        Me.CopyDownRCMBT.Image = Global.FinancialBI.My.Resources.Resources.arrow_down
         Me.CopyDownRCMBT.Name = "CopyDownRCMBT"
         Me.CopyDownRCMBT.Size = New System.Drawing.Size(168, 22)
         Me.CopyDownRCMBT.Text = "Copy Value Down"
         '
         'DropToExcelRCMBT
         '
-        Me.DropToExcelRCMBT.Image = Global.PPS.My.Resources.Resources.Excel_Blue_32x32
+        Me.DropToExcelRCMBT.Image = Global.FinancialBI.My.Resources.Resources.Excel_Blue_32x32
         Me.DropToExcelRCMBT.Name = "DropToExcelRCMBT"
         Me.DropToExcelRCMBT.Size = New System.Drawing.Size(168, 22)
         Me.DropToExcelRCMBT.Text = "Drop To Excel"
         '
         'NewProductRCMBT
         '
-        Me.NewProductRCMBT.Image = Global.PPS.My.Resources.Resources.barcode_add
+        Me.NewProductRCMBT.Image = Global.FinancialBI.My.Resources.Resources.barcode_add
         Me.NewProductRCMBT.Name = "NewProductRCMBT"
         Me.NewProductRCMBT.Size = New System.Drawing.Size(168, 22)
         Me.NewProductRCMBT.Text = "New Product"
         '
         'DeleteProductRCMBT
         '
-        Me.DeleteProductRCMBT.Image = Global.PPS.My.Resources.Resources.barcode_delete
+        Me.DeleteProductRCMBT.Image = Global.FinancialBI.My.Resources.Resources.barcode_delete
         Me.DeleteProductRCMBT.Name = "DeleteProductRCMBT"
         Me.DeleteProductRCMBT.Size = New System.Drawing.Size(168, 22)
         Me.DeleteProductRCMBT.Text = "Delete Product"

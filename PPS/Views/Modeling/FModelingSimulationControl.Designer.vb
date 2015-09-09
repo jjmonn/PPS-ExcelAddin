@@ -236,7 +236,7 @@ Partial Class FModelingSimulationControl
         '
         'refreshBT
         '
-        Me.refreshBT.BackgroundImage = Global.PPS.My.Resources.Resources.Refresh2
+        Me.refreshBT.BackgroundImage = Global.FinancialBI.My.Resources.Resources.Refresh2
         Me.refreshBT.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
         Me.refreshBT.Location = New System.Drawing.Point(116, 5)
         Me.refreshBT.Name = "refreshBT"

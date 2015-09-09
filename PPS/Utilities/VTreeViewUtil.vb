@@ -50,7 +50,11 @@ Public Class VTreeViewUtil
                                     ByRef value As String, _
                                     Optional ByRef includeSelf As Boolean = False) As vTreeNode
 
-        For Each subNode As vTreeNode In GetAllChildrenNodesList(node)
+        Dim childrenNodesList As List(Of vTreeNode) = GetAllChildrenNodesList(node)
+        If includeSelf = True Then
+            childrenNodesList.Add(node)
+        End If
+        For Each subNode As vTreeNode In childrenNodesList
             If subNode.Value = value Then Return subNode
         Next
         Return Nothing
@@ -319,6 +323,49 @@ Public Class VTreeViewUtil
             End If
         Catch ex As Exception
         End Try
+
+    End Sub
+
+#End Region
+
+
+#Region "VtreeviewBox Loading"
+
+    Friend Shared Sub LoadParentEntitiesTreeviewBox(ByRef TVBox As vTreeViewBox, _
+                                                    ByRef originalTV As Windows.Forms.TreeView)
+
+        TVBox.TreeView.Nodes.Clear()
+        For Each node As Windows.Forms.TreeNode In originalTV.Nodes
+            AddNodeToParentEntityTreeviewBox(TVBox, node, Nothing)
+        Next
+
+    End Sub
+
+    Friend Shared Sub LoadParentEntitiesTreeviewBox(ByRef TVBox As vTreeViewBox, _
+                                                    ByRef originalNode As Windows.Forms.TreeNode)
+
+        TVBox.TreeView.Nodes.Clear()
+        For Each node As Windows.Forms.TreeNode In originalNode.Nodes
+            AddNodeToParentEntityTreeviewBox(TVBox, node, Nothing)
+        Next
+
+    End Sub
+
+    Private Shared Sub AddNodeToParentEntityTreeviewBox(ByRef TVBox As vTreeViewBox, _
+                                                        ByRef originNode As Windows.Forms.TreeNode, _
+                                                        ByRef destinationNode As VIBlend.WinForms.Controls.vTreeNode)
+
+        Dim newNode As New VIBlend.WinForms.Controls.vTreeNode
+        newNode.Value = originNode.Name
+        newNode.Text = originNode.Text
+        If destinationNode Is Nothing Then
+            TVBox.TreeView.Nodes.Add(newNode)
+        Else
+            destinationNode.Nodes.Add(newNode)
+        End If
+        For Each subNode As Windows.Forms.TreeNode In originNode.Nodes
+            AddNodeToParentEntityTreeviewBox(TVBox, subNode, newNode)
+        Next
 
     End Sub
 

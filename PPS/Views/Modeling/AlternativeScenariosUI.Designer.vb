@@ -676,7 +676,7 @@ Partial Class AlternativeScenariosUI
         '
         'SendToExcelToolStripMenuItem
         '
-        Me.SendToExcelToolStripMenuItem.Image = Global.PPS.My.Resources.Resources.excel_2
+        Me.SendToExcelToolStripMenuItem.Image = Global.FinancialBI.My.Resources.Resources.excel_2
         Me.SendToExcelToolStripMenuItem.Name = "SendToExcelToolStripMenuItem"
         Me.SendToExcelToolStripMenuItem.Size = New System.Drawing.Size(143, 22)
         Me.SendToExcelToolStripMenuItem.Text = "Send to Excel"
@@ -696,7 +696,7 @@ Partial Class AlternativeScenariosUI
         '
         'SendToExcelToolStripMenuItem1
         '
-        Me.SendToExcelToolStripMenuItem1.Image = Global.PPS.My.Resources.Resources.excel_2
+        Me.SendToExcelToolStripMenuItem1.Image = Global.FinancialBI.My.Resources.Resources.excel_2
         Me.SendToExcelToolStripMenuItem1.Name = "SendToExcelToolStripMenuItem1"
         Me.SendToExcelToolStripMenuItem1.Size = New System.Drawing.Size(195, 22)
         Me.SendToExcelToolStripMenuItem1.Text = "Send to Excel"

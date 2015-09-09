@@ -103,14 +103,14 @@ Partial Class CurrenciesControl
         '
         'AddCurrencyToolStripMenuItem
         '
-        Me.AddCurrencyToolStripMenuItem.Image = Global.PPS.My.Resources.Resources.symbol_dollar_euro_add
+        Me.AddCurrencyToolStripMenuItem.Image = Global.FinancialBI.My.Resources.Resources.symbol_dollar_euro_add
         Me.AddCurrencyToolStripMenuItem.Name = "AddCurrencyToolStripMenuItem"
         Me.AddCurrencyToolStripMenuItem.Size = New System.Drawing.Size(158, 22)
         Me.AddCurrencyToolStripMenuItem.Text = "Add Currency"
         '
         'DeleteCurrencyToolStripMenuItem1
         '
-        Me.DeleteCurrencyToolStripMenuItem1.Image = Global.PPS.My.Resources.Resources.symbol_dollar_euro_delete
+        Me.DeleteCurrencyToolStripMenuItem1.Image = Global.FinancialBI.My.Resources.Resources.symbol_dollar_euro_delete
         Me.DeleteCurrencyToolStripMenuItem1.Name = "DeleteCurrencyToolStripMenuItem1"
         Me.DeleteCurrencyToolStripMenuItem1.Size = New System.Drawing.Size(158, 22)
         Me.DeleteCurrencyToolStripMenuItem1.Text = "Delete Currency"
@@ -123,7 +123,7 @@ Partial Class CurrenciesControl
         '
         'select_version
         '
-        Me.select_version.Image = Global.PPS.My.Resources.Resources.config_circle_green
+        Me.select_version.Image = Global.FinancialBI.My.Resources.Resources.config_circle_green
         Me.select_version.Name = "select_version"
         Me.select_version.Size = New System.Drawing.Size(147, 22)
         Me.select_version.Text = "Select Version"
@@ -135,14 +135,14 @@ Partial Class CurrenciesControl
         '
         'AddRatesVersionRCM
         '
-        Me.AddRatesVersionRCM.Image = Global.PPS.My.Resources.Resources.elements3_add
+        Me.AddRatesVersionRCM.Image = Global.FinancialBI.My.Resources.Resources.elements3_add
         Me.AddRatesVersionRCM.Name = "AddRatesVersionRCM"
         Me.AddRatesVersionRCM.Size = New System.Drawing.Size(147, 22)
         Me.AddRatesVersionRCM.Text = "Add Version"
         '
         'AddFolderRCM
         '
-        Me.AddFolderRCM.Image = Global.PPS.My.Resources.Resources.folder_open_add
+        Me.AddFolderRCM.Image = Global.FinancialBI.My.Resources.Resources.folder_open_add
         Me.AddFolderRCM.Name = "AddFolderRCM"
         Me.AddFolderRCM.Size = New System.Drawing.Size(147, 22)
         Me.AddFolderRCM.Text = "Add Folder"
@@ -154,7 +154,7 @@ Partial Class CurrenciesControl
         '
         'DeleteVersionRCM
         '
-        Me.DeleteVersionRCM.Image = Global.PPS.My.Resources.Resources.elements3_delete
+        Me.DeleteVersionRCM.Image = Global.FinancialBI.My.Resources.Resources.elements3_delete
         Me.DeleteVersionRCM.Name = "DeleteVersionRCM"
         Me.DeleteVersionRCM.Size = New System.Drawing.Size(147, 22)
         Me.DeleteVersionRCM.Text = "Delete"
@@ -167,7 +167,7 @@ Partial Class CurrenciesControl
         '
         'expand_periods
         '
-        Me.expand_periods.Image = Global.PPS.My.Resources.Resources.images
+        Me.expand_periods.Image = Global.FinancialBI.My.Resources.Resources.images
         Me.expand_periods.Name = "expand_periods"
         Me.expand_periods.Size = New System.Drawing.Size(176, 22)
         Me.expand_periods.Text = "Expand all Periods"
@@ -185,7 +185,7 @@ Partial Class CurrenciesControl
         '
         'CopyRateDownToolStripMenuItem
         '
-        Me.CopyRateDownToolStripMenuItem.Image = Global.PPS.My.Resources.Resources.Download_
+        Me.CopyRateDownToolStripMenuItem.Image = Global.FinancialBI.My.Resources.Resources.Download_
         Me.CopyRateDownToolStripMenuItem.Name = "CopyRateDownToolStripMenuItem"
         Me.CopyRateDownToolStripMenuItem.Size = New System.Drawing.Size(176, 22)
         Me.CopyRateDownToolStripMenuItem.Text = "Copy Rate Down"
@@ -268,14 +268,14 @@ Partial Class CurrenciesControl
         'ToolStripMenuItem2
         '
         Me.ToolStripMenuItem2.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.DisplayRatesToolStripMenuItem, Me.ToolStripSeparator5, Me.CreateFolderToolStripMenuItem, Me.CreateVersionToolStripMenuItem, Me.ToolStripSeparator4, Me.DeleteToolStripMenuItem})
-        Me.ToolStripMenuItem2.Image = Global.PPS.My.Resources.Resources.breakpoints
+        Me.ToolStripMenuItem2.Image = Global.FinancialBI.My.Resources.Resources.breakpoints
         Me.ToolStripMenuItem2.Name = "ToolStripMenuItem2"
         Me.ToolStripMenuItem2.Size = New System.Drawing.Size(79, 20)
         Me.ToolStripMenuItem2.Text = "Versions"
         '
         'DisplayRatesToolStripMenuItem
         '
-        Me.DisplayRatesToolStripMenuItem.Image = Global.PPS.My.Resources.Resources.config_circle_green
+        Me.DisplayRatesToolStripMenuItem.Image = Global.FinancialBI.My.Resources.Resources.config_circle_green
         Me.DisplayRatesToolStripMenuItem.Name = "DisplayRatesToolStripMenuItem"
         Me.DisplayRatesToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
         Me.DisplayRatesToolStripMenuItem.Text = "Display Rates"
@@ -287,14 +287,14 @@ Partial Class CurrenciesControl
         '
         'CreateFolderToolStripMenuItem
         '
-        Me.CreateFolderToolStripMenuItem.Image = Global.PPS.My.Resources.Resources.folder_open_add
+        Me.CreateFolderToolStripMenuItem.Image = Global.FinancialBI.My.Resources.Resources.folder_open_add
         Me.CreateFolderToolStripMenuItem.Name = "CreateFolderToolStripMenuItem"
         Me.CreateFolderToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
         Me.CreateFolderToolStripMenuItem.Text = "Create Folder"
         '
         'CreateVersionToolStripMenuItem
         '
-        Me.CreateVersionToolStripMenuItem.Image = Global.PPS.My.Resources.Resources.elements3_add
+        Me.CreateVersionToolStripMenuItem.Image = Global.FinancialBI.My.Resources.Resources.elements3_add
         Me.CreateVersionToolStripMenuItem.Name = "CreateVersionToolStripMenuItem"
         Me.CreateVersionToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
         Me.CreateVersionToolStripMenuItem.Text = "Create Version"
@@ -306,7 +306,7 @@ Partial Class CurrenciesControl
         '
         'DeleteToolStripMenuItem
         '
-        Me.DeleteToolStripMenuItem.Image = Global.PPS.My.Resources.Resources.elements3_delete
+        Me.DeleteToolStripMenuItem.Image = Global.FinancialBI.My.Resources.Resources.elements3_delete
         Me.DeleteToolStripMenuItem.Name = "DeleteToolStripMenuItem"
         Me.DeleteToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
         Me.DeleteToolStripMenuItem.Text = "Delete"
@@ -314,14 +314,14 @@ Partial Class CurrenciesControl
         'CurrenciesToolStripMenuItem
         '
         Me.CurrenciesToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.AddNewCurrencyToolStripMenuItem, Me.ToolStripSeparator1})
-        Me.CurrenciesToolStripMenuItem.Image = Global.PPS.My.Resources.Resources.symbol_dollar_euro
+        Me.CurrenciesToolStripMenuItem.Image = Global.FinancialBI.My.Resources.Resources.symbol_dollar_euro
         Me.CurrenciesToolStripMenuItem.Name = "CurrenciesToolStripMenuItem"
         Me.CurrenciesToolStripMenuItem.Size = New System.Drawing.Size(91, 20)
         Me.CurrenciesToolStripMenuItem.Text = "Currencies"
         '
         'AddNewCurrencyToolStripMenuItem
         '
-        Me.AddNewCurrencyToolStripMenuItem.Image = Global.PPS.My.Resources.Resources.symbol_dollar_euro_add
+        Me.AddNewCurrencyToolStripMenuItem.Image = Global.FinancialBI.My.Resources.Resources.symbol_dollar_euro_add
         Me.AddNewCurrencyToolStripMenuItem.Name = "AddNewCurrencyToolStripMenuItem"
         Me.AddNewCurrencyToolStripMenuItem.Size = New System.Drawing.Size(174, 22)
         Me.AddNewCurrencyToolStripMenuItem.Text = "Add New Currency"
@@ -333,14 +333,14 @@ Partial Class CurrenciesControl
         '
         'chart_button
         '
-        Me.chart_button.Image = Global.PPS.My.Resources.Resources.chart2
+        Me.chart_button.Image = Global.FinancialBI.My.Resources.Resources.chart2
         Me.chart_button.Name = "chart_button"
         Me.chart_button.Size = New System.Drawing.Size(64, 20)
         Me.chart_button.Text = "Chart"
         '
         'ImportFromExcelToolStripMenuItem
         '
-        Me.ImportFromExcelToolStripMenuItem.Image = Global.PPS.My.Resources.Resources.excel_blue2
+        Me.ImportFromExcelToolStripMenuItem.Image = Global.FinancialBI.My.Resources.Resources.excel_blue2
         Me.ImportFromExcelToolStripMenuItem.Name = "ImportFromExcelToolStripMenuItem"
         Me.ImportFromExcelToolStripMenuItem.Size = New System.Drawing.Size(129, 20)
         Me.ImportFromExcelToolStripMenuItem.Text = "Import from Excel"

@@ -36,7 +36,6 @@ Friend Class EntitiesController
     Private PlatformMGTUI As PlatformMGTGeneralUI
 
     ' Variables
-    Friend entitiesFilterValuesNameIdDict As Hashtable
     Private positionsDictionary As New Dictionary(Of Int32, Double)
 
 #End Region
@@ -47,8 +46,8 @@ Friend Class EntitiesController
     Friend Sub New()
 
         LoadInstanceVariables()
-        View = New EntitiesControl(Me, entitiesTV, entitiesFilterValuesTV, entitiesFilterValuesNameIdDict, entitiesFilterTV)
-        NewEntityView = New NewEntityUI(Me, entitiesTV, entitiesFilterTV, entitiesFilterValuesNameIdDict)
+        View = New EntitiesControl(Me, entitiesTV, entitiesFilterValuesTV, entitiesFilterTV)
+        NewEntityView = New NewEntityUI(Me, entitiesTV, GlobalVariables.Currencies.currencies_hash)
 
         ' Entities CRUD Events
         AddHandler GlobalVariables.Entities.CreationEvent, AddressOf AfterEntityCreation
@@ -58,7 +57,7 @@ Friend Class EntitiesController
 
         ' Entities Filters CRUD Events
         AddHandler GlobalVariables.EntitiesFilters.Read, AddressOf AfterEntityFilterRead
-
+        AddHandler GlobalVariables.EntitiesFilters.UpdateEvent, AddressOf AfterEntityFilterUpdate
 
     End Sub
 
@@ -67,7 +66,6 @@ Friend Class EntitiesController
         GlobalVariables.Entities.LoadEntitiesTV(entitiesTV)
         GlobalVariables.Filters.LoadFiltersTV(entitiesFilterTV, GlobalEnums.AnalysisAxis.ENTITIES)
         AxisFilter.LoadFvTv(entitiesFilterValuesTV, GlobalEnums.AnalysisAxis.ENTITIES)
-        entitiesFilterValuesNameIdDict = GlobalVariables.Filters.GetFiltersDictionary(GlobalEnums.AnalysisAxis.ENTITIES, NAME_VARIABLE, ID_VARIABLE)
 
     End Sub
 
@@ -93,14 +91,7 @@ Friend Class EntitiesController
 
     Public Sub close()
 
-        View.closeControl()
-
-    End Sub
-
-    Friend Sub sendCloseOrder()
-
         View.Dispose()
-        PlatformMGTUI.displayControl()
 
     End Sub
 
@@ -109,11 +100,19 @@ Friend Class EntitiesController
 
 #Region "Interface"
 
-    Friend Sub CreateEntity(ByRef hash As Hashtable, ByRef parent_node As TreeNode)
+    Friend Sub CreateEntity(ByRef entityName As String, _
+                            ByRef entityCurrency As Int32, _
+                            ByRef parentEntityId As Int32, _
+                            ByRef position As Int32, _
+                            ByRef allowEdition As Int32)
 
-        hash(PARENT_ID_VARIABLE) = CInt(parent_node.Name)
-        hash.Add(ITEMS_POSITIONS, 1)
-        GlobalVariables.Entities.CMSG_CREATE_ENTITY(hash)
+        Dim ht As New Hashtable
+        ht.Add(NAME_VARIABLE, entityName)
+        ht.Add(ENTITIES_CURRENCY_VARIABLE, entityCurrency)
+        ht.Add(PARENT_ID_VARIABLE, parentEntityId)
+        ht.Add(ITEMS_POSITIONS, position)
+        ht.Add(ENTITIES_ALLOW_EDITION_VARIABLE, allowEdition)
+        GlobalVariables.Entities.CMSG_CREATE_ENTITY(ht)
 
     End Sub
 
@@ -135,24 +134,8 @@ Friend Class EntitiesController
 
     End Sub
 
-    Friend Sub DeleteEntities(ByRef input_node As TreeNode)
+    Friend Sub DeleteEntity(ByRef entity_id As Int32)
 
-        ' see with nath if this loop goes on the server !
-        ' priority normal
-
-        Dim entities_to_delete = TreeViewsUtilities.GetNodesKeysList(input_node)
-        entities_to_delete.Reverse()
-        For Each entity_id In entities_to_delete
-            DeleteEntity(entity_id)
-        Next
-        View.getDGVRowsIDItemsDict()(input_node.Name).Delete()
-        input_node.Remove()
-
-    End Sub
-
-    Private Sub DeleteEntity(ByRef entity_id As Int32)
-
-        '  EntitiesDeletion.DeleteEntityFromPlatform(entity_id)
         GlobalVariables.Entities.CMSG_DELETE_ENTITY(entity_id)
 
     End Sub
@@ -161,10 +144,10 @@ Friend Class EntitiesController
                                  ByRef filterId As Int32, _
                                  ByRef filterValueId As Int32)
 
-        ' if most nested => update entitiesFilter 
-        ' to be implemented 
-        ' priority high
-
+        If filterId = GlobalVariables.Filters.GetMostNestedFilterId(filterId) Then
+            GlobalVariables.EntitiesFilters.CMSG_UPDATE_entity_FILTER(entityId, filterId, filterValueId)
+        End If
+     
     End Sub
 
 
@@ -176,8 +159,8 @@ Friend Class EntitiesController
     Private Sub AfterEntityRead(ByRef status As Boolean, ByRef ht As Hashtable)
 
         If (status = True) Then
-            View.UpdateEntity(ht)
             LoadInstanceVariables()
+            View.UpdateEntity(ht)
         End If
 
     End Sub
@@ -185,8 +168,8 @@ Friend Class EntitiesController
     Private Sub AfterEntityDeletion(ByRef status As Boolean, ByRef id As Int32)
 
         If status = True Then
-            View.DeleteEntity(id)
             LoadInstanceVariables()
+            View.DeleteEntity(id)
         End If
 
     End Sub
@@ -202,36 +185,37 @@ Friend Class EntitiesController
 
     Private Sub AfterEntityCreation(ByRef status As Boolean, ByRef id As Int32)
 
-        'Dim parent_node As TreeNode = entitiesTV.Nodes.Find(entity_ht(PARENT_ID_VARIABLE), True)(0)
-        'AddNodeAndRow(entity_ht, parent_node)
-
-        'If GlobalVariables.Entities.entities_hash(CInt(parent_node.Name))(ENTITIES_ALLOW_EDITION_VARIABLE) = 1 Then
-
-        '    ' priority normal
-
-        '    'Entities.UpdateEntity(parent_node.Name, ENTITIES_ALLOW_EDITION_VARIABLE, 0)
-
-        '    ' attention dans ce cas les données précédemment soumises sur cette entités sont orphelines !!!
-        '    '  -> Triggers creation entity_name & "CORP"
-        '    '  -> Transfert des facts
-        '    ' ceci peut être codé au niveau du serveur ?
-
-        '    MsgBox(entity_ht(NAME_VARIABLE) & " was previously an editable entity. Adding children entities change its status to not editable. " & Chr(13) _
-        '           & "A CORP level has been created and the data previsoulsy submitted on this entity has been transfered to the CORP entity")
-
-        '    parent_node.StateImageIndex = 0
-        'End If
+        If status = False Then
+            MsgBox("The Entity Could not be created.")
+            ' catch and display error as well V2 priority normal
+        End If
 
     End Sub
 
     Private Sub AfterEntityFilterRead(ByRef status As Boolean, ByRef entityFilterHT As Hashtable)
 
         If (status = True) Then
+            Dim entityId As Int32 = entityFilterHT(ENTITY_ID_VARIABLE)
+        If GlobalVariables.Entities.entities_hash.ContainsKey(entityId) Then
             LoadInstanceVariables()
-            ' refill all entities dgv ?
+            View.UpdateEntity(GlobalVariables.Entities.entities_hash(entityId))
+            End If
         End If
 
     End Sub
+
+    Private Sub AfterEntityFilterUpdate(ByRef status As Boolean, _
+                                        ByRef entityId As Int32, _
+                                        ByRef filterId As Int32, _
+                                        ByRef filterValueId As Int32)
+        If status = False Then
+            View.UpdateEntity(GlobalVariables.Entities.entities_hash(entityId))
+            MsgBox("The Entity could be updated.")
+            ' catch and display message
+        End If
+
+    End Sub
+
 
 #End Region
 
@@ -240,19 +224,14 @@ Friend Class EntitiesController
 
     Friend Sub ShowNewEntityUI()
 
-        Dim current_node As TreeNode = Nothing
-        If Not View.getCurrentRowItem Is Nothing Then
-            Dim entity_id As Int32 = GetEntityId(View.getCurrentEntityName())
-            current_node = entitiesTV.Nodes.Find(entity_id, True)(0)
-            entitiesTV.SelectedNode = current_node
+        Dim parentEntityID As Int32 = 0
+        Dim current_row As HierarchyItem = View.getCurrentRowItem
+        On Error GoTo ShowNewEntity
+        If Not current_row Is Nothing Then parentEntityID = entitiesTV.Nodes.Find(current_row.ItemValue, True)(0).Name
+        GoTo ShowNewEntity
 
-            ' call to entities_filter (axis_filter object) 
-            ' to be implemented
-            ' priority normal
-
-            '        NewEntityView.FillIn(current_node.Text, Entities.GetRecord(current_node.Name, categoriesTV))
-        End If
-        NewEntityView.AddEntitiesTV()
+ShowNewEntity:
+        NewEntityView.SetParentEntityId(parentEntityID)
         NewEntityView.Show()
 
     End Sub
@@ -271,14 +250,12 @@ Friend Class EntitiesController
 
     Friend Sub SendNewPositionsToModel()
 
-        positionsDictionary = TreeViewsUtilities.GeneratePositionsDictionary(entitiesTV)
-        Dim batch_update As New List(Of Object())
-        For Each entity_id In positionsDictionary.Keys
-            batch_update.Add({entity_id, ITEMS_POSITIONS, positionsDictionary(entity_id)})
-        Next
-
-        ' CP while updating
-        ' review ! priority normal
+        ' to be reviewed priority normal
+        'positionsDictionary = TreeViewsUtilities.GeneratePositionsDictionary(entitiesTV)
+        'Dim batch_update As New List(Of Object())
+        'For Each entity_id In positionsDictionary.Keys
+        '    batch_update.Add({entity_id, ITEMS_POSITIONS, positionsDictionary(entity_id)})
+        'Next
 
     End Sub
 

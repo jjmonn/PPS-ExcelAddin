@@ -3,7 +3,7 @@
 '
 '
 '
-' Last modified: 08/06/2015
+' Last modified: 08/09/2015
 ' Author: Julien Monnereau
 
 
@@ -380,7 +380,7 @@ Err:
 
 #Region "Dictionaries Utilities"
 
-    Protected Friend Shared Sub AddOrSetValueToDict(ByRef dict As Dictionary(Of String, String), _
+    Friend Shared Sub AddOrSetValueToDict(ByRef dict As Dictionary(Of String, String), _
                                                     ByRef key As String, _
                                                     ByRef value As String)
 
@@ -413,6 +413,18 @@ Err:
 
     End Function
 
+    Friend Shared Function DictsCompare(ByRef dict1 As Dictionary(Of Int32, List(Of Int32)), _
+                                        ByRef dict2 As Dictionary(Of Int32, List(Of Int32))) As Boolean
+
+        For Each filterId As Int32 In dict1.Keys
+            If dict2.ContainsKey(filterId) = False Then Return False
+            For Each filterValueId As Int32 In dict1(filterId)
+                If dict2(filterId).Contains(filterValueId) = False Then Return False
+            Next
+        Next
+        Return True
+
+    End Function
 
 
 #End Region

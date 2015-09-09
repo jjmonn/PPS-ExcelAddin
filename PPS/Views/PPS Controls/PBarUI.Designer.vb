@@ -23,7 +23,7 @@ Partial Class PBarUI
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(PBarUI))
-        Me.ProgressBarControl1 = New PPS.ProgressBarControl()
+        Me.ProgressBarControl1 = New FinancialBI.ProgressBarControl()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.SuspendLayout()
         '
@@ -57,6 +57,6 @@ Partial Class PBarUI
         Me.PerformLayout()
 
     End Sub
-    Friend WithEvents ProgressBarControl1 As PPS.ProgressBarControl
+    Friend WithEvents ProgressBarControl1 As FinancialBI.ProgressBarControl
     Friend WithEvents Label1 As System.Windows.Forms.Label
 End Class

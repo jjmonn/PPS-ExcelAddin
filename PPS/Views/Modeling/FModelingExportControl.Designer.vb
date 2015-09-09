@@ -110,7 +110,7 @@ Partial Class FModelingExportControl
         '
         'Button1
         '
-        Me.Button1.BackgroundImage = Global.PPS.My.Resources.Resources.arrow_1
+        Me.Button1.BackgroundImage = Global.FinancialBI.My.Resources.Resources.arrow_1
         Me.Button1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
         Me.Button1.FlatAppearance.BorderSize = 0
         Me.Button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat

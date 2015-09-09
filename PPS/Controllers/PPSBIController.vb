@@ -1,20 +1,19 @@
 ﻿' PPSBIController.vb
 ' 
-' - Currently PPSBI user defined function call back
-' - Manage the checks, launch computing and return formula result
+' - PPSBI user defined function call back
+' 
 '
 ' To do:
 '      - Simplification : loop through optional parameters
 '      - Version and currency dllcomputerinstance current checks to add when those params are operationals
 '      - Must be able to identify dates more globally -> regex for example     
-'       - EntitiesTV can be stored in aggregation computer
-'
+'     
 '
 '  Known bugs:
 '      
 '
 ' Author: Julien Monnereau
-' Last modified: 17/07/2015
+' Last modified: 09/09/2015
 '
 
 
@@ -30,15 +29,23 @@ Friend Class PPSBIController
 #Region "Instance Variables"
 
     ' Objects
-  
+    Private Computer As New Computer
+    Private computingCache As ComputingCache
+
+    ' Compute Params
+    Private periodToken As String
+    Private entity_id As Int32
+    Private account_id As Int32
+    Private currency_id As Int32
+    Private version_id As Int32
+    Private adjustment_id As Int32
+
     ' Variables
-    Private AccountsNameKeyDictionary As Hashtable
-    Private EntitiesNameKeyDictionary As Hashtable
-    Private EntitiesCategoriesNameKeyDictionary As Hashtable
-    Private Adjustments_name_id_dic As Hashtable
+    Private error_message As String
+    Private requestIdComputeFlagDict As New Dictionary(Of Int32, Boolean)
     Private emptyCellFlag As Boolean
-    Friend filterList As New List(Of String)
-    Private aggregation_computed_accounts_types As New List(Of String)
+    Private cacheInitFlag As Boolean = False
+    Friend mustUpdateFlag As Boolean = False
 
 #End Region
 
@@ -47,14 +54,16 @@ Friend Class PPSBIController
 
     Friend Sub New()
 
-        AccountsNameKeyDictionary = GlobalVariables.Accounts.GetAccountsDictionary(NAME_VARIABLE, ID_VARIABLE)
-        EntitiesNameKeyDictionary = GlobalVariables.Entities.GetEntitiesDictionary(NAME_VARIABLE, ID_VARIABLE)
-        EntitiesCategoriesNameKeyDictionary = GlobalVariables.FiltersValues.GetFiltervaluesDictionary(GlobalEnums.AnalysisAxis.ENTITIES, NAME_VARIABLE, ID_VARIABLE)
-        Adjustments_name_id_dic = GlobalVariables.Adjustments.GetAdjustmentsDictionary(NAME_VARIABLE, ID_VARIABLE)
         emptyCellFlag = False
-        aggregation_computed_accounts_types.Add(GlobalEnums.FormulaTypes.FORMULA)
-        aggregation_computed_accounts_types.Add(GlobalEnums.FormulaTypes.FIRST_PERIOD_INPUT)
-        aggregation_computed_accounts_types.Add(GlobalEnums.FormulaTypes.AGGREGATION_OF_SUB_ACCOUNTS)
+        AddHandler Computer.ComputationAnswered, AddressOf AfterCompute
+        If GlobalVariables.AuthenticationFlag = True Then InitCache()
+
+    End Sub
+
+    Private Sub InitCache()
+
+        computingCache = New ComputingCache(False)
+        cacheInitFlag = True
 
     End Sub
 
@@ -63,160 +72,209 @@ Friend Class PPSBIController
 
 #Region "Interface"
 
+    Friend Function GetDataCallBack(ByRef p_entity_str As Object, _
+                                   ByRef p_account_str As Object, _
+                                   ByRef p_period_str As Object, _
+                                   ByRef p_currency_str As Object, _
+                                   ByRef p_version_str As Object, _
+                                   ByRef p_clients_filters As Object, _
+                                   ByRef p_products_filters As Object, _
+                                   ByRef p_adjustments_filters As Object, _
+                                   Optional ByRef p_filtersArray As Object = Nothing) As Object
 
-    ' Stubs in this function - clients/ products adjustments filters should come as param or computed here ?!!!
-    ' Period input: date as integer 
-    Friend Function getDataCallBack(ByRef entity_name As Object, _
-                                    ByRef account As Object, _
-                                    ByRef period As Object, _
-                                    ByRef currency As Object, _
-                                    ByRef version As Object, _
-                                    Optional ByRef adjustment_filter As Object = Nothing, _
-                                    Optional ByRef filtersArray As Object = Nothing) As Object
-
-        Dim entityString, entity_id, account_id, accountString, periodString, currencyString, version_id, adjustment_string, adjustment_id, error_message As String
+        If cacheInitFlag = False Then InitCache()
+        error_message = ""
         emptyCellFlag = False
-        entityString = ReturnValueFromRange(entity_name)
-        accountString = ReturnValueFromRange(account)
-        periodString = ReturnValueFromRange(period)
-        currencyString = ReturnValueFromRange(currency)
-        adjustment_string = ReturnValueFromRange(adjustment_filter)
 
-        filterList.Clear()
-        If Not filtersArray Is Nothing Then
-            For Each filter_ In filtersArray
-                If Not filter_ Is Nothing Then AddFilterValueToFiltersList(filter_)
-            Next
+        ' Checks
+        If CheckAccount(p_account_str) = False Then Return error_message
+        If CheckEntity(p_entity_str) = False Then Return error_message
+        If CheckCurrency(p_currency_str) = False Then Return error_message
+        If CheckVersion(p_version_str) = False Then Return error_message
+        If CheckDate(p_period_str) = False Then Return error_message
+
+        ' Filters Building
+        Dim filters = New Dictionary(Of Int32, List(Of Int32))
+        BuildFilters(p_filtersArray, filters)
+        Dim filtersToken As String = "0"
+
+        ' Axis Filters building
+        Dim axis_filters = New Dictionary(Of Int32, List(Of Int32))()
+        BuildAxisFilter(p_clients_filters, GlobalVariables.Clients, GlobalEnums.AnalysisAxis.CLIENTS, axis_filters)
+        BuildAxisFilter(p_products_filters, GlobalVariables.Products, GlobalEnums.AnalysisAxis.PRODUCTS, axis_filters)
+        BuildAxisFilter(p_adjustments_filters, GlobalVariables.Adjustments, GlobalEnums.AnalysisAxis.ADJUSTMENTS, axis_filters)
+
+        ' -> filter token to be created !!!
+        Dim token As String = version_id & Computer.TOKEN_SEPARATOR & _
+                              filtersToken & Computer.TOKEN_SEPARATOR & _
+                              entity_id & Computer.TOKEN_SEPARATOR & _
+                              account_id & Computer.TOKEN_SEPARATOR & _
+                              periodToken
+
+        ' Check Cache and Compute if necessary
+        If mustUpdateFlag = False _
+        AndAlso computingCache.MustCompute(entity_id, _
+                                            currency_id, _
+                                            {version_id}, _
+                                            filters, _
+                                            axis_filters) = True Then
+
+            Compute(filters, axis_filters)
+            GoTo ReturnData
+        Else
+            GoTo ReturnData
         End If
 
-        If CheckParameters(accountString, account_id, _
-                           entityString, entity_id, _
-                           adjustment_string, adjustment_id, _
-                           version, version_id, _
-                           error_message) _
-                           = False Then Return error_message
-
-        ' construction des clients_id_filter
-        '                  proudcts_id_filters
-        ' STUB !!!
-        Dim clients_id_filters As New List(Of String)
-        Dim products_id_filters As New List(Of String)
-        Dim adjustments_id_filters As New List(Of String)
-
-        '   Dim entity_node As TreeNode = getEntityNode(entity_id)
-        '  If entity_node Is Nothing Then Return "Entity not in selection"
-
-        'If CheckDate(period, period_int, GlobalVariables.GenericGlobalSingleEntityComputer.period_list) = False Then
-        '    Return "Invalid Period or Period format"
-        'End If
-
-        ' launch computation => computer.vb
-
-        'ComputeViaAggregationComputer(entity_node, _
-        '                                      account_id, _
-        '                                      version_id, _
-        '                                      currencyString, _
-        '                                      period, _
-        '                                      clients_id_filters, _
-        '                                      products_id_filters, _
-        '                                      adjustments_id_filters)
-       
+ReturnData:
+        If Computer.GetData.ContainsKey(token) Then
+            Return Computer.GetData(token)
+        Else
+            Return 0
+        End If
 
     End Function
 
-  
+    Private Sub Compute(ByRef filters As Dictionary(Of Int32, List(Of Int32)), _
+                        ByRef axis_filters As Dictionary(Of Int32, List(Of Int32)))
+
+        Dim request_id As Int32 = Computer.CMSG_COMPUTE_REQUEST({version_id}, _
+                                                                 entity_id, _
+                                                                 currency_id, _
+                                                                 filters, _
+                                                                 axis_filters, _
+                                                                 Nothing)
+        requestIdComputeFlagDict.Add(request_id, False)
+        While requestIdComputeFlagDict(request_id) = False
+            ' timeout ? priority high
+        End While
+        ' Cache Registering
+        computingCache.cacheEntityID = entity_id
+        computingCache.cacheCurrencyId = currency_id
+        computingCache.cacheVersions = {version_id}
+        computingCache.cacheFilters = filters
+        computingCache.cacheAxisFilters = axis_filters
+        mustUpdateFlag = False
+
+    End Sub
+
 #End Region
 
 
 #Region "Checks"
 
-    Private Function CheckParameters(ByRef accountstring As String, _
-                                     ByRef account_id As String, _
-                                     ByRef entityString As String, _
-                                     ByRef entity_id As String, _
-                                     ByRef adjustmentstring As String, _
-                                     ByRef adjustment_id As String, _
-                                     ByRef version As Object, _
-                                     ByRef version_id As String, _
-                                     ByRef error_message As String) As Boolean
+    Private Function CheckAccount(ByRef accountObject As Object) As Boolean
 
-        If AccountsNameKeyDictionary.ContainsKey(accountstring) Then
-            account_id = AccountsNameKeyDictionary.Item(accountstring)
-        Else
-            error_message = "Invalid Account"
-            Return False
-        End If
-
-        If EntitiesNameKeyDictionary.ContainsKey(entityString) Then
-            entity_id = EntitiesNameKeyDictionary.Item(entityString)
-        Else
-            error_message = "Invalid Entity"
-            Return False
-        End If
-
-        If adjustmentstring <> "" Then
-            If Adjustments_name_id_dic.ContainsKey(adjustmentstring) Then
-                adjustment_id = Adjustments_name_id_dic(adjustmentstring)
+        Dim accountName As String = ReturnValueFromRange(accountObject)
+        If Not accountName Is Nothing Then
+            account_id = GlobalVariables.Accounts.GetIdFromName(accountName)
+            If account_id = 0 Then
+                GoTo ReturnError
             Else
-                error_message = "Invalid Adjustment"
-                Return False
+                Return True
             End If
-        Else
-            adjustment_id = ""
+            GoTo ReturnError
         End If
 
-        If emptyCellFlag = True Then
-            error_message = "Missing Parameter"
-            Return False
-        End If
-
-        If CheckVersion(version, version_id) = False Then
-            error_message = "Invalid version"
-            Return False
-        End If
-        Return True
+ReturnError:
+        error_message = "Invalid Account"
+        Return False
 
     End Function
 
-    Private Function CheckVersion(ByRef version_name As Object, _
-                                  ByRef version_id As String) As String
+    Private Function CheckEntity(ByRef entityObject As Object) As Boolean
 
-        If Not version_name Is Nothing Then
-            Dim versionString As String = ReturnValueFromRange(version_name)
-            version_id = GlobalVariables.Versions.GetVersionsIDFromName(versionString)
-            If version_id <> "" Then Return True Else Return False
+        Dim entityName As String = ReturnValueFromRange(entityObject)
+        If Not entityName Is Nothing Then
+            entity_id = GlobalVariables.Entities.GetEntityId(entityName)
+            If entity_id = 0 Then
+                GoTo ReturnError
+            Else
+                Return True
+            End If
+            GoTo ReturnError
+        End If
+
+ReturnError:
+        error_message = "Invalid Entity"
+        Return False
+
+    End Function
+
+    Private Function CheckCurrency(ByRef currencyObject As Object) As Boolean
+
+        Dim currencyName As String = ReturnValueFromRange(currencyObject)
+        If Not currencyName Is Nothing Then
+            currency_id = GlobalVariables.Currencies.GetCurrencyId(currencyName)
+            If currency_id = 0 Then
+                error_message = "Invalid Currency"
+                Return False
+            Else
+                Return True
+            End If
         Else
+            error_message = "Invalid Currency"
+            Return True
+        End If
+
+    End Function
+
+    Private Function CheckVersion(ByRef versionObject As Object) As Boolean
+
+        Dim version_name As String = ReturnValueFromRange(versionObject)
+        If Not version_name Is Nothing Then
+            version_id = GlobalVariables.Versions.GetVersionsIDFromName(version_name)
+            If version_id = 0 Then
+                error_message = "Invalid Version"
+                Return False
+            Else
+                Return True
+            End If
+        Else
+            ' if my.settings version valid
+            ' else -> error message = "set up version
+            ' priority normal"
             version_id = My.Settings.version_id
             Return True
         End If
 
     End Function
 
-    Private Function CheckDate(ByRef input_period_object As Object, _
-                               ByRef periodInteger As Integer, _
-                               ByRef periodslist As List(Of Int32)) As Boolean
+    Private Function CheckDate(ByRef p_period_str As Object) As Boolean
 
-        Dim periodstr As String = ReturnValueFromRange(input_period_object)
-        If IsDate(periodstr) Then
-            Dim periodAsDate As Date = CDate(periodstr)
-            If periodslist.Contains(periodAsDate.ToOADate) Then
-                periodInteger = periodAsDate.ToOADate
+        ' must be able to read strings or integer !! 
+        On Error GoTo ReturnError
+        Dim periodsList() As Int32 = GlobalVariables.Versions.GetPeriodsList(version_id)
+        Dim periodIdentifyer As Char
+        Select Case GlobalVariables.Versions.versions_hash(version_id)(VERSIONS_TIME_CONFIG_VARIABLE)
+            Case GlobalEnums.TimeConfig.YEARS
+                periodIdentifyer = Computer.YEAR_PERIOD_IDENTIFIER
+            Case GlobalEnums.TimeConfig.MONTHS
+                periodIdentifyer = Computer.MONTH_PERIOD_IDENTIFIER
+        End Select
+        Dim periodObject = ReturnValueFromRange(p_period_str)
+
+        If TypeOf (periodObject) Is Int32 Then
+            GoTo PeriodIntegerIdentification
+        Else If TypeOf (periodObject) Is String Then
+                periodObject = CDate(periodObject).ToOADate()
+                GoTo PeriodIntegerIdentification
+        ElseIf TypeOf (periodObject) Is Date Then
+            periodObject = periodObject.ToOADate()
+            GoTo PeriodIntegerIdentification
+        End If
+
+PeriodIntegerIdentification:
+        For Each p In periodsList
+            If p = periodObject Then
+                periodToken = periodIdentifyer & periodObject
                 Return True
-            Else
-                Return False
             End If
-        Else
-            If Not periodslist Is Nothing Then
-                If periodslist.Contains(periodstr) Then
-                    periodInteger = periodstr
-                    Return True
-                Else
+        Next
+        GoTo ReturnError
 
-                    ' period check to be reimplemented !!
 
-                End If
-            End If
-            End If
+ReturnError:
+        error_message = "Invalid Period or Period format"
         Return False
 
     End Function
@@ -224,22 +282,60 @@ Friend Class PPSBIController
 #End Region
 
 
-#Region " Selections Builders"
+#Region "Events"
 
-    'Private Function getEntityNode(ByRef entity_id As String) As TreeNode
+    Private Sub AfterCompute(ByRef entity_id As Int32, ByRef status As Boolean, ByRef request_id As Int32)
 
-    '    Dim entitiesTV As New TreeView      ' Store in computers ?
-    '    ESB.BuildCategoriesFilterFromFilterList(filterList)
-    '    Globalvariables.Entities.LoadEntitiesTV(entitiesTV, ESB.StrSqlQueryForEntitiesUploadFunctions)
-    '    Dim lookup_result As TreeNode() = entitiesTV.Nodes.Find(entity_id, True)
+        If status = True Then
+            requestIdComputeFlagDict(request_id) = True
+        End If
 
-    '    ' !!! Result even if entity_id not in selection ! -> we still have the children !
+    End Sub
 
-    '    If lookup_result.Length > 0 Then Return lookup_result(0) Else Return Nothing
-
-    'End Function
+#End Region
 
 
+#Region "Filters Dictionaries Building"
+
+    Private Sub BuildFilters(ByRef p_filters_object As Object, _
+                             ByRef filters As Dictionary(Of Int32, List(Of Int32)))
+
+        Dim filterValueId As Int32
+        Dim filterId As Int32
+        For Each filterObject In p_filters_object
+            Dim filterValueName As String = ReturnValueFromRange(filterObject)
+            If Not filterValueName Is Nothing Then
+                filterValueId = GlobalVariables.FiltersValues.GetFilterValueId(filterValueName)
+                If Not filterValueId = 0 Then
+                    filterId = GlobalVariables.FiltersValues.filtervalues_hash(filterValueId)(FILTER_ID_VARIABLE)
+                    If filters.ContainsKey(filterId) = False Then
+                        filters.Add(filterId, New List(Of Int32))
+                    End If
+                    filters(filterId).Add(filterValueId)
+                End If
+            End If
+        Next
+
+    End Sub
+
+    Private Sub BuildAxisFilter(ByRef p_axis_filters_object As Object, _
+                                ByRef CRUDModel As SuperAxisCRUD, _
+                                ByRef axisId As Int32, _
+                                ByRef axis_filters As Dictionary(Of Int32, List(Of Int32)))
+
+        Dim axisFiltersList As New List(Of Int32)
+        For Each axisFilter In p_axis_filters_object
+            Dim axisName As String = ReturnValueFromRange(axisFilter)
+            If Not axisName Is Nothing Then
+                Dim axisValueId As Int32 = CRUDModel.GetAxisId(axisName)
+                If axisValueId <> 0 Then
+                    axisFiltersList.Add(axisValueId)
+                End If
+            End If
+        Next
+        If axisFiltersList.Count > 0 Then axis_filters.Add(axisId, axisFiltersList)
+
+    End Sub
 
 #End Region
 
@@ -259,11 +355,14 @@ Friend Class PPSBIController
 
     End Function
 
-    Private Sub AddFilterValueToFiltersList(ByRef filter As Object)
+    Private Sub AddAxisFilterToFiltersList(ByRef filter As Object, _
+                                            ByRef filterList As List(Of Int32))
 
-        Dim filterValue As String = ReturnValueFromRange(filter)
-        If Not filterValue Is Nothing AndAlso EntitiesCategoriesNameKeyDictionary.ContainsKey(filterValue) Then filterList.Add(EntitiesCategoriesNameKeyDictionary.Item(filterValue))
-      
+        'Dim filterValue As String = ReturnValueFromRange(filter)
+        'If Not filterValue Is Nothing AndAlso EntitiesCategoriesNameKeyDictionary.ContainsKey(filterValue) Then
+        '    filterList.Add(EntitiesCategoriesNameKeyDictionary.Item(filterValue))
+        'End If
+
     End Sub
 
 #End Region
