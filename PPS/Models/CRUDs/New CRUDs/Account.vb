@@ -12,7 +12,7 @@
 
 Imports System.Collections
 Imports System.Collections.Generic
-
+Imports System.Linq
 
 
 Friend Class Account
@@ -22,8 +22,8 @@ Friend Class Account
 
     ' Variables
     Friend state_flag As Boolean
-    Friend accounts_hash As New Hashtable
-
+    Friend accounts_hash As New Dictionary(Of Int32, Hashtable)
+  
     ' Events
     Public Event ObjectInitialized()
     Public Event Read(ByRef status As Boolean, ByRef attributes As Hashtable)
@@ -50,13 +50,24 @@ Friend Class Account
     Private Sub SMSG_LIST_ACCOUNT_ANSWER(packet As ByteBuffer)
 
         If packet.ReadInt32() = 0 Then
+            Dim tmpPositionsDic As New Dictionary(Of Int32, Int32)
+            Dim tmpAccountsHT As New Hashtable
             Dim nb_accounts = packet.ReadInt32()
             For i As Int32 = 1 To nb_accounts
                 Dim tmp_ht As New Hashtable
                 GetAccountHTFromPacket(packet, tmp_ht)
                 tmp_ht(IMAGE_VARIABLE) = tmp_ht(ACCOUNT_FORMULA_TYPE_VARIABLE)
-                accounts_hash(CInt(tmp_ht(ID_VARIABLE))) = tmp_ht
+                tmpAccountsHT(CInt(tmp_ht(ID_VARIABLE))) = tmp_ht
+                tmpPositionsDic.Add(tmp_ht(ID_VARIABLE), tmp_ht(ITEMS_POSITIONS))
             Next
+            Dim sorted = From pair In tmpPositionsDic Order By pair.Value
+            Dim sortedAccountsDict = sorted.ToDictionary(Function(p) p.Key, Function(p) p.Value)
+
+            accounts_hash.Clear()
+            For Each accountId As Int32 In sortedAccountsDict.Keys
+                accounts_hash.Add(accountId, tmpAccountsHT(accountId))
+            Next
+
             state_flag = True
             RaiseEvent ObjectInitialized()
         Else
@@ -291,18 +302,6 @@ Friend Class Account
         VTreeViewUtil.LoadTreeview(TV, accounts_hash)
 
     End Sub
-
-    'Private Function GetAccountHashShortListedByFormulaType(ByRef formula_type As String)
-
-    '    Dim tmp_acc_hash As New Hashtable
-    '    For Each id In accounts_hash.Keys
-    '        If accounts_hash(id)(ACCOUNT_FORMULA_TYPE_VARIABLE) = formula_type Then
-    '            tmp_acc_hash(id) = accounts_hash(id)
-    '        End If
-    '    Next
-    '    Return tmp_acc_hash
-
-    'End Function
 
 #End Region
 

@@ -149,7 +149,7 @@ Public Class VTreeViewUtil
 #Region "TV loading"
 
     Public Shared Sub LoadTreeview(ByRef TV As vTreeView, _
-                                ByRef items_attributes As Collections.Hashtable)
+                                ByRef items_attributes As Object)
 
         Dim currentNode, ParentNode As vTreeNode
         Dim orphans_ids_list As New List(Of Int32)
@@ -180,7 +180,7 @@ Public Class VTreeViewUtil
     End Sub
 
     Private Shared Sub SolveOrphanNodesList(ByRef TV As vTreeView, _
-                                          ByRef items_attributes As Collections.Hashtable, _
+                                          ByRef items_attributes As Object, _
                                           ByRef orphans_id_list As List(Of Int32), _
                                           Optional ByRef solved_orphans_list As List(Of Int32) = Nothing)
 
@@ -209,7 +209,7 @@ Public Class VTreeViewUtil
     End Sub
 
     Public Shared Sub LoadTreenode(ByRef node As vTreeNode, _
-                                   ByRef items_attributes As Collections.Hashtable)
+                                   ByRef items_attributes As Object)
 
         Dim currentNode, ParentNode As vTreeNode
         Dim orphans_ids_list As New List(Of Int32)
@@ -240,7 +240,7 @@ Public Class VTreeViewUtil
     End Sub
 
     Private Shared Sub SolveOrphanNodesList(ByRef node As vTreeNode, _
-                                          ByRef items_attributes As Collections.Hashtable, _
+                                          ByRef items_attributes As Object, _
                                           ByRef orphans_id_list As List(Of Int32), _
                                           Optional ByRef solved_orphans_list As List(Of Int32) = Nothing)
 
@@ -331,7 +331,7 @@ Public Class VTreeViewUtil
 
 #Region "VtreeviewBox Loading"
 
-    Friend Shared Sub LoadParentEntitiesTreeviewBox(ByRef TVBox As vTreeViewBox, _
+    Friend Shared Sub LoadParentsTreeviewBox(ByRef TVBox As vTreeViewBox, _
                                                     ByRef originalTV As Windows.Forms.TreeView)
 
         TVBox.TreeView.Nodes.Clear()
@@ -341,7 +341,7 @@ Public Class VTreeViewUtil
 
     End Sub
 
-    Friend Shared Sub LoadParentEntitiesTreeviewBox(ByRef TVBox As vTreeViewBox, _
+    Friend Shared Sub LoadParentsTreeviewBox(ByRef TVBox As vTreeViewBox, _
                                                     ByRef originalNode As Windows.Forms.TreeNode)
 
         TVBox.TreeView.Nodes.Clear()
