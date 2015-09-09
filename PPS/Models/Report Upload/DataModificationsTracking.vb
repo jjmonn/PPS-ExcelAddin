@@ -184,7 +184,7 @@ Friend Class DataModificationsTracking
         HeaderRangesInputsHighlight(Dataset.AccountsAddressValuesDictionary)
         HeaderRangesInputsHighlight(Dataset.periodsAddressValuesDictionary)
         DataHighlight()
-        RangeHighlighter.ColorOutputRange(outputsRegion)
+        If Not outputsRegion Is Nothing Then RangeHighlighter.ColorOutputRange(outputsRegion)
         HeaderRangesOutputsHighlight(Dataset.OutputsAccountsAddressvaluesDictionary)
         GlobalVariables.APPS.ScreenUpdating = True
 

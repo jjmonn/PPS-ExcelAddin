@@ -120,12 +120,9 @@ Friend Class PPSBIController
                                             axis_filters) = True Then
 
             Compute(filters, axis_filters)
-            GoTo ReturnData
-        Else
-            GoTo ReturnData
         End If
 
-ReturnData:
+        ' Return Data
         If Computer.GetData.ContainsKey(token) Then
             Return Computer.GetData(token)
         Else

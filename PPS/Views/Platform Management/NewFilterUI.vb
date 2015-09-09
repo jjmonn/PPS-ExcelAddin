@@ -39,7 +39,7 @@ Public Class NewFilterUI
 
     Private Sub NewFilter_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 
-        VTreeViewUtil.LoadParentEntitiesTreeviewBox(ParentFilterTreeBox, filtersNode)
+        VTreeViewUtil.LoadParentsTreeviewBox(ParentFilterTreeBox, filtersNode)
 
     End Sub
 

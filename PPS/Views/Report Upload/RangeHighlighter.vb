@@ -127,6 +127,7 @@ Friend Class RangeHighlighter
 
     Friend Sub RevertToOriginalColors()
 
+        On Error Resume Next
         GlobalVariables.APPS.ScreenUpdating = False
         For Each cell_address As String In original_cells_format.Keys
             Dim c As Excel.Range = WS.Range(cell_address)

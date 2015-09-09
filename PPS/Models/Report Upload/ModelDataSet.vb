@@ -261,22 +261,24 @@ Friend Class ModelDataSet
             For j = LBound(GlobalScreenShot, 2) To UBound(GlobalScreenShot, 2)                                      ' Loop into columns of input array
                 If VarType(GlobalScreenShot(i, j)) = 8 Then
 
+                    Dim currentValue As String = CStr(GlobalScreenShot(i, j))
+
                     ' Direct match or algo > 50% Index à vérifier selon table
                     ' Trim left and right the cell.value2 !! -> To be tested
-                    If inputsAccountsList.Contains(CStr(GlobalScreenShot(i, j))) _
-                    AndAlso Not AccountsAddressValuesDictionary.ContainsValue(CStr(GlobalScreenShot(i, j))) Then
+                    If inputsAccountsList.Contains(currentValue) _
+                    AndAlso Not AccountsAddressValuesDictionary.ContainsValue(currentValue) Then
 
                         AccountsAddressValuesDictionary.Add(Split(WS.Columns(j).Address(ColumnAbsolute:=False), ":")(1) & i, _
-                                                            CStr(GlobalScreenShot(i, j)))
-                        AccountsValuesAddressDict.Add(CStr(GlobalScreenShot(i, j)), Split(WS.Columns(j).Address(ColumnAbsolute:=False), ":")(1) & i)
+                                                            currentValue)
+                        AccountsValuesAddressDict.Add(currentValue, Split(WS.Columns(j).Address(ColumnAbsolute:=False), ":")(1) & i)
                         GlobalScreenShotFlag(i, j) = account_flag
 
-                    ElseIf outputsAccountsList.Contains(CStr(GlobalScreenShot(i, j))) _
-                    AndAlso Not AccountsAddressValuesDictionary.ContainsValue(CStr(GlobalScreenShot(i, j))) Then
+                    ElseIf outputsAccountsList.Contains(currentValue) _
+                    AndAlso AccountsAddressValuesDictionary.ContainsValue(currentValue) = False Then
 
                         OutputsAccountsAddressvaluesDictionary.Add(Split(WS.Columns(j).Address(ColumnAbsolute:=False), ":")(1) & i, _
-                                                                   CStr(GlobalScreenShot(i, j)))
-                        OutputsValuesAddressDict.Add(CStr(GlobalScreenShot(i, j)), Split(WS.Columns(j).Address(ColumnAbsolute:=False), ":")(1) & i)
+                                                                   currentValue)
+                        OutputsValuesAddressDict.Add(currentValue, Split(WS.Columns(j).Address(ColumnAbsolute:=False), ":")(1) & i)
                         GlobalScreenShotFlag(i, j) = account_flag
 
                         '         ElseIf AccountSearchAlgo(GlobalScreenShot(i, j)) = True Then           'Repeated procedure but faster...

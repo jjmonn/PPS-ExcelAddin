@@ -75,7 +75,7 @@ Friend Class NewEntityUI
 
     Private Sub NewEntityUI_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 
-        VTreeViewUtil.LoadParentEntitiesTreeviewBox(ParentEntityTreeViewBox, entitiesTV)
+        VTreeViewUtil.LoadParentsTreeviewBox(ParentEntityTreeViewBox, entitiesTV)
 
     End Sub
 

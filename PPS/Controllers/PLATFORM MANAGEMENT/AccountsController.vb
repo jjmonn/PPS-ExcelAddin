@@ -70,9 +70,9 @@ Friend Class AccountsController
     Private Sub InstanceVariablesLoading()
 
         accountsNameKeysDictionary = GlobalVariables.Accounts.GetAccountsDictionary(NAME_VARIABLE, ID_VARIABLE)
-        NewAccountView = New NewAccountUI(View, Me, AccountsTV)
+        NewAccountView = New NewAccountUI(View, Me)
         FormulasTranslator = New FormulasTranslations(accountsNameKeysDictionary)
-
+    
     End Sub
 
     Public Sub addControlToPanel(ByRef dest_panel As Panel, _
@@ -129,7 +129,6 @@ Friend Class AccountsController
         TempHT.Add(ACCOUNT_TAB_VARIABLE, account_tab)
 
         GlobalVariables.Accounts.CMSG_CREATE_ACCOUNT(TempHT)
-        View.LaunchCP()
 
     End Sub
 
@@ -141,14 +140,14 @@ Friend Class AccountsController
 
     End Sub
 
-    Friend Sub UpdateAccount(ByRef id As String, ByRef account_attributes As Hashtable)
+    Friend Sub UpdateAccount(ByRef id As Int32, ByRef account_attributes As Hashtable)
 
-        Dim ht As Hashtable = GlobalVariables.Accounts.accounts_hash(id).clone
-        For Each attribute As String In account_attributes
+        Dim ht As Hashtable = GlobalVariables.Accounts.accounts_hash(id).Clone
+        For Each attribute As String In account_attributes.Keys
             ht(attribute) = account_attributes(attribute)
         Next
         GlobalVariables.Accounts.CMSG_UPDATE_ACCOUNT(ht)
-        View.LaunchCP()
+
 
     End Sub
 
@@ -381,7 +380,6 @@ Friend Class AccountsController
 
     Private Sub AccountCreateConfirmation(ByRef status As Boolean, ByRef id As Int32)
 
-        View.CircularProgressStop()
         If status = False Then
             MsgBox("The account could not be created." & Chr(13) & _
                    "Error " & "")
@@ -409,14 +407,12 @@ Friend Class AccountsController
     Friend Sub DisplayAcountsView()
 
         NewAccountView.Hide()
-        View.Show()
 
     End Sub
 
     Friend Sub DisplayNewAccountView(ByRef parent_node As TreeNode)
 
-        View.Hide()
-        NewAccountView.PrePopulateForm(parent_node)
+        NewAccountView.parentNodeId = parent_node.Name
         NewAccountView.Show()
 
     End Sub

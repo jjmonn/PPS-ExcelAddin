@@ -109,20 +109,26 @@ Friend Class SubmissionWSController
                              ByRef value As Double)
 
         Dim entityAddress, accountAddress, periodAddress As String
-        Try
+        If DataSet.EntitiesValuesAddressDict.ContainsKey(entity) Then
             entityAddress = DataSet.EntitiesValuesAddressDict(entity)
+        Else
+            Exit Sub
+        End If
+        If DataSet.periodsValuesAddressDict.ContainsKey(period) Then
             periodAddress = DataSet.periodsValuesAddressDict(period)
-            If DataSet.AccountsValuesAddressDict.ContainsKey(account) Then
-                accountAddress = DataSet.AccountsValuesAddressDict(account)
-            Else
-                accountAddress = DataSet.OutputsValuesAddressDict(account)
-            End If
-            DataSet.UpdateExcelCell(entityAddress, accountAddress, periodAddress, value, True)
-        Catch ex As Exception
-            System.Diagnostics.Debug.WriteLine("Update Excel Worksheet for outputs raised an error: a name was not found in dataset values address dictionary.")
-        End Try
-        '  PPS Error tracking priority normal
+        Else
+            Exit Sub
+        End If
 
+        If DataSet.AccountsValuesAddressDict.ContainsKey(account) Then
+            accountAddress = DataSet.AccountsValuesAddressDict(account)
+        ElseIf DataSet.OutputsValuesAddressDict.ContainsKey(account) Then
+            accountAddress = DataSet.OutputsValuesAddressDict(account)
+        Else
+            Exit Sub
+        End If
+        DataSet.UpdateExcelCell(entityAddress, accountAddress, periodAddress, value, True)
+   
     End Sub
 
     Friend Sub updateInputsOnWS()
