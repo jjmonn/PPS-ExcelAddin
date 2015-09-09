@@ -152,6 +152,10 @@ Friend Class Computer
 
         If packet.ReadInt32() = 0 Then
             Dim request_id As Int32 = packet.GetRequestId()
+            If requestIdVersionIdDict.ContainsKey(request_id) = False Then
+                MsgBox("The server returned an unregistered compute request id.")
+                Exit Sub
+            End If
             versionId = requestIdVersionIdDict(request_id)
             requestIdVersionIdDict.Remove(request_id)
 
