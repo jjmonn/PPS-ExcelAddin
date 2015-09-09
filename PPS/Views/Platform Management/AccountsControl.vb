@@ -31,8 +31,7 @@ Friend Class AccountsControl
 
     ' Objects
     Friend Controller As AccountsController
-    Private CP As CircularProgressUI
-    Friend AccountsTV As TreeView
+     Friend AccountsTV As TreeView
     Friend current_node As TreeNode
 
     ' Variables
@@ -197,31 +196,7 @@ Friend Class AccountsControl
 
 #Region "Interface"
 
-    Delegate Sub LaunchCP_Delegate()
-    Friend Sub LaunchCP()
-
-        If InvokeRequired Then
-            Dim MyDelegate As New LaunchCP_Delegate(AddressOf LaunchCP)
-            Me.Invoke(MyDelegate, New Object() {})
-        Else
-            CP = New CircularProgressUI(Drawing.Color.Blue, "Saving")
-            CP.Show()
-        End If
-
-    End Sub
-
-    Delegate Sub CircularProgressStop_Delegate()
-    Friend Sub CircularProgressStop()
-
-        If InvokeRequired Then
-            Dim MyDelegate As New CircularProgressStop_Delegate(AddressOf CircularProgressStop)
-            Me.Invoke(MyDelegate, New Object() {})
-        Else
-            CP.Dispose()
-        End If
-
-    End Sub
-
+    
     Delegate Sub TVUpdate_Delegate(ByRef account_id As Int32, _
                                    ByRef account_parent_id As Int32, _
                                    ByRef account_name As String, _
@@ -466,7 +441,7 @@ SubmitFormula:
     Private Sub AccountsTV_ItemDrag(sender As Object, e As ItemDragEventArgs)
 
         DoDragDrop(e.Item, Windows.Forms.DragDropEffects.Move)
-        drag_and_drop = True
+
 
     End Sub
 
@@ -474,6 +449,7 @@ SubmitFormula:
 
         If e.Data.GetDataPresent("System.Windows.Forms.TreeNode", True) Then
             e.Effect = DragDropEffects.Move
+            drag_and_drop = True
         Else
             e.Effect = DragDropEffects.None
         End If
@@ -687,7 +663,7 @@ SubmitFormula:
 
     End Sub
 
-    Private Sub formulaTypeCB_SelectedValueChanged(sender As Object, e As EventArgs)
+    Private Sub formulaTypeCB_SelectedValueChanged(sender As Object, e As EventArgs) Handles FormulaTypeComboBox.SelectedItemChanged
 
         Dim li = FormulaTypeComboBox.SelectedItem
         If Not IsNothing(current_node) _
@@ -723,6 +699,7 @@ SubmitFormula:
             CurrencyConversionComboBox.Enabled = True
             ConsolidationOptionComboBox.Enabled = True
         End If
+        Exit Sub
 
 UdpateFormulaType:
         Controller.UpdateAccount(current_node.Name, ACCOUNT_FORMULA_TYPE_VARIABLE, li.Value)
@@ -798,13 +775,18 @@ UdpateFormulaType:
             Dim formatLI = formatsIdItemDict(Controller.ReadAccount(account_id, ACCOUNT_TYPE_VARIABLE))
             FormatComboBox.SelectedItem = formatLI
 
-            ' Currency Conversion
-            Dim conversionLI = currenciesConversionIdItemDict(Controller.ReadAccount(account_id, ACCOUNT_CONVERSION_OPTION_VARIABLE))
-            CurrencyConversionComboBox.SelectedItem = conversionLI
+            If formatLI.Value = GlobalEnums.AccountFormat.MONETARY Then
 
-            ' Consolidation Option
-            Dim consolidationLI = consoOptionIdItemDict(Controller.ReadAccount(account_id, ACCOUNT_CONSOLIDATION_OPTION_VARIABLE))
-            ConsolidationOptionComboBox.SelectedItem = consolidationLI
+                ' Currency Conversion
+                Dim conversionLI = currenciesConversionIdItemDict(Controller.ReadAccount(account_id, ACCOUNT_CONVERSION_OPTION_VARIABLE))
+                CurrencyConversionComboBox.SelectedItem = conversionLI
+
+                ' Consolidation Option
+                Dim consolidationLI = consoOptionIdItemDict(Controller.ReadAccount(account_id, ACCOUNT_CONSOLIDATION_OPTION_VARIABLE))
+                ConsolidationOptionComboBox.SelectedItem = consolidationLI
+
+            End If
+
 
             ' Formula TB
             If Controller.FTypesToBeTested.Contains(Controller.ReadAccount(account_id, ACCOUNT_FORMULA_TYPE_VARIABLE)) Then
@@ -832,4 +814,5 @@ UdpateFormulaType:
 #End Region
 
 
+  
 End Class

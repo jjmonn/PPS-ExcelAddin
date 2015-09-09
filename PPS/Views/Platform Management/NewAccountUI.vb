@@ -12,7 +12,7 @@
 '       - 
 '
 '
-' Last modified: 02/09/2015
+' Last modified: 09/09/2015
 ' Author: Julien Monnereau
 
 
@@ -29,10 +29,11 @@ Friend Class NewAccountUI
     ' Objects
     Private AccountsView As AccountsControl
     Private Controller As AccountsController
-    Private accountsTV As New TreeView
+    Private ParentAccountsTreeviewBox As VIBlend.WinForms.Controls.vTreeViewBox
 
     ' Variables
     Private isFormExpanded As Boolean
+    Friend parentNodeId As Int32
 
     ' Constants
     Private Const COLLAPSED_WIDTH As Int32 = 720
@@ -47,8 +48,7 @@ Friend Class NewAccountUI
 #Region "Initialize"
 
     Friend Sub New(ByRef input_accountsView As AccountsControl, _
-                   ByRef input_controller As AccountsController, _
-                   ByRef p_accountsTV As TreeView)
+                   ByRef input_controller As AccountsController)
 
         ' This call is required by the designer.
         InitializeComponent()
@@ -56,7 +56,6 @@ Friend Class NewAccountUI
         ' Add any initialization after the InitializeComponent() call.
         AccountsView = input_accountsView
         Controller = input_controller
-        accountsTV = p_accountsTV
         ComboBoxesInitialize()
 
     End Sub
@@ -64,48 +63,36 @@ Friend Class NewAccountUI
     Private Sub ComboBoxesInitialize()
 
         For Each item In AccountsView.FormatComboBox.Items
-            TypeCB.Items.Add(item)
+            TypeComboBox.Items.Add(item)
         Next
 
         For Each item In AccountsView.FormulaTypeComboBox.Items
-            formulaCB.Items.Add(item)
+            FormulaComboBox.Items.Add(item)
         Next
 
 
     End Sub
 
-    Private Sub NewEntityUI_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+    Private Sub NewAccountUI_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 
-        VTreeViewUtil.LoadParentEntitiesTreeviewBox(ParentAccountTreeComboBox, accountsTV)
-
-    End Sub
-
-#End Region
-
-
-#Region "Interface"
-
-    Friend Sub PrePopulateForm(ByRef inputNode As TreeNode)
-
-        Dim parentNode As VIBlend.WinForms.Controls.vTreeNode = VTreeViewUtil.FindNode(ParentAccountTreeComboBox.TreeView, inputNode.Name)
+        ParentAccountsTreeviewBox = New VIBlend.WinForms.Controls.vTreeViewBox
+        ParentTVPanel.Controls.Add(ParentAccountsTreeviewBox)
+        ParentAccountsTreeviewBox.Dock = DockStyle.Fill
+        GlobalVariables.Accounts.LoadAccountsTV(ParentAccountsTreeviewBox.TreeView)
+        '   VTreeViewUtil.LoadParentsTreeviewBox(ParentAccountsTreeviewBox, accountsTV)
+        On Error Resume Next
+        Dim parentNode = VTreeViewUtil.FindNode(ParentAccountsTreeviewBox.TreeView, parentNodeId)
         If Not parentNode Is Nothing Then
-            ParentAccountTreeComboBox.TreeView.SelectedNode = parentNode
+            ParentAccountsTreeviewBox.TreeView.SelectedNode = parentNode
         End If
-        'Dim parentFormatCode = Controller.ReadAccount(parent_node.Name, ACCOUNT_FORMAT_VARIABLE)
-        'formatCB.SelectedItem = AccountsView.formatKeyNameDictionary(parentFormatCode)
-        'typeCB.SelectedItem = AccountsView.accountsTypesKeyNameDict(DEFAULT_ACCOUNT_TYPE_VALUE)
-        'Dim parentFType = Controller.ReadAccount(parent_node.Name, ACCOUNT_FORMULA_TYPE_VARIABLE)
-        'formulaCB.SelectedItem = AccountsView.fTypeCodeNameDictionary(parentFType)
 
     End Sub
-
 
 #End Region
 
 
 #Region "Call backs"
 
-  
     Private Sub CreateAccountBT_Click(sender As Object, e As EventArgs) Handles CreateAccountBT.Click
 
         If IsFormValid() = True Then
@@ -114,12 +101,12 @@ Friend Class NewAccountUI
             Dim conversion_option As Int32 = 0
             Dim account_tab As Int32
 
-            If Not ParentAccountTreeComboBox.TreeView.SelectedNode Is Nothing Then
-                parent_id = CInt(ParentAccountTreeComboBox.TreeView.SelectedNode.Value)
+            If Not ParentAccountsTreeviewBox.TreeView.SelectedNode Is Nothing Then
+                parent_id = CInt(ParentAccountsTreeviewBox.TreeView.SelectedNode.Value)
                 account_tab = GlobalVariables.Accounts.accounts_hash(parent_id)(ACCOUNT_TAB_VARIABLE)
             Else
                 parent_id = 0
-                account_tab = accountsTV.Nodes.Count
+                account_tab = ParentAccountsTreeviewBox.TreeView.Nodes.Count
             End If
             If aggregation_RB.Checked = True Then conso_option = GlobalEnums.ConsolidationOptions.AGGREGATION
             If recompute_RB.Checked = True Then conso_option = GlobalEnums.ConsolidationOptions.RECOMPUTATION
@@ -127,16 +114,16 @@ Friend Class NewAccountUI
             If bs_item_RB.Checked = True Then conversion_option = GlobalEnums.ConversionOptions.END_OF_PERIOD_RATE
 
             Controller.CreateAccount(parent_id, _
-                                     nameTB.Text, _
-                                     formulaCB.SelectedItem.value, _
+                                     NameTextBox.Text, _
+                                     FormulaComboBox.SelectedItem.Value, _
                                      "", _
-                                     TypeCB.SelectedItem.value, _
+                                     TypeComboBox.SelectedItem.Value, _
                                      conso_option, _
                                      conversion_option, _
                                      "n", _
-                                     formulaCB.SelectedItem.value, _
+                                     FormulaComboBox.SelectedItem.Value, _
                                      1, _
-                                     account_tab)   
+                                     account_tab)
             Controller.DisplayAcountsView()
         End If
 
@@ -155,7 +142,7 @@ Friend Class NewAccountUI
 
     Private Function IsFormValid() As Boolean
 
-        If Controller.AccountNameCheck(nameTB.Text) = False Then
+        If Controller.AccountNameCheck(NameTextBox.Text) = False Then
             MsgBox("The Account Name must not be empty.")
             Return False
         End If
@@ -171,8 +158,8 @@ Friend Class NewAccountUI
 
     Private Function ComboBoxesSelectionCheck() As Boolean
 
-        If TypeCB.SelectedItem Is Nothing Then Return False
-        If formulaCB.SelectedItem Is Nothing Then Return False
+        If TypeComboBox.SelectedItem Is Nothing Then Return False
+        If FormulaComboBox.SelectedItem Is Nothing Then Return False
         Return True
 
     End Function
