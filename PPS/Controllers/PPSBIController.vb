@@ -241,8 +241,8 @@ ReturnError:
 
     Private Function CheckDate(ByRef p_period_str As Object) As Boolean
 
+        ' must be able to read strings or integer !! 
         On Error GoTo ReturnError
-        Dim periodAsInt As Int32 = ReturnValueFromRange(p_period_str)
         Dim periodsList() As Int32 = GlobalVariables.Versions.GetPeriodsList(version_id)
         Dim periodIdentifyer As Char
         Select Case GlobalVariables.Versions.versions_hash(version_id)(VERSIONS_TIME_CONFIG_VARIABLE)
@@ -251,13 +251,27 @@ ReturnError:
             Case GlobalEnums.TimeConfig.MONTHS
                 periodIdentifyer = Computer.MONTH_PERIOD_IDENTIFIER
         End Select
+        Dim periodObject = ReturnValueFromRange(p_period_str)
+
+        If TypeOf (periodObject) Is Int32 Then
+            GoTo PeriodIntegerIdentification
+        Else If TypeOf (periodObject) Is String Then
+                periodObject = CDate(periodObject).ToOADate()
+                GoTo PeriodIntegerIdentification
+        ElseIf TypeOf (periodObject) Is Date Then
+            periodObject = periodObject.ToOADate()
+            GoTo PeriodIntegerIdentification
+        End If
+
+PeriodIntegerIdentification:
         For Each p In periodsList
-            If p = periodAsInt Then
-                periodToken = periodIdentifyer & periodAsInt
+            If p = periodObject Then
+                periodToken = periodIdentifyer & periodObject
                 Return True
             End If
         Next
         GoTo ReturnError
+
 
 ReturnError:
         error_message = "Invalid Period or Period format"
