@@ -41,6 +41,9 @@ Friend Class PPSBI_UI
         ProductsTreeviewBox.TreeView.EnableMultipleSelection = True
         AdjustmentsTreeviewBox.TreeView.EnableMultipleSelection = True
 
+
+        Dim fSep As Char = System.Globalization.CultureInfo.CurrentCulture.TextInfo.ListSeparator
+
     End Sub
 
     Private Sub LoadTreeviews()

@@ -75,20 +75,23 @@ Friend Class Period
         periodsList.Add(startPeriod)
 
         Dim monthList() As UInt16 = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31}
-        Dim year As Double = CDbl(startPeriod) / 365.25 + 1900
-        Dim Month As UInt16 = year - Math.Truncate(year) + 1
+        'Dim year As Double = CDbl(startPeriod) / 365.25 + 1900
+        'Dim Month As UInt16 = year - Math.Truncate(year) + 1
+
+        Dim currentYear As Double = Year(Date.FromOADate(startPeriod))
+        Dim currentMonth As UInt16 = Month(Date.FromOADate(startPeriod))
 
         For i As UInt16 = 1 To nbPeriod - 1
-            startPeriod += monthList(Month Mod (12))
-            If (Month = 1 AndAlso DateTime.IsLeapYear(year)) Then    ' february of a leap year
+            startPeriod += monthList(currentMonth Mod (12))
+            If (currentMonth = 1 AndAlso DateTime.IsLeapYear(currentYear)) Then    ' february of a leap year
                 startPeriod += 1
             End If
             periodsList.Add(startPeriod)
-            If (Month = 12) Then
-                year += 1
-                Month = 0
+            If (currentMonth = 12) Then
+                currentYear += 1
+                currentMonth = 0
             End If
-            Month += 1
+            currentMonth += 1
         Next
 
         Return periodsList.ToArray
