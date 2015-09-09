@@ -12,7 +12,8 @@ public class ByteBuffer : MemoryStream
 
     public ByteBuffer(ushort p_opcode)
     {
-        this.WriteUint32(0);
+        this.WriteUint32(0); // size placeholder
+        this.WriteUint32(0); // special id (for minions)
         this.WriteUint16(p_opcode);
     }
 
