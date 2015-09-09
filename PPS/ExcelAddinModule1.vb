@@ -87,15 +87,15 @@ Public Class ExcelAddinModule1
 
 #End Region
 
-    Public Function PPSBI(ByRef entity As Object, _
-                        ByRef account As Object, _
-                        ByRef period As Object, _
-                        ByRef currency As Object, _
-                        ByRef version As Object, _
-                        ByRef clients_filters As Object, _
-                        ByRef products_filters As Object, _
-                        ByRef adjustments_filters As Object, _
-                        ByRef filters As Object) As Object
+    Public Function PPSBI(ByRef Entity As Object, _
+                        ByRef Account As Object, _
+                        ByRef Period As Object, _
+                        ByRef Currency As Object, _
+                        ByRef Version As Object, _
+                        ByRef Clients_Filters As Object, _
+                        ByRef Products_Filters As Object, _
+                        ByRef Adjustments_Filters As Object, _
+                        ByRef Categories_Filters As Object) As Object
 
         If GlobalVariables.APPS.COMAddIns.Item("PPS.AddinModule").Object.ppsbi_refresh_flag = True Then
             If setUpFlag = False Then
@@ -108,15 +108,15 @@ Public Class ExcelAddinModule1
             If GlobalVariables.AuthenticationFlag = False Then
                 Return "Not connected"
             End If
-            Return GlobalVariables.GlobalPPSBIController.GetDataCallBack(entity, _
-                                                                       account, _
-                                                                       period, _
-                                                                       currency,
-                                                                       version, _
-                                                                       clients_filters, _
-                                                                       products_filters, _
-                                                                       adjustments_filters, _
-                                                                       filters)
+            Return GlobalVariables.GlobalPPSBIController.GetDataCallBack(Entity, _
+                                                                       Account, _
+                                                                       Period, _
+                                                                       Currency,
+                                                                       Version, _
+                                                                       Clients_Filters, _
+                                                                       Products_Filters, _
+                                                                       Adjustments_Filters, _
+                                                                       Categories_Filters)
         End If
         Return "Not connected"
 

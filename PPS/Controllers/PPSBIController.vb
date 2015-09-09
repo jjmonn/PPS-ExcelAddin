@@ -13,7 +13,7 @@
 '      
 '
 ' Author: Julien Monnereau
-' Last modified: 08/09/2015
+' Last modified: 09/09/2015
 '
 
 
@@ -93,21 +93,23 @@ Friend Class PPSBIController
         If CheckVersion(p_version_str) = False Then Return error_message
         If CheckDate(p_period_str) = False Then Return error_message
 
-        ' STUB !!! filters priority high !!
+        ' Filters Building
         Dim filters = New Dictionary(Of Int32, List(Of Int32))
-       
+        BuildFilters(p_filtersArray, filters)
+        Dim filtersToken As String = "0"
+
         ' Axis Filters building
         Dim axis_filters = New Dictionary(Of Int32, List(Of Int32))()
         BuildAxisFilter(p_clients_filters, GlobalVariables.Clients, GlobalEnums.AnalysisAxis.CLIENTS, axis_filters)
         BuildAxisFilter(p_products_filters, GlobalVariables.Products, GlobalEnums.AnalysisAxis.PRODUCTS, axis_filters)
         BuildAxisFilter(p_adjustments_filters, GlobalVariables.Adjustments, GlobalEnums.AnalysisAxis.ADJUSTMENTS, axis_filters)
 
-
+        ' -> filter token to be created !!!
         Dim token As String = version_id & Computer.TOKEN_SEPARATOR & _
-                                "0" & Computer.TOKEN_SEPARATOR & _
-                                entity_id & Computer.TOKEN_SEPARATOR & _
-                                account_id & Computer.TOKEN_SEPARATOR & _
-                                periodToken
+                              filtersToken & Computer.TOKEN_SEPARATOR & _
+                              entity_id & Computer.TOKEN_SEPARATOR & _
+                              account_id & Computer.TOKEN_SEPARATOR & _
+                              periodToken
 
         ' Check Cache and Compute if necessary
         If mustUpdateFlag = False _
@@ -127,7 +129,7 @@ ReturnData:
         If Computer.GetData.ContainsKey(token) Then
             Return Computer.GetData(token)
         Else
-            Return "Unable to Compute"
+            Return 0
         End If
 
     End Function
@@ -281,6 +283,27 @@ ReturnError:
 
 #Region "Filters Dictionaries Building"
 
+    Private Sub BuildFilters(ByRef p_filters_object As Object, _
+                             ByRef filters As Dictionary(Of Int32, List(Of Int32)))
+
+        Dim filterValueId As Int32
+        Dim filterId As Int32
+        For Each filterObject In p_filters_object
+            Dim filterValueName As String = ReturnValueFromRange(filterObject)
+            If Not filterValueName Is Nothing Then
+                filterValueId = GlobalVariables.FiltersValues.GetFilterValueId(filterValueName)
+                If Not filterValueId = 0 Then
+                    filterId = GlobalVariables.FiltersValues.filtervalues_hash(filterValueId)(FILTER_ID_VARIABLE)
+                    If filters.ContainsKey(filterId) = False Then
+                        filters.Add(filterId, New List(Of Int32))
+                    End If
+                    filters(filterId).Add(filterValueId)
+                End If
+            End If
+        Next
+
+    End Sub
+
     Private Sub BuildAxisFilter(ByRef p_axis_filters_object As Object, _
                                 ByRef CRUDModel As SuperAxisCRUD, _
                                 ByRef axisId As Int32, _
@@ -299,7 +322,6 @@ ReturnError:
         If axisFiltersList.Count > 0 Then axis_filters.Add(axisId, axisFiltersList)
 
     End Sub
-
 
 #End Region
 
