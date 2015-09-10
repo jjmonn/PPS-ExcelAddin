@@ -327,8 +327,6 @@ SubmitFormula:
             If Controller.accountsNameKeysDictionary.ContainsKey(Name_TB.Text) Then
                 formulaEdit.Checked = False
                 Dim accountId As Int32 = Controller.accountsNameKeysDictionary.Item(Name_TB.Text)
-                MsgBox("check only authorized formulas edition => account control -> submit_formula !!")
-                ' only if authorized => "F" or "FPI" formula type priotity high
                 Controller.UpdateAccount(accountId, ACCOUNT_FORMULA_VARIABLE, Controller.GetCurrentParsedFormula)
             End If
         End If

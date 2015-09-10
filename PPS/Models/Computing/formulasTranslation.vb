@@ -59,7 +59,7 @@ Friend Class FormulasTranslations
     Private accRegexStr As String = "([^\[" & regexOperatorsStr & "][\w\s]+)\[?[^\]" & regexOperatorsStr & "]"  ' & OPERATORS & "\w]"
     Private accountsHumanToDBRegex As Regex = New Regex(accRegexStr, RegexOptions.IgnoreCase)
 
-    Private accGuillemetStr As String = Chr(34) & "([\w\s\(\)']+)" & Chr(34) & "\[?"  'ACCOUNTS_HUMAN_IDENTIFIYER & "([\w\s]+)" & ACCOUNTS_HUMAN_IDENTIFIYER & "\[?"
+    Private accGuillemetStr As String = Chr(34) & "([\w\s\(\)'’]+)" & Chr(34) & "\[?"  'ACCOUNTS_HUMAN_IDENTIFIYER & "([\w\s]+)" & ACCOUNTS_HUMAN_IDENTIFIYER & "\[?"
     Private guillemetsHumanToDBRegex As Regex = New Regex(accGuillemetStr, RegexOptions.IgnoreCase)
 
     ' Periods Regex
