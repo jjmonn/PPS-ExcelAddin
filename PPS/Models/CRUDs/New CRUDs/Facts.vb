@@ -61,15 +61,20 @@ Public Class Facts
             Dim requestId As UInt32 = packet.GetRequestId()
             Dim resultsDict As New Dictionary(Of String, Boolean)
             packet.ReadUint32()
-            For Each cell_address As String In requestIdFactsCommitDict(requestId)
-                packet.ReadUint32()
-                If packet.ReadBool() = True Then
-                    resultsDict.Add(cell_address, True)
-                Else
-                    resultsDict.Add(cell_address, False)
-                    packet.ReadUint8() ' catch error message ! priority normal
-                End If
-            Next
+            If requestIdFactsCommitDict.ContainsKey(requestId) Then
+                For Each cell_address As String In requestIdFactsCommitDict(requestId)
+                    packet.ReadUint32()
+                    If packet.ReadBool() = True Then
+                        resultsDict.Add(cell_address, True)
+                    Else
+                        resultsDict.Add(cell_address, False)
+                        packet.ReadUint8() ' catch error message ! priority normal
+                    End If
+                Next
+                requestIdFactsCommitDict.Remove(requestId)
+            Else
+                System.Diagnostics.Debug.WriteLine("FACTS UDPATE LIST request id not in dictionary")
+            End If
             RaiseEvent AfterUpdate(True, resultsDict)
         Else
             RaiseEvent AfterUpdate(False, Nothing)
