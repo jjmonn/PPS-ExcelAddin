@@ -140,14 +140,14 @@ public class NetworkManager
 
   public ByteBuffer Receive()
   {
-    byte[] l_buffer = new byte[15];
+    byte[] l_buffer = new byte[19];
     ByteBuffer l_byteBuffer;
     ByteBuffer.Header l_header;
     int l_size;
     int l_byteReaded = 0;
 
-    l_size = m_StreamSSL.Read(l_buffer, 0, 15);
-    if (l_size < 15)
+    l_size = m_StreamSSL.Read(l_buffer, 0, 19);
+    if (l_size < 19)
     {
       System.Diagnostics.Debug.WriteLine("Invalid packet received");
       return (null);

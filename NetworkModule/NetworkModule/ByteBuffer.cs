@@ -13,6 +13,7 @@ public class ByteBuffer : MemoryStream
     public Int32 realPayloadSize;
     public UInt32 specialId;
     public bool isCompressed;
+    public UInt32 error;
     public UInt16 opcode;
   }
 
@@ -24,6 +25,7 @@ public class ByteBuffer : MemoryStream
   public ByteBuffer(ushort p_opcode)
   {
     m_header.opcode = p_opcode;
+    m_header.error = 0;
     m_header.isCompressed = false;
     WriteHeader();
     m_sizeHeader = Length;
@@ -76,6 +78,7 @@ public class ByteBuffer : MemoryStream
     WriteInt32(m_header.realPayloadSize);
     WriteUint32(m_header.specialId);
     WriteBool(m_header.isCompressed);
+    WriteUint32(m_header.error);
     WriteUint16(m_header.opcode);
   }
 
