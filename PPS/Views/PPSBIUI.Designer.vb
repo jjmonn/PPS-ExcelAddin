@@ -28,6 +28,8 @@ Partial Class PPSBI_UI
         Me.validate_cmd = New System.Windows.Forms.Button()
         Me.categoriesIL = New System.Windows.Forms.ImageList(Me.components)
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
+        Me.AdjustmentsTreeviewBox = New VIBlend.WinForms.Controls.vTreeViewBox()
+        Me.ProductsTreeviewBox = New VIBlend.WinForms.Controls.vTreeViewBox()
         Me.CategoriesFiltersTreebox = New VIBlend.WinForms.Controls.vTreeViewBox()
         Me.VLabel9 = New VIBlend.WinForms.Controls.vLabel()
         Me.CurrenciesComboBox = New VIBlend.WinForms.Controls.vComboBox()
@@ -44,8 +46,7 @@ Partial Class PPSBI_UI
         Me.AccountTreeBox = New VIBlend.WinForms.Controls.vTreeViewBox()
         Me.VersionTreeBox = New VIBlend.WinForms.Controls.vTreeViewBox()
         Me.ClientsTreeviewBox = New VIBlend.WinForms.Controls.vTreeViewBox()
-        Me.ProductsTreeviewBox = New VIBlend.WinForms.Controls.vTreeViewBox()
-        Me.AdjustmentsTreeviewBox = New VIBlend.WinForms.Controls.vTreeViewBox()
+        Me.VersionsTVIcons = New System.Windows.Forms.ImageList(Me.components)
         Me.TableLayoutPanel1.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -116,6 +117,40 @@ Partial Class PPSBI_UI
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35.0!))
         Me.TableLayoutPanel1.Size = New System.Drawing.Size(459, 314)
         Me.TableLayoutPanel1.TabIndex = 39
+        '
+        'AdjustmentsTreeviewBox
+        '
+        Me.AdjustmentsTreeviewBox.BackColor = System.Drawing.Color.White
+        Me.AdjustmentsTreeviewBox.BorderColor = System.Drawing.Color.Black
+        Me.AdjustmentsTreeviewBox.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.AdjustmentsTreeviewBox.DropDownMaximumSize = New System.Drawing.Size(1000, 1000)
+        Me.AdjustmentsTreeviewBox.DropDownMinimumSize = New System.Drawing.Size(10, 10)
+        Me.AdjustmentsTreeviewBox.DropDownResizeDirection = VIBlend.WinForms.Controls.SizingDirection.Both
+        Me.AdjustmentsTreeviewBox.Location = New System.Drawing.Point(142, 248)
+        Me.AdjustmentsTreeviewBox.Name = "AdjustmentsTreeviewBox"
+        Me.AdjustmentsTreeviewBox.Size = New System.Drawing.Size(314, 29)
+        Me.AdjustmentsTreeviewBox.TabIndex = 8
+        Me.AdjustmentsTreeviewBox.Text = " "
+        Me.AdjustmentsTreeviewBox.UseThemeBackColor = False
+        Me.AdjustmentsTreeviewBox.UseThemeDropDownArrowColor = True
+        Me.AdjustmentsTreeviewBox.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
+        '
+        'ProductsTreeviewBox
+        '
+        Me.ProductsTreeviewBox.BackColor = System.Drawing.Color.White
+        Me.ProductsTreeviewBox.BorderColor = System.Drawing.Color.Black
+        Me.ProductsTreeviewBox.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.ProductsTreeviewBox.DropDownMaximumSize = New System.Drawing.Size(1000, 1000)
+        Me.ProductsTreeviewBox.DropDownMinimumSize = New System.Drawing.Size(10, 10)
+        Me.ProductsTreeviewBox.DropDownResizeDirection = VIBlend.WinForms.Controls.SizingDirection.Both
+        Me.ProductsTreeviewBox.Location = New System.Drawing.Point(142, 213)
+        Me.ProductsTreeviewBox.Name = "ProductsTreeviewBox"
+        Me.ProductsTreeviewBox.Size = New System.Drawing.Size(314, 29)
+        Me.ProductsTreeviewBox.TabIndex = 7
+        Me.ProductsTreeviewBox.Text = " "
+        Me.ProductsTreeviewBox.UseThemeBackColor = False
+        Me.ProductsTreeviewBox.UseThemeDropDownArrowColor = True
+        Me.ProductsTreeviewBox.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
         '
         'CategoriesFiltersTreebox
         '
@@ -385,39 +420,12 @@ Partial Class PPSBI_UI
         Me.ClientsTreeviewBox.UseThemeDropDownArrowColor = True
         Me.ClientsTreeviewBox.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
         '
-        'ProductsTreeviewBox
+        'VersionsTVIcons
         '
-        Me.ProductsTreeviewBox.BackColor = System.Drawing.Color.White
-        Me.ProductsTreeviewBox.BorderColor = System.Drawing.Color.Black
-        Me.ProductsTreeviewBox.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.ProductsTreeviewBox.DropDownMaximumSize = New System.Drawing.Size(1000, 1000)
-        Me.ProductsTreeviewBox.DropDownMinimumSize = New System.Drawing.Size(10, 10)
-        Me.ProductsTreeviewBox.DropDownResizeDirection = VIBlend.WinForms.Controls.SizingDirection.Both
-        Me.ProductsTreeviewBox.Location = New System.Drawing.Point(142, 213)
-        Me.ProductsTreeviewBox.Name = "ProductsTreeviewBox"
-        Me.ProductsTreeviewBox.Size = New System.Drawing.Size(314, 29)
-        Me.ProductsTreeviewBox.TabIndex = 7
-        Me.ProductsTreeviewBox.Text = " "
-        Me.ProductsTreeviewBox.UseThemeBackColor = False
-        Me.ProductsTreeviewBox.UseThemeDropDownArrowColor = True
-        Me.ProductsTreeviewBox.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
-        '
-        'AdjustmentsTreeviewBox
-        '
-        Me.AdjustmentsTreeviewBox.BackColor = System.Drawing.Color.White
-        Me.AdjustmentsTreeviewBox.BorderColor = System.Drawing.Color.Black
-        Me.AdjustmentsTreeviewBox.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.AdjustmentsTreeviewBox.DropDownMaximumSize = New System.Drawing.Size(1000, 1000)
-        Me.AdjustmentsTreeviewBox.DropDownMinimumSize = New System.Drawing.Size(10, 10)
-        Me.AdjustmentsTreeviewBox.DropDownResizeDirection = VIBlend.WinForms.Controls.SizingDirection.Both
-        Me.AdjustmentsTreeviewBox.Location = New System.Drawing.Point(142, 248)
-        Me.AdjustmentsTreeviewBox.Name = "AdjustmentsTreeviewBox"
-        Me.AdjustmentsTreeviewBox.Size = New System.Drawing.Size(314, 29)
-        Me.AdjustmentsTreeviewBox.TabIndex = 8
-        Me.AdjustmentsTreeviewBox.Text = " "
-        Me.AdjustmentsTreeviewBox.UseThemeBackColor = False
-        Me.AdjustmentsTreeviewBox.UseThemeDropDownArrowColor = True
-        Me.AdjustmentsTreeviewBox.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
+        Me.VersionsTVIcons.ImageStream = CType(resources.GetObject("VersionsTVIcons.ImageStream"), System.Windows.Forms.ImageListStreamer)
+        Me.VersionsTVIcons.TransparentColor = System.Drawing.Color.Transparent
+        Me.VersionsTVIcons.Images.SetKeyName(0, "breakpoint.png")
+        Me.VersionsTVIcons.Images.SetKeyName(1, "favicon(81).ico")
         '
         'PPSBI_UI
         '
@@ -456,4 +464,5 @@ Partial Class PPSBI_UI
     Friend WithEvents AdjustmentsTreeviewBox As VIBlend.WinForms.Controls.vTreeViewBox
     Friend WithEvents ProductsTreeviewBox As VIBlend.WinForms.Controls.vTreeViewBox
     Friend WithEvents ClientsTreeviewBox As VIBlend.WinForms.Controls.vTreeViewBox
+    Friend WithEvents VersionsTVIcons As System.Windows.Forms.ImageList
 End Class

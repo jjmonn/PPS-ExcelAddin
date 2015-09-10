@@ -3,7 +3,7 @@
 ' User interface for the construction of PPSBI functions
 '
 ' 
-' Last modified: 09/09/2015 
+' Last modified: 10/09/2015 
 ' Author: Julien Monnereau
 
 
@@ -76,6 +76,8 @@ Friend Class PPSBI_UI
         VTreeViewUtil.InitTVFormat(ProductsTreeviewBox.TreeView)
         VTreeViewUtil.InitTVFormat(AdjustmentsTreeviewBox.TreeView)
 
+        VersionTreeBox.TreeView.ImageList = VersionsTVIcons
+
     End Sub
 
     Private Sub LoadAxisNodes(ByRef axisId As Int32, _
@@ -145,25 +147,25 @@ Friend Class PPSBI_UI
 
     Private Sub BuildFormula()
 
-        ' check before priority high 
+        If CheckFormValidity() = True Then
+            Dim periodStr As String = (Format(DateTime.FromOADate(PeriodTreeBox.TreeView.SelectedNode.Value), "Short date"))
+            Dim clientsFiltersStr As String = BuildStrFromTreeView(ClientsTreeviewBox.TreeView)
+            Dim productsFiltersStr As String = BuildStrFromTreeView(ProductsTreeviewBox.TreeView)
+            Dim adjustmentsFiltersStr As String = BuildStrFromTreeView(AdjustmentsTreeviewBox.TreeView)
+            Dim categoriesFiltersStr As String = BuildStrFromTreeView(CategoriesFiltersTreebox.TreeView)
 
-        Dim periodStr As String = (Format(DateTime.FromOADate(PeriodTreeBox.TreeView.SelectedNode.Value), "Short date"))
-        Dim clientsFiltersStr As String = BuildStrFromTreeView(ClientsTreeviewBox.TreeView)
-        Dim productsFiltersStr As String = BuildStrFromTreeView(ProductsTreeviewBox.TreeView)
-        Dim adjustmentsFiltersStr As String = BuildStrFromTreeView(AdjustmentsTreeviewBox.TreeView)
-        Dim categoriesFiltersStr As String = BuildStrFromTreeView(CategoriesFiltersTreebox.TreeView)
+            Dim strFormula = "=" + UDF_FORMULA_GET_DATA_NAME + "(" & Chr(34) & EntityTreeBox.TreeView.SelectedNode.Text & Chr(34) & "," _
+                                                                   & Chr(34) & AccountTreeBox.TreeView.SelectedNode.Text & Chr(34) & "," _
+                                                                   & Chr(34) & periodStr & Chr(34) & "," _
+                                                                   & Chr(34) & CurrenciesComboBox.SelectedItem.Text & Chr(34) & "," _
+                                                                   & Chr(34) & VersionTreeBox.TreeView.SelectedNode.Text & Chr(34) & "," _
+                                                                   & Chr(34) & clientsFiltersStr & Chr(34) & "," _
+                                                                   & Chr(34) & productsFiltersStr & Chr(34) & "," _
+                                                                   & Chr(34) & adjustmentsFiltersStr & Chr(34) & "," _
+                                                                   & Chr(34) & categoriesFiltersStr & Chr(34) & ")"
 
-        Dim strFormula = "=" + UDF_FORMULA_GET_DATA_NAME + "(" & Chr(34) & EntityTreeBox.TreeView.SelectedNode.Text & Chr(34) & "," _
-                                                               & Chr(34) & AccountTreeBox.TreeView.SelectedNode.Text & Chr(34) & "," _
-                                                               & Chr(34) & periodStr & Chr(34) & "," _
-                                                               & Chr(34) & CurrenciesComboBox.SelectedItem.Text & Chr(34) & "," _
-                                                               & Chr(34) & VersionTreeBox.TreeView.SelectedNode.Text & Chr(34) & "," _
-                                                               & Chr(34) & clientsFiltersStr & Chr(34) & "," _
-                                                               & Chr(34) & productsFiltersStr & Chr(34) & "," _
-                                                               & Chr(34) & adjustmentsFiltersStr & Chr(34) & "," _
-                                                               & Chr(34) & categoriesFiltersStr & Chr(34) & ")"
-
-        GlobalVariables.APPS.ActiveCell.Formula = strFormula
+            GlobalVariables.APPS.ActiveCell.Formula = strFormula
+        End If
 
     End Sub
 
@@ -194,6 +196,32 @@ Friend Class PPSBI_UI
 
 #Region "Checks"
 
+    Private Function CheckFormValidity() As Boolean
+
+        If EntityTreeBox.TreeView.SelectedNode Is Nothing Then
+            MsgBox("Please select an Entity.")
+            Return False
+        End If
+
+        If AccountTreeBox.TreeView.SelectedNode Is Nothing Then
+            MsgBox("Please select an Account.")
+            Return False
+        End If
+
+        If VersionTreeBox.TreeView.SelectedNode Is Nothing _
+         Or GlobalVariables.Versions.IsVersionValid(VersionTreeBox.TreeView.SelectedNode.Value) = False Then
+            MsgBox("Invalid Version (Folder) or no Version Selected.")
+            Return False
+        End If
+
+        If PeriodTreeBox.TreeView.SelectedNode Is Nothing Then
+            MsgBox("Please select a Period (A version must be selected in order to select the period).")
+            Return False
+        End If
+
+            Return True
+
+    End Function
 
 #End Region
 
@@ -215,5 +243,5 @@ Friend Class PPSBI_UI
 
 
 
-   
+
 End Class
