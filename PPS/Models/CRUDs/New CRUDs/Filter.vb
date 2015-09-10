@@ -52,7 +52,7 @@ Friend Class Filter
 
     Private Sub SMSG_LIST_FILTER_ANSWER(packet As ByteBuffer)
 
-        If packet.ReadInt32() = 0 Then
+        If packet.GetError() = 0 Then
             For i As Int32 = 1 To packet.ReadInt32()
                 Dim tmp_ht As New Hashtable
                 GetFilterHTFromPacket(packet, tmp_ht)
@@ -83,7 +83,7 @@ Friend Class Filter
 
     Private Sub SMSG_CREATE_FILTER_ANSWER(packet As ByteBuffer)
 
-        If packet.ReadInt32() = 0 Then
+        If packet.GetError() = 0 Then
             RaiseEvent CreationEvent(True, packet.ReadUint32())
         Else
             RaiseEvent CreationEvent(False, Nothing)
@@ -102,7 +102,7 @@ Friend Class Filter
 
     Private Sub SMSG_READ_FILTER_ANSWER(packet As ByteBuffer)
 
-        If packet.ReadInt32() = 0 Then
+        If packet.GetError() = 0 Then
             Dim ht As New Hashtable
             GetFilterHTFromPacket(packet, ht)
             filters_hash(CInt(ht(ID_VARIABLE))) = ht
@@ -125,7 +125,7 @@ Friend Class Filter
 
     Private Sub SMSG_UPDATE_FILTER_ANSWER(packet As ByteBuffer)
 
-        If packet.ReadInt32() = 0 Then
+        If packet.GetError() = 0 Then
             RaiseEvent UpdateEvent(True, packet.ReadUint32())
         Else
             RaiseEvent UpdateEvent(False, Nothing)
@@ -145,7 +145,7 @@ Friend Class Filter
 
     Private Sub SMSG_DELETE_FILTER_ANSWER(packet As ByteBuffer)
 
-        If packet.ReadInt32() = 0 Then
+        If packet.GetError() = 0 Then
             Dim id As UInt32 = packet.ReadInt32
             filters_hash.Remove(CInt(id))
             RaiseEvent DeleteEvent(True, id)

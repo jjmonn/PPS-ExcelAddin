@@ -47,7 +47,7 @@ Public Class RatesVersion
 
     Private Sub SMSG_LIST_rate_version_ANSWER(packet As ByteBuffer)
 
-        If packet.ReadInt32() = 0 Then
+        If packet.GetError() = 0 Then
             Dim nb_rate_versions = packet.ReadInt32()
             For i As Int32 = 1 To nb_rate_versions
                 Dim tmp_ht As New Hashtable
@@ -79,7 +79,7 @@ Public Class RatesVersion
 
     Private Sub SMSG_CREATE_RATE_VERSION_ANSWER(packet As ByteBuffer)
 
-        If packet.ReadInt32() = 0 Then
+        If packet.GetError() = 0 Then
             RaiseEvent CreationEvent(True, packet.ReadUint32())
         Else
             RaiseEvent CreationEvent(False, Nothing)
@@ -98,7 +98,7 @@ Public Class RatesVersion
 
     Private Sub SMSG_READ_RATE_VERSION_ANSWER(packet As ByteBuffer)
 
-        If packet.ReadInt32() = 0 Then
+        If packet.GetError() = 0 Then
             Dim ht As New Hashtable
             GetRateVersionHTFromPacket(packet, ht)
             rate_versions_hash(CInt(ht(ID_VARIABLE))) = ht
@@ -121,7 +121,7 @@ Public Class RatesVersion
 
     Private Sub SMSG_UPDATE_RATE_VERSION_ANSWER(packet As ByteBuffer)
 
-        If packet.ReadInt32() = 0 Then
+        If packet.GetError() = 0 Then
             RaiseEvent UpdateEvent(True, packet.ReadUint32())
         Else
             RaiseEvent UpdateEvent(False, Nothing)
@@ -141,7 +141,7 @@ Public Class RatesVersion
 
     Private Sub SMSG_DELETE_RATE_VERSION_ANSWER(packet As ByteBuffer)
 
-        If packet.ReadInt32() = 0 Then
+        If packet.GetError() = 0 Then
             Dim id As UInt32 = packet.ReadUint32
             rate_versions_hash.Remove(CInt(id))
             RaiseEvent DeleteEvent(True, id)

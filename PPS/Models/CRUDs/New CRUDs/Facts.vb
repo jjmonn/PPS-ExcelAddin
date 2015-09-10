@@ -57,7 +57,7 @@ Public Class Facts
 
     Private Sub SMSG_UPDATE_FACT_LIST_ANSWER(packet As ByteBuffer)
 
-        If packet.ReadInt32() = 0 Then
+        If packet.GetError() = 0 Then
             Dim requestId As UInt32 = packet.GetRequestId()
             Dim resultsDict As New Dictionary(Of String, Boolean)
             packet.ReadUint32()

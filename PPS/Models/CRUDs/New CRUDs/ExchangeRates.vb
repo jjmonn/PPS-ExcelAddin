@@ -63,7 +63,7 @@ Friend Class ExchangeRate
     ' ExchangeRates_hash: [currency#ratesVersion#period] => rateValue
     Private Sub SMSG_LIST_EXCHANGE_RATE_ANSWER(packet As ByteBuffer)
 
-        If packet.ReadInt32() = 0 Then
+        If packet.GetError() = 0 Then
             exchangeRatesDict.Clear()
             For i As Int32 = 1 To packet.ReadInt32()
                 Dim tmp_ht As New Hashtable
@@ -92,7 +92,7 @@ Friend Class ExchangeRate
 
     Friend Sub SMSG_READ_EXCHANGE_RATE_ANSWER(packet As ByteBuffer)
 
-        If packet.ReadInt32() = 0 Then
+        If packet.GetError() = 0 Then
             Dim ht As New Hashtable
             GetExchangeRateHTFromPacket(packet, ht)
             exchangeRatesDict(ht(EX_RATES_LOCAL_CURR_VAR) & Computer.TOKEN_SEPARATOR & _
@@ -134,7 +134,7 @@ Friend Class ExchangeRate
 
     Private Sub SMSG_UPDATE_EXCHANGE_RATE_ANSWER(packet As ByteBuffer)
 
-        If packet.ReadInt32() = 0 Then
+        If packet.GetError() = 0 Then
             Dim destinationCurrency As Int32 = packet.ReadUint32()
             Dim ratesVersion As Int32 = packet.ReadUint32()
             Dim period As Int32 = packet.ReadUint32()

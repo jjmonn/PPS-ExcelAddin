@@ -37,7 +37,7 @@ Friend Class GlobalFact
 
     Private Sub SMSG_LIST_GLOBAL_FACT_ANSWER(packet As ByteBuffer)
 
-        If packet.ReadInt32() = 0 Then
+        If packet.GetError() = 0 Then
             Dim nb_globalFacts = packet.ReadInt32()
             For i As Int32 = 1 To nb_globalFacts
                 Dim tmp_ht As New Hashtable
@@ -68,7 +68,7 @@ Friend Class GlobalFact
 
     Private Sub SMSG_CREATE_GLOBAL_FACT_ANSWER(packet As ByteBuffer)
 
-        If packet.ReadInt32() = 0 Then
+        If packet.GetError() = 0 Then
             RaiseEvent CreationEvent(True, CInt(packet.ReadUint32()))
         Else
             RaiseEvent CreationEvent(False, Nothing)
@@ -87,7 +87,7 @@ Friend Class GlobalFact
 
     Private Sub SMSG_READ_GLOBAL_FACT_ANSWER(packet As ByteBuffer)
 
-        If packet.ReadInt32() = 0 Then
+        If packet.GetError() = 0 Then
             Dim ht As New Hashtable
             GetGlobalFactHTFromPacket(packet, ht)
             globalFact_hash(CInt(ht(ID_VARIABLE))) = ht
@@ -110,7 +110,7 @@ Friend Class GlobalFact
 
     Private Sub SMSG_UPDATE_GLOBAL_FACT_ANSWER(packet As ByteBuffer)
 
-        If packet.ReadInt32() = 0 Then
+        If packet.GetError() = 0 Then
             RaiseEvent UpdateEvent(True, CInt(packet.ReadUint32()))
         Else
             RaiseEvent UpdateEvent(False, Nothing)
@@ -130,7 +130,7 @@ Friend Class GlobalFact
 
     Private Sub SMSG_DELETE_GLOBAL_FACT_ANSWER(packet As ByteBuffer)
 
-        If packet.ReadInt32() = 0 Then
+        If packet.GetError() = 0 Then
             Dim id As UInt32 = packet.ReadInt32
             globalFact_hash.Remove(id)
             RaiseEvent DeleteEvent(True, id)

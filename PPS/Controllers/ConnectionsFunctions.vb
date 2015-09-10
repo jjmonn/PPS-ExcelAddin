@@ -72,7 +72,7 @@ Friend Class ConnectionsFunctions
 
     Private Sub SMSG_AUTH_REQUEST_ANSWER(packet As ByteBuffer)
 
-        If packet.ReadInt32() = 0 Then
+        If packet.GetError() = 0 Then
 
             Dim authToken As String = packet.ReadString()
             NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_AUTH_ANSWER, AddressOf SMSG_AUTH_ANSWER)
@@ -94,7 +94,7 @@ Friend Class ConnectionsFunctions
 
     Private Sub SMSG_AUTH_ANSWER(packet As ByteBuffer)
 
-        If packet.ReadInt32() = 0 Then
+        If packet.GetError() = 0 Then
             If packet.ReadBool() = True Then
                 System.Diagnostics.Debug.WriteLine("Authentication succeeded")
                 globalAuthenticated = True

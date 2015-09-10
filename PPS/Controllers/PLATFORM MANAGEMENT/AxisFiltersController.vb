@@ -38,6 +38,7 @@ Friend Class AxisFiltersController
 
         axisId = p_axis_id
         AxisFilter.LoadFvTv(filtersFilterValuesTv, filtersNode, axisId)
+        filtersFilterValuesTv.Nodes(0).Name = "filterId" & filtersFilterValuesTv.Nodes(0).Name
         View = New AxisFiltersControl(Me, filtersNode, axisId, filtersFilterValuesTv)
         View.Show()
 

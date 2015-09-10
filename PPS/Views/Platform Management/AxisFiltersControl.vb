@@ -74,6 +74,7 @@ Friend Class AxisFiltersControl
         Else
             Dim TVExpansionTemp As Dictionary(Of String, Boolean) = TreeViewsUtilities.SaveNodesExpansionsLevel(FiltersFiltersValuesTV)
             AxisFilter.LoadFvTv(FiltersFiltersValuesTV, filtersNode, axisId)
+            FiltersFiltersValuesTV.Nodes(0).Name = "filterId" & FiltersFiltersValuesTV.Nodes(0).Name
             TreeViewsUtilities.ResumeExpansionsLevel(FiltersFiltersValuesTV, TVExpansionTemp)
             FiltersFiltersValuesTV.Refresh()
         End If

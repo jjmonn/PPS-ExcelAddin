@@ -30,8 +30,8 @@ Friend Class Computer
     ' Variables
     Private dataMap As Dictionary(Of String, Double)
     Private versions_comp_flag As New Collections.Generic.Dictionary(Of UInt32, Boolean)
-    Private requestIdVersionIdDict As New Dictionary(Of UInt32, UInt32)
-    Private requestIdEntityIdDict As New Dictionary(Of UInt32, UInt32)
+    Private requestIdVersionIdDict As New Dictionary(Of Int32, Int32)
+    Private requestIdEntityIdDict As New Dictionary(Of Int32, Int32)
 
     ' Computing
     Private isAxis As Boolean
@@ -150,7 +150,7 @@ Friend Class Computer
     ' Server Answer
     Private Sub SMSG_COMPUTE_RESULT(packet As ByteBuffer)
 
-        If packet.ReadInt32() = 0 Then
+        If packet.GetError() = 0 Then
             Dim request_id As Int32 = packet.GetRequestId()
             If requestIdVersionIdDict.ContainsKey(request_id) = False Then
                 MsgBox("The server returned an unregistered compute request id.")

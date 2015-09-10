@@ -42,11 +42,11 @@ Friend Class Adjustment : Inherits SuperAxisCRUD
 
     Private Sub SMSG_LIST_ADJUSTMENT_ANSWER(packet As ByteBuffer)
 
-        If packet.ReadInt32() = 0 Then
+        If packet.GetError() = 0 Then
             For i As Int32 = 1 To packet.ReadInt32()
                 Dim tmp_ht As New Hashtable
                 GetAxisHTFromPacket(packet, tmp_ht)
-                axis_hash(CInt(tmp_ht(ID_VARIABLE))) = tmp_ht
+                Axis_hash(CInt(tmp_ht(ID_VARIABLE))) = tmp_ht
             Next
             RaiseEvent ObjectInitialized(True)
             state_flag = True
@@ -74,7 +74,7 @@ Friend Class Adjustment : Inherits SuperAxisCRUD
 
     Private Sub SMSG_CREATE_ADJUSTMENT_ANSWER(packet As ByteBuffer)
 
-        If packet.ReadInt32() = 0 Then
+        If packet.GetError() = 0 Then
             MyBase.OnCreate(True, packet.ReadUint32())
         Else
             MyBase.OnCreate(False, Nothing)
@@ -93,10 +93,10 @@ Friend Class Adjustment : Inherits SuperAxisCRUD
 
     Private Sub SMSG_READ_ADJUSTMENT_ANSWER(packet As ByteBuffer)
 
-        If packet.ReadInt32() = 0 Then
+        If packet.GetError() = 0 Then
             Dim ht As New Hashtable
             GetAxisHTFromPacket(packet, ht)
-            axis_hash(CInt(ht(ID_VARIABLE))) = ht
+            Axis_hash(CInt(ht(ID_VARIABLE))) = ht
             MyBase.OnRead(True, ht)
         Else
             MyBase.OnRead(False, Nothing)
@@ -116,7 +116,7 @@ Friend Class Adjustment : Inherits SuperAxisCRUD
 
     Private Sub SMSG_UPDATE_ADJUSTMENT_ANSWER(packet As ByteBuffer)
 
-        If packet.ReadInt32() = 0 Then
+        If packet.GetError() = 0 Then
             MyBase.OnUpdate(True, packet.ReadUint32())
         Else
             MyBase.OnUpdate(False, Nothing)
@@ -136,9 +136,9 @@ Friend Class Adjustment : Inherits SuperAxisCRUD
 
     Private Sub SMSG_DELETE_ADJUSTMENT_ANSWER(packet As ByteBuffer)
 
-        If packet.ReadInt32() = 0 Then
+        If packet.GetError() = 0 Then
             Dim id As UInt32 = packet.ReadInt32
-            axis_hash.Remove(CInt(id))
+            Axis_hash.Remove(CInt(id))
             MyBase.OnDelete(True, id)
         Else
             MyBase.OnDelete(False, 0)

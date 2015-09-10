@@ -42,7 +42,7 @@ Friend Class ClientsFilter : Inherits SuperAxisFilterCRUD
     Private Sub SMSG_LIST_CLIENT_FILTER_ANSWER(packet As ByteBuffer)
 
         axisFiltersHash.Clear()
-        If packet.ReadInt32() = 0 Then
+        If packet.GetError() = 0 Then
             For i As Int32 = 1 To packet.ReadInt32()
                 Dim tmp_ht As New Hashtable
                 GetAxisFilterHTFromPacket(packet, tmp_ht)
@@ -76,7 +76,7 @@ Friend Class ClientsFilter : Inherits SuperAxisFilterCRUD
 
     Private Sub SMSG_CREATE_CLIENT_FILTER_ANSWER(packet As ByteBuffer)
 
-        If packet.ReadInt32() = 0 Then
+        If packet.GetError() = 0 Then
             Dim client_id As Int32 = packet.ReadUint32()
             Dim filter_id As Int32 = packet.ReadUint32()
             Dim filter_value_id As Int32 = packet.ReadUint32()
@@ -98,7 +98,7 @@ Friend Class ClientsFilter : Inherits SuperAxisFilterCRUD
 
     Private Sub SMSG_READ_CLIENT_FILTER_ANSWER(packet As ByteBuffer)
 
-        If packet.ReadInt32() = 0 Then
+        If packet.GetError() = 0 Then
             Dim ht As New Hashtable
             GetAxisFilterHTFromPacket(packet, ht)
             AddRecordToaxisFiltersHash(ht(AXIS_ID_VARIABLE), _
@@ -127,7 +127,7 @@ Friend Class ClientsFilter : Inherits SuperAxisFilterCRUD
 
     Private Sub SMSG_UPDATE_CLIENT_FILTER_ANSWER(packet As ByteBuffer)
 
-        If packet.ReadInt32() = 0 Then
+        If packet.GetError() = 0 Then
             Dim client_id As Int32 = packet.ReadUint32()
             Dim filter_id As Int32 = packet.ReadUint32()
             Dim filter_value_id As Int32 = packet.ReadUint32()
@@ -150,7 +150,7 @@ Friend Class ClientsFilter : Inherits SuperAxisFilterCRUD
 
     Private Sub SMSG_DELETE_CLIENT_FILTER_ANSWER(packet As ByteBuffer)
 
-        If packet.ReadInt32() = 0 Then
+        If packet.GetError() = 0 Then
             Dim clientId As UInt32 = packet.ReadInt32
             Dim filterId As UInt32 = packet.ReadInt32
             RemoveRecordFromFiltersHash(clientId, filterId)

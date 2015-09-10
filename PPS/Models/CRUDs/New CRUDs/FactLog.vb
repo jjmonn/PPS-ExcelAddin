@@ -22,7 +22,7 @@ Public Class FactLog
     Private Sub SMSG_GET_FACT_LOG_ANSWER(packet As ByteBuffer)
         Dim factlog_list As New List(Of Hashtable)
 
-        If packet.ReadInt32() = 0 Then
+        If packet.GetError() = 0 Then
 
             Dim requestId As UInt32 = packet.ReadUint32()
             Dim nbResult As UInt32 = packet.ReadUint32()

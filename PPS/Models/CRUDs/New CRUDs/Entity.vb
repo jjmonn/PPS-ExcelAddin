@@ -51,7 +51,7 @@ Friend Class Entity
 
     Private Sub SMSG_LIST_ENTITY_ANSWER(packet As ByteBuffer)
 
-        If packet.ReadInt32() = 0 Then
+        If packet.GetError() = 0 Then
             For i As Int32 = 1 To packet.ReadInt32()
                 Dim tmp_ht As New Hashtable
                 GetEntityHTFromPacket(packet, tmp_ht)
@@ -82,7 +82,7 @@ Friend Class Entity
 
     Private Sub SMSG_CREATE_ENTITY_ANSWER(packet As ByteBuffer)
 
-        If packet.ReadInt32() = 0 Then
+        If packet.GetError() = 0 Then
             RaiseEvent CreationEvent(True, packet.ReadUint32())
         Else
             RaiseEvent CreationEvent(False, Nothing)
@@ -101,7 +101,7 @@ Friend Class Entity
 
     Private Sub SMSG_READ_ENTITY_ANSWER(packet As ByteBuffer)
 
-        If packet.ReadInt32() = 0 Then
+        If packet.GetError() = 0 Then
             Dim ht As New Hashtable
             GetEntityHTFromPacket(packet, ht)
             entities_hash(CInt(ht(ID_VARIABLE))) = ht
@@ -124,7 +124,7 @@ Friend Class Entity
 
     Private Sub SMSG_UPDATE_ENTITY_ANSWER(packet As ByteBuffer)
 
-        If packet.ReadInt32() = 0 Then
+        If packet.GetError() = 0 Then
             RaiseEvent UpdateEvent(True, packet.ReadUint32())
         Else
             RaiseEvent UpdateEvent(False, packet.ReadUint32())
@@ -144,7 +144,7 @@ Friend Class Entity
 
     Private Sub SMSG_DELETE_ENTITY_ANSWER(packet As ByteBuffer)
 
-        If packet.ReadInt32() = 0 Then
+        If packet.GetError() = 0 Then
             Dim id As UInt32 = packet.ReadInt32
             entities_hash.Remove(CInt(id))
             RaiseEvent DeleteEvent(True, id)

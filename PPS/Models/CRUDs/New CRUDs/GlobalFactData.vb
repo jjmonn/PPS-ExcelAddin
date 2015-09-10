@@ -35,7 +35,7 @@ Friend Class GlobalFactData
 
     Private Sub SMSG_LIST_GLOBAL_FACT_DATA_ANSWER(packet As ByteBuffer)
 
-        If packet.ReadInt32() = 0 Then
+        If packet.GetError() = 0 Then
             For i As Int32 = 1 To packet.ReadInt32()
                 Dim tmp_ht As New Hashtable
                 GetGlobalFactDataHTFromPacket(packet, tmp_ht)
@@ -69,7 +69,7 @@ Friend Class GlobalFactData
 
     Private Sub SMSG_CREATE_GLOBAL_FACT_DATA_ANSWER(packet As ByteBuffer)
 
-        If packet.ReadInt32() = 0 Then
+        If packet.GetError() = 0 Then
             Dim factId As Int32 = packet.ReadUint32()
             Dim period As Int32 = packet.ReadUint32()
             Dim versionId As Int32 = packet.ReadUint32()
@@ -92,7 +92,7 @@ Friend Class GlobalFactData
 
     Private Sub SMSG_READ_GLOBAL_FACT_DATA_ANSWER(packet As ByteBuffer)
 
-        If packet.ReadInt32() = 0 Then
+        If packet.GetError() = 0 Then
             Dim ht As New Hashtable
             GetGlobalFactDataHTFromPacket(packet, ht)
             AddRecordToGlobalFactDataHash(ht(GLOBAL_FACT_ID_VARIABLE), _
@@ -124,7 +124,7 @@ Friend Class GlobalFactData
 
     Private Sub SMSG_UPDATE_GLOBAL_FACT_DATA_ANSWER(packet As ByteBuffer)
 
-        If packet.ReadInt32() = 0 Then
+        If packet.GetError() = 0 Then
             Dim globalFactId As Int32 = packet.ReadInt32()
             Dim period As Int32 = packet.ReadInt32()
             Dim versionId As Int32 = packet.ReadInt32()
@@ -149,7 +149,7 @@ Friend Class GlobalFactData
 
     Private Sub SMSG_DELETE_GLOBAL_FACT_DATA_ANSWER(packet As ByteBuffer)
 
-        If packet.ReadInt32() = 0 Then
+        If packet.GetError() = 0 Then
             Dim globalFactId As Int32 = packet.ReadInt32()
             Dim period As Int32 = packet.ReadInt32()
             Dim versionId As Int32 = packet.ReadInt32()
