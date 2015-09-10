@@ -112,6 +112,7 @@ Friend Class WorksheetWrittingFunctions
                                             ByRef header_names_array As String(), _
                                             ByRef header_values_array As String()) As Excel.Range
 
+        On Error GoTo ReturnError
         Dim WS As Excel.Worksheet = CType(GlobalVariables.APPS.Worksheets.Add(), Excel.Worksheet)
         If Len(wsName) < EXCEL_SHEET_NAME_MAX_LENGHT _
         AndAlso CheckIfWorkbookContainsWorksheetName(GlobalVariables.APPS.ActiveWorkbook, wsName) = False Then
@@ -137,6 +138,9 @@ Friend Class WorksheetWrittingFunctions
 
         destination = destination.Offset(i + 2, 0)
         Return destination
+
+ReturnError:
+        Return Nothing
 
     End Function
 

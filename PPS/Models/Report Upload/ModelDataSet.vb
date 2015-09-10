@@ -69,6 +69,7 @@ Friend Class ModelDataSet
     Friend EntitiesValuesAddressDict As New Dictionary(Of String, String)
 
     Friend CellsAddressItemsDictionary As New Dictionary(Of String, Hashtable)
+    Friend DimensionsToCellDictionary As New Dictionary(Of Tuple(Of String, String, String), Excel.Range)
     Friend OutputCellsAddressValuesDictionary As New Dictionary(Of String, Double)
     Friend currentVersionCode As Int32
 
@@ -175,9 +176,10 @@ Friend Class ModelDataSet
     ' Choose which arrays to send and send the vertical array fisrt according to the flags and orientation 
     Friend Sub getDataSet()
 
+        ' priority normal : adapt accountsPeriods get data method to ther orientation + simplify the dictionaries and model dataset storage process !! 
         Select Case GlobalOrientationFlag
             Case DATASET_ACCOUNTS_ENTITIES_OR : getData(AccountsAddressValuesDictionary, EntitiesAddressValuesDictionary)
-            Case DATASET_ACCOUNTS_PERIODS_OR : getData(AccountsAddressValuesDictionary, periodsAddressValuesDictionary)
+            Case DATASET_ACCOUNTS_PERIODS_OR : GetDataOrientationAccountsPeriods()
             Case DATASET_PERIODS_ACCOUNTS_OR : getData(periodsAddressValuesDictionary, AccountsAddressValuesDictionary)
             Case DATASET_PERIODS_ENTITIES_OR : getData(periodsAddressValuesDictionary, EntitiesAddressValuesDictionary)
             Case DATASET_ENTITIES_ACCOUNTS_OR : getData(EntitiesAddressValuesDictionary, AccountsAddressValuesDictionary)
@@ -693,6 +695,42 @@ Friend Class ModelDataSet
 
 #Region " Output/ Input Data Processing functions"
 
+    Private Sub GetDataOrientationAccountsPeriods()
+
+        CellsAddressItemsDictionary.Clear()
+        dataSetDictionary.Clear()
+
+        Dim accountsDictionary As New Dictionary(Of String, Dictionary(Of String, Double))
+        For Each AccountAddressValuePair In AccountsAddressValuesDictionary
+            Dim periodsDictionary As New Dictionary(Of String, Double)
+
+            For Each PeriodAddressValuePair In periodsAddressValuesDictionary
+                Dim cell As Excel.Range = WS.Cells(WS.Range(AccountAddressValuePair.Key).Row, WS.Range(PeriodAddressValuePair.Key).Column)
+
+                ' Cell retreiving dictionaries Registering
+                RegisterCellAddressItems(CellsAddressItemsDictionary, cell, EntitiesAddressValuesDictionary.ElementAt(0).Value, AccountAddressValuePair.Value, PeriodAddressValuePair.Value)
+                Dim tuple_ As New Tuple(Of String, String, String)(EntitiesAddressValuesDictionary.ElementAt(0).Value, AccountAddressValuePair.Value, PeriodAddressValuePair.Value)
+                DimensionsToCellDictionary.Add(tuple_, cell)
+
+                periodsDictionary.Add(PeriodAddressValuePair.Value, cell.Value2)
+            Next
+            accountsDictionary.Add(AccountAddressValuePair.Value, periodsDictionary)
+
+        Next
+        dataSetDictionary.Add(EntitiesAddressValuesDictionary.ElementAt(0).Value, accountsDictionary)
+
+        ' Outputs Dimensions to Cell Registering
+        For Each OutputAccount In OutputsAccountsAddressvaluesDictionary
+
+            For Each PeriodAddressValuePair In periodsAddressValuesDictionary
+                Dim cell As Excel.Range = WS.Cells(WS.Range(OutputAccount.Key).Row, WS.Range(PeriodAddressValuePair.Key).Column)
+                Dim tuple_ As New Tuple(Of String, String, String)(EntitiesAddressValuesDictionary.ElementAt(0).Value, OutputAccount.Value, PeriodAddressValuePair.Value)
+                DimensionsToCellDictionary.Add(tuple_, cell)
+            Next
+        Next
+
+    End Sub
+
     ' Factor functions below
     ' Save the data from WS to DataSetDictionary according to the input orientation code
     ' and 2 inputs AccountsAddressValuesDictionary, EntitiesAddressValuesDictionary or periodsAddressValuesDictionary
@@ -702,7 +740,6 @@ Friend Class ModelDataSet
         CellsAddressItemsDictionary.Clear()
         dataSetDictionary.Clear()
         Select Case GlobalOrientationFlag
-
 
             Case DATASET_ACCOUNTS_PERIODS_OR       ' Lines : Accounts | Columns : Date
                 Dim accountsDictionary As New Dictionary(Of String, Dictionary(Of String, Double))
@@ -714,7 +751,12 @@ Friend Class ModelDataSet
                     For Each periodAddress As String In HorizontalDictionaryAddressValues.Keys
                         Dim period = HorizontalDictionaryAddressValues.Item(periodAddress)
                         Dim cell As Excel.Range = WS.Cells(WS.Range(accountAddress).Row, WS.Range(periodAddress).Column)
+
+                        ' Cell retreiving dictionaries Registering
                         RegisterCellAddressItems(CellsAddressItemsDictionary, cell, EntitiesAddressValuesDictionary.ElementAt(0).Value, account, period)
+                        Dim tuple_ As New Tuple(Of String, String, String)(EntitiesAddressValuesDictionary.ElementAt(0).Value, account, period)
+                        DimensionsToCellDictionary.Add(tuple_, cell)
+
                         periodsDictionary.Add(period, cell.Value2)
                     Next
                     accountsDictionary.Add(account, periodsDictionary)
@@ -844,7 +886,7 @@ Friend Class ModelDataSet
     '        ElseIf OutputsAccountsAddressvaluesDictionary.ContainsKey(AccountAddress) Then
     '            accountKey = AccountsNameKeyDictionary.Item(OutputsAccountsAddressvaluesDictionary.Item(AccountAddress))
     '        Else
-    '            ' PPS Error tracking -> study if possible ?
+    '             PPS Error tracking -> study if possible ?
     '        End If
 
     '        For Each PeriodAddress As String In periodsAddressValuesDictionary.Keys

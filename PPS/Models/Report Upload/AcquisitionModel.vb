@@ -315,23 +315,30 @@ Friend Class AcquisitionModel
 
 #Region "Interface"
 
-    Friend Function GetCalculatedValue(ByRef entityName As String, _
-                                       ByRef accountId As String, _
+    Friend Function GetCalculatedValue(ByRef entityId As Int32, _
+                                       ByRef accountId As Int32, _
                                        ByRef Period_token As String) As Double
 
         ' dataMap: [account_id][period_token] => value
-        ' manage case where value not found ?
-        On Error GoTo errorHandler1
-        Return computationDataMap(CInt(entitiesNameIdDict(entityName)))(accountId)(Period_token)
+        ' Manage case where value not found ? priority normal
+        On Error GoTo ReturnError
+        Return computationDataMap(entityId)(accountId)(Period_token)
 
-errorHandler1:
-        System.Diagnostics.Debug.WriteLine("output not found in dictionary" & Chr(13) & _
-                                           "entity: " & entityName & Chr(13) & _
-                                           "account: " & accountId & Chr(13) & _
-                                           "period: " & Period_token)
-        Return 0
-        ' cuation priority high !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+ReturnError:
 
+        'If computationDataMap.ContainsKey(entityId) = True Then
+        '    If computationDataMap(entityId).ContainsKey(accountId) = True Then
+        '        If computationDataMap(entityId)(accountId).ContainsKey(Period_token) = True Then
+        '            Return 
+        '        Else
+        '            Return 0
+        '        End If
+        '    Else
+        '        Return 0
+        '    End If
+        'Else
+        '    Return 0
+        'End If
 
     End Function
 

@@ -1806,6 +1806,11 @@ Public Class AddinModule
                                                                                        {"Entity", "Currency", "Version"}, _
                                                                                        {entity_name, currencyId, GlobalVariables.Version_Button.Caption})
 
+        If currentcell Is Nothing Then
+            MsgBox("An error occurred in Excel and the report could not be created.")
+            Exit Sub
+        End If
+        
         Dim timeConfig As UInt32 = GlobalVariables.Versions.versions_hash(My.Settings.version_id)(VERSIONS_TIME_CONFIG_VARIABLE)
         Dim periodlist As Int32() = GlobalVariables.Versions.GetPeriodsList(My.Settings.version_id)
         WorksheetWrittingFunctions.InsertInputReportOnWS(currentcell, _

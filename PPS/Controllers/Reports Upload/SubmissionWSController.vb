@@ -87,19 +87,21 @@ Friend Class SubmissionWSController
 
     Friend Sub updateCalculatedItemsOnWS(ByRef entityName As String)
 
-        For Each accountName In AcquisitionModel.outputsList
-            For Each period In AcquisitionModel.currentPeriodList
+        Dim value As Double
+        Dim entityId As Int32 = CInt(AcquisitionModel.entitiesNameIdDict(entityName))
+        For Each accountName As String In AcquisitionModel.outputsList
+            For Each period As Int32 In AcquisitionModel.currentPeriodList
 
-                Dim value As Double = AcquisitionModel.GetCalculatedValue(entityName, _
-                                                                          DataSet.AccountsNameKeyDictionary(accountName), _
-                                                                          AcquisitionModel.periodsIdentifyer & period)
-                If Double.IsNaN(value) Then
-                    value = 0
-                End If
-                UpdateExcelWS(entityName, accountName, period, value)
+                value = AcquisitionModel.GetCalculatedValue(entityId, _
+                                                            DataSet.AccountsNameKeyDictionary(accountName), _
+                                                            AcquisitionModel.periodsIdentifyer & period)
+                If Double.IsNaN(value) Then value = 0
+                Dim tuple_ As New Tuple(Of String, String, String)(entityName, accountName, period)
+                Dim c As Excel.Range = DataSet.DimensionsToCellDictionary(tuple_)
+                c.Value2 = value
             Next
         Next
-    
+
     End Sub
 
     ' Update the value on the excel worksheet
