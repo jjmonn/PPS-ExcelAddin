@@ -150,8 +150,12 @@ Friend Class Computer
     ' Server Answer
     Private Sub SMSG_COMPUTE_RESULT(packet As ByteBuffer)
 
-        If packet.ReadInt32() = 0 Then
+        If packet.GetError() = 0 Then
             Dim request_id As Int32 = packet.GetRequestId()
+            If (requestIdVersionIdDict.ContainsKey(request_id) = False) Then
+                RaiseEvent ComputationAnswered("", False, 0)
+                Exit Sub
+            End If
             versionId = requestIdVersionIdDict(request_id)
             requestIdVersionIdDict.Remove(request_id)
 

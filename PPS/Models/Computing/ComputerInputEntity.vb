@@ -76,7 +76,7 @@ Public Class ComputerInputEntity
     ' Server Response
     Private Sub SMSG_SOURCED_COMPUTE_RESULT(packet As ByteBuffer)
 
-        If packet.ReadInt32() = 0 Then
+        If packet.GetError() = 0 Then
             Dim request_id = packet.GetRequestId()
             dataMap = New Dictionary(Of Int32, Dictionary(Of String, Double))
 

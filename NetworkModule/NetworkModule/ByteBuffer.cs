@@ -31,6 +31,7 @@ public class ByteBuffer : MemoryStream
     m_sizeHeader = Length;
   }
 
+  public UInt32 GetError() { return m_header.error; }
   public ByteBuffer() { }
 
   public UInt16 GetOpcode() { return (m_header.opcode); }
@@ -44,6 +45,7 @@ public class ByteBuffer : MemoryStream
     if (m_header.isCompressed)
       Uncompress(m_header.realPayloadSize);
     m_header.isCompressed = false;
+    Position = m_sizeHeader;
   }
 
   public ByteBuffer Clone()
@@ -253,9 +255,9 @@ public class ByteBuffer : MemoryStream
     int size = stream.Read(uncompressed, 0, p_realSize);
 
     byte[] buffer = GetBuffer();
-    Array.Clear(buffer, 0, buffer.Length);
-    Position = 0;
-    SetLength(0);
+    Array.Clear(buffer, (int)m_sizeHeader, buffer.Length - (int)m_sizeHeader);
+    Position = m_sizeHeader;
+    SetLength(m_sizeHeader);
     Write(uncompressed, 0, size);
   }
 }

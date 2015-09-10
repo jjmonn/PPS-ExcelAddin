@@ -128,13 +128,14 @@ public class NetworkManager
 
   ByteBuffer.Header FillHeader(byte[] p_buffer)
   {
-    ByteBuffer.Header l_header;
+    ByteBuffer.Header l_header = new ByteBuffer.Header();
 
     l_header.payloadSize = BitConverter.ToInt32(p_buffer, 0);
     l_header.realPayloadSize = BitConverter.ToInt32(p_buffer, 4);
     l_header.specialId = BitConverter.ToUInt32(p_buffer, 8);
     l_header.isCompressed = p_buffer[12] == 1;
-    l_header.opcode = BitConverter.ToUInt16(p_buffer, 13);
+    l_header.error = BitConverter.ToUInt32(p_buffer, 13);
+    l_header.opcode = BitConverter.ToUInt16(p_buffer, 17);
     return (l_header);
   }
 
@@ -201,7 +202,6 @@ public class NetworkManager
 
       if ((l_packet = this.Receive()) == null)
         return (true);
-      l_packet.Position = 0;
       l_opcode = l_packet.GetOpcode();
       if ((l_callback = this.GetCallback(l_opcode)) == null)
         System.Diagnostics.Debug.WriteLine("Undefined packet type " + l_opcode.ToString("X2"));

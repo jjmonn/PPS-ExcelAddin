@@ -49,7 +49,7 @@ Friend Class EntitiesFilter
 
     Private Sub SMSG_LIST_ENTITY_FILTER_ANSWER(packet As ByteBuffer)
 
-        If packet.ReadInt32() = 0 Then
+        If packet.GetError() = 0 Then
             Dim nbRecords As UInt32 = packet.ReadInt32()
             For i As Int32 = 1 To nbRecords
                 Dim tmp_ht As New Hashtable
@@ -84,7 +84,7 @@ Friend Class EntitiesFilter
 
     Private Sub SMSG_CREATE_ENTITY_FILTER_ANSWER(packet As ByteBuffer)
 
-        If packet.ReadInt32() = 0 Then
+        If packet.GetError() = 0 Then
             Dim entity_id As Int32 = packet.ReadUint32()
             Dim filter_id As Int32 = packet.ReadUint32()
             Dim filter_value_id As Int32 = packet.ReadUint32()
@@ -106,7 +106,7 @@ Friend Class EntitiesFilter
 
     Private Sub SMSG_READ_ENTITY_FILTER_ANSWER(packet As ByteBuffer)
 
-        If packet.ReadInt32() = 0 Then
+        If packet.GetError() = 0 Then
             Dim ht As New Hashtable
             GetEntityFilterHTFromPacket(packet, ht)
             AddRecordToEntitiesFiltersHash(ht(ENTITY_ID_VARIABLE), _
@@ -135,7 +135,7 @@ Friend Class EntitiesFilter
 
     Private Sub SMSG_UPDATE_ENTITY_FILTER_ANSWER(packet As ByteBuffer)
 
-        If packet.ReadInt32() = 0 Then
+        If packet.GetError() = 0 Then
             Dim entity_id As Int32 = packet.ReadUint32()
             Dim filter_id As Int32 = packet.ReadUint32()
             Dim filter_value_id As Int32 = packet.ReadUint32()
@@ -158,7 +158,7 @@ Friend Class EntitiesFilter
 
     Private Sub SMSG_DELETE_ENTITY_FILTER_ANSWER(packet As ByteBuffer)
 
-        If packet.ReadInt32() = 0 Then
+        If packet.GetError() = 0 Then
             Dim entityId As UInt32 = packet.ReadInt32
             Dim filterId As UInt32 = packet.ReadInt32
             RemoveRecordFromFiltersHash(entityId, filterId)

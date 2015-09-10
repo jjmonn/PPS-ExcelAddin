@@ -59,7 +59,7 @@ Friend Class Currency
 
     Private Sub SMSG_LIST_CURRENCY_ANSWER(packet As ByteBuffer)
 
-        If packet.ReadInt32() = 0 Then
+        If packet.GetError() = 0 Then
             Dim nb_currencies = packet.ReadInt32()
             For i As Int32 = 1 To nb_currencies
                 Dim tmp_ht As New Hashtable
@@ -86,7 +86,7 @@ Friend Class Currency
 
     Private Sub SMSG_CREATE_CURRENCY_ANSWER(packet As ByteBuffer)
 
-        If packet.ReadInt32() = 0 Then
+        If packet.GetError() = 0 Then
             RaiseEvent CreationEvent(True, packet.ReadUint32())
         Else
             RaiseEvent CreationEvent(False, Nothing)
@@ -105,7 +105,7 @@ Friend Class Currency
 
     Private Sub SMSG_READ_CURRENCY_ANSWER(packet As ByteBuffer)
 
-        If packet.ReadInt32() = 0 Then
+        If packet.GetError() = 0 Then
             Dim ht As New Hashtable
             GetcurrencyHTFromPacket(packet, ht)
             currencies_hash(CInt(ht(ID_VARIABLE))) = ht
@@ -128,7 +128,7 @@ Friend Class Currency
 
     Private Sub SMSG_UPDATE_CURRENCY_ANSWER(packet As ByteBuffer)
 
-        If packet.ReadInt32() = 0 Then
+        If packet.GetError() = 0 Then
             RaiseEvent UpdateEvent(True, packet.ReadUint32())
         Else
             RaiseEvent UpdateEvent(False, Nothing)
@@ -148,7 +148,7 @@ Friend Class Currency
 
     Private Sub SMSG_DELETE_CURRENCY_ANSWER(packet As ByteBuffer)
 
-        If packet.ReadInt32() = 0 Then
+        If packet.GetError() = 0 Then
             Dim id As UInt32 = packet.ReadInt32
             currencies_hash.Remove(CInt(id))
             RaiseEvent DeleteEvent(True, id)
@@ -166,7 +166,7 @@ Friend Class Currency
     End Sub
 
     Private Sub SMSG_SET_MAIN_CURRENCY_ANSWER(packet As ByteBuffer)
-        If packet.ReadInt32() = 0 Then
+        If packet.GetError() = 0 Then
             RaiseEvent GetMainCurrency(False, 0)
         Else
             RaiseEvent GetMainCurrency(True, packet.ReadUint32())

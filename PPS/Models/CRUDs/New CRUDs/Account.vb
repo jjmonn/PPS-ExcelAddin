@@ -49,7 +49,7 @@ Friend Class Account
 
     Private Sub SMSG_LIST_ACCOUNT_ANSWER(packet As ByteBuffer)
 
-        If packet.ReadInt32() = 0 Then
+        If packet.GetError() = 0 Then
             Dim nb_accounts = packet.ReadInt32()
             For i As Int32 = 1 To nb_accounts
                 Dim tmp_ht As New Hashtable
@@ -82,7 +82,7 @@ Friend Class Account
 
     Private Sub SMSG_CREATE_ACCOUNT_ANSWER(packet As ByteBuffer)
 
-        If packet.ReadInt32() = 0 Then
+        If packet.GetError() = 0 Then
             RaiseEvent CreationEvent(True, CInt(packet.ReadUint32()))
         Else
             RaiseEvent CreationEvent(False, Nothing)
@@ -101,7 +101,7 @@ Friend Class Account
 
     Private Sub SMSG_READ_ACCOUNT_ANSWER(packet As ByteBuffer)
 
-        If packet.ReadInt32() = 0 Then
+        If packet.GetError() = 0 Then
             Dim ht As New Hashtable
             GetAccountHTFromPacket(packet, ht)
             accounts_hash(CInt(ht(ID_VARIABLE))) = ht
@@ -124,7 +124,7 @@ Friend Class Account
 
     Private Sub SMSG_UPDATE_ACCOUNT_ANSWER(packet As ByteBuffer)
 
-        If packet.ReadInt32() = 0 Then
+        If packet.GetError() = 0 Then
             RaiseEvent UpdateEvent(True, CInt(packet.ReadUint32()))
         Else
             RaiseEvent UpdateEvent(False, Nothing)
@@ -148,7 +148,7 @@ Friend Class Account
 
     Friend Sub SMSG_UPDATE_ACCOUNT_LIST_ANSWER(packet As ByteBuffer)
 
-        If packet.ReadInt32() = 0 Then
+        If packet.GetError() = 0 Then
             Dim updatesStatus As New List(Of Boolean)
             For i As Int32 = 0 To packet.ReadUint32()
                 updatesStatus.Add(packet.ReadBool())
@@ -172,7 +172,7 @@ Friend Class Account
 
     Private Sub SMSG_DELETE_ACCOUNT_ANSWER(packet As ByteBuffer)
 
-        If packet.ReadInt32() = 0 Then
+        If packet.GetError() = 0 Then
             Dim id As UInt32 = packet.ReadInt32
             accounts_hash.Remove(CInt(id))
             RaiseEvent DeleteEvent(True, id)
