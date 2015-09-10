@@ -32,7 +32,7 @@ Friend Class FormulasTranslations
     Friend Const FORMULA_SEPARATOR As Char = "#" ' to be checkek if ok
     Friend Const ACCOUNT_IDENTIFIER As String = "acc"
     Friend Const PARSER_FORMULAS As String = "if,sin,cos,tan,log2,log10,log,ln,exp,sqrt,sign,rint,abs,min,max,sum,avg" ' to be reviewed + case insensitive !! priority high
-    Friend Const ACCOUNTS_HUMAN_IDENTIFIYER As Char = "'"
+    Friend Const ACCOUNTS_HUMAN_IDENTIFIYER As Char = Chr(34) '"'"
 
     ' Periods
     Friend Const PERIODS_SEPARATOR_START As Char = "["
@@ -58,7 +58,8 @@ Friend Class FormulasTranslations
     Private regexOperatorsStr As String = "/\(\)\+\-\*\=\<\>\^\?\:\;\!"
     Private accRegexStr As String = "([^\[" & regexOperatorsStr & "][\w\s]+)\[?[^\]" & regexOperatorsStr & "]"  ' & OPERATORS & "\w]"
     Private accountsHumanToDBRegex As Regex = New Regex(accRegexStr, RegexOptions.IgnoreCase)
-    Private accGuillemetStr As String = ACCOUNTS_HUMAN_IDENTIFIYER & "([\w\s]+)" & ACCOUNTS_HUMAN_IDENTIFIYER & "\[?"
+
+    Private accGuillemetStr As String = Chr(34) & "([\w\s]+)" & Chr(34) & "\[?"  'ACCOUNTS_HUMAN_IDENTIFIYER & "([\w\s]+)" & ACCOUNTS_HUMAN_IDENTIFIYER & "\[?"
     Private guillemetsHumanToDBRegex As Regex = New Regex(accGuillemetStr, RegexOptions.IgnoreCase)
 
     ' Periods Regex

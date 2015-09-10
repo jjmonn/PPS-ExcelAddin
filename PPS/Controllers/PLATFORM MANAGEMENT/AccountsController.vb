@@ -43,7 +43,7 @@ Friend Class AccountsController
     Private isClosing As Boolean = False
 
     ' Constants
-    Friend Const ACCOUNTS_FORBIDDEN_CHARACTERS As String = "()+-*/=<>^?:;![]" ' to be reviewed - 
+    Friend Const ACCOUNTS_FORBIDDEN_CHARACTERS As String = "'+-*/=<>^?:;![]" ' to be reviewed - 
 
 
 #End Region
