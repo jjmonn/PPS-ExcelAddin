@@ -122,18 +122,18 @@ Friend Class AxisController
 
     End Sub
 
-    Friend Sub DeleteAxis(ByRef Axis_id As Int32)
+    Friend Sub DeleteAxis(ByRef AxisValueId As Int32)
 
-        CrudModel.CMSG_DELETE_AXIS(Axis_id)
+        CrudModel.CMSG_DELETE_AXIS(AxisValueId)
 
     End Sub
 
-    Friend Sub UpdateFilterValue(ByRef AxisId As Int32, _
+    Friend Sub UpdateFilterValue(ByRef AxisValueId As Int32, _
                                  ByRef filterId As Int32, _
                                  ByRef filterValueId As Int32)
 
         If filterId = GlobalVariables.Filters.GetMostNestedFilterId(filterId) Then
-            CrudModelFilters.CMSG_UPDATE_AXIS_FILTER(AxisId, filterId, filterValueId)
+            CrudModelFilters.CMSG_UPDATE_AXIS_FILTER(AxisValueId, filterId, filterValueId)
         End If
 
     End Sub
@@ -189,11 +189,11 @@ Friend Class AxisController
     End Sub
 
     Private Sub AfterAxisFilterUpdate(ByRef status As Boolean, _
-                                        ByRef AxisId As Int32, _
+                                        ByRef AxisValueId As Int32, _
                                         ByRef filterId As Int32, _
                                         ByRef filterValueId As Int32)
         If status = False Then
-            View.UpdateAxis(CrudModel.Axis_hash(AxisId))
+            View.UpdateAxis(CrudModel.Axis_hash(AxisValueId))
             MsgBox("The Axis could be updated.")
             ' catch and display message
         End If
@@ -205,9 +205,9 @@ Friend Class AxisController
 
 #Region "Utilities"
 
-    Friend Function GetAxisId(ByRef name As String) As Int32
+    Friend Function GetAxisValueId(ByRef name As String) As Int32
 
-        Return CrudModel.GetAxisId(name)
+        Return CrudModel.GetAxisValueId(name)
 
     End Function
 
