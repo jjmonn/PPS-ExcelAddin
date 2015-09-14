@@ -283,6 +283,7 @@ Friend Class GeneralSubmissionControler
     Friend Sub UpdateCalculatedItems(ByRef entityName As String)
 
         ' Update Computer order
+        GlobalVariables.APPS.Interactive = False
         Model.ComputeCalculatedItems(entityName)   
 
     End Sub
@@ -291,6 +292,7 @@ Friend Class GeneralSubmissionControler
     Private Sub AfterOutputsComputed(ByRef entityName As String)
 
         isUpdating = True
+        GlobalVariables.APPS.Interactive = False
         GlobalVariables.APPS.ScreenUpdating = False
         SubmissionWSController.updateCalculatedItemsOnWS(entityName)
         GlobalVariables.APPS.ScreenUpdating = True

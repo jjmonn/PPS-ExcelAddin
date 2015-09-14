@@ -24,6 +24,7 @@ Friend Class GlobalVariables
 
 #End Region
 
+
 #Region "Versioning"
 
     Friend Shared VersionSelectionTaskPane As VersionSelectionPane
@@ -31,6 +32,7 @@ Friend Class GlobalVariables
     Friend Shared Version_label_Sub_Ribbon As ADXRibbonEditBox
   
 #End Region
+
 
 #Region "Menu Display"
 

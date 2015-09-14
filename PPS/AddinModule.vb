@@ -1187,7 +1187,7 @@ Public Class AddinModule
     Private Sub AddinModule_AddinInitialize(sender As Object, e As EventArgs) Handles MyBase.AddinInitialize
 
         GlobalVariables.APPS = Me.HostApplication
-
+       
         ' Main Ribbon Initialize
         GlobalVariables.VersionSelectionTaskPane = Me.VersionSelectionTaskPane
         GlobalVariables.SubmissionStatusButton = SubmissionStatus
