@@ -211,9 +211,10 @@ Friend Class AxisController
 
     End Function
 
-    Friend Function GetFilterValueId(ByRef filterId As Int32) As Int32
+    Friend Function GetFilterValueId(ByRef filterId As Int32, _
+                                     ByRef axisValueId As Int32) As Int32
 
-        Return CrudModelFilters.GetFilterValueId(filterId, axisId)
+        Return CrudModelFilters.GetFilterValueId(filterId, axisValueId)
 
     End Function
 

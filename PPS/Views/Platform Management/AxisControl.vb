@@ -8,7 +8,7 @@
 '
 '
 '
-' Last modified: 04/09/2015
+' Last modified: 14/09/2015
 ' Author: Julien Monnereau
 
 
@@ -144,8 +144,8 @@ Friend Class AxisControl
                                                      "This axis and all sub axis will be deleted, do you confirm?" + Chr(13) + Chr(13), _
                                                      "Axis deletion confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
             If confirm = DialogResult.Yes Then
-                Dim axis_id As String = Controller.GetAxisId(DGV.CellsArea.GetCellValue(currentRowItem, DGV.ColumnsHierarchy.Items(0)))
-                Controller.DeleteAxis(axis_id)
+                Dim axisValueId As Int32 = currentRowItem.ItemValue
+                Controller.DeleteAxis(axisValueId)
             End If
         Else
             MsgBox("An Axis must be selected in order to be deleted")
@@ -229,8 +229,8 @@ Friend Class AxisControl
     Private Sub fillDGV(ByRef axisHT As Hashtable)
 
         isFillingDGV = True
-        For Each axis_id In axisHT.Keys
-            FillRow(axis_id, axisHT(axis_id))
+        For Each axisValueId In axisHT.Keys
+            FillRow(axisValueId, axisHT(axisValueId))
         Next
         isFillingDGV = False
         updateDGVFormat()
@@ -331,30 +331,30 @@ Friend Class AxisControl
 
 #Region "DGV Filling"
 
-    Friend Sub FillRow(ByVal axis_id As Int32, _
+    Friend Sub FillRow(ByVal axisValueId As Int32, _
                        ByVal axis_ht As Hashtable)
 
         Dim rowItem As HierarchyItem
-        If rows_id_item_dic.ContainsKey(axis_id) Then
-            rowItem = rows_id_item_dic(axis_id)
+        If rows_id_item_dic.ContainsKey(axisValueId) Then
+            rowItem = rows_id_item_dic(axisValueId)
         Else
-            rowItem = CreateRow(axis_id)
+            rowItem = CreateRow(axisValueId)
         End If
         DGV.CellsArea.SetCellValue(rowItem, columnsVariableItemDictionary(NAME_VARIABLE), axis_ht(NAME_VARIABLE))
         For Each filterNode As TreeNode In axisFilterTV.Nodes
-            FillSubFilters(filterNode, axis_id, rowItem)
+            FillSubFilters(filterNode, axisValueId, rowItem)
         Next
 
     End Sub
 
     Private Sub FillSubFilters(ByRef filterNode As TreeNode, _
-                               ByRef axis_id As Int32, _
+                               ByRef axisValueId As Int32, _
                                ByRef rowItem As HierarchyItem)
 
         Dim combobox As New ComboBoxEditor
         combobox.DropDownList = True
         Dim columnItem As HierarchyItem = columnsVariableItemDictionary(filterNode.Name)
-        Dim filterValueId = Controller.GetFilterValueId(CInt(filterNode.Name))
+        Dim filterValueId = Controller.GetFilterValueId(CInt(filterNode.Name), axisValueId)
         Dim filter_value_name = GlobalVariables.FiltersValues.filtervalues_hash(filterValueId)(NAME_VARIABLE)
         DGV.CellsArea.SetCellValue(rowItem, columnItem, filter_value_name)
 
@@ -367,7 +367,7 @@ Friend Class AxisControl
             Next
         Else
             ' Child Filter
-            Dim parentFilterFilterValueId As Int32 = Controller.GetFilterValueId(CInt(filterNode.Parent.Name))     ' Child Filter Id
+            Dim parentFilterFilterValueId As Int32 = Controller.GetFilterValueId(CInt(filterNode.Parent.Name), axisValueId)     ' Child Filter Id
             Dim filterValuesIds = GlobalVariables.FiltersValues.GetFilterValueIdsFromParentFilterValueIds({parentFilterFilterValueId})
             For Each Id As Int32 In filterValuesIds
                 combobox.Items.Add(GlobalVariables.FiltersValues.filtervalues_hash(Id)(NAME_VARIABLE))
@@ -379,7 +379,7 @@ Friend Class AxisControl
 
         ' Recursive if Filters Children exist
         For Each childFilterNode As TreeNode In filterNode.Nodes
-            FillSubFilters(childFilterNode, axis_id, rowItem)
+            FillSubFilters(childFilterNode, axisValueId, rowItem)
         Next
 
     End Sub

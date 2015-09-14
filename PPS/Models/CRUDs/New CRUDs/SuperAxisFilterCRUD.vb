@@ -41,10 +41,10 @@ Public MustInherit Class SuperAxisFilterCRUD
     End Function
 
     Friend Function GetFilterValueId(ByRef filterId As Int32, _
-                                     ByRef axisId As Int32) As Int32
+                                     ByRef axisValueId As Int32) As Int32
 
         Dim mostNestedFilterId = GlobalVariables.Filters.GetMostNestedFilterId(filterId)
-        Dim mostNestedFilterValueId = axisFiltersHash(axisId)(mostNestedFilterId)
+        Dim mostNestedFilterValueId = axisFiltersHash(axisValueId)(mostNestedFilterId)
         Return GlobalVariables.FiltersValues.GetFilterValueId(mostNestedFilterValueId, filterId)
 
     End Function
