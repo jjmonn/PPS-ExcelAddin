@@ -218,7 +218,7 @@ Friend Class Filter
         If attributes.ContainsKey(ID_VARIABLE) Then packet.WriteUint32(attributes(ID_VARIABLE))
         packet.WriteUint32(attributes(PARENT_ID_VARIABLE))
         packet.WriteUint32(attributes(AXIS_ID_VARIABLE))
-        packet.WriteUint8(attributes(FILTER_IS_PARENT_VARIABLE))
+        packet.WriteBool(attributes(FILTER_IS_PARENT_VARIABLE))
         packet.WriteString(attributes(NAME_VARIABLE))
         packet.WriteUint32(attributes(ITEMS_POSITIONS))
 
