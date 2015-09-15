@@ -58,7 +58,7 @@ Public MustInherit Class SuperAxisCRUD
 
 
     ' Utilities Methods
-    Friend Function GetAxisId(ByRef name As String) As Int32
+    Friend Function GetAxisValueId(ByRef name As String) As Int32
 
         For Each id As Int32 In Axis_hash.Keys
             If name = Axis_hash(id)(NAME_VARIABLE) Then Return id

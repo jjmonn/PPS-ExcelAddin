@@ -324,7 +324,7 @@ ReturnError:
         For Each axisFilter In p_axis_filters_object
             Dim axisName As String = ReturnValueFromRange(axisFilter)
             If Not axisName Is Nothing Then
-                Dim axisValueId As Int32 = CRUDModel.GetAxisId(axisName)
+                Dim axisValueId As Int32 = CRUDModel.GetAxisValueId(axisName)
                 If axisValueId <> 0 Then
                     axisFiltersList.Add(axisValueId)
                 End If
