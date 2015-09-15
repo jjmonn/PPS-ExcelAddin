@@ -232,7 +232,7 @@ Friend Class Currency
         If attributes.ContainsKey(ID_VARIABLE) Then packet.WriteInt32(attributes(ID_VARIABLE))
         packet.WriteString(attributes(NAME_VARIABLE))
         packet.WriteString(attributes(CURRENCY_SYMBOL_VARIABLE))
-        packet.WriteUint8(attributes(CURRENCY_IN_USE_VARIABLE))
+        packet.WriteBool(attributes(CURRENCY_IN_USE_VARIABLE))
 
     End Sub
 

@@ -259,22 +259,22 @@ Friend Class VersionsControl
 
 #Region "Versions Attributes Modifications"
 
-    Private Sub lockedCB_CheckedChanged(sender As Object, e As EventArgs)
+    Private Sub lockedCB_CheckedChanged(sender As Object, e As EventArgs) Handles lockedCB.CheckedChanged
 
         ' only if not folder ?
         If Not VersionsTV.SelectedNode Is Nothing AndAlso isDisplaying = False Then
             Select Case lockedCB.Checked
-                Case True : Controller.LockVersion(VersionsTV.SelectedNode.value)
-                Case False : Controller.UnlockVersion(VersionsTV.SelectedNode.value)
+                Case True : Controller.LockVersion(VersionsTV.SelectedNode.Value)
+                Case False : Controller.UnlockVersion(VersionsTV.SelectedNode.Value)
             End Select
         End If
 
     End Sub
 
-    Private Sub RatesVersionCB_SelectedValueChanged(sender As Object, e As EventArgs)
+    Private Sub RatesVersionCB_SelectedValueChanged(sender As Object, e As EventArgs) Handles RatesVersionCB.SelectedValueChanged
 
         If Not VersionsTV.SelectedNode Is Nothing AndAlso isDisplaying = False Then
-            Dim version_id As String = VersionsTV.SelectedNode.value
+            Dim version_id As String = VersionsTV.SelectedNode.Value
             Dim rates_version_id As String = Controller.rates_versions_name_id_dic(RatesVersionCB.Text)
             If Controller.IsRatesVersionValid(StartPeriodTB.Text, NBPeriodsTB.Text, rates_version_id) Then
                 Controller.UpdateRatesVersion_id(version_id, rates_version_id)
@@ -371,6 +371,5 @@ Friend Class VersionsControl
 
 
 #End Region
-
 
 End Class

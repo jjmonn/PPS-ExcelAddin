@@ -219,7 +219,7 @@ Friend Class Entity
         packet.WriteUint32(attributes(ENTITIES_CURRENCY_VARIABLE))
         packet.WriteString(attributes(NAME_VARIABLE))
         packet.WriteUint32(attributes(ITEMS_POSITIONS))
-        packet.WriteUint8(attributes(ENTITIES_ALLOW_EDITION_VARIABLE))
+        packet.WriteBool(attributes(ENTITIES_ALLOW_EDITION_VARIABLE))
 
     End Sub
 

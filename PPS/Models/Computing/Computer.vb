@@ -126,11 +126,11 @@ Friend Class Computer
                     If query_type = GlobalEnums.DecompositionQueryType.AXIS Then
                         axis_id = GetItemID(item)
                         packet.WriteInt32(axis_id)
-                        packet.WriteUint8(True)
+                        packet.WriteBool(True)
                     Else
                         axis_id = GlobalVariables.Filters.filters_hash(GetItemID(item))(AXIS_ID_VARIABLE)
                         packet.WriteInt32(axis_id)
-                        packet.WriteUint8(False)
+                        packet.WriteBool(False)
                         packet.WriteUint32(GetItemID(item))
                     End If
                 Next

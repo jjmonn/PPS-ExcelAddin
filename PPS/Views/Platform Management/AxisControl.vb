@@ -355,6 +355,10 @@ Friend Class AxisControl
         combobox.DropDownList = True
         Dim columnItem As HierarchyItem = columnsVariableItemDictionary(filterNode.Name)
         Dim filterValueId = Controller.GetFilterValueId(CInt(filterNode.Name), axisValueId)
+        If (filterValueId = 0) Then
+            System.Diagnostics.Debug.WriteLine("AxisControl.FillSubFilters: Invalid filter value id")
+            Exit Sub
+        End If
         Dim filter_value_name = GlobalVariables.FiltersValues.filtervalues_hash(filterValueId)(NAME_VARIABLE)
         DGV.CellsArea.SetCellValue(rowItem, columnItem, filter_value_name)
 

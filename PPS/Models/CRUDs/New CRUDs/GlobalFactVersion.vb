@@ -165,7 +165,7 @@ Public Class GlobalFactVersion
         If attributes.ContainsKey(ID_VARIABLE) Then packet.WriteUint32(attributes(ID_VARIABLE))
         packet.WriteUint32(attributes(PARENT_ID_VARIABLE))
         packet.WriteString(attributes(NAME_VARIABLE))
-        packet.WriteUint8(attributes(IS_FOLDER_VARIABLE))
+        packet.WriteBool(attributes(IS_FOLDER_VARIABLE))
         packet.WriteUint32(attributes(ITEMS_POSITIONS))
         packet.WriteUint32(attributes(VERSIONS_START_PERIOD_VAR))
         packet.WriteUint16(attributes(VERSIONS_NB_PERIODS_VAR))
