@@ -276,6 +276,9 @@ Friend Class FilterValue
     Friend Function GetFilterValueId(ByVal mostNestedFilterValueId As Int32, _
                                      ByRef filterId As Int32) As Int32
 
+        If Not filtervalues_hash.ContainsKey(mostNestedFilterValueId) Then
+            Return 0
+        End If
         If filtervalues_hash(mostNestedFilterValueId)(FILTER_ID_VARIABLE) = filterId Then
             Return mostNestedFilterValueId
         Else
