@@ -35,6 +35,14 @@ Public MustInherit Class SuperAxisCRUD
     Friend MustOverride Sub CMSG_UPDATE_AXIS(ByRef ht As Hashtable)
     Friend MustOverride Sub CMSG_DELETE_AXIS(ByRef id As UInt32)
 
+    Friend Function GetAxisValueId(ByRef name As String) As Int32
+        For Each id In Axis_hash.Keys
+            If Axis_hash(id)(NAME_VARIABLE) = name Then
+                Return id
+            End If
+        Next
+        Return 0
+    End Function
     ' Mappings
     Friend Function GetAxisNameList() As List(Of String)
 

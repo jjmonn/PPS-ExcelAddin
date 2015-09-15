@@ -148,7 +148,6 @@ Friend Class AccountsController
         Next
         GlobalVariables.Accounts.CMSG_UPDATE_ACCOUNT(ht)
 
-
     End Sub
 
     Friend Sub UpdateBatch(ByRef accountsUpdates As List(Of Tuple(Of Int32, String, Int32)))
@@ -167,7 +166,13 @@ Friend Class AccountsController
                            ByRef new_name As String)
 
         UpdateAccount(account_id, NAME_VARIABLE, new_name)
-
+        For Each name As String In accountsNameKeysDictionary.Keys
+            If accountsNameKeysDictionary(name) = account_id Then
+                accountsNameKeysDictionary.Remove(name)
+                Exit For
+            End If
+        Next
+        accountsNameKeysDictionary.Add(new_name, account_id)
     End Sub
 
     Friend Sub DeleteAccount(ByRef account_id As Int32)
