@@ -1221,6 +1221,9 @@ Public Class AddinModule
         GlobalVariables.GlobalFacts = New GlobalFact
         GlobalVariables.GlobalFactsDatas = New GlobalFactData
         GlobalVariables.GlobalFactsVersions = New GlobalFactVersion
+        GlobalVariables.Users = New User
+        GlobalVariables.Groups = New Group
+        GlobalVariables.GroupAllowedEntities = New GroupAllowedEntity
 
         ' Financial Bi User Defined Function
         GlobalVariables.GlobalPPSBIController = New PPSBIController

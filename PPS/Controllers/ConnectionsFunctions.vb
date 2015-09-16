@@ -129,6 +129,9 @@ Friend Class ConnectionsFunctions
         AddHandler GlobalVariables.GlobalFacts.ObjectInitialized, AddressOf AfterGlobalFactsInit
         AddHandler GlobalVariables.GlobalFactsDatas.ObjectInitialized, AddressOf AfterGlobalFactsDataInit
         AddHandler GlobalVariables.GlobalFactsVersions.ObjectInitialized, AddressOf AfterGlobalFactsVersionInit
+        AddHandler GlobalVariables.Users.ObjectInitialized, AddressOf AfterUserInit
+        AddHandler GlobalVariables.Groups.ObjectInitialized, AddressOf AfterGroupInit
+        AddHandler GlobalVariables.GroupAllowedEntities.ObjectInitialized, AddressOf AfterGroupAllowedEntityInit
 
         globalVariablesInitFlags.Add(GlobalEnums.GlobalModels.ACCOUNTS, False)
         globalVariablesInitFlags.Add(GlobalEnums.GlobalModels.ENTITIES, False)
@@ -147,6 +150,9 @@ Friend Class ConnectionsFunctions
         globalVariablesInitFlags.Add(GlobalEnums.GlobalModels.GLOBALFACT, False)
         globalVariablesInitFlags.Add(GlobalEnums.GlobalModels.GLOBALFACTSDATA, False)
         globalVariablesInitFlags.Add(GlobalEnums.GlobalModels.GLOBALFACTSVERSION, False)
+        globalVariablesInitFlags.Add(GlobalEnums.GlobalModels.USER, False)
+        globalVariablesInitFlags.Add(GlobalEnums.GlobalModels.GROUP, False)
+        globalVariablesInitFlags.Add(GlobalEnums.GlobalModels.GROUPALLOWEDENTITY, False)
 
     End Sub
 
@@ -272,6 +278,21 @@ Friend Class ConnectionsFunctions
 
     Private Sub AfterGlobalFactsVersionInit()
         globalVariablesInitFlags(GlobalEnums.GlobalModels.GLOBALFACTSVERSION) = True
+        globalInitFlag = CheckGlobalVariablesInitFlag()
+    End Sub
+
+    Private Sub AfterUserInit()
+        globalVariablesInitFlags(GlobalEnums.GlobalModels.USER) = True
+        globalInitFlag = CheckGlobalVariablesInitFlag()
+    End Sub
+
+    Private Sub AfterGroupInit()
+        globalVariablesInitFlags(GlobalEnums.GlobalModels.GROUP) = True
+        globalInitFlag = CheckGlobalVariablesInitFlag()
+    End Sub
+
+    Private Sub AfterGroupAllowedEntityInit()
+        globalVariablesInitFlags(GlobalEnums.GlobalModels.GROUPALLOWEDENTITY) = True
         globalInitFlag = CheckGlobalVariablesInitFlag()
     End Sub
 #End Region

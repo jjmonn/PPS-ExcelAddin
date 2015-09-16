@@ -83,6 +83,9 @@ Friend Class GlobalVariables
     Friend Shared GlobalFacts As GlobalFact
     Friend Shared GlobalFactsDatas As GlobalFactData
     Friend Shared GlobalFactsVersions As GlobalFactVersion
+    Friend Shared Users As User
+    Friend Shared Groups As Group
+    Friend Shared GroupAllowedEntities As GroupAllowedEntity
 
 #End Region
 
