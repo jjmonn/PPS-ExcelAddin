@@ -83,7 +83,7 @@ Friend Class NewUserUI
         End Try
 
         Dim user_id As String = UserIDTB.Text
-        If CONTROLLER.IsUSerIDAlreadyInUse(UserIDTB.Text) = True Then
+        If CONTROLLER.IsUserNameAlreadyInUse(UserIDTB.Text) = True Then
             MsgBox("This name already exists, please enter another name")
             Exit Sub
         ElseIf Len(user_id) > USERS_ID_MAX_SIZE Then
@@ -143,7 +143,7 @@ Friend Class NewUserUI
     Private Sub CancelBT_Click(sender As Object, e As EventArgs) Handles CancelBT.Click
 
         Me.Hide()
-        CONTROLLER.ShowUsersMGTUI()
+        'CONTROLLER.ShowUsersMGTUI()
 
     End Sub
 
@@ -151,7 +151,7 @@ Friend Class NewUserUI
 
         e.Cancel = True
         Me.Hide()
-        CONTROLLER.ShowUsersMGTUI()
+        'CONTROLLER.ShowUsersMGTUI()
 
     End Sub
 

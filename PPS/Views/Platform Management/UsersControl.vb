@@ -7,8 +7,13 @@
 ' Last modified: 25/06/2015
 
 
+Imports VIBlend.WinForms.DataGridView
+Imports VIBlend.WinForms.DataGridView.Filters
+Imports VIBlend.Utilities
+Imports System.Collections.Generic
+Imports System.Collections
+Imports VIBlend.WinForms.Controls
 Imports System.Windows.Forms
-
 
 Friend Class UsersControl
 
@@ -16,171 +21,116 @@ Friend Class UsersControl
 #Region "Instance variables"
 
     ' Objects
-    Friend Controller As UsersController
-    Friend UsersTGVMGT As UsersTGV
-    Friend EntitySelectionUI As EntitySelectionForUsersMGT
-
+    Private m_controller As UsersController
+    Private m_dataGridView As New vDataGridView
+    Private m_columnsVariableItemDictionary As New Dictionary(Of String, HierarchyItem)
 
 #End Region
-
 
 #Region "Initialize"
 
-    Protected Friend Sub New(ByRef Controller As UsersController)
-
-        ' This call is required by the designer.
+    Friend Sub New(ByRef p_controller As UsersController)
         InitializeComponent()
 
-        ' Add any initialization after the InitializeComponent() call.
-        Me.Controller = Controller
-        usersTGV.ImageList = TGVIcons
-        UsersTGVMGT = New UsersTGV(usersTGV, Me)
-        UsersTGVMGT.SetController(Controller)
-        EntitySelectionUI = New EntitySelectionForUsersMGT(UsersTGVMGT)
+        m_controller = p_controller
+        Me.Controls.Add(m_dataGridView)
+        m_dataGridView.Dock = DockStyle.Fill
+        ColumnsInitialize()
+        RowsInitialize()
+        InitGroupList()
+
+        m_dataGridView.VIBlendTheme = VIBLEND_THEME.OFFICESILVER
+        m_dataGridView.ColumnsHierarchy.AutoResize(AutoResizeMode.FIT_ALL)
+
+        AddHandler GlobalVariables.Users.UpdateEvent, AddressOf Controller_Update
 
     End Sub
 
-#End Region
+    Private Sub ColumnsInitialize()
 
+        m_dataGridView.ColumnsHierarchy.Clear()
 
-#Region "Call backs"
+        ' User Name Column
+        Dim nameColumn As HierarchyItem = m_dataGridView.ColumnsHierarchy.Items.Add("Name")
+        nameColumn.ItemValue = NAME_VARIABLE
+        m_columnsVariableItemDictionary.Add(NAME_VARIABLE, nameColumn)
+        nameColumn.AllowFiltering = True
 
-    'Private Sub AddFolderBT_Click(sender As Object, e As EventArgs) Handles addFolderBT.Click
-
-    '    If Not UsersTGVMGT.currentRowItem Is Nothing Then
-    '        If UsersTGVMGT.currentRowItem.ImageIndex = 1 Then
-    '            Dim new_user_id = PromptUser_id()
-    '            Controller.CreateFolder(new_user_id, UsersTGVMGT.currentRowItem)
-    '        Else
-    '            MsgBox("A Folder cannot be created under a user.")
-    '        End If
-    '    Else
-    '        Dim new_user_id = PromptUser_id()
-    '        Controller.CreateFolder(new_user_id)
-    '    End If
-
-    'End Sub
-
-    'Private Sub AddUser_Click(sender As Object, e As EventArgs) Handles addUserBT.Click
-
-    '    Me.Hide()
-    '    Controller.ShowNewUserUI()
-
-    'End Sub
-
-    'Private Sub DeleteBT_Click(sender As Object, e As EventArgs) Handles DeleteBT.Click
-
-    '    If Not UsersTGVMGT.currentRowItem Is Nothing Then
-
-    '        If UsersTGVMGT.currentRowItem.ImageIndex = 0 Then
-    '            Dim confirm As Integer = MessageBox.Show("Careful, you are about to delete user " + Chr(13) + Chr(13) + _
-    '                                                     UsersTGVMGT.currentRowItem.Caption + Chr(13) + Chr(13) + _
-    '                                                     "Do you confirm?" + Chr(13) + Chr(13), _
-    '                                                     "User deletion confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
-    '            If confirm = DialogResult.Yes Then
-    '                Controller.DeleteUser(UsersTGVMGT.currentRowItem.Caption)
-    '            End If
-    '        Else
-    '            Dim confirm As Integer = MessageBox.Show("Careful, you are about to delete folder " + Chr(13) + Chr(13) + _
-    '                                                      UsersTGVMGT.currentRowItem.Caption + Chr(13) + Chr(13) + _
-    '                                                      "Deleting this folder will delete all sub folders and users" + Chr(13) + Chr(13) + _
-    '                                                      "Do you confirm?" + Chr(13) + Chr(13), _
-    '                                                      "Folder deletion confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
-    '            If confirm = DialogResult.Yes Then
-    '                Controller.DeleteFolder(UsersTGVMGT.currentRowItem.Caption)
-    '                UsersTGVMGT.currentRowItem = Nothing
-    '            End If
-    '        End If
-    '    End If
-
-    'End Sub
-
-    'Private Sub ReinitPwdBT_Click(sender As Object, e As EventArgs) Handles ReinitPwdBT.Click
-
-    '    If Not UsersTGVMGT.currentRowItem Is Nothing AndAlso UsersTGVMGT.currentRowItem.ImageIndex = 0 Then
-    '        Controller.ReiniatilizePassword(UsersTGVMGT.currentRowItem.Caption)
-    '    Else
-    '        MsgBox("A user must be selected in order to reinitialize the password")
-    '    End If
-
-    'End Sub
-
-    'Private Sub ExitBT_Click(sender As Object, e As EventArgs) Handles ExitBT.Click
-
-    '    Me.Dispose()
-
-    'End Sub
-
-
-#End Region
-
-
-#Region "Right Click Menu"
-
-    'Private Sub CreateUserToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles CreateUserToolStripMenuItem.Click
-
-    '    AddUser_Click(sender, e)
-
-    'End Sub
-
-    'Private Sub CreateFolderToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles CreateFolderToolStripMenuItem.Click
-
-    '    AddFolderBT_Click(sender, e)
-
-    'End Sub
-
-    'Private Sub DeleteToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles DeleteToolStripMenuItem.Click
-
-    '    DeleteBT_Click(sender, e)
-
-    'End Sub
-
-    'Private Sub ReinitializePasswordToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ReinitializePasswordToolStripMenuItem.Click
-
-    '    ReinitPwdBT_Click(sender, e)
-
-    'End Sub
-
-
-#End Region
-
-
-#Region "Utilities"
-
-    Friend Sub ShowEntitiesSelection()
-
-        EntitySelectionUI.Show()
-        Me.Cursor = New Cursor(Cursor.Current.Handle)
-        Dim temp As Drawing.Point = MousePosition
-        temp.X = temp.X
-        temp.Y = temp.Y
-        EntitySelectionUI.Location = temp
+        ' User Group Column
+        Dim groupColumn As HierarchyItem = m_dataGridView.ColumnsHierarchy.Items.Add("Group")
+        groupColumn.ItemValue = GROUP_ID_VARIABLE
+        m_columnsVariableItemDictionary.Add(GROUP_ID_VARIABLE, groupColumn)
+        groupColumn.AllowFiltering = True
 
     End Sub
 
-    Friend Sub HideEntitySelection()
+    Private Sub RowsInitialize()
 
-        EntitySelectionUI.Hide()
+        RemoveHandler m_dataGridView.CellValueChanged, AddressOf DataGridView_ValueChanged
+
+        m_dataGridView.RowsHierarchy.Clear()
+        For Each user In m_controller.GetUserList()
+            CreateRow(user.Value)
+        Next
+
+        AddHandler m_dataGridView.CellValueChanged, AddressOf DataGridView_ValueChanged
 
     End Sub
 
-    Private Function PromptUser_id() As String
+    Private Function CreateRow(ByRef user As Hashtable) As HierarchyItem
 
-        Dim new_user_id As String = InputBox("Enter the new folder name")
-        If Controller.IsUSerIDAlreadyInUse(new_user_id) = True Then
-            MsgBox("This name already exists, please enter another name")
-            Return ""
-        ElseIf Len(new_user_id) > USERS_ID_MAX_SIZE Then
-            MsgBox("The User cannot exceed " & USERS_ID_MAX_SIZE & " characters.")
-            Return ""
-        End If
-        Return new_user_id
+        Dim row As HierarchyItem
+        row = m_dataGridView.RowsHierarchy.Items.Add("")
+        row.ItemValue = user(ID_VARIABLE)
+        m_dataGridView.CellsArea.SetCellValue(row, m_columnsVariableItemDictionary(NAME_VARIABLE), user(NAME_VARIABLE))
+        m_dataGridView.CellsArea.SetCellValue(row, m_columnsVariableItemDictionary(GROUP_ID_VARIABLE), m_controller.GetGroupName(user(GROUP_ID_VARIABLE)))
+        Return row
 
     End Function
 
+    Private Sub InitGroupList()
+
+        Dim list As New ComboBoxEditor()
+        list.DropDownList = True
+
+        For Each group In m_controller.GetGroupList()
+            Dim listItem As New ListItem
+            listItem.Value = group.Value(ID_VARIABLE)
+            listItem.Text = group.Value(NAME_VARIABLE)
+            list.Items.Add(listItem)
+        Next
+        m_columnsVariableItemDictionary(GROUP_ID_VARIABLE).CellsEditor = list
+
+    End Sub
+
 #End Region
 
+#Region "CRUD Event"
 
+    Private Sub Controller_Update(ByRef state As Boolean, ByRef id As Int32)
+        If (state = False) Then
+            RowsInitialize()
+        End If
+    End Sub
 
+#End Region
+
+#Region "UI Event"
+
+    Private Sub DataGridView_ValueChanged(sender As Object, args As CellEventArgs)
+
+        Dim list As ComboBoxEditor = args.Cell.Editor
+
+        Select Case args.Cell.ColumnItem.ItemValue
+
+            Case GROUP_ID_VARIABLE
+                Dim groupId As Int32 = list.SelectedItem.Value
+
+                m_controller.SetUserGroup(args.Cell.RowItem.ItemValue, groupId)
+        End Select
+
+    End Sub
+
+#End Region
 
 End Class

@@ -8,7 +8,7 @@ Friend Class User
 
     ' Variables
     Friend state_flag As Boolean
-    Friend userHT As New Hashtable
+    Friend userDic As New Dictionary(Of Int32, Hashtable)
     Public Event CreationEvent(ByRef status As Boolean, ByRef id As Int32)
     Public Event UpdateEvent(ByRef status As Boolean, ByRef id As Int32)
     Public Event DeleteEvent(ByRef status As Boolean, ByRef id As Int32)
@@ -32,11 +32,12 @@ Friend Class User
 
     Private Sub SMSG_LIST_USERS(packet As ByteBuffer)
 
+        System.Diagnostics.Debug.WriteLine("Load users")
         If packet.GetError() = 0 Then
             For i As Int32 = 1 To packet.ReadInt32()
                 Dim tmp_ht As New Hashtable
                 GetUserHTFromPacket(packet, tmp_ht)
-                userHT(CInt(tmp_ht(ID_VARIABLE))) = tmp_ht
+                userDic(CInt(tmp_ht(ID_VARIABLE))) = tmp_ht
             Next
             RaiseEvent ObjectInitialized(True)
             state_flag = True
@@ -60,6 +61,15 @@ Friend Class User
 
     End Sub
 
+    Friend Function GetIdFromName(ByRef name As String) As Int32
+
+        For Each user In userDic
+            If name = user.Value(NAME_VARIABLE) Then Return user.Value(ID_VARIABLE)
+        Next
+        Return 0
+
+    End Function
+
 #End Region
 
 #Region "CRUD"
@@ -70,7 +80,6 @@ Friend Class User
         Dim packet As New ByteBuffer(CType(ClientMessage.CMSG_CREATE_USER, UShort))
         packet.WriteUint32(attributes(GROUP_ID_VARIABLE))
         packet.WriteString(attributes(NAME_VARIABLE))
-        packet.WriteString(attributes(PASSWORD_VARIABLE))
         packet.Release()
         NetworkManager.GetInstance().Send(packet)
 
@@ -124,7 +133,7 @@ Friend Class User
 
         Dim ht As New Hashtable
         GetUserHTFromPacket(packet, ht)
-        userHT(CInt(ht(ID_VARIABLE))) = ht
+        userDic(CInt(ht(ID_VARIABLE))) = ht
         RaiseEvent ReadEvent(True, ht)
     End Sub
 

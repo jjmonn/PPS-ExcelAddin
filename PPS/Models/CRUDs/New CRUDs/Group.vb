@@ -8,7 +8,7 @@ Friend Class Group
 
     ' Variables
     Friend state_flag As Boolean
-    Friend groupHT As New Hashtable
+    Friend groupDic As New Dictionary(Of Int32, Hashtable)
     Public Event CreationEvent(ByRef status As Boolean, ByRef id As Int32)
     Public Event ReadEvent(ByRef status As Boolean, ByRef id As Hashtable)
     Public Event DeleteEvent(ByRef status As Boolean, ByRef id As Int32)
@@ -36,7 +36,7 @@ Friend Class Group
             For i As Int32 = 1 To packet.ReadInt32()
                 Dim tmp_ht As New Hashtable
                 GetGroupHTFromPacket(packet, tmp_ht)
-                groupHT(CInt(tmp_ht(ID_VARIABLE))) = tmp_ht
+                groupDic(CInt(tmp_ht(ID_VARIABLE))) = tmp_ht
             Next
             RaiseEvent ObjectInitialized(True)
             state_flag = True
@@ -125,7 +125,7 @@ Friend Class Group
 
         Dim ht As New Hashtable
         GetGroupHTFromPacket(packet, ht)
-        groupHT(CInt(ht(ID_VARIABLE))) = ht
+        groupDic(CInt(ht(ID_VARIABLE))) = ht
         RaiseEvent ReadEvent(True, ht)
     End Sub
 

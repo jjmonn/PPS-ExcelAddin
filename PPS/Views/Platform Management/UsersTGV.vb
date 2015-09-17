@@ -225,12 +225,12 @@ Friend Class UsersTGV
 
     Private Sub dataGrid_CellBeginEdit(ByVal sender As Object, ByVal args As CellCancelEventArgs)
 
-        If args.Cell.ColumnItem Is columnsDictionary(USERS_ENTITY_ID_VARIABLE) Then
-            tmp_entity_id = ""
-            If args.Cell.Editor.EditorType = CellEditorType.TextBox Then
-                ParentView.ShowEntitiesSelection()
-            End If
-        End If
+        'If args.Cell.ColumnItem Is columnsDictionary(USERS_ENTITY_ID_VARIABLE) Then
+        '    tmp_entity_id = ""
+        '    If args.Cell.Editor.EditorType = CellEditorType.TextBox Then
+        '        ParentView.ShowEntitiesSelection()
+        '    End If
+        'End If
 
     End Sub
 
