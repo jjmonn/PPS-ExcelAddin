@@ -1796,7 +1796,7 @@ Public Class AddinModule
 
     Friend Sub InputReportPaneCallBack_ReportCreation()
 
-        ' circular progress !!!
+        ' circular progress !!! priority high
         ' GlobalVariables.APPS.ScreenUpdating = False
         Dim entity_id As Int32 = Me.InputReportTaskPane.EntitiesTV.SelectedNode.Name
         Dim entity_name As String = Me.InputReportTaskPane.EntitiesTV.SelectedNode.Text

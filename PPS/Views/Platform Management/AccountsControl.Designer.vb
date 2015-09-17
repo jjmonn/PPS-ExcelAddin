@@ -46,7 +46,7 @@ Partial Class AccountsControl
         Me.VLabel3 = New VIBlend.WinForms.Controls.vLabel()
         Me.VLabel1 = New VIBlend.WinForms.Controls.vLabel()
         Me.FormulaTypeComboBox = New VIBlend.WinForms.Controls.vComboBox()
-        Me.FormatComboBox = New VIBlend.WinForms.Controls.vComboBox()
+        Me.TypeComboBox = New VIBlend.WinForms.Controls.vComboBox()
         Me.Name_TB = New System.Windows.Forms.TextBox()
         Me.accountsIL = New System.Windows.Forms.ImageList(Me.components)
         Me.TVRCM = New System.Windows.Forms.ContextMenuStrip(Me.components)
@@ -92,7 +92,7 @@ Partial Class AccountsControl
         '
         Me.SplitContainer1.Panel2.Controls.Add(Me.TableLayoutPanel2)
         Me.SplitContainer1.Size = New System.Drawing.Size(844, 652)
-        Me.SplitContainer1.SplitterDistance = 208
+        Me.SplitContainer1.SplitterDistance = 267
         Me.SplitContainer1.TabIndex = 23
         '
         'TableLayoutPanel1
@@ -107,7 +107,7 @@ Partial Class AccountsControl
         Me.TableLayoutPanel1.RowCount = 2
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25.0!))
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TableLayoutPanel1.Size = New System.Drawing.Size(208, 652)
+        Me.TableLayoutPanel1.Size = New System.Drawing.Size(267, 652)
         Me.TableLayoutPanel1.TabIndex = 0
         '
         'Panel1
@@ -116,7 +116,7 @@ Partial Class AccountsControl
         Me.Panel1.Location = New System.Drawing.Point(1, 1)
         Me.Panel1.Margin = New System.Windows.Forms.Padding(1)
         Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(206, 23)
+        Me.Panel1.Size = New System.Drawing.Size(265, 23)
         Me.Panel1.TabIndex = 1
         '
         'AccountsTVPanel
@@ -125,7 +125,7 @@ Partial Class AccountsControl
         Me.AccountsTVPanel.Location = New System.Drawing.Point(1, 26)
         Me.AccountsTVPanel.Margin = New System.Windows.Forms.Padding(1)
         Me.AccountsTVPanel.Name = "AccountsTVPanel"
-        Me.AccountsTVPanel.Size = New System.Drawing.Size(206, 625)
+        Me.AccountsTVPanel.Size = New System.Drawing.Size(265, 625)
         Me.AccountsTVPanel.TabIndex = 2
         '
         'TableLayoutPanel2
@@ -143,7 +143,7 @@ Partial Class AccountsControl
         Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 285.0!))
         Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 54.77032!))
         Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 45.22968!))
-        Me.TableLayoutPanel2.Size = New System.Drawing.Size(632, 652)
+        Me.TableLayoutPanel2.Size = New System.Drawing.Size(573, 652)
         Me.TableLayoutPanel2.TabIndex = 1
         '
         'GroupBox5
@@ -153,7 +153,7 @@ Partial Class AccountsControl
         Me.GroupBox5.Dock = System.Windows.Forms.DockStyle.Fill
         Me.GroupBox5.Location = New System.Drawing.Point(3, 500)
         Me.GroupBox5.Name = "GroupBox5"
-        Me.GroupBox5.Size = New System.Drawing.Size(626, 149)
+        Me.GroupBox5.Size = New System.Drawing.Size(567, 149)
         Me.GroupBox5.TabIndex = 20
         Me.GroupBox5.TabStop = False
         Me.GroupBox5.Text = "Account's Description"
@@ -164,7 +164,7 @@ Partial Class AccountsControl
         Me.SaveDescriptionBT.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
         Me.SaveDescriptionBT.ImageKey = "1420498403_340208.ico"
         Me.SaveDescriptionBT.ImageList = Me.EditButtonsImagelist
-        Me.SaveDescriptionBT.Location = New System.Drawing.Point(457, 109)
+        Me.SaveDescriptionBT.Location = New System.Drawing.Point(398, 109)
         Me.SaveDescriptionBT.Margin = New System.Windows.Forms.Padding(2)
         Me.SaveDescriptionBT.Name = "SaveDescriptionBT"
         Me.SaveDescriptionBT.Size = New System.Drawing.Size(135, 28)
@@ -191,7 +191,7 @@ Partial Class AccountsControl
         Me.DescriptionTB.Margin = New System.Windows.Forms.Padding(2)
         Me.DescriptionTB.Multiline = True
         Me.DescriptionTB.Name = "DescriptionTB"
-        Me.DescriptionTB.Size = New System.Drawing.Size(586, 75)
+        Me.DescriptionTB.Size = New System.Drawing.Size(527, 75)
         Me.DescriptionTB.TabIndex = 6
         '
         'GroupBox3
@@ -202,7 +202,7 @@ Partial Class AccountsControl
         Me.GroupBox3.Dock = System.Windows.Forms.DockStyle.Fill
         Me.GroupBox3.Location = New System.Drawing.Point(3, 313)
         Me.GroupBox3.Name = "GroupBox3"
-        Me.GroupBox3.Size = New System.Drawing.Size(626, 181)
+        Me.GroupBox3.Size = New System.Drawing.Size(567, 181)
         Me.GroupBox3.TabIndex = 19
         Me.GroupBox3.TabStop = False
         Me.GroupBox3.Text = "Account's Formula"
@@ -228,7 +228,7 @@ Partial Class AccountsControl
         Me.submit_cmd.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
         Me.submit_cmd.ImageKey = "1420498403_340208.ico"
         Me.submit_cmd.ImageList = Me.EditButtonsImagelist
-        Me.submit_cmd.Location = New System.Drawing.Point(458, 140)
+        Me.submit_cmd.Location = New System.Drawing.Point(399, 140)
         Me.submit_cmd.Margin = New System.Windows.Forms.Padding(2)
         Me.submit_cmd.Name = "submit_cmd"
         Me.submit_cmd.Size = New System.Drawing.Size(134, 28)
@@ -248,7 +248,7 @@ Partial Class AccountsControl
         Me.formula_TB.Margin = New System.Windows.Forms.Padding(2)
         Me.formula_TB.Multiline = True
         Me.formula_TB.Name = "formula_TB"
-        Me.formula_TB.Size = New System.Drawing.Size(587, 85)
+        Me.formula_TB.Size = New System.Drawing.Size(528, 85)
         Me.formula_TB.TabIndex = 6
         '
         'GroupBox1
@@ -261,7 +261,7 @@ Partial Class AccountsControl
         Me.GroupBox1.Controls.Add(Me.VLabel3)
         Me.GroupBox1.Controls.Add(Me.VLabel1)
         Me.GroupBox1.Controls.Add(Me.FormulaTypeComboBox)
-        Me.GroupBox1.Controls.Add(Me.FormatComboBox)
+        Me.GroupBox1.Controls.Add(Me.TypeComboBox)
         Me.GroupBox1.Controls.Add(Me.Name_TB)
         Me.GroupBox1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.GroupBox1.FlatStyle = System.Windows.Forms.FlatStyle.Popup
@@ -269,7 +269,7 @@ Partial Class AccountsControl
         Me.GroupBox1.Margin = New System.Windows.Forms.Padding(2)
         Me.GroupBox1.Name = "GroupBox1"
         Me.GroupBox1.Padding = New System.Windows.Forms.Padding(2)
-        Me.GroupBox1.Size = New System.Drawing.Size(628, 281)
+        Me.GroupBox1.Size = New System.Drawing.Size(569, 281)
         Me.GroupBox1.TabIndex = 17
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "Account's information"
@@ -355,7 +355,7 @@ Partial Class AccountsControl
         Me.VLabel2.Name = "VLabel2"
         Me.VLabel2.Size = New System.Drawing.Size(129, 25)
         Me.VLabel2.TabIndex = 43
-        Me.VLabel2.Text = "Format"
+        Me.VLabel2.Text = "Account Type"
         Me.VLabel2.TextAlignment = System.Drawing.ContentAlignment.TopLeft
         Me.VLabel2.UseMnemonics = True
         Me.VLabel2.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
@@ -411,24 +411,24 @@ Partial Class AccountsControl
         Me.FormulaTypeComboBox.VIBlendScrollBarsTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
         Me.FormulaTypeComboBox.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
         '
-        'FormatComboBox
+        'TypeComboBox
         '
-        Me.FormatComboBox.BackColor = System.Drawing.Color.White
-        Me.FormatComboBox.DisplayMember = ""
-        Me.FormatComboBox.DropDownMaximumSize = New System.Drawing.Size(1000, 1000)
-        Me.FormatComboBox.DropDownMinimumSize = New System.Drawing.Size(10, 10)
-        Me.FormatComboBox.DropDownResizeDirection = VIBlend.WinForms.Controls.SizingDirection.Both
-        Me.FormatComboBox.DropDownWidth = 216
-        Me.FormatComboBox.Location = New System.Drawing.Point(207, 117)
-        Me.FormatComboBox.Name = "FormatComboBox"
-        Me.FormatComboBox.RoundedCornersMaskListItem = CType(15, Byte)
-        Me.FormatComboBox.Size = New System.Drawing.Size(216, 20)
-        Me.FormatComboBox.TabIndex = 31
-        Me.FormatComboBox.UseThemeBackColor = False
-        Me.FormatComboBox.UseThemeDropDownArrowColor = True
-        Me.FormatComboBox.ValueMember = ""
-        Me.FormatComboBox.VIBlendScrollBarsTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
-        Me.FormatComboBox.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
+        Me.TypeComboBox.BackColor = System.Drawing.Color.White
+        Me.TypeComboBox.DisplayMember = ""
+        Me.TypeComboBox.DropDownMaximumSize = New System.Drawing.Size(1000, 1000)
+        Me.TypeComboBox.DropDownMinimumSize = New System.Drawing.Size(10, 10)
+        Me.TypeComboBox.DropDownResizeDirection = VIBlend.WinForms.Controls.SizingDirection.Both
+        Me.TypeComboBox.DropDownWidth = 216
+        Me.TypeComboBox.Location = New System.Drawing.Point(207, 117)
+        Me.TypeComboBox.Name = "TypeComboBox"
+        Me.TypeComboBox.RoundedCornersMaskListItem = CType(15, Byte)
+        Me.TypeComboBox.Size = New System.Drawing.Size(216, 20)
+        Me.TypeComboBox.TabIndex = 31
+        Me.TypeComboBox.UseThemeBackColor = False
+        Me.TypeComboBox.UseThemeDropDownArrowColor = True
+        Me.TypeComboBox.ValueMember = ""
+        Me.TypeComboBox.VIBlendScrollBarsTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
+        Me.TypeComboBox.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
         '
         'Name_TB
         '
@@ -436,7 +436,7 @@ Partial Class AccountsControl
         Me.Name_TB.Location = New System.Drawing.Point(207, 41)
         Me.Name_TB.Margin = New System.Windows.Forms.Padding(2)
         Me.Name_TB.Name = "Name_TB"
-        Me.Name_TB.Size = New System.Drawing.Size(360, 20)
+        Me.Name_TB.Size = New System.Drawing.Size(341, 20)
         Me.Name_TB.TabIndex = 1
         '
         'accountsIL
@@ -619,7 +619,7 @@ Partial Class AccountsControl
     Friend WithEvents SaveDescriptionBT As System.Windows.Forms.Button
     Friend WithEvents DescriptionTB As System.Windows.Forms.TextBox
     Friend WithEvents FormulaTypeComboBox As VIBlend.WinForms.Controls.vComboBox
-    Friend WithEvents FormatComboBox As VIBlend.WinForms.Controls.vComboBox
+    Friend WithEvents TypeComboBox As VIBlend.WinForms.Controls.vComboBox
     Friend WithEvents VLabel3 As VIBlend.WinForms.Controls.vLabel
     Friend WithEvents VLabel1 As VIBlend.WinForms.Controls.vLabel
     Friend WithEvents VLabel5 As VIBlend.WinForms.Controls.vLabel

@@ -123,29 +123,29 @@ Friend Class AccountsControl
         FormulaTypeComboBox.Items.Add(TitleListItem)
         formulasTypesIdItemDict.Add(TitleListItem.Value, TitleListItem)
 
-        ' Formats
+        ' Type
         Dim MonetaryFormatLI As New ListItem
         MonetaryFormatLI.Text = "Monetary"
-        MonetaryFormatLI.Value = GlobalEnums.AccountFormat.MONETARY
-        FormatComboBox.Items.Add(MonetaryFormatLI)
+        MonetaryFormatLI.Value = GlobalEnums.AccountType.MONETARY
+        TypeComboBox.Items.Add(MonetaryFormatLI)
         formatsIdItemDict.Add(MonetaryFormatLI.Value, MonetaryFormatLI)
 
         Dim NormalFormatLI As New ListItem
         NormalFormatLI.Text = "Number"
-        NormalFormatLI.Value = GlobalEnums.AccountFormat.NUMBER
-        FormatComboBox.Items.Add(NormalFormatLI)
+        NormalFormatLI.Value = GlobalEnums.AccountType.NUMBER
+        TypeComboBox.Items.Add(NormalFormatLI)
         formatsIdItemDict.Add(NormalFormatLI.Value, NormalFormatLI)
 
         Dim percentageFormatLI As New ListItem
         percentageFormatLI.Text = "Percentage"
-        percentageFormatLI.Value = GlobalEnums.AccountFormat.PERCENTAGE
-        FormatComboBox.Items.Add(percentageFormatLI)
+        percentageFormatLI.Value = GlobalEnums.AccountType.PERCENTAGE
+        TypeComboBox.Items.Add(percentageFormatLI)
         formatsIdItemDict.Add(percentageFormatLI.Value, percentageFormatLI)
 
         Dim DateFormatLI As New ListItem
         DateFormatLI.Text = "Date"
-        DateFormatLI.Value = GlobalEnums.AccountFormat.DATE_
-        FormatComboBox.Items.Add(DateFormatLI)
+        DateFormatLI.Value = GlobalEnums.AccountType.DATE_
+        TypeComboBox.Items.Add(DateFormatLI)
         formatsIdItemDict.Add(DateFormatLI.Value, DateFormatLI)
 
 
@@ -196,7 +196,7 @@ Friend Class AccountsControl
 
 #Region "Interface"
 
-    
+
     Delegate Sub TVUpdate_Delegate(ByRef account_id As Int32, _
                                    ByRef account_parent_id As Int32, _
                                    ByRef account_name As String, _
@@ -271,7 +271,7 @@ Friend Class AccountsControl
                                          newCategoryName, _
                                          GlobalEnums.FormulaTypes.TITLE, _
                                          "", _
-                                         GlobalEnums.AccountFormat.DATE_, _
+                                         GlobalEnums.AccountType.DATE_, _
                                          1, _
                                          1, _
                                          TITLE_FORMAT_CODE, _
@@ -311,7 +311,7 @@ TokensCheck:
         Else
             GoTo DependanciesCheck
         End If
-      
+
 DependanciesCheck:
         If Controller.InterdependancyTest = True Then
             GoTo SubmitFormula
@@ -689,11 +689,11 @@ SubmitFormula:
 
         If li.Value = GlobalEnums.FormulaTypes.TITLE Then
             CurrencyConversionComboBox.SelectedValue = GlobalEnums.ConversionOptions.NO_CONVERSION
-            FormatComboBox.Enabled = False
+            TypeComboBox.Enabled = False
             CurrencyConversionComboBox.Enabled = False
             ConsolidationOptionComboBox.Enabled = False
         Else
-            FormatComboBox.Enabled = True
+            TypeComboBox.Enabled = True
             CurrencyConversionComboBox.Enabled = True
             ConsolidationOptionComboBox.Enabled = True
         End If
@@ -704,14 +704,14 @@ UdpateFormulaType:
 
     End Sub
 
-    Private Sub formatsCB_SelectedItemChanged(sender As Object, e As EventArgs) Handles FormatComboBox.SelectedItemChanged
+    Private Sub TypeCB_SelectedItemChanged(sender As Object, e As EventArgs) Handles TypeComboBox.SelectedItemChanged
 
-        Dim li = FormatComboBox.SelectedItem
+        Dim li = TypeComboBox.SelectedItem
         If Not IsNothing(current_node) _
         AndAlso isDisplayingAttributes = False Then
             Controller.UpdateAccount(current_node.Name, ACCOUNT_TYPE_VARIABLE, li.Value)
         End If
-        If li.Value = GlobalEnums.AccountFormat.MONETARY Then
+        If li.Value = GlobalEnums.AccountType.MONETARY Then
             CurrencyConversionComboBox.Enabled = True
             CurrencyConversionComboBox.SelectedValue = GlobalEnums.ConversionOptions.AVERAGE_RATE
         Else
@@ -771,9 +771,9 @@ UdpateFormulaType:
 
             ' Format ComboBox
             Dim formatLI = formatsIdItemDict(Controller.ReadAccount(account_id, ACCOUNT_TYPE_VARIABLE))
-            FormatComboBox.SelectedItem = formatLI
+            TypeComboBox.SelectedItem = formatLI
 
-            If formatLI.Value = GlobalEnums.AccountFormat.MONETARY Then
+            If formatLI.Value = GlobalEnums.AccountType.MONETARY Then
 
                 ' Currency Conversion
                 Dim conversionLI = currenciesConversionIdItemDict(Controller.ReadAccount(account_id, ACCOUNT_CONVERSION_OPTION_VARIABLE))
@@ -801,7 +801,7 @@ UdpateFormulaType:
     Private Sub SetEnableStatusEdition(ByRef status As Boolean)
 
         FormulaTypeComboBox.Enabled = status
-        FormatComboBox.Enabled = status
+        TypeComboBox.Enabled = status
         CurrencyConversionComboBox.Enabled = status
         ConsolidationOptionComboBox.Enabled = status
         formula_TB.Enabled = status
@@ -813,4 +813,5 @@ UdpateFormulaType:
 
 
   
+    
 End Class

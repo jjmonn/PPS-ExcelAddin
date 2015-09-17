@@ -62,7 +62,7 @@ Friend Class NewAccountUI
 
     Private Sub ComboBoxesInitialize()
 
-        For Each item In AccountsView.FormatComboBox.Items
+        For Each item In AccountsView.TypeComboBox.Items
             TypeComboBox.Items.Add(item)
         Next
 

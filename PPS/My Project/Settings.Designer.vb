@@ -128,7 +128,7 @@ Namespace My
         
         <Global.System.Configuration.UserScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("52.19.161.163")>  _
+         Global.System.Configuration.DefaultSettingValueAttribute("52.18.194.135")>  _
         Public Property serverIp() As String
             Get
                 Return CType(Me("serverIp"),String)

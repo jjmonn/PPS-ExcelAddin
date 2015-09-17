@@ -70,10 +70,10 @@ Friend Class ExcelFormatting
                     If formatsDictionary(formatCode).isItalic = True Then row.Font.Italic = True
 
                     Select Case AccountsNameTypeDict(accValue)
-                        Case GlobalEnums.AccountFormat.MONETARY : row.Cells.NumberFormat = currencies_symbol_dict(currency) & "#,##0.00;(" & currencies_symbol_dict(currency) & "#,##0.00)"
-                        Case GlobalEnums.AccountFormat.PERCENTAGE : row.Cells.NumberFormat = "0.00%"        ' put this in a table ?
-                        Case GlobalEnums.AccountFormat.NUMBER : row.Cells.NumberFormat = "#,##0.00"        ' further evolution set unit ?
-                        Case GlobalEnums.AccountFormat.DATE_ : row.Cells.NumberFormat = "d-mmm-yy" ' d-mmm-yy
+                        Case GlobalEnums.AccountType.MONETARY : row.Cells.NumberFormat = currencies_symbol_dict(currency) & "#,##0.00;(" & currencies_symbol_dict(currency) & "#,##0.00)"
+                        Case GlobalEnums.AccountType.PERCENTAGE : row.Cells.NumberFormat = "0.00%"        ' put this in a table ?
+                        Case GlobalEnums.AccountType.NUMBER : row.Cells.NumberFormat = "#,##0.00"        ' further evolution set unit ?
+                        Case GlobalEnums.AccountType.DATE_ : row.Cells.NumberFormat = "d-mmm-yy" ' d-mmm-yy
                         Case Else : row.Cells.NumberFormat = "#,##0.00"
                     End Select
 
