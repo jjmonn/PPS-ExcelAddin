@@ -248,8 +248,8 @@ Public Class AddinModule
         Me.ConnectionBT.ImageList = Me.ConnectionIcons
         Me.ConnectionBT.ImageTransparentColor = System.Drawing.Color.Transparent
         Me.ConnectionBT.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
-        Me.ConnectionBT.ScreenTip = "Click to open the connection with Financial BI server (your identification and password wi" & _
-    "ll be required)"
+        Me.ConnectionBT.ScreenTip = "Click to open the connection with Financial BI server (your identification and pa" & _
+    "ssword will be required)"
         Me.ConnectionBT.Size = AddinExpress.MSO.ADXRibbonXControlSize.Large
         '
         'ConnectionIcons
@@ -594,7 +594,7 @@ Public Class AddinModule
         '
         'SettingsBT
         '
-        Me.SettingsBT.Caption = "Financial BI Settings"
+        Me.SettingsBT.Caption = "Settings"
         Me.SettingsBT.Id = "adxRibbonButton_aa28ec782b5541edb1482374e14ceaa6"
         Me.SettingsBT.Image = 16
         Me.SettingsBT.ImageList = Me.Menu3

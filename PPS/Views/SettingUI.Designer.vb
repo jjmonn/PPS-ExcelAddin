@@ -23,7 +23,7 @@ Partial Class SettingUI
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
-        Dim DataGridLocalization1 As VIBlend.WinForms.DataGridView.DataGridLocalization = New VIBlend.WinForms.DataGridView.DataGridLocalization()
+        Dim DataGridLocalization2 As VIBlend.WinForms.DataGridView.DataGridLocalization = New VIBlend.WinForms.DataGridView.DataGridLocalization()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(SettingUI))
         Me.Panel1 = New System.Windows.Forms.Panel()
         Me.TabControl1 = New System.Windows.Forms.TabControl()
@@ -58,7 +58,7 @@ Partial Class SettingUI
         Me.Panel1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Panel1.Location = New System.Drawing.Point(0, 0)
         Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(810, 496)
+        Me.Panel1.Size = New System.Drawing.Size(852, 496)
         Me.Panel1.TabIndex = 0
         '
         'TabControl1
@@ -75,7 +75,7 @@ Partial Class SettingUI
         Me.TabControl1.Multiline = True
         Me.TabControl1.Name = "TabControl1"
         Me.TabControl1.SelectedIndex = 0
-        Me.TabControl1.Size = New System.Drawing.Size(786, 472)
+        Me.TabControl1.Size = New System.Drawing.Size(828, 472)
         Me.TabControl1.SizeMode = System.Windows.Forms.TabSizeMode.Fixed
         Me.TabControl1.TabIndex = 0
         '
@@ -169,7 +169,7 @@ Partial Class SettingUI
         Me.TabPage2.Location = New System.Drawing.Point(124, 4)
         Me.TabPage2.Name = "TabPage2"
         Me.TabPage2.Padding = New System.Windows.Forms.Padding(3)
-        Me.TabPage2.Size = New System.Drawing.Size(658, 464)
+        Me.TabPage2.Size = New System.Drawing.Size(700, 464)
         Me.TabPage2.TabIndex = 1
         Me.TabPage2.Text = "Display"
         Me.TabPage2.UseVisualStyleBackColor = True
@@ -183,7 +183,7 @@ Partial Class SettingUI
         Me.VGroupBox1.Controls.Add(Me.FormatsDGV)
         Me.VGroupBox1.Location = New System.Drawing.Point(17, 19)
         Me.VGroupBox1.Name = "VGroupBox1"
-        Me.VGroupBox1.Size = New System.Drawing.Size(628, 218)
+        Me.VGroupBox1.Size = New System.Drawing.Size(670, 218)
         Me.VGroupBox1.TabIndex = 1
         Me.VGroupBox1.TabStop = False
         Me.VGroupBox1.Text = "Reports Formats"
@@ -203,6 +203,9 @@ Partial Class SettingUI
         Me.FormatsDGV.AllowDefaultContextMenu = True
         Me.FormatsDGV.AllowDragDropIndication = True
         Me.FormatsDGV.AllowHeaderItemHighlightOnCellSelection = True
+        Me.FormatsDGV.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.FormatsDGV.AutoUpdateOnListChanged = False
         Me.FormatsDGV.BackColor = System.Drawing.Color.White
         Me.FormatsDGV.BindingProgressEnabled = False
@@ -215,7 +218,6 @@ Partial Class SettingUI
         Me.FormatsDGV.ColumnsHierarchy.AutoStretchColumns = False
         Me.FormatsDGV.ColumnsHierarchy.Fixed = False
         Me.FormatsDGV.ColumnsHierarchy.ShowExpandCollapseButtons = True
-        Me.FormatsDGV.Dock = System.Windows.Forms.DockStyle.Fill
         Me.FormatsDGV.EnableColumnChooser = False
         Me.FormatsDGV.EnableResizeToolTip = True
         Me.FormatsDGV.EnableToolTips = True
@@ -227,8 +229,8 @@ Partial Class SettingUI
         Me.FormatsDGV.HorizontalScrollBarLargeChange = 20
         Me.FormatsDGV.HorizontalScrollBarSmallChange = 5
         Me.FormatsDGV.ImageList = Nothing
-        Me.FormatsDGV.Localization = DataGridLocalization1
-        Me.FormatsDGV.Location = New System.Drawing.Point(3, 16)
+        Me.FormatsDGV.Localization = DataGridLocalization2
+        Me.FormatsDGV.Location = New System.Drawing.Point(6, 16)
         Me.FormatsDGV.MultipleSelectionEnabled = True
         Me.FormatsDGV.Name = "FormatsDGV"
         Me.FormatsDGV.PivotColumnsTotalsEnabled = False
@@ -246,7 +248,7 @@ Partial Class SettingUI
         Me.FormatsDGV.SelectionBorderEnabled = True
         Me.FormatsDGV.SelectionBorderWidth = 2
         Me.FormatsDGV.SelectionMode = VIBlend.WinForms.DataGridView.vDataGridView.SELECTION_MODE.CELL_SELECT
-        Me.FormatsDGV.Size = New System.Drawing.Size(622, 199)
+        Me.FormatsDGV.Size = New System.Drawing.Size(658, 185)
         Me.FormatsDGV.TabIndex = 0
         Me.FormatsDGV.Text = "VDataGridView1"
         Me.FormatsDGV.ToolTipDuration = 5000
@@ -287,12 +289,12 @@ Partial Class SettingUI
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(810, 496)
+        Me.ClientSize = New System.Drawing.Size(852, 496)
         Me.Controls.Add(Me.Panel1)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Name = "SettingUI"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = "SettingMainUI"
+        Me.Text = "Settings"
         Me.Panel1.ResumeLayout(False)
         Me.TabControl1.ResumeLayout(False)
         Me.TabPage1.ResumeLayout(False)
