@@ -164,13 +164,169 @@ Namespace My
         
         <Global.System.Configuration.UserScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("-16777216")>  _
-        Public Property normalFontColor() As Integer
+         Global.System.Configuration.DefaultSettingValueAttribute("Black")>  _
+        Public Property titleFontColor() As Global.System.Drawing.Color
             Get
-                Return CType(Me("normalFontColor"),Integer)
+                Return CType(Me("titleFontColor"),Global.System.Drawing.Color)
+            End Get
+            Set
+                Me("titleFontColor") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("0, 0, 0, 0")>  _
+        Public Property titleBackColor() As Global.System.Drawing.Color
+            Get
+                Return CType(Me("titleBackColor"),Global.System.Drawing.Color)
+            End Get
+            Set
+                Me("titleBackColor") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property titleFontBold() As Boolean
+            Get
+                Return CType(Me("titleFontBold"),Boolean)
+            End Get
+            Set
+                Me("titleFontBold") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property titleFontItalic() As Boolean
+            Get
+                Return CType(Me("titleFontItalic"),Boolean)
+            End Get
+            Set
+                Me("titleFontItalic") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property titleBordersPresent() As Boolean
+            Get
+                Return CType(Me("titleBordersPresent"),Boolean)
+            End Get
+            Set
+                Me("titleBordersPresent") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("1")>  _
+        Public Property titleIndent() As Integer
+            Get
+                Return CType(Me("titleIndent"),Integer)
+            End Get
+            Set
+                Me("titleIndent") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("Black")>  _
+        Public Property importantFontColor() As Global.System.Drawing.Color
+            Get
+                Return CType(Me("importantFontColor"),Global.System.Drawing.Color)
+            End Get
+            Set
+                Me("importantFontColor") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("0, 0, 0, 0")>  _
+        Public Property importantBackColor() As Global.System.Drawing.Color
+            Get
+                Return CType(Me("importantBackColor"),Global.System.Drawing.Color)
+            End Get
+            Set
+                Me("importantBackColor") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property importantFontBold() As Boolean
+            Get
+                Return CType(Me("importantFontBold"),Boolean)
+            End Get
+            Set
+                Me("importantFontBold") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property importantFontItalic() As Boolean
+            Get
+                Return CType(Me("importantFontItalic"),Boolean)
+            End Get
+            Set
+                Me("importantFontItalic") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property importantBordersPresent() As Boolean
+            Get
+                Return CType(Me("importantBordersPresent"),Boolean)
+            End Get
+            Set
+                Me("importantBordersPresent") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("0, 0, 0, 0")>  _
+        Public Property importantBordersColor() As Global.System.Drawing.Color
+            Get
+                Return CType(Me("importantBordersColor"),Global.System.Drawing.Color)
+            End Get
+            Set
+                Me("importantBordersColor") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("Black")>  _
+        Public Property normalFontColor() As Global.System.Drawing.Color
+            Get
+                Return CType(Me("normalFontColor"),Global.System.Drawing.Color)
             End Get
             Set
                 Me("normalFontColor") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("0, 0, 0, 0")>  _
+        Public Property normalBackColor() As Global.System.Drawing.Color
+            Get
+                Return CType(Me("normalBackColor"),Global.System.Drawing.Color)
+            End Get
+            Set
+                Me("normalBackColor") = value
             End Set
         End Property
         
@@ -201,108 +357,36 @@ Namespace My
         <Global.System.Configuration.UserScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
-        Public Property normalFontBorder() As Boolean
+        Public Property normalBordersPresent() As Boolean
             Get
-                Return CType(Me("normalFontBorder"),Boolean)
+                Return CType(Me("normalBordersPresent"),Boolean)
             End Get
             Set
-                Me("normalFontBorder") = value
+                Me("normalBordersPresent") = value
             End Set
         End Property
         
         <Global.System.Configuration.UserScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("0")>  _
-        Public Property normalBackColor() As Integer
+         Global.System.Configuration.DefaultSettingValueAttribute("1")>  _
+        Public Property normalIndent() As Integer
             Get
-                Return CType(Me("normalBackColor"),Integer)
+                Return CType(Me("normalIndent"),Integer)
             End Get
             Set
-                Me("normalBackColor") = value
+                Me("normalIndent") = value
             End Set
         End Property
         
         <Global.System.Configuration.UserScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("-16777216")>  _
-        Public Property importantFontColor() As Integer
+         Global.System.Configuration.DefaultSettingValueAttribute("0, 0, 0, 0")>  _
+        Public Property normalBordersColor() As Global.System.Drawing.Color
             Get
-                Return CType(Me("importantFontColor"),Integer)
+                Return CType(Me("normalBordersColor"),Global.System.Drawing.Color)
             End Get
             Set
-                Me("importantFontColor") = value
-            End Set
-        End Property
-        
-        <Global.System.Configuration.UserScopedSettingAttribute(),  _
-         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
-        Public Property importantFontItalic() As Boolean
-            Get
-                Return CType(Me("importantFontItalic"),Boolean)
-            End Get
-            Set
-                Me("importantFontItalic") = value
-            End Set
-        End Property
-        
-        <Global.System.Configuration.UserScopedSettingAttribute(),  _
-         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("0")>  _
-        Public Property importantBackColor() As Integer
-            Get
-                Return CType(Me("importantBackColor"),Integer)
-            End Get
-            Set
-                Me("importantBackColor") = value
-            End Set
-        End Property
-        
-        <Global.System.Configuration.UserScopedSettingAttribute(),  _
-         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("0")>  _
-        Public Property importantIndent() As Integer
-            Get
-                Return CType(Me("importantIndent"),Integer)
-            End Get
-            Set
-                Me("importantIndent") = value
-            End Set
-        End Property
-        
-        <Global.System.Configuration.UserScopedSettingAttribute(),  _
-         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("-13181954")>  _
-        Public Property importantUpColor() As Integer
-            Get
-                Return CType(Me("importantUpColor"),Integer)
-            End Get
-            Set
-                Me("importantUpColor") = value
-            End Set
-        End Property
-        
-        <Global.System.Configuration.UserScopedSettingAttribute(),  _
-         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("-13181954")>  _
-        Public Property importantBottomColor() As Integer
-            Get
-                Return CType(Me("importantBottomColor"),Integer)
-            End Get
-            Set
-                Me("importantBottomColor") = value
-            End Set
-        End Property
-        
-        <Global.System.Configuration.UserScopedSettingAttribute(),  _
-         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("-16744193")>  _
-        Public Property detailFontColor() As Integer
-            Get
-                Return CType(Me("detailFontColor"),Integer)
-            End Get
-            Set
-                Me("detailFontColor") = value
+                Me("normalBordersColor") = value
             End Set
         End Property
         
@@ -321,210 +405,6 @@ Namespace My
         <Global.System.Configuration.UserScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
-        Public Property detailFontBorder() As Boolean
-            Get
-                Return CType(Me("detailFontBorder"),Boolean)
-            End Get
-            Set
-                Me("detailFontBorder") = value
-            End Set
-        End Property
-        
-        <Global.System.Configuration.UserScopedSettingAttribute(),  _
-         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("-1")>  _
-        Public Property detailBackColor() As Integer
-            Get
-                Return CType(Me("detailBackColor"),Integer)
-            End Get
-            Set
-                Me("detailBackColor") = value
-            End Set
-        End Property
-        
-        <Global.System.Configuration.UserScopedSettingAttribute(),  _
-         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("2")>  _
-        Public Property detailIndent() As Integer
-            Get
-                Return CType(Me("detailIndent"),Integer)
-            End Get
-            Set
-                Me("detailIndent") = value
-            End Set
-        End Property
-        
-        <Global.System.Configuration.UserScopedSettingAttribute(),  _
-         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("0")>  _
-        Public Property detailUpColor() As Integer
-            Get
-                Return CType(Me("detailUpColor"),Integer)
-            End Get
-            Set
-                Me("detailUpColor") = value
-            End Set
-        End Property
-        
-        <Global.System.Configuration.UserScopedSettingAttribute(),  _
-         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("0")>  _
-        Public Property detailBottomColor() As Integer
-            Get
-                Return CType(Me("detailBottomColor"),Integer)
-            End Get
-            Set
-                Me("detailBottomColor") = value
-            End Set
-        End Property
-        
-        <Global.System.Configuration.UserScopedSettingAttribute(),  _
-         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("-16777216")>  _
-        Public Property titleFontColor() As Integer
-            Get
-                Return CType(Me("titleFontColor"),Integer)
-            End Get
-            Set
-                Me("titleFontColor") = value
-            End Set
-        End Property
-        
-        <Global.System.Configuration.UserScopedSettingAttribute(),  _
-         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
-        Public Property titleFontItalic() As Boolean
-            Get
-                Return CType(Me("titleFontItalic"),Boolean)
-            End Get
-            Set
-                Me("titleFontItalic") = value
-            End Set
-        End Property
-        
-        <Global.System.Configuration.UserScopedSettingAttribute(),  _
-         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
-        Public Property titleFontBorder() As Boolean
-            Get
-                Return CType(Me("titleFontBorder"),Boolean)
-            End Get
-            Set
-                Me("titleFontBorder") = value
-            End Set
-        End Property
-        
-        <Global.System.Configuration.UserScopedSettingAttribute(),  _
-         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("0")>  _
-        Public Property titleBackColor() As Integer
-            Get
-                Return CType(Me("titleBackColor"),Integer)
-            End Get
-            Set
-                Me("titleBackColor") = value
-            End Set
-        End Property
-        
-        <Global.System.Configuration.UserScopedSettingAttribute(),  _
-         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("0")>  _
-        Public Property titleIndent() As Integer
-            Get
-                Return CType(Me("titleIndent"),Integer)
-            End Get
-            Set
-                Me("titleIndent") = value
-            End Set
-        End Property
-        
-        <Global.System.Configuration.UserScopedSettingAttribute(),  _
-         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("0")>  _
-        Public Property titleUpColor() As Integer
-            Get
-                Return CType(Me("titleUpColor"),Integer)
-            End Get
-            Set
-                Me("titleUpColor") = value
-            End Set
-        End Property
-        
-        <Global.System.Configuration.UserScopedSettingAttribute(),  _
-         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("-13181954")>  _
-        Public Property titleBottomColor() As Integer
-            Get
-                Return CType(Me("titleBottomColor"),Integer)
-            End Get
-            Set
-                Me("titleBottomColor") = value
-            End Set
-        End Property
-        
-        <Global.System.Configuration.UserScopedSettingAttribute(),  _
-         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("1")>  _
-        Public Property normalIndent() As Integer
-            Get
-                Return CType(Me("normalIndent"),Integer)
-            End Get
-            Set
-                Me("normalIndent") = value
-            End Set
-        End Property
-        
-        <Global.System.Configuration.UserScopedSettingAttribute(),  _
-         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("0")>  _
-        Public Property normalUpColor() As Integer
-            Get
-                Return CType(Me("normalUpColor"),Integer)
-            End Get
-            Set
-                Me("normalUpColor") = value
-            End Set
-        End Property
-        
-        <Global.System.Configuration.UserScopedSettingAttribute(),  _
-         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("0")>  _
-        Public Property normalBottomColor() As Integer
-            Get
-                Return CType(Me("normalBottomColor"),Integer)
-            End Get
-            Set
-                Me("normalBottomColor") = value
-            End Set
-        End Property
-        
-        <Global.System.Configuration.UserScopedSettingAttribute(),  _
-         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("True")>  _
-        Public Property importantFontBold() As Boolean
-            Get
-                Return CType(Me("importantFontBold"),Boolean)
-            End Get
-            Set
-                Me("importantFontBold") = value
-            End Set
-        End Property
-        
-        <Global.System.Configuration.UserScopedSettingAttribute(),  _
-         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("True")>  _
-        Public Property importantFontBorder() As Boolean
-            Get
-                Return CType(Me("importantFontBorder"),Boolean)
-            End Get
-            Set
-                Me("importantFontBorder") = value
-            End Set
-        End Property
-        
-        <Global.System.Configuration.UserScopedSettingAttribute(),  _
-         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("True")>  _
         Public Property detailFontItalic() As Boolean
             Get
                 Return CType(Me("detailFontItalic"),Boolean)
@@ -534,15 +414,87 @@ Namespace My
             End Set
         End Property
         
+        <Global.System.Configuration.UserScopedSettingAttribute(), _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(), _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")> _
+        Public Property detailBordersPresent() As Boolean
+            Get
+                Return CType(Me("detailBordersPresent"), Boolean)
+            End Get
+            Set(value As Boolean)
+                Me("detailBordersPresent") = value
+            End Set
+        End Property
+
+        <Global.System.Configuration.UserScopedSettingAttribute(), _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(), _
+         Global.System.Configuration.DefaultSettingValueAttribute("1")> _
+        Public Property detailIndent() As Integer
+            Get
+                Return CType(Me("detailIndent"), Integer)
+            End Get
+            Set(value As Integer)
+                Me("detailIndent") = value
+            End Set
+        End Property
+
+        <Global.System.Configuration.UserScopedSettingAttribute(), _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(), _
+         Global.System.Configuration.DefaultSettingValueAttribute("0, 0, 0, 0")> _
+        Public Property detailBordersColor() As Global.System.Drawing.Color
+            Get
+                Return CType(Me("detailBordersColor"), Global.System.Drawing.Color)
+            End Get
+            Set(value As Global.System.Drawing.Color)
+                Me("detailBordersColor") = value
+            End Set
+        End Property
+        
         <Global.System.Configuration.UserScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("True")>  _
-        Public Property titleFontBold() As Boolean
+         Global.System.Configuration.DefaultSettingValueAttribute("0")>  _
+        Public Property importantIndent() As Integer
             Get
-                Return CType(Me("titleFontBold"),Boolean)
+                Return CType(Me("importantIndent"),Integer)
             End Get
             Set
-                Me("titleFontBold") = value
+                Me("importantIndent") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("Navy")>  _
+        Public Property detailFontColor() As Global.System.Drawing.Color
+            Get
+                Return CType(Me("detailFontColor"),Global.System.Drawing.Color)
+            End Get
+            Set
+                Me("detailFontColor") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("White")>  _
+        Public Property detailBackColor() As Global.System.Drawing.Color
+            Get
+                Return CType(Me("detailBackColor"),Global.System.Drawing.Color)
+            End Get
+            Set
+                Me("detailBackColor") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("Navy")>  _
+        Public Property titleBordersColor() As Global.System.Drawing.Color
+            Get
+                Return CType(Me("titleBordersColor"),Global.System.Drawing.Color)
+            End Get
+            Set
+                Me("titleBordersColor") = value
             End Set
         End Property
     End Class

@@ -10,7 +10,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 31/08/2015
+' Last modified: 16/09/2015
 
 
 Imports System.Windows.Forms
@@ -48,7 +48,7 @@ Friend Class ControllingUIController
     Friend versionsDict As New Dictionary(Of Int32, String)
     Friend initDisplayFlag As Boolean = False
     Friend computedFlag As Boolean = False
-
+    Friend isComputingFlag As Boolean
   
     ' Virtual binding
     Private itemsDimensionsDict As Dictionary(Of HierarchyItem, Hashtable)
@@ -121,6 +121,7 @@ Friend Class ControllingUIController
                        ByRef inputEntityNode As vTreeNode, _
                        Optional ByRef useCache As Boolean = False)
 
+        isComputingFlag = True
         computedFlag = False
 
         If Not dataMap Is Nothing Then dataMap.Clear()
@@ -196,7 +197,6 @@ Friend Class ControllingUIController
 
     End Sub
 
-   
     Private Sub AfterCompute()
 
         While initDisplayFlag = False
@@ -266,7 +266,7 @@ Friend Class ControllingUIController
             AddHandler DGV.CellValueNeeded, AddressOf DGVs_CellValueNeeded
         Next
         initDisplayFlag = True
-        ' cellsUpdateNeeded = True
+        isComputingFlag = False
 
     End Sub
 

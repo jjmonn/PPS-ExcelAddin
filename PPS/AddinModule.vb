@@ -1564,7 +1564,7 @@ Public Class AddinModule
                                     control As AddinExpress.MSO.IRibbonControl,
                                     pressed As System.Boolean) Handles SettingsBT.OnClick
 
-        Dim SETTINGSUI As New SettingMainUI
+        Dim SETTINGSUI As New SettingUI
         SETTINGSUI.Show()
 
 
