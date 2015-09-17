@@ -30,10 +30,10 @@
       <Value Profile="(Default)">True</Value>
     </Setting>
     <Setting Name="titleFontColor" Type="System.Drawing.Color" Scope="User">
-      <Value Profile="(Default)">Black</Value>
+      <Value Profile="(Default)">White</Value>
     </Setting>
     <Setting Name="titleBackColor" Type="System.Drawing.Color" Scope="User">
-      <Value Profile="(Default)">0, 0, 0, 0</Value>
+      <Value Profile="(Default)">DarkSlateBlue</Value>
     </Setting>
     <Setting Name="titleFontBold" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
@@ -45,13 +45,13 @@
       <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="titleIndent" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">1</Value>
+      <Value Profile="(Default)">0</Value>
     </Setting>
     <Setting Name="importantFontColor" Type="System.Drawing.Color" Scope="User">
       <Value Profile="(Default)">Black</Value>
     </Setting>
     <Setting Name="importantBackColor" Type="System.Drawing.Color" Scope="User">
-      <Value Profile="(Default)">0, 0, 0, 0</Value>
+      <Value Profile="(Default)">White</Value>
     </Setting>
     <Setting Name="importantFontBold" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
@@ -63,13 +63,13 @@
       <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="importantBordersColor" Type="System.Drawing.Color" Scope="User">
-      <Value Profile="(Default)">0, 0, 0, 0</Value>
+      <Value Profile="(Default)">White</Value>
     </Setting>
     <Setting Name="normalFontColor" Type="System.Drawing.Color" Scope="User">
       <Value Profile="(Default)">Black</Value>
     </Setting>
     <Setting Name="normalBackColor" Type="System.Drawing.Color" Scope="User">
-      <Value Profile="(Default)">0, 0, 0, 0</Value>
+      <Value Profile="(Default)">White</Value>
     </Setting>
     <Setting Name="normalFontBold" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
@@ -81,10 +81,10 @@
       <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="normalIndent" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">1</Value>
+      <Value Profile="(Default)">2</Value>
     </Setting>
     <Setting Name="normalBordersColor" Type="System.Drawing.Color" Scope="User">
-      <Value Profile="(Default)">0, 0, 0, 0</Value>
+      <Value Profile="(Default)">White</Value>
     </Setting>
     <Setting Name="detailFontBold" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
@@ -96,22 +96,34 @@
       <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="detailIndent" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">1</Value>
+      <Value Profile="(Default)">3</Value>
     </Setting>
     <Setting Name="detailBordersColor" Type="System.Drawing.Color" Scope="User">
-      <Value Profile="(Default)">0, 0, 0, 0</Value>
-    </Setting>
-    <Setting Name="importantIndent" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">0</Value>
-    </Setting>
-    <Setting Name="detailFontColor" Type="System.Drawing.Color" Scope="User">
-      <Value Profile="(Default)">Navy</Value>
-    </Setting>
-    <Setting Name="detailBackColor" Type="System.Drawing.Color" Scope="User">
       <Value Profile="(Default)">White</Value>
     </Setting>
+    <Setting Name="importantIndent" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">1</Value>
+    </Setting>
+    <Setting Name="detailFontColor" Type="System.Drawing.Color" Scope="User">
+      <Value Profile="(Default)">Green</Value>
+    </Setting>
+    <Setting Name="detailBackColor" Type="System.Drawing.Color" Scope="User">
+      <Value Profile="(Default)">PaleGreen</Value>
+    </Setting>
     <Setting Name="titleBordersColor" Type="System.Drawing.Color" Scope="User">
+      <Value Profile="(Default)">Black</Value>
+    </Setting>
+    <Setting Name="snapshotInputsBackColor" Type="System.Drawing.Color" Scope="User">
+      <Value Profile="(Default)">PowderBlue</Value>
+    </Setting>
+    <Setting Name="snapshotInputsTextColor" Type="System.Drawing.Color" Scope="User">
       <Value Profile="(Default)">Navy</Value>
+    </Setting>
+    <Setting Name="snapshotOutputsBackColor" Type="System.Drawing.Color" Scope="User">
+      <Value Profile="(Default)">White</Value>
+    </Setting>
+    <Setting Name="snapshotOutputsTextColor" Type="System.Drawing.Color" Scope="User">
+      <Value Profile="(Default)">Black</Value>
     </Setting>
   </Settings>
 </SettingsFile>

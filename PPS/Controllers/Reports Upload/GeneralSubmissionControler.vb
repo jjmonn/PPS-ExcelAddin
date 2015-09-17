@@ -201,6 +201,7 @@ Friend Class GeneralSubmissionControler
             If Dataset.GlobalOrientationFlag <> ORIENTATION_ERROR_FLAG _
             AndAlso Dataset.EntitiesAddressValuesDictionary.Count > 0 Then
 
+                Dataset.getDataSet()
                 snapshotSuccess = True
                 FillInEntityAndCurrencyTB(Dataset.EntitiesAddressValuesDictionary.ElementAt(0).Value)
                 SubmissionWSController = New SubmissionWSController(Me, Dataset, Model, DataModificationsTracker)
@@ -248,7 +249,7 @@ Friend Class GeneralSubmissionControler
         If mustUpdateExcelWorksheetFromDataBase = True Then
             updateInputs()
         End If
-        Dataset.getDataSet()
+        ' Dataset.getDataSet()
         DataModificationsTracker.IdentifyDifferencesBtwDataSetAndDB(Model.dataBaseInputsDictionary)
         UpdateCalculatedItems(current_entity_name)
         isUpdating = False

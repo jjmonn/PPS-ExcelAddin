@@ -1532,14 +1532,13 @@ Public Class AddinModule
 
 #Region "Export"
 
-    'Private Sub ReportFMTBT_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) _
-    '        Handles ReportFmtBT.OnClick, FormattingBT.OnClick
+    'Private Sub ReportFMTBT_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean)
 
-    '    If globalvariables.ConnectioN Is Nothing Then
+    '    If GlobalVariables.ConnectioN Is Nothing Then
     '        Dim CONNUI As New ConnectionUI(Me)
     '        CONNUI.Show()
     '    Else
-    '        CExcelFormatting.FormatExcelRange(GlobalVariables.APPS.ActiveSheet, REPORT_FORMAT_CODE)
+    '        ExcelFormatting.FormatExcelRange(GlobalVariables.APPS.ActiveSheet, REPORT_FORMAT_CODE)
     '    End If
 
     'End Sub
@@ -1798,7 +1797,7 @@ Public Class AddinModule
     Friend Sub InputReportPaneCallBack_ReportCreation()
 
         ' circular progress !!!
-        GlobalVariables.APPS.ScreenUpdating = False
+        ' GlobalVariables.APPS.ScreenUpdating = False
         Dim entity_id As Int32 = Me.InputReportTaskPane.EntitiesTV.SelectedNode.Name
         Dim entity_name As String = Me.InputReportTaskPane.EntitiesTV.SelectedNode.Text
         Dim currencyId As Int32 = GlobalVariables.Entities.entities_hash(entity_id)(ENTITIES_CURRENCY_VARIABLE)
@@ -1819,9 +1818,8 @@ Public Class AddinModule
 
         Me.InputReportTaskPane.Hide()
         Me.InputReportTaskPane.Close()
-        ' priority normal => implement format CRUD
-        '       CExcelFormatting.FormatExcelRange(currentcell, INPUT_FORMAT_CODE, currencyId, Date.FromOADate(periodlist(0)))
-        GlobalVariables.APPS.ScreenUpdating = True
+        ExcelFormatting.FormatExcelRange(currentcell, currencyId, Date.FromOADate(periodlist(0)))
+        ' GlobalVariables.APPS.ScreenUpdating = True
         AssociateGRSControler(True)
 
     End Sub

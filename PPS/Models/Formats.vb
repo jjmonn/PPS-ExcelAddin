@@ -9,6 +9,7 @@
         Public isBold
         Public isItalic
         Public bordersPresent
+        Public indent
 
     End Structure
 
@@ -23,6 +24,7 @@
                 format.isItalic = My.Settings.titleFontItalic
                 format.bordersPresent = My.Settings.titleBordersPresent
                 format.bordersColor = My.Settings.titleBordersColor
+                format.indent = My.Settings.titleIndent
             Case "Important"
                 format.textColor = My.Settings.importantFontColor
                 format.backColor = My.Settings.importantBackColor
@@ -30,6 +32,7 @@
                 format.isItalic = My.Settings.importantFontItalic
                 format.bordersPresent = My.Settings.importantBordersPresent
                 format.bordersColor = My.Settings.importantBordersColor
+                format.indent = My.Settings.importantIndent
             Case "Normal"
                 format.textColor = My.Settings.normalFontColor
                 format.backColor = My.Settings.normalBackColor
@@ -37,6 +40,7 @@
                 format.isItalic = My.Settings.normalFontItalic
                 format.bordersPresent = My.Settings.normalBordersPresent
                 format.bordersColor = My.Settings.normalBordersColor
+                format.indent = My.Settings.normalIndent
             Case "Detail"
                 format.textColor = My.Settings.detailFontColor
                 format.backColor = My.Settings.detailBackColor
@@ -44,6 +48,7 @@
                 format.isItalic = My.Settings.detailFontItalic
                 format.bordersPresent = My.Settings.detailBordersPresent
                 format.bordersColor = My.Settings.detailBordersColor
+                format.indent = My.Settings.detailIndent
         End Select
         Return format
 

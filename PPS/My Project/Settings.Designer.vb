@@ -164,7 +164,7 @@ Namespace My
         
         <Global.System.Configuration.UserScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("Black")>  _
+         Global.System.Configuration.DefaultSettingValueAttribute("White")>  _
         Public Property titleFontColor() As Global.System.Drawing.Color
             Get
                 Return CType(Me("titleFontColor"),Global.System.Drawing.Color)
@@ -176,7 +176,7 @@ Namespace My
         
         <Global.System.Configuration.UserScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("0, 0, 0, 0")>  _
+         Global.System.Configuration.DefaultSettingValueAttribute("DarkSlateBlue")>  _
         Public Property titleBackColor() As Global.System.Drawing.Color
             Get
                 Return CType(Me("titleBackColor"),Global.System.Drawing.Color)
@@ -224,7 +224,7 @@ Namespace My
         
         <Global.System.Configuration.UserScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("1")>  _
+         Global.System.Configuration.DefaultSettingValueAttribute("0")>  _
         Public Property titleIndent() As Integer
             Get
                 Return CType(Me("titleIndent"),Integer)
@@ -248,7 +248,7 @@ Namespace My
         
         <Global.System.Configuration.UserScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("0, 0, 0, 0")>  _
+         Global.System.Configuration.DefaultSettingValueAttribute("White")>  _
         Public Property importantBackColor() As Global.System.Drawing.Color
             Get
                 Return CType(Me("importantBackColor"),Global.System.Drawing.Color)
@@ -296,7 +296,7 @@ Namespace My
         
         <Global.System.Configuration.UserScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("0, 0, 0, 0")>  _
+         Global.System.Configuration.DefaultSettingValueAttribute("White")>  _
         Public Property importantBordersColor() As Global.System.Drawing.Color
             Get
                 Return CType(Me("importantBordersColor"),Global.System.Drawing.Color)
@@ -320,7 +320,7 @@ Namespace My
         
         <Global.System.Configuration.UserScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("0, 0, 0, 0")>  _
+         Global.System.Configuration.DefaultSettingValueAttribute("White")>  _
         Public Property normalBackColor() As Global.System.Drawing.Color
             Get
                 Return CType(Me("normalBackColor"),Global.System.Drawing.Color)
@@ -368,7 +368,7 @@ Namespace My
         
         <Global.System.Configuration.UserScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("1")>  _
+         Global.System.Configuration.DefaultSettingValueAttribute("2")>  _
         Public Property normalIndent() As Integer
             Get
                 Return CType(Me("normalIndent"),Integer)
@@ -380,7 +380,7 @@ Namespace My
         
         <Global.System.Configuration.UserScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("0, 0, 0, 0")>  _
+         Global.System.Configuration.DefaultSettingValueAttribute("White")>  _
         Public Property normalBordersColor() As Global.System.Drawing.Color
             Get
                 Return CType(Me("normalBordersColor"),Global.System.Drawing.Color)
@@ -414,45 +414,45 @@ Namespace My
             End Set
         End Property
         
-        <Global.System.Configuration.UserScopedSettingAttribute(), _
-         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(), _
-         Global.System.Configuration.DefaultSettingValueAttribute("False")> _
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
         Public Property detailBordersPresent() As Boolean
             Get
-                Return CType(Me("detailBordersPresent"), Boolean)
+                Return CType(Me("detailBordersPresent"),Boolean)
             End Get
-            Set(value As Boolean)
+            Set
                 Me("detailBordersPresent") = value
             End Set
         End Property
-
-        <Global.System.Configuration.UserScopedSettingAttribute(), _
-         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(), _
-         Global.System.Configuration.DefaultSettingValueAttribute("1")> _
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("3")>  _
         Public Property detailIndent() As Integer
             Get
-                Return CType(Me("detailIndent"), Integer)
+                Return CType(Me("detailIndent"),Integer)
             End Get
-            Set(value As Integer)
+            Set
                 Me("detailIndent") = value
             End Set
         End Property
-
-        <Global.System.Configuration.UserScopedSettingAttribute(), _
-         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(), _
-         Global.System.Configuration.DefaultSettingValueAttribute("0, 0, 0, 0")> _
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("White")>  _
         Public Property detailBordersColor() As Global.System.Drawing.Color
             Get
-                Return CType(Me("detailBordersColor"), Global.System.Drawing.Color)
+                Return CType(Me("detailBordersColor"),Global.System.Drawing.Color)
             End Get
-            Set(value As Global.System.Drawing.Color)
+            Set
                 Me("detailBordersColor") = value
             End Set
         End Property
         
         <Global.System.Configuration.UserScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("0")>  _
+         Global.System.Configuration.DefaultSettingValueAttribute("1")>  _
         Public Property importantIndent() As Integer
             Get
                 Return CType(Me("importantIndent"),Integer)
@@ -464,7 +464,7 @@ Namespace My
         
         <Global.System.Configuration.UserScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("Navy")>  _
+         Global.System.Configuration.DefaultSettingValueAttribute("Green")>  _
         Public Property detailFontColor() As Global.System.Drawing.Color
             Get
                 Return CType(Me("detailFontColor"),Global.System.Drawing.Color)
@@ -476,7 +476,7 @@ Namespace My
         
         <Global.System.Configuration.UserScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("White")>  _
+         Global.System.Configuration.DefaultSettingValueAttribute("PaleGreen")>  _
         Public Property detailBackColor() As Global.System.Drawing.Color
             Get
                 Return CType(Me("detailBackColor"),Global.System.Drawing.Color)
@@ -488,13 +488,61 @@ Namespace My
         
         <Global.System.Configuration.UserScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("Navy")>  _
+         Global.System.Configuration.DefaultSettingValueAttribute("Black")>  _
         Public Property titleBordersColor() As Global.System.Drawing.Color
             Get
                 Return CType(Me("titleBordersColor"),Global.System.Drawing.Color)
             End Get
             Set
                 Me("titleBordersColor") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("PowderBlue")>  _
+        Public Property snapshotInputsBackColor() As Global.System.Drawing.Color
+            Get
+                Return CType(Me("snapshotInputsBackColor"),Global.System.Drawing.Color)
+            End Get
+            Set
+                Me("snapshotInputsBackColor") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("Navy")>  _
+        Public Property snapshotInputsTextColor() As Global.System.Drawing.Color
+            Get
+                Return CType(Me("snapshotInputsTextColor"),Global.System.Drawing.Color)
+            End Get
+            Set
+                Me("snapshotInputsTextColor") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("White")>  _
+        Public Property snapshotOutputsBackColor() As Global.System.Drawing.Color
+            Get
+                Return CType(Me("snapshotOutputsBackColor"),Global.System.Drawing.Color)
+            End Get
+            Set
+                Me("snapshotOutputsBackColor") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("Black")>  _
+        Public Property snapshotOutputsTextColor() As Global.System.Drawing.Color
+            Get
+                Return CType(Me("snapshotOutputsTextColor"),Global.System.Drawing.Color)
+            End Get
+            Set
+                Me("snapshotOutputsTextColor") = value
             End Set
         End Property
     End Class
