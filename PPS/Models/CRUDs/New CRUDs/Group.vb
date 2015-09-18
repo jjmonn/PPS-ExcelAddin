@@ -60,6 +60,11 @@ Friend Class Group
 
     End Sub
 
+    Friend Sub LoadGroupTV(ByRef TV As VIBlend.WinForms.Controls.vTreeView)
+
+        VTreeViewUtil.LoadTreeview(TV, groupDic)
+
+    End Sub
 #End Region
 
 #Region "Management"

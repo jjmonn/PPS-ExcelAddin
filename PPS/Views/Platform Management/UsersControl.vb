@@ -64,7 +64,7 @@ Friend Class UsersControl
 
     End Sub
 
-    Private Sub RowsInitialize()
+    Friend Sub RowsInitialize()
 
         RemoveHandler m_dataGridView.CellValueChanged, AddressOf DataGridView_ValueChanged
 
@@ -108,9 +108,7 @@ Friend Class UsersControl
 #Region "CRUD Event"
 
     Private Sub Controller_Update(ByRef state As Boolean, ByRef id As Int32)
-        If (state = False) Then
-            RowsInitialize()
-        End If
+        RowsInitialize()
     End Sub
 
 #End Region

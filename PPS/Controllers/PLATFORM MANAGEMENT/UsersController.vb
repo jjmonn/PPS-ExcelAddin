@@ -1,19 +1,4 @@
-﻿' UsersController.vb
-'
-' 
-' To do: 
-'       - if change pwd = success then send pwd else try again ?
-'   
-'
-' Known bugs: 
-'       - issues with cmd. -> execute sql queries -> find a way more secure or manage potential errors...
-'
-'
-' Author: Julien Monnereau
-' Last modified: 25/06/2015
-
-
-Imports VIBlend.WinForms.DataGridView
+﻿Imports VIBlend.WinForms.DataGridView
 Imports System.Collections.Generic
 Imports System.Collections
 Imports System.Windows.Forms
@@ -30,6 +15,8 @@ Friend Class UsersController
     Private m_userList As User
     Private m_groupList As Group
     Private PlatformMGTUI As PlatformMGTGeneralUI
+    Private m_filterGroup As UInt32
+    Private m_isFiltered As Boolean
 
 #End Region
 
@@ -38,18 +25,35 @@ Friend Class UsersController
 
     Friend Sub New()
 
+        m_filterGroup = 0
+        m_isFiltered = False
         m_userList = GlobalVariables.Users
         m_groupList = GlobalVariables.Groups
         m_view = New UsersControl(Me)
 
     End Sub
 
-
     Public Sub close()
 
         m_view.Dispose()
 
     End Sub
+
+    Friend Sub ApplyFilter(ByRef p_filterGroup As Int32)
+        m_filterGroup = p_filterGroup
+        m_isFiltered = True
+        m_view.RowsInitialize()
+        m_view.Refresh()
+    End Sub
+
+    Friend Sub RemoveFilter()
+        m_isFiltered = False
+        m_view.RowsInitialize()
+    End Sub
+
+    Friend Function GetView() As UserControl
+        Return m_view
+    End Function
 
     Public Sub addControlToPanel(ByRef dest_panel As Panel, _
                              ByRef PlatformMGTUI As PlatformMGTGeneralUI)
@@ -66,7 +70,14 @@ Friend Class UsersController
 #Region "Interface"
 
     Friend Function GetUserList() As Dictionary(Of Int32, Hashtable)
-        Return m_userList.userDic
+        If m_isFiltered = False Then Return m_userList.userDic
+        Dim filteredDic As New Dictionary(Of Int32, Hashtable)
+        For Each user In m_userList.userDic
+            If user.Value(GROUP_ID_VARIABLE) = m_filterGroup Then
+                filteredDic.Add(user.Value(ID_VARIABLE), user.Value)
+            End If
+        Next
+        Return filteredDic
     End Function
 
     Friend Function GetGroupList() As Dictionary(Of Int32, Hashtable)
