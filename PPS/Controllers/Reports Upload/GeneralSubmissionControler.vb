@@ -62,7 +62,7 @@ Friend Class GeneralSubmissionControler
     Friend wsComboboxMenuItem As ADXRibbonItem
   
     ' Variables
-    Private current_entity_name As String
+    Private m_entityName As String
     Friend snapshotSuccess As Boolean
     Friend autoCommitFlag As Boolean
     Private itemsHighlightFlag As Boolean
@@ -96,16 +96,19 @@ Friend Class GeneralSubmissionControler
     End Sub
 
     ' Display the entity name and currency in the ribbons Corresponding edit boxes
-    Friend Sub FillInEntityAndCurrencyTB(ByRef entity As String)
+    Friend Sub FillInEntityAndCurrencyTB(ByRef p_entityName As String)
 
-        ADDIN.CurrentEntityTB.Text = entity
-        Dim entitiesNameCurrDic As Hashtable = GlobalVariables.Entities.GetEntitiesDictionary(NAME_VARIABLE, ENTITIES_CURRENCY_VARIABLE)
-        ADDIN.EntCurrTB.Text = entitiesNameCurrDic(entity)
-        current_entity_name = entity
+        ADDIN.CurrentEntityTB.Text = p_entityName
+        m_entityName = p_entityName
+        Dim entityId As Int32 = GlobalVariables.Entities.GetEntityId(p_entityName)
+        If entityId <> 0 Then
+            Dim currencyId As Int32 = GlobalVariables.Entities.entities_hash(entityId)(ENTITIES_CURRENCY_VARIABLE)
+            ADDIN.EntCurrTB.Text = GlobalVariables.Currencies.currencies_hash(currencyId)(NAME_VARIABLE)
+        End If
 
     End Sub
 
-    
+
 #End Region
 
 
@@ -168,7 +171,7 @@ Friend Class GeneralSubmissionControler
         If Not Dataset Is Nothing Then Dataset = Nothing
         If Not DataModificationsTracker Is Nothing Then DataModificationsTracker = Nothing
         If Not Model Is Nothing Then Model = Nothing
-       
+
         On Error Resume Next
         RemoveHandler associatedWorksheet.Change, AddressOf SubmissionWSController.Worksheet_Change
         RemoveHandler associatedWorksheet.BeforeRightClick, AddressOf SubmissionWSController.Worksheet_BeforeRightClick
@@ -237,7 +240,7 @@ Friend Class GeneralSubmissionControler
         ' (possibility to download inputs from multiple entities => function ready in model)
         ' priority normal => V2
 
-        Model.downloadDBInputs(current_entity_name, _
+        Model.downloadDBInputs(m_entityName, _
                                client_id, _
                                product_id, _
                                adjustment_id)
@@ -251,7 +254,7 @@ Friend Class GeneralSubmissionControler
         End If
         ' Dataset.getDataSet()
         DataModificationsTracker.IdentifyDifferencesBtwDataSetAndDB(Model.dataBaseInputsDictionary)
-        UpdateCalculatedItems(current_entity_name)
+        UpdateCalculatedItems(m_entityName)
         isUpdating = False
 
     End Sub
@@ -400,8 +403,6 @@ Friend Class GeneralSubmissionControler
         Return tmpStr
 
     End Function
-
-
 
 #End Region
 

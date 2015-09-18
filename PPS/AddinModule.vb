@@ -1817,9 +1817,10 @@ Public Class AddinModule
         Dim entity_id As Int32 = Me.InputReportTaskPane.EntitiesTV.SelectedNode.Name
         Dim entity_name As String = Me.InputReportTaskPane.EntitiesTV.SelectedNode.Text
         Dim currencyId As Int32 = GlobalVariables.Entities.entities_hash(entity_id)(ENTITIES_CURRENCY_VARIABLE)
+        Dim currencyName As String = GlobalVariables.Currencies.currencies_hash(currencyId)(NAME_VARIABLE)
         Dim currentcell As Excel.Range = WorksheetWrittingFunctions.CreateReceptionWS(entity_name, _
                                                                                        {"Entity", "Currency", "Version"}, _
-                                                                                       {entity_name, currencyId, GlobalVariables.Version_Button.Caption})
+                                                                                       {entity_name, currencyName, GlobalVariables.Version_Button.Caption})
 
         If currentcell Is Nothing Then
             MsgBox("An error occurred in Excel and the report could not be created.")
@@ -1834,7 +1835,7 @@ Public Class AddinModule
 
         Me.InputReportTaskPane.Hide()
         Me.InputReportTaskPane.Close()
-        ExcelFormatting.FormatExcelRange(currentcell, currencyId, Date.FromOADate(periodlist(0)))
+        ExcelFormatting.FormatExcelRange(currentcell, currencyName, Date.FromOADate(periodlist(0)))
         ' GlobalVariables.APPS.ScreenUpdating = True
         AssociateGRSControler(True)
 

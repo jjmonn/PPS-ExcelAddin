@@ -32,9 +32,9 @@ Friend Class WorksheetWrittingFunctions
 
 #Region "Input Report Creation"
 
-    Protected Friend Shared Sub InsertInputReportOnWS(ByVal destinationcell As Excel.Range, _
-                                                      ByRef periodList As Int32(), _
-                                                      ByRef timeConfig As String)
+    Friend Shared Sub InsertInputReportOnWS(ByVal destinationcell As Excel.Range, _
+                                            ByRef periodList As Int32(), _
+                                            ByRef timeConfig As String)
 
         Dim accountsTV As New TreeView
         Dim WS As Excel.Worksheet = destinationcell.Worksheet
