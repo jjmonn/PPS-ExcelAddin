@@ -148,7 +148,7 @@ Friend Class EntitiesView
             MsgBox("An Entity must be selected.")
             Exit Sub
         End If
-        Dim newEntityName As String = InputBox("New Name: ")
+        Dim newEntityName As String = InputBox("New Name: ", , currentRowItem.Caption)
         If newEntityName <> "" Then
             Controller.UpdateEntity(currentRowItem.ItemValue, _
                                     NAME_VARIABLE, _

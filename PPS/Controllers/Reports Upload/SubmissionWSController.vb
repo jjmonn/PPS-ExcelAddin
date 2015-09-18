@@ -89,7 +89,7 @@ Friend Class SubmissionWSController
 
         Dim value As Double
         Dim entityId As Int32 = CInt(AcquisitionModel.entitiesNameIdDict(entityName))
-        For Each accountName As String In AcquisitionModel.outputsList
+        For Each accountName As String In DataSet.OutputsAccountsAddressvaluesDictionary.Values
             For Each period As Int32 In AcquisitionModel.currentPeriodList
 
                 value = AcquisitionModel.GetCalculatedValue(entityId, _
