@@ -885,13 +885,43 @@ Friend Class DataGridViewsUtil
 
     End Sub
 
-    Friend Shared Function GetHierarchyItemFromId(ByRef hierarchy As Hierarchy, _
-                                                  ByRef id As String) As HierarchyItem
+    Friend Shared Function GetHierarchyItemFromId(ByRef p_hierarchy As Hierarchy, _
+                                                  ByRef p_id As String) As HierarchyItem
 
-        For Each item In hierarchy.Items
-            If item.ItemValue = id Then
+        For Each item In p_hierarchy.Items
+            If item.ItemValue = p_id Then
                 Return item
             End If
+            For Each subItem In item.Items
+                If subItem.ItemValue = p_id Then
+                    Return subItem
+                End If
+                Dim subResult As HierarchyItem = GetHierarchyItemFromId(subItem, p_id)
+                If Not subResult Is Nothing Then
+                    Return subResult
+                End If
+            Next
+        Next
+        Return Nothing
+
+    End Function
+
+    Private Shared Function GetHierarchyItemFromId(ByRef p_parentItem As HierarchyItem, _
+                                                   ByRef p_id As String) As HierarchyItem
+
+        For Each item In p_parentItem.Items
+            If item.ItemValue = p_id Then
+                Return item
+            End If
+            For Each subItem In item.Items
+                If subItem.ItemValue = p_id Then
+                    Return subItem
+                End If
+                Dim subResult As HierarchyItem = GetHierarchyItemFromId(subItem, p_id)
+                If Not subResult Is Nothing Then
+                    Return subResult
+                End If
+            Next
         Next
         Return Nothing
 
