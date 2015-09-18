@@ -159,7 +159,7 @@ Public Class CUI2LeftPane
             li.Value = currencyId
             li.Text = GlobalVariables.Currencies.currencies_hash(currencyId)(NAME_VARIABLE)
             currenciesCLB.Items.Add(li)
-            If li.Value = My.Settings.mainCurrency Then
+            If li.Value = GlobalVariables.Currencies.mainCurrency Then
                 li.IsChecked = True
                 currenciesCLB.SelectedItem = li
             End If

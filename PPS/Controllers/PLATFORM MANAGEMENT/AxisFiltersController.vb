@@ -21,10 +21,10 @@ Friend Class AxisFiltersController
 #Region "Instance Variables"
 
     ' Objects
-    Private View As AxisFiltersControl
+    Private View As AxisFiltersView
     Private filtersNode As New TreeNode
     Private filtersFilterValuesTv As New TreeView
-  
+
     ' Variables
     Private axisId As Int32
 
@@ -42,7 +42,7 @@ Friend Class AxisFiltersController
             filtersFilterValuesTv.Nodes(0).Name = "filterId" & filtersFilterValuesTv.Nodes(0).Name
         End If
 
-        View = New AxisFiltersControl(Me, filtersNode, axisId, filtersFilterValuesTv)
+        View = New AxisFiltersView(Me, filtersNode, axisId, filtersFilterValuesTv)
         View.Show()
 
         AddHandler GlobalVariables.Filters.CreationEvent, AddressOf AfterFilterCreation

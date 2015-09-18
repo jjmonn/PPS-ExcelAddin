@@ -10,7 +10,7 @@ Imports System.Windows.Forms
 Imports System.Collections.Generic
 
 
-Friend Class AxisFiltersControl
+Friend Class AxisFiltersView
 
 
 #Region "Instance Variables"
@@ -138,18 +138,18 @@ NewFilterValue:
 
         If Not FiltersFiltersValuesTV.SelectedNode Is Nothing Then
             Dim current_node As TreeNode = FiltersFiltersValuesTV.SelectedNode
-                Dim name = InputBox("Please enter the new Category Value Name:")
-                If name <> "" Then
+            Dim name = InputBox("Please enter the new Category Value Name:")
+            If name <> "" Then
 
-                    ' reimplement => update simply
-                    ' the server manage validity
-                    ' priority normal
-                    'If Controller.RenameFilterValue(current_node.Name, name) Then
-                    '    current_node.Text = name
-                    'Else
-                    '    MsgBox("This name is already used or contains forbiden characters.")
-                    'End If
-                End If
+                ' reimplement => update simply
+                ' the server manage validity
+                ' priority normal
+                'If Controller.RenameFilterValue(current_node.Name, name) Then
+                '    current_node.Text = name
+                'Else
+                '    MsgBox("This name is already used or contains forbiden characters.")
+                'End If
+            End If
         Else
             MsgBox("A Category must be selected in order ot Add a Value.")
         End If
@@ -173,12 +173,12 @@ NewFilterValue:
                 End If
             Else
                 ' Delete Category Value
-                    Dim confirm As Integer = MessageBox.Show("Careful, you are about to delete the Category value: " + Chr(13) + current_node.Text + Chr(13) + "Do you confirm?", _
-                                                             "Category value deletion confirmation", _
-                                                             MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question)
-                    If confirm = DialogResult.Yes Then
-                        Controller.DeleteFilterValue(current_node.Name)
-                    End If
+                Dim confirm As Integer = MessageBox.Show("Careful, you are about to delete the Category value: " + Chr(13) + current_node.Text + Chr(13) + "Do you confirm?", _
+                                                         "Category value deletion confirmation", _
+                                                         MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question)
+                If confirm = DialogResult.Yes Then
+                    Controller.DeleteFilterValue(current_node.Name)
+                End If
             End If
         End If
 

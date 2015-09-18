@@ -23,7 +23,7 @@ Imports System.ComponentModel
 Imports Microsoft.Office.Interop
 
 
-Friend Class AxisControl
+Friend Class AxisView
 
 
 #Region "Instance Variables"

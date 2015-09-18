@@ -23,7 +23,7 @@ Imports System.ComponentModel
 Imports Microsoft.Office.Interop
 
 
-Friend Class EntitiesControl
+Friend Class EntitiesView
 
 
 #Region "Instance Variables"
@@ -88,7 +88,7 @@ Friend Class EntitiesControl
 
     End Sub
 
-  
+
 #End Region
 
 

@@ -14,9 +14,6 @@
     <Setting Name="tablesFontSize" Type="System.UInt32" Scope="User">
       <Value Profile="(Default)">8</Value>
     </Setting>
-    <Setting Name="mainCurrency" Type="System.UInt32" Scope="User">
-      <Value Profile="(Default)">3</Value>
-    </Setting>
     <Setting Name="dgvFontSize" Type="System.Single" Scope="User">
       <Value Profile="(Default)">8.5</Value>
     </Setting>

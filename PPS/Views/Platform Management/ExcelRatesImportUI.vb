@@ -42,7 +42,7 @@ Friend Class ExcelRatesImportUI
         ' Add any initialization after the InitializeComponent() call.
         Controller = inputController
         For Each item In input_items_list
-            If item <> My.Settings.mainCurrency Then items_CB.Items.Add(item)
+            If item <> GlobalVariables.Currencies.mainCurrency Then items_CB.Items.Add(item)
         Next
 
     End Sub

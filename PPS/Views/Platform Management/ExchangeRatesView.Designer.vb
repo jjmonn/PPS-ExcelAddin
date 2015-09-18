@@ -1,5 +1,5 @@
 ﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
-Partial Class CurrenciesControl
+Partial Class ExchangeRatesView
     Inherits System.Windows.Forms.UserControl
 
     'UserControl overrides dispose to clean up the component list.
@@ -23,7 +23,7 @@ Partial Class CurrenciesControl
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
-        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(CurrenciesControl))
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(ExchangeRatesView))
         Me.MenuButtonIL = New System.Windows.Forms.ImageList(Me.components)
         Me.ratesVersionsIL = New System.Windows.Forms.ImageList(Me.components)
         Me.currenciesRCMenu = New System.Windows.Forms.ContextMenuStrip(Me.components)

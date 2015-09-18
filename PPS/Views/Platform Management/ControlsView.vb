@@ -15,7 +15,7 @@ Imports VIBlend.Utilities
 Imports System.Windows.Forms
 
 
-Friend Class ControlsControl
+Friend Class ControlsView
 
 
 #Region "Instance Variables"

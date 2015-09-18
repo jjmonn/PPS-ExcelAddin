@@ -104,18 +104,6 @@ Namespace My
         
         <Global.System.Configuration.UserScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("3")>  _
-        Public Property mainCurrency() As UInteger
-            Get
-                Return CType(Me("mainCurrency"),UInteger)
-            End Get
-            Set
-                Me("mainCurrency") = value
-            End Set
-        End Property
-        
-        <Global.System.Configuration.UserScopedSettingAttribute(),  _
-         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.Configuration.DefaultSettingValueAttribute("8.5")>  _
         Public Property dgvFontSize() As Single
             Get

@@ -39,12 +39,13 @@ Partial Class PlatformMGTGeneralUI
         Me.ProductsFiltersBT = New System.Windows.Forms.ToolStripMenuItem()
         Me.AdjustmentsFiltersBT = New System.Windows.Forms.ToolStripMenuItem()
         Me.Panel1 = New System.Windows.Forms.Panel()
+        Me.ExchangeRatesButton = New System.Windows.Forms.ToolStripMenuItem()
         Me.MenuStrip1.SuspendLayout()
         Me.SuspendLayout()
         '
         'MenuStrip1
         '
-        Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.AccountsBT, Me.EntitiesBT, Me.ClientsBT, Me.ProductsBT, Me.AdjustmentsBT, Me.VersionsBT, Me.CurrenciesBT, Me.UsersBT, Me.ControlsBT, Me.CategoriesBT})
+        Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.AccountsBT, Me.EntitiesBT, Me.ClientsBT, Me.ProductsBT, Me.AdjustmentsBT, Me.VersionsBT, Me.CurrenciesBT, Me.ExchangeRatesButton, Me.UsersBT, Me.ControlsBT, Me.CategoriesBT})
         Me.MenuStrip1.Location = New System.Drawing.Point(0, 0)
         Me.MenuStrip1.Name = "MenuStrip1"
         Me.MenuStrip1.Size = New System.Drawing.Size(1009, 59)
@@ -121,7 +122,6 @@ Partial Class PlatformMGTGeneralUI
         'CurrenciesBT
         '
         Me.CurrenciesBT.CheckOnClick = True
-        Me.CurrenciesBT.Enabled = False
         Me.CurrenciesBT.Image = Global.FinancialBI.My.Resources.Resources.symbol_dollar_euro1
         Me.CurrenciesBT.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
         Me.CurrenciesBT.Name = "CurrenciesBT"
@@ -203,6 +203,15 @@ Partial Class PlatformMGTGeneralUI
         Me.Panel1.Size = New System.Drawing.Size(1009, 432)
         Me.Panel1.TabIndex = 1
         '
+        'ExchangeRatesButton
+        '
+        Me.ExchangeRatesButton.Image = Global.FinancialBI.My.Resources.Resources.favicon_249_
+        Me.ExchangeRatesButton.Name = "ExchangeRatesButton"
+        Me.ExchangeRatesButton.Size = New System.Drawing.Size(115, 55)
+        Me.ExchangeRatesButton.Text = "Exchange Rates"
+        Me.ExchangeRatesButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
+        Me.ExchangeRatesButton.ToolTipText = "Edit the currencies used in Financial BI"
+        '
         'PlatformMGTGeneralUI
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -236,4 +245,5 @@ Partial Class PlatformMGTGeneralUI
     Friend WithEvents EntitiesFiltersBT As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ProductsFiltersBT As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents AdjustmentsFiltersBT As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ExchangeRatesButton As System.Windows.Forms.ToolStripMenuItem
 End Class

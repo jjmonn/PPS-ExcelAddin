@@ -24,14 +24,14 @@ Imports VIBlend.WinForms.Controls
 
 
 
-Friend Class AccountsControl
+Friend Class AccountsView
 
 
 #Region "Instance Variables"
 
     ' Objects
     Friend Controller As AccountsController
-     Friend AccountsTV As TreeView
+    Friend AccountsTV As TreeView
     Friend current_node As TreeNode
 
     ' Variables
@@ -812,6 +812,6 @@ UdpateFormulaType:
 #End Region
 
 
-  
-    
+
+
 End Class

@@ -25,7 +25,7 @@ Imports System.Windows.Forms.DataVisualization.Charting
 Imports VIBlend.WinForms.Controls
 
 
-Friend Class CurrenciesControl
+Friend Class ExchangeRatesView
 
 
 #Region "Instance Variables"

@@ -100,7 +100,6 @@ Friend Class SettingUI
         g.DrawString(sText, ctlTab.Font, Brushes.Black, iX, iY)
     End Sub
 
-
     Private Sub PortTB_TextChanged(sender As Object, e As EventArgs) Handles PortTB.TextChanged
 
         My.Settings.port_number = PortTB.Text

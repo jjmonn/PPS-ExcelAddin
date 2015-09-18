@@ -16,7 +16,7 @@
 '
 '
 ' Author: Julien Monnereau/ Addin Express automated code
-' Last modified: 07/09/2015
+' Last modified: 18/09/2015
 
 
 Imports System.Runtime.InteropServices
@@ -1551,8 +1551,8 @@ Public Class AddinModule
                 startDate = Date.FromOADate(GlobalVariables.Versions.versions_hash(My.Settings.version_id)(VERSIONS_START_PERIOD_VAR))
             End If
             Dim currencyName As String = ""
-            If GlobalVariables.Currencies.currencies_hash.ContainsKey(CInt(My.Settings.mainCurrency)) = True Then
-                currencyName = GlobalVariables.Currencies.currencies_hash(CInt(My.Settings.mainCurrency))(NAME_VARIABLE)
+            If GlobalVariables.Currencies.currencies_hash.ContainsKey(CInt(GlobalVariables.Currencies.mainCurrency)) = True Then
+                currencyName = GlobalVariables.Currencies.currencies_hash(CInt(GlobalVariables.Currencies.mainCurrency))(NAME_VARIABLE)
             End If
                 ExcelFormatting.FormatExcelRange(GlobalVariables.APPS.ActiveSheet.cells(1, 1), currencyName, startDate)
             End If

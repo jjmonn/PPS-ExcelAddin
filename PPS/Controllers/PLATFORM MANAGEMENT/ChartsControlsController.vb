@@ -20,7 +20,7 @@ Friend Class ChartsControlsController
 
     ' Objects
     Private ControlCharts As New ControlChart
-    Private View As ControlsControl
+    Private View As ControlsView
     Private ChartsTV As New TreeView
 
     ' Variables
@@ -44,7 +44,7 @@ Friend Class ChartsControlsController
 
 #Region "Interface"
 
-    Friend Sub InitializeDisplay(ByRef input_view As ControlsControl)
+    Friend Sub InitializeDisplay(ByRef input_view As ControlsView)
 
         View = input_view
         View.DisplayChartsInit(ChartsTV)

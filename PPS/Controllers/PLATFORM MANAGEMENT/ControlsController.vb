@@ -19,7 +19,7 @@ Friend Class ControlsController
 
     ' Objects
     Private Controls As New Control
-    Private View As ControlsControl
+    Private View As ControlsView
     Private NewControlUI As NewControlUI
     Private ChartsController As New ChartsControlsController
     Private PlatformMGTUI As PlatformMGTGeneralUI
@@ -41,7 +41,7 @@ Friend Class ControlsController
         operators_symbol_id_dic = OperatorsMapping.GetOperatorsDictionary(OPERATOR_SYMBOL_VARIABLE, OPERATOR_ID_VARIABLE)
         period_options_name_id_dic = ControlOptionsMapping.GetControlOptionsDictionary(CONTROL_OPTION_NAME_VARIABLE, CONTROL_OPTION_ID_VARIABLE)
 
-        View = New ControlsControl(Me, ChartsController, accounts_name_id_dic, operators_symbol_id_dic, period_options_name_id_dic)
+        View = New ControlsView(Me, ChartsController, accounts_name_id_dic, operators_symbol_id_dic, period_options_name_id_dic)
         NewControlUI = New NewControlUI(Me, accounts_name_id_dic, operators_symbol_id_dic, period_options_name_id_dic)
 
         InitializeView()
@@ -74,7 +74,7 @@ Friend Class ControlsController
         View.closeControl()
         View.Dispose()
         Controls.close()
- 
+
     End Sub
 
 

@@ -32,7 +32,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 28/08/2015
+' Last modified: 18/09/2015
 
 
 Imports Microsoft.Office.Interop

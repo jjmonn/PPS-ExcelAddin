@@ -13,7 +13,7 @@ Imports System.Collections
 Friend Class pps_colorsMapping
 
 
-    Protected Friend Shared Function GetColorsList() As List(Of Hashtable)
+    Friend Shared Function GetColorsList() As List(Of Hashtable)
 
         Dim tmpList As New List(Of Hashtable)
         Dim srv As New ModelServer

@@ -99,14 +99,14 @@ Friend Class RatesView
     Private Sub InitColumns(ByRef currenciesList As List(Of UInt32))
 
         For Each currencyId As UInt32 In currenciesList
-            If currencyId <> My.Settings.mainCurrency Then AddColumn(currencyId)
+            If currencyId <> GlobalVariables.Currencies.mainCurrency Then AddColumn(currencyId)
         Next
 
     End Sub
 
     Private Sub AddColumn(ByRef currencyId As UInt32)
 
-        Dim col As HierarchyItem = DGV.ColumnsHierarchy.Items.Add(GlobalVariables.Currencies.currencies_hash(My.Settings.mainCurrency)(NAME_VARIABLE) & "/" & currencyId)
+        Dim col As HierarchyItem = DGV.ColumnsHierarchy.Items.Add(GlobalVariables.Currencies.currencies_hash(GlobalVariables.Currencies.mainCurrency)(NAME_VARIABLE) & "/" & currencyId)
         columnIDKeyDictionary.Add(col.GetUniqueID, currencyId)
         columnsKeyItemDictionary.Add(currencyId, col)
 
