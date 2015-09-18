@@ -15,6 +15,7 @@ Friend Class CurrenciesController
 
 #End Region
 
+
 #Region "Initialize"
 
     Friend Sub New()
@@ -74,7 +75,9 @@ Friend Class CurrenciesController
 
 #Region "Events"
 
-
+    ' priority low
+    ' listen READ
+    ' listen update 
 
 
 #End Region
