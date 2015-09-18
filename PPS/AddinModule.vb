@@ -119,6 +119,7 @@ Public Class AddinModule
     Friend WithEvents AdxRibbonMenu3 As AddinExpress.MSO.ADXRibbonMenu
     Friend WithEvents SubmissionControlBT As AddinExpress.MSO.ADXRibbonSplitButton
     Friend WithEvents EditionMainRibbonBT As AddinExpress.MSO.ADXRibbonButton
+    Friend WithEvents FormatButton As AddinExpress.MSO.ADXRibbonButton
 
 
 #End Region
@@ -216,6 +217,7 @@ Public Class AddinModule
         Me.AdxRibbonLabel1 = New AddinExpress.MSO.ADXRibbonLabel(Me.components)
         Me.AdxRibbonMenu3 = New AddinExpress.MSO.ADXRibbonMenu(Me.components)
         Me.SubmissionControlBT = New AddinExpress.MSO.ADXRibbonSplitButton(Me.components)
+        Me.FormatButton = New AddinExpress.MSO.ADXRibbonButton(Me.components)
         '
         'MaintTab
         '
@@ -574,6 +576,7 @@ Public Class AddinModule
         'AdxRibbonGroup3
         '
         Me.AdxRibbonGroup3.Caption = "Configuration"
+        Me.AdxRibbonGroup3.Controls.Add(Me.FormatButton)
         Me.AdxRibbonGroup3.Controls.Add(Me.ConfigurationRibbonBT)
         Me.AdxRibbonGroup3.Controls.Add(Me.SettingsBT)
         Me.AdxRibbonGroup3.Id = "adxRibbonGroup_472aee773e454c20851d757e92f14553"
@@ -1047,6 +1050,15 @@ Public Class AddinModule
         Me.SubmissionControlBT.ImageTransparentColor = System.Drawing.Color.Transparent
         Me.SubmissionControlBT.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
         Me.SubmissionControlBT.Size = AddinExpress.MSO.ADXRibbonXControlSize.Large
+        '
+        'FormatButton
+        '
+        Me.FormatButton.Caption = "Format"
+        Me.FormatButton.Id = "adxRibbonButton_0609b73e6104420c9944e6db704cb0e9"
+        Me.FormatButton.ImageList = Me.Menu3
+        Me.FormatButton.ImageTransparentColor = System.Drawing.Color.Transparent
+        Me.FormatButton.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
+        Me.FormatButton.Size = AddinExpress.MSO.ADXRibbonXControlSize.Large
         '
         'AddinModule
         '
@@ -1529,19 +1541,24 @@ Public Class AddinModule
 
 #End Region
 
+    Private Sub FormatButton_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) Handles FormatButton.OnClick
 
-#Region "Export"
+        If GlobalVariables.AuthenticationFlag = False Then
+            ConnectionBT_OnClick(sender, control, pressed)
+        Else
+            Dim startDate As Date = Nothing
+            If GlobalVariables.Versions.versions_hash.ContainsKey(My.Settings.version_id) = True Then
+                startDate = Date.FromOADate(GlobalVariables.Versions.versions_hash(My.Settings.version_id)(VERSIONS_START_PERIOD_VAR))
+            End If
+            Dim currencyName As String = ""
+            If GlobalVariables.Currencies.currencies_hash.ContainsKey(CInt(My.Settings.mainCurrency)) = True Then
+                currencyName = GlobalVariables.Currencies.currencies_hash(CInt(My.Settings.mainCurrency))(NAME_VARIABLE)
+            End If
+                ExcelFormatting.FormatExcelRange(GlobalVariables.APPS.ActiveSheet.cells(1, 1), currencyName, startDate)
+            End If
 
-    'Private Sub ReportFMTBT_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean)
+    End Sub
 
-    '    If GlobalVariables.ConnectioN Is Nothing Then
-    '        Dim CONNUI As New ConnectionUI(Me)
-    '        CONNUI.Show()
-    '    Else
-    '        ExcelFormatting.FormatExcelRange(GlobalVariables.APPS.ActiveSheet, REPORT_FORMAT_CODE)
-    '    End If
-
-    'End Sub
 
     'Private Sub InputFMTBT_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) Handles InputFmtBT.OnClick
 
@@ -1554,7 +1571,6 @@ Public Class AddinModule
 
     'End Sub
 
-#End Region
 
 
 #Region "Settings"
@@ -1968,5 +1984,6 @@ Public Class AddinModule
 
     End Sub
 
+    
 End Class
 
