@@ -16,7 +16,7 @@
 '
 '
 ' Author: Julien Monnereau/ Addin Express automated code
-' Last modified: 18/09/2015
+' Last modified: 19/09/2015
 
 
 Imports System.Runtime.InteropServices
@@ -166,6 +166,7 @@ Public Class AddinModule
         Me.MainTabImageList = New System.Windows.Forms.ImageList(Me.components)
         Me.financialModelingBT = New AddinExpress.MSO.ADXRibbonButton(Me.components)
         Me.AdxRibbonGroup3 = New AddinExpress.MSO.ADXRibbonGroup(Me.components)
+        Me.FormatButton = New AddinExpress.MSO.ADXRibbonButton(Me.components)
         Me.ConfigurationRibbonBT = New AddinExpress.MSO.ADXRibbonButton(Me.components)
         Me.SettingsBT = New AddinExpress.MSO.ADXRibbonButton(Me.components)
         Me.NewIcosSmall = New System.Windows.Forms.ImageList(Me.components)
@@ -217,7 +218,6 @@ Public Class AddinModule
         Me.AdxRibbonLabel1 = New AddinExpress.MSO.ADXRibbonLabel(Me.components)
         Me.AdxRibbonMenu3 = New AddinExpress.MSO.ADXRibbonMenu(Me.components)
         Me.SubmissionControlBT = New AddinExpress.MSO.ADXRibbonSplitButton(Me.components)
-        Me.FormatButton = New AddinExpress.MSO.ADXRibbonButton(Me.components)
         '
         'MaintTab
         '
@@ -582,6 +582,15 @@ Public Class AddinModule
         Me.AdxRibbonGroup3.Id = "adxRibbonGroup_472aee773e454c20851d757e92f14553"
         Me.AdxRibbonGroup3.ImageTransparentColor = System.Drawing.Color.Transparent
         Me.AdxRibbonGroup3.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
+        '
+        'FormatButton
+        '
+        Me.FormatButton.Caption = "Format"
+        Me.FormatButton.Id = "adxRibbonButton_0609b73e6104420c9944e6db704cb0e9"
+        Me.FormatButton.ImageList = Me.Menu3
+        Me.FormatButton.ImageTransparentColor = System.Drawing.Color.Transparent
+        Me.FormatButton.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
+        Me.FormatButton.Size = AddinExpress.MSO.ADXRibbonXControlSize.Large
         '
         'ConfigurationRibbonBT
         '
@@ -1051,15 +1060,6 @@ Public Class AddinModule
         Me.SubmissionControlBT.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
         Me.SubmissionControlBT.Size = AddinExpress.MSO.ADXRibbonXControlSize.Large
         '
-        'FormatButton
-        '
-        Me.FormatButton.Caption = "Format"
-        Me.FormatButton.Id = "adxRibbonButton_0609b73e6104420c9944e6db704cb0e9"
-        Me.FormatButton.ImageList = Me.Menu3
-        Me.FormatButton.ImageTransparentColor = System.Drawing.Color.Transparent
-        Me.FormatButton.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
-        Me.FormatButton.Size = AddinExpress.MSO.ADXRibbonXControlSize.Large
-        '
         'AddinModule
         '
         Me.AddinName = "FinancialBI"
@@ -1108,7 +1108,6 @@ Public Class AddinModule
     Public ppsbi_refresh_flag As Boolean = True
     Private CurrentGRSControler As GeneralSubmissionControler
     Private Const EXCEL_MIN_VERSION As Double = 9
-
 
 #End Region
 
@@ -1350,41 +1349,6 @@ Public Class AddinModule
 
     End Sub
 
-
-#Region "GRS Controler Display Functions"
-
-    ' Create GRS Conctroler and display
-    Private Sub AssociateGRSControler(ByRef update_inputs As Boolean)
-
-        Dim ctrl As ADXRibbonItem = AddButtonToDropDown(WSCB, GlobalVariables.APPS.ActiveSheet.name, GlobalVariables.APPS.ActiveSheet.name)
-        loadDropDownsSubmissionButtons()
-        Dim CGRSControlerInstance As New GeneralSubmissionControler(ctrl, Me)
-        GRSControlersDictionary.Add(GlobalVariables.APPS.ActiveSheet, CGRSControlerInstance)
-        ctrlsTextWSDictionary.Add(ctrl.Caption, GlobalVariables.APPS.ActiveSheet)
-        CurrentGRSControler = CGRSControlerInstance
-
-        CurrentGRSControler.RefreshSnapshot(update_inputs)
-        SubmissionModeRibbon.Visible = True
-        SubmissionModeRibbon.Activate()
-        WSCB.SelectedItemId = ctrl.Id
-
-    End Sub
-
-    ' Disable Submission Buttons (Call back from GRSController)
-    Friend Sub modifySubmissionControlsStatus(ByRef buttonsStatus As Boolean)
-
-        RefreshInputsBT.Enabled = buttonsStatus
-        SubmitBT2.Enabled = buttonsStatus
-        SubmissionStatus.Enabled = buttonsStatus
-        CancelBT2.Enabled = buttonsStatus
-        AutoComitBT.Enabled = buttonsStatus
-        ShowReportBT.Enabled = buttonsStatus
-
-    End Sub
-
-#End Region
-
-
 #End Region
 
 #Region "Download Data"
@@ -1551,27 +1515,13 @@ Public Class AddinModule
                 startDate = Date.FromOADate(GlobalVariables.Versions.versions_hash(My.Settings.version_id)(VERSIONS_START_PERIOD_VAR))
             End If
             Dim currencyName As String = ""
-            If GlobalVariables.Currencies.currencies_hash.ContainsKey(CInt(GlobalVariables.Currencies.mainCurrency)) = True Then
-                currencyName = GlobalVariables.Currencies.currencies_hash(CInt(GlobalVariables.Currencies.mainCurrency))(NAME_VARIABLE)
+            If GlobalVariables.Currencies.currencies_hash.ContainsKey(My.Settings.currentCurrency) = True Then
+                currencyName = GlobalVariables.Currencies.currencies_hash(My.Settings.currentCurrency)(NAME_VARIABLE)
             End If
                 ExcelFormatting.FormatExcelRange(GlobalVariables.APPS.ActiveSheet.cells(1, 1), currencyName, startDate)
             End If
 
     End Sub
-
-
-    'Private Sub InputFMTBT_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) Handles InputFmtBT.OnClick
-
-    '    If globalvariables.ConnectioN Is Nothing Then
-    '        Dim CONNUI As New ConnectionUI(Me)
-    '        CONNUI.Show()
-    '    Else
-    '        CExcelFormatting.FormatExcelRange(GlobalVariables.APPS.ActiveSheet, INPUT_FORMAT_CODE)
-    '    End If
-
-    'End Sub
-
-
 
 #Region "Settings"
 
@@ -1767,6 +1717,7 @@ Public Class AddinModule
     ' Change in Clients DropDown
     Private Sub ClientsDropDown_OnAction(sender As Object, Control As IRibbonControl, selectedId As String, selectedIndex As Integer) Handles ClientsDropDown.OnAction
 
+        GlobalVariables.APPS.Interactive = False
         CurrentGRSControler.UpdateAfterAnalysisAxisChanged(selectedId, _
                                                            ProductsDropDown.SelectedItemId, _
                                                            AdjustmentDropDown.SelectedItemId,
@@ -1777,6 +1728,7 @@ Public Class AddinModule
     ' Change in Products DropDown
     Private Sub ProductsDropDown_OnAction(sender As Object, Control As IRibbonControl, selectedId As String, selectedIndex As Integer) Handles ProductsDropDown.OnAction
 
+        GlobalVariables.APPS.Interactive = False
         CurrentGRSControler.UpdateAfterAnalysisAxisChanged(ClientsDropDown.SelectedItemId, _
                                                            selectedId, _
                                                            AdjustmentDropDown.SelectedItemId, _
@@ -1787,6 +1739,7 @@ Public Class AddinModule
     ' Change in Adjustments DropDown
     Private Sub AdjustmentDD_OnAction(sender As Object, Control As IRibbonControl, selectedId As String, selectedIndex As Integer) Handles AdjustmentDropDown.OnAction
 
+        GlobalVariables.APPS.Interactive = False
         CurrentGRSControler.UpdateAfterAnalysisAxisChanged(ClientsDropDown.SelectedItemId, _
                                                             ProductsDropDown.SelectedItemId, _
                                                             selectedId, _
@@ -1829,6 +1782,7 @@ Public Class AddinModule
         
         Dim timeConfig As UInt32 = GlobalVariables.Versions.versions_hash(My.Settings.version_id)(VERSIONS_TIME_CONFIG_VARIABLE)
         Dim periodlist As Int32() = GlobalVariables.Versions.GetPeriodsList(My.Settings.version_id)
+        GlobalVariables.APPS.Interactive = False
         WorksheetWrittingFunctions.InsertInputReportOnWS(currentcell, _
                                                           periodlist, _
                                                           timeConfig)
@@ -1890,6 +1844,41 @@ Public Class AddinModule
     End Sub
 
 #End Region
+
+#End Region
+
+
+#Region "Snapshot Methods"
+
+    ' Create GRS Conctroler and display
+    Private Sub AssociateGRSControler(ByRef p_mustUpdateInputs As Boolean)
+
+        Dim ctrl As ADXRibbonItem = AddButtonToDropDown(WSCB, GlobalVariables.APPS.ActiveSheet.name, GlobalVariables.APPS.ActiveSheet.name)
+        loadDropDownsSubmissionButtons()
+        Dim CGRSControlerInstance As New GeneralSubmissionControler(ctrl, Me)
+        GRSControlersDictionary.Add(GlobalVariables.APPS.ActiveSheet, CGRSControlerInstance)
+        ctrlsTextWSDictionary.Add(ctrl.Caption, GlobalVariables.APPS.ActiveSheet)
+        CurrentGRSControler = CGRSControlerInstance
+        If CurrentGRSControler.RefreshSnapshot(p_mustUpdateInputs) = True Then
+            SubmissionModeRibbon.Visible = True
+            SubmissionModeRibbon.Activate()
+            WSCB.SelectedItemId = ctrl.Id
+        End If
+
+    End Sub
+
+    ' Disable Submission Buttons (Call back from GRSController)
+    Friend Sub modifySubmissionControlsStatus(ByRef buttonsStatus As Boolean)
+
+        RefreshInputsBT.Enabled = buttonsStatus
+        SubmitBT2.Enabled = buttonsStatus
+        SubmissionStatus.Enabled = buttonsStatus
+        CancelBT2.Enabled = buttonsStatus
+        AutoComitBT.Enabled = buttonsStatus
+        ShowReportBT.Enabled = buttonsStatus
+
+    End Sub
+
 
 #End Region
 
@@ -1971,20 +1960,6 @@ Public Class AddinModule
 #End Region
 
 
-    Private Sub PPTExportBT_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean)
 
-        Dim testHTTPUI As New HTTP_test
-        testHTTPUI.Show()
-
-    End Sub
-
-    Private Sub AdxRibbonButton5_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean)
-
-        Dim t As New Test
-        t.Show()
-
-    End Sub
-
-    
 End Class
 

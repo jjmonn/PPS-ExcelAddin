@@ -254,7 +254,7 @@ Friend Class DataModificationsTracking
 
     ' Identify differences between captured data and and current DB
     ' Param: DBInputsDictionary (from ACQMODEL-> (entity)(account)(period))
-    Friend Sub IdentifyDifferencesBtwDataSetAndDB(ByRef DBInputsDictionary As Dictionary(Of String, Dictionary(Of String, Dictionary(Of String, Double))))
+    Friend Sub IdentifyDifferencesBtwDataSetAndDB(ByRef p_dataBaseInputsDictionary As Dictionary(Of String, Dictionary(Of String, Dictionary(Of String, Double))))
 
         Dim periodIdentifyer As String = ""
         Select Case GlobalVariables.Versions.versions_hash(Dataset.currentVersionCode)(VERSIONS_TIME_CONFIG_VARIABLE)
@@ -270,13 +270,13 @@ Friend Class DataModificationsTracking
                     Case GlobalEnums.FormulaTypes.FIRST_PERIOD_INPUT
                         Dim period As Integer = CInt(CDbl(Dataset.periodsDatesList(0).ToOADate))
                         ' Date from dataset converted to integer to meet DB integer date storage
-                        If Dataset.dataSetDictionary(entity)(account)(period) <> DBInputsDictionary(entity)(account)(periodIdentifyer & period) Then _
+                        If Dataset.dataSetDictionary(entity)(account)(period) <> p_dataBaseInputsDictionary(entity)(account)(periodIdentifyer & period) Then _
                            RegisterModification(GetExcelCell(entity, account, period).Address)
 
                     Case Else
                         For Each period As String In Dataset.dataSetDictionary(entity)(account).Keys
-           
-                            If Dataset.dataSetDictionary(entity)(account)(period) <> DBInputsDictionary(entity)(account)(periodIdentifyer & period) Then
+
+                            If Dataset.dataSetDictionary(entity)(account)(period) <> p_dataBaseInputsDictionary(entity)(account)(periodIdentifyer & period) Then
                                 RegisterModification(GetExcelCell(entity, account, period).Address)
                             End If
                         Next

@@ -72,6 +72,7 @@ Friend Class GeneralSubmissionControler
     Private originalValue As Double
     Friend isUpdating As Boolean
     Private mustUpdateExcelWorksheetFromDataBase As Boolean
+    Friend isReportReady As Boolean
 
 #End Region
 
@@ -187,8 +188,9 @@ Friend Class GeneralSubmissionControler
 
     End Sub
 
-    Friend Sub RefreshSnapshot(ByRef update_inputs As Boolean)
+    Friend Function RefreshSnapshot(ByRef update_inputs As Boolean) As Boolean
 
+        isReportReady = False
         ' Unformat if necessary 
         If DataModificationsTracker.RangeHighlighter.FormattedCellsDictionnarySize > 0 Then
             DataModificationsTracker.RangeHighlighter.RevertToOriginalColors()
@@ -204,7 +206,7 @@ Friend Class GeneralSubmissionControler
             If Dataset.GlobalOrientationFlag <> ORIENTATION_ERROR_FLAG _
             AndAlso Dataset.EntitiesAddressValuesDictionary.Count > 0 Then
 
-                Dataset.getDataSet()
+                '  Dataset.getDataSet()
                 snapshotSuccess = True
                 FillInEntityAndCurrencyTB(Dataset.EntitiesAddressValuesDictionary.ElementAt(0).Value)
                 SubmissionWSController = New SubmissionWSController(Me, Dataset, Model, DataModificationsTracker)
@@ -221,11 +223,15 @@ Friend Class GeneralSubmissionControler
                 End If
             Else
                 SnapshotError()
+                Return False
             End If
             ADDIN.modifySubmissionControlsStatus(snapshotSuccess)
+        Else
+            Return False
         End If
+        Return True
 
-    End Sub
+    End Function
 
     Friend Sub UpdateAfterAnalysisAxisChanged(ByVal client_id As String, _
                                               ByVal product_id As String, _
@@ -244,18 +250,6 @@ Friend Class GeneralSubmissionControler
                                client_id, _
                                product_id, _
                                adjustment_id)
-
-    End Sub
-
-    Private Sub AfterDataBaseInputsDowloaded()
-
-        If mustUpdateExcelWorksheetFromDataBase = True Then
-            updateInputs()
-        End If
-        ' Dataset.getDataSet()
-        DataModificationsTracker.IdentifyDifferencesBtwDataSetAndDB(Model.dataBaseInputsDictionary)
-        UpdateCalculatedItems(m_entityName)
-        isUpdating = False
 
     End Sub
 
@@ -279,20 +273,37 @@ Friend Class GeneralSubmissionControler
 
         isUpdating = True
         SubmissionWSController.updateInputsOnWS()
-        ' Update DGV in acquisitionInterface !!
-        isUpdating = False
+        'isUpdating = False
 
     End Sub
 
     Friend Sub UpdateCalculatedItems(ByRef entityName As String)
 
-        ' Update Computer order
+        isUpdating = True
         GlobalVariables.APPS.Interactive = False
         Model.ComputeCalculatedItems(entityName)   
 
     End Sub
 
-    ' Worksheet display update
+#End Region
+
+
+#Region "Model Events Listening"
+
+    Private Sub AfterDataBaseInputsDowloaded()
+
+        If mustUpdateExcelWorksheetFromDataBase = True Then
+            Dataset.getDataSet()
+            updateInputs()
+        End If
+        Dataset.getDataSet()
+        DataModificationsTracker.IdentifyDifferencesBtwDataSetAndDB(Model.dataBaseInputsDictionary)
+        UpdateCalculatedItems(m_entityName)
+        isUpdating = False
+        ' Update DGV in acquisitionInterface !!
+
+    End Sub
+
     Private Sub AfterOutputsComputed(ByRef entityName As String)
 
         isUpdating = True

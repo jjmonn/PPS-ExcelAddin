@@ -452,7 +452,7 @@ Namespace My
         
         <Global.System.Configuration.UserScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("Green")>  _
+         Global.System.Configuration.DefaultSettingValueAttribute("DodgerBlue")>  _
         Public Property detailFontColor() As Global.System.Drawing.Color
             Get
                 Return CType(Me("detailFontColor"),Global.System.Drawing.Color)
@@ -464,7 +464,7 @@ Namespace My
         
         <Global.System.Configuration.UserScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("PaleGreen")>  _
+         Global.System.Configuration.DefaultSettingValueAttribute("192, 255, 255")>  _
         Public Property detailBackColor() As Global.System.Drawing.Color
             Get
                 Return CType(Me("detailBackColor"),Global.System.Drawing.Color)
@@ -531,6 +531,18 @@ Namespace My
             End Get
             Set
                 Me("snapshotOutputsTextColor") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("0")>  _
+        Public Property currentCurrency() As Integer
+            Get
+                Return CType(Me("currentCurrency"),Integer)
+            End Get
+            Set
+                Me("currentCurrency") = value
             End Set
         End Property
     End Class

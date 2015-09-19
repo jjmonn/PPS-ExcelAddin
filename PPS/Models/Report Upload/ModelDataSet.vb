@@ -699,6 +699,7 @@ Friend Class ModelDataSet
 
         CellsAddressItemsDictionary.Clear()
         dataSetDictionary.Clear()
+        DimensionsToCellDictionary.Clear()
 
         Dim accountsDictionary As New Dictionary(Of String, Dictionary(Of String, Double))
         For Each AccountAddressValuePair In AccountsAddressValuesDictionary
@@ -734,7 +735,7 @@ Friend Class ModelDataSet
     ' Factor functions below
     ' Save the data from WS to DataSetDictionary according to the input orientation code
     ' and 2 inputs AccountsAddressValuesDictionary, EntitiesAddressValuesDictionary or periodsAddressValuesDictionary
-    Private Sub getData(VerticalDictionaryAddressValues As Dictionary(Of String, String), _
+    Private Sub GetData(VerticalDictionaryAddressValues As Dictionary(Of String, String), _
                         HorizontalDictionaryAddressValues As Dictionary(Of String, String))
 
         CellsAddressItemsDictionary.Clear()

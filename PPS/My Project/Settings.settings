@@ -102,10 +102,10 @@
       <Value Profile="(Default)">1</Value>
     </Setting>
     <Setting Name="detailFontColor" Type="System.Drawing.Color" Scope="User">
-      <Value Profile="(Default)">Green</Value>
+      <Value Profile="(Default)">DodgerBlue</Value>
     </Setting>
     <Setting Name="detailBackColor" Type="System.Drawing.Color" Scope="User">
-      <Value Profile="(Default)">PaleGreen</Value>
+      <Value Profile="(Default)">192, 255, 255</Value>
     </Setting>
     <Setting Name="titleBordersColor" Type="System.Drawing.Color" Scope="User">
       <Value Profile="(Default)">Black</Value>
@@ -121,6 +121,9 @@
     </Setting>
     <Setting Name="snapshotOutputsTextColor" Type="System.Drawing.Color" Scope="User">
       <Value Profile="(Default)">Black</Value>
+    </Setting>
+    <Setting Name="currentCurrency" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">0</Value>
     </Setting>
   </Settings>
 </SettingsFile>

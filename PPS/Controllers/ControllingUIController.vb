@@ -162,6 +162,10 @@ Friend Class ControllingUIController
         IncrementComputingHierarchy(columnsHierarchyNode, computingHierarchyList)
 
         ' Currency Setup
+        If View.leftPane_control.currenciesCLB.SelectedItem Is Nothing Then
+            MsgBox("Please select a Currency.")
+            Exit Sub
+        End If
         Dim currencyId As Int32 = CInt(View.leftPane_control.currenciesCLB.SelectedItem.Value)
 
         ' Computing order
