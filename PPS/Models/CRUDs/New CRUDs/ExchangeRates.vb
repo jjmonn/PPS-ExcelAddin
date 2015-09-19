@@ -1,8 +1,4 @@
-﻿Imports System.Collections
-Imports System.Collections.Generic
-
-
-' ExchangeRate2.vb
+﻿' ExchangeRate.vb
 '
 ' CRUD for exchangeRates table - relation with c++ server
 '
@@ -12,7 +8,11 @@ Imports System.Collections.Generic
 '
 ' Author: Julien Monnereau
 ' Created: 05/08/2015
-' Last modified: 02/09/2015
+' Last modified: 19/09/2015
+
+
+Imports System.Collections
+Imports System.Collections.Generic
 
 
 
@@ -23,7 +23,7 @@ Friend Class ExchangeRate
 
     ' Variables
     Friend state_flag As Boolean
-    Friend exchangeRatesDict As New Dictionary(Of String, Double)
+    Friend m_exchangeRatesHash As New Dictionary(Of Tuple(Of Int32, Int32, Int32), Double)
     Private request_id As Dictionary(Of UInt32, Boolean)
 
     ' Events
@@ -34,10 +34,6 @@ Friend Class ExchangeRate
                              ByRef ratesVersion As Int32, _
                              ByRef period As Int32)
 
-
-    ' Constants
-    Friend Const RATES_CURRENCIES_TOKEN_SEPARATOR As Char = "#"
-
 #End Region
 
 
@@ -46,6 +42,7 @@ Friend Class ExchangeRate
     Friend Sub New()
 
         NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_READ_EXCHANGE_RATE_ANSWER, AddressOf SMSG_READ_EXCHANGE_RATE_ANSWER)
+        NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_LIST_EXCHANGE_RATE_ANSWER, AddressOf SMSG_LIST_EXCHANGE_RATE_ANSWER)
         state_flag = False
         LoadExchangeRatesTable()
 
@@ -53,32 +50,29 @@ Friend Class ExchangeRate
 
     Friend Sub LoadExchangeRatesTable()
 
-        NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_LIST_EXCHANGE_RATE_ANSWER, AddressOf SMSG_LIST_EXCHANGE_RATE_ANSWER)
         Dim packet As New ByteBuffer(CType(ClientMessage.CMSG_LIST_EXCHANGE_RATE, UShort))
         packet.Release()
-        NetworkManager.GetInstance().Send(packet)
 
     End Sub
 
-    ' ExchangeRates_hash: [currency#ratesVersion#period] => rateValue
     Private Sub SMSG_LIST_EXCHANGE_RATE_ANSWER(packet As ByteBuffer)
 
         If packet.GetError() = 0 Then
-            exchangeRatesDict.Clear()
+            m_exchangeRatesHash.Clear()
             For i As Int32 = 1 To packet.ReadInt32()
                 Dim tmp_ht As New Hashtable
                 GetExchangeRateHTFromPacket(packet, tmp_ht)
-                exchangeRatesDict(tmp_ht(EX_RATES_LOCAL_CURR_VAR) & Computer.TOKEN_SEPARATOR & _
-                                  tmp_ht(EX_RATES_RATE_VARIABLE) & Computer.TOKEN_SEPARATOR & _
-                                  tmp_ht(EX_RATES_PERIOD_VARIABLE)) = _
-                                  tmp_ht(EX_RATES_RATE_VARIABLE)
+                AddRecordToExchangeRatesHash(tmp_ht(EX_RATES_DESTINATION_CURR_VAR), _
+                                             tmp_ht(EX_RATES_RATE_VERSION), _
+                                             tmp_ht(EX_RATES_PERIOD_VARIABLE), _
+                                             tmp_ht(EX_RATES_RATE_VARIABLE))
             Next
+            state_flag = True
             RaiseEvent ObjectInitialized(True)
         Else
             state_flag = False
             RaiseEvent ObjectInitialized(True)
         End If
-        NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_LIST_EXCHANGE_RATE_ANSWER, AddressOf SMSG_LIST_EXCHANGE_RATE_ANSWER)
 
     End Sub
 
@@ -89,36 +83,19 @@ Friend Class ExchangeRate
 
     ' add read => must listen in case somebody is already editing
     ' or block any CRUD editing when someone is already editing ?!
-
     Friend Sub SMSG_READ_EXCHANGE_RATE_ANSWER(packet As ByteBuffer)
 
         If packet.GetError() = 0 Then
-            Dim ht As New Hashtable
-            GetExchangeRateHTFromPacket(packet, ht)
-            exchangeRatesDict(ht(EX_RATES_LOCAL_CURR_VAR) & Computer.TOKEN_SEPARATOR & _
-                                ht(EX_RATES_RATE_VARIABLE) & Computer.TOKEN_SEPARATOR & _
-                                ht(EX_RATES_PERIOD_VARIABLE)) = _
-                                ht(EX_RATES_RATE_VARIABLE)
-            RaiseEvent Read(True, ht)
+            Dim tmpHt As New Hashtable
+            GetExchangeRateHTFromPacket(packet, tmpHt)
+            AddRecordToExchangeRatesHash(tmpHt(EX_RATES_DESTINATION_CURR_VAR), _
+                                         tmpHt(EX_RATES_RATE_VERSION), _
+                                         tmpHt(EX_RATES_PERIOD_VARIABLE), _
+                                         tmpHt(EX_RATES_RATE_VARIABLE))
+            RaiseEvent Read(True, tmpHt)
         Else
             RaiseEvent Read(False, Nothing)
         End If
-
-    End Sub
-
-    Friend Sub CMSG_UPDATE_EXCHANGE_RATE(ByRef id As UInt32, _
-                                          ByRef updated_var As String, _
-                                          ByRef new_value As String)
-
-        ' to be reviewed priority high
-        '     Dim tmp_ht As Hashtable = exchangeRatesDict(id).clone ' check clone !!!!
-        'tmp_ht(updated_var) = new_value
-
-        'NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_UPDATE_EXCHANGE_RATE_ANSWER, AddressOf SMSG_UPDATE_EXCHANGE_RATE_ANSWER)
-        'Dim packet As New ByteBuffer(CType(ClientMessage.CMSG_UPDATE_EXCHANGE_RATE, UShort))
-        'WriteExchangeRatePacket(packet, tmp_ht)
-        'packet.Release()
-        'NetworkManager.GetInstance().Send(packet)
 
     End Sub
 
@@ -151,9 +128,9 @@ Friend Class ExchangeRate
 
 #Region "Utilities"
 
-    Friend Shared Sub GetExchangeRateHTFromPacket(ByRef packet As ByteBuffer, ByRef exchangeRate_ht As Hashtable)
+    Private Shared Sub GetExchangeRateHTFromPacket(ByRef packet As ByteBuffer, ByRef exchangeRate_ht As Hashtable)
 
-        exchangeRate_ht(EX_RATES_LOCAL_CURR_VAR) = packet.ReadUint32()
+        exchangeRate_ht(EX_RATES_DESTINATION_CURR_VAR) = packet.ReadUint32()
         exchangeRate_ht(EX_RATES_RATE_VERSION) = packet.ReadUint32()
         exchangeRate_ht(EX_RATES_PERIOD_VARIABLE) = packet.ReadUint32()
         exchangeRate_ht(EX_RATES_RATE_VARIABLE) = packet.ReadDouble()
@@ -162,20 +139,34 @@ Friend Class ExchangeRate
 
     Private Sub WriteExchangeRatePacket(ByRef packet As ByteBuffer, ByRef attributes As Hashtable)
 
-        packet.WriteUint32(attributes(EX_RATES_LOCAL_CURR_VAR))
+        packet.WriteUint32(attributes(EX_RATES_DESTINATION_CURR_VAR))
         packet.WriteUint32(attributes(EX_RATES_RATE_VERSION))
         packet.WriteUint32(attributes(EX_RATES_PERIOD_VARIABLE))
         packet.WriteDouble(attributes(EX_RATES_RATE_VARIABLE))
 
     End Sub
 
+    Private Sub AddRecordToExchangeRatesHash(ByRef p_destinationCurrency As Int32, _
+                                             ByRef p_versionId As Int32, _
+                                             ByRef p_period As Int32, _
+                                             ByRef p_rateValue As Double)
+
+        Dim key As Tuple(Of Int32, Int32, Int32) = Tuple.Create(p_destinationCurrency, p_versionId, p_period)
+        If m_exchangeRatesHash.ContainsKey(key) Then
+            m_exchangeRatesHash(key) = p_rateValue
+        Else
+            m_exchangeRatesHash.Add(key, p_rateValue)
+        End If
+
+    End Sub
 
 #End Region
 
 
     Protected Overrides Sub finalize()
 
-        NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_UPDATE_EXCHANGE_RATE_ANSWER, AddressOf SMSG_UPDATE_EXCHANGE_RATE_ANSWER)
+        NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_LIST_EXCHANGE_RATE_ANSWER, AddressOf SMSG_LIST_EXCHANGE_RATE_ANSWER)
+        NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_READ_EXCHANGE_RATE_ANSWER, AddressOf SMSG_READ_EXCHANGE_RATE_ANSWER)
 
     End Sub
 

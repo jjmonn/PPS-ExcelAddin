@@ -1469,23 +1469,6 @@ Public Class AddinModule
 
     End Sub
 
-
-#Region "Configuration"
-
-    Private Sub MarketPricesMGT_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean)
-
-        If GlobalVariables.AuthenticationFlag = False Then
-            ConnectionBT_OnClick(sender, control, pressed)
-        Else
-            Dim MarketPricesMGT As New MarketPricesController
-        End If
-
-    End Sub
-
-
-#End Region
-
-
 #End Region
 
 #Region "Platform Management"

@@ -12,7 +12,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 24/08/2015
+' Last modified: 19/09/2015
 
 
 Imports System.Collections.Generic
@@ -21,7 +21,6 @@ Imports System.Windows.Forms
 Imports VIBlend.WinForms.DataGridView
 Imports VIBlend.WinForms.Controls
 
-'Imports VIBlend.WinForms.Controls
 
 
 Friend Class ExchangeRatesController
@@ -30,17 +29,18 @@ Friend Class ExchangeRatesController
 #Region "Instance Variables"
 
     ' Objects
-    Private View As ExchangeRatesView
-    Private ExchangeRates As New ExchangeRate
-    Private rates_versionsTV As New vTreeView
-    Private NewRatesVersionUI As NewRatesVersionUI
-    Private ExcelImport As ExcelRatesImportUI
-    Private PBar As PBarUI
-    Private PlatformMGTUI As PlatformMGTGeneralUI
+    Private m_view As ExchangeRatesView
+    Private m_exchangeRates As New ExchangeRate
+    Private m_ratesVersionTV As New vTreeView
+    Private m_newRatesVersionUI As NewRatesVersionUI
+    Private m_excelImport As ExcelRatesImportUI
+    Private mpBar As PBarUI
+    Private m_PlatformManagementUI As PlatformMGTGeneralUI
 
     ' Variables
-    Friend currentRatesVersionId As Int32
-    Friend monthsIdList As List(Of Int32)
+    Friend m_isValid As Boolean
+    Friend m_currentRatesVersionId As Int32
+    Friend m_MonthsIdList As List(Of Int32)
 
 
 #End Region
@@ -50,32 +50,53 @@ Friend Class ExchangeRatesController
 
     Friend Sub New()
 
-        View = New ExchangeRatesView(Me, rates_versionsTV)
-        currentRatesVersionId = GlobalVariables.Versions.versions_hash(My.Settings.version_id)(EX_RATES_RATE_VERSION)
-        NewRatesVersionUI = New NewRatesVersionUI(Me)
+        If GlobalVariables.Currencies.currencies_hash.ContainsKey(CInt(GlobalVariables.Currencies.mainCurrency)) = False Then
+            MsgBox("Main currency must be set up.")
+            m_isValid = False
+            Exit Sub
+        End If
 
-        AddHandler ExchangeRates.UpdateEvent, AddressOf AfterRateUpdate
+        GlobalVariables.RatesVersions.LoadRateVersionsTV(m_ratesVersionTV)
+        m_view = New ExchangeRatesView(Me, m_ratesVersionTV, GlobalVariables.Currencies.mainCurrency)
+        m_currentRatesVersionId = GlobalVariables.Versions.versions_hash(My.Settings.version_id)(EX_RATES_RATE_VERSION)
+        m_newRatesVersionUI = New NewRatesVersionUI(Me)
+  
+        AddHandler m_exchangeRates.UpdateEvent, AddressOf AfterRateUpdate
         AddHandler GlobalVariables.RatesVersions.CreationEvent, AddressOf AfterVersionCreate
         AddHandler GlobalVariables.RatesVersions.UpdateEvent, AddressOf AfterVersionUpdate
         AddHandler GlobalVariables.RatesVersions.DeleteEvent, AddressOf AfterVersionDelete
-
+        m_isValid = True
 
     End Sub
 
-    Public Sub addControlToPanel(ByRef dest_panel As Panel, _
+    Public Sub AddControlToPanel(ByRef dest_panel As Panel, _
                                  ByRef PlatformMGTUI As PlatformMGTGeneralUI)
 
-        Me.PlatformMGTUI = PlatformMGTUI
-        dest_panel.Controls.Add(View)
-        View.Dock = Windows.Forms.DockStyle.Fill
+        If m_isValid = True Then
+            Me.m_PlatformManagementUI = PlatformMGTUI
+            dest_panel.Controls.Add(m_view)
+            m_view.Dock = Windows.Forms.DockStyle.Fill
+        End If
 
     End Sub
 
     Public Sub close()
 
-        View.closeControl()
-        View.Dispose()
-        View = Nothing
+        If m_isValid = True Then
+            m_view.closeControl()
+            m_view.Dispose()
+            m_view = Nothing
+        End If
+
+    End Sub
+
+    Friend Sub DisplayRates(ByRef p_ratesVersionid As Int32)
+
+        m_currentRatesVersionId = p_ratesVersionid
+        m_MonthsIdList = GlobalVariables.RatesVersions.GetMonthsList(p_ratesVersionid)
+        m_view.InitializeDGV(GlobalVariables.Currencies.GetInUseCurrenciesIdList(), m_MonthsIdList, p_ratesVersionid)
+        m_view.DisplayRatesVersionValues(m_exchangeRates.m_exchangeRatesHash)
+        m_view.rates_version_TB.Text = GlobalVariables.RatesVersions.rate_versions_hash(m_currentRatesVersionId)(NAME_VARIABLE)
 
     End Sub
 
@@ -94,18 +115,7 @@ Friend Class ExchangeRatesController
         ' fill ht priority high !!!!!!!!!!!!!!!!!
         ' quid origin currency
         ' 
-        ExchangeRates.CMSG_UPDATE_EXCHANGE_RATE(ht)
-
-    End Sub
-
-    Friend Sub ChangeVersion(ByRef versionId As Int32)
-
-        currentRatesVersionId = versionId
-        monthsIdList = GlobalVariables.RatesVersions.GetMonthsList(versionId)
-        View.ratesView.InitializeDGV(GlobalVariables.Currencies.currencies_hash.Keys, _
-                                     monthsIdList)
-        View.ratesView.DisplayRatesVersionValuesinDGV(ExchangeRates.exchangeRatesDict)
-        View.rates_version_TB.Text = GlobalVariables.RatesVersions.rate_versions_hash(currentRatesVersionId)(NAME_VARIABLE)
+        m_exchangeRates.CMSG_UPDATE_EXCHANGE_RATE(ht)
 
     End Sub
 
@@ -117,8 +127,6 @@ Friend Class ExchangeRatesController
         ' to be implemented priority normal
 
     End Sub
-
-
 
 #End Region
 
@@ -148,6 +156,43 @@ Friend Class ExchangeRatesController
 
     End Sub
 
+    Friend Sub UpdateVersionName(ByRef version_id As Int32, ByRef name As String)
+
+        '  GlobalVariables.RatesVersions.UpdateVersion(version_id, NAME_VARIABLE, name)
+
+    End Sub
+
+    Private Sub Update(ByRef id As Int32, _
+                       ByRef variable As String, _
+                       ByRef value As Object)
+
+        Dim ht As Hashtable = GlobalVariables.RatesVersions.rate_versions_hash(id)
+        ht(variable) = value
+        GlobalVariables.RatesVersions.CMSG_UPDATE_RATE_VERSION(ht)
+
+    End Sub
+
+    Friend Function DeleteRatesVersion(ByRef p_ratesVersionId As Int32) As Boolean
+
+        ' ---------------------------------------------------------------------------------------------------
+        ' caution PRIORITY HIGH => rule : cannot delete exchange rates version if binded to a fact verions !!!!!!!!!!!
+        ' checks before delete
+        ' return false
+        ' ---------------------------------------------------------------------------------------------------
+
+        If p_ratesVersionId = m_currentRatesVersionId Then
+            m_currentRatesVersionId = ""
+            ' not ok to be reviewed! 
+            '      m_view.InitializeDGV(GlobalVariables.Currencies.currencies_hash.Keys, m_MonthsIdList, p_ratesVersionId)
+        End If
+        GlobalVariables.RatesVersions.CMSG_DELETE_RATE_VERSION(p_ratesVersionId)
+        Return True
+
+    End Function
+
+
+#Region "Events"
+
     Private Sub AfterVersionCreate(ByRef status As Boolean, ByRef id As Int32)
 
         ' to be reimplemented priority high
@@ -168,53 +213,17 @@ Friend Class ExchangeRatesController
 
     End Sub
 
-    Friend Sub UpdateVersionName(ByRef version_id As Int32, ByRef name As String)
-
-        '  GlobalVariables.RatesVersions.UpdateVersion(version_id, NAME_VARIABLE, name)
-
-    End Sub
-
-    Private Sub Update(ByRef id As Int32, _
-                       ByRef variable As String, _
-                       ByRef value As Object)
-
-        Dim ht As Hashtable = GlobalVariables.RatesVersions.rate_versions_hash(id)
-        ht(variable) = value
-        GlobalVariables.RatesVersions.CMSG_UPDATE_RATE_VERSION(ht)
-
-    End Sub
-
-
-
     Private Sub AfterVersionUpdate(ByRef status As Boolean, ByRef id As Int32)
 
         ' to be implemented -> priority normal
 
     End Sub
 
-    Friend Function DeleteRatesVersion(ByRef version_id As Int32) As Boolean
-
-        ' ---------------------------------------------------------------------------------------------------
-        ' caution PRIORITY HIGH => rule : cannot delete exchange rates version if binded to a fact verions !!!!!!!!!!!
-        ' checks before delete
-        ' return false
-        ' ---------------------------------------------------------------------------------------------------
-
-        If version_id = currentRatesVersionId Then
-            currentRatesVersionId = ""
-            View.ratesView.InitializeDGV(GlobalVariables.Currencies.currencies_hash.Keys, _
-                                         monthsIdList)
-        End If
-        GlobalVariables.RatesVersions.CMSG_DELETE_RATE_VERSION(version_id)
-        Return True
-
-    End Function
-
     Private Sub AfterVersionDelete(ByRef status As Boolean, ByRef id As Int32)
 
         ' if version is currently displayed -> set another one
         ' priority high
-        Dim nodeToBeRemoved As vTreeNode = VTreeViewUtil.FindNode(rates_versionsTV, id)
+        Dim nodeToBeRemoved As vTreeNode = VTreeViewUtil.FindNode(m_ratesVersionTV, id)
         If Not nodeToBeRemoved Is Nothing Then
             nodeToBeRemoved.Remove()
         End If
@@ -225,6 +234,10 @@ Friend Class ExchangeRatesController
 #End Region
 
 
+#End Region
+
+
+
 #Region "Utilities"
 
     Friend Function IsFolderVersion(ByRef versionId As Int32) As Boolean
@@ -233,7 +246,7 @@ Friend Class ExchangeRatesController
 
     Private Sub UpdateVersionsPositions()
 
-        Dim positions_dic = VTreeViewUtil.GeneratePositionsDictionary(rates_versionsTV)
+        Dim positions_dic = VTreeViewUtil.GeneratePositionsDictionary(m_ratesVersionTV)
         For Each id In positions_dic.Keys
             Update(id, ITEMS_POSITIONS, positions_dic(id))
         Next
@@ -244,17 +257,17 @@ Friend Class ExchangeRatesController
 
     Friend Sub ImportRatesFromExcel()
 
-        ExcelImport = New ExcelRatesImportUI(Me, GlobalVariables.Currencies.currencies_hash.Keys)
-        ExcelImport.Show()
+        m_excelImport = New ExcelRatesImportUI(Me, GlobalVariables.Currencies.currencies_hash.Keys)
+        m_excelImport.Show()
 
     End Sub
 
     Friend Sub InputRangesCallBack(ByRef period() As Integer, ByRef rates() As Double, ByRef curr As String)
 
         For i = 0 To period.Length - 1
-            View.ratesView.UpdateCell(curr, period(i), rates(i))
+            m_view.UpdateCell(curr, period(i), rates(i))
         Next
-        ExcelImport.Dispose()
+        m_excelImport.Dispose()
 
     End Sub
 
@@ -262,8 +275,8 @@ Friend Class ExchangeRatesController
 
     Friend Sub ShowNewRatesVersion(Optional ByRef parent_node As vTreeNode = Nothing)
 
-        NewRatesVersionUI.parent_node = parent_node
-        NewRatesVersionUI.Show()
+        m_newRatesVersionUI.parent_node = parent_node
+        m_newRatesVersionUI.Show()
 
     End Sub
 

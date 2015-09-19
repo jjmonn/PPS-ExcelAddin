@@ -1,20 +1,18 @@
 ﻿' CurrenciesControl
 '
-' User interface for adding/ deleting currencies and seeing/ modifying the exchange rates
+' User interface for modifying the exchange rates
 '
 '
 ' To do:
-'       - Chart automatically reload when changing version
 '       - Add rename rate version
-'       - PRIORITY HIGH / SIMPLIFY (NO CURRENCY MANAGEMENT here) + right click node won t work with vtreeview
-'
+'       
 '
 ' Known bugs:
 '
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 24/08/2015
+' Last modified: 19/09/2015
 
 
 Imports System.Collections.Generic
@@ -23,6 +21,7 @@ Imports System.Collections
 Imports System.Windows.Forms
 Imports System.Windows.Forms.DataVisualization.Charting
 Imports VIBlend.WinForms.Controls
+Imports System.Drawing
 
 
 Friend Class ExchangeRatesView
@@ -31,75 +30,78 @@ Friend Class ExchangeRatesView
 #Region "Instance Variables"
 
     ' Objects
-    Friend Controller As ExchangeRatesController
-    Private rates_versionsTV As vTreeView
-    Friend ratesView As RatesView
-    Protected Friend rates_DGV As New vDataGridView
-    Private chart As Chart
+    Friend m_controller As ExchangeRatesController
+    Friend m_ratesDataGridView As New vDataGridView
+    Private m_ratesVersionsTV As vTreeView
 
     ' Variables
-    Private mainMenuFlag As Boolean
-    Private currenciesMenuFlag As Boolean
-    Private VersionsMenuFlag As Boolean = True
-    Private right_clicked_node As vTreeNode
+    Private m_mainCurrency As Int32
+    Friend m_currentRatesVersionId As Int32
+    Private m_rightClickedNode As vTreeNode
+    Private m_isFillingCells As Boolean
+    Private m_isCopyingValueDown As Boolean = False
+    Private m_currencyTextBoxEditor As New TextBoxEditor()
 
-    ' Menu
-    Private version_splitter_distance As Double = 240
-    Private chart_splitter_distance As Double = 500
-    Private isVersionDisplayed As Boolean
-    Private isChartDisplayed As Boolean
+
+    ' Constants
+    Private LINES_WIDTH As Single = 3
 
 #End Region
 
 
 #Region "Initialize"
 
-    Friend Sub New(ByRef input_controller As ExchangeRatesController, _
-                   ByRef input_rates_versionsTV As vTreeView)
+    Friend Sub New(ByRef p_controller As ExchangeRatesController, _
+                   ByRef p_ratesVersionsTV As vTreeView, _
+                   ByRef p_mainCurrency As Int32)
 
         ' This call is required by the designer.
         InitializeComponent()
 
         ' Add any initialization after the InitializeComponent() call.
-        Controller = input_controller
-        rates_versionsTV = input_rates_versionsTV
-        SplitContainer1.Panel1.Controls.Add(rates_versionsTV)
-        rates_versionsTV.Dock = DockStyle.Fill
-        SplitContainer1.Panel2.Controls.Add(rates_DGV)
-        rates_DGV.Dock = DockStyle.Fill
-        rates_DGV.ContextMenuStrip = dgvRCM
+        m_controller = p_controller
+        m_ratesVersionsTV = p_ratesVersionsTV
+        m_mainCurrency = p_mainCurrency
 
-        Dim ht As New Hashtable
-        ht.Add(name_variable, "Exchange Rates")
-        chart = ChartsUtilities.CreateChart(ht)
-        SplitContainer2.Panel2.Controls.Add(chart)
-        chart.Dock = DockStyle.Fill
-        chart.BorderlineColor = Drawing.Color.Gray
-        chart.BorderlineWidth = 1
-        ratesView = New RatesView(rates_DGV, chart)
-        ratesView.AttributeController(Controller)
+        SplitContainer1.Panel1.Controls.Add(m_ratesVersionsTV)
+        SplitContainer1.Panel2.Controls.Add(m_ratesDataGridView)
 
-        rates_versionsTV.ContextMenuStrip = VersionsRCMenu
-        AddHandler rates_versionsTV.MouseClick, AddressOf rates_version_MouseClick
-        AddHandler rates_versionsTV.KeyPress, AddressOf rates_versionsTV_KeyPress
-        AddHandler rates_versionsTV.MouseDoubleClick, AddressOf rates_versionsTV_NodeMouseDoubleClick
+        m_ratesVersionsTV.Dock = DockStyle.Fill
+        m_ratesDataGridView.Dock = DockStyle.Fill
+        m_ratesDataGridView.ContextMenuStrip = dgvRCM
+        m_ratesVersionsTV.ContextMenuStrip = VersionsRCMenu
+        VTreeViewUtil.InitTVFormat(m_ratesVersionsTV)
+
+        AddHandler m_ratesDataGridView.CellValueChanging, AddressOf RatesDataGridView_CellValueChanging
+        AddHandler m_ratesVersionsTV.KeyPress, AddressOf Rates_versionsTV_KeyPress
+        AddHandler m_ratesVersionsTV.MouseDoubleClick, AddressOf RatesVersionsTV_MouseDoubleClick
+        AddHandler m_ratesVersionsTV.MouseClick, AddressOf Rates_versionsTV_MouseClick
 
     End Sub
 
     Private Sub CurrenciesManagementUI_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 
-        CollapseChartPane()
-        rates_DGV.AllowCopyPaste = True
-        rates_DGV.ColumnsHierarchy.AutoResize(AutoResizeMode.FIT_ALL)
-        rates_DGV.RowsHierarchy.CompactStyleRenderingEnabled = True
-        rates_DGV.Refresh()
-        rates_DGV.Select()
-        'ExpandChartPane()
-
+        m_ratesDataGridView.AllowCopyPaste = True
+        m_ratesDataGridView.ColumnsHierarchy.AutoResize(AutoResizeMode.FIT_ALL)
+        m_ratesDataGridView.RowsHierarchy.CompactStyleRenderingEnabled = True
+        m_ratesDataGridView.Refresh()
+        m_ratesDataGridView.Select()
+    
     End Sub
 
     Friend Sub closeControl()
 
+
+    End Sub
+
+#End Region
+
+
+#Region "Interface"
+
+    Private Sub ChangeRatesVersionDisplayRequest(ByRef p_ratesVersionId As Int32)
+
+        m_controller.DisplayRates(p_ratesVersionId)
 
     End Sub
 
@@ -109,85 +111,59 @@ Friend Class ExchangeRatesView
 
 #Region "Call Backs"
 
-#Region "Main Menu Call backs"
-
-    Private Sub VersionsToolStripMenuItem_Click(sender As Object, e As EventArgs)
-
-        If isVersionDisplayed = True Then
-            CollapseVersionPane()
-            isVersionDisplayed = False
-        Else
-            ExpandVersionPane()
-            isVersionDisplayed = True
-        End If
-    End Sub
-
-    Private Sub chart_display_Click(sender As Object, e As EventArgs) Handles chart_button.Click
-
-        If isChartDisplayed = True Then
-            CollapseChartPane()
-        Else
-            ExpandChartPane()
-        End If
-
-    End Sub
-
     Private Sub ImportFromExcelToolStripMenuItem_Click(sender As Object, e As EventArgs)
-
-        Controller.ImportRatesFromExcel()
-
+        m_controller.ImportRatesFromExcel()
     End Sub
-
-
-#End Region
 
 #Region "Versions Right Click Menu"
 
-    Private Sub select_version_Click(sender As Object, e As EventArgs) Handles select_version.Click
+    Private Sub Select_version_Click(sender As Object, e As EventArgs) Handles select_version.Click, DisplayRatesToolStripMenuItem.Click
 
-        If Controller.IsFolderVersion(right_clicked_node.Value) = False Then Controller.ChangeVersion(right_clicked_node.Value)
+        If m_controller.IsFolderVersion(m_rightClickedNode.Value) = False Then
+            ChangeRatesVersionDisplayRequest(m_rightClickedNode.Value)
+        End If
 
     End Sub
 
     Private Sub AddFolderRCM_Click(sender As Object, e As EventArgs) Handles AddFolderRCM.Click
 
-        If Not right_clicked_node Is Nothing Then
-            If right_clicked_node.SelectedImageIndex = 1 Then
+        If Not m_rightClickedNode Is Nothing Then
+            If m_rightClickedNode.SelectedImageIndex = 1 Then
                 Dim name As String = InputBox("Please enter a name for the new Folder")
-                If Len(name) < 50 Then Controller.CreateVersion(name, 1, , , right_clicked_node.Value) Else MsgBox("The name cannot exceed 50 characters")
+                If Len(name) < NAMES_MAX_LENGTH Then m_controller.CreateVersion(name, 1, , , m_rightClickedNode.Value) Else MsgBox("The name cannot exceed 50 characters")
             Else
                 MsgBox("A folder can only be added to another folder")
             End If
         Else
             Dim name As String = InputBox("Please enter a name for the new Folder")
-            If Len(name) < 50 Then Controller.CreateVersion(name, 1) Else MsgBox("The name cannot exceed 50 characters")
+            If Len(name) < NAMES_MAX_LENGTH Then m_controller.CreateVersion(name, 1) Else MsgBox("The name cannot exceed 50 characters")
         End If
 
     End Sub
 
     Private Sub AddRatesVersionRCM_Click(sender As Object, e As EventArgs) Handles AddRatesVersionRCM.Click
 
-        If Not right_clicked_node Is Nothing Then
-            If Controller.IsFolderVersion(right_clicked_node.Value) = True Then
-                Controller.ShowNewRatesVersion(right_clicked_node)
+        If Not m_rightClickedNode Is Nothing Then
+            If m_controller.IsFolderVersion(m_rightClickedNode.Value) = True Then
+                m_controller.ShowNewRatesVersion(m_rightClickedNode)
             Else
                 MsgBox("A Version can only be added under a folder")
             End If
         Else
-            Controller.ShowNewRatesVersion()
+            m_controller.ShowNewRatesVersion()
         End If
 
     End Sub
 
     Private Sub DeleteVersionBT_Click(sender As Object, e As EventArgs) Handles DeleteVersionRCM.Click
 
-        If Not right_clicked_node Is Nothing Then
+        If Not m_rightClickedNode Is Nothing Then
             Dim confirm As Integer = MessageBox.Show("Careful, you are about to delete the version " + Chr(13) + Chr(13) + _
-                                                      right_clicked_node.Text + Chr(13) + Chr(13) + _
+                                                      m_rightClickedNode.Text + Chr(13) + Chr(13) + _
                                                       "This version and all sub versions will be deleted, do you confirm?" + Chr(13) + Chr(13), _
                                                       "Version deletion confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
             If confirm = DialogResult.Yes Then
-                Controller.DeleteRatesVersion(right_clicked_node.value)
+                m_controller.DeleteRatesVersion(m_rightClickedNode.Value)
             End If
         End If
 
@@ -195,23 +171,23 @@ Friend Class ExchangeRatesView
 
 #End Region
 
-#Region "DGV Right Click Menu"
+#Region "m_ratesDataGridView Right Click Menu"
 
     Private Sub expand_periods_Click(sender As Object, e As EventArgs) Handles expand_periods.Click
 
-        rates_DGV.RowsHierarchy.ExpandAllItems()
+        m_ratesDataGridView.RowsHierarchy.ExpandAllItems()
 
     End Sub
 
     Private Sub collapse_periods_Click(sender As Object, e As EventArgs) Handles collapse_periods.Click
 
-        rates_DGV.RowsHierarchy.CollapseAllItems()
+        m_ratesDataGridView.RowsHierarchy.CollapseAllItems()
 
     End Sub
 
     Private Sub CopyRateDownToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles CopyRateDownToolStripMenuItem.Click
 
-        ratesView.CopyRateValueDown()
+        CopyRateValueDown()
 
     End Sub
 
@@ -222,75 +198,46 @@ Friend Class ExchangeRatesView
 
 #Region "Events"
 
-    Private Sub rates_version_MouseClick(sender As Object, e As MouseEventArgs)
+    Private Sub RatesDataGridView_CellValueChanging(sender As Object, args As CellValueChangingEventArgs)
 
-        ' VersionsToolStripMenuItem_Click(sender, e)  ' Display Versions pane
-
-    End Sub
-
-#Region "Versions TV Events"
-
-    Private Sub rates_versionsTV_NodeMouseDoubleClick(sender As Object, e As TreeNodeMouseClickEventArgs)
-
-        If e.Node.SelectedImageIndex = 0 Then Controller.ChangeVersion(e.Node.Name)
-
-    End Sub
-
-    Private Sub rates_versionsTV_KeyPress(sender As Object, e As KeyPressEventArgs)
-
-        If e.KeyChar = Chr(13) AndAlso Not rates_versionsTV.SelectedNode Is Nothing _
-        AndAlso rates_versionsTV.SelectedNode.SelectedImageIndex = 0 Then Controller.ChangeVersion(rates_versionsTV.SelectedNode.Value)
-
-        '   If e.KeyChar = Chr(10) Then DeleteVersionBT_Click(sender, e)
-
-    End Sub
-
-    Private Sub rates_versionsTV_NodeMouseClick(sender As Object, e As TreeNodeMouseClickEventArgs)
-
-        If e.Button = Windows.Forms.MouseButtons.Right _
-        AndAlso Not rates_versionsTV.HitTest(e.Location) Is Nothing Then
-            right_clicked_node = rates_versionsTV.HitTest(e.Location)
-        Else
-            right_clicked_node = Nothing
+        If m_isFillingCells = False Then
+            If Not IsNumeric(args.NewValue) Then
+                args.Cancel = True
+            Else
+                Dim destinationCurrency As Int32 = args.Cell.ColumnItem.ItemValue
+                Dim period As String = args.Cell.RowItem.ItemValue
+                m_controller.UpdateRate(destinationCurrency, period, args.NewValue)
+            End If
         End If
 
     End Sub
 
-#End Region
+    Private Sub Rates_versionsTV_MouseClick(sender As Object, e As MouseEventArgs)
 
-
-#End Region
-
-
-#Region "Menu Utilities"
-
-    Private Sub CollapseVersionPane()
-
-        SplitContainer1.SplitterDistance = 0
-        SplitContainer1.Panel1.Hide()
+        If e.Button = Windows.Forms.MouseButtons.Right _
+        AndAlso Not m_ratesVersionsTV.HitTest(e.Location) Is Nothing Then
+            m_rightClickedNode = m_ratesVersionsTV.HitTest(e.Location)
+        Else
+            m_rightClickedNode = Nothing
+        End If
 
     End Sub
 
-    Private Sub ExpandVersionPane()
+    Private Sub RatesVersionsTV_MouseDoubleClick(sender As Object, e As MouseEventArgs)
 
-        SplitContainer1.SplitterDistance = version_splitter_distance
-        SplitContainer1.Panel1.Show()
-
-    End Sub
-
-    Private Sub CollapseChartPane()
-
-        SplitContainer2.SplitterDistance = SplitContainer2.Height
-        SplitContainer2.Panel2.Hide()
-        isChartDisplayed = False
+        If m_controller.IsFolderVersion(m_ratesVersionsTV.SelectedNode.Value) = False Then
+            ChangeRatesVersionDisplayRequest(m_ratesVersionsTV.SelectedNode.Value)
+        End If
 
     End Sub
 
-    Private Sub ExpandChartPane()
+    Private Sub Rates_versionsTV_KeyPress(sender As Object, e As KeyPressEventArgs)
 
-        SplitContainer2.SplitterDistance = chart_splitter_distance
-        SplitContainer2.Panel2.Show()
-        isChartDisplayed = True
+        If e.KeyChar = Chr(13) AndAlso Not m_ratesVersionsTV.SelectedNode Is Nothing _
+        AndAlso m_ratesVersionsTV.SelectedNode.SelectedImageIndex = 0 Then
+            ChangeRatesVersionDisplayRequest(m_ratesVersionsTV.SelectedNode.Value)
+        End If
+        '   If e.KeyChar = Chr(10) Then DeleteVersionBT_Click(sender, e)
 
     End Sub
 
@@ -298,5 +245,148 @@ Friend Class ExchangeRatesView
 #End Region
 
 
+#Region "Exchange Rates m_ratesDataGridView"
 
+    Friend Sub InitializeDGV(ByRef currenciesList As List(Of Int32), _
+                             ByRef monthsIdList As List(Of Int32), _
+                             ByRef p_ratesVersionid As Int32)
+
+        m_currentRatesVersionId = p_ratesVersionid
+        m_ratesDataGridView.RowsHierarchy.Clear()
+        m_ratesDataGridView.ColumnsHierarchy.Clear()
+        InitColumns(currenciesList)
+        InitRows(monthsIdList)
+        DataGridViewsUtil.DGVSetHiearchyFontSize(m_ratesDataGridView, My.Settings.tablesFontSize, My.Settings.tablesFontSize)
+        m_ratesDataGridView.ColumnsHierarchy.AutoResize(AutoResizeMode.FIT_ALL)
+        DataGridViewsUtil.FormatDGVRowsHierarchy(m_ratesDataGridView)
+        m_ratesDataGridView.RowsHierarchy.CompactStyleRenderingEnabled = False
+        m_ratesDataGridView.BackColor = Color.White
+        m_ratesDataGridView.Refresh()
+
+    End Sub
+
+    Private Sub InitColumns(ByRef currenciesList As List(Of Int32))
+
+        Dim mainCurrencyName As String = GlobalVariables.Currencies.currencies_hash(m_mainCurrency)(NAME_VARIABLE)
+        For Each currencyId As UInt32 In currenciesList
+            If currencyId <> m_mainCurrency Then
+                Dim destinationCurrencyName As String = GlobalVariables.Currencies.currencies_hash(CInt(currencyId))(NAME_VARIABLE)
+                Dim col As HierarchyItem = m_ratesDataGridView.ColumnsHierarchy.Items.Add(mainCurrencyName & "/" & destinationCurrencyName)
+                col.ItemValue = currencyId
+            End If
+        Next
+
+    End Sub
+
+    Private Sub InitRows(ByRef p_monthsIdList As List(Of Int32))
+
+        For Each monthId As Int32 In p_monthsIdList
+            Dim period As Date = Date.FromOADate(monthId)
+            Dim row As HierarchyItem = m_ratesDataGridView.RowsHierarchy.Items.Add(Format(period, "MMM yyyy"))
+            row.ItemValue = monthId
+            m_currencyTextBoxEditor.ActivationFlags = EditorActivationFlags.MOUSE_CLICK_SELECTED_CELL
+            row.CellsEditor = m_currencyTextBoxEditor
+        Next
+
+    End Sub
+
+    Friend Sub DisplayRatesVersionValues(ByRef p_exchangeRatesHahstable As Dictionary(Of Tuple(Of Int32, Int32, Int32), Double))
+
+        m_isFillingCells = True
+        Dim currencyId As Int32
+        For Each column As HierarchyItem In m_ratesDataGridView.ColumnsHierarchy.Items
+            currencyId = CInt(column.ItemValue)
+
+            For Each row As HierarchyItem In m_ratesDataGridView.RowsHierarchy.Items
+                Dim period As Int32 = CInt(row.ItemValue)
+
+                Dim rateTuple As New Tuple(Of Int32, Int32, Int32)(currencyId, m_currentRatesVersionId, period)
+                If p_exchangeRatesHahstable.ContainsKey(rateTuple) = True Then
+                    m_ratesDataGridView.CellsArea.SetCellValue(row, column, p_exchangeRatesHahstable(rateTuple))
+                Else
+                    m_ratesDataGridView.CellsArea.SetCellValue(row, column, 0)
+                End If
+
+            Next
+        Next
+        m_isFillingCells = False
+        m_ratesDataGridView.Refresh()
+
+    End Sub
+
+    Friend Sub UpdateCell(ByRef p_currencyId As Int32, _
+                          ByRef p_period As Int32, _
+                          ByRef p_value As Double)
+
+        m_ratesDataGridView.CellsArea.SetCellValue(DataGridViewsUtil.GetHierarchyItemFromId(m_ratesDataGridView.RowsHierarchy, p_period), _
+                                                   DataGridViewsUtil.GetHierarchyItemFromId(m_ratesDataGridView.ColumnsHierarchy, p_currencyId), _
+                                                   p_value)
+
+    End Sub
+
+    Private Sub CopyValueIntoCellsBelow(ByRef parent_row As HierarchyItem, _
+                                        ByRef start_index As Int32, _
+                                        ByRef column As HierarchyItem, _
+                                        ByRef value As Double)
+
+        For i As Int32 = start_index To parent_row.Items.Count - 1
+            m_ratesDataGridView.CellsArea.SetCellValue(parent_row.Items(i), column, value)
+        Next
+
+    End Sub
+
+    Friend Sub CopyRateValueDown()
+
+        Dim value As Double = m_ratesDataGridView.CellsArea.SelectedCells(0).Value
+        Dim column As HierarchyItem = m_ratesDataGridView.CellsArea.SelectedCells(0).ColumnItem
+        Dim row As HierarchyItem = m_ratesDataGridView.CellsArea.SelectedCells(0).RowItem
+        m_isCopyingValueDown = True
+        If Not row.ParentItem Is Nothing Then
+            CopyValueIntoCellsBelow(row.ParentItem, row.ItemIndex + 1, column, value)
+            For i = row.ParentItem.ItemIndex + 1 To m_ratesDataGridView.RowsHierarchy.Items.Count - 1
+                CopyValueIntoCellsBelow(m_ratesDataGridView.RowsHierarchy.Items(i), 0, column, value)
+            Next
+        End If
+        m_isCopyingValueDown = False
+
+    End Sub
+
+#Region "Chart Display"
+
+    'Friend Sub DisplayPriceCurve(ByRef curr As String, _
+    '                             ByRef values As Double(), _
+    '                             ByRef color_index As Int32)
+
+    '    Dim new_serie As New Series(curr)
+    '    Chart.Series.Add(curr)
+    '    new_serie.ChartArea = "ChartArea1"
+    '    Chart.Series(curr).ChartType = SeriesChartType.Line
+    '    Chart.Series(curr).Color = Color.FromArgb(colors_palette(color_index)(PPS_COLORS_RED_VAR), colors_palette(color_index)(PPS_COLORS_GREEN_VAR), colors_palette(color_index)(PPS_COLORS_BLUE_VAR))
+    '    Chart.Series(curr).BorderWidth = LINES_WIDTH
+    '    Chart.Series(curr).Points.DataBindXY(charts_periods, values)
+
+    'End Sub
+
+    'Private Sub UpdateSerie(ByRef curr As String, _
+    '                        ByRef column_curr As Int32)
+
+    '    Dim values(charts_periods.Count - 1) As Double
+    '    Dim i As Int32 = 0
+    '    For Each row As HierarchyItem In m_ratesDataGridView.RowsHierarchy.Items
+    '        For Each sub_row As HierarchyItem In row.Items
+    '            values(i) = m_ratesDataGridView.CellsArea.GetCellValue(sub_row, m_ratesDataGridView.ColumnsHierarchy.Items(column_curr))
+    '            i = i + 1
+    '        Next
+    '    Next
+    '    Chart.Series(curr).Points.DataBindXY(charts_periods, values)
+    '    Chart.Update()
+
+    'End Sub
+
+#End Region
+
+#End Region
+
+
+   
 End Class

@@ -164,18 +164,23 @@ Friend Class Currency
     End Sub
 
     Private Sub SMSG_GET_MAIN_CURRENCY_ANSWER(packet As ByteBuffer)
-        packet.ReadInt32()
 
+        ' if ? priority normal
+        packet.ReadInt32()
         mainCurrency = packet.ReadUint32()
+        mainCurrency = 34 ' stub to be reviewed Nath lundi -> database + ici
         RaiseEvent GetMainCurrency(True, mainCurrency)
+
     End Sub
 
     Private Sub SMSG_SET_MAIN_CURRENCY_ANSWER(packet As ByteBuffer)
+
         If packet.GetError() = 0 Then
             RaiseEvent GetMainCurrency(False, 0)
         Else
             RaiseEvent GetMainCurrency(True, packet.ReadUint32())
         End If
+
     End Sub
 
     Friend Sub CMSG_SET_MAIN_CURRENCY(ByRef id As UInt32)
@@ -184,6 +189,7 @@ Friend Class Currency
         packet.Release()
         NetworkManager.GetInstance().Send(packet)
     End Sub
+
 #End Region
 
 
@@ -215,6 +221,16 @@ Friend Class Currency
             tmpHT(currencies_hash(id)(Key)) = currencies_hash(id)(Value)
         Next
         Return tmpHT
+
+    End Function
+
+    Friend Function GetInUseCurrenciesIdList() As List(Of Int32)
+
+        Dim list As New List(Of Int32)
+        For Each key As Int32 In currencies_hash.Keys
+            list.Add(key)
+        Next
+        Return list
 
     End Function
 
