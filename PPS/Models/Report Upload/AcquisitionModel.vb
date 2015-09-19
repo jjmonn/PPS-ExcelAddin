@@ -3,13 +3,13 @@
 ' Upload database inputs, computes - serve calculations for DGV and Excel submission processes
 '
 ' To do:
-'       - !! pour l'instant complètement dépendant du DATASET -> can t be used stand alone
+'       - !! pour l'instant complètement dépendant du dataset -> can t be used stand alone
 '
 '       - 2nd update sub (for ENT/PER orientation)
 '       - Implementation of calculated items and DBInputs for AcEn and EnAc configs
 '       - Default -> 3rd dimension = entities, when resetting dimensions we should rename DGVs with the 3rd dimension name 
 '       - Format -> according to items (maybe should go into display) - > simple loop
-'       - always same orientation as DATASET ?
+'       - always same orientation as dataset ?
 '       - Computations should go in separate class or display !
 '       - format -> not always currency + currency is variable
 '
@@ -39,8 +39,8 @@ Friend Class AcquisitionModel
     ' Objects
     Private Computer As New Computer
     Private SingleComputer As New ComputerInputEntity
-    Private DATASET As ModelDataSet
- 
+    Private dataset As ModelDataSet
+
     ' Variables
     '(entity_name)(account_name)(period_token) => values
     Friend dataBaseInputsDictionary As New Dictionary(Of String, Dictionary(Of String, Dictionary(Of String, Double)))
@@ -71,15 +71,15 @@ Friend Class AcquisitionModel
     Friend Sub New(ByRef inputDataSet As ModelDataSet)
 
         GlobalVariables.Accounts.LoadAccountsTV(accountsTV)
-        DATASET = inputDataSet
-        entitiesNameIdDict = inputDataSet.EntitiesNameKeyDictionary
+        dataset = inputDataSet
+        entitiesNameIdDict = inputDataSet.m_entitiesNameIdDictionary
 
         accountsNamesFormulaTypeDict = globalvariables.accounts.GetAccountsDictionary(NAME_VARIABLE, ACCOUNT_FORMULA_TYPE_VARIABLE)
         outputsList = GlobalVariables.Accounts.GetAccountsList(GlobalEnums.AccountsLookupOptions.LOOKUP_OUTPUTS, NAME_VARIABLE)
 
         AddHandler Computer.ComputationAnswered, AddressOf AfterInputsComputation
         AddHandler SingleComputer.ComputationAnswered, AddressOf AfterOuptutsComputed
-      
+
     End Sub
 
 #End Region
@@ -168,7 +168,7 @@ Friend Class AcquisitionModel
         ' select case input/ FPI
         For Each accountId As Int32 In TreeViewsUtilities.GetNodesKeysList(accountsTV)
 
-            Select GlobalVariables.Accounts.accounts_hash(accountId)(ACCOUNT_FORMULA_TYPE_VARIABLE)
+            Select Case GlobalVariables.Accounts.accounts_hash(accountId)(ACCOUNT_FORMULA_TYPE_VARIABLE)
 
                 Case GlobalEnums.FormulaTypes.HARD_VALUE_INPUT
 
@@ -272,30 +272,29 @@ Friend Class AcquisitionModel
             computationDataMap.Add(entityId, SingleComputer.GetDataMap)
         End If
         RaiseEvent AfterOutputsComputed(GlobalVariables.Entities.entities_hash(entityId)(NAME_VARIABLE))
-   
+
     End Sub
 
     ' Build datasource arrays (accKeys, periods, values)
-    Private Sub BuildInputsArrays(ByRef entity)
+    Private Sub BuildInputsArrays(ByRef p_entityName As String)
 
         Dim i As Integer
-        ReDim accKeysArray(DATASET.inputsAccountsList.Count * currentPeriodList.Length)
-        ReDim periodsArray(DATASET.inputsAccountsList.Count * currentPeriodList.Length)
-        ReDim valuesArray(DATASET.inputsAccountsList.Count * currentPeriodList.Length) 'legnth periods to be checked
+        ReDim accKeysArray(dataset.m_inputsAccountsList.Count * currentPeriodList.Length)
+        ReDim periodsArray(dataset.m_inputsAccountsList.Count * currentPeriodList.Length)
+        ReDim valuesArray(dataset.m_inputsAccountsList.Count * currentPeriodList.Length) 'legnth periods to be checked
 
-        For Each inputAccount As String In DATASET.inputsAccountsList
-            For Each period In currentPeriodlist
+        For Each inputAccountName As String In dataset.m_inputsAccountsList
+            For Each period As Int32 In currentPeriodList
 
-                accKeysArray(i) = DATASET.AccountsNameKeyDictionary(inputAccount)
+                accKeysArray(i) = dataset.m_accountsNameIdDictionary(inputAccountName)
                 periodsArray(i) = period
 
-                If DATASET.dataSetDictionary.ContainsKey(entity) _
-                AndAlso DATASET.dataSetDictionary(entity).ContainsKey(inputAccount) _
-                AndAlso DATASET.dataSetDictionary(entity)(inputAccount).ContainsKey(Trim(CStr(period))) Then
-                    valuesArray(i) = DATASET.dataSetDictionary(entity)(inputAccount)(Trim(CStr(period)))
-                ElseIf dataBaseInputsDictionary(entity).ContainsKey(inputAccount) _
-                AndAlso dataBaseInputsDictionary(entity)(inputAccount).ContainsKey(Trim(CStr(period))) Then
-                    valuesArray(i) = dataBaseInputsDictionary(entity)(inputAccount)(Trim(CStr(period)))
+                Dim tuple_ As New Tuple(Of String, String, String)(p_entityName, inputAccountName, CStr(period))
+                If dataset.m_datasetCellsDictionary.ContainsKey(tuple_) = True Then
+                    valuesArray(i) = dataset.m_datasetCellsDictionary(tuple_).Value2
+                ElseIf dataBaseInputsDictionary(p_entityName).ContainsKey(inputAccountName) _
+                AndAlso dataBaseInputsDictionary(p_entityName)(inputAccountName).ContainsKey(Trim(CStr(period))) Then
+                    valuesArray(i) = dataBaseInputsDictionary(p_entityName)(inputAccountName)(Trim(CStr(period)))
                 Else
                     valuesArray(i) = 0
                 End If
@@ -342,19 +341,22 @@ ReturnError:
 
     End Function
 
-    Friend Sub ValuesDictionariesUpdate(ByRef entityName As String, _
-                                        ByRef accountName As String, _
-                                        ByRef periodInt As String, _
-                                        ByVal value As Double)
+    Friend Sub ValuesDictionariesUpdate(ByRef p_entityName As String, _
+                                        ByRef p_accountName As String, _
+                                        ByRef p_period As String, _
+                                        ByVal p_value As Double)
 
         ' -> should go back in dataset or controller !! no dataset here
-        If DATASET.dataSetDictionary(entityName).ContainsKey(accountName) Then
-            DATASET.dataSetDictionary(entityName)(accountName)(periodInt) = value
+        Dim tuple_ As New Tuple(Of String, String, String)(p_entityName, p_accountName, p_period)
+        If dataset.m_datasetCellsDictionary.ContainsKey(tuple_) = True Then
+            Dim cell As Excel.Range = dataset.m_datasetCellsDictionary(tuple_)
+            Dim datasetCell As ModelDataSet.DataSetCellDimensions = dataset.m_datasetCellDimensionsDictionary(cell.Address)
+            datasetCell.m_value = p_value
         End If
-        If dataBaseInputsDictionary(entityName)(accountName).ContainsKey(periodInt) Then
-            dataBaseInputsDictionary(entityName)(accountName)(periodInt) = value
+        If dataBaseInputsDictionary(p_entityName)(p_accountName).ContainsKey(p_period) Then
+            dataBaseInputsDictionary(p_entityName)(p_accountName)(p_period) = p_value
         Else
-            dataBaseInputsDictionary(entityName)(accountName).Add(periodInt, value)
+            dataBaseInputsDictionary(p_entityName)(p_accountName).Add(p_period, p_value)
         End If
 
     End Sub
@@ -367,7 +369,7 @@ ReturnError:
     Friend Function CheckIfBSCalculatedItem(ByRef accountName As String, ByRef period As Integer) As Boolean
 
         If accountsNamesFormulaTypeDict(accountName) = GlobalEnums.FormulaTypes.FIRST_PERIOD_INPUT _
-        AndAlso Not period = CInt(CDbl(DATASET.periodsDatesList(0).ToOADate())) Then
+        AndAlso Not period = CInt(CDbl(dataset.m_periodsDatesList(0).ToOADate())) Then
             Return True
         Else
             Return False

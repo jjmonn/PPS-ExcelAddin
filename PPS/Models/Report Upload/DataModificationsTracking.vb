@@ -257,27 +257,34 @@ Friend Class DataModificationsTracking
     Friend Sub IdentifyDifferencesBtwDataSetAndDB(ByRef p_dataBaseInputsDictionary As Dictionary(Of String, Dictionary(Of String, Dictionary(Of String, Double))))
 
         Dim periodIdentifyer As String = ""
-        Select Case GlobalVariables.Versions.versions_hash(Dataset.currentVersionCode)(VERSIONS_TIME_CONFIG_VARIABLE)
+        Select Case GlobalVariables.Versions.versions_hash(Dataset.m_currentVersionId)(VERSIONS_TIME_CONFIG_VARIABLE)
             Case GlobalEnums.TimeConfig.YEARS : periodIdentifyer = Computer.YEAR_PERIOD_IDENTIFIER
             Case GlobalEnums.TimeConfig.MONTHS : periodIdentifyer = Computer.MONTH_PERIOD_IDENTIFIER
         End Select
 
         Dim accountsNameTypeDict As Hashtable = GlobalVariables.Accounts.GetAccountsDictionary(NAME_VARIABLE, ACCOUNT_FORMULA_TYPE_VARIABLE)
-        For Each entity As String In Dataset.dataSetDictionary.Keys
-            For Each account As String In Dataset.dataSetDictionary(entity).Keys
+        For Each entity As String In Dataset.EntitiesValuesAddressDict.Keys
+            For Each account As String In Dataset.AccountsValuesAddressDict.Keys
 
                 Select Case accountsNameTypeDict(account)
                     Case GlobalEnums.FormulaTypes.FIRST_PERIOD_INPUT
-                        Dim period As Integer = CInt(CDbl(Dataset.periodsDatesList(0).ToOADate))
+                        Dim period As Integer = CInt(CDbl(Dataset.m_periodsDatesList(0).ToOADate))
                         ' Date from dataset converted to integer to meet DB integer date storage
-                        If Dataset.dataSetDictionary(entity)(account)(period) <> p_dataBaseInputsDictionary(entity)(account)(periodIdentifyer & period) Then _
-                           RegisterModification(GetExcelCell(entity, account, period).Address)
 
+                        Dim tuple_ As New Tuple(Of String, String, String)(entity, account, period)
+                        If Dataset.m_datasetCellsDictionary.ContainsKey(tuple_) = True Then
+                            Dim cell As Excel.Range = Dataset.m_datasetCellsDictionary(tuple_)
+                            If cell.Value2 <> p_dataBaseInputsDictionary(entity)(account)(periodIdentifyer & period) Then _
+                               RegisterModification(cell)
+                        End If
                     Case Else
-                        For Each period As String In Dataset.dataSetDictionary(entity)(account).Keys
-
-                            If Dataset.dataSetDictionary(entity)(account)(period) <> p_dataBaseInputsDictionary(entity)(account)(periodIdentifyer & period) Then
-                                RegisterModification(GetExcelCell(entity, account, period).Address)
+                        For Each period As String In Dataset.periodsValuesAddressDict.Keys
+                            Dim tuple_ As New Tuple(Of String, String, String)(entity, account, period)
+                            If Dataset.m_datasetCellsDictionary.ContainsKey(tuple_) = True Then
+                                Dim cell As Excel.Range = Dataset.m_datasetCellsDictionary(tuple_)
+                                If cell.Value2 <> p_dataBaseInputsDictionary(entity)(account)(periodIdentifyer & period) Then
+                                    RegisterModification(cell)
+                                End If
                             End If
                         Next
                 End Select
@@ -294,28 +301,29 @@ Friend Class DataModificationsTracking
 
 
     ' Return the excel cell from items
-    Friend Function GetExcelCell(ByRef entity As String, ByRef account As String, ByRef period As String) As Excel.Range
+    '    Friend Function GetExcelCell(ByRef entity As String, ByRef account As String, ByRef period As String) As Excel.Range
 
-        Dim entityAddress, accountAddress, periodAddress As String
-        On Error GoTo errorHandler
+    '        Dim entityAddress, accountAddress, periodAddress As String
+    '        On Error GoTo errorHandler
 
-        entityAddress = Dataset.EntitiesValuesAddressDict(entity)
-        periodAddress = Dataset.periodsValuesAddressDict(period)
-        If Dataset.AccountsValuesAddressDict.ContainsKey(account) Then
-            accountAddress = Dataset.AccountsValuesAddressDict(account)
-        Else
-            accountAddress = Dataset.OutputsValuesAddressDict(account)
-        End If
-        Return Dataset.GetCellFromItem(entityAddress, accountAddress, periodAddress)
-        ' PPS Error tracking ' priority normal
-        ' function could be merged with SubmissionWSController UpdateExcelCell
+    '        entityAddress = Dataset.EntitiesValuesAddressDict(entity)
+    '        periodAddress = Dataset.periodsValuesAddressDict(period)
+    '        If Dataset.AccountsValuesAddressDict.ContainsKey(account) Then
+    '            accountAddress = Dataset.AccountsValuesAddressDict(account)
+    '        Else
+    '            accountAddress = Dataset.OutputsValuesAddressDict(account)
+    '        End If
+    '        Dim tuple_ As New Tuple(Of String, String, String)()
+    '        Return Dataset.GetCellFromItem(entityAddress, accountAddress, periodAddress)
+    '        ' PPS Error tracking ' priority normal
+    '        ' function could be merged with SubmissionWSController UpdateExcelCell
 
-errorHandler:
-        System.Diagnostics.Debug.WriteLine("DataModification Tacking Get Excel Cell raised an error: a name was not found in dataset values address dictionary.")
-        Return Nothing
+    'errorHandler:
+    '        System.Diagnostics.Debug.WriteLine("DataModification Tacking Get Excel Cell raised an error: a name was not found in dataset values address dictionary.")
+    '        Return Nothing
 
 
-    End Function
+    '    End Function
 
 
 #End Region

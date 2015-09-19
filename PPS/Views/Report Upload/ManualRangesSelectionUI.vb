@@ -68,7 +68,7 @@ Public Class ManualRangesSelectionUI
         If AccountsRefEdit.Text <> "" Then
             DATASET.AccountsAddressValuesDictionary.Clear()
             For Each cell As Excel.Range In tmpRng
-                If DATASET.inputsAccountsList.Contains(cell.Value2) Then
+                If DATASET.m_inputsAccountsList.Contains(cell.Value2) Then
                     DATASET.AccountsAddressValuesDictionary.Add(CStr(cell.Address), CStr(cell.Value2))
                 End If
             Next
@@ -92,7 +92,7 @@ Public Class ManualRangesSelectionUI
         If EntitiesRefEdit.Text <> "" Then
             DATASET.EntitiesAddressValuesDictionary.Clear()
             For Each cell As Excel.Range In tmpRng
-                If DATASET.assetsList.Contains(cell.Value2) Then
+                If DATASET.m_entitiesNameList.Contains(cell.Value2) Then
                     DATASET.EntitiesAddressValuesDictionary.Add(CStr(cell.Address), CStr(cell.Value2))
                 End If
             Next
@@ -117,7 +117,7 @@ Public Class ManualRangesSelectionUI
             DATASET.periodsAddressValuesDictionary.Clear()
             For Each cell As Excel.Range In tmpRng
                 ' Here control Int/ Double / Date
-                If DATASET.periodsDatesList.Contains(cell.Value2) Then
+                If DATASET.m_periodsDatesList.Contains(cell.Value2) Then
                     DATASET.periodsAddressValuesDictionary.Add(CStr(cell.Address), CDate(cell.Value2).ToOADate())
                 End If
             Next

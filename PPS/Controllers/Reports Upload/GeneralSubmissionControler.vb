@@ -32,7 +32,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 18/09/2015
+' Last modified: 19/09/2015
 
 
 Imports Microsoft.Office.Interop
@@ -292,11 +292,11 @@ Friend Class GeneralSubmissionControler
 
     Private Sub AfterDataBaseInputsDowloaded()
 
+        Dataset.RegisterDimensionsToCellDictionary()
         If mustUpdateExcelWorksheetFromDataBase = True Then
-            Dataset.getDataSet()
             updateInputs()
         End If
-        Dataset.getDataSet()
+        Dataset.RegisterDatesetCellsValues()
         DataModificationsTracker.IdentifyDifferencesBtwDataSetAndDB(Model.dataBaseInputsDictionary)
         UpdateCalculatedItems(m_entityName)
         isUpdating = False
@@ -328,10 +328,10 @@ Friend Class GeneralSubmissionControler
         Dim cellsAddresses As List(Of String) = DataModificationsTracker.GetModificationsListCopy
         For Each cellAddress In cellsAddresses
             ' Implies type of cell checked before -> only double -> check if we can enter anything else !!!
-            Dim ht As New Hashtable
-            ht(ENTITY_ID_VARIABLE) = Dataset.EntitiesNameKeyDictionary(Dataset.CellsAddressItemsDictionary(cellAddress)(ModelDataSet.ENTITY_ITEM))
-            ht(ACCOUNT_ID_VARIABLE) = Dataset.AccountsNameKeyDictionary(Dataset.CellsAddressItemsDictionary(cellAddress)(ModelDataSet.ACCOUNT_ITEM))
-            ht(PERIOD_VARIABLE) = Dataset.CellsAddressItemsDictionary(cellAddress)(ModelDataSet.PERIOD_ITEM)
+            Dim ht As New Hashtable()
+            ht(ENTITY_ID_VARIABLE) = Dataset.m_entitiesNameIdDictionary(Dataset.m_datasetCellDimensionsDictionary(cellAddress).m_entityName)
+            ht(ACCOUNT_ID_VARIABLE) = Dataset.m_accountsNameIdDictionary(Dataset.m_datasetCellDimensionsDictionary(cellAddress).m_accountName)
+            ht(PERIOD_VARIABLE) = Dataset.m_datasetCellDimensionsDictionary(cellAddress).m_period
             ht(VERSION_ID_VARIABLE) = Model.current_version_id
             ht(CLIENT_ID_VARIABLE) = GlobalVariables.ClientsIDDropDown.SelectedItemId
             ht(PRODUCT_ID_VARIABLE) = GlobalVariables.ProductsIDDropDown.SelectedItemId
@@ -351,9 +351,9 @@ Friend Class GeneralSubmissionControler
                 If commitResults(cellAddress) = True Then
                     DataModificationsTracker.UnregisterSingleModification(cellAddress)
                 Else
-                    errorsList.Add("Error during upload of Entity: " & Dataset.CellsAddressItemsDictionary(cellAddress)(ModelDataSet.ENTITY_ITEM) _
-                                    & " Account: " & Dataset.CellsAddressItemsDictionary(cellAddress)(ModelDataSet.ACCOUNT_ITEM) _
-                                    & " Period: " & Dataset.CellsAddressItemsDictionary(cellAddress)(ModelDataSet.PERIOD_ITEM) _
+                    errorsList.Add("Error during upload of Entity: " & Dataset.m_datasetCellDimensionsDictionary(cellAddress).m_entityName _
+                                    & " Account: " & Dataset.m_datasetCellDimensionsDictionary(cellAddress).m_accountName _
+                                    & " Period: " & Date.FromOADate(Dataset.m_datasetCellDimensionsDictionary(cellAddress).m_period) _
                                     & " Value: " & GlobalVariables.APPS.ActiveSheet.range(cellAddress).value)
                 End If
              Next
