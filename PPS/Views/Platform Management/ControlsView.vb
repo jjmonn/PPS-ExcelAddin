@@ -121,18 +121,28 @@ Friend Class ControlsView
 
     Private Sub InitializeChartsCBs()
 
-        Dim palettes_list As List(Of String) = PalettesMapping.GetPalettesList
-        For Each palette In palettes_list
-            PalettesCB.Items.Add(palette)
-        Next
+        PalettesCB.Items.Add("Berry")
+        PalettesCB.Items.Add("Bright")
+        PalettesCB.Items.Add("BrightPastel")
+        PalettesCB.Items.Add("Chocolate")
+        PalettesCB.Items.Add("EarthTones")
+        PalettesCB.Items.Add("Excel")
+        PalettesCB.Items.Add("Fire")
+        PalettesCB.Items.Add("GrayScale")
+        PalettesCB.Items.Add("Light")
+        PalettesCB.Items.Add("Pastel")
+        PalettesCB.Items.Add("SeaGreen")
+        PalettesCB.Items.Add("SemiTransparent")
 
         For Each account_name In accounts_list
             SerieAccountIDCB.Items.Add(account_name)
         Next
 
-        For Each serie_type In SeriesMapping.GetSerieTypesList
-            SerieTypeCB.Items.Add(serie_type)
-        Next
+        ' store palettes and series type in global enum 
+        ' priority normal
+        'For Each serie_type In SeriesMapping.GetSerieTypesList
+        '    SerieTypeCB.Items.Add(serie_type)
+        'Next
 
         PalettesCB.Items.Add("")
         SerieAccountIDCB.Items.Add("")

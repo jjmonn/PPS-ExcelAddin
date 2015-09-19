@@ -100,7 +100,7 @@ Module Data_Tables_Constants
 
     Friend Const CURRENCY_SYMBOL_VARIABLE As String = "symbol"
     Friend Const CURRENCY_IN_USE_VARIABLE As String = "in_use"
-    Friend Const EX_RATES_LOCAL_CURR_VAR As String = "local_currency"
+    Friend Const EX_RATES_DESTINATION_CURR_VAR As String = "local_currency"
     Friend Const EX_RATES_RATE_VERSION As String = "rate_version_id"
     Friend Const EX_RATES_PERIOD_VARIABLE As String = "rate_period"
     Friend Const EX_RATES_RATE_VARIABLE As String = "rate_value"

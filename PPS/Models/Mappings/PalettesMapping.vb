@@ -1,35 +1,35 @@
-﻿' Mapping for Series tables
-'
-'
-'
-' Author: Julien Monnereau
-' Last modified: 29/12/2014
+﻿'' Mapping for Series tables
+''
+''
+''
+'' Author: Julien Monnereau
+'' Last modified: 29/12/2014
 
 
-Imports System.Collections.Generic
+'Imports System.Collections.Generic
 
 
-Friend Class PalettesMapping
+'Friend Class PalettesMapping
 
 
-    Protected Friend Shared Function GetPalettesList() As List(Of String)
+'    Protected Friend Shared Function GetPalettesList() As List(Of String)
 
-        Dim tmpList As New List(Of String)
-        Dim srv As New ModelServer
-        srv.openRst(GlobalVariables.database + "." + PALETTES_TABLE, ModelServer.FWD_CURSOR)
+'        Dim tmpList As New List(Of String)
+'        Dim srv As New ModelServer
+'        srv.openRst(GlobalVariables.database + "." + PALETTES_TABLE, ModelServer.FWD_CURSOR)
 
-        If srv.rst.EOF = False And srv.rst.BOF = False Then
-            srv.rst.MoveFirst()
-            Do While srv.rst.EOF = False
-                tmpList.Add(srv.rst.Fields(PALETTES_ID_VARIABLES).Value)
-                srv.rst.MoveNext()
-            Loop
-        End If
+'        If srv.rst.EOF = False And srv.rst.BOF = False Then
+'            srv.rst.MoveFirst()
+'            Do While srv.rst.EOF = False
+'                tmpList.Add(srv.rst.Fields(PALETTES_ID_VARIABLES).Value)
+'                srv.rst.MoveNext()
+'            Loop
+'        End If
 
-        srv.rst.Close()
-        Return tmpList
+'        srv.rst.Close()
+'        Return tmpList
 
-    End Function
+'    End Function
 
 
-End Class
+'End Class

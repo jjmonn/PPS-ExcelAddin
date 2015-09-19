@@ -69,19 +69,27 @@ Friend Class ReportsDesignerUI
 
     Protected Friend Sub InitializeDisplay(ByRef accounts_names_list As List(Of String))
 
+        ReportPaletteCB.Items.Add("Berry")
+        ReportPaletteCB.Items.Add("Bright")
+        ReportPaletteCB.Items.Add("BrightPastel")
+        ReportPaletteCB.Items.Add("Chocolate")
+        ReportPaletteCB.Items.Add("EarthTones")
+        ReportPaletteCB.Items.Add("Excel")
+        ReportPaletteCB.Items.Add("Fire")
+        ReportPaletteCB.Items.Add("GrayScale")
+        ReportPaletteCB.Items.Add("Light")
+        ReportPaletteCB.Items.Add("Pastel")
+        ReportPaletteCB.Items.Add("SeaGreen")
+        ReportPaletteCB.Items.Add("SemiTransparent")
 
-        Dim palettes_list As List(Of String) = PalettesMapping.GetPalettesList
-        For Each palette In palettes_list
-            ReportPaletteCB.Items.Add(palette)
-        Next
-
+      
         For Each account_name In accounts_names_list
             ItemCB.Items.Add(account_name)
         Next
 
-        For Each serie_type In SeriesMapping.GetSerieTypesList
-            TypeCB.Items.Add(serie_type)
-        Next
+        'For Each serie_type In SeriesMapping.GetSerieTypesList
+        '    TypeCB.Items.Add(serie_type)
+        'Next
 
         ReportPaletteCB.Items.Add("")
         ItemCB.Items.Add("")

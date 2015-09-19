@@ -113,9 +113,12 @@ Friend Class FModelingAccountsMGTUI
     Private Sub InitializeEditors(ByRef TypesCBEditor As ComboBoxEditor, _
                                   ByRef ChartsCBEditor As ComboBoxEditor)
 
-        For Each serie_type In SeriesMapping.GetSerieTypesList
-            TypesCBEditor.Items.Add(serie_type)
-        Next
+        TypesCBEditor.Items.Add("Area")
+        TypesCBEditor.Items.Add("Bar")
+        TypesCBEditor.Items.Add("Column")
+        TypesCBEditor.Items.Add("Line")
+        TypesCBEditor.Items.Add("Spline")
+        TypesCBEditor.Items.Add("StackedColumn")
 
         ChartsCBEditor.Items.Add("Right Chart")
         ChartsCBEditor.Items.Add("Left Chart")
