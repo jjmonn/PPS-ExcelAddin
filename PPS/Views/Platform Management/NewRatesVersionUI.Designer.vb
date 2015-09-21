@@ -42,7 +42,7 @@ Partial Class NewRatesVersionUI
         Me.Label1.AutoSize = True
         Me.Label1.Location = New System.Drawing.Point(46, 49)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(35, 13)
+        Me.Label1.Size = New System.Drawing.Size(41, 15)
         Me.Label1.TabIndex = 0
         Me.Label1.Text = "Name"
         '
@@ -51,7 +51,7 @@ Partial Class NewRatesVersionUI
         Me.Label2.AutoSize = True
         Me.Label2.Location = New System.Drawing.Point(46, 97)
         Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(68, 13)
+        Me.Label2.Size = New System.Drawing.Size(77, 15)
         Me.Label2.TabIndex = 1
         Me.Label2.Text = "Starting Year"
         '
@@ -60,20 +60,20 @@ Partial Class NewRatesVersionUI
         Me.Label3.AutoSize = True
         Me.Label3.Location = New System.Drawing.Point(46, 139)
         Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(86, 13)
+        Me.Label3.Size = New System.Drawing.Size(99, 15)
         Me.Label3.TabIndex = 2
         Me.Label3.Text = "Number of Years"
         '
         'NameTB
         '
-        Me.NameTB.Location = New System.Drawing.Point(143, 49)
+        Me.NameTB.Location = New System.Drawing.Point(171, 49)
         Me.NameTB.Name = "NameTB"
         Me.NameTB.Size = New System.Drawing.Size(160, 20)
         Me.NameTB.TabIndex = 3
         '
         'StartPeriodNUD
         '
-        Me.StartPeriodNUD.Location = New System.Drawing.Point(143, 95)
+        Me.StartPeriodNUD.Location = New System.Drawing.Point(171, 95)
         Me.StartPeriodNUD.Maximum = New Decimal(New Integer() {3000, 0, 0, 0})
         Me.StartPeriodNUD.Name = "StartPeriodNUD"
         Me.StartPeriodNUD.Size = New System.Drawing.Size(100, 20)
@@ -81,7 +81,7 @@ Partial Class NewRatesVersionUI
         '
         'NBPeriodsNUD
         '
-        Me.NBPeriodsNUD.Location = New System.Drawing.Point(143, 137)
+        Me.NBPeriodsNUD.Location = New System.Drawing.Point(171, 137)
         Me.NBPeriodsNUD.Maximum = New Decimal(New Integer() {70, 0, 0, 0})
         Me.NBPeriodsNUD.Name = "NBPeriodsNUD"
         Me.NBPeriodsNUD.Size = New System.Drawing.Size(100, 20)
@@ -92,7 +92,7 @@ Partial Class NewRatesVersionUI
         Me.CancelBT.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
         Me.CancelBT.ImageKey = "imageres_89.ico"
         Me.CancelBT.ImageList = Me.ButtonIcons
-        Me.CancelBT.Location = New System.Drawing.Point(160, 201)
+        Me.CancelBT.Location = New System.Drawing.Point(171, 192)
         Me.CancelBT.Name = "CancelBT"
         Me.CancelBT.Size = New System.Drawing.Size(86, 26)
         Me.CancelBT.TabIndex = 25
@@ -115,7 +115,7 @@ Partial Class NewRatesVersionUI
         Me.ValidateBT.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
         Me.ValidateBT.ImageKey = "1420498403_340208.ico"
         Me.ValidateBT.ImageList = Me.ButtonIcons
-        Me.ValidateBT.Location = New System.Drawing.Point(289, 201)
+        Me.ValidateBT.Location = New System.Drawing.Point(291, 192)
         Me.ValidateBT.Name = "ValidateBT"
         Me.ValidateBT.Size = New System.Drawing.Size(86, 26)
         Me.ValidateBT.TabIndex = 24

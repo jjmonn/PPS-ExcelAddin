@@ -37,7 +37,6 @@ Friend Class ExchangeRatesView
     ' Variables
     Private m_mainCurrency As Int32
     Friend m_currentRatesVersionId As Int32
-    Private m_rightClickedNode As vTreeNode
     Private m_isFillingCells As Boolean
     Private m_isCopyingValueDown As Boolean = False
     Private m_currencyTextBoxEditor As New TextBoxEditor()
@@ -75,7 +74,7 @@ Friend Class ExchangeRatesView
         AddHandler m_ratesDataGridView.CellValueChanging, AddressOf RatesDataGridView_CellValueChanging
         AddHandler m_ratesVersionsTV.KeyPress, AddressOf Rates_versionsTV_KeyPress
         AddHandler m_ratesVersionsTV.MouseDoubleClick, AddressOf RatesVersionsTV_MouseDoubleClick
-        AddHandler m_ratesVersionsTV.MouseClick, AddressOf Rates_versionsTV_MouseClick
+        '     AddHandler m_ratesVersionsTV.MouseClick, AddressOf Rates_versionsTV_MouseClick
 
     End Sub
 
@@ -105,6 +104,48 @@ Friend Class ExchangeRatesView
 
     End Sub
 
+    Delegate Sub TVUpdate_Delegate(ByRef ratesVersion_id As Int32, _
+                                   ByRef ratesVersion_parent_id As Int32, _
+                                   ByRef ratesVersion_name As String, _
+                                   ByRef ratesVersion_image As Int32)
+    Friend Sub TVUpdate(ByRef ratesVersion_id As Int32, _
+                        ByRef ratesVersion_parent_id As Int32, _
+                        ByRef ratesVersion_name As String, _
+                        ByRef ratesVersion_image As Int32)
+
+        If InvokeRequired Then
+            Dim MyDelegate As New TVUpdate_Delegate(AddressOf TVUpdate)
+            Me.Invoke(MyDelegate, New Object() {ratesVersion_id, ratesVersion_parent_id, ratesVersion_name, ratesVersion_image})
+        Else
+            If ratesVersion_parent_id = 0 Then
+                VTreeViewUtil.AddNode(ratesVersion_id, ratesVersion_name, m_ratesVersionsTV, ratesVersion_image)
+            Else
+                Dim ratesVersionNode As vTreeNode = VTreeViewUtil.FindNode(m_ratesVersionsTV, ratesVersion_parent_id)
+                If Not ratesVersionNode Is Nothing Then
+                    VTreeViewUtil.AddNode(ratesVersion_id, ratesVersion_name, ratesVersionNode, ratesVersion_image)
+                End If
+            End If
+            m_ratesVersionsTV.Refresh()
+        End If
+
+    End Sub
+
+    Delegate Sub TVNodeDelete_Delegate(ByRef p_ratesVersionId As Int32)
+    Friend Sub TVNodeDelete(ByRef p_ratesVersionId As Int32)
+
+        If InvokeRequired Then
+            Dim MyDelegate As New TVNodeDelete_Delegate(AddressOf TVNodeDelete)
+            Me.Invoke(MyDelegate, New Object() {p_ratesVersionId})
+        Else
+            Dim ratesVersionNode As vTreeNode = VTreeViewUtil.FindNode(m_ratesVersionsTV, p_ratesVersionId)
+            If Not ratesVersionNode Is Nothing Then
+                ratesVersionNode.Remove()
+                m_ratesVersionsTV.Refresh()
+            End If
+        End If
+
+    End Sub
+
 
 #End Region
 
@@ -119,51 +160,59 @@ Friend Class ExchangeRatesView
 
     Private Sub Select_version_Click(sender As Object, e As EventArgs) Handles select_version.Click, DisplayRatesToolStripMenuItem.Click
 
-        If m_controller.IsFolderVersion(m_rightClickedNode.Value) = False Then
-            ChangeRatesVersionDisplayRequest(m_rightClickedNode.Value)
+        If m_controller.IsFolderVersion(m_ratesVersionsTV.SelectedNode.Value) = False Then
+            ChangeRatesVersionDisplayRequest(m_ratesVersionsTV.SelectedNode.Value)
         End If
 
     End Sub
 
     Private Sub AddFolderRCM_Click(sender As Object, e As EventArgs) Handles AddFolderRCM.Click
 
-        If Not m_rightClickedNode Is Nothing Then
-            If m_rightClickedNode.SelectedImageIndex = 1 Then
+        If Not m_ratesVersionsTV.SelectedNode Is Nothing Then
+            If m_controller.IsFolderVersion(m_ratesVersionsTV.SelectedNode.Value) = False Then
                 Dim name As String = InputBox("Please enter a name for the new Folder")
-                If Len(name) < NAMES_MAX_LENGTH Then m_controller.CreateVersion(name, 1, , , m_rightClickedNode.Value) Else MsgBox("The name cannot exceed 50 characters")
+                If Len(name) < NAMES_MAX_LENGTH Then
+                    m_controller.CreateVersion(m_ratesVersionsTV.SelectedNode.Value, name, 1, 0, 0)
+                Else
+                    MsgBox("The name cannot exceed " & NAMES_MAX_LENGTH & " characters")
+                End If
             Else
                 MsgBox("A folder can only be added to another folder")
             End If
         Else
             Dim name As String = InputBox("Please enter a name for the new Folder")
-            If Len(name) < NAMES_MAX_LENGTH Then m_controller.CreateVersion(name, 1) Else MsgBox("The name cannot exceed 50 characters")
+            If Len(name) < NAMES_MAX_LENGTH Then
+                m_controller.CreateVersion(0, name, 1, 0, 0)
+            Else
+                MsgBox("The name cannot exceed 50 characters")
+            End If
         End If
 
     End Sub
 
     Private Sub AddRatesVersionRCM_Click(sender As Object, e As EventArgs) Handles AddRatesVersionRCM.Click
 
-        If Not m_rightClickedNode Is Nothing Then
-            If m_controller.IsFolderVersion(m_rightClickedNode.Value) = True Then
-                m_controller.ShowNewRatesVersion(m_rightClickedNode)
+        If Not m_ratesVersionsTV.SelectedNode Is Nothing Then
+            If m_controller.IsFolderVersion(m_ratesVersionsTV.SelectedNode.Value) = True Then
+                m_controller.ShowNewRatesVersion(m_ratesVersionsTV.SelectedNode.Value)
             Else
                 MsgBox("A Version can only be added under a folder")
             End If
         Else
-            m_controller.ShowNewRatesVersion()
+            m_controller.ShowNewRatesVersion(0)
         End If
 
     End Sub
 
     Private Sub DeleteVersionBT_Click(sender As Object, e As EventArgs) Handles DeleteVersionRCM.Click
 
-        If Not m_rightClickedNode Is Nothing Then
+        If Not m_ratesVersionsTV.SelectedNode Is Nothing Then
             Dim confirm As Integer = MessageBox.Show("Careful, you are about to delete the version " + Chr(13) + Chr(13) + _
-                                                      m_rightClickedNode.Text + Chr(13) + Chr(13) + _
+                                                      m_ratesVersionsTV.SelectedNode.Text + Chr(13) + Chr(13) + _
                                                       "This version and all sub versions will be deleted, do you confirm?" + Chr(13) + Chr(13), _
                                                       "Version deletion confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
             If confirm = DialogResult.Yes Then
-                m_controller.DeleteRatesVersion(m_rightClickedNode.Value)
+                m_controller.DeleteRatesVersion(m_ratesVersionsTV.SelectedNode.Value)
             End If
         End If
 
@@ -212,16 +261,15 @@ Friend Class ExchangeRatesView
 
     End Sub
 
-    Private Sub Rates_versionsTV_MouseClick(sender As Object, e As MouseEventArgs)
+    'Private Sub Rates_versionsTV_MouseClick(sender As Object, e As MouseEventArgs)
 
-        If e.Button = Windows.Forms.MouseButtons.Right _
-        AndAlso Not m_ratesVersionsTV.HitTest(e.Location) Is Nothing Then
-            m_rightClickedNode = m_ratesVersionsTV.HitTest(e.Location)
-        Else
-            m_rightClickedNode = Nothing
-        End If
+    '    If Not m_ratesVersionsTV.HitTest(e.Location) Is Nothing Then
+    '        m_rightClickedNode = m_ratesVersionsTV.HitTest(e.Location)
+    '    Else
+    '        m_rightClickedNode = Nothing
+    '    End If
 
-    End Sub
+    'End Sub
 
     Private Sub RatesVersionsTV_MouseDoubleClick(sender As Object, e As MouseEventArgs)
 

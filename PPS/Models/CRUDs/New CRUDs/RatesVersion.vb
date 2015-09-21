@@ -182,7 +182,7 @@ Public Class RatesVersion
 
 #Region "Utilities"
 
-    Friend Shared Sub GetRateVersionHTFromPacket(ByRef packet As ByteBuffer, ByRef rate_version_ht As Hashtable)
+    Private Shared Sub GetRateVersionHTFromPacket(ByRef packet As ByteBuffer, ByRef rate_version_ht As Hashtable)
 
         rate_version_ht(ID_VARIABLE) = packet.ReadUint32()
         rate_version_ht(PARENT_ID_VARIABLE) = packet.ReadUint32()

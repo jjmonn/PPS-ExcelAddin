@@ -12,7 +12,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 19/09/2015
+' Last modified: 23/09/2015
 
 
 Imports System.Collections.Generic
@@ -56,16 +56,23 @@ Friend Class ExchangeRatesController
             Exit Sub
         End If
 
-        GlobalVariables.RatesVersions.LoadRateVersionsTV(m_ratesVersionTV)
+        LoadRatesVersionsInstanceVariables()
         m_view = New ExchangeRatesView(Me, m_ratesVersionTV, GlobalVariables.Currencies.mainCurrency)
         m_currentRatesVersionId = GlobalVariables.Versions.versions_hash(My.Settings.version_id)(EX_RATES_RATE_VERSION)
         m_newRatesVersionUI = New NewRatesVersionUI(Me)
   
         AddHandler m_exchangeRates.UpdateEvent, AddressOf AfterRateUpdate
+        AddHandler GlobalVariables.RatesVersions.Read, AddressOf RatesVersionUpdateFromServer
         AddHandler GlobalVariables.RatesVersions.CreationEvent, AddressOf AfterVersionCreate
         AddHandler GlobalVariables.RatesVersions.UpdateEvent, AddressOf AfterVersionUpdate
         AddHandler GlobalVariables.RatesVersions.DeleteEvent, AddressOf AfterVersionDelete
         m_isValid = True
+
+    End Sub
+
+    Private Sub LoadRatesVersionsInstanceVariables()
+
+        GlobalVariables.RatesVersions.LoadRateVersionsTV(m_ratesVersionTV)
 
     End Sub
 
@@ -133,24 +140,19 @@ Friend Class ExchangeRatesController
 
 #Region "Rates Version Controller"
 
-    Friend Sub CreateVersion(ByRef name As String, _
-                             ByRef isFolder As Boolean, _
-                             Optional ByRef start_period As Int32 = 0, _
-                             Optional ByRef nb_periods As Int32 = 0, _
-                             Optional ByRef parentId As Int32 = 0)
+    Friend Sub CreateVersion(ByRef p_parentId As Int32, _
+                             ByRef p_name As String, _
+                             ByRef p_isFolder As Boolean, _
+                             ByRef p_startPeriodYear As Int32, _
+                             ByRef p_nbPeriods As Int32)
 
         Dim tmpHT As New Hashtable
-        tmpHT.Add(NAME_VARIABLE, name)
+        tmpHT.Add(PARENT_ID_VARIABLE, p_parentId)
+        tmpHT.Add(NAME_VARIABLE, p_name)
+        tmpHT.Add(IS_FOLDER_VARIABLE, p_isFolder)
         tmpHT.Add(ITEMS_POSITIONS, 1)
-
-        If parentId <> 0 Then tmpHT.Add(PARENT_ID_VARIABLE, 0) Else tmpHT.Add(PARENT_ID_VARIABLE, parentId)
-        If isFolder = True Then
-            tmpHT.Add(IS_FOLDER_VARIABLE, 1)
-        Else
-            tmpHT.Add(IS_FOLDER_VARIABLE, 0)
-            tmpHT.Add(VERSIONS_START_PERIOD_VAR, start_period)
-            tmpHT.Add(VERSIONS_NB_PERIODS_VAR, nb_periods)
-        End If
+        tmpHT.Add(VERSIONS_START_PERIOD_VAR, DateSerial(p_startPeriodYear, 12, 31).ToOADate())
+        tmpHT.Add(VERSIONS_NB_PERIODS_VAR, p_nbPeriods)
 
         GlobalVariables.RatesVersions.CMSG_CREATE_RATE_VERSION(tmpHT)
 
@@ -193,23 +195,24 @@ Friend Class ExchangeRatesController
 
 #Region "Events"
 
-    Private Sub AfterVersionCreate(ByRef status As Boolean, ByRef id As Int32)
+    Private Sub RatesVersionUpdateFromServer(ByRef p_status As Boolean, ByRef p_ratesVersionHt As Hashtable)
 
-        ' to be reimplemented priority high
+        If p_status = False Then
+            LoadRatesVersionsInstanceVariables()
+            m_view.TVUpdate(p_ratesVersionHt(ID_VARIABLE), _
+                            p_ratesVersionHt(PARENT_ID_VARIABLE), _
+                            p_ratesVersionHt(NAME_VARIABLE), _
+                            p_ratesVersionHt(IS_FOLDER_VARIABLE))
+        End If
 
+    End Sub
 
-        'If ht(PARENT_ID_VARIABLE) = 0 Then
-        '    VTreeViewUtil.AddNode(ht(ID_VARIABLE), ht(NAME_VARIABLE), rates_versionsTV)
-        'Else
-        '    Dim parentNode As vTreeNode = VTreeViewUtil.FindNode(rates_versionsTV, ht(PARENT_ID_VARIABLE))
-        '    If Not parentNode Is Nothing Then
-        '        VTreeViewUtil.AddNode(ht(ID_VARIABLE), ht(NAME_VARIABLE), parentNode)
-        '    End If
-        'End If
+    Private Sub AfterVersionCreate(ByRef p_status As Boolean, ByRef id As Int32)
 
-        'If ht(IS_FOLDER_VARIABLE) = False Then
-        '    ChangeVersion(ht(ID_VARIABLE))
-        'End If
+        If p_status = False Then
+            MsgBox("The version could not be created")
+            ' register error from CRUD and display details -> priority normal V1 
+        End If
 
     End Sub
 
@@ -219,13 +222,12 @@ Friend Class ExchangeRatesController
 
     End Sub
 
-    Private Sub AfterVersionDelete(ByRef status As Boolean, ByRef id As Int32)
+    Private Sub AfterVersionDelete(ByRef p_status As Boolean, ByRef p_id As Int32)
 
         ' if version is currently displayed -> set another one
         ' priority high
-        Dim nodeToBeRemoved As vTreeNode = VTreeViewUtil.FindNode(m_ratesVersionTV, id)
-        If Not nodeToBeRemoved Is Nothing Then
-            nodeToBeRemoved.Remove()
+        If p_status = True Then
+            m_view.TVNodeDelete(p_id)
         End If
 
     End Sub
@@ -273,9 +275,9 @@ Friend Class ExchangeRatesController
 
 #End Region
 
-    Friend Sub ShowNewRatesVersion(Optional ByRef parent_node As vTreeNode = Nothing)
+    Friend Sub ShowNewRatesVersion(ByRef p_parentId As Int32)
 
-        m_newRatesVersionUI.parent_node = parent_node
+        m_newRatesVersionUI.m_parentId = p_parentId
         m_newRatesVersionUI.Show()
 
     End Sub
