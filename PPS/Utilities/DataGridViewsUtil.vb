@@ -971,4 +971,37 @@ Friend Class DataGridViewsUtil
 #End Region
 
 
+#Region "Positions"
+
+    Friend Shared Function GeneratePositionsDictionary(ByRef p_dataGridView As vDataGridView) As Dictionary(Of Int32, Double)
+
+        Dim positionsDictionary As New Dictionary(Of Int32, Double)
+        Dim currentPosition As Int32 = 0
+        For Each rowItem As HierarchyItem In p_dataGridView.RowsHierarchy.Items
+            AddItemToPositionDictionary(rowItem, currentPosition, positionsDictionary)
+        Next
+        Return positionsDictionary
+
+    End Function
+
+    Private Shared Sub AddItemToPositionDictionary(ByRef p_rowItem As HierarchyItem, _
+                                                   ByRef currentPosition As Int32, _
+                                                   ByRef positionsDictionary As Dictionary(Of Int32, Double))
+
+        If (positionsDictionary.ContainsKey(p_rowItem.ItemValue)) Then
+            positionsDictionary(p_rowItem.ItemValue) = currentPosition
+        Else
+            positionsDictionary.Add(p_rowItem.ItemValue, currentPosition)
+        End If
+        currentPosition += 1
+        For Each subRowItem As HierarchyItem In p_rowItem.Items
+            AddItemToPositionDictionary(subRowItem, currentPosition, positionsDictionary)
+        Next
+
+    End Sub
+
+#End Region
+
+
+
 End Class

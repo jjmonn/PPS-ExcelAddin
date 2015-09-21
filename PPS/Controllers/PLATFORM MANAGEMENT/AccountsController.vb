@@ -87,7 +87,7 @@ Friend Class AccountsController
     Public Sub close()
 
         isClosing = True
-        View.closeControl()
+        SendNewPositionsToModel()
         View.Dispose()
 
     End Sub

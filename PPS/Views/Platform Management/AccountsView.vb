@@ -184,12 +184,7 @@ Friend Class AccountsView
 
     End Sub
 
-    Friend Sub closeControl()
-
-        Controller.SendNewPositionsToModel()
-        ' dispose other if needed priority normal
-
-    End Sub
+  
 
 #End Region
 

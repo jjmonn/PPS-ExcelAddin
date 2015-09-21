@@ -11,7 +11,7 @@ Imports System.Collections.Generic
 '
 ' Author: Julien Monnereau
 ' Created: 21/07/2015
-' Last modified: 02/09/2015
+' Last modified: 23/09/2015
 
 
 
@@ -31,6 +31,7 @@ Friend Class Entity
     Public Event Read(ByRef status As Boolean, ByRef attributes As Hashtable)
     Public Event CreationEvent(ByRef status As Boolean, ByRef id As Int32)
     Public Event UpdateEvent(ByRef status As Boolean, ByRef id As Int32)
+    Public Event UpdateListEvent(ByRef status As Boolean, ByRef updateResults As List(Of Boolean))
     Public Event DeleteEvent(ByRef status As Boolean, ByRef id As UInt32)
 
 
@@ -130,6 +131,34 @@ Friend Class Entity
             RaiseEvent UpdateEvent(False, packet.ReadUint32())
         End If
         NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_UPDATE_ENTITY_ANSWER, AddressOf SMSG_UPDATE_ENTITY_ANSWER)
+
+    End Sub
+
+    Friend Sub CMSG_UPDATE_ENTITY_LIST(ByRef p_entitiesAttributes As List(Of Hashtable))
+
+        'NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_UPDATE_ENTITY_LIST_ANSWER, AddressOf SMSG_UPDATE_ENTITY_LIST_ANSWER)
+        'Dim packet As New ByteBuffer(CType(ClientMessage.CMSG_UPDATE_ENTITY_LIST, UShort))
+        'packet.WriteUint32(p_entitiesAttributes.Count)
+        'For Each ht As Hashtable In p_entitiesAttributes
+        '    WriteEntityPacket(packet, ht)
+        'Next
+        'packet.Release()
+        'NetworkManager.GetInstance().Send(packet)
+
+    End Sub
+
+    Friend Sub SMSG_UPDATE_ENTITY_LIST_ANSWER(packet As ByteBuffer)
+
+        'If packet.GetError() = 0 Then
+        '    Dim updatesStatus As New List(Of Boolean)
+        '    For i As Int32 = 0 To packet.ReadUint32()
+        '        updatesStatus.Add(packet.ReadBool())
+        '    Next
+        '    RaiseEvent UpdateListEvent(True, updatesStatus)
+        'Else
+        '    RaiseEvent UpdateListEvent(False, Nothing)
+        'End If
+        'NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_UPDATE_ENTITY_LIST_ANSWER, AddressOf SMSG_UPDATE_ENTITY_LIST_ANSWER)
 
     End Sub
 

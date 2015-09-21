@@ -8,7 +8,7 @@
 '
 '
 '
-' Last modified: 18/09/2015
+' Last modified: 21/09/2015
 ' Author: Julien Monnereau
 
 
@@ -33,9 +33,9 @@ Friend Class EntitiesView
     Private entitiesTV As TreeView
     Private entitiesFilterTV As TreeView
     Private entitiesFilterValuesTV As TreeView
-    Friend DGV As New vDataGridView
+    Friend m_entitiesDataGridView As New vDataGridView
     Private CP As CircularProgressUI
-    Private p_currenciesComboBox As New ComboBoxEditor()
+    Private m_currenciesComboBox As New ComboBoxEditor()
 
     ' Variables
     Private DGVArray(,) As String
@@ -77,27 +77,28 @@ Friend Class EntitiesView
         DGVColumnsInitialize()
         DGVRowsInitialize(entitiesTV)
         fillDGV()
+        m_entitiesDataGridView.RowsHierarchy.ExpandAllItems()
 
-        Me.TableLayoutPanel1.Controls.Add(DGV, 0, 1)
-        DGV.Dock = DockStyle.Fill
-        DGV.ContextMenuStrip = RCM_TGV
+        Me.TableLayoutPanel1.Controls.Add(m_entitiesDataGridView, 0, 1)
+        m_entitiesDataGridView.Dock = DockStyle.Fill
+        m_entitiesDataGridView.ContextMenuStrip = RCM_TGV
 
-        AddHandler DGV.CellMouseClick, AddressOf dataGridView_CellMouseClick
-        AddHandler DGV.HierarchyItemMouseClick, AddressOf dataGridView_HierarchyItemMouseClick
-        AddHandler DGV.CellValueChanged, AddressOf dataGridView_CellValueChanged
-        AddHandler DGV.KeyDown, AddressOf DGV_KeyDown
+        AddHandler m_entitiesDataGridView.CellMouseClick, AddressOf dataGridView_CellMouseClick
+        AddHandler m_entitiesDataGridView.HierarchyItemMouseClick, AddressOf dataGridView_HierarchyItemMouseClick
+        AddHandler m_entitiesDataGridView.CellValueChanged, AddressOf dataGridView_CellValueChanged
+        AddHandler m_entitiesDataGridView.KeyDown, AddressOf DGV_KeyDown
 
     End Sub
 
     Private Sub InitCurrenciesComboBox()
 
-        p_currenciesComboBox.DropDownList = True
-        p_currenciesComboBox.DropDownHeight = p_currenciesComboBox.ItemHeight * CB_NB_ITEMS_DISPLAYED
-        p_currenciesComboBox.DropDownWidth = CB_WIDTH
+        m_currenciesComboBox.DropDownList = True
+        m_currenciesComboBox.DropDownHeight = m_currenciesComboBox.ItemHeight * CB_NB_ITEMS_DISPLAYED
+        m_currenciesComboBox.DropDownWidth = CB_WIDTH
         For Each currencyId As Int32 In GlobalVariables.Currencies.currencies_hash.Keys
-            p_currenciesComboBox.Items.Add(GlobalVariables.Currencies.currencies_hash(currencyId)(NAME_VARIABLE))
+            m_currenciesComboBox.Items.Add(GlobalVariables.Currencies.currencies_hash(currencyId)(NAME_VARIABLE))
         Next
-        AddHandler p_currenciesComboBox.EditBase.TextBox.KeyDown, AddressOf comboTextBox_KeyDown
+        AddHandler m_currenciesComboBox.EditBase.TextBox.KeyDown, AddressOf comboTextBox_KeyDown
 
     End Sub
 
@@ -116,6 +117,7 @@ Friend Class EntitiesView
         Else
             isFillingDGV = True
             FillRow(ht(ID_VARIABLE), ht)
+            UpdateDGVFormat()
             isFillingDGV = False
         End If
 
@@ -128,9 +130,9 @@ Friend Class EntitiesView
             Dim MyDelegate As New DeleteEntity_Delegate(AddressOf DeleteEntity)
             Me.Invoke(MyDelegate, New Object() {id})
         Else
-            Dim row As HierarchyItem = DataGridViewsUtil.GetHierarchyItemFromId(DGV.RowsHierarchy, id)
+            Dim row As HierarchyItem = DataGridViewsUtil.GetHierarchyItemFromId(m_entitiesDataGridView.RowsHierarchy, id)
             row.Delete()
-            DGV.Refresh()
+            m_entitiesDataGridView.Refresh()
         End If
 
     End Sub
@@ -160,7 +162,7 @@ Friend Class EntitiesView
     Private Sub cop_down_bt_Click(sender As Object, e As EventArgs) Handles copy_down_bt.Click
 
         CopyValueDown()
-        DGV.Refresh()
+        m_entitiesDataGridView.Refresh()
 
     End Sub
 
@@ -183,7 +185,7 @@ Friend Class EntitiesView
     End Sub
 
     Private Sub AutoResizeColumnsButton_Click(sender As Object, e As EventArgs) Handles AutoResizeColumnsButton.Click
-        DGV.ColumnsHierarchy.AutoResize(AutoResizeMode.FIT_ALL)
+        m_entitiesDataGridView.ColumnsHierarchy.AutoResize(AutoResizeMode.FIT_ALL)
     End Sub
 
 #End Region
@@ -230,14 +232,14 @@ Friend Class EntitiesView
 
     Private Sub InitializeDGVDisplay()
 
-        DGV.ColumnsHierarchy.AllowResize = True
-        DGV.RowsHierarchy.AllowDragDrop = True
-        DGV.RowsHierarchy.CompactStyleRenderingEnabled = True
-        DGV.AllowDragDropIndication = True
-        DGV.AllowCopyPaste = True
-        DGV.FilterDisplayMode = FilterDisplayMode.Custom
-        DGV.VIBlendTheme = DGV_VI_BLEND_STYLE
-        DGV.BackColor = SystemColors.Control
+        m_entitiesDataGridView.ColumnsHierarchy.AllowResize = True
+        m_entitiesDataGridView.RowsHierarchy.AllowDragDrop = True
+        m_entitiesDataGridView.RowsHierarchy.CompactStyleRenderingEnabled = True
+        m_entitiesDataGridView.AllowDragDropIndication = True
+        m_entitiesDataGridView.AllowCopyPaste = True
+        m_entitiesDataGridView.FilterDisplayMode = FilterDisplayMode.Custom
+        m_entitiesDataGridView.VIBlendTheme = DGV_VI_BLEND_STYLE
+        m_entitiesDataGridView.BackColor = SystemColors.Control
         'DGV.ImageList = EntitiesIL
 
     End Sub
@@ -258,14 +260,14 @@ Friend Class EntitiesView
 
     Private Sub DGVColumnsInitialize()
 
-        DGV.ColumnsHierarchy.Clear()
-   
+        m_entitiesDataGridView.ColumnsHierarchy.Clear()
+
         ' Entities Currency Column
-        Dim currencyColumn As HierarchyItem = DGV.ColumnsHierarchy.Items.Add(CURRENCY_COLUMN_NAME)
+        Dim currencyColumn As HierarchyItem = m_entitiesDataGridView.ColumnsHierarchy.Items.Add(CURRENCY_COLUMN_NAME)
         currencyColumn.ItemValue = ENTITIES_CURRENCY_VARIABLE
         currencyColumn.AllowFiltering = True
         currencyColumn.Width = COLUMNS_WIDTH
-        currencyColumn.CellsEditor = p_currenciesComboBox
+        currencyColumn.CellsEditor = m_currenciesComboBox
         ' CreateFilter(col1)
 
         For Each rootNode As TreeNode In entitiesFilterTV.Nodes
@@ -277,7 +279,7 @@ Friend Class EntitiesView
 
     Private Sub CreateSubFilters(ByRef node As TreeNode)
 
-        Dim col As HierarchyItem = DGV.ColumnsHierarchy.Items.Add(node.Text)
+        Dim col As HierarchyItem = m_entitiesDataGridView.ColumnsHierarchy.Items.Add(node.Text)
         col.ItemValue = node.Name
         col.AllowFiltering = True
         col.Width = COLUMNS_WIDTH
@@ -318,7 +320,7 @@ Friend Class EntitiesView
 
     Private Sub DGVRowsInitialize(ByRef entities_tv As TreeView)
 
-        DGV.RowsHierarchy.Clear()
+        m_entitiesDataGridView.RowsHierarchy.Clear()
         For Each node In entities_tv.Nodes
             AddRow(node)
         Next
@@ -343,7 +345,7 @@ Friend Class EntitiesView
 
         Dim row As HierarchyItem
         If parentRow Is Nothing Then
-            row = DGV.RowsHierarchy.Items.Add(p_entityName)
+            row = m_entitiesDataGridView.RowsHierarchy.Items.Add(p_entityName)
         Else
             row = parentRow.Items.Add(p_entityName)
         End If
@@ -361,18 +363,19 @@ Friend Class EntitiesView
     Friend Sub FillRow(ByVal p_entityId As Int32, _
                        ByVal p_entityHashtable As Hashtable)
 
-        Dim rowItem As HierarchyItem = DataGridViewsUtil.GetHierarchyItemFromId(DGV.RowsHierarchy, p_entityId)
+        Dim rowItem As HierarchyItem = DataGridViewsUtil.GetHierarchyItemFromId(m_entitiesDataGridView.RowsHierarchy, p_entityId)
         If rowItem Is Nothing Then
             Dim parentEntityId As Int32 = p_entityHashtable(PARENT_ID_VARIABLE)
             If parentEntityId = 0 Then
                 rowItem = CreateRow(p_entityId, p_entityHashtable(NAME_VARIABLE))
             Else
-                rowItem = CreateRow(p_entityId, p_entityHashtable(NAME_VARIABLE))
+                Dim parentRow As HierarchyItem = DataGridViewsUtil.GetHierarchyItemFromId(m_entitiesDataGridView.RowsHierarchy, parentEntityId)
+                rowItem = CreateRow(p_entityId, p_entityHashtable(NAME_VARIABLE), parentRow)
             End If
         End If
         rowItem.Caption = p_entityHashtable(NAME_VARIABLE)
-        Dim column As HierarchyItem = DataGridViewsUtil.GetHierarchyItemFromId(DGV.ColumnsHierarchy, ENTITIES_CURRENCY_VARIABLE)
-        DGV.CellsArea.SetCellValue(rowItem, column, GlobalVariables.Currencies.currencies_hash(CInt(p_entityHashtable(ENTITIES_CURRENCY_VARIABLE)))(NAME_VARIABLE))
+        Dim column As HierarchyItem = DataGridViewsUtil.GetHierarchyItemFromId(m_entitiesDataGridView.ColumnsHierarchy, ENTITIES_CURRENCY_VARIABLE)
+        m_entitiesDataGridView.CellsArea.SetCellValue(rowItem, column, GlobalVariables.Currencies.currencies_hash(CInt(p_entityHashtable(ENTITIES_CURRENCY_VARIABLE)))(NAME_VARIABLE))
         For Each filterNode As TreeNode In entitiesFilterTV.Nodes
             FillSubFilters(filterNode, p_entityId, rowItem)
         Next
@@ -386,10 +389,10 @@ Friend Class EntitiesView
 
         Dim combobox As New ComboBoxEditor
         combobox.DropDownList = True
-        Dim columnItem As HierarchyItem = DataGridViewsUtil.GetHierarchyItemFromId(DGV.ColumnsHierarchy, filterNode.Name)
+        Dim columnItem As HierarchyItem = DataGridViewsUtil.GetHierarchyItemFromId(m_entitiesDataGridView.ColumnsHierarchy, filterNode.Name)
         Dim filterValueId = GlobalVariables.EntitiesFilters.GetFilterValueId(CInt(filterNode.Name), entity_id)
         Dim filter_value_name = GlobalVariables.FiltersValues.filtervalues_hash(filterValueId)(NAME_VARIABLE)
-        DGV.CellsArea.SetCellValue(rowItem, columnItem, filter_value_name)
+        m_entitiesDataGridView.CellsArea.SetCellValue(rowItem, columnItem, filter_value_name)
 
         ' Filters Choices Setup
         If filterNode.Parent Is Nothing Then
@@ -408,7 +411,7 @@ Friend Class EntitiesView
         End If
 
         ' Add ComboBoxEditor to Cell
-        DGV.CellsArea.SetCellEditor(rowItem, columnItem, combobox)
+        m_entitiesDataGridView.CellsArea.SetCellEditor(rowItem, columnItem, combobox)
 
         ' Recursive if Filters Children exist
         For Each childFilterNode As TreeNode In filterNode.Nodes
@@ -417,11 +420,11 @@ Friend Class EntitiesView
 
     End Sub
 
-    Private Sub updateDGVFormat()
+    Private Sub UpdateDGVFormat()
 
-        DataGridViewsUtil.DGVSetHiearchyFontSize(DGV, My.Settings.dgvFontSize, My.Settings.dgvFontSize)
-        DataGridViewsUtil.FormatDGVRowsHierarchy(DGV)
-        DGV.Refresh()
+        DataGridViewsUtil.DGVSetHiearchyFontSize(m_entitiesDataGridView, My.Settings.dgvFontSize, My.Settings.dgvFontSize)
+        DataGridViewsUtil.FormatDGVRowsHierarchy(m_entitiesDataGridView)
+        m_entitiesDataGridView.Refresh()
 
     End Sub
 
@@ -439,14 +442,14 @@ Friend Class EntitiesView
         Dim filterNode As TreeNode = entitiesFilterTV.Nodes.Find(filterId, True)(0)
 
         ' Update parent filters recursively
-        UpdateParentFiltersValues(DataGridViewsUtil.GetHierarchyItemFromId(DGV.RowsHierarchy, entityId), _
+        UpdateParentFiltersValues(DataGridViewsUtil.GetHierarchyItemFromId(m_entitiesDataGridView.RowsHierarchy, entityId), _
                                  entityId, _
                                  filterNode, _
                                  filterValueId)
 
         ' Update children filters comboboxes recursively
         For Each childFilterNode As TreeNode In filterNode.Nodes
-            UpdateChildrenFiltersComboBoxes(DataGridViewsUtil.GetHierarchyItemFromId(DGV.RowsHierarchy, entityId), _
+            UpdateChildrenFiltersComboBoxes(DataGridViewsUtil.GetHierarchyItemFromId(m_entitiesDataGridView.RowsHierarchy, entityId), _
                                             childFilterNode, _
                                             {filterValueId})
         Next
@@ -461,10 +464,10 @@ Friend Class EntitiesView
 
         If Not filterNode.Parent Is Nothing Then
             Dim parentFilterNode As TreeNode = filterNode.Parent
-            Dim column As HierarchyItem = DataGridViewsUtil.GetHierarchyItemFromId(DGV.ColumnsHierarchy, parentFilterNode.Name)
+            Dim column As HierarchyItem = DataGridViewsUtil.GetHierarchyItemFromId(m_entitiesDataGridView.ColumnsHierarchy, parentFilterNode.Name)
             Dim parentFilterValueId As Int32 = GlobalVariables.FiltersValues.filtervalues_hash(filterValueId)(PARENT_FILTER_VALUE_ID_VARIABLE)
             Dim filtervaluename = GlobalVariables.FiltersValues.filtervalues_hash(parentFilterValueId)(NAME_VARIABLE)
-            DGV.CellsArea.SetCellValue(row, column, filtervaluename)
+            m_entitiesDataGridView.CellsArea.SetCellValue(row, column, filtervaluename)
 
             ' Recursively update parent filters
             UpdateParentFiltersValues(row, _
@@ -479,7 +482,7 @@ Friend Class EntitiesView
                                                 ByRef filterNode As TreeNode,
                                                 ByRef parentFilterValueIds() As Int32)
 
-        Dim column As HierarchyItem = DataGridViewsUtil.GetHierarchyItemFromId(DGV.ColumnsHierarchy, filterNode.Name)
+        Dim column As HierarchyItem = DataGridViewsUtil.GetHierarchyItemFromId(m_entitiesDataGridView.ColumnsHierarchy, filterNode.Name)
         Dim comboBox As New ComboBoxEditor
 
         Dim filterValuesIds As Int32() = GlobalVariables.FiltersValues.GetFilterValueIdsFromParentFilterValueIds(parentFilterValueIds)
@@ -488,10 +491,10 @@ Friend Class EntitiesView
         Next
 
         ' Set Cell value to nothing
-        DGV.CellsArea.SetCellValue(row, column, Nothing)
+        m_entitiesDataGridView.CellsArea.SetCellValue(row, column, Nothing)
 
         ' Add ComboBoxEditor to Cell
-        DGV.CellsArea.SetCellEditor(row, column, comboBox)
+        m_entitiesDataGridView.CellsArea.SetCellEditor(row, column, comboBox)
 
         ' Recursivly update children comboboxes
         For Each childFilterNode As TreeNode In filterNode.Nodes
@@ -511,9 +514,9 @@ Friend Class EntitiesView
 
         If e.KeyCode = Keys.Enter OrElse e.KeyCode = Keys.Escape Then
             If e.KeyCode = Keys.Enter Then
-                DGV.CloseEditor(True)
+                m_entitiesDataGridView.CloseEditor(True)
             Else
-                DGV.CloseEditor(False)
+                m_entitiesDataGridView.CloseEditor(False)
             End If
         End If
 
@@ -593,13 +596,13 @@ Friend Class EntitiesView
 
     Friend Sub CopyValueDown()
 
-        If Not DGV.CellsArea.SelectedCells(0) Is Nothing Then
-            Dim row As HierarchyItem = DGV.CellsArea.SelectedCells(0).RowItem
-            Dim column As HierarchyItem = DGV.CellsArea.SelectedCells(0).ColumnItem
-            Dim value As String = DGV.CellsArea.SelectedCells(0).Value
+        If Not m_entitiesDataGridView.CellsArea.SelectedCells(0) Is Nothing Then
+            Dim row As HierarchyItem = m_entitiesDataGridView.CellsArea.SelectedCells(0).RowItem
+            Dim column As HierarchyItem = m_entitiesDataGridView.CellsArea.SelectedCells(0).ColumnItem
+            Dim value As String = m_entitiesDataGridView.CellsArea.SelectedCells(0).Value
             If row.Items.Count > 0 Then SetValueToChildrenItems(row, column, value) Else SetValueToSibbling(row, column, value)
-            DGV.Refresh()
-            DGV.Select()
+            m_entitiesDataGridView.Refresh()
+            m_entitiesDataGridView.Select()
         End If
 
     End Sub
@@ -607,7 +610,7 @@ Friend Class EntitiesView
     Private Sub SetValueToChildrenItems(ByRef rowItem_ As HierarchyItem, ByRef columnItem_ As HierarchyItem, ByRef value As String)
 
         For Each childItem As HierarchyItem In rowItem_.Items
-            DGV.CellsArea.SetCellValue(childItem, columnItem_, value)
+            m_entitiesDataGridView.CellsArea.SetCellValue(childItem, columnItem_, value)
             If childItem.Items.Count > 0 Then SetValueToChildrenItems(childItem, columnItem_, value)
         Next
 
@@ -621,7 +624,7 @@ Friend Class EntitiesView
 
             currentItem = currentItem.ItemBelow
             If currentItem.ParentItem.GetUniqueID = parent.GetUniqueID Then
-                DGV.CellsArea.SetCellValue(currentItem, columnItem_, value)
+                m_entitiesDataGridView.CellsArea.SetCellValue(currentItem, columnItem_, value)
                 If currentItem.Items.Count > 0 Then SetValueToChildrenItems(currentItem, columnItem_, value)
             End If
 
@@ -640,21 +643,21 @@ Friend Class EntitiesView
                                                                                 {"Entities Hierarchy"}, _
                                                                                 {""})
         Dim nbRows As Int32
-        For Each item As HierarchyItem In DGV.RowsHierarchy.Items
+        For Each item As HierarchyItem In m_entitiesDataGridView.RowsHierarchy.Items
             DGVRowsCount(item, nbRows)
         Next
 
-        Dim nbcols As Int32 = DGV.ColumnsHierarchy.Items.Count
+        Dim nbcols As Int32 = m_entitiesDataGridView.ColumnsHierarchy.Items.Count
         ReDim DGVArray(nbRows + 1, nbcols + 2)
         Dim i, j As Int32
 
         DGVArray(i, 0) = "Entity's Name"
         DGVArray(i, 1) = "Entity's Affiliate's Name"
         For j = 0 To nbcols - 1
-            DGVArray(i, j + 2) = DGV.ColumnsHierarchy.Items(j).Caption
+            DGVArray(i, j + 2) = m_entitiesDataGridView.ColumnsHierarchy.Items(j).Caption
         Next
 
-        For Each row In DGV.RowsHierarchy.Items
+        For Each row In m_entitiesDataGridView.RowsHierarchy.Items
             fillInDGVArrayRow(row, 1)
         Next
 
@@ -668,15 +671,15 @@ Friend Class EntitiesView
 
         Dim j As Int32
 
-        DGVArray(rowIndex, 0) = DGV.CellsArea.GetCellValue(inputRow, DGV.ColumnsHierarchy.Items(0))
+        DGVArray(rowIndex, 0) = m_entitiesDataGridView.CellsArea.GetCellValue(inputRow, m_entitiesDataGridView.ColumnsHierarchy.Items(0))
         If Not inputRow.ParentItem Is Nothing Then
-            DGVArray(rowIndex, 1) = DGV.CellsArea.GetCellValue(inputRow.ParentItem, DGV.ColumnsHierarchy.Items(0))
+            DGVArray(rowIndex, 1) = m_entitiesDataGridView.CellsArea.GetCellValue(inputRow.ParentItem, m_entitiesDataGridView.ColumnsHierarchy.Items(0))
         Else
             DGVArray(rowIndex, 1) = ""
         End If
 
-        For Each column As HierarchyItem In DGV.ColumnsHierarchy.Items
-            DGVArray(rowIndex, j + 2) = DGV.CellsArea.GetCellValue(inputRow, column)
+        For Each column As HierarchyItem In m_entitiesDataGridView.ColumnsHierarchy.Items
+            DGVArray(rowIndex, j + 2) = m_entitiesDataGridView.CellsArea.GetCellValue(inputRow, column)
             j = j + 1
         Next
         rowIndex = rowIndex + 1

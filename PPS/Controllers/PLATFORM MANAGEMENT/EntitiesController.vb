@@ -69,17 +69,6 @@ Friend Class EntitiesController
 
     End Sub
 
-    Private Sub AssignFilterValue(ByRef fullEntitiesHash As Hashtable, _
-                                  ByRef filter_id As UInt32, _
-                                  ByRef entity_id As UInt32)
-
-        'fullEntitiesHash(entity_id)(filter_id) = GlobalVariables.EntitiesFilters.GetFilter
-
-
-
-
-    End Sub
-
     Public Sub addControlToPanel(ByRef dest_panel As Panel, _
                                  ByRef PlatformMGTUI As PlatformMGTGeneralUI)
 
@@ -91,6 +80,7 @@ Friend Class EntitiesController
 
     Public Sub close()
 
+        SendNewPositionsToModel()
         View.Dispose()
 
     End Sub
@@ -131,6 +121,18 @@ Friend Class EntitiesController
             ht(attribute) = entity_attributes(attribute)
         Next
         GlobalVariables.Entities.CMSG_UPDATE_ENTITY(ht)
+
+    End Sub
+
+    Friend Sub UpdateBatch(ByRef p_entitiesUpdates As List(Of Tuple(Of Int32, String, Int32)))
+
+        Dim entitiesHTUpdates As New List(Of Hashtable)
+        For Each tuple_ As Tuple(Of Int32, String, Int32) In p_entitiesUpdates
+            Dim ht As Hashtable = GlobalVariables.Entities.entities_hash(tuple_.Item1).Clone
+            ht(tuple_.Item2) = tuple_.Item3
+            entitiesHTUpdates.Add(ht)
+        Next
+        GlobalVariables.Entities.CMSG_UPDATE_ENTITY_LIST(entitiesHTUpdates)
 
     End Sub
 
@@ -250,12 +252,18 @@ ShowNewEntity:
 
     Friend Sub SendNewPositionsToModel()
 
-        ' to be reviewed priority normal
-        'positionsDictionary = TreeViewsUtilities.GeneratePositionsDictionary(entitiesTV)
-        'Dim batch_update As New List(Of Object())
-        'For Each entity_id In positionsDictionary.Keys
-        '    batch_update.Add({entity_id, ITEMS_POSITIONS, positionsDictionary(entity_id)})
-        'Next
+        Dim position As Int32
+        Dim entitiesUpdates As New List(Of Tuple(Of Int32, String, Int32))
+        positionsDictionary = DataGridViewsUtil.GeneratePositionsDictionary(View.m_entitiesDataGridView)
+
+        For Each entity_id As Int32 In positionsDictionary.Keys
+            position = positionsDictionary(entity_id)
+            If position <> GlobalVariables.Entities.entities_hash(entity_id)(ITEMS_POSITIONS) Then
+                Dim tuple_ As New Tuple(Of Int32, String, Int32)(entity_id, ITEMS_POSITIONS, position)
+                entitiesUpdates.Add(tuple_)
+            End If
+        Next
+        UpdateBatch(entitiesUpdates)
 
     End Sub
 
