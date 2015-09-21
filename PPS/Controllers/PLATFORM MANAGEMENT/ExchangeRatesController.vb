@@ -56,7 +56,7 @@ Friend Class ExchangeRatesController
             Exit Sub
         End If
 
-        LoadRatesVersionsInstanceVariables()
+        GlobalVariables.RatesVersions.LoadRateVersionsTV(m_ratesVersionTV)
         m_view = New ExchangeRatesView(Me, m_ratesVersionTV, GlobalVariables.Currencies.mainCurrency)
         m_currentRatesVersionId = GlobalVariables.Versions.versions_hash(My.Settings.version_id)(EX_RATES_RATE_VERSION)
         m_newRatesVersionUI = New NewRatesVersionUI(Me)
@@ -70,11 +70,6 @@ Friend Class ExchangeRatesController
 
     End Sub
 
-    Private Sub LoadRatesVersionsInstanceVariables()
-
-        GlobalVariables.RatesVersions.LoadRateVersionsTV(m_ratesVersionTV)
-
-    End Sub
 
     Public Sub AddControlToPanel(ByRef dest_panel As Panel, _
                                  ByRef PlatformMGTUI As PlatformMGTGeneralUI)
@@ -113,15 +108,15 @@ Friend Class ExchangeRatesController
 
 #Region "Rates Controller"
 
-    Friend Sub UpdateRate(ByRef curr As String, _
-                          ByRef period As Integer, _
-                          ByVal value As Double)
-
+    Friend Sub UpdateRate(ByRef p_destinationCurrency As Int32, _
+                          ByRef p_period As Int32, _
+                          ByVal p_value As Double)
 
         Dim ht As New Hashtable
-        ' fill ht priority high !!!!!!!!!!!!!!!!!
-        ' quid origin currency
-        ' 
+        ht.Add(EX_RATES_DESTINATION_CURR_VAR, p_destinationCurrency)
+        ht.Add(EX_RATES_RATE_VERSION, m_currentRatesVersionId)
+        ht.Add(EX_RATES_PERIOD_VARIABLE, p_period)
+        ht.Add(EX_RATES_RATE_VARIABLE, p_value)
         m_exchangeRates.CMSG_UPDATE_EXCHANGE_RATE(ht)
 
     End Sub
@@ -197,8 +192,7 @@ Friend Class ExchangeRatesController
 
     Private Sub RatesVersionUpdateFromServer(ByRef p_status As Boolean, ByRef p_ratesVersionHt As Hashtable)
 
-        If p_status = False Then
-            LoadRatesVersionsInstanceVariables()
+        If p_status = True Then
             m_view.TVUpdate(p_ratesVersionHt(ID_VARIABLE), _
                             p_ratesVersionHt(PARENT_ID_VARIABLE), _
                             p_ratesVersionHt(NAME_VARIABLE), _

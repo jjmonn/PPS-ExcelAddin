@@ -69,6 +69,7 @@ Friend Class ExchangeRatesView
         m_ratesDataGridView.Dock = DockStyle.Fill
         m_ratesDataGridView.ContextMenuStrip = dgvRCM
         m_ratesVersionsTV.ContextMenuStrip = VersionsRCMenu
+        m_ratesVersionsTV.ImageList = ratesVersionsIL
         VTreeViewUtil.InitTVFormat(m_ratesVersionsTV)
 
         AddHandler m_ratesDataGridView.CellValueChanging, AddressOf RatesDataGridView_CellValueChanging

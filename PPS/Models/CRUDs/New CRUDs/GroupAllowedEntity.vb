@@ -132,7 +132,7 @@ Friend Class GroupAllowedEntity
         NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_LIST_GROUP_ENTITIES_ANSWER, AddressOf SMSG_LIST_GROUP_ENTITIES_ANSWER)
         NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_GET_GROUP_ENTITIES_ANSWER, AddressOf SMSG_GET_GROUP_ENTITIES_ANSWER)
         NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_DEL_GROUP_ENTITY_ANSWER, AddressOf SMSG_DEL_GROUP_ENTITY_ANSWER)
-
+        NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_READ_GROUP_ENTITY, AddressOf SMSG_READ_GROUP_ENTITY)
         MyBase.Finalize()
 
     End Sub

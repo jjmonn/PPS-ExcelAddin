@@ -52,6 +52,7 @@ Friend Class ExchangeRate
 
         Dim packet As New ByteBuffer(CType(ClientMessage.CMSG_LIST_EXCHANGE_RATE, UShort))
         packet.Release()
+        NetworkManager.GetInstance().Send(packet)
 
     End Sub
 

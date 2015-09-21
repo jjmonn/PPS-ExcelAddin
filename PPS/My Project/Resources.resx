@@ -148,20 +148,17 @@
   <data name="favicon(217)" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\favicon(217).ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="element_branch2" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\element_branch2.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="refresh" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\refresh.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="favicon(15)" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\favicon(15).ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="symbol_dollar_euro" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\symbol_dollar_euro.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="upload" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\upload.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="favicon(17)1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\favicon(17)1.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="yellow-ms-excel-32" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\yellow-ms-excel-32.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -187,14 +184,17 @@
   <data name="add21" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\add2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="UIscon Yellow1" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\UIscon Yellow.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="element_branch22" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\element_branch22.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="registry2" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\registry2.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="constraint" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\constraint.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="sizes" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\sizes.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="favicon(81)" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\favicon(81).ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="favicon(19)" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\favicon(19).ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -202,8 +202,8 @@
   <data name="Excel dark 24 24" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Excel dark 24 24.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="checkbox2" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\checkbox2.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="elements_add" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\elements_add.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="down arrow" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\down arrow.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -220,11 +220,14 @@
   <data name="excel 2" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\excel 2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="barcode_delete" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\barcode_delete.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="excel blue2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\excel blue2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="favicon(233)" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\favicon(233).ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="checked" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\checked.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="images" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\images.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -238,14 +241,14 @@
   <data name="folder2" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\folder2.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="arrow 1" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\arrow 1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="elements31" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\elements31.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Financial BI dark blue" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Financial BI dark blue.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="users_relation2_delete" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\users_relation2_delete.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="favicon(249)" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\favicon(249).ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -259,9 +262,6 @@
   <data name="favicon(239)" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\favicon(239).ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="sizes1" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\sizes1.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="registry1" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\registry1.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -271,8 +271,8 @@
   <data name="excel blue" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\excel blue.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="elements1" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\elements1.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="plus" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\plus.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="element_branch23" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\element_branch23.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -301,14 +301,11 @@
   <data name="config circle purple" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\config circle purple.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="elements_hierarchy" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\elements_hierarchy.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="UIscon Yellow1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\UIscon Yellow.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="data" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\data.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="elements_delete" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\elements_delete.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="registry" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\registry.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -319,14 +316,14 @@
   <data name="elements3_delete" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\elements3_delete.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="sizes" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\sizes.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="arrow 1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\arrow 1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="add3" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\add.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="symbol_dollar_euro_add" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\symbol_dollar_euro_add.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="registry_add" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\registry_add.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="users_relation21" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\users_relation21.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -334,8 +331,8 @@
   <data name="favicon(232)" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\favicon(232).ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="excel blue2" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\excel blue2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="symbol_dollar_euro_add" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\symbol_dollar_euro_add.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="users_relation" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\users_relation.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -343,14 +340,17 @@
   <data name="tablet_computer3" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\tablet_computer3.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="barcode" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\barcode.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="ok" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ok.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Excel Green 32x32" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Excel Green 32x32.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="favicon(81)" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\favicon(81).ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="elements1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\elements1.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="users_relation2" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\users_relation2.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -358,8 +358,8 @@
   <data name="elements3_add" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\elements3_add.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="element_branch22" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\element_branch22.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="symbol_dollar_euro" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\symbol_dollar_euro.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Excel Blue 32x32" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Excel Blue 32x32.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -367,8 +367,8 @@
   <data name="favicon(188)" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\favicon(188).ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="elements_add" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\elements_add.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="barcode_delete" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\barcode_delete.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="symbol_dollar_euro_delete" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\symbol_dollar_euro_delete.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -379,14 +379,14 @@
   <data name="imageres_89" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\imageres_89.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="add2" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\add2.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="element_branch2_delete" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\element_branch2_delete.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="users_relation2_delete" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\users_relation2_delete.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="checkbox2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\checkbox2.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="config circle blue1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\config circle blue1.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="users_relation2_add" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\users_relation2_add.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -397,8 +397,8 @@
   <data name="element_branch21" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\element_branch21.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="checked" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\checked.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="elements_hierarchy" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\elements_hierarchy.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="arrow_circle2" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\arrow_circle2.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -406,8 +406,8 @@
   <data name="folder_open_add" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\folder_open_add.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="breakpoints" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\breakpoints.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="add2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\add2.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="symbol_dollar_euro1" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\symbol_dollar_euro1.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -418,8 +418,8 @@
   <data name="registry_delete" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\registry_delete.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="barcode" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\barcode.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="elements_delete" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\elements_delete.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="favicon(220)" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\favicon(220).ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -427,19 +427,22 @@
   <data name="Refresh DB 32" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Refresh DB 322.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="favicon(17)1" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\favicon(17)1.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="registry_add" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\registry_add.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="breakpoints" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\breakpoints.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Download " type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Download .jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="config circle blue1" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\config circle blue1.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="sizes1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\sizes1.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="plus" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\plus.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="constraint" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\constraint.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="element_branch2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\element_branch2.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="elements2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\elements2.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>
