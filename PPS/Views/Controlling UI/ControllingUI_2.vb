@@ -643,7 +643,7 @@ Friend Class ControllingUI_2
         '     CircularProgressInit()
         CircularProgress = New ProgressIndicator
         CircularProgressInit()
-     
+
         Do While Controller.computedFlag = False
         Loop
         ' set cancel button !! priority high !!!

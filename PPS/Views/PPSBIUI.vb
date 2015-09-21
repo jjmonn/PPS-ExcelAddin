@@ -96,7 +96,7 @@ Friend Class PPSBI_UI
             li.Value = currencyId
             li.Text = GlobalVariables.Currencies.currencies_hash(currencyId)(NAME_VARIABLE)
             CurrenciesComboBox.Items.Add(li)
-            If li.Value = My.Settings.currentCurrency Then
+            If li.Value = GlobalVariables.Currencies.mainCurrency Then
                 CurrenciesComboBox.SelectedItem = li
             End If
         Next

@@ -99,6 +99,9 @@
         GLOBALFACT
         GLOBALFACTSDATA
         GLOBALFACTSVERSION
+        USER
+        GROUP
+        GROUPALLOWEDENTITY
 
     End Enum
 

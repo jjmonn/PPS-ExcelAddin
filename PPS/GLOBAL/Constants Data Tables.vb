@@ -29,6 +29,12 @@ Module Data_Tables_Constants
 
 #End Region
 
+#Region "Users"
+    Friend Const GROUP_ID_VARIABLE As String = "group_id"
+    Friend Const PASSWORD_VARIABLE As String = "password"
+    Friend Const RIGHTS_VARIABLE As String = "rights"
+#End Region
+
 
 #Region "Operational and Financials Items"
 

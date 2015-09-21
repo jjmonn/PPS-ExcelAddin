@@ -1198,7 +1198,7 @@ Public Class AddinModule
     Private Sub AddinModule_AddinInitialize(sender As Object, e As EventArgs) Handles MyBase.AddinInitialize
 
         GlobalVariables.APPS = Me.HostApplication
-       
+
         ' Main Ribbon Initialize
         GlobalVariables.VersionSelectionTaskPane = Me.VersionSelectionTaskPane
         GlobalVariables.SubmissionStatusButton = SubmissionStatus
@@ -1232,6 +1232,9 @@ Public Class AddinModule
         GlobalVariables.GlobalFacts = New GlobalFact
         GlobalVariables.GlobalFactsDatas = New GlobalFactData
         GlobalVariables.GlobalFactsVersions = New GlobalFactVersion
+        GlobalVariables.Users = New User
+        GlobalVariables.Groups = New Group
+        GlobalVariables.GroupAllowedEntities = New GroupAllowedEntity
 
         ' Financial Bi User Defined Function
         GlobalVariables.GlobalPPSBIController = New PPSBIController
@@ -1501,8 +1504,8 @@ Public Class AddinModule
             If GlobalVariables.Currencies.currencies_hash.ContainsKey(My.Settings.currentCurrency) = True Then
                 currencyName = GlobalVariables.Currencies.currencies_hash(My.Settings.currentCurrency)(NAME_VARIABLE)
             End If
-                ExcelFormatting.FormatExcelRange(GlobalVariables.APPS.ActiveSheet.cells(1, 1), currencyName, startDate)
-            End If
+            ExcelFormatting.FormatExcelRange(GlobalVariables.APPS.ActiveSheet.cells(1, 1), currencyName, startDate)
+        End If
 
     End Sub
 
@@ -1762,7 +1765,7 @@ Public Class AddinModule
             MsgBox("An error occurred in Excel and the report could not be created.")
             Exit Sub
         End If
-        
+
         Dim timeConfig As UInt32 = GlobalVariables.Versions.versions_hash(My.Settings.version_id)(VERSIONS_TIME_CONFIG_VARIABLE)
         Dim periodlist As Int32() = GlobalVariables.Versions.GetPeriodsList(My.Settings.version_id)
         GlobalVariables.APPS.Interactive = False
@@ -1941,7 +1944,6 @@ Public Class AddinModule
 
 
 #End Region
-
 
 
 End Class

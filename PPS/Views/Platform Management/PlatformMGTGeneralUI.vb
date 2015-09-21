@@ -19,7 +19,7 @@ Friend Class PlatformMGTGeneralUI
 
     ' Objects
     Private current_controller As Object
- 
+
 
 #End Region
 
@@ -163,10 +163,12 @@ Friend Class PlatformMGTGeneralUI
 
     End Sub
 
+    Private Sub GroupsBT_Click(sender As Object, e As EventArgs) Handles GroupsBT.Click
+        closeCurrentControl()
+        current_controller = New GroupController()
+        current_controller.addControlToPanel(Panel1, Me)
+    End Sub
 
 #End Region
 
-
-
-    
 End Class
