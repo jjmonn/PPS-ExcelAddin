@@ -16,8 +16,8 @@ Friend Class NewRatesVersionUI
 
 #Region "Instance Variables"
 
-    Private Controller As ExchangeRatesController
-    Protected Friend parent_node As vTreeNode = Nothing
+    Private m_controller As ExchangeRatesController
+    Friend m_parentId As Int32
 
 #End Region
 
@@ -30,7 +30,7 @@ Friend Class NewRatesVersionUI
         InitializeComponent()
 
         ' Add any initialization after the InitializeComponent() call.
-        Controller = input_controller
+        m_controller = input_controller
         StartPeriodNUD.Value = Year(Now)
 
     End Sub
@@ -44,10 +44,10 @@ Friend Class NewRatesVersionUI
 
         Dim name As String = NameTB.Text
         If Len(name) < NAMES_MAX_LENGTH Then
-            Controller.CreateVersion(name, 0, _
-                                     StartPeriodNUD.Value, _
-                                     NBPeriodsNUD.Value, _
-                                     parent_node.Value)
+            m_controller.CreateVersion(m_parentId, _
+                                         name, 0, _
+                                         StartPeriodNUD.Value, _
+                                         NBPeriodsNUD.Value)
             Me.Hide()
         Else
             MsgBox("The Name cannot exceed " & NAMES_MAX_LENGTH & " characters")

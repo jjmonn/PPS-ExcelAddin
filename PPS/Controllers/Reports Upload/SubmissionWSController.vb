@@ -101,12 +101,15 @@ Friend Class SubmissionWSController
                                    ByRef p_accountName As String, _
                                    ByRef p_period As Int32)
 
-        Dim value = AcquisitionModel.GetCalculatedValue(p_entityId, _
-                                                        DataSet.m_accountsNameIdDictionary(p_accountName), _
-                                                        AcquisitionModel.periodsIdentifyer & p_period)
-        If Double.IsNaN(value) Then value = 0
         Dim tuple_ As New Tuple(Of String, String, String)(p_entityName, p_accountName, p_period)
-        DataSet.m_datasetCellsDictionary(tuple_).Value2 = value
+        If DataSet.m_datasetCellsDictionary.ContainsKey(tuple_) = True Then
+            Dim value = AcquisitionModel.GetCalculatedValue(p_entityId, _
+                                                            DataSet.m_accountsNameIdDictionary(p_accountName), _
+                                                            AcquisitionModel.periodsIdentifyer & p_period)
+            If Double.IsNaN(value) Then value = 0
+
+            DataSet.m_datasetCellsDictionary(tuple_).Value2 = value
+        End If
 
     End Sub
 
