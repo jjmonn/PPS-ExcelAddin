@@ -10,7 +10,7 @@
 '       - 
 '
 ' Author: Julien Monnereau
-' Last modified: 01/09/2015
+' Last modified: 18/09/2015
 
 
 Imports System.Collections.Generic
@@ -89,7 +89,7 @@ Friend Class SubmissionWSController
 
         Dim value As Double
         Dim entityId As Int32 = CInt(AcquisitionModel.entitiesNameIdDict(entityName))
-        For Each accountName As String In AcquisitionModel.outputsList
+        For Each accountName As String In DataSet.OutputsAccountsAddressvaluesDictionary.Values
             For Each period As Int32 In AcquisitionModel.currentPeriodList
 
                 value = AcquisitionModel.GetCalculatedValue(entityId, _
@@ -99,6 +99,27 @@ Friend Class SubmissionWSController
                 Dim tuple_ As New Tuple(Of String, String, String)(entityName, accountName, period)
                 Dim c As Excel.Range = DataSet.DimensionsToCellDictionary(tuple_)
                 c.Value2 = value
+            Next
+        Next
+
+    End Sub
+
+    Friend Sub updateInputsOnWS()
+
+        Dim value As Double
+        For Each entityName As String In DataSet.EntitiesAddressValuesDictionary.Values
+            For Each accountName As String In DataSet.inputsAccountsList
+                For Each period As Int32 In AcquisitionModel.currentPeriodList
+                    If AcquisitionModel.dataBaseInputsDictionary(entityName)(accountName).ContainsKey(AcquisitionModel.periodsIdentifyer & period) = True Then
+                        value = AcquisitionModel.dataBaseInputsDictionary(entityName)(accountName)(AcquisitionModel.periodsIdentifyer & period)
+                    Else
+                        value = 0
+                    End If
+                    If Double.IsNaN(value) Then value = 0
+                    Dim tuple_ As New Tuple(Of String, String, String)(entityName, accountName, period)
+                    Dim c As Excel.Range = DataSet.DimensionsToCellDictionary(tuple_)
+                    c.Value2 = value
+                Next
             Next
         Next
 
@@ -130,31 +151,6 @@ Friend Class SubmissionWSController
             Exit Sub
         End If
         DataSet.UpdateExcelCell(entityAddress, accountAddress, periodAddress, value, True)
-   
-    End Sub
-
-    Friend Sub updateInputsOnWS()
-
-        For Each EntityAddress As String In DataSet.EntitiesAddressValuesDictionary.Keys
-            Dim entity_name As String = DataSet.EntitiesAddressValuesDictionary(EntityAddress)
-
-            For Each AccountAddress As String In DataSet.AccountsAddressValuesDictionary.Keys
-                If DataSet.AccountsAddressValuesDictionary.ContainsKey(AccountAddress) Then
-                    Dim account_name As String = DataSet.AccountsAddressValuesDictionary(AccountAddress)
-
-                    For Each PeriodAddress As String In DataSet.periodsAddressValuesDictionary.Keys
-                        Dim period = DataSet.periodsAddressValuesDictionary(PeriodAddress)
-                        Dim periodToken As String = AcquisitionModel.periodsIdentifyer & period
-                        If AcquisitionModel.dataBaseInputsDictionary(entity_name)(account_name).ContainsKey(periodToken) Then
-                            DataSet.UpdateExcelCell(EntityAddress, _
-                                                    AccountAddress, _
-                                                    PeriodAddress, _
-                                                    AcquisitionModel.dataBaseInputsDictionary(entity_name)(account_name)(periodToken), False)
-                        End If
-                    Next
-                End If
-            Next
-        Next
 
     End Sub
 

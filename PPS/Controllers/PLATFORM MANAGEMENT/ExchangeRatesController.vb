@@ -30,7 +30,7 @@ Friend Class ExchangeRatesController
 #Region "Instance Variables"
 
     ' Objects
-    Private View As CurrenciesControl
+    Private View As ExchangeRatesView
     Private ExchangeRates As New ExchangeRate
     Private rates_versionsTV As New vTreeView
     Private NewRatesVersionUI As NewRatesVersionUI
@@ -50,7 +50,7 @@ Friend Class ExchangeRatesController
 
     Friend Sub New()
 
-        View = New CurrenciesControl(Me, rates_versionsTV)
+        View = New ExchangeRatesView(Me, rates_versionsTV)
         currentRatesVersionId = GlobalVariables.Versions.versions_hash(My.Settings.version_id)(EX_RATES_RATE_VERSION)
         NewRatesVersionUI = New NewRatesVersionUI(Me)
 

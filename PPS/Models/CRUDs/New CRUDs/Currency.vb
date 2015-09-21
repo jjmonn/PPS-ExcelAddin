@@ -23,6 +23,7 @@ Friend Class Currency
     ' Variables
     Friend state_flag As Boolean
     Friend currencies_hash As New Hashtable
+    Friend m_allCurrenciesHash As New Hashtable
     Friend mainCurrency As UInt32
 
     ' Events
@@ -61,10 +62,13 @@ Friend Class Currency
 
         If packet.GetError() = 0 Then
             Dim nb_currencies = packet.ReadInt32()
+            m_allCurrenciesHash.Clear()
+            currencies_hash.Clear()
             For i As Int32 = 1 To nb_currencies
                 Dim tmp_ht As New Hashtable
                 GetcurrencyHTFromPacket(packet, tmp_ht)
                 If tmp_ht(CURRENCY_IN_USE_VARIABLE) = True Then currencies_hash(CInt(tmp_ht(ID_VARIABLE))) = tmp_ht
+                m_allCurrenciesHash.Add(CInt(tmp_ht(ID_VARIABLE)), tmp_ht)
             Next
             state_flag = True
             RaiseEvent ObjectInitialized()
@@ -109,6 +113,7 @@ Friend Class Currency
             Dim ht As New Hashtable
             GetcurrencyHTFromPacket(packet, ht)
             currencies_hash(CInt(ht(ID_VARIABLE))) = ht
+            m_allCurrenciesHash(CInt(ht(ID_VARIABLE))) = ht
             RaiseEvent Read(True, ht)
         Else
             RaiseEvent Read(False, Nothing)

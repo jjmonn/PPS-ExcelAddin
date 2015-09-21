@@ -31,21 +31,22 @@ Partial Class PlatformMGTGeneralUI
         Me.AdjustmentsBT = New System.Windows.Forms.ToolStripMenuItem()
         Me.VersionsBT = New System.Windows.Forms.ToolStripMenuItem()
         Me.CurrenciesBT = New System.Windows.Forms.ToolStripMenuItem()
-        Me.UsersBT = New System.Windows.Forms.ToolStripMenuItem()
         Me.ControlsBT = New System.Windows.Forms.ToolStripMenuItem()
         Me.CategoriesBT = New System.Windows.Forms.ToolStripMenuItem()
         Me.EntitiesFiltersBT = New System.Windows.Forms.ToolStripMenuItem()
         Me.ClientsFiltersBT = New System.Windows.Forms.ToolStripMenuItem()
         Me.ProductsFiltersBT = New System.Windows.Forms.ToolStripMenuItem()
         Me.AdjustmentsFiltersBT = New System.Windows.Forms.ToolStripMenuItem()
-        Me.Panel1 = New System.Windows.Forms.Panel()
+        Me.UsersBT = New System.Windows.Forms.ToolStripMenuItem()
         Me.GroupsBT = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ExchangeRatesButton = New System.Windows.Forms.ToolStripMenuItem()
+        Me.Panel1 = New System.Windows.Forms.Panel()
         Me.MenuStrip1.SuspendLayout()
         Me.SuspendLayout()
         '
         'MenuStrip1
         '
-        Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.AccountsBT, Me.EntitiesBT, Me.ClientsBT, Me.ProductsBT, Me.AdjustmentsBT, Me.VersionsBT, Me.CurrenciesBT, Me.ControlsBT, Me.CategoriesBT, Me.UsersBT, Me.GroupsBT})
+        Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.AccountsBT, Me.EntitiesBT, Me.ClientsBT, Me.ProductsBT, Me.AdjustmentsBT, Me.VersionsBT, Me.CurrenciesBT, Me.ExchangeRatesButton, Me.UsersBT, Me.GroupsBT, Me.ControlsBT, Me.CategoriesBT})
         Me.MenuStrip1.Location = New System.Drawing.Point(0, 0)
         Me.MenuStrip1.Name = "MenuStrip1"
         Me.MenuStrip1.Size = New System.Drawing.Size(1009, 55)
@@ -122,7 +123,6 @@ Partial Class PlatformMGTGeneralUI
         'CurrenciesBT
         '
         Me.CurrenciesBT.CheckOnClick = True
-        Me.CurrenciesBT.Enabled = False
         Me.CurrenciesBT.Image = Global.FinancialBI.My.Resources.Resources.symbol_dollar_euro1
         Me.CurrenciesBT.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
         Me.CurrenciesBT.Name = "CurrenciesBT"
@@ -130,17 +130,6 @@ Partial Class PlatformMGTGeneralUI
         Me.CurrenciesBT.Text = "Currencies"
         Me.CurrenciesBT.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
         Me.CurrenciesBT.ToolTipText = "Currencies Edition (All changes applied will be available for all users)"
-        '
-        'UsersBT
-        '
-        Me.UsersBT.CheckOnClick = True
-        Me.UsersBT.Image = Global.FinancialBI.My.Resources.Resources.user1
-        Me.UsersBT.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
-        Me.UsersBT.Name = "UsersBT"
-        Me.UsersBT.Size = New System.Drawing.Size(47, 51)
-        Me.UsersBT.Text = "Users"
-        Me.UsersBT.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
-        Me.UsersBT.ToolTipText = "Users Edition"
         '
         'ControlsBT
         '
@@ -193,6 +182,32 @@ Partial Class PlatformMGTGeneralUI
         Me.AdjustmentsFiltersBT.Size = New System.Drawing.Size(141, 22)
         Me.AdjustmentsFiltersBT.Text = "Adjustments"
         '
+        'UsersBT
+        '
+        Me.UsersBT.CheckOnClick = True
+        Me.UsersBT.Image = Global.FinancialBI.My.Resources.Resources.user1
+        Me.UsersBT.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
+        Me.UsersBT.Name = "UsersBT"
+        Me.UsersBT.Size = New System.Drawing.Size(47, 51)
+        Me.UsersBT.Text = "Users"
+        Me.UsersBT.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
+        Me.UsersBT.ToolTipText = "Users Edition"
+        '
+        'GroupsBT
+        '
+        Me.GroupsBT.Name = "GroupsBT"
+        Me.GroupsBT.Size = New System.Drawing.Size(57, 51)
+        Me.GroupsBT.Text = "Groups"
+        '
+        'ExchangeRatesButton
+        '
+        Me.ExchangeRatesButton.Image = Global.FinancialBI.My.Resources.Resources.favicon_249_
+        Me.ExchangeRatesButton.Name = "ExchangeRatesButton"
+        Me.ExchangeRatesButton.Size = New System.Drawing.Size(100, 51)
+        Me.ExchangeRatesButton.Text = "Exchange Rates"
+        Me.ExchangeRatesButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
+        Me.ExchangeRatesButton.ToolTipText = "Edit the currencies used in Financial BI"
+        '
         'Panel1
         '
         Me.Panel1.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
@@ -202,12 +217,6 @@ Partial Class PlatformMGTGeneralUI
         Me.Panel1.Name = "Panel1"
         Me.Panel1.Size = New System.Drawing.Size(1009, 432)
         Me.Panel1.TabIndex = 1
-        '
-        'GroupsBT
-        '
-        Me.GroupsBT.Name = "GroupsBT"
-        Me.GroupsBT.Size = New System.Drawing.Size(57, 51)
-        Me.GroupsBT.Text = "Groups"
         '
         'PlatformMGTGeneralUI
         '
@@ -243,4 +252,5 @@ Partial Class PlatformMGTGeneralUI
     Friend WithEvents ProductsFiltersBT As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents AdjustmentsFiltersBT As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents GroupsBT As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ExchangeRatesButton As System.Windows.Forms.ToolStripMenuItem
 End Class

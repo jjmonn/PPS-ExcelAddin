@@ -21,10 +21,10 @@ Friend Class AxisFiltersController
 #Region "Instance Variables"
 
     ' Objects
-    Private View As AxisFiltersControl
+    Private View As AxisFiltersView
     Private filtersNode As New TreeNode
     Private filtersFilterValuesTv As New TreeView
-  
+
     ' Variables
     Private axisId As Int32
 
@@ -42,7 +42,7 @@ Friend Class AxisFiltersController
             filtersFilterValuesTv.Nodes(0).Name = "filterId" & filtersFilterValuesTv.Nodes(0).Name
         End If
 
-        View = New AxisFiltersControl(Me, filtersNode, axisId, filtersFilterValuesTv)
+        View = New AxisFiltersView(Me, filtersNode, axisId, filtersFilterValuesTv)
         View.Show()
 
         AddHandler GlobalVariables.Filters.CreationEvent, AddressOf AfterFilterCreation
@@ -77,15 +77,16 @@ Friend Class AxisFiltersController
 #Region "Interface"
 
     ' Filters
-    Friend Function CreateFilter(ByRef filter_name As String, _
-                                 ByRef parentFilterid As Int32) As Boolean
+    Friend Function CreateFilter(ByRef p_filterName As String, _
+                                 ByRef p_parentFilterid As Int32, _
+                                 ByRef p_isParent As Int32) As Boolean
 
         Dim ht As New Hashtable
-        ht.Add(NAME_VARIABLE, filter_name)
-        ht.Add(PARENT_ID_VARIABLE, parentFilterid)
+        ht.Add(NAME_VARIABLE, p_filterName)
+        ht.Add(PARENT_ID_VARIABLE, p_parentFilterid)
         ht.Add(AXIS_ID_VARIABLE, axisId)
         ht.Add(ITEMS_POSITIONS, 1)
-        ht.Add(FILTER_IS_PARENT_VARIABLE, 0)
+        ht.Add(FILTER_IS_PARENT_VARIABLE, p_isParent)
         GlobalVariables.Filters.CMSG_CREATE_FILTER(ht)
 
     End Function

@@ -17,7 +17,7 @@
 '
 '
 '
-' Last modified date: 03/05/2015
+' Last modified date: 17/09/2015
 ' Author: Julien Monnereau
 
 
@@ -875,7 +875,7 @@ Friend Class DataGridViewsUtil
 
 #Region "DGV Utilities"
 
-    Protected Friend Shared Sub CountSubItemsNb(ByRef item As HierarchyItem, _
+    Friend Shared Sub CountSubItemsNb(ByRef item As HierarchyItem, _
                                                 ByRef nb_items As Int32)
 
         For Each sub_item As HierarchyItem In item.Items
@@ -885,7 +885,49 @@ Friend Class DataGridViewsUtil
 
     End Sub
 
-    Protected Friend Shared Function GetDGVHeight(ByRef DGV As vDataGridView) As Int32
+    Friend Shared Function GetHierarchyItemFromId(ByRef p_hierarchy As Hierarchy, _
+                                                  ByRef p_id As String) As HierarchyItem
+
+        For Each item In p_hierarchy.Items
+            If item.ItemValue = p_id Then
+                Return item
+            End If
+            For Each subItem In item.Items
+                If subItem.ItemValue = p_id Then
+                    Return subItem
+                End If
+                Dim subResult As HierarchyItem = GetHierarchyItemFromId(subItem, p_id)
+                If Not subResult Is Nothing Then
+                    Return subResult
+                End If
+            Next
+        Next
+        Return Nothing
+
+    End Function
+
+    Private Shared Function GetHierarchyItemFromId(ByRef p_parentItem As HierarchyItem, _
+                                                   ByRef p_id As String) As HierarchyItem
+
+        For Each item In p_parentItem.Items
+            If item.ItemValue = p_id Then
+                Return item
+            End If
+            For Each subItem In item.Items
+                If subItem.ItemValue = p_id Then
+                    Return subItem
+                End If
+                Dim subResult As HierarchyItem = GetHierarchyItemFromId(subItem, p_id)
+                If Not subResult Is Nothing Then
+                    Return subResult
+                End If
+            Next
+        Next
+        Return Nothing
+
+    End Function
+
+    Friend Shared Function GetDGVHeight(ByRef DGV As vDataGridView) As Int32
 
         Dim height As Int32 = DGV_HEIGHT_MARGIN
         Try
@@ -897,7 +939,7 @@ Friend Class DataGridViewsUtil
 
     End Function
 
-    Protected Friend Shared Sub CopyValueRight(ByRef DGV As vDataGridView, _
+    Friend Shared Sub CopyValueRight(ByRef DGV As vDataGridView, _
                                                ByRef cell As GridCell)
 
         Dim row As HierarchyItem = cell.RowItem
@@ -908,8 +950,8 @@ Friend Class DataGridViewsUtil
 
     End Sub
 
-    Protected Friend Shared Sub SetCellFillColor(ByRef cell As GridCell, _
-                                                 ByRef color_int As Int32)
+    Public Shared Sub SetCellFillColor(ByRef cell As GridCell, _
+                                       ByRef color_int As Int32)
 
         Dim CStyle As GridCellStyle = GridTheme.GetDefaultTheme(cell.ColumnItem.DataGridView.VIBlendTheme).GridCellStyle
         CStyle.FillStyle = New FillStyleSolid(System.Drawing.Color.FromArgb(color_int))
@@ -917,6 +959,14 @@ Friend Class DataGridViewsUtil
 
     End Sub
 
+    Public Shared Sub SetCellFillColor(ByRef cell As GridCell, _
+                                      ByRef color As System.Drawing.Color)
+
+        Dim CStyle As GridCellStyle = GridTheme.GetDefaultTheme(cell.ColumnItem.DataGridView.VIBlendTheme).GridCellStyle
+        CStyle.FillStyle = New FillStyleSolid(color)
+        cell.DrawStyle = CStyle
+
+    End Sub
 
 #End Region
 

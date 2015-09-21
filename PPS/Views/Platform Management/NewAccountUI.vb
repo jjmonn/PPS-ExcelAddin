@@ -27,7 +27,7 @@ Friend Class NewAccountUI
 #Region "Instance Variables"
 
     ' Objects
-    Private AccountsView As AccountsControl
+    Private AccountsView As AccountsView
     Private Controller As AccountsController
     Private ParentAccountsTreeviewBox As VIBlend.WinForms.Controls.vTreeViewBox
 
@@ -47,7 +47,7 @@ Friend Class NewAccountUI
 
 #Region "Initialize"
 
-    Friend Sub New(ByRef input_accountsView As AccountsControl, _
+    Friend Sub New(ByRef input_accountsView As AccountsView, _
                    ByRef input_controller As AccountsController)
 
         ' This call is required by the designer.
@@ -62,7 +62,7 @@ Friend Class NewAccountUI
 
     Private Sub ComboBoxesInitialize()
 
-        For Each item In AccountsView.FormatComboBox.Items
+        For Each item In AccountsView.TypeComboBox.Items
             TypeComboBox.Items.Add(item)
         Next
 

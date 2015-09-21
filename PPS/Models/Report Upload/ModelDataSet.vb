@@ -855,51 +855,6 @@ Friend Class ModelDataSet
 
     End Sub
 
-    ' Write dataset data from Computation to the worksheet according to the current identified items
-    'Friend Sub RefreshAll(Optional ByRef adjustment_id As String = "")
-
-    '    If GlobalVariables.GenericGlobalSingleEntityComputer Is Nothing Then GlobalVariables.GenericGlobalSingleEntityComputer = New GenericSingleEntityDLL3Computer(GlobalVariables.GlobalDBDownloader, GlobalVariables.GlobalDll3Interface)
-    '    Dim entityKey As String
-    '    For Each EntityAddress As String In EntitiesAddressValuesDictionary.Keys
-    '        entityKey = EntitiesNameKeyDictionary.Item(EntitiesAddressValuesDictionary.Item(EntityAddress))
-
-    '        ' Here currentVersionCode Assumed to be set up -> TBC
-    '        ' STUB BELOW !!! -> adjustments/clients/ producst filters list
-    '        GlobalVariables.GenericGlobalSingleEntityComputer.ComputeSingleEntity(currentVersionCode, _
-    '                                                                              GlobalVariables.GenericGlobalSingleEntityComputer.GetEntityNode(entityKey), _
-    '                                                                              )         ' Recompute each time
-    '        RefreshAccounts(EntityAddress, AccountsAddressValuesDictionary)
-    '        RefreshAccounts(EntityAddress, OutputsAccountsAddressvaluesDictionary)
-    '    Next
-
-    'End Sub
-
-    ' Update the outputs values only on Excel 
-    'Friend Sub RefreshAccounts(ByRef entityAddress As String, _
-    '                           ByRef accountsAddressesRefreshDic As Dictionary(Of String, String))
-
-    '    Dim accountKey, period As String
-    '    For Each AccountAddress As String In accountsAddressesRefreshDic.Keys
-
-    '        If AccountsAddressValuesDictionary.ContainsKey(AccountAddress) Then
-    '            accountKey = AccountsNameKeyDictionary.Item(AccountsAddressValuesDictionary.Item(AccountAddress))
-    '        ElseIf OutputsAccountsAddressvaluesDictionary.ContainsKey(AccountAddress) Then
-    '            accountKey = AccountsNameKeyDictionary.Item(OutputsAccountsAddressvaluesDictionary.Item(AccountAddress))
-    '        Else
-    '             PPS Error tracking -> study if possible ?
-    '        End If
-
-    '        For Each PeriodAddress As String In periodsAddressValuesDictionary.Keys
-    '            period = periodsAddressValuesDictionary.Item(PeriodAddress)
-    '            Dim tmpValue = GlobalVariables.GenericGlobalSingleEntityComputer.GetDataFromDLL3Computer(accountKey, period)
-    '            UpdateExcelCell(entityAddress, AccountAddress, PeriodAddress, tmpValue, True)
-    '        Next
-    '    Next
-
-    'End Sub
-
-    ' Write param value in cell(param row address, param column address)
-
     Friend Sub UpdateExcelCell(ByRef entityAddress As String, _
                                 ByRef accountAddress As String, _
                                 ByRef periodAddress As String, _

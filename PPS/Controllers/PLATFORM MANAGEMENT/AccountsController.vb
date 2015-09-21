@@ -29,7 +29,7 @@ Friend Class AccountsController
 
     ' Objects
     Private FormulasTranslator As FormulasTranslations
-    Private View As AccountsControl
+    Private View As AccountsView
     Private NewAccountView As NewAccountUI
     Private AccountsTV As New TreeView
     Private PlatformMGTUI As PlatformMGTGeneralUI
@@ -54,7 +54,7 @@ Friend Class AccountsController
     Friend Sub New()
 
         GlobalVariables.Accounts.LoadAccountsTV(AccountsTV)
-        View = New AccountsControl(Me, AccountsTV)
+        View = New AccountsView(Me, AccountsTV)
         InstanceVariablesLoading()
         positionsDictionary = TreeViewsUtilities.GeneratePositionsDictionary(AccountsTV)
         FTypesToBeTested.Add(GlobalEnums.FormulaTypes.FIRST_PERIOD_INPUT)
@@ -72,7 +72,7 @@ Friend Class AccountsController
         accountsNameKeysDictionary = GlobalVariables.Accounts.GetAccountsDictionary(NAME_VARIABLE, ID_VARIABLE)
         NewAccountView = New NewAccountUI(View, Me)
         FormulasTranslator = New FormulasTranslations(accountsNameKeysDictionary)
-    
+
     End Sub
 
     Public Sub addControlToPanel(ByRef dest_panel As Panel, _

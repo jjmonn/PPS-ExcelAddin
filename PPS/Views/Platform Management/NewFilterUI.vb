@@ -53,10 +53,12 @@ Public Class NewFilterUI
         If NameTextBox.Text <> "" Then
             If ParentFilterTreeBox.TreeView.SelectedNode Is Nothing Then
                 Controller.CreateFilter(NameTextBox.Text, _
-                                        0)
+                                        0, _
+                                        1)
             Else
                 Controller.CreateFilter(NameTextBox.Text, _
-                                        ParentFilterTreeBox.TreeView.SelectedNode.Value)
+                                        ParentFilterTreeBox.TreeView.SelectedNode.Value, _
+                                        1)
             End If
             Me.Hide()
         Else

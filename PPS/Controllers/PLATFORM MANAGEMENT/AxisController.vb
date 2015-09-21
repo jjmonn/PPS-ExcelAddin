@@ -28,7 +28,7 @@ Friend Class AxisController
 #Region "Instance Variables"
 
     ' Objects
-    Private View As AxisControl
+    Private View As AxisView
     Private CrudModel As SuperAxisCRUD
     Private CrudModelFilters As SuperAxisFilterCRUD
 
@@ -54,7 +54,7 @@ Friend Class AxisController
         CrudModel = p_CrudModel
         CrudModelFilters = p_CrudFilterModel
         LoadInstanceVariables()
-        View = New AxisControl(Me, CrudModel.Axis_hash, AxisTV, AxisFilterValuesTV, AxisFilterTV)
+        View = New AxisView(Me, CrudModel.Axis_hash, AxisTV, AxisFilterValuesTV, AxisFilterTV)
 
         ' Axis CRUD Events
         AddHandler CrudModel.CreationEvent, AddressOf AfterAxisCreation

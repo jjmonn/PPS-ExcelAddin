@@ -28,7 +28,7 @@ Friend Class EntitiesController
 #Region "Instance Variables"
 
     ' Objects
-    Private View As EntitiesControl
+    Private View As EntitiesView
     Private entitiesTV As New TreeView
     Private entitiesFilterTV As New TreeView
     Private entitiesFilterValuesTV As New TreeView
@@ -46,7 +46,7 @@ Friend Class EntitiesController
     Friend Sub New()
 
         LoadInstanceVariables()
-        View = New EntitiesControl(Me, entitiesTV, entitiesFilterValuesTV, entitiesFilterTV)
+        View = New EntitiesView(Me, entitiesTV, entitiesFilterValuesTV, entitiesFilterTV)
         NewEntityView = New NewEntityUI(Me, entitiesTV, GlobalVariables.Currencies.currencies_hash)
 
         ' Entities CRUD Events

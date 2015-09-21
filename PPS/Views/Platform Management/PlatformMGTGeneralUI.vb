@@ -5,7 +5,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 04/09/2015
+' Last modified: 18/09/2015
 
 
 Imports System.ComponentModel
@@ -19,7 +19,7 @@ Friend Class PlatformMGTGeneralUI
 
     ' Objects
     Private current_controller As Object
- 
+
 
 #End Region
 
@@ -132,6 +132,14 @@ Friend Class PlatformMGTGeneralUI
     End Sub
 
     Private Sub CurrenciesBT_Click(sender As Object, e As EventArgs) Handles CurrenciesBT.Click
+
+        closeCurrentControl()
+        current_controller = New currenciesController()
+        current_controller.addControlToPanel(Panel1, Me)
+
+    End Sub
+
+    Private Sub ExchangeRatesButton_Click(sender As Object, e As EventArgs) Handles ExchangeRatesButton.Click
 
         closeCurrentControl()
         current_controller = New ExchangeRatesController()

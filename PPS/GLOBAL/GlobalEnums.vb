@@ -105,7 +105,7 @@
 
     End Enum
 
-    Enum AccountFormat
+    Enum AccountType
 
         MONETARY = 1
         NUMBER

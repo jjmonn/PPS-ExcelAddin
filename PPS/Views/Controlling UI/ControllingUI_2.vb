@@ -9,7 +9,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 31/08/2015
+' Last modified: 16/09/2015
 
 
 Imports System.Windows.Forms
@@ -254,9 +254,10 @@ Friend Class ControllingUI_2
     Private Sub RefreshData(Optional ByRef entityNode As vTreeNode = Nothing, _
                             Optional ByRef useCache As Boolean = False)
 
+        If Controller.isComputingFlag = True Then
+            Exit Sub
+        End If
         DGVsControlTab.Visible = False
-        'CircularProgressInit()
-        'CircularProgress.Visible = True
         BackgroundWorker1.RunWorkerAsync()
 
         Dim versionsIds As New List(Of Int32)
@@ -642,7 +643,7 @@ Friend Class ControllingUI_2
         '     CircularProgressInit()
         CircularProgress = New ProgressIndicator
         CircularProgressInit()
-     
+
         Do While Controller.computedFlag = False
         Loop
         ' set cancel button !! priority high !!!
