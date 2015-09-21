@@ -283,7 +283,7 @@ Friend Class DataModificationsTracking
                             If Dataset.m_datasetCellsDictionary.ContainsKey(tuple_) = True Then
                                 Dim cell As Excel.Range = Dataset.m_datasetCellsDictionary(tuple_)
                                 If cell.Value2 <> p_dataBaseInputsDictionary(entity)(account)(periodIdentifyer & period) Then
-                                    RegisterModification(cell)
+                                    RegisterModification(cell.Address)
                                 End If
                             End If
                         Next

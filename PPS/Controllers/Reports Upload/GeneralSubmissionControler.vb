@@ -292,6 +292,7 @@ Friend Class GeneralSubmissionControler
 
     Private Sub AfterDataBaseInputsDowloaded()
 
+        On Error GoTo errorHandler
         Dataset.RegisterDimensionsToCellDictionary()
         If mustUpdateExcelWorksheetFromDataBase = True Then
             updateInputs()
@@ -301,6 +302,9 @@ Friend Class GeneralSubmissionControler
         UpdateCalculatedItems(m_entityName)
         isUpdating = False
         ' Update DGV in acquisitionInterface !!
+
+errorHandler:
+        Exit Sub
 
     End Sub
 
