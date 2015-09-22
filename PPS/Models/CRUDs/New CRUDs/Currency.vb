@@ -165,10 +165,7 @@ Friend Class Currency
 
     Private Sub SMSG_GET_MAIN_CURRENCY_ANSWER(packet As ByteBuffer)
 
-        ' if ? priority normal
-        packet.ReadInt32()
         mainCurrency = packet.ReadUint32()
-        mainCurrency = 34 ' stub to be reviewed Nath lundi -> database + ici
         RaiseEvent GetMainCurrency(True, mainCurrency)
 
     End Sub
