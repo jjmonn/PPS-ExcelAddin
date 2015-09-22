@@ -169,6 +169,12 @@ Friend Class PlatformMGTGeneralUI
         current_controller.addControlToPanel(Panel1, Me)
     End Sub
 
+    Private Sub GlobalFactBT_Click(sender As Object, e As EventArgs) Handles GlobalFact_BT.Click
+        closeCurrentControl()
+        current_controller = New GlobalFactController()
+        current_controller.AddControlToPanel(Panel1, Me)
+    End Sub
+
 #End Region
 
 End Class
