@@ -188,12 +188,11 @@ Friend Class ControllingUI_2
         SplitContainer2.Panel2.Controls.Add(rightPane_Control)
         rightPane_Control.Dock = DockStyle.Fill
 
-        Me.SplitContainer2.Panel2.Controls.Add(rightPaneExpandBT)
-
         rightPane_Control.CollapseRightPaneBT.ImageList = ExpansionImageList
         rightPane_Control.CollapseRightPaneBT.ImageKey = "minus"
 
         rightPaneExpandBT = New vButton
+        SplitContainer2.Panel2.Controls.Add(rightPaneExpandBT)
         rightPaneExpandBT.Width = 19
         rightPaneExpandBT.Height = 19
         rightPaneExpandBT.ImageList = ExpansionImageList

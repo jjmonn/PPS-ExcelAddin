@@ -233,7 +233,6 @@ Friend Class ExchangeRatesController
 #End Region
 
 
-
 #Region "Utilities"
 
     Friend Function IsFolderVersion(ByRef versionId As Int32) As Boolean

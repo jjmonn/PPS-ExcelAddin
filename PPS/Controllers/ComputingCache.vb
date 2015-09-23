@@ -38,7 +38,13 @@ Public Class ComputingCache
 
     Friend Sub ResetCache()
 
-
+        cacheEntityID = 0
+        cacheCurrencyId = 0
+        Erase cacheVersions
+        If Not cacheComputingHierarchyList Is Nothing Then cacheComputingHierarchyList.Clear()
+        If Not cacheFilters Is Nothing Then cacheFilters.Clear()
+        If Not cacheAxisFilters Is Nothing Then cacheAxisFilters.Clear()
+        GlobalVariables.g_mustResetCache = False
 
     End Sub
 

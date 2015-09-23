@@ -64,6 +64,7 @@ Friend Class PPSBI_UI
         ProductsTreeviewBox.DropDownWidth = ProductsTreeviewBox.Width
         AdjustmentsTreeviewBox.DropDownWidth = AdjustmentsTreeviewBox.Width
 
+        LoadAxisNodes(GlobalEnums.AnalysisAxis.ENTITIES, "Entities Filters")
         LoadAxisNodes(GlobalEnums.AnalysisAxis.CLIENTS, "Clients Filters")
         LoadAxisNodes(GlobalEnums.AnalysisAxis.PRODUCTS, "Products Filters")
         LoadAxisNodes(GlobalEnums.AnalysisAxis.ADJUSTMENTS, "Adjustments Filters")
