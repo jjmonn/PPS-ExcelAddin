@@ -23,7 +23,7 @@ Imports System.Collections.Generic
 Imports System.Windows.Forms
 
 
-Friend Class PPSBIController
+Public Class PPSBIController
 
 
 #Region "Instance Variables"
@@ -72,6 +72,12 @@ Friend Class PPSBIController
 
 #Region "Interface"
 
+    Friend Sub ReinitializeCache()
+
+        computingCache.ResetCache()
+
+    End Sub
+
     Friend Function GetDataCallBack(ByRef p_entity_str As Object, _
                                    ByRef p_account_str As Object, _
                                    ByRef p_period_str As Object, _
@@ -83,6 +89,7 @@ Friend Class PPSBIController
                                    Optional ByRef p_filtersArray As Object = Nothing) As Object
 
         If cacheInitFlag = False Then InitCache()
+        If GlobalVariables.g_mustResetCache = True Then ReinitializeCache()
         error_message = ""
         emptyCellFlag = False
 
@@ -252,9 +259,9 @@ ReturnError:
 
         If TypeOf (periodObject) Is Int32 Then
             GoTo PeriodIntegerIdentification
-        Else If TypeOf (periodObject) Is String Then
-                periodObject = CDate(periodObject).ToOADate()
-                GoTo PeriodIntegerIdentification
+        ElseIf TypeOf (periodObject) Is String Then
+            periodObject = CDate(periodObject).ToOADate()
+            GoTo PeriodIntegerIdentification
         ElseIf TypeOf (periodObject) Is Date Then
             periodObject = periodObject.ToOADate()
             GoTo PeriodIntegerIdentification

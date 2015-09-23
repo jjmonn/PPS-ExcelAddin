@@ -273,6 +273,8 @@ Friend Class GeneralSubmissionControler
 
         isUpdating = True
         SubmissionWSController.updateInputsOnWS()
+        GlobalVariables.APPS.ScreenUpdating = True
+        GlobalVariables.APPS.ScreenUpdating = False
         'isUpdating = False
 
     End Sub
@@ -297,7 +299,7 @@ Friend Class GeneralSubmissionControler
         If mustUpdateExcelWorksheetFromDataBase = True Then
             updateInputs()
         End If
-        Dataset.RegisterDatesetCellsValues()
+        Dataset.RegisterDataSetCellsValues()
         DataModificationsTracker.IdentifyDifferencesBtwDataSetAndDB(Model.dataBaseInputsDictionary)
         UpdateCalculatedItems(m_entityName)
         isUpdating = False
@@ -310,6 +312,7 @@ errorHandler:
 
     Private Sub AfterOutputsComputed(ByRef entityName As String)
 
+        On Error Resume Next
         isUpdating = True
         GlobalVariables.APPS.Interactive = False
         GlobalVariables.APPS.ScreenUpdating = False

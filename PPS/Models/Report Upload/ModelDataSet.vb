@@ -19,7 +19,7 @@
 '       - if data = period -> bug
 '
 '
-' Last modified: 07/09/2015
+' Last modified: 23/09/2015
 ' Author: Julien Monnereau
 
 
@@ -703,36 +703,64 @@ Friend Class ModelDataSet
 
     Friend Sub RegisterDimensionsToCellDictionary()
 
+        Dim entityName As String = EntitiesAddressValuesDictionary.ElementAt(0).Value
+        Dim periodColumn As Int32
+        Dim period As String
+
+        Dim start_time As DateTime
+        Dim elapsed_time As TimeSpan
+        Dim stop_time As DateTime
+        start_time = Now
+
         m_datasetCellsDictionary.Clear()
         m_datasetCellDimensionsDictionary.Clear()
 
-        Dim accountsDictionary As New Dictionary(Of String, Dictionary(Of String, Double))
         For Each PeriodAddressValuePair In periodsAddressValuesDictionary
+            period = PeriodAddressValuePair.Value
+            periodColumn = WS.Range(PeriodAddressValuePair.Key).Column
 
             ' Inputs cells registering
             For Each AccountAddressValuePair In AccountsAddressValuesDictionary
-                Dim cell As Excel.Range = WS.Cells(WS.Range(AccountAddressValuePair.Key).Row, WS.Range(PeriodAddressValuePair.Key).Column)
-                RegisterDatasetCell(cell, EntitiesAddressValuesDictionary.ElementAt(0).Value, AccountAddressValuePair.Value, PeriodAddressValuePair.Value)
+                RegisterDatasetCell(WS.Cells(WS.Range(AccountAddressValuePair.Key).Row, periodColumn), _
+                                    entityName, _
+                                    AccountAddressValuePair.Value, _
+                                    period)
             Next
 
             ' Outputs cells registering
-            For Each OutputAccount In OutputsAccountsAddressvaluesDictionary
-                Dim cell As Excel.Range = WS.Cells(WS.Range(OutputAccount.Key).Row, WS.Range(PeriodAddressValuePair.Key).Column)
-                RegisterDatasetCell(cell, EntitiesAddressValuesDictionary.ElementAt(0).Value, OutputAccount.Value, PeriodAddressValuePair.Value)
+            For Each OutputAccountAddressValuePair In OutputsAccountsAddressvaluesDictionary
+                RegisterDatasetCell(WS.Cells(WS.Range(OutputAccountAddressValuePair.Key).Row, periodColumn), _
+                                    entityName, _
+                                    OutputAccountAddressValuePair.Value, _
+                                    period)
             Next
         Next
 
+        stop_time = Now
+        elapsed_time = stop_time.Subtract(start_time)
+        System.Diagnostics.Debug.WriteLine(elapsed_time.TotalSeconds.ToString("0.000000"))
+
     End Sub
 
-    Friend Sub RegisterDatesetCellsValues()
+    Friend Sub RegisterDataSetCellsValues()
+
+        Dim accountAddress As String
+        Dim start_time As DateTime
+        Dim elapsed_time As TimeSpan
+        Dim stop_time As DateTime
+        start_time = Now
 
         For Each AccountAddressValuePair In AccountsAddressValuesDictionary
+            accountAddress = AccountAddressValuePair.Key
             For Each PeriodAddressValuePair In periodsAddressValuesDictionary
-                Dim cell As Excel.Range = WS.Cells(WS.Range(AccountAddressValuePair.Key).Row, WS.Range(PeriodAddressValuePair.Key).Column)
+                Dim cell As Excel.Range = WS.Cells(WS.Range(accountAddress).Row, WS.Range(PeriodAddressValuePair.Key).Column)
                 Dim datasetCell As DataSetCellDimensions = m_datasetCellDimensionsDictionary(cell.Address)
                 datasetCell.m_value = cell.Value2
             Next
         Next
+        stop_time = Now
+        elapsed_time = stop_time.Subtract(start_time)
+        System.Diagnostics.Debug.WriteLine(elapsed_time.TotalSeconds.ToString("0.000000"))
 
     End Sub
 

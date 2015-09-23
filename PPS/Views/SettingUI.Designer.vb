@@ -23,7 +23,7 @@ Partial Class SettingUI
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
-        Dim DataGridLocalization2 As VIBlend.WinForms.DataGridView.DataGridLocalization = New VIBlend.WinForms.DataGridView.DataGridLocalization()
+        Dim DataGridLocalization1 As VIBlend.WinForms.DataGridView.DataGridLocalization = New VIBlend.WinForms.DataGridView.DataGridLocalization()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(SettingUI))
         Me.Panel1 = New System.Windows.Forms.Panel()
         Me.TabControl1 = New System.Windows.Forms.TabControl()
@@ -39,16 +39,20 @@ Partial Class SettingUI
         Me.TabPage2 = New System.Windows.Forms.TabPage()
         Me.VGroupBox1 = New VIBlend.WinForms.Controls.vGroupBox()
         Me.FormatsDGV = New VIBlend.WinForms.DataGridView.vDataGridView()
+        Me.TabPage3 = New System.Windows.Forms.TabPage()
         Me.ButtonIcons = New System.Windows.Forms.ImageList(Me.components)
         Me.ControlImages = New System.Windows.Forms.ImageList(Me.components)
         Me.ACFIcon = New System.Windows.Forms.ImageList(Me.components)
         Me.FolderBrowserDialog1 = New System.Windows.Forms.FolderBrowserDialog()
         Me.ColorDialog1 = New System.Windows.Forms.ColorDialog()
+        Me.VLabel1 = New VIBlend.WinForms.Controls.vLabel()
+        Me.CurrenciesCombobox = New VIBlend.WinForms.Controls.vComboBox()
         Me.Panel1.SuspendLayout()
         Me.TabControl1.SuspendLayout()
         Me.TabPage1.SuspendLayout()
         Me.TabPage2.SuspendLayout()
         Me.VGroupBox1.SuspendLayout()
+        Me.TabPage3.SuspendLayout()
         Me.SuspendLayout()
         '
         'Panel1
@@ -69,6 +73,7 @@ Partial Class SettingUI
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.TabControl1.Controls.Add(Me.TabPage1)
         Me.TabControl1.Controls.Add(Me.TabPage2)
+        Me.TabControl1.Controls.Add(Me.TabPage3)
         Me.TabControl1.DrawMode = System.Windows.Forms.TabDrawMode.OwnerDrawFixed
         Me.TabControl1.ItemSize = New System.Drawing.Size(30, 120)
         Me.TabControl1.Location = New System.Drawing.Point(11, 11)
@@ -92,7 +97,7 @@ Partial Class SettingUI
         Me.TabPage1.Location = New System.Drawing.Point(124, 4)
         Me.TabPage1.Name = "TabPage1"
         Me.TabPage1.Padding = New System.Windows.Forms.Padding(3)
-        Me.TabPage1.Size = New System.Drawing.Size(658, 464)
+        Me.TabPage1.Size = New System.Drawing.Size(700, 464)
         Me.TabPage1.TabIndex = 0
         Me.TabPage1.Text = "Connection"
         Me.TabPage1.UseVisualStyleBackColor = True
@@ -229,7 +234,7 @@ Partial Class SettingUI
         Me.FormatsDGV.HorizontalScrollBarLargeChange = 20
         Me.FormatsDGV.HorizontalScrollBarSmallChange = 5
         Me.FormatsDGV.ImageList = Nothing
-        Me.FormatsDGV.Localization = DataGridLocalization2
+        Me.FormatsDGV.Localization = DataGridLocalization1
         Me.FormatsDGV.Location = New System.Drawing.Point(6, 16)
         Me.FormatsDGV.MultipleSelectionEnabled = True
         Me.FormatsDGV.Name = "FormatsDGV"
@@ -259,6 +264,18 @@ Partial Class SettingUI
         Me.FormatsDGV.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.OFFICE2010SILVER
         Me.FormatsDGV.VirtualModeCellDefault = False
         '
+        'TabPage3
+        '
+        Me.TabPage3.Controls.Add(Me.CurrenciesCombobox)
+        Me.TabPage3.Controls.Add(Me.VLabel1)
+        Me.TabPage3.Location = New System.Drawing.Point(124, 4)
+        Me.TabPage3.Name = "TabPage3"
+        Me.TabPage3.Padding = New System.Windows.Forms.Padding(3)
+        Me.TabPage3.Size = New System.Drawing.Size(700, 464)
+        Me.TabPage3.TabIndex = 2
+        Me.TabPage3.Text = "Preferences"
+        Me.TabPage3.UseVisualStyleBackColor = True
+        '
         'ButtonIcons
         '
         Me.ButtonIcons.ImageStream = CType(resources.GetObject("ButtonIcons.ImageStream"), System.Windows.Forms.ImageListStreamer)
@@ -285,6 +302,41 @@ Partial Class SettingUI
         Me.ACFIcon.TransparentColor = System.Drawing.Color.Transparent
         Me.ACFIcon.Images.SetKeyName(0, "ACF Square 2 .1Control bgd.png")
         '
+        'VLabel1
+        '
+        Me.VLabel1.BackColor = System.Drawing.Color.Transparent
+        Me.VLabel1.DisplayStyle = VIBlend.WinForms.Controls.LabelItemStyle.TextOnly
+        Me.VLabel1.Ellipsis = False
+        Me.VLabel1.ImageAlignment = System.Drawing.ContentAlignment.TopLeft
+        Me.VLabel1.Location = New System.Drawing.Point(22, 38)
+        Me.VLabel1.Multiline = True
+        Me.VLabel1.Name = "VLabel1"
+        Me.VLabel1.Size = New System.Drawing.Size(149, 25)
+        Me.VLabel1.TabIndex = 0
+        Me.VLabel1.Text = "Consolidation Currency"
+        Me.VLabel1.TextAlignment = System.Drawing.ContentAlignment.TopLeft
+        Me.VLabel1.UseMnemonics = True
+        Me.VLabel1.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
+        '
+        'CurrenciesCombobox
+        '
+        Me.CurrenciesCombobox.BackColor = System.Drawing.Color.White
+        Me.CurrenciesCombobox.DisplayMember = ""
+        Me.CurrenciesCombobox.DropDownMaximumSize = New System.Drawing.Size(1000, 1000)
+        Me.CurrenciesCombobox.DropDownMinimumSize = New System.Drawing.Size(10, 10)
+        Me.CurrenciesCombobox.DropDownResizeDirection = VIBlend.WinForms.Controls.SizingDirection.Both
+        Me.CurrenciesCombobox.DropDownWidth = 166
+        Me.CurrenciesCombobox.Location = New System.Drawing.Point(165, 35)
+        Me.CurrenciesCombobox.Name = "CurrenciesCombobox"
+        Me.CurrenciesCombobox.RoundedCornersMaskListItem = CType(15, Byte)
+        Me.CurrenciesCombobox.Size = New System.Drawing.Size(166, 23)
+        Me.CurrenciesCombobox.TabIndex = 0
+        Me.CurrenciesCombobox.UseThemeBackColor = False
+        Me.CurrenciesCombobox.UseThemeDropDownArrowColor = True
+        Me.CurrenciesCombobox.ValueMember = ""
+        Me.CurrenciesCombobox.VIBlendScrollBarsTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
+        Me.CurrenciesCombobox.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
+        '
         'SettingUI
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -301,6 +353,7 @@ Partial Class SettingUI
         Me.TabPage1.PerformLayout()
         Me.TabPage2.ResumeLayout(False)
         Me.VGroupBox1.ResumeLayout(False)
+        Me.TabPage3.ResumeLayout(False)
         Me.ResumeLayout(False)
 
     End Sub
@@ -323,4 +376,7 @@ Partial Class SettingUI
     Friend WithEvents VGroupBox1 As VIBlend.WinForms.Controls.vGroupBox
     Friend WithEvents ColorDialog1 As System.Windows.Forms.ColorDialog
     Friend WithEvents FormatsDGV As VIBlend.WinForms.DataGridView.vDataGridView
+    Friend WithEvents TabPage3 As System.Windows.Forms.TabPage
+    Friend WithEvents CurrenciesCombobox As VIBlend.WinForms.Controls.vComboBox
+    Friend WithEvents VLabel1 As VIBlend.WinForms.Controls.vLabel
 End Class

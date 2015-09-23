@@ -153,13 +153,12 @@ Public Class CUI2LeftPane
 
     Private Sub InitCurrenciesCLB()
 
-        Dim currenciesList As New Collections.Generic.List(Of UInt32)
         For Each currencyId As Int32 In GlobalVariables.Currencies.currencies_hash.Keys
             Dim li As New ListItem
             li.Value = currencyId
             li.Text = GlobalVariables.Currencies.currencies_hash(currencyId)(NAME_VARIABLE)
             currenciesCLB.Items.Add(li)
-            If li.Value = GlobalVariables.Currencies.mainCurrency Then
+            If li.Value = My.Settings.currentCurrency Then
                 li.IsChecked = True
                 currenciesCLB.SelectedItem = li
             End If

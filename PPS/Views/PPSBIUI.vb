@@ -64,6 +64,7 @@ Friend Class PPSBI_UI
         ProductsTreeviewBox.DropDownWidth = ProductsTreeviewBox.Width
         AdjustmentsTreeviewBox.DropDownWidth = AdjustmentsTreeviewBox.Width
 
+        LoadAxisNodes(GlobalEnums.AnalysisAxis.ENTITIES, "Entities Filters")
         LoadAxisNodes(GlobalEnums.AnalysisAxis.CLIENTS, "Clients Filters")
         LoadAxisNodes(GlobalEnums.AnalysisAxis.PRODUCTS, "Products Filters")
         LoadAxisNodes(GlobalEnums.AnalysisAxis.ADJUSTMENTS, "Adjustments Filters")
@@ -96,7 +97,7 @@ Friend Class PPSBI_UI
             li.Value = currencyId
             li.Text = GlobalVariables.Currencies.currencies_hash(currencyId)(NAME_VARIABLE)
             CurrenciesComboBox.Items.Add(li)
-            If li.Value = GlobalVariables.Currencies.mainCurrency Then
+            If li.Value = My.Settings.currentCurrency Then
                 CurrenciesComboBox.SelectedItem = li
             End If
         Next

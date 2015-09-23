@@ -123,7 +123,7 @@
       <Value Profile="(Default)">Black</Value>
     </Setting>
     <Setting Name="currentCurrency" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">0</Value>
+      <Value Profile="(Default)">34</Value>
     </Setting>
   </Settings>
 </SettingsFile>

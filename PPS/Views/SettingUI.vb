@@ -61,6 +61,19 @@ Friend Class SettingUI
         FormatsDGV.ColumnsHierarchy.AutoResize(AutoResizeMode.FIT_ALL)
         FillFormatsDGV()
 
+        If GlobalVariables.AuthenticationFlag = True Then
+            For Each currencyId As Int32 In GlobalVariables.Currencies.currencies_hash.Keys
+                Dim li As New ListItem
+                li.Value = currencyId
+                li.Text = GlobalVariables.Currencies.currencies_hash(currencyId)(NAME_VARIABLE)
+                CurrenciesCombobox.Items.Add(li)
+                If li.Value = My.Settings.currentCurrency Then
+                    li.IsChecked = True
+                    CurrenciesCombobox.SelectedItem = li
+                End If
+            Next
+        End If
+
     End Sub
 
 
@@ -128,6 +141,12 @@ Friend Class SettingUI
 
     End Sub
 
+    Private Sub CurrenciesCombobox_SelectedItemChanged(sender As Object, e As EventArgs) Handles CurrenciesCombobox.SelectedItemChanged
+
+        My.Settings.currentCurrency = CurrenciesCombobox.SelectedItem.Value
+        My.Settings.Save()
+
+    End Sub
 
 #End Region
 
@@ -334,4 +353,5 @@ Friend Class SettingUI
 
 
 
+   
 End Class

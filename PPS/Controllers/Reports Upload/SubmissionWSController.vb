@@ -88,7 +88,7 @@ Friend Class SubmissionWSController
     Friend Sub updateCalculatedItemsOnWS(ByRef entityName As String)
 
         Dim entityId As Int32 = CInt(AcquisitionModel.entitiesNameIdDict(entityName))
-        For Each accountName As String In DataSet.OutputsAccountsAddressvaluesDictionary.Values
+        For Each accountName As String In AcquisitionModel.outputsList
             For Each period As Int32 In AcquisitionModel.currentPeriodList
                 SetDatsetCellValue(entityId, entityName, accountName, period)
             Next
@@ -155,10 +155,10 @@ Friend Class SubmissionWSController
 
             For Each cell As Excel.Range In Target.Cells
 
-                entityName = DataSet.m_datasetCellDimensionsDictionary(cell.Address).m_entityName
                 Dim intersect = GlobalVariables.APPS.Intersect(cell, DataModificationsTracker.dataSetRegion)
                 If Not intersect Is Nothing Then
 
+                    entityName = DataSet.m_datasetCellDimensionsDictionary(cell.Address).m_entityName
                     If IsNumeric(cell.Value) Then
                         If AcquisitionModel.CheckIfBSCalculatedItem(DataSet.m_datasetCellDimensionsDictionary(cell.Address).m_accountName, _
                                                                     DataSet.m_datasetCellDimensionsDictionary(cell.Address).m_period) = False Then

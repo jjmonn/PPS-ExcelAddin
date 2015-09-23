@@ -41,6 +41,7 @@ Friend Class WorksheetRefreshController
 
     Friend Sub RefreshWorksheet(Optional ByRef rng As Excel.Range = Nothing)
 
+        GlobalVariables.g_mustResetCache = True
         Dim FormulasRangesCollection As New Dictionary(Of Excel.Range, String)
 
         If rng Is Nothing Then
@@ -105,7 +106,8 @@ Friend Class WorksheetRefreshController
 
         ' dans l'idéal extraire la liste des entities_id to be computed pour avoir le highest hierarchy level to be computed
         For Each cell As Excel.Range In FormulasRangesCollection.Keys
-            cell.Formula = FormulasRangesCollection.Item(cell)
+            GlobalVariables.APPS.ActiveSheet.range(cell.Address).formula = FormulasRangesCollection.Item(cell)
+            ' cell.Formula = FormulasRangesCollection.Item(cell)
         Next
 
     End Sub

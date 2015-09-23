@@ -404,6 +404,7 @@ Public Class AddinModule
         Me.Menu3.Images.SetKeyName(14, "ok.ico")
         Me.Menu3.Images.SetKeyName(15, "dna.ico")
         Me.Menu3.Images.SetKeyName(16, "system-settings-icon.ico")
+        Me.Menu3.Images.SetKeyName(17, "font.ico")
         '
         'EditionMainRibbonBT
         '
@@ -587,6 +588,7 @@ Public Class AddinModule
         '
         Me.FormatButton.Caption = "Format"
         Me.FormatButton.Id = "adxRibbonButton_0609b73e6104420c9944e6db704cb0e9"
+        Me.FormatButton.Image = 17
         Me.FormatButton.ImageList = Me.Menu3
         Me.FormatButton.ImageTransparentColor = System.Drawing.Color.Transparent
         Me.FormatButton.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
@@ -1106,6 +1108,7 @@ Public Class AddinModule
     Private ctrlsTextWSDictionary As New Dictionary(Of String, Excel.Worksheet)
     Public setUpFlag As Boolean
     Public ppsbi_refresh_flag As Boolean = True
+    Public m_ppsbiController As PPSBIController
     Private CurrentGRSControler As GeneralSubmissionControler
     Private Const EXCEL_MIN_VERSION As Double = 9
 
@@ -1195,6 +1198,12 @@ Public Class AddinModule
         End Get
     End Property
 
+    Public ReadOnly Property GetAuthenticationFlag() As Boolean
+        Get
+            Return GlobalVariables.AuthenticationFlag
+        End Get
+    End Property
+
     Private Sub AddinModule_AddinInitialize(sender As Object, e As EventArgs) Handles MyBase.AddinInitialize
 
         GlobalVariables.APPS = Me.HostApplication
@@ -1255,6 +1264,7 @@ Public Class AddinModule
     Public Function GetVersionButton() As ADXRibbonButton
         Return GlobalVariables.Version_Button
     End Function
+
 
 #End Region
 
@@ -1417,7 +1427,6 @@ Public Class AddinModule
 
             ppsbi_refresh_flag = False
         Else
-
             ppsbi_refresh_flag = True
         End If
 
@@ -1839,6 +1848,8 @@ Public Class AddinModule
     ' Create GRS Conctroler and display
     Private Sub AssociateGRSControler(ByRef p_mustUpdateInputs As Boolean)
 
+
+        GlobalVariables.APPS.Interactive = False
         Dim ctrl As ADXRibbonItem = AddButtonToDropDown(WSCB, GlobalVariables.APPS.ActiveSheet.name, GlobalVariables.APPS.ActiveSheet.name)
         loadDropDownsSubmissionButtons()
         Dim CGRSControlerInstance As New GeneralSubmissionControler(ctrl, Me)
@@ -1914,6 +1925,10 @@ Public Class AddinModule
             GlobalVariables.Connection_Toggle_Button.Image = 1
             GlobalVariables.Connection_Toggle_Button.Caption = "Connected"
             SetCurrentVersionAfterConnection()
+            Dim c As Excel.Range = GlobalVariables.APPS.ActiveSheet.range("AZ200")
+            c.Formula = "=" & UDF_FORMULA_GET_DATA_NAME & "("","","","","","","","","")"
+            c.Formula = ""
+            '   GlobalVariables.GlobalPPSBIController = New PPSBIController
         Else
             GlobalVariables.Connection_Toggle_Button.Image = 0
             GlobalVariables.Connection_Toggle_Button.Caption = "Not connected"
@@ -1940,6 +1955,10 @@ Public Class AddinModule
         My.Settings.version_id = versionId
         My.Settings.Save()
 
+    End Sub
+
+    Public Sub InitializePPSBIController()
+        m_ppsbiController = New PPSBIController
     End Sub
 
 

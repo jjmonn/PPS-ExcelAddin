@@ -177,7 +177,7 @@ Friend Class Computer
                 requestIdEntityIdDict.Remove(request_id)
             End If
         Else
-            RaiseEvent ComputationAnswered("", False, 0)
+            RaiseEvent ComputationAnswered(0, False, 0)
         End If
 
     End Sub

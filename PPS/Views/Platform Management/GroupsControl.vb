@@ -106,6 +106,7 @@ Friend Class GroupsControl
 
     Private Sub entitiesTreeView_Check(sender As Object, e As vTreeViewEventArgs)
         If m_isLoading = True Then Exit Sub
+        On Error Resume Next
         If e.Node.Checked = CheckState.Checked Then
             m_controller.AddAllowedEntity(m_currentNode.Value, e.Node.Value)
         Else

@@ -391,7 +391,11 @@ Friend Class EntitiesView
         combobox.DropDownList = True
         Dim columnItem As HierarchyItem = DataGridViewsUtil.GetHierarchyItemFromId(m_entitiesDataGridView.ColumnsHierarchy, filterNode.Name)
         Dim filterValueId = GlobalVariables.EntitiesFilters.GetFilterValueId(CInt(filterNode.Name), entity_id)
-        Dim filter_value_name = GlobalVariables.FiltersValues.filtervalues_hash(filterValueId)(NAME_VARIABLE)
+        Dim filter_value_name As String = ""
+        If filterValueId <> 0 Then
+            filter_value_name = GlobalVariables.FiltersValues.filtervalues_hash(filterValueId)(NAME_VARIABLE)
+        End If
+
         m_entitiesDataGridView.CellsArea.SetCellValue(rowItem, columnItem, filter_value_name)
 
         ' Filters Choices Setup
