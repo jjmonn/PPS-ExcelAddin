@@ -206,6 +206,11 @@ Public Class GlobalFactVersion
 
     End Function
 
+    Friend Sub LoadVersionsTV(ByRef TV As VIBlend.WinForms.Controls.vTreeView)
+
+        VTreeViewUtil.LoadTreeview(TV, globalFact_versions_hash)
+
+    End Sub
 
 #End Region
 

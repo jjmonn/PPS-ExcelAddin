@@ -57,11 +57,19 @@ Friend Class GlobalFactData
 
 #Region "CRUD"
 
-    Friend Sub CMSG_CREATE_GLOBAL_FACT_DATA(ByRef attributes As Hashtable)
+    Friend Sub CMSG_CREATE_GLOBAL_FACT_DATA(ByRef globalFactId As Int32, _
+                                             ByRef period As Int32, _
+                                             ByRef VersionId As Int32, _
+                                             ByRef value As Double)
 
         NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_CREATE_GLOBAL_FACT_DATA_ANSWER, AddressOf SMSG_CREATE_GLOBAL_FACT_DATA_ANSWER)
         Dim packet As New ByteBuffer(CType(ClientMessage.CMSG_CREATE_GLOBAL_FACT_DATA, UShort))
-        WriteGlobalFactDataPacket(packet, attributes)
+
+        packet.WriteUint32(globalFactId)
+        packet.WriteUint32(period)
+        packet.WriteUint32(VersionId)
+        packet.WriteDouble(value)
+
         packet.Release()
         NetworkManager.GetInstance().Send(packet)
 
@@ -70,9 +78,9 @@ Friend Class GlobalFactData
     Private Sub SMSG_CREATE_GLOBAL_FACT_DATA_ANSWER(packet As ByteBuffer)
 
         If packet.GetError() = 0 Then
-            Dim factId As Int32 = packet.ReadUint32()
-            Dim period As Int32 = packet.ReadUint32()
-            Dim versionId As Int32 = packet.ReadUint32()
+            Dim factId As Int32 = packet.ReadInt32()
+            Dim period As Int32 = packet.ReadInt32()
+            Dim versionId As Int32 = packet.ReadInt32()
             Dim value As Double = packet.ReadDouble()
             RaiseEvent CreationEvent(True, factId, period, versionId, value)
         Else

@@ -159,6 +159,19 @@ Friend Class GlobalFact
 
     End Sub
 
+    Friend Function GetMonthsList(ByRef p_versionId As Int32) As List(Of Int32)
+
+        Dim periodList As New List(Of Int32)
+        Dim versionHash = GlobalVariables.GlobalFactsVersions.globalFact_versions_hash
+
+        For Each monthId As Int32 In Period.GetMonthsList(versionHash(p_versionId)(VERSIONS_START_PERIOD_VAR), _
+                                      versionHash(p_versionId)(VERSIONS_NB_PERIODS_VAR))
+            periodList.Add(monthId)
+        Next
+        Return periodList
+
+    End Function
+
 #End Region
 
 

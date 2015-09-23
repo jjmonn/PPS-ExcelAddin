@@ -73,7 +73,7 @@ Friend Class Period
 
         Dim periodsList As New List(Of Int32)
         periodsList.Add(startPeriod)
-
+        If (nbPeriod <= 1) Then Return periodsList.ToArray
         Dim monthList() As UInt16 = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31}
         'Dim year As Double = CDbl(startPeriod) / 365.25 + 1900
         'Dim Month As UInt16 = year - Math.Truncate(year) + 1
