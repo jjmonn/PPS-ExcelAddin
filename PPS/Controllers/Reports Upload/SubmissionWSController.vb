@@ -88,7 +88,7 @@ Friend Class SubmissionWSController
     Friend Sub updateCalculatedItemsOnWS(ByRef entityName As String)
 
         Dim entityId As Int32 = CInt(AcquisitionModel.entitiesNameIdDict(entityName))
-        For Each accountName As String In DataSet.OutputsAccountsAddressvaluesDictionary.Values
+        For Each accountName As String In AcquisitionModel.outputsList
             For Each period As Int32 In AcquisitionModel.currentPeriodList
                 SetDatsetCellValue(entityId, entityName, accountName, period)
             Next

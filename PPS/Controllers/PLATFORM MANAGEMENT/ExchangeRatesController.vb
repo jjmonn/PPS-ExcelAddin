@@ -70,7 +70,6 @@ Friend Class ExchangeRatesController
 
     End Sub
 
-
     Public Sub AddControlToPanel(ByRef dest_panel As Panel, _
                                  ByRef PlatformMGTUI As PlatformMGTGeneralUI)
 
@@ -178,7 +177,7 @@ Friend Class ExchangeRatesController
         ' ---------------------------------------------------------------------------------------------------
 
         If p_ratesVersionId = m_currentRatesVersionId Then
-            m_currentRatesVersionId = ""
+            m_currentRatesVersionId = 0
             ' not ok to be reviewed! 
             '      m_view.InitializeDGV(GlobalVariables.Currencies.currencies_hash.Keys, m_MonthsIdList, p_ratesVersionId)
         End If

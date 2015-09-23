@@ -273,6 +273,8 @@ Friend Class GeneralSubmissionControler
 
         isUpdating = True
         SubmissionWSController.updateInputsOnWS()
+        GlobalVariables.APPS.ScreenUpdating = True
+        GlobalVariables.APPS.ScreenUpdating = False
         'isUpdating = False
 
     End Sub
