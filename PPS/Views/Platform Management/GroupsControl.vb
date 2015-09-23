@@ -43,6 +43,7 @@ Friend Class GroupsControl
 
         GlobalVariables.Entities.LoadEntitiesTV(m_entitiesTV)
         Me.EntitiesPanel.Controls.Add(m_entitiesTV)
+        EntitiesPanel.Enabled = False
         m_entitiesTV.Dock = DockStyle.Fill
         m_entitiesTV.CheckBoxes = True
         AddHandler GlobalVariables.GroupAllowedEntities.ReadEvent, AddressOf GroupAllowedEntities_READ
@@ -54,10 +55,12 @@ Friend Class GroupsControl
     Friend Sub AddUserControl(ByRef p_userController As UsersController)
         m_userController = p_userController
         Me.UsersPanel.Controls.Add(m_userController.GetView())
+        m_userController.ApplyFilter(0)
     End Sub
 
     Private Sub LoadCurrent()
         m_isLoading = True
+        If (m_groupTreeView.SelectedNode Is Nothing) Then EntitiesPanel.Enabled = False Else EntitiesPanel.Enabled = True
         If m_currentNode Is Nothing Then
             If Not m_userController Is Nothing Then
                 m_userController.RemoveFilter()
