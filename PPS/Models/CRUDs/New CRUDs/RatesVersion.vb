@@ -237,9 +237,11 @@ Public Class RatesVersion
     Friend Function GetMonthsList(ByRef versionId As Int32) As List(Of Int32)
 
         Dim periodList As New List(Of Int32)
-        For Each monthId As Int32 In Period.GetMonthsList(rate_versions_hash(versionId)(VERSIONS_START_PERIOD_VAR), _
-                                      rate_versions_hash(versionId)(VERSIONS_NB_PERIODS_VAR))
-            periodList.Add(monthId)
+        For Each yearId As Int32 In Period.GetYearlyPeriodList(rate_versions_hash(versionId)(VERSIONS_START_PERIOD_VAR), _
+                                                               rate_versions_hash(versionId)(VERSIONS_NB_PERIODS_VAR))
+            For Each monthId As Int32 In Period.GetMonthsPeriodsInOneYear(Year(Date.FromOADate(yearId)), False)
+                periodList.Add(monthId)
+            Next
         Next
         Return periodList
 

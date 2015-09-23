@@ -373,29 +373,15 @@ Friend Class ExchangeRatesView
 
     End Sub
 
-    Private Sub CopyValueIntoCellsBelow(ByRef parent_row As HierarchyItem, _
-                                        ByRef start_index As Int32, _
-                                        ByRef column As HierarchyItem, _
-                                        ByRef value As Double)
-
-        For i As Int32 = start_index To parent_row.Items.Count - 1
-            m_ratesDataGridView.CellsArea.SetCellValue(parent_row.Items(i), column, value)
-        Next
-
-    End Sub
-
     Friend Sub CopyRateValueDown()
 
         Dim value As Double = m_ratesDataGridView.CellsArea.SelectedCells(0).Value
         Dim column As HierarchyItem = m_ratesDataGridView.CellsArea.SelectedCells(0).ColumnItem
         Dim row As HierarchyItem = m_ratesDataGridView.CellsArea.SelectedCells(0).RowItem
         m_isCopyingValueDown = True
-        If Not row.ParentItem Is Nothing Then
-            CopyValueIntoCellsBelow(row.ParentItem, row.ItemIndex + 1, column, value)
-            For i = row.ParentItem.ItemIndex + 1 To m_ratesDataGridView.RowsHierarchy.Items.Count - 1
-                CopyValueIntoCellsBelow(m_ratesDataGridView.RowsHierarchy.Items(i), 0, column, value)
-            Next
-        End If
+        For i As Int32 = row.ItemIndex To m_ratesDataGridView.RowsHierarchy.Items.Count - 1
+            m_ratesDataGridView.CellsArea.SetCellValue(m_ratesDataGridView.RowsHierarchy.Items(i), column, value)
+        Next
         m_isCopyingValueDown = False
 
     End Sub

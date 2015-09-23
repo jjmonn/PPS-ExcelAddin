@@ -167,13 +167,14 @@ Friend Class Period
 
     End Function
 
-    Friend Shared Function GetYearlyPeriodList(ByRef startPeriod As Int32, _
-                                               ByRef nbPeriods As Int32) As List(Of Int32)
+    Friend Shared Function GetYearlyPeriodList(ByRef p_startPeriod As Int32, _
+                                               ByRef p_nbPeriods As Int32) As List(Of Int32)
 
+        Dim currentYear As Int32 = Year(Date.FromOADate(p_startPeriod))
         Dim list As New List(Of Int32)
-        Dim nbDaysinMonth As Int32 = DateTime.DaysInMonth(startPeriod, NB_MONTHS)
-        For j As Int32 = 0 To nbPeriods - 1
-            list.Add(Int(CDbl(DateSerial(startPeriod + j, NB_MONTHS, nbDaysinMonth).ToOADate())))
+        Dim nbDaysinMonth As Int32 = DateTime.DaysInMonth(currentYear, NB_MONTHS)
+        For j As Int32 = 0 To p_nbPeriods - 1
+            list.Add(Int(CDbl(DateSerial(currentYear + j, NB_MONTHS, nbDaysinMonth).ToOADate())))
         Next
         Return list
 
@@ -196,12 +197,6 @@ Friend Class Period
 
     End Function
 
-    Friend Shared Function GetGlobalPeriodsDictionary(ByRef start_period As Int32, _
-                                                                ByRef nb_periods As Int32) As Dictionary(Of Integer, List(Of Int32))
-
-        Return GetGlobalPeriodsDictionary(GetYearlyPeriodList(start_period, nb_periods))
-
-    End Function
 
     Friend Shared Function GetLastMonthOfYear(ByRef year_value As Int32) As List(Of Int32)
 
