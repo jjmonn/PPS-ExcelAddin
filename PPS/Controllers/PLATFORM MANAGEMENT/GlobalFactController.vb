@@ -158,6 +158,13 @@ Friend Class GlobalFactController
 
 #Region "Import Rates from Excel"
 
+    Friend Sub ImportRatesFromExcel()
+
+        'm_excelImport = New ExcelRatesImportUI(Me, GlobalVariables.GlobalFactsDatas.globalFactDataHash)
+        'm_excelImport.Show()
+
+    End Sub
+
     Friend Sub InputRangesCallBack(ByRef period() As Integer, ByRef rates() As Double, ByRef curr As String)
 
         If m_view Is Nothing Then Exit Sub

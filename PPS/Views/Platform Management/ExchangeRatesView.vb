@@ -153,7 +153,7 @@ Friend Class ExchangeRatesView
 
 #Region "Call Backs"
 
-    Private Sub ImportFromExcelToolStripMenuItem_Click(sender As Object, e As EventArgs)
+    Private Sub ImportFromExcelToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ImportFromExcelToolStripMenuItem.Click
         m_controller.ImportRatesFromExcel()
     End Sub
 

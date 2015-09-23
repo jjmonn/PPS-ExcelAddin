@@ -21,7 +21,7 @@ Friend Class ExcelRatesImportUI
 #Region "Instance Variables"
 
     ' objects
-    Private Controller As ExchangeRatesController
+    Private Controller As Object
 
     ' variables
     Private periods_range As Excel.Range
@@ -33,8 +33,8 @@ Friend Class ExcelRatesImportUI
 
 #Region "Initialize"
 
-    Friend Sub New(ByRef inputController As ExchangeRatesController, _
-                   ByRef input_items_list As List(Of UInt32))
+    Friend Sub New(ByRef inputController As Object, _
+                   ByRef input_items_list As System.Collections.ICollection)
 
         ' This call is required by the designer.
         InitializeComponent()
