@@ -769,16 +769,14 @@ UdpateFormulaType:
             TypeComboBox.SelectedItem = formatLI
 
             If formatLI.Value = GlobalEnums.AccountType.MONETARY Then
-
                 ' Currency Conversion
                 Dim conversionLI = currenciesConversionIdItemDict(Controller.ReadAccount(account_id, ACCOUNT_CONVERSION_OPTION_VARIABLE))
                 CurrencyConversionComboBox.SelectedItem = conversionLI
-
-                ' Consolidation Option
-                Dim consolidationLI = consoOptionIdItemDict(Controller.ReadAccount(account_id, ACCOUNT_CONSOLIDATION_OPTION_VARIABLE))
-                ConsolidationOptionComboBox.SelectedItem = consolidationLI
-
             End If
+
+            ' Consolidation Option
+            Dim consolidationLI = consoOptionIdItemDict(Controller.ReadAccount(account_id, ACCOUNT_CONSOLIDATION_OPTION_VARIABLE))
+            ConsolidationOptionComboBox.SelectedItem = consolidationLI
 
 
             ' Formula TB
