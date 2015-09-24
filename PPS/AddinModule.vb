@@ -1848,7 +1848,6 @@ Public Class AddinModule
     ' Create GRS Conctroler and display
     Private Sub AssociateGRSControler(ByRef p_mustUpdateInputs As Boolean)
 
-
         GlobalVariables.APPS.Interactive = False
         Dim ctrl As ADXRibbonItem = AddButtonToDropDown(WSCB, GlobalVariables.APPS.ActiveSheet.name, GlobalVariables.APPS.ActiveSheet.name)
         loadDropDownsSubmissionButtons()

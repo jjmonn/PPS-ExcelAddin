@@ -62,7 +62,8 @@ Friend Class DataGridViewsUtil
 
         EntitiesTokenNamesDict = GlobalVariables.Entities.GetEntitiesDictionary(ID_VARIABLE, NAME_VARIABLE)
         AccountNamesKeysDic = GlobalVariables.Accounts.GetAccountsDictionary(NAME_VARIABLE, ID_VARIABLE)
-        ' currencies_symbol_dict = GlobalVariables.Currencies.GetCurrenciesDict(CURRENCIES_KEY_VARIABLE, CURRENCIES_SYMBOL_VARIABLE)
+        currencies_symbol_dict = GlobalVariables.Currencies.GetCurrenciesDict(ID_VARIABLE, CURRENCY_SYMBOL_VARIABLE)
+
 
     End Sub
 
@@ -85,85 +86,82 @@ Friend Class DataGridViewsUtil
     End Sub
 
     ' vDgv Display After Populating ' note controlling ui2 specificity !!
-    Friend Sub FormatDGVs(ByRef tabsControl As TabControl, _
-                                    ByRef currency As String)
+    Friend Sub FormatDGVs(ByRef vDGV As vDataGridView, _
+                          ByRef currency As Int32)
 
         ' priority normal => implement format CRUD
         '     Dim InputsFormatsDictionary = FormatsMapping.GetFormatTable(INPUT_FORMAT_CODE)
         Dim formatCode, account_id, fmtStr As String
         Dim indent As Int32
-        For Each tab_ As TabPage In tabsControl.TabPages
-            Dim vDgv As vDataGridView = tab_.Controls(0)
-            For Each row In vDgv.RowsHierarchy.Items
-                formatCode = GlobalVariables.Accounts.accounts_hash(AccountNamesKeysDic.Item(row.Caption))(ACCOUNT_FORMAT_VARIABLE)
-                account_id = AccountNamesKeysDic.Item(row.Caption)
+        For Each row In vDGV.RowsHierarchy.Items
+            formatCode = GlobalVariables.Accounts.accounts_hash(AccountNamesKeysDic.Item(row.Caption))(ACCOUNT_FORMAT_VARIABLE)
+            account_id = AccountNamesKeysDic.Item(row.Caption)
 
-                Dim HANStyle As VIBlend.Utilities.HierarchyItemStyle = GridTheme.GetDefaultTheme(vDgv.VIBlendTheme).HierarchyItemStyleNormal
-                Dim HASStyle As VIBlend.Utilities.HierarchyItemStyle = GridTheme.GetDefaultTheme(vDgv.VIBlendTheme).HierarchyItemStyleSelected
-                Dim HENStyle As VIBlend.Utilities.HierarchyItemStyle = GridTheme.GetDefaultTheme(ENTITIES_ROWS_THEME).HierarchyItemStyleNormal
-                Dim HESStyle As VIBlend.Utilities.HierarchyItemStyle = GridTheme.GetDefaultTheme(ENTITIES_ROWS_THEME).HierarchyItemStyleSelected
-                Dim CAStyle As GridCellStyle = GridTheme.GetDefaultTheme(vDgv.VIBlendTheme).GridCellStyle
-                Dim CEStyle As GridCellStyle = GridTheme.GetDefaultTheme(ENTITIES_ROWS_THEME).GridCellStyle
+            Dim HANStyle As VIBlend.Utilities.HierarchyItemStyle = GridTheme.GetDefaultTheme(vDGV.VIBlendTheme).HierarchyItemStyleNormal
+            Dim HASStyle As VIBlend.Utilities.HierarchyItemStyle = GridTheme.GetDefaultTheme(vDGV.VIBlendTheme).HierarchyItemStyleSelected
+            Dim HENStyle As VIBlend.Utilities.HierarchyItemStyle = GridTheme.GetDefaultTheme(ENTITIES_ROWS_THEME).HierarchyItemStyleNormal
+            Dim HESStyle As VIBlend.Utilities.HierarchyItemStyle = GridTheme.GetDefaultTheme(ENTITIES_ROWS_THEME).HierarchyItemStyleSelected
+            Dim CAStyle As GridCellStyle = GridTheme.GetDefaultTheme(vDGV.VIBlendTheme).GridCellStyle
+            Dim CEStyle As GridCellStyle = GridTheme.GetDefaultTheme(ENTITIES_ROWS_THEME).GridCellStyle
 
-                HANStyle.Font = New System.Drawing.Font(vDgv.Font.FontFamily, BASIC_DGV_REPORT_FONT_SIZE)
-                HASStyle.Font = New System.Drawing.Font(vDgv.Font.FontFamily, BASIC_DGV_REPORT_FONT_SIZE)
-                HENStyle.Font = New System.Drawing.Font(vDgv.Font.FontFamily, BASIC_DGV_REPORT_FONT_SIZE)
-                HESStyle.Font = New System.Drawing.Font(vDgv.Font.FontFamily, BASIC_DGV_REPORT_FONT_SIZE)
-                CAStyle.Font = New System.Drawing.Font(vDgv.Font.FontFamily, BASIC_DGV_REPORT_FONT_SIZE)
-                CEStyle.Font = New System.Drawing.Font(vDgv.Font.FontFamily, BASIC_DGV_REPORT_FONT_SIZE)
+            HANStyle.Font = New System.Drawing.Font(vDGV.Font.FontFamily, BASIC_DGV_REPORT_FONT_SIZE)
+            HASStyle.Font = New System.Drawing.Font(vDGV.Font.FontFamily, BASIC_DGV_REPORT_FONT_SIZE)
+            HENStyle.Font = New System.Drawing.Font(vDGV.Font.FontFamily, BASIC_DGV_REPORT_FONT_SIZE)
+            HESStyle.Font = New System.Drawing.Font(vDGV.Font.FontFamily, BASIC_DGV_REPORT_FONT_SIZE)
+            CAStyle.Font = New System.Drawing.Font(vDGV.Font.FontFamily, BASIC_DGV_REPORT_FONT_SIZE)
+            CEStyle.Font = New System.Drawing.Font(vDGV.Font.FontFamily, BASIC_DGV_REPORT_FONT_SIZE)
 
-                ' priority normal => implement format CRUD
-                'priority high !!!!!!!!!!!!!!!!!!!!
-                'If InputsFormatsDictionary(formatCode)(FORMAT_BOLD_VARIABLE) = 1 Then
-                '    HANStyle.Font = New System.Drawing.Font(HANStyle.Font.FontFamily, BASIC_DGV_REPORT_FONT_SIZE, FontStyle.Bold)
-                '    HASStyle.Font = New System.Drawing.Font(HASStyle.Font.FontFamily, BASIC_DGV_REPORT_FONT_SIZE, FontStyle.Bold)
-                '    CAStyle.Font = New System.Drawing.Font(CAStyle.Font.FontFamily, BASIC_DGV_REPORT_FONT_SIZE, FontStyle.Bold)
-                'End If
-                'If InputsFormatsDictionary(formatCode)(FORMAT_ITALIC_VARIABLE) = 1 Then
-                '    HANStyle.Font = New System.Drawing.Font(HANStyle.Font.FontFamily, BASIC_DGV_REPORT_FONT_SIZE, FontStyle.Italic)
-                '    HASStyle.Font = New System.Drawing.Font(HASStyle.Font.FontFamily, BASIC_DGV_REPORT_FONT_SIZE, FontStyle.Italic)
-                '    CAStyle.Font = New System.Drawing.Font(CAStyle.Font.FontFamily, BASIC_DGV_REPORT_FONT_SIZE, FontStyle.Italic)
-                'End If
+            ' priority normal => implement format CRUD
+            'priority high !!!!!!!!!!!!!!!!!!!!
+            'If InputsFormatsDictionary(formatCode)(FORMAT_BOLD_VARIABLE) = 1 Then
+            '    HANStyle.Font = New System.Drawing.Font(HANStyle.Font.FontFamily, BASIC_DGV_REPORT_FONT_SIZE, FontStyle.Bold)
+            '    HASStyle.Font = New System.Drawing.Font(HASStyle.Font.FontFamily, BASIC_DGV_REPORT_FONT_SIZE, FontStyle.Bold)
+            '    CAStyle.Font = New System.Drawing.Font(CAStyle.Font.FontFamily, BASIC_DGV_REPORT_FONT_SIZE, FontStyle.Bold)
+            'End If
+            'If InputsFormatsDictionary(formatCode)(FORMAT_ITALIC_VARIABLE) = 1 Then
+            '    HANStyle.Font = New System.Drawing.Font(HANStyle.Font.FontFamily, BASIC_DGV_REPORT_FONT_SIZE, FontStyle.Italic)
+            '    HASStyle.Font = New System.Drawing.Font(HASStyle.Font.FontFamily, BASIC_DGV_REPORT_FONT_SIZE, FontStyle.Italic)
+            '    CAStyle.Font = New System.Drawing.Font(CAStyle.Font.FontFamily, BASIC_DGV_REPORT_FONT_SIZE, FontStyle.Italic)
+            'End If
 
-                '' Colors 
-                'If Not IsDBNull(InputsFormatsDictionary(formatCode)(FORMAT_TEXT_COLOR_VARIABLE)) Then
-                '    CAStyle.TextColor = System.Drawing.Color.FromArgb(InputsFormatsDictionary(formatCode)(FORMAT_TEXT_COLOR_VARIABLE))
-                'End If
-                'If Not IsDBNull(InputsFormatsDictionary(formatCode)(FORMAT_BCKGD_VARIABLE)) Then
-                '    CAStyle.FillStyle = New FillStyleSolid(System.Drawing.Color.FromArgb(InputsFormatsDictionary(formatCode)(FORMAT_BCKGD_VARIABLE)))
-                'End If
+            '' Colors 
+            'If Not IsDBNull(InputsFormatsDictionary(formatCode)(FORMAT_TEXT_COLOR_VARIABLE)) Then
+            '    CAStyle.TextColor = System.Drawing.Color.FromArgb(InputsFormatsDictionary(formatCode)(FORMAT_TEXT_COLOR_VARIABLE))
+            'End If
+            'If Not IsDBNull(InputsFormatsDictionary(formatCode)(FORMAT_BCKGD_VARIABLE)) Then
+            '    CAStyle.FillStyle = New FillStyleSolid(System.Drawing.Color.FromArgb(InputsFormatsDictionary(formatCode)(FORMAT_BCKGD_VARIABLE)))
+            'End If
 
-                Select Case (GlobalVariables.Accounts.accounts_hash(account_id)(ACCOUNT_TYPE_VARIABLE))
-                    ' nombe de chiffres après la virgule à variabiliser -> settings !!!!
-                    Case "MO" : fmtStr = "{0:" & currencies_symbol_dict(currency) & "#,##0;(" & currencies_symbol_dict(currency) & "#,##0)}"
-                    Case "RA" : fmtStr = "{0:P}"        ' put this in a table ?
-                    Case "OP" : fmtStr = "{0:N}"        ' further evolution set unit ?
-                    Case "NU" : fmtStr = "{0:N2}"
-                    Case Else : fmtStr = "{0:C0}"
-                End Select
+            Select Case (GlobalVariables.Accounts.accounts_hash(account_id)(ACCOUNT_TYPE_VARIABLE))
+                ' nombe de chiffres après la virgule à variabiliser -> settings !!!!
+                Case GlobalEnums.AccountType.MONETARY : fmtStr = "{0:" & currencies_symbol_dict(currency) & "#,##0;(" & currencies_symbol_dict(currency) & "#,##0)}"
+                Case GlobalEnums.AccountType.PERCENTAGE : fmtStr = "{0:P}"        ' put this in a table ?
+                Case GlobalEnums.AccountType.NUMBER : fmtStr = "{0:N}"        ' further evolution set unit ?
+                Case Else : fmtStr = "{0:C0}"
+            End Select
 
-                '      indent = InputsFormatsDictionary(formatCode)(FORMAT_INDENT_VARIABLE)
-                If row.ParentItem Is Nothing Then
-                    format_row(row, formatCode, fmtStr, CAStyle, HANStyle, HASStyle, indent, CAStyle, CEStyle, HANStyle, HASStyle, HENStyle, HESStyle)
-                Else
-                    format_row(row, formatCode, fmtStr, CEStyle, HENStyle, HESStyle, indent, CAStyle, CEStyle, HANStyle, HASStyle, HENStyle, HESStyle)
-                End If
-            Next
-
-            If vDgv.ColumnsHierarchy.Items(0).Items.Count = 0 Then
-                For Each item In vDgv.ColumnsHierarchy.Items
-                    item.Width = FIXED_SINGLE_HIERARCHY_COLUMN_WIDTH
-                Next
+            '      indent = InputsFormatsDictionary(formatCode)(FORMAT_INDENT_VARIABLE)
+            If row.ParentItem Is Nothing Then
+                format_row(row, formatCode, fmtStr, CAStyle, HANStyle, HASStyle, indent, CAStyle, CEStyle, HANStyle, HASStyle, HENStyle, HESStyle)
             Else
-                vDgv.ColumnsHierarchy.ExpandAllItems()
-                For Each item In vDgv.ColumnsHierarchy.Items
-                    AdjustChildrenHierarchyItemSize(item)
-                Next
+                format_row(row, formatCode, fmtStr, CEStyle, HENStyle, HESStyle, indent, CAStyle, CEStyle, HANStyle, HASStyle, HENStyle, HESStyle)
             End If
-            vDgv.RowsHierarchy.AutoResize(AutoResizeMode.FIT_ALL)
-            ' vdgv.ColumnsHierarchy.AutoStretchColumns = True
-            vDgv.Refresh()
         Next
+
+        If vDGV.ColumnsHierarchy.Items(0).Items.Count = 0 Then
+            For Each item In vDGV.ColumnsHierarchy.Items
+                item.Width = FIXED_SINGLE_HIERARCHY_COLUMN_WIDTH
+            Next
+        Else
+            vDGV.ColumnsHierarchy.ExpandAllItems()
+            For Each item In vDGV.ColumnsHierarchy.Items
+                AdjustChildrenHierarchyItemSize(item)
+            Next
+        End If
+        '  vDgv.RowsHierarchy.AutoResize(AutoResizeMode.FIT_ALL)
+        ' vdgv.ColumnsHierarchy.AutoStretchColumns = True
+        '   vDgv.Refresh()
+
 
     End Sub
 
@@ -835,8 +833,8 @@ Friend Class DataGridViewsUtil
 
 #Region "Format vDGV -> Excel"
 
-    Protected Friend Shared Sub FormatRangeFromGridCell(ByRef xlRange As Excel.Range, _
-                                                        ByRef item As HierarchyItem)
+    Friend Shared Sub FormatRangeFromGridCell(ByRef xlRange As Excel.Range, _
+                                              ByRef item As HierarchyItem)
 
         '   xlRange.NumberFormat = "# ##0 €"
         Select Case item.CellsFormatString
@@ -853,7 +851,7 @@ Friend Class DataGridViewsUtil
             xlRange.Font.Italic = item.CellsStyle.Font.Italic
         Catch ex As Exception
         End Try
-      
+
     End Sub
 
     Protected Friend Shared Sub FormatRangeFromHierarchyItem(ByRef xlRange As Excel.Range, _

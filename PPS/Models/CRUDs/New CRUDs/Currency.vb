@@ -215,7 +215,7 @@ Friend Class Currency
 
         Dim tmpHT As New Hashtable
         For Each id In currencies_hash.Keys
-            tmpHT(currencies_hash(id)(Key)) = currencies_hash(id)(Value)
+            tmpHT(CInt(id)) = currencies_hash(id)(Value)
         Next
         Return tmpHT
 
