@@ -47,7 +47,7 @@ Friend Class NewRatesVersionUI
             m_controller.CreateVersion(m_parentId, _
                                          name, 0, _
                                          StartPeriodNUD.Value, _
-                                         NBPeriodsNUD.Value)
+                                         NBPeriodsNUD.Value * 12)
             Me.Hide()
         Else
             MsgBox("The Name cannot exceed " & NAMES_MAX_LENGTH & " characters")
