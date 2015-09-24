@@ -884,7 +884,7 @@ Friend Class ModelDataSet
 
     'End Sub
 
-    Private Sub RegisterDatasetCell(ByRef p_cell As Excel.Range, _
+    Private Sub RegisterDatasetCell(ByVal p_cell As Excel.Range, _
                                     ByRef p_entityName As String, _
                                     ByRef p_accountName As String, _
                                     ByRef p_period As String)

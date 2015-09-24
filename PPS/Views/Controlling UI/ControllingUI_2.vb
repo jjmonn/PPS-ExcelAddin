@@ -58,14 +58,20 @@ Friend Class ControllingUI_2
     Private row_index As Int32
     Private column_index As Int32
     Friend accountsTV As New vTreeView
+    Private SP1Distance As Single = 230
+    Private SP2Distance As Single = 900
+    '   Private m_formatsDictionary As New Dictionary(Of int32, Formats.FinancialBIFormat)
+    Private m_currenciesSymbol_dict As Hashtable
+
+
+#End Region
+
+#Region "Data Grid Views Items and Cells Formats"
 
     Private hierarchyItemNormalStyle As HierarchyItemStyle
     Private hierarchyItemSelectedStyle As HierarchyItemStyle
     Private hierarchyItemDisabledStyle As HierarchyItemStyle
-    Private CEStyle As GridCellStyle
-
-    Private SP1Distance As Single = 230
-    Private SP2Distance As Single = 900
+    Private GridCellStyleNormal As GridCellStyle
 
 #End Region
 
@@ -117,7 +123,7 @@ Friend Class ControllingUI_2
         Controller = New ControllingUIController(Me)
         GlobalVariables.Accounts.LoadAccountsTV(accountsTV)
         BackgroundWorker1.WorkerSupportsCancellation = True
-
+        m_currenciesSymbol_dict = GlobalVariables.Currencies.GetCurrenciesDict(ID_VARIABLE, CURRENCY_SYMBOL_VARIABLE)
 
         ' Init TabControl
         For Each node As vTreeNode In accountsTV.Nodes
@@ -212,8 +218,8 @@ Friend Class ControllingUI_2
 
     Private Sub DataMiningUI_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 
-        CEStyle = GridTheme.GetDefaultTheme(DGV_THEME).GridCellStyle
-        CEStyle.Font = New System.Drawing.Font(CEStyle.Font.FontFamily, My.Settings.dgvFontSize)
+        GridCellStyleNormal = GridTheme.GetDefaultTheme(DGV_THEME).GridCellStyle
+        GridCellStyleNormal.Font = New System.Drawing.Font(GridCellStyleNormal.Font.FontFamily, My.Settings.dgvFontSize)
 
         For Each tab_ As vTabPage In DGVsControlTab.TabPages
             DGVsControlTab.SelectedTab = tab_
@@ -307,15 +313,25 @@ Friend Class ControllingUI_2
 
     Friend Sub FormatDGVItem(ByRef item As HierarchyItem)
 
+        Dim currencyId As Int32 = leftPane_control.currenciesCLB.SelectedItem.Value
         item.HierarchyItemStyleNormal = hierarchyItemNormalStyle
         item.HierarchyItemStyleSelected = hierarchyItemSelectedStyle
         item.HierarchyItemStyleDisabled = hierarchyItemDisabledStyle
 
-        item.CellsStyle = CEStyle
+        item.CellsStyle = GridCellStyleNormal
         item.CellsTextAlignment = System.Drawing.ContentAlignment.MiddleRight
-
-        ' Manage cells formats according to account type, currencies and units
-        'priority normal
+        If item.IsRowsHierarchyItem Then
+            Dim typeId As Int32 = Controller.GetAccountFormatFromId(item.ItemValue)
+            If typeId <> 0 Then
+                Select Case typeId
+                    Case GlobalEnums.AccountType.MONETARY : item.CellsFormatString = "{0:" & m_currenciesSymbol_dict(currencyId) & "#,##0;(" & m_currenciesSymbol_dict(currencyId) & "#,##0)}" ' m_currenciesSymbol_dict(currencyId) & "#,##0.00;(" & m_currenciesSymbol_dict(currencyId) & "#,##0.00)"
+                    Case GlobalEnums.AccountType.PERCENTAGE : item.CellsFormatString = "{0:P}" '"0.00%"        ' put this in a table ?
+                    Case GlobalEnums.AccountType.NUMBER : item.CellsFormatString = "{0:N2}" '"#,##0.00"
+                    Case GlobalEnums.AccountType.DATE_ : item.CellsFormatString = "{0:yyyy/MMMM/dd}"  '"d-mmm-yy" ' d-mmm-yy
+                    Case Else : item.CellsFormatString = "{0:N}"
+                End Select
+            End If
+        End If
 
         If item.IsColumnsHierarchyItem _
        AndAlso item.Caption.Length > 20 Then
@@ -703,7 +719,6 @@ Friend Class ControllingUI_2
 
     End Sub
 
-
     Delegate Sub DGVFormattingAttemp_Delegate()
     Friend Sub FormatDGV_ThreadSafe()
 
@@ -711,6 +726,7 @@ Friend Class ControllingUI_2
             Dim MyDelegate As New DGVFormattingAttemp_Delegate(AddressOf FormatDGV_ThreadSafe)
             Me.Invoke(MyDelegate, New Object() {})
         Else
+            Dim dgvFormatter As New DataGridViewsUtil
             For Each tab_ As vTabPage In DGVsControlTab.TabPages
                 Dim dgv As vDataGridView = tab_.Controls(0)
                 dgv.Select()
@@ -723,6 +739,10 @@ Friend Class ControllingUI_2
                 dgv.RowsHierarchy.CompactStyleRenderingEnabled = True
                 dgv.ColumnsHierarchy.AutoStretchColumns = True
                 dgv.ColumnsHierarchy.ExpandAllItems()
+
+                ' attention !!! test
+                '    dgvFormatter.FormatDGVs(dgv, 34)
+
                 dgv.Update()
                 dgv.Refresh()
             Next

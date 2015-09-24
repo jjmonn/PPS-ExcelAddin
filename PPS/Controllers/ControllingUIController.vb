@@ -398,6 +398,7 @@ Friend Class ControllingUIController
                 Else
                     subColumn = column.Items.Add(valueNode.Text)
                 End If
+                subColumn.ItemValue = 0
                 HideHiearchyItemIfVComp(subColumn, _
                                         dimensionNode, _
                                         valueNode)
@@ -405,7 +406,6 @@ Friend Class ControllingUIController
                 ' Style => will go in utilities !!! priority normal
                 ' ------------------------------------------------------------------------------
                 View.FormatDGVItem(subColumn)
-                subColumn.CellsFormatString = "{0:N}"
                 subColumn.TextAlignment = Drawing.ContentAlignment.MiddleCenter
                 RegisterHierarchyItemDimensions(subColumn)
                 ' ------------------------------------------------------------------------------
@@ -446,6 +446,7 @@ Friend Class ControllingUIController
                 Else
                     subRow = row.Items.Add(valueNode.Text)
                 End If
+                subRow.ItemValue = display_axis_ht(GlobalEnums.DataMapAxis.ACCOUNTS)
                 subRow.CellsDataSource = GridCellDataSource.Virtual
                 View.FormatDGVItem(subRow)
                 HideHiearchyItemIfVComp(subRow, _
@@ -618,10 +619,9 @@ Friend Class ControllingUIController
                 Else
                     args.CellValue = ""
                 End If
-
             End If
         End If
-    
+
     End Sub
 
 #End Region
@@ -833,6 +833,15 @@ Friend Class ControllingUIController
 
         Dim sepIndex = versionId.IndexOf(Computer.TOKEN_SEPARATOR)
         Return Right(versionId, Len(versionId) - sepIndex - 1)
+
+    End Function
+
+    Friend Function GetAccountFormatFromId(ByRef p_accountId As Int32) As Int32
+
+        If GlobalVariables.Accounts.accounts_hash.ContainsKey(p_accountId) Then
+            Return GlobalVariables.Accounts.accounts_hash(p_accountId)(ACCOUNT_TYPE_VARIABLE)
+        End If
+        Return 0
 
     End Function
 
