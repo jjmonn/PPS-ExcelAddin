@@ -39,9 +39,8 @@ Partial Class GroupsControl
         '
         'EntitiesPanel
         '
-        Me.EntitiesPanel.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.EntitiesPanel.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.EntitiesPanel.Location = New System.Drawing.Point(247, 0)
         Me.EntitiesPanel.Name = "EntitiesPanel"
         Me.EntitiesPanel.Size = New System.Drawing.Size(303, 429)

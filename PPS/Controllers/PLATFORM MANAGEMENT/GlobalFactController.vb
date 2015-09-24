@@ -17,6 +17,7 @@ Friend Class GlobalFactController
     Friend m_currentVersionId As Int32
     Friend m_MonthsIdList As List(Of Int32)
     Private m_newFactVersionUI As NewGlobalFactVersionUI
+    Private m_newFactUI As NewGlobalFactUI
 
 #End Region
 
@@ -29,6 +30,7 @@ Friend Class GlobalFactController
         m_view = New GlobalFactUI(Me, m_versionTV)
         m_currentVersionId = GlobalVariables.Versions.versions_hash(My.Settings.version_id)(EX_RATES_RATE_VERSION)
         m_newFactVersionUI = New NewGlobalFactVersionUI(Me)
+        m_newFactUI = New NewGlobalFactUI(Me)
 
         AddHandler GlobalVariables.GlobalFactsVersions.Read, AddressOf GlobalFactsVersionUpdateFromServer
         AddHandler GlobalVariables.GlobalFactsVersions.CreationEvent, AddressOf AfterGlobalFactsVersionCreate
@@ -134,10 +136,18 @@ Friend Class GlobalFactController
 
     End Sub
 
+    Friend Sub CreateFact(ByRef p_name As String)
+
+        Dim tmpHT As New Hashtable
+        tmpHT.Add(NAME_VARIABLE, p_name)
+        GlobalVariables.GlobalFacts.CMSG_CREATE_GLOBAL_FACT(tmpHT)
+
+    End Sub
+
     Friend Function DeleteRatesVersion(ByRef p_ratesVersionId As Int32) As Boolean
 
         If p_ratesVersionId = m_currentVersionId Then
-            m_currentVersionId = ""
+            m_currentVersionId = 0
         End If
         GlobalVariables.GlobalFactsVersions.CMSG_DELETE_GLOBAL_FACT_VERSION(p_ratesVersionId)
         Return True
@@ -167,10 +177,17 @@ Friend Class GlobalFactController
 
     End Sub
 
+    Friend Sub ShowNewFact()
+
+        m_newFactUI.Show()
+
+    End Sub
+
 #Region "Events"
 
     Private Sub GlobalFactsVersionUpdateFromServer(ByRef p_status As Boolean, ByRef p_versionHt As Hashtable)
 
+        If m_view Is Nothing Then Exit Sub
         If p_status = True Then
             m_view.TVUpdate(p_versionHt(ID_VARIABLE), _
                             p_versionHt(PARENT_ID_VARIABLE), _
@@ -194,6 +211,7 @@ Friend Class GlobalFactController
     End Sub
 
     Private Sub AfterGlobalFactsVersionDelete(ByRef p_status As Boolean, ByRef p_id As Int32)
+        If m_view Is Nothing Then Exit Sub
 
         If p_status = True Then
             m_view.TVNodeDelete(p_id)

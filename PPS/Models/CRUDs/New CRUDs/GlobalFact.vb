@@ -1,5 +1,6 @@
 ﻿Imports System.Collections
 Imports System.Collections.Generic
+Imports System.Windows.Forms
 
 
 
@@ -145,6 +146,13 @@ Friend Class GlobalFact
 
 #Region "Utilities"
 
+    Friend Function GetFactsHashTable() As Hashtable
+        Dim ht As New Hashtable
+        For Each id In globalFact_hash.Keys
+            ht(globalFact_hash(id)(NAME_VARIABLE)) = globalFact_hash(id)(ID_VARIABLE)
+        Next
+        Return ht
+    End Function
     Friend Shared Sub GetGlobalFactHTFromPacket(ByRef packet As ByteBuffer, ByRef globalFact_ht As Hashtable)
 
         globalFact_ht(ID_VARIABLE) = packet.ReadInt32()
@@ -171,6 +179,10 @@ Friend Class GlobalFact
         Return periodList
 
     End Function
+
+    Friend Sub LoadGlobalFactsTV(ByRef p_tv As TreeView)
+        TreeViewsUtilities.LoadTreeview(p_tv, globalFact_hash)
+    End Sub
 
 #End Region
 

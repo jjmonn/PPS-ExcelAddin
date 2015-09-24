@@ -32,11 +32,13 @@ Friend Class AccountsController
     Private View As AccountsView
     Private NewAccountView As NewAccountUI
     Private AccountsTV As New TreeView
+    Private m_globalFactsTV As New TreeView
     Private PlatformMGTUI As PlatformMGTGeneralUI
 
 
     ' Variables
     Friend accountsNameKeysDictionary As Hashtable
+    Friend factsNameKeysDictionary As Hashtable
     Friend positionsDictionary As New Dictionary(Of Int32, Double)
     Private dependant_account_id As String
     Friend FTypesToBeTested As New List(Of Int32)
@@ -54,7 +56,8 @@ Friend Class AccountsController
     Friend Sub New()
 
         GlobalVariables.Accounts.LoadAccountsTV(AccountsTV)
-        View = New AccountsView(Me, AccountsTV)
+        GlobalVariables.GlobalFacts.LoadGlobalFactsTV(m_globalFactsTV)
+        View = New AccountsView(Me, AccountsTV, m_globalFactsTV)
         InstanceVariablesLoading()
         positionsDictionary = TreeViewsUtilities.GeneratePositionsDictionary(AccountsTV)
         FTypesToBeTested.Add(GlobalEnums.FormulaTypes.FIRST_PERIOD_INPUT)
@@ -70,8 +73,9 @@ Friend Class AccountsController
     Private Sub InstanceVariablesLoading()
 
         accountsNameKeysDictionary = GlobalVariables.Accounts.GetAccountsDictionary(NAME_VARIABLE, ID_VARIABLE)
+        factsNameKeysDictionary = GlobalVariables.GlobalFacts.GetFactsHashtable()
         NewAccountView = New NewAccountUI(View, Me)
-        FormulasTranslator = New FormulasTranslations(accountsNameKeysDictionary)
+        FormulasTranslator = New FormulasTranslations(accountsNameKeysDictionary, factsNameKeysDictionary)
 
     End Sub
 

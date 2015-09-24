@@ -54,8 +54,20 @@ Friend Class GlobalFactUI
         AddHandler m_dataGridView.CellValueChanging, AddressOf DataGridView_CellValueChanging
         AddHandler m_versionsTV.KeyPress, AddressOf VersionsTV_KeyPress
         AddHandler m_versionsTV.MouseDoubleClick, AddressOf VersionsTV_MouseDoubleClick
+        AddHandler GlobalVariables.GlobalFacts.Read, AddressOf ReloadUI
         '     AddHandler m_ratesVersionsTV.MouseClick, AddressOf Rates_versionsTV_MouseClick
 
+    End Sub
+
+    Delegate Sub ReloadUI_Delegate()
+    Private Sub ReloadUI()
+        If InvokeRequired Then
+            Dim MyDelegate As New ReloadUI_Delegate(AddressOf ReloadUI)
+            Me.Invoke(MyDelegate, New Object() {})
+        Else
+            If m_versionsTV.SelectedNode Is Nothing Then Exit Sub
+            ChangeRatesVersionDisplayRequest(m_versionsTV.SelectedNode.Value)
+        End If
     End Sub
 
     Private Sub ManagementUI_Load(sender As Object, e As EventArgs) Handles MyBase.Load
@@ -137,7 +149,7 @@ Friend Class GlobalFactUI
 
 #Region "Versions Right Click Menu"
 
-    Private Sub Select_version_Click(sender As Object, e As EventArgs) Handles select_version.Click, DisplayRatesToolStripMenuItem.Click
+    Private Sub Select_version_Click(sender As Object, e As EventArgs) Handles select_version.Click
 
         If (m_versionsTV.SelectedNode Is Nothing) Then Exit Sub
         If m_controller.IsFolderVersion(m_versionsTV.SelectedNode.Value) = False Then
@@ -198,6 +210,10 @@ Friend Class GlobalFactUI
 
     End Sub
 
+    Private Sub CreateNewFact_Click(sender As Object, e As EventArgs) Handles CreateNewFact.Click
+        m_controller.ShowNewFact()
+    End Sub
+
 #End Region
 
 #Region "m_ratesDataGridView Right Click Menu"
@@ -236,6 +252,7 @@ Friend Class GlobalFactUI
         End If
 
     End Sub
+
 
     Private Sub VersionsTV_MouseDoubleClick(sender As Object, e As MouseEventArgs)
 
@@ -283,6 +300,7 @@ Friend Class GlobalFactUI
     Private Sub InitColumns(ByRef currenciesList As List(Of Int32))
 
         m_dataGridView.ColumnsHierarchy.Clear()
+        m_columnsVariableItemDictionary.Clear()
 
         For Each fact In m_controller.GetGlobalFactList()
             Dim column As HierarchyItem = m_dataGridView.ColumnsHierarchy.Items.Add(fact.Value(NAME_VARIABLE))
@@ -335,7 +353,5 @@ Friend Class GlobalFactUI
     End Sub
 
 #End Region
-
-
 
 End Class

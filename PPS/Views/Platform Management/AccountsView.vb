@@ -30,18 +30,19 @@ Friend Class AccountsView
 #Region "Instance Variables"
 
     ' Objects
-    Friend Controller As AccountsController
-    Friend AccountsTV As TreeView
-    Friend current_node As TreeNode
+    Friend m_controller As AccountsController
+    Friend m_accountTV As TreeView
+    Friend m_globalFactsTV As TreeView
+    Friend m_currentNode As TreeNode
 
     ' Variables
-    Private formulasTypesIdItemDict As New Dictionary(Of Int32, ListItem)
-    Private formatsIdItemDict As New Dictionary(Of Int32, ListItem)
-    Private currenciesConversionIdItemDict As New Dictionary(Of Int32, ListItem)
-    Private consoOptionIdItemDict As New Dictionary(Of Int32, ListItem)
-    Private isRevertingFType As Boolean = False
-    Private isDisplayingAttributes As Boolean
-    Private drag_and_drop As Boolean = False
+    Private m_formulasTypesIdItemDict As New Dictionary(Of Int32, ListItem)
+    Private m_formatsIdItemDict As New Dictionary(Of Int32, ListItem)
+    Private m_currenciesConversionIdItemDict As New Dictionary(Of Int32, ListItem)
+    Private m_consoOptionIdItemDict As New Dictionary(Of Int32, ListItem)
+    Private m_isRevertingFType As Boolean = False
+    Private m_isDisplayingAttributes As Boolean
+    Private m_dragAndDrop As Boolean = False
 
     ' Constants
     Private Const MARGIN_SIZE As Integer = 15
@@ -54,39 +55,52 @@ Friend Class AccountsView
 
 #Region "Initialization"
 
-    Friend Sub New(ByRef input_controller As AccountsController, _
-                   ByRef input_accountTV As TreeView)
+    Friend Sub New(ByRef p_inputController As AccountsController, _
+                   ByRef p_inputAccountTV As TreeView, ByRef p_inputGlobalFactsTv As TreeView)
 
         ' This call is required by the designer.
         InitializeComponent()
 
         ' Add any initialization after the InitializeComponent() call.
-        Controller = input_controller
-        AccountsTV = input_accountTV
+        m_controller = p_inputController
+        m_accountTV = p_inputAccountTV
+        m_globalFactsTV = p_inputGlobalFactsTv
         AccountsTVInit()
+        GlobalFactsTVInit()
         ComboBoxesInit()
 
     End Sub
 
+    Private Sub TVInit(ByRef p_tv As TreeView)
+        p_tv.ContextMenuStrip = TVRCM
+        p_tv.Dock = DockStyle.Fill
+        p_tv.ImageList = accountsIL
+        p_tv.AllowDrop = True
+        p_tv.LabelEdit = False
+        p_tv.CollapseAll()
+    End Sub
+
     Private Sub AccountsTVInit()
 
+        TVInit(m_accountTV)
+        AccountsTVPanel.Controls.Add(m_accountTV)
 
-        AccountsTVPanel.Controls.Add(AccountsTV)
-        AccountsTV.ContextMenuStrip = TVRCM
-        AccountsTV.Dock = DockStyle.Fill
-        AccountsTV.ImageList = accountsIL
-        AccountsTV.AllowDrop = True
-        AccountsTV.LabelEdit = False
-        AccountsTV.CollapseAll()
+        AddHandler m_accountTV.AfterSelect, AddressOf AccountsTV_AfterSelect
+        AddHandler m_accountTV.KeyDown, AddressOf AccountsTV_KeyDown
+        AddHandler m_accountTV.NodeMouseClick, AddressOf AccountsTV_NodeMouseClick
+        AddHandler m_accountTV.NodeMouseDoubleClick, AddressOf AccountsTV_NodeMouseDoubleClick
+        AddHandler m_accountTV.DragDrop, AddressOf AccountsTV_DragDrop
+        AddHandler m_accountTV.DragOver, AddressOf AccountsTV_DragOver
+        AddHandler m_accountTV.ItemDrag, AddressOf AccountsTV_ItemDrag
+        AddHandler m_accountTV.DragEnter, AddressOf AccountsTV_DragEnter
+        AddHandler m_globalFactsTV.NodeMouseDoubleClick, AddressOf GlobalFactTV_NodeMouseDoubleClick
 
-        AddHandler AccountsTV.AfterSelect, AddressOf AccountsTV_AfterSelect
-        AddHandler AccountsTV.KeyDown, AddressOf AccountsTV_KeyDown
-        AddHandler AccountsTV.NodeMouseClick, AddressOf AccountsTV_NodeMouseClick
-        AddHandler AccountsTV.NodeMouseDoubleClick, AddressOf AccountsTV_NodeMouseDoubleClick
-        AddHandler AccountsTV.DragDrop, AddressOf AccountsTV_DragDrop
-        AddHandler AccountsTV.DragOver, AddressOf AccountsTV_DragOver
-        AddHandler AccountsTV.ItemDrag, AddressOf AccountsTV_ItemDrag
-        AddHandler AccountsTV.DragEnter, AddressOf AccountsTV_DragEnter
+    End Sub
+
+    Private Sub GlobalFactsTVInit()
+
+        TVInit(m_globalFactsTV)
+        GlobalFactsPanel.Controls.Add(m_globalFactsTV)
 
     End Sub
 
@@ -97,56 +111,56 @@ Friend Class AccountsView
         InputListItem.Text = "Input"
         InputListItem.Value = GlobalEnums.FormulaTypes.HARD_VALUE_INPUT
         FormulaTypeComboBox.Items.Add(InputListItem)
-        formulasTypesIdItemDict.Add(InputListItem.Value, InputListItem)
+        m_formulasTypesIdItemDict.Add(InputListItem.Value, InputListItem)
 
         Dim FormulaListItem As New ListItem
         FormulaListItem.Text = "Formula"
         FormulaListItem.Value = GlobalEnums.FormulaTypes.FORMULA
         FormulaTypeComboBox.Items.Add(FormulaListItem)
-        formulasTypesIdItemDict.Add(FormulaListItem.Value, FormulaListItem)
+        m_formulasTypesIdItemDict.Add(FormulaListItem.Value, FormulaListItem)
 
         Dim AggregationListItem As New ListItem
         AggregationListItem.Text = "Aggregation of Sub Accounts"
         AggregationListItem.Value = GlobalEnums.FormulaTypes.AGGREGATION_OF_SUB_ACCOUNTS
         FormulaTypeComboBox.Items.Add(AggregationListItem)
-        formulasTypesIdItemDict.Add(AggregationListItem.Value, AggregationListItem)
+        m_formulasTypesIdItemDict.Add(AggregationListItem.Value, AggregationListItem)
 
         Dim FirstPeriodInputListItem As New ListItem
         FirstPeriodInputListItem.Text = "First Period Input"
         FirstPeriodInputListItem.Value = GlobalEnums.FormulaTypes.FIRST_PERIOD_INPUT
         FormulaTypeComboBox.Items.Add(FirstPeriodInputListItem)
-        formulasTypesIdItemDict.Add(FirstPeriodInputListItem.Value, FirstPeriodInputListItem)
+        m_formulasTypesIdItemDict.Add(FirstPeriodInputListItem.Value, FirstPeriodInputListItem)
 
         Dim TitleListItem As New ListItem
         TitleListItem.Text = "Title"
         TitleListItem.Value = GlobalEnums.FormulaTypes.TITLE
         FormulaTypeComboBox.Items.Add(TitleListItem)
-        formulasTypesIdItemDict.Add(TitleListItem.Value, TitleListItem)
+        m_formulasTypesIdItemDict.Add(TitleListItem.Value, TitleListItem)
 
         ' Type
         Dim MonetaryFormatLI As New ListItem
         MonetaryFormatLI.Text = "Monetary"
         MonetaryFormatLI.Value = GlobalEnums.AccountType.MONETARY
         TypeComboBox.Items.Add(MonetaryFormatLI)
-        formatsIdItemDict.Add(MonetaryFormatLI.Value, MonetaryFormatLI)
+        m_formatsIdItemDict.Add(MonetaryFormatLI.Value, MonetaryFormatLI)
 
         Dim NormalFormatLI As New ListItem
         NormalFormatLI.Text = "Number"
         NormalFormatLI.Value = GlobalEnums.AccountType.NUMBER
         TypeComboBox.Items.Add(NormalFormatLI)
-        formatsIdItemDict.Add(NormalFormatLI.Value, NormalFormatLI)
+        m_formatsIdItemDict.Add(NormalFormatLI.Value, NormalFormatLI)
 
         Dim percentageFormatLI As New ListItem
         percentageFormatLI.Text = "Percentage"
         percentageFormatLI.Value = GlobalEnums.AccountType.PERCENTAGE
         TypeComboBox.Items.Add(percentageFormatLI)
-        formatsIdItemDict.Add(percentageFormatLI.Value, percentageFormatLI)
+        m_formatsIdItemDict.Add(percentageFormatLI.Value, percentageFormatLI)
 
         Dim DateFormatLI As New ListItem
         DateFormatLI.Text = "Date"
         DateFormatLI.Value = GlobalEnums.AccountType.DATE_
         TypeComboBox.Items.Add(DateFormatLI)
-        formatsIdItemDict.Add(DateFormatLI.Value, DateFormatLI)
+        m_formatsIdItemDict.Add(DateFormatLI.Value, DateFormatLI)
 
 
         ' Currencies Conversion
@@ -154,19 +168,19 @@ Friend Class AccountsView
         NoConversionLI.Text = "Non Converted"
         NoConversionLI.Value = GlobalEnums.ConversionOptions.NO_CONVERSION
         CurrencyConversionComboBox.Items.Add(NoConversionLI)
-        currenciesConversionIdItemDict.Add(NoConversionLI.Value, NoConversionLI)
+        m_currenciesConversionIdItemDict.Add(NoConversionLI.Value, NoConversionLI)
 
         Dim AverageRateLI As New ListItem
         AverageRateLI.Text = "Average Exchange Rate"
         AverageRateLI.Value = GlobalEnums.ConversionOptions.AVERAGE_RATE
         CurrencyConversionComboBox.Items.Add(AverageRateLI)
-        currenciesConversionIdItemDict.Add(AverageRateLI.Value, AverageRateLI)
+        m_currenciesConversionIdItemDict.Add(AverageRateLI.Value, AverageRateLI)
 
         Dim EndOfPeriodRateLI As New ListItem
         EndOfPeriodRateLI.Text = "End of Period Exchange Rate"
         EndOfPeriodRateLI.Value = GlobalEnums.ConversionOptions.END_OF_PERIOD_RATE
         CurrencyConversionComboBox.Items.Add(EndOfPeriodRateLI)
-        currenciesConversionIdItemDict.Add(EndOfPeriodRateLI.Value, EndOfPeriodRateLI)
+        m_currenciesConversionIdItemDict.Add(EndOfPeriodRateLI.Value, EndOfPeriodRateLI)
 
 
         ' Recomputation Option
@@ -174,17 +188,17 @@ Friend Class AccountsView
         AggregatedLI.Text = "Aggregated"
         AggregatedLI.Value = GlobalEnums.ConsolidationOptions.AGGREGATION
         ConsolidationOptionComboBox.Items.Add(AggregatedLI)
-        consoOptionIdItemDict.Add(AggregatedLI.Value, AggregatedLI)
+        m_consoOptionIdItemDict.Add(AggregatedLI.Value, AggregatedLI)
 
         Dim RecomputedLI As New ListItem
         RecomputedLI.Text = "Recomputed"
         RecomputedLI.Value = GlobalEnums.ConsolidationOptions.RECOMPUTATION
         ConsolidationOptionComboBox.Items.Add(RecomputedLI)
-        consoOptionIdItemDict.Add(RecomputedLI.Value, RecomputedLI)
+        m_consoOptionIdItemDict.Add(RecomputedLI.Value, RecomputedLI)
 
     End Sub
 
-  
+
 
 #End Region
 
@@ -206,16 +220,16 @@ Friend Class AccountsView
             Me.Invoke(MyDelegate, New Object() {account_id, account_parent_id, account_name, account_image})
         Else
             If account_parent_id = 0 Then
-                Dim new_node As TreeNode = AccountsTV.Nodes.Add(CStr(account_id), account_name, account_image, account_image)
+                Dim new_node As TreeNode = m_accountTV.Nodes.Add(CStr(account_id), account_name, account_image, account_image)
                 new_node.EnsureVisible()
             Else
-                Dim accounts() As TreeNode = AccountsTV.Nodes.Find(account_parent_id, True)
+                Dim accounts() As TreeNode = m_accountTV.Nodes.Find(account_parent_id, True)
                 If accounts.Length = 1 Then
                     Dim new_node As TreeNode = accounts(0).Nodes.Add(CStr(account_id), account_name, account_image, account_image)
                     new_node.EnsureVisible()
                 End If
             End If
-            AccountsTV.Refresh()
+            m_accountTV.Refresh()
         End If
 
     End Sub
@@ -227,10 +241,10 @@ Friend Class AccountsView
             Dim MyDelegate As New TVNodeDelete_Delegate(AddressOf TVNodeDelete)
             Me.Invoke(MyDelegate, New Object() {account_id})
         Else
-            Dim accountsNodes() As TreeNode = AccountsTV.Nodes.Find(account_id, True)
+            Dim accountsNodes() As TreeNode = m_accountTV.Nodes.Find(account_id, True)
             If accountsNodes.Length = 1 Then
                 accountsNodes(0).Remove()
-                AccountsTV.Refresh()
+                m_accountTV.Refresh()
             End If
         End If
 
@@ -246,8 +260,8 @@ Friend Class AccountsView
                                                                              AddSubAccountToolStripMenuItem.Click
 
         formulaEdit.Checked = False
-        If Not current_node Is Nothing Then
-            Controller.DisplayNewAccountView(current_node)
+        If Not m_currentNode Is Nothing Then
+            m_controller.DisplayNewAccountView(m_currentNode)
         Else
             MsgBox("Please Select Parent Account first.")
         End If
@@ -261,8 +275,8 @@ Friend Class AccountsView
         Dim newCategoryName As String = InputBox("Name of the New Tab: ", "Account Tab Creation", "")
         If newCategoryName <> "" Then
 
-            If Controller.AccountNameCheck(newCategoryName) = True Then
-                Controller.CreateAccount(0, _
+            If m_controller.AccountNameCheck(newCategoryName) = True Then
+                m_controller.CreateAccount(0, _
                                          newCategoryName, _
                                          GlobalEnums.FormulaTypes.TITLE, _
                                          "", _
@@ -272,7 +286,7 @@ Friend Class AccountsView
                                          TITLE_FORMAT_CODE, _
                                          GlobalEnums.FormulaTypes.TITLE, _
                                          1, _
-                                         AccountsTV.Nodes.Count)
+                                         m_accountTV.Nodes.Count)
             End If
         End If
 
@@ -295,7 +309,7 @@ Friend Class AccountsView
         End If
 
 TokensCheck:
-        Dim errorsList = Controller.CheckFormulaForUnkonwnTokens(formulastr)
+        Dim errorsList = m_controller.CheckFormulaForUnkonwnTokens(formulastr)
         If errorsList.Count > 0 Then
             Dim errorsStr As String = ""
             For Each errorItem As String In errorsList
@@ -308,7 +322,7 @@ TokensCheck:
         End If
 
 DependanciesCheck:
-        If Controller.InterdependancyTest = True Then
+        If m_controller.InterdependancyTest = True Then
             GoTo SubmitFormula
         Else
             Exit Sub
@@ -319,10 +333,10 @@ SubmitFormula:
                                                  "DataBase submission confirmation", _
                                                   MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question)
         If confirm = DialogResult.Yes Then
-            If Controller.accountsNameKeysDictionary.ContainsKey(Name_TB.Text) Then
+            If m_controller.accountsNameKeysDictionary.ContainsKey(Name_TB.Text) Then
                 formulaEdit.Checked = False
-                Dim accountId As Int32 = Controller.accountsNameKeysDictionary.Item(Name_TB.Text)
-                Controller.UpdateAccount(accountId, ACCOUNT_FORMULA_VARIABLE, Controller.GetCurrentParsedFormula)
+                Dim accountId As Int32 = m_controller.accountsNameKeysDictionary.Item(Name_TB.Text)
+                m_controller.UpdateAccount(accountId, ACCOUNT_FORMULA_VARIABLE, m_controller.GetCurrentParsedFormula)
             End If
         End If
 
@@ -331,9 +345,9 @@ SubmitFormula:
     Private Sub B_DeleteAccount_Click(sender As Object, e As EventArgs) Handles DeleteAccountToolStripMenuItem.Click, _
                                                                                 DeleteAccountToolStripMenuItem1.Click
 
-        If Not current_node Is Nothing Then
+        If Not m_currentNode Is Nothing Then
             formulaEdit.Checked = False
-            Dim dependantAccountslist() As String = Controller.ExistingDependantAccounts(current_node)
+            Dim dependantAccountslist() As String = m_controller.ExistingDependantAccounts(m_currentNode)
             If dependantAccountslist.Length > 0 Then
 
                 Dim listStr As String = ""
@@ -350,8 +364,8 @@ SubmitFormula:
                                                      "This Account and all its Sub Accounts will be deleted.", _
                                                      "Account deletion confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
             If confirm = DialogResult.Yes Then
-                Controller.DeleteAccount(CInt(current_node.Name))
-                current_node = Nothing
+                m_controller.DeleteAccount(CInt(m_currentNode.Name))
+                m_currentNode = Nothing
             End If
         End If
 
@@ -373,7 +387,7 @@ SubmitFormula:
             Response = MsgBox("The Accounts will be dropped into cell" + RNG.Address, MsgBoxStyle.OkCancel)
             If Response = MsgBoxResult.Ok Then
                 ' Launch Accounts Drop
-                WorksheetWrittingFunctions.WriteAccountsFromTreeView(AccountsTV, RNG)
+                WorksheetWrittingFunctions.WriteAccountsFromTreeView(m_accountTV, RNG)
             ElseIf Response = MsgBoxResult.Cancel Then
                 Exit Sub
             End If
@@ -393,17 +407,17 @@ SubmitFormula:
 
     Private Sub AccountsTV_NodeMouseClick(sender As Object, e As TreeNodeMouseClickEventArgs)
 
-        If drag_and_drop = False Then
-            If formulaEdit.Checked = False Then current_node = e.Node
+        If m_dragAndDrop = False Then
+            If formulaEdit.Checked = False Then m_currentNode = e.Node
         End If
 
     End Sub
 
     Private Sub AccountsTV_AfterSelect(sender As Object, e As TreeViewEventArgs)
 
-        If drag_and_drop = False Then
+        If m_dragAndDrop = False Then
             If formulaEdit.Checked = False Then
-                current_node = e.Node
+                m_currentNode = e.Node
                 DisplayAttributes()
             End If
         End If
@@ -412,17 +426,17 @@ SubmitFormula:
 
     Private Sub AccountsTV_KeyDown(sender As Object, e As KeyEventArgs)
 
-        If drag_and_drop = False Then
+        If m_dragAndDrop = False Then
             Select Case e.KeyCode
                 Case Keys.Delete : B_DeleteAccount_Click(sender, e)
 
                 Case Keys.Up
                     If e.Control Then
-                        TreeViewsUtilities.MoveNodeUp(AccountsTV.SelectedNode)
+                        TreeViewsUtilities.MoveNodeUp(m_accountTV.SelectedNode)
                     End If
                 Case Keys.Down
                     If e.Control Then
-                        TreeViewsUtilities.MoveNodeDown(AccountsTV.SelectedNode)
+                        TreeViewsUtilities.MoveNodeDown(m_accountTV.SelectedNode)
                     End If
             End Select
         End If
@@ -442,7 +456,7 @@ SubmitFormula:
 
         If e.Data.GetDataPresent("System.Windows.Forms.TreeNode", True) Then
             e.Effect = DragDropEffects.Move
-            drag_and_drop = True
+            m_dragAndDrop = True
         Else
             e.Effect = DragDropEffects.None
         End If
@@ -503,18 +517,18 @@ SubmitFormula:
 
                 Else
                     e.Effect = DragDropEffects.None
-                    drag_and_drop = False
+                    m_dragAndDrop = False
                     Exit Sub
                 End If
             End If
 
-            drag_and_drop = False
+            m_dragAndDrop = False
             dropNode.EnsureVisible()                                        ' Ensure the newley created node is visible to the user and 
             selectedTreeview.SelectedNode = dropNode                        ' Select it
             Dim tmpHT As New Hashtable
             tmpHT.Add(ACCOUNT_TAB_VARIABLE, TreeViewsUtilities.ReturnRootNodeFromNode(dropNode).Index)
             tmpHT.Add(PARENT_ID_VARIABLE, targetNode.Name)
-            Controller.UpdateAccount(dropNode.Name, tmpHT)
+            m_controller.UpdateAccount(dropNode.Name, tmpHT)
 
         End If
 
@@ -531,8 +545,8 @@ SubmitFormula:
     Private Sub formula_TB_Enter(sender As Object, e As EventArgs) Handles formula_TB.Enter
 
         If formulaEdit.Checked = False Then
-            If Not current_node Is Nothing Then
-                If Controller.FTypesToBeTested.Contains(Controller.ReadAccount(current_node.Name, ACCOUNT_FORMULA_TYPE_VARIABLE)) Then
+            If Not m_currentNode Is Nothing Then
+                If m_controller.FTypesToBeTested.Contains(m_controller.ReadAccount(m_currentNode.Name, ACCOUNT_FORMULA_TYPE_VARIABLE)) Then
                     formulaEdit.Checked = True
                 Else
                     MsgBox("This Account has no editable Formula. Please change the Formula Type or select another accounts " _
@@ -542,8 +556,8 @@ SubmitFormula:
             Else
                 MsgBox("An Accounts must be selected in order to edit its formula.")
                 formulaEdit.Checked = False
-                AccountsTV.Focus()
-                AccountsTV.SelectedNode = AccountsTV.Nodes(0)
+                m_accountTV.Focus()
+                m_accountTV.SelectedNode = m_accountTV.Nodes(0)
             End If
         End If
 
@@ -583,12 +597,21 @@ SubmitFormula:
     Private Sub AccountsTV_NodeMouseDoubleClick(sender As Object, e As Windows.Forms.TreeNodeMouseClickEventArgs)
 
         If formulaEdit.Checked = True Then
-            formula_TB.Text = formula_TB.Text & FormulasTranslations.ACCOUNTS_HUMAN_IDENTIFIYER & _
-                              AccountsTV.SelectedNode.Text & _
-                              FormulasTranslations.ACCOUNTS_HUMAN_IDENTIFIYER
+            formula_TB.Text = formula_TB.Text & FormulasTranslations.ACCOUNTS_HUMAN_IDENTIFIER & _
+                              m_accountTV.SelectedNode.Text & _
+                              FormulasTranslations.ACCOUNTS_HUMAN_IDENTIFIER
             formula_TB.Focus()
         End If
 
+    End Sub
+
+    Private Sub GlobalFactTV_NodeMouseDoubleClick(sender As Object, e As Windows.Forms.TreeNodeMouseClickEventArgs)
+        If formulaEdit.Checked = True Then
+            formula_TB.Text = formula_TB.Text & FormulasTranslations.FACTS_HUMAN_IDENTIFIER & _
+                              m_globalFactsTV.SelectedNode.Text & _
+                              FormulasTranslations.FACTS_HUMAN_IDENTIFIER
+            formula_TB.Focus()
+        End If
     End Sub
 
 
@@ -619,9 +642,9 @@ SubmitFormula:
         Dim dropNode As TreeNode = CType(e.Data.GetData("System.Windows.Forms.TreeNode"), TreeNode)
 
         ' Add the node and childs node to the selected list view
-        formula_TB.Text = formula_TB.Text & FormulasTranslations.ACCOUNTS_HUMAN_IDENTIFIYER & _
-                          AccountsTV.SelectedNode.Text & _
-                          FormulasTranslations.ACCOUNTS_HUMAN_IDENTIFIYER
+        formula_TB.Text = formula_TB.Text & FormulasTranslations.ACCOUNTS_HUMAN_IDENTIFIER & _
+                          m_accountTV.SelectedNode.Text & _
+                          FormulasTranslations.ACCOUNTS_HUMAN_IDENTIFIER
         formula_TB.Focus()
 
     End Sub
@@ -636,15 +659,15 @@ SubmitFormula:
 
     Private Sub Name_TB_Validated(sender As Object, e As EventArgs) Handles Name_TB.Validated
 
-        If Not IsNothing(current_node) _
-        AndAlso isDisplayingAttributes = False Then
+        If Not IsNothing(m_currentNode) _
+        AndAlso m_isDisplayingAttributes = False Then
             Dim newNameStr = Name_TB.Text
 
-            If Controller.AccountNameCheck(newNameStr) = True Then
-                current_node.Text = Name_TB.Text
-                Controller.UpdateName(current_node.Name, current_node.Text)
+            If m_controller.AccountNameCheck(newNameStr) = True Then
+                m_currentNode.Text = Name_TB.Text
+                m_controller.UpdateName(m_currentNode.Name, m_currentNode.Text)
             Else
-                Name_TB.Text = current_node.Text
+                Name_TB.Text = m_currentNode.Text
             End If
 
         End If
@@ -659,19 +682,19 @@ SubmitFormula:
     Private Sub formulaTypeCB_SelectedValueChanged(sender As Object, e As EventArgs) Handles FormulaTypeComboBox.SelectedItemChanged
 
         Dim li = FormulaTypeComboBox.SelectedItem
-        If Not IsNothing(current_node) _
-        AndAlso isDisplayingAttributes = False _
-        AndAlso isRevertingFType = False Then
-            If Controller.FormulaTypeChangeImpliesFactsDeletion(CInt(current_node.Name), li.Value) = True Then
+        If Not IsNothing(m_currentNode) _
+        AndAlso m_isDisplayingAttributes = False _
+        AndAlso m_isRevertingFType = False Then
+            If m_controller.FormulaTypeChangeImpliesFactsDeletion(CInt(m_currentNode.Name), li.Value) = True Then
                 Dim confirm As Integer = MessageBox.Show("Changing the Formula Type of this account may imply the loss of inputs, do you confirm you want to convert this account into a formula?", _
                                                          "Formula Type Upadte Confirmation", _
                                                          MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question)
                 If confirm = DialogResult.Yes Then
                     GoTo UdpateFormulaType
                 Else
-                    isRevertingFType = True
-                    FormulaTypeComboBox.SelectedValue = Controller.ReadAccount(current_node.Name, ACCOUNT_FORMULA_TYPE_VARIABLE)
-                    isRevertingFType = False
+                    m_isRevertingFType = True
+                    FormulaTypeComboBox.SelectedValue = m_controller.ReadAccount(m_currentNode.Name, ACCOUNT_FORMULA_TYPE_VARIABLE)
+                    m_isRevertingFType = False
                     Exit Sub
                 End If
             Else
@@ -695,16 +718,16 @@ SubmitFormula:
         Exit Sub
 
 UdpateFormulaType:
-        Controller.UpdateAccount(current_node.Name, ACCOUNT_FORMULA_TYPE_VARIABLE, li.Value)
+        m_controller.UpdateAccount(m_currentNode.Name, ACCOUNT_FORMULA_TYPE_VARIABLE, li.Value)
 
     End Sub
 
     Private Sub TypeCB_SelectedItemChanged(sender As Object, e As EventArgs) Handles TypeComboBox.SelectedItemChanged
 
         Dim li = TypeComboBox.SelectedItem
-        If Not IsNothing(current_node) _
-        AndAlso isDisplayingAttributes = False Then
-            Controller.UpdateAccount(current_node.Name, ACCOUNT_TYPE_VARIABLE, li.Value)
+        If Not IsNothing(m_currentNode) _
+        AndAlso m_isDisplayingAttributes = False Then
+            m_controller.UpdateAccount(m_currentNode.Name, ACCOUNT_TYPE_VARIABLE, li.Value)
         End If
         If li.Value = GlobalEnums.AccountType.MONETARY Then
             CurrencyConversionComboBox.Enabled = True
@@ -719,12 +742,12 @@ UdpateFormulaType:
     Private Sub CurrencyConversionComboBox_SelectedItemChanged(sender As Object, e As EventArgs) Handles CurrencyConversionComboBox.SelectedItemChanged
 
         Dim li = CurrencyConversionComboBox.SelectedItem
-        If Not IsNothing(current_node) _
-        AndAlso isDisplayingAttributes = False Then
+        If Not IsNothing(m_currentNode) _
+        AndAlso m_isDisplayingAttributes = False Then
             Select Case li.Value
                 Case GlobalEnums.ConversionOptions.AVERAGE_RATE, _
                      GlobalEnums.ConversionOptions.END_OF_PERIOD_RATE
-                    Controller.UpdateAccount(current_node.Name, ACCOUNT_CONVERSION_OPTION_VARIABLE, li.Value)
+                    m_controller.UpdateAccount(m_currentNode.Name, ACCOUNT_CONVERSION_OPTION_VARIABLE, li.Value)
             End Select
         End If
 
@@ -733,9 +756,9 @@ UdpateFormulaType:
     Private Sub ConsolidationOptionComboBox_SelectedItemChanged(sender As Object, e As EventArgs) Handles ConsolidationOptionComboBox.SelectedItemChanged
 
         Dim li = ConsolidationOptionComboBox.SelectedItem
-        If Not IsNothing(current_node) _
-        AndAlso isDisplayingAttributes = False Then
-            Controller.UpdateAccount(current_node.Name, ACCOUNT_CONSOLIDATION_OPTION_VARIABLE, li.Value)
+        If Not IsNothing(m_currentNode) _
+        AndAlso m_isDisplayingAttributes = False Then
+            m_controller.UpdateAccount(m_currentNode.Name, ACCOUNT_CONSOLIDATION_OPTION_VARIABLE, li.Value)
         End If
 
     End Sub
@@ -747,15 +770,15 @@ UdpateFormulaType:
 
     Private Sub DisplayAttributes()
 
-        If Not IsNothing(current_node) _
+        If Not IsNothing(m_currentNode) _
         AndAlso formulaEdit.Checked = False Then
 
-            isDisplayingAttributes = True
-            Dim account_id As Int32 = current_node.Name
-            Name_TB.Text = current_node.Text
+            m_isDisplayingAttributes = True
+            Dim account_id As Int32 = m_currentNode.Name
+            Name_TB.Text = m_currentNode.Text
 
             ' Formula Type ComboBox
-            Dim formulaTypeLI = formulasTypesIdItemDict(Controller.ReadAccount(account_id, ACCOUNT_FORMULA_TYPE_VARIABLE))
+            Dim formulaTypeLI = m_formulasTypesIdItemDict(m_controller.ReadAccount(account_id, ACCOUNT_FORMULA_TYPE_VARIABLE))
             FormulaTypeComboBox.SelectedItem = formulaTypeLI
 
             If formulaTypeLI.Value = GlobalEnums.FormulaTypes.TITLE Then
@@ -765,27 +788,28 @@ UdpateFormulaType:
             End If
 
             ' Format ComboBox
-            Dim formatLI = formatsIdItemDict(Controller.ReadAccount(account_id, ACCOUNT_TYPE_VARIABLE))
+            Dim formatLI = m_formatsIdItemDict(m_controller.ReadAccount(account_id, ACCOUNT_TYPE_VARIABLE))
             TypeComboBox.SelectedItem = formatLI
 
             If formatLI.Value = GlobalEnums.AccountType.MONETARY Then
                 ' Currency Conversion
-                Dim conversionLI = currenciesConversionIdItemDict(Controller.ReadAccount(account_id, ACCOUNT_CONVERSION_OPTION_VARIABLE))
+                Dim conversionLI = m_currenciesConversionIdItemDict(m_controller.ReadAccount(account_id, ACCOUNT_CONVERSION_OPTION_VARIABLE))
                 CurrencyConversionComboBox.SelectedItem = conversionLI
+
             End If
 
             ' Consolidation Option
-            Dim consolidationLI = consoOptionIdItemDict(Controller.ReadAccount(account_id, ACCOUNT_CONSOLIDATION_OPTION_VARIABLE))
+            Dim consolidationLI = m_consoOptionIdItemDict(m_controller.ReadAccount(account_id, ACCOUNT_CONSOLIDATION_OPTION_VARIABLE))
             ConsolidationOptionComboBox.SelectedItem = consolidationLI
 
 
             ' Formula TB
-            If Controller.FTypesToBeTested.Contains(Controller.ReadAccount(account_id, ACCOUNT_FORMULA_TYPE_VARIABLE)) Then
-                formula_TB.Text = Controller.GetFormulaText(account_id)
+            If m_controller.FTypesToBeTested.Contains(m_controller.ReadAccount(account_id, ACCOUNT_FORMULA_TYPE_VARIABLE)) Then
+                formula_TB.Text = m_controller.GetFormulaText(account_id)
             Else
                 formula_TB.Text = ""
             End If
-            isDisplayingAttributes = False
+            m_isDisplayingAttributes = False
 
         End If
 
@@ -803,8 +827,5 @@ UdpateFormulaType:
 
 
 #End Region
-
-
-
 
 End Class
