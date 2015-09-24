@@ -60,7 +60,7 @@ Friend Class ExchangeRatesController
         m_view = New ExchangeRatesView(Me, m_ratesVersionTV, GlobalVariables.Currencies.mainCurrency)
         m_currentRatesVersionId = GlobalVariables.Versions.versions_hash(My.Settings.version_id)(EX_RATES_RATE_VERSION)
         m_newRatesVersionUI = New NewRatesVersionUI(Me)
-  
+
         AddHandler m_exchangeRates.UpdateEvent, AddressOf AfterRateUpdate
         AddHandler GlobalVariables.RatesVersions.Read, AddressOf RatesVersionUpdateFromServer
         AddHandler GlobalVariables.RatesVersions.CreationEvent, AddressOf AfterVersionCreate
@@ -219,6 +219,7 @@ Friend Class ExchangeRatesController
 
         ' if version is currently displayed -> set another one
         ' priority high
+        If m_view Is Nothing Then Exit Sub
         If p_status = True Then
             m_view.TVNodeDelete(p_id)
         End If
