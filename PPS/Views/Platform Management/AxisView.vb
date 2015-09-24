@@ -97,6 +97,7 @@ Friend Class AxisView
     Delegate Sub UpdateAxis_Delegate(ByRef ht As Hashtable)
     Friend Sub UpdateAxis(ByRef ht As Hashtable)
 
+        If ht Is Nothing Then Exit Sub
         If InvokeRequired Then
             Dim MyDelegate As New UpdateAxis_Delegate(AddressOf UpdateAxis)
             Me.Invoke(MyDelegate, New Object() {ht})
