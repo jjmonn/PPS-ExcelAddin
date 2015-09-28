@@ -144,9 +144,10 @@ Friend Class Period
         Dim nbDaysinMonth As Int32
         Dim tmpList As New List(Of Integer)
         If PeriodMinusOneOption = True Then tmpList.Add(Int(CDbl(DateSerial(year - 1, 12, 31).ToOADate())))
-        For i = 1 To NB_MONTHS
+        tmpList.Add(Int(CDbl(DateSerial(year, 1, 0).ToOADate())))
+        For i = 2 To NB_MONTHS
             nbDaysinMonth = DateTime.DaysInMonth(year, i)
-            tmpList.Add(Int(CDbl(DateSerial(year, i, nbDaysinMonth).ToOADate())))
+            tmpList.Add(Int(CDbl(DateSerial(year, i - 1, nbDaysinMonth).ToOADate())))
         Next
         Return tmpList
 
