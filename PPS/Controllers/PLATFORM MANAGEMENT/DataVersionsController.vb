@@ -276,6 +276,7 @@ Friend Class DataVersionsController
 
     Friend Function GetRatesVersionNameFromId(ByRef rateVersionId As Int32) As String
 
+        If Not GlobalVariables.RatesVersions.rate_versions_hash.ContainsKey(rateVersionId) Then Return 0
         Return GlobalVariables.RatesVersions.rate_versions_hash(rateVersionId)(NAME_VARIABLE)
 
     End Function

@@ -191,6 +191,7 @@ Friend Class ExchangeRatesController
 
     Private Sub RatesVersionUpdateFromServer(ByRef p_status As Boolean, ByRef p_ratesVersionHt As Hashtable)
 
+        If m_view Is Nothing Then Exit Sub
         If p_status = True Then
             m_view.TVUpdate(p_ratesVersionHt(ID_VARIABLE), _
                             p_ratesVersionHt(PARENT_ID_VARIABLE), _
@@ -219,6 +220,7 @@ Friend Class ExchangeRatesController
 
         ' if version is currently displayed -> set another one
         ' priority high
+        If m_view Is Nothing Then Exit Sub
         If p_status = True Then
             m_view.TVNodeDelete(p_id)
         End If
