@@ -836,12 +836,21 @@ Friend Class ControllingUIController
 
     End Function
 
-    Friend Function GetAccountFormatFromId(ByRef p_accountId As Int32) As Int32
+    Friend Function GetAccountTypeFromId(ByRef p_accountId As Int32) As Int32
 
         If GlobalVariables.Accounts.accounts_hash.ContainsKey(p_accountId) Then
             Return GlobalVariables.Accounts.accounts_hash(p_accountId)(ACCOUNT_TYPE_VARIABLE)
         End If
         Return 0
+
+    End Function
+
+    Friend Function GetAccountFormatFromId(ByRef p_accountId As Int32) As String
+
+        If GlobalVariables.Accounts.accounts_hash.ContainsKey(p_accountId) Then
+            Return GlobalVariables.Accounts.accounts_hash(p_accountId)(ACCOUNT_FORMAT_VARIABLE)
+        End If
+        Return ""
 
     End Function
 
