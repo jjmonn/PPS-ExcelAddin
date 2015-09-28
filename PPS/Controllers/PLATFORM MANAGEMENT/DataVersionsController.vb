@@ -267,10 +267,10 @@ Friend Class DataVersionsController
 
         ' update batch to be implemented prioritiy normal
         ' 
-        positions_dictionary = VTreeViewUtil.GeneratePositionsDictionary(versionsTV)
-        For Each version_id In positions_dictionary.Keys
-            Update(version_id, ITEMS_POSITIONS, positions_dictionary(version_id))
-        Next
+        'positions_dictionary = VTreeViewUtil.GeneratePositionsDictionary(versionsTV)
+        'For Each version_id In positions_dictionary.Keys
+        '    Update(version_id, ITEMS_POSITIONS, positions_dictionary(version_id))
+        'Next
 
     End Sub
 

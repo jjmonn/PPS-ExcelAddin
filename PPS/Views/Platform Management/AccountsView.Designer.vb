@@ -25,6 +25,10 @@ Partial Class AccountsView
         Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(AccountsView))
         Me.SplitContainer1 = New System.Windows.Forms.SplitContainer()
+        Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
+        Me.Panel1 = New System.Windows.Forms.Panel()
+        Me.AccountsTVPanel = New System.Windows.Forms.Panel()
+        Me.SplitContainer2 = New System.Windows.Forms.SplitContainer()
         Me.TableLayoutPanel2 = New System.Windows.Forms.TableLayoutPanel()
         Me.GroupBox5 = New System.Windows.Forms.GroupBox()
         Me.SaveDescriptionBT = New System.Windows.Forms.Button()
@@ -45,6 +49,8 @@ Partial Class AccountsView
         Me.FormulaTypeComboBox = New VIBlend.WinForms.Controls.vComboBox()
         Me.TypeComboBox = New VIBlend.WinForms.Controls.vComboBox()
         Me.Name_TB = New System.Windows.Forms.TextBox()
+        Me.GlobalFactsPanel = New System.Windows.Forms.Panel()
+        Me.VLabel6 = New VIBlend.WinForms.Controls.vLabel()
         Me.accountsIL = New System.Windows.Forms.ImageList(Me.components)
         Me.TVRCM = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.AddSubAccountToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -62,21 +68,21 @@ Partial Class AccountsView
         Me.DropAllAccountsHierarchyToExcelToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.DropSelectedAccountHierarchyToExcelToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.HelpToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.AccountsTVPanel = New System.Windows.Forms.Panel()
-        Me.Panel1 = New System.Windows.Forms.Panel()
-        Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
-        Me.GlobalFactsPanel = New System.Windows.Forms.Panel()
         CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SplitContainer1.Panel1.SuspendLayout()
         Me.SplitContainer1.Panel2.SuspendLayout()
         Me.SplitContainer1.SuspendLayout()
+        Me.TableLayoutPanel1.SuspendLayout()
+        CType(Me.SplitContainer2, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.SplitContainer2.Panel1.SuspendLayout()
+        Me.SplitContainer2.Panel2.SuspendLayout()
+        Me.SplitContainer2.SuspendLayout()
         Me.TableLayoutPanel2.SuspendLayout()
         Me.GroupBox5.SuspendLayout()
         Me.GroupBox3.SuspendLayout()
         Me.GroupBox1.SuspendLayout()
         Me.TVRCM.SuspendLayout()
         Me.MainMenu.SuspendLayout()
-        Me.TableLayoutPanel1.SuspendLayout()
         Me.SuspendLayout()
         '
         'SplitContainer1
@@ -91,10 +97,63 @@ Partial Class AccountsView
         '
         'SplitContainer1.Panel2
         '
-        Me.SplitContainer1.Panel2.Controls.Add(Me.TableLayoutPanel2)
+        Me.SplitContainer1.Panel2.Controls.Add(Me.SplitContainer2)
         Me.SplitContainer1.Size = New System.Drawing.Size(844, 652)
-        Me.SplitContainer1.SplitterDistance = 267
+        Me.SplitContainer1.SplitterDistance = 246
         Me.SplitContainer1.TabIndex = 23
+        '
+        'TableLayoutPanel1
+        '
+        Me.TableLayoutPanel1.ColumnCount = 1
+        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
+        Me.TableLayoutPanel1.Controls.Add(Me.Panel1, 0, 0)
+        Me.TableLayoutPanel1.Controls.Add(Me.AccountsTVPanel, 0, 1)
+        Me.TableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.TableLayoutPanel1.Location = New System.Drawing.Point(0, 0)
+        Me.TableLayoutPanel1.Name = "TableLayoutPanel1"
+        Me.TableLayoutPanel1.RowCount = 2
+        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25.0!))
+        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
+        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
+        Me.TableLayoutPanel1.Size = New System.Drawing.Size(246, 652)
+        Me.TableLayoutPanel1.TabIndex = 0
+        '
+        'Panel1
+        '
+        Me.Panel1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Panel1.Location = New System.Drawing.Point(1, 1)
+        Me.Panel1.Margin = New System.Windows.Forms.Padding(1)
+        Me.Panel1.Name = "Panel1"
+        Me.Panel1.Size = New System.Drawing.Size(244, 23)
+        Me.Panel1.TabIndex = 1
+        '
+        'AccountsTVPanel
+        '
+        Me.AccountsTVPanel.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.AccountsTVPanel.Location = New System.Drawing.Point(1, 26)
+        Me.AccountsTVPanel.Margin = New System.Windows.Forms.Padding(1)
+        Me.AccountsTVPanel.Name = "AccountsTVPanel"
+        Me.AccountsTVPanel.Size = New System.Drawing.Size(244, 625)
+        Me.AccountsTVPanel.TabIndex = 2
+        '
+        'SplitContainer2
+        '
+        Me.SplitContainer2.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.SplitContainer2.Location = New System.Drawing.Point(0, 0)
+        Me.SplitContainer2.Name = "SplitContainer2"
+        '
+        'SplitContainer2.Panel1
+        '
+        Me.SplitContainer2.Panel1.Controls.Add(Me.TableLayoutPanel2)
+        '
+        'SplitContainer2.Panel2
+        '
+        Me.SplitContainer2.Panel2.Controls.Add(Me.GlobalFactsPanel)
+        Me.SplitContainer2.Panel2.Controls.Add(Me.VLabel6)
+        Me.SplitContainer2.Size = New System.Drawing.Size(594, 652)
+        Me.SplitContainer2.SplitterDistance = 482
+        Me.SplitContainer2.SplitterWidth = 3
+        Me.SplitContainer2.TabIndex = 2
         '
         'TableLayoutPanel2
         '
@@ -107,11 +166,11 @@ Partial Class AccountsView
         Me.TableLayoutPanel2.Location = New System.Drawing.Point(0, 0)
         Me.TableLayoutPanel2.Name = "TableLayoutPanel2"
         Me.TableLayoutPanel2.RowCount = 4
-        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25.0!))
-        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 285.0!))
+        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 26.0!))
+        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 284.0!))
         Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 54.77032!))
         Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 45.22968!))
-        Me.TableLayoutPanel2.Size = New System.Drawing.Size(573, 652)
+        Me.TableLayoutPanel2.Size = New System.Drawing.Size(482, 652)
         Me.TableLayoutPanel2.TabIndex = 1
         '
         'GroupBox5
@@ -121,7 +180,7 @@ Partial Class AccountsView
         Me.GroupBox5.Dock = System.Windows.Forms.DockStyle.Fill
         Me.GroupBox5.Location = New System.Drawing.Point(3, 500)
         Me.GroupBox5.Name = "GroupBox5"
-        Me.GroupBox5.Size = New System.Drawing.Size(567, 149)
+        Me.GroupBox5.Size = New System.Drawing.Size(476, 149)
         Me.GroupBox5.TabIndex = 20
         Me.GroupBox5.TabStop = False
         Me.GroupBox5.Text = "Account's Description"
@@ -132,10 +191,10 @@ Partial Class AccountsView
         Me.SaveDescriptionBT.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
         Me.SaveDescriptionBT.ImageKey = "1420498403_340208.ico"
         Me.SaveDescriptionBT.ImageList = Me.EditButtonsImagelist
-        Me.SaveDescriptionBT.Location = New System.Drawing.Point(398, 109)
+        Me.SaveDescriptionBT.Location = New System.Drawing.Point(269, 109)
         Me.SaveDescriptionBT.Margin = New System.Windows.Forms.Padding(2)
         Me.SaveDescriptionBT.Name = "SaveDescriptionBT"
-        Me.SaveDescriptionBT.Size = New System.Drawing.Size(135, 28)
+        Me.SaveDescriptionBT.Size = New System.Drawing.Size(187, 28)
         Me.SaveDescriptionBT.TabIndex = 7
         Me.SaveDescriptionBT.Text = "Save Description"
         Me.SaveDescriptionBT.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
@@ -159,7 +218,7 @@ Partial Class AccountsView
         Me.DescriptionTB.Margin = New System.Windows.Forms.Padding(2)
         Me.DescriptionTB.Multiline = True
         Me.DescriptionTB.Name = "DescriptionTB"
-        Me.DescriptionTB.Size = New System.Drawing.Size(527, 75)
+        Me.DescriptionTB.Size = New System.Drawing.Size(450, 75)
         Me.DescriptionTB.TabIndex = 6
         '
         'GroupBox3
@@ -170,7 +229,7 @@ Partial Class AccountsView
         Me.GroupBox3.Dock = System.Windows.Forms.DockStyle.Fill
         Me.GroupBox3.Location = New System.Drawing.Point(3, 313)
         Me.GroupBox3.Name = "GroupBox3"
-        Me.GroupBox3.Size = New System.Drawing.Size(567, 181)
+        Me.GroupBox3.Size = New System.Drawing.Size(476, 181)
         Me.GroupBox3.TabIndex = 19
         Me.GroupBox3.TabStop = False
         Me.GroupBox3.Text = "Account's Formula"
@@ -196,10 +255,10 @@ Partial Class AccountsView
         Me.submit_cmd.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
         Me.submit_cmd.ImageKey = "1420498403_340208.ico"
         Me.submit_cmd.ImageList = Me.EditButtonsImagelist
-        Me.submit_cmd.Location = New System.Drawing.Point(399, 140)
+        Me.submit_cmd.Location = New System.Drawing.Point(269, 140)
         Me.submit_cmd.Margin = New System.Windows.Forms.Padding(2)
         Me.submit_cmd.Name = "submit_cmd"
-        Me.submit_cmd.Size = New System.Drawing.Size(134, 28)
+        Me.submit_cmd.Size = New System.Drawing.Size(187, 28)
         Me.submit_cmd.TabIndex = 7
         Me.submit_cmd.Text = "Validate Formula"
         Me.submit_cmd.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
@@ -216,7 +275,7 @@ Partial Class AccountsView
         Me.formula_TB.Margin = New System.Windows.Forms.Padding(2)
         Me.formula_TB.Multiline = True
         Me.formula_TB.Name = "formula_TB"
-        Me.formula_TB.Size = New System.Drawing.Size(528, 85)
+        Me.formula_TB.Size = New System.Drawing.Size(451, 85)
         Me.formula_TB.TabIndex = 6
         '
         'GroupBox1
@@ -233,11 +292,11 @@ Partial Class AccountsView
         Me.GroupBox1.Controls.Add(Me.Name_TB)
         Me.GroupBox1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.GroupBox1.FlatStyle = System.Windows.Forms.FlatStyle.Popup
-        Me.GroupBox1.Location = New System.Drawing.Point(2, 27)
+        Me.GroupBox1.Location = New System.Drawing.Point(2, 28)
         Me.GroupBox1.Margin = New System.Windows.Forms.Padding(2)
         Me.GroupBox1.Name = "GroupBox1"
         Me.GroupBox1.Padding = New System.Windows.Forms.Padding(2)
-        Me.GroupBox1.Size = New System.Drawing.Size(569, 281)
+        Me.GroupBox1.Size = New System.Drawing.Size(478, 280)
         Me.GroupBox1.TabIndex = 17
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "Account's information"
@@ -250,7 +309,7 @@ Partial Class AccountsView
         Me.ConsolidationOptionComboBox.DropDownMinimumSize = New System.Drawing.Size(10, 10)
         Me.ConsolidationOptionComboBox.DropDownResizeDirection = VIBlend.WinForms.Controls.SizingDirection.Both
         Me.ConsolidationOptionComboBox.DropDownWidth = 216
-        Me.ConsolidationOptionComboBox.Location = New System.Drawing.Point(206, 198)
+        Me.ConsolidationOptionComboBox.Location = New System.Drawing.Point(160, 198)
         Me.ConsolidationOptionComboBox.Name = "ConsolidationOptionComboBox"
         Me.ConsolidationOptionComboBox.RoundedCornersMaskListItem = CType(15, Byte)
         Me.ConsolidationOptionComboBox.Size = New System.Drawing.Size(216, 20)
@@ -269,7 +328,7 @@ Partial Class AccountsView
         Me.CurrencyConversionComboBox.DropDownMinimumSize = New System.Drawing.Size(10, 10)
         Me.CurrencyConversionComboBox.DropDownResizeDirection = VIBlend.WinForms.Controls.SizingDirection.Both
         Me.CurrencyConversionComboBox.DropDownWidth = 216
-        Me.CurrencyConversionComboBox.Location = New System.Drawing.Point(207, 158)
+        Me.CurrencyConversionComboBox.Location = New System.Drawing.Point(161, 158)
         Me.CurrencyConversionComboBox.Name = "CurrencyConversionComboBox"
         Me.CurrencyConversionComboBox.RoundedCornersMaskListItem = CType(15, Byte)
         Me.CurrencyConversionComboBox.Size = New System.Drawing.Size(216, 20)
@@ -286,7 +345,7 @@ Partial Class AccountsView
         Me.VLabel5.DisplayStyle = VIBlend.WinForms.Controls.LabelItemStyle.TextOnly
         Me.VLabel5.Ellipsis = False
         Me.VLabel5.ImageAlignment = System.Drawing.ContentAlignment.TopLeft
-        Me.VLabel5.Location = New System.Drawing.Point(39, 41)
+        Me.VLabel5.Location = New System.Drawing.Point(20, 41)
         Me.VLabel5.Multiline = True
         Me.VLabel5.Name = "VLabel5"
         Me.VLabel5.Size = New System.Drawing.Size(129, 25)
@@ -302,7 +361,7 @@ Partial Class AccountsView
         Me.VLabel4.DisplayStyle = VIBlend.WinForms.Controls.LabelItemStyle.TextOnly
         Me.VLabel4.Ellipsis = False
         Me.VLabel4.ImageAlignment = System.Drawing.ContentAlignment.TopLeft
-        Me.VLabel4.Location = New System.Drawing.Point(39, 78)
+        Me.VLabel4.Location = New System.Drawing.Point(20, 78)
         Me.VLabel4.Multiline = True
         Me.VLabel4.Name = "VLabel4"
         Me.VLabel4.Size = New System.Drawing.Size(129, 25)
@@ -318,7 +377,7 @@ Partial Class AccountsView
         Me.VLabel2.DisplayStyle = VIBlend.WinForms.Controls.LabelItemStyle.TextOnly
         Me.VLabel2.Ellipsis = False
         Me.VLabel2.ImageAlignment = System.Drawing.ContentAlignment.TopLeft
-        Me.VLabel2.Location = New System.Drawing.Point(39, 117)
+        Me.VLabel2.Location = New System.Drawing.Point(20, 117)
         Me.VLabel2.Multiline = True
         Me.VLabel2.Name = "VLabel2"
         Me.VLabel2.Size = New System.Drawing.Size(129, 25)
@@ -334,7 +393,7 @@ Partial Class AccountsView
         Me.VLabel3.DisplayStyle = VIBlend.WinForms.Controls.LabelItemStyle.TextOnly
         Me.VLabel3.Ellipsis = False
         Me.VLabel3.ImageAlignment = System.Drawing.ContentAlignment.TopLeft
-        Me.VLabel3.Location = New System.Drawing.Point(36, 198)
+        Me.VLabel3.Location = New System.Drawing.Point(17, 198)
         Me.VLabel3.Multiline = True
         Me.VLabel3.Name = "VLabel3"
         Me.VLabel3.Size = New System.Drawing.Size(129, 25)
@@ -350,7 +409,7 @@ Partial Class AccountsView
         Me.VLabel1.DisplayStyle = VIBlend.WinForms.Controls.LabelItemStyle.TextOnly
         Me.VLabel1.Ellipsis = False
         Me.VLabel1.ImageAlignment = System.Drawing.ContentAlignment.TopLeft
-        Me.VLabel1.Location = New System.Drawing.Point(36, 158)
+        Me.VLabel1.Location = New System.Drawing.Point(17, 158)
         Me.VLabel1.Multiline = True
         Me.VLabel1.Name = "VLabel1"
         Me.VLabel1.Size = New System.Drawing.Size(129, 25)
@@ -368,7 +427,7 @@ Partial Class AccountsView
         Me.FormulaTypeComboBox.DropDownMinimumSize = New System.Drawing.Size(10, 10)
         Me.FormulaTypeComboBox.DropDownResizeDirection = VIBlend.WinForms.Controls.SizingDirection.Both
         Me.FormulaTypeComboBox.DropDownWidth = 216
-        Me.FormulaTypeComboBox.Location = New System.Drawing.Point(207, 78)
+        Me.FormulaTypeComboBox.Location = New System.Drawing.Point(161, 78)
         Me.FormulaTypeComboBox.Name = "FormulaTypeComboBox"
         Me.FormulaTypeComboBox.RoundedCornersMaskListItem = CType(15, Byte)
         Me.FormulaTypeComboBox.Size = New System.Drawing.Size(216, 20)
@@ -387,7 +446,7 @@ Partial Class AccountsView
         Me.TypeComboBox.DropDownMinimumSize = New System.Drawing.Size(10, 10)
         Me.TypeComboBox.DropDownResizeDirection = VIBlend.WinForms.Controls.SizingDirection.Both
         Me.TypeComboBox.DropDownWidth = 216
-        Me.TypeComboBox.Location = New System.Drawing.Point(207, 117)
+        Me.TypeComboBox.Location = New System.Drawing.Point(161, 117)
         Me.TypeComboBox.Name = "TypeComboBox"
         Me.TypeComboBox.RoundedCornersMaskListItem = CType(15, Byte)
         Me.TypeComboBox.Size = New System.Drawing.Size(216, 20)
@@ -401,11 +460,37 @@ Partial Class AccountsView
         'Name_TB
         '
         Me.Name_TB.BackColor = System.Drawing.SystemColors.ButtonHighlight
-        Me.Name_TB.Location = New System.Drawing.Point(207, 41)
+        Me.Name_TB.Location = New System.Drawing.Point(161, 41)
         Me.Name_TB.Margin = New System.Windows.Forms.Padding(2)
         Me.Name_TB.Name = "Name_TB"
-        Me.Name_TB.Size = New System.Drawing.Size(341, 20)
+        Me.Name_TB.Size = New System.Drawing.Size(258, 20)
         Me.Name_TB.TabIndex = 1
+        '
+        'GlobalFactsPanel
+        '
+        Me.GlobalFactsPanel.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.GlobalFactsPanel.Location = New System.Drawing.Point(12, 58)
+        Me.GlobalFactsPanel.Name = "GlobalFactsPanel"
+        Me.GlobalFactsPanel.Size = New System.Drawing.Size(85, 579)
+        Me.GlobalFactsPanel.TabIndex = 3
+        '
+        'VLabel6
+        '
+        Me.VLabel6.BackColor = System.Drawing.Color.Transparent
+        Me.VLabel6.DisplayStyle = VIBlend.WinForms.Controls.LabelItemStyle.TextOnly
+        Me.VLabel6.Ellipsis = False
+        Me.VLabel6.ImageAlignment = System.Drawing.ContentAlignment.TopLeft
+        Me.VLabel6.Location = New System.Drawing.Point(12, 28)
+        Me.VLabel6.Multiline = True
+        Me.VLabel6.Name = "VLabel6"
+        Me.VLabel6.Size = New System.Drawing.Size(110, 16)
+        Me.VLabel6.TabIndex = 0
+        Me.VLabel6.Text = "Market Indexes"
+        Me.VLabel6.TextAlignment = System.Drawing.ContentAlignment.TopLeft
+        Me.VLabel6.UseMnemonics = True
+        Me.VLabel6.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
         '
         'accountsIL
         '
@@ -527,50 +612,6 @@ Partial Class AccountsView
         Me.HelpToolStripMenuItem.Size = New System.Drawing.Size(44, 20)
         Me.HelpToolStripMenuItem.Text = "Help"
         '
-        'AccountsTVPanel
-        '
-        Me.AccountsTVPanel.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.AccountsTVPanel.Location = New System.Drawing.Point(1, 26)
-        Me.AccountsTVPanel.Margin = New System.Windows.Forms.Padding(1)
-        Me.AccountsTVPanel.Name = "AccountsTVPanel"
-        Me.AccountsTVPanel.Size = New System.Drawing.Size(265, 421)
-        Me.AccountsTVPanel.TabIndex = 2
-        '
-        'Panel1
-        '
-        Me.Panel1.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Panel1.Location = New System.Drawing.Point(1, 1)
-        Me.Panel1.Margin = New System.Windows.Forms.Padding(1)
-        Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(265, 23)
-        Me.Panel1.TabIndex = 1
-        '
-        'TableLayoutPanel1
-        '
-        Me.TableLayoutPanel1.ColumnCount = 1
-        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TableLayoutPanel1.Controls.Add(Me.Panel1, 0, 0)
-        Me.TableLayoutPanel1.Controls.Add(Me.AccountsTVPanel, 0, 1)
-        Me.TableLayoutPanel1.Controls.Add(Me.GlobalFactsPanel, 0, 2)
-        Me.TableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TableLayoutPanel1.Location = New System.Drawing.Point(0, 0)
-        Me.TableLayoutPanel1.Name = "TableLayoutPanel1"
-        Me.TableLayoutPanel1.RowCount = 3
-        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25.0!))
-        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 204.0!))
-        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
-        Me.TableLayoutPanel1.Size = New System.Drawing.Size(267, 652)
-        Me.TableLayoutPanel1.TabIndex = 0
-        '
-        'GlobalFactsPanel
-        '
-        Me.GlobalFactsPanel.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.GlobalFactsPanel.Location = New System.Drawing.Point(3, 451)
-        Me.GlobalFactsPanel.Name = "GlobalFactsPanel"
-        Me.GlobalFactsPanel.Size = New System.Drawing.Size(261, 198)
-        Me.GlobalFactsPanel.TabIndex = 3
-        '
         'AccountsView
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -583,6 +624,11 @@ Partial Class AccountsView
         Me.SplitContainer1.Panel2.ResumeLayout(False)
         CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.SplitContainer1.ResumeLayout(False)
+        Me.TableLayoutPanel1.ResumeLayout(False)
+        Me.SplitContainer2.Panel1.ResumeLayout(False)
+        Me.SplitContainer2.Panel2.ResumeLayout(False)
+        CType(Me.SplitContainer2, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.SplitContainer2.ResumeLayout(False)
         Me.TableLayoutPanel2.ResumeLayout(False)
         Me.GroupBox5.ResumeLayout(False)
         Me.GroupBox5.PerformLayout()
@@ -593,7 +639,6 @@ Partial Class AccountsView
         Me.TVRCM.ResumeLayout(False)
         Me.MainMenu.ResumeLayout(False)
         Me.MainMenu.PerformLayout()
-        Me.TableLayoutPanel1.ResumeLayout(False)
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -640,5 +685,7 @@ Partial Class AccountsView
     Friend WithEvents Panel1 As System.Windows.Forms.Panel
     Friend WithEvents AccountsTVPanel As System.Windows.Forms.Panel
     Friend WithEvents GlobalFactsPanel As System.Windows.Forms.Panel
+    Friend WithEvents VLabel6 As VIBlend.WinForms.Controls.vLabel
+    Friend WithEvents SplitContainer2 As System.Windows.Forms.SplitContainer
 
 End Class
