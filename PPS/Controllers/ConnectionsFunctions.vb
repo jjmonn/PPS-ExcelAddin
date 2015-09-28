@@ -24,6 +24,7 @@ Friend Class ConnectionsFunctions
     Public Event ConnectionFailedEvent()
     Private userName As String
     Private pwd As String
+    Private Shared connectionFailed As Boolean
 
     ' Flags
     Friend globalInitFlag As Boolean = False
@@ -49,10 +50,21 @@ Friend Class ConnectionsFunctions
             CloseNetworkConnection()
         End If
         GlobalVariables.NetworkConnect = New NetworkLauncher()
-        GlobalVariables.ConnectionState = GlobalVariables.NetworkConnect.Launch(p_hostname, p_port, Function()
-                                                                                                        AddinModule.DisplayConnectionStatus(False)
-                                                                                                        MsgBox("Connection lost")
-                                                                                                    End Function)
+        GlobalVariables.ConnectionState = GlobalVariables.NetworkConnect.Launch(p_hostname, p_port, _
+                                                                                Function()
+                                                                                    System.Diagnostics.Debug.WriteLine("Connection to server lost, attempt reconnection")
+                                                                                    Dim failed As Boolean = True
+                                                                                    Dim nbTry As Int32 = 5
+                                                                                    AddinModule.DisplayConnectionStatus(False)
+                                                                                    While failed And nbTry > 0
+                                                                                        System.Threading.Thread.Sleep(3000)
+                                                                                        ConnectionsFunctions.Connect(Me, failed, userName, pwd, False)
+                                                                                        nbTry -= 1
+                                                                                    End While
+                                                                                    If failed Then MsgBox("Connection to server lost")
+                                                                                    If Not failed Then AddinModule.DisplayConnectionStatus(True)
+
+                                                                                End Function)
 
         If GlobalVariables.ConnectionState = True Then
             ' request auth token
@@ -154,6 +166,31 @@ Friend Class ConnectionsFunctions
         globalVariablesInitFlags.Add(GlobalEnums.GlobalModels.GROUP, False)
         globalVariablesInitFlags.Add(GlobalEnums.GlobalModels.GROUPALLOWEDENTITY, False)
 
+    End Sub
+
+    Friend Shared Sub Connect(ByRef connectionFunction As ConnectionsFunctions, ByRef connectionFailed As Boolean, _
+                              ByRef id As String, ByRef pwd As String, Optional verbose As Boolean = True)
+        Dim start_time As Date
+        Dim secs As Single
+        connectionFailed = False
+
+        If connectionFunction.NetworkConnection(My.Settings.serverIp, _
+                                                My.Settings.port_number, _
+                                                id, _
+                                                pwd) = True Then
+
+            start_time = Now
+            Do While connectionFunction.globalInitFlag = False
+                secs = DateDiff("s", start_time, Now)
+                If secs > 6 Then Exit Do
+            Loop
+        Else
+            ConnectionsFunctions.CloseNetworkConnection()
+        End If
+        If connectionFunction.globalAuthenticated = False Then
+            If verbose Then MsgBox("Connection failed")
+            connectionFailed = True
+        End If
     End Sub
 
     Friend Shared Sub CloseNetworkConnection()
