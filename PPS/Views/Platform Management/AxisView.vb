@@ -86,8 +86,18 @@ Friend Class AxisView
         AddHandler DGV.HierarchyItemMouseClick, AddressOf dataGridView_HierarchyItemMouseClick
         AddHandler DGV.CellValueChanged, AddressOf dataGridView_CellValueChanged
         AddHandler DGV.KeyDown, AddressOf DGV_KeyDown
-
+        DesactivateUnallowed()
     End Sub
+
+    Private Sub DesactivateUnallowed()
+        If Not GlobalVariables.Users.CurrentUserIsAdmin() Then
+            DeleteAxisToolStripMenuItem.Enabled = False
+            DeleteAxisToolStripMenuItem2.Enabled = False
+            CreateAxisToolStripMenuItem.Enabled = False
+            CreateNewToolStripMenuItem.Enabled = False
+        End If
+    End Sub
+
 
 #End Region
 
@@ -251,7 +261,7 @@ Friend Class AxisView
         nameColumn.ItemValue = NAME_VARIABLE
         Dim nameTextBox As New TextBoxEditor()
         nameTextBox.ActivationFlags = EditorActivationFlags.MOUSE_CLICK_SELECTED_CELL
-        nameColumn.CellsEditor = nameTextBox
+        If GlobalVariables.Users.CurrentUserIsAdmin() Then nameColumn.CellsEditor = nameTextBox
         columnsVariableItemDictionary.Add(NAME_VARIABLE, nameColumn)
 
         For Each filterNode As TreeNode In axisFilterTV.Nodes
@@ -380,7 +390,7 @@ Friend Class AxisView
         End If
 
         ' Add ComboBoxEditor to Cell
-        DGV.CellsArea.SetCellEditor(rowItem, columnItem, combobox)
+        If GlobalVariables.Users.CurrentUserIsAdmin() Then DGV.CellsArea.SetCellEditor(rowItem, columnItem, combobox)
 
         ' Recursive if Filters Children exist
         For Each childFilterNode As TreeNode In filterNode.Nodes

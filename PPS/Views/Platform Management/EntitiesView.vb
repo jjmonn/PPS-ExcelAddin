@@ -87,7 +87,17 @@ Friend Class EntitiesView
         AddHandler m_entitiesDataGridView.HierarchyItemMouseClick, AddressOf dataGridView_HierarchyItemMouseClick
         AddHandler m_entitiesDataGridView.CellValueChanged, AddressOf dataGridView_CellValueChanged
         AddHandler m_entitiesDataGridView.KeyDown, AddressOf DGV_KeyDown
+        DesactivateUnallowed()
+    End Sub
 
+    Private Sub DesactivateUnallowed()
+        If Not GlobalVariables.Users.CurrentUserIsAdmin() Then
+            RenameEntityButton.Enabled = False
+            CreateEntityToolStripMenuItem.Enabled = False
+            DeleteEntityToolStripMenuItem.Enabled = False
+            DeleteEntityToolStripMenuItem2.Enabled = False
+            CreateANewEntityToolStripMenuItem.Enabled = False
+        End If
     End Sub
 
     Private Sub InitCurrenciesComboBox()
@@ -267,7 +277,7 @@ Friend Class EntitiesView
         currencyColumn.ItemValue = ENTITIES_CURRENCY_VARIABLE
         currencyColumn.AllowFiltering = True
         currencyColumn.Width = COLUMNS_WIDTH
-        currencyColumn.CellsEditor = m_currenciesComboBox
+        If GlobalVariables.Users.CurrentUserIsAdmin() Then currencyColumn.CellsEditor = m_currenciesComboBox
         ' CreateFilter(col1)
 
         For Each rootNode As TreeNode In entitiesFilterTV.Nodes
@@ -415,7 +425,7 @@ Friend Class EntitiesView
         End If
 
         ' Add ComboBoxEditor to Cell
-        m_entitiesDataGridView.CellsArea.SetCellEditor(rowItem, columnItem, combobox)
+        If GlobalVariables.Users.CurrentUserIsAdmin() Then m_entitiesDataGridView.CellsArea.SetCellEditor(rowItem, columnItem, combobox)
 
         ' Recursive if Filters Children exist
         For Each childFilterNode As TreeNode In filterNode.Nodes
@@ -498,7 +508,7 @@ Friend Class EntitiesView
         m_entitiesDataGridView.CellsArea.SetCellValue(row, column, Nothing)
 
         ' Add ComboBoxEditor to Cell
-        m_entitiesDataGridView.CellsArea.SetCellEditor(row, column, comboBox)
+        If GlobalVariables.Users.CurrentUserIsAdmin() Then m_entitiesDataGridView.CellsArea.SetCellEditor(row, column, comboBox)
 
         ' Recursivly update children comboboxes
         For Each childFilterNode As TreeNode In filterNode.Nodes

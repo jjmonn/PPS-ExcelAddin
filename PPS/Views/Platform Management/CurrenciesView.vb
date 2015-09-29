@@ -42,7 +42,13 @@ Friend Class CurrenciesView
         m_currenciesDataGridView.RowsHierarchy.SortBy(m_currenciesDataGridView.ColumnsHierarchy.Items(1), SortingDirection.Ascending)
 
         AddHandler m_currenciesDataGridView.CellMouseEnter, AddressOf DataGridView_CellMouseEnter
+        DesactivateUnallowed()
+    End Sub
 
+    Private Sub DesactivateUnallowed()
+        If Not GlobalVariables.Users.CurrentUserIsAdmin() Then
+            ValidateButton.Enabled = False
+        End If
     End Sub
 
     Private Sub InitializeCurrenciesdgvColumns()
@@ -73,7 +79,9 @@ Friend Class CurrenciesView
             Dim currencyRow As HierarchyItem = m_currenciesDataGridView.RowsHierarchy.Items.Add("")
             Dim inUsecheckBoxEditor As New CheckBoxEditor
             currencyRow.ItemValue = currencyId
-            m_currenciesDataGridView.CellsArea.SetCellEditor(currencyRow, m_currenciesDataGridView.ColumnsHierarchy.Items(0), inUsecheckBoxEditor)
+            If GlobalVariables.Users.CurrentUserIsAdmin() Then
+                m_currenciesDataGridView.CellsArea.SetCellEditor(currencyRow, m_currenciesDataGridView.ColumnsHierarchy.Items(0), inUsecheckBoxEditor)
+            End If
             m_currenciesDataGridView.CellsArea.SetCellValue(currencyRow, m_currenciesDataGridView.ColumnsHierarchy.Items(0), p_currenciesHash(currencyId)(CURRENCY_IN_USE_VARIABLE))
             m_currenciesDataGridView.CellsArea.SetCellValue(currencyRow, m_currenciesDataGridView.ColumnsHierarchy.Items(1), p_currenciesHash(currencyId)(NAME_VARIABLE))
             m_currenciesDataGridView.CellsArea.SetCellValue(currencyRow, m_currenciesDataGridView.ColumnsHierarchy.Items(2), p_currenciesHash(currencyId)(CURRENCY_SYMBOL_VARIABLE))

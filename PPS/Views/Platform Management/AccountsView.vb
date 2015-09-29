@@ -68,7 +68,29 @@ Friend Class AccountsView
         AccountsTVInit()
         GlobalFactsTVInit()
         ComboBoxesInit()
+        DesactivateUnallowed()
 
+    End Sub
+
+    Private Sub DesactivateUnallowed()
+        If Not GlobalVariables.Users.CurrentUserIsAdmin() Then
+            SaveDescriptionBT.Enabled = False
+            Name_TB.Enabled = False
+            formula_TB.Enabled = False
+            FormulaTypeComboBox.Enabled = False
+            TypeComboBox.Enabled = False
+            CurrencyConversionComboBox.Enabled = False
+            DescriptionTB.Enabled = False
+            ConsolidationOptionComboBox.Enabled = False
+            AddSubAccountToolStripMenuItem.Enabled = False
+            AddCategoryToolStripMenuItem.Enabled = False
+            DeleteAccountToolStripMenuItem.Enabled = False
+            DeleteAccountToolStripMenuItem1.Enabled = False
+            submit_cmd.Enabled = False
+            formulaEdit.Enabled = False
+            CreateANewAccountToolStripMenuItem.Enabled = False
+            CreateANewCategoryToolStripMenuItem.Enabled = False
+        End If
     End Sub
 
     Private Sub TVInit(ByRef p_tv As TreeView)
@@ -424,6 +446,7 @@ SubmitFormula:
             If formulaEdit.Checked = False Then
                 m_currentNode = e.Node
                 DisplayAttributes()
+                DesactivateUnallowed()
             End If
         End If
 
@@ -543,7 +566,6 @@ SubmitFormula:
 #End Region
 
 #End Region
-
 
 #Region "Formula Events"
 

@@ -23,6 +23,15 @@ Friend Class PlatformMGTGeneralUI
 
 #End Region
 
+    Friend Sub New()
+
+        ' This call is required by the designer.
+        InitializeComponent()
+        If Not GlobalVariables.Users.CurrentUserIsAdmin() Then GroupsBT.Enabled = False
+
+        ' Add any initialization after the InitializeComponent() call.
+
+    End Sub
 
     Private Sub closeCurrentControl()
 
@@ -134,7 +143,7 @@ Friend Class PlatformMGTGeneralUI
     Private Sub CurrenciesBT_Click(sender As Object, e As EventArgs) Handles CurrenciesBT.Click
 
         closeCurrentControl()
-        current_controller = New currenciesController()
+        current_controller = New CurrenciesController()
         current_controller.addControlToPanel(Panel1, Me)
 
     End Sub
@@ -147,7 +156,7 @@ Friend Class PlatformMGTGeneralUI
 
     End Sub
 
-    Private Sub UsersBT_Click(sender As Object, e As EventArgs) Handles UsersBT.Click
+    Private Sub UsersBT_Click(sender As Object, e As EventArgs)
 
         closeCurrentControl()
         current_controller = New UsersController()

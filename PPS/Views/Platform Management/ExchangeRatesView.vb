@@ -76,7 +76,20 @@ Friend Class ExchangeRatesView
         AddHandler m_ratesVersionsTV.KeyPress, AddressOf Rates_versionsTV_KeyPress
         AddHandler m_ratesVersionsTV.MouseDoubleClick, AddressOf RatesVersionsTV_MouseDoubleClick
         '     AddHandler m_ratesVersionsTV.MouseClick, AddressOf Rates_versionsTV_MouseClick
+        DesactivateUnallowed()
+    End Sub
 
+    Private Sub DesactivateUnallowed()
+        If Not GlobalVariables.Users.CurrentUserIsAdmin() Then
+            AddRatesVersionRCM.Enabled = False
+            DeleteVersionRCM.Enabled = False
+            AddFolderRCM.Enabled = False
+            currenciesRCMenu.Enabled = False
+            CreateFolderToolStripMenuItem.Enabled = False
+            CreateVersionToolStripMenuItem.Enabled = False
+            DeleteToolStripMenuItem.Enabled = False
+            ImportFromExcelToolStripMenuItem.Enabled = False
+        End If
     End Sub
 
     Private Sub CurrenciesManagementUI_Load(sender As Object, e As EventArgs) Handles MyBase.Load
@@ -161,6 +174,7 @@ Friend Class ExchangeRatesView
 
     Private Sub Select_version_Click(sender As Object, e As EventArgs) Handles select_version.Click, DisplayRatesToolStripMenuItem.Click
 
+        If m_ratesVersionsTV.SelectedNode Is Nothing Then Exit Sub
         If m_controller.IsFolderVersion(m_ratesVersionsTV.SelectedNode.Value) = False Then
             ChangeRatesVersionDisplayRequest(m_ratesVersionsTV.SelectedNode.Value)
         End If
@@ -274,6 +288,7 @@ Friend Class ExchangeRatesView
 
     Private Sub RatesVersionsTV_MouseDoubleClick(sender As Object, e As MouseEventArgs)
 
+        If m_ratesVersionsTV.SelectedNode Is Nothing Then Exit Sub
         If m_controller.IsFolderVersion(m_ratesVersionsTV.SelectedNode.Value) = False Then
             ChangeRatesVersionDisplayRequest(m_ratesVersionsTV.SelectedNode.Value)
         End If
@@ -334,7 +349,7 @@ Friend Class ExchangeRatesView
             Dim row As HierarchyItem = m_ratesDataGridView.RowsHierarchy.Items.Add(Format(period, "MMM yyyy"))
             row.ItemValue = monthId
             m_currencyTextBoxEditor.ActivationFlags = EditorActivationFlags.MOUSE_CLICK_SELECTED_CELL
-            row.CellsEditor = m_currencyTextBoxEditor
+            If GlobalVariables.Users.CurrentUserIsAdmin() Then row.CellsEditor = m_currencyTextBoxEditor
         Next
 
     End Sub
@@ -423,5 +438,5 @@ Friend Class ExchangeRatesView
 #End Region
 
 
-   
+
 End Class

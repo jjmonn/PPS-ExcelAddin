@@ -3,12 +3,13 @@ Imports System.Collections.Generic
 
 Friend Class User
 
-
 #Region "Instance variables"
 
     ' Variables
     Friend state_flag As Boolean
     Friend userDic As New Dictionary(Of Int32, Hashtable)
+    Friend currentUserName As String
+    Private m_currentUserId As Int32
     Public Event CreationEvent(ByRef status As Boolean, ByRef id As Int32)
     Public Event UpdateEvent(ByRef status As Boolean, ByRef id As Int32)
     Public Event DeleteEvent(ByRef status As Boolean, ByRef id As Int32)
@@ -37,6 +38,9 @@ Friend Class User
             For i As Int32 = 1 To packet.ReadInt32()
                 Dim tmp_ht As New Hashtable
                 GetUserHTFromPacket(packet, tmp_ht)
+                If tmp_ht(NAME_VARIABLE) = currentUserName Then
+                    m_currentUserId = CInt(tmp_ht(ID_VARIABLE))
+                End If
                 userDic(CInt(tmp_ht(ID_VARIABLE))) = tmp_ht
             Next
             RaiseEvent ObjectInitialized(True)
@@ -51,6 +55,14 @@ Friend Class User
 #End Region
 
 #Region "Utilities"
+
+    Friend Function GetCurrentUser() As Hashtable
+        Return userDic(m_currentUserId)
+    End Function
+
+    Friend Function CurrentUserIsAdmin() As Boolean
+        Return GlobalVariables.Groups.GroupIsAdmin(userDic(m_currentUserId)(GROUP_ID_VARIABLE))
+    End Function
 
     Private Shared Sub GetUserHTFromPacket(ByRef packet As ByteBuffer, ByRef user_ht As Hashtable)
 

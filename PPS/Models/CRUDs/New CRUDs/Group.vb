@@ -3,6 +3,11 @@ Imports System.Collections.Generic
 
 Friend Class Group
 
+    Enum Permission
+        NONE = 0
+        ADMIN = 1
+        USER = 2
+    End Enum
 
 #Region "Instance variables"
 
@@ -65,6 +70,10 @@ Friend Class Group
         VTreeViewUtil.LoadTreeview(TV, groupDic)
 
     End Sub
+
+    Friend Function GroupIsAdmin(ByRef p_groupId As Int32) As Boolean
+        Return groupDic(p_groupId)(RIGHTS_VARIABLE) And Permission.ADMIN
+    End Function
 #End Region
 
 #Region "Management"

@@ -109,6 +109,7 @@ Friend Class ConnectionsFunctions
         If packet.GetError() = 0 Then
             If packet.ReadBool() = True Then
                 System.Diagnostics.Debug.WriteLine("Authentication succeeded")
+                GlobalVariables.Users.currentUserName = userName
                 globalAuthenticated = True
             Else
                 globalInitFlag = True

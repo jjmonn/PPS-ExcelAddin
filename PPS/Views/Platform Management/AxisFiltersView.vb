@@ -49,6 +49,14 @@ Friend Class AxisFiltersView
         FiltersFiltersValuesTV.ImageList = ImageList1
         FiltersFiltersValuesTV.ContextMenuStrip = RCM_TV
 
+        If Not GlobalVariables.Users.CurrentUserIsAdmin() Then
+            CategoriesToolStripMenuItem.Enabled = False
+            RenameRCM.Enabled = False
+            DeleteRCM.Enabled = False
+            CreateCategoryRCM.Enabled = False
+            AddValueRCM.Enabled = False
+        End If
+
         AddHandler FiltersFiltersValuesTV.KeyDown, AddressOf FiltersFiltersValuesTV_KeyDown
         AddHandler FiltersFiltersValuesTV.AfterSelect, AddressOf TV_AfterSelect
 

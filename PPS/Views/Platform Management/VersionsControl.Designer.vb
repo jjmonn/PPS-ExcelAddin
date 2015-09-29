@@ -84,43 +84,43 @@ Partial Class VersionsControl
         '
         Me.RCM_TV.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.new_version_bt, Me.new_folder_bt, Me.ToolStripSeparator2, Me.rename_bt, Me.ToolStripSeparator1, Me.delete_bt})
         Me.RCM_TV.Name = "RCM_TV"
-        Me.RCM_TV.Size = New System.Drawing.Size(168, 112)
+        Me.RCM_TV.Size = New System.Drawing.Size(150, 104)
         '
         'new_version_bt
         '
         Me.new_version_bt.Image = Global.FinancialBI.My.Resources.Resources.elements3_add
         Me.new_version_bt.Name = "new_version_bt"
-        Me.new_version_bt.Size = New System.Drawing.Size(167, 24)
+        Me.new_version_bt.Size = New System.Drawing.Size(149, 22)
         Me.new_version_bt.Text = "Create Version"
         '
         'new_folder_bt
         '
         Me.new_folder_bt.Image = Global.FinancialBI.My.Resources.Resources.folder2
         Me.new_folder_bt.Name = "new_folder_bt"
-        Me.new_folder_bt.Size = New System.Drawing.Size(167, 24)
+        Me.new_folder_bt.Size = New System.Drawing.Size(149, 22)
         Me.new_folder_bt.Text = "Create Folder"
         '
         'ToolStripSeparator2
         '
         Me.ToolStripSeparator2.Name = "ToolStripSeparator2"
-        Me.ToolStripSeparator2.Size = New System.Drawing.Size(164, 6)
+        Me.ToolStripSeparator2.Size = New System.Drawing.Size(146, 6)
         '
         'rename_bt
         '
         Me.rename_bt.Name = "rename_bt"
-        Me.rename_bt.Size = New System.Drawing.Size(167, 24)
+        Me.rename_bt.Size = New System.Drawing.Size(149, 22)
         Me.rename_bt.Text = "Rename"
         '
         'ToolStripSeparator1
         '
         Me.ToolStripSeparator1.Name = "ToolStripSeparator1"
-        Me.ToolStripSeparator1.Size = New System.Drawing.Size(164, 6)
+        Me.ToolStripSeparator1.Size = New System.Drawing.Size(146, 6)
         '
         'delete_bt
         '
         Me.delete_bt.Image = Global.FinancialBI.My.Resources.Resources.elements3_delete
         Me.delete_bt.Name = "delete_bt"
-        Me.delete_bt.Size = New System.Drawing.Size(167, 24)
+        Me.delete_bt.Size = New System.Drawing.Size(149, 22)
         Me.delete_bt.Text = "Delete"
         '
         'VersionsTVIcons
@@ -213,7 +213,7 @@ Partial Class VersionsControl
         Me.Label2.Location = New System.Drawing.Point(3, 329)
         Me.Label2.Margin = New System.Windows.Forms.Padding(3, 7, 3, 0)
         Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(100, 30)
+        Me.Label2.Size = New System.Drawing.Size(89, 26)
         Me.Label2.TabIndex = 22
         Me.Label2.Text = "Exchange Rates Version"
         '
@@ -223,7 +223,7 @@ Partial Class VersionsControl
         Me.Label1.Location = New System.Drawing.Point(3, 283)
         Me.Label1.Margin = New System.Windows.Forms.Padding(3, 7, 3, 0)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(99, 15)
+        Me.Label1.Size = New System.Drawing.Size(86, 13)
         Me.Label1.TabIndex = 20
         Me.Label1.Text = "Number of Years"
         '
@@ -233,7 +233,7 @@ Partial Class VersionsControl
         Me.Label11.Location = New System.Drawing.Point(3, 237)
         Me.Label11.Margin = New System.Windows.Forms.Padding(3, 7, 3, 0)
         Me.Label11.Name = "Label11"
-        Me.Label11.Size = New System.Drawing.Size(77, 15)
+        Me.Label11.Size = New System.Drawing.Size(68, 13)
         Me.Label11.TabIndex = 17
         Me.Label11.Text = "Starting Year"
         '
@@ -243,7 +243,7 @@ Partial Class VersionsControl
         Me.Label10.Location = New System.Drawing.Point(3, 191)
         Me.Label10.Margin = New System.Windows.Forms.Padding(3, 7, 3, 0)
         Me.Label10.Name = "Label10"
-        Me.Label10.Size = New System.Drawing.Size(78, 30)
+        Me.Label10.Size = New System.Drawing.Size(106, 13)
         Me.Label10.TabIndex = 15
         Me.Label10.Text = "Periods configuration"
         '
@@ -254,7 +254,7 @@ Partial Class VersionsControl
         Me.Label4.Location = New System.Drawing.Point(3, 7)
         Me.Label4.Margin = New System.Windows.Forms.Padding(3, 7, 3, 0)
         Me.Label4.Name = "Label4"
-        Me.Label4.Size = New System.Drawing.Size(97, 15)
+        Me.Label4.Size = New System.Drawing.Size(85, 13)
         Me.Label4.TabIndex = 7
         Me.Label4.Text = "Version Name"
         '
@@ -275,7 +275,7 @@ Partial Class VersionsControl
         Me.Label7.Location = New System.Drawing.Point(3, 99)
         Me.Label7.Margin = New System.Windows.Forms.Padding(3, 7, 3, 0)
         Me.Label7.Name = "Label7"
-        Me.Label7.Size = New System.Drawing.Size(87, 15)
+        Me.Label7.Size = New System.Drawing.Size(77, 13)
         Me.Label7.TabIndex = 10
         Me.Label7.Text = "Version locked"
         '
@@ -285,7 +285,7 @@ Partial Class VersionsControl
         Me.Label8.Location = New System.Drawing.Point(3, 145)
         Me.Label8.Margin = New System.Windows.Forms.Padding(3, 7, 3, 0)
         Me.Label8.Name = "Label8"
-        Me.Label8.Size = New System.Drawing.Size(74, 15)
+        Me.Label8.Size = New System.Drawing.Size(67, 13)
         Me.Label8.TabIndex = 11
         Me.Label8.Text = "Locked date"
         '
@@ -320,7 +320,7 @@ Partial Class VersionsControl
         Me.Label3.Location = New System.Drawing.Point(3, 53)
         Me.Label3.Margin = New System.Windows.Forms.Padding(3, 7, 3, 0)
         Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(80, 15)
+        Me.Label3.Size = New System.Drawing.Size(70, 13)
         Me.Label3.TabIndex = 6
         Me.Label3.Text = "Creation date"
         '
@@ -372,7 +372,7 @@ Partial Class VersionsControl
         Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.VersionsToolStripMenuItem})
         Me.MenuStrip1.Location = New System.Drawing.Point(0, 0)
         Me.MenuStrip1.Name = "MenuStrip1"
-        Me.MenuStrip1.Size = New System.Drawing.Size(856, 25)
+        Me.MenuStrip1.Size = New System.Drawing.Size(856, 24)
         Me.MenuStrip1.TabIndex = 0
         Me.MenuStrip1.Text = "MenuStrip1"
         '
@@ -380,34 +380,34 @@ Partial Class VersionsControl
         '
         Me.VersionsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.NewVersionMenuBT, Me.NewFolderMenuBT, Me.DeleteVersionMenuBT, Me.RenameMenuBT})
         Me.VersionsToolStripMenuItem.Name = "VersionsToolStripMenuItem"
-        Me.VersionsToolStripMenuItem.Size = New System.Drawing.Size(72, 21)
+        Me.VersionsToolStripMenuItem.Size = New System.Drawing.Size(62, 20)
         Me.VersionsToolStripMenuItem.Text = "Versions"
         '
         'NewVersionMenuBT
         '
         Me.NewVersionMenuBT.Image = Global.FinancialBI.My.Resources.Resources.elements3_add
         Me.NewVersionMenuBT.Name = "NewVersionMenuBT"
-        Me.NewVersionMenuBT.Size = New System.Drawing.Size(166, 24)
+        Me.NewVersionMenuBT.Size = New System.Drawing.Size(148, 22)
         Me.NewVersionMenuBT.Text = "New Version"
         '
         'NewFolderMenuBT
         '
         Me.NewFolderMenuBT.Image = Global.FinancialBI.My.Resources.Resources.favicon_81_
         Me.NewFolderMenuBT.Name = "NewFolderMenuBT"
-        Me.NewFolderMenuBT.Size = New System.Drawing.Size(166, 24)
+        Me.NewFolderMenuBT.Size = New System.Drawing.Size(148, 22)
         Me.NewFolderMenuBT.Text = "New Folder"
         '
         'DeleteVersionMenuBT
         '
         Me.DeleteVersionMenuBT.Image = Global.FinancialBI.My.Resources.Resources.elements3_delete
         Me.DeleteVersionMenuBT.Name = "DeleteVersionMenuBT"
-        Me.DeleteVersionMenuBT.Size = New System.Drawing.Size(166, 24)
+        Me.DeleteVersionMenuBT.Size = New System.Drawing.Size(148, 22)
         Me.DeleteVersionMenuBT.Text = "Delete Version"
         '
         'RenameMenuBT
         '
         Me.RenameMenuBT.Name = "RenameMenuBT"
-        Me.RenameMenuBT.Size = New System.Drawing.Size(166, 24)
+        Me.RenameMenuBT.Size = New System.Drawing.Size(148, 22)
         Me.RenameMenuBT.Text = "Rename"
         '
         'VersionsControl

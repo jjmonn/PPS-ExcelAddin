@@ -76,7 +76,14 @@ Friend Class VersionsControl
         For Each name_ In Controller.rates_versions_name_id_dic.Keys
             RatesVersionCB.Items.Add(name_)
         Next
+        DesactivateUnallowed()
+    End Sub
 
+    Private Sub DesactivateUnallowed()
+        If Not GlobalVariables.Users.CurrentUserIsAdmin() Then
+            lockedCB.Enabled = False
+            RatesVersionCB.Enabled = False
+        End If
     End Sub
 
     Friend Sub closeControl()
@@ -148,6 +155,7 @@ Friend Class VersionsControl
         isDisplaying = True
         Display(current_node)
         isDisplaying = False
+        DesactivateUnallowed()
 
     End Sub
 

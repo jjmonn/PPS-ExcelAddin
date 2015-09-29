@@ -56,7 +56,16 @@ Friend Class GlobalFactUI
         AddHandler m_versionsTV.MouseDoubleClick, AddressOf VersionsTV_MouseDoubleClick
         AddHandler GlobalVariables.GlobalFacts.Read, AddressOf ReloadUI
         '     AddHandler m_ratesVersionsTV.MouseClick, AddressOf Rates_versionsTV_MouseClick
+        DesactivateUnallowed()
+    End Sub
 
+    Private Sub DesactivateUnallowed()
+        If Not GlobalVariables.Users.CurrentUserIsAdmin() Then
+            AddRatesVersionRCM.Enabled = False
+            DeleteVersionRCM.Enabled = False
+            AddFolderRCM.Enabled = False
+            ImportFromExcelToolStripMenuItem.Enabled = False
+        End If
     End Sub
 
     Delegate Sub ReloadUI_Delegate()
@@ -260,6 +269,7 @@ Friend Class GlobalFactUI
         If m_versionsTV.SelectedNode Is Nothing Then Exit Sub
         If m_controller.IsFolderVersion(m_versionsTV.SelectedNode.Value) = False Then
             ChangeRatesVersionDisplayRequest(m_versionsTV.SelectedNode.Value)
+            DesactivateUnallowed()
         End If
 
     End Sub
@@ -269,6 +279,7 @@ Friend Class GlobalFactUI
         If e.KeyChar = Chr(13) AndAlso Not m_versionsTV.SelectedNode Is Nothing _
         AndAlso m_versionsTV.SelectedNode.SelectedImageIndex = 0 Then
             ChangeRatesVersionDisplayRequest(m_versionsTV.SelectedNode.Value)
+            DesactivateUnallowed()
         End If
         '   If e.KeyChar = Chr(10) Then DeleteVersionBT_Click(sender, e)
 

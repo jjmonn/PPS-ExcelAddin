@@ -32,7 +32,6 @@ Partial Class PlatformMGTGeneralUI
         Me.VersionsBT = New System.Windows.Forms.ToolStripMenuItem()
         Me.CurrenciesBT = New System.Windows.Forms.ToolStripMenuItem()
         Me.ExchangeRatesButton = New System.Windows.Forms.ToolStripMenuItem()
-        Me.UsersBT = New System.Windows.Forms.ToolStripMenuItem()
         Me.ControlsBT = New System.Windows.Forms.ToolStripMenuItem()
         Me.CategoriesBT = New System.Windows.Forms.ToolStripMenuItem()
         Me.EntitiesFiltersBT = New System.Windows.Forms.ToolStripMenuItem()
@@ -40,14 +39,14 @@ Partial Class PlatformMGTGeneralUI
         Me.ProductsFiltersBT = New System.Windows.Forms.ToolStripMenuItem()
         Me.AdjustmentsFiltersBT = New System.Windows.Forms.ToolStripMenuItem()
         Me.GroupsBT = New System.Windows.Forms.ToolStripMenuItem()
-        Me.Panel1 = New System.Windows.Forms.Panel()
         Me.GlobalFact_BT = New System.Windows.Forms.ToolStripMenuItem()
+        Me.Panel1 = New System.Windows.Forms.Panel()
         Me.MenuStrip1.SuspendLayout()
         Me.SuspendLayout()
         '
         'MenuStrip1
         '
-        Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.AccountsBT, Me.EntitiesBT, Me.ClientsBT, Me.ProductsBT, Me.AdjustmentsBT, Me.VersionsBT, Me.CurrenciesBT, Me.ExchangeRatesButton, Me.UsersBT, Me.ControlsBT, Me.CategoriesBT, Me.GroupsBT, Me.GlobalFact_BT})
+        Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.AccountsBT, Me.EntitiesBT, Me.ClientsBT, Me.ProductsBT, Me.AdjustmentsBT, Me.VersionsBT, Me.CurrenciesBT, Me.ExchangeRatesButton, Me.ControlsBT, Me.CategoriesBT, Me.GroupsBT, Me.GlobalFact_BT})
         Me.MenuStrip1.Location = New System.Drawing.Point(0, 0)
         Me.MenuStrip1.Name = "MenuStrip1"
         Me.MenuStrip1.Size = New System.Drawing.Size(1009, 55)
@@ -141,17 +140,6 @@ Partial Class PlatformMGTGeneralUI
         Me.ExchangeRatesButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
         Me.ExchangeRatesButton.ToolTipText = "Edit the currencies used in Financial BI"
         '
-        'UsersBT
-        '
-        Me.UsersBT.CheckOnClick = True
-        Me.UsersBT.Image = Global.FinancialBI.My.Resources.Resources.user1
-        Me.UsersBT.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
-        Me.UsersBT.Name = "UsersBT"
-        Me.UsersBT.Size = New System.Drawing.Size(47, 51)
-        Me.UsersBT.Text = "Users"
-        Me.UsersBT.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
-        Me.UsersBT.ToolTipText = "Users Edition"
-        '
         'ControlsBT
         '
         Me.ControlsBT.Enabled = False
@@ -205,9 +193,18 @@ Partial Class PlatformMGTGeneralUI
         '
         'GroupsBT
         '
+        Me.GroupsBT.Image = Global.FinancialBI.My.Resources.Resources.users_family
+        Me.GroupsBT.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
         Me.GroupsBT.Name = "GroupsBT"
         Me.GroupsBT.Size = New System.Drawing.Size(57, 51)
         Me.GroupsBT.Text = "Groups"
+        Me.GroupsBT.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
+        '
+        'GlobalFact_BT
+        '
+        Me.GlobalFact_BT.Name = "GlobalFact_BT"
+        Me.GlobalFact_BT.Size = New System.Drawing.Size(46, 51)
+        Me.GlobalFact_BT.Text = "Facts"
         '
         'Panel1
         '
@@ -218,12 +215,6 @@ Partial Class PlatformMGTGeneralUI
         Me.Panel1.Name = "Panel1"
         Me.Panel1.Size = New System.Drawing.Size(1009, 432)
         Me.Panel1.TabIndex = 1
-        '
-        'GlobalFact_BT
-        '
-        Me.GlobalFact_BT.Name = "GlobalFact_BT"
-        Me.GlobalFact_BT.Size = New System.Drawing.Size(46, 51)
-        Me.GlobalFact_BT.Text = "Facts"
         '
         'PlatformMGTGeneralUI
         '
@@ -249,7 +240,6 @@ Partial Class PlatformMGTGeneralUI
     Friend WithEvents ProductsBT As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents VersionsBT As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents CurrenciesBT As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents UsersBT As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents Panel1 As System.Windows.Forms.Panel
     Friend WithEvents ControlsBT As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents AdjustmentsBT As System.Windows.Forms.ToolStripMenuItem
