@@ -112,7 +112,12 @@ Friend Class Currency
         If packet.GetError() = 0 Then
             Dim ht As New Hashtable
             GetcurrencyHTFromPacket(packet, ht)
-            currencies_hash(CInt(ht(ID_VARIABLE))) = ht
+            If (ht(CURRENCY_IN_USE_VARIABLE) = True) Then
+                currencies_hash(CInt(ht(ID_VARIABLE))) = ht
+            Else
+                If currencies_hash.ContainsKey(CInt(ht(ID_VARIABLE))) Then currencies_hash.Remove(CInt(ht(ID_VARIABLE)))
+            End If
+
             m_allCurrenciesHash(CInt(ht(ID_VARIABLE))) = ht
             RaiseEvent Read(True, ht)
         Else

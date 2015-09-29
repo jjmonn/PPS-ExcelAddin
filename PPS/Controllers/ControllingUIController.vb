@@ -121,6 +121,7 @@ Friend Class ControllingUIController
                        ByRef inputEntityNode As vTreeNode, _
                        Optional ByRef useCache As Boolean = False)
 
+        If (isComputingFlag = True) Then Exit Sub
         isComputingFlag = True
         computedFlag = False
 
@@ -198,6 +199,7 @@ Friend Class ControllingUIController
         ' Redraw hierarchy Items
         InitDisplay()
         FillUIHeader()
+        isComputingFlag = False
 
     End Sub
 
@@ -270,7 +272,6 @@ Friend Class ControllingUIController
             AddHandler DGV.CellValueNeeded, AddressOf DGVs_CellValueNeeded
         Next
         initDisplayFlag = True
-        isComputingFlag = False
 
     End Sub
 
