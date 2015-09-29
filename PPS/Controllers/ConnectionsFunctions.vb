@@ -51,10 +51,10 @@ Friend Class ConnectionsFunctions
         End If
         GlobalVariables.NetworkConnect = New NetworkLauncher()
         GlobalVariables.ConnectionState = GlobalVariables.NetworkConnect.Launch(p_hostname, p_port, _
-                                                                                Function()
+                                                                                Sub()
                                                                                     System.Diagnostics.Debug.WriteLine("Connection to server lost, attempt reconnection")
                                                                                     Dim failed As Boolean = True
-                                                                                    Dim nbTry As Int32 = 5
+                                                                                    Dim nbTry As Int32 = 10
                                                                                     AddinModule.DisplayConnectionStatus(False)
                                                                                     While failed And nbTry > 0
                                                                                         System.Threading.Thread.Sleep(3000)
@@ -64,7 +64,7 @@ Friend Class ConnectionsFunctions
                                                                                     If failed Then MsgBox("Connection to server lost")
                                                                                     If Not failed Then AddinModule.DisplayConnectionStatus(True)
 
-                                                                                End Function)
+                                                                                End Sub)
 
         If GlobalVariables.ConnectionState = True Then
             ' request auth token
