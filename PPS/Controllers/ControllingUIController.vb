@@ -199,7 +199,6 @@ Friend Class ControllingUIController
         ' Redraw hierarchy Items
         InitDisplay()
         FillUIHeader()
-        isComputingFlag = False
 
     End Sub
 
@@ -211,6 +210,7 @@ Friend Class ControllingUIController
         dataMap = Computer.GetData()
         computedFlag = True
         View.TerminateCircularProgress()
+        isComputingFlag = False
 
     End Sub
 
