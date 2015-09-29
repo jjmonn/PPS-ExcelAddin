@@ -281,7 +281,13 @@ Friend Class ControllingUI_2
                 entityNode = leftPane_control.entitiesTV.Nodes(0)
                 If versionsIds.Count > 0 Then
                     ' Launch Computation
-                    Controller.Compute(versionsIds.ToArray, entityNode)
+                    Try
+                        Controller.Compute(versionsIds.ToArray, entityNode)
+                    Catch ex As OutOfMemoryException
+                        System.Diagnostics.Debug.WriteLine(ex.Message)
+                        MsgBox("Unable to display result: Request too complex")
+                        AfterWorkDoneAttemp_ThreadSafe()
+                    End Try
                 Else
                     MsgBox("At least one version must be selected.")
                 End If
@@ -292,7 +298,13 @@ Friend Class ControllingUI_2
         Else
             If versionsIds.Count > 0 Then
                 ' Launch Computation
-                Controller.Compute(versionsIds.ToArray, entityNode)
+                Try
+                    Controller.Compute(versionsIds.ToArray, entityNode)
+                Catch ex As Exception
+                    System.Diagnostics.Debug.WriteLine(ex.Message)
+                    MsgBox("Unable to display result: Request too complex")
+                    AfterWorkDoneAttemp_ThreadSafe()
+                End Try
             Else
                 MsgBox("At least one version must be selected.")
             End If
