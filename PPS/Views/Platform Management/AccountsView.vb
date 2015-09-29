@@ -72,12 +72,14 @@ Friend Class AccountsView
     End Sub
 
     Private Sub TVInit(ByRef p_tv As TreeView)
+
         p_tv.ContextMenuStrip = TVRCM
         p_tv.Dock = DockStyle.Fill
         p_tv.ImageList = accountsIL
         p_tv.AllowDrop = True
         p_tv.LabelEdit = False
         p_tv.CollapseAll()
+
     End Sub
 
     Private Sub AccountsTVInit()
@@ -99,7 +101,10 @@ Friend Class AccountsView
 
     Private Sub GlobalFactsTVInit()
 
-        TVInit(m_globalFactsTV)
+        '   TVInit(m_globalFactsTV)
+        m_globalFactsTV.Dock = DockStyle.Fill
+        m_globalFactsTV.LabelEdit = False
+        m_globalFactsTV.CollapseAll()
         GlobalFactsPanel.Controls.Add(m_globalFactsTV)
 
     End Sub
@@ -828,4 +833,5 @@ UdpateFormulaType:
 
 #End Region
 
+  
 End Class

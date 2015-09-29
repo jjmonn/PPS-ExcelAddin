@@ -22,8 +22,8 @@ Public Class ConnectionTP
     Private isConnecting As Boolean
     Private id As String
     Private pwd As String
-    Private connectionFailed As Boolean
     Private connectionFunction As New ConnectionsFunctions
+    Private connectionFailed As Boolean
 
 #End Region
 
@@ -93,34 +93,13 @@ Public Class ConnectionTP
 
 #Region "Background Worker 1"
 
+    Private Sub BackgroundWorker1_DoWork(sender As Object, e As ComponentModel.DoWorkEventArgs)
 
-  Private Sub BackgroundWorker1_DoWork(sender As Object, e As ComponentModel.DoWorkEventArgs)
+        isConnecting = True
+        AddHandler connectionFunction.ConnectionFailedEvent, AddressOf ConnectionFailedMethod
+        ConnectionsFunctions.Connect(connectionFunction, connectionFailed, id, pwd)
 
-    Dim start_time As Date
-    Dim secs As Single
-    connectionFailed = False
-    AddHandler connectionFunction.ConnectionFailedEvent, AddressOf ConnectionFailedMethod
-
-    isConnecting = True
-    If connectionFunction.NetworkConnection(My.Settings.serverIp, _
-                                            My.Settings.port_number, _
-                                            id, _
-                                            pwd) = True Then
-
-      start_time = Now
-      Do While connectionFunction.globalInitFlag = False
-        secs = DateDiff("s", start_time, Now)
-        If secs > 6 Then Exit Do
-      Loop
-    Else
-      ConnectionsFunctions.CloseNetworkConnection()
-    End If
-        If connectionFunction.globalAuthenticated = False Then
-            MsgBox("Connection failed")
-            connectionFailed = True
-        End If
-
-  End Sub
+    End Sub
 
   Private Sub ConnectionFailedMethod() Handles CancelBT.Click
 

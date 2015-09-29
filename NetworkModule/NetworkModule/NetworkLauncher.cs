@@ -42,12 +42,20 @@ public class NetworkLauncher
     {
         while (m_state == ClientState.running)
         {
-          if (m_netMgr.HandlePacket() == false)
+          try
           {
-            m_state = ClientState.not_connected;
-            if (m_diconnectCallback != null)
-              m_diconnectCallback();
+            if (m_netMgr.HandlePacket() == false)
+            {
+              m_state = ClientState.not_connected;
+              if (m_diconnectCallback != null)
+                m_diconnectCallback();
+            }
           }
+          catch (OutOfMemoryException e)
+          {
+            System.Diagnostics.Debug.WriteLine(e.Message);
+          }
+
           Thread.Sleep(2);
         }
     }

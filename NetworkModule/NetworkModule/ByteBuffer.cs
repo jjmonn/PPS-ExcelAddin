@@ -31,7 +31,14 @@ public class ByteBuffer : MemoryStream
     m_sizeHeader = Length;
   }
 
-  public UInt32 GetError() { return m_header.error; }
+  public UInt32 GetError()
+  {
+    ErrorMessage error = (ErrorMessage)m_header.error;
+    ServerMessage opcode = (ServerMessage)m_header.opcode;
+
+    System.Diagnostics.Debug.WriteLine(opcode.ToString() + " : " + error.ToString());
+    return m_header.error;
+  }
   public ByteBuffer() { }
 
   public UInt16 GetOpcode() { return (m_header.opcode); }

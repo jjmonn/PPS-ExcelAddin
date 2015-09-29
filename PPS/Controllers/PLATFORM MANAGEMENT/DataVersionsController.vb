@@ -267,15 +267,16 @@ Friend Class DataVersionsController
 
         ' update batch to be implemented prioritiy normal
         ' 
-        positions_dictionary = VTreeViewUtil.GeneratePositionsDictionary(versionsTV)
-        For Each version_id In positions_dictionary.Keys
-            Update(version_id, ITEMS_POSITIONS, positions_dictionary(version_id))
-        Next
+        'positions_dictionary = VTreeViewUtil.GeneratePositionsDictionary(versionsTV)
+        'For Each version_id In positions_dictionary.Keys
+        '    Update(version_id, ITEMS_POSITIONS, positions_dictionary(version_id))
+        'Next
 
     End Sub
 
     Friend Function GetRatesVersionNameFromId(ByRef rateVersionId As Int32) As String
 
+        If Not GlobalVariables.RatesVersions.rate_versions_hash.ContainsKey(rateVersionId) Then Return 0
         Return GlobalVariables.RatesVersions.rate_versions_hash(rateVersionId)(NAME_VARIABLE)
 
     End Function

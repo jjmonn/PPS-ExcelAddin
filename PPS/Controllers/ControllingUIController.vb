@@ -121,6 +121,7 @@ Friend Class ControllingUIController
                        ByRef inputEntityNode As vTreeNode, _
                        Optional ByRef useCache As Boolean = False)
 
+        If (isComputingFlag = True) Then Exit Sub
         isComputingFlag = True
         computedFlag = False
 
@@ -209,6 +210,7 @@ Friend Class ControllingUIController
         dataMap = Computer.GetData()
         computedFlag = True
         View.TerminateCircularProgress()
+        isComputingFlag = False
 
     End Sub
 
@@ -270,7 +272,6 @@ Friend Class ControllingUIController
             AddHandler DGV.CellValueNeeded, AddressOf DGVs_CellValueNeeded
         Next
         initDisplayFlag = True
-        isComputingFlag = False
 
     End Sub
 
@@ -398,6 +399,7 @@ Friend Class ControllingUIController
                 Else
                     subColumn = column.Items.Add(valueNode.Text)
                 End If
+                subColumn.ItemValue = 0
                 HideHiearchyItemIfVComp(subColumn, _
                                         dimensionNode, _
                                         valueNode)
@@ -405,7 +407,6 @@ Friend Class ControllingUIController
                 ' Style => will go in utilities !!! priority normal
                 ' ------------------------------------------------------------------------------
                 View.FormatDGVItem(subColumn)
-                subColumn.CellsFormatString = "{0:N}"
                 subColumn.TextAlignment = Drawing.ContentAlignment.MiddleCenter
                 RegisterHierarchyItemDimensions(subColumn)
                 ' ------------------------------------------------------------------------------
@@ -446,6 +447,7 @@ Friend Class ControllingUIController
                 Else
                     subRow = row.Items.Add(valueNode.Text)
                 End If
+                subRow.ItemValue = display_axis_ht(GlobalEnums.DataMapAxis.ACCOUNTS)
                 subRow.CellsDataSource = GridCellDataSource.Virtual
                 View.FormatDGVItem(subRow)
                 HideHiearchyItemIfVComp(subRow, _
@@ -617,11 +619,13 @@ Friend Class ControllingUIController
                     End If
                 Else
                     args.CellValue = ""
+                    If (GlobalVariables.Accounts.accounts_hash(accountId)(ACCOUNT_FORMULA_TYPE_VARIABLE) <> 5) Then
+                        args.RowItem.ParentItem.Items.Remove(args.RowItem)
+                    End If
                 End If
-
             End If
         End If
-    
+
     End Sub
 
 #End Region
@@ -833,6 +837,24 @@ Friend Class ControllingUIController
 
         Dim sepIndex = versionId.IndexOf(Computer.TOKEN_SEPARATOR)
         Return Right(versionId, Len(versionId) - sepIndex - 1)
+
+    End Function
+
+    Friend Function GetAccountTypeFromId(ByRef p_accountId As Int32) As Int32
+
+        If GlobalVariables.Accounts.accounts_hash.ContainsKey(p_accountId) Then
+            Return GlobalVariables.Accounts.accounts_hash(p_accountId)(ACCOUNT_TYPE_VARIABLE)
+        End If
+        Return 0
+
+    End Function
+
+    Friend Function GetAccountFormatFromId(ByRef p_accountId As Int32) As String
+
+        If GlobalVariables.Accounts.accounts_hash.ContainsKey(p_accountId) Then
+            Return GlobalVariables.Accounts.accounts_hash(p_accountId)(ACCOUNT_FORMAT_VARIABLE)
+        End If
+        Return ""
 
     End Function
 

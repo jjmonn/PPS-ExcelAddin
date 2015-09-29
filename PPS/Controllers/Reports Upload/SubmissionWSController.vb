@@ -90,7 +90,13 @@ Friend Class SubmissionWSController
         Dim entityId As Int32 = CInt(AcquisitionModel.entitiesNameIdDict(entityName))
         For Each accountName As String In AcquisitionModel.outputsList
             For Each period As Int32 In AcquisitionModel.currentPeriodList
-                SetDatsetCellValue(entityId, entityName, accountName, period)
+                If AcquisitionModel.accountsNamesFormulaTypeDict(accountName) = GlobalEnums.FormulaTypes.FIRST_PERIOD_INPUT Then
+                    If period <> AcquisitionModel.currentPeriodList(0) Then
+                        SetDatsetCellValue(entityId, entityName, accountName, period)
+                    End If
+                Else
+                    SetDatsetCellValue(entityId, entityName, accountName, period)
+                End If
             Next
         Next
 
@@ -192,7 +198,7 @@ Friend Class SubmissionWSController
                     Else
                         ' Put back the former value in case invalid input has been given (eg. string, ...)
                         disableWSChange = True
-                        cell.Value = DataSet.m_datasetCellDimensionsDictionary(cell).m_value
+                        cell.Value = DataSet.m_datasetCellDimensionsDictionary(cell.Address).m_value
                         disableWSChange = False
                     End If
                 Else

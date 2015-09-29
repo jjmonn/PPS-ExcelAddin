@@ -150,35 +150,42 @@ Friend Class Computer
     ' Server Answer
     Private Sub SMSG_COMPUTE_RESULT(packet As ByteBuffer)
 
-        If packet.GetError() = 0 Then
-            Dim request_id As Int32 = packet.GetRequestId()
-            If requestIdVersionIdDict.ContainsKey(request_id) = False Then
-                MsgBox("The server returned an unregistered compute request id.")
-                Exit Sub
+        Try
+            If packet.GetError() = 0 Then
+                Dim request_id As Int32 = packet.GetRequestId()
+                If requestIdVersionIdDict.ContainsKey(request_id) = False Then
+                    'MsgBox("The server returned an unregistered compute request id.")
+                    Exit Sub
+                End If
+                versionId = requestIdVersionIdDict(request_id)
+                requestIdVersionIdDict.Remove(request_id)
+
+                filtersDict.Clear()
+
+                periodsTokenDict = GlobalVariables.Versions.GetPeriodTokensDict(versionId)
+
+                Select Case GlobalVariables.Versions.versions_hash(versionId)(VERSIONS_TIME_CONFIG_VARIABLE)
+                    Case GlobalEnums.TimeConfig.YEARS : periodIdentifier = YEAR_PERIOD_IDENTIFIER
+                    Case GlobalEnums.TimeConfig.MONTHS : periodIdentifier = MONTH_PERIOD_IDENTIFIER
+                End Select
+
+                FillResultData(packet)
+
+                versions_comp_flag(versionId) = True
+                If AreAllVersionsComputed() = True Then
+                    NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_COMPUTE_RESULT, AddressOf SMSG_COMPUTE_RESULT)
+                    RaiseEvent ComputationAnswered(requestIdEntityIdDict(request_id), True, request_id)
+                    requestIdEntityIdDict.Remove(request_id)
+                End If
+            Else
+                RaiseEvent ComputationAnswered(0, False, 0)
             End If
-            versionId = requestIdVersionIdDict(request_id)
-            requestIdVersionIdDict.Remove(request_id)
-
-            filtersDict.Clear()
-
-            periodsTokenDict = GlobalVariables.Versions.GetPeriodTokensDict(versionId)
-
-            Select Case GlobalVariables.Versions.versions_hash(versionId)(VERSIONS_TIME_CONFIG_VARIABLE)
-                Case GlobalEnums.TimeConfig.YEARS : periodIdentifier = YEAR_PERIOD_IDENTIFIER
-                Case GlobalEnums.TimeConfig.MONTHS : periodIdentifier = MONTH_PERIOD_IDENTIFIER
-            End Select
-
-            FillResultData(packet)
-
-            versions_comp_flag(versionId) = True
-            If AreAllVersionsComputed() = True Then
-                NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_COMPUTE_RESULT, AddressOf SMSG_COMPUTE_RESULT)
-                RaiseEvent ComputationAnswered(requestIdEntityIdDict(request_id), True, request_id)
-                requestIdEntityIdDict.Remove(request_id)
-            End If
-        Else
+        Catch ex As OutOfMemoryException
+            System.Diagnostics.Debug.WriteLine(ex.Message)
+            MsgBox("Unable to display result: Request too complex")
             RaiseEvent ComputationAnswered(0, False, 0)
-        End If
+        End Try
+
 
     End Sub
 

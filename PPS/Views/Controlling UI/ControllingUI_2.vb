@@ -58,14 +58,30 @@ Friend Class ControllingUI_2
     Private row_index As Int32
     Private column_index As Int32
     Friend accountsTV As New vTreeView
+    Private SP1Distance As Single = 230
+    Private SP2Distance As Single = 900
+    '   Private m_formatsDictionary As New Dictionary(Of int32, Formats.FinancialBIFormat)
+    Private m_currenciesSymbol_dict As Hashtable
+
+
+#End Region
+
+#Region "Data Grid Views Items and Cells Formats"
 
     Private hierarchyItemNormalStyle As HierarchyItemStyle
     Private hierarchyItemSelectedStyle As HierarchyItemStyle
     Private hierarchyItemDisabledStyle As HierarchyItemStyle
-    Private CEStyle As GridCellStyle
+    Private hierarchyImportantItemNormalStyle As HierarchyItemStyle
+    Private hierarchyImportantItemSelectedStyle As HierarchyItemStyle
+    Private hierarchyImportantItemDisabledStyle As HierarchyItemStyle
+    Private hierarchyTitleItemNormalStyle As HierarchyItemStyle
+    Private hierarchyTitleItemSelectedStyle As HierarchyItemStyle
+    Private hierarchyTitleItemDisabledStyle As HierarchyItemStyle
+    Private hierarchyDetailItemNormalStyle As HierarchyItemStyle
+    Private hierarchyDetailItemSelectedStyle As HierarchyItemStyle
+    Private hierarchyDetailItemDisabledStyle As HierarchyItemStyle
 
-    Private SP1Distance As Single = 230
-    Private SP2Distance As Single = 900
+    Private GridCellStyleNormal As GridCellStyle
 
 #End Region
 
@@ -117,7 +133,7 @@ Friend Class ControllingUI_2
         Controller = New ControllingUIController(Me)
         GlobalVariables.Accounts.LoadAccountsTV(accountsTV)
         BackgroundWorker1.WorkerSupportsCancellation = True
-
+        m_currenciesSymbol_dict = GlobalVariables.Currencies.GetCurrenciesDict(ID_VARIABLE, CURRENCY_SYMBOL_VARIABLE)
 
         ' Init TabControl
         For Each node As vTreeNode In accountsTV.Nodes
@@ -126,6 +142,7 @@ Friend Class ControllingUI_2
             newTab.Name = node.Value
             DGVsControlTab.TabPages.Add(newTab)
         Next
+        InitItemsFormat()
 
         AddHandler BackgroundWorker1.DoWork, AddressOf BackgroundWorker1_DoWork
         AddHandler BackgroundWorker1.RunWorkerCompleted, AddressOf AfterWorkDoneAttemp_ThreadSafe
@@ -212,8 +229,8 @@ Friend Class ControllingUI_2
 
     Private Sub DataMiningUI_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 
-        CEStyle = GridTheme.GetDefaultTheme(DGV_THEME).GridCellStyle
-        CEStyle.Font = New System.Drawing.Font(CEStyle.Font.FontFamily, My.Settings.dgvFontSize)
+        GridCellStyleNormal = GridTheme.GetDefaultTheme(DGV_THEME).GridCellStyle
+        GridCellStyleNormal.Font = New System.Drawing.Font(GridCellStyleNormal.Font.FontFamily, My.Settings.dgvFontSize)
 
         For Each tab_ As vTabPage In DGVsControlTab.TabPages
             DGVsControlTab.SelectedTab = tab_
@@ -233,13 +250,6 @@ Friend Class ControllingUI_2
             DGVsControlTab.SelectedTab = DGVsControlTab.TabPages(0)
         End If
         Me.WindowState = FormWindowState.Maximized
-
-        hierarchyItemNormalStyle = GridTheme.GetDefaultTheme(DGV_THEME).HierarchyItemStyleNormal
-        hierarchyItemSelectedStyle = GridTheme.GetDefaultTheme(DGV_THEME).HierarchyItemStyleNormal
-        hierarchyItemDisabledStyle = GridTheme.GetDefaultTheme(DGV_THEME).HierarchyItemStyleNormal
-        hierarchyItemNormalStyle.Font = New System.Drawing.Font(hierarchyItemNormalStyle.Font.FontFamily, My.Settings.dgvFontSize)
-        hierarchyItemSelectedStyle.Font = New System.Drawing.Font(hierarchyItemSelectedStyle.Font.FontFamily, My.Settings.dgvFontSize)
-        hierarchyItemDisabledStyle.Font = New System.Drawing.Font(hierarchyItemDisabledStyle.Font.FontFamily, My.Settings.dgvFontSize)
 
 
     End Sub
@@ -271,7 +281,13 @@ Friend Class ControllingUI_2
                 entityNode = leftPane_control.entitiesTV.Nodes(0)
                 If versionsIds.Count > 0 Then
                     ' Launch Computation
-                    Controller.Compute(versionsIds.ToArray, entityNode)
+                    Try
+                        Controller.Compute(versionsIds.ToArray, entityNode)
+                    Catch ex As OutOfMemoryException
+                        System.Diagnostics.Debug.WriteLine(ex.Message)
+                        MsgBox("Unable to display result: Request too complex")
+                        AfterWorkDoneAttemp_ThreadSafe()
+                    End Try
                 Else
                     MsgBox("At least one version must be selected.")
                 End If
@@ -282,7 +298,13 @@ Friend Class ControllingUI_2
         Else
             If versionsIds.Count > 0 Then
                 ' Launch Computation
-                Controller.Compute(versionsIds.ToArray, entityNode)
+                Try
+                    Controller.Compute(versionsIds.ToArray, entityNode)
+                Catch ex As Exception
+                    System.Diagnostics.Debug.WriteLine(ex.Message)
+                    MsgBox("Unable to display result: Request too complex")
+                    AfterWorkDoneAttemp_ThreadSafe()
+                End Try
             Else
                 MsgBox("At least one version must be selected.")
             End If
@@ -307,15 +329,50 @@ Friend Class ControllingUI_2
 
     Friend Sub FormatDGVItem(ByRef item As HierarchyItem)
 
-        item.HierarchyItemStyleNormal = hierarchyItemNormalStyle
-        item.HierarchyItemStyleSelected = hierarchyItemSelectedStyle
-        item.HierarchyItemStyleDisabled = hierarchyItemDisabledStyle
-
-        item.CellsStyle = CEStyle
+        Dim currencyId As Int32 = leftPane_control.currenciesCLB.SelectedItem.Value
+        item.CellsStyle = GridCellStyleNormal
         item.CellsTextAlignment = System.Drawing.ContentAlignment.MiddleRight
 
-        ' Manage cells formats according to account type, currencies and units
-        'priority normal
+        If item.IsRowsHierarchyItem Then
+            ' Account's Type formatting
+            Dim typeId As Int32 = Controller.GetAccountTypeFromId(item.ItemValue)
+            If typeId <> 0 Then
+                Select Case typeId
+                    Case GlobalEnums.AccountType.MONETARY : item.CellsFormatString = "{0:" & m_currenciesSymbol_dict(currencyId) & "#,##0;(" & m_currenciesSymbol_dict(currencyId) & "#,##0)}" ' m_currenciesSymbol_dict(currencyId) & "#,##0.00;(" & m_currenciesSymbol_dict(currencyId) & "#,##0.00)"
+                    Case GlobalEnums.AccountType.PERCENTAGE : item.CellsFormatString = "{0:P}" '"0.00%"        ' put this in a table ?
+                    Case GlobalEnums.AccountType.NUMBER : item.CellsFormatString = "{0:N2}" '"#,##0.00"
+                    Case GlobalEnums.AccountType.DATE_ : item.CellsFormatString = "{0:yyyy/MMMM/dd}"  '"d-mmm-yy" ' d-mmm-yy
+                    Case Else : item.CellsFormatString = "{0:N}"
+                End Select
+            End If
+
+            ' Account's Format
+            Dim formatId As String = Controller.GetAccountFormatFromId(item.ItemValue)
+            If formatId <> "" Then
+                Select Case formatId
+                    Case "t"
+                        item.HierarchyItemStyleNormal = hierarchyTitleItemNormalStyle
+                        item.HierarchyItemStyleSelected = hierarchyTitleItemSelectedStyle
+                        item.HierarchyItemStyleDisabled = hierarchyTitleItemDisabledStyle
+                    Case "i"
+                        item.HierarchyItemStyleNormal = hierarchyImportantItemNormalStyle
+                        item.HierarchyItemStyleSelected = hierarchyImportantItemSelectedStyle
+                        item.HierarchyItemStyleDisabled = hierarchyImportantItemDisabledStyle
+                    Case "n"
+                        item.HierarchyItemStyleNormal = hierarchyItemNormalStyle
+                        item.HierarchyItemStyleSelected = hierarchyItemSelectedStyle
+                        item.HierarchyItemStyleDisabled = hierarchyItemDisabledStyle
+                    Case "d"
+                        item.HierarchyItemStyleNormal = hierarchyDetailItemNormalStyle
+                        item.HierarchyItemStyleSelected = hierarchyDetailItemSelectedStyle
+                        item.HierarchyItemStyleDisabled = hierarchyDetailItemDisabledStyle
+                End Select
+            End If
+        Else
+            item.HierarchyItemStyleNormal = hierarchyItemNormalStyle
+            item.HierarchyItemStyleSelected = hierarchyItemSelectedStyle
+            item.HierarchyItemStyleDisabled = hierarchyItemDisabledStyle
+        End If
 
         If item.IsColumnsHierarchyItem _
        AndAlso item.Caption.Length > 20 Then
@@ -703,7 +760,6 @@ Friend Class ControllingUI_2
 
     End Sub
 
-
     Delegate Sub DGVFormattingAttemp_Delegate()
     Friend Sub FormatDGV_ThreadSafe()
 
@@ -711,6 +767,7 @@ Friend Class ControllingUI_2
             Dim MyDelegate As New DGVFormattingAttemp_Delegate(AddressOf FormatDGV_ThreadSafe)
             Me.Invoke(MyDelegate, New Object() {})
         Else
+            Dim dgvFormatter As New DataGridViewsUtil
             For Each tab_ As vTabPage In DGVsControlTab.TabPages
                 Dim dgv As vDataGridView = tab_.Controls(0)
                 dgv.Select()
@@ -723,6 +780,10 @@ Friend Class ControllingUI_2
                 dgv.RowsHierarchy.CompactStyleRenderingEnabled = True
                 dgv.ColumnsHierarchy.AutoStretchColumns = True
                 dgv.ColumnsHierarchy.ExpandAllItems()
+
+                ' attention !!! test
+                '    dgvFormatter.FormatDGVs(dgv, 34)
+
                 dgv.Update()
                 dgv.Refresh()
             Next
@@ -732,5 +793,42 @@ Friend Class ControllingUI_2
 
 #End Region
 
+
+#Region "Formatting"
+
+    Private Sub InitItemsFormat()
+
+        hierarchyItemNormalStyle = GridTheme.GetDefaultTheme(DGV_THEME).HierarchyItemStyleNormal
+        hierarchyItemSelectedStyle = GridTheme.GetDefaultTheme(DGV_THEME).HierarchyItemStyleSelected
+        hierarchyItemDisabledStyle = GridTheme.GetDefaultTheme(DGV_THEME).HierarchyItemStyleDisabled
+        hierarchyItemNormalStyle.Font = New System.Drawing.Font(hierarchyItemNormalStyle.Font.FontFamily, My.Settings.dgvFontSize)
+        hierarchyItemSelectedStyle.Font = New System.Drawing.Font(hierarchyItemSelectedStyle.Font.FontFamily, My.Settings.dgvFontSize)
+        hierarchyItemDisabledStyle.Font = New System.Drawing.Font(hierarchyItemDisabledStyle.Font.FontFamily, My.Settings.dgvFontSize)
+
+        hierarchyImportantItemNormalStyle = GridTheme.GetDefaultTheme(DGV_THEME).HierarchyItemStyleNormal
+        hierarchyImportantItemNormalStyle = GridTheme.GetDefaultTheme(DGV_THEME).HierarchyItemStyleSelected
+        hierarchyImportantItemNormalStyle = GridTheme.GetDefaultTheme(DGV_THEME).HierarchyItemStyleDisabled
+        hierarchyImportantItemNormalStyle.Font = New System.Drawing.Font(hierarchyImportantItemNormalStyle.Font.FontFamily, My.Settings.dgvFontSize, FontStyle.Bold)
+        hierarchyImportantItemNormalStyle.Font = New System.Drawing.Font(hierarchyImportantItemNormalStyle.Font.FontFamily, My.Settings.dgvFontSize, FontStyle.Bold)
+        hierarchyImportantItemNormalStyle.Font = New System.Drawing.Font(hierarchyImportantItemNormalStyle.Font.FontFamily, My.Settings.dgvFontSize, FontStyle.Bold)
+
+        hierarchyTitleItemDisabledStyle = GridTheme.GetDefaultTheme(DGV_THEME).HierarchyItemStyleNormal
+        hierarchyTitleItemDisabledStyle = GridTheme.GetDefaultTheme(DGV_THEME).HierarchyItemStyleSelected
+        hierarchyTitleItemDisabledStyle = GridTheme.GetDefaultTheme(DGV_THEME).HierarchyItemStyleDisabled
+        hierarchyTitleItemDisabledStyle.Font = New System.Drawing.Font(hierarchyTitleItemDisabledStyle.Font.FontFamily, My.Settings.dgvFontSize, FontStyle.Bold)
+        hierarchyTitleItemDisabledStyle.Font = New System.Drawing.Font(hierarchyTitleItemDisabledStyle.Font.FontFamily, My.Settings.dgvFontSize, FontStyle.Bold)
+        hierarchyTitleItemDisabledStyle.Font = New System.Drawing.Font(hierarchyTitleItemDisabledStyle.Font.FontFamily, My.Settings.dgvFontSize, FontStyle.Bold)
+
+        hierarchyDetailItemDisabledStyle = GridTheme.GetDefaultTheme(DGV_THEME).HierarchyItemStyleNormal
+        hierarchyDetailItemDisabledStyle = GridTheme.GetDefaultTheme(DGV_THEME).HierarchyItemStyleSelected
+        hierarchyDetailItemDisabledStyle = GridTheme.GetDefaultTheme(DGV_THEME).HierarchyItemStyleDisabled
+        hierarchyDetailItemDisabledStyle.Font = New System.Drawing.Font(hierarchyDetailItemDisabledStyle.Font.FontFamily, My.Settings.dgvFontSize, FontStyle.Italic)
+        hierarchyDetailItemDisabledStyle.Font = New System.Drawing.Font(hierarchyDetailItemDisabledStyle.Font.FontFamily, My.Settings.dgvFontSize, FontStyle.Italic)
+        hierarchyDetailItemDisabledStyle.Font = New System.Drawing.Font(hierarchyDetailItemDisabledStyle.Font.FontFamily, My.Settings.dgvFontSize, FontStyle.Italic)
+
+    End Sub
+
+
+#End Region
 
 End Class

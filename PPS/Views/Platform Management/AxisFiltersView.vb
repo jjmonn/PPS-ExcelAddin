@@ -215,9 +215,17 @@ NewFilterValue:
 
     End Sub
 
+    Private Sub ExpandAllBT_Click(sender As Object, e As EventArgs) Handles ExpandAllBT.Click
+        For Each node As TreeNode In FiltersFiltersValuesTV.Nodes
+            node.ExpandAll()
+        Next
+    End Sub
+
 #End Region
 
-
-
-
+    Private Sub CollapseAllBT_Click(sender As Object, e As EventArgs) Handles CollapseAllBT.Click
+        For Each node As TreeNode In FiltersFiltersValuesTV.Nodes
+            node.Collapse(False)
+        Next
+    End Sub
 End Class

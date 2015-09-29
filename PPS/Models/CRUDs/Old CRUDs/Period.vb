@@ -126,13 +126,13 @@ Friend Class Period
 
         Dim nbDaysinMonth As Int32
         Dim tmpList As New List(Of Integer)
+        Dim currentPeriod = start_period + 1
 
-        For j As Int32 = start_period To start_period + nb_periods - 1
-            If PeriodMinusOneOption = True AndAlso j = start_period Then tmpList.Add(Int(CDbl(DateSerial(j - 1, 12, 31).ToOADate())))
-            For i = 1 To NB_MONTHS
-                nbDaysinMonth = DateTime.DaysInMonth(j, i)
-                tmpList.Add(Int(CDbl(DateSerial(j, i, nbDaysinMonth).ToOADate())))
-            Next
+        For i As Int32 = 1 To nb_periods
+            Dim currentDate = DateTime.FromOADate(currentPeriod) 'miss february
+            nbDaysinMonth = DateTime.DaysInMonth(currentDate.Year, currentDate.Month)
+            tmpList.Add(currentPeriod - 1)
+            currentPeriod += nbDaysinMonth
         Next
         Return tmpList
 
@@ -143,10 +143,10 @@ Friend Class Period
 
         Dim nbDaysinMonth As Int32
         Dim tmpList As New List(Of Integer)
-        If PeriodMinusOneOption = True Then tmpList.Add(Int(CDbl(DateSerial(year - 1, 12, 31).ToOADate())))
-        For i = 1 To NB_MONTHS
+        tmpList.Add(Int(CDbl(DateSerial(year, 1, 0).ToOADate())))
+        For i = 2 To NB_MONTHS
             nbDaysinMonth = DateTime.DaysInMonth(year, i)
-            tmpList.Add(Int(CDbl(DateSerial(year, i, nbDaysinMonth).ToOADate())))
+            tmpList.Add(Int(CDbl(DateSerial(year, i - 1, nbDaysinMonth).ToOADate())))
         Next
         Return tmpList
 
@@ -164,19 +164,6 @@ Friend Class Period
         '       => and we can have tha same function with time_config as argument
         '       => and periods should be stored as string => changes DB schema
 
-
-    End Function
-
-    Friend Shared Function GetYearlyPeriodList(ByRef p_startPeriod As Int32, _
-                                               ByRef p_nbPeriods As Int32) As List(Of Int32)
-
-        Dim currentYear As Int32 = Year(Date.FromOADate(p_startPeriod))
-        Dim list As New List(Of Int32)
-        Dim nbDaysinMonth As Int32 = DateTime.DaysInMonth(currentYear, NB_MONTHS)
-        For j As Int32 = 0 To p_nbPeriods - 1
-            list.Add(Int(CDbl(DateSerial(currentYear + j, NB_MONTHS, nbDaysinMonth).ToOADate())))
-        Next
-        Return list
 
     End Function
 
