@@ -618,7 +618,10 @@ Friend Class ControllingUIController
                         ' args.ColumnItem.AutoResize(AutoResizeMode.FIT_ALL)
                     End If
                 Else
-                    If (GlobalVariables.Accounts.accounts_hash(accountId)(ACCOUNT_FORMULA_TYPE_VARIABLE) <> 5) Then args.RowItem.ParentItem.Items.Remove(args.RowItem)
+                    args.CellValue = ""
+                    If (GlobalVariables.Accounts.accounts_hash(accountId)(ACCOUNT_FORMULA_TYPE_VARIABLE) <> 5) Then
+                        args.RowItem.ParentItem.Items.Remove(args.RowItem)
+                    End If
                 End If
             End If
         End If
