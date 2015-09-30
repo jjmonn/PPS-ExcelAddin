@@ -7,6 +7,7 @@ Public MustInherit Class SuperAxisFilterCRUD
     ' Events
     Public Event Read(ByRef status As Boolean, ByRef attributes As Hashtable)
     Public Event UpdateEvent(ByRef status As Boolean, ByRef axis_id As Int32, ByRef filter_id As Int32, ByRef filter_value_id As Int32)
+    Public Event UpdateListEvent(ByRef status As Boolean, ByRef resultList As List(Of Boolean))
 
     Protected Sub OnRead(ByRef status As Boolean, ByRef attributes As Hashtable)
         RaiseEvent Read(status, attributes)
@@ -14,6 +15,10 @@ Public MustInherit Class SuperAxisFilterCRUD
 
     Protected Sub OnUpdate(ByRef status As Boolean, ByRef axis_id As Int32, ByRef filter_id As Int32, ByRef filter_value_id As Int32)
         RaiseEvent UpdateEvent(status, axis_id, filter_id, filter_value_id)
+    End Sub
+
+    Protected Sub OnUpdateList(ByRef status As Boolean, ByRef resultList As List(Of Boolean))
+        RaiseEvent UpdateListEvent(status, resultList)
     End Sub
 
 

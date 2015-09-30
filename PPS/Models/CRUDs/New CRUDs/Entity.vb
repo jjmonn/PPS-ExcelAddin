@@ -31,7 +31,7 @@ Friend Class Entity
     Public Event Read(ByRef status As Boolean, ByRef attributes As Hashtable)
     Public Event CreationEvent(ByRef status As Boolean, ByRef id As Int32)
     Public Event UpdateEvent(ByRef status As Boolean, ByRef id As Int32)
-    Public Event UpdateListEvent(ByRef status As Boolean, ByRef updateResults As List(Of Boolean))
+    Public Event UpdateListEvent(ByRef status As Boolean, ByRef updateResults As Dictionary(Of Int32, Boolean))
     Public Event DeleteEvent(ByRef status As Boolean, ByRef id As UInt32)
 
 
@@ -134,31 +134,39 @@ Friend Class Entity
 
     End Sub
 
-    Friend Sub CMSG_UPDATE_ENTITY_LIST(ByRef p_entitiesAttributes As List(Of Hashtable))
+    Friend Sub CMSG_UPDATE_ENTITY_LIST(ByRef p_entities As Hashtable)
+        NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_UPDATE_ENTITY_LIST_ANSWER, AddressOf SMSG_UPDATE_ENTITY_LIST_ANSWER)
+        Dim packet As New ByteBuffer(CType(ClientMessage.CMSG_UPDATE_ENTITY_LIST, UShort))
 
-        'NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_UPDATE_ENTITY_LIST_ANSWER, AddressOf SMSG_UPDATE_ENTITY_LIST_ANSWER)
-        'Dim packet As New ByteBuffer(CType(ClientMessage.CMSG_UPDATE_ENTITY_LIST, UShort))
-        'packet.WriteUint32(p_entitiesAttributes.Count)
-        'For Each ht As Hashtable In p_entitiesAttributes
-        '    WriteEntityPacket(packet, ht)
-        'Next
-        'packet.Release()
-        'NetworkManager.GetInstance().Send(packet)
-
+        packet.WriteInt32(p_entities.Count())
+        For Each attributes As Hashtable In p_entities.Values
+            WriteEntityPacket(packet, attributes)
+        Next
+        packet.Release()
+        NetworkManager.GetInstance().Send(packet)
     End Sub
 
-    Friend Sub SMSG_UPDATE_ENTITY_LIST_ANSWER(packet As ByteBuffer)
+    Private Sub SMSG_UPDATE_ENTITY_LIST_ANSWER(packet As ByteBuffer)
 
-        'If packet.GetError() = 0 Then
-        '    Dim updatesStatus As New List(Of Boolean)
-        '    For i As Int32 = 0 To packet.ReadUint32()
-        '        updatesStatus.Add(packet.ReadBool())
-        '    Next
-        '    RaiseEvent UpdateListEvent(True, updatesStatus)
-        'Else
-        '    RaiseEvent UpdateListEvent(False, Nothing)
-        'End If
-        'NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_UPDATE_ENTITY_LIST_ANSWER, AddressOf SMSG_UPDATE_ENTITY_LIST_ANSWER)
+        If packet.GetError() = 0 Then
+            Dim resultList As New Dictionary(Of Int32, Boolean)
+            Dim nbResult As Int32 = packet.ReadInt32()
+
+            For i As Int32 = 1 To nbResult
+                Dim id As Int32 = packet.ReadInt32()
+                If (resultList.ContainsKey(id)) Then
+                    resultList(id) = packet.ReadBool()
+                Else
+                    resultList.Add(id, packet.ReadBool)
+                End If
+                packet.ReadString()
+            Next
+
+            RaiseEvent UpdateListEvent(False, resultList)
+        Else
+            RaiseEvent UpdateListEvent(False, Nothing)
+        End If
+        NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_UPDATE_ENTITY_LIST_ANSWER, AddressOf SMSG_UPDATE_ENTITY_LIST_ANSWER)
 
     End Sub
 

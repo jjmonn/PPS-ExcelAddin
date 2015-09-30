@@ -140,6 +140,37 @@ Friend Class AdjustmentFilter : Inherits SuperAxisFilterCRUD
 
     End Sub
 
+    Friend Sub CMSG_UPDATE_AXIS_FILTER_LIST(ByRef p_filters As Hashtable)
+        NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_UPDATE_ADJUSTMENT_FILTER_LIST_ANSWER, AddressOf SMSG_UPDATE_ADJUSTMENT_FILTER_LIST_ANSWER)
+        Dim packet As New ByteBuffer(CType(ClientMessage.CMSG_UPDATE_ADJUSTMENT_FILTER_LIST, UShort))
+
+        packet.WriteInt32(p_filters.Count())
+        For Each attributes As Hashtable In p_filters.Values
+            WriteAxisFilterPacket(packet, attributes)
+        Next
+        packet.Release()
+        NetworkManager.GetInstance().Send(packet)
+    End Sub
+
+    Private Sub SMSG_UPDATE_ADJUSTMENT_FILTER_LIST_ANSWER(packet As ByteBuffer)
+
+        If packet.GetError() = 0 Then
+            Dim resultList As New List(Of Boolean)
+            Dim nbResult As Int32 = packet.ReadInt32()
+
+            For i As Int32 = 1 To nbResult
+                resultList.Add(packet.ReadBool())
+                packet.ReadString()
+            Next
+
+            MyBase.OnUpdateList(True, resultList)
+        Else
+            MyBase.OnUpdateList(False, Nothing)
+        End If
+        NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_UPDATE_ADJUSTMENT_FILTER_LIST_ANSWER, AddressOf SMSG_UPDATE_ADJUSTMENT_FILTER_LIST_ANSWER)
+
+    End Sub
+
     Friend Sub CMSG_DELETE_ADJUSTMENT_FILTER(ByRef id As UInt32)
 
         Dim packet As New ByteBuffer(CType(ClientMessage.CMSG_DELETE_ADJUSTMENTS_FILTER, UShort))

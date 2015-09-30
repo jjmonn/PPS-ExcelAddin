@@ -33,6 +33,7 @@ Friend Class ExchangeRate
                              ByRef destinationCurrency As Int32, _
                              ByRef ratesVersion As Int32, _
                              ByRef period As Int32)
+    Public Event UpdateListEvent(ByRef status As Boolean, ByRef resultList As Dictionary(Of Int32, Boolean))
 
 #End Region
 
@@ -121,6 +122,42 @@ Friend Class ExchangeRate
             RaiseEvent UpdateEvent(False, 0, 0, 0)
         End If
         NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_UPDATE_EXCHANGE_RATE_ANSWER, AddressOf SMSG_UPDATE_EXCHANGE_RATE_ANSWER)
+
+    End Sub
+
+    Friend Sub CMSG_UPDATE_EXCHANGE_RATE_LIST(ByRef p_currencies As Hashtable)
+        NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_UPDATE_EXCHANGE_RATE_LIST_ANSWER, AddressOf SMSG_UPDATE_EXCHANGE_RATE_LIST_ANSWER)
+        Dim packet As New ByteBuffer(CType(ClientMessage.CMSG_UPDATE_EXCHANGE_RATE_LIST, UShort))
+
+        packet.WriteInt32(p_currencies.Count())
+        For Each attributes As Hashtable In p_currencies.Values
+            WriteExchangeRatePacket(packet, attributes)
+        Next
+        packet.Release()
+        NetworkManager.GetInstance().Send(packet)
+    End Sub
+
+    Private Sub SMSG_UPDATE_EXCHANGE_RATE_LIST_ANSWER(packet As ByteBuffer)
+
+        If packet.GetError() = 0 Then
+            Dim resultList As New Dictionary(Of Int32, Boolean)
+            Dim nbResult As Int32 = packet.ReadInt32()
+
+            For i As Int32 = 1 To nbResult
+                Dim id As Int32 = packet.ReadInt32()
+                If (resultList.ContainsKey(id)) Then
+                    resultList(id) = packet.ReadBool()
+                Else
+                    resultList.Add(id, packet.ReadBool)
+                End If
+                packet.ReadString()
+            Next
+
+            RaiseEvent UpdateListEvent(False, resultList)
+        Else
+            RaiseEvent UpdateListEvent(False, Nothing)
+        End If
+        NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_UPDATE_EXCHANGE_RATE_LIST_ANSWER, AddressOf SMSG_UPDATE_EXCHANGE_RATE_LIST_ANSWER)
 
     End Sub
 

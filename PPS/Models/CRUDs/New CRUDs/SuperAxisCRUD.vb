@@ -8,6 +8,7 @@ Public MustInherit Class SuperAxisCRUD
     Public Event Read(ByRef status As Boolean, ByRef attributes As Hashtable)
     Public Event CreationEvent(ByRef status As Boolean, ByRef id As Int32)
     Public Event UpdateEvent(ByRef status As Boolean, ByRef id As Int32)
+    Public Event UpdateListEvent(ByRef status As Boolean, ByRef resultList As Dictionary(Of Int32, Boolean))
     Public Event DeleteEvent(ByRef status As Boolean, ByRef id As UInt32)
 
     Protected Sub OnRead(ByRef status As Boolean, ByRef attributes As Hashtable)
@@ -24,6 +25,10 @@ Public MustInherit Class SuperAxisCRUD
 
     Protected Sub OnDelete(ByRef status As Boolean, ByRef id As UInt32)
         RaiseEvent DeleteEvent(status, id)
+    End Sub
+
+    Protected Sub OnUpdateList(ByRef status As Boolean, ByRef resultList As Dictionary(Of Int32, Boolean))
+        RaiseEvent UpdateListEvent(status, resultList)
     End Sub
 
 

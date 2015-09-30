@@ -30,6 +30,7 @@ Friend Class EntitiesFilter
     Public Event Read(ByRef status As Boolean, ByRef attributes As Hashtable)
     Public Event CreationEvent(ByRef status As Boolean, ByRef entity_id As Int32, ByRef filter_id As Int32, ByRef filter_value_id As Int32)
     Public Event UpdateEvent(ByRef status As Boolean, ByRef entity_id As Int32, ByRef filter_id As Int32, ByRef filter_value_id As Int32)
+    Public Event UpdateListEvent(ByRef status As Boolean, ByRef resultList As List(Of Boolean))
     Public Event DeleteEvent(ByRef status As Boolean, ByRef entity_id As Int32, ByRef filter_id As Int32)
 
 
@@ -144,6 +145,37 @@ Friend Class EntitiesFilter
             RaiseEvent UpdateEvent(False, 0, 0, 0)
         End If
         NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_UPDATE_ENTITY_FILTER_ANSWER, AddressOf SMSG_UPDATE_ENTITY_FILTER_ANSWER)
+
+    End Sub
+
+    Friend Sub CMSG_UPDATE_ENTITY_FILTER_LIST(ByRef p_filters As Hashtable)
+        NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_UPDATE_ENTITY_FILTER_LIST_ANSWER, AddressOf SMSG_UPDATE_ENTITY_FILTER_LIST_ANSWER)
+        Dim packet As New ByteBuffer(CType(ClientMessage.CMSG_UPDATE_ENTITY_FILTER_LIST, UShort))
+
+        packet.WriteInt32(p_filters.Count())
+        For Each attributes As Hashtable In p_filters.Values
+            WriteEntityFilterPacket(packet, attributes)
+        Next
+        packet.Release()
+        NetworkManager.GetInstance().Send(packet)
+    End Sub
+
+    Private Sub SMSG_UPDATE_ENTITY_FILTER_LIST_ANSWER(packet As ByteBuffer)
+
+        If packet.GetError() = 0 Then
+            Dim resultList As New List(Of Boolean)
+            Dim nbResult As Int32 = packet.ReadInt32()
+
+            For i As Int32 = 1 To nbResult
+                resultList.Add(packet.ReadBool())
+                packet.ReadString()
+            Next
+
+            RaiseEvent UpdateListEvent(True, resultList)
+        Else
+            RaiseEvent UpdateListEvent(False, Nothing)
+        End If
+        NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_UPDATE_ENTITY_FILTER_LIST_ANSWER, AddressOf SMSG_UPDATE_ENTITY_FILTER_LIST_ANSWER)
 
     End Sub
 

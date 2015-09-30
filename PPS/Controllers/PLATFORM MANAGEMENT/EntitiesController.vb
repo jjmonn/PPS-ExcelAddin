@@ -126,11 +126,11 @@ Friend Class EntitiesController
 
     Friend Sub UpdateBatch(ByRef p_entitiesUpdates As List(Of Tuple(Of Int32, String, Int32)))
 
-        Dim entitiesHTUpdates As New List(Of Hashtable)
+        Dim entitiesHTUpdates As New Hashtable
         For Each tuple_ As Tuple(Of Int32, String, Int32) In p_entitiesUpdates
             Dim ht As Hashtable = GlobalVariables.Entities.entities_hash(tuple_.Item1).Clone
             ht(tuple_.Item2) = tuple_.Item3
-            entitiesHTUpdates.Add(ht)
+            entitiesHTUpdates(CInt(ht(ID_VARIABLE))) = ht
         Next
         GlobalVariables.Entities.CMSG_UPDATE_ENTITY_LIST(entitiesHTUpdates)
 

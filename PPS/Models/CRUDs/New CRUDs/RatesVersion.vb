@@ -30,7 +30,7 @@ Public Class RatesVersion
     Public Event CreationEvent(ByRef status As Boolean, ByRef id As Int32)
     Public Event UpdateEvent(ByRef status As Boolean, ByRef id As Int32)
     Public Event DeleteEvent(ByRef status As Boolean, ByRef id As UInt32)
-
+    Public Event UpdateListEvent(ByRef status As Boolean, ByRef resultList As Dictionary(Of Int32, Boolean))
 
 #End Region
 
@@ -127,6 +127,42 @@ Public Class RatesVersion
             RaiseEvent UpdateEvent(False, Nothing)
         End If
         NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_UPDATE_RATE_VERSION_ANSWER, AddressOf SMSG_UPDATE_RATE_VERSION_ANSWER)
+
+    End Sub
+
+    Friend Sub CMSG_UPDATE_RATE_VERSION_LIST(ByRef p_currencies As Hashtable)
+        NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_UPDATE_RATE_VERSION_LIST_ANSWER, AddressOf SMSG_UPDATE_RATE_VERSION_LIST_ANSWER)
+        Dim packet As New ByteBuffer(CType(ClientMessage.CMSG_UPDATE_RATE_VERSION_LIST, UShort))
+
+        packet.WriteInt32(p_currencies.Count())
+        For Each attributes As Hashtable In p_currencies.Values
+            WriteRateVersionPacket(packet, attributes)
+        Next
+        packet.Release()
+        NetworkManager.GetInstance().Send(packet)
+    End Sub
+
+    Private Sub SMSG_UPDATE_RATE_VERSION_LIST_ANSWER(packet As ByteBuffer)
+
+        If packet.GetError() = 0 Then
+            Dim resultList As New Dictionary(Of Int32, Boolean)
+            Dim nbResult As Int32 = packet.ReadInt32()
+
+            For i As Int32 = 1 To nbResult
+                Dim id As Int32 = packet.ReadInt32()
+                If (resultList.ContainsKey(id)) Then
+                    resultList(id) = packet.ReadBool()
+                Else
+                    resultList.Add(id, packet.ReadBool)
+                End If
+                packet.ReadString()
+            Next
+
+            RaiseEvent UpdateListEvent(False, resultList)
+        Else
+            RaiseEvent UpdateListEvent(False, Nothing)
+        End If
+        NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_UPDATE_RATE_VERSION_LIST_ANSWER, AddressOf SMSG_UPDATE_RATE_VERSION_LIST_ANSWER)
 
     End Sub
 

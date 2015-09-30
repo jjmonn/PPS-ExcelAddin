@@ -70,6 +70,7 @@ Friend Class CurrenciesView
         symbolColum.TextAlignment = Drawing.ContentAlignment.MiddleCenter
         symbolColum.CellsTextAlignment = Drawing.ContentAlignment.MiddleCenter
         symbolColum.Width = m_columnsWidth
+        symbolColum.ItemValue = CURRENCY_SYMBOL_VARIABLE
 
     End Sub
 
@@ -115,17 +116,12 @@ Friend Class CurrenciesView
 
     Private Sub DataGridView_CheckedChanged(sender As Object, e As EventArgs)
 
-        If Not m_CurrentCell Is Nothing Then
-            Dim checkBox As vCheckBox = TryCast(m_currenciesDataGridView.CellsArea.GetCellEditor(m_CurrentCell.RowItem, m_currenciesDataGridView.ColumnsHierarchy.Items(0)).Control, vCheckBox)
-            m_controller.UpdateCurrency(m_CurrentCell.RowItem.ItemValue, _
-                                        checkBox.Checked)
-        End If
-
     End Sub
 
+    Private Sub ValidateButton_Click(sender As Object, e As EventArgs) Handles ValidateButton.Click
+        m_controller.UpdateCurrencies(m_currenciesDataGridView)
+    End Sub
 
 #End Region
-
-
 
 End Class
