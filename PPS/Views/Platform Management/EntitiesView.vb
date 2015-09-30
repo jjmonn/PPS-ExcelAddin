@@ -233,6 +233,14 @@ Friend Class EntitiesView
 
     End Sub
 
+    Private Sub ExpandAllBT_Click(sender As Object, e As EventArgs) Handles ExpandAllBT.Click
+        m_entitiesDataGridView.RowsHierarchy.ExpandAllItems()
+    End Sub
+
+    Private Sub CollapseAllBT_Click(sender As Object, e As EventArgs) Handles CollapseAllBT.Click
+        m_entitiesDataGridView.RowsHierarchy.CollapseAllItems()
+    End Sub
+
 #End Region
 
 #End Region
@@ -720,7 +728,4 @@ Friend Class EntitiesView
 
 #End Region
 
-
-
-  
 End Class
