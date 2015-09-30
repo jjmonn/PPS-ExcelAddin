@@ -36,19 +36,19 @@ Public Class AddinModule
 #Region "instance Variables"
 
 
-    Friend WithEvents AdxRibbonGroup2 As AddinExpress.MSO.ADXRibbonGroup
-    Friend WithEvents AdxRibbonGroup1 As AddinExpress.MSO.ADXRibbonGroup
+    Friend WithEvents ComputeGroup As AddinExpress.MSO.ADXRibbonGroup
+    Friend WithEvents DataUploadGroup As AddinExpress.MSO.ADXRibbonGroup
     Friend WithEvents MaintTab As AddinExpress.MSO.ADXRibbonTab
     Friend WithEvents WSUplaodBT As AddinExpress.MSO.ADXRibbonButton
     Friend WithEvents ControlingUI2BT As AddinExpress.MSO.ADXRibbonButton
-    Friend WithEvents AdxRibbonGroup3 As AddinExpress.MSO.ADXRibbonGroup
+    Friend WithEvents ConfigurationGroup As AddinExpress.MSO.ADXRibbonGroup
     Friend WithEvents adxExcelEvents As AddinExpress.MSO.ADXExcelAppEvents
     Friend WithEvents UploadBT As AddinExpress.MSO.ADXRibbonSplitButton
     Friend WithEvents UplodBT1 As AddinExpress.MSO.ADXRibbonMenu
     Friend WithEvents WBUplaodBT As AddinExpress.MSO.ADXRibbonButton
     Friend WithEvents SettingsBT As AddinExpress.MSO.ADXRibbonButton
     Friend WithEvents BreakLinksBT As AddinExpress.MSO.ADXRibbonButton
-    Friend WithEvents AdxRibbonGroup6 As AddinExpress.MSO.ADXRibbonGroup
+    Friend WithEvents ConnectionGroup As AddinExpress.MSO.ADXRibbonGroup
     Friend WithEvents LightsImageList As System.Windows.Forms.ImageList
     Friend WithEvents VersionBT As AddinExpress.MSO.ADXRibbonButton
     Friend WithEvents Addin_Version_label As AddinExpress.MSO.ADXRibbonLabel
@@ -135,7 +135,7 @@ Public Class AddinModule
         Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(AddinModule))
         Me.MaintTab = New AddinExpress.MSO.ADXRibbonTab(Me.components)
-        Me.AdxRibbonGroup6 = New AddinExpress.MSO.ADXRibbonGroup(Me.components)
+        Me.ConnectionGroup = New AddinExpress.MSO.ADXRibbonGroup(Me.components)
         Me.ConnectionBT = New AddinExpress.MSO.ADXRibbonButton(Me.components)
         Me.ConnectionIcons = New System.Windows.Forms.ImageList(Me.components)
         Me.AdxRibbonSeparator1 = New AddinExpress.MSO.ADXRibbonSeparator(Me.components)
@@ -143,7 +143,7 @@ Public Class AddinModule
         Me.NewICOs = New System.Windows.Forms.ImageList(Me.components)
         Me.Addin_Version_label = New AddinExpress.MSO.ADXRibbonLabel(Me.components)
         Me.Addin_rates_version_label = New AddinExpress.MSO.ADXRibbonLabel(Me.components)
-        Me.AdxRibbonGroup1 = New AddinExpress.MSO.ADXRibbonGroup(Me.components)
+        Me.DataUploadGroup = New AddinExpress.MSO.ADXRibbonGroup(Me.components)
         Me.UploadBT = New AddinExpress.MSO.ADXRibbonSplitButton(Me.components)
         Me.UplodBT1 = New AddinExpress.MSO.ADXRibbonMenu(Me.components)
         Me.WSUplaodBT = New AddinExpress.MSO.ADXRibbonButton(Me.components)
@@ -158,14 +158,14 @@ Public Class AddinModule
         Me.RefreshWorkbookBT = New AddinExpress.MSO.ADXRibbonButton(Me.components)
         Me.AdxRibbonMenuSeparator1 = New AddinExpress.MSO.ADXRibbonMenuSeparator(Me.components)
         Me.AutoRefreshBT = New AddinExpress.MSO.ADXRibbonCheckBox(Me.components)
-        Me.AdxRibbonGroup2 = New AddinExpress.MSO.ADXRibbonGroup(Me.components)
+        Me.ComputeGroup = New AddinExpress.MSO.ADXRibbonGroup(Me.components)
         Me.ControlingUI2BT = New AddinExpress.MSO.ADXRibbonButton(Me.components)
         Me.FunctionDesigner = New AddinExpress.MSO.ADXRibbonSplitButton(Me.components)
         Me.AdxRibbonMenu1 = New AddinExpress.MSO.ADXRibbonMenu(Me.components)
         Me.BreakLinksBT = New AddinExpress.MSO.ADXRibbonButton(Me.components)
         Me.MainTabImageList = New System.Windows.Forms.ImageList(Me.components)
         Me.financialModelingBT = New AddinExpress.MSO.ADXRibbonButton(Me.components)
-        Me.AdxRibbonGroup3 = New AddinExpress.MSO.ADXRibbonGroup(Me.components)
+        Me.ConfigurationGroup = New AddinExpress.MSO.ADXRibbonGroup(Me.components)
         Me.FormatButton = New AddinExpress.MSO.ADXRibbonButton(Me.components)
         Me.ConfigurationRibbonBT = New AddinExpress.MSO.ADXRibbonButton(Me.components)
         Me.SettingsBT = New AddinExpress.MSO.ADXRibbonButton(Me.components)
@@ -222,25 +222,25 @@ Public Class AddinModule
         'MaintTab
         '
         Me.MaintTab.Caption = "Financial BI®"
-        Me.MaintTab.Controls.Add(Me.AdxRibbonGroup6)
-        Me.MaintTab.Controls.Add(Me.AdxRibbonGroup1)
-        Me.MaintTab.Controls.Add(Me.AdxRibbonGroup2)
-        Me.MaintTab.Controls.Add(Me.AdxRibbonGroup3)
+        Me.MaintTab.Controls.Add(Me.ConnectionGroup)
+        Me.MaintTab.Controls.Add(Me.DataUploadGroup)
+        Me.MaintTab.Controls.Add(Me.ComputeGroup)
+        Me.MaintTab.Controls.Add(Me.ConfigurationGroup)
         Me.MaintTab.Id = "adxRibbonTab_b30b165b93e0463887478085c350e723"
         Me.MaintTab.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
         '
-        'AdxRibbonGroup6
+        'ConnectionGroup
         '
-        Me.AdxRibbonGroup6.Caption = "Connection"
-        Me.AdxRibbonGroup6.CenterVertically = True
-        Me.AdxRibbonGroup6.Controls.Add(Me.ConnectionBT)
-        Me.AdxRibbonGroup6.Controls.Add(Me.AdxRibbonSeparator1)
-        Me.AdxRibbonGroup6.Controls.Add(Me.VersionBT)
-        Me.AdxRibbonGroup6.Controls.Add(Me.Addin_Version_label)
-        Me.AdxRibbonGroup6.Controls.Add(Me.Addin_rates_version_label)
-        Me.AdxRibbonGroup6.Id = "adxRibbonGroup_89e20fb41d2445e782d9c54beb6faae8"
-        Me.AdxRibbonGroup6.ImageTransparentColor = System.Drawing.Color.Transparent
-        Me.AdxRibbonGroup6.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
+        Me.ConnectionGroup.Caption = "Connection"
+        Me.ConnectionGroup.CenterVertically = True
+        Me.ConnectionGroup.Controls.Add(Me.ConnectionBT)
+        Me.ConnectionGroup.Controls.Add(Me.AdxRibbonSeparator1)
+        Me.ConnectionGroup.Controls.Add(Me.VersionBT)
+        Me.ConnectionGroup.Controls.Add(Me.Addin_Version_label)
+        Me.ConnectionGroup.Controls.Add(Me.Addin_rates_version_label)
+        Me.ConnectionGroup.Id = "adxRibbonGroup_89e20fb41d2445e782d9c54beb6faae8"
+        Me.ConnectionGroup.ImageTransparentColor = System.Drawing.Color.Transparent
+        Me.ConnectionGroup.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
         '
         'ConnectionBT
         '
@@ -325,15 +325,15 @@ Public Class AddinModule
         Me.Addin_rates_version_label.Id = "adxRibbonLabel_43aa53308e4d4b3a8e3d7193f8945b6f"
         Me.Addin_rates_version_label.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
         '
-        'AdxRibbonGroup1
+        'DataUploadGroup
         '
-        Me.AdxRibbonGroup1.Caption = "Data Upload"
-        Me.AdxRibbonGroup1.Controls.Add(Me.UploadBT)
-        Me.AdxRibbonGroup1.Controls.Add(Me.EditionMainRibbonBT)
-        Me.AdxRibbonGroup1.Controls.Add(Me.RefreshBT)
-        Me.AdxRibbonGroup1.Id = "adxRibbonGroup_6d270a7302274c0bb0cb396921e59e09"
-        Me.AdxRibbonGroup1.ImageTransparentColor = System.Drawing.Color.Transparent
-        Me.AdxRibbonGroup1.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
+        Me.DataUploadGroup.Caption = "Data Upload"
+        Me.DataUploadGroup.Controls.Add(Me.UploadBT)
+        Me.DataUploadGroup.Controls.Add(Me.EditionMainRibbonBT)
+        Me.DataUploadGroup.Controls.Add(Me.RefreshBT)
+        Me.DataUploadGroup.Id = "adxRibbonGroup_6d270a7302274c0bb0cb396921e59e09"
+        Me.DataUploadGroup.ImageTransparentColor = System.Drawing.Color.Transparent
+        Me.DataUploadGroup.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
         '
         'UploadBT
         '
@@ -481,15 +481,15 @@ Public Class AddinModule
         Me.AutoRefreshBT.Pressed = True
         Me.AutoRefreshBT.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
         '
-        'AdxRibbonGroup2
+        'ComputeGroup
         '
-        Me.AdxRibbonGroup2.Caption = " "
-        Me.AdxRibbonGroup2.Controls.Add(Me.ControlingUI2BT)
-        Me.AdxRibbonGroup2.Controls.Add(Me.FunctionDesigner)
-        Me.AdxRibbonGroup2.Controls.Add(Me.financialModelingBT)
-        Me.AdxRibbonGroup2.Id = "adxRibbonGroup_13e7ba6b0acf4975af1793d5cfec00ed"
-        Me.AdxRibbonGroup2.ImageTransparentColor = System.Drawing.Color.Transparent
-        Me.AdxRibbonGroup2.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
+        Me.ComputeGroup.Caption = " "
+        Me.ComputeGroup.Controls.Add(Me.ControlingUI2BT)
+        Me.ComputeGroup.Controls.Add(Me.FunctionDesigner)
+        Me.ComputeGroup.Controls.Add(Me.financialModelingBT)
+        Me.ComputeGroup.Id = "adxRibbonGroup_13e7ba6b0acf4975af1793d5cfec00ed"
+        Me.ComputeGroup.ImageTransparentColor = System.Drawing.Color.Transparent
+        Me.ComputeGroup.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
         '
         'ControlingUI2BT
         '
@@ -574,15 +574,15 @@ Public Class AddinModule
         Me.financialModelingBT.ScreenTip = resources.GetString("financialModelingBT.ScreenTip")
         Me.financialModelingBT.Size = AddinExpress.MSO.ADXRibbonXControlSize.Large
         '
-        'AdxRibbonGroup3
+        'ConfigurationGroup
         '
-        Me.AdxRibbonGroup3.Caption = "Configuration"
-        Me.AdxRibbonGroup3.Controls.Add(Me.FormatButton)
-        Me.AdxRibbonGroup3.Controls.Add(Me.ConfigurationRibbonBT)
-        Me.AdxRibbonGroup3.Controls.Add(Me.SettingsBT)
-        Me.AdxRibbonGroup3.Id = "adxRibbonGroup_472aee773e454c20851d757e92f14553"
-        Me.AdxRibbonGroup3.ImageTransparentColor = System.Drawing.Color.Transparent
-        Me.AdxRibbonGroup3.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
+        Me.ConfigurationGroup.Caption = "Configuration"
+        Me.ConfigurationGroup.Controls.Add(Me.FormatButton)
+        Me.ConfigurationGroup.Controls.Add(Me.ConfigurationRibbonBT)
+        Me.ConfigurationGroup.Controls.Add(Me.SettingsBT)
+        Me.ConfigurationGroup.Id = "adxRibbonGroup_472aee773e454c20851d757e92f14553"
+        Me.ConfigurationGroup.ImageTransparentColor = System.Drawing.Color.Transparent
+        Me.ConfigurationGroup.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
         '
         'FormatButton
         '
@@ -1247,10 +1247,25 @@ Public Class AddinModule
 
         ' Financial Bi User Defined Function
         GlobalVariables.GlobalPPSBIController = New PPSBIController
+        GlobalVariables.Addin = Me
+        SetMainMenuButtonState(False)
 
     End Sub
 
+    Friend Shared Sub SetMainMenuButtonState(ByRef p_state As Boolean)
+        Dim Addin As AddinModule = GlobalVariables.Addin
 
+        Addin.VersionBT.Enabled = p_state
+        Addin.UploadBT.Enabled = p_state
+        Addin.EditionMainRibbonBT.Enabled = p_state
+        Addin.RefreshBT.Enabled = p_state
+        Addin.ControlingUI2BT.Enabled = p_state
+        Addin.FunctionDesigner.Enabled = p_state
+        Addin.financialModelingBT.Enabled = p_state
+        Addin.FormatButton.Enabled = p_state
+        Addin.ConfigurationRibbonBT.Enabled = p_state
+
+    End Sub
 #Region "Properties Getters"
 
     ' Returns the connection instance variable
@@ -1920,6 +1935,7 @@ Public Class AddinModule
     Public Shared Function DisplayConnectionStatus(ByRef connected As Boolean) As Int32
 
         On Error Resume Next
+        SetMainMenuButtonState(connected)
         If connected = True Then
             GlobalVariables.Connection_Toggle_Button.Image = 1
             GlobalVariables.Connection_Toggle_Button.Caption = "Connected"

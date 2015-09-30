@@ -73,8 +73,8 @@ Public Class ExcelAddinModule1
     Private Sub ExcelAddinModule1_AddinInitialize(sender As Object, e As EventArgs) Handles MyBase.AddinInitialize
 
         GlobalVariables.APPS = Me.HostApplication
-        If GlobalVariables.apps.COMAddIns.Item("PPS.AddinModule").Object.setupflag = True Then
-             setUpFlag = True
+        If GlobalVariables.APPS.COMAddIns.Item("FinancialBI.AddinModule").Object.setupflag = True Then
+            setUpFlag = True
         End If
 
     End Sub

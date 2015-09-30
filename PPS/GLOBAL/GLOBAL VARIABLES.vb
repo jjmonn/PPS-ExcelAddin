@@ -15,6 +15,7 @@ Friend Class GlobalVariables
 
 #Region "Connections and Server"
 
+    Friend Shared Addin As AddinModule
     'Friend Shared Connection As ADODB.Connection
   Friend Shared NetworkConnect As NetworkLauncher
     Friend Shared ConnectionState As Boolean = False
