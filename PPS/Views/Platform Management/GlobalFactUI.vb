@@ -331,7 +331,7 @@ Friend Class GlobalFactUI
             Dim row As HierarchyItem = m_dataGridView.RowsHierarchy.Items.Add(Format(period, "MMMMMMMM yyyy"))
             row.ItemValue = monthId
             m_textBoxEditor.ActivationFlags = EditorActivationFlags.MOUSE_CLICK_SELECTED_CELL
-            row.CellsEditor = m_textBoxEditor
+            If GlobalVariables.Users.CurrentUserIsAdmin() Then row.CellsEditor = m_textBoxEditor
 
             m_isFillingCells = True
             For Each column In m_columnsVariableItemDictionary
