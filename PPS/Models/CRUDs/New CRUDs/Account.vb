@@ -22,15 +22,15 @@ Friend Class Account
 
     ' Variables
     Friend state_flag As Boolean
-    Friend accounts_hash As New Dictionary(Of Int32, Hashtable)
-  
+    Friend m_accountsHash As New SortedDictionary(Of Int32, Hashtable)
+
     ' Events
     Public Event ObjectInitialized()
     Public Event Read(ByRef status As Boolean, ByRef attributes As Hashtable)
     Public Event CreationEvent(ByRef status As Boolean, ByRef id As Int32)
     Public Event UpdateEvent(ByRef status As Boolean, ByRef id As Int32)
     Public Event DeleteEvent(ByRef status As Boolean, ByRef id As UInt32)
-    Public Event UpdateListEvent(ByRef status As Boolean, ByRef updateResults As List(Of Boolean))
+    Public Event UpdateListEvent(ByRef status As Boolean, ByRef updateResults As List(Of Tuple(Of Byte, Boolean, String)))
 
 #End Region
 
@@ -45,6 +45,17 @@ Friend Class Account
 
         state_flag = False
 
+    End Sub
+
+#End Region
+
+
+#Region "CRUD"
+
+    Friend Sub CMSG_LIST_ACCOUNT()
+        Dim packet As New ByteBuffer(CType(ClientMessage.CMSG_LIST_ACCOUNT, UShort))
+        packet.Release()
+        NetworkManager.GetInstance().Send(packet)
     End Sub
 
     Private Sub SMSG_LIST_ACCOUNT_ANSWER(packet As ByteBuffer)
@@ -63,9 +74,9 @@ Friend Class Account
             Dim sorted = From pair In tmpPositionsDic Order By pair.Value
             Dim sortedAccountsDict = sorted.ToDictionary(Function(p) p.Key, Function(p) p.Value)
 
-            accounts_hash.Clear()
+            m_accountsHash.Clear()
             For Each accountId As Int32 In sortedAccountsDict.Keys
-                accounts_hash.Add(accountId, tmpAccountsHT(accountId))
+                m_accountsHash.Add(accountId, tmpAccountsHT(accountId))
             Next
 
             state_flag = True
@@ -76,46 +87,12 @@ Friend Class Account
 
     End Sub
 
-#End Region
-
-
-#Region "CRUD"
-
-    Friend Sub CMSG_CREATE_ACCOUNT(ByRef attributes As Hashtable)
-
-        NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_CREATE_ACCOUNT_ANSWER, AddressOf SMSG_CREATE_ACCOUNT_ANSWER)
-        Dim packet As New ByteBuffer(CType(ClientMessage.CMSG_CREATE_ACCOUNT, UShort))
-        WriteAccountPacket(packet, attributes)
-        packet.Release()
-        NetworkManager.GetInstance().Send(packet)
-
-    End Sub
-
-    Private Sub SMSG_CREATE_ACCOUNT_ANSWER(packet As ByteBuffer)
-
-        If packet.GetError() = 0 Then
-            RaiseEvent CreationEvent(True, CInt(packet.ReadUint32()))
-        Else
-            RaiseEvent CreationEvent(False, Nothing)
-        End If
-        NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_CREATE_ACCOUNT_ANSWER, AddressOf SMSG_CREATE_ACCOUNT_ANSWER)
-
-    End Sub
-
-    Friend Sub CMSG_READ_ACCOUNT(ByRef id As UInt32)
-
-        Dim packet As New ByteBuffer(CType(ClientMessage.CMSG_READ_ACCOUNT, UShort))
-        packet.Release()
-        NetworkManager.GetInstance().Send(packet)
-
-    End Sub
-
     Private Sub SMSG_READ_ACCOUNT_ANSWER(packet As ByteBuffer)
 
         If packet.GetError() = 0 Then
             Dim ht As New Hashtable
             GetAccountHTFromPacket(packet, ht)
-            accounts_hash(CInt(ht(ID_VARIABLE))) = ht
+            m_accountsHash(CInt(ht(ID_VARIABLE))) = ht
             RaiseEvent Read(True, ht)
         Else
             RaiseEvent Read(False, Nothing)
@@ -123,34 +100,15 @@ Friend Class Account
 
     End Sub
 
-    Friend Sub CMSG_UPDATE_ACCOUNT(ByRef attributes As Hashtable)
-
-        NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_UPDATE_ACCOUNT_ANSWER, AddressOf SMSG_UPDATE_ACCOUNT_ANSWER)
-        Dim packet As New ByteBuffer(CType(ClientMessage.CMSG_UPDATE_ACCOUNT, UShort))
-        WriteAccountPacket(packet, attributes)
-        packet.Release()
-        NetworkManager.GetInstance().Send(packet)
-
-    End Sub
-
-    Private Sub SMSG_UPDATE_ACCOUNT_ANSWER(packet As ByteBuffer)
-
-        If packet.GetError() = 0 Then
-            RaiseEvent UpdateEvent(True, CInt(packet.ReadUint32()))
-        Else
-            RaiseEvent UpdateEvent(False, Nothing)
-        End If
-        NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_UPDATE_ACCOUNT_ANSWER, AddressOf SMSG_UPDATE_ACCOUNT_ANSWER)
-
-    End Sub
-
-    Friend Sub CMSG_UPDATE_LIST_ACCOUNT(ByRef accountsAttributes As List(Of Hashtable))
+    Friend Sub CMSG_CRUD_ACCOUNT_LIST(ByRef p_operations As Dictionary(Of Int32, CRUDAction))
 
         NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_UPDATE_ACCOUNT_LIST_ANSWER, AddressOf SMSG_UPDATE_ACCOUNT_LIST_ANSWER)
         Dim packet As New ByteBuffer(CType(ClientMessage.CMSG_UPDATE_ACCOUNT_LIST, UShort))
-        packet.WriteUint32(accountsAttributes.Count)
-        For Each ht As Hashtable In accountsAttributes
-            WriteAccountPacket(packet, ht)
+        packet.WriteUint32(p_operations.Count)
+
+        For Each op In p_operations
+            packet.WriteUint8(op.Value)
+            If op.Value = CRUDAction.DELETE Then packet.WriteInt32(op.Key) Else WriteAccountPacket(packet, m_accountsHash(op.Key))
         Next
         packet.Release()
         NetworkManager.GetInstance().Send(packet)
@@ -160,9 +118,12 @@ Friend Class Account
     Friend Sub SMSG_UPDATE_ACCOUNT_LIST_ANSWER(packet As ByteBuffer)
 
         If packet.GetError() = 0 Then
-            Dim updatesStatus As New List(Of Boolean)
+            Dim updatesStatus As New List(Of Tuple(Of Byte, Boolean, String))
             For i As Int32 = 0 To packet.ReadUint32()
-                updatesStatus.Add(packet.ReadBool())
+                Dim action As CRUDAction = packet.ReadUint8()
+
+                If (action = CRUDAction.DELETE Or action = CRUDAction.UPDATE) Then packet.ReadInt32() ' ignore id
+                updatesStatus.Add(New Tuple(Of Byte, Boolean, String)(action, packet.ReadBool(), packet.ReadString()))
             Next
             RaiseEvent UpdateListEvent(True, updatesStatus)
         Else
@@ -172,20 +133,11 @@ Friend Class Account
 
     End Sub
 
-    Friend Sub CMSG_DELETE_ACCOUNT(ByRef id As UInt32)
-
-        Dim packet As New ByteBuffer(CType(ClientMessage.CMSG_DELETE_ACCOUNT, UShort))
-        packet.WriteUint32(id)
-        packet.Release()
-        NetworkManager.GetInstance().Send(packet)
-
-    End Sub
-
     Private Sub SMSG_DELETE_ACCOUNT_ANSWER(packet As ByteBuffer)
 
         If packet.GetError() = 0 Then
             Dim id As UInt32 = packet.ReadInt32
-            accounts_hash.Remove(CInt(id))
+            m_accountsHash.Remove(CInt(id))
             RaiseEvent DeleteEvent(True, id)
         Else
             RaiseEvent DeleteEvent(False, 0)
@@ -224,9 +176,9 @@ Friend Class Account
                 selection.Add(GlobalEnums.FormulaTypes.FORMULA)
         End Select
 
-        For Each id In accounts_hash.Keys
-            If selection.Contains(accounts_hash(id)(ACCOUNT_FORMULA_TYPE_VARIABLE)) Then
-                tmp_list.Add(accounts_hash(id)(variable))
+        For Each id In m_accountsHash.Keys
+            If selection.Contains(m_accountsHash(id)(ACCOUNT_FORMULA_TYPE_VARIABLE)) Then
+                tmp_list.Add(m_accountsHash(id)(variable))
             End If
         Next
         Return tmp_list
@@ -236,8 +188,8 @@ Friend Class Account
     Friend Function GetAccountsDictionary(ByRef Key As String, ByRef Value As String) As Hashtable
 
         Dim tmpHT As New Hashtable
-        For Each id In accounts_hash.Keys
-            tmpHT(accounts_hash(id)(Key)) = accounts_hash(id)(Value)
+        For Each id In m_accountsHash.Keys
+            tmpHT(m_accountsHash(id)(Key)) = m_accountsHash(id)(Value)
         Next
         Return tmpHT
 
@@ -245,8 +197,8 @@ Friend Class Account
 
     Friend Function GetIdFromName(ByRef name As String) As Int32
 
-        For Each id As Int32 In accounts_hash.Keys
-            If name = accounts_hash(id)(NAME_VARIABLE) Then Return id
+        For Each id As Int32 In m_accountsHash.Keys
+            If name = m_accountsHash(id)(NAME_VARIABLE) Then Return id
         Next
         Return 0
 
@@ -271,6 +223,7 @@ Friend Class Account
         account_ht(ACCOUNT_IMAGE_VARIABLE) = packet.ReadUint32()
         account_ht(ITEMS_POSITIONS) = packet.ReadInt32()
         account_ht(ACCOUNT_TAB_VARIABLE) = packet.ReadInt32()
+        account_ht(IS_TMP_ID) = False
 
     End Sub
 
@@ -293,14 +246,26 @@ Friend Class Account
 
     Friend Sub LoadAccountsTV(ByRef TV As Windows.Forms.TreeView)
 
-        TreeViewsUtilities.LoadTreeview(TV, accounts_hash)
+        TreeViewsUtilities.LoadTreeview(TV, m_accountsHash)
 
     End Sub
 
     Friend Sub LoadAccountsTV(ByRef TV As VIBlend.WinForms.Controls.vTreeView)
 
-        VTreeViewUtil.LoadTreeview(TV, accounts_hash)
+        VTreeViewUtil.LoadTreeview(TV, m_accountsHash)
 
+    End Sub
+
+    Friend Function CreateAccount(ByRef p_account As Hashtable) As Int32
+        Dim tmpId As Int32 = m_accountsHash.Keys.LastOrDefault() + 1
+
+        p_account(IS_TMP_ID) = True
+        m_accountsHash.Add(tmpId, p_account)
+        Return (tmpId)
+    End Function
+
+    Friend Sub DeleteAccount(ByRef p_id As Int32)
+        m_accountsHash.Remove(p_id)
     End Sub
 
 #End Region

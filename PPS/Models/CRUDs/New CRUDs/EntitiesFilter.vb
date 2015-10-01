@@ -154,6 +154,7 @@ Friend Class EntitiesFilter
 
         packet.WriteInt32(p_filters.Count())
         For Each attributes As Hashtable In p_filters.Values
+            packet.WriteUint8(CRUDAction.UPDATE)
             WriteEntityFilterPacket(packet, attributes)
         Next
         packet.Release()

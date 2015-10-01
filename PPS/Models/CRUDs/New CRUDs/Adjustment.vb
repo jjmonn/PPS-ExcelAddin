@@ -22,10 +22,10 @@ Friend Class Adjustment : Inherits SuperAxisCRUD
 
     ' Variables
     Friend state_flag As Boolean
-  
+
     ' Events
     Public Shadows Event ObjectInitialized(ByRef status As Boolean)
-   
+
 
 #End Region
 
@@ -120,6 +120,7 @@ Friend Class Adjustment : Inherits SuperAxisCRUD
 
         packet.WriteInt32(p_adjustments.Count())
         For Each attributes As Hashtable In p_adjustments.Values
+            packet.WriteUint8(CRUDAction.UPDATE)
             WriteAxisPacket(packet, attributes)
         Next
         packet.Release()

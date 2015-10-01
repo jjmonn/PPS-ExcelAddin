@@ -1,5 +1,6 @@
 ﻿Imports System.Windows.Forms
 Imports System.Collections
+Imports VIBlend.WinForms.DataGridView
 
 
 
@@ -53,6 +54,24 @@ Friend Class CurrenciesController
         Dim currencyHT As Hashtable = GlobalVariables.Currencies.m_allCurrenciesHash(p_currencyId).clone
         currencyHT(CURRENCY_IN_USE_VARIABLE) = p_inUse
         GlobalVariables.Currencies.CMSG_UPDATE_CURRENCY(currencyHT)
+
+    End Sub
+
+    Friend Sub UpdateCurrencies(ByRef p_dataGridView As vDataGridView)
+
+        Dim listCurrencies As New Hashtable
+
+        For Each row As HierarchyItem In p_dataGridView.RowsHierarchy.Items
+            Dim currency As New Hashtable
+            currency(ID_VARIABLE) = row.ItemValue
+
+            For Each column As HierarchyItem In p_dataGridView.ColumnsHierarchy.Items
+                currency(column.ItemValue) = p_dataGridView.CellsArea.GetCellValue(row, column)
+            Next
+            listCurrencies(CInt(currency(ID_VARIABLE))) = currency
+        Next
+
+        GlobalVariables.Currencies.CMSG_UPDATE_CURRENCY_LIST(listCurrencies)
 
     End Sub
 

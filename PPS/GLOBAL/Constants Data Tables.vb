@@ -26,6 +26,7 @@ Module Data_Tables_Constants
     Friend Const IS_FOLDER_VARIABLE = "is_folder"
     Friend Const ITEMS_POSITIONS As String = "item_position"
     Friend Const NAMES_MAX_LENGTH As Int32 = 100
+    Friend Const IS_TMP_ID As String = "tmp_id"
 
 #End Region
 

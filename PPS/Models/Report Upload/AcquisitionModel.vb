@@ -168,11 +168,11 @@ Friend Class AcquisitionModel
         ' select case input/ FPI
         For Each accountId As Int32 In TreeViewsUtilities.GetNodesKeysList(accountsTV)
 
-            Select Case GlobalVariables.Accounts.accounts_hash(accountId)(ACCOUNT_FORMULA_TYPE_VARIABLE)
+            Select Case GlobalVariables.Accounts.m_accountsHash(accountId)(ACCOUNT_FORMULA_TYPE_VARIABLE)
 
                 Case GlobalEnums.FormulaTypes.HARD_VALUE_INPUT
 
-                    Dim accountName As String = GlobalVariables.Accounts.accounts_hash(accountId)(NAME_VARIABLE)
+                    Dim accountName As String = GlobalVariables.Accounts.m_accountsHash(accountId)(NAME_VARIABLE)
                     dataDict.Add(accountName, New Dictionary(Of String, Double))
 
                     ' Years
@@ -204,7 +204,7 @@ Friend Class AcquisitionModel
                     Next
 
                 Case GlobalEnums.FormulaTypes.FIRST_PERIOD_INPUT
-                    Dim accountName As String = GlobalVariables.Accounts.accounts_hash(accountId)(NAME_VARIABLE)
+                    Dim accountName As String = GlobalVariables.Accounts.m_accountsHash(accountId)(NAME_VARIABLE)
                     dataDict.Add(accountName, New Dictionary(Of String, Double))
                     Dim periodToken As String = ""
 

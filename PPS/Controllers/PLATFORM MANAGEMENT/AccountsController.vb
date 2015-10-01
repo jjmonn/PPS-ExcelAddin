@@ -29,7 +29,7 @@ Friend Class AccountsController
 
     ' Objects
     Private FormulasTranslator As FormulasTranslations
-    Private View As AccountsView
+    Private m_view As AccountsView
     Private NewAccountView As NewAccountUI
     Private AccountsTV As New TreeView
     Private m_globalFactsTV As New TreeView
@@ -43,6 +43,7 @@ Friend Class AccountsController
     Private dependant_account_id As String
     Friend FTypesToBeTested As New List(Of Int32)
     Private isClosing As Boolean = False
+    Private m_CRUDOperations As New Dictionary(Of Int32, CRUDAction)
 
     ' Constants
     Friend Const ACCOUNTS_FORBIDDEN_CHARACTERS As String = "+-*=<>^?:;![]" ' to be reviewed - 
@@ -57,7 +58,7 @@ Friend Class AccountsController
 
         GlobalVariables.Accounts.LoadAccountsTV(AccountsTV)
         GlobalVariables.GlobalFacts.LoadGlobalFactsTV(m_globalFactsTV)
-        View = New AccountsView(Me, AccountsTV, m_globalFactsTV)
+        m_view = New AccountsView(Me, AccountsTV, m_globalFactsTV)
         InstanceVariablesLoading()
         positionsDictionary = TreeViewsUtilities.GeneratePositionsDictionary(AccountsTV)
         FTypesToBeTested.Add(GlobalEnums.FormulaTypes.FIRST_PERIOD_INPUT)
@@ -74,7 +75,7 @@ Friend Class AccountsController
 
         accountsNameKeysDictionary = GlobalVariables.Accounts.GetAccountsDictionary(NAME_VARIABLE, ID_VARIABLE)
         factsNameKeysDictionary = GlobalVariables.GlobalFacts.GetFactsHashtable()
-        NewAccountView = New NewAccountUI(View, Me)
+        NewAccountView = New NewAccountUI(m_view, Me)
         FormulasTranslator = New FormulasTranslations(accountsNameKeysDictionary, factsNameKeysDictionary)
 
     End Sub
@@ -83,8 +84,8 @@ Friend Class AccountsController
                                  ByRef PlatformMGTUI As PlatformMGTGeneralUI)
 
         Me.PlatformMGTUI = PlatformMGTUI
-        dest_panel.Controls.Add(View)
-        View.Dock = Windows.Forms.DockStyle.Fill
+        dest_panel.Controls.Add(m_view)
+        m_view.Dock = Windows.Forms.DockStyle.Fill
 
     End Sub
 
@@ -92,7 +93,7 @@ Friend Class AccountsController
 
         isClosing = True
         SendNewPositionsToModel()
-        View.Dispose()
+        m_view.Dispose()
 
     End Sub
 
@@ -103,7 +104,7 @@ Friend Class AccountsController
 
     Friend Function ReadAccount(ByRef accountKey As Int32, ByRef field As String) As Object
 
-        Return GlobalVariables.Accounts.accounts_hash(accountKey)(field)
+        Return GlobalVariables.Accounts.m_accountsHash(accountKey)(field)
 
     End Function
 
@@ -132,37 +133,41 @@ Friend Class AccountsController
         TempHT.Add(ITEMS_POSITIONS, account_position)                                                              ' Dumb
         TempHT.Add(ACCOUNT_TAB_VARIABLE, account_tab)
 
-        GlobalVariables.Accounts.CMSG_CREATE_ACCOUNT(TempHT)
+        Dim tmpId As Int32 = GlobalVariables.Accounts.CreateAccount(TempHT)
+        If m_CRUDOperations.ContainsKey(tmpId) Then m_CRUDOperations(tmpId) = CRUDAction.CREATE Else m_CRUDOperations.Add(tmpId, CRUDAction.CREATE)
+        m_view.TVUpdate(tmpId, account_parent_id, account_name, account_image)
+        accountsNameKeysDictionary.Add(account_name, tmpId)
 
     End Sub
 
     Friend Sub UpdateAccount(ByRef id As Int32, ByRef variable As String, ByVal value As Object)
 
-        Dim ht As Hashtable = GlobalVariables.Accounts.accounts_hash(id).clone
-        ht(variable) = value
-        GlobalVariables.Accounts.CMSG_UPDATE_ACCOUNT(ht)
+        Dim ht As Hashtable = GlobalVariables.Accounts.m_accountsHash(id)
 
+        ht(variable) = value
+        If Not ht(IS_TMP_ID) Then
+            If m_CRUDOperations.ContainsKey(id) Then m_CRUDOperations(id) = CRUDAction.UPDATE Else m_CRUDOperations.Add(id, CRUDAction.UPDATE)
+        End If
     End Sub
 
     Friend Sub UpdateAccount(ByRef id As Int32, ByRef account_attributes As Hashtable)
 
-        Dim ht As Hashtable = GlobalVariables.Accounts.accounts_hash(id).Clone
+        Dim ht As Hashtable = GlobalVariables.Accounts.m_accountsHash(id)
+
         For Each attribute As String In account_attributes.Keys
             ht(attribute) = account_attributes(attribute)
         Next
-        GlobalVariables.Accounts.CMSG_UPDATE_ACCOUNT(ht)
 
+        If Not ht(IS_TMP_ID) Then
+            If m_CRUDOperations.ContainsKey(id) Then m_CRUDOperations(id) = CRUDAction.UPDATE Else m_CRUDOperations.Add(id, CRUDAction.UPDATE)
+        End If
     End Sub
 
-    Friend Sub UpdateBatch(ByRef accountsUpdates As List(Of Tuple(Of Int32, String, Int32)))
+    Friend Sub Save()
 
-        Dim accountsHTUpdates As New List(Of Hashtable)
-        For Each tuple_ As Tuple(Of Int32, String, Int32) In accountsUpdates
-            Dim ht As Hashtable = GlobalVariables.Accounts.accounts_hash(tuple_.Item1).clone
-            ht(tuple_.Item2) = tuple_.Item3
-            accountsHTUpdates.Add(ht)
-        Next
-        GlobalVariables.Accounts.CMSG_UPDATE_LIST_ACCOUNT(accountsHTUpdates)
+        If (m_CRUDOperations.Count = 0) Then Exit Sub
+        GlobalVariables.Accounts.CMSG_CRUD_ACCOUNT_LIST(m_CRUDOperations)
+        GlobalVariables.Accounts.CMSG_LIST_ACCOUNT()
 
     End Sub
 
@@ -177,12 +182,20 @@ Friend Class AccountsController
             End If
         Next
         accountsNameKeysDictionary.Add(new_name, account_id)
+
     End Sub
 
-    Friend Sub DeleteAccount(ByRef account_id As Int32)
+    Friend Sub DeleteAccount(ByRef id As Int32)
 
-        GlobalVariables.Accounts.CMSG_DELETE_ACCOUNT(account_id)
+        Dim account As Hashtable = GlobalVariables.Accounts.m_accountsHash(id)
 
+        If Not account(IS_TMP_ID) Then
+            If m_CRUDOperations.ContainsKey(id) Then m_CRUDOperations(id) = CRUDAction.DELETE Else m_CRUDOperations.Add(id, CRUDAction.DELETE)
+        Else
+            m_CRUDOperations.Remove(id)
+        End If
+        accountsNameKeysDictionary.Remove(account(NAME_VARIABLE))
+        GlobalVariables.Accounts.DeleteAccount(id)
     End Sub
 
 #End Region
@@ -198,7 +211,7 @@ Friend Class AccountsController
 
         Dim dependantAccountsId() As Int32 = DependenciesLoopCheck(accountsKeyList).ToArray
         For Each dependantAccountId As Int32 In dependantAccountsId
-            dependantAccountsNames.Add(GlobalVariables.Accounts.accounts_hash(dependantAccountId)(NAME_VARIABLE))
+            dependantAccountsNames.Add(GlobalVariables.Accounts.m_accountsHash(dependantAccountId)(NAME_VARIABLE))
         Next
 
         Return dependantAccountsNames.ToArray
@@ -222,8 +235,8 @@ Friend Class AccountsController
     ' Looks for the param accountKey in Accounts formulas
     Private Sub CheckForDependencies(ByRef accountKey As String, dependenciesList As List(Of Int32))
 
-        For Each accountId As Int32 In GlobalVariables.Accounts.accounts_hash.Keys
-            Dim formula As String = GlobalVariables.Accounts.accounts_hash(accountId)(ACCOUNT_FORMULA_VARIABLE)
+        For Each accountId As Int32 In GlobalVariables.Accounts.m_accountsHash.Keys
+            Dim formula As String = GlobalVariables.Accounts.m_accountsHash(accountId)(ACCOUNT_FORMULA_VARIABLE)
             If Not formula Is Nothing AndAlso formula.Contains(accountKey) Then _
                 dependenciesList.Add(accountId)
         Next
@@ -291,14 +304,14 @@ Friend Class AccountsController
         Dim dependancies_dict As New Dictionary(Of Int32, List(Of Int32))
         Dim accounts_list = TreeViewsUtilities.GetNodesKeysList(AccountsTV)
         For Each account_id In accounts_list
-            Dim ftype As String = GlobalVariables.Accounts.accounts_hash(account_id)(ACCOUNT_FORMULA_TYPE_VARIABLE)
+            Dim ftype As String = GlobalVariables.Accounts.m_accountsHash(account_id)(ACCOUNT_FORMULA_TYPE_VARIABLE)
             If ftype <> GlobalEnums.FormulaTypes.HARD_VALUE_INPUT _
             AndAlso ftype <> GlobalEnums.FormulaTypes.TITLE Then
                 If dependancies_dict.ContainsKey(account_id) = False Then AddDependantToDependanciesDict(account_id, dependancies_dict)
                 For Each dependant_id In dependancies_dict(account_id)
                     If CheckDependantsInterdependancy(account_id, dependant_id, dependancies_dict) = False Then
                         MsgBox("An interdependancy has been introduced inot accounts formula: " & Chr(13) & Chr(13) & _
-                               GlobalVariables.Accounts.accounts_hash(dependant_account_id)(NAME_VARIABLE) & " depends on " & GlobalVariables.Accounts.accounts_hash(account_id)(NAME_VARIABLE) & Chr(13) & Chr(13) & _
+                               GlobalVariables.Accounts.m_accountsHash(dependant_account_id)(NAME_VARIABLE) & " depends on " & GlobalVariables.Accounts.m_accountsHash(account_id)(NAME_VARIABLE) & Chr(13) & Chr(13) & _
                                "The formula cannot therefore be saved.")
                         Return False
                     End If
@@ -331,7 +344,7 @@ Friend Class AccountsController
     Private Sub AddDependantToDependanciesDict(ByRef dependant_id As Int32, _
                                                ByRef dependancies_dict As Dictionary(Of Int32, List(Of Int32)))
 
-        If GlobalVariables.Accounts.accounts_hash(dependant_id)(ACCOUNT_FORMULA_TYPE_VARIABLE) = GlobalEnums.FormulaTypes.AGGREGATION_OF_SUB_ACCOUNTS Then
+        If GlobalVariables.Accounts.m_accountsHash(dependant_id)(ACCOUNT_FORMULA_TYPE_VARIABLE) = GlobalEnums.FormulaTypes.AGGREGATION_OF_SUB_ACCOUNTS Then
             dependancies_dict.Add(dependant_id, TreeViewsUtilities.GetChildrenIDList(AccountsTV.Nodes.Find(dependant_id, True)(0)))
         Else
             dependancies_dict.Add(dependant_id, FormulasTranslator.GetFormulaDependantsLIst(dependant_id))
@@ -343,7 +356,7 @@ Friend Class AccountsController
 
     Friend Function FormulaTypeChangeImpliesFactsDeletion(ByRef account_id As Int32, ByRef new_formula_type As Int32) As Boolean
 
-        Dim currentFType As Int32 = GlobalVariables.Accounts.accounts_hash(account_id)(ACCOUNT_FORMULA_TYPE_VARIABLE)
+        Dim currentFType As Int32 = GlobalVariables.Accounts.m_accountsHash(account_id)(ACCOUNT_FORMULA_TYPE_VARIABLE)
         If currentFType = GlobalEnums.FormulaTypes.HARD_VALUE_INPUT _
         Or currentFType = GlobalEnums.FormulaTypes.FIRST_PERIOD_INPUT Then
             If new_formula_type = GlobalEnums.FormulaTypes.AGGREGATION_OF_SUB_ACCOUNTS _
@@ -365,7 +378,7 @@ Friend Class AccountsController
         If status = True _
         AndAlso AccountsTV.Nodes.Find(accountsAttributes(ID_VARIABLE), True).Length = 0 _
         AndAlso isClosing = False Then
-            View.TVUpdate(accountsAttributes(ID_VARIABLE), _
+            m_view.TVUpdate(accountsAttributes(ID_VARIABLE), _
                           accountsAttributes(PARENT_ID_VARIABLE), _
                           accountsAttributes(NAME_VARIABLE), _
                           accountsAttributes(IMAGE_VARIABLE))
@@ -381,7 +394,7 @@ Friend Class AccountsController
 
         If status = True _
         AndAlso isClosing = False Then
-            View.TVNodeDelete(id)
+            m_view.TVNodeDelete(id)
             InstanceVariablesLoading()
         End If
 
@@ -413,7 +426,7 @@ Friend Class AccountsController
 
 #Region "Utilities"
 
-    Friend Sub DisplayAcountsView()
+    Friend Sub DisplayAccountsView()
 
         NewAccountView.Hide()
 
@@ -433,12 +446,11 @@ Friend Class AccountsController
         positionsDictionary = TreeViewsUtilities.GeneratePositionsDictionary(AccountsTV)
         For Each account_id As Int32 In positionsDictionary.Keys
             position = positionsDictionary(account_id)
-            If position <> GlobalVariables.Accounts.accounts_hash(account_id)(ITEMS_POSITIONS) Then
-                Dim tuple_ As New Tuple(Of Int32, String, Int32)(account_id, ITEMS_POSITIONS, position)
-                accountsUpdates.Add(tuple_)
+            If position <> GlobalVariables.Accounts.m_accountsHash(account_id)(ITEMS_POSITIONS) Then
+                UpdateAccount(account_id, ITEMS_POSITIONS, position)
             End If
         Next
-        UpdateBatch(accountsUpdates)
+        Save()
 
     End Sub
 

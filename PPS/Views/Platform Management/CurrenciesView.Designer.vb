@@ -23,13 +23,13 @@ Partial Class CurrenciesView
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
-        Dim DataGridLocalization1 As VIBlend.WinForms.DataGridView.DataGridLocalization = New VIBlend.WinForms.DataGridView.DataGridLocalization()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(CurrenciesView))
+        Dim DataGridLocalization1 As VIBlend.WinForms.DataGridView.DataGridLocalization = New VIBlend.WinForms.DataGridView.DataGridLocalization()
         Me.VContextMenu1 = New VIBlend.WinForms.Controls.vContextMenu()
         Me.SetMainCurrencyCallBack = New System.Windows.Forms.MenuItem()
         Me.ValidateButton = New VIBlend.WinForms.Controls.vButton()
-        Me.m_currenciesDataGridView = New VIBlend.WinForms.DataGridView.vDataGridView()
         Me.EditButtonsImagelist = New System.Windows.Forms.ImageList(Me.components)
+        Me.m_currenciesDataGridView = New VIBlend.WinForms.DataGridView.vDataGridView()
         Me.SuspendLayout()
         '
         'VContextMenu1
@@ -58,6 +58,12 @@ Partial Class CurrenciesView
         Me.ValidateButton.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         Me.ValidateButton.UseVisualStyleBackColor = False
         Me.ValidateButton.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
+        '
+        'EditButtonsImagelist
+        '
+        Me.EditButtonsImagelist.ImageStream = CType(resources.GetObject("EditButtonsImagelist.ImageStream"), System.Windows.Forms.ImageListStreamer)
+        Me.EditButtonsImagelist.TransparentColor = System.Drawing.Color.Transparent
+        Me.EditButtonsImagelist.Images.SetKeyName(0, "1420498403_340208.ico")
         '
         'm_currenciesDataGridView
         '
@@ -127,12 +133,6 @@ Partial Class CurrenciesView
         Me.m_currenciesDataGridView.VerticalScrollBarSmallChange = 5
         Me.m_currenciesDataGridView.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.OFFICE2010SILVER
         Me.m_currenciesDataGridView.VirtualModeCellDefault = False
-        '
-        'EditButtonsImagelist
-        '
-        Me.EditButtonsImagelist.ImageStream = CType(resources.GetObject("EditButtonsImagelist.ImageStream"), System.Windows.Forms.ImageListStreamer)
-        Me.EditButtonsImagelist.TransparentColor = System.Drawing.Color.Transparent
-        Me.EditButtonsImagelist.Images.SetKeyName(0, "1420498403_340208.ico")
         '
         'CurrenciesView
         '

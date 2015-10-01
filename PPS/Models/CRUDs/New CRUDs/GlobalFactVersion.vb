@@ -124,6 +124,7 @@ Public Class GlobalFactVersion
 
         packet.WriteInt32(p_currencies.Count())
         For Each attributes As Hashtable In p_currencies.Values
+            packet.WriteUint8(CRUDAction.UPDATE)
             WriteGlobalFactVersionPacket(packet, attributes)
         Next
         packet.Release()

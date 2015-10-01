@@ -146,6 +146,7 @@ Friend Class AdjustmentFilter : Inherits SuperAxisFilterCRUD
 
         packet.WriteInt32(p_filters.Count())
         For Each attributes As Hashtable In p_filters.Values
+            packet.WriteUint8(CRUDAction.UPDATE)
             WriteAxisFilterPacket(packet, attributes)
         Next
         packet.Release()

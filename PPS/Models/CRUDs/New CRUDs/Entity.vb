@@ -140,6 +140,7 @@ Friend Class Entity
 
         packet.WriteInt32(p_entities.Count())
         For Each attributes As Hashtable In p_entities.Values
+            packet.WriteUint8(CRUDAction.UPDATE)
             WriteEntityPacket(packet, attributes)
         Next
         packet.Release()

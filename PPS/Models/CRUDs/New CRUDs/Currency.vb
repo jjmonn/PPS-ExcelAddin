@@ -154,6 +154,7 @@ Friend Class Currency
 
         packet.WriteInt32(p_currencies.Count())
         For Each attributes As Hashtable In p_currencies.Values
+            packet.WriteUint8(CRUDAction.UPDATE)
             WritecurrencyPacket(packet, attributes)
         Next
         packet.Release()

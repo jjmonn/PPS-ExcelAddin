@@ -131,6 +131,7 @@ Friend Class ExchangeRate
 
         packet.WriteInt32(p_currencies.Count())
         For Each attributes As Hashtable In p_currencies.Values
+            packet.WriteUint8(CRUDAction.UPDATE)
             WriteExchangeRatePacket(packet, attributes)
         Next
         packet.Release()

@@ -103,7 +103,7 @@ Friend Class NewAccountUI
 
             If Not ParentAccountsTreeviewBox.TreeView.SelectedNode Is Nothing Then
                 parent_id = CInt(ParentAccountsTreeviewBox.TreeView.SelectedNode.Value)
-                account_tab = GlobalVariables.Accounts.accounts_hash(parent_id)(ACCOUNT_TAB_VARIABLE)
+                account_tab = GlobalVariables.Accounts.m_accountsHash(parent_id)(ACCOUNT_TAB_VARIABLE)
             Else
                 parent_id = 0
                 account_tab = ParentAccountsTreeviewBox.TreeView.Nodes.Count
@@ -124,14 +124,14 @@ Friend Class NewAccountUI
                                      FormulaComboBox.SelectedItem.Value, _
                                      1, _
                                      account_tab)
-            Controller.DisplayAcountsView()
+            Controller.DisplayAccountsView()
         End If
 
     End Sub
 
     Private Sub CancelBT_Click(sender As Object, e As EventArgs) Handles CancelBT.Click
 
-        Controller.DisplayAcountsView()
+        Controller.DisplayAccountsView()
 
     End Sub
 
@@ -170,7 +170,7 @@ Friend Class NewAccountUI
     Private Sub NewAccountUI_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
 
         e.Cancel = True
-        Controller.DisplayAcountsView()
+        Controller.DisplayAccountsView()
 
     End Sub
 

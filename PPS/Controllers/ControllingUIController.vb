@@ -106,8 +106,8 @@ Friend Class ControllingUIController
         Dim adjustmentsNode As vTreeNode = VTreeViewUtil.AddNode(Computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.ADJUSTMENTS, _
                                                                  ControllingUI_2.ADJUSTMENT_CODE, _
                                                                  filtersNodes)
-        For Each adjustmentId As Int32 In GlobalVariables.Adjustments.axis_hash.Keys
-            VTreeViewUtil.AddNode(adjustmentId, GlobalVariables.Adjustments.axis_hash(adjustmentId)(NAME_VARIABLE), adjustmentsNode)
+        For Each adjustmentId As Int32 In GlobalVariables.Adjustments.Axis_hash.Keys
+            VTreeViewUtil.AddNode(adjustmentId, GlobalVariables.Adjustments.Axis_hash(adjustmentId)(NAME_VARIABLE), adjustmentsNode)
         Next
 
     End Sub
@@ -619,7 +619,7 @@ Friend Class ControllingUIController
                     End If
                 Else
                     args.CellValue = ""
-                    If (GlobalVariables.Accounts.accounts_hash(accountId)(ACCOUNT_FORMULA_TYPE_VARIABLE) <> 5) Then
+                    If (GlobalVariables.Accounts.m_accountsHash(accountId)(ACCOUNT_FORMULA_TYPE_VARIABLE) <> 5) Then
                         args.RowItem.ParentItem.Items.Remove(args.RowItem)
                     End If
                 End If
@@ -842,8 +842,8 @@ Friend Class ControllingUIController
 
     Friend Function GetAccountTypeFromId(ByRef p_accountId As Int32) As Int32
 
-        If GlobalVariables.Accounts.accounts_hash.ContainsKey(p_accountId) Then
-            Return GlobalVariables.Accounts.accounts_hash(p_accountId)(ACCOUNT_TYPE_VARIABLE)
+        If GlobalVariables.Accounts.m_accountsHash.ContainsKey(p_accountId) Then
+            Return GlobalVariables.Accounts.m_accountsHash(p_accountId)(ACCOUNT_TYPE_VARIABLE)
         End If
         Return 0
 
@@ -851,8 +851,8 @@ Friend Class ControllingUIController
 
     Friend Function GetAccountFormatFromId(ByRef p_accountId As Int32) As String
 
-        If GlobalVariables.Accounts.accounts_hash.ContainsKey(p_accountId) Then
-            Return GlobalVariables.Accounts.accounts_hash(p_accountId)(ACCOUNT_FORMAT_VARIABLE)
+        If GlobalVariables.Accounts.m_accountsHash.ContainsKey(p_accountId) Then
+            Return GlobalVariables.Accounts.m_accountsHash(p_accountId)(ACCOUNT_FORMAT_VARIABLE)
         End If
         Return ""
 

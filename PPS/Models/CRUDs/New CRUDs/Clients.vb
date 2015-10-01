@@ -136,6 +136,7 @@ Friend Class Client : Inherits SuperAxisCRUD
 
         packet.WriteInt32(p_clients.Count())
         For Each attributes As Hashtable In p_clients.Values
+            packet.WriteUint8(CRUDAction.UPDATE)
             WriteAxisPacket(packet, attributes)
         Next
         packet.Release()

@@ -88,7 +88,7 @@ Friend Class FModelingInputsController
             Dim account_id = FModellingAccount.ReadFModellingAccount(fmodelling_account_id, FINANCIAL_MODELLING_ACCOUNT_ID_VARIABLE)
             Dim row = MappingDGV.RowsHierarchy.Items.Add(fmodelling_account_id)
             MappingDGV.CellsArea.SetCellValue(row, MappingDGV.ColumnsHierarchy.Items(1), FModellingAccount.ReadFModellingAccount(fmodelling_account_id, FINANCIAL_MODELLING_NAME_VARIABLE))
-            If Not account_id Is Nothing Then MappingDGV.CellsArea.SetCellValue(row, MappingDGV.ColumnsHierarchy.Items(0), GlobalVariables.Accounts.accounts_hash(account_id)(NAME_VARIABLE))
+            If Not account_id Is Nothing Then MappingDGV.CellsArea.SetCellValue(row, MappingDGV.ColumnsHierarchy.Items(0), GlobalVariables.Accounts.m_accountsHash(account_id)(NAME_VARIABLE))
         Next
         DataGridViewsUtil.InitDisplayVDataGridView(MappingDGV, DGV_THEME)
         DataGridViewsUtil.DGVSetHiearchyFontSize(MappingDGV, DGV_CELLS_FONT_SIZE, DGV_CELLS_FONT_SIZE)

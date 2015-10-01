@@ -131,6 +131,7 @@ Friend Class Product : Inherits SuperAxisCRUD
 
         packet.WriteInt32(p_products.Count())
         For Each attributes As Hashtable In p_products.Values
+            packet.WriteUint8(CRUDAction.UPDATE)
             WriteAxisPacket(packet, attributes)
         Next
         packet.Release()

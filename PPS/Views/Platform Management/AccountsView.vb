@@ -392,6 +392,7 @@ SubmitFormula:
                                                      "Account deletion confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
             If confirm = DialogResult.Yes Then
                 m_controller.DeleteAccount(CInt(m_currentNode.Name))
+                m_currentNode.Remove()
                 m_currentNode = Nothing
             End If
         End If

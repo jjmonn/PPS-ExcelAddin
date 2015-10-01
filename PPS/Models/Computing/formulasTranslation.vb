@@ -271,7 +271,7 @@ Friend Class FormulasTranslations
                     System.Diagnostics.Debug.Write("Error in regex parsing from DB to Human: Identified several Accounts IDs.")
                 End If
                 accountId = m.Groups(1).Captures(0).Value
-                accountName = GlobalVariables.Accounts.accounts_hash(accountId)(NAME_VARIABLE)
+                accountName = GlobalVariables.Accounts.m_accountsHash(accountId)(NAME_VARIABLE)
                 formulaStr = Replace(formulaStr, m.Groups(0).Value, ACCOUNTS_HUMAN_IDENTIFIER & _
                                                                     accountName & _
                                                                     ACCOUNTS_HUMAN_IDENTIFIER & _
@@ -330,7 +330,7 @@ Friend Class FormulasTranslations
 
     Friend Function GetFormulaDependantsLIst(ByRef accountid As Int32) As List(Of Int32)
 
-        Dim formula_str As String = GlobalVariables.Accounts.accounts_hash(accountid)(ACCOUNT_FORMULA_VARIABLE)
+        Dim formula_str As String = GlobalVariables.Accounts.m_accountsHash(accountid)(ACCOUNT_FORMULA_VARIABLE)
         Dim dependantId As Int32
         Dim dependants_list As New List(Of Int32)
         Dim m As Match = dependanciesCheckRegex.Match(formula_str)

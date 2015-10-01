@@ -94,7 +94,7 @@ Friend Class DataGridViewsUtil
         Dim formatCode, account_id, fmtStr As String
         Dim indent As Int32
         For Each row In vDGV.RowsHierarchy.Items
-            formatCode = GlobalVariables.Accounts.accounts_hash(AccountNamesKeysDic.Item(row.Caption))(ACCOUNT_FORMAT_VARIABLE)
+            formatCode = GlobalVariables.Accounts.m_accountsHash(AccountNamesKeysDic.Item(row.Caption))(ACCOUNT_FORMAT_VARIABLE)
             account_id = AccountNamesKeysDic.Item(row.Caption)
 
             Dim HANStyle As VIBlend.Utilities.HierarchyItemStyle = GridTheme.GetDefaultTheme(vDGV.VIBlendTheme).HierarchyItemStyleNormal
@@ -132,7 +132,7 @@ Friend Class DataGridViewsUtil
             '    CAStyle.FillStyle = New FillStyleSolid(System.Drawing.Color.FromArgb(InputsFormatsDictionary(formatCode)(FORMAT_BCKGD_VARIABLE)))
             'End If
 
-            Select Case (GlobalVariables.Accounts.accounts_hash(account_id)(ACCOUNT_TYPE_VARIABLE))
+            Select Case (GlobalVariables.Accounts.m_accountsHash(account_id)(ACCOUNT_TYPE_VARIABLE))
                 ' nombe de chiffres après la virgule à variabiliser -> settings !!!!
                 Case GlobalEnums.AccountType.MONETARY : fmtStr = "{0:" & currencies_symbol_dict(currency) & "#,##0;(" & currencies_symbol_dict(currency) & "#,##0)}"
                 Case GlobalEnums.AccountType.PERCENTAGE : fmtStr = "{0:P}"        ' put this in a table ?
@@ -450,7 +450,7 @@ Friend Class DataGridViewsUtil
         End If
         If account_node.Nodes.Count > 0 Then
             For Each account As TreeNode In account_node.Nodes
-                If GlobalVariables.Accounts.accounts_hash(account.Name)(ACCOUNT_FORMAT_VARIABLE) <> TITLE_FORMAT_CODE Then
+                If GlobalVariables.Accounts.m_accountsHash(account.Name)(ACCOUNT_FORMAT_VARIABLE) <> TITLE_FORMAT_CODE Then
                     FillInSubRowsHierarchySeveralEntities(account, _
                                                           line_index, _
                                                           dgv, _
@@ -487,10 +487,10 @@ Friend Class DataGridViewsUtil
                                                     ByRef entities_token_names_dict As Hashtable)
 
         If entity_node.Checked = True Then
-        Dim sub_row As HierarchyItem = row.Items.Add(EntitiesTokenNamesDict.Item(entity_node.Name))
-        For Each child In entity_node.Nodes
-            SetUpRowsHierarchyEntitiesHierarchy(sub_row, child, DGV, entities_token_names_dict)
-        Next
+            Dim sub_row As HierarchyItem = row.Items.Add(EntitiesTokenNamesDict.Item(entity_node.Name))
+            For Each child In entity_node.Nodes
+                SetUpRowsHierarchyEntitiesHierarchy(sub_row, child, DGV, entities_token_names_dict)
+            Next
         End If
 
     End Sub
