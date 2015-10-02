@@ -424,7 +424,8 @@ SubmitFormula:
 
     Private Sub SaveDescriptionBT_Click(sender As Object, e As EventArgs) Handles SaveDescriptionBT.Click
 
-
+        Dim accountId As Int32 = m_controller.accountsNameKeysDictionary.Item(Name_TB.Text)
+        m_controller.UpdateAccount(accountId, ACCOUNT_DESCRIPTION_VARIABLE, DescriptionTB.Text, True)
 
     End Sub
 
@@ -557,7 +558,7 @@ SubmitFormula:
             Dim tmpHT As New Hashtable
             tmpHT.Add(ACCOUNT_TAB_VARIABLE, TreeViewsUtilities.ReturnRootNodeFromNode(dropNode).Index)
             tmpHT.Add(PARENT_ID_VARIABLE, targetNode.Name)
-            m_controller.UpdateAccount(dropNode.Name, tmpHT)
+            m_controller.UpdateAccount(dropNode.Name, tmpHT, True)
 
         End If
 
@@ -746,7 +747,7 @@ SubmitFormula:
         Exit Sub
 
 UdpateFormulaType:
-        m_controller.UpdateAccount(m_currentNode.Name, ACCOUNT_FORMULA_TYPE_VARIABLE, li.Value)
+        m_controller.UpdateAccount(m_currentNode.Name, ACCOUNT_FORMULA_TYPE_VARIABLE, li.Value, True)
 
     End Sub
 
@@ -755,7 +756,7 @@ UdpateFormulaType:
         Dim li = TypeComboBox.SelectedItem
         If Not IsNothing(m_currentNode) _
         AndAlso m_isDisplayingAttributes = False Then
-            m_controller.UpdateAccount(m_currentNode.Name, ACCOUNT_TYPE_VARIABLE, li.Value)
+            m_controller.UpdateAccount(m_currentNode.Name, ACCOUNT_TYPE_VARIABLE, li.Value, True)
         End If
         If li.Value = GlobalEnums.AccountType.MONETARY Then
             CurrencyConversionComboBox.Enabled = True
@@ -775,7 +776,7 @@ UdpateFormulaType:
             Select Case li.Value
                 Case GlobalEnums.ConversionOptions.AVERAGE_RATE, _
                      GlobalEnums.ConversionOptions.END_OF_PERIOD_RATE
-                    m_controller.UpdateAccount(m_currentNode.Name, ACCOUNT_CONVERSION_OPTION_VARIABLE, li.Value)
+                    m_controller.UpdateAccount(m_currentNode.Name, ACCOUNT_CONVERSION_OPTION_VARIABLE, li.Value, True)
             End Select
         End If
 
@@ -786,7 +787,7 @@ UdpateFormulaType:
         Dim li = ConsolidationOptionComboBox.SelectedItem
         If Not IsNothing(m_currentNode) _
         AndAlso m_isDisplayingAttributes = False Then
-            m_controller.UpdateAccount(m_currentNode.Name, ACCOUNT_CONSOLIDATION_OPTION_VARIABLE, li.Value)
+            m_controller.UpdateAccount(m_currentNode.Name, ACCOUNT_CONSOLIDATION_OPTION_VARIABLE, li.Value, True)
         End If
 
     End Sub
@@ -837,6 +838,8 @@ UdpateFormulaType:
             Else
                 formula_TB.Text = ""
             End If
+
+            DescriptionTB.Text = m_controller.ReadAccount(account_id, ACCOUNT_DESCRIPTION_VARIABLE)
             m_isDisplayingAttributes = False
 
         End If

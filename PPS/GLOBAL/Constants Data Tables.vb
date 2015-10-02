@@ -51,6 +51,7 @@ Module Data_Tables_Constants
     Friend Const ACCOUNT_TYPE_VARIABLE = "type_id"
     Friend Const ACCOUNT_CONSOLIDATION_OPTION_VARIABLE = "computation_option"
     Friend Const ACCOUNT_CONVERSION_OPTION_VARIABLE = "conversion_flag"
+    Friend Const ACCOUNT_DESCRIPTION_VARIABLE = "description"
 
 #End Region
 

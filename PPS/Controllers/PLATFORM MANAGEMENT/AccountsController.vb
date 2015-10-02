@@ -145,13 +145,13 @@ Friend Class AccountsController
         Dim ht As Hashtable = GlobalVariables.Accounts.m_accountsHash(id)
 
         ht(variable) = value
-        If Not ht(IS_TMP_ID) Then
+        If Not ht(IS_TMP_ID) And Not send Then
             If m_CRUDOperations.ContainsKey(id) Then m_CRUDOperations(id) = CRUDAction.UPDATE Else m_CRUDOperations.Add(id, CRUDAction.UPDATE)
         End If
         If send = True Then GlobalVariables.Accounts.CMSG_UPDATE_ACCOUNT(ht)
     End Sub
 
-    Friend Sub UpdateAccount(ByRef id As Int32, ByRef account_attributes As Hashtable)
+    Friend Sub UpdateAccount(ByRef id As Int32, ByRef account_attributes As Hashtable, Optional send As Boolean = False)
 
         Dim ht As Hashtable = GlobalVariables.Accounts.m_accountsHash(id)
 
@@ -159,9 +159,11 @@ Friend Class AccountsController
             ht(attribute) = account_attributes(attribute)
         Next
 
-        If Not ht(IS_TMP_ID) Then
+        If Not ht(IS_TMP_ID) And Not send Then
             If m_CRUDOperations.ContainsKey(id) Then m_CRUDOperations(id) = CRUDAction.UPDATE Else m_CRUDOperations.Add(id, CRUDAction.UPDATE)
         End If
+        If send = True Then GlobalVariables.Accounts.CMSG_UPDATE_ACCOUNT(ht)
+
     End Sub
 
     Friend Sub Save()
@@ -175,7 +177,7 @@ Friend Class AccountsController
     Friend Sub UpdateName(ByRef account_id As Int32, _
                            ByRef new_name As String)
 
-        UpdateAccount(account_id, NAME_VARIABLE, new_name)
+        UpdateAccount(account_id, NAME_VARIABLE, new_name, True)
         For Each name As String In accountsNameKeysDictionary.Keys
             If accountsNameKeysDictionary(name) = account_id Then
                 accountsNameKeysDictionary.Remove(name)

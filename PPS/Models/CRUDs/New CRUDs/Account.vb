@@ -244,6 +244,7 @@ Friend Class Account
         account_ht(ACCOUNT_IMAGE_VARIABLE) = packet.ReadUint32()
         account_ht(ITEMS_POSITIONS) = packet.ReadInt32()
         account_ht(ACCOUNT_TAB_VARIABLE) = packet.ReadInt32()
+        account_ht(ACCOUNT_DESCRIPTION_VARIABLE) = packet.ReadString()
         account_ht(IS_TMP_ID) = False
 
     End Sub
@@ -262,6 +263,7 @@ Friend Class Account
         packet.WriteUint32(attributes(ACCOUNT_IMAGE_VARIABLE))
         packet.WriteInt32(attributes(ITEMS_POSITIONS))
         packet.WriteInt32(attributes(ACCOUNT_TAB_VARIABLE))
+        packet.WriteString(attributes(ACCOUNT_DESCRIPTION_VARIABLE))
 
     End Sub
 
