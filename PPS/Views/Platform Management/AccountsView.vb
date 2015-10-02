@@ -68,29 +68,31 @@ Friend Class AccountsView
         AccountsTVInit()
         GlobalFactsTVInit()
         ComboBoxesInit()
-        DesactivateUnallowed()
+        SetAccountUIState(False)
 
     End Sub
 
+    Private Sub SetAccountUIState(ByRef p_state As Boolean)
+        SaveDescriptionBT.Enabled = p_state
+        Name_TB.Enabled = p_state
+        formula_TB.Enabled = p_state
+        FormulaTypeComboBox.Enabled = p_state
+        TypeComboBox.Enabled = p_state
+        CurrencyConversionComboBox.Enabled = p_state
+        DescriptionTB.Enabled = p_state
+        ConsolidationOptionComboBox.Enabled = p_state
+        AddSubAccountToolStripMenuItem.Enabled = p_state
+        AddCategoryToolStripMenuItem.Enabled = p_state
+        DeleteAccountToolStripMenuItem.Enabled = p_state
+        DeleteAccountToolStripMenuItem1.Enabled = p_state
+        submit_cmd.Enabled = p_state
+        formulaEdit.Enabled = p_state
+        CreateANewAccountToolStripMenuItem.Enabled = p_state
+        CreateANewCategoryToolStripMenuItem.Enabled = p_state
+    End Sub
+
     Private Sub DesactivateUnallowed()
-        If Not GlobalVariables.Users.CurrentUserIsAdmin() Then
-            SaveDescriptionBT.Enabled = False
-            Name_TB.Enabled = False
-            formula_TB.Enabled = False
-            FormulaTypeComboBox.Enabled = False
-            TypeComboBox.Enabled = False
-            CurrencyConversionComboBox.Enabled = False
-            DescriptionTB.Enabled = False
-            ConsolidationOptionComboBox.Enabled = False
-            AddSubAccountToolStripMenuItem.Enabled = False
-            AddCategoryToolStripMenuItem.Enabled = False
-            DeleteAccountToolStripMenuItem.Enabled = False
-            DeleteAccountToolStripMenuItem1.Enabled = False
-            submit_cmd.Enabled = False
-            formulaEdit.Enabled = False
-            CreateANewAccountToolStripMenuItem.Enabled = False
-            CreateANewCategoryToolStripMenuItem.Enabled = False
-        End If
+        SetAccountUIState(GlobalVariables.Users.CurrentUserIsAdmin())
     End Sub
 
     Private Sub TVInit(ByRef p_tv As TreeView)
