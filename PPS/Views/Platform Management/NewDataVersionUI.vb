@@ -50,11 +50,12 @@ Friend Class NewDataVersionUI
         ' Add any initialization after the InitializeComponent() call.
         Controller = input_controller
         GlobalVariables.Versions.LoadVersionsTV(versionsTV)
+        StartingPeriodNUD.Value = Year(Now)
 
         InitializeCBs()
         Panel1.Controls.Add(versionsTV)
         versionsTV.Dock = DockStyle.Fill
-        AddHandler versionsTV.MouseClick, AddressOf versionsTV_NodeMouseClick
+        AddHandler versionsTV.NodeMouseDown, AddressOf versionsTV_NodeMouseClick
         AddHandler versionsTV.KeyDown, AddressOf versionsTV_KeyDown
 
     End Sub
@@ -71,6 +72,10 @@ Friend Class NewDataVersionUI
 
         For Each name_ In Controller.rates_versions_name_id_dic.Keys
             RatesVersionCB.Items.Add(name_)
+        Next
+
+        For Each name_ In Controller.fact_versions_name_id_dic.Keys
+            FactVersionCB.Items.Add(name_)
         Next
 
     End Sub
@@ -104,10 +109,14 @@ Friend Class NewDataVersionUI
             hash.Add(VERSIONS_CREATION_DATE_VARIABLE, Format(Now, "short Date"))
             hash.Add(IS_FOLDER_VARIABLE, 0)
             hash.Add(VERSIONS_LOCKED_VARIABLE, 0)
-            hash.Add(VERSIONS_TIME_CONFIG_VARIABLE, TimeConfigCB.Text)
-            hash.Add(VERSIONS_START_PERIOD_VAR, StartingPeriodNUD.Text)
+            hash.Add(VERSIONS_LOCKED_DATE_VARIABLE, "")
+            Dim timeConfig As Byte
+            If TimeConfigCB.Text = MONTHLY_TIME_CONFIGURATION Then timeConfig = 2 Else timeConfig = 1
+            hash.Add(VERSIONS_TIME_CONFIG_VARIABLE, timeConfig)
+            hash.Add(VERSIONS_START_PERIOD_VAR, DateSerial(StartingPeriodNUD.Value, 12, 31).ToOADate())
             hash.Add(VERSIONS_NB_PERIODS_VAR, NbPeriodsNUD.Text)
             hash.Add(VERSIONS_RATES_VERSION_ID_VAR, Controller.rates_versions_name_id_dic(RatesVersionCB.Text))
+            hash.Add(VERSIONS_GLOBAL_FACT_VERSION_ID, Controller.fact_versions_name_id_dic(FactVersionCB.Text))
             If Not parent_node Is Nothing Then hash.Add(PARENT_ID_VARIABLE, parent_node.Value)
 
             If CreateCopyBT.Checked = True AndAlso _
@@ -144,12 +153,12 @@ Friend Class NewDataVersionUI
 
     End Sub
 
-    Private Sub versionsTV_NodeMouseClick(sender As Object, e As TreeNodeMouseClickEventArgs)
+    Private Sub versionsTV_NodeMouseClick(sender As Object, e As vTreeViewMouseEventArgs)
 
         Select Case e.Node.Nodes.Count
             Case 0
                 ReferenceTB.Text = e.Node.Text
-                reference_node = versionsTV.HitTest(e.Location)
+                reference_node = versionsTV.HitTest(e.MouseEventArgs.Location)
                 HideVersionsTV()
         End Select
 
@@ -173,7 +182,7 @@ Friend Class NewDataVersionUI
         Controller.IsFolder(reference_node.Value) = False Then
 
             TimeConfigCB.SelectedText = GlobalVariables.Versions.versions_hash(reference_node.Value)(VERSIONS_TIME_CONFIG_VARIABLE)
-            StartingPeriodNUD.Value = GlobalVariables.Versions.versions_hash(reference_node.Value)(VERSIONS_START_PERIOD_VAR)
+            StartingPeriodNUD.Value = Year(GlobalVariables.Versions.versions_hash(reference_node.Value)(VERSIONS_START_PERIOD_VAR))
             NbPeriodsNUD = GlobalVariables.Versions.versions_hash(reference_node.Value)(VERSIONS_NB_PERIODS_VAR)
 
         End If
@@ -191,10 +200,15 @@ Friend Class NewDataVersionUI
             If TimeConfigCB.Text <> "" Then
                 If TimeConfigCB.Text = MONTHLY_TIME_CONFIGURATION Then
                     If StartingPeriodNUD.Text <> "" Then
-                        If Controller.IsRatesVersionValid(StartingPeriodNUD.Value, NbPeriodsNUD.Value, Controller.rates_versions_name_id_dic(RatesVersionCB.Text)) = True Then
+                        If Controller.IsRatesVersionValid(DateSerial(StartingPeriodNUD.Value, 12, 31).ToOADate(), NbPeriodsNUD.Value, Controller.rates_versions_name_id_dic(RatesVersionCB.Text)) = True Then
                             Return True
                         Else
                             MsgBox("This Exchange Rates Version is not compatible with the Periods Configuration.")
+                        End If
+                        If Controller.IsFactVersionValid(DateSerial(StartingPeriodNUD.Value, 12, 31).ToOADate(), NbPeriodsNUD.Value, Controller.fact_versions_name_id_dic(FactVersionCB.Text)) = True Then
+                            Return True
+                        Else
+                            MsgBox("This Fact Version is not compatible with the Periods Configuration.")
                         End If
                     Else
                         MsgBox("The Reference Year must be selected for monthly Time Configuration Versions.")
@@ -240,8 +254,5 @@ Friend Class NewDataVersionUI
     End Sub
 
 #End Region
-
-
-
 
 End Class

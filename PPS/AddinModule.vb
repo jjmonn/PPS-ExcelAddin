@@ -1235,7 +1235,7 @@ Public Class AddinModule
         GlobalVariables.ClientsFilters = New ClientsFilter
         GlobalVariables.ProductsFilters = New ProductsFilter
         GlobalVariables.AdjustmentsFilters = New AdjustmentFilter
-        GlobalVariables.Versions = New FactsVersion
+        GlobalVariables.Versions = New Version
         GlobalVariables.Currencies = New Currency
         GlobalVariables.RatesVersions = New RatesVersion
         GlobalVariables.GlobalFacts = New GlobalFact

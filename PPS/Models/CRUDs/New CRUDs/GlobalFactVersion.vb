@@ -249,6 +249,16 @@ Public Class GlobalFactVersion
 
     End Sub
 
+    Friend Function GetGlobalFactVersionsDictionary(ByRef Key As String, ByRef Value As String) As Hashtable
+
+        Dim tmpHT As New Hashtable
+        For Each id In globalFact_versions_hash.Keys
+            tmpHT(globalFact_versions_hash(id)(Key)) = globalFact_versions_hash(id)(Value)
+        Next
+        Return tmpHT
+
+    End Function
+
 #End Region
 
 

@@ -37,6 +37,7 @@ Partial Class VersionsControl
         Me.SplitContainer1 = New System.Windows.Forms.SplitContainer()
         Me.VersionsTVPanel = New System.Windows.Forms.Panel()
         Me.TableLayoutPanel2 = New System.Windows.Forms.TableLayoutPanel()
+        Me.Label5 = New System.Windows.Forms.Label()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.Label11 = New System.Windows.Forms.Label()
@@ -53,6 +54,7 @@ Partial Class VersionsControl
         Me.StartPeriodTB = New System.Windows.Forms.TextBox()
         Me.NBPeriodsTB = New System.Windows.Forms.TextBox()
         Me.RatesVersionCB = New System.Windows.Forms.ComboBox()
+        Me.FactVersionCB = New System.Windows.Forms.ComboBox()
         Me.MenuStrip1 = New System.Windows.Forms.MenuStrip()
         Me.VersionsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.NewVersionMenuBT = New System.Windows.Forms.ToolStripMenuItem()
@@ -177,6 +179,7 @@ Partial Class VersionsControl
         Me.TableLayoutPanel2.ColumnCount = 2
         Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 21.00139!))
         Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 78.99861!))
+        Me.TableLayoutPanel2.Controls.Add(Me.Label5, 0, 8)
         Me.TableLayoutPanel2.Controls.Add(Me.Label2, 0, 7)
         Me.TableLayoutPanel2.Controls.Add(Me.Label1, 0, 6)
         Me.TableLayoutPanel2.Controls.Add(Me.Label11, 0, 5)
@@ -193,9 +196,10 @@ Partial Class VersionsControl
         Me.TableLayoutPanel2.Controls.Add(Me.StartPeriodTB, 1, 5)
         Me.TableLayoutPanel2.Controls.Add(Me.NBPeriodsTB, 1, 6)
         Me.TableLayoutPanel2.Controls.Add(Me.RatesVersionCB, 1, 7)
+        Me.TableLayoutPanel2.Controls.Add(Me.FactVersionCB, 1, 8)
         Me.TableLayoutPanel2.Location = New System.Drawing.Point(14, 24)
         Me.TableLayoutPanel2.Name = "TableLayoutPanel2"
-        Me.TableLayoutPanel2.RowCount = 8
+        Me.TableLayoutPanel2.RowCount = 9
         Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 12.5!))
         Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 12.5!))
         Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 12.5!))
@@ -204,13 +208,24 @@ Partial Class VersionsControl
         Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 12.5!))
         Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 12.5!))
         Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 12.5!))
-        Me.TableLayoutPanel2.Size = New System.Drawing.Size(552, 368)
+        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 37.0!))
+        Me.TableLayoutPanel2.Size = New System.Drawing.Size(552, 392)
         Me.TableLayoutPanel2.TabIndex = 0
+        '
+        'Label5
+        '
+        Me.Label5.AutoSize = True
+        Me.Label5.Location = New System.Drawing.Point(3, 359)
+        Me.Label5.Margin = New System.Windows.Forms.Padding(3, 7, 3, 0)
+        Me.Label5.Name = "Label5"
+        Me.Label5.Size = New System.Drawing.Size(66, 13)
+        Me.Label5.TabIndex = 24
+        Me.Label5.Text = "Fact Version"
         '
         'Label2
         '
         Me.Label2.AutoSize = True
-        Me.Label2.Location = New System.Drawing.Point(3, 329)
+        Me.Label2.Location = New System.Drawing.Point(3, 315)
         Me.Label2.Margin = New System.Windows.Forms.Padding(3, 7, 3, 0)
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(89, 26)
@@ -220,7 +235,7 @@ Partial Class VersionsControl
         'Label1
         '
         Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(3, 283)
+        Me.Label1.Location = New System.Drawing.Point(3, 271)
         Me.Label1.Margin = New System.Windows.Forms.Padding(3, 7, 3, 0)
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(86, 13)
@@ -230,7 +245,7 @@ Partial Class VersionsControl
         'Label11
         '
         Me.Label11.AutoSize = True
-        Me.Label11.Location = New System.Drawing.Point(3, 237)
+        Me.Label11.Location = New System.Drawing.Point(3, 227)
         Me.Label11.Margin = New System.Windows.Forms.Padding(3, 7, 3, 0)
         Me.Label11.Name = "Label11"
         Me.Label11.Size = New System.Drawing.Size(68, 13)
@@ -240,7 +255,7 @@ Partial Class VersionsControl
         'Label10
         '
         Me.Label10.AutoSize = True
-        Me.Label10.Location = New System.Drawing.Point(3, 191)
+        Me.Label10.Location = New System.Drawing.Point(3, 183)
         Me.Label10.Margin = New System.Windows.Forms.Padding(3, 7, 3, 0)
         Me.Label10.Name = "Label10"
         Me.Label10.Size = New System.Drawing.Size(106, 13)
@@ -261,7 +276,7 @@ Partial Class VersionsControl
         'CreationTB
         '
         Me.CreationTB.Enabled = False
-        Me.CreationTB.Location = New System.Drawing.Point(118, 51)
+        Me.CreationTB.Location = New System.Drawing.Point(118, 49)
         Me.CreationTB.Margin = New System.Windows.Forms.Padding(3, 5, 3, 3)
         Me.CreationTB.MaximumSize = New System.Drawing.Size(400, 4)
         Me.CreationTB.MinimumSize = New System.Drawing.Size(280, 20)
@@ -272,7 +287,7 @@ Partial Class VersionsControl
         'Label7
         '
         Me.Label7.AutoSize = True
-        Me.Label7.Location = New System.Drawing.Point(3, 99)
+        Me.Label7.Location = New System.Drawing.Point(3, 95)
         Me.Label7.Margin = New System.Windows.Forms.Padding(3, 7, 3, 0)
         Me.Label7.Name = "Label7"
         Me.Label7.Size = New System.Drawing.Size(77, 13)
@@ -282,7 +297,7 @@ Partial Class VersionsControl
         'Label8
         '
         Me.Label8.AutoSize = True
-        Me.Label8.Location = New System.Drawing.Point(3, 145)
+        Me.Label8.Location = New System.Drawing.Point(3, 139)
         Me.Label8.Margin = New System.Windows.Forms.Padding(3, 7, 3, 0)
         Me.Label8.Name = "Label8"
         Me.Label8.Size = New System.Drawing.Size(67, 13)
@@ -292,7 +307,7 @@ Partial Class VersionsControl
         'LockedDateT
         '
         Me.LockedDateT.Enabled = False
-        Me.LockedDateT.Location = New System.Drawing.Point(118, 143)
+        Me.LockedDateT.Location = New System.Drawing.Point(118, 137)
         Me.LockedDateT.Margin = New System.Windows.Forms.Padding(3, 5, 3, 3)
         Me.LockedDateT.MaximumSize = New System.Drawing.Size(400, 4)
         Me.LockedDateT.MinimumSize = New System.Drawing.Size(280, 20)
@@ -317,7 +332,7 @@ Partial Class VersionsControl
         'Label3
         '
         Me.Label3.AutoSize = True
-        Me.Label3.Location = New System.Drawing.Point(3, 53)
+        Me.Label3.Location = New System.Drawing.Point(3, 51)
         Me.Label3.Margin = New System.Windows.Forms.Padding(3, 7, 3, 0)
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(70, 13)
@@ -327,7 +342,7 @@ Partial Class VersionsControl
         'lockedCB
         '
         Me.lockedCB.AutoSize = True
-        Me.lockedCB.Location = New System.Drawing.Point(118, 102)
+        Me.lockedCB.Location = New System.Drawing.Point(118, 98)
         Me.lockedCB.Margin = New System.Windows.Forms.Padding(3, 10, 3, 3)
         Me.lockedCB.Name = "lockedCB"
         Me.lockedCB.Size = New System.Drawing.Size(15, 14)
@@ -338,7 +353,7 @@ Partial Class VersionsControl
         'TimeConfigTB
         '
         Me.TimeConfigTB.Enabled = False
-        Me.TimeConfigTB.Location = New System.Drawing.Point(118, 187)
+        Me.TimeConfigTB.Location = New System.Drawing.Point(118, 179)
         Me.TimeConfigTB.Name = "TimeConfigTB"
         Me.TimeConfigTB.Size = New System.Drawing.Size(188, 20)
         Me.TimeConfigTB.TabIndex = 18
@@ -346,7 +361,7 @@ Partial Class VersionsControl
         'StartPeriodTB
         '
         Me.StartPeriodTB.Enabled = False
-        Me.StartPeriodTB.Location = New System.Drawing.Point(118, 233)
+        Me.StartPeriodTB.Location = New System.Drawing.Point(118, 223)
         Me.StartPeriodTB.Name = "StartPeriodTB"
         Me.StartPeriodTB.Size = New System.Drawing.Size(188, 20)
         Me.StartPeriodTB.TabIndex = 19
@@ -354,7 +369,7 @@ Partial Class VersionsControl
         'NBPeriodsTB
         '
         Me.NBPeriodsTB.Enabled = False
-        Me.NBPeriodsTB.Location = New System.Drawing.Point(118, 279)
+        Me.NBPeriodsTB.Location = New System.Drawing.Point(118, 267)
         Me.NBPeriodsTB.Name = "NBPeriodsTB"
         Me.NBPeriodsTB.Size = New System.Drawing.Size(188, 20)
         Me.NBPeriodsTB.TabIndex = 21
@@ -362,10 +377,18 @@ Partial Class VersionsControl
         'RatesVersionCB
         '
         Me.RatesVersionCB.FormattingEnabled = True
-        Me.RatesVersionCB.Location = New System.Drawing.Point(118, 325)
+        Me.RatesVersionCB.Location = New System.Drawing.Point(118, 311)
         Me.RatesVersionCB.Name = "RatesVersionCB"
         Me.RatesVersionCB.Size = New System.Drawing.Size(188, 21)
         Me.RatesVersionCB.TabIndex = 23
+        '
+        'FactVersionCB
+        '
+        Me.FactVersionCB.FormattingEnabled = True
+        Me.FactVersionCB.Location = New System.Drawing.Point(118, 355)
+        Me.FactVersionCB.Name = "FactVersionCB"
+        Me.FactVersionCB.Size = New System.Drawing.Size(188, 21)
+        Me.FactVersionCB.TabIndex = 25
         '
         'MenuStrip1
         '
@@ -467,5 +490,7 @@ Partial Class VersionsControl
     Friend WithEvents RatesVersionCB As System.Windows.Forms.ComboBox
     Friend WithEvents RenameMenuBT As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents BackgroundWorker1 As System.ComponentModel.BackgroundWorker
+    Friend WithEvents Label5 As System.Windows.Forms.Label
+    Friend WithEvents FactVersionCB As System.Windows.Forms.ComboBox
 
 End Class

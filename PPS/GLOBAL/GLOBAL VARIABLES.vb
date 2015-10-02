@@ -79,7 +79,7 @@ Friend Class GlobalVariables
     Friend Shared ClientsFilters As ClientsFilter
     Friend Shared ProductsFilters As ProductsFilter
     Friend Shared AdjustmentsFilters As AdjustmentFilter
-    Friend Shared Versions As FactsVersion
+    Friend Shared Versions As Version
     Friend Shared Currencies As Currency
     Friend Shared RatesVersions As RatesVersion
     Friend Shared GlobalFacts As GlobalFact

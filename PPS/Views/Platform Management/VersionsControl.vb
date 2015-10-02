@@ -65,6 +65,7 @@ Friend Class VersionsControl
         AddHandler VersionsTV.AfterSelect, AddressOf VersionsTV_AfterSelect
         AddHandler VersionsTV.KeyDown, AddressOf CategoriesTV_KeyDown
         AddHandler VersionsTV.MouseClick, AddressOf tv_mouse_click
+        AddHandler GlobalVariables.Versions.Read, AddressOf versionReadEvent
 
         ' implement tv drag and drop -> common for all
 
@@ -75,6 +76,9 @@ Friend Class VersionsControl
 
         For Each name_ In Controller.rates_versions_name_id_dic.Keys
             RatesVersionCB.Items.Add(name_)
+        Next
+        For Each name_ In Controller.fact_versions_name_id_dic.Keys
+            FactVersionCB.Items.Add(name_)
         Next
         DesactivateUnallowed()
     End Sub
@@ -116,6 +120,7 @@ Friend Class VersionsControl
             StartPeriodTB.Text = GlobalVariables.Versions.versions_hash(CInt(inputNode.Value))(VERSIONS_START_PERIOD_VAR)
             NBPeriodsTB.Text = GlobalVariables.Versions.versions_hash(CInt(inputNode.Value))(VERSIONS_NB_PERIODS_VAR)
             RatesVersionCB.SelectedItem = Controller.GetRatesVersionNameFromId(GlobalVariables.Versions.versions_hash(CInt(inputNode.Value))(VERSIONS_RATES_VERSION_ID_VAR))
+            FactVersionCB.SelectedItem = Controller.GetFactVersionNameFromId(GlobalVariables.Versions.versions_hash(CInt(inputNode.Value))(VERSIONS_GLOBAL_FACT_VERSION_ID))
             If GlobalVariables.Versions.versions_hash(CInt(inputNode.Value))(VERSIONS_LOCKED_VARIABLE) = True Then
                 lockedCB.Checked = True
                 LockedDateT.Text = GlobalVariables.Versions.versions_hash(CInt(inputNode.Value))(VERSIONS_LOCKED_DATE_VARIABLE)
@@ -147,15 +152,48 @@ Friend Class VersionsControl
 
 #Region "Events"
 
+    Delegate Sub versionReadEvent_Delegate(ByRef p_status As Boolean, ByRef p_attributes As Hashtable)
+    Private Sub versionReadEvent(ByRef p_status As Boolean, ByRef p_attributes As Hashtable)
+        If InvokeRequired Then
+            Dim MyDelegate As New versionReadEvent_Delegate(AddressOf versionReadEvent)
+            Me.Invoke(MyDelegate, New Object() {p_status, p_attributes})
+        Else
+            GlobalVariables.Versions.LoadVersionsTV(VersionsTV)
+            VersionsTV.Refresh()
+            VersionsTV.Show()
+            If p_attributes(ID_VARIABLE) = current_node.Value Then Display(current_node)
+        End If
+    End Sub
+
+    Delegate Sub AfterDelete_Delegate(ByRef status As Boolean, ByRef id As UInt32)
+    Friend Sub AfterDelete(ByRef status As Boolean, ByRef id As UInt32)
+
+        If InvokeRequired Then
+            Dim MyDelegate As New AfterDelete_Delegate(AddressOf AfterDelete)
+            Me.Invoke(MyDelegate, New Object() {status, id})
+        Else
+            Dim node As VIBlend.WinForms.Controls.vTreeNode = VTreeViewUtil.FindNode(VersionsTV, id)
+            If Not node Is Nothing Then
+                node.Remove()
+            End If
+        End If
+    End Sub
+
 #Region "TV Events"
 
+    Delegate Sub VersionsTV_AfterSelect_Delegate(sender As Object, e As VIBlend.WinForms.Controls.vTreeViewEventArgs)
     Private Sub VersionsTV_AfterSelect(sender As Object, e As VIBlend.WinForms.Controls.vTreeViewEventArgs)
 
-        current_node = e.Node
-        isDisplaying = True
-        Display(current_node)
-        isDisplaying = False
-        DesactivateUnallowed()
+        If InvokeRequired Then
+            Dim MyDelegate As New VersionsTV_AfterSelect_Delegate(AddressOf VersionsTV_AfterSelect)
+            Me.Invoke(MyDelegate, New Object() {sender, e})
+        Else
+            current_node = e.Node
+            isDisplaying = True
+            Display(current_node)
+            isDisplaying = False
+            DesactivateUnallowed()
+        End If
 
     End Sub
 
@@ -291,6 +329,18 @@ Friend Class VersionsControl
             End If
         End If
 
+    End Sub
+
+    Private Sub FactVersionCB_SelectedValueChanged(sender As Object, e As EventArgs) Handles FactVersionCB.SelectedValueChanged
+        If Not VersionsTV.SelectedNode Is Nothing AndAlso isDisplaying = False Then
+            Dim version_id As String = VersionsTV.SelectedNode.Value
+            Dim fact_version_id As String = Controller.fact_versions_name_id_dic(FactVersionCB.Text)
+            If Controller.IsFactVersionValid(StartPeriodTB.Text, NBPeriodsTB.Text, fact_version_id) Then
+                Controller.UpdateFactVersion_id(version_id, fact_version_id)
+            Else
+                MsgBox("This Fact Version is not compatible with the Periods Configuration.")
+            End If
+        End If
     End Sub
 
 #End Region

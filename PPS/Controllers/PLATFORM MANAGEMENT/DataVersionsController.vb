@@ -33,6 +33,7 @@ Friend Class DataVersionsController
     Friend versionsNamesList As New List(Of String)
     Friend positions_dictionary As New Dictionary(Of Int32, Int32)
     Friend rates_versions_name_id_dic As Hashtable
+    Friend fact_versions_name_id_dic As Hashtable
 
     Private deletedVersionId As Int32 = 0
 
@@ -50,6 +51,7 @@ Friend Class DataVersionsController
         GlobalVariables.Versions.LoadVersionsTV(versionsTV)
         VTreeViewUtil.InitTVFormat(versionsTV)
         rates_versions_name_id_dic = GlobalVariables.RatesVersions.GetRateVersionsDictionary(NAME_VARIABLE, ID_VARIABLE)
+        fact_versions_name_id_dic = GlobalVariables.GlobalFactsVersions.GetGlobalFactVersionsDictionary(NAME_VARIABLE, ID_VARIABLE)
         View = New VersionsControl(Me, versionsTV)
         versionsNamesList = GlobalVariables.Versions.GetVersionsNameList(NAME_VARIABLE)
         NewVersionUI = New NewDataVersionUI(Me)
@@ -130,6 +132,12 @@ Friend Class DataVersionsController
 
     End Sub
 
+    Friend Sub UpdateFactVersion_id(ByRef version_id As UInt32, ByRef fact_version_id As UInt32)
+
+        Update(version_id, VERSIONS_GLOBAL_FACT_VERSION_ID, fact_version_id)
+
+    End Sub
+
     Private Sub Update(ByRef id As Int32, _
                        ByRef variable As String, _
                        ByVal value As Object)
@@ -153,27 +161,18 @@ Friend Class DataVersionsController
 
         ' priority high 
         ' ask for confirmation (deletion of all subversions)
-
         deletedVersionId = node.Value
+        Dim deletedVersionName = GlobalVariables.Versions.versions_hash(deletedVersionId)(NAME_VARIABLE)
+        If versionsNamesList.Contains(deletedVersionName) Then
+            versionsNamesList.Remove(deletedVersionName)
+        End If
         GlobalVariables.Versions.CMSG_DELETE_VERSION(node.Value)
 
     End Sub
 
     Private Sub AfterDelete(ByRef status As Boolean, ByRef id As UInt32)
 
-        ' ask to change current version if deleted
-        ' priority high
-        Dim deletedVersionName = GlobalVariables.Versions.versions_hash(deletedVersionId)(NAME_VARIABLE)
-        If My.Settings.version_id = deletedVersionId Then
-            ' change current version 
-        End If
-        If versionsNamesList.Contains(deletedVersionName) Then
-            versionsNamesList.Remove(deletedVersionName)
-        End If
-        Dim node As VIBlend.WinForms.Controls.vTreeNode = VTreeViewUtil.FindNode(versionsTV, id)
-        If Not node Is Nothing Then
-            node.Remove()
-        End If
+        View.AfterDelete(status, id)
 
     End Sub
 
@@ -206,7 +205,7 @@ Friend Class DataVersionsController
 
     Friend Function IsFolder(ByRef version_id As String) As Boolean
 
-        If GlobalVariables.Versions.versions_hash(version_id)(IS_FOLDER_VARIABLE) = 1 Then Return True
+        If GlobalVariables.Versions.versions_hash(CInt(version_id))(IS_FOLDER_VARIABLE) = True Then Return True
         Return False
 
     End Function
@@ -250,6 +249,20 @@ Friend Class DataVersionsController
 
     End Function
 
+    Friend Function IsFactVersionValid(ByRef start_period As Int32, _
+                                             ByRef nb_periods As Int32, _
+                                             ByRef fact_version_id As String) As Boolean
+
+        Dim fact_version_start_period As Int32 = GlobalVariables.GlobalFactsVersions.globalFact_versions_hash(CInt(fact_version_id))(VERSIONS_START_PERIOD_VAR)
+        Dim fact_version_nb_periods As Int32 = GlobalVariables.GlobalFactsVersions.globalFact_versions_hash(CInt(fact_version_id))(VERSIONS_NB_PERIODS_VAR)
+        If start_period >= fact_version_start_period AndAlso _
+           nb_periods <= fact_version_nb_periods Then
+            Return True
+        End If
+        Return False
+
+    End Function
+
     Friend Sub AddNode(ByRef id As String, _
                         ByRef name As String, _
                         ByRef is_folder As Int32, _
@@ -278,6 +291,13 @@ Friend Class DataVersionsController
 
         If Not GlobalVariables.RatesVersions.rate_versions_hash.ContainsKey(rateVersionId) Then Return 0
         Return GlobalVariables.RatesVersions.rate_versions_hash(rateVersionId)(NAME_VARIABLE)
+
+    End Function
+
+    Friend Function GetFactVersionNameFromId(ByRef p_factVersionId As Int32) As String
+
+        If Not GlobalVariables.GlobalFactsVersions.globalFact_versions_hash.ContainsKey(p_factVersionId) Then Return 0
+        Return GlobalVariables.GlobalFactsVersions.globalFact_versions_hash(p_factVersionId)(NAME_VARIABLE)
 
     End Function
 

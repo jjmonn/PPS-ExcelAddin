@@ -15,7 +15,7 @@ Imports System.Collections.Generic
 Imports System.Linq
 
 
-Friend Class FactsVersion
+Friend Class Version
 
 
 #Region "Instance variables"
@@ -38,13 +38,13 @@ Friend Class FactsVersion
 
 #Region "Init"
 
-  Friend Sub New()
+    Friend Sub New()
 
-    NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_READ_VERSION_ANSWER, AddressOf SMSG_READ_VERSION_ANSWER)
-    NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_DELETE_VERSION_ANSWER, AddressOf SMSG_DELETE_VERSION_ANSWER)
-    NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_LIST_VERSION_ANSWER, AddressOf SMSG_LIST_VERSION_ANSWER)
+        NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_READ_VERSION_ANSWER, AddressOf SMSG_READ_VERSION_ANSWER)
+        NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_DELETE_VERSION_ANSWER, AddressOf SMSG_DELETE_VERSION_ANSWER)
+        NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_LIST_VERSION_ANSWER, AddressOf SMSG_LIST_VERSION_ANSWER)
 
-  End Sub
+    End Sub
 
     Private Sub SMSG_LIST_VERSION_ANSWER(packet As ByteBuffer)
 
@@ -460,14 +460,14 @@ Friend Class FactsVersion
 #End Region
 
 
-  Protected Overrides Sub finalize()
+    Protected Overrides Sub finalize()
 
-    NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_LIST_VERSION_ANSWER, AddressOf SMSG_LIST_VERSION_ANSWER)
-    NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_READ_VERSION_ANSWER, AddressOf SMSG_READ_VERSION_ANSWER)
-    NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_DELETE_VERSION_ANSWER, AddressOf SMSG_DELETE_VERSION_ANSWER)
-    MyBase.Finalize()
+        NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_LIST_VERSION_ANSWER, AddressOf SMSG_LIST_VERSION_ANSWER)
+        NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_READ_VERSION_ANSWER, AddressOf SMSG_READ_VERSION_ANSWER)
+        NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_DELETE_VERSION_ANSWER, AddressOf SMSG_DELETE_VERSION_ANSWER)
+        MyBase.Finalize()
 
-  End Sub
+    End Sub
 
 
 
