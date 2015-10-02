@@ -140,7 +140,7 @@ Friend Class AccountsController
 
     End Sub
 
-    Friend Sub UpdateAccount(ByRef id As Int32, ByRef variable As String, ByVal value As Object)
+    Friend Sub UpdateAccount(ByRef id As Int32, ByRef variable As String, ByVal value As Object, Optional send As Boolean = False)
 
         Dim ht As Hashtable = GlobalVariables.Accounts.m_accountsHash(id)
 
@@ -148,6 +148,7 @@ Friend Class AccountsController
         If Not ht(IS_TMP_ID) Then
             If m_CRUDOperations.ContainsKey(id) Then m_CRUDOperations(id) = CRUDAction.UPDATE Else m_CRUDOperations.Add(id, CRUDAction.UPDATE)
         End If
+        If send = True Then GlobalVariables.Accounts.CMSG_UPDATE_ACCOUNT(ht)
     End Sub
 
     Friend Sub UpdateAccount(ByRef id As Int32, ByRef account_attributes As Hashtable)
@@ -410,12 +411,24 @@ Friend Class AccountsController
 
     End Sub
 
-    Private Sub AccountUpdateConfirmation(ByRef status As Boolean, ByRef id As Int32)
+    Private Sub AccountUpdateConfirmation(ByRef status As ErrorMessage, ByRef id As Int32)
 
-        If status = False Then
+        If status <> ErrorMessage.SUCCESS Then
+            Dim errorMsg As String
+
+            Select Case status
+                Case ErrorMessage.SYNTAX
+                    errorMsg = "Syntax incorrect."
+                Case ErrorMessage.INVALID_ATTRIBUTE
+                    errorMsg = "Invalid attribute."
+                Case ErrorMessage.NOT_FOUND
+                    errorMsg = "One or more of formula's defined elements does not exist."
+                Case Else
+                    errorMsg = "Unknown error."
+            End Select
+
             MsgBox("The account could not be created." & Chr(13) & _
-                   "Error " & "")
-            ' display error from error (to be catched in account) priority normal 
+                   "Error: " & errorMsg)
         End If
 
 

@@ -1,4 +1,4 @@
-﻿enum ErrorMessage
+﻿public enum ErrorMessage
 {
   SUCCESS,
   NOT_FOUND,
@@ -7,5 +7,6 @@
   NOT_IMPLEMENTED,
   NAME_ALREADY_USED,
   INVALID_ATTRIBUTE,
-  PERMISSION_DENIED
+  PERMISSION_DENIED,
+  SYNTAX
 };

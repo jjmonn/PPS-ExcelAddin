@@ -28,7 +28,7 @@ Friend Class Account
     Public Event ObjectInitialized()
     Public Event Read(ByRef status As Boolean, ByRef attributes As Hashtable)
     Public Event CreationEvent(ByRef status As Boolean, ByRef id As Int32)
-    Public Event UpdateEvent(ByRef status As Boolean, ByRef id As Int32)
+    Public Event UpdateEvent(ByRef status As ErrorMessage, ByRef id As Int32)
     Public Event DeleteEvent(ByRef status As Boolean, ByRef id As UInt32)
     Public Event UpdateListEvent(ByRef status As Boolean, ByRef updateResults As List(Of Tuple(Of Byte, Boolean, String)))
 
@@ -97,6 +97,27 @@ Friend Class Account
         Else
             RaiseEvent Read(False, Nothing)
         End If
+
+    End Sub
+
+    Friend Sub CMSG_UPDATE_ACCOUNT(ByRef attributes As Hashtable)
+
+        NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_UPDATE_ACCOUNT_ANSWER, AddressOf SMSG_UPDATE_ACCOUNT_ANSWER)
+        Dim packet As New ByteBuffer(CType(ClientMessage.CMSG_UPDATE_ACCOUNT, UShort))
+        WriteAccountPacket(packet, attributes)
+        packet.Release()
+        NetworkManager.GetInstance().Send(packet)
+
+    End Sub
+
+    Private Sub SMSG_UPDATE_ACCOUNT_ANSWER(packet As ByteBuffer)
+
+        If packet.GetError() = ErrorMessage.SUCCESS Then
+            RaiseEvent UpdateEvent(packet.GetError(), CInt(packet.ReadUint32()))
+        Else
+            RaiseEvent UpdateEvent(packet.GetError(), Nothing)
+        End If
+        NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_UPDATE_ACCOUNT_ANSWER, AddressOf SMSG_UPDATE_ACCOUNT_ANSWER)
 
     End Sub
 

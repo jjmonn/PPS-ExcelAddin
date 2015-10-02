@@ -363,7 +363,7 @@ SubmitFormula:
             If m_controller.accountsNameKeysDictionary.ContainsKey(Name_TB.Text) Then
                 formulaEdit.Checked = False
                 Dim accountId As Int32 = m_controller.accountsNameKeysDictionary.Item(Name_TB.Text)
-                m_controller.UpdateAccount(accountId, ACCOUNT_FORMULA_VARIABLE, m_controller.GetCurrentParsedFormula)
+                m_controller.UpdateAccount(accountId, ACCOUNT_FORMULA_VARIABLE, m_controller.GetCurrentParsedFormula, True)
             End If
         End If
 
