@@ -206,6 +206,16 @@ Friend Class AccountsController
 
 #Region "Checks"
 
+    Friend Function IsUsedName(ByRef p_name As String) As Boolean
+        For Each fact In GlobalVariables.GlobalFacts.globalFact_hash
+            If fact(NAME_VARIABLE) = p_name Then Return True
+        Next
+        For Each account In GlobalVariables.Accounts.m_accountsHash
+            If account.Value(NAME_VARIABLE) = p_name Then Return True
+        Next
+        Return False
+    End Function
+
     Friend Function ExistingDependantAccounts(ByRef node As TreeNode) As String()
 
         Dim dependantAccountsNames As New List(Of String)

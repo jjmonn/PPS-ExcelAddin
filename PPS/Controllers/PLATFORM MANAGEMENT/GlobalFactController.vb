@@ -76,6 +76,16 @@ Friend Class GlobalFactController
 
 #Region "Utilities"
 
+    Friend Function IsUsedName(ByRef p_name As String) As Boolean
+        For Each fact In GetGlobalFactList()
+            If fact(NAME_VARIABLE) = p_name Then Return True
+        Next
+        For Each account In GlobalVariables.Accounts.m_accountsHash
+            If account.Value(NAME_VARIABLE) = p_name Then Return True
+        Next
+        Return False
+    End Function
+
     Friend Function GetGlobalFactList() As Hashtable
         Return GlobalVariables.GlobalFacts.globalFact_hash
     End Function
