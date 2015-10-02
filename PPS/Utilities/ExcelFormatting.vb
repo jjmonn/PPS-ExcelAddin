@@ -94,8 +94,8 @@ Friend Class ExcelFormatting
         area.Font.Color = Color.Black
         Dim subArea As Excel.Range
         For j = 1 To area.Columns.Count - 1
-            Dim cell1 As Excel.Range = area.Cells(1, j)
-            Dim cell2 As Excel.Range = area.Cells(1, j).Offset(area.Rows.Count - 1, 0)
+            Dim cell1 As Excel.Range = area.Cells(1, j).Offset(-3, 0)
+            Dim cell2 As Excel.Range = area.Cells(1, j).Offset(area.Rows.Count - 4, 0)
             subArea = area.Range(cell1, cell2)
             subArea.Borders(Excel.XlBordersIndex.xlEdgeRight).Color = Color.Black
             subArea.Borders(Excel.XlBordersIndex.xlEdgeBottom).Color = Color.Black

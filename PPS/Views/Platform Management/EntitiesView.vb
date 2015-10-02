@@ -227,7 +227,7 @@ Friend Class EntitiesView
 
     End Sub
 
-    Private Sub dropInExcel_cmd_Click(sender As Object, e As EventArgs) Handles drop_to_excel_bt.Click
+    Private Sub dropInExcel_cmd_Click(sender As Object, e As EventArgs) Handles drop_to_excel_bt.Click, SendEntitiesHierarchyToExcelToolStripMenuItem.Click
 
         DropInExcel()
 
@@ -693,9 +693,9 @@ Friend Class EntitiesView
 
         Dim j As Int32
 
-        DGVArray(rowIndex, 0) = m_entitiesDataGridView.CellsArea.GetCellValue(inputRow, m_entitiesDataGridView.ColumnsHierarchy.Items(0))
+        DGVArray(rowIndex, 0) = inputRow.Caption
         If Not inputRow.ParentItem Is Nothing Then
-            DGVArray(rowIndex, 1) = m_entitiesDataGridView.CellsArea.GetCellValue(inputRow.ParentItem, m_entitiesDataGridView.ColumnsHierarchy.Items(0))
+            DGVArray(rowIndex, 1) = inputRow.ParentItem.Caption
         Else
             DGVArray(rowIndex, 1) = ""
         End If
