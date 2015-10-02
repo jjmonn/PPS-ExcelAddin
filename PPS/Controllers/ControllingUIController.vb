@@ -122,6 +122,7 @@ Friend Class ControllingUIController
                        Optional ByRef useCache As Boolean = False)
 
         If (isComputingFlag = True) Then Exit Sub
+        View.SetComputeButtonState(False)
         isComputingFlag = True
         computedFlag = False
 
@@ -211,6 +212,7 @@ Friend Class ControllingUIController
         computedFlag = True
         View.TerminateCircularProgress()
         isComputingFlag = False
+        View.SetComputeButtonState(True)
 
     End Sub
 

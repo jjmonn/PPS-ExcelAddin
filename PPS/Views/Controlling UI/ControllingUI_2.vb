@@ -693,6 +693,18 @@ Friend Class ControllingUI_2
 
 #Region "ThreadSafe"
 
+    Delegate Sub SetComputeButtonState_Delegate(ByRef p_state As Boolean)
+    Friend Sub SetComputeButtonState(ByRef p_state As Boolean)
+        If InvokeRequired Then
+            Dim MyDelegate As New SetComputeButtonState_Delegate(AddressOf SetComputeButtonState)
+            Me.Invoke(MyDelegate, New Object() {p_state})
+        Else
+            RefreshToolStripMenuItem.Enabled = p_state
+            rightPane_Control.UpdateBT.Enabled = p_state
+            RefreshToolStripMenuItem.GetCurrentParent().Refresh()
+        End If
+    End Sub
+
     Private Sub BackgroundWorker1_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs)
 
         'CircularProgress.Visible = True
