@@ -36,6 +36,7 @@ Friend Class GlobalFactController
         AddHandler GlobalVariables.GlobalFactsVersions.CreationEvent, AddressOf AfterGlobalFactsVersionCreate
         AddHandler GlobalVariables.GlobalFactsVersions.UpdateEvent, AddressOf AfterGlobalFactsVersionUpdate
         AddHandler GlobalVariables.GlobalFactsVersions.DeleteEvent, AddressOf AfterGlobalFactsVersionDelete
+        AddHandler GlobalVariables.GlobalFacts.DeleteEvent, AddressOf AfterGlobalFactDelete
 
     End Sub
 
@@ -76,9 +77,26 @@ Friend Class GlobalFactController
 
 #Region "Utilities"
 
+    Friend Sub UpdateFactName(ByRef p_factId As Int32, ByRef p_name As String)
+        Dim fact As Hashtable = GlobalVariables.GlobalFacts.globalFact_hash(p_factId)
+        If fact Is Nothing Then Exit Sub
+
+        fact = fact.Clone()
+        fact(NAME_VARIABLE) = p_name
+        GlobalVariables.GlobalFacts.CMSG_UPDATE_GLOBAL_FACT(fact)
+
+    End Sub
+
+    Friend Sub DeleteFact(ByRef p_factId As Int32)
+        Dim fact As Hashtable = GlobalVariables.GlobalFacts.globalFact_hash(p_factId)
+        If fact Is Nothing Then Exit Sub
+
+        GlobalVariables.GlobalFacts.CMSG_DELETE_GLOBAL_FACT(p_factId)
+    End Sub
+
     Friend Function IsUsedName(ByRef p_name As String) As Boolean
         For Each fact In GetGlobalFactList()
-            If fact(NAME_VARIABLE) = p_name Then Return True
+            If fact.Value(NAME_VARIABLE) = p_name Then Return True
         Next
         For Each account In GlobalVariables.Accounts.m_accountsHash
             If account.Value(NAME_VARIABLE) = p_name Then Return True
@@ -201,6 +219,11 @@ Friend Class GlobalFactController
     End Sub
 
 #Region "Events"
+
+    Private Sub AfterGlobalFactDelete(ByRef p_status As Boolean, ByRef p_id As Int32)
+        If p_status = False Then Exit Sub
+        m_view.ReloadUI()
+    End Sub
 
     Private Sub GlobalFactsVersionUpdateFromServer(ByRef p_status As Boolean, ByRef p_versionHt As Hashtable)
 

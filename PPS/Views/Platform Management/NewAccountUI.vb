@@ -152,6 +152,10 @@ Friend Class NewAccountUI
             Return False
         End If
 
+        If Controller.IsUsedName(NameTextBox.Text) Then
+            MsgBox("This name is already used by another fact or account.")
+            Return False
+        End If
         Return True
 
     End Function

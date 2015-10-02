@@ -208,7 +208,7 @@ Friend Class AccountsController
 
     Friend Function IsUsedName(ByRef p_name As String) As Boolean
         For Each fact In GlobalVariables.GlobalFacts.globalFact_hash
-            If fact(NAME_VARIABLE) = p_name Then Return True
+            If fact.Value(NAME_VARIABLE) = p_name Then Return True
         Next
         For Each account In GlobalVariables.Accounts.m_accountsHash
             If account.Value(NAME_VARIABLE) = p_name Then Return True

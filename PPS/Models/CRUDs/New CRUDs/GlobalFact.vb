@@ -169,7 +169,7 @@ Friend Class GlobalFact
     Private Sub SMSG_DELETE_GLOBAL_FACT_ANSWER(packet As ByteBuffer)
 
         If packet.GetError() = 0 Then
-            Dim id As UInt32 = packet.ReadInt32
+            Dim id As Int32 = packet.ReadInt32
             globalFact_hash.Remove(id)
             RaiseEvent DeleteEvent(True, id)
         Else

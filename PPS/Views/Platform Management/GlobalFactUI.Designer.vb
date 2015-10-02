@@ -44,10 +44,13 @@ Partial Class GlobalFactUI
         Me.MenuStrip1 = New System.Windows.Forms.MenuStrip()
         Me.ImportFromExcelToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
-        Me.CreateNewFact = New System.Windows.Forms.ToolStripMenuItem()
         Me.Panel1 = New System.Windows.Forms.Panel()
         Me.VersionLabel = New System.Windows.Forms.Label()
         Me.version_TB = New System.Windows.Forms.TextBox()
+        Me.FactRightClickMenu = New System.Windows.Forms.ContextMenuStrip(Me.components)
+        Me.RenameBT = New System.Windows.Forms.ToolStripMenuItem()
+        Me.DeleteBT = New System.Windows.Forms.ToolStripMenuItem()
+        Me.CreateNewFact = New System.Windows.Forms.ToolStripMenuItem()
         Me.VersionsRCMenu.SuspendLayout()
         Me.dgvRCM.SuspendLayout()
         Me.TableLayoutPanel4.SuspendLayout()
@@ -56,6 +59,7 @@ Partial Class GlobalFactUI
         Me.TableLayoutPanel5.SuspendLayout()
         Me.MenuStrip1.SuspendLayout()
         Me.Panel1.SuspendLayout()
+        Me.FactRightClickMenu.SuspendLayout()
         Me.SuspendLayout()
         '
         'MenuButtonIL
@@ -123,9 +127,9 @@ Partial Class GlobalFactUI
         '
         'dgvRCM
         '
-        Me.dgvRCM.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.expand_periods, Me.collapse_periods, Me.ToolStripSeparator3, Me.CopyRateDownToolStripMenuItem})
+        Me.dgvRCM.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.expand_periods, Me.collapse_periods, Me.ToolStripSeparator3, Me.CopyRateDownToolStripMenuItem, Me.CreateNewFact})
         Me.dgvRCM.Name = "dgvRCM"
-        Me.dgvRCM.Size = New System.Drawing.Size(177, 76)
+        Me.dgvRCM.Size = New System.Drawing.Size(177, 98)
         '
         'expand_periods
         '
@@ -206,10 +210,10 @@ Partial Class GlobalFactUI
         'MenuStrip1
         '
         Me.MenuStrip1.Dock = System.Windows.Forms.DockStyle.None
-        Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ImportFromExcelToolStripMenuItem, Me.ToolStripMenuItem1, Me.CreateNewFact})
+        Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ImportFromExcelToolStripMenuItem, Me.ToolStripMenuItem1})
         Me.MenuStrip1.Location = New System.Drawing.Point(0, 0)
         Me.MenuStrip1.Name = "MenuStrip1"
-        Me.MenuStrip1.Size = New System.Drawing.Size(266, 24)
+        Me.MenuStrip1.Size = New System.Drawing.Size(149, 24)
         Me.MenuStrip1.TabIndex = 5
         Me.MenuStrip1.Text = "MenuStrip1"
         '
@@ -224,13 +228,6 @@ Partial Class GlobalFactUI
         '
         Me.ToolStripMenuItem1.Name = "ToolStripMenuItem1"
         Me.ToolStripMenuItem1.Size = New System.Drawing.Size(12, 20)
-        '
-        'CreateNewFact
-        '
-        Me.CreateNewFact.Image = Global.FinancialBI.My.Resources.Resources.elements_add
-        Me.CreateNewFact.Name = "CreateNewFact"
-        Me.CreateNewFact.Size = New System.Drawing.Size(117, 20)
-        Me.CreateNewFact.Text = "Create new fact"
         '
         'Panel1
         '
@@ -261,6 +258,30 @@ Partial Class GlobalFactUI
         Me.version_TB.Size = New System.Drawing.Size(130, 20)
         Me.version_TB.TabIndex = 2
         '
+        'FactRightClickMenu
+        '
+        Me.FactRightClickMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.RenameBT, Me.DeleteBT})
+        Me.FactRightClickMenu.Name = "ContextMenuStrip1"
+        Me.FactRightClickMenu.Size = New System.Drawing.Size(118, 48)
+        '
+        'RenameBT
+        '
+        Me.RenameBT.Name = "RenameBT"
+        Me.RenameBT.Size = New System.Drawing.Size(117, 22)
+        Me.RenameBT.Text = "Rename"
+        '
+        'DeleteBT
+        '
+        Me.DeleteBT.Name = "DeleteBT"
+        Me.DeleteBT.Size = New System.Drawing.Size(117, 22)
+        Me.DeleteBT.Text = "Delete"
+        '
+        'CreateNewFact
+        '
+        Me.CreateNewFact.Name = "CreateNewFact"
+        Me.CreateNewFact.Size = New System.Drawing.Size(176, 22)
+        Me.CreateNewFact.Text = "Create fact"
+        '
         'GlobalFactUI
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -280,6 +301,7 @@ Partial Class GlobalFactUI
         Me.MenuStrip1.PerformLayout()
         Me.Panel1.ResumeLayout(False)
         Me.Panel1.PerformLayout()
+        Me.FactRightClickMenu.ResumeLayout(False)
         Me.ResumeLayout(False)
 
     End Sub
@@ -306,6 +328,9 @@ Partial Class GlobalFactUI
     Friend WithEvents version_TB As System.Windows.Forms.TextBox
     Friend WithEvents SplitContainer1 As System.Windows.Forms.SplitContainer
     Friend WithEvents Panel1 As System.Windows.Forms.Panel
+    Friend WithEvents FactRightClickMenu As System.Windows.Forms.ContextMenuStrip
+    Friend WithEvents RenameBT As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents DeleteBT As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents CreateNewFact As System.Windows.Forms.ToolStripMenuItem
 
 End Class

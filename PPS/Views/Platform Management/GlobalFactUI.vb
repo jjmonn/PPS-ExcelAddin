@@ -22,6 +22,7 @@ Friend Class GlobalFactUI
     Private m_isFillingCells As Boolean
     Private m_isCopyingValueDown As Boolean = False
     Private m_textBoxEditor As New TextBoxEditor()
+    Private m_selectedFact As Int32
 
     ' Constants
     Private LINES_WIDTH As Single = 3
@@ -55,7 +56,8 @@ Friend Class GlobalFactUI
         AddHandler m_versionsTV.KeyPress, AddressOf VersionsTV_KeyPress
         AddHandler m_versionsTV.MouseDoubleClick, AddressOf VersionsTV_MouseDoubleClick
         AddHandler GlobalVariables.GlobalFacts.Read, AddressOf ReloadUI
-        '     AddHandler m_ratesVersionsTV.MouseClick, AddressOf Rates_versionsTV_MouseClick
+        AddHandler m_dataGridView.MouseDown, AddressOf FactRightClick
+
         DesactivateUnallowed()
     End Sub
 
@@ -69,7 +71,7 @@ Friend Class GlobalFactUI
     End Sub
 
     Delegate Sub ReloadUI_Delegate()
-    Private Sub ReloadUI()
+    Friend Sub ReloadUI()
         If InvokeRequired Then
             Dim MyDelegate As New ReloadUI_Delegate(AddressOf ReloadUI)
             Me.Invoke(MyDelegate, New Object() {})
@@ -228,6 +230,16 @@ Friend Class GlobalFactUI
 
 #Region "m_ratesDataGridView Right Click Menu"
 
+    Private Sub FactRightClick(sender As Object, e As MouseEventArgs)
+        If (e.Button <> MouseButtons.Right) Then Exit Sub
+        Dim target As HierarchyItem = m_dataGridView.ColumnsHierarchy.HitTest(e.Location)
+        If target Is Nothing Then Exit Sub
+
+        FactRightClickMenu.Visible = True
+        FactRightClickMenu.Bounds = New Rectangle(MousePosition, New Size(FactRightClickMenu.Width, FactRightClickMenu.Height))
+        m_selectedFact = target.ItemValue
+    End Sub
+
     Private Sub expand_periods_Click(sender As Object, e As EventArgs) Handles expand_periods.Click
 
         m_dataGridView.RowsHierarchy.ExpandAllItems()
@@ -285,6 +297,17 @@ Friend Class GlobalFactUI
 
     End Sub
 
+    Private Sub RenameBT_Click(sender As Object, e As EventArgs) Handles RenameBT.Click
+
+        Dim name As String = InputBox("Enter new name", "Rename fact")
+
+        If name <> "" And Not m_controller.IsUsedName(name) Then m_controller.UpdateFactName(m_selectedFact, name)
+
+    End Sub
+
+    Private Sub DeleteBT_Click(sender As Object, e As EventArgs) Handles DeleteBT.Click
+        m_controller.DeleteFact(m_selectedFact)
+    End Sub
 
 #End Region
 
@@ -319,7 +342,9 @@ Friend Class GlobalFactUI
 
             m_columnsVariableItemDictionary.Add(fact.Value(NAME_VARIABLE), column)
             column.ItemValue = CInt(fact.Value(ID_VARIABLE))
-            column.AllowFiltering = True
+            column.AllowFiltering = False
+            m_dataGridView.ContextMenu = Nothing
+
         Next
 
     End Sub
