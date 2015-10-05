@@ -21,7 +21,6 @@ Imports System.Linq
 Imports VIBlend.Utilities
 Imports VIBlend.WinForms.Controls
 
-
 Friend Class ControllingUIController
 
 
@@ -49,7 +48,9 @@ Friend Class ControllingUIController
     Friend initDisplayFlag As Boolean = False
     Friend computedFlag As Boolean = False
     Friend isComputingFlag As Boolean
-  
+    Private m_chartsView As CUI2Visualization
+    Private m_chartsViewContainer As New CUI2VisualizationContainer
+
     ' Virtual binding
     Private itemsDimensionsDict As Dictionary(Of HierarchyItem, Hashtable)
     Friend cellsUpdateNeeded As Boolean = True
@@ -63,6 +64,12 @@ Friend Class ControllingUIController
 
         View = inputView
         LoadSpecialFiltersValuesNode()
+
+        m_chartsView = New CUI2Visualization(Me)
+        m_chartsViewContainer.Controls.Add(m_chartsView)
+        m_chartsView.Dock = DockStyle.Fill
+        StubFillingChart()
+
         AddHandler Computer.ComputationAnswered, AddressOf AfterCompute
 
     End Sub
@@ -795,8 +802,19 @@ Friend Class ControllingUIController
 
 #End Region
 
+    Private Sub StubFillingChart()
+
+        m_chartsView.BindData(0, "Dumb", {2014, 2015, 2016}, {1000, 2000, 3540})
+
+    End Sub
 
 #Region "Utilities"
+
+    Friend Sub ShowCharts()
+
+        m_chartsViewContainer.Show()
+
+    End Sub
 
     Private Sub FillUIHeader()
 

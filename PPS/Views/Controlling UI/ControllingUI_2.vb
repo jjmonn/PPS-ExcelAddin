@@ -36,7 +36,7 @@ Friend Class ControllingUI_2
 
 #Region "Objects"
 
-    Private Controller As ControllingUIController
+    Private m_controller As ControllingUIController
     Friend DGVUTIL As New DataGridViewsUtil
     Friend rightPane_Control As CUI2RightPane
     Friend leftPane_control As CUI2LeftPane
@@ -130,7 +130,7 @@ Friend Class ControllingUI_2
         ' Add any initialization after the InitializeComponent() call. 
         LeftPaneSetup()
         RightPaneSetup()
-        Controller = New ControllingUIController(Me)
+        m_controller = New ControllingUIController(Me)
         GlobalVariables.Accounts.LoadAccountsTV(accountsTV)
         BackgroundWorker1.WorkerSupportsCancellation = True
         m_currenciesSymbol_dict = GlobalVariables.Currencies.GetCurrenciesDict(ID_VARIABLE, CURRENCY_SYMBOL_VARIABLE)
@@ -263,7 +263,7 @@ Friend Class ControllingUI_2
     Private Sub RefreshData(Optional ByRef entityNode As vTreeNode = Nothing, _
                             Optional ByRef useCache As Boolean = False)
 
-        If Controller.isComputingFlag = True Then
+        If m_controller.isComputingFlag = True Then
             Exit Sub
         End If
         DGVsControlTab.Visible = False
@@ -282,7 +282,7 @@ Friend Class ControllingUI_2
                 If versionsIds.Count > 0 Then
                     ' Launch Computation
                     Try
-                        Controller.Compute(versionsIds.ToArray, entityNode)
+                        m_controller.Compute(versionsIds.ToArray, entityNode)
                     Catch ex As OutOfMemoryException
                         System.Diagnostics.Debug.WriteLine(ex.Message)
                         MsgBox("Unable to display result: Request too complex")
@@ -299,7 +299,7 @@ Friend Class ControllingUI_2
             If versionsIds.Count > 0 Then
                 ' Launch Computation
                 Try
-                    Controller.Compute(versionsIds.ToArray, entityNode)
+                    m_controller.Compute(versionsIds.ToArray, entityNode)
                 Catch ex As Exception
                     System.Diagnostics.Debug.WriteLine(ex.Message)
                     MsgBox("Unable to display result: Request too complex")
@@ -315,8 +315,8 @@ Friend Class ControllingUI_2
 
     Private Sub RefreshFromRightPane()
 
-        If Not Controller.EntityNode Is Nothing Then
-            RefreshData(Controller.EntityNode, True)
+        If Not m_controller.EntityNode Is Nothing Then
+            RefreshData(m_controller.EntityNode, True)
         Else
             If Not leftPane_control.entitiesTV.SelectedNode Is Nothing Then
                 RefreshData(leftPane_control.entitiesTV.SelectedNode, True)
@@ -335,7 +335,7 @@ Friend Class ControllingUI_2
 
         If item.IsRowsHierarchyItem Then
             ' Account's Type formatting
-            Dim typeId As Int32 = Controller.GetAccountTypeFromId(item.ItemValue)
+            Dim typeId As Int32 = m_controller.GetAccountTypeFromId(item.ItemValue)
             If typeId <> 0 Then
                 Select Case typeId
                     Case GlobalEnums.AccountType.MONETARY : item.CellsFormatString = "{0:" & m_currenciesSymbol_dict(currencyId) & "#,##0;(" & m_currenciesSymbol_dict(currencyId) & "#,##0)}" ' m_currenciesSymbol_dict(currencyId) & "#,##0.00;(" & m_currenciesSymbol_dict(currencyId) & "#,##0.00)"
@@ -347,7 +347,7 @@ Friend Class ControllingUI_2
             End If
 
             ' Account's Format
-            Dim formatId As String = Controller.GetAccountFormatFromId(item.ItemValue)
+            Dim formatId As String = m_controller.GetAccountFormatFromId(item.ItemValue)
             If formatId <> "" Then
                 Select Case formatId
                     Case "t"
@@ -424,7 +424,7 @@ Friend Class ControllingUI_2
                     periodSelectionDict.Add(node.Text, False)
                 End If
             Next
-            Controller.PeriodsSelectionFilter(periodSelectionDict)
+            m_controller.PeriodsSelectionFilter(periodSelectionDict)
         End If
 
     End Sub
@@ -437,7 +437,7 @@ Friend Class ControllingUI_2
 
     Private Sub tabControl1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles DGVsControlTab.SelectedIndexChanged
 
-        Controller.cellsUpdateNeeded = True
+        m_controller.cellsUpdateNeeded = True
 
     End Sub
 
@@ -494,11 +494,11 @@ Friend Class ControllingUI_2
     Private Sub VersionsComparisonToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles VersionsComparisonToolStripMenuItem.Click
 
         If isVersionComparisonDisplayed = True Then
-            Controller.VersionsCompDisplay(False)
+            m_controller.VersionsCompDisplay(False)
             isVersionComparisonDisplayed = False
         Else
-            If Controller.versionsDict.Count = 2 Then
-                Controller.VersionsCompDisplay(True)
+            If m_controller.versionsDict.Count = 2 Then
+                m_controller.VersionsCompDisplay(True)
                 isVersionComparisonDisplayed = True
             Else
                 MsgBox("Two versions must be selected in order to display the comparison.")
@@ -508,7 +508,7 @@ Friend Class ControllingUI_2
     End Sub
 
     Private Sub SwitchVersionsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles SwitchVersionsToolStripMenuItem.Click
-        Controller.ReverseVersionsComparison()
+        m_controller.ReverseVersionsComparison()
     End Sub
 
     Private Sub HideVersionsComparisonToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles HideVersionsComparisonToolStripMenuItem.Click
@@ -524,7 +524,7 @@ Friend Class ControllingUI_2
     End Sub
 
     Private Sub ExcelToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ExcelToolStripMenuItem.Click
-        Controller.dropOnExcel()
+        m_controller.dropOnExcel()
     End Sub
 
     Private Sub RefreshToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles RefreshToolStripMenuItem.Click
@@ -537,6 +537,11 @@ Friend Class ControllingUI_2
 
     End Sub
 
+    Private Sub ChartsBT_Click(sender As Object, e As EventArgs) Handles ChartBT.Click
+
+        m_controller.ShowCharts()
+
+    End Sub
 
 #End Region
 
@@ -712,7 +717,7 @@ Friend Class ControllingUI_2
         CircularProgress = New ProgressIndicator
         CircularProgressInit()
 
-        Do While Controller.computedFlag = False
+        Do While m_controller.computedFlag = False
         Loop
         ' set cancel button !! priority high !!!
 

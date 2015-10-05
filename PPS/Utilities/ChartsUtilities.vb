@@ -140,6 +140,21 @@ Friend Class ChartsUtilities
 
     End Sub
 
+    Friend Shared Sub BindSerieToChart(ByRef chart As Chart, _
+                                    ByRef p_name As String, _
+                                    ByRef p_axisType As AxisType, _
+                                    ByRef p_dataX As IEnumerable, _
+                                    ByRef p_dataY As IEnumerable, _
+                                    Optional ByRef chart_area As String = "ChartArea1")
+
+        Dim new_serie As New Series(p_name)
+        chart.Series.Add(new_serie)
+        new_serie.ChartArea = chart_area
+        new_serie.YAxisType = p_axisType
+        new_serie.Points.DataBindXY(p_dataX, p_dataY)
+
+    End Sub
+
     Friend Shared Sub EqualizeChartsYAxis1(ByRef chart1 As Chart, _
                                                     ByRef chart2 As Chart)
 
