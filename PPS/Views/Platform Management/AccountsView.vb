@@ -68,31 +68,31 @@ Friend Class AccountsView
         AccountsTVInit()
         GlobalFactsTVInit()
         ComboBoxesInit()
-        SetAccountUIState(False)
+        SetAccountUIState(False, True)
 
     End Sub
 
-    Private Sub SetAccountUIState(ByRef p_state As Boolean)
-        SaveDescriptionBT.Enabled = p_state
-        Name_TB.Enabled = p_state
-        formula_TB.Enabled = p_state
-        FormulaTypeComboBox.Enabled = p_state
-        TypeComboBox.Enabled = p_state
-        CurrencyConversionComboBox.Enabled = p_state
-        DescriptionTB.Enabled = p_state
-        ConsolidationOptionComboBox.Enabled = p_state
-        AddSubAccountToolStripMenuItem.Enabled = p_state
-        AddCategoryToolStripMenuItem.Enabled = p_state
-        DeleteAccountToolStripMenuItem.Enabled = p_state
-        DeleteAccountToolStripMenuItem1.Enabled = p_state
-        submit_cmd.Enabled = p_state
-        formulaEdit.Enabled = p_state
-        CreateANewAccountToolStripMenuItem.Enabled = p_state
-        CreateANewCategoryToolStripMenuItem.Enabled = p_state
+    Private Sub SetAccountUIState(ByRef p_uiState As Boolean, ByRef p_rightClickState As Boolean)
+        SaveDescriptionBT.Enabled = p_uiState
+        Name_TB.Enabled = p_uiState
+        formula_TB.Enabled = p_uiState
+        FormulaTypeComboBox.Enabled = p_uiState
+        TypeComboBox.Enabled = p_uiState
+        CurrencyConversionComboBox.Enabled = p_uiState
+        DescriptionTB.Enabled = p_uiState
+        ConsolidationOptionComboBox.Enabled = p_uiState
+        AddSubAccountToolStripMenuItem.Enabled = p_rightClickState
+        AddCategoryToolStripMenuItem.Enabled = p_rightClickState
+        DeleteAccountToolStripMenuItem.Enabled = p_rightClickState
+        DeleteAccountToolStripMenuItem1.Enabled = p_rightClickState
+        submit_cmd.Enabled = p_uiState
+        formulaEdit.Enabled = p_uiState
+        CreateANewAccountToolStripMenuItem.Enabled = p_rightClickState
+        CreateANewCategoryToolStripMenuItem.Enabled = p_rightClickState
     End Sub
 
     Private Sub DesactivateUnallowed()
-        SetAccountUIState(GlobalVariables.Users.CurrentUserIsAdmin())
+        SetAccountUIState(GlobalVariables.Users.CurrentUserIsAdmin(), GlobalVariables.Users.CurrentUserIsAdmin())
     End Sub
 
     Private Sub TVInit(ByRef p_tv As TreeView)
