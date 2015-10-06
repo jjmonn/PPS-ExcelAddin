@@ -132,12 +132,13 @@ Friend Class AccountsController
         TempHT.Add(ACCOUNT_IMAGE_VARIABLE, TempHT(ACCOUNT_FORMULA_TYPE_VARIABLE))                   ' dumb to be takenoff priotiy normal
         TempHT.Add(ITEMS_POSITIONS, account_position)                                                              ' Dumb
         TempHT.Add(ACCOUNT_TAB_VARIABLE, account_tab)
+        TempHT.Add(ACCOUNT_DESCRIPTION_VARIABLE, "")
 
-        Dim tmpId As Int32 = GlobalVariables.Accounts.CreateAccount(TempHT)
-        If m_CRUDOperations.ContainsKey(tmpId) Then m_CRUDOperations(tmpId) = CRUDAction.CREATE Else m_CRUDOperations.Add(tmpId, CRUDAction.CREATE)
-        m_view.TVUpdate(tmpId, account_parent_id, account_name, account_image)
-        accountsNameKeysDictionary.Add(account_name, tmpId)
-
+        'Dim tmpId As Int32 = GlobalVariables.Accounts.CreateAccount(TempHT)
+        'If m_CRUDOperations.ContainsKey(tmpId) Then m_CRUDOperations(tmpId) = CRUDAction.CREATE Else m_CRUDOperations.Add(tmpId, CRUDAction.CREATE)
+        'm_view.TVUpdate(tmpId, account_parent_id, account_name, account_image)
+        'accountsNameKeysDictionary.Add(account_name, tmpId)
+        GlobalVariables.Accounts.CMSG_CREATE_ACCOUNT(TempHT)
     End Sub
 
     Friend Sub UpdateAccount(ByRef id As Int32, ByRef variable As String, ByVal value As Object, Optional send As Boolean = False)

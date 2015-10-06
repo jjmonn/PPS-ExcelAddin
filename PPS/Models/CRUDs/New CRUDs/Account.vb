@@ -87,6 +87,28 @@ Friend Class Account
 
     End Sub
 
+
+    Friend Sub CMSG_CREATE_ACCOUNT(ByRef attributes As Hashtable)
+
+        NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_CREATE_ACCOUNT_ANSWER, AddressOf SMSG_CREATE_ACCOUNT_ANSWER)
+        Dim packet As New ByteBuffer(CType(ClientMessage.CMSG_CREATE_ACCOUNT, UShort))
+        WriteAccountPacket(packet, attributes)
+        packet.Release()
+        NetworkManager.GetInstance().Send(packet)
+
+    End Sub
+
+    Private Sub SMSG_CREATE_ACCOUNT_ANSWER(packet As ByteBuffer)
+
+        If packet.GetError() = 0 Then
+            RaiseEvent CreationEvent(True, CInt(packet.ReadUint32()))
+        Else
+            RaiseEvent CreationEvent(False, Nothing)
+        End If
+        NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_CREATE_ACCOUNT_ANSWER, AddressOf SMSG_CREATE_ACCOUNT_ANSWER)
+
+    End Sub
+
     Private Sub SMSG_READ_ACCOUNT_ANSWER(packet As ByteBuffer)
 
         If packet.GetError() = 0 Then
