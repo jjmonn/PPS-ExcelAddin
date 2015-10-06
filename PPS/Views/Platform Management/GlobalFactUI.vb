@@ -226,6 +226,10 @@ Friend Class GlobalFactUI
         m_controller.ShowNewFact()
     End Sub
 
+    Private Sub CreateNewFact2_Click(sender As Object, e As EventArgs) Handles CreateNewFact2.Click
+        m_controller.ShowNewFact()
+    End Sub
+
 #End Region
 
 #Region "m_ratesDataGridView Right Click Menu"
@@ -240,28 +244,24 @@ Friend Class GlobalFactUI
         m_selectedFact = target.ItemValue
     End Sub
 
-    Private Sub expand_periods_Click(sender As Object, e As EventArgs) Handles expand_periods.Click
-
-        m_dataGridView.RowsHierarchy.ExpandAllItems()
-
-    End Sub
-
-    Private Sub collapse_periods_Click(sender As Object, e As EventArgs) Handles collapse_periods.Click
-
-        m_dataGridView.RowsHierarchy.CollapseAllItems()
-
-    End Sub
-
-    Private Sub CopyRateDownToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles CopyRateDownToolStripMenuItem.Click
-
+    Private Sub CopyFactDownToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles CopyFactDownToolStripMenuItem.Click
+        CopyFactValueDown()
     End Sub
 
 #End Region
 
 #End Region
-
 
 #Region "Events"
+
+    Private Sub RenameVersionBT_Click(sender As Object, e As EventArgs) Handles RenameVersionBT.Click
+
+        If m_versionsTV.SelectedNode Is Nothing Then Exit Sub
+        Dim name As String = InputBox("Enter new name", "Rename version")
+
+        If name <> "" Then m_controller.UpdateVersionName(m_versionsTV.SelectedNode.Value, name)
+        m_versionsTV.SelectedNode.Remove()
+    End Sub
 
     Private Sub DataGridView_CellValueChanging(sender As Object, args As CellValueChangingEventArgs)
 
@@ -312,7 +312,7 @@ Friend Class GlobalFactUI
 #End Region
 
 
-#Region "Exchange Rates m_ratesDataGridView"
+#Region "Facts m_ratesDataGridView"
 
     Friend Sub InitializeDGV(ByRef currenciesList As List(Of Int32), _
                              ByRef monthsIdList As List(Of Int32), _
@@ -386,6 +386,19 @@ Friend Class GlobalFactUI
         For i As Int32 = start_index To parent_row.Items.Count - 1
             m_dataGridView.CellsArea.SetCellValue(parent_row.Items(i), column, value)
         Next
+
+    End Sub
+
+    Friend Sub CopyFactValueDown()
+
+        Dim value As Double = m_dataGridView.CellsArea.SelectedCells(0).Value
+        Dim column As HierarchyItem = m_dataGridView.CellsArea.SelectedCells(0).ColumnItem
+        Dim row As HierarchyItem = m_dataGridView.CellsArea.SelectedCells(0).RowItem
+        m_isCopyingValueDown = True
+        For i As Int32 = row.ItemIndex To m_dataGridView.RowsHierarchy.Items.Count - 1
+            m_dataGridView.CellsArea.SetCellValue(m_dataGridView.RowsHierarchy.Items(i), column, value)
+        Next
+        m_isCopyingValueDown = False
 
     End Sub
 

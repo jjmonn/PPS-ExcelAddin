@@ -94,7 +94,7 @@ Partial Class NewGlobalFactUI
         Me.Controls.Add(Me.Label1)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Name = "NewGlobalFactUI"
-        Me.Text = "New Fact"
+        Me.Text = "New Economic indicator"
         Me.ResumeLayout(False)
         Me.PerformLayout()
 

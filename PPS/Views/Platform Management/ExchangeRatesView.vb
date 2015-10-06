@@ -262,6 +262,15 @@ Friend Class ExchangeRatesView
 
 #Region "Events"
 
+    Private Sub RenameBT_Click(sender As Object, e As EventArgs) Handles RenameBT.Click
+
+        If m_ratesVersionsTV.SelectedNode Is Nothing Then Exit Sub
+        Dim name As String = InputBox("Enter new name", "Rename version")
+
+        If name <> "" Then m_controller.UpdateVersionName(m_ratesVersionsTV.SelectedNode.Value, name)
+        m_ratesVersionsTV.SelectedNode.Remove()
+    End Sub
+
     Private Sub RatesDataGridView_CellValueChanging(sender As Object, args As CellValueChangingEventArgs)
 
         If m_isFillingCells = False Then
@@ -436,7 +445,5 @@ Friend Class ExchangeRatesView
 #End Region
 
 #End Region
-
-
 
 End Class

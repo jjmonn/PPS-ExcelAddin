@@ -127,13 +127,17 @@ Friend Class GlobalFactController
 
     End Sub
 
+    Friend Sub UpdateVersionName(ByRef p_versionId As Int32, ByRef p_name As String)
+        UpdateVersion(p_versionId, NAME_VARIABLE, p_name)
+    End Sub
+
     Private Sub UpdateVersion(ByRef id As Int32, _
                    ByRef variable As String, _
                    ByRef value As Object)
 
         Dim ht As Hashtable = GlobalVariables.GlobalFactsVersions.globalFact_versions_hash(id)
         ht(variable) = value
-        GlobalVariables.GlobalFacts.CMSG_UPDATE_GLOBAL_FACT(ht)
+        GlobalVariables.GlobalFactsVersions.CMSG_UPDATE_GLOBAL_FACT_VERSION(ht)
 
     End Sub
 

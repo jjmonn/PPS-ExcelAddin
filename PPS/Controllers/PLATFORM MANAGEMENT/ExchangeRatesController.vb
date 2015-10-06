@@ -154,7 +154,7 @@ Friend Class ExchangeRatesController
 
     Friend Sub UpdateVersionName(ByRef version_id As Int32, ByRef name As String)
 
-        '  GlobalVariables.RatesVersions.UpdateVersion(version_id, NAME_VARIABLE, name)
+        Update(version_id, NAME_VARIABLE, name)
 
     End Sub
 
@@ -163,6 +163,8 @@ Friend Class ExchangeRatesController
                        ByRef value As Object)
 
         Dim ht As Hashtable = GlobalVariables.RatesVersions.rate_versions_hash(id)
+
+        If ht Is Nothing Then Exit Sub
         ht(variable) = value
         GlobalVariables.RatesVersions.CMSG_UPDATE_RATE_VERSION(ht)
 
