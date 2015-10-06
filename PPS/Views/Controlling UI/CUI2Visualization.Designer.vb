@@ -24,18 +24,18 @@ Partial Class CUI2Visualization
     Private Sub InitializeComponent()
         Dim ChartArea1 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
         Dim Legend1 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
-        Dim ChartArea3 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
-        Dim Legend3 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
         Dim ChartArea2 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
         Dim Legend2 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
+        Dim ChartArea3 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
+        Dim Legend3 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
         Dim ChartArea4 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
         Dim Legend4 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
         Me.VSplitContainer1 = New VIBlend.WinForms.Controls.vSplitContainer()
         Me.VSplitContainer3 = New VIBlend.WinForms.Controls.vSplitContainer()
         Me.Chart1 = New System.Windows.Forms.DataVisualization.Charting.Chart()
+        Me.Chart3 = New System.Windows.Forms.DataVisualization.Charting.Chart()
         Me.VSplitContainer2 = New VIBlend.WinForms.Controls.vSplitContainer()
         Me.Chart2 = New System.Windows.Forms.DataVisualization.Charting.Chart()
-        Me.Chart3 = New System.Windows.Forms.DataVisualization.Charting.Chart()
         Me.Chart4 = New System.Windows.Forms.DataVisualization.Charting.Chart()
         Me.VSplitContainer1.Panel1.SuspendLayout()
         Me.VSplitContainer1.Panel2.SuspendLayout()
@@ -44,11 +44,11 @@ Partial Class CUI2Visualization
         Me.VSplitContainer3.Panel2.SuspendLayout()
         Me.VSplitContainer3.SuspendLayout()
         CType(Me.Chart1, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.Chart3, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.VSplitContainer2.Panel1.SuspendLayout()
         Me.VSplitContainer2.Panel2.SuspendLayout()
         Me.VSplitContainer2.SuspendLayout()
         CType(Me.Chart2, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.Chart3, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.Chart4, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
@@ -132,6 +132,19 @@ Partial Class CUI2Visualization
         Me.Chart1.TabIndex = 0
         Me.Chart1.Text = "Chart1"
         '
+        'Chart3
+        '
+        ChartArea2.Name = "ChartArea1"
+        Me.Chart3.ChartAreas.Add(ChartArea2)
+        Me.Chart3.Dock = System.Windows.Forms.DockStyle.Fill
+        Legend2.Name = "Legend1"
+        Me.Chart3.Legends.Add(Legend2)
+        Me.Chart3.Location = New System.Drawing.Point(0, 0)
+        Me.Chart3.Name = "Chart3"
+        Me.Chart3.Size = New System.Drawing.Size(348, 206)
+        Me.Chart3.TabIndex = 1
+        Me.Chart3.Text = "Chart3"
+        '
         'VSplitContainer2
         '
         Me.VSplitContainer2.AllowAnimations = True
@@ -178,19 +191,6 @@ Partial Class CUI2Visualization
         Me.Chart2.TabIndex = 1
         Me.Chart2.Text = "Chart2"
         '
-        'Chart3
-        '
-        ChartArea2.Name = "ChartArea1"
-        Me.Chart3.ChartAreas.Add(ChartArea2)
-        Me.Chart3.Dock = System.Windows.Forms.DockStyle.Fill
-        Legend2.Name = "Legend1"
-        Me.Chart3.Legends.Add(Legend2)
-        Me.Chart3.Location = New System.Drawing.Point(0, 0)
-        Me.Chart3.Name = "Chart3"
-        Me.Chart3.Size = New System.Drawing.Size(348, 206)
-        Me.Chart3.TabIndex = 1
-        Me.Chart3.Text = "Chart3"
-        '
         'Chart4
         '
         ChartArea4.Name = "ChartArea1"
@@ -218,11 +218,11 @@ Partial Class CUI2Visualization
         Me.VSplitContainer3.Panel2.ResumeLayout(False)
         Me.VSplitContainer3.ResumeLayout(False)
         CType(Me.Chart1, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.Chart3, System.ComponentModel.ISupportInitialize).EndInit()
         Me.VSplitContainer2.Panel1.ResumeLayout(False)
         Me.VSplitContainer2.Panel2.ResumeLayout(False)
         Me.VSplitContainer2.ResumeLayout(False)
         CType(Me.Chart2, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.Chart3, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.Chart4, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 

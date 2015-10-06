@@ -14,6 +14,7 @@ Imports System.Windows.Forms.DataVisualization.Charting
 Imports System.Collections
 Imports Microsoft.Office.Interop
 Imports System.Runtime.InteropServices
+Imports System.Drawing
 
 
 Friend Class ChartsUtilities
@@ -21,14 +22,14 @@ Friend Class ChartsUtilities
 
 #Region "Instance Variables"
 
-    Friend Const LABELS_MAX_FONT_SIZE As Single = 8
+    Friend Const LABELS_MAX_FONT_SIZE As Single = 10
+    Friend Const LABELS_MIN_FONT_SIZE As Single = 8
     Friend Const VALUES_LABELS_FONT_SIZE As Single = 8
     Friend Const DEFAULT_CHART_PALETTE = ChartColorPalette.Berry
-    Friend Const CHART_TITLE_FONT_SIZE As Single = 9
+    Friend Const CHART_TITLE_FONT_SIZE As Single = 12
     Friend Const DEFAULT_LABELS_FORMAT As String = "{0:N0}"
     Friend Const CHARTS_X_AXIS_ANGLE As Int32 = -45
 
-  
 
 
 #End Region
@@ -36,6 +37,7 @@ Friend Class ChartsUtilities
 
 #Region "Charts and Series Creation"
 
+    ' Obsolete! (only used in financial engineering -to be reviewed)
     Friend Shared Function CreateChart(ByRef reportHT As Hashtable) As Chart
 
         Dim new_chart As New Chart
@@ -72,12 +74,12 @@ Friend Class ChartsUtilities
         new_chart.Legends(0).IsDockedInsideChartArea = False
         new_chart.Legends(0).TableStyle = LegendTableStyle.Wide
         new_chart.Legends(0).Alignment = System.Drawing.StringAlignment.Center
-        new_chart.Legends(0).AutoFitMinFontSize = VALUES_LABELS_FONT_SIZE
-
+        ' new_chart.Legends(0).AutoFitMinFontSize = VALUES_LABELS_FONT_SIZE
+        new_chart.Legends(0).Font = New Drawing.Font("calibri", 10)
 
         ' Title
-        new_chart.Titles.Add(reportHT(name_variable))
-        new_chart.Titles(0).Font = New Drawing.Font("Arial", CHART_TITLE_FONT_SIZE, Drawing.FontStyle.Bold)
+        new_chart.Titles.Add(reportHT(NAME_VARIABLE))
+        new_chart.Titles(0).Font = New Drawing.Font("calibri", CHART_TITLE_FONT_SIZE, Drawing.FontStyle.Bold)
 
         ' Borders
         new_chart.BorderlineWidth = 1
@@ -86,6 +88,7 @@ Friend Class ChartsUtilities
 
     End Function
 
+    ' Obsolete! (only used in financial engineering -to be reviewed)
     Friend Shared Sub AddSerieToChart(ByRef chart As Chart, _
                                                ByRef serieHT As Hashtable, _
                                                Optional ByRef chart_area As String = "ChartArea1")
@@ -140,7 +143,8 @@ Friend Class ChartsUtilities
 
     End Sub
 
-    Friend Shared Sub BindSerieToChart(ByRef chart As Chart, _
+
+    Friend Shared Sub BindSerieToChart(ByRef p_chart As Chart, _
                                     ByRef p_name As String, _
                                     ByRef p_axisType As AxisType, _
                                     ByRef p_dataX As IEnumerable, _
@@ -148,16 +152,118 @@ Friend Class ChartsUtilities
                                     Optional ByRef chart_area As String = "ChartArea1")
 
         Dim new_serie As New Series(p_name)
-        chart.Series.Add(new_serie)
+        p_chart.Series.Add(new_serie)
         new_serie.ChartArea = chart_area
         new_serie.YAxisType = p_axisType
         new_serie.Points.DataBindXY(p_dataX, p_dataY)
 
     End Sub
 
-    Friend Shared Sub EqualizeChartsYAxis1(ByRef chart1 As Chart, _
-                                                    ByRef chart2 As Chart)
+    Friend Shared Sub FormatSerie(ByRef p_serie As Series, _
+                                   ByRef p_color As System.Drawing.Color, _
+                                   ByRef p_chartType As SeriesChartType, _
+                                         Optional ByRef p_alphaColor As Integer = -1, _
+                                   Optional ByRef p_seriePointsWidth As Single = 0)
 
+        If p_serie Is Nothing Then Exit Sub
+        p_serie.Color = p_color
+        If p_alphaColor > -1 Then
+            p_serie.Color = Color.FromArgb(p_alphaColor, p_color.R, p_color.G, p_color.B)
+        End If
+        p_serie.ChartType = p_chartType
+        If p_seriePointsWidth > 0 Then
+            p_serie.CustomProperties = "PixelPointWidth = " & p_seriePointsWidth
+        End If
+
+    End Sub
+
+    Friend Shared Sub FormatSerieLabel(ByRef p_serie As Series, _
+                                       ByRef p_labelsColor As System.Drawing.Color, _
+                                       ByRef p_labelsBackColor As System.Drawing.Color, _
+                                       ByRef p_labelsBordersWidth As Single, _
+                                       ByRef p_labelsBorderColor As System.Drawing.Color, _
+                                       Optional ByRef p_labelsFontSize As Single = VALUES_LABELS_FONT_SIZE)
+
+        If p_serie Is Nothing Then Exit Sub
+        p_serie.IsValueShownAsLabel = True
+        p_serie.LabelBackColor = p_labelsBackColor
+        p_serie.LabelBorderColor = p_labelsColor
+        p_serie.LabelBorderWidth = 1
+        p_serie.LabelFormat = DEFAULT_LABELS_FORMAT
+        Dim label_font As System.Drawing.Font = New System.Drawing.Font("calibri", p_labelsFontSize)
+        p_serie.Font = label_font
+
+    End Sub
+
+    Friend Shared Sub InitializeChartDisplay(ByRef p_chart As Chart, _
+                                          Optional ByRef p_title As String = "", _
+                                          Optional ByRef p_yAxisName As String = "", _
+                                          Optional ByRef p_yAxis2Name As String = "",
+                                          Optional ByRef p_colorPalette As Integer = -1, _
+                                          Optional ByRef p_border As Boolean = False, _
+                                          Optional ByRef p_YAxisFormat As String = DEFAULT_LABELS_FORMAT)
+
+        Dim chartArea1 As ChartArea = p_chart.ChartAreas("ChartArea1")
+        chartArea1.IsSameFontSizeForAllAxes = True
+
+        ' Axis
+        chartArea1.AxisY.TitleFont = New Drawing.Font("calibri", VALUES_LABELS_FONT_SIZE)
+        chartArea1.AxisX.TitleFont = New Drawing.Font("calibri", VALUES_LABELS_FONT_SIZE)
+        chartArea1.AxisX.LabelStyle.Angle = CHARTS_X_AXIS_ANGLE
+        chartArea1.AxisY.LabelAutoFitMaxFontSize = LABELS_MAX_FONT_SIZE
+        chartArea1.AxisY.LabelAutoFitMinFontSize = LABELS_MIN_FONT_SIZE
+        chartArea1.AxisX.LabelAutoFitMaxFontSize = LABELS_MAX_FONT_SIZE
+        chartArea1.AxisX.LabelAutoFitMinFontSize = LABELS_MIN_FONT_SIZE
+
+        If p_yAxisName <> "" Then
+            chartArea1.AxisY.Title = p_yAxisName
+            chartArea1.AxisY.TextOrientation = TextOrientation.Rotated90
+        End If
+        chartArea1.AxisY.LabelStyle.Format = p_YAxisFormat
+
+        If p_yAxis2Name <> "" Then
+            chartArea1.AxisY2.Title = p_yAxis2Name
+            chartArea1.AxisY2.TextOrientation = TextOrientation.Rotated90
+        End If
+
+        ' Grid Lines
+        chartArea1.AxisX.MajorGrid.Enabled = False
+        chartArea1.AxisY.MajorGrid.LineColor = Drawing.Color.LightGray
+        chartArea1.AxisY2.MajorGrid.Enabled = False
+
+        ' Colors Palette
+        If p_colorPalette > -1 Then
+            p_chart.Palette = p_colorPalette
+        End If
+
+        ' Legend
+        Dim legend1 As New Legend
+        p_chart.Legends.Add(legend1)
+        p_chart.Legends(0).Docking = Docking.Bottom
+        p_chart.Legends(0).IsDockedInsideChartArea = False
+        p_chart.Legends(0).TableStyle = LegendTableStyle.Auto
+        p_chart.Legends(0).Alignment = System.Drawing.StringAlignment.Center
+        p_chart.Legends(0).Font = New Drawing.Font("calibri", VALUES_LABELS_FONT_SIZE)
+        p_chart.Legends(0).AutoFitMinFontSize = LABELS_MIN_FONT_SIZE
+        p_chart.Legends(0).MaximumAutoSize = LABELS_MAX_FONT_SIZE
+        p_chart.Legends(0).Font = New Drawing.Font("calibri", 10)
+
+        ' Title
+        If p_title <> "" Then
+            p_chart.Titles.Add(p_title)
+            p_chart.Titles(0).Font = New Drawing.Font("calibri", CHART_TITLE_FONT_SIZE, Drawing.FontStyle.Bold)
+        End If
+
+        ' Borders
+        If p_border = True Then
+            p_chart.BorderlineWidth = 1
+            p_chart.BorderlineColor = Drawing.Color.Gray
+        End If
+
+    End Sub
+
+    Friend Shared Sub EqualizeChartsYAxis1(ByRef chart1 As Chart, _
+                                           ByRef chart2 As Chart)
 
         If chart1.ChartAreas(0).AxisY.Maximum > chart2.ChartAreas(0).AxisY.Maximum Then
             chart2.ChartAreas(0).AxisY.Maximum = chart1.ChartAreas(0).AxisY.Maximum

@@ -68,8 +68,7 @@ Friend Class ControllingUIController
         m_chartsView = New CUI2Visualization(Me)
         m_chartsViewContainer.Controls.Add(m_chartsView)
         m_chartsView.Dock = DockStyle.Fill
-        StubFillingChart()
-
+    
         AddHandler Computer.ComputationAnswered, AddressOf AfterCompute
 
     End Sub
@@ -88,8 +87,6 @@ Friend Class ControllingUIController
             For Each filterValueId As Int32 In filterValuesDict.Keys
                 VTreeViewUtil.AddNode(filterValueId, filterValuesDict(filterValueId), filterNode)
             Next
-
-
 
         Next
 
@@ -216,6 +213,7 @@ Friend Class ControllingUIController
         End While
         View.FormatDGV_ThreadSafe()
         dataMap = Computer.GetData()
+        StubFillingChart()
         computedFlag = True
         View.TerminateCircularProgress()
         isComputingFlag = False
@@ -802,19 +800,77 @@ Friend Class ControllingUIController
 
 #End Region
 
-    Private Sub StubFillingChart()
 
-        m_chartsView.BindData(0, "Dumb", {2014, 2015, 2016}, {1000, 2000, 3540})
-
-    End Sub
-
-#Region "Utilities"
+#Region "Charts Interface"
 
     Friend Sub ShowCharts()
 
         m_chartsViewContainer.Show()
 
     End Sub
+
+    Friend Sub StubFillingChart()
+
+        m_chartsView.ClearCharts_ThreadSafe()
+        Dim xAxisValues As String() = GetSerieXValues()
+        m_chartsView.BindData_ThreadSafe(0, "Chiffre d'affaires", xAxisValues, BuildSerieYValues(2))
+        m_chartsView.BindData_ThreadSafe(0, "EBIDTA", xAxisValues, BuildSerieYValues(9))
+        m_chartsView.BindData_ThreadSafe(1, "Investissements", xAxisValues, BuildSerieYValues(89))
+        m_chartsView.BindData_ThreadSafe(2, "Cash-Flow", xAxisValues, BuildSerieYValues(349))
+        m_chartsView.BindData_ThreadSafe(2, "Trésorerie", xAxisValues, BuildSerieYValues(41))
+        m_chartsView.BindData_ThreadSafe(3, "Levier Financier (D/E) %", xAxisValues, BuildSerieYValues(358))
+        m_chartsView.BindData_ThreadSafe(3, "Rentabilité (ROCE) %", xAxisValues, BuildSerieYValues(353))
+
+        m_chartsView.StubDemosFormatting_ThreadSafe()
+
+    End Sub
+
+    Private Function BuildSerieYValues(ByRef p_accountId As Int32) As Double()
+
+        Dim nbPeriods As Int32 = View.leftPane_control.periodsTV.Nodes.Count - 1
+        Dim yValues(nbPeriods) As Double
+        Dim entityId As Int32 = EntityNode.Value
+        Dim versionId As Int32 = CInt(versionsDict.Keys(0))
+        Dim filterId As String = "0"
+        Dim periodId As String = ""
+        Dim token As String
+
+        Dim i As Int32
+        For Each periodNode As vTreeNode In View.leftPane_control.periodsTV.Nodes
+            periodId = periodNode.Value
+            token = versionId & Computer.TOKEN_SEPARATOR & _
+                    filterId & Computer.TOKEN_SEPARATOR & _
+                    entityId & Computer.TOKEN_SEPARATOR & _
+                    p_accountId & Computer.TOKEN_SEPARATOR & _
+                    periodId
+            If dataMap.ContainsKey(token) _
+            AndAlso Not Double.IsNaN(dataMap(token)) Then
+                yValues(i) = dataMap(token)
+                i += 1
+            End If
+        Next
+        Return yValues
+
+    End Function
+
+    Private Function GetSerieXValues() As String()
+
+        Dim nbPeriods As Int32 = View.leftPane_control.periodsTV.Nodes.Count - 1
+        Dim xValues(nbPeriods) As String
+        Dim i As Int32 = 0
+        For Each node As vTreeNode In View.leftPane_control.periodsTV.Nodes
+            xValues(i) = node.Text
+            i += 1
+        Next
+        Return xValues
+
+    End Function
+
+
+#End Region
+
+
+#Region "Utilities"
 
     Private Sub FillUIHeader()
 
