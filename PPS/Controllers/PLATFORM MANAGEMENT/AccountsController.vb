@@ -191,15 +191,16 @@ Friend Class AccountsController
 
     Friend Sub DeleteAccount(ByRef id As Int32)
 
-        Dim account As Hashtable = GlobalVariables.Accounts.m_accountsHash(id)
+        GlobalVariables.Accounts.CMSG_DELETE_ACCOUNT(id)
+        'Dim account As Hashtable = GlobalVariables.Accounts.m_accountsHash(id)
 
-        If Not account(IS_TMP_ID) Then
-            If m_CRUDOperations.ContainsKey(id) Then m_CRUDOperations(id) = CRUDAction.DELETE Else m_CRUDOperations.Add(id, CRUDAction.DELETE)
-        Else
-            m_CRUDOperations.Remove(id)
-        End If
-        accountsNameKeysDictionary.Remove(account(NAME_VARIABLE))
-        GlobalVariables.Accounts.DeleteAccount(id)
+        'If Not account(IS_TMP_ID) Then
+        '    If m_CRUDOperations.ContainsKey(id) Then m_CRUDOperations(id) = CRUDAction.DELETE Else m_CRUDOperations.Add(id, CRUDAction.DELETE)
+        'Else
+        '    m_CRUDOperations.Remove(id)
+        'End If
+        'accountsNameKeysDictionary.Remove(account(NAME_VARIABLE))
+        'GlobalVariables.Accounts.DeleteAccount(id)
     End Sub
 
 #End Region

@@ -22,7 +22,7 @@ Friend Class Account
 
     ' Variables
     Friend state_flag As Boolean
-    Friend m_accountsHash As New SortedDictionary(Of Int32, Hashtable)
+    Friend m_accountsHash As New Dictionary(Of Int32, Hashtable)
 
     ' Events
     Public Event ObjectInitialized()
@@ -173,6 +173,15 @@ Friend Class Account
             RaiseEvent UpdateListEvent(False, Nothing)
         End If
         NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_UPDATE_ACCOUNT_LIST_ANSWER, AddressOf SMSG_UPDATE_ACCOUNT_LIST_ANSWER)
+
+    End Sub
+
+    Friend Sub CMSG_DELETE_ACCOUNT(ByRef id As UInt32)
+
+        Dim packet As New ByteBuffer(CType(ClientMessage.CMSG_DELETE_ACCOUNT, UShort))
+        packet.WriteUint32(id)
+        packet.Release()
+        NetworkManager.GetInstance().Send(packet)
 
     End Sub
 
