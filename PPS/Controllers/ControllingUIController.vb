@@ -878,6 +878,10 @@ Friend Class ControllingUIController
         View.CurrencyTB.Text = View.leftPane_control.currenciesCLB.SelectedItem.Text
         View.VersionTB.Text = String.Join(" ; ", versionsDict.Values)
 
+        m_chartsView.EntityTB.Text = EntityNode.Text
+        m_chartsView.CurrencyTB.Text = View.leftPane_control.currenciesCLB.SelectedItem.Text
+        m_chartsView.VersionTB.Text = String.Join(" ; ", versionsDict.Values)
+
     End Sub
 
     Friend Sub dropOnExcel()
