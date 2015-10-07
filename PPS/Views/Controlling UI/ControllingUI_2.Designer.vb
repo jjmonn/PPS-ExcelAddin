@@ -60,9 +60,9 @@ Partial Class ControllingUI_2
         Me.SwitchVersionsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.HideVersionsComparisonToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.RefreshToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ChartBT = New System.Windows.Forms.ToolStripMenuItem()
         Me.RefreshRightClick = New System.Windows.Forms.ToolStripMenuItem()
         Me.DGVFormatsButton = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ChartBT = New System.Windows.Forms.ToolStripMenuItem()
         Me.EntitiesRCMenu.SuspendLayout()
         Me.PeriodsRCMenu.SuspendLayout()
         Me.DataGridViewsRCMenu.SuspendLayout()
@@ -81,64 +81,64 @@ Partial Class ControllingUI_2
         '
         Me.EntitiesRCMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.RefreshRightClick})
         Me.EntitiesRCMenu.Name = "ContextMenuStripEntitiesNodes"
-        Me.EntitiesRCMenu.Size = New System.Drawing.Size(114, 26)
+        Me.EntitiesRCMenu.Size = New System.Drawing.Size(124, 28)
         '
         'PeriodsRCMenu
         '
         Me.PeriodsRCMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.SelectAllToolStripMenuItem, Me.UnselectAllToolStripMenuItem})
         Me.PeriodsRCMenu.Name = "periodsRightClickMenu"
-        Me.PeriodsRCMenu.Size = New System.Drawing.Size(137, 48)
+        Me.PeriodsRCMenu.Size = New System.Drawing.Size(150, 52)
         '
         'SelectAllToolStripMenuItem
         '
         Me.SelectAllToolStripMenuItem.Name = "SelectAllToolStripMenuItem"
-        Me.SelectAllToolStripMenuItem.Size = New System.Drawing.Size(136, 22)
+        Me.SelectAllToolStripMenuItem.Size = New System.Drawing.Size(149, 24)
         Me.SelectAllToolStripMenuItem.Text = "Select All"
         '
         'UnselectAllToolStripMenuItem
         '
         Me.UnselectAllToolStripMenuItem.Name = "UnselectAllToolStripMenuItem"
-        Me.UnselectAllToolStripMenuItem.Size = New System.Drawing.Size(136, 22)
+        Me.UnselectAllToolStripMenuItem.Size = New System.Drawing.Size(149, 24)
         Me.UnselectAllToolStripMenuItem.Text = "Unselect All"
         '
         'DataGridViewsRCMenu
         '
         Me.DataGridViewsRCMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ExpandAllRightClick, Me.CollapseAllRightClick, Me.ToolStripSeparator2, Me.LogRightClick, Me.ToolStripSeparator4, Me.DGVFormatsButton, Me.ColumnsAutoSize, Me.ColumnsAutoFitBT})
         Me.DataGridViewsRCMenu.Name = "DGVsRCM"
-        Me.DataGridViewsRCMenu.Size = New System.Drawing.Size(247, 148)
+        Me.DataGridViewsRCMenu.Size = New System.Drawing.Size(275, 160)
         '
         'ExpandAllRightClick
         '
         Me.ExpandAllRightClick.Name = "ExpandAllRightClick"
-        Me.ExpandAllRightClick.Size = New System.Drawing.Size(246, 22)
+        Me.ExpandAllRightClick.Size = New System.Drawing.Size(274, 24)
         Me.ExpandAllRightClick.Text = "Expand All"
         '
         'CollapseAllRightClick
         '
         Me.CollapseAllRightClick.Name = "CollapseAllRightClick"
-        Me.CollapseAllRightClick.Size = New System.Drawing.Size(246, 22)
+        Me.CollapseAllRightClick.Size = New System.Drawing.Size(274, 24)
         Me.CollapseAllRightClick.Text = "Collapse All"
         '
         'ToolStripSeparator2
         '
         Me.ToolStripSeparator2.Name = "ToolStripSeparator2"
-        Me.ToolStripSeparator2.Size = New System.Drawing.Size(243, 6)
+        Me.ToolStripSeparator2.Size = New System.Drawing.Size(271, 6)
         '
         'LogRightClick
         '
         Me.LogRightClick.Name = "LogRightClick"
-        Me.LogRightClick.Size = New System.Drawing.Size(246, 22)
+        Me.LogRightClick.Size = New System.Drawing.Size(274, 24)
         Me.LogRightClick.Text = "Log"
         '
         'ToolStripSeparator4
         '
         Me.ToolStripSeparator4.Name = "ToolStripSeparator4"
-        Me.ToolStripSeparator4.Size = New System.Drawing.Size(243, 6)
+        Me.ToolStripSeparator4.Size = New System.Drawing.Size(271, 6)
         '
         'ColumnsAutoSize
         '
         Me.ColumnsAutoSize.Name = "ColumnsAutoSize"
-        Me.ColumnsAutoSize.Size = New System.Drawing.Size(246, 22)
+        Me.ColumnsAutoSize.Size = New System.Drawing.Size(274, 24)
         Me.ColumnsAutoSize.Text = "Adjust Columns Width"
         '
         'ColumnsAutoFitBT
@@ -147,25 +147,25 @@ Partial Class ControllingUI_2
         Me.ColumnsAutoFitBT.CheckOnClick = True
         Me.ColumnsAutoFitBT.CheckState = System.Windows.Forms.CheckState.Checked
         Me.ColumnsAutoFitBT.Name = "ColumnsAutoFitBT"
-        Me.ColumnsAutoFitBT.Size = New System.Drawing.Size(246, 22)
+        Me.ColumnsAutoFitBT.Size = New System.Drawing.Size(274, 24)
         Me.ColumnsAutoFitBT.Text = "Automatic Columns Adjustment"
         '
         'AdjustmentsRCMenu
         '
         Me.AdjustmentsRCMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.SelectAllToolStripMenuItem1, Me.UnselectAllToolStripMenuItem1})
         Me.AdjustmentsRCMenu.Name = "AdjustmentsRCM"
-        Me.AdjustmentsRCMenu.Size = New System.Drawing.Size(137, 48)
+        Me.AdjustmentsRCMenu.Size = New System.Drawing.Size(150, 52)
         '
         'SelectAllToolStripMenuItem1
         '
         Me.SelectAllToolStripMenuItem1.Name = "SelectAllToolStripMenuItem1"
-        Me.SelectAllToolStripMenuItem1.Size = New System.Drawing.Size(136, 22)
+        Me.SelectAllToolStripMenuItem1.Size = New System.Drawing.Size(149, 24)
         Me.SelectAllToolStripMenuItem1.Text = "Select All"
         '
         'UnselectAllToolStripMenuItem1
         '
         Me.UnselectAllToolStripMenuItem1.Name = "UnselectAllToolStripMenuItem1"
-        Me.UnselectAllToolStripMenuItem1.Size = New System.Drawing.Size(136, 22)
+        Me.UnselectAllToolStripMenuItem1.Size = New System.Drawing.Size(149, 24)
         Me.UnselectAllToolStripMenuItem1.Text = "Unselect All"
         '
         'SplitContainer1
@@ -315,7 +315,7 @@ Partial Class ControllingUI_2
         Me.Label3.AutoSize = True
         Me.Label3.Location = New System.Drawing.Point(534, 9)
         Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(49, 13)
+        Me.Label3.Size = New System.Drawing.Size(55, 15)
         Me.Label3.TabIndex = 3
         Me.Label3.Text = "Currency"
         '
@@ -325,7 +325,7 @@ Partial Class ControllingUI_2
         Me.Label2.AutoSize = True
         Me.Label2.Location = New System.Drawing.Point(670, 9)
         Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(42, 13)
+        Me.Label2.Size = New System.Drawing.Size(48, 15)
         Me.Label2.TabIndex = 2
         Me.Label2.Text = "Version"
         '
@@ -335,7 +335,7 @@ Partial Class ControllingUI_2
         Me.Label1.AutoSize = True
         Me.Label1.Location = New System.Drawing.Point(350, 9)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(33, 13)
+        Me.Label1.Size = New System.Drawing.Size(36, 15)
         Me.Label1.TabIndex = 1
         Me.Label1.Text = "Entity"
         '
@@ -346,7 +346,7 @@ Partial Class ControllingUI_2
         Me.MainMenu.Location = New System.Drawing.Point(0, 0)
         Me.MainMenu.Name = "MainMenu"
         Me.MainMenu.ShowItemToolTips = True
-        Me.MainMenu.Size = New System.Drawing.Size(363, 55)
+        Me.MainMenu.Size = New System.Drawing.Size(308, 59)
         Me.MainMenu.TabIndex = 0
         Me.MainMenu.Text = "MenuStrip1"
         '
@@ -363,7 +363,7 @@ Partial Class ControllingUI_2
         Me.ExcelToolStripMenuItem.Image = CType(resources.GetObject("ExcelToolStripMenuItem.Image"), System.Drawing.Image)
         Me.ExcelToolStripMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
         Me.ExcelToolStripMenuItem.Name = "ExcelToolStripMenuItem"
-        Me.ExcelToolStripMenuItem.Size = New System.Drawing.Size(45, 51)
+        Me.ExcelToolStripMenuItem.Size = New System.Drawing.Size(50, 55)
         Me.ExcelToolStripMenuItem.Text = "Excel"
         Me.ExcelToolStripMenuItem.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
         Me.ExcelToolStripMenuItem.ToolTipText = "Drop the Data on the active Excel Worksheet"
@@ -371,7 +371,7 @@ Partial Class ControllingUI_2
         'DropOnExcelToolStripMenuItem
         '
         Me.DropOnExcelToolStripMenuItem.Name = "DropOnExcelToolStripMenuItem"
-        Me.DropOnExcelToolStripMenuItem.Size = New System.Drawing.Size(146, 22)
+        Me.DropOnExcelToolStripMenuItem.Size = New System.Drawing.Size(162, 24)
         Me.DropOnExcelToolStripMenuItem.Text = "Drop on Excel"
         '
         'BusinessControlToolStripMenuItem
@@ -380,7 +380,7 @@ Partial Class ControllingUI_2
         Me.BusinessControlToolStripMenuItem.Image = CType(resources.GetObject("BusinessControlToolStripMenuItem.Image"), System.Drawing.Image)
         Me.BusinessControlToolStripMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
         Me.BusinessControlToolStripMenuItem.Name = "BusinessControlToolStripMenuItem"
-        Me.BusinessControlToolStripMenuItem.Size = New System.Drawing.Size(107, 51)
+        Me.BusinessControlToolStripMenuItem.Size = New System.Drawing.Size(123, 55)
         Me.BusinessControlToolStripMenuItem.Text = "Business Control"
         Me.BusinessControlToolStripMenuItem.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
         Me.BusinessControlToolStripMenuItem.ToolTipText = "Versions comparisons functionalities"
@@ -388,19 +388,19 @@ Partial Class ControllingUI_2
         'VersionsComparisonToolStripMenuItem
         '
         Me.VersionsComparisonToolStripMenuItem.Name = "VersionsComparisonToolStripMenuItem"
-        Me.VersionsComparisonToolStripMenuItem.Size = New System.Drawing.Size(213, 22)
+        Me.VersionsComparisonToolStripMenuItem.Size = New System.Drawing.Size(239, 24)
         Me.VersionsComparisonToolStripMenuItem.Text = "Versions Comparison"
         '
         'SwitchVersionsToolStripMenuItem
         '
         Me.SwitchVersionsToolStripMenuItem.Name = "SwitchVersionsToolStripMenuItem"
-        Me.SwitchVersionsToolStripMenuItem.Size = New System.Drawing.Size(213, 22)
+        Me.SwitchVersionsToolStripMenuItem.Size = New System.Drawing.Size(239, 24)
         Me.SwitchVersionsToolStripMenuItem.Text = "Switch Versions"
         '
         'HideVersionsComparisonToolStripMenuItem
         '
         Me.HideVersionsComparisonToolStripMenuItem.Name = "HideVersionsComparisonToolStripMenuItem"
-        Me.HideVersionsComparisonToolStripMenuItem.Size = New System.Drawing.Size(213, 22)
+        Me.HideVersionsComparisonToolStripMenuItem.Size = New System.Drawing.Size(239, 24)
         Me.HideVersionsComparisonToolStripMenuItem.Text = "Hide Versions Comparison"
         '
         'RefreshToolStripMenuItem
@@ -409,30 +409,33 @@ Partial Class ControllingUI_2
         Me.RefreshToolStripMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
         Me.RefreshToolStripMenuItem.Name = "RefreshToolStripMenuItem"
         Me.RefreshToolStripMenuItem.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.Space), System.Windows.Forms.Keys)
-        Me.RefreshToolStripMenuItem.Size = New System.Drawing.Size(58, 51)
+        Me.RefreshToolStripMenuItem.Size = New System.Drawing.Size(66, 55)
         Me.RefreshToolStripMenuItem.Text = "Refresh"
         Me.RefreshToolStripMenuItem.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
         Me.RefreshToolStripMenuItem.ToolTipText = "Refresh the Data"
+        '
+        'ChartBT
+        '
+        Me.ChartBT.Image = Global.FinancialBI.My.Resources.Resources.chart_pie
+        Me.ChartBT.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
+        Me.ChartBT.Name = "ChartBT"
+        Me.ChartBT.Size = New System.Drawing.Size(61, 55)
+        Me.ChartBT.Text = "Charts"
+        Me.ChartBT.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
         '
         'RefreshRightClick
         '
         Me.RefreshRightClick.Image = CType(resources.GetObject("RefreshRightClick.Image"), System.Drawing.Image)
         Me.RefreshRightClick.Name = "RefreshRightClick"
-        Me.RefreshRightClick.Size = New System.Drawing.Size(113, 22)
+        Me.RefreshRightClick.Size = New System.Drawing.Size(123, 24)
         Me.RefreshRightClick.Text = "Refresh"
         '
         'DGVFormatsButton
         '
         Me.DGVFormatsButton.Image = CType(resources.GetObject("DGVFormatsButton.Image"), System.Drawing.Image)
         Me.DGVFormatsButton.Name = "DGVFormatsButton"
-        Me.DGVFormatsButton.Size = New System.Drawing.Size(246, 22)
+        Me.DGVFormatsButton.Size = New System.Drawing.Size(274, 24)
         Me.DGVFormatsButton.Text = "Display Options"
-        '
-        'ChartsToolStripMenuItem
-        '
-        Me.ChartBT.Name = "ChartsToolStripMenuItem"
-        Me.ChartBT.Size = New System.Drawing.Size(53, 51)
-        Me.ChartBT.Text = "Charts"
         '
         'ControllingUI_2
         '
