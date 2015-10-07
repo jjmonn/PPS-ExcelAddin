@@ -18,7 +18,7 @@
       <Value Profile="(Default)">8.5</Value>
     </Setting>
     <Setting Name="serverIp" Type="System.String" Scope="User">
-      <Value Profile="(Default)">54.72.242.58</Value>
+      <Value Profile="(Default)">52.19.112.46</Value>
     </Setting>
     <Setting Name="user" Type="System.String" Scope="User">
       <Value Profile="(Default)">root</Value>

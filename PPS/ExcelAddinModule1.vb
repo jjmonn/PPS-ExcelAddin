@@ -97,7 +97,7 @@ Public Class ExcelAddinModule1
                         ByRef Adjustments_Filters As Object, _
                         ByRef Categories_Filters As Object) As Object
 
-        If GlobalVariables.APPS.COMAddIns.Item("PPS.AddinModule").Object.ppsbi_refresh_flag = True Then
+        If GlobalVariables.APPS.COMAddIns.Item("FinancialBI.AddinModule").Object.ppsbi_refresh_flag = True Then
             If setUpFlag = False Then
                 If GlobalVariables.GlobalPPSBIController Is Nothing Then
                     InitializeComputer()

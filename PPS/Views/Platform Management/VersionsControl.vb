@@ -23,6 +23,8 @@ Imports System.Collections.Generic
 Imports System.Windows.Forms
 Imports System.Collections
 Imports System.Drawing
+Imports VIBlend.WinForms.Controls
+
 'Imports VIBlend.WinForms.Controls
 
 
@@ -74,19 +76,23 @@ Friend Class VersionsControl
         AddHandler VersionsTV.DragOver, AddressOf versionsTV_DragOver
         AddHandler VersionsTV.DragDrop, AddressOf versionsTV_DragDrop
 
-        For Each name_ In Controller.rates_versions_name_id_dic.Keys
-            RatesVersionCB.Items.Add(name_)
-        Next
-        For Each name_ In Controller.fact_versions_name_id_dic.Keys
-            FactVersionCB.Items.Add(name_)
-        Next
+        AddHandler m_exchangeRatesVersionVTreeviewbox.TreeView.AfterSelect, AddressOf ExchangeRatesVTreebox_TextChanged
+        AddHandler m_factsVersionVTreeviewbox.TreeView.AfterSelect, AddressOf FactsRatesVTreebox_TextChanged
+
+        VTreeViewUtil.LoadTreeview(m_exchangeRatesVersionVTreeviewbox.TreeView, GlobalVariables.RatesVersions.rate_versions_hash)
+        VTreeViewUtil.LoadTreeview(m_factsVersionVTreeviewbox.TreeView, GlobalVariables.GlobalFactsVersions.globalFact_versions_hash)
+
+        m_exchangeRatesVersionVTreeviewbox.Text = ""
+        m_factsVersionVTreeviewbox.Text = ""
+
         DesactivateUnallowed()
+
     End Sub
 
     Private Sub DesactivateUnallowed()
         If Not GlobalVariables.Users.CurrentUserIsAdmin() Then
             lockedCB.Enabled = False
-            RatesVersionCB.Enabled = False
+            m_exchangeRatesVersionVTreeviewbox.Enabled = False
         End If
     End Sub
 
@@ -104,7 +110,8 @@ Friend Class VersionsControl
 
     Private Sub Display(ByRef inputNode As VIBlend.WinForms.Controls.vTreeNode)
 
-        If GlobalVariables.Versions.versions_hash(CInt(inputNode.Value))(IS_FOLDER_VARIABLE) = 1 Then
+        Dim startPeriod As String = ""
+        If GlobalVariables.Versions.versions_hash(CInt(inputNode.Value))(IS_FOLDER_VARIABLE) = True Then
             NameTB.Text = ""
             CreationTB.Text = ""
             lockedCB.Checked = False
@@ -112,18 +119,40 @@ Friend Class VersionsControl
             TimeConfigTB.Text = ""
             StartPeriodTB.Text = ""
             NBPeriodsTB.Text = ""
-            RatesVersionCB.Text = ""
+            m_exchangeRatesVersionVTreeviewbox.Text = ""
+            m_factsVersionVTreeviewbox.Text = ""
         Else
+            Dim versionId As Int32 = CInt(inputNode.Value)
             NameTB.Text = inputNode.Text
-            CreationTB.Text = GlobalVariables.Versions.versions_hash(CInt(inputNode.Value))(VERSIONS_CREATION_DATE_VARIABLE)
-            TimeConfigTB.Text = GlobalVariables.Versions.versions_hash(CInt(inputNode.Value))(VERSIONS_TIME_CONFIG_VARIABLE)
-            StartPeriodTB.Text = GlobalVariables.Versions.versions_hash(CInt(inputNode.Value))(VERSIONS_START_PERIOD_VAR)
-            NBPeriodsTB.Text = GlobalVariables.Versions.versions_hash(CInt(inputNode.Value))(VERSIONS_NB_PERIODS_VAR)
-            RatesVersionCB.SelectedItem = Controller.GetRatesVersionNameFromId(GlobalVariables.Versions.versions_hash(CInt(inputNode.Value))(VERSIONS_RATES_VERSION_ID_VAR))
-            FactVersionCB.SelectedItem = Controller.GetFactVersionNameFromId(GlobalVariables.Versions.versions_hash(CInt(inputNode.Value))(VERSIONS_GLOBAL_FACT_VERSION_ID))
-            If GlobalVariables.Versions.versions_hash(CInt(inputNode.Value))(VERSIONS_LOCKED_VARIABLE) = True Then
+            CreationTB.Text = GlobalVariables.Versions.versions_hash(versionId)(VERSIONS_CREATION_DATE_VARIABLE)
+            TimeConfigTB.Text = GlobalVariables.Versions.versions_hash(versionId)(VERSIONS_TIME_CONFIG_VARIABLE)
+
+            If GlobalVariables.Versions.versions_hash(versionId)(VERSIONS_TIME_CONFIG_VARIABLE) = GlobalEnums.TimeConfig.YEARS Then
+                startPeriod = Format(Date.FromOADate(GlobalVariables.Versions.versions_hash(versionId)(VERSIONS_START_PERIOD_VAR)), "yyyy")
+            Else
+                startPeriod = Format(Date.FromOADate(GlobalVariables.Versions.versions_hash(versionId)(VERSIONS_START_PERIOD_VAR)), "MMM yyyy")
+            End If
+            StartPeriodTB.Text = startPeriod
+
+            NBPeriodsTB.Text = GlobalVariables.Versions.versions_hash(versionId)(VERSIONS_NB_PERIODS_VAR)
+
+            ' Exchange Rates verions node activation
+            Dim activeExchangeRatesNode As vTreeNode = VTreeViewUtil.FindNode(m_exchangeRatesVersionVTreeviewbox.TreeView, GlobalVariables.Versions.versions_hash(versionId)(VERSIONS_RATES_VERSION_ID_VAR))
+            If Not activeExchangeRatesNode Is Nothing Then
+                m_exchangeRatesVersionVTreeviewbox.TreeView.SelectedNode = activeExchangeRatesNode
+                m_exchangeRatesVersionVTreeviewbox.Text = m_exchangeRatesVersionVTreeviewbox.TreeView.SelectedNode.Text
+            End If
+
+            ' Facts Rates verions node activation
+            Dim activeFactsRatesNode As vTreeNode = VTreeViewUtil.FindNode(m_factsVersionVTreeviewbox.TreeView, GlobalVariables.Versions.versions_hash(versionId)(VERSIONS_GLOBAL_FACT_VERSION_ID))
+            If Not activeFactsRatesNode Is Nothing Then
+                m_factsVersionVTreeviewbox.TreeView.SelectedNode = activeFactsRatesNode
+                m_factsVersionVTreeviewbox.Text = m_factsVersionVTreeviewbox.TreeView.SelectedNode.Text
+            End If
+
+            If GlobalVariables.Versions.versions_hash(versionId)(VERSIONS_LOCKED_VARIABLE) = True Then
                 lockedCB.Checked = True
-                LockedDateT.Text = GlobalVariables.Versions.versions_hash(CInt(inputNode.Value))(VERSIONS_LOCKED_DATE_VARIABLE)
+                LockedDateT.Text = GlobalVariables.Versions.versions_hash(versionId)(VERSIONS_LOCKED_DATE_VARIABLE)
             Else
                 lockedCB.Checked = False
                 LockedDateT.Text = "Version not locked"
@@ -317,30 +346,63 @@ Friend Class VersionsControl
 
     End Sub
 
-    Private Sub RatesVersionCB_SelectedValueChanged(sender As Object, e As EventArgs) Handles RatesVersionCB.SelectedValueChanged
+    Private Sub ExchangeRatesVTreebox_TextChanged(sender As Object, e As EventArgs)
 
         If Not VersionsTV.SelectedNode Is Nothing AndAlso isDisplaying = False Then
-            Dim version_id As String = VersionsTV.SelectedNode.Value
-            Dim rates_version_id As String = Controller.rates_versions_name_id_dic(RatesVersionCB.Text)
-            If Controller.IsRatesVersionValid(StartPeriodTB.Text, NBPeriodsTB.Text, rates_version_id) Then
+            Dim version_id As Int32 = VersionsTV.SelectedNode.Value
+            Dim rates_version_id As Int32 = m_exchangeRatesVersionVTreeviewbox.TreeView.SelectedNode.Value
+
+            ' Not folder Control
+            If Controller.IsRatesVersionValid(rates_version_id) = False Then
+                MsgBox(m_exchangeRatesVersionVTreeviewbox.TreeView.SelectedNode.Text & " is a folder.")
+                GoTo RevertToFormerValue
+            End If
+
+            ' Time configuration control
+            If Controller.IsRatesVersionCompatibleWithPeriods(StartPeriodTB.Text, NBPeriodsTB.Text, rates_version_id) Then
                 Controller.UpdateRatesVersion_id(version_id, rates_version_id)
             Else
                 MsgBox("This Exchange Rates Version is not compatible with the Periods Configuration.")
+                GoTo RevertToFormerValue
             End If
         End If
+        Exit Sub
+
+
+RevertToFormerValue:
+        isDisplaying = True
+        m_exchangeRatesVersionVTreeviewbox.TreeView.SelectedNode = VTreeViewUtil.FindNode(m_exchangeRatesVersionVTreeviewbox.TreeView, GlobalVariables.Versions.versions_hash(CInt(current_node.Value))(VERSIONS_RATES_VERSION_ID_VAR))
+        isDisplaying = False
 
     End Sub
 
-    Private Sub FactVersionCB_SelectedValueChanged(sender As Object, e As EventArgs) Handles FactVersionCB.SelectedValueChanged
+    Private Sub FactsRatesVTreebox_TextChanged(sender As Object, e As EventArgs)
+
         If Not VersionsTV.SelectedNode Is Nothing AndAlso isDisplaying = False Then
-            Dim version_id As String = VersionsTV.SelectedNode.Value
-            Dim fact_version_id As String = Controller.fact_versions_name_id_dic(FactVersionCB.Text)
-            If Controller.IsFactVersionValid(StartPeriodTB.Text, NBPeriodsTB.Text, fact_version_id) Then
+            Dim version_id As Int32 = VersionsTV.SelectedNode.Value
+            Dim fact_version_id As Int32 = m_factsVersionVTreeviewbox.TreeView.SelectedNode.Value
+
+            ' Not folder Control
+            If Controller.IsFactsVersionValid(fact_version_id) = False Then
+                MsgBox(m_factsVersionVTreeviewbox.TreeView.SelectedNode.Text & " is a folder.")
+                GoTo RevertToFormerValue
+            End If
+
+            ' Time configuration control
+            If Controller.IsFactVersionCompatibleWithPeriods(StartPeriodTB.Text, NBPeriodsTB.Text, fact_version_id) Then
                 Controller.UpdateFactVersion_id(version_id, fact_version_id)
             Else
                 MsgBox("This Fact Version is not compatible with the Periods Configuration.")
+                GoTo RevertToFormerValue
             End If
         End If
+        Exit Sub
+
+RevertToFormerValue:
+        isDisplaying = True
+        m_factsVersionVTreeviewbox.TreeView.SelectedNode = VTreeViewUtil.FindNode(m_factsVersionVTreeviewbox.TreeView, GlobalVariables.Versions.versions_hash(CInt(current_node.Value))(VERSIONS_GLOBAL_FACT_VERSION_ID))
+        isDisplaying = False
+
     End Sub
 
 #End Region
@@ -429,5 +491,6 @@ Friend Class VersionsControl
 
 
 #End Region
+
 
 End Class

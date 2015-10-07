@@ -29,7 +29,7 @@ Partial Class NewDataVersionUI
         Me.Label2 = New System.Windows.Forms.Label()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.CreateCopyBT = New System.Windows.Forms.CheckBox()
-        Me.BigIcons = New System.Windows.Forms.ImageList(Me.components)
+        Me.ButtonIcons = New System.Windows.Forms.ImageList(Me.components)
         Me.Label11 = New System.Windows.Forms.Label()
         Me.Label10 = New System.Windows.Forms.Label()
         Me.Label4 = New System.Windows.Forms.Label()
@@ -38,10 +38,10 @@ Partial Class NewDataVersionUI
         Me.TimeConfigCB = New System.Windows.Forms.ComboBox()
         Me.NbPeriodsNUD = New System.Windows.Forms.NumericUpDown()
         Me.StartingPeriodNUD = New System.Windows.Forms.NumericUpDown()
-        Me.RatesVersionCB = New System.Windows.Forms.ComboBox()
-        Me.FactVersionCB = New System.Windows.Forms.ComboBox()
+        Me.m_exchangeRatesVersionVTreeviewbox = New VIBlend.WinForms.Controls.vTreeViewBox()
+        Me.m_factsVersionVTreeviewbox = New VIBlend.WinForms.Controls.vTreeViewBox()
+        Me.BigIcons = New System.Windows.Forms.ImageList(Me.components)
         Me.Panel1 = New System.Windows.Forms.Panel()
-        Me.ButtonIcons = New System.Windows.Forms.ImageList(Me.components)
         Me.CancelBT = New System.Windows.Forms.Button()
         Me.CreateVersionBT = New System.Windows.Forms.Button()
         Me.TableLayoutPanel2.SuspendLayout()
@@ -66,8 +66,8 @@ Partial Class NewDataVersionUI
         Me.TableLayoutPanel2.Controls.Add(Me.TimeConfigCB, 1, 2)
         Me.TableLayoutPanel2.Controls.Add(Me.NbPeriodsNUD, 1, 4)
         Me.TableLayoutPanel2.Controls.Add(Me.StartingPeriodNUD, 1, 3)
-        Me.TableLayoutPanel2.Controls.Add(Me.RatesVersionCB, 1, 5)
-        Me.TableLayoutPanel2.Controls.Add(Me.FactVersionCB, 1, 6)
+        Me.TableLayoutPanel2.Controls.Add(Me.m_exchangeRatesVersionVTreeviewbox, 1, 5)
+        Me.TableLayoutPanel2.Controls.Add(Me.m_factsVersionVTreeviewbox, 1, 6)
         Me.TableLayoutPanel2.Location = New System.Drawing.Point(32, 27)
         Me.TableLayoutPanel2.Name = "TableLayoutPanel2"
         Me.TableLayoutPanel2.RowCount = 7
@@ -87,7 +87,7 @@ Partial Class NewDataVersionUI
         Me.Label3.Location = New System.Drawing.Point(3, 223)
         Me.Label3.Margin = New System.Windows.Forms.Padding(3, 7, 3, 0)
         Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(66, 13)
+        Me.Label3.Size = New System.Drawing.Size(74, 15)
         Me.Label3.TabIndex = 30
         Me.Label3.Text = "Fact Version"
         '
@@ -97,7 +97,7 @@ Partial Class NewDataVersionUI
         Me.Label2.Location = New System.Drawing.Point(3, 187)
         Me.Label2.Margin = New System.Windows.Forms.Padding(3, 7, 3, 0)
         Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(124, 13)
+        Me.Label2.Size = New System.Drawing.Size(141, 15)
         Me.Label2.TabIndex = 28
         Me.Label2.Text = "Exchange Rates Version"
         '
@@ -107,7 +107,7 @@ Partial Class NewDataVersionUI
         Me.Label1.Location = New System.Drawing.Point(3, 151)
         Me.Label1.Margin = New System.Windows.Forms.Padding(3, 7, 3, 0)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(86, 13)
+        Me.Label1.Size = New System.Drawing.Size(99, 15)
         Me.Label1.TabIndex = 25
         Me.Label1.Text = "Number of Years"
         '
@@ -117,8 +117,8 @@ Partial Class NewDataVersionUI
         Me.CreateCopyBT.AutoSize = True
         Me.CreateCopyBT.Dock = System.Windows.Forms.DockStyle.Fill
         Me.CreateCopyBT.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
-        Me.CreateCopyBT.ImageKey = "favicon(230).ico"
-        Me.CreateCopyBT.ImageList = Me.BigIcons
+        Me.CreateCopyBT.ImageIndex = 0
+        Me.CreateCopyBT.ImageList = Me.ButtonIcons
         Me.CreateCopyBT.Location = New System.Drawing.Point(3, 39)
         Me.CreateCopyBT.Name = "CreateCopyBT"
         Me.CreateCopyBT.Size = New System.Drawing.Size(218, 30)
@@ -127,11 +127,13 @@ Partial Class NewDataVersionUI
         Me.CreateCopyBT.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         Me.CreateCopyBT.UseVisualStyleBackColor = True
         '
-        'BigIcons
+        'ButtonIcons
         '
-        Me.BigIcons.ImageStream = CType(resources.GetObject("BigIcons.ImageStream"), System.Windows.Forms.ImageListStreamer)
-        Me.BigIcons.TransparentColor = System.Drawing.Color.Transparent
-        Me.BigIcons.Images.SetKeyName(0, "favicon(230).ico")
+        Me.ButtonIcons.ImageStream = CType(resources.GetObject("ButtonIcons.ImageStream"), System.Windows.Forms.ImageListStreamer)
+        Me.ButtonIcons.TransparentColor = System.Drawing.Color.Transparent
+        Me.ButtonIcons.Images.SetKeyName(0, "favicon(81) (1).ico")
+        Me.ButtonIcons.Images.SetKeyName(1, "imageres_89.ico")
+        Me.ButtonIcons.Images.SetKeyName(2, "1420498403_340208.ico")
         '
         'Label11
         '
@@ -139,7 +141,7 @@ Partial Class NewDataVersionUI
         Me.Label11.Location = New System.Drawing.Point(3, 115)
         Me.Label11.Margin = New System.Windows.Forms.Padding(3, 7, 3, 0)
         Me.Label11.Name = "Label11"
-        Me.Label11.Size = New System.Drawing.Size(68, 13)
+        Me.Label11.Size = New System.Drawing.Size(77, 15)
         Me.Label11.TabIndex = 17
         Me.Label11.Text = "Starting Year"
         '
@@ -149,7 +151,7 @@ Partial Class NewDataVersionUI
         Me.Label10.Location = New System.Drawing.Point(3, 79)
         Me.Label10.Margin = New System.Windows.Forms.Padding(3, 7, 3, 0)
         Me.Label10.Name = "Label10"
-        Me.Label10.Size = New System.Drawing.Size(192, 13)
+        Me.Label10.Size = New System.Drawing.Size(172, 29)
         Me.Label10.TabIndex = 15
         Me.Label10.Text = "Periods configuration (Yearly / Monthly)"
         '
@@ -160,7 +162,7 @@ Partial Class NewDataVersionUI
         Me.Label4.Location = New System.Drawing.Point(3, 7)
         Me.Label4.Margin = New System.Windows.Forms.Padding(3, 7, 3, 0)
         Me.Label4.Name = "Label4"
-        Me.Label4.Size = New System.Drawing.Size(85, 13)
+        Me.Label4.Size = New System.Drawing.Size(97, 15)
         Me.Label4.TabIndex = 7
         Me.Label4.Text = "Version Name"
         '
@@ -215,23 +217,41 @@ Partial Class NewDataVersionUI
         Me.StartingPeriodNUD.Size = New System.Drawing.Size(139, 20)
         Me.StartingPeriodNUD.TabIndex = 27
         '
-        'RatesVersionCB
+        'm_exchangeRatesVersionVTreeviewbox
         '
-        Me.RatesVersionCB.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.RatesVersionCB.FormattingEnabled = True
-        Me.RatesVersionCB.Location = New System.Drawing.Point(227, 183)
-        Me.RatesVersionCB.Name = "RatesVersionCB"
-        Me.RatesVersionCB.Size = New System.Drawing.Size(143, 21)
-        Me.RatesVersionCB.TabIndex = 29
+        Me.m_exchangeRatesVersionVTreeviewbox.BackColor = System.Drawing.Color.White
+        Me.m_exchangeRatesVersionVTreeviewbox.BorderColor = System.Drawing.Color.Black
+        Me.m_exchangeRatesVersionVTreeviewbox.DropDownMaximumSize = New System.Drawing.Size(1000, 1000)
+        Me.m_exchangeRatesVersionVTreeviewbox.DropDownMinimumSize = New System.Drawing.Size(10, 10)
+        Me.m_exchangeRatesVersionVTreeviewbox.DropDownResizeDirection = VIBlend.WinForms.Controls.SizingDirection.Both
+        Me.m_exchangeRatesVersionVTreeviewbox.Location = New System.Drawing.Point(227, 183)
+        Me.m_exchangeRatesVersionVTreeviewbox.Name = "m_exchangeRatesVersionVTreeviewbox"
+        Me.m_exchangeRatesVersionVTreeviewbox.Size = New System.Drawing.Size(227, 23)
+        Me.m_exchangeRatesVersionVTreeviewbox.TabIndex = 31
+        Me.m_exchangeRatesVersionVTreeviewbox.UseThemeBackColor = False
+        Me.m_exchangeRatesVersionVTreeviewbox.UseThemeDropDownArrowColor = True
+        Me.m_exchangeRatesVersionVTreeviewbox.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
         '
-        'FactVersionCB
+        'm_factsVersionVTreeviewbox
         '
-        Me.FactVersionCB.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.FactVersionCB.FormattingEnabled = True
-        Me.FactVersionCB.Location = New System.Drawing.Point(227, 219)
-        Me.FactVersionCB.Name = "FactVersionCB"
-        Me.FactVersionCB.Size = New System.Drawing.Size(143, 21)
-        Me.FactVersionCB.TabIndex = 31
+        Me.m_factsVersionVTreeviewbox.BackColor = System.Drawing.Color.White
+        Me.m_factsVersionVTreeviewbox.BorderColor = System.Drawing.Color.Black
+        Me.m_factsVersionVTreeviewbox.DropDownMaximumSize = New System.Drawing.Size(1000, 1000)
+        Me.m_factsVersionVTreeviewbox.DropDownMinimumSize = New System.Drawing.Size(10, 10)
+        Me.m_factsVersionVTreeviewbox.DropDownResizeDirection = VIBlend.WinForms.Controls.SizingDirection.Both
+        Me.m_factsVersionVTreeviewbox.Location = New System.Drawing.Point(227, 219)
+        Me.m_factsVersionVTreeviewbox.Name = "m_factsVersionVTreeviewbox"
+        Me.m_factsVersionVTreeviewbox.Size = New System.Drawing.Size(227, 23)
+        Me.m_factsVersionVTreeviewbox.TabIndex = 32
+        Me.m_factsVersionVTreeviewbox.UseThemeBackColor = False
+        Me.m_factsVersionVTreeviewbox.UseThemeDropDownArrowColor = True
+        Me.m_factsVersionVTreeviewbox.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
+        '
+        'BigIcons
+        '
+        Me.BigIcons.ImageStream = CType(resources.GetObject("BigIcons.ImageStream"), System.Windows.Forms.ImageListStreamer)
+        Me.BigIcons.TransparentColor = System.Drawing.Color.Transparent
+        Me.BigIcons.Images.SetKeyName(0, "favicon(230).ico")
         '
         'Panel1
         '
@@ -239,16 +259,6 @@ Partial Class NewDataVersionUI
         Me.Panel1.Name = "Panel1"
         Me.Panel1.Size = New System.Drawing.Size(393, 485)
         Me.Panel1.TabIndex = 2
-        '
-        'ButtonIcons
-        '
-        Me.ButtonIcons.ImageStream = CType(resources.GetObject("ButtonIcons.ImageStream"), System.Windows.Forms.ImageListStreamer)
-        Me.ButtonIcons.TransparentColor = System.Drawing.Color.Transparent
-        Me.ButtonIcons.Images.SetKeyName(0, "favicon(97).ico")
-        Me.ButtonIcons.Images.SetKeyName(1, "imageres_99.ico")
-        Me.ButtonIcons.Images.SetKeyName(2, "folder 1.ico")
-        Me.ButtonIcons.Images.SetKeyName(3, "imageres_89.ico")
-        Me.ButtonIcons.Images.SetKeyName(4, "1420498403_340208.ico")
         '
         'CancelBT
         '
@@ -312,7 +322,7 @@ Partial Class NewDataVersionUI
     Friend WithEvents NbPeriodsNUD As System.Windows.Forms.NumericUpDown
     Friend WithEvents StartingPeriodNUD As System.Windows.Forms.NumericUpDown
     Friend WithEvents Label2 As System.Windows.Forms.Label
-    Friend WithEvents RatesVersionCB As System.Windows.Forms.ComboBox
     Friend WithEvents Label3 As System.Windows.Forms.Label
-    Friend WithEvents FactVersionCB As System.Windows.Forms.ComboBox
+    Friend WithEvents m_exchangeRatesVersionVTreeviewbox As VIBlend.WinForms.Controls.vTreeViewBox
+    Friend WithEvents m_factsVersionVTreeviewbox As VIBlend.WinForms.Controls.vTreeViewBox
 End Class

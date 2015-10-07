@@ -164,7 +164,7 @@ Friend Class PlatformMGTGeneralUI
 
     End Sub
 
-    Private Sub ControlsBT_Click(sender As Object, e As EventArgs) Handles ControlsBT.Click
+    Private Sub ControlsBT_Click(sender As Object, e As EventArgs)
 
         closeCurrentControl()
         current_controller = New ControlsController()
