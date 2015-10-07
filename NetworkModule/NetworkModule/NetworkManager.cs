@@ -95,7 +95,7 @@ public class NetworkManager
               null);
     try
     {
-      m_StreamSSL.AuthenticateAsClient("ppsdev");
+      m_StreamSSL.AuthenticateAsClient("pps");
     }
     catch (AuthenticationException e)
     {
@@ -107,6 +107,11 @@ public class NetworkManager
       Debug.WriteLine("SSL authentication failed");
       return (false);
     }
+
+    byte[] header = System.Text.Encoding.UTF8.GetBytes("NOWEBSOCKET");
+
+    m_StreamSSL.Write(header, 0, header.Length);
+    m_StreamSSL.Flush();
     return (true);
   }
 
