@@ -98,7 +98,7 @@ Friend Class Period
 
     End Function
 
-    '' yearId: "31/12/N" au format INT
+    ' yearId: "31/12/N" au format INT
     Friend Shared Function GetMonthsIdsInYear(ByRef yearId As UInt32) As Int32()
 
         Dim nbDaysinMonth As Int32

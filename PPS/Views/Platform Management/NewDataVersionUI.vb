@@ -70,13 +70,8 @@ Friend Class NewDataVersionUI
         StartingPeriodNUD.Increment = 1
         NbPeriodsNUD.Increment = 1
 
-        For Each name_ In Controller.rates_versions_name_id_dic.Keys
-            RatesVersionCB.Items.Add(name_)
-        Next
-
-        For Each name_ In Controller.fact_versions_name_id_dic.Keys
-            FactVersionCB.Items.Add(name_)
-        Next
+        VTreeViewUtil.LoadTreeview(m_exchangeRatesVersionVTreeviewbox.TreeView, GlobalVariables.RatesVersions.rate_versions_hash)
+        VTreeViewUtil.LoadTreeview(m_factsVersionVTreeviewbox.TreeView, GlobalVariables.GlobalFactsVersions.globalFact_versions_hash)
 
     End Sub
 
@@ -115,8 +110,8 @@ Friend Class NewDataVersionUI
             hash.Add(VERSIONS_TIME_CONFIG_VARIABLE, timeConfig)
             hash.Add(VERSIONS_START_PERIOD_VAR, DateSerial(StartingPeriodNUD.Value, 12, 31).ToOADate())
             hash.Add(VERSIONS_NB_PERIODS_VAR, NbPeriodsNUD.Text)
-            hash.Add(VERSIONS_RATES_VERSION_ID_VAR, Controller.rates_versions_name_id_dic(RatesVersionCB.Text))
-            hash.Add(VERSIONS_GLOBAL_FACT_VERSION_ID, Controller.fact_versions_name_id_dic(FactVersionCB.Text))
+            hash.Add(VERSIONS_RATES_VERSION_ID_VAR, m_exchangeRatesVersionVTreeviewbox.TreeView.SelectedNode.Value)
+            hash.Add(VERSIONS_GLOBAL_FACT_VERSION_ID, m_factsVersionVTreeviewbox.TreeView.SelectedNode.Value)
             If Not parent_node Is Nothing Then hash.Add(PARENT_ID_VARIABLE, parent_node.Value)
 
             If CreateCopyBT.Checked = True AndAlso _
@@ -196,36 +191,43 @@ Friend Class NewDataVersionUI
 
     Private Function IsFormValid(ByRef name As String) As Boolean
 
-        If Controller.IsNameValid(name) Then
-            If TimeConfigCB.Text <> "" Then
-                If TimeConfigCB.Text = MONTHLY_TIME_CONFIGURATION Then
-                    If StartingPeriodNUD.Text <> "" Then
-                        If Controller.IsRatesVersionValid(DateSerial(StartingPeriodNUD.Value, 12, 31).ToOADate(), NbPeriodsNUD.Value, Controller.rates_versions_name_id_dic(RatesVersionCB.Text)) = True Then
-                            Return True
-                        Else
-                            MsgBox("This Exchange Rates Version is not compatible with the Periods Configuration.")
-                        End If
-                        If Controller.IsFactVersionValid(DateSerial(StartingPeriodNUD.Value, 12, 31).ToOADate(), NbPeriodsNUD.Value, Controller.fact_versions_name_id_dic(FactVersionCB.Text)) = True Then
-                            Return True
-                        Else
-                            MsgBox("This Fact Version is not compatible with the Periods Configuration.")
-                        End If
-                    Else
-                        MsgBox("The Reference Year must be selected for monthly Time Configuration Versions.")
-                        Return False
-                    End If
-                Else
-                    Return True
-                End If
-            Else
-                MsgBox("The Time Configuration must be selected.")
-                Return False
-            End If
-        Else
+        If Controller.IsNameValid(name) = False Then
+            ' Pourquoi ne pas ajouter le check duplicate names ici ?! priority normal
             MsgBox("The name is not valid. The name must not exceed " & NAMES_MAX_LENGTH & " characters.")
             Return False
         End If
 
+        If TimeConfigCB.Text = "" Then
+            MsgBox("The Time Configuration must be selected.")
+            Return False
+        End If
+
+        If StartingPeriodNUD.Text = "" Then
+            MsgBox("The Reference Year must be selected for monthly Time Configuration Versions.")
+            Return False
+        End If
+
+        If Controller.IsRatesVersionValid(m_exchangeRatesVersionVTreeviewbox.TreeView.SelectedNode.Value) = False Then
+            MsgBox(m_exchangeRatesVersionVTreeviewbox.TreeView.SelectedNode.Text & " is a folder and connot be set as the Exchange Rates version.")
+            Return False
+        End If
+
+        If Controller.IsFactsVersionValid(m_factsVersionVTreeviewbox.TreeView.SelectedNode.Value) = False Then
+            MsgBox(m_factsVersionVTreeviewbox.TreeView.SelectedNode.Text & "is a folder and cannot be set as the Economic Indicators version.")
+            Return False
+        End If
+
+        If Controller.IsRatesVersionCompatibleWithPeriods(DateSerial(StartingPeriodNUD.Value, 12, 31).ToOADate(), NbPeriodsNUD.Value, m_exchangeRatesVersionVTreeviewbox.TreeView.SelectedNode.Value) = False Then
+            MsgBox("This Exchange Rates Version is not compatible with the Periods Configuration.")
+            Return False
+        End If
+
+        If Controller.IsFactVersionCompatibleWithPeriods(DateSerial(StartingPeriodNUD.Value, 12, 31).ToOADate(), NbPeriodsNUD.Value, m_factsVersionVTreeviewbox.TreeView.SelectedNode.Value) = False Then
+            MsgBox("This Fact Version is not compatible with the Periods Configuration.")
+            Return False
+        End If
+
+        Return True
 
     End Function
 

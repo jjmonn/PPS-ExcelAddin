@@ -32,9 +32,7 @@ Friend Class DataVersionsController
     Private versionsTV As New VIBlend.WinForms.Controls.vTreeView
     Friend versionsNamesList As New List(Of String)
     Friend positions_dictionary As New Dictionary(Of Int32, Int32)
-    Friend rates_versions_name_id_dic As Hashtable
-    Friend fact_versions_name_id_dic As Hashtable
-
+  
     Private deletedVersionId As Int32 = 0
 
     ' Constants
@@ -50,8 +48,6 @@ Friend Class DataVersionsController
 
         GlobalVariables.Versions.LoadVersionsTV(versionsTV)
         VTreeViewUtil.InitTVFormat(versionsTV)
-        rates_versions_name_id_dic = GlobalVariables.RatesVersions.GetRateVersionsDictionary(NAME_VARIABLE, ID_VARIABLE)
-        fact_versions_name_id_dic = GlobalVariables.GlobalFactsVersions.GetGlobalFactVersionsDictionary(NAME_VARIABLE, ID_VARIABLE)
         View = New VersionsControl(Me, versionsTV)
         versionsNamesList = GlobalVariables.Versions.GetVersionsNameList(NAME_VARIABLE)
         NewVersionUI = New NewDataVersionUI(Me)
@@ -235,10 +231,21 @@ Friend Class DataVersionsController
 
     End Function
 
-    Friend Function IsRatesVersionValid(ByRef start_period As Int32, _
-                                                 ByRef nb_periods As Int32, _
-                                                 ByRef rates_version_id As String) As Boolean
+    Friend Function IsRatesVersionValid(ByRef p_ratesVersionId As Int32) As Boolean
 
+        If GlobalVariables.RatesVersions.rate_versions_hash(p_ratesVersionId)(IS_FOLDER_VARIABLE) = 1 Then
+            Return False
+        Else
+            Return True
+        End If
+        
+    End Function
+
+    Friend Function IsRatesVersionCompatibleWithPeriods(ByRef start_period As Int32, _
+                                                        ByRef nb_periods As Int32, _
+                                                        ByRef rates_version_id As String) As Boolean
+
+        start_period = DateSerial(start_period, 12, 31).ToOADate()
         Dim rates_version_start_period As Int32 = GlobalVariables.RatesVersions.rate_versions_hash(CInt(rates_version_id))(VERSIONS_START_PERIOD_VAR)
         Dim rates_version_nb_periods As Int32 = GlobalVariables.RatesVersions.rate_versions_hash(CInt(rates_version_id))(VERSIONS_NB_PERIODS_VAR)
         If start_period >= rates_version_start_period AndAlso _
@@ -249,10 +256,21 @@ Friend Class DataVersionsController
 
     End Function
 
-    Friend Function IsFactVersionValid(ByRef start_period As Int32, _
-                                             ByRef nb_periods As Int32, _
-                                             ByRef fact_version_id As String) As Boolean
+    Friend Function IsFactsVersionValid(ByRef p_factsVersionId As Int32) As Boolean
 
+        If GlobalVariables.GlobalFactsVersions.globalFact_versions_hash(p_factsVersionId)(IS_FOLDER_VARIABLE) = 1 Then
+            Return False
+        Else
+            Return True
+        End If
+
+    End Function
+
+    Friend Function IsFactVersionCompatibleWithPeriods(ByRef start_period As Int32, _
+                                                        ByRef nb_periods As Int32, _
+                                                        ByRef fact_version_id As String) As Boolean
+
+        start_period = DateSerial(start_period, 12, 31).ToOADate()
         Dim fact_version_start_period As Int32 = GlobalVariables.GlobalFactsVersions.globalFact_versions_hash(CInt(fact_version_id))(VERSIONS_START_PERIOD_VAR)
         Dim fact_version_nb_periods As Int32 = GlobalVariables.GlobalFactsVersions.globalFact_versions_hash(CInt(fact_version_id))(VERSIONS_NB_PERIODS_VAR)
         If start_period >= fact_version_start_period AndAlso _
