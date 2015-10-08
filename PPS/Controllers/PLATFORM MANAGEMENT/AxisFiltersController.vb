@@ -27,7 +27,7 @@ Friend Class AxisFiltersController
 
     ' Variables
     Private axisId As Int32
-
+    Private Const m_FilterTag As String = "filterId"
 
 #End Region
 
@@ -39,7 +39,7 @@ Friend Class AxisFiltersController
         axisId = p_axis_id
         AxisFilter.LoadFvTv(filtersFilterValuesTv, filtersNode, axisId)
         If filtersFilterValuesTv.Nodes.Count > 0 Then
-            filtersFilterValuesTv.Nodes(0).Name = "filterId" & filtersFilterValuesTv.Nodes(0).Name
+            filtersFilterValuesTv.Nodes(0).Name = m_FilterTag & filtersFilterValuesTv.Nodes(0).Name
         End If
 
         View = New AxisFiltersView(Me, filtersNode, axisId, filtersFilterValuesTv)
@@ -229,15 +229,20 @@ Friend Class AxisFiltersController
 
 #Region "Utilities"
 
-    Friend Function IsFilter(ByRef id As Int32) As Boolean
+    Friend Function IsFilter(ByRef id As String) As Boolean
 
-        If GlobalVariables.Filters.filters_hash.ContainsKey(id) = True Then
+        If id.IndexOf(m_FilterTag) > -1 Then
+            id = Right(id, Len(id) - Len(m_FilterTag))
+        End If
+
+        If GlobalVariables.Filters.filters_hash.ContainsKey(CInt(id)) = True Then
             Return True
         Else
             Return False
         End If
 
     End Function
+
 
     Friend Sub SendNewPositionsToModel()
 
