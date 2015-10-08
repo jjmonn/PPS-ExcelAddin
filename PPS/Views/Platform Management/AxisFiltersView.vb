@@ -80,12 +80,13 @@ Friend Class AxisFiltersView
             Dim MyDelegate As New UpdateFiltersValuesTV_Delegate(AddressOf UpdateFiltersValuesTV)
             Me.Invoke(MyDelegate, New Object() {})
         Else
-            Dim TVExpansionTemp As Dictionary(Of String, Boolean) = TreeViewsUtilities.SaveNodesExpansionsLevel(FiltersFiltersValuesTV)
+            '   Dim TVExpansionTemp As Dictionary(Of String, Boolean) = TreeViewsUtilities.SaveNodesExpansionsLevel(FiltersFiltersValuesTV)
             AxisFilter.LoadFvTv(FiltersFiltersValuesTV, filtersNode, axisId)
             If FiltersFiltersValuesTV.Nodes.Count > 0 Then
                 FiltersFiltersValuesTV.Nodes(0).Name = "filterId" & FiltersFiltersValuesTV.Nodes(0).Name
             End If
-            TreeViewsUtilities.ResumeExpansionsLevel(FiltersFiltersValuesTV, TVExpansionTemp)
+            '  TreeViewsUtilities.ResumeExpansionsLevel(FiltersFiltersValuesTV, TVExpansionTemp)
+            'FiltersFiltersValuesTV.ExpandAll()
             FiltersFiltersValuesTV.Refresh()
         End If
 
@@ -117,15 +118,11 @@ Friend Class AxisFiltersView
 
             If currentNode.Nodes.Count > 0 Then
                 filterId = GlobalVariables.FiltersValues.filtervalues_hash(CInt(currentNode.Nodes(0).Name))(FILTER_ID_VARIABLE)
-                parentFilterValueId = CInt(currentNode.Name)
             Else
-                filterId = GlobalVariables.FiltersValues.filtervalues_hash(CInt(currentNode.Name))(FILTER_ID_VARIABLE)
-                If Controller.IsFilter(currentNode.Parent.Name) = True Then
-                    parentFilterValueId = 0
-                Else
-                    parentFilterValueId = CInt(currentNode.Parent.Name)
-                End If
+                Dim parentFilterId As Int32 = GlobalVariables.FiltersValues.filtervalues_hash(CInt(currentNode.Name))(FILTER_ID_VARIABLE)
+                filterId = GlobalVariables.Filters.GetFilterChild(parentFilterId)
             End If
+            parentFilterValueId = CInt(currentNode.Name)
         End If
 
 NewFilterValue:

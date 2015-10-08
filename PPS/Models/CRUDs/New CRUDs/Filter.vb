@@ -328,7 +328,7 @@ Friend Class Filter
 
     End Function
 
-    Private Function GetFilterChild(ByRef filter_id As Int32) As Int32
+    Friend Function GetFilterChild(ByRef filter_id As Int32) As Int32
 
         For Each id As Int32 In filters_hash.Keys
             If filters_hash(id)(PARENT_ID_VARIABLE) = filter_id Then Return id
