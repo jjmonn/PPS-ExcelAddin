@@ -162,7 +162,7 @@ Friend Class Filter
                 packet.ReadString()
             Next
 
-            RaiseEvent UpdateListEvent(False, resultList)
+            RaiseEvent UpdateListEvent(True, resultList)
         Else
             RaiseEvent UpdateListEvent(False, Nothing)
         End If

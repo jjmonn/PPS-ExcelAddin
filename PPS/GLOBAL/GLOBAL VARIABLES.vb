@@ -88,6 +88,7 @@ Friend Class GlobalVariables
     Friend Shared Users As User
     Friend Shared Groups As Group
     Friend Shared GroupAllowedEntities As GroupAllowedEntity
+    Friend Shared FModelingsAccounts As FModelingAccount
 
 #End Region
 

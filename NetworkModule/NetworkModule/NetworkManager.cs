@@ -189,7 +189,7 @@ public class NetworkManager
     {
       return !(m_Sock.Poll(1, SelectMode.SelectRead) && m_Sock.Available == 0);
     }
-    catch (SocketException) { return false; }
+    catch (Exception) { return false; }
   }
 
   public bool HandlePacket()

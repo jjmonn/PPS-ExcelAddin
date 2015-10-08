@@ -30,6 +30,18 @@ Module Data_Tables_Constants
 
 #End Region
 
+#Region "FModeling Accounts"
+
+    Friend Const FMODELING_ACCOUNT_TYPE As String = "fmodeling_account_type"
+    Friend Const FMODELING_ACCOUNT_FORMAT_STRING As String = "fmodeling_account_format_string"
+    Friend Const FMODELING_ACCOUNT_ACCOUNT_ID As String = "fmodeling_account_account_id"
+    Friend Const FMODELING_ACCOUNT_MAPPED_ENTITY As String = "fmodeling_account_mapped_entity"
+    Friend Const FMODELING_ACCOUNT_SERIE_COLOR As String = "fmodeling_account_serie_color"
+    Friend Const FMODELING_ACCOUNT_SERIE_TYPE As String = "fmodeling_account_serie_type"
+    Friend Const FMODELING_ACCOUNT_SERIE_CHART As String = "fmodeling_account_serie_chart"
+
+#End Region
+
 #Region "Users"
     Friend Const GROUP_ID_VARIABLE As String = "group_id"
     Friend Const PASSWORD_VARIABLE As String = "password"
