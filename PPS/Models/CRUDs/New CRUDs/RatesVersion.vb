@@ -29,7 +29,7 @@ Public Class RatesVersion
     Public Event Read(ByRef status As Boolean, ByRef attributes As Hashtable)
     Public Event CreationEvent(ByRef status As Boolean, ByRef id As Int32)
     Public Event UpdateEvent(ByRef status As Boolean, ByRef id As Int32)
-    Public Event DeleteEvent(ByRef status As Boolean, ByRef id As UInt32)
+    Public Event DeleteEvent(ByRef status As ErrorMessage, ByRef id As UInt32)
     Public Event UpdateListEvent(ByRef status As Boolean, ByRef resultList As Dictionary(Of Int32, Boolean))
 
 #End Region
@@ -178,12 +178,12 @@ Public Class RatesVersion
 
     Private Sub SMSG_DELETE_RATE_VERSION_ANSWER(packet As ByteBuffer)
 
-        If packet.GetError() = 0 Then
+        If packet.GetError() = ErrorMessage.SUCCESS Then
             Dim id As UInt32 = packet.ReadUint32
             rate_versions_hash.Remove(CInt(id))
-            RaiseEvent DeleteEvent(True, id)
+            RaiseEvent DeleteEvent(packet.GetError(), id)
         Else
-            RaiseEvent DeleteEvent(False, 0)
+            RaiseEvent DeleteEvent(packet.GetError(), 0)
         End If
 
     End Sub
