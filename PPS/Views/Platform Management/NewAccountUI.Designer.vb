@@ -143,7 +143,7 @@ Partial Class NewAccountUI
         Me.Label4.AutoSize = True
         Me.Label4.Location = New System.Drawing.Point(3, 32)
         Me.Label4.Name = "Label4"
-        Me.Label4.Size = New System.Drawing.Size(96, 15)
+        Me.Label4.Size = New System.Drawing.Size(85, 13)
         Me.Label4.TabIndex = 31
         Me.Label4.Text = "Account's Name"
         '
@@ -152,7 +152,7 @@ Partial Class NewAccountUI
         Me.Label2.AutoSize = True
         Me.Label2.Location = New System.Drawing.Point(3, 0)
         Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(89, 15)
+        Me.Label2.Size = New System.Drawing.Size(81, 13)
         Me.Label2.TabIndex = 30
         Me.Label2.Text = "Parent Account"
         '
@@ -161,7 +161,7 @@ Partial Class NewAccountUI
         Me.Label6.AutoSize = True
         Me.Label6.Location = New System.Drawing.Point(3, 64)
         Me.Label6.Name = "Label6"
-        Me.Label6.Size = New System.Drawing.Size(86, 15)
+        Me.Label6.Size = New System.Drawing.Size(76, 13)
         Me.Label6.TabIndex = 32
         Me.Label6.Text = "Formula/ Input"
         '
@@ -170,7 +170,7 @@ Partial Class NewAccountUI
         Me.Label3.AutoSize = True
         Me.Label3.Location = New System.Drawing.Point(3, 96)
         Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(101, 15)
+        Me.Label3.Size = New System.Drawing.Size(89, 13)
         Me.Label3.TabIndex = 33
         Me.Label3.Text = "Account's Format"
         '
@@ -190,18 +190,18 @@ Partial Class NewAccountUI
         Me.recompute_RB.AutoSize = True
         Me.recompute_RB.Location = New System.Drawing.Point(167, 11)
         Me.recompute_RB.Name = "recompute_RB"
-        Me.recompute_RB.Size = New System.Drawing.Size(109, 19)
+        Me.recompute_RB.Size = New System.Drawing.Size(97, 17)
         Me.recompute_RB.TabIndex = 5
-        Me.recompute_RB.TabStop = True
         Me.recompute_RB.Text = "Recomputation"
         Me.recompute_RB.UseVisualStyleBackColor = True
         '
         'aggregation_RB
         '
         Me.aggregation_RB.AutoSize = True
+        Me.aggregation_RB.Checked = True
         Me.aggregation_RB.Location = New System.Drawing.Point(39, 11)
         Me.aggregation_RB.Name = "aggregation_RB"
-        Me.aggregation_RB.Size = New System.Drawing.Size(91, 19)
+        Me.aggregation_RB.Size = New System.Drawing.Size(82, 17)
         Me.aggregation_RB.TabIndex = 4
         Me.aggregation_RB.TabStop = True
         Me.aggregation_RB.Text = "Aggregation"
@@ -212,7 +212,7 @@ Partial Class NewAccountUI
         Me.Label7.AutoSize = True
         Me.Label7.Location = New System.Drawing.Point(3, 128)
         Me.Label7.Name = "Label7"
-        Me.Label7.Size = New System.Drawing.Size(121, 15)
+        Me.Label7.Size = New System.Drawing.Size(104, 13)
         Me.Label7.TabIndex = 34
         Me.Label7.Text = "Consolidation Option"
         '
@@ -232,18 +232,18 @@ Partial Class NewAccountUI
         Me.bs_item_RB.AutoSize = True
         Me.bs_item_RB.Location = New System.Drawing.Point(167, 12)
         Me.bs_item_RB.Name = "bs_item_RB"
-        Me.bs_item_RB.Size = New System.Drawing.Size(146, 19)
+        Me.bs_item_RB.Size = New System.Drawing.Size(131, 17)
         Me.bs_item_RB.TabIndex = 8
-        Me.bs_item_RB.TabStop = True
         Me.bs_item_RB.Text = "End of Period FX Rate"
         Me.bs_item_RB.UseVisualStyleBackColor = True
         '
         'flux_RB
         '
         Me.flux_RB.AutoSize = True
+        Me.flux_RB.Checked = True
         Me.flux_RB.Location = New System.Drawing.Point(39, 12)
         Me.flux_RB.Name = "flux_RB"
-        Me.flux_RB.Size = New System.Drawing.Size(116, 19)
+        Me.flux_RB.Size = New System.Drawing.Size(107, 17)
         Me.flux_RB.TabIndex = 6
         Me.flux_RB.TabStop = True
         Me.flux_RB.Text = "Average FX Rate"
@@ -254,7 +254,7 @@ Partial Class NewAccountUI
         Me.Label8.AutoSize = True
         Me.Label8.Location = New System.Drawing.Point(3, 160)
         Me.Label8.Name = "Label8"
-        Me.Label8.Size = New System.Drawing.Size(119, 15)
+        Me.Label8.Size = New System.Drawing.Size(105, 13)
         Me.Label8.TabIndex = 35
         Me.Label8.Text = "Currency Conversion"
         '
@@ -282,7 +282,6 @@ Partial Class NewAccountUI
         Me.NameTextBox.SelectionStart = 0
         Me.NameTextBox.Size = New System.Drawing.Size(408, 26)
         Me.NameTextBox.TabIndex = 1
-        Me.NameTextBox.Text = " "
         Me.NameTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Left
         Me.NameTextBox.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
         '
