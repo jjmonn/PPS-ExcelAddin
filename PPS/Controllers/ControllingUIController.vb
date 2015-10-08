@@ -466,14 +466,21 @@ Friend Class ControllingUIController
 
                 ' Dig one level deeper if any
                 If Not dimensionNode.NextSiblingNode Is Nothing Then
-                    CreateRow(dgv, dimensionNode.NextNode, , subRow)
+
+                    ' Test: Loop only if dimension is not account and account_formulatype = title
+                    If dimensionNode.Value = Computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.ACCOUNTS _
+                    AndAlso GlobalVariables.Accounts.m_accountsHash(CInt(valueNode.Value))(ACCOUNT_FORMULA_TYPE_VARIABLE) = GlobalEnums.FormulaTypes.TITLE Then
+                        ' Case account formula type title
+                    Else
+                        CreateRow(dgv, dimensionNode.NextNode, , subRow)
+                    End If
                 End If
 
                 ' Loop through children if any
                 For Each subNode In valueNode.Nodes
                     CreateRow(dgv, dimensionNode, subNode, subRow)
                 Next
-
+                
                 LevelDimensionFilterOrAxis(dimensionNode)
             End If
         End If
@@ -606,7 +613,7 @@ Friend Class ControllingUIController
                     End If
                 Else
                     args.CellValue = ""
-                    If (GlobalVariables.Accounts.m_accountsHash(accountId)(ACCOUNT_FORMULA_TYPE_VARIABLE) <> 5) Then
+                    If (GlobalVariables.Accounts.m_accountsHash(accountId)(ACCOUNT_FORMULA_TYPE_VARIABLE) <> GlobalEnums.FormulaTypes.TITLE) Then
                         args.RowItem.ParentItem.Items.Remove(args.RowItem)
                     End If
                 End If
