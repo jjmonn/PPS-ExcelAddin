@@ -51,6 +51,7 @@
     <Compile Include="ByteBuffer.cs" />
     <Compile Include="ClientMessage.cs" />
     <Compile Include="ClientState.cs" />
+    <Compile Include="ErrorMessage.cs" />
     <Compile Include="NetworkLauncher.cs" />
     <Compile Include="NetworkManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
