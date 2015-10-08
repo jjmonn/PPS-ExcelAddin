@@ -23,7 +23,7 @@ Friend Class ConnectionsFunctions
     ' Variables
     Public Event ConnectionFailedEvent()
     Private userName As String
-    Private pwd As String
+    Public Shared pwd As String
     Private Shared connectionFailed As Boolean
 
     ' Flags
