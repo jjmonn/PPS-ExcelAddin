@@ -133,8 +133,11 @@ public class ByteBuffer : MemoryStream
 
   public void WriteString(String value)
   {
-    byte[] tmp = System.Text.Encoding.UTF8.GetBytes(value);
-    Write(tmp, 0, tmp.Length);
+    if (value != null)
+    {
+      byte[] tmp = System.Text.Encoding.UTF8.GetBytes(value);
+      Write(tmp, 0, tmp.Length);
+    }
     WriteByte(0x00);
   }
 

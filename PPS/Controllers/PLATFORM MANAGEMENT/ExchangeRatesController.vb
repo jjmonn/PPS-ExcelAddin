@@ -218,14 +218,18 @@ Friend Class ExchangeRatesController
 
     End Sub
 
-    Private Sub AfterVersionDelete(ByRef p_status As Boolean, ByRef p_id As Int32)
+    Private Sub AfterVersionDelete(ByRef p_status As ErrorMessage, ByRef p_id As Int32)
 
-        ' if version is currently displayed -> set another one
-        ' priority high
         If m_view Is Nothing Then Exit Sub
-        If p_status = True Then
-            m_view.TVNodeDelete(p_id)
-        End If
+
+        Select Case p_status
+            Case ErrorMessage.SUCCESS
+                m_view.TVNodeDelete(p_id)
+            Case ErrorMessage.DEPENDENT_PARENT
+                MsgBox("This exchange rate version is linked to a general version")
+            Case Else
+                MsgBox("Unable to delete this version")
+        End Select
 
     End Sub
 

@@ -133,6 +133,7 @@ Friend Class VersionsControl
                 startPeriod = Format(Date.FromOADate(GlobalVariables.Versions.versions_hash(versionId)(VERSIONS_START_PERIOD_VAR)), "MMM yyyy")
             End If
             StartPeriodTB.Text = startPeriod
+            StartPeriodTB.ValueMember = GlobalVariables.Versions.versions_hash(versionId)(VERSIONS_START_PERIOD_VAR)
 
             NBPeriodsTB.Text = GlobalVariables.Versions.versions_hash(versionId)(VERSIONS_NB_PERIODS_VAR)
 
@@ -176,6 +177,14 @@ Friend Class VersionsControl
 
     End Sub
 
+    Private Sub RenameVersionInTV(ByRef p_id As UInt32, ByRef p_name As String)
+
+        For Each node In VersionsTV.Nodes
+            If node.Value = p_id Then node.Text = p_name
+        Next
+
+    End Sub
+
 #End Region
 
 
@@ -187,9 +196,7 @@ Friend Class VersionsControl
             Dim MyDelegate As New versionReadEvent_Delegate(AddressOf versionReadEvent)
             Me.Invoke(MyDelegate, New Object() {p_status, p_attributes})
         Else
-            GlobalVariables.Versions.LoadVersionsTV(VersionsTV)
-            VersionsTV.Refresh()
-            VersionsTV.Show()
+            RenameVersionInTV(p_attributes(ID_VARIABLE), p_attributes(NAME_VARIABLE))
             If p_attributes(ID_VARIABLE) = current_node.Value Then Display(current_node)
         End If
     End Sub
@@ -359,7 +366,7 @@ Friend Class VersionsControl
             End If
 
             ' Time configuration control
-            If Controller.IsRatesVersionCompatibleWithPeriods(StartPeriodTB.Text, NBPeriodsTB.Text, rates_version_id) Then
+            If Controller.IsRatesVersionCompatibleWithPeriods(StartPeriodTB.ValueMember, NBPeriodsTB.Text, rates_version_id) Then
                 Controller.UpdateRatesVersion_id(version_id, rates_version_id)
             Else
                 MsgBox("This Exchange Rates Version is not compatible with the Periods Configuration.")
@@ -389,7 +396,7 @@ RevertToFormerValue:
             End If
 
             ' Time configuration control
-            If Controller.IsFactVersionCompatibleWithPeriods(StartPeriodTB.Text, NBPeriodsTB.Text, fact_version_id) Then
+            If Controller.IsFactVersionCompatibleWithPeriods(StartPeriodTB.ValueMember, NBPeriodsTB.Text, fact_version_id) Then
                 Controller.UpdateFactVersion_id(version_id, fact_version_id)
             Else
                 MsgBox("This Fact Version is not compatible with the Periods Configuration.")
