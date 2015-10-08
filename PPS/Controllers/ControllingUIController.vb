@@ -10,7 +10,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 16/09/2015
+' Last modified: 07/10/2015
 
 
 Imports System.Windows.Forms
@@ -20,6 +20,8 @@ Imports System.Collections
 Imports System.Linq
 Imports VIBlend.Utilities
 Imports VIBlend.WinForms.Controls
+
+
 
 Friend Class ControllingUIController
 
@@ -566,35 +568,13 @@ Friend Class ControllingUIController
             Dim versionId As String = 0
             Dim filterId As String = "0"
 
-            Dim items() As HierarchyItem = {args.RowItem, args.ColumnItem}
-            For Each item As HierarchyItem In items
-                '  If itemsDimensionsDict(item).Count = 0 then Exit sub
-                Dim ht As Hashtable = itemsDimensionsDict(item)
-                For Each dimension In ht.Keys
-                    Dim value = ht(dimension)
-                    If Not TypeOf (dimension) Is Char Then
-                        Select Case dimension
-                            Case GlobalEnums.DataMapAxis.ACCOUNTS
-                                If value <> 0 Then accountId = value
-                            Case GlobalEnums.DataMapAxis.ENTITIES
-                                If value <> 0 Then
-                                    Select Case entityId
-                                        Case 0
-                                            entityId = value
-                                        Case Else
-                                            If entityId = CInt(EntityNode.Value) Then entityId = value
-                                    End Select
-                                End If
-                            Case GlobalEnums.DataMapAxis.PERIODS
-                                If value <> "" Then periodId = value
-                            Case GlobalEnums.DataMapAxis.VERSIONS
-                                If value <> "0" Then versionId = value
-                            Case GlobalEnums.DataMapAxis.FILTERS
-                                If value <> "0" Then filterId = value
-                        End Select
-                    End If
-                Next
-            Next
+            SetCellsItems(args.RowItem, _
+                          args.ColumnItem, _
+                          entityId, _
+                          accountId, _
+                          periodId, _
+                          versionId, _
+                          filterId)
 
             Dim token As String = Computer.TOKEN_SEPARATOR & _
                                   filterId & Computer.TOKEN_SEPARATOR & _
@@ -632,6 +612,49 @@ Friend Class ControllingUIController
                 End If
             End If
         End If
+
+    End Sub
+
+    ' si ralentissement de l'affichage des valeurs remettre la function directement 
+    ' au dessus (pour éviter le byval)
+    Friend Sub SetCellsItems(ByVal p_row As HierarchyItem, _
+                             ByVal p_column As HierarchyItem, _
+                             ByRef p_entityId As Int32, _
+                             ByRef p_accountId As Int32, _
+                             ByRef p_periodId As String, _
+                             ByRef p_versionId As String, _
+                             ByRef p_filterId As String)
+
+        Dim items() As HierarchyItem = {p_row, p_column}
+        For Each item As HierarchyItem In items
+            '  If itemsDimensionsDict(item).Count = 0 then Exit sub
+            Dim ht As Hashtable = itemsDimensionsDict(item)
+            For Each dimension In ht.Keys
+                Dim value = ht(dimension)
+                If Not TypeOf (dimension) Is Char Then
+                    Select Case dimension
+                        Case GlobalEnums.DataMapAxis.ACCOUNTS
+                            If value <> 0 Then p_accountId = value
+                        Case GlobalEnums.DataMapAxis.ENTITIES
+                            If value <> 0 Then
+                                Select Case p_entityId
+                                    Case 0
+                                        p_entityId = value
+                                    Case Else
+                                        If p_entityId = CInt(EntityNode.Value) Then p_entityId = value
+                                End Select
+                            End If
+                        Case GlobalEnums.DataMapAxis.PERIODS
+                            If value <> "" Then p_periodId = value
+                        Case GlobalEnums.DataMapAxis.VERSIONS
+                            If value <> "0" Then p_versionId = value
+                        Case GlobalEnums.DataMapAxis.FILTERS
+                            If value <> "0" Then p_filterId = value
+                    End Select
+                End If
+            Next
+        Next
+
 
     End Sub
 
@@ -878,14 +901,17 @@ Friend Class ControllingUIController
         View.CurrencyTB.Text = View.leftPane_control.currenciesCLB.SelectedItem.Text
         View.VersionTB.Text = String.Join(" ; ", versionsDict.Values)
 
+        m_chartsView.EntityTB.Text = EntityNode.Text
+        m_chartsView.CurrencyTB.Text = View.leftPane_control.currenciesCLB.SelectedItem.Text
+        m_chartsView.VersionTB.Text = String.Join(" ; ", versionsDict.Values)
+
     End Sub
 
-    Friend Sub dropOnExcel()
+    Friend Sub DropOnExcel()
 
-        ' should be elsewhere !!!! 
         ' priority normal
         ' Maybe issue if nothing in the DGV ? !
-        ' reimplement ??  priority normal
+        ' reimplement ??  
         On Error Resume Next
         If Not EntityNode Is Nothing Then
             Dim destination As Microsoft.Office.Interop.Excel.Range = WorksheetWrittingFunctions.CreateReceptionWS(EntityNode.Text, _

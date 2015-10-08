@@ -291,6 +291,7 @@ Friend Class ChartsUtilities
 
 #Region "Excel Export"
 
+    ' drop values as option ? priority normal
     Friend Shared Sub ExportChartExcel(ByRef input_chart As Chart, _
                                                 ByRef ws As Excel.Worksheet, _
                                                 Optional ByRef i As Int32 = 2, _

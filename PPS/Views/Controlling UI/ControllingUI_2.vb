@@ -9,7 +9,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 16/09/2015
+' Last modified: 07/10/2015
 
 
 Imports System.Windows.Forms
@@ -47,6 +47,7 @@ Friend Class ControllingUI_2
     Private leftPaneExpandBT As vButton
     Private rightPaneExpandBT As vButton
     Friend BackgroundWorker1 As New BackgroundWorker
+    Private m_logController As New LogController
 
 #End Region
 
@@ -454,7 +455,6 @@ Friend Class ControllingUI_2
 
     End Sub
 
-
     Private Sub ColumnsAutoFitBT_Click(sender As Object, e As EventArgs) Handles ColumnsAutoFitBT.Click
 
         My.Settings.controllingUIResizeTofitGrid = ColumnsAutoFitBT.Checked
@@ -474,7 +474,31 @@ Friend Class ControllingUI_2
     Private Sub DisplayDataTrackingToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles LogRightClick.Click
 
         If Not current_DGV_cell Is Nothing Then
-            ' to be implemented -> quid -> find cell's account, entity, period, version from nothing...
+            Dim accountId As Int32 = 0
+            Dim entityId As Int32 = 0
+            Dim periodId As String = ""
+            Dim versionId As String = 0
+            Dim filterId As String = "0"
+
+            m_controller.SetCellsItems(current_DGV_cell.RowItem, _
+                                       current_DGV_cell.ColumnItem, _
+                                       entityId, _
+                                       accountId, _
+                                       periodId, _
+                                       versionId, _
+                                       filterId)
+
+            Dim logsHashTable As Action(Of List(Of Hashtable)) = Nothing
+            m_logController.GetFactLog(accountId, _
+                                       entityId, _
+                                       periodId, _
+                                       versionId,
+                                       logsHashTable)
+            ' display log ui
+            ' use same ui
+            ' clear dgv
+            ' must not belong to anything, just adgv and a function display
+
         End If
 
     End Sub

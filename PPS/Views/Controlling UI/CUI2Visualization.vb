@@ -19,6 +19,11 @@ Public Class CUI2Visualization
         m_controller = p_controller
         m_chartTab = {Chart1, Chart2, Chart3, Chart4}
 
+        Chart1.ContextMenu = m_chartsRightClickMenu
+        Chart2.ContextMenu = m_chartsRightClickMenu
+        Chart3.ContextMenu = m_chartsRightClickMenu
+        Chart4.ContextMenu = m_chartsRightClickMenu
+
         ' STUB !!
         ChartsUtilities.InitializeChartDisplay(Chart1, "Résultat Opérationnel (m€)")
         ChartsUtilities.InitializeChartDisplay(Chart2, "Investissements (m€)")
@@ -114,10 +119,61 @@ Public Class CUI2Visualization
 
 #End Region
 
+#Region "Call Backs"
+
+    Private Sub m_addSerieButton_Click(sender As Object, e As EventArgs) Handles m_addSerieButton.Click
+
+        Dim chart As Chart = sender ' ?
+   
+
+    End Sub
+
+    Private Sub m_removeSerieButton_Click(sender As Object, e As EventArgs) Handles m_removeSerieButton.Click
+
+    End Sub
+
+    Private Sub m_editSerieButton_Click(sender As Object, e As EventArgs) Handles m_editSerieButton.Click
+
+        ' follow mouse location on chart
+        ' on click -> hit test -> return the element
+
+        ' need to have a UI to edit the series
+        ' where should we store that ?
+        Dim chart As Chart = sender
+        Dim HTR As HitTestResult
+        Dim dataPoint As DataPoint
+        '   HTR = chart.HitTest(e.x, e.y)
+        If HTR.ChartElementType = ChartElementType.DataPoint Then
+            Dim serie As Series = HTR.Series
+            dataPoint = serie.Points(HTR.PointIndex)
+        End If
+
+    End Sub
+
+    Private Sub m_editChartButton_Click(sender As Object, e As EventArgs) Handles m_editChartButton.Click
+
+        ' change font 
+        ' change title
+
+    End Sub
+
+    Private Sub m_exportOnExcel_Click(sender As Object, e As EventArgs) Handles m_exportOnExcel.Click
+
+        ' validation message
+        ChartsUtilities.ExportChartExcel(sender, GlobalVariables.APPS.ActiveSheet)
+
+    End Sub
+
+#End Region
+
+#Region "Events"
+
+    ' listen to mouse move over charts and 
+    '   - display data pont value
+    '   - highligh hovered serie
 
 
-
-
+#End Region
 
 
 
