@@ -11,7 +11,6 @@ Friend Class LogController
 #Region "Instance Variables"
 
     ' Objects
-    Private m_view As LogUI
     Private m_onSuccess As Action(Of List(Of Hashtable))
     Private m_onError As Action
 
@@ -33,6 +32,7 @@ Friend Class LogController
     Friend Sub GetFactLog(ByRef p_accountId As Int32, ByRef p_entityId As Int32, ByRef p_period As Int32, ByRef p_versionId As Int32, _
                           ByRef p_onSuccess As Action(Of List(Of Hashtable)), _
                           Optional ByRef p_onError As Action = Nothing)
+
         m_onSuccess = p_onSuccess
         m_onError = p_onError
         AddHandler FactLog.Read, AddressOf ReadEvent
@@ -48,6 +48,7 @@ Friend Class LogController
 
 #End Region
 
+
 #Region "Callback"
 
     Private Sub ReadEvent(p_status As Boolean, p_factLogList As List(Of Hashtable))
@@ -56,5 +57,6 @@ Friend Class LogController
     End Sub
 
 #End Region
+
 
 End Class

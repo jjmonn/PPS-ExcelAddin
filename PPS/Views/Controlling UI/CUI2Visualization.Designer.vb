@@ -22,14 +22,14 @@ Partial Class CUI2Visualization
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
-        Dim ChartArea1 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
-        Dim Legend1 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
-        Dim ChartArea2 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
-        Dim Legend2 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
-        Dim ChartArea3 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
-        Dim Legend3 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
-        Dim ChartArea4 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
-        Dim Legend4 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
+        Dim ChartArea5 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
+        Dim Legend5 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
+        Dim ChartArea6 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
+        Dim Legend6 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
+        Dim ChartArea7 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
+        Dim Legend7 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
+        Dim ChartArea8 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
+        Dim Legend8 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
         Me.VSplitContainer1 = New VIBlend.WinForms.Controls.vSplitContainer()
         Me.VSplitContainer3 = New VIBlend.WinForms.Controls.vSplitContainer()
         Me.Chart1 = New System.Windows.Forms.DataVisualization.Charting.Chart()
@@ -45,6 +45,12 @@ Partial Class CUI2Visualization
         Me.Label3 = New System.Windows.Forms.Label()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.Label1 = New System.Windows.Forms.Label()
+        Me.m_chartsRightClickMenu = New VIBlend.WinForms.Controls.vContextMenu()
+        Me.m_addSerieButton = New System.Windows.Forms.MenuItem()
+        Me.m_removeSerieButton = New System.Windows.Forms.MenuItem()
+        Me.m_editSerieButton = New System.Windows.Forms.MenuItem()
+        Me.m_editChartButton = New System.Windows.Forms.MenuItem()
+        Me.m_exportOnExcel = New System.Windows.Forms.MenuItem()
         Me.VSplitContainer1.Panel1.SuspendLayout()
         Me.VSplitContainer1.Panel2.SuspendLayout()
         Me.VSplitContainer1.SuspendLayout()
@@ -131,11 +137,11 @@ Partial Class CUI2Visualization
         '
         'Chart1
         '
-        ChartArea1.Name = "ChartArea1"
-        Me.Chart1.ChartAreas.Add(ChartArea1)
+        ChartArea5.Name = "ChartArea1"
+        Me.Chart1.ChartAreas.Add(ChartArea5)
         Me.Chart1.Dock = System.Windows.Forms.DockStyle.Fill
-        Legend1.Name = "Legend1"
-        Me.Chart1.Legends.Add(Legend1)
+        Legend5.Name = "Legend1"
+        Me.Chart1.Legends.Add(Legend5)
         Me.Chart1.Location = New System.Drawing.Point(0, 0)
         Me.Chart1.Name = "Chart1"
         Me.Chart1.Size = New System.Drawing.Size(345, 190)
@@ -144,11 +150,11 @@ Partial Class CUI2Visualization
         '
         'Chart3
         '
-        ChartArea2.Name = "ChartArea1"
-        Me.Chart3.ChartAreas.Add(ChartArea2)
+        ChartArea6.Name = "ChartArea1"
+        Me.Chart3.ChartAreas.Add(ChartArea6)
         Me.Chart3.Dock = System.Windows.Forms.DockStyle.Fill
-        Legend2.Name = "Legend1"
-        Me.Chart3.Legends.Add(Legend2)
+        Legend6.Name = "Legend1"
+        Me.Chart3.Legends.Add(Legend6)
         Me.Chart3.Location = New System.Drawing.Point(0, 0)
         Me.Chart3.Name = "Chart3"
         Me.Chart3.Size = New System.Drawing.Size(345, 191)
@@ -190,11 +196,11 @@ Partial Class CUI2Visualization
         '
         'Chart2
         '
-        ChartArea3.Name = "ChartArea1"
-        Me.Chart2.ChartAreas.Add(ChartArea3)
+        ChartArea7.Name = "ChartArea1"
+        Me.Chart2.ChartAreas.Add(ChartArea7)
         Me.Chart2.Dock = System.Windows.Forms.DockStyle.Fill
-        Legend3.Name = "Legend1"
-        Me.Chart2.Legends.Add(Legend3)
+        Legend7.Name = "Legend1"
+        Me.Chart2.Legends.Add(Legend7)
         Me.Chart2.Location = New System.Drawing.Point(0, 0)
         Me.Chart2.Name = "Chart2"
         Me.Chart2.Size = New System.Drawing.Size(346, 190)
@@ -203,11 +209,11 @@ Partial Class CUI2Visualization
         '
         'Chart4
         '
-        ChartArea4.Name = "ChartArea1"
-        Me.Chart4.ChartAreas.Add(ChartArea4)
+        ChartArea8.Name = "ChartArea1"
+        Me.Chart4.ChartAreas.Add(ChartArea8)
         Me.Chart4.Dock = System.Windows.Forms.DockStyle.Fill
-        Legend4.Name = "Legend1"
-        Me.Chart4.Legends.Add(Legend4)
+        Legend8.Name = "Legend1"
+        Me.Chart4.Legends.Add(Legend8)
         Me.Chart4.Location = New System.Drawing.Point(0, 0)
         Me.Chart4.Name = "Chart4"
         Me.Chart4.Size = New System.Drawing.Size(346, 191)
@@ -343,6 +349,35 @@ Partial Class CUI2Visualization
         Me.Label1.TabIndex = 7
         Me.Label1.Text = "Entity"
         '
+        'm_chartsRightClickMenu
+        '
+        Me.m_chartsRightClickMenu.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.m_addSerieButton, Me.m_removeSerieButton, Me.m_editSerieButton, Me.m_editChartButton, Me.m_exportOnExcel})
+        '
+        'm_addSerieButton
+        '
+        Me.m_addSerieButton.Index = 0
+        Me.m_addSerieButton.Text = "Add Serie"
+        '
+        'm_removeSerieButton
+        '
+        Me.m_removeSerieButton.Index = 1
+        Me.m_removeSerieButton.Text = "Remove Serie"
+        '
+        'm_editSerieButton
+        '
+        Me.m_editSerieButton.Index = 2
+        Me.m_editSerieButton.Text = "Edit Serie"
+        '
+        'm_editChartButton
+        '
+        Me.m_editChartButton.Index = 3
+        Me.m_editChartButton.Text = "Edit Chart"
+        '
+        'm_exportOnExcel
+        '
+        Me.m_exportOnExcel.Index = 4
+        Me.m_exportOnExcel.Text = "Export on Excel"
+        '
         'CUI2Visualization
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -384,5 +419,11 @@ Partial Class CUI2Visualization
     Friend WithEvents Label3 As System.Windows.Forms.Label
     Friend WithEvents Label2 As System.Windows.Forms.Label
     Friend WithEvents Label1 As System.Windows.Forms.Label
+    Friend WithEvents m_chartsRightClickMenu As VIBlend.WinForms.Controls.vContextMenu
+    Friend WithEvents m_removeSerieButton As System.Windows.Forms.MenuItem
+    Friend WithEvents m_addSerieButton As System.Windows.Forms.MenuItem
+    Friend WithEvents m_editSerieButton As System.Windows.Forms.MenuItem
+    Friend WithEvents m_editChartButton As System.Windows.Forms.MenuItem
+    Friend WithEvents m_exportOnExcel As System.Windows.Forms.MenuItem
 
 End Class
