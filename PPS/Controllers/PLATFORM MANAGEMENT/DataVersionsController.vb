@@ -177,7 +177,7 @@ Friend Class DataVersionsController
         ' lock version ? 
         ' priority normal => nath server
         Dim ht As Hashtable = GlobalVariables.Versions.versions_hash(CInt(version_id))
-        ht(VERSIONS_LOCKED_VARIABLE) = 1
+        ht(VERSIONS_LOCKED_VARIABLE) = True
         ht(VERSIONS_LOCKED_DATE_VARIABLE) = Format(Now, "short Date")
         GlobalVariables.Versions.CMSG_UPDATE_VERSION(ht)
   
@@ -188,7 +188,7 @@ Friend Class DataVersionsController
         ' lock version ? 
         ' priority normal => nath server
         Dim ht As Hashtable = GlobalVariables.Versions.versions_hash(CInt(version_id))
-        ht(VERSIONS_LOCKED_VARIABLE) = 0
+        ht(VERSIONS_LOCKED_VARIABLE) = False
         ht(VERSIONS_LOCKED_DATE_VARIABLE) = "NA"
         GlobalVariables.Versions.CMSG_UPDATE_VERSION(ht)
 
@@ -245,7 +245,6 @@ Friend Class DataVersionsController
                                                         ByRef nb_periods As Int32, _
                                                         ByRef rates_version_id As String) As Boolean
 
-        start_period = DateSerial(start_period, 12, 31).ToOADate()
         Dim rates_version_start_period As Int32 = GlobalVariables.RatesVersions.rate_versions_hash(CInt(rates_version_id))(VERSIONS_START_PERIOD_VAR)
         Dim rates_version_nb_periods As Int32 = GlobalVariables.RatesVersions.rate_versions_hash(CInt(rates_version_id))(VERSIONS_NB_PERIODS_VAR)
         If start_period >= rates_version_start_period AndAlso _
@@ -270,7 +269,6 @@ Friend Class DataVersionsController
                                                         ByRef nb_periods As Int32, _
                                                         ByRef fact_version_id As String) As Boolean
 
-        start_period = DateSerial(start_period, 12, 31).ToOADate()
         Dim fact_version_start_period As Int32 = GlobalVariables.GlobalFactsVersions.globalFact_versions_hash(CInt(fact_version_id))(VERSIONS_START_PERIOD_VAR)
         Dim fact_version_nb_periods As Int32 = GlobalVariables.GlobalFactsVersions.globalFact_versions_hash(CInt(fact_version_id))(VERSIONS_NB_PERIODS_VAR)
         If start_period >= fact_version_start_period AndAlso _
