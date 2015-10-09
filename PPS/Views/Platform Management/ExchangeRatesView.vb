@@ -84,7 +84,6 @@ Friend Class ExchangeRatesView
             AddRatesVersionRCM.Enabled = False
             DeleteVersionRCM.Enabled = False
             AddFolderRCM.Enabled = False
-            currenciesRCMenu.Enabled = False
             CreateFolderToolStripMenuItem.Enabled = False
             CreateVersionToolStripMenuItem.Enabled = False
             DeleteToolStripMenuItem.Enabled = False
@@ -166,10 +165,6 @@ Friend Class ExchangeRatesView
 
 #Region "Call Backs"
 
-    Private Sub ImportFromExcelToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ImportFromExcelToolStripMenuItem.Click
-        m_controller.ImportRatesFromExcel()
-    End Sub
-
 #Region "Versions Right Click Menu"
 
     Private Sub Select_version_Click(sender As Object, e As EventArgs) Handles select_version.Click, DisplayRatesToolStripMenuItem.Click
@@ -237,22 +232,24 @@ Friend Class ExchangeRatesView
 
 #Region "m_ratesDataGridView Right Click Menu"
 
-    Private Sub expand_periods_Click(sender As Object, e As EventArgs) Handles expand_periods.Click
-
+    Private Sub expand_periods_Click(sender As Object, e As EventArgs)
         m_ratesDataGridView.RowsHierarchy.ExpandAllItems()
-
     End Sub
 
-    Private Sub collapse_periods_Click(sender As Object, e As EventArgs) Handles collapse_periods.Click
-
+    Private Sub collapse_periods_Click(sender As Object, e As EventArgs)
         m_ratesDataGridView.RowsHierarchy.CollapseAllItems()
-
     End Sub
 
     Private Sub CopyRateDownToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles CopyRateDownToolStripMenuItem.Click
-
         CopyRateValueDown()
+    End Sub
 
+    Private Sub ImportFromExcelToolStripMenuItem1_Click(sender As Object, e As EventArgs) Handles ImportFromExcelToolStripMenuItem1.Click
+        If m_ratesDataGridView.CellsArea.SelectedCells.Length > 0 Then
+            m_controller.ImportRatesFromExcel(m_ratesDataGridView.CellsArea.SelectedCells(0).ColumnItem.ItemValue)
+        Else
+            m_controller.ImportRatesFromExcel()
+        End If
     End Sub
 
 #End Region
@@ -445,5 +442,6 @@ Friend Class ExchangeRatesView
 #End Region
 
 #End Region
+
 
 End Class

@@ -33,7 +33,7 @@ Friend Class ExchangeRatesController
     Private m_exchangeRates As New ExchangeRate
     Private m_ratesVersionTV As New vTreeView
     Private m_newRatesVersionUI As NewRatesVersionUI
-    Private m_excelImport As ExcelRatesImportUI
+    Private m_excelImport As ExcelExchangeRatesImportUI
     Private mpBar As PBarUI
     Private m_PlatformManagementUI As PlatformMGTGeneralUI
 
@@ -257,9 +257,12 @@ Friend Class ExchangeRatesController
 
 #Region "Import Rates from Excel"
 
-    Friend Sub ImportRatesFromExcel()
+    Friend Sub ImportRatesFromExcel(Optional ByRef p_destinationCurrencyId As Int32 = -1)
 
-        m_excelImport = New ExcelRatesImportUI(Me)
+        m_excelImport = New ExcelExchangeRatesImportUI(Me)
+        If p_destinationCurrencyId <> -1 Then
+            m_excelImport.m_destinationCurrency = p_destinationCurrencyId
+        End If
         m_excelImport.Show()
 
     End Sub

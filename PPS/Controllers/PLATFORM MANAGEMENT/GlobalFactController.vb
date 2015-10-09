@@ -13,7 +13,7 @@ Friend Class GlobalFactController
     Private m_view As GlobalFactUI
     Private m_versionTV As New vTreeView
     Private m_platformMGTUI As PlatformMGTGeneralUI
-    Private m_excelImport As ExcelRatesImportUI
+    Private m_excelImport As ExcelFactsValuesImportUI
     Friend m_currentVersionId As Int32
     Friend m_MonthsIdList As List(Of Int32)
     Private m_newFactVersionUI As NewGlobalFactVersionUI
@@ -188,20 +188,23 @@ Friend Class GlobalFactController
 
 #End Region
 
+
 #Region "Import Rates from Excel"
 
-    Friend Sub ImportRatesFromExcel()
+    Friend Sub ImportRatesFromExcel(Optional ByRef p_globalFactId As Int32 = -1)
 
-        'm_excelImport = New ExcelRatesImportUI(Me, GlobalVariables.GlobalFactsDatas.globalFactDataHash)
-        'm_excelImport.Show()
+        m_excelImport = New ExcelFactsValuesImportUI(Me)
+        m_excelImport.m_globalFactId = p_globalFactId
+        m_excelImport.Show()
 
     End Sub
 
-    Friend Sub InputRangesCallBack(ByRef period() As Integer, ByRef rates() As Double, ByRef curr As String)
+    Friend Sub InputRangesCallBack(ByRef p_periods() As Int32, _
+                                   ByRef p_rates() As Double, _
+                                   ByRef p_globalFactId As Int32)
 
-        If m_view Is Nothing Then Exit Sub
-        For i = 0 To period.Length - 1
-            m_view.UpdateCell(curr, period(i), rates(i))
+        For i = 0 To p_periods.Length - 1
+            m_view.UpdateCell(p_globalFactId, p_periods(i), p_rates(i))
         Next
         m_excelImport.Dispose()
 

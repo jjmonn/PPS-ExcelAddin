@@ -66,7 +66,7 @@ Friend Class GlobalFactUI
             AddRatesVersionRCM.Enabled = False
             DeleteVersionRCM.Enabled = False
             AddFolderRCM.Enabled = False
-            ImportFromExcelToolStripMenuItem.Enabled = False
+            ImportFromExcelBT.Enabled = False
         End If
     End Sub
 
@@ -155,10 +155,6 @@ Friend Class GlobalFactUI
 
 #Region "Call Backs"
 
-    Private Sub ImportFromExcelToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ImportFromExcelToolStripMenuItem.Click
-        m_controller.ImportRatesFromExcel()
-    End Sub
-
 #Region "Versions Right Click Menu"
 
     Private Sub Select_version_Click(sender As Object, e As EventArgs) Handles select_version.Click
@@ -244,6 +240,16 @@ Friend Class GlobalFactUI
         m_selectedFact = target.ItemValue
     End Sub
 
+    Private Sub ImportFromExcelBT_Click_1(sender As Object, e As EventArgs) Handles ImportFromExcelBT.Click
+
+        If m_dataGridView.CellsArea.SelectedCells.Length > 0 Then
+            m_controller.ImportRatesFromExcel(m_dataGridView.CellsArea.SelectedCells(0).ColumnItem.ItemValue)
+        Else
+            m_controller.ImportRatesFromExcel()
+        End If
+
+    End Sub
+
     Private Sub CopyFactDownToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles CopyFactDownToolStripMenuItem.Click
         CopyFactValueDown()
     End Sub
@@ -251,6 +257,7 @@ Friend Class GlobalFactUI
 #End Region
 
 #End Region
+
 
 #Region "Events"
 
@@ -403,5 +410,6 @@ Friend Class GlobalFactUI
     End Sub
 
 #End Region
+
 
 End Class

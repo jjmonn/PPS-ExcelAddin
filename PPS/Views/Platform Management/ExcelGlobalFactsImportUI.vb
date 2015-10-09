@@ -7,7 +7,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 05/08/2015
+' Last modified: 09/10/2015
 
 
 Imports Microsoft.Office.Interop
@@ -16,39 +16,38 @@ Imports VIBlend.WinForms.Controls
 
 
 
-Friend Class ExcelRatesImportUI
+Friend Class ExcelFactsValuesImportUI
 
 
 #Region "Instance Variables"
 
     ' objects
-    Private m_controller As ExchangeRatesController
+    Private m_controller As GlobalFactController
 
     ' variables
     Private m_periodsRange As Excel.Range
     Private m_valuesRange As Excel.Range
-
+    Friend m_globalFactId As Int32 = -1
 
 #End Region
 
 
 #Region "Initialize"
 
-    Friend Sub New(ByRef p_controller As ExchangeRatesController)
+    Friend Sub New(ByRef p_controller As GlobalFactController)
 
         ' This call is required by the designer.
         InitializeComponent()
 
         ' Add any initialization after the InitializeComponent() call.
         m_controller = p_controller
-        Dim mainCurrencyId As Int32 = GlobalVariables.Currencies.mainCurrency
-        Dim mainCurrencyName As String = GlobalVariables.Currencies.currencies_hash(mainCurrencyId)(NAME_VARIABLE)
-        For Each currencyId As Int32 In GlobalVariables.Currencies.currencies_hash.Keys
-            If currencyId <> GlobalVariables.Currencies.mainCurrency Then
-                Dim li As New ListItem
-                li.Value = currencyId
-                li.Text = "/" & GlobalVariables.Currencies.currencies_hash(currencyId)(NAME_VARIABLE)
-                m_currencyComboBox.Items.Add(li)
+        For Each globalFactId As Int32 In GlobalVariables.GlobalFacts.globalFact_hash.Keys
+            Dim li As New ListItem
+            li.Value = globalFactId
+            li.Text = GlobalVariables.GlobalFacts.globalFact_hash(globalFactId)(NAME_VARIABLE)
+            m_factsComboBox.Items.Add(li)
+            If globalFactId = m_globalFactId Then
+                m_factsComboBox.SelectedItem = li
             End If
         Next
 
@@ -80,7 +79,7 @@ Friend Class ExcelRatesImportUI
                           System.Type.Missing, System.Type.Missing, System.Type.Missing, _
                           System.Type.Missing, 8)
 
-        m_ratesRangeTextBox.Text = m_valuesRange.Address
+        m_factsRangeTextBox.Text = m_valuesRange.Address
         ' Check if it is a valid address !!
         Me.TopMost = True
 
@@ -89,7 +88,7 @@ Friend Class ExcelRatesImportUI
     Private Sub import_BT_Click(sender As Object, e As EventArgs) Handles import_BT.Click
 
         If m_periodsRange.Count = m_valuesRange.Count _
-        AndAlso Not m_currencyComboBox.SelectedItem Is Nothing _
+        AndAlso Not m_factsComboBox.SelectedItem Is Nothing _
         AndAlso CheckRangeDimension(m_periodsRange) = True Then
             Dim periods_array(m_periodsRange.Count - 1) As Integer
             Dim rates_array(m_valuesRange.Count - 1) As Double
@@ -103,7 +102,7 @@ Friend Class ExcelRatesImportUI
                     i = i + 1
                 End If
             Next
-            m_controller.InputRangesCallBack(periods_array, rates_array, m_currencyComboBox.SelectedItem.Value)
+            m_controller.InputRangesCallBack(periods_array, rates_array, m_factsComboBox.SelectedItem.Value)
         Else
             MsgBox("The Periods range and Rates range do not have the same size, or the dimensions of the ranges are not valid.")
         End If

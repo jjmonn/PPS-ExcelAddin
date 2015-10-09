@@ -1944,7 +1944,6 @@ Public Class AddinModule
             Dim c As Excel.Range = GlobalVariables.APPS.ActiveSheet.range("AZ200")
             c.Formula = "=" & UDF_FORMULA_GET_DATA_NAME & "("","","","","","","","","")"
             c.Formula = ""
-            '   GlobalVariables.GlobalPPSBIController = New PPSBIController
         Else
             GlobalVariables.Connection_Toggle_Button.Image = 0
             GlobalVariables.Connection_Toggle_Button.Caption = "Not connected"
