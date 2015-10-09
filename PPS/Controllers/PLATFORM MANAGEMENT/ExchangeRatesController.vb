@@ -259,15 +259,17 @@ Friend Class ExchangeRatesController
 
     Friend Sub ImportRatesFromExcel()
 
-        m_excelImport = New ExcelRatesImportUI(Me, GlobalVariables.Currencies.currencies_hash.Keys)
+        m_excelImport = New ExcelRatesImportUI(Me)
         m_excelImport.Show()
 
     End Sub
 
-    Friend Sub InputRangesCallBack(ByRef period() As Integer, ByRef rates() As Double, ByRef curr As String)
+    Friend Sub InputRangesCallBack(ByRef p_periods() As Int32, _
+                                   ByRef p_rates() As Double,
+                                   ByRef p_currencyId As Int32)
 
-        For i = 0 To period.Length - 1
-            m_view.UpdateCell(curr, period(i), rates(i))
+        For i = 0 To p_periods.Length - 1
+            m_view.UpdateCell(p_currencyId, p_periods(i), p_rates(i))
         Next
         m_excelImport.Dispose()
 
