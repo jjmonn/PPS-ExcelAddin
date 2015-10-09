@@ -269,7 +269,7 @@ Friend Class GlobalFactUI
             If Not IsNumeric(args.NewValue) Then
                 args.Cancel = True
             Else
-                m_controller.UpdateFactData(args.Cell.RowItem.ItemValue, args.Cell.ColumnItem.ItemValue, m_currentVersionId, CInt(args.NewValue))
+                m_controller.UpdateFactData(args.Cell.RowItem.ItemValue, args.Cell.ColumnItem.ItemValue, m_currentVersionId, CDbl(args.NewValue))
             End If
         End If
 
