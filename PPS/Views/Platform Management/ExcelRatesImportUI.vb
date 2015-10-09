@@ -12,6 +12,7 @@
 
 Imports Microsoft.Office.Interop
 Imports System.Collections.Generic
+Imports VIBlend.WinForms.Controls
 
 
 
@@ -21,11 +22,11 @@ Friend Class ExcelRatesImportUI
 #Region "Instance Variables"
 
     ' objects
-    Private Controller As Object
+    Private m_controller As ExchangeRatesController
 
     ' variables
-    Private periods_range As Excel.Range
-    Private values_range As Excel.Range
+    Private m_periodsRange As Excel.Range
+    Private m_valuesRange As Excel.Range
 
 
 #End Region
@@ -33,16 +34,22 @@ Friend Class ExcelRatesImportUI
 
 #Region "Initialize"
 
-    Friend Sub New(ByRef inputController As Object, _
-                   ByRef input_items_list As System.Collections.ICollection)
+    Friend Sub New(ByRef p_controller As ExchangeRatesController)
 
         ' This call is required by the designer.
         InitializeComponent()
 
         ' Add any initialization after the InitializeComponent() call.
-        Controller = inputController
-        For Each item In input_items_list
-            If item <> GlobalVariables.Currencies.mainCurrency Then items_CB.Items.Add(item)
+        m_controller = p_controller
+        Dim mainCurrencyId As Int32 = GlobalVariables.Currencies.mainCurrency
+        Dim mainCurrencyName As String = GlobalVariables.Currencies.currencies_hash(mainCurrencyId)(NAME_VARIABLE)
+        For Each currencyId As Int32 In GlobalVariables.Currencies.currencies_hash.Keys
+            If currencyId <> GlobalVariables.Currencies.mainCurrency Then
+                Dim li As New ListItem
+                li.Value = currencyId
+                li.Text = "/" & GlobalVariables.Currencies.currencies_hash(currencyId)(NAME_VARIABLE)
+                m_currencyComboBox.Items.Add(li)
+            End If
         Next
 
     End Sub
@@ -55,11 +62,11 @@ Friend Class ExcelRatesImportUI
     Private Sub PeriodsEditBT_Click(sender As Object, e As EventArgs) Handles periods_edit_BT.Click
 
         Me.TopMost = False
-        periods_range = GlobalVariables.apps.InputBox("Select Account(s) Range(s)", System.Type.Missing, System.Type.Missing, _
+        m_periodsRange = GlobalVariables.APPS.InputBox("Select periods(s) range(s)", System.Type.Missing, System.Type.Missing, _
                           System.Type.Missing, System.Type.Missing, System.Type.Missing, _
                           System.Type.Missing, 8)
 
-        periods_RefEdit.Text = periods_range.Address
+        m_periodsRangeTextBox.Text = m_periodsRange.Address
 
         ' Check if it is a valid address !!
         Me.TopMost = True
@@ -69,11 +76,11 @@ Friend Class ExcelRatesImportUI
     Private Sub RatesEditBT_Click(sender As Object, e As EventArgs) Handles rates_edit_BT.Click
 
         Me.TopMost = False
-        values_range = GlobalVariables.apps.InputBox("Select Account(s) Range(s)", System.Type.Missing, System.Type.Missing, _
+        m_valuesRange = GlobalVariables.APPS.InputBox("Select rates(s) range(s)", System.Type.Missing, System.Type.Missing, _
                           System.Type.Missing, System.Type.Missing, System.Type.Missing, _
                           System.Type.Missing, 8)
 
-        rates_RefEdit.Text = values_range.Address
+        m_ratesRangeTextBox.Text = m_valuesRange.Address
         ' Check if it is a valid address !!
         Me.TopMost = True
 
@@ -81,22 +88,22 @@ Friend Class ExcelRatesImportUI
 
     Private Sub import_BT_Click(sender As Object, e As EventArgs) Handles import_BT.Click
 
-        If periods_range.Count = values_range.Count _
-        AndAlso items_CB.Text <> "" _
-        AndAlso CheckRangeDimension(periods_range) = True Then
-            Dim periods_array(periods_range.Count - 1) As Integer
-            Dim rates_array(values_range.Count - 1) As Double
+        If m_periodsRange.Count = m_valuesRange.Count _
+        AndAlso Not m_currencyComboBox.SelectedItem Is Nothing _
+        AndAlso CheckRangeDimension(m_periodsRange) = True Then
+            Dim periods_array(m_periodsRange.Count - 1) As Integer
+            Dim rates_array(m_valuesRange.Count - 1) As Double
 
             Dim i As Int32 = 0
-            For Each period_cell As Excel.Range In periods_range.Cells
-                Dim rate_cell As Excel.Range = values_range.Cells(i + 1)
+            For Each period_cell As Excel.Range In m_periodsRange.Cells
+                Dim rate_cell As Excel.Range = m_valuesRange.Cells(i + 1)
                 If IsNumeric(period_cell.Value2) And IsNumeric(rate_cell.Value2) Then
                     periods_array(i) = CInt(period_cell.Value2)
                     rates_array(i) = CDbl(rate_cell.Value2)
                     i = i + 1
                 End If
             Next
-            Controller.InputRangesCallBack(periods_array, rates_array, items_CB.Text)
+            m_controller.InputRangesCallBack(periods_array, rates_array, m_currencyComboBox.SelectedItem.Value)
         Else
             MsgBox("The Periods range and Rates range do not have the same size, or the dimensions of the ranges are not valid.")
         End If
