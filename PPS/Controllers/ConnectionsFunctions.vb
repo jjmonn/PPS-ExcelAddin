@@ -23,7 +23,7 @@ Friend Class ConnectionsFunctions
     ' Variables
     Public Event ConnectionFailedEvent()
     Private userName As String
-    Private pwd As String
+    Public Shared pwd As String
     Private Shared connectionFailed As Boolean
 
     ' Flags
@@ -125,6 +125,7 @@ Friend Class ConnectionsFunctions
 
     Private Sub InitializeGlobalModels()
 
+        AddHandler GlobalVariables.FModelingsAccounts.ObjectInitialized, AddressOf AfterFModelingAccountsInit
         AddHandler GlobalVariables.Accounts.ObjectInitialized, AddressOf AfterAccountsInit
         AddHandler GlobalVariables.Entities.ObjectInitialized, AddressOf AfterEntitiesInit
         AddHandler GlobalVariables.Filters.ObjectInitialized, AddressOf AfterFiltersInit
@@ -166,6 +167,7 @@ Friend Class ConnectionsFunctions
         globalVariablesInitFlags.Add(GlobalEnums.GlobalModels.USER, False)
         globalVariablesInitFlags.Add(GlobalEnums.GlobalModels.GROUP, False)
         globalVariablesInitFlags.Add(GlobalEnums.GlobalModels.GROUPALLOWEDENTITY, False)
+        globalVariablesInitFlags.Add(GlobalEnums.GlobalModels.FMODELINGACCOUNT, False)
 
     End Sub
 
@@ -205,6 +207,13 @@ Friend Class ConnectionsFunctions
 
 
 #Region "Call backs global variables (CRUDs) Init"
+
+    Private Sub AfterFModelingAccountsInit()
+
+        globalVariablesInitFlags(GlobalEnums.GlobalModels.FMODELINGACCOUNT) = True
+        globalInitFlag = CheckGlobalVariablesInitFlag()
+
+    End Sub
 
     Private Sub AfterAccountsInit()
 
