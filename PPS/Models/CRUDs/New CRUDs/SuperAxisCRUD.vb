@@ -41,6 +41,13 @@ Public MustInherit Class SuperAxisCRUD
     Friend MustOverride Sub CMSG_DELETE_AXIS(ByRef id As UInt32)
 
     ' Mappings
+
+    Friend Function GetDefaultAxis() As Int32
+        Return 1
+        '' If Axis_hash.Keys.Count <= 0 Then Return 1
+        '' Return Axis_hash.Keys.GetEnumerator().Current
+    End Function
+
     Friend Function GetAxisNameList() As List(Of String)
 
         Dim tmp_list As New List(Of String)
