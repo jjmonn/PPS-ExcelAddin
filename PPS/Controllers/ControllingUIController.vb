@@ -874,7 +874,8 @@ Friend Class ControllingUIController
                     p_accountId & Computer.TOKEN_SEPARATOR & _
                     periodId
             If dataMap.ContainsKey(token) _
-            AndAlso Not Double.IsNaN(dataMap(token)) Then
+            AndAlso Not Double.IsNaN(dataMap(token)) _
+            AndAlso Not Double.IsInfinity(dataMap(token)) Then
                 yValues(i) = dataMap(token)
                 i += 1
             End If
