@@ -334,7 +334,7 @@ Friend Class GlobalFactUI
         m_dataGridView.ColumnsHierarchy.AutoResize(AutoResizeMode.FIT_ALL)
         DataGridViewsUtil.FormatDGVRowsHierarchy(m_dataGridView)
         m_dataGridView.RowsHierarchy.CompactStyleRenderingEnabled = False
-        m_dataGridView.BackColor = Color.White
+        m_dataGridView.BackColor = SystemColors.ButtonFace
         m_dataGridView.Refresh()
 
     End Sub

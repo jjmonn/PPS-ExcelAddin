@@ -48,6 +48,7 @@ Friend Class ControllingUI_2
     Private rightPaneExpandBT As vButton
     Friend BackgroundWorker1 As New BackgroundWorker
     Private m_logController As New LogController
+    Private m_logView As LogView
 
 #End Region
 
@@ -471,7 +472,7 @@ Friend Class ControllingUI_2
 
     End Sub
 
-    Private Sub DisplayDataTrackingToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles LogRightClick.Click
+    Private Sub LogRightClick_Click(sender As Object, e As EventArgs) Handles LogRightClick.Click
 
         If Not current_DGV_cell Is Nothing Then
             Dim accountId As Int32 = 0
@@ -488,16 +489,17 @@ Friend Class ControllingUI_2
                                        versionId, _
                                        filterId)
 
-            Dim logsHashTable As Action(Of List(Of Hashtable)) = Nothing
+            ' Check that entity and account are input type !! priority normal
+
+            Dim logsHashTable As New Action(Of List(Of Hashtable))(AddressOf DisplayLog_ThreadSafe)
             m_logController.GetFactLog(accountId, _
                                        entityId, _
-                                       periodId, _
+                                       Strings.Right(periodId, Len(periodId) - 1), _
                                        versionId,
                                        logsHashTable)
-            ' display log ui
-            ' use same ui
-            ' clear dgv
-            ' must not belong to anything, just adgv and a function display
+
+            m_logView = New LogView(GlobalVariables.Entities.entities_hash(entityId)(NAME_VARIABLE), _
+                                    GlobalVariables.Accounts.m_accountsHash(accountId)(NAME_VARIABLE))
 
         End If
 
@@ -828,6 +830,18 @@ Friend Class ControllingUI_2
                 dgv.Update()
                 dgv.Refresh()
             Next
+        End If
+
+    End Sub
+
+    Delegate Sub DisplayLogAttemp_Delegate(p_logValuesHt As List(Of Hashtable))
+    Private Sub DisplayLog_ThreadSafe(p_logValuesHt As List(Of Hashtable))
+
+        If InvokeRequired Then
+            Dim MyDelegate As New DisplayLogAttemp_Delegate(AddressOf DisplayLog_ThreadSafe)
+            Me.Invoke(MyDelegate, New Object() {p_logValuesHt})
+        Else
+            m_logView.DisplayLogValues(p_logValuesHt)
         End If
 
     End Sub
