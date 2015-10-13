@@ -32,11 +32,13 @@ Friend Class SubmissionWSController
     Private m_acquisitionModel As AcquisitionModel
     Private m_dataModificationsTracker As DataModificationsTracking
     Private m_generalSubmissionController As GeneralSubmissionControler
-
+    Private m_logController As New LogController
+    Private m_logView As LogView
 
     ' Variables
     Private m_disableWSChangeFlag As Boolean
     Friend m_excelWorksheet As Excel.Worksheet
+    Private m_currentCellAddress As String
 
     ' const 
     Private MAX_NB_ROWS As UInt16 = 16384
@@ -55,6 +57,7 @@ Friend Class SubmissionWSController
         m_dataSet = inputDataSet
         m_acquisitionModel = inputAcquisitionModel
         m_dataModificationsTracker = inputDataModificationTracker
+        m_logView = New LogView(True)
 
     End Sub
 
@@ -63,8 +66,7 @@ Friend Class SubmissionWSController
         AddHandler p_excelWorksheet.Change, AddressOf Worksheet_Change
         AddHandler p_excelWorksheet.BeforeRightClick, AddressOf Worksheet_BeforeRightClick
         AddHandler p_excelWorksheet.SelectionChange, AddressOf Worksheet_SelectionChange
-        Me.m_excelWorksheet = p_excelWorksheet
-
+        m_excelWorksheet = p_excelWorksheet
 
         ' AddHandler thisworkbook.SheetSelectionChange, AddressOf Worksheet_SelectionChange
         'WS.Protect(DrawingObjects:=False, _
@@ -227,22 +229,65 @@ Friend Class SubmissionWSController
 
     Friend Sub Worksheet_BeforeRightClick(ByVal Target As Range, ByRef Cancel As Boolean)
 
-        Dim newButton As CommandBarButton
+        Dim logButton As CommandBarButton
         On Error Resume Next
-        GlobalVariables.APPS.CommandBars("Cell").Controls("Account Details").Delete()
-        newButton = GlobalVariables.APPS.CommandBars("Cell").Controls.Add(Temporary:=True)
-        newButton.Caption = "Account Details"
-        newButton.Style = MsoButtonStyle.msoButtonCaption
-        ' rajouter image -> icone PPS
-        AddHandler newButton.Click, AddressOf ShowAccountDetailsRightClick
+        GlobalVariables.APPS.CommandBars("Cell").Controls("Financial Bi Data Log").Delete()
+        logButton = GlobalVariables.APPS.CommandBars("Cell").Controls.Add(Temporary:=True)
+        logButton.Caption = "Financial Bi Data Log"
+        logButton.Style = MsoButtonStyle.msoButtonCaption
+        '   logButton.Picture = My.Resources.fbi_dark_blue_icon
+        m_currentCellAddress = Target.Address
+        AddHandler logButton.Click, AddressOf DisplayLogButton_Click
         On Error GoTo 0
 
     End Sub
 
-    Public Sub ShowAccountDetailsRightClick(ctrl As CommandBarButton, ByRef cancelDefault As Boolean)
+    Private Sub DisplayLogButton_Click(ctrl As CommandBarButton, ByRef cancelDefault As Boolean)
 
-        MsgBox("account(s detail")
-        ' to be implemented priority normal -> display account's formula
+        Dim accountId As Int32 = 0
+        Dim entityId As Int32 = 0
+        Dim periodId As String = ""
+        Dim versionId As String = My.Settings.version_id
+
+        If m_dataSet.m_datasetCellDimensionsDictionary.ContainsKey(m_currentCellAddress) Then
+            Dim datasetCellStruct As ModelDataSet.DataSetCellDimensions = m_dataSet.m_datasetCellDimensionsDictionary(m_currentCellAddress)
+            accountId = GlobalVariables.Accounts.GetIdFromName(datasetCellStruct.m_accountName)
+            entityId = GlobalVariables.Entities.GetEntityId(datasetCellStruct.m_entityName)
+            periodId = datasetCellStruct.m_period
+
+            If accountId = 0 Or entityId = 0 Then
+                MsgBox("Invalid Account or Entity. Unable to display log. Contact your administratyor or the Financial BI team if the error persists.")
+                Exit Sub
+            End If
+
+            If GlobalVariables.Accounts.m_accountsHash(accountId)(ACCOUNT_FORMULA_TYPE_VARIABLE) = GlobalEnums.FormulaTypes.HARD_VALUE_INPUT _
+            Or GlobalVariables.Accounts.m_accountsHash(accountId)(ACCOUNT_FORMULA_TYPE_VARIABLE) = GlobalEnums.FormulaTypes.FIRST_PERIOD_INPUT Then
+                ' we must add the check for entity = input when report upload is adapted to all orientations
+                ' Priority normal
+
+                Dim logsHashTable As New Action(Of List(Of Hashtable))(AddressOf DisplayLogUI)
+                m_logController.GetFactLog(accountId, _
+                                           entityId, _
+                                           periodId, _
+                                           versionId,
+                                           logsHashTable)
+
+                m_logView.SetEntityAndAccountNames(datasetCellStruct.m_entityName, _
+                                                   datasetCellStruct.m_accountName)
+                m_logView.Show()
+            Else
+                MsgBox("The selected cell correspond to a computed Account or Entity. Log is only available for inputs.")
+            End If
+        Else
+            MsgBox("The log can only be displayed for values cells.")
+        End If
+
+    End Sub
+
+    Private Sub DisplayLogUI(p_logValuesHt As List(Of Hashtable))
+
+        m_logView.DisplayLogValues(p_logValuesHt)
+        ' ui position = right click location ?
 
     End Sub
 
@@ -267,3 +312,4 @@ Friend Class SubmissionWSController
 
 
 End Class
+

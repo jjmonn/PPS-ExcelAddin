@@ -491,7 +491,8 @@ Friend Class ControllingUI_2
                                        versionId,
                                        logsHashTable)
 
-            m_logView = New LogView(GlobalVariables.Entities.entities_hash(entityId)(NAME_VARIABLE), _
+            m_logView = New LogView(False, _
+                                    GlobalVariables.Entities.entities_hash(entityId)(NAME_VARIABLE), _
                                     GlobalVariables.Accounts.m_accountsHash(accountId)(NAME_VARIABLE))
 
         End If
