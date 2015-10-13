@@ -67,7 +67,6 @@ Friend Class GeneralSubmissionControler
     Friend m_snapshotSuccessFlag As Boolean
     Friend m_autoCommitFlag As Boolean
     Private m_itemsHighlightFlag As Boolean
-    Private m_errorsList As New List(Of String)
     Private m_uploadTimeStamp As Date
     Private m_uploadState As Boolean
     Private m_originalValue As Double
@@ -126,11 +125,11 @@ Friend Class GeneralSubmissionControler
     Friend Sub DataSubmission()
 
         If m_dataset.m_globalOrientationFlag <> ORIENTATION_ERROR_FLAG Then
-            m_errorsList.Clear()
+            m_errorMessagesUI.ClearBox()
             Submit()
         Else
             GlobalVariables.SubmissionStatusButton.Image = 2
-            m_errorsList.Add("The worksheet recognition was not set up properly.")
+            m_errorMessagesUI.AddError("The worksheet recognition was not set up properly.")
             MsgBox("PPS Error tracking -> which flag error")
             m_uploadState = False
         End If
@@ -352,20 +351,21 @@ errorHandler:
 
     End Sub
 
-    Private Sub AfterCommit(ByRef status As Boolean, ByRef commitResults As Dictionary(Of String, Boolean))
+
+
+    Private Sub AfterCommit(ByRef status As Boolean, ByRef commitResults As Dictionary(Of String, ErrorMessage))
 
         If status = True Then
-            For Each cellAddress In commitResults.Keys
-                If commitResults(cellAddress) = True Then
-                    m_dataModificationsTracker.UnregisterSingleModification(cellAddress)
+            Dim HasError As Boolean = False
+            m_errorMessagesUI.AfterCommit(m_dataset, commitResults)
+            For Each result In commitResults
+                If commitResults(result.Key) = ErrorMessage.SUCCESS Then
+                    m_dataModificationsTracker.UnregisterSingleModification(result.Key)
                 Else
-                    m_errorsList.Add("Error during upload of Entity: " & m_dataset.m_datasetCellDimensionsDictionary(cellAddress).m_entityName _
-                                    & " Account: " & m_dataset.m_datasetCellDimensionsDictionary(cellAddress).m_accountName _
-                                    & " Period: " & Date.FromOADate(m_dataset.m_datasetCellDimensionsDictionary(cellAddress).m_period) _
-                                    & " Value: " & GlobalVariables.APPS.ActiveSheet.range(cellAddress).value)
+                    HasError = True
                 End If
             Next
-            If m_errorsList.Count = 0 Then
+            If HasError = False Then
                 m_uploadState = True
                 GlobalVariables.SubmissionStatusButton.Image = 1
             Else
