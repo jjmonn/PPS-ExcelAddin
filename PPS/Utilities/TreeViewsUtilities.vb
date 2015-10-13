@@ -11,6 +11,7 @@ Imports System.Windows.Forms
 Imports System.Collections.Generic
 Imports VIBlend.WinForms.DataGridView
 Imports System.Drawing
+Imports VIBlend.WinForms.Controls
 
 
 Friend Class TreeViewsUtilities
@@ -405,7 +406,7 @@ Friend Class TreeViewsUtilities
 
     Friend Shared Function GetUniqueList(ByRef input_list As List(Of Int32)) As List(Of Int32)
 
-        Dim tmp_list As New List(Of int32)
+        Dim tmp_list As New List(Of Int32)
         For Each item In input_list
             If tmp_list.Contains(item) = False Then tmp_list.Add(item)
         Next
@@ -468,7 +469,7 @@ Friend Class TreeViewsUtilities
     Friend Shared Function GetHighestHierarchyLevelFromList(ByRef ids_list As List(Of String), _
                                                                      ByRef TV As TreeView) As String
 
-        Dim all_nodes_list As List(Of int32) = GetNodesKeysList(TV)
+        Dim all_nodes_list As List(Of Int32) = GetNodesKeysList(TV)
         Dim highest_level_id As String = ""
         Dim highest_index As Int32 = all_nodes_list.Count
         For Each id As String In ids_list
@@ -515,68 +516,77 @@ Friend Class TreeViewsUtilities
 
 #Region "Nodes Expansion/ Checked States Level Utility"
 
-    Public Shared Function SaveNodesExpansionsLevel(TV As TreeView) As Dictionary(Of String, Boolean)
+    Public Shared Function SaveNodesExpansionsLevel(TV As vTreeView) As Dictionary(Of String, Boolean)
 
         Dim expansionDic As New Collections.Generic.Dictionary(Of String, Boolean)
-        For Each currNode As TreeNode In TV.Nodes
+        For Each currNode As vTreeNode In TV.Nodes
             SaveChildrenExpansionsLevel(currNode, expansionDic)
         Next
         Return expansionDic
 
     End Function
 
-    Public Shared Sub SaveChildrenExpansionsLevel(ByRef currNode As TreeNode, _
+    Public Shared Sub SaveChildrenExpansionsLevel(ByRef currNode As vTreeNode, _
                                                   ByRef expansionDic As Dictionary(Of String, Boolean))
 
-        expansionDic.Add(currNode.Name, currNode.IsExpanded)
+        If expansionDic.ContainsKey(currNode.Value) Then expansionDic(currNode.Value) = currNode.IsExpanded Else expansionDic.Add(currNode.Value, currNode.IsExpanded)
         If currNode.Nodes.Count > 0 Then
-            For Each child As TreeNode In currNode.Nodes
+            For Each child As vTreeNode In currNode.Nodes
                 SaveChildrenExpansionsLevel(child, expansionDic)
             Next
         End If
 
     End Sub
 
-    Public Shared Sub ResumeExpansionsLevel(ByRef TV As TreeView, _
+    Public Shared Sub ResumeExpansionsLevel(ByRef TV As vTreeView, _
                                             ByRef expansionDictionary As Dictionary(Of String, Boolean))
 
         TV.CollapseAll()
         For Each key In expansionDictionary.Keys
             If expansionDictionary(key) = True Then
-                Dim tmpNode() = TV.Nodes.Find(key, True)
-                If tmpNode.Length > 0 Then tmpNode(0).Expand()
+                Dim tmpNode = VTreeViewUtil.FindNode(TV, key)
+                If Not tmpNode Is Nothing Then tmpNode.Expand()
             End If
         Next
 
     End Sub
 
-    Public Shared Function SaveCheckedStates(ByRef TV As TreeView) As List(Of String)
+    Public Shared Function FindNode(ByRef p_nodeList As vTreeNodeCollection, ByRef p_text As String, ByRef p_value As Object)
+        For Each node As vTreeNode In p_nodeList
+            If node.Text = p_text AndAlso node.Value = p_value Then Return node
+            Dim result = FindNode(node.Nodes, p_text, p_value)
+            If Not result Is Nothing Then Return result
+        Next
+        Return Nothing
+    End Function
+
+    Public Shared Function SaveCheckedStates(ByRef TV As vTreeView) As List(Of String)
 
         Dim checkedList As New List(Of String)
-        For Each currNode As TreeNode In TV.Nodes
+        For Each currNode As vTreeNode In TV.Nodes
             SaveChildrenCheckedState(currNode, checkedList)
         Next
         Return checkedList
 
     End Function
 
-    Public Shared Sub SaveChildrenCheckedState(ByRef currNode As TreeNode, _
+    Public Shared Sub SaveChildrenCheckedState(ByRef currNode As vTreeNode, _
                                                ByRef checkedList As List(Of String))
 
-        If currNode.Checked = True Then checkedList.Add(currNode.Name)
-        For Each child As TreeNode In currNode.Nodes
+        If currNode.Checked = True Then checkedList.Add(currNode.Value)
+        For Each child As vTreeNode In currNode.Nodes
             SaveChildrenCheckedState(child, checkedList)
         Next
 
     End Sub
 
-    Public Shared Function ResumeCheckedStates(ByRef TV As TreeView, ByRef checkedList As List(Of String)) As List(Of String)
+    Public Shared Function ResumeCheckedStates(ByRef TV As vTreeView, ByRef checkedList As List(Of String)) As List(Of String)
 
         Dim tmpList As New List(Of String)
         For Each key In checkedList
-            Dim tmpNode() = TV.Nodes.Find(key, True)
-            If tmpNode.Length > 0 Then
-                tmpNode(0).Checked = True
+            Dim tmpNode = FindNode(TV.Nodes, key, True)
+            If Not tmpNode Is Nothing Then
+                tmpNode.Checked = True
             Else
                 tmpList.Add(key)
             End If
@@ -593,7 +603,7 @@ Friend Class TreeViewsUtilities
 
     Public Shared Sub set_TV_basics_icon_index(ByRef TV As TreeView)
 
-        Dim nodes_keys_list As List(Of int32) = GetNodesKeysList(TV)
+        Dim nodes_keys_list As List(Of Int32) = GetNodesKeysList(TV)
         For Each key In nodes_keys_list
             Dim tmp_node = TV.Nodes.Find(key, True)(0)
             If tmp_node.Nodes.Count > 0 Then

@@ -93,6 +93,15 @@ Friend Class VersionsControl
         If Not GlobalVariables.Users.CurrentUserIsAdmin() Then
             lockedCB.Enabled = False
             m_exchangeRatesVersionVTreeviewbox.Enabled = False
+            m_factsVersionVTreeviewbox.Enabled = False
+            new_folder_bt.Enabled = False
+            new_version_bt.Enabled = False
+            rename_bt.Enabled = False
+            delete_bt.Enabled = False
+            NewVersionMenuBT.Enabled = False
+            NewFolderMenuBT.Enabled = False
+            DeleteVersionMenuBT.Enabled = False
+            RenameMenuBT.Enabled = False
         End If
     End Sub
 

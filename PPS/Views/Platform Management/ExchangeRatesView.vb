@@ -88,6 +88,8 @@ Friend Class ExchangeRatesView
             CreateVersionToolStripMenuItem.Enabled = False
             DeleteToolStripMenuItem.Enabled = False
             ImportFromExcelToolStripMenuItem.Enabled = False
+            RenameBT.Enabled = False
+            CopyRateDownToolStripMenuItem.Enabled = False
         End If
     End Sub
 

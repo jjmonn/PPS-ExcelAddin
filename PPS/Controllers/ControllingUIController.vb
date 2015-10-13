@@ -614,13 +614,25 @@ Friend Class ControllingUIController
                 Else
                     args.CellValue = ""
                     If (GlobalVariables.Accounts.m_accountsHash(accountId)(ACCOUNT_FORMULA_TYPE_VARIABLE) <> GlobalEnums.FormulaTypes.TITLE) Then
-                        args.RowItem.ParentItem.Items.Remove(args.RowItem)
+                        args.CellValue = "-"
+                        'Dim parent = args.RowItem.ParentItem
+
+                        'If Not parent Is Nothing AndAlso IsEmptyRow(args.RowItem) Then
+                        '    parent.Items.Remove(args.RowItem)
+                        'End If
                     End If
                 End If
             End If
         End If
 
     End Sub
+
+    Private Function IsEmptyRow(ByRef p_row As HierarchyItem) As Boolean
+        For Each item In p_row.Cells
+            If item.Value <> "" Then Return (False)
+        Next
+        Return (True)
+    End Function
 
     ' si ralentissement de l'affichage des valeurs remettre la function directement 
     ' au dessus (pour éviter le byval)

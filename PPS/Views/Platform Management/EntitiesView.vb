@@ -21,6 +21,7 @@ Imports VIBlend.Utilities
 Imports System.Drawing
 Imports System.ComponentModel
 Imports Microsoft.Office.Interop
+Imports VIBlend.WinForms.Controls
 
 
 Friend Class EntitiesView
@@ -30,9 +31,9 @@ Friend Class EntitiesView
 
     ' Objects
     Private Controller As EntitiesController
-    Private entitiesTV As TreeView
-    Private entitiesFilterTV As TreeView
-    Private entitiesFilterValuesTV As TreeView
+    Private entitiesTV As vTreeView
+    Private entitiesFilterTV As vTreeView
+    Private entitiesFilterValuesTV As vTreeView
     Friend m_entitiesDataGridView As New vDataGridView
     Private CP As CircularProgressUI
     Private m_currenciesComboBox As New ComboBoxEditor()
@@ -58,9 +59,9 @@ Friend Class EntitiesView
 #Region "Initialization"
 
     Friend Sub New(ByRef p_controller As EntitiesController, _
-                   ByRef p_entitiesTV As TreeView, _
-                   ByRef p_entitiesFilterValuesTV As TreeView, _
-                   ByRef p_entitiesFiltersTV As TreeView)
+                   ByRef p_entitiesTV As vTreeView, _
+                   ByRef p_entitiesFilterValuesTV As vTreeView, _
+                   ByRef p_entitiesFiltersTV As vTreeView)
 
         ' This call is required by the designer.
         InitializeComponent()
@@ -97,6 +98,7 @@ Friend Class EntitiesView
             DeleteEntityToolStripMenuItem.Enabled = False
             DeleteEntityToolStripMenuItem2.Enabled = False
             CreateANewEntityToolStripMenuItem.Enabled = False
+            copy_down_bt.Enabled = False
         End If
     End Sub
 
@@ -117,6 +119,16 @@ Friend Class EntitiesView
 
 
 #Region "Interface"
+
+    Delegate Sub LoadInstanceVariables_Delegate()
+    Friend Sub LoadInstanceVariables()
+        If InvokeRequired Then
+            Dim MyDelegate As New LoadInstanceVariables_Delegate(AddressOf LoadInstanceVariables)
+            Me.Invoke(MyDelegate, New Object() {})
+        Else
+            Controller.LoadInstanceVariables()
+        End If
+    End Sub
 
     Delegate Sub UpdateEntity_Delegate(ByRef ht As Hashtable)
     Friend Sub UpdateEntity(ByRef ht As Hashtable)
@@ -269,7 +281,7 @@ Friend Class EntitiesView
             FillRow(entity_id, GlobalVariables.Entities.entities_hash(entity_id))
         Next
         isFillingDGV = False
-        updateDGVFormat()
+        UpdateDGVFormat()
 
     End Sub
 
@@ -288,20 +300,20 @@ Friend Class EntitiesView
         If GlobalVariables.Users.CurrentUserIsAdmin() Then currencyColumn.CellsEditor = m_currenciesComboBox
         ' CreateFilter(col1)
 
-        For Each rootNode As TreeNode In entitiesFilterTV.Nodes
+        For Each rootNode As vTreeNode In entitiesFilterTV.Nodes
             CreateSubFilters(rootNode)
             '   CreateFilter(col)
         Next
 
     End Sub
 
-    Private Sub CreateSubFilters(ByRef node As TreeNode)
+    Private Sub CreateSubFilters(ByRef node As vTreeNode)
 
         Dim col As HierarchyItem = m_entitiesDataGridView.ColumnsHierarchy.Items.Add(node.Text)
-        col.ItemValue = node.Name
+        col.ItemValue = node.Value
         col.AllowFiltering = True
         col.Width = COLUMNS_WIDTH
-        For Each childNode As TreeNode In node.Nodes
+        For Each childNode As vTreeNode In node.Nodes
             CreateSubFilters(childNode)
         Next
 
@@ -326,8 +338,8 @@ Friend Class EntitiesView
         stringFilter1.ComparisonOperator = StringFilterComparisonOperator.CONTAINS
         stringFilter1.Value = "a"
 
-        FilterGroup.AddFilter(FilterOperator.AND, stringFilter1)
-        FilterGroup.AddFilter(FilterOperator.AND, stringFilter2)
+        filterGroup.AddFilter(FilterOperator.AND, stringFilter1)
+        filterGroup.AddFilter(FilterOperator.AND, stringFilter2)
 
     End Sub
 
@@ -336,7 +348,7 @@ Friend Class EntitiesView
 
 #Region "Rows Initialization"
 
-    Private Sub DGVRowsInitialize(ByRef entities_tv As TreeView)
+    Private Sub DGVRowsInitialize(ByRef entities_tv As vTreeView)
 
         m_entitiesDataGridView.RowsHierarchy.Clear()
         For Each node In entities_tv.Nodes
@@ -345,13 +357,13 @@ Friend Class EntitiesView
 
     End Sub
 
-    Friend Sub AddRow(ByRef node As TreeNode, _
+    Friend Sub AddRow(ByRef node As vTreeNode, _
                       Optional ByRef parent_row As HierarchyItem = Nothing)
 
         isFillingDGV = True
-        Dim row As HierarchyItem = CreateRow(node.Name, node.Text, parent_row)
+        Dim row As HierarchyItem = CreateRow(node.Value, node.Text, parent_row)
         For Each child_node In node.Nodes
-            addRow(child_node, row)
+            AddRow(child_node, row)
         Next
         isFillingDGV = False
 
@@ -394,21 +406,21 @@ Friend Class EntitiesView
         rowItem.Caption = p_entityHashtable(NAME_VARIABLE)
         Dim column As HierarchyItem = DataGridViewsUtil.GetHierarchyItemFromId(m_entitiesDataGridView.ColumnsHierarchy, ENTITIES_CURRENCY_VARIABLE)
         m_entitiesDataGridView.CellsArea.SetCellValue(rowItem, column, GlobalVariables.Currencies.currencies_hash(CInt(p_entityHashtable(ENTITIES_CURRENCY_VARIABLE)))(NAME_VARIABLE))
-        For Each filterNode As TreeNode In entitiesFilterTV.Nodes
+        For Each filterNode As vTreeNode In entitiesFilterTV.Nodes
             FillSubFilters(filterNode, p_entityId, rowItem)
         Next
         If p_entityHashtable(ENTITIES_ALLOW_EDITION_VARIABLE) = 0 Then rowItem.ImageIndex = 0 Else rowItem.ImageIndex = 1
 
     End Sub
 
-    Private Sub FillSubFilters(ByRef filterNode As TreeNode, _
+    Private Sub FillSubFilters(ByRef filterNode As vTreeNode, _
                                ByRef entity_id As Int32, _
                                ByRef rowItem As HierarchyItem)
 
         Dim combobox As New ComboBoxEditor
         combobox.DropDownList = True
-        Dim columnItem As HierarchyItem = DataGridViewsUtil.GetHierarchyItemFromId(m_entitiesDataGridView.ColumnsHierarchy, filterNode.Name)
-        Dim filterValueId = GlobalVariables.EntitiesFilters.GetFilterValueId(CInt(filterNode.Name), entity_id)
+        Dim columnItem As HierarchyItem = DataGridViewsUtil.GetHierarchyItemFromId(m_entitiesDataGridView.ColumnsHierarchy, filterNode.Value)
+        Dim filterValueId = GlobalVariables.EntitiesFilters.GetFilterValueId(CInt(filterNode.Value), entity_id)
         Dim filter_value_name As String = ""
         If filterValueId <> 0 Then
             filter_value_name = GlobalVariables.FiltersValues.filtervalues_hash(filterValueId)(NAME_VARIABLE)
@@ -419,13 +431,13 @@ Friend Class EntitiesView
         ' Filters Choices Setup
         If filterNode.Parent Is Nothing Then
             ' Root Filter
-            Dim valuesNames = GlobalVariables.FiltersValues.GetFiltervaluesList(filterNode.Name, NAME_VARIABLE)
+            Dim valuesNames = GlobalVariables.FiltersValues.GetFiltervaluesList(filterNode.Value, NAME_VARIABLE)
             For Each valueName As String In valuesNames
                 combobox.Items.Add(valueName)
             Next
         Else
             ' Child Filter
-            Dim parentFilterFilterValueId As Int32 = GlobalVariables.EntitiesFilters.GetFilterValueId(filterNode.Parent.Name, entity_id)     ' Child Filter Id
+            Dim parentFilterFilterValueId As Int32 = GlobalVariables.EntitiesFilters.GetFilterValueId(filterNode.Parent.Value, entity_id)     ' Child Filter Id
             Dim filterValuesIds = GlobalVariables.FiltersValues.GetFilterValueIdsFromParentFilterValueIds({parentFilterFilterValueId})
             For Each Id As Int32 In filterValuesIds
                 combobox.Items.Add(GlobalVariables.FiltersValues.filtervalues_hash(Id)(NAME_VARIABLE))
@@ -436,7 +448,8 @@ Friend Class EntitiesView
         If GlobalVariables.Users.CurrentUserIsAdmin() Then m_entitiesDataGridView.CellsArea.SetCellEditor(rowItem, columnItem, combobox)
 
         ' Recursive if Filters Children exist
-        For Each childFilterNode As TreeNode In filterNode.Nodes
+        If filterNode.Nodes Is Nothing Then Exit Sub
+        For Each childFilterNode As vTreeNode In filterNode.Nodes
             FillSubFilters(childFilterNode, entity_id, rowItem)
         Next
 
@@ -461,7 +474,7 @@ Friend Class EntitiesView
                                                  ByRef filterValueId As Int32)
 
         isFillingDGV = True
-        Dim filterNode As TreeNode = entitiesFilterTV.Nodes.Find(filterId, True)(0)
+        Dim filterNode As TreeNode = TreeViewsUtilities.FindNode(entitiesFilterTV.Nodes, filterId, True)
 
         ' Update parent filters recursively
         UpdateParentFiltersValues(DataGridViewsUtil.GetHierarchyItemFromId(m_entitiesDataGridView.RowsHierarchy, entityId), _

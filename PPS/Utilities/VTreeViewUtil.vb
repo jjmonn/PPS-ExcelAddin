@@ -332,38 +332,38 @@ Public Class VTreeViewUtil
 #Region "VtreeviewBox Loading"
 
     Friend Shared Sub LoadParentsTreeviewBox(ByRef TVBox As vTreeViewBox, _
-                                                    ByRef originalTV As Windows.Forms.TreeView)
+                                                    ByRef originalTV As vTreeView)
 
         TVBox.TreeView.Nodes.Clear()
-        For Each node As Windows.Forms.TreeNode In originalTV.Nodes
+        For Each node As vTreeNode In originalTV.Nodes
             AddNodeToParentEntityTreeviewBox(TVBox, node, Nothing)
         Next
 
     End Sub
 
     Friend Shared Sub LoadParentsTreeviewBox(ByRef TVBox As vTreeViewBox, _
-                                                    ByRef originalNode As Windows.Forms.TreeNode)
+                                                    ByRef originalNode As vTreeNode)
 
         TVBox.TreeView.Nodes.Clear()
-        For Each node As Windows.Forms.TreeNode In originalNode.Nodes
+        For Each node As vTreeNode In originalNode.Nodes
             AddNodeToParentEntityTreeviewBox(TVBox, node, Nothing)
         Next
 
     End Sub
 
     Private Shared Sub AddNodeToParentEntityTreeviewBox(ByRef TVBox As vTreeViewBox, _
-                                                        ByRef originNode As Windows.Forms.TreeNode, _
+                                                        ByRef originNode As vTreeNode, _
                                                         ByRef destinationNode As VIBlend.WinForms.Controls.vTreeNode)
 
         Dim newNode As New VIBlend.WinForms.Controls.vTreeNode
-        newNode.Value = originNode.Name
+        newNode.Value = originNode.Value
         newNode.Text = originNode.Text
         If destinationNode Is Nothing Then
             TVBox.TreeView.Nodes.Add(newNode)
         Else
             destinationNode.Nodes.Add(newNode)
         End If
-        For Each subNode As Windows.Forms.TreeNode In originNode.Nodes
+        For Each subNode As vTreeNode In originNode.Nodes
             AddNodeToParentEntityTreeviewBox(TVBox, subNode, newNode)
         Next
 

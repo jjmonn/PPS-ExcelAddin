@@ -1,5 +1,6 @@
 ﻿Imports System.Collections
 Imports System.Collections.Generic
+Imports VIBlend.WinForms.Controls
 
 
 Public MustInherit Class SuperAxisCRUD
@@ -107,10 +108,10 @@ Public MustInherit Class SuperAxisCRUD
 
 
     ' Treeeviews Loading
-    Friend Sub LoadAxisTV(ByRef TV As Windows.Forms.TreeView)
+    Friend Sub LoadAxisTV(ByRef TV As vTreeView)
 
         TV.Nodes.Clear()
-        TreeViewsUtilities.LoadTreeview(TV, Axis_hash)
+        VTreeViewUtil.LoadTreeview(TV, Axis_hash)
 
     End Sub
 

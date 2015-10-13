@@ -243,27 +243,27 @@ Partial Class GlobalFactUI
         '
         Me.FactRightClickMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.RenameBT, Me.DeleteBT, Me.CreateNewFact2})
         Me.FactRightClickMenu.Name = "ContextMenuStrip1"
-        Me.FactRightClickMenu.Size = New System.Drawing.Size(240, 70)
+        Me.FactRightClickMenu.Size = New System.Drawing.Size(277, 70)
         '
         'RenameBT
         '
         Me.RenameBT.Name = "RenameBT"
-        Me.RenameBT.Size = New System.Drawing.Size(239, 22)
+        Me.RenameBT.Size = New System.Drawing.Size(276, 22)
         Me.RenameBT.Text = "Rename"
         '
         'DeleteBT
         '
         Me.DeleteBT.Image = Global.FinancialBI.My.Resources.Resources.elements_delete
         Me.DeleteBT.Name = "DeleteBT"
-        Me.DeleteBT.Size = New System.Drawing.Size(239, 22)
+        Me.DeleteBT.Size = New System.Drawing.Size(276, 22)
         Me.DeleteBT.Text = "Delete"
         '
         'CreateNewFact2
         '
         Me.CreateNewFact2.Image = Global.FinancialBI.My.Resources.Resources.elements_add
         Me.CreateNewFact2.Name = "CreateNewFact2"
-        Me.CreateNewFact2.Size = New System.Drawing.Size(239, 22)
-        Me.CreateNewFact2.Text = "Create new economic indicator"
+        Me.CreateNewFact2.Size = New System.Drawing.Size(276, 22)
+        Me.CreateNewFact2.Text = "Create new macro economic indicator"
         '
         'GlobalFactUI
         '

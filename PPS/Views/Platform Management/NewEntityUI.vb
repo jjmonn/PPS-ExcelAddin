@@ -17,6 +17,7 @@
 Imports System.Windows.Forms
 Imports System.Collections.Generic
 Imports System.Collections
+Imports VIBlend.WinForms.Controls
 
 
 
@@ -27,7 +28,7 @@ Friend Class NewEntityUI
 
     ' Objects
     Private Controller As EntitiesController
-    Private entitiesTV As TreeView
+    Private entitiesTV As vTreeView
 
     ' Variables
     Private parentTB As New TextBox
@@ -42,7 +43,7 @@ Friend Class NewEntityUI
 #Region "Initialize"
 
     Friend Sub New(ByRef p_controller As EntitiesController, _
-                   ByRef p_entitiesTV As TreeView, _
+                   ByRef p_entitiesTV As vTreeView, _
                    ByRef p_currenciesHT As Hashtable)
 
         ' This call is required by the designer.

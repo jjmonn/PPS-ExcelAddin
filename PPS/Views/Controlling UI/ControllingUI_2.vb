@@ -269,7 +269,8 @@ Friend Class ControllingUI_2
             Exit Sub
         End If
         DGVsControlTab.Visible = False
-        BackgroundWorker1.RunWorkerAsync()
+
+        If Not BackgroundWorker1.IsBusy Then BackgroundWorker1.RunWorkerAsync()
 
         Dim versionsIds As New List(Of Int32)
         For Each versionId In VTreeViewUtil.GetCheckedNodesIds(leftPane_control.versionsTV)

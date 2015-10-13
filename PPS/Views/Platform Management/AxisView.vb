@@ -21,6 +21,7 @@ Imports VIBlend.Utilities
 Imports System.Drawing
 Imports System.ComponentModel
 Imports Microsoft.Office.Interop
+Imports VIBlend.WinForms.Controls
 
 
 Friend Class AxisView
@@ -30,9 +31,9 @@ Friend Class AxisView
 
     ' Objects
     Private Controller As AxisController
-    Private axisTV As TreeView
-    Private axisFilterTV As TreeView
-    Private axisFilterValuesTV As TreeView
+    Private axisTV As vTreeView
+    Private axisFilterTV As vTreeView
+    Private axisFilterValuesTV As vTreeView
     Friend DGV As New vDataGridView
     Private CP As CircularProgressUI
 
@@ -59,9 +60,9 @@ Friend Class AxisView
 
     Friend Sub New(ByRef p_controller As AxisController, _
                    ByRef p_axisHT As Hashtable, _
-                   ByRef p_axisTV As TreeView, _
-                   ByRef p_axisFilterValuesTV As TreeView, _
-                   ByRef p_axisFiltersTV As TreeView)
+                   ByRef p_axisTV As vTreeView, _
+                   ByRef p_axisFilterValuesTV As vTreeView, _
+                   ByRef p_axisFiltersTV As vTreeView)
 
         ' This call is required by the designer.
         InitializeComponent()
@@ -95,6 +96,7 @@ Friend Class AxisView
             DeleteAxisToolStripMenuItem2.Enabled = False
             CreateAxisToolStripMenuItem.Enabled = False
             CreateNewToolStripMenuItem.Enabled = False
+            copy_down_bt.Enabled = False
         End If
     End Sub
 
@@ -264,21 +266,21 @@ Friend Class AxisView
         If GlobalVariables.Users.CurrentUserIsAdmin() Then nameColumn.CellsEditor = nameTextBox
         columnsVariableItemDictionary.Add(NAME_VARIABLE, nameColumn)
 
-        For Each filterNode As TreeNode In axisFilterTV.Nodes
+        For Each filterNode As vTreeNode In axisFilterTV.Nodes
             CreateSubFilters(filterNode)
         Next
 
     End Sub
 
-    Private Sub CreateSubFilters(ByRef node As TreeNode)
+    Private Sub CreateSubFilters(ByRef node As vTreeNode)
 
         Dim col As HierarchyItem = DGV.ColumnsHierarchy.Items.Add(node.Text)
 
-        columnsVariableItemDictionary.Add(node.Name, col)
-        col.ItemValue = node.Name
+        columnsVariableItemDictionary.Add(node.Value, col)
+        col.ItemValue = node.Value
         col.AllowFiltering = True
 
-        For Each childNode As TreeNode In node.Nodes
+        For Each childNode As vTreeNode In node.Nodes
             CreateSubFilters(childNode)
         Next
 
@@ -304,13 +306,13 @@ Friend Class AxisView
 
 #Region "Rows Initialization"
 
-    Private Sub DGVRowsInitialize(ByRef axis_tv As TreeView)
+    Private Sub DGVRowsInitialize(ByRef axis_tv As vTreeView)
 
         DGV.RowsHierarchy.Clear()
         rows_id_item_dic.Clear()
         isFillingDGV = True
         For Each node In axis_tv.Nodes
-            Dim row As HierarchyItem = CreateRow(node.Name)
+            Dim row As HierarchyItem = CreateRow(node.Value)
         Next
         isFillingDGV = False
 
@@ -352,20 +354,20 @@ Friend Class AxisView
             rowItem = CreateRow(axisValueId)
         End If
         DGV.CellsArea.SetCellValue(rowItem, columnsVariableItemDictionary(NAME_VARIABLE), axis_ht(NAME_VARIABLE))
-        For Each filterNode As TreeNode In axisFilterTV.Nodes
+        For Each filterNode As vTreeNode In axisFilterTV.Nodes
             FillSubFilters(filterNode, axisValueId, rowItem)
         Next
 
     End Sub
 
-    Private Sub FillSubFilters(ByRef filterNode As TreeNode, _
+    Private Sub FillSubFilters(ByRef filterNode As vTreeNode, _
                                ByRef axisValueId As Int32, _
                                ByRef rowItem As HierarchyItem)
 
         Dim combobox As New ComboBoxEditor
         combobox.DropDownList = True
-        Dim columnItem As HierarchyItem = columnsVariableItemDictionary(filterNode.Name)
-        Dim filterValueId = Controller.GetFilterValueId(CInt(filterNode.Name), axisValueId)
+        Dim columnItem As HierarchyItem = columnsVariableItemDictionary(filterNode.Value)
+        Dim filterValueId = Controller.GetFilterValueId(CInt(filterNode.Value), axisValueId)
         If (filterValueId = 0) Then
             System.Diagnostics.Debug.WriteLine("AxisControl.FillSubFilters: Invalid filter value id")
             Exit Sub
@@ -376,13 +378,13 @@ Friend Class AxisView
         ' Filters Choices Setup
         If filterNode.Parent Is Nothing Then
             ' Root Filter
-            Dim valuesNames = GlobalVariables.FiltersValues.GetFiltervaluesList(filterNode.Name, NAME_VARIABLE)
+            Dim valuesNames = GlobalVariables.FiltersValues.GetFiltervaluesList(filterNode.Value, NAME_VARIABLE)
             For Each valueName As String In valuesNames
                 combobox.Items.Add(valueName)
             Next
         Else
             ' Child Filter
-            Dim parentFilterFilterValueId As Int32 = Controller.GetFilterValueId(CInt(filterNode.Parent.Name), axisValueId)     ' Child Filter Id
+            Dim parentFilterFilterValueId As Int32 = Controller.GetFilterValueId(CInt(filterNode.Parent.Value), axisValueId)     ' Child Filter Id
             Dim filterValuesIds = GlobalVariables.FiltersValues.GetFilterValueIdsFromParentFilterValueIds({parentFilterFilterValueId})
             For Each Id As Int32 In filterValuesIds
                 combobox.Items.Add(GlobalVariables.FiltersValues.filtervalues_hash(Id)(NAME_VARIABLE))
@@ -393,7 +395,7 @@ Friend Class AxisView
         If GlobalVariables.Users.CurrentUserIsAdmin() Then DGV.CellsArea.SetCellEditor(rowItem, columnItem, combobox)
 
         ' Recursive if Filters Children exist
-        For Each childFilterNode As TreeNode In filterNode.Nodes
+        For Each childFilterNode As vTreeNode In filterNode.Nodes
             FillSubFilters(childFilterNode, axisValueId, rowItem)
         Next
 
@@ -418,7 +420,7 @@ Friend Class AxisView
                                                  ByRef filterValueId As Int32)
 
         isFillingDGV = True
-        Dim filterNode As TreeNode = axisFilterTV.Nodes.Find(filterId, True)(0)
+        Dim filterNode As TreeNode = TreeViewsUtilities.FindNode(axisFilterTV.Nodes, filterId, True)
 
         ' Update parent filters recursively
         UpdateParentFiltersValues(rows_id_item_dic(axisId), _
