@@ -9,7 +9,7 @@
 '
 ' Known bugs :
 '
-' Last modified: 04/12/2014
+' Last modified: 13/10/2015
 ' Author: Julien Monnereau
 
 
@@ -42,7 +42,7 @@ Class AxisFilterStructView
         p_axisFiltersTV.Dock = DockStyle.Fill
         m_controller = p_controller
         m_newFilterUI = New NewFilterUI(p_controller, p_filtersNode)
-        m_filtersTV.ContextMenu = VContextMenu1
+        m_filtersTV.ContextMenuStrip = m_structureTreeviewRightClickMenu
 
     End Sub
 
@@ -131,7 +131,7 @@ Class AxisFilterStructView
         Me.Hide()
     End Sub
 
-    Private Sub DeleteBT_Click(sender As Object, e As EventArgs) Handles DeleteBT.Click, DeleteMenuBT.Click
+    Private Sub DeleteBT_Click(sender As Object, e As EventArgs) Handles DeleteBT.Click, m_deleteButton.Click
 
         ' to be validated 
         ' priority normal 
@@ -159,7 +159,7 @@ Class AxisFilterStructView
 
     End Sub
 
-    Private Sub RenameMenuBT_Click(sender As Object, e As EventArgs) Handles RenameMenuBT.Click
+    Private Sub RenameMenuBT_Click(sender As Object, e As EventArgs) Handles m_renameButton.Click
         If Not m_filtersTV.SelectedNode Is Nothing Then
             Dim current_node As vTreeNode = m_filtersTV.SelectedNode
             Dim name = InputBox("Please enter the new Category Name:")
@@ -175,7 +175,7 @@ Class AxisFilterStructView
         End If
     End Sub
 
-    Private Sub CreateFilterBT_Click(sender As Object, e As EventArgs) Handles AddBT.Click
+    Private Sub CreateFilterBT_Click(sender As Object, e As EventArgs) Handles AddBT.Click, m_createButton.Click
 
         Dim currentNode As vTreeNode = m_filtersTV.SelectedNode
         If m_filtersTV.SelectedNode Is Nothing Then
