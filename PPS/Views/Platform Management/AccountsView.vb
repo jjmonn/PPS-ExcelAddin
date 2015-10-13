@@ -363,7 +363,7 @@ SubmitFormula:
                 m_controller.UpdateAccount(accountId, ACCOUNT_FORMULA_VARIABLE, m_controller.GetCurrentParsedFormula, True)
             End If
         Else
-            formula_TB.Text = m_controller.GetFormatedAccountFormula(m_accountTV.SelectedNode.Name)
+            m_formulaTextBox.Text = m_controller.GetFormatedAccountFormula(m_accountTV.SelectedNode.Name)
         End If
 
     End Sub
@@ -619,7 +619,7 @@ SubmitFormula:
             If confirm = DialogResult.Yes Then
                 Submit_Formula_Click(sender, e)
             Else
-                formula_TB.Text = m_controller.GetFormatedAccountFormula(m_accountTV.SelectedNode.Name)
+                m_formulaTextBox.Text = m_controller.GetFormatedAccountFormula(m_accountTV.SelectedNode.Name)
             End If
         Else
             formulaEdit.Checked = False
@@ -637,7 +637,7 @@ SubmitFormula:
                 If confirm = DialogResult.Yes Then
                     Submit_Formula_Click(sender, e)
                 Else
-                    formula_TB.Text = m_controller.GetFormatedAccountFormula(m_accountTV.SelectedNode.Name)
+                    m_formulaTextBox.Text = m_controller.GetFormatedAccountFormula(m_accountTV.SelectedNode.Name)
                 End If
                 formulaEdit.Checked = False
             Case Keys.Enter
