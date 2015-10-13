@@ -216,9 +216,9 @@ Friend Class GeneralSubmissionControler
                                                GlobalVariables.AdjustmentIDDropDown.SelectedItemId, _
                                                update_inputs)
                 ' Associate worksheet if not already associated 
-                If SubmissionWSController.ws Is Nothing Then
+                If SubmissionWSController.m_excelWorksheet Is Nothing Then
                     SubmissionWSController.AssociateWS(associatedWorksheet)
-                ElseIf Not SubmissionWSController.ws.Name Is associatedWorksheet Then
+                ElseIf Not SubmissionWSController.m_excelWorksheet.Name Is associatedWorksheet Then
                     SubmissionWSController.AssociateWS(associatedWorksheet)
                 End If
             Else

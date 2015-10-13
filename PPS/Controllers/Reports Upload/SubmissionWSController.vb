@@ -28,15 +28,15 @@ Friend Class SubmissionWSController
 #Region "Instance Variables"
 
     ' Objects
-    Private DataSet As ModelDataSet
-    Private AcquisitionModel As AcquisitionModel
-    Private DataModificationsTracker As DataModificationsTracking
-    Private GeneralSubmissionController As GeneralSubmissionControler
+    Private m_dataSet As ModelDataSet
+    Private m_acquisitionModel As AcquisitionModel
+    Private m_dataModificationsTracker As DataModificationsTracking
+    Private m_generalSubmissionController As GeneralSubmissionControler
 
 
     ' Variables
-    Private disableWSChange As Boolean
-    Friend ws As Excel.Worksheet
+    Private m_disableWSChangeFlag As Boolean
+    Friend m_excelWorksheet As Excel.Worksheet
 
     ' const 
     Private MAX_NB_ROWS As UInt16 = 16384
@@ -51,10 +51,10 @@ Friend Class SubmissionWSController
                    ByRef inputAcquisitionModel As AcquisitionModel, _
                    ByRef inputDataModificationTracker As DataModificationsTracking)
 
-        GeneralSubmissionController = inputGeneralSubmissionController
-        DataSet = inputDataSet
-        AcquisitionModel = inputAcquisitionModel
-        DataModificationsTracker = inputDataModificationTracker
+        m_generalSubmissionController = inputGeneralSubmissionController
+        m_dataSet = inputDataSet
+        m_acquisitionModel = inputAcquisitionModel
+        m_dataModificationsTracker = inputDataModificationTracker
 
     End Sub
 
@@ -62,7 +62,7 @@ Friend Class SubmissionWSController
 
         AddHandler WS.Change, AddressOf Worksheet_Change
         AddHandler WS.BeforeRightClick, AddressOf Worksheet_BeforeRightClick
-        Me.ws = WS
+        Me.m_excelWorksheet = WS
 
         ' AddHandler thisworkbook.SheetSelectionChange, AddressOf Worksheet_SelectionChange
         'WS.Protect(DrawingObjects:=False, _
@@ -85,13 +85,13 @@ Friend Class SubmissionWSController
 
 #Region "Update Worksheet"
 
-    Friend Sub updateCalculatedItemsOnWS(ByRef entityName As String)
+    Friend Sub UpdateCalculatedItemsOnWS(ByRef entityName As String)
 
-        Dim entityId As Int32 = CInt(AcquisitionModel.entitiesNameIdDict(entityName))
-        For Each accountName As String In AcquisitionModel.outputsList
-            For Each period As Int32 In AcquisitionModel.currentPeriodList
-                If AcquisitionModel.accountsNamesFormulaTypeDict(accountName) = GlobalEnums.FormulaTypes.FIRST_PERIOD_INPUT Then
-                    If period <> AcquisitionModel.currentPeriodList(0) Then
+        Dim entityId As Int32 = CInt(m_acquisitionModel.entitiesNameIdDict(entityName))
+        For Each accountName As String In m_acquisitionModel.outputsList
+            For Each period As Int32 In m_acquisitionModel.currentPeriodList
+                If m_acquisitionModel.accountsNamesFormulaTypeDict(accountName) = GlobalEnums.FormulaTypes.FIRST_PERIOD_INPUT Then
+                    If period <> m_acquisitionModel.currentPeriodList(0) Then
                         SetDatsetCellValue(entityId, entityName, accountName, period)
                     End If
                 Else
@@ -108,72 +108,72 @@ Friend Class SubmissionWSController
                                    ByRef p_period As Int32)
 
         Dim tuple_ As New Tuple(Of String, String, String)(p_entityName, p_accountName, p_period)
-        If DataSet.m_datasetCellsDictionary.ContainsKey(tuple_) = True Then
-            Dim value = AcquisitionModel.GetCalculatedValue(p_entityId, _
-                                                            DataSet.m_accountsNameIdDictionary(p_accountName), _
-                                                            AcquisitionModel.periodsIdentifyer & p_period)
+        If m_dataSet.m_datasetCellsDictionary.ContainsKey(tuple_) = True Then
+            Dim value = m_acquisitionModel.GetCalculatedValue(p_entityId, _
+                                                            m_dataSet.m_accountsNameIdDictionary(p_accountName), _
+                                                            m_acquisitionModel.periodsIdentifyer & p_period)
             If Double.IsNaN(value) Then value = 0
 
-            DataSet.m_datasetCellsDictionary(tuple_).Value2 = value
+            m_dataSet.m_datasetCellsDictionary(tuple_).Value2 = value
         End If
 
     End Sub
 
-    Friend Sub updateInputsOnWS()
+    Friend Sub UpdateInputsOnWS()
 
         Dim value As Double
-        For Each entityName As String In DataSet.EntitiesAddressValuesDictionary.Values
-            For Each accountName As String In DataSet.m_inputsAccountsList
-                For Each period As Int32 In AcquisitionModel.currentPeriodList
-                    If AcquisitionModel.dataBaseInputsDictionary(entityName)(accountName).ContainsKey(AcquisitionModel.periodsIdentifyer & period) = True Then
-                        value = AcquisitionModel.dataBaseInputsDictionary(entityName)(accountName)(AcquisitionModel.periodsIdentifyer & period)
+        For Each entityName As String In m_dataSet.EntitiesAddressValuesDictionary.Values
+            For Each accountName As String In m_dataSet.m_inputsAccountsList
+                For Each period As Int32 In m_acquisitionModel.currentPeriodList
+                    If m_acquisitionModel.dataBaseInputsDictionary(entityName)(accountName).ContainsKey(m_acquisitionModel.periodsIdentifyer & period) = True Then
+                        value = m_acquisitionModel.dataBaseInputsDictionary(entityName)(accountName)(m_acquisitionModel.periodsIdentifyer & period)
                     Else
                         value = 0
                     End If
                     If Double.IsNaN(value) Then value = 0
                     Dim tuple_ As New Tuple(Of String, String, String)(entityName, accountName, period)
-                    DataSet.m_datasetCellsDictionary(tuple_).Value2 = value
+                    m_dataSet.m_datasetCellsDictionary(tuple_).Value2 = value
                 Next
             Next
         Next
 
     End Sub
 
- 
+
 #End Region
 
 
 #Region "Events"
 
     ' Listen to changes in associated worksheet
-    Friend Sub Worksheet_Change(ByVal Target As Excel.Range)
+    Friend Sub Worksheet_Change(ByVal p_target As Excel.Range)
 
         ' If row or column insertion then exit and relaunch dataset snapshot
-        If Target.Count > MAX_NB_ROWS Then
-            GeneralSubmissionController.RefreshSnapshot(False)
+        If p_target.Count > MAX_NB_ROWS Then
+            m_generalSubmissionController.RefreshSnapshot(False)
             Exit Sub
         End If
 
         Dim modelUpdateFlag As Boolean = False
         Dim dependents_cells As Excel.Range = Nothing
         Dim entityName As String
-        If GeneralSubmissionController.isUpdating = False AndAlso disableWSChange = False Then
+        If m_generalSubmissionController.isUpdating = False AndAlso m_disableWSChangeFlag = False Then
 
-            For Each cell As Excel.Range In Target.Cells
+            For Each cell As Excel.Range In p_target.Cells
 
-                Dim intersect = GlobalVariables.APPS.Intersect(cell, DataModificationsTracker.dataSetRegion)
+                Dim intersect = GlobalVariables.APPS.Intersect(cell, m_dataModificationsTracker.dataSetRegion)
                 If Not intersect Is Nothing Then
 
-                    entityName = DataSet.m_datasetCellDimensionsDictionary(cell.Address).m_entityName
+                    entityName = m_dataSet.m_datasetCellDimensionsDictionary(cell.Address).m_entityName
                     If IsNumeric(cell.Value) Then
-                        If AcquisitionModel.CheckIfBSCalculatedItem(DataSet.m_datasetCellDimensionsDictionary(cell.Address).m_accountName, _
-                                                                    DataSet.m_datasetCellDimensionsDictionary(cell.Address).m_period) = False Then
+                        If m_acquisitionModel.CheckIfBSCalculatedItem(m_dataSet.m_datasetCellDimensionsDictionary(cell.Address).m_accountName, _
+                                                                    m_dataSet.m_datasetCellDimensionsDictionary(cell.Address).m_period) = False Then
 
                             ' Cell modification registration
                             modelUpdateFlag = True
-                            GeneralSubmissionController.UpdateModelFromExcelUpdate(entityName, _
-                                                                                   DataSet.m_datasetCellDimensionsDictionary(cell.Address).m_accountName, _
-                                                                                   DataSet.m_datasetCellDimensionsDictionary(cell.Address).m_period, _
+                            m_generalSubmissionController.UpdateModelFromExcelUpdate(entityName, _
+                                                                                   m_dataSet.m_datasetCellDimensionsDictionary(cell.Address).m_accountName, _
+                                                                                   m_dataSet.m_datasetCellDimensionsDictionary(cell.Address).m_period, _
                                                                                    cell.Value2, _
                                                                                    cell.Address)
 
@@ -182,42 +182,43 @@ Friend Class SubmissionWSController
                             dependents_cells = cell.Dependents
                             If Not dependents_cells Is Nothing Then
                                 For Each dependant_cell As Excel.Range In dependents_cells
-                                    intersect = GlobalVariables.APPS.Intersect(dependant_cell, DataModificationsTracker.dataSetRegion)
+                                    intersect = GlobalVariables.APPS.Intersect(dependant_cell, m_dataModificationsTracker.dataSetRegion)
                                     If Not intersect Is Nothing Then
-                                        GeneralSubmissionController.UpdateModelFromExcelUpdate(DataSet.m_datasetCellDimensionsDictionary(dependents_cells.Address).m_entityName, _
-                                                                                               DataSet.m_datasetCellDimensionsDictionary(dependents_cells.Address).m_accountName, _
-                                                                                               DataSet.m_datasetCellDimensionsDictionary(dependents_cells.Address).m_period, _
+                                        m_generalSubmissionController.UpdateModelFromExcelUpdate(m_dataSet.m_datasetCellDimensionsDictionary(dependents_cells.Address).m_entityName, _
+                                                                                               m_dataSet.m_datasetCellDimensionsDictionary(dependents_cells.Address).m_accountName, _
+                                                                                               m_dataSet.m_datasetCellDimensionsDictionary(dependents_cells.Address).m_period, _
                                                                                                dependant_cell.Value2, _
                                                                                                dependant_cell.Address)
                                     End If
                                 Next
                             End If
-                            If GeneralSubmissionController.autoCommitFlag = True Then GeneralSubmissionController.DataSubmission()
+                            If m_generalSubmissionController.autoCommitFlag = True Then m_generalSubmissionController.DataSubmission()
 
                         End If
                     Else
                         ' Put back the former value in case invalid input has been given (eg. string, ...)
-                        disableWSChange = True
-                        cell.Value = DataSet.m_datasetCellDimensionsDictionary(cell.Address).m_value
-                        disableWSChange = False
+                        m_disableWSChangeFlag = True
+                        cell.Value = m_dataSet.m_datasetCellDimensionsDictionary(cell.Address).m_value
+                        m_disableWSChangeFlag = False
                     End If
                 Else
                     ' Put back the real output value in case the output has been overwritten
                     On Error Resume Next
-                    Dim intersectOutput = GlobalVariables.APPS.Intersect(cell, DataModificationsTracker.outputsRegion)
+                    entityName = m_dataSet.m_datasetCellDimensionsDictionary(cell.Address).m_entityName
+                    Dim intersectOutput = GlobalVariables.APPS.Intersect(cell, m_dataModificationsTracker.outputsRegion)
                     If Not intersectOutput Is Nothing Then
-                        disableWSChange = True
-                        SetDatsetCellValue(DataSet.m_entitiesNameIdDictionary(entityName), _
+                        m_disableWSChangeFlag = True
+                        SetDatsetCellValue(m_dataSet.m_entitiesNameIdDictionary(entityName), _
                                            entityName, _
-                                           DataSet.m_datasetCellDimensionsDictionary(cell.Address).m_accountName, _
-                                           DataSet.m_datasetCellDimensionsDictionary(cell.Address).m_period)
-                        disableWSChange = False
+                                           m_dataSet.m_datasetCellDimensionsDictionary(cell.Address).m_accountName, _
+                                           m_dataSet.m_datasetCellDimensionsDictionary(cell.Address).m_period)
+                        m_disableWSChangeFlag = False
                     End If
                 End If
             Next
             If modelUpdateFlag = True Then
                 GlobalVariables.APPS.Interactive = False
-                GeneralSubmissionController.UpdateCalculatedItems(entityName)
+                m_generalSubmissionController.UpdateCalculatedItems(entityName)
             End If
         End If
 
