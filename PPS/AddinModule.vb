@@ -57,7 +57,6 @@ Public Class AddinModule
     Friend WithEvents AdxRibbonSeparator1 As AddinExpress.MSO.ADXRibbonSeparator
     Friend WithEvents SubmissionModeRibbon As AddinExpress.MSO.ADXRibbonTab
     Friend WithEvents EditSelectionGroup As AddinExpress.MSO.ADXRibbonGroup
-    Friend WithEvents HighlightBT As AddinExpress.MSO.ADXRibbonButton
     Friend WithEvents ShowReportBT As AddinExpress.MSO.ADXRibbonButton
     Friend WithEvents SubmissionnGroup As AddinExpress.MSO.ADXRibbonGroup
     Friend WithEvents SubmitBT2 As AddinExpress.MSO.ADXRibbonButton
@@ -205,7 +204,6 @@ Public Class AddinModule
         Me.AdxRibbonMenu5 = New AddinExpress.MSO.ADXRibbonMenu(Me.components)
         Me.ShowReportBT = New AddinExpress.MSO.ADXRibbonButton(Me.components)
         Me.RefreshInputsBT = New AddinExpress.MSO.ADXRibbonButton(Me.components)
-        Me.HighlightBT = New AddinExpress.MSO.ADXRibbonButton(Me.components)
         Me.EditRangesMenuBT = New AddinExpress.MSO.ADXRibbonSplitButton(Me.components)
         Me.EditRangesMenu = New AddinExpress.MSO.ADXRibbonMenu(Me.components)
         Me.SelectAccRangeBT = New AddinExpress.MSO.ADXRibbonButton(Me.components)
@@ -882,7 +880,6 @@ Public Class AddinModule
         Me.EditSelectionGroup.Caption = " Settings"
         Me.EditSelectionGroup.Controls.Add(Me.SubmissionOptionsBT)
         Me.EditSelectionGroup.Controls.Add(Me.WSCB)
-        Me.EditSelectionGroup.Controls.Add(Me.m_reportUploadAccountInfoButton)
         Me.EditSelectionGroup.Id = "adxRibbonGroup_845aac06fe0b43ffa1a5ab1c8cf56d7a"
         Me.EditSelectionGroup.ImageTransparentColor = System.Drawing.Color.Transparent
         Me.EditSelectionGroup.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
@@ -901,9 +898,9 @@ Public Class AddinModule
         'AdxRibbonMenu5
         '
         Me.AdxRibbonMenu5.Caption = "AdxRibbonMenu5"
+        Me.AdxRibbonMenu5.Controls.Add(Me.m_reportUploadAccountInfoButton)
         Me.AdxRibbonMenu5.Controls.Add(Me.ShowReportBT)
         Me.AdxRibbonMenu5.Controls.Add(Me.RefreshInputsBT)
-        Me.AdxRibbonMenu5.Controls.Add(Me.HighlightBT)
         Me.AdxRibbonMenu5.Controls.Add(Me.EditRangesMenuBT)
         Me.AdxRibbonMenu5.Id = "adxRibbonMenu_22c008855d864379ba85629a938602dc"
         Me.AdxRibbonMenu5.ImageTransparentColor = System.Drawing.Color.Transparent
@@ -927,16 +924,6 @@ Public Class AddinModule
         Me.RefreshInputsBT.ImageList = Me.SubmissionRibbonIL
         Me.RefreshInputsBT.ImageTransparentColor = System.Drawing.Color.Transparent
         Me.RefreshInputsBT.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
-        '
-        'HighlightBT
-        '
-        Me.HighlightBT.Caption = "Highlight Inputs"
-        Me.HighlightBT.Id = "adxRibbonButton_703868e94c394267b617fb17c2879b3c"
-        Me.HighlightBT.Image = 12
-        Me.HighlightBT.ImageList = Me.SubmissionRibbonIL
-        Me.HighlightBT.ImageTransparentColor = System.Drawing.Color.Transparent
-        Me.HighlightBT.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
-        Me.HighlightBT.ToggleButton = True
         '
         'EditRangesMenuBT
         '
@@ -989,7 +976,7 @@ Public Class AddinModule
         '
         'm_reportUploadAccountInfoButton
         '
-        Me.m_reportUploadAccountInfoButton.Caption = "Display Account Info"
+        Me.m_reportUploadAccountInfoButton.Caption = "Display Account information side pane"
         Me.m_reportUploadAccountInfoButton.Id = "adxRibbonButton_d6ccc3789816424192506d30e6008981"
         Me.m_reportUploadAccountInfoButton.Image = 8
         Me.m_reportUploadAccountInfoButton.ImageList = Me.SubmissionRibbonIL
@@ -1613,7 +1600,7 @@ Public Class AddinModule
 
 #Region "Edit Selection"
 
-    Private Sub HighlightBT_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) Handles HighlightBT.OnClick
+    Private Sub HighlightBT_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean)
 
         CurrentGRSControler.HighlightItemsAndDataRegions()
 
