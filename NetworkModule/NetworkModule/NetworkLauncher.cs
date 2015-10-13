@@ -20,6 +20,7 @@ public class NetworkLauncher
         {
             m_state = ClientState.running;
             m_thread = new Thread(new ThreadStart(HandleLoop));
+            m_thread.Name = "Network Module";
             m_thread.Start();
             m_diconnectCallback = p_disconnectCallback;
             return (true);

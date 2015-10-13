@@ -162,7 +162,7 @@ Friend Class EntitiesController
     Private Sub AfterEntityRead(ByRef status As Boolean, ByRef ht As Hashtable)
 
         If (status = True) Then
-            View.LoadInstanceVariables()
+            View.LoadInstanceVariables_Safe()
             View.UpdateEntity(ht)
         End If
 
@@ -171,7 +171,7 @@ Friend Class EntitiesController
     Private Sub AfterEntityDeletion(ByRef status As Boolean, ByRef id As Int32)
 
         If status = True Then
-            View.LoadInstanceVariables()
+            View.LoadInstanceVariables_Safe()
             View.DeleteEntity(id)
         End If
 
