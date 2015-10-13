@@ -75,11 +75,11 @@ Friend Class AccountsView
     Private Sub SetAccountUIState(ByRef p_uiState As Boolean, ByRef p_rightClickState As Boolean)
         SaveDescriptionBT.Enabled = p_uiState
         Name_TB.Enabled = p_uiState
-        formula_TB.Enabled = p_uiState
+        m_formulaTextBox.Enabled = p_uiState
         FormulaTypeComboBox.Enabled = p_uiState
         TypeComboBox.Enabled = p_uiState
         CurrencyConversionComboBox.Enabled = p_uiState
-        DescriptionTB.Enabled = p_uiState
+        m_descriptionTextBox.Enabled = p_uiState
         ConsolidationOptionComboBox.Enabled = p_uiState
         AddSubAccountToolStripMenuItem.Enabled = p_rightClickState
         AddCategoryToolStripMenuItem.Enabled = p_rightClickState
@@ -95,20 +95,14 @@ Friend Class AccountsView
         SetAccountUIState(GlobalVariables.Users.CurrentUserIsAdmin(), GlobalVariables.Users.CurrentUserIsAdmin())
     End Sub
 
-    Private Sub TVInit(ByRef p_tv As TreeView)
-
-        p_tv.ContextMenuStrip = TVRCM
-        p_tv.Dock = DockStyle.Fill
-        p_tv.ImageList = accountsIL
-        p_tv.AllowDrop = True
-        p_tv.LabelEdit = False
-        p_tv.CollapseAll()
-
-    End Sub
-
     Private Sub AccountsTVInit()
 
-        TVInit(m_accountTV)
+        m_accountTV.ContextMenuStrip = TVRCM
+        m_accountTV.Dock = DockStyle.Fill
+        m_accountTV.ImageList = accountsIL
+        m_accountTV.AllowDrop = True
+        m_accountTV.LabelEdit = False
+        m_accountTV.CollapseAll()
         AccountsTVPanel.Controls.Add(m_accountTV)
 
         AddHandler m_accountTV.AfterSelect, AddressOf AccountsTV_AfterSelect
@@ -130,6 +124,9 @@ Friend Class AccountsView
         m_globalFactsTV.LabelEdit = False
         m_globalFactsTV.CollapseAll()
         GlobalFactsPanel.Controls.Add(m_globalFactsTV)
+        AddHandler m_globalFactsTV.ItemDrag, AddressOf GlobalFactsTV_ItemDrag
+        AddHandler m_globalFactsTV.DragEnter, AddressOf GlobalFactsTV_DragEnter
+
 
     End Sub
 
@@ -227,34 +224,32 @@ Friend Class AccountsView
 
     End Sub
 
-
-
 #End Region
 
 
 #Region "Interface"
 
 
-    Delegate Sub TVUpdate_Delegate(ByRef account_id As Int32, _
-                                   ByRef account_parent_id As Int32, _
-                                   ByRef account_name As String, _
-                                   ByRef account_image As Int32)
-    Friend Sub TVUpdate(ByRef account_id As Int32, _
-                        ByRef account_parent_id As Int32, _
-                        ByRef account_name As String, _
-                        ByRef account_image As Int32)
+    Delegate Sub TVUpdate_Delegate(ByRef p_accountId As Int32, _
+                                   ByRef p_accountParentId As Int32, _
+                                   ByRef p_accountName As String, _
+                                   ByRef p_accountImage As Int32)
+    Friend Sub TVUpdate(ByRef p_accountId As Int32, _
+                        ByRef p_accountParentId As Int32, _
+                        ByRef p_accountName As String, _
+                        ByRef p_accountImage As Int32)
 
         If InvokeRequired Then
             Dim MyDelegate As New TVUpdate_Delegate(AddressOf TVUpdate)
-            Me.Invoke(MyDelegate, New Object() {account_id, account_parent_id, account_name, account_image})
+            Me.Invoke(MyDelegate, New Object() {p_accountId, p_accountParentId, p_accountName, p_accountImage})
         Else
-            If account_parent_id = 0 Then
-                Dim new_node As TreeNode = m_accountTV.Nodes.Add(CStr(account_id), account_name, account_image, account_image)
+            If p_accountParentId = 0 Then
+                Dim new_node As TreeNode = m_accountTV.Nodes.Add(CStr(p_accountId), p_accountName, p_accountImage, p_accountImage)
                 new_node.EnsureVisible()
             Else
-                Dim accounts() As TreeNode = m_accountTV.Nodes.Find(account_parent_id, True)
+                Dim accounts() As TreeNode = m_accountTV.Nodes.Find(p_accountParentId, True)
                 If accounts.Length = 1 Then
-                    Dim new_node As TreeNode = accounts(0).Nodes.Add(CStr(account_id), account_name, account_image, account_image)
+                    Dim new_node As TreeNode = accounts(0).Nodes.Add(CStr(p_accountId), p_accountName, p_accountImage, p_accountImage)
                     new_node.EnsureVisible()
                 End If
             End If
@@ -323,7 +318,7 @@ Friend Class AccountsView
 
     Private Sub Submit_Formula_Click(sender As Object, e As EventArgs) Handles submit_cmd.Click
 
-        Dim formulastr As String = formula_TB.Text
+        Dim formulastr As String = m_formulaTextBox.Text
         If formulastr = "" Then
             Dim confirm2 As Integer = MessageBox.Show("The formula is empty, do you want to save it?", _
                                                       "Formula validation", _
@@ -431,7 +426,7 @@ SubmitFormula:
     Private Sub SaveDescriptionBT_Click(sender As Object, e As EventArgs) Handles SaveDescriptionBT.Click
 
         Dim accountId As Int32 = m_controller.accountsNameKeysDictionary.Item(Name_TB.Text)
-        m_controller.UpdateAccount(accountId, ACCOUNT_DESCRIPTION_VARIABLE, DescriptionTB.Text, True)
+        m_controller.UpdateAccount(accountId, ACCOUNT_DESCRIPTION_VARIABLE, m_descriptionTextBox.Text, True)
 
     End Sub
 
@@ -481,15 +476,16 @@ SubmitFormula:
 
 #Region "Nodes Drag and Drop Procedure"
 
+    ' Accounts TV
     Private Sub AccountsTV_ItemDrag(sender As Object, e As ItemDragEventArgs)
 
-        DoDragDrop(e.Item, Windows.Forms.DragDropEffects.Move)
-
+        If IsNothing(m_currentNode.Parent) = False Then
+            DoDragDrop(e.Item, Windows.Forms.DragDropEffects.Move)
+        End If
 
     End Sub
 
     Private Sub AccountsTV_DragEnter(sender As Object, e As Windows.Forms.DragEventArgs)
-
         If e.Data.GetDataPresent("System.Windows.Forms.TreeNode", True) Then
             e.Effect = DragDropEffects.Move
             m_dragAndDrop = True
@@ -571,6 +567,22 @@ SubmitFormula:
 
     End Sub
 
+    ' Facts TV
+    Private Sub GlobalFactsTV_ItemDrag(sender As Object, e As ItemDragEventArgs)
+        If IsNothing(m_currentNode.Parent) = False Then
+            DoDragDrop(e.Item, Windows.Forms.DragDropEffects.Move)
+        End If
+    End Sub
+
+    Private Sub GlobalFactsTV_DragEnter(sender As Object, e As Windows.Forms.DragEventArgs)
+        If e.Data.GetDataPresent("System.Windows.Forms.TreeNode", True) Then
+            e.Effect = DragDropEffects.Move
+            m_dragAndDrop = True
+        Else
+            e.Effect = DragDropEffects.None
+        End If
+    End Sub
+
 #End Region
 
 #End Region
@@ -578,7 +590,7 @@ SubmitFormula:
 
 #Region "Formula Events"
 
-    Private Sub formula_TB_Enter(sender As Object, e As EventArgs) Handles formula_TB.Enter
+    Private Sub formula_TB_Enter(sender As Object, e As EventArgs) Handles m_formulaTextBox.Enter
 
         If formulaEdit.Checked = False Then
             If Not m_currentNode Is Nothing Then
@@ -616,7 +628,7 @@ SubmitFormula:
 
     End Sub
 
-    Private Sub formula_TB_Keydown(sender As Object, e As KeyEventArgs) Handles formula_TB.KeyDown
+    Private Sub formula_TB_Keydown(sender As Object, e As KeyEventArgs) Handles m_formulaTextBox.KeyDown
 
         Select Case e.KeyCode
             Case Keys.Escape
@@ -637,55 +649,55 @@ SubmitFormula:
     Private Sub AccountsTV_NodeMouseDoubleClick(sender As Object, e As Windows.Forms.TreeNodeMouseClickEventArgs)
 
         If formulaEdit.Checked = True Then
-            formula_TB.Text = formula_TB.Text & FormulasTranslations.ACCOUNTS_HUMAN_IDENTIFIER & _
+            m_formulaTextBox.Text = m_formulaTextBox.Text & FormulasTranslations.ACCOUNTS_HUMAN_IDENTIFIER & _
                               m_accountTV.SelectedNode.Text & _
                               FormulasTranslations.ACCOUNTS_HUMAN_IDENTIFIER
-            formula_TB.Focus()
+            m_formulaTextBox.Focus()
         End If
 
     End Sub
 
     Private Sub GlobalFactTV_NodeMouseDoubleClick(sender As Object, e As Windows.Forms.TreeNodeMouseClickEventArgs)
         If formulaEdit.Checked = True Then
-            formula_TB.Text = formula_TB.Text & FormulasTranslations.FACTS_HUMAN_IDENTIFIER & _
+            m_formulaTextBox.Text = m_formulaTextBox.Text & FormulasTranslations.FACTS_HUMAN_IDENTIFIER & _
                               m_globalFactsTV.SelectedNode.Text & _
                               FormulasTranslations.FACTS_HUMAN_IDENTIFIER
-            formula_TB.Focus()
+            m_formulaTextBox.Focus()
         End If
     End Sub
 
 
 #Region "Drag and drop into formula TB"
 
-    Private Sub formula_DragOver(sender As Object, e As DragEventArgs) Handles formula_TB.DragOver
+    Private Sub formula_DragOver(sender As Object, e As DragEventArgs) Handles m_formulaTextBox.DragOver
 
         'Check that there is a TreeNode being dragged 
         If e.Data.GetDataPresent("System.Windows.Forms.TreeNode", True) = False Then Exit Sub
 
         'Get the TreeView raising the event (incase multiple on form)
-        Dim selectedListBox As TextBox = CType(sender, TextBox)
+        Dim selectedListBox As vTextBox = CType(sender, vTextBox)
 
         'Currently selected node is a suitable target
         e.Effect = DragDropEffects.Move
 
     End Sub
 
-    Private Sub formula_DragDrop(sender As Object, e As DragEventArgs) Handles formula_TB.DragDrop
+    Private Sub formula_DragDrop(sender As Object, e As DragEventArgs) Handles m_formulaTextBox.DragDrop
 
         'Check that there is a TreeNode being dragged
         If e.Data.GetDataPresent("System.Windows.Forms.TreeNode", True) = False Then Exit Sub
 
         'Get the TreeView raising the event (incase multiple on form)
-        Dim selectedListBox As TextBox = CType(sender, TextBox)
+        Dim selectedListBox As vTextBox = CType(sender, vTextBox)
 
         'Get the TreeNode being dragged
         Dim dropNode As TreeNode = CType(e.Data.GetData("System.Windows.Forms.TreeNode"), TreeNode)
 
         ' Add the node and childs node to the selected list view
-        formula_TB.Text = formula_TB.Text & FormulasTranslations.ACCOUNTS_HUMAN_IDENTIFIER & _
-                          m_accountTV.SelectedNode.Text & _
-                          FormulasTranslations.ACCOUNTS_HUMAN_IDENTIFIER
-        formula_TB.Focus()
+        m_formulaTextBox.Text = m_formulaTextBox.Text & FormulasTranslations.ACCOUNTS_HUMAN_IDENTIFIER & _
+                                dropNode.Text & _
+                                FormulasTranslations.ACCOUNTS_HUMAN_IDENTIFIER
+        m_formulaTextBox.Focus()
 
     End Sub
 
@@ -759,6 +771,8 @@ SubmitFormula:
 
 UdpateFormulaType:
         m_controller.UpdateAccount(m_currentNode.Name, ACCOUNT_FORMULA_TYPE_VARIABLE, li.Value, True)
+        m_currentNode.ImageIndex = li.Value
+        m_currentNode.SelectedImageIndex = li.Value
 
     End Sub
 
@@ -845,12 +859,12 @@ UdpateFormulaType:
 
             ' Formula TB
             If m_controller.FTypesToBeTested.Contains(m_controller.ReadAccount(account_id, ACCOUNT_FORMULA_TYPE_VARIABLE)) Then
-                formula_TB.Text = m_controller.GetFormulaText(account_id)
+                m_formulaTextBox.Text = m_controller.GetFormulaText(account_id)
             Else
-                formula_TB.Text = ""
+                m_formulaTextBox.Text = ""
             End If
 
-            DescriptionTB.Text = m_controller.ReadAccount(account_id, ACCOUNT_DESCRIPTION_VARIABLE)
+            m_descriptionTextBox.Text = m_controller.ReadAccount(account_id, ACCOUNT_DESCRIPTION_VARIABLE)
             m_isDisplayingAttributes = False
 
         End If
@@ -863,7 +877,7 @@ UdpateFormulaType:
         TypeComboBox.Enabled = status
         CurrencyConversionComboBox.Enabled = status
         ConsolidationOptionComboBox.Enabled = status
-        formula_TB.Enabled = status
+        m_formulaTextBox.Enabled = status
 
     End Sub
 

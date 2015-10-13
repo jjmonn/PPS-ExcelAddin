@@ -202,6 +202,7 @@ Public Class AddinModule
         Me.EditSelectionGroup = New AddinExpress.MSO.ADXRibbonGroup(Me.components)
         Me.SubmissionOptionsBT = New AddinExpress.MSO.ADXRibbonSplitButton(Me.components)
         Me.AdxRibbonMenu5 = New AddinExpress.MSO.ADXRibbonMenu(Me.components)
+        Me.m_reportUploadAccountInfoButton = New AddinExpress.MSO.ADXRibbonButton(Me.components)
         Me.ShowReportBT = New AddinExpress.MSO.ADXRibbonButton(Me.components)
         Me.RefreshInputsBT = New AddinExpress.MSO.ADXRibbonButton(Me.components)
         Me.EditRangesMenuBT = New AddinExpress.MSO.ADXRibbonSplitButton(Me.components)
@@ -210,7 +211,6 @@ Public Class AddinModule
         Me.SelectEntitiesRangeBT = New AddinExpress.MSO.ADXRibbonButton(Me.components)
         Me.SelectPeriodsRangeBT = New AddinExpress.MSO.ADXRibbonButton(Me.components)
         Me.WSCB = New AddinExpress.MSO.ADXRibbonDropDown(Me.components)
-        Me.m_reportUploadAccountInfoButton = New AddinExpress.MSO.ADXRibbonButton(Me.components)
         Me.AdxRibbonGroup9 = New AddinExpress.MSO.ADXRibbonGroup(Me.components)
         Me.CloseBT = New AddinExpress.MSO.ADXRibbonButton(Me.components)
         Me.AdxExcelTaskPanesManager1 = New AddinExpress.XL.ADXExcelTaskPanesManager(Me.components)
@@ -889,8 +889,8 @@ Public Class AddinModule
         Me.SubmissionOptionsBT.Caption = " Options"
         Me.SubmissionOptionsBT.Controls.Add(Me.AdxRibbonMenu5)
         Me.SubmissionOptionsBT.Id = "adxRibbonSplitButton_ed37a10f5b0a4990ad8f167982663559"
-        Me.SubmissionOptionsBT.Image = 4
-        Me.SubmissionOptionsBT.ImageList = Me.SubmissionRibbonIL
+        Me.SubmissionOptionsBT.Image = 16
+        Me.SubmissionOptionsBT.ImageList = Me.Menu3
         Me.SubmissionOptionsBT.ImageTransparentColor = System.Drawing.Color.Transparent
         Me.SubmissionOptionsBT.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
         Me.SubmissionOptionsBT.Size = AddinExpress.MSO.ADXRibbonXControlSize.Large
@@ -906,6 +906,15 @@ Public Class AddinModule
         Me.AdxRibbonMenu5.ImageTransparentColor = System.Drawing.Color.Transparent
         Me.AdxRibbonMenu5.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
         '
+        'm_reportUploadAccountInfoButton
+        '
+        Me.m_reportUploadAccountInfoButton.Caption = "Display Account information side pane"
+        Me.m_reportUploadAccountInfoButton.Id = "adxRibbonButton_d6ccc3789816424192506d30e6008981"
+        Me.m_reportUploadAccountInfoButton.Image = 8
+        Me.m_reportUploadAccountInfoButton.ImageList = Me.SubmissionRibbonIL
+        Me.m_reportUploadAccountInfoButton.ImageTransparentColor = System.Drawing.Color.Transparent
+        Me.m_reportUploadAccountInfoButton.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
+        '
         'ShowReportBT
         '
         Me.ShowReportBT.Caption = "Display Report"
@@ -915,6 +924,7 @@ Public Class AddinModule
         Me.ShowReportBT.ImageTransparentColor = System.Drawing.Color.Transparent
         Me.ShowReportBT.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
         Me.ShowReportBT.Size = AddinExpress.MSO.ADXRibbonXControlSize.Large
+        Me.ShowReportBT.Visible = False
         '
         'RefreshInputsBT
         '
@@ -973,15 +983,6 @@ Public Class AddinModule
         Me.WSCB.Id = "adxRibbonDropDown_051d087fb85b425c947f7c3a0fe28700"
         Me.WSCB.ImageTransparentColor = System.Drawing.Color.Transparent
         Me.WSCB.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
-        '
-        'm_reportUploadAccountInfoButton
-        '
-        Me.m_reportUploadAccountInfoButton.Caption = "Display Account information side pane"
-        Me.m_reportUploadAccountInfoButton.Id = "adxRibbonButton_d6ccc3789816424192506d30e6008981"
-        Me.m_reportUploadAccountInfoButton.Image = 8
-        Me.m_reportUploadAccountInfoButton.ImageList = Me.SubmissionRibbonIL
-        Me.m_reportUploadAccountInfoButton.ImageTransparentColor = System.Drawing.Color.Transparent
-        Me.m_reportUploadAccountInfoButton.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
         '
         'AdxRibbonGroup9
         '
