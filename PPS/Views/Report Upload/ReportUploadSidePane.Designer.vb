@@ -24,12 +24,12 @@ Partial Class ReportUploadSidePane
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(ReportUploadSidePane))
         Me.m_accountTypeTextBox = New VIBlend.WinForms.Controls.vTextBox()
         Me.VLabel4 = New VIBlend.WinForms.Controls.vLabel()
-        Me.m_descriptionTextBox = New VIBlend.WinForms.Controls.vTextBox()
         Me.VLabel3 = New VIBlend.WinForms.Controls.vLabel()
-        Me.m_formulaTextBox = New VIBlend.WinForms.Controls.vTextBox()
         Me.VLabel2 = New VIBlend.WinForms.Controls.vLabel()
         Me.m_accountTextBox = New VIBlend.WinForms.Controls.vTextBox()
         Me.VLabel1 = New VIBlend.WinForms.Controls.vLabel()
+        Me.m_formulaTextBox = New System.Windows.Forms.TextBox()
+        Me.m_descriptionTextBox = New System.Windows.Forms.TextBox()
         Me.SuspendLayout()
         '
         'm_accountTypeTextBox
@@ -39,7 +39,7 @@ Partial Class ReportUploadSidePane
         Me.m_accountTypeTextBox.ControlBorderColor = System.Drawing.Color.FromArgb(CType(CType(39, Byte), Integer), CType(CType(39, Byte), Integer), CType(CType(39, Byte), Integer))
         Me.m_accountTypeTextBox.DefaultText = "Empty..."
         Me.m_accountTypeTextBox.Enabled = False
-        Me.m_accountTypeTextBox.Location = New System.Drawing.Point(14, 565)
+        Me.m_accountTypeTextBox.Location = New System.Drawing.Point(14, 609)
         Me.m_accountTypeTextBox.MaxLength = 32767
         Me.m_accountTypeTextBox.Name = "m_accountTypeTextBox"
         Me.m_accountTypeTextBox.PasswordChar = Global.Microsoft.VisualBasic.ChrW(0)
@@ -57,7 +57,7 @@ Partial Class ReportUploadSidePane
         Me.VLabel4.DisplayStyle = VIBlend.WinForms.Controls.LabelItemStyle.TextOnly
         Me.VLabel4.Ellipsis = False
         Me.VLabel4.ImageAlignment = System.Drawing.ContentAlignment.TopLeft
-        Me.VLabel4.Location = New System.Drawing.Point(14, 536)
+        Me.VLabel4.Location = New System.Drawing.Point(14, 580)
         Me.VLabel4.Multiline = True
         Me.VLabel4.Name = "VLabel4"
         Me.VLabel4.Size = New System.Drawing.Size(136, 23)
@@ -66,25 +66,6 @@ Partial Class ReportUploadSidePane
         Me.VLabel4.TextAlignment = System.Drawing.ContentAlignment.MiddleLeft
         Me.VLabel4.UseMnemonics = True
         Me.VLabel4.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
-        '
-        'm_descriptionTextBox
-        '
-        Me.m_descriptionTextBox.BackColor = System.Drawing.Color.White
-        Me.m_descriptionTextBox.BoundsOffset = New System.Drawing.Size(1, 1)
-        Me.m_descriptionTextBox.ControlBorderColor = System.Drawing.Color.FromArgb(CType(CType(39, Byte), Integer), CType(CType(39, Byte), Integer), CType(CType(39, Byte), Integer))
-        Me.m_descriptionTextBox.DefaultText = "Empty..."
-        Me.m_descriptionTextBox.Enabled = False
-        Me.m_descriptionTextBox.Location = New System.Drawing.Point(14, 357)
-        Me.m_descriptionTextBox.MaxLength = 32767
-        Me.m_descriptionTextBox.Name = "m_descriptionTextBox"
-        Me.m_descriptionTextBox.PasswordChar = Global.Microsoft.VisualBasic.ChrW(0)
-        Me.m_descriptionTextBox.ScrollBars = System.Windows.Forms.ScrollBars.None
-        Me.m_descriptionTextBox.SelectionLength = 0
-        Me.m_descriptionTextBox.SelectionStart = 0
-        Me.m_descriptionTextBox.Size = New System.Drawing.Size(251, 153)
-        Me.m_descriptionTextBox.TabIndex = 13
-        Me.m_descriptionTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Left
-        Me.m_descriptionTextBox.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
         '
         'VLabel3
         '
@@ -101,25 +82,6 @@ Partial Class ReportUploadSidePane
         Me.VLabel3.TextAlignment = System.Drawing.ContentAlignment.MiddleLeft
         Me.VLabel3.UseMnemonics = True
         Me.VLabel3.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
-        '
-        'm_formulaTextBox
-        '
-        Me.m_formulaTextBox.BackColor = System.Drawing.Color.White
-        Me.m_formulaTextBox.BoundsOffset = New System.Drawing.Size(1, 1)
-        Me.m_formulaTextBox.ControlBorderColor = System.Drawing.Color.FromArgb(CType(CType(39, Byte), Integer), CType(CType(39, Byte), Integer), CType(CType(39, Byte), Integer))
-        Me.m_formulaTextBox.DefaultText = "Empty..."
-        Me.m_formulaTextBox.Enabled = False
-        Me.m_formulaTextBox.Location = New System.Drawing.Point(12, 106)
-        Me.m_formulaTextBox.MaxLength = 32767
-        Me.m_formulaTextBox.Name = "m_formulaTextBox"
-        Me.m_formulaTextBox.PasswordChar = Global.Microsoft.VisualBasic.ChrW(0)
-        Me.m_formulaTextBox.ScrollBars = System.Windows.Forms.ScrollBars.None
-        Me.m_formulaTextBox.SelectionLength = 0
-        Me.m_formulaTextBox.SelectionStart = 0
-        Me.m_formulaTextBox.Size = New System.Drawing.Size(251, 201)
-        Me.m_formulaTextBox.TabIndex = 11
-        Me.m_formulaTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Left
-        Me.m_formulaTextBox.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
         '
         'VLabel2
         '
@@ -172,31 +134,50 @@ Partial Class ReportUploadSidePane
         Me.VLabel1.UseMnemonics = True
         Me.VLabel1.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
         '
+        'm_formulaTextBox
+        '
+        Me.m_formulaTextBox.Enabled = False
+        Me.m_formulaTextBox.Location = New System.Drawing.Point(12, 106)
+        Me.m_formulaTextBox.Multiline = True
+        Me.m_formulaTextBox.Name = "m_formulaTextBox"
+        Me.m_formulaTextBox.Size = New System.Drawing.Size(249, 196)
+        Me.m_formulaTextBox.TabIndex = 16
+        '
+        'm_descriptionTextBox
+        '
+        Me.m_descriptionTextBox.Enabled = False
+        Me.m_descriptionTextBox.Location = New System.Drawing.Point(14, 357)
+        Me.m_descriptionTextBox.Multiline = True
+        Me.m_descriptionTextBox.Name = "m_descriptionTextBox"
+        Me.m_descriptionTextBox.Size = New System.Drawing.Size(249, 201)
+        Me.m_descriptionTextBox.TabIndex = 17
+        '
         'ReportUploadSidePane
         '
         Me.ClientSize = New System.Drawing.Size(304, 830)
+        Me.Controls.Add(Me.m_descriptionTextBox)
+        Me.Controls.Add(Me.m_formulaTextBox)
         Me.Controls.Add(Me.m_accountTypeTextBox)
         Me.Controls.Add(Me.VLabel4)
-        Me.Controls.Add(Me.m_descriptionTextBox)
         Me.Controls.Add(Me.VLabel3)
-        Me.Controls.Add(Me.m_formulaTextBox)
         Me.Controls.Add(Me.VLabel2)
         Me.Controls.Add(Me.m_accountTextBox)
         Me.Controls.Add(Me.VLabel1)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Location = New System.Drawing.Point(0, 0)
         Me.Name = "ReportUploadSidePane"
-        Me.Text = ""
+        Me.Text = "Account's details"
         Me.ResumeLayout(False)
+        Me.PerformLayout()
 
     End Sub
     Friend WithEvents m_accountTypeTextBox As VIBlend.WinForms.Controls.vTextBox
     Friend WithEvents VLabel4 As VIBlend.WinForms.Controls.vLabel
-    Friend WithEvents m_descriptionTextBox As VIBlend.WinForms.Controls.vTextBox
     Friend WithEvents VLabel3 As VIBlend.WinForms.Controls.vLabel
-    Friend WithEvents m_formulaTextBox As VIBlend.WinForms.Controls.vTextBox
     Friend WithEvents VLabel2 As VIBlend.WinForms.Controls.vLabel
     Friend WithEvents m_accountTextBox As VIBlend.WinForms.Controls.vTextBox
     Friend WithEvents VLabel1 As VIBlend.WinForms.Controls.vLabel
+    Friend WithEvents m_formulaTextBox As System.Windows.Forms.TextBox
+    Friend WithEvents m_descriptionTextBox As System.Windows.Forms.TextBox
 
 End Class

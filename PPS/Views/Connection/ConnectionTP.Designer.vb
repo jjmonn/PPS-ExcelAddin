@@ -81,6 +81,9 @@ Partial Class ConnectionTP
         '
         'CPPanel
         '
+        Me.CPPanel.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.CPPanel.Location = New System.Drawing.Point(81, 223)
         Me.CPPanel.Name = "CPPanel"
         Me.CPPanel.Size = New System.Drawing.Size(85, 85)

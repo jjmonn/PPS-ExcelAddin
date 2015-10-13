@@ -78,7 +78,7 @@ Friend Class GlobalFactController
 #Region "Utilities"
 
     Friend Sub UpdateFactName(ByRef p_factId As Int32, ByRef p_name As String)
-        Dim fact As Hashtable = GlobalVariables.GlobalFacts.globalFact_hash(p_factId)
+        Dim fact As Hashtable = GlobalVariables.GlobalFacts.m_globalFactHash(p_factId)
         If fact Is Nothing Then Exit Sub
 
         fact = fact.Clone()
@@ -88,7 +88,7 @@ Friend Class GlobalFactController
     End Sub
 
     Friend Sub DeleteFact(ByRef p_factId As Int32)
-        Dim fact As Hashtable = GlobalVariables.GlobalFacts.globalFact_hash(p_factId)
+        Dim fact As Hashtable = GlobalVariables.GlobalFacts.m_globalFactHash(p_factId)
         If fact Is Nothing Then Exit Sub
 
         GlobalVariables.GlobalFacts.CMSG_DELETE_GLOBAL_FACT(p_factId)
@@ -105,7 +105,7 @@ Friend Class GlobalFactController
     End Function
 
     Friend Function GetGlobalFactList() As Hashtable
-        Return GlobalVariables.GlobalFacts.globalFact_hash
+        Return GlobalVariables.GlobalFacts.m_globalFactHash
     End Function
 
     Friend Function GetFact(ByRef p_period As Int32, ByRef p_factId As Int32, ByRef p_versionId As Int32) As Double

@@ -248,9 +248,14 @@ Friend Class SubmissionWSController
 
     Friend Sub Worksheet_SelectionChange(ByVal Target As Excel.Range)
 
+        Dim address As String = Strings.Replace(Target.Address, "$", "")
         If m_dataSet.m_datasetCellDimensionsDictionary.ContainsKey(Target.Address) Then
             Dim datasetCellStruct As ModelDataSet.DataSetCellDimensions = m_dataSet.m_datasetCellDimensionsDictionary(Target.Address)
             GlobalVariables.s_reportUploadSidePane.DisplayAccountDetails(GlobalVariables.Accounts.GetIdFromName(datasetCellStruct.m_accountName))
+        ElseIf m_dataSet.m_accountsAddressValuesDictionary.ContainsKey(address) Then
+            GlobalVariables.s_reportUploadSidePane.DisplayAccountDetails(GlobalVariables.Accounts.GetIdFromName(m_dataSet.m_accountsAddressValuesDictionary(address)))
+        ElseIf m_dataSet.m_outputsAccountsAddressvaluesDictionary.ContainsKey(address) Then
+            GlobalVariables.s_reportUploadSidePane.DisplayAccountDetails(GlobalVariables.Accounts.GetIdFromName(m_dataSet.m_outputsAccountsAddressvaluesDictionary(address)))
         Else
             GlobalVariables.s_reportUploadSidePane.DisplayEmptyTextBoxes()
         End If

@@ -41,10 +41,10 @@ Friend Class ExcelFactsValuesImportUI
 
         ' Add any initialization after the InitializeComponent() call.
         m_controller = p_controller
-        For Each globalFactId As Int32 In GlobalVariables.GlobalFacts.globalFact_hash.Keys
+        For Each globalFactId As Int32 In GlobalVariables.GlobalFacts.m_globalFactHash.Keys
             Dim li As New ListItem
             li.Value = globalFactId
-            li.Text = GlobalVariables.GlobalFacts.globalFact_hash(globalFactId)(NAME_VARIABLE)
+            li.Text = GlobalVariables.GlobalFacts.m_globalFactHash(globalFactId)(NAME_VARIABLE)
             m_factsComboBox.Items.Add(li)
             If globalFactId = m_globalFactId Then
                 m_factsComboBox.SelectedItem = li
