@@ -120,6 +120,15 @@ Friend Class EntitiesView
 
 #Region "Interface"
 
+    Friend Sub LoadInstanceVariables_Safe()
+        Try
+            Dim MyDelegate As New LoadInstanceVariables_Delegate(AddressOf LoadInstanceVariables)
+            Me.Invoke(MyDelegate, New Object() {})
+        Catch ex As Exception
+            System.Diagnostics.Debug.WriteLine(ex.Message)
+        End Try
+    End Sub
+
     Delegate Sub LoadInstanceVariables_Delegate()
     Friend Sub LoadInstanceVariables()
         If InvokeRequired Then

@@ -1,5 +1,6 @@
 ﻿Imports System.Collections
 Imports System.Collections.Generic
+Imports System.Linq
 
 
 ' Entity2.vb
@@ -23,7 +24,7 @@ Friend Class Entity
 
     ' Variables
     Friend state_flag As Boolean
-    Friend entities_hash As New Hashtable
+    Friend entities_hash As New Dictionary(Of Int32, SortableHashtable)
     Private request_id As Dictionary(Of UInt32, Boolean)
 
     ' Events
@@ -54,10 +55,11 @@ Friend Class Entity
 
         If packet.GetError() = 0 Then
             For i As Int32 = 1 To packet.ReadInt32()
-                Dim tmp_ht As New Hashtable
+                Dim tmp_ht As New SortableHashtable(ITEMS_POSITIONS)
                 GetEntityHTFromPacket(packet, tmp_ht)
                 entities_hash(CInt(tmp_ht(ID_VARIABLE))) = tmp_ht
             Next
+            SortEntities()
             state_flag = True
             RaiseEvent ObjectInitialized()
         Else
@@ -103,9 +105,10 @@ Friend Class Entity
     Private Sub SMSG_READ_ENTITY_ANSWER(packet As ByteBuffer)
 
         If packet.GetError() = 0 Then
-            Dim ht As New Hashtable
+            Dim ht As New SortableHashtable(ITEMS_POSITIONS)
             GetEntityHTFromPacket(packet, ht)
             entities_hash(CInt(ht(ID_VARIABLE))) = ht
+            SortEntities()
             RaiseEvent Read(True, ht)
         Else
             RaiseEvent Read(False, Nothing)
@@ -234,6 +237,10 @@ Friend Class Entity
 
 #Region "Utilities"
 
+    Private Sub SortEntities()
+        entities_hash = entities_hash.OrderBy(Function(x) x.Value).ToDictionary(Function(keyItem) keyItem.Key, Function(valueItem) valueItem.Value)
+    End Sub
+
     Friend Shared Sub GetEntityHTFromPacket(ByRef packet As ByteBuffer, ByRef entity_ht As Hashtable)
 
         entity_ht(ID_VARIABLE) = packet.ReadUint32()
@@ -276,7 +283,7 @@ Friend Class Entity
     Friend Sub LoadEntitiesTV(ByRef TV As Windows.Forms.TreeView, _
                             ByRef nodes_icon_dic As Dictionary(Of UInt32, Int32))
 
-        Dim tmp_ht As New Hashtable
+        Dim tmp_ht As New Dictionary(Of Int32, SortableHashtable)
         tmp_ht = entities_hash
         For Each id As UInt32 In nodes_icon_dic.Keys
             tmp_ht(id)(IMAGE_VARIABLE) = nodes_icon_dic(id)
