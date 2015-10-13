@@ -60,6 +60,7 @@ Friend Class GeneralSubmissionControler
     Private m_submissionWSController As SubmissionWSController
     Friend m_associatedWorksheet As Excel.Worksheet
     Friend m_worksheetsComboboxMenuItem As ADXRibbonItem
+    Private m_errorMessagesUI As New StatusReportInterfaceUI
 
     ' Variables
     Private m_entityName As String
@@ -89,7 +90,7 @@ Friend Class GeneralSubmissionControler
         m_dataset = New ModelDataSet(m_associatedWorksheet)
         m_acquisitionModel = New AcquisitionModel(m_dataset)
         m_dataModificationsTracker = New DataModificationsTracking(m_dataset)
-
+   
         AddHandler m_acquisitionModel.AfterInputsDownloaded, AddressOf AfterDataBaseInputsDowloaded
         AddHandler m_acquisitionModel.AfterOutputsComputed, AddressOf AfterOutputsComputed
         AddHandler m_fact.AfterUpdate, AddressOf AfterCommit
@@ -159,10 +160,7 @@ Friend Class GeneralSubmissionControler
 
     Friend Sub DisplayUploadStatusAndErrorsUI()
 
-        Dim UploadStatusUI As New UploadingHistoryUI(m_uploadState, _
-                                                     m_uploadTimeStamp, _
-                                                     m_errorsList)
-        UploadStatusUI.Show()
+        m_errorMessagesUI.Show()
 
     End Sub
 

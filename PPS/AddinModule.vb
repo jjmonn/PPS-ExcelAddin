@@ -120,6 +120,10 @@ Public Class AddinModule
     Friend WithEvents SubmissionControlBT As AddinExpress.MSO.ADXRibbonSplitButton
     Friend WithEvents EditionMainRibbonBT As AddinExpress.MSO.ADXRibbonButton
     Friend WithEvents FormatButton As AddinExpress.MSO.ADXRibbonButton
+    Friend WithEvents ReportUploadTaskPaneItem As AddinExpress.XL.ADXExcelTaskPanesCollectionItem
+    Friend WithEvents m_reportUploadAccountInfoButton As AddinExpress.MSO.ADXRibbonButton
+    Friend WithEvents AdxRibbonQuickAccessToolbar1 As AddinExpress.MSO.ADXRibbonQuickAccessToolbar
+    Friend WithEvents AdxRibbonButton5 As AddinExpress.MSO.ADXRibbonButton
 
 
 #End Region
@@ -208,6 +212,7 @@ Public Class AddinModule
         Me.SelectEntitiesRangeBT = New AddinExpress.MSO.ADXRibbonButton(Me.components)
         Me.SelectPeriodsRangeBT = New AddinExpress.MSO.ADXRibbonButton(Me.components)
         Me.WSCB = New AddinExpress.MSO.ADXRibbonDropDown(Me.components)
+        Me.m_reportUploadAccountInfoButton = New AddinExpress.MSO.ADXRibbonButton(Me.components)
         Me.AdxRibbonGroup9 = New AddinExpress.MSO.ADXRibbonGroup(Me.components)
         Me.CloseBT = New AddinExpress.MSO.ADXRibbonButton(Me.components)
         Me.AdxExcelTaskPanesManager1 = New AddinExpress.XL.ADXExcelTaskPanesManager(Me.components)
@@ -215,9 +220,12 @@ Public Class AddinModule
         Me.VersionSelectionTaskPaneItem = New AddinExpress.XL.ADXExcelTaskPanesCollectionItem(Me.components)
         Me.EntitySelectionTaskPaneItem = New AddinExpress.XL.ADXExcelTaskPanesCollectionItem(Me.components)
         Me.ConnectionTaskPaneItem = New AddinExpress.XL.ADXExcelTaskPanesCollectionItem(Me.components)
+        Me.ReportUploadTaskPaneItem = New AddinExpress.XL.ADXExcelTaskPanesCollectionItem(Me.components)
         Me.AdxRibbonLabel1 = New AddinExpress.MSO.ADXRibbonLabel(Me.components)
         Me.AdxRibbonMenu3 = New AddinExpress.MSO.ADXRibbonMenu(Me.components)
         Me.SubmissionControlBT = New AddinExpress.MSO.ADXRibbonSplitButton(Me.components)
+        Me.AdxRibbonQuickAccessToolbar1 = New AddinExpress.MSO.ADXRibbonQuickAccessToolbar(Me.components)
+        Me.AdxRibbonButton5 = New AddinExpress.MSO.ADXRibbonButton(Me.components)
         '
         'MaintTab
         '
@@ -874,6 +882,7 @@ Public Class AddinModule
         Me.EditSelectionGroup.Caption = " Settings"
         Me.EditSelectionGroup.Controls.Add(Me.SubmissionOptionsBT)
         Me.EditSelectionGroup.Controls.Add(Me.WSCB)
+        Me.EditSelectionGroup.Controls.Add(Me.m_reportUploadAccountInfoButton)
         Me.EditSelectionGroup.Id = "adxRibbonGroup_845aac06fe0b43ffa1a5ab1c8cf56d7a"
         Me.EditSelectionGroup.ImageTransparentColor = System.Drawing.Color.Transparent
         Me.EditSelectionGroup.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
@@ -978,6 +987,15 @@ Public Class AddinModule
         Me.WSCB.ImageTransparentColor = System.Drawing.Color.Transparent
         Me.WSCB.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
         '
+        'm_reportUploadAccountInfoButton
+        '
+        Me.m_reportUploadAccountInfoButton.Caption = "Display Account Info"
+        Me.m_reportUploadAccountInfoButton.Id = "adxRibbonButton_d6ccc3789816424192506d30e6008981"
+        Me.m_reportUploadAccountInfoButton.Image = 8
+        Me.m_reportUploadAccountInfoButton.ImageList = Me.SubmissionRibbonIL
+        Me.m_reportUploadAccountInfoButton.ImageTransparentColor = System.Drawing.Color.Transparent
+        Me.m_reportUploadAccountInfoButton.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
+        '
         'AdxRibbonGroup9
         '
         Me.AdxRibbonGroup9.Caption = "Exit"
@@ -1003,13 +1021,17 @@ Public Class AddinModule
         Me.AdxExcelTaskPanesManager1.Items.Add(Me.VersionSelectionTaskPaneItem)
         Me.AdxExcelTaskPanesManager1.Items.Add(Me.EntitySelectionTaskPaneItem)
         Me.AdxExcelTaskPanesManager1.Items.Add(Me.ConnectionTaskPaneItem)
+        Me.AdxExcelTaskPanesManager1.Items.Add(Me.ReportUploadTaskPaneItem)
         Me.AdxExcelTaskPanesManager1.SetOwner(Me)
         '
         'InputSelectionTaskPaneItem
         '
+        Me.InputSelectionTaskPaneItem.AllowedDropPositions = CType((((AddinExpress.XL.ADXExcelAllowedDropPositions.Top Or AddinExpress.XL.ADXExcelAllowedDropPositions.Bottom) _
+            Or AddinExpress.XL.ADXExcelAllowedDropPositions.Right) _
+            Or AddinExpress.XL.ADXExcelAllowedDropPositions.Left), AddinExpress.XL.ADXExcelAllowedDropPositions)
         Me.InputSelectionTaskPaneItem.AlwaysShowHeader = True
         Me.InputSelectionTaskPaneItem.CloseButton = True
-        Me.InputSelectionTaskPaneItem.Position = AddinExpress.XL.ADXExcelTaskPanePosition.Right
+        Me.InputSelectionTaskPaneItem.Position = AddinExpress.XL.ADXExcelTaskPanePosition.Left
         Me.InputSelectionTaskPaneItem.TaskPaneClassName = "InputSelectionPane"
         Me.InputSelectionTaskPaneItem.UseOfficeThemeForBackground = True
         '
@@ -1039,6 +1061,17 @@ Public Class AddinModule
         Me.ConnectionTaskPaneItem.TaskPaneClassName = "ConnectionTP"
         Me.ConnectionTaskPaneItem.UseOfficeThemeForBackground = True
         '
+        'ReportUploadTaskPaneItem
+        '
+        Me.ReportUploadTaskPaneItem.AllowedDropPositions = CType((((AddinExpress.XL.ADXExcelAllowedDropPositions.Top Or AddinExpress.XL.ADXExcelAllowedDropPositions.Bottom) _
+            Or AddinExpress.XL.ADXExcelAllowedDropPositions.Right) _
+            Or AddinExpress.XL.ADXExcelAllowedDropPositions.Left), AddinExpress.XL.ADXExcelAllowedDropPositions)
+        Me.ReportUploadTaskPaneItem.AlwaysShowHeader = True
+        Me.ReportUploadTaskPaneItem.CloseButton = True
+        Me.ReportUploadTaskPaneItem.Position = AddinExpress.XL.ADXExcelTaskPanePosition.Right
+        Me.ReportUploadTaskPaneItem.TaskPaneClassName = "ReportUploadSidePane"
+        Me.ReportUploadTaskPaneItem.UseOfficeThemeForBackground = True
+        '
         'AdxRibbonLabel1
         '
         Me.AdxRibbonLabel1.Caption = "Associated with"
@@ -1061,6 +1094,18 @@ Public Class AddinModule
         Me.SubmissionControlBT.ImageTransparentColor = System.Drawing.Color.Transparent
         Me.SubmissionControlBT.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
         Me.SubmissionControlBT.Size = AddinExpress.MSO.ADXRibbonXControlSize.Large
+        '
+        'AdxRibbonQuickAccessToolbar1
+        '
+        Me.AdxRibbonQuickAccessToolbar1.Controls.Add(Me.AdxRibbonButton5)
+        Me.AdxRibbonQuickAccessToolbar1.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
+        '
+        'AdxRibbonButton5
+        '
+        Me.AdxRibbonButton5.Caption = "AdxRibbonButton5"
+        Me.AdxRibbonButton5.Id = "adxRibbonButton_e7993e8e71f646d7a54ec7540bff2ee8"
+        Me.AdxRibbonButton5.ImageTransparentColor = System.Drawing.Color.Transparent
+        Me.AdxRibbonButton5.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
         '
         'AddinModule
         '
@@ -1155,6 +1200,18 @@ Public Class AddinModule
         End Get
     End Property
 
+    Friend ReadOnly Property ReportUploadTaskPane As ReportUploadSidePane
+        Get
+            Dim taskPaneInstance As AddinExpress.XL.ADXExcelTaskPane = Nothing
+            taskPaneInstance = ReportUploadTaskPaneItem.TaskPaneInstance
+
+            If taskPaneInstance Is Nothing Then
+                taskPaneInstance = ReportUploadTaskPaneItem.CreateTaskPaneInstance()
+            End If
+            Return TryCast(taskPaneInstance, ReportUploadSidePane)
+        End Get
+    End Property
+
     Friend ReadOnly Property ConnectionTaskPane As ConnectionTP
 
         Get
@@ -1218,6 +1275,7 @@ Public Class AddinModule
         ' Submission Ribbon Initialize
         WSCB.Items.RemoveAt(0)
         SubmissionModeRibbon.Visible = False
+        GlobalVariables.s_reportUploadSidePane = Me.ReportUploadTaskPane
         GlobalVariables.Version_label_Sub_Ribbon = VersionTBSubRibbon
         GlobalVariables.ClientsIDDropDown = ClientsDropDown
         GlobalVariables.ProductsIDDropDown = ProductsDropDown
@@ -1267,6 +1325,7 @@ Public Class AddinModule
         Addin.ConfigurationRibbonBT.Enabled = p_state
 
     End Sub
+
 #Region "Properties Getters"
 
     ' Returns the connection instance variable
@@ -1288,7 +1347,6 @@ Public Class AddinModule
 
 
 #Region "Call Backs"
-
 
 #Region "Main Ribbon"
 
@@ -1551,7 +1609,6 @@ Public Class AddinModule
 
 #End Region
 
-
 #Region "Submission Ribbon"
 
 #Region "Edit Selection"
@@ -1650,6 +1707,10 @@ Public Class AddinModule
 
     Private Sub CloseBT_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) Handles CloseBT.OnClick
         ClearSubmissionMode()
+    End Sub
+
+    Private Sub m_reportUploadAccountInfoButton_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) Handles m_reportUploadAccountInfoButton.OnClick
+        DisplayReportUploadSidePane()
     End Sub
 
 #End Region
@@ -1774,10 +1835,20 @@ Public Class AddinModule
 
 #Region "Task Panes Launches and call backs"
 
+#Region "Report Upload"
+
+    Private Sub DisplayReportUploadSidePane()
+
+        If CDbl(GlobalVariables.APPS.Version.Replace(".", ",")) > EXCEL_MIN_VERSION Then  ' 
+            GlobalVariables.s_reportUploadSidePaneVisible = True
+            GlobalVariables.s_reportUploadSidePane.Show()
+        End If
+
+    End Sub
+
     Friend Sub InputReportPaneCallBack_ReportCreation()
 
-        ' circular progress !!! priority high
-        ' GlobalVariables.APPS.ScreenUpdating = False
+        GlobalVariables.APPS.ScreenUpdating = False
         Dim entity_id As Int32 = Me.InputReportTaskPane.EntitiesTV.SelectedNode.Name
         Dim entity_name As String = Me.InputReportTaskPane.EntitiesTV.SelectedNode.Text
         Dim currencyId As Int32 = GlobalVariables.Entities.entities_hash(entity_id)(ENTITIES_CURRENCY_VARIABLE)
@@ -1801,22 +1872,20 @@ Public Class AddinModule
         Me.InputReportTaskPane.Hide()
         Me.InputReportTaskPane.Close()
         ExcelFormatting.FormatExcelRange(currentcell, currencyName, Date.FromOADate(periodlist(0)))
-        ' GlobalVariables.APPS.ScreenUpdating = True
+        GlobalVariables.APPS.ScreenUpdating = True
         AssociateGRSControler(True)
 
     End Sub
 
+#End Region
 
 #Region "Version Selection"
 
     Public Sub SetVersion(ByRef version_id As String)
-
         Me.VersionSelectionTaskPane.SetVersion(version_id)
-
     End Sub
 
     Public Shared Sub LaunchVersionSelection()
-
         If CDbl(GlobalVariables.APPS.Version.Replace(".", ",")) > EXCEL_MIN_VERSION Then  ' 
             GlobalVariables.VersionsSelectionPaneVisible = True
             GlobalVariables.VersionSelectionTaskPane.Init()
@@ -1826,11 +1895,9 @@ Public Class AddinModule
             Dim VERSELUI As New VersionSelectionUI
             VERSELUI.Show()
         End If
-
     End Sub
 
 #End Region
-
 
 #Region "Entity Selection"
 
@@ -1875,6 +1942,7 @@ Public Class AddinModule
             SubmissionModeRibbon.Visible = True
             SubmissionModeRibbon.Activate()
             WSCB.SelectedItemId = ctrl.Id
+            DisplayReportUploadSidePane()
         End If
 
     End Sub
@@ -1980,5 +2048,6 @@ Public Class AddinModule
 #End Region
 
 
+   
 End Class
 
