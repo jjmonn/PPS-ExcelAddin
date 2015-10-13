@@ -18,7 +18,7 @@ Public Class Facts
 #Region "Intance Variables"
 
     Private requestIdFactsCommitDict As New Dictionary(Of UInt32, List(Of String))
-    Public Event AfterUpdate(ByRef status As Boolean, ByRef resultsDict As Dictionary(Of String, Boolean))
+    Public Event AfterUpdate(ByRef status As Boolean, ByRef resultsDict As Dictionary(Of String, ErrorMessage))
 
 
 #End Region
@@ -59,17 +59,12 @@ Public Class Facts
 
         If packet.GetError() = 0 Then
             Dim requestId As UInt32 = packet.GetRequestId()
-            Dim resultsDict As New Dictionary(Of String, Boolean)
+            Dim resultsDict As New Dictionary(Of String, ErrorMessage)
             packet.ReadUint32()
             If requestIdFactsCommitDict.ContainsKey(requestId) Then
                 For Each cell_address As String In requestIdFactsCommitDict(requestId)
                     packet.ReadUint32()
-                    If packet.ReadBool() = True Then
-                        resultsDict.Add(cell_address, True)
-                    Else
-                        resultsDict.Add(cell_address, False)
-                        packet.ReadUint8() ' catch error message ! priority normal
-                    End If
+                    resultsDict.Add(cell_address, packet.ReadUint8())
                 Next
                 requestIdFactsCommitDict.Remove(requestId)
             Else

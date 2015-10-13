@@ -362,6 +362,8 @@ SubmitFormula:
                 Dim accountId As Int32 = m_controller.accountsNameKeysDictionary.Item(Name_TB.Text)
                 m_controller.UpdateAccount(accountId, ACCOUNT_FORMULA_VARIABLE, m_controller.GetCurrentParsedFormula, True)
             End If
+        Else
+            formula_TB.Text = m_controller.GetFormatedAccountFormula(m_accountTV.SelectedNode.Name)
         End If
 
     End Sub
@@ -616,6 +618,8 @@ SubmitFormula:
                                                      "Formula Edition Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
             If confirm = DialogResult.Yes Then
                 Submit_Formula_Click(sender, e)
+            Else
+                formula_TB.Text = m_controller.GetFormatedAccountFormula(m_accountTV.SelectedNode.Name)
             End If
         Else
             formulaEdit.Checked = False
@@ -632,6 +636,8 @@ SubmitFormula:
                                          "Formula Edition Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
                 If confirm = DialogResult.Yes Then
                     Submit_Formula_Click(sender, e)
+                Else
+                    formula_TB.Text = m_controller.GetFormatedAccountFormula(m_accountTV.SelectedNode.Name)
                 End If
                 formulaEdit.Checked = False
             Case Keys.Enter
