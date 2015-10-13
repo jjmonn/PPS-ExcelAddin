@@ -190,14 +190,20 @@ Public Class CUI2LeftPane
 #End Region
 
 
-#Region "interface"
+#Region "Interface"
 
+    Delegate Sub SetupPeriodsTVDoneAttemp_Delegate(ByRef periodsNodes As vTreeNode)
     Friend Sub SetupPeriodsTV(ByRef periodsNodes As vTreeNode)
 
-        periodsTV.Nodes.Clear()
-        For Each node As vTreeNode In periodsNodes.Nodes
-            VTreeViewUtil.CopySubNodes(node, periodsTV)
-        Next
+        If InvokeRequired Then
+            Dim MyDelegate As New SetupPeriodsTVDoneAttemp_Delegate(AddressOf SetupPeriodsTV)
+            Me.Invoke(MyDelegate, New Object() {periodsNodes})
+        Else
+            periodsTV.Nodes.Clear()
+            For Each node As vTreeNode In periodsNodes.Nodes
+                VTreeViewUtil.CopySubNodes(node, periodsTV)
+            Next
+        End If
 
     End Sub
 

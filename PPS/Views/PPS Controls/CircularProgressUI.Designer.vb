@@ -45,7 +45,7 @@ Partial Class CircularProgressUI
         Me.Label1.AutoSize = True
         Me.Label1.Location = New System.Drawing.Point(67, 128)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(52, 13)
+        Me.Label1.Size = New System.Drawing.Size(62, 15)
         Me.Label1.TabIndex = 1
         Me.Label1.Text = "Initializing"
         Me.Label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter

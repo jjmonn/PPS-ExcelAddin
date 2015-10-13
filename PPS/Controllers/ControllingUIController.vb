@@ -206,6 +206,9 @@ Friend Class ControllingUIController
         ' Redraw hierarchy Items
         InitDisplay()
         FillUIHeader()
+        If initDisplayFlag = False Then
+            View.LaunchCircularProgress()
+        End If
 
     End Sub
 
@@ -215,9 +218,14 @@ Friend Class ControllingUIController
         End While
         View.FormatDGV_ThreadSafe()
         dataMap = Computer.GetData()
-        StubFillingChart()
-        computedFlag = True
         View.TerminateCircularProgress()
+
+        ' **************************************************'
+        StubFillingChart()
+        ' priority high !!!!!!!!!!!!
+        ' **************************************************'
+
+        computedFlag = True
         isComputingFlag = False
         View.SetComputeButtonState(True)
 
@@ -250,6 +258,7 @@ Friend Class ControllingUIController
         itemsDimensionsDict = New Dictionary(Of HierarchyItem, Hashtable)
         FillHierarchy(rowsHierarchyNode)
         FillHierarchy(columnsHierarchyNode)
+        View.m_progressBar.Launch(1, GetNumberOfRows() * 0.6)
 
         For Each tab_ As VIBlend.WinForms.Controls.vTabPage In View.DGVsControlTab.TabPages
             '  View.DGVsControlTab.SelectedTab = tab_
@@ -447,6 +456,7 @@ Friend Class ControllingUIController
             For Each subNode In dimensionNode.Nodes
                 CreateRow(dgv, dimensionNode, subNode, row)
             Next
+            View.m_progressBar.AddProgress(1)
         Else
             'Set current value for current display axis
             If SetDisplayAxisValue(dimensionNode, valueNode) = True Then
@@ -965,6 +975,16 @@ Friend Class ControllingUIController
             Return GlobalVariables.Accounts.m_accountsHash(p_accountId)(ACCOUNT_FORMAT_VARIABLE)
         End If
         Return ""
+
+    End Function
+
+    Private Function GetNumberOfRows() As Int32
+
+        Dim nbRows As Int32 = 1
+        For Each node In rowsHierarchyNode.Nodes
+            nbRows *= node.Nodes.Count
+        Next
+        Return nbRows
 
     End Function
 

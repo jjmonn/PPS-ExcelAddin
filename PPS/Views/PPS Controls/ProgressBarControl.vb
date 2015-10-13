@@ -27,11 +27,10 @@ Public Class ProgressBarControl
 #Region "Instance Variables"
 
     'Objects
-    Friend mProgressBar As New GaugeThisBar
+    Friend m_progressBar As New GaugeThisBar
 
     ' Variables
-    Friend barProgress As Double
-    Private LoadingBarIncrementValue As Double
+    Friend m_incrementalProgress As Double
 
     ' Constants
     Public Const PROGRESS_BAR_MAX_VALUE As Integer = 100
@@ -53,19 +52,12 @@ Public Class ProgressBarControl
         InitializeComponent()
 
         ' Add any initialization after the InitializeComponent() call.
-        'Me.Width = PROGRESS_BAR_WIDTH + H_MARGIN
-        'Me.Height = PROGRESS_BAR_HEIGHT + V_MARGIN
-        Me.Controls.Add(mProgressBar)
-
-        mProgressBar.Dock = Windows.Forms.DockStyle.Fill
-        'mProgressBar.Left = (Me.Width - mProgressBar.Width) / 2
-        'mProgressBar.Top = (Me.Height - mProgressBar.Height) / 2
-        'mProgressBar.Width = PROGRESS_BAR_WIDTH
-        'mProgressBar.Height = PROGRESS_BAR_HEIGHT
-        mProgressBar.GradientColor1 = PROGRESS_BAR_COLOR_1
-        mProgressBar.GradientColor2 = PROGRESS_BAR_COLOR_2
-        mProgressBar.Value = 0
-        mProgressBar.MaxValue = PROGRESS_BAR_MAX_VALUE
+        Me.Controls.Add(m_progressBar)
+        m_progressBar.Dock = Windows.Forms.DockStyle.Fill
+        m_progressBar.GradientColor1 = PROGRESS_BAR_COLOR_1
+        m_progressBar.GradientColor2 = PROGRESS_BAR_COLOR_2
+        m_progressBar.Value = 0
+        m_progressBar.MaxValue = PROGRESS_BAR_MAX_VALUE
         Me.Hide()
 
     End Sub
@@ -76,31 +68,31 @@ Public Class ProgressBarControl
 
 #Region "Interface"
 
-    Friend Sub Launch(ByRef incrementalProgress As Double, Optional ByRef maxValue As Integer = 0)
+    Friend Sub Launch(ByRef p_incrementalProgress As Double, Optional ByRef p_maxValue As Integer = 0)
 
-        If maxValue <> 0 Then mProgressBar.MaxValue = maxValue
-        barProgress = incrementalProgress
-        mProgressBar.Value = 0
+        If p_maxValue <> 0 Then m_progressBar.MaxValue = p_maxValue
+        m_incrementalProgress = p_incrementalProgress
+        m_progressBar.Value = 0
         Me.Show()
         Me.BringToFront()
 
     End Sub
 
-    Friend Sub AddProgress(Optional ByRef progress As Double = 0)
+    Friend Sub AddProgress(Optional ByRef p_progress As Double = 0)
 
-        If progress = 0 Then progress = barProgress
-        LoadingBarIncrementValue = mProgressBar.Value + progress
-        If LoadingBarIncrementValue > mProgressBar.MaxValue Then
-            mProgressBar.Value = 99
+        If p_progress = 0 Then p_progress = m_incrementalProgress
+        Dim incrementalValue As Double = m_progressBar.Value + p_progress
+        If incrementalValue > m_progressBar.MaxValue Then
+            m_progressBar.Value = 99
         End If
-        mProgressBar.Value = LoadingBarIncrementValue
-        mProgressBar.Update()
+        m_progressBar.Value = incrementalValue
+        m_progressBar.Update()
 
     End Sub
 
     Friend Sub EndProgress()
 
-        mProgressBar.Value = mProgressBar.MaxValue
+        m_progressBar.Value = m_progressBar.MaxValue
         Me.Hide()
 
     End Sub
