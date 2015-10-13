@@ -50,6 +50,7 @@ Friend Class ControllingUIController
     Friend initDisplayFlag As Boolean = False
     Friend computedFlag As Boolean = False
     Friend isComputingFlag As Boolean
+    Friend isDisplayingFlag As Boolean = False
     Private m_chartsView As CUI2Visualization
     Private m_chartsViewContainer As New CUI2VisualizationContainer
 
@@ -123,13 +124,36 @@ Friend Class ControllingUIController
 
 #Region "Computing"
 
+    Private Function HasMinimumDimensions() As Boolean
+        If Not View.rightPane_Control.DimensionsListContainsItem(Computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.YEARS) Then
+            If Not View.rightPane_Control.DimensionsListContainsItem(Computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.MONTHS) Then
+                If Not View.rightPane_Control.DimensionsListContainsItem(Computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.YMONTHS) Then
+                    Return False
+                End If
+            End If
+        End If
+        If Not View.rightPane_Control.DimensionsListContainsItem(Computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.ACCOUNTS) Then
+            Return False
+        End If
+        If Not View.rightPane_Control.DimensionsListContainsItem(Computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.ENTITIES) Then
+            Return False
+        End If
+        Return True
+    End Function
+
     Friend Sub Compute(ByRef versionIDs() As Int32, _
                        ByRef inputEntityNode As vTreeNode, _
                        Optional ByRef useCache As Boolean = False)
 
-        If (isComputingFlag = True) Then Exit Sub
+        If (isComputingFlag = True Or isDisplayingFlag = True) Then Exit Sub
+
+        If HasMinimumDimensions() = False Then
+            MsgBox("You need to specify at least the following dimensions: " + Chr(13) + Chr(10) + "Entities, Accounts and periods (Years or Months)")
+            Exit Sub
+        End If
         View.SetComputeButtonState(False)
         isComputingFlag = True
+        isDisplayingFlag = True
         computedFlag = False
 
         If Not dataMap Is Nothing Then dataMap.Clear()
@@ -209,6 +233,7 @@ Friend Class ControllingUIController
         If initDisplayFlag = False Then
             View.LaunchCircularProgress()
         End If
+        isDisplayingFlag = False
 
     End Sub
 
@@ -226,8 +251,8 @@ Friend Class ControllingUIController
         ' **************************************************'
 
         computedFlag = True
-        isComputingFlag = False
         View.SetComputeButtonState(True)
+        isComputingFlag = False
 
     End Sub
 
@@ -490,7 +515,7 @@ Friend Class ControllingUIController
                 For Each subNode In valueNode.Nodes
                     CreateRow(dgv, dimensionNode, subNode, subRow)
                 Next
-                
+
                 LevelDimensionFilterOrAxis(dimensionNode)
             End If
         End If
