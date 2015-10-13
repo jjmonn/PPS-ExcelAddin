@@ -573,6 +573,7 @@ SubmitFormula:
 
 #End Region
 
+
 #Region "Formula Events"
 
     Private Sub formula_TB_Enter(sender As Object, e As EventArgs) Handles formula_TB.Enter

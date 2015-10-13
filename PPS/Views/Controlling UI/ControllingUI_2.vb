@@ -9,7 +9,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 07/10/2015
+' Last modified: 13/10/2015
 
 
 Imports System.Windows.Forms
@@ -151,6 +151,10 @@ Friend Class ControllingUI_2
         BackgroundWorker1.WorkerSupportsCancellation = True
         AddHandler BackgroundWorker1.DoWork, AddressOf BackgroundWorker1_DoWork
         AddHandler BackgroundWorker1.RunWorkerCompleted, AddressOf backgroundWorker1_RunWorkerCompleted
+
+        ' Accounts Events
+        AddHandler GlobalVariables.Accounts.Read, AddressOf AccountUpdateFromServer
+        AddHandler GlobalVariables.Accounts.DeleteEvent, AddressOf AccountDeleteFromServer
 
     End Sub
 
@@ -378,13 +382,17 @@ Friend Class ControllingUI_2
 
 #Region "Events"
 
+    Private Sub AccountUpdateFromServer(ByRef status As Boolean, ByRef accountsAttributes As Hashtable)
+        GlobalVariables.Accounts.LoadAccountsTV(accountsTV)
+    End Sub
 
-    'Private Sub VTreeView1_KeyDown(sender As Object, e As Windows.Forms.KeyEventArgs) Handles VTreeView1.KeyDown
-
-    'End Sub
+    Private Sub AccountDeleteFromServer(ByRef status As Boolean, ByRef id As UInt32)
+     GlobalVariables.Accounts.LoadAccountsTV(accountsTV)
+    End Sub
 
     Private Sub EntitiesTV_KeyDown(sender As Object, e As KeyEventArgs)
 
+        ' to be managed !! -> goes into left pane ? priority normal
         If e.KeyCode = Keys.Enter Then
             If Not leftPane_control.entitiesTV.SelectedNode Is Nothing Then
                 m_currentEntityNode = leftPane_control.entitiesTV.SelectedNode
@@ -396,7 +404,6 @@ Friend Class ControllingUI_2
         End If
 
     End Sub
-
 
     ' Periods filter when unchecked
     Private Sub periodsTV_ItemCheck(sender As Object, e As vTreeViewEventArgs)
