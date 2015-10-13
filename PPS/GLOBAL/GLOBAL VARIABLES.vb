@@ -57,6 +57,8 @@ Friend Class GlobalVariables
 
 #Region "Submission Process Global Variables"
 
+    Friend Shared s_reportUploadSidePane As New ReportUploadSidePane
+    Friend Shared s_reportUploadSidePaneVisible As Boolean = False
     Friend Shared SubmissionStatusButton As ADXRibbonButton
     Friend Shared WSHasChangedSinceLastSubmission As Boolean
     Friend Shared ClientsIDDropDown As ADXRibbonDropDown

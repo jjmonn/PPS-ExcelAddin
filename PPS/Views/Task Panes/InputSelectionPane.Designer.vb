@@ -59,7 +59,7 @@ Partial Class InputSelectionPane
         Me.Label1.Location = New System.Drawing.Point(3, 4)
         Me.Label1.Margin = New System.Windows.Forms.Padding(3, 4, 3, 0)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(81, 13)
+        Me.Label1.Size = New System.Drawing.Size(90, 15)
         Me.Label1.TabIndex = 0
         Me.Label1.Text = "Select an Entity"
         '
@@ -79,14 +79,14 @@ Partial Class InputSelectionPane
         Me.TableLayoutPanel1.Size = New System.Drawing.Size(259, 685)
         Me.TableLayoutPanel1.TabIndex = 6
         '
-        'CInputSelectionPane
+        'InputSelectionPane
         '
         Me.BackColor = System.Drawing.SystemColors.GrayText
         Me.ClientSize = New System.Drawing.Size(259, 685)
         Me.Controls.Add(Me.TableLayoutPanel1)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Location = New System.Drawing.Point(0, 0)
-        Me.Name = "CInputSelectionPane"
+        Me.Name = "InputSelectionPane"
         Me.Text = "Data Edition"
         Me.TableLayoutPanel1.ResumeLayout(False)
         Me.TableLayoutPanel1.PerformLayout()

@@ -62,7 +62,7 @@ Friend Class SubmissionWSController
 
         AddHandler p_excelWorksheet.Change, AddressOf Worksheet_Change
         AddHandler p_excelWorksheet.BeforeRightClick, AddressOf Worksheet_BeforeRightClick
-        '      AddHandler p_excelWorksheet.SelectionChange
+        AddHandler p_excelWorksheet.SelectionChange, AddressOf Worksheet_SelectionChange
         Me.m_excelWorksheet = p_excelWorksheet
 
 
@@ -140,7 +140,6 @@ Friend Class SubmissionWSController
         Next
 
     End Sub
-
 
 #End Region
 
@@ -247,20 +246,14 @@ Friend Class SubmissionWSController
 
     End Sub
 
-    Friend Sub Worksheet_SelectionChange(ByVal Sh As Object, ByVal Target As Excel.Range)
+    Friend Sub Worksheet_SelectionChange(ByVal Target As Excel.Range)
 
-        ' doea not work yet : error in addin express Get Thisworkbook function
-        ' priority normal 
-        Dim ws As Excel.Worksheet = CType(Sh, Excel.Worksheet)
-        MsgBox("worksheet changed: " & ws.Name)
-
-        ' if ok 
-        '  -> change active GRS in addin ()
-        '  -> update ribbon
-        ' Entity
-        ' Currency 
-        ' Product
-        ' Client
+        If m_dataSet.m_datasetCellDimensionsDictionary.ContainsKey(Target.Address) Then
+            Dim datasetCellStruct As ModelDataSet.DataSetCellDimensions = m_dataSet.m_datasetCellDimensionsDictionary(Target.Address)
+            GlobalVariables.s_reportUploadSidePane.DisplayAccountDetails(GlobalVariables.Accounts.GetIdFromName(datasetCellStruct.m_accountName))
+        Else
+            GlobalVariables.s_reportUploadSidePane.DisplayEmptyTextBoxes()
+        End If
 
     End Sub
 

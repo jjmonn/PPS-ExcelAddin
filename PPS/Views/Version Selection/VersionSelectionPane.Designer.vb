@@ -55,7 +55,7 @@ Partial Class VersionSelectionPane
         Me.Label1.Location = New System.Drawing.Point(3, 4)
         Me.Label1.Margin = New System.Windows.Forms.Padding(3, 4, 3, 0)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(84, 13)
+        Me.Label1.Size = New System.Drawing.Size(95, 15)
         Me.Label1.TabIndex = 2
         Me.Label1.Text = "Select a Version"
         '
@@ -85,13 +85,13 @@ Partial Class VersionSelectionPane
         Me.VersioningTVIL.Images.SetKeyName(0, "config circle orangev small.png")
         Me.VersioningTVIL.Images.SetKeyName(1, "favicon(81).ico")
         '
-        'CVersionSelectionPane
+        'VersionSelectionPane
         '
         Me.ClientSize = New System.Drawing.Size(315, 701)
         Me.Controls.Add(Me.TableLayoutPanel1)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Location = New System.Drawing.Point(0, 0)
-        Me.Name = "CVersionSelectionPane"
+        Me.Name = "VersionSelectionPane"
         Me.Text = "Versions Selection"
         Me.TableLayoutPanel1.ResumeLayout(False)
         Me.TableLayoutPanel1.PerformLayout()
