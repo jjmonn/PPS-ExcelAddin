@@ -135,9 +135,6 @@ Friend Class ControllingUIController
         If Not View.rightPane_Control.DimensionsListContainsItem(Computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.ACCOUNTS) Then
             Return False
         End If
-        If Not View.rightPane_Control.DimensionsListContainsItem(Computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.ENTITIES) Then
-            Return False
-        End If
         Return True
     End Function
 
@@ -148,7 +145,7 @@ Friend Class ControllingUIController
         If (isComputingFlag = True Or isDisplayingFlag = True) Then Exit Sub
 
         If HasMinimumDimensions() = False Then
-            MsgBox("You need to specify at least the following dimensions: " + Chr(13) + Chr(10) + "Entities, Accounts and periods (Years or Months)")
+            MsgBox("You need to specify at least the following dimensions: " + Chr(13) + Chr(10) + "Accounts and periods (Years or Months)")
             Exit Sub
         End If
         View.SetComputeButtonState(False)
@@ -283,7 +280,7 @@ Friend Class ControllingUIController
         itemsDimensionsDict = New Dictionary(Of HierarchyItem, Hashtable)
         FillHierarchy(rowsHierarchyNode)
         FillHierarchy(columnsHierarchyNode)
-        View.m_progressBar.Launch(1, GetNumberOfRows() * 0.6)
+        View.m_progressBar.Launch(1, View.accountsTV.Nodes.Count)
 
         For Each tab_ As VIBlend.WinForms.Controls.vTabPage In View.DGVsControlTab.TabPages
             '  View.DGVsControlTab.SelectedTab = tab_
@@ -313,6 +310,7 @@ Friend Class ControllingUIController
             If rowsHierarchyNode.Nodes.Count > 0 Then CreateRow(DGV, rowsHierarchyNode.Nodes(0))
             DGV.ColumnsHierarchy.AutoStretchColumns = True
             AddHandler DGV.CellValueNeeded, AddressOf DGVs_CellValueNeeded
+            View.m_progressBar.AddProgress(1)
         Next
         initDisplayFlag = True
 
@@ -481,7 +479,6 @@ Friend Class ControllingUIController
             For Each subNode In dimensionNode.Nodes
                 CreateRow(dgv, dimensionNode, subNode, row)
             Next
-            View.m_progressBar.AddProgress(1)
         Else
             'Set current value for current display axis
             If SetDisplayAxisValue(dimensionNode, valueNode) = True Then
