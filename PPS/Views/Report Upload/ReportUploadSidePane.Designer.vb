@@ -28,8 +28,8 @@ Partial Class ReportUploadSidePane
         Me.VLabel2 = New VIBlend.WinForms.Controls.vLabel()
         Me.m_accountTextBox = New VIBlend.WinForms.Controls.vTextBox()
         Me.VLabel1 = New VIBlend.WinForms.Controls.vLabel()
-        Me.m_formulaTextBox = New System.Windows.Forms.TextBox()
-        Me.m_descriptionTextBox = New System.Windows.Forms.TextBox()
+        Me.m_formulaTextBox = New Windows.Forms.TextBox
+        Me.m_descriptionTextBox = New Windows.Forms.TextBox()
         Me.SuspendLayout()
         '
         'm_accountTypeTextBox
@@ -177,7 +177,7 @@ Partial Class ReportUploadSidePane
     Friend WithEvents VLabel2 As VIBlend.WinForms.Controls.vLabel
     Friend WithEvents m_accountTextBox As VIBlend.WinForms.Controls.vTextBox
     Friend WithEvents VLabel1 As VIBlend.WinForms.Controls.vLabel
-    Friend WithEvents m_formulaTextBox As System.Windows.Forms.TextBox
-    Friend WithEvents m_descriptionTextBox As System.Windows.Forms.TextBox
+    Friend WithEvents m_formulaTextBox As Windows.Forms.TextBox
+    Friend WithEvents m_descriptionTextBox As Windows.Forms.TextBox
 
 End Class
