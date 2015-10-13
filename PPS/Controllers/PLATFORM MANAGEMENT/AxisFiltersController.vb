@@ -13,6 +13,7 @@
 Imports System.Windows.Forms
 Imports System.Collections.Generic
 Imports System.Collections
+Imports VIBlend.WinForms.Controls
 
 
 Friend Class AxisFiltersController
@@ -22,12 +23,14 @@ Friend Class AxisFiltersController
 
     ' Objects
     Private View As AxisFiltersView
-    Private filtersNode As New TreeNode
-    Private filtersFilterValuesTv As New TreeView
+    Private filtersNode As New vTreeNode
+    Private filtersFilterValuesTv As New vTreeView
+    Private m_filterTV As New vTreeView
 
     ' Variables
     Private axisId As Int32
     Private Const m_FilterTag As String = "filterId"
+    Private m_editFilterStructUI As AxisFilterStructView
 
 #End Region
 
@@ -38,13 +41,13 @@ Friend Class AxisFiltersController
 
         axisId = p_axis_id
         AxisFilter.LoadFvTv(filtersFilterValuesTv, filtersNode, axisId)
-        If filtersFilterValuesTv.Nodes.Count > 0 Then
-            filtersFilterValuesTv.Nodes(0).Name = m_FilterTag & filtersFilterValuesTv.Nodes(0).Name
-        End If
+        For Each node As vTreeNode In filtersFilterValuesTv.Nodes
+            node.Value = m_FilterTag & node.Value
+        Next
 
         View = New AxisFiltersView(Me, filtersNode, axisId, filtersFilterValuesTv)
-        View.Show()
-
+        GlobalVariables.Filters.LoadFiltersTV(m_filterTV, axisId)
+        m_editFilterStructUI = New AxisFilterStructView(m_filterTV, axisId, Me, filtersNode)
         AddHandler GlobalVariables.Filters.CreationEvent, AddressOf AfterFilterCreation
         AddHandler GlobalVariables.Filters.Read, AddressOf AfterFilterRead
         AddHandler GlobalVariables.Filters.UpdateEvent, AddressOf AfterFilterUpdate
@@ -76,6 +79,14 @@ Friend Class AxisFiltersController
 
 #Region "Interface"
 
+    Friend Sub ShowEditStructure()
+        Try
+            m_editFilterStructUI.Show()
+        Catch ex As Exception
+            System.Diagnostics.Debug.WriteLine(ex.Message)
+        End Try
+    End Sub
+
     ' Filters
     Friend Function CreateFilter(ByRef p_filterName As String, _
                                  ByRef p_parentFilterid As Int32, _
@@ -93,7 +104,7 @@ Friend Class AxisFiltersController
 
     Friend Sub UpdateFilter(ByRef filterId As Int32, ByRef field As String, ByRef value As Object)
 
-        Dim ht As Hashtable = GlobalVariables.Filters.filters_hash(filterid).clone
+        Dim ht As Hashtable = GlobalVariables.Filters.filters_hash(filterId).clone
         ht(field) = value
         GlobalVariables.Filters.CMSG_UPDATE_FILTER(ht)
 
@@ -110,7 +121,15 @@ Friend Class AxisFiltersController
 
     End Sub
 
-
+    Friend Function IsAllowedFilterName(ByRef p_name As String)
+        For Each filter In GlobalVariables.Filters.filters_hash.Values
+            If filter(NAME_VARIABLE) = p_name Then Return False
+        Next
+        For Each filterValue In GlobalVariables.FiltersValues.filtervalues_hash.Values
+            If filterValue(NAME_VARIABLE) = p_name Then Return False
+        Next
+        Return True
+    End Function
     ' Filters Values
     Friend Sub CreateFilterValue(ByRef filterValueName As String, _
                                 ByRef filterId As Int32, _
@@ -163,6 +182,7 @@ Friend Class AxisFiltersController
 
         If status = True Then
             View.UpdateFiltersValuesTV()
+            m_editFilterStructUI.SetFilter(ht)
         End If
 
     End Sub
@@ -171,6 +191,7 @@ Friend Class AxisFiltersController
 
         If status = True Then
             View.UpdateFiltersValuesTV()
+            m_editFilterStructUI.DeleteFilter(id)
         End If
 
     End Sub

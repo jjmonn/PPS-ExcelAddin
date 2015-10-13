@@ -8,6 +8,8 @@
 
 Imports System.Windows.Forms
 Imports System.Collections.Generic
+Imports System.Collections
+Imports VIBlend.WinForms.Controls
 
 
 Friend Class AxisFiltersView
@@ -17,9 +19,8 @@ Friend Class AxisFiltersView
 
     ' Objects
     Private Controller As AxisFiltersController
-    Private NewFilterUI As NewFilterUI
-    Private FiltersFiltersValuesTV As New TreeView
-    Private filtersNode As TreeNode
+    Private FiltersFiltersValuesTV As New vTreeView
+    Private filtersNode As vTreeNode
     Private axisId As Int32
 
     ' Variables
@@ -31,16 +32,15 @@ Friend Class AxisFiltersView
 #Region "Initialization"
 
     Friend Sub New(ByRef p_controller As AxisFiltersController, _
-                   ByRef p_filtersNode As TreeNode, _
+                   ByRef p_filtersNode As vTreeNode, _
                    ByRef p_axidId As Int32, _
-                   ByRef p_filtersFiltersValuesTV As TreeView)
+                   ByRef p_filtersFiltersValuesTV As vTreeView)
 
         ' This call is required by the designer.
         InitializeComponent()
 
         ' Add any initialization after the InitializeComponent() call.
         Controller = p_controller
-        Me.NewFilterUI = New NewFilterUI(p_controller, p_filtersNode)
         FiltersFiltersValuesTV = p_filtersFiltersValuesTV
         axisId = p_axidId
         filtersNode = p_filtersNode
@@ -48,13 +48,13 @@ Friend Class AxisFiltersView
         FiltersFiltersValuesTV.Dock = DockStyle.Fill
         FiltersFiltersValuesTV.ImageList = ImageList1
         FiltersFiltersValuesTV.ContextMenuStrip = RCM_TV
-
+        VTreeViewUtil.InitTVFormat(FiltersFiltersValuesTV)
         If Not GlobalVariables.Users.CurrentUserIsAdmin() Then
             CategoriesToolStripMenuItem.Enabled = False
             RenameRCM.Enabled = False
             DeleteRCM.Enabled = False
-            CreateCategoryRCM.Enabled = False
             AddValueRCM.Enabled = False
+            EditStructureToolStripMenuItem.Enabled = False
         End If
 
         AddHandler FiltersFiltersValuesTV.KeyDown, AddressOf FiltersFiltersValuesTV_KeyDown
@@ -80,49 +80,74 @@ Friend Class AxisFiltersView
             Dim MyDelegate As New UpdateFiltersValuesTV_Delegate(AddressOf UpdateFiltersValuesTV)
             Me.Invoke(MyDelegate, New Object() {})
         Else
-            '   Dim TVExpansionTemp As Dictionary(Of String, Boolean) = TreeViewsUtilities.SaveNodesExpansionsLevel(FiltersFiltersValuesTV)
+            Dim TVExpansionTemp As Dictionary(Of String, Boolean) = TreeViewsUtilities.SaveNodesExpansionsLevel(FiltersFiltersValuesTV)
             AxisFilter.LoadFvTv(FiltersFiltersValuesTV, filtersNode, axisId)
-            If FiltersFiltersValuesTV.Nodes.Count > 0 Then
-                FiltersFiltersValuesTV.Nodes(0).Name = "filterId" & FiltersFiltersValuesTV.Nodes(0).Name
-            End If
-            '  TreeViewsUtilities.ResumeExpansionsLevel(FiltersFiltersValuesTV, TVExpansionTemp)
-            'FiltersFiltersValuesTV.ExpandAll()
+            For Each node As vTreeNode In FiltersFiltersValuesTV.Nodes
+                node.Value = "filterId" & node.Value
+            Next
+            TreeViewsUtilities.ResumeExpansionsLevel(FiltersFiltersValuesTV, TVExpansionTemp)
             FiltersFiltersValuesTV.Refresh()
         End If
 
     End Sub
+
+    Delegate Sub SetFilter_Delegate(ByRef p_ht As Hashtable)
+    Friend Sub SetFilter(ByRef p_ht As Hashtable)
+        If InvokeRequired Then
+            Dim MyDelegate As New SetFilter_Delegate(AddressOf SetFilter)
+            Me.Invoke(MyDelegate, New Object() {p_ht})
+        Else
+            Dim newNode As New vTreeNode
+
+            newNode.Text = p_ht(NAME_VARIABLE)
+            newNode.Value = p_ht(ID_VARIABLE)
+            If p_ht(PARENT_ID_VARIABLE) = 0 Then
+                newNode.Value = "filterId" & newNode.Value
+                FiltersFiltersValuesTV.Nodes.Add(newNode)
+            Else
+                Dim parentNode = GetNode(FiltersFiltersValuesTV.Nodes, p_ht(PARENT_ID_VARIABLE))
+
+                If Not parentNode Is Nothing Then parentNode.Nodes.Add(newNode)
+            End If
+        End If
+    End Sub
+
+    Private Function GetNode(ByRef p_parentNode As vTreeNodeCollection, ByRef p_id As Int32) As vTreeNode
+        For Each node As vTreeNode In p_parentNode
+            If node.Value = p_id Then Return node
+
+            Dim result = GetNode(node.Nodes, p_id)
+            If Not result Is Nothing Then Return result
+        Next
+        Return Nothing
+    End Function
 
 #End Region
 
 
 #Region "Call backs"
 
-    Private Sub CreateFilterBT_Click(sender As Object, e As EventArgs) Handles NewCategoryMenuBT.Click, CreateCategoryRCM.Click
-
-        Me.NewFilterUI.Show()
-
-    End Sub
-
     Private Sub CreateFilterValueBT_Click_1(sender As Object, e As EventArgs) Handles AddValueRCM.Click
 
         Dim filterId, parentFilterValueId As Int32
-        Dim currentNode As TreeNode = FiltersFiltersValuesTV.SelectedNode
+        Dim currentNode As vTreeNode = FiltersFiltersValuesTV.SelectedNode
         If FiltersFiltersValuesTV.SelectedNode Is Nothing Then
             MsgBox("Please select a Category or a Value.")
         Else
-            If Controller.IsFilter(currentNode.Name) Then
-                filterId = CInt(currentNode.Name)
+            If Controller.IsFilter(currentNode.Value) Then
+                filterId = CInt(currentNode.Value)
                 parentFilterValueId = 0
                 GoTo NewFilterValue
             End If
 
             If currentNode.Nodes.Count > 0 Then
-                filterId = GlobalVariables.FiltersValues.filtervalues_hash(CInt(currentNode.Nodes(0).Name))(FILTER_ID_VARIABLE)
+                filterId = GlobalVariables.FiltersValues.filtervalues_hash(CInt(currentNode.Nodes(0).Value))(FILTER_ID_VARIABLE)
             Else
-                Dim parentFilterId As Int32 = GlobalVariables.FiltersValues.filtervalues_hash(CInt(currentNode.Name))(FILTER_ID_VARIABLE)
+                Dim parentFilterId As Int32 = GlobalVariables.FiltersValues.filtervalues_hash(CInt(currentNode.Value))(FILTER_ID_VARIABLE)
                 filterId = GlobalVariables.Filters.GetFilterChild(parentFilterId)
+                If (filterId = -1) Then Exit Sub
             End If
-            parentFilterValueId = CInt(currentNode.Name)
+            parentFilterValueId = CInt(currentNode.Value)
         End If
 
 NewFilterValue:
@@ -142,7 +167,7 @@ NewFilterValue:
     Private Sub RenameToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles RenameMenuBT.Click, RenameRCM.Click
 
         If Not FiltersFiltersValuesTV.SelectedNode Is Nothing Then
-            Dim current_node As TreeNode = FiltersFiltersValuesTV.SelectedNode
+            Dim current_node As vTreeNode = FiltersFiltersValuesTV.SelectedNode
             Dim name = InputBox("Please enter the new Category Value Name:")
             If name <> "" Then
 
@@ -161,20 +186,21 @@ NewFilterValue:
 
     End Sub
 
+
     Private Sub DeleteBT_Click(sender As Object, e As EventArgs) Handles DeleteMenuBT.Click, DeleteRCM.Click
 
         ' to be validated 
         ' priority normal 
         ' !!!
         If Not FiltersFiltersValuesTV.SelectedNode Is Nothing Then
-            Dim current_node As TreeNode = FiltersFiltersValuesTV.SelectedNode
-            If Controller.IsFilter(FiltersFiltersValuesTV.SelectedNode.Name) Then
+            Dim current_node As vTreeNode = FiltersFiltersValuesTV.SelectedNode
+            If Controller.IsFilter(FiltersFiltersValuesTV.SelectedNode.Value) Then
                 ' Delete Category
                 Dim confirm As Integer = MessageBox.Show("Careful, you are about to delete the Category: " + Chr(13) + current_node.Text + Chr(13) + "Do you confirm?", _
                                                          "Category deletion confirmation", _
                                                          MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question)
                 If confirm = DialogResult.Yes Then
-                    Controller.DeleteFilter(current_node.Name)
+                    Controller.DeleteFilter(current_node.Value)
                 End If
             Else
                 ' Delete Category Value
@@ -182,7 +208,7 @@ NewFilterValue:
                                                          "Category value deletion confirmation", _
                                                          MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question)
                 If confirm = DialogResult.Yes Then
-                    Controller.DeleteFilterValue(current_node.Name)
+                    Controller.DeleteFilterValue(current_node.Value)
                 End If
             End If
         End If
@@ -194,7 +220,7 @@ NewFilterValue:
 
 #Region "Events"
 
-    Private Sub TV_AfterSelect(sender As Object, e As TreeViewEventArgs)
+    Private Sub TV_AfterSelect(sender As Object, e As vTreeViewEventArgs)
 
         FiltersFiltersValuesTV.SelectedNode = e.Node
 
@@ -207,13 +233,13 @@ NewFilterValue:
             Case Keys.Up
                 If e.Control Then
                     If Not FiltersFiltersValuesTV.SelectedNode Is Nothing Then
-                        TreeViewsUtilities.MoveNodeUp(FiltersFiltersValuesTV.SelectedNode)
+                        VTreeViewUtil.MoveNodeUp(FiltersFiltersValuesTV.SelectedNode)
                     End If
                 End If
             Case Keys.Down
                 If e.Control Then
                     If Not FiltersFiltersValuesTV.SelectedNode Is Nothing Then
-                        TreeViewsUtilities.MoveNodeDown(FiltersFiltersValuesTV.SelectedNode)
+                        VTreeViewUtil.MoveNodeDown(FiltersFiltersValuesTV.SelectedNode)
                     End If
                 End If
         End Select
@@ -221,16 +247,21 @@ NewFilterValue:
     End Sub
 
     Private Sub ExpandAllBT_Click(sender As Object, e As EventArgs) Handles ExpandAllBT.Click
-        For Each node As TreeNode In FiltersFiltersValuesTV.Nodes
-            node.ExpandAll()
+        For Each node As vTreeNode In FiltersFiltersValuesTV.Nodes
+            node.Expand()
         Next
     End Sub
 
 #End Region
 
     Private Sub CollapseAllBT_Click(sender As Object, e As EventArgs) Handles CollapseAllBT.Click
-        For Each node As TreeNode In FiltersFiltersValuesTV.Nodes
+        For Each node As vTreeNode In FiltersFiltersValuesTV.Nodes
             node.Collapse(False)
         Next
     End Sub
+
+    Private Sub EditStructureToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles EditStructureToolStripMenuItem.Click
+        Controller.ShowEditStructure()
+    End Sub
+
 End Class

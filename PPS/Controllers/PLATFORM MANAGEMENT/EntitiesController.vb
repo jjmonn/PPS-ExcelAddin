@@ -19,6 +19,7 @@ Imports System.Windows.Forms
 Imports System.Collections
 Imports System.Collections.Generic
 Imports VIBlend.WinForms.DataGridView
+Imports VIBlend.WinForms.Controls
 
 
 
@@ -29,9 +30,9 @@ Friend Class EntitiesController
 
     ' Objects
     Private View As EntitiesView
-    Private entitiesTV As New TreeView
-    Private entitiesFilterTV As New TreeView
-    Private entitiesFilterValuesTV As New TreeView
+    Private entitiesTV As New vTreeView
+    Private entitiesFilterTV As New vTreeView
+    Private entitiesFilterValuesTV As New vTreeView
     Private NewEntityView As NewEntityUI
     Private PlatformMGTUI As PlatformMGTGeneralUI
 
@@ -61,7 +62,7 @@ Friend Class EntitiesController
 
     End Sub
 
-    Private Sub LoadInstanceVariables()
+    Public Sub LoadInstanceVariables()
 
         GlobalVariables.Entities.LoadEntitiesTV(entitiesTV)
         GlobalVariables.Filters.LoadFiltersTV(entitiesFilterTV, GlobalEnums.AnalysisAxis.ENTITIES)
@@ -111,7 +112,7 @@ Friend Class EntitiesController
         Dim ht As Hashtable = GlobalVariables.Entities.entities_hash(id).Clone()
         ht(variable) = value
         GlobalVariables.Entities.CMSG_UPDATE_ENTITY(ht)
-     
+
     End Sub
 
     Friend Sub UpdateEntity(ByRef id As String, ByRef entity_attributes As Hashtable)
@@ -149,7 +150,7 @@ Friend Class EntitiesController
         If filterId = GlobalVariables.Filters.GetMostNestedFilterId(filterId) Then
             GlobalVariables.EntitiesFilters.CMSG_UPDATE_entity_FILTER(entityId, filterId, filterValueId)
         End If
-     
+
     End Sub
 
 
@@ -161,7 +162,7 @@ Friend Class EntitiesController
     Private Sub AfterEntityRead(ByRef status As Boolean, ByRef ht As Hashtable)
 
         If (status = True) Then
-            LoadInstanceVariables()
+            View.LoadInstanceVariables()
             View.UpdateEntity(ht)
         End If
 
@@ -170,7 +171,7 @@ Friend Class EntitiesController
     Private Sub AfterEntityDeletion(ByRef status As Boolean, ByRef id As Int32)
 
         If status = True Then
-            LoadInstanceVariables()
+            View.LoadInstanceVariables()
             View.DeleteEntity(id)
         End If
 
@@ -198,9 +199,9 @@ Friend Class EntitiesController
 
         If (status = True) Then
             Dim entityId As Int32 = entityFilterHT(ENTITY_ID_VARIABLE)
-        If GlobalVariables.Entities.entities_hash.ContainsKey(entityId) Then
-            LoadInstanceVariables()
-            View.UpdateEntity(GlobalVariables.Entities.entities_hash(entityId))
+            If GlobalVariables.Entities.entities_hash.ContainsKey(entityId) Then
+                View.LoadInstanceVariables()
+                View.UpdateEntity(GlobalVariables.Entities.entities_hash(entityId))
             End If
         End If
 
@@ -229,7 +230,7 @@ Friend Class EntitiesController
         Dim parentEntityID As Int32 = 0
         Dim current_row As HierarchyItem = View.getCurrentRowItem
         On Error GoTo ShowNewEntity
-        If Not current_row Is Nothing Then parentEntityID = entitiesTV.Nodes.Find(current_row.ItemValue, True)(0).Name
+        If Not current_row Is Nothing Then parentEntityID = TreeViewsUtilities.FindNode(entitiesTV.Nodes, current_row.ItemValue, True).Value
         GoTo ShowNewEntity
 
 ShowNewEntity:

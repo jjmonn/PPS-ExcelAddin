@@ -424,27 +424,27 @@ Partial Class VersionsControl
         '
         Me.NewVersionMenuBT.Image = Global.FinancialBI.My.Resources.Resources.elements3_add
         Me.NewVersionMenuBT.Name = "NewVersionMenuBT"
-        Me.NewVersionMenuBT.Size = New System.Drawing.Size(148, 22)
+        Me.NewVersionMenuBT.Size = New System.Drawing.Size(152, 22)
         Me.NewVersionMenuBT.Text = "New Version"
         '
         'NewFolderMenuBT
         '
         Me.NewFolderMenuBT.Image = Global.FinancialBI.My.Resources.Resources.favicon_81_
         Me.NewFolderMenuBT.Name = "NewFolderMenuBT"
-        Me.NewFolderMenuBT.Size = New System.Drawing.Size(148, 22)
+        Me.NewFolderMenuBT.Size = New System.Drawing.Size(152, 22)
         Me.NewFolderMenuBT.Text = "New Folder"
         '
         'DeleteVersionMenuBT
         '
         Me.DeleteVersionMenuBT.Image = Global.FinancialBI.My.Resources.Resources.elements3_delete
         Me.DeleteVersionMenuBT.Name = "DeleteVersionMenuBT"
-        Me.DeleteVersionMenuBT.Size = New System.Drawing.Size(148, 22)
+        Me.DeleteVersionMenuBT.Size = New System.Drawing.Size(152, 22)
         Me.DeleteVersionMenuBT.Text = "Delete Version"
         '
         'RenameMenuBT
         '
         Me.RenameMenuBT.Name = "RenameMenuBT"
-        Me.RenameMenuBT.Size = New System.Drawing.Size(148, 22)
+        Me.RenameMenuBT.Size = New System.Drawing.Size(152, 22)
         Me.RenameMenuBT.Text = "Rename"
         '
         'VersionsControl

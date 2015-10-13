@@ -33,8 +33,8 @@ Partial Class AxisFiltersView
         Me.DeleteMenuBT = New System.Windows.Forms.ToolStripMenuItem()
         Me.RenameMenuBT = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator3 = New System.Windows.Forms.ToolStripSeparator()
+        Me.EditStructureToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.RCM_TV = New System.Windows.Forms.ContextMenuStrip(Me.components)
-        Me.CreateCategoryRCM = New System.Windows.Forms.ToolStripMenuItem()
         Me.AddValueRCM = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator()
         Me.DeleteRCM = New System.Windows.Forms.ToolStripMenuItem()
@@ -69,7 +69,7 @@ Partial Class AxisFiltersView
         '
         'MenuStrip1
         '
-        Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.CategoriesToolStripMenuItem})
+        Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.CategoriesToolStripMenuItem, Me.EditStructureToolStripMenuItem})
         Me.MenuStrip1.Location = New System.Drawing.Point(0, 0)
         Me.MenuStrip1.Name = "MenuStrip1"
         Me.MenuStrip1.Size = New System.Drawing.Size(525, 24)
@@ -115,59 +115,58 @@ Partial Class AxisFiltersView
         Me.ToolStripSeparator3.Name = "ToolStripSeparator3"
         Me.ToolStripSeparator3.Size = New System.Drawing.Size(146, 6)
         '
+        'EditStructureToolStripMenuItem
+        '
+        Me.EditStructureToolStripMenuItem.Name = "EditStructureToolStripMenuItem"
+        Me.EditStructureToolStripMenuItem.Size = New System.Drawing.Size(89, 20)
+        Me.EditStructureToolStripMenuItem.Text = "Edit structure"
+        '
         'RCM_TV
         '
-        Me.RCM_TV.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.CreateCategoryRCM, Me.AddValueRCM, Me.ToolStripSeparator2, Me.DeleteRCM, Me.ToolStripSeparator1, Me.RenameRCM, Me.ExpandAllBT, Me.CollapseAllBT})
+        Me.RCM_TV.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.AddValueRCM, Me.ToolStripSeparator2, Me.DeleteRCM, Me.ToolStripSeparator1, Me.RenameRCM, Me.ExpandAllBT, Me.CollapseAllBT})
         Me.RCM_TV.Name = "RCM_TV"
-        Me.RCM_TV.Size = New System.Drawing.Size(160, 170)
-        '
-        'CreateCategoryRCM
-        '
-        Me.CreateCategoryRCM.Image = Global.FinancialBI.My.Resources.Resources.folder_open_add
-        Me.CreateCategoryRCM.Name = "CreateCategoryRCM"
-        Me.CreateCategoryRCM.Size = New System.Drawing.Size(159, 22)
-        Me.CreateCategoryRCM.Text = "Create Category"
+        Me.RCM_TV.Size = New System.Drawing.Size(140, 126)
         '
         'AddValueRCM
         '
         Me.AddValueRCM.Image = Global.FinancialBI.My.Resources.Resources.elements_add
         Me.AddValueRCM.Name = "AddValueRCM"
-        Me.AddValueRCM.Size = New System.Drawing.Size(159, 22)
+        Me.AddValueRCM.Size = New System.Drawing.Size(139, 22)
         Me.AddValueRCM.Text = "Create Value"
         '
         'ToolStripSeparator2
         '
         Me.ToolStripSeparator2.Name = "ToolStripSeparator2"
-        Me.ToolStripSeparator2.Size = New System.Drawing.Size(156, 6)
+        Me.ToolStripSeparator2.Size = New System.Drawing.Size(136, 6)
         '
         'DeleteRCM
         '
         Me.DeleteRCM.Image = Global.FinancialBI.My.Resources.Resources.elements_delete
         Me.DeleteRCM.Name = "DeleteRCM"
-        Me.DeleteRCM.Size = New System.Drawing.Size(159, 22)
+        Me.DeleteRCM.Size = New System.Drawing.Size(139, 22)
         Me.DeleteRCM.Text = "Delete"
         '
         'ToolStripSeparator1
         '
         Me.ToolStripSeparator1.Name = "ToolStripSeparator1"
-        Me.ToolStripSeparator1.Size = New System.Drawing.Size(156, 6)
+        Me.ToolStripSeparator1.Size = New System.Drawing.Size(136, 6)
         '
         'RenameRCM
         '
         Me.RenameRCM.Name = "RenameRCM"
-        Me.RenameRCM.Size = New System.Drawing.Size(159, 22)
+        Me.RenameRCM.Size = New System.Drawing.Size(139, 22)
         Me.RenameRCM.Text = "Rename"
         '
         'ExpandAllBT
         '
         Me.ExpandAllBT.Name = "ExpandAllBT"
-        Me.ExpandAllBT.Size = New System.Drawing.Size(159, 22)
+        Me.ExpandAllBT.Size = New System.Drawing.Size(139, 22)
         Me.ExpandAllBT.Text = "Expand all"
         '
         'CollapseAllBT
         '
         Me.CollapseAllBT.Name = "CollapseAllBT"
-        Me.CollapseAllBT.Size = New System.Drawing.Size(159, 22)
+        Me.CollapseAllBT.Size = New System.Drawing.Size(139, 22)
         Me.CollapseAllBT.Text = "Collapse all"
         '
         'AxisFiltersView
@@ -194,7 +193,6 @@ Partial Class AxisFiltersView
     Friend WithEvents RenameMenuBT As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents DeleteMenuBT As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents RCM_TV As System.Windows.Forms.ContextMenuStrip
-    Friend WithEvents CreateCategoryRCM As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents AddValueRCM As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ToolStripSeparator2 As System.Windows.Forms.ToolStripSeparator
     Friend WithEvents RenameRCM As System.Windows.Forms.ToolStripMenuItem
@@ -203,5 +201,6 @@ Partial Class AxisFiltersView
     Friend WithEvents ToolStripSeparator3 As System.Windows.Forms.ToolStripSeparator
     Friend WithEvents ExpandAllBT As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents CollapseAllBT As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents EditStructureToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
 
 End Class

@@ -1,4 +1,5 @@
 ﻿Imports System.Windows.Forms
+Imports VIBlend.WinForms.Controls
 
 ' NewFilter.vb
 '
@@ -16,7 +17,7 @@ Public Class NewFilterUI
 
 #Region "Instance Variables"
 
-    Private filtersNode As TreeNode
+    Private filtersNode As vTreeNode
     Private Controller As AxisFiltersController
 
 
@@ -26,7 +27,7 @@ Public Class NewFilterUI
 #Region "Initialize"
 
     Friend Sub New(ByRef p_controller As AxisFiltersController, _
-                   ByRef p_filtersNode As TreeNode)
+                   ByRef p_filtersNode As vTreeNode)
 
         ' This call is required by the designer.
         InitializeComponent()

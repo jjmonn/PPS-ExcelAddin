@@ -67,6 +67,12 @@ Friend Class GlobalFactUI
             DeleteVersionRCM.Enabled = False
             AddFolderRCM.Enabled = False
             ImportFromExcelBT.Enabled = False
+            RenameBT.Enabled = False
+            RenameVersionBT.Enabled = False
+            CopyFactDownToolStripMenuItem.Enabled = False
+            DeleteBT.Enabled = False
+            CreateNewFact.Enabled = False
+            CreateNewFact2.Enabled = False
         End If
     End Sub
 

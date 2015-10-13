@@ -68,7 +68,7 @@ Friend Class AccountsView
         AccountsTVInit()
         GlobalFactsTVInit()
         ComboBoxesInit()
-        SetAccountUIState(False, True)
+        SetAccountUIState(False, GlobalVariables.Users.CurrentUserIsAdmin())
 
     End Sub
 

@@ -19,6 +19,7 @@ Imports System.Windows.Forms
 Imports System.Collections
 Imports System.Collections.Generic
 Imports VIBlend.WinForms.DataGridView
+Imports VIBlend.WinForms.Controls
 
 
 
@@ -32,9 +33,9 @@ Friend Class AxisController
     Private CrudModel As SuperAxisCRUD
     Private CrudModelFilters As SuperAxisFilterCRUD
 
-    Private AxisTV As New TreeView
-    Private AxisFilterTV As New TreeView
-    Private AxisFilterValuesTV As New TreeView
+    Private AxisTV As New vTreeView
+    Private AxisFilterTV As New vTreeView
+    Private AxisFilterValuesTV As New vTreeView
     Private PlatformMGTUI As PlatformMGTGeneralUI
 
     ' Variables

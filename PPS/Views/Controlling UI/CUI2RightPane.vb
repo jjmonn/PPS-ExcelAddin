@@ -265,7 +265,7 @@ Public Class CUI2RightPane
             vListBox.DropItem(Me.rowsDisplayList, Me.columnsDisplayList, e.SourceItem)
             If dimensionsList.Contains(e.SourceItem.Value) = False Then
                 dimensionsList.Add(e.SourceItem.Value)
-            End If
+        End If
         End If
         rowsDisplayList.StopDraggingTimer()
         columnsDisplayList.StopDraggingTimer()
@@ -326,9 +326,13 @@ Public Class CUI2RightPane
         Dim dropNode As vTreeNode = TryCast(e.Data.GetData(GetType(vTreeNode)), vTreeNode)
         If dropNode IsNot Nothing Then
             If dimensionsList.Contains(dropNode.Value) = False Then
-                Dim item = selectedListBox.Items.Add(dropNode.Text)
-                item.Value = dropNode.Value
-                dimensionsList.Add(dropNode.Value)
+                If dimensionsList.Count >= 6 Then
+                    MsgBox("Maximum allowed number of dimensions is 6.")
+                Else
+                    Dim item = selectedListBox.Items.Add(dropNode.Text)
+                    item.Value = dropNode.Value
+                    dimensionsList.Add(dropNode.Value)
+                End If
             End If
         End If
 

@@ -87,7 +87,7 @@ Partial Class NewDataVersionUI
         Me.Label3.Location = New System.Drawing.Point(3, 223)
         Me.Label3.Margin = New System.Windows.Forms.Padding(3, 7, 3, 0)
         Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(74, 15)
+        Me.Label3.Size = New System.Drawing.Size(66, 13)
         Me.Label3.TabIndex = 30
         Me.Label3.Text = "Fact Version"
         '
@@ -97,7 +97,7 @@ Partial Class NewDataVersionUI
         Me.Label2.Location = New System.Drawing.Point(3, 187)
         Me.Label2.Margin = New System.Windows.Forms.Padding(3, 7, 3, 0)
         Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(141, 15)
+        Me.Label2.Size = New System.Drawing.Size(124, 13)
         Me.Label2.TabIndex = 28
         Me.Label2.Text = "Exchange Rates Version"
         '
@@ -107,7 +107,7 @@ Partial Class NewDataVersionUI
         Me.Label1.Location = New System.Drawing.Point(3, 151)
         Me.Label1.Margin = New System.Windows.Forms.Padding(3, 7, 3, 0)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(99, 15)
+        Me.Label1.Size = New System.Drawing.Size(86, 13)
         Me.Label1.TabIndex = 25
         Me.Label1.Text = "Number of Years"
         '
@@ -141,7 +141,7 @@ Partial Class NewDataVersionUI
         Me.Label11.Location = New System.Drawing.Point(3, 115)
         Me.Label11.Margin = New System.Windows.Forms.Padding(3, 7, 3, 0)
         Me.Label11.Name = "Label11"
-        Me.Label11.Size = New System.Drawing.Size(77, 15)
+        Me.Label11.Size = New System.Drawing.Size(68, 13)
         Me.Label11.TabIndex = 17
         Me.Label11.Text = "Starting Year"
         '
@@ -151,7 +151,7 @@ Partial Class NewDataVersionUI
         Me.Label10.Location = New System.Drawing.Point(3, 79)
         Me.Label10.Margin = New System.Windows.Forms.Padding(3, 7, 3, 0)
         Me.Label10.Name = "Label10"
-        Me.Label10.Size = New System.Drawing.Size(172, 29)
+        Me.Label10.Size = New System.Drawing.Size(192, 13)
         Me.Label10.TabIndex = 15
         Me.Label10.Text = "Periods configuration (Yearly / Monthly)"
         '
@@ -162,7 +162,7 @@ Partial Class NewDataVersionUI
         Me.Label4.Location = New System.Drawing.Point(3, 7)
         Me.Label4.Margin = New System.Windows.Forms.Padding(3, 7, 3, 0)
         Me.Label4.Name = "Label4"
-        Me.Label4.Size = New System.Drawing.Size(97, 15)
+        Me.Label4.Size = New System.Drawing.Size(85, 13)
         Me.Label4.TabIndex = 7
         Me.Label4.Text = "Version Name"
         '
