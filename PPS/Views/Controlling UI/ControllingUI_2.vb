@@ -383,11 +383,11 @@ Friend Class ControllingUI_2
 #Region "Events"
 
     Private Sub AccountUpdateFromServer(ByRef status As Boolean, ByRef accountsAttributes As Hashtable)
-        GlobalVariables.Accounts.LoadAccountsTV(accountsTV)
+        ReloadAccountsTV_ThreadSafe()
     End Sub
 
     Private Sub AccountDeleteFromServer(ByRef status As Boolean, ByRef id As UInt32)
-     GlobalVariables.Accounts.LoadAccountsTV(accountsTV)
+        ReloadAccountsTV_ThreadSafe()
     End Sub
 
     Private Sub EntitiesTV_KeyDown(sender As Object, e As KeyEventArgs)
@@ -876,6 +876,18 @@ Friend Class ControllingUI_2
             Me.Invoke(MyDelegate, New Object() {p_logValuesHt})
         Else
             m_logView.DisplayLogValues(p_logValuesHt)
+        End If
+
+    End Sub
+
+    Delegate Sub ReloadAccountsTV_Delegate()
+    Friend Sub ReloadAccountsTV_ThreadSafe()
+
+        If InvokeRequired Then
+            Dim MyDelegate As New ReloadAccountsTV_Delegate(AddressOf ReloadAccountsTV_ThreadSafe)
+            Me.Invoke(MyDelegate, New Object() {})
+        Else
+            GlobalVariables.Accounts.LoadAccountsTV(accountsTV)
         End If
 
     End Sub
