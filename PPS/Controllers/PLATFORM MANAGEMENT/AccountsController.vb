@@ -76,7 +76,7 @@ Friend Class AccountsController
         accountsNameKeysDictionary = GlobalVariables.Accounts.GetAccountsDictionary(NAME_VARIABLE, ID_VARIABLE)
         factsNameKeysDictionary = GlobalVariables.GlobalFacts.GetFactsHashtable()
         NewAccountView = New NewAccountUI(m_view, Me)
-        FormulasTranslator = New FormulasTranslations(accountsNameKeysDictionary, factsNameKeysDictionary)
+        FormulasTranslator = New FormulasTranslations()
 
     End Sub
 
@@ -209,7 +209,7 @@ Friend Class AccountsController
 #Region "Checks"
 
     Friend Function IsUsedName(ByRef p_name As String) As Boolean
-        For Each fact In GlobalVariables.GlobalFacts.globalFact_hash
+        For Each fact In GlobalVariables.GlobalFacts.m_globalFactHash
             If fact.Value(NAME_VARIABLE) = p_name Then Return True
         Next
         For Each account In GlobalVariables.Accounts.m_accountsHash

@@ -83,7 +83,7 @@ Partial Class CUI2Visualization
         Me.VSplitContainer1.Panel1.Controls.Add(Me.VSplitContainer3)
         Me.VSplitContainer1.Panel1.Location = New System.Drawing.Point(0, 0)
         Me.VSplitContainer1.Panel1.Name = "Panel1"
-        Me.VSplitContainer1.Panel1.Size = New System.Drawing.Size(345, 388)
+        Me.VSplitContainer1.Panel1.Size = New System.Drawing.Size(346, 388)
         Me.VSplitContainer1.Panel1.TabIndex = 1
         '
         'VSplitContainer1.Panel2
@@ -92,15 +92,16 @@ Partial Class CUI2Visualization
         Me.VSplitContainer1.Panel2.BorderColor = System.Drawing.Color.Silver
         Me.VSplitContainer1.Panel2.Controls.Add(Me.VSplitContainer2)
         Me.VSplitContainer1.Panel2.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.VSplitContainer1.Panel2.Location = New System.Drawing.Point(352, 0)
+        Me.VSplitContainer1.Panel2.Location = New System.Drawing.Point(351, 0)
         Me.VSplitContainer1.Panel2.Name = "Panel2"
-        Me.VSplitContainer1.Panel2.Size = New System.Drawing.Size(346, 388)
+        Me.VSplitContainer1.Panel2.Size = New System.Drawing.Size(347, 388)
         Me.VSplitContainer1.Panel2.TabIndex = 2
         Me.VSplitContainer1.Size = New System.Drawing.Size(698, 388)
+        Me.VSplitContainer1.SplitterSize = 5
         Me.VSplitContainer1.StyleKey = "Splitter"
         Me.VSplitContainer1.TabIndex = 0
         Me.VSplitContainer1.Text = "VSplitContainer1"
-        Me.VSplitContainer1.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
+        Me.VSplitContainer1.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.OFFICE2010SILVER
         '
         'VSplitContainer3
         '
@@ -117,7 +118,7 @@ Partial Class CUI2Visualization
         Me.VSplitContainer3.Panel1.Controls.Add(Me.Chart1)
         Me.VSplitContainer3.Panel1.Location = New System.Drawing.Point(0, 0)
         Me.VSplitContainer3.Panel1.Name = "Panel1"
-        Me.VSplitContainer3.Panel1.Size = New System.Drawing.Size(345, 190)
+        Me.VSplitContainer3.Panel1.Size = New System.Drawing.Size(346, 191)
         Me.VSplitContainer3.Panel1.TabIndex = 1
         '
         'VSplitContainer3.Panel2
@@ -125,15 +126,16 @@ Partial Class CUI2Visualization
         Me.VSplitContainer3.Panel2.BackColor = System.Drawing.Color.White
         Me.VSplitContainer3.Panel2.BorderColor = System.Drawing.Color.Silver
         Me.VSplitContainer3.Panel2.Controls.Add(Me.Chart3)
-        Me.VSplitContainer3.Panel2.Location = New System.Drawing.Point(0, 197)
+        Me.VSplitContainer3.Panel2.Location = New System.Drawing.Point(0, 196)
         Me.VSplitContainer3.Panel2.Name = "Panel2"
-        Me.VSplitContainer3.Panel2.Size = New System.Drawing.Size(345, 191)
+        Me.VSplitContainer3.Panel2.Size = New System.Drawing.Size(346, 192)
         Me.VSplitContainer3.Panel2.TabIndex = 2
-        Me.VSplitContainer3.Size = New System.Drawing.Size(345, 388)
+        Me.VSplitContainer3.Size = New System.Drawing.Size(346, 388)
+        Me.VSplitContainer3.SplitterSize = 5
         Me.VSplitContainer3.StyleKey = "Splitter"
         Me.VSplitContainer3.TabIndex = 0
         Me.VSplitContainer3.Text = "VSplitContainer3"
-        Me.VSplitContainer3.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
+        Me.VSplitContainer3.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.OFFICE2010SILVER
         '
         'Chart1
         '
@@ -144,7 +146,7 @@ Partial Class CUI2Visualization
         Me.Chart1.Legends.Add(Legend5)
         Me.Chart1.Location = New System.Drawing.Point(0, 0)
         Me.Chart1.Name = "Chart1"
-        Me.Chart1.Size = New System.Drawing.Size(345, 190)
+        Me.Chart1.Size = New System.Drawing.Size(346, 191)
         Me.Chart1.TabIndex = 0
         Me.Chart1.Text = "Chart1"
         '
@@ -157,7 +159,7 @@ Partial Class CUI2Visualization
         Me.Chart3.Legends.Add(Legend6)
         Me.Chart3.Location = New System.Drawing.Point(0, 0)
         Me.Chart3.Name = "Chart3"
-        Me.Chart3.Size = New System.Drawing.Size(345, 191)
+        Me.Chart3.Size = New System.Drawing.Size(346, 192)
         Me.Chart3.TabIndex = 1
         Me.Chart3.Text = "Chart3"
         '
@@ -176,7 +178,7 @@ Partial Class CUI2Visualization
         Me.VSplitContainer2.Panel1.Controls.Add(Me.Chart2)
         Me.VSplitContainer2.Panel1.Location = New System.Drawing.Point(0, 0)
         Me.VSplitContainer2.Panel1.Name = "Panel1"
-        Me.VSplitContainer2.Panel1.Size = New System.Drawing.Size(346, 190)
+        Me.VSplitContainer2.Panel1.Size = New System.Drawing.Size(347, 190)
         Me.VSplitContainer2.Panel1.TabIndex = 1
         '
         'VSplitContainer2.Panel2
@@ -184,15 +186,16 @@ Partial Class CUI2Visualization
         Me.VSplitContainer2.Panel2.BackColor = System.Drawing.Color.White
         Me.VSplitContainer2.Panel2.BorderColor = System.Drawing.Color.Silver
         Me.VSplitContainer2.Panel2.Controls.Add(Me.Chart4)
-        Me.VSplitContainer2.Panel2.Location = New System.Drawing.Point(0, 197)
+        Me.VSplitContainer2.Panel2.Location = New System.Drawing.Point(0, 195)
         Me.VSplitContainer2.Panel2.Name = "Panel2"
-        Me.VSplitContainer2.Panel2.Size = New System.Drawing.Size(346, 191)
+        Me.VSplitContainer2.Panel2.Size = New System.Drawing.Size(347, 193)
         Me.VSplitContainer2.Panel2.TabIndex = 2
-        Me.VSplitContainer2.Size = New System.Drawing.Size(346, 388)
+        Me.VSplitContainer2.Size = New System.Drawing.Size(347, 388)
+        Me.VSplitContainer2.SplitterSize = 5
         Me.VSplitContainer2.StyleKey = "Splitter"
         Me.VSplitContainer2.TabIndex = 0
         Me.VSplitContainer2.Text = "VSplitContainer2"
-        Me.VSplitContainer2.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
+        Me.VSplitContainer2.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.OFFICE2010SILVER
         '
         'Chart2
         '
@@ -203,7 +206,7 @@ Partial Class CUI2Visualization
         Me.Chart2.Legends.Add(Legend7)
         Me.Chart2.Location = New System.Drawing.Point(0, 0)
         Me.Chart2.Name = "Chart2"
-        Me.Chart2.Size = New System.Drawing.Size(346, 190)
+        Me.Chart2.Size = New System.Drawing.Size(347, 190)
         Me.Chart2.TabIndex = 1
         Me.Chart2.Text = "Chart2"
         '
@@ -216,7 +219,7 @@ Partial Class CUI2Visualization
         Me.Chart4.Legends.Add(Legend8)
         Me.Chart4.Location = New System.Drawing.Point(0, 0)
         Me.Chart4.Name = "Chart4"
-        Me.Chart4.Size = New System.Drawing.Size(346, 191)
+        Me.Chart4.Size = New System.Drawing.Size(347, 193)
         Me.Chart4.TabIndex = 1
         Me.Chart4.Text = "Chart4"
         '
@@ -325,7 +328,7 @@ Partial Class CUI2Visualization
         Me.Label3.AutoSize = True
         Me.Label3.Location = New System.Drawing.Point(356, 5)
         Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(49, 13)
+        Me.Label3.Size = New System.Drawing.Size(55, 15)
         Me.Label3.TabIndex = 9
         Me.Label3.Text = "Currency"
         '
@@ -335,7 +338,7 @@ Partial Class CUI2Visualization
         Me.Label2.AutoSize = True
         Me.Label2.Location = New System.Drawing.Point(492, 5)
         Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(42, 13)
+        Me.Label2.Size = New System.Drawing.Size(48, 15)
         Me.Label2.TabIndex = 8
         Me.Label2.Text = "Version"
         '
@@ -345,7 +348,7 @@ Partial Class CUI2Visualization
         Me.Label1.AutoSize = True
         Me.Label1.Location = New System.Drawing.Point(172, 5)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(33, 13)
+        Me.Label1.Size = New System.Drawing.Size(36, 15)
         Me.Label1.TabIndex = 7
         Me.Label1.Text = "Entity"
         '

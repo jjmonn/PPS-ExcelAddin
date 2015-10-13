@@ -8,10 +8,9 @@ Friend Class GlobalFact
 
 #Region "Instance variables"
 
-
     ' Variables
     Friend state_flag As Boolean
-    Friend globalFact_hash As New Hashtable
+    Friend m_globalFactHash As New Hashtable
 
     ' Events
     Public Event ObjectInitialized()
@@ -43,7 +42,7 @@ Friend Class GlobalFact
             For i As Int32 = 1 To nb_globalFacts
                 Dim tmp_ht As New Hashtable
                 GetGlobalFactHTFromPacket(packet, tmp_ht)
-                globalFact_hash(CInt(tmp_ht(ID_VARIABLE))) = tmp_ht
+                m_globalFactHash(CInt(tmp_ht(ID_VARIABLE))) = tmp_ht
             Next
             state_flag = True
             RaiseEvent ObjectInitialized()
@@ -54,6 +53,7 @@ Friend Class GlobalFact
     End Sub
 
 #End Region
+
 
 #Region "CRUD"
 
@@ -91,7 +91,7 @@ Friend Class GlobalFact
         If packet.GetError() = 0 Then
             Dim ht As New Hashtable
             GetGlobalFactHTFromPacket(packet, ht)
-            globalFact_hash(CInt(ht(ID_VARIABLE))) = ht
+            m_globalFactHash(CInt(ht(ID_VARIABLE))) = ht
             RaiseEvent Read(True, ht)
         Else
             RaiseEvent Read(False, Nothing)
@@ -170,7 +170,7 @@ Friend Class GlobalFact
 
         If packet.GetError() = 0 Then
             Dim id As Int32 = packet.ReadInt32
-            globalFact_hash.Remove(id)
+            m_globalFactHash.Remove(id)
             RaiseEvent DeleteEvent(True, id)
         Else
             RaiseEvent DeleteEvent(False, 0)
@@ -185,11 +185,12 @@ Friend Class GlobalFact
 
     Friend Function GetFactsHashTable() As Hashtable
         Dim ht As New Hashtable
-        For Each id In globalFact_hash.Keys
-            ht(globalFact_hash(id)(NAME_VARIABLE)) = globalFact_hash(id)(ID_VARIABLE)
+        For Each id In m_globalFactHash.Keys
+            ht(m_globalFactHash(id)(NAME_VARIABLE)) = m_globalFactHash(id)(ID_VARIABLE)
         Next
         Return ht
     End Function
+
     Friend Shared Sub GetGlobalFactHTFromPacket(ByRef packet As ByteBuffer, ByRef globalFact_ht As Hashtable)
 
         globalFact_ht(ID_VARIABLE) = packet.ReadInt32()
@@ -218,8 +219,17 @@ Friend Class GlobalFact
     End Function
 
     Friend Sub LoadGlobalFactsTV(ByRef p_tv As TreeView)
-        TreeViewsUtilities.LoadTreeview(p_tv, globalFact_hash)
+        TreeViewsUtilities.LoadTreeview(p_tv, m_globalFactHash)
     End Sub
+
+    Friend Function GetIdFromName(ByRef name As String) As Int32
+
+        For Each id As Int32 In m_globalFactHash.Keys
+            If name = m_globalFactHash(id)(NAME_VARIABLE) Then Return id
+        Next
+        Return 0
+
+    End Function
 
 #End Region
 

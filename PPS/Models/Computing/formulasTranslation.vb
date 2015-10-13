@@ -21,7 +21,6 @@ Friend Class FormulasTranslations
 
 #Region "Instance Variables and constants"
 
-
 #Region "Common"
 
     ' Variables
@@ -47,15 +46,11 @@ Friend Class FormulasTranslations
     Private Const PERIOD_REGEX_GROUP As UInt16 = 5
     Friend Const PERIODS_HUMAN_AGG_IDENTIFIER As Char = ":"
 
-
 #End Region
-
 
 #Region "From Human to DataBase"
 
     Friend currentDBFormula As String
-    Private m_accountsNameKeyDictionary As Hashtable
-    Private m_factsNameKeyDictionary As Hashtable
 
     ' Accounts Regex
     Private regexOperatorsStr As String = "/\(\)\+\-\*\=\<\>\^\?\:\;\!"
@@ -74,7 +69,6 @@ Friend Class FormulasTranslations
     Private periodsHumanToDBregex As Regex = New Regex(period_str_regex, RegexOptions.IgnoreCase)
 
 #End Region
-
 
 #Region "From DB to Human"
 
@@ -100,16 +94,12 @@ Friend Class FormulasTranslations
 
 #End Region
 
-
 #End Region
 
 
 #Region "Initialize"
 
-    Friend Sub New(ByRef p_accountsNameKeysDictionary As Hashtable, ByRef p_factsNameKeysDictionary As Hashtable)
-
-        m_accountsNameKeyDictionary = p_accountsNameKeysDictionary
-        m_factsNameKeyDictionary = p_factsNameKeysDictionary
+    Friend Sub New()
 
         ' caution => accounts name/ parser functions !!! priority high
         Dim parsers_functions_array As String() = Split(PARSER_FORMULAS, ",")
@@ -158,8 +148,9 @@ Friend Class FormulasTranslations
 
                 matchStr = m.Groups(0).Value
                 accountName = m.Groups(1).Value
-                If m_accountsNameKeyDictionary.ContainsKey(accountName) Then
-                    accountId = m_accountsNameKeyDictionary(accountName)
+
+                accountId = GlobalVariables.Accounts.GetIdFromName(accountName)
+                If accountId <> 0 Then
 
                     If matchStr.IndexOf(PERIODS_SEPARATOR_START, 0) > 0 Then
                         ' human_formula = human_formula.Replace(accountName, ACCOUNT_IDENTIFIER & accountId)
@@ -198,8 +189,9 @@ Friend Class FormulasTranslations
 
                 matchStr = m.Groups(0).Value
                 factName = m.Groups(1).Value
-                If m_factsNameKeyDictionary.ContainsKey(factName) Then
-                    factId = m_factsNameKeyDictionary(factName)
+
+                factId = GlobalVariables.GlobalFacts.GetIdFromName(factName)
+                If factId <> 0 Then
 
                     If matchStr.IndexOf(PERIODS_SEPARATOR_START, 0) > 0 Then
                         human_formula = Replace(human_formula, matchStr, FACTS_IDENTIFIER & factId & PERIODS_SEPARATOR_START, 1, 1)
@@ -294,7 +286,7 @@ Friend Class FormulasTranslations
                     System.Diagnostics.Debug.Write("Error in regex parsing from DB to Human: Identified several Accounts IDs.")
                 End If
                 factId = m.Groups(1).Captures(0).Value
-                factName = GlobalVariables.GlobalFacts.globalFact_hash(factId)(NAME_VARIABLE)
+                factName = GlobalVariables.GlobalFacts.m_globalFactHash(factId)(NAME_VARIABLE)
                 formulaStr = Replace(formulaStr, m.Groups(0).Value, FACTS_HUMAN_IDENTIFIER & _
                                                                     factName & _
                                                                     FACTS_HUMAN_IDENTIFIER & _
