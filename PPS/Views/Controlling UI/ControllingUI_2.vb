@@ -9,7 +9,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 07/10/2015
+' Last modified: 13/10/2015
 
 
 Imports System.Windows.Forms
@@ -42,8 +42,8 @@ Friend Class ControllingUI_2
     Friend leftPane_control As CUI2LeftPane
     Private leftSplitContainer As SplitContainer
     Private rightSplitContainer As SplitContainer
-    Private Accounts As New Account
-    Friend CircularProgress As ProgressIndicator
+    Private m_circularProgress As New ProgressIndicator
+    Friend m_progressBar As New ProgressBarControl
     Private leftPaneExpandBT As vButton
     Private rightPaneExpandBT As vButton
     Friend BackgroundWorker1 As New BackgroundWorker
@@ -64,6 +64,7 @@ Friend Class ControllingUI_2
     Private SP2Distance As Single = 900
     '   Private m_formatsDictionary As New Dictionary(Of int32, Formats.FinancialBIFormat)
     Private m_currenciesSymbol_dict As Hashtable
+    Private m_currentEntityNode As vTreeNode
 
 
 #End Region
@@ -89,11 +90,11 @@ Friend Class ControllingUI_2
 
 #Region "Flags"
 
-    Private isUpdatingPeriodsCheckList As Boolean
-    Private isVersionComparisonDisplayed As Boolean
-    Private IsUpdatingChildrenCategory As Boolean
-    Private displayControlFlag As Boolean
-    Private leftPaneExpandedFlag As Boolean
+    Private m_isUpdatingPeriodsCheckList As Boolean
+    Private m_isVersionComparisonDisplayed As Boolean
+    ' Private m_IsUpdatingChildrenCategory As Boolean
+    ' Private m_displayControlFlag As Boolean
+    ' Private m_leftPaneExpandedFlag As Boolean
 
 #End Region
 
@@ -134,8 +135,8 @@ Friend Class ControllingUI_2
         RightPaneSetup()
         m_controller = New ControllingUIController(Me)
         GlobalVariables.Accounts.LoadAccountsTV(accountsTV)
-        BackgroundWorker1.WorkerSupportsCancellation = True
         m_currenciesSymbol_dict = GlobalVariables.Currencies.GetCurrenciesDict(ID_VARIABLE, CURRENCY_SYMBOL_VARIABLE)
+        SetupProgressUIs()
 
         ' Init TabControl
         For Each node As vTreeNode In accountsTV.Nodes
@@ -146,8 +147,33 @@ Friend Class ControllingUI_2
         Next
         InitItemsFormat()
 
+        ' Refreshing Background Worker
+        BackgroundWorker1.WorkerSupportsCancellation = True
         AddHandler BackgroundWorker1.DoWork, AddressOf BackgroundWorker1_DoWork
-        AddHandler BackgroundWorker1.RunWorkerCompleted, AddressOf AfterWorkDoneAttemp_ThreadSafe
+        AddHandler BackgroundWorker1.RunWorkerCompleted, AddressOf backgroundWorker1_RunWorkerCompleted
+
+        ' Accounts Events
+        AddHandler GlobalVariables.Accounts.Read, AddressOf AccountUpdateFromServer
+        AddHandler GlobalVariables.Accounts.DeleteEvent, AddressOf AccountDeleteFromServer
+
+    End Sub
+
+    Private Sub SetupProgressUIs()
+
+        ' Progress Bar
+        SplitContainer1.Panel2.Controls.Add(m_progressBar)
+        m_progressBar.Visible = False
+
+        ' Progress Indicator (circular)
+        m_circularProgress.CircleColor = Drawing.Color.Purple
+        m_circularProgress.NumberOfCircles = 12
+        m_circularProgress.NumberOfVisibleCircles = 8
+        m_circularProgress.AnimationSpeed = 75
+        m_circularProgress.CircleSize = 0.7
+        m_circularProgress.Width = 79
+        m_circularProgress.Height = 79
+        SplitContainer1.Panel2.Controls.Add(m_circularProgress)
+        m_circularProgress.Visible = False
 
     End Sub
 
@@ -244,6 +270,7 @@ Friend Class ControllingUI_2
             DGV.Top = INNER_MARGIN
             DGV.BackColor = SystemColors.Control
             DGV.ContextMenuStrip = DataGridViewsRCMenu
+            DGV.RowsHierarchy.AllowResize = False
             tab_.Controls.Add(DGV)
             AddHandler DGV.CellMouseClick, AddressOf DGV_CellMouseClick
         Next
@@ -253,76 +280,35 @@ Friend Class ControllingUI_2
         End If
         Me.WindowState = FormWindowState.Maximized
 
-
     End Sub
-
 
 #End Region
 
 
 #Region "Interface"
 
-    Private Sub RefreshData(Optional ByRef entityNode As vTreeNode = Nothing, _
-                            Optional ByRef useCache As Boolean = False)
+    Private Sub RefreshData(Optional ByRef useCache As Boolean = False)
 
         If m_controller.isComputingFlag = True Then
             Exit Sub
         End If
+        m_progressBar.Left = (SplitContainer1.Panel2.Width - m_progressBar.Width) / 2
+        m_progressBar.Top = (SplitContainer1.Panel2.Height - m_progressBar.Height) / 2
         DGVsControlTab.Visible = False
-
-        If Not BackgroundWorker1.IsBusy Then BackgroundWorker1.RunWorkerAsync()
-
-        Dim versionsIds As New List(Of Int32)
-        For Each versionId In VTreeViewUtil.GetCheckedNodesIds(leftPane_control.versionsTV)
-            If GlobalVariables.Versions.versions_hash(versionId)(IS_FOLDER_VARIABLE) = False Then
-                versionsIds.Add(versionId)
-            End If
-        Next
-
-        If entityNode Is Nothing Then
-            If leftPane_control.entitiesTV.Nodes.Count > 0 Then
-                entityNode = leftPane_control.entitiesTV.Nodes(0)
-                If versionsIds.Count > 0 Then
-                    ' Launch Computation
-                    Try
-                        m_controller.Compute(versionsIds.ToArray, entityNode)
-                    Catch ex As OutOfMemoryException
-                        System.Diagnostics.Debug.WriteLine(ex.Message)
-                        MsgBox("Unable to display result: Request too complex")
-                        AfterWorkDoneAttemp_ThreadSafe()
-                    End Try
-                Else
-                    MsgBox("At least one version must be selected.")
-                End If
-            Else
-                MsgBox("No Entity set up.")
-                Exit Sub
-            End If
-        Else
-            If versionsIds.Count > 0 Then
-                ' Launch Computation
-                Try
-                    m_controller.Compute(versionsIds.ToArray, entityNode)
-                Catch ex As Exception
-                    System.Diagnostics.Debug.WriteLine(ex.Message)
-                    MsgBox("Unable to display result: Request too complex")
-                    AfterWorkDoneAttemp_ThreadSafe()
-                End Try
-            Else
-                MsgBox("At least one version must be selected.")
-            End If
-        End If
-
+        m_progressBar.Visible = True
+        BackgroundWorker1.RunWorkerAsync()
 
     End Sub
 
     Private Sub RefreshFromRightPane()
 
         If Not m_controller.EntityNode Is Nothing Then
-            RefreshData(m_controller.EntityNode, True)
+            m_currentEntityNode = m_controller.EntityNode
+            RefreshData(True)
         Else
             If Not leftPane_control.entitiesTV.SelectedNode Is Nothing Then
-                RefreshData(leftPane_control.entitiesTV.SelectedNode, True)
+                m_currentEntityNode = leftPane_control.entitiesTV.SelectedNode
+                RefreshData(True)
             Else
                 MsgBox("Please select an Entity to refresh")
             End If
@@ -396,28 +382,33 @@ Friend Class ControllingUI_2
 
 #Region "Events"
 
+    Private Sub AccountUpdateFromServer(ByRef status As Boolean, ByRef accountsAttributes As Hashtable)
+        ReloadAccountsTV_ThreadSafe()
+    End Sub
 
-    'Private Sub VTreeView1_KeyDown(sender As Object, e As Windows.Forms.KeyEventArgs) Handles VTreeView1.KeyDown
-
-    'End Sub
+    Private Sub AccountDeleteFromServer(ByRef status As Boolean, ByRef id As UInt32)
+        ReloadAccountsTV_ThreadSafe()
+    End Sub
 
     Private Sub EntitiesTV_KeyDown(sender As Object, e As KeyEventArgs)
 
+        ' to be managed !! -> goes into left pane ? priority normal
         If e.KeyCode = Keys.Enter Then
             If Not leftPane_control.entitiesTV.SelectedNode Is Nothing Then
-                RefreshData(leftPane_control.entitiesTV.SelectedNode)
+                m_currentEntityNode = leftPane_control.entitiesTV.SelectedNode
+                RefreshData()
             Else
+                m_currentEntityNode = Nothing
                 RefreshData()
             End If
         End If
 
     End Sub
 
-
     ' Periods filter when unchecked
     Private Sub periodsTV_ItemCheck(sender As Object, e As vTreeViewEventArgs)
 
-        If isUpdatingPeriodsCheckList = False Then
+        If m_isUpdatingPeriodsCheckList = False Then
             Dim periodSelectionDict As New Dictionary(Of String, Boolean)
 
             For Each node As vTreeNode In leftPane_control.periodsTV.GetNodes
@@ -451,9 +442,10 @@ Friend Class ControllingUI_2
 
 #Region "Data Grid View Righ Click Menu Calls backs"
 
-    Private Sub compute_Click(sender As Object, e As EventArgs) Handles RefreshRightClick.Click
+    Private Sub Compute_Click(sender As Object, e As EventArgs) Handles RefreshRightClick.Click
 
-        RefreshData(leftPane_control.entitiesTV.SelectedNode)
+        m_currentEntityNode = leftPane_control.entitiesTV.SelectedNode
+        RefreshData()
 
     End Sub
 
@@ -520,13 +512,13 @@ Friend Class ControllingUI_2
 
     Private Sub VersionsComparisonToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles VersionsComparisonToolStripMenuItem.Click
 
-        If isVersionComparisonDisplayed = True Then
+        If m_isVersionComparisonDisplayed = True Then
             m_controller.VersionsCompDisplay(False)
-            isVersionComparisonDisplayed = False
+            m_isVersionComparisonDisplayed = False
         Else
             If m_controller.versionsDict.Count = 2 Then
                 m_controller.VersionsCompDisplay(True)
-                isVersionComparisonDisplayed = True
+                m_isVersionComparisonDisplayed = True
             Else
                 MsgBox("Two versions must be selected in order to display the comparison.")
             End If
@@ -540,12 +532,12 @@ Friend Class ControllingUI_2
 
     Private Sub HideVersionsComparisonToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles HideVersionsComparisonToolStripMenuItem.Click
 
-        If isVersionComparisonDisplayed Then
+        If m_isVersionComparisonDisplayed Then
             For Each tab_ As vTabPage In DGVsControlTab.TabPages
                 Dim DGV As vDataGridView = tab_.Controls(0)
                 DGVUTIL.RemoveVersionsComparison(DGV)
             Next
-            isVersionComparisonDisplayed = False
+            m_isVersionComparisonDisplayed = False
         End If
 
     End Sub
@@ -557,9 +549,11 @@ Friend Class ControllingUI_2
     Private Sub RefreshToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles RefreshToolStripMenuItem.Click
 
         If leftPane_control.entitiesTV.SelectedNode Is Nothing Then
+            m_currentEntityNode = Nothing
             RefreshData()
         Else
-            RefreshData(leftPane_control.entitiesTV.SelectedNode)
+            m_currentEntityNode = leftPane_control.entitiesTV.SelectedNode
+            RefreshData()
         End If
 
     End Sub
@@ -577,18 +571,18 @@ Friend Class ControllingUI_2
 
     Private Sub SelectAllToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles SelectAllToolStripMenuItem.Click
 
-        isUpdatingPeriodsCheckList = True
+        m_isUpdatingPeriodsCheckList = True
         VTreeViewUtil.CheckStateAllNodes(leftPane_control.periodsTV, True)
-        isUpdatingPeriodsCheckList = False
+        m_isUpdatingPeriodsCheckList = False
         periodsTV_ItemCheck(sender, New vTreeViewEventArgs(leftPane_control.periodsTV.SelectedNode, vTreeViewAction.Unknown))
 
     End Sub
 
     Private Sub UnselectAllToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles UnselectAllToolStripMenuItem.Click
 
-        isUpdatingPeriodsCheckList = True
+        m_isUpdatingPeriodsCheckList = True
         VTreeViewUtil.CheckStateAllNodes(leftPane_control.periodsTV, False)
-        isUpdatingPeriodsCheckList = False
+        m_isUpdatingPeriodsCheckList = False
         periodsTV_ItemCheck(sender, New vTreeViewEventArgs(leftPane_control.periodsTV.SelectedNode, vTreeViewAction.Unknown))
 
 
@@ -738,55 +732,93 @@ Friend Class ControllingUI_2
     End Sub
 
     Private Sub BackgroundWorker1_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs)
-
-        'CircularProgress.Visible = True
-        '     CircularProgressInit()
-        CircularProgress = New ProgressIndicator
-        CircularProgressInit()
-
-        Do While m_controller.computedFlag = False
-        Loop
-        ' set cancel button !! priority high !!!
-
+        RefreshBackGround()
     End Sub
 
-    Delegate Sub CircularProgressInit_Delegate()
-    Private Sub CircularProgressInit()
+    Delegate Sub RefreshBackGround_Delegate()
+    Private Sub RefreshBackGround()
 
         If InvokeRequired Then
-            Dim MyDelegate As New CircularProgressInit_Delegate(AddressOf CircularProgressInit)
+            Dim MyDelegate As New RefreshBackGround_Delegate(AddressOf RefreshBackGround)
             Me.Invoke(MyDelegate, New Object() {})
         Else
-            CircularProgress.CircleColor = Drawing.Color.Purple
-            CircularProgress.NumberOfCircles = 12
-            CircularProgress.NumberOfVisibleCircles = 8
-            CircularProgress.AnimationSpeed = 75
-            CircularProgress.CircleSize = 0.7
-            CircularProgress.Width = 79
-            CircularProgress.Height = 79
 
-            CircularProgress.Left = (SplitContainer1.Panel2.Width - CircularProgress.Width) / 2
-            CircularProgress.Top = (SplitContainer1.Panel2.Height - CircularProgress.Height) / 2
-            SplitContainer1.Panel2.Controls.Add(CircularProgress)
+            Dim versionsIds As New List(Of Int32)
+            For Each versionId In VTreeViewUtil.GetCheckedNodesIds(leftPane_control.versionsTV)
+                If GlobalVariables.Versions.versions_hash(versionId)(IS_FOLDER_VARIABLE) = False Then
+                    versionsIds.Add(versionId)
+                End If
+            Next
 
-            CircularProgress.Visible = True
-            CircularProgress.Start()
+            If m_currentEntityNode Is Nothing Then
+                If leftPane_control.entitiesTV.Nodes.Count > 0 Then
+                    m_currentEntityNode = leftPane_control.entitiesTV.Nodes(0)
+                    If versionsIds.Count > 0 Then
+                        ' Launch Computation
+                        Try
+                            m_controller.Compute(versionsIds.ToArray, m_currentEntityNode)
+                        Catch ex As OutOfMemoryException
+                            System.Diagnostics.Debug.WriteLine(ex.Message)
+                            MsgBox("Unable to display result: Request too complex")
+                            'AfterWorkDoneAttemp_ThreadSafe()
+                        End Try
+                    Else
+                        MsgBox("At least one version must be selected.")
+                    End If
+                Else
+                    MsgBox("No Entity set up.")
+                    Exit Sub
+                End If
+            Else
+                If versionsIds.Count > 0 Then
+                    ' Launch Computation
+                    Try
+                        m_controller.Compute(versionsIds.ToArray, m_currentEntityNode)
+                    Catch ex As Exception
+                        System.Diagnostics.Debug.WriteLine(ex.Message)
+                        MsgBox("Unable to display result: Request too complex")
+                        '   AfterWorkDoneAttemp_ThreadSafe()
+                    End Try
+                Else
+                    MsgBox("At least one version must be selected.")
+                End If
+            End If
+
         End If
 
     End Sub
 
-    Delegate Sub AfterWorkDoneAttemp_Delegate()
-    Friend Sub AfterWorkDoneAttemp_ThreadSafe()
+    Private Sub backgroundWorker1_RunWorkerCompleted(sender As Object, e As RunWorkerCompletedEventArgs)
+
+        AfterWorkDoneAttemp_ThreadSafe(e)
+
+    End Sub
+
+    Delegate Sub AfterWorkDoneAttemp_Delegate(e As RunWorkerCompletedEventArgs)
+    Friend Sub AfterWorkDoneAttemp_ThreadSafe(e As RunWorkerCompletedEventArgs)
 
         If InvokeRequired Then
             Dim MyDelegate As New AfterWorkDoneAttemp_Delegate(AddressOf AfterWorkDoneAttemp_ThreadSafe)
+            Me.Invoke(MyDelegate, New Object() {e})
+        Else
+            If Not m_progressBar Is Nothing Then
+                m_progressBar.Visible = False
+            End If
+        End If
+
+    End Sub
+
+    Delegate Sub LaunchCircularProgress_Delegate()
+    Friend Sub LaunchCircularProgress()
+
+        If InvokeRequired Then
+            Dim MyDelegate As New LaunchCircularProgress_Delegate(AddressOf LaunchCircularProgress)
             Me.Invoke(MyDelegate, New Object() {})
         Else
-            If Not CircularProgress Is Nothing Then
-                CircularProgress.Stop()
-                CircularProgress.Dispose()
-                DGVsControlTab.Visible = True
-            End If
+            m_circularProgress.Left = (SplitContainer1.Panel2.Width - m_circularProgress.Width) / 2
+            m_circularProgress.Top = (SplitContainer1.Panel2.Height - m_circularProgress.Height) / 2
+            m_circularProgress.Start()
+            m_circularProgress.Visible = True
         End If
 
     End Sub
@@ -798,8 +830,9 @@ Friend Class ControllingUI_2
             Dim MyDelegate As New TerminateCircularProgress_Delegate(AddressOf TerminateCircularProgress)
             Me.Invoke(MyDelegate, New Object() {})
         Else
-            BackgroundWorker1.CancelAsync()
-            AfterWorkDoneAttemp_ThreadSafe()
+            m_circularProgress.Stop()
+            m_circularProgress.Visible = False
+            DGVsControlTab.Visible = True
         End If
 
     End Sub
@@ -847,6 +880,18 @@ Friend Class ControllingUI_2
 
     End Sub
 
+    Delegate Sub ReloadAccountsTV_Delegate()
+    Friend Sub ReloadAccountsTV_ThreadSafe()
+
+        If InvokeRequired Then
+            Dim MyDelegate As New ReloadAccountsTV_Delegate(AddressOf ReloadAccountsTV_ThreadSafe)
+            Me.Invoke(MyDelegate, New Object() {})
+        Else
+            GlobalVariables.Accounts.LoadAccountsTV(accountsTV)
+        End If
+
+    End Sub
+
 #End Region
 
 
@@ -886,5 +931,6 @@ Friend Class ControllingUI_2
 
 
 #End Region
+
 
 End Class

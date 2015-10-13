@@ -54,16 +54,16 @@ Friend Class ConnectionUI
 
 #Region "Call Backs"
 
-    Private Sub ConnectionBT_Click(sender As Object, e As EventArgs)
+    'Private Sub ConnectionBT_Click(sender As Object, e As EventArgs)
 
-        If isConnecting = False Then
-            CP = New CircularProgressUI(Drawing.Color.Purple, "Connecting and Initializing")
-            Me.Hide()
-            CP.Show()
-            BackgroundWorker1.RunWorkerAsync()
-        End If
+    '    If isConnecting = False Then
+    '        CP = New CircularProgressUI(Drawing.Color.Purple, "Connecting and Initializing")
+    '        Me.Hide()
+    '        CP.Show()
+    '        BackgroundWorker1.RunWorkerAsync()
+    '    End If
 
-    End Sub
+    'End Sub
 
     Private Sub CloseBT_Click(sender As Object, e As EventArgs) Handles CloseBT.Click
 
