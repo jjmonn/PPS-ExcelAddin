@@ -29,10 +29,10 @@ Partial Class CUI2RightPane
         Me.Label1 = New System.Windows.Forms.Label()
         Me.ImageList2 = New System.Windows.Forms.ImageList(Me.components)
         Me.columnsDisplayList = New VIBlend.WinForms.Controls.vListBox()
+        Me.Label2 = New System.Windows.Forms.Label()
         Me.rowsDisplayList = New VIBlend.WinForms.Controls.vListBox()
         Me.UpdateBT = New System.Windows.Forms.Button()
         Me.ImageList1 = New System.Windows.Forms.ImageList(Me.components)
-        Me.Label2 = New System.Windows.Forms.Label()
         Me.DimensionsTVPanel = New System.Windows.Forms.Panel()
         Me.Panel1 = New System.Windows.Forms.Panel()
         Me.CollapseRightPaneBT = New VIBlend.WinForms.Controls.vButton()
@@ -71,13 +71,13 @@ Partial Class CUI2RightPane
         Me.TableLayoutPanel2.Controls.Add(Me.rowsDisplayList, 0, 1)
         Me.TableLayoutPanel2.Controls.Add(Me.UpdateBT, 1, 2)
         Me.TableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TableLayoutPanel2.Location = New System.Drawing.Point(3, 338)
+        Me.TableLayoutPanel2.Location = New System.Drawing.Point(3, 337)
         Me.TableLayoutPanel2.Name = "TableLayoutPanel2"
         Me.TableLayoutPanel2.RowCount = 3
         Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
         Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 88.44884!))
         Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 11.55116!))
-        Me.TableLayoutPanel2.Size = New System.Drawing.Size(271, 275)
+        Me.TableLayoutPanel2.Size = New System.Drawing.Size(271, 276)
         Me.TableLayoutPanel2.TabIndex = 5
         '
         'Label1
@@ -109,44 +109,11 @@ Partial Class CUI2RightPane
         Me.columnsDisplayList.Location = New System.Drawing.Point(138, 23)
         Me.columnsDisplayList.Name = "columnsDisplayList"
         Me.columnsDisplayList.RoundedCornersMaskListItem = CType(15, Byte)
-        Me.columnsDisplayList.Size = New System.Drawing.Size(130, 219)
+        Me.columnsDisplayList.Size = New System.Drawing.Size(130, 220)
         Me.columnsDisplayList.TabIndex = 5
         Me.columnsDisplayList.Text = "VListBox1"
         Me.columnsDisplayList.VIBlendScrollBarsTheme = VIBlend.Utilities.VIBLEND_THEME.OFFICESILVER
         Me.columnsDisplayList.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.OFFICESILVER
-        '
-        'rowsDisplayList
-        '
-        Me.rowsDisplayList.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.rowsDisplayList.Location = New System.Drawing.Point(3, 23)
-        Me.rowsDisplayList.Name = "rowsDisplayList"
-        Me.rowsDisplayList.RoundedCornersMaskListItem = CType(15, Byte)
-        Me.rowsDisplayList.Size = New System.Drawing.Size(129, 219)
-        Me.rowsDisplayList.TabIndex = 6
-        Me.rowsDisplayList.Text = "VListBox1"
-        Me.rowsDisplayList.VIBlendScrollBarsTheme = VIBlend.Utilities.VIBLEND_THEME.OFFICESILVER
-        Me.rowsDisplayList.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.OFFICESILVER
-        '
-        'UpdateBT
-        '
-        Me.UpdateBT.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.UpdateBT.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
-        Me.UpdateBT.ImageKey = "Refresh DB 24.ico"
-        Me.UpdateBT.ImageList = Me.ImageList1
-        Me.UpdateBT.Location = New System.Drawing.Point(193, 248)
-        Me.UpdateBT.Name = "UpdateBT"
-        Me.UpdateBT.Size = New System.Drawing.Size(75, 24)
-        Me.UpdateBT.TabIndex = 0
-        Me.UpdateBT.Text = "Update"
-        Me.UpdateBT.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.UpdateBT.UseVisualStyleBackColor = True
-        '
-        'ImageList1
-        '
-        Me.ImageList1.ImageStream = CType(resources.GetObject("ImageList1.ImageStream"), System.Windows.Forms.ImageListStreamer)
-        Me.ImageList1.TransparentColor = System.Drawing.Color.Transparent
-        Me.ImageList1.Images.SetKeyName(0, "Close_Box_Red.png")
-        Me.ImageList1.Images.SetKeyName(1, "Refresh DB 24.ico")
         '
         'Label2
         '
@@ -163,12 +130,45 @@ Partial Class CUI2RightPane
         Me.Label2.Text = "Rows Labels"
         Me.Label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
+        'rowsDisplayList
+        '
+        Me.rowsDisplayList.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.rowsDisplayList.Location = New System.Drawing.Point(3, 23)
+        Me.rowsDisplayList.Name = "rowsDisplayList"
+        Me.rowsDisplayList.RoundedCornersMaskListItem = CType(15, Byte)
+        Me.rowsDisplayList.Size = New System.Drawing.Size(129, 220)
+        Me.rowsDisplayList.TabIndex = 6
+        Me.rowsDisplayList.Text = "VListBox1"
+        Me.rowsDisplayList.VIBlendScrollBarsTheme = VIBlend.Utilities.VIBLEND_THEME.OFFICESILVER
+        Me.rowsDisplayList.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.OFFICESILVER
+        '
+        'UpdateBT
+        '
+        Me.UpdateBT.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.UpdateBT.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.UpdateBT.ImageKey = "Refresh DB 24.ico"
+        Me.UpdateBT.ImageList = Me.ImageList1
+        Me.UpdateBT.Location = New System.Drawing.Point(193, 249)
+        Me.UpdateBT.Name = "UpdateBT"
+        Me.UpdateBT.Size = New System.Drawing.Size(75, 24)
+        Me.UpdateBT.TabIndex = 0
+        Me.UpdateBT.Text = "Update"
+        Me.UpdateBT.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.UpdateBT.UseVisualStyleBackColor = True
+        '
+        'ImageList1
+        '
+        Me.ImageList1.ImageStream = CType(resources.GetObject("ImageList1.ImageStream"), System.Windows.Forms.ImageListStreamer)
+        Me.ImageList1.TransparentColor = System.Drawing.Color.Transparent
+        Me.ImageList1.Images.SetKeyName(0, "Close_Box_Red.png")
+        Me.ImageList1.Images.SetKeyName(1, "Refresh DB 24.ico")
+        '
         'DimensionsTVPanel
         '
         Me.DimensionsTVPanel.Dock = System.Windows.Forms.DockStyle.Fill
         Me.DimensionsTVPanel.Location = New System.Drawing.Point(3, 38)
         Me.DimensionsTVPanel.Name = "DimensionsTVPanel"
-        Me.DimensionsTVPanel.Size = New System.Drawing.Size(271, 294)
+        Me.DimensionsTVPanel.Size = New System.Drawing.Size(271, 293)
         Me.DimensionsTVPanel.TabIndex = 7
         '
         'Panel1

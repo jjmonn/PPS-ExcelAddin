@@ -25,9 +25,6 @@ Partial Class AccountsView
         Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(AccountsView))
         Me.SplitContainer1 = New System.Windows.Forms.SplitContainer()
-        Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
-        Me.Panel1 = New System.Windows.Forms.Panel()
-        Me.AccountsTVPanel = New System.Windows.Forms.Panel()
         Me.SplitContainer2 = New System.Windows.Forms.SplitContainer()
         Me.TableLayoutPanel2 = New System.Windows.Forms.TableLayoutPanel()
         Me.GroupBox5 = New System.Windows.Forms.GroupBox()
@@ -68,11 +65,11 @@ Partial Class AccountsView
         Me.DropAllAccountsHierarchyToExcelToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.DropSelectedAccountHierarchyToExcelToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.HelpToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.AccountsTVPanel = New System.Windows.Forms.Panel()
         CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SplitContainer1.Panel1.SuspendLayout()
         Me.SplitContainer1.Panel2.SuspendLayout()
         Me.SplitContainer1.SuspendLayout()
-        Me.TableLayoutPanel1.SuspendLayout()
         CType(Me.SplitContainer2, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SplitContainer2.Panel1.SuspendLayout()
         Me.SplitContainer2.Panel2.SuspendLayout()
@@ -93,7 +90,7 @@ Partial Class AccountsView
         '
         'SplitContainer1.Panel1
         '
-        Me.SplitContainer1.Panel1.Controls.Add(Me.TableLayoutPanel1)
+        Me.SplitContainer1.Panel1.Controls.Add(Me.AccountsTVPanel)
         '
         'SplitContainer1.Panel2
         '
@@ -101,40 +98,6 @@ Partial Class AccountsView
         Me.SplitContainer1.Size = New System.Drawing.Size(844, 652)
         Me.SplitContainer1.SplitterDistance = 246
         Me.SplitContainer1.TabIndex = 23
-        '
-        'TableLayoutPanel1
-        '
-        Me.TableLayoutPanel1.ColumnCount = 1
-        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TableLayoutPanel1.Controls.Add(Me.Panel1, 0, 0)
-        Me.TableLayoutPanel1.Controls.Add(Me.AccountsTVPanel, 0, 1)
-        Me.TableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TableLayoutPanel1.Location = New System.Drawing.Point(0, 0)
-        Me.TableLayoutPanel1.Name = "TableLayoutPanel1"
-        Me.TableLayoutPanel1.RowCount = 2
-        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25.0!))
-        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
-        Me.TableLayoutPanel1.Size = New System.Drawing.Size(246, 652)
-        Me.TableLayoutPanel1.TabIndex = 0
-        '
-        'Panel1
-        '
-        Me.Panel1.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Panel1.Location = New System.Drawing.Point(1, 1)
-        Me.Panel1.Margin = New System.Windows.Forms.Padding(1)
-        Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(244, 23)
-        Me.Panel1.TabIndex = 1
-        '
-        'AccountsTVPanel
-        '
-        Me.AccountsTVPanel.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.AccountsTVPanel.Location = New System.Drawing.Point(1, 26)
-        Me.AccountsTVPanel.Margin = New System.Windows.Forms.Padding(1)
-        Me.AccountsTVPanel.Name = "AccountsTVPanel"
-        Me.AccountsTVPanel.Size = New System.Drawing.Size(244, 625)
-        Me.AccountsTVPanel.TabIndex = 2
         '
         'SplitContainer2
         '
@@ -490,7 +453,7 @@ Partial Class AccountsView
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.GlobalFactsPanel.Location = New System.Drawing.Point(12, 58)
         Me.GlobalFactsPanel.Name = "GlobalFactsPanel"
-        Me.GlobalFactsPanel.Size = New System.Drawing.Size(89, 579)
+        Me.GlobalFactsPanel.Size = New System.Drawing.Size(90, 579)
         Me.GlobalFactsPanel.TabIndex = 3
         '
         'VLabel6
@@ -504,7 +467,7 @@ Partial Class AccountsView
         Me.VLabel6.Location = New System.Drawing.Point(12, 28)
         Me.VLabel6.Multiline = True
         Me.VLabel6.Name = "VLabel6"
-        Me.VLabel6.Size = New System.Drawing.Size(111, 16)
+        Me.VLabel6.Size = New System.Drawing.Size(112, 16)
         Me.VLabel6.TabIndex = 0
         Me.VLabel6.Text = "Macro Economic Indicators"
         Me.VLabel6.TextAlignment = System.Drawing.ContentAlignment.TopLeft
@@ -631,6 +594,14 @@ Partial Class AccountsView
         Me.HelpToolStripMenuItem.Size = New System.Drawing.Size(49, 23)
         Me.HelpToolStripMenuItem.Text = "Help"
         '
+        'AccountsTVPanel
+        '
+        Me.AccountsTVPanel.Location = New System.Drawing.Point(1, 35)
+        Me.AccountsTVPanel.Margin = New System.Windows.Forms.Padding(1)
+        Me.AccountsTVPanel.Name = "AccountsTVPanel"
+        Me.AccountsTVPanel.Size = New System.Drawing.Size(244, 602)
+        Me.AccountsTVPanel.TabIndex = 3
+        '
         'AccountsView
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -643,7 +614,6 @@ Partial Class AccountsView
         Me.SplitContainer1.Panel2.ResumeLayout(False)
         CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.SplitContainer1.ResumeLayout(False)
-        Me.TableLayoutPanel1.ResumeLayout(False)
         Me.SplitContainer2.Panel1.ResumeLayout(False)
         Me.SplitContainer2.Panel2.ResumeLayout(False)
         CType(Me.SplitContainer2, System.ComponentModel.ISupportInitialize).EndInit()
@@ -697,13 +667,11 @@ Partial Class AccountsView
     Friend WithEvents VLabel2 As VIBlend.WinForms.Controls.vLabel
     Friend WithEvents ConsolidationOptionComboBox As VIBlend.WinForms.Controls.vComboBox
     Friend WithEvents CurrencyConversionComboBox As VIBlend.WinForms.Controls.vComboBox
-    Friend WithEvents TableLayoutPanel1 As System.Windows.Forms.TableLayoutPanel
-    Friend WithEvents Panel1 As System.Windows.Forms.Panel
-    Friend WithEvents AccountsTVPanel As System.Windows.Forms.Panel
     Friend WithEvents GlobalFactsPanel As System.Windows.Forms.Panel
     Friend WithEvents VLabel6 As VIBlend.WinForms.Controls.vLabel
     Friend WithEvents SplitContainer2 As System.Windows.Forms.SplitContainer
     Friend WithEvents m_descriptionTextBox As VIBlend.WinForms.Controls.vTextBox
     Friend WithEvents m_formulaTextBox As VIBlend.WinForms.Controls.vTextBox
+    Friend WithEvents AccountsTVPanel As System.Windows.Forms.Panel
 
 End Class
