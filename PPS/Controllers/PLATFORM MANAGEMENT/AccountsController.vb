@@ -205,7 +205,6 @@ Friend Class AccountsController
 
 #End Region
 
-
 #Region "Checks"
 
     Friend Function IsUsedName(ByRef p_name As String) As Boolean
@@ -452,6 +451,11 @@ Friend Class AccountsController
 
 
 #Region "Utilities"
+
+    Friend Function GetFormatedAccountFormula(ByRef p_accountId As Int32) As String
+        If GlobalVariables.Accounts.m_accountsHash.ContainsKey(p_accountId) = False Then Return ""
+        Return FormulasTranslator.GetHumanFormulaFromDB(GlobalVariables.Accounts.m_accountsHash(p_accountId)(ACCOUNT_FORMULA_VARIABLE))
+    End Function
 
     Friend Sub DisplayAccountsView()
 
