@@ -34,66 +34,51 @@ Friend Class ModelDataSet
 
 #Region "Instance Variables"
 
-#Region "Objects"
+    Friend m_excelWorkSheet As Excel.Worksheet
+    Friend m_lastCell As Excel.Range
 
-    Friend WS As Excel.Worksheet
-    Friend lastCell As Excel.Range
+    Private m_GlobalScreenShotFlag(,) As String                   ' Flag array for the entire worksheet
+    Friend m_GlobalScreenShot(,) As Object                       ' Worksheet values array
+    Private m_accountRefs() As String                             ' String array for account references
 
-#End Region
-
-#Region "Arrays"
-
-    Private GlobalScreenShotFlag(,) As String                   ' Flag array for the entire worksheet
-    Friend GlobalScreenShot(,) As Object                       ' Worksheet values array
-    Private accountRefs() As String                             ' String array for account references
-    '  Friend dataSetDictionary As New Dictionary(Of String, Dictionary(Of String, Dictionary(Of String, Double)))
-
-#End Region
-
-#Region "Lists and Dictionaries"
-
+    'Lists and Dictionaries
     Friend m_entitiesNameList As List(Of String)                                    ' String array containing the list of assets
     Friend m_periodsDatesList As New List(Of Date)
     Friend m_inputsAccountsList As List(Of String)
-    Friend m_entitiesNameIdDictionary As Hashtable
+    Friend m_entitiesNameIdDictionary As Hashtable  ' to be deleted priority normal
     Friend m_accountsNameIdDictionary As Hashtable
 
     ' Axes
-    Friend periodsAddressValuesDictionary As New Dictionary(Of String, String)
-    Friend AccountsAddressValuesDictionary As New Dictionary(Of String, String)
-    Friend OutputsAccountsAddressvaluesDictionary As New Dictionary(Of String, String)
-    Friend EntitiesAddressValuesDictionary As New Dictionary(Of String, String)
-    Friend periodsValuesAddressDict As New Dictionary(Of String, String)
-    Friend AccountsValuesAddressDict As New Dictionary(Of String, String)
-    Friend OutputsValuesAddressDict As New Dictionary(Of String, String)
-    Friend EntitiesValuesAddressDict As New Dictionary(Of String, String)
+    Friend m_periodsAddressValuesDictionary As New Dictionary(Of String, String)
+    Friend m_accountsAddressValuesDictionary As New Dictionary(Of String, String)
+    Friend m_outputsAccountsAddressvaluesDictionary As New Dictionary(Of String, String)
+    Friend m_entitiesAddressValuesDictionary As New Dictionary(Of String, String)
+    Friend m_periodsValuesAddressDict As New Dictionary(Of String, String)
+    Friend m_accountsValuesAddressDict As New Dictionary(Of String, String)
+    Friend m_outputsValuesAddressDict As New Dictionary(Of String, String)
+    Friend m_entitiesValuesAddressDict As New Dictionary(Of String, String)
 
     ' DataSet Cells
     Friend m_datasetCellsDictionary As New Dictionary(Of Tuple(Of String, String, String), Excel.Range)
     Friend m_datasetCellDimensionsDictionary As New Dictionary(Of String, DataSetCellDimensions)
     Friend m_currentVersionId As Int32
 
-#End Region
+    'Flags"
+    Friend m_dateFlag As Integer             ' Dates Flag: 0 = no period found; 1 = 1 period found ; 2 = period array found ; 3=worksheet name
+    Friend m_accountFlag As Integer          ' Accounts Flag: 0 = no account found; 1 = 1 account found ; 2 = account array found
+    Friend m_EntityFlag As Integer            ' Asset Flag: 0 = no asset found; 1 = 1 asset found ; 2 = asset array found
+    Friend m_globalOrientationFlag As String  ' Aggregation of the three flags (accounts, assets/ products, periods)
+    Friend m_datesOrientationFlag As String
+    Friend m_accountsOrientationFlag As String
+    Friend m_entitiesOrientationFlag As String
 
-#Region "Flags"
+    Private Const m_stringFlag As String = "String"
+    Private Const m_accountStringFlag As String = "Account"
+    Private Const m_entityStringFlag As String = "Entity"
+    Private Const m_periodFormatflag As String = "Period"
 
-    Friend pDateFlag As Integer             ' Dates Flag: 0 = no period found; 1 = 1 period found ; 2 = period array found ; 3=worksheet name
-    Friend pAccountFlag As Integer          ' Accounts Flag: 0 = no account found; 1 = 1 account found ; 2 = account array found
-    Friend pAssetFlag As Integer            ' Asset Flag: 0 = no asset found; 1 = 1 asset found ; 2 = asset array found
-    Friend GlobalOrientationFlag As String  ' Aggregation of the three flags (accounts, assets/ products, periods)
-    Friend datesOrientation As String
-    Friend accountsOrientation As String
-    Friend assetsOrientation As String
 
-    Private Const string_flag As String = "String"
-    Private Const account_flag As String = "Account"
-    Private Const entity_flag As String = "Entity"
-    Private Const period_flag As String = "Period"
-
-#End Region
-
-#Region "Constants"
-
+    'Constants"
     Private Const NULL_VALUE As String = "Not found"
     Public Const DATASET_ACCOUNTS_PERIODS_OR As String = "acVda"
     Public Const DATASET_PERIODS_ACCOUNTS_OR As String = "daVac"
@@ -104,8 +89,6 @@ Friend Class ModelDataSet
     Public Const ENTITY_ITEM As String = "EntityItem"
     Public Const ACCOUNT_ITEM As String = "AccountItem"
     Public Const PERIOD_ITEM As String = "PeriodItem"
-
-#End Region
 
     Structure DataSetCellDimensions
 
@@ -124,7 +107,7 @@ Friend Class ModelDataSet
 
     Public Sub New(inputWS As Excel.Worksheet)
 
-        Me.WS = inputWS
+        Me.m_excelWorkSheet = inputWS
         m_entitiesNameIdDictionary = GlobalVariables.Entities.GetEntitiesDictionary(NAME_VARIABLE, ID_VARIABLE)
         m_accountsNameIdDictionary = GlobalVariables.Accounts.GetAccountsDictionary(NAME_VARIABLE, ID_VARIABLE)
 
@@ -137,15 +120,15 @@ Friend Class ModelDataSet
 
     Friend Function WsScreenshot() As Boolean
 
-        lastCell = Utilities_Functions.GetRealLastCell(WS)
-        If IsNothing(lastCell) Then
+        m_lastCell = Utilities_Functions.GetRealLastCell(m_excelWorkSheet)
+        If IsNothing(m_lastCell) Then
             MsgBox("The worksheet is empty")
-            GlobalScreenShot = Nothing
+            m_GlobalScreenShot = Nothing
             Return False
         End If
 
-        GlobalScreenShot = WS.Range(WS.Cells(1, 1), lastCell).Value
-        ReDim GlobalScreenShotFlag(UBound(GlobalScreenShot, 1), UBound(GlobalScreenShot, 2))
+        m_GlobalScreenShot = m_excelWorkSheet.Range(m_excelWorkSheet.Cells(1, 1), m_lastCell).Value
+        ReDim m_GlobalScreenShotFlag(UBound(m_GlobalScreenShot, 1), UBound(m_GlobalScreenShot, 2))
         Return True
 
     End Function
@@ -153,15 +136,15 @@ Friend Class ModelDataSet
     ' Lookup for Versions, Accounts, Periods and Entities
     Friend Sub SnapshotWS()
 
-        AccountsAddressValuesDictionary.Clear()
-        OutputsAccountsAddressvaluesDictionary.Clear()
-        periodsAddressValuesDictionary.Clear()
-        EntitiesAddressValuesDictionary.Clear()
+        m_accountsAddressValuesDictionary.Clear()
+        m_outputsAccountsAddressvaluesDictionary.Clear()
+        m_periodsAddressValuesDictionary.Clear()
+        m_entitiesAddressValuesDictionary.Clear()
 
-        AccountsValuesAddressDict.Clear()
-        OutputsValuesAddressDict.Clear()
-        periodsValuesAddressDict.Clear()
-        EntitiesValuesAddressDict.Clear()
+        m_accountsValuesAddressDict.Clear()
+        m_outputsValuesAddressDict.Clear()
+        m_periodsValuesAddressDict.Clear()
+        m_entitiesValuesAddressDict.Clear()
 
         If Not VersionsIdentify() Then
             If GlobalVariables.Versions.IsVersionValid(My.Settings.version_id) = True Then
@@ -200,7 +183,6 @@ Friend Class ModelDataSet
 
 #Region "Snapshot Functions"
 
-
 #Region "Primary Recognition"
 
     Private Function VersionsIdentify() As Boolean
@@ -209,10 +191,10 @@ Friend Class ModelDataSet
         Dim versionsNameCodeDictionary As Hashtable = GlobalVariables.Versions.GetVersionsDictionary(NAME_VARIABLE, ID_VARIABLE)
 
         Dim i, j As Integer
-        For i = LBound(GlobalScreenShot, 1) To UBound(GlobalScreenShot, 1)
-            For j = LBound(GlobalScreenShot, 2) To UBound(GlobalScreenShot, 2)
-                If versionsNameList.Contains(CStr(GlobalScreenShot(i, j))) Then
-                    m_currentVersionId = versionsNameCodeDictionary(CStr(GlobalScreenShot(i, j)))
+        For i = LBound(m_GlobalScreenShot, 1) To UBound(m_GlobalScreenShot, 1)
+            For j = LBound(m_GlobalScreenShot, 2) To UBound(m_GlobalScreenShot, 2)
+                If versionsNameList.Contains(CStr(m_GlobalScreenShot(i, j))) Then
+                    m_currentVersionId = versionsNameCodeDictionary(CStr(m_GlobalScreenShot(i, j)))
                     ' ask confirmation first -> priority high
                     AddinModule.SetCurrentVersionId(m_currentVersionId)
                     Return True
@@ -232,16 +214,16 @@ Friend Class ModelDataSet
         Next
 
         Dim i, j, periodStoredAsInt As Integer
-        For i = LBound(GlobalScreenShot, 1) To UBound(GlobalScreenShot, 1)
-            For j = LBound(GlobalScreenShot, 2) To UBound(GlobalScreenShot, 2)
-                If IsDate(GlobalScreenShot(i, j)) Then
-                    periodStoredAsInt = CInt(CDate((GlobalScreenShot(i, j))).ToOADate())
-                    If m_periodsDatesList.Contains(CDate(GlobalScreenShot(i, j))) _
-                    AndAlso Not periodsAddressValuesDictionary.ContainsValue(periodStoredAsInt) Then
+        For i = LBound(m_GlobalScreenShot, 1) To UBound(m_GlobalScreenShot, 1)
+            For j = LBound(m_GlobalScreenShot, 2) To UBound(m_GlobalScreenShot, 2)
+                If IsDate(m_GlobalScreenShot(i, j)) Then
+                    periodStoredAsInt = CInt(CDate((m_GlobalScreenShot(i, j))).ToOADate())
+                    If m_periodsDatesList.Contains(CDate(m_GlobalScreenShot(i, j))) _
+                    AndAlso Not m_periodsAddressValuesDictionary.ContainsValue(periodStoredAsInt) Then
 
-                        periodsAddressValuesDictionary.Add(Split(WS.Columns(j).Address(ColumnAbsolute:=False), ":")(1) & i, periodStoredAsInt)
-                        periodsValuesAddressDict.Add(periodStoredAsInt, Split(WS.Columns(j).Address(ColumnAbsolute:=False), ":")(1) & i)
-                        GlobalScreenShotFlag(i, j) = period_flag
+                        m_periodsAddressValuesDictionary.Add(Split(m_excelWorkSheet.Columns(j).Address(ColumnAbsolute:=False), ":")(1) & i, periodStoredAsInt)
+                        m_periodsValuesAddressDict.Add(periodStoredAsInt, Split(m_excelWorkSheet.Columns(j).Address(ColumnAbsolute:=False), ":")(1) & i)
+                        m_GlobalScreenShotFlag(i, j) = m_periodFormatflag
 
                     End If
                 End If
@@ -249,10 +231,10 @@ Friend Class ModelDataSet
         Next i
 
         ' Flag
-        Select Case periodsAddressValuesDictionary.Count
-            Case 0 : pDateFlag = 0
-            Case 1 : pDateFlag = 1
-            Case Else : pDateFlag = 2
+        Select Case m_periodsAddressValuesDictionary.Count
+            Case 0 : m_dateFlag = 0
+            Case 1 : m_dateFlag = 1
+            Case Else : m_dateFlag = 2
         End Select
 
     End Sub
@@ -263,47 +245,47 @@ Friend Class ModelDataSet
         Dim i, j As Integer
         m_inputsAccountsList = GlobalVariables.Accounts.GetAccountsList(GlobalEnums.AccountsLookupOptions.LOOKUP_INPUTS, NAME_VARIABLE)
         Dim outputsAccountsList As List(Of String) = GlobalVariables.Accounts.GetAccountsList(GlobalEnums.AccountsLookupOptions.LOOKUP_OUTPUTS, NAME_VARIABLE)
-        AccountsAddressValuesDictionary.Clear()
+        m_accountsAddressValuesDictionary.Clear()
 
-        For i = LBound(GlobalScreenShot, 1) To UBound(GlobalScreenShot, 1)                                          ' Loop into rows of input array
-            For j = LBound(GlobalScreenShot, 2) To UBound(GlobalScreenShot, 2)                                      ' Loop into columns of input array
-                If VarType(GlobalScreenShot(i, j)) = 8 Then
+        For i = LBound(m_GlobalScreenShot, 1) To UBound(m_GlobalScreenShot, 1)                                          ' Loop into rows of input array
+            For j = LBound(m_GlobalScreenShot, 2) To UBound(m_GlobalScreenShot, 2)                                      ' Loop into columns of input array
+                If VarType(m_GlobalScreenShot(i, j)) = 8 Then
 
-                    Dim currentValue As String = CStr(GlobalScreenShot(i, j))
+                    Dim currentValue As String = CStr(m_GlobalScreenShot(i, j))
 
                     ' Direct match or algo > 50% Index à vérifier selon table
                     ' Trim left and right the cell.value2 !! -> To be tested
                     If m_inputsAccountsList.Contains(currentValue) _
-                    AndAlso Not AccountsAddressValuesDictionary.ContainsValue(currentValue) Then
+                    AndAlso Not m_accountsAddressValuesDictionary.ContainsValue(currentValue) Then
 
-                        AccountsAddressValuesDictionary.Add(Split(WS.Columns(j).Address(ColumnAbsolute:=False), ":")(1) & i, _
+                        m_accountsAddressValuesDictionary.Add(Split(m_excelWorkSheet.Columns(j).Address(ColumnAbsolute:=False), ":")(1) & i, _
                                                             currentValue)
-                        AccountsValuesAddressDict.Add(currentValue, Split(WS.Columns(j).Address(ColumnAbsolute:=False), ":")(1) & i)
-                        GlobalScreenShotFlag(i, j) = account_flag
+                        m_accountsValuesAddressDict.Add(currentValue, Split(m_excelWorkSheet.Columns(j).Address(ColumnAbsolute:=False), ":")(1) & i)
+                        m_GlobalScreenShotFlag(i, j) = m_accountStringFlag
 
                     ElseIf outputsAccountsList.Contains(currentValue) _
-                    AndAlso AccountsAddressValuesDictionary.ContainsValue(currentValue) = False Then
+                    AndAlso m_accountsAddressValuesDictionary.ContainsValue(currentValue) = False Then
 
-                        OutputsAccountsAddressvaluesDictionary.Add(Split(WS.Columns(j).Address(ColumnAbsolute:=False), ":")(1) & i, _
+                        m_outputsAccountsAddressvaluesDictionary.Add(Split(m_excelWorkSheet.Columns(j).Address(ColumnAbsolute:=False), ":")(1) & i, _
                                                                    currentValue)
-                        OutputsValuesAddressDict.Add(currentValue, Split(WS.Columns(j).Address(ColumnAbsolute:=False), ":")(1) & i)
-                        GlobalScreenShotFlag(i, j) = account_flag
+                        m_outputsValuesAddressDict.Add(currentValue, Split(m_excelWorkSheet.Columns(j).Address(ColumnAbsolute:=False), ":")(1) & i)
+                        m_GlobalScreenShotFlag(i, j) = m_accountStringFlag
 
                         '         ElseIf AccountSearchAlgo(GlobalScreenShot(i, j)) = True Then           'Repeated procedure but faster...
                         '
                         '            AccountsAddressValuesDictionary.add(Split(Columns(j).Address(ColumnAbsolute:=False), ":")(1) + i, CStr(GlobalScreenShot(i, j)))
                         '            GlobalScreenShotFlag(i, j) = account_flag
                     End If
-                    GlobalScreenShotFlag(i, j) = string_flag                                       ' Flag for assets lookup
+                    m_GlobalScreenShotFlag(i, j) = m_stringFlag                                       ' Flag for assets lookup
 
                 End If
             Next j
         Next i
 
-        Select Case AccountsAddressValuesDictionary.Count
-            Case 0 : pAccountFlag = 0
-            Case 1 : pAccountFlag = 1
-            Case Else : pAccountFlag = 2
+        Select Case m_accountsAddressValuesDictionary.Count
+            Case 0 : m_accountFlag = 0
+            Case 1 : m_accountFlag = 1
+            Case Else : m_accountFlag = 2
         End Select
 
     End Sub
@@ -314,18 +296,18 @@ Friend Class ModelDataSet
         Dim i, j As Integer
         m_entitiesNameList = GlobalVariables.Entities.GetEntitiesList(NAME_VARIABLE)
 
-        For i = LBound(GlobalScreenShot, 1) To UBound(GlobalScreenShot, 1)
-            For j = LBound(GlobalScreenShot, 2) To UBound(GlobalScreenShot, 2)
+        For i = LBound(m_GlobalScreenShot, 1) To UBound(m_GlobalScreenShot, 1)
+            For j = LBound(m_GlobalScreenShot, 2) To UBound(m_GlobalScreenShot, 2)
 
-                Select Case GlobalScreenShotFlag(i, j)
-                    Case string_flag
+                Select Case m_GlobalScreenShotFlag(i, j)
+                    Case m_stringFlag
 
-                        If m_entitiesNameList.Contains(CStr(GlobalScreenShot(i, j))) _
-                        AndAlso Not EntitiesAddressValuesDictionary.ContainsValue(CStr(GlobalScreenShot(i, j))) Then
+                        If m_entitiesNameList.Contains(CStr(m_GlobalScreenShot(i, j))) _
+                        AndAlso Not m_entitiesAddressValuesDictionary.ContainsValue(CStr(m_GlobalScreenShot(i, j))) Then
 
-                            EntitiesAddressValuesDictionary.Add(Split(WS.Columns(j).Address(ColumnAbsolute:=False), ":")(1) & i, _
-                                                                CStr(GlobalScreenShot(i, j)))
-                            EntitiesValuesAddressDict.Add(CStr(GlobalScreenShot(i, j)), Split(WS.Columns(j).Address(ColumnAbsolute:=False), ":")(1) & i)
+                            m_entitiesAddressValuesDictionary.Add(Split(m_excelWorkSheet.Columns(j).Address(ColumnAbsolute:=False), ":")(1) & i, _
+                                                                CStr(m_GlobalScreenShot(i, j)))
+                            m_entitiesValuesAddressDict.Add(CStr(m_GlobalScreenShot(i, j)), Split(m_excelWorkSheet.Columns(j).Address(ColumnAbsolute:=False), ":")(1) & i)
 
                             'ElseIf AssetResearchAlgo(GlobalScreenShot(i, j)) Then
                             '    EntitiesAddressValuesDictionary.Add(Split(WS.Columns(j).Address(ColumnAbsolute:=False), ":")(1) & i, _
@@ -336,10 +318,10 @@ Friend Class ModelDataSet
             Next j
         Next i
 
-        Select Case EntitiesAddressValuesDictionary.Count
-            Case 0 : pAssetFlag = 0
-            Case 1 : pAssetFlag = 1
-            Case Else : pAssetFlag = 2
+        Select Case m_entitiesAddressValuesDictionary.Count
+            Case 0 : m_EntityFlag = 0
+            Case 1 : m_EntityFlag = 1
+            Case Else : m_EntityFlag = 2
         End Select
 
     End Sub
@@ -422,9 +404,9 @@ Friend Class ModelDataSet
     Private Sub UpdatePeriodDictionaryValuesWithCurrentWS()
 
         Dim key As String
-        For i = 0 To periodsAddressValuesDictionary.Keys.Count - 1
-            key = periodsAddressValuesDictionary.Keys(i)
-            periodsAddressValuesDictionary.Item(key) = WS.Range(key).Value2
+        For i = 0 To m_periodsAddressValuesDictionary.Keys.Count - 1
+            key = m_periodsAddressValuesDictionary.Keys(i)
+            m_periodsAddressValuesDictionary.Item(key) = m_excelWorkSheet.Range(key).Value2
         Next
 
     End Sub
@@ -433,9 +415,9 @@ Friend Class ModelDataSet
     Private Sub UpdateAccountsDictionaryValuesWithCurrentWS()
 
         Dim key As String
-        For i = 0 To AccountsAddressValuesDictionary.Keys.Count - 1
-            key = AccountsAddressValuesDictionary.Keys(i)
-            AccountsAddressValuesDictionary.Item(key) = WS.Range(key).Value2
+        For i = 0 To m_accountsAddressValuesDictionary.Keys.Count - 1
+            key = m_accountsAddressValuesDictionary.Keys(i)
+            m_accountsAddressValuesDictionary.Item(key) = m_excelWorkSheet.Range(key).Value2
         Next
 
     End Sub
@@ -444,9 +426,9 @@ Friend Class ModelDataSet
     Private Sub UpdateEntitiesDictionaryValuesWithCurrentWS()
 
         Dim key As String
-        For i = 0 To EntitiesAddressValuesDictionary.Keys.Count - 1
-            key = EntitiesAddressValuesDictionary.Keys(i)
-            EntitiesAddressValuesDictionary.Item(key) = WS.Range(key).Value2
+        For i = 0 To m_entitiesAddressValuesDictionary.Keys.Count - 1
+            key = m_entitiesAddressValuesDictionary.Keys(i)
+            m_entitiesAddressValuesDictionary.Item(key) = m_excelWorkSheet.Range(key).Value2
         Next
 
     End Sub
@@ -466,7 +448,7 @@ Friend Class ModelDataSet
 
         Dim MaxRight As String = ""
         Dim MaxBelow As String = ""
-        Dim FlagsCode As String = CStr(pDateFlag) + CStr(pAccountFlag) + CStr(pAssetFlag)
+        Dim FlagsCode As String = CStr(m_dateFlag) + CStr(m_accountFlag) + CStr(m_EntityFlag)
 
         Select Case FlagsCode
             Case "111"          ' Only one value
@@ -477,98 +459,98 @@ Friend Class ModelDataSet
 
                 Select Case MaxsFlag
                     Case "AssetAccount"
-                        assetsOrientation = "H"
-                        accountsOrientation = "V"
+                        m_entitiesOrientationFlag = "H"
+                        m_accountsOrientationFlag = "V"
                     Case "DateAccount"
-                        datesOrientation = "H"
-                        accountsOrientation = "V"
+                        m_datesOrientationFlag = "H"
+                        m_accountsOrientationFlag = "V"
                     Case "AssetDate"
-                        assetsOrientation = "H"
-                        datesOrientation = "V"
+                        m_entitiesOrientationFlag = "H"
+                        m_datesOrientationFlag = "V"
                     Case "AccountAsset"
-                        accountsOrientation = "H"
-                        assetsOrientation = "V"
+                        m_accountsOrientationFlag = "H"
+                        m_entitiesOrientationFlag = "V"
                     Case "AccountDate"
-                        accountsOrientation = "H"
-                        datesOrientation = "V"
+                        m_accountsOrientationFlag = "H"
+                        m_datesOrientationFlag = "V"
                     Case "DateAsset"
-                        datesOrientation = "H"
-                        assetsOrientation = "V"
+                        m_datesOrientationFlag = "H"
+                        m_entitiesOrientationFlag = "V"
                     Case Else
                         ' Interface New ! 
                 End Select
             Case "112"                          ' 1 period, 1 Account, Several assets
                 getAssetsOrientations()
-                If assetsOrientation = "H" Then
-                    If WS.Range(periodsAddressValuesDictionary.ElementAt(periodsAddressValuesDictionary.Count - 1).Key).Row > WS.Range(AccountsAddressValuesDictionary.ElementAt(AccountsAddressValuesDictionary.Count - 1).Key).Row Then
-                        datesOrientation = "V"
+                If m_entitiesOrientationFlag = "H" Then
+                    If m_excelWorkSheet.Range(m_periodsAddressValuesDictionary.ElementAt(m_periodsAddressValuesDictionary.Count - 1).Key).Row > m_excelWorkSheet.Range(m_accountsAddressValuesDictionary.ElementAt(m_accountsAddressValuesDictionary.Count - 1).Key).Row Then
+                        m_datesOrientationFlag = "V"
                     Else
-                        accountsOrientation = "V"
+                        m_accountsOrientationFlag = "V"
                     End If
                 Else
-                    If WS.Range(periodsAddressValuesDictionary.ElementAt(periodsAddressValuesDictionary.Count - 1).Key).Column > WS.Range(AccountsAddressValuesDictionary.ElementAt(AccountsAddressValuesDictionary.Count - 1).Key).Column Then
-                        datesOrientation = "H"
+                    If m_excelWorkSheet.Range(m_periodsAddressValuesDictionary.ElementAt(m_periodsAddressValuesDictionary.Count - 1).Key).Column > m_excelWorkSheet.Range(m_accountsAddressValuesDictionary.ElementAt(m_accountsAddressValuesDictionary.Count - 1).Key).Column Then
+                        m_datesOrientationFlag = "H"
                     Else
-                        accountsOrientation = "H"
+                        m_accountsOrientationFlag = "H"
                     End If
                 End If
             Case "121"                          ' 1 period, Several Accounts, 1 asset
                 getAccountsOrientations()
-                If accountsOrientation = "H" Then
-                    If WS.Range(periodsAddressValuesDictionary.ElementAt(periodsAddressValuesDictionary.Count - 1).Key).Row > WS.Range(EntitiesAddressValuesDictionary.ElementAt(EntitiesAddressValuesDictionary.Count - 1).Key).Row Then
-                        datesOrientation = "V"
+                If m_accountsOrientationFlag = "H" Then
+                    If m_excelWorkSheet.Range(m_periodsAddressValuesDictionary.ElementAt(m_periodsAddressValuesDictionary.Count - 1).Key).Row > m_excelWorkSheet.Range(m_entitiesAddressValuesDictionary.ElementAt(m_entitiesAddressValuesDictionary.Count - 1).Key).Row Then
+                        m_datesOrientationFlag = "V"
                     Else
-                        assetsOrientation = "V"
+                        m_entitiesOrientationFlag = "V"
                     End If
                 Else
-                    If WS.Range(periodsAddressValuesDictionary.ElementAt(periodsAddressValuesDictionary.Count - 1).Key).Column > WS.Range(EntitiesAddressValuesDictionary.ElementAt(EntitiesAddressValuesDictionary.Count - 1).Key).Column Then
-                        datesOrientation = "H"
+                    If m_excelWorkSheet.Range(m_periodsAddressValuesDictionary.ElementAt(m_periodsAddressValuesDictionary.Count - 1).Key).Column > m_excelWorkSheet.Range(m_entitiesAddressValuesDictionary.ElementAt(m_entitiesAddressValuesDictionary.Count - 1).Key).Column Then
+                        m_datesOrientationFlag = "H"
                     Else
-                        assetsOrientation = "H"
+                        m_entitiesOrientationFlag = "H"
                     End If
                 End If
             Case "211"                          ' Several periods, 1 Account, 1 Asset
                 getDatesOrientations()
-                If datesOrientation = "H" Then
-                    If WS.Range(AccountsAddressValuesDictionary.ElementAt(AccountsAddressValuesDictionary.Count - 1).Key).Row > WS.Range(EntitiesAddressValuesDictionary.ElementAt(EntitiesAddressValuesDictionary.Count - 1).Key).Row Then
-                        accountsOrientation = "V"
+                If m_datesOrientationFlag = "H" Then
+                    If m_excelWorkSheet.Range(m_accountsAddressValuesDictionary.ElementAt(m_accountsAddressValuesDictionary.Count - 1).Key).Row > m_excelWorkSheet.Range(m_entitiesAddressValuesDictionary.ElementAt(m_entitiesAddressValuesDictionary.Count - 1).Key).Row Then
+                        m_accountsOrientationFlag = "V"
                     Else
-                        assetsOrientation = "V"
+                        m_entitiesOrientationFlag = "V"
                     End If
                 Else
-                    If WS.Range(AccountsAddressValuesDictionary.ElementAt(AccountsAddressValuesDictionary.Count - 1).Key).Column > WS.Range(EntitiesAddressValuesDictionary.ElementAt(EntitiesAddressValuesDictionary.Count - 1).Key).Column Then
-                        accountsOrientation = "H"
+                    If m_excelWorkSheet.Range(m_accountsAddressValuesDictionary.ElementAt(m_accountsAddressValuesDictionary.Count - 1).Key).Column > m_excelWorkSheet.Range(m_entitiesAddressValuesDictionary.ElementAt(m_entitiesAddressValuesDictionary.Count - 1).Key).Column Then
+                        m_accountsOrientationFlag = "H"
                     Else
-                        assetsOrientation = "H"
+                        m_entitiesOrientationFlag = "H"
                     End If
                 End If
             Case "311"                          ' WS Period, 1 Account, 1 Asset
-                If WS.Range(AccountsAddressValuesDictionary.ElementAt(AccountsAddressValuesDictionary.Count - 1).Key).Row > WS.Range(EntitiesAddressValuesDictionary.ElementAt(EntitiesAddressValuesDictionary.Count - 1).Key).Row Then
-                    accountsOrientation = "V"
-                    assetsOrientation = "H"
-                ElseIf WS.Range(AccountsAddressValuesDictionary.ElementAt(AccountsAddressValuesDictionary.Count - 1).Key).Row < WS.Range(EntitiesAddressValuesDictionary.ElementAt(EntitiesAddressValuesDictionary.Count - 1).Key).Row Then
-                    accountsOrientation = "H"
-                    assetsOrientation = "V"
-                ElseIf WS.Range(AccountsAddressValuesDictionary.ElementAt(AccountsAddressValuesDictionary.Count - 1).Key).Column > WS.Range(EntitiesAddressValuesDictionary.ElementAt(EntitiesAddressValuesDictionary.Count - 1).Key).Column Then
-                    accountsOrientation = "H"
-                    assetsOrientation = "V"
+                If m_excelWorkSheet.Range(m_accountsAddressValuesDictionary.ElementAt(m_accountsAddressValuesDictionary.Count - 1).Key).Row > m_excelWorkSheet.Range(m_entitiesAddressValuesDictionary.ElementAt(m_entitiesAddressValuesDictionary.Count - 1).Key).Row Then
+                    m_accountsOrientationFlag = "V"
+                    m_entitiesOrientationFlag = "H"
+                ElseIf m_excelWorkSheet.Range(m_accountsAddressValuesDictionary.ElementAt(m_accountsAddressValuesDictionary.Count - 1).Key).Row < m_excelWorkSheet.Range(m_entitiesAddressValuesDictionary.ElementAt(m_entitiesAddressValuesDictionary.Count - 1).Key).Row Then
+                    m_accountsOrientationFlag = "H"
+                    m_entitiesOrientationFlag = "V"
+                ElseIf m_excelWorkSheet.Range(m_accountsAddressValuesDictionary.ElementAt(m_accountsAddressValuesDictionary.Count - 1).Key).Column > m_excelWorkSheet.Range(m_entitiesAddressValuesDictionary.ElementAt(m_entitiesAddressValuesDictionary.Count - 1).Key).Column Then
+                    m_accountsOrientationFlag = "H"
+                    m_entitiesOrientationFlag = "V"
                 Else
-                    accountsOrientation = "V"
-                    assetsOrientation = "H"
+                    m_accountsOrientationFlag = "V"
+                    m_entitiesOrientationFlag = "H"
                 End If
             Case "312"                          ' WS Period, 1 Account, Several Asset
                 getAssetsOrientations()
-                If assetsOrientation = "H" Then
-                    accountsOrientation = "V"
+                If m_entitiesOrientationFlag = "H" Then
+                    m_accountsOrientationFlag = "V"
                 Else
-                    accountsOrientation = "H"
+                    m_accountsOrientationFlag = "H"
                 End If
             Case "321"                          ' WS Period, Several Accounts, 1 Asset
                 getAccountsOrientations()
-                If accountsOrientation = "H" Then
-                    assetsOrientation = "V"
+                If m_accountsOrientationFlag = "H" Then
+                    m_entitiesOrientationFlag = "V"
                 Else
-                    assetsOrientation = "H"
+                    m_entitiesOrientationFlag = "H"
                 End If
             Case Else
                 ' Case "221","212","122","222","322"
@@ -585,31 +567,31 @@ Friend Class ModelDataSet
     Private Sub GetMaxs(ByRef MaxRight As String, ByRef MaxBelow As String)
 
         ' Get Maximum Right cell
-        If WS.Range(periodsAddressValuesDictionary.ElementAt(periodsAddressValuesDictionary.Count - 1).Key).Column > WS.Range(AccountsAddressValuesDictionary.ElementAt(AccountsAddressValuesDictionary.Count - 1).Key).Column Then
-            If WS.Range(periodsAddressValuesDictionary.ElementAt(periodsAddressValuesDictionary.Count - 1).Key).Column > WS.Range(EntitiesAddressValuesDictionary.ElementAt(EntitiesAddressValuesDictionary.Count - 1).Key).Column Then
-                MaxRight = period_flag
+        If m_excelWorkSheet.Range(m_periodsAddressValuesDictionary.ElementAt(m_periodsAddressValuesDictionary.Count - 1).Key).Column > m_excelWorkSheet.Range(m_accountsAddressValuesDictionary.ElementAt(m_accountsAddressValuesDictionary.Count - 1).Key).Column Then
+            If m_excelWorkSheet.Range(m_periodsAddressValuesDictionary.ElementAt(m_periodsAddressValuesDictionary.Count - 1).Key).Column > m_excelWorkSheet.Range(m_entitiesAddressValuesDictionary.ElementAt(m_entitiesAddressValuesDictionary.Count - 1).Key).Column Then
+                MaxRight = m_periodFormatflag
             Else
-                MaxRight = entity_flag
+                MaxRight = m_entityStringFlag
             End If
         Else
-            If WS.Range(AccountsAddressValuesDictionary.ElementAt(AccountsAddressValuesDictionary.Count - 1).Key).Column > WS.Range(EntitiesAddressValuesDictionary.ElementAt(EntitiesAddressValuesDictionary.Count - 1).Key).Column Then
-                MaxRight = account_flag
+            If m_excelWorkSheet.Range(m_accountsAddressValuesDictionary.ElementAt(m_accountsAddressValuesDictionary.Count - 1).Key).Column > m_excelWorkSheet.Range(m_entitiesAddressValuesDictionary.ElementAt(m_entitiesAddressValuesDictionary.Count - 1).Key).Column Then
+                MaxRight = m_accountStringFlag
             Else
-                MaxRight = entity_flag
+                MaxRight = m_entityStringFlag
             End If
         End If
         ' Get Maximum Below cell
-        If WS.Range(periodsAddressValuesDictionary.ElementAt(periodsAddressValuesDictionary.Count - 1).Key).Row > WS.Range(AccountsAddressValuesDictionary.ElementAt(AccountsAddressValuesDictionary.Count - 1).Key).Row Then
-            If WS.Range(periodsAddressValuesDictionary.ElementAt(periodsAddressValuesDictionary.Count - 1).Key).Row > WS.Range(EntitiesAddressValuesDictionary.ElementAt(EntitiesAddressValuesDictionary.Count - 1).Key).Row Then
-                MaxBelow = period_flag
+        If m_excelWorkSheet.Range(m_periodsAddressValuesDictionary.ElementAt(m_periodsAddressValuesDictionary.Count - 1).Key).Row > m_excelWorkSheet.Range(m_accountsAddressValuesDictionary.ElementAt(m_accountsAddressValuesDictionary.Count - 1).Key).Row Then
+            If m_excelWorkSheet.Range(m_periodsAddressValuesDictionary.ElementAt(m_periodsAddressValuesDictionary.Count - 1).Key).Row > m_excelWorkSheet.Range(m_entitiesAddressValuesDictionary.ElementAt(m_entitiesAddressValuesDictionary.Count - 1).Key).Row Then
+                MaxBelow = m_periodFormatflag
             Else
-                MaxBelow = entity_flag
+                MaxBelow = m_entityStringFlag
             End If
         Else
-            If WS.Range(AccountsAddressValuesDictionary.ElementAt(AccountsAddressValuesDictionary.Count - 1).Key).Row > WS.Range(EntitiesAddressValuesDictionary.ElementAt(EntitiesAddressValuesDictionary.Count - 1).Key).Row Then
-                MaxBelow = account_flag
+            If m_excelWorkSheet.Range(m_accountsAddressValuesDictionary.ElementAt(m_accountsAddressValuesDictionary.Count - 1).Key).Row > m_excelWorkSheet.Range(m_entitiesAddressValuesDictionary.ElementAt(m_entitiesAddressValuesDictionary.Count - 1).Key).Row Then
+                MaxBelow = m_accountStringFlag
             Else
-                MaxBelow = entity_flag
+                MaxBelow = m_entityStringFlag
             End If
         End If
     End Sub
@@ -618,17 +600,17 @@ Friend Class ModelDataSet
     Private Sub getDatesOrientations()
 
         Dim deltaRows, deltaColumns As Integer
-        If pDateFlag = 2 Then
-            deltaRows = WS.Range(periodsAddressValuesDictionary.ElementAt(periodsAddressValuesDictionary.Count - 1).Key).Row - _
-                                    WS.Range(periodsAddressValuesDictionary.ElementAt(0).Key).Row
+        If m_dateFlag = 2 Then
+            deltaRows = m_excelWorkSheet.Range(m_periodsAddressValuesDictionary.ElementAt(m_periodsAddressValuesDictionary.Count - 1).Key).Row - _
+                                    m_excelWorkSheet.Range(m_periodsAddressValuesDictionary.ElementAt(0).Key).Row
 
-            deltaColumns = WS.Range(periodsAddressValuesDictionary.ElementAt(periodsAddressValuesDictionary.Count - 1).Key).Column - _
-                           WS.Range(periodsAddressValuesDictionary.ElementAt(0).Key).Column
+            deltaColumns = m_excelWorkSheet.Range(m_periodsAddressValuesDictionary.ElementAt(m_periodsAddressValuesDictionary.Count - 1).Key).Column - _
+                           m_excelWorkSheet.Range(m_periodsAddressValuesDictionary.ElementAt(0).Key).Column
 
             If deltaRows > deltaColumns Then
-                datesOrientation = "V"
+                m_datesOrientationFlag = "V"
             Else
-                datesOrientation = "H"
+                m_datesOrientationFlag = "H"
             End If
         End If
 
@@ -638,17 +620,17 @@ Friend Class ModelDataSet
     Private Sub getAccountsOrientations()
 
         Dim deltaRows, deltaColumns As Integer
-        If pAccountFlag = 2 Then
-            deltaRows = WS.Range(AccountsAddressValuesDictionary.ElementAt(AccountsAddressValuesDictionary.Count - 1).Key).Row - _
-                        WS.Range(AccountsAddressValuesDictionary.ElementAt(0).Key).Row
+        If m_accountFlag = 2 Then
+            deltaRows = m_excelWorkSheet.Range(m_accountsAddressValuesDictionary.ElementAt(m_accountsAddressValuesDictionary.Count - 1).Key).Row - _
+                        m_excelWorkSheet.Range(m_accountsAddressValuesDictionary.ElementAt(0).Key).Row
 
-            deltaColumns = WS.Range(AccountsAddressValuesDictionary.ElementAt(AccountsAddressValuesDictionary.Count - 1).Key).Column - _
-                           WS.Range(AccountsAddressValuesDictionary.ElementAt(0).Key).Column
+            deltaColumns = m_excelWorkSheet.Range(m_accountsAddressValuesDictionary.ElementAt(m_accountsAddressValuesDictionary.Count - 1).Key).Column - _
+                           m_excelWorkSheet.Range(m_accountsAddressValuesDictionary.ElementAt(0).Key).Column
 
             If deltaRows > deltaColumns Then
-                accountsOrientation = "V"
+                m_accountsOrientationFlag = "V"
             Else
-                accountsOrientation = "H"
+                m_accountsOrientationFlag = "H"
             End If
         End If
 
@@ -658,17 +640,17 @@ Friend Class ModelDataSet
     Private Sub getAssetsOrientations()
 
         Dim deltaRows, deltaColumns As Integer
-        If pAssetFlag = 2 Then
-            deltaRows = WS.Range(EntitiesAddressValuesDictionary.ElementAt(EntitiesAddressValuesDictionary.Count - 1).Key).Row - _
-                        WS.Range(EntitiesAddressValuesDictionary.ElementAt(0).Key).Row
+        If m_EntityFlag = 2 Then
+            deltaRows = m_excelWorkSheet.Range(m_entitiesAddressValuesDictionary.ElementAt(m_entitiesAddressValuesDictionary.Count - 1).Key).Row - _
+                        m_excelWorkSheet.Range(m_entitiesAddressValuesDictionary.ElementAt(0).Key).Row
 
-            deltaColumns = WS.Range(EntitiesAddressValuesDictionary.ElementAt(EntitiesAddressValuesDictionary.Count - 1).Key).Column - _
-                           WS.Range(EntitiesAddressValuesDictionary.ElementAt(0).Key).Column
+            deltaColumns = m_excelWorkSheet.Range(m_entitiesAddressValuesDictionary.ElementAt(m_entitiesAddressValuesDictionary.Count - 1).Key).Column - _
+                           m_excelWorkSheet.Range(m_entitiesAddressValuesDictionary.ElementAt(0).Key).Column
 
             If deltaRows > deltaColumns Then
-                assetsOrientation = "V"
+                m_entitiesOrientationFlag = "V"
             Else
-                assetsOrientation = "H"
+                m_entitiesOrientationFlag = "H"
             End If
         End If
 
@@ -677,20 +659,20 @@ Friend Class ModelDataSet
     '
     Private Sub DefineGlobalOrientationFlag()
 
-        If accountsOrientation = "V" And assetsOrientation = "H" Then       ' Case Accounts in line / Assets in columns
-            GlobalOrientationFlag = DATASET_ACCOUNTS_ENTITIES_OR
-        ElseIf accountsOrientation = "V" And datesOrientation = "H" Then    ' Case Accounts in line / Dates in columns
-            GlobalOrientationFlag = DATASET_ACCOUNTS_PERIODS_OR
-        ElseIf datesOrientation = "V" And accountsOrientation = "H" Then    ' Case Dates in line / Accounts in columns
-            GlobalOrientationFlag = DATASET_PERIODS_ACCOUNTS_OR
-        ElseIf datesOrientation = "V" And assetsOrientation = "H" Then      ' Case Dates in line / Assets in columns
-            GlobalOrientationFlag = DATASET_PERIODS_ENTITIES_OR
-        ElseIf assetsOrientation = "V" And accountsOrientation = "H" Then   ' Case Assets in line / Accounts in columns
-            GlobalOrientationFlag = DATASET_ENTITIES_ACCOUNTS_OR
-        ElseIf assetsOrientation = "V" And datesOrientation = "H" Then      ' Case Assets in line / Dates in columns
-            GlobalOrientationFlag = DATASET_ENTITIES_PERIODS_OR
+        If m_accountsOrientationFlag = "V" And m_entitiesOrientationFlag = "H" Then       ' Case Accounts in line / Assets in columns
+            m_globalOrientationFlag = DATASET_ACCOUNTS_ENTITIES_OR
+        ElseIf m_accountsOrientationFlag = "V" And m_datesOrientationFlag = "H" Then    ' Case Accounts in line / Dates in columns
+            m_globalOrientationFlag = DATASET_ACCOUNTS_PERIODS_OR
+        ElseIf m_datesOrientationFlag = "V" And m_accountsOrientationFlag = "H" Then    ' Case Dates in line / Accounts in columns
+            m_globalOrientationFlag = DATASET_PERIODS_ACCOUNTS_OR
+        ElseIf m_datesOrientationFlag = "V" And m_entitiesOrientationFlag = "H" Then      ' Case Dates in line / Assets in columns
+            m_globalOrientationFlag = DATASET_PERIODS_ENTITIES_OR
+        ElseIf m_entitiesOrientationFlag = "V" And m_accountsOrientationFlag = "H" Then   ' Case Assets in line / Accounts in columns
+            m_globalOrientationFlag = DATASET_ENTITIES_ACCOUNTS_OR
+        ElseIf m_entitiesOrientationFlag = "V" And m_datesOrientationFlag = "H" Then      ' Case Assets in line / Dates in columns
+            m_globalOrientationFlag = DATASET_ENTITIES_PERIODS_OR
         Else
-            GlobalOrientationFlag = ORIENTATION_ERROR_FLAG
+            m_globalOrientationFlag = ORIENTATION_ERROR_FLAG
         End If
 
     End Sub
@@ -703,7 +685,7 @@ Friend Class ModelDataSet
 
     Friend Sub RegisterDimensionsToCellDictionary()
 
-        Dim entityName As String = EntitiesAddressValuesDictionary.ElementAt(0).Value
+        Dim entityName As String = m_entitiesAddressValuesDictionary.ElementAt(0).Value
         Dim periodColumn As Int32
         Dim period As String
 
@@ -715,21 +697,21 @@ Friend Class ModelDataSet
         m_datasetCellsDictionary.Clear()
         m_datasetCellDimensionsDictionary.Clear()
 
-        For Each PeriodAddressValuePair In periodsAddressValuesDictionary
+        For Each PeriodAddressValuePair In m_periodsAddressValuesDictionary
             period = PeriodAddressValuePair.Value
-            periodColumn = WS.Range(PeriodAddressValuePair.Key).Column
+            periodColumn = m_excelWorkSheet.Range(PeriodAddressValuePair.Key).Column
 
             ' Inputs cells registering
-            For Each AccountAddressValuePair In AccountsAddressValuesDictionary
-                RegisterDatasetCell(WS.Cells(WS.Range(AccountAddressValuePair.Key).Row, periodColumn), _
+            For Each AccountAddressValuePair In m_accountsAddressValuesDictionary
+                RegisterDatasetCell(m_excelWorkSheet.Cells(m_excelWorkSheet.Range(AccountAddressValuePair.Key).Row, periodColumn), _
                                     entityName, _
                                     AccountAddressValuePair.Value, _
                                     period)
             Next
 
             ' Outputs cells registering
-            For Each OutputAccountAddressValuePair In OutputsAccountsAddressvaluesDictionary
-                RegisterDatasetCell(WS.Cells(WS.Range(OutputAccountAddressValuePair.Key).Row, periodColumn), _
+            For Each OutputAccountAddressValuePair In m_outputsAccountsAddressvaluesDictionary
+                RegisterDatasetCell(m_excelWorkSheet.Cells(m_excelWorkSheet.Range(OutputAccountAddressValuePair.Key).Row, periodColumn), _
                                     entityName, _
                                     OutputAccountAddressValuePair.Value, _
                                     period)
@@ -750,10 +732,10 @@ Friend Class ModelDataSet
         Dim stop_time As DateTime
         start_time = Now
 
-        For Each AccountAddressValuePair In AccountsAddressValuesDictionary
+        For Each AccountAddressValuePair In m_accountsAddressValuesDictionary
             accountAddress = AccountAddressValuePair.Key
-            For Each PeriodAddressValuePair In periodsAddressValuesDictionary
-                Dim cell As Excel.Range = WS.Cells(WS.Range(accountAddress).Row, WS.Range(PeriodAddressValuePair.Key).Column)
+            For Each PeriodAddressValuePair In m_periodsAddressValuesDictionary
+                Dim cell As Excel.Range = m_excelWorkSheet.Cells(m_excelWorkSheet.Range(accountAddress).Row, m_excelWorkSheet.Range(PeriodAddressValuePair.Key).Column)
                 Dim datasetCell As DataSetCellDimensions = m_datasetCellDimensionsDictionary(cell.Address)
                 datasetCell.m_value = cell.Value2
             Next

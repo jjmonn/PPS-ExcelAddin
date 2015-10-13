@@ -58,11 +58,13 @@ Friend Class SubmissionWSController
 
     End Sub
 
-    Friend Sub AssociateWS(ByRef WS As Excel.Worksheet)
+    Friend Sub AssociateWS(ByRef p_excelWorksheet As Excel.Worksheet)
 
-        AddHandler WS.Change, AddressOf Worksheet_Change
-        AddHandler WS.BeforeRightClick, AddressOf Worksheet_BeforeRightClick
-        Me.m_excelWorksheet = WS
+        AddHandler p_excelWorksheet.Change, AddressOf Worksheet_Change
+        AddHandler p_excelWorksheet.BeforeRightClick, AddressOf Worksheet_BeforeRightClick
+        '      AddHandler p_excelWorksheet.SelectionChange
+        Me.m_excelWorksheet = p_excelWorksheet
+
 
         ' AddHandler thisworkbook.SheetSelectionChange, AddressOf Worksheet_SelectionChange
         'WS.Protect(DrawingObjects:=False, _
@@ -122,7 +124,7 @@ Friend Class SubmissionWSController
     Friend Sub UpdateInputsOnWS()
 
         Dim value As Double
-        For Each entityName As String In m_dataSet.EntitiesAddressValuesDictionary.Values
+        For Each entityName As String In m_dataSet.m_entitiesAddressValuesDictionary.Values
             For Each accountName As String In m_dataSet.m_inputsAccountsList
                 For Each period As Int32 In m_acquisitionModel.currentPeriodList
                     If m_acquisitionModel.dataBaseInputsDictionary(entityName)(accountName).ContainsKey(m_acquisitionModel.periodsIdentifyer & period) = True Then
@@ -157,11 +159,11 @@ Friend Class SubmissionWSController
         Dim modelUpdateFlag As Boolean = False
         Dim dependents_cells As Excel.Range = Nothing
         Dim entityName As String
-        If m_generalSubmissionController.isUpdating = False AndAlso m_disableWSChangeFlag = False Then
+        If m_generalSubmissionController.m_isUpdating = False AndAlso m_disableWSChangeFlag = False Then
 
             For Each cell As Excel.Range In p_target.Cells
 
-                Dim intersect = GlobalVariables.APPS.Intersect(cell, m_dataModificationsTracker.dataSetRegion)
+                Dim intersect = GlobalVariables.APPS.Intersect(cell, m_dataModificationsTracker.m_dataSetRegion)
                 If Not intersect Is Nothing Then
 
                     entityName = m_dataSet.m_datasetCellDimensionsDictionary(cell.Address).m_entityName
@@ -182,7 +184,7 @@ Friend Class SubmissionWSController
                             dependents_cells = cell.Dependents
                             If Not dependents_cells Is Nothing Then
                                 For Each dependant_cell As Excel.Range In dependents_cells
-                                    intersect = GlobalVariables.APPS.Intersect(dependant_cell, m_dataModificationsTracker.dataSetRegion)
+                                    intersect = GlobalVariables.APPS.Intersect(dependant_cell, m_dataModificationsTracker.m_dataSetRegion)
                                     If Not intersect Is Nothing Then
                                         m_generalSubmissionController.UpdateModelFromExcelUpdate(m_dataSet.m_datasetCellDimensionsDictionary(dependents_cells.Address).m_entityName, _
                                                                                                m_dataSet.m_datasetCellDimensionsDictionary(dependents_cells.Address).m_accountName, _
@@ -192,7 +194,7 @@ Friend Class SubmissionWSController
                                     End If
                                 Next
                             End If
-                            If m_generalSubmissionController.autoCommitFlag = True Then m_generalSubmissionController.DataSubmission()
+                            If m_generalSubmissionController.m_autoCommitFlag = True Then m_generalSubmissionController.DataSubmission()
 
                         End If
                     Else
@@ -205,7 +207,7 @@ Friend Class SubmissionWSController
                     ' Put back the real output value in case the output has been overwritten
                     On Error Resume Next
                     entityName = m_dataSet.m_datasetCellDimensionsDictionary(cell.Address).m_entityName
-                    Dim intersectOutput = GlobalVariables.APPS.Intersect(cell, m_dataModificationsTracker.outputsRegion)
+                    Dim intersectOutput = GlobalVariables.APPS.Intersect(cell, m_dataModificationsTracker.m_outputsRegion)
                     If Not intersectOutput Is Nothing Then
                         m_disableWSChangeFlag = True
                         SetDatsetCellValue(m_dataSet.m_entitiesNameIdDictionary(entityName), _

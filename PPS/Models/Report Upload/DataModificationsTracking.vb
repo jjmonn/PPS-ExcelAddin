@@ -29,41 +29,45 @@ Friend Class DataModificationsTracking
 #Region "Instance Variables"
 
     ' Objects
-    Private Dataset As ModelDataSet
-    Friend RangeHighlighter As RangeHighlighter
-    Friend dataSetRegion As Excel.Range
-    Friend outputsRegion As Excel.Range
-    Friend CellBeingEdited As Excel.Range
-    Private accountsNameTypeDict As Hashtable
+    Private m_dataset As ModelDataSet
+    Friend m_rangeHighlighter As RangeHighlighter
+    Friend m_dataSetRegion As Excel.Range
+    Friend m_outputsRegion As Excel.Range
+    Friend m_cellBeingEdited As Excel.Range
+    '   Private m_accountsNameTypeDict As Hashtable
+    Private m_accountsNameFormulaTypeDict As Hashtable
 
     ' Variables
-    Friend modifiedCellsList As New List(Of String)
+    Friend m_modifiedCellsList As New List(Of String)
+    Private m_startPeriod As Int32
 
 #End Region
 
 
-    Friend Sub New(ByRef inputDataSet As ModelDataSet)
+    Friend Sub New(ByRef p_dataSet As ModelDataSet)
 
-        Dataset = inputDataSet
-        RangeHighlighter = New RangeHighlighter(Dataset.WS)
-        accountsNameTypeDict = GlobalVariables.Accounts.GetAccountsDictionary(NAME_VARIABLE, ACCOUNT_TYPE_VARIABLE)
+        m_dataset = p_dataSet
+        m_rangeHighlighter = New RangeHighlighter(m_dataset.m_excelWorkSheet)
+        '     m_accountsNameTypeDict = GlobalVariables.Accounts.GetAccountsDictionary(NAME_VARIABLE, ACCOUNT_TYPE_VARIABLE)
+        m_accountsNameFormulaTypeDict = GlobalVariables.Accounts.GetAccountsDictionary(NAME_VARIABLE, ACCOUNT_FORMULA_TYPE_VARIABLE)
 
     End Sub
 
 
 #Region "Dataset and Outputs Region Set up"
 
+    ' to be simplified => we already have the information with dataset dictionaries
     ' Initializes or Reinitializes the Dataset Region according to Dataset dictionaries and orientation
     Friend Sub InitializeDataSetRegion()
 
-        dataSetRegion = Nothing
-        Select Case Dataset.GlobalOrientationFlag
-            Case ModelDataSet.DATASET_ACCOUNTS_PERIODS_OR : AppendDataRegionRanges(dataSetRegion, Dataset.AccountsAddressValuesDictionary, Dataset.periodsAddressValuesDictionary)
-            Case ModelDataSet.DATASET_PERIODS_ACCOUNTS_OR : AppendDataRegionRanges(dataSetRegion, Dataset.periodsAddressValuesDictionary, Dataset.AccountsAddressValuesDictionary)
-            Case ModelDataSet.DATASET_ACCOUNTS_ENTITIES_OR : AppendDataRegionRanges(dataSetRegion, Dataset.AccountsAddressValuesDictionary, Dataset.EntitiesAddressValuesDictionary)
-            Case ModelDataSet.DATASET_ENTITIES_ACCOUNTS_OR : AppendDataRegionRanges(dataSetRegion, Dataset.EntitiesAddressValuesDictionary, Dataset.AccountsAddressValuesDictionary)
-            Case ModelDataSet.DATASET_PERIODS_ENTITIES_OR : AppendDataRegionRanges(dataSetRegion, Dataset.periodsAddressValuesDictionary, Dataset.EntitiesAddressValuesDictionary)
-            Case ModelDataSet.DATASET_ENTITIES_PERIODS_OR : AppendDataRegionRanges(dataSetRegion, Dataset.EntitiesAddressValuesDictionary, Dataset.periodsAddressValuesDictionary)
+        m_dataSetRegion = Nothing
+        Select Case m_dataset.m_globalOrientationFlag
+            Case ModelDataSet.DATASET_ACCOUNTS_PERIODS_OR : AppendDataRegionRanges(m_dataSetRegion, m_dataset.m_accountsAddressValuesDictionary, m_dataset.m_periodsAddressValuesDictionary)
+            Case ModelDataSet.DATASET_PERIODS_ACCOUNTS_OR : AppendDataRegionRanges(m_dataSetRegion, m_dataset.m_periodsAddressValuesDictionary, m_dataset.m_accountsAddressValuesDictionary)
+            Case ModelDataSet.DATASET_ACCOUNTS_ENTITIES_OR : AppendDataRegionRanges(m_dataSetRegion, m_dataset.m_accountsAddressValuesDictionary, m_dataset.m_entitiesAddressValuesDictionary)
+            Case ModelDataSet.DATASET_ENTITIES_ACCOUNTS_OR : AppendDataRegionRanges(m_dataSetRegion, m_dataset.m_entitiesAddressValuesDictionary, m_dataset.m_accountsAddressValuesDictionary)
+            Case ModelDataSet.DATASET_PERIODS_ENTITIES_OR : AppendDataRegionRanges(m_dataSetRegion, m_dataset.m_periodsAddressValuesDictionary, m_dataset.m_entitiesAddressValuesDictionary)
+            Case ModelDataSet.DATASET_ENTITIES_PERIODS_OR : AppendDataRegionRanges(m_dataSetRegion, m_dataset.m_entitiesAddressValuesDictionary, m_dataset.m_periodsAddressValuesDictionary)
             Case Else
                 ' PPS error tracking
                 Exit Sub
@@ -73,13 +77,13 @@ Friend Class DataModificationsTracking
 
     Friend Sub InitializeOutputsRegion()
 
-        outputsRegion = Nothing
-        If Dataset.OutputsAccountsAddressvaluesDictionary.Count > 0 Then
-            Select Case Dataset.GlobalOrientationFlag
-                Case ModelDataSet.DATASET_ACCOUNTS_PERIODS_OR : AppendDataRegionRanges(outputsRegion, Dataset.OutputsAccountsAddressvaluesDictionary, Dataset.periodsAddressValuesDictionary)
-                Case ModelDataSet.DATASET_PERIODS_ACCOUNTS_OR : AppendDataRegionRanges(outputsRegion, Dataset.periodsAddressValuesDictionary, Dataset.OutputsAccountsAddressvaluesDictionary)
-                Case ModelDataSet.DATASET_ACCOUNTS_ENTITIES_OR : AppendDataRegionRanges(outputsRegion, Dataset.OutputsAccountsAddressvaluesDictionary, Dataset.EntitiesAddressValuesDictionary)
-                Case ModelDataSet.DATASET_ENTITIES_ACCOUNTS_OR : AppendDataRegionRanges(outputsRegion, Dataset.EntitiesAddressValuesDictionary, Dataset.OutputsAccountsAddressvaluesDictionary)
+        m_outputsRegion = Nothing
+        If m_dataset.m_outputsAccountsAddressvaluesDictionary.Count > 0 Then
+            Select Case m_dataset.m_globalOrientationFlag
+                Case ModelDataSet.DATASET_ACCOUNTS_PERIODS_OR : AppendDataRegionRanges(m_outputsRegion, m_dataset.m_outputsAccountsAddressvaluesDictionary, m_dataset.m_periodsAddressValuesDictionary)
+                Case ModelDataSet.DATASET_PERIODS_ACCOUNTS_OR : AppendDataRegionRanges(m_outputsRegion, m_dataset.m_periodsAddressValuesDictionary, m_dataset.m_outputsAccountsAddressvaluesDictionary)
+                Case ModelDataSet.DATASET_ACCOUNTS_ENTITIES_OR : AppendDataRegionRanges(m_outputsRegion, m_dataset.m_outputsAccountsAddressvaluesDictionary, m_dataset.m_entitiesAddressValuesDictionary)
+                Case ModelDataSet.DATASET_ENTITIES_ACCOUNTS_OR : AppendDataRegionRanges(m_outputsRegion, m_dataset.m_entitiesAddressValuesDictionary, m_dataset.m_outputsAccountsAddressvaluesDictionary)
             End Select
         End If
 
@@ -93,8 +97,8 @@ Friend Class DataModificationsTracking
         For Each VArea As Excel.Range In TransformDictionaryToRange(VDict).Areas
             For Each HArea As Excel.Range In TransformDictionaryToRange(HDict).Areas
 
-                Dim appendRange = Dataset.WS.Range(Dataset.WS.Cells(VArea(1).row, HArea(1).column), _
-                                                   Dataset.WS.Cells(VArea(VArea.Count).row, HArea(HArea.Count).column))
+                Dim appendRange = m_dataset.m_excelWorkSheet.Range(m_dataset.m_excelWorkSheet.Cells(VArea(1).row, HArea(1).column), _
+                                                   m_dataset.m_excelWorkSheet.Cells(VArea(VArea.Count).row, HArea(HArea.Count).column))
                 If region Is Nothing Then region = appendRange
                 region = GlobalVariables.apps.Union(region, appendRange)
 
@@ -107,9 +111,9 @@ Friend Class DataModificationsTracking
     Private Function TransformDictionaryToRange(ByRef inputDict As Dictionary(Of String, String)) As Excel.Range
 
         Dim rng As Excel.Range
-        rng = Dataset.WS.Range(inputDict.ElementAt(0).Key)
+        rng = m_dataset.m_excelWorkSheet.Range(inputDict.ElementAt(0).Key)
         For Each address As String In inputDict.Keys
-            rng = GlobalVariables.apps.Union(rng, Dataset.WS.Range(address))
+            rng = GlobalVariables.apps.Union(rng, m_dataset.m_excelWorkSheet.Range(address))
         Next
 
         Return rng
@@ -125,46 +129,46 @@ Friend Class DataModificationsTracking
     ' Register a modification in the dictionary cellAddress | Values
     Friend Sub RegisterModification(ByRef cellAddress As String)
 
-        If modifiedCellsList.Contains(cellAddress) = False Then modifiedCellsList.Add(cellAddress)
-        RangeHighlighter.ColorRangeRed(cellAddress)
+        If m_modifiedCellsList.Contains(cellAddress) = False Then m_modifiedCellsList.Add(cellAddress)
+        m_rangeHighlighter.ColorRangeRed(cellAddress)
 
     End Sub
 
     ' Empty the modifications list and set the cells to green
     Friend Sub UnregisterModifications()
 
-        For Each cellAddress As String In modifiedCellsList
-            RangeHighlighter.ColorRangeGreen(cellAddress)
+        For Each cellAddress As String In m_modifiedCellsList
+            m_rangeHighlighter.ColorRangeGreen(cellAddress)
         Next
-        modifiedCellsList.Clear()
+        m_modifiedCellsList.Clear()
 
     End Sub
 
     ' Revert to input/ output color
     Friend Sub DiscardModifications()
 
-        For Each cellAddress As String In modifiedCellsList
-             If RangeHighlighter.outputCellsAddresses.Contains(cellAddress) Then
-                RangeHighlighter.ColorOutputRange(cellAddress)
+        For Each cellAddress As String In m_modifiedCellsList
+            If m_rangeHighlighter.outputCellsAddresses.Contains(cellAddress) Then
+                m_rangeHighlighter.ColorOutputRange(cellAddress)
             Else
-                RangeHighlighter.ColorRangeInputBlue(cellAddress)
+                m_rangeHighlighter.ColorRangeInputBlue(cellAddress)
             End If
         Next
-        modifiedCellsList.Clear()
+        m_modifiedCellsList.Clear()
 
     End Sub
 
     Friend Sub UnregisterSingleModification(ByRef cellAddress As String)
 
-        modifiedCellsList.Remove(cellAddress)
-        RangeHighlighter.ColorRangeGreen(cellAddress)
+        m_modifiedCellsList.Remove(cellAddress)
+        m_rangeHighlighter.ColorRangeGreen(cellAddress)
 
     End Sub
 
     Friend Function GetModificationsListCopy() As List(Of String)
 
         Dim tmpList As New List(Of String)
-        For Each item In modifiedCellsList
+        For Each item In m_modifiedCellsList
             tmpList.Add(item)
         Next
         Return tmpList
@@ -180,33 +184,37 @@ Friend Class DataModificationsTracking
     Friend Sub HighlightItemsAndDataRanges()
 
         GlobalVariables.APPS.ScreenUpdating = False
-        HeaderRangesInputsHighlight(Dataset.EntitiesAddressValuesDictionary)
-        HeaderRangesInputsHighlight(Dataset.AccountsAddressValuesDictionary)
-        HeaderRangesInputsHighlight(Dataset.periodsAddressValuesDictionary)
+        m_startPeriod = GlobalVariables.Versions.versions_hash(Int(My.Settings.version_id))(VERSIONS_START_PERIOD_VAR)
+
+        ' Headers Coloring
+        HeaderRangesInputsHighlight(m_dataset.m_accountsAddressValuesDictionary)
+        HeaderRangesInputsHighlight(m_dataset.m_entitiesAddressValuesDictionary)
+        HeaderRangesInputsHighlight(m_dataset.m_periodsAddressValuesDictionary)
+        HeaderRangesOutputsHighlight(m_dataset.m_outputsAccountsAddressvaluesDictionary)
+
+        ' Data coloring
         DataHighlight()
-        If Not outputsRegion Is Nothing Then RangeHighlighter.ColorOutputRange(outputsRegion)
-        HeaderRangesOutputsHighlight(Dataset.OutputsAccountsAddressvaluesDictionary)
+        If Not m_outputsRegion Is Nothing Then m_rangeHighlighter.ColorOutputRange(m_outputsRegion)
         GlobalVariables.APPS.ScreenUpdating = True
 
     End Sub
 
     Friend Sub UnHighlightItemsAndDataRanges()
 
-        RangeHighlighter.RevertToOriginalColors()
+        m_rangeHighlighter.RevertToOriginalColors()
 
     End Sub
 
     Friend Sub TakeOffFormats()
 
-        RangeHighlighter.RevertToOriginalColors()
+        m_rangeHighlighter.RevertToOriginalColors()
 
     End Sub
 
-    ' Highlight the input headers
     Private Sub HeaderRangesInputsHighlight(ByRef addressDictionary As Dictionary(Of String, String))
 
         For Each contiguousRange As Excel.Range In TransformDictionaryToRange(addressDictionary).Areas
-            RangeHighlighter.HighlightInputRange(contiguousRange)
+            m_rangeHighlighter.HighlightInputRange(contiguousRange)
         Next
 
     End Sub
@@ -215,23 +223,40 @@ Friend Class DataModificationsTracking
     Private Sub HeaderRangesOutputsHighlight(ByRef addressDictionary As Dictionary(Of String, String))
 
         For Each contiguousRange As Excel.Range In TransformDictionaryToRange(addressDictionary).Areas
-            RangeHighlighter.ColorOutputRange(contiguousRange)
+            m_rangeHighlighter.ColorOutputRange(contiguousRange)
         Next
 
     End Sub
 
-    ' Launch highlight data according to orientations
     Private Sub DataHighlight()
 
-        Select Case Dataset.GlobalOrientationFlag
-            Case ModelDataSet.DATASET_ACCOUNTS_PERIODS_OR : DataAreasHighlight(Dataset.AccountsAddressValuesDictionary, Dataset.periodsAddressValuesDictionary)
-            Case ModelDataSet.DATASET_PERIODS_ACCOUNTS_OR : DataAreasHighlight(Dataset.periodsAddressValuesDictionary, Dataset.AccountsAddressValuesDictionary)
-            Case ModelDataSet.DATASET_ACCOUNTS_ENTITIES_OR : DataAreasHighlight(Dataset.AccountsAddressValuesDictionary, Dataset.EntitiesAddressValuesDictionary)
-            Case ModelDataSet.DATASET_ENTITIES_ACCOUNTS_OR : DataAreasHighlight(Dataset.EntitiesAddressValuesDictionary, Dataset.AccountsAddressValuesDictionary)
-            Case ModelDataSet.DATASET_PERIODS_ENTITIES_OR : DataAreasHighlight(Dataset.periodsAddressValuesDictionary, Dataset.EntitiesAddressValuesDictionary)
-            Case ModelDataSet.DATASET_ENTITIES_PERIODS_OR : DataAreasHighlight(Dataset.EntitiesAddressValuesDictionary, Dataset.periodsAddressValuesDictionary)
+        Select Case m_dataset.m_globalOrientationFlag
+            Case ModelDataSet.DATASET_ACCOUNTS_PERIODS_OR : DataAreasHighlight(m_dataset.m_accountsAddressValuesDictionary, m_dataset.m_periodsAddressValuesDictionary)
+            Case ModelDataSet.DATASET_PERIODS_ACCOUNTS_OR : DataAreasHighlight(m_dataset.m_periodsAddressValuesDictionary, m_dataset.m_accountsAddressValuesDictionary)
+            Case ModelDataSet.DATASET_ACCOUNTS_ENTITIES_OR : DataAreasHighlight(m_dataset.m_accountsAddressValuesDictionary, m_dataset.m_entitiesAddressValuesDictionary)
+            Case ModelDataSet.DATASET_ENTITIES_ACCOUNTS_OR : DataAreasHighlight(m_dataset.m_entitiesAddressValuesDictionary, m_dataset.m_accountsAddressValuesDictionary)
+            Case ModelDataSet.DATASET_PERIODS_ENTITIES_OR : DataAreasHighlight(m_dataset.m_periodsAddressValuesDictionary, m_dataset.m_entitiesAddressValuesDictionary)
+            Case ModelDataSet.DATASET_ENTITIES_PERIODS_OR : DataAreasHighlight(m_dataset.m_entitiesAddressValuesDictionary, m_dataset.m_periodsAddressValuesDictionary)
             Case Else : Exit Sub
         End Select
+
+    End Sub
+
+    Friend Sub HighlightsFPIOutputPart()
+
+        Dim tuple_ As Tuple(Of String, String, String)
+        Dim excelCell As Excel.Range
+
+        For Each tupleCellPair In m_dataset.m_datasetCellsDictionary
+            tuple_ = tupleCellPair.Key
+            excelCell = tupleCellPair.Value
+
+            If m_accountsNameFormulaTypeDict(tuple_.Item2) = GlobalEnums.FormulaTypes.FIRST_PERIOD_INPUT Then
+                If tuple_.Item3 <> m_startPeriod Then
+                    m_rangeHighlighter.ColorOutputRange(excelCell)
+                End If
+            End If
+        Next
 
     End Sub
 
@@ -240,8 +265,8 @@ Friend Class DataModificationsTracking
 
         For Each VArea As Excel.Range In TransformDictionaryToRange(VDict).Areas
             For Each HArea As Excel.Range In TransformDictionaryToRange(HDict).Areas
-                RangeHighlighter.HighlightInputRange(RangeHighlighter.WS.Range(RangeHighlighter.WS.Cells(VArea(1).row, HArea(1).column), _
-                                                                               RangeHighlighter.WS.Cells(VArea(VArea.Count).row, HArea(HArea.Count).column)))
+                m_rangeHighlighter.HighlightInputRange(m_rangeHighlighter.WS.Range(m_rangeHighlighter.WS.Cells(VArea(1).row, HArea(1).column), _
+                                                                               m_rangeHighlighter.WS.Cells(VArea(VArea.Count).row, HArea(HArea.Count).column)))
             Next
         Next
 
@@ -257,31 +282,31 @@ Friend Class DataModificationsTracking
     Friend Sub IdentifyDifferencesBtwDataSetAndDB(ByRef p_dataBaseInputsDictionary As Dictionary(Of String, Dictionary(Of String, Dictionary(Of String, Double))))
 
         Dim periodIdentifyer As String = ""
-        Select Case GlobalVariables.Versions.versions_hash(Dataset.m_currentVersionId)(VERSIONS_TIME_CONFIG_VARIABLE)
+        Select Case GlobalVariables.Versions.versions_hash(m_dataset.m_currentVersionId)(VERSIONS_TIME_CONFIG_VARIABLE)
             Case GlobalEnums.TimeConfig.YEARS : periodIdentifyer = Computer.YEAR_PERIOD_IDENTIFIER
             Case GlobalEnums.TimeConfig.MONTHS : periodIdentifyer = Computer.MONTH_PERIOD_IDENTIFIER
         End Select
 
         Dim accountsNameTypeDict As Hashtable = GlobalVariables.Accounts.GetAccountsDictionary(NAME_VARIABLE, ACCOUNT_FORMULA_TYPE_VARIABLE)
-        For Each entity As String In Dataset.EntitiesValuesAddressDict.Keys
-            For Each account As String In Dataset.AccountsValuesAddressDict.Keys
+        For Each entity As String In m_dataset.m_entitiesValuesAddressDict.Keys
+            For Each account As String In m_dataset.m_accountsValuesAddressDict.Keys
 
                 Select Case accountsNameTypeDict(account)
                     Case GlobalEnums.FormulaTypes.FIRST_PERIOD_INPUT
-                        Dim period As Integer = CInt(CDbl(Dataset.m_periodsDatesList(0).ToOADate))
+                        Dim period As Integer = CInt(CDbl(m_dataset.m_periodsDatesList(0).ToOADate))
                         ' Date from dataset converted to integer to meet DB integer date storage
 
                         Dim tuple_ As New Tuple(Of String, String, String)(entity, account, period)
-                        If Dataset.m_datasetCellsDictionary.ContainsKey(tuple_) = True Then
-                            Dim cell As Excel.Range = Dataset.m_datasetCellsDictionary(tuple_)
+                        If m_dataset.m_datasetCellsDictionary.ContainsKey(tuple_) = True Then
+                            Dim cell As Excel.Range = m_dataset.m_datasetCellsDictionary(tuple_)
                             If cell.Value2 <> p_dataBaseInputsDictionary(entity)(account)(periodIdentifyer & period) Then _
                                RegisterModification(cell.Address)
                         End If
                     Case Else
-                        For Each period As String In Dataset.periodsValuesAddressDict.Keys
+                        For Each period As String In m_dataset.m_periodsValuesAddressDict.Keys
                             Dim tuple_ As New Tuple(Of String, String, String)(entity, account, period)
-                            If Dataset.m_datasetCellsDictionary.ContainsKey(tuple_) = True Then
-                                Dim cell As Excel.Range = Dataset.m_datasetCellsDictionary(tuple_)
+                            If m_dataset.m_datasetCellsDictionary.ContainsKey(tuple_) = True Then
+                                Dim cell As Excel.Range = m_dataset.m_datasetCellsDictionary(tuple_)
                                 If cell.Value2 <> p_dataBaseInputsDictionary(entity)(account)(periodIdentifyer & period) Then
                                     RegisterModification(cell.Address)
                                 End If
@@ -295,40 +320,6 @@ Friend Class DataModificationsTracking
 
 
 #End Region
-
-
-#Region "Utilities"
-
-
-    ' Return the excel cell from items
-    '    Friend Function GetExcelCell(ByRef entity As String, ByRef account As String, ByRef period As String) As Excel.Range
-
-    '        Dim entityAddress, accountAddress, periodAddress As String
-    '        On Error GoTo errorHandler
-
-    '        entityAddress = Dataset.EntitiesValuesAddressDict(entity)
-    '        periodAddress = Dataset.periodsValuesAddressDict(period)
-    '        If Dataset.AccountsValuesAddressDict.ContainsKey(account) Then
-    '            accountAddress = Dataset.AccountsValuesAddressDict(account)
-    '        Else
-    '            accountAddress = Dataset.OutputsValuesAddressDict(account)
-    '        End If
-    '        Dim tuple_ As New Tuple(Of String, String, String)()
-    '        Return Dataset.GetCellFromItem(entityAddress, accountAddress, periodAddress)
-    '        ' PPS Error tracking ' priority normal
-    '        ' function could be merged with SubmissionWSController UpdateExcelCell
-
-    'errorHandler:
-    '        System.Diagnostics.Debug.WriteLine("DataModification Tacking Get Excel Cell raised an error: a name was not found in dataset values address dictionary.")
-    '        Return Nothing
-
-
-    '    End Function
-
-
-#End Region
-
-
 
 
 End Class

@@ -66,10 +66,10 @@ Public Class ManualRangesSelectionUI
 
         ' Check if it is a valid address !!
         If AccountsRefEdit.Text <> "" Then
-            DATASET.AccountsAddressValuesDictionary.Clear()
+            DATASET.m_accountsAddressValuesDictionary.Clear()
             For Each cell As Excel.Range In tmpRng
                 If DATASET.m_inputsAccountsList.Contains(cell.Value2) Then
-                    DATASET.AccountsAddressValuesDictionary.Add(CStr(cell.Address), CStr(cell.Value2))
+                    DATASET.m_accountsAddressValuesDictionary.Add(CStr(cell.Address), CStr(cell.Value2))
                 End If
             Next
         End If
@@ -90,10 +90,10 @@ Public Class ManualRangesSelectionUI
 
         ' Check if it is a valid address !!
         If EntitiesRefEdit.Text <> "" Then
-            DATASET.EntitiesAddressValuesDictionary.Clear()
+            DATASET.m_entitiesAddressValuesDictionary.Clear()
             For Each cell As Excel.Range In tmpRng
                 If DATASET.m_entitiesNameList.Contains(cell.Value2) Then
-                    DATASET.EntitiesAddressValuesDictionary.Add(CStr(cell.Address), CStr(cell.Value2))
+                    DATASET.m_entitiesAddressValuesDictionary.Add(CStr(cell.Address), CStr(cell.Value2))
                 End If
             Next
         End If
@@ -114,11 +114,11 @@ Public Class ManualRangesSelectionUI
 
         ' Check if it is a valid address !!
         If PeriodsRefEdit.Text <> "" Then
-            DATASET.periodsAddressValuesDictionary.Clear()
+            DATASET.m_periodsAddressValuesDictionary.Clear()
             For Each cell As Excel.Range In tmpRng
                 ' Here control Int/ Double / Date
                 If DATASET.m_periodsDatesList.Contains(cell.Value2) Then
-                    DATASET.periodsAddressValuesDictionary.Add(CStr(cell.Address), CDate(cell.Value2).ToOADate())
+                    DATASET.m_periodsAddressValuesDictionary.Add(CStr(cell.Address), CDate(cell.Value2).ToOADate())
                 End If
             Next
         End If

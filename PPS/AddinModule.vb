@@ -1612,10 +1612,10 @@ Public Class AddinModule
 
     Private Sub AutoCommitBT_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) Handles AutoComitBT.OnClick
 
-        If CurrentGRSControler.autoCommitFlag = False Then
-            CurrentGRSControler.autoCommitFlag = True
+        If CurrentGRSControler.m_autoCommitFlag = False Then
+            CurrentGRSControler.m_autoCommitFlag = True
         Else
-            CurrentGRSControler.autoCommitFlag = False
+            CurrentGRSControler.m_autoCommitFlag = False
         End If
 
     End Sub
@@ -1712,7 +1712,7 @@ Public Class AddinModule
     Private Sub WSCB_OnAction(sender As Object, Control As IRibbonControl, selectedId As String, selectedIndex As Integer)
 
         Try
-            If Not CurrentGRSControler.associatedWorksheet.Name = selectedId Then
+            If Not CurrentGRSControler.m_associatedWorksheet.Name = selectedId Then
                 CurrentGRSControler = GRSControlersDictionary(ctrlsTextWSDictionary(selectedId))
                 CurrentGRSControler.UpdateRibbon()
                 ctrlsTextWSDictionary(selectedId).Activate()
@@ -1917,8 +1917,8 @@ Public Class AddinModule
         ' check that the relation to input task pane is killed
 
         For Each GRS In GRSControlersDictionary.Values
-            ctrlsTextWSDictionary.Remove(GRS.wsComboboxMenuItem.Caption)
-            WSCB.Items.Remove(GRS.wsComboboxMenuItem)
+            ctrlsTextWSDictionary.Remove(GRS.m_worksheetsComboboxMenuItem.Caption)
+            WSCB.Items.Remove(GRS.m_worksheetsComboboxMenuItem)
             GRS.CloseInstance()
             GRS = Nothing
         Next

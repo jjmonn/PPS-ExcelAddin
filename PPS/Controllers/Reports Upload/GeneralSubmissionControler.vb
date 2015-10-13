@@ -52,27 +52,27 @@ Friend Class GeneralSubmissionControler
 #Region "Instance Variables"
 
     ' Objects
-    Private ADDIN As AddinModule
-    Private Fact As New Facts
-    Private Dataset As ModelDataSet
-    Private DataModificationsTracker As DataModificationsTracking
-    Private Model As AcquisitionModel
-    Private SubmissionWSController As SubmissionWSController
-    Friend associatedWorksheet As Excel.Worksheet
-    Friend wsComboboxMenuItem As ADXRibbonItem
-  
+    Private m_addin As AddinModule
+    Private m_fact As New Facts
+    Private m_dataset As ModelDataSet
+    Private m_dataModificationsTracker As DataModificationsTracking
+    Private m_acquisitionModel As AcquisitionModel
+    Private m_submissionWSController As SubmissionWSController
+    Friend m_associatedWorksheet As Excel.Worksheet
+    Friend m_worksheetsComboboxMenuItem As ADXRibbonItem
+
     ' Variables
     Private m_entityName As String
-    Friend snapshotSuccess As Boolean
-    Friend autoCommitFlag As Boolean
-    Private itemsHighlightFlag As Boolean
-    Private errorsList As New List(Of String)
-    Private uploadTimeStamp As Date
-    Private uploadState As Boolean
-    Private originalValue As Double
-    Friend isUpdating As Boolean
-    Private mustUpdateExcelWorksheetFromDataBase As Boolean
-    Friend isReportReady As Boolean
+    Friend m_snapshotSuccessFlag As Boolean
+    Friend m_autoCommitFlag As Boolean
+    Private m_itemsHighlightFlag As Boolean
+    Private m_errorsList As New List(Of String)
+    Private m_uploadTimeStamp As Date
+    Private m_uploadState As Boolean
+    Private m_originalValue As Double
+    Friend m_isUpdating As Boolean
+    Private m_mustUpdateExcelWorksheetFromDataBase As Boolean
+    Friend m_isReportReadyFlag As Boolean
 
 #End Region
 
@@ -82,29 +82,29 @@ Friend Class GeneralSubmissionControler
     Friend Sub New(ByRef inputWSCB As ADXRibbonItem, _
                    ByRef inputAddIn As AddinModule)
 
-        ADDIN = inputAddIn
-        wsComboboxMenuItem = inputWSCB
-        associatedWorksheet = GlobalVariables.APPS.ActiveSheet
+        m_addin = inputAddIn
+        m_worksheetsComboboxMenuItem = inputWSCB
+        m_associatedWorksheet = GlobalVariables.APPS.ActiveSheet
 
-        Dataset = New ModelDataSet(associatedWorksheet)
-        Model = New AcquisitionModel(Dataset)
-        DataModificationsTracker = New DataModificationsTracking(Dataset)
+        m_dataset = New ModelDataSet(m_associatedWorksheet)
+        m_acquisitionModel = New AcquisitionModel(m_dataset)
+        m_dataModificationsTracker = New DataModificationsTracking(m_dataset)
 
-        AddHandler Model.AfterInputsDownloaded, AddressOf AfterDataBaseInputsDowloaded
-        AddHandler Model.AfterOutputsComputed, AddressOf AfterOutputsComputed
-        AddHandler Fact.AfterUpdate, AddressOf AfterCommit
+        AddHandler m_acquisitionModel.AfterInputsDownloaded, AddressOf AfterDataBaseInputsDowloaded
+        AddHandler m_acquisitionModel.AfterOutputsComputed, AddressOf AfterOutputsComputed
+        AddHandler m_fact.AfterUpdate, AddressOf AfterCommit
 
     End Sub
 
     ' Display the entity name and currency in the ribbons Corresponding edit boxes
     Friend Sub FillInEntityAndCurrencyTB(ByRef p_entityName As String)
 
-        ADDIN.CurrentEntityTB.Text = p_entityName
+        m_addin.CurrentEntityTB.Text = p_entityName
         m_entityName = p_entityName
         Dim entityId As Int32 = GlobalVariables.Entities.GetEntityId(p_entityName)
         If entityId <> 0 Then
             Dim currencyId As Int32 = GlobalVariables.Entities.entities_hash(entityId)(ENTITIES_CURRENCY_VARIABLE)
-            ADDIN.EntCurrTB.Text = GlobalVariables.Currencies.currencies_hash(currencyId)(NAME_VARIABLE)
+            m_addin.EntCurrTB.Text = GlobalVariables.Currencies.currencies_hash(currencyId)(NAME_VARIABLE)
         End If
 
     End Sub
@@ -117,115 +117,117 @@ Friend Class GeneralSubmissionControler
 
     Friend Sub UpdateRibbon()
 
-        If Dataset.pAssetFlag = 1 Then FillInEntityAndCurrencyTB(Dataset.EntitiesAddressValuesDictionary.ElementAt(0).Value)
+        If m_dataset.m_EntityFlag = 1 Then FillInEntityAndCurrencyTB(m_dataset.m_entitiesAddressValuesDictionary.ElementAt(0).Value)
         ' Check that the Dataset is still the same ?
 
     End Sub
 
     Friend Sub DataSubmission()
 
-        If Dataset.GlobalOrientationFlag <> ORIENTATION_ERROR_FLAG Then
-            errorsList.Clear()
+        If m_dataset.m_globalOrientationFlag <> ORIENTATION_ERROR_FLAG Then
+            m_errorsList.Clear()
             Submit()
         Else
             GlobalVariables.SubmissionStatusButton.Image = 2
-            errorsList.Add("The worksheet recognition was not set up properly.")
+            m_errorsList.Add("The worksheet recognition was not set up properly.")
             MsgBox("PPS Error tracking -> which flag error")
-            uploadState = False
+            m_uploadState = False
         End If
 
     End Sub
 
     Friend Sub HighlightItemsAndDataRegions()
 
-        If itemsHighlightFlag = False Then
-            DataModificationsTracker.HighlightItemsAndDataRanges()
-            itemsHighlightFlag = True
+        If m_itemsHighlightFlag = False Then
+            m_dataModificationsTracker.HighlightItemsAndDataRanges()
+            m_itemsHighlightFlag = True
         Else
-            DataModificationsTracker.UnHighlightItemsAndDataRanges()
-            itemsHighlightFlag = False
+            m_dataModificationsTracker.UnHighlightItemsAndDataRanges()
+            m_itemsHighlightFlag = False
         End If
 
     End Sub
 
     Friend Sub ChangeCurrentEntity(ByRef entityname As String)
 
-        Dim entityCellAddress As String = Dataset.EntitiesAddressValuesDictionary.ElementAt(0).Key
-        associatedWorksheet.Range(entityCellAddress).Value2 = entityname
-        Dataset.EntitiesAddressValuesDictionary(entityCellAddress) = entityname
+        Dim entityCellAddress As String = m_dataset.m_entitiesAddressValuesDictionary.ElementAt(0).Key
+        m_associatedWorksheet.Range(entityCellAddress).Value2 = entityname
+        m_dataset.m_entitiesAddressValuesDictionary(entityCellAddress) = entityname
         FillInEntityAndCurrencyTB(entityname)
 
     End Sub
 
     Friend Sub DisplayUploadStatusAndErrorsUI()
 
-        Dim UploadStatusUI As New UploadingHistoryUI(uploadState, _
-                                                     uploadTimeStamp, _
-                                                     errorsList)
+        Dim UploadStatusUI As New UploadingHistoryUI(m_uploadState, _
+                                                     m_uploadTimeStamp, _
+                                                     m_errorsList)
         UploadStatusUI.Show()
 
     End Sub
 
     Friend Sub CloseInstance()
 
-        DataModificationsTracker.TakeOffFormats()
-        If Not Dataset Is Nothing Then Dataset = Nothing
-        If Not DataModificationsTracker Is Nothing Then DataModificationsTracker = Nothing
-        If Not Model Is Nothing Then Model = Nothing
+        m_dataModificationsTracker.TakeOffFormats()
+        If Not m_dataset Is Nothing Then m_dataset = Nothing
+        If Not m_dataModificationsTracker Is Nothing Then m_dataModificationsTracker = Nothing
+        If Not m_acquisitionModel Is Nothing Then m_acquisitionModel = Nothing
 
         On Error Resume Next
-        RemoveHandler associatedWorksheet.Change, AddressOf SubmissionWSController.Worksheet_Change
-        RemoveHandler associatedWorksheet.BeforeRightClick, AddressOf SubmissionWSController.Worksheet_BeforeRightClick
-        If Not SubmissionWSController Is Nothing Then SubmissionWSController = Nothing
+        RemoveHandler m_associatedWorksheet.Change, AddressOf m_submissionWSController.Worksheet_Change
+        RemoveHandler m_associatedWorksheet.BeforeRightClick, AddressOf m_submissionWSController.Worksheet_BeforeRightClick
+        If Not m_submissionWSController Is Nothing Then m_submissionWSController = Nothing
         '  associatedWorksheet.Unprotect()
 
     End Sub
 
     Friend Sub RangeEdition()
 
-        Dim RNGEDITION As New ManualRangesSelectionUI(Me, Dataset)
+        Dim RNGEDITION As New ManualRangesSelectionUI(Me, m_dataset)
         RNGEDITION.Show()
 
     End Sub
 
     Friend Function RefreshSnapshot(ByRef update_inputs As Boolean) As Boolean
 
-        isReportReady = False
+        m_isReportReadyFlag = False
         ' Unformat if necessary 
-        If DataModificationsTracker.RangeHighlighter.FormattedCellsDictionnarySize > 0 Then
-            DataModificationsTracker.RangeHighlighter.RevertToOriginalColors()
-            itemsHighlightFlag = False
+        If m_dataModificationsTracker.m_rangeHighlighter.FormattedCellsDictionnarySize > 0 Then
+            m_dataModificationsTracker.m_rangeHighlighter.RevertToOriginalColors()
+            m_itemsHighlightFlag = False
         End If
 
-        If Dataset.WsScreenshot() = True Then
-            Dataset.SnapshotWS()
-            Dataset.getOrientations()
-            DataModificationsTracker.InitializeDataSetRegion()
-            DataModificationsTracker.InitializeOutputsRegion()
+        If m_dataset.WsScreenshot() = True Then
+            m_dataset.SnapshotWS()
+            m_dataset.getOrientations()
 
-            If Dataset.GlobalOrientationFlag <> ORIENTATION_ERROR_FLAG _
-            AndAlso Dataset.EntitiesAddressValuesDictionary.Count > 0 Then
+            ' needed ,??????!!!!!!!! priority normal
+            m_dataModificationsTracker.InitializeDataSetRegion()
+            m_dataModificationsTracker.InitializeOutputsRegion()
+            
+            If m_dataset.m_globalOrientationFlag <> ORIENTATION_ERROR_FLAG _
+            AndAlso m_dataset.m_entitiesAddressValuesDictionary.Count > 0 Then
 
                 '  Dataset.getDataSet()
-                snapshotSuccess = True
-                FillInEntityAndCurrencyTB(Dataset.EntitiesAddressValuesDictionary.ElementAt(0).Value)
-                SubmissionWSController = New SubmissionWSController(Me, Dataset, Model, DataModificationsTracker)
+                m_snapshotSuccessFlag = True
+                FillInEntityAndCurrencyTB(m_dataset.m_entitiesAddressValuesDictionary.ElementAt(0).Value)
+                m_submissionWSController = New SubmissionWSController(Me, m_dataset, m_acquisitionModel, m_dataModificationsTracker)
                 HighlightItemsAndDataRegions()
                 UpdateAfterAnalysisAxisChanged(GlobalVariables.ClientsIDDropDown.SelectedItemId, _
                                                GlobalVariables.ProductsIDDropDown.SelectedItemId, _
                                                GlobalVariables.AdjustmentIDDropDown.SelectedItemId, _
                                                update_inputs)
                 ' Associate worksheet if not already associated 
-                If SubmissionWSController.m_excelWorksheet Is Nothing Then
-                    SubmissionWSController.AssociateWS(associatedWorksheet)
-                ElseIf Not SubmissionWSController.m_excelWorksheet.Name Is associatedWorksheet Then
-                    SubmissionWSController.AssociateWS(associatedWorksheet)
+                If m_submissionWSController.m_excelWorksheet Is Nothing Then
+                    m_submissionWSController.AssociateWS(m_associatedWorksheet)
+                ElseIf Not m_submissionWSController.m_excelWorksheet.Name Is m_associatedWorksheet Then
+                    m_submissionWSController.AssociateWS(m_associatedWorksheet)
                 End If
             Else
                 SnapshotError()
                 Return False
             End If
-            ADDIN.modifySubmissionControlsStatus(snapshotSuccess)
+            m_addin.modifySubmissionControlsStatus(m_snapshotSuccessFlag)
         Else
             Return False
         End If
@@ -238,15 +240,15 @@ Friend Class GeneralSubmissionControler
                                               ByVal adjustment_id As String, _
                                               Optional ByRef update_inputs_from_DB As Boolean = False)
 
-        isUpdating = True
-        mustUpdateExcelWorksheetFromDataBase = update_inputs_from_DB
-        DataModificationsTracker.DiscardModifications()
+        m_isUpdating = True
+        m_mustUpdateExcelWorksheetFromDataBase = update_inputs_from_DB
+        m_dataModificationsTracker.DiscardModifications()
         ' PB: Ceci ne marche que pour le cas orientation "AcDa"  !!! 
         ' option: select case on orientation 
         ' (possibility to download inputs from multiple entities => function ready in model)
         ' priority normal => V2
 
-        Model.downloadDBInputs(m_entityName, _
+        m_acquisitionModel.downloadDBInputs(m_entityName, _
                                client_id, _
                                product_id, _
                                adjustment_id)
@@ -264,15 +266,15 @@ Friend Class GeneralSubmissionControler
                                             ByVal value As Double, _
                                             ByRef cellAddress As String)
 
-        Model.ValuesDictionariesUpdate(entityName, accountName, periodInt, value)
-        DataModificationsTracker.RegisterModification(cellAddress)
+        m_acquisitionModel.ValuesDictionariesUpdate(entityName, accountName, periodInt, value)
+        m_dataModificationsTracker.RegisterModification(cellAddress)
 
     End Sub
 
     Friend Sub updateInputs()
 
-        isUpdating = True
-        SubmissionWSController.updateInputsOnWS()
+        m_isUpdating = True
+        m_submissionWSController.updateInputsOnWS()
         GlobalVariables.APPS.ScreenUpdating = True
         GlobalVariables.APPS.ScreenUpdating = False
         'isUpdating = False
@@ -281,9 +283,9 @@ Friend Class GeneralSubmissionControler
 
     Friend Sub UpdateCalculatedItems(ByRef entityName As String)
 
-        isUpdating = True
+        m_isUpdating = True
         GlobalVariables.APPS.Interactive = False
-        Model.ComputeCalculatedItems(entityName)   
+        m_acquisitionModel.ComputeCalculatedItems(entityName)
 
     End Sub
 
@@ -295,14 +297,15 @@ Friend Class GeneralSubmissionControler
     Private Sub AfterDataBaseInputsDowloaded()
 
         On Error GoTo errorHandler
-        Dataset.RegisterDimensionsToCellDictionary()
-        If mustUpdateExcelWorksheetFromDataBase = True Then
+        m_dataset.RegisterDimensionsToCellDictionary()
+        m_dataModificationsTracker.HighlightsFPIOutputPart()
+        If m_mustUpdateExcelWorksheetFromDataBase = True Then
             updateInputs()
         End If
-        Dataset.RegisterDataSetCellsValues()
-        DataModificationsTracker.IdentifyDifferencesBtwDataSetAndDB(Model.dataBaseInputsDictionary)
+        m_dataset.RegisterDataSetCellsValues()
+        m_dataModificationsTracker.IdentifyDifferencesBtwDataSetAndDB(m_acquisitionModel.dataBaseInputsDictionary)
         UpdateCalculatedItems(m_entityName)
-        isUpdating = False
+        m_isUpdating = False
         ' Update DGV in acquisitionInterface !!
 
 errorHandler:
@@ -313,13 +316,13 @@ errorHandler:
     Private Sub AfterOutputsComputed(ByRef entityName As String)
 
         On Error Resume Next
-        isUpdating = True
+        m_isUpdating = True
         GlobalVariables.APPS.Interactive = False
         GlobalVariables.APPS.ScreenUpdating = False
-        SubmissionWSController.updateCalculatedItemsOnWS(entityName)
+        m_submissionWSController.updateCalculatedItemsOnWS(entityName)
         GlobalVariables.APPS.ScreenUpdating = True
         GlobalVariables.APPS.Interactive = True
-        isUpdating = False
+        m_isUpdating = False
 
     End Sub
 
@@ -332,14 +335,14 @@ errorHandler:
     Private Sub Submit()
 
         Dim factsList As New List(Of Hashtable)
-        Dim cellsAddresses As List(Of String) = DataModificationsTracker.GetModificationsListCopy
+        Dim cellsAddresses As List(Of String) = m_dataModificationsTracker.GetModificationsListCopy
         For Each cellAddress In cellsAddresses
             ' Implies type of cell checked before -> only double -> check if we can enter anything else !!!
             Dim ht As New Hashtable()
-            ht(ENTITY_ID_VARIABLE) = Dataset.m_entitiesNameIdDictionary(Dataset.m_datasetCellDimensionsDictionary(cellAddress).m_entityName)
-            ht(ACCOUNT_ID_VARIABLE) = Dataset.m_accountsNameIdDictionary(Dataset.m_datasetCellDimensionsDictionary(cellAddress).m_accountName)
-            ht(PERIOD_VARIABLE) = Dataset.m_datasetCellDimensionsDictionary(cellAddress).m_period
-            ht(VERSION_ID_VARIABLE) = Model.current_version_id
+            ht(ENTITY_ID_VARIABLE) = m_dataset.m_entitiesNameIdDictionary(m_dataset.m_datasetCellDimensionsDictionary(cellAddress).m_entityName)
+            ht(ACCOUNT_ID_VARIABLE) = m_dataset.m_accountsNameIdDictionary(m_dataset.m_datasetCellDimensionsDictionary(cellAddress).m_accountName)
+            ht(PERIOD_VARIABLE) = m_dataset.m_datasetCellDimensionsDictionary(cellAddress).m_period
+            ht(VERSION_ID_VARIABLE) = m_acquisitionModel.current_version_id
             ht(CLIENT_ID_VARIABLE) = GlobalVariables.ClientsIDDropDown.SelectedItemId
             ht(PRODUCT_ID_VARIABLE) = GlobalVariables.ProductsIDDropDown.SelectedItemId
             ht(ADJUSTMENT_ID_VARIABLE) = GlobalVariables.AdjustmentIDDropDown.SelectedItemId
@@ -347,28 +350,28 @@ errorHandler:
 
             factsList.Add(ht)
         Next
-        Fact.CMSG_UPDATE_FACT_LIST(factsList, cellsAddresses)
+        m_fact.CMSG_UPDATE_FACT_LIST(factsList, cellsAddresses)
 
     End Sub
 
     Private Sub AfterCommit(ByRef status As Boolean, ByRef commitResults As Dictionary(Of String, Boolean))
 
         If status = True Then
-             For Each cellAddress In commitResults.Keys
+            For Each cellAddress In commitResults.Keys
                 If commitResults(cellAddress) = True Then
-                    DataModificationsTracker.UnregisterSingleModification(cellAddress)
+                    m_dataModificationsTracker.UnregisterSingleModification(cellAddress)
                 Else
-                    errorsList.Add("Error during upload of Entity: " & Dataset.m_datasetCellDimensionsDictionary(cellAddress).m_entityName _
-                                    & " Account: " & Dataset.m_datasetCellDimensionsDictionary(cellAddress).m_accountName _
-                                    & " Period: " & Date.FromOADate(Dataset.m_datasetCellDimensionsDictionary(cellAddress).m_period) _
+                    m_errorsList.Add("Error during upload of Entity: " & m_dataset.m_datasetCellDimensionsDictionary(cellAddress).m_entityName _
+                                    & " Account: " & m_dataset.m_datasetCellDimensionsDictionary(cellAddress).m_accountName _
+                                    & " Period: " & Date.FromOADate(m_dataset.m_datasetCellDimensionsDictionary(cellAddress).m_period) _
                                     & " Value: " & GlobalVariables.APPS.ActiveSheet.range(cellAddress).value)
                 End If
-             Next
-            If errorsList.Count = 0 Then
-                uploadState = True
+            Next
+            If m_errorsList.Count = 0 Then
+                m_uploadState = True
                 GlobalVariables.SubmissionStatusButton.Image = 1
             Else
-                uploadState = False
+                m_uploadState = False
                 GlobalVariables.SubmissionStatusButton.Image = 2
             End If
         Else
@@ -377,7 +380,6 @@ errorHandler:
 
     End Sub
 
-
 #End Region
 
 
@@ -385,21 +387,21 @@ errorHandler:
 
     Friend Function GetPeriodsList() As Int32()
 
-        Return Model.currentPeriodList
+        Return m_acquisitionModel.currentPeriodList
 
     End Function
 
     Friend Function GetTimeConfig() As String
 
-        Return GlobalVariables.Versions.versions_hash(Model.current_version_id)(VERSIONS_TIME_CONFIG_VARIABLE)
+        Return GlobalVariables.Versions.versions_hash(m_acquisitionModel.current_version_id)(VERSIONS_TIME_CONFIG_VARIABLE)
 
     End Function
 
     Private Sub SnapshotError()
 
-        If Dataset.pAssetFlag = 0 AndAlso _
-        Dataset.pAccountFlag <> 0 AndAlso _
-        Dataset.pDateFlag <> 0 Then
+        If m_dataset.m_EntityFlag = 0 AndAlso _
+        m_dataset.m_accountFlag <> 0 AndAlso _
+        m_dataset.m_dateFlag <> 0 Then
             ' Initialize AcVPe or PeVAc + necessary to choose an Entity
             ' Need a call from entity selection (which will launch initialize and addHandler, if cancel suppr GRS)
             ' !! priority normal !
@@ -408,16 +410,16 @@ errorHandler:
             MsgBox("The Snapshot was unsuccessful because the following dimensions not found on the Worksheet: " + Chr(13) + _
                    errorStr)
         End If
-        snapshotSuccess = False
+        m_snapshotSuccessFlag = False
 
     End Sub
 
     Private Function IdentifyFlagsErrors() As String
 
         Dim tmpStr As String = ""
-        If Dataset.pAssetFlag = 0 Then tmpStr = "  - Entities" + Chr(13)
-        If Dataset.pDateFlag = 0 Then tmpStr = tmpStr & "  - Periods" + Chr(13)
-        If Dataset.pAccountFlag = 0 Then tmpStr = tmpStr & "  - Accounts"
+        If m_dataset.m_EntityFlag = 0 Then tmpStr = "  - Entities" + Chr(13)
+        If m_dataset.m_dateFlag = 0 Then tmpStr = tmpStr & "  - Periods" + Chr(13)
+        If m_dataset.m_accountFlag = 0 Then tmpStr = tmpStr & "  - Accounts"
         Return tmpStr
 
     End Function
