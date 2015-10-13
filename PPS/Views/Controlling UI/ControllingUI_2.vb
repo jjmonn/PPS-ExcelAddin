@@ -90,11 +90,11 @@ Friend Class ControllingUI_2
 
 #Region "Flags"
 
-    Private isUpdatingPeriodsCheckList As Boolean
-    Private isVersionComparisonDisplayed As Boolean
-    Private IsUpdatingChildrenCategory As Boolean
-    Private displayControlFlag As Boolean
-    Private leftPaneExpandedFlag As Boolean
+    Private m_isUpdatingPeriodsCheckList As Boolean
+    Private m_isVersionComparisonDisplayed As Boolean
+    ' Private m_IsUpdatingChildrenCategory As Boolean
+    ' Private m_displayControlFlag As Boolean
+    ' Private m_leftPaneExpandedFlag As Boolean
 
 #End Region
 
@@ -170,7 +170,7 @@ Friend Class ControllingUI_2
         m_circularProgress.NumberOfVisibleCircles = 8
         m_circularProgress.AnimationSpeed = 75
         m_circularProgress.CircleSize = 0.7
-           m_circularProgress.Width = 79
+        m_circularProgress.Width = 79
         m_circularProgress.Height = 79
         SplitContainer1.Panel2.Controls.Add(m_circularProgress)
         m_circularProgress.Visible = False
@@ -408,7 +408,7 @@ Friend Class ControllingUI_2
     ' Periods filter when unchecked
     Private Sub periodsTV_ItemCheck(sender As Object, e As vTreeViewEventArgs)
 
-        If isUpdatingPeriodsCheckList = False Then
+        If m_isUpdatingPeriodsCheckList = False Then
             Dim periodSelectionDict As New Dictionary(Of String, Boolean)
 
             For Each node As vTreeNode In leftPane_control.periodsTV.GetNodes
@@ -512,13 +512,13 @@ Friend Class ControllingUI_2
 
     Private Sub VersionsComparisonToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles VersionsComparisonToolStripMenuItem.Click
 
-        If isVersionComparisonDisplayed = True Then
+        If m_isVersionComparisonDisplayed = True Then
             m_controller.VersionsCompDisplay(False)
-            isVersionComparisonDisplayed = False
+            m_isVersionComparisonDisplayed = False
         Else
             If m_controller.versionsDict.Count = 2 Then
                 m_controller.VersionsCompDisplay(True)
-                isVersionComparisonDisplayed = True
+                m_isVersionComparisonDisplayed = True
             Else
                 MsgBox("Two versions must be selected in order to display the comparison.")
             End If
@@ -532,12 +532,12 @@ Friend Class ControllingUI_2
 
     Private Sub HideVersionsComparisonToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles HideVersionsComparisonToolStripMenuItem.Click
 
-        If isVersionComparisonDisplayed Then
+        If m_isVersionComparisonDisplayed Then
             For Each tab_ As vTabPage In DGVsControlTab.TabPages
                 Dim DGV As vDataGridView = tab_.Controls(0)
                 DGVUTIL.RemoveVersionsComparison(DGV)
             Next
-            isVersionComparisonDisplayed = False
+            m_isVersionComparisonDisplayed = False
         End If
 
     End Sub
@@ -571,18 +571,18 @@ Friend Class ControllingUI_2
 
     Private Sub SelectAllToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles SelectAllToolStripMenuItem.Click
 
-        isUpdatingPeriodsCheckList = True
+        m_isUpdatingPeriodsCheckList = True
         VTreeViewUtil.CheckStateAllNodes(leftPane_control.periodsTV, True)
-        isUpdatingPeriodsCheckList = False
+        m_isUpdatingPeriodsCheckList = False
         periodsTV_ItemCheck(sender, New vTreeViewEventArgs(leftPane_control.periodsTV.SelectedNode, vTreeViewAction.Unknown))
 
     End Sub
 
     Private Sub UnselectAllToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles UnselectAllToolStripMenuItem.Click
 
-        isUpdatingPeriodsCheckList = True
+        m_isUpdatingPeriodsCheckList = True
         VTreeViewUtil.CheckStateAllNodes(leftPane_control.periodsTV, False)
-        isUpdatingPeriodsCheckList = False
+        m_isUpdatingPeriodsCheckList = False
         periodsTV_ItemCheck(sender, New vTreeViewEventArgs(leftPane_control.periodsTV.SelectedNode, vTreeViewAction.Unknown))
 
 
