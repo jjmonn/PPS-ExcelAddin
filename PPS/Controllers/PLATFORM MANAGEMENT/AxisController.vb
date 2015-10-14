@@ -69,7 +69,18 @@ Friend Class AxisController
 
     End Sub
 
-    Private Sub LoadInstanceVariables()
+    Protected Overrides Sub Finalize()
+        RemoveHandler CrudModel.CreationEvent, AddressOf AfterAxisCreation
+        RemoveHandler CrudModel.DeleteEvent, AddressOf AfterAxisDeletion
+        RemoveHandler CrudModel.UpdateEvent, AddressOf AfterAxisUpdate
+        RemoveHandler CrudModel.Read, AddressOf AfterAxisRead
+
+        ' Axis Filters CRUD Events
+        RemoveHandler CrudModelFilters.Read, AddressOf AfterAxisFilterRead
+        RemoveHandler CrudModelFilters.UpdateEvent, AddressOf AfterAxisFilterUpdate
+    End Sub
+
+    Friend Sub LoadInstanceVariables()
 
         CrudModel.LoadAxisTV(AxisTV)
         GlobalVariables.Filters.LoadFiltersTV(AxisFilterTV, axisId)
@@ -88,6 +99,7 @@ Friend Class AxisController
 
     Public Sub close()
 
+        SendNewPositionsToModel()
         View.Dispose()
 
     End Sub
@@ -139,6 +151,18 @@ Friend Class AxisController
 
     End Sub
 
+    Friend Sub UpdateBatch(ByRef p_axisUpdates As List(Of Tuple(Of Int32, String, Int32)))
+
+        Dim axisHTUpdates As New Hashtable
+        For Each tuple_ As Tuple(Of Int32, String, Int32) In p_axisUpdates
+            Dim ht As Hashtable = CrudModel.Axis_hash(tuple_.Item1).Clone
+            ht(tuple_.Item2) = tuple_.Item3
+            axisHTUpdates(CInt(ht(ID_VARIABLE))) = ht
+        Next
+        CrudModel.CMSG_UPDATE_AXIS_LIST(axisHTUpdates)
+
+    End Sub
+
 #End Region
 
 
@@ -147,7 +171,7 @@ Friend Class AxisController
     Private Sub AfterAxisRead(ByRef status As Boolean, ByRef ht As Hashtable)
 
         If (status = True) Then
-            LoadInstanceVariables()
+            View.LoadInstanceVariables_Safe()
             View.UpdateAxis(ht)
         End If
 
@@ -156,7 +180,7 @@ Friend Class AxisController
     Private Sub AfterAxisDeletion(ByRef status As Boolean, ByRef id As Int32)
 
         If status = True Then
-            LoadInstanceVariables()
+            View.LoadInstanceVariables_Safe()
             View.DeleteAxis(id)
         End If
 
@@ -183,7 +207,7 @@ Friend Class AxisController
     Private Sub AfterAxisFilterRead(ByRef status As Boolean, ByRef AxisFilterHT As Hashtable)
 
         If (status = True) Then
-            LoadInstanceVariables()
+            View.LoadInstanceVariables_Safe()
             View.UpdateAxis(CrudModel.Axis_hash(CInt(AxisFilterHT(AXIS_ID_VARIABLE))))
         End If
 
@@ -218,6 +242,25 @@ Friend Class AxisController
         Return CrudModelFilters.GetFilterValueId(filterId, axisValueId)
 
     End Function
+
+    Friend Sub SendNewPositionsToModel()
+
+        Dim position As Int32
+        Dim axisUpdates As New List(Of Tuple(Of Int32, String, Int32))
+        positionsDictionary = DataGridViewsUtil.GeneratePositionsDictionary(View.DGV)
+
+        For Each axisId As Int32 In positionsDictionary.Keys
+            position = positionsDictionary(axisId)
+
+            If CrudModel.Axis_hash.ContainsKey(axisId) = False Then Continue For
+            If position <> CrudModel.Axis_hash(axisId)(ITEMS_POSITIONS) Then
+                Dim tuple_ As New Tuple(Of Int32, String, Int32)(axisId, ITEMS_POSITIONS, position)
+                axisUpdates.Add(tuple_)
+            End If
+        Next
+        UpdateBatch(axisUpdates)
+
+    End Sub
 
 #End Region
 

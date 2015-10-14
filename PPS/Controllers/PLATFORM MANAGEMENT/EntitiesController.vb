@@ -259,6 +259,7 @@ ShowNewEntity:
 
         For Each entity_id As Int32 In positionsDictionary.Keys
             position = positionsDictionary(entity_id)
+            If GlobalVariables.Entities.entities_hash.ContainsKey(entity_id) = False Then Continue For
             If position <> GlobalVariables.Entities.entities_hash(entity_id)(ITEMS_POSITIONS) Then
                 Dim tuple_ As New Tuple(Of Int32, String, Int32)(entity_id, ITEMS_POSITIONS, position)
                 entitiesUpdates.Add(tuple_)

@@ -59,7 +59,7 @@ Friend Class AxisView
 #Region "Initialization"
 
     Friend Sub New(ByRef p_controller As AxisController, _
-                   ByRef p_axisHT As Hashtable, _
+                   ByRef p_axisHT As Dictionary(Of Int32, SortableHashtable), _
                    ByRef p_axisTV As vTreeView, _
                    ByRef p_axisFilterValuesTV As vTreeView, _
                    ByRef p_axisFiltersTV As vTreeView)
@@ -82,6 +82,8 @@ Friend Class AxisView
         Me.TableLayoutPanel1.Controls.Add(DGV, 0, 1)
         DGV.Dock = DockStyle.Fill
         DGV.ContextMenuStrip = RCM_TGV
+        DGV.RowsHierarchy.AllowDragDrop = True
+        DGV.AllowDragDropIndication = True
 
         AddHandler DGV.CellMouseClick, AddressOf dataGridView_CellMouseClick
         AddHandler DGV.HierarchyItemMouseClick, AddressOf dataGridView_HierarchyItemMouseClick
@@ -115,7 +117,7 @@ Friend Class AxisView
             Me.Invoke(MyDelegate, New Object() {ht})
         Else
             isFillingDGV = True
-            FillRow(ht(ID_VARIABLE), ht)
+            FillRow(ht(ID_VARIABLE), ht(NAME_VARIABLE), ht)
             isFillingDGV = False
         End If
 
@@ -239,11 +241,11 @@ Friend Class AxisView
 
     End Sub
 
-    Private Sub fillDGV(ByRef axisHT As Hashtable)
+    Private Sub fillDGV(ByRef axisHT As Dictionary(Of Int32, SortableHashtable))
 
         isFillingDGV = True
         For Each axisValueId In axisHT.Keys
-            FillRow(axisValueId, axisHT(axisValueId))
+            FillRow(axisValueId, axisHT(axisValueId)(NAME_VARIABLE), axisHT(axisValueId))
         Next
         isFillingDGV = False
         updateDGVFormat()
@@ -257,14 +259,6 @@ Friend Class AxisView
 
         DGV.ColumnsHierarchy.Clear()
         columnsVariableItemDictionary.Clear()
-
-        ' Axis Name Column
-        Dim nameColumn As HierarchyItem = DGV.ColumnsHierarchy.Items.Add("Axis")
-        nameColumn.ItemValue = NAME_VARIABLE
-        Dim nameTextBox As New TextBoxEditor()
-        nameTextBox.ActivationFlags = EditorActivationFlags.MOUSE_CLICK_SELECTED_CELL
-        If GlobalVariables.Users.CurrentUserIsAdmin() Then nameColumn.CellsEditor = nameTextBox
-        columnsVariableItemDictionary.Add(NAME_VARIABLE, nameColumn)
 
         For Each filterNode As vTreeNode In axisFilterTV.Nodes
             CreateSubFilters(filterNode)
@@ -312,18 +306,18 @@ Friend Class AxisView
         rows_id_item_dic.Clear()
         isFillingDGV = True
         For Each node In axis_tv.Nodes
-            Dim row As HierarchyItem = CreateRow(node.Value)
+            Dim row As HierarchyItem = CreateRow(node.Value, node.Text)
         Next
         isFillingDGV = False
 
     End Sub
 
-    Private Function CreateRow(ByRef axisId As Int32) As HierarchyItem
+    Private Function CreateRow(ByRef p_axisId As Int32, ByRef p_axisName As String) As HierarchyItem
 
         Dim row As HierarchyItem
-        row = DGV.RowsHierarchy.Items.Add("")
-        row.ItemValue = axisId
-        FormatRow(row, axisId)
+        row = DGV.RowsHierarchy.Items.Add(p_axisName)
+        row.ItemValue = p_axisId
+        FormatRow(row, p_axisId)
         Return row
 
     End Function
@@ -344,16 +338,15 @@ Friend Class AxisView
 
 #Region "DGV Filling"
 
-    Friend Sub FillRow(ByVal axisValueId As Int32, _
+    Friend Sub FillRow(ByVal axisValueId As Int32, ByRef p_axisName As String, _
                        ByVal axis_ht As Hashtable)
 
         Dim rowItem As HierarchyItem
         If rows_id_item_dic.ContainsKey(axisValueId) Then
             rowItem = rows_id_item_dic(axisValueId)
         Else
-            rowItem = CreateRow(axisValueId)
+            rowItem = CreateRow(axisValueId, p_axisName)
         End If
-        DGV.CellsArea.SetCellValue(rowItem, columnsVariableItemDictionary(NAME_VARIABLE), axis_ht(NAME_VARIABLE))
         For Each filterNode As vTreeNode In axisFilterTV.Nodes
             FillSubFilters(filterNode, axisValueId, rowItem)
         Next
@@ -414,6 +407,25 @@ Friend Class AxisView
 
 #Region "DGV Updates"
 
+    Friend Sub LoadInstanceVariables_Safe()
+        Try
+            Dim MyDelegate As New LoadInstanceVariables_Delegate(AddressOf LoadInstanceVariables)
+            Me.Invoke(MyDelegate, New Object() {})
+        Catch ex As Exception
+            System.Diagnostics.Debug.WriteLine(ex.Message)
+        End Try
+    End Sub
+
+    Friend Delegate Sub LoadInstanceVariables_Delegate()
+    Friend Sub LoadInstanceVariables()
+        If InvokeRequired Then
+            Dim MyDelegate As New LoadInstanceVariables_Delegate(AddressOf LoadInstanceVariables)
+            Me.Invoke(MyDelegate, New Object() {})
+        Else
+            Controller.LoadInstanceVariables()
+        End If
+    End Sub
+
     ' Update Parents and Children Filters Cells or comboboxes after a filter cell has been edited
     Friend Sub UpdateAxisFiltersAfterEdition(ByRef axisId As Int32, _
                                                  ByRef filterId As Int32, _
@@ -421,6 +433,7 @@ Friend Class AxisView
 
         isFillingDGV = True
         Dim filterNode As TreeNode = TreeViewsUtilities.FindNode(axisFilterTV.Nodes, filterId, True)
+        If (filterNode Is Nothing) Then Exit Sub
 
         ' Update parent filters recursively
         UpdateParentFiltersValues(rows_id_item_dic(axisId), _
@@ -442,6 +455,7 @@ Friend Class AxisView
                                           ByRef axisId As Int32, _
                                           ByRef filterNode As TreeNode,
                                           ByRef filterValueId As Int32)
+        If filterNode Is Nothing Then Exit Sub
 
         If Not filterNode.Parent Is Nothing Then
             Dim parentFilterNode As TreeNode = filterNode.Parent

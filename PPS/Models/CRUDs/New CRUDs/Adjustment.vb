@@ -44,10 +44,11 @@ Friend Class Adjustment : Inherits SuperAxisCRUD
 
         If packet.GetError() = 0 Then
             For i As Int32 = 1 To packet.ReadInt32()
-                Dim tmp_ht As New Hashtable
+                Dim tmp_ht As New SortableHashtable(ITEMS_POSITIONS)
                 GetAxisHTFromPacket(packet, tmp_ht)
                 Axis_hash(CInt(tmp_ht(ID_VARIABLE))) = tmp_ht
             Next
+            SortAxis()
             RaiseEvent ObjectInitialized(True)
             state_flag = True
         Else
@@ -94,9 +95,10 @@ Friend Class Adjustment : Inherits SuperAxisCRUD
     Private Sub SMSG_READ_ADJUSTMENT_ANSWER(packet As ByteBuffer)
 
         If packet.GetError() = 0 Then
-            Dim ht As New Hashtable
+            Dim ht As New SortableHashtable(ITEMS_POSITIONS)
             GetAxisHTFromPacket(packet, ht)
             Axis_hash(CInt(ht(ID_VARIABLE))) = ht
+            SortAxis()
             MyBase.OnRead(True, ht)
         Else
             MyBase.OnRead(False, Nothing)
@@ -114,7 +116,7 @@ Friend Class Adjustment : Inherits SuperAxisCRUD
 
     End Sub
 
-    Friend Sub CMSG_UPDATE_AXIS_LIST(ByRef p_adjustments As Hashtable)
+    Friend Overrides Sub CMSG_UPDATE_AXIS_LIST(ByRef p_adjustments As Hashtable)
         NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_UPDATE_ADJUSTMENT_LIST_ANSWER, AddressOf SMSG_UPDATE_ADJUSTMENT_LIST_ANSWER)
         Dim packet As New ByteBuffer(CType(ClientMessage.CMSG_UPDATE_ADJUSTMENT_LIST, UShort))
 

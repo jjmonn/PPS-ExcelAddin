@@ -1,6 +1,7 @@
 ﻿Imports System.Collections
 Imports System.Collections.Generic
 Imports VIBlend.WinForms.Controls
+Imports System.Linq
 
 
 Public MustInherit Class SuperAxisCRUD
@@ -34,12 +35,13 @@ Public MustInherit Class SuperAxisCRUD
 
 
     ' Variables
-    Friend Axis_hash As New Hashtable
+    Friend Axis_hash As New Dictionary(Of Int32, SortableHashtable)
 
     ' CRUD Methods
     Friend MustOverride Sub CMSG_CREATE_AXIS(ByRef ht As Hashtable)
     Friend MustOverride Sub CMSG_UPDATE_AXIS(ByRef ht As Hashtable)
     Friend MustOverride Sub CMSG_DELETE_AXIS(ByRef id As UInt32)
+    Friend MustOverride Sub CMSG_UPDATE_AXIS_LIST(ByRef p_axisUpdates As Hashtable)
 
     ' Mappings
 
@@ -59,9 +61,9 @@ Public MustInherit Class SuperAxisCRUD
 
     End Function
 
-    Friend Function GetAxisDictionary(ByRef Key As String, ByRef Value As String) As Hashtable
+    Friend Function GetAxisDictionary(ByRef Key As String, ByRef Value As String) As SortableHashtable
 
-        Dim tmpHT As New Hashtable
+        Dim tmpHT As New SortableHashtable(ITEMS_POSITIONS)
         For Each id In Axis_hash.Keys
             tmpHT(Axis_hash(id)(Key)) = Axis_hash(id)(Value)
         Next
@@ -84,6 +86,7 @@ Public MustInherit Class SuperAxisCRUD
 
         axis_ht(ID_VARIABLE) = packet.ReadUint32()
         axis_ht(NAME_VARIABLE) = packet.ReadString()
+        axis_ht(ITEMS_POSITIONS) = packet.ReadInt32()
 
     End Sub
 
@@ -91,6 +94,7 @@ Public MustInherit Class SuperAxisCRUD
 
         If attributes.ContainsKey(ID_VARIABLE) Then packet.WriteUint32(attributes(ID_VARIABLE))
         packet.WriteString(attributes(NAME_VARIABLE))
+        packet.WriteInt32(attributes(ITEMS_POSITIONS))
 
     End Sub
 
@@ -147,6 +151,9 @@ Public MustInherit Class SuperAxisCRUD
 
     End Sub
 
+    Protected Sub SortAxis()
+        Axis_hash = Axis_hash.OrderBy(Function(x) x.Value).ToDictionary(Function(keyItem) keyItem.Key, Function(valueItem) valueItem.Value)
+    End Sub
 
 
 
