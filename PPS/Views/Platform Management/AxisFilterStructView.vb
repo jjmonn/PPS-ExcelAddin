@@ -165,16 +165,18 @@ Class AxisFilterStructView
     Private Sub CreateFilterBT_Click(sender As Object, e As EventArgs) Handles AddBT.Click, m_createButton.Click
 
         Dim currentNode As vTreeNode = m_filtersTV.SelectedNode
+        Dim parentId As Int32
         If m_filtersTV.SelectedNode Is Nothing Then
-            MsgBox("Please select a Category.")
+            parentId = 0
         Else
-            Dim newFilterName As String = InputBox("Enter the name of the New Category", "New Category")
-            If newFilterName <> "" Then
-                If GlobalVariables.Filters.IsNameValid(newFilterName) = True Then
-                    m_controller.CreateFilter(newFilterName, currentNode.Value, False)
-                Else
-                    MsgBox("This name is already in use.")
-                End If
+            parentId = currentNode.Value
+        End If
+        Dim newFilterName As String = InputBox("Enter the name of the New Category", "New Category")
+        If newFilterName <> "" Then
+            If GlobalVariables.Filters.IsNameValid(newFilterName) = True Then
+                m_controller.CreateFilter(newFilterName, parentId, False)
+            Else
+                MsgBox("This name is already in use.")
             End If
         End If
     End Sub

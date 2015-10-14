@@ -222,8 +222,10 @@ Friend Class EntitiesFilter
 
     Friend Function GetFilterValueId(ByRef filterId As Int32, _
                                      ByRef entityId As Int32) As Int32
+        If GlobalVariables.EntitiesFilters.entitiesFiltersHash.ContainsKey(entityId) = False Then Return 0
 
         Dim mostNestedFilterId = GlobalVariables.Filters.GetMostNestedFilterId(filterId)
+        If GlobalVariables.EntitiesFilters.entitiesFiltersHash(entityId).ContainsKey(mostNestedFilterId) = False Then Return 0
         Dim mostNestedFilterValueId = GlobalVariables.EntitiesFilters.entitiesFiltersHash(entityId)(mostNestedFilterId)
         Return GlobalVariables.FiltersValues.GetFilterValueId(mostNestedFilterValueId, filterId)
 
