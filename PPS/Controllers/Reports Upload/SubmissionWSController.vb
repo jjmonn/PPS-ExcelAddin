@@ -169,7 +169,7 @@ Friend Class SubmissionWSController
 
                     entityName = m_dataSet.m_datasetCellDimensionsDictionary(cell.Address).m_entityName
                     If IsNumeric(cell.Value) Then
-                        If m_acquisitionModel.CheckIfBSCalculatedItem(m_dataSet.m_datasetCellDimensionsDictionary(cell.Address).m_accountName, _
+                        If m_acquisitionModel.CheckIfFPICalculatedItem(m_dataSet.m_datasetCellDimensionsDictionary(cell.Address).m_accountName, _
                                                                     m_dataSet.m_datasetCellDimensionsDictionary(cell.Address).m_period) = False Then
 
                             ' Cell modification registration
@@ -196,7 +196,14 @@ Friend Class SubmissionWSController
                                 Next
                             End If
                             If m_generalSubmissionController.m_autoCommitFlag = True Then m_generalSubmissionController.DataSubmission()
-
+                        Else
+                            ' First period input formula type : output period
+                            m_disableWSChangeFlag = True
+                            SetDatsetCellValue(m_dataSet.m_entitiesNameIdDictionary(entityName), _
+                                               entityName, _
+                                               m_dataSet.m_datasetCellDimensionsDictionary(cell.Address).m_accountName, _
+                                               m_dataSet.m_datasetCellDimensionsDictionary(cell.Address).m_period)
+                            m_disableWSChangeFlag = False
                         End If
                     Else
                         ' Put back the former value in case invalid input has been given (eg. string, ...)
