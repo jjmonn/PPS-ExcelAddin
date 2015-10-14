@@ -134,8 +134,10 @@ Friend Class AxisFiltersView
         If FiltersFiltersValuesTV.SelectedNode Is Nothing Then
             MsgBox("Please select a Category or a Value.")
         Else
-            If Controller.IsFilter(currentNode.Value) Then
-                filterId = CInt(currentNode.Value)
+
+            ' Check if node is filter Node
+            If currentNode.Value.IndexOf(AxisFiltersController.m_FilterTag) > -1 Then
+                filterId = Strings.Right(currentNode.Value, Len(currentNode.Value) - Len(AxisFiltersController.m_FilterTag))
                 parentFilterValueId = 0
                 GoTo NewFilterValue
             End If
@@ -145,7 +147,10 @@ Friend Class AxisFiltersView
             Else
                 Dim parentFilterId As Int32 = GlobalVariables.FiltersValues.filtervalues_hash(CInt(currentNode.Value))(FILTER_ID_VARIABLE)
                 filterId = GlobalVariables.Filters.GetFilterChild(parentFilterId)
-                If (filterId = -1) Then Exit Sub
+                If (filterId = -1) Then
+                    MsgBox("A value cannot be added under " & currentNode.Text & " because there is no deeper category.")
+                    Exit Sub
+                End If
             End If
             parentFilterValueId = CInt(currentNode.Value)
         End If
@@ -194,13 +199,15 @@ NewFilterValue:
         ' !!!
         If Not FiltersFiltersValuesTV.SelectedNode Is Nothing Then
             Dim current_node As vTreeNode = FiltersFiltersValuesTV.SelectedNode
-            If Controller.IsFilter(FiltersFiltersValuesTV.SelectedNode.Value) Then
+            If current_node.Value.IndexOf(AxisFiltersController.m_FilterTag) > -1 Then
+
+                Dim filterId As Int32 = Strings.Right(current_node.Value, Len(current_node.Value) - Len(AxisFiltersController.m_FilterTag))
                 ' Delete Category
                 Dim confirm As Integer = MessageBox.Show("Careful, you are about to delete the Category: " + Chr(13) + current_node.Text + Chr(13) + "Do you confirm?", _
                                                          "Category deletion confirmation", _
                                                          MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question)
                 If confirm = DialogResult.Yes Then
-                    Controller.DeleteFilter(current_node.Value)
+                    Controller.DeleteFilter(filterId)
                 End If
             Else
                 ' Delete Category Value
