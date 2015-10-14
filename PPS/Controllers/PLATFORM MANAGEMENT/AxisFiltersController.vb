@@ -29,7 +29,7 @@ Friend Class AxisFiltersController
 
     ' Variables
     Private axisId As Int32
-    Private Const m_FilterTag As String = "filterId"
+    Friend Const m_FilterTag As String = "filterId"
     Private m_editFilterStructUI As AxisFilterStructView
 
 #End Region
@@ -249,21 +249,6 @@ Friend Class AxisFiltersController
 
 
 #Region "Utilities"
-
-    Friend Function IsFilter(ByRef id As String) As Boolean
-
-        If id.IndexOf(m_FilterTag) > -1 Then
-            id = Right(id, Len(id) - Len(m_FilterTag))
-        End If
-
-        If GlobalVariables.Filters.filters_hash.ContainsKey(CInt(id)) = True Then
-            Return True
-        Else
-            Return False
-        End If
-
-    End Function
-
 
     Friend Sub SendNewPositionsToModel()
 
