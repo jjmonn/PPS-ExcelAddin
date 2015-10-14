@@ -1296,6 +1296,7 @@ Public Class AddinModule
         GlobalVariables.GlobalPPSBIController = New PPSBIController
         GlobalVariables.Addin = Me
         SetMainMenuButtonState(False)
+        Local.LoadLocalFile("PPS-Repo/PPS/Locals/french.xml")
 
     End Sub
 

@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<category name="FBI">
+  <category name="Platform Management">
+    <string name="currencies">Devises</string>
+  </category>
+  <category name="CUI">
+    <string name="refresh">Rafraichir</string>
+    <string name="update">Mettre à jour</string>
+  </category>
+</category>
+
+<!-- 
+  Category name: forbidden character: '.'
+-->
