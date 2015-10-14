@@ -417,7 +417,7 @@ Partial Class ControllingUI_2
         Me.RefreshToolStripMenuItem.Name = "RefreshToolStripMenuItem"
         Me.RefreshToolStripMenuItem.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.Space), System.Windows.Forms.Keys)
         Me.RefreshToolStripMenuItem.Size = New System.Drawing.Size(66, 55)
-        Me.RefreshToolStripMenuItem.Text = "Refresh"
+        Me.RefreshToolStripMenuItem.Text = Local.GetValue("CUI.refresh")
         Me.RefreshToolStripMenuItem.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
         Me.RefreshToolStripMenuItem.ToolTipText = "Refresh the Data"
         '
