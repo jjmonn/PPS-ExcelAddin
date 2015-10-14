@@ -150,6 +150,7 @@ Friend Class AccountsController
             If m_CRUDOperations.ContainsKey(id) Then m_CRUDOperations(id) = CRUDAction.UPDATE Else m_CRUDOperations.Add(id, CRUDAction.UPDATE)
         End If
         If send = True Then GlobalVariables.Accounts.CMSG_UPDATE_ACCOUNT(ht)
+
     End Sub
 
     Friend Sub UpdateAccount(ByRef id As Int32, ByRef account_attributes As Hashtable, Optional send As Boolean = False)

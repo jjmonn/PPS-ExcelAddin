@@ -194,9 +194,6 @@ NewFilterValue:
 
     Private Sub DeleteBT_Click(sender As Object, e As EventArgs) Handles DeleteMenuBT.Click, DeleteRCM.Click
 
-        ' to be validated 
-        ' priority normal 
-        ' !!!
         If Not FiltersFiltersValuesTV.SelectedNode Is Nothing Then
             Dim current_node As vTreeNode = FiltersFiltersValuesTV.SelectedNode
             If current_node.Value.IndexOf(AxisFiltersController.m_FilterTag) > -1 Then

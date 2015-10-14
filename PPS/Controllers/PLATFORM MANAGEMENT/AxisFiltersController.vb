@@ -23,8 +23,8 @@ Friend Class AxisFiltersController
 
     ' Objects
     Private View As AxisFiltersView
-    Private filtersNode As New vTreeNode
-    Private filtersFilterValuesTv As New vTreeView
+    Private m_filtersNode As New vTreeNode
+    Private m_filtersFilterValuesTv As New vTreeView
     Private m_filterTV As New vTreeView
 
     ' Variables
@@ -40,14 +40,14 @@ Friend Class AxisFiltersController
     Friend Sub New(ByRef p_axis_id As UInt32)
 
         axisId = p_axis_id
-        AxisFilter.LoadFvTv(filtersFilterValuesTv, filtersNode, axisId)
-        For Each node As vTreeNode In filtersFilterValuesTv.Nodes
+        AxisFilter.LoadFvTv(m_filtersFilterValuesTv, m_filtersNode, axisId)
+        For Each node As vTreeNode In m_filtersFilterValuesTv.Nodes
             node.Value = m_FilterTag & node.Value
         Next
 
-        View = New AxisFiltersView(Me, filtersNode, axisId, filtersFilterValuesTv)
+        View = New AxisFiltersView(Me, m_filtersNode, axisId, m_filtersFilterValuesTv)
         GlobalVariables.Filters.LoadFiltersTV(m_filterTV, axisId)
-        m_editFilterStructUI = New AxisFilterStructView(m_filterTV, axisId, Me, filtersNode)
+        m_editFilterStructUI = New AxisFilterStructView(m_filterTV, axisId, Me, m_filtersNode)
         AddHandler GlobalVariables.Filters.CreationEvent, AddressOf AfterFilterCreation
         AddHandler GlobalVariables.Filters.Read, AddressOf AfterFilterRead
         AddHandler GlobalVariables.Filters.UpdateEvent, AddressOf AfterFilterUpdate
@@ -154,16 +154,15 @@ Friend Class AxisFiltersController
 
     End Sub
 
-    Friend Sub UpdateFilterValuesBatch(ByRef filtersValuesUpdates As List(Of Tuple(Of Int32, String, Int32)))
+    Friend Sub UpdateFilterValuesBatch(ByRef p_filtersValuesUpdates As List(Of Tuple(Of Int32, String, Int32)))
 
-        'Dim filterValuesHTUpdates As New List(Of Hashtable)
-        'For Each tuple_ As Tuple(Of Int32, String, Int32) In filtersValuesUpdates
-        '    Dim ht As Hashtable = GlobalVariables.FiltersValues.filtervalues_hash(tuple_.Item1).clone
-        '    ht(tuple_.Item2) = tuple_.Item3
-        '    filterValuesHTUpdates.Add(ht)
-        'Next
-        '    GlobalVariables.filtervalues.(filterValuesHTUpdates)
-        ' bacth not implemented on server ?
+        Dim filterValuesHTUpdates As New Hashtable
+        For Each tuple_ As Tuple(Of Int32, String, Int32) In p_filtersValuesUpdates
+            Dim ht As Hashtable = GlobalVariables.FiltersValues.filtervalues_hash(tuple_.Item1).clone
+            ht(tuple_.Item2) = tuple_.Item3
+            filterValuesHTUpdates(CInt(ht(ID_VARIABLE))) = ht
+        Next
+        GlobalVariables.FiltersValues.CMSG_UPDATE_FILTERS_VALUE_LIST(filterValuesHTUpdates)
 
     End Sub
 
@@ -252,22 +251,35 @@ Friend Class AxisFiltersController
 
     Friend Sub SendNewPositionsToModel()
 
-        ' positions update 
-        '       -> filters
-        '       -> filters values
-        'priority normal
-        ' !!!
+        Dim position As Int32
+        Dim accountsUpdates As New List(Of Tuple(Of Int32, String, Int32))
 
-        'positions_dictionary = TreeViewsUtilities.GeneratePositionsDictionary(filtersTV)
-        'Dim batch_update As New List(Of Object())
-        'For Each filter_id In positions_dictionary.Keys
-        '    batch_update.Add({filter_id, ITEMS_POSITIONS, positions_dictionary(filter_id)})
-        'Next
-        'GlobalVariables.Filters.UpdateBatch(batch_update)
-        ' CP while updating
-        ' review ! priority normal
+        Dim positionsDictionary As Dictionary(Of Int32, Int32) = GetFiltersValuesPositionsDictionary()
+        Dim updateList As New List(Of Tuple(Of Int32, String, Int32))
+
+        For Each filterValueId As Int32 In positionsDictionary.Keys
+            position = positionsDictionary(filterValueId)
+            If position <> GlobalVariables.FiltersValues.filtervalues_hash(filterValueId)(ITEMS_POSITIONS) Then
+                Dim tuple_ As New Tuple(Of Int32, String, Int32)(filterValueId, ITEMS_POSITIONS, position)
+                updateList.Add(tuple_)
+            End If
+        Next
+        UpdateFilterValuesBatch(updateList)
 
     End Sub
+
+    Private Function GetFiltersValuesPositionsDictionary() As Dictionary(Of Int32, Int32)
+
+        Dim positionsDictionary As New Dictionary(Of Int32, Int32)
+        For Each node As vTreeNode In m_filtersFilterValuesTv.Nodes
+
+
+        Next
+        Return positionsDictionary
+
+    End Function
+
+
 
 #End Region
 

@@ -138,6 +138,7 @@ Friend Class Entity
     End Sub
 
     Friend Sub CMSG_UPDATE_ENTITY_LIST(ByRef p_entities As Hashtable)
+
         NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_UPDATE_ENTITY_LIST_ANSWER, AddressOf SMSG_UPDATE_ENTITY_LIST_ANSWER)
         Dim packet As New ByteBuffer(CType(ClientMessage.CMSG_UPDATE_ENTITY_LIST, UShort))
 
@@ -148,6 +149,7 @@ Friend Class Entity
         Next
         packet.Release()
         NetworkManager.GetInstance().Send(packet)
+
     End Sub
 
     Private Sub SMSG_UPDATE_ENTITY_LIST_ANSWER(packet As ByteBuffer)

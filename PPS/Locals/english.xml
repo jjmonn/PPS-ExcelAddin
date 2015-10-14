@@ -11,4 +11,5 @@
 
 <!-- 
   Category name: forbidden character: '.'
+  Local.GetValue("CUI.refresh")
 -->
