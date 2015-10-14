@@ -22,13 +22,13 @@ Friend Class AxisFiltersController
 #Region "Instance Variables"
 
     ' Objects
-    Private View As AxisFiltersView
+    Private m_view As AxisFiltersView
     Private m_filtersNode As New vTreeNode
-    Private m_filtersFilterValuesTv As New vTreeView
+    '    Private m_filtersFilterValuesTv As vTreeView
     Private m_filterTV As New vTreeView
 
     ' Variables
-    Private axisId As Int32
+    Private m_axisId As Int32
     Friend Const m_FilterTag As String = "filterId"
     Private m_editFilterStructUI As AxisFilterStructView
 
@@ -39,15 +39,13 @@ Friend Class AxisFiltersController
 
     Friend Sub New(ByRef p_axis_id As UInt32)
 
-        axisId = p_axis_id
-        AxisFilter.LoadFvTv(m_filtersFilterValuesTv, m_filtersNode, axisId)
-        For Each node As vTreeNode In m_filtersFilterValuesTv.Nodes
-            node.Value = m_FilterTag & node.Value
-        Next
+        m_axisId = p_axis_id
+        m_view = New AxisFiltersView(Me, m_filtersNode, m_axisId)
 
-        View = New AxisFiltersView(Me, m_filtersNode, axisId, m_filtersFilterValuesTv)
-        GlobalVariables.Filters.LoadFiltersTV(m_filterTV, axisId)
-        m_editFilterStructUI = New AxisFilterStructView(m_filterTV, axisId, Me, m_filtersNode)
+        GlobalVariables.Filters.LoadFiltersTV(m_filterTV, m_axisId)
+        m_editFilterStructUI = New AxisFilterStructView(m_filterTV, m_axisId, Me, m_filtersNode)
+
+        ' Event Handlers
         AddHandler GlobalVariables.Filters.CreationEvent, AddressOf AfterFilterCreation
         AddHandler GlobalVariables.Filters.Read, AddressOf AfterFilterRead
         AddHandler GlobalVariables.Filters.UpdateEvent, AddressOf AfterFilterUpdate
@@ -62,15 +60,16 @@ Friend Class AxisFiltersController
 
     Public Sub addControlToPanel(ByRef dest_panel As Panel, ByRef PlatformMgtUI As PlatformMGTGeneralUI)
 
-        dest_panel.Controls.Add(View)
-        View.Dock = Windows.Forms.DockStyle.Fill
+        dest_panel.Controls.Add(m_view)
+        m_view.Dock = Windows.Forms.DockStyle.Fill
 
     End Sub
 
     Public Sub close()
 
-        View.closeControl()
-        View.Dispose()
+        m_view.closeControl()
+        ' m_view.Dispose()
+        m_view.Hide()
 
     End Sub
 
@@ -95,7 +94,7 @@ Friend Class AxisFiltersController
         Dim ht As New Hashtable
         ht.Add(NAME_VARIABLE, p_filterName)
         ht.Add(PARENT_ID_VARIABLE, p_parentFilterid)
-        ht.Add(AXIS_ID_VARIABLE, axisId)
+        ht.Add(AXIS_ID_VARIABLE, m_axisId)
         ht.Add(ITEMS_POSITIONS, 1)
         ht.Add(FILTER_IS_PARENT_VARIABLE, p_isParent)
         GlobalVariables.Filters.CMSG_CREATE_FILTER(ht)
@@ -180,7 +179,7 @@ Friend Class AxisFiltersController
     Private Sub AfterFilterRead(ByRef status As Boolean, ByRef ht As Hashtable)
 
         If status = True Then
-            View.UpdateFiltersValuesTV()
+            m_view.UpdateFiltersValuesTV()
             m_editFilterStructUI.SetFilter(ht)
         End If
 
@@ -189,7 +188,7 @@ Friend Class AxisFiltersController
     Private Sub AfterFilterDelete(ByRef status As Boolean, ByRef id As Int32)
 
         If status = True Then
-            View.UpdateFiltersValuesTV()
+            m_view.UpdateFiltersValuesTV()
             m_editFilterStructUI.DeleteFilter(id)
         End If
 
@@ -214,7 +213,7 @@ Friend Class AxisFiltersController
     Private Sub AfterFilterValueRead(ByRef status As Boolean, ByRef ht As Hashtable)
 
         If status = True Then
-            View.UpdateFiltersValuesTV()
+            m_view.UpdateFiltersValuesTV()
         End If
 
     End Sub
@@ -222,7 +221,7 @@ Friend Class AxisFiltersController
     Private Sub AfterFilterValueDelete(ByRef status As Boolean, ByRef id As Int32)
 
         If status = True Then
-            View.UpdateFiltersValuesTV()
+            m_view.UpdateFiltersValuesTV()
         End If
 
     End Sub
@@ -271,7 +270,7 @@ Friend Class AxisFiltersController
     Private Function GetFiltersValuesPositionsDictionary() As Dictionary(Of Int32, Int32)
 
         Dim positionsDictionary As New Dictionary(Of Int32, Int32)
-        For Each node As vTreeNode In m_filtersFilterValuesTv.Nodes
+        For Each node As vTreeNode In m_view.m_filtersFiltersValuesTV.Nodes
 
 
         Next

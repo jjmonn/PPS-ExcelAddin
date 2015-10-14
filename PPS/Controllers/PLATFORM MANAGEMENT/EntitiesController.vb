@@ -230,7 +230,7 @@ Friend Class EntitiesController
         Dim parentEntityID As Int32 = 0
         Dim current_row As HierarchyItem = View.getCurrentRowItem
         On Error GoTo ShowNewEntity
-        If Not current_row Is Nothing Then parentEntityID = TreeViewsUtilities.FindNode(entitiesTV.Nodes, current_row.ItemValue, True).Value
+        If Not current_row Is Nothing Then parentEntityID = VTreeViewUtil.FindNode(entitiesTV, current_row.ItemValue).Value
         GoTo ShowNewEntity
 
 ShowNewEntity:

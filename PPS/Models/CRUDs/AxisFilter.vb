@@ -38,7 +38,6 @@ Friend Class AxisFilter
 
     End Sub
 
-
     ' Method with Filters Nodes given as param to be filled as well
     Friend Shared Sub LoadFvTv(ByRef FvTv As vTreeView, _
                                ByRef filtersNode As vTreeNode, _

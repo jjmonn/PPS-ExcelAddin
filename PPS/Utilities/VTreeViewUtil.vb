@@ -373,4 +373,85 @@ Public Class VTreeViewUtil
 #End Region
 
 
+#Region "CheckStates"
+
+    Public Shared Function SaveCheckedStates(ByRef TV As vTreeView) As List(Of String)
+
+        Dim checkedList As New List(Of String)
+        For Each currNode As vTreeNode In TV.Nodes
+            SaveChildrenCheckedState(currNode, checkedList)
+        Next
+        Return checkedList
+
+    End Function
+
+    Public Shared Sub SaveChildrenCheckedState(ByRef currNode As vTreeNode, _
+                                               ByRef checkedList As List(Of String))
+
+        If currNode.Checked = True Then checkedList.Add(currNode.Value)
+        For Each child As vTreeNode In currNode.Nodes
+            SaveChildrenCheckedState(child, checkedList)
+        Next
+
+    End Sub
+
+    Public Shared Function ResumeCheckedStates(ByRef TV As vTreeView, ByRef checkedList As List(Of String)) As List(Of String)
+
+        Dim tmpList As New List(Of String)
+        For Each key In checkedList
+            Dim tmpNode = VTreeViewUtil.FindNode(TV, key)
+            If Not tmpNode Is Nothing Then
+                tmpNode.Checked = True
+            Else
+                tmpList.Add(key)
+            End If
+        Next
+        Return tmpList
+
+    End Function
+
+
+#End Region
+
+
+#Region "Expansions Levels"
+
+    Public Shared Function SaveNodesExpansionsLevel(ByVal TV As vTreeView) As Dictionary(Of String, Boolean)
+
+        Dim expansionDic As New Collections.Generic.Dictionary(Of String, Boolean)
+        For Each currNode As vTreeNode In TV.Nodes
+            SaveChildrenExpansionsLevel(currNode, expansionDic)
+        Next
+        Return expansionDic
+
+    End Function
+
+    Public Shared Sub SaveChildrenExpansionsLevel(ByRef currNode As vTreeNode, _
+                                                  ByRef expansionDic As Dictionary(Of String, Boolean))
+
+        If expansionDic.ContainsKey(currNode.Value) Then expansionDic(currNode.Value) = currNode.IsExpanded Else expansionDic.Add(currNode.Value, currNode.IsExpanded)
+        If currNode.Nodes.Count > 0 Then
+            For Each child As vTreeNode In currNode.Nodes
+                SaveChildrenExpansionsLevel(child, expansionDic)
+            Next
+        End If
+
+    End Sub
+
+    Public Shared Sub ResumeExpansionsLevel(ByRef TV As vTreeView, _
+                                            ByRef expansionDictionary As Dictionary(Of String, Boolean))
+
+        TV.CollapseAll()
+        For Each key In expansionDictionary.Keys
+            If expansionDictionary(key) = True Then
+                Dim tmpNode = VTreeViewUtil.FindNode(TV, key)
+                If Not tmpNode Is Nothing Then tmpNode.Expand()
+            End If
+        Next
+
+    End Sub
+
+#End Region
+
+
 End Class

@@ -428,11 +428,11 @@ Friend Class AxisView
 
     ' Update Parents and Children Filters Cells or comboboxes after a filter cell has been edited
     Friend Sub UpdateAxisFiltersAfterEdition(ByRef axisId As Int32, _
-                                                 ByRef filterId As Int32, _
-                                                 ByRef filterValueId As Int32)
+                                            ByRef filterId As Int32, _
+                                            ByRef filterValueId As Int32)
 
         isFillingDGV = True
-        Dim filterNode As TreeNode = TreeViewsUtilities.FindNode(axisFilterTV.Nodes, filterId, True)
+        Dim filterNode As vTreeNode = VTreeViewUtil.FindNode(axisFilterTV, filterId)
         If (filterNode Is Nothing) Then Exit Sub
 
         ' Update parent filters recursively
@@ -442,7 +442,7 @@ Friend Class AxisView
                                  filterValueId)
 
         ' Update children filters comboboxes recursively
-        For Each childFilterNode As TreeNode In filterNode.Nodes
+        For Each childFilterNode As vTreeNode In filterNode.Nodes
             UpdateChildrenFiltersComboBoxes(rows_id_item_dic(axisId), _
                                             childFilterNode, _
                                             {filterValueId})
@@ -453,13 +453,13 @@ Friend Class AxisView
 
     Private Sub UpdateParentFiltersValues(ByRef row As HierarchyItem, _
                                           ByRef axisId As Int32, _
-                                          ByRef filterNode As TreeNode,
+                                          ByRef filterNode As vTreeNode,
                                           ByRef filterValueId As Int32)
         If filterNode Is Nothing Then Exit Sub
 
         If Not filterNode.Parent Is Nothing Then
-            Dim parentFilterNode As TreeNode = filterNode.Parent
-            Dim column As HierarchyItem = columnsVariableItemDictionary(parentFilterNode.Name)
+            Dim parentFilterNode As vTreeNode = filterNode.Parent
+            Dim column As HierarchyItem = columnsVariableItemDictionary(parentFilterNode.Value)
             Dim parentFilterValueId As Int32 = GlobalVariables.FiltersValues.filtervalues_hash(filterValueId)(PARENT_FILTER_VALUE_ID_VARIABLE)
             Dim filtervaluename = GlobalVariables.FiltersValues.filtervalues_hash(parentFilterValueId)(NAME_VARIABLE)
             DGV.CellsArea.SetCellValue(row, column, filtervaluename)
@@ -474,10 +474,10 @@ Friend Class AxisView
     End Sub
 
     Private Sub UpdateChildrenFiltersComboBoxes(ByRef row As HierarchyItem, _
-                                                ByRef filterNode As TreeNode,
+                                                ByRef filterNode As vTreeNode,
                                                 ByRef parentFilterValueIds() As Int32)
 
-        Dim column As HierarchyItem = columnsVariableItemDictionary(filterNode.Name)
+        Dim column As HierarchyItem = columnsVariableItemDictionary(filterNode.Value)
         Dim comboBox As New ComboBoxEditor
 
         Dim filterValuesIds As Int32() = GlobalVariables.FiltersValues.GetFilterValueIdsFromParentFilterValueIds(parentFilterValueIds)
@@ -492,7 +492,7 @@ Friend Class AxisView
         DGV.CellsArea.SetCellEditor(row, column, comboBox)
 
         ' Recursivly update children comboboxes
-        For Each childFilterNode As TreeNode In filterNode.Nodes
+        For Each childFilterNode As vTreeNode In filterNode.Nodes
             UpdateChildrenFiltersComboBoxes(row, _
                                             childFilterNode, _
                                             filterValuesIds)

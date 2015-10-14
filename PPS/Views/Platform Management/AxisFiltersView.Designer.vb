@@ -24,7 +24,7 @@ Partial Class AxisFiltersView
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(AxisFiltersView))
-        Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
+        Me.m_tableLayoutPanel = New System.Windows.Forms.TableLayoutPanel()
         Me.ImageList1 = New System.Windows.Forms.ImageList(Me.components)
         Me.MenuStrip1 = New System.Windows.Forms.MenuStrip()
         Me.CategoriesToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -46,18 +46,18 @@ Partial Class AxisFiltersView
         Me.RCM_TV.SuspendLayout()
         Me.SuspendLayout()
         '
-        'TableLayoutPanel1
+        'm_tableLayoutPanel
         '
-        Me.TableLayoutPanel1.ColumnCount = 1
-        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TableLayoutPanel1.Location = New System.Drawing.Point(0, 0)
-        Me.TableLayoutPanel1.Name = "TableLayoutPanel1"
-        Me.TableLayoutPanel1.RowCount = 2
-        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24.0!))
-        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TableLayoutPanel1.Size = New System.Drawing.Size(525, 430)
-        Me.TableLayoutPanel1.TabIndex = 0
+        Me.m_tableLayoutPanel.ColumnCount = 1
+        Me.m_tableLayoutPanel.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
+        Me.m_tableLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.m_tableLayoutPanel.Location = New System.Drawing.Point(0, 0)
+        Me.m_tableLayoutPanel.Name = "m_tableLayoutPanel"
+        Me.m_tableLayoutPanel.RowCount = 2
+        Me.m_tableLayoutPanel.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24.0!))
+        Me.m_tableLayoutPanel.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
+        Me.m_tableLayoutPanel.Size = New System.Drawing.Size(525, 430)
+        Me.m_tableLayoutPanel.TabIndex = 0
         '
         'ImageList1
         '
@@ -72,7 +72,7 @@ Partial Class AxisFiltersView
         Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.CategoriesToolStripMenuItem, Me.EditStructureToolStripMenuItem})
         Me.MenuStrip1.Location = New System.Drawing.Point(0, 0)
         Me.MenuStrip1.Name = "MenuStrip1"
-        Me.MenuStrip1.Size = New System.Drawing.Size(525, 24)
+        Me.MenuStrip1.Size = New System.Drawing.Size(525, 27)
         Me.MenuStrip1.TabIndex = 2
         Me.MenuStrip1.Text = "MenuStrip1"
         '
@@ -81,92 +81,92 @@ Partial Class AxisFiltersView
         Me.CategoriesToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.NewCategoryMenuBT, Me.AddValueMenuBT, Me.DeleteMenuBT, Me.RenameMenuBT, Me.ToolStripSeparator3})
         Me.CategoriesToolStripMenuItem.Image = Global.FinancialBI.My.Resources.Resources.elements
         Me.CategoriesToolStripMenuItem.Name = "CategoriesToolStripMenuItem"
-        Me.CategoriesToolStripMenuItem.Size = New System.Drawing.Size(91, 20)
+        Me.CategoriesToolStripMenuItem.Size = New System.Drawing.Size(102, 23)
         Me.CategoriesToolStripMenuItem.Text = "Categories"
         '
         'NewCategoryMenuBT
         '
         Me.NewCategoryMenuBT.Image = Global.FinancialBI.My.Resources.Resources.elements_add
         Me.NewCategoryMenuBT.Name = "NewCategoryMenuBT"
-        Me.NewCategoryMenuBT.Size = New System.Drawing.Size(149, 22)
+        Me.NewCategoryMenuBT.Size = New System.Drawing.Size(165, 24)
         Me.NewCategoryMenuBT.Text = "New Category"
         '
         'AddValueMenuBT
         '
         Me.AddValueMenuBT.Name = "AddValueMenuBT"
-        Me.AddValueMenuBT.Size = New System.Drawing.Size(149, 22)
+        Me.AddValueMenuBT.Size = New System.Drawing.Size(165, 24)
         Me.AddValueMenuBT.Text = "New Value"
         '
         'DeleteMenuBT
         '
         Me.DeleteMenuBT.Image = Global.FinancialBI.My.Resources.Resources.elements_delete
         Me.DeleteMenuBT.Name = "DeleteMenuBT"
-        Me.DeleteMenuBT.Size = New System.Drawing.Size(149, 22)
+        Me.DeleteMenuBT.Size = New System.Drawing.Size(165, 24)
         Me.DeleteMenuBT.Text = "Delete"
         '
         'RenameMenuBT
         '
         Me.RenameMenuBT.Name = "RenameMenuBT"
-        Me.RenameMenuBT.Size = New System.Drawing.Size(149, 22)
+        Me.RenameMenuBT.Size = New System.Drawing.Size(165, 24)
         Me.RenameMenuBT.Text = "Rename"
         '
         'ToolStripSeparator3
         '
         Me.ToolStripSeparator3.Name = "ToolStripSeparator3"
-        Me.ToolStripSeparator3.Size = New System.Drawing.Size(146, 6)
+        Me.ToolStripSeparator3.Size = New System.Drawing.Size(162, 6)
         '
         'EditStructureToolStripMenuItem
         '
         Me.EditStructureToolStripMenuItem.Name = "EditStructureToolStripMenuItem"
-        Me.EditStructureToolStripMenuItem.Size = New System.Drawing.Size(89, 20)
+        Me.EditStructureToolStripMenuItem.Size = New System.Drawing.Size(103, 23)
         Me.EditStructureToolStripMenuItem.Text = "Edit structure"
         '
         'RCM_TV
         '
         Me.RCM_TV.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.AddValueRCM, Me.ToolStripSeparator2, Me.DeleteRCM, Me.ToolStripSeparator1, Me.RenameRCM, Me.ExpandAllBT, Me.CollapseAllBT})
         Me.RCM_TV.Name = "RCM_TV"
-        Me.RCM_TV.Size = New System.Drawing.Size(140, 126)
+        Me.RCM_TV.Size = New System.Drawing.Size(156, 136)
         '
         'AddValueRCM
         '
         Me.AddValueRCM.Image = Global.FinancialBI.My.Resources.Resources.elements_add
         Me.AddValueRCM.Name = "AddValueRCM"
-        Me.AddValueRCM.Size = New System.Drawing.Size(139, 22)
+        Me.AddValueRCM.Size = New System.Drawing.Size(155, 24)
         Me.AddValueRCM.Text = "Create Value"
         '
         'ToolStripSeparator2
         '
         Me.ToolStripSeparator2.Name = "ToolStripSeparator2"
-        Me.ToolStripSeparator2.Size = New System.Drawing.Size(136, 6)
+        Me.ToolStripSeparator2.Size = New System.Drawing.Size(152, 6)
         '
         'DeleteRCM
         '
         Me.DeleteRCM.Image = Global.FinancialBI.My.Resources.Resources.elements_delete
         Me.DeleteRCM.Name = "DeleteRCM"
-        Me.DeleteRCM.Size = New System.Drawing.Size(139, 22)
+        Me.DeleteRCM.Size = New System.Drawing.Size(155, 24)
         Me.DeleteRCM.Text = "Delete"
         '
         'ToolStripSeparator1
         '
         Me.ToolStripSeparator1.Name = "ToolStripSeparator1"
-        Me.ToolStripSeparator1.Size = New System.Drawing.Size(136, 6)
+        Me.ToolStripSeparator1.Size = New System.Drawing.Size(152, 6)
         '
         'RenameRCM
         '
         Me.RenameRCM.Name = "RenameRCM"
-        Me.RenameRCM.Size = New System.Drawing.Size(139, 22)
+        Me.RenameRCM.Size = New System.Drawing.Size(155, 24)
         Me.RenameRCM.Text = "Rename"
         '
         'ExpandAllBT
         '
         Me.ExpandAllBT.Name = "ExpandAllBT"
-        Me.ExpandAllBT.Size = New System.Drawing.Size(139, 22)
+        Me.ExpandAllBT.Size = New System.Drawing.Size(155, 24)
         Me.ExpandAllBT.Text = "Expand all"
         '
         'CollapseAllBT
         '
         Me.CollapseAllBT.Name = "CollapseAllBT"
-        Me.CollapseAllBT.Size = New System.Drawing.Size(139, 22)
+        Me.CollapseAllBT.Size = New System.Drawing.Size(155, 24)
         Me.CollapseAllBT.Text = "Collapse all"
         '
         'AxisFiltersView
@@ -174,7 +174,7 @@ Partial Class AxisFiltersView
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.Controls.Add(Me.MenuStrip1)
-        Me.Controls.Add(Me.TableLayoutPanel1)
+        Me.Controls.Add(Me.m_tableLayoutPanel)
         Me.Name = "AxisFiltersView"
         Me.Size = New System.Drawing.Size(525, 430)
         Me.MenuStrip1.ResumeLayout(False)
@@ -184,7 +184,7 @@ Partial Class AxisFiltersView
         Me.PerformLayout()
 
     End Sub
-    Friend WithEvents TableLayoutPanel1 As System.Windows.Forms.TableLayoutPanel
+    Friend WithEvents m_tableLayoutPanel As System.Windows.Forms.TableLayoutPanel
     Friend WithEvents ImageList1 As System.Windows.Forms.ImageList
     Friend WithEvents MenuStrip1 As System.Windows.Forms.MenuStrip
     Friend WithEvents CategoriesToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem

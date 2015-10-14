@@ -486,7 +486,7 @@ Friend Class EntitiesView
                                                  ByRef filterValueId As Int32)
 
         isFillingDGV = True
-        Dim filterNode As TreeNode = TreeViewsUtilities.FindNode(entitiesFilterTV.Nodes, filterId, True)
+        Dim filterNode As vTreeNode = VTreeViewUtil.FindNode(entitiesFilterTV, filterId)
 
         If filterNode Is Nothing Then Exit Sub
         ' Update parent filters recursively
@@ -496,7 +496,7 @@ Friend Class EntitiesView
                                  filterValueId)
 
         ' Update children filters comboboxes recursively
-        For Each childFilterNode As TreeNode In filterNode.Nodes
+        For Each childFilterNode As vTreeNode In filterNode.Nodes
             UpdateChildrenFiltersComboBoxes(DataGridViewsUtil.GetHierarchyItemFromId(m_entitiesDataGridView.RowsHierarchy, entityId), _
                                             childFilterNode, _
                                             {filterValueId})
@@ -507,12 +507,12 @@ Friend Class EntitiesView
 
     Private Sub UpdateParentFiltersValues(ByRef row As HierarchyItem, _
                                           ByRef entityId As Int32, _
-                                          ByRef filterNode As TreeNode,
+                                          ByRef filterNode As vTreeNode,
                                           ByRef filterValueId As Int32)
 
         If Not filterNode.Parent Is Nothing Then
-            Dim parentFilterNode As TreeNode = filterNode.Parent
-            Dim column As HierarchyItem = DataGridViewsUtil.GetHierarchyItemFromId(m_entitiesDataGridView.ColumnsHierarchy, parentFilterNode.Name)
+            Dim parentFilterNode As vTreeNode = filterNode.Parent
+            Dim column As HierarchyItem = DataGridViewsUtil.GetHierarchyItemFromId(m_entitiesDataGridView.ColumnsHierarchy, parentFilterNode.Value)
             Dim parentFilterValueId As Int32 = GlobalVariables.FiltersValues.filtervalues_hash(filterValueId)(PARENT_FILTER_VALUE_ID_VARIABLE)
             Dim filtervaluename = GlobalVariables.FiltersValues.filtervalues_hash(parentFilterValueId)(NAME_VARIABLE)
             m_entitiesDataGridView.CellsArea.SetCellValue(row, column, filtervaluename)
@@ -527,10 +527,10 @@ Friend Class EntitiesView
     End Sub
 
     Private Sub UpdateChildrenFiltersComboBoxes(ByRef row As HierarchyItem, _
-                                                ByRef filterNode As TreeNode,
+                                                ByRef filterNode As vTreeNode,
                                                 ByRef parentFilterValueIds() As Int32)
 
-        Dim column As HierarchyItem = DataGridViewsUtil.GetHierarchyItemFromId(m_entitiesDataGridView.ColumnsHierarchy, filterNode.Name)
+        Dim column As HierarchyItem = DataGridViewsUtil.GetHierarchyItemFromId(m_entitiesDataGridView.ColumnsHierarchy, filterNode.Value)
         Dim comboBox As New ComboBoxEditor
 
         Dim filterValuesIds As Int32() = GlobalVariables.FiltersValues.GetFilterValueIdsFromParentFilterValueIds(parentFilterValueIds)
@@ -545,7 +545,7 @@ Friend Class EntitiesView
         If GlobalVariables.Users.CurrentUserIsAdmin() Then m_entitiesDataGridView.CellsArea.SetCellEditor(row, column, comboBox)
 
         ' Recursivly update children comboboxes
-        For Each childFilterNode As TreeNode In filterNode.Nodes
+        For Each childFilterNode As vTreeNode In filterNode.Nodes
             UpdateChildrenFiltersComboBoxes(row, _
                                             childFilterNode, _
                                             filterValuesIds)
@@ -754,5 +754,7 @@ Friend Class EntitiesView
 #End Region
 
 #End Region
+
+
 
 End Class
