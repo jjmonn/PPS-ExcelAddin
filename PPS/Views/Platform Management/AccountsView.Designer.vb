@@ -25,19 +25,14 @@ Partial Class AccountsView
         Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(AccountsView))
         Me.SplitContainer1 = New System.Windows.Forms.SplitContainer()
-        Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
-        Me.Panel1 = New System.Windows.Forms.Panel()
         Me.AccountsTVPanel = New System.Windows.Forms.Panel()
         Me.SplitContainer2 = New System.Windows.Forms.SplitContainer()
         Me.TableLayoutPanel2 = New System.Windows.Forms.TableLayoutPanel()
         Me.GroupBox5 = New System.Windows.Forms.GroupBox()
         Me.m_descriptionTextBox = New VIBlend.WinForms.Controls.vTextBox()
-        Me.SaveDescriptionBT = New System.Windows.Forms.Button()
         Me.EditButtonsImagelist = New System.Windows.Forms.ImageList(Me.components)
         Me.GroupBox3 = New System.Windows.Forms.GroupBox()
         Me.m_formulaTextBox = New VIBlend.WinForms.Controls.vTextBox()
-        Me.formulaEdit = New System.Windows.Forms.CheckBox()
-        Me.submit_cmd = New System.Windows.Forms.Button()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
         Me.ConsolidationOptionComboBox = New VIBlend.WinForms.Controls.vComboBox()
         Me.CurrencyConversionComboBox = New VIBlend.WinForms.Controls.vComboBox()
@@ -53,26 +48,28 @@ Partial Class AccountsView
         Me.VLabel6 = New VIBlend.WinForms.Controls.vLabel()
         Me.accountsIL = New System.Windows.Forms.ImageList(Me.components)
         Me.TVRCM = New System.Windows.Forms.ContextMenuStrip(Me.components)
+        Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
+        Me.MainMenu = New System.Windows.Forms.MenuStrip()
+        Me.NewToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator()
+        Me.DropHierarchyToExcelToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
+        Me.HelpToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.CreateANewAccountToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.CreateANewCategoryToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.DeleteAccountToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
+        Me.DropAllAccountsHierarchyToExcelToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.DropSelectedAccountHierarchyToExcelToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.SaveDescriptionBT = New System.Windows.Forms.Button()
+        Me.formulaEdit = New System.Windows.Forms.CheckBox()
+        Me.submit_cmd = New System.Windows.Forms.Button()
         Me.AddSubAccountToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.AddCategoryToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.DeleteAccountToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.DropHierarchyToExcelToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
-        Me.MainMenu = New System.Windows.Forms.MenuStrip()
-        Me.NewToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.CreateANewAccountToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.CreateANewCategoryToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.DeleteAccountToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator()
-        Me.DropHierarchyToExcelToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
-        Me.DropAllAccountsHierarchyToExcelToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.DropSelectedAccountHierarchyToExcelToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.HelpToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SplitContainer1.Panel1.SuspendLayout()
         Me.SplitContainer1.Panel2.SuspendLayout()
         Me.SplitContainer1.SuspendLayout()
-        Me.TableLayoutPanel1.SuspendLayout()
         CType(Me.SplitContainer2, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SplitContainer2.Panel1.SuspendLayout()
         Me.SplitContainer2.Panel2.SuspendLayout()
@@ -93,7 +90,7 @@ Partial Class AccountsView
         '
         'SplitContainer1.Panel1
         '
-        Me.SplitContainer1.Panel1.Controls.Add(Me.TableLayoutPanel1)
+        Me.SplitContainer1.Panel1.Controls.Add(Me.AccountsTVPanel)
         '
         'SplitContainer1.Panel2
         '
@@ -102,39 +99,13 @@ Partial Class AccountsView
         Me.SplitContainer1.SplitterDistance = 246
         Me.SplitContainer1.TabIndex = 23
         '
-        'TableLayoutPanel1
-        '
-        Me.TableLayoutPanel1.ColumnCount = 1
-        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TableLayoutPanel1.Controls.Add(Me.Panel1, 0, 0)
-        Me.TableLayoutPanel1.Controls.Add(Me.AccountsTVPanel, 0, 1)
-        Me.TableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TableLayoutPanel1.Location = New System.Drawing.Point(0, 0)
-        Me.TableLayoutPanel1.Name = "TableLayoutPanel1"
-        Me.TableLayoutPanel1.RowCount = 2
-        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25.0!))
-        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
-        Me.TableLayoutPanel1.Size = New System.Drawing.Size(246, 652)
-        Me.TableLayoutPanel1.TabIndex = 0
-        '
-        'Panel1
-        '
-        Me.Panel1.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Panel1.Location = New System.Drawing.Point(1, 1)
-        Me.Panel1.Margin = New System.Windows.Forms.Padding(1)
-        Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(244, 23)
-        Me.Panel1.TabIndex = 1
-        '
         'AccountsTVPanel
         '
-        Me.AccountsTVPanel.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.AccountsTVPanel.Location = New System.Drawing.Point(1, 26)
+        Me.AccountsTVPanel.Location = New System.Drawing.Point(1, 35)
         Me.AccountsTVPanel.Margin = New System.Windows.Forms.Padding(1)
         Me.AccountsTVPanel.Name = "AccountsTVPanel"
-        Me.AccountsTVPanel.Size = New System.Drawing.Size(244, 625)
-        Me.AccountsTVPanel.TabIndex = 2
+        Me.AccountsTVPanel.Size = New System.Drawing.Size(244, 602)
+        Me.AccountsTVPanel.TabIndex = 3
         '
         'SplitContainer2
         '
@@ -207,21 +178,6 @@ Partial Class AccountsView
         Me.m_descriptionTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Left
         Me.m_descriptionTextBox.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
         '
-        'SaveDescriptionBT
-        '
-        Me.SaveDescriptionBT.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.SaveDescriptionBT.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
-        Me.SaveDescriptionBT.ImageKey = "1420498403_340208.ico"
-        Me.SaveDescriptionBT.ImageList = Me.EditButtonsImagelist
-        Me.SaveDescriptionBT.Location = New System.Drawing.Point(269, 109)
-        Me.SaveDescriptionBT.Margin = New System.Windows.Forms.Padding(2)
-        Me.SaveDescriptionBT.Name = "SaveDescriptionBT"
-        Me.SaveDescriptionBT.Size = New System.Drawing.Size(187, 28)
-        Me.SaveDescriptionBT.TabIndex = 7
-        Me.SaveDescriptionBT.Text = "Save Description"
-        Me.SaveDescriptionBT.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.SaveDescriptionBT.UseVisualStyleBackColor = True
-        '
         'EditButtonsImagelist
         '
         Me.EditButtonsImagelist.ImageStream = CType(resources.GetObject("EditButtonsImagelist.ImageStream"), System.Windows.Forms.ImageListStreamer)
@@ -264,36 +220,6 @@ Partial Class AccountsView
         Me.m_formulaTextBox.TabIndex = 0
         Me.m_formulaTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Left
         Me.m_formulaTextBox.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
-        '
-        'formulaEdit
-        '
-        Me.formulaEdit.Appearance = System.Windows.Forms.Appearance.Button
-        Me.formulaEdit.AutoSize = True
-        Me.formulaEdit.BackColor = System.Drawing.Color.AliceBlue
-        Me.formulaEdit.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
-        Me.formulaEdit.ImageKey = "config circle purple.ico"
-        Me.formulaEdit.ImageList = Me.EditButtonsImagelist
-        Me.formulaEdit.Location = New System.Drawing.Point(6, 21)
-        Me.formulaEdit.Name = "formulaEdit"
-        Me.formulaEdit.Size = New System.Drawing.Size(105, 25)
-        Me.formulaEdit.TabIndex = 5
-        Me.formulaEdit.Text = "Edit Formula      "
-        Me.formulaEdit.UseVisualStyleBackColor = True
-        '
-        'submit_cmd
-        '
-        Me.submit_cmd.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.submit_cmd.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
-        Me.submit_cmd.ImageKey = "1420498403_340208.ico"
-        Me.submit_cmd.ImageList = Me.EditButtonsImagelist
-        Me.submit_cmd.Location = New System.Drawing.Point(269, 140)
-        Me.submit_cmd.Margin = New System.Windows.Forms.Padding(2)
-        Me.submit_cmd.Name = "submit_cmd"
-        Me.submit_cmd.Size = New System.Drawing.Size(187, 28)
-        Me.submit_cmd.TabIndex = 7
-        Me.submit_cmd.Text = "Validate Formula"
-        Me.submit_cmd.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.submit_cmd.UseVisualStyleBackColor = True
         '
         'GroupBox1
         '
@@ -490,7 +416,7 @@ Partial Class AccountsView
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.GlobalFactsPanel.Location = New System.Drawing.Point(12, 58)
         Me.GlobalFactsPanel.Name = "GlobalFactsPanel"
-        Me.GlobalFactsPanel.Size = New System.Drawing.Size(89, 579)
+        Me.GlobalFactsPanel.Size = New System.Drawing.Size(91, 579)
         Me.GlobalFactsPanel.TabIndex = 3
         '
         'VLabel6
@@ -504,7 +430,7 @@ Partial Class AccountsView
         Me.VLabel6.Location = New System.Drawing.Point(12, 28)
         Me.VLabel6.Multiline = True
         Me.VLabel6.Name = "VLabel6"
-        Me.VLabel6.Size = New System.Drawing.Size(111, 16)
+        Me.VLabel6.Size = New System.Drawing.Size(113, 16)
         Me.VLabel6.TabIndex = 0
         Me.VLabel6.Text = "Macro Economic Indicators"
         Me.VLabel6.TextAlignment = System.Drawing.ContentAlignment.TopLeft
@@ -527,6 +453,126 @@ Partial Class AccountsView
         Me.TVRCM.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.AddSubAccountToolStripMenuItem, Me.AddCategoryToolStripMenuItem, Me.DeleteAccountToolStripMenuItem, Me.DropHierarchyToExcelToolStripMenuItem, Me.ToolStripSeparator1})
         Me.TVRCM.Name = "ContextMenuStripTV"
         Me.TVRCM.Size = New System.Drawing.Size(222, 106)
+        '
+        'ToolStripSeparator1
+        '
+        Me.ToolStripSeparator1.Name = "ToolStripSeparator1"
+        Me.ToolStripSeparator1.Size = New System.Drawing.Size(218, 6)
+        '
+        'MainMenu
+        '
+        Me.MainMenu.BackColor = System.Drawing.SystemColors.Control
+        Me.MainMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.NewToolStripMenuItem, Me.DropHierarchyToExcelToolStripMenuItem1, Me.HelpToolStripMenuItem})
+        Me.MainMenu.Location = New System.Drawing.Point(0, 0)
+        Me.MainMenu.Name = "MainMenu"
+        Me.MainMenu.Size = New System.Drawing.Size(844, 27)
+        Me.MainMenu.TabIndex = 25
+        Me.MainMenu.Text = "MenuStrip1"
+        '
+        'NewToolStripMenuItem
+        '
+        Me.NewToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.CreateANewAccountToolStripMenuItem, Me.CreateANewCategoryToolStripMenuItem, Me.DeleteAccountToolStripMenuItem1, Me.ToolStripSeparator2})
+        Me.NewToolStripMenuItem.Name = "NewToolStripMenuItem"
+        Me.NewToolStripMenuItem.Size = New System.Drawing.Size(71, 23)
+        Me.NewToolStripMenuItem.Text = "Account"
+        '
+        'ToolStripSeparator2
+        '
+        Me.ToolStripSeparator2.Name = "ToolStripSeparator2"
+        Me.ToolStripSeparator2.Size = New System.Drawing.Size(215, 6)
+        '
+        'DropHierarchyToExcelToolStripMenuItem1
+        '
+        Me.DropHierarchyToExcelToolStripMenuItem1.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.DropAllAccountsHierarchyToExcelToolStripMenuItem, Me.DropSelectedAccountHierarchyToExcelToolStripMenuItem})
+        Me.DropHierarchyToExcelToolStripMenuItem1.Name = "DropHierarchyToExcelToolStripMenuItem1"
+        Me.DropHierarchyToExcelToolStripMenuItem1.Size = New System.Drawing.Size(50, 23)
+        Me.DropHierarchyToExcelToolStripMenuItem1.Text = "Excel"
+        '
+        'HelpToolStripMenuItem
+        '
+        Me.HelpToolStripMenuItem.Name = "HelpToolStripMenuItem"
+        Me.HelpToolStripMenuItem.Size = New System.Drawing.Size(49, 23)
+        Me.HelpToolStripMenuItem.Text = "Help"
+        '
+        'CreateANewAccountToolStripMenuItem
+        '
+        Me.CreateANewAccountToolStripMenuItem.Image = Global.FinancialBI.My.Resources.Resources.registry_add
+        Me.CreateANewAccountToolStripMenuItem.Name = "CreateANewAccountToolStripMenuItem"
+        Me.CreateANewAccountToolStripMenuItem.Size = New System.Drawing.Size(218, 24)
+        Me.CreateANewAccountToolStripMenuItem.Text = "Create a new Account"
+        '
+        'CreateANewCategoryToolStripMenuItem
+        '
+        Me.CreateANewCategoryToolStripMenuItem.Image = Global.FinancialBI.My.Resources.Resources.favicon_81_
+        Me.CreateANewCategoryToolStripMenuItem.Name = "CreateANewCategoryToolStripMenuItem"
+        Me.CreateANewCategoryToolStripMenuItem.Size = New System.Drawing.Size(218, 24)
+        Me.CreateANewCategoryToolStripMenuItem.Text = "Create a new Category"
+        '
+        'DeleteAccountToolStripMenuItem1
+        '
+        Me.DeleteAccountToolStripMenuItem1.Image = Global.FinancialBI.My.Resources.Resources.registry_delete
+        Me.DeleteAccountToolStripMenuItem1.Name = "DeleteAccountToolStripMenuItem1"
+        Me.DeleteAccountToolStripMenuItem1.Size = New System.Drawing.Size(218, 24)
+        Me.DeleteAccountToolStripMenuItem1.Text = "Delete Account"
+        '
+        'DropAllAccountsHierarchyToExcelToolStripMenuItem
+        '
+        Me.DropAllAccountsHierarchyToExcelToolStripMenuItem.Image = Global.FinancialBI.My.Resources.Resources.Excel_Blue_32x32
+        Me.DropAllAccountsHierarchyToExcelToolStripMenuItem.Name = "DropAllAccountsHierarchyToExcelToolStripMenuItem"
+        Me.DropAllAccountsHierarchyToExcelToolStripMenuItem.Size = New System.Drawing.Size(328, 24)
+        Me.DropAllAccountsHierarchyToExcelToolStripMenuItem.Text = "Drop all Accounts Hierarchy to Excel"
+        '
+        'DropSelectedAccountHierarchyToExcelToolStripMenuItem
+        '
+        Me.DropSelectedAccountHierarchyToExcelToolStripMenuItem.Image = Global.FinancialBI.My.Resources.Resources.Excel_Green_32x32
+        Me.DropSelectedAccountHierarchyToExcelToolStripMenuItem.Name = "DropSelectedAccountHierarchyToExcelToolStripMenuItem"
+        Me.DropSelectedAccountHierarchyToExcelToolStripMenuItem.Size = New System.Drawing.Size(328, 24)
+        Me.DropSelectedAccountHierarchyToExcelToolStripMenuItem.Text = "Drop selected Account Hierarchy to Excel"
+        '
+        'SaveDescriptionBT
+        '
+        Me.SaveDescriptionBT.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.SaveDescriptionBT.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.SaveDescriptionBT.ImageKey = "1420498403_340208.ico"
+        Me.SaveDescriptionBT.ImageList = Me.EditButtonsImagelist
+        Me.SaveDescriptionBT.Location = New System.Drawing.Point(269, 109)
+        Me.SaveDescriptionBT.Margin = New System.Windows.Forms.Padding(2)
+        Me.SaveDescriptionBT.Name = "SaveDescriptionBT"
+        Me.SaveDescriptionBT.Size = New System.Drawing.Size(187, 28)
+        Me.SaveDescriptionBT.TabIndex = 7
+        Me.SaveDescriptionBT.Text = "Save Description"
+        Me.SaveDescriptionBT.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.SaveDescriptionBT.UseVisualStyleBackColor = True
+        '
+        'formulaEdit
+        '
+        Me.formulaEdit.Appearance = System.Windows.Forms.Appearance.Button
+        Me.formulaEdit.AutoSize = True
+        Me.formulaEdit.BackColor = System.Drawing.Color.AliceBlue
+        Me.formulaEdit.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.formulaEdit.ImageKey = "config circle purple.ico"
+        Me.formulaEdit.ImageList = Me.EditButtonsImagelist
+        Me.formulaEdit.Location = New System.Drawing.Point(6, 21)
+        Me.formulaEdit.Name = "formulaEdit"
+        Me.formulaEdit.Size = New System.Drawing.Size(105, 25)
+        Me.formulaEdit.TabIndex = 5
+        Me.formulaEdit.Text = "Edit Formula      "
+        Me.formulaEdit.UseVisualStyleBackColor = True
+        '
+        'submit_cmd
+        '
+        Me.submit_cmd.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.submit_cmd.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.submit_cmd.ImageKey = "1420498403_340208.ico"
+        Me.submit_cmd.ImageList = Me.EditButtonsImagelist
+        Me.submit_cmd.Location = New System.Drawing.Point(269, 140)
+        Me.submit_cmd.Margin = New System.Windows.Forms.Padding(2)
+        Me.submit_cmd.Name = "submit_cmd"
+        Me.submit_cmd.Size = New System.Drawing.Size(187, 28)
+        Me.submit_cmd.TabIndex = 7
+        Me.submit_cmd.Text = "Validate Formula"
+        Me.submit_cmd.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.submit_cmd.UseVisualStyleBackColor = True
         '
         'AddSubAccountToolStripMenuItem
         '
@@ -556,81 +602,6 @@ Partial Class AccountsView
         Me.DropHierarchyToExcelToolStripMenuItem.Size = New System.Drawing.Size(221, 24)
         Me.DropHierarchyToExcelToolStripMenuItem.Text = "Drop Hierarchy to Excel"
         '
-        'ToolStripSeparator1
-        '
-        Me.ToolStripSeparator1.Name = "ToolStripSeparator1"
-        Me.ToolStripSeparator1.Size = New System.Drawing.Size(218, 6)
-        '
-        'MainMenu
-        '
-        Me.MainMenu.BackColor = System.Drawing.SystemColors.Control
-        Me.MainMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.NewToolStripMenuItem, Me.DropHierarchyToExcelToolStripMenuItem1, Me.HelpToolStripMenuItem})
-        Me.MainMenu.Location = New System.Drawing.Point(0, 0)
-        Me.MainMenu.Name = "MainMenu"
-        Me.MainMenu.Size = New System.Drawing.Size(844, 27)
-        Me.MainMenu.TabIndex = 25
-        Me.MainMenu.Text = "MenuStrip1"
-        '
-        'NewToolStripMenuItem
-        '
-        Me.NewToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.CreateANewAccountToolStripMenuItem, Me.CreateANewCategoryToolStripMenuItem, Me.DeleteAccountToolStripMenuItem1, Me.ToolStripSeparator2})
-        Me.NewToolStripMenuItem.Name = "NewToolStripMenuItem"
-        Me.NewToolStripMenuItem.Size = New System.Drawing.Size(71, 23)
-        Me.NewToolStripMenuItem.Text = "Account"
-        '
-        'CreateANewAccountToolStripMenuItem
-        '
-        Me.CreateANewAccountToolStripMenuItem.Image = Global.FinancialBI.My.Resources.Resources.registry_add
-        Me.CreateANewAccountToolStripMenuItem.Name = "CreateANewAccountToolStripMenuItem"
-        Me.CreateANewAccountToolStripMenuItem.Size = New System.Drawing.Size(218, 24)
-        Me.CreateANewAccountToolStripMenuItem.Text = "Create a new Account"
-        '
-        'CreateANewCategoryToolStripMenuItem
-        '
-        Me.CreateANewCategoryToolStripMenuItem.Image = Global.FinancialBI.My.Resources.Resources.favicon_81_
-        Me.CreateANewCategoryToolStripMenuItem.Name = "CreateANewCategoryToolStripMenuItem"
-        Me.CreateANewCategoryToolStripMenuItem.Size = New System.Drawing.Size(218, 24)
-        Me.CreateANewCategoryToolStripMenuItem.Text = "Create a new Category"
-        '
-        'DeleteAccountToolStripMenuItem1
-        '
-        Me.DeleteAccountToolStripMenuItem1.Image = Global.FinancialBI.My.Resources.Resources.registry_delete
-        Me.DeleteAccountToolStripMenuItem1.Name = "DeleteAccountToolStripMenuItem1"
-        Me.DeleteAccountToolStripMenuItem1.Size = New System.Drawing.Size(218, 24)
-        Me.DeleteAccountToolStripMenuItem1.Text = "Delete Account"
-        '
-        'ToolStripSeparator2
-        '
-        Me.ToolStripSeparator2.Name = "ToolStripSeparator2"
-        Me.ToolStripSeparator2.Size = New System.Drawing.Size(215, 6)
-        '
-        'DropHierarchyToExcelToolStripMenuItem1
-        '
-        Me.DropHierarchyToExcelToolStripMenuItem1.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.DropAllAccountsHierarchyToExcelToolStripMenuItem, Me.DropSelectedAccountHierarchyToExcelToolStripMenuItem})
-        Me.DropHierarchyToExcelToolStripMenuItem1.Name = "DropHierarchyToExcelToolStripMenuItem1"
-        Me.DropHierarchyToExcelToolStripMenuItem1.Size = New System.Drawing.Size(50, 23)
-        Me.DropHierarchyToExcelToolStripMenuItem1.Text = "Excel"
-        '
-        'DropAllAccountsHierarchyToExcelToolStripMenuItem
-        '
-        Me.DropAllAccountsHierarchyToExcelToolStripMenuItem.Image = Global.FinancialBI.My.Resources.Resources.Excel_Blue_32x32
-        Me.DropAllAccountsHierarchyToExcelToolStripMenuItem.Name = "DropAllAccountsHierarchyToExcelToolStripMenuItem"
-        Me.DropAllAccountsHierarchyToExcelToolStripMenuItem.Size = New System.Drawing.Size(328, 24)
-        Me.DropAllAccountsHierarchyToExcelToolStripMenuItem.Text = "Drop all Accounts Hierarchy to Excel"
-        '
-        'DropSelectedAccountHierarchyToExcelToolStripMenuItem
-        '
-        Me.DropSelectedAccountHierarchyToExcelToolStripMenuItem.Image = Global.FinancialBI.My.Resources.Resources.Excel_Green_32x32
-        Me.DropSelectedAccountHierarchyToExcelToolStripMenuItem.Name = "DropSelectedAccountHierarchyToExcelToolStripMenuItem"
-        Me.DropSelectedAccountHierarchyToExcelToolStripMenuItem.Size = New System.Drawing.Size(328, 24)
-        Me.DropSelectedAccountHierarchyToExcelToolStripMenuItem.Text = "Drop selected Account Hierarchy to Excel"
-        '
-        'HelpToolStripMenuItem
-        '
-        Me.HelpToolStripMenuItem.Name = "HelpToolStripMenuItem"
-        Me.HelpToolStripMenuItem.Size = New System.Drawing.Size(49, 23)
-        Me.HelpToolStripMenuItem.Text = "Help"
-        '
         'AccountsView
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -643,7 +614,6 @@ Partial Class AccountsView
         Me.SplitContainer1.Panel2.ResumeLayout(False)
         CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.SplitContainer1.ResumeLayout(False)
-        Me.TableLayoutPanel1.ResumeLayout(False)
         Me.SplitContainer2.Panel1.ResumeLayout(False)
         Me.SplitContainer2.Panel2.ResumeLayout(False)
         CType(Me.SplitContainer2, System.ComponentModel.ISupportInitialize).EndInit()
@@ -697,13 +667,11 @@ Partial Class AccountsView
     Friend WithEvents VLabel2 As VIBlend.WinForms.Controls.vLabel
     Friend WithEvents ConsolidationOptionComboBox As VIBlend.WinForms.Controls.vComboBox
     Friend WithEvents CurrencyConversionComboBox As VIBlend.WinForms.Controls.vComboBox
-    Friend WithEvents TableLayoutPanel1 As System.Windows.Forms.TableLayoutPanel
-    Friend WithEvents Panel1 As System.Windows.Forms.Panel
-    Friend WithEvents AccountsTVPanel As System.Windows.Forms.Panel
     Friend WithEvents GlobalFactsPanel As System.Windows.Forms.Panel
     Friend WithEvents VLabel6 As VIBlend.WinForms.Controls.vLabel
     Friend WithEvents SplitContainer2 As System.Windows.Forms.SplitContainer
     Friend WithEvents m_descriptionTextBox As VIBlend.WinForms.Controls.vTextBox
     Friend WithEvents m_formulaTextBox As VIBlend.WinForms.Controls.vTextBox
+    Friend WithEvents AccountsTVPanel As System.Windows.Forms.Panel
 
 End Class

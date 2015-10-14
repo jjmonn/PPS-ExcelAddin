@@ -22,29 +22,37 @@ Partial Class AxisFilterStructView
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
+        Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(AxisFilterStructView))
         Me.AddBT = New VIBlend.WinForms.Controls.vButton()
         Me.DeleteBT = New VIBlend.WinForms.Controls.vButton()
         Me.VPanel1 = New VIBlend.WinForms.Controls.vPanel()
         Me.VPanel2 = New VIBlend.WinForms.Controls.vPanel()
-        Me.VContextMenu1 = New VIBlend.WinForms.Controls.vContextMenu()
-        Me.RenameMenuBT = New System.Windows.Forms.MenuItem()
-        Me.DeleteMenuBT = New System.Windows.Forms.MenuItem()
+        Me.m_structureTreeviewRightClickMenu = New System.Windows.Forms.ContextMenuStrip(Me.components)
+        Me.m_createButton = New System.Windows.Forms.ToolStripMenuItem()
+        Me.m_renameButton = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
+        Me.m_deleteButton = New System.Windows.Forms.ToolStripMenuItem()
+        Me.EditButtonsImagelist = New System.Windows.Forms.ImageList(Me.components)
         Me.VPanel1.Content.SuspendLayout()
         Me.VPanel1.SuspendLayout()
         Me.VPanel2.SuspendLayout()
+        Me.m_structureTreeviewRightClickMenu.SuspendLayout()
         Me.SuspendLayout()
         '
         'AddBT
         '
         Me.AddBT.AllowAnimations = True
         Me.AddBT.BackColor = System.Drawing.Color.Transparent
-        Me.AddBT.Location = New System.Drawing.Point(11, 2)
+        Me.AddBT.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.AddBT.ImageKey = "1420498403_340208.ico"
+        Me.AddBT.ImageList = Me.EditButtonsImagelist
+        Me.AddBT.Location = New System.Drawing.Point(10, 7)
         Me.AddBT.Name = "AddBT"
         Me.AddBT.RoundedCornersMask = CType(15, Byte)
-        Me.AddBT.Size = New System.Drawing.Size(30, 30)
+        Me.AddBT.Size = New System.Drawing.Size(93, 25)
         Me.AddBT.TabIndex = 0
-        Me.AddBT.Text = "+"
+        Me.AddBT.Text = "Create"
         Me.AddBT.UseVisualStyleBackColor = False
         Me.AddBT.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.OFFICESILVER
         '
@@ -52,12 +60,15 @@ Partial Class AxisFilterStructView
         '
         Me.DeleteBT.AllowAnimations = True
         Me.DeleteBT.BackColor = System.Drawing.Color.Transparent
-        Me.DeleteBT.Location = New System.Drawing.Point(54, 2)
+        Me.DeleteBT.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.DeleteBT.ImageKey = "imageres_89.ico"
+        Me.DeleteBT.ImageList = Me.EditButtonsImagelist
+        Me.DeleteBT.Location = New System.Drawing.Point(110, 7)
         Me.DeleteBT.Name = "DeleteBT"
         Me.DeleteBT.RoundedCornersMask = CType(15, Byte)
-        Me.DeleteBT.Size = New System.Drawing.Size(30, 30)
+        Me.DeleteBT.Size = New System.Drawing.Size(93, 25)
         Me.DeleteBT.TabIndex = 1
-        Me.DeleteBT.Text = "-"
+        Me.DeleteBT.Text = "Delete"
         Me.DeleteBT.UseVisualStyleBackColor = False
         Me.DeleteBT.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.OFFICESILVER
         '
@@ -109,19 +120,43 @@ Partial Class AxisFilterStructView
         Me.VPanel2.Text = "VPanel2"
         Me.VPanel2.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.OFFICESILVER
         '
-        'VContextMenu1
+        'm_structureTreeviewRightClickMenu
         '
-        Me.VContextMenu1.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.RenameMenuBT, Me.DeleteMenuBT})
+        Me.m_structureTreeviewRightClickMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.m_createButton, Me.m_renameButton, Me.ToolStripSeparator1, Me.m_deleteButton})
+        Me.m_structureTreeviewRightClickMenu.Name = "ContextMenuStripTV"
+        Me.m_structureTreeviewRightClickMenu.Size = New System.Drawing.Size(179, 82)
         '
-        'RenameMenuBT
+        'm_createButton
         '
-        Me.RenameMenuBT.Index = 0
-        Me.RenameMenuBT.Text = "Rename"
+        Me.m_createButton.Image = Global.FinancialBI.My.Resources.Resources.add
+        Me.m_createButton.Name = "m_createButton"
+        Me.m_createButton.Size = New System.Drawing.Size(178, 24)
+        Me.m_createButton.Text = "Create Category"
         '
-        'DeleteMenuBT
+        'm_renameButton
         '
-        Me.DeleteMenuBT.Index = 1
-        Me.DeleteMenuBT.Text = "Delete"
+        Me.m_renameButton.Name = "m_renameButton"
+        Me.m_renameButton.Size = New System.Drawing.Size(178, 24)
+        Me.m_renameButton.Text = "Rename"
+        '
+        'ToolStripSeparator1
+        '
+        Me.ToolStripSeparator1.Name = "ToolStripSeparator1"
+        Me.ToolStripSeparator1.Size = New System.Drawing.Size(175, 6)
+        '
+        'm_deleteButton
+        '
+        Me.m_deleteButton.Image = Global.FinancialBI.My.Resources.Resources.imageres_89
+        Me.m_deleteButton.Name = "m_deleteButton"
+        Me.m_deleteButton.Size = New System.Drawing.Size(178, 24)
+        Me.m_deleteButton.Text = "Delete"
+        '
+        'EditButtonsImagelist
+        '
+        Me.EditButtonsImagelist.ImageStream = CType(resources.GetObject("EditButtonsImagelist.ImageStream"), System.Windows.Forms.ImageListStreamer)
+        Me.EditButtonsImagelist.TransparentColor = System.Drawing.Color.Transparent
+        Me.EditButtonsImagelist.Images.SetKeyName(0, "1420498403_340208.ico")
+        Me.EditButtonsImagelist.Images.SetKeyName(1, "imageres_89.ico")
         '
         'AxisFilterStructView
         '
@@ -136,6 +171,7 @@ Partial Class AxisFilterStructView
         Me.VPanel1.Content.ResumeLayout(False)
         Me.VPanel1.ResumeLayout(False)
         Me.VPanel2.ResumeLayout(False)
+        Me.m_structureTreeviewRightClickMenu.ResumeLayout(False)
         Me.ResumeLayout(False)
 
     End Sub
@@ -143,7 +179,10 @@ Partial Class AxisFilterStructView
     Friend WithEvents DeleteBT As VIBlend.WinForms.Controls.vButton
     Friend WithEvents VPanel1 As VIBlend.WinForms.Controls.vPanel
     Friend WithEvents VPanel2 As VIBlend.WinForms.Controls.vPanel
-    Friend WithEvents VContextMenu1 As VIBlend.WinForms.Controls.vContextMenu
-    Friend WithEvents RenameMenuBT As System.Windows.Forms.MenuItem
-    Friend WithEvents DeleteMenuBT As System.Windows.Forms.MenuItem
+    Friend WithEvents m_structureTreeviewRightClickMenu As System.Windows.Forms.ContextMenuStrip
+    Friend WithEvents m_createButton As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents m_renameButton As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ToolStripSeparator1 As System.Windows.Forms.ToolStripSeparator
+    Friend WithEvents m_deleteButton As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents EditButtonsImagelist As System.Windows.Forms.ImageList
 End Class

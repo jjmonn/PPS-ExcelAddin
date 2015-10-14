@@ -394,5 +394,4 @@ Public Class CUI2RightPane
 #End Region
 
 
-
 End Class

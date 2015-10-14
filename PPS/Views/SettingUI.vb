@@ -4,16 +4,13 @@
 '
 '
 ' To do: 
-'       - Implement connection and reinitialize password
-'       - Need to initialize GLOBAL variables when connection reinitialized ? !!!
-'
 '
 '
 ' Known bugs:
 '
 '
 '
-' Last modified: 17/09/2015
+' Last modified: 14/10/2015
 ' Author: Julien Monnereau
 
 
@@ -76,23 +73,6 @@ Friend Class SettingUI
 
     End Sub
 
-
-#End Region
-
-
-#Region "Call backs"
-
-    Private Sub CloseBT_Click(sender As Object, e As EventArgs)
-
-        Me.Dispose()
-
-    End Sub
-
-#End Region
-
-
-#Region "Events"
-
     Private Sub TabControl1_DrawItem(ByVal sender As Object, ByVal e As System.Windows.Forms.DrawItemEventArgs) Handles TabControl1.DrawItem
 
         Dim g As Graphics
@@ -111,39 +91,34 @@ Friend Class SettingUI
         iX = e.Bounds.Left + 6
         iY = e.Bounds.Top + (e.Bounds.Height - sizeText.Height) / 2
         g.DrawString(sText, ctlTab.Font, Brushes.Black, iX, iY)
+
     End Sub
 
-    Private Sub PortTB_TextChanged(sender As Object, e As EventArgs) Handles PortTB.TextChanged
+
+#End Region
+
+
+#Region "Call backs"
+
+    Private Sub CloseBT_Click(sender As Object, e As EventArgs)
+
+        Me.Dispose()
+
+    End Sub
+
+    Private Sub m_saveButton_Click(sender As Object, e As EventArgs) Handles m_saveButton.Click
 
         My.Settings.port_number = PortTB.Text
         My.Settings.Save()
-
-    End Sub
-
-    Private Sub IDTB_TextChanged(sender As Object, e As EventArgs) Handles IDTB.TextChanged
-
         My.Settings.user = IDTB.Text
         My.Settings.Save()
-
-    End Sub
-
-    Private Sub ServerAddressTB_TextChanged(sender As Object, e As EventArgs) Handles ServerAddressTB.TextChanged
-
         My.Settings.serverIp = ServerAddressTB.Text
         My.Settings.Save()
-
-    End Sub
-
-    Private Sub databasesCB_SelectedIndexChanged(sender As Object, e As EventArgs) Handles databasesCB.SelectedIndexChanged
-
         My.Settings.database = databasesCB.Text
         My.Settings.Save()
-
-    End Sub
-
-    Private Sub CurrenciesCombobox_SelectedItemChanged(sender As Object, e As EventArgs) Handles CurrenciesCombobox.SelectedItemChanged
-
-        My.Settings.currentCurrency = CurrenciesCombobox.SelectedItem.Value
+        If IsNothing(CurrenciesCombobox.SelectedItem) = False Then
+            My.Settings.currentCurrency = CurrenciesCombobox.SelectedItem.Value
+        End If
         My.Settings.Save()
 
     End Sub
@@ -351,7 +326,5 @@ Friend Class SettingUI
 
 #End Region
 
-
-
-   
+    
 End Class

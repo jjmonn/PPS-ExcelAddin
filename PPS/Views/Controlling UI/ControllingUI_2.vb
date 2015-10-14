@@ -187,7 +187,7 @@ Friend Class ControllingUI_2
         leftPaneExpandBT.Width = 19
         leftPaneExpandBT.Height = 19
         leftPaneExpandBT.ImageList = ExpansionImageList
-        leftPaneExpandBT.ImageKey = "menu"
+        leftPaneExpandBT.ImageIndex = 0
         leftPaneExpandBT.Text = ""
         leftPaneExpandBT.FlatStyle = FlatStyle.Flat
         leftPaneExpandBT.FlatAppearance.BorderSize = 0
@@ -234,7 +234,7 @@ Friend Class ControllingUI_2
         rightPane_Control.Dock = DockStyle.Fill
 
         rightPane_Control.CollapseRightPaneBT.ImageList = ExpansionImageList
-        rightPane_Control.CollapseRightPaneBT.ImageKey = "minus"
+        rightPane_Control.CollapseRightPaneBT.ImageIndex = 1
 
         rightPaneExpandBT = New vButton
         SplitContainer2.Panel2.Controls.Add(rightPaneExpandBT)
@@ -242,7 +242,7 @@ Friend Class ControllingUI_2
         rightPaneExpandBT.Height = 19
         rightPaneExpandBT.ImageList = ExpansionImageList
         rightPaneExpandBT.Margin = New Padding(3, 5, 3, 3)
-        rightPaneExpandBT.ImageKey = "menu"
+        rightPaneExpandBT.ImageIndex = 0
         rightPaneExpandBT.Text = ""
         rightPaneExpandBT.FlatStyle = FlatStyle.Flat
         rightPaneExpandBT.PaintBorder = False
@@ -310,7 +310,7 @@ Friend Class ControllingUI_2
                 m_currentEntityNode = leftPane_control.entitiesTV.SelectedNode
                 RefreshData(True)
             Else
-                MsgBox("Please select an Entity to refresh")
+                RefreshData(True)
             End If
         End If
 
@@ -491,7 +491,8 @@ Friend Class ControllingUI_2
                                        versionId,
                                        logsHashTable)
 
-            m_logView = New LogView(GlobalVariables.Entities.entities_hash(entityId)(NAME_VARIABLE), _
+            m_logView = New LogView(False, _
+                                    GlobalVariables.Entities.entities_hash(entityId)(NAME_VARIABLE), _
                                     GlobalVariables.Accounts.m_accountsHash(accountId)(NAME_VARIABLE))
 
         End If

@@ -40,13 +40,14 @@ Partial Class SettingUI
         Me.VGroupBox1 = New VIBlend.WinForms.Controls.vGroupBox()
         Me.FormatsDGV = New VIBlend.WinForms.DataGridView.vDataGridView()
         Me.TabPage3 = New System.Windows.Forms.TabPage()
+        Me.CurrenciesCombobox = New VIBlend.WinForms.Controls.vComboBox()
+        Me.VLabel1 = New VIBlend.WinForms.Controls.vLabel()
         Me.ButtonIcons = New System.Windows.Forms.ImageList(Me.components)
         Me.ControlImages = New System.Windows.Forms.ImageList(Me.components)
         Me.ACFIcon = New System.Windows.Forms.ImageList(Me.components)
         Me.FolderBrowserDialog1 = New System.Windows.Forms.FolderBrowserDialog()
         Me.ColorDialog1 = New System.Windows.Forms.ColorDialog()
-        Me.VLabel1 = New VIBlend.WinForms.Controls.vLabel()
-        Me.CurrenciesCombobox = New VIBlend.WinForms.Controls.vComboBox()
+        Me.m_saveButton = New VIBlend.WinForms.Controls.vButton()
         Me.Panel1.SuspendLayout()
         Me.TabControl1.SuspendLayout()
         Me.TabPage1.SuspendLayout()
@@ -86,6 +87,7 @@ Partial Class SettingUI
         '
         'TabPage1
         '
+        Me.TabPage1.Controls.Add(Me.m_saveButton)
         Me.TabPage1.Controls.Add(Me.databasesCB)
         Me.TabPage1.Controls.Add(Me.Label5)
         Me.TabPage1.Controls.Add(Me.PortTB)
@@ -115,7 +117,7 @@ Partial Class SettingUI
         Me.Label5.AutoSize = True
         Me.Label5.Location = New System.Drawing.Point(27, 157)
         Me.Label5.Name = "Label5"
-        Me.Label5.Size = New System.Drawing.Size(53, 13)
+        Me.Label5.Size = New System.Drawing.Size(60, 15)
         Me.Label5.TabIndex = 17
         Me.Label5.Text = "Database"
         '
@@ -132,7 +134,7 @@ Partial Class SettingUI
         Me.Label4.AutoSize = True
         Me.Label4.Location = New System.Drawing.Point(27, 107)
         Me.Label4.Name = "Label4"
-        Me.Label4.Size = New System.Drawing.Size(26, 13)
+        Me.Label4.Size = New System.Drawing.Size(29, 15)
         Me.Label4.TabIndex = 15
         Me.Label4.Text = "Port"
         '
@@ -148,7 +150,7 @@ Partial Class SettingUI
         Me.Label3.AutoSize = True
         Me.Label3.Location = New System.Drawing.Point(27, 55)
         Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(38, 13)
+        Me.Label3.Size = New System.Drawing.Size(42, 15)
         Me.Label3.TabIndex = 4
         Me.Label3.Text = "Server"
         '
@@ -164,7 +166,7 @@ Partial Class SettingUI
         Me.Label1.AutoSize = True
         Me.Label1.Location = New System.Drawing.Point(27, 213)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(43, 13)
+        Me.Label1.Size = New System.Drawing.Size(48, 15)
         Me.Label1.TabIndex = 0
         Me.Label1.Text = "User ID"
         '
@@ -276,13 +278,48 @@ Partial Class SettingUI
         Me.TabPage3.Text = "Preferences"
         Me.TabPage3.UseVisualStyleBackColor = True
         '
+        'CurrenciesCombobox
+        '
+        Me.CurrenciesCombobox.BackColor = System.Drawing.Color.White
+        Me.CurrenciesCombobox.DisplayMember = ""
+        Me.CurrenciesCombobox.DropDownMaximumSize = New System.Drawing.Size(1000, 1000)
+        Me.CurrenciesCombobox.DropDownMinimumSize = New System.Drawing.Size(10, 10)
+        Me.CurrenciesCombobox.DropDownResizeDirection = VIBlend.WinForms.Controls.SizingDirection.Both
+        Me.CurrenciesCombobox.DropDownWidth = 166
+        Me.CurrenciesCombobox.Location = New System.Drawing.Point(165, 35)
+        Me.CurrenciesCombobox.Name = "CurrenciesCombobox"
+        Me.CurrenciesCombobox.RoundedCornersMaskListItem = CType(15, Byte)
+        Me.CurrenciesCombobox.Size = New System.Drawing.Size(166, 23)
+        Me.CurrenciesCombobox.TabIndex = 0
+        Me.CurrenciesCombobox.UseThemeBackColor = False
+        Me.CurrenciesCombobox.UseThemeDropDownArrowColor = True
+        Me.CurrenciesCombobox.ValueMember = ""
+        Me.CurrenciesCombobox.VIBlendScrollBarsTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
+        Me.CurrenciesCombobox.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
+        '
+        'VLabel1
+        '
+        Me.VLabel1.BackColor = System.Drawing.Color.Transparent
+        Me.VLabel1.DisplayStyle = VIBlend.WinForms.Controls.LabelItemStyle.TextOnly
+        Me.VLabel1.Ellipsis = False
+        Me.VLabel1.ImageAlignment = System.Drawing.ContentAlignment.TopLeft
+        Me.VLabel1.Location = New System.Drawing.Point(22, 38)
+        Me.VLabel1.Multiline = True
+        Me.VLabel1.Name = "VLabel1"
+        Me.VLabel1.Size = New System.Drawing.Size(149, 25)
+        Me.VLabel1.TabIndex = 0
+        Me.VLabel1.Text = "Consolidation Currency"
+        Me.VLabel1.TextAlignment = System.Drawing.ContentAlignment.TopLeft
+        Me.VLabel1.UseMnemonics = True
+        Me.VLabel1.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
+        '
         'ButtonIcons
         '
         Me.ButtonIcons.ImageStream = CType(resources.GetObject("ButtonIcons.ImageStream"), System.Windows.Forms.ImageListStreamer)
         Me.ButtonIcons.TransparentColor = System.Drawing.Color.Transparent
         Me.ButtonIcons.Images.SetKeyName(0, "imageres_89.ico")
         Me.ButtonIcons.Images.SetKeyName(1, "favicon(95).ico")
-        Me.ButtonIcons.Images.SetKeyName(2, "submit 1 ok.ico")
+        Me.ButtonIcons.Images.SetKeyName(2, "1420498403_340208.ico")
         Me.ButtonIcons.Images.SetKeyName(3, "favicon(97).ico")
         Me.ButtonIcons.Images.SetKeyName(4, "imageres_99.ico")
         Me.ButtonIcons.Images.SetKeyName(5, "favicon(70).ico")
@@ -302,40 +339,21 @@ Partial Class SettingUI
         Me.ACFIcon.TransparentColor = System.Drawing.Color.Transparent
         Me.ACFIcon.Images.SetKeyName(0, "ACF Square 2 .1Control bgd.png")
         '
-        'VLabel1
+        'm_saveButton
         '
-        Me.VLabel1.BackColor = System.Drawing.Color.Transparent
-        Me.VLabel1.DisplayStyle = VIBlend.WinForms.Controls.LabelItemStyle.TextOnly
-        Me.VLabel1.Ellipsis = False
-        Me.VLabel1.ImageAlignment = System.Drawing.ContentAlignment.TopLeft
-        Me.VLabel1.Location = New System.Drawing.Point(22, 38)
-        Me.VLabel1.Multiline = True
-        Me.VLabel1.Name = "VLabel1"
-        Me.VLabel1.Size = New System.Drawing.Size(149, 25)
-        Me.VLabel1.TabIndex = 0
-        Me.VLabel1.Text = "Consolidation Currency"
-        Me.VLabel1.TextAlignment = System.Drawing.ContentAlignment.TopLeft
-        Me.VLabel1.UseMnemonics = True
-        Me.VLabel1.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
-        '
-        'CurrenciesCombobox
-        '
-        Me.CurrenciesCombobox.BackColor = System.Drawing.Color.White
-        Me.CurrenciesCombobox.DisplayMember = ""
-        Me.CurrenciesCombobox.DropDownMaximumSize = New System.Drawing.Size(1000, 1000)
-        Me.CurrenciesCombobox.DropDownMinimumSize = New System.Drawing.Size(10, 10)
-        Me.CurrenciesCombobox.DropDownResizeDirection = VIBlend.WinForms.Controls.SizingDirection.Both
-        Me.CurrenciesCombobox.DropDownWidth = 166
-        Me.CurrenciesCombobox.Location = New System.Drawing.Point(165, 35)
-        Me.CurrenciesCombobox.Name = "CurrenciesCombobox"
-        Me.CurrenciesCombobox.RoundedCornersMaskListItem = CType(15, Byte)
-        Me.CurrenciesCombobox.Size = New System.Drawing.Size(166, 23)
-        Me.CurrenciesCombobox.TabIndex = 0
-        Me.CurrenciesCombobox.UseThemeBackColor = False
-        Me.CurrenciesCombobox.UseThemeDropDownArrowColor = True
-        Me.CurrenciesCombobox.ValueMember = ""
-        Me.CurrenciesCombobox.VIBlendScrollBarsTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
-        Me.CurrenciesCombobox.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
+        Me.m_saveButton.AllowAnimations = True
+        Me.m_saveButton.BackColor = System.Drawing.Color.Transparent
+        Me.m_saveButton.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.m_saveButton.ImageKey = "1420498403_340208.ico"
+        Me.m_saveButton.ImageList = Me.ButtonIcons
+        Me.m_saveButton.Location = New System.Drawing.Point(248, 258)
+        Me.m_saveButton.Name = "m_saveButton"
+        Me.m_saveButton.RoundedCornersMask = CType(15, Byte)
+        Me.m_saveButton.Size = New System.Drawing.Size(100, 30)
+        Me.m_saveButton.TabIndex = 20
+        Me.m_saveButton.Text = "Save"
+        Me.m_saveButton.UseVisualStyleBackColor = False
+        Me.m_saveButton.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
         '
         'SettingUI
         '
@@ -379,4 +397,5 @@ Partial Class SettingUI
     Friend WithEvents TabPage3 As System.Windows.Forms.TabPage
     Friend WithEvents CurrenciesCombobox As VIBlend.WinForms.Controls.vComboBox
     Friend WithEvents VLabel1 As VIBlend.WinForms.Controls.vLabel
+    Friend WithEvents m_saveButton As VIBlend.WinForms.Controls.vButton
 End Class
