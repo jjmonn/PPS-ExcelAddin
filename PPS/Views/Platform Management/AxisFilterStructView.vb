@@ -55,10 +55,11 @@ Class AxisFilterStructView
         If InvokeRequired Then
             Dim MyDelegate As New DeleteFilter_Delegate(AddressOf DeleteFilter)
             Me.Invoke(MyDelegate, New Object() {p_filterId})
-            Exit Sub
+        Else
+            DeleteNode(m_filtersTV.Nodes, p_filterId)
+            m_filtersTV.Refresh()
         End If
-        DeleteNode(m_filtersTV.Nodes, p_filterId)
-        m_filtersTV.Refresh()
+
     End Sub
 
     Delegate Sub SetFilter_Delegate(ByRef p_filter As Hashtable)
@@ -66,16 +67,17 @@ Class AxisFilterStructView
         If InvokeRequired Then
             Dim MyDelegate As New SetFilter_Delegate(AddressOf SetFilter)
             Me.Invoke(MyDelegate, New Object() {p_filter})
-            Exit Sub
-        End If
-        Dim targetNode As vTreeNode = FindNode(m_filtersTV.Nodes, p_filter(ID_VARIABLE))
+        Else
+            Dim targetNode As vTreeNode = FindNode(m_filtersTV.Nodes, p_filter(ID_VARIABLE))
 
-        If targetNode Is Nothing Then
-            targetNode = New vTreeNode
-            targetNode.Value = CInt(p_filter(ID_VARIABLE))
-            AddNode(m_filtersTV.Nodes, p_filter(PARENT_ID_VARIABLE), targetNode)
+            If targetNode Is Nothing Then
+                targetNode = New vTreeNode
+                targetNode.Value = CInt(p_filter(ID_VARIABLE))
+                AddNode(m_filtersTV.Nodes, p_filter(PARENT_ID_VARIABLE), targetNode)
+            End If
+            targetNode.Text = p_filter(NAME_VARIABLE)
         End If
-        targetNode.Text = p_filter(NAME_VARIABLE)
+
     End Sub
 
     Private Function FindNode(ByRef p_nodeList As vTreeNodeCollection, ByRef p_value As Int32) As vTreeNode
@@ -120,10 +122,10 @@ Class AxisFilterStructView
         If InvokeRequired Then
             Dim MyDelegate As New UpdateFiltersTV_Delegate(AddressOf UpdateFiltersTV)
             Me.Invoke(MyDelegate, New Object() {})
-            Exit Sub
+        Else
+            GlobalVariables.Filters.LoadFiltersTV(m_filtersTV, m_axisId)
+            m_filtersTV.Refresh()
         End If
-        GlobalVariables.Filters.LoadFiltersTV(m_filtersTV, m_axisId)
-        m_filtersTV.Refresh()
     End Sub
 
     Private Sub AxisFilterStructView_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
@@ -133,27 +135,12 @@ Class AxisFilterStructView
 
     Private Sub DeleteBT_Click(sender As Object, e As EventArgs) Handles DeleteBT.Click, m_deleteButton.Click
 
-        ' to be validated 
-        ' priority normal 
-        ' !!!
         If Not m_filtersTV.SelectedNode Is Nothing Then
-            Dim current_node As vTreeNode = m_filtersTV.SelectedNode
-            If m_controller.IsFilter(m_filtersTV.SelectedNode.Value) Then
-                ' Delete Category
-                Dim confirm As Integer = MessageBox.Show("Careful, you are about to delete the Category: " + Chr(13) + current_node.Text + Chr(13) + "Do you confirm?", _
-                                                         "Category deletion confirmation", _
-                                                         MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question)
-                If confirm = DialogResult.Yes Then
-                    m_controller.DeleteFilter(current_node.Value)
-                End If
-            Else
-                ' Delete Category Value
-                Dim confirm As Integer = MessageBox.Show("Careful, you are about to delete the Category value: " + Chr(13) + current_node.Text + Chr(13) + "Do you confirm?", _
-                                                         "Category value deletion confirmation", _
-                                                         MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question)
-                If confirm = DialogResult.Yes Then
-                    m_controller.DeleteFilterValue(current_node.Value)
-                End If
+            Dim confirm As Integer = MessageBox.Show("Careful, you are about to delete the Category: " + Chr(13) + m_filtersTV.SelectedNode.Text + Chr(13) + "Do you confirm?", _
+                                                     "Category deletion confirmation", _
+                                                     MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question)
+            If confirm = DialogResult.Yes Then
+                m_controller.DeleteFilter(m_filtersTV.SelectedNode.Value)
             End If
         End If
 
