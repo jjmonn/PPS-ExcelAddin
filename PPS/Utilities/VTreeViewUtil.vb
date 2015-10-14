@@ -97,6 +97,7 @@ Public Class VTreeViewUtil
         list.Add(node)
         For Each subNode As vTreeNode In node.Nodes
             list.Add(subNode)
+            FillChildrenNodesList(subNode, list)
         Next
 
     End Sub
