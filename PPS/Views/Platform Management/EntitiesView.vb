@@ -306,7 +306,6 @@ Friend Class EntitiesView
         currencyColumn.ItemValue = ENTITIES_CURRENCY_VARIABLE
         currencyColumn.AllowFiltering = True
         currencyColumn.Width = COLUMNS_WIDTH
-        If GlobalVariables.Users.CurrentUserIsAdmin() Then currencyColumn.CellsEditor = m_currenciesComboBox
         ' CreateFilter(col1)
 
         For Each rootNode As vTreeNode In entitiesFilterTV.Nodes
@@ -414,11 +413,15 @@ Friend Class EntitiesView
         End If
         rowItem.Caption = p_entityHashtable(NAME_VARIABLE)
         Dim column As HierarchyItem = DataGridViewsUtil.GetHierarchyItemFromId(m_entitiesDataGridView.ColumnsHierarchy, ENTITIES_CURRENCY_VARIABLE)
-        m_entitiesDataGridView.CellsArea.SetCellValue(rowItem, column, GlobalVariables.Currencies.currencies_hash(CInt(p_entityHashtable(ENTITIES_CURRENCY_VARIABLE)))(NAME_VARIABLE))
-        For Each filterNode As vTreeNode In entitiesFilterTV.Nodes
-            FillSubFilters(filterNode, p_entityId, rowItem)
-        Next
-        If p_entityHashtable(ENTITIES_ALLOW_EDITION_VARIABLE) = 0 Then rowItem.ImageIndex = 0 Else rowItem.ImageIndex = 1
+        If p_entityHashtable(ENTITIES_ALLOW_EDITION_VARIABLE) = True Then
+            If GlobalVariables.Users.CurrentUserIsAdmin() Then m_entitiesDataGridView.CellsArea.SetCellEditor(rowItem, column, m_currenciesComboBox)
+            m_entitiesDataGridView.CellsArea.SetCellValue(rowItem, column, GlobalVariables.Currencies.currencies_hash(CInt(p_entityHashtable(ENTITIES_CURRENCY_VARIABLE)))(NAME_VARIABLE))
+
+            For Each filterNode As vTreeNode In entitiesFilterTV.Nodes
+                FillSubFilters(filterNode, p_entityId, rowItem)
+            Next
+        End If
+        If p_entityHashtable(ENTITIES_ALLOW_EDITION_VARIABLE) = False Then rowItem.ImageIndex = 0 Else rowItem.ImageIndex = 1
 
     End Sub
 
@@ -485,6 +488,7 @@ Friend Class EntitiesView
         isFillingDGV = True
         Dim filterNode As TreeNode = TreeViewsUtilities.FindNode(entitiesFilterTV.Nodes, filterId, True)
 
+        If filterNode Is Nothing Then Exit Sub
         ' Update parent filters recursively
         UpdateParentFiltersValues(DataGridViewsUtil.GetHierarchyItemFromId(m_entitiesDataGridView.RowsHierarchy, entityId), _
                                  entityId, _
