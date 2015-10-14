@@ -63,6 +63,16 @@ Namespace My.Resources
         '''<summary>
         '''  Looks up a localized resource of type System.Drawing.Bitmap.
         '''</summary>
+        Friend ReadOnly Property add() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("add", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized resource of type System.Drawing.Bitmap.
+        '''</summary>
         Friend ReadOnly Property add1() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("add1", resourceCulture)
@@ -763,20 +773,20 @@ Namespace My.Resources
         '''<summary>
         '''  Looks up a localized resource of type System.Drawing.Bitmap.
         '''</summary>
-        Friend ReadOnly Property filter_and_sort() As System.Drawing.Bitmap
+        Friend ReadOnly Property fbi_dark_blue_icon() As System.Drawing.Bitmap
             Get
-                Dim obj As Object = ResourceManager.GetObject("filter_and_sort", resourceCulture)
-                Return CType(obj,System.Drawing.Bitmap)
+                Dim obj As Object = ResourceManager.GetObject("fbi_dark_blue_icon", resourceCulture)
+                Return CType(obj, System.Drawing.Bitmap)
             End Get
         End Property
-        
+
         '''<summary>
         '''  Looks up a localized resource of type System.Drawing.Bitmap.
         '''</summary>
-        Friend ReadOnly Property Financial_BI_dark_blue() As System.Drawing.Bitmap
+        Friend ReadOnly Property filter_and_sort() As System.Drawing.Bitmap
             Get
-                Dim obj As Object = ResourceManager.GetObject("Financial BI dark blue", resourceCulture)
-                Return CType(obj,System.Drawing.Bitmap)
+                Dim obj As Object = ResourceManager.GetObject("filter_and_sort", resourceCulture)
+                Return CType(obj, System.Drawing.Bitmap)
             End Get
         End Property
         

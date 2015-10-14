@@ -366,7 +366,7 @@ ReturnError:
 
 #Region "Checks"
 
-    Friend Function CheckIfBSCalculatedItem(ByRef accountName As String, ByRef period As Integer) As Boolean
+    Friend Function CheckIfFPICalculatedItem(ByRef accountName As String, ByRef period As Integer) As Boolean
 
         If accountsNamesFormulaTypeDict(accountName) = GlobalEnums.FormulaTypes.FIRST_PERIOD_INPUT _
         AndAlso Not period = CInt(CDbl(dataset.m_periodsDatesList(0).ToOADate())) Then
