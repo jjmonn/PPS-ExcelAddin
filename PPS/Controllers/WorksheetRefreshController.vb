@@ -46,7 +46,7 @@ Friend Class WorksheetRefreshController
 
         If rng Is Nothing Then
             Dim ws As Excel.Worksheet = GlobalVariables.APPS.ActiveSheet
-            Dim lastCell As Excel.Range = Utilities_Functions.GetRealLastCell(ws)
+            Dim lastCell As Excel.Range = GeneralUtilities.GetRealLastCell(ws)
 
             If (lastCell Is Nothing) Then
                 MsgBox("Nothing to refresh")

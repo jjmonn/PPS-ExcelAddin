@@ -34,7 +34,7 @@ Friend Class ExcelFormatting
 
         Dim ws As Excel.Worksheet = first_range_cell.Worksheet
         Dim tmpRange As Excel.Range
-        tmpRange = ws.Range(first_range_cell, Utilities_Functions.GetRealLastCell(ws))
+        tmpRange = ws.Range(first_range_cell, GeneralUtilities.GetRealLastCell(ws))
         FormatExcelRangeAs(tmpRange, currency, startingDate)
 
     End Sub

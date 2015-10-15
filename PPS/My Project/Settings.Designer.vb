@@ -545,6 +545,342 @@ Namespace My
                 Me("currentCurrency") = value
             End Set
         End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("2")>  _
+        Public Property chart1Serie1AccountId() As Integer
+            Get
+                Return CType(Me("chart1Serie1AccountId"),Integer)
+            End Get
+            Set
+                Me("chart1Serie1AccountId") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("9")>  _
+        Public Property chart1Serie2AccountId() As Integer
+            Get
+                Return CType(Me("chart1Serie2AccountId"),Integer)
+            End Get
+            Set
+                Me("chart1Serie2AccountId") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("89")>  _
+        Public Property chart2Serie1AccountId() As Integer
+            Get
+                Return CType(Me("chart2Serie1AccountId"),Integer)
+            End Get
+            Set
+                Me("chart2Serie1AccountId") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("0")>  _
+        Public Property chart2Serie2AccountId() As Integer
+            Get
+                Return CType(Me("chart2Serie2AccountId"),Integer)
+            End Get
+            Set
+                Me("chart2Serie2AccountId") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("349")>  _
+        Public Property chart3Serie1AccountId() As Integer
+            Get
+                Return CType(Me("chart3Serie1AccountId"),Integer)
+            End Get
+            Set
+                Me("chart3Serie1AccountId") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("41")>  _
+        Public Property chart3Serie2AccountId() As Integer
+            Get
+                Return CType(Me("chart3Serie2AccountId"),Integer)
+            End Get
+            Set
+                Me("chart3Serie2AccountId") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("358")>  _
+        Public Property chart4Serie1AccountId() As Integer
+            Get
+                Return CType(Me("chart4Serie1AccountId"),Integer)
+            End Get
+            Set
+                Me("chart4Serie1AccountId") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("353")>  _
+        Public Property chart4Serie2AccountId() As Integer
+            Get
+                Return CType(Me("chart4Serie2AccountId"),Integer)
+            End Get
+            Set
+                Me("chart4Serie2AccountId") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("Navy")>  _
+        Public Property chart1Serie1Color() As Global.System.Drawing.Color
+            Get
+                Return CType(Me("chart1Serie1Color"),Global.System.Drawing.Color)
+            End Get
+            Set
+                Me("chart1Serie1Color") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("128, 128, 255")>  _
+        Public Property chart1Serie2Color() As Global.System.Drawing.Color
+            Get
+                Return CType(Me("chart1Serie2Color"),Global.System.Drawing.Color)
+            End Get
+            Set
+                Me("chart1Serie2Color") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("Teal")>  _
+        Public Property chart2Serie1Color() As Global.System.Drawing.Color
+            Get
+                Return CType(Me("chart2Serie1Color"),Global.System.Drawing.Color)
+            End Get
+            Set
+                Me("chart2Serie1Color") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("0, 192, 192")>  _
+        Public Property chart2Serie2Color() As Global.System.Drawing.Color
+            Get
+                Return CType(Me("chart2Serie2Color"),Global.System.Drawing.Color)
+            End Get
+            Set
+                Me("chart2Serie2Color") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("PaleTurquoise")>  _
+        Public Property chart3Serie1Color() As Global.System.Drawing.Color
+            Get
+                Return CType(Me("chart3Serie1Color"),Global.System.Drawing.Color)
+            End Get
+            Set
+                Me("chart3Serie1Color") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("Silver")>  _
+        Public Property chart3Serie2Color() As Global.System.Drawing.Color
+            Get
+                Return CType(Me("chart3Serie2Color"),Global.System.Drawing.Color)
+            End Get
+            Set
+                Me("chart3Serie2Color") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("255, 255, 128")>  _
+        Public Property chart4Serie1Color() As Global.System.Drawing.Color
+            Get
+                Return CType(Me("chart4Serie1Color"),Global.System.Drawing.Color)
+            End Get
+            Set
+                Me("chart4Serie1Color") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("128, 255, 128")>  _
+        Public Property chart4Serie2Color() As Global.System.Drawing.Color
+            Get
+                Return CType(Me("chart4Serie2Color"),Global.System.Drawing.Color)
+            End Get
+            Set
+                Me("chart4Serie2Color") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("10")>  _
+        Public Property chart1Serie1Type() As Integer
+            Get
+                Return CType(Me("chart1Serie1Type"),Integer)
+            End Get
+            Set
+                Me("chart1Serie1Type") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("10")>  _
+        Public Property chart1Serie2Type() As Integer
+            Get
+                Return CType(Me("chart1Serie2Type"),Integer)
+            End Get
+            Set
+                Me("chart1Serie2Type") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("10")>  _
+        Public Property chart2Serie1Type() As Integer
+            Get
+                Return CType(Me("chart2Serie1Type"),Integer)
+            End Get
+            Set
+                Me("chart2Serie1Type") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("10")>  _
+        Public Property chart2Serie2Type() As Integer
+            Get
+                Return CType(Me("chart2Serie2Type"),Integer)
+            End Get
+            Set
+                Me("chart2Serie2Type") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("10")>  _
+        Public Property chart3Serie1Type() As Integer
+            Get
+                Return CType(Me("chart3Serie1Type"),Integer)
+            End Get
+            Set
+                Me("chart3Serie1Type") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("10")>  _
+        Public Property chart3Serie2Type() As Integer
+            Get
+                Return CType(Me("chart3Serie2Type"),Integer)
+            End Get
+            Set
+                Me("chart3Serie2Type") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("10")>  _
+        Public Property chart4Serie1Type() As Integer
+            Get
+                Return CType(Me("chart4Serie1Type"),Integer)
+            End Get
+            Set
+                Me("chart4Serie1Type") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("10")>  _
+        Public Property chart4Serie2Type() As Integer
+            Get
+                Return CType(Me("chart4Serie2Type"),Integer)
+            End Get
+            Set
+                Me("chart4Serie2Type") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("Résultat Opérationnel (m€)")>  _
+        Public Property chart1Title() As String
+            Get
+                Return CType(Me("chart1Title"),String)
+            End Get
+            Set
+                Me("chart1Title") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("Investissements (m€)")>  _
+        Public Property chart2Title() As String
+            Get
+                Return CType(Me("chart2Title"),String)
+            End Get
+            Set
+                Me("chart2Title") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("Cash Flow (€)")>  _
+        Public Property chart3Title() As String
+            Get
+                Return CType(Me("chart3Title"),String)
+            End Get
+            Set
+                Me("chart3Title") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("Ratios Financiers (%)")>  _
+        Public Property chart4Title() As String
+            Get
+                Return CType(Me("chart4Title"),String)
+            End Get
+            Set
+                Me("chart4Title") = value
+            End Set
+        End Property
     End Class
 End Namespace
 

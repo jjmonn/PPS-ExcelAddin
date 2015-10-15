@@ -887,14 +887,14 @@ Friend Class ControllingUIController
 
         m_chartsView.ClearCharts_ThreadSafe()
         Dim xAxisValues As String() = GetSerieXValues()
-        m_chartsView.BindData_ThreadSafe(0, "Chiffre d'affaires", xAxisValues, BuildSerieYValues(2))
-        m_chartsView.BindData_ThreadSafe(0, "EBIDTA", xAxisValues, BuildSerieYValues(9))
-        m_chartsView.BindData_ThreadSafe(1, "Investissements", xAxisValues, BuildSerieYValues(89))
-        m_chartsView.BindData_ThreadSafe(2, "Cash-Flow", xAxisValues, BuildSerieYValues(349))
-        m_chartsView.BindData_ThreadSafe(2, "Trésorerie", xAxisValues, BuildSerieYValues(41))
-        m_chartsView.BindData_ThreadSafe(3, "Levier Financier (D/E) %", xAxisValues, BuildSerieYValues(358))
-        m_chartsView.BindData_ThreadSafe(3, "Rentabilité (ROCE) %", xAxisValues, BuildSerieYValues(353))
-
+        If My.Settings.chart1Serie1AccountId <> 0 Then m_chartsView.BindData_ThreadSafe(0, GlobalVariables.Accounts.m_accountsHash(My.Settings.chart1Serie1AccountId)(NAME_VARIABLE), xAxisValues, BuildSerieYValues(My.Settings.chart1Serie1AccountId))
+        If My.Settings.chart1Serie2AccountId <> 0 Then m_chartsView.BindData_ThreadSafe(0, GlobalVariables.Accounts.m_accountsHash(My.Settings.chart1Serie2AccountId)(NAME_VARIABLE), xAxisValues, BuildSerieYValues(My.Settings.chart1Serie2AccountId))
+        If My.Settings.chart2Serie1AccountId <> 0 Then m_chartsView.BindData_ThreadSafe(1, GlobalVariables.Accounts.m_accountsHash(My.Settings.chart2Serie1AccountId)(NAME_VARIABLE), xAxisValues, BuildSerieYValues(My.Settings.chart2Serie1AccountId))
+        If My.Settings.chart2Serie2AccountId <> 0 Then m_chartsView.BindData_ThreadSafe(1, GlobalVariables.Accounts.m_accountsHash(My.Settings.chart2Serie2AccountId)(NAME_VARIABLE), xAxisValues, BuildSerieYValues(My.Settings.chart2Serie2AccountId))
+        If My.Settings.chart3Serie1AccountId <> 0 Then m_chartsView.BindData_ThreadSafe(2, GlobalVariables.Accounts.m_accountsHash(My.Settings.chart3Serie1AccountId)(NAME_VARIABLE), xAxisValues, BuildSerieYValues(My.Settings.chart3Serie1AccountId))
+        If My.Settings.chart3Serie2AccountId <> 0 Then m_chartsView.BindData_ThreadSafe(2, GlobalVariables.Accounts.m_accountsHash(My.Settings.chart3Serie2AccountId)(NAME_VARIABLE), xAxisValues, BuildSerieYValues(My.Settings.chart3Serie2AccountId))
+        If My.Settings.chart4Serie1AccountId <> 0 Then m_chartsView.BindData_ThreadSafe(3, GlobalVariables.Accounts.m_accountsHash(My.Settings.chart4Serie1AccountId)(NAME_VARIABLE), xAxisValues, BuildSerieYValues(My.Settings.chart4Serie1AccountId))
+        If My.Settings.chart4Serie2AccountId <> 0 Then m_chartsView.BindData_ThreadSafe(3, GlobalVariables.Accounts.m_accountsHash(My.Settings.chart4Serie2AccountId)(NAME_VARIABLE), xAxisValues, BuildSerieYValues(My.Settings.chart4Serie2AccountId))
         m_chartsView.StubDemosFormatting_ThreadSafe()
 
     End Sub

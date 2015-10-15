@@ -1,5 +1,7 @@
 ﻿Imports System.Collections
 Imports System.Windows.Forms.DataVisualization.Charting
+Imports System.Collections.Generic
+Imports System.Windows.Forms
 
 
 Public Class CUI2Visualization
@@ -8,6 +10,7 @@ Public Class CUI2Visualization
 
     Private m_controller As ControllingUIController
     Private m_chartTab As Chart()
+    Private m_chartIndexes As New Dictionary(Of Chart, Int32)
 
 #End Region
 
@@ -19,16 +22,21 @@ Public Class CUI2Visualization
         m_controller = p_controller
         m_chartTab = {Chart1, Chart2, Chart3, Chart4}
 
-        Chart1.ContextMenu = m_chartsRightClickMenu
-        Chart2.ContextMenu = m_chartsRightClickMenu
-        Chart3.ContextMenu = m_chartsRightClickMenu
-        Chart4.ContextMenu = m_chartsRightClickMenu
+        m_chartIndexes.Add(Chart1, 1)
+        m_chartIndexes.Add(Chart2, 2)
+        m_chartIndexes.Add(Chart3, 3)
+        m_chartIndexes.Add(Chart4, 4)
 
-        ' STUB !!
-        ChartsUtilities.InitializeChartDisplay(Chart1, "Résultat Opérationnel (m€)")
-        ChartsUtilities.InitializeChartDisplay(Chart2, "Investissements (m€)")
-        ChartsUtilities.InitializeChartDisplay(Chart3, "Cash Flow (€)")
-        ChartsUtilities.InitializeChartDisplay(Chart4, "Ratios Financiers (%)", "%", "", , False, "{0:P0}")
+        Chart1.ContextMenuStrip = m_chartsRightClickMenu
+        Chart2.ContextMenuStrip = m_chartsRightClickMenu
+        Chart3.ContextMenuStrip = m_chartsRightClickMenu
+        Chart4.ContextMenuStrip = m_chartsRightClickMenu
+
+        ' STUB !! -> chart format en settings  (i.e. {0:P0})
+        ChartsUtilities.InitializeChartDisplay(Chart1, My.Settings.chart1Title)
+        ChartsUtilities.InitializeChartDisplay(Chart2, My.Settings.chart2Title)
+        ChartsUtilities.InitializeChartDisplay(Chart3, My.Settings.chart3Title)
+        ChartsUtilities.InitializeChartDisplay(Chart4, My.Settings.chart4Title, "%", "", , False, "{0:P0}")
 
     End Sub
 
@@ -83,13 +91,14 @@ Public Class CUI2Visualization
             Dim MyDelegate As New StubDemosFormatting_Delegate(AddressOf StubDemosFormatting_ThreadSafe)
             Me.Invoke(MyDelegate, New Object() {})
         Else
-            ChartsUtilities.FormatSerie(Chart1.Series("Chiffre d'affaires"), System.Drawing.Color.DeepSkyBlue, SeriesChartType.Column)
-            ChartsUtilities.FormatSerie(Chart1.Series("EBIDTA"), System.Drawing.Color.Cyan, SeriesChartType.Column)
-            ChartsUtilities.FormatSerie(Chart2.Series("Investissements"), System.Drawing.Color.DarkGray, SeriesChartType.Column, , 22)
-            ChartsUtilities.FormatSerie(Chart3.Series("Cash-Flow"), System.Drawing.Color.Red, SeriesChartType.Line)
-            ChartsUtilities.FormatSerie(Chart3.Series("Trésorerie"), System.Drawing.Color.LightSlateGray, SeriesChartType.Column, , 22)
-            ChartsUtilities.FormatSerie(Chart4.Series("Levier Financier (D/E) %"), System.Drawing.Color.LightYellow, SeriesChartType.Area, 100)
-            ChartsUtilities.FormatSerie(Chart4.Series("Rentabilité (ROCE) %"), System.Drawing.Color.LightBlue, SeriesChartType.Area, 100)
+            If My.Settings.chart1Serie1AccountId <> 0 Then ChartsUtilities.FormatSerie(Chart1.Series(GlobalVariables.Accounts.m_accountsHash(My.Settings.chart1Serie1AccountId)(NAME_VARIABLE)), My.Settings.chart1Serie1Color, My.Settings.chart1Serie1Type)
+            If My.Settings.chart1Serie2AccountId <> 0 Then ChartsUtilities.FormatSerie(Chart1.Series(GlobalVariables.Accounts.m_accountsHash(My.Settings.chart1Serie2AccountId)(NAME_VARIABLE)), My.Settings.chart1Serie2Color, My.Settings.chart1Serie2Type)
+            If My.Settings.chart2Serie1AccountId <> 0 Then ChartsUtilities.FormatSerie(Chart2.Series(GlobalVariables.Accounts.m_accountsHash(My.Settings.chart2Serie1AccountId)(NAME_VARIABLE)), My.Settings.chart2Serie1Color, My.Settings.chart2Serie1Type, , 22)
+            If My.Settings.chart2Serie2AccountId <> 0 Then ChartsUtilities.FormatSerie(Chart2.Series(GlobalVariables.Accounts.m_accountsHash(My.Settings.chart2Serie2AccountId)(NAME_VARIABLE)), My.Settings.chart2Serie2Color, My.Settings.chart2Serie2Type)
+            If My.Settings.chart3Serie1AccountId <> 0 Then ChartsUtilities.FormatSerie(Chart3.Series(GlobalVariables.Accounts.m_accountsHash(My.Settings.chart3Serie1AccountId)(NAME_VARIABLE)), My.Settings.chart3Serie1Color, My.Settings.chart3Serie1Type, , 22)
+            If My.Settings.chart3Serie2AccountId <> 0 Then ChartsUtilities.FormatSerie(Chart3.Series(GlobalVariables.Accounts.m_accountsHash(My.Settings.chart3Serie2AccountId)(NAME_VARIABLE)), My.Settings.chart3Serie2Color, My.Settings.chart3Serie2Type, 100)
+            If My.Settings.chart4Serie1AccountId <> 0 Then ChartsUtilities.FormatSerie(Chart4.Series(GlobalVariables.Accounts.m_accountsHash(My.Settings.chart4Serie1AccountId)(NAME_VARIABLE)), My.Settings.chart4Serie1Color, My.Settings.chart4Serie1Type, 100)
+            If My.Settings.chart4Serie1AccountId <> 0 Then ChartsUtilities.FormatSerie(Chart4.Series(GlobalVariables.Accounts.m_accountsHash(My.Settings.chart4Serie1AccountId)(NAME_VARIABLE)), My.Settings.chart4Serie2Color, My.Settings.chart4Serie2Type, 100)
         End If
 
     End Sub
@@ -115,31 +124,18 @@ Public Class CUI2Visualization
 
     End Sub
 
-
-
 #End Region
 
 #Region "Call Backs"
 
-    Private Sub m_addSerieButton_Click(sender As Object, e As EventArgs) Handles m_addSerieButton.Click
-
-        Dim chart As Chart = sender ' ?
-   
-
-    End Sub
-
-    Private Sub m_removeSerieButton_Click(sender As Object, e As EventArgs) Handles m_removeSerieButton.Click
-
-    End Sub
-
-    Private Sub m_editSerieButton_Click(sender As Object, e As EventArgs) Handles m_editSerieButton.Click
+    Private Sub m_editSerieButton_Click(sender As Object, e As EventArgs)
 
         ' follow mouse location on chart
         ' on click -> hit test -> return the element
 
         ' need to have a UI to edit the series
         ' where should we store that ?
-        Dim chart As Chart = sender
+        Dim chart As Chart = GetChartFromContextMenu(sender)
         Dim HTR As HitTestResult
         Dim dataPoint As DataPoint
         '   HTR = chart.HitTest(e.x, e.y)
@@ -152,15 +148,17 @@ Public Class CUI2Visualization
 
     Private Sub m_editChartButton_Click(sender As Object, e As EventArgs) Handles m_editChartButton.Click
 
-        ' change font 
-        ' change title
+        Dim chart As Chart = GetChartFromContextMenu(sender)
+        Dim chartEditionUI As New CUI2VisualisationChartsSettings(Chart, m_chartIndexes(Chart))
+        chartEditionUI.Show()
 
     End Sub
 
-    Private Sub m_exportOnExcel_Click(sender As Object, e As EventArgs) Handles m_exportOnExcel.Click
+    Private Sub m_exportOnExcel_Click(sender As Object, e As EventArgs) Handles m_dropChartOnExcelButton.Click
 
         ' validation message
-        ChartsUtilities.ExportChartExcel(sender, GlobalVariables.APPS.ActiveSheet)
+        Dim chart As Chart = GetChartFromContextMenu(sender)
+        ChartsUtilities.ExportChartExcel(chart, GlobalVariables.APPS.ActiveSheet)
 
     End Sub
 
@@ -175,6 +173,14 @@ Public Class CUI2Visualization
 
 #End Region
 
+
+    Private Function GetChartFromContextMenu(ByRef sender As Object) As Chart
+
+        Dim myItem As ToolStripMenuItem = CType(sender, ToolStripMenuItem)
+        Dim cms As ContextMenuStrip = CType(myItem.Owner, ContextMenuStrip)
+        Return cms.SourceControl
+
+    End Function
 
 
 End Class

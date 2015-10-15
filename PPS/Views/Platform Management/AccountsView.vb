@@ -386,14 +386,14 @@ SubmitFormula:
                 Exit Sub
             End If
 
-            Dim confirm As Utilities_Functions.CheckResult = Utilities_Functions.AskPasswordConfirmation("Careful, you are about to delete account " + Chr(13) + Chr(10) + Name_TB.Text + Chr(13) + Chr(10) + Chr(13) + Chr(10) + "Do you confirm?" + Chr(13) + Chr(10) + _
+            Dim confirm As GeneralUtilities.CheckResult = GeneralUtilities.AskPasswordConfirmation("Careful, you are about to delete account " + Chr(13) + Chr(10) + Name_TB.Text + Chr(13) + Chr(10) + Chr(13) + Chr(10) + "Do you confirm?" + Chr(13) + Chr(10) + _
                                                      "This Account and all its Sub Accounts will be deleted.", _
                                                      "Account deletion confirmation")
-            If confirm = Utilities_Functions.CheckResult.Success Then
+            If confirm = GeneralUtilities.CheckResult.Success Then
                 m_controller.DeleteAccount(CInt(m_currentNode.Name))
                 m_currentNode.Remove()
                 m_currentNode = Nothing
-            ElseIf confirm = Utilities_Functions.CheckResult.Fail Then
+            ElseIf confirm = GeneralUtilities.CheckResult.Fail Then
                 MessageBox.Show("Password incorrect")
             End If
         End If
@@ -738,15 +738,15 @@ SubmitFormula:
         AndAlso m_isDisplayingAttributes = False _
         AndAlso m_isRevertingFType = False Then
             If m_controller.FormulaTypeChangeImpliesFactsDeletion(CInt(m_currentNode.Name), li.Value) = True Then
-                Dim confirm As Utilities_Functions.CheckResult = Utilities_Functions.AskPasswordConfirmation("Changing the Formula Type of this account may imply the loss of inputs, do you confirm you want to convert this account into a formula?", _
+                Dim confirm As GeneralUtilities.CheckResult = GeneralUtilities.AskPasswordConfirmation("Changing the Formula Type of this account may imply the loss of inputs, do you confirm you want to convert this account into a formula?", _
                                                          "Formula Type Upadte Confirmation")
-                If confirm = Utilities_Functions.CheckResult.Success Then
+                If confirm = GeneralUtilities.CheckResult.Success Then
                     GoTo UdpateFormulaType
                 Else
                     m_isRevertingFType = True
                     FormulaTypeComboBox.SelectedValue = m_controller.ReadAccount(m_currentNode.Name, ACCOUNT_FORMULA_TYPE_VARIABLE)
                     m_isRevertingFType = False
-                    If confirm = Utilities_Functions.CheckResult.Fail Then MsgBox("Password confirmation failed")
+                    If confirm = GeneralUtilities.CheckResult.Fail Then MsgBox("Password confirmation failed")
                     Exit Sub
                 End If
             Else

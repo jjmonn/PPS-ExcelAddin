@@ -12,7 +12,7 @@ Imports System.Collections.Generic
 Imports System.Collections
 
 
-Friend Class Utilities_Functions
+Friend Class GeneralUtilities
 
 
 #Region "Arrays Utilities"
@@ -462,5 +462,16 @@ Err:
         Return strResult
 
     End Function
+
+
+    Friend Shared Sub SetSelectedItem(ByRef p_combobox As VIBlend.WinForms.Controls.vComboBox, _
+                                      ByRef p_itemValue As String)
+
+        For Each item As VIBlend.WinForms.Controls.ListItem In p_combobox.Items
+            If item.Value = p_itemValue Then p_combobox.SelectedItem = item
+        Next
+
+    End Sub
+
 
 End Class

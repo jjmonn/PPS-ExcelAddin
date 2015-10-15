@@ -22,6 +22,7 @@ Partial Class CUI2Visualization
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
+        Me.components = New System.ComponentModel.Container()
         Dim ChartArea5 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
         Dim Legend5 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
         Dim ChartArea6 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
@@ -45,12 +46,9 @@ Partial Class CUI2Visualization
         Me.Label3 = New System.Windows.Forms.Label()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.Label1 = New System.Windows.Forms.Label()
-        Me.m_chartsRightClickMenu = New VIBlend.WinForms.Controls.vContextMenu()
-        Me.m_addSerieButton = New System.Windows.Forms.MenuItem()
-        Me.m_removeSerieButton = New System.Windows.Forms.MenuItem()
-        Me.m_editSerieButton = New System.Windows.Forms.MenuItem()
-        Me.m_editChartButton = New System.Windows.Forms.MenuItem()
-        Me.m_exportOnExcel = New System.Windows.Forms.MenuItem()
+        Me.m_chartsRightClickMenu = New System.Windows.Forms.ContextMenuStrip(Me.components)
+        Me.m_editChartButton = New System.Windows.Forms.ToolStripMenuItem()
+        Me.m_dropChartOnExcelButton = New System.Windows.Forms.ToolStripMenuItem()
         Me.VSplitContainer1.Panel1.SuspendLayout()
         Me.VSplitContainer1.Panel2.SuspendLayout()
         Me.VSplitContainer1.SuspendLayout()
@@ -66,6 +64,7 @@ Partial Class CUI2Visualization
         CType(Me.Chart4, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.Panel1.SuspendLayout()
+        Me.m_chartsRightClickMenu.SuspendLayout()
         Me.SuspendLayout()
         '
         'VSplitContainer1
@@ -178,7 +177,7 @@ Partial Class CUI2Visualization
         Me.VSplitContainer2.Panel1.Controls.Add(Me.Chart2)
         Me.VSplitContainer2.Panel1.Location = New System.Drawing.Point(0, 0)
         Me.VSplitContainer2.Panel1.Name = "Panel1"
-        Me.VSplitContainer2.Panel1.Size = New System.Drawing.Size(347, 190)
+        Me.VSplitContainer2.Panel1.Size = New System.Drawing.Size(347, 191)
         Me.VSplitContainer2.Panel1.TabIndex = 1
         '
         'VSplitContainer2.Panel2
@@ -186,9 +185,9 @@ Partial Class CUI2Visualization
         Me.VSplitContainer2.Panel2.BackColor = System.Drawing.Color.White
         Me.VSplitContainer2.Panel2.BorderColor = System.Drawing.Color.Silver
         Me.VSplitContainer2.Panel2.Controls.Add(Me.Chart4)
-        Me.VSplitContainer2.Panel2.Location = New System.Drawing.Point(0, 195)
+        Me.VSplitContainer2.Panel2.Location = New System.Drawing.Point(0, 196)
         Me.VSplitContainer2.Panel2.Name = "Panel2"
-        Me.VSplitContainer2.Panel2.Size = New System.Drawing.Size(347, 193)
+        Me.VSplitContainer2.Panel2.Size = New System.Drawing.Size(347, 192)
         Me.VSplitContainer2.Panel2.TabIndex = 2
         Me.VSplitContainer2.Size = New System.Drawing.Size(347, 388)
         Me.VSplitContainer2.SplitterSize = 5
@@ -206,7 +205,7 @@ Partial Class CUI2Visualization
         Me.Chart2.Legends.Add(Legend7)
         Me.Chart2.Location = New System.Drawing.Point(0, 0)
         Me.Chart2.Name = "Chart2"
-        Me.Chart2.Size = New System.Drawing.Size(347, 190)
+        Me.Chart2.Size = New System.Drawing.Size(347, 191)
         Me.Chart2.TabIndex = 1
         Me.Chart2.Text = "Chart2"
         '
@@ -219,7 +218,7 @@ Partial Class CUI2Visualization
         Me.Chart4.Legends.Add(Legend8)
         Me.Chart4.Location = New System.Drawing.Point(0, 0)
         Me.Chart4.Name = "Chart4"
-        Me.Chart4.Size = New System.Drawing.Size(347, 193)
+        Me.Chart4.Size = New System.Drawing.Size(347, 192)
         Me.Chart4.TabIndex = 1
         Me.Chart4.Text = "Chart4"
         '
@@ -328,7 +327,7 @@ Partial Class CUI2Visualization
         Me.Label3.AutoSize = True
         Me.Label3.Location = New System.Drawing.Point(356, 5)
         Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(55, 15)
+        Me.Label3.Size = New System.Drawing.Size(49, 13)
         Me.Label3.TabIndex = 9
         Me.Label3.Text = "Currency"
         '
@@ -338,7 +337,7 @@ Partial Class CUI2Visualization
         Me.Label2.AutoSize = True
         Me.Label2.Location = New System.Drawing.Point(492, 5)
         Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(48, 15)
+        Me.Label2.Size = New System.Drawing.Size(42, 13)
         Me.Label2.TabIndex = 8
         Me.Label2.Text = "Version"
         '
@@ -348,38 +347,29 @@ Partial Class CUI2Visualization
         Me.Label1.AutoSize = True
         Me.Label1.Location = New System.Drawing.Point(172, 5)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(36, 15)
+        Me.Label1.Size = New System.Drawing.Size(33, 13)
         Me.Label1.TabIndex = 7
         Me.Label1.Text = "Entity"
         '
         'm_chartsRightClickMenu
         '
-        Me.m_chartsRightClickMenu.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.m_addSerieButton, Me.m_removeSerieButton, Me.m_editSerieButton, Me.m_editChartButton, Me.m_exportOnExcel})
-        '
-        'm_addSerieButton
-        '
-        Me.m_addSerieButton.Index = 0
-        Me.m_addSerieButton.Text = "Add Serie"
-        '
-        'm_removeSerieButton
-        '
-        Me.m_removeSerieButton.Index = 1
-        Me.m_removeSerieButton.Text = "Remove Serie"
-        '
-        'm_editSerieButton
-        '
-        Me.m_editSerieButton.Index = 2
-        Me.m_editSerieButton.Text = "Edit Serie"
+        Me.m_chartsRightClickMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.m_editChartButton, Me.m_dropChartOnExcelButton})
+        Me.m_chartsRightClickMenu.Name = "m_chartsRightClickMenu"
+        Me.m_chartsRightClickMenu.Size = New System.Drawing.Size(153, 70)
         '
         'm_editChartButton
         '
-        Me.m_editChartButton.Index = 3
+        Me.m_editChartButton.Image = Global.FinancialBI.My.Resources.Resources.chart_line
+        Me.m_editChartButton.Name = "m_editChartButton"
+        Me.m_editChartButton.Size = New System.Drawing.Size(152, 22)
         Me.m_editChartButton.Text = "Edit Chart"
         '
-        'm_exportOnExcel
+        'm_dropChartOnExcelButton
         '
-        Me.m_exportOnExcel.Index = 4
-        Me.m_exportOnExcel.Text = "Export on Excel"
+        Me.m_dropChartOnExcelButton.Image = Global.FinancialBI.My.Resources.Resources.Excel_Blue_32x32
+        Me.m_dropChartOnExcelButton.Name = "m_dropChartOnExcelButton"
+        Me.m_dropChartOnExcelButton.Size = New System.Drawing.Size(152, 22)
+        Me.m_dropChartOnExcelButton.Text = "Drop on Excel"
         '
         'CUI2Visualization
         '
@@ -404,6 +394,7 @@ Partial Class CUI2Visualization
         Me.TableLayoutPanel1.ResumeLayout(False)
         Me.Panel1.ResumeLayout(False)
         Me.Panel1.PerformLayout()
+        Me.m_chartsRightClickMenu.ResumeLayout(False)
         Me.ResumeLayout(False)
 
     End Sub
@@ -422,11 +413,8 @@ Partial Class CUI2Visualization
     Friend WithEvents Label3 As System.Windows.Forms.Label
     Friend WithEvents Label2 As System.Windows.Forms.Label
     Friend WithEvents Label1 As System.Windows.Forms.Label
-    Friend WithEvents m_chartsRightClickMenu As VIBlend.WinForms.Controls.vContextMenu
-    Friend WithEvents m_removeSerieButton As System.Windows.Forms.MenuItem
-    Friend WithEvents m_addSerieButton As System.Windows.Forms.MenuItem
-    Friend WithEvents m_editSerieButton As System.Windows.Forms.MenuItem
-    Friend WithEvents m_editChartButton As System.Windows.Forms.MenuItem
-    Friend WithEvents m_exportOnExcel As System.Windows.Forms.MenuItem
+    Friend WithEvents m_chartsRightClickMenu As System.Windows.Forms.ContextMenuStrip
+    Friend WithEvents m_editChartButton As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents m_dropChartOnExcelButton As System.Windows.Forms.ToolStripMenuItem
 
 End Class

@@ -120,7 +120,7 @@ Friend Class ModelDataSet
 
     Friend Function WsScreenshot() As Boolean
 
-        m_lastCell = Utilities_Functions.GetRealLastCell(m_excelWorkSheet)
+        m_lastCell = GeneralUtilities.GetRealLastCell(m_excelWorkSheet)
         If IsNothing(m_lastCell) Then
             MsgBox("The worksheet is empty")
             m_GlobalScreenShot = Nothing
@@ -376,7 +376,7 @@ Friend Class ModelDataSet
         AssetResearchAlgo = False
 
         For i = 0 To m_entitiesNameList.Count - 1
-            Delta = Utilities_Functions.Levenshtein(CStr(str), CStr(m_entitiesNameList(i)))
+            Delta = GeneralUtilities.Levenshtein(CStr(str), CStr(m_entitiesNameList(i)))
             P = Delta / Len(m_entitiesNameList(i))
             If P <= 2 / Len(m_entitiesNameList(i)) Then
                 AssetResearchAlgo = True

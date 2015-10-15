@@ -125,5 +125,89 @@
     <Setting Name="currentCurrency" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">34</Value>
     </Setting>
+    <Setting Name="chart1Serie1AccountId" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">2</Value>
+    </Setting>
+    <Setting Name="chart1Serie2AccountId" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">9</Value>
+    </Setting>
+    <Setting Name="chart2Serie1AccountId" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">89</Value>
+    </Setting>
+    <Setting Name="chart2Serie2AccountId" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="chart3Serie1AccountId" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">349</Value>
+    </Setting>
+    <Setting Name="chart3Serie2AccountId" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">41</Value>
+    </Setting>
+    <Setting Name="chart4Serie1AccountId" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">358</Value>
+    </Setting>
+    <Setting Name="chart4Serie2AccountId" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">353</Value>
+    </Setting>
+    <Setting Name="chart1Serie1Color" Type="System.Drawing.Color" Scope="User">
+      <Value Profile="(Default)">Navy</Value>
+    </Setting>
+    <Setting Name="chart1Serie2Color" Type="System.Drawing.Color" Scope="User">
+      <Value Profile="(Default)">128, 128, 255</Value>
+    </Setting>
+    <Setting Name="chart2Serie1Color" Type="System.Drawing.Color" Scope="User">
+      <Value Profile="(Default)">Teal</Value>
+    </Setting>
+    <Setting Name="chart2Serie2Color" Type="System.Drawing.Color" Scope="User">
+      <Value Profile="(Default)">0, 192, 192</Value>
+    </Setting>
+    <Setting Name="chart3Serie1Color" Type="System.Drawing.Color" Scope="User">
+      <Value Profile="(Default)">PaleTurquoise</Value>
+    </Setting>
+    <Setting Name="chart3Serie2Color" Type="System.Drawing.Color" Scope="User">
+      <Value Profile="(Default)">Silver</Value>
+    </Setting>
+    <Setting Name="chart4Serie1Color" Type="System.Drawing.Color" Scope="User">
+      <Value Profile="(Default)">255, 255, 128</Value>
+    </Setting>
+    <Setting Name="chart4Serie2Color" Type="System.Drawing.Color" Scope="User">
+      <Value Profile="(Default)">128, 255, 128</Value>
+    </Setting>
+    <Setting Name="chart1Serie1Type" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">10</Value>
+    </Setting>
+    <Setting Name="chart1Serie2Type" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">10</Value>
+    </Setting>
+    <Setting Name="chart2Serie1Type" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">10</Value>
+    </Setting>
+    <Setting Name="chart2Serie2Type" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">10</Value>
+    </Setting>
+    <Setting Name="chart3Serie1Type" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">10</Value>
+    </Setting>
+    <Setting Name="chart3Serie2Type" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">10</Value>
+    </Setting>
+    <Setting Name="chart4Serie1Type" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">10</Value>
+    </Setting>
+    <Setting Name="chart4Serie2Type" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">10</Value>
+    </Setting>
+    <Setting Name="chart1Title" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Résultat Opérationnel (m€)</Value>
+    </Setting>
+    <Setting Name="chart2Title" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Investissements (m€)</Value>
+    </Setting>
+    <Setting Name="chart3Title" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Cash Flow (€)</Value>
+    </Setting>
+    <Setting Name="chart4Title" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Ratios Financiers (%)</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

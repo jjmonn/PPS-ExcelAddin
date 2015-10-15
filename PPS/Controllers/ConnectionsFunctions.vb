@@ -90,7 +90,7 @@ Friend Class ConnectionsFunctions
             NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_AUTH_ANSWER, AddressOf SMSG_AUTH_ANSWER)
             Dim answer As New ByteBuffer(CType(ClientMessage.CMSG_AUTHENTIFICATION, UShort))
             answer.WriteString(userName)
-            answer.WriteString(Utilities_Functions.getSHA1Hash(Utilities_Functions.getSHA1Hash(pwd & userName) & authToken))
+            answer.WriteString(GeneralUtilities.getSHA1Hash(GeneralUtilities.getSHA1Hash(pwd & userName) & authToken))
             answer.Release()
 
             NetworkManager.GetInstance().Send(answer)

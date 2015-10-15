@@ -68,10 +68,10 @@ Public Class ComputingCache
         Next
 
         ' filters / axis filters
-        If Utilities_Functions.DictsCompare(filters, cacheFilters) = False Then Return True
-        If Utilities_Functions.DictsCompare(cacheFilters, filters) = False Then Return True
-        If Utilities_Functions.DictsCompare(axisFilters, cacheAxisFilters) = False Then Return True
-        If Utilities_Functions.DictsCompare(cacheAxisFilters, axisFilters) = False Then Return True
+        If GeneralUtilities.DictsCompare(filters, cacheFilters) = False Then Return True
+        If GeneralUtilities.DictsCompare(cacheFilters, filters) = False Then Return True
+        If GeneralUtilities.DictsCompare(axisFilters, cacheAxisFilters) = False Then Return True
+        If GeneralUtilities.DictsCompare(cacheAxisFilters, axisFilters) = False Then Return True
 
         If computingHierarchyCompareFlag = True Then
             ' decomposition dimensions
