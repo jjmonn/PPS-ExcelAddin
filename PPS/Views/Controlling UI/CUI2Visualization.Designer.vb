@@ -31,6 +31,7 @@ Partial Class CUI2Visualization
         Dim Legend7 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
         Dim ChartArea8 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
         Dim Legend8 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(CUI2Visualization))
         Me.VSplitContainer1 = New VIBlend.WinForms.Controls.vSplitContainer()
         Me.VSplitContainer3 = New VIBlend.WinForms.Controls.vSplitContainer()
         Me.Chart1 = New System.Windows.Forms.DataVisualization.Charting.Chart()
@@ -49,6 +50,8 @@ Partial Class CUI2Visualization
         Me.m_chartsRightClickMenu = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.m_editChartButton = New System.Windows.Forms.ToolStripMenuItem()
         Me.m_dropChartOnExcelButton = New System.Windows.Forms.ToolStripMenuItem()
+        Me.m_refreshButton = New VIBlend.WinForms.Controls.vButton()
+        Me.ImageList1 = New System.Windows.Forms.ImageList(Me.components)
         Me.VSplitContainer1.Panel1.SuspendLayout()
         Me.VSplitContainer1.Panel2.SuspendLayout()
         Me.VSplitContainer1.SuspendLayout()
@@ -245,6 +248,7 @@ Partial Class CUI2Visualization
         '
         'Panel1
         '
+        Me.Panel1.Controls.Add(Me.m_refreshButton)
         Me.Panel1.Controls.Add(Me.VersionTB)
         Me.Panel1.Controls.Add(Me.CurrencyTB)
         Me.Panel1.Controls.Add(Me.EntityTB)
@@ -355,21 +359,45 @@ Partial Class CUI2Visualization
         '
         Me.m_chartsRightClickMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.m_editChartButton, Me.m_dropChartOnExcelButton})
         Me.m_chartsRightClickMenu.Name = "m_chartsRightClickMenu"
-        Me.m_chartsRightClickMenu.Size = New System.Drawing.Size(153, 70)
+        Me.m_chartsRightClickMenu.Size = New System.Drawing.Size(147, 48)
         '
         'm_editChartButton
         '
         Me.m_editChartButton.Image = Global.FinancialBI.My.Resources.Resources.chart_line
         Me.m_editChartButton.Name = "m_editChartButton"
-        Me.m_editChartButton.Size = New System.Drawing.Size(152, 22)
+        Me.m_editChartButton.Size = New System.Drawing.Size(146, 22)
         Me.m_editChartButton.Text = "Edit Chart"
         '
         'm_dropChartOnExcelButton
         '
         Me.m_dropChartOnExcelButton.Image = Global.FinancialBI.My.Resources.Resources.Excel_Blue_32x32
         Me.m_dropChartOnExcelButton.Name = "m_dropChartOnExcelButton"
-        Me.m_dropChartOnExcelButton.Size = New System.Drawing.Size(152, 22)
+        Me.m_dropChartOnExcelButton.Size = New System.Drawing.Size(146, 22)
         Me.m_dropChartOnExcelButton.Text = "Drop on Excel"
+        '
+        'm_refreshButton
+        '
+        Me.m_refreshButton.AllowAnimations = True
+        Me.m_refreshButton.BackColor = System.Drawing.Color.Transparent
+        Me.m_refreshButton.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.m_refreshButton.ImageKey = "refresh classic green.ico"
+        Me.m_refreshButton.ImageList = Me.ImageList1
+        Me.m_refreshButton.Location = New System.Drawing.Point(3, 0)
+        Me.m_refreshButton.Name = "m_refreshButton"
+        Me.m_refreshButton.RoundedCornersMask = CType(15, Byte)
+        Me.m_refreshButton.Size = New System.Drawing.Size(73, 25)
+        Me.m_refreshButton.TabIndex = 13
+        Me.m_refreshButton.Text = "Refresh"
+        Me.m_refreshButton.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.m_refreshButton.UseVisualStyleBackColor = False
+        Me.m_refreshButton.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
+        '
+        'ImageList1
+        '
+        Me.ImageList1.ImageStream = CType(resources.GetObject("ImageList1.ImageStream"), System.Windows.Forms.ImageListStreamer)
+        Me.ImageList1.TransparentColor = System.Drawing.Color.Transparent
+        Me.ImageList1.Images.SetKeyName(0, "Export classic green bigger.ico")
+        Me.ImageList1.Images.SetKeyName(1, "refresh classic green.ico")
         '
         'CUI2Visualization
         '
@@ -416,5 +444,7 @@ Partial Class CUI2Visualization
     Friend WithEvents m_chartsRightClickMenu As System.Windows.Forms.ContextMenuStrip
     Friend WithEvents m_editChartButton As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents m_dropChartOnExcelButton As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents m_refreshButton As VIBlend.WinForms.Controls.vButton
+    Friend WithEvents ImageList1 As System.Windows.Forms.ImageList
 
 End Class
