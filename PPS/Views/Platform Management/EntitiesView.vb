@@ -471,6 +471,7 @@ Friend Class EntitiesView
 
         DataGridViewsUtil.DGVSetHiearchyFontSize(m_entitiesDataGridView, My.Settings.dgvFontSize, My.Settings.dgvFontSize)
         DataGridViewsUtil.FormatDGVRowsHierarchy(m_entitiesDataGridView)
+        m_entitiesDataGridView.ColumnsHierarchy.AutoResize(AutoResizeMode.FIT_ALL)
         m_entitiesDataGridView.Refresh()
 
     End Sub

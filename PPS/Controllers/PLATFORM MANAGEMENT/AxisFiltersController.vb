@@ -2,12 +2,12 @@
 '
 ' Generic
 '
-'
+' To do: 
 '
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 14/10/2015
+' Last modified: 15/10/2015
 
 
 Imports System.Windows.Forms
@@ -132,6 +132,7 @@ Friend Class AxisFiltersController
         Next
         Return True
     End Function
+
     ' Filters Values
     Friend Sub CreateFilterValue(ByRef filterValueName As String, _
                                 ByRef filterId As Int32, _

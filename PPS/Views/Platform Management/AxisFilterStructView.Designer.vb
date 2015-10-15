@@ -25,15 +25,15 @@ Partial Class AxisFilterStructView
         Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(AxisFilterStructView))
         Me.AddBT = New VIBlend.WinForms.Controls.vButton()
+        Me.EditButtonsImagelist = New System.Windows.Forms.ImageList(Me.components)
         Me.DeleteBT = New VIBlend.WinForms.Controls.vButton()
         Me.VPanel1 = New VIBlend.WinForms.Controls.vPanel()
         Me.VPanel2 = New VIBlend.WinForms.Controls.vPanel()
         Me.m_structureTreeviewRightClickMenu = New System.Windows.Forms.ContextMenuStrip(Me.components)
-        Me.m_createButton = New System.Windows.Forms.ToolStripMenuItem()
+        Me.m_createCategoryUnderCurrentCategoryButton = New System.Windows.Forms.ToolStripMenuItem()
         Me.m_renameButton = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
         Me.m_deleteButton = New System.Windows.Forms.ToolStripMenuItem()
-        Me.EditButtonsImagelist = New System.Windows.Forms.ImageList(Me.components)
         Me.VPanel1.Content.SuspendLayout()
         Me.VPanel1.SuspendLayout()
         Me.VPanel2.SuspendLayout()
@@ -55,6 +55,13 @@ Partial Class AxisFilterStructView
         Me.AddBT.Text = "Create"
         Me.AddBT.UseVisualStyleBackColor = False
         Me.AddBT.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.OFFICESILVER
+        '
+        'EditButtonsImagelist
+        '
+        Me.EditButtonsImagelist.ImageStream = CType(resources.GetObject("EditButtonsImagelist.ImageStream"), System.Windows.Forms.ImageListStreamer)
+        Me.EditButtonsImagelist.TransparentColor = System.Drawing.Color.Transparent
+        Me.EditButtonsImagelist.Images.SetKeyName(0, "1420498403_340208.ico")
+        Me.EditButtonsImagelist.Images.SetKeyName(1, "imageres_89.ico")
         '
         'DeleteBT
         '
@@ -122,41 +129,34 @@ Partial Class AxisFilterStructView
         '
         'm_structureTreeviewRightClickMenu
         '
-        Me.m_structureTreeviewRightClickMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.m_createButton, Me.m_renameButton, Me.ToolStripSeparator1, Me.m_deleteButton})
+        Me.m_structureTreeviewRightClickMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.m_createCategoryUnderCurrentCategoryButton, Me.m_renameButton, Me.ToolStripSeparator1, Me.m_deleteButton})
         Me.m_structureTreeviewRightClickMenu.Name = "ContextMenuStripTV"
-        Me.m_structureTreeviewRightClickMenu.Size = New System.Drawing.Size(179, 82)
+        Me.m_structureTreeviewRightClickMenu.Size = New System.Drawing.Size(307, 104)
         '
-        'm_createButton
+        'm_createCategoryUnderCurrentCategoryButton
         '
-        Me.m_createButton.Image = Global.FinancialBI.My.Resources.Resources.add
-        Me.m_createButton.Name = "m_createButton"
-        Me.m_createButton.Size = New System.Drawing.Size(178, 24)
-        Me.m_createButton.Text = "Create Category"
+        Me.m_createCategoryUnderCurrentCategoryButton.Image = Global.FinancialBI.My.Resources.Resources.add
+        Me.m_createCategoryUnderCurrentCategoryButton.Name = "m_createCategoryUnderCurrentCategoryButton"
+        Me.m_createCategoryUnderCurrentCategoryButton.Size = New System.Drawing.Size(306, 24)
+        Me.m_createCategoryUnderCurrentCategoryButton.Text = "Create Category Under this Category"
         '
         'm_renameButton
         '
         Me.m_renameButton.Name = "m_renameButton"
-        Me.m_renameButton.Size = New System.Drawing.Size(178, 24)
+        Me.m_renameButton.Size = New System.Drawing.Size(306, 24)
         Me.m_renameButton.Text = "Rename"
         '
         'ToolStripSeparator1
         '
         Me.ToolStripSeparator1.Name = "ToolStripSeparator1"
-        Me.ToolStripSeparator1.Size = New System.Drawing.Size(175, 6)
+        Me.ToolStripSeparator1.Size = New System.Drawing.Size(303, 6)
         '
         'm_deleteButton
         '
         Me.m_deleteButton.Image = Global.FinancialBI.My.Resources.Resources.imageres_89
         Me.m_deleteButton.Name = "m_deleteButton"
-        Me.m_deleteButton.Size = New System.Drawing.Size(178, 24)
+        Me.m_deleteButton.Size = New System.Drawing.Size(306, 24)
         Me.m_deleteButton.Text = "Delete"
-        '
-        'EditButtonsImagelist
-        '
-        Me.EditButtonsImagelist.ImageStream = CType(resources.GetObject("EditButtonsImagelist.ImageStream"), System.Windows.Forms.ImageListStreamer)
-        Me.EditButtonsImagelist.TransparentColor = System.Drawing.Color.Transparent
-        Me.EditButtonsImagelist.Images.SetKeyName(0, "1420498403_340208.ico")
-        Me.EditButtonsImagelist.Images.SetKeyName(1, "imageres_89.ico")
         '
         'AxisFilterStructView
         '
@@ -180,7 +180,7 @@ Partial Class AxisFilterStructView
     Friend WithEvents VPanel1 As VIBlend.WinForms.Controls.vPanel
     Friend WithEvents VPanel2 As VIBlend.WinForms.Controls.vPanel
     Friend WithEvents m_structureTreeviewRightClickMenu As System.Windows.Forms.ContextMenuStrip
-    Friend WithEvents m_createButton As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents m_createCategoryUnderCurrentCategoryButton As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents m_renameButton As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ToolStripSeparator1 As System.Windows.Forms.ToolStripSeparator
     Friend WithEvents m_deleteButton As System.Windows.Forms.ToolStripMenuItem

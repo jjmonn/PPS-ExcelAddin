@@ -3,13 +3,14 @@
 ' Entities Treeview for the selection and holds the key | names dictionary
 '
 '
-' To do:
+' To do: Key down event to delete filters
 '
 '
 '
 ' Known bugs :
 '
-' Last modified: 13/10/2015
+'
+' Last modified: 15/10/2015
 ' Author: Julien Monnereau
 
 
@@ -23,15 +24,21 @@ Imports System.Collections
 Class AxisFilterStructView
 
 #Region "Instances"
+
     Private m_newFilterUI As NewFilterUI
     Private m_controller As AxisFiltersController
     Private m_filtersTV As vTreeView
     Private m_axisId As Int32
+
 #End Region
+
 
 #Region "Initialize"
 
-    Public Sub New(ByRef p_axisFiltersTV As vTreeView, ByRef p_axisId As Int32, ByRef p_controller As AxisFiltersController, ByRef p_filtersNode As vTreeNode)
+    Public Sub New(ByRef p_axisFiltersTV As vTreeView, _
+                   ByRef p_axisId As Int32, _
+                   ByRef p_controller As AxisFiltersController, _
+                   ByRef p_filtersNode As vTreeNode)
 
         ' This call is required by the designer.
         InitializeComponent()
@@ -44,9 +51,12 @@ Class AxisFilterStructView
         m_newFilterUI = New NewFilterUI(p_controller, p_filtersNode)
         m_filtersTV.ContextMenuStrip = m_structureTreeviewRightClickMenu
 
+        AddHandler m_filtersTV.KeyDown, AddressOf FiltersTV_KeyDown
+
     End Sub
 
 #End Region
+
 
 #Region "Thread Safe Interface"
 
@@ -56,7 +66,8 @@ Class AxisFilterStructView
             Dim MyDelegate As New DeleteFilter_Delegate(AddressOf DeleteFilter)
             Me.Invoke(MyDelegate, New Object() {p_filterId})
         Else
-            DeleteNode(m_filtersTV.Nodes, p_filterId)
+            Dim nodeToBeRemoved As vTreeNode = VTreeViewUtil.FindNode(m_filtersTV, p_filterId)
+            If IsNothing(nodeToBeRemoved) = False Then nodeToBeRemoved.Remove()
             m_filtersTV.Refresh()
         End If
 
@@ -64,34 +75,32 @@ Class AxisFilterStructView
 
     Delegate Sub SetFilter_Delegate(ByRef p_filter As Hashtable)
     Friend Sub SetFilter(ByRef p_filter As Hashtable)
+
         If InvokeRequired Then
             Dim MyDelegate As New SetFilter_Delegate(AddressOf SetFilter)
             Me.Invoke(MyDelegate, New Object() {p_filter})
         Else
             Dim targetNode As vTreeNode = VTreeViewUtil.FindNode(m_filtersTV, p_filter(ID_VARIABLE))
-
             If targetNode Is Nothing Then
-                targetNode = New vTreeNode
-                targetNode.Value = CInt(p_filter(ID_VARIABLE))
-                AddNode(m_filtersTV.Nodes, p_filter(PARENT_ID_VARIABLE), targetNode)
+                If p_filter(PARENT_ID_VARIABLE) <> 0 Then
+                    Dim parentNode As vTreeNode = VTreeViewUtil.FindNode(m_filtersTV, p_filter(PARENT_ID_VARIABLE))
+                    VTreeViewUtil.AddNode(p_filter(ID_VARIABLE), _
+                                          p_filter(NAME_VARIABLE), _
+                                          parentNode)
+                Else
+                    VTreeViewUtil.AddNode(p_filter(ID_VARIABLE), _
+                                          p_filter(NAME_VARIABLE), _
+                                          m_filtersTV)
+                End If         
+            Else
+                targetNode.Text = p_filter(NAME_VARIABLE)
             End If
-            targetNode.Text = p_filter(NAME_VARIABLE)
         End If
 
-    End Sub
-
-    Delegate Sub UpdateFiltersTV_Delegate()
-    Friend Sub UpdateFiltersTV()
-        If InvokeRequired Then
-            Dim MyDelegate As New UpdateFiltersTV_Delegate(AddressOf UpdateFiltersTV)
-            Me.Invoke(MyDelegate, New Object() {})
-        Else
-            GlobalVariables.Filters.LoadFiltersTV(m_filtersTV, m_axisId)
-            m_filtersTV.Refresh()
-        End If
     End Sub
 
 #End Region
+
 
 #Region "Call Backs"
 
@@ -124,12 +133,13 @@ Class AxisFilterStructView
         End If
     End Sub
 
-    Private Sub CreateFilterBT_Click(sender As Object, e As EventArgs) Handles AddBT.Click, m_createButton.Click
+    Private Sub CreateFilterBTUnderSelectedNode_Click(sender As Object, e As EventArgs) Handles m_createCategoryUnderCurrentCategoryButton.Click
 
         Dim currentNode As vTreeNode = m_filtersTV.SelectedNode
         Dim parentId As Int32
-        If m_filtersTV.SelectedNode Is Nothing Then
-            parentId = 0
+        If currentNode Is Nothing Then
+            MsgBox("A Category must be selected.")
+            Exit Sub
         Else
             parentId = currentNode.Value
         End If
@@ -143,9 +153,46 @@ Class AxisFilterStructView
         End If
     End Sub
 
+    Private Sub CreateFilterBT_Click(sender As Object, e As EventArgs) Handles AddBT.Click
+
+        Dim parentId As Int32= 0
+        Dim newFilterName As String = InputBox("Enter the name of the New Category", "New Category")
+        If newFilterName <> "" Then
+            If GlobalVariables.Filters.IsNameValid(newFilterName) = True Then
+                m_controller.CreateFilter(newFilterName, parentId, False)
+            Else
+                MsgBox("This name is already in use.")
+            End If
+        End If
+    End Sub
+
 #End Region
 
+
 #Region "Events"
+
+    Private Sub FiltersTV_KeyDown(sender As Object, e As KeyEventArgs)
+
+        Select Case e.KeyCode
+            Case Keys.Delete : DeleteBT_Click(sender, e)
+
+
+                ' Below -> to be reviewed because it crashes sometimes !!! check priority normal
+                'Case Keys.Up
+                '    If e.Control Then
+                '        If Not m_filtersTV.SelectedNode Is Nothing Then
+                '            VTreeViewUtil.MoveNodeUp(m_filtersTV.SelectedNode)
+                '        End If
+                '    End If
+                'Case Keys.Down
+                '    If e.Control Then
+                '        If Not m_filtersTV.SelectedNode Is Nothing Then
+                '            VTreeViewUtil.MoveNodeDown(m_filtersTV.SelectedNode)
+                '        End If
+                '    End If
+        End Select
+
+    End Sub
 
     Private Sub AxisFilterStructView_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
         e.Cancel = True
@@ -154,36 +201,8 @@ Class AxisFilterStructView
 
 #End Region
 
-#Region "Utilities"
 
-    ' Ci-dessous à revoir : utiliser les méthodes de vTreeViewUtil : priority high
-    Private Sub AddNode(ByRef p_nodeList As vTreeNodeCollection, ByRef p_parent As Int32, ByRef p_newNode As vTreeNode)
-        If (p_parent = 0) Then
-            p_nodeList.Add(p_newNode)
-            Exit Sub
-        End If
-        For Each node As vTreeNode In p_nodeList
-            If node.Value = p_parent Then
-                node.Nodes.Add(p_newNode)
-                Exit Sub
-            End If
-            AddNode(node.Nodes, p_parent, p_newNode)
-        Next
+    Private Sub AxisFilterStructView_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+
     End Sub
-
-    ' Ci-dessous à revoir : utiliser les méthodes de vTreeViewUtil : priority high
-    Private Sub DeleteNode(ByRef p_node As vTreeNodeCollection, ByRef p_value As Int32)
-        For Each node As vTreeNode In p_node
-            If CInt(node.Value) = p_value Then
-                node.Remove()
-                Exit Sub
-            End If
-
-            DeleteNode(node.Nodes, p_value)
-        Next
-    End Sub
-
-#End Region
-
-
 End Class

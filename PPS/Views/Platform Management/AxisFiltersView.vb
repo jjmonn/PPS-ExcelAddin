@@ -247,18 +247,20 @@ NewFilterValue:
 
         Select Case e.KeyCode
             Case Keys.Delete : DeleteBT_Click(sender, e)
-            Case Keys.Up
-                If e.Control Then
-                    If Not m_filtersFiltersValuesTV.SelectedNode Is Nothing Then
-                        VTreeViewUtil.MoveNodeUp(m_filtersFiltersValuesTV.SelectedNode)
-                    End If
-                End If
-            Case Keys.Down
-                If e.Control Then
-                    If Not m_filtersFiltersValuesTV.SelectedNode Is Nothing Then
-                        VTreeViewUtil.MoveNodeDown(m_filtersFiltersValuesTV.SelectedNode)
-                    End If
-                End If
+
+                ' Below -> to be reviewed because it crashes sometimes !!! check priority normal
+                'Case Keys.Up
+                '    If e.Control Then
+                '        If Not m_filtersFiltersValuesTV.SelectedNode Is Nothing Then
+                '            VTreeViewUtil.MoveNodeUp(m_filtersFiltersValuesTV.SelectedNode)
+                '        End If
+                '    End If
+                'Case Keys.Down
+                '    If e.Control Then
+                '        If Not m_filtersFiltersValuesTV.SelectedNode Is Nothing Then
+                '            VTreeViewUtil.MoveNodeDown(m_filtersFiltersValuesTV.SelectedNode)
+                '        End If
+                '    End If
         End Select
 
     End Sub
