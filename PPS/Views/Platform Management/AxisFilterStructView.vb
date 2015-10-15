@@ -48,7 +48,7 @@ Class AxisFilterStructView
 
 #End Region
 
-#Region "Events"
+#Region "Thread Safe Interface"
 
     Delegate Sub DeleteFilter_Delegate(ByRef p_filterId As Int32)
     Friend Sub DeleteFilter(ByRef p_filterId As Int32)
@@ -68,7 +68,7 @@ Class AxisFilterStructView
             Dim MyDelegate As New SetFilter_Delegate(AddressOf SetFilter)
             Me.Invoke(MyDelegate, New Object() {p_filter})
         Else
-            Dim targetNode As vTreeNode = FindNode(m_filtersTV.Nodes, p_filter(ID_VARIABLE))
+            Dim targetNode As vTreeNode = VTreeViewUtil.FindNode(m_filtersTV, p_filter(ID_VARIABLE))
 
             If targetNode Is Nothing Then
                 targetNode = New vTreeNode
@@ -78,43 +78,6 @@ Class AxisFilterStructView
             targetNode.Text = p_filter(NAME_VARIABLE)
         End If
 
-    End Sub
-
-    Private Function FindNode(ByRef p_nodeList As vTreeNodeCollection, ByRef p_value As Int32) As vTreeNode
-        For Each node As vTreeNode In p_nodeList
-            If CInt(node.Value) = p_value Then Return node
-            For Each child In node.Nodes
-                If CInt(child.Value) = p_value Then Return child
-                Dim result As vTreeNode = FindNode(child.Nodes, p_value)
-                If Not result Is Nothing Then Return result
-            Next
-        Next
-        Return Nothing
-    End Function
-
-    Private Sub AddNode(ByRef p_nodeList As vTreeNodeCollection, ByRef p_parent As Int32, ByRef p_newNode As vTreeNode)
-        If (p_parent = 0) Then
-            p_nodeList.Add(p_newNode)
-            Exit Sub
-        End If
-        For Each node As vTreeNode In p_nodeList
-            If node.Value = p_parent Then
-                node.Nodes.Add(p_newNode)
-                Exit Sub
-            End If
-            AddNode(node.Nodes, p_parent, p_newNode)
-        Next
-    End Sub
-
-    Private Sub DeleteNode(ByRef p_node As vTreeNodeCollection, ByRef p_value As Int32)
-        For Each node As vTreeNode In p_node
-            If CInt(node.Value) = p_value Then
-                node.Remove()
-                Exit Sub
-            End If
-
-            DeleteNode(node.Nodes, p_value)
-        Next
     End Sub
 
     Delegate Sub UpdateFiltersTV_Delegate()
@@ -128,10 +91,9 @@ Class AxisFilterStructView
         End If
     End Sub
 
-    Private Sub AxisFilterStructView_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
-        e.Cancel = True
-        Me.Hide()
-    End Sub
+#End Region
+
+#Region "Call Backs"
 
     Private Sub DeleteBT_Click(sender As Object, e As EventArgs) Handles DeleteBT.Click, m_deleteButton.Click
 
@@ -182,5 +144,46 @@ Class AxisFilterStructView
     End Sub
 
 #End Region
+
+#Region "Events"
+
+    Private Sub AxisFilterStructView_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
+        e.Cancel = True
+        Me.Hide()
+    End Sub
+
+#End Region
+
+#Region "Utilities"
+
+    ' Ci-dessous à revoir : utiliser les méthodes de vTreeViewUtil : priority high
+    Private Sub AddNode(ByRef p_nodeList As vTreeNodeCollection, ByRef p_parent As Int32, ByRef p_newNode As vTreeNode)
+        If (p_parent = 0) Then
+            p_nodeList.Add(p_newNode)
+            Exit Sub
+        End If
+        For Each node As vTreeNode In p_nodeList
+            If node.Value = p_parent Then
+                node.Nodes.Add(p_newNode)
+                Exit Sub
+            End If
+            AddNode(node.Nodes, p_parent, p_newNode)
+        Next
+    End Sub
+
+    ' Ci-dessous à revoir : utiliser les méthodes de vTreeViewUtil : priority high
+    Private Sub DeleteNode(ByRef p_node As vTreeNodeCollection, ByRef p_value As Int32)
+        For Each node As vTreeNode In p_node
+            If CInt(node.Value) = p_value Then
+                node.Remove()
+                Exit Sub
+            End If
+
+            DeleteNode(node.Nodes, p_value)
+        Next
+    End Sub
+
+#End Region
+
 
 End Class

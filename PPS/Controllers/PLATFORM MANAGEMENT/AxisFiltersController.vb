@@ -7,7 +7,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 08/09/2015
+' Last modified: 14/10/2015
 
 
 Imports System.Windows.Forms
@@ -31,6 +31,7 @@ Friend Class AxisFiltersController
     Private m_axisId As Int32
     Friend Const m_FilterTag As String = "filterId"
     Private m_editFilterStructUI As AxisFilterStructView
+    Private m_isEditingFiltersStructure As Boolean
 
 #End Region
 
@@ -65,7 +66,7 @@ Friend Class AxisFiltersController
 
     End Sub
 
-    Public Sub close()
+    Public Sub Close()
 
         m_view.closeControl()
         ' m_view.Dispose()
@@ -97,6 +98,7 @@ Friend Class AxisFiltersController
         ht.Add(AXIS_ID_VARIABLE, m_axisId)
         ht.Add(ITEMS_POSITIONS, 1)
         ht.Add(FILTER_IS_PARENT_VARIABLE, p_isParent)
+        m_isEditingFiltersStructure = True
         GlobalVariables.Filters.CMSG_CREATE_FILTER(ht)
 
     End Function
@@ -116,6 +118,7 @@ Friend Class AxisFiltersController
 
     Friend Sub DeleteFilter(ByRef filterId As Int32)
 
+        m_isEditingFiltersStructure = True
         GlobalVariables.Filters.CMSG_DELETE_FILTER(filterId)
 
     End Sub
@@ -176,12 +179,14 @@ Friend Class AxisFiltersController
 
 #Region "Events"
 
+    ' Filters
     Private Sub AfterFilterRead(ByRef status As Boolean, ByRef ht As Hashtable)
 
         If status = True Then
             m_view.UpdateFiltersValuesTV()
             m_editFilterStructUI.SetFilter(ht)
         End If
+        m_isEditingFiltersStructure = False
 
     End Sub
 
@@ -191,6 +196,7 @@ Friend Class AxisFiltersController
             m_view.UpdateFiltersValuesTV()
             m_editFilterStructUI.DeleteFilter(id)
         End If
+        m_isEditingFiltersStructure = False
 
     End Sub
 
@@ -199,7 +205,7 @@ Friend Class AxisFiltersController
         If status = False Then
             MsgBox("The Filter could not be created.")
         End If
-
+     
     End Sub
 
     Private Sub AfterFilterUpdate(ByRef status As Boolean, ByRef id As Int32)
@@ -210,9 +216,10 @@ Friend Class AxisFiltersController
 
     End Sub
 
+    ' Filters values
     Private Sub AfterFilterValueRead(ByRef status As Boolean, ByRef ht As Hashtable)
 
-        If status = True Then
+        If status = True AndAlso m_isEditingFiltersStructure = False Then
             m_view.UpdateFiltersValuesTV()
         End If
 
@@ -220,7 +227,7 @@ Friend Class AxisFiltersController
 
     Private Sub AfterFilterValueDelete(ByRef status As Boolean, ByRef id As Int32)
 
-        If status = True Then
+        If status = True AndAlso m_isEditingFiltersStructure = False Then
             m_view.UpdateFiltersValuesTV()
         End If
 
