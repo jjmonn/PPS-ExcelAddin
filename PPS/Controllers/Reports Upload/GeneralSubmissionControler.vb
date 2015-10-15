@@ -173,7 +173,7 @@ Friend Class GeneralSubmissionControler
         On Error Resume Next
         RemoveHandler m_associatedWorksheet.Change, AddressOf m_submissionWSController.Worksheet_Change
         RemoveHandler m_associatedWorksheet.BeforeRightClick, AddressOf m_submissionWSController.Worksheet_BeforeRightClick
-        RemoveHandler m_associatedWorksheet.SelectionChange, AddressOf Worksheet_SelectionChange
+        RemoveHandler m_associatedWorksheet.SelectionChange, AddressOf m_submissionWSController.Worksheet_SelectionChange
         If Not m_submissionWSController Is Nothing Then m_submissionWSController = Nothing
         '  associatedWorksheet.Unprotect()
 
