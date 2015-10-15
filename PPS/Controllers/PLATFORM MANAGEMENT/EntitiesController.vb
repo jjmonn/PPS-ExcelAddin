@@ -81,6 +81,8 @@ Friend Class EntitiesController
 
     Public Sub close()
 
+        RemoveHandler GlobalVariables.EntitiesFilters.Read, AddressOf AfterEntityFilterRead
+        RemoveHandler GlobalVariables.EntitiesFilters.UpdateEvent, AddressOf AfterEntityFilterUpdate
         SendNewPositionsToModel()
         View.Dispose()
 
