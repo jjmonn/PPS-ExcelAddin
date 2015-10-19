@@ -55,7 +55,7 @@ Partial Class VersionSelectionPane
         Me.Label1.Location = New System.Drawing.Point(3, 4)
         Me.Label1.Margin = New System.Windows.Forms.Padding(3, 4, 3, 0)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(95, 15)
+        Me.Label1.Size = New System.Drawing.Size(84, 13)
         Me.Label1.TabIndex = 2
         Me.Label1.Text = "Select a Version"
         '

@@ -42,6 +42,7 @@ Public Class ConnectionTP
         CP.AnimationSpeed = 75
         CP.CircleSize = 0.7
         CPPanel.Controls.Add(CP)
+        CP.Dock = Windows.Forms.DockStyle.Fill
         CP.Width = 79
         CP.Height = 79
         CP.Visible = False
