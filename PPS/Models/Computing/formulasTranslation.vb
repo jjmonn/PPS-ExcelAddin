@@ -32,7 +32,7 @@ Friend Class FormulasTranslations
     Friend Const ACCOUNT_IDENTIFIER As String = "acc"
     Friend Const PARSER_FORMULAS As String = "if,sin,cos,tan,log2,log10,log,ln,exp,sqrt,sign,rint,abs,min,max,sum,avg" ' to be reviewed + case insensitive !! priority high
     Friend Const ACCOUNTS_HUMAN_IDENTIFIER As Char = Chr(34) '"'"
-    Friend Const FACTS_HUMAN_IDENTIFIER As Char = "#"
+    Friend Const FACTS_HUMAN_IDENTIFIER As Char = Chr(34)
     Friend Const FACTS_IDENTIFIER As String = "gfact"
 
     ' Periods
@@ -169,7 +169,7 @@ Friend Class FormulasTranslations
                         '                                      RELATIVE_PERIODS_IDENTIFIER & _
                         '                                      PERIODS_SEPARATOR_END)
                     End If
-                Else
+                ElseIf GlobalVariables.GlobalFacts.GetIdFromName(accountName) = 0 Then
                     error_tokens.Add(accountName)
                 End If
                 m = m.NextMatch
@@ -204,7 +204,7 @@ Friend Class FormulasTranslations
                                                 PERIODS_SEPARATOR_END, _
                                                 1, 1)
                     End If
-                Else
+                ElseIf GlobalVariables.Accounts.GetIdFromName(factName) = 0 Then
                     error_tokens.Add(factName)
                 End If
                 m = m.NextMatch

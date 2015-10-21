@@ -114,7 +114,6 @@ Friend Class SettingUI
         My.Settings.Save()
         My.Settings.serverIp = ServerAddressTB.Text
         My.Settings.Save()
-        My.Settings.database = databasesCB.Text
         My.Settings.Save()
         If IsNothing(CurrenciesCombobox.SelectedItem) = False Then
             My.Settings.currentCurrency = CurrenciesCombobox.SelectedItem.Value

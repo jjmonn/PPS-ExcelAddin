@@ -23,13 +23,13 @@ Partial Class SettingUI
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
-        Dim DataGridLocalization1 As VIBlend.WinForms.DataGridView.DataGridLocalization = New VIBlend.WinForms.DataGridView.DataGridLocalization()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(SettingUI))
+        Dim DataGridLocalization1 As VIBlend.WinForms.DataGridView.DataGridLocalization = New VIBlend.WinForms.DataGridView.DataGridLocalization()
         Me.Panel1 = New System.Windows.Forms.Panel()
         Me.TabControl1 = New System.Windows.Forms.TabControl()
         Me.TabPage1 = New System.Windows.Forms.TabPage()
-        Me.databasesCB = New System.Windows.Forms.ComboBox()
-        Me.Label5 = New System.Windows.Forms.Label()
+        Me.m_saveButton = New VIBlend.WinForms.Controls.vButton()
+        Me.ButtonIcons = New System.Windows.Forms.ImageList(Me.components)
         Me.PortTB = New System.Windows.Forms.TextBox()
         Me.Label4 = New System.Windows.Forms.Label()
         Me.ServerAddressTB = New System.Windows.Forms.TextBox()
@@ -42,12 +42,10 @@ Partial Class SettingUI
         Me.TabPage3 = New System.Windows.Forms.TabPage()
         Me.CurrenciesCombobox = New VIBlend.WinForms.Controls.vComboBox()
         Me.VLabel1 = New VIBlend.WinForms.Controls.vLabel()
-        Me.ButtonIcons = New System.Windows.Forms.ImageList(Me.components)
         Me.ControlImages = New System.Windows.Forms.ImageList(Me.components)
         Me.ACFIcon = New System.Windows.Forms.ImageList(Me.components)
         Me.FolderBrowserDialog1 = New System.Windows.Forms.FolderBrowserDialog()
         Me.ColorDialog1 = New System.Windows.Forms.ColorDialog()
-        Me.m_saveButton = New VIBlend.WinForms.Controls.vButton()
         Me.Panel1.SuspendLayout()
         Me.TabControl1.SuspendLayout()
         Me.TabPage1.SuspendLayout()
@@ -88,8 +86,6 @@ Partial Class SettingUI
         'TabPage1
         '
         Me.TabPage1.Controls.Add(Me.m_saveButton)
-        Me.TabPage1.Controls.Add(Me.databasesCB)
-        Me.TabPage1.Controls.Add(Me.Label5)
         Me.TabPage1.Controls.Add(Me.PortTB)
         Me.TabPage1.Controls.Add(Me.Label4)
         Me.TabPage1.Controls.Add(Me.ServerAddressTB)
@@ -104,22 +100,34 @@ Partial Class SettingUI
         Me.TabPage1.Text = "Connection"
         Me.TabPage1.UseVisualStyleBackColor = True
         '
-        'databasesCB
+        'm_saveButton
         '
-        Me.databasesCB.FormattingEnabled = True
-        Me.databasesCB.Location = New System.Drawing.Point(151, 157)
-        Me.databasesCB.Name = "databasesCB"
-        Me.databasesCB.Size = New System.Drawing.Size(197, 21)
-        Me.databasesCB.TabIndex = 19
+        Me.m_saveButton.AllowAnimations = True
+        Me.m_saveButton.BackColor = System.Drawing.Color.Transparent
+        Me.m_saveButton.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.m_saveButton.ImageKey = "1420498403_340208.ico"
+        Me.m_saveButton.ImageList = Me.ButtonIcons
+        Me.m_saveButton.Location = New System.Drawing.Point(247, 206)
+        Me.m_saveButton.Name = "m_saveButton"
+        Me.m_saveButton.RoundedCornersMask = CType(15, Byte)
+        Me.m_saveButton.Size = New System.Drawing.Size(100, 30)
+        Me.m_saveButton.TabIndex = 20
+        Me.m_saveButton.Text = "Save"
+        Me.m_saveButton.UseVisualStyleBackColor = False
+        Me.m_saveButton.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
         '
-        'Label5
+        'ButtonIcons
         '
-        Me.Label5.AutoSize = True
-        Me.Label5.Location = New System.Drawing.Point(27, 157)
-        Me.Label5.Name = "Label5"
-        Me.Label5.Size = New System.Drawing.Size(60, 15)
-        Me.Label5.TabIndex = 17
-        Me.Label5.Text = "Database"
+        Me.ButtonIcons.ImageStream = CType(resources.GetObject("ButtonIcons.ImageStream"), System.Windows.Forms.ImageListStreamer)
+        Me.ButtonIcons.TransparentColor = System.Drawing.Color.Transparent
+        Me.ButtonIcons.Images.SetKeyName(0, "imageres_89.ico")
+        Me.ButtonIcons.Images.SetKeyName(1, "favicon(95).ico")
+        Me.ButtonIcons.Images.SetKeyName(2, "1420498403_340208.ico")
+        Me.ButtonIcons.Images.SetKeyName(3, "favicon(97).ico")
+        Me.ButtonIcons.Images.SetKeyName(4, "imageres_99.ico")
+        Me.ButtonIcons.Images.SetKeyName(5, "favicon(70).ico")
+        Me.ButtonIcons.Images.SetKeyName(6, "imageres_82.ico")
+        Me.ButtonIcons.Images.SetKeyName(7, "refresh greay bcgd.bmp")
         '
         'PortTB
         '
@@ -134,7 +142,7 @@ Partial Class SettingUI
         Me.Label4.AutoSize = True
         Me.Label4.Location = New System.Drawing.Point(27, 107)
         Me.Label4.Name = "Label4"
-        Me.Label4.Size = New System.Drawing.Size(29, 15)
+        Me.Label4.Size = New System.Drawing.Size(26, 13)
         Me.Label4.TabIndex = 15
         Me.Label4.Text = "Port"
         '
@@ -150,13 +158,13 @@ Partial Class SettingUI
         Me.Label3.AutoSize = True
         Me.Label3.Location = New System.Drawing.Point(27, 55)
         Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(42, 15)
+        Me.Label3.Size = New System.Drawing.Size(38, 13)
         Me.Label3.TabIndex = 4
         Me.Label3.Text = "Server"
         '
         'IDTB
         '
-        Me.IDTB.Location = New System.Drawing.Point(151, 210)
+        Me.IDTB.Location = New System.Drawing.Point(151, 153)
         Me.IDTB.Name = "IDTB"
         Me.IDTB.Size = New System.Drawing.Size(196, 20)
         Me.IDTB.TabIndex = 1
@@ -164,9 +172,9 @@ Partial Class SettingUI
         'Label1
         '
         Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(27, 213)
+        Me.Label1.Location = New System.Drawing.Point(27, 156)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(48, 15)
+        Me.Label1.Size = New System.Drawing.Size(43, 13)
         Me.Label1.TabIndex = 0
         Me.Label1.Text = "User ID"
         '
@@ -313,19 +321,6 @@ Partial Class SettingUI
         Me.VLabel1.UseMnemonics = True
         Me.VLabel1.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
         '
-        'ButtonIcons
-        '
-        Me.ButtonIcons.ImageStream = CType(resources.GetObject("ButtonIcons.ImageStream"), System.Windows.Forms.ImageListStreamer)
-        Me.ButtonIcons.TransparentColor = System.Drawing.Color.Transparent
-        Me.ButtonIcons.Images.SetKeyName(0, "imageres_89.ico")
-        Me.ButtonIcons.Images.SetKeyName(1, "favicon(95).ico")
-        Me.ButtonIcons.Images.SetKeyName(2, "1420498403_340208.ico")
-        Me.ButtonIcons.Images.SetKeyName(3, "favicon(97).ico")
-        Me.ButtonIcons.Images.SetKeyName(4, "imageres_99.ico")
-        Me.ButtonIcons.Images.SetKeyName(5, "favicon(70).ico")
-        Me.ButtonIcons.Images.SetKeyName(6, "imageres_82.ico")
-        Me.ButtonIcons.Images.SetKeyName(7, "refresh greay bcgd.bmp")
-        '
         'ControlImages
         '
         Me.ControlImages.ImageStream = CType(resources.GetObject("ControlImages.ImageStream"), System.Windows.Forms.ImageListStreamer)
@@ -338,22 +333,6 @@ Partial Class SettingUI
         Me.ACFIcon.ImageStream = CType(resources.GetObject("ACFIcon.ImageStream"), System.Windows.Forms.ImageListStreamer)
         Me.ACFIcon.TransparentColor = System.Drawing.Color.Transparent
         Me.ACFIcon.Images.SetKeyName(0, "ACF Square 2 .1Control bgd.png")
-        '
-        'm_saveButton
-        '
-        Me.m_saveButton.AllowAnimations = True
-        Me.m_saveButton.BackColor = System.Drawing.Color.Transparent
-        Me.m_saveButton.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
-        Me.m_saveButton.ImageKey = "1420498403_340208.ico"
-        Me.m_saveButton.ImageList = Me.ButtonIcons
-        Me.m_saveButton.Location = New System.Drawing.Point(248, 258)
-        Me.m_saveButton.Name = "m_saveButton"
-        Me.m_saveButton.RoundedCornersMask = CType(15, Byte)
-        Me.m_saveButton.Size = New System.Drawing.Size(100, 30)
-        Me.m_saveButton.TabIndex = 20
-        Me.m_saveButton.Text = "Save"
-        Me.m_saveButton.UseVisualStyleBackColor = False
-        Me.m_saveButton.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
         '
         'SettingUI
         '
@@ -388,8 +367,6 @@ Partial Class SettingUI
     Friend WithEvents FolderBrowserDialog1 As System.Windows.Forms.FolderBrowserDialog
     Friend WithEvents PortTB As System.Windows.Forms.TextBox
     Friend WithEvents Label4 As System.Windows.Forms.Label
-    Friend WithEvents Label5 As System.Windows.Forms.Label
-    Friend WithEvents databasesCB As System.Windows.Forms.ComboBox
     Friend WithEvents TabPage2 As System.Windows.Forms.TabPage
     Friend WithEvents VGroupBox1 As VIBlend.WinForms.Controls.vGroupBox
     Friend WithEvents ColorDialog1 As System.Windows.Forms.ColorDialog
