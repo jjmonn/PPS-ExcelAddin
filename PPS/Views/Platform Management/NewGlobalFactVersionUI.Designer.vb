@@ -29,12 +29,15 @@ Partial Class NewGlobalFactVersionUI
         Me.Label3 = New System.Windows.Forms.Label()
         Me.NameTB = New System.Windows.Forms.TextBox()
         Me.StartPeriodNUD = New System.Windows.Forms.NumericUpDown()
-        Me.NBPeriodsNUD = New System.Windows.Forms.NumericUpDown()
+        Me.NBPeriodsYear = New System.Windows.Forms.NumericUpDown()
         Me.CancelBT = New System.Windows.Forms.Button()
         Me.ButtonIcons = New System.Windows.Forms.ImageList(Me.components)
         Me.ValidateBT = New System.Windows.Forms.Button()
+        Me.NbPeriodMonth = New System.Windows.Forms.NumericUpDown()
+        Me.Label4 = New System.Windows.Forms.Label()
         CType(Me.StartPeriodNUD, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.NBPeriodsNUD, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.NBPeriodsYear, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.NbPeriodMonth, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'Label1
@@ -60,9 +63,9 @@ Partial Class NewGlobalFactVersionUI
         Me.Label3.AutoSize = True
         Me.Label3.Location = New System.Drawing.Point(46, 139)
         Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(94, 13)
+        Me.Label3.Size = New System.Drawing.Size(86, 13)
         Me.Label3.TabIndex = 2
-        Me.Label3.Text = "Number of Months"
+        Me.Label3.Text = "Number of Years"
         '
         'NameTB
         '
@@ -79,20 +82,20 @@ Partial Class NewGlobalFactVersionUI
         Me.StartPeriodNUD.Size = New System.Drawing.Size(100, 20)
         Me.StartPeriodNUD.TabIndex = 4
         '
-        'NBPeriodsNUD
+        'NBPeriodsYear
         '
-        Me.NBPeriodsNUD.Location = New System.Drawing.Point(171, 137)
-        Me.NBPeriodsNUD.Maximum = New Decimal(New Integer() {70, 0, 0, 0})
-        Me.NBPeriodsNUD.Name = "NBPeriodsNUD"
-        Me.NBPeriodsNUD.Size = New System.Drawing.Size(100, 20)
-        Me.NBPeriodsNUD.TabIndex = 5
+        Me.NBPeriodsYear.Location = New System.Drawing.Point(171, 137)
+        Me.NBPeriodsYear.Maximum = New Decimal(New Integer() {70, 0, 0, 0})
+        Me.NBPeriodsYear.Name = "NBPeriodsYear"
+        Me.NBPeriodsYear.Size = New System.Drawing.Size(100, 20)
+        Me.NBPeriodsYear.TabIndex = 5
         '
         'CancelBT
         '
         Me.CancelBT.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
         Me.CancelBT.ImageKey = "imageres_89.ico"
         Me.CancelBT.ImageList = Me.ButtonIcons
-        Me.CancelBT.Location = New System.Drawing.Point(171, 192)
+        Me.CancelBT.Location = New System.Drawing.Point(171, 224)
         Me.CancelBT.Name = "CancelBT"
         Me.CancelBT.Size = New System.Drawing.Size(86, 26)
         Me.CancelBT.TabIndex = 25
@@ -115,7 +118,7 @@ Partial Class NewGlobalFactVersionUI
         Me.ValidateBT.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
         Me.ValidateBT.ImageKey = "1420498403_340208.ico"
         Me.ValidateBT.ImageList = Me.ButtonIcons
-        Me.ValidateBT.Location = New System.Drawing.Point(291, 192)
+        Me.ValidateBT.Location = New System.Drawing.Point(291, 224)
         Me.ValidateBT.Name = "ValidateBT"
         Me.ValidateBT.Size = New System.Drawing.Size(86, 26)
         Me.ValidateBT.TabIndex = 24
@@ -123,14 +126,33 @@ Partial Class NewGlobalFactVersionUI
         Me.ValidateBT.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         Me.ValidateBT.UseVisualStyleBackColor = True
         '
+        'NbPeriodMonth
+        '
+        Me.NbPeriodMonth.Location = New System.Drawing.Point(171, 177)
+        Me.NbPeriodMonth.Maximum = New Decimal(New Integer() {70, 0, 0, 0})
+        Me.NbPeriodMonth.Name = "NbPeriodMonth"
+        Me.NbPeriodMonth.Size = New System.Drawing.Size(100, 20)
+        Me.NbPeriodMonth.TabIndex = 27
+        '
+        'Label4
+        '
+        Me.Label4.AutoSize = True
+        Me.Label4.Location = New System.Drawing.Point(46, 179)
+        Me.Label4.Name = "Label4"
+        Me.Label4.Size = New System.Drawing.Size(94, 13)
+        Me.Label4.TabIndex = 26
+        Me.Label4.Text = "Number of Months"
+        '
         'NewGlobalFactVersionUI
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(402, 248)
+        Me.ClientSize = New System.Drawing.Size(402, 259)
+        Me.Controls.Add(Me.NbPeriodMonth)
+        Me.Controls.Add(Me.Label4)
         Me.Controls.Add(Me.CancelBT)
         Me.Controls.Add(Me.ValidateBT)
-        Me.Controls.Add(Me.NBPeriodsNUD)
+        Me.Controls.Add(Me.NBPeriodsYear)
         Me.Controls.Add(Me.StartPeriodNUD)
         Me.Controls.Add(Me.NameTB)
         Me.Controls.Add(Me.Label3)
@@ -140,7 +162,8 @@ Partial Class NewGlobalFactVersionUI
         Me.Name = "NewGlobalFactVersionUI"
         Me.Text = "New Fact Version"
         CType(Me.StartPeriodNUD, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.NBPeriodsNUD, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.NBPeriodsYear, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.NbPeriodMonth, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -150,8 +173,10 @@ Partial Class NewGlobalFactVersionUI
     Friend WithEvents Label3 As System.Windows.Forms.Label
     Friend WithEvents NameTB As System.Windows.Forms.TextBox
     Friend WithEvents StartPeriodNUD As System.Windows.Forms.NumericUpDown
-    Friend WithEvents NBPeriodsNUD As System.Windows.Forms.NumericUpDown
+    Friend WithEvents NBPeriodsYear As System.Windows.Forms.NumericUpDown
     Friend WithEvents CancelBT As System.Windows.Forms.Button
     Friend WithEvents ValidateBT As System.Windows.Forms.Button
     Friend WithEvents ButtonIcons As System.Windows.Forms.ImageList
+    Friend WithEvents NbPeriodMonth As System.Windows.Forms.NumericUpDown
+    Friend WithEvents Label4 As System.Windows.Forms.Label
 End Class

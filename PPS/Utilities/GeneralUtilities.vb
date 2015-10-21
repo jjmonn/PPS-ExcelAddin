@@ -438,12 +438,13 @@ Err:
     End Enum
     Public Shared Function AskPasswordConfirmation(ByRef p_message As String, ByRef p_title As String) As CheckResult
         p_message = p_message + Chr(13) + Chr(10) + Chr(13) + Chr(10) + "Please type your password to confirm:"
-        Dim result = InputBox(p_message, p_title)
+        Dim result = PasswordBox.Open(p_message, p_title)
 
         If result = "" Then Return CheckResult.Aborted
         If result <> ConnectionsFunctions.pwd Then Return CheckResult.Fail
         Return CheckResult.Success
     End Function
+
 #End Region
 
     Public Shared Function getSHA1Hash(ByVal strToHash As String) As String

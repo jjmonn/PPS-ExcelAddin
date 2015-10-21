@@ -47,7 +47,7 @@ Friend Class NewGlobalFactVersionUI
             m_controller.CreateVersion(m_parentId, _
                                          name, 0, _
                                          StartPeriodNUD.Value, _
-                                         NBPeriodsNUD.Value)
+                                         NBPeriodsYear.Value * 12 + NbPeriodMonth.Value)
             Me.Hide()
         Else
             MsgBox("The Name cannot exceed " & NAMES_MAX_LENGTH & " characters")
@@ -79,8 +79,4 @@ Friend Class NewGlobalFactVersionUI
 #End Region
 
 
-
-    Private Sub NewGlobalFactVersionUI_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-
-    End Sub
 End Class
