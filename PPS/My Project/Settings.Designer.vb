@@ -68,18 +68,6 @@ Namespace My
         
         <Global.System.Configuration.UserScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("4242")>  _
-        Public Property port_number() As String
-            Get
-                Return CType(Me("port_number"),String)
-            End Get
-            Set
-                Me("port_number") = value
-            End Set
-        End Property
-        
-        <Global.System.Configuration.UserScopedSettingAttribute(),  _
-         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.Configuration.DefaultSettingValueAttribute("ppsbi_engie")>  _
         Public Property database() As String
             Get
@@ -111,18 +99,6 @@ Namespace My
             End Get
             Set
                 Me("dgvFontSize") = value
-            End Set
-        End Property
-        
-        <Global.System.Configuration.UserScopedSettingAttribute(),  _
-         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("52.19.112.46")>  _
-        Public Property serverIp() As String
-            Get
-                Return CType(Me("serverIp"),String)
-            End Get
-            Set
-                Me("serverIp") = value
             End Set
         End Property
         
@@ -879,6 +855,30 @@ Namespace My
             End Get
             Set
                 Me("chart4Title") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("4242")>  _
+        Public Property port_number() As String
+            Get
+                Return CType(Me("port_number"),String)
+            End Get
+            Set
+                Me("port_number") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("52.19.112.46")>  _
+        Public Property serverIp() As String
+            Get
+                Return CType(Me("serverIp"),String)
+            End Get
+            Set
+                Me("serverIp") = value
             End Set
         End Property
     End Class

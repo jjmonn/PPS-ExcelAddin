@@ -287,9 +287,9 @@ Friend Class ControllingUI_2
 
 #Region "Interface"
 
-    Private Sub RefreshData(Optional ByRef useCache As Boolean = False)
+    Friend Sub RefreshData(Optional ByRef useCache As Boolean = False)
 
-        If m_controller.isComputingFlag = True Then
+        If m_controller.m_isComputingFlag = True Then
             Exit Sub
         End If
         m_progressBar.Left = (SplitContainer1.Panel2.Width - m_progressBar.Width) / 2
@@ -302,8 +302,8 @@ Friend Class ControllingUI_2
 
     Private Sub RefreshFromRightPane()
 
-        If Not m_controller.EntityNode Is Nothing Then
-            m_currentEntityNode = m_controller.EntityNode
+        If Not m_controller.m_entityNode Is Nothing Then
+            m_currentEntityNode = m_controller.m_entityNode
             RefreshData(True)
         Else
             If Not leftPane_control.entitiesTV.SelectedNode Is Nothing Then
@@ -517,7 +517,7 @@ Friend Class ControllingUI_2
             m_controller.VersionsCompDisplay(False)
             m_isVersionComparisonDisplayed = False
         Else
-            If m_controller.versionsDict.Count = 2 Then
+            If m_controller.m_versionsDict.Count = 2 Then
                 m_controller.VersionsCompDisplay(True)
                 m_isVersionComparisonDisplayed = True
             Else
@@ -884,7 +884,7 @@ Friend Class ControllingUI_2
     Delegate Sub ReloadAccountsTV_Delegate()
     Friend Sub ReloadAccountsTV_ThreadSafe()
 
-        If InvokeRequired Then
+        If Me.accountsTV.InvokeRequired Then
             Dim MyDelegate As New ReloadAccountsTV_Delegate(AddressOf ReloadAccountsTV_ThreadSafe)
             Me.Invoke(MyDelegate, New Object() {})
         Else

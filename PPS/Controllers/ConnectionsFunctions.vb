@@ -198,6 +198,7 @@ Friend Class ConnectionsFunctions
 
     Friend Shared Sub CloseNetworkConnection()
 
+        On Error Resume Next
         GlobalVariables.NetworkConnect.Stop()
         GlobalVariables.Connection_Toggle_Button.Image = 0
         GlobalVariables.Connection_Toggle_Button.Caption = "Not connected"

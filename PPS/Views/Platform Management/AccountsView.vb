@@ -479,6 +479,7 @@ SubmitFormula:
     ' Accounts TV
     Private Sub AccountsTV_ItemDrag(sender As Object, e As ItemDragEventArgs)
 
+        If IsNothing(m_currentNode) = True Then Exit Sub
         If IsNothing(m_currentNode.Parent) = False Then
             DoDragDrop(e.Item, Windows.Forms.DragDropEffects.Move)
         End If

@@ -1,11 +1,11 @@
-﻿' PlatformMGTGeneralUI.vb 
-'
-'
-'
-'
-'
-' Author: Julien Monnereau
-' Last modified: 18/09/2015
+﻿'PlatformMGTGeneralUI.vb 
+
+
+
+
+
+'Author: Julien Monnereau
+'Last modified: 18/09/2015
 
 
 Imports System.ComponentModel
@@ -17,7 +17,7 @@ Friend Class PlatformMGTGeneralUI
 
 #Region "Instance Variables"
 
-    ' Objects
+    'Objects
     Private current_controller As Object
 
 
@@ -25,7 +25,7 @@ Friend Class PlatformMGTGeneralUI
 
     Friend Sub New()
 
-        ' This call is required by the designer.
+        '  This call is required by the designer.
         InitializeComponent()
         If Not GlobalVariables.Users.CurrentUserIsAdmin() Then GroupsBT.Enabled = False
 

@@ -162,6 +162,13 @@ Public Class CUI2Visualization
 
     End Sub
 
+    Private Sub m_refreshButton_Click(sender As Object, e As EventArgs) Handles m_refreshButton.Click
+
+        m_controller.LaunchMainUIRefreshFromCharts()
+
+    End Sub
+
+
 #End Region
 
 #Region "Events"
@@ -183,4 +190,5 @@ Public Class CUI2Visualization
     End Function
 
 
+  
 End Class
