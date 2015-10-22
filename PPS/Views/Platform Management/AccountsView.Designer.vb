@@ -157,7 +157,7 @@ Partial Class AccountsView
         Me.GroupBox5.Size = New System.Drawing.Size(476, 149)
         Me.GroupBox5.TabIndex = 20
         Me.GroupBox5.TabStop = False
-        Me.GroupBox5.Text = "Account's Description"
+        Me.GroupBox5.Text = Local.GetValue("accounts_edition.account_description")
         '
         'm_descriptionTextBox
         '
@@ -192,7 +192,7 @@ Partial Class AccountsView
         Me.SaveDescriptionBT.Name = "SaveDescriptionBT"
         Me.SaveDescriptionBT.Size = New System.Drawing.Size(187, 28)
         Me.SaveDescriptionBT.TabIndex = 7
-        Me.SaveDescriptionBT.Text = "Save Description"
+        Me.SaveDescriptionBT.Text = Local.GetValue("accounts_edition.save_description")
         Me.SaveDescriptionBT.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         Me.SaveDescriptionBT.UseVisualStyleBackColor = True
         '
@@ -214,7 +214,7 @@ Partial Class AccountsView
         Me.GroupBox3.Size = New System.Drawing.Size(476, 181)
         Me.GroupBox3.TabIndex = 19
         Me.GroupBox3.TabStop = False
-        Me.GroupBox3.Text = "Account's Formula"
+        Me.GroupBox3.Text = Local.GetValue("accounts_edition.account_formula")
         '
         'm_formulaTextBox
         '
@@ -251,7 +251,7 @@ Partial Class AccountsView
         Me.formulaEdit.Name = "formulaEdit"
         Me.formulaEdit.Size = New System.Drawing.Size(105, 25)
         Me.formulaEdit.TabIndex = 5
-        Me.formulaEdit.Text = "Edit Formula      "
+        Me.formulaEdit.Text = Local.GetValue("accounts_edition.edit_formula")
         Me.formulaEdit.UseVisualStyleBackColor = True
         '
         'submit_cmd
@@ -265,7 +265,7 @@ Partial Class AccountsView
         Me.submit_cmd.Name = "submit_cmd"
         Me.submit_cmd.Size = New System.Drawing.Size(187, 28)
         Me.submit_cmd.TabIndex = 7
-        Me.submit_cmd.Text = "Validate Formula"
+        Me.submit_cmd.Text = Local.GetValue("accounts_edition.validate_formula")
         Me.submit_cmd.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         Me.submit_cmd.UseVisualStyleBackColor = True
         '
@@ -290,7 +290,7 @@ Partial Class AccountsView
         Me.GroupBox1.Size = New System.Drawing.Size(478, 280)
         Me.GroupBox1.TabIndex = 17
         Me.GroupBox1.TabStop = False
-        Me.GroupBox1.Text = "Account's information"
+        Me.GroupBox1.Text = Local.GetValue("accounts_edition.account_information")
         '
         'ConsolidationOptionComboBox
         '
@@ -341,7 +341,7 @@ Partial Class AccountsView
         Me.VLabel5.Name = "VLabel5"
         Me.VLabel5.Size = New System.Drawing.Size(129, 25)
         Me.VLabel5.TabIndex = 45
-        Me.VLabel5.Text = "Account's Name"
+        Me.VLabel5.Text = Local.GetValue("accounts_edition.account_name")
         Me.VLabel5.TextAlignment = System.Drawing.ContentAlignment.TopLeft
         Me.VLabel5.UseMnemonics = True
         Me.VLabel5.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
@@ -357,7 +357,7 @@ Partial Class AccountsView
         Me.VLabel4.Name = "VLabel4"
         Me.VLabel4.Size = New System.Drawing.Size(129, 25)
         Me.VLabel4.TabIndex = 44
-        Me.VLabel4.Text = "Formula Type"
+        Me.VLabel4.Text = Local.GetValue("accounts_edition.formula_type")
         Me.VLabel4.TextAlignment = System.Drawing.ContentAlignment.TopLeft
         Me.VLabel4.UseMnemonics = True
         Me.VLabel4.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
@@ -373,7 +373,7 @@ Partial Class AccountsView
         Me.VLabel2.Name = "VLabel2"
         Me.VLabel2.Size = New System.Drawing.Size(129, 25)
         Me.VLabel2.TabIndex = 43
-        Me.VLabel2.Text = "Account Type"
+        Me.VLabel2.Text = Local.GetValue("accounts_edition.account_type")
         Me.VLabel2.TextAlignment = System.Drawing.ContentAlignment.TopLeft
         Me.VLabel2.UseMnemonics = True
         Me.VLabel2.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
@@ -389,7 +389,7 @@ Partial Class AccountsView
         Me.VLabel3.Name = "VLabel3"
         Me.VLabel3.Size = New System.Drawing.Size(129, 25)
         Me.VLabel3.TabIndex = 42
-        Me.VLabel3.Text = "Consolidation Option"
+        Me.VLabel3.Text = Local.GetValue("accounts_edition.consolidation_option")
         Me.VLabel3.TextAlignment = System.Drawing.ContentAlignment.TopLeft
         Me.VLabel3.UseMnemonics = True
         Me.VLabel3.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
@@ -405,7 +405,7 @@ Partial Class AccountsView
         Me.VLabel1.Name = "VLabel1"
         Me.VLabel1.Size = New System.Drawing.Size(129, 25)
         Me.VLabel1.TabIndex = 41
-        Me.VLabel1.Text = "Currencies Conversion"
+        Me.VLabel1.Text = Local.GetValue("accounts_edition.currencies_conversion")
         Me.VLabel1.TextAlignment = System.Drawing.ContentAlignment.TopLeft
         Me.VLabel1.UseMnemonics = True
         Me.VLabel1.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
@@ -480,7 +480,7 @@ Partial Class AccountsView
         Me.VLabel6.Name = "VLabel6"
         Me.VLabel6.Size = New System.Drawing.Size(114, 16)
         Me.VLabel6.TabIndex = 0
-        Me.VLabel6.Text = "Macro Economic Indicators"
+        Me.VLabel6.Text = Local.GetValue("accounts_edition.macro_economic_indicators")
         Me.VLabel6.TextAlignment = System.Drawing.ContentAlignment.TopLeft
         Me.VLabel6.UseMnemonics = True
         Me.VLabel6.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
@@ -507,28 +507,28 @@ Partial Class AccountsView
         Me.AddSubAccountToolStripMenuItem.Image = Global.FinancialBI.My.Resources.Resources.registry_add
         Me.AddSubAccountToolStripMenuItem.Name = "AddSubAccountToolStripMenuItem"
         Me.AddSubAccountToolStripMenuItem.Size = New System.Drawing.Size(221, 24)
-        Me.AddSubAccountToolStripMenuItem.Text = "Add Sub Account"
+        Me.AddSubAccountToolStripMenuItem.Text = Local.GetValue("accounts_edition.new_account")
         '
         'AddCategoryToolStripMenuItem
         '
         Me.AddCategoryToolStripMenuItem.Image = Global.FinancialBI.My.Resources.Resources.favicon_81_
         Me.AddCategoryToolStripMenuItem.Name = "AddCategoryToolStripMenuItem"
         Me.AddCategoryToolStripMenuItem.Size = New System.Drawing.Size(221, 24)
-        Me.AddCategoryToolStripMenuItem.Text = "Add Category"
+        Me.AddCategoryToolStripMenuItem.Text = Local.GetValue("accounts_edition.add_tab_account")
         '
         'DeleteAccountToolStripMenuItem
         '
         Me.DeleteAccountToolStripMenuItem.Image = Global.FinancialBI.My.Resources.Resources.registry_delete
         Me.DeleteAccountToolStripMenuItem.Name = "DeleteAccountToolStripMenuItem"
         Me.DeleteAccountToolStripMenuItem.Size = New System.Drawing.Size(221, 24)
-        Me.DeleteAccountToolStripMenuItem.Text = "Delete Account"
+        Me.DeleteAccountToolStripMenuItem.Text = Local.GetValue("accounts_edition.delete_account")
         '
         'DropHierarchyToExcelToolStripMenuItem
         '
         Me.DropHierarchyToExcelToolStripMenuItem.Image = Global.FinancialBI.My.Resources.Resources.Excel_Blue_32x32
         Me.DropHierarchyToExcelToolStripMenuItem.Name = "DropHierarchyToExcelToolStripMenuItem"
         Me.DropHierarchyToExcelToolStripMenuItem.Size = New System.Drawing.Size(221, 24)
-        Me.DropHierarchyToExcelToolStripMenuItem.Text = "Drop Hierarchy to Excel"
+        Me.DropHierarchyToExcelToolStripMenuItem.Text = Local.GetValue("accounts_edition.drop_to_excel")
         '
         'ToolStripSeparator1
         '
@@ -550,28 +550,28 @@ Partial Class AccountsView
         Me.NewToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.CreateANewAccountToolStripMenuItem, Me.CreateANewCategoryToolStripMenuItem, Me.DeleteAccountToolStripMenuItem1, Me.ToolStripSeparator2})
         Me.NewToolStripMenuItem.Name = "NewToolStripMenuItem"
         Me.NewToolStripMenuItem.Size = New System.Drawing.Size(71, 23)
-        Me.NewToolStripMenuItem.Text = "Account"
+        Me.NewToolStripMenuItem.Text = Local.GetValue("general.account")
         '
         'CreateANewAccountToolStripMenuItem
         '
         Me.CreateANewAccountToolStripMenuItem.Image = Global.FinancialBI.My.Resources.Resources.registry_add
         Me.CreateANewAccountToolStripMenuItem.Name = "CreateANewAccountToolStripMenuItem"
         Me.CreateANewAccountToolStripMenuItem.Size = New System.Drawing.Size(218, 24)
-        Me.CreateANewAccountToolStripMenuItem.Text = "Create a new Account"
+        Me.CreateANewAccountToolStripMenuItem.Text = Local.GetValue("accounts_edition.new_account")
         '
         'CreateANewCategoryToolStripMenuItem
         '
         Me.CreateANewCategoryToolStripMenuItem.Image = Global.FinancialBI.My.Resources.Resources.favicon_81_
         Me.CreateANewCategoryToolStripMenuItem.Name = "CreateANewCategoryToolStripMenuItem"
         Me.CreateANewCategoryToolStripMenuItem.Size = New System.Drawing.Size(218, 24)
-        Me.CreateANewCategoryToolStripMenuItem.Text = "Create a new Category"
+        Me.CreateANewCategoryToolStripMenuItem.Text = Local.GetValue("accounts_edition.new_tab_account")
         '
         'DeleteAccountToolStripMenuItem1
         '
         Me.DeleteAccountToolStripMenuItem1.Image = Global.FinancialBI.My.Resources.Resources.registry_delete
         Me.DeleteAccountToolStripMenuItem1.Name = "DeleteAccountToolStripMenuItem1"
         Me.DeleteAccountToolStripMenuItem1.Size = New System.Drawing.Size(218, 24)
-        Me.DeleteAccountToolStripMenuItem1.Text = "Delete Account"
+        Me.DeleteAccountToolStripMenuItem1.Text = Local.GetValue("accounts_edition.delete_account")
         '
         'ToolStripSeparator2
         '
@@ -590,20 +590,20 @@ Partial Class AccountsView
         Me.DropAllAccountsHierarchyToExcelToolStripMenuItem.Image = Global.FinancialBI.My.Resources.Resources.Excel_Blue_32x32
         Me.DropAllAccountsHierarchyToExcelToolStripMenuItem.Name = "DropAllAccountsHierarchyToExcelToolStripMenuItem"
         Me.DropAllAccountsHierarchyToExcelToolStripMenuItem.Size = New System.Drawing.Size(328, 24)
-        Me.DropAllAccountsHierarchyToExcelToolStripMenuItem.Text = "Drop all Accounts Hierarchy to Excel"
+        Me.DropAllAccountsHierarchyToExcelToolStripMenuItem.Text = Local.GetValue("accounts_edition.drop_to_excel")
         '
         'DropSelectedAccountHierarchyToExcelToolStripMenuItem
         '
         Me.DropSelectedAccountHierarchyToExcelToolStripMenuItem.Image = Global.FinancialBI.My.Resources.Resources.Excel_Green_32x32
         Me.DropSelectedAccountHierarchyToExcelToolStripMenuItem.Name = "DropSelectedAccountHierarchyToExcelToolStripMenuItem"
         Me.DropSelectedAccountHierarchyToExcelToolStripMenuItem.Size = New System.Drawing.Size(328, 24)
-        Me.DropSelectedAccountHierarchyToExcelToolStripMenuItem.Text = "Drop selected Account Hierarchy to Excel"
+        Me.DropSelectedAccountHierarchyToExcelToolStripMenuItem.Text = Local.GetValue("accounts_edition.drop_selected_hierarchy_to_excel")
         '
         'HelpToolStripMenuItem
         '
         Me.HelpToolStripMenuItem.Name = "HelpToolStripMenuItem"
         Me.HelpToolStripMenuItem.Size = New System.Drawing.Size(49, 23)
-        Me.HelpToolStripMenuItem.Text = "Help"
+        Me.HelpToolStripMenuItem.Text = Local.GetValue("general.help")
         '
         'AccountsView
         '

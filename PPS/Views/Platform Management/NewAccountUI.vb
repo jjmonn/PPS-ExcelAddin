@@ -143,17 +143,17 @@ Friend Class NewAccountUI
     Private Function IsFormValid() As Boolean
 
         If Controller.AccountNameCheck(NameTextBox.Text) = False Then
-            MsgBox("The Account Name must not be empty.")
+            MsgBox(Local.GetValue("accounts_edition.msg_name_empty"))
             Return False
         End If
 
         If ComboBoxesSelectionCheck() = False Then
-            MsgBox("Account's Format and Formula type must be populated.")
+            MsgBox(Local.GetValue("accounts_edition.msg_fill_values"))
             Return False
         End If
 
         If Controller.IsUsedName(NameTextBox.Text) Then
-            MsgBox("This name is already used by another fact or account.")
+            MsgBox(Local.GetValue("accounts_edition.msg_name_already_used"))
             Return False
         End If
         Return True

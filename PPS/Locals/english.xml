@@ -5,8 +5,121 @@
   </category>
   <category name="CUI">
     <string name="refresh">Refresh</string>
-    <string name="update">Update</string>
+    <string name="update">Update</string>    
+    <string name="select_all">Select all</string>
+    <string name="unselect_all">Unselect all</string>
+    <string name="expand_all">Expand all</string>
+    <string name="collapse_all">Collapse all</string>
+    <string name="log">Log</string>
+    <string name="display_options">Display options</string>
+    <string name="adjust_columns_size">Adjust columns size</string>
+    <string name="automatic_columns_adjustment">Automatic Columns Adjustment</string>
+    <string name="currency">Currency</string>
+    <string name="version">Version</string>
+    <string name="entity">Entity</string>
+    <string name="main_menu">Main menu</string>
+    <string name="drop_on_excel">Drop on Excel</string>
+    <string name="drop_on_excel_tooltip">Drop the Data on the active Excel Worksheet</string>
+    <string name="performance_review">Performance Review</string>
+    <string name="performance_review_tooltip">Versions comparisons functionalities</string>
+    <string name="display_versions_comparison">Display versions comparison</string>
+    <string name="switch_versions">Switch Versions</string>
+    <string name="take_off_comparison">Hide versions comparison</string>
+    <string name="refresh_tooltip">Update the data</string>
+    <string name="charts">Charts</string>
+    <string name="financials">Financials</string>
+    <string name="2_versions_alert">Two versions must be selected in order to display the comparison.</string>
+    <string name="request_too_complex">Unable to display result: too much decompositions.</string>
+    <string name="need_one_version">At least one version must be selected.</string>
+    <string name="no_entity_selected">An entity must be selected.</string>
+    <string name="selection">Selection</string>
+    <string name="entities_selection">Entity selection</string>
+    <string name="columns_label">Columns labels</string>
+    <string name="rows_label">Rows labels</string>
+    <string name="fields_choice">Choose fields to add to report:</string>  
   </category>
+
+  <category name="CUI_Charts">
+    <string name="charts_settings">Chart settings</string>
+    <string name="chart_title">Title</string>
+    <string name="serie_1">Item 1</string>
+    <string name="serie_2">Item 2</string>
+    <string name="CUI2_vizualization">Financial BI Visualization</string>
+  </category>
+   
+  <category name="connection">
+    <string name="user_id">User ID</string>
+    <string name="password">Password</string>  
+    <string name="connection">Connection</string>
+  </category>
+    
+  <category name="accounts_edition">
+    <string name="account_description">Account's description</string>
+    <string name="save_description">Save description</string>
+    <string name="account_formula">Account's formula</string>
+    <string name="edit_formula">Edit formula</string>
+    <string name="validate_formula">Validate formula</string>
+    <string name="account_information">Account's information</string>
+    <string name="account_name">Account's name</string>
+    <string name="formula_type">Formula type</string>
+    <string name="account_type">Account's type</string>
+    <string name="consolidation_option">Consolidation option</string>
+    <string name="currencies_conversion">Currencies conversion</string>
+    <string name="macro_economic_indicators">Macro economic indicators</string>
+    <string name="new_account">Create a new account</string>
+    <string name="add_tab_account">Create a new tab account</string>
+    <string name="delete_account">Delete account</string>
+    <string name="drop_to_excel">Drop accounts hierarchy on Excel</string>
+    <string name="drop_selected_hierarchy_to_excel">Drop selected account hierarchy on Excel</string>
+    <string name="msg_select_account">Please Select Parent Account first.</string>
+    <string name="msg_formula_empty">The formula is empty, do you want to save it?</string>
+    <string name="msg_items_not_mapped">The following items are not mapped accounts or invalid items in a formula: </string>
+    <string name="msg_dependant_accounts">The following Accounts formula are dependant on some accounts you want to delete: </string>
+    <string name="msg_formula_to_be_changed">Those formulas must first be changed before the Selected Accounts can be deleted.</string>
+    <string name="msg_account_deletion1">Careful, you are about to delete account </string>
+    <string name="msg_account_deletion2">Do you confirm? </string>
+    <string name="msg_account_deletion3">This Account and all its Sub Accounts will be deleted.</string>
+    <string name="msg_account_deletion_confirmation">Account deletion confirmation</string>  
+    <string name="msg_incorrect_password">Incorrect password</string>
+    <string name="msg_destination_cell_not_valid">A destination cell must be selected in order to drop the Accounts on the Worksheet.</string>
+    <string name="msg_accounts_drop">The Accounts will be dropped into cell.</string>
+    <string name="msg_formula_not_editable">This Account has no editable Formula. Please change the Formula Type or select another accounts in order to edit the formula.</string>
+    <string name="msg_select_account">An Account must be selected in order to edit its formula.</string>
+    <string name="msg_formula_validation_confirmation">Do you want to save the formula?</string>
+    <string name="title_formula_validation_confirmation">Formula edition confirmation</string>
+    <string name="msg_password_required">Changing the Formula Type of this account may imply the loss of inputs, do you confirm you want to convert this account into a formula?</string>
+    <string name="msg_password_confirmation_failed">Password confirmation failed.</string>
+    <string name="msg_select_parent_account">Please Select a Parent Account first.</string>
+    <string name="msg_new_tab_name">Name of the new report: </string>
+    <string name="title_new_tab_name">Report creation</string>
+    <string name="msg_empty_formula">The formula is empty, do you want to save it?</string>
+    <string name="msg_accounts_drop">The Accounts will be dropped into cell.</string>
+    <string name="msg_formula_edition_for_account">You are about to update the formula for Account: </string>
+    <string name="title_formula_type_validation_confirmation">Formula type edition confirmation</string>  
+    <string name="account_parent">Account's parent</string>
+    <string name="account_format">Account's format</string>
+    <string name="recomputation">Recomputation</string>
+    <string name="aggregation">Aggregation</string>
+    <string name="end_of_period_rate">End of Period FX Rate</string>
+    <string name="average_rate">Average FX Rate</string>
+    <string name="title_new_account">New account</string>
+    <string name="msg_name_empty">The Account Name must not be empty.</string>
+    <string name="msg_fill_values">"Account's Format and Formula type must be populated."</string>
+    <string name="msg_name_already_used">This name is already used by another fact or account.</string>
+  </category>
+    
+  <category name="general">
+     <string name="account">Account</string>
+     <string name="couleur">Couleur</string>
+     <string name="type">Type</string>
+     <string name="save">Save</string>
+     <string name="cancel">Cancel</string>
+     <string name="help">Help</string>
+     <string name="create">Create</string>
+  
+  </category>
+
+
 </category>
 
 <!-- 

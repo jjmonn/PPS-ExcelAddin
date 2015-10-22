@@ -92,7 +92,7 @@ Partial Class CUI2RightPane
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(130, 20)
         Me.Label1.TabIndex = 3
-        Me.Label1.Text = "Columns Labels"
+        Me.Label1.Text = Local.GetValue("CUI.columns_label")
         Me.Label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
         'ImageList2
@@ -127,7 +127,7 @@ Partial Class CUI2RightPane
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(129, 20)
         Me.Label2.TabIndex = 4
-        Me.Label2.Text = "Rows Labels"
+        Me.Label2.Text = Local.GetValue("CUI.rows_label")
         Me.Label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
         'rowsDisplayList
@@ -152,7 +152,7 @@ Partial Class CUI2RightPane
         Me.UpdateBT.Name = "UpdateBT"
         Me.UpdateBT.Size = New System.Drawing.Size(75, 24)
         Me.UpdateBT.TabIndex = 0
-        Me.UpdateBT.Text = "Update"
+        Me.UpdateBT.Text = Local.GetValue("CUI.refresh")
         Me.UpdateBT.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         Me.UpdateBT.UseVisualStyleBackColor = True
         '
@@ -205,7 +205,7 @@ Partial Class CUI2RightPane
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(169, 15)
         Me.Label3.TabIndex = 6
-        Me.Label3.Text = "Choose fields to add to report:"
+        Me.Label3.Text = Local.GetValue("CUI.fields_choice")
         '
         'CUI2RightPane
         '

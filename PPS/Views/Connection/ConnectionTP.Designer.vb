@@ -42,7 +42,7 @@ Partial Class ConnectionTP
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(48, 15)
         Me.Label1.TabIndex = 1
-        Me.Label1.Text = "User ID"
+        Me.Label1.Text = Local.GetValue("connection.user_ID")
         '
         'userNameTextBox
         '
@@ -77,7 +77,7 @@ Partial Class ConnectionTP
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(61, 15)
         Me.Label2.TabIndex = 6
-        Me.Label2.Text = "Password"
+        Me.Label2.Text = Local.GetValue("connection.password")
         '
         'CPPanel
         '
@@ -116,7 +116,7 @@ Partial Class ConnectionTP
         Me.ConnectionBT.RoundedCornersMask = CType(15, Byte)
         Me.ConnectionBT.Size = New System.Drawing.Size(100, 47)
         Me.ConnectionBT.TabIndex = 4
-        Me.ConnectionBT.Text = "Connection"
+        Me.ConnectionBT.Text = Local.GetValue("connection.connection")
         Me.ConnectionBT.TextAlign = System.Drawing.ContentAlignment.BottomCenter
         Me.ConnectionBT.UseVisualStyleBackColor = False
         Me.ConnectionBT.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
@@ -133,7 +133,7 @@ Partial Class ConnectionTP
         Me.CancelBT.RoundedCornersMask = CType(15, Byte)
         Me.CancelBT.Size = New System.Drawing.Size(100, 47)
         Me.CancelBT.TabIndex = 5
-        Me.CancelBT.Text = "Cancel"
+        Me.CancelBT.Text = Local.GetValue("general.cancel")
         Me.CancelBT.TextAlign = System.Drawing.ContentAlignment.BottomCenter
         Me.CancelBT.UseVisualStyleBackColor = False
         Me.CancelBT.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
@@ -146,7 +146,7 @@ Partial Class ConnectionTP
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Location = New System.Drawing.Point(0, 0)
         Me.Name = "ConnectionTP"
-        Me.Text = "Connection"
+        Me.Text = Local.GetValue("connection.connection")
         Me.Panel1.ResumeLayout(False)
         Me.Panel1.PerformLayout()
         Me.ResumeLayout(False)

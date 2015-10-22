@@ -119,7 +119,7 @@ Partial Class CUI2LeftPane
         Me.SelectionCB.RoundedCornersMaskListItem = CType(15, Byte)
         Me.SelectionCB.Size = New System.Drawing.Size(233, 19)
         Me.SelectionCB.TabIndex = 0
-        Me.SelectionCB.Text = "Selection"
+        Me.SelectionCB.Text = Local.GetValue("CUI.selection")
         Me.SelectionCB.UseThemeBackColor = False
         Me.SelectionCB.UseThemeDropDownArrowColor = True
         Me.SelectionCB.ValueMember = ""
@@ -178,7 +178,7 @@ Partial Class CUI2LeftPane
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(101, 15)
         Me.Label1.TabIndex = 0
-        Me.Label1.Text = "Entities Selection"
+        Me.Label1.Text = Local.GetValue("CUI.entities_selection")
         Me.Label1.TextAlign = System.Drawing.ContentAlignment.BottomLeft
         '
         'CategoriesIL

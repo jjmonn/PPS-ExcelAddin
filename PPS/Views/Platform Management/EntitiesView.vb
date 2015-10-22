@@ -674,8 +674,12 @@ Friend Class EntitiesView
 
             currentItem = currentItem.ItemBelow
             If currentItem.ParentItem.GetUniqueID = parent.GetUniqueID Then
-                m_entitiesDataGridView.CellsArea.SetCellValue(currentItem, columnItem_, value)
-                If currentItem.Items.Count > 0 Then SetValueToChildrenItems(currentItem, columnItem_, value)
+
+                If currentItem.Items.Count > 0 Then
+                    SetValueToChildrenItems(currentItem, columnItem_, value)
+                Else
+                    m_entitiesDataGridView.CellsArea.SetCellValue(currentItem, columnItem_, value)
+                End If
             End If
 
         End While

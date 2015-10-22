@@ -521,7 +521,7 @@ Friend Class ControllingUI_2
                 m_controller.VersionsCompDisplay(True)
                 m_isVersionComparisonDisplayed = True
             Else
-                MsgBox("Two versions must be selected in order to display the comparison.")
+                MsgBox(Local.GetValue("CUI.2_versions_alert"))
             End If
         End If
 
@@ -760,14 +760,14 @@ Friend Class ControllingUI_2
                             m_controller.Compute(versionsIds.ToArray, m_currentEntityNode)
                         Catch ex As OutOfMemoryException
                             System.Diagnostics.Debug.WriteLine(ex.Message)
-                            MsgBox("Unable to display result: Request too complex")
+                            MsgBox(Local.GetValue("CUI.request_too_complex"))
                             'AfterWorkDoneAttemp_ThreadSafe()
                         End Try
                     Else
-                        MsgBox("At least one version must be selected.")
+                        MsgBox(Local.GetValue("CUI.need_one_version"))
                     End If
                 Else
-                    MsgBox("No Entity set up.")
+                    MsgBox(Local.GetValue("CUI.no_entity_selected"))
                     Exit Sub
                 End If
             Else
@@ -777,11 +777,11 @@ Friend Class ControllingUI_2
                         m_controller.Compute(versionsIds.ToArray, m_currentEntityNode)
                     Catch ex As Exception
                         System.Diagnostics.Debug.WriteLine(ex.Message)
-                        MsgBox("Unable to display result: Request too complex")
+                        MsgBox(Local.GetValue("CUI.request_too_complex"))
                         '   AfterWorkDoneAttemp_ThreadSafe()
                     End Try
                 Else
-                    MsgBox("At least one version must be selected.")
+                    MsgBox(Local.GetValue("CUI.need_one_version"))
                 End If
             End If
 
