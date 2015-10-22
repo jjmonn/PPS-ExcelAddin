@@ -70,7 +70,7 @@ Partial Class NewEntityUI
         Me.VLabel3.Name = "VLabel3"
         Me.VLabel3.Size = New System.Drawing.Size(169, 24)
         Me.VLabel3.TabIndex = 5
-        Me.VLabel3.Text = "Parent Entity"
+        Me.VLabel3.Text = Local.GetValue("entities_edition.parent_entity")
         Me.VLabel3.TextAlignment = System.Drawing.ContentAlignment.MiddleLeft
         Me.VLabel3.UseMnemonics = True
         Me.VLabel3.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
@@ -106,7 +106,7 @@ Partial Class NewEntityUI
         Me.VLabel1.Name = "VLabel1"
         Me.VLabel1.Size = New System.Drawing.Size(169, 24)
         Me.VLabel1.TabIndex = 1
-        Me.VLabel1.Text = "Name"
+        Me.VLabel1.Text = Local.GetValue("general.name")
         Me.VLabel1.TextAlignment = System.Drawing.ContentAlignment.MiddleLeft
         Me.VLabel1.UseMnemonics = True
         Me.VLabel1.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
@@ -141,7 +141,7 @@ Partial Class NewEntityUI
         Me.ParentEntityTreeViewBox.Name = "ParentEntityTreeViewBox"
         Me.ParentEntityTreeViewBox.Size = New System.Drawing.Size(301, 23)
         Me.ParentEntityTreeViewBox.TabIndex = 4
-        Me.ParentEntityTreeViewBox.Text = "Select Parent Entity"
+        Me.ParentEntityTreeViewBox.Text = Local.GetValue("entities_edition.parent_entity_selection")
         Me.ParentEntityTreeViewBox.UseThemeBackColor = False
         Me.ParentEntityTreeViewBox.UseThemeDropDownArrowColor = True
         Me.ParentEntityTreeViewBox.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
@@ -157,7 +157,7 @@ Partial Class NewEntityUI
         Me.VLabel2.Name = "VLabel2"
         Me.VLabel2.Size = New System.Drawing.Size(169, 24)
         Me.VLabel2.TabIndex = 2
-        Me.VLabel2.Text = "Currency"
+        Me.VLabel2.Text = Local.GetValue("general.currency")
         Me.VLabel2.TextAlignment = System.Drawing.ContentAlignment.MiddleLeft
         Me.VLabel2.UseMnemonics = True
         Me.VLabel2.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
@@ -181,7 +181,7 @@ Partial Class NewEntityUI
         Me.CancelBT.Name = "CancelBT"
         Me.CancelBT.Size = New System.Drawing.Size(92, 30)
         Me.CancelBT.TabIndex = 21
-        Me.CancelBT.Text = "Cancel"
+        Me.CancelBT.Text = Local.GetValue("general.cancel")
         Me.CancelBT.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         Me.CancelBT.UseVisualStyleBackColor = True
         '
@@ -202,7 +202,7 @@ Partial Class NewEntityUI
         Me.CreateEntityBT.Name = "CreateEntityBT"
         Me.CreateEntityBT.Size = New System.Drawing.Size(92, 30)
         Me.CreateEntityBT.TabIndex = 20
-        Me.CreateEntityBT.Text = "Create"
+        Me.CreateEntityBT.Text = Local.GetValue("general.create")
         Me.CreateEntityBT.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         Me.CreateEntityBT.UseVisualStyleBackColor = True
         '
@@ -217,7 +217,7 @@ Partial Class NewEntityUI
         Me.Controls.Add(Me.CreateEntityBT)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Name = "NewEntityUI"
-        Me.Text = "New Entity"
+        Me.Text = Local.GetValue("entities_edition.new_entity")
         Me.TableLayoutPanel1.ResumeLayout(False)
         Me.ResumeLayout(False)
 

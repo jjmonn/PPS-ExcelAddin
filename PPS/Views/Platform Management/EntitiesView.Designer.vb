@@ -74,7 +74,7 @@ Partial Class EntitiesView
         '
         Me.RenameEntityButton.Name = "RenameEntityButton"
         Me.RenameEntityButton.Size = New System.Drawing.Size(186, 22)
-        Me.RenameEntityButton.Text = "Rename Entity"
+        Me.RenameEntityButton.Text = Local.GetValue("general.rename")
         '
         'ToolStripSeparator1
         '
@@ -86,14 +86,14 @@ Partial Class EntitiesView
         Me.CreateEntityToolStripMenuItem.Image = Global.FinancialBI.My.Resources.Resources.element_branch2_add
         Me.CreateEntityToolStripMenuItem.Name = "CreateEntityToolStripMenuItem"
         Me.CreateEntityToolStripMenuItem.Size = New System.Drawing.Size(186, 22)
-        Me.CreateEntityToolStripMenuItem.Text = "Create Entity"
+        Me.CreateEntityToolStripMenuItem.Text = Local.GetValue("general.create")
         '
         'DeleteEntityToolStripMenuItem2
         '
         Me.DeleteEntityToolStripMenuItem2.Image = Global.FinancialBI.My.Resources.Resources.element_branch2_delete
         Me.DeleteEntityToolStripMenuItem2.Name = "DeleteEntityToolStripMenuItem2"
         Me.DeleteEntityToolStripMenuItem2.Size = New System.Drawing.Size(186, 22)
-        Me.DeleteEntityToolStripMenuItem2.Text = "Delete Entity"
+        Me.DeleteEntityToolStripMenuItem2.Text = Local.GetValue("general.delete")
         '
         'ToolStripSeparator5
         '
@@ -105,7 +105,7 @@ Partial Class EntitiesView
         Me.copy_down_bt.Image = Global.FinancialBI.My.Resources.Resources.Download_
         Me.copy_down_bt.Name = "copy_down_bt"
         Me.copy_down_bt.Size = New System.Drawing.Size(186, 22)
-        Me.copy_down_bt.Text = "Copy Value Down"
+        Me.copy_down_bt.Text = Local.GetValue("general.copy_down")
         '
         'ToolStripSeparator4
         '
@@ -117,25 +117,25 @@ Partial Class EntitiesView
         Me.drop_to_excel_bt.Image = Global.FinancialBI.My.Resources.Resources.Excel_Blue_32x32
         Me.drop_to_excel_bt.Name = "drop_to_excel_bt"
         Me.drop_to_excel_bt.Size = New System.Drawing.Size(186, 22)
-        Me.drop_to_excel_bt.Text = "Drop To Excel"
+        Me.drop_to_excel_bt.Text = Local.GetValue("general.drop_on_excel")
         '
         'AutoResizeColumnsButton
         '
         Me.AutoResizeColumnsButton.Name = "AutoResizeColumnsButton"
         Me.AutoResizeColumnsButton.Size = New System.Drawing.Size(186, 22)
-        Me.AutoResizeColumnsButton.Text = "Auto Resize Columns"
+        Me.AutoResizeColumnsButton.Text = Local.GetValue("general.auto_resize_columns")
         '
         'ExpandAllBT
         '
         Me.ExpandAllBT.Name = "ExpandAllBT"
         Me.ExpandAllBT.Size = New System.Drawing.Size(186, 22)
-        Me.ExpandAllBT.Text = "Expand all"
+        Me.ExpandAllBT.Text = Local.GetValue("general.expand_all")
         '
         'CollapseAllBT
         '
         Me.CollapseAllBT.Name = "CollapseAllBT"
         Me.CollapseAllBT.Size = New System.Drawing.Size(186, 22)
-        Me.CollapseAllBT.Text = "Collapse all"
+        Me.CollapseAllBT.Text = Local.GetValue("general.collapse_all")
         '
         'TableLayoutPanel1
         '
@@ -167,21 +167,21 @@ Partial Class EntitiesView
         Me.EditToolStripMenuItem.Image = Global.FinancialBI.My.Resources.Resources.element_branch23
         Me.EditToolStripMenuItem.Name = "EditToolStripMenuItem"
         Me.EditToolStripMenuItem.Size = New System.Drawing.Size(104, 20)
-        Me.EditToolStripMenuItem.Text = "Legal Entities"
+        Me.EditToolStripMenuItem.Text = Local.GetValue("general.entities")
         '
         'CreateANewEntityToolStripMenuItem
         '
         Me.CreateANewEntityToolStripMenuItem.Image = Global.FinancialBI.My.Resources.Resources.plus
         Me.CreateANewEntityToolStripMenuItem.Name = "CreateANewEntityToolStripMenuItem"
         Me.CreateANewEntityToolStripMenuItem.Size = New System.Drawing.Size(175, 22)
-        Me.CreateANewEntityToolStripMenuItem.Text = "Create a new Entity"
+        Me.CreateANewEntityToolStripMenuItem.Text = Local.GetValue("general.create")
         '
         'DeleteEntityToolStripMenuItem
         '
         Me.DeleteEntityToolStripMenuItem.Image = Global.FinancialBI.My.Resources.Resources.imageres_89
         Me.DeleteEntityToolStripMenuItem.Name = "DeleteEntityToolStripMenuItem"
         Me.DeleteEntityToolStripMenuItem.Size = New System.Drawing.Size(175, 22)
-        Me.DeleteEntityToolStripMenuItem.Text = "Delete Entity"
+        Me.DeleteEntityToolStripMenuItem.Text = Local.GetValue("general.delete")
         '
         'ToolStripSeparator2
         '
@@ -201,7 +201,7 @@ Partial Class EntitiesView
         Me.SendEntitiesHierarchyToExcelToolStripMenuItem.Image = Global.FinancialBI.My.Resources.Resources.Excel_Blue_32x32
         Me.SendEntitiesHierarchyToExcelToolStripMenuItem.Name = "SendEntitiesHierarchyToExcelToolStripMenuItem"
         Me.SendEntitiesHierarchyToExcelToolStripMenuItem.Size = New System.Drawing.Size(238, 22)
-        Me.SendEntitiesHierarchyToExcelToolStripMenuItem.Text = "Send Entities Hierarchy to Excel"
+        Me.SendEntitiesHierarchyToExcelToolStripMenuItem.Text = Local.GetValue("general.drop_on_excel")
         '
         'EntitiesView
         '

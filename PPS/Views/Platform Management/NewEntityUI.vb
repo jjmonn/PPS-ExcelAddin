@@ -10,7 +10,7 @@
 '           -> should have "" and "NS" for each category (hence name-> keys dict in categories should be for each categories)
 '
 '
-' Last modified: 04/09/2015
+' Last modified: 22/10/2015
 ' Author: Julien Monnereau
 
 
@@ -119,15 +119,15 @@ Friend Class NewEntityUI
     Private Function IsFormValid(ByRef new_entity_name As String) As Boolean
 
         If new_entity_name = "" Then
-            MsgBox("Please enter a Name for the New Entity")
+            MsgBox(Local.GetValue("entities_edition.msg_entity_name"))
         End If
-        ' below -> check is on server 
+        ' below -> check is on server priority normal
         'If names_list.Contains(new_entity_name) Then
         '    MsgBox("This Entity name is already in use. Please choose another one.")
         '    Return False
         'End If
         If CurrenciesComboBox1.SelectedItem Is Nothing Then
-            MsgBox("A currency must be selected.")
+            MsgBox(Local.GetValue("entities_edition.msg_select_currency"))
             Return False
         End If
         Return True

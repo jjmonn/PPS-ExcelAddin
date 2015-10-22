@@ -182,21 +182,21 @@ Friend Class ExchangeRatesView
 
         If Not m_ratesVersionsTV.SelectedNode Is Nothing Then
             If m_controller.IsFolderVersion(m_ratesVersionsTV.SelectedNode.Value) = False Then
-                Dim name As String = InputBox("Please enter a name for the new Folder")
+                Dim name As String = InputBox(Local.GetValue("versions.msg_folder_name"))
                 If Len(name) < NAMES_MAX_LENGTH Then
                     m_controller.CreateVersion(m_ratesVersionsTV.SelectedNode.Value, name, 1, 0, 0)
                 Else
-                    MsgBox("The name cannot exceed " & NAMES_MAX_LENGTH & " characters")
+                    MsgBox(Local.GetValue("general.msg_name_exceed1") & NAMES_MAX_LENGTH & Local.GetValue("general.msg_name_exceed2"))
                 End If
             Else
-                MsgBox("A folder can only be added to another folder")
+                MsgBox(Local.GetValue("versions.msg_folder_under_folder"))
             End If
         Else
-            Dim name As String = InputBox("Please enter a name for the new Folder")
+            Dim name As String = InputBox(Local.GetValue("versions.msg_folder_name"))
             If Len(name) < NAMES_MAX_LENGTH Then
                 m_controller.CreateVersion(0, name, 1, 0, 0)
             Else
-                MsgBox("The name cannot exceed 50 characters")
+                MsgBox(Local.GetValue("general.msg_name_exceed1") & NAMES_MAX_LENGTH & Local.GetValue("general.msg_name_exceed2"))
             End If
         End If
 
@@ -208,7 +208,7 @@ Friend Class ExchangeRatesView
             If m_controller.IsFolderVersion(m_ratesVersionsTV.SelectedNode.Value) = True Then
                 m_controller.ShowNewRatesVersion(m_ratesVersionsTV.SelectedNode.Value)
             Else
-                MsgBox("A Version can only be added under a folder")
+                MsgBox(Local.GetValue("versions.msg_version_under_folder"))
             End If
         Else
             m_controller.ShowNewRatesVersion(0)
@@ -219,10 +219,10 @@ Friend Class ExchangeRatesView
     Private Sub DeleteVersionBT_Click(sender As Object, e As EventArgs) Handles DeleteVersionRCM.Click
 
         If Not m_ratesVersionsTV.SelectedNode Is Nothing Then
-            Dim confirm As Integer = MessageBox.Show("Careful, you are about to delete the version " + Chr(13) + Chr(13) + _
+            Dim confirm As Integer = MessageBox.Show(Local.GetValue("versions.msg_delete1") + Chr(13) + Chr(13) + _
                                                       m_ratesVersionsTV.SelectedNode.Text + Chr(13) + Chr(13) + _
-                                                      "This version and all sub versions will be deleted, do you confirm?" + Chr(13) + Chr(13), _
-                                                      "Version deletion confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+                                                      Local.GetValue("versions.msg_delete2") + Chr(13) + Chr(13), _
+                                                      Local.GetValue("versions.title_delete_confirmation"), MessageBoxButtons.YesNo, MessageBoxIcon.Question)
             If confirm = DialogResult.Yes Then
                 m_controller.DeleteRatesVersion(m_ratesVersionsTV.SelectedNode.Value)
             End If

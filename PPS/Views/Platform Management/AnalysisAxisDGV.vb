@@ -80,7 +80,7 @@ Friend Class AnalysisAxisDGV
 
     Private Sub columnsInit()
 
-        Dim nameColumn As HierarchyItem = DGV.ColumnsHierarchy.Items.Add("Name")
+        Dim nameColumn As HierarchyItem = DGV.ColumnsHierarchy.Items.Add(Local.GetValue("general.name"))
         Dim nameEditor As New TextBoxEditor
         nameColumn.CellsEditor = nameEditor
         AddHandler nameEditor.KeyDown, AddressOf comboTextBox_KeyDown

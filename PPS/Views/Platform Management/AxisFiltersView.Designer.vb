@@ -79,95 +79,95 @@ Partial Class AxisFiltersView
         'CategoriesToolStripMenuItem
         '
         Me.CategoriesToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.NewCategoryMenuBT, Me.AddValueMenuBT, Me.DeleteMenuBT, Me.RenameMenuBT, Me.ToolStripSeparator3})
-        Me.CategoriesToolStripMenuItem.Image = Global.FinancialBI.My.Resources.Resources.elements
+        Me.CategoriesToolStripMenuItem.Image = Global.FinancialBI.My.Resources.Resources.element_branch25
         Me.CategoriesToolStripMenuItem.Name = "CategoriesToolStripMenuItem"
-        Me.CategoriesToolStripMenuItem.Size = New System.Drawing.Size(102, 23)
-        Me.CategoriesToolStripMenuItem.Text = "Categories"
+        Me.CategoriesToolStripMenuItem.Size = New System.Drawing.Size(143, 23)
+        Me.CategoriesToolStripMenuItem.Text = "[filters.categories]"
         '
         'NewCategoryMenuBT
         '
-        Me.NewCategoryMenuBT.Image = Global.FinancialBI.My.Resources.Resources.elements_add
+        Me.NewCategoryMenuBT.Image = Global.FinancialBI.My.Resources.Resources.add
         Me.NewCategoryMenuBT.Name = "NewCategoryMenuBT"
-        Me.NewCategoryMenuBT.Size = New System.Drawing.Size(165, 24)
-        Me.NewCategoryMenuBT.Text = "New Category"
+        Me.NewCategoryMenuBT.Size = New System.Drawing.Size(206, 24)
+        Me.NewCategoryMenuBT.Text = "[filters.new_category]"
         '
         'AddValueMenuBT
         '
         Me.AddValueMenuBT.Name = "AddValueMenuBT"
-        Me.AddValueMenuBT.Size = New System.Drawing.Size(165, 24)
-        Me.AddValueMenuBT.Text = "New Value"
+        Me.AddValueMenuBT.Size = New System.Drawing.Size(206, 24)
+        Me.AddValueMenuBT.Text = "[filters.new_value]"
         '
         'DeleteMenuBT
         '
-        Me.DeleteMenuBT.Image = Global.FinancialBI.My.Resources.Resources.elements_delete
+        Me.DeleteMenuBT.Image = Global.FinancialBI.My.Resources.Resources.imageres_89
         Me.DeleteMenuBT.Name = "DeleteMenuBT"
-        Me.DeleteMenuBT.Size = New System.Drawing.Size(165, 24)
-        Me.DeleteMenuBT.Text = "Delete"
+        Me.DeleteMenuBT.Size = New System.Drawing.Size(206, 24)
+        Me.DeleteMenuBT.Text = "[general.delete]"
         '
         'RenameMenuBT
         '
         Me.RenameMenuBT.Name = "RenameMenuBT"
-        Me.RenameMenuBT.Size = New System.Drawing.Size(165, 24)
-        Me.RenameMenuBT.Text = "Rename"
+        Me.RenameMenuBT.Size = New System.Drawing.Size(206, 24)
+        Me.RenameMenuBT.Text = "[general.rename]"
         '
         'ToolStripSeparator3
         '
         Me.ToolStripSeparator3.Name = "ToolStripSeparator3"
-        Me.ToolStripSeparator3.Size = New System.Drawing.Size(162, 6)
+        Me.ToolStripSeparator3.Size = New System.Drawing.Size(203, 6)
         '
         'EditStructureToolStripMenuItem
         '
         Me.EditStructureToolStripMenuItem.Name = "EditStructureToolStripMenuItem"
-        Me.EditStructureToolStripMenuItem.Size = New System.Drawing.Size(103, 23)
-        Me.EditStructureToolStripMenuItem.Text = "Edit structure"
+        Me.EditStructureToolStripMenuItem.Size = New System.Drawing.Size(149, 23)
+        Me.EditStructureToolStripMenuItem.Text = "[filters.edit_structure]"
         '
         'RCM_TV
         '
         Me.RCM_TV.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.AddValueRCM, Me.ToolStripSeparator2, Me.DeleteRCM, Me.ToolStripSeparator1, Me.RenameRCM, Me.ExpandAllBT, Me.CollapseAllBT})
         Me.RCM_TV.Name = "RCM_TV"
-        Me.RCM_TV.Size = New System.Drawing.Size(156, 136)
+        Me.RCM_TV.Size = New System.Drawing.Size(202, 158)
         '
         'AddValueRCM
         '
-        Me.AddValueRCM.Image = Global.FinancialBI.My.Resources.Resources.elements_add
+        Me.AddValueRCM.Image = Global.FinancialBI.My.Resources.Resources.add
         Me.AddValueRCM.Name = "AddValueRCM"
-        Me.AddValueRCM.Size = New System.Drawing.Size(155, 24)
-        Me.AddValueRCM.Text = "Create Value"
+        Me.AddValueRCM.Size = New System.Drawing.Size(201, 24)
+        Me.AddValueRCM.Text = "[filters.new_value]"
         '
         'ToolStripSeparator2
         '
         Me.ToolStripSeparator2.Name = "ToolStripSeparator2"
-        Me.ToolStripSeparator2.Size = New System.Drawing.Size(152, 6)
+        Me.ToolStripSeparator2.Size = New System.Drawing.Size(198, 6)
         '
         'DeleteRCM
         '
-        Me.DeleteRCM.Image = Global.FinancialBI.My.Resources.Resources.elements_delete
+        Me.DeleteRCM.Image = Global.FinancialBI.My.Resources.Resources.imageres_89
         Me.DeleteRCM.Name = "DeleteRCM"
-        Me.DeleteRCM.Size = New System.Drawing.Size(155, 24)
-        Me.DeleteRCM.Text = "Delete"
+        Me.DeleteRCM.Size = New System.Drawing.Size(201, 24)
+        Me.DeleteRCM.Text = "[general.delete]"
         '
         'ToolStripSeparator1
         '
         Me.ToolStripSeparator1.Name = "ToolStripSeparator1"
-        Me.ToolStripSeparator1.Size = New System.Drawing.Size(152, 6)
+        Me.ToolStripSeparator1.Size = New System.Drawing.Size(198, 6)
         '
         'RenameRCM
         '
         Me.RenameRCM.Name = "RenameRCM"
-        Me.RenameRCM.Size = New System.Drawing.Size(155, 24)
-        Me.RenameRCM.Text = "Rename"
+        Me.RenameRCM.Size = New System.Drawing.Size(201, 24)
+        Me.RenameRCM.Text = "[general.rename]"
         '
         'ExpandAllBT
         '
         Me.ExpandAllBT.Name = "ExpandAllBT"
-        Me.ExpandAllBT.Size = New System.Drawing.Size(155, 24)
-        Me.ExpandAllBT.Text = "Expand all"
+        Me.ExpandAllBT.Size = New System.Drawing.Size(201, 24)
+        Me.ExpandAllBT.Text = "[general.expand_all]"
         '
         'CollapseAllBT
         '
         Me.CollapseAllBT.Name = "CollapseAllBT"
-        Me.CollapseAllBT.Size = New System.Drawing.Size(155, 24)
-        Me.CollapseAllBT.Text = "Collapse all"
+        Me.CollapseAllBT.Size = New System.Drawing.Size(201, 24)
+        Me.CollapseAllBT.Text = "[general.collapse_all]"
         '
         'AxisFiltersView
         '

@@ -40,9 +40,9 @@ Partial Class ConnectionTP
         Me.Label1.AutoSize = True
         Me.Label1.Location = New System.Drawing.Point(99, 58)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(48, 15)
+        Me.Label1.Size = New System.Drawing.Size(117, 15)
         Me.Label1.TabIndex = 1
-        Me.Label1.Text = Local.GetValue("connection.user_ID")
+        Me.Label1.Text = Local.GetValue("connection.user_id")
         '
         'userNameTextBox
         '
@@ -75,7 +75,7 @@ Partial Class ConnectionTP
         Me.Label2.AutoSize = True
         Me.Label2.Location = New System.Drawing.Point(93, 136)
         Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(61, 15)
+        Me.Label2.Size = New System.Drawing.Size(129, 15)
         Me.Label2.TabIndex = 6
         Me.Label2.Text = Local.GetValue("connection.password")
         '

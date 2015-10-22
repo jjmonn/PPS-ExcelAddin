@@ -354,7 +354,7 @@ DependanciesCheck:
         End If
 
 SubmitFormula:
-        Dim confirm As Integer = MessageBox.Show(Local.GetValue("accounts_edition.msg_formula_edition_for_account") + Chr(13) + Name_TB.Text + Chr(13) + "Do you confirm?", _
+        Dim confirm As Integer = MessageBox.Show(Local.GetValue("accounts_edition.msg_formula_edition_for_account") + Chr(13) + Name_TB.Text + Chr(13) + Local.GetValue("accounts_edition.msg_account_deletion2"), _
                                                  Local.GetValue("accounts_edition.title_formula_validation_confirmation"), _
                                                   MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question)
         If confirm = DialogResult.Yes Then
