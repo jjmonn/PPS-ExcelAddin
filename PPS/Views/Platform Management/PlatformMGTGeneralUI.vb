@@ -166,9 +166,9 @@ Friend Class PlatformMGTGeneralUI
 
     Private Sub ControlsBT_Click(sender As Object, e As EventArgs)
 
-        closeCurrentControl()
-        current_controller = New ControlsController()
-        current_controller.addControlToPanel(Panel1, Me)
+        'closeCurrentControl()
+        'current_controller = New ControlsController()
+        'current_controller.addControlToPanel(Panel1, Me)
 
     End Sub
 

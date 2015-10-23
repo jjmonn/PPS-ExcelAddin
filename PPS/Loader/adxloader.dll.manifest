@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <configuration>
-  <assemblyIdentity name="PPS, PublicKeyToken=dc0faa5459e5cd83" xllClass="" />
-  <loaderSettings generateLogFile="true" shadowCopyEnabled="false" privileges="user" configFileName="PPS.dll.config" />
+  <assemblyIdentity name="FinancialBI, PublicKeyToken=dc0faa5459e5cd83" xllClass="" />
+  <loaderSettings generateLogFile="true" shadowCopyEnabled="false" privileges="user" configFileName="FinancialBI.dll.config" />
 </configuration>

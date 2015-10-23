@@ -68,9 +68,12 @@ Public Class ManualRangesSelectionUI
         If AccountsRefEdit.Text <> "" Then
             DATASET.m_accountsAddressValuesDictionary.Clear()
             For Each cell As Excel.Range In tmpRng
-                If DATASET.m_inputsAccountsList.Contains(cell.Value2) Then
-                    DATASET.m_accountsAddressValuesDictionary.Add(CStr(cell.Address), CStr(cell.Value2))
-                End If
+                For Each l_account In DATASET.m_inputsAccountsList
+                    If l_account.Name = cell.Value2 Then
+                        DATASET.m_accountsAddressValuesDictionary.Add(CStr(cell.Address), CStr(cell.Value2))
+                        Exit For
+                    End If
+                Next
             Next
         End If
         rangesModifiedFlag = True

@@ -327,10 +327,10 @@ Friend Class ControllingUI_2
             Dim typeId As Int32 = m_controller.GetAccountTypeFromId(item.ItemValue)
             If typeId <> 0 Then
                 Select Case typeId
-                    Case GlobalEnums.AccountType.MONETARY : item.CellsFormatString = "{0:" & m_currenciesSymbol_dict(currencyId) & "#,##0;(" & m_currenciesSymbol_dict(currencyId) & "#,##0)}" ' m_currenciesSymbol_dict(currencyId) & "#,##0.00;(" & m_currenciesSymbol_dict(currencyId) & "#,##0.00)"
-                    Case GlobalEnums.AccountType.PERCENTAGE : item.CellsFormatString = "{0:P}" '"0.00%"        ' put this in a table ?
-                    Case GlobalEnums.AccountType.NUMBER : item.CellsFormatString = "{0:N2}" '"#,##0.00"
-                    Case GlobalEnums.AccountType.DATE_ : item.CellsFormatString = "{0:yyyy/MMMM/dd}"  '"d-mmm-yy" ' d-mmm-yy
+                    Case Account.AccountType.MONETARY : item.CellsFormatString = "{0:" & m_currenciesSymbol_dict(currencyId) & "#,##0;(" & m_currenciesSymbol_dict(currencyId) & "#,##0)}" ' m_currenciesSymbol_dict(currencyId) & "#,##0.00;(" & m_currenciesSymbol_dict(currencyId) & "#,##0.00)"
+                    Case Account.AccountType.PERCENTAGE : item.CellsFormatString = "{0:P}" '"0.00%"        ' put this in a table ?
+                    Case Account.AccountType.NUMBER : item.CellsFormatString = "{0:N2}" '"#,##0.00"
+                    Case Account.AccountType.DATE_ : item.CellsFormatString = "{0:yyyy/MMMM/dd}"  '"d-mmm-yy" ' d-mmm-yy
                     Case Else : item.CellsFormatString = "{0:N}"
                 End Select
             End If
@@ -382,7 +382,7 @@ Friend Class ControllingUI_2
 
 #Region "Events"
 
-    Private Sub AccountUpdateFromServer(ByRef status As Boolean, ByRef accountsAttributes As Hashtable)
+    Private Sub AccountUpdateFromServer(ByRef status As Boolean, ByRef p_account As Account)
         ReloadAccountsTV_ThreadSafe()
     End Sub
 
@@ -482,6 +482,9 @@ Friend Class ControllingUI_2
                                        versionId, _
                                        filterId)
 
+            Dim l_account = GlobalVariables.Accounts.GetAccount(accountId)
+
+            If l_account Is Nothing Then Exit Sub
             ' Check that entity and account are input type !! priority normal
 
             Dim logsHashTable As New Action(Of List(Of Hashtable))(AddressOf DisplayLog_ThreadSafe)
@@ -493,7 +496,7 @@ Friend Class ControllingUI_2
 
             m_logView = New LogView(False, _
                                     GlobalVariables.Entities.entities_hash(entityId)(NAME_VARIABLE), _
-                                    GlobalVariables.Accounts.m_accountsHash(accountId)(NAME_VARIABLE))
+                                    l_account.Name)
 
         End If
 

@@ -47,9 +47,8 @@ Friend Class AcquisitionModel
     Private computationDataMap As New Dictionary(Of Int32, Dictionary(Of Int32, Dictionary(Of String, Double)))
     Friend currentPeriodDict As Dictionary(Of Int32, List(Of Int32))
     Friend currentPeriodList() As Int32
-    Friend outputsList As List(Of String)
+    Friend outputsList As List(Of Account)
     Friend accountsTV As New TreeView
-    Friend accountsNamesFormulaTypeDict As Hashtable
     Friend entitiesNameIdDict As Hashtable
     Friend current_version_id As Int32
     Friend periodsIdentifyer As String
@@ -74,8 +73,7 @@ Friend Class AcquisitionModel
         dataset = inputDataSet
         entitiesNameIdDict = inputDataSet.m_entitiesNameIdDictionary
 
-        accountsNamesFormulaTypeDict = globalvariables.accounts.GetAccountsDictionary(NAME_VARIABLE, ACCOUNT_FORMULA_TYPE_VARIABLE)
-        outputsList = GlobalVariables.Accounts.GetAccountsList(GlobalEnums.AccountsLookupOptions.LOOKUP_OUTPUTS, NAME_VARIABLE)
+        outputsList = GlobalVariables.Accounts.GetAccountsList(GlobalEnums.AccountsLookupOptions.LOOKUP_OUTPUTS)
 
         AddHandler Computer.ComputationAnswered, AddressOf AfterInputsComputation
         AddHandler SingleComputer.ComputationAnswered, AddressOf AfterOuptutsComputed
@@ -168,11 +166,14 @@ Friend Class AcquisitionModel
         ' select case input/ FPI
         For Each accountId As Int32 In TreeViewsUtilities.GetNodesKeysList(accountsTV)
 
-            Select Case GlobalVariables.Accounts.m_accountsHash(accountId)(ACCOUNT_FORMULA_TYPE_VARIABLE)
+            Dim l_account = GlobalVariables.Accounts.GetAccount(accountId)
 
-                Case GlobalEnums.FormulaTypes.HARD_VALUE_INPUT
+            If l_account Is Nothing Then Continue For
+            Select Case l_account.FormulaType
 
-                    Dim accountName As String = GlobalVariables.Accounts.m_accountsHash(accountId)(NAME_VARIABLE)
+                Case Account.FormulaTypes.HARD_VALUE_INPUT
+
+                    Dim accountName As String = l_account.Name
                     dataDict.Add(accountName, New Dictionary(Of String, Double))
 
                     ' Years
@@ -203,8 +204,9 @@ Friend Class AcquisitionModel
                         Next
                     Next
 
-                Case GlobalEnums.FormulaTypes.FIRST_PERIOD_INPUT
-                    Dim accountName As String = GlobalVariables.Accounts.m_accountsHash(accountId)(NAME_VARIABLE)
+                Case Account.FormulaTypes.FIRST_PERIOD_INPUT
+
+                    Dim accountName As String = l_account.Name
                     dataDict.Add(accountName, New Dictionary(Of String, Double))
                     Dim periodToken As String = ""
 
@@ -283,18 +285,18 @@ Friend Class AcquisitionModel
         ReDim periodsArray(dataset.m_inputsAccountsList.Count * currentPeriodList.Length)
         ReDim valuesArray(dataset.m_inputsAccountsList.Count * currentPeriodList.Length) 'legnth periods to be checked
 
-        For Each inputAccountName As String In dataset.m_inputsAccountsList
+        For Each inputAccount As Account In dataset.m_inputsAccountsList
             For Each period As Int32 In currentPeriodList
 
-                accKeysArray(i) = dataset.m_accountsNameIdDictionary(inputAccountName)
+                accKeysArray(i) = inputAccount.Id
                 periodsArray(i) = period
 
-                Dim tuple_ As New Tuple(Of String, String, String)(p_entityName, inputAccountName, CStr(period))
+                Dim tuple_ As New Tuple(Of String, String, String)(p_entityName, inputAccount.Name, CStr(period))
                 If dataset.m_datasetCellsDictionary.ContainsKey(tuple_) = True Then
                     valuesArray(i) = dataset.m_datasetCellsDictionary(tuple_).Value2
-                ElseIf dataBaseInputsDictionary(p_entityName).ContainsKey(inputAccountName) _
-                AndAlso dataBaseInputsDictionary(p_entityName)(inputAccountName).ContainsKey(Trim(CStr(period))) Then
-                    valuesArray(i) = dataBaseInputsDictionary(p_entityName)(inputAccountName)(Trim(CStr(period)))
+                ElseIf dataBaseInputsDictionary(p_entityName).ContainsKey(inputAccount.Name) _
+                AndAlso dataBaseInputsDictionary(p_entityName)(inputAccount.Name).ContainsKey(Trim(CStr(period))) Then
+                    valuesArray(i) = dataBaseInputsDictionary(p_entityName)(inputAccount.Name)(Trim(CStr(period)))
                 Else
                     valuesArray(i) = 0
                 End If
@@ -368,7 +370,10 @@ ReturnError:
 
     Friend Function CheckIfFPICalculatedItem(ByRef accountName As String, ByRef period As Integer) As Boolean
 
-        If accountsNamesFormulaTypeDict(accountName) = GlobalEnums.FormulaTypes.FIRST_PERIOD_INPUT _
+        Dim l_account = GlobalVariables.Accounts.GetAccount(accountName)
+
+        If l_account Is Nothing Then Return False
+        If l_account.FormulaType = Account.FormulaTypes.FIRST_PERIOD_INPUT _
         AndAlso Not period = CInt(CDbl(dataset.m_periodsDatesList(0).ToOADate())) Then
             Return True
         Else

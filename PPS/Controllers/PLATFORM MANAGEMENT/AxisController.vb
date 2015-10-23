@@ -30,7 +30,7 @@ Friend Class AxisController
 
     ' Objects
     Private View As AxisView
-    Private CrudModel As SuperAxisCRUD
+    Private CrudModel As AxisElemManager
     Private CrudModelFilters As SuperAxisFilterCRUD
 
     Private AxisTV As New vTreeView
@@ -47,7 +47,7 @@ Friend Class AxisController
 
 #Region "Initialize"
 
-    Friend Sub New(ByRef p_CrudModel As SuperAxisCRUD, _
+    Friend Sub New(ByRef p_CrudModel As AxisElemManager, _
                    ByRef p_CrudFilterModel As SuperAxisFilterCRUD, _
                    ByRef p_axisId As Int32)
 
@@ -55,7 +55,7 @@ Friend Class AxisController
         CrudModel = p_CrudModel
         CrudModelFilters = p_CrudFilterModel
         LoadInstanceVariables()
-        View = New AxisView(Me, CrudModel.Axis_hash, AxisTV, AxisFilterValuesTV, AxisFilterTV)
+        View = New AxisView(Me, AxisTV, AxisFilterValuesTV, AxisFilterTV)
 
         ' Axis CRUD Events
         AddHandler CrudModel.CreationEvent, AddressOf AfterAxisCreation
@@ -104,6 +104,21 @@ Friend Class AxisController
 
     End Sub
 
+    Friend Function GetAxis(ByVal p_axisId As UInt32) As AxisElem
+        Return CrudModel.GetAxis(p_axisId)
+    End Function
+
+    Friend Function GetAxisCopy(ByVal p_axisId As UInt32) As AxisElem
+        Dim l_axis = GetAxis(p_axisId)
+
+        If l_axis Is Nothing Then Return Nothing
+        Return l_axis.Clone()
+    End Function
+
+    Friend Function GetAxisDictionary() As SortedDictionary(Of Int32, AxisElem)
+        Return CrudModel.GetAxisDictionary()
+    End Function
+
 #End Region
 
 
@@ -111,27 +126,16 @@ Friend Class AxisController
 
     Friend Sub CreateAxis(ByRef AxisName As String)
 
-        Dim ht As New Hashtable
-        ht.Add(NAME_VARIABLE, AxisName)
+        Dim ht As New AxisElem
+        ht.Name = AxisName
+        ht.ItemPosition = 0
         CrudModel.CMSG_CREATE_AXIS(ht)
 
     End Sub
 
-    Friend Sub UpdateAxis(ByRef id As Int32, ByRef variable As String, ByVal value As Object)
+    Friend Sub UpdateAxis(ByRef Axis_attributes As AxisElem)
 
-        Dim ht As Hashtable = CrudModel.Axis_hash(id).Clone()
-        ht(variable) = value
-        CrudModel.CMSG_UPDATE_AXIS(ht)
-
-    End Sub
-
-    Friend Sub UpdateAxis(ByRef id As String, ByRef Axis_attributes As Hashtable)
-
-        Dim ht As Hashtable = CrudModel.Axis_hash(id).Clone()
-        For Each attribute As String In Axis_attributes
-            ht(attribute) = Axis_attributes(attribute)
-        Next
-        CrudModel.CMSG_UPDATE_AXIS(ht)
+        CrudModel.CMSG_UPDATE_AXIS(Axis_attributes)
 
     End Sub
 
@@ -151,24 +155,12 @@ Friend Class AxisController
 
     End Sub
 
-    Friend Sub UpdateBatch(ByRef p_axisUpdates As List(Of Tuple(Of Int32, String, Int32)))
-
-        Dim axisHTUpdates As New Hashtable
-        For Each tuple_ As Tuple(Of Int32, String, Int32) In p_axisUpdates
-            Dim ht As Hashtable = CrudModel.Axis_hash(tuple_.Item1).Clone
-            ht(tuple_.Item2) = tuple_.Item3
-            axisHTUpdates(CInt(ht(ID_VARIABLE))) = ht
-        Next
-        CrudModel.CMSG_UPDATE_AXIS_LIST(axisHTUpdates)
-
-    End Sub
-
 #End Region
 
 
 #Region "Events"
 
-    Private Sub AfterAxisRead(ByRef status As Boolean, ByRef ht As Hashtable)
+    Private Sub AfterAxisRead(ByRef status As Boolean, ByRef ht As AxisElem)
 
         If (status = True) Then
             View.LoadInstanceVariables_Safe()
@@ -189,7 +181,7 @@ Friend Class AxisController
     Private Sub AfterAxisUpdate(ByRef status As Boolean, ByRef id As Int32)
 
         If (status = False) Then
-            View.UpdateAxis(CrudModel.Axis_hash(id))
+            View.UpdateAxis(CrudModel.GetAxis(id))
             MsgBox("Invalid parameter")
         End If
 
@@ -208,7 +200,7 @@ Friend Class AxisController
 
         If (status = True) Then
             View.LoadInstanceVariables_Safe()
-            View.UpdateAxis(CrudModel.Axis_hash(CInt(AxisFilterHT(AXIS_ID_VARIABLE))))
+            View.UpdateAxis(CrudModel.GetAxis(CInt(AxisFilterHT(AXIS_ID_VARIABLE))))
         End If
 
     End Sub
@@ -218,7 +210,7 @@ Friend Class AxisController
                                         ByRef filterId As Int32, _
                                         ByRef filterValueId As Int32)
         If status = False Then
-            View.UpdateAxis(CrudModel.Axis_hash(AxisValueId))
+            View.UpdateAxis(CrudModel.GetAxis(AxisValueId))
             MsgBox("The Axis could be updated.")
             ' catch and display message
         End If
@@ -246,19 +238,18 @@ Friend Class AxisController
     Friend Sub SendNewPositionsToModel()
 
         Dim position As Int32
-        Dim axisUpdates As New List(Of Tuple(Of Int32, String, Int32))
+        Dim axisUpdates As New List(Of AxisElem)
         positionsDictionary = DataGridViewsUtil.GeneratePositionsDictionary(View.DGV)
 
         For Each axisId As Int32 In positionsDictionary.Keys
             position = positionsDictionary(axisId)
 
-            If CrudModel.Axis_hash.ContainsKey(axisId) = False Then Continue For
-            If position <> CrudModel.Axis_hash(axisId)(ITEMS_POSITIONS) Then
-                Dim tuple_ As New Tuple(Of Int32, String, Int32)(axisId, ITEMS_POSITIONS, position)
-                axisUpdates.Add(tuple_)
+            If CrudModel.GetAxis(axisId) Is Nothing Then Continue For
+            If position <> CrudModel.GetAxis(axisId).ItemPosition Then
+                axisUpdates.Add(CrudModel.GetAxis(axisId))
             End If
         Next
-        UpdateBatch(axisUpdates)
+        CrudModel.CMSG_UPDATE_AXIS_LIST(axisUpdates)
 
     End Sub
 

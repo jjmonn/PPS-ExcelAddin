@@ -44,9 +44,8 @@ Friend Class ModelDataSet
     'Lists and Dictionaries
     Friend m_entitiesNameList As List(Of String)                                    ' String array containing the list of assets
     Friend m_periodsDatesList As New List(Of Date)
-    Friend m_inputsAccountsList As List(Of String)
+    Friend m_inputsAccountsList As List(Of Account)
     Friend m_entitiesNameIdDictionary As Hashtable  ' to be deleted priority normal
-    Friend m_accountsNameIdDictionary As Hashtable
 
     ' Axes
     Friend m_periodsAddressValuesDictionary As New Dictionary(Of String, String)
@@ -109,7 +108,6 @@ Friend Class ModelDataSet
 
         Me.m_excelWorkSheet = inputWS
         m_entitiesNameIdDictionary = GlobalVariables.Entities.GetEntitiesDictionary(NAME_VARIABLE, ID_VARIABLE)
-        m_accountsNameIdDictionary = GlobalVariables.Accounts.GetAccountsDictionary(NAME_VARIABLE, ID_VARIABLE)
 
     End Sub
 
@@ -243,8 +241,8 @@ Friend Class ModelDataSet
     Friend Sub AccountsIdentify()
 
         Dim i, j As Integer
-        m_inputsAccountsList = GlobalVariables.Accounts.GetAccountsList(GlobalEnums.AccountsLookupOptions.LOOKUP_INPUTS, NAME_VARIABLE)
-        Dim outputsAccountsList As List(Of String) = GlobalVariables.Accounts.GetAccountsList(GlobalEnums.AccountsLookupOptions.LOOKUP_OUTPUTS, NAME_VARIABLE)
+        m_inputsAccountsList = GlobalVariables.Accounts.GetAccountsList(GlobalEnums.AccountsLookupOptions.LOOKUP_INPUTS)
+        Dim outputsAccountsList As List(Of Account) = GlobalVariables.Accounts.GetAccountsList(GlobalEnums.AccountsLookupOptions.LOOKUP_OUTPUTS)
         m_accountsAddressValuesDictionary.Clear()
 
         For i = LBound(m_GlobalScreenShot, 1) To UBound(m_GlobalScreenShot, 1)                                          ' Loop into rows of input array
@@ -255,7 +253,7 @@ Friend Class ModelDataSet
 
                     ' Direct match or algo > 50% Index à vérifier selon table
                     ' Trim left and right the cell.value2 !! -> To be tested
-                    If m_inputsAccountsList.Contains(currentValue) _
+                    If m_inputsAccountsList.Contains(GlobalVariables.Accounts.GetAccount(currentValue)) _
                     AndAlso Not m_accountsAddressValuesDictionary.ContainsValue(currentValue) Then
 
                         m_accountsAddressValuesDictionary.Add(Split(m_excelWorkSheet.Columns(j).Address(ColumnAbsolute:=False), ":")(1) & i, _
@@ -263,7 +261,7 @@ Friend Class ModelDataSet
                         m_accountsValuesAddressDict.Add(currentValue, Split(m_excelWorkSheet.Columns(j).Address(ColumnAbsolute:=False), ":")(1) & i)
                         m_GlobalScreenShotFlag(i, j) = m_accountStringFlag
 
-                    ElseIf outputsAccountsList.Contains(currentValue) _
+                    ElseIf outputsAccountsList.Contains(GlobalVariables.Accounts.GetAccount(currentValue)) _
                     AndAlso m_accountsAddressValuesDictionary.ContainsValue(currentValue) = False Then
 
                         m_outputsAccountsAddressvaluesDictionary.Add(Split(m_excelWorkSheet.Columns(j).Address(ColumnAbsolute:=False), ":")(1) & i, _

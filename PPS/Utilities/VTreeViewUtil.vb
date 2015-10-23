@@ -158,21 +158,20 @@ Public Class VTreeViewUtil
         TV.Nodes.Clear()
 
         For Each id As Int32 In items_attributes.Keys
-            If items_attributes(id).ContainsKey(IMAGE_VARIABLE) Then image_index = items_attributes(id)(IMAGE_VARIABLE)
-            If items_attributes(id)(PARENT_ID_VARIABLE) = 0 Then
-                currentNode = AddNode(items_attributes(id)(ID_VARIABLE), _
-                                      items_attributes(id)(NAME_VARIABLE),
+            If items_attributes(id).ParentId = 0 Then
+                currentNode = AddNode(items_attributes(id).Id, _
+                                      items_attributes(id).Name,
                                       TV, _
                                       image_index)
             Else
-                ParentNode = FindNode(TV, items_attributes(id)(ID_VARIABLE))
+                ParentNode = FindNode(TV, items_attributes(id).Id)
                 If Not ParentNode Is Nothing Then
-                    currentNode = AddNode(items_attributes(id)(ID_VARIABLE), _
-                                        items_attributes(id)(NAME_VARIABLE),
+                    currentNode = AddNode(items_attributes(id).Id, _
+                                        items_attributes(id).Name,
                                         ParentNode, _
                                         image_index)
                 Else
-                    orphans_ids_list.Add(items_attributes(id)(ID_VARIABLE))
+                    orphans_ids_list.Add(items_attributes(id).Id)
                 End If
             End If
         Next
@@ -189,13 +188,12 @@ Public Class VTreeViewUtil
         Dim image_index As UInt16 = 0
         If solved_orphans_list Is Nothing Then solved_orphans_list = New List(Of Int32)
         For Each orphan_id As Int32 In orphans_id_list
-            If items_attributes(orphan_id).ContainsKey(IMAGE_VARIABLE) = True Then image_index = items_attributes(orphan_id)(IMAGE_VARIABLE)
             If solved_orphans_list.Contains(orphan_id) = False Then
-                parent_node = FindNode(TV, items_attributes(orphan_id)(PARENT_ID_VARIABLE))
+                parent_node = FindNode(TV, items_attributes(orphan_id).ParentId)
 
                 If Not parent_node Is Nothing Then
-                    current_node = AddNode(items_attributes(orphan_id)(ID_VARIABLE), _
-                                           items_attributes(orphan_id)(NAME_VARIABLE),
+                    current_node = AddNode(items_attributes(orphan_id).Id, _
+                                           items_attributes(orphan_id).Name,
                                            parent_node, _
                                            image_index)
                     solved_orphans_list.Add(orphan_id)

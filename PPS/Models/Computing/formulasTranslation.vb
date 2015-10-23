@@ -255,6 +255,7 @@ Friend Class FormulasTranslations
 
         Dim accountId As Int32
         Dim accountName As String
+        Dim l_account As Account
         Dim str_copy As String = formulaStr
         Dim m As Match = accountsDBToHumanRegex.Match(str_copy)
         If (m.Success) Then
@@ -263,7 +264,10 @@ Friend Class FormulasTranslations
                     System.Diagnostics.Debug.Write("Error in regex parsing from DB to Human: Identified several Accounts IDs.")
                 End If
                 accountId = m.Groups(1).Captures(0).Value
-                accountName = GlobalVariables.Accounts.m_accountsHash(accountId)(NAME_VARIABLE)
+                l_account = GlobalVariables.Accounts.GetAccount(accountId)
+
+                If l_account Is Nothing Then Exit While
+                accountName = l_account.Name
                 formulaStr = Replace(formulaStr, m.Groups(0).Value, ACCOUNTS_HUMAN_IDENTIFIER & _
                                                                     accountName & _
                                                                     ACCOUNTS_HUMAN_IDENTIFIER & _
@@ -320,11 +324,14 @@ Friend Class FormulasTranslations
 
 #Region "Utilities"
 
-    Friend Function GetFormulaDependantsLIst(ByRef accountid As Int32) As List(Of Int32)
+    Friend Function GetFormulaDependantsLIst(ByRef accountid As UInt32) As List(Of UInt32)
 
-        Dim formula_str As String = GlobalVariables.Accounts.m_accountsHash(accountid)(ACCOUNT_FORMULA_VARIABLE)
-        Dim dependantId As Int32
-        Dim dependants_list As New List(Of Int32)
+        Dim dependantId As UInt32
+        Dim dependants_list As New List(Of UInt32)
+        Dim l_account = GlobalVariables.Accounts.GetAccount(accountid)
+
+        If l_account Is Nothing Then Return dependants_list
+        Dim formula_str As String = l_account.Formula
         Dim m As Match = dependanciesCheckRegex.Match(formula_str)
         If (m.Success) Then
             While m.Success

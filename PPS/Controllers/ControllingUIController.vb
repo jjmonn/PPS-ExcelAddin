@@ -97,24 +97,26 @@ Friend Class ControllingUIController
         Dim clientsNode As vTreeNode = VTreeViewUtil.AddNode(Computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.CLIENTS, _
                                                              ControllingUI_2.CLIENTS_CODE, _
                                                              m_filtersNodes)
-        For Each clientId As Int32 In GlobalVariables.Clients.Axis_hash.Keys
-            VTreeViewUtil.AddNode(clientId, GlobalVariables.Clients.Axis_hash(clientId)(NAME_VARIABLE), clientsNode)
+        For Each clientId As Int32 In GlobalVariables.Clients.GetAxisDictionary().Keys
+            If GlobalVariables.Clients.GetAxis(clientId) Is Nothing Then Continue For
+            VTreeViewUtil.AddNode(clientId, GlobalVariables.Clients.GetAxis(clientId).Name, clientsNode)
         Next
 
         ' Load Products Nodes
         Dim productsNode As vTreeNode = VTreeViewUtil.AddNode(computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.PRODUCTS, _
                                                               ControllingUI_2.PRODUCTS_CODE, _
                                                               m_filtersNodes)
-        For Each productId As Int32 In GlobalVariables.Products.Axis_hash.Keys
-            VTreeViewUtil.AddNode(productId, GlobalVariables.Products.Axis_hash(productId)(NAME_VARIABLE), productsNode)
+        For Each productId As Int32 In GlobalVariables.Products.GetAxisDictionary().Keys
+            If GlobalVariables.Products.GetAxis(productId) Is Nothing Then Continue For
+            VTreeViewUtil.AddNode(productId, GlobalVariables.Products.GetAxis(productId).Name, productsNode)
         Next
 
         ' Load Adjustment Nodes
         Dim adjustmentsNode As vTreeNode = VTreeViewUtil.AddNode(computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.ADJUSTMENTS, _
                                                                  ControllingUI_2.ADJUSTMENT_CODE, _
                                                                  m_filtersNodes)
-        For Each adjustmentId As Int32 In GlobalVariables.Adjustments.Axis_hash.Keys
-            VTreeViewUtil.AddNode(adjustmentId, GlobalVariables.Adjustments.Axis_hash(adjustmentId)(NAME_VARIABLE), adjustmentsNode)
+        For Each elem In GlobalVariables.Adjustments.GetAxisDictionary()
+            VTreeViewUtil.AddNode(elem.Value.Id, elem.Value.Name, adjustmentsNode)
         Next
 
     End Sub
@@ -501,7 +503,7 @@ Friend Class ControllingUIController
 
                     ' Test: Loop only if dimension is not account and account_formulatype = title
                     If dimensionNode.Value = computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.ACCOUNTS _
-                    AndAlso GlobalVariables.Accounts.m_accountsHash(CInt(valueNode.Value))(ACCOUNT_FORMULA_TYPE_VARIABLE) = GlobalEnums.FormulaTypes.TITLE Then
+                    AndAlso GlobalVariables.Accounts.GetAccount(valueNode.Value).FormulaType = Account.FormulaTypes.TITLE Then
                         ' Case account formula type title
                     Else
                         CreateRow(dgv, dimensionNode.NextNode, , subRow)
@@ -601,7 +603,7 @@ Friend Class ControllingUIController
         '---------------------------------------------------------
         If Not m_dataMap Is Nothing Then
 
-            Dim accountId As Int32 = 0
+            Dim accountId As UInt32 = 0
             Dim entityId As Int32 = 0
             Dim periodId As String = ""
             Dim versionId As String = 0
@@ -645,13 +647,17 @@ Friend Class ControllingUIController
                     End If
                 Else
                     args.CellValue = ""
-                    If (GlobalVariables.Accounts.m_accountsHash(accountId)(ACCOUNT_FORMULA_TYPE_VARIABLE) <> GlobalEnums.FormulaTypes.TITLE) Then
-                        args.CellValue = "-"
-                        'Dim parent = args.RowItem.ParentItem
+                    Dim l_account = GlobalVariables.Accounts.GetAccount(accountId)
 
-                        'If Not parent Is Nothing AndAlso IsEmptyRow(args.RowItem) Then
-                        '    parent.Items.Remove(args.RowItem)
-                        'End If
+                    If Not l_account Is Nothing Then
+                        If (l_account.FormulaType <> Account.FormulaTypes.TITLE) Then
+                            args.CellValue = "-"
+                            'Dim parent = args.RowItem.ParentItem
+
+                            'If Not parent Is Nothing AndAlso IsEmptyRow(args.RowItem) Then
+                            '    parent.Items.Remove(args.RowItem)
+                            'End If
+                        End If
                     End If
                 End If
             End If
@@ -887,14 +893,14 @@ Friend Class ControllingUIController
 
         m_chartsView.ClearCharts_ThreadSafe()
         Dim xAxisValues As String() = GetSerieXValues()
-        If My.Settings.chart1Serie1AccountId <> 0 Then m_chartsView.BindData_ThreadSafe(0, GlobalVariables.Accounts.m_accountsHash(My.Settings.chart1Serie1AccountId)(NAME_VARIABLE), xAxisValues, BuildSerieYValues(My.Settings.chart1Serie1AccountId))
-        If My.Settings.chart1Serie2AccountId <> 0 Then m_chartsView.BindData_ThreadSafe(0, GlobalVariables.Accounts.m_accountsHash(My.Settings.chart1Serie2AccountId)(NAME_VARIABLE), xAxisValues, BuildSerieYValues(My.Settings.chart1Serie2AccountId))
-        If My.Settings.chart2Serie1AccountId <> 0 Then m_chartsView.BindData_ThreadSafe(1, GlobalVariables.Accounts.m_accountsHash(My.Settings.chart2Serie1AccountId)(NAME_VARIABLE), xAxisValues, BuildSerieYValues(My.Settings.chart2Serie1AccountId))
-        If My.Settings.chart2Serie2AccountId <> 0 Then m_chartsView.BindData_ThreadSafe(1, GlobalVariables.Accounts.m_accountsHash(My.Settings.chart2Serie2AccountId)(NAME_VARIABLE), xAxisValues, BuildSerieYValues(My.Settings.chart2Serie2AccountId))
-        If My.Settings.chart3Serie1AccountId <> 0 Then m_chartsView.BindData_ThreadSafe(2, GlobalVariables.Accounts.m_accountsHash(My.Settings.chart3Serie1AccountId)(NAME_VARIABLE), xAxisValues, BuildSerieYValues(My.Settings.chart3Serie1AccountId))
-        If My.Settings.chart3Serie2AccountId <> 0 Then m_chartsView.BindData_ThreadSafe(2, GlobalVariables.Accounts.m_accountsHash(My.Settings.chart3Serie2AccountId)(NAME_VARIABLE), xAxisValues, BuildSerieYValues(My.Settings.chart3Serie2AccountId))
-        If My.Settings.chart4Serie1AccountId <> 0 Then m_chartsView.BindData_ThreadSafe(3, GlobalVariables.Accounts.m_accountsHash(My.Settings.chart4Serie1AccountId)(NAME_VARIABLE), xAxisValues, BuildSerieYValues(My.Settings.chart4Serie1AccountId))
-        If My.Settings.chart4Serie2AccountId <> 0 Then m_chartsView.BindData_ThreadSafe(3, GlobalVariables.Accounts.m_accountsHash(My.Settings.chart4Serie2AccountId)(NAME_VARIABLE), xAxisValues, BuildSerieYValues(My.Settings.chart4Serie2AccountId))
+        If My.Settings.chart1Serie1AccountId <> 0 Then m_chartsView.BindData_ThreadSafe(0, GlobalVariables.Accounts.GetAccount(My.Settings.chart1Serie1AccountId).Name, xAxisValues, BuildSerieYValues(My.Settings.chart1Serie1AccountId))
+        If My.Settings.chart1Serie2AccountId <> 0 Then m_chartsView.BindData_ThreadSafe(0, GlobalVariables.Accounts.GetAccount(My.Settings.chart1Serie2AccountId).Name, xAxisValues, BuildSerieYValues(My.Settings.chart1Serie2AccountId))
+        If My.Settings.chart2Serie1AccountId <> 0 Then m_chartsView.BindData_ThreadSafe(1, GlobalVariables.Accounts.GetAccount(My.Settings.chart2Serie1AccountId).Name, xAxisValues, BuildSerieYValues(My.Settings.chart2Serie1AccountId))
+        If My.Settings.chart2Serie2AccountId <> 0 Then m_chartsView.BindData_ThreadSafe(1, GlobalVariables.Accounts.GetAccount(My.Settings.chart2Serie2AccountId).Name, xAxisValues, BuildSerieYValues(My.Settings.chart2Serie2AccountId))
+        If My.Settings.chart3Serie1AccountId <> 0 Then m_chartsView.BindData_ThreadSafe(2, GlobalVariables.Accounts.GetAccount(My.Settings.chart3Serie1AccountId).Name, xAxisValues, BuildSerieYValues(My.Settings.chart3Serie1AccountId))
+        If My.Settings.chart3Serie2AccountId <> 0 Then m_chartsView.BindData_ThreadSafe(2, GlobalVariables.Accounts.GetAccount(My.Settings.chart3Serie2AccountId).Name, xAxisValues, BuildSerieYValues(My.Settings.chart3Serie2AccountId))
+        If My.Settings.chart4Serie1AccountId <> 0 Then m_chartsView.BindData_ThreadSafe(3, GlobalVariables.Accounts.GetAccount(My.Settings.chart4Serie1AccountId).Name, xAxisValues, BuildSerieYValues(My.Settings.chart4Serie1AccountId))
+        If My.Settings.chart4Serie2AccountId <> 0 Then m_chartsView.BindData_ThreadSafe(3, GlobalVariables.Accounts.GetAccount(My.Settings.chart4Serie2AccountId).Name, xAxisValues, BuildSerieYValues(My.Settings.chart4Serie2AccountId))
         m_chartsView.StubDemosFormatting_ThreadSafe()
 
     End Sub
@@ -999,19 +1005,19 @@ Friend Class ControllingUIController
 
     End Function
 
-    Friend Function GetAccountTypeFromId(ByRef p_accountId As Int32) As Int32
+    Friend Function GetAccountTypeFromId(ByRef p_accountId As UInt32) As Account.AccountType
 
-        If GlobalVariables.Accounts.m_accountsHash.ContainsKey(p_accountId) Then
-            Return GlobalVariables.Accounts.m_accountsHash(p_accountId)(ACCOUNT_TYPE_VARIABLE)
+        If Not GlobalVariables.Accounts.GetAccount(p_accountId) Is Nothing Then
+            Return GlobalVariables.Accounts.GetAccount(p_accountId).Type
         End If
         Return 0
 
     End Function
 
-    Friend Function GetAccountFormatFromId(ByRef p_accountId As Int32) As String
+    Friend Function GetAccountFormatFromId(ByRef p_accountId As UInt32) As String
 
-        If GlobalVariables.Accounts.m_accountsHash.ContainsKey(p_accountId) Then
-            Return GlobalVariables.Accounts.m_accountsHash(p_accountId)(ACCOUNT_FORMAT_VARIABLE)
+        If Not GlobalVariables.Accounts.GetAccount(p_accountId) Is Nothing Then
+            Return GlobalVariables.Accounts.GetAccount(p_accountId).FormatId
         End If
         Return ""
 

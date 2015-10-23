@@ -98,8 +98,8 @@ Friend Class GlobalFactController
         For Each fact In GetGlobalFactList()
             If fact.Value(NAME_VARIABLE) = p_name Then Return True
         Next
-        For Each account In GlobalVariables.Accounts.m_accountsHash
-            If account.Value(NAME_VARIABLE) = p_name Then Return True
+        For Each account In GlobalVariables.Accounts.GetAccountsDictionary().Values
+            If account.Name = p_name Then Return True
         Next
         Return False
     End Function

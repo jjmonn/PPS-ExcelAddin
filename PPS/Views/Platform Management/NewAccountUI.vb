@@ -103,15 +103,17 @@ Friend Class NewAccountUI
 
             If Not ParentAccountsTreeviewBox.TreeView.SelectedNode Is Nothing Then
                 parent_id = CInt(ParentAccountsTreeviewBox.TreeView.SelectedNode.Value)
-                account_tab = GlobalVariables.Accounts.m_accountsHash(parent_id)(ACCOUNT_TAB_VARIABLE)
+
+                Dim l_account = GlobalVariables.Accounts.GetAccount(parent_id)
+                account_tab = If(l_account Is Nothing, 0, l_account.AccountTab)
             Else
                 parent_id = 0
                 account_tab = ParentAccountsTreeviewBox.TreeView.Nodes.Count
             End If
-            If aggregation_RB.Checked = True Then conso_option = GlobalEnums.ConsolidationOptions.AGGREGATION
-            If recompute_RB.Checked = True Then conso_option = GlobalEnums.ConsolidationOptions.RECOMPUTATION
-            If flux_RB.Checked = True Then conversion_option = GlobalEnums.ConversionOptions.AVERAGE_RATE
-            If bs_item_RB.Checked = True Then conversion_option = GlobalEnums.ConversionOptions.END_OF_PERIOD_RATE
+            If aggregation_RB.Checked = True Then conso_option = Account.ConsolidationOptions.AGGREGATION
+            If recompute_RB.Checked = True Then conso_option = Account.ConsolidationOptions.RECOMPUTATION
+            If flux_RB.Checked = True Then conversion_option = Account.ConversionOptions.AVERAGE_RATE
+            If bs_item_RB.Checked = True Then conversion_option = Account.ConversionOptions.END_OF_PERIOD_RATE
 
             Controller.CreateAccount(parent_id, _
                                      NameTextBox.Text, _

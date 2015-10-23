@@ -92,14 +92,17 @@ Friend Class SubmissionWSController
     Friend Sub UpdateCalculatedItemsOnWS(ByRef entityName As String)
 
         Dim entityId As Int32 = CInt(m_acquisitionModel.entitiesNameIdDict(entityName))
-        For Each accountName As String In m_acquisitionModel.outputsList
+        For Each l_account As Account In m_acquisitionModel.outputsList
             For Each period As Int32 In m_acquisitionModel.currentPeriodList
-                If m_acquisitionModel.accountsNamesFormulaTypeDict(accountName) = GlobalEnums.FormulaTypes.FIRST_PERIOD_INPUT Then
-                    If period <> m_acquisitionModel.currentPeriodList(0) Then
-                        SetDatsetCellValue(entityId, entityName, accountName, period)
+
+                If Not l_account Is Nothing Then
+                    If l_account.FormulaType = Account.FormulaTypes.FIRST_PERIOD_INPUT Then
+                        If period <> m_acquisitionModel.currentPeriodList(0) Then
+                            SetDatsetCellValue(entityId, entityName, l_account.Name, period)
+                        End If
+                    Else
+                        SetDatsetCellValue(entityId, entityName, l_account.Name, period)
                     End If
-                Else
-                    SetDatsetCellValue(entityId, entityName, accountName, period)
                 End If
             Next
         Next
@@ -113,8 +116,11 @@ Friend Class SubmissionWSController
 
         Dim tuple_ As New Tuple(Of String, String, String)(p_entityName, p_accountName, p_period)
         If m_dataSet.m_datasetCellsDictionary.ContainsKey(tuple_) = True Then
+            Dim l_account = GlobalVariables.Accounts.GetAccount(p_accountName)
+
+            If l_account Is Nothing Then Exit Sub
             Dim value = m_acquisitionModel.GetCalculatedValue(p_entityId, _
-                                                            m_dataSet.m_accountsNameIdDictionary(p_accountName), _
+                                                            l_account.Id, _
                                                             m_acquisitionModel.periodsIdentifyer & p_period)
             If Double.IsNaN(value) Then value = 0
 
@@ -127,15 +133,15 @@ Friend Class SubmissionWSController
 
         Dim value As Double
         For Each entityName As String In m_dataSet.m_entitiesAddressValuesDictionary.Values
-            For Each accountName As String In m_dataSet.m_inputsAccountsList
+            For Each l_account As Account In m_dataSet.m_inputsAccountsList
                 For Each period As Int32 In m_acquisitionModel.currentPeriodList
-                    If m_acquisitionModel.dataBaseInputsDictionary(entityName)(accountName).ContainsKey(m_acquisitionModel.periodsIdentifyer & period) = True Then
-                        value = m_acquisitionModel.dataBaseInputsDictionary(entityName)(accountName)(m_acquisitionModel.periodsIdentifyer & period)
+                    If m_acquisitionModel.dataBaseInputsDictionary(entityName)(l_account.Name).ContainsKey(m_acquisitionModel.periodsIdentifyer & period) = True Then
+                        value = m_acquisitionModel.dataBaseInputsDictionary(entityName)(l_account.Name)(m_acquisitionModel.periodsIdentifyer & period)
                     Else
                         value = 0
                     End If
                     If Double.IsNaN(value) Then value = 0
-                    Dim tuple_ As New Tuple(Of String, String, String)(entityName, accountName, period)
+                    Dim tuple_ As New Tuple(Of String, String, String)(entityName, l_account.Name, period)
                     m_dataSet.m_datasetCellsDictionary(tuple_).Value2 = value
                 Next
             Next
@@ -251,29 +257,30 @@ Friend Class SubmissionWSController
 
     Private Sub DisplayLogButton_Click(ctrl As CommandBarButton, ByRef cancelDefault As Boolean)
 
-        Dim accountId As Int32 = 0
         Dim entityId As Int32 = 0
         Dim periodId As String = ""
         Dim versionId As String = My.Settings.version_id
+        Dim l_account As Account
 
         If m_dataSet.m_datasetCellDimensionsDictionary.ContainsKey(m_currentCellAddress) Then
             Dim datasetCellStruct As ModelDataSet.DataSetCellDimensions = m_dataSet.m_datasetCellDimensionsDictionary(m_currentCellAddress)
-            accountId = GlobalVariables.Accounts.GetIdFromName(datasetCellStruct.m_accountName)
+            l_account = GlobalVariables.Accounts.GetAccount(datasetCellStruct.m_accountName)
             entityId = GlobalVariables.Entities.GetEntityId(datasetCellStruct.m_entityName)
             periodId = datasetCellStruct.m_period
 
-            If accountId = 0 Or entityId = 0 Then
+            If l_account Is Nothing Then Exit Sub
+            If l_account.Id = 0 Or entityId = 0 Then
                 MsgBox("Invalid Account or Entity. Unable to display log. Contact your administratyor or the Financial BI team if the error persists.")
                 Exit Sub
             End If
 
-            If GlobalVariables.Accounts.m_accountsHash(accountId)(ACCOUNT_FORMULA_TYPE_VARIABLE) = GlobalEnums.FormulaTypes.HARD_VALUE_INPUT _
-            Or GlobalVariables.Accounts.m_accountsHash(accountId)(ACCOUNT_FORMULA_TYPE_VARIABLE) = GlobalEnums.FormulaTypes.FIRST_PERIOD_INPUT Then
+            If l_account.FormulaType = Account.FormulaTypes.HARD_VALUE_INPUT _
+            Or l_account.FormulaType = Account.FormulaTypes.FIRST_PERIOD_INPUT Then
                 ' we must add the check for entity = input when report upload is adapted to all orientations
                 ' Priority normal
 
                 Dim logsHashTable As New Action(Of List(Of Hashtable))(AddressOf DisplayLogUI)
-                m_logController.GetFactLog(accountId, _
+                m_logController.GetFactLog(l_account.Id, _
                                            entityId, _
                                            periodId, _
                                            versionId,

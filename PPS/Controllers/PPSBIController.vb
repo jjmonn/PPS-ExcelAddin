@@ -323,7 +323,7 @@ ReturnError:
     End Sub
 
     Private Sub BuildAxisFilter(ByRef p_axis_filters_object As Object, _
-                                ByRef CRUDModel As SuperAxisCRUD, _
+                                ByRef CRUDModel As AxisElemManager, _
                                 ByRef axisId As Int32, _
                                 ByRef axis_filters As Dictionary(Of Int32, List(Of Int32)))
 

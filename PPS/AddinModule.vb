@@ -1270,17 +1270,10 @@ Public Class AddinModule
         GlobalVariables.AdjustmentIDDropDown = AdjustmentDropDown
 
         ' CRUDs
-        GlobalVariables.Accounts = New Account
+        GlobalVariables.Accounts = New AccountManager
         GlobalVariables.Entities = New Entity
         GlobalVariables.Filters = New Filter
         GlobalVariables.FiltersValues = New FilterValue
-        GlobalVariables.Clients = New Client
-        GlobalVariables.Products = New Product
-        GlobalVariables.Adjustments = New Adjustment
-        GlobalVariables.EntitiesFilters = New EntitiesFilter
-        GlobalVariables.ClientsFilters = New ClientsFilter
-        GlobalVariables.ProductsFilters = New ProductsFilter
-        GlobalVariables.AdjustmentsFilters = New AdjustmentFilter
         GlobalVariables.Versions = New Version
         GlobalVariables.Currencies = New Currency
         GlobalVariables.RatesVersions = New RatesVersion
@@ -1296,7 +1289,7 @@ Public Class AddinModule
         GlobalVariables.GlobalPPSBIController = New PPSBIController
         GlobalVariables.Addin = Me
         SetMainMenuButtonState(False)
-        Local.LoadLocalFile("PPS-Repo/PPS/Locals/french.xml")
+        Local.LoadLocalFile("./PPS-Repo/PPS/Locals/french.xml")
 
     End Sub
 
@@ -1709,10 +1702,11 @@ Public Class AddinModule
     Friend Shared Sub loadDropDownsSubmissionButtons()
 
         GlobalVariables.ClientsIDDropDown.Items.Clear()
-        For Each client_id As Int32 In GlobalVariables.Clients.Axis_hash.Keys
+        For Each client_id As Int32 In GlobalVariables.Clients.GetAxisDictionary().Keys
+            If GlobalVariables.Clients.GetAxis(client_id) Is Nothing Then Continue For
             AddButtonToDropDown(GlobalVariables.ClientsIDDropDown, _
                                 client_id, _
-                                GlobalVariables.Clients.Axis_hash(client_id)(NAME_VARIABLE))
+                                GlobalVariables.Clients.GetAxis(client_id).Name)
         Next
         GlobalVariables.ClientsIDDropDown.SelectedItemId = DEFAULT_ANALYSIS_AXIS_ID
         GlobalVariables.ClientsIDDropDown.Invalidate()
@@ -1720,19 +1714,21 @@ Public Class AddinModule
         '  GlobalVariables.ClientsIDDropDown. = GlobalVariables.Clients.axis_hash(DEFAULT_ANALYSIS_AXIS_ID)(NAME_VARIABLE)
 
         GlobalVariables.ProductsIDDropDown.Items.Clear()
-        For Each product_id As Int32 In GlobalVariables.Products.Axis_hash.Keys
+        For Each product_id As Int32 In GlobalVariables.Products.GetAxisDictionary().Keys
+            If GlobalVariables.Clients.GetAxis(product_id) Is Nothing Then Continue For
             AddButtonToDropDown(GlobalVariables.ProductsIDDropDown, _
                                 product_id, _
-                                GlobalVariables.Products.Axis_hash(product_id)(NAME_VARIABLE))
+                                GlobalVariables.Products.GetAxis(product_id).Name)
         Next
         GlobalVariables.ProductsIDDropDown.SelectedItemId = DEFAULT_ANALYSIS_AXIS_ID
         '    GlobalVariables.ProductsIDDropDown.Caption = GlobalVariables.Products.axis_hash(DEFAULT_ANALYSIS_AXIS_ID)(NAME_VARIABLE)
 
         GlobalVariables.AdjustmentIDDropDown.Items.Clear()
-        For Each adjustment_id As Int32 In GlobalVariables.Adjustments.Axis_hash.Keys
+        For Each adjustment_id As Int32 In GlobalVariables.Adjustments.GetAxisDictionary().Keys
+            If GlobalVariables.Clients.GetAxis(adjustment_id) Is Nothing Then Continue For
             AddButtonToDropDown(GlobalVariables.AdjustmentIDDropDown, _
                                 adjustment_id, _
-                                GlobalVariables.Adjustments.Axis_hash(adjustment_id)((NAME_VARIABLE)))
+                                GlobalVariables.Adjustments.GetAxis(adjustment_id).Name)
         Next
         GlobalVariables.AdjustmentIDDropDown.SelectedItemId = DEFAULT_ANALYSIS_AXIS_ID
         '  GlobalVariables.AdjustmentIDDropDown.Caption = GlobalVariables.Adjustments.axis_hash(DEFAULT_ANALYSIS_AXIS_ID)(NAME_VARIABLE)

@@ -1,212 +1,212 @@
-﻿' FModelingUI2.vb
-'
-' General FModelling Controller
-'
-'
-'
-' Author: Julien Monnereau
-' Last modified: 27/05/2015
+﻿'' FModelingUI2.vb
+''
+'' General FModelling Controller
+''
+''
+''
+'' Author: Julien Monnereau
+'' Last modified: 27/05/2015
 
 
-Imports System.Collections.Generic
+'Imports System.Collections.Generic
 
 
 
-Friend Class FModelingUI2
+'Friend Class FModelingUI2
 
 
-#Region "Instance Variables"
+'#Region "Instance Variables"
 
-    ' Objects
-    Private InputsController As FModelingInputsController
-    Private SimulationsController As FModelingSimulationController
-    Private ExportsController As FModelingExportController
-    Private FAccountsController As FModellingAccountsController
+'    ' Objects
+'    Private InputsController As FModelingInputsController
+'    Private SimulationsController As FModelingSimulationController
+'    Private ExportsController As FModelingExportController
+'    Private FAccountsController As FModellingAccountsController
 
-#End Region
+'#End Region
 
 
-#Region "Initialize"
+'#Region "Initialize"
 
-    Friend Sub New()
+'    Friend Sub New()
 
-        ' This call is required by the designer.
-        InitializeComponent()
+'        ' This call is required by the designer.
+'        InitializeComponent()
 
-        ' Add any initialization after the InitializeComponent() call.
-        SimulationsController = New FModelingSimulationController(Me)
-        InputsController = New FModelingInputsController(Me, SimulationsController.FModellingAccount)
-        ExportsController = New FModelingExportController(Me, SimulationsController.FModellingAccount, _
-                                                          InputsController.accounts_names_id_dic, _
-                                                          InputsController.CBEditor)
+'        ' Add any initialization after the InitializeComponent() call.
+'        SimulationsController = New FModelingSimulationController(Me)
+'        InputsController = New FModelingInputsController(Me, SimulationsController.FModellingAccount)
+'        ExportsController = New FModelingExportController(Me, SimulationsController.FModellingAccount, _
+'                                                          InputsController.accounts_names_id_dic, _
+'                                                          InputsController.CBEditor)
 
-        FAccountsController = New FModellingAccountsController(SimulationsController.possible_targets_name_id_dict, _
-                                                               SimulationsController.FModellingAccount)
+'        FAccountsController = New FModellingAccountsController(SimulationsController.possible_targets_name_id_dict, _
+'                                                               SimulationsController.FModellingAccount)
 
 
-        InputsController.InitializeView()
-        ExportsController.InitializeView()
-        Me.WindowState = Windows.Forms.FormWindowState.Maximized
+'        InputsController.InitializeView()
+'        ExportsController.InitializeView()
+'        Me.WindowState = Windows.Forms.FormWindowState.Maximized
 
-    End Sub
+'    End Sub
 
-#End Region
+'#End Region
 
 
-#Region "Menu"
+'#Region "Menu"
 
-#Region "Scenario"
+'#Region "Scenario"
 
-    Private Sub NewScenarioBT_Click(sender As Object, e As EventArgs) Handles NewScenarioBT.Click
+'    Private Sub NewScenarioBT_Click(sender As Object, e As EventArgs) Handles NewScenarioBT.Click
 
-        displayInputs()
+'        displayInputs()
 
-    End Sub
+'    End Sub
 
-    Private Sub NewTargetToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles NewTargetToolStripMenuItem.Click
+'    Private Sub NewTargetToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles NewTargetToolStripMenuItem.Click
 
-        SimulationsController.View.AddConstraintToolStripMenuItem_Click(sender, e)
-  
-    End Sub
+'        SimulationsController.View.AddConstraintToolStripMenuItem_Click(sender, e)
 
-    Private Sub RefreshScenarioToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles RefreshScenarioToolStripMenuItem.Click
+'    End Sub
 
-        SimulationsController.ComputeScenario()
+'    Private Sub RefreshScenarioToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles RefreshScenarioToolStripMenuItem.Click
 
-    End Sub
+'        SimulationsController.ComputeScenario()
 
-#End Region
+'    End Sub
 
-#Region "Mappings"
+'#End Region
 
-    Private Sub InputsMappingToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles InputsMappingToolStripMenuItem.Click
+'#Region "Mappings"
 
-        ' put a generic control instead !
-        '
-        Dim genericUI As New GenericView("Inputs Mapping")
-        genericUI.Controls.Add(InputsController.MappingDGV)
-        InputsController.MappingDGV.Dock = Windows.Forms.DockStyle.Fill
-        genericUI.Show()
+'    Private Sub InputsMappingToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles InputsMappingToolStripMenuItem.Click
 
-    End Sub
+'        ' put a generic control instead !
+'        '
+'        Dim genericUI As New GenericView("Inputs Mapping")
+'        genericUI.Controls.Add(InputsController.MappingDGV)
+'        InputsController.MappingDGV.Dock = Windows.Forms.DockStyle.Fill
+'        genericUI.Show()
 
-    Private Sub FinancialAccountsMappingToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles FinancialAccountsMappingToolStripMenuItem.Click
+'    End Sub
 
-        ' Display must be in this form !
-        ' view = user control
-        FAccountsController.DisplayView()
+'    Private Sub FinancialAccountsMappingToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles FinancialAccountsMappingToolStripMenuItem.Click
 
-    End Sub
+'        ' Display must be in this form !
+'        ' view = user control
+'        FAccountsController.DisplayView()
 
-    ' outputs mappings
+'    End Sub
 
-#End Region
+'    ' outputs mappings
 
-#Region "View"
+'#End Region
 
-    Private Sub VersionAndScopeSelectionToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles VersionAndScopeSelectionToolStripMenuItem.Click
+'#Region "View"
 
-        displayInputs()
+'    Private Sub VersionAndScopeSelectionToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles VersionAndScopeSelectionToolStripMenuItem.Click
 
-    End Sub
+'        displayInputs()
 
-    Private Sub SimutlationsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles SimutlationsToolStripMenuItem.Click
+'    End Sub
 
-        displaySimulation()
+'    Private Sub SimutlationsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles SimutlationsToolStripMenuItem.Click
 
-    End Sub
+'        displaySimulation()
 
-    Private Sub OutputToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles OutputToolStripMenuItem.Click
+'    End Sub
 
-        displayOutput()
+'    Private Sub OutputToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles OutputToolStripMenuItem.Click
 
-    End Sub
+'        displayOutput()
 
+'    End Sub
 
-#End Region
-   
-    '   InputsController.DisplayInputsDGV() -> in case we want to separate the conso inputs DGV
 
-#End Region
+'#End Region
 
+'    '   InputsController.DisplayInputsDGV() -> in case we want to separate the conso inputs DGV
 
-#Region "Controllers Interface"
+'#End Region
 
-    Friend Sub setVersionAndPeriods(ByRef input_period_list As List(Of Int32), _
-                                    ByRef version_id As String, _
-                                    ByRef version_name As String)
 
-        SimulationsController.periods_list = input_period_list.ToArray
-        SimulationsController.version_id = version_id
-        ExportsController.UpdatePeriodList(input_period_list.ToArray)
-        SimulationsController.setCartoucheValues(version_name, My.Settings.currentCurrency)
+'#Region "Controllers Interface"
 
-    End Sub
+'    Friend Sub setVersionAndPeriods(ByRef input_period_list As List(Of Int32), _
+'                                    ByRef version_id As String, _
+'                                    ByRef version_name As String)
 
-    Friend Sub addConstraint(ByRef f_account_name As String, _
-                             ByRef default_value As Double)
+'        SimulationsController.periods_list = input_period_list.ToArray
+'        SimulationsController.version_id = version_id
+'        ExportsController.UpdatePeriodList(input_period_list.ToArray)
+'        SimulationsController.setCartoucheValues(version_name, My.Settings.currentCurrency)
 
-        SimulationsController.AddConstraint(f_account_name, default_value)
+'    End Sub
 
-    End Sub
+'    Friend Sub addConstraint(ByRef f_account_name As String, _
+'                             ByRef default_value As Double)
 
-    Friend Sub sendInputsToSimulationController(ByRef inputsDGV As VIBlend.WinForms.DataGridView.vDataGridView)
+'        SimulationsController.AddConstraint(f_account_name, default_value)
 
-        SimulationsController.InitializeInputs(inputsDGV)
-        SimulationsController.NewScenario()
+'    End Sub
 
-    End Sub
+'    Friend Sub sendInputsToSimulationController(ByRef inputsDGV As VIBlend.WinForms.DataGridView.vDataGridView)
 
-#End Region
+'        SimulationsController.InitializeInputs(inputsDGV)
+'        SimulationsController.NewScenario()
 
+'    End Sub
 
-#Region "Utilities"
+'#End Region
 
-    Friend Function getVersion_id() As String
 
-        Return SimulationsController.version_id
+'#Region "Utilities"
 
-    End Function
+'    Friend Function getVersion_id() As String
 
-    Friend Function getDataDictionary() As Dictionary(Of String, Double())
+'        Return SimulationsController.version_id
 
-        Return SimulationsController.scenario.data_dic
+'    End Function
 
-    End Function
+'    Friend Function getDataDictionary() As Dictionary(Of String, Double())
 
-#End Region
+'        Return SimulationsController.scenario.data_dic
 
-  
-#Region "Display"
+'    End Function
 
-    Friend Sub displayInputs()
+'#End Region
 
-        On Error Resume Next
-        TableLayoutPanel1.Controls.RemoveAt(1)
-        TableLayoutPanel1.Controls.Add(InputsController.View, 0, 1)
-        InputsController.View.Dock = Windows.Forms.DockStyle.Fill
 
-    End Sub
+'#Region "Display"
 
-    Friend Sub displaySimulation()
+'    Friend Sub displayInputs()
 
-        On Error Resume Next
-        TableLayoutPanel1.Controls.RemoveAt(1)
-        TableLayoutPanel1.Controls.Add(SimulationsController.View, 0, 1)
-        SimulationsController.View.Dock = Windows.Forms.DockStyle.Fill
+'        On Error Resume Next
+'        TableLayoutPanel1.Controls.RemoveAt(1)
+'        TableLayoutPanel1.Controls.Add(InputsController.View, 0, 1)
+'        InputsController.View.Dock = Windows.Forms.DockStyle.Fill
 
-    End Sub
+'    End Sub
 
-    Friend Sub displayOutput()
+'    Friend Sub displaySimulation()
 
-        On Error Resume Next
-        TableLayoutPanel1.Controls.RemoveAt(1)
-        TableLayoutPanel1.Controls.Add(ExportsController.View, 0, 1)
-        ExportsController.View.Dock = Windows.Forms.DockStyle.Fill
+'        On Error Resume Next
+'        TableLayoutPanel1.Controls.RemoveAt(1)
+'        TableLayoutPanel1.Controls.Add(SimulationsController.View, 0, 1)
+'        SimulationsController.View.Dock = Windows.Forms.DockStyle.Fill
 
-    End Sub
+'    End Sub
 
-#End Region
-   
-   
-End Class
+'    Friend Sub displayOutput()
+
+'        On Error Resume Next
+'        TableLayoutPanel1.Controls.RemoveAt(1)
+'        TableLayoutPanel1.Controls.Add(ExportsController.View, 0, 1)
+'        ExportsController.View.Dock = Windows.Forms.DockStyle.Fill
+
+'    End Sub
+
+'#End Region
+
+
+'End Class

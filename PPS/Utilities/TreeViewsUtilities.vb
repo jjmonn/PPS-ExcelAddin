@@ -27,17 +27,16 @@ Friend Class TreeViewsUtilities
         Dim image_index As UInt16 = 0
         TV.Nodes.Clear()
 
-        For Each id As Int32 In items_attributes.Keys
-            If items_attributes(id).ContainsKey(IMAGE_VARIABLE) Then image_index = items_attributes(id)(IMAGE_VARIABLE)
-            If items_attributes(id)(PARENT_ID_VARIABLE) = 0 Then
-                currentNode = TV.Nodes.Add(items_attributes(id)(ID_VARIABLE), _
-                                           items_attributes(id)(NAME_VARIABLE), _
+        For Each id As UInt32 In items_attributes.Keys
+            If items_attributes(id).ParentId = 0 Then
+                currentNode = TV.Nodes.Add(items_attributes(id).Id, _
+                                           items_attributes(id).Name, _
                                            image_index, image_index)
             Else
-                ParentNode = TV.Nodes.Find((items_attributes(id)(PARENT_ID_VARIABLE)), True)
+                ParentNode = TV.Nodes.Find((items_attributes(id).ParentId), True)
                 If ParentNode.Length > 0 Then
-                    currentNode = ParentNode(0).Nodes.Add(items_attributes(id)(ID_VARIABLE), _
-                                                          items_attributes(id)(NAME_VARIABLE), _
+                    currentNode = ParentNode(0).Nodes.Add(items_attributes(id).Id, _
+                                                          items_attributes(id).Name, _
                                                           image_index, image_index)
                 Else
                     orphans_ids_list.Add(items_attributes(id)(ID_VARIABLE))
@@ -57,13 +56,12 @@ Friend Class TreeViewsUtilities
         Dim image_index As UInt16 = 0
         If solved_orphans_list Is Nothing Then solved_orphans_list = New List(Of Int32)
         For Each orphan_id As Int32 In orphans_id_list
-            If items_attributes(orphan_id).ContainsKey(IMAGE_VARIABLE) = True Then image_index = items_attributes(orphan_id)(IMAGE_VARIABLE)
             If solved_orphans_list.Contains(orphan_id) = False Then
-                parent_nodes = TV.Nodes.Find(items_attributes(orphan_id)(PARENT_ID_VARIABLE), True)
+                parent_nodes = TV.Nodes.Find(items_attributes(orphan_id).ParentId, True)
 
                 If parent_nodes.Length > 0 Then
-                    current_node = parent_nodes(0).Nodes.Add(items_attributes(orphan_id)(ID_VARIABLE), _
-                                                             items_attributes(orphan_id)(NAME_VARIABLE), _
+                    current_node = parent_nodes(0).Nodes.Add(items_attributes(orphan_id).Id, _
+                                                             items_attributes(orphan_id).Name, _
                                                              image_index, _
                                                              image_index)
                     solved_orphans_list.Add(orphan_id)
@@ -85,19 +83,18 @@ Friend Class TreeViewsUtilities
         node.Nodes.Clear()
 
         For Each id As Int32 In items_attributes.Keys
-            If items_attributes(id).ContainsKey(IMAGE_VARIABLE) Then image_index = items_attributes(id)(IMAGE_VARIABLE)
-            If items_attributes(id)(PARENT_ID_VARIABLE) = 0 Then
-                currentNode = node.Nodes.Add(items_attributes(id)(ID_VARIABLE), _
-                                           items_attributes(id)(NAME_VARIABLE), _
+            If items_attributes(id).ParentId = 0 Then
+                currentNode = node.Nodes.Add(items_attributes(id).Id, _
+                                           items_attributes(id).Name, _
                                            image_index, image_index)
             Else
-                ParentNode = node.Nodes.Find((items_attributes(id)(PARENT_ID_VARIABLE)), True)
+                ParentNode = node.Nodes.Find((items_attributes(id).ParentId), True)
                 If ParentNode.Length > 0 Then
-                    currentNode = ParentNode(0).Nodes.Add(items_attributes(id)(ID_VARIABLE), _
-                                                          items_attributes(id)(NAME_VARIABLE), _
+                    currentNode = ParentNode(0).Nodes.Add(items_attributes(id).Id, _
+                                                          items_attributes(id).Name, _
                                                           image_index, image_index)
                 Else
-                    orphans_ids_list.Add(items_attributes(id)(ID_VARIABLE))
+                    orphans_ids_list.Add(id)
                 End If
             End If
         Next
@@ -114,13 +111,12 @@ Friend Class TreeViewsUtilities
         Dim image_index As UInt16 = 0
         If solved_orphans_list Is Nothing Then solved_orphans_list = New List(Of Int32)
         For Each orphan_id As Int32 In orphans_id_list
-            If items_attributes(orphan_id).ContainsKey(IMAGE_VARIABLE) Then image_index = items_attributes(orphan_id)(IMAGE_VARIABLE)
             If solved_orphans_list.Contains(orphan_id) = False Then
-                parent_nodes = node.Nodes.Find(items_attributes(orphan_id)(PARENT_ID_VARIABLE), True)
+                parent_nodes = node.Nodes.Find(items_attributes(orphan_id).ParentId, True)
 
                 If parent_nodes.Length > 0 Then
-                    current_node = parent_nodes(0).Nodes.Add(items_attributes(orphan_id)(ID_VARIABLE), _
-                                                             items_attributes(orphan_id)(NAME_VARIABLE), _
+                    current_node = parent_nodes(0).Nodes.Add(items_attributes(orphan_id).Id, _
+                                                             items_attributes(orphan_id).Name, _
                                                              image_index, _
                                                              image_index)
                     solved_orphans_list.Add(orphan_id)

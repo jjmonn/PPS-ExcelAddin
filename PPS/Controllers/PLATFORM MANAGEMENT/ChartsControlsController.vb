@@ -1,176 +1,176 @@
-﻿'
-'
-'
-'
-'
-'
-'
-' Author: Julien Monnereau
-' Last modified: 05/05/2015
+﻿''
+''
+''
+''
+''
+''
+''
+'' Author: Julien Monnereau
+'' Last modified: 05/05/2015
 
 
-Imports System.Windows.Forms
-Imports System.Collections
-Imports System.Collections.Generic
+'Imports System.Windows.Forms
+'Imports System.Collections
+'Imports System.Collections.Generic
 
 
-Friend Class ChartsControlsController
+'Friend Class ChartsControlsController
 
-#Region "Instance Variables"
+'#Region "Instance Variables"
 
-    ' Objects
-    Private ControlCharts As New ControlChart
-    Private View As ControlsView
-    Private ChartsTV As New TreeView
+'    ' Objects
+'    Private ControlCharts As New ControlChart
+'    Private View As ControlsView
+'    Private ChartsTV As New TreeView
 
-    ' Variables
-    Private positions_dictionary As New Dictionary(Of Int32, Double)
+'    ' Variables
+'    Private positions_dictionary As New Dictionary(Of Int32, Double)
 
 
-#End Region
+'#End Region
 
 
-#Region "Initialize"
+'#Region "Initialize"
 
-    Protected Friend Sub New()
+'    Protected Friend Sub New()
 
-        ControlChart.LoadControlChartsTree(ChartsTV)
-        positions_dictionary = TreeViewsUtilities.GeneratePositionsDictionary(ChartsTV)
+'        ControlChart.LoadControlChartsTree(ChartsTV)
+'        positions_dictionary = TreeViewsUtilities.GeneratePositionsDictionary(ChartsTV)
 
-    End Sub
+'    End Sub
 
-#End Region
+'#End Region
 
 
-#Region "Interface"
+'#Region "Interface"
 
-    Friend Sub InitializeDisplay(ByRef input_view As ControlsView)
+'    Friend Sub InitializeDisplay(ByRef input_view As ControlsView)
 
-        View = input_view
-        View.DisplayChartsInit(ChartsTV)
+'        View = input_view
+'        View.DisplayChartsInit(ChartsTV)
 
-    End Sub
+'    End Sub
 
-    Friend Sub CreateControlChart(ByRef name As String)
+'    Friend Sub CreateControlChart(ByRef name As String)
 
-        Dim HT As New Hashtable
-        HT.Add(CONTROL_CHART_NAME_VARIABLE, name)
-        HT.Add(ITEMS_POSITIONS, 1)
-        ControlCharts.CreateControlChart(HT)
+'        Dim HT As New Hashtable
+'        HT.Add(CONTROL_CHART_NAME_VARIABLE, name)
+'        HT.Add(ITEMS_POSITIONS, 1)
+'        ControlCharts.CreateControlChart(HT)
 
-        ' after update  priority normal to be implemented !!! 
-        'ChartsTV.Nodes.Add(id, name, 0, 0)
-        'positions_dictionary = TreeViewsUtilities.GeneratePositionsDictionary(ChartsTV)
-        'ControlCharts.UpdateControlChart(id, ITEMS_POSITIONS, positions_dictionary(id))
+'        ' after update  priority normal to be implemented !!! 
+'        'ChartsTV.Nodes.Add(id, name, 0, 0)
+'        'positions_dictionary = TreeViewsUtilities.GeneratePositionsDictionary(ChartsTV)
+'        'ControlCharts.UpdateControlChart(id, ITEMS_POSITIONS, positions_dictionary(id))
 
-    End Sub
+'    End Sub
 
-    Protected Friend Function GetChartPalette(ByRef chart_id As String) As Object
+'    Protected Friend Function GetChartPalette(ByRef chart_id As String) As Object
 
-        Return ControlCharts.ReadControlChart(chart_id, CONTROL_CHART_PALETTE_VARIABLE)
+'        Return ControlCharts.ReadControlChart(chart_id, CONTROL_CHART_PALETTE_VARIABLE)
 
-    End Function
+'    End Function
 
-    Friend Sub UpdateChartName(ByRef controlchart_id As String, ByRef name As String)
+'    Friend Sub UpdateChartName(ByRef controlchart_id As String, ByRef name As String)
 
-        ControlCharts.UpdateControlChart(controlchart_id, CONTROL_CHART_NAME_VARIABLE, name)
+'        ControlCharts.UpdateControlChart(controlchart_id, CONTROL_CHART_NAME_VARIABLE, name)
 
-    End Sub
+'    End Sub
 
-    Friend Sub DeleteChart(ByRef controlchart_node As TreeNode)
+'    Friend Sub DeleteChart(ByRef controlchart_node As TreeNode)
 
-        For Each node In controlchart_node.Nodes
-            ControlCharts.DeleteControlChart(node.Name)
-        Next
-        ControlCharts.DeleteControlChart(controlchart_node.Name)
-        controlchart_node.Remove()
-        positions_dictionary = TreeViewsUtilities.GeneratePositionsDictionary(ChartsTV)
-        SendNewPositionsToModel()
+'        For Each node In controlchart_node.Nodes
+'            ControlCharts.DeleteControlChart(node.Name)
+'        Next
+'        ControlCharts.DeleteControlChart(controlchart_node.Name)
+'        controlchart_node.Remove()
+'        positions_dictionary = TreeViewsUtilities.GeneratePositionsDictionary(ChartsTV)
+'        SendNewPositionsToModel()
 
-    End Sub
+'    End Sub
 
-    Friend Sub CreateSerie(ByRef controlchart_node As TreeNode, ByRef name As String)
+'    Friend Sub CreateSerie(ByRef controlchart_node As TreeNode, ByRef name As String)
 
-        Dim HT As New Hashtable
-        HT.Add(CONTROL_CHART_PARENT_ID_VARIABLE, controlchart_node.Name)
-        HT.Add(CONTROL_CHART_NAME_VARIABLE, name)
-        HT.Add(ITEMS_POSITIONS, 1)
-        ControlCharts.CreateControlChart(HT)
+'        Dim HT As New Hashtable
+'        HT.Add(CONTROL_CHART_PARENT_ID_VARIABLE, controlchart_node.Name)
+'        HT.Add(CONTROL_CHART_NAME_VARIABLE, name)
+'        HT.Add(ITEMS_POSITIONS, 1)
+'        ControlCharts.CreateControlChart(HT)
 
-        ' after update  priority normal to be implemented !!! 
-        'controlchart_node.Nodes.Add(id, name, 1, 1)
-        'positions_dictionary = TreeViewsUtilities.GeneratePositionsDictionary(ChartsTV)
-        'ControlCharts.UpdateControlChart(id, ITEMS_POSITIONS, positions_dictionary(id))
+'        ' after update  priority normal to be implemented !!! 
+'        'controlchart_node.Nodes.Add(id, name, 1, 1)
+'        'positions_dictionary = TreeViewsUtilities.GeneratePositionsDictionary(ChartsTV)
+'        'ControlCharts.UpdateControlChart(id, ITEMS_POSITIONS, positions_dictionary(id))
 
-    End Sub
+'    End Sub
 
-    Protected Friend Function GetSerieHT(ByRef serie_id As String)
+'    Protected Friend Function GetSerieHT(ByRef serie_id As String)
 
-        Return ControlCharts.GetSerieHT(serie_id)
+'        Return ControlCharts.GetSerieHT(serie_id)
 
-    End Function
+'    End Function
 
-    Protected Friend Sub UpdateChartPalette(ByRef chart_id As String, ByRef palette As String)
+'    Protected Friend Sub UpdateChartPalette(ByRef chart_id As String, ByRef palette As String)
 
-        ControlCharts.UpdateControlChart(chart_id, CONTROL_CHART_PALETTE_VARIABLE, palette)
+'        ControlCharts.UpdateControlChart(chart_id, CONTROL_CHART_PALETTE_VARIABLE, palette)
 
-    End Sub
+'    End Sub
 
-    Protected Friend Sub UpdateName(ByRef node As TreeNode, ByRef name As String)
+'    Protected Friend Sub UpdateName(ByRef node As TreeNode, ByRef name As String)
 
-        ControlCharts.UpdateControlChart(node.Name, CONTROL_CHART_NAME_VARIABLE, name)
-        node.Text = name
+'        ControlCharts.UpdateControlChart(node.Name, CONTROL_CHART_NAME_VARIABLE, name)
+'        node.Text = name
 
-    End Sub
+'    End Sub
 
-    Protected Friend Sub UpdateSerieAccountID(ByRef serie_id As String, ByRef account_id As String)
+'    Protected Friend Sub UpdateSerieAccountID(ByRef serie_id As String, ByRef account_id As String)
 
-        ControlCharts.UpdateControlChart(serie_id, CONTROL_CHART_ACCOUNT_ID_VARIABLE, account_id)
+'        ControlCharts.UpdateControlChart(serie_id, CONTROL_CHART_ACCOUNT_ID_VARIABLE, account_id)
 
-    End Sub
+'    End Sub
 
-    Protected Friend Sub UpdateSerieType(ByRef serie_id As String, ByRef type As String)
+'    Protected Friend Sub UpdateSerieType(ByRef serie_id As String, ByRef type As String)
 
-        ControlCharts.UpdateControlChart(serie_id, CONTROL_CHART_TYPE_VARIABLE, type)
+'        ControlCharts.UpdateControlChart(serie_id, CONTROL_CHART_TYPE_VARIABLE, type)
 
-    End Sub
+'    End Sub
 
-    Protected Friend Sub UpdateSerieColor(ByRef serie_id As String, ByRef color As String)
+'    Protected Friend Sub UpdateSerieColor(ByRef serie_id As String, ByRef color As String)
 
-        ControlCharts.UpdateControlChart(serie_id, CONTROL_CHART_COLOR_VARIABLE, color)
+'        ControlCharts.UpdateControlChart(serie_id, CONTROL_CHART_COLOR_VARIABLE, color)
 
-    End Sub
+'    End Sub
 
-    Protected Friend Sub UpdateSerieChart(ByRef serie_id As String, ByRef chart_id As String)
+'    Protected Friend Sub UpdateSerieChart(ByRef serie_id As String, ByRef chart_id As String)
 
-        ControlCharts.UpdateControlChart(serie_id, CONTROL_CHART_PARENT_ID_VARIABLE, chart_id)
+'        ControlCharts.UpdateControlChart(serie_id, CONTROL_CHART_PARENT_ID_VARIABLE, chart_id)
 
-    End Sub
+'    End Sub
 
-    Protected Friend Sub DeleteSerie(ByRef serie_node As TreeNode)
+'    Protected Friend Sub DeleteSerie(ByRef serie_node As TreeNode)
 
-        ControlCharts.DeleteControlChart(serie_node.Name)
-        serie_node.Remove()
-        positions_dictionary = TreeViewsUtilities.GeneratePositionsDictionary(ChartsTV)
-        SendNewPositionsToModel()
+'        ControlCharts.DeleteControlChart(serie_node.Name)
+'        serie_node.Remove()
+'        positions_dictionary = TreeViewsUtilities.GeneratePositionsDictionary(ChartsTV)
+'        SendNewPositionsToModel()
 
-    End Sub
+'    End Sub
 
-#End Region
+'#End Region
 
 
-#Region "Utilities"
+'#Region "Utilities"
 
-    Private Sub SendNewPositionsToModel()
+'    Private Sub SendNewPositionsToModel()
 
-        For Each chart_id In positions_dictionary.Keys
-            ControlCharts.UpdateControlChart(chart_id, ITEMS_POSITIONS, positions_dictionary(chart_id))
-        Next
+'        For Each chart_id In positions_dictionary.Keys
+'            ControlCharts.UpdateControlChart(chart_id, ITEMS_POSITIONS, positions_dictionary(chart_id))
+'        Next
 
-    End Sub
+'    End Sub
 
-#End Region
+'#End Region
 
 
 
-End Class
+'End Class

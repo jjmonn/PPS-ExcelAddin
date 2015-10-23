@@ -59,7 +59,6 @@ Friend Class AxisView
 #Region "Initialization"
 
     Friend Sub New(ByRef p_controller As AxisController, _
-                   ByRef p_axisHT As Dictionary(Of Int32, SortableHashtable), _
                    ByRef p_axisTV As vTreeView, _
                    ByRef p_axisFilterValuesTV As vTreeView, _
                    ByRef p_axisFiltersTV As vTreeView)
@@ -77,7 +76,7 @@ Friend Class AxisView
         InitializeDGVDisplay()
         DGVColumnsInitialize()
         DGVRowsInitialize(axisTV)
-        fillDGV(p_axisHT)
+        fillDGV(Controller.GetAxisDictionary())
 
         Me.TableLayoutPanel1.Controls.Add(DGV, 0, 1)
         DGV.Dock = DockStyle.Fill
@@ -108,8 +107,8 @@ Friend Class AxisView
 
 #Region "Interface"
 
-    Delegate Sub UpdateAxis_Delegate(ByRef ht As Hashtable)
-    Friend Sub UpdateAxis(ByRef ht As Hashtable)
+    Delegate Sub UpdateAxis_Delegate(ByRef ht As AxisElem)
+    Friend Sub UpdateAxis(ByRef ht As AxisElem)
 
         If ht Is Nothing Then Exit Sub
         If InvokeRequired Then
@@ -117,7 +116,7 @@ Friend Class AxisView
             Me.Invoke(MyDelegate, New Object() {ht})
         Else
             isFillingDGV = True
-            FillRow(ht(ID_VARIABLE), ht(NAME_VARIABLE), ht)
+            FillRow(ht.Id, ht.Name, ht)
             isFillingDGV = False
         End If
 
@@ -241,11 +240,11 @@ Friend Class AxisView
 
     End Sub
 
-    Private Sub fillDGV(ByRef axisHT As Dictionary(Of Int32, SortableHashtable))
+    Private Sub fillDGV(ByRef axisHT As SortedDictionary(Of Int32, AxisElem))
 
         isFillingDGV = True
         For Each axisValueId In axisHT.Keys
-            FillRow(axisValueId, axisHT(axisValueId)(NAME_VARIABLE), axisHT(axisValueId))
+            FillRow(axisValueId, axisHT(axisValueId).Name, axisHT(axisValueId))
         Next
         isFillingDGV = False
         updateDGVFormat()
@@ -339,7 +338,7 @@ Friend Class AxisView
 #Region "DGV Filling"
 
     Friend Sub FillRow(ByVal axisValueId As Int32, ByRef p_axisName As String, _
-                       ByVal axis_ht As Hashtable)
+                       ByVal axis_ht As AxisElem)
 
         Dim rowItem As HierarchyItem
         If rows_id_item_dic.ContainsKey(axisValueId) Then
@@ -547,9 +546,7 @@ Friend Class AxisView
 
                     Case NAME_VARIABLE
                         Dim newAxisName As String = args.Cell.Value
-                        Controller.UpdateAxis(axisId, _
-                                                args.Cell.ColumnItem.ItemValue, _
-                                                newAxisName)
+                        'Controller.UpdateAxis(axisId, args.Cell.ColumnItem.ItemValue, newAxisName) ' Nath_TODO
                     Case Else
                         Dim filterValueName As String = args.Cell.Value
                         Dim filterValueId As Int32 = GlobalVariables.FiltersValues.GetFilterValueId(filterValueName)

@@ -38,7 +38,6 @@ Friend Class DataGridViewsUtil
 
     ' Variables
     Private EntitiesTokenNamesDict As Hashtable
-    Private AccountNamesKeysDic As Hashtable
     Private currencies_symbol_dict As Hashtable
 
     ' Constants
@@ -61,7 +60,6 @@ Friend Class DataGridViewsUtil
     Friend Sub New()
 
         EntitiesTokenNamesDict = GlobalVariables.Entities.GetEntitiesDictionary(ID_VARIABLE, NAME_VARIABLE)
-        AccountNamesKeysDic = GlobalVariables.Accounts.GetAccountsDictionary(NAME_VARIABLE, ID_VARIABLE)
         currencies_symbol_dict = GlobalVariables.Currencies.GetCurrenciesDict(ID_VARIABLE, CURRENCY_SYMBOL_VARIABLE)
 
 
@@ -91,11 +89,13 @@ Friend Class DataGridViewsUtil
 
         ' priority normal => implement format CRUD
         '     Dim InputsFormatsDictionary = FormatsMapping.GetFormatTable(INPUT_FORMAT_CODE)
-        Dim formatCode, account_id, fmtStr As String
+        Dim formatCode, fmtStr As String
         Dim indent As Int32
         For Each row In vDGV.RowsHierarchy.Items
-            formatCode = GlobalVariables.Accounts.m_accountsHash(AccountNamesKeysDic.Item(row.Caption))(ACCOUNT_FORMAT_VARIABLE)
-            account_id = AccountNamesKeysDic.Item(row.Caption)
+            Dim l_account = GlobalVariables.Accounts.GetAccount(row.Caption)
+
+            If l_account Is Nothing Then Continue For
+            formatCode = l_account.FormatId
 
             Dim HANStyle As VIBlend.Utilities.HierarchyItemStyle = GridTheme.GetDefaultTheme(vDGV.VIBlendTheme).HierarchyItemStyleNormal
             Dim HASStyle As VIBlend.Utilities.HierarchyItemStyle = GridTheme.GetDefaultTheme(vDGV.VIBlendTheme).HierarchyItemStyleSelected
@@ -132,11 +132,11 @@ Friend Class DataGridViewsUtil
             '    CAStyle.FillStyle = New FillStyleSolid(System.Drawing.Color.FromArgb(InputsFormatsDictionary(formatCode)(FORMAT_BCKGD_VARIABLE)))
             'End If
 
-            Select Case (GlobalVariables.Accounts.m_accountsHash(account_id)(ACCOUNT_TYPE_VARIABLE))
+            Select Case (l_account.Type)
                 ' nombe de chiffres après la virgule à variabiliser -> settings !!!!
-                Case GlobalEnums.AccountType.MONETARY : fmtStr = "{0:" & currencies_symbol_dict(currency) & "#,##0;(" & currencies_symbol_dict(currency) & "#,##0)}"
-                Case GlobalEnums.AccountType.PERCENTAGE : fmtStr = "{0:P}"        ' put this in a table ?
-                Case GlobalEnums.AccountType.NUMBER : fmtStr = "{0:N}"        ' further evolution set unit ?
+                Case Account.AccountType.MONETARY : fmtStr = "{0:" & currencies_symbol_dict(currency) & "#,##0;(" & currencies_symbol_dict(currency) & "#,##0)}"
+                Case Account.AccountType.PERCENTAGE : fmtStr = "{0:P}"        ' put this in a table ?
+                Case Account.AccountType.NUMBER : fmtStr = "{0:N}"        ' further evolution set unit ?
                 Case Else : fmtStr = "{0:C0}"
             End Select
 
@@ -449,9 +449,12 @@ Friend Class DataGridViewsUtil
             Next
         End If
         If account_node.Nodes.Count > 0 Then
-            For Each account As TreeNode In account_node.Nodes
-                If GlobalVariables.Accounts.m_accountsHash(account.Name)(ACCOUNT_FORMAT_VARIABLE) <> TITLE_FORMAT_CODE Then
-                    FillInSubRowsHierarchySeveralEntities(account, _
+            For Each node As TreeNode In account_node.Nodes
+                Dim l_account = GlobalVariables.Accounts.GetAccount(CInt(node.Name))
+
+                If l_account Is Nothing Then Continue For
+                If l_account.FormatId <> TITLE_FORMAT_CODE Then
+                    FillInSubRowsHierarchySeveralEntities(node, _
                                                           line_index, _
                                                           dgv, _
                                                           KeyLineDictionary, _

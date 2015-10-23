@@ -135,56 +135,56 @@ Friend Class AccountsView
         ' Formulas 
         Dim InputListItem As New ListItem
         InputListItem.Text = "Input"
-        InputListItem.Value = GlobalEnums.FormulaTypes.HARD_VALUE_INPUT
+        InputListItem.Value = Account.FormulaTypes.HARD_VALUE_INPUT
         FormulaTypeComboBox.Items.Add(InputListItem)
         m_formulasTypesIdItemDict.Add(InputListItem.Value, InputListItem)
 
         Dim FormulaListItem As New ListItem
         FormulaListItem.Text = "Formula"
-        FormulaListItem.Value = GlobalEnums.FormulaTypes.FORMULA
+        FormulaListItem.Value = Account.FormulaTypes.FORMULA
         FormulaTypeComboBox.Items.Add(FormulaListItem)
         m_formulasTypesIdItemDict.Add(FormulaListItem.Value, FormulaListItem)
 
         Dim AggregationListItem As New ListItem
         AggregationListItem.Text = "Aggregation of Sub Accounts"
-        AggregationListItem.Value = GlobalEnums.FormulaTypes.AGGREGATION_OF_SUB_ACCOUNTS
+        AggregationListItem.Value = Account.FormulaTypes.AGGREGATION_OF_SUB_ACCOUNTS
         FormulaTypeComboBox.Items.Add(AggregationListItem)
         m_formulasTypesIdItemDict.Add(AggregationListItem.Value, AggregationListItem)
 
         Dim FirstPeriodInputListItem As New ListItem
         FirstPeriodInputListItem.Text = "First Period Input"
-        FirstPeriodInputListItem.Value = GlobalEnums.FormulaTypes.FIRST_PERIOD_INPUT
+        FirstPeriodInputListItem.Value = Account.FormulaTypes.FIRST_PERIOD_INPUT
         FormulaTypeComboBox.Items.Add(FirstPeriodInputListItem)
         m_formulasTypesIdItemDict.Add(FirstPeriodInputListItem.Value, FirstPeriodInputListItem)
 
         Dim TitleListItem As New ListItem
         TitleListItem.Text = "Title"
-        TitleListItem.Value = GlobalEnums.FormulaTypes.TITLE
+        TitleListItem.Value = Account.FormulaTypes.TITLE
         FormulaTypeComboBox.Items.Add(TitleListItem)
         m_formulasTypesIdItemDict.Add(TitleListItem.Value, TitleListItem)
 
         ' Type
         Dim MonetaryFormatLI As New ListItem
         MonetaryFormatLI.Text = "Monetary"
-        MonetaryFormatLI.Value = GlobalEnums.AccountType.MONETARY
+        MonetaryFormatLI.Value = Account.AccountType.MONETARY
         TypeComboBox.Items.Add(MonetaryFormatLI)
         m_formatsIdItemDict.Add(MonetaryFormatLI.Value, MonetaryFormatLI)
 
         Dim NormalFormatLI As New ListItem
         NormalFormatLI.Text = "Number"
-        NormalFormatLI.Value = GlobalEnums.AccountType.NUMBER
+        NormalFormatLI.Value = Account.AccountType.NUMBER
         TypeComboBox.Items.Add(NormalFormatLI)
         m_formatsIdItemDict.Add(NormalFormatLI.Value, NormalFormatLI)
 
         Dim percentageFormatLI As New ListItem
         percentageFormatLI.Text = "Percentage"
-        percentageFormatLI.Value = GlobalEnums.AccountType.PERCENTAGE
+        percentageFormatLI.Value = Account.AccountType.PERCENTAGE
         TypeComboBox.Items.Add(percentageFormatLI)
         m_formatsIdItemDict.Add(percentageFormatLI.Value, percentageFormatLI)
 
         Dim DateFormatLI As New ListItem
         DateFormatLI.Text = "Date"
-        DateFormatLI.Value = GlobalEnums.AccountType.DATE_
+        DateFormatLI.Value = Account.AccountType.DATE_
         TypeComboBox.Items.Add(DateFormatLI)
         m_formatsIdItemDict.Add(DateFormatLI.Value, DateFormatLI)
 
@@ -192,19 +192,19 @@ Friend Class AccountsView
         ' Currencies Conversion
         Dim NoConversionLI As New ListItem
         NoConversionLI.Text = "Non Converted"
-        NoConversionLI.Value = GlobalEnums.ConversionOptions.NO_CONVERSION
+        NoConversionLI.Value = Account.ConversionOptions.NO_CONVERSION
         CurrencyConversionComboBox.Items.Add(NoConversionLI)
         m_currenciesConversionIdItemDict.Add(NoConversionLI.Value, NoConversionLI)
 
         Dim AverageRateLI As New ListItem
         AverageRateLI.Text = "Average Exchange Rate"
-        AverageRateLI.Value = GlobalEnums.ConversionOptions.AVERAGE_RATE
+        AverageRateLI.Value = Account.ConversionOptions.AVERAGE_RATE
         CurrencyConversionComboBox.Items.Add(AverageRateLI)
         m_currenciesConversionIdItemDict.Add(AverageRateLI.Value, AverageRateLI)
 
         Dim EndOfPeriodRateLI As New ListItem
         EndOfPeriodRateLI.Text = "End of Period Exchange Rate"
-        EndOfPeriodRateLI.Value = GlobalEnums.ConversionOptions.END_OF_PERIOD_RATE
+        EndOfPeriodRateLI.Value = Account.ConversionOptions.END_OF_PERIOD_RATE
         CurrencyConversionComboBox.Items.Add(EndOfPeriodRateLI)
         m_currenciesConversionIdItemDict.Add(EndOfPeriodRateLI.Value, EndOfPeriodRateLI)
 
@@ -212,13 +212,13 @@ Friend Class AccountsView
         ' Recomputation Option
         Dim AggregatedLI As New ListItem
         AggregatedLI.Text = "Aggregated"
-        AggregatedLI.Value = GlobalEnums.ConsolidationOptions.AGGREGATION
+        AggregatedLI.Value = Account.ConsolidationOptions.AGGREGATION
         ConsolidationOptionComboBox.Items.Add(AggregatedLI)
         m_consoOptionIdItemDict.Add(AggregatedLI.Value, AggregatedLI)
 
         Dim RecomputedLI As New ListItem
         RecomputedLI.Text = "Recomputed"
-        RecomputedLI.Value = GlobalEnums.ConsolidationOptions.RECOMPUTATION
+        RecomputedLI.Value = Account.ConsolidationOptions.RECOMPUTATION
         ConsolidationOptionComboBox.Items.Add(RecomputedLI)
         m_consoOptionIdItemDict.Add(RecomputedLI.Value, RecomputedLI)
 
@@ -302,13 +302,13 @@ Friend Class AccountsView
             If m_controller.AccountNameCheck(newCategoryName) = True Then
                 m_controller.CreateAccount(0, _
                                          newCategoryName, _
-                                         GlobalEnums.FormulaTypes.TITLE, _
+                                         Account.FormulaTypes.TITLE, _
                                          "", _
-                                         GlobalEnums.AccountType.DATE_, _
+                                         Account.AccountType.DATE_, _
                                          1, _
                                          1, _
                                          TITLE_FORMAT_CODE, _
-                                         GlobalEnums.FormulaTypes.TITLE, _
+                                         Account.FormulaTypes.TITLE, _
                                          1, _
                                          m_accountTV.Nodes.Count)
             End If
@@ -357,13 +357,13 @@ SubmitFormula:
                                                  "DataBase submission confirmation", _
                                                   MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question)
         If confirm = DialogResult.Yes Then
-            If m_controller.accountsNameKeysDictionary.ContainsKey(Name_TB.Text) Then
+            If Not m_controller.GetAccount(Name_TB.Text) Is Nothing Then
                 formulaEdit.Checked = False
-                Dim accountId As Int32 = m_controller.accountsNameKeysDictionary.Item(Name_TB.Text)
-                m_controller.UpdateAccount(accountId, ACCOUNT_FORMULA_VARIABLE, m_controller.GetCurrentParsedFormula, True)
+                Dim accountId As Int32 = m_controller.GetAccount(Name_TB.Text).Id
+                m_controller.UpdateAccountFormula(accountId, m_controller.GetCurrentParsedFormula)
             End If
         Else
-            m_formulaTextBox.Text = m_controller.GetFormatedAccountFormula(m_accountTV.SelectedNode.Name)
+            m_formulaTextBox.Text = m_controller.GetFormulaText(m_accountTV.SelectedNode.Name)
         End If
 
     End Sub
@@ -425,8 +425,10 @@ SubmitFormula:
 
     Private Sub SaveDescriptionBT_Click(sender As Object, e As EventArgs) Handles SaveDescriptionBT.Click
 
-        Dim accountId As Int32 = m_controller.accountsNameKeysDictionary.Item(Name_TB.Text)
-        m_controller.UpdateAccount(accountId, ACCOUNT_DESCRIPTION_VARIABLE, m_descriptionTextBox.Text, True)
+        Dim l_account As Account = m_controller.GetAccount(Name_TB.Text)
+
+        If l_account Is Nothing Then Exit Sub
+        m_controller.UpdateAccountDescription(l_account.Id, m_descriptionTextBox.Text)
 
     End Sub
 
@@ -558,10 +560,11 @@ SubmitFormula:
             m_dragAndDrop = False
             dropNode.EnsureVisible()                                        ' Ensure the newley created node is visible to the user and 
             selectedTreeview.SelectedNode = dropNode                        ' Select it
-            Dim tmpHT As New Hashtable
-            tmpHT.Add(ACCOUNT_TAB_VARIABLE, TreeViewsUtilities.ReturnRootNodeFromNode(dropNode).Index)
-            tmpHT.Add(PARENT_ID_VARIABLE, targetNode.Name)
-            m_controller.UpdateAccount(dropNode.Name, tmpHT, True)
+            Dim l_account = m_controller.GetAccountCopy(dropNode.Name)
+
+            l_account.AccountTab = TreeViewsUtilities.ReturnRootNodeFromNode(dropNode).Index
+            l_account.ParentId = targetNode.Name
+            m_controller.UpdateAccount(l_account)
 
         End If
 
@@ -595,7 +598,10 @@ SubmitFormula:
 
         If formulaEdit.Checked = False Then
             If Not m_currentNode Is Nothing Then
-                If m_controller.FTypesToBeTested.Contains(m_controller.ReadAccount(m_currentNode.Name, ACCOUNT_FORMULA_TYPE_VARIABLE)) Then
+                Dim l_account = GlobalVariables.Accounts.GetAccount(CInt(m_currentNode.Name))
+
+                If l_account Is Nothing Then Exit Sub
+                If m_controller.FTypesToBeTested.Contains(l_account.FormulaType) Then
                     formulaEdit.Checked = True
                 Else
                     MsgBox("This Account has no editable Formula. Please change the Formula Type or select another accounts " _
@@ -620,7 +626,7 @@ SubmitFormula:
             If confirm = DialogResult.Yes Then
                 Submit_Formula_Click(sender, e)
             Else
-                m_formulaTextBox.Text = m_controller.GetFormatedAccountFormula(m_accountTV.SelectedNode.Name)
+                m_formulaTextBox.Text = m_controller.GetFormulaText(m_accountTV.SelectedNode.Name)
             End If
         Else
             formulaEdit.Checked = False
@@ -638,7 +644,7 @@ SubmitFormula:
                 If confirm = DialogResult.Yes Then
                     Submit_Formula_Click(sender, e)
                 Else
-                    m_formulaTextBox.Text = m_controller.GetFormatedAccountFormula(m_accountTV.SelectedNode.Name)
+                    m_formulaTextBox.Text = m_controller.GetFormulaText(m_accountTV.SelectedNode.Name)
                 End If
                 formulaEdit.Checked = False
             Case Keys.Enter
@@ -745,7 +751,11 @@ SubmitFormula:
                     GoTo UdpateFormulaType
                 Else
                     m_isRevertingFType = True
-                    FormulaTypeComboBox.SelectedValue = m_controller.ReadAccount(m_currentNode.Name, ACCOUNT_FORMULA_TYPE_VARIABLE)
+                    Dim l_account = GlobalVariables.Accounts.GetAccount(CInt(m_currentNode.Name))
+
+                    If Not l_account Is Nothing Then
+                        FormulaTypeComboBox.SelectedValue = l_account.FormulaType
+                    End If
                     m_isRevertingFType = False
                     If confirm = GeneralUtilities.CheckResult.Fail Then MsgBox("Password confirmation failed")
                     Exit Sub
@@ -758,8 +768,8 @@ SubmitFormula:
         ' below -> not clean -> must happen after update'
         ' at display time priority high
 
-        If li.Value = GlobalEnums.FormulaTypes.TITLE Then
-            CurrencyConversionComboBox.SelectedValue = GlobalEnums.ConversionOptions.NO_CONVERSION
+        If li.Value = Account.FormulaTypes.TITLE Then
+            CurrencyConversionComboBox.SelectedValue = Account.ConversionOptions.NO_CONVERSION
             TypeComboBox.Enabled = False
             CurrencyConversionComboBox.Enabled = False
             ConsolidationOptionComboBox.Enabled = False
@@ -771,7 +781,7 @@ SubmitFormula:
         Exit Sub
 
 UdpateFormulaType:
-        m_controller.UpdateAccount(m_currentNode.Name, ACCOUNT_FORMULA_TYPE_VARIABLE, li.Value, True)
+        m_controller.UpdateAccountFormulaType(m_currentNode.Name, li.Value)
         m_currentNode.ImageIndex = li.Value
         m_currentNode.SelectedImageIndex = li.Value
 
@@ -782,14 +792,14 @@ UdpateFormulaType:
         Dim li = TypeComboBox.SelectedItem
         If Not IsNothing(m_currentNode) _
         AndAlso m_isDisplayingAttributes = False Then
-            m_controller.UpdateAccount(m_currentNode.Name, ACCOUNT_TYPE_VARIABLE, li.Value, True)
+            m_controller.UpdateAccountType(m_currentNode.Name, li.Value)
         End If
-        If li.Value = GlobalEnums.AccountType.MONETARY Then
+        If li.Value = Account.AccountType.MONETARY Then
             CurrencyConversionComboBox.Enabled = True
-            CurrencyConversionComboBox.SelectedValue = GlobalEnums.ConversionOptions.AVERAGE_RATE
+            CurrencyConversionComboBox.SelectedValue = Account.ConversionOptions.AVERAGE_RATE
         Else
             CurrencyConversionComboBox.Enabled = False ' check if selected value <=> selected item
-            CurrencyConversionComboBox.SelectedValue = GlobalEnums.ConversionOptions.NO_CONVERSION
+            CurrencyConversionComboBox.SelectedValue = Account.ConversionOptions.NO_CONVERSION
         End If
 
     End Sub
@@ -800,9 +810,9 @@ UdpateFormulaType:
         If Not IsNothing(m_currentNode) _
         AndAlso m_isDisplayingAttributes = False Then
             Select Case li.Value
-                Case GlobalEnums.ConversionOptions.AVERAGE_RATE, _
-                     GlobalEnums.ConversionOptions.END_OF_PERIOD_RATE
-                    m_controller.UpdateAccount(m_currentNode.Name, ACCOUNT_CONVERSION_OPTION_VARIABLE, li.Value, True)
+                Case Account.ConversionOptions.AVERAGE_RATE, _
+                     Account.ConversionOptions.END_OF_PERIOD_RATE
+                    m_controller.UpdateAccountConversionOption(m_currentNode.Name, li.Value)
             End Select
         End If
 
@@ -813,7 +823,7 @@ UdpateFormulaType:
         Dim li = ConsolidationOptionComboBox.SelectedItem
         If Not IsNothing(m_currentNode) _
         AndAlso m_isDisplayingAttributes = False Then
-            m_controller.UpdateAccount(m_currentNode.Name, ACCOUNT_CONSOLIDATION_OPTION_VARIABLE, li.Value, True)
+            m_controller.UpdateAccountConsolidationOption(m_currentNode.Name, li.Value)
         End If
 
     End Sub
@@ -830,42 +840,45 @@ UdpateFormulaType:
 
             m_isDisplayingAttributes = True
             Dim account_id As Int32 = m_currentNode.Name
+            Dim l_account As Account = GlobalVariables.Accounts.GetAccount(account_id)
+
+            If l_account Is Nothing Then Exit Sub
             Name_TB.Text = m_currentNode.Text
 
             ' Formula Type ComboBox
-            Dim formulaTypeLI = m_formulasTypesIdItemDict(m_controller.ReadAccount(account_id, ACCOUNT_FORMULA_TYPE_VARIABLE))
+            Dim formulaTypeLI = m_formulasTypesIdItemDict(l_account.FormulaType)
             FormulaTypeComboBox.SelectedItem = formulaTypeLI
 
-            If formulaTypeLI.Value = GlobalEnums.FormulaTypes.TITLE Then
+            If formulaTypeLI.Value = Account.FormulaTypes.TITLE Then
                 SetEnableStatusEdition(False)
             Else
                 SetEnableStatusEdition(True)
             End If
 
             ' Format ComboBox
-            Dim formatLI = m_formatsIdItemDict(m_controller.ReadAccount(account_id, ACCOUNT_TYPE_VARIABLE))
+            Dim formatLI = m_formatsIdItemDict(l_account.Type)
             TypeComboBox.SelectedItem = formatLI
 
-            If formatLI.Value = GlobalEnums.AccountType.MONETARY Then
+            If formatLI.Value = Account.AccountType.MONETARY Then
                 ' Currency Conversion
-                Dim conversionLI = m_currenciesConversionIdItemDict(m_controller.ReadAccount(account_id, ACCOUNT_CONVERSION_OPTION_VARIABLE))
+                Dim conversionLI = m_currenciesConversionIdItemDict(l_account.ConversionOptionId)
                 CurrencyConversionComboBox.SelectedItem = conversionLI
 
             End If
 
             ' Consolidation Option
-            Dim consolidationLI = m_consoOptionIdItemDict(m_controller.ReadAccount(account_id, ACCOUNT_CONSOLIDATION_OPTION_VARIABLE))
+            Dim consolidationLI = m_consoOptionIdItemDict(l_account.ConsolidationOptionId)
             ConsolidationOptionComboBox.SelectedItem = consolidationLI
 
 
             ' Formula TB
-            If m_controller.FTypesToBeTested.Contains(m_controller.ReadAccount(account_id, ACCOUNT_FORMULA_TYPE_VARIABLE)) Then
+            If m_controller.FTypesToBeTested.Contains(l_account.FormulaType) Then
                 m_formulaTextBox.Text = m_controller.GetFormulaText(account_id)
             Else
                 m_formulaTextBox.Text = ""
             End If
 
-            m_descriptionTextBox.Text = m_controller.ReadAccount(account_id, ACCOUNT_DESCRIPTION_VARIABLE)
+            m_descriptionTextBox.Text = l_account.Description
             m_isDisplayingAttributes = False
 
         End If

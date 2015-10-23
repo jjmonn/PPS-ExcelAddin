@@ -1,171 +1,171 @@
-﻿'
-'
-'
-'
-'
-'
-'
-' Author: Julien Monnereau
-' Last modified: 17/07/2015
+﻿''
+''
+''
+''
+''
+''
+''
+'' Author: Julien Monnereau
+'' Last modified: 17/07/2015
 
 
-Imports System.Collections
-Imports System.Collections.Generic
+'Imports System.Collections
+'Imports System.Collections.Generic
 
 
-Friend Class ControlsController
+'Friend Class ControlsController
 
-#Region "Instance Variables"
+'#Region "Instance Variables"
 
-    ' Objects
-    Private Controls As New Control
-    Private View As ControlsView
-    Private NewControlUI As NewControlUI
-    Private ChartsController As New ChartsControlsController
-    Private PlatformMGTUI As PlatformMGTGeneralUI
+'    ' Objects
+'    Private Controls As New Control
+'    Private View As ControlsView
+'    Private NewControlUI As NewControlUI
+'    Private ChartsController As New ChartsControlsController
+'    Private PlatformMGTUI As PlatformMGTGeneralUI
 
-    ' Variables
-    Private accounts_name_id_dic As Hashtable
-    Private operators_symbol_id_dic As Dictionary(Of String, String)
-    Private period_options_name_id_dic As Dictionary(Of String, String)
-    Private controls_names_list As New List(Of String)
+'    ' Variables
+'    Private accounts_name_id_dic As Hashtable
+'    Private operators_symbol_id_dic As Dictionary(Of String, String)
+'    Private period_options_name_id_dic As Dictionary(Of String, String)
+'    Private controls_names_list As New List(Of String)
 
-#End Region
+'#End Region
 
 
-#Region "Initialize"
+'#Region "Initialize"
 
-    Protected Friend Sub New()
+'    Protected Friend Sub New()
 
-        accounts_name_id_dic = GlobalVariables.Accounts.GetAccountsDictionary(NAME_VARIABLE, ID_VARIABLE)
-        operators_symbol_id_dic = OperatorsMapping.GetOperatorsDictionary(OPERATOR_SYMBOL_VARIABLE, OPERATOR_ID_VARIABLE)
-        period_options_name_id_dic = ControlOptionsMapping.GetControlOptionsDictionary(CONTROL_OPTION_NAME_VARIABLE, CONTROL_OPTION_ID_VARIABLE)
+'        accounts_name_id_dic = GlobalVariables.Accounts.GetAccountsDictionary(NAME_VARIABLE, ID_VARIABLE)
+'        operators_symbol_id_dic = OperatorsMapping.GetOperatorsDictionary(OPERATOR_SYMBOL_VARIABLE, OPERATOR_ID_VARIABLE)
+'        period_options_name_id_dic = ControlOptionsMapping.GetControlOptionsDictionary(CONTROL_OPTION_NAME_VARIABLE, CONTROL_OPTION_ID_VARIABLE)
 
-        View = New ControlsView(Me, ChartsController, accounts_name_id_dic, operators_symbol_id_dic, period_options_name_id_dic)
-        NewControlUI = New NewControlUI(Me, accounts_name_id_dic, operators_symbol_id_dic, period_options_name_id_dic)
+'        View = New ControlsView(Me, ChartsController, accounts_name_id_dic, operators_symbol_id_dic, period_options_name_id_dic)
+'        NewControlUI = New NewControlUI(Me, accounts_name_id_dic, operators_symbol_id_dic, period_options_name_id_dic)
 
-        InitializeView()
-        ChartsController.InitializeDisplay(View)
-        View.Show()
+'        InitializeView()
+'        ChartsController.InitializeDisplay(View)
+'        View.Show()
 
-    End Sub
+'    End Sub
 
-    Private Sub InitializeView()
+'    Private Sub InitializeView()
 
-        Dim controls_dic = Controls.ReadAll
-        For Each control_id In controls_dic.Keys
-            View.AddRow(controls_dic(control_id))
-            controls_names_list.Add(controls_dic(control_id)(CONTROL_NAME_VARIABLE))
-        Next
+'        Dim controls_dic = Controls.ReadAll
+'        For Each control_id In controls_dic.Keys
+'            View.AddRow(controls_dic(control_id))
+'            controls_names_list.Add(controls_dic(control_id)(CONTROL_NAME_VARIABLE))
+'        Next
 
-    End Sub
+'    End Sub
 
-    Public Sub addControlToPanel(ByRef dest_panel As Windows.Forms.Panel, _
-                               ByRef PlatformMGTUI As PlatformMGTGeneralUI)
+'    Public Sub addControlToPanel(ByRef dest_panel As Windows.Forms.Panel, _
+'                               ByRef PlatformMGTUI As PlatformMGTGeneralUI)
 
-        Me.PlatformMGTUI = PlatformMGTUI
-        dest_panel.Controls.Add(View)
-        View.Dock = Windows.Forms.DockStyle.Fill
+'        Me.PlatformMGTUI = PlatformMGTUI
+'        dest_panel.Controls.Add(View)
+'        View.Dock = Windows.Forms.DockStyle.Fill
 
-    End Sub
+'    End Sub
 
-    Public Sub close()
+'    Public Sub close()
 
-        View.closeControl()
-        View.Dispose()
-        Controls.close()
+'        View.closeControl()
+'        View.Dispose()
+'        Controls.close()
 
-    End Sub
+'    End Sub
 
 
-#End Region
+'#End Region
 
 
-#Region "Interface"
+'#Region "Interface"
 
-    Friend Sub CreateControl(ByRef HT As Hashtable)
+'    Friend Sub CreateControl(ByRef HT As Hashtable)
 
-        Controls.CreateControl(HT)
+'        Controls.CreateControl(HT)
 
 
-        ' after create
-        ' priority normal
+'        ' after create
+'        ' priority normal
 
-        'controls_names_list.Add(HT(CONTROL_NAME_VARIABLE))
-        'View.AddRow(HT)
-        'View.DGV.Refresh()
-        'View.DGV.Select()
+'        'controls_names_list.Add(HT(CONTROL_NAME_VARIABLE))
+'        'View.AddRow(HT)
+'        'View.DGV.Refresh()
+'        'View.DGV.Select()
 
-    End Sub
+'    End Sub
 
-    Protected Friend Sub UpdateName(ByRef control_id As String, ByRef name As String)
+'    Protected Friend Sub UpdateName(ByRef control_id As String, ByRef name As String)
 
-        Controls.UpdateControl(control_id, CONTROL_NAME_VARIABLE, name)
+'        Controls.UpdateControl(control_id, CONTROL_NAME_VARIABLE, name)
 
-    End Sub
+'    End Sub
 
-    Protected Friend Sub UpdateItem1(ByRef control_id As String, ByRef account_id As String)
+'    Protected Friend Sub UpdateItem1(ByRef control_id As String, ByRef account_id As String)
 
-        Controls.UpdateControl(control_id, CONTROL_ITEM1_VARIABLE, account_id)
+'        Controls.UpdateControl(control_id, CONTROL_ITEM1_VARIABLE, account_id)
 
-    End Sub
+'    End Sub
 
-    Protected Friend Sub UpdateItem2(ByRef control_id As String, ByRef account_id As String)
+'    Protected Friend Sub UpdateItem2(ByRef control_id As String, ByRef account_id As String)
 
-        Controls.UpdateControl(control_id, CONTROL_ITEM2_VARIABLE, account_id)
+'        Controls.UpdateControl(control_id, CONTROL_ITEM2_VARIABLE, account_id)
 
-    End Sub
+'    End Sub
 
-    Protected Friend Sub UpdateOperator(ByRef control_id As String, ByRef operator_id As String)
+'    Protected Friend Sub UpdateOperator(ByRef control_id As String, ByRef operator_id As String)
 
-        Controls.UpdateControl(control_id, CONTROL_OPERATOR_ID_VARIABLE, operator_id)
+'        Controls.UpdateControl(control_id, CONTROL_OPERATOR_ID_VARIABLE, operator_id)
 
-    End Sub
+'    End Sub
 
-    Protected Friend Sub UpdateOption(ByRef control_id As String, ByRef option_id As String)
+'    Protected Friend Sub UpdateOption(ByRef control_id As String, ByRef option_id As String)
 
-        Controls.UpdateControl(control_id, CONTROL_PERIOD_OPTION_VARIABLE, option_id)
+'        Controls.UpdateControl(control_id, CONTROL_PERIOD_OPTION_VARIABLE, option_id)
 
-    End Sub
+'    End Sub
 
-    Protected Friend Sub DeleteControl(ByRef control_id)
+'    Protected Friend Sub DeleteControl(ByRef control_id)
 
-        Controls.DeleteControl(control_id)
+'        Controls.DeleteControl(control_id)
 
-    End Sub
+'    End Sub
 
-#End Region
+'#End Region
 
 
-#Region "Utilities"
+'#Region "Utilities"
 
-    Friend Function IsNameValid(ByRef name As String) As Boolean
+'    Friend Function IsNameValid(ByRef name As String) As Boolean
 
-        If controls_names_list.Contains(name) Then Return False
-        Return True
+'        If controls_names_list.Contains(name) Then Return False
+'        Return True
 
-    End Function
+'    End Function
 
 
-#Region "Display Utilities"
+'#Region "Display Utilities"
 
-    Protected Friend Sub DisplayMGTUI()
+'    Protected Friend Sub DisplayMGTUI()
 
-        NewControlUI.Hide()
-        View.Show()
+'        NewControlUI.Hide()
+'        View.Show()
 
-    End Sub
+'    End Sub
 
-    Protected Friend Sub DisplayNewUI()
+'    Protected Friend Sub DisplayNewUI()
 
-        View.Hide()
-        NewControlUI.Show()
+'        View.Hide()
+'        NewControlUI.Show()
 
-    End Sub
+'    End Sub
 
-#End Region
+'#End Region
 
-#End Region
+'#End Region
 
 
-End Class
+'End Class

@@ -34,8 +34,6 @@ Friend Class DataModificationsTracking
     Friend m_dataSetRegion As Excel.Range
     Friend m_outputsRegion As Excel.Range
     Friend m_cellBeingEdited As Excel.Range
-    '   Private m_accountsNameTypeDict As Hashtable
-    Private m_accountsNameFormulaTypeDict As Hashtable
 
     ' Variables
     Friend m_modifiedCellsList As New List(Of String)
@@ -49,7 +47,6 @@ Friend Class DataModificationsTracking
         m_dataset = p_dataSet
         m_rangeHighlighter = New RangeHighlighter(m_dataset.m_excelWorkSheet)
         '     m_accountsNameTypeDict = GlobalVariables.Accounts.GetAccountsDictionary(NAME_VARIABLE, ACCOUNT_TYPE_VARIABLE)
-        m_accountsNameFormulaTypeDict = GlobalVariables.Accounts.GetAccountsDictionary(NAME_VARIABLE, ACCOUNT_FORMULA_TYPE_VARIABLE)
 
     End Sub
 
@@ -248,10 +245,12 @@ Friend Class DataModificationsTracking
         Dim excelCell As Excel.Range
 
         For Each tupleCellPair In m_dataset.m_datasetCellsDictionary
+            Dim l_account = GlobalVariables.Accounts.GetAccount(tuple_.Item2)
             tuple_ = tupleCellPair.Key
             excelCell = tupleCellPair.Value
 
-            If m_accountsNameFormulaTypeDict(tuple_.Item2) = GlobalEnums.FormulaTypes.FIRST_PERIOD_INPUT Then
+            If l_account Is Nothing Then Continue For
+            If l_account.FormulaType = Account.FormulaTypes.FIRST_PERIOD_INPUT Then
                 If tuple_.Item3 <> m_startPeriod Then
                     m_rangeHighlighter.ColorOutputRange(excelCell)
                 End If
@@ -287,27 +286,27 @@ Friend Class DataModificationsTracking
             Case GlobalEnums.TimeConfig.MONTHS : periodIdentifyer = Computer.MONTH_PERIOD_IDENTIFIER
         End Select
 
-        Dim accountsNameTypeDict As Hashtable = GlobalVariables.Accounts.GetAccountsDictionary(NAME_VARIABLE, ACCOUNT_FORMULA_TYPE_VARIABLE)
         For Each entity As String In m_dataset.m_entitiesValuesAddressDict.Keys
-            For Each account As String In m_dataset.m_accountsValuesAddressDict.Keys
+            For Each elem As String In m_dataset.m_accountsValuesAddressDict.Keys
+                Dim l_account = GlobalVariables.Accounts.GetAccount(elem)
 
-                Select Case accountsNameTypeDict(account)
-                    Case GlobalEnums.FormulaTypes.FIRST_PERIOD_INPUT
+                Select Case l_account.FormulaType
+                    Case Account.FormulaTypes.FIRST_PERIOD_INPUT
                         Dim period As Integer = CInt(CDbl(m_dataset.m_periodsDatesList(0).ToOADate))
                         ' Date from dataset converted to integer to meet DB integer date storage
 
-                        Dim tuple_ As New Tuple(Of String, String, String)(entity, account, period)
+                        Dim tuple_ As New Tuple(Of String, String, String)(entity, l_account.Name, period)
                         If m_dataset.m_datasetCellsDictionary.ContainsKey(tuple_) = True Then
                             Dim cell As Excel.Range = m_dataset.m_datasetCellsDictionary(tuple_)
-                            If cell.Value2 <> p_dataBaseInputsDictionary(entity)(account)(periodIdentifyer & period) Then _
+                            If cell.Value2 <> p_dataBaseInputsDictionary(entity)(l_account.Name)(periodIdentifyer & period) Then _
                                RegisterModification(cell.Address)
                         End If
                     Case Else
                         For Each period As String In m_dataset.m_periodsValuesAddressDict.Keys
-                            Dim tuple_ As New Tuple(Of String, String, String)(entity, account, period)
+                            Dim tuple_ As New Tuple(Of String, String, String)(entity, l_account.Name, period)
                             If m_dataset.m_datasetCellsDictionary.ContainsKey(tuple_) = True Then
                                 Dim cell As Excel.Range = m_dataset.m_datasetCellsDictionary(tuple_)
-                                If cell.Value2 <> p_dataBaseInputsDictionary(entity)(account)(periodIdentifyer & period) Then
+                                If cell.Value2 <> p_dataBaseInputsDictionary(entity)(l_account.Name)(periodIdentifyer & period) Then
                                     RegisterModification(cell.Address)
                                 End If
                             End If

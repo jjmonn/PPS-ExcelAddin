@@ -9,31 +9,6 @@
 
     End Enum
 
-    Enum FormulaTypes
-
-        HARD_VALUE_INPUT = 1
-        FORMULA
-        AGGREGATION_OF_SUB_ACCOUNTS
-        FIRST_PERIOD_INPUT
-        TITLE
-
-    End Enum
-
-    Enum ConversionOptions
-
-        AVERAGE_RATE = 1
-        END_OF_PERIOD_RATE
-        NO_CONVERSION
-
-    End Enum
-
-    Enum ConsolidationOptions
-
-        AGGREGATION = 1
-        RECOMPUTATION
-
-    End Enum
-
     Enum DecompositionQueryType
 
         AXIS = 0
@@ -105,17 +80,6 @@
         FMODELINGACCOUNT
 
     End Enum
-
-    Enum AccountType
-
-        MONETARY = 1
-        NUMBER
-        PERCENTAGE
-        DATE_
-
-    End Enum
-
-
 
 
 End Class

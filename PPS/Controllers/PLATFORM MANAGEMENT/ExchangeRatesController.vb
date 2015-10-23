@@ -21,8 +21,6 @@ Imports System.Windows.Forms
 Imports VIBlend.WinForms.DataGridView
 Imports VIBlend.WinForms.Controls
 
-
-
 Friend Class ExchangeRatesController
 
 

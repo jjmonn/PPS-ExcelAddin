@@ -11,11 +11,9 @@ Imports System.Collections.Generic
 '
 ' Author: Julien Monnereau
 ' Created: 24/07/2015
-' Last modified: 04/09/2015
 
 
-
-Friend Class Adjustment : Inherits SuperAxisCRUD
+Friend Class AdjustmentManager : Inherits AxisElemManager
 
 
 #Region "Instance variables"
@@ -28,7 +26,6 @@ Friend Class Adjustment : Inherits SuperAxisCRUD
 
 
 #End Region
-
 
 #Region "Init"
 
@@ -44,11 +41,9 @@ Friend Class Adjustment : Inherits SuperAxisCRUD
 
         If packet.GetError() = 0 Then
             For i As Int32 = 1 To packet.ReadInt32()
-                Dim tmp_ht As New SortableHashtable(ITEMS_POSITIONS)
-                GetAxisHTFromPacket(packet, tmp_ht)
-                Axis_hash(CInt(tmp_ht(ID_VARIABLE))) = tmp_ht
+                Dim tmpAxis = Axis.BuildAxis(packet)
+                m_axisDictionary(tmpAxis.Id) = tmpAxis
             Next
-            SortAxis()
             RaiseEvent ObjectInitialized(True)
             state_flag = True
         Else
@@ -63,11 +58,11 @@ Friend Class Adjustment : Inherits SuperAxisCRUD
 
 #Region "CRUD"
 
-    Friend Overrides Sub CMSG_CREATE_AXIS(ByRef attributes As Hashtable)
+    Friend Overrides Sub CMSG_CREATE_AXIS(ByRef attributes As AxisElem)
 
         NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_CREATE_ADJUSTMENT_ANSWER, AddressOf SMSG_CREATE_ADJUSTMENT_ANSWER)
         Dim packet As New ByteBuffer(CType(ClientMessage.CMSG_CREATE_ADJUSTMENT, UShort))
-        WriteAxisPacket(packet, attributes)
+        attributes.Dump(packet, False)
         packet.Release()
         NetworkManager.GetInstance().Send(packet)
 
@@ -95,35 +90,33 @@ Friend Class Adjustment : Inherits SuperAxisCRUD
     Private Sub SMSG_READ_ADJUSTMENT_ANSWER(packet As ByteBuffer)
 
         If packet.GetError() = 0 Then
-            Dim ht As New SortableHashtable(ITEMS_POSITIONS)
-            GetAxisHTFromPacket(packet, ht)
-            Axis_hash(CInt(ht(ID_VARIABLE))) = ht
-            SortAxis()
-            MyBase.OnRead(True, ht)
+            Dim tmpAxis = Axis.BuildAxis(packet)
+            m_axisDictionary(tmpAxis.Id) = tmpAxis
+            MyBase.OnRead(True, tmpAxis)
         Else
             MyBase.OnRead(False, Nothing)
         End If
 
     End Sub
 
-    Friend Overrides Sub CMSG_UPDATE_AXIS(ByRef attributes As Hashtable)
+    Friend Overrides Sub CMSG_UPDATE_AXIS(ByRef attributes As AxisElem)
 
         NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_UPDATE_ADJUSTMENT_ANSWER, AddressOf SMSG_UPDATE_ADJUSTMENT_ANSWER)
         Dim packet As New ByteBuffer(CType(ClientMessage.CMSG_UPDATE_ADJUSTMENT, UShort))
-        WriteAxisPacket(packet, attributes)
+        attributes.Dump(packet, True)
         packet.Release()
         NetworkManager.GetInstance().Send(packet)
 
     End Sub
 
-    Friend Overrides Sub CMSG_UPDATE_AXIS_LIST(ByRef p_adjustments As Hashtable)
+    Friend Overrides Sub CMSG_UPDATE_AXIS_LIST(ByRef p_adjustments As List(Of AxisElem))
         NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_UPDATE_ADJUSTMENT_LIST_ANSWER, AddressOf SMSG_UPDATE_ADJUSTMENT_LIST_ANSWER)
         Dim packet As New ByteBuffer(CType(ClientMessage.CMSG_UPDATE_ADJUSTMENT_LIST, UShort))
 
         packet.WriteInt32(p_adjustments.Count())
-        For Each attributes As Hashtable In p_adjustments.Values
+        For Each attributes As AxisElem In p_adjustments
             packet.WriteUint8(CRUDAction.UPDATE)
-            WriteAxisPacket(packet, attributes)
+            attributes.Dump(packet, True)
         Next
         packet.Release()
         NetworkManager.GetInstance().Send(packet)
@@ -177,7 +170,7 @@ Friend Class Adjustment : Inherits SuperAxisCRUD
 
         If packet.GetError() = 0 Then
             Dim id As UInt32 = packet.ReadInt32
-            Axis_hash.Remove(CInt(id))
+            m_axisDictionary.Remove(id)
             MyBase.OnDelete(True, id)
         Else
             MyBase.OnDelete(False, 0)
@@ -187,7 +180,6 @@ Friend Class Adjustment : Inherits SuperAxisCRUD
 
 #End Region
 
-
     Protected Overrides Sub finalize()
 
         NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_LIST_ADJUSTMENT_ANSWER, AddressOf SMSG_LIST_ADJUSTMENT_ANSWER)
@@ -196,6 +188,5 @@ Friend Class Adjustment : Inherits SuperAxisCRUD
         MyBase.Finalize()
 
     End Sub
-
 
 End Class

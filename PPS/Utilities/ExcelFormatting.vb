@@ -43,8 +43,6 @@ Friend Class ExcelFormatting
                                          ByRef currency As String, _
                                          Optional ByRef startingDate As Date = Nothing)
 
-        Dim AccountsNameFormatDictionary As Hashtable = GlobalVariables.Accounts.GetAccountsDictionary(NAME_VARIABLE, ACCOUNT_FORMAT_VARIABLE)
-        Dim AccountsNameTypeDict As Hashtable = GlobalVariables.Accounts.GetAccountsDictionary(NAME_VARIABLE, ACCOUNT_TYPE_VARIABLE)
         Dim currencies_symbol_dict As Hashtable = GlobalVariables.Currencies.GetCurrenciesDict(ID_VARIABLE, CURRENCY_SYMBOL_VARIABLE)
         Dim formatsDictionary As New Dictionary(Of String, Formats.FinancialBIFormat)
         formatsDictionary.Add("t", Formats.GetFormat("Title"))
@@ -57,23 +55,24 @@ Friend Class ExcelFormatting
 
             Dim accValue As String = row.Cells(1, 1).value2
             If Not accValue Is Nothing Then
-                If AccountsNameFormatDictionary.ContainsKey(accValue) Then
-                    formatCode = AccountsNameFormatDictionary(accValue)
+                Dim l_account = GlobalVariables.Accounts.GetAccount(accValue)
+                If Not l_account Is Nothing Then
+                    formatCode = l_account.FormatId
 
                     ' Colors
                     row.Interior.Color = formatsDictionary(formatCode).backColor
                     row.Font.Color = formatsDictionary(formatCode).textColor
-                
+
                     ' Format
                     row.Columns(1).IndentLevel = formatsDictionary(formatCode).indent
                     If formatsDictionary(formatCode).isBold = True Then row.Font.Bold = True
                     If formatsDictionary(formatCode).isItalic = True Then row.Font.Italic = True
 
-                    Select Case AccountsNameTypeDict(accValue)
-                        Case GlobalEnums.AccountType.MONETARY : row.Cells.NumberFormat = currencies_symbol_dict(currency) & "#,##0.00;(" & currencies_symbol_dict(currency) & "#,##0.00)"
-                        Case GlobalEnums.AccountType.PERCENTAGE : row.Cells.NumberFormat = "0.00%"        ' put this in a table ?
-                        Case GlobalEnums.AccountType.NUMBER : row.Cells.NumberFormat = "#,##0.00"        ' further evolution set unit ?
-                        Case GlobalEnums.AccountType.DATE_ : row.Cells.NumberFormat = "d-mmm-yy" ' d-mmm-yy
+                    Select Case l_account.Type
+                        Case Account.AccountType.MONETARY : row.Cells.NumberFormat = currencies_symbol_dict(currency) & "#,##0.00;(" & currencies_symbol_dict(currency) & "#,##0.00)"
+                        Case Account.AccountType.PERCENTAGE : row.Cells.NumberFormat = "0.00%"        ' put this in a table ?
+                        Case Account.AccountType.NUMBER : row.Cells.NumberFormat = "#,##0.00"        ' further evolution set unit ?
+                        Case Account.AccountType.DATE_ : row.Cells.NumberFormat = "d-mmm-yy" ' d-mmm-yy
                         Case Else : row.Cells.NumberFormat = "#,##0.00"
                     End Select
 

@@ -70,17 +70,10 @@ Friend Class GlobalVariables
 
 #Region "Models"
 
-    Friend Shared Accounts As Account
+    Friend Shared Accounts As AccountManager
     Friend Shared Entities As Entity
     Friend Shared Filters As Filter
     Friend Shared FiltersValues As FilterValue
-    Friend Shared Clients As Client
-    Friend Shared Products As Product
-    Friend Shared Adjustments As Adjustment
-    Friend Shared EntitiesFilters As EntitiesFilter
-    Friend Shared ClientsFilters As ClientsFilter
-    Friend Shared ProductsFilters As ProductsFilter
-    Friend Shared AdjustmentsFilters As AdjustmentFilter
     Friend Shared Versions As Version
     Friend Shared Currencies As Currency
     Friend Shared RatesVersions As RatesVersion

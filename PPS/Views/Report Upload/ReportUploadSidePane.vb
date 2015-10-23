@@ -29,23 +29,25 @@ Public Class ReportUploadSidePane
     End Sub
 
     Friend Sub DisplayAccountDetails(ByRef p_accountId As Int32)
-        If GlobalVariables.Accounts.m_accountsHash.ContainsKey(p_accountId) Then
-            m_accountTextBox.Text = GlobalVariables.Accounts.m_accountsHash(p_accountId)(NAME_VARIABLE)
-            Dim formulaTypeId As Int32 = GlobalVariables.Accounts.m_accountsHash(p_accountId)(ACCOUNT_FORMULA_TYPE_VARIABLE)
+        Dim l_account = GlobalVariables.Accounts.GetAccount(p_accountId)
+
+        If Not l_account Is Nothing Then
+            m_accountTextBox.Text = l_account.Name
+            Dim formulaTypeId As Account.FormulaTypes = l_account.FormulaType
             Select Case formulaTypeId
-                Case GlobalEnums.FormulaTypes.TITLE
+                Case Account.FormulaTypes.TITLE
                     m_accountTypeTextBox.Text = "Title"
-                Case GlobalEnums.FormulaTypes.HARD_VALUE_INPUT
+                Case Account.FormulaTypes.HARD_VALUE_INPUT
                     m_accountTypeTextBox.Text = "Input"
-                Case GlobalEnums.FormulaTypes.FORMULA
+                Case Account.FormulaTypes.FORMULA
                     m_accountTypeTextBox.Text = "Formula"
-                Case GlobalEnums.FormulaTypes.FIRST_PERIOD_INPUT
+                Case Account.FormulaTypes.FIRST_PERIOD_INPUT
                     m_accountTypeTextBox.Text = "First period input"
-                Case GlobalEnums.FormulaTypes.AGGREGATION_OF_SUB_ACCOUNTS
+                Case Account.FormulaTypes.AGGREGATION_OF_SUB_ACCOUNTS
                     m_accountTypeTextBox.Text = "Aggregation of sub Accounts"
             End Select
-            m_formulaTextBox.Text = m_formulaTranslator.GetHumanFormulaFromDB(GlobalVariables.Accounts.m_accountsHash(p_accountId)(ACCOUNT_FORMULA_VARIABLE))
-            m_descriptionTextBox.Text = GlobalVariables.Accounts.m_accountsHash(p_accountId)(ACCOUNT_DESCRIPTION_VARIABLE)
+            m_formulaTextBox.Text = m_formulaTranslator.GetHumanFormulaFromDB(l_account.Formula)
+            m_descriptionTextBox.Text = l_account.Formula
         Else
             DisplayEmptyTextBoxes()
         End If

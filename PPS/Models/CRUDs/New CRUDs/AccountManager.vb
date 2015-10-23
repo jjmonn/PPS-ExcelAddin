@@ -14,26 +14,23 @@ Imports System.Collections
 Imports System.Collections.Generic
 Imports System.Linq
 
-
-Friend Class Account
+Friend Class AccountManager
 
 #Region "Instance variables"
 
-
     ' Variables
     Friend state_flag As Boolean
-    Friend m_accountsHash As New Dictionary(Of Int32, Hashtable)
+    Private m_accountList As New MultiIndexDictionary(Of UInt32, String, Account)
 
     ' Events
     Public Event ObjectInitialized()
-    Public Event Read(ByRef status As Boolean, ByRef attributes As Hashtable)
+    Public Event Read(ByRef status As Boolean, ByRef attributes As Account)
     Public Event CreationEvent(ByRef status As Boolean, ByRef id As Int32)
     Public Event UpdateEvent(ByRef status As ErrorMessage, ByRef id As Int32)
     Public Event DeleteEvent(ByRef status As Boolean, ByRef id As UInt32)
     Public Event UpdateListEvent(ByRef status As Boolean, ByRef updateResults As List(Of Tuple(Of Byte, Boolean, String)))
 
 #End Region
-
 
 #Region "Init"
 
@@ -49,7 +46,6 @@ Friend Class Account
 
 #End Region
 
-
 #Region "CRUD"
 
     Friend Sub CMSG_LIST_ACCOUNT()
@@ -61,22 +57,11 @@ Friend Class Account
     Private Sub SMSG_LIST_ACCOUNT_ANSWER(packet As ByteBuffer)
 
         If packet.GetError() = 0 Then
-            Dim tmpPositionsDic As New Dictionary(Of Int32, Int32)
-            Dim tmpAccountsHT As New Hashtable
             Dim nb_accounts = packet.ReadInt32()
             For i As Int32 = 1 To nb_accounts
-                Dim tmp_ht As New Hashtable
-                GetAccountHTFromPacket(packet, tmp_ht)
-                tmp_ht(IMAGE_VARIABLE) = tmp_ht(ACCOUNT_FORMULA_TYPE_VARIABLE)
-                tmpAccountsHT(CInt(tmp_ht(ID_VARIABLE))) = tmp_ht
-                tmpPositionsDic.Add(tmp_ht(ID_VARIABLE), tmp_ht(ITEMS_POSITIONS))
-            Next
-            Dim sorted = From pair In tmpPositionsDic Order By pair.Value
-            Dim sortedAccountsDict = sorted.ToDictionary(Function(p) p.Key, Function(p) p.Value)
+                Dim tmp_account = Account.BuildAccount(packet)
 
-            m_accountsHash.Clear()
-            For Each accountId As Int32 In sortedAccountsDict.Keys
-                m_accountsHash.Add(accountId, tmpAccountsHT(accountId))
+                m_accountList.Set(tmp_account.Id, tmp_account.Name, tmp_account)
             Next
 
             state_flag = True
@@ -88,11 +73,11 @@ Friend Class Account
     End Sub
 
 
-    Friend Sub CMSG_CREATE_ACCOUNT(ByRef attributes As Hashtable)
+    Friend Sub CMSG_CREATE_ACCOUNT(ByRef p_account As Account)
 
         NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_CREATE_ACCOUNT_ANSWER, AddressOf SMSG_CREATE_ACCOUNT_ANSWER)
         Dim packet As New ByteBuffer(CType(ClientMessage.CMSG_CREATE_ACCOUNT, UShort))
-        WriteAccountPacket(packet, attributes)
+        p_account.Dump(packet, False)
         packet.Release()
         NetworkManager.GetInstance().Send(packet)
 
@@ -112,21 +97,20 @@ Friend Class Account
     Private Sub SMSG_READ_ACCOUNT_ANSWER(packet As ByteBuffer)
 
         If packet.GetError() = 0 Then
-            Dim ht As New Hashtable
-            GetAccountHTFromPacket(packet, ht)
-            m_accountsHash(CInt(ht(ID_VARIABLE))) = ht
-            RaiseEvent Read(True, ht)
+            Dim l_account = Account.BuildAccount(packet)
+            m_accountList.Set(l_account.Id, l_account.Name, l_account)
+            RaiseEvent Read(True, l_account)
         Else
             RaiseEvent Read(False, Nothing)
         End If
 
     End Sub
 
-    Friend Sub CMSG_UPDATE_ACCOUNT(ByRef attributes As Hashtable)
+    Friend Sub CMSG_UPDATE_ACCOUNT(ByRef p_account As Account)
 
         NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_UPDATE_ACCOUNT_ANSWER, AddressOf SMSG_UPDATE_ACCOUNT_ANSWER)
         Dim packet As New ByteBuffer(CType(ClientMessage.CMSG_UPDATE_ACCOUNT, UShort))
-        WriteAccountPacket(packet, attributes)
+        p_account.Dump(packet, True)
         packet.Release()
         NetworkManager.GetInstance().Send(packet)
 
@@ -150,8 +134,11 @@ Friend Class Account
         packet.WriteUint32(p_operations.Count)
 
         For Each op In p_operations
+            Dim l_account = GetAccount(op.Key)
+
+            If l_account Is Nothing Then Continue For
             packet.WriteUint8(op.Value)
-            If op.Value = CRUDAction.DELETE Then packet.WriteInt32(op.Key) Else WriteAccountPacket(packet, m_accountsHash(op.Key))
+            If op.Value = CRUDAction.DELETE Then packet.WriteInt32(op.Key) Else l_account.Dump(packet, True)
         Next
         packet.Release()
         NetworkManager.GetInstance().Send(packet)
@@ -189,7 +176,7 @@ Friend Class Account
 
         If packet.GetError() = 0 Then
             Dim id As UInt32 = packet.ReadInt32
-            m_accountsHash.Remove(CInt(id))
+            m_accountList.Remove(id)
             RaiseEvent DeleteEvent(True, id)
         Else
             RaiseEvent DeleteEvent(False, 0)
@@ -199,131 +186,88 @@ Friend Class Account
 
 #End Region
 
-
 #Region "Mappings"
 
-    Friend Function GetAccountsList(ByRef LookupOption As String, ByRef variable As String)
+    Public Function GetAccount(ByVal p_id As UInt32) As Account
+        Return m_accountList(p_id)
+    End Function
 
-        Dim tmp_list As New List(Of String)
-        Dim selection As New List(Of String)
+    Public Function GetAccount(ByVal p_id As Int32) As Account
+        Return m_accountList(CUInt(p_id))
+    End Function
+
+    Public Function GetAccount(ByVal p_name As String) As Account
+        Return m_accountList(p_name)
+    End Function
+
+    Friend Function GetAccountsList(ByRef LookupOption As String) As List(Of Account)
+
+        Dim tmp_list As New List(Of Account)
+        Dim selection As New List(Of Account.FormulaTypes)
         Select Case LookupOption
             Case GlobalEnums.AccountsLookupOptions.LOOKUP_ALL
-                selection.Add(GlobalEnums.FormulaTypes.AGGREGATION_OF_SUB_ACCOUNTS)
-                selection.Add(GlobalEnums.FormulaTypes.FIRST_PERIOD_INPUT)
-                selection.Add(GlobalEnums.FormulaTypes.FORMULA)
-                selection.Add(GlobalEnums.FormulaTypes.HARD_VALUE_INPUT)
+                selection.Add(Account.FormulaTypes.AGGREGATION_OF_SUB_ACCOUNTS)
+                selection.Add(Account.FormulaTypes.FIRST_PERIOD_INPUT)
+                selection.Add(Account.FormulaTypes.FORMULA)
+                selection.Add(Account.FormulaTypes.HARD_VALUE_INPUT)
 
             Case GlobalEnums.AccountsLookupOptions.LOOKUP_INPUTS
-                selection.Add(GlobalEnums.FormulaTypes.FIRST_PERIOD_INPUT)
-                selection.Add(GlobalEnums.FormulaTypes.HARD_VALUE_INPUT)
+                selection.Add(Account.FormulaTypes.FIRST_PERIOD_INPUT)
+                selection.Add(Account.FormulaTypes.HARD_VALUE_INPUT)
 
             Case GlobalEnums.AccountsLookupOptions.LOOKUP_OUTPUTS
-                selection.Add(GlobalEnums.FormulaTypes.AGGREGATION_OF_SUB_ACCOUNTS)
-                selection.Add(GlobalEnums.FormulaTypes.FIRST_PERIOD_INPUT)
-                selection.Add(GlobalEnums.FormulaTypes.FORMULA)
+                selection.Add(Account.FormulaTypes.AGGREGATION_OF_SUB_ACCOUNTS)
+                selection.Add(Account.FormulaTypes.FIRST_PERIOD_INPUT)
+                selection.Add(Account.FormulaTypes.FORMULA)
 
             Case GlobalEnums.AccountsLookupOptions.LOOKUP_TITLES
-                selection.Add(GlobalEnums.FormulaTypes.AGGREGATION_OF_SUB_ACCOUNTS)
-                selection.Add(GlobalEnums.FormulaTypes.FIRST_PERIOD_INPUT)
-                selection.Add(GlobalEnums.FormulaTypes.FORMULA)
+                selection.Add(Account.FormulaTypes.AGGREGATION_OF_SUB_ACCOUNTS)
+                selection.Add(Account.FormulaTypes.FIRST_PERIOD_INPUT)
+                selection.Add(Account.FormulaTypes.FORMULA)
         End Select
 
-        For Each id In m_accountsHash.Keys
-            If selection.Contains(m_accountsHash(id)(ACCOUNT_FORMULA_TYPE_VARIABLE)) Then
-                tmp_list.Add(m_accountsHash(id)(variable))
+        For Each id In m_accountList.Keys
+            Dim l_account = GetAccount(id)
+
+            If l_account Is Nothing Then Continue For
+            If selection.Contains(l_account.FormulaType) Then
+                tmp_list.Add(l_account)
             End If
         Next
         Return tmp_list
 
     End Function
 
-    Friend Function GetAccountsDictionary(ByRef Key As String, ByRef Value As String) As Hashtable
+    Friend Function GetAccountsDictionary() As MultiIndexDictionary(Of UInt32, String, Account)
 
-        Dim tmpHT As New Hashtable
-        For Each id In m_accountsHash.Keys
-            tmpHT(m_accountsHash(id)(Key)) = m_accountsHash(id)(Value)
-        Next
-        Return tmpHT
+        Return m_accountList
 
     End Function
 
     Friend Function GetIdFromName(ByRef name As String) As Int32
 
-        For Each id As Int32 In m_accountsHash.Keys
-            If name = m_accountsHash(id)(NAME_VARIABLE) Then Return id
-        Next
-        Return 0
+        If m_accountList(name) Is Nothing Then Return 0
+        Return m_accountList(name).Id
 
     End Function
 
 #End Region
 
-
 #Region "Utilities"
-
-    Private Shared Sub GetAccountHTFromPacket(ByRef packet As ByteBuffer, ByRef account_ht As Hashtable)
-
-        account_ht(ID_VARIABLE) = packet.ReadInt32()
-        account_ht(PARENT_ID_VARIABLE) = packet.ReadUint32()
-        account_ht(NAME_VARIABLE) = packet.ReadString()
-        account_ht(ACCOUNT_FORMULA_TYPE_VARIABLE) = packet.ReadInt32()
-        account_ht(ACCOUNT_FORMULA_VARIABLE) = packet.ReadString()
-        account_ht(ACCOUNT_TYPE_VARIABLE) = packet.ReadInt32()
-        account_ht(ACCOUNT_CONSOLIDATION_OPTION_VARIABLE) = packet.ReadInt32()
-        account_ht(ACCOUNT_CONVERSION_OPTION_VARIABLE) = packet.ReadInt32()
-        account_ht(ACCOUNT_FORMAT_VARIABLE) = packet.ReadString()
-        account_ht(ACCOUNT_IMAGE_VARIABLE) = packet.ReadUint32()
-        account_ht(ITEMS_POSITIONS) = packet.ReadInt32()
-        account_ht(ACCOUNT_TAB_VARIABLE) = packet.ReadInt32()
-        account_ht(ACCOUNT_DESCRIPTION_VARIABLE) = packet.ReadString()
-        account_ht(IS_TMP_ID) = False
-
-    End Sub
-
-    Private Sub WriteAccountPacket(ByRef packet As ByteBuffer, ByRef attributes As Hashtable)
-
-        If attributes.ContainsKey(ID_VARIABLE) Then packet.WriteInt32(attributes(ID_VARIABLE))
-        packet.WriteUint32(attributes(PARENT_ID_VARIABLE))
-        packet.WriteString(attributes(NAME_VARIABLE))
-        packet.WriteInt32(attributes(ACCOUNT_FORMULA_TYPE_VARIABLE))
-        packet.WriteString(attributes(ACCOUNT_FORMULA_VARIABLE))
-        packet.WriteInt32(attributes(ACCOUNT_TYPE_VARIABLE))
-        packet.WriteInt32(attributes(ACCOUNT_CONSOLIDATION_OPTION_VARIABLE))
-        packet.WriteInt32(attributes(ACCOUNT_CONVERSION_OPTION_VARIABLE))
-        packet.WriteString(attributes(ACCOUNT_FORMAT_VARIABLE))
-        packet.WriteUint32(attributes(ACCOUNT_IMAGE_VARIABLE))
-        packet.WriteInt32(attributes(ITEMS_POSITIONS))
-        packet.WriteInt32(attributes(ACCOUNT_TAB_VARIABLE))
-        packet.WriteString(attributes(ACCOUNT_DESCRIPTION_VARIABLE))
-
-    End Sub
 
     Friend Sub LoadAccountsTV(ByRef TV As Windows.Forms.TreeView)
 
-        TreeViewsUtilities.LoadTreeview(TV, m_accountsHash)
+        TreeViewsUtilities.LoadTreeview(TV, m_accountList)
 
     End Sub
 
     Friend Sub LoadAccountsTV(ByRef TV As VIBlend.WinForms.Controls.vTreeView)
 
-        VTreeViewUtil.LoadTreeview(TV, m_accountsHash)
+        VTreeViewUtil.LoadTreeview(TV, m_accountList)
 
-    End Sub
-
-    Friend Function CreateAccount(ByRef p_account As Hashtable) As Int32
-        Dim tmpId As Int32 = m_accountsHash.Keys.LastOrDefault() + 1
-
-        p_account(IS_TMP_ID) = True
-        m_accountsHash.Add(tmpId, p_account)
-        Return (tmpId)
-    End Function
-
-    Friend Sub DeleteAccount(ByRef p_id As Int32)
-        m_accountsHash.Remove(p_id)
     End Sub
 
 #End Region
-
 
     Protected Overrides Sub finalize()
 
@@ -333,6 +277,5 @@ Friend Class Account
         MyBase.Finalize()
 
     End Sub
-
 
 End Class

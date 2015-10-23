@@ -36,8 +36,8 @@ Public Class CUI2VisualisationChartsSettings
         ' Add any initialization after the InitializeComponent() call.
         m_chart = p_chart
         m_chartIndex = p_chartIndex
-        VTreeViewUtil.LoadTreeview(m_serie1AccountTreeviewBox.TreeView, GlobalVariables.Accounts.m_accountsHash)
-        VTreeViewUtil.LoadTreeview(m_serie2AccountTreeviewBox.TreeView, GlobalVariables.Accounts.m_accountsHash)
+        GlobalVariables.Accounts.LoadAccountsTV(m_serie1AccountTreeviewBox.TreeView)
+        GlobalVariables.Accounts.LoadAccountsTV(m_serie2AccountTreeviewBox.TreeView)
         InitializeTypesComboboxes()
         LoadCurrentSettings()
 
