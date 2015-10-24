@@ -69,7 +69,7 @@ Partial Class PPSBI_UI
         Me.validate_cmd.Name = "validate_cmd"
         Me.validate_cmd.Size = New System.Drawing.Size(114, 27)
         Me.validate_cmd.TabIndex = 10
-        Me.validate_cmd.Text = "Insert Formula"
+        Me.validate_cmd.Text = Local.GetValue("ppsbi.insert_formula")
         Me.validate_cmd.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         Me.validate_cmd.UseVisualStyleBackColor = True
         '
@@ -130,7 +130,7 @@ Partial Class PPSBI_UI
         Me.AdjustmentsTreeviewBox.Name = "AdjustmentsTreeviewBox"
         Me.AdjustmentsTreeviewBox.Size = New System.Drawing.Size(314, 29)
         Me.AdjustmentsTreeviewBox.TabIndex = 8
-        Me.AdjustmentsTreeviewBox.Text = " "
+        Me.AdjustmentsTreeviewBox.Text = ""
         Me.AdjustmentsTreeviewBox.UseThemeBackColor = False
         Me.AdjustmentsTreeviewBox.UseThemeDropDownArrowColor = True
         Me.AdjustmentsTreeviewBox.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
@@ -147,7 +147,7 @@ Partial Class PPSBI_UI
         Me.ProductsTreeviewBox.Name = "ProductsTreeviewBox"
         Me.ProductsTreeviewBox.Size = New System.Drawing.Size(314, 29)
         Me.ProductsTreeviewBox.TabIndex = 7
-        Me.ProductsTreeviewBox.Text = " "
+        Me.ProductsTreeviewBox.Text = ""
         Me.ProductsTreeviewBox.UseThemeBackColor = False
         Me.ProductsTreeviewBox.UseThemeDropDownArrowColor = True
         Me.ProductsTreeviewBox.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
@@ -164,7 +164,7 @@ Partial Class PPSBI_UI
         Me.CategoriesFiltersTreebox.Name = "CategoriesFiltersTreebox"
         Me.CategoriesFiltersTreebox.Size = New System.Drawing.Size(314, 29)
         Me.CategoriesFiltersTreebox.TabIndex = 9
-        Me.CategoriesFiltersTreebox.Text = " "
+        Me.CategoriesFiltersTreebox.Text = ""
         Me.CategoriesFiltersTreebox.UseThemeBackColor = False
         Me.CategoriesFiltersTreebox.UseThemeDropDownArrowColor = True
         Me.CategoriesFiltersTreebox.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
@@ -181,7 +181,7 @@ Partial Class PPSBI_UI
         Me.VLabel9.Name = "VLabel9"
         Me.VLabel9.Size = New System.Drawing.Size(133, 29)
         Me.VLabel9.TabIndex = 38
-        Me.VLabel9.Text = "Categories Filters"
+        Me.VLabel9.Text = Local.GetValue("ppsbi.categories_filter")
         Me.VLabel9.TextAlignment = System.Drawing.ContentAlignment.MiddleLeft
         Me.VLabel9.UseMnemonics = True
         Me.VLabel9.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
@@ -218,7 +218,7 @@ Partial Class PPSBI_UI
         Me.PeriodTreeBox.Name = "PeriodTreeBox"
         Me.PeriodTreeBox.Size = New System.Drawing.Size(314, 29)
         Me.PeriodTreeBox.TabIndex = 3
-        Me.PeriodTreeBox.Text = " "
+        Me.PeriodTreeBox.Text = ""
         Me.PeriodTreeBox.UseThemeBackColor = False
         Me.PeriodTreeBox.UseThemeDropDownArrowColor = True
         Me.PeriodTreeBox.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
@@ -234,7 +234,7 @@ Partial Class PPSBI_UI
         Me.VLabel7.Name = "VLabel7"
         Me.VLabel7.Size = New System.Drawing.Size(123, 24)
         Me.VLabel7.TabIndex = 36
-        Me.VLabel7.Text = "Products Filter"
+        Me.VLabel7.Text = Local.GetValue("ppsbi.products_filter")
         Me.VLabel7.TextAlignment = System.Drawing.ContentAlignment.MiddleLeft
         Me.VLabel7.UseMnemonics = True
         Me.VLabel7.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
@@ -250,7 +250,7 @@ Partial Class PPSBI_UI
         Me.VLabel6.Name = "VLabel6"
         Me.VLabel6.Size = New System.Drawing.Size(123, 24)
         Me.VLabel6.TabIndex = 35
-        Me.VLabel6.Text = "Clients Filter"
+        Me.VLabel6.Text = Local.GetValue("ppsbi.clients_filter")
         Me.VLabel6.TextAlignment = System.Drawing.ContentAlignment.MiddleLeft
         Me.VLabel6.UseMnemonics = True
         Me.VLabel6.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
@@ -266,7 +266,7 @@ Partial Class PPSBI_UI
         Me.VLabel5.Name = "VLabel5"
         Me.VLabel5.Size = New System.Drawing.Size(123, 24)
         Me.VLabel5.TabIndex = 34
-        Me.VLabel5.Text = "Version"
+        Me.VLabel5.Text = Local.GetValue("general.version")
         Me.VLabel5.TextAlignment = System.Drawing.ContentAlignment.MiddleLeft
         Me.VLabel5.UseMnemonics = True
         Me.VLabel5.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
@@ -282,7 +282,7 @@ Partial Class PPSBI_UI
         Me.VLabel4.Name = "VLabel4"
         Me.VLabel4.Size = New System.Drawing.Size(123, 24)
         Me.VLabel4.TabIndex = 33
-        Me.VLabel4.Text = "Currency"
+        Me.VLabel4.Text = Local.GetValue("general.currency")
         Me.VLabel4.TextAlignment = System.Drawing.ContentAlignment.MiddleLeft
         Me.VLabel4.UseMnemonics = True
         Me.VLabel4.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
@@ -299,7 +299,7 @@ Partial Class PPSBI_UI
         Me.VLabel1.Name = "VLabel1"
         Me.VLabel1.Size = New System.Drawing.Size(133, 29)
         Me.VLabel1.TabIndex = 30
-        Me.VLabel1.Text = "Entity"
+        Me.VLabel1.Text = Local.GetValue("general.entity")
         Me.VLabel1.TextAlignment = System.Drawing.ContentAlignment.MiddleLeft
         Me.VLabel1.UseMnemonics = True
         Me.VLabel1.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
@@ -315,7 +315,7 @@ Partial Class PPSBI_UI
         Me.VLabel2.Name = "VLabel2"
         Me.VLabel2.Size = New System.Drawing.Size(123, 24)
         Me.VLabel2.TabIndex = 31
-        Me.VLabel2.Text = "Account"
+        Me.VLabel2.Text = Local.GetValue("general.account")
         Me.VLabel2.TextAlignment = System.Drawing.ContentAlignment.MiddleLeft
         Me.VLabel2.UseMnemonics = True
         Me.VLabel2.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
@@ -331,7 +331,7 @@ Partial Class PPSBI_UI
         Me.VLabel3.Name = "VLabel3"
         Me.VLabel3.Size = New System.Drawing.Size(123, 24)
         Me.VLabel3.TabIndex = 32
-        Me.VLabel3.Text = "Period"
+        Me.VLabel3.Text = Local.GetValue("general.period")
         Me.VLabel3.TextAlignment = System.Drawing.ContentAlignment.MiddleLeft
         Me.VLabel3.UseMnemonics = True
         Me.VLabel3.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
@@ -347,7 +347,7 @@ Partial Class PPSBI_UI
         Me.VLabel8.Name = "VLabel8"
         Me.VLabel8.Size = New System.Drawing.Size(123, 24)
         Me.VLabel8.TabIndex = 37
-        Me.VLabel8.Text = "Adjustments Filter"
+        Me.VLabel8.Text = Local.GetValue("ppsbi.adjustments_filter")
         Me.VLabel8.TextAlignment = System.Drawing.ContentAlignment.MiddleLeft
         Me.VLabel8.UseMnemonics = True
         Me.VLabel8.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
@@ -364,7 +364,7 @@ Partial Class PPSBI_UI
         Me.EntityTreeBox.Name = "EntityTreeBox"
         Me.EntityTreeBox.Size = New System.Drawing.Size(314, 29)
         Me.EntityTreeBox.TabIndex = 1
-        Me.EntityTreeBox.Text = " "
+        Me.EntityTreeBox.Text = ""
         Me.EntityTreeBox.UseThemeBackColor = False
         Me.EntityTreeBox.UseThemeDropDownArrowColor = True
         Me.EntityTreeBox.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
@@ -381,7 +381,7 @@ Partial Class PPSBI_UI
         Me.AccountTreeBox.Name = "AccountTreeBox"
         Me.AccountTreeBox.Size = New System.Drawing.Size(314, 29)
         Me.AccountTreeBox.TabIndex = 2
-        Me.AccountTreeBox.Text = " "
+        Me.AccountTreeBox.Text = ""
         Me.AccountTreeBox.UseThemeBackColor = False
         Me.AccountTreeBox.UseThemeDropDownArrowColor = True
         Me.AccountTreeBox.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
@@ -398,7 +398,7 @@ Partial Class PPSBI_UI
         Me.VersionTreeBox.Name = "VersionTreeBox"
         Me.VersionTreeBox.Size = New System.Drawing.Size(314, 29)
         Me.VersionTreeBox.TabIndex = 5
-        Me.VersionTreeBox.Text = " "
+        Me.VersionTreeBox.Text = ""
         Me.VersionTreeBox.UseThemeBackColor = False
         Me.VersionTreeBox.UseThemeDropDownArrowColor = True
         Me.VersionTreeBox.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
@@ -415,7 +415,7 @@ Partial Class PPSBI_UI
         Me.ClientsTreeviewBox.Name = "ClientsTreeviewBox"
         Me.ClientsTreeviewBox.Size = New System.Drawing.Size(314, 29)
         Me.ClientsTreeviewBox.TabIndex = 6
-        Me.ClientsTreeviewBox.Text = " "
+        Me.ClientsTreeviewBox.Text = ""
         Me.ClientsTreeviewBox.UseThemeBackColor = False
         Me.ClientsTreeviewBox.UseThemeDropDownArrowColor = True
         Me.ClientsTreeviewBox.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
@@ -437,7 +437,7 @@ Partial Class PPSBI_UI
         Me.Controls.Add(Me.validate_cmd)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Name = "PPSBI_UI"
-        Me.Text = "Financial BI Excel Function Edition"
+        Me.Text = Local.GetValue("ppsbi.title")
         Me.TableLayoutPanel1.ResumeLayout(False)
         Me.ResumeLayout(False)
 

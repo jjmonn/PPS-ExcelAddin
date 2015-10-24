@@ -15,7 +15,7 @@
     End Function
 
     Private Sub AcceptBT_Click(sender As Object, e As EventArgs) Handles AcceptBT.Click
-        m_returnValue = inputBox.Text
+        m_returnValue = m_passwordTextBox.Text
         Close()
     End Sub
 

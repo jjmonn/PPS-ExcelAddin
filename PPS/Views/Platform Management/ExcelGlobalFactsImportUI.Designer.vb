@@ -143,7 +143,7 @@ Partial Class ExcelFactsValuesImportUI
         Me.VLabel1.Name = "VLabel1"
         Me.VLabel1.Size = New System.Drawing.Size(80, 25)
         Me.VLabel1.TabIndex = 11
-        Me.VLabel1.Text = "Periods"
+        Me.VLabel1.Text = Local.GetValue("upload.periods")
         Me.VLabel1.TextAlignment = System.Drawing.ContentAlignment.TopLeft
         Me.VLabel1.UseMnemonics = True
         Me.VLabel1.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
@@ -159,7 +159,7 @@ Partial Class ExcelFactsValuesImportUI
         Me.VLabel2.Name = "VLabel2"
         Me.VLabel2.Size = New System.Drawing.Size(80, 25)
         Me.VLabel2.TabIndex = 12
-        Me.VLabel2.Text = "Values"
+        Me.VLabel2.Text = Local.GetValue("upload.values")
         Me.VLabel2.TextAlignment = System.Drawing.ContentAlignment.TopLeft
         Me.VLabel2.UseMnemonics = True
         Me.VLabel2.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
@@ -173,7 +173,7 @@ Partial Class ExcelFactsValuesImportUI
         Me.import_BT.Name = "import_BT"
         Me.import_BT.Size = New System.Drawing.Size(91, 28)
         Me.import_BT.TabIndex = 6
-        Me.import_BT.Text = "Import"
+        Me.import_BT.Text = Local.GetValue("upload.upload")
         Me.import_BT.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         Me.import_BT.UseVisualStyleBackColor = True
         '
@@ -207,7 +207,7 @@ Partial Class ExcelFactsValuesImportUI
         Me.VLabel3.Name = "VLabel3"
         Me.VLabel3.Size = New System.Drawing.Size(135, 25)
         Me.VLabel3.TabIndex = 12
-        Me.VLabel3.Text = "Macro Economic Indicator"
+        Me.VLabel3.Text = Local.GetValue("general.macro_economic_indicator")
         Me.VLabel3.TextAlignment = System.Drawing.ContentAlignment.TopLeft
         Me.VLabel3.UseMnemonics = True
         Me.VLabel3.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
@@ -223,7 +223,7 @@ Partial Class ExcelFactsValuesImportUI
         Me.Controls.Add(Me.TableLayoutPanel1)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Name = "ExcelFactsValuesImportUI"
-        Me.Text = "Economic Indictaor Values Import"
+        Me.Text = Local.GetValue("upload.global_facts_upload")
         Me.TableLayoutPanel1.ResumeLayout(False)
         Me.ResumeLayout(False)
 

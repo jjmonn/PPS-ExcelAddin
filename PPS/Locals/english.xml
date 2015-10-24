@@ -107,7 +107,90 @@
     <string name="msg_fill_values">"Account's Format and Formula type must be populated."</string>
     <string name="msg_name_already_used">This name is already used by another fact or account.</string>
   </category>
-    
+
+  <category name="upload">
+    <string name="periods">Periods</string>
+    <string name="rates">rates</string>
+    <string name="values">Values</string>
+    <string name="upload">Upload</string>
+    <string name="exchange_rates_upload">Exchange Rates Upload</string>
+    <string name="global_facts_upload">Macro Economic Indicator Upload</string>
+    <string name="range_mismatch">The Periods range and Rates range do not have the same size, or the dimensions of the ranges are not valid.</string>
+    <string name="msg_periods_selection">Select periods(s) range(s)</string>
+    <string name="msg_rates_selection">Select rates(s) range(s)</string>
+    <string name="msg_values_selection">Select value(s) range(s)</string>
+  </category>
+
+  <category name="global_facts">
+    <string name="new">Create a new macro economic indicator</string>
+    <string name="new_global_fact">New Macro Economic indicator</string>
+    <string name="new_version">New Macro Economic Indicators Version</string>    
+  </category>
+
+  <category name="facts_versions">
+    <string name="fact_version">Data Version</string>
+    <string name="exchange_rates_version">Exchange rates version</string>
+    <string name="nb_years">Number of years</string>
+    <string name="copy_from">Create copy from</string>
+    <string name="starting_period">Starting year</string>
+    <string name="period_config">Periods configuration (Yearly / Monthly)</string>
+    <string name="version_name">Version name</string>
+    <string name="version_new">New version</string>
+    <string name="msg_config_selection">The Time Configuration must be selected.</string>
+    <string name="msg_starting_period">The starting period must be selected</string>
+    <string name="msg_rates_version_mismatch">This exchange rates version is not compatible with the periods configuration.</string>
+    <string name="msg_cannot_use_global_fact_folder"> is a folder and cannot be set as the Economic Indicators version</string>
+    <string name="msg_cannot_use_exchange_rates_folder"> is a folder and cannot be set as the Exchange Rates version.</string>
+    <string name="msg_fact_version_mismatch">This Fact Version is not compatible with the Periods Configuration.</string>
+    <string name="global_facts_version">Macro Economic Indicators version</string>
+    <string name="version_locked">Locked</string>
+    <string name="locked_date">Locked date</string>
+    <string name="creation_date">Creation date</string>
+    <string name="version_not_locked">Version not locked</string>
+    <string name="msg_delete_successful">The version has successfully been deleted</string>
+    <string name="msg_is_folder"> is a folder</string>
+    <string name="msg_folder_name">Please enter the new Folder Name</string>
+    <string name="msg_new_version_name">Enter the new Name: </string>
+    <string name="msg_invalid_name">This Name is not valid. Either it already exists or contains forbidden characters. Please Try with another Name.</string>
+    <string name="msg_select_version_or_folder">Please select a Version or a Folder.</string>
+    <string name=""></string>    
+  </category>
+
+  <category name="ppsbi">
+    <string name="insert_formula">Insert Formula</string>
+    <string name="categories_filter">Categories filter</string>
+    <string name="products_filter">Product filter</string>
+    <string name="clients_filter">Clients filter</string>
+    <string name="adjustment_filter">Adjustment filter</string>
+    <string name="title">Financial BI Excel Function Edition</string>
+    <string name="msg_entity_selection">Please select an Entity.</string>
+    <string name="msg_account_selection">Please select an Account</string>
+    <string name="msg_invalid_version">Invalid Version (Folder) or no Version Selected.</string>
+    <string name="msg_period_selection">Please select a Period (A version must be selected in order to select the period).</string>
+  </category>
+
+  <category name="settings">
+    <string name="port_number">Port number</string>
+    <string name="server_address">Server address</string>
+    <string name="display_options">Display options</string>
+    <string name="report_format">Report formats</string>
+    <string name="preferences">Preferences</string>
+    <string name="consolidation_currency">Consolidation currency</string>
+    <string name="settings">Settings</string>
+    <string name="format_preview">Format Preview</string>
+    <string name="text_color">Text color</string>
+    <string name="background_color">Background color</string>
+    <string name="bold">Bold</string>
+    <string name="italic">Italic</string>
+    <string name="border">Border</string>
+    <string name="title">Title</string>
+    <string name="important">Important</string>
+    <string name="normal">Normal</string>
+    <string name="detail">Detail</string>
+
+  </category>
+
+
   <category name="general">
      <string name="account">Account</string>
      <string name="couleur">Couleur</string>
@@ -116,7 +199,15 @@
      <string name="cancel">Cancel</string>
      <string name="help">Help</string>
      <string name="create">Create</string>
-  
+
+    <string name="macro_economic_indicator">Macro Economic Indicator</string>
+    <string name="log">Log</string>
+    <string name=""></string>
+    <string name=""></string>
+    <string name=""></string>
+    <string name=""></string>
+    
+    
   </category>
 
 
@@ -124,5 +215,5 @@
 
 <!-- 
   Category name: forbidden character: '.'
-  Local.GetValue("CUI.refresh")
+  Local.GetValue("global_facts.new_global_fact")
 -->
