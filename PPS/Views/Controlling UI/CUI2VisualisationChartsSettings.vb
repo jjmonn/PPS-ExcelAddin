@@ -5,7 +5,7 @@
 '
 ' Author: Julien Monnereau
 ' Created: 15/10/2015
-' Last modified: 15/10/2015
+' Last modified: 25/10/2015
 
 
 Imports System.Windows.Forms.DataVisualization.Charting
@@ -170,16 +170,20 @@ Public Class CUI2VisualisationChartsSettings
             Case 1
                 My.Settings.chart1Title = m_chartTitleTextBox.Text
                 ' Serie 1
-                My.Settings.chart1Serie1AccountId = m_serie1AccountTreeviewBox.TreeView.SelectedNode.Value
-                My.Settings.Save()
+                If IsNothing(m_serie1AccountTreeviewBox.TreeView.SelectedNode) = False Then
+                    My.Settings.chart1Serie1AccountId = m_serie1AccountTreeviewBox.TreeView.SelectedNode.Value
+                    My.Settings.Save()
+                End If
                 My.Settings.chart1Serie1Color = m_serie1ColorPicker.SelectedColor
                 My.Settings.Save()
                 My.Settings.chart1Serie1Type = m_serie1TypeComboBox.SelectedItem.Value
                 My.Settings.Save()
 
                 ' Serie 2
-                My.Settings.chart1Serie2AccountId = m_serie2AccountTreeviewBox.TreeView.SelectedNode.Value
-                My.Settings.Save()
+                If IsNothing(m_serie2AccountTreeviewBox.TreeView.SelectedNode) = False Then
+                    My.Settings.chart1Serie2AccountId = m_serie2AccountTreeviewBox.TreeView.SelectedNode.Value
+                    My.Settings.Save()
+                End If
                 My.Settings.chart1Serie2Color = m_serie2ColorPicker.SelectedColor
                 My.Settings.Save()
                 My.Settings.chart1Serie2Type = m_serie2TypeComboBox.SelectedItem.Value
@@ -188,16 +192,20 @@ Public Class CUI2VisualisationChartsSettings
             Case 2
                 My.Settings.chart2Title = m_chartTitleTextBox.Text
                 ' Serie 1
-                My.Settings.chart2Serie1AccountId = m_serie1AccountTreeviewBox.TreeView.SelectedNode.Value
-                My.Settings.Save()
+                If IsNothing(m_serie1AccountTreeviewBox.TreeView.SelectedNode) = False Then
+                    My.Settings.chart2Serie1AccountId = m_serie1AccountTreeviewBox.TreeView.SelectedNode.Value
+                    My.Settings.Save()
+                End If
                 My.Settings.chart2Serie1Color = m_serie1ColorPicker.SelectedColor
                 My.Settings.Save()
                 My.Settings.chart2Serie1Type = m_serie1TypeComboBox.SelectedItem.Value
                 My.Settings.Save()
 
                 ' Serie 2
-                My.Settings.chart2Serie2AccountId = m_serie2AccountTreeviewBox.TreeView.SelectedNode.Value
-                My.Settings.Save()
+                If IsNothing(m_serie2AccountTreeviewBox.TreeView.SelectedNode) = False Then
+                    My.Settings.chart2Serie2AccountId = m_serie2AccountTreeviewBox.TreeView.SelectedNode.Value
+                    My.Settings.Save()
+                End If
                 My.Settings.chart2Serie2Color = m_serie2ColorPicker.SelectedColor
                 My.Settings.Save()
                 My.Settings.chart2Serie2Type = m_serie2TypeComboBox.SelectedItem.Value
@@ -205,16 +213,20 @@ Public Class CUI2VisualisationChartsSettings
             Case 3
                 My.Settings.chart3Title = m_chartTitleTextBox.Text
                 ' Serie 1
-                My.Settings.chart3Serie1AccountId = m_serie1AccountTreeviewBox.TreeView.SelectedNode.Value
-                My.Settings.Save()
+                If IsNothing(m_serie1AccountTreeviewBox.TreeView.SelectedNode) = False Then
+                    My.Settings.chart3Serie1AccountId = m_serie1AccountTreeviewBox.TreeView.SelectedNode.Value
+                    My.Settings.Save()
+                End If
                 My.Settings.chart3Serie1Color = m_serie1ColorPicker.SelectedColor
                 My.Settings.Save()
                 My.Settings.chart3Serie1Type = m_serie1TypeComboBox.SelectedItem.Value
                 My.Settings.Save()
 
                 ' Serie 2
-                My.Settings.chart3Serie2AccountId = m_serie2AccountTreeviewBox.TreeView.SelectedNode.Value
-                My.Settings.Save()
+                If IsNothing(m_serie2AccountTreeviewBox.TreeView.SelectedNode) = False Then
+                    My.Settings.chart3Serie2AccountId = m_serie2AccountTreeviewBox.TreeView.SelectedNode.Value
+                    My.Settings.Save()
+                End If
                 My.Settings.chart3Serie2Color = m_serie2ColorPicker.SelectedColor
                 My.Settings.Save()
                 My.Settings.chart3Serie2Type = m_serie2TypeComboBox.SelectedItem.Value
@@ -223,16 +235,20 @@ Public Class CUI2VisualisationChartsSettings
             Case 4
                 My.Settings.chart4Title = m_chartTitleTextBox.Text
                 ' Serie 1
-                My.Settings.chart4Serie1AccountId = m_serie1AccountTreeviewBox.TreeView.SelectedNode.Value
-                My.Settings.Save()
+                If IsNothing(m_serie1AccountTreeviewBox.TreeView.SelectedNode) = False Then
+                    My.Settings.chart4Serie1AccountId = m_serie1AccountTreeviewBox.TreeView.SelectedNode.Value
+                    My.Settings.Save()
+                End If
                 My.Settings.chart4Serie1Color = m_serie1ColorPicker.SelectedColor
                 My.Settings.Save()
                 My.Settings.chart4Serie1Type = m_serie1TypeComboBox.SelectedItem.Value
                 My.Settings.Save()
 
                 ' Serie 2
-                My.Settings.chart4Serie2AccountId = m_serie2AccountTreeviewBox.TreeView.SelectedNode.Value
-                My.Settings.Save()
+                If IsNothing(m_serie2AccountTreeviewBox.TreeView.SelectedNode) = False Then
+                    My.Settings.chart4Serie2AccountId = m_serie2AccountTreeviewBox.TreeView.SelectedNode.Value
+                    My.Settings.Save()
+                End If
                 My.Settings.chart4Serie2Color = m_serie2ColorPicker.SelectedColor
                 My.Settings.Save()
                 My.Settings.chart4Serie2Type = m_serie2TypeComboBox.SelectedItem.Value

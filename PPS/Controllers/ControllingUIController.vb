@@ -887,24 +887,61 @@ Friend Class ControllingUIController
 
         m_chartsView.ClearCharts_ThreadSafe()
         Dim xAxisValues As String() = GetSerieXValues()
-        If GlobalVariables.Accounts.m_accountsHash.ContainsKey(My.Settings.chart1Serie1AccountId) Then m_chartsView.BindData_ThreadSafe(0, GlobalVariables.Accounts.m_accountsHash(My.Settings.chart1Serie1AccountId)(NAME_VARIABLE), xAxisValues, BuildSerieYValues(My.Settings.chart1Serie1AccountId))
-        If GlobalVariables.Accounts.m_accountsHash.ContainsKey(My.Settings.chart1Serie2AccountId) <> 0 Then m_chartsView.BindData_ThreadSafe(0, GlobalVariables.Accounts.m_accountsHash(My.Settings.chart1Serie2AccountId)(NAME_VARIABLE), xAxisValues, BuildSerieYValues(My.Settings.chart1Serie2AccountId))
-        If GlobalVariables.Accounts.m_accountsHash.ContainsKey(My.Settings.chart2Serie1AccountId) <> 0 Then m_chartsView.BindData_ThreadSafe(1, GlobalVariables.Accounts.m_accountsHash(My.Settings.chart2Serie1AccountId)(NAME_VARIABLE), xAxisValues, BuildSerieYValues(My.Settings.chart2Serie1AccountId))
-        If GlobalVariables.Accounts.m_accountsHash.ContainsKey(My.Settings.chart2Serie2AccountId) <> 0 Then m_chartsView.BindData_ThreadSafe(1, GlobalVariables.Accounts.m_accountsHash(My.Settings.chart2Serie2AccountId)(NAME_VARIABLE), xAxisValues, BuildSerieYValues(My.Settings.chart2Serie2AccountId))
-        If GlobalVariables.Accounts.m_accountsHash.ContainsKey(My.Settings.chart3Serie1AccountId) <> 0 Then m_chartsView.BindData_ThreadSafe(2, GlobalVariables.Accounts.m_accountsHash(My.Settings.chart3Serie1AccountId)(NAME_VARIABLE), xAxisValues, BuildSerieYValues(My.Settings.chart3Serie1AccountId))
-        If GlobalVariables.Accounts.m_accountsHash.ContainsKey(My.Settings.chart3Serie2AccountId) <> 0 Then m_chartsView.BindData_ThreadSafe(2, GlobalVariables.Accounts.m_accountsHash(My.Settings.chart3Serie2AccountId)(NAME_VARIABLE), xAxisValues, BuildSerieYValues(My.Settings.chart3Serie2AccountId))
-        If GlobalVariables.Accounts.m_accountsHash.ContainsKey(My.Settings.chart4Serie1AccountId) <> 0 Then m_chartsView.BindData_ThreadSafe(3, GlobalVariables.Accounts.m_accountsHash(My.Settings.chart4Serie1AccountId)(NAME_VARIABLE), xAxisValues, BuildSerieYValues(My.Settings.chart4Serie1AccountId))
-        If GlobalVariables.Accounts.m_accountsHash.ContainsKey(My.Settings.chart4Serie2AccountId) <> 0 Then m_chartsView.BindData_ThreadSafe(3, GlobalVariables.Accounts.m_accountsHash(My.Settings.chart4Serie2AccountId)(NAME_VARIABLE), xAxisValues, BuildSerieYValues(My.Settings.chart4Serie2AccountId))
-        m_chartsView.StubDemosFormatting_ThreadSafe()
+
+        Select Case m_versionsDict.Count
+            Case 1
+                FillChartsSeries(CInt(m_versionsDict.Keys(0)), "", xAxisValues, 100)
+            Case Else
+                Dim alpha As Single = 100
+                For Each versionId As Int32 In m_versionsDict.Keys
+                    FillChartsSeries(CInt(m_versionsDict.Keys(0)), m_versionsDict(versionId), xAxisValues, alpha)
+                    alpha -= 15
+                    'If alpha < 60 Then Exit Select ' define as main alpha priority normal
+                Next
+        End Select
 
     End Sub
 
-    Private Function BuildSerieYValues(ByRef p_accountId As Int32) As Double()
+    Private Sub FillChartsSeries(ByVal p_versionId As Int32, _
+                                 ByVal p_versionName As String, _
+                                 ByRef p_xAxisValues As String(), _
+                                 ByVal p_alpha As Single)
+
+        FillSerie(My.Settings.chart1Serie1AccountId, 0, p_versionId, p_versionName, p_xAxisValues, My.Settings.chart1Serie1Color, My.Settings.chart1Serie1Type, p_alpha)
+        FillSerie(My.Settings.chart1Serie2AccountId, 0, p_versionId, p_versionName, p_xAxisValues, My.Settings.chart1Serie2Color, My.Settings.chart1Serie2Type, p_alpha)
+        FillSerie(My.Settings.chart2Serie1AccountId, 1, p_versionId, p_versionName, p_xAxisValues, My.Settings.chart2Serie1Color, My.Settings.chart2Serie1Type, p_alpha)
+        FillSerie(My.Settings.chart2Serie2AccountId, 1, p_versionId, p_versionName, p_xAxisValues, My.Settings.chart2Serie2Color, My.Settings.chart2Serie2Type, p_alpha)
+        FillSerie(My.Settings.chart3Serie1AccountId, 2, p_versionId, p_versionName, p_xAxisValues, My.Settings.chart3Serie1Color, My.Settings.chart3Serie1Type, p_alpha)
+        FillSerie(My.Settings.chart3Serie2AccountId, 2, p_versionId, p_versionName, p_xAxisValues, My.Settings.chart3Serie2Color, My.Settings.chart3Serie2Type, p_alpha)
+        FillSerie(My.Settings.chart4Serie1AccountId, 3, p_versionId, p_versionName, p_xAxisValues, My.Settings.chart4Serie1Color, My.Settings.chart4Serie1Type, p_alpha)
+        FillSerie(My.Settings.chart4Serie2AccountId, 3, p_versionId, p_versionName, p_xAxisValues, My.Settings.chart4Serie2Color, My.Settings.chart4Serie2Type, p_alpha)
+
+    End Sub
+
+    Private Sub FillSerie(ByRef p_accountId As Int32, _
+                          ByRef p_chartIndex As UInt16, _
+                          ByRef p_versionId As Int32, _
+                          ByRef p_versionName As String, _
+                          ByRef p_xAxisValues As String(), _
+                          ByRef p_serieColor As System.Drawing.Color, _
+                          ByRef p_serieType As Int32, _
+                          ByRef p_alpha As Single)
+
+        If GlobalVariables.Accounts.m_accountsHash.ContainsKey(p_accountId) Then
+            Dim accountName As String = GlobalVariables.Accounts.m_accountsHash(p_accountId)(NAME_VARIABLE)
+            Dim serieName = accountName & p_versionName
+            m_chartsView.BindData_ThreadSafe(p_chartIndex, serieName, p_xAxisValues, BuildSerieYValues(p_accountId, p_versionId))
+            m_chartsView.FormatSerie_ThreadSafe(p_chartIndex, p_serieColor, p_serieType, serieName, p_alpha)
+        End If
+
+    End Sub
+
+    Private Function BuildSerieYValues(ByRef p_accountId As Int32, _
+                                       ByRef p_versionId As Int32) As Double()
 
         Dim nbPeriods As Int32 = m_view.leftPane_control.periodsTV.Nodes.Count - 1
         Dim yValues(nbPeriods) As Double
         Dim entityId As Int32 = m_entityNode.Value
-        Dim versionId As Int32 = CInt(m_versionsDict.Keys(0))
         Dim filterId As String = "0"
         Dim periodId As String = ""
         Dim token As String
@@ -912,7 +949,7 @@ Friend Class ControllingUIController
         Dim i As Int32
         For Each periodNode As vTreeNode In m_view.leftPane_control.periodsTV.Nodes
             periodId = periodNode.Value
-            token = versionId & computer.TOKEN_SEPARATOR & _
+            token = p_versionId & computer.TOKEN_SEPARATOR & _
                     filterId & computer.TOKEN_SEPARATOR & _
                     entityId & computer.TOKEN_SEPARATOR & _
                     p_accountId & computer.TOKEN_SEPARATOR & _

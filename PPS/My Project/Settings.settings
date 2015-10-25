@@ -102,7 +102,7 @@
       <Value Profile="(Default)">192, 255, 255</Value>
     </Setting>
     <Setting Name="titleBordersColor" Type="System.Drawing.Color" Scope="User">
-      <Value Profile="(Default)">Black</Value>
+      <Value Profile="(Default)">MediumBlue</Value>
     </Setting>
     <Setting Name="snapshotInputsBackColor" Type="System.Drawing.Color" Scope="User">
       <Value Profile="(Default)">PowderBlue</Value>

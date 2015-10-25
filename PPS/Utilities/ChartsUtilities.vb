@@ -162,7 +162,7 @@ Friend Class ChartsUtilities
     Friend Shared Sub FormatSerie(ByRef p_serie As Series, _
                                    ByRef p_color As System.Drawing.Color, _
                                    ByRef p_chartType As SeriesChartType, _
-                                         Optional ByRef p_alphaColor As Integer = -1, _
+                                   Optional ByRef p_alphaColor As Integer = -1, _
                                    Optional ByRef p_seriePointsWidth As Single = 0)
 
         If p_serie Is Nothing Then Exit Sub

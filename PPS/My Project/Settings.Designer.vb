@@ -452,7 +452,7 @@ Namespace My
         
         <Global.System.Configuration.UserScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("Black")>  _
+         Global.System.Configuration.DefaultSettingValueAttribute("MediumBlue")>  _
         Public Property titleBordersColor() As Global.System.Drawing.Color
             Get
                 Return CType(Me("titleBordersColor"),Global.System.Drawing.Color)
