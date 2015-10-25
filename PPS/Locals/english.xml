@@ -108,14 +108,148 @@
     <string name="msg_name_already_used">This name is already used by another fact or account.</string>
   </category>
     
+  <category name="entities_edition">
+
+    <string name="parent_entity">Parent Entity</string>
+    <string name="parent_entity_selection">Select Parent Entity</string>
+    <string name="new_entity">New Legal Entity</string>
+   
+    <!--messages-->
+      <string name="msg_selection">An Entity must be selected.</string>
+      <string name="msg_entity_name">Enter the name of the new entity:</string>
+      <string name="msg_delete1">Careful, you are about to delete the entity </string>
+      <string name="msg_delete2">This entity and all sub entities will be deleted, do you confirm?</string>
+      <string name="title_delete_confirmation">Entity deletion confirmation</string>
+      <string name="msg_currency_not_found1">Currency </string>
+      <string name="msg_currency_not_found2"> not found</string>  
+      <string name="msg_select_currency">A currency must be selected.</string>
+     
+  </category>
+  
+  <category name="filters">
+    
+    <!--title-->
+      <string name="title_filters_structure">Structure</string>
+    
+    <!--edition-->
+      <string name="categories">Categories</string>
+      <string name="new_category">New category</string>
+      <string name="new_value">New value</string>
+      <string name="edit_structure">Edit structure</string>
+      <string name="create_category_under_category">Create Category Under this Category</string>
+    
+     <!--messages-->
+      <string name="msg_new_category_name">Please enter the new Category Name:</string>
+      <string name="msg_name_used">This name is already used or contains forbiden characters.</string>
+      <string name="msg_select_category">A Category must be selected in order ot Add a Value.</string>
+  
+  </category>  
+      
+  <category name="axis">
+ 
+    <!--messages-->
+      <string name="msg_enter_name">Enter the new name</string>  
+      <string name="msg_axis_creation">Creation</string>  
+      <string name="msg_axis_delete1">Careful, you are about to delete the axis </string>  
+      <string name="msg_axis_delete2">This axis and all sub axis will be deleted, do you confirm?</string>  
+      <string name="msg_deletion_confirmation">Axis deletion confirmation</string>  
+      <string name="msg_select_axis">An Axis must be selected in order to be deleted</string>  
+      <string name="msg_filter_value_not_found">The Filter Value Name could not be found.</string>  
+  
+  </category>
+    
+  <category name="GeneralEditionUI">
+    
+    <!--edition-->
+      <string name="accounts">Accounts</string>
+      <string name="entities">Entities Hierarchy</string>
+      <string name="categories">Categories</string>
+      <string name="exchange_rates">Exchange Rates</string>
+      <string name="users_groups">user Groups</string>
+      <string name="platform_config">Your Financial BI Configuration</string>
+  
+    <!--titles-->
+      <string name="tool_tip_account">Financial and Operational Accounts Edition  (All changes applied will be available for all users)</string>
+      <string name="tool_tip_entities">Legal Organization Hierarchy Ediition  (All changes applied will be available for all users)</string>
+      <string name="tool_tip_categories">Entities, Clients, Products and Adjustments Categories Edition  (All changes applied will be available for all users)</string>
+      <string name="tool_tip_clients">Clients Edition  (All changes applied will be available for all users)</string>
+      <string name="tool_tip_products">Products Edition  (All changes applied will be available for all users)</string>
+      <string name="tool_tip_adjustments">Adjustments Edition  (All changes applied will be available for all users)</string>
+      <string name="tool_tip_versions">Versions Edition  (All changes applied will be available for all users)</string>
+      <string name="tool_tip_currencies">Currencies Edition (All changes applied will be available for all users)</string>
+      <string name="tool_tip_economic_indicators">Macro Economic Indicators Edition (All changes applied will be available for all users)</string>
+      <string name="tool_tip_exchange_rates">Edit the currencies used in Financial BI</string>
+      <string name="tool_tip_users_groups">Edition of the credential granted to the different groups of users</string>  
+    
+    </category>
+        
+  <category name="currencies">
+  
+    <!--edition-->
+      <string name="set_main_currency">Set Main Currency</string>
+      <string name="display_rates">Display Exchange Rates</string> 
+      <string name="import">Import from Excel</string> 
+    
+    <!--messages-->
+      <string name="msg_select_currency">A Currency must be selected first</string>
+      
+  </category>
+       
+   <category name="versions">
+      <string name="select_version">Select a version</string> 
+      <string name="new_version">Create a new version</string> 
+      <string name="new_folder">Create a new folder</string> 
+      <string name="version">Version</string> 
+      <string name=""></string> 
+  
+      <!--messages-->
+      <string name="msg_folder_name">Please enter a name for the new Folder</string>
+      <string name="msg_folder_under_folder">A folder cannot be added under a version</string>
+      <string name="msg_version_under_folder">A Version can only be added under a folder</string>
+      <string name="msg_delete1">Careful, you are about to delete the version </string>
+      <string name="msg_delete2">This version and all sub versions will be deleted, do you confirm?</string>
+      <string name="title_delete_confirmation">Version deletion confirmation</string>
+   
+   </category>
+    
+    
   <category name="general">
      <string name="account">Account</string>
-     <string name="couleur">Couleur</string>
+     <string name="entity">Entity</string>
+     <string name="client">Client</string>
+     <string name="product">product</string>
+     <string name="adjustment">Adjustment</string>
+
+    <string name="couleur">Couleur</string>
      <string name="type">Type</string>
      <string name="save">Save</string>
      <string name="cancel">Cancel</string>
      <string name="help">Help</string>
      <string name="create">Create</string>
+     <string name="name">Name</string>
+     <string name="delete">Delete</string>
+     <string name="rename">Rename</string>
+     <string name="expand_all">Expand all</string>
+     <string name="collapse_all">Collapse all</string> 
+    <string name="copy_down">Copy value down</string>
+    <string name="drop_on_excel">Drop on Excel</string>
+    <string name="menu">Menu</string>
+    <string name="accounts">Accounts</string>
+    <string name="entities">Entities</string>
+    <string name="clients">Clients</string>
+    <string name="products">Products</string>
+    <string name="adjustments">Adjustments</string>
+    <string name="versions">Versions</string>
+    <string name="currencies">Currencies</string>
+    <string name="economic_indicators">Macro Economic Indicators</string>
+    <string name="msg_name_exceed1">The name cannot exceed </string>
+    <string name="msg_name_exceed2"> characters</string>
+    <string name="auto_resize_columns">Auto resize columns width</string>
+    <string name="currency">Currency</string>
+    <string name=""></string>
+    <string name=""></string>
+    <string name=""></string>
+  
   
   </category>
 
@@ -124,5 +258,5 @@
 
 <!-- 
   Category name: forbidden character: '.'
-  Local.GetValue("CUI.refresh")
+  Local.GetValue("general.save")
 -->
