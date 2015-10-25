@@ -126,8 +126,7 @@
     <string name="msg_select_currency">Une devise doit être sélectionnée.</string>
 
   </category>
-  
-  
+   
   <category name="axis">
 
     <!--messages-->
@@ -215,9 +214,92 @@
 
   </category>
 
+  <category name="upload">
+    <string name="periods">Périodes</string>
+    <string name="rates">Taux</string>
+    <string name="values">Valeurs</string>
+    <string name="upload">Importer</string>
+    <string name="exchange_rates_upload">Import des Taux de Change</string>
+    <string name="global_facts_upload">Import des Indicateurs Macro Economiques</string>
+    <string name="range_mismatch">Les sélections pour les périodes et les valeurs n'ont pas la même taille, ou la sélection n'est pas valide.</string>
+    <string name="msg_periods_selection">Sélectionnez la(les) période(s)</string>
+    <string name="msg_rates_selection">Sélectionnez le(s) taux</string>
+    <string name="msg_values_selection">Sélectionnez la(les) valeur(s)</string>
+  </category>
+
+  <category name="global_facts">
+    <string name="new">Créer un nouvel indicateur macro économique</string>
+      <string name="new_global_fact">Nouvel Indicateur Macro Economique</string>
+    <string name="new_version">Nouvelle version des Indicateurs Macro Economiques</string>    
+  </category>
+
+  <category name="facts_versions">
+    <string name="fact_version">Version</string>
+    <string name="exchange_rates_version">version de taux de change</string>
+    <string name="nb_years">Nombre d'année</string>
+    <string name="copy_from">Créer une copie de</string>
+    <string name="starting_period">Année de départ</string>
+    <string name="period_config">Configuration des périodes (annuel ou mensuel)</string>
+    <string name="version_name">Nom de la version</string>
+    <string name="version_new">Nouvelle Version</string>
+    <string name="msg_config_selection">La configuration des périodes doit être indiquée.</string>
+    <string name="msg_starting_period">L'année de départ doit être indiquée.</string>
+    <string name="msg_rates_version_mismatch">Cette version des taux de change n'est pas compatible avec les périodes indiquées.</string>
+    <string name="msg_cannot_use_global_fact_folder"> est un dossier et ne peut pas être utilisé commme version des indicateurs macro économiques.</string>
+    <string name="msg_cannot_use_exchange_rates_folder"> est un dossier et ne peut pas être utilisé commme version des taux de change.</string>
+    <string name="msg_fact_version_mismatch">Cette version des indicateurs macro économiques n'est pas compatible avec les périodes indiquées.</string>
+
+    <string name="global_facts_version">Version des Indicateurs Macro Economiques</string>
+    <string name="version_locked">Verrouillée</string>
+    <string name="locked_date">Date de verrouillage</string>
+    <string name="creation_date">Date de création</string>
+    <string name="version_not_locked">Versions non verrouillée</string>
+    <string name="msg_delete_successful">Cette version a été supprimée avec succès.</string>
+    <string name="msg_is_folder"> est un dossier.</string>
+    <string name="msg_folder_name">Entrez le nom du nouveau dossier : </string>
+    <string name="msg_new_version_name">Entrez le nom de la nouvelle version : </string>
+    <string name="msg_invalid_name">Ce nom n'est pas valide. Il est déjà utilisé ou bien contient des caractères interdits. Essayez avec un autre nom.</string>
+    <string name="msg_select_version_or_folder">Sélectionez une version ou dossier.</string>
+  </category>
+
+  <category name="ppsbi">
+    <string name="insert_formula">insérer la formule</string>
+    <string name="categories_filter">Filtre sur les catégories</string>
+    <string name="products_filter">Filtre produits</string>
+    <string name="clients_filter">Filtre clients</string>
+    <string name="adjustment_filter">Filtre ajustements</string>
+    <string name="title">Edition de la fonction Excel Financial BI</string>
+    <string name="msg_entity_selection">Merci de sélectionner une entité.</string>
+    <string name="msg_account_selection">Merci de sélectionner un compte.</string>
+    <string name="msg_invalid_version">La version sélectionnée n'est pas valide (dossier) ou bien aucune version n'est sélectionnée.</string>
+    <string name="msg_period_selection">Merci de sélectionner une période (Une version doit être sélectionnée avant de pouvoir choisir  une période).</string>
+  </category>
+
+  <category name="settings">
+    <string name="port_number">Numéro de port</string>
+    <string name="server_address">Adresse du serveur</string>
+    <string name="display_options">Options d'affichage</string>
+    <string name="report_format">Format des rapports</string>
+    <string name="preferences">Préférences</string>
+    <string name="consolidation_currency">Devise de consolidation</string>
+    <string name="settings">Paramètres</string>
+    <string name="format_preview">Prévisualisation du format</string>
+    <string name="text_color">Couleur du texte</string>
+    <string name="background_color">Couleur du fonds</string>
+    <string name="bold">Gras</string>
+    <string name="italic">Italique</string>
+    <string name="border">Bordures</string>
+    <string name="title">Titre</string>
+    <string name="important">Important</string>
+    <string name="normal">Normal</string>
+    <string name="detail">Détail</string>
+
+  </category>
 
 
-
+  
+  
+  
   <category name="general">
     <string name="account">Compte</string>
     <string name="entity">Entity</string>
@@ -256,6 +338,7 @@
   </category>
 
 </category>
+
 
 <!-- 
   Category name: forbidden character: '.'

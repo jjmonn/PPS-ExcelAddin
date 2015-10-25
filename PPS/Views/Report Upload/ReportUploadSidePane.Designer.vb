@@ -34,6 +34,8 @@ Partial Class ReportUploadSidePane
         '
         'm_accountTypeTextBox
         '
+        Me.m_accountTypeTextBox.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.m_accountTypeTextBox.BackColor = System.Drawing.Color.White
         Me.m_accountTypeTextBox.BoundsOffset = New System.Drawing.Size(1, 1)
         Me.m_accountTypeTextBox.ControlBorderColor = System.Drawing.Color.FromArgb(CType(CType(39, Byte), Integer), CType(CType(39, Byte), Integer), CType(CType(39, Byte), Integer))
@@ -53,6 +55,8 @@ Partial Class ReportUploadSidePane
         '
         'm_accountTextBox
         '
+        Me.m_accountTextBox.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.m_accountTextBox.BackColor = System.Drawing.Color.White
         Me.m_accountTextBox.BoundsOffset = New System.Drawing.Size(1, 1)
         Me.m_accountTextBox.ControlBorderColor = System.Drawing.Color.FromArgb(CType(CType(39, Byte), Integer), CType(CType(39, Byte), Integer), CType(CType(39, Byte), Integer))
@@ -72,6 +76,8 @@ Partial Class ReportUploadSidePane
         '
         'm_formulaTextBox
         '
+        Me.m_formulaTextBox.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.m_formulaTextBox.Enabled = False
         Me.m_formulaTextBox.Location = New System.Drawing.Point(12, 106)
         Me.m_formulaTextBox.Multiline = True
@@ -81,6 +87,8 @@ Partial Class ReportUploadSidePane
         '
         'm_descriptionTextBox
         '
+        Me.m_descriptionTextBox.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.m_descriptionTextBox.Enabled = False
         Me.m_descriptionTextBox.Location = New System.Drawing.Point(14, 357)
         Me.m_descriptionTextBox.Multiline = True
@@ -154,7 +162,7 @@ Partial Class ReportUploadSidePane
         '
         'ReportUploadSidePane
         '
-        Me.ClientSize = New System.Drawing.Size(280, 830)
+        Me.ClientSize = New System.Drawing.Size(280, 780)
         Me.Controls.Add(Me.m_descriptionTextBox)
         Me.Controls.Add(Me.m_formulaTextBox)
         Me.Controls.Add(Me.m_accountTypeTextBox)

@@ -25,7 +25,6 @@ Class AxisFilterStructView
 
 #Region "Instances"
 
-    Private m_newFilterUI As NewFilterUI
     Private m_controller As AxisFiltersController
     Private m_filtersTV As vTreeView
     Private m_axisId As Int32
@@ -48,7 +47,6 @@ Class AxisFilterStructView
         VPanel2.Content.Controls.Add(p_axisFiltersTV)
         p_axisFiltersTV.Dock = DockStyle.Fill
         m_controller = p_controller
-        m_newFilterUI = New NewFilterUI(p_controller, p_filtersNode)
         m_filtersTV.ContextMenuStrip = m_structureTreeviewRightClickMenu
 
         AddHandler m_filtersTV.KeyDown, AddressOf FiltersTV_KeyDown
