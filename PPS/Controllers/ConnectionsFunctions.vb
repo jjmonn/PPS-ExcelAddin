@@ -125,18 +125,13 @@ Friend Class ConnectionsFunctions
 
     Private Sub InitializeGlobalModels()
 
+        AddHandler GlobalVariables.AxisElems.ObjectInitialized, AddressOf AfterAxisElemInit
+        AddHandler GlobalVariables.AxisFilters.ObjectInitialized, AddressOf AfterAxisFilterInit
         AddHandler GlobalVariables.FModelingsAccounts.ObjectInitialized, AddressOf AfterFModelingAccountsInit
         AddHandler GlobalVariables.Accounts.ObjectInitialized, AddressOf AfterAccountsInit
         AddHandler GlobalVariables.Entities.ObjectInitialized, AddressOf AfterEntitiesInit
         AddHandler GlobalVariables.Filters.ObjectInitialized, AddressOf AfterFiltersInit
         AddHandler GlobalVariables.FiltersValues.ObjectInitialized, AddressOf AfterFiltersValuesInit
-        AddHandler GlobalVariables.Clients.ObjectInitialized, AddressOf AfterClientsInit
-        AddHandler GlobalVariables.Products.ObjectInitialized, AddressOf AfterProductsInit
-        AddHandler GlobalVariables.Adjustments.ObjectInitialized, AddressOf AfterAdjustmentsInit
-        AddHandler GlobalVariables.EntitiesFilters.ObjectInitialized, AddressOf AfterEntitiesFiltersInit
-        AddHandler GlobalVariables.ClientsFilters.ObjectInitialized, AddressOf AfterClientsFiltersInit
-        AddHandler GlobalVariables.ProductsFilters.ObjectInitialized, AddressOf AfterProductsFiltersInit
-        AddHandler GlobalVariables.AdjustmentsFilters.ObjectInitialized, AddressOf AfterAdjustmentsFiltersInit
         AddHandler GlobalVariables.Versions.ObjectInitialized, AddressOf AfterFactsVersionsInit
         AddHandler GlobalVariables.Currencies.ObjectInitialized, AddressOf AfterCurrenciesInit
         AddHandler GlobalVariables.RatesVersions.ObjectInitialized, AddressOf AfterRatesVersionsInit
@@ -151,13 +146,6 @@ Friend Class ConnectionsFunctions
         globalVariablesInitFlags.Add(GlobalEnums.GlobalModels.ENTITIES, False)
         globalVariablesInitFlags.Add(GlobalEnums.GlobalModels.FILTERS, False)
         globalVariablesInitFlags.Add(GlobalEnums.GlobalModels.FILTERSVALUES, False)
-        globalVariablesInitFlags.Add(GlobalEnums.GlobalModels.CLIENTS, False)
-        globalVariablesInitFlags.Add(GlobalEnums.GlobalModels.PRODUCTS, False)
-        globalVariablesInitFlags.Add(GlobalEnums.GlobalModels.ADJUSTMENTS, False)
-        globalVariablesInitFlags.Add(GlobalEnums.GlobalModels.ENTITIESFILTERS, False)
-        globalVariablesInitFlags.Add(GlobalEnums.GlobalModels.CLIENTSFILTERS, False)
-        globalVariablesInitFlags.Add(GlobalEnums.GlobalModels.PRODUCTSFILTERS, False)
-        globalVariablesInitFlags.Add(GlobalEnums.GlobalModels.ADJUSTMENTSFILTERS, False)
         globalVariablesInitFlags.Add(GlobalEnums.GlobalModels.FACTSVERSIONS, False)
         globalVariablesInitFlags.Add(GlobalEnums.GlobalModels.CURRENCIES, False)
         globalVariablesInitFlags.Add(GlobalEnums.GlobalModels.RATESVERSIONS, False)
@@ -168,6 +156,8 @@ Friend Class ConnectionsFunctions
         globalVariablesInitFlags.Add(GlobalEnums.GlobalModels.GROUP, False)
         globalVariablesInitFlags.Add(GlobalEnums.GlobalModels.GROUPALLOWEDENTITY, False)
         globalVariablesInitFlags.Add(GlobalEnums.GlobalModels.FMODELINGACCOUNT, False)
+        globalVariablesInitFlags.Add(GlobalEnums.GlobalModels.AXIS_ELEM, False)
+        globalVariablesInitFlags.Add(GlobalEnums.GlobalModels.AXIS_FILTER, False)
 
     End Sub
 
@@ -209,6 +199,20 @@ Friend Class ConnectionsFunctions
 
 #Region "Call backs global variables (CRUDs) Init"
 
+    Private Sub AfterAxisFilterInit()
+
+        globalVariablesInitFlags(GlobalEnums.GlobalModels.AXIS_FILTER) = True
+        globalInitFlag = CheckGlobalVariablesInitFlag()
+
+    End Sub
+
+    Private Sub AfterAxisElemInit()
+
+        globalVariablesInitFlags(GlobalEnums.GlobalModels.AXIS_ELEM) = True
+        globalInitFlag = CheckGlobalVariablesInitFlag()
+
+    End Sub
+
     Private Sub AfterFModelingAccountsInit()
 
         globalVariablesInitFlags(GlobalEnums.GlobalModels.FMODELINGACCOUNT) = True
@@ -240,55 +244,6 @@ Friend Class ConnectionsFunctions
     Private Sub AfterFiltersValuesInit()
 
         globalVariablesInitFlags(GlobalEnums.GlobalModels.FILTERSVALUES) = True
-        globalInitFlag = CheckGlobalVariablesInitFlag()
-
-    End Sub
-
-    Private Sub AfterClientsInit()
-
-        globalVariablesInitFlags(GlobalEnums.GlobalModels.CLIENTS) = True
-        globalInitFlag = CheckGlobalVariablesInitFlag()
-
-    End Sub
-
-    Private Sub AfterProductsInit()
-
-        globalVariablesInitFlags(GlobalEnums.GlobalModels.PRODUCTS) = True
-        globalInitFlag = CheckGlobalVariablesInitFlag()
-
-    End Sub
-
-    Private Sub AfterAdjustmentsInit()
-
-        globalVariablesInitFlags(GlobalEnums.GlobalModels.ADJUSTMENTS) = True
-        globalInitFlag = CheckGlobalVariablesInitFlag()
-
-    End Sub
-
-    Private Sub AfterEntitiesFiltersInit()
-
-        globalVariablesInitFlags(GlobalEnums.GlobalModels.ENTITIESFILTERS) = True
-        globalInitFlag = CheckGlobalVariablesInitFlag()
-
-    End Sub
-
-    Private Sub AfterClientsFiltersInit()
-
-        globalVariablesInitFlags(GlobalEnums.GlobalModels.CLIENTSFILTERS) = True
-        globalInitFlag = CheckGlobalVariablesInitFlag()
-
-    End Sub
-
-    Private Sub AfterProductsFiltersInit()
-
-        globalVariablesInitFlags(GlobalEnums.GlobalModels.PRODUCTSFILTERS) = True
-        globalInitFlag = CheckGlobalVariablesInitFlag()
-
-    End Sub
-
-    Private Sub AfterAdjustmentsFiltersInit()
-
-        globalVariablesInitFlags(GlobalEnums.GlobalModels.ADJUSTMENTSFILTERS) = True
         globalInitFlag = CheckGlobalVariablesInitFlag()
 
     End Sub

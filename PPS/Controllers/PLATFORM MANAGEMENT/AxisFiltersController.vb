@@ -101,6 +101,8 @@ Friend Class AxisFiltersController
         m_isEditingFiltersStructure = True
         GlobalVariables.Filters.CMSG_CREATE_FILTER(ht)
 
+        Return True
+
     End Function
 
     Friend Sub UpdateFilter(ByRef filterId As Int32, ByRef field As String, ByRef value As Object)

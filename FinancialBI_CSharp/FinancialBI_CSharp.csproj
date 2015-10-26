@@ -62,6 +62,7 @@
     <Compile Include="Network\Core\NetworkManager.cs" />
     <Compile Include="Network\Core\ServerMessage.cs" />
     <Compile Include="Network\CRUD\AxisElem.cs" />
+    <Compile Include="Network\CRUD\AxisFilter.cs" />
     <Compile Include="Network\CRUD\CRUDEntity.cs" />
     <Compile Include="Network\CRUD\HierarchyCRUDEntity.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -25,7 +25,7 @@ Imports System.Windows.Forms
 Imports AddinExpress.MSO
 Imports Excel = Microsoft.Office.Interop.Excel
 Imports System.Collections.Generic
-
+Imports CRUD
 
 'Add-in Express Add-in Module"
 <GuidAttribute("C5985605-3A21-426D-8DC3-B38EEBDA50C8"), ProgIdAttribute("FinancialBI.AddinModule")> _
@@ -1284,6 +1284,8 @@ Public Class AddinModule
         GlobalVariables.Groups = New Group
         GlobalVariables.GroupAllowedEntities = New GroupAllowedEntity
         GlobalVariables.FModelingsAccounts = New FModelingAccount
+        GlobalVariables.AxisElems = New AxisElemManager
+        GlobalVariables.AxisFilters = New AxisFilterManager
 
         ' Financial Bi User Defined Function
         GlobalVariables.GlobalPPSBIController = New PPSBIController
@@ -1702,11 +1704,11 @@ Public Class AddinModule
     Friend Shared Sub loadDropDownsSubmissionButtons()
 
         GlobalVariables.ClientsIDDropDown.Items.Clear()
-        For Each client_id As Int32 In GlobalVariables.Clients.GetAxisDictionary().Keys
-            If GlobalVariables.Clients.GetAxis(client_id) Is Nothing Then Continue For
+        For Each client_id As Int32 In GlobalVariables.AxisElems.GetAxisElemDictionary(AxisType.Client).Keys
+            If GlobalVariables.AxisElems.GetAxisElem(AxisType.Client, client_id) Is Nothing Then Continue For
             AddButtonToDropDown(GlobalVariables.ClientsIDDropDown, _
                                 client_id, _
-                                GlobalVariables.Clients.GetAxis(client_id).Name)
+                                GlobalVariables.AxisElems.GetAxisElem(AxisType.Client, client_id).Name)
         Next
         GlobalVariables.ClientsIDDropDown.SelectedItemId = DEFAULT_ANALYSIS_AXIS_ID
         GlobalVariables.ClientsIDDropDown.Invalidate()
@@ -1714,21 +1716,21 @@ Public Class AddinModule
         '  GlobalVariables.ClientsIDDropDown. = GlobalVariables.Clients.axis_hash(DEFAULT_ANALYSIS_AXIS_ID)(NAME_VARIABLE)
 
         GlobalVariables.ProductsIDDropDown.Items.Clear()
-        For Each product_id As Int32 In GlobalVariables.Products.GetAxisDictionary().Keys
-            If GlobalVariables.Clients.GetAxis(product_id) Is Nothing Then Continue For
+        For Each product_id As Int32 In GlobalVariables.AxisElems.GetAxisElemDictionary(AxisType.Product).Keys
+            If GlobalVariables.AxisElems.GetAxisElem(AxisType.Client, product_id) Is Nothing Then Continue For
             AddButtonToDropDown(GlobalVariables.ProductsIDDropDown, _
                                 product_id, _
-                                GlobalVariables.Products.GetAxis(product_id).Name)
+                                GlobalVariables.AxisElems.GetAxisElem(AxisType.Product, product_id).Name)
         Next
         GlobalVariables.ProductsIDDropDown.SelectedItemId = DEFAULT_ANALYSIS_AXIS_ID
         '    GlobalVariables.ProductsIDDropDown.Caption = GlobalVariables.Products.axis_hash(DEFAULT_ANALYSIS_AXIS_ID)(NAME_VARIABLE)
 
         GlobalVariables.AdjustmentIDDropDown.Items.Clear()
-        For Each adjustment_id As Int32 In GlobalVariables.Adjustments.GetAxisDictionary().Keys
-            If GlobalVariables.Clients.GetAxis(adjustment_id) Is Nothing Then Continue For
+        For Each adjustment_id As Int32 In GlobalVariables.AxisElems.GetAxisElemDictionary(AxisType.Adjustment).Keys
+            If GlobalVariables.AxisElems.GetAxisElem(AxisType.Client, adjustment_id) Is Nothing Then Continue For
             AddButtonToDropDown(GlobalVariables.AdjustmentIDDropDown, _
                                 adjustment_id, _
-                                GlobalVariables.Adjustments.GetAxis(adjustment_id).Name)
+                                GlobalVariables.AxisElems.GetAxisElem(AxisType.Adjustment, adjustment_id).Name)
         Next
         GlobalVariables.AdjustmentIDDropDown.SelectedItemId = DEFAULT_ANALYSIS_AXIS_ID
         '  GlobalVariables.AdjustmentIDDropDown.Caption = GlobalVariables.Adjustments.axis_hash(DEFAULT_ANALYSIS_AXIS_ID)(NAME_VARIABLE)

@@ -39,7 +39,7 @@ Friend Class AxisFiltersView
         m_controller = p_controller
         m_axisId = p_axidId
         m_filtersNode = p_filtersNode
-        AxisFilter.LoadFvTv(m_filtersFiltersValuesTV, m_filtersNode, m_axisId)
+        AxisFilterManager.LoadFvTv(m_filtersFiltersValuesTV, m_filtersNode, m_axisId)
         For Each node As vTreeNode In m_filtersFiltersValuesTV.Nodes
             node.Value = AxisFiltersController.m_FilterTag & node.Value
         Next
@@ -74,7 +74,7 @@ Friend Class AxisFiltersView
 
 #Region "Interface"
 
-    
+
     Delegate Sub UpdateFiltersValuesTV_Delegate()
     Friend Sub UpdateFiltersValuesTV()
 
@@ -83,7 +83,7 @@ Friend Class AxisFiltersView
             Me.Invoke(MyDelegate, New Object() {})
         Else
             Dim TVExpansionTemp As Dictionary(Of String, Boolean) = VTreeViewUtil.SaveNodesExpansionsLevel(m_filtersFiltersValuesTV)
-            AxisFilter.LoadFvTv(m_filtersFiltersValuesTV, m_filtersNode, m_axisId)
+            AxisFilterManager.LoadFvTv(m_filtersFiltersValuesTV, m_filtersNode, m_axisId)
             For Each node As vTreeNode In m_filtersFiltersValuesTV.Nodes
                 node.Value = AxisFiltersController.m_FilterTag & node.Value
             Next

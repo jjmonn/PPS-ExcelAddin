@@ -84,6 +84,8 @@ Friend Class GlobalVariables
     Friend Shared Groups As Group
     Friend Shared GroupAllowedEntities As GroupAllowedEntity
     Friend Shared FModelingsAccounts As FModelingAccount
+    Friend Shared AxisElems As AxisElemManager
+    Friend Shared AxisFilters As AxisFilterManager
 
 #End Region
 

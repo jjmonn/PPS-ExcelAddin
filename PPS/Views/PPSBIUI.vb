@@ -12,8 +12,7 @@ Imports System.Windows.Forms
 Imports System.Collections.Generic
 Imports System.Collections
 Imports VIBlend.WinForms.Controls
-
-
+Imports CRUD
 
 Friend Class PPSBI_UI
 
@@ -51,9 +50,9 @@ Friend Class PPSBI_UI
         GlobalVariables.Entities.LoadEntitiesTV(EntityTreeBox.TreeView)
         GlobalVariables.Accounts.LoadAccountsTV(AccountTreeBox.TreeView)
         GlobalVariables.Versions.LoadVersionsTV(VersionTreeBox.TreeView)
-        GlobalVariables.Clients.LoadAxisTree(ClientsTreeviewBox.TreeView)
-        GlobalVariables.Products.LoadAxisTree(ProductsTreeviewBox.TreeView)
-        GlobalVariables.Adjustments.LoadAxisTree(AdjustmentsTreeviewBox.TreeView)
+        GlobalVariables.AxisElems.LoadAxisTree(AxisType.Client, ClientsTreeviewBox.TreeView)
+        GlobalVariables.AxisElems.LoadAxisTree(AxisType.Product, ProductsTreeviewBox.TreeView)
+        GlobalVariables.AxisElems.LoadAxisTree(AxisType.Adjustment, AdjustmentsTreeviewBox.TreeView)
 
         EntityTreeBox.DropDownWidth = EntityTreeBox.Width
         AccountTreeBox.DropDownWidth = AccountTreeBox.Width
@@ -85,7 +84,7 @@ Friend Class PPSBI_UI
                               ByRef axisName As String)
 
         Dim axisNode As VIBlend.WinForms.Controls.vTreeNode = VTreeViewUtil.AddNode(axisId, axisName, CategoriesFiltersTreebox.TreeView)
-        AxisFilter.LoadFvTv(axisNode, axisId)
+        AxisFilterManager.LoadFvTv(axisNode, axisId)
 
     End Sub
 

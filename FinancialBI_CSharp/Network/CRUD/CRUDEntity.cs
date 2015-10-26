@@ -4,8 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-public interface CRUDEntity
+namespace CRUD
 {
-  UInt32 Id { get; }
-  void Dump(ByteBuffer p_packet, bool p_includeId);
+  public interface CRUDEntity
+  {
+    UInt32 Id { get; }
+    void Dump(ByteBuffer p_packet, bool p_includeId);
+  }
 }

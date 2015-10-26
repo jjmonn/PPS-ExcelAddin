@@ -20,6 +20,7 @@ Imports System.Collections
 Imports System.Linq
 Imports VIBlend.Utilities
 Imports VIBlend.WinForms.Controls
+Imports CRUD
 
 
 
@@ -97,25 +98,25 @@ Friend Class ControllingUIController
         Dim clientsNode As vTreeNode = VTreeViewUtil.AddNode(Computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.CLIENTS, _
                                                              ControllingUI_2.CLIENTS_CODE, _
                                                              m_filtersNodes)
-        For Each clientId As Int32 In GlobalVariables.Clients.GetAxisDictionary().Keys
-            If GlobalVariables.Clients.GetAxis(clientId) Is Nothing Then Continue For
-            VTreeViewUtil.AddNode(clientId, GlobalVariables.Clients.GetAxis(clientId).Name, clientsNode)
+        For Each clientId As Int32 In GlobalVariables.AxisElems.GetAxisElemDictionary(AxisType.Client).Keys
+            If GlobalVariables.AxisElems.GetAxisElem(AxisType.Client, clientId) Is Nothing Then Continue For
+            VTreeViewUtil.AddNode(clientId, GlobalVariables.AxisElems.GetAxisElem(AxisType.Client, clientId).Name, clientsNode)
         Next
 
         ' Load Products Nodes
         Dim productsNode As vTreeNode = VTreeViewUtil.AddNode(computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.PRODUCTS, _
                                                               ControllingUI_2.PRODUCTS_CODE, _
                                                               m_filtersNodes)
-        For Each productId As Int32 In GlobalVariables.Products.GetAxisDictionary().Keys
-            If GlobalVariables.Products.GetAxis(productId) Is Nothing Then Continue For
-            VTreeViewUtil.AddNode(productId, GlobalVariables.Products.GetAxis(productId).Name, productsNode)
+        For Each productId As Int32 In GlobalVariables.AxisElems.GetAxisElemDictionary(AxisType.Product).Keys
+            If GlobalVariables.AxisElems.GetAxisElem(AxisType.Product, productId) Is Nothing Then Continue For
+            VTreeViewUtil.AddNode(productId, GlobalVariables.AxisElems.GetAxisElem(AxisType.Product, productId).Name, productsNode)
         Next
 
         ' Load Adjustment Nodes
         Dim adjustmentsNode As vTreeNode = VTreeViewUtil.AddNode(computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.ADJUSTMENTS, _
                                                                  ControllingUI_2.ADJUSTMENT_CODE, _
                                                                  m_filtersNodes)
-        For Each elem In GlobalVariables.Adjustments.GetAxisDictionary()
+        For Each elem In GlobalVariables.AxisElems.GetAxisElemDictionary(AxisType.Adjustment)
             VTreeViewUtil.AddNode(elem.Value.Id, elem.Value.Name, adjustmentsNode)
         Next
 

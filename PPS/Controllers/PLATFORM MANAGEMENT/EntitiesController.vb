@@ -20,8 +20,7 @@ Imports System.Collections
 Imports System.Collections.Generic
 Imports VIBlend.WinForms.DataGridView
 Imports VIBlend.WinForms.Controls
-
-
+Imports CRUD
 
 Friend Class EntitiesController
 
@@ -57,8 +56,8 @@ Friend Class EntitiesController
         AddHandler GlobalVariables.Entities.Read, AddressOf AfterEntityRead
 
         ' Entities Filters CRUD Events
-        AddHandler GlobalVariables.EntitiesFilters.Read, AddressOf AfterEntityFilterRead
-        AddHandler GlobalVariables.EntitiesFilters.UpdateEvent, AddressOf AfterEntityFilterUpdate
+        AddHandler GlobalVariables.AxisFilters.Read, AddressOf AfterEntityFilterRead
+        AddHandler GlobalVariables.AxisFilters.UpdateEvent, AddressOf AfterEntityFilterUpdate
 
     End Sub
 
@@ -66,7 +65,7 @@ Friend Class EntitiesController
 
         GlobalVariables.Entities.LoadEntitiesTV(entitiesTV)
         GlobalVariables.Filters.LoadFiltersTV(entitiesFilterTV, GlobalEnums.AnalysisAxis.ENTITIES)
-        AxisFilter.LoadFvTv(entitiesFilterValuesTV, GlobalEnums.AnalysisAxis.ENTITIES)
+        AxisFilterManager.LoadFvTv(entitiesFilterValuesTV, GlobalEnums.AnalysisAxis.ENTITIES)
 
     End Sub
 
@@ -81,8 +80,8 @@ Friend Class EntitiesController
 
     Public Sub close()
 
-        RemoveHandler GlobalVariables.EntitiesFilters.Read, AddressOf AfterEntityFilterRead
-        RemoveHandler GlobalVariables.EntitiesFilters.UpdateEvent, AddressOf AfterEntityFilterUpdate
+        RemoveHandler GlobalVariables.AxisFilters.Read, AddressOf AfterEntityFilterRead
+        RemoveHandler GlobalVariables.AxisFilters.UpdateEvent, AddressOf AfterEntityFilterUpdate
         SendNewPositionsToModel()
         View.Dispose()
 
@@ -145,15 +144,41 @@ Friend Class EntitiesController
 
     End Sub
 
-    Friend Sub UpdateFilterValue(ByRef entityId As Int32, _
-                                 ByRef filterId As Int32, _
-                                 ByRef filterValueId As Int32)
+    Friend Sub UpdateFilterValue(ByRef p_axisElemId As Int32, _
+                             ByRef filterId As Int32, _
+                             ByRef filterValueId As Int32)
+        For Each axisFilter As AxisFilter In GetAxisFilterDictionary().Values
+            If axisFilter.FilterId = filterId Then
+                Dim l_copy = GetAxisFilterCopy(axisFilter.Id)
+                l_copy.FilterValueId = filterValueId
+                UpdateFilterValue(l_copy)
+            End If
+        Next
+    End Sub
 
-        If filterId = GlobalVariables.Filters.GetMostNestedFilterId(filterId) Then
-            GlobalVariables.EntitiesFilters.CMSG_UPDATE_entity_FILTER(entityId, filterId, filterValueId)
+    Friend Sub UpdateFilterValue(ByRef p_axisFilter As AxisFilter)
+
+        If p_axisFilter.FilterId = GlobalVariables.Filters.GetMostNestedFilterId(p_axisFilter.FilterId) Then
+            GlobalVariables.AxisFilters.CMSG_UPDATE_AXIS_FILTER(p_axisFilter)
         End If
 
     End Sub
+
+    Friend Function GetAxisFilter(ByVal p_axisFilterId As UInt32) As AxisFilter
+        Return GlobalVariables.AxisFilters.GetAxisFilter(AxisType.Entities, p_axisFilterId)
+    End Function
+
+    Friend Function GetAxisFilterCopy(ByVal p_axisId As UInt32) As AxisFilter
+        Dim l_axis = GetAxisFilter(p_axisId)
+
+        If l_axis Is Nothing Then Return Nothing
+        Return l_axis.Clone()
+    End Function
+
+    Friend Function GetAxisFilterDictionary() As SortedDictionary(Of Int32, AxisFilter)
+        Return GlobalVariables.AxisFilters.GetAxisFilterDictionary(AxisType.Entities)
+    End Function
+
 
 
 #End Region
@@ -197,10 +222,11 @@ Friend Class EntitiesController
 
     End Sub
 
-    Private Sub AfterEntityFilterRead(ByRef status As Boolean, ByRef entityFilterHT As Hashtable)
+    Private Sub AfterEntityFilterRead(ByRef status As ErrorMessage, ByRef p_axisFilter As AxisFilter)
 
-        If (status = True) Then
-            Dim entityId As Int32 = entityFilterHT(ENTITY_ID_VARIABLE)
+        If (status = ErrorMessage.SUCCESS) Then
+            If p_axisFilter.Axis <> AxisType.Entities Then Exit Sub
+            Dim entityId As Int32 = p_axisFilter.Id
             If GlobalVariables.Entities.entities_hash.ContainsKey(entityId) Then
                 View.LoadInstanceVariables()
                 View.UpdateEntity(GlobalVariables.Entities.entities_hash(entityId))
@@ -209,12 +235,13 @@ Friend Class EntitiesController
 
     End Sub
 
-    Private Sub AfterEntityFilterUpdate(ByRef status As Boolean, _
-                                        ByRef entityId As Int32, _
-                                        ByRef filterId As Int32, _
-                                        ByRef filterValueId As Int32)
-        If status = False Then
-            View.UpdateEntity(GlobalVariables.Entities.entities_hash(entityId))
+    Private Sub AfterEntityFilterUpdate(ByRef status As ErrorMessage, _
+                                        ByRef axisType As AxisType, _
+                                        ByRef axisFilterId As Int32)
+        If status <> ErrorMessage.SUCCESS Then
+            If axisType <> CRUD.AxisType.Entities Then Exit Sub
+            Dim l_axisFilter As AxisFilter = GlobalVariables.AxisFilters.GetAxisFilter(axisType, axisFilterId)
+            View.UpdateEntity(GlobalVariables.Entities.entities_hash(l_axisFilter.AxisElemId))
             MsgBox("The Entity could be updated.")
             ' catch and display message
         End If

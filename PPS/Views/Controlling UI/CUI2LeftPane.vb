@@ -1,6 +1,7 @@
 ﻿Imports VIBlend.WinForms.Controls
 Imports System.Windows.Forms
 Imports System.Collections.Generic
+Imports CRUD
 
 ' CUI2LeftPane.vb
 '
@@ -76,14 +77,14 @@ Public Class CUI2LeftPane
     Private Sub LoadTvs()
 
         GlobalVariables.Entities.LoadEntitiesTV(entitiesTV)
-        GlobalVariables.Clients.LoadAxisTree(clientsTV)
-        GlobalVariables.Products.LoadAxisTree(productsTV)
-        GlobalVariables.Adjustments.LoadAxisTree(adjustmentsTV)
+        GlobalVariables.AxisElems.LoadAxisTree(AxisType.Client, clientsTV)
+        GlobalVariables.AxisElems.LoadAxisTree(AxisType.Product, productsTV)
+        GlobalVariables.AxisElems.LoadAxisTree(AxisType.Adjustment, adjustmentsTV)
 
-        AxisFilter.LoadFvTv(entitiesFiltersTV, GlobalEnums.AnalysisAxis.ENTITIES)
-        AxisFilter.LoadFvTv(clientsFiltersTV, GlobalEnums.AnalysisAxis.CLIENTS)
-        AxisFilter.LoadFvTv(productsFiltersTV, GlobalEnums.AnalysisAxis.PRODUCTS)
-        AxisFilter.LoadFvTv(adjustmentsFiltersTV, GlobalEnums.AnalysisAxis.ADJUSTMENTS)
+        AxisFilterManager.LoadFvTv(entitiesFiltersTV, GlobalEnums.AnalysisAxis.ENTITIES)
+        AxisFilterManager.LoadFvTv(clientsFiltersTV, GlobalEnums.AnalysisAxis.CLIENTS)
+        AxisFilterManager.LoadFvTv(productsFiltersTV, GlobalEnums.AnalysisAxis.PRODUCTS)
+        AxisFilterManager.LoadFvTv(adjustmentsFiltersTV, GlobalEnums.AnalysisAxis.ADJUSTMENTS)
 
         VTreeViewUtil.CheckStateAllNodes(entitiesTV, True)
         VTreeViewUtil.CheckStateAllNodes(clientsTV, True)

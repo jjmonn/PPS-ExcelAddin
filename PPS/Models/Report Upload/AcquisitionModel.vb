@@ -29,6 +29,7 @@ Imports VIBlend.Utilities
 Imports System.Drawing
 Imports Microsoft.Office.Interop
 Imports System.Linq
+Imports CRUD
 
 
 Friend Class AcquisitionModel

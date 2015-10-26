@@ -21,7 +21,7 @@ Imports Microsoft.Office.Interop
 Imports System.Collections
 Imports System.Collections.Generic
 Imports System.Windows.Forms
-
+Imports CRUD
 
 Public Class PPSBIController
 
@@ -107,9 +107,9 @@ Public Class PPSBIController
 
         ' Axis Filters building
         Dim axis_filters = New Dictionary(Of Int32, List(Of Int32))()
-        BuildAxisFilter(p_clients_filters, GlobalVariables.Clients, GlobalEnums.AnalysisAxis.CLIENTS, axis_filters)
-        BuildAxisFilter(p_products_filters, GlobalVariables.Products, GlobalEnums.AnalysisAxis.PRODUCTS, axis_filters)
-        BuildAxisFilter(p_adjustments_filters, GlobalVariables.Adjustments, GlobalEnums.AnalysisAxis.ADJUSTMENTS, axis_filters)
+        BuildAxisFilter(p_clients_filters, GlobalVariables.AxisElems, AxisType.Client, axis_filters)
+        BuildAxisFilter(p_products_filters, GlobalVariables.AxisElems, AxisType.Product, axis_filters)
+        BuildAxisFilter(p_adjustments_filters, GlobalVariables.AxisElems, AxisType.Adjustment, axis_filters)
 
         ' -> filter token to be created !!!
         Dim token As String = version_id & Computer.TOKEN_SEPARATOR & _
@@ -324,20 +324,20 @@ ReturnError:
 
     Private Sub BuildAxisFilter(ByRef p_axis_filters_object As Object, _
                                 ByRef CRUDModel As AxisElemManager, _
-                                ByRef axisId As Int32, _
+                                ByRef axisType As AxisType, _
                                 ByRef axis_filters As Dictionary(Of Int32, List(Of Int32)))
 
         Dim axisFiltersList As New List(Of Int32)
         For Each axisFilter In p_axis_filters_object
             Dim axisName As String = ReturnValueFromRange(axisFilter)
             If Not axisName Is Nothing Then
-                Dim axisValueId As Int32 = CRUDModel.GetAxisValueId(axisName)
+                Dim axisValueId As Int32 = CRUDModel.GetAxisValueId(axisType, axisName)
                 If axisValueId <> 0 Then
                     axisFiltersList.Add(axisValueId)
                 End If
             End If
         Next
-        If axisFiltersList.Count > 0 Then axis_filters.Add(axisId, axisFiltersList)
+        If axisFiltersList.Count > 0 Then axis_filters.Add(axisType, axisFiltersList)
 
     End Sub
 

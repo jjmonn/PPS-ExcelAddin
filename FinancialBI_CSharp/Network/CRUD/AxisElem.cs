@@ -4,61 +4,75 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-public class AxisElem : CRUDEntity, IComparable
+namespace CRUD
 {
-  public UInt32 Id { get; private set; }
-  public string Name { get; set; }
-  public Int32 ItemPosition { get; set; }
-
-  public AxisElem() { }
-  private AxisElem(UInt32 p_id)
+  public enum AxisType
   {
-    Id = p_id;
+    Entities = 1,
+    Client,
+    Product,
+    Adjustment,
   }
 
-  public static AxisElem BuildAxis(ByteBuffer p_packet)
+  public class AxisElem : CRUDEntity, IComparable
   {
-    AxisElem l_account = new AxisElem(p_packet.ReadUint32());
+    public UInt32 Id { get; private set; }
+    public string Name { get; set; }
+    public Int32 ItemPosition { get; set; }
+    public AxisType Axis { get; set; }
 
-    l_account.Name = p_packet.ReadString();
-    l_account.ItemPosition = p_packet.ReadInt32();
+    public AxisElem() { }
+    private AxisElem(UInt32 p_id)
+    {
+      Id = p_id;
+    }
 
-    return (l_account);
-  }
+    public static AxisElem BuildAxis(ByteBuffer p_packet)
+    {
+      AxisElem l_account = new AxisElem(p_packet.ReadUint32());
 
-  public void Dump(ByteBuffer p_packet, bool p_includeId)
-  {
-    if (p_includeId)
-      p_packet.WriteUint32(Id);
-    p_packet.WriteString(Name);
-    p_packet.WriteInt32(ItemPosition);
-  }
+      l_account.Name = p_packet.ReadString();
+      l_account.Axis = (AxisType)p_packet.ReadUint32();
+      l_account.ItemPosition = p_packet.ReadInt32();
 
-  public void CopyFrom(AxisElem p_model)
-  {
-    Name = p_model.Name;
-    ItemPosition = p_model.ItemPosition;
-  }
+      return (l_account);
+    }
 
-  public AxisElem Clone()
-  {
-    AxisElem l_clone = new AxisElem(Id);
+    public void Dump(ByteBuffer p_packet, bool p_includeId)
+    {
+      if (p_includeId)
+        p_packet.WriteUint32(Id);
+      p_packet.WriteString(Name);
+      p_packet.WriteUint32((UInt32)Axis);
+      p_packet.WriteInt32(ItemPosition);
+    }
 
-    l_clone.CopyFrom(this);
-    return (l_clone);
-  }
+    public void CopyFrom(AxisElem p_model)
+    {
+      Name = p_model.Name;
+      ItemPosition = p_model.ItemPosition;
+    }
 
-  public int CompareTo(object p_obj)
-  {
-    if (p_obj == null)
-      return 0;
-    AxisElem l_cmpAxis = p_obj as AxisElem;
+    public AxisElem Clone()
+    {
+      AxisElem l_clone = new AxisElem(Id);
 
-    if (l_cmpAxis == null)
-      return 0;
-    if (l_cmpAxis.ItemPosition > ItemPosition)
-      return -1;
-    else
-      return 1;
+      l_clone.CopyFrom(this);
+      return (l_clone);
+    }
+
+    public int CompareTo(object p_obj)
+    {
+      if (p_obj == null)
+        return 0;
+      AxisElem l_cmpAxis = p_obj as AxisElem;
+
+      if (l_cmpAxis == null)
+        return 0;
+      if (l_cmpAxis.ItemPosition > ItemPosition)
+        return -1;
+      else
+        return 1;
+    }
   }
 }

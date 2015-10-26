@@ -10,7 +10,7 @@
 
 Imports System.ComponentModel
 Imports System.Threading.Tasks
-
+Imports CRUD
 
 Friend Class PlatformMGTGeneralUI
 
@@ -79,7 +79,7 @@ Friend Class PlatformMGTGeneralUI
     Private Sub ClientsBT_Click(sender As Object, e As EventArgs) Handles ClientsBT.Click
 
         closeCurrentControl()
-        current_controller = New AxisController(GlobalVariables.Clients, GlobalVariables.ClientsFilters, GlobalEnums.AnalysisAxis.CLIENTS)
+        current_controller = New AxisController(GlobalVariables.AxisElems, GlobalVariables.AxisFilters, AxisType.Client)
         current_controller.addControlToPanel(Panel1, Me)
 
     End Sub
@@ -87,7 +87,7 @@ Friend Class PlatformMGTGeneralUI
     Private Sub ProductsBT_Click(sender As Object, e As EventArgs) Handles ProductsBT.Click
 
         closeCurrentControl()
-        current_controller = New AxisController(GlobalVariables.Products, GlobalVariables.ProductsFilters, GlobalEnums.AnalysisAxis.PRODUCTS)
+        current_controller = New AxisController(GlobalVariables.AxisElems, GlobalVariables.AxisFilters, AxisType.Product)
         current_controller.addControlToPanel(Panel1, Me)
 
     End Sub
@@ -127,7 +127,7 @@ Friend Class PlatformMGTGeneralUI
     Private Sub AdjustmentsBT_Click(sender As Object, e As EventArgs) Handles AdjustmentsBT.Click
 
         closeCurrentControl()
-        current_controller = New AxisController(GlobalVariables.Adjustments, GlobalVariables.AdjustmentsFilters, GlobalEnums.AnalysisAxis.ADJUSTMENTS)
+        current_controller = New AxisController(GlobalVariables.AxisElems, GlobalVariables.AxisFilters, AxisType.Adjustment)
         current_controller.addControlToPanel(Panel1, Me)
 
     End Sub

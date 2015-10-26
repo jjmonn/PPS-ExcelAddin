@@ -4,7 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-public interface HierarchyCRUDEntity : CRUDEntity
+namespace CRUD
 {
-  UInt32 ParentId { get; set;  }
+  public interface HierarchyCRUDEntity : CRUDEntity
+  {
+    UInt32 ParentId { get; set; }
+  }
 }

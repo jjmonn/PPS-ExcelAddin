@@ -22,7 +22,7 @@ Imports System.Drawing
 Imports System.ComponentModel
 Imports Microsoft.Office.Interop
 Imports VIBlend.WinForms.Controls
-
+Imports CRUD
 
 Friend Class AxisView
 

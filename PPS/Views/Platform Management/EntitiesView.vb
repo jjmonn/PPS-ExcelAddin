@@ -22,7 +22,7 @@ Imports System.Drawing
 Imports System.ComponentModel
 Imports Microsoft.Office.Interop
 Imports VIBlend.WinForms.Controls
-
+Imports CRUD
 
 Friend Class EntitiesView
 
@@ -432,7 +432,7 @@ Friend Class EntitiesView
         Dim combobox As New ComboBoxEditor
         combobox.DropDownList = True
         Dim columnItem As HierarchyItem = DataGridViewsUtil.GetHierarchyItemFromId(m_entitiesDataGridView.ColumnsHierarchy, filterNode.Value)
-        Dim filterValueId = GlobalVariables.EntitiesFilters.GetFilterValueId(CInt(filterNode.Value), entity_id)
+        Dim filterValueId = GlobalVariables.AxisFilters.GetFilterValueId(AxisType.Entities, CInt(filterNode.Value), entity_id)
         Dim filter_value_name As String = ""
         If filterValueId <> 0 Then
             filter_value_name = GlobalVariables.FiltersValues.filtervalues_hash(filterValueId)(NAME_VARIABLE)
@@ -449,7 +449,7 @@ Friend Class EntitiesView
             Next
         Else
             ' Child Filter
-            Dim parentFilterFilterValueId As Int32 = GlobalVariables.EntitiesFilters.GetFilterValueId(filterNode.Parent.Value, entity_id)     ' Child Filter Id
+            Dim parentFilterFilterValueId As Int32 = GlobalVariables.AxisFilters.GetFilterValueId(AxisType.Entities, filterNode.Parent.Value, entity_id)     ' Child Filter Id
             Dim filterValuesIds = GlobalVariables.FiltersValues.GetFilterValueIdsFromParentFilterValueIds({parentFilterFilterValueId})
             For Each Id As Int32 In filterValuesIds
                 combobox.Items.Add(GlobalVariables.FiltersValues.filtervalues_hash(Id)(NAME_VARIABLE))
