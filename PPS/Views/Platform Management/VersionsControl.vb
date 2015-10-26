@@ -174,10 +174,10 @@ Friend Class VersionsControl
     Private Sub DeleteVersion()
 
         If Not current_node Is Nothing Then
-            Dim confirm As Integer = MessageBox.Show("You are about to delete the version named: " + Chr(13) + Chr(13) + _
+            Dim confirm As Integer = MessageBox.Show(Local.GetValue("versions.msg_delete1") + Chr(13) + Chr(13) + _
                                                      current_node.Text + Chr(13) + Chr(13) + _
-                                                     "Do you confirm?" + Chr(13) + Chr(13), _
-                                                     "Version deleting confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+                                                     Local.GetValue("versions.msg_delete2") + Chr(13) + Chr(13), _
+                                                     Local.GetValue("versions.title_delete_confirmation"), MessageBoxButtons.YesNo, MessageBoxIcon.Question)
             If confirm = DialogResult.Yes Then
                 Controller.DeleteVersions(current_node)
                 MsgBox(Local.GetValue("facts_versions.msg_delete_successful"))

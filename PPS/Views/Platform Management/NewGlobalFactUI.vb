@@ -42,11 +42,11 @@ Friend Class NewGlobalFactUI
 
         Dim name As String = NameTB.Text
         If Len(name) < NAMES_MAX_LENGTH AndAlso Len(name) > 0 Then
-            If m_controller.IsUsedName(name) Then MsgBox("This name is already used for another fact or account") Else _
+            If m_controller.IsUsedName(name) Then MsgBox(Local.GetValue("global_facts.msg_name_already_taken")) Else _
                 m_controller.CreateFact(name)
             Me.Hide()
         Else
-            MsgBox("The Name cannot exceed " & NAMES_MAX_LENGTH & " characters")
+            MsgBox(Local.GetValue("general.msg_name_exceed1") & NAMES_MAX_LENGTH & Local.GetValue("general.msg_name_exceed1"))
         End If
 
     End Sub
