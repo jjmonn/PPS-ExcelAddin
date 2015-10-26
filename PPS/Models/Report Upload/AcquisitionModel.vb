@@ -271,7 +271,11 @@ Friend Class AcquisitionModel
         Else
             computationDataMap.Add(entityId, SingleComputer.GetDataMap)
         End If
-        RaiseEvent AfterOutputsComputed(GlobalVariables.Entities.entities_hash(entityId)(NAME_VARIABLE))
+        If GlobalVariables.Entities.entities_hash.ContainsKey(entityId) Then
+            RaiseEvent AfterOutputsComputed(GlobalVariables.Entities.entities_hash(entityId)(NAME_VARIABLE))
+        Else
+            RaiseEvent AfterOutputsComputed("")
+        End If
 
     End Sub
 

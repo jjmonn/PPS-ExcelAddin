@@ -89,7 +89,7 @@ Public Class ComputerInputEntity
             RaiseEvent ComputationAnswered(requestIdEntityIdDict(request_id), True)
             requestIdEntityIdDict.Remove(request_id)
         Else
-            RaiseEvent ComputationAnswered("", False)
+            RaiseEvent ComputationAnswered(0, False)
         End If
         NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_SOURCED_COMPUTE_RESULT, AddressOf SMSG_SOURCED_COMPUTE_RESULT)
         ' here ?!! riority high
