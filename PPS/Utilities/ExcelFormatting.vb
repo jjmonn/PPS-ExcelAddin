@@ -47,10 +47,10 @@ Friend Class ExcelFormatting
         Dim AccountsNameTypeDict As Hashtable = GlobalVariables.Accounts.GetAccountsDictionary(NAME_VARIABLE, ACCOUNT_TYPE_VARIABLE)
         Dim currencies_symbol_dict As Hashtable = GlobalVariables.Currencies.GetCurrenciesDict(ID_VARIABLE, CURRENCY_SYMBOL_VARIABLE)
         Dim formatsDictionary As New Dictionary(Of String, Formats.FinancialBIFormat)
-        formatsDictionary.Add("t", Formats.GetFormat("Title"))
-        formatsDictionary.Add("i", Formats.GetFormat("Important"))
-        formatsDictionary.Add("n", Formats.GetFormat("Normal"))
-        formatsDictionary.Add("d", Formats.GetFormat("Detail"))
+        formatsDictionary.Add("t", Formats.GetFormat("t"))
+        formatsDictionary.Add("i", Formats.GetFormat("i"))
+        formatsDictionary.Add("n", Formats.GetFormat("n"))
+        formatsDictionary.Add("d", Formats.GetFormat("d"))
 
         Dim formatCode As String
         For Each row As Excel.Range In inputRange.Rows

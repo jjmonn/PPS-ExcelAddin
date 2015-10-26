@@ -97,7 +97,7 @@ Public Class CUI2Visualization
             Dim MyDelegate As New FormatSerie_Delegate(AddressOf FormatSerie_ThreadSafe)
             Me.Invoke(MyDelegate, New Object() {p_chartIndex, p_serieColor, p_serieType, p_serieName, p_alpha})
         Else
-            ChartsUtilities.FormatSerie(m_chartTab(p_chartIndex).Series(p_serieName), My.Settings.chart1Serie1Color, My.Settings.chart1Serie1Type, p_alpha)
+            ChartsUtilities.FormatSerie(m_chartTab(p_chartIndex).Series(p_serieName), p_serieColor, p_serieType, p_alpha)
         End If
 
     End Sub

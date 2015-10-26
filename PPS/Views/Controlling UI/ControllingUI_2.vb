@@ -886,7 +886,7 @@ Friend Class ControllingUI_2
 
         If Me.accountsTV.InvokeRequired Then
             Dim MyDelegate As New ReloadAccountsTV_Delegate(AddressOf ReloadAccountsTV_ThreadSafe)
-            Me.Invoke(MyDelegate, New Object() {})
+            Me.accountsTV.Invoke(MyDelegate, New Object() {})
         Else
             GlobalVariables.Accounts.LoadAccountsTV(accountsTV)
         End If

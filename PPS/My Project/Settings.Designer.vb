@@ -452,18 +452,6 @@ Namespace My
         
         <Global.System.Configuration.UserScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("MediumBlue")>  _
-        Public Property titleBordersColor() As Global.System.Drawing.Color
-            Get
-                Return CType(Me("titleBordersColor"),Global.System.Drawing.Color)
-            End Get
-            Set
-                Me("titleBordersColor") = value
-            End Set
-        End Property
-        
-        <Global.System.Configuration.UserScopedSettingAttribute(),  _
-         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.Configuration.DefaultSettingValueAttribute("PowderBlue")>  _
         Public Property snapshotInputsBackColor() As Global.System.Drawing.Color
             Get
@@ -536,7 +524,7 @@ Namespace My
         
         <Global.System.Configuration.UserScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("9")>  _
+         Global.System.Configuration.DefaultSettingValueAttribute("0")>  _
         Public Property chart1Serie2AccountId() As Integer
             Get
                 Return CType(Me("chart1Serie2AccountId"),Integer)
@@ -879,6 +867,18 @@ Namespace My
             End Get
             Set
                 Me("serverIp") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("Black")>  _
+        Public Property titleBordersColor() As Global.System.Drawing.Color
+            Get
+                Return CType(Me("titleBordersColor"),Global.System.Drawing.Color)
+            End Get
+            Set
+                Me("titleBordersColor") = value
             End Set
         End Property
     End Class

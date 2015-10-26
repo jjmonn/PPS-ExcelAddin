@@ -101,9 +101,6 @@
     <Setting Name="detailBackColor" Type="System.Drawing.Color" Scope="User">
       <Value Profile="(Default)">192, 255, 255</Value>
     </Setting>
-    <Setting Name="titleBordersColor" Type="System.Drawing.Color" Scope="User">
-      <Value Profile="(Default)">MediumBlue</Value>
-    </Setting>
     <Setting Name="snapshotInputsBackColor" Type="System.Drawing.Color" Scope="User">
       <Value Profile="(Default)">PowderBlue</Value>
     </Setting>
@@ -123,7 +120,7 @@
       <Value Profile="(Default)">2</Value>
     </Setting>
     <Setting Name="chart1Serie2AccountId" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">9</Value>
+      <Value Profile="(Default)">0</Value>
     </Setting>
     <Setting Name="chart2Serie1AccountId" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">89</Value>
@@ -208,6 +205,9 @@
     </Setting>
     <Setting Name="serverIp" Type="System.String" Scope="User">
       <Value Profile="(Default)">52.19.112.46</Value>
+    </Setting>
+    <Setting Name="titleBordersColor" Type="System.Drawing.Color" Scope="User">
+      <Value Profile="(Default)">Black</Value>
     </Setting>
   </Settings>
 </SettingsFile>

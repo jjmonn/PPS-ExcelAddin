@@ -58,6 +58,9 @@ Friend Class ControllingUIController
     Private itemsDimensionsDict As Dictionary(Of HierarchyItem, Hashtable)
     Friend cellsUpdateNeeded As Boolean = True
 
+    ' constants
+    Private Const BASE_ALPHA As Single = 190
+
 #End Region
 
 
@@ -890,13 +893,13 @@ Friend Class ControllingUIController
 
         Select Case m_versionsDict.Count
             Case 1
-                FillChartsSeries(CInt(m_versionsDict.Keys(0)), "", xAxisValues, 100)
+                FillChartsSeries(CInt(m_versionsDict.Keys(0)), "", xAxisValues, BASE_ALPHA)
             Case Else
-                Dim alpha As Single = 100
+                Dim alpha As Single = BASE_ALPHA
                 For Each versionId As Int32 In m_versionsDict.Keys
-                    FillChartsSeries(CInt(m_versionsDict.Keys(0)), m_versionsDict(versionId), xAxisValues, alpha)
-                    alpha -= 15
-                    'If alpha < 60 Then Exit Select ' define as main alpha priority normal
+                    FillChartsSeries(versionId, m_versionsDict(versionId), xAxisValues, alpha)
+                    alpha -= 50
+                    If alpha < 60 Then Exit Select ' define as main alpha priority normal
                 Next
         End Select
 
