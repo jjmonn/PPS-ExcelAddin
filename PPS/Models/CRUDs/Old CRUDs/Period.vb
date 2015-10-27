@@ -41,7 +41,7 @@ Friend Class Period
                                          ByVal timeConfig As UInt16) As Int32()
 
         Dim periodsList As New List(Of Int32)
-        If timeConfig = GlobalEnums.TimeConfig.MONTHS Then
+        If timeConfig = CRUD.TimeConfig.MONTHS Then
             Dim yearId As Int32
             For Each monthId As Int32 In GetMonthsList(startPeriod, nbPeriod)
                 yearId = GetYearIdFromMonthID(monthId)
@@ -63,7 +63,7 @@ Friend Class Period
                 periodsList.Add(startPeriod)
                 year__ += 1
             Next
-        End If      
+        End If
         Return periodsList.ToArray
 
     End Function

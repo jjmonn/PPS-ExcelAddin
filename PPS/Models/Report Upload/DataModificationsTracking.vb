@@ -283,8 +283,8 @@ Friend Class DataModificationsTracking
 
         Dim periodIdentifyer As String = ""
         Select Case GlobalVariables.Versions.versions_hash(m_dataset.m_currentVersionId)(VERSIONS_TIME_CONFIG_VARIABLE)
-            Case GlobalEnums.TimeConfig.YEARS : periodIdentifyer = Computer.YEAR_PERIOD_IDENTIFIER
-            Case GlobalEnums.TimeConfig.MONTHS : periodIdentifyer = Computer.MONTH_PERIOD_IDENTIFIER
+            Case CRUD.TimeConfig.YEARS : periodIdentifyer = Computer.YEAR_PERIOD_IDENTIFIER
+            Case CRUD.TimeConfig.MONTHS : periodIdentifyer = Computer.MONTH_PERIOD_IDENTIFIER
         End Select
 
         For Each entity As String In m_dataset.m_entitiesValuesAddressDict.Keys

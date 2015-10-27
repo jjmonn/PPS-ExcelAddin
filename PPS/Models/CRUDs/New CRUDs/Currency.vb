@@ -13,12 +13,9 @@
 Imports System.Collections
 Imports System.Collections.Generic
 
-
-
-Friend Class Currency
+Friend Class CurrencyManager
 
 #Region "Instance variables"
-
 
     ' Variables
     Friend state_flag As Boolean

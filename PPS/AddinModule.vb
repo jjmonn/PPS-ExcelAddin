@@ -1275,7 +1275,7 @@ Public Class AddinModule
         GlobalVariables.Filters = New Filter
         GlobalVariables.FiltersValues = New FilterValue
         GlobalVariables.Versions = New Version
-        GlobalVariables.Currencies = New Currency
+        GlobalVariables.Currencies = New CurrencyManager
         GlobalVariables.RatesVersions = New RatesVersion
         GlobalVariables.GlobalFacts = New GlobalFact
         GlobalVariables.GlobalFactsDatas = New GlobalFactData

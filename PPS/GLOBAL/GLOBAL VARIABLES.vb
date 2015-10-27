@@ -75,7 +75,7 @@ Friend Class GlobalVariables
     Friend Shared Filters As Filter
     Friend Shared FiltersValues As FilterValue
     Friend Shared Versions As Version
-    Friend Shared Currencies As Currency
+    Friend Shared Currencies As CurrencyManager
     Friend Shared RatesVersions As RatesVersion
     Friend Shared GlobalFacts As GlobalFact
     Friend Shared GlobalFactsDatas As GlobalFactData

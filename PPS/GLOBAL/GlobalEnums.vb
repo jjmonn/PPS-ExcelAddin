@@ -40,13 +40,6 @@
 
     End Enum
 
-    Enum TimeConfig
-
-        YEARS = 1
-        MONTHS
-
-    End Enum
-
     Enum VersionComparisonConfig
 
         Y_VERSIONS_COMPARISON = 1

@@ -112,8 +112,8 @@ Friend Class AcquisitionModel
         currentPeriodDict = GlobalVariables.Versions.GetPeriodsDictionary(current_version_id)
         currentPeriodList = GlobalVariables.Versions.GetPeriodsList(current_version_id)
         Select Case GlobalVariables.Versions.versions_hash(current_version_id)(VERSIONS_TIME_CONFIG_VARIABLE)
-            Case GlobalEnums.TimeConfig.YEARS : periodsIdentifyer = Computer.YEAR_PERIOD_IDENTIFIER
-            Case GlobalEnums.TimeConfig.MONTHS : periodsIdentifyer = Computer.MONTH_PERIOD_IDENTIFIER
+            Case CRUD.TimeConfig.YEARS : periodsIdentifyer = Computer.YEAR_PERIOD_IDENTIFIER
+            Case CRUD.TimeConfig.MONTHS : periodsIdentifyer = Computer.MONTH_PERIOD_IDENTIFIER
         End Select
 
         ' Axis filters creation

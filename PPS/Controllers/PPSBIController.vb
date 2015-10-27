@@ -250,9 +250,9 @@ ReturnError:
         Dim periodsList() As Int32 = GlobalVariables.Versions.GetPeriodsList(version_id)
         Dim periodIdentifyer As Char
         Select Case GlobalVariables.Versions.versions_hash(version_id)(VERSIONS_TIME_CONFIG_VARIABLE)
-            Case GlobalEnums.TimeConfig.YEARS
+            Case CRUD.TimeConfig.YEARS
                 periodIdentifyer = Computer.YEAR_PERIOD_IDENTIFIER
-            Case GlobalEnums.TimeConfig.MONTHS
+            Case CRUD.TimeConfig.MONTHS
                 periodIdentifyer = Computer.MONTH_PERIOD_IDENTIFIER
         End Select
         Dim periodObject = ReturnValueFromRange(p_period_str)

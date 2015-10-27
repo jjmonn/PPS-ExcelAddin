@@ -71,24 +71,6 @@ Friend Class GroupAllowedEntity
 
 #Region "Management"
 
-    Friend Sub CMSG_GET_GROUP_ENTITIES(ByRef groupId As Int32)
-
-        Dim packet As New ByteBuffer(CType(ClientMessage.CMSG_GET_GROUP_ENTITIES, UShort))
-        packet.WriteInt32(groupId)
-        packet.Release()
-        NetworkManager.GetInstance().Send(packet)
-
-    End Sub
-
-    Private Sub SMSG_GET_GROUP_ENTITIES_ANSWER(packet As ByteBuffer)
-
-        If (packet.GetError() <> 0) Then
-            RaiseEvent UpdateEvent(False, packet.ReadUint32(), packet.ReadUint32())
-        End If
-        RaiseEvent UpdateEvent(True, packet.ReadUint32(), packet.ReadUint32())
-
-    End Sub
-
     Friend Sub CMSG_ADD_GROUP_ENTITY(ByRef groupId As Int32, ByRef entityId As Int32)
         Dim packet As New ByteBuffer(CType(ClientMessage.CMSG_ADD_GROUP_ENTITY, UShort))
         packet.WriteInt32(groupId)

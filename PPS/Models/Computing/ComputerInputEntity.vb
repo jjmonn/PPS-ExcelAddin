@@ -82,8 +82,8 @@ Public Class ComputerInputEntity
 
             periodsTokenDict = GlobalVariables.Versions.GetPeriodTokensDict(versionId)
             Select Case GlobalVariables.Versions.versions_hash(versionId)(VERSIONS_TIME_CONFIG_VARIABLE)
-                Case GlobalEnums.TimeConfig.YEARS : periodIdentifier = Computer.YEAR_PERIOD_IDENTIFIER
-                Case GlobalEnums.TimeConfig.MONTHS : periodIdentifier = Computer.MONTH_PERIOD_IDENTIFIER
+                Case CRUD.TimeConfig.YEARS : periodIdentifier = Computer.YEAR_PERIOD_IDENTIFIER
+                Case CRUD.TimeConfig.MONTHS : periodIdentifier = Computer.MONTH_PERIOD_IDENTIFIER
             End Select
             FillEntityData(packet)
             RaiseEvent ComputationAnswered(requestIdEntityIdDict(request_id), True)

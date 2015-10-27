@@ -136,7 +136,7 @@ Friend Class VersionsControl
             CreationTB.Text = GlobalVariables.Versions.versions_hash(versionId)(VERSIONS_CREATION_DATE_VARIABLE)
             TimeConfigTB.Text = GlobalVariables.Versions.versions_hash(versionId)(VERSIONS_TIME_CONFIG_VARIABLE)
 
-            If GlobalVariables.Versions.versions_hash(versionId)(VERSIONS_TIME_CONFIG_VARIABLE) = GlobalEnums.TimeConfig.YEARS Then
+            If GlobalVariables.Versions.versions_hash(versionId)(VERSIONS_TIME_CONFIG_VARIABLE) = CRUD.TimeConfig.YEARS Then
                 startPeriod = Format(Date.FromOADate(GlobalVariables.Versions.versions_hash(versionId)(VERSIONS_START_PERIOD_VAR)), "yyyy")
             Else
                 startPeriod = Format(Date.FromOADate(GlobalVariables.Versions.versions_hash(versionId)(VERSIONS_START_PERIOD_VAR)), "MMM yyyy")

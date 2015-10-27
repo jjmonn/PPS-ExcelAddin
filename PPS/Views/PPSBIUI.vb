@@ -119,12 +119,12 @@ Friend Class PPSBI_UI
         PeriodTreeBox.TreeView.Nodes.Clear()
         Select Case GlobalVariables.Versions.versions_hash(versionId)(VERSIONS_TIME_CONFIG_VARIABLE)
 
-            Case GlobalEnums.TimeConfig.YEARS
+            Case CRUD.TimeConfig.YEARS
                 For Each yearId As Int32 In GlobalVariables.Versions.GetPeriodsList(versionId)
                     VTreeViewUtil.AddNode(yearId, Format(Date.FromOADate(yearId), "yyyy"), PeriodTreeBox.TreeView)
                 Next
 
-            Case GlobalEnums.TimeConfig.MONTHS
+            Case CRUD.TimeConfig.MONTHS
                 Dim periodsDict = GlobalVariables.Versions.GetPeriodsDictionary(versionId)
                 For Each yearId As Int32 In periodsDict.Keys
                     Dim yearNode As VIBlend.WinForms.Controls.vTreeNode = VTreeViewUtil.AddNode(Computer.YEAR_PERIOD_IDENTIFIER & yearId, _

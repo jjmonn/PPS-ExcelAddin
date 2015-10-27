@@ -165,8 +165,8 @@ Friend Class Computer
                 periodsTokenDict = GlobalVariables.Versions.GetPeriodTokensDict(versionId)
 
                 Select Case GlobalVariables.Versions.versions_hash(versionId)(VERSIONS_TIME_CONFIG_VARIABLE)
-                    Case GlobalEnums.TimeConfig.YEARS : periodIdentifier = YEAR_PERIOD_IDENTIFIER
-                    Case GlobalEnums.TimeConfig.MONTHS : periodIdentifier = MONTH_PERIOD_IDENTIFIER
+                    Case CRUD.TimeConfig.YEARS : periodIdentifier = YEAR_PERIOD_IDENTIFIER
+                    Case CRUD.TimeConfig.MONTHS : periodIdentifier = MONTH_PERIOD_IDENTIFIER
                 End Select
 
                 FillResultData(packet)

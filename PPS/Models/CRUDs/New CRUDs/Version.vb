@@ -213,7 +213,7 @@ Friend Class Version
             Dim timeConfig As UInt16 = versions_hash(versionId)(VERSIONS_TIME_CONFIG_VARIABLE)
 
             Select Case timeConfig
-                Case GlobalEnums.TimeConfig.YEARS
+                Case CRUD.TimeConfig.YEARS
                     For Each yearId As Int32 In Period.GetYearsList(startPeriod, nbPeriods, timeConfig)
                         For Each monthId As Int32 In Period.GetMonthsIdsInYear(yearId)
                             If monthsList.Contains(monthId) = False Then
@@ -222,7 +222,7 @@ Friend Class Version
                         Next
                     Next
 
-                Case GlobalEnums.TimeConfig.MONTHS
+                Case CRUD.TimeConfig.MONTHS
                     For Each monthId As Int32 In Period.GetMonthsList(startPeriod, nbPeriods)
                         If monthsList.Contains(monthId) = False Then
                             monthsList.Add(monthId)
@@ -243,9 +243,9 @@ Friend Class Version
         Dim timeConfig As Int16 = versions_hash(versionId)(VERSIONS_TIME_CONFIG_VARIABLE)
 
         Select Case timeConfig
-            Case GlobalEnums.TimeConfig.YEARS
+            Case CRUD.TimeConfig.YEARS
                 Return Period.GetYearsList(startPeriod, nbPeriods, timeConfig)
-            Case GlobalEnums.TimeConfig.MONTHS
+            Case CRUD.TimeConfig.MONTHS
                 Return Period.GetMonthsList(startPeriod, nbPeriods)
             Case Else
                 MsgBox("PPS Error N°9: Unknown Time Configuration")
@@ -258,14 +258,14 @@ Friend Class Version
 
         Dim periodsTokens As New Dictionary(Of String, String)
         Select Case versions_hash(versionId)(VERSIONS_TIME_CONFIG_VARIABLE)
-            Case GlobalEnums.TimeConfig.YEARS
+            Case CRUD.TimeConfig.YEARS
                 Dim periodIndex As UInt16 = 0
                 For Each periodId As UInt32 In GetPeriodsList(versionId)
                     periodsTokens.Add(Computer.YEAR_PERIOD_IDENTIFIER & periodIndex, Computer.YEAR_PERIOD_IDENTIFIER & periodId)
                     periodIndex += 1
                 Next
 
-            Case GlobalEnums.TimeConfig.MONTHS
+            Case CRUD.TimeConfig.MONTHS
                 Dim monthIndex As Int32 = 0
                 For Each monthId As Int32 In GetPeriodsList(versionId)
                     periodsTokens.Add(Computer.MONTH_PERIOD_IDENTIFIER & monthIndex, Computer.MONTH_PERIOD_IDENTIFIER & monthId)
@@ -289,13 +289,13 @@ Friend Class Version
 
         Dim periodsDict As New Dictionary(Of Int32, List(Of Int32))
         Select Case versions_hash(versionId)(VERSIONS_TIME_CONFIG_VARIABLE)
-            Case GlobalEnums.TimeConfig.YEARS
+            Case CRUD.TimeConfig.YEARS
                 ' Years only
                 For Each periodId As UInt32 In GetPeriodsList(versionId)
                     periodsDict.Add(periodId, New List(Of Int32))
                 Next
 
-            Case GlobalEnums.TimeConfig.MONTHS
+            Case CRUD.TimeConfig.MONTHS
                 ' Years
                 For Each yearId As Int32 In Period.GetYearsList(versions_hash(versionId)(VERSIONS_START_PERIOD_VAR), _
                                                                 versions_hash(versionId)(VERSIONS_NB_PERIODS_VAR), _
@@ -319,14 +319,14 @@ Friend Class Version
         For Each versionId As Int32 In versionsIdDict.Keys
 
             Select Case versions_hash(versionId)(VERSIONS_TIME_CONFIG_VARIABLE)
-                Case GlobalEnums.TimeConfig.YEARS
+                Case CRUD.TimeConfig.YEARS
                     For Each periodId As UInt32 In GetPeriodsList(versionId)
                         If periodsDict.ContainsKey(periodId) = False Then
                             periodsDict.Add(periodId, New List(Of Int32))
                         End If
                     Next
 
-                Case GlobalEnums.TimeConfig.MONTHS
+                Case CRUD.TimeConfig.MONTHS
                     ' Years
                     For Each yearId As Int32 In Period.GetYearsList(versions_hash(versionId)(VERSIONS_START_PERIOD_VAR), _
                                                                     versions_hash(versionId)(VERSIONS_NB_PERIODS_VAR), _
