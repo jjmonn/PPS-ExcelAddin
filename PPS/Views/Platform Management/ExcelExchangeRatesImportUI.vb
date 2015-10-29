@@ -13,7 +13,7 @@
 Imports Microsoft.Office.Interop
 Imports System.Collections.Generic
 Imports VIBlend.WinForms.Controls
-
+Imports CRUD
 
 
 Friend Class ExcelExchangeRatesImportUI
@@ -41,15 +41,20 @@ Friend Class ExcelExchangeRatesImportUI
 
         ' Add any initialization after the InitializeComponent() call.
         m_controller = p_controller
-        Dim mainCurrencyId As Int32 = GlobalVariables.Currencies.mainCurrency
-        Dim mainCurrencyName As String = GlobalVariables.Currencies.currencies_hash(mainCurrencyId)(NAME_VARIABLE)
-        For Each currencyId As Int32 In GlobalVariables.Currencies.currencies_hash.Keys
-            If currencyId <> GlobalVariables.Currencies.mainCurrency Then
+        Dim mainCurrencyId As Int32 = GlobalVariables.Currencies.GetMainCurrency()
+        Dim mainCurrency As Currency = GlobalVariables.Currencies.GetValue(mainCurrencyId)
+
+        If mainCurrency Is Nothing Then
+            MsgBox("Main currency is not defined")
+            Exit Sub
+        End If
+        For Each currency As Currency In GlobalVariables.Currencies.GetDictionary().Values
+            If currency.Id <> mainCurrencyId Then
                 Dim li As New ListItem
-                li.Value = currencyId
-                li.Text = mainCurrencyName & "/" & GlobalVariables.Currencies.currencies_hash(currencyId)(NAME_VARIABLE)
+                li.Value = currency.Id
+                li.Text = mainCurrency.Name & "/" & currency.Name
                 m_currencyComboBox.Items.Add(li)
-                If currencyId = m_destinationCurrency Then
+                If currency.Id = m_destinationCurrency Then
                     m_currencyComboBox.SelectedItem = li
                 End If
             End If

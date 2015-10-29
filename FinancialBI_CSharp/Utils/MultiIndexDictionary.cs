@@ -29,15 +29,21 @@ public class MultiIndexDictionary<KeyA, KeyB, Value>
     get { return m_secondDic.Keys; }
   }
 
+  public bool ContainsKey(KeyA p_key)
+  {
+    return m_firstDic.ContainsKey(p_key);
+  }
+
+  public bool ContainsSecondaryKey(KeyB p_key)
+  {
+    return m_secondDic.ContainsKey(p_key);
+  }
+
   public Value this[KeyA index]
   {
     get
     {
-      if (!m_firstDic.ContainsKey(index))
-        return default(Value);
-      if (!m_mainDic.ContainsKey(m_firstDic[index]))
-        return default(Value);
-      return m_mainDic[m_firstDic[index]];
+      return PrimaryKeyItem(index);
     }
   }
 
@@ -45,12 +51,26 @@ public class MultiIndexDictionary<KeyA, KeyB, Value>
   {
     get
     {
-      if (!m_secondDic.ContainsKey(index))
-        return default(Value);
-      if (!m_mainDic.ContainsKey(m_secondDic[index]))
-        return default(Value);
-      return m_mainDic[m_secondDic[index]];
+      return SecondaryKeyItem(index);
     }
+  }
+
+  public Value PrimaryKeyItem(KeyA p_key)
+  {
+    if (!m_firstDic.ContainsKey(p_key))
+      return default(Value);
+    if (!m_mainDic.ContainsKey(m_firstDic[p_key]))
+      return default(Value);
+    return m_mainDic[m_firstDic[p_key]];
+  }
+
+  public Value SecondaryKeyItem(KeyB p_key)
+  {
+    if (!m_secondDic.ContainsKey(p_key))
+      return default(Value);
+    if (!m_mainDic.ContainsKey(m_secondDic[p_key]))
+      return default(Value);
+    return m_mainDic[m_secondDic[p_key]];
   }
 
   public bool Set(KeyA p_keyA, KeyB p_keyB, Value p_value)
@@ -77,6 +97,16 @@ public class MultiIndexDictionary<KeyA, KeyB, Value>
 
   public void Remove(KeyA p_key)
   {
+    RemovePrimary(p_key);
+  }
+
+  public void Remove(KeyB p_key)
+  {
+    RemoveSecondary(p_key);
+  }
+
+  public void RemovePrimary(KeyA p_key)
+  {
     if (this[p_key] != null)
     {
       UInt32 id = m_firstDic[p_key];
@@ -87,7 +117,7 @@ public class MultiIndexDictionary<KeyA, KeyB, Value>
     }
   }
 
-  public void Remove(KeyB p_key)
+  public void RemoveSecondary(KeyB p_key)
   {
     if (this[p_key] != null)
     {
@@ -109,6 +139,13 @@ public class MultiIndexDictionary<KeyA, KeyB, Value>
         return;
       }
     }
+  }
+
+  public void Clear()
+  {
+    m_firstDic.Clear();
+    m_secondDic.Clear();
+    m_mainDic.Clear();
   }
 }
 

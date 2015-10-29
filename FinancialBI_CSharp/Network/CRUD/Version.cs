@@ -12,7 +12,7 @@ namespace CRUD
     MONTHS
   }
 
-  class Version : HierarchyCRUDEntity, IComparable
+  public class Version : NamedHierarchyCRUDEntity, IComparable
   {
     public UInt32 Id { get; private set; }
     public UInt32 ParentId { get; set; }

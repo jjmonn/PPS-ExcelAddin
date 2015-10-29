@@ -246,7 +246,7 @@ Friend Class DataModificationsTracking
         Dim excelCell As Excel.Range
 
         For Each tupleCellPair In m_dataset.m_datasetCellsDictionary
-            Dim l_account = GlobalVariables.Accounts.GetAccount(tuple_.Item2)
+            Dim l_account As Account = GlobalVariables.Accounts.GetValue(tuple_.Item2)
             tuple_ = tupleCellPair.Key
             excelCell = tupleCellPair.Value
 
@@ -289,7 +289,7 @@ Friend Class DataModificationsTracking
 
         For Each entity As String In m_dataset.m_entitiesValuesAddressDict.Keys
             For Each elem As String In m_dataset.m_accountsValuesAddressDict.Keys
-                Dim l_account = GlobalVariables.Accounts.GetAccount(elem)
+                Dim l_account As Account = GlobalVariables.Accounts.GetValue(elem)
 
                 Select Case l_account.FormulaType
                     Case Account.FormulaTypes.FIRST_PERIOD_INPUT

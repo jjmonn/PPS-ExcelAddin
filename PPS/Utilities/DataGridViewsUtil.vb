@@ -37,10 +37,7 @@ Friend Class DataGridViewsUtil
 
 #Region "Instance Variables"
 
-    ' Variables
-    Private EntitiesTokenNamesDict As Hashtable
-    Private currencies_symbol_dict As Hashtable
-
+    ' 
     ' Constants
     Private FIXED_SINGLE_HIERARCHY_COLUMN_WIDTH As Single = 100
     Public Const AVERAGE_CHAR_SIZE As Int32 = 9
@@ -59,10 +56,6 @@ Friend Class DataGridViewsUtil
 
 
     Friend Sub New()
-
-        EntitiesTokenNamesDict = GlobalVariables.Entities.GetEntitiesDictionary(ID_VARIABLE, NAME_VARIABLE)
-        currencies_symbol_dict = GlobalVariables.Currencies.GetCurrenciesDict(ID_VARIABLE, CURRENCY_SYMBOL_VARIABLE)
-
 
     End Sub
 
@@ -86,14 +79,14 @@ Friend Class DataGridViewsUtil
 
     ' vDgv Display After Populating ' note controlling ui2 specificity !!
     Friend Sub FormatDGVs(ByRef vDGV As vDataGridView, _
-                          ByRef currency As Int32)
+                          ByRef currencyId As Int32)
 
         ' priority normal => implement format CRUD
         '     Dim InputsFormatsDictionary = FormatsMapping.GetFormatTable(INPUT_FORMAT_CODE)
         Dim formatCode, fmtStr As String
         Dim indent As Int32
         For Each row In vDGV.RowsHierarchy.Items
-            Dim l_account = GlobalVariables.Accounts.GetAccount(row.Caption)
+            Dim l_account As Account = GlobalVariables.Accounts.GetValue(row.Caption)
 
             If l_account Is Nothing Then Continue For
             formatCode = l_account.FormatId
@@ -132,10 +125,12 @@ Friend Class DataGridViewsUtil
             'If Not IsDBNull(InputsFormatsDictionary(formatCode)(FORMAT_BCKGD_VARIABLE)) Then
             '    CAStyle.FillStyle = New FillStyleSolid(System.Drawing.Color.FromArgb(InputsFormatsDictionary(formatCode)(FORMAT_BCKGD_VARIABLE)))
             'End If
+            Dim l_currency As Currency = GlobalVariables.Currencies.GetValue(currencyId)
 
+            If l_currency is Nothing then Continue For
             Select Case (l_account.Type)
                 ' nombe de chiffres après la virgule à variabiliser -> settings !!!!
-                Case Account.AccountType.MONETARY : fmtStr = "{0:" & currencies_symbol_dict(currency) & "#,##0;(" & currencies_symbol_dict(currency) & "#,##0)}"
+                Case Account.AccountType.MONETARY : fmtStr = "{0:" & l_currency.Symbol & "#,##0;(" & l_currency.Symbol & "#,##0)}"
                 Case Account.AccountType.PERCENTAGE : fmtStr = "{0:P}"        ' put this in a table ?
                 Case Account.AccountType.NUMBER : fmtStr = "{0:N}"        ' further evolution set unit ?
                 Case Else : fmtStr = "{0:C0}"
@@ -400,7 +395,6 @@ Friend Class DataGridViewsUtil
                                                           line_index, _
                                                           dgv, _
                                                           KeyLineDictionary, _
-                                                          EntitiesTokenNamesDict,
                                                           entitiesArray)
                 Next
             Else
@@ -417,9 +411,8 @@ Friend Class DataGridViewsUtil
                 FillInSubRowsHierarchySeveralEntities(account_node, _
                                                       line_index, _
                                                       dgv, _
-                                                      KeyLineDictionary, _
-                                                      EntitiesTokenNamesDict, _
-                                                      , entity_node)
+                                                      KeyLineDictionary, , _
+                                                      entity_node)
             Next
         End If
         Return KeyLineDictionary
@@ -432,7 +425,6 @@ Friend Class DataGridViewsUtil
                                                       ByRef line_index As Int32, _
                                                       ByRef dgv As vDataGridView, _
                                                       ByRef KeyLineDictionary As Dictionary(Of String, Int32), _
-                                                      ByRef entities_token_names_dict As Hashtable, _
                                                       Optional ByRef entitiesArray() As String = Nothing, _
                                                       Optional ByRef entity_node As TreeNode = Nothing)
 
@@ -442,24 +434,23 @@ Friend Class DataGridViewsUtil
         line_index = line_index + 1
         If Not entitiesArray Is Nothing Then
             For i As Int32 = 1 To UBound(entitiesArray)
-                Dim sub_row As HierarchyItem = row.Items.Add(entities_token_names_dict.Item(entitiesArray(i)))
+                Dim sub_row As HierarchyItem = row.Items.Add(GlobalVariables.Entities.GetValueId(entitiesArray(i)))
             Next
         Else
             For Each child In entity_node.Nodes
-                SetUpRowsHierarchyEntitiesHierarchy(row, child, dgv, entities_token_names_dict)
+                SetUpRowsHierarchyEntitiesHierarchy(row, child, dgv)
             Next
         End If
         If account_node.Nodes.Count > 0 Then
             For Each node As TreeNode In account_node.Nodes
-                Dim l_account = GlobalVariables.Accounts.GetAccount(CInt(node.Name))
+                Dim l_account As Account = GlobalVariables.Accounts.GetValue(CInt(node.Name))
 
                 If l_account Is Nothing Then Continue For
                 If l_account.FormatId <> TITLE_FORMAT_CODE Then
                     FillInSubRowsHierarchySeveralEntities(node, _
                                                           line_index, _
                                                           dgv, _
-                                                          KeyLineDictionary, _
-                                                          entities_token_names_dict,
+                                                          KeyLineDictionary,
                                                           entitiesArray,
                                                           entity_node)
                 End If
@@ -487,13 +478,12 @@ Friend Class DataGridViewsUtil
 
     Private Sub SetUpRowsHierarchyEntitiesHierarchy(ByRef row As HierarchyItem, _
                                                     ByRef entity_node As TreeNode, _
-                                                    ByRef DGV As vDataGridView, _
-                                                    ByRef entities_token_names_dict As Hashtable)
+                                                    ByRef DGV As vDataGridView)
 
         If entity_node.Checked = True Then
-            Dim sub_row As HierarchyItem = row.Items.Add(EntitiesTokenNamesDict.Item(entity_node.Name))
+            Dim sub_row As HierarchyItem = row.Items.Add(GlobalVariables.Entities.GetValueId(CStr(entity_node.Name)))
             For Each child In entity_node.Nodes
-                SetUpRowsHierarchyEntitiesHierarchy(sub_row, child, DGV, entities_token_names_dict)
+                SetUpRowsHierarchyEntitiesHierarchy(sub_row, child, DGV)
             Next
         End If
 

@@ -64,7 +64,6 @@ Friend Class ControllingUI_2
     Private SP1Distance As Single = 230
     Private SP2Distance As Single = 900
     '   Private m_formatsDictionary As New Dictionary(Of int32, Formats.FinancialBIFormat)
-    Private m_currenciesSymbol_dict As Hashtable
     Private m_currentEntityNode As vTreeNode
 
 
@@ -136,7 +135,6 @@ Friend Class ControllingUI_2
         RightPaneSetup()
         m_controller = New ControllingUIController(Me)
         GlobalVariables.Accounts.LoadAccountsTV(accountsTV)
-        m_currenciesSymbol_dict = GlobalVariables.Currencies.GetCurrenciesDict(ID_VARIABLE, CURRENCY_SYMBOL_VARIABLE)
         SetupProgressUIs()
 
         ' Init TabControl
@@ -319,7 +317,10 @@ Friend Class ControllingUI_2
 
     Friend Sub FormatDGVItem(ByRef item As HierarchyItem)
 
-        Dim currencyId As Int32 = leftPane_control.currenciesCLB.SelectedItem.Value
+        Dim currencyId As UInt32 = leftPane_control.currenciesCLB.SelectedItem.Value
+        Dim l_currency As Currency = GlobalVariables.Currencies.GetValue(currencyId)
+        If l_currency Is Nothing Then Exit Sub
+
         item.CellsStyle = GridCellStyleNormal
         item.CellsTextAlignment = System.Drawing.ContentAlignment.MiddleRight
 
@@ -328,7 +329,7 @@ Friend Class ControllingUI_2
             Dim typeId As Int32 = m_controller.GetAccountTypeFromId(item.ItemValue)
             If typeId <> 0 Then
                 Select Case typeId
-                    Case Account.AccountType.MONETARY : item.CellsFormatString = "{0:" & m_currenciesSymbol_dict(currencyId) & "#,##0;(" & m_currenciesSymbol_dict(currencyId) & "#,##0)}" ' m_currenciesSymbol_dict(currencyId) & "#,##0.00;(" & m_currenciesSymbol_dict(currencyId) & "#,##0.00)"
+                    Case Account.AccountType.MONETARY : item.CellsFormatString = "{0:" & l_currency.Symbol & "#,##0;(" & l_currency.Symbol & "#,##0)}" ' m_currenciesSymbol_dict(currencyId) & "#,##0.00;(" & m_currenciesSymbol_dict(currencyId) & "#,##0.00)"
                     Case Account.AccountType.PERCENTAGE : item.CellsFormatString = "{0:P}" '"0.00%"        ' put this in a table ?
                     Case Account.AccountType.NUMBER : item.CellsFormatString = "{0:N2}" '"#,##0.00"
                     Case Account.AccountType.DATE_ : item.CellsFormatString = "{0:yyyy/MMMM/dd}"  '"d-mmm-yy" ' d-mmm-yy
@@ -483,7 +484,7 @@ Friend Class ControllingUI_2
                                        versionId, _
                                        filterId)
 
-            Dim l_account = GlobalVariables.Accounts.GetAccount(accountId)
+            Dim l_account As Account = GlobalVariables.Accounts.GetValue(accountId)
 
             If l_account Is Nothing Then Exit Sub
             ' Check that entity and account are input type !! priority normal
@@ -495,8 +496,11 @@ Friend Class ControllingUI_2
                                        versionId,
                                        logsHashTable)
 
+            Dim l_entity As Entity = GlobalVariables.Entities.GetValue(entityId)
+            If l_entity Is Nothing Then Exit Sub
+
             m_logView = New LogView(False, _
-                                    GlobalVariables.Entities.entities_hash(entityId)(NAME_VARIABLE), _
+                                    l_entity.Name, _
                                     l_account.Name)
 
         End If

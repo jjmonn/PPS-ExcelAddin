@@ -71,19 +71,19 @@ Friend Class GlobalVariables
 #Region "Models"
 
     Friend Shared Accounts As AccountManager
-    Friend Shared Entities As Entity
-    Friend Shared Filters As Filter
-    Friend Shared FiltersValues As FilterValue
+    Friend Shared Entities As EntityManager
+    Friend Shared Filters As FilterManager
+    Friend Shared FiltersValues As FilterValueManager
     Friend Shared Versions As Version
     Friend Shared Currencies As CurrencyManager
-    Friend Shared RatesVersions As RatesVersion
-    Friend Shared GlobalFacts As GlobalFact
-    Friend Shared GlobalFactsDatas As GlobalFactData
-    Friend Shared GlobalFactsVersions As GlobalFactVersion
-    Friend Shared Users As User
-    Friend Shared Groups As Group
-    Friend Shared GroupAllowedEntities As GroupAllowedEntity
-    Friend Shared FModelingsAccounts As FModelingAccount
+    Friend Shared RatesVersions As RatesVersionManager
+    Friend Shared GlobalFacts As GlobalFactManager
+    Friend Shared GlobalFactsDatas As GlobalFactDataManager
+    Friend Shared GlobalFactsVersions As GlobalFactVersionManager
+    Friend Shared Users As UserManager
+    Friend Shared Groups As GroupManager
+    Friend Shared GroupAllowedEntities As GroupAllowedEntityManager
+    Friend Shared FModelingsAccounts As FModelingAccountManager
     Friend Shared AxisElems As AxisElemManager
     Friend Shared AxisFilters As AxisFilterManager
 

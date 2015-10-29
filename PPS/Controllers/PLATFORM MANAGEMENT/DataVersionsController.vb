@@ -16,7 +16,7 @@
 Imports System.Windows.Forms
 Imports System.Collections.Generic
 Imports System.Collections
-
+Imports CRUD
 
 Friend Class DataVersionsController
 
@@ -233,7 +233,8 @@ Friend Class DataVersionsController
 
     Friend Function IsRatesVersionValid(ByRef p_ratesVersionId As Int32) As Boolean
 
-        If GlobalVariables.RatesVersions.rate_versions_hash(p_ratesVersionId)(IS_FOLDER_VARIABLE) = 1 Then
+        Dim l_version As ExchangeRateVersion = GlobalVariables.RatesVersions.GetValue(p_ratesVersionId)
+        If l_version Is Nothing OrElse l_version.IsFolder = True Then
             Return False
         Else
             Return True
@@ -245,8 +246,11 @@ Friend Class DataVersionsController
                                                         ByRef nb_periods As Int32, _
                                                         ByRef rates_version_id As String) As Boolean
 
-        Dim rates_version_start_period As Int32 = GlobalVariables.RatesVersions.rate_versions_hash(CInt(rates_version_id))(VERSIONS_START_PERIOD_VAR)
-        Dim rates_version_nb_periods As Int32 = GlobalVariables.RatesVersions.rate_versions_hash(CInt(rates_version_id))(VERSIONS_NB_PERIODS_VAR)
+        Dim l_version As ExchangeRateVersion = GlobalVariables.RatesVersions.GetValue(rates_version_id)
+        If l_version Is Nothing Then Return False
+
+        Dim rates_version_start_period As Int32 = l_version.StartPeriod
+        Dim rates_version_nb_periods As Int32 = l_version.NbPeriod
         If start_period >= rates_version_start_period AndAlso _
            nb_periods <= rates_version_nb_periods Then
             Return True
@@ -255,9 +259,10 @@ Friend Class DataVersionsController
 
     End Function
 
-    Friend Function IsFactsVersionValid(ByRef p_factsVersionId As Int32) As Boolean
+    Friend Function IsFactsVersionValid(ByRef p_factsVersionId As UInt32) As Boolean
 
-        If GlobalVariables.GlobalFactsVersions.globalFact_versions_hash(p_factsVersionId)(IS_FOLDER_VARIABLE) = 1 Then
+        Dim version As GlobalFactVersion = GlobalVariables.GlobalFactsVersions.GetValue(p_factsVersionId)
+        If version Is Nothing OrElse version.IsFolder = True Then
             Return False
         Else
             Return True
@@ -269,10 +274,11 @@ Friend Class DataVersionsController
                                                         ByRef nb_periods As Int32, _
                                                         ByRef fact_version_id As String) As Boolean
 
-        Dim fact_version_start_period As Int32 = GlobalVariables.GlobalFactsVersions.globalFact_versions_hash(CInt(fact_version_id))(VERSIONS_START_PERIOD_VAR)
-        Dim fact_version_nb_periods As Int32 = GlobalVariables.GlobalFactsVersions.globalFact_versions_hash(CInt(fact_version_id))(VERSIONS_NB_PERIODS_VAR)
-        If start_period >= fact_version_start_period AndAlso _
-           nb_periods <= fact_version_nb_periods Then
+        Dim version As GlobalFactVersion = GlobalVariables.GlobalFactsVersions.GetValue(fact_version_id)
+        If version Is Nothing Then Return False
+
+        If start_period >= version.StartPeriod AndAlso _
+           nb_periods <= version.NbPeriod Then
             Return True
         End If
         Return False
@@ -303,17 +309,15 @@ Friend Class DataVersionsController
 
     End Sub
 
-    Friend Function GetRatesVersionNameFromId(ByRef rateVersionId As Int32) As String
+    Friend Function GetRatesVersionNameFromId(ByRef rateVersionId As UInt32) As String
 
-        If Not GlobalVariables.RatesVersions.rate_versions_hash.ContainsKey(rateVersionId) Then Return 0
-        Return GlobalVariables.RatesVersions.rate_versions_hash(rateVersionId)(NAME_VARIABLE)
+        Return GlobalVariables.RatesVersions.GetValueName(rateVersionId)
 
     End Function
 
-    Friend Function GetFactVersionNameFromId(ByRef p_factVersionId As Int32) As String
+    Friend Function GetFactVersionNameFromId(ByRef p_factVersionId As UInt32) As String
 
-        If Not GlobalVariables.GlobalFactsVersions.globalFact_versions_hash.ContainsKey(p_factVersionId) Then Return 0
-        Return GlobalVariables.GlobalFactsVersions.globalFact_versions_hash(p_factVersionId)(NAME_VARIABLE)
+        Return GlobalVariables.GlobalFactsVersions.GetValueName(p_factVersionId)
 
     End Function
 

@@ -18,8 +18,7 @@ Imports System.Windows.Forms
 Imports System.Collections.Generic
 Imports System.Collections
 Imports VIBlend.WinForms.Controls
-
-
+Imports CRUD
 
 Friend Class NewEntityUI
 
@@ -44,7 +43,7 @@ Friend Class NewEntityUI
 
     Friend Sub New(ByRef p_controller As EntitiesController, _
                    ByRef p_entitiesTV As vTreeView, _
-                   ByRef p_currenciesHT As Hashtable)
+                   ByRef p_currenciesHT As MultiIndexDictionary(Of UInt32, String, NamedCRUDEntity))
 
         ' This call is required by the designer.
         InitializeComponent()
@@ -56,12 +55,12 @@ Friend Class NewEntityUI
 
     End Sub
 
-    Private Sub LoadCurrencies(ByRef currenciesHt As Hashtable)
+    Private Sub LoadCurrencies(ByRef currenciesHt As MultiIndexDictionary(Of UInt32, String, NamedCRUDEntity))
 
-        For Each currencyId As Int32 In currenciesHt.Keys
+        For Each currency As Currency In currenciesHt.Values
             Dim LI As New VIBlend.WinForms.Controls.ListItem
-            LI.Value = currencyId
-            LI.Text = currenciesHt(currencyId)(NAME_VARIABLE)
+            LI.Value = currency.Id
+            LI.Text = currency.Name
             CurrenciesComboBox1.Items.Add(LI)
         Next
 

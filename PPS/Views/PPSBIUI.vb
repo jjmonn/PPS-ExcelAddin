@@ -91,10 +91,10 @@ Friend Class PPSBI_UI
     Private Sub InitCurrenciesCheckedListBox()
 
         Dim currenciesList As New Collections.Generic.List(Of UInt32)
-        For Each currencyId As Int32 In GlobalVariables.Currencies.currencies_hash.Keys
+        For Each currency As Currency In GlobalVariables.Currencies.GetDictionary().Values
             Dim li As New VIBlend.WinForms.Controls.ListItem
-            li.Value = currencyId
-            li.Text = GlobalVariables.Currencies.currencies_hash(currencyId)(NAME_VARIABLE)
+            li.Value = currency.Id
+            li.Text = currency.Name
             CurrenciesComboBox.Items.Add(li)
             If li.Value = My.Settings.currentCurrency Then
                 CurrenciesComboBox.SelectedItem = li

@@ -10,8 +10,9 @@
 
 Imports VIBlend.WinForms.DataGridView
 Imports System.Collections
+Imports System.Collections.Generic
 Imports VIBlend.WinForms.Controls
-
+Imports CRUD
 
 
 Friend Class CurrenciesView
@@ -29,7 +30,7 @@ Friend Class CurrenciesView
 #Region "Initialize"
 
     Friend Sub New(ByRef p_currenciesController As CurrenciesController, _
-                   ByRef p_currenciesHash As Hashtable)
+                   ByRef p_currenciesHash As MultiIndexDictionary(Of UInt32, String, NamedCRUDEntity))
 
         ' This call is required by the designer.
         InitializeComponent()
@@ -74,18 +75,18 @@ Friend Class CurrenciesView
 
     End Sub
 
-    Friend Sub CreateCurrenciesRows(ByRef p_currenciesHash As Hashtable)
+    Friend Sub CreateCurrenciesRows(ByRef p_currenciesHash As MultiIndexDictionary(Of UInt32, String, NamedCRUDEntity))
 
-        For Each currencyId As Int32 In p_currenciesHash.Keys
+        For Each currency As Currency In p_currenciesHash.Values
             Dim currencyRow As HierarchyItem = m_currenciesDataGridView.RowsHierarchy.Items.Add("")
             Dim inUsecheckBoxEditor As New CheckBoxEditor
-            currencyRow.ItemValue = currencyId
+            currencyRow.ItemValue = currency.Id
             If GlobalVariables.Users.CurrentUserIsAdmin() Then
                 m_currenciesDataGridView.CellsArea.SetCellEditor(currencyRow, m_currenciesDataGridView.ColumnsHierarchy.Items(0), inUsecheckBoxEditor)
             End If
-            m_currenciesDataGridView.CellsArea.SetCellValue(currencyRow, m_currenciesDataGridView.ColumnsHierarchy.Items(0), p_currenciesHash(currencyId)(CURRENCY_IN_USE_VARIABLE))
-            m_currenciesDataGridView.CellsArea.SetCellValue(currencyRow, m_currenciesDataGridView.ColumnsHierarchy.Items(1), p_currenciesHash(currencyId)(NAME_VARIABLE))
-            m_currenciesDataGridView.CellsArea.SetCellValue(currencyRow, m_currenciesDataGridView.ColumnsHierarchy.Items(2), p_currenciesHash(currencyId)(CURRENCY_SYMBOL_VARIABLE))
+            m_currenciesDataGridView.CellsArea.SetCellValue(currencyRow, m_currenciesDataGridView.ColumnsHierarchy.Items(0), currency.InUse)
+            m_currenciesDataGridView.CellsArea.SetCellValue(currencyRow, m_currenciesDataGridView.ColumnsHierarchy.Items(1), currency.Name)
+            m_currenciesDataGridView.CellsArea.SetCellValue(currencyRow, m_currenciesDataGridView.ColumnsHierarchy.Items(2), currency.Symbol)
             AddHandler inUsecheckBoxEditor.CheckedChanged, AddressOf DataGridView_CheckedChanged
 
         Next

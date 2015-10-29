@@ -44,7 +44,7 @@ Imports System.Collections
 Imports System.ComponentModel
 Imports System.Collections.Generic
 Imports Microsoft.Office.Core
-
+Imports CRUD
 
 Friend Class GeneralSubmissionControler
 
@@ -101,10 +101,12 @@ Friend Class GeneralSubmissionControler
 
         m_addin.CurrentEntityTB.Text = p_entityName
         m_entityName = p_entityName
-        Dim entityId As Int32 = GlobalVariables.Entities.GetEntityId(p_entityName)
-        If entityId <> 0 Then
-            Dim currencyId As Int32 = GlobalVariables.Entities.entities_hash(entityId)(ENTITIES_CURRENCY_VARIABLE)
-            m_addin.EntCurrTB.Text = GlobalVariables.Currencies.currencies_hash(currencyId)(NAME_VARIABLE)
+        Dim entity As Entity = GlobalVariables.Entities.GetValue(p_entityName)
+        If Not entity Is Nothing Then
+            Dim currency As Currency = GlobalVariables.Currencies.GetValue(entity.CurrencyId)
+
+            If currency Is Nothing Then Exit Sub
+            m_addin.EntCurrTB.Text = currency.Name
         End If
 
     End Sub
@@ -337,8 +339,9 @@ errorHandler:
         For Each cellAddress In cellsAddresses
             ' Implies type of cell checked before -> only double -> check if we can enter anything else !!!
             Dim ht As New Hashtable()
-            ht(ENTITY_ID_VARIABLE) = m_dataset.m_entitiesNameIdDictionary(m_dataset.m_datasetCellDimensionsDictionary(cellAddress).m_entityName)
-            ht(ACCOUNT_ID_VARIABLE) = GlobalVariables.Accounts.GetAccount(m_dataset.m_datasetCellDimensionsDictionary(cellAddress).m_accountName)
+
+            ht(ENTITY_ID_VARIABLE) = GlobalVariables.Entities.GetValueId(m_dataset.m_datasetCellDimensionsDictionary(cellAddress).m_entityName)
+            ht(ACCOUNT_ID_VARIABLE) = GlobalVariables.Accounts.GetValue(m_dataset.m_datasetCellDimensionsDictionary(cellAddress).m_accountName)
             ht(PERIOD_VARIABLE) = m_dataset.m_datasetCellDimensionsDictionary(cellAddress).m_period
             ht(VERSION_ID_VARIABLE) = m_acquisitionModel.current_version_id
             ht(CLIENT_ID_VARIABLE) = GlobalVariables.ClientsIDDropDown.SelectedItemId

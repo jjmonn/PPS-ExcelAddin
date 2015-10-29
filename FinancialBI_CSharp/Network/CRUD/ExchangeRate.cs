@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CRUD
 {
-  class ExchangeRate : CRUDEntity, IComparable
+  public class ExchangeRate : CRUDEntity, IComparable
   {
     public UInt32 Id { get; private set; }
     public UInt32 DestCurrencyId { get; private set; }

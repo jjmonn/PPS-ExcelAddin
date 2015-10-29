@@ -2,6 +2,7 @@
 Imports System.Collections.Generic
 Imports System.Collections
 Imports System.Windows.Forms
+Imports CRUD
 
 Friend Class UsersController
 
@@ -12,8 +13,8 @@ Friend Class UsersController
     Private m_view As UsersControl
     Private m_userDGV As New vDataGridView
     Private m_platformMGTUI As PlatformMGTGeneralUI
-    Private m_userList As User
-    Private m_groupList As Group
+    Private m_userList As UserManager
+    Private m_groupList As GroupManager
     Private PlatformMGTUI As PlatformMGTGeneralUI
     Private m_filterGroup As UInt32
     Private m_isFiltered As Boolean
@@ -69,30 +70,32 @@ Friend Class UsersController
 
 #Region "Interface"
 
-    Friend Function GetUserList() As Dictionary(Of Int32, Hashtable)
-        If m_isFiltered = False Then Return m_userList.userDic
-        Dim filteredDic As New Dictionary(Of Int32, Hashtable)
-        For Each user In m_userList.userDic
-            If user.Value(GROUP_ID_VARIABLE) = m_filterGroup Then
-                filteredDic.Add(user.Value(ID_VARIABLE), user.Value)
+    Friend Function GetUserList() As MultiIndexDictionary(Of UInt32, String, NamedCRUDEntity)
+        If m_isFiltered = False Then Return m_userList.GetDictionary()
+        Dim filteredDic As New MultiIndexDictionary(Of UInt32, String, NamedCRUDEntity)
+        For Each user As User In m_userList.GetDictionary().Values
+            If user.GroupId = m_filterGroup Then
+                filteredDic.Set(user.Id, user.Name, user)
             End If
         Next
         Return filteredDic
     End Function
 
-    Friend Function GetGroupList() As Dictionary(Of Int32, Hashtable)
-        Return (m_groupList.groupDic)
+    Friend Function GetGroupList() As MultiIndexDictionary(Of UInt32, String, NamedCRUDEntity)
+        Return (m_groupList.GetDictionary())
     End Function
 
-    Friend Function GetGroupName(ByRef p_id As Int32) As String
-        If Not m_groupList.groupDic.ContainsKey(p_id) Then Return ""
-        Return m_groupList.groupDic(p_id)(NAME_VARIABLE)
+    Friend Function GetGroupName(ByRef p_id As UInt32) As String
+        Return m_groupList.GetValueName(p_id)
     End Function
 
-    Friend Sub SetUserGroup(ByRef p_userId As Int32, ByRef p_groupId As Int32)
-        Dim tmpUser As Hashtable = m_userList.userDic(p_userId).Clone()
-        tmpUser(GROUP_ID_VARIABLE) = p_groupId
-        m_userList.CMSG_UPDATE_USER(tmpUser)
+    Friend Sub SetUserGroup(ByRef p_userId As UInt32, ByRef p_groupId As UInt32)
+        Dim tmpUser As User = m_userList.GetValue(p_userId)
+        If tmpUser Is Nothing Then Exit Sub
+
+        tmpUser = tmpUser.Clone()
+        tmpUser.GroupId = p_groupId
+        m_userList.Update(tmpUser)
     End Sub
 
 #End Region
@@ -102,7 +105,7 @@ Friend Class UsersController
 
     Friend Function IsUserNameAlreadyInUse(ByRef userName As String) As Boolean
 
-        If m_userList.GetIdFromName(userName) <> 0 Then Return True Else Return False
+        If m_userList.GetValueId(userName) <> 0 Then Return True Else Return False
 
     End Function
 

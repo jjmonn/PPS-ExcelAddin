@@ -3,6 +3,7 @@ Imports System.Collections.Generic
 Imports System.Collections
 Imports System.Windows.Forms
 Imports VIBlend.WinForms.Controls
+Imports CRUD
 
 Friend Class GroupController
 
@@ -12,7 +13,7 @@ Friend Class GroupController
     ' Objects
     Private m_view As GroupsControl
     Private m_platformMGTUI As PlatformMGTGeneralUI
-    Private m_groupList As Group
+    Private m_groupList As GroupManager
     Private PlatformMGTUI As PlatformMGTGeneralUI
     Private m_userController As UsersController
 
@@ -51,13 +52,12 @@ Friend Class GroupController
 
 #Region "Interface"
 
-    Friend Function GetGroupList() As Dictionary(Of Int32, Hashtable)
-        Return (m_groupList.groupDic)
+    Friend Function GetGroupList() As MultiIndexDictionary(Of UInt32, String, NamedCRUDEntity)
+        Return (m_groupList.GetDictionary())
     End Function
 
-    Friend Function GetGroupName(ByRef p_id As Int32) As String
-        If Not m_groupList.groupDic.ContainsKey(p_id) Then Return ""
-        Return m_groupList.groupDic(p_id)(NAME_VARIABLE)
+    Friend Function GetGroupName(ByRef p_id As UInt32) As String
+        Return m_groupList.GetValueName(p_id)
     End Function
 
     Friend Function GetGroupTV() As vTreeView
@@ -66,23 +66,30 @@ Friend Class GroupController
         Return treeView
     End Function
 
-    Friend Function GetGroupAllowedEntities(ByRef p_groupId As Int32) As List(Of Int32)
-        Return GlobalVariables.GroupAllowedEntities.groupAllowedEntityDic(p_groupId)
+    Friend Function GetGroupAllowedEntities(ByRef p_groupId As Int32) As MultiIndexDictionary(Of UInt32, UInt32, GroupAllowedEntity)
+        Return GlobalVariables.GroupAllowedEntities.GetDictionary(p_groupId)
     End Function
 
     Friend Function IsAllowedEntity(ByRef p_groupId As Int32, ByRef p_entityId As Int32) As Boolean
         Dim list = GetGroupAllowedEntities(p_groupId)
 
         If list Is Nothing Then Return False
-        Return list.Contains(p_entityId)
+        Return list.ContainsSecondaryKey(p_entityId)
     End Function
 
-    Friend Sub AddAllowedEntity(ByRef p_groupId As Int32, ByRef p_entityId As Int32)
-        GlobalVariables.GroupAllowedEntities.CMSG_ADD_GROUP_ENTITY(p_groupId, p_entityId)
+    Friend Sub AddAllowedEntity(ByRef p_groupId As UInt32, ByRef p_entityId As UInt32)
+        Dim allowedEntity As New GroupAllowedEntity
+
+        allowedEntity.GroupId = p_groupId
+        allowedEntity.EntityId = p_entityId
+        GlobalVariables.GroupAllowedEntities.Create(allowedEntity)
     End Sub
 
-    Friend Sub RemoveAllowedEntity(ByRef p_groupId As Int32, ByRef p_entityId As Int32)
-        GlobalVariables.GroupAllowedEntities.CMSG_DEL_GROUP_ENTITY(p_groupId, p_entityId)
+    Friend Sub RemoveAllowedEntity(ByRef p_groupId As Int32, ByRef p_entityId As UInt32)
+        Dim allowedEntity As GroupAllowedEntity = GlobalVariables.GroupAllowedEntities.GetValue(p_groupId, p_entityId)
+
+        If allowedEntity Is Nothing Then Exit Sub
+        GlobalVariables.GroupAllowedEntities.Delete(allowedEntity.Id)
     End Sub
 
 #End Region

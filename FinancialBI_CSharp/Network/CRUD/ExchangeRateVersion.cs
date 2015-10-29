@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CRUD
 {
-  class ExchangeRateVersion : HierarchyCRUDEntity, IComparable
+  public class ExchangeRateVersion : NamedHierarchyCRUDEntity, IComparable
   {
     public UInt32 Id { get; private set; }
     public UInt32 ParentId { get; set; }

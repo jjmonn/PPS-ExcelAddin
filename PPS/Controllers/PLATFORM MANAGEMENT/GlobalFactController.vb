@@ -3,6 +3,7 @@ Imports System.Collections.Generic
 Imports System.Collections
 Imports System.Windows.Forms
 Imports VIBlend.WinForms.Controls
+Imports CRUD
 
 Friend Class GlobalFactController
 
@@ -54,7 +55,7 @@ Friend Class GlobalFactController
         m_MonthsIdList = GlobalVariables.GlobalFacts.GetMonthsList(p_versionid)
         m_view.InitializeDGV(GlobalVariables.Currencies.GetInUseCurrenciesIdList(), m_MonthsIdList, p_versionid)
         'm_view.DisplayRatesVersionValues(m_exchangeRates.m_exchangeRatesHash)
-        m_view.version_TB.Text = GlobalVariables.GlobalFactsVersions.globalFact_versions_hash(m_currentVersionId)(NAME_VARIABLE)
+        m_view.version_TB.Text = GlobalVariables.GlobalFactsVersions.GetValueName(m_currentVersionId)
 
     End Sub
 
@@ -77,76 +78,92 @@ Friend Class GlobalFactController
 
 #Region "Utilities"
 
-    Friend Sub UpdateFactName(ByRef p_factId As Int32, ByRef p_name As String)
-        Dim fact As Hashtable = GlobalVariables.GlobalFacts.m_globalFactHash(p_factId)
+    Friend Sub UpdateFactName(ByRef p_factId As UInt32, ByRef p_name As String)
+        Dim fact As GlobalFact = GlobalVariables.GlobalFacts.GetValue(p_factId)
         If fact Is Nothing Then Exit Sub
 
         fact = fact.Clone()
-        fact(NAME_VARIABLE) = p_name
-        GlobalVariables.GlobalFacts.CMSG_UPDATE_GLOBAL_FACT(fact)
+        fact.Name = p_name
+        GlobalVariables.GlobalFacts.Update(fact)
 
     End Sub
 
-    Friend Sub DeleteFact(ByRef p_factId As Int32)
-        Dim fact As Hashtable = GlobalVariables.GlobalFacts.m_globalFactHash(p_factId)
+    Friend Sub DeleteFact(ByRef p_factId As UInt32)
+        Dim fact As GlobalFact = GlobalVariables.GlobalFacts.GetValue(p_factId)
         If fact Is Nothing Then Exit Sub
 
-        GlobalVariables.GlobalFacts.CMSG_DELETE_GLOBAL_FACT(p_factId)
+        GlobalVariables.GlobalFacts.Delete(p_factId)
     End Sub
 
     Friend Function IsUsedName(ByRef p_name As String) As Boolean
-        For Each fact In GetGlobalFactList()
-            If fact.Value(NAME_VARIABLE) = p_name Then Return True
+        For Each fact In GetGlobalFactList().Values
+            If fact.Name = p_name Then Return True
         Next
-        For Each account In GlobalVariables.Accounts.GetAccountsDictionary().Values
+        For Each account In GlobalVariables.Accounts.GetDictionary().Values
             If account.Name = p_name Then Return True
         Next
         Return False
     End Function
 
-    Friend Function GetGlobalFactList() As Hashtable
-        Return GlobalVariables.GlobalFacts.m_globalFactHash
+    Friend Function GetGlobalFactList() As MultiIndexDictionary(Of UInt32, String, NamedCRUDEntity)
+        Return GlobalVariables.GlobalFacts.GetDictionary()
     End Function
 
     Friend Function GetFact(ByRef p_period As Int32, ByRef p_factId As Int32, ByRef p_versionId As Int32) As Double
-        Dim key = New Tuple(Of Int32, Int32, Int32)(p_factId, p_period, p_versionId)
-        If (Not GlobalVariables.GlobalFactsDatas.globalFactDataHash.ContainsKey(key)) Then Return 0
-        Return GlobalVariables.GlobalFactsDatas.globalFactDataHash(key)
+        Dim factData As GlobalFactData = GlobalVariables.GlobalFactsDatas.GetValue(p_factId, p_period, p_versionId)
+        If factData Is Nothing Then Return 0
+        Return factData.Value
     End Function
 
-    Friend Function IsFolderVersion(ByRef versionId As Int32) As Boolean
-        Return GlobalVariables.GlobalFactsVersions.globalFact_versions_hash(versionId)(IS_FOLDER_VARIABLE) = True
+    Friend Function IsFolderVersion(ByRef versionId As UInt32) As Boolean
+        Dim version As GlobalFactVersion = GlobalVariables.GlobalFactsVersions.GetValue(versionId)
+
+        If version Is Nothing Then Return False
+        Return version.IsFolder
     End Function
 
     Private Sub UpdateVersionsPositions()
 
         Dim positions_dic = VTreeViewUtil.GeneratePositionsDictionary(m_versionTV)
+        Dim listVersion As New List(Of CRUDEntity)
+
         For Each id In positions_dic.Keys
-            UpdateVersion(id, ITEMS_POSITIONS, positions_dic(id))
+            Dim version As GlobalFactVersion = GlobalVariables.GlobalFactsVersions.GetValue(id)
+            If version Is Nothing Then Continue For
+
+            version = version.Clone()
+            version.ItemPosition = positions_dic(id)
+            listVersion.Add(version)
         Next
+        GlobalVariables.GlobalFactsVersions.UpdateList(listVersion)
 
     End Sub
 
-    Friend Sub UpdateVersionName(ByRef p_versionId As Int32, ByRef p_name As String)
-        UpdateVersion(p_versionId, NAME_VARIABLE, p_name)
-    End Sub
+    Friend Sub UpdateVersionName(ByRef p_versionId As UInt32, ByRef p_name As String)
+        Dim version As GlobalFactVersion = GlobalVariables.GlobalFactsVersions.GetValue(p_versionId)
+        If version Is Nothing Then Exit Sub
 
-    Private Sub UpdateVersion(ByRef id As Int32, _
-                   ByRef variable As String, _
-                   ByRef value As Object)
-
-        Dim ht As Hashtable = GlobalVariables.GlobalFactsVersions.globalFact_versions_hash(id)
-        ht(variable) = value
-        GlobalVariables.GlobalFactsVersions.CMSG_UPDATE_GLOBAL_FACT_VERSION(ht)
-
+        version = version.Clone()
+        version.Name = p_name
+        GlobalVariables.GlobalFactsVersions.Update(version)
     End Sub
 
     Friend Sub UpdateFactData(ByRef p_period As Int32, ByRef p_factId As Int32, ByRef p_versionId As Int32, ByRef p_value As Double)
-        Dim key = New Tuple(Of Int32, Int32, Int32)(p_factId, p_period, p_versionId)
-        If GlobalVariables.GlobalFactsDatas.globalFactDataHash.ContainsKey(key) Then
-            GlobalVariables.GlobalFactsDatas.CMSG_UPDATE_GLOBAL_FACT_DATA(p_factId, p_period, p_versionId, p_value)
+        Dim fact As GlobalFactData = GlobalVariables.GlobalFactsDatas.GetValue(p_factId, p_period, p_versionId)
+
+        If Not fact Is Nothing Then
+            fact = fact.Clone()
+
+            fact.Value = p_value
+            GlobalVariables.GlobalFactsDatas.Update(fact)
         Else
-            GlobalVariables.GlobalFactsDatas.CMSG_CREATE_GLOBAL_FACT_DATA(p_factId, p_period, p_versionId, p_value)
+            fact = New GlobalFactData
+
+            fact.GlobalFactId = p_factId
+            fact.Period = p_period
+            fact.VersionId = p_versionId
+            fact.Value = p_value
+            GlobalVariables.GlobalFactsDatas.Create(fact)
         End If
     End Sub
 
@@ -164,15 +181,16 @@ Friend Class GlobalFactController
         tmpHT.Add(VERSIONS_START_PERIOD_VAR, DateSerial(p_startPeriodYear, 12, 31).ToOADate())
         tmpHT.Add(VERSIONS_NB_PERIODS_VAR, p_nbPeriods)
 
-        GlobalVariables.GlobalFactsVersions.CMSG_CREATE_GLOBAL_FACT_VERSION(tmpHT)
+        GlobalVariables.GlobalFactsVersions.Create(tmpHT)
 
     End Sub
 
     Friend Sub CreateFact(ByRef p_name As String)
 
-        Dim tmpHT As New Hashtable
-        tmpHT.Add(NAME_VARIABLE, p_name)
-        GlobalVariables.GlobalFacts.CMSG_CREATE_GLOBAL_FACT(tmpHT)
+        Dim tmpHT As New GlobalFact
+
+        tmpHT.Name = p_name
+        GlobalVariables.GlobalFacts.Create(tmpHT)
 
     End Sub
 
@@ -181,7 +199,7 @@ Friend Class GlobalFactController
         If p_ratesVersionId = m_currentVersionId Then
             m_currentVersionId = 0
         End If
-        GlobalVariables.GlobalFactsVersions.CMSG_DELETE_GLOBAL_FACT_VERSION(p_ratesVersionId)
+        GlobalVariables.GlobalFactsVersions.Delete(p_ratesVersionId)
         Return True
 
     End Function

@@ -327,7 +327,7 @@ Friend Class GlobalFactUI
 
 #Region "Facts m_ratesDataGridView"
 
-    Friend Sub InitializeDGV(ByRef currenciesList As List(Of Int32), _
+    Friend Sub InitializeDGV(ByRef currenciesList As SortedSet(Of UInt32), _
                              ByRef monthsIdList As List(Of Int32), _
                              ByRef p_versionid As Int32)
 
@@ -345,16 +345,16 @@ Friend Class GlobalFactUI
 
     End Sub
 
-    Private Sub InitColumns(ByRef currenciesList As List(Of Int32))
+    Private Sub InitColumns(ByRef currenciesList As SortedSet(Of UInt32))
 
         m_dataGridView.ColumnsHierarchy.Clear()
         m_columnsVariableItemDictionary.Clear()
 
-        For Each fact In m_controller.GetGlobalFactList()
-            Dim column As HierarchyItem = m_dataGridView.ColumnsHierarchy.Items.Add(fact.Value(NAME_VARIABLE))
+        For Each fact In m_controller.GetGlobalFactList().Values
+            Dim column As HierarchyItem = m_dataGridView.ColumnsHierarchy.Items.Add(fact.Name)
 
-            m_columnsVariableItemDictionary.Add(fact.Value(NAME_VARIABLE), column)
-            column.ItemValue = CInt(fact.Value(ID_VARIABLE))
+            m_columnsVariableItemDictionary.Add(fact.Name, column)
+            column.ItemValue = CInt(fact.Id)
             column.AllowFiltering = False
             m_dataGridView.ContextMenu = Nothing
 

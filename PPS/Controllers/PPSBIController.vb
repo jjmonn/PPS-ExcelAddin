@@ -170,7 +170,7 @@ Public Class PPSBIController
 
         Dim accountName As String = ReturnValueFromRange(accountObject)
         If Not accountName Is Nothing Then
-            account_id = GlobalVariables.Accounts.GetIdFromName(accountName)
+            account_id = GlobalVariables.Accounts.GetValueId(accountName)
             If account_id = 0 Then
                 GoTo ReturnError
             Else
@@ -189,7 +189,7 @@ ReturnError:
 
         Dim entityName As String = ReturnValueFromRange(entityObject)
         If Not entityName Is Nothing Then
-            entity_id = GlobalVariables.Entities.GetEntityId(entityName)
+            entity_id = GlobalVariables.Entities.GetValueId(entityName)
             If entity_id = 0 Then
                 GoTo ReturnError
             Else
@@ -208,7 +208,7 @@ ReturnError:
 
         Dim currencyName As String = ReturnValueFromRange(currencyObject)
         If Not currencyName Is Nothing Then
-            currency_id = GlobalVariables.Currencies.GetCurrencyId(currencyName)
+            currency_id = GlobalVariables.Currencies.GetValueId(currencyName)
             If currency_id = 0 Then
                 error_message = "Invalid Currency"
                 Return False
@@ -304,18 +304,18 @@ ReturnError:
     Private Sub BuildFilters(ByRef p_filters_object As Object, _
                              ByRef filters As Dictionary(Of Int32, List(Of Int32)))
 
-        Dim filterValueId As Int32
+        Dim filterValue As FilterValue
         Dim filterId As Int32
         For Each filterObject In p_filters_object
             Dim filterValueName As String = ReturnValueFromRange(filterObject)
             If Not filterValueName Is Nothing Then
-                filterValueId = GlobalVariables.FiltersValues.GetFilterValueId(filterValueName)
-                If Not filterValueId = 0 Then
-                    filterId = GlobalVariables.FiltersValues.filtervalues_hash(filterValueId)(FILTER_ID_VARIABLE)
+                filterValue = GlobalVariables.FiltersValues.GetValue(filterValueName)
+                If Not filterValue Is Nothing Then
+                    filterId = filterValue.FilterId
                     If filters.ContainsKey(filterId) = False Then
                         filters.Add(filterId, New List(Of Int32))
                     End If
-                    filters(filterId).Add(filterValueId)
+                    filters(filterId).Add(filterValue.Id)
                 End If
             End If
         Next
@@ -331,7 +331,7 @@ ReturnError:
         For Each axisFilter In p_axis_filters_object
             Dim axisName As String = ReturnValueFromRange(axisFilter)
             If Not axisName Is Nothing Then
-                Dim axisValueId As Int32 = CRUDModel.GetAxisValueId(axisType, axisName)
+                Dim axisValueId As Int32 = CRUDModel.GetValueId(axisType, axisName)
                 If axisValueId <> 0 Then
                     axisFiltersList.Add(axisValueId)
                 End If

@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 namespace CRUD
 {
 
-  public class AxisFilter : CRUDEntity, IComparable
+  public class AxisFilter : CRUDEntity, AxedCRUDEntity, IComparable
   {
 
     public UInt32 Id { get; private set; }
-    public AxisType Axis { get; private set; }
+    public AxisType Axis { get; set; }
     public UInt32 AxisElemId { get; set; }
     public UInt32 FilterId { get; set; }
     public UInt32 FilterValueId { get; set; }

@@ -40,14 +40,13 @@ Friend Class EntitiesController
 
 #End Region
 
-
 #Region "Initialize"
 
     Friend Sub New()
 
         LoadInstanceVariables()
         View = New EntitiesView(Me, entitiesTV, entitiesFilterValuesTV, entitiesFilterTV)
-        NewEntityView = New NewEntityUI(Me, entitiesTV, GlobalVariables.Currencies.currencies_hash)
+        NewEntityView = New NewEntityUI(Me, entitiesTV, GlobalVariables.Currencies.GetDictionary())
 
         ' Entities CRUD Events
         AddHandler GlobalVariables.Entities.CreationEvent, AddressOf AfterEntityCreation
@@ -89,7 +88,6 @@ Friend Class EntitiesController
 
 #End Region
 
-
 #Region "Interface"
 
     Friend Sub CreateEntity(ByRef entityName As String, _
@@ -98,74 +96,51 @@ Friend Class EntitiesController
                             ByRef position As Int32, _
                             ByRef allowEdition As Int32)
 
-        Dim ht As New Hashtable
-        ht.Add(NAME_VARIABLE, entityName)
-        ht.Add(ENTITIES_CURRENCY_VARIABLE, entityCurrency)
-        ht.Add(PARENT_ID_VARIABLE, parentEntityId)
-        ht.Add(ITEMS_POSITIONS, position)
-        ht.Add(ENTITIES_ALLOW_EDITION_VARIABLE, allowEdition)
-        GlobalVariables.Entities.CMSG_CREATE_ENTITY(ht)
+        Dim l_entity As New Entity
+
+        l_entity.Name = entityName
+        l_entity.CurrencyId = entityCurrency
+        l_entity.ParentId = parentEntityId
+        l_entity.ItemPosition = position
+        l_entity.AllowEdition = allowEdition
+        GlobalVariables.Entities.Create(l_entity)
 
     End Sub
 
-    Friend Sub UpdateEntity(ByRef id As Int32, ByRef variable As String, ByVal value As Object)
+    Friend Sub UpdateEntity(ByRef entity_attributes As Entity)
 
-        Dim ht As Hashtable = GlobalVariables.Entities.entities_hash(id).Clone()
-        ht(variable) = value
-        GlobalVariables.Entities.CMSG_UPDATE_ENTITY(ht)
-
-    End Sub
-
-    Friend Sub UpdateEntity(ByRef id As String, ByRef entity_attributes As Hashtable)
-
-        Dim ht As Hashtable = GlobalVariables.Entities.entities_hash(id).Clone()
-        For Each attribute As String In entity_attributes
-            ht(attribute) = entity_attributes(attribute)
-        Next
-        GlobalVariables.Entities.CMSG_UPDATE_ENTITY(ht)
-
-    End Sub
-
-    Friend Sub UpdateBatch(ByRef p_entitiesUpdates As List(Of Tuple(Of Int32, String, Int32)))
-
-        Dim entitiesHTUpdates As New Hashtable
-        For Each tuple_ As Tuple(Of Int32, String, Int32) In p_entitiesUpdates
-            Dim ht As Hashtable = GlobalVariables.Entities.entities_hash(tuple_.Item1).Clone
-            ht(tuple_.Item2) = tuple_.Item3
-            entitiesHTUpdates(CInt(ht(ID_VARIABLE))) = ht
-        Next
-        GlobalVariables.Entities.CMSG_UPDATE_ENTITY_LIST(entitiesHTUpdates)
+        GlobalVariables.Entities.Update(entity_attributes)
 
     End Sub
 
     Friend Sub DeleteEntity(ByRef entity_id As Int32)
 
-        GlobalVariables.Entities.CMSG_DELETE_ENTITY(entity_id)
+        GlobalVariables.Entities.Delete(entity_id)
 
     End Sub
 
-    Friend Sub UpdateFilterValue(ByRef p_axisElemId As Int32, _
+    Friend Sub UpdateAxisFilter(ByRef p_axisElemId As Int32, _
                              ByRef filterId As Int32, _
                              ByRef filterValueId As Int32)
         For Each axisFilter As AxisFilter In GetAxisFilterDictionary().Values
             If axisFilter.FilterId = filterId Then
                 Dim l_copy = GetAxisFilterCopy(axisFilter.Id)
                 l_copy.FilterValueId = filterValueId
-                UpdateFilterValue(l_copy)
+                UpdateAxisFilter(l_copy)
             End If
         Next
     End Sub
 
-    Friend Sub UpdateFilterValue(ByRef p_axisFilter As AxisFilter)
+    Friend Sub UpdateAxisFilter(ByRef p_axisFilter As AxisFilter)
 
         If p_axisFilter.FilterId = GlobalVariables.Filters.GetMostNestedFilterId(p_axisFilter.FilterId) Then
-            GlobalVariables.AxisFilters.CMSG_UPDATE_AXIS_FILTER(p_axisFilter)
+            GlobalVariables.AxisFilters.Update(p_axisFilter)
         End If
 
     End Sub
 
     Friend Function GetAxisFilter(ByVal p_axisFilterId As UInt32) As AxisFilter
-        Return GlobalVariables.AxisFilters.GetAxisFilter(AxisType.Entities, p_axisFilterId)
+        Return GlobalVariables.AxisFilters.GetValue(AxisType.Entities, p_axisFilterId)
     End Function
 
     Friend Function GetAxisFilterCopy(ByVal p_axisId As UInt32) As AxisFilter
@@ -176,46 +151,60 @@ Friend Class EntitiesController
     End Function
 
     Friend Function GetAxisFilterDictionary() As SortedDictionary(Of Int32, AxisFilter)
-        Return GlobalVariables.AxisFilters.GetAxisFilterDictionary(AxisType.Entities)
+        Return GlobalVariables.AxisFilters.GetDictionary(AxisType.Entities)
     End Function
 
+    Friend Sub UpdateEntityName(ByVal p_id As UInt32, ByVal p_value As String)
+        UpdateVar(p_id, p_value, Function(p_entity As Entity, p_destValue As Object) p_entity.Name = p_destValue)
+    End Sub
 
+    Friend Sub UpdateEntityCurrency(ByVal p_id As UInt32, ByVal p_value As UInt32)
+        UpdateVar(p_id, p_value, Function(p_entity As Entity, p_destValue As Object) p_entity.CurrencyId = p_destValue)
+    End Sub
+
+    Private Sub UpdateVar(ByVal p_id As UInt32, ByVal p_value As Object, ByRef p_action As Action(Of Entity, Object))
+        Dim l_entity = GetEntityCopy(p_id)
+
+        If l_entity Is Nothing Then Exit Sub
+        p_action(l_entity, p_value)
+        UpdateEntity(l_entity)
+    End Sub
 
 #End Region
 
-
 #Region "Events"
 
-    Private Sub AfterEntityRead(ByRef status As Boolean, ByRef ht As Hashtable)
+    Private Sub AfterEntityRead(ByRef status As ErrorMessage, ByRef ht As Entity)
 
-        If (status = True) Then
+        If (status = ErrorMessage.SUCCESS) Then
             View.LoadInstanceVariables_Safe()
             View.UpdateEntity(ht)
         End If
 
     End Sub
 
-    Private Sub AfterEntityDeletion(ByRef status As Boolean, ByRef id As Int32)
+    Private Sub AfterEntityDeletion(ByRef status As ErrorMessage, ByRef id As Int32)
 
-        If status = True Then
+        If status = ErrorMessage.SUCCESS Then
             View.LoadInstanceVariables_Safe()
             View.DeleteEntity(id)
         End If
 
     End Sub
 
-    Private Sub AfterEntityUpdate(ByRef status As Boolean, ByRef id As Int32)
+    Private Sub AfterEntityUpdate(ByRef status As ErrorMessage, ByRef id As Int32)
 
-        If (status = False) Then
-            View.UpdateEntity(GlobalVariables.Entities.entities_hash(id))
+        If (status <> ErrorMessage.SUCCESS) Then
+            If GlobalVariables.Entities.GetValue(id) Is Nothing Then Exit Sub
+            View.UpdateEntity(GlobalVariables.Entities.GetValue(id))
             MsgBox("Invalid parameter")
         End If
 
     End Sub
 
-    Private Sub AfterEntityCreation(ByRef status As Boolean, ByRef id As Int32)
+    Private Sub AfterEntityCreation(ByRef status As ErrorMessage, ByRef id As Int32)
 
-        If status = False Then
+        If status <> ErrorMessage.SUCCESS Then
             MsgBox("The Entity Could not be created.")
             ' catch and display error as well V2 priority normal
         End If
@@ -227,32 +216,41 @@ Friend Class EntitiesController
         If (status = ErrorMessage.SUCCESS) Then
             If p_axisFilter.Axis <> AxisType.Entities Then Exit Sub
             Dim entityId As Int32 = p_axisFilter.Id
-            If GlobalVariables.Entities.entities_hash.ContainsKey(entityId) Then
+            If Not GlobalVariables.Entities.GetValue(entityId) Is Nothing Then
                 View.LoadInstanceVariables()
-                View.UpdateEntity(GlobalVariables.Entities.entities_hash(entityId))
+                View.UpdateEntity(GlobalVariables.Entities.GetValue(entityId))
             End If
         End If
 
     End Sub
 
     Private Sub AfterEntityFilterUpdate(ByRef status As ErrorMessage, _
-                                        ByRef axisType As AxisType, _
-                                        ByRef axisFilterId As Int32)
+                                        ByRef axisFilterId As UInt32)
         If status <> ErrorMessage.SUCCESS Then
-            If axisType <> CRUD.AxisType.Entities Then Exit Sub
-            Dim l_axisFilter As AxisFilter = GlobalVariables.AxisFilters.GetAxisFilter(axisType, axisFilterId)
-            View.UpdateEntity(GlobalVariables.Entities.entities_hash(l_axisFilter.AxisElemId))
+            Dim l_axisFilter As AxisFilter = GlobalVariables.AxisFilters.GetValue(axisFilterId)
+            If l_axisFilter.Axis <> CRUD.AxisType.Entities Then Exit Sub
+            If GlobalVariables.Entities.GetValue(l_axisFilter.AxisElemId) Is Nothing Then Exit Sub
+            View.UpdateEntity(GlobalVariables.Entities.GetValue(l_axisFilter.AxisElemId))
             MsgBox("The Entity could be updated.")
             ' catch and display message
         End If
 
     End Sub
 
-
 #End Region
 
-
 #Region "Utilities"
+
+    Friend Function GetEntity(ByVal p_id As UInt32) As Entity
+        Return GlobalVariables.Entities.GetValue(p_id)
+    End Function
+
+    Friend Function GetEntityCopy(ByVal p_id As UInt32) As Entity
+        Dim l_entity As Entity = GlobalVariables.Entities.GetValue(p_id)
+
+        If l_entity Is Nothing Then Return Nothing
+        Return l_entity.Clone()
+    End Function
 
     Friend Sub ShowNewEntityUI()
 
@@ -276,30 +274,32 @@ ShowNewEntity:
 
     Friend Function GetEntityId(ByRef name As String) As Int32
 
-        Return GlobalVariables.Entities.GetEntityId(name)
+        Return GlobalVariables.Entities.GetValueId(name)
 
     End Function
 
     Friend Sub SendNewPositionsToModel()
 
         Dim position As Int32
-        Dim entitiesUpdates As New List(Of Tuple(Of Int32, String, Int32))
-        positionsDictionary = DataGridViewsUtil.GeneratePositionsDictionary(View.m_entitiesDataGridView)
+        Dim listEntities As New List(Of CRUDEntity)
 
+        positionsDictionary = DataGridViewsUtil.GeneratePositionsDictionary(View.m_entitiesDataGridView)
         For Each entity_id As Int32 In positionsDictionary.Keys
             position = positionsDictionary(entity_id)
-            If GlobalVariables.Entities.entities_hash.ContainsKey(entity_id) = False Then Continue For
-            If position <> GlobalVariables.Entities.entities_hash(entity_id)(ITEMS_POSITIONS) Then
-                Dim tuple_ As New Tuple(Of Int32, String, Int32)(entity_id, ITEMS_POSITIONS, position)
-                entitiesUpdates.Add(tuple_)
+            If GetEntity(entity_id) Is Nothing Then Continue For
+            If position <> GetEntity(entity_id).ItemPosition Then
+                Dim l_entity = GetEntityCopy(entity_id)
+
+                If Not l_entity Is Nothing Then
+                    l_entity.ItemPosition = position
+                    listEntities.Add(l_entity)
+                End If
             End If
         Next
-        UpdateBatch(entitiesUpdates)
-
+        GlobalVariables.Entities.UpdateList(listEntities)
     End Sub
 
 
 #End Region
-
 
 End Class

@@ -14,7 +14,7 @@ namespace CRUD
     Adjustment,
   }
 
-  public class AxisElem : CRUDEntity, IComparable
+  public class AxisElem : NamedCRUDEntity, AxedCRUDEntity, IComparable
   {
     public UInt32 Id { get; private set; }
     public string Name { get; set; }

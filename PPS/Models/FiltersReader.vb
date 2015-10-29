@@ -11,7 +11,7 @@
 Imports System.Collections.Generic
 Imports System.Windows.Forms
 Imports VIBlend.WinForms.Controls
-
+Imports CRUD
 
 Friend Class FiltersReader
 
@@ -86,9 +86,11 @@ Friend Class FiltersReader
             Next
             If tmpList1.Count > 0 Then
                 ' We first request the filterId => node id corresponds to the filterValueId
-                Dim filter_id As Int32 = GlobalVariables.FiltersValues.filtervalues_hash(CInt(node.Value))(FILTER_ID_VARIABLE)
-                If activeFiltersList.Contains(filter_id) = False Then
-                    activeFiltersList.Add(filter_id)
+                Dim filterValue As FilterValue = GlobalVariables.FiltersValues.GetValue(CUInt(node.Value))
+
+                If filterValue Is Nothing Then Continue For
+                If activeFiltersList.Contains(filterValue.FilterId) = False Then
+                    activeFiltersList.Add(filterValue.FilterId)
                 End If
             End If
         Next
@@ -100,13 +102,15 @@ Friend Class FiltersReader
                                                 ByRef filterIdsList As List(Of Int32), _
                                                 ByRef selectionDictionary As Dictionary(Of Int32, List(Of Int32)))
 
-        Dim filterId As Int32 = GlobalVariables.FiltersValues.filtervalues_hash(CInt(valueNode.Value))(FILTER_ID_VARIABLE)
-        If filterIdsList.Contains(filterId) _
+        Dim filterValue As FilterValue = GlobalVariables.FiltersValues.GetValue(CUInt(valueNode.Value))
+
+        If filterValue Is Nothing Then Exit Sub
+        If filterIdsList.Contains(filterValue.FilterId) _
          AndAlso valueNode.Checked = CheckState.Checked Then
-            If selectionDictionary.ContainsKey(filterId) = False Then
-                selectionDictionary.Add(filterId, New List(Of Int32))
+            If selectionDictionary.ContainsKey(filterValue.FilterId) = False Then
+                selectionDictionary.Add(filterValue.FilterId, New List(Of Int32))
             End If
-            selectionDictionary(filterId).Add(valueNode.Value)
+            selectionDictionary(filterValue.FilterId).Add(valueNode.Value)
         End If
 
         ' Loop through children nodes to fill up selection dictionary

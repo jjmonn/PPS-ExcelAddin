@@ -63,7 +63,10 @@
     <Compile Include="Network\Core\ServerMessage.cs" />
     <Compile Include="Network\CRUD\AxisElem.cs" />
     <Compile Include="Network\CRUD\AxisFilter.cs" />
-    <Compile Include="Network\CRUD\CRUDEntity.cs" />
+    <Compile Include="Network\CRUD\Base\AxedCRUDEntity.cs" />
+    <Compile Include="Network\CRUD\Base\NamedHierarchyCRUDEntity.cs" />
+    <Compile Include="Network\CRUD\Base\NamedCRUDEntity.cs" />
+    <Compile Include="Network\CRUD\Base\CRUDEntity.cs" />
     <Compile Include="Network\CRUD\Currency.cs" />
     <Compile Include="Network\CRUD\Entity.cs" />
     <Compile Include="Network\CRUD\ExchangeRate.cs" />
@@ -76,7 +79,7 @@
     <Compile Include="Network\CRUD\GlobalFactVersion.cs" />
     <Compile Include="Network\CRUD\Group.cs" />
     <Compile Include="Network\CRUD\GroupAllowedEntity.cs" />
-    <Compile Include="Network\CRUD\HierarchyCRUDEntity.cs" />
+    <Compile Include="Network\CRUD\Base\HierarchyCRUDEntity.cs" />
     <Compile Include="Network\CRUD\User.cs" />
     <Compile Include="Network\CRUD\Version.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace CRUD
 {
-  class GlobalFactData : CRUDEntity, IComparable
+  public class GlobalFactData : CRUDEntity, IComparable
   {
     public UInt32 Id { get; private set; }
-    public UInt32 GlobalFactId { get; private set; }
-    public UInt32 Period { get; private set; }
-    public UInt32 VersionId { get; private set; }
+    public UInt32 GlobalFactId { get; set; }
+    public UInt32 Period { get; set; }
+    public UInt32 VersionId { get; set; }
     public double Value { get; set; }
 
     public GlobalFactData() { }

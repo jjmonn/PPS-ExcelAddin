@@ -597,7 +597,7 @@ SubmitFormula:
 
         If formulaEdit.Checked = False Then
             If Not m_currentNode Is Nothing Then
-                Dim l_account = GlobalVariables.Accounts.GetAccount(CInt(m_currentNode.Name))
+                Dim l_account As Account = GlobalVariables.Accounts.GetValue(CInt(m_currentNode.Name))
 
                 If l_account Is Nothing Then Exit Sub
                 If m_controller.FTypesToBeTested.Contains(l_account.FormulaType) Then
@@ -750,7 +750,7 @@ SubmitFormula:
                     GoTo UdpateFormulaType
                 Else
                     m_isRevertingFType = True
-                    Dim l_account = GlobalVariables.Accounts.GetAccount(CInt(m_currentNode.Name))
+                    Dim l_account As Account = GlobalVariables.Accounts.GetValue(CInt(m_currentNode.Name))
 
                     If Not l_account Is Nothing Then
                         FormulaTypeComboBox.SelectedValue = l_account.FormulaType
@@ -839,7 +839,7 @@ UdpateFormulaType:
 
             m_isDisplayingAttributes = True
             Dim account_id As Int32 = m_currentNode.Name
-            Dim l_account As Account = GlobalVariables.Accounts.GetAccount(account_id)
+            Dim l_account As Account = GlobalVariables.Accounts.GetValue(account_id)
 
             If l_account Is Nothing Then Exit Sub
             Name_TB.Text = m_currentNode.Text

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CRUD
 {
-  class Entity : HierarchyCRUDEntity, IComparable
+  public class Entity : NamedHierarchyCRUDEntity, IComparable
   {
     public UInt32 Id { get; private set; }
     public UInt32 ParentId { get; set; }
@@ -14,6 +14,7 @@ namespace CRUD
     public string Name { get; set; }
     public Int32 ItemPosition { get; set; }
     public bool AllowEdition { get; set; }
+    public Int32 Image { get; set; }
 
     public Entity() { }
     private Entity(UInt32 p_id)
@@ -52,6 +53,7 @@ namespace CRUD
       Name = p_model.Name;
       ItemPosition = p_model.ItemPosition;
       AllowEdition = p_model.AllowEdition;
+      Image = p_model.Image;
     }
 
     public Entity Clone()

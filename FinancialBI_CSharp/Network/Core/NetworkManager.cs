@@ -37,7 +37,7 @@ public class NetworkManager
 
   public void SetCallback(UInt16 p_opcodeId, Action<ByteBuffer> p_newCallback)
   {
-    if (p_opcodeId > (byte)ServerMessage.OpcodeMax)
+    if (p_opcodeId == 0 || p_opcodeId > (byte)ServerMessage.OpcodeMax)
       return;
     if (m_callback[p_opcodeId] == null)
       m_callback[p_opcodeId] = new List<Action<ByteBuffer>>();
@@ -58,7 +58,7 @@ public class NetworkManager
 
   public void RemoveCallback(int p_opcode, Action<ByteBuffer> p_oldCallback)
   {
-    if (p_opcode > (byte)ServerMessage.OpcodeMax)
+    if (p_opcode == 0 || p_opcode > (byte)ServerMessage.OpcodeMax)
       return;
     if (m_callback[p_opcode] != null)
       m_callback[p_opcode].Remove(p_oldCallback);

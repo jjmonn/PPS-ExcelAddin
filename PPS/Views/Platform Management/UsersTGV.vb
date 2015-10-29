@@ -33,7 +33,6 @@ Friend Class UsersTGV
     ' Variables
     Friend columnsDictionary As New Dictionary(Of String, HierarchyItem)
     Friend rowsIDItem As New Dictionary(Of String, HierarchyItem)
-    Friend entitiesIDName As Hashtable
     Friend tmp_entity_name As String
     Friend tmp_entity_id As String
     Friend currentRowItem As HierarchyItem
@@ -64,7 +63,6 @@ Friend Class UsersTGV
         ParentView = input_parent_view
         TGV = inputTGV
         InitializeTGVColumns()
-        entitiesIDName = GlobalVariables.Entities.GetEntitiesDictionary(ID_VARIABLE, NAME_VARIABLE)
         '  credentials_types_list = CredentialsTypesMapping.GetCredentialsTypesList(CREDENTIALS_DESCRIPTION_VARIABLE)
 
         InitCredentialTypesComboBox()
@@ -158,7 +156,7 @@ Friend Class UsersTGV
                                       hash(USERS_CREDENTIAL_TYPE_VARIABLE))
 
             TGV.CellsArea.SetCellValue(row, columnsDictionary(USERS_ENTITY_ID_VARIABLE), _
-                                       entitiesIDName(hash(USERS_ENTITY_ID_VARIABLE)))
+                                       GlobalVariables.Entities.GetValue(hash(USERS_ENTITY_ID_VARIABLE)))
 
             TGV.CellsArea.SetCellValue(row, columnsDictionary(USERS_EMAIL_VARIABLE), _
                                        hash(USERS_EMAIL_VARIABLE))

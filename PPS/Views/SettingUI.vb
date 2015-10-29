@@ -20,7 +20,7 @@ Imports System.Collections.Generic
 Imports VIBlend.WinForms.DataGridView
 Imports VIBlend.WinForms.Controls
 Imports VIBlend.Utilities
-
+Imports CRUD
 
 
 Friend Class SettingUI
@@ -59,10 +59,10 @@ Friend Class SettingUI
         FillFormatsDGV()
 
         If GlobalVariables.AuthenticationFlag = True Then
-            For Each currencyId As Int32 In GlobalVariables.Currencies.currencies_hash.Keys
+            For Each currency As Currency In GlobalVariables.Currencies.GetDictionary().Values
                 Dim li As New ListItem
-                li.Value = currencyId
-                li.Text = GlobalVariables.Currencies.currencies_hash(currencyId)(NAME_VARIABLE)
+                li.Value = currency.Id
+                li.Text = currency.Name
                 CurrenciesCombobox.Items.Add(li)
                 If li.Value = My.Settings.currentCurrency Then
                     li.IsChecked = True

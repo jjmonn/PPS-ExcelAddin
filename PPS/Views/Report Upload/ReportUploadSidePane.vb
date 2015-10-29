@@ -28,7 +28,7 @@ Public Class ReportUploadSidePane
     End Sub
 
     Friend Sub DisplayAccountDetails(ByRef p_accountId As Int32)
-        Dim l_account = GlobalVariables.Accounts.GetAccount(p_accountId)
+        Dim l_account As Account = GlobalVariables.Accounts.GetValue(p_accountId)
 
         If Not l_account Is Nothing Then
             m_accountTextBox.Text = l_account.Name

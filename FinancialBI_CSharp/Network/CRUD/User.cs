@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CRUD
 {
-  class User : CRUDEntity, IComparable
+  public class User : NamedCRUDEntity, IComparable
   {
     public UInt32 Id { get; private set; }
     public UInt32 GroupId { get; set; }

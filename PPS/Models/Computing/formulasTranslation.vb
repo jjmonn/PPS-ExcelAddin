@@ -149,7 +149,7 @@ Friend Class FormulasTranslations
                 matchStr = m.Groups(0).Value
                 accountName = m.Groups(1).Value
 
-                accountId = GlobalVariables.Accounts.GetIdFromName(accountName)
+                accountId = GlobalVariables.Accounts.GetValueId(accountName)
                 If accountId <> 0 Then
 
                     If matchStr.IndexOf(PERIODS_SEPARATOR_START, 0) > 0 Then
@@ -169,7 +169,7 @@ Friend Class FormulasTranslations
                         '                                      RELATIVE_PERIODS_IDENTIFIER & _
                         '                                      PERIODS_SEPARATOR_END)
                     End If
-                ElseIf GlobalVariables.GlobalFacts.GetIdFromName(accountName) = 0 Then
+                ElseIf GlobalVariables.GlobalFacts.GetValueId(accountName) = 0 Then
                     error_tokens.Add(accountName)
                 End If
                 m = m.NextMatch
@@ -190,7 +190,7 @@ Friend Class FormulasTranslations
                 matchStr = m.Groups(0).Value
                 factName = m.Groups(1).Value
 
-                factId = GlobalVariables.GlobalFacts.GetIdFromName(factName)
+                factId = GlobalVariables.GlobalFacts.GetValueId(factName)
                 If factId <> 0 Then
 
                     If matchStr.IndexOf(PERIODS_SEPARATOR_START, 0) > 0 Then
@@ -204,7 +204,7 @@ Friend Class FormulasTranslations
                                                 PERIODS_SEPARATOR_END, _
                                                 1, 1)
                     End If
-                ElseIf GlobalVariables.Accounts.GetIdFromName(factName) = 0 Then
+                ElseIf GlobalVariables.Accounts.GetValueId(factName) = 0 Then
                     error_tokens.Add(factName)
                 End If
                 m = m.NextMatch
@@ -264,7 +264,7 @@ Friend Class FormulasTranslations
                     System.Diagnostics.Debug.Write("Error in regex parsing from DB to Human: Identified several Accounts IDs.")
                 End If
                 accountId = m.Groups(1).Captures(0).Value
-                l_account = GlobalVariables.Accounts.GetAccount(accountId)
+                l_account = GlobalVariables.Accounts.GetValue(accountId)
 
                 If l_account Is Nothing Then Exit While
                 accountName = l_account.Name
@@ -280,7 +280,7 @@ Friend Class FormulasTranslations
 
     Private Sub ParseFactsTokenFromDB(ByRef formulaStr As String)
 
-        Dim factId As Int32
+        Dim factId As UInt32
         Dim factName As String
         Dim str_copy As String = formulaStr
         Dim m As Match = factsDBToHumanRegex.Match(str_copy)
@@ -290,9 +290,11 @@ Friend Class FormulasTranslations
                     System.Diagnostics.Debug.Write("Error in regex parsing from DB to Human: Identified several Accounts IDs.")
                 End If
                 factId = m.Groups(1).Captures(0).Value
-                factName = GlobalVariables.GlobalFacts.m_globalFactHash(factId)(NAME_VARIABLE)
+                Dim fact As GlobalFact = GlobalVariables.GlobalFacts.GetValue(factId)
+                If fact Is Nothing Then Exit Sub
+
                 formulaStr = Replace(formulaStr, m.Groups(0).Value, FACTS_HUMAN_IDENTIFIER & _
-                                                                    factName & _
+                                                                    fact.Name & _
                                                                     FACTS_HUMAN_IDENTIFIER & _
                                                                     PERIODS_SEPARATOR_START)
                 m = m.NextMatch
@@ -328,7 +330,7 @@ Friend Class FormulasTranslations
 
         Dim dependantId As UInt32
         Dim dependants_list As New List(Of UInt32)
-        Dim l_account = GlobalVariables.Accounts.GetAccount(accountid)
+        Dim l_account As Account = GlobalVariables.Accounts.GetValue(accountid)
 
         If l_account Is Nothing Then Return dependants_list
         Dim formula_str As String = l_account.Formula

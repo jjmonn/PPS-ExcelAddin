@@ -1271,19 +1271,19 @@ Public Class AddinModule
 
         ' CRUDs
         GlobalVariables.Accounts = New AccountManager
-        GlobalVariables.Entities = New Entity
-        GlobalVariables.Filters = New Filter
-        GlobalVariables.FiltersValues = New FilterValue
+        GlobalVariables.Entities = New EntityManager
+        GlobalVariables.Filters = New FilterManager
+        GlobalVariables.FiltersValues = New FilterValueManager
         GlobalVariables.Versions = New Version
         GlobalVariables.Currencies = New CurrencyManager
-        GlobalVariables.RatesVersions = New RatesVersion
-        GlobalVariables.GlobalFacts = New GlobalFact
-        GlobalVariables.GlobalFactsDatas = New GlobalFactData
-        GlobalVariables.GlobalFactsVersions = New GlobalFactVersion
-        GlobalVariables.Users = New User
-        GlobalVariables.Groups = New Group
-        GlobalVariables.GroupAllowedEntities = New GroupAllowedEntity
-        GlobalVariables.FModelingsAccounts = New FModelingAccount
+        GlobalVariables.RatesVersions = New RatesVersionManager
+        GlobalVariables.GlobalFacts = New GlobalFactManager
+        GlobalVariables.GlobalFactsDatas = New GlobalFactDataManager
+        GlobalVariables.GlobalFactsVersions = New GlobalFactVersionManager
+        GlobalVariables.Users = New UserManager
+        GlobalVariables.Groups = New GroupManager
+        GlobalVariables.GroupAllowedEntities = New GroupAllowedEntityManager
+        GlobalVariables.FModelingsAccounts = New FModelingAccountManager
         GlobalVariables.AxisElems = New AxisElemManager
         GlobalVariables.AxisFilters = New AxisFilterManager
 
@@ -1568,8 +1568,9 @@ Public Class AddinModule
                 startDate = Date.FromOADate(GlobalVariables.Versions.versions_hash(My.Settings.version_id)(VERSIONS_START_PERIOD_VAR))
             End If
             Dim currencyName As String = ""
-            If GlobalVariables.Currencies.currencies_hash.ContainsKey(My.Settings.currentCurrency) = True Then
-                currencyName = GlobalVariables.Currencies.currencies_hash(My.Settings.currentCurrency)(NAME_VARIABLE)
+            Dim l_currency As Currency = GlobalVariables.Currencies.GetValue(My.Settings.currentCurrency)
+            If Not l_currency Is Nothing Then
+                currencyName = l_currency.Name
             End If
             ExcelFormatting.FormatExcelRange(GlobalVariables.APPS.ActiveSheet.cells(1, 1), currencyName, startDate)
         End If
@@ -1704,11 +1705,11 @@ Public Class AddinModule
     Friend Shared Sub loadDropDownsSubmissionButtons()
 
         GlobalVariables.ClientsIDDropDown.Items.Clear()
-        For Each client_id As Int32 In GlobalVariables.AxisElems.GetAxisElemDictionary(AxisType.Client).Keys
-            If GlobalVariables.AxisElems.GetAxisElem(AxisType.Client, client_id) Is Nothing Then Continue For
+        For Each client_id As Int32 In GlobalVariables.AxisElems.GetDictionary(AxisType.Client).Keys
+            If GlobalVariables.AxisElems.GetValue(AxisType.Client, client_id) Is Nothing Then Continue For
             AddButtonToDropDown(GlobalVariables.ClientsIDDropDown, _
                                 client_id, _
-                                GlobalVariables.AxisElems.GetAxisElem(AxisType.Client, client_id).Name)
+                                GlobalVariables.AxisElems.GetValueName(AxisType.Client, client_id))
         Next
         GlobalVariables.ClientsIDDropDown.SelectedItemId = DEFAULT_ANALYSIS_AXIS_ID
         GlobalVariables.ClientsIDDropDown.Invalidate()
@@ -1716,21 +1717,21 @@ Public Class AddinModule
         '  GlobalVariables.ClientsIDDropDown. = GlobalVariables.Clients.axis_hash(DEFAULT_ANALYSIS_AXIS_ID)(NAME_VARIABLE)
 
         GlobalVariables.ProductsIDDropDown.Items.Clear()
-        For Each product_id As Int32 In GlobalVariables.AxisElems.GetAxisElemDictionary(AxisType.Product).Keys
-            If GlobalVariables.AxisElems.GetAxisElem(AxisType.Client, product_id) Is Nothing Then Continue For
+        For Each product_id As Int32 In GlobalVariables.AxisElems.GetDictionary(AxisType.Product).Keys
+            If GlobalVariables.AxisElems.GetValue(AxisType.Client, product_id) Is Nothing Then Continue For
             AddButtonToDropDown(GlobalVariables.ProductsIDDropDown, _
                                 product_id, _
-                                GlobalVariables.AxisElems.GetAxisElem(AxisType.Product, product_id).Name)
+                                GlobalVariables.AxisElems.GetValueName(AxisType.Product, product_id))
         Next
         GlobalVariables.ProductsIDDropDown.SelectedItemId = DEFAULT_ANALYSIS_AXIS_ID
         '    GlobalVariables.ProductsIDDropDown.Caption = GlobalVariables.Products.axis_hash(DEFAULT_ANALYSIS_AXIS_ID)(NAME_VARIABLE)
 
         GlobalVariables.AdjustmentIDDropDown.Items.Clear()
-        For Each adjustment_id As Int32 In GlobalVariables.AxisElems.GetAxisElemDictionary(AxisType.Adjustment).Keys
-            If GlobalVariables.AxisElems.GetAxisElem(AxisType.Client, adjustment_id) Is Nothing Then Continue For
+        For Each adjustment_id As Int32 In GlobalVariables.AxisElems.GetDictionary(AxisType.Adjustment).Keys
+            If GlobalVariables.AxisElems.GetValue(AxisType.Client, adjustment_id) Is Nothing Then Continue For
             AddButtonToDropDown(GlobalVariables.AdjustmentIDDropDown, _
                                 adjustment_id, _
-                                GlobalVariables.AxisElems.GetAxisElem(AxisType.Adjustment, adjustment_id).Name)
+                                GlobalVariables.AxisElems.GetValueName(AxisType.Adjustment, adjustment_id))
         Next
         GlobalVariables.AdjustmentIDDropDown.SelectedItemId = DEFAULT_ANALYSIS_AXIS_ID
         '  GlobalVariables.AdjustmentIDDropDown.Caption = GlobalVariables.Adjustments.axis_hash(DEFAULT_ANALYSIS_AXIS_ID)(NAME_VARIABLE)
@@ -1838,11 +1839,14 @@ Public Class AddinModule
         GlobalVariables.APPS.ScreenUpdating = False
         Dim entity_id As Int32 = Me.InputReportTaskPane.EntitiesTV.SelectedNode.Name
         Dim entity_name As String = Me.InputReportTaskPane.EntitiesTV.SelectedNode.Text
-        Dim currencyId As Int32 = GlobalVariables.Entities.entities_hash(entity_id)(ENTITIES_CURRENCY_VARIABLE)
-        Dim currencyName As String = GlobalVariables.Currencies.currencies_hash(currencyId)(NAME_VARIABLE)
+        Dim l_entity As Entity = GlobalVariables.Entities.GetValue(entity_id)
+        If l_entity Is Nothing Then Exit Sub
+        Dim currency As Currency = GlobalVariables.Currencies.GetValue(l_entity.CurrencyId)
+        If currency Is Nothing Then Exit Sub
+
         Dim currentcell As Excel.Range = WorksheetWrittingFunctions.CreateReceptionWS(entity_name, _
                                                                                        {"Entity", "Currency", "Version"}, _
-                                                                                       {entity_name, currencyName, GlobalVariables.Version_Button.Caption})
+                                                                                       {entity_name, currency.Name, GlobalVariables.Version_Button.Caption})
 
         If currentcell Is Nothing Then
             MsgBox("An error occurred in Excel and the report could not be created.")
@@ -1858,7 +1862,7 @@ Public Class AddinModule
 
         Me.InputReportTaskPane.Hide()
         Me.InputReportTaskPane.Close()
-        ExcelFormatting.FormatExcelRange(currentcell, currencyName, Date.FromOADate(periodlist(0)))
+        ExcelFormatting.FormatExcelRange(currentcell, currency.Name, Date.FromOADate(periodlist(0)))
         GlobalVariables.APPS.ScreenUpdating = True
         AssociateGRSControler(True)
 

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CRUD
 {
-  class GlobalFact : CRUDEntity, IComparable
+  public class GlobalFact : NamedCRUDEntity, IComparable
   {
     public UInt32 Id { get; private set; }
     public string Name { get; set; }

@@ -50,7 +50,6 @@ Friend Class AcquisitionModel
     Friend currentPeriodList() As Int32
     Friend outputsList As List(Of Account)
     Friend accountsTV As New TreeView
-    Friend entitiesNameIdDict As Hashtable
     Friend current_version_id As Int32
     Friend periodsIdentifyer As String
 
@@ -72,7 +71,6 @@ Friend Class AcquisitionModel
 
         GlobalVariables.Accounts.LoadAccountsTV(accountsTV)
         dataset = inputDataSet
-        entitiesNameIdDict = inputDataSet.m_entitiesNameIdDictionary
 
         outputsList = GlobalVariables.Accounts.GetAccountsList(GlobalEnums.AccountsLookupOptions.LOOKUP_OUTPUTS)
 
@@ -107,7 +105,8 @@ Friend Class AcquisitionModel
                                 ByRef product_id As Int32, _
                                 ByRef adjustment_id As Int32)
 
-        Dim entity_id As Int32 = entitiesNameIdDict(entityName)
+        Dim entity As Entity = GlobalVariables.Entities.GetValue(entityName)
+        If entity Is Nothing Then Exit Sub
         current_version_id = My.Settings.version_id
         currentPeriodDict = GlobalVariables.Versions.GetPeriodsDictionary(current_version_id)
         currentPeriodList = GlobalVariables.Versions.GetPeriodsList(current_version_id)
@@ -125,24 +124,27 @@ Friend Class AcquisitionModel
         axisFilters(GlobalEnums.AnalysisAxis.PRODUCTS).Add(product_id)
         axisFilters(GlobalEnums.AnalysisAxis.ADJUSTMENTS).Add(adjustment_id)
 
+
         ' Computation order
         Computer.CMSG_COMPUTE_REQUEST({current_version_id}, _
-                                      entity_id, _
-                                      GlobalVariables.Entities.entities_hash(entity_id)(ENTITIES_CURRENCY_VARIABLE), _
+                                      entity.Id, _
+                                      entity.CurrencyId, _
                                       Nothing, _
                                       axisFilters, _
                                       Nothing)
 
     End Sub
 
-    Private Sub AfterInputsComputation(ByRef entityId As Int32, ByRef status As Boolean, ByRef requestId As Int32)
+    Private Sub AfterInputsComputation(ByRef entityId As Int32, ByRef status As ErrorMessage, ByRef requestId As Int32)
 
-        If status = True Then
-            Dim entityName As String = GlobalVariables.Entities.entities_hash(entityId)(NAME_VARIABLE)
-            If dataBaseInputsDictionary.ContainsKey(entityName) Then
-                dataBaseInputsDictionary(entityName) = LoadDataMapIntoInputsDict(entityId, entityName, Computer.GetData)
+        If status = ErrorMessage.SUCCESS Then
+            Dim entity As Entity = GlobalVariables.Entities.GetValue(entityId)
+            If entity Is Nothing Then Exit Sub
+
+            If dataBaseInputsDictionary.ContainsKey(entity.Name) Then
+                dataBaseInputsDictionary(entity.Name) = LoadDataMapIntoInputsDict(entityId, entity.Name, Computer.GetData)
             Else
-                dataBaseInputsDictionary.Add(entityName, LoadDataMapIntoInputsDict(entityId, entityName, Computer.GetData))
+                dataBaseInputsDictionary.Add(entity.Name, LoadDataMapIntoInputsDict(entityId, entity.Name, Computer.GetData))
             End If
             RaiseEvent AfterInputsDownloaded()
             ' Quid priority high -> do not raise event if all entities have not been downloaded !
@@ -167,7 +169,7 @@ Friend Class AcquisitionModel
         ' select case input/ FPI
         For Each accountId As Int32 In TreeViewsUtilities.GetNodesKeysList(accountsTV)
 
-            Dim l_account = GlobalVariables.Accounts.GetAccount(accountId)
+            Dim l_account As Account = GlobalVariables.Accounts.GetValue(accountId)
 
             If l_account Is Nothing Then Continue For
             Select Case l_account.FormulaType
@@ -256,11 +258,12 @@ Friend Class AcquisitionModel
     ' Launch Single Computation
     Friend Sub ComputeCalculatedItems(ByRef entityName As String)
 
-        Dim entityId As Int32 = entitiesNameIdDict(entityName)
-        BuildInputsArrays(entityName)
+        Dim entity As Entity = GlobalVariables.Entities.GetValue(entityName)
+        If entity Is Nothing Then Exit Sub
+        BuildInputsArrays(entity.Name)
         SingleComputer.CMSG_SOURCED_COMPUTE(current_version_id, _
-                                            entityId, _
-                                            GlobalVariables.Entities.entities_hash(entityId)(ENTITIES_CURRENCY_VARIABLE), _
+                                            entity.Id, _
+                                            entity.CurrencyId, _
                                             accKeysArray, _
                                             periodsArray, _
                                             valuesArray)
@@ -274,7 +277,10 @@ Friend Class AcquisitionModel
         Else
             computationDataMap.Add(entityId, SingleComputer.GetDataMap)
         End If
-        RaiseEvent AfterOutputsComputed(GlobalVariables.Entities.entities_hash(entityId)(NAME_VARIABLE))
+
+        Dim l_entity As Entity = GlobalVariables.Entities.GetValue(entityId)
+        If l_entity Is Nothing Then Exit Sub
+        RaiseEvent AfterOutputsComputed(l_entity.Name)
 
     End Sub
 
@@ -371,7 +377,7 @@ ReturnError:
 
     Friend Function CheckIfFPICalculatedItem(ByRef accountName As String, ByRef period As Integer) As Boolean
 
-        Dim l_account = GlobalVariables.Accounts.GetAccount(accountName)
+        Dim l_account As Account = GlobalVariables.Accounts.GetValue(accountName)
 
         If l_account Is Nothing Then Return False
         If l_account.FormulaType = Account.FormulaTypes.FIRST_PERIOD_INPUT _

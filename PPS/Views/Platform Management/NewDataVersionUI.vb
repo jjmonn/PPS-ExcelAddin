@@ -70,8 +70,8 @@ Friend Class NewDataVersionUI
         StartingPeriodNUD.Increment = 1
         NbPeriodsNUD.Increment = 1
 
-        VTreeViewUtil.LoadTreeview(m_exchangeRatesVersionVTreeviewbox.TreeView, GlobalVariables.RatesVersions.rate_versions_hash)
-        VTreeViewUtil.LoadTreeview(m_factsVersionVTreeviewbox.TreeView, GlobalVariables.GlobalFactsVersions.globalFact_versions_hash)
+        VTreeViewUtil.LoadTreeview(m_exchangeRatesVersionVTreeviewbox.TreeView, GlobalVariables.RatesVersions.GetDictionary())
+        VTreeViewUtil.LoadTreeview(m_factsVersionVTreeviewbox.TreeView, GlobalVariables.GlobalFactsVersions.GetDictionary())
 
     End Sub
 

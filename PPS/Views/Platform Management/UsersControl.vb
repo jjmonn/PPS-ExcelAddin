@@ -14,6 +14,7 @@ Imports System.Collections.Generic
 Imports System.Collections
 Imports VIBlend.WinForms.Controls
 Imports System.Windows.Forms
+Imports CRUD
 
 Friend Class UsersControl
 
@@ -69,21 +70,21 @@ Friend Class UsersControl
         RemoveHandler m_dataGridView.CellValueChanged, AddressOf DataGridView_ValueChanged
 
         m_dataGridView.RowsHierarchy.Clear()
-        For Each user In m_controller.GetUserList()
-            CreateRow(user.Value)
+        For Each user In m_controller.GetUserList().Values
+            CreateRow(user)
         Next
 
         AddHandler m_dataGridView.CellValueChanged, AddressOf DataGridView_ValueChanged
 
     End Sub
 
-    Private Function CreateRow(ByRef user As Hashtable) As HierarchyItem
+    Private Function CreateRow(ByRef user As User) As HierarchyItem
 
         Dim row As HierarchyItem
         row = m_dataGridView.RowsHierarchy.Items.Add("")
-        row.ItemValue = user(ID_VARIABLE)
-        m_dataGridView.CellsArea.SetCellValue(row, m_columnsVariableItemDictionary(NAME_VARIABLE), user(NAME_VARIABLE))
-        m_dataGridView.CellsArea.SetCellValue(row, m_columnsVariableItemDictionary(GROUP_ID_VARIABLE), m_controller.GetGroupName(user(GROUP_ID_VARIABLE)))
+        row.ItemValue = user.Id
+        m_dataGridView.CellsArea.SetCellValue(row, m_columnsVariableItemDictionary(NAME_VARIABLE), user.Name)
+        m_dataGridView.CellsArea.SetCellValue(row, m_columnsVariableItemDictionary(GROUP_ID_VARIABLE), m_controller.GetGroupName(user.GroupId))
         Return row
 
     End Function
@@ -93,10 +94,10 @@ Friend Class UsersControl
         Dim list As New ComboBoxEditor()
         list.DropDownList = True
 
-        For Each group In m_controller.GetGroupList()
+        For Each group As Group In m_controller.GetGroupList().Values
             Dim listItem As New ListItem
-            listItem.Value = group.Value(ID_VARIABLE)
-            listItem.Text = group.Value(NAME_VARIABLE)
+            listItem.Value = group.Id
+            listItem.Text = group.Name
             list.Items.Add(listItem)
         Next
         m_columnsVariableItemDictionary(GROUP_ID_VARIABLE).CellsEditor = list

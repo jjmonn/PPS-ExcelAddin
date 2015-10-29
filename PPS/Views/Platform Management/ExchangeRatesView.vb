@@ -22,7 +22,7 @@ Imports System.Windows.Forms
 Imports System.Windows.Forms.DataVisualization.Charting
 Imports VIBlend.WinForms.Controls
 Imports System.Drawing
-
+Imports CRUD
 
 Friend Class ExchangeRatesView
 
@@ -319,7 +319,7 @@ Friend Class ExchangeRatesView
 
 #Region "Exchange Rates m_ratesDataGridView"
 
-    Friend Sub InitializeDGV(ByRef currenciesList As List(Of Int32), _
+    Friend Sub InitializeDGV(ByRef currenciesList As SortedSet(Of UInt32), _
                              ByRef monthsIdList As List(Of Int32), _
                              ByRef p_ratesVersionid As Int32)
 
@@ -337,13 +337,17 @@ Friend Class ExchangeRatesView
 
     End Sub
 
-    Private Sub InitColumns(ByRef currenciesList As List(Of Int32))
+    Private Sub InitColumns(ByRef currenciesList As SortedSet(Of UInt32))
 
-        Dim mainCurrencyName As String = GlobalVariables.Currencies.currencies_hash(m_mainCurrency)(NAME_VARIABLE)
+        Dim mainCurrency As Currency = GlobalVariables.Currencies.GetValue(m_mainCurrency)
+
+        If mainCurrency Is Nothing Then Exit Sub
         For Each currencyId As UInt32 In currenciesList
             If currencyId <> m_mainCurrency Then
-                Dim destinationCurrencyName As String = GlobalVariables.Currencies.currencies_hash(CInt(currencyId))(NAME_VARIABLE)
-                Dim col As HierarchyItem = m_ratesDataGridView.ColumnsHierarchy.Items.Add(mainCurrencyName & "/" & destinationCurrencyName)
+                Dim l_currency As Currency = GlobalVariables.Currencies.GetValue(currencyId)
+
+                If l_currency Is Nothing Then Continue For
+                Dim col As HierarchyItem = m_ratesDataGridView.ColumnsHierarchy.Items.Add(mainCurrency.Name & "/" & l_currency.Name)
                 col.ItemValue = currencyId
             End If
         Next
@@ -362,7 +366,7 @@ Friend Class ExchangeRatesView
 
     End Sub
 
-    Friend Sub DisplayRatesVersionValues(ByRef p_exchangeRatesHahstable As Dictionary(Of Tuple(Of Int32, Int32, Int32), Double))
+    Friend Sub DisplayRatesVersionValues(ByRef p_exchangeRates As ExchangeRateManager)
 
         m_isFillingCells = True
         Dim currencyId As Int32
@@ -372,9 +376,8 @@ Friend Class ExchangeRatesView
             For Each row As HierarchyItem In m_ratesDataGridView.RowsHierarchy.Items
                 Dim period As Int32 = CInt(row.ItemValue)
 
-                Dim rateTuple As New Tuple(Of Int32, Int32, Int32)(currencyId, m_currentRatesVersionId, period)
-                If p_exchangeRatesHahstable.ContainsKey(rateTuple) = True Then
-                    m_ratesDataGridView.CellsArea.SetCellValue(row, column, p_exchangeRatesHahstable(rateTuple))
+                If Not p_exchangeRates.GetValue(currencyId, m_currentRatesVersionId, period) Is Nothing Then
+                    m_ratesDataGridView.CellsArea.SetCellValue(row, column, p_exchangeRates.GetValue(currencyId, m_currentRatesVersionId, period))
                 Else
                     m_ratesDataGridView.CellsArea.SetCellValue(row, column, 0)
                 End If

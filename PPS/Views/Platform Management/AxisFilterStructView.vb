@@ -19,7 +19,7 @@ Imports System.Drawing
 Imports System.Windows.Forms
 Imports VIBlend.WinForms.Controls
 Imports System.Collections
-
+Imports CRUD
 
 Class AxisFilterStructView
 
@@ -73,27 +73,27 @@ Class AxisFilterStructView
 
     End Sub
 
-    Delegate Sub SetFilter_Delegate(ByRef p_filter As Hashtable)
-    Friend Sub SetFilter(ByRef p_filter As Hashtable)
+    Delegate Sub SetFilter_Delegate(ByRef p_filter As Filter)
+    Friend Sub SetFilter(ByRef p_filter As Filter)
 
         If InvokeRequired Then
             Dim MyDelegate As New SetFilter_Delegate(AddressOf SetFilter)
             Me.Invoke(MyDelegate, New Object() {p_filter})
         Else
-            Dim targetNode As vTreeNode = VTreeViewUtil.FindNode(m_filtersTV, p_filter(ID_VARIABLE))
+            Dim targetNode As vTreeNode = VTreeViewUtil.FindNode(m_filtersTV, p_filter.Id)
             If targetNode Is Nothing Then
-                If p_filter(PARENT_ID_VARIABLE) <> 0 Then
-                    Dim parentNode As vTreeNode = VTreeViewUtil.FindNode(m_filtersTV, p_filter(PARENT_ID_VARIABLE))
-                    VTreeViewUtil.AddNode(p_filter(ID_VARIABLE), _
-                                          p_filter(NAME_VARIABLE), _
+                If p_filter.ParentId <> 0 Then
+                    Dim parentNode As vTreeNode = VTreeViewUtil.FindNode(m_filtersTV, p_filter.ParentId)
+                    VTreeViewUtil.AddNode(p_filter.Id, _
+                                          p_filter.Name, _
                                           parentNode)
                 Else
-                    VTreeViewUtil.AddNode(p_filter(ID_VARIABLE), _
-                                          p_filter(NAME_VARIABLE), _
+                    VTreeViewUtil.AddNode(p_filter.Id, _
+                                          p_filter.Name, _
                                           m_filtersTV)
-                End If         
+                End If
             Else
-                targetNode.Text = p_filter(NAME_VARIABLE)
+                targetNode.Text = p_filter.Name
             End If
         End If
 
@@ -123,7 +123,7 @@ Class AxisFilterStructView
             Dim name = InputBox("Please enter the new Category Name:")
             If name <> "" Then
                 If m_controller.IsAllowedFilterName(name) Then
-                    m_controller.UpdateFilter(current_node.Value, NAME_VARIABLE, name)
+                    m_controller.UpdateFilterName(current_node.Value, name)
                 Else
                     MsgBox("This name is already used or contains forbiden characters.")
                 End If

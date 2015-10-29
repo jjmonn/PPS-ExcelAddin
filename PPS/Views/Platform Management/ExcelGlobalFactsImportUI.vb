@@ -13,7 +13,7 @@
 Imports Microsoft.Office.Interop
 Imports System.Collections.Generic
 Imports VIBlend.WinForms.Controls
-
+Imports CRUD
 
 
 Friend Class ExcelFactsValuesImportUI
@@ -41,12 +41,12 @@ Friend Class ExcelFactsValuesImportUI
 
         ' Add any initialization after the InitializeComponent() call.
         m_controller = p_controller
-        For Each globalFactId As Int32 In GlobalVariables.GlobalFacts.m_globalFactHash.Keys
+        For Each globalFact As GlobalFact In GlobalVariables.GlobalFacts.GetDictionary().Values
             Dim li As New ListItem
-            li.Value = globalFactId
-            li.Text = GlobalVariables.GlobalFacts.m_globalFactHash(globalFactId)(NAME_VARIABLE)
+            li.Value = globalFact.Id
+            li.Text = globalFact.Name
             m_factsComboBox.Items.Add(li)
-            If globalFactId = m_globalFactId Then
+            If globalFact.Id = m_globalFactId Then
                 m_factsComboBox.SelectedItem = li
             End If
         Next

@@ -10,7 +10,7 @@ Imports System.Windows.Forms
 Imports System.Collections.Generic
 Imports System.Collections
 Imports VIBlend.WinForms.Controls
-
+Imports CRUD
 
 Friend Class AxisFiltersView
 
@@ -146,9 +146,13 @@ Friend Class AxisFiltersView
             End If
 
             If currentNode.Nodes.Count > 0 Then
-                filterId = GlobalVariables.FiltersValues.filtervalues_hash(CInt(currentNode.Nodes(0).Value))(FILTER_ID_VARIABLE)
+                Dim filterValue As FilterValue = GlobalVariables.FiltersValues.GetValue(CUInt(currentNode.Nodes(0).Value))
+                If filterValue Is Nothing Then Exit Sub
+                filterId = filterValue.FilterId
             Else
-                Dim parentFilterId As Int32 = GlobalVariables.FiltersValues.filtervalues_hash(CInt(currentNode.Value))(FILTER_ID_VARIABLE)
+                Dim filterValue As FilterValue = GlobalVariables.FiltersValues.GetValue(CUInt(currentNode.Nodes(0).Value))
+                If filterValue Is Nothing Then Exit Sub
+                Dim parentFilterId As Int32 = filterValue.ParentId
                 filterId = GlobalVariables.Filters.GetFilterChild(parentFilterId)
                 If (filterId = -1) Then
                     MsgBox("A value cannot be added under " & currentNode.Text & " because there is no deeper category.")

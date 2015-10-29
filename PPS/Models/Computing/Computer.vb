@@ -1,5 +1,6 @@
 ﻿Imports System.Collections.Generic
 Imports System.Collections
+Imports CRUD
 
 ' Computer.vb
 '
@@ -96,7 +97,7 @@ Friend Class Computer
                 packet.WriteUint32(GetTotalFiltersDictionariesValues(filters))          ' number of filters_values
                 For Each Filter_id In filters.Keys
                     For Each filter_value_id In filters(Filter_id)
-                        packet.WriteUint32(GlobalVariables.Filters.filters_hash(Filter_id)(AXIS_ID_VARIABLE))              ' axis_id 
+                        packet.WriteUint32(GlobalVariables.Filters.GetAxisOfFilter(Filter_id))              ' axis_id 
                         packet.WriteUint32(Filter_id)                                   ' filter_id
                         packet.WriteUint32(filter_value_id)                             ' filter_value_id
                     Next
@@ -120,7 +121,7 @@ Friend Class Computer
 
             If Not hierarchy Is Nothing Then
                 packet.WriteUint32(hierarchy.Count)                                      ' decomposition hierarchy size
-                Dim axis_id As UInt32
+                Dim axis_id As AxisType
                 For Each item In hierarchy
                     Dim query_type As UInt32 = GetDecompositionQueryType(item)
                     If query_type = GlobalEnums.DecompositionQueryType.AXIS Then
@@ -128,7 +129,7 @@ Friend Class Computer
                         packet.WriteInt32(axis_id)
                         packet.WriteBool(True)
                     Else
-                        axis_id = GlobalVariables.Filters.filters_hash(GetItemID(item))(AXIS_ID_VARIABLE)
+                        axis_id = GlobalVariables.Filters.GetAxisOfFilter(GetItemID(item))
                         packet.WriteInt32(axis_id)
                         packet.WriteBool(False)
                         packet.WriteUint32(GetItemID(item))

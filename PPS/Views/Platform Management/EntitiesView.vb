@@ -107,8 +107,8 @@ Friend Class EntitiesView
         m_currenciesComboBox.DropDownList = True
         m_currenciesComboBox.DropDownHeight = m_currenciesComboBox.ItemHeight * CB_NB_ITEMS_DISPLAYED
         m_currenciesComboBox.DropDownWidth = CB_WIDTH
-        For Each currencyId As Int32 In GlobalVariables.Currencies.currencies_hash.Keys
-            m_currenciesComboBox.Items.Add(GlobalVariables.Currencies.currencies_hash(currencyId)(NAME_VARIABLE))
+        For Each currency As Currency In GlobalVariables.Currencies.GetDictionary().Values
+            m_currenciesComboBox.Items.Add(currency.Name)
         Next
         AddHandler m_currenciesComboBox.EditBase.TextBox.KeyDown, AddressOf comboTextBox_KeyDown
 
@@ -139,15 +139,15 @@ Friend Class EntitiesView
         End If
     End Sub
 
-    Delegate Sub UpdateEntity_Delegate(ByRef ht As Hashtable)
-    Friend Sub UpdateEntity(ByRef ht As Hashtable)
+    Delegate Sub UpdateEntity_Delegate(ByRef ht As Entity)
+    Friend Sub UpdateEntity(ByRef ht As Entity)
 
         If InvokeRequired Then
             Dim MyDelegate As New UpdateEntity_Delegate(AddressOf UpdateEntity)
             Me.Invoke(MyDelegate, New Object() {ht})
         Else
             isFillingDGV = True
-            FillRow(ht(ID_VARIABLE), ht)
+            FillRow(ht.Id, ht)
             UpdateDGVFormat()
             isFillingDGV = False
         End If
@@ -183,9 +183,7 @@ Friend Class EntitiesView
         End If
         Dim newEntityName As String = InputBox("New Name: ", , currentRowItem.Caption)
         If newEntityName <> "" Then
-            Controller.UpdateEntity(currentRowItem.ItemValue, _
-                                    NAME_VARIABLE, _
-                                    newEntityName)
+            Controller.UpdateEntityName(currentRowItem.ItemValue, newEntityName)
         End If
 
     End Sub
@@ -286,8 +284,8 @@ Friend Class EntitiesView
     Private Sub fillDGV()
 
         isFillingDGV = True
-        For Each entity_id In GlobalVariables.Entities.entities_hash.Keys
-            FillRow(entity_id, GlobalVariables.Entities.entities_hash(entity_id))
+        For Each entity As Entity In GlobalVariables.Entities.GetDictionary().Values
+            FillRow(entity.Id, entity)
         Next
         isFillingDGV = False
         UpdateDGVFormat()
@@ -399,29 +397,32 @@ Friend Class EntitiesView
 #Region "DGV Filling"
 
     Friend Sub FillRow(ByVal p_entityId As Int32, _
-                       ByVal p_entityHashtable As Hashtable)
+                       ByVal p_entityHashtable As Entity)
 
         Dim rowItem As HierarchyItem = DataGridViewsUtil.GetHierarchyItemFromId(m_entitiesDataGridView.RowsHierarchy, p_entityId)
         If rowItem Is Nothing Then
-            Dim parentEntityId As Int32 = p_entityHashtable(PARENT_ID_VARIABLE)
+            Dim parentEntityId As Int32 = p_entityHashtable.ParentId
             If parentEntityId = 0 Then
-                rowItem = CreateRow(p_entityId, p_entityHashtable(NAME_VARIABLE))
+                rowItem = CreateRow(p_entityId, p_entityHashtable.Name)
             Else
                 Dim parentRow As HierarchyItem = DataGridViewsUtil.GetHierarchyItemFromId(m_entitiesDataGridView.RowsHierarchy, parentEntityId)
-                rowItem = CreateRow(p_entityId, p_entityHashtable(NAME_VARIABLE), parentRow)
+                rowItem = CreateRow(p_entityId, p_entityHashtable.Name, parentRow)
             End If
         End If
-        rowItem.Caption = p_entityHashtable(NAME_VARIABLE)
+        rowItem.Caption = p_entityHashtable.Name
         Dim column As HierarchyItem = DataGridViewsUtil.GetHierarchyItemFromId(m_entitiesDataGridView.ColumnsHierarchy, ENTITIES_CURRENCY_VARIABLE)
-        If p_entityHashtable(ENTITIES_ALLOW_EDITION_VARIABLE) = True Then
+        If p_entityHashtable.AllowEdition = True Then
             If GlobalVariables.Users.CurrentUserIsAdmin() Then m_entitiesDataGridView.CellsArea.SetCellEditor(rowItem, column, m_currenciesComboBox)
-            m_entitiesDataGridView.CellsArea.SetCellValue(rowItem, column, GlobalVariables.Currencies.currencies_hash(CInt(p_entityHashtable(ENTITIES_CURRENCY_VARIABLE)))(NAME_VARIABLE))
+            Dim currency As Currency = GlobalVariables.Currencies.GetValue(CInt(p_entityHashtable.CurrencyId))
+
+            If currency Is Nothing Then Exit Sub
+            m_entitiesDataGridView.CellsArea.SetCellValue(rowItem, column, currency.Name)
 
             For Each filterNode As vTreeNode In entitiesFilterTV.Nodes
                 FillSubFilters(filterNode, p_entityId, rowItem)
             Next
         End If
-        If p_entityHashtable(ENTITIES_ALLOW_EDITION_VARIABLE) = False Then rowItem.ImageIndex = 0 Else rowItem.ImageIndex = 1
+        If p_entityHashtable.AllowEdition = False Then rowItem.ImageIndex = 0 Else rowItem.ImageIndex = 1
 
     End Sub
 
@@ -432,10 +433,10 @@ Friend Class EntitiesView
         Dim combobox As New ComboBoxEditor
         combobox.DropDownList = True
         Dim columnItem As HierarchyItem = DataGridViewsUtil.GetHierarchyItemFromId(m_entitiesDataGridView.ColumnsHierarchy, filterNode.Value)
-        Dim filterValueId = GlobalVariables.AxisFilters.GetFilterValueId(AxisType.Entities, CInt(filterNode.Value), entity_id)
+        Dim filterValueId As UInt32 = GlobalVariables.AxisFilters.GetFilterValueId(AxisType.Entities, CInt(filterNode.Value), entity_id)
         Dim filter_value_name As String = ""
         If filterValueId <> 0 Then
-            filter_value_name = GlobalVariables.FiltersValues.filtervalues_hash(filterValueId)(NAME_VARIABLE)
+            filter_value_name = GlobalVariables.FiltersValues.GetValueName(filterValueId)
         End If
 
         m_entitiesDataGridView.CellsArea.SetCellValue(rowItem, columnItem, filter_value_name)
@@ -443,16 +444,17 @@ Friend Class EntitiesView
         ' Filters Choices Setup
         If filterNode.Parent Is Nothing Then
             ' Root Filter
-            Dim valuesNames = GlobalVariables.FiltersValues.GetFiltervaluesList(filterNode.Value, NAME_VARIABLE)
-            For Each valueName As String In valuesNames
-                combobox.Items.Add(valueName)
-            Next
+            If Not GlobalVariables.FiltersValues.GetDictionary(filterNode.Value) Is Nothing Then
+                For Each value As FilterValue In GlobalVariables.FiltersValues.GetDictionary(filterNode.Value).Values
+                    combobox.Items.Add(value.Name)
+                Next
+            End If
         Else
             ' Child Filter
             Dim parentFilterFilterValueId As Int32 = GlobalVariables.AxisFilters.GetFilterValueId(AxisType.Entities, filterNode.Parent.Value, entity_id)     ' Child Filter Id
             Dim filterValuesIds = GlobalVariables.FiltersValues.GetFilterValueIdsFromParentFilterValueIds({parentFilterFilterValueId})
-            For Each Id As Int32 In filterValuesIds
-                combobox.Items.Add(GlobalVariables.FiltersValues.filtervalues_hash(Id)(NAME_VARIABLE))
+            For Each Id As UInt32 In filterValuesIds
+                combobox.Items.Add(GlobalVariables.FiltersValues.GetValueName(Id))
             Next
         End If
 
@@ -509,20 +511,24 @@ Friend Class EntitiesView
     Private Sub UpdateParentFiltersValues(ByRef row As HierarchyItem, _
                                           ByRef entityId As Int32, _
                                           ByRef filterNode As vTreeNode,
-                                          ByRef filterValueId As Int32)
+                                          ByRef filterValueId As UInt32)
+
+        Dim filterValue As FilterValue = GlobalVariables.FiltersValues.GetValue(filterValueId)
+        If filterValue Is Nothing Then Exit Sub
 
         If Not filterNode.Parent Is Nothing Then
             Dim parentFilterNode As vTreeNode = filterNode.Parent
             Dim column As HierarchyItem = DataGridViewsUtil.GetHierarchyItemFromId(m_entitiesDataGridView.ColumnsHierarchy, parentFilterNode.Value)
-            Dim parentFilterValueId As Int32 = GlobalVariables.FiltersValues.filtervalues_hash(filterValueId)(PARENT_FILTER_VALUE_ID_VARIABLE)
-            Dim filtervaluename = GlobalVariables.FiltersValues.filtervalues_hash(parentFilterValueId)(NAME_VARIABLE)
-            m_entitiesDataGridView.CellsArea.SetCellValue(row, column, filtervaluename)
+            Dim parentFilterValue As FilterValue = GlobalVariables.FiltersValues.GetValue(filterValue.ParentId)
+            If parentFilterValue Is Nothing Then Exit Sub
+
+            m_entitiesDataGridView.CellsArea.SetCellValue(row, column, parentFilterValue.Name)
 
             ' Recursively update parent filters
             UpdateParentFiltersValues(row, _
                                       entityId, _
                                       parentFilterNode, _
-                                      parentFilterValueId)
+                                      parentFilterValue.Id)
         End If
 
     End Sub
@@ -535,8 +541,8 @@ Friend Class EntitiesView
         Dim comboBox As New ComboBoxEditor
 
         Dim filterValuesIds As Int32() = GlobalVariables.FiltersValues.GetFilterValueIdsFromParentFilterValueIds(parentFilterValueIds)
-        For Each Id As Int32 In filterValuesIds
-            comboBox.Items.Add(GlobalVariables.FiltersValues.filtervalues_hash(Id)(NAME_VARIABLE))
+        For Each Id As UInt32 In filterValuesIds
+            comboBox.Items.Add(GlobalVariables.FiltersValues.GetValueName(Id))
         Next
 
         ' Set Cell value to nothing
@@ -601,26 +607,24 @@ Friend Class EntitiesView
                 Select Case args.Cell.ColumnItem.ItemValue
 
                     Case ENTITIES_CURRENCY_VARIABLE
-                        Dim currencyId As Int32 = GlobalVariables.Currencies.GetCurrencyId(args.Cell.Value)
+                        Dim currencyId As Int32 = GlobalVariables.Currencies.GetValueId(args.Cell.Value)
                         If (currencyId = 0) Then
                             MsgBox("Currency " & args.Cell.Value & " not found.")
                             Exit Sub
                         Else
-                            Controller.UpdateEntity(entityId, _
-                                                    args.Cell.ColumnItem.ItemValue, _
-                                                    currencyId)
+                            Controller.UpdateEntityCurrency(entityId, currencyId)
                         End If
 
                     Case Else
                         Dim filterValueName As String = args.Cell.Value
-                        Dim filterValueId As Int32 = GlobalVariables.FiltersValues.GetFilterValueId(filterValueName)
+                        Dim filterValueId As Int32 = GlobalVariables.FiltersValues.GetValueId(filterValueName)
                         If filterValueId = 0 Then
                             MsgBox("The Filter Value Name " & filterValueName & " could not be found.")
                             Exit Sub
                         End If
                         Dim filterId As Int32 = args.Cell.ColumnItem.ItemValue
                         UpdateEntitiesFiltersAfterEdition(entityId, filterId, filterValueId)
-                        Controller.UpdateFilterValue(entityId, filterId, filterValueId)
+                        Controller.UpdateAxisFilter(entityId, filterId, filterValueId)
                 End Select
 
             End If

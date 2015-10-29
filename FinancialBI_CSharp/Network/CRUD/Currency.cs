@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace CRUD
 {
-  class Currency : CRUDEntity, System.IComparable
+  public class Currency : NamedCRUDEntity, System.IComparable
   {
     public System.UInt32 Id { get; private set; }
     public string Name { get; set; }

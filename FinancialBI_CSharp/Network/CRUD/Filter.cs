@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace CRUD
 {
-  class Filter : HierarchyCRUDEntity, IComparable
+  public class Filter : NamedHierarchyCRUDEntity, AxedCRUDEntity, IComparable
   {
     public UInt32 Id { get; private set; }
     public UInt32 ParentId { get; set; }
     public AxisType Axis { get; set; }
-    public bool IsParent { get; private set; }
+    public bool IsParent { get; set; }
     public string Name { get; set; }
     public Int32 ItemPosition { get; set; }
 

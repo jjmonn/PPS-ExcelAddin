@@ -95,7 +95,7 @@ Public Class ManualRangesSelectionUI
         If EntitiesRefEdit.Text <> "" Then
             DATASET.m_entitiesAddressValuesDictionary.Clear()
             For Each cell As Excel.Range In tmpRng
-                If DATASET.m_entitiesNameList.Contains(cell.Value2) Then
+                If Not GlobalVariables.Entities.GetValue(CType(cell.Value2, String)) Is Nothing Then
                     DATASET.m_entitiesAddressValuesDictionary.Add(CStr(cell.Address), CStr(cell.Value2))
                 End If
             Next

@@ -42,10 +42,8 @@ Friend Class ModelDataSet
     Private m_accountRefs() As String                             ' String array for account references
 
     'Lists and Dictionaries
-    Friend m_entitiesNameList As List(Of String)                                    ' String array containing the list of assets
     Friend m_periodsDatesList As New List(Of Date)
     Friend m_inputsAccountsList As List(Of Account)
-    Friend m_entitiesNameIdDictionary As Hashtable  ' to be deleted priority normal
 
     ' Axes
     Friend m_periodsAddressValuesDictionary As New Dictionary(Of String, String)
@@ -107,7 +105,6 @@ Friend Class ModelDataSet
     Public Sub New(inputWS As Excel.Worksheet)
 
         Me.m_excelWorkSheet = inputWS
-        m_entitiesNameIdDictionary = GlobalVariables.Entities.GetEntitiesDictionary(NAME_VARIABLE, ID_VARIABLE)
 
     End Sub
 
@@ -253,7 +250,7 @@ Friend Class ModelDataSet
 
                     ' Direct match or algo > 50% Index à vérifier selon table
                     ' Trim left and right the cell.value2 !! -> To be tested
-                    If m_inputsAccountsList.Contains(GlobalVariables.Accounts.GetAccount(currentValue)) _
+                    If m_inputsAccountsList.Contains(GlobalVariables.Accounts.GetValue(currentValue)) _
                     AndAlso Not m_accountsAddressValuesDictionary.ContainsValue(currentValue) Then
 
                         m_accountsAddressValuesDictionary.Add(Split(m_excelWorkSheet.Columns(j).Address(ColumnAbsolute:=False), ":")(1) & i, _
@@ -261,7 +258,7 @@ Friend Class ModelDataSet
                         m_accountsValuesAddressDict.Add(currentValue, Split(m_excelWorkSheet.Columns(j).Address(ColumnAbsolute:=False), ":")(1) & i)
                         m_GlobalScreenShotFlag(i, j) = m_accountStringFlag
 
-                    ElseIf outputsAccountsList.Contains(GlobalVariables.Accounts.GetAccount(currentValue)) _
+                    ElseIf outputsAccountsList.Contains(GlobalVariables.Accounts.GetValue(currentValue)) _
                     AndAlso m_accountsAddressValuesDictionary.ContainsValue(currentValue) = False Then
 
                         m_outputsAccountsAddressvaluesDictionary.Add(Split(m_excelWorkSheet.Columns(j).Address(ColumnAbsolute:=False), ":")(1) & i, _
@@ -292,7 +289,6 @@ Friend Class ModelDataSet
     Private Sub EntitiesIdentify()
 
         Dim i, j As Integer
-        m_entitiesNameList = GlobalVariables.Entities.GetEntitiesList(NAME_VARIABLE)
 
         For i = LBound(m_GlobalScreenShot, 1) To UBound(m_GlobalScreenShot, 1)
             For j = LBound(m_GlobalScreenShot, 2) To UBound(m_GlobalScreenShot, 2)
@@ -300,7 +296,7 @@ Friend Class ModelDataSet
                 Select Case m_GlobalScreenShotFlag(i, j)
                     Case m_stringFlag
 
-                        If m_entitiesNameList.Contains(CStr(m_GlobalScreenShot(i, j))) _
+                        If Not GlobalVariables.Entities.GetValue(CStr(m_GlobalScreenShot(i, j))) Is Nothing _
                         AndAlso Not m_entitiesAddressValuesDictionary.ContainsValue(CStr(m_GlobalScreenShot(i, j))) Then
 
                             m_entitiesAddressValuesDictionary.Add(Split(m_excelWorkSheet.Columns(j).Address(ColumnAbsolute:=False), ":")(1) & i, _
@@ -373,14 +369,14 @@ Friend Class ModelDataSet
 
         AssetResearchAlgo = False
 
-        For i = 0 To m_entitiesNameList.Count - 1
-            Delta = GeneralUtilities.Levenshtein(CStr(str), CStr(m_entitiesNameList(i)))
-            P = Delta / Len(m_entitiesNameList(i))
-            If P <= 2 / Len(m_entitiesNameList(i)) Then
+        For Each l_entity As Entity In GlobalVariables.Entities.GetDictionary().Values
+            Delta = GeneralUtilities.Levenshtein(CStr(str), l_entity.Name)
+            P = Delta / l_entity.Name.Length
+            If P <= 2 / l_entity.Name.Length Then
                 AssetResearchAlgo = True
                 Exit Function
             End If
-        Next i
+        Next
 
     End Function
 

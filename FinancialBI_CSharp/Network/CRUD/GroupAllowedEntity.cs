@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace CRUD
 {
-  class GroupAllowedEntity : CRUDEntity, IComparable
+  public class GroupAllowedEntity : CRUDEntity, IComparable
   {
     public UInt32 Id { get; private set; }
-    public UInt32 GroupId { get; private set; }
-    public UInt32 EntityId { get; private set; }
+    public UInt32 GroupId { get; set; }
+    public UInt32 EntityId { get; set; }
 
     public GroupAllowedEntity() { }
     private GroupAllowedEntity(UInt32 p_id)

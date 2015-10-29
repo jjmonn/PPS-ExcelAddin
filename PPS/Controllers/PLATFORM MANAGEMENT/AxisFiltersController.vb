@@ -14,7 +14,7 @@ Imports System.Windows.Forms
 Imports System.Collections.Generic
 Imports System.Collections
 Imports VIBlend.WinForms.Controls
-
+Imports CRUD
 
 Friend Class AxisFiltersController
 
@@ -89,49 +89,34 @@ Friend Class AxisFiltersController
 
     ' Filters
     Friend Function CreateFilter(ByRef p_filterName As String, _
-                                 ByRef p_parentFilterid As Int32, _
-                                 ByRef p_isParent As Int32) As Boolean
+                                 ByRef p_parentFilterid As UInt32, _
+                                 ByRef p_isParent As Boolean) As Boolean
 
-        Dim ht As New Hashtable
-        ht.Add(NAME_VARIABLE, p_filterName)
-        ht.Add(PARENT_ID_VARIABLE, p_parentFilterid)
-        ht.Add(AXIS_ID_VARIABLE, m_axisId)
-        ht.Add(ITEMS_POSITIONS, 1)
-        ht.Add(FILTER_IS_PARENT_VARIABLE, p_isParent)
+        Dim l_filter As New Filter
+
+        l_filter.Name = p_filterName
+        l_filter.ParentId = p_parentFilterid
+        l_filter.IsParent = p_isParent
+        l_filter.Axis = m_axisId
+        l_filter.ItemPosition = 1
+
         m_isEditingFiltersStructure = True
-        GlobalVariables.Filters.CMSG_CREATE_FILTER(ht)
+        GlobalVariables.Filters.Create(l_filter)
 
         Return True
 
     End Function
 
-    Friend Sub UpdateFilter(ByRef filterId As Int32, ByRef field As String, ByRef value As Object)
-
-        Dim ht As Hashtable = GlobalVariables.Filters.filters_hash(filterId).clone
-        ht(field) = value
-        GlobalVariables.Filters.CMSG_UPDATE_FILTER(ht)
-
-    End Sub
-
-    Friend Sub UpdateFiltersBatch()
-
-
-    End Sub
-
     Friend Sub DeleteFilter(ByRef filterId As Int32)
 
         m_isEditingFiltersStructure = True
-        GlobalVariables.Filters.CMSG_DELETE_FILTER(filterId)
+        GlobalVariables.Filters.Delete(filterId)
 
     End Sub
 
     Friend Function IsAllowedFilterName(ByRef p_name As String)
-        For Each filter In GlobalVariables.Filters.filters_hash.Values
-            If filter(NAME_VARIABLE) = p_name Then Return False
-        Next
-        For Each filterValue In GlobalVariables.FiltersValues.filtervalues_hash.Values
-            If filterValue(NAME_VARIABLE) = p_name Then Return False
-        Next
+        If GlobalVariables.Filters.IsNameValid(p_name) = False Then Return False
+        If GlobalVariables.FiltersValues.IsNameAvailable(p_name) = False Then Return False
         Return True
     End Function
 
@@ -140,41 +125,42 @@ Friend Class AxisFiltersController
                                 ByRef filterId As Int32, _
                                 ByRef parentFilterValueId As Int32)
 
-        Dim ht As New Hashtable
-        ht.Add(NAME_VARIABLE, filterValueName)
-        ht.Add(FILTER_ID_VARIABLE, filterId)
-        ht.Add(PARENT_FILTER_VALUE_ID_VARIABLE, parentFilterValueId)
-        ht.Add(ITEMS_POSITIONS, 1)
-        GlobalVariables.FiltersValues.CMSG_CREATE_FILTER_VALUE(ht)
+        Dim ht As New FilterValue
+
+        ht.Name = filterValueName
+        ht.FilterId = filterId
+        ht.ParentId = parentFilterValueId
+        ht.ItemPosition = 1
+        GlobalVariables.FiltersValues.Create(ht)
 
     End Sub
 
-    Friend Sub UpdateFilterValue(ByRef filterId As Int32, _
-                                 ByRef variable As String, _
-                                 ByRef value As Object)
+    Friend Sub UpdateFilterValuesBatch(ByRef p_filtersValuesUpdates As List(Of CRUDEntity))
 
-        Dim ht As Hashtable = GlobalVariables.FiltersValues.filtervalues_hash(filterId).clone
-        ht(variable) = value
-        GlobalVariables.FiltersValues.CMSG_UPDATE_FILTER_VALUE(ht)
-
-    End Sub
-
-    Friend Sub UpdateFilterValuesBatch(ByRef p_filtersValuesUpdates As List(Of Tuple(Of Int32, String, Int32)))
-
-        Dim filterValuesHTUpdates As New Hashtable
-        For Each tuple_ As Tuple(Of Int32, String, Int32) In p_filtersValuesUpdates
-            Dim ht As Hashtable = GlobalVariables.FiltersValues.filtervalues_hash(tuple_.Item1).clone
-            ht(tuple_.Item2) = tuple_.Item3
-            filterValuesHTUpdates(CInt(ht(ID_VARIABLE))) = ht
-        Next
-        GlobalVariables.FiltersValues.CMSG_UPDATE_FILTERS_VALUE_LIST(filterValuesHTUpdates)
+        GlobalVariables.FiltersValues.UpdateList(p_filtersValuesUpdates)
 
     End Sub
 
     Friend Sub DeleteFilterValue(ByRef filterValueId As Int32)
 
-        GlobalVariables.FiltersValues.CMSG_DELETE_FILTER_VALUE(filterValueId)
+        GlobalVariables.FiltersValues.Delete(filterValueId)
 
+    End Sub
+
+    Friend Sub UpdateFilter(ByRef p_filter As Filter)
+        GlobalVariables.Filters.Update(p_filter)
+    End Sub
+
+    Friend Sub UpdateFilterName(ByVal p_id As UInt32, ByVal p_value As String)
+        UpdateVar(p_id, p_value, Function(p_filter As Filter, p_destValue As Object) p_filter.Name = p_destValue)
+    End Sub
+
+    Private Sub UpdateVar(ByVal p_id As UInt32, ByVal p_value As Object, ByRef p_action As Action(Of Filter, Object))
+        Dim l_filter = GetFilterCopy(p_id)
+
+        If l_filter Is Nothing Then Exit Sub
+        p_action(l_filter, p_value)
+        UpdateFilter(l_filter)
     End Sub
 
 #End Region
@@ -183,9 +169,9 @@ Friend Class AxisFiltersController
 #Region "Events"
 
     ' Filters
-    Private Sub AfterFilterRead(ByRef status As Boolean, ByRef ht As Hashtable)
+    Private Sub AfterFilterRead(ByRef status As ErrorMessage, ByRef ht As Filter)
 
-        If status = True Then
+        If status = ErrorMessage.SUCCESS Then
             m_view.UpdateFiltersValuesTV()
             m_editFilterStructUI.SetFilter(ht)
         End If
@@ -193,9 +179,9 @@ Friend Class AxisFiltersController
 
     End Sub
 
-    Private Sub AfterFilterDelete(ByRef status As Boolean, ByRef id As Int32)
+    Private Sub AfterFilterDelete(ByRef status As ErrorMessage, ByRef id As Int32)
 
-        If status = True Then
+        If status = ErrorMessage.SUCCESS Then
             m_view.UpdateFiltersValuesTV()
             m_editFilterStructUI.DeleteFilter(id)
         End If
@@ -203,50 +189,50 @@ Friend Class AxisFiltersController
 
     End Sub
 
-    Private Sub AfterFilterCreation(ByRef status As Boolean, ByRef id As Int32)
+    Private Sub AfterFilterCreation(ByRef status As ErrorMessage, ByRef id As Int32)
 
-        If status = False Then
+        If status <> ErrorMessage.SUCCESS Then
             MsgBox("The Filter could not be created.")
         End If
-     
+
     End Sub
 
-    Private Sub AfterFilterUpdate(ByRef status As Boolean, ByRef id As Int32)
+    Private Sub AfterFilterUpdate(ByRef status As ErrorMessage, ByRef id As Int32)
 
-        If status = False Then
+        If status <> ErrorMessage.SUCCESS Then
             MsgBox("The Filter could not be updated.")
         End If
 
     End Sub
 
     ' Filters values
-    Private Sub AfterFilterValueRead(ByRef status As Boolean, ByRef ht As Hashtable)
+    Private Sub AfterFilterValueRead(ByRef status As ErrorMessage, ByRef ht As FilterValue)
 
-        If status = True AndAlso m_isEditingFiltersStructure = False Then
+        If status = ErrorMessage.SUCCESS AndAlso m_isEditingFiltersStructure = False Then
             m_view.UpdateFiltersValuesTV()
         End If
 
     End Sub
 
-    Private Sub AfterFilterValueDelete(ByRef status As Boolean, ByRef id As Int32)
+    Private Sub AfterFilterValueDelete(ByRef status As ErrorMessage, ByRef id As Int32)
 
-        If status = True AndAlso m_isEditingFiltersStructure = False Then
+        If status = ErrorMessage.SUCCESS AndAlso m_isEditingFiltersStructure = False Then
             m_view.UpdateFiltersValuesTV()
         End If
 
     End Sub
 
-    Private Sub AfterFilterValueCreation(ByRef status As Boolean, ByRef id As Int32)
+    Private Sub AfterFilterValueCreation(ByRef status As ErrorMessage, ByRef id As Int32)
 
-        If status = False Then
+        If status <> ErrorMessage.SUCCESS Then
             MsgBox("The Filter Value could not be created.")
         End If
 
     End Sub
 
-    Private Sub AfterFilterValueUpdate(ByRef status As Boolean, ByRef id As Int32)
+    Private Sub AfterFilterValueUpdate(ByRef status As ErrorMessage, ByRef id As Int32)
 
-        If status = False Then
+        If status <> ErrorMessage.SUCCESS Then
             MsgBox("The Filter Value could not be updated.")
         End If
 
@@ -264,13 +250,18 @@ Friend Class AxisFiltersController
         Dim accountsUpdates As New List(Of Tuple(Of Int32, String, Int32))
 
         Dim positionsDictionary As Dictionary(Of Int32, Int32) = GetFiltersValuesPositionsDictionary()
-        Dim updateList As New List(Of Tuple(Of Int32, String, Int32))
+        Dim updateList As New List(Of CRUDEntity)
 
         For Each filterValueId As Int32 In positionsDictionary.Keys
             position = positionsDictionary(filterValueId)
-            If position <> GlobalVariables.FiltersValues.filtervalues_hash(filterValueId)(ITEMS_POSITIONS) Then
-                Dim tuple_ As New Tuple(Of Int32, String, Int32)(filterValueId, ITEMS_POSITIONS, position)
-                updateList.Add(tuple_)
+
+            If GetFilterValue(filterValueId) Is Nothing Then Continue For
+            If position <> GetFilterValue(filterValueId).ItemPosition Then
+                Dim filterValue As FilterValue = GetFilterValueCopy(filterValueId)
+
+                If filterValue Is Nothing Then Continue For
+                filterValue.ItemPosition = position
+                updateList.Add(filterValue)
             End If
         Next
         UpdateFilterValuesBatch(updateList)
@@ -288,7 +279,32 @@ Friend Class AxisFiltersController
 
     End Function
 
+    Public Function GetFilter(ByRef p_id As UInt32) As Filter
+        For Each axis In GlobalVariables.Filters.GetDictionary().Keys
+            Dim filter = GlobalVariables.Filters.GetValue(axis, p_id)
 
+            If Not filter Is Nothing Then Return filter
+        Next
+        Return Nothing
+    End Function
+
+    Public Function GetFilterCopy(ByRef p_id As UInt32) As Filter
+        Dim filter = GetFilter(p_id)
+
+        If filter Is Nothing Then Return Nothing
+        Return filter.Clone()
+    End Function
+
+    Public Function GetFilterValue(ByRef p_id As UInt32) As FilterValue
+        Return GlobalVariables.FiltersValues.GetValue(p_id)
+    End Function
+
+    Public Function GetFilterValueCopy(ByRef p_id As UInt32) As FilterValue
+        Dim filterValue = GetFilterValue(p_id)
+
+        If filterValue Is Nothing Then Return Nothing
+        Return filterValue.Clone()
+    End Function
 
 #End Region
 

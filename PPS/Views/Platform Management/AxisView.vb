@@ -240,11 +240,11 @@ Friend Class AxisView
 
     End Sub
 
-    Private Sub fillDGV(ByRef axisHT As SortedDictionary(Of Int32, AxisElem))
+    Private Sub fillDGV(ByRef axisHT As MultiIndexDictionary(Of UInt32, String, NamedCRUDEntity))
 
         isFillingDGV = True
-        For Each axisValueId In axisHT.Keys
-            FillRow(axisValueId, axisHT(axisValueId).Name, axisHT(axisValueId))
+        For Each axisValue In axisHT.Values
+            FillRow(axisValue.Id, axisValue.Name, axisValue)
         Next
         isFillingDGV = False
         updateDGVFormat()
@@ -359,27 +359,29 @@ Friend Class AxisView
         Dim combobox As New ComboBoxEditor
         combobox.DropDownList = True
         Dim columnItem As HierarchyItem = columnsVariableItemDictionary(filterNode.Value)
-        Dim filterValueId = Controller.GetFilterValueId(CInt(filterNode.Value), axisValueId)
+        Dim filterValueId As UInt32 = Controller.GetFilterValueId(CInt(filterNode.Value), axisValueId)
         If (filterValueId = 0) Then
             System.Diagnostics.Debug.WriteLine("AxisControl.FillSubFilters: Invalid filter value id")
             Exit Sub
         End If
-        Dim filter_value_name = GlobalVariables.FiltersValues.filtervalues_hash(filterValueId)(NAME_VARIABLE)
-        DGV.CellsArea.SetCellValue(rowItem, columnItem, filter_value_name)
+        Dim filterValue As FilterValue = GlobalVariables.FiltersValues.GetValue(filterValueId)
+
+        If filterValue Is Nothing Then Exit Sub
+        DGV.CellsArea.SetCellValue(rowItem, columnItem, filterValue.Name)
 
         ' Filters Choices Setup
         If filterNode.Parent Is Nothing Then
             ' Root Filter
-            Dim valuesNames = GlobalVariables.FiltersValues.GetFiltervaluesList(filterNode.Value, NAME_VARIABLE)
-            For Each valueName As String In valuesNames
-                combobox.Items.Add(valueName)
+            Dim valuesDic = GlobalVariables.FiltersValues.GetDictionary(filterNode.Value)
+            For Each value As FilterValue In valuesDic.Values
+                combobox.Items.Add(value.Name)
             Next
         Else
             ' Child Filter
             Dim parentFilterFilterValueId As Int32 = Controller.GetFilterValueId(CInt(filterNode.Parent.Value), axisValueId)     ' Child Filter Id
             Dim filterValuesIds = GlobalVariables.FiltersValues.GetFilterValueIdsFromParentFilterValueIds({parentFilterFilterValueId})
-            For Each Id As Int32 In filterValuesIds
-                combobox.Items.Add(GlobalVariables.FiltersValues.filtervalues_hash(Id)(NAME_VARIABLE))
+            For Each Id As UInt32 In filterValuesIds
+                combobox.Items.Add(GlobalVariables.FiltersValues.GetValueName(Id))
             Next
         End If
 
@@ -453,21 +455,24 @@ Friend Class AxisView
     Private Sub UpdateParentFiltersValues(ByRef row As HierarchyItem, _
                                           ByRef axisId As Int32, _
                                           ByRef filterNode As vTreeNode,
-                                          ByRef filterValueId As Int32)
+                                          ByRef filterValueId As UInt32)
         If filterNode Is Nothing Then Exit Sub
+        Dim filterValue As FilterValue = GlobalVariables.FiltersValues.GetValue(filterValueId)
+        If filterValue Is Nothing Then Exit Sub
 
         If Not filterNode.Parent Is Nothing Then
             Dim parentFilterNode As vTreeNode = filterNode.Parent
             Dim column As HierarchyItem = columnsVariableItemDictionary(parentFilterNode.Value)
-            Dim parentFilterValueId As Int32 = GlobalVariables.FiltersValues.filtervalues_hash(filterValueId)(PARENT_FILTER_VALUE_ID_VARIABLE)
-            Dim filtervaluename = GlobalVariables.FiltersValues.filtervalues_hash(parentFilterValueId)(NAME_VARIABLE)
-            DGV.CellsArea.SetCellValue(row, column, filtervaluename)
+            Dim parentFilterValue As FilterValue = GlobalVariables.FiltersValues.GetValue(filterValue.ParentId)
+            If parentFilterValue Is Nothing Then Exit Sub
+
+            DGV.CellsArea.SetCellValue(row, column, parentFilterValue.Name)
 
             ' Recursively update parent filters
             UpdateParentFiltersValues(row, _
                                       axisId, _
                                       parentFilterNode, _
-                                      parentFilterValueId)
+                                      parentFilterValue.Id)
         End If
 
     End Sub
@@ -480,8 +485,8 @@ Friend Class AxisView
         Dim comboBox As New ComboBoxEditor
 
         Dim filterValuesIds As Int32() = GlobalVariables.FiltersValues.GetFilterValueIdsFromParentFilterValueIds(parentFilterValueIds)
-        For Each Id As Int32 In filterValuesIds
-            comboBox.Items.Add(GlobalVariables.FiltersValues.filtervalues_hash(Id)(NAME_VARIABLE))
+        For Each Id As UInt32 In filterValuesIds
+            comboBox.Items.Add(GlobalVariables.FiltersValues.GetValueName(Id))
         Next
 
         ' Set Cell value to nothing
@@ -549,7 +554,7 @@ Friend Class AxisView
                         'Controller.UpdateAxis(axisId, args.Cell.ColumnItem.ItemValue, newAxisName) ' Nath_TODO
                     Case Else
                         Dim filterValueName As String = args.Cell.Value
-                        Dim filterValueId As Int32 = GlobalVariables.FiltersValues.GetFilterValueId(filterValueName)
+                        Dim filterValueId As Int32 = GlobalVariables.FiltersValues.GetValueId(filterValueName)
                         If filterValueId = 0 Then
                             MsgBox("The Filter Value Name " & filterValueName & " could not be found.")
                             Exit Sub

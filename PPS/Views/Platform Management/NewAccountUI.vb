@@ -105,7 +105,7 @@ Friend Class NewAccountUI
             If Not ParentAccountsTreeviewBox.TreeView.SelectedNode Is Nothing Then
                 parent_id = CInt(ParentAccountsTreeviewBox.TreeView.SelectedNode.Value)
 
-                Dim l_account = GlobalVariables.Accounts.GetAccount(parent_id)
+                Dim l_account As Account = GlobalVariables.Accounts.GetValue(parent_id)
                 account_tab = If(l_account Is Nothing, 0, l_account.AccountTab)
             Else
                 parent_id = 0

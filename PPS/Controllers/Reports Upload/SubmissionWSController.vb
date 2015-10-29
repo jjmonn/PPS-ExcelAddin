@@ -92,7 +92,7 @@ Friend Class SubmissionWSController
 
     Friend Sub UpdateCalculatedItemsOnWS(ByRef entityName As String)
 
-        Dim entityId As Int32 = CInt(m_acquisitionModel.entitiesNameIdDict(entityName))
+        Dim entityId As Int32 = GlobalVariables.Entities.GetValueId(entityName)
         For Each l_account As Account In m_acquisitionModel.outputsList
             For Each period As Int32 In m_acquisitionModel.currentPeriodList
 
@@ -117,7 +117,7 @@ Friend Class SubmissionWSController
 
         Dim tuple_ As New Tuple(Of String, String, String)(p_entityName, p_accountName, p_period)
         If m_dataSet.m_datasetCellsDictionary.ContainsKey(tuple_) = True Then
-            Dim l_account = GlobalVariables.Accounts.GetAccount(p_accountName)
+            Dim l_account = GlobalVariables.Accounts.GetValue(p_accountName)
 
             If l_account Is Nothing Then Exit Sub
             Dim value = m_acquisitionModel.GetCalculatedValue(p_entityId, _
@@ -206,7 +206,7 @@ Friend Class SubmissionWSController
                         Else
                             ' First period input formula type : output period
                             m_disableWSChangeFlag = True
-                            SetDatsetCellValue(m_dataSet.m_entitiesNameIdDictionary(entityName), _
+                            SetDatsetCellValue(GlobalVariables.Entities.GetValueId(entityName), _
                                                entityName, _
                                                m_dataSet.m_datasetCellDimensionsDictionary(cell.Address).m_accountName, _
                                                m_dataSet.m_datasetCellDimensionsDictionary(cell.Address).m_period)
@@ -225,7 +225,7 @@ Friend Class SubmissionWSController
                     Dim intersectOutput = GlobalVariables.APPS.Intersect(cell, m_dataModificationsTracker.m_outputsRegion)
                     If Not intersectOutput Is Nothing Then
                         m_disableWSChangeFlag = True
-                        SetDatsetCellValue(m_dataSet.m_entitiesNameIdDictionary(entityName), _
+                        SetDatsetCellValue(GlobalVariables.Entities.GetValueId(entityName), _
                                            entityName, _
                                            m_dataSet.m_datasetCellDimensionsDictionary(cell.Address).m_accountName, _
                                            m_dataSet.m_datasetCellDimensionsDictionary(cell.Address).m_period)
@@ -265,8 +265,8 @@ Friend Class SubmissionWSController
 
         If m_dataSet.m_datasetCellDimensionsDictionary.ContainsKey(m_currentCellAddress) Then
             Dim datasetCellStruct As ModelDataSet.DataSetCellDimensions = m_dataSet.m_datasetCellDimensionsDictionary(m_currentCellAddress)
-            l_account = GlobalVariables.Accounts.GetAccount(datasetCellStruct.m_accountName)
-            entityId = GlobalVariables.Entities.GetEntityId(datasetCellStruct.m_entityName)
+            l_account = GlobalVariables.Accounts.GetValue(datasetCellStruct.m_accountName)
+            entityId = GlobalVariables.Entities.GetValueId(datasetCellStruct.m_entityName)
             periodId = datasetCellStruct.m_period
 
             If l_account Is Nothing Then Exit Sub
@@ -311,11 +311,11 @@ Friend Class SubmissionWSController
         Dim address As String = Strings.Replace(Target.Address, "$", "")
         If m_dataSet.m_datasetCellDimensionsDictionary.ContainsKey(Target.Address) Then
             Dim datasetCellStruct As ModelDataSet.DataSetCellDimensions = m_dataSet.m_datasetCellDimensionsDictionary(Target.Address)
-            GlobalVariables.s_reportUploadSidePane.DisplayAccountDetails(GlobalVariables.Accounts.GetIdFromName(datasetCellStruct.m_accountName))
+            GlobalVariables.s_reportUploadSidePane.DisplayAccountDetails(GlobalVariables.Accounts.GetValueId(datasetCellStruct.m_accountName))
         ElseIf m_dataSet.m_accountsAddressValuesDictionary.ContainsKey(address) Then
-            GlobalVariables.s_reportUploadSidePane.DisplayAccountDetails(GlobalVariables.Accounts.GetIdFromName(m_dataSet.m_accountsAddressValuesDictionary(address)))
+            GlobalVariables.s_reportUploadSidePane.DisplayAccountDetails(GlobalVariables.Accounts.GetValueId(m_dataSet.m_accountsAddressValuesDictionary(address)))
         ElseIf m_dataSet.m_outputsAccountsAddressvaluesDictionary.ContainsKey(address) Then
-            GlobalVariables.s_reportUploadSidePane.DisplayAccountDetails(GlobalVariables.Accounts.GetIdFromName(m_dataSet.m_outputsAccountsAddressvaluesDictionary(address)))
+            GlobalVariables.s_reportUploadSidePane.DisplayAccountDetails(GlobalVariables.Accounts.GetValueId(m_dataSet.m_outputsAccountsAddressvaluesDictionary(address)))
         Else
             GlobalVariables.s_reportUploadSidePane.DisplayEmptyTextBoxes()
         End If

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CRUD
 {
-  class FModelingAccount : HierarchyCRUDEntity, IComparable
+  public class FModelingAccount : NamedHierarchyCRUDEntity, IComparable
   {
     public UInt32 Id { get; private set; }
     public UInt32 ParentId { get; set; }

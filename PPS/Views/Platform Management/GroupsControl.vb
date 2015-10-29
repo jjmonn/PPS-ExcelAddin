@@ -14,6 +14,7 @@ Imports System.Collections.Generic
 Imports System.Collections
 Imports VIBlend.WinForms.Controls
 Imports System.Windows.Forms
+Imports CRUD
 
 Friend Class GroupsControl
 
@@ -46,7 +47,7 @@ Friend Class GroupsControl
         EntitiesPanel.Enabled = False
         m_entitiesTV.Dock = DockStyle.Fill
         m_entitiesTV.CheckBoxes = True
-        AddHandler GlobalVariables.GroupAllowedEntities.ReadEvent, AddressOf GroupAllowedEntities_READ
+        AddHandler GlobalVariables.GroupAllowedEntities.Read, AddressOf GroupAllowedEntities_READ
         AddHandler GlobalVariables.GroupAllowedEntities.DeleteEvent, AddressOf GroupAllowedEntities_DELETE
         AddHandler m_entitiesTV.NodeChecked, AddressOf entitiesTreeView_Check
 
@@ -121,25 +122,27 @@ Friend Class GroupsControl
 
 #Region "CRUD Events"
 
-    Delegate Sub GroupAllowedEntities_READ_Delegate(ByRef p_status As Boolean, ByRef p_groupId As Int32, ByRef p_entityId As Int32)
-    Private Sub GroupAllowedEntities_READ(ByRef p_status As Boolean, ByRef p_groupId As Int32, ByRef p_entityId As Int32)
+    Delegate Sub GroupAllowedEntities_READ_Delegate(ByRef p_status As ErrorMessage, ByRef p_groupAllowedEntity As GroupAllowedEntity)
+    Private Sub GroupAllowedEntities_READ(ByRef p_status As ErrorMessage, ByRef p_groupAllowedEntity As GroupAllowedEntity)
         If InvokeRequired Then
             Dim MyDelegate As New GroupAllowedEntities_READ_Delegate(AddressOf GroupAllowedEntities_READ)
-            Me.Invoke(MyDelegate, New Object() {p_status, p_groupId, p_entityId})
+            Me.Invoke(MyDelegate, New Object() {p_status, p_groupAllowedEntity})
         Else
-            If (Not m_currentNode Is Nothing AndAlso p_groupId = m_currentNode.Value) Then
+            If (Not m_currentNode Is Nothing AndAlso p_groupAllowedEntity.GroupId = m_currentNode.Value) Then
                 LoadCurrent()
             End If
         End If
     End Sub
 
-    Delegate Sub GroupAllowedEntities_DELETE_Delegate(ByRef p_status As Boolean, ByRef p_groupId As Int32, ByRef p_entityId As Int32)
-    Private Sub GroupAllowedEntities_DELETE(ByRef p_status As Boolean, ByRef p_groupId As Int32, ByRef p_entityId As Int32)
+    Delegate Sub GroupAllowedEntities_DELETE_Delegate(ByRef p_status As ErrorMessage, ByRef p_id As UInt32)
+    Private Sub GroupAllowedEntities_DELETE(ByRef p_status As ErrorMessage, ByRef p_id As UInt32)
         If InvokeRequired Then
-            Dim MyDelegate As New GroupAllowedEntities_DELETE_Delegate(AddressOf GroupAllowedEntities_READ)
-            Me.Invoke(MyDelegate, New Object() {p_status, p_groupId, p_entityId})
+            Dim MyDelegate As New GroupAllowedEntities_DELETE_Delegate(AddressOf GroupAllowedEntities_DELETE)
+            Me.Invoke(MyDelegate, New Object() {p_status, p_id})
         Else
-            If (Not m_currentNode Is Nothing AndAlso p_groupId = m_currentNode.Value) Then
+            Dim l_allowedEntity As GroupAllowedEntity = GlobalVariables.GroupAllowedEntities.GetValue(p_id)
+
+            If (Not l_allowedEntity Is Nothing AndAlso Not m_currentNode Is Nothing AndAlso l_allowedEntity.GroupId = m_currentNode.Value) Then
                 LoadCurrent()
             End If
         End If

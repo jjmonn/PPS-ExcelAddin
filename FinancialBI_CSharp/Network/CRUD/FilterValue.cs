@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CRUD
 {
-  class FilterValue : HierarchyCRUDEntity, IComparable
+  public class FilterValue : NamedHierarchyCRUDEntity, IComparable
   {
     public UInt32 Id { get; private set; }
     public UInt32 FilterId { get; set; }

@@ -39,10 +39,11 @@ Friend Class ExcelFormatting
     End Sub
 
     Friend Shared Sub FormatExcelRangeAs(ByRef inputRange As Excel.Range, _
-                                         ByRef currency As String, _
+                                         ByRef currency As UInt32, _
                                          Optional ByRef startingDate As Date = Nothing)
 
-        Dim currencies_symbol_dict As Hashtable = GlobalVariables.Currencies.GetCurrenciesDict(ID_VARIABLE, CURRENCY_SYMBOL_VARIABLE)
+        Dim l_currency As Currency = GlobalVariables.Currencies.GetValue(currency)
+        If l_currency Is Nothing Then Exit Sub
         Dim formatsDictionary As New Dictionary(Of String, Formats.FinancialBIFormat)
         formatsDictionary.Add("t", Formats.GetFormat("Title"))
         formatsDictionary.Add("i", Formats.GetFormat("Important"))
@@ -54,7 +55,7 @@ Friend Class ExcelFormatting
 
             Dim accValue As String = row.Cells(1, 1).value2
             If Not accValue Is Nothing Then
-                Dim l_account = GlobalVariables.Accounts.GetAccount(accValue)
+                Dim l_account As Account = GlobalVariables.Accounts.GetValue(accValue)
                 If Not l_account Is Nothing Then
                     formatCode = l_account.FormatId
 
@@ -68,7 +69,7 @@ Friend Class ExcelFormatting
                     If formatsDictionary(formatCode).isItalic = True Then row.Font.Italic = True
 
                     Select Case l_account.Type
-                        Case Account.AccountType.MONETARY : row.Cells.NumberFormat = currencies_symbol_dict(currency) & "#,##0.00;(" & currencies_symbol_dict(currency) & "#,##0.00)"
+                        Case Account.AccountType.MONETARY : row.Cells.NumberFormat = l_currency.Symbol & "#,##0.00;(" & l_currency.Symbol & "#,##0.00)"
                         Case Account.AccountType.PERCENTAGE : row.Cells.NumberFormat = "0.00%"        ' put this in a table ?
                         Case Account.AccountType.NUMBER : row.Cells.NumberFormat = "#,##0.00"        ' further evolution set unit ?
                         Case Account.AccountType.DATE_ : row.Cells.NumberFormat = "d-mmm-yy" ' d-mmm-yy

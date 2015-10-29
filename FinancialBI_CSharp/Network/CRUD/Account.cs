@@ -8,7 +8,7 @@ using System.Diagnostics;
 namespace CRUD
 {
 
-  public class Account : HierarchyCRUDEntity, IComparable
+  public class Account : NamedHierarchyCRUDEntity, IComparable
   {
 
     #region Enums
@@ -65,7 +65,7 @@ namespace CRUD
       Id = p_id;
     }
 
-    public static Account BuildAccount(ByteBuffer p_packet)
+    public static CRUDEntity BuildAccount(ByteBuffer p_packet)
     {
       Account l_account = new Account(p_packet.ReadUint32());
 

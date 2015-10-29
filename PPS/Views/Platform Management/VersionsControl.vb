@@ -79,8 +79,8 @@ Friend Class VersionsControl
         AddHandler m_exchangeRatesVersionVTreeviewbox.TreeView.AfterSelect, AddressOf ExchangeRatesVTreebox_TextChanged
         AddHandler m_factsVersionVTreeviewbox.TreeView.AfterSelect, AddressOf FactsRatesVTreebox_TextChanged
 
-        VTreeViewUtil.LoadTreeview(m_exchangeRatesVersionVTreeviewbox.TreeView, GlobalVariables.RatesVersions.rate_versions_hash)
-        VTreeViewUtil.LoadTreeview(m_factsVersionVTreeviewbox.TreeView, GlobalVariables.GlobalFactsVersions.globalFact_versions_hash)
+        VTreeViewUtil.LoadTreeview(m_exchangeRatesVersionVTreeviewbox.TreeView, GlobalVariables.RatesVersions.GetDictionary())
+        VTreeViewUtil.LoadTreeview(m_factsVersionVTreeviewbox.TreeView, GlobalVariables.GlobalFactsVersions.GetDictionary())
 
         m_exchangeRatesVersionVTreeviewbox.Text = ""
         m_factsVersionVTreeviewbox.Text = ""

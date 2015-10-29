@@ -1,9 +1,8 @@
 ﻿Imports System.Windows.Forms
 Imports System.Collections
+Imports System.Collections.Generic
 Imports VIBlend.WinForms.DataGridView
-
-
-
+Imports CRUD
 
 Friend Class CurrenciesController
 
@@ -21,9 +20,7 @@ Friend Class CurrenciesController
 
     Friend Sub New()
 
-        m_view = New CurrenciesView(Me, _
-                                    GlobalVariables.Currencies.m_allCurrenciesHash)
-
+        m_view = New CurrenciesView(Me, GlobalVariables.Currencies.GetDictionary())
 
     End Sub
 
@@ -51,27 +48,38 @@ Friend Class CurrenciesController
                               ByRef p_inUse As Boolean)
 
         ' register into temp updates for update list - priority normal
-        Dim currencyHT As Hashtable = GlobalVariables.Currencies.m_allCurrenciesHash(p_currencyId).clone
-        currencyHT(CURRENCY_IN_USE_VARIABLE) = p_inUse
-        GlobalVariables.Currencies.CMSG_UPDATE_CURRENCY(currencyHT)
+        Dim currencyHT As Currency = GetCurrencyCopy(p_currencyId)
+
+        If currencyHT Is Nothing Then Exit Sub
+        currencyHT.InUse = p_inUse
+        GlobalVariables.Currencies.Update(currencyHT)
 
     End Sub
 
     Friend Sub UpdateCurrencies(ByRef p_dataGridView As vDataGridView)
 
-        Dim listCurrencies As New Hashtable
+        Dim listCurrencies As New List(Of CRUDEntity)
 
         For Each row As HierarchyItem In p_dataGridView.RowsHierarchy.Items
-            Dim currency As New Hashtable
-            currency(ID_VARIABLE) = row.ItemValue
+            Dim l_currency As Currency = GetCurrencyCopy(row.ItemValue)
 
+            If l_currency Is Nothing Then Continue For
             For Each column As HierarchyItem In p_dataGridView.ColumnsHierarchy.Items
-                currency(column.ItemValue) = p_dataGridView.CellsArea.GetCellValue(row, column)
+                Dim l_cellValue = p_dataGridView.CellsArea.GetCellValue(row, column)
+
+                Select Case column.ItemValue
+                    Case NAME_VARIABLE
+                        l_currency.Name = CType(l_cellValue, String)
+                    Case CURRENCY_SYMBOL_VARIABLE
+                        l_currency.Symbol = CType(l_cellValue, String)
+                    Case CURRENCY_IN_USE_VARIABLE
+                        l_currency.InUse = CType(l_cellValue, Boolean)
+                End Select
             Next
-            listCurrencies(CInt(currency(ID_VARIABLE))) = currency
+            listCurrencies.Add(l_currency)
         Next
 
-        GlobalVariables.Currencies.CMSG_UPDATE_CURRENCY_LIST(listCurrencies)
+        GlobalVariables.Currencies.UpdateList(listCurrencies)
 
     End Sub
 
@@ -91,7 +99,6 @@ Friend Class CurrenciesController
 
 #End Region
 
-
 #Region "Events"
 
     ' priority low
@@ -101,5 +108,17 @@ Friend Class CurrenciesController
 
 #End Region
 
+#Region "Utilities"
 
+    Friend Function GetCurrency(ByVal p_id As UInt32) As Currency
+        Return GlobalVariables.Currencies.GetValue(p_id)
+    End Function
+
+    Friend Function GetCurrencyCopy(ByVal p_id As UInt32) As Currency
+        Dim l_currency = GetCurrency(p_id)
+
+        If l_currency Is Nothing Then Return Nothing
+        Return l_currency.Clone()
+    End Function
+#End Region
 End Class
