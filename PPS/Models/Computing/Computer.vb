@@ -152,20 +152,24 @@ Friend Class Computer
     Private Sub SMSG_COMPUTE_RESULT(packet As ByteBuffer)
 
         Try
-            If packet.GetError() = 0 Then
+            If packet.GetError() = ErrorMessage.SUCCESS Then
                 Dim request_id As Int32 = packet.GetRequestId()
                 If requestIdVersionIdDict.ContainsKey(request_id) = False Then
                     'MsgBox("The server returned an unregistered compute request id.")
                     Exit Sub
                 End If
-                versionId = requestIdVersionIdDict(request_id)
+                Dim version As Version = GlobalVariables.Versions.GetValue(requestIdVersionIdDict(request_id))
+                If version Is Nothing Then
+                    MsgBox("Compute returned a result for an invalid version.")
+                    Exit Sub
+                End If
                 requestIdVersionIdDict.Remove(request_id)
 
                 filtersDict.Clear()
 
                 periodsTokenDict = GlobalVariables.Versions.GetPeriodTokensDict(versionId)
 
-                Select Case GlobalVariables.Versions.versions_hash(versionId)(VERSIONS_TIME_CONFIG_VARIABLE)
+                Select Case version.TimeConfiguration
                     Case CRUD.TimeConfig.YEARS : periodIdentifier = YEAR_PERIOD_IDENTIFIER
                     Case CRUD.TimeConfig.MONTHS : periodIdentifier = MONTH_PERIOD_IDENTIFIER
                 End Select
@@ -283,7 +287,7 @@ Friend Class Computer
             Case Computer.AXIS_DECOMPOSITION_IDENTIFIER : Return GlobalEnums.DecompositionQueryType.AXIS
             Case Computer.FILTERS_DECOMPOSITION_IDENTIFIER : Return GlobalEnums.DecompositionQueryType.FILTER
         End Select
-
+        Return Nothing
     End Function
 
     Friend Shared Function GetItemID(ByRef str As String) As Int32

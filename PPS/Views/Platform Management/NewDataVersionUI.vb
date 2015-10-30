@@ -14,7 +14,7 @@
 Imports System.Windows.Forms
 Imports System.Collections
 Imports VIBlend.WinForms.Controls
-
+Imports CRUD
 
 Friend Class NewDataVersionUI
 
@@ -99,32 +99,36 @@ Friend Class NewDataVersionUI
 
         Dim name As String = NameTB.Text
         If IsFormValid(name) = True Then
-            Dim hash As New Hashtable
-            hash.Add(NAME_VARIABLE, name)
-            hash.Add(VERSIONS_CREATION_DATE_VARIABLE, Format(Now, "short Date"))
-            hash.Add(IS_FOLDER_VARIABLE, 0)
-            hash.Add(VERSIONS_LOCKED_VARIABLE, 0)
-            hash.Add(VERSIONS_LOCKED_DATE_VARIABLE, "")
-            Dim timeConfig As Byte
-            If TimeConfigCB.Text = MONTHLY_TIME_CONFIGURATION Then timeConfig = 2 Else timeConfig = 1
-            hash.Add(VERSIONS_TIME_CONFIG_VARIABLE, timeConfig)
-            hash.Add(VERSIONS_START_PERIOD_VAR, DateSerial(StartingPeriodNUD.Value, 12, 31).ToOADate())
-            hash.Add(VERSIONS_NB_PERIODS_VAR, NbPeriodsNUD.Text)
-            hash.Add(VERSIONS_RATES_VERSION_ID_VAR, m_exchangeRatesVersionVTreeviewbox.TreeView.SelectedNode.Value)
-            hash.Add(VERSIONS_GLOBAL_FACT_VERSION_ID, m_factsVersionVTreeviewbox.TreeView.SelectedNode.Value)
-            If Not parent_node Is Nothing Then hash.Add(PARENT_ID_VARIABLE, parent_node.Value)
+            Dim newVersion As New Version
+
+            newVersion.Name = name
+            newVersion.CreatedAt = Format(Now, "short Date")
+            newVersion.IsFolder = False
+            newVersion.Locked = False
+            newVersion.LockDate = "NA"
+            Dim l_timeConfig As TimeConfig
+            If TimeConfigCB.Text = MONTHLY_TIME_CONFIGURATION Then l_timeConfig = TimeConfig.MONTHS Else l_timeConfig = TimeConfig.YEARS
+            newVersion.TimeConfiguration = l_timeConfig
+            newVersion.StartPeriod = DateSerial(StartingPeriodNUD.Value, 12, 31).ToOADate()
+            newVersion.NbPeriod = NbPeriodsNUD.Text
+            newVersion.RateVersionId = m_exchangeRatesVersionVTreeviewbox.TreeView.SelectedNode.Value
+            newVersion.GlobalFactVersionId = m_factsVersionVTreeviewbox.TreeView.SelectedNode.Value()
+            If Not parent_node Is Nothing Then newVersion.ParentId = parent_node.Value
 
             If CreateCopyBT.Checked = True AndAlso _
             ReferenceTB.Text <> "" AndAlso _
             reference_node.Text = ReferenceTB.Text AndAlso
             Controller.IsFolder(reference_node.Value) = False Then
                 Dim id As UInt32 = reference_node.Value
-                hash(VERSIONS_TIME_CONFIG_VARIABLE) = GlobalVariables.Versions.versions_hash(id)(VERSIONS_TIME_CONFIG_VARIABLE)
-                hash(VERSIONS_START_PERIOD_VAR) = GlobalVariables.Versions.versions_hash(id)(VERSIONS_START_PERIOD_VAR)
-                hash(VERSIONS_NB_PERIODS_VAR) = GlobalVariables.Versions.versions_hash(id)(VERSIONS_NB_PERIODS_VAR)
-                Controller.CreateVersion(hash, reference_node.Value)
+                Dim version As Version = GlobalVariables.Versions.GetValue(id)
+                If version Is Nothing Then Exit Sub
+
+                newVersion.TimeConfiguration = version.TimeConfiguration
+                newVersion.StartPeriod = version.StartPeriod
+                newVersion.NbPeriod = version.NbPeriod
+                Controller.CreateVersion(newVersion, reference_node.Value)
             Else
-                Controller.CreateVersion(hash)
+                Controller.CreateVersion(newVersion)
             End If
         End If
 
@@ -176,9 +180,12 @@ Friend Class NewDataVersionUI
         reference_node.Text = ReferenceTB.Text AndAlso
         Controller.IsFolder(reference_node.Value) = False Then
 
-            TimeConfigCB.SelectedText = GlobalVariables.Versions.versions_hash(reference_node.Value)(VERSIONS_TIME_CONFIG_VARIABLE)
-            StartingPeriodNUD.Value = Year(GlobalVariables.Versions.versions_hash(reference_node.Value)(VERSIONS_START_PERIOD_VAR))
-            NbPeriodsNUD = GlobalVariables.Versions.versions_hash(reference_node.Value)(VERSIONS_NB_PERIODS_VAR)
+            Dim version As Version = GlobalVariables.Versions.GetValue(reference_node.Value)
+            If version Is Nothing Then Exit Sub
+
+            TimeConfigCB.SelectedText = version.TimeConfiguration
+            StartingPeriodNUD.Value = Year(Date.FromOADate(version.StartPeriod))
+            NbPeriodsNUD.Value = version.NbPeriod
 
         End If
 

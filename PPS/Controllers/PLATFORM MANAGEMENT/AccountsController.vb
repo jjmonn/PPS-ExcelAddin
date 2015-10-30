@@ -37,7 +37,7 @@ Friend Class AccountsController
 
 
     ' Variables
-    Friend factsNameKeysDictionary As MultiIndexDictionary(Of UInt32, String, NamedCRUDEntity)
+    Friend factsNameKeysDictionary As MultiIndexDictionary(Of UInt32, String, NamedHierarchyCRUDEntity)
     Friend positionsDictionary As New Dictionary(Of Int32, Double)
     Private dependant_account_id As String
     Friend FTypesToBeTested As New List(Of Int32)

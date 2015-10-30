@@ -1,5 +1,6 @@
 ﻿Imports System.Collections.Generic
 Imports System.Collections
+Imports CRUD
 
 ' Computer.vb
 '
@@ -27,7 +28,7 @@ Public Class ComputerInputEntity
     Private requestIdEntityIdDict As New Dictionary(Of UInt32, UInt32)
     Private dataMap As Dictionary(Of Int32, Dictionary(Of String, Double))
     Private entityId As Int32
-    Private versionId As Int32
+    Private m_versionId As Int32
     Private accountId As Int32
     Private periodIdentifier As String
     Private periodsTokenDict As Dictionary(Of String, String)
@@ -50,7 +51,7 @@ Public Class ComputerInputEntity
                                     ByRef valuesArray() As Double)
 
 
-        versionId = p_versionId
+        m_versionId = p_versionId
         NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_SOURCED_COMPUTE_RESULT, AddressOf SMSG_SOURCED_COMPUTE_RESULT)
         Dim packet As New ByteBuffer(CType(ClientMessage.CMSG_SOURCED_COMPUTE, UShort))
         Dim requestId As Int32 = packet.AssignRequestId()
@@ -76,12 +77,18 @@ Public Class ComputerInputEntity
     ' Server Response
     Private Sub SMSG_SOURCED_COMPUTE_RESULT(packet As ByteBuffer)
 
-        If packet.GetError() = 0 Then
+        If packet.GetError() = ErrorMessage.SUCCESS Then
             Dim request_id = packet.GetRequestId()
             dataMap = New Dictionary(Of Int32, Dictionary(Of String, Double))
 
-            periodsTokenDict = GlobalVariables.Versions.GetPeriodTokensDict(versionId)
-            Select Case GlobalVariables.Versions.versions_hash(versionId)(VERSIONS_TIME_CONFIG_VARIABLE)
+            Dim version As Version = GlobalVariables.Versions.GetValue(m_versionId)
+            If version Is Nothing Then
+                MsgBox("Compute returned a result for an invalid version.")
+                Exit Sub
+            End If
+
+            periodsTokenDict = GlobalVariables.Versions.GetPeriodTokensDict(m_versionId)
+            Select Case version.TimeConfiguration
                 Case CRUD.TimeConfig.YEARS : periodIdentifier = Computer.YEAR_PERIOD_IDENTIFIER
                 Case CRUD.TimeConfig.MONTHS : periodIdentifier = Computer.MONTH_PERIOD_IDENTIFIER
             End Select

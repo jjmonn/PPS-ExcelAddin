@@ -211,10 +211,11 @@ Friend Class EntitiesController
 
     End Sub
 
-    Private Sub AfterEntityFilterRead(ByRef status As ErrorMessage, ByRef p_axisFilter As AxisFilter)
+    Private Sub AfterEntityFilterRead(ByRef status As ErrorMessage, ByRef p_axisFilter As CRUDEntity)
 
         If (status = ErrorMessage.SUCCESS) Then
-            If p_axisFilter.Axis <> AxisType.Entities Then Exit Sub
+            Dim axisFilter As AxisElem = CType(p_axisFilter, AxisElem)
+            If axisFilter.Axis <> AxisType.Entities Then Exit Sub
             Dim entityId As Int32 = p_axisFilter.Id
             If Not GlobalVariables.Entities.GetValue(entityId) Is Nothing Then
                 View.LoadInstanceVariables()

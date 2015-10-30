@@ -1274,7 +1274,7 @@ Public Class AddinModule
         GlobalVariables.Entities = New EntityManager
         GlobalVariables.Filters = New FilterManager
         GlobalVariables.FiltersValues = New FilterValueManager
-        GlobalVariables.Versions = New Version
+        GlobalVariables.Versions = New VersionManager
         GlobalVariables.Currencies = New CurrencyManager
         GlobalVariables.RatesVersions = New RatesVersionManager
         GlobalVariables.GlobalFacts = New GlobalFactManager
@@ -1564,8 +1564,10 @@ Public Class AddinModule
             ConnectionBT_OnClick(sender, control, pressed)
         Else
             Dim startDate As Date = Nothing
-            If GlobalVariables.Versions.versions_hash.ContainsKey(My.Settings.version_id) = True Then
-                startDate = Date.FromOADate(GlobalVariables.Versions.versions_hash(My.Settings.version_id)(VERSIONS_START_PERIOD_VAR))
+            Dim version As Version = GlobalVariables.Versions.GetValue(My.Settings.version_id)
+
+            If Not version Is Nothing Then
+                startDate = Date.FromOADate(version.StartPeriod)
             End If
             Dim currencyName As String = ""
             Dim l_currency As Currency = GlobalVariables.Currencies.GetValue(My.Settings.currentCurrency)
@@ -1837,6 +1839,9 @@ Public Class AddinModule
     Friend Sub InputReportPaneCallBack_ReportCreation()
 
         GlobalVariables.APPS.ScreenUpdating = False
+        Dim version As Version = GlobalVariables.Versions.GetValue(My.Settings.version_id)
+        If version Is Nothing Then Exit Sub
+
         Dim entity_id As Int32 = Me.InputReportTaskPane.EntitiesTV.SelectedNode.Name
         Dim entity_name As String = Me.InputReportTaskPane.EntitiesTV.SelectedNode.Text
         Dim l_entity As Entity = GlobalVariables.Entities.GetValue(entity_id)
@@ -1853,8 +1858,10 @@ Public Class AddinModule
             Exit Sub
         End If
 
-        Dim timeConfig As UInt32 = GlobalVariables.Versions.versions_hash(My.Settings.version_id)(VERSIONS_TIME_CONFIG_VARIABLE)
+        Dim timeConfig As UInt32 = version.TimeConfiguration
         Dim periodlist As Int32() = GlobalVariables.Versions.GetPeriodsList(My.Settings.version_id)
+
+        If periodlist Is Nothing Then Exit Sub
         GlobalVariables.APPS.Interactive = False
         WorksheetWrittingFunctions.InsertInputReportOnWS(currentcell, _
                                                           periodlist, _
@@ -2022,10 +2029,13 @@ Public Class AddinModule
 
     End Sub
 
-    Public Shared Sub SetCurrentVersionId(ByRef versionId As Int32)
+    Public Shared Sub SetCurrentVersionId(ByRef versionId As UInt32)
 
-        GlobalVariables.Version_Button.Caption = GlobalVariables.Versions.versions_hash(versionId)(NAME_VARIABLE)
-        GlobalVariables.Version_label_Sub_Ribbon.Text = GlobalVariables.Versions.versions_hash(versionId)(NAME_VARIABLE)
+        Dim version As Version = GlobalVariables.Versions.GetValue(versionId)
+        If version Is Nothing Then Exit Sub
+
+        GlobalVariables.Version_Button.Caption = version.Name
+        GlobalVariables.Version_label_Sub_Ribbon.Text = version.Name
         My.Settings.version_id = versionId
         My.Settings.Save()
 

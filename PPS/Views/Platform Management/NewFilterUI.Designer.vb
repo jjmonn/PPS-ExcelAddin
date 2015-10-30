@@ -30,7 +30,7 @@ Partial Class NewFilterUI
         Me.NameTextBox = New VIBlend.WinForms.Controls.vTextBox()
         Me.CreateButton = New System.Windows.Forms.Button()
         Me.ButtonsIL = New System.Windows.Forms.ImageList(Me.components)
-        Me.CancelButton = New System.Windows.Forms.Button()
+        Me.CancelBT = New System.Windows.Forms.Button()
         Me.SuspendLayout()
         '
         'ParentFilterTreeBox
@@ -120,22 +120,22 @@ Partial Class NewFilterUI
         '
         'CancelButton
         '
-        Me.CancelButton.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
-        Me.CancelButton.ImageKey = "delete-2-xxl.png"
-        Me.CancelButton.ImageList = Me.ButtonsIL
-        Me.CancelButton.Location = New System.Drawing.Point(145, 120)
-        Me.CancelButton.Name = "CancelButton"
-        Me.CancelButton.Size = New System.Drawing.Size(92, 25)
-        Me.CancelButton.TabIndex = 22
-        Me.CancelButton.Text = "Cancel"
-        Me.CancelButton.UseVisualStyleBackColor = True
+        Me.CancelBT.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.CancelBT.ImageKey = "delete-2-xxl.png"
+        Me.CancelBT.ImageList = Me.ButtonsIL
+        Me.CancelBT.Location = New System.Drawing.Point(145, 120)
+        Me.CancelBT.Name = "CancelButton"
+        Me.CancelBT.Size = New System.Drawing.Size(92, 25)
+        Me.CancelBT.TabIndex = 22
+        Me.CancelBT.Text = "Cancel"
+        Me.CancelBT.UseVisualStyleBackColor = True
         '
         'NewFilter
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(380, 168)
-        Me.Controls.Add(Me.CancelButton)
+        Me.Controls.Add(Me.CancelBT)
         Me.Controls.Add(Me.CreateButton)
         Me.Controls.Add(Me.NameTextBox)
         Me.Controls.Add(Me.VLabel2)
@@ -153,5 +153,5 @@ Partial Class NewFilterUI
     Friend WithEvents NameTextBox As VIBlend.WinForms.Controls.vTextBox
     Friend WithEvents CreateButton As System.Windows.Forms.Button
     Friend WithEvents ButtonsIL As System.Windows.Forms.ImageList
-    Friend WithEvents CancelButton As System.Windows.Forms.Button
+    Friend WithEvents CancelBT As System.Windows.Forms.Button
 End Class

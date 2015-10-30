@@ -2,7 +2,7 @@
 Imports System.Collections.Generic
 Imports CRUD
 
-Friend Class UserManager : Inherits NamedCRUDManager
+Friend Class UserManager : Inherits NamedCRUDManager(Of NamedCRUDEntity)
 
 #Region "Instance variables"
 

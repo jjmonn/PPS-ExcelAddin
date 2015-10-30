@@ -14,7 +14,7 @@ Imports System.Collections
 Imports System.Collections.Generic
 Imports CRUD
 
-Public Class RatesVersionManager : Inherits NamedCRUDManager
+Public Class RatesVersionManager : Inherits NamedCRUDManager(Of NamedHierarchyCRUDEntity)
 
 #Region "Init"
 

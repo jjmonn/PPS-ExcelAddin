@@ -2,7 +2,7 @@
 Imports System.Drawing
 Imports VIBlend.Utilities
 Imports System.Collections.Generic
-
+Imports CRUD
 
 Public Class VTreeViewUtil
 
@@ -149,15 +149,15 @@ Public Class VTreeViewUtil
 
 #Region "TV loading"
 
-    Public Shared Sub LoadTreeview(ByRef TV As vTreeView, _
-                                ByRef items_attributes As Object)
+    Public Shared Sub LoadTreeview(Of T As {NamedHierarchyCRUDEntity})(ByRef TV As vTreeView, _
+                                ByRef items_attributes As MultiIndexDictionary(Of UInt32, String, T))
 
         Dim currentNode, ParentNode As vTreeNode
         Dim orphans_ids_list As New List(Of Int32)
         Dim image_index As UInt16 = 0
         TV.Nodes.Clear()
 
-        For Each id As Int32 In items_attributes.Keys
+        For Each id As UInt32 In items_attributes.Keys
             If items_attributes(id).ParentId = 0 Then
                 currentNode = AddNode(items_attributes(id).Id, _
                                       items_attributes(id).Name,
@@ -179,15 +179,15 @@ Public Class VTreeViewUtil
 
     End Sub
 
-    Private Shared Sub SolveOrphanNodesList(ByRef TV As vTreeView, _
-                                          ByRef items_attributes As Object, _
+    Private Shared Sub SolveOrphanNodesList(Of T As {NamedHierarchyCRUDEntity})(ByRef TV As vTreeView, _
+                                          ByRef items_attributes As MultiIndexDictionary(Of UInt32, String, T), _
                                           ByRef orphans_id_list As List(Of Int32), _
                                           Optional ByRef solved_orphans_list As List(Of Int32) = Nothing)
 
         Dim current_node, parent_node As vTreeNode
         Dim image_index As UInt16 = 0
         If solved_orphans_list Is Nothing Then solved_orphans_list = New List(Of Int32)
-        For Each orphan_id As Int32 In orphans_id_list
+        For Each orphan_id As UInt32 In orphans_id_list
             If solved_orphans_list.Contains(orphan_id) = False Then
                 parent_node = FindNode(TV, items_attributes(orphan_id).ParentId)
 
@@ -207,30 +207,29 @@ Public Class VTreeViewUtil
 
     End Sub
 
-    Public Shared Sub LoadTreenode(ByRef node As vTreeNode, _
-                                   ByRef items_attributes As Object)
+    Public Shared Sub LoadTreenode(Of T As {NamedHierarchyCRUDEntity})(ByRef node As vTreeNode, _
+                                   ByRef items_attributes As MultiIndexDictionary(Of UInt32, String, T))
 
         Dim currentNode, ParentNode As vTreeNode
         Dim orphans_ids_list As New List(Of Int32)
         Dim image_index As UInt16 = 0
         node.Nodes.Clear()
 
-        For Each id As Int32 In items_attributes.Keys
-            If items_attributes(id).ContainsKey(IMAGE_VARIABLE) Then image_index = items_attributes(id)(IMAGE_VARIABLE)
-            If items_attributes(id)(PARENT_ID_VARIABLE) = 0 Then
-                currentNode = AddNode(items_attributes(id)(ID_VARIABLE), _
-                                       items_attributes(id)(NAME_VARIABLE), _
+        For Each id As UInt32 In items_attributes.Keys
+            If items_attributes(id).ParentId = 0 Then
+                currentNode = AddNode(items_attributes(id).Id, _
+                                       items_attributes(id).Name, _
                                        node, _
                                        image_index)
             Else
-                ParentNode = FindNode(node, items_attributes(id)(ID_VARIABLE))
+                ParentNode = FindNode(node, items_attributes(id).Id)
                 If Not ParentNode Is Nothing Then
-                    currentNode = AddNode(items_attributes(id)(ID_VARIABLE), _
-                                        items_attributes(id)(NAME_VARIABLE),
+                    currentNode = AddNode(items_attributes(id).Id, _
+                                        items_attributes(id).Name,
                                         ParentNode, _
                                         image_index)
                 Else
-                    orphans_ids_list.Add(items_attributes(id)(ID_VARIABLE))
+                    orphans_ids_list.Add(items_attributes(id).Id)
                 End If
             End If
         Next
@@ -238,22 +237,21 @@ Public Class VTreeViewUtil
 
     End Sub
 
-    Private Shared Sub SolveOrphanNodesList(ByRef node As vTreeNode, _
-                                          ByRef items_attributes As Object, _
+    Private Shared Sub SolveOrphanNodesList(Of T As {NamedHierarchyCRUDEntity})(ByRef node As vTreeNode, _
+                                          ByRef items_attributes As MultiIndexDictionary(Of UInt32, String, T), _
                                           ByRef orphans_id_list As List(Of Int32), _
                                           Optional ByRef solved_orphans_list As List(Of Int32) = Nothing)
 
         Dim current_node, parent_node As vTreeNode
         Dim image_index As UInt16 = 0
         If solved_orphans_list Is Nothing Then solved_orphans_list = New List(Of Int32)
-        For Each orphan_id As Int32 In orphans_id_list
-            If items_attributes(orphan_id).ContainsKey(IMAGE_VARIABLE) = True Then image_index = items_attributes(orphan_id)(IMAGE_VARIABLE)
+        For Each orphan_id As UInt32 In orphans_id_list
             If solved_orphans_list.Contains(orphan_id) = False Then
-                parent_node = FindNode(node, items_attributes(orphan_id)(PARENT_ID_VARIABLE))
+                parent_node = FindNode(node, items_attributes(orphan_id).ParentId)
 
                 If Not parent_node Is Nothing Then
-                    current_node = AddNode(items_attributes(orphan_id)(ID_VARIABLE), _
-                                           items_attributes(orphan_id)(NAME_VARIABLE),
+                    current_node = AddNode(items_attributes(orphan_id).Id, _
+                                           items_attributes(orphan_id).Name,
                                            parent_node, _
                                            image_index)
                     solved_orphans_list.Add(orphan_id)

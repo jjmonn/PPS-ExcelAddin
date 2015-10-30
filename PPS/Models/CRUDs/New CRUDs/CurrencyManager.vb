@@ -14,7 +14,7 @@ Imports System.Collections
 Imports System.Collections.Generic
 Imports CRUD
 
-Friend Class CurrencyManager : Inherits NamedCRUDManager
+Friend Class CurrencyManager : Inherits NamedCRUDManager(Of NamedCRUDEntity)
 
 #Region "Instance variables"
 
@@ -67,7 +67,7 @@ Friend Class CurrencyManager : Inherits NamedCRUDManager
         NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_GET_MAIN_CURRENCY_ANSWER, AddressOf SMSG_GET_MAIN_CURRENCY_ANSWER)
         NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_SET_MAIN_CURRENCY_ANSWER, AddressOf SMSG_SET_MAIN_CURRENCY_ANSWER)
 
-        MyBase.Finalize()
+        MyBase.finalize()
 
     End Sub
 

@@ -55,9 +55,15 @@ Friend Class ExchangeRatesController
             Exit Sub
         End If
 
+        Dim version As Version = GlobalVariables.Versions.GetValue(My.Settings.version_id)
+        If version Is Nothing Then
+            MsgBox("Invalid version in settings.")
+            m_isValid = False
+            Exit Sub
+        End If
         GlobalVariables.RatesVersions.LoadRateVersionsTV(m_ratesVersionTV)
         m_view = New ExchangeRatesView(Me, m_ratesVersionTV, GlobalVariables.Currencies.GetMainCurrency())
-        m_currentRatesVersionId = GlobalVariables.Versions.versions_hash(My.Settings.version_id)(EX_RATES_RATE_VERSION)
+        m_currentRatesVersionId = version.RateVersionId
         m_newRatesVersionUI = New NewRatesVersionUI(Me)
 
         AddHandler m_exchangeRates.UpdateEvent, AddressOf AfterRateUpdate

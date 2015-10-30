@@ -4,7 +4,7 @@ Imports System.Windows.Forms
 Imports CRUD
 
 
-Friend Class GlobalFactManager : Inherits NamedCRUDManager
+Friend Class GlobalFactManager : Inherits NamedCRUDManager(Of NamedHierarchyCRUDEntity)
 
 #Region "Init"
 

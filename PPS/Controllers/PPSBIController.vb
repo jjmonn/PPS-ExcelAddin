@@ -37,7 +37,7 @@ Public Class PPSBIController
     Private entity_id As Int32
     Private account_id As Int32
     Private currency_id As Int32
-    Private version_id As Int32
+    Private m_versionId As Int32
     Private adjustment_id As Int32
 
     ' Variables
@@ -112,7 +112,7 @@ Public Class PPSBIController
         BuildAxisFilter(p_adjustments_filters, GlobalVariables.AxisElems, AxisType.Adjustment, axis_filters)
 
         ' -> filter token to be created !!!
-        Dim token As String = version_id & Computer.TOKEN_SEPARATOR & _
+        Dim token As String = m_versionId & Computer.TOKEN_SEPARATOR & _
                               filtersToken & Computer.TOKEN_SEPARATOR & _
                               entity_id & Computer.TOKEN_SEPARATOR & _
                               account_id & Computer.TOKEN_SEPARATOR & _
@@ -122,7 +122,7 @@ Public Class PPSBIController
         If mustUpdateFlag = False _
         AndAlso computingCache.MustCompute(entity_id, _
                                             currency_id, _
-                                            {version_id}, _
+                                            {m_versionId}, _
                                             filters, _
                                             axis_filters) = True Then
 
@@ -141,7 +141,7 @@ Public Class PPSBIController
     Private Sub Compute(ByRef filters As Dictionary(Of Int32, List(Of Int32)), _
                         ByRef axis_filters As Dictionary(Of Int32, List(Of Int32)))
 
-        Dim request_id As Int32 = Computer.CMSG_COMPUTE_REQUEST({version_id}, _
+        Dim request_id As Int32 = Computer.CMSG_COMPUTE_REQUEST({m_versionId}, _
                                                                  entity_id, _
                                                                  currency_id, _
                                                                  filters, _
@@ -154,7 +154,7 @@ Public Class PPSBIController
         ' Cache Registering
         computingCache.cacheEntityID = entity_id
         computingCache.cacheCurrencyId = currency_id
-        computingCache.cacheVersions = {version_id}
+        computingCache.cacheVersions = {m_versionId}
         computingCache.cacheFilters = filters
         computingCache.cacheAxisFilters = axis_filters
         mustUpdateFlag = False
@@ -226,8 +226,8 @@ ReturnError:
 
         Dim version_name As String = ReturnValueFromRange(versionObject)
         If Not version_name Is Nothing Then
-            version_id = GlobalVariables.Versions.GetVersionsIDFromName(version_name)
-            If version_id = 0 Then
+            m_versionId = GlobalVariables.Versions.GetValueId(version_name)
+            If m_versionId = 0 Then
                 error_message = "Invalid Version"
                 Return False
             Else
@@ -237,7 +237,7 @@ ReturnError:
             ' if my.settings version valid
             ' else -> error message = "set up version
             ' priority normal"
-            version_id = My.Settings.version_id
+            m_versionId = My.Settings.version_id
             Return True
         End If
 
@@ -247,9 +247,12 @@ ReturnError:
 
         ' must be able to read strings or integer !! 
         On Error GoTo ReturnError
-        Dim periodsList() As Int32 = GlobalVariables.Versions.GetPeriodsList(version_id)
+        Dim version As Version = GlobalVariables.Versions.GetValue(m_versionId)
+        If version Is Nothing Then GoTo ReturnError
+
+        Dim periodsList() As Int32 = GlobalVariables.Versions.GetPeriodsList(m_versionId)
         Dim periodIdentifyer As Char
-        Select Case GlobalVariables.Versions.versions_hash(version_id)(VERSIONS_TIME_CONFIG_VARIABLE)
+        Select Case version.TimeConfiguration
             Case CRUD.TimeConfig.YEARS
                 periodIdentifyer = Computer.YEAR_PERIOD_IDENTIFIER
             Case CRUD.TimeConfig.MONTHS

@@ -136,7 +136,7 @@ Public Class CUI2Visualization
         ' need to have a UI to edit the series
         ' where should we store that ?
         Dim chart As Chart = GetChartFromContextMenu(sender)
-        Dim HTR As HitTestResult
+        Dim HTR As New HitTestResult
         Dim dataPoint As DataPoint
         '   HTR = chart.HitTest(e.x, e.y)
         If HTR.ChartElementType = ChartElementType.DataPoint Then

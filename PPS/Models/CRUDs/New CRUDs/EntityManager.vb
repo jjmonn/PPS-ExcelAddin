@@ -14,7 +14,7 @@ Imports CRUD
 ' Created: 21/07/2015
 ' Last modified: 23/09/2015
 
-Friend Class EntityManager : Inherits NamedCRUDManager
+Friend Class EntityManager : Inherits NamedCRUDManager(Of NamedHierarchyCRUDEntity)
 
 #Region "Instance variables"
 
@@ -66,14 +66,14 @@ Friend Class EntityManager : Inherits NamedCRUDManager
     Friend Sub LoadEntitiesTV(ByRef TV As Windows.Forms.TreeView, _
                             ByRef nodes_icon_dic As Dictionary(Of UInt32, Int32))
 
-        Dim tmp_ht As New Dictionary(Of Int32, Entity)
+        Dim tmp_ht As New MultiIndexDictionary(Of UInt32, String, NamedHierarchyCRUDEntity)
         For Each id As UInt32 In nodes_icon_dic.Keys
             Dim l_entity As Entity = GetValue(id)
             If l_entity Is Nothing Then Continue For
             l_entity = l_entity.Clone()
 
             l_entity.Image = nodes_icon_dic(id)
-            tmp_ht(l_entity.Id) = l_entity
+            tmp_ht.Set(l_entity.Id, l_entity.Name, l_entity)
         Next
         TreeViewsUtilities.LoadTreeview(TV, tmp_ht)
 
@@ -83,10 +83,10 @@ Friend Class EntityManager : Inherits NamedCRUDManager
                                          ByRef axisFilteredValues As List(Of UInt32))
 
 
-        Dim tmp_ht As New Hashtable
-        For Each id As UInt32 In m_CRUDDic.Keys
-            If axisFilteredValues.Contains(id) Then
-                tmp_ht(id) = m_CRUDDic(id)
+        Dim tmp_ht As New MultiIndexDictionary(Of UInt32, String, NamedHierarchyCRUDEntity)
+        For Each value As Entity In m_CRUDDic.Values
+            If axisFilteredValues.Contains(value.Id) Then
+                tmp_ht.Set(value.Id, value.Name, value)
             End If
         Next
         TreeViewsUtilities.LoadTreeview(TV, tmp_ht)

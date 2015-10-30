@@ -106,11 +106,13 @@ Friend Class AcquisitionModel
                                 ByRef adjustment_id As Int32)
 
         Dim entity As Entity = GlobalVariables.Entities.GetValue(entityName)
-        If entity Is Nothing Then Exit Sub
+        Dim version As Version = GlobalVariables.Versions.GetValue(My.Settings.version_id)
+        If entity Is Nothing OrElse version Is Nothing Then Exit Sub
+
         current_version_id = My.Settings.version_id
         currentPeriodDict = GlobalVariables.Versions.GetPeriodsDictionary(current_version_id)
         currentPeriodList = GlobalVariables.Versions.GetPeriodsList(current_version_id)
-        Select Case GlobalVariables.Versions.versions_hash(current_version_id)(VERSIONS_TIME_CONFIG_VARIABLE)
+        Select Case version.TimeConfiguration
             Case CRUD.TimeConfig.YEARS : periodsIdentifyer = Computer.YEAR_PERIOD_IDENTIFIER
             Case CRUD.TimeConfig.MONTHS : periodsIdentifyer = Computer.MONTH_PERIOD_IDENTIFIER
         End Select
@@ -158,7 +160,7 @@ Friend Class AcquisitionModel
                                                ByRef entityName As String, _
                                                ByRef dataMap As Dictionary(Of String, Double)) As Dictionary(Of String, Dictionary(Of String, Double))
 
-        Dim dataMapToken As String
+        Dim dataMapToken As New String("")
         Dim dataDict As New Dictionary(Of String, Dictionary(Of String, Double))
         Dim fixed_left_token As String = current_version_id & _
                                          Computer.TOKEN_SEPARATOR & _

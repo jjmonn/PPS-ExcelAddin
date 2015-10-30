@@ -182,16 +182,12 @@ Friend Class ModelDataSet
 
     Private Function VersionsIdentify() As Boolean
 
-        Dim versionsNameList As List(Of String) = GlobalVariables.Versions.GetVersionsNameList(NAME_VARIABLE)
-        Dim versionsNameCodeDictionary As Hashtable = GlobalVariables.Versions.GetVersionsDictionary(NAME_VARIABLE, ID_VARIABLE)
-
         Dim i, j As Integer
         For i = LBound(m_GlobalScreenShot, 1) To UBound(m_GlobalScreenShot, 1)
             For j = LBound(m_GlobalScreenShot, 2) To UBound(m_GlobalScreenShot, 2)
-                If versionsNameList.Contains(CStr(m_GlobalScreenShot(i, j))) Then
-                    m_currentVersionId = versionsNameCodeDictionary(CStr(m_GlobalScreenShot(i, j)))
-                    ' ask confirmation first -> priority high
-                    AddinModule.SetCurrentVersionId(m_currentVersionId)
+                Dim version As Version = GlobalVariables.Versions.GetValue(CStr(m_GlobalScreenShot(i, j)))
+                If Not version Is Nothing Then
+                    AddinModule.SetCurrentVersionId(version.Id)
                     Return True
                 End If
             Next j
@@ -327,6 +323,7 @@ Friend Class ModelDataSet
 #Region "Recognition Algoritms"
 
     ' Recognizes whether a cell value is an account 
+    <Obsolete("Not implemented", True)>
     Private Function AccountSearchAlgo(inputValue As Object) As Boolean
 
         'Dim WordsArray() As String
@@ -358,13 +355,13 @@ Friend Class ModelDataSet
         'If matches / nbWords >= ACCOUNTS_SEARCH_ALGO_THRESHOLD Then Result = 1
 
         'AccountSearchAlgo = Result
-
+        Return False
     End Function
 
     ' Returns true if a the input exceeds the Levenstein thresold  (Close to a mapped asset)
     Private Function AssetResearchAlgo(str As Object) As Boolean
 
-        Dim i, Delta As Integer
+        Dim Delta As Integer
         Dim P As Double
 
         AssetResearchAlgo = False

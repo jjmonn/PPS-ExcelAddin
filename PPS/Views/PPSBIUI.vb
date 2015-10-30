@@ -117,7 +117,10 @@ Friend Class PPSBI_UI
     Private Sub InitPeriodsTReeview(ByRef versionId As Int32)
 
         PeriodTreeBox.TreeView.Nodes.Clear()
-        Select Case GlobalVariables.Versions.versions_hash(versionId)(VERSIONS_TIME_CONFIG_VARIABLE)
+        Dim version As Version = GlobalVariables.Versions.GetValue(versionId)
+        If version Is Nothing Then Exit Sub
+
+        Select Case version.TimeConfiguration
 
             Case CRUD.TimeConfig.YEARS
                 For Each yearId As Int32 In GlobalVariables.Versions.GetPeriodsList(versionId)

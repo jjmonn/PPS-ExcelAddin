@@ -147,5 +147,16 @@ public class MultiIndexDictionary<KeyA, KeyB, Value>
     m_secondDic.Clear();
     m_mainDic.Clear();
   }
+
+  public MultiIndexDictionary<KeyA, KeyB, DValue> Cast<DValue>()
+  {
+    MultiIndexDictionary<KeyA, KeyB, DValue> dest = new MultiIndexDictionary<KeyA, KeyB, DValue>();
+
+    dest.m_firstDic = m_firstDic;
+    dest.m_secondDic = m_secondDic;
+    dest.m_id = m_id;
+    dest.m_mainDic = m_mainDic as SortedDictionary<uint, DValue>;
+    return dest;
+  }
 }
 

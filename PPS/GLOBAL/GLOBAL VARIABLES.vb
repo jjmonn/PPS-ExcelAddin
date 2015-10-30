@@ -74,7 +74,7 @@ Friend Class GlobalVariables
     Friend Shared Entities As EntityManager
     Friend Shared Filters As FilterManager
     Friend Shared FiltersValues As FilterValueManager
-    Friend Shared Versions As Version
+    Friend Shared Versions As VersionManager
     Friend Shared Currencies As CurrencyManager
     Friend Shared RatesVersions As RatesVersionManager
     Friend Shared GlobalFacts As GlobalFactManager

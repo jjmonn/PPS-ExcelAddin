@@ -217,7 +217,6 @@ Friend Class FormulasTranslations
 
         Dim m As Match = periodsHumanToDBregex.Match(str)
         If (m.Success) Then
-            Dim j As UInt16
             For Each cap As Capture In m.Groups(PERIOD_REGEX_GROUP).Captures
                 Dim tmp_val As String = cap.Value.Replace("+", PERIODS_DB_PLUS)
                 tmp_val = tmp_val.Replace("-", PERIODS_DB_MINUS)
@@ -281,7 +280,6 @@ Friend Class FormulasTranslations
     Private Sub ParseFactsTokenFromDB(ByRef formulaStr As String)
 
         Dim factId As UInt32
-        Dim factName As String
         Dim str_copy As String = formulaStr
         Dim m As Match = factsDBToHumanRegex.Match(str_copy)
         If (m.Success) Then

@@ -182,7 +182,9 @@ Friend Class DataModificationsTracking
     Friend Sub HighlightItemsAndDataRanges()
 
         GlobalVariables.APPS.ScreenUpdating = False
-        m_startPeriod = GlobalVariables.Versions.versions_hash(Int(My.Settings.version_id))(VERSIONS_START_PERIOD_VAR)
+        Dim version As Version = GlobalVariables.Versions.GetValue(My.Settings.version_id)
+        If version Is Nothing Then Exit Sub
+        m_startPeriod = version.StartPeriod
 
         ' Headers Coloring
         HeaderRangesInputsHighlight(m_dataset.m_accountsAddressValuesDictionary)
@@ -246,9 +248,9 @@ Friend Class DataModificationsTracking
         Dim excelCell As Excel.Range
 
         For Each tupleCellPair In m_dataset.m_datasetCellsDictionary
-            Dim l_account As Account = GlobalVariables.Accounts.GetValue(tuple_.Item2)
             tuple_ = tupleCellPair.Key
             excelCell = tupleCellPair.Value
+            Dim l_account As Account = GlobalVariables.Accounts.GetValue(tuple_.Item2)
 
             If l_account Is Nothing Then Continue For
             If l_account.FormulaType = Account.FormulaTypes.FIRST_PERIOD_INPUT Then
@@ -282,7 +284,10 @@ Friend Class DataModificationsTracking
     Friend Sub IdentifyDifferencesBtwDataSetAndDB(ByRef p_dataBaseInputsDictionary As Dictionary(Of String, Dictionary(Of String, Dictionary(Of String, Double))))
 
         Dim periodIdentifyer As String = ""
-        Select Case GlobalVariables.Versions.versions_hash(m_dataset.m_currentVersionId)(VERSIONS_TIME_CONFIG_VARIABLE)
+        Dim version As Version = GlobalVariables.Versions.GetValue(m_dataset.m_currentVersionId)
+        If version Is Nothing Then Exit Sub
+
+        Select Case version.TimeConfiguration
             Case CRUD.TimeConfig.YEARS : periodIdentifyer = Computer.YEAR_PERIOD_IDENTIFIER
             Case CRUD.TimeConfig.MONTHS : periodIdentifyer = Computer.MONTH_PERIOD_IDENTIFIER
         End Select

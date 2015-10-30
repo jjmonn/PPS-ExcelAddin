@@ -152,21 +152,6 @@ Friend Class Period
 
     End Function
 
-    ' startPeriod becomes periodId ! (carefull changes everywhere)
-    ' we want 
-    Friend Shared Function GetYearsDict(ByRef startPeriodId As Int32, _
-                                        ByRef nbPeriods As Int32) As Dictionary(Of Int32, Date)
-
-        ' use function from server nath
-        '    -> build periods_id
-        '    -> years/ months period identifyer ?
-        '       => in that case periods ID should be strings
-        '       => and we can have tha same function with time_config as argument
-        '       => and periods should be stored as string => changes DB schema
-
-
-    End Function
-
     Friend Shared Function GetGlobalPeriodsDictionary(ByRef yearly_periods_list As List(Of Int32)) _
                                                       As Dictionary(Of Int32, List(Of Int32))
 

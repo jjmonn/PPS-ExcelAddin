@@ -240,7 +240,7 @@ Friend Class AxisView
 
     End Sub
 
-    Private Sub fillDGV(ByRef axisHT As MultiIndexDictionary(Of UInt32, String, NamedCRUDEntity))
+    Private Sub fillDGV(ByRef axisHT As MultiIndexDictionary(Of UInt32, String, AxisElem))
 
         isFillingDGV = True
         For Each axisValue In axisHT.Values

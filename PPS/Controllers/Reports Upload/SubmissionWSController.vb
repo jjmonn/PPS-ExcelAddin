@@ -166,7 +166,7 @@ Friend Class SubmissionWSController
 
         Dim modelUpdateFlag As Boolean = False
         Dim dependents_cells As Excel.Range = Nothing
-        Dim entityName As String
+        Dim entityName As New String("")
         If m_generalSubmissionController.m_isUpdating = False AndAlso m_disableWSChangeFlag = False Then
 
             For Each cell As Excel.Range In p_target.Cells

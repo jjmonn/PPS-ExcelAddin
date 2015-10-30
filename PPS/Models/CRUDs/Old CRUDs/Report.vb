@@ -135,6 +135,7 @@ Friend Class Report
 
     End Sub
 
+    <Obsolete("Not implemented", True)>
     Protected Friend Shared Function GetReportsSettingsDictionary(Optional ByRef srv As ModelServer = Nothing) As Dictionary(Of String, Hashtable)
 
         ' To be reimplemented -> priotiy low
@@ -169,7 +170,7 @@ Friend Class Report
         'SRV.rst.Close()
         'SRV = Nothing
         'Return reports_dict
-
+        Return Nothing
     End Function
 
     Protected Overrides Sub finalize()

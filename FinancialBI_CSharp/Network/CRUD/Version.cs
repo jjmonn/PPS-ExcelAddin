@@ -34,7 +34,7 @@ namespace CRUD
       Id = p_id;
     }
 
-    public static Version BuildGlobalFactVersion(ByteBuffer p_packet)
+    public static Version BuildVersion(ByteBuffer p_packet)
     {
       Version l_version = new Version(p_packet.ReadUint32());
 

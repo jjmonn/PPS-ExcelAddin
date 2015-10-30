@@ -3,10 +3,10 @@ Imports System.Collections.Generic
 Imports System.Linq
 Imports CRUD
 
-Public Class NamedCRUDManager : Inherits CRUDManager
+Public Class NamedCRUDManager(Of T As {NamedCRUDEntity}) : Inherits CRUDManager
 
 #Region "Instance variables"
-    Protected m_CRUDDic As New MultiIndexDictionary(Of UInt32, String, NamedCRUDEntity)
+    Protected m_CRUDDic As New MultiIndexDictionary(Of UInt32, String, T)
 #End Region
 
 #Region "CRUD"
@@ -65,7 +65,7 @@ Public Class NamedCRUDManager : Inherits CRUDManager
 
     End Function
 
-    Public Overloads Function GetValue(ByVal p_name As String) As NamedCRUDEntity
+    Public Overloads Function GetValue(ByVal p_name As String) As T
         Return m_CRUDDic(p_name)
     End Function
 
@@ -77,7 +77,7 @@ Public Class NamedCRUDManager : Inherits CRUDManager
         Return m_CRUDDic(CUInt(p_id))
     End Function
 
-    Public Function GetDictionary() As MultiIndexDictionary(Of UInt32, String, NamedCRUDEntity)
+    Public Function GetDictionary() As MultiIndexDictionary(Of UInt32, String, T)
         Return m_CRUDDic
     End Function
 

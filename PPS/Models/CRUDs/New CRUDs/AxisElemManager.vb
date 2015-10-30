@@ -55,12 +55,6 @@ Public Class AxisElemManager : Inherits AxedCRUDManager(Of AxisElem)
 #End Region
 
 #Region "Utilities"
-    Friend Sub LoadAxisTV(ByVal p_axis As AxisType, ByRef TV As vTreeView)
-
-        TV.Nodes.Clear()
-        VTreeViewUtil.LoadTreeview(TV, m_CRUDDic(p_axis))
-
-    End Sub
 
     Friend Sub LoadAxisTree(ByVal p_axis As AxisType, ByRef TV As VIBlend.WinForms.Controls.vTreeView)
 

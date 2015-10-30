@@ -2,7 +2,7 @@
 Imports System.Collections.Generic
 Imports CRUD
 
-Public Class GlobalFactVersionManager : Inherits NamedCRUDManager
+Public Class GlobalFactVersionManager : Inherits NamedCRUDManager(Of NamedHierarchyCRUDEntity)
 
 #Region "Init"
 

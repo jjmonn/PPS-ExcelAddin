@@ -30,7 +30,6 @@ Friend Class DataVersionsController
  
     ' Variables
     Private versionsTV As New VIBlend.WinForms.Controls.vTreeView
-    Friend versionsNamesList As New List(Of String)
     Friend positions_dictionary As New Dictionary(Of Int32, Int32)
   
     Private deletedVersionId As Int32 = 0
@@ -49,7 +48,6 @@ Friend Class DataVersionsController
         GlobalVariables.Versions.LoadVersionsTV(versionsTV)
         VTreeViewUtil.InitTVFormat(versionsTV)
         View = New VersionsControl(Me, versionsTV)
-        versionsNamesList = GlobalVariables.Versions.GetVersionsNameList(NAME_VARIABLE)
         NewVersionUI = New NewDataVersionUI(Me)
         positions_dictionary = VTreeViewUtil.GeneratePositionsDictionary(versionsTV)
 
@@ -84,13 +82,13 @@ Friend Class DataVersionsController
 
 #Region "Interface"
 
-    Friend Sub CreateVersion(ByRef hash As Hashtable, _
+    Friend Sub CreateVersion(ByRef p_version As Version, _
                              Optional ByRef origin_version_id As String = "")
 
         ' implement copy creation 
         ' priority high
         ' quid ratesversion id priority high
-        GlobalVariables.Versions.CMSG_CREATE_VERSION(hash)
+        GlobalVariables.Versions.Create(p_version)
         NewVersionUI.Hide()
 
     End Sub
@@ -109,39 +107,60 @@ Friend Class DataVersionsController
 
     End Sub
 
+    Friend Function GetVersion(ByVal p_id As UInt32) As Version
+        Return GlobalVariables.Versions.GetValue(p_id)
+    End Function
+
+    Friend Function GetVersionCopy(ByVal p_id As UInt32) As Version
+        Dim version As Version = GetVersion(p_id)
+        If version Is Nothing Then Return Nothing
+        Return version.Clone()
+    End Function
+
     Friend Sub UpdateParent(ByRef version_id As String, ByRef parent_id As Object)
 
-        Update(version_id, PARENT_ID_VARIABLE, parent_id)
+        Dim version As Version = GetVersionCopy(version_id)
+        If version Is Nothing Then Exit Sub
+
+        version.ParentId = parent_id
+        Update(version)
 
     End Sub
 
     Friend Sub UpdateName(ByRef version_id As String, ByRef name As String)
 
         ' set the names check every where at the same place priority high
-        Update(version_id, NAME_VARIABLE, name)
+        Dim version As Version = GetVersionCopy(version_id)
+        If version Is Nothing Then Exit Sub
+
+        version.Name = name
+        Update(version)
 
     End Sub
 
     Friend Sub UpdateRatesVersion_id(ByRef version_id As UInt32, ByRef rates_version_id As UInt32)
 
-        Update(version_id, VERSIONS_RATES_VERSION_ID_VAR, rates_version_id)
+        Dim version As Version = GetVersionCopy(version_id)
+        If version Is Nothing Then Exit Sub
+
+        version.RateVersionId = rates_version_id
+        Update(version)
 
     End Sub
 
     Friend Sub UpdateFactVersion_id(ByRef version_id As UInt32, ByRef fact_version_id As UInt32)
 
-        Update(version_id, VERSIONS_GLOBAL_FACT_VERSION_ID, fact_version_id)
+        Dim version As Version = GetVersionCopy(version_id)
+        If version Is Nothing Then Exit Sub
+
+        version.GlobalFactVersionId = fact_version_id
+        Update(version)
 
     End Sub
 
-    Private Sub Update(ByRef id As Int32, _
-                       ByRef variable As String, _
-                       ByVal value As Object)
+    Private Sub Update(ByRef p_version As Version)
 
-
-        Dim ht As Hashtable = GlobalVariables.Versions.versions_hash(id).clone()
-        ht(variable) = value
-        GlobalVariables.Versions.CMSG_UPDATE_VERSION(ht)
+        GlobalVariables.Versions.Update(p_version)
 
     End Sub
 
@@ -157,12 +176,7 @@ Friend Class DataVersionsController
 
         ' priority high 
         ' ask for confirmation (deletion of all subversions)
-        deletedVersionId = node.Value
-        Dim deletedVersionName = GlobalVariables.Versions.versions_hash(deletedVersionId)(NAME_VARIABLE)
-        If versionsNamesList.Contains(deletedVersionName) Then
-            versionsNamesList.Remove(deletedVersionName)
-        End If
-        GlobalVariables.Versions.CMSG_DELETE_VERSION(node.Value)
+        GlobalVariables.Versions.Delete(node.Value)
 
     End Sub
 
@@ -174,23 +188,23 @@ Friend Class DataVersionsController
 
     Friend Sub LockVersion(ByRef version_id As UInt32)
 
-        ' lock version ? 
-        ' priority normal => nath server
-        Dim ht As Hashtable = GlobalVariables.Versions.versions_hash(CInt(version_id))
-        ht(VERSIONS_LOCKED_VARIABLE) = True
-        ht(VERSIONS_LOCKED_DATE_VARIABLE) = Format(Now, "short Date")
-        GlobalVariables.Versions.CMSG_UPDATE_VERSION(ht)
-  
+        Dim version As Version = GetVersion(version_id)
+        If version Is Nothing Then Exit Sub
+
+        version.Locked = True
+        version.LockDate = Format(Now, "short Date")
+        Update(version)
+
     End Sub
 
     Friend Sub UnlockVersion(ByRef version_id As UInt32)
 
-        ' lock version ? 
-        ' priority normal => nath server
-        Dim ht As Hashtable = GlobalVariables.Versions.versions_hash(CInt(version_id))
-        ht(VERSIONS_LOCKED_VARIABLE) = False
-        ht(VERSIONS_LOCKED_DATE_VARIABLE) = "NA"
-        GlobalVariables.Versions.CMSG_UPDATE_VERSION(ht)
+        Dim version As Version = GetVersion(version_id)
+        If version Is Nothing Then Exit Sub
+
+        version.Locked = False
+        version.LockDate = "NA"
+        Update(version)
 
     End Sub
 
@@ -201,8 +215,9 @@ Friend Class DataVersionsController
 
     Friend Function IsFolder(ByRef version_id As String) As Boolean
 
-        If GlobalVariables.Versions.versions_hash(CInt(version_id))(IS_FOLDER_VARIABLE) = True Then Return True
-        Return False
+        Dim version As Version = GetVersion(version_id)
+        If version Is Nothing Then Return False
+        Return version.IsFolder
 
     End Function
 
@@ -222,7 +237,7 @@ Friend Class DataVersionsController
 
     Friend Function IsNameValid(ByRef name As String)
 
-        If versionsNamesList.Contains(name) Then Return False
+        If Not GlobalVariables.Versions.GetValue(name) Is Nothing Then Return False
         If name.Length > NAMES_MAX_LENGTH Then Return False
         For Each char_ In FORBIDEN_CHARS
             If name.Contains(char_) Then Return False
@@ -239,7 +254,7 @@ Friend Class DataVersionsController
         Else
             Return True
         End If
-        
+
     End Function
 
     Friend Function IsRatesVersionCompatibleWithPeriods(ByRef start_period As Int32, _
@@ -295,7 +310,7 @@ Friend Class DataVersionsController
         Else
             VTreeViewUtil.AddNode(id, name, parent_node, is_folder)
         End If
-    
+
     End Sub
 
     Friend Sub SendNewPositionsToModel()

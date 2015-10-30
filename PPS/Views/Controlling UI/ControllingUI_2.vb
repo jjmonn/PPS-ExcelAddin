@@ -754,7 +754,9 @@ Friend Class ControllingUI_2
 
             Dim versionsIds As New List(Of Int32)
             For Each versionId In VTreeViewUtil.GetCheckedNodesIds(leftPane_control.versionsTV)
-                If GlobalVariables.Versions.versions_hash(versionId)(IS_FOLDER_VARIABLE) = False Then
+                Dim version As Version = GlobalVariables.Versions.GetValue(versionId)
+                If version Is Nothing Then Continue For
+                If version.IsFolder = False Then
                     versionsIds.Add(versionId)
                 End If
             Next

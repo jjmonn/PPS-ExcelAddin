@@ -28,11 +28,11 @@ public class NetworkManager
   public static bool ValidateServerCertificate(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)
   {
     return true;
-    if (sslPolicyErrors == SslPolicyErrors.None)
-      return true;
+    //if (sslPolicyErrors == SslPolicyErrors.None)
+    //  return true;
 
-    Debug.WriteLine("Certificate error: " + sslPolicyErrors);
-    return false;
+    //Debug.WriteLine("Certificate error: " + sslPolicyErrors);
+    //return false;
   }
 
   public void SetCallback(UInt16 p_opcodeId, Action<ByteBuffer> p_newCallback)

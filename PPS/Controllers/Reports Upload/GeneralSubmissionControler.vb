@@ -393,12 +393,6 @@ errorHandler:
 
     End Function
 
-    Friend Function GetTimeConfig() As String
-
-        Return GlobalVariables.Versions.versions_hash(m_acquisitionModel.current_version_id)(VERSIONS_TIME_CONFIG_VARIABLE)
-
-    End Function
-
     Private Sub SnapshotError()
 
         If m_dataset.m_EntityFlag = 0 AndAlso _

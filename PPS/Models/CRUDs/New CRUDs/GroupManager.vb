@@ -2,7 +2,7 @@
 Imports System.Collections.Generic
 Imports CRUD
 
-Friend Class GroupManager : Inherits NamedCRUDManager
+Friend Class GroupManager : Inherits NamedCRUDManager(Of NamedHierarchyCRUDEntity)
 
     Enum Permission
         NONE = 0

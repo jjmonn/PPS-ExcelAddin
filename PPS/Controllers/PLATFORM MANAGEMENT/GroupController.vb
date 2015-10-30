@@ -52,7 +52,7 @@ Friend Class GroupController
 
 #Region "Interface"
 
-    Friend Function GetGroupList() As MultiIndexDictionary(Of UInt32, String, NamedCRUDEntity)
+    Friend Function GetGroupList() As MultiIndexDictionary(Of UInt32, String, NamedHierarchyCRUDEntity)
         Return (m_groupList.GetDictionary())
     End Function
 

@@ -127,6 +127,7 @@ Friend Class ModelServer
 
 #Region "Connection Queries"
 
+    <Obsolete("Not implemented", False)>
     Private Function RstTableConnection(strSQL As String, _
                                        ByRef cursor_option As Int32, _
                                        ByRef lock_type As LockTypeEnum) As Boolean
@@ -142,10 +143,11 @@ Friend Class ModelServer
 
         'queryError:
         '        ErrorMessage = Err.Description
-        '        Return False
+        Return False
 
     End Function
 
+    <Obsolete("Not implemented", False)>
     Private Function RstQueryConnection(ByRef sqlQuery As String, _
                                         ByRef cursor_option As Int32, _
                                         ByRef lock_type As LockTypeEnum) As Boolean
@@ -161,7 +163,7 @@ Friend Class ModelServer
 
         'queryError:
         '        ErrorMessage = Err.Description
-        '        Return False
+        Return False
 
     End Function
 

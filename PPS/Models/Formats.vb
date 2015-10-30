@@ -15,7 +15,7 @@
 
     Friend Shared Function GetFormat(ByRef formatName As String) As Formats.FinancialBIFormat
 
-        Dim format As Formats.FinancialBIFormat
+        Dim format As New Formats.FinancialBIFormat
         Select Case formatName
             Case "Title"
                 format.textColor = My.Settings.titleFontColor

@@ -81,7 +81,7 @@ Friend Class AxisController
 
     Friend Sub LoadInstanceVariables()
 
-        CrudModel.LoadAxisTV(m_axisType, AxisTV)
+        CrudModel.LoadAxisTree(m_axisType, AxisTV)
         GlobalVariables.Filters.LoadFiltersTV(AxisFilterTV, m_axisType)
         AxisFilterManager.LoadFvTv(AxisFilterValuesTV, CInt(m_axisType))
 
@@ -114,7 +114,7 @@ Friend Class AxisController
         Return l_axis.Clone()
     End Function
 
-    Friend Function GetAxisDictionary() As MultiIndexDictionary(Of UInt32, String, NamedCRUDEntity)
+    Friend Function GetAxisDictionary() As MultiIndexDictionary(Of UInt32, String, AxisElem)
         Return CrudModel.GetDictionary(CType(m_axisType, AxisType))
     End Function
 
@@ -185,9 +185,9 @@ Friend Class AxisController
 
 #Region "Events"
 
-    Private Sub AfterAxisRead(ByRef status As ErrorMessage, ByRef ht As AxisElem)
+    Private Sub AfterAxisRead(ByRef status As ErrorMessage, ByRef ht As CRUDEntity)
 
-        If (status = True) Then
+        If (status = ErrorMessage.SUCCESS) Then
             View.LoadInstanceVariables_Safe()
             View.UpdateAxis(ht)
         End If
@@ -221,11 +221,12 @@ Friend Class AxisController
 
     End Sub
 
-    Private Sub AfterAxisFilterRead(ByRef status As ErrorMessage, ByRef p_axisFilter As AxisFilter)
+    Private Sub AfterAxisFilterRead(ByRef status As ErrorMessage, ByRef p_axisFilter As CRUDEntity)
 
         If (status = ErrorMessage.SUCCESS) Then
+            Dim axisFilter As AxisElem = CType(p_axisFilter, AxisElem)
             View.LoadInstanceVariables_Safe()
-            View.UpdateAxis(CrudModel.GetValue(p_axisFilter.Axis, p_axisFilter.Id))
+            View.UpdateAxis(CrudModel.GetValue(axisFilter.Axis, axisFilter.Id))
         End If
 
     End Sub

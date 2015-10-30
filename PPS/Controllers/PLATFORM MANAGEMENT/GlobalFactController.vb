@@ -28,8 +28,13 @@ Friend Class GlobalFactController
     Friend Sub New()
 
         GlobalVariables.GlobalFactsVersions.LoadVersionsTV(m_versionTV)
+        Dim version As Version = GlobalVariables.Versions.GetValue(My.Settings.version_id)
+        If version Is Nothing Then
+            MsgBox("Invalid version in settings.")
+            Exit Sub
+        End If
         m_view = New GlobalFactUI(Me, m_versionTV)
-        m_currentVersionId = GlobalVariables.Versions.versions_hash(My.Settings.version_id)(EX_RATES_RATE_VERSION)
+        m_currentVersionId = version.GlobalFactVersionId
         m_newFactVersionUI = New NewGlobalFactVersionUI(Me)
         m_newFactUI = New NewGlobalFactUI(Me)
 
@@ -105,7 +110,7 @@ Friend Class GlobalFactController
         Return False
     End Function
 
-    Friend Function GetGlobalFactList() As MultiIndexDictionary(Of UInt32, String, NamedCRUDEntity)
+    Friend Function GetGlobalFactList() As MultiIndexDictionary(Of UInt32, String, NamedHierarchyCRUDEntity)
         Return GlobalVariables.GlobalFacts.GetDictionary()
     End Function
 

@@ -6,7 +6,7 @@ Imports CRUD
 Public Class AxedCRUDManager(Of T As {AxedCRUDEntity, NamedCRUDEntity}) : Inherits CRUDManager
 
 #Region "Instance variables"
-    Protected m_CRUDDic As New SortedDictionary(Of AxisType, MultiIndexDictionary(Of UInt32, String, NamedCRUDEntity))
+    Protected m_CRUDDic As New SortedDictionary(Of AxisType, MultiIndexDictionary(Of UInt32, String, T))
 #End Region
 
 #Region "Init"
@@ -17,7 +17,7 @@ Public Class AxedCRUDManager(Of T As {AxedCRUDEntity, NamedCRUDEntity}) : Inheri
     Private Sub Clear()
         m_CRUDDic.Clear()
         For Each l_axis In System.Enum.GetValues(GetType(AxisType))
-            m_CRUDDic(l_axis) = New MultiIndexDictionary(Of UInt32, String, NamedCRUDEntity)
+            m_CRUDDic(l_axis) = New MultiIndexDictionary(Of UInt32, String, T)
         Next
     End Sub
 #End Region
@@ -44,7 +44,7 @@ Public Class AxedCRUDManager(Of T As {AxedCRUDEntity, NamedCRUDEntity}) : Inheri
     Protected Overrides Sub ReadAnswer(packet As ByteBuffer)
 
         If packet.GetError() = ErrorMessage.SUCCESS Then
-            Dim tmp_filter = Filter.BuildFilter(packet)
+            Dim tmp_filter As T = Build(packet)
 
             m_CRUDDic(tmp_filter.Axis).Set(tmp_filter.Id, tmp_filter.Name, tmp_filter)
             RaiseReadEvent(packet.GetError(), tmp_filter)
@@ -73,11 +73,11 @@ Public Class AxedCRUDManager(Of T As {AxedCRUDEntity, NamedCRUDEntity}) : Inheri
 
 #Region "Mapping"
 
-    Public Overloads Function GetValue(ByVal p_axis As AxisType, ByVal p_id As UInt32) As CRUDEntity
+    Public Overloads Function GetValue(ByVal p_axis As AxisType, ByVal p_id As UInt32) As T
         Return m_CRUDDic(p_axis)(p_id)
     End Function
 
-    Public Overloads Function GetValue(ByVal p_axis As AxisType, ByVal p_id As Int32) As CRUDEntity
+    Public Overloads Function GetValue(ByVal p_axis As AxisType, ByVal p_id As Int32) As T
         Return m_CRUDDic(p_axis)(CUInt(p_id))
     End Function
 
@@ -94,18 +94,18 @@ Public Class AxedCRUDManager(Of T As {AxedCRUDEntity, NamedCRUDEntity}) : Inheri
         Return GetValue(CUInt(p_id))
     End Function
 
-    Friend Function GetDictionary(ByVal p_axis As AxisType) As MultiIndexDictionary(Of UInt32, String, NamedCRUDEntity)
+    Friend Function GetDictionary(ByVal p_axis As AxisType) As MultiIndexDictionary(Of UInt32, String, T)
         Return m_CRUDDic(p_axis)
     End Function
 
-    Friend Function GetDictionary() As SortedDictionary(Of AxisType, MultiIndexDictionary(Of UInt32, String, NamedCRUDEntity))
+    Friend Function GetDictionary() As SortedDictionary(Of AxisType, MultiIndexDictionary(Of UInt32, String, T))
         Return m_CRUDDic
     End Function
 
     ' Utilities Methods
     Friend Function GetValueId(ByVal p_axis As AxisType, ByRef name As String) As UInt32
 
-        Dim axisValue As AxisElem = m_CRUDDic(p_axis)(name)
+        Dim axisValue As T = m_CRUDDic(p_axis)(name)
 
         If axisValue Is Nothing Then Return 0
         Return axisValue.Id
@@ -114,7 +114,7 @@ Public Class AxedCRUDManager(Of T As {AxedCRUDEntity, NamedCRUDEntity}) : Inheri
 
     Friend Function GetValueName(ByVal p_axis As AxisType, ByRef p_id As UInt32) As String
 
-        Dim axisValue As AxisElem = m_CRUDDic(p_axis)(p_id)
+        Dim axisValue As T = m_CRUDDic(p_axis)(p_id)
 
         If axisValue Is Nothing Then Return ""
         Return axisValue.Name

@@ -24,7 +24,7 @@ Imports System.Windows.Forms
 Imports System.Collections
 Imports System.Drawing
 Imports VIBlend.WinForms.Controls
-
+Imports CRUD
 'Imports VIBlend.WinForms.Controls
 
 
@@ -120,7 +120,8 @@ Friend Class VersionsControl
     Private Sub Display(ByRef inputNode As VIBlend.WinForms.Controls.vTreeNode)
 
         Dim startPeriod As String = ""
-        If GlobalVariables.Versions.versions_hash(CInt(inputNode.Value))(IS_FOLDER_VARIABLE) = True Then
+
+        If Controller.IsFolder(CUInt(inputNode.Value)) Then
             NameTB.Text = ""
             CreationTB.Text = ""
             lockedCB.Checked = False
@@ -131,38 +132,40 @@ Friend Class VersionsControl
             m_exchangeRatesVersionVTreeviewbox.Text = ""
             m_factsVersionVTreeviewbox.Text = ""
         Else
-            Dim versionId As Int32 = CInt(inputNode.Value)
-            NameTB.Text = inputNode.Text
-            CreationTB.Text = GlobalVariables.Versions.versions_hash(versionId)(VERSIONS_CREATION_DATE_VARIABLE)
-            TimeConfigTB.Text = GlobalVariables.Versions.versions_hash(versionId)(VERSIONS_TIME_CONFIG_VARIABLE)
+            Dim version As Version = Controller.GetVersion(CUInt(inputNode.Value))
+            If version Is Nothing Then Exit Sub
 
-            If GlobalVariables.Versions.versions_hash(versionId)(VERSIONS_TIME_CONFIG_VARIABLE) = CRUD.TimeConfig.YEARS Then
-                startPeriod = Format(Date.FromOADate(GlobalVariables.Versions.versions_hash(versionId)(VERSIONS_START_PERIOD_VAR)), "yyyy")
+            NameTB.Text = inputNode.Text
+            CreationTB.Text = version.CreatedAt
+            TimeConfigTB.Text = version.TimeConfiguration
+
+            If version.TimeConfiguration = CRUD.TimeConfig.YEARS Then
+                startPeriod = Format(Date.FromOADate(version.StartPeriod), "yyyy")
             Else
-                startPeriod = Format(Date.FromOADate(GlobalVariables.Versions.versions_hash(versionId)(VERSIONS_START_PERIOD_VAR)), "MMM yyyy")
+                startPeriod = Format(Date.FromOADate(version.StartPeriod), "MMM yyyy")
             End If
             StartPeriodTB.Text = startPeriod
-            StartPeriodTB.ValueMember = GlobalVariables.Versions.versions_hash(versionId)(VERSIONS_START_PERIOD_VAR)
+            StartPeriodTB.ValueMember = version.StartPeriod
 
-            NBPeriodsTB.Text = GlobalVariables.Versions.versions_hash(versionId)(VERSIONS_NB_PERIODS_VAR)
+            NBPeriodsTB.Text = version.NbPeriod
 
             ' Exchange Rates verions node activation
-            Dim activeExchangeRatesNode As vTreeNode = VTreeViewUtil.FindNode(m_exchangeRatesVersionVTreeviewbox.TreeView, GlobalVariables.Versions.versions_hash(versionId)(VERSIONS_RATES_VERSION_ID_VAR))
+            Dim activeExchangeRatesNode As vTreeNode = VTreeViewUtil.FindNode(m_exchangeRatesVersionVTreeviewbox.TreeView, version.RateVersionId)
             If Not activeExchangeRatesNode Is Nothing Then
                 m_exchangeRatesVersionVTreeviewbox.TreeView.SelectedNode = activeExchangeRatesNode
                 m_exchangeRatesVersionVTreeviewbox.Text = m_exchangeRatesVersionVTreeviewbox.TreeView.SelectedNode.Text
             End If
 
             ' Facts Rates verions node activation
-            Dim activeFactsRatesNode As vTreeNode = VTreeViewUtil.FindNode(m_factsVersionVTreeviewbox.TreeView, GlobalVariables.Versions.versions_hash(versionId)(VERSIONS_GLOBAL_FACT_VERSION_ID))
+            Dim activeFactsRatesNode As vTreeNode = VTreeViewUtil.FindNode(m_factsVersionVTreeviewbox.TreeView, version.GlobalFactVersionId)
             If Not activeFactsRatesNode Is Nothing Then
                 m_factsVersionVTreeviewbox.TreeView.SelectedNode = activeFactsRatesNode
                 m_factsVersionVTreeviewbox.Text = m_factsVersionVTreeviewbox.TreeView.SelectedNode.Text
             End If
 
-            If GlobalVariables.Versions.versions_hash(versionId)(VERSIONS_LOCKED_VARIABLE) = True Then
+            If version.Locked Then
                 lockedCB.Checked = True
-                LockedDateT.Text = GlobalVariables.Versions.versions_hash(versionId)(VERSIONS_LOCKED_DATE_VARIABLE)
+                LockedDateT.Text = version.LockDate
             Else
                 lockedCB.Checked = False
                 LockedDateT.Text = "Version not locked"
@@ -387,7 +390,11 @@ Friend Class VersionsControl
 
 RevertToFormerValue:
         isDisplaying = True
-        m_exchangeRatesVersionVTreeviewbox.TreeView.SelectedNode = VTreeViewUtil.FindNode(m_exchangeRatesVersionVTreeviewbox.TreeView, GlobalVariables.Versions.versions_hash(CInt(current_node.Value))(VERSIONS_RATES_VERSION_ID_VAR))
+        Dim version As Version = Controller.GetVersion(CUInt(current_node.Value))
+
+        If Not version Is Nothing Then
+            m_exchangeRatesVersionVTreeviewbox.TreeView.SelectedNode = VTreeViewUtil.FindNode(m_exchangeRatesVersionVTreeviewbox.TreeView, version.RateVersionId)
+        End If
         isDisplaying = False
 
     End Sub
@@ -416,7 +423,11 @@ RevertToFormerValue:
 
 RevertToFormerValue:
         isDisplaying = True
-        m_factsVersionVTreeviewbox.TreeView.SelectedNode = VTreeViewUtil.FindNode(m_factsVersionVTreeviewbox.TreeView, GlobalVariables.Versions.versions_hash(CInt(current_node.Value))(VERSIONS_GLOBAL_FACT_VERSION_ID))
+        Dim version As Version = Controller.GetVersion(CUInt(current_node.Value))
+
+        If Not version Is Nothing Then
+            m_factsVersionVTreeviewbox.TreeView.SelectedNode = VTreeViewUtil.FindNode(m_factsVersionVTreeviewbox.TreeView, version.GlobalFactVersionId)
+        End If
         isDisplaying = False
 
     End Sub
@@ -443,14 +454,16 @@ RevertToFormerValue:
     Private Sub new_folder_bt_Click(sender As Object, e As EventArgs) Handles new_folder_bt.Click, NewFolderMenuBT.Click
 
         Dim name = InputBox("Please enter the new Folder Name")
-        Dim ht As New Hashtable
+        Dim version As New Version
         If name <> "" Then
             If Controller.IsNameValid(name) = True Then
-                ht(NAME_VARIABLE) = name
+
+                version.Name = name
+                version.IsFolder = True
                 If Not current_node Is Nothing Then
-                    ht.Add(PARENT_ID_VARIABLE, current_node.Value)
+                    version.ParentId = current_node.Value
                 End If
-                Controller.CreateVersion(ht)
+                Controller.CreateVersion(version)
             Else
                 MsgBox("Invalid Name.")
             End If

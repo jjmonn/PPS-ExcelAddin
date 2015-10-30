@@ -156,7 +156,7 @@ Err:
     ' Output: valid address
     '----------------------------------------------------------------
     Protected Friend Function CheckAddress(sAddress As String) As String
-        Dim rng As Microsoft.Office.Interop.Excel.Range
+        Dim rng As Microsoft.Office.Interop.Excel.Range = Nothing
         Dim sFullAddress As String
 
         If Left$(sAddress, 1) = "=" Then sAddress = Mid$(sAddress, 2, 256)
