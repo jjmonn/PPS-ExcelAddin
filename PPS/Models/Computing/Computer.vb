@@ -180,11 +180,11 @@ Friend Class Computer
                 versions_comp_flag(versionId) = True
                 If AreAllVersionsComputed() = True Then
                     NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_COMPUTE_RESULT, AddressOf SMSG_COMPUTE_RESULT)
-                    RaiseEvent ComputationAnswered(requestIdEntityIdDict(request_id), True, request_id)
+                    RaiseEvent ComputationAnswered(requestIdEntityIdDict(request_id), packet.GetError(), request_id)
                     requestIdEntityIdDict.Remove(request_id)
                 End If
             Else
-                RaiseEvent ComputationAnswered(0, False, 0)
+                RaiseEvent ComputationAnswered(0, packet.GetError(), 0)
             End If
         Catch ex As OutOfMemoryException
             System.Diagnostics.Debug.WriteLine(ex.Message)

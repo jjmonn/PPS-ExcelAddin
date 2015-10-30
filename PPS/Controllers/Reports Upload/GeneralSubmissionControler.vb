@@ -341,7 +341,7 @@ errorHandler:
             Dim ht As New Hashtable()
 
             ht(ENTITY_ID_VARIABLE) = GlobalVariables.Entities.GetValueId(m_dataset.m_datasetCellDimensionsDictionary(cellAddress).m_entityName)
-            ht(ACCOUNT_ID_VARIABLE) = GlobalVariables.Accounts.GetValue(m_dataset.m_datasetCellDimensionsDictionary(cellAddress).m_accountName)
+            ht(ACCOUNT_ID_VARIABLE) = GlobalVariables.Accounts.GetValueId(m_dataset.m_datasetCellDimensionsDictionary(cellAddress).m_accountName)
             ht(PERIOD_VARIABLE) = m_dataset.m_datasetCellDimensionsDictionary(cellAddress).m_period
             ht(VERSION_ID_VARIABLE) = m_acquisitionModel.current_version_id
             ht(CLIENT_ID_VARIABLE) = GlobalVariables.ClientsIDDropDown.SelectedItemId

@@ -607,7 +607,7 @@ Friend Class EntitiesView
                 Select Case args.Cell.ColumnItem.ItemValue
 
                     Case ENTITIES_CURRENCY_VARIABLE
-                        Dim currencyId As Int32 = GlobalVariables.Currencies.GetValueId(args.Cell.Value)
+                        Dim currencyId As Int32 = GlobalVariables.Currencies.GetValueId(CStr(args.Cell.Value))
                         If (currencyId = 0) Then
                             MsgBox("Currency " & args.Cell.Value & " not found.")
                             Exit Sub

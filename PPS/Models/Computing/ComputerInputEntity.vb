@@ -22,7 +22,7 @@ Public Class ComputerInputEntity
 #Region "Instance Variables"
 
     ' Events
-    Public Event ComputationAnswered(ByRef entityId As String, ByRef status As Boolean)
+    Public Event ComputationAnswered(ByRef entityId As UInt32, ByRef status As Boolean)
 
     ' Variables
     Private requestIdEntityIdDict As New Dictionary(Of UInt32, UInt32)
@@ -96,7 +96,7 @@ Public Class ComputerInputEntity
             RaiseEvent ComputationAnswered(requestIdEntityIdDict(request_id), True)
             requestIdEntityIdDict.Remove(request_id)
         Else
-            RaiseEvent ComputationAnswered("", False)
+            RaiseEvent ComputationAnswered(0, False)
         End If
         NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_SOURCED_COMPUTE_RESULT, AddressOf SMSG_SOURCED_COMPUTE_RESULT)
         ' here ?!! riority high
