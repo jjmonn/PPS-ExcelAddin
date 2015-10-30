@@ -501,9 +501,11 @@ Friend Class ControllingUIController
                 ' Dig one level deeper if any
                 If Not dimensionNode.NextSiblingNode Is Nothing Then
 
+                    Dim account As Account = GlobalVariables.Accounts.GetValue(CUInt(valueNode.Value))
+                    If account Is Nothing Then Exit Sub
                     ' Test: Loop only if dimension is not account and account_formulatype = title
                     If dimensionNode.Value = computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.ACCOUNTS _
-                    AndAlso GlobalVariables.Accounts.GetValue(valueNode.Value).FormulaType = Account.FormulaTypes.TITLE Then
+                    AndAlso account.FormulaType = account.FormulaTypes.TITLE Then
                         ' Case account formula type title
                     Else
                         CreateRow(dgv, dimensionNode.NextNode, , subRow)

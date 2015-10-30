@@ -37,7 +37,7 @@ Friend Class EntityManager : Inherits NamedCRUDManager(Of NamedHierarchyCRUDEnti
         CreateSMSG = ServerMessage.SMSG_CREATE_ENTITY_ANSWER
         ReadSMSG = ServerMessage.SMSG_READ_ENTITY_ANSWER
         UpdateSMSG = ServerMessage.SMSG_UPDATE_ENTITY_ANSWER
-        UpdateListSMSG = ServerMessage.SMSG_UPDATE_ENTITY_LIST_ANSWER
+        UpdateListSMSG = ServerMessage.SMSG_CRUD_ENTITY_LIST_ANSWER
         DeleteSMSG = ServerMessage.SMSG_DELETE_ENTITY_ANSWER
         ListSMSG = ServerMessage.SMSG_LIST_ENTITY_ANSWER
 

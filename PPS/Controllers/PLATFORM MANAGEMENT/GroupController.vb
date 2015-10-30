@@ -89,7 +89,7 @@ Friend Class GroupController
         Dim allowedEntity As GroupAllowedEntity = GlobalVariables.GroupAllowedEntities.GetValue(p_groupId, p_entityId)
 
         If allowedEntity Is Nothing Then Exit Sub
-        GlobalVariables.GroupAllowedEntities.Delete(allowedEntity.Id)
+        GlobalVariables.GroupAllowedEntities.Delete(allowedEntity.Id, allowedEntity.GroupId, allowedEntity.EntityId)
     End Sub
 
 #End Region

@@ -34,6 +34,12 @@ Friend Class GroupAllowedEntityManager : Inherits CRUDManager
 #Region "CRUD"
 
 #Region "Disabled"
+
+    <Obsolete("Not implemented", True)> _
+<System.ComponentModel.EditorBrowsable(ComponentModel.EditorBrowsableState.Never)>
+    Friend Overrides Sub Delete(ByRef p_id As UInt32)
+    End Sub
+
     <Obsolete("Not implemented", True)> _
     <System.ComponentModel.EditorBrowsable(ComponentModel.EditorBrowsableState.Never)>
     Friend Overrides Sub Update(ByRef p_crud As CRUDEntity)
@@ -45,9 +51,21 @@ Friend Class GroupAllowedEntityManager : Inherits CRUDManager
     End Sub
 #End Region
 
+    Friend Overloads Sub Delete(ByRef p_id As UInt32, ByRef p_groupId As UInt32, ByRef p_entityId As UInt32)
+
+        Dim packet As New ByteBuffer(CType(DeleteCMSG, UShort))
+        packet.WriteUint32(p_id)
+        packet.WriteUint32(p_groupId)
+        packet.WriteUint32(p_entityId)
+        packet.Release()
+        NetworkManager.GetInstance().Send(packet)
+
+    End Sub
+
     Protected Overrides Sub ListAnswer(packet As ByteBuffer)
         If packet.GetError() = ErrorMessage.SUCCESS Then
-            For i As Int32 = 1 To packet.ReadInt32()
+            Dim count As UInt32 = packet.ReadUint32()
+            For i As Int32 = 1 To count
                 Dim l_allowedEntity As GroupAllowedEntity = Build(packet)
 
                 If m_groupAllowedEntityDic.ContainsKey(l_allowedEntity.GroupId) = False Then
@@ -104,8 +122,8 @@ Friend Class GroupAllowedEntityManager : Inherits CRUDManager
     End Function
 
     Public Overloads Function GetValue(ByVal p_groupId As UInt32, ByVal p_entityId As UInt32) As GroupAllowedEntity
+        If m_groupAllowedEntityDic.ContainsKey(p_groupId) = False Then Return Nothing
         Dim l_group = m_groupAllowedEntityDic(p_groupId)
-        If l_group Is Nothing Then Return Nothing
 
         Return l_group.SecondaryKeyItem(p_entityId)
     End Function
@@ -115,6 +133,7 @@ Friend Class GroupAllowedEntityManager : Inherits CRUDManager
     End Function
 
     Public Function GetDictionary(ByVal p_groupId As UInt32) As MultiIndexDictionary(Of UInt32, UInt32, GroupAllowedEntity)
+        If m_groupAllowedEntityDic.ContainsKey(p_groupId) = False Then Return Nothing
         Return m_groupAllowedEntityDic(p_groupId)
     End Function
 

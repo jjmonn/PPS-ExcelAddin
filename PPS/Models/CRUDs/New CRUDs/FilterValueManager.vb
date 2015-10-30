@@ -35,7 +35,7 @@ Friend Class FilterValueManager : Inherits CRUDManager
         CreateSMSG = ServerMessage.SMSG_CREATE_FILTERS_VALUE_ANSWER
         ReadSMSG = ServerMessage.SMSG_READ_FILTERS_VALUE_ANSWER
         UpdateSMSG = ServerMessage.SMSG_UPDATE_FILTERS_VALUE_ANSWER
-        UpdateListSMSG = ServerMessage.SMSG_UPDATE_FILTER_VALUE_LIST_ANSWER
+        UpdateListSMSG = ServerMessage.SMSG_CRUD_FILTER_VALUE_LIST_ANSWER
         DeleteSMSG = ServerMessage.SMSG_DELETE_FILTERS_VALUE_ANSWER
         ListSMSG = ServerMessage.SMSG_LIST_FILTER_VALUE_ANSWER
 
@@ -118,6 +118,7 @@ Friend Class FilterValueManager : Inherits CRUDManager
 
     Friend Function GetDictionary(ByRef filter_id As Int32) As MultiIndexDictionary(Of UInt32, String, FilterValue)
 
+        If m_filterValuesDic.ContainsKey(filter_id) = False Then Return Nothing
         Return m_filterValuesDic(filter_id)
 
     End Function
@@ -174,7 +175,7 @@ Friend Class FilterValueManager : Inherits CRUDManager
 
     Public Overloads Function GetValue(ByRef p_filterId As UInt32, ByRef p_id As UInt32) As FilterValue
 
-        If m_filterValuesDic(p_filterId) Is Nothing Then Return Nothing
+        If m_filterValuesDic.ContainsKey(p_filterId) = False Then Return Nothing
         Return m_filterValuesDic(p_filterId)(p_id)
 
     End Function

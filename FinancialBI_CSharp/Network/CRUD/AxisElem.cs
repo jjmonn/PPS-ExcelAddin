@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CRUD
 {
-  public enum AxisType
+  public enum AxisType : byte
   {
     Entities = 1,
     Client,

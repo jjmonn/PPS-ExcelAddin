@@ -6,7 +6,7 @@ Imports CRUD
 Friend Class GlobalFactDataManager : Inherits CRUDManager
 
 #Region "Instance Variable"
-    Private m_globalFactDic As MultiIndexDictionary(Of UInt32, Tuple(Of UInt32, UInt32, UInt32), GlobalFactData)
+    Private m_globalFactDic As New MultiIndexDictionary(Of UInt32, Tuple(Of UInt32, UInt32, UInt32), GlobalFactData)
 #End Region
 
 #Region "Init"
@@ -23,7 +23,7 @@ Friend Class GlobalFactDataManager : Inherits CRUDManager
         CreateSMSG = ServerMessage.SMSG_CREATE_GLOBAL_FACT_DATA_ANSWER
         ReadSMSG = ServerMessage.SMSG_READ_GLOBAL_FACT_DATA_ANSWER
         UpdateSMSG = ServerMessage.SMSG_UPDATE_GLOBAL_FACT_DATA_ANSWER
-        UpdateListSMSG = ServerMessage.SMSG_UPDATE_GLOBAL_FACT_DATA_LIST_ANSWER
+        UpdateListSMSG = ServerMessage.SMSG_CRUD_GLOBAL_FACT_DATA_LIST_ANSWER
         DeleteSMSG = ServerMessage.SMSG_DELETE_GLOBAL_FACT_DATA_ANSWER
         ListSMSG = ServerMessage.SMSG_LIST_GLOBAL_FACT_DATA_ANSWER
 

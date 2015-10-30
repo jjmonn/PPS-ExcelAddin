@@ -66,6 +66,7 @@ Public Class NamedCRUDManager(Of T As {NamedCRUDEntity}) : Inherits CRUDManager
     End Function
 
     Public Overloads Function GetValue(ByVal p_name As String) As T
+        If p_name Is Nothing Then Return Nothing
         Return m_CRUDDic(p_name)
     End Function
 

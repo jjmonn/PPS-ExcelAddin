@@ -19,7 +19,7 @@ Friend Class CurrencyManager : Inherits NamedCRUDManager(Of NamedCRUDEntity)
 #Region "Instance variables"
 
     ' Variables
-    Private m_usedCurrencies As SortedSet(Of UInt32)
+    Private m_usedCurrencies As New SortedSet(Of UInt32)
     Private m_mainCurrency As UInt32
 
     Public Event GetMainCurrencyEvent(ByRef status As ErrorMessage, ByRef id As UInt32)
@@ -40,7 +40,7 @@ Friend Class CurrencyManager : Inherits NamedCRUDManager(Of NamedCRUDEntity)
         CreateSMSG = ServerMessage.SMSG_CREATE_CURRENCY_ANSWER
         ReadSMSG = ServerMessage.SMSG_READ_CURRENCY_ANSWER
         UpdateSMSG = ServerMessage.SMSG_UPDATE_CURRENCY_ANSWER
-        UpdateListSMSG = ServerMessage.SMSG_UPDATE_CURRENCY_LIST_ANSWER
+        UpdateListSMSG = ServerMessage.SMSG_CRUD_CURRENCY_LIST_ANSWER
         DeleteSMSG = ServerMessage.SMSG_DELETE_CURRENCY_ANSWER
         ListSMSG = ServerMessage.SMSG_LIST_CURRENCY_ANSWER
 
@@ -48,12 +48,6 @@ Friend Class CurrencyManager : Inherits NamedCRUDManager(Of NamedCRUDEntity)
 
         InitCallbacks()
 
-        NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_LIST_CURRENCY_ANSWER, AddressOf MyBase.ListAnswer)
-        NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_READ_CURRENCY_ANSWER, AddressOf MyBase.ReadAnswer)
-        NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_DELETE_CURRENCY_ANSWER, AddressOf MyBase.DeleteAnswer)
-        NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_LIST_CURRENCY_ANSWER, AddressOf ListAnswer)
-        NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_READ_CURRENCY_ANSWER, AddressOf ReadAnswer)
-        NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_DELETE_CURRENCY_ANSWER, AddressOf DeleteAnswer)
         NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_GET_MAIN_CURRENCY_ANSWER, AddressOf SMSG_GET_MAIN_CURRENCY_ANSWER)
         NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_SET_MAIN_CURRENCY_ANSWER, AddressOf SMSG_SET_MAIN_CURRENCY_ANSWER)
 
@@ -61,9 +55,6 @@ Friend Class CurrencyManager : Inherits NamedCRUDManager(Of NamedCRUDEntity)
 
     Protected Overrides Sub finalize()
 
-        NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_LIST_CURRENCY_ANSWER, AddressOf ListAnswer)
-        NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_READ_CURRENCY_ANSWER, AddressOf ReadAnswer)
-        NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_DELETE_CURRENCY_ANSWER, AddressOf DeleteAnswer)
         NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_GET_MAIN_CURRENCY_ANSWER, AddressOf SMSG_GET_MAIN_CURRENCY_ANSWER)
         NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_SET_MAIN_CURRENCY_ANSWER, AddressOf SMSG_SET_MAIN_CURRENCY_ANSWER)
 
@@ -163,9 +154,7 @@ Friend Class CurrencyManager : Inherits NamedCRUDManager(Of NamedCRUDEntity)
     End Function
 
     Friend Function GetInUseCurrenciesIdList() As SortedSet(Of UInt32)
-
         Return m_usedCurrencies
-
     End Function
 
 #End Region

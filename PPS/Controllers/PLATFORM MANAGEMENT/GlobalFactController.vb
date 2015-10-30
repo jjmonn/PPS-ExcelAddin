@@ -110,7 +110,7 @@ Friend Class GlobalFactController
         Return False
     End Function
 
-    Friend Function GetGlobalFactList() As MultiIndexDictionary(Of UInt32, String, NamedHierarchyCRUDEntity)
+    Friend Function GetGlobalFactList() As MultiIndexDictionary(Of UInt32, String, NamedCRUDEntity)
         Return GlobalVariables.GlobalFacts.GetDictionary()
     End Function
 

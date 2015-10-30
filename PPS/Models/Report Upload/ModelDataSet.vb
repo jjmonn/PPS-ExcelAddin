@@ -188,6 +188,7 @@ Friend Class ModelDataSet
                 Dim version As Version = GlobalVariables.Versions.GetValue(CStr(m_GlobalScreenShot(i, j)))
                 If Not version Is Nothing Then
                     AddinModule.SetCurrentVersionId(version.Id)
+                    m_currentVersionId = version.Id
                     Return True
                 End If
             Next j

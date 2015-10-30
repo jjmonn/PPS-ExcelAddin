@@ -131,31 +131,31 @@ Partial Class AxisFilterStructView
         '
         Me.m_structureTreeviewRightClickMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.m_createCategoryUnderCurrentCategoryButton, Me.m_renameButton, Me.ToolStripSeparator1, Me.m_deleteButton})
         Me.m_structureTreeviewRightClickMenu.Name = "ContextMenuStripTV"
-        Me.m_structureTreeviewRightClickMenu.Size = New System.Drawing.Size(307, 104)
+        Me.m_structureTreeviewRightClickMenu.Size = New System.Drawing.Size(268, 76)
         '
         'm_createCategoryUnderCurrentCategoryButton
         '
         Me.m_createCategoryUnderCurrentCategoryButton.Image = Global.FinancialBI.My.Resources.Resources.add
         Me.m_createCategoryUnderCurrentCategoryButton.Name = "m_createCategoryUnderCurrentCategoryButton"
-        Me.m_createCategoryUnderCurrentCategoryButton.Size = New System.Drawing.Size(306, 24)
+        Me.m_createCategoryUnderCurrentCategoryButton.Size = New System.Drawing.Size(267, 22)
         Me.m_createCategoryUnderCurrentCategoryButton.Text = "Create Category Under this Category"
         '
         'm_renameButton
         '
         Me.m_renameButton.Name = "m_renameButton"
-        Me.m_renameButton.Size = New System.Drawing.Size(306, 24)
+        Me.m_renameButton.Size = New System.Drawing.Size(267, 22)
         Me.m_renameButton.Text = "Rename"
         '
         'ToolStripSeparator1
         '
         Me.ToolStripSeparator1.Name = "ToolStripSeparator1"
-        Me.ToolStripSeparator1.Size = New System.Drawing.Size(303, 6)
+        Me.ToolStripSeparator1.Size = New System.Drawing.Size(264, 6)
         '
         'm_deleteButton
         '
         Me.m_deleteButton.Image = Global.FinancialBI.My.Resources.Resources.imageres_89
         Me.m_deleteButton.Name = "m_deleteButton"
-        Me.m_deleteButton.Size = New System.Drawing.Size(306, 24)
+        Me.m_deleteButton.Size = New System.Drawing.Size(267, 22)
         Me.m_deleteButton.Text = "Delete"
         '
         'AxisFilterStructView

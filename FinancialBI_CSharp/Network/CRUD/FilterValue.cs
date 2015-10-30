@@ -24,9 +24,9 @@ namespace CRUD
     {
       FilterValue l_filter = new FilterValue(p_packet.ReadUint32());
 
+      l_filter.Name = p_packet.ReadString();
       l_filter.FilterId = p_packet.ReadUint32();
       l_filter.ParentId = p_packet.ReadUint32();
-      l_filter.Name = p_packet.ReadString();
       l_filter.ItemPosition = p_packet.ReadInt32();
 
       return (l_filter);

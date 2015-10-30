@@ -30,8 +30,6 @@ Friend Class GroupManager : Inherits NamedCRUDManager(Of NamedHierarchyCRUDEntit
 
         InitCallbacks()
 
-        List()
-
     End Sub
 
     <Obsolete("Not implemented", True)> _

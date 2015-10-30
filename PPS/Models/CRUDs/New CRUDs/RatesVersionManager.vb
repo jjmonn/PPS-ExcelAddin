@@ -30,7 +30,7 @@ Public Class RatesVersionManager : Inherits NamedCRUDManager(Of NamedHierarchyCR
         CreateSMSG = ServerMessage.SMSG_CREATE_RATE_VERSION_ANSWER
         ReadSMSG = ServerMessage.SMSG_READ_RATE_VERSION_ANSWER
         UpdateSMSG = ServerMessage.SMSG_UPDATE_RATE_VERSION_ANSWER
-        UpdateListSMSG = ServerMessage.SMSG_UPDATE_RATE_VERSION_LIST_ANSWER
+        UpdateListSMSG = ServerMessage.SMSG_CRUD_RATE_VERSION_LIST_ANSWER
         DeleteSMSG = ServerMessage.SMSG_DELETE_RATE_VERSION_ANSWER
         ListSMSG = ServerMessage.SMSG_LIST_RATE_VERSION_ANSWER
 

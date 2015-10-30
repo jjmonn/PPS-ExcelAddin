@@ -214,7 +214,7 @@ Friend Class EntitiesController
     Private Sub AfterEntityFilterRead(ByRef status As ErrorMessage, ByRef p_axisFilter As CRUDEntity)
 
         If (status = ErrorMessage.SUCCESS) Then
-            Dim axisFilter As AxisElem = CType(p_axisFilter, AxisElem)
+            Dim axisFilter As AxisFilter = CType(p_axisFilter, AxisFilter)
             If axisFilter.Axis <> AxisType.Entities Then Exit Sub
             Dim entityId As Int32 = p_axisFilter.Id
             If Not GlobalVariables.Entities.GetValue(entityId) Is Nothing Then

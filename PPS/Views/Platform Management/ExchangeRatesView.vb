@@ -375,9 +375,10 @@ Friend Class ExchangeRatesView
 
             For Each row As HierarchyItem In m_ratesDataGridView.RowsHierarchy.Items
                 Dim period As Int32 = CInt(row.ItemValue)
+                Dim exchangeRate As ExchangeRate = p_exchangeRates.GetValue(currencyId, m_currentRatesVersionId, period)
 
-                If Not p_exchangeRates.GetValue(currencyId, m_currentRatesVersionId, period) Is Nothing Then
-                    m_ratesDataGridView.CellsArea.SetCellValue(row, column, p_exchangeRates.GetValue(currencyId, m_currentRatesVersionId, period))
+                If Not exchangeRate Is Nothing Then
+                    m_ratesDataGridView.CellsArea.SetCellValue(row, column, exchangeRate.Value)
                 Else
                     m_ratesDataGridView.CellsArea.SetCellValue(row, column, 0)
                 End If

@@ -1869,7 +1869,7 @@ Public Class AddinModule
 
         Me.InputReportTaskPane.Hide()
         Me.InputReportTaskPane.Close()
-        ExcelFormatting.FormatExcelRange(currentcell, currency.Name, Date.FromOADate(periodlist(0)))
+        ExcelFormatting.FormatExcelRange(currentcell, currency.Id, Date.FromOADate(periodlist(0)))
         GlobalVariables.APPS.ScreenUpdating = True
         AssociateGRSControler(True)
 

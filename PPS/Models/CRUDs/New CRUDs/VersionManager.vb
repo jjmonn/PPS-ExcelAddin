@@ -32,7 +32,7 @@ Friend Class VersionManager : Inherits NamedCRUDManager(Of NamedHierarchyCRUDEnt
         CreateSMSG = ServerMessage.SMSG_CREATE_VERSION_ANSWER
         ReadSMSG = ServerMessage.SMSG_READ_VERSION_ANSWER
         UpdateSMSG = ServerMessage.SMSG_UPDATE_VERSION_ANSWER
-        UpdateListSMSG = ServerMessage.SMSG_UPDATE_VERSION_LIST_ANSWER
+        UpdateListSMSG = ServerMessage.SMSG_CRUD_VERSION_LIST_ANSWER
         DeleteSMSG = ServerMessage.SMSG_DELETE_VERSION_ANSWER
         ListSMSG = ServerMessage.SMSG_LIST_VERSION_ANSWER
 
@@ -118,7 +118,7 @@ Friend Class VersionManager : Inherits NamedCRUDManager(Of NamedHierarchyCRUDEnt
 
         Dim periodsTokens As New Dictionary(Of String, String)
         Dim version As Version = GetValue(versionId)
-        If version Is Nothing Then Return Nothing
+        If version Is Nothing Then Return periodsTokens
 
         Select Case version.TimeConfiguration
             Case CRUD.TimeConfig.YEARS

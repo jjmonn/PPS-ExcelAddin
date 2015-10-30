@@ -70,6 +70,7 @@ Class AxisFilterManager : Inherits CRUDManager
 
         If packet.GetError() = ErrorMessage.SUCCESS Then
             Dim tmp_ht = AxisFilter.BuildAxisFilter(packet)
+
             m_axisFilterDictionary(tmp_ht.Axis)(tmp_ht.Id) = tmp_ht
             RaiseReadEvent(packet.GetError(), tmp_ht)
         Else
@@ -96,18 +97,20 @@ Class AxisFilterManager : Inherits CRUDManager
 #Region "Mapping"
 
     Public Overloads Function GetValue(ByVal p_axis As AxisType, ByVal p_id As UInt32) As AxisFilter
+        If m_axisFilterDictionary.ContainsKey(p_axis) = False Then Return Nothing
+        If m_axisFilterDictionary(p_axis).ContainsKey(p_id) = False Then Return Nothing
+
         Return m_axisFilterDictionary(p_axis)(p_id)
     End Function
 
     Public Overloads Function GetValue(ByVal p_axis As AxisType, ByVal p_id As Int32) As AxisFilter
-        Return m_axisFilterDictionary(p_axis)(p_id)
+        Return GetValue(p_axis, CUInt(p_id))
     End Function
 
     Public Overrides Function GetValue(ByVal p_id As UInt32) As CRUDEntity
         For Each axis In m_axisFilterDictionary.Values
-            Dim l_value As CRUDEntity = axis(p_id)
-
-            If Not l_value Is Nothing Then Return l_value
+            If axis.ContainsKey(p_id) = False Then Continue For
+            Return axis(p_id)
         Next
         Return Nothing
     End Function
@@ -117,6 +120,7 @@ Class AxisFilterManager : Inherits CRUDManager
     End Function
 
     Friend Function GetDictionary(ByVal p_axis As AxisType) As SortedDictionary(Of Int32, AxisFilter)
+        If m_axisFilterDictionary.ContainsKey(p_axis) = False Then Return Nothing
         Return m_axisFilterDictionary(p_axis)
     End Function
 
@@ -134,9 +138,8 @@ Class AxisFilterManager : Inherits CRUDManager
 
     Friend Function GetFilterValueId(ByRef p_axisType As AxisType, ByRef filterId As Int32, _
                                      ByRef axisValueId As Int32) As Int32
-
         Dim mostNestedFilterId = GlobalVariables.Filters.GetMostNestedFilterId(filterId)
-        Dim mostNestedFilterValueId = m_axisFilterDictionary(p_axisType)(mostNestedFilterId)
+        Dim mostNestedFilterValueId = GetValue(p_axisType, mostNestedFilterId)
 
         If mostNestedFilterValueId Is Nothing Then Return 0
         Return GlobalVariables.FiltersValues.GetFilterValueId(mostNestedFilterValueId.FilterValueId, filterId)

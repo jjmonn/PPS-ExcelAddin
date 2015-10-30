@@ -47,29 +47,30 @@ Public MustInherit Class CRUDManager
 
     Protected Overrides Sub finalize()
 
-        NetworkManager.GetInstance().RemoveCallback(ReadSMSG, AddressOf ReadAnswer)
-        NetworkManager.GetInstance().RemoveCallback(DeleteSMSG, AddressOf DeleteAnswer)
-        NetworkManager.GetInstance().RemoveCallback(ListSMSG, AddressOf ListAnswer)
-        NetworkManager.GetInstance().RemoveCallback(UpdateSMSG, AddressOf UpdateAnswer)
-        NetworkManager.GetInstance().RemoveCallback(UpdateListSMSG, AddressOf UpdateListAnswer)
-        NetworkManager.GetInstance().RemoveCallback(CreateSMSG, AddressOf CreateAnswer)
+        NetworkManager.GetInstance().RemoveCallback(ReadSMSG, AddressOf ReadAnswer_Intern)
+        NetworkManager.GetInstance().RemoveCallback(DeleteSMSG, AddressOf DeleteAnswer_Intern)
+        NetworkManager.GetInstance().RemoveCallback(ListSMSG, AddressOf ListAnswer_Intern)
+        NetworkManager.GetInstance().RemoveCallback(UpdateSMSG, AddressOf UpdateAnswer_Intern)
+        NetworkManager.GetInstance().RemoveCallback(UpdateListSMSG, AddressOf UpdateListAnswer_Intern)
+        NetworkManager.GetInstance().RemoveCallback(CreateSMSG, AddressOf CreateAnswer_Intern)
         MyBase.Finalize()
 
     End Sub
 
     Protected Sub InitCallbacks()
-        NetworkManager.GetInstance().SetCallback(ReadSMSG, AddressOf ReadAnswer)
-        NetworkManager.GetInstance().SetCallback(DeleteSMSG, AddressOf DeleteAnswer)
-        NetworkManager.GetInstance().SetCallback(ListSMSG, AddressOf ListAnswer)
-        NetworkManager.GetInstance().SetCallback(UpdateSMSG, AddressOf UpdateAnswer)
-        NetworkManager.GetInstance().SetCallback(UpdateListSMSG, AddressOf UpdateListAnswer)
-        NetworkManager.GetInstance().SetCallback(CreateSMSG, AddressOf CreateAnswer)
+        NetworkManager.GetInstance().SetCallback(ReadSMSG, AddressOf ReadAnswer_Intern)
+        NetworkManager.GetInstance().SetCallback(DeleteSMSG, AddressOf DeleteAnswer_Intern)
+        NetworkManager.GetInstance().SetCallback(ListSMSG, AddressOf ListAnswer_Intern)
+        NetworkManager.GetInstance().SetCallback(UpdateSMSG, AddressOf UpdateAnswer_Intern)
+        NetworkManager.GetInstance().SetCallback(UpdateListSMSG, AddressOf UpdateListAnswer_Intern)
+        NetworkManager.GetInstance().SetCallback(CreateSMSG, AddressOf CreateAnswer_Intern)
     End Sub
 
 #End Region
 
 #Region "CRUD"
 
+#Region "Available"
     Protected MustOverride Sub ListAnswer(packet As ByteBuffer)
     Protected MustOverride Sub ReadAnswer(packet As ByteBuffer)
     Protected MustOverride Sub DeleteAnswer(packet As ByteBuffer)
@@ -148,6 +149,59 @@ Public MustInherit Class CRUDManager
         NetworkManager.GetInstance().Send(packet)
 
     End Sub
+#End Region
+
+#Region "Intern"
+
+    Private Sub ReadAnswer_Intern(packet As ByteBuffer)
+        Try
+            ReadAnswer(packet)
+        Catch ex As Exception
+            Diagnostics.Debug.WriteLine("ReadAnswer: " & ex.Message)
+        End Try
+    End Sub
+
+    Private Sub UpdateAnswer_Intern(packet As ByteBuffer)
+        Try
+            UpdateAnswer(packet)
+        Catch ex As Exception
+            Diagnostics.Debug.WriteLine("UpdateAnswer: " & ex.Message)
+        End Try
+    End Sub
+
+    Private Sub UpdateListAnswer_Intern(packet As ByteBuffer)
+        Try
+            UpdateListAnswer(packet)
+        Catch ex As Exception
+            Diagnostics.Debug.WriteLine("UpdateListAnswer: " & ex.Message)
+        End Try
+    End Sub
+
+    Private Sub CreateAnswer_Intern(packet As ByteBuffer)
+        Try
+            CreateAnswer(packet)
+        Catch ex As Exception
+            Diagnostics.Debug.WriteLine("CreateAnswer: " & ex.Message)
+        End Try
+    End Sub
+
+    Private Sub DeleteAnswer_Intern(packet As ByteBuffer)
+        Try
+            DeleteAnswer(packet)
+        Catch ex As Exception
+            Diagnostics.Debug.WriteLine("DeleteAnswer: " & ex.Message)
+        End Try
+    End Sub
+
+    Private Sub ListAnswer_Intern(packet As ByteBuffer)
+        Try
+            ListAnswer(packet)
+        Catch ex As Exception
+            Diagnostics.Debug.WriteLine("ListAnswer: " & ex.Message)
+        End Try
+    End Sub
+
+#End Region
 
 #End Region
 

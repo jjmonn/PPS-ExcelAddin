@@ -4,7 +4,7 @@ Imports System.Windows.Forms
 Imports CRUD
 
 
-Friend Class GlobalFactManager : Inherits NamedCRUDManager(Of NamedHierarchyCRUDEntity)
+Friend Class GlobalFactManager : Inherits NamedCRUDManager(Of NamedCRUDEntity)
 
 #Region "Init"
 
@@ -20,7 +20,7 @@ Friend Class GlobalFactManager : Inherits NamedCRUDManager(Of NamedHierarchyCRUD
         CreateSMSG = ServerMessage.SMSG_CREATE_GLOBAL_FACT_ANSWER
         ReadSMSG = ServerMessage.SMSG_READ_GLOBAL_FACT_ANSWER
         UpdateSMSG = ServerMessage.SMSG_UPDATE_GLOBAL_FACT_ANSWER
-        UpdateListSMSG = ServerMessage.SMSG_UPDATE_GLOBAL_FACT_LIST_ANSWER
+        UpdateListSMSG = ServerMessage.SMSG_CRUD_GLOBAL_FACT_LIST_ANSWER
         DeleteSMSG = ServerMessage.SMSG_DELETE_GLOBAL_FACT_ANSWER
         ListSMSG = ServerMessage.SMSG_LIST_GLOBAL_FACT_ANSWER
 
@@ -48,7 +48,7 @@ Friend Class GlobalFactManager : Inherits NamedCRUDManager(Of NamedHierarchyCRUD
     End Function
 
     Friend Sub LoadGlobalFactsTV(ByRef p_tv As TreeView)
-        TreeViewsUtilities.LoadTreeview(p_tv, m_CRUDDic)
+        'TreeViewsUtilities.LoadTreeview(p_tv, m_CRUDDic)
     End Sub
 
 #End Region

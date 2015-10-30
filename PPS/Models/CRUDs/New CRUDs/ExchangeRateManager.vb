@@ -39,7 +39,7 @@ Friend Class ExchangeRateManager : Inherits CRUDManager
         CreateSMSG = ServerMessage.SMSG_CREATE_EXCHANGE_RATE_ANSWER
         ReadSMSG = ServerMessage.SMSG_READ_EXCHANGE_RATE_ANSWER
         UpdateSMSG = ServerMessage.SMSG_UPDATE_EXCHANGE_RATE_ANSWER
-        UpdateListSMSG = ServerMessage.SMSG_UPDATE_EXCHANGE_RATE_LIST_ANSWER
+        UpdateListSMSG = ServerMessage.SMSG_CRUD_EXCHANGE_RATE_LIST_ANSWER
         DeleteSMSG = ServerMessage.SMSG_DELETE_EXCHANGE_RATE_ANSWER
         ListSMSG = ServerMessage.SMSG_LIST_EXCHANGE_RATE_ANSWER
 

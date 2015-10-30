@@ -39,7 +39,7 @@ Friend Class FilterManager : Inherits AxedCRUDManager(Of Filter)
         CreateSMSG = ServerMessage.SMSG_CREATE_FILTER_ANSWER
         ReadSMSG = ServerMessage.SMSG_READ_FILTER_ANSWER
         UpdateSMSG = ServerMessage.SMSG_UPDATE_FILTER_ANSWER
-        UpdateListSMSG = ServerMessage.SMSG_UPDATE_FILTER_LIST_ANSWER
+        UpdateListSMSG = ServerMessage.SMSG_CRUD_FILTER_LIST_ANSWER
         DeleteSMSG = ServerMessage.SMSG_DELETE_FILTER_ANSWER
         ListSMSG = ServerMessage.SMSG_LIST_FILTER_ANSWER
 

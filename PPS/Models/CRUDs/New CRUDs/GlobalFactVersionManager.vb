@@ -18,7 +18,7 @@ Public Class GlobalFactVersionManager : Inherits NamedCRUDManager(Of NamedHierar
         CreateSMSG = ServerMessage.SMSG_CREATE_GLOBAL_FACT_VERSION_ANSWER
         ReadSMSG = ServerMessage.SMSG_READ_GLOBAL_FACT_VERSION_ANSWER
         UpdateSMSG = ServerMessage.SMSG_UPDATE_GLOBAL_FACT_VERSION_ANSWER
-        UpdateListSMSG = ServerMessage.SMSG_UPDATE_GLOBAL_FACT_VERSION_LIST_ANSWER
+        UpdateListSMSG = ServerMessage.SMSG_CRUD_GLOBAL_FACT_VERSION_LIST_ANSWER
         DeleteSMSG = ServerMessage.SMSG_DELETE_GLOBAL_FACT_VERSION_ANSWER
         ListSMSG = ServerMessage.SMSG_LIST_GLOBAL_FACT_VERSION_ANSWER
 

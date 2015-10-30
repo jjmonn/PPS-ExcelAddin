@@ -73,19 +73,25 @@ Public Class AxedCRUDManager(Of T As {AxedCRUDEntity, NamedCRUDEntity}) : Inheri
 
 #Region "Mapping"
 
+    Public Overloads Function GetValue(ByVal p_axis As AxisType, ByVal p_name As String) As T
+        If m_CRUDDic.ContainsKey(p_axis) = False Then Return Nothing
+        Return m_CRUDDic(p_axis)(p_name)
+    End Function
+
     Public Overloads Function GetValue(ByVal p_axis As AxisType, ByVal p_id As UInt32) As T
+        If m_CRUDDic.ContainsKey(p_axis) = False Then Return Nothing
         Return m_CRUDDic(p_axis)(p_id)
     End Function
 
     Public Overloads Function GetValue(ByVal p_axis As AxisType, ByVal p_id As Int32) As T
-        Return m_CRUDDic(p_axis)(CUInt(p_id))
+        Return GetValue(p_axis, CUInt(p_id))
     End Function
 
     Public Overrides Function GetValue(ByVal p_id As UInt32) As CRUDEntity
         For Each axis In m_CRUDDic.Values
-            Dim l_value As CRUDEntity = axis(p_id)
+            If axis.ContainsKey(p_id) = False Then Continue For
 
-            If Not l_value Is Nothing Then Return l_value
+            Return axis(p_id)
         Next
         Return Nothing
     End Function
@@ -95,6 +101,7 @@ Public Class AxedCRUDManager(Of T As {AxedCRUDEntity, NamedCRUDEntity}) : Inheri
     End Function
 
     Friend Function GetDictionary(ByVal p_axis As AxisType) As MultiIndexDictionary(Of UInt32, String, T)
+        If m_CRUDDic.ContainsKey(p_axis) = False Then Return Nothing
         Return m_CRUDDic(p_axis)
     End Function
 
@@ -105,7 +112,7 @@ Public Class AxedCRUDManager(Of T As {AxedCRUDEntity, NamedCRUDEntity}) : Inheri
     ' Utilities Methods
     Friend Function GetValueId(ByVal p_axis As AxisType, ByRef name As String) As UInt32
 
-        Dim axisValue As T = m_CRUDDic(p_axis)(name)
+        Dim axisValue As T = GetValue(p_axis, name)
 
         If axisValue Is Nothing Then Return 0
         Return axisValue.Id
@@ -114,7 +121,7 @@ Public Class AxedCRUDManager(Of T As {AxedCRUDEntity, NamedCRUDEntity}) : Inheri
 
     Friend Function GetValueName(ByVal p_axis As AxisType, ByRef p_id As UInt32) As String
 
-        Dim axisValue As T = m_CRUDDic(p_axis)(p_id)
+        Dim axisValue As T = GetValue(p_axis, p_id)
 
         If axisValue Is Nothing Then Return ""
         Return axisValue.Name

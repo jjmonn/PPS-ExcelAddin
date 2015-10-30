@@ -83,7 +83,7 @@ public class MultiIndexDictionary<KeyA, KeyB, Value>
       id = m_id;
       ++m_id;
     }
-    else if (m_firstDic[p_keyA] == 0 || m_secondDic[p_keyB] == 0)
+    else if (m_firstDic.ContainsKey(p_keyA) == false || m_secondDic.ContainsKey(p_keyB) == false)
     {
       return false;
     }

@@ -31,7 +31,7 @@ Friend Class AccountManager : Inherits NamedCRUDManager(Of NamedHierarchyCRUDEnt
         CreateSMSG = ServerMessage.SMSG_CREATE_ACCOUNT_ANSWER
         ReadSMSG = ServerMessage.SMSG_READ_ACCOUNT_ANSWER
         UpdateSMSG = ServerMessage.SMSG_UPDATE_ACCOUNT_ANSWER
-        UpdateListSMSG = ServerMessage.SMSG_UPDATE_ACCOUNT_LIST_ANSWER
+        UpdateListSMSG = ServerMessage.SMSG_CRUD_ACCOUNT_LIST_ANSWER
         DeleteSMSG = ServerMessage.SMSG_DELETE_ACCOUNT_ANSWER
         ListSMSG = ServerMessage.SMSG_LIST_ACCOUNT_ANSWER
 

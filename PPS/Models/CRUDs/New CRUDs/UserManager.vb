@@ -7,7 +7,6 @@ Friend Class UserManager : Inherits NamedCRUDManager(Of NamedCRUDEntity)
 #Region "Instance variables"
 
     Friend currentUserName As String
-    Private m_currentUserId As UInt32
 
 #End Region
 
@@ -43,7 +42,7 @@ Friend Class UserManager : Inherits NamedCRUDManager(Of NamedCRUDEntity)
 #Region "Utilities"
 
     Friend Function GetCurrentUser() As User
-        Return m_CRUDDic(m_currentUserId)
+        Return m_CRUDDic(currentUserName)
     End Function
 
     Friend Function CurrentUserIsAdmin() As Boolean

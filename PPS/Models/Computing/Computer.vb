@@ -167,7 +167,8 @@ Friend Class Computer
 
                 filtersDict.Clear()
 
-                periodsTokenDict = GlobalVariables.Versions.GetPeriodTokensDict(versionId)
+                versionId = version.Id
+                periodsTokenDict = GlobalVariables.Versions.GetPeriodTokensDict(version.Id)
 
                 Select Case version.TimeConfiguration
                     Case CRUD.TimeConfig.YEARS : periodIdentifier = YEAR_PERIOD_IDENTIFIER
