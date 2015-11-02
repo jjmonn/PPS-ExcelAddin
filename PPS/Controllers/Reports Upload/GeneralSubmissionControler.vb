@@ -315,6 +315,14 @@ errorHandler:
 
     Private Sub AfterOutputsComputed(ByRef entityName As String)
 
+        If entityName = "" Then
+            MsgBox("An error occured in the computation of this report. You may have not been granted access to this version or entity.Please contact your administrator.")
+            GlobalVariables.APPS.ScreenUpdating = True
+            GlobalVariables.APPS.Interactive = True
+            m_isUpdating = False
+            Exit Sub
+        End If
+
         On Error Resume Next
         m_isUpdating = True
         GlobalVariables.APPS.Interactive = False

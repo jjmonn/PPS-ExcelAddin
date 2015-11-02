@@ -220,7 +220,7 @@ Partial Class VersionsControl
         Me.Label5.Name = "Label5"
         Me.Label5.Size = New System.Drawing.Size(139, 13)
         Me.Label5.TabIndex = 24
-        Me.Label5.Text = Local.GetValue("facts_version.global_facts_version")
+        Me.Label5.Text = Local.GetValue("facts_versions.global_facts_version")
         '
         'Label2
         '
@@ -230,7 +230,7 @@ Partial Class VersionsControl
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(118, 13)
         Me.Label2.TabIndex = 22
-        Me.Label2.Text = Local.GetValue("facts_version.exchange_rates_version")
+        Me.Label2.Text = Local.GetValue("facts_versions.exchange_rates_version")
         '
         'Label1
         '
@@ -240,7 +240,7 @@ Partial Class VersionsControl
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(93, 13)
         Me.Label1.TabIndex = 20
-        Me.Label1.Text = Local.GetValue("facts_version.nb_years")
+        Me.Label1.Text = Local.GetValue("facts_versions.nb_years")
         '
         'Label11
         '
@@ -250,7 +250,7 @@ Partial Class VersionsControl
         Me.Label11.Name = "Label11"
         Me.Label11.Size = New System.Drawing.Size(66, 13)
         Me.Label11.TabIndex = 17
-        Me.Label11.Text = Local.GetValue("facts_version.starting_period")
+        Me.Label11.Text = Local.GetValue("facts_versions.starting_period")
         '
         'Label10
         '
@@ -260,7 +260,7 @@ Partial Class VersionsControl
         Me.Label10.Name = "Label10"
         Me.Label10.Size = New System.Drawing.Size(106, 13)
         Me.Label10.TabIndex = 15
-        Me.Label10.Text = Local.GetValue("facts_version.period_config")
+        Me.Label10.Text = Local.GetValue("facts_versions.period_config")
         '
         'Label4
         '
@@ -271,7 +271,7 @@ Partial Class VersionsControl
         Me.Label4.Name = "Label4"
         Me.Label4.Size = New System.Drawing.Size(85, 13)
         Me.Label4.TabIndex = 7
-        Me.Label4.Text = Local.GetValue("facts_version.version_name")
+        Me.Label4.Text = Local.GetValue("facts_versions.version_name")
         '
         'CreationTB
         '
@@ -292,7 +292,7 @@ Partial Class VersionsControl
         Me.Label7.Name = "Label7"
         Me.Label7.Size = New System.Drawing.Size(77, 13)
         Me.Label7.TabIndex = 10
-        Me.Label7.Text = Local.GetValue("facts_version.version_locked")
+        Me.Label7.Text = Local.GetValue("facts_versions.version_locked")
         '
         'Label8
         '
@@ -302,7 +302,7 @@ Partial Class VersionsControl
         Me.Label8.Name = "Label8"
         Me.Label8.Size = New System.Drawing.Size(67, 13)
         Me.Label8.TabIndex = 11
-        Me.Label8.Text = Local.GetValue("facts_version.locked_date")
+        Me.Label8.Text = Local.GetValue("facts_versions.locked_date")
         '
         'LockedDateT
         '
@@ -337,7 +337,7 @@ Partial Class VersionsControl
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(70, 13)
         Me.Label3.TabIndex = 6
-        Me.Label3.Text = Local.GetValue("facts_version.creation_date")
+        Me.Label3.Text = Local.GetValue("facts_versions.creation_date")
         '
         'lockedCB
         '

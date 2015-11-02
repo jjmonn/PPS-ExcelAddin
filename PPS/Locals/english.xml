@@ -3,6 +3,7 @@
   <category name="Platform Management">
     <string name="currencies">Currencies</string>
   </category>
+  
   <category name="CUI">
     <string name="refresh">Refresh</string>
     <string name="update">Update</string>    
@@ -125,6 +126,19 @@
       <string name="msg_select_currency">A currency must be selected.</string>
      
   </category>
+
+  <category name="axis">
+
+    <!--messages-->
+    <string name="msg_enter_name">Enter the new name</string>
+    <string name="msg_axis_creation">Creation</string>
+    <string name="msg_axis_delete1">Careful, you are about to delete the axis </string>
+    <string name="msg_axis_delete2">This axis and all sub axis will be deleted, do you confirm?</string>
+    <string name="msg_deletion_confirmation">Axis deletion confirmation</string>
+    <string name="msg_select_axis">An Axis must be selected in order to be deleted</string>
+    <string name="msg_filter_value_not_found">The Filter Value Name could not be found.</string>
+
+  </category>
   
   <category name="filters">
     
@@ -145,19 +159,6 @@
   
   </category>  
       
-  <category name="axis">
- 
-    <!--messages-->
-      <string name="msg_enter_name">Enter the new name</string>  
-      <string name="msg_axis_creation">Creation</string>  
-      <string name="msg_axis_delete1">Careful, you are about to delete the axis </string>  
-      <string name="msg_axis_delete2">This axis and all sub axis will be deleted, do you confirm?</string>  
-      <string name="msg_deletion_confirmation">Axis deletion confirmation</string>  
-      <string name="msg_select_axis">An Axis must be selected in order to be deleted</string>  
-      <string name="msg_filter_value_not_found">The Filter Value Name could not be found.</string>  
-  
-  </category>
-    
   <category name="GeneralEditionUI">
     
     <!--edition-->
@@ -200,8 +201,7 @@
       <string name="new_version">Create a new version</string> 
       <string name="new_folder">Create a new folder</string> 
       <string name="version">Version</string> 
-      <string name=""></string> 
-  
+    
       <!--messages-->
       <string name="msg_folder_name">Please enter a name for the new Folder</string>
       <string name="msg_folder_under_folder">A folder cannot be added under a version</string>
@@ -228,7 +228,8 @@
   <category name="global_facts">
     <string name="new">Create a new macro economic indicator</string>
     <string name="new_global_fact">New Macro Economic indicator</string>
-    <string name="new_version">New Macro Economic Indicators Version</string>    
+    <string name="new_version">New Macro Economic Indicators Version</string>
+    <string name="msg_name_already_taken">This name is already used for another macro economic indicator or account</string>
   </category>
 
   <category name="facts_versions">
@@ -246,6 +247,7 @@
     <string name="msg_cannot_use_global_fact_folder"> is a folder and cannot be set as the Economic Indicators version</string>
     <string name="msg_cannot_use_exchange_rates_folder"> is a folder and cannot be set as the Exchange Rates version.</string>
     <string name="msg_fact_version_mismatch">This Fact Version is not compatible with the Periods Configuration.</string>
+
     <string name="global_facts_version">Macro Economic Indicators version</string>
     <string name="version_locked">Locked</string>
     <string name="locked_date">Locked date</string>
@@ -257,7 +259,6 @@
     <string name="msg_new_version_name">Enter the new Name: </string>
     <string name="msg_invalid_name">This Name is not valid. Either it already exists or contains forbidden characters. Please Try with another Name.</string>
     <string name="msg_select_version_or_folder">Please select a Version or a Folder.</string>
-    <string name=""></string>    
   </category>
 
   <category name="ppsbi">
@@ -317,6 +318,7 @@
      <string name="rename">Rename</string>
      <string name="expand_all">Expand all</string>
      <string name="collapse_all">Collapse all</string> 
+    
     <string name="copy_down">Copy value down</string>
     <string name="drop_on_excel">Drop on Excel</string>
     <string name="menu">Menu</string>
@@ -332,9 +334,6 @@
     <string name="msg_name_exceed2"> characters</string>
     <string name="auto_resize_columns">Auto resize columns width</string>
     <string name="currency">Currency</string>
-    <string name=""></string>
-    <string name=""></string>
-    <string name=""></string>
   
     <string name="macro_economic_indicator">Macro Economic Indicator</string>
     <string name="log">Log</string>

@@ -46,6 +46,7 @@ Friend Class AxisController
 
 #Region "Initialize"
 
+    ' p_axisId => GlobalEnums.AnalysisAxis (client, product, adjustment)
     Friend Sub New(ByRef p_CrudModel As AxisElemManager, _
                    ByRef p_CrudFilterModel As AxisFilterManager, _
                    ByRef p_axisType As AxisType)

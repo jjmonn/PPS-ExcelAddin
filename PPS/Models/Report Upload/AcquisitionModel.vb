@@ -282,7 +282,11 @@ Friend Class AcquisitionModel
 
         Dim l_entity As Entity = GlobalVariables.Entities.GetValue(entityId)
         If l_entity Is Nothing Then Exit Sub
-        RaiseEvent AfterOutputsComputed(l_entity.Name)
+        If Not l_entity Is Nothing Then
+            RaiseEvent AfterOutputsComputed(l_entity.Name)
+        Else
+            RaiseEvent AfterOutputsComputed("")
+        End If
 
     End Sub
 
