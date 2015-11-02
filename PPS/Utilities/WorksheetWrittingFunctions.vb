@@ -69,7 +69,7 @@ Friend Class WorksheetWrittingFunctions
             If Not periodDatesList Is Nothing Then
                 Dim i As Int32 = 0
                 For Each period As UInt32 In periodDatesList
-                    destinationCell.Offset(0, 1 + i).Value2 = Format(Date.FromOADate(period), "Short Date")
+                    destinationCell.Offset(0, 1 + i).Value = Format(Date.FromOADate(period), "Short Date")
                     'destinationCell.Offset(0, 1 + i).NumberFormat = "yyyy"
                     i = i + 1
                 Next

@@ -210,6 +210,7 @@ Friend Class ModelDataSet
             For j = LBound(m_GlobalScreenShot, 2) To UBound(m_GlobalScreenShot, 2)
                 If IsDate(m_GlobalScreenShot(i, j)) Then
                     periodStoredAsInt = CInt(CDate((m_GlobalScreenShot(i, j))).ToOADate())
+                    Dim res As Date = CDate(m_GlobalScreenShot(i, j))
                     If m_periodsDatesList.Contains(CDate(m_GlobalScreenShot(i, j))) _
                     AndAlso Not m_periodsAddressValuesDictionary.ContainsValue(periodStoredAsInt) Then
 

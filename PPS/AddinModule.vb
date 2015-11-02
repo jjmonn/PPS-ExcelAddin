@@ -1291,7 +1291,7 @@ Public Class AddinModule
         GlobalVariables.GlobalPPSBIController = New PPSBIController
         GlobalVariables.Addin = Me
         SetMainMenuButtonState(False)
-        Local.LoadLocalFile("./PPS-Repo/PPS/Locals/french.xml")
+        Local.LoadLocalFile("C:\Users\PPS\Documents\GitHub\PPS Client Addin\PPS\Locals\french.xml")
 
     End Sub
 
@@ -1838,7 +1838,7 @@ Public Class AddinModule
 
     Friend Sub InputReportPaneCallBack_ReportCreation()
 
-        GlobalVariables.APPS.ScreenUpdating = False
+        '     GlobalVariables.APPS.ScreenUpdating = False
         Dim version As Version = GlobalVariables.Versions.GetValue(My.Settings.version_id)
         If version Is Nothing Then Exit Sub
 
@@ -1862,7 +1862,7 @@ Public Class AddinModule
         Dim periodlist As Int32() = GlobalVariables.Versions.GetPeriodsList(My.Settings.version_id)
 
         If periodlist Is Nothing Then Exit Sub
-        GlobalVariables.APPS.Interactive = False
+        '  GlobalVariables.APPS.Interactive = False
         WorksheetWrittingFunctions.InsertInputReportOnWS(currentcell, _
                                                           periodlist, _
                                                           timeConfig)

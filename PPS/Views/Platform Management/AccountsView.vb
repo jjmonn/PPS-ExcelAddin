@@ -856,14 +856,17 @@ UdpateFormulaType:
             End If
 
             ' Format ComboBox
-            Dim formatLI = m_formatsIdItemDict(l_account.Type)
-            TypeComboBox.SelectedItem = formatLI
-
-            If formatLI.Value = Account.AccountType.MONETARY Then
-                ' Currency Conversion
-                Dim conversionLI = m_currenciesConversionIdItemDict(l_account.ConversionOptionId)
-                CurrencyConversionComboBox.SelectedItem = conversionLI
-
+            If m_formatsIdItemDict.ContainsKey(l_account.Type) Then
+                Dim formatLI = m_formatsIdItemDict(l_account.Type)
+                TypeComboBox.SelectedItem = formatLI
+                If formatLI.Value = Account.AccountType.MONETARY Then
+                    ' Currency Conversion
+                    Dim conversionLI = m_currenciesConversionIdItemDict(l_account.ConversionOptionId)
+                    CurrencyConversionComboBox.SelectedItem = conversionLI
+                End If
+            Else
+                TypeComboBox.SelectedItem = Nothing
+                TypeComboBox.Text = ""
             End If
 
             ' Consolidation Option
