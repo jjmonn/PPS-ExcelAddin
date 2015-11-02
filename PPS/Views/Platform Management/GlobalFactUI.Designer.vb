@@ -89,7 +89,7 @@ Partial Class GlobalFactUI
         Me.select_version.Image = Global.FinancialBI.My.Resources.Resources.config_circle_green
         Me.select_version.Name = "select_version"
         Me.select_version.Size = New System.Drawing.Size(146, 22)
-        Me.select_version.Text = "Select Version"
+        Me.select_version.Text = Local.GetValue("version.select")
         '
         'ToolStripSeparator2
         '
@@ -101,14 +101,14 @@ Partial Class GlobalFactUI
         Me.AddRatesVersionRCM.Image = Global.FinancialBI.My.Resources.Resources.elements3_add
         Me.AddRatesVersionRCM.Name = "AddRatesVersionRCM"
         Me.AddRatesVersionRCM.Size = New System.Drawing.Size(146, 22)
-        Me.AddRatesVersionRCM.Text = "Add Version"
+        Me.AddRatesVersionRCM.Text = Local.GetValue("version.add_version")
         '
         'AddFolderRCM
         '
         Me.AddFolderRCM.Image = Global.FinancialBI.My.Resources.Resources.folder_open_add
         Me.AddFolderRCM.Name = "AddFolderRCM"
         Me.AddFolderRCM.Size = New System.Drawing.Size(146, 22)
-        Me.AddFolderRCM.Text = "Add Folder"
+        Me.AddFolderRCM.Text = Local.GetValue("version.add_folder")
         '
         'ToolStripSeparator6
         '
@@ -120,13 +120,13 @@ Partial Class GlobalFactUI
         Me.DeleteVersionRCM.Image = Global.FinancialBI.My.Resources.Resources.elements3_delete
         Me.DeleteVersionRCM.Name = "DeleteVersionRCM"
         Me.DeleteVersionRCM.Size = New System.Drawing.Size(146, 22)
-        Me.DeleteVersionRCM.Text = "Delete"
+        Me.DeleteVersionRCM.Text = Local.GetValue("general.delete")
         '
         'RenameVersionBT
         '
         Me.RenameVersionBT.Name = "RenameVersionBT"
         Me.RenameVersionBT.Size = New System.Drawing.Size(146, 22)
-        Me.RenameVersionBT.Text = "Rename"
+        Me.RenameVersionBT.Text = Local.GetValue("general.delete")
         '
         'dgvRCM
         '
@@ -144,21 +144,21 @@ Partial Class GlobalFactUI
         Me.CopyFactDownToolStripMenuItem.Image = Global.FinancialBI.My.Resources.Resources.Download_
         Me.CopyFactDownToolStripMenuItem.Name = "CopyFactDownToolStripMenuItem"
         Me.CopyFactDownToolStripMenuItem.Size = New System.Drawing.Size(276, 22)
-        Me.CopyFactDownToolStripMenuItem.Text = "Copy value down"
+        Me.CopyFactDownToolStripMenuItem.Text = Local.GetValue("general.copy_down")
         '
         'ImportFromExcelBT
         '
         Me.ImportFromExcelBT.Image = Global.FinancialBI.My.Resources.Resources.Excel_Blue_32x32
         Me.ImportFromExcelBT.Name = "ImportFromExcelBT"
         Me.ImportFromExcelBT.Size = New System.Drawing.Size(276, 22)
-        Me.ImportFromExcelBT.Text = "Import from Excel"
+        Me.ImportFromExcelBT.Text = Local.GetValue("general.import")
         '
         'CreateNewFact
         '
         Me.CreateNewFact.Image = Global.FinancialBI.My.Resources.Resources.elements_add
         Me.CreateNewFact.Name = "CreateNewFact"
         Me.CreateNewFact.Size = New System.Drawing.Size(276, 22)
-        Me.CreateNewFact.Text = "Create new macro economic indicator"
+        Me.CreateNewFact.Text = Local.GetValue("global_fact.new")
         '
         'TableLayoutPanel4
         '
@@ -228,7 +228,7 @@ Partial Class GlobalFactUI
         Me.VersionLabel.Name = "VersionLabel"
         Me.VersionLabel.Size = New System.Drawing.Size(42, 13)
         Me.VersionLabel.TabIndex = 3
-        Me.VersionLabel.Text = "Version"
+        Me.VersionLabel.Text = Local.GetValue("general.version")
         '
         'version_TB
         '
@@ -249,21 +249,23 @@ Partial Class GlobalFactUI
         '
         Me.RenameBT.Name = "RenameBT"
         Me.RenameBT.Size = New System.Drawing.Size(276, 22)
-        Me.RenameBT.Text = "Rename"
+        Me.RenameBT.Text = Local.GetValue("general.rename")
         '
         'DeleteBT
         '
         Me.DeleteBT.Image = Global.FinancialBI.My.Resources.Resources.elements_delete
         Me.DeleteBT.Name = "DeleteBT"
         Me.DeleteBT.Size = New System.Drawing.Size(276, 22)
-        Me.DeleteBT.Text = "Delete"
+        Me.DeleteBT.Text = Local.GetValue("general.delete")
+
         '
         'CreateNewFact2
         '
         Me.CreateNewFact2.Image = Global.FinancialBI.My.Resources.Resources.elements_add
         Me.CreateNewFact2.Name = "CreateNewFact2"
         Me.CreateNewFact2.Size = New System.Drawing.Size(276, 22)
-        Me.CreateNewFact2.Text = "Create new macro economic indicator"
+        Me.CreateNewFact2.Text = Local.GetValue("global_fact.new")
+
         '
         'GlobalFactUI
         '

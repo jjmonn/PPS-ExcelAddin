@@ -38,7 +38,7 @@ Partial Class NewGlobalFactUI
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(35, 13)
         Me.Label1.TabIndex = 0
-        Me.Label1.Text = "Name"
+        Me.Label1.Text = Local.GetValue("general.name")
         '
         'NameTB
         '
@@ -56,7 +56,7 @@ Partial Class NewGlobalFactUI
         Me.CancelBT.Name = "CancelBT"
         Me.CancelBT.Size = New System.Drawing.Size(86, 26)
         Me.CancelBT.TabIndex = 25
-        Me.CancelBT.Text = "Cancel"
+        Me.CancelBT.Text = Local.GetValue("general.cancel")
         Me.CancelBT.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         Me.CancelBT.UseVisualStyleBackColor = True
         '
@@ -79,7 +79,7 @@ Partial Class NewGlobalFactUI
         Me.ValidateBT.Name = "ValidateBT"
         Me.ValidateBT.Size = New System.Drawing.Size(86, 26)
         Me.ValidateBT.TabIndex = 24
-        Me.ValidateBT.Text = "Create"
+        Me.ValidateBT.Text = Local.GetValue("general.create")
         Me.ValidateBT.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         Me.ValidateBT.UseVisualStyleBackColor = True
         '
@@ -94,7 +94,7 @@ Partial Class NewGlobalFactUI
         Me.Controls.Add(Me.Label1)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Name = "NewGlobalFactUI"
-        Me.Text = "New Economic indicator"
+        Me.Text = Local.GetValue("global_facts.new_global_fact")
         Me.ResumeLayout(False)
         Me.PerformLayout()
 

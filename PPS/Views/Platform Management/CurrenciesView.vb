@@ -102,7 +102,7 @@ Friend Class CurrenciesView
     Private Sub SetMainCurrency_Click(sender As Object, e As EventArgs) Handles SetMainCurrencyCallBack.Click
 
         If m_CurrentCell Is Nothing Then
-            MsgBox("A Currency must be selected first")
+            MsgBox(Local.GetValue("currencies.msg_select_currency"))
             Exit Sub
         End If
         m_controller.SetMainCurrency(m_CurrentCell.RowItem.ItemValue)

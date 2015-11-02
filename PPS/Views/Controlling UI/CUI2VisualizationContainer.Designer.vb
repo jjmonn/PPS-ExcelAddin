@@ -32,7 +32,7 @@ Partial Class CUI2VisualizationContainer
         Me.ClientSize = New System.Drawing.Size(284, 261)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Name = "CUI2VisualizationContainer"
-        Me.Text = "Financial BI Visualization"
+        Me.Text = Local.GetValue("CUI_Charts.CUI2_vizualization")
         Me.ResumeLayout(False)
 
     End Sub

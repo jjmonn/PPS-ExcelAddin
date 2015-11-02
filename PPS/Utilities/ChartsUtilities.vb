@@ -162,12 +162,13 @@ Friend Class ChartsUtilities
     Friend Shared Sub FormatSerie(ByRef p_serie As Series, _
                                    ByRef p_color As System.Drawing.Color, _
                                    ByRef p_chartType As SeriesChartType, _
-                                         Optional ByRef p_alphaColor As Integer = -1, _
+                                   Optional ByRef p_alphaColor As Integer = -1, _
                                    Optional ByRef p_seriePointsWidth As Single = 0)
 
         If p_serie Is Nothing Then Exit Sub
         p_serie.Color = p_color
         If p_alphaColor > -1 Then
+            'p_serie.Color
             p_serie.Color = Color.FromArgb(p_alphaColor, p_color.R, p_color.G, p_color.B)
         End If
         p_serie.ChartType = p_chartType
@@ -211,9 +212,9 @@ Friend Class ChartsUtilities
         chartArea1.AxisX.TitleFont = New Drawing.Font("calibri", VALUES_LABELS_FONT_SIZE)
         chartArea1.AxisX.LabelStyle.Angle = CHARTS_X_AXIS_ANGLE
         chartArea1.AxisY.LabelAutoFitMaxFontSize = LABELS_MAX_FONT_SIZE
-        chartArea1.AxisY.LabelAutoFitMinFontSize = LABELS_MIN_FONT_SIZE
+        '      chartArea1.AxisY.LabelAutoFitMinFontSize = LABELS_MIN_FONT_SIZE
         chartArea1.AxisX.LabelAutoFitMaxFontSize = LABELS_MAX_FONT_SIZE
-        chartArea1.AxisX.LabelAutoFitMinFontSize = LABELS_MIN_FONT_SIZE
+        '     chartArea1.AxisX.LabelAutoFitMinFontSize = LABELS_MIN_FONT_SIZE
 
         If p_yAxisName <> "" Then
             chartArea1.AxisY.Title = p_yAxisName
@@ -244,9 +245,10 @@ Friend Class ChartsUtilities
         p_chart.Legends(0).TableStyle = LegendTableStyle.Auto
         p_chart.Legends(0).Alignment = System.Drawing.StringAlignment.Center
         p_chart.Legends(0).Font = New Drawing.Font("calibri", VALUES_LABELS_FONT_SIZE)
-        p_chart.Legends(0).AutoFitMinFontSize = LABELS_MIN_FONT_SIZE
-        p_chart.Legends(0).MaximumAutoSize = LABELS_MAX_FONT_SIZE
-        p_chart.Legends(0).Font = New Drawing.Font("calibri", 10)
+        '     p_chart.Legends(0).AutoFitMinFontSize = LABELS_MIN_FONT_SIZE
+        '  p_chart.Legends(0).Font = New Drawing.Font("calibri", 10)
+        '  p_chart.Legends(0).MaximumAutoSize = 90
+
 
         ' Title
         If p_title <> "" Then

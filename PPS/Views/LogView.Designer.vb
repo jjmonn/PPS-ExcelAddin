@@ -147,7 +147,7 @@ Partial Class LogView
         Me.VLabel1.Name = "VLabel1"
         Me.VLabel1.Size = New System.Drawing.Size(41, 23)
         Me.VLabel1.TabIndex = 3
-        Me.VLabel1.Text = "Entity"
+        Me.VLabel1.Text = Local.GetValue("general.entity")
         Me.VLabel1.TextAlignment = System.Drawing.ContentAlignment.MiddleLeft
         Me.VLabel1.UseMnemonics = True
         Me.VLabel1.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
@@ -163,7 +163,7 @@ Partial Class LogView
         Me.VLabel2.Name = "VLabel2"
         Me.VLabel2.Size = New System.Drawing.Size(50, 23)
         Me.VLabel2.TabIndex = 4
-        Me.VLabel2.Text = "Account"
+        Me.VLabel2.Text = Local.GetValue("general.account")
         Me.VLabel2.TextAlignment = System.Drawing.ContentAlignment.MiddleLeft
         Me.VLabel2.UseMnemonics = True
         Me.VLabel2.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
@@ -180,7 +180,7 @@ Partial Class LogView
         Me.Controls.Add(Me.m_logDataGridView)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Name = "LogView"
-        Me.Text = "Log"
+        Me.Text = Local.GetValue("general.log")
         Me.ResumeLayout(False)
 
     End Sub

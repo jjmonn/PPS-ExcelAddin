@@ -52,7 +52,7 @@ Partial Class CUI2VisualisationChartsSettings
         Me.VLabel1.Name = "VLabel1"
         Me.VLabel1.Size = New System.Drawing.Size(41, 25)
         Me.VLabel1.TabIndex = 0
-        Me.VLabel1.Text = "Title"
+        Me.VLabel1.Text = local.getvalue("CUI_Charts.chart_title")
         Me.VLabel1.TextAlignment = System.Drawing.ContentAlignment.MiddleLeft
         Me.VLabel1.UseMnemonics = True
         Me.VLabel1.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
@@ -86,7 +86,7 @@ Partial Class CUI2VisualisationChartsSettings
         Me.VLabel2.Name = "VLabel2"
         Me.VLabel2.Size = New System.Drawing.Size(41, 25)
         Me.VLabel2.TabIndex = 2
-        Me.VLabel2.Text = "Serie 2"
+        Me.VLabel2.Text = local.getvalue("CUI_Charts.serie_2")
         Me.VLabel2.TextAlignment = System.Drawing.ContentAlignment.MiddleLeft
         Me.VLabel2.UseMnemonics = True
         Me.VLabel2.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
@@ -102,7 +102,7 @@ Partial Class CUI2VisualisationChartsSettings
         Me.VLabel3.Name = "VLabel3"
         Me.VLabel3.Size = New System.Drawing.Size(41, 25)
         Me.VLabel3.TabIndex = 2
-        Me.VLabel3.Text = "Serie 1"
+        Me.VLabel3.Text = local.getvalue("CUI_Charts.serie_1")
         Me.VLabel3.TextAlignment = System.Drawing.ContentAlignment.MiddleCenter
         Me.VLabel3.UseMnemonics = True
         Me.VLabel3.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
@@ -158,7 +158,7 @@ Partial Class CUI2VisualisationChartsSettings
         Me.VLabel4.Name = "VLabel4"
         Me.VLabel4.Size = New System.Drawing.Size(246, 25)
         Me.VLabel4.TabIndex = 6
-        Me.VLabel4.Text = "Account"
+        Me.VLabel4.Text = local.getvalue("general.account")
         Me.VLabel4.TextAlignment = System.Drawing.ContentAlignment.MiddleCenter
         Me.VLabel4.UseMnemonics = True
         Me.VLabel4.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
@@ -174,7 +174,7 @@ Partial Class CUI2VisualisationChartsSettings
         Me.VLabel5.Name = "VLabel5"
         Me.VLabel5.Size = New System.Drawing.Size(143, 25)
         Me.VLabel5.TabIndex = 7
-        Me.VLabel5.Text = "Color"
+        Me.VLabel5.Text = local.getvalue("general.couleur")
         Me.VLabel5.TextAlignment = System.Drawing.ContentAlignment.MiddleCenter
         Me.VLabel5.UseMnemonics = True
         Me.VLabel5.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
@@ -228,7 +228,7 @@ Partial Class CUI2VisualisationChartsSettings
         Me.VLabel6.Name = "VLabel6"
         Me.VLabel6.Size = New System.Drawing.Size(226, 25)
         Me.VLabel6.TabIndex = 10
-        Me.VLabel6.Text = "Type"
+        Me.VLabel6.Text = local.getvalue("general.type")
         Me.VLabel6.TextAlignment = System.Drawing.ContentAlignment.MiddleCenter
         Me.VLabel6.UseMnemonics = True
         Me.VLabel6.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
@@ -245,7 +245,7 @@ Partial Class CUI2VisualisationChartsSettings
         Me.m_saveButton.RoundedCornersMask = CType(15, Byte)
         Me.m_saveButton.Size = New System.Drawing.Size(80, 22)
         Me.m_saveButton.TabIndex = 13
-        Me.m_saveButton.Text = "Save"
+        Me.m_saveButton.Text = local.getvalue("general.save")
         Me.m_saveButton.UseVisualStyleBackColor = False
         Me.m_saveButton.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
         '
@@ -306,7 +306,7 @@ Partial Class CUI2VisualisationChartsSettings
         Me.Controls.Add(Me.VLabel1)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Name = "CUI2VisualisationChartsSettings"
-        Me.Text = "Chart Settings"
+        Me.Text = local.getvalue("CUI_Charts.charts_settings")
         Me.ResumeLayout(False)
 
     End Sub

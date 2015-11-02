@@ -8,7 +8,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 25/08/2015
+' Last modified: 24/10/2015
 
 
 Imports System.Windows.Forms
@@ -205,32 +205,32 @@ Friend Class NewDataVersionUI
         End If
 
         If TimeConfigCB.Text = "" Then
-            MsgBox("The Time Configuration must be selected.")
+            MsgBox(Local.GetValue("facts_versions.msg_config_selection"))
             Return False
         End If
 
         If StartingPeriodNUD.Text = "" Then
-            MsgBox("The Reference Year must be selected for monthly Time Configuration Versions.")
+            MsgBox(Local.GetValue("facts_versions.msg_starting_period"))
             Return False
         End If
 
         If Controller.IsRatesVersionValid(m_exchangeRatesVersionVTreeviewbox.TreeView.SelectedNode.Value) = False Then
-            MsgBox(m_exchangeRatesVersionVTreeviewbox.TreeView.SelectedNode.Text & " is a folder and connot be set as the Exchange Rates version.")
+            MsgBox(m_exchangeRatesVersionVTreeviewbox.TreeView.SelectedNode.Text & Local.GetValue("facts_versions.msg_cannot_use_exchange_rates_folder"))
             Return False
         End If
 
         If Controller.IsFactsVersionValid(m_factsVersionVTreeviewbox.TreeView.SelectedNode.Value) = False Then
-            MsgBox(m_factsVersionVTreeviewbox.TreeView.SelectedNode.Text & "is a folder and cannot be set as the Economic Indicators version.")
+            MsgBox(m_factsVersionVTreeviewbox.TreeView.SelectedNode.Text & Local.GetValue("facts_versions.msg_cannot_use_global_fact_folder"))
             Return False
         End If
 
         If Controller.IsRatesVersionCompatibleWithPeriods(DateSerial(StartingPeriodNUD.Value, 12, 31).ToOADate(), NbPeriodsNUD.Value, m_exchangeRatesVersionVTreeviewbox.TreeView.SelectedNode.Value) = False Then
-            MsgBox("This Exchange Rates Version is not compatible with the Periods Configuration.")
+            MsgBox(Local.GetValue("facts_versions.msg_rates_version_mismatch"))
             Return False
         End If
 
         If Controller.IsFactVersionCompatibleWithPeriods(DateSerial(StartingPeriodNUD.Value, 12, 31).ToOADate(), NbPeriodsNUD.Value, m_factsVersionVTreeviewbox.TreeView.SelectedNode.Value) = False Then
-            MsgBox("This Fact Version is not compatible with the Periods Configuration.")
+            MsgBox(Local.GetValue("facts_versions.msg_fact_version_mismatch"))
             Return False
         End If
 

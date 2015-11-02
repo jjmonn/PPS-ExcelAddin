@@ -168,7 +168,7 @@ Friend Class VersionsControl
                 LockedDateT.Text = version.LockDate
             Else
                 lockedCB.Checked = False
-                LockedDateT.Text = "Version not locked"
+                LockedDateT.Text = Local.GetValue("facts_versions.version_not_locked")
             End If
         End If
 
@@ -183,7 +183,7 @@ Friend Class VersionsControl
                                                      "Version deleting confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
             If confirm = DialogResult.Yes Then
                 Controller.DeleteVersions(current_node)
-                MsgBox("The version has successfully been deleted")
+                MsgBox(Local.GetValue("facts_versions.msg_delete_successful"))
             End If
         End If
 
@@ -373,7 +373,7 @@ Friend Class VersionsControl
 
             ' Not folder Control
             If Controller.IsRatesVersionValid(rates_version_id) = False Then
-                MsgBox(m_exchangeRatesVersionVTreeviewbox.TreeView.SelectedNode.Text & " is a folder.")
+                MsgBox(m_exchangeRatesVersionVTreeviewbox.TreeView.SelectedNode.Text & Local.GetValue("facts_versions.msg_is_folder"))
                 GoTo RevertToFormerValue
             End If
 
@@ -381,7 +381,7 @@ Friend Class VersionsControl
             If Controller.IsRatesVersionCompatibleWithPeriods(StartPeriodTB.ValueMember, NBPeriodsTB.Text, rates_version_id) Then
                 Controller.UpdateRatesVersion_id(version_id, rates_version_id)
             Else
-                MsgBox("This Exchange Rates Version is not compatible with the Periods Configuration.")
+                MsgBox(Local.GetValue("facts_versions.msg_rates_version_mismatch"))
                 GoTo RevertToFormerValue
             End If
         End If
@@ -407,7 +407,7 @@ RevertToFormerValue:
 
             ' Not folder Control
             If Controller.IsFactsVersionValid(fact_version_id) = False Then
-                MsgBox(m_factsVersionVTreeviewbox.TreeView.SelectedNode.Text & " is a folder.")
+                MsgBox(m_factsVersionVTreeviewbox.TreeView.SelectedNode.Text & Local.GetValue("facts_versions.msg_is_folder"))
                 GoTo RevertToFormerValue
             End If
 
@@ -415,7 +415,7 @@ RevertToFormerValue:
             If Controller.IsFactVersionCompatibleWithPeriods(StartPeriodTB.ValueMember, NBPeriodsTB.Text, fact_version_id) Then
                 Controller.UpdateFactVersion_id(version_id, fact_version_id)
             Else
-                MsgBox("This Fact Version is not compatible with the Periods Configuration.")
+                MsgBox(Local.GetValue("facts_versions.msg_fact_version_mismatch"))
                 GoTo RevertToFormerValue
             End If
         End If
@@ -453,7 +453,7 @@ RevertToFormerValue:
 
     Private Sub new_folder_bt_Click(sender As Object, e As EventArgs) Handles new_folder_bt.Click, NewFolderMenuBT.Click
 
-        Dim name = InputBox("Please enter the new Folder Name")
+        Dim name = InputBox(Local.GetValue("facts_versions.msg_folder_name"))
         Dim version As New Version
         If name <> "" Then
             If Controller.IsNameValid(name) = True Then
@@ -465,7 +465,7 @@ RevertToFormerValue:
                 End If
                 Controller.CreateVersion(version)
             Else
-                MsgBox("Invalid Name.")
+                MsgBox(Local.GetValue("facts_versions.invalid_name"))
             End If
         End If
 
@@ -480,17 +480,17 @@ RevertToFormerValue:
     Private Sub rename_bt_Click(sender As Object, e As EventArgs) Handles rename_bt.Click, RenameMenuBT.Click
 
         If Not current_node Is Nothing Then
-            Dim name As String = InputBox("Enter the new Name: ")
+            Dim name As String = InputBox(Local.GetValue("facts_versions.msg_new_version_name"))
             If name <> "" Then
                 If Controller.IsNameValid(name) Then
                     Controller.UpdateName(current_node.Value, name)
                     current_node.Text = name
                 Else
-                    MsgBox("This Name is not valid. Either it already exists or contains forbidden characters. Please Try with another Name.")
+                    MsgBox(Local.GetValue("facts_versions.msg_invalid_name"))
                 End If
             End If
         Else
-            MsgBox("Please select a Version or a Folder.")
+            MsgBox(Local.GetValue("facts_versions.msg_select_version_or_folder"))
         End If
 
     End Sub

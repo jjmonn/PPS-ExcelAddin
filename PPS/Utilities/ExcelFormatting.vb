@@ -45,10 +45,10 @@ Friend Class ExcelFormatting
         Dim l_currency As Currency = GlobalVariables.Currencies.GetValue(currency)
         If l_currency Is Nothing Then Exit Sub
         Dim formatsDictionary As New Dictionary(Of String, Formats.FinancialBIFormat)
-        formatsDictionary.Add("t", Formats.GetFormat("Title"))
-        formatsDictionary.Add("i", Formats.GetFormat("Important"))
-        formatsDictionary.Add("n", Formats.GetFormat("Normal"))
-        formatsDictionary.Add("d", Formats.GetFormat("Detail"))
+        formatsDictionary.Add("t", Formats.GetFormat("t"))
+        formatsDictionary.Add("i", Formats.GetFormat("i"))
+        formatsDictionary.Add("n", Formats.GetFormat("n"))
+        formatsDictionary.Add("d", Formats.GetFormat("d"))
 
         Dim formatCode As String
         For Each row As Excel.Range In inputRange.Rows

@@ -10,7 +10,7 @@
 ' Known bugs :
 '
 '
-' Last modified: 15/10/2015
+' Last modified: 22/10/2015
 ' Author: Julien Monnereau
 
 
@@ -25,7 +25,6 @@ Class AxisFilterStructView
 
 #Region "Instances"
 
-    Private m_newFilterUI As NewFilterUI
     Private m_controller As AxisFiltersController
     Private m_filtersTV As vTreeView
     Private m_axisId As Int32
@@ -48,7 +47,6 @@ Class AxisFilterStructView
         VPanel2.Content.Controls.Add(p_axisFiltersTV)
         p_axisFiltersTV.Dock = DockStyle.Fill
         m_controller = p_controller
-        m_newFilterUI = New NewFilterUI(p_controller, p_filtersNode)
         m_filtersTV.ContextMenuStrip = m_structureTreeviewRightClickMenu
 
         AddHandler m_filtersTV.KeyDown, AddressOf FiltersTV_KeyDown
@@ -120,16 +118,16 @@ Class AxisFilterStructView
     Private Sub RenameMenuBT_Click(sender As Object, e As EventArgs) Handles m_renameButton.Click
         If Not m_filtersTV.SelectedNode Is Nothing Then
             Dim current_node As vTreeNode = m_filtersTV.SelectedNode
-            Dim name = InputBox("Please enter the new Category Name:")
+            Dim name = InputBox(Local.GetValue("filters.msg_new_category_name"))
             If name <> "" Then
                 If m_controller.IsAllowedFilterName(name) Then
                     m_controller.UpdateFilterName(current_node.Value, name)
                 Else
-                    MsgBox("This name is already used or contains forbiden characters.")
+                    MsgBox(Local.GetValue("filters.msg_name_used"))
                 End If
             End If
         Else
-            MsgBox("A Category must be selected in order ot Add a Value.")
+            MsgBox(Local.GetValue("filters.msg_select_category"))
         End If
     End Sub
 
@@ -202,7 +200,6 @@ Class AxisFilterStructView
 #End Region
 
 
-    Private Sub AxisFilterStructView_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 
-    End Sub
+
 End Class

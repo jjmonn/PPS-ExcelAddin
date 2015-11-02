@@ -89,7 +89,7 @@ Partial Class NewDataVersionUI
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(66, 13)
         Me.Label3.TabIndex = 30
-        Me.Label3.Text = "Fact Version"
+        Me.Label3.Text = Local.GetValue("facts_versions.fact_version")
         '
         'Label2
         '
@@ -99,7 +99,7 @@ Partial Class NewDataVersionUI
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(124, 13)
         Me.Label2.TabIndex = 28
-        Me.Label2.Text = "Exchange Rates Version"
+        Me.Label2.Text = Local.GetValue("facts_versions.exchange_rates_version")
         '
         'Label1
         '
@@ -109,7 +109,7 @@ Partial Class NewDataVersionUI
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(86, 13)
         Me.Label1.TabIndex = 25
-        Me.Label1.Text = "Number of Years"
+        Me.Label1.Text = Local.GetValue("facts_versions.nb_years")
         '
         'CreateCopyBT
         '
@@ -123,7 +123,7 @@ Partial Class NewDataVersionUI
         Me.CreateCopyBT.Name = "CreateCopyBT"
         Me.CreateCopyBT.Size = New System.Drawing.Size(218, 30)
         Me.CreateCopyBT.TabIndex = 24
-        Me.CreateCopyBT.Text = "Create Copy of"
+        Me.CreateCopyBT.Text = Local.GetValue("facts_versions.copy_from")
         Me.CreateCopyBT.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         Me.CreateCopyBT.UseVisualStyleBackColor = True
         '
@@ -143,7 +143,7 @@ Partial Class NewDataVersionUI
         Me.Label11.Name = "Label11"
         Me.Label11.Size = New System.Drawing.Size(68, 13)
         Me.Label11.TabIndex = 17
-        Me.Label11.Text = "Starting Year"
+        Me.Label11.Text = Local.GetValue("facts_versions.starting_period")
         '
         'Label10
         '
@@ -153,7 +153,7 @@ Partial Class NewDataVersionUI
         Me.Label10.Name = "Label10"
         Me.Label10.Size = New System.Drawing.Size(192, 13)
         Me.Label10.TabIndex = 15
-        Me.Label10.Text = "Periods configuration (Yearly / Monthly)"
+        Me.Label10.Text = Local.GetValue("facts_versions.period_config")
         '
         'Label4
         '
@@ -164,7 +164,7 @@ Partial Class NewDataVersionUI
         Me.Label4.Name = "Label4"
         Me.Label4.Size = New System.Drawing.Size(85, 13)
         Me.Label4.TabIndex = 7
-        Me.Label4.Text = "Version Name"
+        Me.Label4.Text = Local.GetValue("facts_versions.version_name")
         '
         'ReferenceTB
         '
@@ -269,7 +269,7 @@ Partial Class NewDataVersionUI
         Me.CancelBT.Name = "CancelBT"
         Me.CancelBT.Size = New System.Drawing.Size(92, 30)
         Me.CancelBT.TabIndex = 23
-        Me.CancelBT.Text = "Cancel"
+        Me.CancelBT.Text = Local.GetValue("general.cancel")
         Me.CancelBT.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         Me.CancelBT.UseVisualStyleBackColor = True
         '
@@ -282,7 +282,7 @@ Partial Class NewDataVersionUI
         Me.CreateVersionBT.Name = "CreateVersionBT"
         Me.CreateVersionBT.Size = New System.Drawing.Size(92, 30)
         Me.CreateVersionBT.TabIndex = 22
-        Me.CreateVersionBT.Text = "Create"
+        Me.CreateVersionBT.Text = Local.GetValue("general.create")
         Me.CreateVersionBT.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         Me.CreateVersionBT.UseVisualStyleBackColor = True
         '
@@ -297,7 +297,7 @@ Partial Class NewDataVersionUI
         Me.Controls.Add(Me.TableLayoutPanel2)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Name = "NewDataVersionUI"
-        Me.Text = "New Version"
+        Me.Text = Local.GetValue("facts_versions.version_new")
         Me.TableLayoutPanel2.ResumeLayout(False)
         Me.TableLayoutPanel2.PerformLayout()
         CType(Me.NbPeriodsNUD, System.ComponentModel.ISupportInitialize).EndInit()

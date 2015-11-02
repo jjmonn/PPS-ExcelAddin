@@ -11,7 +11,7 @@
 '       -
 '        
 '
-' Last modified: 02/09/2015
+' Last modified: 22/10/2015
 ' Author: Julien Monnereau
 
 
@@ -286,7 +286,7 @@ Friend Class AccountsView
         If Not m_currentNode Is Nothing Then
             m_controller.DisplayNewAccountView(m_currentNode)
         Else
-            MsgBox("Please Select Parent Account first.")
+            MsgBox(Local.GetValue("accounts_edition.msg_select_account"))
         End If
 
     End Sub
@@ -295,7 +295,8 @@ Friend Class AccountsView
                                                                               AddCategoryToolStripMenuItem.Click
 
         formulaEdit.Checked = False
-        Dim newCategoryName As String = InputBox("Name of the New Tab: ", "Account Tab Creation", "")
+        Dim newCategoryName As String = InputBox(Local.GetValue("accounts_edition.msg_new_tab_name"), _
+                                                 Local.GetValue("accounts_edition.title_new_tab_name"), "")
         If newCategoryName <> "" Then
 
             If m_controller.AccountNameCheck(newCategoryName) = True Then
@@ -319,8 +320,8 @@ Friend Class AccountsView
 
         Dim formulastr As String = m_formulaTextBox.Text
         If formulastr = "" Then
-            Dim confirm2 As Integer = MessageBox.Show("The formula is empty, do you want to save it?", _
-                                                      "Formula validation", _
+            Dim confirm2 As Integer = MessageBox.Show(Local.GetValue("accounts_edition.msg_formula_empty"), _
+                                                      Local.GetValue("accounts_edition.title_formula_validation_confirmation"), _
                                                       MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question)
             If confirm2 = DialogResult.Yes Then
                 GoTo TokensCheck
@@ -338,7 +339,7 @@ TokensCheck:
             For Each errorItem As String In errorsList
                 errorsStr = errorsStr & errorItem & Chr(13)
             Next
-            MsgBox("The following items are not mapped accounts or invalid items in a formula: " + Chr(13) & errorsStr)
+            MsgBox(Local.GetValue("accounts_edition.msg_items_not_mapped") + Chr(13) & errorsStr)
             Exit Sub
         Else
             GoTo DependanciesCheck
@@ -352,8 +353,8 @@ DependanciesCheck:
         End If
 
 SubmitFormula:
-        Dim confirm As Integer = MessageBox.Show("You are about to update the formula for Account: " + Chr(13) + Name_TB.Text + Chr(13) + "Do you confirm?", _
-                                                 "DataBase submission confirmation", _
+        Dim confirm As Integer = MessageBox.Show(Local.GetValue("accounts_edition.msg_formula_edition_for_account") + Chr(13) + Name_TB.Text + Chr(13) + Local.GetValue("accounts_edition.msg_account_deletion2"), _
+                                                 Local.GetValue("accounts_edition.title_formula_validation_confirmation"), _
                                                   MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question)
         If confirm = DialogResult.Yes Then
             If Not m_controller.GetAccount(Name_TB.Text) Is Nothing Then
@@ -379,21 +380,22 @@ SubmitFormula:
                 For Each accountName In dependantAccountslist
                     listStr = listStr & " - " & accountName & Chr(13)
                 Next
-                MsgBox("The following Accounts formula are dependant on some accounts you want to delete: " & Chr(13) & _
+                MsgBox(Local.GetValue("accounts_edition.msg_dependant_accounts") & Chr(13) & _
                        listStr & Chr(13) & _
-                       "Those formulas must first be changed before the Selected Accounts can be deleted.")
+                       Local.GetValue("accounts_edition.msg_formula_to_be_changed"))
                 Exit Sub
             End If
 
-            Dim confirm As GeneralUtilities.CheckResult = GeneralUtilities.AskPasswordConfirmation("Careful, you are about to delete account " + Chr(13) + Chr(10) + Name_TB.Text + Chr(13) + Chr(10) + Chr(13) + Chr(10) + "Do you confirm?" + Chr(13) + Chr(10) + _
-                                                     "This Account and all its Sub Accounts will be deleted.", _
-                                                     "Account deletion confirmation")
+            Dim confirm As GeneralUtilities.CheckResult = GeneralUtilities.AskPasswordConfirmation(Local.GetValue("accounts_edition.msg_account_deletion1") + Chr(13) + Chr(10) + Name_TB.Text + Chr(13) + Chr(10) + Chr(13) + Chr(10) + _
+                                                                                                   Local.GetValue("accounts_edition.msg_account_deletion2") + Chr(13) + Chr(10) + _
+                                                                                                   Local.GetValue("accounts_edition.msg_account_deletion3"), _
+                                                                                                   Local.GetValue("accounts_edition.msg_account_deletion_confirmation"))
             If confirm = GeneralUtilities.CheckResult.Success Then
                 m_controller.DeleteAccount(CInt(m_currentNode.Name))
                 m_currentNode.Remove()
                 m_currentNode = Nothing
             ElseIf confirm = GeneralUtilities.CheckResult.Fail Then
-                MessageBox.Show("Password incorrect")
+                MessageBox.Show(Local.GetValue("accounts_edition.msg_incorrect_password"))
             End If
         End If
 
@@ -402,17 +404,17 @@ SubmitFormula:
     Private Sub BDropToWS_Click(sender As Object, e As EventArgs) Handles DropAllAccountsHierarchyToExcelToolStripMenuItem.Click, _
                                                                           DropHierarchyToExcelToolStripMenuItem.Click
 
-        ' !! to be reimplemented ? !!
+        ' !! to be reimplemented ? !! priority normal
         formulaEdit.Checked = False
         Dim ActiveWS As Excel.Worksheet = GlobalVariables.APPS.ActiveSheet
         Dim RNG As Excel.Range = GlobalVariables.APPS.Application.ActiveCell
         Dim Response As MsgBoxResult
 
         If IsNothing(RNG) Then
-            MsgBox("A destination cell must be selected in order to drop the Accounts on the Worksheet")
+            MsgBox(Local.GetValue("accounts_edition.msg_destination_cell_not_valid"))
             Exit Sub
         Else
-            Response = MsgBox("The Accounts will be dropped into cell" + RNG.Address, MsgBoxStyle.OkCancel)
+            Response = MsgBox(Local.GetValue("accounts_edition.msg_accounts_drop") + RNG.Address, MsgBoxStyle.OkCancel)
             If Response = MsgBoxResult.Ok Then
                 ' Launch Accounts Drop
                 WorksheetWrittingFunctions.WriteAccountsFromTreeView(m_accountTV, RNG)
@@ -603,12 +605,11 @@ SubmitFormula:
                 If m_controller.FTypesToBeTested.Contains(l_account.FormulaType) Then
                     formulaEdit.Checked = True
                 Else
-                    MsgBox("This Account has no editable Formula. Please change the Formula Type or select another accounts " _
-                           + "in order to edit the formula.")
+                    MsgBox(Local.GetValue("accounts_edition.msg_formula_not_editable"))
                     FormulaTypeComboBox.Focus()
                 End If
             Else
-                MsgBox("An Accounts must be selected in order to edit its formula.")
+                MsgBox(Local.GetValue("accounts_edition.msg_select_account"))
                 formulaEdit.Checked = False
                 m_accountTV.Focus()
                 m_accountTV.SelectedNode = m_accountTV.Nodes(0)
@@ -620,8 +621,8 @@ SubmitFormula:
     Private Sub formulaEdit_Click(sender As Object, e As EventArgs) Handles formulaEdit.Click
 
         If formulaEdit.Checked = False Then
-            Dim confirm As Integer = MessageBox.Show("Do you want to save the formula?", _
-                                                     "Formula Edition Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+            Dim confirm As Integer = MessageBox.Show(Local.GetValue("accounts_edition.msg_formula_validation_confirmation"), _
+                                                     Local.GetValue("accounts_edition.title_formula_validation_confirmation"), MessageBoxButtons.YesNo, MessageBoxIcon.Question)
             If confirm = DialogResult.Yes Then
                 Submit_Formula_Click(sender, e)
             Else
@@ -638,8 +639,8 @@ SubmitFormula:
 
         Select Case e.KeyCode
             Case Keys.Escape
-                Dim confirm As Integer = MessageBox.Show("You are about to ext the Formula Editor. Do you want to save the formula?", _
-                                         "Formula Edition Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+                Dim confirm As Integer = MessageBox.Show(Local.GetValue("accounts_edition.msg_formula_validation_confirmation"), _
+                                                         Local.GetValue("accounts_edition.title_formula_validation_confirmation"), MessageBoxButtons.YesNo, MessageBoxIcon.Question)
                 If confirm = DialogResult.Yes Then
                     Submit_Formula_Click(sender, e)
                 Else
@@ -744,8 +745,8 @@ SubmitFormula:
         AndAlso m_isDisplayingAttributes = False _
         AndAlso m_isRevertingFType = False Then
             If m_controller.FormulaTypeChangeImpliesFactsDeletion(CInt(m_currentNode.Name), li.Value) = True Then
-                Dim confirm As GeneralUtilities.CheckResult = GeneralUtilities.AskPasswordConfirmation("Changing the Formula Type of this account may imply the loss of inputs, do you confirm you want to convert this account into a formula?", _
-                                                         "Formula Type Upadte Confirmation")
+                Dim confirm As GeneralUtilities.CheckResult = GeneralUtilities.AskPasswordConfirmation(Local.GetValue("accounts_edition.msg_password_required"), _
+                                                                                                       Local.GetValue("accounts_edition.title_formula_type_validation_confirmation"))
                 If confirm = GeneralUtilities.CheckResult.Success Then
                     GoTo UdpateFormulaType
                 Else
@@ -756,7 +757,7 @@ SubmitFormula:
                         FormulaTypeComboBox.SelectedValue = l_account.FormulaType
                     End If
                     m_isRevertingFType = False
-                    If confirm = GeneralUtilities.CheckResult.Fail Then MsgBox("Password confirmation failed")
+                    If confirm = GeneralUtilities.CheckResult.Fail Then MsgBox(Local.GetValue("accounts_edition.msg_password_confirmation_failed"))
                     Exit Sub
                 End If
             Else

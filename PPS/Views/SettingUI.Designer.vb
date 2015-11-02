@@ -97,7 +97,7 @@ Partial Class SettingUI
         Me.TabPage1.Padding = New System.Windows.Forms.Padding(3)
         Me.TabPage1.Size = New System.Drawing.Size(700, 464)
         Me.TabPage1.TabIndex = 0
-        Me.TabPage1.Text = "Connection"
+        Me.TabPage1.Text = Local.GetValue("connection.connection")
         Me.TabPage1.UseVisualStyleBackColor = True
         '
         'm_saveButton
@@ -112,7 +112,7 @@ Partial Class SettingUI
         Me.m_saveButton.RoundedCornersMask = CType(15, Byte)
         Me.m_saveButton.Size = New System.Drawing.Size(100, 30)
         Me.m_saveButton.TabIndex = 20
-        Me.m_saveButton.Text = "Save"
+        Me.m_saveButton.Text = Local.GetValue("general.save")
         Me.m_saveButton.UseVisualStyleBackColor = False
         Me.m_saveButton.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
         '
@@ -144,7 +144,7 @@ Partial Class SettingUI
         Me.Label4.Name = "Label4"
         Me.Label4.Size = New System.Drawing.Size(26, 13)
         Me.Label4.TabIndex = 15
-        Me.Label4.Text = "Port"
+        Me.Label4.Text = Local.GetValue("settings.port_number")
         '
         'ServerAddressTB
         '
@@ -160,7 +160,7 @@ Partial Class SettingUI
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(38, 13)
         Me.Label3.TabIndex = 4
-        Me.Label3.Text = "Server"
+        Me.Label3.Text = Local.GetValue("settings.server_address")
         '
         'IDTB
         '
@@ -176,7 +176,7 @@ Partial Class SettingUI
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(43, 13)
         Me.Label1.TabIndex = 0
-        Me.Label1.Text = "User ID"
+        Me.Label1.Text = Local.GetValue("connection.user_id")
         '
         'TabPage2
         '
@@ -186,7 +186,7 @@ Partial Class SettingUI
         Me.TabPage2.Padding = New System.Windows.Forms.Padding(3)
         Me.TabPage2.Size = New System.Drawing.Size(700, 464)
         Me.TabPage2.TabIndex = 1
-        Me.TabPage2.Text = "Display"
+        Me.TabPage2.Text = Local.GetValue("settings.display_options")
         Me.TabPage2.UseVisualStyleBackColor = True
         '
         'VGroupBox1
@@ -201,7 +201,7 @@ Partial Class SettingUI
         Me.VGroupBox1.Size = New System.Drawing.Size(670, 218)
         Me.VGroupBox1.TabIndex = 1
         Me.VGroupBox1.TabStop = False
-        Me.VGroupBox1.Text = "Reports Formats"
+        Me.VGroupBox1.Text = Local.GetValue("settings.report_formats")
         Me.VGroupBox1.UseThemeBorderColor = True
         Me.VGroupBox1.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
         '
@@ -283,7 +283,7 @@ Partial Class SettingUI
         Me.TabPage3.Padding = New System.Windows.Forms.Padding(3)
         Me.TabPage3.Size = New System.Drawing.Size(700, 464)
         Me.TabPage3.TabIndex = 2
-        Me.TabPage3.Text = "Preferences"
+        Me.TabPage3.Text = Local.GetValue("settings.preferences")
         Me.TabPage3.UseVisualStyleBackColor = True
         '
         'CurrenciesCombobox
@@ -316,7 +316,7 @@ Partial Class SettingUI
         Me.VLabel1.Name = "VLabel1"
         Me.VLabel1.Size = New System.Drawing.Size(149, 25)
         Me.VLabel1.TabIndex = 0
-        Me.VLabel1.Text = "Consolidation Currency"
+        Me.VLabel1.Text = Local.GetValue("settings.consolidation_currency")
         Me.VLabel1.TextAlignment = System.Drawing.ContentAlignment.TopLeft
         Me.VLabel1.UseMnemonics = True
         Me.VLabel1.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
@@ -343,7 +343,7 @@ Partial Class SettingUI
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Name = "SettingUI"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = "Settings"
+        Me.Text = Local.GetValue("settings.settings")
         Me.Panel1.ResumeLayout(False)
         Me.TabControl1.ResumeLayout(False)
         Me.TabPage1.ResumeLayout(False)

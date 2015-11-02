@@ -3,7 +3,7 @@
 ' User interface for the construction of PPSBI functions
 '
 ' 
-' Last modified: 10/09/2015 
+' Last modified: 24/10/2015 
 ' Author: Julien Monnereau
 
 
@@ -202,23 +202,23 @@ Friend Class PPSBI_UI
     Private Function CheckFormValidity() As Boolean
 
         If EntityTreeBox.TreeView.SelectedNode Is Nothing Then
-            MsgBox("Please select an Entity.")
+            MsgBox(Local.GetValue("ppsbi.entity_selection"))
             Return False
         End If
 
         If AccountTreeBox.TreeView.SelectedNode Is Nothing Then
-            MsgBox("Please select an Account.")
+            MsgBox(Local.GetValue("ppsbi.account_selection"))
             Return False
         End If
 
         If VersionTreeBox.TreeView.SelectedNode Is Nothing _
          Or GlobalVariables.Versions.IsVersionValid(VersionTreeBox.TreeView.SelectedNode.Value) = False Then
-            MsgBox("Invalid Version (Folder) or no Version Selected.")
+            MsgBox(Local.GetValue("ppsbi.invalid_version"))
             Return False
         End If
 
         If PeriodTreeBox.TreeView.SelectedNode Is Nothing Then
-            MsgBox("Please select a Period (A version must be selected in order to select the period).")
+            MsgBox(Local.GetValue("ppsbi.msg_period_selection"))
             Return False
         End If
 

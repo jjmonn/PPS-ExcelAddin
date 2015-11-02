@@ -60,7 +60,7 @@ Partial Class NewAccountUI
         Me.CancelBT.Name = "CancelBT"
         Me.CancelBT.Size = New System.Drawing.Size(92, 25)
         Me.CancelBT.TabIndex = 10
-        Me.CancelBT.Text = "Cancel"
+        Me.CancelBT.Text = Local.GetValue("general.cancel")
         Me.CancelBT.UseVisualStyleBackColor = True
         '
         'ButtonsIL
@@ -81,7 +81,7 @@ Partial Class NewAccountUI
         Me.CreateAccountBT.Name = "CreateAccountBT"
         Me.CreateAccountBT.Size = New System.Drawing.Size(92, 25)
         Me.CreateAccountBT.TabIndex = 9
-        Me.CreateAccountBT.Text = "Create"
+        Me.CreateAccountBT.Text = Local.GetValue("general.create")
         Me.CreateAccountBT.UseVisualStyleBackColor = True
         '
         'ButtonIcons
@@ -145,7 +145,7 @@ Partial Class NewAccountUI
         Me.Label4.Name = "Label4"
         Me.Label4.Size = New System.Drawing.Size(85, 13)
         Me.Label4.TabIndex = 31
-        Me.Label4.Text = "Account's Name"
+        Me.Label4.Text = Local.GetValue("accounts_edition.account_name")
         '
         'Label2
         '
@@ -154,7 +154,7 @@ Partial Class NewAccountUI
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(81, 13)
         Me.Label2.TabIndex = 30
-        Me.Label2.Text = "Parent Account"
+        Me.Label2.Text = Local.GetValue("accounts_edition.account_parent")
         '
         'Label6
         '
@@ -163,7 +163,7 @@ Partial Class NewAccountUI
         Me.Label6.Name = "Label6"
         Me.Label6.Size = New System.Drawing.Size(76, 13)
         Me.Label6.TabIndex = 32
-        Me.Label6.Text = "Formula/ Input"
+        Me.Label6.Text = Local.GetValue("accounts_edition.formula_type")
         '
         'Label3
         '
@@ -172,7 +172,7 @@ Partial Class NewAccountUI
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(89, 13)
         Me.Label3.TabIndex = 33
-        Me.Label3.Text = "Account's Format"
+        Me.Label3.Text = Local.GetValue("accounts_edition.account_format")
         '
         'GroupBox1
         '
@@ -192,7 +192,7 @@ Partial Class NewAccountUI
         Me.recompute_RB.Name = "recompute_RB"
         Me.recompute_RB.Size = New System.Drawing.Size(97, 17)
         Me.recompute_RB.TabIndex = 5
-        Me.recompute_RB.Text = "Recomputation"
+        Me.recompute_RB.Text = Local.GetValue("accounts_edition.recomputation")
         Me.recompute_RB.UseVisualStyleBackColor = True
         '
         'aggregation_RB
@@ -204,7 +204,7 @@ Partial Class NewAccountUI
         Me.aggregation_RB.Size = New System.Drawing.Size(82, 17)
         Me.aggregation_RB.TabIndex = 4
         Me.aggregation_RB.TabStop = True
-        Me.aggregation_RB.Text = "Aggregation"
+        Me.aggregation_RB.Text = Local.GetValue("accounts_edition.aggregation")
         Me.aggregation_RB.UseVisualStyleBackColor = True
         '
         'Label7
@@ -214,7 +214,7 @@ Partial Class NewAccountUI
         Me.Label7.Name = "Label7"
         Me.Label7.Size = New System.Drawing.Size(104, 13)
         Me.Label7.TabIndex = 34
-        Me.Label7.Text = "Consolidation Option"
+        Me.Label7.Text = Local.GetValue("accounts_edition.consolidation_option")
         '
         'GroupBox2
         '
@@ -234,7 +234,7 @@ Partial Class NewAccountUI
         Me.bs_item_RB.Name = "bs_item_RB"
         Me.bs_item_RB.Size = New System.Drawing.Size(131, 17)
         Me.bs_item_RB.TabIndex = 8
-        Me.bs_item_RB.Text = "End of Period FX Rate"
+        Me.bs_item_RB.Text = Local.GetValue("accounts_edition.end_of_period_rate")
         Me.bs_item_RB.UseVisualStyleBackColor = True
         '
         'flux_RB
@@ -246,7 +246,7 @@ Partial Class NewAccountUI
         Me.flux_RB.Size = New System.Drawing.Size(107, 17)
         Me.flux_RB.TabIndex = 6
         Me.flux_RB.TabStop = True
-        Me.flux_RB.Text = "Average FX Rate"
+        Me.flux_RB.Text = Local.GetValue("accounts_edition.average_rate")
         Me.flux_RB.UseVisualStyleBackColor = True
         '
         'Label8
@@ -256,7 +256,7 @@ Partial Class NewAccountUI
         Me.Label8.Name = "Label8"
         Me.Label8.Size = New System.Drawing.Size(105, 13)
         Me.Label8.TabIndex = 35
-        Me.Label8.Text = "Currency Conversion"
+        Me.Label8.Text = Local.GetValue("accounts_edition.currencies_conversion")
         '
         'ParentTVPanel
         '
@@ -337,7 +337,7 @@ Partial Class NewAccountUI
         Me.Controls.Add(Me.CreateAccountBT)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Name = "NewAccountUI"
-        Me.Text = "New Account"
+        Me.Text = Local.GetValue("accounts_edition.title_new_account")
         Me.TableLayoutPanel1.ResumeLayout(False)
         Me.TableLayoutPanel1.PerformLayout()
         Me.GroupBox1.ResumeLayout(False)

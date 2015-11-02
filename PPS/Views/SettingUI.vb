@@ -10,7 +10,7 @@
 '
 '
 '
-' Last modified: 14/10/2015
+' Last modified: 24/10/2015
 ' Author: Julien Monnereau
 
 
@@ -143,12 +143,12 @@ Friend Class SettingUI
 
         Dim TBEditor As New TextBoxEditor
 
-        FormatsDGV.ColumnsHierarchy.Items.Add("Format Preview")
-        Dim col1 As HierarchyItem = FormatsDGV.ColumnsHierarchy.Items.Add("Text Color")
-        Dim col2 As HierarchyItem = FormatsDGV.ColumnsHierarchy.Items.Add("Background Color")
-        FormatsDGV.ColumnsHierarchy.Items.Add("Bold")
-        FormatsDGV.ColumnsHierarchy.Items.Add("Italic")
-        FormatsDGV.ColumnsHierarchy.Items.Add("Border")
+        FormatsDGV.ColumnsHierarchy.Items.Add(Local.GetValue("settings.format_preview"))
+        Dim col1 As HierarchyItem = FormatsDGV.ColumnsHierarchy.Items.Add(Local.GetValue("settings.text_color"))
+        Dim col2 As HierarchyItem = FormatsDGV.ColumnsHierarchy.Items.Add(Local.GetValue("settings.background_color"))
+        FormatsDGV.ColumnsHierarchy.Items.Add(Local.GetValue("settings.bold"))
+        FormatsDGV.ColumnsHierarchy.Items.Add(Local.GetValue("settings.italic"))
+        FormatsDGV.ColumnsHierarchy.Items.Add(Local.GetValue("settings.border"))
 
         col1.CellsEditor = TBEditor
         col2.CellsEditor = TBEditor
@@ -164,33 +164,35 @@ Friend Class SettingUI
 
         isFillingDGV = True
         Dim checkBoxEditor As New CheckBoxEditor
-        CreateFormatRow("Title", checkBoxEditor)
-        CreateFormatRow("Important", checkBoxEditor)
-        CreateFormatRow("Normal", checkBoxEditor)
-        CreateFormatRow("Detail", checkBoxEditor)
+        CreateFormatRow(Local.GetValue("settings.title"), "t", checkBoxEditor)
+        CreateFormatRow(Local.GetValue("settings.important"), "i", checkBoxEditor)
+        CreateFormatRow(Local.GetValue("settings.normal"), "n", checkBoxEditor)
+        CreateFormatRow(Local.GetValue("settings.detail"), "d", checkBoxEditor)
         AddHandler checkBoxEditor.CheckedChanged, AddressOf dataGridView_Checkedchanged
         isFillingDGV = False
 
     End Sub
 
-    Private Sub CreateFormatRow(ByRef formatName As String, _
+    Private Sub CreateFormatRow(ByRef p_formatName As String, _
+                                ByRef p_formatId As String, _
                                 ByRef checkBoxEditor As CheckBoxEditor)
 
-        Dim row As HierarchyItem = FormatsDGV.RowsHierarchy.Items.Add(formatName)
-        FormatsDGV.CellsArea.SetCellValue(row, FormatsDGV.ColumnsHierarchy.Items(0), formatName)
-        FormatsDGV.CellsArea.SetCellEditor(row, FormatsDGV.ColumnsHierarchy.Items(3), checkBoxEditor)
-        FormatsDGV.CellsArea.SetCellEditor(row, FormatsDGV.ColumnsHierarchy.Items(4), checkBoxEditor)
-        FormatsDGV.CellsArea.SetCellEditor(row, FormatsDGV.ColumnsHierarchy.Items(5), checkBoxEditor)
+        Dim row As HierarchyItem = FormatsDGV.RowsHierarchy.Items.Add(p_formatName)
+        row.ItemValue = p_formatId
+        FormatsDGV.CellsArea.SetCellValue(row, FormatsDGV.ColumnsHierarchy.Items(0), p_formatName)
+        FormatsDGV.CellsArea.SetCellEditor(row, FormatsDGV.ColumnsHierarchy.Items(3), CheckBoxEditor)
+        FormatsDGV.CellsArea.SetCellEditor(row, FormatsDGV.ColumnsHierarchy.Items(4), CheckBoxEditor)
+        FormatsDGV.CellsArea.SetCellEditor(row, FormatsDGV.ColumnsHierarchy.Items(5), CheckBoxEditor)
 
     End Sub
 
     Friend Sub FillFormatsDGV()
 
         isFillingDGV = True
-        FillRow(Formats.GetFormat("Title"), FormatsDGV.RowsHierarchy.Items(0))
-        FillRow(Formats.GetFormat("Important"), FormatsDGV.RowsHierarchy.Items(1))
-        FillRow(Formats.GetFormat("Normal"), FormatsDGV.RowsHierarchy.Items(2))
-        FillRow(Formats.GetFormat("Detail"), FormatsDGV.RowsHierarchy.Items(3))
+        FillRow(Formats.GetFormat("t"), FormatsDGV.RowsHierarchy.Items(0))
+        FillRow(Formats.GetFormat("i"), FormatsDGV.RowsHierarchy.Items(1))
+        FillRow(Formats.GetFormat("n"), FormatsDGV.RowsHierarchy.Items(2))
+        FillRow(Formats.GetFormat("d"), FormatsDGV.RowsHierarchy.Items(3))
         isFillingDGV = False
         DataGridViewsUtil.FormatDGVRowsHierarchy(FormatsDGV)
         FormatsDGV.ColumnsHierarchy.AutoStretchColumns = True
@@ -230,7 +232,7 @@ Friend Class SettingUI
         End If
 
         FormatPreview(row, format)
-      
+
     End Sub
 
     Friend Sub FormatPreview(ByVal row As HierarchyItem, ByVal format As Formats.FinancialBIFormat)
@@ -261,10 +263,10 @@ Friend Class SettingUI
                     If ColorDialog1.ShowDialog <> Windows.Forms.DialogResult.Cancel Then
                         DataGridViewsUtil.SetCellFillColor(currentFormatDGVcell, ColorDialog1.Color.ToArgb)
                         Select Case currentFormatDGVcell.RowItem.Caption
-                            Case "Title" : My.Settings.titleFontColor = ColorDialog1.Color
-                            Case "Important" : My.Settings.importantFontColor = ColorDialog1.Color
-                            Case "Normal" : My.Settings.normalFontColor = ColorDialog1.Color
-                            Case "Detail" : My.Settings.detailFontColor = ColorDialog1.Color
+                            Case "t" : My.Settings.titleFontColor = ColorDialog1.Color
+                            Case "i" : My.Settings.importantFontColor = ColorDialog1.Color
+                            Case "n" : My.Settings.normalFontColor = ColorDialog1.Color
+                            Case "d" : My.Settings.detailFontColor = ColorDialog1.Color
                         End Select
                         FormatsDGV.CloseEditor(False)
                     End If
@@ -272,15 +274,15 @@ Friend Class SettingUI
                     If ColorDialog1.ShowDialog <> Windows.Forms.DialogResult.Cancel Then
                         DataGridViewsUtil.SetCellFillColor(currentFormatDGVcell, ColorDialog1.Color.ToArgb)
                         Select Case currentFormatDGVcell.RowItem.Caption
-                            Case "Title" : My.Settings.titleBackColor = ColorDialog1.Color
-                            Case "Important" : My.Settings.importantBackColor = ColorDialog1.Color
-                            Case "Normal" : My.Settings.normalBackColor = ColorDialog1.Color
-                            Case "Detail" : My.Settings.detailBackColor = ColorDialog1.Color
+                            Case "t" : My.Settings.titleBackColor = ColorDialog1.Color
+                            Case "i" : My.Settings.importantBackColor = ColorDialog1.Color
+                            Case "n" : My.Settings.normalBackColor = ColorDialog1.Color
+                            Case "d" : My.Settings.detailBackColor = ColorDialog1.Color
                         End Select
                         FormatsDGV.CloseEditor(False)
                     End If
             End Select
-         End If
+        End If
         My.Settings.Save()
         FormatPreview(currentFormatDGVcell.RowItem, Formats.GetFormat(currentFormatDGVcell.RowItem.Caption))
 
@@ -292,28 +294,28 @@ Friend Class SettingUI
             Case 3
                 Dim checkBox As vCheckBox = TryCast(FormatsDGV.CellsArea.GetCellEditor(currentFormatDGVcell.RowItem, FormatsDGV.ColumnsHierarchy.Items(3)).Control, vCheckBox)
                 Select Case currentFormatDGVcell.RowItem.Caption
-                    Case "Title" : My.Settings.titleFontBold = checkBox.Checked
-                    Case "Important" : My.Settings.importantFontBold = checkBox.Checked
-                    Case "Normal" : My.Settings.normalFontBold = checkBox.Checked
-                    Case "Detail" : My.Settings.detailFontBold = checkBox.Checked
+                    Case "t" : My.Settings.titleFontBold = checkBox.Checked
+                    Case "i" : My.Settings.importantFontBold = checkBox.Checked
+                    Case "n" : My.Settings.normalFontBold = checkBox.Checked
+                    Case "d" : My.Settings.detailFontBold = checkBox.Checked
                 End Select
             Case 4
                 Dim checkBox As vCheckBox = TryCast(FormatsDGV.CellsArea.GetCellEditor(currentFormatDGVcell.RowItem, FormatsDGV.ColumnsHierarchy.Items(4)).Control, vCheckBox)
                 Select Case currentFormatDGVcell.RowItem.Caption
-                    Case "Title" : My.Settings.titleFontItalic = checkBox.Checked
-                    Case "Important" : My.Settings.importantFontItalic = checkBox.Checked
-                    Case "Normal" : My.Settings.normalFontItalic = checkBox.Checked
-                    Case "Detail" : My.Settings.detailFontItalic = checkBox.Checked
+                    Case "t" : My.Settings.titleFontItalic = checkBox.Checked
+                    Case "i" : My.Settings.importantFontItalic = checkBox.Checked
+                    Case "n" : My.Settings.normalFontItalic = checkBox.Checked
+                    Case "d" : My.Settings.detailFontItalic = checkBox.Checked
                 End Select
             Case 5
                 Dim checkBox As vCheckBox = TryCast(FormatsDGV.CellsArea.GetCellEditor(currentFormatDGVcell.RowItem, FormatsDGV.ColumnsHierarchy.Items(5)).Control, vCheckBox)
                 Select Case currentFormatDGVcell.RowItem.Caption
-                    Case "Title" : My.Settings.titleBordersPresent = checkBox.Checked
-                    Case "Important" : My.Settings.importantBordersPresent = checkBox.Checked
-                    Case "Normal" : My.Settings.normalBordersPresent = checkBox.Checked
-                    Case "Detail" : My.Settings.detailBordersPresent = checkBox.Checked
+                    Case "t" : My.Settings.titleBordersPresent = checkBox.Checked
+                    Case "i" : My.Settings.importantBordersPresent = checkBox.Checked
+                    Case "n" : My.Settings.normalBordersPresent = checkBox.Checked
+                    Case "d" : My.Settings.detailBordersPresent = checkBox.Checked
                 End Select
-       End Select
+        End Select
         My.Settings.Save()
         FormatPreview(currentFormatDGVcell.RowItem, Formats.GetFormat(currentFormatDGVcell.RowItem.Caption))
 
@@ -325,5 +327,5 @@ Friend Class SettingUI
 
 #End Region
 
-    
+
 End Class

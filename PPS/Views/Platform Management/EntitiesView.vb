@@ -8,7 +8,7 @@
 '
 '
 '
-' Last modified: 21/09/2015
+' Last modified: 22/10/2015
 ' Author: Julien Monnereau
 
 
@@ -178,10 +178,10 @@ Friend Class EntitiesView
     Private Sub RenameEntityButton_Click(sender As Object, e As EventArgs) Handles RenameEntityButton.Click
 
         If currentRowItem Is Nothing Then
-            MsgBox("An Entity must be selected.")
+            MsgBox(Local.GetValue("entities_edition.msg_selection"))
             Exit Sub
         End If
-        Dim newEntityName As String = InputBox("New Name: ", , currentRowItem.Caption)
+        Dim newEntityName As String = InputBox(Local.GetValue("entities_edition.msg_entity_name"), , currentRowItem.Caption)
         If newEntityName <> "" Then
             Controller.UpdateEntityName(currentRowItem.ItemValue, newEntityName)
         End If
@@ -231,16 +231,16 @@ Friend Class EntitiesView
     Private Sub DeleteEntity_cmd_Click(sender As Object, e As EventArgs) Handles DeleteEntityToolStripMenuItem.Click
 
         If Not currentRowItem Is Nothing Then
-            Dim confirm As Integer = MessageBox.Show("Careful, you are about to delete the entity " + Chr(13) + Chr(13) + _
+            Dim confirm As Integer = MessageBox.Show(Local.GetValue("entities_edition.msg_delete1") + Chr(13) + Chr(13) + _
                                                     currentRowItem.Caption + Chr(13) + Chr(13) + _
-                                                     "This entity and all sub entities will be deleted, do you confirm?" + Chr(13) + Chr(13), _
-                                                     "Entity deletion confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+                                                    Local.GetValue("entities_edition.msg_delete2") + Chr(13) + Chr(13), _
+                                                    Local.GetValue("entities_edition.title_delete_confirmation"), MessageBoxButtons.YesNo, MessageBoxIcon.Question)
             If confirm = DialogResult.Yes Then
                 Dim entity_id As String = currentRowItem.ItemValue
                 Controller.DeleteEntity(entity_id)
             End If
         Else
-            MsgBox("An Entity must be selected in order to be deleted")
+            MsgBox(Local.GetValue("entities_edition.msg_selection"))
         End If
         currentRowItem = Nothing
 
@@ -609,7 +609,7 @@ Friend Class EntitiesView
                     Case ENTITIES_CURRENCY_VARIABLE
                         Dim currencyId As Int32 = GlobalVariables.Currencies.GetValueId(CStr(args.Cell.Value))
                         If (currencyId = 0) Then
-                            MsgBox("Currency " & args.Cell.Value & " not found.")
+                            MsgBox(Local.GetValue("entities_edition.msg_currency_not_found1") & args.Cell.Value & Local.GetValue("entities_edition.msg_currency_not_found2"))
                             Exit Sub
                         Else
                             Controller.UpdateEntityCurrency(entityId, currencyId)
@@ -619,7 +619,7 @@ Friend Class EntitiesView
                         Dim filterValueName As String = args.Cell.Value
                         Dim filterValueId As Int32 = GlobalVariables.FiltersValues.GetValueId(filterValueName)
                         If filterValueId = 0 Then
-                            MsgBox("The Filter Value Name " & filterValueName & " could not be found.")
+                            MsgBox(Local.GetValue("axis.msg_filter_value_not_found"))
                             Exit Sub
                         End If
                         Dim filterId As Int32 = args.Cell.ColumnItem.ItemValue
@@ -678,8 +678,12 @@ Friend Class EntitiesView
 
             currentItem = currentItem.ItemBelow
             If currentItem.ParentItem.GetUniqueID = parent.GetUniqueID Then
-                m_entitiesDataGridView.CellsArea.SetCellValue(currentItem, columnItem_, value)
-                If currentItem.Items.Count > 0 Then SetValueToChildrenItems(currentItem, columnItem_, value)
+
+                If currentItem.Items.Count > 0 Then
+                    SetValueToChildrenItems(currentItem, columnItem_, value)
+                Else
+                    m_entitiesDataGridView.CellsArea.SetCellValue(currentItem, columnItem_, value)
+                End If
             End If
 
         End While

@@ -7,7 +7,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 09/10/2015
+' Last modified: 24/10/2015
 
 
 Imports Microsoft.Office.Interop
@@ -61,7 +61,7 @@ Friend Class ExcelFactsValuesImportUI
     Private Sub PeriodsEditBT_Click(sender As Object, e As EventArgs) Handles periods_edit_BT.Click
 
         Me.TopMost = False
-        m_periodsRange = GlobalVariables.APPS.InputBox("Select periods(s) range(s)", System.Type.Missing, System.Type.Missing, _
+        m_periodsRange = GlobalVariables.APPS.InputBox(Local.GetValue("upload.msg_periods_selection"), System.Type.Missing, System.Type.Missing, _
                           System.Type.Missing, System.Type.Missing, System.Type.Missing, _
                           System.Type.Missing, 8)
 
@@ -75,7 +75,7 @@ Friend Class ExcelFactsValuesImportUI
     Private Sub RatesEditBT_Click(sender As Object, e As EventArgs) Handles rates_edit_BT.Click
 
         Me.TopMost = False
-        m_valuesRange = GlobalVariables.APPS.InputBox("Select rates(s) range(s)", System.Type.Missing, System.Type.Missing, _
+        m_valuesRange = GlobalVariables.APPS.InputBox(Local.GetValue("upload.msg_values_selection"), System.Type.Missing, System.Type.Missing, _
                           System.Type.Missing, System.Type.Missing, System.Type.Missing, _
                           System.Type.Missing, 8)
 
@@ -104,7 +104,7 @@ Friend Class ExcelFactsValuesImportUI
             Next
             m_controller.InputRangesCallBack(periods_array, rates_array, m_factsComboBox.SelectedItem.Value)
         Else
-            MsgBox("The Periods range and Rates range do not have the same size, or the dimensions of the ranges are not valid.")
+            MsgBox(Local.GetValue("upload.range_mismatch"))
         End If
     End Sub
 

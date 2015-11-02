@@ -94,7 +94,7 @@ Partial Class ExchangeRatesView
         Me.select_version.Image = Global.FinancialBI.My.Resources.Resources.config_circle_green
         Me.select_version.Name = "select_version"
         Me.select_version.Size = New System.Drawing.Size(146, 22)
-        Me.select_version.Text = "Select Version"
+        Me.select_version.Text = Local.GetValue("versions.select_version")
         '
         'ToolStripSeparator2
         '
@@ -106,14 +106,14 @@ Partial Class ExchangeRatesView
         Me.AddRatesVersionRCM.Image = Global.FinancialBI.My.Resources.Resources.elements3_add
         Me.AddRatesVersionRCM.Name = "AddRatesVersionRCM"
         Me.AddRatesVersionRCM.Size = New System.Drawing.Size(146, 22)
-        Me.AddRatesVersionRCM.Text = "Add Version"
+        Me.AddRatesVersionRCM.Text = Local.GetValue("versions.new_version")
         '
         'AddFolderRCM
         '
         Me.AddFolderRCM.Image = Global.FinancialBI.My.Resources.Resources.folder_open_add
         Me.AddFolderRCM.Name = "AddFolderRCM"
         Me.AddFolderRCM.Size = New System.Drawing.Size(146, 22)
-        Me.AddFolderRCM.Text = "Add Folder"
+        Me.AddFolderRCM.Text = Local.GetValue("versions.new_folder")
         '
         'ToolStripSeparator6
         '
@@ -125,13 +125,13 @@ Partial Class ExchangeRatesView
         Me.DeleteVersionRCM.Image = Global.FinancialBI.My.Resources.Resources.elements3_delete
         Me.DeleteVersionRCM.Name = "DeleteVersionRCM"
         Me.DeleteVersionRCM.Size = New System.Drawing.Size(146, 22)
-        Me.DeleteVersionRCM.Text = "Delete"
+        Me.DeleteVersionRCM.Text = Local.GetValue("general.delete")
         '
         'RenameBT
         '
         Me.RenameBT.Name = "RenameBT"
         Me.RenameBT.Size = New System.Drawing.Size(146, 22)
-        Me.RenameBT.Text = "Rename"
+        Me.RenameBT.Text = Local.GetValue("general.rename")
         '
         'dgvRCM
         '
@@ -149,7 +149,7 @@ Partial Class ExchangeRatesView
         Me.CopyRateDownToolStripMenuItem.Image = Global.FinancialBI.My.Resources.Resources.Download_
         Me.CopyRateDownToolStripMenuItem.Name = "CopyRateDownToolStripMenuItem"
         Me.CopyRateDownToolStripMenuItem.Size = New System.Drawing.Size(168, 22)
-        Me.CopyRateDownToolStripMenuItem.Text = "Copy Rate Down"
+        Me.CopyRateDownToolStripMenuItem.Text = Local.GetValue("general.copy_down")
         '
         'TableLayoutPanel4
         '
@@ -218,14 +218,14 @@ Partial Class ExchangeRatesView
         Me.ToolStripMenuItem2.Image = Global.FinancialBI.My.Resources.Resources.elements2
         Me.ToolStripMenuItem2.Name = "ToolStripMenuItem2"
         Me.ToolStripMenuItem2.Size = New System.Drawing.Size(78, 20)
-        Me.ToolStripMenuItem2.Text = "Versions"
+        Me.ToolStripMenuItem2.Text = Local.GetValue("general.versions")
         '
         'DisplayRatesToolStripMenuItem
         '
         Me.DisplayRatesToolStripMenuItem.Image = Global.FinancialBI.My.Resources.Resources.config_circle_green
         Me.DisplayRatesToolStripMenuItem.Name = "DisplayRatesToolStripMenuItem"
         Me.DisplayRatesToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
-        Me.DisplayRatesToolStripMenuItem.Text = "Display Rates"
+        Me.DisplayRatesToolStripMenuItem.Text = Local.GetValue("currencies.display_rates")
         '
         'ToolStripSeparator5
         '
@@ -237,14 +237,14 @@ Partial Class ExchangeRatesView
         Me.CreateFolderToolStripMenuItem.Image = Global.FinancialBI.My.Resources.Resources.folder_open_add
         Me.CreateFolderToolStripMenuItem.Name = "CreateFolderToolStripMenuItem"
         Me.CreateFolderToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
-        Me.CreateFolderToolStripMenuItem.Text = "Create Folder"
+        Me.CreateFolderToolStripMenuItem.Text = Local.GetValue("versions.new_folder")
         '
         'CreateVersionToolStripMenuItem
         '
         Me.CreateVersionToolStripMenuItem.Image = Global.FinancialBI.My.Resources.Resources.elements3_add
         Me.CreateVersionToolStripMenuItem.Name = "CreateVersionToolStripMenuItem"
         Me.CreateVersionToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
-        Me.CreateVersionToolStripMenuItem.Text = "Create Version"
+        Me.CreateVersionToolStripMenuItem.Text = Local.GetValue("versions.new_version")
         '
         'ToolStripSeparator4
         '
@@ -256,14 +256,14 @@ Partial Class ExchangeRatesView
         Me.DeleteToolStripMenuItem.Image = Global.FinancialBI.My.Resources.Resources.elements3_delete
         Me.DeleteToolStripMenuItem.Name = "DeleteToolStripMenuItem"
         Me.DeleteToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
-        Me.DeleteToolStripMenuItem.Text = "Delete"
+        Me.DeleteToolStripMenuItem.Text = Local.GetValue("general.delete")
         '
         'ImportFromExcelToolStripMenuItem
         '
         Me.ImportFromExcelToolStripMenuItem.Image = Global.FinancialBI.My.Resources.Resources.excel_blue2
         Me.ImportFromExcelToolStripMenuItem.Name = "ImportFromExcelToolStripMenuItem"
         Me.ImportFromExcelToolStripMenuItem.Size = New System.Drawing.Size(129, 20)
-        Me.ImportFromExcelToolStripMenuItem.Text = "Import from Excel"
+        Me.ImportFromExcelToolStripMenuItem.Text = Local.GetValue("currencies.import")
         '
         'ToolStripMenuItem1
         '
@@ -288,7 +288,7 @@ Partial Class ExchangeRatesView
         Me.VersionLabel.Name = "VersionLabel"
         Me.VersionLabel.Size = New System.Drawing.Size(42, 13)
         Me.VersionLabel.TabIndex = 3
-        Me.VersionLabel.Text = "Version"
+        Me.VersionLabel.Text = Local.GetValue("versions.version")
         '
         'rates_version_TB
         '
@@ -304,7 +304,7 @@ Partial Class ExchangeRatesView
         Me.ImportFromExcelToolStripMenuItem1.Image = Global.FinancialBI.My.Resources.Resources.Excel_Blue_32x32
         Me.ImportFromExcelToolStripMenuItem1.Name = "ImportFromExcelToolStripMenuItem1"
         Me.ImportFromExcelToolStripMenuItem1.Size = New System.Drawing.Size(168, 22)
-        Me.ImportFromExcelToolStripMenuItem1.Text = "Import from Excel"
+        Me.ImportFromExcelToolStripMenuItem1.Text = Local.GetValue("currencies.import")
         '
         'ExchangeRatesView
         '

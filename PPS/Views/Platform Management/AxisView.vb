@@ -143,7 +143,7 @@ Friend Class AxisView
 
     Private Sub CreateAxisOrder()
 
-        Dim axisName As String = InputBox("Enter the new Name", "Creation")
+        Dim axisName As String = InputBox(Local.GetValue("axis.msg_enter_name"), Local.GetValue("axis.msg_axis_creation"))
         If axisName <> "" Then
             Controller.CreateAxis(axisName)
         End If
@@ -153,16 +153,16 @@ Friend Class AxisView
     Private Sub DeleteAxisOrder()
 
         If Not currentRowItem Is Nothing Then
-            Dim confirm As Integer = MessageBox.Show("Careful, you are about to delete the axis " + Chr(13) + Chr(13) + _
+            Dim confirm As Integer = MessageBox.Show(Local.GetValue("axis.msg_axis_delete1") + Chr(13) + Chr(13) + _
                                                     DGV.CellsArea.GetCellValue(currentRowItem, DGV.ColumnsHierarchy.Items(0)) + Chr(13) + Chr(13) + _
-                                                     "This axis and all sub axis will be deleted, do you confirm?" + Chr(13) + Chr(13), _
-                                                     "Axis deletion confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+                                                     Local.GetValue("axis.msg_axis_delete2") + Chr(13) + Chr(13), _
+                                                     Local.GetValue("axis.msg_deletion_confirmation"), MessageBoxButtons.YesNo, MessageBoxIcon.Question)
             If confirm = DialogResult.Yes Then
                 Dim axisValueId As Int32 = currentRowItem.ItemValue
                 Controller.DeleteAxis(axisValueId)
             End If
         Else
-            MsgBox("An Axis must be selected in order to be deleted")
+            MsgBox(Local.GetValue("axis.msg_select_axis"))
         End If
         currentRowItem = Nothing
 
@@ -556,7 +556,7 @@ Friend Class AxisView
                         Dim filterValueName As String = args.Cell.Value
                         Dim filterValueId As Int32 = GlobalVariables.FiltersValues.GetValueId(filterValueName)
                         If filterValueId = 0 Then
-                            MsgBox("The Filter Value Name " & filterValueName & " could not be found.")
+                            MsgBox(Local.GetValue("axis.msg_filter_value_not_found"))
                             Exit Sub
                         End If
                         Dim filterId As Int32 = args.Cell.ColumnItem.ItemValue

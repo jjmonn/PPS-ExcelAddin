@@ -17,7 +17,7 @@
 
         Dim format As New Formats.FinancialBIFormat
         Select Case formatName
-            Case "Title"
+            Case "t"
                 format.textColor = My.Settings.titleFontColor
                 format.backColor = My.Settings.titleBackColor
                 format.isBold = My.Settings.titleFontBold
@@ -25,7 +25,7 @@
                 format.bordersPresent = My.Settings.titleBordersPresent
                 format.bordersColor = My.Settings.titleBordersColor
                 format.indent = My.Settings.titleIndent
-            Case "Important"
+            Case "i"
                 format.textColor = My.Settings.importantFontColor
                 format.backColor = My.Settings.importantBackColor
                 format.isBold = My.Settings.importantFontBold
@@ -33,7 +33,7 @@
                 format.bordersPresent = My.Settings.importantBordersPresent
                 format.bordersColor = My.Settings.importantBordersColor
                 format.indent = My.Settings.importantIndent
-            Case "Normal"
+            Case "n"
                 format.textColor = My.Settings.normalFontColor
                 format.backColor = My.Settings.normalBackColor
                 format.isBold = My.Settings.normalFontBold
@@ -41,7 +41,7 @@
                 format.bordersPresent = My.Settings.normalBordersPresent
                 format.bordersColor = My.Settings.normalBordersColor
                 format.indent = My.Settings.normalIndent
-            Case "Detail"
+            Case "d"
                 format.textColor = My.Settings.detailFontColor
                 format.backColor = My.Settings.detailBackColor
                 format.isBold = My.Settings.detailFontBold

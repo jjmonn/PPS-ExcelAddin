@@ -2,6 +2,7 @@
 Imports System.Windows.Forms.DataVisualization.Charting
 Imports System.Collections.Generic
 Imports System.Windows.Forms
+Imports System.Drawing
 
 
 Public Class CUI2Visualization
@@ -63,7 +64,8 @@ Public Class CUI2Visualization
                                    ByRef p_serieName As String, _
                                    ByRef p_dataX As IEnumerable, _
                                    ByRef p_dataY As IEnumerable, _
-                                    ByRef p_axisType As AxisType)
+                                   ByRef p_axisType As AxisType)
+
     Friend Sub BindData_ThreadSafe(ByRef p_chartNb As UInt32, _
                                    ByRef p_serieName As String, _
                                    ByRef p_dataX As IEnumerable, _
@@ -75,54 +77,69 @@ Public Class CUI2Visualization
             Me.Invoke(MyDelegate, New Object() {p_chartNb, p_serieName, p_dataX, p_dataY, p_axisType})
         Else
             If p_chartNb > m_chartTab.Length Then Exit Sub
-
             ChartsUtilities.BindSerieToChart(m_chartTab(p_chartNb), p_serieName, p_axisType, p_dataX, p_dataY)
-
         End If
 
     End Sub
 
-
-    ' STUB Formatting for demos
-    Delegate Sub StubDemosFormatting_Delegate()
-    Friend Sub StubDemosFormatting_ThreadSafe()
+    Delegate Sub FormatSerie_Delegate(ByRef p_chartIndex As UInt32, _
+                                      ByRef p_serieColor As Color, _
+                                      ByRef p_serieType As Int32, _
+                                      ByRef p_serieName As String, _
+                                      ByRef p_alpha As Single)
+    Friend Sub FormatSerie_ThreadSafe(ByRef p_chartIndex As UInt32, _
+                                      ByRef p_serieColor As Color, _
+                                      ByRef p_serieType As Int32, _
+                                      ByRef p_serieName As String, _
+                                      ByRef p_alpha As Single)
 
         If InvokeRequired Then
-            Dim MyDelegate As New StubDemosFormatting_Delegate(AddressOf StubDemosFormatting_ThreadSafe)
-            Me.Invoke(MyDelegate, New Object() {})
+            Dim MyDelegate As New FormatSerie_Delegate(AddressOf FormatSerie_ThreadSafe)
+            Me.Invoke(MyDelegate, New Object() {p_chartIndex, p_serieColor, p_serieType, p_serieName, p_alpha})
         Else
-            If My.Settings.chart1Serie1AccountId <> 0 Then ChartsUtilities.FormatSerie(Chart1.Series(GlobalVariables.Accounts.GetValueName(My.Settings.chart1Serie1AccountId)), My.Settings.chart1Serie1Color, My.Settings.chart1Serie1Type)
-            If My.Settings.chart1Serie2AccountId <> 0 Then ChartsUtilities.FormatSerie(Chart1.Series(GlobalVariables.Accounts.GetValueName(My.Settings.chart1Serie2AccountId)), My.Settings.chart1Serie2Color, My.Settings.chart1Serie2Type)
-            If My.Settings.chart2Serie1AccountId <> 0 Then ChartsUtilities.FormatSerie(Chart2.Series(GlobalVariables.Accounts.GetValueName(My.Settings.chart2Serie1AccountId)), My.Settings.chart2Serie1Color, My.Settings.chart2Serie1Type, , 22)
-            If My.Settings.chart2Serie2AccountId <> 0 Then ChartsUtilities.FormatSerie(Chart2.Series(GlobalVariables.Accounts.GetValueName(My.Settings.chart2Serie2AccountId)), My.Settings.chart2Serie2Color, My.Settings.chart2Serie2Type)
-            If My.Settings.chart3Serie1AccountId <> 0 Then ChartsUtilities.FormatSerie(Chart3.Series(GlobalVariables.Accounts.GetValueName(My.Settings.chart3Serie1AccountId)), My.Settings.chart3Serie1Color, My.Settings.chart3Serie1Type, , 22)
-            If My.Settings.chart3Serie2AccountId <> 0 Then ChartsUtilities.FormatSerie(Chart3.Series(GlobalVariables.Accounts.GetValueName(My.Settings.chart3Serie2AccountId)), My.Settings.chart3Serie2Color, My.Settings.chart3Serie2Type, 100)
-            If My.Settings.chart4Serie1AccountId <> 0 Then ChartsUtilities.FormatSerie(Chart4.Series(GlobalVariables.Accounts.GetValueName(My.Settings.chart4Serie1AccountId)), My.Settings.chart4Serie1Color, My.Settings.chart4Serie1Type, 100)
-            If My.Settings.chart4Serie1AccountId <> 0 Then ChartsUtilities.FormatSerie(Chart4.Series(GlobalVariables.Accounts.GetValueName(My.Settings.chart4Serie1AccountId)), My.Settings.chart4Serie2Color, My.Settings.chart4Serie2Type, 100)
+            ChartsUtilities.FormatSerie(m_chartTab(p_chartIndex).Series(p_serieName), p_serieColor, p_serieType, p_alpha)
         End If
 
     End Sub
 
 
+    'Delegate Sub FormatCharts_Delegate(ByRef p_alpha As Single)
+    'Friend Sub FormatCharts_ThreadSafe(ByRef p_alpha As Single)
 
-    Delegate Sub RefreshData_Delegate(ByRef p_serieName As String, _
-                                       ByRef p_dataX As IEnumerable, _
-                                       ByRef p_dataY As IEnumerable)
-    Friend Sub RefreshData_ThreadSafe(ByRef p_serieName As String, _
-                                       ByRef p_dataX As IEnumerable, _
-                                       ByRef p_dataY As IEnumerable)
+    '    If InvokeRequired Then
+    '        Dim MyDelegate As New FormatCharts_Delegate(AddressOf FormatCharts_ThreadSafe)
+    '        Me.Invoke(MyDelegate, New Object() {p_alpha})
+    '    Else
+    '        If GlobalVariables.Accounts.m_accountsHash.ContainsKey(My.Settings.chart1Serie1AccountId) <> 0 Then ChartsUtilities.FormatSerie(Chart1.Series(GlobalVariables.Accounts.m_accountsHash(My.Settings.chart1Serie1AccountId)(NAME_VARIABLE)), My.Settings.chart1Serie1Color, My.Settings.chart1Serie1Type, p_alpha)
+    '        If GlobalVariables.Accounts.m_accountsHash.ContainsKey(My.Settings.chart1Serie2AccountId) <> 0 Then ChartsUtilities.FormatSerie(Chart1.Series(GlobalVariables.Accounts.m_accountsHash(My.Settings.chart1Serie2AccountId)(NAME_VARIABLE)), My.Settings.chart1Serie2Color, My.Settings.chart1Serie2Type, p_alpha)
+    '        If GlobalVariables.Accounts.m_accountsHash.ContainsKey(My.Settings.chart2Serie1AccountId) <> 0 Then ChartsUtilities.FormatSerie(Chart2.Series(GlobalVariables.Accounts.m_accountsHash(My.Settings.chart2Serie1AccountId)(NAME_VARIABLE)), My.Settings.chart2Serie1Color, My.Settings.chart2Serie1Type, p_alpha, 22)
+    '        If GlobalVariables.Accounts.m_accountsHash.ContainsKey(My.Settings.chart2Serie2AccountId) <> 0 Then ChartsUtilities.FormatSerie(Chart2.Series(GlobalVariables.Accounts.m_accountsHash(My.Settings.chart2Serie2AccountId)(NAME_VARIABLE)), My.Settings.chart2Serie2Color, My.Settings.chart2Serie2Type, p_alpha)
+    '        If GlobalVariables.Accounts.m_accountsHash.ContainsKey(My.Settings.chart3Serie1AccountId) <> 0 Then ChartsUtilities.FormatSerie(Chart3.Series(GlobalVariables.Accounts.m_accountsHash(My.Settings.chart3Serie1AccountId)(NAME_VARIABLE)), My.Settings.chart3Serie1Color, My.Settings.chart3Serie1Type, p_alpha, 22)
+    '        If GlobalVariables.Accounts.m_accountsHash.ContainsKey(My.Settings.chart3Serie2AccountId) <> 0 Then ChartsUtilities.FormatSerie(Chart3.Series(GlobalVariables.Accounts.m_accountsHash(My.Settings.chart3Serie2AccountId)(NAME_VARIABLE)), My.Settings.chart3Serie2Color, My.Settings.chart3Serie2Type, p_alpha)
+    '        If GlobalVariables.Accounts.m_accountsHash.ContainsKey(My.Settings.chart4Serie1AccountId) <> 0 Then ChartsUtilities.FormatSerie(Chart4.Series(GlobalVariables.Accounts.m_accountsHash(My.Settings.chart4Serie1AccountId)(NAME_VARIABLE)), My.Settings.chart4Serie1Color, My.Settings.chart4Serie1Type, p_alpha)
+    '        If GlobalVariables.Accounts.m_accountsHash.ContainsKey(My.Settings.chart4Serie1AccountId) <> 0 Then ChartsUtilities.FormatSerie(Chart4.Series(GlobalVariables.Accounts.m_accountsHash(My.Settings.chart4Serie1AccountId)(NAME_VARIABLE)), My.Settings.chart4Serie2Color, My.Settings.chart4Serie2Type, p_alpha)
+    '    End If
 
-        If InvokeRequired Then
-            Dim MyDelegate As New RefreshData_Delegate(AddressOf RefreshData_ThreadSafe)
-            Me.Invoke(MyDelegate, New Object() {p_serieName, p_dataX, p_dataY})
-        Else
-            For Each chart As Chart In m_chartTab
-                If Not chart.Series(p_serieName) Is Nothing Then _
-                    chart.Series(p_serieName).Points.DataBindXY(p_dataX, p_dataY)
-            Next
-        End If
+    'End Sub
 
-    End Sub
+    'Delegate Sub RefreshData_Delegate(ByRef p_serieName As String, _
+    '                                   ByRef p_dataX As IEnumerable, _
+    '                                   ByRef p_dataY As IEnumerable)
+    'Friend Sub RefreshData_ThreadSafe(ByRef p_serieName As String, _
+    '                                   ByRef p_dataX As IEnumerable, _
+    '                                   ByRef p_dataY As IEnumerable)
+
+    '    If InvokeRequired Then
+    '        Dim MyDelegate As New RefreshData_Delegate(AddressOf RefreshData_ThreadSafe)
+    '        Me.Invoke(MyDelegate, New Object() {p_serieName, p_dataX, p_dataY})
+    '    Else
+    '        For Each chart As Chart In m_chartTab
+    '            If Not chart.Series(p_serieName) Is Nothing Then _
+    '                chart.Series(p_serieName).Points.DataBindXY(p_dataX, p_dataY)
+    '        Next
+    '    End If
+
+    'End Sub
 
 #End Region
 
@@ -149,7 +166,7 @@ Public Class CUI2Visualization
     Private Sub m_editChartButton_Click(sender As Object, e As EventArgs) Handles m_editChartButton.Click
 
         Dim chart As Chart = GetChartFromContextMenu(sender)
-        Dim chartEditionUI As New CUI2VisualisationChartsSettings(Chart, m_chartIndexes(Chart))
+        Dim chartEditionUI As New CUI2VisualisationChartsSettings(chart, m_chartIndexes(chart))
         chartEditionUI.Show()
 
     End Sub
@@ -190,5 +207,5 @@ Public Class CUI2Visualization
     End Function
 
 
-  
+
 End Class
