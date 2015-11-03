@@ -18,6 +18,7 @@
 
 
 Imports Microsoft.Office.Interop
+Imports CRUD
 
 
 Public Class ManualRangesSelectionUI
@@ -58,7 +59,7 @@ Public Class ManualRangesSelectionUI
     Private Sub AccountsEditBT_Click(sender As Object, e As EventArgs) Handles AccountsEditBT.Click
 
         Me.TopMost = False
-        Dim tmpRng As Excel.Range = GlobalVariables.apps.InputBox("Select Account(s) Range(s)", System.Type.Missing, System.Type.Missing, _
+        Dim tmpRng As Excel.Range = GlobalVariables.APPS.InputBox("Select Account(s) Range(s)", System.Type.Missing, System.Type.Missing, _
                           System.Type.Missing, System.Type.Missing, System.Type.Missing, _
                           System.Type.Missing, 8)
 
@@ -85,7 +86,7 @@ Public Class ManualRangesSelectionUI
     Private Sub EntitiesEditBT_Click(sender As Object, e As EventArgs) Handles EntitiesEditBT.Click
 
         Me.TopMost = False
-        Dim tmpRng As Excel.Range = GlobalVariables.apps.InputBox("Select Entity(s) Range(s)", System.Type.Missing, System.Type.Missing, _
+        Dim tmpRng As Excel.Range = GlobalVariables.APPS.InputBox("Select Entity(s) Range(s)", System.Type.Missing, System.Type.Missing, _
                       System.Type.Missing, System.Type.Missing, System.Type.Missing, _
                       System.Type.Missing, 8)
 
@@ -95,7 +96,7 @@ Public Class ManualRangesSelectionUI
         If EntitiesRefEdit.Text <> "" Then
             DATASET.m_entitiesAddressValuesDictionary.Clear()
             For Each cell As Excel.Range In tmpRng
-                If Not GlobalVariables.Entities.GetValue(CType(cell.Value2, String)) Is Nothing Then
+                If Not GlobalVariables.AxisElems.GetValue(AxisType.Entities, CType(cell.Value2, String)) Is Nothing Then
                     DATASET.m_entitiesAddressValuesDictionary.Add(CStr(cell.Address), CStr(cell.Value2))
                 End If
             Next
@@ -109,7 +110,7 @@ Public Class ManualRangesSelectionUI
     Private Sub PeriodsRef_Click(sender As Object, e As EventArgs) Handles PeriodsEditBT.Click
 
         Me.TopMost = False
-        Dim tmpRng As Excel.Range = GlobalVariables.apps.InputBox("Select Period(s) Range(s)", System.Type.Missing, System.Type.Missing, _
+        Dim tmpRng As Excel.Range = GlobalVariables.APPS.InputBox("Select Period(s) Range(s)", System.Type.Missing, System.Type.Missing, _
                             System.Type.Missing, System.Type.Missing, System.Type.Missing, _
                             System.Type.Missing, 8)
 

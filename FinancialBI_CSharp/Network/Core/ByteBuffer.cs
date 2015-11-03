@@ -36,7 +36,7 @@ public class ByteBuffer : MemoryStream
     ErrorMessage error = (ErrorMessage)m_header.error;
     ServerMessage opcode = (ServerMessage)m_header.opcode;
 
-    System.Diagnostics.Debug.WriteLine(opcode.ToString() + " : " + error.ToString());
+    System.Diagnostics.Debug.WriteLine(opcode.ToString() + "(" + (UInt32)(opcode) + ") : " + error.ToString());
     return m_header.error;
   }
   public ByteBuffer() { }

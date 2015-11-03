@@ -76,6 +76,7 @@ Public MustInherit Class CRUDManager
     Protected MustOverride Sub DeleteAnswer(packet As ByteBuffer)
 
     Protected Sub UpdateAnswer(packet As ByteBuffer)
+        packet.GetError()
         RaiseEvent UpdateEvent(packet.GetError(), packet.ReadUint32())
     End Sub
 

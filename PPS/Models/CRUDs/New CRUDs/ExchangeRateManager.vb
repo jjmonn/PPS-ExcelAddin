@@ -32,7 +32,7 @@ Friend Class ExchangeRateManager : Inherits CRUDManager
         CreateCMSG = ClientMessage.CMSG_CREATE_EXCHANGE_RATE
         ReadCMSG = ClientMessage.CMSG_READ_EXCHANGE_RATE
         UpdateCMSG = ClientMessage.CMSG_UPDATE_EXCHANGE_RATE
-        UpdateListCMSG = ClientMessage.CMSG_UPDATE_EXCHANGE_RATE_LIST
+        UpdateListCMSG = ClientMessage.CMSG_CRUD_EXCHANGE_RATE_LIST
         DeleteCMSG = ClientMessage.CMSG_DELETE_EXCHANGE_RATE
         ListCMSG = ClientMessage.CMSG_LIST_EXCHANGE_RATE
 
@@ -62,7 +62,7 @@ Friend Class ExchangeRateManager : Inherits CRUDManager
         If packet.GetError() = ErrorMessage.SUCCESS Then
             m_exchangeRatesDic.Clear()
             For i As Int32 = 1 To packet.ReadInt32()
-                Dim tmp_rate = ExchangeRate.BuildExchangeRate(packet)
+                Dim tmp_rate As ExchangeRate = Build(packet)
 
                 m_exchangeRatesDic.Set(tmp_rate.Id, New Tuple(Of UInt32, UInt32, UInt32)(tmp_rate.DestCurrencyId, tmp_rate.RateVersionId, tmp_rate.Period), tmp_rate)
             Next
@@ -80,7 +80,7 @@ Friend Class ExchangeRateManager : Inherits CRUDManager
     Protected Overrides Sub ReadAnswer(packet As ByteBuffer)
 
         If packet.GetError() = ErrorMessage.SUCCESS Then
-            Dim tmp_rate = ExchangeRate.BuildExchangeRate(packet)
+            Dim tmp_rate As ExchangeRate = Build(packet)
 
             m_exchangeRatesDic.Set(tmp_rate.Id, New Tuple(Of UInt32, UInt32, UInt32)(tmp_rate.DestCurrencyId, tmp_rate.RateVersionId, tmp_rate.Period), tmp_rate)
             RaiseReadEvent(packet.GetError(), tmp_rate)

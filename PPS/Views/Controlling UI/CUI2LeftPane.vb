@@ -76,7 +76,7 @@ Public Class CUI2LeftPane
 
     Private Sub LoadTvs()
 
-        GlobalVariables.Entities.LoadEntitiesTV(entitiesTV)
+        GlobalVariables.AxisElems.LoadEntitiesTV(entitiesTV)
         GlobalVariables.AxisElems.LoadAxisTree(AxisType.Client, clientsTV)
         GlobalVariables.AxisElems.LoadAxisTree(AxisType.Product, productsTV)
         GlobalVariables.AxisElems.LoadAxisTree(AxisType.Adjustment, adjustmentsTV)

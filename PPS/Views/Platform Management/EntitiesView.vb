@@ -139,8 +139,8 @@ Friend Class EntitiesView
         End If
     End Sub
 
-    Delegate Sub UpdateEntity_Delegate(ByRef ht As Entity)
-    Friend Sub UpdateEntity(ByRef ht As Entity)
+    Delegate Sub UpdateEntity_Delegate(ByRef ht As AxisElem)
+    Friend Sub UpdateEntity(ByRef ht As AxisElem)
 
         If InvokeRequired Then
             Dim MyDelegate As New UpdateEntity_Delegate(AddressOf UpdateEntity)
@@ -284,7 +284,7 @@ Friend Class EntitiesView
     Private Sub fillDGV()
 
         isFillingDGV = True
-        For Each entity As Entity In GlobalVariables.Entities.GetDictionary().Values
+        For Each entity As AxisElem In GlobalVariables.AxisElems.GetDictionary(AxisType.Entities).Values
             FillRow(entity.Id, entity)
         Next
         isFillingDGV = False
@@ -397,7 +397,7 @@ Friend Class EntitiesView
 #Region "DGV Filling"
 
     Friend Sub FillRow(ByVal p_entityId As Int32, _
-                       ByVal p_entityHashtable As Entity)
+                       ByVal p_entityHashtable As AxisElem)
 
         Dim rowItem As HierarchyItem = DataGridViewsUtil.GetHierarchyItemFromId(m_entitiesDataGridView.RowsHierarchy, p_entityId)
         If rowItem Is Nothing Then
@@ -413,9 +413,11 @@ Friend Class EntitiesView
         Dim column As HierarchyItem = DataGridViewsUtil.GetHierarchyItemFromId(m_entitiesDataGridView.ColumnsHierarchy, ENTITIES_CURRENCY_VARIABLE)
         If p_entityHashtable.AllowEdition = True Then
             If GlobalVariables.Users.CurrentUserIsAdmin() Then m_entitiesDataGridView.CellsArea.SetCellEditor(rowItem, column, m_currenciesComboBox)
-            Dim currency As Currency = GlobalVariables.Currencies.GetValue(CInt(p_entityHashtable.CurrencyId))
-
+            Dim entityCurrency As EntityCurrency = GlobalVariables.EntityCurrencies.GetValue(p_entityId)
+            If entityCurrency Is Nothing Then Exit Sub
+            Dim currency As Currency = GlobalVariables.Currencies.GetValue(CInt(entityCurrency.CurrencyId))
             If currency Is Nothing Then Exit Sub
+
             m_entitiesDataGridView.CellsArea.SetCellValue(rowItem, column, currency.Name)
 
             For Each filterNode As vTreeNode In entitiesFilterTV.Nodes

@@ -499,7 +499,7 @@ Friend Class ControllingUI_2
                                        versionId,
                                        logsHashTable)
 
-            Dim l_entity As Entity = GlobalVariables.Entities.GetValue(entityId)
+            Dim l_entity As AxisElem = GlobalVariables.AxisElems.GetValue(CRUD.AxisType.Entities, entityId)
             If l_entity Is Nothing Then Exit Sub
 
             m_logView = New LogView(False, _

@@ -51,7 +51,7 @@
     Enum GlobalModels
 
         ACCOUNTS = 1
-        ENTITIES
+        ENTITYCURRENCY
         FILTERS
         FILTERSVALUES
         FACTSVERSIONS

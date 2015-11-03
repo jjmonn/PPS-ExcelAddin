@@ -55,7 +55,7 @@ Public Class EntitySelectionTP
         selectionRestrictedToInput = RestrictionToInputsEntities
         entitiesTV = New TreeView
         entitiesTV.ImageList = EntitiesTVImageList
-        Globalvariables.Entities.LoadEntitiesTV(entitiesTV)
+        GlobalVariables.AxisElems.LoadEntitiesTV(entitiesTV)
         TableLayoutPanel1.Controls.Add(entitiesTV, 0, 1)
         TableLayoutPanel1.GetControlFromPosition(0, 1).Dock = DockStyle.Fill
         entitiesTV.CollapseAll()

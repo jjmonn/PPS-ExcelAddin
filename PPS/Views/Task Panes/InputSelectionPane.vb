@@ -47,7 +47,7 @@ Public Class InputSelectionPane
     Friend Sub InitializeSelectionChoices(ByRef AddinInstance As AddinModule)
 
         ADDIN = AddinInstance
-        Globalvariables.Entities.LoadEntitiesTV(EntitiesTV)
+        GlobalVariables.AxisElems.LoadEntitiesTV(EntitiesTV)
         TreeViewsUtilities.set_TV_basics_icon_index(EntitiesTV)
         EntitiesTV.CollapseAll()
 

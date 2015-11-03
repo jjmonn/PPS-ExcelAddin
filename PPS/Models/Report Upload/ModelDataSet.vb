@@ -294,7 +294,7 @@ Friend Class ModelDataSet
                 Select Case m_GlobalScreenShotFlag(i, j)
                     Case m_stringFlag
 
-                        If Not GlobalVariables.Entities.GetValue(CStr(m_GlobalScreenShot(i, j))) Is Nothing _
+                        If Not GlobalVariables.AxisElems.GetValue(AxisType.Entities, CStr(m_GlobalScreenShot(i, j))) Is Nothing _
                         AndAlso Not m_entitiesAddressValuesDictionary.ContainsValue(CStr(m_GlobalScreenShot(i, j))) Then
 
                             m_entitiesAddressValuesDictionary.Add(Split(m_excelWorkSheet.Columns(j).Address(ColumnAbsolute:=False), ":")(1) & i, _
@@ -368,7 +368,7 @@ Friend Class ModelDataSet
 
         AssetResearchAlgo = False
 
-        For Each l_entity As Entity In GlobalVariables.Entities.GetDictionary().Values
+        For Each l_entity As AxisElem In GlobalVariables.AxisElems.GetDictionary(AxisType.Entities).Values
             Delta = GeneralUtilities.Levenshtein(CStr(str), l_entity.Name)
             P = Delta / l_entity.Name.Length
             If P <= 2 / l_entity.Name.Length Then

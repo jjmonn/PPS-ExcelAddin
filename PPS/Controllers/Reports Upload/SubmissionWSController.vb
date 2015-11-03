@@ -92,7 +92,7 @@ Friend Class SubmissionWSController
 
     Friend Sub UpdateCalculatedItemsOnWS(ByRef entityName As String)
 
-        Dim entityId As Int32 = GlobalVariables.Entities.GetValueId(entityName)
+        Dim entityId As Int32 = GlobalVariables.AxisElems.GetValueId(AxisType.Entities, entityName)
         For Each l_account As Account In m_acquisitionModel.outputsList
             For Each period As Int32 In m_acquisitionModel.currentPeriodList
 
@@ -206,7 +206,7 @@ Friend Class SubmissionWSController
                         Else
                             ' First period input formula type : output period
                             m_disableWSChangeFlag = True
-                            SetDatsetCellValue(GlobalVariables.Entities.GetValueId(entityName), _
+                            SetDatsetCellValue(GlobalVariables.AxisElems.GetValueId(AxisType.Entities, entityName), _
                                                entityName, _
                                                m_dataSet.m_datasetCellDimensionsDictionary(cell.Address).m_accountName, _
                                                m_dataSet.m_datasetCellDimensionsDictionary(cell.Address).m_period)
@@ -225,7 +225,7 @@ Friend Class SubmissionWSController
                     Dim intersectOutput = GlobalVariables.APPS.Intersect(cell, m_dataModificationsTracker.m_outputsRegion)
                     If Not intersectOutput Is Nothing Then
                         m_disableWSChangeFlag = True
-                        SetDatsetCellValue(GlobalVariables.Entities.GetValueId(entityName), _
+                        SetDatsetCellValue(GlobalVariables.AxisElems.GetValueId(AxisType.Entities, entityName), _
                                            entityName, _
                                            m_dataSet.m_datasetCellDimensionsDictionary(cell.Address).m_accountName, _
                                            m_dataSet.m_datasetCellDimensionsDictionary(cell.Address).m_period)
@@ -266,7 +266,7 @@ Friend Class SubmissionWSController
         If m_dataSet.m_datasetCellDimensionsDictionary.ContainsKey(m_currentCellAddress) Then
             Dim datasetCellStruct As ModelDataSet.DataSetCellDimensions = m_dataSet.m_datasetCellDimensionsDictionary(m_currentCellAddress)
             l_account = GlobalVariables.Accounts.GetValue(datasetCellStruct.m_accountName)
-            entityId = GlobalVariables.Entities.GetValueId(datasetCellStruct.m_entityName)
+            entityId = GlobalVariables.AxisElems.GetValueId(AxisType.Entities, datasetCellStruct.m_entityName)
             periodId = datasetCellStruct.m_period
 
             If l_account Is Nothing Then Exit Sub

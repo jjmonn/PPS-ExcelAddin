@@ -209,10 +209,10 @@ public class NetworkManager
         return (true);
       l_opcode = l_packet.GetOpcode();
       if ((l_callback = this.GetCallback(l_opcode)) == null)
-        System.Diagnostics.Debug.WriteLine("Undefined packet type " + l_opcode.ToString("X2"));
+        System.Diagnostics.Debug.WriteLine("Undefined packet type " + (ServerMessage)(l_opcode) + " (" + l_opcode + ")");
       else
       {
-        System.Diagnostics.Debug.WriteLine("Receive defined " + l_opcode.ToString("X2"));
+        System.Diagnostics.Debug.WriteLine("Receive defined " + (ServerMessage)(l_opcode) + " (" + l_opcode + ")");
         for (int i = 0; i < l_callback.Count; i++)
           l_callback.ElementAt(i)(l_packet.Clone());
       }

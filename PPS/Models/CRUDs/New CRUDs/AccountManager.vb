@@ -24,7 +24,7 @@ Friend Class AccountManager : Inherits NamedCRUDManager(Of NamedHierarchyCRUDEnt
         CreateCMSG = ClientMessage.CMSG_CREATE_ACCOUNT
         ReadCMSG = ClientMessage.CMSG_READ_ACCOUNT
         UpdateCMSG = ClientMessage.CMSG_UPDATE_ACCOUNT
-        UpdateListCMSG = ClientMessage.CMSG_UPDATE_ACCOUNT_LIST
+        UpdateListCMSG = ClientMessage.CMSG_CRUD_ACCOUNT_LIST
         DeleteCMSG = ClientMessage.CMSG_DELETE_ACCOUNT
         ListCMSG = ClientMessage.CMSG_LIST_ACCOUNT
 

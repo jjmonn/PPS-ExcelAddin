@@ -28,7 +28,7 @@ Friend Class FilterValueManager : Inherits CRUDManager
         CreateCMSG = ClientMessage.CMSG_CREATE_FILTER_VALUE
         ReadCMSG = ClientMessage.CMSG_READ_FILTER_VALUE
         UpdateCMSG = ClientMessage.CMSG_UPDATE_FILTER_VALUE
-        UpdateListCMSG = ClientMessage.CMSG_UPDATE_FILTER_VALUE_LIST
+        UpdateListCMSG = ClientMessage.CMSG_CRUD_FILTER_VALUE_LIST
         DeleteCMSG = ClientMessage.CMSG_DELETE_FILTER_VALUE
         ListCMSG = ClientMessage.CMSG_LIST_FILTER_VALUE
 

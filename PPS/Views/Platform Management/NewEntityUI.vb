@@ -51,20 +51,20 @@ Friend Class NewEntityUI
         ' Add any initialization after the InitializeComponent() call.
         Controller = p_controller
         entitiesTV = p_entitiesTV
-        LoadCurrencies(p_currenciesHT)
+        'LoadCurrencies(p_currenciesHT)
 
     End Sub
 
-    Private Sub LoadCurrencies(ByRef currenciesHt As MultiIndexDictionary(Of UInt32, String, NamedCRUDEntity))
+    'Private Sub LoadCurrencies(ByRef currenciesHt As MultiIndexDictionary(Of UInt32, String, NamedCRUDEntity))
 
-        For Each currency As Currency In currenciesHt.Values
-            Dim LI As New VIBlend.WinForms.Controls.ListItem
-            LI.Value = currency.Id
-            LI.Text = currency.Name
-            CurrenciesComboBox1.Items.Add(LI)
-        Next
+    '    For Each currency As Currency In currenciesHt.Values
+    '        Dim LI As New VIBlend.WinForms.Controls.ListItem
+    '        LI.Value = currency.Id
+    '        LI.Text = currency.Name
+    '        CurrenciesComboBox1.Items.Add(LI)
+    '    Next
 
-    End Sub
+    'End Sub
 
     Friend Sub SetParentEntityId(ByRef parentEntityId As Int32)
 
@@ -93,7 +93,6 @@ Friend Class NewEntityUI
                 parentEntityId = ParentEntityTreeViewBox.TreeView.SelectedNode.Value
             End If
             Controller.CreateEntity(new_entity_Name, _
-                                    CurrenciesComboBox1.SelectedItem.Value, _
                                     parentEntityId, _
                                     1, _
                                     1)
@@ -119,16 +118,17 @@ Friend Class NewEntityUI
 
         If new_entity_name = "" Then
             MsgBox(Local.GetValue("entities_edition.msg_entity_name"))
+            Return False
         End If
         ' below -> check is on server priority normal
         'If names_list.Contains(new_entity_name) Then
         '    MsgBox("This Entity name is already in use. Please choose another one.")
         '    Return False
         'End If
-        If CurrenciesComboBox1.SelectedItem Is Nothing Then
-            MsgBox(Local.GetValue("entities_edition.msg_select_currency"))
-            Return False
-        End If
+        'If CurrenciesComboBox1.SelectedItem Is Nothing Then
+        '    MsgBox(Local.GetValue("entities_edition.msg_select_currency"))
+        '    Return False
+        'End If
         Return True
 
     End Function

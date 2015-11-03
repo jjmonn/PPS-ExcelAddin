@@ -47,7 +47,7 @@ Friend Class PPSBI_UI
 
     Private Sub LoadTreeviews()
 
-        GlobalVariables.Entities.LoadEntitiesTV(EntityTreeBox.TreeView)
+        GlobalVariables.AxisElems.LoadEntitiesTV(EntityTreeBox.TreeView)
         GlobalVariables.Accounts.LoadAccountsTV(AccountTreeBox.TreeView)
         GlobalVariables.Versions.LoadVersionsTV(VersionTreeBox.TreeView)
         GlobalVariables.AxisElems.LoadAxisTree(AxisType.Client, ClientsTreeviewBox.TreeView)

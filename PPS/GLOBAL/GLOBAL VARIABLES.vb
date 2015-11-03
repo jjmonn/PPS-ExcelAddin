@@ -71,7 +71,6 @@ Friend Class GlobalVariables
 #Region "Models"
 
     Friend Shared Accounts As AccountManager
-    Friend Shared Entities As EntityManager
     Friend Shared Filters As FilterManager
     Friend Shared FiltersValues As FilterValueManager
     Friend Shared Versions As VersionManager
@@ -86,6 +85,7 @@ Friend Class GlobalVariables
     Friend Shared FModelingsAccounts As FModelingAccountManager
     Friend Shared AxisElems As AxisElemManager
     Friend Shared AxisFilters As AxisFilterManager
+    Friend Shared EntityCurrencies As EntityCurrencyManager
 
 #End Region
 

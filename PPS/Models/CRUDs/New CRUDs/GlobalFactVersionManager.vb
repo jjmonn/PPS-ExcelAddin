@@ -11,7 +11,7 @@ Public Class GlobalFactVersionManager : Inherits NamedCRUDManager(Of NamedHierar
         CreateCMSG = ClientMessage.CMSG_CREATE_GLOBAL_FACT_VERSION
         ReadCMSG = ClientMessage.CMSG_READ_GLOBAL_FACT_VERSION
         UpdateCMSG = ClientMessage.CMSG_UPDATE_GLOBAL_FACT_VERSION
-        UpdateListCMSG = ClientMessage.CMSG_UPDATE_GLOBAL_FACT_VERSION_LIST
+        UpdateListCMSG = ClientMessage.CMSG_CRUD_GLOBAL_FACT_VERSION_LIST
         DeleteCMSG = ClientMessage.CMSG_DELETE_GLOBAL_FACT_VERSION
         ListCMSG = ClientMessage.CMSG_LIST_GLOBAL_FACT_VERSION
 

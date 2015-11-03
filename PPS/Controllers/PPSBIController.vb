@@ -189,7 +189,7 @@ ReturnError:
 
         Dim entityName As String = ReturnValueFromRange(entityObject)
         If Not entityName Is Nothing Then
-            entity_id = GlobalVariables.Entities.GetValueId(entityName)
+            entity_id = GlobalVariables.AxisElems.GetValueId(AxisType.Entities, entityName)
             If entity_id = 0 Then
                 GoTo ReturnError
             Else
