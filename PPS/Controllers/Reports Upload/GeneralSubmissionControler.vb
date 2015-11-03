@@ -101,7 +101,7 @@ Friend Class GeneralSubmissionControler
 
         m_addin.CurrentEntityTB.Text = p_entityName
         m_entityName = p_entityName
-        Dim entity As Entity = GlobalVariables.Entities.GetValue(p_entityName)
+        Dim entity As EntityCurrency = GlobalVariables.EntityCurrencies.GetValue(p_entityName)
         If Not entity Is Nothing Then
             Dim currency As Currency = GlobalVariables.Currencies.GetValue(entity.CurrencyId)
 
@@ -353,7 +353,7 @@ errorHandler:
             ' Implies type of cell checked before -> only double -> check if we can enter anything else !!!
             Dim ht As New Hashtable()
 
-            ht(ENTITY_ID_VARIABLE) = GlobalVariables.Entities.GetValueId(m_dataset.m_datasetCellDimensionsDictionary(cellAddress).m_entityName)
+            ht(ENTITY_ID_VARIABLE) = GlobalVariables.AxisElems.GetValueId(AxisType.Entities, m_dataset.m_datasetCellDimensionsDictionary(cellAddress).m_entityName)
             ht(ACCOUNT_ID_VARIABLE) = GlobalVariables.Accounts.GetValueId(m_dataset.m_datasetCellDimensionsDictionary(cellAddress).m_accountName)
             ht(PERIOD_VARIABLE) = m_dataset.m_datasetCellDimensionsDictionary(cellAddress).m_period
             ht(VERSION_ID_VARIABLE) = m_acquisitionModel.m_currentVersionId

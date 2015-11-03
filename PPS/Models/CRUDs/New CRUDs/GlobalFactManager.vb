@@ -13,7 +13,7 @@ Friend Class GlobalFactManager : Inherits NamedCRUDManager(Of NamedCRUDEntity)
         CreateCMSG = ClientMessage.CMSG_CREATE_GLOBAL_FACT
         ReadCMSG = ClientMessage.CMSG_READ_GLOBAL_FACT
         UpdateCMSG = ClientMessage.CMSG_UPDATE_GLOBAL_FACT
-        UpdateListCMSG = ClientMessage.CMSG_UPDATE_GLOBAL_FACT_LIST
+        UpdateListCMSG = ClientMessage.CMSG_CRUD_GLOBAL_FACT_LIST
         DeleteCMSG = ClientMessage.CMSG_DELETE_GLOBAL_FACT
         ListCMSG = ClientMessage.CMSG_LIST_GLOBAL_FACT
 

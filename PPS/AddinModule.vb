@@ -1271,7 +1271,6 @@ Public Class AddinModule
 
         ' CRUDs
         GlobalVariables.Accounts = New AccountManager
-        GlobalVariables.Entities = New EntityManager
         GlobalVariables.Filters = New FilterManager
         GlobalVariables.FiltersValues = New FilterValueManager
         GlobalVariables.Versions = New VersionManager
@@ -1286,6 +1285,7 @@ Public Class AddinModule
         GlobalVariables.FModelingsAccounts = New FModelingAccountManager
         GlobalVariables.AxisElems = New AxisElemManager
         GlobalVariables.AxisFilters = New AxisFilterManager
+        GlobalVariables.EntityCurrencies = New EntityCurrencyManager
 
         ' Financial Bi User Defined Function
         GlobalVariables.GlobalPPSBIController = New PPSBIController
@@ -1844,7 +1844,7 @@ Public Class AddinModule
 
         Dim entity_id As Int32 = Me.InputReportTaskPane.EntitiesTV.SelectedNode.Name
         Dim entity_name As String = Me.InputReportTaskPane.EntitiesTV.SelectedNode.Text
-        Dim l_entity As Entity = GlobalVariables.Entities.GetValue(entity_id)
+        Dim l_entity As EntityCurrency = GlobalVariables.EntityCurrencies.GetValue(entity_id)
         If l_entity Is Nothing Then Exit Sub
         Dim currency As Currency = GlobalVariables.Currencies.GetValue(l_entity.CurrencyId)
         If currency Is Nothing Then Exit Sub

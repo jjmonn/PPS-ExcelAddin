@@ -31,7 +31,7 @@ Public Class ComputingCache
     Friend Sub New(ByRef computingHierarchyCompare As Boolean)
 
         computingHierarchyCompareFlag = computingHierarchyCompare
-        GlobalVariables.Entities.LoadEntitiesTV(entitiesTV)
+        GlobalVariables.AxisElems.LoadEntitiesTV(entitiesTV)
         ' listen to entities updates !! 
 
     End Sub

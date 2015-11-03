@@ -16,7 +16,7 @@ Friend Class GlobalFactDataManager : Inherits CRUDManager
         CreateCMSG = ClientMessage.CMSG_CREATE_GLOBAL_FACT_DATA
         ReadCMSG = ClientMessage.CMSG_READ_GLOBAL_FACT_DATA
         UpdateCMSG = ClientMessage.CMSG_UPDATE_GLOBAL_FACT_DATA
-        UpdateListCMSG = ClientMessage.CMSG_UPDATE_GLOBAL_FACT_DATA_LIST
+        UpdateListCMSG = ClientMessage.CMSG_CRUD_GLOBAL_FACT_DATA_LIST
         DeleteCMSG = ClientMessage.CMSG_DELETE_GLOBAL_FACT_DATA
         ListCMSG = ClientMessage.CMSG_LIST_GLOBAL_FACT_DATA
 

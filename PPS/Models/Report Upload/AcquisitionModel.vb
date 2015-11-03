@@ -105,7 +105,7 @@ Friend Class AcquisitionModel
                                 ByRef product_id As Int32, _
                                 ByRef adjustment_id As Int32)
 
-        Dim entity As Entity = GlobalVariables.Entities.GetValue(entityName)
+        Dim entity As EntityCurrency = GlobalVariables.EntityCurrencies.GetValue(entityName)
         Dim version As Version = GlobalVariables.Versions.GetValue(My.Settings.version_id)
         If entity Is Nothing OrElse version Is Nothing Then Exit Sub
 
@@ -140,7 +140,7 @@ Friend Class AcquisitionModel
     Private Sub AfterInputsComputation(ByRef entityId As Int32, ByRef status As ErrorMessage, ByRef requestId As Int32)
 
         If status = ErrorMessage.SUCCESS Then
-            Dim entity As Entity = GlobalVariables.Entities.GetValue(entityId)
+            Dim entity As AxisElem = GlobalVariables.AxisElems.GetValue(AxisType.Entities, entityId)
             If entity Is Nothing Then Exit Sub
 
             If m_databaseInputsDictionary.ContainsKey(entity.Name) Then
@@ -260,15 +260,19 @@ Friend Class AcquisitionModel
     ' Launch Single Computation
     Friend Sub ComputeCalculatedItems(ByRef entityName As String)
 
-        Dim entity As Entity = GlobalVariables.Entities.GetValue(entityName)
-        If entity Is Nothing Then Exit Sub
-        BuildInputsArrays(entity.Name)
+        Dim l_entityCurrency As EntityCurrency = GlobalVariables.EntityCurrencies.GetValue(entityName)
+        If l_entityCurrency Is Nothing Then Exit Sub
+
+        Dim l_entity As AxisElem = GlobalVariables.AxisElems.GetValue(AxisType.Entities, entityName)
+        If l_entity Is Nothing Then Exit Sub
+
+        BuildInputsArrays(l_entity.Name)
         m_singleComputer.CMSG_SOURCED_COMPUTE(m_currentVersionId, _
-                                            entity.Id, _
-                                            entity.CurrencyId, _
-                                            m_accKeysArray, _
-                                            m_periodsArray, _
-                                            m_valuesArray)
+                                              l_entity.Id, _
+                                              l_entityCurrency.CurrencyId, _
+                                              m_accKeysArray, _
+                                              m_periodsArray, _
+                                              m_valuesArray)
 
     End Sub
 
@@ -280,7 +284,7 @@ Friend Class AcquisitionModel
             m_computationDataMap.Add(entityId, m_singleComputer.GetDataMap)
         End If
 
-        Dim l_entity As Entity = GlobalVariables.Entities.GetValue(entityId)
+        Dim l_entity As AxisElem = GlobalVariables.AxisElems.GetValue(AxisType.Entities, entityId)
         If l_entity Is Nothing Then Exit Sub
         If Not l_entity Is Nothing Then
             RaiseEvent m_afterOutputsComputed(l_entity.Name)

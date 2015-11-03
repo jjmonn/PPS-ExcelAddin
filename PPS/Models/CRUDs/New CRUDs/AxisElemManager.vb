@@ -56,6 +56,34 @@ Public Class AxisElemManager : Inherits AxedCRUDManager(Of AxisElem)
 
 #Region "Utilities"
 
+    Friend Sub LoadEntitiesTV(ByRef TV As Windows.Forms.TreeView)
+
+        TreeViewsUtilities.LoadTreeview(TV, m_CRUDDic(AxisType.Entities))
+
+    End Sub
+
+    Friend Sub LoadEntitiesTV(ByRef TV As VIBlend.WinForms.Controls.vTreeView)
+
+        VTreeViewUtil.LoadTreeview(TV, m_CRUDDic(AxisType.Entities))
+
+    End Sub
+
+    Friend Sub LoadEntitiesTV(ByRef TV As Windows.Forms.TreeView, _
+                           ByRef nodes_icon_dic As Dictionary(Of UInt32, Int32))
+
+        Dim tmp_ht As New MultiIndexDictionary(Of UInt32, String, NamedHierarchyCRUDEntity)
+        For Each id As UInt32 In nodes_icon_dic.Keys
+            Dim l_entity As AxisElem = GetValue(AxisType.Entities, id)
+            If l_entity Is Nothing Then Continue For
+            l_entity = l_entity.Clone()
+
+            l_entity.Image = nodes_icon_dic(id)
+            tmp_ht.Set(l_entity.Id, l_entity.Name, l_entity)
+        Next
+        TreeViewsUtilities.LoadTreeview(TV, tmp_ht)
+
+    End Sub
+
     Friend Sub LoadAxisTree(ByVal p_axis As AxisType, ByRef TV As VIBlend.WinForms.Controls.vTreeView)
 
         TV.Nodes.Clear()

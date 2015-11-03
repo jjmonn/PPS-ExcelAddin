@@ -282,7 +282,7 @@ Friend Class ModelDataSet
                 Try
                     If VarType(m_excelWorkSheet.Cells(rowIndex, columnIndex).value) = 8 Then
                         currentStr = CStr(m_excelWorkSheet.Cells(rowIndex, columnIndex).value)
-                        If Not GlobalVariables.Entities.GetValue(currentStr) Is Nothing _
+                        If Not GlobalVariables.AxisElems.GetValue(AxisType.Entities, currentStr) Is Nothing _
                         AndAlso Not m_entitiesAddressValuesDictionary.ContainsValue(currentStr) Then
                             m_entitiesAddressValuesDictionary.Add(GetRangeAddressFromRowAndColumn(rowIndex, columnIndex), currentStr)
                             m_entitiesValuesAddressDict.Add(currentStr, GetRangeAddressFromRowAndColumn(rowIndex, columnIndex))
@@ -356,9 +356,8 @@ Friend Class ModelDataSet
         Dim P As Double
 
         AssetResearchAlgo = False
-
-        For Each l_entity As Entity In GlobalVariables.Entities.GetDictionary().Values
-            Delta = GeneralUtilities.Levenshtein(CStr(str()), l_entity.Name)
+        For Each l_entity As AxisElem In GlobalVariables.AxisElems.GetDictionary(AxisType.Entities).Values
+            Delta = GeneralUtilities.Levenshtein(CStr(str), l_entity.Name)
             P = Delta / l_entity.Name.Length
             If P <= 2 / l_entity.Name.Length Then
                 AssetResearchAlgo = True

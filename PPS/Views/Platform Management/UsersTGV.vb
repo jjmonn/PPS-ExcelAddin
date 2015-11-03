@@ -18,6 +18,7 @@ Imports System.Collections.Generic
 Imports System.Collections
 Imports System.Windows.Forms
 Imports System.Drawing
+Imports CRUD
 
 
 Friend Class UsersTGV
@@ -156,7 +157,7 @@ Friend Class UsersTGV
                                       hash(USERS_CREDENTIAL_TYPE_VARIABLE))
 
             TGV.CellsArea.SetCellValue(row, columnsDictionary(USERS_ENTITY_ID_VARIABLE), _
-                                       GlobalVariables.Entities.GetValue(hash(USERS_ENTITY_ID_VARIABLE)))
+                                       GlobalVariables.AxisElems.GetValue(AxisType.Entities, hash(USERS_ENTITY_ID_VARIABLE)))
 
             TGV.CellsArea.SetCellValue(row, columnsDictionary(USERS_EMAIL_VARIABLE), _
                                        hash(USERS_EMAIL_VARIABLE))

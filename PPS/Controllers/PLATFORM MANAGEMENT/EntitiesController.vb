@@ -49,10 +49,10 @@ Friend Class EntitiesController
         NewEntityView = New NewEntityUI(Me, entitiesTV, GlobalVariables.Currencies.GetDictionary())
 
         ' Entities CRUD Events
-        AddHandler GlobalVariables.Entities.CreationEvent, AddressOf AfterEntityCreation
-        AddHandler GlobalVariables.Entities.DeleteEvent, AddressOf AfterEntityDeletion
-        AddHandler GlobalVariables.Entities.UpdateEvent, AddressOf AfterEntityUpdate
-        AddHandler GlobalVariables.Entities.Read, AddressOf AfterEntityRead
+        AddHandler GlobalVariables.AxisElems.CreationEvent, AddressOf AfterEntityCreation
+        AddHandler GlobalVariables.AxisElems.DeleteEvent, AddressOf AfterEntityDeletion
+        AddHandler GlobalVariables.AxisElems.UpdateEvent, AddressOf AfterEntityUpdate
+        AddHandler GlobalVariables.AxisElems.Read, AddressOf AfterEntityRead
 
         ' Entities Filters CRUD Events
         AddHandler GlobalVariables.AxisFilters.Read, AddressOf AfterEntityFilterRead
@@ -62,7 +62,7 @@ Friend Class EntitiesController
 
     Public Sub LoadInstanceVariables()
 
-        GlobalVariables.Entities.LoadEntitiesTV(entitiesTV)
+        GlobalVariables.AxisElems.LoadEntitiesTV(entitiesTV)
         GlobalVariables.Filters.LoadFiltersTV(entitiesFilterTV, GlobalEnums.AnalysisAxis.ENTITIES)
         AxisFilterManager.LoadFvTv(entitiesFilterValuesTV, GlobalEnums.AnalysisAxis.ENTITIES)
 
@@ -91,31 +91,30 @@ Friend Class EntitiesController
 #Region "Interface"
 
     Friend Sub CreateEntity(ByRef entityName As String, _
-                            ByRef entityCurrency As Int32, _
                             ByRef parentEntityId As Int32, _
                             ByRef position As Int32, _
                             ByRef allowEdition As Int32)
 
-        Dim l_entity As New Entity
+        Dim l_entity As New AxisElem
 
         l_entity.Name = entityName
-        l_entity.CurrencyId = entityCurrency
+        l_entity.Axis = AxisType.Entities
         l_entity.ParentId = parentEntityId
         l_entity.ItemPosition = position
         l_entity.AllowEdition = allowEdition
-        GlobalVariables.Entities.Create(l_entity)
+        GlobalVariables.AxisElems.Create(l_entity)
 
     End Sub
 
-    Friend Sub UpdateEntity(ByRef entity_attributes As Entity)
+    Friend Sub UpdateEntity(ByRef entity_attributes As AxisElem)
 
-        GlobalVariables.Entities.Update(entity_attributes)
+        GlobalVariables.AxisElems.Update(entity_attributes)
 
     End Sub
 
     Friend Sub DeleteEntity(ByRef entity_id As Int32)
 
-        GlobalVariables.Entities.Delete(entity_id)
+        GlobalVariables.AxisElems.Delete(entity_id)
 
     End Sub
 
@@ -155,14 +154,20 @@ Friend Class EntitiesController
     End Function
 
     Friend Sub UpdateEntityName(ByVal p_id As UInt32, ByVal p_value As String)
-        UpdateVar(p_id, p_value, Function(p_entity As Entity, p_destValue As Object) p_entity.Name = p_destValue)
+        UpdateVar(p_id, p_value, Function(p_entity As AxisElem, p_destValue As Object) p_entity.Name = p_destValue)
     End Sub
 
     Friend Sub UpdateEntityCurrency(ByVal p_id As UInt32, ByVal p_value As UInt32)
-        UpdateVar(p_id, p_value, Function(p_entity As Entity, p_destValue As Object) p_entity.CurrencyId = p_destValue)
+        Dim l_entityCurrency As EntityCurrency = GlobalVariables.EntityCurrencies.GetValue(p_id)
+
+        If l_entityCurrency Is Nothing Then Exit Sub
+        l_entityCurrency = l_entityCurrency.Clone()
+
+        l_entityCurrency.CurrencyId = p_value
+        GlobalVariables.EntityCurrencies.Update(l_entityCurrency)
     End Sub
 
-    Private Sub UpdateVar(ByVal p_id As UInt32, ByVal p_value As Object, ByRef p_action As Action(Of Entity, Object))
+    Private Sub UpdateVar(ByVal p_id As UInt32, ByVal p_value As Object, ByRef p_action As Action(Of AxisElem, Object))
         Dim l_entity = GetEntityCopy(p_id)
 
         If l_entity Is Nothing Then Exit Sub
@@ -174,7 +179,7 @@ Friend Class EntitiesController
 
 #Region "Events"
 
-    Private Sub AfterEntityRead(ByRef status As ErrorMessage, ByRef ht As Entity)
+    Private Sub AfterEntityRead(ByRef status As ErrorMessage, ByRef ht As AxisElem)
 
         If (status = ErrorMessage.SUCCESS) Then
             View.LoadInstanceVariables_Safe()
@@ -195,8 +200,8 @@ Friend Class EntitiesController
     Private Sub AfterEntityUpdate(ByRef status As ErrorMessage, ByRef id As Int32)
 
         If (status <> ErrorMessage.SUCCESS) Then
-            If GlobalVariables.Entities.GetValue(id) Is Nothing Then Exit Sub
-            View.UpdateEntity(GlobalVariables.Entities.GetValue(id))
+            If GlobalVariables.AxisElems.GetValue(AxisType.Entities, id) Is Nothing Then Exit Sub
+            View.UpdateEntity(GlobalVariables.AxisElems.GetValue(AxisType.Entities, id))
             MsgBox("Invalid parameter")
         End If
 
@@ -217,9 +222,9 @@ Friend Class EntitiesController
             Dim axisFilter As AxisFilter = CType(p_axisFilter, AxisFilter)
             If axisFilter.Axis <> AxisType.Entities Then Exit Sub
             Dim entityId As Int32 = p_axisFilter.Id
-            If Not GlobalVariables.Entities.GetValue(entityId) Is Nothing Then
+            If Not GlobalVariables.AxisElems.GetValue(AxisType.Entities, entityId) Is Nothing Then
                 View.LoadInstanceVariables()
-                View.UpdateEntity(GlobalVariables.Entities.GetValue(entityId))
+                View.UpdateEntity(GlobalVariables.AxisElems.GetValue(AxisType.Entities, entityId))
             End If
         End If
 
@@ -230,8 +235,8 @@ Friend Class EntitiesController
         If status <> ErrorMessage.SUCCESS Then
             Dim l_axisFilter As AxisFilter = GlobalVariables.AxisFilters.GetValue(axisFilterId)
             If l_axisFilter.Axis <> CRUD.AxisType.Entities Then Exit Sub
-            If GlobalVariables.Entities.GetValue(l_axisFilter.AxisElemId) Is Nothing Then Exit Sub
-            View.UpdateEntity(GlobalVariables.Entities.GetValue(l_axisFilter.AxisElemId))
+            If GlobalVariables.AxisElems.GetValue(AxisType.Entities, l_axisFilter.AxisElemId) Is Nothing Then Exit Sub
+            View.UpdateEntity(GlobalVariables.AxisElems.GetValue(AxisType.Entities, l_axisFilter.AxisElemId))
             MsgBox("The Entity could be updated.")
             ' catch and display message
         End If
@@ -242,12 +247,12 @@ Friend Class EntitiesController
 
 #Region "Utilities"
 
-    Friend Function GetEntity(ByVal p_id As UInt32) As Entity
-        Return GlobalVariables.Entities.GetValue(p_id)
+    Friend Function GetEntity(ByVal p_id As UInt32) As AxisElem
+        Return GlobalVariables.AxisElems.GetValue(AxisType.Entities, p_id)
     End Function
 
-    Friend Function GetEntityCopy(ByVal p_id As UInt32) As Entity
-        Dim l_entity As Entity = GlobalVariables.Entities.GetValue(p_id)
+    Friend Function GetEntityCopy(ByVal p_id As UInt32) As AxisElem
+        Dim l_entity As AxisElem = GetEntity(p_id)
 
         If l_entity Is Nothing Then Return Nothing
         Return l_entity.Clone()
@@ -275,7 +280,7 @@ ShowNewEntity:
 
     Friend Function GetEntityId(ByRef name As String) As Int32
 
-        Return GlobalVariables.Entities.GetValueId(name)
+        Return GlobalVariables.AxisElems.GetValueId(AxisType.Entities, name)
 
     End Function
 
@@ -297,7 +302,7 @@ ShowNewEntity:
                 End If
             End If
         Next
-        GlobalVariables.Entities.UpdateList(listEntities)
+        GlobalVariables.AxisElems.UpdateList(listEntities)
     End Sub
 
 

@@ -25,7 +25,7 @@ Friend Class VersionManager : Inherits NamedCRUDManager(Of NamedHierarchyCRUDEnt
         CreateCMSG = ClientMessage.CMSG_CREATE_VERSION
         ReadCMSG = ClientMessage.CMSG_READ_VERSION
         UpdateCMSG = ClientMessage.CMSG_UPDATE_VERSION
-        UpdateListCMSG = ClientMessage.CMSG_UPDATE_VERSION_LIST
+        UpdateListCMSG = ClientMessage.CMSG_CRUD_VERSION_LIST
         DeleteCMSG = ClientMessage.CMSG_DELETE_VERSION
         ListCMSG = ClientMessage.CMSG_LIST_VERSION
 

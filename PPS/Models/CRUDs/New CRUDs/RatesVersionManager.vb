@@ -23,7 +23,7 @@ Public Class RatesVersionManager : Inherits NamedCRUDManager(Of NamedHierarchyCR
         CreateCMSG = ClientMessage.CMSG_CREATE_RATE_VERSION
         ReadCMSG = ClientMessage.CMSG_READ_RATE_VERSION
         UpdateCMSG = ClientMessage.CMSG_UPDATE_RATE_VERSION
-        UpdateListCMSG = ClientMessage.CMSG_UPDATE_RATE_VERSION_LIST
+        UpdateListCMSG = ClientMessage.CMSG_CRUD_RATE_VERSION_LIST
         DeleteCMSG = ClientMessage.CMSG_DELETE_RATE_VERSION
         ListCMSG = ClientMessage.CMSG_LIST_RATE_VERSION
 

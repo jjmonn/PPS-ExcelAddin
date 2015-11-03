@@ -30,7 +30,7 @@ Friend Class ConnectionsFunctions
     Friend globalInitFlag As Boolean = False
     Friend globalAuthenticated As Boolean = False
 
-    Private globalVariablesInitFlags As New Collections.Generic.Dictionary(Of UInt32, Boolean)
+    Private globalVariablesInitFlags As New Collections.Generic.Dictionary(Of GlobalEnums.GlobalModels, Boolean)
 
 #End Region
 
@@ -129,7 +129,7 @@ Friend Class ConnectionsFunctions
         AddHandler GlobalVariables.AxisFilters.ObjectInitialized, AddressOf AfterAxisFilterInit
         AddHandler GlobalVariables.FModelingsAccounts.ObjectInitialized, AddressOf AfterFModelingAccountsInit
         AddHandler GlobalVariables.Accounts.ObjectInitialized, AddressOf AfterAccountsInit
-        AddHandler GlobalVariables.Entities.ObjectInitialized, AddressOf AfterEntitiesInit
+        AddHandler GlobalVariables.EntityCurrencies.ObjectInitialized, AddressOf AfterEntityCurrenciesInit
         AddHandler GlobalVariables.Filters.ObjectInitialized, AddressOf AfterFiltersInit
         AddHandler GlobalVariables.FiltersValues.ObjectInitialized, AddressOf AfterFiltersValuesInit
         AddHandler GlobalVariables.Versions.ObjectInitialized, AddressOf AfterFactsVersionsInit
@@ -143,7 +143,7 @@ Friend Class ConnectionsFunctions
         AddHandler GlobalVariables.GroupAllowedEntities.ObjectInitialized, AddressOf AfterGroupAllowedEntityInit
 
         globalVariablesInitFlags.Add(GlobalEnums.GlobalModels.ACCOUNTS, False)
-        globalVariablesInitFlags.Add(GlobalEnums.GlobalModels.ENTITIES, False)
+        globalVariablesInitFlags.Add(GlobalEnums.GlobalModels.ENTITYCURRENCY, False)
         globalVariablesInitFlags.Add(GlobalEnums.GlobalModels.FILTERS, False)
         globalVariablesInitFlags.Add(GlobalEnums.GlobalModels.FILTERSVALUES, False)
         globalVariablesInitFlags.Add(GlobalEnums.GlobalModels.FACTSVERSIONS, False)
@@ -227,9 +227,9 @@ Friend Class ConnectionsFunctions
 
     End Sub
 
-    Private Sub AfterEntitiesInit()
+    Private Sub AfterEntityCurrenciesInit()
 
-        globalVariablesInitFlags(GlobalEnums.GlobalModels.ENTITIES) = True
+        globalVariablesInitFlags(GlobalEnums.GlobalModels.ENTITYCURRENCY) = True
         globalInitFlag = CheckGlobalVariablesInitFlag()
 
     End Sub

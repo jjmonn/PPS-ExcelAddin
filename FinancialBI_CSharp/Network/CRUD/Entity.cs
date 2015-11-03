@@ -6,61 +6,35 @@ using System.Threading.Tasks;
 
 namespace CRUD
 {
-  public class Entity : NamedHierarchyCRUDEntity, IComparable
+  public class EntityCurrency : CRUDEntity, IComparable
   {
     public UInt32 Id { get; private set; }
-    public UInt32 ParentId { get; set; }
     public UInt32 CurrencyId { get; set; }
-    public string Name { get; set; }
-    public Int32 ItemPosition { get; set; }
-    public bool AllowEdition { get; set; }
-    public Int32 Image { get; set; }
 
-    public Entity() { }
-    private Entity(UInt32 p_id)
+    public EntityCurrency() { }
+    private EntityCurrency(UInt32 p_entityId, UInt32 p_currencyId)
     {
-      Id = p_id;
+      Id = p_entityId;
+      CurrencyId = p_currencyId;
     }
 
-    public static Entity BuildEntity(ByteBuffer p_packet)
+    public static EntityCurrency BuildEntityCurrency(ByteBuffer p_packet)
     {
-      Entity l_entity = new Entity(p_packet.ReadUint32());
-
-      l_entity.ParentId = p_packet.ReadUint32();
-      l_entity.CurrencyId = p_packet.ReadUint32();
-      l_entity.Name = p_packet.ReadString();
-      l_entity.ItemPosition = p_packet.ReadInt32();
-      l_entity.AllowEdition = p_packet.ReadBool();
+      EntityCurrency l_entity = new EntityCurrency(p_packet.ReadUint32(), p_packet.ReadUint32());
 
       return (l_entity);
     }
 
     public void Dump(ByteBuffer p_packet, bool p_includeId)
     {
-      if (p_includeId)
-        p_packet.WriteUint32(Id);
-      p_packet.WriteUint32(ParentId);
+      p_packet.WriteUint32(Id);
       p_packet.WriteUint32(CurrencyId);
-      p_packet.WriteString(Name);
-      p_packet.WriteInt32(ItemPosition);
-      p_packet.WriteBool(AllowEdition);
     }
 
-    public void CopyFrom(Entity p_model)
+    public EntityCurrency Clone()
     {
-      ParentId = p_model.ParentId;
-      CurrencyId = p_model.CurrencyId;
-      Name = p_model.Name;
-      ItemPosition = p_model.ItemPosition;
-      AllowEdition = p_model.AllowEdition;
-      Image = p_model.Image;
-    }
+      EntityCurrency l_clone = new EntityCurrency(Id, CurrencyId);
 
-    public Entity Clone()
-    {
-      Entity l_clone = new Entity(Id);
-
-      l_clone.CopyFrom(this);
       return (l_clone);
     }
 
@@ -68,11 +42,11 @@ namespace CRUD
     {
       if (p_obj == null)
         return 0;
-      Entity l_cmpEntity = p_obj as Entity;
+      EntityCurrency l_cmpEntity = p_obj as EntityCurrency;
 
       if (l_cmpEntity == null)
         return 0;
-      if (l_cmpEntity.ItemPosition > ItemPosition)
+      if (l_cmpEntity.Id > Id)
         return -1;
       else
         return 1;

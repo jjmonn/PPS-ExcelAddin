@@ -42,7 +42,7 @@ Friend Class GroupsControl
         m_groupTreeView.Dock = DockStyle.Fill
         AddHandler m_groupTreeView.MouseClick, AddressOf groupTreeView_Click
 
-        GlobalVariables.Entities.LoadEntitiesTV(m_entitiesTV)
+        GlobalVariables.AxisElems.LoadEntitiesTV(m_entitiesTV)
         Me.EntitiesPanel.Controls.Add(m_entitiesTV)
         EntitiesPanel.Enabled = False
         m_entitiesTV.Dock = DockStyle.Fill

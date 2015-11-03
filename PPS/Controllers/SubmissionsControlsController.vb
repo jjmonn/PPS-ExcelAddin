@@ -44,7 +44,7 @@ Friend Class SubmissionsControlsController
     Protected Friend Sub New()
 
 
-        Globalvariables.Entities.LoadEntitiesTV(EntitiesTV)
+        GlobalVariables.AxisElems.LoadEntitiesTV(EntitiesTV)
         TreeViewsUtilities.CheckAllNodes(EntitiesTV)
         ControlChart.LoadControlChartsTree(ChartsTV)
         entities_id_list = TreeViewsUtilities.GetNodesKeysList(EntitiesTV)
@@ -171,7 +171,7 @@ Friend Class SubmissionsControlsController
                 nodes_icon_dic.Add(entity_id, 0)
             End If
         Next
-        GlobalVariables.Entities.LoadEntitiesTV(EntitiesTV, nodes_icon_dic)
+        GlobalVariables.AxisElems.LoadEntitiesTV(EntitiesTV, nodes_icon_dic)
         EntitiesTV.CollapseAll()
         EntitiesTV.Refresh()
 

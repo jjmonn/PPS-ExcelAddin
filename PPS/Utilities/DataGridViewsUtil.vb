@@ -434,7 +434,7 @@ Friend Class DataGridViewsUtil
         line_index = line_index + 1
         If Not entitiesArray Is Nothing Then
             For i As Int32 = 1 To UBound(entitiesArray)
-                Dim sub_row As HierarchyItem = row.Items.Add(GlobalVariables.Entities.GetValueId(entitiesArray(i)))
+                Dim sub_row As HierarchyItem = row.Items.Add(GlobalVariables.AxisElems.GetValueId(AxisType.Entities, entitiesArray(i)))
             Next
         Else
             For Each child In entity_node.Nodes
@@ -481,7 +481,7 @@ Friend Class DataGridViewsUtil
                                                     ByRef DGV As vDataGridView)
 
         If entity_node.Checked = True Then
-            Dim sub_row As HierarchyItem = row.Items.Add(GlobalVariables.Entities.GetValueId(CStr(entity_node.Name)))
+            Dim sub_row As HierarchyItem = row.Items.Add(GlobalVariables.AxisElems.GetValueId(AxisType.Entities, CStr(entity_node.Name)))
             For Each child In entity_node.Nodes
                 SetUpRowsHierarchyEntitiesHierarchy(sub_row, child, DGV)
             Next

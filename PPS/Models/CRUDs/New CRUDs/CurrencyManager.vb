@@ -33,7 +33,7 @@ Friend Class CurrencyManager : Inherits NamedCRUDManager(Of NamedCRUDEntity)
         CreateCMSG = ClientMessage.CMSG_CREATE_CURRENCY
         ReadCMSG = ClientMessage.CMSG_READ_CURRENCY
         UpdateCMSG = ClientMessage.CMSG_UPDATE_CURRENCY
-        UpdateListCMSG = ClientMessage.CMSG_UPDATE_CURRENCY_LIST
+        UpdateListCMSG = ClientMessage.CMSG_CRUD_CURRENCY_LIST
         DeleteCMSG = ClientMessage.CMSG_DELETE_CURRENCY
         ListCMSG = ClientMessage.CMSG_LIST_CURRENCY
 
