@@ -203,6 +203,9 @@ Friend Class ControllingUI_2
         leftPane_control.entitiesTV.ContextMenuStrip = EntitiesRCMenu
         leftPane_control.adjustmentsTV.ContextMenuStrip = AdjustmentsRCMenu
         leftPane_control.periodsTV.ContextMenuStrip = PeriodsRCMenu
+        leftPane_control.SelectionCB.DropDownWidth = leftPane_control.SelectionCB.Width
+        leftPane_control.SelectionCB.DropDownHeight = leftPane_control.SelectionCB.ItemHeight * 12
+
 
         Dim vNode As vTreeNode = VTreeViewUtil.FindNode(leftPane_control.versionsTV, My.Settings.version_id)
         If Not vNode Is Nothing Then

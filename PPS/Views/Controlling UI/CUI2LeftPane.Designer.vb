@@ -119,7 +119,7 @@ Partial Class CUI2LeftPane
         Me.SelectionCB.RoundedCornersMaskListItem = CType(15, Byte)
         Me.SelectionCB.Size = New System.Drawing.Size(233, 19)
         Me.SelectionCB.TabIndex = 0
-        Me.SelectionCB.Text = Local.GetValue("CUI.selection")
+        Me.SelectionCB.Text = local.getvalue("CUI.selection")
         Me.SelectionCB.UseThemeBackColor = False
         Me.SelectionCB.UseThemeDropDownArrowColor = True
         Me.SelectionCB.ValueMember = ""
@@ -132,6 +132,7 @@ Partial Class CUI2LeftPane
         Me.CollapseSelectionBT.BackColor = System.Drawing.Color.Transparent
         Me.CollapseSelectionBT.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.CollapseSelectionBT.ImageKey = "minus"
+        Me.CollapseSelectionBT.ImageList = Me.ExpansionImageList
         Me.CollapseSelectionBT.Location = New System.Drawing.Point(242, 3)
         Me.CollapseSelectionBT.Name = "CollapseSelectionBT"
         Me.CollapseSelectionBT.PaintBorder = False
@@ -161,6 +162,7 @@ Partial Class CUI2LeftPane
         Me.PanelCollapseBT.BorderStyle = VIBlend.WinForms.Controls.ButtonBorderStyle.NONE
         Me.PanelCollapseBT.FlatAppearance.BorderSize = 0
         Me.PanelCollapseBT.ImageKey = "minus"
+        Me.PanelCollapseBT.ImageList = Me.ExpansionImageList
         Me.PanelCollapseBT.Location = New System.Drawing.Point(247, 3)
         Me.PanelCollapseBT.Name = "PanelCollapseBT"
         Me.PanelCollapseBT.PaintBorder = False
@@ -176,9 +178,9 @@ Partial Class CUI2LeftPane
         Me.Label1.AutoSize = True
         Me.Label1.Location = New System.Drawing.Point(3, 5)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(101, 15)
+        Me.Label1.Size = New System.Drawing.Size(131, 15)
         Me.Label1.TabIndex = 0
-        Me.Label1.Text = Local.GetValue("CUI.entities_selection")
+        Me.Label1.Text = local.getvalue("CUI.entities_selection")
         Me.Label1.TextAlign = System.Drawing.ContentAlignment.BottomLeft
         '
         'CategoriesIL

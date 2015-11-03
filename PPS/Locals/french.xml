@@ -35,9 +35,12 @@
     <string name="no_entity_selected">Une entité doit être selectionnée.</string>
     <string name="selection">Sélection</string>
     <string name="entities_selection">Selection de l'entité</string>
-    <string name="columns_label">Dimensions en colonnes</string>
-    <string name="rows_label">Dimensions en lignes</string>
+    <string name="columns_label">Colonnes</string>
+    <string name="rows_label">Lignes</string>
     <string name="fields_choice">Choisissez les dimensions à ajouter au rapport:</string>
+    <string name="msg_specify_dimensions1">Vous devez préciser les dimensions suivantes </string>
+    <string name="msg_specify_dimensions2">Comptes et périodes (années ou mois)</string>
+    <string name="msg_currency_selection">Vous devez sélectionner une devise.</string>
   </category>
 
   <category name="CUI_Charts">

@@ -150,7 +150,7 @@ Friend Class ControllingUIController
         If (m_isComputingFlag = True Or m_isDisplayingFlag = True) Then Exit Sub
 
         If HasMinimumDimensions() = False Then
-            MsgBox("You need to specify at least the following dimensions: " + Chr(13) + Chr(10) + "Accounts and periods (Years or Months)")
+            MsgBox(Local.GetValue("CUI.msg_specify_dimensions1") + Chr(13) + Chr(10) + Local.GetValue("CUI.msg_specify_dimensions1"))
             Exit Sub
         End If
         m_view.SetComputeButtonState(False)
@@ -197,7 +197,7 @@ Friend Class ControllingUIController
 
         ' Currency Setup
         If m_view.leftPane_control.currenciesCLB.SelectedItem Is Nothing Then
-            MsgBox("Please select a Currency.")
+            MsgBox(Local.GetValue("CUI.msg_currency_selection"))
             Exit Sub
         End If
         Dim currencyId As Int32 = CInt(m_view.leftPane_control.currenciesCLB.SelectedItem.Value)
@@ -480,51 +480,55 @@ Friend Class ControllingUIController
 
         Dim subRow As HierarchyItem
         If valueNode Is Nothing Then
-            ' Loop through values
-            For Each subNode In dimensionNode.Nodes
-                CreateRow(dgv, dimensionNode, subNode, row)
-            Next
+            If dimensionNode.Nodes.Count > 0 Then
+                ' Loop through values
+                For Each subNode In dimensionNode.Nodes
+                    CreateRow(dgv, dimensionNode, subNode, row)
+                Next
+            ElseIf Not dimensionNode.NextSiblingNode Is Nothing Then
+                CreateRow(dgv, dimensionNode.NextNode, , row)
+            End If
         Else
-            'Set current value for current display axis
-            If SetDisplayAxisValue(dimensionNode, valueNode) = True Then
+                'Set current value for current display axis
+                If SetDisplayAxisValue(dimensionNode, valueNode) = True Then
 
-                If row Is Nothing Then
-                    subRow = dgv.RowsHierarchy.Items.Add(valueNode.Text)
-                Else
-                    subRow = row.Items.Add(valueNode.Text)
-                End If
-                subRow.ItemValue = m_DisplayAxisHt(GlobalEnums.DataMapAxis.ACCOUNTS)
-                subRow.CellsDataSource = GridCellDataSource.Virtual
-                m_view.FormatDGVItem(subRow)
-                HideHiearchyItemIfVComp(subRow, _
-                                        dimensionNode, _
-                                        valueNode)
-                RegisterHierarchyItemDimensions(subRow)
+                    If row Is Nothing Then
+                        subRow = dgv.RowsHierarchy.Items.Add(valueNode.Text)
+                    Else
+                        subRow = row.Items.Add(valueNode.Text)
+                    End If
+                    subRow.ItemValue = m_DisplayAxisHt(GlobalEnums.DataMapAxis.ACCOUNTS)
+                    subRow.CellsDataSource = GridCellDataSource.Virtual
+                    m_view.FormatDGVItem(subRow)
+                    HideHiearchyItemIfVComp(subRow, _
+                                            dimensionNode, _
+                                            valueNode)
+                    RegisterHierarchyItemDimensions(subRow)
 
-                ' Dig one level deeper if any
-                If Not dimensionNode.NextSiblingNode Is Nothing Then
+                    ' Dig one level deeper if any
+                    If Not dimensionNode.NextSiblingNode Is Nothing Then
 
-                    ' Test: Loop only if dimension is not account and account_formulatype = title
-                    If dimensionNode.Value = computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.ACCOUNTS Then
-                        Dim account As Account = GlobalVariables.Accounts.GetValue(CUInt(valueNode.Value))
-                        If account Is Nothing Then Exit Sub
-                        If account.FormulaType = account.FormulaTypes.TITLE Then
-                            ' Case account formula type title
+                        ' Test: Loop only if dimension is not account and account_formulatype = title
+                        If dimensionNode.Value = computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.ACCOUNTS Then
+                            Dim account As Account = GlobalVariables.Accounts.GetValue(CUInt(valueNode.Value))
+                            If account Is Nothing Then Exit Sub
+                            If account.FormulaType = account.FormulaTypes.TITLE Then
+                                ' Case account formula type title
+                            Else
+                                CreateRow(dgv, dimensionNode.NextNode, , subRow)
+                            End If
                         Else
                             CreateRow(dgv, dimensionNode.NextNode, , subRow)
                         End If
-                    Else
-                        CreateRow(dgv, dimensionNode.NextNode, , subRow)
                     End If
+
+                    ' Loop through children if any
+                    For Each subNode In valueNode.Nodes
+                        CreateRow(dgv, dimensionNode, subNode, subRow)
+                    Next
+
+                    LevelDimensionFilterOrAxis(dimensionNode)
                 End If
-
-                ' Loop through children if any
-                For Each subNode In valueNode.Nodes
-                    CreateRow(dgv, dimensionNode, subNode, subRow)
-                Next
-
-                LevelDimensionFilterOrAxis(dimensionNode)
-            End If
         End If
 
     End Sub
