@@ -366,8 +366,6 @@ Module Data_Tables_Constants
     Friend Const PARENT_FILTER_VALUE_ID_VARIABLE As String = "parent_filter_value_id"
 
     Friend Const AXIS_NAME_FORBIDEN_CHARS = ","
-    Friend Const DEFAULT_ANALYSIS_AXIS_ID As Int32 = 1
-
 
 #End Region
 

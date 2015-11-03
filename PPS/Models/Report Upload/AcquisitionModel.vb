@@ -38,29 +38,29 @@ Friend Class AcquisitionModel
 #Region "Instance Variables"
 
     ' Objects
-    Private Computer As New Computer
-    Private SingleComputer As New ComputerInputEntity
-    Private dataset As ModelDataSet
+    Private m_computer As New Computer
+    Private m_singleComputer As New ComputerInputEntity
+    Private m_dataSet As ModelDataSet
 
     ' Variables
     '(entity_name)(account_name)(period_token) => values
-    Friend dataBaseInputsDictionary As New Dictionary(Of String, Dictionary(Of String, Dictionary(Of String, Double)))
-    Private computationDataMap As New Dictionary(Of Int32, Dictionary(Of Int32, Dictionary(Of String, Double)))
-    Friend currentPeriodDict As Dictionary(Of Int32, List(Of Int32))
-    Friend currentPeriodList() As Int32
-    Friend outputsList As List(Of Account)
-    Friend accountsTV As New TreeView
-    Friend current_version_id As Int32
-    Friend periodsIdentifyer As String
+    Friend m_databaseInputsDictionary As New Dictionary(Of String, Dictionary(Of String, Dictionary(Of String, Double)))
+    Private m_computationDataMap As New Dictionary(Of Int32, Dictionary(Of Int32, Dictionary(Of String, Double)))
+    Friend m_currentPeriodDict As Dictionary(Of Int32, List(Of Int32))
+    Friend m_currentPeriodList() As Int32
+    Friend m_outputsList As List(Of Account)
+    Friend m_accountsTV As New TreeView
+    Friend m_currentVersionId As Int32
+    Friend m_periodsIdentifyer As String
 
     ' Dll computation related
-    Private accKeysArray() As Int32
-    Private periodsArray() As Int32
-    Private valuesArray() As Double
+    Private m_accKeysArray() As Int32
+    Private m_periodsArray() As Int32
+    Private m_valuesArray() As Double
 
     ' Events
-    Public Event AfterInputsDownloaded()
-    Public Event AfterOutputsComputed(ByRef entityName As String)
+    Public Event m_afterInputsDownloaded()
+    Public Event m_afterOutputsComputed(ByRef entityName As String)
 
 #End Region
 
@@ -69,13 +69,13 @@ Friend Class AcquisitionModel
 
     Friend Sub New(ByRef inputDataSet As ModelDataSet)
 
-        GlobalVariables.Accounts.LoadAccountsTV(accountsTV)
-        dataset = inputDataSet
+        GlobalVariables.Accounts.LoadAccountsTV(m_accountsTV)
+        m_dataSet = inputDataSet
 
-        outputsList = GlobalVariables.Accounts.GetAccountsList(GlobalEnums.AccountsLookupOptions.LOOKUP_OUTPUTS)
+        m_outputsList = GlobalVariables.Accounts.GetAccountsList(GlobalEnums.AccountsLookupOptions.LOOKUP_OUTPUTS)
 
-        AddHandler Computer.ComputationAnswered, AddressOf AfterInputsComputation
-        AddHandler SingleComputer.ComputationAnswered, AddressOf AfterOuptutsComputed
+        AddHandler m_computer.ComputationAnswered, AddressOf AfterInputsComputation
+        AddHandler m_singleComputer.ComputationAnswered, AddressOf AfterOuptutsComputed
 
     End Sub
 
@@ -109,12 +109,12 @@ Friend Class AcquisitionModel
         Dim version As Version = GlobalVariables.Versions.GetValue(My.Settings.version_id)
         If entity Is Nothing OrElse version Is Nothing Then Exit Sub
 
-        current_version_id = My.Settings.version_id
-        currentPeriodDict = GlobalVariables.Versions.GetPeriodsDictionary(current_version_id)
-        currentPeriodList = GlobalVariables.Versions.GetPeriodsList(current_version_id)
+        m_currentVersionId = My.Settings.version_id
+        m_currentPeriodDict = GlobalVariables.Versions.GetPeriodsDictionary(m_currentVersionId)
+        m_currentPeriodList = GlobalVariables.Versions.GetPeriodsList(m_currentVersionId)
         Select Case version.TimeConfiguration
-            Case CRUD.TimeConfig.YEARS : periodsIdentifyer = Computer.YEAR_PERIOD_IDENTIFIER
-            Case CRUD.TimeConfig.MONTHS : periodsIdentifyer = Computer.MONTH_PERIOD_IDENTIFIER
+            Case CRUD.TimeConfig.YEARS : m_periodsIdentifyer = Computer.YEAR_PERIOD_IDENTIFIER
+            Case CRUD.TimeConfig.MONTHS : m_periodsIdentifyer = Computer.MONTH_PERIOD_IDENTIFIER
         End Select
 
         ' Axis filters creation
@@ -128,7 +128,7 @@ Friend Class AcquisitionModel
 
 
         ' Computation order
-        Computer.CMSG_COMPUTE_REQUEST({current_version_id}, _
+        m_computer.CMSG_COMPUTE_REQUEST({m_currentVersionId}, _
                                       entity.Id, _
                                       entity.CurrencyId, _
                                       Nothing, _
@@ -143,12 +143,12 @@ Friend Class AcquisitionModel
             Dim entity As Entity = GlobalVariables.Entities.GetValue(entityId)
             If entity Is Nothing Then Exit Sub
 
-            If dataBaseInputsDictionary.ContainsKey(entity.Name) Then
-                dataBaseInputsDictionary(entity.Name) = LoadDataMapIntoInputsDict(entityId, entity.Name, Computer.GetData)
+            If m_databaseInputsDictionary.ContainsKey(entity.Name) Then
+                m_databaseInputsDictionary(entity.Name) = LoadDataMapIntoInputsDict(entityId, entity.Name, m_computer.GetData)
             Else
-                dataBaseInputsDictionary.Add(entity.Name, LoadDataMapIntoInputsDict(entityId, entity.Name, Computer.GetData))
+                m_databaseInputsDictionary.Add(entity.Name, LoadDataMapIntoInputsDict(entityId, entity.Name, m_computer.GetData))
             End If
-            RaiseEvent AfterInputsDownloaded()
+            RaiseEvent m_afterInputsDownloaded()
             ' Quid priority high -> do not raise event if all entities have not been downloaded !
         Else
             ' ? priority normal
@@ -162,14 +162,14 @@ Friend Class AcquisitionModel
 
         Dim dataMapToken As New String("")
         Dim dataDict As New Dictionary(Of String, Dictionary(Of String, Double))
-        Dim fixed_left_token As String = current_version_id & _
+        Dim fixed_left_token As String = m_currentVersionId & _
                                          Computer.TOKEN_SEPARATOR & _
                                          "0" & _
                                          Computer.TOKEN_SEPARATOR & _
                                          entityId
 
         ' select case input/ FPI
-        For Each accountId As Int32 In TreeViewsUtilities.GetNodesKeysList(accountsTV)
+        For Each accountId As Int32 In TreeViewsUtilities.GetNodesKeysList(m_accountsTV)
 
             Dim l_account As Account = GlobalVariables.Accounts.GetValue(accountId)
 
@@ -182,7 +182,7 @@ Friend Class AcquisitionModel
                     dataDict.Add(accountName, New Dictionary(Of String, Double))
 
                     ' Years
-                    For Each yearId As Int32 In currentPeriodDict.Keys
+                    For Each yearId As Int32 In m_currentPeriodDict.Keys
                         dataMapToken = fixed_left_token & Computer.TOKEN_SEPARATOR & _
                                         accountId & Computer.TOKEN_SEPARATOR & _
                                        Computer.YEAR_PERIOD_IDENTIFIER & yearId
@@ -195,7 +195,7 @@ Friend Class AcquisitionModel
                         End If
 
                         ' Months
-                        For Each monthId As Int32 In currentPeriodDict(yearId)
+                        For Each monthId As Int32 In m_currentPeriodDict(yearId)
                             dataMapToken = fixed_left_token & Computer.TOKEN_SEPARATOR & _
                                            accountId & Computer.TOKEN_SEPARATOR & _
                                            Computer.MONTH_PERIOD_IDENTIFIER & monthId
@@ -215,18 +215,18 @@ Friend Class AcquisitionModel
                     dataDict.Add(accountName, New Dictionary(Of String, Double))
                     Dim periodToken As String = ""
 
-                    Select Case periodsIdentifyer
+                    Select Case m_periodsIdentifyer
                         Case Computer.YEAR_PERIOD_IDENTIFIER
-                            periodToken = Computer.YEAR_PERIOD_IDENTIFIER & currentPeriodDict.ElementAt(0).Key
+                            periodToken = Computer.YEAR_PERIOD_IDENTIFIER & m_currentPeriodDict.ElementAt(0).Key
                             dataMapToken = fixed_left_token & Computer.TOKEN_SEPARATOR & _
                                                               accountId & Computer.TOKEN_SEPARATOR & _
                                                                 periodToken
 
                         Case Computer.MONTH_PERIOD_IDENTIFIER
-                            periodToken = Computer.MONTH_PERIOD_IDENTIFIER & currentPeriodDict.ElementAt(0).Key
+                            periodToken = Computer.MONTH_PERIOD_IDENTIFIER & m_currentPeriodDict.ElementAt(0).Key
                             dataMapToken = fixed_left_token & Computer.TOKEN_SEPARATOR & _
                                                               accountId & Computer.TOKEN_SEPARATOR & _
-                                                              Computer.YEAR_PERIOD_IDENTIFIER & currentPeriodDict.ElementAt(0).Value(0)
+                                                              Computer.YEAR_PERIOD_IDENTIFIER & m_currentPeriodDict.ElementAt(0).Value(0)
                     End Select
                     If dataMap.ContainsKey(dataMapToken) Then
                         dataDict(accountName).Add(periodToken, dataMap(dataMapToken))
@@ -263,29 +263,29 @@ Friend Class AcquisitionModel
         Dim entity As Entity = GlobalVariables.Entities.GetValue(entityName)
         If entity Is Nothing Then Exit Sub
         BuildInputsArrays(entity.Name)
-        SingleComputer.CMSG_SOURCED_COMPUTE(current_version_id, _
+        m_singleComputer.CMSG_SOURCED_COMPUTE(m_currentVersionId, _
                                             entity.Id, _
                                             entity.CurrencyId, _
-                                            accKeysArray, _
-                                            periodsArray, _
-                                            valuesArray)
+                                            m_accKeysArray, _
+                                            m_periodsArray, _
+                                            m_valuesArray)
 
     End Sub
 
     Private Sub AfterOuptutsComputed(ByRef entityId As Int32, ByRef status As Boolean)
 
-        If computationDataMap.ContainsKey(entityId) Then
-            computationDataMap(entityId) = SingleComputer.GetDataMap
+        If m_computationDataMap.ContainsKey(entityId) Then
+            m_computationDataMap(entityId) = m_singleComputer.GetDataMap
         Else
-            computationDataMap.Add(entityId, SingleComputer.GetDataMap)
+            m_computationDataMap.Add(entityId, m_singleComputer.GetDataMap)
         End If
 
         Dim l_entity As Entity = GlobalVariables.Entities.GetValue(entityId)
         If l_entity Is Nothing Then Exit Sub
         If Not l_entity Is Nothing Then
-            RaiseEvent AfterOutputsComputed(l_entity.Name)
+            RaiseEvent m_afterOutputsComputed(l_entity.Name)
         Else
-            RaiseEvent AfterOutputsComputed("")
+            RaiseEvent m_afterOutputsComputed("")
         End If
 
     End Sub
@@ -294,32 +294,32 @@ Friend Class AcquisitionModel
     Private Sub BuildInputsArrays(ByRef p_entityName As String)
 
         Dim i As Integer
-        ReDim accKeysArray(dataset.m_inputsAccountsList.Count * currentPeriodList.Length)
-        ReDim periodsArray(dataset.m_inputsAccountsList.Count * currentPeriodList.Length)
-        ReDim valuesArray(dataset.m_inputsAccountsList.Count * currentPeriodList.Length) 'legnth periods to be checked
+        ReDim m_accKeysArray(m_dataSet.m_inputsAccountsList.Count * m_currentPeriodList.Length)
+        ReDim m_periodsArray(m_dataSet.m_inputsAccountsList.Count * m_currentPeriodList.Length)
+        ReDim m_valuesArray(m_dataSet.m_inputsAccountsList.Count * m_currentPeriodList.Length) 'legnth periods to be checked
 
-        For Each inputAccount As Account In dataset.m_inputsAccountsList
-            For Each period As Int32 In currentPeriodList
+        For Each inputAccount As Account In m_dataSet.m_inputsAccountsList
+            For Each period As Int32 In m_currentPeriodList
 
-                accKeysArray(i) = inputAccount.Id
-                periodsArray(i) = period
+                m_accKeysArray(i) = inputAccount.Id
+                m_periodsArray(i) = period
 
                 Dim tuple_ As New Tuple(Of String, String, String)(p_entityName, inputAccount.Name, CStr(period))
-                If dataset.m_datasetCellsDictionary.ContainsKey(tuple_) = True Then
-                    valuesArray(i) = dataset.m_datasetCellsDictionary(tuple_).Value2
-                ElseIf dataBaseInputsDictionary(p_entityName).ContainsKey(inputAccount.Name) _
-                AndAlso dataBaseInputsDictionary(p_entityName)(inputAccount.Name).ContainsKey(Trim(CStr(period))) Then
-                    valuesArray(i) = dataBaseInputsDictionary(p_entityName)(inputAccount.Name)(Trim(CStr(period)))
+                If m_dataSet.m_datasetCellsDictionary.ContainsKey(tuple_) = True Then
+                    m_valuesArray(i) = m_dataSet.m_datasetCellsDictionary(tuple_).Value2
+                ElseIf m_databaseInputsDictionary(p_entityName).ContainsKey(inputAccount.Name) _
+                AndAlso m_databaseInputsDictionary(p_entityName)(inputAccount.Name).ContainsKey(Trim(CStr(period))) Then
+                    m_valuesArray(i) = m_databaseInputsDictionary(p_entityName)(inputAccount.Name)(Trim(CStr(period)))
                 Else
-                    valuesArray(i) = 0
+                    m_valuesArray(i) = 0
                 End If
                 i = i + 1
             Next
         Next
 
-        ReDim Preserve accKeysArray(i - 1)
-        ReDim Preserve periodsArray(i - 1)
-        ReDim Preserve valuesArray(i - 1)
+        ReDim Preserve m_accKeysArray(i - 1)
+        ReDim Preserve m_periodsArray(i - 1)
+        ReDim Preserve m_valuesArray(i - 1)
 
     End Sub
 
@@ -336,7 +336,7 @@ Friend Class AcquisitionModel
         ' dataMap: [account_id][period_token] => value
         ' Manage case where value not found ? priority normal
         On Error GoTo ReturnError
-        Return computationDataMap(entityId)(accountId)(Period_token)
+        Return m_computationDataMap(entityId)(accountId)(Period_token)
 
 ReturnError:
 
@@ -363,15 +363,15 @@ ReturnError:
 
         ' -> should go back in dataset or controller !! no dataset here
         Dim tuple_ As New Tuple(Of String, String, String)(p_entityName, p_accountName, p_period)
-        If dataset.m_datasetCellsDictionary.ContainsKey(tuple_) = True Then
-            Dim cell As Excel.Range = dataset.m_datasetCellsDictionary(tuple_)
-            Dim datasetCell As ModelDataSet.DataSetCellDimensions = dataset.m_datasetCellDimensionsDictionary(cell.Address)
+        If m_dataSet.m_datasetCellsDictionary.ContainsKey(tuple_) = True Then
+            Dim cell As Excel.Range = m_dataSet.m_datasetCellsDictionary(tuple_)
+            Dim datasetCell As ModelDataSet.DataSetCellDimensions = m_dataSet.m_datasetCellDimensionsDictionary(cell.Address)
             datasetCell.m_value = p_value
         End If
-        If dataBaseInputsDictionary(p_entityName)(p_accountName).ContainsKey(p_period) Then
-            dataBaseInputsDictionary(p_entityName)(p_accountName)(p_period) = p_value
+        If m_databaseInputsDictionary(p_entityName)(p_accountName).ContainsKey(p_period) Then
+            m_databaseInputsDictionary(p_entityName)(p_accountName)(p_period) = p_value
         Else
-            dataBaseInputsDictionary(p_entityName)(p_accountName).Add(p_period, p_value)
+            m_databaseInputsDictionary(p_entityName)(p_accountName).Add(p_period, p_value)
         End If
 
     End Sub
@@ -387,7 +387,7 @@ ReturnError:
 
         If l_account Is Nothing Then Return False
         If l_account.FormulaType = Account.FormulaTypes.FIRST_PERIOD_INPUT _
-        AndAlso Not period = CInt(CDbl(dataset.m_periodsDatesList(0).ToOADate())) Then
+        AndAlso Not period = CInt(CDbl(m_dataSet.m_periodsDatesList(0).ToOADate())) Then
             Return True
         Else
             Return False

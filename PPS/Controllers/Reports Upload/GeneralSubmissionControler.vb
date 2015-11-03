@@ -90,8 +90,8 @@ Friend Class GeneralSubmissionControler
         m_acquisitionModel = New AcquisitionModel(m_dataset)
         m_dataModificationsTracker = New DataModificationsTracking(m_dataset)
    
-        AddHandler m_acquisitionModel.AfterInputsDownloaded, AddressOf AfterDataBaseInputsDowloaded
-        AddHandler m_acquisitionModel.AfterOutputsComputed, AddressOf AfterOutputsComputed
+        AddHandler m_acquisitionModel.m_afterInputsDownloaded, AddressOf AfterDataBaseInputsDowloaded
+        AddHandler m_acquisitionModel.m_afterOutputsComputed, AddressOf AfterOutputsComputed
         AddHandler m_fact.AfterUpdate, AddressOf AfterCommit
 
     End Sub
@@ -188,7 +188,7 @@ Friend Class GeneralSubmissionControler
 
     End Sub
 
-    Friend Function RefreshSnapshot(ByRef update_inputs As Boolean) As Boolean
+    Friend Function RefreshSnapshot(ByRef p_updateInputsFlag As Boolean) As Boolean
 
         m_isReportReadyFlag = False
         ' Unformat if necessary 
@@ -202,9 +202,9 @@ Friend Class GeneralSubmissionControler
             m_dataset.getOrientations()
 
             ' needed ,??????!!!!!!!! priority normal
-            m_dataModificationsTracker.InitializeDataSetRegion()
-            m_dataModificationsTracker.InitializeOutputsRegion()
-            
+            'm_dataModificationsTracker.InitializeDataSetRegion()
+            'm_dataModificationsTracker.InitializeOutputsRegion()
+
             If m_dataset.m_globalOrientationFlag <> ORIENTATION_ERROR_FLAG _
             AndAlso m_dataset.m_entitiesAddressValuesDictionary.Count > 0 Then
 
@@ -216,7 +216,7 @@ Friend Class GeneralSubmissionControler
                 UpdateAfterAnalysisAxisChanged(GlobalVariables.ClientsIDDropDown.SelectedItemId, _
                                                GlobalVariables.ProductsIDDropDown.SelectedItemId, _
                                                GlobalVariables.AdjustmentIDDropDown.SelectedItemId, _
-                                               update_inputs)
+                                               p_updateInputsFlag)
                 ' Associate worksheet if not already associated 
                 If m_submissionWSController.m_excelWorksheet Is Nothing Then
                     m_submissionWSController.AssociateWS(m_associatedWorksheet)
@@ -235,23 +235,28 @@ Friend Class GeneralSubmissionControler
 
     End Function
 
-    Friend Sub UpdateAfterAnalysisAxisChanged(ByVal client_id As String, _
-                                              ByVal product_id As String, _
-                                              ByVal adjustment_id As String, _
-                                              Optional ByRef update_inputs_from_DB As Boolean = False)
+    Friend Sub UpdateAfterAnalysisAxisChanged(ByVal p_client_id As String, _
+                                              ByVal p_product_id As String, _
+                                              ByVal p_adjustment_id As String, _
+                                              Optional ByRef p_update_inputs_from_DB As Boolean = False)
 
         m_isUpdating = True
-        m_mustUpdateExcelWorksheetFromDataBase = update_inputs_from_DB
+        m_mustUpdateExcelWorksheetFromDataBase = p_update_inputs_from_DB
         m_dataModificationsTracker.DiscardModifications()
+
+        If p_update_inputs_from_DB = True Then
+            m_dataModificationsTracker.InitializeDataSetRegion()
+            m_dataModificationsTracker.InitializeOutputsRegion()
+        End If
         ' PB: Ceci ne marche que pour le cas orientation "AcDa"  !!! 
         ' option: select case on orientation 
         ' (possibility to download inputs from multiple entities => function ready in model)
         ' priority normal => V2
 
         m_acquisitionModel.downloadDBInputs(m_entityName, _
-                               client_id, _
-                               product_id, _
-                               adjustment_id)
+                                            p_client_id, _
+                                            p_product_id, _
+                                            p_adjustment_id)
 
     End Sub
 
@@ -303,7 +308,7 @@ Friend Class GeneralSubmissionControler
             updateInputs()
         End If
         m_dataset.RegisterDataSetCellsValues()
-        m_dataModificationsTracker.IdentifyDifferencesBtwDataSetAndDB(m_acquisitionModel.dataBaseInputsDictionary)
+        m_dataModificationsTracker.IdentifyDifferencesBtwDataSetAndDB(m_acquisitionModel.m_databaseInputsDictionary)
         UpdateCalculatedItems(m_entityName)
         m_isUpdating = False
         ' Update DGV in acquisitionInterface !!
@@ -351,7 +356,7 @@ errorHandler:
             ht(ENTITY_ID_VARIABLE) = GlobalVariables.Entities.GetValueId(m_dataset.m_datasetCellDimensionsDictionary(cellAddress).m_entityName)
             ht(ACCOUNT_ID_VARIABLE) = GlobalVariables.Accounts.GetValueId(m_dataset.m_datasetCellDimensionsDictionary(cellAddress).m_accountName)
             ht(PERIOD_VARIABLE) = m_dataset.m_datasetCellDimensionsDictionary(cellAddress).m_period
-            ht(VERSION_ID_VARIABLE) = m_acquisitionModel.current_version_id
+            ht(VERSION_ID_VARIABLE) = m_acquisitionModel.m_currentVersionId
             ht(CLIENT_ID_VARIABLE) = GlobalVariables.ClientsIDDropDown.SelectedItemId
             ht(PRODUCT_ID_VARIABLE) = GlobalVariables.ProductsIDDropDown.SelectedItemId
             ht(ADJUSTMENT_ID_VARIABLE) = GlobalVariables.AdjustmentIDDropDown.SelectedItemId
@@ -397,23 +402,14 @@ errorHandler:
 
     Friend Function GetPeriodsList() As Int32()
 
-        Return m_acquisitionModel.currentPeriodList
+        Return m_acquisitionModel.m_currentPeriodList
 
     End Function
 
     Private Sub SnapshotError()
 
-        If m_dataset.m_EntityFlag = 0 AndAlso _
-        m_dataset.m_accountFlag <> 0 AndAlso _
-        m_dataset.m_dateFlag <> 0 Then
-            ' Initialize AcVPe or PeVAc + necessary to choose an Entity
-            ' Need a call from entity selection (which will launch initialize and addHandler, if cancel suppr GRS)
-            ' !! priority normal !
-        Else
-            Dim errorStr As String = IdentifyFlagsErrors()
-            MsgBox("The Snapshot was unsuccessful because the following dimensions not found on the Worksheet: " + Chr(13) + _
-                   errorStr)
-        End If
+        Dim errorStr As String = IdentifyFlagsErrors()
+        MsgBox(Local.GetValue("upload.msg_snapshot_error") & Chr(13) & errorStr)
         m_snapshotSuccessFlag = False
 
     End Sub
@@ -421,9 +417,9 @@ errorHandler:
     Private Function IdentifyFlagsErrors() As String
 
         Dim tmpStr As String = ""
-        If m_dataset.m_EntityFlag = 0 Then tmpStr = "  - Entities" + Chr(13)
-        If m_dataset.m_dateFlag = 0 Then tmpStr = tmpStr & "  - Periods" + Chr(13)
-        If m_dataset.m_accountFlag = 0 Then tmpStr = tmpStr & "  - Accounts"
+        If m_dataset.m_EntityFlag = 0 Then tmpStr = "  - " & Local.GetValue("general.entities") & Chr(13)
+        If m_dataset.m_dateFlag = 0 Then tmpStr = tmpStr & "  - " & Local.GetValue("general.periods") & Chr(13)
+        If m_dataset.m_accountFlag = 0 Then tmpStr = tmpStr & "  - " & Local.GetValue("general.accounts")
         Return tmpStr
 
     End Function

@@ -227,6 +227,7 @@
     <string name="msg_periods_selection">Sélectionnez la(les) période(s)</string>
     <string name="msg_rates_selection">Sélectionnez le(s) taux</string>
     <string name="msg_values_selection">Sélectionnez la(les) valeur(s)</string>
+    <string name="msg_snapshot_error">Le snapshot n'a pas réussi car les dimensions suivantes n'ont pas été identifiées sur la feuille de calcul: </string>
   </category>
 
   <category name="global_facts">
@@ -309,6 +310,10 @@
     <string name="client">Client</string>
     <string name="product">product</string>
     <string name="adjustment">Adjustment</string>
+
+    <string name="Periods">Périodes</string>
+    <string name="Accounts">Comptes</string>
+    <string name="Entities">Entités</string>
 
     <string name="couleur">Couleur</string>
     <string name="type">Type</string>

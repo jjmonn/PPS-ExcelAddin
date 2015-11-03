@@ -93,12 +93,12 @@ Friend Class SubmissionWSController
     Friend Sub UpdateCalculatedItemsOnWS(ByRef entityName As String)
 
         Dim entityId As Int32 = GlobalVariables.Entities.GetValueId(entityName)
-        For Each l_account As Account In m_acquisitionModel.outputsList
-            For Each period As Int32 In m_acquisitionModel.currentPeriodList
+        For Each l_account As Account In m_acquisitionModel.m_outputsList
+            For Each period As Int32 In m_acquisitionModel.m_currentPeriodList
 
                 If Not l_account Is Nothing Then
                     If l_account.FormulaType = Account.FormulaTypes.FIRST_PERIOD_INPUT Then
-                        If period <> m_acquisitionModel.currentPeriodList(0) Then
+                        If period <> m_acquisitionModel.m_currentPeriodList(0) Then
                             SetDatsetCellValue(entityId, entityName, l_account.Name, period)
                         End If
                     Else
@@ -122,7 +122,7 @@ Friend Class SubmissionWSController
             If l_account Is Nothing Then Exit Sub
             Dim value = m_acquisitionModel.GetCalculatedValue(p_entityId, _
                                                             l_account.Id, _
-                                                            m_acquisitionModel.periodsIdentifyer & p_period)
+                                                            m_acquisitionModel.m_periodsIdentifyer & p_period)
             If Double.IsNaN(value) Then value = 0
 
             m_dataSet.m_datasetCellsDictionary(tuple_).Value2 = value
@@ -135,9 +135,9 @@ Friend Class SubmissionWSController
         Dim value As Double
         For Each entityName As String In m_dataSet.m_entitiesAddressValuesDictionary.Values
             For Each l_account As Account In m_dataSet.m_inputsAccountsList
-                For Each period As Int32 In m_acquisitionModel.currentPeriodList
-                    If m_acquisitionModel.dataBaseInputsDictionary(entityName)(l_account.Name).ContainsKey(m_acquisitionModel.periodsIdentifyer & period) = True Then
-                        value = m_acquisitionModel.dataBaseInputsDictionary(entityName)(l_account.Name)(m_acquisitionModel.periodsIdentifyer & period)
+                For Each period As Int32 In m_acquisitionModel.m_currentPeriodList
+                    If m_acquisitionModel.m_databaseInputsDictionary(entityName)(l_account.Name).ContainsKey(m_acquisitionModel.m_periodsIdentifyer & period) = True Then
+                        value = m_acquisitionModel.m_databaseInputsDictionary(entityName)(l_account.Name)(m_acquisitionModel.m_periodsIdentifyer & period)
                     Else
                         value = 0
                     End If
