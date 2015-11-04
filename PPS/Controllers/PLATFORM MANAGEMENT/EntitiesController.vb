@@ -122,7 +122,7 @@ Friend Class EntitiesController
                              ByRef filterId As Int32, _
                              ByRef filterValueId As Int32)
         For Each axisFilter As AxisFilter In GetAxisFilterDictionary().Values
-            If axisFilter.FilterId = filterId Then
+            If axisFilter.FilterId = filterId AndAlso axisFilter.AxisElemId = p_axisElemId Then
                 Dim l_copy = GetAxisFilterCopy(axisFilter.Id)
                 l_copy.FilterValueId = filterValueId
                 UpdateAxisFilter(l_copy)

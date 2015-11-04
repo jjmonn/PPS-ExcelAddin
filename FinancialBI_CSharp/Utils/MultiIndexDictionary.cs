@@ -90,7 +90,6 @@ public class MultiIndexDictionary<KeyA, KeyB, Value>
 
     if (m_firstDic.ContainsKey(p_keyA) == false && m_secondDic.ContainsKey(p_keyB) == false)
     {
-      m_mainDic[m_id] = p_value;
       id = m_id;
       ++m_id;
     }
@@ -103,6 +102,7 @@ public class MultiIndexDictionary<KeyA, KeyB, Value>
       
     m_firstDic[p_keyA] = id;
     m_secondDic[p_keyB] = id;
+    m_mainDic[id] = p_value;
     m_sortedList = null;
     return (true);
   }

@@ -225,7 +225,7 @@ Friend Class AxisController
     Private Sub AfterAxisFilterRead(ByRef status As ErrorMessage, ByRef p_axisFilter As CRUDEntity)
 
         If (status = ErrorMessage.SUCCESS) Then
-            Dim axisFilter As AxisElem = CType(p_axisFilter, AxisElem)
+            Dim axisFilter As AxisFilter = CType(p_axisFilter, AxisFilter)
             View.LoadInstanceVariables_Safe()
             View.UpdateAxis(CrudModel.GetValue(axisFilter.Axis, axisFilter.Id))
         End If
