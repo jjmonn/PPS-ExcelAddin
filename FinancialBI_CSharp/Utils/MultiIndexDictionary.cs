@@ -10,6 +10,7 @@ public class MultiIndexDictionary<KeyA, KeyB, Value>
   private Dictionary<KeyA, UInt32> m_firstDic = new Dictionary<KeyA,uint>();
   private Dictionary<KeyB, UInt32> m_secondDic = new Dictionary<KeyB, uint>();
   private Dictionary<UInt32, Value> m_mainDic = new Dictionary<uint, Value>();
+  private List<Value> m_sortedList = null;
 
   public Dictionary<UInt32, Value>.ValueCollection Values
   {
@@ -23,7 +24,9 @@ public class MultiIndexDictionary<KeyA, KeyB, Value>
   {
     get
     {
-      return m_mainDic.OrderBy(x => x.Value).Select(p => p.Value).ToList();
+      if (m_sortedList == null)
+        m_sortedList = m_mainDic.OrderBy(x => x.Value).Select(p => p.Value).ToList();
+      return m_sortedList;
     }
   }
 
@@ -100,6 +103,7 @@ public class MultiIndexDictionary<KeyA, KeyB, Value>
       
     m_firstDic[p_keyA] = id;
     m_secondDic[p_keyB] = id;
+    m_sortedList = null;
     return (true);
   }
 
@@ -122,6 +126,7 @@ public class MultiIndexDictionary<KeyA, KeyB, Value>
       m_mainDic.Remove(id);
       m_firstDic.Remove(p_key);
       RemoveValue<KeyB>(m_secondDic, id);
+      m_sortedList = null;
     }
   }
 
@@ -134,6 +139,7 @@ public class MultiIndexDictionary<KeyA, KeyB, Value>
       m_mainDic.Remove(id);
       m_secondDic.Remove(p_key);
       RemoveValue<KeyA>(m_firstDic, id);
+      m_sortedList = null;
     }
   }
 
@@ -154,6 +160,7 @@ public class MultiIndexDictionary<KeyA, KeyB, Value>
     m_firstDic.Clear();
     m_secondDic.Clear();
     m_mainDic.Clear();
+    m_sortedList = null;
   }
 
   public MultiIndexDictionary<KeyA, KeyB, DValue> Cast<DValue>()
