@@ -9,13 +9,21 @@ public class MultiIndexDictionary<KeyA, KeyB, Value>
   private UInt32 m_id = 0;
   private Dictionary<KeyA, UInt32> m_firstDic = new Dictionary<KeyA,uint>();
   private Dictionary<KeyB, UInt32> m_secondDic = new Dictionary<KeyB, uint>();
-  private SortedDictionary<UInt32, Value> m_mainDic = new SortedDictionary<uint,Value>();
+  private Dictionary<UInt32, Value> m_mainDic = new Dictionary<uint, Value>();
 
-  public SortedDictionary<UInt32, Value>.ValueCollection Values
+  public Dictionary<UInt32, Value>.ValueCollection Values
   {
     get
     {
       return m_mainDic.Values;
+    }
+  }
+
+  public List<Value> SortedValues
+  {
+    get
+    {
+      return m_mainDic.OrderBy(x => x.Value).Select(p => p.Value).ToList();
     }
   }
 
@@ -155,7 +163,7 @@ public class MultiIndexDictionary<KeyA, KeyB, Value>
     dest.m_firstDic = m_firstDic;
     dest.m_secondDic = m_secondDic;
     dest.m_id = m_id;
-    dest.m_mainDic = m_mainDic as SortedDictionary<uint, DValue>;
+    dest.m_mainDic = m_mainDic as Dictionary<uint, DValue>;
     return dest;
   }
 }

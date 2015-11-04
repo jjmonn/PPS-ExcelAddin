@@ -302,7 +302,7 @@ ShowNewEntity:
                 End If
             End If
         Next
-        GlobalVariables.AxisElems.UpdateList(listEntities)
+        If listEntities.Count > 0 Then GlobalVariables.AxisElems.UpdateList(listEntities)
     End Sub
 
 

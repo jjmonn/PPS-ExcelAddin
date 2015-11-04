@@ -87,7 +87,7 @@ Public Class AxisElemManager : Inherits AxedCRUDManager(Of AxisElem)
     Friend Sub LoadAxisTree(ByVal p_axis As AxisType, ByRef TV As VIBlend.WinForms.Controls.vTreeView)
 
         TV.Nodes.Clear()
-        For Each axisElem As AxisElem In m_CRUDDic(p_axis).Values
+        For Each axisElem As AxisElem In m_CRUDDic(p_axis).SortedValues
             Dim node As VIBlend.WinForms.Controls.vTreeNode = VTreeViewUtil.AddNode(axisElem.Id, axisElem.Name, TV, 0)
             node.Checked = Windows.Forms.CheckState.Checked
         Next
@@ -96,7 +96,7 @@ Public Class AxisElemManager : Inherits AxedCRUDManager(Of AxisElem)
     Friend Sub LoadAxisTree(ByVal p_axis As AxisType, ByRef DestNode As VIBlend.WinForms.Controls.vTreeNode)
 
         DestNode.Nodes.Clear()
-        For Each axisElem As AxisElem In m_CRUDDic(p_axis).Values
+        For Each axisElem As AxisElem In m_CRUDDic(p_axis).SortedValues
             Dim newNode As VIBlend.WinForms.Controls.vTreeNode = VTreeViewUtil.AddNode(axisElem.Id, axisElem.Name, DestNode, 0)
             newNode.Checked = Windows.Forms.CheckState.Checked
         Next
@@ -108,7 +108,7 @@ Public Class AxisElemManager : Inherits AxedCRUDManager(Of AxisElem)
                                ByRef filter_list As List(Of UInt32))
 
         TV.Nodes.Clear()
-        For Each axisElem As AxisElem In m_CRUDDic(p_axis).Values
+        For Each axisElem As AxisElem In m_CRUDDic(p_axis).SortedValues
             Dim node As VIBlend.WinForms.Controls.vTreeNode = VTreeViewUtil.AddNode(axisElem.Id, axisElem.Name, TV, 0)
             node.Checked = Windows.Forms.CheckState.Checked
         Next

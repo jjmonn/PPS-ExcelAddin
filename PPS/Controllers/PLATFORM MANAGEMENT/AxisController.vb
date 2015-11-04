@@ -272,10 +272,12 @@ Friend Class AxisController
 
             If axisElem Is Nothing Then Continue For
             If position <> axisElem.ItemPosition Then
-                axisUpdates.Add(CrudModel.GetValue(m_axisType, axisId))
+                axisElem = axisElem.Clone()
+                axisElem.ItemPosition = position
+                axisUpdates.Add(axisElem)
             End If
         Next
-        CrudModel.UpdateList(axisUpdates)
+        If axisUpdates.Count > 0 Then CrudModel.UpdateList(axisUpdates)
 
     End Sub
 
