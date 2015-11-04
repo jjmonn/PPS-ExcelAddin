@@ -130,7 +130,7 @@ Friend Class AxisController
         Return l_axis.Clone()
     End Function
 
-    Friend Function GetAxisFilterDictionary() As SortedDictionary(Of Int32, AxisFilter)
+    Friend Function GetAxisFilterDictionary() As MultiIndexDictionary(Of UInt32, Tuple(Of UInt32, UInt32), AxisFilter)
         Return CrudModelFilters.GetDictionary(CType(m_axisType, AxisType))
     End Function
 
@@ -254,9 +254,9 @@ Friend Class AxisController
     End Function
 
     Friend Function GetFilterValueId(ByRef filterId As Int32, _
-                                     ByRef axisValueId As Int32) As Int32
+                                     ByRef p_axisElemId As Int32) As Int32
 
-        Return CrudModelFilters.GetFilterValueId(m_axisType, filterId, axisValueId)
+        Return CrudModelFilters.GetFilterValueId(m_axisType, filterId, p_axisElemId)
 
     End Function
 

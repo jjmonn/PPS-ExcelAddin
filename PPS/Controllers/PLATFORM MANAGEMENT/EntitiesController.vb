@@ -149,7 +149,7 @@ Friend Class EntitiesController
         Return l_axis.Clone()
     End Function
 
-    Friend Function GetAxisFilterDictionary() As SortedDictionary(Of Int32, AxisFilter)
+    Friend Function GetAxisFilterDictionary() As MultiIndexDictionary(Of UInt32, Tuple(Of UInt32, UInt32), AxisFilter)
         Return GlobalVariables.AxisFilters.GetDictionary(AxisType.Entities)
     End Function
 
