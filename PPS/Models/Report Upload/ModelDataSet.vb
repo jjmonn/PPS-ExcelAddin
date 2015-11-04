@@ -31,19 +31,16 @@ Imports CRUD
 
 Friend Class ModelDataSet
 
+ 
+
 
 #Region "Instance Variables"
 
     Friend m_excelWorkSheet As Excel.Worksheet
     Friend m_lastCell As Excel.Range
 
-    Private m_GlobalScreenShotFlag(,) As String                   ' Flag array for the entire worksheet
-    Friend m_GlobalScreenShot(,) As Object                       ' Worksheet values array
-    Private m_accountRefs() As String                             ' String array for account references
-
-    'Lists and Dictionaries
-    Friend m_periodsDatesList As New List(Of Date)
     Friend m_inputsAccountsList As List(Of Account)
+    Friend m_periodsDatesList As New List(Of Date)
 
     ' Axes
     Friend m_periodsAddressValuesDictionary As New Dictionary(Of String, String)
@@ -61,10 +58,10 @@ Friend Class ModelDataSet
     Friend m_currentVersionId As Int32
 
     'Flags"
-    Friend m_dateFlag As Integer             ' Dates Flag: 0 = no period found; 1 = 1 period found ; 2 = period array found ; 3=worksheet name
-    Friend m_accountFlag As Integer          ' Accounts Flag: 0 = no account found; 1 = 1 account found ; 2 = account array found
-    Friend m_EntityFlag As Integer            ' Asset Flag: 0 = no asset found; 1 = 1 asset found ; 2 = asset array found
-    Friend m_globalOrientationFlag As String  ' Aggregation of the three flags (accounts, assets/ products, periods)
+    Friend m_dateFlag As Integer
+    Friend m_accountFlag As Integer
+    Friend m_EntityFlag As Integer
+    Friend m_globalOrientationFlag As String
     Friend m_datesOrientationFlag As String
     Friend m_accountsOrientationFlag As String
     Friend m_entitiesOrientationFlag As String
@@ -77,12 +74,6 @@ Friend Class ModelDataSet
 
     'Constants"
     Private Const NULL_VALUE As String = "Not found"
-    Public Const DATASET_ACCOUNTS_PERIODS_OR As String = "acVda"
-    Public Const DATASET_PERIODS_ACCOUNTS_OR As String = "daVac"
-    Public Const DATASET_ENTITIES_ACCOUNTS_OR As String = "asVac"
-    Public Const DATASET_ACCOUNTS_ENTITIES_OR As String = "acVas"
-    Public Const DATASET_PERIODS_ENTITIES_OR As String = "daVas"
-    Public Const DATASET_ENTITIES_PERIODS_OR As String = "asVda"
     Public Const ENTITY_ITEM As String = "EntityItem"
     Public Const ACCOUNT_ITEM As String = "AccountItem"
     Public Const PERIOD_ITEM As String = "PeriodItem"
@@ -96,6 +87,20 @@ Friend Class ModelDataSet
 
     End Structure
 
+    Enum SnapshotResult
+        ZERO = 0
+        ONE
+        SEVERAL
+    End Enum
+
+    Enum Orientations
+        ACCOUNTSPERIODS = 0
+        PERIODSACCOUNTS
+        ENTITIESACCOUNTS
+        ACCOUNTSENTITIES
+        PERIODSENTITIES
+        ENTITIESPERIODS
+    End Enum
 
 #End Region
 
@@ -111,19 +116,15 @@ Friend Class ModelDataSet
 #End Region
 
 
-#Region " Interface"
+#Region "Interface"
 
     Friend Function WsScreenshot() As Boolean
 
         m_lastCell = GeneralUtilities.GetRealLastCell(m_excelWorkSheet)
         If IsNothing(m_lastCell) Then
             MsgBox("The worksheet is empty")
-            m_GlobalScreenShot = Nothing
             Return False
         End If
-
-        m_GlobalScreenShot = m_excelWorkSheet.Range(m_excelWorkSheet.Cells(1, 1), m_lastCell).Value
-        ReDim m_GlobalScreenShotFlag(UBound(m_GlobalScreenShot, 1), UBound(m_GlobalScreenShot, 2))
         Return True
 
     End Function
@@ -182,17 +183,20 @@ Friend Class ModelDataSet
 
     Private Function VersionsIdentify() As Boolean
 
-        Dim i, j As Integer
-        For i = LBound(m_GlobalScreenShot, 1) To UBound(m_GlobalScreenShot, 1)
-            For j = LBound(m_GlobalScreenShot, 2) To UBound(m_GlobalScreenShot, 2)
-                Dim version As Version = GlobalVariables.Versions.GetValue(CStr(m_GlobalScreenShot(i, j)))
-                If Not version Is Nothing Then
-                    AddinModule.SetCurrentVersionId(version.Id)
-                    m_currentVersionId = version.Id
-                    Return True
-                End If
-            Next j
-        Next i
+        For rowIndex = 1 To m_lastCell.Row
+            For columnIndex = 1 To m_lastCell.Column
+                Try
+                    Dim version As Version = GlobalVariables.Versions.GetValue(CStr(m_excelWorkSheet.Cells(rowIndex, columnIndex).value))
+                    If Not version Is Nothing Then
+                        AddinModule.SetCurrentVersionId(version.Id)
+                        m_currentVersionId = version.Id
+                        Return True
+                    End If
+                Catch ex As Exception
+                    Return False
+                End Try
+            Next
+        Next
         Return False
 
     End Function
@@ -200,34 +204,34 @@ Friend Class ModelDataSet
     ' Look for date in the spreasheet, and populate periodsAddressValuesDictionary
     Private Sub DatesIdentify()
 
-        m_periodsDatesList.Clear()
+        Dim periodStoredAsInt As Int32
         For Each periodId As UInt32 In GlobalVariables.Versions.GetPeriodsList(m_currentVersionId)
             m_periodsDatesList.Add(Date.FromOADate(periodId))
         Next
 
-        Dim i, j, periodStoredAsInt As Integer
-        For i = LBound(m_GlobalScreenShot, 1) To UBound(m_GlobalScreenShot, 1)
-            For j = LBound(m_GlobalScreenShot, 2) To UBound(m_GlobalScreenShot, 2)
-                If IsDate(m_GlobalScreenShot(i, j)) Then
-                    periodStoredAsInt = CInt(CDate((m_GlobalScreenShot(i, j))).ToOADate())
-                    Dim res As Date = CDate(m_GlobalScreenShot(i, j))
-                    If m_periodsDatesList.Contains(CDate(m_GlobalScreenShot(i, j))) _
-                    AndAlso Not m_periodsAddressValuesDictionary.ContainsValue(periodStoredAsInt) Then
-
-                        m_periodsAddressValuesDictionary.Add(Split(m_excelWorkSheet.Columns(j).Address(ColumnAbsolute:=False), ":")(1) & i, periodStoredAsInt)
-                        m_periodsValuesAddressDict.Add(periodStoredAsInt, Split(m_excelWorkSheet.Columns(j).Address(ColumnAbsolute:=False), ":")(1) & i)
-                        m_GlobalScreenShotFlag(i, j) = m_periodFormatflag
-
+        For rowIndex = 1 To m_lastCell.Row
+            For columnIndex = 1 To m_lastCell.Column
+                Try
+                    If IsDate(m_excelWorkSheet.Cells(rowIndex, columnIndex).value) Then
+                        periodStoredAsInt = CInt(CDate((m_excelWorkSheet.Cells(rowIndex, columnIndex).value)).ToOADate())
+                        Dim res As Date = CDate(m_excelWorkSheet.Cells(rowIndex, columnIndex).value)
+                        If m_periodsDatesList.Contains(CDate(m_excelWorkSheet.Cells(rowIndex, columnIndex).value)) _
+                        AndAlso Not m_periodsAddressValuesDictionary.ContainsValue(periodStoredAsInt) Then
+                            m_periodsAddressValuesDictionary.Add(GetRangeAddressFromRowAndColumn(rowIndex, columnIndex), periodStoredAsInt)
+                            m_periodsValuesAddressDict.Add(periodStoredAsInt, GetRangeAddressFromRowAndColumn(rowIndex, columnIndex))
+                        End If
                     End If
-                End If
-            Next j
-        Next i
+                Catch ex As Exception
+                    ' Impossible to read cell's value.
+                End Try
+            Next
+        Next
 
         ' Flag
         Select Case m_periodsAddressValuesDictionary.Count
-            Case 0 : m_dateFlag = 0
-            Case 1 : m_dateFlag = 1
-            Case Else : m_dateFlag = 2
+            Case 0 : m_dateFlag = snapshotResult.ZERO
+            Case 1 : m_dateFlag = snapshotResult.ONE
+            Case Else : m_dateFlag = snapshotResult.SEVERAL
         End Select
 
     End Sub
@@ -235,50 +239,36 @@ Friend Class ModelDataSet
     ' Identify the mapped accounts in the WS  | CURRENTLY NOT using the Accounts Search Algo
     Friend Sub AccountsIdentify()
 
-        Dim i, j As Integer
-        m_inputsAccountsList = GlobalVariables.Accounts.GetAccountsList(GlobalEnums.AccountsLookupOptions.LOOKUP_INPUTS)
+        Dim currentStr As String
         Dim outputsAccountsList As List(Of Account) = GlobalVariables.Accounts.GetAccountsList(GlobalEnums.AccountsLookupOptions.LOOKUP_OUTPUTS)
-        m_accountsAddressValuesDictionary.Clear()
+        m_inputsAccountsList = GlobalVariables.Accounts.GetAccountsList(GlobalEnums.AccountsLookupOptions.LOOKUP_INPUTS)
 
-        For i = LBound(m_GlobalScreenShot, 1) To UBound(m_GlobalScreenShot, 1)                                          ' Loop into rows of input array
-            For j = LBound(m_GlobalScreenShot, 2) To UBound(m_GlobalScreenShot, 2)                                      ' Loop into columns of input array
-                If VarType(m_GlobalScreenShot(i, j)) = 8 Then
-
-                    Dim currentValue As String = CStr(m_GlobalScreenShot(i, j))
-
-                    ' Direct match or algo > 50% Index à vérifier selon table
-                    ' Trim left and right the cell.value2 !! -> To be tested
-                    If m_inputsAccountsList.Contains(GlobalVariables.Accounts.GetValue(currentValue)) _
-                    AndAlso Not m_accountsAddressValuesDictionary.ContainsValue(currentValue) Then
-
-                        m_accountsAddressValuesDictionary.Add(Split(m_excelWorkSheet.Columns(j).Address(ColumnAbsolute:=False), ":")(1) & i, _
-                                                            currentValue)
-                        m_accountsValuesAddressDict.Add(currentValue, Split(m_excelWorkSheet.Columns(j).Address(ColumnAbsolute:=False), ":")(1) & i)
-                        m_GlobalScreenShotFlag(i, j) = m_accountStringFlag
-
-                    ElseIf outputsAccountsList.Contains(GlobalVariables.Accounts.GetValue(currentValue)) _
-                    AndAlso m_accountsAddressValuesDictionary.ContainsValue(currentValue) = False Then
-
-                        m_outputsAccountsAddressvaluesDictionary.Add(Split(m_excelWorkSheet.Columns(j).Address(ColumnAbsolute:=False), ":")(1) & i, _
-                                                                   currentValue)
-                        m_outputsValuesAddressDict.Add(currentValue, Split(m_excelWorkSheet.Columns(j).Address(ColumnAbsolute:=False), ":")(1) & i)
-                        m_GlobalScreenShotFlag(i, j) = m_accountStringFlag
-
-                        '         ElseIf AccountSearchAlgo(GlobalScreenShot(i, j)) = True Then           'Repeated procedure but faster...
-                        '
-                        '            AccountsAddressValuesDictionary.add(Split(Columns(j).Address(ColumnAbsolute:=False), ":")(1) + i, CStr(GlobalScreenShot(i, j)))
-                        '            GlobalScreenShotFlag(i, j) = account_flag
+        For rowIndex = 1 To m_lastCell.Row
+            For columnIndex = 1 To m_lastCell.Column
+                Try
+                    If VarType(m_excelWorkSheet.Cells(rowIndex, columnIndex).value) = 8 Then
+                        currentStr = CStr(m_excelWorkSheet.Cells(rowIndex, columnIndex).value)
+                        If m_inputsAccountsList.Contains(GlobalVariables.Accounts.GetValue(currentStr)) _
+                        AndAlso Not m_accountsAddressValuesDictionary.ContainsValue(currentStr) Then
+                            ' Input account
+                            m_accountsAddressValuesDictionary.Add(GetRangeAddressFromRowAndColumn(rowIndex, columnIndex), currentStr)
+                            m_accountsValuesAddressDict.Add(currentStr, GetRangeAddressFromRowAndColumn(rowIndex, columnIndex))
+                        ElseIf outputsAccountsList.Contains(GlobalVariables.Accounts.GetValue(currentStr)) _
+                        AndAlso m_accountsAddressValuesDictionary.ContainsValue(currentStr) = False Then
+                            ' Computed Account
+                            m_outputsAccountsAddressvaluesDictionary.Add(GetRangeAddressFromRowAndColumn(rowIndex, columnIndex), currentStr)
+                            m_outputsValuesAddressDict.Add(currentStr, GetRangeAddressFromRowAndColumn(rowIndex, columnIndex))
+                        End If
                     End If
-                    m_GlobalScreenShotFlag(i, j) = m_stringFlag                                       ' Flag for assets lookup
-
-                End If
-            Next j
-        Next i
+                Catch ex As Exception
+                End Try
+            Next
+        Next
 
         Select Case m_accountsAddressValuesDictionary.Count
-            Case 0 : m_accountFlag = 0
-            Case 1 : m_accountFlag = 1
-            Case Else : m_accountFlag = 2
+            Case 0 : m_accountFlag = snapshotResult.ZERO
+            Case 1 : m_accountFlag = snapshotResult.ONE
+            Case Else : m_accountFlag = snapshotResult.SEVERAL
         End Select
 
     End Sub
@@ -286,41 +276,40 @@ Friend Class ModelDataSet
     ' Identify the assets from mapping      | CURRENTLY NOT using the AssetsSearch Algorithm (>leveinstein Threshold%)
     Private Sub EntitiesIdentify()
 
-        Dim i, j As Integer
-
-        For i = LBound(m_GlobalScreenShot, 1) To UBound(m_GlobalScreenShot, 1)
-            For j = LBound(m_GlobalScreenShot, 2) To UBound(m_GlobalScreenShot, 2)
-
-                Select Case m_GlobalScreenShotFlag(i, j)
-                    Case m_stringFlag
-
-                        If Not GlobalVariables.AxisElems.GetValue(AxisType.Entities, CStr(m_GlobalScreenShot(i, j))) Is Nothing _
-                        AndAlso Not m_entitiesAddressValuesDictionary.ContainsValue(CStr(m_GlobalScreenShot(i, j))) Then
-
-                            m_entitiesAddressValuesDictionary.Add(Split(m_excelWorkSheet.Columns(j).Address(ColumnAbsolute:=False), ":")(1) & i, _
-                                                                CStr(m_GlobalScreenShot(i, j)))
-                            m_entitiesValuesAddressDict.Add(CStr(m_GlobalScreenShot(i, j)), Split(m_excelWorkSheet.Columns(j).Address(ColumnAbsolute:=False), ":")(1) & i)
-
-                            'ElseIf AssetResearchAlgo(GlobalScreenShot(i, j)) Then
-                            '    EntitiesAddressValuesDictionary.Add(Split(WS.Columns(j).Address(ColumnAbsolute:=False), ":")(1) & i, _
-                            '                          CStr(GlobalScreenShot(i, j)))
-
+        Dim currentStr As String
+        For rowIndex = 1 To m_lastCell.Row
+            For columnIndex = 1 To m_lastCell.Column
+                Try
+                    If VarType(m_excelWorkSheet.Cells(rowIndex, columnIndex).value) = 8 Then
+                        currentStr = CStr(m_excelWorkSheet.Cells(rowIndex, columnIndex).value)
+                        If Not GlobalVariables.AxisElems.GetValue(AxisType.Entities, currentStr) Is Nothing _
+                        AndAlso Not m_entitiesAddressValuesDictionary.ContainsValue(currentStr) Then
+                            m_entitiesAddressValuesDictionary.Add(GetRangeAddressFromRowAndColumn(rowIndex, columnIndex), currentStr)
+                            m_entitiesValuesAddressDict.Add(currentStr, GetRangeAddressFromRowAndColumn(rowIndex, columnIndex))
                         End If
-                End Select
-            Next j
-        Next i
+                    End If
+                Catch ex As Exception
+                End Try
+            Next
+        Next
 
         Select Case m_entitiesAddressValuesDictionary.Count
-            Case 0 : m_EntityFlag = 0
-            Case 1 : m_EntityFlag = 1
-            Case Else : m_EntityFlag = 2
+            Case 0 : m_EntityFlag = SnapshotResult.ZERO
+            Case 1 : m_EntityFlag = snapshotResult.ONE
+            Case Else : m_EntityFlag = snapshotResult.SEVERAL
         End Select
 
     End Sub
 
+    Private Function GetRangeAddressFromRowAndColumn(ByRef p_rowIndex As Int32, _
+                                                     ByRef p_columnIndex As Int32) As String
+
+        Return Split(m_excelWorkSheet.Columns(p_columnIndex).Address(ColumnAbsolute:=False), ":")(1) & p_rowIndex
+
+    End Function
+
 
 #End Region
-
 
 #Region "Recognition Algoritms"
 
@@ -367,7 +356,6 @@ Friend Class ModelDataSet
         Dim P As Double
 
         AssetResearchAlgo = False
-
         For Each l_entity As AxisElem In GlobalVariables.AxisElems.GetDictionary(AxisType.Entities).Values
             Delta = GeneralUtilities.Levenshtein(CStr(str), l_entity.Name)
             P = Delta / l_entity.Name.Length
@@ -380,56 +368,6 @@ Friend Class ModelDataSet
     End Function
 
 #End Region
-
-
-#Region "Dictionaries Values Update with current Worksheet"
-
-    ' Launch the update of the pAddress dates, accounts and assets to  insert the values of the current WS
-    Public Sub UpdateDictionariesValuesWithCurrentWS()
-
-        UpdatePeriodDictionaryValuesWithCurrentWS()
-        UpdateAccountsDictionaryValuesWithCurrentWS()
-        UpdateEntitiesDictionaryValuesWithCurrentWS()
-
-    End Sub
-
-    ' Update the periodsAddressValuesDictionary with values of the current worksheet
-    Private Sub UpdatePeriodDictionaryValuesWithCurrentWS()
-
-        Dim key As String
-        For i = 0 To m_periodsAddressValuesDictionary.Keys.Count - 1
-            key = m_periodsAddressValuesDictionary.Keys(i)
-            m_periodsAddressValuesDictionary.Item(key) = m_excelWorkSheet.Range(key).Value2
-        Next
-
-    End Sub
-
-    ' Update the AccountsAddressValuesDictionary with values of the current worksheet
-    Private Sub UpdateAccountsDictionaryValuesWithCurrentWS()
-
-        Dim key As String
-        For i = 0 To m_accountsAddressValuesDictionary.Keys.Count - 1
-            key = m_accountsAddressValuesDictionary.Keys(i)
-            m_accountsAddressValuesDictionary.Item(key) = m_excelWorkSheet.Range(key).Value2
-        Next
-
-    End Sub
-
-    ' Update the EntitiesAddressValuesDictionary with values of the current worksheet
-    Private Sub UpdateEntitiesDictionaryValuesWithCurrentWS()
-
-        Dim key As String
-        For i = 0 To m_entitiesAddressValuesDictionary.Keys.Count - 1
-            key = m_entitiesAddressValuesDictionary.Keys(i)
-            m_entitiesAddressValuesDictionary.Item(key) = m_excelWorkSheet.Range(key).Value2
-        Next
-
-    End Sub
-
-
-
-#End Region
-
 
 #End Region
 
@@ -653,17 +591,17 @@ Friend Class ModelDataSet
     Private Sub DefineGlobalOrientationFlag()
 
         If m_accountsOrientationFlag = "V" And m_entitiesOrientationFlag = "H" Then       ' Case Accounts in line / Assets in columns
-            m_globalOrientationFlag = DATASET_ACCOUNTS_ENTITIES_OR
+            m_globalOrientationFlag = Orientations.ACCOUNTSENTITIES
         ElseIf m_accountsOrientationFlag = "V" And m_datesOrientationFlag = "H" Then    ' Case Accounts in line / Dates in columns
-            m_globalOrientationFlag = DATASET_ACCOUNTS_PERIODS_OR
+            m_globalOrientationFlag = Orientations.ACCOUNTSPERIODS
         ElseIf m_datesOrientationFlag = "V" And m_accountsOrientationFlag = "H" Then    ' Case Dates in line / Accounts in columns
-            m_globalOrientationFlag = DATASET_PERIODS_ACCOUNTS_OR
+            m_globalOrientationFlag = Orientations.PERIODSACCOUNTS
         ElseIf m_datesOrientationFlag = "V" And m_entitiesOrientationFlag = "H" Then      ' Case Dates in line / Assets in columns
-            m_globalOrientationFlag = DATASET_PERIODS_ENTITIES_OR
+            m_globalOrientationFlag = Orientations.PERIODSENTITIES
         ElseIf m_entitiesOrientationFlag = "V" And m_accountsOrientationFlag = "H" Then   ' Case Assets in line / Accounts in columns
-            m_globalOrientationFlag = DATASET_ENTITIES_ACCOUNTS_OR
+            m_globalOrientationFlag = Orientations.ENTITIESACCOUNTS
         ElseIf m_entitiesOrientationFlag = "V" And m_datesOrientationFlag = "H" Then      ' Case Assets in line / Dates in columns
-            m_globalOrientationFlag = DATASET_ENTITIES_PERIODS_OR
+            m_globalOrientationFlag = Orientations.ENTITIESPERIODS
         Else
             m_globalOrientationFlag = ORIENTATION_ERROR_FLAG
         End If
@@ -917,7 +855,7 @@ Friend Class ModelDataSet
 
     'End Function
 
-   
+
 #End Region
 
 

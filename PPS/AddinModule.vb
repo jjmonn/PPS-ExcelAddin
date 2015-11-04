@@ -1136,13 +1136,13 @@ Public Class AddinModule
 
 #Region "My Instance Variables"
 
-    Friend Ribbon As IRibbonUI
-    Friend GRSControlersDictionary As New Dictionary(Of Excel.Worksheet, GeneralSubmissionControler)
-    Private ctrlsTextWSDictionary As New Dictionary(Of String, Excel.Worksheet)
+    Friend m_ribbon As IRibbonUI
+    Friend m_GRSControlersDictionary As New Dictionary(Of Excel.Worksheet, GeneralSubmissionControler)
+    Private m_ctrlsTextWSDictionary As New Dictionary(Of String, Excel.Worksheet)
     Public setUpFlag As Boolean
     Public ppsbi_refresh_flag As Boolean = True
     Public m_ppsbiController As PPSBIController
-    Private CurrentGRSControler As GeneralSubmissionControler
+    Private m_currentGRSControler As GeneralSubmissionControler
     Private Const EXCEL_MIN_VERSION As Double = 9
 
 #End Region
@@ -1375,9 +1375,9 @@ Public Class AddinModule
         If GlobalVariables.AuthenticationFlag = False Then
             ConnectionBT_OnClick(sender, control, pressed)
         Else
-            If GRSControlersDictionary.ContainsKey(GlobalVariables.APPS.ActiveSheet) Then
-                CurrentGRSControler = GRSControlersDictionary(GlobalVariables.APPS.ActiveSheet)
-                CurrentGRSControler.UpdateRibbon()
+            If m_GRSControlersDictionary.ContainsKey(GlobalVariables.APPS.ActiveSheet) Then
+                m_currentGRSControler = m_GRSControlersDictionary(GlobalVariables.APPS.ActiveSheet)
+                m_currentGRSControler.UpdateRibbon()
                 SubmissionModeRibbon.Visible = True
             Else
                 ' -> choix adjustment, client, product
@@ -1445,7 +1445,7 @@ Public Class AddinModule
         If GlobalVariables.AuthenticationFlag = False Then
             ConnectionBT_OnClick(sender, control, pressed)
         Else
-            If Not GRSControlersDictionary.ContainsKey(GlobalVariables.APPS.ActiveSheet) Then
+            If Not m_GRSControlersDictionary.ContainsKey(GlobalVariables.APPS.ActiveSheet) Then
                 Dim cREFRESH As New WorksheetRefreshController
                 cREFRESH.RefreshWorksheet()
             Else
@@ -1461,7 +1461,7 @@ Public Class AddinModule
         If GlobalVariables.AuthenticationFlag = False Then
             ConnectionBT_OnClick(sender, control, pressed)
         Else
-            If Not GRSControlersDictionary.ContainsKey(GlobalVariables.APPS.ActiveSheet) Then
+            If Not m_GRSControlersDictionary.ContainsKey(GlobalVariables.APPS.ActiveSheet) Then
                 Dim cREFRESH As New WorksheetRefreshController
                 Dim ws As Excel.Worksheet = GlobalVariables.APPS.ActiveSheet
                 cREFRESH.RefreshWorksheet(GlobalVariables.APPS.Selection)
@@ -1602,7 +1602,7 @@ Public Class AddinModule
 
     Private Sub HighlightBT_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean)
 
-        CurrentGRSControler.HighlightItemsAndDataRegions()
+        m_currentGRSControler.HighlightItemsAndDataRegions()
 
     End Sub
 
@@ -1616,7 +1616,7 @@ Public Class AddinModule
 
     Private Sub EditRangesMenuBT_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) Handles EditRangesMenuBT.OnClick
 
-        CurrentGRSControler.RangeEdition()
+        m_currentGRSControler.RangeEdition()
 
     End Sub
 
@@ -1638,13 +1638,13 @@ Public Class AddinModule
 
     Private Sub SubmitBT2_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) Handles SubmitBT2.OnClick
 
-        CurrentGRSControler.DataSubmission()
+        m_currentGRSControler.DataSubmission()
 
     End Sub
 
     Private Sub SubmissionStatus_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) Handles SubmissionStatus.OnClick
 
-        CurrentGRSControler.DisplayUploadStatusAndErrorsUI()
+        m_currentGRSControler.DisplayUploadStatusAndErrorsUI()
 
     End Sub
 
@@ -1656,10 +1656,10 @@ Public Class AddinModule
 
     Private Sub AutoCommitBT_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) Handles AutoComitBT.OnClick
 
-        If CurrentGRSControler.m_autoCommitFlag = False Then
-            CurrentGRSControler.m_autoCommitFlag = True
+        If m_currentGRSControler.m_autoCommitFlag = False Then
+            m_currentGRSControler.m_autoCommitFlag = True
         Else
-            CurrentGRSControler.m_autoCommitFlag = False
+            m_currentGRSControler.m_autoCommitFlag = False
         End If
 
     End Sub
@@ -1713,29 +1713,29 @@ Public Class AddinModule
                                 client_id, _
                                 GlobalVariables.AxisElems.GetValueName(AxisType.Client, client_id))
         Next
-        GlobalVariables.ClientsIDDropDown.SelectedItemId = DEFAULT_ANALYSIS_AXIS_ID
+        GlobalVariables.ClientsIDDropDown.SelectedItemId = AxisType.Client
         GlobalVariables.ClientsIDDropDown.Invalidate()
         GlobalVariables.ClientsIDDropDown.ScreenTip = "screentip"
         '  GlobalVariables.ClientsIDDropDown. = GlobalVariables.Clients.axis_hash(DEFAULT_ANALYSIS_AXIS_ID)(NAME_VARIABLE)
 
         GlobalVariables.ProductsIDDropDown.Items.Clear()
         For Each product_id As Int32 In GlobalVariables.AxisElems.GetDictionary(AxisType.Product).Keys
-            If GlobalVariables.AxisElems.GetValue(AxisType.Client, product_id) Is Nothing Then Continue For
+            If GlobalVariables.AxisElems.GetValue(AxisType.Product, product_id) Is Nothing Then Continue For
             AddButtonToDropDown(GlobalVariables.ProductsIDDropDown, _
                                 product_id, _
                                 GlobalVariables.AxisElems.GetValueName(AxisType.Product, product_id))
         Next
-        GlobalVariables.ProductsIDDropDown.SelectedItemId = DEFAULT_ANALYSIS_AXIS_ID
+        GlobalVariables.ProductsIDDropDown.SelectedItemId = AxisType.Product
         '    GlobalVariables.ProductsIDDropDown.Caption = GlobalVariables.Products.axis_hash(DEFAULT_ANALYSIS_AXIS_ID)(NAME_VARIABLE)
 
         GlobalVariables.AdjustmentIDDropDown.Items.Clear()
         For Each adjustment_id As Int32 In GlobalVariables.AxisElems.GetDictionary(AxisType.Adjustment).Keys
-            If GlobalVariables.AxisElems.GetValue(AxisType.Client, adjustment_id) Is Nothing Then Continue For
+            If GlobalVariables.AxisElems.GetValue(AxisType.Adjustment, adjustment_id) Is Nothing Then Continue For
             AddButtonToDropDown(GlobalVariables.AdjustmentIDDropDown, _
                                 adjustment_id, _
                                 GlobalVariables.AxisElems.GetValueName(AxisType.Adjustment, adjustment_id))
         Next
-        GlobalVariables.AdjustmentIDDropDown.SelectedItemId = DEFAULT_ANALYSIS_AXIS_ID
+        GlobalVariables.AdjustmentIDDropDown.SelectedItemId = AxisType.Adjustment
         '  GlobalVariables.AdjustmentIDDropDown.Caption = GlobalVariables.Adjustments.axis_hash(DEFAULT_ANALYSIS_AXIS_ID)(NAME_VARIABLE)
 
     End Sub
@@ -1752,7 +1752,7 @@ Public Class AddinModule
 #Region "Main Ribbon"
 
     Private Sub AddinModule_OnRibbonLoaded(sender As Object, ribbon As IRibbonUI) Handles Me.OnRibbonLoaded
-        Me.Ribbon = ribbon
+        Me.m_ribbon = ribbon
     End Sub
 
 #End Region
@@ -1763,14 +1763,14 @@ Public Class AddinModule
     Private Sub WSCB_OnAction(sender As Object, Control As IRibbonControl, selectedId As String, selectedIndex As Integer)
 
         Try
-            If Not CurrentGRSControler.m_associatedWorksheet.Name = selectedId Then
-                CurrentGRSControler = GRSControlersDictionary(ctrlsTextWSDictionary(selectedId))
-                CurrentGRSControler.UpdateRibbon()
-                ctrlsTextWSDictionary(selectedId).Activate()
+            If Not m_currentGRSControler.m_associatedWorksheet.Name = selectedId Then
+                m_currentGRSControler = m_GRSControlersDictionary(m_ctrlsTextWSDictionary(selectedId))
+                m_currentGRSControler.UpdateRibbon()
+                m_ctrlsTextWSDictionary(selectedId).Activate()
             End If
         Catch ex As Exception
-            GRSControlersDictionary.Remove(ctrlsTextWSDictionary(selectedId))
-            ctrlsTextWSDictionary.Remove(selectedId)
+            m_GRSControlersDictionary.Remove(m_ctrlsTextWSDictionary(selectedId))
+            m_ctrlsTextWSDictionary.Remove(selectedId)
             MsgBox("The worksheet has been deleted.")
         End Try
 
@@ -1780,7 +1780,7 @@ Public Class AddinModule
     Private Sub ClientsDropDown_OnAction(sender As Object, Control As IRibbonControl, selectedId As String, selectedIndex As Integer) Handles ClientsDropDown.OnAction
 
         GlobalVariables.APPS.Interactive = False
-        CurrentGRSControler.UpdateAfterAnalysisAxisChanged(selectedId, _
+        m_currentGRSControler.UpdateAfterAnalysisAxisChanged(selectedId, _
                                                            ProductsDropDown.SelectedItemId, _
                                                            AdjustmentDropDown.SelectedItemId,
                                                            True)
@@ -1791,7 +1791,7 @@ Public Class AddinModule
     Private Sub ProductsDropDown_OnAction(sender As Object, Control As IRibbonControl, selectedId As String, selectedIndex As Integer) Handles ProductsDropDown.OnAction
 
         GlobalVariables.APPS.Interactive = False
-        CurrentGRSControler.UpdateAfterAnalysisAxisChanged(ClientsDropDown.SelectedItemId, _
+        m_currentGRSControler.UpdateAfterAnalysisAxisChanged(ClientsDropDown.SelectedItemId, _
                                                            selectedId, _
                                                            AdjustmentDropDown.SelectedItemId, _
                                                            True)
@@ -1802,7 +1802,7 @@ Public Class AddinModule
     Private Sub AdjustmentDD_OnAction(sender As Object, Control As IRibbonControl, selectedId As String, selectedIndex As Integer) Handles AdjustmentDropDown.OnAction
 
         GlobalVariables.APPS.Interactive = False
-        CurrentGRSControler.UpdateAfterAnalysisAxisChanged(ClientsDropDown.SelectedItemId, _
+        m_currentGRSControler.UpdateAfterAnalysisAxisChanged(ClientsDropDown.SelectedItemId, _
                                                             ProductsDropDown.SelectedItemId, _
                                                             selectedId, _
                                                             True)
@@ -1814,7 +1814,7 @@ Public Class AddinModule
 #Region "Addin Events"
 
     Private Sub AddinModule_Finalize(sender As Object, e As EventArgs) Handles MyBase.AddinFinalize
-        If GRSControlersDictionary.Count > 0 Then ClearSubmissionMode()
+        If m_GRSControlersDictionary.Count > 0 Then ClearSubmissionMode()
     End Sub
 
 
@@ -1838,7 +1838,7 @@ Public Class AddinModule
 
     Friend Sub InputReportPaneCallBack_ReportCreation()
 
-        '     GlobalVariables.APPS.ScreenUpdating = False
+        GlobalVariables.APPS.ScreenUpdating = False
         Dim version As Version = GlobalVariables.Versions.GetValue(My.Settings.version_id)
         If version Is Nothing Then Exit Sub
 
@@ -1862,7 +1862,7 @@ Public Class AddinModule
         Dim periodlist As Int32() = GlobalVariables.Versions.GetPeriodsList(My.Settings.version_id)
 
         If periodlist Is Nothing Then Exit Sub
-        '  GlobalVariables.APPS.Interactive = False
+        GlobalVariables.APPS.Interactive = False
         WorksheetWrittingFunctions.InsertInputReportOnWS(currentcell, _
                                                           periodlist, _
                                                           timeConfig)
@@ -1914,7 +1914,7 @@ Public Class AddinModule
     ' call back from entitySelectionTP for setting up new entity in submission control mode
     Public Sub ValidateEntitySelection(ByRef entityName As String)
 
-        CurrentGRSControler.ChangeCurrentEntity(entityName)
+        m_currentGRSControler.ChangeCurrentEntity(entityName)
         Me.EntitySelectionTaskPane.ClearAndClose()
 
     End Sub
@@ -1933,14 +1933,18 @@ Public Class AddinModule
         Dim ctrl As ADXRibbonItem = AddButtonToDropDown(WSCB, GlobalVariables.APPS.ActiveSheet.name, GlobalVariables.APPS.ActiveSheet.name)
         loadDropDownsSubmissionButtons()
         Dim CGRSControlerInstance As New GeneralSubmissionControler(ctrl, Me)
-        GRSControlersDictionary.Add(GlobalVariables.APPS.ActiveSheet, CGRSControlerInstance)
-        ctrlsTextWSDictionary.Add(ctrl.Caption, GlobalVariables.APPS.ActiveSheet)
-        CurrentGRSControler = CGRSControlerInstance
-        If CurrentGRSControler.RefreshSnapshot(p_mustUpdateInputs) = True Then
+        m_currentGRSControler = CGRSControlerInstance
+        If m_currentGRSControler.RefreshSnapshot(p_mustUpdateInputs) = True Then
+            m_GRSControlersDictionary.Add(GlobalVariables.APPS.ActiveSheet, CGRSControlerInstance)
+            m_ctrlsTextWSDictionary.Add(ctrl.Caption, GlobalVariables.APPS.ActiveSheet)
             SubmissionModeRibbon.Visible = True
             SubmissionModeRibbon.Activate()
             WSCB.SelectedItemId = ctrl.Id
             DisplayReportUploadSidePane()
+        Else
+            GlobalVariables.APPS.Interactive = True
+            GlobalVariables.APPS.ScreenUpdating = True
+            m_currentGRSControler = Nothing
         End If
 
     End Sub
@@ -1982,14 +1986,14 @@ Public Class AddinModule
         ' shouldn' t suppress all GRS.. only the one associated to WS
         ' check that the relation to input task pane is killed
 
-        For Each GRS In GRSControlersDictionary.Values
-            ctrlsTextWSDictionary.Remove(GRS.m_worksheetsComboboxMenuItem.Caption)
+        For Each GRS In m_GRSControlersDictionary.Values
+            m_ctrlsTextWSDictionary.Remove(GRS.m_worksheetsComboboxMenuItem.Caption)
             WSCB.Items.Remove(GRS.m_worksheetsComboboxMenuItem)
             GRS.CloseInstance()
             GRS = Nothing
         Next
         SubmissionModeRibbon.Visible = False
-        GRSControlersDictionary.Clear()
+        m_GRSControlersDictionary.Clear()
 
     End Sub
 

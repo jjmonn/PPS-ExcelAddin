@@ -226,6 +226,10 @@
     <string name="msg_periods_selection">Select periods(s) range(s)</string>
     <string name="msg_rates_selection">Select rates(s) range(s)</string>
     <string name="msg_values_selection">Select value(s) range(s)</string>
+
+    <string name="msg_snapshot_error">The Snapshot was unsuccessful because the following dimensions not found on the Worksheet: </string>
+
+
   </category>
 
   <category name="global_facts">
@@ -308,6 +312,10 @@
      <string name="client">Client</string>
      <string name="product">product</string>
      <string name="adjustment">Adjustment</string>
+   
+    <string name="Periods">Periods</string>
+    <string name="Accounts">Accounts</string>
+    <string name="Entities">Entities</string>
 
     <string name="couleur">Couleur</string>
      <string name="type">Type</string>

@@ -60,12 +60,12 @@ Friend Class DataModificationsTracking
 
         m_dataSetRegion = Nothing
         Select Case m_dataset.m_globalOrientationFlag
-            Case ModelDataSet.DATASET_ACCOUNTS_PERIODS_OR : AppendDataRegionRanges(m_dataSetRegion, m_dataset.m_accountsAddressValuesDictionary, m_dataset.m_periodsAddressValuesDictionary)
-            Case ModelDataSet.DATASET_PERIODS_ACCOUNTS_OR : AppendDataRegionRanges(m_dataSetRegion, m_dataset.m_periodsAddressValuesDictionary, m_dataset.m_accountsAddressValuesDictionary)
-            Case ModelDataSet.DATASET_ACCOUNTS_ENTITIES_OR : AppendDataRegionRanges(m_dataSetRegion, m_dataset.m_accountsAddressValuesDictionary, m_dataset.m_entitiesAddressValuesDictionary)
-            Case ModelDataSet.DATASET_ENTITIES_ACCOUNTS_OR : AppendDataRegionRanges(m_dataSetRegion, m_dataset.m_entitiesAddressValuesDictionary, m_dataset.m_accountsAddressValuesDictionary)
-            Case ModelDataSet.DATASET_PERIODS_ENTITIES_OR : AppendDataRegionRanges(m_dataSetRegion, m_dataset.m_periodsAddressValuesDictionary, m_dataset.m_entitiesAddressValuesDictionary)
-            Case ModelDataSet.DATASET_ENTITIES_PERIODS_OR : AppendDataRegionRanges(m_dataSetRegion, m_dataset.m_entitiesAddressValuesDictionary, m_dataset.m_periodsAddressValuesDictionary)
+            Case ModelDataSet.Orientations.ACCOUNTSPERIODS : AppendDataRegionRanges(m_dataSetRegion, m_dataset.m_accountsAddressValuesDictionary, m_dataset.m_periodsAddressValuesDictionary)
+            Case ModelDataSet.Orientations.PERIODSACCOUNTS : AppendDataRegionRanges(m_dataSetRegion, m_dataset.m_periodsAddressValuesDictionary, m_dataset.m_accountsAddressValuesDictionary)
+            Case ModelDataSet.Orientations.ACCOUNTSENTITIES : AppendDataRegionRanges(m_dataSetRegion, m_dataset.m_accountsAddressValuesDictionary, m_dataset.m_entitiesAddressValuesDictionary)
+            Case ModelDataSet.Orientations.ENTITIESACCOUNTS : AppendDataRegionRanges(m_dataSetRegion, m_dataset.m_entitiesAddressValuesDictionary, m_dataset.m_accountsAddressValuesDictionary)
+            Case ModelDataSet.Orientations.PERIODSENTITIES : AppendDataRegionRanges(m_dataSetRegion, m_dataset.m_periodsAddressValuesDictionary, m_dataset.m_entitiesAddressValuesDictionary)
+            Case ModelDataSet.Orientations.ENTITIESPERIODS : AppendDataRegionRanges(m_dataSetRegion, m_dataset.m_entitiesAddressValuesDictionary, m_dataset.m_periodsAddressValuesDictionary)
             Case Else
                 ' PPS error tracking
                 Exit Sub
@@ -78,10 +78,10 @@ Friend Class DataModificationsTracking
         m_outputsRegion = Nothing
         If m_dataset.m_outputsAccountsAddressvaluesDictionary.Count > 0 Then
             Select Case m_dataset.m_globalOrientationFlag
-                Case ModelDataSet.DATASET_ACCOUNTS_PERIODS_OR : AppendDataRegionRanges(m_outputsRegion, m_dataset.m_outputsAccountsAddressvaluesDictionary, m_dataset.m_periodsAddressValuesDictionary)
-                Case ModelDataSet.DATASET_PERIODS_ACCOUNTS_OR : AppendDataRegionRanges(m_outputsRegion, m_dataset.m_periodsAddressValuesDictionary, m_dataset.m_outputsAccountsAddressvaluesDictionary)
-                Case ModelDataSet.DATASET_ACCOUNTS_ENTITIES_OR : AppendDataRegionRanges(m_outputsRegion, m_dataset.m_outputsAccountsAddressvaluesDictionary, m_dataset.m_entitiesAddressValuesDictionary)
-                Case ModelDataSet.DATASET_ENTITIES_ACCOUNTS_OR : AppendDataRegionRanges(m_outputsRegion, m_dataset.m_entitiesAddressValuesDictionary, m_dataset.m_outputsAccountsAddressvaluesDictionary)
+                Case ModelDataSet.Orientations.ACCOUNTSPERIODS : AppendDataRegionRanges(m_outputsRegion, m_dataset.m_outputsAccountsAddressvaluesDictionary, m_dataset.m_periodsAddressValuesDictionary)
+                Case ModelDataSet.Orientations.PERIODSACCOUNTS : AppendDataRegionRanges(m_outputsRegion, m_dataset.m_periodsAddressValuesDictionary, m_dataset.m_outputsAccountsAddressvaluesDictionary)
+                Case ModelDataSet.Orientations.ACCOUNTSENTITIES : AppendDataRegionRanges(m_outputsRegion, m_dataset.m_outputsAccountsAddressvaluesDictionary, m_dataset.m_entitiesAddressValuesDictionary)
+                Case ModelDataSet.Orientations.ENTITIESACCOUNTS : AppendDataRegionRanges(m_outputsRegion, m_dataset.m_entitiesAddressValuesDictionary, m_dataset.m_outputsAccountsAddressvaluesDictionary)
             End Select
         End If
 
@@ -213,30 +213,34 @@ Friend Class DataModificationsTracking
 
     Private Sub HeaderRangesInputsHighlight(ByRef addressDictionary As Dictionary(Of String, String))
 
-        For Each contiguousRange As Excel.Range In TransformDictionaryToRange(addressDictionary).Areas
-            m_rangeHighlighter.HighlightInputRange(contiguousRange)
-        Next
+        If addressDictionary.Count > 0 Then
+            For Each contiguousRange As Excel.Range In TransformDictionaryToRange(addressDictionary).Areas
+                m_rangeHighlighter.HighlightInputRange(contiguousRange)
+            Next
+        End If
 
     End Sub
 
     ' Highlight the outputs headers
     Private Sub HeaderRangesOutputsHighlight(ByRef addressDictionary As Dictionary(Of String, String))
 
-        For Each contiguousRange As Excel.Range In TransformDictionaryToRange(addressDictionary).Areas
-            m_rangeHighlighter.ColorOutputRange(contiguousRange)
-        Next
+        If addressDictionary.Count > 0 Then
+            For Each contiguousRange As Excel.Range In TransformDictionaryToRange(addressDictionary).Areas
+                m_rangeHighlighter.ColorOutputRange(contiguousRange)
+            Next
+        End If
 
     End Sub
 
     Private Sub DataHighlight()
 
         Select Case m_dataset.m_globalOrientationFlag
-            Case ModelDataSet.DATASET_ACCOUNTS_PERIODS_OR : DataAreasHighlight(m_dataset.m_accountsAddressValuesDictionary, m_dataset.m_periodsAddressValuesDictionary)
-            Case ModelDataSet.DATASET_PERIODS_ACCOUNTS_OR : DataAreasHighlight(m_dataset.m_periodsAddressValuesDictionary, m_dataset.m_accountsAddressValuesDictionary)
-            Case ModelDataSet.DATASET_ACCOUNTS_ENTITIES_OR : DataAreasHighlight(m_dataset.m_accountsAddressValuesDictionary, m_dataset.m_entitiesAddressValuesDictionary)
-            Case ModelDataSet.DATASET_ENTITIES_ACCOUNTS_OR : DataAreasHighlight(m_dataset.m_entitiesAddressValuesDictionary, m_dataset.m_accountsAddressValuesDictionary)
-            Case ModelDataSet.DATASET_PERIODS_ENTITIES_OR : DataAreasHighlight(m_dataset.m_periodsAddressValuesDictionary, m_dataset.m_entitiesAddressValuesDictionary)
-            Case ModelDataSet.DATASET_ENTITIES_PERIODS_OR : DataAreasHighlight(m_dataset.m_entitiesAddressValuesDictionary, m_dataset.m_periodsAddressValuesDictionary)
+            Case ModelDataSet.Orientations.ACCOUNTSPERIODS : DataAreasHighlight(m_dataset.m_accountsAddressValuesDictionary, m_dataset.m_periodsAddressValuesDictionary)
+            Case ModelDataSet.Orientations.PERIODSACCOUNTS : DataAreasHighlight(m_dataset.m_periodsAddressValuesDictionary, m_dataset.m_accountsAddressValuesDictionary)
+            Case ModelDataSet.Orientations.ACCOUNTSENTITIES : DataAreasHighlight(m_dataset.m_accountsAddressValuesDictionary, m_dataset.m_entitiesAddressValuesDictionary)
+            Case ModelDataSet.Orientations.ENTITIESACCOUNTS : DataAreasHighlight(m_dataset.m_entitiesAddressValuesDictionary, m_dataset.m_accountsAddressValuesDictionary)
+            Case ModelDataSet.Orientations.PERIODSENTITIES : DataAreasHighlight(m_dataset.m_periodsAddressValuesDictionary, m_dataset.m_entitiesAddressValuesDictionary)
+            Case ModelDataSet.Orientations.ENTITIESPERIODS : DataAreasHighlight(m_dataset.m_entitiesAddressValuesDictionary, m_dataset.m_periodsAddressValuesDictionary)
             Case Else : Exit Sub
         End Select
 

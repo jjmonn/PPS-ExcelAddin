@@ -52,7 +52,7 @@ Friend Class WorksheetWrittingFunctions
     ' Write array to the specified destination range
     Public Shared Sub WriteArray(arrayToWrite(,) As Object, Destination As Excel.Range)
 
-        Destination.Resize(UBound(arrayToWrite, 1) + 1, UBound(arrayToWrite, 2) + 1).Value = arrayToWrite
+        Destination.Resize(UBound(arrayToWrite, 1) + 1, UBound(arrayToWrite, 2) + 1).Value2 = arrayToWrite
 
     End Sub
 
@@ -64,7 +64,7 @@ Friend Class WorksheetWrittingFunctions
         For Each Node As TreeNode In TV.Nodes
             IndentLevel = 0
             destinationCell = destinationCell.Offset(1, 0)
-            destinationCell.Value2 = Node.Text
+            destinationCell.Value = Node.Text
 
             If Not periodDatesList Is Nothing Then
                 Dim i As Int32 = 0
@@ -91,7 +91,7 @@ Friend Class WorksheetWrittingFunctions
 
         With destinationCell
             .IndentLevel = IndentLevel
-            .Value2 = Node.Text
+            .Value = Node.Text
         End With
         destinationCell = destinationCell.Offset(1, 0)
 
