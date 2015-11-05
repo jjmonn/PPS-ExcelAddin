@@ -9,7 +9,7 @@ Class AxisFilterManager : Inherits CRUDManager
 
 #Region "Instance variables"
 
-    Protected m_axisFilterDictionary As New SortedDictionary(Of AxisType, SortedDictionary(Of Int32, AxisFilter))
+    Protected m_axisFilterDictionary As New SortedDictionary(Of AxisType, MultiIndexDictionary(Of UInt32, Tuple(Of UInt32, UInt32), AxisFilter))
 
 #End Region
 
@@ -41,7 +41,7 @@ Class AxisFilterManager : Inherits CRUDManager
 
     Private Sub Clear()
         For Each l_axis In System.Enum.GetValues(GetType(AxisType))
-            m_axisFilterDictionary(l_axis) = New SortedDictionary(Of Int32, AxisFilter)
+            m_axisFilterDictionary(l_axis) = New MultiIndexDictionary(Of UInt32, Tuple(Of UInt32, UInt32), AxisFilter)
         Next
     End Sub
 
@@ -55,7 +55,7 @@ Class AxisFilterManager : Inherits CRUDManager
             Clear()
             For i As Int32 = 1 To packet.ReadInt32()
                 Dim tmp_ht = AxisFilter.BuildAxisFilter(packet)
-                m_axisFilterDictionary(tmp_ht.Axis)(tmp_ht.Id) = tmp_ht
+                m_axisFilterDictionary(tmp_ht.Axis).Set(tmp_ht.Id, New Tuple(Of UInt32, UInt32)(tmp_ht.AxisElemId, tmp_ht.FilterId), tmp_ht)
             Next
             state_flag = True
             RaiseObjectInitializedEvent()
@@ -71,7 +71,7 @@ Class AxisFilterManager : Inherits CRUDManager
         If packet.GetError() = ErrorMessage.SUCCESS Then
             Dim tmp_ht = AxisFilter.BuildAxisFilter(packet)
 
-            m_axisFilterDictionary(tmp_ht.Axis)(tmp_ht.Id) = tmp_ht
+            m_axisFilterDictionary(tmp_ht.Axis).Set(tmp_ht.Id, New Tuple(Of UInt32, UInt32)(tmp_ht.AxisElemId, tmp_ht.FilterId), tmp_ht)
             RaiseReadEvent(packet.GetError(), tmp_ht)
         Else
             RaiseReadEvent(packet.GetError(), Nothing)
@@ -96,9 +96,13 @@ Class AxisFilterManager : Inherits CRUDManager
 
 #Region "Mapping"
 
+    Public Overloads Function GetValue(ByVal p_axis As AxisType, ByRef p_axisElemId As UInt32, ByRef p_filterId As UInt32)
+        If m_axisFilterDictionary.ContainsKey(p_axis) = False Then Return Nothing
+        Return m_axisFilterDictionary(p_axis)(New Tuple(Of UInt32, UInt32)(p_axisElemId, p_filterId))
+    End Function
+
     Public Overloads Function GetValue(ByVal p_axis As AxisType, ByVal p_id As UInt32) As AxisFilter
         If m_axisFilterDictionary.ContainsKey(p_axis) = False Then Return Nothing
-        If m_axisFilterDictionary(p_axis).ContainsKey(p_id) = False Then Return Nothing
 
         Return m_axisFilterDictionary(p_axis)(p_id)
     End Function
@@ -119,7 +123,7 @@ Class AxisFilterManager : Inherits CRUDManager
         Return GetValue(CUInt(p_id))
     End Function
 
-    Friend Function GetDictionary(ByVal p_axis As AxisType) As SortedDictionary(Of Int32, AxisFilter)
+    Friend Function GetDictionary(ByVal p_axis As AxisType) As MultiIndexDictionary(Of UInt32, Tuple(Of UInt32, UInt32), AxisFilter)
         If m_axisFilterDictionary.ContainsKey(p_axis) = False Then Return Nothing
         Return m_axisFilterDictionary(p_axis)
     End Function
@@ -137,9 +141,9 @@ Class AxisFilterManager : Inherits CRUDManager
     End Function
 
     Friend Function GetFilterValueId(ByRef p_axisType As AxisType, ByRef filterId As Int32, _
-                                     ByRef axisValueId As Int32) As Int32
+                                     ByRef p_axisElemId As Int32) As Int32
         Dim mostNestedFilterId = GlobalVariables.Filters.GetMostNestedFilterId(filterId)
-        Dim mostNestedFilterValueId = GetValue(p_axisType, mostNestedFilterId)
+        Dim mostNestedFilterValueId = GetValue(p_axisType, p_axisElemId, mostNestedFilterId)
 
         If mostNestedFilterValueId Is Nothing Then Return 0
         Return GlobalVariables.FiltersValues.GetFilterValueId(mostNestedFilterValueId.FilterValueId, filterId)

@@ -36,9 +36,9 @@ namespace CRUD
     {
       if (p_includeId)
         p_packet.WriteUint32(Id);
+      p_packet.WriteString(Name);
       p_packet.WriteUint32(FilterId);
       p_packet.WriteUint32(ParentId);
-      p_packet.WriteString(Name);
       p_packet.WriteInt32(ItemPosition);
     }
 

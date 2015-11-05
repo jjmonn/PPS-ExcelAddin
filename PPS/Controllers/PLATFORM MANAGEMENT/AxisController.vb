@@ -130,7 +130,7 @@ Friend Class AxisController
         Return l_axis.Clone()
     End Function
 
-    Friend Function GetAxisFilterDictionary() As SortedDictionary(Of Int32, AxisFilter)
+    Friend Function GetAxisFilterDictionary() As MultiIndexDictionary(Of UInt32, Tuple(Of UInt32, UInt32), AxisFilter)
         Return CrudModelFilters.GetDictionary(CType(m_axisType, AxisType))
     End Function
 
@@ -225,7 +225,7 @@ Friend Class AxisController
     Private Sub AfterAxisFilterRead(ByRef status As ErrorMessage, ByRef p_axisFilter As CRUDEntity)
 
         If (status = ErrorMessage.SUCCESS) Then
-            Dim axisFilter As AxisElem = CType(p_axisFilter, AxisElem)
+            Dim axisFilter As AxisFilter = CType(p_axisFilter, AxisFilter)
             View.LoadInstanceVariables_Safe()
             View.UpdateAxis(CrudModel.GetValue(axisFilter.Axis, axisFilter.Id))
         End If
@@ -254,9 +254,9 @@ Friend Class AxisController
     End Function
 
     Friend Function GetFilterValueId(ByRef filterId As Int32, _
-                                     ByRef axisValueId As Int32) As Int32
+                                     ByRef p_axisElemId As Int32) As Int32
 
-        Return CrudModelFilters.GetFilterValueId(m_axisType, filterId, axisValueId)
+        Return CrudModelFilters.GetFilterValueId(m_axisType, filterId, p_axisElemId)
 
     End Function
 
@@ -272,10 +272,12 @@ Friend Class AxisController
 
             If axisElem Is Nothing Then Continue For
             If position <> axisElem.ItemPosition Then
-                axisUpdates.Add(CrudModel.GetValue(m_axisType, axisId))
+                axisElem = axisElem.Clone()
+                axisElem.ItemPosition = position
+                axisUpdates.Add(axisElem)
             End If
         Next
-        CrudModel.UpdateList(axisUpdates)
+        If axisUpdates.Count > 0 Then CrudModel.UpdateList(axisUpdates)
 
     End Sub
 

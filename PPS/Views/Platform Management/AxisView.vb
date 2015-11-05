@@ -243,7 +243,7 @@ Friend Class AxisView
     Private Sub fillDGV(ByRef axisHT As MultiIndexDictionary(Of UInt32, String, AxisElem))
 
         isFillingDGV = True
-        For Each axisValue In axisHT.Values
+        For Each axisValue In axisHT.SortedValues
             FillRow(axisValue.Id, axisValue.Name, axisValue)
         Next
         isFillingDGV = False

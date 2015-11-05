@@ -157,21 +157,21 @@ Public Class VTreeViewUtil
         Dim image_index As UInt16 = 0
         TV.Nodes.Clear()
 
-        For Each id As UInt32 In items_attributes.Keys
-            If items_attributes(id).ParentId = 0 Then
-                currentNode = AddNode(items_attributes(id).Id, _
-                                      items_attributes(id).Name,
+        For Each value As T In items_attributes.SortedValues
+            If value.ParentId = 0 Then
+                currentNode = AddNode(value.Id, _
+                                      value.Name,
                                       TV, _
                                       image_index)
             Else
-                ParentNode = FindNode(TV, items_attributes(id).Id)
+                ParentNode = FindNode(TV, value.Id)
                 If Not ParentNode Is Nothing Then
-                    currentNode = AddNode(items_attributes(id).Id, _
-                                        items_attributes(id).Name,
+                    currentNode = AddNode(value.Id, _
+                                        value.Name,
                                         ParentNode, _
                                         image_index)
                 Else
-                    orphans_ids_list.Add(items_attributes(id).Id)
+                    orphans_ids_list.Add(value.Id)
                 End If
             End If
         Next
@@ -215,21 +215,21 @@ Public Class VTreeViewUtil
         Dim image_index As UInt16 = 0
         node.Nodes.Clear()
 
-        For Each id As UInt32 In items_attributes.Keys
-            If items_attributes(id).ParentId = 0 Then
-                currentNode = AddNode(items_attributes(id).Id, _
-                                       items_attributes(id).Name, _
+        For Each value As T In items_attributes.SortedValues
+            If value.ParentId = 0 Then
+                currentNode = AddNode(value.Id, _
+                                       value.Name, _
                                        node, _
                                        image_index)
             Else
-                ParentNode = FindNode(node, items_attributes(id).Id)
+                ParentNode = FindNode(node, value.Id)
                 If Not ParentNode Is Nothing Then
-                    currentNode = AddNode(items_attributes(id).Id, _
-                                        items_attributes(id).Name,
+                    currentNode = AddNode(value.Id, _
+                                        value.Name,
                                         ParentNode, _
                                         image_index)
                 Else
-                    orphans_ids_list.Add(items_attributes(id).Id)
+                    orphans_ids_list.Add(value.Id)
                 End If
             End If
         Next

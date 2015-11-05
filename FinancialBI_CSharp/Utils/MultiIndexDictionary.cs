@@ -9,13 +9,24 @@ public class MultiIndexDictionary<KeyA, KeyB, Value>
   private UInt32 m_id = 0;
   private Dictionary<KeyA, UInt32> m_firstDic = new Dictionary<KeyA,uint>();
   private Dictionary<KeyB, UInt32> m_secondDic = new Dictionary<KeyB, uint>();
-  private SortedDictionary<UInt32, Value> m_mainDic = new SortedDictionary<uint,Value>();
+  private Dictionary<UInt32, Value> m_mainDic = new Dictionary<uint, Value>();
+  private List<Value> m_sortedList = null;
 
-  public SortedDictionary<UInt32, Value>.ValueCollection Values
+  public Dictionary<UInt32, Value>.ValueCollection Values
   {
     get
     {
       return m_mainDic.Values;
+    }
+  }
+
+  public List<Value> SortedValues
+  {
+    get
+    {
+      if (m_sortedList == null)
+        m_sortedList = m_mainDic.OrderBy(x => x.Value).Select(p => p.Value).ToList();
+      return m_sortedList;
     }
   }
 
@@ -79,7 +90,6 @@ public class MultiIndexDictionary<KeyA, KeyB, Value>
 
     if (m_firstDic.ContainsKey(p_keyA) == false && m_secondDic.ContainsKey(p_keyB) == false)
     {
-      m_mainDic[m_id] = p_value;
       id = m_id;
       ++m_id;
     }
@@ -92,6 +102,8 @@ public class MultiIndexDictionary<KeyA, KeyB, Value>
       
     m_firstDic[p_keyA] = id;
     m_secondDic[p_keyB] = id;
+    m_mainDic[id] = p_value;
+    m_sortedList = null;
     return (true);
   }
 
@@ -114,6 +126,7 @@ public class MultiIndexDictionary<KeyA, KeyB, Value>
       m_mainDic.Remove(id);
       m_firstDic.Remove(p_key);
       RemoveValue<KeyB>(m_secondDic, id);
+      m_sortedList = null;
     }
   }
 
@@ -126,6 +139,7 @@ public class MultiIndexDictionary<KeyA, KeyB, Value>
       m_mainDic.Remove(id);
       m_secondDic.Remove(p_key);
       RemoveValue<KeyA>(m_firstDic, id);
+      m_sortedList = null;
     }
   }
 
@@ -146,6 +160,7 @@ public class MultiIndexDictionary<KeyA, KeyB, Value>
     m_firstDic.Clear();
     m_secondDic.Clear();
     m_mainDic.Clear();
+    m_sortedList = null;
   }
 
   public MultiIndexDictionary<KeyA, KeyB, DValue> Cast<DValue>()
@@ -155,7 +170,7 @@ public class MultiIndexDictionary<KeyA, KeyB, Value>
     dest.m_firstDic = m_firstDic;
     dest.m_secondDic = m_secondDic;
     dest.m_id = m_id;
-    dest.m_mainDic = m_mainDic as SortedDictionary<uint, DValue>;
+    dest.m_mainDic = m_mainDic as Dictionary<uint, DValue>;
     return dest;
   }
 }

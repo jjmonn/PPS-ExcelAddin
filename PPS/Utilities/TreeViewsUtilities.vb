@@ -26,7 +26,7 @@ Friend Class TreeViewsUtilities
         Dim image_index As UInt16 = 0
         TV.Nodes.Clear()
 
-        For Each value As T In items_attributes.Values
+        For Each value As T In items_attributes.SortedValues
 
             If value.ParentId = 0 Then
                 currentNode = TV.Nodes.Add(CStr(value.Id), value.Name, image_index, image_index)
@@ -78,19 +78,19 @@ Friend Class TreeViewsUtilities
         Dim image_index As UInt16 = 0
         node.Nodes.Clear()
 
-        For Each id As UInt32 In items_attributes.Keys
-            If items_attributes(id).ParentId = 0 Then
-                currentNode = node.Nodes.Add(CStr(items_attributes(id).Id), _
-                                           items_attributes(id).Name, _
+        For Each value As T In items_attributes.SortedValues
+            If value.ParentId = 0 Then
+                currentNode = node.Nodes.Add(CStr(value.Id), _
+                                           value.Name, _
                                            image_index, image_index)
             Else
-                ParentNode = node.Nodes.Find((items_attributes(id).ParentId), True)
+                ParentNode = node.Nodes.Find((value.ParentId), True)
                 If ParentNode.Length > 0 Then
-                    currentNode = ParentNode(0).Nodes.Add(CStr(items_attributes(id).Id), _
-                                                          items_attributes(id).Name, _
+                    currentNode = ParentNode(0).Nodes.Add(CStr(value.Id), _
+                                                          value.Name, _
                                                           image_index, image_index)
                 Else
-                    orphans_ids_list.Add(id)
+                    orphans_ids_list.Add(value.Id)
                 End If
             End If
         Next
