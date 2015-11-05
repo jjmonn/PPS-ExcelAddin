@@ -288,8 +288,6 @@ Friend Class AcquisitionModel
         Next
 
         BuildInputsArrays(m_entitiesNameOutputList)
-        ' Test retrou server false avec version = 0 
-        m_currentVersionId = 0
         m_singleComputer.CMSG_SOURCED_COMPUTE(m_currentVersionId, _
                                               m_entitiesIdOutputList, _
                                               m_entitiesIdInputsAccounts, _
