@@ -65,21 +65,7 @@ Friend Class SubmissionWSController
         AddHandler p_excelWorksheet.BeforeRightClick, AddressOf Worksheet_BeforeRightClick
         AddHandler p_excelWorksheet.SelectionChange, AddressOf Worksheet_SelectionChange
         m_excelWorksheet = p_excelWorksheet
-
-        ' AddHandler thisworkbook.SheetSelectionChange, AddressOf Worksheet_SelectionChange
-        'WS.Protect(DrawingObjects:=False, _
-        '           Contents:=True, _
-        '           Scenarios:= _
-        '           False, _
-        '           AllowFormattingCells:=True, _
-        '           AllowFormattingColumns:=True, _
-        '           AllowFormattingRows:=True, _
-        '           AllowInsertingHyperlinks:=True, _
-        '           AllowSorting:= _
-        '           True, _
-        '           AllowFiltering:=True, _
-        '           AllowUsingPivotTables:=True)
-
+      
     End Sub
 
 #End Region
@@ -308,6 +294,7 @@ Friend Class SubmissionWSController
 
     Friend Sub Worksheet_SelectionChange(ByVal Target As Excel.Range)
 
+        ' Side pane display
         Dim address As String = Strings.Replace(Target.Address, "$", "")
         If m_dataSet.m_datasetCellDimensionsDictionary.ContainsKey(Target.Address) Then
             Dim datasetCellStruct As ModelDataSet.DataSetCellDimensions = m_dataSet.m_datasetCellDimensionsDictionary(Target.Address)
@@ -320,14 +307,10 @@ Friend Class SubmissionWSController
             GlobalVariables.s_reportUploadSidePane.DisplayEmptyTextBoxes()
         End If
 
-
-
-    End Sub
-
-    Private Sub UpdateActiveWorksheet(ByRef p_exceXorksheet As Excel.Worksheet)
-
-        ' priority normal !!
-
+        ' Associate the right GRS Controller if the worksheet is different
+        If m_generalSubmissionController.IsCurrentController() = False Then
+            m_generalSubmissionController.ActivateGRSController()
+        End If
 
     End Sub
 
