@@ -60,12 +60,12 @@ Friend Class DataModificationsTracking
 
         m_dataSetRegion = Nothing
         Select Case m_dataset.m_globalOrientationFlag
-            Case ModelDataSet.Orientations.ACCOUNTSPERIODS : AppendDataRegionRanges(m_dataSetRegion, m_dataset.m_accountsAddressValuesDictionary, m_dataset.m_periodsAddressValuesDictionary)
-            Case ModelDataSet.Orientations.PERIODSACCOUNTS : AppendDataRegionRanges(m_dataSetRegion, m_dataset.m_periodsAddressValuesDictionary, m_dataset.m_accountsAddressValuesDictionary)
-            Case ModelDataSet.Orientations.ACCOUNTSENTITIES : AppendDataRegionRanges(m_dataSetRegion, m_dataset.m_accountsAddressValuesDictionary, m_dataset.m_entitiesAddressValuesDictionary)
-            Case ModelDataSet.Orientations.ENTITIESACCOUNTS : AppendDataRegionRanges(m_dataSetRegion, m_dataset.m_entitiesAddressValuesDictionary, m_dataset.m_accountsAddressValuesDictionary)
-            Case ModelDataSet.Orientations.PERIODSENTITIES : AppendDataRegionRanges(m_dataSetRegion, m_dataset.m_periodsAddressValuesDictionary, m_dataset.m_entitiesAddressValuesDictionary)
-            Case ModelDataSet.Orientations.ENTITIESPERIODS : AppendDataRegionRanges(m_dataSetRegion, m_dataset.m_entitiesAddressValuesDictionary, m_dataset.m_periodsAddressValuesDictionary)
+            Case ModelDataSet.Orientations.ACCOUNTS_PERIODS : AppendDataRegionRanges(m_dataSetRegion, m_dataset.m_accountsAddressValuesDictionary, m_dataset.m_periodsAddressValuesDictionary)
+            Case ModelDataSet.Orientations.PERIODS_ACCOUNTS : AppendDataRegionRanges(m_dataSetRegion, m_dataset.m_periodsAddressValuesDictionary, m_dataset.m_accountsAddressValuesDictionary)
+            Case ModelDataSet.Orientations.ACCOUNTS_ENTITIES : AppendDataRegionRanges(m_dataSetRegion, m_dataset.m_accountsAddressValuesDictionary, m_dataset.m_entitiesAddressValuesDictionary)
+            Case ModelDataSet.Orientations.ENTITIES_ACCOUNTS : AppendDataRegionRanges(m_dataSetRegion, m_dataset.m_entitiesAddressValuesDictionary, m_dataset.m_accountsAddressValuesDictionary)
+            Case ModelDataSet.Orientations.PERIODS_ENTITIES : AppendDataRegionRanges(m_dataSetRegion, m_dataset.m_periodsAddressValuesDictionary, m_dataset.m_entitiesAddressValuesDictionary)
+            Case ModelDataSet.Orientations.ENTITIES_PERIODS : AppendDataRegionRanges(m_dataSetRegion, m_dataset.m_entitiesAddressValuesDictionary, m_dataset.m_periodsAddressValuesDictionary)
             Case Else
                 ' PPS error tracking
                 Exit Sub
@@ -78,10 +78,10 @@ Friend Class DataModificationsTracking
         m_outputsRegion = Nothing
         If m_dataset.m_outputsAccountsAddressvaluesDictionary.Count > 0 Then
             Select Case m_dataset.m_globalOrientationFlag
-                Case ModelDataSet.Orientations.ACCOUNTSPERIODS : AppendDataRegionRanges(m_outputsRegion, m_dataset.m_outputsAccountsAddressvaluesDictionary, m_dataset.m_periodsAddressValuesDictionary)
-                Case ModelDataSet.Orientations.PERIODSACCOUNTS : AppendDataRegionRanges(m_outputsRegion, m_dataset.m_periodsAddressValuesDictionary, m_dataset.m_outputsAccountsAddressvaluesDictionary)
-                Case ModelDataSet.Orientations.ACCOUNTSENTITIES : AppendDataRegionRanges(m_outputsRegion, m_dataset.m_outputsAccountsAddressvaluesDictionary, m_dataset.m_entitiesAddressValuesDictionary)
-                Case ModelDataSet.Orientations.ENTITIESACCOUNTS : AppendDataRegionRanges(m_outputsRegion, m_dataset.m_entitiesAddressValuesDictionary, m_dataset.m_outputsAccountsAddressvaluesDictionary)
+                Case ModelDataSet.Orientations.ACCOUNTS_PERIODS : AppendDataRegionRanges(m_outputsRegion, m_dataset.m_outputsAccountsAddressvaluesDictionary, m_dataset.m_periodsAddressValuesDictionary)
+                Case ModelDataSet.Orientations.PERIODS_ACCOUNTS : AppendDataRegionRanges(m_outputsRegion, m_dataset.m_periodsAddressValuesDictionary, m_dataset.m_outputsAccountsAddressvaluesDictionary)
+                Case ModelDataSet.Orientations.ACCOUNTS_ENTITIES : AppendDataRegionRanges(m_outputsRegion, m_dataset.m_outputsAccountsAddressvaluesDictionary, m_dataset.m_entitiesAddressValuesDictionary)
+                Case ModelDataSet.Orientations.ENTITIES_ACCOUNTS : AppendDataRegionRanges(m_outputsRegion, m_dataset.m_entitiesAddressValuesDictionary, m_dataset.m_outputsAccountsAddressvaluesDictionary)
             End Select
         End If
 
@@ -108,12 +108,12 @@ Friend Class DataModificationsTracking
     ' Transforms a dictionary Addresses | Values into a range
     Private Function TransformDictionaryToRange(ByRef inputDict As Dictionary(Of String, String)) As Excel.Range
 
+        If inputDict.Count = 0 Then Return Nothing
         Dim rng As Excel.Range
         rng = m_dataset.m_excelWorkSheet.Range(inputDict.ElementAt(0).Key)
         For Each address As String In inputDict.Keys
             rng = GlobalVariables.apps.Union(rng, m_dataset.m_excelWorkSheet.Range(address))
         Next
-
         Return rng
 
     End Function
@@ -235,12 +235,12 @@ Friend Class DataModificationsTracking
     Private Sub DataHighlight()
 
         Select Case m_dataset.m_globalOrientationFlag
-            Case ModelDataSet.Orientations.ACCOUNTSPERIODS : DataAreasHighlight(m_dataset.m_accountsAddressValuesDictionary, m_dataset.m_periodsAddressValuesDictionary)
-            Case ModelDataSet.Orientations.PERIODSACCOUNTS : DataAreasHighlight(m_dataset.m_periodsAddressValuesDictionary, m_dataset.m_accountsAddressValuesDictionary)
-            Case ModelDataSet.Orientations.ACCOUNTSENTITIES : DataAreasHighlight(m_dataset.m_accountsAddressValuesDictionary, m_dataset.m_entitiesAddressValuesDictionary)
-            Case ModelDataSet.Orientations.ENTITIESACCOUNTS : DataAreasHighlight(m_dataset.m_entitiesAddressValuesDictionary, m_dataset.m_accountsAddressValuesDictionary)
-            Case ModelDataSet.Orientations.PERIODSENTITIES : DataAreasHighlight(m_dataset.m_periodsAddressValuesDictionary, m_dataset.m_entitiesAddressValuesDictionary)
-            Case ModelDataSet.Orientations.ENTITIESPERIODS : DataAreasHighlight(m_dataset.m_entitiesAddressValuesDictionary, m_dataset.m_periodsAddressValuesDictionary)
+            Case ModelDataSet.Orientations.ACCOUNTS_PERIODS : DataAreasHighlight(m_dataset.m_accountsAddressValuesDictionary, m_dataset.m_periodsAddressValuesDictionary)
+            Case ModelDataSet.Orientations.PERIODS_ACCOUNTS : DataAreasHighlight(m_dataset.m_periodsAddressValuesDictionary, m_dataset.m_accountsAddressValuesDictionary)
+            Case ModelDataSet.Orientations.ACCOUNTS_ENTITIES : DataAreasHighlight(m_dataset.m_accountsAddressValuesDictionary, m_dataset.m_entitiesAddressValuesDictionary)
+            Case ModelDataSet.Orientations.ENTITIES_ACCOUNTS : DataAreasHighlight(m_dataset.m_entitiesAddressValuesDictionary, m_dataset.m_accountsAddressValuesDictionary)
+            Case ModelDataSet.Orientations.PERIODS_ENTITIES : DataAreasHighlight(m_dataset.m_periodsAddressValuesDictionary, m_dataset.m_entitiesAddressValuesDictionary)
+            Case ModelDataSet.Orientations.ENTITIES_PERIODS : DataAreasHighlight(m_dataset.m_entitiesAddressValuesDictionary, m_dataset.m_periodsAddressValuesDictionary)
             Case Else : Exit Sub
         End Select
 
@@ -267,12 +267,14 @@ Friend Class DataModificationsTracking
     End Sub
 
     ' Highlight data areas
-    Private Sub DataAreasHighlight(ByRef VDict As Dictionary(Of String, String), ByRef HDict As Dictionary(Of String, String))
+    Private Sub DataAreasHighlight(ByRef p_verticalDictionary As Dictionary(Of String, String), _
+                                   ByRef p_horizontalDictionary As Dictionary(Of String, String))
 
-        For Each VArea As Excel.Range In TransformDictionaryToRange(VDict).Areas
-            For Each HArea As Excel.Range In TransformDictionaryToRange(HDict).Areas
-                m_rangeHighlighter.HighlightInputRange(m_rangeHighlighter.WS.Range(m_rangeHighlighter.WS.Cells(VArea(1).row, HArea(1).column), _
-                                                                               m_rangeHighlighter.WS.Cells(VArea(VArea.Count).row, HArea(HArea.Count).column)))
+        If p_verticalDictionary.Count = 0 OrElse p_horizontalDictionary.Count = 0 Then Exit Sub
+        For Each l_verticalArea As Excel.Range In TransformDictionaryToRange(p_verticalDictionary).Areas
+            For Each l_horizontalArea As Excel.Range In TransformDictionaryToRange(p_horizontalDictionary).Areas
+                m_rangeHighlighter.HighlightInputRange(m_rangeHighlighter.WS.Range(m_rangeHighlighter.WS.Cells(l_verticalArea(1).row, l_horizontalArea(1).column), _
+                                                                                   m_rangeHighlighter.WS.Cells(l_verticalArea(l_verticalArea.Count).row, l_horizontalArea(l_horizontalArea.Count).column)))
             Next
         Next
 

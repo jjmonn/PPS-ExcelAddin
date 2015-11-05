@@ -1,25 +1,16 @@
 ﻿' ModelDataSet.vb
 '
 ' This class manages the data sets to be uploaded and downloaded to and from the server
-'   > Look for version (if not found take ribbon version)   
-'   > Look for periods (period dates list according to version)
-'   > Look for Entities and Accounts according to DB (possibility to use recognition algorithms)
 '   
-'   > Describe Get Data and write back processes
-'
-'
-'
+'  
 ' to do: 
-'       - Write method: implement version choice (currently using the VERSION BUTTON)
-'       - Try to factor getDataSet
-'       - swap GetData. v and h dicts
+'  
 '
 ' Known bugs:
 '       - Orientation: in some cases does not work (max left or right cells)
-'       - if data = period -> bug
 '
 '
-' Last modified: 23/09/2015
+' Last modified: 04/11/2015
 ' Author: Julien Monnereau
 
 
@@ -32,13 +23,10 @@ Imports CRUD
 Friend Class ModelDataSet
 
  
-
-
 #Region "Instance Variables"
 
     Friend m_excelWorkSheet As Excel.Worksheet
     Friend m_lastCell As Excel.Range
-
     Friend m_inputsAccountsList As List(Of Account)
     Friend m_periodsDatesList As New List(Of Date)
 
@@ -71,13 +59,6 @@ Friend Class ModelDataSet
     Private Const m_entityStringFlag As String = "Entity"
     Private Const m_periodFormatflag As String = "Period"
 
-
-    'Constants"
-    Private Const NULL_VALUE As String = "Not found"
-    Public Const ENTITY_ITEM As String = "EntityItem"
-    Public Const ACCOUNT_ITEM As String = "AccountItem"
-    Public Const PERIOD_ITEM As String = "PeriodItem"
-
     Structure DataSetCellDimensions
 
         Public m_accountName As String
@@ -94,12 +75,19 @@ Friend Class ModelDataSet
     End Enum
 
     Enum Orientations
-        ACCOUNTSPERIODS = 0
-        PERIODSACCOUNTS
-        ENTITIESACCOUNTS
-        ACCOUNTSENTITIES
-        PERIODSENTITIES
-        ENTITIESPERIODS
+        ACCOUNTS_PERIODS = 0
+        PERIODS_ACCOUNTS
+        ENTITIES_ACCOUNTS
+        ACCOUNTS_ENTITIES
+        PERIODS_ENTITIES
+        ENTITIES_PERIODS
+        ORIENTATION_ERROR
+    End Enum
+
+    Enum Alignment
+        VERTICAL = 0
+        HORIZONTAL
+        UNCLEAR
     End Enum
 
 #End Region
@@ -142,7 +130,7 @@ Friend Class ModelDataSet
         m_periodsValuesAddressDict.Clear()
         m_entitiesValuesAddressDict.Clear()
 
-        If Not VersionsIdentify() Then
+        If VersionsIdentify() = False Then
             If GlobalVariables.Versions.IsVersionValid(My.Settings.version_id) = True Then
                 m_currentVersionId = My.Settings.version_id
             Else
@@ -160,20 +148,6 @@ Friend Class ModelDataSet
 
     End Sub
 
-    'Friend Sub GetDataSet()
-
-    '    ' priority normal : adapt accountsPeriods get data method to ther orientation + simplify the dictionaries and model dataset storage process !! 
-    '    Select Case GlobalOrientationFlag
-    '        Case DATASET_ACCOUNTS_ENTITIES_OR : getData(AccountsAddressValuesDictionary, EntitiesAddressValuesDictionary)
-    '        Case DATASET_ACCOUNTS_PERIODS_OR : GetDataOrientationAccountsPeriods()
-    '        Case DATASET_PERIODS_ACCOUNTS_OR : getData(periodsAddressValuesDictionary, AccountsAddressValuesDictionary)
-    '        Case DATASET_PERIODS_ENTITIES_OR : getData(periodsAddressValuesDictionary, EntitiesAddressValuesDictionary)
-    '        Case DATASET_ENTITIES_ACCOUNTS_OR : getData(EntitiesAddressValuesDictionary, AccountsAddressValuesDictionary)
-    '        Case DATASET_ENTITIES_PERIODS_OR : getData(EntitiesAddressValuesDictionary, periodsAddressValuesDictionary)
-    '    End Select
-
-    'End Sub
-
 #End Region
 
 
@@ -186,11 +160,13 @@ Friend Class ModelDataSet
         For rowIndex = 1 To m_lastCell.Row
             For columnIndex = 1 To m_lastCell.Column
                 Try
-                    Dim version As Version = GlobalVariables.Versions.GetValue(CStr(m_excelWorkSheet.Cells(rowIndex, columnIndex).value))
-                    If Not version Is Nothing Then
-                        AddinModule.SetCurrentVersionId(version.Id)
-                        m_currentVersionId = version.Id
-                        Return True
+                    If VarType(m_excelWorkSheet.Cells(rowIndex, columnIndex).value) = 8 Then
+                        Dim version As Version = GlobalVariables.Versions.GetValue(CStr(m_excelWorkSheet.Cells(rowIndex, columnIndex).value))
+                        If Not version Is Nothing Then
+                            AddinModule.SetCurrentVersionId(version.Id)
+                            m_currentVersionId = version.Id
+                            Return True
+                        End If
                     End If
                 Catch ex As Exception
                     Return False
@@ -375,11 +351,18 @@ Friend Class ModelDataSet
 #Region " Orientation Functions"
 
     ' Determines the worksheet orientations of the ranges
-    Public Sub getOrientations()
+    Public Sub GetOrientations()
 
         Dim MaxRight As String = ""
         Dim MaxBelow As String = ""
         Dim FlagsCode As String = CStr(m_dateFlag) + CStr(m_accountFlag) + CStr(m_EntityFlag)
+
+        If m_accountFlag = SnapshotResult.ZERO _
+        Or m_EntityFlag = SnapshotResult.ZERO _
+        Or m_dateFlag = SnapshotResult.ZERO Then
+            m_globalOrientationFlag = Orientations.ORIENTATION_ERROR
+            Exit Sub
+        End If
 
         Select Case FlagsCode
             Case "111"          ' Only one value
@@ -390,104 +373,104 @@ Friend Class ModelDataSet
 
                 Select Case MaxsFlag
                     Case "AssetAccount"
-                        m_entitiesOrientationFlag = "H"
-                        m_accountsOrientationFlag = "V"
+                        m_entitiesOrientationFlag = Alignment.HORIZONTAL
+                        m_accountsOrientationFlag = Alignment.VERTICAL
                     Case "DateAccount"
-                        m_datesOrientationFlag = "H"
-                        m_accountsOrientationFlag = "V"
+                        m_datesOrientationFlag = Alignment.HORIZONTAL
+                        m_accountsOrientationFlag = Alignment.VERTICAL
                     Case "AssetDate"
-                        m_entitiesOrientationFlag = "H"
-                        m_datesOrientationFlag = "V"
+                        m_entitiesOrientationFlag = Alignment.HORIZONTAL
+                        m_datesOrientationFlag = Alignment.VERTICAL
                     Case "AccountAsset"
-                        m_accountsOrientationFlag = "H"
-                        m_entitiesOrientationFlag = "V"
+                        m_accountsOrientationFlag = Alignment.HORIZONTAL
+                        m_entitiesOrientationFlag = Alignment.VERTICAL
                     Case "AccountDate"
-                        m_accountsOrientationFlag = "H"
-                        m_datesOrientationFlag = "V"
+                        m_accountsOrientationFlag = Alignment.HORIZONTAL
+                        m_datesOrientationFlag = Alignment.VERTICAL
                     Case "DateAsset"
-                        m_datesOrientationFlag = "H"
-                        m_entitiesOrientationFlag = "V"
+                        m_datesOrientationFlag = Alignment.HORIZONTAL
+                        m_entitiesOrientationFlag = Alignment.VERTICAL
                     Case Else
                         ' Interface New ! 
                 End Select
             Case "112"                          ' 1 period, 1 Account, Several assets
-                getAssetsOrientations()
-                If m_entitiesOrientationFlag = "H" Then
+                GetAssetsOrientations()
+                If m_entitiesOrientationFlag = Alignment.HORIZONTAL Then
                     If m_excelWorkSheet.Range(m_periodsAddressValuesDictionary.ElementAt(m_periodsAddressValuesDictionary.Count - 1).Key).Row > m_excelWorkSheet.Range(m_accountsAddressValuesDictionary.ElementAt(m_accountsAddressValuesDictionary.Count - 1).Key).Row Then
-                        m_datesOrientationFlag = "V"
+                        m_datesOrientationFlag = Alignment.VERTICAL
                     Else
-                        m_accountsOrientationFlag = "V"
+                        m_accountsOrientationFlag = Alignment.VERTICAL
                     End If
                 Else
                     If m_excelWorkSheet.Range(m_periodsAddressValuesDictionary.ElementAt(m_periodsAddressValuesDictionary.Count - 1).Key).Column > m_excelWorkSheet.Range(m_accountsAddressValuesDictionary.ElementAt(m_accountsAddressValuesDictionary.Count - 1).Key).Column Then
-                        m_datesOrientationFlag = "H"
+                        m_datesOrientationFlag = Alignment.HORIZONTAL
                     Else
-                        m_accountsOrientationFlag = "H"
+                        m_accountsOrientationFlag = Alignment.HORIZONTAL
                     End If
                 End If
             Case "121"                          ' 1 period, Several Accounts, 1 asset
-                getAccountsOrientations()
-                If m_accountsOrientationFlag = "H" Then
+                GetAccountsOrientations()
+                If m_accountsOrientationFlag = Alignment.HORIZONTAL Then
                     If m_excelWorkSheet.Range(m_periodsAddressValuesDictionary.ElementAt(m_periodsAddressValuesDictionary.Count - 1).Key).Row > m_excelWorkSheet.Range(m_entitiesAddressValuesDictionary.ElementAt(m_entitiesAddressValuesDictionary.Count - 1).Key).Row Then
-                        m_datesOrientationFlag = "V"
+                        m_datesOrientationFlag = Alignment.VERTICAL
                     Else
-                        m_entitiesOrientationFlag = "V"
+                        m_entitiesOrientationFlag = Alignment.VERTICAL
                     End If
                 Else
                     If m_excelWorkSheet.Range(m_periodsAddressValuesDictionary.ElementAt(m_periodsAddressValuesDictionary.Count - 1).Key).Column > m_excelWorkSheet.Range(m_entitiesAddressValuesDictionary.ElementAt(m_entitiesAddressValuesDictionary.Count - 1).Key).Column Then
-                        m_datesOrientationFlag = "H"
+                        m_datesOrientationFlag = Alignment.HORIZONTAL
                     Else
-                        m_entitiesOrientationFlag = "H"
+                        m_entitiesOrientationFlag = Alignment.HORIZONTAL
                     End If
                 End If
             Case "211"                          ' Several periods, 1 Account, 1 Asset
-                getDatesOrientations()
-                If m_datesOrientationFlag = "H" Then
+                GetDatesOrientations()
+                If m_datesOrientationFlag = Alignment.HORIZONTAL Then
                     If m_excelWorkSheet.Range(m_accountsAddressValuesDictionary.ElementAt(m_accountsAddressValuesDictionary.Count - 1).Key).Row > m_excelWorkSheet.Range(m_entitiesAddressValuesDictionary.ElementAt(m_entitiesAddressValuesDictionary.Count - 1).Key).Row Then
-                        m_accountsOrientationFlag = "V"
+                        m_accountsOrientationFlag = Alignment.VERTICAL
                     Else
-                        m_entitiesOrientationFlag = "V"
+                        m_entitiesOrientationFlag = Alignment.VERTICAL
                     End If
                 Else
                     If m_excelWorkSheet.Range(m_accountsAddressValuesDictionary.ElementAt(m_accountsAddressValuesDictionary.Count - 1).Key).Column > m_excelWorkSheet.Range(m_entitiesAddressValuesDictionary.ElementAt(m_entitiesAddressValuesDictionary.Count - 1).Key).Column Then
-                        m_accountsOrientationFlag = "H"
+                        m_accountsOrientationFlag = Alignment.HORIZONTAL
                     Else
-                        m_entitiesOrientationFlag = "H"
+                        m_entitiesOrientationFlag = Alignment.HORIZONTAL
                     End If
                 End If
             Case "311"                          ' WS Period, 1 Account, 1 Asset
                 If m_excelWorkSheet.Range(m_accountsAddressValuesDictionary.ElementAt(m_accountsAddressValuesDictionary.Count - 1).Key).Row > m_excelWorkSheet.Range(m_entitiesAddressValuesDictionary.ElementAt(m_entitiesAddressValuesDictionary.Count - 1).Key).Row Then
-                    m_accountsOrientationFlag = "V"
-                    m_entitiesOrientationFlag = "H"
+                    m_accountsOrientationFlag = Alignment.VERTICAL
+                    m_entitiesOrientationFlag = Alignment.HORIZONTAL
                 ElseIf m_excelWorkSheet.Range(m_accountsAddressValuesDictionary.ElementAt(m_accountsAddressValuesDictionary.Count - 1).Key).Row < m_excelWorkSheet.Range(m_entitiesAddressValuesDictionary.ElementAt(m_entitiesAddressValuesDictionary.Count - 1).Key).Row Then
-                    m_accountsOrientationFlag = "H"
-                    m_entitiesOrientationFlag = "V"
+                    m_accountsOrientationFlag = Alignment.HORIZONTAL
+                    m_entitiesOrientationFlag = Alignment.VERTICAL
                 ElseIf m_excelWorkSheet.Range(m_accountsAddressValuesDictionary.ElementAt(m_accountsAddressValuesDictionary.Count - 1).Key).Column > m_excelWorkSheet.Range(m_entitiesAddressValuesDictionary.ElementAt(m_entitiesAddressValuesDictionary.Count - 1).Key).Column Then
-                    m_accountsOrientationFlag = "H"
-                    m_entitiesOrientationFlag = "V"
+                    m_accountsOrientationFlag = Alignment.HORIZONTAL
+                    m_entitiesOrientationFlag = Alignment.VERTICAL
                 Else
-                    m_accountsOrientationFlag = "V"
-                    m_entitiesOrientationFlag = "H"
+                    m_accountsOrientationFlag = Alignment.VERTICAL
+                    m_entitiesOrientationFlag = Alignment.HORIZONTAL
                 End If
             Case "312"                          ' WS Period, 1 Account, Several Asset
-                getAssetsOrientations()
-                If m_entitiesOrientationFlag = "H" Then
-                    m_accountsOrientationFlag = "V"
+                GetAssetsOrientations()
+                If m_entitiesOrientationFlag = Alignment.HORIZONTAL Then
+                    m_accountsOrientationFlag = Alignment.VERTICAL
                 Else
-                    m_accountsOrientationFlag = "H"
+                    m_accountsOrientationFlag = Alignment.HORIZONTAL
                 End If
             Case "321"                          ' WS Period, Several Accounts, 1 Asset
-                getAccountsOrientations()
-                If m_accountsOrientationFlag = "H" Then
-                    m_entitiesOrientationFlag = "V"
+                GetAccountsOrientations()
+                If m_accountsOrientationFlag = Alignment.HORIZONTAL Then
+                    m_entitiesOrientationFlag = Alignment.VERTICAL
                 Else
-                    m_entitiesOrientationFlag = "H"
+                    m_entitiesOrientationFlag = Alignment.HORIZONTAL
                 End If
             Case Else
                 ' Case "221","212","122","222","322"
-                getDatesOrientations()                       ' Dates Orientation
-                getAccountsOrientations()                    ' Accounts orientation
-                getAssetsOrientations()                      ' Assets orientation
+                GetDatesOrientations()                       ' Dates Orientation
+                GetAccountsOrientations()                    ' Accounts orientation
+                GetAssetsOrientations()                      ' Assets orientation
         End Select
 
         DefineGlobalOrientationFlag()
@@ -527,276 +510,310 @@ Friend Class ModelDataSet
         End If
     End Sub
 
-    ' Compute whether the Dates range is Vertical or Horizontal
-    Private Sub getDatesOrientations()
+    Private Sub GetDatesOrientations()
 
         Dim deltaRows, deltaColumns As Integer
-        If m_dateFlag = 2 Then
+        If m_dateFlag = SnapshotResult.SEVERAL Then
             deltaRows = m_excelWorkSheet.Range(m_periodsAddressValuesDictionary.ElementAt(m_periodsAddressValuesDictionary.Count - 1).Key).Row - _
-                                    m_excelWorkSheet.Range(m_periodsAddressValuesDictionary.ElementAt(0).Key).Row
+                                               m_excelWorkSheet.Range(m_periodsAddressValuesDictionary.ElementAt(0).Key).Row
 
             deltaColumns = m_excelWorkSheet.Range(m_periodsAddressValuesDictionary.ElementAt(m_periodsAddressValuesDictionary.Count - 1).Key).Column - _
                            m_excelWorkSheet.Range(m_periodsAddressValuesDictionary.ElementAt(0).Key).Column
 
-            If deltaRows > deltaColumns Then
-                m_datesOrientationFlag = "V"
-            Else
-                m_datesOrientationFlag = "H"
+            If deltaRows > 0 AndAlso deltaColumns > 0 Then
+                m_datesOrientationFlag = Alignment.UNCLEAR
+                Exit Sub
             End If
+
+            If deltaRows > deltaColumns Then
+                m_datesOrientationFlag = Alignment.VERTICAL
+            ElseIf deltaColumns > deltaRows Then
+                m_datesOrientationFlag = Alignment.HORIZONTAL
+            Else
+                m_datesOrientationFlag = Alignment.UNCLEAR
+            End If
+        Else
+            m_datesOrientationFlag = Alignment.UNCLEAR
         End If
 
     End Sub
 
-    ' Compute whether the Accounts range is Vertical or Horizontal
-    Private Sub getAccountsOrientations()
+    Private Sub GetAccountsOrientations()
 
         Dim deltaRows, deltaColumns As Integer
-        If m_accountFlag = 2 Then
+        If m_accountFlag = SnapshotResult.SEVERAL Then
             deltaRows = m_excelWorkSheet.Range(m_accountsAddressValuesDictionary.ElementAt(m_accountsAddressValuesDictionary.Count - 1).Key).Row - _
                         m_excelWorkSheet.Range(m_accountsAddressValuesDictionary.ElementAt(0).Key).Row
 
             deltaColumns = m_excelWorkSheet.Range(m_accountsAddressValuesDictionary.ElementAt(m_accountsAddressValuesDictionary.Count - 1).Key).Column - _
                            m_excelWorkSheet.Range(m_accountsAddressValuesDictionary.ElementAt(0).Key).Column
 
-            If deltaRows > deltaColumns Then
-                m_accountsOrientationFlag = "V"
-            Else
-                m_accountsOrientationFlag = "H"
+            If deltaRows > 0 AndAlso deltaColumns > 0 Then
+                m_accountsOrientationFlag = Alignment.UNCLEAR
+                Exit Sub
             End If
+
+            If deltaRows > deltaColumns Then
+                m_accountsOrientationFlag = Alignment.VERTICAL
+            ElseIf deltaColumns > deltaRows Then
+                m_accountsOrientationFlag = Alignment.HORIZONTAL
+            Else
+                m_accountsOrientationFlag = Alignment.UNCLEAR
+            End If
+        Else
+            m_accountsOrientationFlag = Alignment.UNCLEAR
         End If
 
     End Sub
 
-    ' Compute whether the Assets range is Vertical or Horizontal
-    Private Sub getAssetsOrientations()
+    Private Sub GetAssetsOrientations()
 
         Dim deltaRows, deltaColumns As Integer
-        If m_EntityFlag = 2 Then
+        If m_EntityFlag = SnapshotResult.SEVERAL Then
             deltaRows = m_excelWorkSheet.Range(m_entitiesAddressValuesDictionary.ElementAt(m_entitiesAddressValuesDictionary.Count - 1).Key).Row - _
                         m_excelWorkSheet.Range(m_entitiesAddressValuesDictionary.ElementAt(0).Key).Row
 
             deltaColumns = m_excelWorkSheet.Range(m_entitiesAddressValuesDictionary.ElementAt(m_entitiesAddressValuesDictionary.Count - 1).Key).Column - _
                            m_excelWorkSheet.Range(m_entitiesAddressValuesDictionary.ElementAt(0).Key).Column
 
-            If deltaRows > deltaColumns Then
-                m_entitiesOrientationFlag = "V"
-            Else
-                m_entitiesOrientationFlag = "H"
+            If deltaRows > 0 AndAlso deltaColumns > 0 Then
+                m_entitiesOrientationFlag = Alignment.UNCLEAR
+                Exit Sub
             End If
+
+            If deltaRows > deltaColumns Then
+                m_entitiesOrientationFlag = Alignment.VERTICAL
+            ElseIf deltaColumns > deltaRows Then
+                m_entitiesOrientationFlag = Alignment.HORIZONTAL
+            Else
+                m_entitiesOrientationFlag = Alignment.UNCLEAR
+            End If
+        Else
+            m_entitiesOrientationFlag = Alignment.UNCLEAR
         End If
 
     End Sub
 
-    '
     Private Sub DefineGlobalOrientationFlag()
 
-        If m_accountsOrientationFlag = "V" And m_entitiesOrientationFlag = "H" Then       ' Case Accounts in line / Assets in columns
-            m_globalOrientationFlag = Orientations.ACCOUNTSENTITIES
-        ElseIf m_accountsOrientationFlag = "V" And m_datesOrientationFlag = "H" Then    ' Case Accounts in line / Dates in columns
-            m_globalOrientationFlag = Orientations.ACCOUNTSPERIODS
-        ElseIf m_datesOrientationFlag = "V" And m_accountsOrientationFlag = "H" Then    ' Case Dates in line / Accounts in columns
-            m_globalOrientationFlag = Orientations.PERIODSACCOUNTS
-        ElseIf m_datesOrientationFlag = "V" And m_entitiesOrientationFlag = "H" Then      ' Case Dates in line / Assets in columns
-            m_globalOrientationFlag = Orientations.PERIODSENTITIES
-        ElseIf m_entitiesOrientationFlag = "V" And m_accountsOrientationFlag = "H" Then   ' Case Assets in line / Accounts in columns
-            m_globalOrientationFlag = Orientations.ENTITIESACCOUNTS
-        ElseIf m_entitiesOrientationFlag = "V" And m_datesOrientationFlag = "H" Then      ' Case Assets in line / Dates in columns
-            m_globalOrientationFlag = Orientations.ENTITIESPERIODS
-        Else
-            m_globalOrientationFlag = ORIENTATION_ERROR_FLAG
+        If m_accountsOrientationFlag = Alignment.VERTICAL _
+        AndAlso m_entitiesOrientationFlag = Alignment.HORIZONTAL Then
+            m_globalOrientationFlag = Orientations.ACCOUNTS_ENTITIES
+            Exit Sub
         End If
 
-    End Sub
+        If m_accountsOrientationFlag = Alignment.VERTICAL _
+        AndAlso m_datesOrientationFlag = Alignment.HORIZONTAL Then
+            m_globalOrientationFlag = Orientations.ACCOUNTS_PERIODS
+            Exit Sub
+        End If
 
+        If m_datesOrientationFlag = Alignment.VERTICAL _
+        AndAlso m_accountsOrientationFlag = Alignment.HORIZONTAL Then
+            m_globalOrientationFlag = Orientations.PERIODS_ACCOUNTS
+            Exit Sub
+        End If
+
+        If m_datesOrientationFlag = Alignment.VERTICAL _
+        AndAlso m_entitiesOrientationFlag = Alignment.HORIZONTAL Then
+            m_globalOrientationFlag = Orientations.PERIODS_ENTITIES
+            Exit Sub
+        End If
+
+        If m_entitiesOrientationFlag = Alignment.VERTICAL _
+        AndAlso m_accountsOrientationFlag = Alignment.HORIZONTAL Then
+            m_globalOrientationFlag = Orientations.ENTITIES_ACCOUNTS
+            Exit Sub
+        End If
+
+        If m_entitiesOrientationFlag = Alignment.VERTICAL _
+        AndAlso m_datesOrientationFlag = Alignment.HORIZONTAL Then
+            m_globalOrientationFlag = Orientations.ENTITIES_PERIODS
+            Exit Sub
+        End If
+
+        m_globalOrientationFlag = Orientations.ORIENTATION_ERROR
+
+    End Sub
 
 #End Region
 
 
-#Region "Dataset Cells Registering"
+#Region "Cells dimensions registering"
 
     Friend Sub RegisterDimensionsToCellDictionary()
-
-        Dim entityName As String = m_entitiesAddressValuesDictionary.ElementAt(0).Value
-        Dim periodColumn As Int32
-        Dim period As String
-
-        Dim start_time As DateTime
-        Dim elapsed_time As TimeSpan
-        Dim stop_time As DateTime
-        start_time = Now
 
         m_datasetCellsDictionary.Clear()
         m_datasetCellDimensionsDictionary.Clear()
 
-        For Each PeriodAddressValuePair In m_periodsAddressValuesDictionary
-            period = PeriodAddressValuePair.Value
-            periodColumn = m_excelWorkSheet.Range(PeriodAddressValuePair.Key).Column
+        Select Case m_globalOrientationFlag
+            Case Orientations.ACCOUNTS_PERIODS : RegisterDimensionsToCellDictionaryACCOUNTS_PERIODS()
+            Case Orientations.PERIODS_ACCOUNTS : RegisterDimensionsToCellDictionaryPERIODS_ACCOUNTS()
+            Case Orientations.ACCOUNTS_ENTITIES : RegisterDimensionsToCellDictionaryACCOUNTS_ENTITIES()
+            Case Orientations.ENTITIES_ACCOUNTS : RegisterDimensionsToCellDictionaryENTITIES_ACCOUNTS()
+            Case Orientations.ENTITIES_PERIODS : RegisterDimensionsToCellDictionaryENTITIES_PERIODS()
+            Case Orientations.PERIODS_ENTITIES : RegisterDimensionsToCellDictionaryPERIODS_ENTITIES()
+        End Select
+
+    End Sub
+
+    Private Sub RegisterDimensionsToCellDictionaryACCOUNTS_PERIODS()
+
+        Dim l_entityName As String = m_entitiesAddressValuesDictionary.ElementAt(0).Value
+        Dim l_periodColumn As Int32
+        Dim l_period As String
+
+        For Each l_periodAddressValuePair In m_periodsAddressValuesDictionary
+            l_period = l_periodAddressValuePair.Value
+            l_periodColumn = m_excelWorkSheet.Range(l_periodAddressValuePair.Key).Column
 
             ' Inputs cells registering
             For Each AccountAddressValuePair In m_accountsAddressValuesDictionary
-                RegisterDatasetCell(m_excelWorkSheet.Cells(m_excelWorkSheet.Range(AccountAddressValuePair.Key).Row, periodColumn), _
-                                    entityName, _
+                RegisterDatasetCell(m_excelWorkSheet.Cells(m_excelWorkSheet.Range(AccountAddressValuePair.Key).Row, l_periodColumn), _
+                                    l_entityName, _
                                     AccountAddressValuePair.Value, _
-                                    period)
+                                    l_period)
             Next
 
             ' Outputs cells registering
             For Each OutputAccountAddressValuePair In m_outputsAccountsAddressvaluesDictionary
-                RegisterDatasetCell(m_excelWorkSheet.Cells(m_excelWorkSheet.Range(OutputAccountAddressValuePair.Key).Row, periodColumn), _
-                                    entityName, _
+                RegisterDatasetCell(m_excelWorkSheet.Cells(m_excelWorkSheet.Range(OutputAccountAddressValuePair.Key).Row, l_periodColumn), _
+                                    l_entityName, _
                                     OutputAccountAddressValuePair.Value, _
-                                    period)
+                                    l_period)
             Next
         Next
 
-        stop_time = Now
-        elapsed_time = stop_time.Subtract(start_time)
-        System.Diagnostics.Debug.WriteLine(elapsed_time.TotalSeconds.ToString("0.000000"))
-
     End Sub
 
-    Friend Sub RegisterDataSetCellsValues()
+    Private Sub RegisterDimensionsToCellDictionaryPERIODS_ACCOUNTS()
 
-        Dim accountAddress As String
-        Dim start_time As DateTime
-        Dim elapsed_time As TimeSpan
-        Dim stop_time As DateTime
-        start_time = Now
+        Dim l_entityName As String = m_entitiesAddressValuesDictionary.ElementAt(0).Value
+        Dim l_periodRow As Int32
+        Dim l_period As String
 
-        For Each AccountAddressValuePair In m_accountsAddressValuesDictionary
-            accountAddress = AccountAddressValuePair.Key
-            For Each PeriodAddressValuePair In m_periodsAddressValuesDictionary
-                Dim cell As Excel.Range = m_excelWorkSheet.Cells(m_excelWorkSheet.Range(accountAddress).Row, m_excelWorkSheet.Range(PeriodAddressValuePair.Key).Column)
-                Dim datasetCell As DataSetCellDimensions = m_datasetCellDimensionsDictionary(cell.Address)
-                datasetCell.m_value = cell.Value2
+        For Each l_periodAddressValuePair In m_periodsAddressValuesDictionary
+            l_period = l_periodAddressValuePair.Value
+            l_periodRow = m_excelWorkSheet.Range(l_periodAddressValuePair.Key).Row
+
+            ' Inputs cells registering
+            For Each l_accountAddressValuePair In m_accountsAddressValuesDictionary
+                RegisterDatasetCell(m_excelWorkSheet.Cells(l_periodRow, m_excelWorkSheet.Range(l_accountAddressValuePair.Key).Column), _
+                                    l_entityName, _
+                                    l_accountAddressValuePair.Value, _
+                                    l_period)
+            Next
+
+            ' Outputs cells registering
+            For Each l_outputAccountAddressValuePair In m_outputsAccountsAddressvaluesDictionary
+                RegisterDatasetCell(m_excelWorkSheet.Cells(l_periodRow, m_excelWorkSheet.Range(l_outputAccountAddressValuePair.Key).Column), _
+                                    l_entityName, _
+                                    l_outputAccountAddressValuePair.Value, _
+                                    l_period)
             Next
         Next
-        stop_time = Now
-        elapsed_time = stop_time.Subtract(start_time)
-        System.Diagnostics.Debug.WriteLine(elapsed_time.TotalSeconds.ToString("0.000000"))
 
     End Sub
 
-    'Private Sub GetData(VerticalDictionaryAddressValues As Dictionary(Of String, String), _
-    '                    HorizontalDictionaryAddressValues As Dictionary(Of String, String))
+    Private Sub RegisterDimensionsToCellDictionaryACCOUNTS_ENTITIES()
 
-    '    m_datasetCellsDictionary.Clear()
-    '    Select Case GlobalOrientationFlag
+        Dim l_period As Int32 = m_periodsAddressValuesDictionary.ElementAt(0).Value
+        Dim l_entityColumn As Int32
+        Dim l_entityName As String
 
-    '        Case DATASET_ACCOUNTS_PERIODS_OR       ' Lines : Accounts | Columns : Date
-    '            Dim accountsDictionary As New Dictionary(Of String, Dictionary(Of String, Double))
-    '            For Each accountAddress As String In VerticalDictionaryAddressValues.Keys
+        For Each l_entityAddressValuePair In m_entitiesAddressValuesDictionary
+            l_entityName = l_entityAddressValuePair.Value
+            l_entityColumn = m_excelWorkSheet.Range(l_entityAddressValuePair.Key).Column
 
-    '                Dim account As String = VerticalDictionaryAddressValues.Item(accountAddress)
-    '                Dim periodsDictionary As New Dictionary(Of String, Double)
+            ' Inputs cells registering
+            For Each l_accountAddressValuePair In m_accountsAddressValuesDictionary
+                RegisterDatasetCell(m_excelWorkSheet.Cells(m_excelWorkSheet.Range(l_accountAddressValuePair.Key).Row, l_entityColumn), _
+                                    l_entityName, _
+                                    l_accountAddressValuePair.Value, _
+                                    l_period)
+            Next
 
-    '                For Each periodAddress As String In HorizontalDictionaryAddressValues.Keys
-    '                    Dim period = HorizontalDictionaryAddressValues.Item(periodAddress)
-    '                    Dim cell As Excel.Range = WS.Cells(WS.Range(accountAddress).Row, WS.Range(periodAddress).Column)
+            ' Outputs cells registering
+            For Each l_outputAccountAddressValuePair In m_outputsAccountsAddressvaluesDictionary
+                RegisterDatasetCell(m_excelWorkSheet.Cells(m_excelWorkSheet.Range(l_outputAccountAddressValuePair.Key).Row, l_entityColumn), _
+                                    l_entityName, _
+                                    l_outputAccountAddressValuePair.Value, _
+                                    l_period)
+            Next
+        Next
 
-    '                    ' Cell retreiving dictionaries Registering
-    '                    RegisterCellAddressDimensions(cell, EntitiesAddressValuesDictionary.ElementAt(0).Value, account, period)
-    '                    Dim tuple_ As New Tuple(Of String, String, String)(EntitiesAddressValuesDictionary.ElementAt(0).Value, account, period)
-    '                    DimensionsToCellDictionary.Add(tuple_, cell)
+    End Sub
 
-    '                    periodsDictionary.Add(period, cell.Value2)
-    '                Next
-    '                accountsDictionary.Add(account, periodsDictionary)
+    Private Sub RegisterDimensionsToCellDictionaryENTITIES_ACCOUNTS()
 
-    '            Next
-    '            dataSetDictionary.Add(EntitiesAddressValuesDictionary.ElementAt(0).Value, accountsDictionary)
+        Dim l_periodId As String = m_periodsAddressValuesDictionary.ElementAt(0).Value
+        Dim l_entityRow As Int32
+        Dim l_entityName As String
 
-    '        Case DATASET_PERIODS_ACCOUNTS_OR                      ' Lines : Dates | Columns : Accounts
-    '            Dim accountsDictionary As New Dictionary(Of String, Dictionary(Of String, Double))
-    '            For Each accountAddress As String In HorizontalDictionaryAddressValues.Keys                       ' accounts
-    '                Dim account As String = HorizontalDictionaryAddressValues.Item(accountAddress)
+        For Each l_entitiesAddressValuePair In m_entitiesAddressValuesDictionary
+            l_entityName = l_entitiesAddressValuePair.Value
+            l_entityRow = m_excelWorkSheet.Range(l_entitiesAddressValuePair.Key).Row
 
-    '                Dim periodsDictionary As New Dictionary(Of String, Double)
-    '                For Each periodAddress As String In VerticalDictionaryAddressValues.Keys                      ' periods
-    '                    Dim period = HorizontalDictionaryAddressValues.Item(periodAddress)
-    '                    Dim cell As Excel.Range = WS.Cells(WS.Range(periodAddress).Row, WS.Range(accountAddress).Column)
-    '                    RegisterCellAddressDimensions(cell, EntitiesAddressValuesDictionary.ElementAt(0).Value, account, period)
-    '                    periodsDictionary.Add(period, cell.Value2)
-    '                Next
-    '                accountsDictionary.Add(account, periodsDictionary)
+            ' Inputs cells registering
+            For Each l_accountAddressValuePair In m_accountsAddressValuesDictionary
+                RegisterDatasetCell(m_excelWorkSheet.Cells(l_entityRow, m_excelWorkSheet.Range(l_accountAddressValuePair.Key).Column), _
+                                    l_entityName, _
+                                    l_accountAddressValuePair.Value, _
+                                    l_periodId)
+            Next
 
-    '            Next
-    '            dataSetDictionary.Add(EntitiesAddressValuesDictionary.ElementAt(0).Value, accountsDictionary)
+            ' Outputs cells registering
+            For Each l_outputAccountAddressValuePair In m_outputsAccountsAddressvaluesDictionary
+                RegisterDatasetCell(m_excelWorkSheet.Cells(l_entityRow, m_excelWorkSheet.Range(l_outputAccountAddressValuePair.Key).Column), _
+                                    l_entityName, _
+                                    l_outputAccountAddressValuePair.Value, _
+                                    l_periodId)
+            Next
+        Next
 
+    End Sub
 
-    '        Case DATASET_ACCOUNTS_ENTITIES_OR                     ' Lines : Accounts | Columns : Assets
-    '            For Each entityAddress As String In HorizontalDictionaryAddressValues.Keys
-    '                Dim entity As String = HorizontalDictionaryAddressValues.Item(entityAddress)
-    '                Dim accountsDictionary As New Dictionary(Of String, Dictionary(Of String, Double))
+    Private Sub RegisterDimensionsToCellDictionaryENTITIES_PERIODS()
 
-    '                For Each accountAddress As String In VerticalDictionaryAddressValues.Keys
-    '                    Dim account As String = VerticalDictionaryAddressValues.Item(accountAddress)
-    '                    Dim periodsDictionary As New Dictionary(Of String, Double)
-    '                    Dim cell As Excel.Range = WS.Cells(WS.Range(accountAddress).Row, WS.Range(entityAddress).Column)
-    '                    RegisterCellAddressDimensions(cell, entity, account, periodsAddressValuesDictionary.ElementAt(0).Value)
-    '                    periodsDictionary.Add(periodsAddressValuesDictionary.ElementAt(0).Value, cell.Value2)
-    '                    accountsDictionary.Add(account, periodsDictionary)
-    '                Next
-    '                dataSetDictionary.Add(entity, accountsDictionary)
-    '            Next
+        Dim l_accountName As String = m_accountsAddressValuesDictionary.ElementAt(0).Value
+        Dim l_periodColumn As Int32
+        Dim l_period As String
 
+        For Each l_periodAddressValuePair In m_periodsAddressValuesDictionary
+            l_period = l_periodAddressValuePair.Value
+            l_periodColumn = m_excelWorkSheet.Range(l_periodAddressValuePair.Key).Column
 
-    '        Case DATASET_ENTITIES_ACCOUNTS_OR                ' Lines : Assets | Columns : Accounts
+            For Each l_entityAddressValuePair In m_entitiesAddressValuesDictionary
+                RegisterDatasetCell(m_excelWorkSheet.Cells(m_excelWorkSheet.Range(l_entityAddressValuePair.Key).Row, l_periodColumn), _
+                                    l_entityAddressValuePair.Value, _
+                                    l_accountName, _
+                                    l_period)
+            Next
+        Next
 
-    '            For Each entityAddress As String In VerticalDictionaryAddressValues.Keys
-    '                Dim entity As String = VerticalDictionaryAddressValues.Item(entityAddress)
-    '                Dim accountsDictionary As New Dictionary(Of String, Dictionary(Of String, Double))
-    '                For Each accountAddress As String In HorizontalDictionaryAddressValues.Keys
-    '                    Dim account As String = HorizontalDictionaryAddressValues.Item(accountAddress)
-    '                    Dim periodsDictionary As New Dictionary(Of String, Double)
-    '                    Dim cell As Excel.Range = WS.Cells(WS.Range(entityAddress).Row, WS.Range(accountAddress).Column)
-    '                    RegisterCellAddressDimensions(cell, entity, account, periodsAddressValuesDictionary.ElementAt(0).Value)
-    '                    periodsDictionary.Add(periodsAddressValuesDictionary.ElementAt(0).Value, cell.Value2)
-    '                    accountsDictionary.Add(account, periodsDictionary)
-    '                Next
-    '                dataSetDictionary.Add(entity, accountsDictionary)
-    '            Next
+    End Sub
 
+    Private Sub RegisterDimensionsToCellDictionaryPERIODS_ENTITIES()
 
-    '        Case DATASET_PERIODS_ENTITIES_OR                  ' Lines : Dates | Columns : Assets
+        Dim l_accountName As String = m_accountsAddressValuesDictionary.ElementAt(0).Value
+        Dim l_entityColumn As Int32
+        Dim l_entityName As String
 
-    '            For Each entityAddress As String In HorizontalDictionaryAddressValues.Keys
-    '                Dim entity As String = HorizontalDictionaryAddressValues.Item(entityAddress)
-    '                Dim accountsDictionary As New Dictionary(Of String, Dictionary(Of String, Double))
-    '                Dim periodsDictionary As New Dictionary(Of String, Double)
-    '                For Each periodAddress As String In VerticalDictionaryAddressValues.Keys
-    '                    Dim period As String = VerticalDictionaryAddressValues.Item(periodAddress)
-    '                    Dim cell As Excel.Range = WS.Cells(WS.Range(periodAddress).Row, WS.Range(entityAddress).Column)
-    '                    RegisterCellAddressDimensions(cell, entity, AccountsAddressValuesDictionary.ElementAt(0).Value, period)
-    '                    periodsDictionary.Add(period, cell.Value2)
-    '                Next
-    '                accountsDictionary.Add(AccountsAddressValuesDictionary.ElementAt(0).Value, periodsDictionary)
-    '                dataSetDictionary.Add(entity, accountsDictionary)
-    '            Next
+        For Each l_entityAddressValuePair In m_entitiesAddressValuesDictionary
+            l_entityName = l_entityAddressValuePair.Value
+            l_entityColumn = m_excelWorkSheet.Range(l_entityAddressValuePair.Key).Column
 
+            For Each l_periodAddressValuePair In m_periodsAddressValuesDictionary
+                RegisterDatasetCell(m_excelWorkSheet.Cells(m_excelWorkSheet.Range(l_periodAddressValuePair.Key).Row, l_entityColumn), _
+                                    l_entityName, _
+                                    l_accountName, _
+                                    l_periodAddressValuePair.Value)
+            Next
+        Next
 
-    '        Case DATASET_ENTITIES_PERIODS_OR                ' Lines : Assets | Columns : Dates
+    End Sub
 
-    '            For Each entityAddress As String In VerticalDictionaryAddressValues.Keys
-    '                Dim entity As String = VerticalDictionaryAddressValues.Item(entityAddress)
-    '                Dim accountsDictionary As New Dictionary(Of String, Dictionary(Of String, Double))
-
-    '                Dim periodsDictionary As New Dictionary(Of String, Double)
-    '                For Each periodAddress As String In HorizontalDictionaryAddressValues.Keys
-    '                    Dim period As String = HorizontalDictionaryAddressValues.Item(periodAddress)
-    '                    Dim cell As Excel.Range = WS.Cells(WS.Range(entityAddress).Row, WS.Range(periodAddress).Column)
-    '                    RegisterCellAddressDimensions(cell, entity, AccountsAddressValuesDictionary.ElementAt(0).Value, period)
-    '                    periodsDictionary.Add(period, cell.Value2)
-    '                Next
-    '                accountsDictionary.Add(AccountsAddressValuesDictionary.ElementAt(0).Value, periodsDictionary)
-    '                dataSetDictionary.Add(entity, accountsDictionary)
-    '            Next
-
-    '    End Select
-
-
-    'End Sub
-
+    ' Cells and dimensions registration utility function
     Private Sub RegisterDatasetCell(ByVal p_cell As Excel.Range, _
                                     ByRef p_entityName As String, _
                                     ByRef p_accountName As String, _
@@ -813,47 +830,131 @@ Friend Class ModelDataSet
 
     End Sub
 
-
 #End Region
 
 
-#Region "Utilities"
+#Region "Cells Values Registration"
 
-    'Friend Function GetCellFromItem(ByRef entityAddress As String, _
-    '                                ByRef accountAddress As String, _
-    '                                ByRef periodAddress As String) As Excel.Range
+    Friend Sub RegisterDataSetCellsValues()
 
-    '    Select Case GlobalOrientationFlag
-    '        Case DATASET_ACCOUNTS_PERIODS_OR : Return WS.Cells(WS.Range(accountAddress).Row, WS.Range(periodAddress).Column)
-    '        Case DATASET_PERIODS_ACCOUNTS_OR : Return WS.Cells(WS.Range(periodAddress).Row, WS.Range(accountAddress).Column)
-    '        Case DATASET_ACCOUNTS_ENTITIES_OR : Return WS.Cells(WS.Range(accountAddress).Row, WS.Range(entityAddress).Column)
-    '        Case DATASET_ENTITIES_ACCOUNTS_OR : Return WS.Cells(WS.Range(entityAddress).Row, WS.Range(accountAddress).Column)
-    '        Case DATASET_PERIODS_ENTITIES_OR : Return WS.Cells(WS.Range(periodAddress).Row, WS.Range(entityAddress).Column)
-    '        Case DATASET_ENTITIES_PERIODS_OR : Return WS.Cells(WS.Range(entityAddress).Row, WS.Range(periodAddress).Column)
-    '        Case Else
-    '            System.Diagnostics.Debug.WriteLine("Model DataSet - GetCellFromItem() Error: GlobalOrientationFlag non valid or non initialized.")
-    '            Return Nothing
-    '    End Select
+        Select Case m_globalOrientationFlag
+            Case Orientations.ACCOUNTS_PERIODS : RegisterDataSetCellsValuesACCOUNTS_PERIODS()
+            Case Orientations.PERIODS_ACCOUNTS : RegisterDataSetCellsValuesPERIODS_ACCOUNTS()
+            Case Orientations.ACCOUNTS_ENTITIES : RegisterDataSetCellsValuesACCOUNTS_ENTITIES()
+            Case Orientations.ENTITIES_ACCOUNTS : RegisterDataSetCellsValuesENTITIES_ACCOUNTS()
+            Case Orientations.ENTITIES_PERIODS : RegisterDataSetCellsValuesENTITIES_PERIODS()
+            Case Orientations.PERIODS_ENTITIES : RegisterDataSetCellsValuesPERIODS_ENTITIES()
+        End Select
 
-    'End Function
+    End Sub
 
-    'Friend Function GetCellAddress(ByRef entityAddress As String, _
-    '                                ByRef accountAddress As String, _
-    '                                ByRef periodAddress As String) As String
+    Private Sub RegisterDataSetCellsValuesACCOUNTS_PERIODS()
 
-    '    Select Case GlobalOrientationFlag
-    '        Case DATASET_ACCOUNTS_PERIODS_OR : Return WS.Cells(WS.Range(accountAddress).Row, WS.Range(periodAddress).Column).address
-    '        Case DATASET_PERIODS_ACCOUNTS_OR : Return WS.Cells(WS.Range(periodAddress).Row, WS.Range(accountAddress).Column).address
-    '        Case DATASET_ACCOUNTS_ENTITIES_OR : Return WS.Cells(WS.Range(accountAddress).Row, WS.Range(entityAddress).Column).address
-    '        Case DATASET_ENTITIES_ACCOUNTS_OR : Return WS.Cells(WS.Range(entityAddress).Row, WS.Range(accountAddress).Column).address
-    '        Case DATASET_PERIODS_ENTITIES_OR : Return WS.Cells(WS.Range(periodAddress).Row, WS.Range(entityAddress).Column).address
-    '        Case DATASET_ENTITIES_PERIODS_OR : Return WS.Cells(WS.Range(entityAddress).Row, WS.Range(periodAddress).Column).address
-    '        Case Else
-    '            System.Diagnostics.Debug.WriteLine("Model DataSet - GetCellFromItem() Error: GlobalOrientationFlag non valid or non initialized.")
-    '            Return Nothing
-    '    End Select
+        Dim l_accountAddress As String
+        Dim l_cell As Excel.Range
+        Dim l_datasetCell As DataSetCellDimensions
 
-    'End Function
+        For Each l_accountAddressValuePair In m_accountsAddressValuesDictionary
+            l_accountAddress = l_accountAddressValuePair.Key
+            For Each l_periodAddressValuePair In m_periodsAddressValuesDictionary
+                l_cell = m_excelWorkSheet.Cells(m_excelWorkSheet.Range(l_accountAddress).Row, _
+                                                m_excelWorkSheet.Range(l_periodAddressValuePair.Key).Column)
+                l_datasetCell = m_datasetCellDimensionsDictionary(l_cell.Address)
+                l_datasetCell.m_value = l_cell.Value2
+            Next
+        Next
+
+    End Sub
+
+    Private Sub RegisterDataSetCellsValuesPERIODS_ACCOUNTS()
+
+        Dim l_accountAddress As String
+        Dim l_cell As Excel.Range
+        Dim l_datasetCell As DataSetCellDimensions
+
+        For Each l_accountAddressValuePair In m_accountsAddressValuesDictionary
+            l_accountAddress = l_accountAddressValuePair.Key
+            For Each l_periodAddressValuePair In m_periodsAddressValuesDictionary
+                l_cell = m_excelWorkSheet.Cells(m_excelWorkSheet.Range(l_periodAddressValuePair.Key).Row, _
+                                                m_excelWorkSheet.Range(l_accountAddress).Column)
+                l_datasetCell = m_datasetCellDimensionsDictionary(l_cell.Address)
+                l_datasetCell.m_value = l_cell.Value2
+            Next
+        Next
+
+    End Sub
+
+    Private Sub RegisterDataSetCellsValuesACCOUNTS_ENTITIES()
+
+        Dim l_accountAddress As String
+        Dim l_cell As Excel.Range
+        Dim l_datasetCell As DataSetCellDimensions
+
+        For Each l_accountAddressValuePair In m_accountsAddressValuesDictionary
+            l_accountAddress = l_accountAddressValuePair.Key
+            For Each l_entitiesAddressValuePair In m_entitiesAddressValuesDictionary
+                l_cell = m_excelWorkSheet.Cells(m_excelWorkSheet.Range(l_accountAddress).Row, _
+                                                m_excelWorkSheet.Range(l_entitiesAddressValuePair.Key).Column)
+                l_datasetCell = m_datasetCellDimensionsDictionary(l_cell.Address)
+                l_datasetCell.m_value = l_cell.Value2
+            Next
+        Next
+
+    End Sub
+
+    Private Sub RegisterDataSetCellsValuesENTITIES_ACCOUNTS()
+
+        Dim l_accountAddress As String
+        Dim l_cell As Excel.Range
+        Dim l_datasetCell As DataSetCellDimensions
+
+        For Each l_accountAddressValuePair In m_accountsAddressValuesDictionary
+            l_accountAddress = l_accountAddressValuePair.Key
+            For Each l_entitiesAddressValuePair In m_entitiesAddressValuesDictionary
+                l_cell = m_excelWorkSheet.Cells(m_excelWorkSheet.Range(l_entitiesAddressValuePair.Key).Row, _
+                                                m_excelWorkSheet.Range(l_accountAddress).Column)
+                l_datasetCell = m_datasetCellDimensionsDictionary(l_cell.Address)
+                l_datasetCell.m_value = l_cell.Value2
+            Next
+        Next
+
+    End Sub
+
+    Private Sub RegisterDataSetCellsValuesENTITIES_PERIODS()
+
+        Dim l_entityAddress As String
+        Dim l_cell As Excel.Range
+        Dim l_datasetCell As DataSetCellDimensions
+
+        For Each l_entitiesAddressValuePair In m_entitiesAddressValuesDictionary
+            l_entityAddress = l_entitiesAddressValuePair.Key
+            For Each l_periodsAddressValuePair In m_periodsAddressValuesDictionary
+                l_cell = m_excelWorkSheet.Cells(m_excelWorkSheet.Range(l_entityAddress).Row, _
+                                                m_excelWorkSheet.Range(l_periodsAddressValuePair.Key).Column)
+                l_datasetCell = m_datasetCellDimensionsDictionary(l_cell.Address)
+                l_datasetCell.m_value = l_cell.Value2
+            Next
+        Next
+
+    End Sub
+
+    Private Sub RegisterDataSetCellsValuesPERIODS_ENTITIES()
+
+        Dim l_entityAddress As String
+        Dim l_cell As Excel.Range
+        Dim l_datasetCell As DataSetCellDimensions
+
+        For Each l_entitiesAddressValuePair In m_entitiesAddressValuesDictionary
+            l_entityAddress = l_entitiesAddressValuePair.Key
+            For Each l_periodsAddressValuePair In m_periodsAddressValuesDictionary
+                l_cell = m_excelWorkSheet.Cells(m_excelWorkSheet.Range(l_periodsAddressValuePair.Key).Row, _
+                                                m_excelWorkSheet.Range(l_entityAddress).Column)
+                l_datasetCell = m_datasetCellDimensionsDictionary(l_cell.Address)
+                l_datasetCell.m_value = l_cell.Value2
+            Next
+        Next
+
+    End Sub
 
 
 #End Region

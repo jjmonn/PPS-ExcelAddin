@@ -1,4 +1,6 @@
-﻿Public Class Test
+﻿Imports System.Linq
+
+Public Class Test
 
 
     Private Computer As New Computer
@@ -18,7 +20,7 @@
         Dim decompList As New Collections.Generic.List(Of String)
         decompList.Add("A2")
         Computer.CMSG_COMPUTE_REQUEST({5}, _
-                                      2, _
+                                      {2}.tolist, _
                                       3, _
                                       , _
                                       , _
@@ -59,8 +61,8 @@
 
 
 
- 
-  
+
+
 
     Private Sub VTreeView1_KeyDown(sender As Object, e As Windows.Forms.KeyEventArgs) Handles VTreeView1.KeyDown
         MsgBox("key down worked")

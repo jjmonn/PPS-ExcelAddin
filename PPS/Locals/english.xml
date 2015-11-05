@@ -226,9 +226,12 @@
     <string name="msg_periods_selection">Select periods(s) range(s)</string>
     <string name="msg_rates_selection">Select rates(s) range(s)</string>
     <string name="msg_values_selection">Select value(s) range(s)</string>
-
     <string name="msg_snapshot_error">The Snapshot was unsuccessful because the following dimensions not found on the Worksheet: </string>
-
+    <string name="msg_entity_not_computed1">The server return a computation error.</string>
+    <string name="msg_report_error">An error occured in the computation of this report. You may have not been granted access to this version or entity.Please contact your administrator.</string>
+    <string name="msg_accounts_orientation_unclear">Accounts orgnization is not clear. Please check that accounts are aligned in rows or columns.</string>
+    <string name="msg_entities_orientation_unclear">Entities orgnization is not clear. Please check that entities are aligned in rows or columns.</string>
+    <string name="msg_periods_orientation_unclear">Periods orgnization is not clear. Please check that periods are aligned in rows or columns.</string>
 
   </category>
 

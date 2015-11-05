@@ -63,12 +63,11 @@ Module Constants
     '  Friend Const Addin_Name As String = "ExcelAddIn2"
     'Friend Const VALUE_FLAG = "V"
     'Friend Const ADDRESS_FLAG = "A"
-    Friend Const ACCOUNT_FLAG As String = "Account"
-    Friend Const ASSET_FLAG As String = "Entity"
-    Friend Const PERIOD_FLAG As String = "Period"
-    Friend Const VERSION_FLAG As String = "Version"
-    Friend Const ORIENTATION_ERROR_FLAG As String = "Orientation_error"
-
+    'Friend Const ACCOUNT_FLAG As String = "Account"
+    'Friend Const ASSET_FLAG As String = "Entity"
+    'Friend Const PERIOD_FLAG As String = "Period"
+    'Friend Const VERSION_FLAG As String = "Version"
+ 
     Friend Const CIRCULAR_ERROR = 35614
 
     'Friend Const OPERATORS_FLAG As String = "OPERATORFlag"

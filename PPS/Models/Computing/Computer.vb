@@ -29,23 +29,23 @@ Friend Class Computer
     Public Event ComputationAnswered(ByRef entityId As String, ByRef status As Boolean, ByRef requestId As Int32)
 
     ' Variables
-    Private dataMap As Dictionary(Of String, Double)
-    Private versions_comp_flag As New Collections.Generic.Dictionary(Of UInt32, Boolean)
-    Private requestIdVersionIdDict As New Dictionary(Of Int32, Int32)
-    Private requestIdEntityIdDict As New Dictionary(Of Int32, Int32)
+    Private m_dataMap As Dictionary(Of String, Double)
+    Private m_versionsComputationQueue As New Dictionary(Of Int32, Dictionary(Of Int32, Boolean))
+    Private m_requestIdVersionIdDict As New Dictionary(Of Int32, Int32)
+    Private m_requestIdEntityIdDict As New Dictionary(Of Int32, Int32)
 
     ' Computing
-    Private isAxis As Boolean
-    Private isFiltered As Boolean
-    Private axisId As Int32
-    Private versionId As Int32
-    Private entityId As Int32
-    Private accountId As Int32
-    Private periodId As Int32
-    Private filterToken As String
-    Private periodIdentifier As Char
-    Private periodsTokenDict As Dictionary(Of String, String)
-    Private filtersDict As New Dictionary(Of String, Int32)
+    Private m_isAxis As Boolean
+    Private m_isFiltered As Boolean
+    Private m_axisId As Int32
+    Private m_versionId As Int32
+    Private m_entityId As Int32
+    Private m_accountId As Int32
+    Private m_periodId As Int32
+    Private m_filterToken As String
+    Private m_periodIdentifier As Char
+    Private m_periodsTokenDict As Dictionary(Of String, String)
+    Private m_filtersDict As New Dictionary(Of String, Int32)
 
     ' Constants
     Friend Const FILTERS_DECOMPOSITION_IDENTIFIER As Char = "F"
@@ -60,136 +60,167 @@ Friend Class Computer
 
     ' dataMap: [version_id][filter_id][entity_id][account_id][period]
     Friend Function GetData() As Dictionary(Of String, Double)
-        Return dataMap
+        Return m_dataMap
     End Function
 
 
 #Region "Computation Query Interfaces"
 
     ' Query
-    Friend Function CMSG_COMPUTE_REQUEST(ByRef versions_id As Int32(), _
-                                        ByRef entity_id As Int32, _
-                                        ByRef currency_id As Int32, _
-                                        Optional ByRef filters As Dictionary(Of Int32, List(Of Int32)) = Nothing, _
-                                        Optional ByRef axis_filters As Dictionary(Of Int32, List(Of Int32)) = Nothing, _
-                                        Optional ByRef hierarchy As List(Of String) = Nothing) As Int32
+    Friend Function CMSG_COMPUTE_REQUEST(ByRef p_versionsIds As Int32(), _
+                                         ByRef p_entitiesIds As List(Of Int32), _
+                                         Optional ByRef p_currencyId As Int32 = 0, _
+                                         Optional ByRef p_filters As Dictionary(Of Int32, List(Of Int32)) = Nothing, _
+                                         Optional ByRef p_axisFilters As Dictionary(Of Int32, List(Of Int32)) = Nothing, _
+                                         Optional ByRef p_hierarchy As List(Of String) = Nothing) As Int32
 
-        dataMap = New Dictionary(Of String, Double)
-        requestIdVersionIdDict.Clear()
-        versions_comp_flag.Clear()
-        For Each id In versions_id
-            versions_comp_flag.Add(id, False)
+        m_dataMap = New Dictionary(Of String, Double)
+        m_requestIdVersionIdDict.Clear()
+        m_requestIdEntityIdDict.Clear()
+        m_versionsComputationQueue.Clear()
+
+        ' Initializing entities to be computed
+        Dim l_entitiesIds As New Dictionary(Of Int32, Boolean)
+        For Each l_entityId As Int32 In p_entitiesIds
+            l_entitiesIds.Add(l_entityId, False)
         Next
 
-        For Each version_id In versions_id
+        ' Initializing versions to be computed
+        For Each l_versionId In p_versionsIds
+            m_versionsComputationQueue.Add(l_versionId, l_entitiesIds)
+        Next
 
-            NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_COMPUTE_RESULT, AddressOf SMSG_COMPUTE_RESULT)
-            Dim packet As New ByteBuffer(CType(ClientMessage.CMSG_COMPUTE_REQUEST, UShort))
-            Dim requestId As Int32 = packet.AssignRequestId()
-            requestIdVersionIdDict.Add(requestId, version_id)
-            requestIdEntityIdDict.Add(requestId, entity_id)
-            packet.WriteUint32(version_id)                                               ' version_id
-            packet.WriteUint32(entity_id)                                                ' entity_id
-            packet.WriteUint32(currency_id)                                              ' currency_id
+        NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_COMPUTE_RESULT, AddressOf SMSG_COMPUTE_RESULT)
+        ' Start versions computing loop
+        For Each l_versionId In p_versionsIds
+            ' Start entities computing loop
+            For Each l_entityId As Int32 In p_entitiesIds
 
-            ' Loop through filters
-            If Not filters Is Nothing Then
-                packet.WriteUint32(GetTotalFiltersDictionariesValues(filters))          ' number of filters_values
-                For Each Filter_id In filters.Keys
-                    For Each filter_value_id In filters(Filter_id)
-                        packet.WriteUint32(GlobalVariables.Filters.GetAxisOfFilter(Filter_id))              ' axis_id 
-                        packet.WriteUint32(Filter_id)                                   ' filter_id
-                        packet.WriteUint32(filter_value_id)                             ' filter_value_id
-                    Next
-                Next
-            Else
-                packet.WriteInt32(0)                                                    ' number of filters = 0
-            End If
-
-            ' Loop through Axis direct filters
-            If Not axis_filters Is Nothing Then
-                packet.WriteUint32(GetTotalFiltersDictionariesValues(axis_filters))     ' number of filters_values
-                For Each axis_id In axis_filters.Keys
-                    For Each axis_value_id In axis_filters(axis_id)
-                        packet.WriteUint32(axis_id)                                     ' axis_id
-                        packet.WriteUint32(axis_value_id)                               ' axis_value_id
-                    Next
-                Next
-            Else
-                packet.WriteInt32(0)                                                    ' number of axis filters = 0
-            End If
-
-            If Not hierarchy Is Nothing Then
-                packet.WriteUint32(hierarchy.Count)                                      ' decomposition hierarchy size
-                Dim axis_id As AxisType
-                For Each item In hierarchy
-                    Dim query_type As UInt32 = GetDecompositionQueryType(item)
-                    If query_type = GlobalEnums.DecompositionQueryType.AXIS Then
-                        axis_id = GetItemID(item)
-                        packet.WriteInt32(axis_id)
-                        packet.WriteBool(True)
-                    Else
-                        axis_id = GlobalVariables.Filters.GetAxisOfFilter(GetItemID(item))
-                        packet.WriteInt32(axis_id)
-                        packet.WriteBool(False)
-                        packet.WriteUint32(GetItemID(item))
+                If p_currencyId = 0 Then
+                    Dim l_entityCurrency As EntityCurrency = GlobalVariables.EntityCurrencies.GetValue(l_entityId)
+                    If l_entityCurrency Is Nothing Then
+                        System.Diagnostics.Debug.WriteLine("Compute: no entity currency found for entityId = " & l_entityId)
+                        Exit For
                     End If
-                Next
-            Else
-                packet.WriteUint32(0)                                                    ' decomposition hierarchy size = 0
-            End If
-            packet.Release()
-            NetworkManager.GetInstance().Send(packet)
-            If versions_id.Length = 1 Then
-                Return requestId
-            End If
+                    p_currencyId = l_entityCurrency.CurrencyId
+                End If
+
+                Dim l_packet As New ByteBuffer(CType(ClientMessage.CMSG_COMPUTE_REQUEST, UShort))
+                Dim l_requestId As Int32 = l_packet.AssignRequestId()
+                m_requestIdVersionIdDict.Add(l_requestId, l_versionId)
+                m_requestIdEntityIdDict.Add(l_requestId, l_entityId)
+                l_packet.WriteUint32(l_versionId)                                               ' version_id
+                l_packet.WriteUint32(l_entityId)                                                ' entity_id
+                l_packet.WriteUint32(p_currencyId)                                              ' currency_id
+
+                ' Loop through filters
+                If Not p_filters Is Nothing Then
+                    l_packet.WriteUint32(GetTotalFiltersDictionariesValues(p_filters))          ' number of filters_values
+                    For Each Filter_id In p_filters.Keys
+                        For Each filter_value_id In p_filters(Filter_id)
+                            l_packet.WriteUint32(GlobalVariables.Filters.GetAxisOfFilter(Filter_id))              ' axis_id 
+                            l_packet.WriteUint32(Filter_id)                                   ' filter_id
+                            l_packet.WriteUint32(filter_value_id)                             ' filter_value_id
+                        Next
+                    Next
+                Else
+                    l_packet.WriteInt32(0)                                                    ' number of filters = 0
+                End If
+
+                ' Loop through Axis direct filters
+                If Not p_axisFilters Is Nothing Then
+                    l_packet.WriteUint32(GetTotalFiltersDictionariesValues(p_axisFilters))     ' number of filters_values
+                    For Each axis_id In p_axisFilters.Keys
+                        For Each axis_value_id In p_axisFilters(axis_id)
+                            l_packet.WriteUint32(axis_id)                                     ' axis_id
+                            l_packet.WriteUint32(axis_value_id)                               ' axis_value_id
+                        Next
+                    Next
+                Else
+                    l_packet.WriteInt32(0)                                                    ' number of axis filters = 0
+                End If
+
+                If Not p_hierarchy Is Nothing Then
+                    l_packet.WriteUint32(p_hierarchy.Count)                                      ' decomposition hierarchy size
+                    Dim axis_id As AxisType
+                    For Each item In p_hierarchy
+                        Dim query_type As UInt32 = GetDecompositionQueryType(item)
+                        If query_type = GlobalEnums.DecompositionQueryType.AXIS Then
+                            axis_id = GetItemID(item)
+                            l_packet.WriteInt32(axis_id)
+                            l_packet.WriteBool(True)
+                        Else
+                            axis_id = GlobalVariables.Filters.GetAxisOfFilter(GetItemID(item))
+                            l_packet.WriteInt32(axis_id)
+                            l_packet.WriteBool(False)
+                            l_packet.WriteUint32(GetItemID(item))
+                        End If
+                    Next
+                Else
+                    l_packet.WriteUint32(0)                                                    ' decomposition hierarchy size = 0
+                End If
+                l_packet.Release()
+                NetworkManager.GetInstance().Send(l_packet)
+                If p_versionsIds.Length = 1 AndAlso p_entitiesIds.Count = 1 Then
+                    Return l_requestId
+                End If
+            Next
+            ' End entities computing loop
         Next
+        ' End versions computing loop
         Return 0
 
     End Function
 
     ' Server Answer
-    Private Sub SMSG_COMPUTE_RESULT(packet As ByteBuffer)
+    Private Sub SMSG_COMPUTE_RESULT(p_packet As ByteBuffer)
 
         Try
-            If packet.GetError() = ErrorMessage.SUCCESS Then
-                Dim request_id As Int32 = packet.GetRequestId()
-                If requestIdVersionIdDict.ContainsKey(request_id) = False Then
-                    'MsgBox("The server returned an unregistered compute request id.")
+            If p_packet.GetError() = ErrorMessage.SUCCESS Then
+                Dim request_id As Int32 = p_packet.GetRequestId()
+                If m_requestIdVersionIdDict.ContainsKey(request_id) = False Then
+                    Diagnostics.Debug.WriteLine("The server returned an unregistered compute request id.")
                     Exit Sub
                 End If
-                Dim version As Version = GlobalVariables.Versions.GetValue(requestIdVersionIdDict(request_id))
+                Dim version As Version = GlobalVariables.Versions.GetValue(m_requestIdVersionIdDict(request_id))
+                m_requestIdVersionIdDict.Remove(request_id)
                 If version Is Nothing Then
-                    MsgBox("Compute returned a result for an invalid version.")
+                    MsgBox("Compute returned a result for an invalid version.") ' msg_local
                     Exit Sub
                 End If
-                requestIdVersionIdDict.Remove(request_id)
+                m_versionId = version.Id
 
-                filtersDict.Clear()
+                Dim l_entity As AxisElem = GlobalVariables.AxisElems.GetValue(AxisType.Entities, m_requestIdEntityIdDict(request_id))
+                If l_entity Is Nothing Then
+                    MsgBox("Compute returned a result for an invalid entity.") ' msg_local
+                    Exit Sub
+                End If
 
-                versionId = version.Id
-                periodsTokenDict = GlobalVariables.Versions.GetPeriodTokensDict(version.Id)
-
+                m_filtersDict.Clear()
+                m_periodsTokenDict = GlobalVariables.Versions.GetPeriodTokensDict(version.Id)
                 Select Case version.TimeConfiguration
-                    Case CRUD.TimeConfig.YEARS : periodIdentifier = YEAR_PERIOD_IDENTIFIER
-                    Case CRUD.TimeConfig.MONTHS : periodIdentifier = MONTH_PERIOD_IDENTIFIER
+                    Case CRUD.TimeConfig.YEARS : m_periodIdentifier = YEAR_PERIOD_IDENTIFIER
+                    Case CRUD.TimeConfig.MONTHS : m_periodIdentifier = MONTH_PERIOD_IDENTIFIER
                 End Select
 
-                FillResultData(packet)
+                ' Fill m_dataMap
+                FillResultData(p_packet)
 
-                versions_comp_flag(versionId) = True
+                ' Register computed entities and versions of the Queue
+                m_versionsComputationQueue(m_versionId)(l_entity.Id) = True
+
                 If AreAllVersionsComputed() = True Then
                     NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_COMPUTE_RESULT, AddressOf SMSG_COMPUTE_RESULT)
-                    RaiseEvent ComputationAnswered(requestIdEntityIdDict(request_id), packet.GetError(), request_id)
-                    requestIdEntityIdDict.Remove(request_id)
+                    RaiseEvent ComputationAnswered(m_requestIdEntityIdDict(request_id), p_packet.GetError(), request_id)
+                    m_requestIdEntityIdDict.Remove(request_id)
                 End If
             Else
-                RaiseEvent ComputationAnswered(0, packet.GetError(), 0)
+                RaiseEvent ComputationAnswered(0, p_packet.GetError(), 0)
             End If
         Catch ex As OutOfMemoryException
             System.Diagnostics.Debug.WriteLine(ex.Message)
-            MsgBox("Unable to display result: Request too complex")
-            RaiseEvent ComputationAnswered(0, False, 0)
+            MsgBox("Server computations limits exceeded.")
+            RaiseEvent ComputationAnswered(0, p_packet.GetError(), 0)
         End Try
 
 
@@ -203,22 +234,22 @@ Friend Class Computer
     Private Sub FillResultData(ByRef packet As ByteBuffer)
 
         Dim filterCode As String = ""
-        isFiltered = packet.ReadBool()
-        If isFiltered = True Then
-            axisId = packet.ReadUint8()
-            isAxis = packet.ReadBool()
-            If isAxis = True Then
-                filterCode = AXIS_DECOMPOSITION_IDENTIFIER & axisId
-                filtersDict(filterCode) = packet.ReadUint32
+        m_isFiltered = packet.ReadBool()
+        If m_isFiltered = True Then
+            m_axisId = packet.ReadUint8()
+            m_isAxis = packet.ReadBool()
+            If m_isAxis = True Then
+                filterCode = AXIS_DECOMPOSITION_IDENTIFIER & m_axisId
+                m_filtersDict(filterCode) = packet.ReadUint32
             Else
                 filterCode = FILTERS_DECOMPOSITION_IDENTIFIER & packet.ReadUint32
-                filtersDict(filterCode) = packet.ReadUint32
+                m_filtersDict(filterCode) = packet.ReadUint32
             End If
 
         End If
 
-        filterToken = GetFiltersToken(filtersDict)
-        System.Diagnostics.Debug.WriteLine("filter Token:" & filterToken)
+        m_filterToken = GetFiltersToken(m_filtersDict)
+        System.Diagnostics.Debug.WriteLine("filter Token:" & m_filterToken)
 
         FillEntityData(packet)
 
@@ -226,37 +257,37 @@ Friend Class Computer
             FillResultData(packet)
         Next
 
-        If isFiltered = True Then
-            filtersDict.Remove(filterCode)
+        If m_isFiltered = True Then
+            m_filtersDict.Remove(filterCode)
         End If
 
     End Sub
 
     Private Sub FillEntityData(ByRef packet As ByteBuffer)
 
-        entityId = packet.ReadUint32()
-        System.Diagnostics.Debug.WriteLine("entityId:" & entityId)
+        m_entityId = packet.ReadUint32()
+        System.Diagnostics.Debug.WriteLine("entityId:" & m_entityId)
 
         For account_index As Int32 = 1 To packet.ReadUint32()
-            accountId = packet.ReadUint32()
+            m_accountId = packet.ReadUint32()
 
             ' Non aggregated data
             For period_index As Int16 = 0 To packet.ReadUint16() - 1
-                dataMap(versionId & TOKEN_SEPARATOR & _
-                        filterToken & TOKEN_SEPARATOR & _
-                        entityId & TOKEN_SEPARATOR & _
-                        accountId & TOKEN_SEPARATOR & _
-                        periodsTokenDict(periodIdentifier & period_index)) _
+                m_dataMap(m_versionId & TOKEN_SEPARATOR & _
+                        m_filterToken & TOKEN_SEPARATOR & _
+                        m_entityId & TOKEN_SEPARATOR & _
+                        m_accountId & TOKEN_SEPARATOR & _
+                        m_periodsTokenDict(m_periodIdentifier & period_index)) _
                         = packet.ReadDouble()
             Next
 
             ' Aggreagted data
             For aggregationIndex As Int32 = 0 To packet.ReadUint32() - 1
-                dataMap(versionId & TOKEN_SEPARATOR & _
-                        filterToken & TOKEN_SEPARATOR & _
-                        entityId & TOKEN_SEPARATOR & _
-                        accountId & TOKEN_SEPARATOR & _
-                        periodsTokenDict(YEAR_PERIOD_IDENTIFIER & aggregationIndex)) _
+                m_dataMap(m_versionId & TOKEN_SEPARATOR & _
+                        m_filterToken & TOKEN_SEPARATOR & _
+                        m_entityId & TOKEN_SEPARATOR & _
+                        m_accountId & TOKEN_SEPARATOR & _
+                        m_periodsTokenDict(YEAR_PERIOD_IDENTIFIER & aggregationIndex)) _
                         = packet.ReadDouble()
             Next
         Next
@@ -275,8 +306,10 @@ Friend Class Computer
 
     Private Function AreAllVersionsComputed() As Boolean
 
-        For Each flag In versions_comp_flag.Values
-            If flag = False Then Return False
+        For Each l_versionId As Int32 In m_versionsComputationQueue.Keys
+            For Each l_entityIdFlagPair In m_versionsComputationQueue(l_versionId)
+                If l_entityIdFlagPair.Value = False Then Return False
+            Next
         Next
         Return True
 

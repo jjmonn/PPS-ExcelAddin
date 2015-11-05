@@ -13,7 +13,7 @@
 '
 ' 
 ' Author: Julien Monnereau
-' Last modified: 17/07/2015
+' Last modified: 04/11/2015
 
 
 Imports Microsoft.Office.Interop
@@ -28,7 +28,7 @@ Friend Class ExcelFormatting
     ' Identify the current range and 
     ' Param: REPORT_FORMAT_CODE or INPUT_FORMAT_CODE
     Friend Shared Sub FormatExcelRange(ByRef first_range_cell As Excel.Range, _
-                                        ByRef currency As String, _
+                                        ByRef currency As Int32, _
                                         Optional ByRef startingDate As Date = Nothing)
 
         Dim ws As Excel.Worksheet = first_range_cell.Worksheet

@@ -57,7 +57,7 @@ Friend Class GeneralSubmissionControler
     Private m_dataset As ModelDataSet
     Private m_dataModificationsTracker As DataModificationsTracking
     Private m_acquisitionModel As AcquisitionModel
-    Private m_submissionWSController As SubmissionWSController
+    Private Shared m_submissionWSController As SubmissionWSController
     Friend m_associatedWorksheet As Excel.Worksheet
     Friend m_worksheetsComboboxMenuItem As ADXRibbonItem
     Private m_errorMessagesUI As New StatusReportInterfaceUI
@@ -82,6 +82,7 @@ Friend Class GeneralSubmissionControler
     Friend Sub New(ByRef inputWSCB As ADXRibbonItem, _
                    ByRef inputAddIn As AddinModule)
 
+        m_submissionWSController = New SubmissionWSController()
         m_addin = inputAddIn
         m_worksheetsComboboxMenuItem = inputWSCB
         m_associatedWorksheet = GlobalVariables.APPS.ActiveSheet
@@ -126,7 +127,7 @@ Friend Class GeneralSubmissionControler
 
     Friend Sub DataSubmission()
 
-        If m_dataset.m_globalOrientationFlag <> ORIENTATION_ERROR_FLAG Then
+        If m_dataset.m_globalOrientationFlag <> ModelDataSet.Orientations.ORIENTATION_ERROR Then
             m_errorMessagesUI.ClearBox()
             Submit()
         Else
@@ -167,17 +168,19 @@ Friend Class GeneralSubmissionControler
 
     Friend Sub CloseInstance()
 
+        On Error Resume Next
         m_dataModificationsTracker.TakeOffFormats()
         If Not m_dataset Is Nothing Then m_dataset = Nothing
         If Not m_dataModificationsTracker Is Nothing Then m_dataModificationsTracker = Nothing
         If Not m_acquisitionModel Is Nothing Then m_acquisitionModel = Nothing
 
-        On Error Resume Next
         RemoveHandler m_associatedWorksheet.Change, AddressOf m_submissionWSController.Worksheet_Change
         RemoveHandler m_associatedWorksheet.BeforeRightClick, AddressOf m_submissionWSController.Worksheet_BeforeRightClick
         RemoveHandler m_associatedWorksheet.SelectionChange, AddressOf m_submissionWSController.Worksheet_SelectionChange
         If Not m_submissionWSController Is Nothing Then m_submissionWSController = Nothing
-        '  associatedWorksheet.Unprotect()
+
+        GlobalVariables.APPS.Interactive = True
+        GlobalVariables.APPS.ScreenUpdating = True
 
     End Sub
 
@@ -201,27 +204,25 @@ Friend Class GeneralSubmissionControler
             m_dataset.SnapshotWS()
             m_dataset.getOrientations()
 
-            ' needed ,??????!!!!!!!! priority normal
-            'm_dataModificationsTracker.InitializeDataSetRegion()
-            'm_dataModificationsTracker.InitializeOutputsRegion()
+            m_dataModificationsTracker.InitializeDataSetRegion()
+            m_dataModificationsTracker.InitializeOutputsRegion()
 
-            If m_dataset.m_globalOrientationFlag <> ORIENTATION_ERROR_FLAG _
+            If m_dataset.m_globalOrientationFlag <> ModelDataSet.Orientations.ORIENTATION_ERROR _
             AndAlso m_dataset.m_entitiesAddressValuesDictionary.Count > 0 Then
 
-                '  Dataset.getDataSet()
                 m_snapshotSuccessFlag = True
                 FillInEntityAndCurrencyTB(m_dataset.m_entitiesAddressValuesDictionary.ElementAt(0).Value)
-                m_submissionWSController = New SubmissionWSController(Me, m_dataset, m_acquisitionModel, m_dataModificationsTracker)
                 HighlightItemsAndDataRegions()
                 UpdateAfterAnalysisAxisChanged(GlobalVariables.ClientsIDDropDown.SelectedItemId, _
                                                GlobalVariables.ProductsIDDropDown.SelectedItemId, _
                                                GlobalVariables.AdjustmentIDDropDown.SelectedItemId, _
                                                p_updateInputsFlag)
+
                 ' Associate worksheet if not already associated 
                 If m_submissionWSController.m_excelWorksheet Is Nothing Then
-                    m_submissionWSController.AssociateWS(m_associatedWorksheet)
+                    m_submissionWSController.AssociateSubmissionWSController(Me, m_dataset, m_acquisitionModel, m_dataModificationsTracker, m_associatedWorksheet)
                 ElseIf Not m_submissionWSController.m_excelWorksheet.Name Is m_associatedWorksheet Then
-                    m_submissionWSController.AssociateWS(m_associatedWorksheet)
+                    m_submissionWSController.AssociateSubmissionWSController(Me, m_dataset, m_acquisitionModel, m_dataModificationsTracker, m_associatedWorksheet)
                 End If
             Else
                 SnapshotError()
@@ -248,15 +249,29 @@ Friend Class GeneralSubmissionControler
             m_dataModificationsTracker.InitializeDataSetRegion()
             m_dataModificationsTracker.InitializeOutputsRegion()
         End If
-        ' PB: Ceci ne marche que pour le cas orientation "AcDa"  !!! 
-        ' option: select case on orientation 
-        ' (possibility to download inputs from multiple entities => function ready in model)
-        ' priority normal => V2
 
-        m_acquisitionModel.downloadDBInputs(m_entityName, _
-                                            p_client_id, _
-                                            p_product_id, _
-                                            p_adjustment_id)
+        GlobalVariables.APPS.Interactive = True
+        Select Case m_dataset.m_globalOrientationFlag
+            Case ModelDataSet.Orientations.ACCOUNTS_PERIODS, _
+                 ModelDataSet.Orientations.PERIODS_ACCOUNTS
+
+                m_acquisitionModel.DownloadInputsFromServer({m_entityName}.ToList, _
+                                                            p_client_id, _
+                                                            p_product_id, _
+                                                            p_adjustment_id)
+
+            Case ModelDataSet.Orientations.ACCOUNTS_ENTITIES, _
+                 ModelDataSet.Orientations.ENTITIES_ACCOUNTS, _
+                 ModelDataSet.Orientations.ENTITIES_PERIODS, _
+                 ModelDataSet.Orientations.PERIODS_ENTITIES
+
+                Dim l_entitiesNamesList = m_dataset.m_entitiesValuesAddressDict.Keys.ToList
+                m_acquisitionModel.DownloadInputsFromServer(l_entitiesNamesList, _
+                                                            p_client_id, _
+                                                            p_product_id, _
+                                                            p_adjustment_id)
+                
+        End Select
 
     End Sub
 
@@ -267,9 +282,9 @@ Friend Class GeneralSubmissionControler
 
     Friend Sub UpdateModelFromExcelUpdate(ByRef entityName As String, _
                                           ByRef accountName As String, _
-                                            ByRef periodInt As Integer, _
-                                            ByVal value As Double, _
-                                            ByRef cellAddress As String)
+                                          ByRef periodInt As Integer, _
+                                          ByVal value As Double, _
+                                          ByRef cellAddress As String)
 
         m_acquisitionModel.ValuesDictionariesUpdate(entityName, accountName, periodInt, value)
         m_dataModificationsTracker.RegisterModification(cellAddress)
@@ -279,6 +294,8 @@ Friend Class GeneralSubmissionControler
     Friend Sub updateInputs()
 
         m_isUpdating = True
+        GlobalVariables.APPS.ScreenUpdating = False
+        GlobalVariables.APPS.Interactive = False
         m_submissionWSController.updateInputsOnWS()
         GlobalVariables.APPS.ScreenUpdating = True
         GlobalVariables.APPS.ScreenUpdating = False
@@ -286,11 +303,11 @@ Friend Class GeneralSubmissionControler
 
     End Sub
 
-    Friend Sub UpdateCalculatedItems(ByRef entityName As String)
+    Friend Sub UpdateCalculatedItems()
 
         m_isUpdating = True
-        GlobalVariables.APPS.Interactive = False
-        m_acquisitionModel.ComputeCalculatedItems(entityName)
+        GlobalVariables.APPS.Interactive = True
+        m_acquisitionModel.ComputeCalculatedItems()
 
     End Sub
 
@@ -299,9 +316,18 @@ Friend Class GeneralSubmissionControler
 
 #Region "Model Events Listening"
 
-    Private Sub AfterDataBaseInputsDowloaded()
+    Private Sub AfterDataBaseInputsDowloaded(ByRef p_status As Boolean)
+
+        If p_status = False Then
+            CloseInstance()
+            ' close ribbon edition mode
+            ' close side pane edition mode
+            ' priority normal !
+            Exit Sub
+        End If
 
         On Error GoTo errorHandler
+        GlobalVariables.APPS.Interactive = False
         m_dataset.RegisterDimensionsToCellDictionary()
         m_dataModificationsTracker.HighlightsFPIOutputPart()
         If m_mustUpdateExcelWorksheetFromDataBase = True Then
@@ -309,36 +335,48 @@ Friend Class GeneralSubmissionControler
         End If
         m_dataset.RegisterDataSetCellsValues()
         m_dataModificationsTracker.IdentifyDifferencesBtwDataSetAndDB(m_acquisitionModel.m_databaseInputsDictionary)
-        UpdateCalculatedItems(m_entityName)
+
+        ' update calculated items only if several accounts => 
+        Select Case m_dataset.m_globalOrientationFlag
+            Case ModelDataSet.Orientations.ACCOUNTS_PERIODS, _
+                 ModelDataSet.Orientations.PERIODS_ACCOUNTS, _
+                 ModelDataSet.Orientations.ACCOUNTS_ENTITIES, _
+                 ModelDataSet.Orientations.ENTITIES_ACCOUNTS
+                UpdateCalculatedItems()
+        End Select
         m_isUpdating = False
-        ' Update DGV in acquisitionInterface !!
+        ' Update DGV in acquisitionInterface 
+        GlobalVariables.APPS.Interactive = True
 
 errorHandler:
+        GlobalVariables.APPS.Interactive = True
+        GlobalVariables.APPS.ScreenUpdating = True
         Exit Sub
 
     End Sub
 
-    Private Sub AfterOutputsComputed(ByRef entityName As String)
+     Private Sub AfterOutputsComputed(ByRef p_entitiesName() As String)
 
-        If entityName = "" Then
-            MsgBox("An error occured in the computation of this report. You may have not been granted access to this version or entity.Please contact your administrator.")
-            GlobalVariables.APPS.ScreenUpdating = True
-            GlobalVariables.APPS.Interactive = True
+        If p_entitiesName Is Nothing Then
+            MsgBox(Local.GetValue("upload.msg_report_error"))
             m_isUpdating = False
+            m_addin.ClearSubmissionMode()
+            '     CloseInstance()
             Exit Sub
         End If
 
         On Error Resume Next
-        m_isUpdating = True
-        GlobalVariables.APPS.Interactive = False
-        GlobalVariables.APPS.ScreenUpdating = False
-        m_submissionWSController.updateCalculatedItemsOnWS(entityName)
-        GlobalVariables.APPS.ScreenUpdating = True
-        GlobalVariables.APPS.Interactive = True
-        m_isUpdating = False
+        SyncLock (m_submissionWSController)
+            m_isUpdating = True
+            GlobalVariables.APPS.Interactive = False
+            GlobalVariables.APPS.ScreenUpdating = False
+            m_submissionWSController.UpdateCalculatedItemsOnWS(p_entitiesName)
+            GlobalVariables.APPS.ScreenUpdating = True
+            GlobalVariables.APPS.Interactive = True
+            m_isUpdating = False
+        End SyncLock
 
     End Sub
-
 
 #End Region
 
@@ -367,8 +405,6 @@ errorHandler:
         m_fact.CMSG_UPDATE_FACT_LIST(factsList, cellsAddresses)
 
     End Sub
-
-
 
     Private Sub AfterCommit(ByRef status As Boolean, ByRef commitResults As Dictionary(Of String, ErrorMessage))
 
@@ -417,9 +453,12 @@ errorHandler:
     Private Function IdentifyFlagsErrors() As String
 
         Dim tmpStr As String = ""
-        If m_dataset.m_EntityFlag = 0 Then tmpStr = "  - " & Local.GetValue("general.entities") & Chr(13)
-        If m_dataset.m_dateFlag = 0 Then tmpStr = tmpStr & "  - " & Local.GetValue("general.periods") & Chr(13)
-        If m_dataset.m_accountFlag = 0 Then tmpStr = tmpStr & "  - " & Local.GetValue("general.accounts")
+        If m_dataset.m_EntityFlag = ModelDataSet.SnapshotResult.ZERO Then tmpStr = "  - " & Local.GetValue("general.entities") & Chr(13)
+        If m_dataset.m_dateFlag = ModelDataSet.SnapshotResult.ZERO Then tmpStr = tmpStr & "  - " & Local.GetValue("general.periods") & Chr(13)
+        If m_dataset.m_accountFlag = ModelDataSet.SnapshotResult.ZERO Then tmpStr = tmpStr & "  - " & Local.GetValue("general.accounts")
+        If m_dataset.m_entitiesOrientationFlag = ModelDataSet.Alignment.UNCLEAR Then tmpStr = "  - " & Local.GetValue("upload.msg_entities_orientation_unclear") & Chr(13)
+        If m_dataset.m_datesOrientationFlag = ModelDataSet.Alignment.UNCLEAR Then tmpStr = tmpStr & "  - " & Local.GetValue("upload.msg_periods_orientation_unclear") & Chr(13)
+        If m_dataset.m_accountsOrientationFlag = ModelDataSet.Alignment.UNCLEAR Then tmpStr = tmpStr & "  - " & Local.GetValue("upload.msg_accounts_orientation_unclear")
         Return tmpStr
 
     End Function

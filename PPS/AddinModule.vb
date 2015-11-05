@@ -660,6 +660,13 @@ Public Class AddinModule
         Me.SubmissionRibbonIL.Images.SetKeyName(12, "favicon(199).ico")
         Me.SubmissionRibbonIL.Images.SetKeyName(13, "imageres_89.ico")
         Me.SubmissionRibbonIL.Images.SetKeyName(14, "door_exit.ico")
+        Me.SubmissionRibbonIL.Images.SetKeyName(15, "spreadsheed.ico")
+        Me.SubmissionRibbonIL.Images.SetKeyName(16, "currency_euro.ico")
+        Me.SubmissionRibbonIL.Images.SetKeyName(17, "elements_branch.ico")
+        Me.SubmissionRibbonIL.Images.SetKeyName(18, "barcode.ico")
+        Me.SubmissionRibbonIL.Images.SetKeyName(19, "element_branch2.ico")
+        Me.SubmissionRibbonIL.Images.SetKeyName(20, "users_relation.ico")
+        Me.SubmissionRibbonIL.Images.SetKeyName(21, "breakpoints.ico")
         '
         'LightsImageList
         '
@@ -770,8 +777,8 @@ Public Class AddinModule
         '
         Me.entityEditBT.Caption = "Legal Entity"
         Me.entityEditBT.Id = "adxRibbonButton_4134f852978240a19f9e57bcd1ce4b13"
-        Me.entityEditBT.Image = 5
-        Me.entityEditBT.ImageList = Me.NewICOs
+        Me.entityEditBT.Image = 19
+        Me.entityEditBT.ImageList = Me.SubmissionRibbonIL
         Me.entityEditBT.ImageTransparentColor = System.Drawing.Color.Transparent
         Me.entityEditBT.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
         '
@@ -779,8 +786,8 @@ Public Class AddinModule
         '
         Me.AdxRibbonButton1.Caption = "Currency"
         Me.AdxRibbonButton1.Id = "adxRibbonButton_761717ad648d4c9e9bcf165ae54c587a"
-        Me.AdxRibbonButton1.Image = 8
-        Me.AdxRibbonButton1.ImageList = Me.NewICOs
+        Me.AdxRibbonButton1.Image = 16
+        Me.AdxRibbonButton1.ImageList = Me.SubmissionRibbonIL
         Me.AdxRibbonButton1.ImageTransparentColor = System.Drawing.Color.Transparent
         Me.AdxRibbonButton1.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
         '
@@ -788,8 +795,8 @@ Public Class AddinModule
         '
         Me.VersionBT2.Caption = "Version"
         Me.VersionBT2.Id = "adxRibbonButton_2a8644b2388844f9aa05d2c0c48d6969"
-        Me.VersionBT2.Image = 15
-        Me.VersionBT2.ImageList = Me.NewICOs
+        Me.VersionBT2.Image = 21
+        Me.VersionBT2.ImageList = Me.SubmissionRibbonIL
         Me.VersionBT2.ImageTransparentColor = System.Drawing.Color.Transparent
         Me.VersionBT2.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
         '
@@ -827,8 +834,8 @@ Public Class AddinModule
         '
         Me.AdxRibbonButton2.Caption = "Adjustment"
         Me.AdxRibbonButton2.Id = "adxRibbonButton_2e9c88867cbf42739ff76362741a9df5"
-        Me.AdxRibbonButton2.Image = 7
-        Me.AdxRibbonButton2.ImageList = Me.NewICOs
+        Me.AdxRibbonButton2.Image = 15
+        Me.AdxRibbonButton2.ImageList = Me.SubmissionRibbonIL
         Me.AdxRibbonButton2.ImageTransparentColor = System.Drawing.Color.Transparent
         Me.AdxRibbonButton2.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
         '
@@ -836,8 +843,8 @@ Public Class AddinModule
         '
         Me.AdxRibbonButton3.Caption = "Client"
         Me.AdxRibbonButton3.Id = "adxRibbonButton_f4417fc36c7146838b067b42e3c2ce9c"
-        Me.AdxRibbonButton3.Image = 1
-        Me.AdxRibbonButton3.ImageList = Me.NewICOs
+        Me.AdxRibbonButton3.Image = 20
+        Me.AdxRibbonButton3.ImageList = Me.SubmissionRibbonIL
         Me.AdxRibbonButton3.ImageTransparentColor = System.Drawing.Color.Transparent
         Me.AdxRibbonButton3.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
         '
@@ -845,8 +852,8 @@ Public Class AddinModule
         '
         Me.AdxRibbonButton4.Caption = "Product"
         Me.AdxRibbonButton4.Id = "adxRibbonButton_e6a542c796824b86acbcf89f89d6ae83"
-        Me.AdxRibbonButton4.Image = 9
-        Me.AdxRibbonButton4.ImageList = Me.NewICOs
+        Me.AdxRibbonButton4.Image = 18
+        Me.AdxRibbonButton4.ImageList = Me.SubmissionRibbonIL
         Me.AdxRibbonButton4.ImageTransparentColor = System.Drawing.Color.Transparent
         Me.AdxRibbonButton4.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
         '
@@ -1569,12 +1576,12 @@ Public Class AddinModule
             If Not version Is Nothing Then
                 startDate = Date.FromOADate(version.StartPeriod)
             End If
-            Dim currencyName As String = ""
+            Dim l_currencyId As String = ""
             Dim l_currency As Currency = GlobalVariables.Currencies.GetValue(My.Settings.currentCurrency)
             If Not l_currency Is Nothing Then
-                currencyName = l_currency.Name
+                l_currencyId = l_currency.Id
             End If
-            ExcelFormatting.FormatExcelRange(GlobalVariables.APPS.ActiveSheet.cells(1, 1), currencyName, startDate)
+            ExcelFormatting.FormatExcelRange(GlobalVariables.APPS.ActiveSheet.cells(1, 1), l_currencyId, startDate)
         End If
 
     End Sub
@@ -1870,6 +1877,7 @@ Public Class AddinModule
         Me.InputReportTaskPane.Hide()
         Me.InputReportTaskPane.Close()
         ExcelFormatting.FormatExcelRange(currentcell, currency.Id, Date.FromOADate(periodlist(0)))
+        GlobalVariables.APPS.Interactive = True
         GlobalVariables.APPS.ScreenUpdating = True
         AssociateGRSControler(True)
 
@@ -1929,7 +1937,7 @@ Public Class AddinModule
     ' Create GRS Conctroler and display
     Private Sub AssociateGRSControler(ByRef p_mustUpdateInputs As Boolean)
 
-        GlobalVariables.APPS.Interactive = False
+        ' GlobalVariables.APPS.Interactive = False
         Dim ctrl As ADXRibbonItem = AddButtonToDropDown(WSCB, GlobalVariables.APPS.ActiveSheet.name, GlobalVariables.APPS.ActiveSheet.name)
         loadDropDownsSubmissionButtons()
         Dim CGRSControlerInstance As New GeneralSubmissionControler(ctrl, Me)
@@ -1981,10 +1989,13 @@ Public Class AddinModule
 
     End Function
 
-    Private Sub ClearSubmissionMode()
+    Friend Sub ClearSubmissionMode()
 
         ' shouldn' t suppress all GRS.. only the one associated to WS
         ' check that the relation to input task pane is killed
+        ' priority high
+
+        ' -> m_currentGRSControler
 
         For Each GRS In m_GRSControlersDictionary.Values
             m_ctrlsTextWSDictionary.Remove(GRS.m_worksheetsComboboxMenuItem.Caption)

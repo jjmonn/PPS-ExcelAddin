@@ -49,20 +49,17 @@ Friend Class SubmissionWSController
 
 #Region "Initialize"
 
-    Friend Sub New(ByRef inputGeneralSubmissionController As GeneralSubmissionControler, _
-                   ByRef inputDataSet As ModelDataSet, _
-                   ByRef inputAcquisitionModel As AcquisitionModel, _
-                   ByRef inputDataModificationTracker As DataModificationsTracking)
+    Friend Sub AssociateSubmissionWSController(ByRef p_generalSubmissionController As GeneralSubmissionControler, _
+                                               ByRef p_dataSet As ModelDataSet, _
+                                               ByRef p_acquisitionModel As AcquisitionModel, _
+                                               ByRef p_dataModificationTracker As DataModificationsTracking, _
+                                               ByRef p_excelWorksheet As Excel.Worksheet)
 
-        m_generalSubmissionController = inputGeneralSubmissionController
-        m_dataSet = inputDataSet
-        m_acquisitionModel = inputAcquisitionModel
-        m_dataModificationsTracker = inputDataModificationTracker
+        m_generalSubmissionController = p_generalSubmissionController
+        m_dataSet = p_dataSet
+        m_acquisitionModel = p_acquisitionModel
+        m_dataModificationsTracker = p_dataModificationTracker
         m_logView = New LogView(True)
-
-    End Sub
-
-    Friend Sub AssociateWS(ByRef p_excelWorksheet As Excel.Worksheet)
 
         AddHandler p_excelWorksheet.Change, AddressOf Worksheet_Change
         AddHandler p_excelWorksheet.BeforeRightClick, AddressOf Worksheet_BeforeRightClick
@@ -90,21 +87,25 @@ Friend Class SubmissionWSController
 
 #Region "Update Worksheet"
 
-    Friend Sub UpdateCalculatedItemsOnWS(ByRef entityName As String)
+    Friend Sub UpdateCalculatedItemsOnWS(ByRef p_entitiesName() As String)
 
-        Dim entityId As Int32 = GlobalVariables.AxisElems.GetValueId(AxisType.Entities, entityName)
-        For Each l_account As Account In m_acquisitionModel.m_outputsList
-            For Each period As Int32 In m_acquisitionModel.m_currentPeriodList
-                If Not l_account Is Nothing Then
-                    If l_account.FormulaType = Account.FormulaTypes.FIRST_PERIOD_INPUT Then
-                        If period <> m_acquisitionModel.m_currentPeriodList(0) Then
-                            SetDatsetCellValue(entityId, entityName, l_account.Name, period)
+        For Each l_entityName As String In p_entitiesName
+            Dim l_entity As AxisElem = GlobalVariables.AxisElems.GetValue(AxisType.Entities, l_entityName)
+            If Not l_entity Is Nothing Then
+                For Each l_account As Account In m_acquisitionModel.m_outputsList
+                    For Each l_period As Int32 In m_acquisitionModel.m_currentPeriodList
+                        If Not l_account Is Nothing Then
+                            If l_account.FormulaType = Account.FormulaTypes.FIRST_PERIOD_INPUT Then
+                                If l_period <> m_acquisitionModel.m_currentPeriodList(0) Then
+                                    SetDatsetCellValue(l_entity.Id, l_entityName, l_account.Name, l_period)
+                                End If
+                            Else
+                                SetDatsetCellValue(l_entity.Id, l_entity.Name, l_account.Name, l_period)
+                            End If
                         End If
-                    Else
-                        SetDatsetCellValue(entityId, entityName, l_account.Name, period)
-                    End If
-                End If
-            Next
+                    Next
+                Next
+            End If
         Next
 
     End Sub
@@ -234,7 +235,7 @@ Friend Class SubmissionWSController
             Next
             If modelUpdateFlag = True Then
                 GlobalVariables.APPS.Interactive = False
-                m_generalSubmissionController.UpdateCalculatedItems(entityName)
+                m_generalSubmissionController.UpdateCalculatedItems()
             End If
         End If
 
@@ -319,7 +320,17 @@ Friend Class SubmissionWSController
             GlobalVariables.s_reportUploadSidePane.DisplayEmptyTextBoxes()
         End If
 
+
+
     End Sub
+
+    Private Sub UpdateActiveWorksheet(ByRef p_exceXorksheet As Excel.Worksheet)
+
+        ' priority normal !!
+
+
+    End Sub
+
 
 #End Region
 

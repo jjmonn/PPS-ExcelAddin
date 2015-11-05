@@ -21,6 +21,7 @@ Imports Microsoft.Office.Interop
 Imports System.Collections
 Imports System.Collections.Generic
 Imports System.Windows.Forms
+Imports System.Linq
 Imports CRUD
 
 Public Class PPSBIController
@@ -142,7 +143,7 @@ Public Class PPSBIController
                         ByRef axis_filters As Dictionary(Of Int32, List(Of Int32)))
 
         Dim request_id As Int32 = Computer.CMSG_COMPUTE_REQUEST({m_versionId}, _
-                                                                 entity_id, _
+                                                                 {entity_id}.tolist, _
                                                                  currency_id, _
                                                                  filters, _
                                                                  axis_filters, _
