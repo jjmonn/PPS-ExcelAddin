@@ -13,6 +13,7 @@ namespace CRUD
     public UInt32 Period { get; set; }
     public UInt32 VersionId { get; set; }
     public double Value { get; set; }
+    public UInt32 Image { get; set; }
 
     public GlobalFactData() { }
     private GlobalFactData(UInt32 p_id)

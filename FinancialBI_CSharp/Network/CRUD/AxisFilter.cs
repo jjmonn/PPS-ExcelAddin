@@ -15,6 +15,7 @@ namespace CRUD
     public UInt32 AxisElemId { get; set; }
     public UInt32 FilterId { get; set; }
     public UInt32 FilterValueId { get; set; }
+    public UInt32 Image { get; set; }
 
     public AxisFilter() { }
     private AxisFilter(UInt32 p_id)

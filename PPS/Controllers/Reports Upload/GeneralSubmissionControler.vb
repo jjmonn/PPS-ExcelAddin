@@ -59,7 +59,6 @@ Friend Class GeneralSubmissionControler
     Private m_acquisitionModel As AcquisitionModel
     Private Shared m_submissionWSController As SubmissionWSController
     Friend m_associatedWorksheet As Excel.Worksheet
-    Friend m_worksheetsComboboxMenuItem As ADXRibbonItem
     Private m_errorMessagesUI As New StatusReportInterfaceUI
 
     ' Variables
@@ -79,12 +78,10 @@ Friend Class GeneralSubmissionControler
 
 #Region "Initialize"
 
-    Friend Sub New(ByRef inputWSCB As ADXRibbonItem, _
-                   ByRef inputAddIn As AddinModule)
+    Friend Sub New(ByRef inputAddIn As AddinModule)
 
         m_submissionWSController = New SubmissionWSController()
         m_addin = inputAddIn
-        m_worksheetsComboboxMenuItem = inputWSCB
         m_associatedWorksheet = GlobalVariables.APPS.ActiveSheet
 
         m_dataset = New ModelDataSet(m_associatedWorksheet)
@@ -168,19 +165,21 @@ Friend Class GeneralSubmissionControler
 
     Friend Sub CloseInstance()
 
-        On Error Resume Next
-        m_dataModificationsTracker.TakeOffFormats()
-        If Not m_dataset Is Nothing Then m_dataset = Nothing
-        If Not m_dataModificationsTracker Is Nothing Then m_dataModificationsTracker = Nothing
-        If Not m_acquisitionModel Is Nothing Then m_acquisitionModel = Nothing
+        Try
+            m_dataModificationsTracker.TakeOffFormats()
+            If Not m_dataset Is Nothing Then m_dataset = Nothing
+            If Not m_dataModificationsTracker Is Nothing Then m_dataModificationsTracker = Nothing
+            If Not m_acquisitionModel Is Nothing Then m_acquisitionModel = Nothing
 
-        RemoveHandler m_associatedWorksheet.Change, AddressOf m_submissionWSController.Worksheet_Change
-        RemoveHandler m_associatedWorksheet.BeforeRightClick, AddressOf m_submissionWSController.Worksheet_BeforeRightClick
-        RemoveHandler m_associatedWorksheet.SelectionChange, AddressOf m_submissionWSController.Worksheet_SelectionChange
-        If Not m_submissionWSController Is Nothing Then m_submissionWSController = Nothing
+            RemoveHandler m_associatedWorksheet.Change, AddressOf m_submissionWSController.Worksheet_Change
+            RemoveHandler m_associatedWorksheet.BeforeRightClick, AddressOf m_submissionWSController.Worksheet_BeforeRightClick
+            RemoveHandler m_associatedWorksheet.SelectionChange, AddressOf m_submissionWSController.Worksheet_SelectionChange
+            If Not m_submissionWSController Is Nothing Then m_submissionWSController = Nothing
+        Catch ex As Exception
 
-        GlobalVariables.APPS.Interactive = True
-        GlobalVariables.APPS.ScreenUpdating = True
+        End Try
+        'GlobalVariables.APPS.Interactive = True
+        'GlobalVariables.APPS.ScreenUpdating = True
 
     End Sub
 
@@ -319,10 +318,7 @@ Friend Class GeneralSubmissionControler
     Private Sub AfterDataBaseInputsDowloaded(ByRef p_status As Boolean)
 
         If p_status = False Then
-            CloseInstance()
-            ' close ribbon edition mode
-            ' close side pane edition mode
-            ' priority normal !
+            m_addin.ClearSubmissionMode(Me)
             Exit Sub
         End If
 
@@ -360,8 +356,7 @@ errorHandler:
         If p_entitiesName Is Nothing Then
             MsgBox(Local.GetValue("upload.msg_report_error"))
             m_isUpdating = False
-            m_addin.ClearSubmissionMode()
-            '     CloseInstance()
+            m_addin.ClearSubmissionMode(Me)
             Exit Sub
         End If
 
@@ -462,6 +457,18 @@ errorHandler:
         Return tmpStr
 
     End Function
+
+    Friend Function IsCurrentController() As Boolean
+
+        Return m_addin.IsCurrentGRSController(Me)
+
+    End Function
+
+    Friend Sub ActivateGRSController()
+
+        m_addin.ActivateGRSController(Me)
+
+    End Sub
 
 #End Region
 

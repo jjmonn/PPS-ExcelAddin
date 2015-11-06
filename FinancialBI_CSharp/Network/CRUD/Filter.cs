@@ -14,6 +14,7 @@ namespace CRUD
     public bool IsParent { get; set; }
     public string Name { get; set; }
     public Int32 ItemPosition { get; set; }
+    public UInt32 Image { get; set; }
 
     public Filter() { }
     private Filter(UInt32 p_id)

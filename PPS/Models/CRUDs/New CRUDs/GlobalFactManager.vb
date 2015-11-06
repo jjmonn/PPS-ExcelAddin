@@ -47,9 +47,15 @@ Friend Class GlobalFactManager : Inherits NamedCRUDManager(Of NamedCRUDEntity)
 
     End Function
 
-    Friend Sub LoadGlobalFactsTV(ByRef p_tv As TreeView)
-        'TreeViewsUtilities.LoadTreeview(p_tv, m_CRUDDic)
+    'Friend Sub LoadGlobalFactsTV(ByRef p_tv As TreeView)
+    '    TreeViewsUtilities.LoadFlatTreeview(p_tv, m_CRUDDic)
+    'End Sub
+
+    Friend Sub LoadGlobalFactsTV(ByRef p_treeview As VIBlend.WinForms.Controls.vTreeView)
+        VTreeViewUtil.LoadFlatTreeview(p_treeview, m_CRUDDic)
+        VTreeViewUtil.SetTreeviewIconsHiearachy(p_treeview)
     End Sub
+
 
 #End Region
 

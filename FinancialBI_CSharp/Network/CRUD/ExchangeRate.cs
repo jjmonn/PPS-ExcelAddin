@@ -13,6 +13,7 @@ namespace CRUD
     public UInt32 RateVersionId { get; private set; }
     public UInt32 Period { get; private set; }
     public double Value { get; set; }
+    public UInt32 Image { get; set; }
 
     public ExchangeRate() { }
     private ExchangeRate(UInt32 p_id)

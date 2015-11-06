@@ -22,6 +22,7 @@ Imports Microsoft.Office.Interop
 Imports System.Collections.Generic
 Imports System.Collections
 Imports System.Windows.Forms
+Imports VIBlend.WinForms.Controls
 
 
 Friend Class WorksheetWrittingFunctions
@@ -84,7 +85,6 @@ Friend Class WorksheetWrittingFunctions
 
     End Sub
 
-    ' param+ = timeSetup for periods formatting
     Public Shared Sub WriteAccount(ByRef Node As TreeNode, _
                                    ByRef destinationCell As Excel.Range, _
                                    ByRef IndentLevel As Integer)
@@ -102,6 +102,53 @@ Friend Class WorksheetWrittingFunctions
         Next
 
     End Sub
+
+    Public Shared Sub WriteAccountsFromTreeView(ByRef p_treeview As vTreeView, _
+                                             ByVal p_destinationCell As Microsoft.Office.Interop.Excel.Range, _
+                                             Optional ByRef p_periodDatesList As Int32() = Nothing)
+
+        Dim IndentLevel As Integer = 0
+        For Each Node As vTreeNode In p_treeview.GetNodes
+            IndentLevel = 0
+            p_destinationCell = p_destinationCell.Offset(1, 0)
+            p_destinationCell.Value = Node.Text
+
+            If Not p_periodDatesList Is Nothing Then
+                Dim i As Int32 = 0
+                For Each period As UInt32 In p_periodDatesList
+                    p_destinationCell.Offset(0, 1 + i).Value = Format(Date.FromOADate(period), "Short Date")
+                    'p_destinationCell.Offset(0, 1 + i).NumberFormat = "yyyy"
+                    i = i + 1
+                Next
+            End If
+            p_destinationCell = p_destinationCell.Offset(1, 0)
+
+            For Each childNode In Node.Nodes
+                WriteAccount(childNode, p_destinationCell, IndentLevel)
+            Next
+        Next
+        p_destinationCell.Worksheet.Columns(p_destinationCell.Column).autofit()
+
+    End Sub
+
+    Public Shared Sub WriteAccount(ByRef p_node As vTreeNode, _
+                                  ByRef p_destinationCell As Microsoft.Office.Interop.Excel.Range, _
+                                  ByRef p_indentLevel As Integer)
+
+        With p_destinationCell
+            .IndentLevel = p_indentLevel
+            .Value = p_node.Text
+        End With
+        p_destinationCell = p_destinationCell.Offset(1, 0)
+
+        For Each Child As vTreeNode In p_node.Nodes
+            p_indentLevel = p_indentLevel + 1
+            WriteAccount(Child, p_destinationCell, p_indentLevel)
+            p_indentLevel = p_indentLevel - 1
+        Next
+
+    End Sub
+
 
 #End Region
 

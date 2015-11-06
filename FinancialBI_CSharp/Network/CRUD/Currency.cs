@@ -11,6 +11,7 @@ namespace CRUD
     public string Name { get; set; }
     public string Symbol { get; set; }
     public bool InUse { get; set; }
+    public uint Image { get; set; }
 
     public Currency() { }
     private Currency(System.UInt32 p_id)

@@ -23,6 +23,7 @@ Imports System.Runtime.InteropServices
 Imports System.ComponentModel
 Imports System.Windows.Forms
 Imports AddinExpress.MSO
+Imports System.Linq
 Imports Excel = Microsoft.Office.Interop.Excel
 Imports System.Collections.Generic
 Imports CRUD
@@ -104,7 +105,7 @@ Public Class AddinModule
     Friend WithEvents AdxRibbonButton4 As AddinExpress.MSO.ADXRibbonButton
     Friend WithEvents ClientsDropDown As AddinExpress.MSO.ADXRibbonDropDown
     Friend WithEvents ProductsDropDown As AddinExpress.MSO.ADXRibbonDropDown
-    Friend WithEvents WSCB As AddinExpress.MSO.ADXRibbonDropDown
+    Friend WithEvents m_submissionWorksheetCombobox As AddinExpress.MSO.ADXRibbonDropDown
     Friend WithEvents RefreshBT As AddinExpress.MSO.ADXRibbonSplitButton
     Friend WithEvents RefreshMenu As AddinExpress.MSO.ADXRibbonMenu
     Friend WithEvents RefreshSelectionBT As AddinExpress.MSO.ADXRibbonButton
@@ -210,7 +211,7 @@ Public Class AddinModule
         Me.SelectAccRangeBT = New AddinExpress.MSO.ADXRibbonButton(Me.components)
         Me.SelectEntitiesRangeBT = New AddinExpress.MSO.ADXRibbonButton(Me.components)
         Me.SelectPeriodsRangeBT = New AddinExpress.MSO.ADXRibbonButton(Me.components)
-        Me.WSCB = New AddinExpress.MSO.ADXRibbonDropDown(Me.components)
+        Me.m_submissionWorksheetCombobox = New AddinExpress.MSO.ADXRibbonDropDown(Me.components)
         Me.AdxRibbonGroup9 = New AddinExpress.MSO.ADXRibbonGroup(Me.components)
         Me.CloseBT = New AddinExpress.MSO.ADXRibbonButton(Me.components)
         Me.AdxExcelTaskPanesManager1 = New AddinExpress.XL.ADXExcelTaskPanesManager(Me.components)
@@ -886,7 +887,7 @@ Public Class AddinModule
         '
         Me.EditSelectionGroup.Caption = " Settings"
         Me.EditSelectionGroup.Controls.Add(Me.SubmissionOptionsBT)
-        Me.EditSelectionGroup.Controls.Add(Me.WSCB)
+        Me.EditSelectionGroup.Controls.Add(Me.m_submissionWorksheetCombobox)
         Me.EditSelectionGroup.Id = "adxRibbonGroup_845aac06fe0b43ffa1a5ab1c8cf56d7a"
         Me.EditSelectionGroup.ImageTransparentColor = System.Drawing.Color.Transparent
         Me.EditSelectionGroup.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
@@ -984,12 +985,13 @@ Public Class AddinModule
         Me.SelectPeriodsRangeBT.ImageTransparentColor = System.Drawing.Color.Transparent
         Me.SelectPeriodsRangeBT.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
         '
-        'WSCB
+        'm_submissionWorksheetCombobox
         '
-        Me.WSCB.Caption = "Excel Worksheet"
-        Me.WSCB.Id = "adxRibbonDropDown_051d087fb85b425c947f7c3a0fe28700"
-        Me.WSCB.ImageTransparentColor = System.Drawing.Color.Transparent
-        Me.WSCB.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
+        Me.m_submissionWorksheetCombobox.Caption = "Excel Worksheet"
+        Me.m_submissionWorksheetCombobox.Id = "adxRibbonDropDown_051d087fb85b425c947f7c3a0fe28700"
+        Me.m_submissionWorksheetCombobox.ImageTransparentColor = System.Drawing.Color.Transparent
+        Me.m_submissionWorksheetCombobox.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
+        Me.m_submissionWorksheetCombobox.SelectedItemId = "1"
         '
         'AdxRibbonGroup9
         '
@@ -1145,11 +1147,11 @@ Public Class AddinModule
 
     Friend m_ribbon As IRibbonUI
     Friend m_GRSControlersDictionary As New Dictionary(Of Excel.Worksheet, GeneralSubmissionControler)
-    Private m_ctrlsTextWSDictionary As New Dictionary(Of String, Excel.Worksheet)
+    Private m_worksheetNamesObjectDict As New Dictionary(Of String, Excel.Worksheet)
     Public setUpFlag As Boolean
     Public ppsbi_refresh_flag As Boolean = True
     Public m_ppsbiController As PPSBIController
-    Private m_currentGRSControler As GeneralSubmissionControler
+    Private m_currentGeneralSubmissionControler As GeneralSubmissionControler
     Private Const EXCEL_MIN_VERSION As Double = 9
 
 #End Region
@@ -1268,7 +1270,7 @@ Public Class AddinModule
         ConnectionBT.Image = 0
 
         ' Submission Ribbon Initialize
-        WSCB.Items.RemoveAt(0)
+        m_submissionWorksheetCombobox.Items.RemoveAt(0)
         SubmissionModeRibbon.Visible = False
         GlobalVariables.s_reportUploadSidePane = Me.ReportUploadTaskPane
         GlobalVariables.Version_label_Sub_Ribbon = VersionTBSubRibbon
@@ -1383,8 +1385,8 @@ Public Class AddinModule
             ConnectionBT_OnClick(sender, control, pressed)
         Else
             If m_GRSControlersDictionary.ContainsKey(GlobalVariables.APPS.ActiveSheet) Then
-                m_currentGRSControler = m_GRSControlersDictionary(GlobalVariables.APPS.ActiveSheet)
-                m_currentGRSControler.UpdateRibbon()
+                m_currentGeneralSubmissionControler = m_GRSControlersDictionary(GlobalVariables.APPS.ActiveSheet)
+                m_currentGeneralSubmissionControler.UpdateRibbon()
                 SubmissionModeRibbon.Visible = True
             Else
                 ' -> choix adjustment, client, product
@@ -1609,7 +1611,7 @@ Public Class AddinModule
 
     Private Sub HighlightBT_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean)
 
-        m_currentGRSControler.HighlightItemsAndDataRegions()
+        m_currentGeneralSubmissionControler.HighlightItemsAndDataRegions()
 
     End Sub
 
@@ -1623,7 +1625,7 @@ Public Class AddinModule
 
     Private Sub EditRangesMenuBT_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) Handles EditRangesMenuBT.OnClick
 
-        m_currentGRSControler.RangeEdition()
+        m_currentGeneralSubmissionControler.RangeEdition()
 
     End Sub
 
@@ -1645,13 +1647,13 @@ Public Class AddinModule
 
     Private Sub SubmitBT2_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) Handles SubmitBT2.OnClick
 
-        m_currentGRSControler.DataSubmission()
+        m_currentGeneralSubmissionControler.DataSubmission()
 
     End Sub
 
     Private Sub SubmissionStatus_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) Handles SubmissionStatus.OnClick
 
-        m_currentGRSControler.DisplayUploadStatusAndErrorsUI()
+        m_currentGeneralSubmissionControler.DisplayUploadStatusAndErrorsUI()
 
     End Sub
 
@@ -1663,10 +1665,10 @@ Public Class AddinModule
 
     Private Sub AutoCommitBT_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) Handles AutoComitBT.OnClick
 
-        If m_currentGRSControler.m_autoCommitFlag = False Then
-            m_currentGRSControler.m_autoCommitFlag = True
+        If m_currentGeneralSubmissionControler.m_autoCommitFlag = False Then
+            m_currentGeneralSubmissionControler.m_autoCommitFlag = True
         Else
-            m_currentGRSControler.m_autoCommitFlag = False
+            m_currentGeneralSubmissionControler.m_autoCommitFlag = False
         End If
 
     End Sub
@@ -1700,7 +1702,7 @@ Public Class AddinModule
     End Sub
 
     Private Sub CloseBT_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) Handles CloseBT.OnClick
-        ClearSubmissionMode()
+        ClearSubmissionMode(m_currentGeneralSubmissionControler)
     End Sub
 
     Private Sub m_reportUploadAccountInfoButton_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) Handles m_reportUploadAccountInfoButton.OnClick
@@ -1767,17 +1769,20 @@ Public Class AddinModule
 #Region "Submission module"
 
     ' Associated Worksheet combobox on change event
-    Private Sub WSCB_OnAction(sender As Object, Control As IRibbonControl, selectedId As String, selectedIndex As Integer)
+    Private Sub m_submissionWorksheetCombobox_OnAction(sender As Object, _
+                                                       Control As IRibbonControl, _
+                                                       selectedId As String, _
+                                                       selectedIndex As Integer) Handles m_submissionWorksheetCombobox.OnAction
 
         Try
-            If Not m_currentGRSControler.m_associatedWorksheet.Name = selectedId Then
-                m_currentGRSControler = m_GRSControlersDictionary(m_ctrlsTextWSDictionary(selectedId))
-                m_currentGRSControler.UpdateRibbon()
-                m_ctrlsTextWSDictionary(selectedId).Activate()
+            If Not m_currentGeneralSubmissionControler.m_associatedWorksheet.Name = selectedId Then
+                ActivateGRSController(m_GRSControlersDictionary(m_worksheetNamesObjectDict(selectedId)))
+                m_currentGeneralSubmissionControler.UpdateRibbon()
+                m_worksheetNamesObjectDict(selectedId).Activate()
             End If
         Catch ex As Exception
-            m_GRSControlersDictionary.Remove(m_ctrlsTextWSDictionary(selectedId))
-            m_ctrlsTextWSDictionary.Remove(selectedId)
+            '    m_GRSControlersDictionary.Remove(m_ctrlsTextWSDictionary(selectedId))
+            m_worksheetNamesObjectDict.Remove(selectedId)
             MsgBox("The worksheet has been deleted.")
         End Try
 
@@ -1787,7 +1792,7 @@ Public Class AddinModule
     Private Sub ClientsDropDown_OnAction(sender As Object, Control As IRibbonControl, selectedId As String, selectedIndex As Integer) Handles ClientsDropDown.OnAction
 
         GlobalVariables.APPS.Interactive = False
-        m_currentGRSControler.UpdateAfterAnalysisAxisChanged(selectedId, _
+        m_currentGeneralSubmissionControler.UpdateAfterAnalysisAxisChanged(selectedId, _
                                                            ProductsDropDown.SelectedItemId, _
                                                            AdjustmentDropDown.SelectedItemId,
                                                            True)
@@ -1798,7 +1803,7 @@ Public Class AddinModule
     Private Sub ProductsDropDown_OnAction(sender As Object, Control As IRibbonControl, selectedId As String, selectedIndex As Integer) Handles ProductsDropDown.OnAction
 
         GlobalVariables.APPS.Interactive = False
-        m_currentGRSControler.UpdateAfterAnalysisAxisChanged(ClientsDropDown.SelectedItemId, _
+        m_currentGeneralSubmissionControler.UpdateAfterAnalysisAxisChanged(ClientsDropDown.SelectedItemId, _
                                                            selectedId, _
                                                            AdjustmentDropDown.SelectedItemId, _
                                                            True)
@@ -1809,7 +1814,7 @@ Public Class AddinModule
     Private Sub AdjustmentDD_OnAction(sender As Object, Control As IRibbonControl, selectedId As String, selectedIndex As Integer) Handles AdjustmentDropDown.OnAction
 
         GlobalVariables.APPS.Interactive = False
-        m_currentGRSControler.UpdateAfterAnalysisAxisChanged(ClientsDropDown.SelectedItemId, _
+        m_currentGeneralSubmissionControler.UpdateAfterAnalysisAxisChanged(ClientsDropDown.SelectedItemId, _
                                                             ProductsDropDown.SelectedItemId, _
                                                             selectedId, _
                                                             True)
@@ -1821,7 +1826,11 @@ Public Class AddinModule
 #Region "Addin Events"
 
     Private Sub AddinModule_Finalize(sender As Object, e As EventArgs) Handles MyBase.AddinFinalize
-        If m_GRSControlersDictionary.Count > 0 Then ClearSubmissionMode()
+        If m_GRSControlersDictionary.Count > 0 Then
+            For Each l_generalSubmissionController As GeneralSubmissionControler In m_GRSControlersDictionary.Values
+                ClearSubmissionMode(l_generalSubmissionController)
+            Next
+        End If
     End Sub
 
 
@@ -1922,7 +1931,7 @@ Public Class AddinModule
     ' call back from entitySelectionTP for setting up new entity in submission control mode
     Public Sub ValidateEntitySelection(ByRef entityName As String)
 
-        m_currentGRSControler.ChangeCurrentEntity(entityName)
+        m_currentGeneralSubmissionControler.ChangeCurrentEntity(entityName)
         Me.EntitySelectionTaskPane.ClearAndClose()
 
     End Sub
@@ -1932,33 +1941,38 @@ Public Class AddinModule
 #End Region
 
 
-#Region "Snapshot Methods"
+#Region "Report Upload Methods"
 
     ' Create GRS Conctroler and display
     Private Sub AssociateGRSControler(ByRef p_mustUpdateInputs As Boolean)
 
         ' GlobalVariables.APPS.Interactive = False
-        Dim ctrl As ADXRibbonItem = AddButtonToDropDown(WSCB, GlobalVariables.APPS.ActiveSheet.name, GlobalVariables.APPS.ActiveSheet.name)
         loadDropDownsSubmissionButtons()
-        Dim CGRSControlerInstance As New GeneralSubmissionControler(ctrl, Me)
-        m_currentGRSControler = CGRSControlerInstance
-        If m_currentGRSControler.RefreshSnapshot(p_mustUpdateInputs) = True Then
-            m_GRSControlersDictionary.Add(GlobalVariables.APPS.ActiveSheet, CGRSControlerInstance)
-            m_ctrlsTextWSDictionary.Add(ctrl.Caption, GlobalVariables.APPS.ActiveSheet)
+        Dim l_generalSubmissionController As New GeneralSubmissionControler(Me)
+        Dim l_excelWorksheet As Excel.Worksheet = GlobalVariables.APPS.ActiveSheet
+
+        If l_generalSubmissionController.RefreshSnapshot(p_mustUpdateInputs) = True Then
+            m_currentGeneralSubmissionControler = l_generalSubmissionController
+            m_GRSControlersDictionary.Add(l_excelWorksheet, l_generalSubmissionController)
+            m_worksheetNamesObjectDict.Add(l_excelWorksheet.Name, GlobalVariables.APPS.ActiveSheet)
+            Dim l_item = AddButtonToDropDown(m_submissionWorksheetCombobox, _
+                                            l_excelWorksheet.Name, _
+                                            l_excelWorksheet.Name)
+            m_submissionWorksheetCombobox.SelectedItemId = l_excelWorksheet.Name
+
             SubmissionModeRibbon.Visible = True
             SubmissionModeRibbon.Activate()
-            WSCB.SelectedItemId = ctrl.Id
             DisplayReportUploadSidePane()
         Else
             GlobalVariables.APPS.Interactive = True
             GlobalVariables.APPS.ScreenUpdating = True
-            m_currentGRSControler = Nothing
+            m_currentGeneralSubmissionControler = Nothing
         End If
 
     End Sub
 
     ' Disable Submission Buttons (Call back from GRSController)
-    Friend Sub modifySubmissionControlsStatus(ByRef buttonsStatus As Boolean)
+    Friend Sub ModifySubmissionControlsStatus(ByRef buttonsStatus As Boolean)
 
         RefreshInputsBT.Enabled = buttonsStatus
         SubmitBT2.Enabled = buttonsStatus
@@ -1969,6 +1983,32 @@ Public Class AddinModule
 
     End Sub
 
+    Friend Sub ClearSubmissionMode(ByRef p_generalSubmissionController As GeneralSubmissionControler)
+
+        On Error Resume Next
+        m_worksheetNamesObjectDict.Remove(p_generalSubmissionController.m_associatedWorksheet.Name)
+        m_GRSControlersDictionary.Remove(p_generalSubmissionController.m_associatedWorksheet)
+        For Each l_item In m_submissionWorksheetCombobox.Items
+            If l_item.id = p_generalSubmissionController.m_associatedWorksheet.Name Then
+                m_submissionWorksheetCombobox.Items.Remove(l_item)
+                Exit For
+            End If
+        Next
+        p_generalSubmissionController.CloseInstance()
+        p_generalSubmissionController = Nothing
+
+        If m_GRSControlersDictionary.Count = 0 Then
+            SubmissionModeRibbon.Visible = False
+            m_GRSControlersDictionary.Clear()
+        Else
+            ActivateGRSController(m_GRSControlersDictionary.ElementAt(0).Value)
+            m_submissionWorksheetCombobox.SelectedItemId = m_currentGeneralSubmissionControler.m_associatedWorksheet.Name
+            m_currentGeneralSubmissionControler.m_associatedWorksheet.Activate()
+        End If
+        GlobalVariables.APPS.Interactive = True
+        GlobalVariables.APPS.ScreenUpdating = True
+
+    End Sub
 
 #End Region
 
@@ -1989,25 +2029,14 @@ Public Class AddinModule
 
     End Function
 
-    Friend Sub ClearSubmissionMode()
+    Friend Function IsCurrentGRSController(ByRef p_GRSController As GeneralSubmissionControler) As Boolean
+        Return p_GRSController Is m_currentGeneralSubmissionControler
+    End Function
 
-        ' shouldn' t suppress all GRS.. only the one associated to WS
-        ' check that the relation to input task pane is killed
-        ' priority high
-
-        ' -> m_currentGRSControler
-
-        For Each GRS In m_GRSControlersDictionary.Values
-            m_ctrlsTextWSDictionary.Remove(GRS.m_worksheetsComboboxMenuItem.Caption)
-            WSCB.Items.Remove(GRS.m_worksheetsComboboxMenuItem)
-            GRS.CloseInstance()
-            GRS = Nothing
-        Next
-        SubmissionModeRibbon.Visible = False
-        m_GRSControlersDictionary.Clear()
-
+    Friend Sub ActivateGRSController(ByRef p_GRSController As GeneralSubmissionControler)
+        m_currentGeneralSubmissionControler = p_GRSController
+        m_submissionWorksheetCombobox.SelectedItemId = p_GRSController.m_associatedWorksheet.Name
     End Sub
-
 
 #End Region
 
@@ -2064,6 +2093,6 @@ Public Class AddinModule
 #End Region
 
 
-   
+
 End Class
 

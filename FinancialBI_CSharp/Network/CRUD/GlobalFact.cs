@@ -10,6 +10,7 @@ namespace CRUD
   {
     public UInt32 Id { get; private set; }
     public string Name { get; set; }
+    public UInt32 Image { get; set; }
 
     public GlobalFact() { }
     private GlobalFact(UInt32 p_id)
