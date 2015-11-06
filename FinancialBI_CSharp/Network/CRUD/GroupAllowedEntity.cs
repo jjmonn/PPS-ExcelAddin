@@ -11,6 +11,7 @@ namespace CRUD
     public UInt32 Id { get; private set; }
     public UInt32 GroupId { get; set; }
     public UInt32 EntityId { get; set; }
+    public UInt32 Image { get; set; }
 
     public GroupAllowedEntity() { }
     private GroupAllowedEntity(UInt32 p_id)

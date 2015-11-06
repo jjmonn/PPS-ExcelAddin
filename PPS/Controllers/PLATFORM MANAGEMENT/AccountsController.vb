@@ -21,6 +21,7 @@ Imports System.Collections.Generic
 Imports System.Collections
 Imports System.Linq
 Imports CRUD
+Imports VIBlend.WinForms.Controls
 
 
 Friend Class AccountsController
@@ -28,22 +29,22 @@ Friend Class AccountsController
 #Region "Instance Variables"
 
     ' Objects
-    Private FormulasTranslator As FormulasTranslations
+    Private m_formulasTranslator As FormulasTranslations
     Private m_view As AccountsView
-    Private NewAccountView As NewAccountUI
-    Private AccountsTV As New TreeView
-    Private m_globalFactsTV As New TreeView
-    Private PlatformMGTUI As PlatformMGTGeneralUI
+    Private m_newAccountView As NewAccountUI
+    Private m_accountsTV As New vTreeView
+    Private m_globalFactsTV As New vTreeView
+    Private m_platformMGTUI As PlatformMGTGeneralUI
 
 
     ' Variables
-    Friend factsNameKeysDictionary As MultiIndexDictionary(Of UInt32, String, NamedCRUDEntity)
-    Friend positionsDictionary As New Dictionary(Of Int32, Double)
-    Private dependant_account_id As String
-    Friend FTypesToBeTested As New List(Of Int32)
-    Private isClosing As Boolean = False
+    Friend m_factsNameKeysDictionary As MultiIndexDictionary(Of UInt32, String, NamedCRUDEntity)
+    Friend m_positionsDictionary As New Dictionary(Of Int32, Int32)
+    Private m_dependant_account_id As String
+    Friend m_formulaTypesToBeTested As New List(Of Int32)
+    Private m_isClosing As Boolean = False
     Private m_CRUDOperations As New Dictionary(Of Int32, CRUDAction)
-
+    Private Delegate Sub UpdateVarDelegate(ByRef p_account As Account, ByRef p_value As Object)
     ' Constants
     Friend Const ACCOUNTS_FORBIDDEN_CHARACTERS As String = "+-*=<>^?:;![]" ' to be reviewed - 
 
@@ -54,13 +55,13 @@ Friend Class AccountsController
 
     Friend Sub New()
 
-        GlobalVariables.Accounts.LoadAccountsTV(AccountsTV)
+        GlobalVariables.Accounts.LoadAccountsTV(m_accountsTV)
         GlobalVariables.GlobalFacts.LoadGlobalFactsTV(m_globalFactsTV)
-        m_view = New AccountsView(Me, AccountsTV, m_globalFactsTV)
+        m_view = New AccountsView(Me, m_accountsTV, m_globalFactsTV)
         InstanceVariablesLoading()
-        positionsDictionary = TreeViewsUtilities.GeneratePositionsDictionary(AccountsTV)
-        FTypesToBeTested.Add(Account.FormulaTypes.FIRST_PERIOD_INPUT)
-        FTypesToBeTested.Add(Account.FormulaTypes.FORMULA)
+        m_positionsDictionary = VTreeViewUtil.GeneratePositionsDictionary(m_accountsTV)
+        m_formulaTypesToBeTested.Add(Account.FormulaTypes.FIRST_PERIOD_INPUT)
+        m_formulaTypesToBeTested.Add(Account.FormulaTypes.FORMULA)
 
         AddHandler GlobalVariables.Accounts.Read, AddressOf AccountUpdateFromServer
         AddHandler GlobalVariables.Accounts.DeleteEvent, AddressOf AccountDeleteFromServer
@@ -71,16 +72,16 @@ Friend Class AccountsController
 
     Private Sub InstanceVariablesLoading()
 
-        factsNameKeysDictionary = GlobalVariables.GlobalFacts.GetDictionary()
-        NewAccountView = New NewAccountUI(m_view, Me)
-        FormulasTranslator = New FormulasTranslations()
+        m_factsNameKeysDictionary = GlobalVariables.GlobalFacts.GetDictionary()
+        m_newAccountView = New NewAccountUI(m_view, Me)
+        m_formulasTranslator = New FormulasTranslations()
 
     End Sub
 
     Public Sub addControlToPanel(ByRef dest_panel As Panel, _
                                  ByRef PlatformMGTUI As PlatformMGTGeneralUI)
 
-        Me.PlatformMGTUI = PlatformMGTUI
+        Me.m_platformMGTUI = PlatformMGTUI
         dest_panel.Controls.Add(m_view)
         m_view.Dock = Windows.Forms.DockStyle.Fill
 
@@ -88,7 +89,7 @@ Friend Class AccountsController
 
     Public Sub close()
 
-        isClosing = True
+        m_isClosing = True
         SendNewPositionsToModel()
         m_view.Dispose()
 
@@ -119,7 +120,7 @@ Friend Class AccountsController
         l_account.ConsolidationOptionId = p_consolidationOption
         l_account.ConversionOptionId = p_conversionOption
         l_account.FormatId = p_format
-        l_account.AccountImage = p_image
+        l_account.Image = p_image
         l_account.ItemPosition = p_position
         l_account.AccountTab = p_tab
 
@@ -149,30 +150,30 @@ Friend Class AccountsController
     End Sub
 
     Friend Sub UpdateAccountFormulaType(ByVal p_id As UInt32, ByVal p_value As Account.FormulaTypes)
-        UpdateVar(p_id, p_value, Function(p_account As Account, p_destValue As Object) p_account.FormulaType = p_destValue)
+        UpdateVar(p_id, p_value, New UpdateVarDelegate(Sub(ByRef p_account As Account, ByRef p_destValue As Object) p_account.FormulaType = p_destValue))
     End Sub
 
     Friend Sub UpdateAccountType(ByVal p_id As UInt32, ByVal p_value As Account.AccountType)
-        UpdateVar(p_id, p_value, Function(p_account As Account, p_destValue As Object) p_account.Type = p_destValue)
+        UpdateVar(p_id, p_value, New UpdateVarDelegate(Sub(ByRef p_account As Account, ByRef p_destValue As Object) p_account.Type = p_destValue))
     End Sub
 
     Friend Sub UpdateAccountConversionOption(ByVal p_id As UInt32, ByVal p_value As Account.ConversionOptions)
-        UpdateVar(p_id, p_value, Function(p_account As Account, p_destValue As Object) p_account.ConversionOptionId = p_destValue)
+        UpdateVar(p_id, p_value, New UpdateVarDelegate(Sub(ByRef p_account As Account, ByRef p_destValue As Object) p_account.ConversionOptionId = p_destValue))
     End Sub
 
     Friend Sub UpdateAccountConsolidationOption(ByVal p_id As UInt32, ByVal p_value As Account.ConversionOptions)
-        UpdateVar(p_id, p_value, Function(p_account As Account, p_destValue As Object) p_account.ConsolidationOptionId = p_destValue)
+        UpdateVar(p_id, p_value, New UpdateVarDelegate(Sub(ByRef p_account As Account, ByRef p_destValue As Object) p_account.ConsolidationOptionId = p_destValue))
     End Sub
 
     Friend Sub UpdateAccountFormula(ByVal p_id As UInt32, ByVal p_value As String)
-        UpdateVar(p_id, p_value, Function(p_account As Account, p_destValue As Object) p_account.Formula = p_destValue)
+        UpdateVar(p_id, p_value, New UpdateVarDelegate(Sub(ByRef p_account As Account, ByRef p_destValue As Object) p_account.Formula = p_destValue))
     End Sub
 
     Friend Sub UpdateAccountDescription(ByVal p_id As UInt32, ByVal p_value As String)
-        UpdateVar(p_id, p_value, Function(p_account As Account, p_destValue As Object) p_account.Description = p_destValue)
+        UpdateVar(p_id, p_value, New UpdateVarDelegate(Sub(ByRef p_account As Account, ByRef p_destValue As Object) p_account.Description = p_destValue))
     End Sub
 
-    Private Sub UpdateVar(ByVal p_id As UInt32, ByVal p_value As Object, ByRef p_action As Action(Of Account, Object))
+    Private Sub UpdateVar(ByVal p_id As UInt32, ByVal p_value As Object, ByRef p_action As UpdateVarDelegate)
         Dim l_account = GetAccountCopy(p_id)
 
         If l_account Is Nothing Then Exit Sub
@@ -194,10 +195,10 @@ Friend Class AccountsController
         Return False
     End Function
 
-    Friend Function ExistingDependantAccounts(ByRef node As TreeNode) As String()
+    Friend Function ExistingDependantAccounts(ByRef node As VIBlend.WinForms.Controls.vTreeNode) As String()
 
         Dim dependantAccountsNames As New List(Of String)
-        Dim accountsKeyList As List(Of UInt32) = CType(TreeViewsUtilities.GetNodesKeysList(node), Object)
+        Dim accountsKeyList As List(Of UInt32) = CType(VTreeViewUtil.GetNodesIds(node), Object)
         accountsKeyList.Reverse()
 
         Dim dependantAccountsId() As UInt32 = DependenciesLoopCheck(accountsKeyList).ToArray
@@ -271,21 +272,21 @@ Friend Class AccountsController
 
     Friend Function GetCurrentParsedFormula() As String
 
-        Return FormulasTranslator.currentDBFormula
+        Return m_formulasTranslator.currentDBFormula
 
     End Function
 
     ' 1. Tokens check
     Friend Function CheckFormulaForUnkonwnTokens(ByRef str As String) As List(Of String)
 
-        Return FormulasTranslator.GetDBFormulaFromHumanFormula(str)
+        Return m_formulasTranslator.GetDBFormulaFromHumanFormula(str)
 
     End Function
 
     ' 2. Formula syntax validity
     Friend Function CheckFormulaValidity(ByRef str As String)
 
-        Return FormulasTranslator.testFormula()
+        Return m_formulasTranslator.testFormula()
 
     End Function
 
@@ -293,7 +294,7 @@ Friend Class AccountsController
     Friend Function InterdependancyTest() As Boolean
 
         Dim dependancies_dict As New Dictionary(Of UInt32, List(Of UInt32))
-        Dim accounts_list = TreeViewsUtilities.GetNodesKeysList(AccountsTV)
+        Dim accounts_list = VTreeViewUtil.GetNodesIds(m_accountsTV)
         For Each account_id In accounts_list
             Dim ftype As String = GetAccount(CUInt(account_id)).Formula
             If ftype <> Account.FormulaTypes.HARD_VALUE_INPUT _
@@ -302,7 +303,7 @@ Friend Class AccountsController
                 For Each dependant_id In dependancies_dict(account_id)
                     If CheckDependantsInterdependancy(account_id, dependant_id, dependancies_dict) = False Then
                         MsgBox("An interdependancy has been introduced inot accounts formula: " & Chr(13) & Chr(13) & _
-                               GetAccount(CUInt(dependant_account_id)).Name & " depends on " _
+                               GetAccount(CUInt(m_dependant_account_id)).Name & " depends on " _
                                & GetAccount(CUInt(account_id)).Name & Chr(13) & Chr(13) & _
                                "The formula cannot therefore be saved.")
                         Return False
@@ -325,7 +326,7 @@ Friend Class AccountsController
         If dependancies_dict.ContainsKey(dependant_id) = False Then AddDependantToDependanciesDict(dependant_id, dependancies_dict)
         For Each dependant_child_id In dependancies_dict(dependant_id)
             If CheckDependantsInterdependancy(account_id, dependant_child_id, dependancies_dict) = False Then
-                dependant_account_id = dependant_child_id
+                m_dependant_account_id = dependant_child_id
                 Return False
             End If
         Next
@@ -337,24 +338,31 @@ Friend Class AccountsController
                                                ByRef dependancies_dict As Dictionary(Of UInt32, List(Of UInt32)))
 
         If GetAccount(dependant_id).FormulaType = Account.FormulaTypes.AGGREGATION_OF_SUB_ACCOUNTS Then
-            dependancies_dict.Add(dependant_id, CType(TreeViewsUtilities.GetChildrenIDList(AccountsTV.Nodes.Find(dependant_id, True)(0)), Object))
+            Dim l_dependantNode As vTreeNode = VTreeViewUtil.FindNode(m_accountsTV, dependant_id)
+            If l_dependantNode IsNot Nothing Then
+                dependancies_dict.Add(dependant_id, CType(VTreeViewUtil.GetNodesIds(l_dependantNode), Object))
+            End If
         Else
-            dependancies_dict.Add(dependant_id, FormulasTranslator.GetFormulaDependantsLIst(dependant_id))
+            dependancies_dict.Add(dependant_id, m_formulasTranslator.GetFormulaDependantsLIst(dependant_id))
         End If
 
     End Sub
 
 #End Region
 
-    Friend Function FormulaTypeChangeImpliesFactsDeletion(ByRef account_id As UInt32, ByRef new_formula_type As UInt32) As Boolean
+    Friend Function FormulaTypeChangeImpliesFactsDeletion(ByRef p_accountId As UInt32, _
+                                                          ByRef p_newFormulaType As UInt32) As Boolean
 
-        Dim currentFType As Int32 = GetAccount(account_id).FormulaType
-        If currentFType = Account.FormulaTypes.HARD_VALUE_INPUT _
-        Or currentFType = Account.FormulaTypes.FIRST_PERIOD_INPUT Then
-            If new_formula_type = Account.FormulaTypes.AGGREGATION_OF_SUB_ACCOUNTS _
-            Or new_formula_type = Account.FormulaTypes.FORMULA Then
+        Dim l_currentFType As Int32 = GetAccount(p_accountId).FormulaType
+        If l_currentFType = Account.FormulaTypes.HARD_VALUE_INPUT _
+        Or l_currentFType = Account.FormulaTypes.FIRST_PERIOD_INPUT Then
+
+            If p_newFormulaType = Account.FormulaTypes.AGGREGATION_OF_SUB_ACCOUNTS _
+            Or p_newFormulaType = Account.FormulaTypes.FORMULA _
+            Or p_newFormulaType = Account.FormulaTypes.TITLE Then
                 Return True
             End If
+
         End If
         Return False
 
@@ -364,36 +372,36 @@ Friend Class AccountsController
 
 #Region "Events"
 
-    Private Sub AccountUpdateFromServer(ByRef status As Boolean, ByRef p_account As Account)
+    Private Sub AccountUpdateFromServer(ByRef status As ErrorMessage, ByRef p_account As Account)
 
-        If status = True _
-        AndAlso AccountsTV.Nodes.Find(p_account.Id, True).Length = 0 _
-        AndAlso isClosing = False Then
+        Dim l_node As vTreeNode = VTreeViewUtil.FindNode(m_accountsTV, p_account.Id)
+
+        If status = ErrorMessage.SUCCESS _
+        AndAlso l_node IsNot Nothing _
+        AndAlso m_isClosing = False Then
             m_view.TVUpdate(p_account.Id, _
                             p_account.ParentId, _
                             p_account.Name, _
-                          p_account.AccountImage)
-
-            ' -> view update attributes view -> 
+                            p_account.Image)
 
             InstanceVariablesLoading()
         End If
 
     End Sub
 
-    Private Sub AccountDeleteFromServer(ByRef status As Boolean, ByRef id As UInt32)
+    Private Sub AccountDeleteFromServer(ByRef status As ErrorMessage, ByRef id As UInt32)
 
-        If status = True _
-        AndAlso isClosing = False Then
+        If status = ErrorMessage.SUCCESS _
+         AndAlso m_isClosing = False Then
             m_view.TVNodeDelete(id)
             InstanceVariablesLoading()
         End If
 
     End Sub
 
-    Private Sub AccountCreateConfirmation(ByRef status As Boolean, ByRef id As Int32)
+    Private Sub AccountCreateConfirmation(ByRef status As ErrorMessage, ByRef id As Int32)
 
-        If status = False Then
+        If status <> ErrorMessage.SUCCESS Then
             MsgBox("The account could not be created." & Chr(13) & _
                    "Error " & "")
             ' display error from error (to be catched in account) priority normal 
@@ -430,14 +438,14 @@ Friend Class AccountsController
 
     Friend Sub DisplayAccountsView()
 
-        NewAccountView.Hide()
+        m_newAccountView.Hide()
 
     End Sub
 
-    Friend Sub DisplayNewAccountView(ByRef parent_node As TreeNode)
+    Friend Sub DisplayNewAccountView(ByRef p_parentNode As VIBlend.WinForms.Controls.vTreeNode)
 
-        NewAccountView.parentNodeId = parent_node.Name
-        NewAccountView.Show()
+        m_newAccountView.parentNodeId = p_parentNode.Value
+        m_newAccountView.Show()
 
     End Sub
 
@@ -446,14 +454,14 @@ Friend Class AccountsController
         Dim position As Int32
         Dim listAccounts As New List(Of CRUDEntity)
 
-        positionsDictionary = TreeViewsUtilities.GeneratePositionsDictionary(AccountsTV)
-        For Each account_id As UInt32 In positionsDictionary.Keys
-            position = positionsDictionary(account_id)
-            If GetAccount(account_id) Is Nothing Then Continue For
-            If position <> GetAccount(account_id).ItemPosition Then
+        m_positionsDictionary = VTreeViewUtil.GeneratePositionsDictionary(m_accountsTV)
+        For Each account_id As UInt32 In m_positionsDictionary.Keys
+            position = m_positionsDictionary(account_id)
+            Dim l_account1 As Account = GetAccount(account_id)
+            If l_account1 Is Nothing Then Continue For
+            If position <> l_account1.ItemPosition Then
                 Dim l_account = GetAccountCopy(account_id)
-
-                If Not l_account Is Nothing Then
+                If l_account IsNot Nothing Then
                     l_account.ItemPosition = position
                     listAccounts.Add(l_account)
                 End If
@@ -466,7 +474,7 @@ Friend Class AccountsController
     Friend Function GetFormulaText(ByRef p_accountId As UInt32) As String
 
         If GetAccount(p_accountId) Is Nothing Then Return ""
-        Return FormulasTranslator.GetHumanFormulaFromDB(GetAccount(p_accountId).Formula)
+        Return m_formulasTranslator.GetHumanFormulaFromDB(GetAccount(p_accountId).Formula)
 
     End Function
 

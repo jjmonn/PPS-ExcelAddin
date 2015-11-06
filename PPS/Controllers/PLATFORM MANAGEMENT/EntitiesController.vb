@@ -154,7 +154,11 @@ Friend Class EntitiesController
     End Function
 
     Friend Sub UpdateEntityName(ByVal p_id As UInt32, ByVal p_value As String)
-        UpdateVar(p_id, p_value, Function(p_entity As AxisElem, p_destValue As Object) p_entity.Name = p_destValue)
+        Dim l_entity = GetEntityCopy(p_id)
+
+        If l_entity Is Nothing Then Exit Sub
+        l_entity.Name = p_value
+        UpdateEntity(l_entity)
     End Sub
 
     Friend Sub UpdateEntityCurrency(ByVal p_id As UInt32, ByVal p_value As UInt32)
@@ -165,14 +169,6 @@ Friend Class EntitiesController
 
         l_entityCurrency.CurrencyId = p_value
         GlobalVariables.EntityCurrencies.Update(l_entityCurrency)
-    End Sub
-
-    Private Sub UpdateVar(ByVal p_id As UInt32, ByVal p_value As Object, ByRef p_action As Action(Of AxisElem, Object))
-        Dim l_entity = GetEntityCopy(p_id)
-
-        If l_entity Is Nothing Then Exit Sub
-        p_action(l_entity, p_value)
-        UpdateEntity(l_entity)
     End Sub
 
 #End Region

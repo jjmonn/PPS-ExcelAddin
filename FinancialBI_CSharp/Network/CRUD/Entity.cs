@@ -10,6 +10,7 @@ namespace CRUD
   {
     public UInt32 Id { get; private set; }
     public UInt32 CurrencyId { get; set; }
+    public UInt32 Image { get; set; }
 
     public EntityCurrency() { }
     private EntityCurrency(UInt32 p_entityId, UInt32 p_currencyId)

@@ -13,6 +13,7 @@ namespace CRUD
     public UInt32 ParentId { get; set; }
     public string Name { get; set; }
     public Int32 ItemPosition { get; set; }
+    public UInt32 Image { get; set; }
 
     public FilterValue() { }
     private FilterValue(UInt32 p_id)

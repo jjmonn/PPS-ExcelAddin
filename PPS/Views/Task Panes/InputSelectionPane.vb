@@ -48,7 +48,6 @@ Public Class InputSelectionPane
 
         ADDIN = AddinInstance
         GlobalVariables.AxisElems.LoadEntitiesTV(EntitiesTV)
-        TreeViewsUtilities.set_TV_basics_icon_index(EntitiesTV)
         EntitiesTV.CollapseAll()
 
     End Sub

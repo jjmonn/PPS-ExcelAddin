@@ -19,6 +19,7 @@ namespace CRUD
     public UInt32 SerieColor { get; set; }
     public UInt32 SerieType { get; set; }
     public string SerieChart { get; set; }
+    public UInt32 Image { get; set; }
 
     public FModelingAccount() { }
     private FModelingAccount(UInt32 p_id)

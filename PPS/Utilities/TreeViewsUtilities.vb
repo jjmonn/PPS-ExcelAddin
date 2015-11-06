@@ -508,21 +508,35 @@ Friend Class TreeViewsUtilities
 
 #Region "Nodes Icons"
 
-    Public Shared Sub set_TV_basics_icon_index(ByRef TV As TreeView)
+    Public Shared Sub SetTreeviewIconsHiearachy(ByRef p_treeview As TreeView)
 
-        Dim nodes_keys_list As List(Of Int32) = GetNodesKeysList(TV)
-        For Each key In nodes_keys_list
-            Dim tmp_node = TV.Nodes.Find(key, True)(0)
-            If tmp_node.Nodes.Count > 0 Then
-                tmp_node.StateImageIndex = 0
-                '      tmp_node.SelectedImageIndex = 0
+        For Each l_node As TreeNode In GetNodesList(p_treeview)
+            If l_node.Nodes.Count > 0 Then
+                l_node.ImageIndex = 0
+                l_node.SelectedImageIndex = 0
             Else
-                tmp_node.StateImageIndex = 1
-                '     tmp_node.SelectedImageIndex = 1
+                l_node.ImageIndex = 1
+                l_node.SelectedImageIndex = 1
             End If
         Next
 
     End Sub
+
+    'Public Shared Sub set_TV_basics_icon_index(ByRef TV As TreeView)
+
+    '    Dim nodes_keys_list As List(Of Int32) = GetNodesKeysList(TV)
+    '    For Each key In nodes_keys_list
+    '        Dim tmp_node = TV.Nodes.Find(key, True)(0)
+    '        If tmp_node.Nodes.Count > 0 Then
+    '            tmp_node.StateImageIndex = 0
+    '            '      tmp_node.SelectedImageIndex = 0
+    '        Else
+    '            tmp_node.StateImageIndex = 1
+    '            '     tmp_node.SelectedImageIndex = 1
+    '        End If
+    '    Next
+
+    'End Sub
 
 #End Region
 
@@ -619,7 +633,7 @@ Friend Class TVDragAndDrop
 
     End Sub
 
-    Protected Friend Shared Sub TGV_DragEnter(sender As Object, e As DragEventArgs)
+    Friend Shared Sub TGV_DragEnter(sender As Object, e As DragEventArgs)
 
         If e.Data.GetDataPresent("VIBlend.WinForms.DataGridView.HierarchyItem", True) Then
             e.Effect = DragDropEffects.Move                           ' Hierarchy item found allow move effect
@@ -628,7 +642,7 @@ Friend Class TVDragAndDrop
         End If
     End Sub
 
-    Protected Friend Shared Sub TGV_DragOver(sender As Object, e As DragEventArgs)
+    Friend Shared Sub TGV_DragOver(sender As Object, e As DragEventArgs)
 
         If e.Data.GetDataPresent("VIBlend.WinForms.DataGridView.HierarchyItem", True) = False Then
             Exit Sub
@@ -662,7 +676,7 @@ Friend Class TVDragAndDrop
 
     End Sub
 
-    Protected Friend Shared Sub TGV_DragDrop(sender As Object, e As DragEventArgs)
+    Friend Shared Sub TGV_DragDrop(sender As Object, e As DragEventArgs)
 
         'Check that there is an item being dragged
         If e.Data.GetDataPresent("VIBlend.WinForms.DataGridView.HierarchyItem", True) = False Then Exit Sub

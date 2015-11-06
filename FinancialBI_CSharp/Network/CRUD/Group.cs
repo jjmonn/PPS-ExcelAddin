@@ -12,6 +12,7 @@ namespace CRUD
     public UInt32 ParentId { get; set; }
     public string Name { get; set; }
     public UInt64 Rights { get; set; }
+    public UInt32 Image { get; set; }
     
     public Group() { }
     private Group(UInt32 p_id)
@@ -33,7 +34,7 @@ namespace CRUD
     public void Dump(ByteBuffer p_packet, bool p_includeId)
     {
       if (p_includeId)
-        p_packet.WriteUint32(Id);
+      p_packet.WriteUint32(Id);
       p_packet.WriteUint32(ParentId);
       p_packet.WriteString(Name);
       p_packet.WriteUint64(Rights);

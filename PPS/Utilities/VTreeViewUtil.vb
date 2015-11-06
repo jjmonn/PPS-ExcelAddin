@@ -146,6 +146,15 @@ Public Class VTreeViewUtil
 
     End Sub
 
+    Public Shared Function ReturnRootNodeFromNode(ByRef inputNode As vTreeNode) As vTreeNode
+
+        Dim currentNode As vTreeNode = inputNode
+        Do While Not currentNode.Parent Is Nothing
+            currentNode = currentNode.Parent
+        Loop
+        Return currentNode
+
+    End Function
 
 #Region "TV loading"
 
@@ -154,22 +163,19 @@ Public Class VTreeViewUtil
 
         Dim currentNode, ParentNode As vTreeNode
         Dim orphans_ids_list As New List(Of Int32)
-        Dim image_index As UInt16 = 0
         TV.Nodes.Clear()
 
         For Each value As T In items_attributes.SortedValues
             If value.ParentId = 0 Then
                 currentNode = AddNode(value.Id, _
                                       value.Name,
-                                      TV, _
-                                      image_index)
+                                      TV)
             Else
                 ParentNode = FindNode(TV, value.Id)
                 If Not ParentNode Is Nothing Then
                     currentNode = AddNode(value.Id, _
                                         value.Name,
-                                        ParentNode, _
-                                        image_index)
+                                        ParentNode)
                 Else
                     orphans_ids_list.Add(value.Id)
                 End If
@@ -185,7 +191,6 @@ Public Class VTreeViewUtil
                                           Optional ByRef solved_orphans_list As List(Of Int32) = Nothing)
 
         Dim current_node, parent_node As vTreeNode
-        Dim image_index As UInt16 = 0
         If solved_orphans_list Is Nothing Then solved_orphans_list = New List(Of Int32)
         For Each orphan_id As UInt32 In orphans_id_list
             If solved_orphans_list.Contains(orphan_id) = False Then
@@ -194,8 +199,7 @@ Public Class VTreeViewUtil
                 If Not parent_node Is Nothing Then
                     current_node = AddNode(items_attributes(orphan_id).Id, _
                                            items_attributes(orphan_id).Name,
-                                           parent_node, _
-                                           image_index)
+                                           parent_node)
                     solved_orphans_list.Add(orphan_id)
                 End If
             End If
@@ -212,22 +216,19 @@ Public Class VTreeViewUtil
 
         Dim currentNode, ParentNode As vTreeNode
         Dim orphans_ids_list As New List(Of Int32)
-        Dim image_index As UInt16 = 0
         node.Nodes.Clear()
 
         For Each value As T In items_attributes.SortedValues
             If value.ParentId = 0 Then
                 currentNode = AddNode(value.Id, _
                                        value.Name, _
-                                       node, _
-                                       image_index)
+                                       node)
             Else
                 ParentNode = FindNode(node, value.Id)
                 If Not ParentNode Is Nothing Then
                     currentNode = AddNode(value.Id, _
                                         value.Name,
-                                        ParentNode, _
-                                        image_index)
+                                        ParentNode)
                 Else
                     orphans_ids_list.Add(value.Id)
                 End If
@@ -243,7 +244,6 @@ Public Class VTreeViewUtil
                                           Optional ByRef solved_orphans_list As List(Of Int32) = Nothing)
 
         Dim current_node, parent_node As vTreeNode
-        Dim image_index As UInt16 = 0
         If solved_orphans_list Is Nothing Then solved_orphans_list = New List(Of Int32)
         For Each orphan_id As UInt32 In orphans_id_list
             If solved_orphans_list.Contains(orphan_id) = False Then
@@ -252,8 +252,7 @@ Public Class VTreeViewUtil
                 If Not parent_node Is Nothing Then
                     current_node = AddNode(items_attributes(orphan_id).Id, _
                                            items_attributes(orphan_id).Name,
-                                           parent_node, _
-                                           image_index)
+                                           parent_node)
                     solved_orphans_list.Add(orphan_id)
                 End If
             End If
@@ -262,6 +261,41 @@ Public Class VTreeViewUtil
                                                                                         items_attributes, _
                                                                                         orphans_id_list, _
                                                                                         solved_orphans_list)
+
+    End Sub
+
+    Public Shared Sub LoadFlatTreeview(Of T As {NamedCRUDEntity})(ByRef p_treeview As vTreeView, _
+                                      ByRef p_itemsAttributes As MultiIndexDictionary(Of UInt32, String, T))
+
+        p_treeview.Nodes.Clear()
+        For Each value As T In p_itemsAttributes.SortedValues
+            Dim l_node As vTreeNode = AddNode(value.Id, value.Name, p_treeview)
+            l_node.Checked = Windows.Forms.CheckState.Checked
+        Next
+
+    End Sub
+
+    Public Shared Sub LoadTreeviewIcons(Of T As {CRUDEntity})(ByRef p_treeview As vTreeView, _
+                                        ByRef p_itemsAttributes As MultiIndexDictionary(Of UInt32, String, T))
+
+        For Each l_node As vTreeNode In p_treeview.GetNodes
+            Dim value As T = p_itemsAttributes(CUInt(l_node.Value))
+            If value IsNot Nothing Then
+                l_node.ImageIndex = value.Image
+            End If
+        Next
+
+    End Sub
+
+    Public Shared Sub SetTreeviewIconsHiearachy(ByRef p_treeview As vTreeView)
+
+        For Each l_node As vTreeNode In p_treeview.GetNodes
+            If l_node.Nodes.Count > 0 Then
+                l_node.ImageIndex = 0
+            Else
+                l_node.ImageIndex = 1
+            End If
+        Next
 
     End Sub
 
@@ -283,43 +317,79 @@ Public Class VTreeViewUtil
 
 #Region "Move nodes up and down into hierarchy Procedure"
 
-    Friend Shared Sub MoveNodeUp(ByRef inputNode As vTreeNode)
+    Friend Shared Sub MoveNodeUp(ByRef p_node As vTreeNode)
 
-        ' below to be checked priority normal
-        Dim index = inputNode.TreeView.Nodes.IndexOf(inputNode)
+        Dim index As Int32
+        Dim l_treeview As vTreeView = p_node.TreeView
         Try
-            If Not (inputNode.PrevNode Is Nothing) Then
-                Dim prev_node = inputNode.PrevNode
-                If inputNode.Parent Is Nothing Then
-                    inputNode.TreeView.Nodes.Insert(index - 1, CType(inputNode.Clone, vTreeNode))
+            If Not (p_node.PrevNode Is Nothing) Then
+                Dim prev_node = p_node.PrevNode
+                Dim l_namesValuesDict As Dictionary(Of String, String) = GetNodesNamesValueDict(l_treeview)
+                Dim l_accountId As Int32 = l_treeview.SelectedNode.Value
+                If p_node.Parent Is Nothing Then
+                    index = p_node.TreeView.Nodes.IndexOf(p_node)
+                    p_node.TreeView.Nodes.Insert(index - 1, CType(p_node.Clone, vTreeNode))
                 Else
-                    inputNode.Parent.Nodes.Insert(index - 1, CType(inputNode.Clone, vTreeNode))
+                    index = p_node.Parent.Nodes.IndexOf(p_node)
+                    p_node.Parent.Nodes.Insert(index - 1, CType(p_node.Clone, vTreeNode))
                 End If
-                inputNode.Remove()
-                prev_node.TreeView.SelectedNode = prev_node.PrevNode
+                prev_node.PrevNode.Value = p_node.Value
+                p_node.Remove()
+                PutBackNodesValues(l_treeview, l_namesValuesDict)
+                l_treeview.SelectedNode = FindNode(l_treeview, l_accountId)
+                l_treeview.Refresh()
             End If
         Catch ex As Exception
         End Try
 
     End Sub
 
-    Friend Shared Sub MoveNodeDown(ByRef inputNode As vTreeNode)
+    Friend Shared Sub MoveNodeDown(ByRef p_node As vTreeNode)
 
-        ' below to be checked priority normal
-        Dim index = inputNode.TreeView.Nodes.IndexOf(inputNode)
+        Dim index As Int32
+        Dim l_treeview As vTreeView = p_node.TreeView
         Try
-            If Not (inputNode.NextNode Is Nothing) Then
-                Dim nextnode = inputNode.NextNode
-                If inputNode.Parent Is Nothing Then
-                    inputNode.TreeView.Nodes.Insert(index + 2, CType(inputNode.Clone, vTreeNode))
+            If Not (p_node.NextNode Is Nothing) Then
+                Dim nextnode = p_node.NextNode
+                Dim l_namesValuesDict As Dictionary(Of String, String) = GetNodesNamesValueDict(l_treeview)
+                Dim l_accountId As Int32 = l_treeview.SelectedNode.Value
+                If p_node.Parent Is Nothing Then
+                    index = p_node.TreeView.Nodes.IndexOf(p_node)
+                    p_node.TreeView.Nodes.Insert(index + 2, CType(p_node.Clone, vTreeNode))
                 Else
-                    inputNode.Parent.Nodes.Insert(index + 2, CType(inputNode.Clone, vTreeNode))
+                    index = p_node.Parent.Nodes.IndexOf(p_node)
+                    p_node.Parent.Nodes.Insert(index + 2, CType(p_node.Clone, vTreeNode))
                 End If
-                inputNode.Remove()
-                nextnode.TreeView.SelectedNode = nextnode.NextNode
+                nextnode.NextNode.Value = p_node.Value
+                p_node.Remove()
+                PutBackNodesValues(l_treeview, l_namesValuesDict)
+                l_treeview.SelectedNode = FindNode(l_treeview, l_accountId)
+                l_treeview.Refresh()
+
             End If
         Catch ex As Exception
         End Try
+
+    End Sub
+
+    Private Shared Function GetNodesNamesValueDict(ByRef p_treeview As vTreeView) As Dictionary(Of String, String)
+
+        Dim l_namesValuesDict As New Dictionary(Of String, String)
+        For Each l_node As vTreeNode In p_treeview.GetNodes
+            If l_namesValuesDict.ContainsKey(l_node.Text) = False Then
+                l_namesValuesDict.Add(l_node.Text, l_node.Value)
+            End If
+        Next
+        Return l_namesValuesDict
+
+    End Function
+
+    Private Shared Sub PutBackNodesValues(ByRef p_treeview As vTreeView, _
+                                   ByRef p_namesValuesDict As Dictionary(Of String, String))
+
+        For Each l_node As vTreeNode In p_treeview.GetNodes
+            l_node.Value = p_namesValuesDict(l_node.Text)
+        Next
 
     End Sub
 
@@ -448,6 +518,7 @@ Public Class VTreeViewUtil
     End Sub
 
 #End Region
+
 
 
 End Class

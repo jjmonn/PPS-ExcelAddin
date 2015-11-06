@@ -27,6 +27,7 @@ namespace CRUD
     public UInt16 NbPeriod { get; set; }
     public string CreatedAt { get; set; }
     public UInt32 GlobalFactVersionId { get; set; }
+    public UInt32 Image { get; set; }
 
     public Version() { }
     private Version(UInt32 p_id)

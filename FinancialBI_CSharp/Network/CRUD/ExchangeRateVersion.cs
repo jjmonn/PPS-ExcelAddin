@@ -15,6 +15,7 @@ namespace CRUD
     public Int32 ItemPosition { get; set; }
     public UInt32 StartPeriod { get; set; }
     public UInt16 NbPeriod { get; set; }
+    public UInt32 Image { get; set; }
 
     public ExchangeRateVersion() { }
     private ExchangeRateVersion(UInt32 p_id)

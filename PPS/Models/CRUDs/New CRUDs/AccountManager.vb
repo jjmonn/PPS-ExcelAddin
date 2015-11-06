@@ -87,16 +87,17 @@ Friend Class AccountManager : Inherits NamedCRUDManager(Of NamedHierarchyCRUDEnt
 
 #Region "Utilities"
 
-    Friend Sub LoadAccountsTV(ByRef TV As Windows.Forms.TreeView)
-
-        TreeViewsUtilities.LoadTreeview(TV, m_CRUDDic)
+    Friend Sub LoadAccountsTV(ByRef p_treeview As Windows.Forms.TreeView)
+        TreeViewsUtilities.LoadTreeview(p_treeview, m_CRUDDic)
 
     End Sub
 
-    Friend Sub LoadAccountsTV(ByRef TV As VIBlend.WinForms.Controls.vTreeView)
+    Friend Sub LoadAccountsTV(ByRef p_treeview As VIBlend.WinForms.Controls.vTreeView)
+        VTreeViewUtil.LoadTreeview(p_treeview, m_CRUDDic)
+    End Sub
 
-        VTreeViewUtil.LoadTreeview(TV, m_CRUDDic)
-
+    Friend Sub LoadAccountsTVIcons(ByRef p_treeview As VIBlend.WinForms.Controls.vTreeView)
+        VTreeViewUtil.LoadTreeviewIcons(p_treeview, m_CRUDDic)
     End Sub
 
 #End Region

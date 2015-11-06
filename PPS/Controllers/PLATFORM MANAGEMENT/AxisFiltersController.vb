@@ -152,14 +152,10 @@ Friend Class AxisFiltersController
     End Sub
 
     Friend Sub UpdateFilterName(ByVal p_id As UInt32, ByVal p_value As String)
-        UpdateVar(p_id, p_value, Function(p_filter As Filter, p_destValue As Object) p_filter.Name = p_destValue)
-    End Sub
-
-    Private Sub UpdateVar(ByVal p_id As UInt32, ByVal p_value As Object, ByRef p_action As Action(Of Filter, Object))
         Dim l_filter = GetFilterCopy(p_id)
 
         If l_filter Is Nothing Then Exit Sub
-        p_action(l_filter, p_value)
+        l_filter.Name = p_value
         UpdateFilter(l_filter)
     End Sub
 
