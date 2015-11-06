@@ -112,7 +112,13 @@ public class NetworkManager
 
     m_StreamSSL.Write(header, 0, header.Length);
     m_StreamSSL.Flush();
-    return (true);
+
+    byte[] answer = new byte[5];
+    int ret = m_StreamSSL.Read(answer, 0, answer.Length);
+
+    if (ret < answer.Length)
+      return (false);
+    return (System.Text.Encoding.UTF8.GetString(answer) == "READY");
   }
 
   public void Send(ByteBuffer p_data)
