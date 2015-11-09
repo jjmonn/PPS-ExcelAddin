@@ -88,17 +88,15 @@ public class MultiIndexDictionary<KeyA, KeyB, Value>
   {
     UInt32 id;
 
-    if (m_firstDic.ContainsKey(p_keyA) == false && m_secondDic.ContainsKey(p_keyB) == false)
+    if (m_firstDic.ContainsKey(p_keyA))
+      id = m_firstDic[p_keyA];
+    else if (m_secondDic.ContainsKey(p_keyB))
+      id = m_secondDic[p_keyB];
+    else
     {
       id = m_id;
       ++m_id;
     }
-    else if (m_firstDic.ContainsKey(p_keyA) == false || m_secondDic.ContainsKey(p_keyB) == false)
-    {
-      return false;
-    }
-    else
-      id = m_firstDic[p_keyA];
       
     m_firstDic[p_keyA] = id;
     m_secondDic[p_keyB] = id;
