@@ -148,6 +148,7 @@ Friend Class AccountsView
         AddHandler m_accountTV.DragOver, AddressOf AccountsTV_DragOver
         AddHandler m_accountTV.AfterSelect, AddressOf AccountsTV_AfterSelect
         AddHandler m_globalFactsTV.MouseDoubleClick, AddressOf GlobalFactTV_NodeMouseDoubleClick
+        AddHandler m_formulaTextBox.KeyDown, AddressOf FormulaTextBox_KeyDown
 
     End Sub
 
@@ -524,6 +525,12 @@ SubmitFormula:
             End Select
         End If
 
+    End Sub
+
+    Private Sub FormulaTextBox_KeyDown(sender As Object, e As KeyEventArgs)
+        If (e.KeyCode = Keys.A AndAlso e.Control) Then
+            m_formulaTextBox.SelectAll()
+        End If
     End Sub
 
 #Region "Nodes Drag and Drop Procedure"
