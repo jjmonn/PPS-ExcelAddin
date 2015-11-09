@@ -8,7 +8,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 24/10/2015
+' Last modified: 09/11/2015
 
 
 Imports System.Windows.Forms
@@ -43,6 +43,7 @@ Friend Class NewDataVersionUI
         m_controller = input_controller
         StartingPeriodNUD.Value = Year(Now)
         InitializeComboboxes()
+        MultilanguageSetup()
 
     End Sub
 
@@ -63,6 +64,21 @@ Friend Class NewDataVersionUI
         VTreeViewUtil.LoadTreeview(m_factsVersionVTreeviewbox.TreeView, GlobalVariables.GlobalFactsVersions.GetDictionary())
 
     End Sub
+
+    Private Sub MultilanguageSetup()
+
+        Me.m_factsVersionLabel.Text = Local.GetValue("facts_versions.fact_version")
+        Me.m_ratesVersionLabel.Text = Local.GetValue("facts_versions.exchange_rates_version")
+        Me.m_numberOfYearsLabel.Text = Local.GetValue("facts_versions.nb_years")
+        Me.m_startingYearLabel.Text = Local.GetValue("facts_versions.starting_period")
+        Me.m_periodConfigLabel.Text = Local.GetValue("facts_versions.period_config")
+        Me.m_nameLabel.Text = Local.GetValue("facts_versions.version_name")
+        Me.CancelBT.Text = Local.GetValue("general.cancel")
+        Me.CreateVersionBT.Text = Local.GetValue("general.create")
+        Me.Text = Local.GetValue("facts_versions.version_new")
+
+    End Sub
+
 
 #End Region
 

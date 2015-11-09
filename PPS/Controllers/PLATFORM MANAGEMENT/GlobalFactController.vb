@@ -48,7 +48,6 @@ Friend Class GlobalFactController
 
     Public Sub Close()
 
-        m_view.closeControl()
         m_view.Dispose()
         m_view = Nothing
 

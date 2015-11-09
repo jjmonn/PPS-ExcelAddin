@@ -25,12 +25,12 @@ Partial Class NewDataVersionUI
         Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(NewDataVersionUI))
         Me.TableLayoutPanel2 = New System.Windows.Forms.TableLayoutPanel()
-        Me.Label3 = New System.Windows.Forms.Label()
-        Me.Label2 = New System.Windows.Forms.Label()
-        Me.Label1 = New System.Windows.Forms.Label()
-        Me.Label11 = New System.Windows.Forms.Label()
-        Me.Label10 = New System.Windows.Forms.Label()
-        Me.Label4 = New System.Windows.Forms.Label()
+        Me.m_factsVersionLabel = New System.Windows.Forms.Label()
+        Me.m_ratesVersionLabel = New System.Windows.Forms.Label()
+        Me.m_numberOfYearsLabel = New System.Windows.Forms.Label()
+        Me.m_startingYearLabel = New System.Windows.Forms.Label()
+        Me.m_periodConfigLabel = New System.Windows.Forms.Label()
+        Me.m_nameLabel = New System.Windows.Forms.Label()
         Me.NameTB = New System.Windows.Forms.TextBox()
         Me.TimeConfigCB = New System.Windows.Forms.ComboBox()
         Me.NbPeriodsNUD = New System.Windows.Forms.NumericUpDown()
@@ -44,22 +44,22 @@ Partial Class NewDataVersionUI
         Me.CancelBT = New System.Windows.Forms.Button()
         Me.CreateVersionBT = New System.Windows.Forms.Button()
         Me.m_copyCheckBox = New VIBlend.WinForms.Controls.vCheckBox()
-        Me.TableLayoutPanel2.SuspendLayout
-        CType(Me.NbPeriodsNUD,System.ComponentModel.ISupportInitialize).BeginInit
-        CType(Me.StartingPeriodNUD,System.ComponentModel.ISupportInitialize).BeginInit
-        Me.SuspendLayout
+        Me.TableLayoutPanel2.SuspendLayout()
+        CType(Me.NbPeriodsNUD, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.StartingPeriodNUD, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.SuspendLayout()
         '
         'TableLayoutPanel2
         '
         Me.TableLayoutPanel2.ColumnCount = 2
         Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 38.35376!))
         Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 61.64624!))
-        Me.TableLayoutPanel2.Controls.Add(Me.Label3, 0, 6)
-        Me.TableLayoutPanel2.Controls.Add(Me.Label2, 0, 5)
-        Me.TableLayoutPanel2.Controls.Add(Me.Label1, 0, 4)
-        Me.TableLayoutPanel2.Controls.Add(Me.Label11, 0, 3)
-        Me.TableLayoutPanel2.Controls.Add(Me.Label10, 0, 2)
-        Me.TableLayoutPanel2.Controls.Add(Me.Label4, 0, 0)
+        Me.TableLayoutPanel2.Controls.Add(Me.m_factsVersionLabel, 0, 6)
+        Me.TableLayoutPanel2.Controls.Add(Me.m_ratesVersionLabel, 0, 5)
+        Me.TableLayoutPanel2.Controls.Add(Me.m_numberOfYearsLabel, 0, 4)
+        Me.TableLayoutPanel2.Controls.Add(Me.m_startingYearLabel, 0, 3)
+        Me.TableLayoutPanel2.Controls.Add(Me.m_periodConfigLabel, 0, 2)
+        Me.TableLayoutPanel2.Controls.Add(Me.m_nameLabel, 0, 0)
         Me.TableLayoutPanel2.Controls.Add(Me.NameTB, 1, 0)
         Me.TableLayoutPanel2.Controls.Add(Me.TimeConfigCB, 1, 2)
         Me.TableLayoutPanel2.Controls.Add(Me.NbPeriodsNUD, 1, 4)
@@ -77,76 +77,76 @@ Partial Class NewDataVersionUI
         Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.66667!))
         Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.66667!))
         Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.66667!))
-        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 33!))
+        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 33.0!))
         Me.TableLayoutPanel2.Size = New System.Drawing.Size(586, 251)
         Me.TableLayoutPanel2.TabIndex = 1
         '
-        'Label3
+        'm_factsVersionLabel
         '
-        Me.Label3.AutoSize = true
-        Me.Label3.Location = New System.Drawing.Point(3, 223)
-        Me.Label3.Margin = New System.Windows.Forms.Padding(3, 7, 3, 0)
-        Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(158, 15)
-        Me.Label3.TabIndex = 30
-        Me.Label3.Text = "[facts_versions.fact_version]"
+        Me.m_factsVersionLabel.AutoSize = True
+        Me.m_factsVersionLabel.Location = New System.Drawing.Point(3, 223)
+        Me.m_factsVersionLabel.Margin = New System.Windows.Forms.Padding(3, 7, 3, 0)
+        Me.m_factsVersionLabel.Name = "m_factsVersionLabel"
+        Me.m_factsVersionLabel.Size = New System.Drawing.Size(158, 15)
+        Me.m_factsVersionLabel.TabIndex = 30
+        Me.m_factsVersionLabel.Text = "fact_version"
         '
-        'Label2
+        'm_ratesVersionLabel
         '
-        Me.Label2.AutoSize = true
-        Me.Label2.Location = New System.Drawing.Point(3, 187)
-        Me.Label2.Margin = New System.Windows.Forms.Padding(3, 7, 3, 0)
-        Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(217, 29)
-        Me.Label2.TabIndex = 28
-        Me.Label2.Text = "[facts_versions.exchange_rates_version]"
+        Me.m_ratesVersionLabel.AutoSize = True
+        Me.m_ratesVersionLabel.Location = New System.Drawing.Point(3, 187)
+        Me.m_ratesVersionLabel.Margin = New System.Windows.Forms.Padding(3, 7, 3, 0)
+        Me.m_ratesVersionLabel.Name = "m_ratesVersionLabel"
+        Me.m_ratesVersionLabel.Size = New System.Drawing.Size(217, 29)
+        Me.m_ratesVersionLabel.TabIndex = 28
+        Me.m_ratesVersionLabel.Text = "exchange_rates_version"
         '
         'Label1
         '
-        Me.Label1.AutoSize = true
-        Me.Label1.Location = New System.Drawing.Point(3, 151)
-        Me.Label1.Margin = New System.Windows.Forms.Padding(3, 7, 3, 0)
-        Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(143, 15)
-        Me.Label1.TabIndex = 25
-        Me.Label1.Text = "[facts_versions.nb_years]"
+        Me.m_numberOfYearsLabel.AutoSize = True
+        Me.m_numberOfYearsLabel.Location = New System.Drawing.Point(3, 151)
+        Me.m_numberOfYearsLabel.Margin = New System.Windows.Forms.Padding(3, 7, 3, 0)
+        Me.m_numberOfYearsLabel.Name = "Label1"
+        Me.m_numberOfYearsLabel.Size = New System.Drawing.Size(143, 15)
+        Me.m_numberOfYearsLabel.TabIndex = 25
+        Me.m_numberOfYearsLabel.Text = "nb_years"
         '
-        'Label11
+        'm_startingYearLabel
         '
-        Me.Label11.AutoSize = true
-        Me.Label11.Location = New System.Drawing.Point(3, 115)
-        Me.Label11.Margin = New System.Windows.Forms.Padding(3, 7, 3, 0)
-        Me.Label11.Name = "Label11"
-        Me.Label11.Size = New System.Drawing.Size(175, 15)
-        Me.Label11.TabIndex = 17
-        Me.Label11.Text = "[facts_versions.starting_period]"
+        Me.m_startingYearLabel.AutoSize = True
+        Me.m_startingYearLabel.Location = New System.Drawing.Point(3, 115)
+        Me.m_startingYearLabel.Margin = New System.Windows.Forms.Padding(3, 7, 3, 0)
+        Me.m_startingYearLabel.Name = "m_startingYearLabel"
+        Me.m_startingYearLabel.Size = New System.Drawing.Size(175, 15)
+        Me.m_startingYearLabel.TabIndex = 17
+        Me.m_startingYearLabel.Text = "starting_period"
         '
-        'Label10
+        'm_periodConfigLabel
         '
-        Me.Label10.AutoSize = true
-        Me.Label10.Location = New System.Drawing.Point(3, 79)
-        Me.Label10.Margin = New System.Windows.Forms.Padding(3, 7, 3, 0)
-        Me.Label10.Name = "Label10"
-        Me.Label10.Size = New System.Drawing.Size(168, 15)
-        Me.Label10.TabIndex = 15
-        Me.Label10.Text = "[facts_versions.period_config]"
+        Me.m_periodConfigLabel.AutoSize = True
+        Me.m_periodConfigLabel.Location = New System.Drawing.Point(3, 79)
+        Me.m_periodConfigLabel.Margin = New System.Windows.Forms.Padding(3, 7, 3, 0)
+        Me.m_periodConfigLabel.Name = "m_periodConfigLabel"
+        Me.m_periodConfigLabel.Size = New System.Drawing.Size(168, 15)
+        Me.m_periodConfigLabel.TabIndex = 15
+        Me.m_periodConfigLabel.Text = "period_config"
         '
-        'Label4
+        'm_nameLabel
         '
-        Me.Label4.AutoSize = true
-        Me.Label4.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.Label4.Location = New System.Drawing.Point(3, 7)
-        Me.Label4.Margin = New System.Windows.Forms.Padding(3, 7, 3, 0)
-        Me.Label4.Name = "Label4"
-        Me.Label4.Size = New System.Drawing.Size(200, 15)
-        Me.Label4.TabIndex = 7
-        Me.Label4.Text = "[facts_versions.version_name]"
+        Me.m_nameLabel.AutoSize = True
+        Me.m_nameLabel.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.m_nameLabel.Location = New System.Drawing.Point(3, 7)
+        Me.m_nameLabel.Margin = New System.Windows.Forms.Padding(3, 7, 3, 0)
+        Me.m_nameLabel.Name = "m_nameLabel"
+        Me.m_nameLabel.Size = New System.Drawing.Size(200, 15)
+        Me.m_nameLabel.TabIndex = 7
+        Me.m_nameLabel.Text = "version_name"
         '
         'NameTB
         '
-        Me.NameTB.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom)  _
-            Or System.Windows.Forms.AnchorStyles.Left)  _
-            Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
+        Me.NameTB.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.NameTB.Location = New System.Drawing.Point(227, 5)
         Me.NameTB.Margin = New System.Windows.Forms.Padding(3, 5, 3, 3)
         Me.NameTB.MaximumSize = New System.Drawing.Size(400, 4)
@@ -158,7 +158,7 @@ Partial Class NewDataVersionUI
         'TimeConfigCB
         '
         Me.TimeConfigCB.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.TimeConfigCB.FormattingEnabled = true
+        Me.TimeConfigCB.FormattingEnabled = True
         Me.TimeConfigCB.Location = New System.Drawing.Point(227, 75)
         Me.TimeConfigCB.Name = "TimeConfigCB"
         Me.TimeConfigCB.Size = New System.Drawing.Size(143, 21)
@@ -191,8 +191,8 @@ Partial Class NewDataVersionUI
         Me.m_exchangeRatesVersionVTreeviewbox.Name = "m_exchangeRatesVersionVTreeviewbox"
         Me.m_exchangeRatesVersionVTreeviewbox.Size = New System.Drawing.Size(227, 23)
         Me.m_exchangeRatesVersionVTreeviewbox.TabIndex = 31
-        Me.m_exchangeRatesVersionVTreeviewbox.UseThemeBackColor = false
-        Me.m_exchangeRatesVersionVTreeviewbox.UseThemeDropDownArrowColor = true
+        Me.m_exchangeRatesVersionVTreeviewbox.UseThemeBackColor = False
+        Me.m_exchangeRatesVersionVTreeviewbox.UseThemeDropDownArrowColor = True
         Me.m_exchangeRatesVersionVTreeviewbox.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
         '
         'm_factsVersionVTreeviewbox
@@ -206,8 +206,8 @@ Partial Class NewDataVersionUI
         Me.m_factsVersionVTreeviewbox.Name = "m_factsVersionVTreeviewbox"
         Me.m_factsVersionVTreeviewbox.Size = New System.Drawing.Size(227, 23)
         Me.m_factsVersionVTreeviewbox.TabIndex = 32
-        Me.m_factsVersionVTreeviewbox.UseThemeBackColor = false
-        Me.m_factsVersionVTreeviewbox.UseThemeDropDownArrowColor = true
+        Me.m_factsVersionVTreeviewbox.UseThemeBackColor = False
+        Me.m_factsVersionVTreeviewbox.UseThemeDropDownArrowColor = True
         Me.m_factsVersionVTreeviewbox.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
         '
         'm_versionsTreeviewBox
@@ -222,13 +222,13 @@ Partial Class NewDataVersionUI
         Me.m_versionsTreeviewBox.Size = New System.Drawing.Size(356, 23)
         Me.m_versionsTreeviewBox.TabIndex = 33
         Me.m_versionsTreeviewBox.Text = "VTreeViewBox1"
-        Me.m_versionsTreeviewBox.UseThemeBackColor = false
-        Me.m_versionsTreeviewBox.UseThemeDropDownArrowColor = true
+        Me.m_versionsTreeviewBox.UseThemeBackColor = False
+        Me.m_versionsTreeviewBox.UseThemeDropDownArrowColor = True
         Me.m_versionsTreeviewBox.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
         '
         'ButtonIcons
         '
-        Me.ButtonIcons.ImageStream = CType(resources.GetObject("ButtonIcons.ImageStream"),System.Windows.Forms.ImageListStreamer)
+        Me.ButtonIcons.ImageStream = CType(resources.GetObject("ButtonIcons.ImageStream"), System.Windows.Forms.ImageListStreamer)
         Me.ButtonIcons.TransparentColor = System.Drawing.Color.Transparent
         Me.ButtonIcons.Images.SetKeyName(0, "favicon(81) (1).ico")
         Me.ButtonIcons.Images.SetKeyName(1, "imageres_89.ico")
@@ -236,7 +236,7 @@ Partial Class NewDataVersionUI
         '
         'BigIcons
         '
-        Me.BigIcons.ImageStream = CType(resources.GetObject("BigIcons.ImageStream"),System.Windows.Forms.ImageListStreamer)
+        Me.BigIcons.ImageStream = CType(resources.GetObject("BigIcons.ImageStream"), System.Windows.Forms.ImageListStreamer)
         Me.BigIcons.TransparentColor = System.Drawing.Color.Transparent
         Me.BigIcons.Images.SetKeyName(0, "favicon(230).ico")
         '
@@ -256,9 +256,9 @@ Partial Class NewDataVersionUI
         Me.CancelBT.Name = "CancelBT"
         Me.CancelBT.Size = New System.Drawing.Size(92, 30)
         Me.CancelBT.TabIndex = 23
-        Me.CancelBT.Text = "[general.cancel]"
+        Me.CancelBT.Text = "cancel"
         Me.CancelBT.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.CancelBT.UseVisualStyleBackColor = true
+        Me.CancelBT.UseVisualStyleBackColor = True
         '
         'CreateVersionBT
         '
@@ -269,9 +269,9 @@ Partial Class NewDataVersionUI
         Me.CreateVersionBT.Name = "CreateVersionBT"
         Me.CreateVersionBT.Size = New System.Drawing.Size(92, 30)
         Me.CreateVersionBT.TabIndex = 22
-        Me.CreateVersionBT.Text = "[general.create]"
+        Me.CreateVersionBT.Text = "create"
         Me.CreateVersionBT.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.CreateVersionBT.UseVisualStyleBackColor = true
+        Me.CreateVersionBT.UseVisualStyleBackColor = True
         '
         'm_copyCheckBox
         '
@@ -281,32 +281,32 @@ Partial Class NewDataVersionUI
         Me.m_copyCheckBox.Size = New System.Drawing.Size(175, 24)
         Me.m_copyCheckBox.TabIndex = 34
         Me.m_copyCheckBox.Text = "VCheckBox1"
-        Me.m_copyCheckBox.UseVisualStyleBackColor = false
+        Me.m_copyCheckBox.UseVisualStyleBackColor = False
         Me.m_copyCheckBox.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
         '
         'NewDataVersionUI
         '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(6!, 13!)
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(641, 352)
         Me.Controls.Add(Me.CancelBT)
         Me.Controls.Add(Me.CreateVersionBT)
         Me.Controls.Add(Me.Panel1)
         Me.Controls.Add(Me.TableLayoutPanel2)
-        Me.Icon = CType(resources.GetObject("$this.Icon"),System.Drawing.Icon)
+        Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Name = "NewDataVersionUI"
-        Me.Text = "[facts_versions.version_new]"
-        Me.TableLayoutPanel2.ResumeLayout(false)
-        Me.TableLayoutPanel2.PerformLayout
-        CType(Me.NbPeriodsNUD,System.ComponentModel.ISupportInitialize).EndInit
-        CType(Me.StartingPeriodNUD,System.ComponentModel.ISupportInitialize).EndInit
-        Me.ResumeLayout(false)
+        Me.Text = "version_new"
+        Me.TableLayoutPanel2.ResumeLayout(False)
+        Me.TableLayoutPanel2.PerformLayout()
+        CType(Me.NbPeriodsNUD, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.StartingPeriodNUD, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.ResumeLayout(False)
 
-End Sub
+    End Sub
     Friend WithEvents TableLayoutPanel2 As System.Windows.Forms.TableLayoutPanel
-    Friend WithEvents Label11 As System.Windows.Forms.Label
-    Friend WithEvents Label10 As System.Windows.Forms.Label
-    Friend WithEvents Label4 As System.Windows.Forms.Label
+    Friend WithEvents m_startingYearLabel As System.Windows.Forms.Label
+    Friend WithEvents m_periodConfigLabel As System.Windows.Forms.Label
+    Friend WithEvents m_nameLabel As System.Windows.Forms.Label
     Friend WithEvents NameTB As System.Windows.Forms.TextBox
     Friend WithEvents TimeConfigCB As System.Windows.Forms.ComboBox
     Friend WithEvents Panel1 As System.Windows.Forms.Panel
@@ -314,11 +314,11 @@ End Sub
     Friend WithEvents CreateVersionBT As System.Windows.Forms.Button
     Friend WithEvents ButtonIcons As System.Windows.Forms.ImageList
     Friend WithEvents BigIcons As System.Windows.Forms.ImageList
-    Friend WithEvents Label1 As System.Windows.Forms.Label
+    Friend WithEvents m_numberOfYearsLabel As System.Windows.Forms.Label
     Friend WithEvents NbPeriodsNUD As System.Windows.Forms.NumericUpDown
     Friend WithEvents StartingPeriodNUD As System.Windows.Forms.NumericUpDown
-    Friend WithEvents Label2 As System.Windows.Forms.Label
-    Friend WithEvents Label3 As System.Windows.Forms.Label
+    Friend WithEvents m_ratesVersionLabel As System.Windows.Forms.Label
+    Friend WithEvents m_factsVersionLabel As System.Windows.Forms.Label
     Friend WithEvents m_exchangeRatesVersionVTreeviewbox As VIBlend.WinForms.Controls.vTreeViewBox
     Friend WithEvents m_factsVersionVTreeviewbox As VIBlend.WinForms.Controls.vTreeViewBox
     Friend WithEvents m_versionsTreeviewBox As VIBlend.WinForms.Controls.vTreeViewBox

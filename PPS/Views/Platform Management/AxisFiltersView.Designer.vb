@@ -81,26 +81,26 @@ Partial Class AxisFiltersView
         Me.CategoriesToolStripMenuItem.Image = Global.FinancialBI.My.Resources.Resources.element_branch25
         Me.CategoriesToolStripMenuItem.Name = "CategoriesToolStripMenuItem"
         Me.CategoriesToolStripMenuItem.Size = New System.Drawing.Size(129, 20)
-        Me.CategoriesToolStripMenuItem.Text = "[filters.categories]"
+        Me.CategoriesToolStripMenuItem.Text = "Categories"
         '
         'AddValueMenuBT
         '
         Me.AddValueMenuBT.Name = "AddValueMenuBT"
         Me.AddValueMenuBT.Size = New System.Drawing.Size(169, 22)
-        Me.AddValueMenuBT.Text = "[filters.new_value]"
+        Me.AddValueMenuBT.Text = "New value"
         '
         'DeleteMenuBT
         '
         Me.DeleteMenuBT.Image = Global.FinancialBI.My.Resources.Resources.imageres_89
         Me.DeleteMenuBT.Name = "DeleteMenuBT"
         Me.DeleteMenuBT.Size = New System.Drawing.Size(169, 22)
-        Me.DeleteMenuBT.Text = "[general.delete]"
+        Me.DeleteMenuBT.Text = "Delete"
         '
         'RenameMenuBT
         '
         Me.RenameMenuBT.Name = "RenameMenuBT"
         Me.RenameMenuBT.Size = New System.Drawing.Size(169, 22)
-        Me.RenameMenuBT.Text = "[general.rename]"
+        Me.RenameMenuBT.Text = "Rename"
         '
         'ToolStripSeparator3
         '
@@ -111,7 +111,7 @@ Partial Class AxisFiltersView
         '
         Me.EditStructureToolStripMenuItem.Name = "EditStructureToolStripMenuItem"
         Me.EditStructureToolStripMenuItem.Size = New System.Drawing.Size(131, 20)
-        Me.EditStructureToolStripMenuItem.Text = "[filters.edit_structure]"
+        Me.EditStructureToolStripMenuItem.Text = "Edit structure"
         '
         'RCM_TV
         '
@@ -124,7 +124,7 @@ Partial Class AxisFiltersView
         Me.AddValueRCM.Image = Global.FinancialBI.My.Resources.Resources.add
         Me.AddValueRCM.Name = "AddValueRCM"
         Me.AddValueRCM.Size = New System.Drawing.Size(184, 22)
-        Me.AddValueRCM.Text = "[filters.new_value]"
+        Me.AddValueRCM.Text = "New value"
         '
         'ToolStripSeparator2
         '
@@ -136,7 +136,7 @@ Partial Class AxisFiltersView
         Me.DeleteRCM.Image = Global.FinancialBI.My.Resources.Resources.imageres_89
         Me.DeleteRCM.Name = "DeleteRCM"
         Me.DeleteRCM.Size = New System.Drawing.Size(184, 22)
-        Me.DeleteRCM.Text = "[general.delete]"
+        Me.DeleteRCM.Text = "Delete"
         '
         'ToolStripSeparator1
         '
@@ -147,19 +147,19 @@ Partial Class AxisFiltersView
         '
         Me.RenameRCM.Name = "RenameRCM"
         Me.RenameRCM.Size = New System.Drawing.Size(184, 22)
-        Me.RenameRCM.Text = "[general.rename]"
+        Me.RenameRCM.Text = "Rename"
         '
         'ExpandAllBT
         '
         Me.ExpandAllBT.Name = "ExpandAllBT"
         Me.ExpandAllBT.Size = New System.Drawing.Size(184, 22)
-        Me.ExpandAllBT.Text = "[general.expand_all]"
+        Me.ExpandAllBT.Text = "Expand_all"
         '
         'CollapseAllBT
         '
         Me.CollapseAllBT.Name = "CollapseAllBT"
         Me.CollapseAllBT.Size = New System.Drawing.Size(184, 22)
-        Me.CollapseAllBT.Text = "[general.collapse_all]"
+        Me.CollapseAllBT.Text = "Collapse all"
         '
         'AxisFiltersView
         '

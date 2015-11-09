@@ -58,6 +58,7 @@ Friend Class NewAccountUI
         AccountsView = input_accountsView
         Controller = input_controller
         ComboBoxesInitialize()
+        MultilanguageSetup()
 
     End Sub
 
@@ -88,6 +89,25 @@ Friend Class NewAccountUI
         End If
 
     End Sub
+
+    Private Sub MultilanguageSetup()
+
+        Me.CancelBT.Text = Local.GetValue("general.cancel")
+        Me.CreateAccountBT.Text = Local.GetValue("general.create")
+        Me.m_accountNameLabel.Text = Local.GetValue("accounts_edition.account_name")
+        Me.m_accountParentLabel.Text = Local.GetValue("accounts_edition.account_parent")
+        Me.m_formulaTypeLabel.Text = Local.GetValue("accounts_edition.formula_type")
+        Me.m_formatLabel.Text = Local.GetValue("accounts_edition.account_format")
+        Me.recompute_RB.Text = Local.GetValue("accounts_edition.recomputation")
+        Me.aggregation_RB.Text = Local.GetValue("accounts_edition.aggregation")
+        Me.m_consolidationOptionLabel.Text = Local.GetValue("accounts_edition.consolidation_option")
+        Me.bs_item_RB.Text = Local.GetValue("accounts_edition.end_of_period_rate")
+        Me.flux_RB.Text = Local.GetValue("accounts_edition.average_rate")
+        Me.m_conversionOptionLabel.Text = Local.GetValue("accounts_edition.currencies_conversion")
+        Me.Text = Local.GetValue("accounts_edition.title_new_account")
+
+    End Sub
+
 
 #End Region
 

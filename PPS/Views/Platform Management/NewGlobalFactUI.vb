@@ -30,6 +30,18 @@ Friend Class NewGlobalFactUI
 
         ' Add any initialization after the InitializeComponent() call.
         m_controller = p_controller
+        MultilanguageSetup()
+
+    End Sub
+
+    Private Sub MultilanguageSetup()
+
+        Me.m_nameLabel.Text = Local.GetValue("general.name")
+        Me.CancelBT.Text = Local.GetValue("general.cancel")
+        Me.ValidateBT.Text = Local.GetValue("general.create")
+        Me.Text = Local.GetValue("global_facts.new_global_fact")
+
+
 
     End Sub
 

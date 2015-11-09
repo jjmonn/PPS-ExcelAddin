@@ -10,7 +10,7 @@
 '           -> should have "" and "NS" for each category (hence name-> keys dict in categories should be for each categories)
 '
 '
-' Last modified: 22/10/2015
+' Last modified: 09/11/2015
 ' Author: Julien Monnereau
 
 
@@ -51,6 +51,7 @@ Friend Class NewEntityUI
         ' Add any initialization after the InitializeComponent() call.
         Controller = p_controller
         entitiesTV = p_entitiesTV
+        MultilanguageSetup()
         'LoadCurrencies(p_currenciesHT)
 
     End Sub
@@ -76,6 +77,17 @@ Friend Class NewEntityUI
     Private Sub NewEntityUI_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 
         VTreeViewUtil.LoadParentsTreeviewBox(ParentEntityTreeViewBox, entitiesTV)
+
+    End Sub
+
+    Private Sub MultilanguageSetup()
+
+        Me.m_parentEntityLabel.Text = Local.GetValue("entities_edition.parent_entity")
+        Me.m_nameLabel.Text = Local.GetValue("general.name")
+        Me.ParentEntityTreeViewBox.Text = Local.GetValue("entities_edition.parent_entity_selection")
+        Me.CancelBT.Text = Local.GetValue("general.cancel")
+        Me.CreateEntityBT.Text = Local.GetValue("general.create")
+        Me.Text = Local.GetValue("entities_edition.new_entity")
 
     End Sub
 

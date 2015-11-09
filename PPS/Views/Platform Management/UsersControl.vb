@@ -31,6 +31,7 @@ Friend Class UsersControl
 #Region "Initialize"
 
     Friend Sub New(ByRef p_controller As UsersController)
+
         InitializeComponent()
 
         m_controller = p_controller
@@ -39,6 +40,7 @@ Friend Class UsersControl
         ColumnsInitialize()
         RowsInitialize()
         InitGroupList()
+        InitializeFormats()
 
         m_dataGridView.VIBlendTheme = VIBLEND_THEME.OFFICESILVER
         m_dataGridView.ColumnsHierarchy.AutoResize(AutoResizeMode.FIT_ALL)
@@ -101,6 +103,15 @@ Friend Class UsersControl
             list.Items.Add(listItem)
         Next
         m_columnsVariableItemDictionary(GROUP_ID_VARIABLE).CellsEditor = list
+
+    End Sub
+
+    Private Sub InitializeFormats()
+
+        m_dataGridView.BackColor = System.Drawing.SystemColors.Control
+        m_dataGridView.ColumnsHierarchy.AutoStretchColumns = True
+        m_dataGridView.RowsHierarchy.Visible = False
+        m_dataGridView.Dock = DockStyle.Fill
 
     End Sub
 

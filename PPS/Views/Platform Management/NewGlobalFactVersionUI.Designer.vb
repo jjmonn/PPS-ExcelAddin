@@ -24,9 +24,9 @@ Partial Class NewGlobalFactVersionUI
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(NewGlobalFactVersionUI))
-        Me.Label1 = New System.Windows.Forms.Label()
-        Me.Label2 = New System.Windows.Forms.Label()
-        Me.Label3 = New System.Windows.Forms.Label()
+        Me.m_nameLabel = New System.Windows.Forms.Label()
+        Me.m_startingPeriodLabel = New System.Windows.Forms.Label()
+        Me.m_numberPeriodsLabel = New System.Windows.Forms.Label()
         Me.NameTB = New System.Windows.Forms.TextBox()
         Me.StartPeriodNUD = New System.Windows.Forms.NumericUpDown()
         Me.m_nb_years = New System.Windows.Forms.NumericUpDown()
@@ -37,32 +37,32 @@ Partial Class NewGlobalFactVersionUI
         CType(Me.m_nb_years, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
-        'Label1
+        'm_nameLabel
         '
-        Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(28, 31)
-        Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(77, 13)
-        Me.Label1.TabIndex = 0
-        Me.Label1.Text = Local.GetValue("general.name")
+        Me.m_nameLabel.AutoSize = True
+        Me.m_nameLabel.Location = New System.Drawing.Point(28, 31)
+        Me.m_nameLabel.Name = "m_nameLabel"
+        Me.m_nameLabel.Size = New System.Drawing.Size(77, 13)
+        Me.m_nameLabel.TabIndex = 0
+        Me.m_nameLabel.Text = "Name"
         '
-        'Label2
+        'm_startingPeriodLabel
         '
-        Me.Label2.AutoSize = True
-        Me.Label2.Location = New System.Drawing.Point(28, 79)
-        Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(153, 13)
-        Me.Label2.TabIndex = 1
-        Me.Label2.Text = Local.GetValue("facts_versions.starting_period")
+        Me.m_startingPeriodLabel.AutoSize = True
+        Me.m_startingPeriodLabel.Location = New System.Drawing.Point(28, 79)
+        Me.m_startingPeriodLabel.Name = "m_startingPeriodLabel"
+        Me.m_startingPeriodLabel.Size = New System.Drawing.Size(153, 13)
+        Me.m_startingPeriodLabel.TabIndex = 1
+        Me.m_startingPeriodLabel.Text = "starting_period"
         '
-        'Label3
+        'm_numberPeriodsLabel
         '
-        Me.Label3.AutoSize = True
-        Me.Label3.Location = New System.Drawing.Point(28, 121)
-        Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(127, 13)
-        Me.Label3.TabIndex = 2
-        Me.Label3.Text = Local.GetValue("facts_versions.nb_years")
+        Me.m_numberPeriodsLabel.AutoSize = True
+        Me.m_numberPeriodsLabel.Location = New System.Drawing.Point(28, 121)
+        Me.m_numberPeriodsLabel.Name = "m_numberPeriodsLabel"
+        Me.m_numberPeriodsLabel.Size = New System.Drawing.Size(127, 13)
+        Me.m_numberPeriodsLabel.TabIndex = 2
+        Me.m_numberPeriodsLabel.Text = "nb_years"
         '
         'NameTB
         '
@@ -96,7 +96,7 @@ Partial Class NewGlobalFactVersionUI
         Me.CancelBT.Name = "CancelBT"
         Me.CancelBT.Size = New System.Drawing.Size(86, 26)
         Me.CancelBT.TabIndex = 25
-        Me.CancelBT.Text = Local.GetValue("general.cancel")
+        Me.CancelBT.Text = "cancel"
         Me.CancelBT.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         Me.CancelBT.UseVisualStyleBackColor = True
         '
@@ -119,7 +119,7 @@ Partial Class NewGlobalFactVersionUI
         Me.ValidateBT.Name = "ValidateBT"
         Me.ValidateBT.Size = New System.Drawing.Size(86, 26)
         Me.ValidateBT.TabIndex = 24
-        Me.ValidateBT.Text = Local.GetValue("general.create")
+        Me.ValidateBT.Text = "Create"
         Me.ValidateBT.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         Me.ValidateBT.UseVisualStyleBackColor = True
         '
@@ -133,21 +133,21 @@ Partial Class NewGlobalFactVersionUI
         Me.Controls.Add(Me.m_nb_years)
         Me.Controls.Add(Me.StartPeriodNUD)
         Me.Controls.Add(Me.NameTB)
-        Me.Controls.Add(Me.Label3)
-        Me.Controls.Add(Me.Label2)
-        Me.Controls.Add(Me.Label1)
+        Me.Controls.Add(Me.m_numberPeriodsLabel)
+        Me.Controls.Add(Me.m_startingPeriodLabel)
+        Me.Controls.Add(Me.m_nameLabel)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Name = "NewGlobalFactVersionUI"
-        Me.Text = Local.GetValue("global_facts.new_version")
+        Me.Text = "new_version"
         CType(Me.StartPeriodNUD, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.m_nb_years, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
     End Sub
-    Friend WithEvents Label1 As System.Windows.Forms.Label
-    Friend WithEvents Label2 As System.Windows.Forms.Label
-    Friend WithEvents Label3 As System.Windows.Forms.Label
+    Friend WithEvents m_nameLabel As System.Windows.Forms.Label
+    Friend WithEvents m_startingPeriodLabel As System.Windows.Forms.Label
+    Friend WithEvents m_numberPeriodsLabel As System.Windows.Forms.Label
     Friend WithEvents NameTB As System.Windows.Forms.TextBox
     Friend WithEvents StartPeriodNUD As System.Windows.Forms.NumericUpDown
     Friend WithEvents m_nb_years As System.Windows.Forms.NumericUpDown

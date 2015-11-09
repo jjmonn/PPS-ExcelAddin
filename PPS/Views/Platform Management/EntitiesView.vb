@@ -8,7 +8,7 @@
 '
 '
 '
-' Last modified: 22/10/2015
+' Last modified: 09/11/2015
 ' Author: Julien Monnereau
 
 
@@ -89,6 +89,8 @@ Friend Class EntitiesView
         AddHandler m_entitiesDataGridView.CellValueChanged, AddressOf dataGridView_CellValueChanged
         AddHandler m_entitiesDataGridView.KeyDown, AddressOf DGV_KeyDown
         DesactivateUnallowed()
+        MultilanguageSetup()
+
     End Sub
 
     Private Sub DesactivateUnallowed()
@@ -114,6 +116,22 @@ Friend Class EntitiesView
 
     End Sub
 
+    Private Sub MultilanguageSetup()
+
+        Me.RenameEntityButton.Text = Local.GetValue("general.rename")
+        Me.CreateEntityToolStripMenuItem.Text = Local.GetValue("general.create")
+        Me.DeleteEntityToolStripMenuItem2.Text = Local.GetValue("general.delete")
+        Me.copy_down_bt.Text = Local.GetValue("general.copy_down")
+        Me.drop_to_excel_bt.Text = Local.GetValue("general.drop_on_excel")
+        Me.AutoResizeColumnsButton.Text = Local.GetValue("general.auto_resize_columns")
+        Me.ExpandAllBT.Text = Local.GetValue("general.expand_all")
+        Me.CollapseAllBT.Text = Local.GetValue("general.collapse_all")
+        Me.EditToolStripMenuItem.Text = Local.GetValue("general.entities")
+        Me.CreateANewEntityToolStripMenuItem.Text = Local.GetValue("general.create")
+        Me.DeleteEntityToolStripMenuItem.Text = Local.GetValue("general.delete")
+        Me.SendEntitiesHierarchyToExcelToolStripMenuItem.Text = Local.GetValue("general.drop_on_excel")
+
+    End Sub
 
 #End Region
 

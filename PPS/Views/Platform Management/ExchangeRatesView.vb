@@ -12,7 +12,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 19/09/2015
+' Last modified: 09/11/2015
 
 
 Imports System.Collections.Generic
@@ -71,12 +71,22 @@ Friend Class ExchangeRatesView
         m_ratesVersionsTV.ContextMenuStrip = VersionsRCMenu
         m_ratesVersionsTV.ImageList = ratesVersionsIL
         VTreeViewUtil.InitTVFormat(m_ratesVersionsTV)
+        FormatDGV()
 
         AddHandler m_ratesDataGridView.CellValueChanging, AddressOf RatesDataGridView_CellValueChanging
         AddHandler m_ratesVersionsTV.KeyPress, AddressOf Rates_versionsTV_KeyPress
         AddHandler m_ratesVersionsTV.MouseDoubleClick, AddressOf RatesVersionsTV_MouseDoubleClick
         '     AddHandler m_ratesVersionsTV.MouseClick, AddressOf Rates_versionsTV_MouseClick
         DesactivateUnallowed()
+        MultiLanguageSetup()
+
+    End Sub
+
+    Private Sub FormatDGV()
+
+        m_ratesDataGridView.BackColor = System.Drawing.SystemColors.Control
+        m_ratesDataGridView.ColumnsHierarchy.AutoStretchColumns = True
+
     End Sub
 
     Private Sub DesactivateUnallowed()
@@ -103,8 +113,22 @@ Friend Class ExchangeRatesView
     
     End Sub
 
-    Friend Sub closeControl()
+    Friend Sub MultiLanguageSetup()
 
+        Me.select_version.Text = Local.GetValue("versions.select_version")
+        Me.AddRatesVersionRCM.Text = Local.GetValue("versions.new_version")
+        Me.AddFolderRCM.Text = Local.GetValue("versions.new_folder")
+        Me.DeleteVersionRCM.Text = Local.GetValue("general.delete")
+        Me.RenameBT.Text = Local.GetValue("general.rename")
+        Me.CopyRateDownToolStripMenuItem.Text = Local.GetValue("general.copy_down")
+        Me.ToolStripMenuItem2.Text = Local.GetValue("general.versions")
+        Me.DisplayRatesToolStripMenuItem.Text = Local.GetValue("currencies.display_rates")
+        Me.CreateFolderToolStripMenuItem.Text = Local.GetValue("versions.new_folder")
+        Me.CreateVersionToolStripMenuItem.Text = Local.GetValue("versions.new_version")
+        Me.DeleteToolStripMenuItem.Text = Local.GetValue("general.delete")
+        Me.ImportFromExcelToolStripMenuItem.Text = Local.GetValue("currencies.import")
+        Me.VersionLabel.Text = Local.GetValue("versions.version")
+        Me.ImportFromExcelToolStripMenuItem1.Text = Local.GetValue("currencies.import")
 
     End Sub
 

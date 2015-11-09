@@ -82,83 +82,83 @@ Partial Class GlobalFactUI
         '
         Me.VersionsRCMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.select_version, Me.ToolStripSeparator2, Me.AddRatesVersionRCM, Me.AddFolderRCM, Me.ToolStripSeparator6, Me.DeleteVersionRCM, Me.RenameVersionBT})
         Me.VersionsRCMenu.Name = "VersionsRCMenu"
-        Me.VersionsRCMenu.Size = New System.Drawing.Size(147, 126)
+        Me.VersionsRCMenu.Size = New System.Drawing.Size(167, 136)
         '
         'select_version
         '
         Me.select_version.Image = Global.FinancialBI.My.Resources.Resources.config_circle_green
         Me.select_version.Name = "select_version"
-        Me.select_version.Size = New System.Drawing.Size(146, 22)
-        Me.select_version.Text = Local.GetValue("version.select")
+        Me.select_version.Size = New System.Drawing.Size(166, 24)
+        Me.select_version.Text = "Select version"
         '
         'ToolStripSeparator2
         '
         Me.ToolStripSeparator2.Name = "ToolStripSeparator2"
-        Me.ToolStripSeparator2.Size = New System.Drawing.Size(143, 6)
+        Me.ToolStripSeparator2.Size = New System.Drawing.Size(163, 6)
         '
         'AddRatesVersionRCM
         '
         Me.AddRatesVersionRCM.Image = Global.FinancialBI.My.Resources.Resources.elements3_add
         Me.AddRatesVersionRCM.Name = "AddRatesVersionRCM"
-        Me.AddRatesVersionRCM.Size = New System.Drawing.Size(146, 22)
-        Me.AddRatesVersionRCM.Text = Local.GetValue("version.add_version")
+        Me.AddRatesVersionRCM.Size = New System.Drawing.Size(166, 24)
+        Me.AddRatesVersionRCM.Text = "Create version"
         '
         'AddFolderRCM
         '
         Me.AddFolderRCM.Image = Global.FinancialBI.My.Resources.Resources.folder_open_add
         Me.AddFolderRCM.Name = "AddFolderRCM"
-        Me.AddFolderRCM.Size = New System.Drawing.Size(146, 22)
-        Me.AddFolderRCM.Text = Local.GetValue("version.add_folder")
+        Me.AddFolderRCM.Size = New System.Drawing.Size(166, 24)
+        Me.AddFolderRCM.Text = "Add folder"
         '
         'ToolStripSeparator6
         '
         Me.ToolStripSeparator6.Name = "ToolStripSeparator6"
-        Me.ToolStripSeparator6.Size = New System.Drawing.Size(143, 6)
+        Me.ToolStripSeparator6.Size = New System.Drawing.Size(163, 6)
         '
         'DeleteVersionRCM
         '
         Me.DeleteVersionRCM.Image = Global.FinancialBI.My.Resources.Resources.elements3_delete
         Me.DeleteVersionRCM.Name = "DeleteVersionRCM"
-        Me.DeleteVersionRCM.Size = New System.Drawing.Size(146, 22)
-        Me.DeleteVersionRCM.Text = Local.GetValue("general.delete")
+        Me.DeleteVersionRCM.Size = New System.Drawing.Size(166, 24)
+        Me.DeleteVersionRCM.Text = "Delete"
         '
         'RenameVersionBT
         '
         Me.RenameVersionBT.Name = "RenameVersionBT"
-        Me.RenameVersionBT.Size = New System.Drawing.Size(146, 22)
-        Me.RenameVersionBT.Text = Local.GetValue("general.delete")
+        Me.RenameVersionBT.Size = New System.Drawing.Size(166, 24)
+        Me.RenameVersionBT.Text = "Delete"
         '
         'dgvRCM
         '
         Me.dgvRCM.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripSeparator3, Me.CopyFactDownToolStripMenuItem, Me.ImportFromExcelBT, Me.CreateNewFact})
         Me.dgvRCM.Name = "dgvRCM"
-        Me.dgvRCM.Size = New System.Drawing.Size(277, 76)
+        Me.dgvRCM.Size = New System.Drawing.Size(149, 82)
         '
         'ToolStripSeparator3
         '
         Me.ToolStripSeparator3.Name = "ToolStripSeparator3"
-        Me.ToolStripSeparator3.Size = New System.Drawing.Size(273, 6)
+        Me.ToolStripSeparator3.Size = New System.Drawing.Size(145, 6)
         '
         'CopyFactDownToolStripMenuItem
         '
         Me.CopyFactDownToolStripMenuItem.Image = Global.FinancialBI.My.Resources.Resources.Download_
         Me.CopyFactDownToolStripMenuItem.Name = "CopyFactDownToolStripMenuItem"
-        Me.CopyFactDownToolStripMenuItem.Size = New System.Drawing.Size(276, 22)
-        Me.CopyFactDownToolStripMenuItem.Text = Local.GetValue("general.copy_down")
+        Me.CopyFactDownToolStripMenuItem.Size = New System.Drawing.Size(148, 24)
+        Me.CopyFactDownToolStripMenuItem.Text = "Copy down"
         '
         'ImportFromExcelBT
         '
         Me.ImportFromExcelBT.Image = Global.FinancialBI.My.Resources.Resources.Excel_Blue_32x32
         Me.ImportFromExcelBT.Name = "ImportFromExcelBT"
-        Me.ImportFromExcelBT.Size = New System.Drawing.Size(276, 22)
-        Me.ImportFromExcelBT.Text = Local.GetValue("general.import")
+        Me.ImportFromExcelBT.Size = New System.Drawing.Size(148, 24)
+        Me.ImportFromExcelBT.Text = "Import"
         '
         'CreateNewFact
         '
         Me.CreateNewFact.Image = Global.FinancialBI.My.Resources.Resources.elements_add
         Me.CreateNewFact.Name = "CreateNewFact"
-        Me.CreateNewFact.Size = New System.Drawing.Size(276, 22)
-        Me.CreateNewFact.Text = Local.GetValue("global_fact.new")
+        Me.CreateNewFact.Size = New System.Drawing.Size(148, 24)
+        Me.CreateNewFact.Text = "New"
         '
         'TableLayoutPanel4
         '
@@ -199,7 +199,7 @@ Partial Class GlobalFactUI
         Me.TableLayoutPanel5.ColumnCount = 3
         Me.TableLayoutPanel5.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 97.02381!))
         Me.TableLayoutPanel5.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 2.976191!))
-        Me.TableLayoutPanel5.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 210.0!))
+        Me.TableLayoutPanel5.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 243.0!))
         Me.TableLayoutPanel5.Controls.Add(Me.Panel1, 2, 0)
         Me.TableLayoutPanel5.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TableLayoutPanel5.Location = New System.Drawing.Point(0, 0)
@@ -215,10 +215,10 @@ Partial Class GlobalFactUI
         Me.Panel1.Controls.Add(Me.VersionLabel)
         Me.Panel1.Controls.Add(Me.version_TB)
         Me.Panel1.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Panel1.Location = New System.Drawing.Point(672, 0)
+        Me.Panel1.Location = New System.Drawing.Point(638, 0)
         Me.Panel1.Margin = New System.Windows.Forms.Padding(0)
         Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(210, 32)
+        Me.Panel1.Size = New System.Drawing.Size(244, 32)
         Me.Panel1.TabIndex = 6
         '
         'VersionLabel
@@ -226,46 +226,44 @@ Partial Class GlobalFactUI
         Me.VersionLabel.AutoSize = True
         Me.VersionLabel.Location = New System.Drawing.Point(8, 7)
         Me.VersionLabel.Name = "VersionLabel"
-        Me.VersionLabel.Size = New System.Drawing.Size(42, 13)
+        Me.VersionLabel.Size = New System.Drawing.Size(48, 15)
         Me.VersionLabel.TabIndex = 3
-        Me.VersionLabel.Text = Local.GetValue("general.version")
+        Me.VersionLabel.Text = "Version"
         '
         'version_TB
         '
         Me.version_TB.Enabled = False
-        Me.version_TB.Location = New System.Drawing.Point(54, 3)
+        Me.version_TB.Location = New System.Drawing.Point(60, 6)
         Me.version_TB.Margin = New System.Windows.Forms.Padding(1)
         Me.version_TB.Name = "version_TB"
-        Me.version_TB.Size = New System.Drawing.Size(130, 20)
+        Me.version_TB.Size = New System.Drawing.Size(183, 20)
         Me.version_TB.TabIndex = 2
         '
         'FactRightClickMenu
         '
         Me.FactRightClickMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.RenameBT, Me.DeleteBT, Me.CreateNewFact2})
         Me.FactRightClickMenu.Name = "ContextMenuStrip1"
-        Me.FactRightClickMenu.Size = New System.Drawing.Size(277, 70)
+        Me.FactRightClickMenu.Size = New System.Drawing.Size(128, 76)
         '
         'RenameBT
         '
         Me.RenameBT.Name = "RenameBT"
-        Me.RenameBT.Size = New System.Drawing.Size(276, 22)
-        Me.RenameBT.Text = Local.GetValue("general.rename")
+        Me.RenameBT.Size = New System.Drawing.Size(127, 24)
+        Me.RenameBT.Text = "Rename"
         '
         'DeleteBT
         '
         Me.DeleteBT.Image = Global.FinancialBI.My.Resources.Resources.elements_delete
         Me.DeleteBT.Name = "DeleteBT"
-        Me.DeleteBT.Size = New System.Drawing.Size(276, 22)
-        Me.DeleteBT.Text = Local.GetValue("general.delete")
-
+        Me.DeleteBT.Size = New System.Drawing.Size(127, 24)
+        Me.DeleteBT.Text = "Delete"
         '
         'CreateNewFact2
         '
         Me.CreateNewFact2.Image = Global.FinancialBI.My.Resources.Resources.elements_add
         Me.CreateNewFact2.Name = "CreateNewFact2"
-        Me.CreateNewFact2.Size = New System.Drawing.Size(276, 22)
-        Me.CreateNewFact2.Text = Local.GetValue("global_fact.new")
-
+        Me.CreateNewFact2.Size = New System.Drawing.Size(127, 24)
+        Me.CreateNewFact2.Text = "New"
         '
         'GlobalFactUI
         '

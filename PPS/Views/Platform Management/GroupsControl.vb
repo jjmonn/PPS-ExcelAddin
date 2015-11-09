@@ -4,7 +4,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 25/06/2015
+' Last modified: 09/11/2015
 
 
 Imports VIBlend.WinForms.DataGridView
@@ -17,7 +17,6 @@ Imports System.Windows.Forms
 Imports CRUD
 
 Friend Class GroupsControl
-
 
 #Region "Instance variables"
 
@@ -47,15 +46,26 @@ Friend Class GroupsControl
         EntitiesPanel.Enabled = False
         m_entitiesTV.Dock = DockStyle.Fill
         m_entitiesTV.CheckBoxes = True
+
+        InitializeFormats()
+       
         AddHandler GlobalVariables.GroupAllowedEntities.Read, AddressOf GroupAllowedEntities_READ
         AddHandler GlobalVariables.GroupAllowedEntities.DeleteEvent, AddressOf GroupAllowedEntities_DELETE
         AddHandler m_entitiesTV.NodeChecked, AddressOf entitiesTreeView_Check
 
     End Sub
 
+    Private Sub InitializeFormats()
+
+        VTreeViewUtil.InitTVFormat(m_groupTreeView)
+        VTreeViewUtil.InitTVFormat(m_entitiesTV)
+
+    End Sub
+
     Friend Sub AddUserControl(ByRef p_userController As UsersController)
         m_userController = p_userController
         Me.UsersPanel.Controls.Add(m_userController.GetView())
+        m_userController.GetView().Dock = DockStyle.Fill
         m_userController.ApplyFilter(0)
     End Sub
 

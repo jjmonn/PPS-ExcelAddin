@@ -6,7 +6,7 @@
 '
 ' Author: Julien Monnereau
 ' Created: 18/09/2015
-' Last modified: 18/09/2015
+' Last modified: 09/11/2015
 
 Imports VIBlend.WinForms.DataGridView
 Imports System.Collections
@@ -44,6 +44,8 @@ Friend Class CurrenciesView
 
         AddHandler m_currenciesDataGridView.CellMouseEnter, AddressOf DataGridView_CellMouseEnter
         DesactivateUnallowed()
+        MultilanguageSetup()
+
     End Sub
 
     Private Sub DesactivateUnallowed()
@@ -90,6 +92,15 @@ Friend Class CurrenciesView
             AddHandler inUsecheckBoxEditor.CheckedChanged, AddressOf DataGridView_CheckedChanged
 
         Next
+
+    End Sub
+
+    Private Sub MultilanguageSetup()
+
+        Me.SetMainCurrencyCallBack.Text = Local.GetValue("currencies.set_main_currency")
+        Me.ValidateButton.Text = Local.GetValue("general.save")
+
+
 
     End Sub
 

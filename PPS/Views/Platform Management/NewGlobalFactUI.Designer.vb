@@ -24,21 +24,21 @@ Partial Class NewGlobalFactUI
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(NewGlobalFactUI))
-        Me.Label1 = New System.Windows.Forms.Label()
+        Me.m_nameLabel = New System.Windows.Forms.Label()
         Me.NameTB = New System.Windows.Forms.TextBox()
         Me.CancelBT = New System.Windows.Forms.Button()
         Me.ButtonIcons = New System.Windows.Forms.ImageList(Me.components)
         Me.ValidateBT = New System.Windows.Forms.Button()
         Me.SuspendLayout()
         '
-        'Label1
+        'm_nameLabel
         '
-        Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(46, 49)
-        Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(35, 13)
-        Me.Label1.TabIndex = 0
-        Me.Label1.Text = Local.GetValue("general.name")
+        Me.m_nameLabel.AutoSize = True
+        Me.m_nameLabel.Location = New System.Drawing.Point(46, 49)
+        Me.m_nameLabel.Name = "m_nameLabel"
+        Me.m_nameLabel.Size = New System.Drawing.Size(35, 13)
+        Me.m_nameLabel.TabIndex = 0
+        Me.m_nameLabel.Text = "Name"
         '
         'NameTB
         '
@@ -56,7 +56,7 @@ Partial Class NewGlobalFactUI
         Me.CancelBT.Name = "CancelBT"
         Me.CancelBT.Size = New System.Drawing.Size(86, 26)
         Me.CancelBT.TabIndex = 25
-        Me.CancelBT.Text = Local.GetValue("general.cancel")
+        Me.CancelBT.Text = "Cancel"
         Me.CancelBT.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         Me.CancelBT.UseVisualStyleBackColor = True
         '
@@ -79,7 +79,7 @@ Partial Class NewGlobalFactUI
         Me.ValidateBT.Name = "ValidateBT"
         Me.ValidateBT.Size = New System.Drawing.Size(86, 26)
         Me.ValidateBT.TabIndex = 24
-        Me.ValidateBT.Text = Local.GetValue("general.create")
+        Me.ValidateBT.Text = "Create"
         Me.ValidateBT.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         Me.ValidateBT.UseVisualStyleBackColor = True
         '
@@ -91,15 +91,15 @@ Partial Class NewGlobalFactUI
         Me.Controls.Add(Me.CancelBT)
         Me.Controls.Add(Me.ValidateBT)
         Me.Controls.Add(Me.NameTB)
-        Me.Controls.Add(Me.Label1)
+        Me.Controls.Add(Me.m_nameLabel)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Name = "NewGlobalFactUI"
-        Me.Text = Local.GetValue("global_facts.new_global_fact")
+        Me.Text = "New_global_fact"
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
     End Sub
-    Friend WithEvents Label1 As System.Windows.Forms.Label
+    Friend WithEvents m_nameLabel As System.Windows.Forms.Label
     Friend WithEvents NameTB As System.Windows.Forms.TextBox
     Friend WithEvents CancelBT As System.Windows.Forms.Button
     Friend WithEvents ValidateBT As System.Windows.Forms.Button

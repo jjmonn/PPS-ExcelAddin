@@ -25,9 +25,9 @@ Partial Class NewEntityUI
         Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(NewEntityUI))
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
-        Me.VLabel3 = New VIBlend.WinForms.Controls.vLabel()
+        Me.m_parentEntityLabel = New VIBlend.WinForms.Controls.vLabel()
         Me.NameTextBox = New VIBlend.WinForms.Controls.vTextBox()
-        Me.VLabel1 = New VIBlend.WinForms.Controls.vLabel()
+        Me.m_nameLabel = New VIBlend.WinForms.Controls.vLabel()
         Me.ParentEntityTreeViewBox = New VIBlend.WinForms.Controls.vTreeViewBox()
         Me.ButtonIcons = New System.Windows.Forms.ImageList(Me.components)
         Me.CancelBT = New System.Windows.Forms.Button()
@@ -42,9 +42,9 @@ Partial Class NewEntityUI
         Me.TableLayoutPanel1.ColumnCount = 2
         Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 36.51376!))
         Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 63.48624!))
-        Me.TableLayoutPanel1.Controls.Add(Me.VLabel3, 0, 1)
+        Me.TableLayoutPanel1.Controls.Add(Me.m_parentEntityLabel, 0, 1)
         Me.TableLayoutPanel1.Controls.Add(Me.NameTextBox, 1, 0)
-        Me.TableLayoutPanel1.Controls.Add(Me.VLabel1, 0, 0)
+        Me.TableLayoutPanel1.Controls.Add(Me.m_nameLabel, 0, 0)
         Me.TableLayoutPanel1.Controls.Add(Me.ParentEntityTreeViewBox, 1, 1)
         Me.TableLayoutPanel1.Location = New System.Drawing.Point(22, 25)
         Me.TableLayoutPanel1.Name = "TableLayoutPanel1"
@@ -55,21 +55,21 @@ Partial Class NewEntityUI
         Me.TableLayoutPanel1.Size = New System.Drawing.Size(482, 156)
         Me.TableLayoutPanel1.TabIndex = 18
         '
-        'VLabel3
+        'm_parentEntityLabel
         '
-        Me.VLabel3.BackColor = System.Drawing.Color.Transparent
-        Me.VLabel3.DisplayStyle = VIBlend.WinForms.Controls.LabelItemStyle.TextOnly
-        Me.VLabel3.Ellipsis = False
-        Me.VLabel3.ImageAlignment = System.Drawing.ContentAlignment.TopLeft
-        Me.VLabel3.Location = New System.Drawing.Point(3, 33)
-        Me.VLabel3.Multiline = True
-        Me.VLabel3.Name = "VLabel3"
-        Me.VLabel3.Size = New System.Drawing.Size(169, 24)
-        Me.VLabel3.TabIndex = 5
-        Me.VLabel3.Text = "[entities_edition.parent_entity]"
-        Me.VLabel3.TextAlignment = System.Drawing.ContentAlignment.MiddleLeft
-        Me.VLabel3.UseMnemonics = True
-        Me.VLabel3.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
+        Me.m_parentEntityLabel.BackColor = System.Drawing.Color.Transparent
+        Me.m_parentEntityLabel.DisplayStyle = VIBlend.WinForms.Controls.LabelItemStyle.TextOnly
+        Me.m_parentEntityLabel.Ellipsis = False
+        Me.m_parentEntityLabel.ImageAlignment = System.Drawing.ContentAlignment.TopLeft
+        Me.m_parentEntityLabel.Location = New System.Drawing.Point(3, 33)
+        Me.m_parentEntityLabel.Multiline = True
+        Me.m_parentEntityLabel.Name = "m_parentEntityLabel"
+        Me.m_parentEntityLabel.Size = New System.Drawing.Size(169, 24)
+        Me.m_parentEntityLabel.TabIndex = 5
+        Me.m_parentEntityLabel.Text = "parent_entity"
+        Me.m_parentEntityLabel.TextAlignment = System.Drawing.ContentAlignment.MiddleLeft
+        Me.m_parentEntityLabel.UseMnemonics = True
+        Me.m_parentEntityLabel.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
         '
         'NameTextBox
         '
@@ -90,22 +90,22 @@ Partial Class NewEntityUI
         Me.NameTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Left
         Me.NameTextBox.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
         '
-        'VLabel1
+        'm_nameLabel
         '
-        Me.VLabel1.BackColor = System.Drawing.Color.Transparent
-        Me.VLabel1.DisplayStyle = VIBlend.WinForms.Controls.LabelItemStyle.TextOnly
-        Me.VLabel1.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.VLabel1.Ellipsis = False
-        Me.VLabel1.ImageAlignment = System.Drawing.ContentAlignment.TopLeft
-        Me.VLabel1.Location = New System.Drawing.Point(3, 3)
-        Me.VLabel1.Multiline = True
-        Me.VLabel1.Name = "VLabel1"
-        Me.VLabel1.Size = New System.Drawing.Size(169, 24)
-        Me.VLabel1.TabIndex = 1
-        Me.VLabel1.Text = "[general.name]"
-        Me.VLabel1.TextAlignment = System.Drawing.ContentAlignment.MiddleLeft
-        Me.VLabel1.UseMnemonics = True
-        Me.VLabel1.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
+        Me.m_nameLabel.BackColor = System.Drawing.Color.Transparent
+        Me.m_nameLabel.DisplayStyle = VIBlend.WinForms.Controls.LabelItemStyle.TextOnly
+        Me.m_nameLabel.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.m_nameLabel.Ellipsis = False
+        Me.m_nameLabel.ImageAlignment = System.Drawing.ContentAlignment.TopLeft
+        Me.m_nameLabel.Location = New System.Drawing.Point(3, 3)
+        Me.m_nameLabel.Multiline = True
+        Me.m_nameLabel.Name = "m_nameLabel"
+        Me.m_nameLabel.Size = New System.Drawing.Size(169, 24)
+        Me.m_nameLabel.TabIndex = 1
+        Me.m_nameLabel.Text = "Name"
+        Me.m_nameLabel.TextAlignment = System.Drawing.ContentAlignment.MiddleLeft
+        Me.m_nameLabel.UseMnemonics = True
+        Me.m_nameLabel.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
         '
         'ParentEntityTreeViewBox
         '
@@ -118,7 +118,7 @@ Partial Class NewEntityUI
         Me.ParentEntityTreeViewBox.Name = "ParentEntityTreeViewBox"
         Me.ParentEntityTreeViewBox.Size = New System.Drawing.Size(301, 23)
         Me.ParentEntityTreeViewBox.TabIndex = 4
-        Me.ParentEntityTreeViewBox.Text = "[entities_edition.parent_entity_selection]"
+        Me.ParentEntityTreeViewBox.Text = "parent_entity_selection"
         Me.ParentEntityTreeViewBox.UseThemeBackColor = False
         Me.ParentEntityTreeViewBox.UseThemeDropDownArrowColor = True
         Me.ParentEntityTreeViewBox.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
@@ -142,7 +142,7 @@ Partial Class NewEntityUI
         Me.CancelBT.Name = "CancelBT"
         Me.CancelBT.Size = New System.Drawing.Size(92, 30)
         Me.CancelBT.TabIndex = 21
-        Me.CancelBT.Text = "[general.cancel]"
+        Me.CancelBT.Text = "Cancel"
         Me.CancelBT.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         Me.CancelBT.UseVisualStyleBackColor = True
         '
@@ -163,7 +163,7 @@ Partial Class NewEntityUI
         Me.CreateEntityBT.Name = "CreateEntityBT"
         Me.CreateEntityBT.Size = New System.Drawing.Size(92, 30)
         Me.CreateEntityBT.TabIndex = 20
-        Me.CreateEntityBT.Text = "[general.create]"
+        Me.CreateEntityBT.Text = "Create"
         Me.CreateEntityBT.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         Me.CreateEntityBT.UseVisualStyleBackColor = True
         '
@@ -177,7 +177,7 @@ Partial Class NewEntityUI
         Me.Controls.Add(Me.CreateEntityBT)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Name = "NewEntityUI"
-        Me.Text = "[entities_edition.new_entity]"
+        Me.Text = "New_entity"
         Me.TableLayoutPanel1.ResumeLayout(False)
         Me.ResumeLayout(False)
 
@@ -188,7 +188,7 @@ Partial Class NewEntityUI
     Friend WithEvents ButtonsIL As System.Windows.Forms.ImageList
     Friend WithEvents ButtonIcons As System.Windows.Forms.ImageList
     Friend WithEvents NameTextBox As VIBlend.WinForms.Controls.vTextBox
-    Friend WithEvents VLabel1 As VIBlend.WinForms.Controls.vLabel
-    Friend WithEvents VLabel3 As VIBlend.WinForms.Controls.vLabel
+    Friend WithEvents m_nameLabel As VIBlend.WinForms.Controls.vLabel
+    Friend WithEvents m_parentEntityLabel As VIBlend.WinForms.Controls.vLabel
     Friend WithEvents ParentEntityTreeViewBox As VIBlend.WinForms.Controls.vTreeViewBox
 End Class

@@ -48,8 +48,21 @@ Class AxisFilterStructView
         p_axisFiltersTV.Dock = DockStyle.Fill
         m_controller = p_controller
         m_filtersTV.ContextMenuStrip = m_structureTreeviewRightClickMenu
+        MultilangageSetup()
 
         AddHandler m_filtersTV.KeyDown, AddressOf FiltersTV_KeyDown
+
+    End Sub
+
+    Private Sub MultilangageSetup()
+
+        Me.AddBT.Text = Local.GetValue("general.create")
+        Me.DeleteBT.Text = Local.GetValue("general.delete")
+        Me.m_createCategoryUnderCurrentCategoryButton.Text = Local.GetValue("general.create_category_under_category")
+        Me.m_renameButton.Text = Local.GetValue("general.renamme")
+        Me.m_deleteButton.Text = Local.GetValue("general.delete")
+        Me.Text = Local.GetValue("filters.title_filters_structure")
+
 
     End Sub
 

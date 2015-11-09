@@ -194,7 +194,7 @@
     <string name="set_main_currency">Définir comme devise principale</string>
     <string name="display_rates">Afficher les taux de change pour cette version</string>
     <string name="import">Importer depuis Excel</string>
-
+    <string name="new_rates_version">Nouvelle version de taux de change</string>
     <!--messages-->
     <string name="msg_select_currency">Une devise doit être sélectionnée.</string>
 
@@ -314,7 +314,8 @@
     <string name="account">Compte</string>
     <string name="entity">Entity</string>
     <string name="client">Client</string>
-    <string name="product">product</string>
+    <string name="product">Product</string>
+    <string name="version">Version</string>
     <string name="adjustment">Adjustment</string>
 
     <string name="Periods">Périodes</string>

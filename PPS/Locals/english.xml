@@ -192,7 +192,8 @@
     <!--edition-->
       <string name="set_main_currency">Set Main Currency</string>
       <string name="display_rates">Display Exchange Rates</string> 
-      <string name="import">Import from Excel</string> 
+      <string name="import">Import from Excel</string>
+      <string name="new_rates_version">New Exchange Rates Version</string>
     
     <!--messages-->
       <string name="msg_select_currency">A Currency must be selected first</string>
@@ -313,9 +314,9 @@
      <string name="account">Account</string>
      <string name="entity">Entity</string>
      <string name="client">Client</string>
-     <string name="product">product</string>
+     <string name="product">Product</string>
      <string name="adjustment">Adjustment</string>
-   
+    <string name="version">Version</string>
     <string name="Periods">Periods</string>
     <string name="Accounts">Accounts</string>
     <string name="Entities">Entities</string>
