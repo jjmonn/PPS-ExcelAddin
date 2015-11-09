@@ -12,7 +12,7 @@ Imports CRUD
 '
 '
 ' Created on : 15/08/2015
-' Last modified: 24/08/2015
+' Last modified: 07/11/2015
 
 
 Public Class CUI2LeftPane
@@ -71,6 +71,7 @@ Public Class CUI2LeftPane
         InitCurrenciesCLB()
         InitSelectionCB()
         InitButton()
+        MultilangueSetup()
 
     End Sub
 
@@ -185,6 +186,14 @@ Public Class CUI2LeftPane
         ExpandSelectionPaneBT.Visible = False
         AddHandler ExpandSelectionPaneBT.Click, AddressOf ExpandSelectionBT_Click
         SplitContainer.Panel2.Controls.Add(ExpandSelectionPaneBT)
+
+    End Sub
+
+    Private Sub MultilangueSetup()
+
+        Me.SelectionCB.Text = Local.GetValue("CUI.selection")
+        Me.m_entitySelectionLabel.Text = Local.GetValue("CUI.entities_selection")
+
 
     End Sub
 

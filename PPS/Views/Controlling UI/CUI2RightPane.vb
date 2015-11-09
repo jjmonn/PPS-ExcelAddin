@@ -11,7 +11,7 @@ Imports System.Windows.Forms
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 05/09/2015
+' Last modified: 07/11/2015
 
 
 
@@ -71,6 +71,7 @@ Public Class CUI2RightPane
         dimensionsList.Add(yearsItem.Value)
 
         AddHandlers()
+        MultilangueSetup()
 
     End Sub
 
@@ -158,6 +159,15 @@ Public Class CUI2RightPane
         For Each originSubNode As TreeNode In originNode.Nodes
             FiltersNodeSubCategoriesInit(originSubNode, destSubNode)
         Next
+
+    End Sub
+
+    Private Sub MultilangueSetup()
+
+        Me.m_columnsLabel.Text = Local.GetValue("CUI.columns_label")
+        Me.m_rowsLabel.Text = Local.GetValue("CUI.rows_label")
+        Me.UpdateBT.Text = Local.GetValue("CUI.refresh")
+        Me.m_fieldChoiceLabel.Text = Local.GetValue("CUI.fields_choice")
 
     End Sub
 

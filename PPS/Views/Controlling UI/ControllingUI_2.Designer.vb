@@ -50,9 +50,9 @@ Partial Class ControllingUI_2
         Me.VersionTB = New VIBlend.WinForms.Controls.vTextBox()
         Me.CurrencyTB = New VIBlend.WinForms.Controls.vTextBox()
         Me.EntityTB = New VIBlend.WinForms.Controls.vTextBox()
-        Me.Label3 = New System.Windows.Forms.Label()
-        Me.Label2 = New System.Windows.Forms.Label()
-        Me.Label1 = New System.Windows.Forms.Label()
+        Me.m_currencyLabel = New System.Windows.Forms.Label()
+        Me.m_versionLabel = New System.Windows.Forms.Label()
+        Me.m_entityLabel = New System.Windows.Forms.Label()
         Me.MainMenu = New System.Windows.Forms.MenuStrip()
         Me.ExcelToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.DropOnExcelToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -81,79 +81,79 @@ Partial Class ControllingUI_2
         '
         Me.EntitiesRCMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.RefreshRightClick})
         Me.EntitiesRCMenu.Name = "ContextMenuStripEntitiesNodes"
-        Me.EntitiesRCMenu.Size = New System.Drawing.Size(124, 28)
+        Me.EntitiesRCMenu.Size = New System.Drawing.Size(155, 28)
         '
         'RefreshRightClick
         '
         Me.RefreshRightClick.Image = CType(resources.GetObject("RefreshRightClick.Image"), System.Drawing.Image)
         Me.RefreshRightClick.Name = "RefreshRightClick"
-        Me.RefreshRightClick.Size = New System.Drawing.Size(123, 24)
-        Me.RefreshRightClick.Text = Local.GetValue("CUI.refresh")
+        Me.RefreshRightClick.Size = New System.Drawing.Size(154, 24)
+        Me.RefreshRightClick.Text = "[CUI.refresh]"
         '
         'PeriodsRCMenu
         '
         Me.PeriodsRCMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.SelectAllToolStripMenuItem, Me.UnselectAllToolStripMenuItem})
         Me.PeriodsRCMenu.Name = "periodsRightClickMenu"
-        Me.PeriodsRCMenu.Size = New System.Drawing.Size(150, 52)
+        Me.PeriodsRCMenu.Size = New System.Drawing.Size(182, 52)
         '
         'SelectAllToolStripMenuItem
         '
         Me.SelectAllToolStripMenuItem.Name = "SelectAllToolStripMenuItem"
-        Me.SelectAllToolStripMenuItem.Size = New System.Drawing.Size(149, 24)
-        Me.SelectAllToolStripMenuItem.Text = Local.GetValue("CUI.select_all")
+        Me.SelectAllToolStripMenuItem.Size = New System.Drawing.Size(181, 24)
+        Me.SelectAllToolStripMenuItem.Text = "[CUI.select_all]"
         '
         'UnselectAllToolStripMenuItem
         '
         Me.UnselectAllToolStripMenuItem.Name = "UnselectAllToolStripMenuItem"
-        Me.UnselectAllToolStripMenuItem.Size = New System.Drawing.Size(149, 24)
-        Me.UnselectAllToolStripMenuItem.Text = Local.GetValue("CUI.unselect_all")
+        Me.UnselectAllToolStripMenuItem.Size = New System.Drawing.Size(181, 24)
+        Me.UnselectAllToolStripMenuItem.Text = "[CUI.unselect_all]"
         '
         'DataGridViewsRCMenu
         '
         Me.DataGridViewsRCMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ExpandAllRightClick, Me.CollapseAllRightClick, Me.ToolStripSeparator2, Me.LogRightClick, Me.ToolStripSeparator4, Me.DGVFormatsButton, Me.ColumnsAutoSize, Me.ColumnsAutoFitBT})
         Me.DataGridViewsRCMenu.Name = "DGVsRCM"
-        Me.DataGridViewsRCMenu.Size = New System.Drawing.Size(275, 160)
+        Me.DataGridViewsRCMenu.Size = New System.Drawing.Size(306, 160)
         '
         'ExpandAllRightClick
         '
         Me.ExpandAllRightClick.Name = "ExpandAllRightClick"
-        Me.ExpandAllRightClick.Size = New System.Drawing.Size(274, 24)
-        Me.ExpandAllRightClick.Text = Local.GetValue("CUI.expand_all")
+        Me.ExpandAllRightClick.Size = New System.Drawing.Size(305, 24)
+        Me.ExpandAllRightClick.Text = "[CUI.expand_all]"
         '
         'CollapseAllRightClick
         '
         Me.CollapseAllRightClick.Name = "CollapseAllRightClick"
-        Me.CollapseAllRightClick.Size = New System.Drawing.Size(274, 24)
-        Me.CollapseAllRightClick.Text = Local.GetValue("CUI.collapse_all")
+        Me.CollapseAllRightClick.Size = New System.Drawing.Size(305, 24)
+        Me.CollapseAllRightClick.Text = "[CUI.collapse_all]"
         '
         'ToolStripSeparator2
         '
         Me.ToolStripSeparator2.Name = "ToolStripSeparator2"
-        Me.ToolStripSeparator2.Size = New System.Drawing.Size(271, 6)
+        Me.ToolStripSeparator2.Size = New System.Drawing.Size(302, 6)
         '
         'LogRightClick
         '
         Me.LogRightClick.Name = "LogRightClick"
-        Me.LogRightClick.Size = New System.Drawing.Size(274, 24)
-        Me.LogRightClick.Text = Local.GetValue("CUI.log")
+        Me.LogRightClick.Size = New System.Drawing.Size(305, 24)
+        Me.LogRightClick.Text = "[CUI.log]"
         '
         'ToolStripSeparator4
         '
         Me.ToolStripSeparator4.Name = "ToolStripSeparator4"
-        Me.ToolStripSeparator4.Size = New System.Drawing.Size(271, 6)
+        Me.ToolStripSeparator4.Size = New System.Drawing.Size(302, 6)
         '
         'DGVFormatsButton
         '
         Me.DGVFormatsButton.Image = CType(resources.GetObject("DGVFormatsButton.Image"), System.Drawing.Image)
         Me.DGVFormatsButton.Name = "DGVFormatsButton"
-        Me.DGVFormatsButton.Size = New System.Drawing.Size(274, 24)
-        Me.DGVFormatsButton.Text = Local.GetValue("CUI.display_options")
+        Me.DGVFormatsButton.Size = New System.Drawing.Size(305, 24)
+        Me.DGVFormatsButton.Text = "[CUI.display_options]"
         '
         'ColumnsAutoSize
         '
         Me.ColumnsAutoSize.Name = "ColumnsAutoSize"
-        Me.ColumnsAutoSize.Size = New System.Drawing.Size(274, 24)
-        Me.ColumnsAutoSize.Text = Local.GetValue("CUI.adjust_columns_size")
+        Me.ColumnsAutoSize.Size = New System.Drawing.Size(305, 24)
+        Me.ColumnsAutoSize.Text = "[CUI.adjust_columns_size]"
         '
         'ColumnsAutoFitBT
         '
@@ -161,26 +161,26 @@ Partial Class ControllingUI_2
         Me.ColumnsAutoFitBT.CheckOnClick = True
         Me.ColumnsAutoFitBT.CheckState = System.Windows.Forms.CheckState.Checked
         Me.ColumnsAutoFitBT.Name = "ColumnsAutoFitBT"
-        Me.ColumnsAutoFitBT.Size = New System.Drawing.Size(274, 24)
-        Me.ColumnsAutoFitBT.Text = Local.GetValue("CUI.automatic_columns_adjustment")
+        Me.ColumnsAutoFitBT.Size = New System.Drawing.Size(305, 24)
+        Me.ColumnsAutoFitBT.Text = "[CUI.automatic_columns_adjustment]"
         '
         'AdjustmentsRCMenu
         '
         Me.AdjustmentsRCMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.SelectAllToolStripMenuItem1, Me.UnselectAllToolStripMenuItem1})
         Me.AdjustmentsRCMenu.Name = "AdjustmentsRCM"
-        Me.AdjustmentsRCMenu.Size = New System.Drawing.Size(150, 52)
+        Me.AdjustmentsRCMenu.Size = New System.Drawing.Size(182, 52)
         '
         'SelectAllToolStripMenuItem1
         '
         Me.SelectAllToolStripMenuItem1.Name = "SelectAllToolStripMenuItem1"
-        Me.SelectAllToolStripMenuItem1.Size = New System.Drawing.Size(149, 24)
-        Me.SelectAllToolStripMenuItem1.Text = Local.GetValue("CUI.select_all")
+        Me.SelectAllToolStripMenuItem1.Size = New System.Drawing.Size(181, 24)
+        Me.SelectAllToolStripMenuItem1.Text = "[CUI.select_all]"
         '
         'UnselectAllToolStripMenuItem1
         '
         Me.UnselectAllToolStripMenuItem1.Name = "UnselectAllToolStripMenuItem1"
-        Me.UnselectAllToolStripMenuItem1.Size = New System.Drawing.Size(149, 24)
-        Me.UnselectAllToolStripMenuItem1.Text = Local.GetValue("CUI.unselect_all")
+        Me.UnselectAllToolStripMenuItem1.Size = New System.Drawing.Size(181, 24)
+        Me.UnselectAllToolStripMenuItem1.Text = "[CUI.unselect_all]"
         '
         'SplitContainer1
         '
@@ -250,9 +250,9 @@ Partial Class ControllingUI_2
         Me.Panel1.Controls.Add(Me.VersionTB)
         Me.Panel1.Controls.Add(Me.CurrencyTB)
         Me.Panel1.Controls.Add(Me.EntityTB)
-        Me.Panel1.Controls.Add(Me.Label3)
-        Me.Panel1.Controls.Add(Me.Label2)
-        Me.Panel1.Controls.Add(Me.Label1)
+        Me.Panel1.Controls.Add(Me.m_currencyLabel)
+        Me.Panel1.Controls.Add(Me.m_versionLabel)
+        Me.Panel1.Controls.Add(Me.m_entityLabel)
         Me.Panel1.Controls.Add(Me.MainMenu)
         Me.Panel1.Dock = System.Windows.Forms.DockStyle.Top
         Me.Panel1.Location = New System.Drawing.Point(0, 0)
@@ -277,7 +277,6 @@ Partial Class ControllingUI_2
         Me.VersionTB.SelectionStart = 0
         Me.VersionTB.Size = New System.Drawing.Size(154, 23)
         Me.VersionTB.TabIndex = 6
-        Me.VersionTB.Text = ""
         Me.VersionTB.TextAlign = System.Windows.Forms.HorizontalAlignment.Left
         Me.VersionTB.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
         '
@@ -298,7 +297,6 @@ Partial Class ControllingUI_2
         Me.CurrencyTB.SelectionStart = 0
         Me.CurrencyTB.Size = New System.Drawing.Size(69, 23)
         Me.CurrencyTB.TabIndex = 5
-        Me.CurrencyTB.Text = ""
         Me.CurrencyTB.TextAlign = System.Windows.Forms.HorizontalAlignment.Left
         Me.CurrencyTB.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
         '
@@ -319,39 +317,38 @@ Partial Class ControllingUI_2
         Me.EntityTB.SelectionStart = 0
         Me.EntityTB.Size = New System.Drawing.Size(136, 23)
         Me.EntityTB.TabIndex = 4
-        Me.EntityTB.Text = ""
         Me.EntityTB.TextAlign = System.Windows.Forms.HorizontalAlignment.Left
         Me.EntityTB.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
         '
-        'Label3
+        'm_currencyLabel
         '
-        Me.Label3.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Label3.AutoSize = True
-        Me.Label3.Location = New System.Drawing.Point(534, 9)
-        Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(55, 15)
-        Me.Label3.TabIndex = 3
-        Me.Label3.Text = Local.GetValue("CUI.currency")
+        Me.m_currencyLabel.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.m_currencyLabel.AutoSize = True
+        Me.m_currencyLabel.Location = New System.Drawing.Point(534, 9)
+        Me.m_currencyLabel.Name = "m_currencyLabel"
+        Me.m_currencyLabel.Size = New System.Drawing.Size(82, 15)
+        Me.m_currencyLabel.TabIndex = 3
+        Me.m_currencyLabel.Text = "[CUI.currency]"
         '
-        'Label2
+        'm_versionLabel
         '
-        Me.Label2.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Label2.AutoSize = True
-        Me.Label2.Location = New System.Drawing.Point(670, 9)
-        Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(48, 15)
-        Me.Label2.TabIndex = 2
-        Me.Label2.Text = Local.GetValue("CUI.version")
+        Me.m_versionLabel.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.m_versionLabel.AutoSize = True
+        Me.m_versionLabel.Location = New System.Drawing.Point(670, 9)
+        Me.m_versionLabel.Name = "m_versionLabel"
+        Me.m_versionLabel.Size = New System.Drawing.Size(75, 15)
+        Me.m_versionLabel.TabIndex = 2
+        Me.m_versionLabel.Text = "[CUI.version]"
         '
-        'Label1
+        'm_entityLabel
         '
-        Me.Label1.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(350, 9)
-        Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(36, 15)
-        Me.Label1.TabIndex = 1
-        Me.Label1.Text = Local.GetValue("CUI.entity")
+        Me.m_entityLabel.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.m_entityLabel.AutoSize = True
+        Me.m_entityLabel.Location = New System.Drawing.Point(350, 9)
+        Me.m_entityLabel.Name = "m_entityLabel"
+        Me.m_entityLabel.Size = New System.Drawing.Size(64, 15)
+        Me.m_entityLabel.TabIndex = 1
+        Me.m_entityLabel.Text = "[CUI.entity]"
         '
         'MainMenu
         '
@@ -360,9 +357,9 @@ Partial Class ControllingUI_2
         Me.MainMenu.Location = New System.Drawing.Point(0, 0)
         Me.MainMenu.Name = "MainMenu"
         Me.MainMenu.ShowItemToolTips = True
-        Me.MainMenu.Size = New System.Drawing.Size(308, 59)
+        Me.MainMenu.Size = New System.Drawing.Size(515, 59)
         Me.MainMenu.TabIndex = 0
-        Me.MainMenu.Text = Local.GetValue("CUI.main_menu")
+        Me.MainMenu.Text = "[CUI.main_menu]"
         '
         'ExcelToolStripMenuItem
         '
@@ -370,16 +367,16 @@ Partial Class ControllingUI_2
         Me.ExcelToolStripMenuItem.Image = CType(resources.GetObject("ExcelToolStripMenuItem.Image"), System.Drawing.Image)
         Me.ExcelToolStripMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
         Me.ExcelToolStripMenuItem.Name = "ExcelToolStripMenuItem"
-        Me.ExcelToolStripMenuItem.Size = New System.Drawing.Size(50, 55)
-        Me.ExcelToolStripMenuItem.Text = Local.GetValue("CUI.drop_on_excel")
+        Me.ExcelToolStripMenuItem.Size = New System.Drawing.Size(141, 55)
+        Me.ExcelToolStripMenuItem.Text = "[CUI.drop_on_excel]"
         Me.ExcelToolStripMenuItem.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
-        Me.ExcelToolStripMenuItem.ToolTipText = Local.GetValue("CUI.drop_on_excel_tooltip")
+        Me.ExcelToolStripMenuItem.ToolTipText = "[CUI.drop_on_excel_tooltip]"
         '
         'DropOnExcelToolStripMenuItem
         '
         Me.DropOnExcelToolStripMenuItem.Name = "DropOnExcelToolStripMenuItem"
-        Me.DropOnExcelToolStripMenuItem.Size = New System.Drawing.Size(162, 24)
-        Me.DropOnExcelToolStripMenuItem.Text = Local.GetValue("CUI.drop_on_excel")
+        Me.DropOnExcelToolStripMenuItem.Size = New System.Drawing.Size(198, 24)
+        Me.DropOnExcelToolStripMenuItem.Text = "[CUI.drop_on_excel]"
         '
         'BusinessControlToolStripMenuItem
         '
@@ -387,28 +384,28 @@ Partial Class ControllingUI_2
         Me.BusinessControlToolStripMenuItem.Image = CType(resources.GetObject("BusinessControlToolStripMenuItem.Image"), System.Drawing.Image)
         Me.BusinessControlToolStripMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
         Me.BusinessControlToolStripMenuItem.Name = "BusinessControlToolStripMenuItem"
-        Me.BusinessControlToolStripMenuItem.Size = New System.Drawing.Size(123, 55)
-        Me.BusinessControlToolStripMenuItem.Text = Local.GetValue("CUI.performance_review")
+        Me.BusinessControlToolStripMenuItem.Size = New System.Drawing.Size(177, 55)
+        Me.BusinessControlToolStripMenuItem.Text = "[CUI.performance_review]"
         Me.BusinessControlToolStripMenuItem.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
-        Me.BusinessControlToolStripMenuItem.ToolTipText = Local.GetValue("CUI.performance_review_tooltip")
+        Me.BusinessControlToolStripMenuItem.ToolTipText = "[CUI.performance_review_tooltip]"
         '
         'VersionsComparisonToolStripMenuItem
         '
         Me.VersionsComparisonToolStripMenuItem.Name = "VersionsComparisonToolStripMenuItem"
-        Me.VersionsComparisonToolStripMenuItem.Size = New System.Drawing.Size(239, 24)
-        Me.VersionsComparisonToolStripMenuItem.Text = Local.GetValue("CUI.display_versions_comparison")
+        Me.VersionsComparisonToolStripMenuItem.Size = New System.Drawing.Size(287, 24)
+        Me.VersionsComparisonToolStripMenuItem.Text = "[CUI.display_versions_comparison]"
         '
         'SwitchVersionsToolStripMenuItem
         '
         Me.SwitchVersionsToolStripMenuItem.Name = "SwitchVersionsToolStripMenuItem"
-        Me.SwitchVersionsToolStripMenuItem.Size = New System.Drawing.Size(239, 24)
-        Me.SwitchVersionsToolStripMenuItem.Text = Local.GetValue("CUI.switch_versions")
+        Me.SwitchVersionsToolStripMenuItem.Size = New System.Drawing.Size(287, 24)
+        Me.SwitchVersionsToolStripMenuItem.Text = "[CUI.switch_versions]"
         '
         'HideVersionsComparisonToolStripMenuItem
         '
         Me.HideVersionsComparisonToolStripMenuItem.Name = "HideVersionsComparisonToolStripMenuItem"
-        Me.HideVersionsComparisonToolStripMenuItem.Size = New System.Drawing.Size(239, 24)
-        Me.HideVersionsComparisonToolStripMenuItem.Text = Local.GetValue("CUI.take_off_comparison")
+        Me.HideVersionsComparisonToolStripMenuItem.Size = New System.Drawing.Size(287, 24)
+        Me.HideVersionsComparisonToolStripMenuItem.Text = "[CUI.take_off_comparison]"
         '
         'RefreshToolStripMenuItem
         '
@@ -416,18 +413,18 @@ Partial Class ControllingUI_2
         Me.RefreshToolStripMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
         Me.RefreshToolStripMenuItem.Name = "RefreshToolStripMenuItem"
         Me.RefreshToolStripMenuItem.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.Space), System.Windows.Forms.Keys)
-        Me.RefreshToolStripMenuItem.Size = New System.Drawing.Size(66, 55)
-        Me.RefreshToolStripMenuItem.Text = Local.GetValue("CUI.refresh")
+        Me.RefreshToolStripMenuItem.Size = New System.Drawing.Size(97, 55)
+        Me.RefreshToolStripMenuItem.Text = "[CUI.refresh]"
         Me.RefreshToolStripMenuItem.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
-        Me.RefreshToolStripMenuItem.ToolTipText = Local.GetValue("CUI.refresh_tooltip")
+        Me.RefreshToolStripMenuItem.ToolTipText = "[CUI.refresh_tooltip]"
         '
         'ChartBT
         '
         Me.ChartBT.Image = Global.FinancialBI.My.Resources.Resources.chart_pie
         Me.ChartBT.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
         Me.ChartBT.Name = "ChartBT"
-        Me.ChartBT.Size = New System.Drawing.Size(61, 55)
-        Me.ChartBT.Text = Local.GetValue("CUI.charts")
+        Me.ChartBT.Size = New System.Drawing.Size(92, 55)
+        Me.ChartBT.Text = "[CUI.charts]"
         Me.ChartBT.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
         '
         'ExpansionImageList
@@ -449,7 +446,7 @@ Partial Class ControllingUI_2
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Margin = New System.Windows.Forms.Padding(2)
         Me.Name = "ControllingUI_2"
-        Me.Text = Local.GetValue("CUI.financials")
+        Me.Text = "[CUI.financials]"
         Me.EntitiesRCMenu.ResumeLayout(False)
         Me.PeriodsRCMenu.ResumeLayout(False)
         Me.DataGridViewsRCMenu.ResumeLayout(False)
@@ -494,9 +491,9 @@ Partial Class ControllingUI_2
     Friend WithEvents HideVersionsComparisonToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ExcelToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents DropOnExcelToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents Label3 As System.Windows.Forms.Label
-    Friend WithEvents Label2 As System.Windows.Forms.Label
-    Friend WithEvents Label1 As System.Windows.Forms.Label
+    Friend WithEvents m_currencyLabel As System.Windows.Forms.Label
+    Friend WithEvents m_versionLabel As System.Windows.Forms.Label
+    Friend WithEvents m_entityLabel As System.Windows.Forms.Label
     Friend WithEvents VersionTB As VIBlend.WinForms.Controls.vTextBox
     Friend WithEvents CurrencyTB As VIBlend.WinForms.Controls.vTextBox
     Friend WithEvents EntityTB As VIBlend.WinForms.Controls.vTextBox

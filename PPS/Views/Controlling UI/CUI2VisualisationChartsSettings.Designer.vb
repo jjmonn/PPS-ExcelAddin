@@ -24,38 +24,38 @@ Partial Class CUI2VisualisationChartsSettings
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(CUI2VisualisationChartsSettings))
-        Me.VLabel1 = New VIBlend.WinForms.Controls.vLabel()
+        Me.m_chartTitleLabel = New VIBlend.WinForms.Controls.vLabel()
         Me.m_chartTitleTextBox = New VIBlend.WinForms.Controls.vTextBox()
-        Me.VLabel2 = New VIBlend.WinForms.Controls.vLabel()
-        Me.VLabel3 = New VIBlend.WinForms.Controls.vLabel()
+        Me.m_chartSerie2Label = New VIBlend.WinForms.Controls.vLabel()
+        Me.m_chartSerie1Label = New VIBlend.WinForms.Controls.vLabel()
         Me.m_serie1ColorPicker = New VIBlend.WinForms.Controls.vColorPicker()
         Me.m_serie2ColorPicker = New VIBlend.WinForms.Controls.vColorPicker()
-        Me.VLabel4 = New VIBlend.WinForms.Controls.vLabel()
-        Me.VLabel5 = New VIBlend.WinForms.Controls.vLabel()
+        Me.m_AccountLabel = New VIBlend.WinForms.Controls.vLabel()
+        Me.m_ColorLabel = New VIBlend.WinForms.Controls.vLabel()
         Me.m_serie1TypeComboBox = New VIBlend.WinForms.Controls.vComboBox()
         Me.m_serie2TypeComboBox = New VIBlend.WinForms.Controls.vComboBox()
-        Me.VLabel6 = New VIBlend.WinForms.Controls.vLabel()
+        Me.m_typeLabel = New VIBlend.WinForms.Controls.vLabel()
         Me.m_saveButton = New VIBlend.WinForms.Controls.vButton()
         Me.ImageList1 = New System.Windows.Forms.ImageList(Me.components)
         Me.m_serie1AccountTreeviewBox = New VIBlend.WinForms.Controls.vTreeViewBox()
         Me.m_serie2AccountTreeviewBox = New VIBlend.WinForms.Controls.vTreeViewBox()
         Me.SuspendLayout()
         '
-        'VLabel1
+        'm_chartTitleLabel
         '
-        Me.VLabel1.BackColor = System.Drawing.Color.Transparent
-        Me.VLabel1.DisplayStyle = VIBlend.WinForms.Controls.LabelItemStyle.TextOnly
-        Me.VLabel1.Ellipsis = False
-        Me.VLabel1.ImageAlignment = System.Drawing.ContentAlignment.TopLeft
-        Me.VLabel1.Location = New System.Drawing.Point(17, 24)
-        Me.VLabel1.Multiline = True
-        Me.VLabel1.Name = "VLabel1"
-        Me.VLabel1.Size = New System.Drawing.Size(41, 25)
-        Me.VLabel1.TabIndex = 0
-        Me.VLabel1.Text = local.getvalue("CUI_Charts.chart_title")
-        Me.VLabel1.TextAlignment = System.Drawing.ContentAlignment.MiddleLeft
-        Me.VLabel1.UseMnemonics = True
-        Me.VLabel1.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
+        Me.m_chartTitleLabel.BackColor = System.Drawing.Color.Transparent
+        Me.m_chartTitleLabel.DisplayStyle = VIBlend.WinForms.Controls.LabelItemStyle.TextOnly
+        Me.m_chartTitleLabel.Ellipsis = False
+        Me.m_chartTitleLabel.ImageAlignment = System.Drawing.ContentAlignment.TopLeft
+        Me.m_chartTitleLabel.Location = New System.Drawing.Point(17, 24)
+        Me.m_chartTitleLabel.Multiline = True
+        Me.m_chartTitleLabel.Name = "m_chartTitleLabel"
+        Me.m_chartTitleLabel.Size = New System.Drawing.Size(41, 25)
+        Me.m_chartTitleLabel.TabIndex = 0
+        Me.m_chartTitleLabel.Text = local.getvalue("CUI_Charts.chart_title")
+        Me.m_chartTitleLabel.TextAlignment = System.Drawing.ContentAlignment.MiddleLeft
+        Me.m_chartTitleLabel.UseMnemonics = True
+        Me.m_chartTitleLabel.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
         '
         'm_chartTitleTextBox
         '
@@ -75,37 +75,37 @@ Partial Class CUI2VisualisationChartsSettings
         Me.m_chartTitleTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Left
         Me.m_chartTitleTextBox.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
         '
-        'VLabel2
+        'm_chartSerie2Label
         '
-        Me.VLabel2.BackColor = System.Drawing.Color.Transparent
-        Me.VLabel2.DisplayStyle = VIBlend.WinForms.Controls.LabelItemStyle.TextOnly
-        Me.VLabel2.Ellipsis = False
-        Me.VLabel2.ImageAlignment = System.Drawing.ContentAlignment.TopLeft
-        Me.VLabel2.Location = New System.Drawing.Point(17, 119)
-        Me.VLabel2.Multiline = True
-        Me.VLabel2.Name = "VLabel2"
-        Me.VLabel2.Size = New System.Drawing.Size(41, 25)
-        Me.VLabel2.TabIndex = 2
-        Me.VLabel2.Text = local.getvalue("CUI_Charts.serie_2")
-        Me.VLabel2.TextAlignment = System.Drawing.ContentAlignment.MiddleLeft
-        Me.VLabel2.UseMnemonics = True
-        Me.VLabel2.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
+        Me.m_chartSerie2Label.BackColor = System.Drawing.Color.Transparent
+        Me.m_chartSerie2Label.DisplayStyle = VIBlend.WinForms.Controls.LabelItemStyle.TextOnly
+        Me.m_chartSerie2Label.Ellipsis = False
+        Me.m_chartSerie2Label.ImageAlignment = System.Drawing.ContentAlignment.TopLeft
+        Me.m_chartSerie2Label.Location = New System.Drawing.Point(17, 119)
+        Me.m_chartSerie2Label.Multiline = True
+        Me.m_chartSerie2Label.Name = "m_chartSerie2Label"
+        Me.m_chartSerie2Label.Size = New System.Drawing.Size(41, 25)
+        Me.m_chartSerie2Label.TabIndex = 2
+        Me.m_chartSerie2Label.Text = local.getvalue("CUI_Charts.serie_2")
+        Me.m_chartSerie2Label.TextAlignment = System.Drawing.ContentAlignment.MiddleLeft
+        Me.m_chartSerie2Label.UseMnemonics = True
+        Me.m_chartSerie2Label.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
         '
-        'VLabel3
+        'm_chartSerie1Label
         '
-        Me.VLabel3.BackColor = System.Drawing.Color.Transparent
-        Me.VLabel3.DisplayStyle = VIBlend.WinForms.Controls.LabelItemStyle.TextOnly
-        Me.VLabel3.Ellipsis = False
-        Me.VLabel3.ImageAlignment = System.Drawing.ContentAlignment.TopLeft
-        Me.VLabel3.Location = New System.Drawing.Point(17, 88)
-        Me.VLabel3.Multiline = True
-        Me.VLabel3.Name = "VLabel3"
-        Me.VLabel3.Size = New System.Drawing.Size(41, 25)
-        Me.VLabel3.TabIndex = 2
-        Me.VLabel3.Text = local.getvalue("CUI_Charts.serie_1")
-        Me.VLabel3.TextAlignment = System.Drawing.ContentAlignment.MiddleCenter
-        Me.VLabel3.UseMnemonics = True
-        Me.VLabel3.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
+        Me.m_chartSerie1Label.BackColor = System.Drawing.Color.Transparent
+        Me.m_chartSerie1Label.DisplayStyle = VIBlend.WinForms.Controls.LabelItemStyle.TextOnly
+        Me.m_chartSerie1Label.Ellipsis = False
+        Me.m_chartSerie1Label.ImageAlignment = System.Drawing.ContentAlignment.TopLeft
+        Me.m_chartSerie1Label.Location = New System.Drawing.Point(17, 88)
+        Me.m_chartSerie1Label.Multiline = True
+        Me.m_chartSerie1Label.Name = "m_chartSerie1Label"
+        Me.m_chartSerie1Label.Size = New System.Drawing.Size(41, 25)
+        Me.m_chartSerie1Label.TabIndex = 2
+        Me.m_chartSerie1Label.Text = local.getvalue("CUI_Charts.serie_1")
+        Me.m_chartSerie1Label.TextAlignment = System.Drawing.ContentAlignment.MiddleCenter
+        Me.m_chartSerie1Label.UseMnemonics = True
+        Me.m_chartSerie1Label.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
         '
         'm_serie1ColorPicker
         '
@@ -147,37 +147,37 @@ Partial Class CUI2VisualisationChartsSettings
         Me.m_serie2ColorPicker.UseThemeDropDownArrowColor = True
         Me.m_serie2ColorPicker.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
         '
-        'VLabel4
+        'm_AccountLabel
         '
-        Me.VLabel4.BackColor = System.Drawing.Color.Transparent
-        Me.VLabel4.DisplayStyle = VIBlend.WinForms.Controls.LabelItemStyle.TextOnly
-        Me.VLabel4.Ellipsis = False
-        Me.VLabel4.ImageAlignment = System.Drawing.ContentAlignment.TopLeft
-        Me.VLabel4.Location = New System.Drawing.Point(86, 59)
-        Me.VLabel4.Multiline = True
-        Me.VLabel4.Name = "VLabel4"
-        Me.VLabel4.Size = New System.Drawing.Size(246, 25)
-        Me.VLabel4.TabIndex = 6
-        Me.VLabel4.Text = local.getvalue("general.account")
-        Me.VLabel4.TextAlignment = System.Drawing.ContentAlignment.MiddleCenter
-        Me.VLabel4.UseMnemonics = True
-        Me.VLabel4.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
+        Me.m_AccountLabel.BackColor = System.Drawing.Color.Transparent
+        Me.m_AccountLabel.DisplayStyle = VIBlend.WinForms.Controls.LabelItemStyle.TextOnly
+        Me.m_AccountLabel.Ellipsis = False
+        Me.m_AccountLabel.ImageAlignment = System.Drawing.ContentAlignment.TopLeft
+        Me.m_AccountLabel.Location = New System.Drawing.Point(86, 59)
+        Me.m_AccountLabel.Multiline = True
+        Me.m_AccountLabel.Name = "m_AccountLabel"
+        Me.m_AccountLabel.Size = New System.Drawing.Size(246, 25)
+        Me.m_AccountLabel.TabIndex = 6
+        Me.m_AccountLabel.Text = local.getvalue("general.account")
+        Me.m_AccountLabel.TextAlignment = System.Drawing.ContentAlignment.MiddleCenter
+        Me.m_AccountLabel.UseMnemonics = True
+        Me.m_AccountLabel.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
         '
-        'VLabel5
+        'm_ColorLabel
         '
-        Me.VLabel5.BackColor = System.Drawing.Color.Transparent
-        Me.VLabel5.DisplayStyle = VIBlend.WinForms.Controls.LabelItemStyle.TextOnly
-        Me.VLabel5.Ellipsis = False
-        Me.VLabel5.ImageAlignment = System.Drawing.ContentAlignment.TopLeft
-        Me.VLabel5.Location = New System.Drawing.Point(347, 62)
-        Me.VLabel5.Multiline = True
-        Me.VLabel5.Name = "VLabel5"
-        Me.VLabel5.Size = New System.Drawing.Size(143, 25)
-        Me.VLabel5.TabIndex = 7
-        Me.VLabel5.Text = local.getvalue("general.couleur")
-        Me.VLabel5.TextAlignment = System.Drawing.ContentAlignment.MiddleCenter
-        Me.VLabel5.UseMnemonics = True
-        Me.VLabel5.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
+        Me.m_ColorLabel.BackColor = System.Drawing.Color.Transparent
+        Me.m_ColorLabel.DisplayStyle = VIBlend.WinForms.Controls.LabelItemStyle.TextOnly
+        Me.m_ColorLabel.Ellipsis = False
+        Me.m_ColorLabel.ImageAlignment = System.Drawing.ContentAlignment.TopLeft
+        Me.m_ColorLabel.Location = New System.Drawing.Point(347, 62)
+        Me.m_ColorLabel.Multiline = True
+        Me.m_ColorLabel.Name = "m_ColorLabel"
+        Me.m_ColorLabel.Size = New System.Drawing.Size(143, 25)
+        Me.m_ColorLabel.TabIndex = 7
+        Me.m_ColorLabel.Text = local.getvalue("general.couleur")
+        Me.m_ColorLabel.TextAlignment = System.Drawing.ContentAlignment.MiddleCenter
+        Me.m_ColorLabel.UseMnemonics = True
+        Me.m_ColorLabel.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
         '
         'm_serie1TypeComboBox
         '
@@ -217,21 +217,21 @@ Partial Class CUI2VisualisationChartsSettings
         Me.m_serie2TypeComboBox.VIBlendScrollBarsTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
         Me.m_serie2TypeComboBox.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
         '
-        'VLabel6
+        'm_typeLabel
         '
-        Me.VLabel6.BackColor = System.Drawing.Color.Transparent
-        Me.VLabel6.DisplayStyle = VIBlend.WinForms.Controls.LabelItemStyle.TextOnly
-        Me.VLabel6.Ellipsis = False
-        Me.VLabel6.ImageAlignment = System.Drawing.ContentAlignment.TopLeft
-        Me.VLabel6.Location = New System.Drawing.Point(503, 62)
-        Me.VLabel6.Multiline = True
-        Me.VLabel6.Name = "VLabel6"
-        Me.VLabel6.Size = New System.Drawing.Size(226, 25)
-        Me.VLabel6.TabIndex = 10
-        Me.VLabel6.Text = local.getvalue("general.type")
-        Me.VLabel6.TextAlignment = System.Drawing.ContentAlignment.MiddleCenter
-        Me.VLabel6.UseMnemonics = True
-        Me.VLabel6.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
+        Me.m_typeLabel.BackColor = System.Drawing.Color.Transparent
+        Me.m_typeLabel.DisplayStyle = VIBlend.WinForms.Controls.LabelItemStyle.TextOnly
+        Me.m_typeLabel.Ellipsis = False
+        Me.m_typeLabel.ImageAlignment = System.Drawing.ContentAlignment.TopLeft
+        Me.m_typeLabel.Location = New System.Drawing.Point(503, 62)
+        Me.m_typeLabel.Multiline = True
+        Me.m_typeLabel.Name = "m_typeLabel"
+        Me.m_typeLabel.Size = New System.Drawing.Size(226, 25)
+        Me.m_typeLabel.TabIndex = 10
+        Me.m_typeLabel.Text = local.getvalue("general.type")
+        Me.m_typeLabel.TextAlignment = System.Drawing.ContentAlignment.MiddleCenter
+        Me.m_typeLabel.UseMnemonics = True
+        Me.m_typeLabel.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
         '
         'm_saveButton
         '
@@ -293,34 +293,34 @@ Partial Class CUI2VisualisationChartsSettings
         Me.Controls.Add(Me.m_serie2AccountTreeviewBox)
         Me.Controls.Add(Me.m_serie1AccountTreeviewBox)
         Me.Controls.Add(Me.m_saveButton)
-        Me.Controls.Add(Me.VLabel6)
+        Me.Controls.Add(Me.m_typeLabel)
         Me.Controls.Add(Me.m_serie2TypeComboBox)
         Me.Controls.Add(Me.m_serie1TypeComboBox)
-        Me.Controls.Add(Me.VLabel5)
-        Me.Controls.Add(Me.VLabel4)
+        Me.Controls.Add(Me.m_ColorLabel)
+        Me.Controls.Add(Me.m_AccountLabel)
         Me.Controls.Add(Me.m_serie2ColorPicker)
         Me.Controls.Add(Me.m_serie1ColorPicker)
-        Me.Controls.Add(Me.VLabel3)
-        Me.Controls.Add(Me.VLabel2)
+        Me.Controls.Add(Me.m_chartSerie1Label)
+        Me.Controls.Add(Me.m_chartSerie2Label)
         Me.Controls.Add(Me.m_chartTitleTextBox)
-        Me.Controls.Add(Me.VLabel1)
+        Me.Controls.Add(Me.m_chartTitleLabel)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Name = "CUI2VisualisationChartsSettings"
         Me.Text = local.getvalue("CUI_Charts.charts_settings")
         Me.ResumeLayout(False)
 
     End Sub
-    Friend WithEvents VLabel1 As VIBlend.WinForms.Controls.vLabel
+    Friend WithEvents m_chartTitleLabel As VIBlend.WinForms.Controls.vLabel
     Friend WithEvents m_chartTitleTextBox As VIBlend.WinForms.Controls.vTextBox
-    Friend WithEvents VLabel2 As VIBlend.WinForms.Controls.vLabel
-    Friend WithEvents VLabel3 As VIBlend.WinForms.Controls.vLabel
+    Friend WithEvents m_chartSerie2Label As VIBlend.WinForms.Controls.vLabel
+    Friend WithEvents m_chartSerie1Label As VIBlend.WinForms.Controls.vLabel
     Friend WithEvents m_serie1ColorPicker As VIBlend.WinForms.Controls.vColorPicker
     Friend WithEvents m_serie2ColorPicker As VIBlend.WinForms.Controls.vColorPicker
-    Friend WithEvents VLabel4 As VIBlend.WinForms.Controls.vLabel
-    Friend WithEvents VLabel5 As VIBlend.WinForms.Controls.vLabel
+    Friend WithEvents m_AccountLabel As VIBlend.WinForms.Controls.vLabel
+    Friend WithEvents m_ColorLabel As VIBlend.WinForms.Controls.vLabel
     Friend WithEvents m_serie1TypeComboBox As VIBlend.WinForms.Controls.vComboBox
     Friend WithEvents m_serie2TypeComboBox As VIBlend.WinForms.Controls.vComboBox
-    Friend WithEvents VLabel6 As VIBlend.WinForms.Controls.vLabel
+    Friend WithEvents m_typeLabel As VIBlend.WinForms.Controls.vLabel
     Friend WithEvents m_saveButton As VIBlend.WinForms.Controls.vButton
     Friend WithEvents ImageList1 As System.Windows.Forms.ImageList
     Friend WithEvents m_serie1AccountTreeviewBox As VIBlend.WinForms.Controls.vTreeViewBox

@@ -23,11 +23,11 @@ Partial Class ConnectionTP
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(ConnectionTP))
-        Me.Label1 = New System.Windows.Forms.Label()
+        Me.m_userLabel = New System.Windows.Forms.Label()
         Me.userNameTextBox = New System.Windows.Forms.TextBox()
         Me.ImageList1 = New System.Windows.Forms.ImageList(Me.components)
         Me.passwordTextBox = New System.Windows.Forms.TextBox()
-        Me.Label2 = New System.Windows.Forms.Label()
+        Me.m_passwordLabel = New System.Windows.Forms.Label()
         Me.CPPanel = New System.Windows.Forms.Panel()
         Me.Panel1 = New System.Windows.Forms.Panel()
         Me.ConnectionBT = New VIBlend.WinForms.Controls.vButton()
@@ -35,14 +35,14 @@ Partial Class ConnectionTP
         Me.Panel1.SuspendLayout()
         Me.SuspendLayout()
         '
-        'Label1
+        'm_userLabel
         '
-        Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(99, 58)
-        Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(117, 15)
-        Me.Label1.TabIndex = 1
-        Me.Label1.Text = Local.GetValue("connection.user_id")
+        Me.m_userLabel.AutoSize = True
+        Me.m_userLabel.Location = New System.Drawing.Point(99, 58)
+        Me.m_userLabel.Name = "m_userLabel"
+        Me.m_userLabel.Size = New System.Drawing.Size(117, 15)
+        Me.m_userLabel.TabIndex = 1
+        Me.m_userLabel.Text = "[connection.user_id]"
         '
         'userNameTextBox
         '
@@ -70,14 +70,14 @@ Partial Class ConnectionTP
         Me.passwordTextBox.TabIndex = 3
         Me.passwordTextBox.UseSystemPasswordChar = True
         '
-        'Label2
+        'm_passwordLabel
         '
-        Me.Label2.AutoSize = True
-        Me.Label2.Location = New System.Drawing.Point(93, 136)
-        Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(129, 15)
-        Me.Label2.TabIndex = 6
-        Me.Label2.Text = Local.GetValue("connection.password")
+        Me.m_passwordLabel.AutoSize = True
+        Me.m_passwordLabel.Location = New System.Drawing.Point(93, 136)
+        Me.m_passwordLabel.Name = "m_passwordLabel"
+        Me.m_passwordLabel.Size = New System.Drawing.Size(129, 15)
+        Me.m_passwordLabel.TabIndex = 6
+        Me.m_passwordLabel.Text = "[connection.password]"
         '
         'CPPanel
         '
@@ -94,9 +94,9 @@ Partial Class ConnectionTP
         Me.Panel1.Controls.Add(Me.ConnectionBT)
         Me.Panel1.Controls.Add(Me.CancelBT)
         Me.Panel1.Controls.Add(Me.CPPanel)
-        Me.Panel1.Controls.Add(Me.Label1)
+        Me.Panel1.Controls.Add(Me.m_userLabel)
         Me.Panel1.Controls.Add(Me.userNameTextBox)
-        Me.Panel1.Controls.Add(Me.Label2)
+        Me.Panel1.Controls.Add(Me.m_passwordLabel)
         Me.Panel1.Controls.Add(Me.passwordTextBox)
         Me.Panel1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Panel1.Location = New System.Drawing.Point(0, 0)
@@ -116,7 +116,7 @@ Partial Class ConnectionTP
         Me.ConnectionBT.RoundedCornersMask = CType(15, Byte)
         Me.ConnectionBT.Size = New System.Drawing.Size(100, 47)
         Me.ConnectionBT.TabIndex = 4
-        Me.ConnectionBT.Text = Local.GetValue("connection.connection")
+        Me.ConnectionBT.Text = "[connection.connection]"
         Me.ConnectionBT.TextAlign = System.Drawing.ContentAlignment.BottomCenter
         Me.ConnectionBT.UseVisualStyleBackColor = False
         Me.ConnectionBT.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
@@ -133,7 +133,7 @@ Partial Class ConnectionTP
         Me.CancelBT.RoundedCornersMask = CType(15, Byte)
         Me.CancelBT.Size = New System.Drawing.Size(100, 47)
         Me.CancelBT.TabIndex = 5
-        Me.CancelBT.Text = Local.GetValue("general.cancel")
+        Me.CancelBT.Text = "[general.cancel]"
         Me.CancelBT.TextAlign = System.Drawing.ContentAlignment.BottomCenter
         Me.CancelBT.UseVisualStyleBackColor = False
         Me.CancelBT.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
@@ -146,17 +146,17 @@ Partial Class ConnectionTP
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Location = New System.Drawing.Point(0, 0)
         Me.Name = "ConnectionTP"
-        Me.Text = Local.GetValue("connection.connection")
+        Me.Text = "[connection.connection]"
         Me.Panel1.ResumeLayout(False)
         Me.Panel1.PerformLayout()
         Me.ResumeLayout(False)
 
     End Sub
-    Friend WithEvents Label1 As System.Windows.Forms.Label
+    Friend WithEvents m_userLabel As System.Windows.Forms.Label
     Friend WithEvents userNameTextBox As System.Windows.Forms.TextBox
     Friend WithEvents ImageList1 As System.Windows.Forms.ImageList
     Friend WithEvents passwordTextBox As System.Windows.Forms.TextBox
-    Friend WithEvents Label2 As System.Windows.Forms.Label
+    Friend WithEvents m_passwordLabel As System.Windows.Forms.Label
     Friend WithEvents CPPanel As System.Windows.Forms.Panel
     Friend WithEvents BackgroundWorker1 As System.ComponentModel.BackgroundWorker
     Friend WithEvents Panel1 As System.Windows.Forms.Panel

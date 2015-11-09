@@ -69,10 +69,38 @@ Friend Class AccountsView
         GlobalFactsTVInit()
         ComboBoxesInit()
         SetAccountUIState(False, GlobalVariables.Users.CurrentUserIsAdmin())
+        MultilangueSetup()
 
     End Sub
 
+    Private Sub MultilangueSetup()
 
+        Me.m_accountDescriptionGroupBox.Text = Local.GetValue("accounts_edition.account_description")
+        Me.SaveDescriptionBT.Text = Local.GetValue("accounts_edition.save_description")
+        Me.m_accountFormulaGroupBox.Text = Local.GetValue("accounts_edition.account_formula")
+        Me.formulaEdit.Text = Local.GetValue("accounts_edition.edit_formula")
+        Me.submit_cmd.Text = Local.GetValue("accounts_edition.validate_formula")
+        Me.m_accountInformation2GroupBox.Text = Local.GetValue("accounts_edition.account_information")
+        Me.m_accountNameLabel.Text = Local.GetValue("accounts_edition.account_name")
+        Me.m_accountformuleTypeLabel.Text = Local.GetValue("accounts_edition.formula_type")
+        Me.m_accountAccountTypeLabel.Text = Local.GetValue("accounts_edition.account_type")
+        Me.m_accountConsolidationOptionLabel.Text = Local.GetValue("accounts_edition.consolidation_option")
+        Me.m_accountcurrenciesConversionLabel.Text = Local.GetValue("accounts_edition.currencies_conversion")
+        Me.m_globalFactsLabel.Text = Local.GetValue("accounts_edition.macro_economic_indicators")
+        Me.AddSubAccountToolStripMenuItem.Text = Local.GetValue("accounts_edition.new_account")
+        Me.AddCategoryToolStripMenuItem.Text = Local.GetValue("accounts_edition.add_tab_account")
+        Me.DeleteAccountToolStripMenuItem.Text = Local.GetValue("accounts_edition.delete_account")
+        Me.DropHierarchyToExcelToolStripMenuItem.Text = Local.GetValue("accounts_edition.drop_to_excel")
+        Me.NewToolStripMenuItem.Text = Local.GetValue("general.account")
+        Me.CreateANewAccountToolStripMenuItem.Text = Local.GetValue("accounts_edition.new_account")
+        Me.CreateANewCategoryToolStripMenuItem.Text = Local.GetValue("accounts_edition.new_tab_account")
+        Me.DeleteAccountToolStripMenuItem1.Text = Local.GetValue("accounts_edition.delete_account")
+        Me.DropAllAccountsHierarchyToExcelToolStripMenuItem.Text = Local.GetValue("accounts_edition.drop_to_excel")
+        Me.DropSelectedAccountHierarchyToExcelToolStripMenuItem.Text = Local.GetValue("accounts_edition.drop_selected_hierarchy_to_excel")
+        Me.HelpToolStripMenuItem.Text = Local.GetValue("general.help")
+
+
+    End Sub
 
     Private Sub SetAccountUIState(ByRef p_uiState As Boolean, ByRef p_rightClickState As Boolean)
         SaveDescriptionBT.Enabled = p_uiState
@@ -107,6 +135,7 @@ Friend Class AccountsView
         VTreeViewUtil.InitTVFormat(m_accountTV)
         m_accountTV.ImageList = accountsIL
         GlobalVariables.Accounts.LoadAccountsTVIcons(m_accountTV)
+        m_accountTV.BorderColor = Drawing.Color.Transparent
         AccountsTVPanel.Controls.Add(m_accountTV)
 
         AddHandler m_accountTV.AfterSelect, AddressOf AccountsTV_AfterSelect
@@ -236,18 +265,36 @@ Friend Class AccountsView
 
 #Region "Interface"
 
-    Delegate Sub TVUpdate_Delegate(ByRef p_accountId As Int32, _
-                                   ByRef p_accountParentId As Int32, _
+    Delegate Sub TVUpdate_Delegate(ByRef p_node As vTreeNode, _
                                    ByRef p_accountName As String, _
                                    ByRef p_accountImage As Int32)
-    Friend Sub TVUpdate(ByRef p_accountId As Int32, _
-                        ByRef p_accountParentId As Int32, _
+    Friend Sub TVUpdate(ByRef p_node As vTreeNode, _
                         ByRef p_accountName As String, _
                         ByRef p_accountImage As Int32)
 
-        If InvokeRequired Then
+        If m_accountTV.InvokeRequired Then
             Dim MyDelegate As New TVUpdate_Delegate(AddressOf TVUpdate)
-            Me.Invoke(MyDelegate, New Object() {p_accountId, p_accountParentId, p_accountName, p_accountImage})
+            m_accountTV.Invoke(MyDelegate, New Object() {p_node, p_accountName, p_accountImage})
+        Else
+            p_node.Text = p_accountName
+            p_node.ImageIndex = p_accountImage
+            m_accountTV.Refresh()
+        End If
+
+    End Sub
+
+    Delegate Sub AccountNodeAddition_Delegate(ByRef p_accountId As Int32, _
+                               ByRef p_accountParentId As Int32, _
+                               ByRef p_accountName As String, _
+                               ByRef p_accountImage As Int32)
+    Friend Sub AccountNodeAddition(ByRef p_accountId As Int32, _
+                                   ByRef p_accountParentId As Int32, _
+                                   ByRef p_accountName As String, _
+                                   ByRef p_accountImage As Int32)
+
+        If Me.m_accountTV.InvokeRequired Then
+            Dim MyDelegate As New AccountNodeAddition_Delegate(AddressOf AccountNodeAddition)
+            m_accountTV.Invoke(MyDelegate, New Object() {p_accountId, p_accountParentId, p_accountName, p_accountImage})
         Else
             If p_accountParentId = 0 Then
                 Dim new_node As vTreeNode = VTreeViewUtil.AddNode(CStr(p_accountId), p_accountName, m_accountTV, p_accountImage)
@@ -267,9 +314,9 @@ Friend Class AccountsView
     Delegate Sub TVNodeDelete_Delegate(ByRef p_account_id As Int32)
     Friend Sub TVNodeDelete(ByRef p_account_id As Int32)
 
-        If InvokeRequired Then
+        If Me.m_accountTV.InvokeRequired Then
             Dim MyDelegate As New TVNodeDelete_Delegate(AddressOf TVNodeDelete)
-            Me.Invoke(MyDelegate, New Object() {p_account_id})
+            Me.m_accountTV.Invoke(MyDelegate, New Object() {p_account_id})
         Else
             Dim l_accountNode As vTreeNode = VTreeViewUtil.FindNode(m_accountTV, p_account_id)
             If l_accountNode IsNot Nothing Then
@@ -811,7 +858,6 @@ SubmitFormula:
         End If
         m_controller.UpdateAccountFormulaType(p_accountId, p_li.Value)
         m_currentNode.ImageIndex = p_li.Value
-        m_currentNode.SelectedImageIndex = p_li.Value
 
     End Sub
 
@@ -928,5 +974,5 @@ SubmitFormula:
 
 #End Region
 
-  
+
 End Class
