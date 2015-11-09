@@ -44,9 +44,9 @@ Partial Class CUI2Visualization
         Me.VersionTB = New VIBlend.WinForms.Controls.vTextBox()
         Me.CurrencyTB = New VIBlend.WinForms.Controls.vTextBox()
         Me.EntityTB = New VIBlend.WinForms.Controls.vTextBox()
-        Me.Label3 = New System.Windows.Forms.Label()
-        Me.Label2 = New System.Windows.Forms.Label()
-        Me.Label1 = New System.Windows.Forms.Label()
+        Me.m_currencyLabel = New VIBlend.WinForms.Controls.vLabel()
+        Me.m_versionLabel = New VIBlend.WinForms.Controls.vLabel()
+        Me.m_entityLabel = New VIBlend.WinForms.Controls.vLabel()
         Me.m_chartsRightClickMenu = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.m_editChartButton = New System.Windows.Forms.ToolStripMenuItem()
         Me.m_dropChartOnExcelButton = New System.Windows.Forms.ToolStripMenuItem()
@@ -252,9 +252,9 @@ Partial Class CUI2Visualization
         Me.Panel1.Controls.Add(Me.VersionTB)
         Me.Panel1.Controls.Add(Me.CurrencyTB)
         Me.Panel1.Controls.Add(Me.EntityTB)
-        Me.Panel1.Controls.Add(Me.Label3)
-        Me.Panel1.Controls.Add(Me.Label2)
-        Me.Panel1.Controls.Add(Me.Label1)
+        Me.Panel1.Controls.Add(Me.m_currencyLabel)
+        Me.Panel1.Controls.Add(Me.m_versionLabel)
+        Me.Panel1.Controls.Add(Me.m_entityLabel)
         Me.Panel1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Panel1.Location = New System.Drawing.Point(0, 0)
         Me.Panel1.Margin = New System.Windows.Forms.Padding(0)
@@ -325,35 +325,35 @@ Partial Class CUI2Visualization
         Me.EntityTB.TextAlign = System.Windows.Forms.HorizontalAlignment.Left
         Me.EntityTB.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
         '
-        'Label3
+        'm_currencyLabel
         '
-        Me.Label3.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Label3.AutoSize = True
-        Me.Label3.Location = New System.Drawing.Point(356, 5)
-        Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(49, 13)
-        Me.Label3.TabIndex = 9
-        Me.Label3.Text = "Currency"
+        Me.m_currencyLabel.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.m_currencyLabel.AutoSize = True
+        Me.m_currencyLabel.Location = New System.Drawing.Point(356, 5)
+        Me.m_currencyLabel.Name = "m_currencyLabel"
+        Me.m_currencyLabel.Size = New System.Drawing.Size(49, 13)
+        Me.m_currencyLabel.TabIndex = 9
+        Me.m_currencyLabel.Text = "Currency"
         '
-        'Label2
+        'm_versionLabel
         '
-        Me.Label2.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Label2.AutoSize = True
-        Me.Label2.Location = New System.Drawing.Point(492, 5)
-        Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(42, 13)
-        Me.Label2.TabIndex = 8
-        Me.Label2.Text = "Version"
+        Me.m_versionLabel.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.m_versionLabel.AutoSize = True
+        Me.m_versionLabel.Location = New System.Drawing.Point(492, 5)
+        Me.m_versionLabel.Name = "m_versionLabel"
+        Me.m_versionLabel.Size = New System.Drawing.Size(42, 13)
+        Me.m_versionLabel.TabIndex = 8
+        Me.m_versionLabel.Text = "Version"
         '
-        'Label1
+        'm_entityLabel
         '
-        Me.Label1.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(172, 5)
-        Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(33, 13)
-        Me.Label1.TabIndex = 7
-        Me.Label1.Text = "Entity"
+        Me.m_entityLabel.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.m_entityLabel.AutoSize = True
+        Me.m_entityLabel.Location = New System.Drawing.Point(172, 5)
+        Me.m_entityLabel.Name = "m_entityLabel"
+        Me.m_entityLabel.Size = New System.Drawing.Size(33, 13)
+        Me.m_entityLabel.TabIndex = 7
+        Me.m_entityLabel.Text = "Entity"
         '
         'm_chartsRightClickMenu
         '
@@ -438,9 +438,9 @@ Partial Class CUI2Visualization
     Friend WithEvents VersionTB As VIBlend.WinForms.Controls.vTextBox
     Friend WithEvents CurrencyTB As VIBlend.WinForms.Controls.vTextBox
     Friend WithEvents EntityTB As VIBlend.WinForms.Controls.vTextBox
-    Friend WithEvents Label3 As System.Windows.Forms.Label
-    Friend WithEvents Label2 As System.Windows.Forms.Label
-    Friend WithEvents Label1 As System.Windows.Forms.Label
+    Friend WithEvents m_currencyLabel As VIBlend.WinForms.Controls.vLabel
+    Friend WithEvents m_versionLabel As VIBlend.WinForms.Controls.vLabel
+    Friend WithEvents m_entityLabel As VIBlend.WinForms.Controls.vLabel
     Friend WithEvents m_chartsRightClickMenu As System.Windows.Forms.ContextMenuStrip
     Friend WithEvents m_editChartButton As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents m_dropChartOnExcelButton As System.Windows.Forms.ToolStripMenuItem

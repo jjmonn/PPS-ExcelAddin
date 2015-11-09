@@ -36,9 +36,7 @@ Friend Class AccountsController
     Private m_globalFactsTV As New vTreeView
     Private m_platformMGTUI As PlatformMGTGeneralUI
 
-
     ' Variables
-    Friend m_factsNameKeysDictionary As MultiIndexDictionary(Of UInt32, String, NamedCRUDEntity)
     Friend m_positionsDictionary As New Dictionary(Of Int32, Int32)
     Private m_dependant_account_id As String
     Friend m_formulaTypesToBeTested As New List(Of Int32)
@@ -63,7 +61,7 @@ Friend Class AccountsController
         m_formulaTypesToBeTested.Add(Account.FormulaTypes.FIRST_PERIOD_INPUT)
         m_formulaTypesToBeTested.Add(Account.FormulaTypes.FORMULA)
 
-        AddHandler GlobalVariables.Accounts.Read, AddressOf AccountUpdateFromServer
+        AddHandler GlobalVariables.Accounts.Read, AddressOf AccountReadFromServer
         AddHandler GlobalVariables.Accounts.DeleteEvent, AddressOf AccountDeleteFromServer
         AddHandler GlobalVariables.Accounts.CreationEvent, AddressOf AccountCreateConfirmation
         AddHandler GlobalVariables.Accounts.UpdateEvent, AddressOf AccountUpdateConfirmation
@@ -72,7 +70,6 @@ Friend Class AccountsController
 
     Private Sub InstanceVariablesLoading()
 
-        m_factsNameKeysDictionary = GlobalVariables.GlobalFacts.GetDictionary()
         m_newAccountView = New NewAccountUI(m_view, Me)
         m_formulasTranslator = New FormulasTranslations()
 
@@ -156,6 +153,11 @@ Friend Class AccountsController
     Friend Sub UpdateAccountType(ByVal p_id As UInt32, ByVal p_value As Account.AccountType)
         UpdateVar(p_id, p_value, New UpdateVarDelegate(Sub(ByRef p_account As Account, ByRef p_destValue As Object) p_account.Type = p_destValue))
     End Sub
+
+    Friend Sub UpdateAccountImage(ByVal p_id As UInt32, ByVal p_value As UInt32)
+        UpdateVar(p_id, p_value, New UpdateVarDelegate(Sub(ByRef p_account As Account, ByRef p_destValue As Object) p_account.Image = p_destValue))
+    End Sub
+
 
     Friend Sub UpdateAccountConversionOption(ByVal p_id As UInt32, ByVal p_value As Account.ConversionOptions)
         UpdateVar(p_id, p_value, New UpdateVarDelegate(Sub(ByRef p_account As Account, ByRef p_destValue As Object) p_account.ConversionOptionId = p_destValue))
@@ -354,16 +356,35 @@ Friend Class AccountsController
                                                           ByRef p_newFormulaType As UInt32) As Boolean
 
         Dim l_currentFType As Int32 = GetAccount(p_accountId).FormulaType
-        If l_currentFType = Account.FormulaTypes.HARD_VALUE_INPUT _
-        Or l_currentFType = Account.FormulaTypes.FIRST_PERIOD_INPUT Then
 
-            If p_newFormulaType = Account.FormulaTypes.AGGREGATION_OF_SUB_ACCOUNTS _
-            Or p_newFormulaType = Account.FormulaTypes.FORMULA _
-            Or p_newFormulaType = Account.FormulaTypes.TITLE Then
-                Return True
-            End If
+        Select Case l_currentFType
+            Case Account.FormulaTypes.HARD_VALUE_INPUT, _
+                 Account.FormulaTypes.FIRST_PERIOD_INPUT
+                If p_newFormulaType = Account.FormulaTypes.AGGREGATION_OF_SUB_ACCOUNTS _
+                Or p_newFormulaType = Account.FormulaTypes.FORMULA _
+                Or p_newFormulaType = Account.FormulaTypes.TITLE Then
+                    Return True
+                End If
+        End Select
+        Return False
 
-        End If
+    End Function
+
+    Friend Function FormulaTypeChangeImpliesFormulaDeletion(ByRef p_accountId As UInt32, _
+                                                            ByRef p_newFormulaType As UInt32) As Boolean
+
+
+        Dim l_currentFType As Int32 = GetAccount(p_accountId).FormulaType
+
+        Select Case l_currentFType
+            Case Account.FormulaTypes.FORMULA, _
+                 Account.FormulaTypes.FIRST_PERIOD_INPUT
+                If p_newFormulaType = Account.FormulaTypes.AGGREGATION_OF_SUB_ACCOUNTS _
+           Or p_newFormulaType = Account.FormulaTypes.HARD_VALUE_INPUT _
+           Or p_newFormulaType = Account.FormulaTypes.TITLE Then
+                    Return True
+                End If
+        End Select
         Return False
 
     End Function
@@ -372,19 +393,22 @@ Friend Class AccountsController
 
 #Region "Events"
 
-    Private Sub AccountUpdateFromServer(ByRef status As ErrorMessage, ByRef p_account As Account)
+    Private Sub AccountReadFromServer(ByRef status As ErrorMessage, ByRef p_account As Account)
 
         Dim l_node As vTreeNode = VTreeViewUtil.FindNode(m_accountsTV, p_account.Id)
-
         If status = ErrorMessage.SUCCESS _
-        AndAlso l_node IsNot Nothing _
         AndAlso m_isClosing = False Then
-            m_view.TVUpdate(p_account.Id, _
-                            p_account.ParentId, _
-                            p_account.Name, _
-                            p_account.Image)
-
             InstanceVariablesLoading()
+            If l_node Is Nothing Then
+                m_view.AccountNodeAddition(p_account.Id, _
+                                           p_account.ParentId, _
+                                           p_account.Name, _
+                                           p_account.Image)
+            Else
+                m_view.TVUpdate(l_node, _
+                                p_account.Name, _
+                                p_account.Image)
+            End If
         End If
 
     End Sub
@@ -399,11 +423,10 @@ Friend Class AccountsController
 
     End Sub
 
-    Private Sub AccountCreateConfirmation(ByRef status As ErrorMessage, ByRef id As Int32)
+    Private Sub AccountCreateConfirmation(ByRef status As ErrorMessage, ByRef p_accountId As Int32)
 
         If status <> ErrorMessage.SUCCESS Then
-            MsgBox("The account could not be created." & Chr(13) & _
-                   "Error " & "")
+            MsgBox("The account could not be created." & Chr(13) & "Error" & "")
             ' display error from error (to be catched in account) priority normal 
         End If
 

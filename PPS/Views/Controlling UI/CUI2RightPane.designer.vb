@@ -26,17 +26,17 @@ Partial Class CUI2RightPane
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(CUI2RightPane))
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
         Me.TableLayoutPanel2 = New System.Windows.Forms.TableLayoutPanel()
-        Me.Label1 = New System.Windows.Forms.Label()
+        Me.m_columnsLabel = New System.Windows.Forms.Label()
         Me.ImageList2 = New System.Windows.Forms.ImageList(Me.components)
         Me.columnsDisplayList = New VIBlend.WinForms.Controls.vListBox()
-        Me.Label2 = New System.Windows.Forms.Label()
+        Me.m_rowsLabel = New System.Windows.Forms.Label()
         Me.rowsDisplayList = New VIBlend.WinForms.Controls.vListBox()
         Me.UpdateBT = New System.Windows.Forms.Button()
         Me.ImageList1 = New System.Windows.Forms.ImageList(Me.components)
         Me.DimensionsTVPanel = New System.Windows.Forms.Panel()
         Me.Panel1 = New System.Windows.Forms.Panel()
         Me.CollapseRightPaneBT = New VIBlend.WinForms.Controls.vButton()
-        Me.Label3 = New System.Windows.Forms.Label()
+        Me.m_fieldChoiceLabel = New System.Windows.Forms.Label()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.TableLayoutPanel2.SuspendLayout()
         Me.Panel1.SuspendLayout()
@@ -65,9 +65,9 @@ Partial Class CUI2RightPane
         Me.TableLayoutPanel2.ColumnCount = 2
         Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
         Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
-        Me.TableLayoutPanel2.Controls.Add(Me.Label1, 1, 0)
+        Me.TableLayoutPanel2.Controls.Add(Me.m_columnsLabel, 1, 0)
         Me.TableLayoutPanel2.Controls.Add(Me.columnsDisplayList, 1, 1)
-        Me.TableLayoutPanel2.Controls.Add(Me.Label2, 0, 0)
+        Me.TableLayoutPanel2.Controls.Add(Me.m_rowsLabel, 0, 0)
         Me.TableLayoutPanel2.Controls.Add(Me.rowsDisplayList, 0, 1)
         Me.TableLayoutPanel2.Controls.Add(Me.UpdateBT, 1, 2)
         Me.TableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill
@@ -80,20 +80,20 @@ Partial Class CUI2RightPane
         Me.TableLayoutPanel2.Size = New System.Drawing.Size(271, 276)
         Me.TableLayoutPanel2.TabIndex = 5
         '
-        'Label1
+        'm_columnsLabel
         '
-        Me.Label1.AutoSize = True
-        Me.Label1.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label1.ForeColor = System.Drawing.Color.Black
-        Me.Label1.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.Label1.ImageKey = "table_selection_column.ico"
-        Me.Label1.ImageList = Me.ImageList2
-        Me.Label1.Location = New System.Drawing.Point(138, 0)
-        Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(130, 20)
-        Me.Label1.TabIndex = 3
-        Me.Label1.Text = Local.GetValue("CUI.columns_label")
-        Me.Label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.m_columnsLabel.AutoSize = True
+        Me.m_columnsLabel.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.m_columnsLabel.ForeColor = System.Drawing.Color.Black
+        Me.m_columnsLabel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.m_columnsLabel.ImageKey = "table_selection_column.ico"
+        Me.m_columnsLabel.ImageList = Me.ImageList2
+        Me.m_columnsLabel.Location = New System.Drawing.Point(138, 0)
+        Me.m_columnsLabel.Name = "m_columnsLabel"
+        Me.m_columnsLabel.Size = New System.Drawing.Size(130, 20)
+        Me.m_columnsLabel.TabIndex = 3
+        Me.m_columnsLabel.Text = Local.GetValue("CUI.columns_label")
+        Me.m_columnsLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
         'ImageList2
         '
@@ -115,20 +115,20 @@ Partial Class CUI2RightPane
         Me.columnsDisplayList.VIBlendScrollBarsTheme = VIBlend.Utilities.VIBLEND_THEME.OFFICESILVER
         Me.columnsDisplayList.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.OFFICESILVER
         '
-        'Label2
+        'm_rowsLabel
         '
-        Me.Label2.AutoSize = True
-        Me.Label2.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label2.ForeColor = System.Drawing.Color.Black
-        Me.Label2.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.Label2.ImageKey = "table_selection_row.ico"
-        Me.Label2.ImageList = Me.ImageList2
-        Me.Label2.Location = New System.Drawing.Point(3, 0)
-        Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(129, 20)
-        Me.Label2.TabIndex = 4
-        Me.Label2.Text = Local.GetValue("CUI.rows_label")
-        Me.Label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.m_rowsLabel.AutoSize = True
+        Me.m_rowsLabel.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.m_rowsLabel.ForeColor = System.Drawing.Color.Black
+        Me.m_rowsLabel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.m_rowsLabel.ImageKey = "table_selection_row.ico"
+        Me.m_rowsLabel.ImageList = Me.ImageList2
+        Me.m_rowsLabel.Location = New System.Drawing.Point(3, 0)
+        Me.m_rowsLabel.Name = "m_rowsLabel"
+        Me.m_rowsLabel.Size = New System.Drawing.Size(129, 20)
+        Me.m_rowsLabel.TabIndex = 4
+        Me.m_rowsLabel.Text = Local.GetValue("CUI.rows_label")
+        Me.m_rowsLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
         'rowsDisplayList
         '
@@ -174,7 +174,7 @@ Partial Class CUI2RightPane
         'Panel1
         '
         Me.Panel1.Controls.Add(Me.CollapseRightPaneBT)
-        Me.Panel1.Controls.Add(Me.Label3)
+        Me.Panel1.Controls.Add(Me.m_fieldChoiceLabel)
         Me.Panel1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Panel1.Location = New System.Drawing.Point(3, 3)
         Me.Panel1.Name = "Panel1"
@@ -196,16 +196,16 @@ Partial Class CUI2RightPane
         Me.CollapseRightPaneBT.UseVisualStyleBackColor = False
         Me.CollapseRightPaneBT.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
         '
-        'Label3
+        'm_fieldChoiceLabel
         '
-        Me.Label3.AutoSize = True
-        Me.Label3.ForeColor = System.Drawing.Color.Black
-        Me.Label3.Location = New System.Drawing.Point(7, 11)
-        Me.Label3.Margin = New System.Windows.Forms.Padding(10, 3, 3, 0)
-        Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(169, 15)
-        Me.Label3.TabIndex = 6
-        Me.Label3.Text = Local.GetValue("CUI.fields_choice")
+        Me.m_fieldChoiceLabel.AutoSize = True
+        Me.m_fieldChoiceLabel.ForeColor = System.Drawing.Color.Black
+        Me.m_fieldChoiceLabel.Location = New System.Drawing.Point(7, 11)
+        Me.m_fieldChoiceLabel.Margin = New System.Windows.Forms.Padding(10, 3, 3, 0)
+        Me.m_fieldChoiceLabel.Name = "m_fieldChoiceLabel"
+        Me.m_fieldChoiceLabel.Size = New System.Drawing.Size(169, 15)
+        Me.m_fieldChoiceLabel.TabIndex = 6
+        Me.m_fieldChoiceLabel.Text = Local.GetValue("CUI.fields_choice")
         '
         'CUI2RightPane
         '
@@ -225,8 +225,8 @@ Partial Class CUI2RightPane
     End Sub
     Friend WithEvents TableLayoutPanel1 As System.Windows.Forms.TableLayoutPanel
     Friend WithEvents TableLayoutPanel2 As System.Windows.Forms.TableLayoutPanel
-    Friend WithEvents Label1 As System.Windows.Forms.Label
-    Friend WithEvents Label3 As System.Windows.Forms.Label
+    Friend WithEvents m_columnsLabel As System.Windows.Forms.Label
+    Friend WithEvents m_fieldChoiceLabel As System.Windows.Forms.Label
     Friend WithEvents DimensionsTVPanel As System.Windows.Forms.Panel
     Friend WithEvents UpdateBT As System.Windows.Forms.Button
     Friend WithEvents ImageList1 As System.Windows.Forms.ImageList
@@ -235,6 +235,6 @@ Partial Class CUI2RightPane
     Friend WithEvents Panel1 As System.Windows.Forms.Panel
     Friend WithEvents ImageList2 As System.Windows.Forms.ImageList
     Friend WithEvents CollapseRightPaneBT As VIBlend.WinForms.Controls.vButton
-    Friend WithEvents Label2 As System.Windows.Forms.Label
+    Friend WithEvents m_rowsLabel As System.Windows.Forms.Label
 
 End Class

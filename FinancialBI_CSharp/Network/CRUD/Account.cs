@@ -82,6 +82,9 @@ namespace CRUD
       l_account.AccountTab = p_packet.ReadInt32();
       l_account.Description = p_packet.ReadString();
 
+        // Currently image corresponds to formula type:
+      l_account.Image = (UInt32)l_account.FormulaType;
+
       return (l_account);
     }
 

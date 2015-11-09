@@ -64,8 +64,11 @@ Public Class VTreeViewUtil
     Public Shared Function GetNodesIds(ByRef TV As vTreeView) As List(Of Int32)
 
         Dim tmpList As New List(Of Int32)
-        For Each node As vTreeNode In TV.GetNodes
-            tmpList.Add(CInt(node.Value))
+        For Each node As vTreeNode In TV.Nodes
+            If tmpList.Contains(CInt(node.Value)) = False Then tmpList.Add(CInt(node.Value))
+            For Each l_accountId As Int32 In GetNodesIds(node)
+                If tmpList.Contains(l_accountId) = False Then tmpList.Add(l_accountId)
+            Next
         Next
         Return tmpList
 
@@ -75,7 +78,7 @@ Public Class VTreeViewUtil
 
         Dim tmpList As New List(Of Int32)
         For Each subNode As vTreeNode In GetAllChildrenNodesList(node)
-            tmpList.Add(CInt(subNode.Value))
+            If tmpList.Contains(CInt(subNode.Value)) = False Then tmpList.Add(CInt(subNode.Value))
         Next
         Return tmpList
 
@@ -302,12 +305,12 @@ Public Class VTreeViewUtil
 #End Region
 
 
-    Public Shared Function GeneratePositionsDictionary(ByRef TV As vTreeView) As Dictionary(Of Int32, Int32)
+    Public Shared Function GeneratePositionsDictionary(ByRef p_treeview As vTreeView) As Dictionary(Of Int32, Int32)
 
         Dim positionsDictionary As New Dictionary(Of Int32, Int32)
         Dim currentPosition As Int32 = 0
-        For Each node As vTreeNode In TV.GetNodes
-            positionsDictionary.Add(node.Value, currentPosition)
+        For Each l_accountId As Int32 In GetNodesIds(p_treeview)
+            positionsDictionary.Add(l_accountId, currentPosition)
             currentPosition += 1
         Next
         Return positionsDictionary

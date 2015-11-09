@@ -41,6 +41,7 @@ Public Class CUI2VisualisationChartsSettings
         GlobalVariables.Accounts.LoadAccountsTV(m_serie2AccountTreeviewBox.TreeView)
         InitializeTypesComboboxes()
         LoadCurrentSettings()
+        MultilangueSetup()
 
         AddHandler m_serie1AccountTreeviewBox.TreeView.KeyDown, AddressOf Serie1TV_KeyDown
         AddHandler m_serie2AccountTreeviewBox.TreeView.KeyDown, AddressOf Serie2TV_KeyDown
@@ -157,6 +158,19 @@ Public Class CUI2VisualisationChartsSettings
 
         End Select
 
+
+    End Sub
+
+    Private Sub MultilangueSetup()
+
+        Me.m_chartTitleLabel.Text = Local.GetValue("CUI_Charts.chart_title")
+        Me.m_chartSerie2Label.Text = Local.GetValue("CUI_Charts.serie_2")
+        Me.m_chartSerie1Label.Text = Local.GetValue("CUI_Charts.serie_1")
+        Me.m_AccountLabel.Text = Local.GetValue("general.account")
+        Me.m_ColorLabel.Text = Local.GetValue("general.couleur")
+        Me.m_typeLabel.Text = Local.GetValue("general.type")
+        Me.m_saveButton.Text = Local.GetValue("general.save")
+        Me.Text = Local.GetValue("CUI_Charts.charts_settings")
 
     End Sub
 
@@ -288,6 +302,7 @@ Public Class CUI2VisualisationChartsSettings
 
 #End Region
 
+
 #Region "Events"
 
     Private Sub Serie1TV_KeyDown(sender As Object, e As KeyEventArgs)
@@ -311,5 +326,6 @@ Public Class CUI2VisualisationChartsSettings
     End Sub
 
 #End Region
+
 
 End Class

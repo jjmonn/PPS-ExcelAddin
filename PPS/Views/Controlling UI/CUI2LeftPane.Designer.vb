@@ -32,7 +32,7 @@ Partial Class CUI2LeftPane
         Me.CollapseSelectionBT = New VIBlend.WinForms.Controls.vButton()
         Me.Panel1 = New System.Windows.Forms.Panel()
         Me.PanelCollapseBT = New VIBlend.WinForms.Controls.vButton()
-        Me.Label1 = New System.Windows.Forms.Label()
+        Me.m_entitySelectionLabel = New System.Windows.Forms.Label()
         Me.CategoriesIL = New System.Windows.Forms.ImageList(Me.components)
         Me.EntitiesTVImageList = New System.Windows.Forms.ImageList(Me.components)
         Me.VersionsIL = New System.Windows.Forms.ImageList(Me.components)
@@ -146,7 +146,7 @@ Partial Class CUI2LeftPane
         'Panel1
         '
         Me.Panel1.Controls.Add(Me.PanelCollapseBT)
-        Me.Panel1.Controls.Add(Me.Label1)
+        Me.Panel1.Controls.Add(Me.m_entitySelectionLabel)
         Me.Panel1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Panel1.Location = New System.Drawing.Point(0, 0)
         Me.Panel1.Margin = New System.Windows.Forms.Padding(0)
@@ -173,15 +173,15 @@ Partial Class CUI2LeftPane
         Me.PanelCollapseBT.UseVisualStyleBackColor = False
         Me.PanelCollapseBT.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
         '
-        'Label1
+        'm_entitySelectionLabel
         '
-        Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(3, 5)
-        Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(131, 15)
-        Me.Label1.TabIndex = 0
-        Me.Label1.Text = local.getvalue("CUI.entities_selection")
-        Me.Label1.TextAlign = System.Drawing.ContentAlignment.BottomLeft
+        Me.m_entitySelectionLabel.AutoSize = True
+        Me.m_entitySelectionLabel.Location = New System.Drawing.Point(3, 5)
+        Me.m_entitySelectionLabel.Name = "m_entitySelectionLabel"
+        Me.m_entitySelectionLabel.Size = New System.Drawing.Size(131, 15)
+        Me.m_entitySelectionLabel.TabIndex = 0
+        Me.m_entitySelectionLabel.Text = local.getvalue("CUI.entities_selection")
+        Me.m_entitySelectionLabel.TextAlign = System.Drawing.ContentAlignment.BottomLeft
         '
         'CategoriesIL
         '
@@ -213,25 +213,25 @@ Partial Class CUI2LeftPane
         '
         'CUI2LeftPane
         '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(6!, 13!)
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.BackColor = System.Drawing.Color.FromArgb(CType(CType(207,Byte),Integer), CType(CType(212,Byte),Integer), CType(CType(221,Byte),Integer))
+        Me.BackColor = System.Drawing.Color.FromArgb(CType(CType(207, Byte), Integer), CType(CType(212, Byte), Integer), CType(CType(221, Byte), Integer))
         Me.Controls.Add(Me.MainTableLayout)
         Me.Name = "CUI2LeftPane"
         Me.Size = New System.Drawing.Size(270, 671)
-        Me.MainTableLayout.ResumeLayout(false)
-        Me.SplitContainer.Panel2.ResumeLayout(false)
-        CType(Me.SplitContainer,System.ComponentModel.ISupportInitialize).EndInit
-        Me.SplitContainer.ResumeLayout(false)
-        Me.SelectionTVTableLayout.ResumeLayout(false)
-        Me.TableLayoutPanel2.ResumeLayout(false)
-        Me.Panel1.ResumeLayout(false)
-        Me.Panel1.PerformLayout
-        Me.ResumeLayout(false)
+        Me.MainTableLayout.ResumeLayout(False)
+        Me.SplitContainer.Panel2.ResumeLayout(False)
+        CType(Me.SplitContainer, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.SplitContainer.ResumeLayout(False)
+        Me.SelectionTVTableLayout.ResumeLayout(False)
+        Me.TableLayoutPanel2.ResumeLayout(False)
+        Me.Panel1.ResumeLayout(False)
+        Me.Panel1.PerformLayout()
+        Me.ResumeLayout(False)
 
-End Sub
+    End Sub
     Friend WithEvents MainTableLayout As System.Windows.Forms.TableLayoutPanel
-    Friend WithEvents Label1 As System.Windows.Forms.Label
+    Friend WithEvents m_entitySelectionLabel As System.Windows.Forms.Label
     Friend WithEvents SplitContainer As System.Windows.Forms.SplitContainer
     Friend WithEvents SelectionTVTableLayout As System.Windows.Forms.TableLayoutPanel
     Friend WithEvents SelectionCB As VIBlend.WinForms.Controls.vComboBox

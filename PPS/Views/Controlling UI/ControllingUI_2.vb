@@ -145,6 +145,7 @@ Friend Class ControllingUI_2
             DGVsControlTab.TabPages.Add(newTab)
         Next
         InitItemsFormat()
+        MultilangueSetup()
 
         ' Refreshing Background Worker
         BackgroundWorker1.WorkerSupportsCancellation = True
@@ -283,6 +284,40 @@ Friend Class ControllingUI_2
         Me.WindowState = FormWindowState.Maximized
 
     End Sub
+
+    Private Sub MultilangueSetup()
+
+        Me.RefreshRightClick.Text = Local.GetValue("CUI.refresh")
+        Me.SelectAllToolStripMenuItem.Text = Local.GetValue("CUI.select_all")
+        Me.UnselectAllToolStripMenuItem.Text = Local.GetValue("CUI.unselect_all")
+        Me.ExpandAllRightClick.Text = Local.GetValue("CUI.expand_all")
+        Me.CollapseAllRightClick.Text = Local.GetValue("CUI.collapse_all")
+        Me.LogRightClick.Text = Local.GetValue("CUI.log")
+        Me.DGVFormatsButton.Text = Local.GetValue("CUI.display_options")
+        Me.ColumnsAutoSize.Text = Local.GetValue("CUI.adjust_columns_size")
+        Me.ColumnsAutoFitBT.Text = Local.GetValue("CUI.automatic_columns_adjustment")
+        Me.SelectAllToolStripMenuItem1.Text = Local.GetValue("CUI.select_all")
+        Me.UnselectAllToolStripMenuItem1.Text = Local.GetValue("CUI.unselect_all")
+
+        ' labels
+        Me.m_currencyLabel.Text = Local.GetValue("CUI.currency")
+        Me.m_versionLabel.Text = Local.GetValue("CUI.version")
+        Me.m_entityLabel.Text = Local.GetValue("CUI.entity")
+
+        Me.MainMenu.Text = Local.GetValue("CUI.main_menu")
+        Me.ExcelToolStripMenuItem.ToolTipText = Local.GetValue("CUI.drop_on_excel_tooltip")
+        Me.DropOnExcelToolStripMenuItem.Text = Local.GetValue("CUI.drop_on_excel")
+        Me.BusinessControlToolStripMenuItem.Text = Local.GetValue("CUI.performance_review")
+        Me.BusinessControlToolStripMenuItem.ToolTipText = Local.GetValue("CUI.performance_review_tooltip")
+        Me.VersionsComparisonToolStripMenuItem.Text = Local.GetValue("CUI.display_versions_comparison")
+        Me.SwitchVersionsToolStripMenuItem.Text = Local.GetValue("CUI.switch_versions")
+        Me.HideVersionsComparisonToolStripMenuItem.Text = Local.GetValue("CUI.take_off_comparison")
+        Me.RefreshToolStripMenuItem.ToolTipText = Local.GetValue("CUI.refresh_tooltip")
+        Me.ChartBT.Text = Local.GetValue("CUI.charts")
+        Me.Text = Local.GetValue("CUI.financials")
+
+    End Sub
+
 
 #End Region
 
@@ -555,7 +590,7 @@ Friend Class ControllingUI_2
     End Sub
 
     Private Sub ExcelToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ExcelToolStripMenuItem.Click
-        m_controller.dropOnExcel()
+        m_controller.DropOnExcel()
     End Sub
 
     Private Sub RefreshToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles RefreshToolStripMenuItem.Click

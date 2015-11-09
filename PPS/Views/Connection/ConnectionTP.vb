@@ -47,6 +47,8 @@ Public Class ConnectionTP
         CP.Height = 79
         CP.Visible = False
 
+        SetupMultilangue()
+
     End Sub
 
   Public Sub Init(ByRef addin As AddinModule)
@@ -54,6 +56,17 @@ Public Class ConnectionTP
     Me.Addin = addin
 
   End Sub
+
+    Private Sub SetupMultilangue()
+
+        Me.m_userLabel.Text = Local.GetValue("connection.user_id")
+        Me.m_passwordLabel.Text = Local.GetValue("connection.password")
+        Me.ConnectionBT.Text = Local.GetValue("connection.connection")
+        Me.CancelBT.Text = Local.GetValue("general.cancel")
+        Me.Text = Local.GetValue("connection.connection")
+
+
+    End Sub
 
 #End Region
 
