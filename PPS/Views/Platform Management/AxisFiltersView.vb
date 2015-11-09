@@ -29,6 +29,7 @@ Friend Class AxisFiltersView
 #Region "Initialization"
 
     Friend Sub New(ByRef p_controller As AxisFiltersController, _
+                   ByRef p_filterValueTV As vTreeView, _
                    ByRef p_filtersNode As vTreeNode, _
                    ByRef p_axidId As Int32)
 
@@ -39,7 +40,7 @@ Friend Class AxisFiltersView
         m_controller = p_controller
         m_axisId = p_axidId
         m_filtersNode = p_filtersNode
-        AxisFilterManager.LoadFvTv(m_filtersFiltersValuesTV, m_filtersNode, m_axisId)
+        m_filtersFiltersValuesTV = p_filterValueTV
 
         m_tableLayoutPanel.Controls.Add(m_filtersFiltersValuesTV, 0, 1)
         m_filtersFiltersValuesTV.Dock = DockStyle.Fill

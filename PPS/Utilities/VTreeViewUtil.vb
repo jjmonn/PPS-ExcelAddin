@@ -309,8 +309,8 @@ Public Class VTreeViewUtil
 
         Dim positionsDictionary As New Dictionary(Of Int32, Int32)
         Dim currentPosition As Int32 = 0
-        For Each l_accountId As Int32 In GetNodesIds(p_treeview)
-            positionsDictionary.Add(l_accountId, currentPosition)
+        For Each l_value As Int32 In GetNodesIds(p_treeview)
+            positionsDictionary.Add(l_value, currentPosition)
             currentPosition += 1
         Next
         Return positionsDictionary

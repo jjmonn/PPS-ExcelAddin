@@ -256,7 +256,7 @@ Class AxisFilterManager : Inherits CRUDManager
 
         Dim filtersValuesDict = GlobalVariables.FiltersValues.GetDictionary(CUInt(filterNode.Value))
         If filtersValuesDict Is Nothing Then Exit Sub
-        For Each filterValue As FilterValue In filtersValuesDict.Values
+        For Each filterValue As FilterValue In filtersValuesDict.SortedValues
             If firstLevelFlag = True Then
 
                 Dim valueNode As vTreeNode = VTreeViewUtil.AddNode(filterValue.Id, filterValue.Name, FvTvNode)

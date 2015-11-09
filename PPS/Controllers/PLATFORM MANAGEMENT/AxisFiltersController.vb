@@ -26,6 +26,7 @@ Friend Class AxisFiltersController
     Private m_filtersNode As New vTreeNode
     '    Private m_filtersFilterValuesTv As vTreeView
     Private m_filterTV As New vTreeView
+    Private m_filtersFiltersValuesTV As New vTreeView
 
     ' Variables
     Private m_axisId As Int32
@@ -40,7 +41,8 @@ Friend Class AxisFiltersController
     Friend Sub New(ByRef p_axis_id As UInt32)
 
         m_axisId = p_axis_id
-        m_view = New AxisFiltersView(Me, m_filtersNode, m_axisId)
+        AxisFilterManager.LoadFvTv(m_filtersFiltersValuesTV, m_filtersNode, m_axisId)
+        m_view = New AxisFiltersView(Me, m_filtersFiltersValuesTV, m_filtersNode, m_axisId)
 
         GlobalVariables.Filters.LoadFiltersTV(m_filterTV, m_axisId)
         m_editFilterStructUI = New AxisFilterStructView(m_filterTV, m_axisId, Me, m_filtersNode)
@@ -252,7 +254,7 @@ Friend Class AxisFiltersController
         Dim position As Int32
         Dim accountsUpdates As New List(Of Tuple(Of Int32, String, Int32))
 
-        Dim positionsDictionary As Dictionary(Of Int32, Int32) = VTreeViewUtil.GeneratePositionsDictionary(m_filterTV)
+        Dim positionsDictionary As Dictionary(Of Int32, Int32) = VTreeViewUtil.GeneratePositionsDictionary(m_filtersFiltersValuesTV)
         Dim updateList As New List(Of CRUDEntity)
 
         For Each filterValueId As Int32 In positionsDictionary.Keys
