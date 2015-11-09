@@ -541,9 +541,16 @@ SubmitFormula:
 
     Private Sub AccountsTV_MouseDown(ByVal sender As Object, ByVal e As MouseEventArgs)
 
-        Dim l_node As vTreeNode = Me.m_accountTV.HitTest(e.Location)
-        If l_node IsNot Nothing Then
-            Me.m_accountTV.DoDragDrop(l_node, DragDropEffects.Move)
+        If e.Button = MouseButtons.Right Then
+            TVRCM.Visible = False
+            TVRCM.Show(e.Location)
+            TVRCM.Visible = True
+        Else
+            '  Dim l_node As vTreeNode = m_accountTV.SelectedNode
+            Dim l_node As vTreeNode = Me.m_accountTV.HitTest(e.Location)
+            If l_node IsNot Nothing Then
+                Me.m_accountTV.DoDragDrop(l_node, DragDropEffects.Move)
+            End If
         End If
 
     End Sub
@@ -706,7 +713,7 @@ SubmitFormula:
 
     End Sub
 
-    Private Sub AccountsTV_MouseDoubleClick(sender As Object, e As Windows.Forms.MouseEventArgs)
+    Private Sub AccountsTV_MouseDoubleClick(sender As Object, e As MouseEventArgs)
 
         Dim node As vTreeNode = Me.m_accountTV.HitTest(e.Location)
         If node IsNot Nothing Then
