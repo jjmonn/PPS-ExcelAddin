@@ -93,7 +93,7 @@ Friend Class AccountsView
         Me.DropHierarchyToExcelToolStripMenuItem.Text = Local.GetValue("accounts_edition.drop_to_excel")
         Me.NewToolStripMenuItem.Text = Local.GetValue("general.account")
         Me.CreateANewAccountToolStripMenuItem.Text = Local.GetValue("accounts_edition.new_account")
-        Me.CreateANewCategoryToolStripMenuItem.Text = Local.GetValue("accounts_edition.new_tab_account")
+        Me.CreateANewCategoryToolStripMenuItem.Text = Local.GetValue("accounts_edition.add_tab_account")
         Me.DeleteAccountToolStripMenuItem1.Text = Local.GetValue("accounts_edition.delete_account")
         Me.DropAllAccountsHierarchyToExcelToolStripMenuItem.Text = Local.GetValue("accounts_edition.drop_to_excel")
         Me.DropSelectedAccountHierarchyToExcelToolStripMenuItem.Text = Local.GetValue("accounts_edition.drop_selected_hierarchy_to_excel")
@@ -140,7 +140,7 @@ Friend Class AccountsView
 
         AddHandler m_accountTV.AfterSelect, AddressOf AccountsTV_AfterSelect
         AddHandler m_accountTV.KeyDown, AddressOf AccountsTV_KeyDown
-        AddHandler m_accountTV.MouseDoubleClick, AddressOf AccountsTV_NodeMouseDoubleClick
+        AddHandler m_accountTV.MouseDoubleClick, AddressOf AccountsTV_MouseDoubleClick
 
         ' Drag and drop events
         AddHandler m_accountTV.MouseDown, AddressOf AccountsTV_MouseDown
@@ -713,7 +713,7 @@ SubmitFormula:
 
     End Sub
 
-    Private Sub AccountsTV_NodeMouseDoubleClick(sender As Object, e As Windows.Forms.TreeNodeMouseClickEventArgs)
+    Private Sub AccountsTV_MouseDoubleClick(sender As Object, e As Windows.Forms.MouseEventArgs)
 
         Dim node As vTreeNode = Me.m_accountTV.HitTest(e.Location)
         If node IsNot Nothing Then
