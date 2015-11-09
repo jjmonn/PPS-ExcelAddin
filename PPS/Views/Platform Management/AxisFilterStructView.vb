@@ -60,9 +60,9 @@ Class AxisFilterStructView
 
     Delegate Sub DeleteFilter_Delegate(ByRef p_filterId As Int32)
     Friend Sub DeleteFilter(ByRef p_filterId As Int32)
-        If InvokeRequired Then
+        If Me.m_filtersTV.InvokeRequired Then
             Dim MyDelegate As New DeleteFilter_Delegate(AddressOf DeleteFilter)
-            Me.Invoke(MyDelegate, New Object() {p_filterId})
+            Me.m_filtersTV.Invoke(MyDelegate, New Object() {p_filterId})
         Else
             Dim nodeToBeRemoved As vTreeNode = VTreeViewUtil.FindNode(m_filtersTV, p_filterId)
             If IsNothing(nodeToBeRemoved) = False Then nodeToBeRemoved.Remove()
@@ -74,9 +74,9 @@ Class AxisFilterStructView
     Delegate Sub SetFilter_Delegate(ByRef p_filter As Filter)
     Friend Sub SetFilter(ByRef p_filter As Filter)
 
-        If InvokeRequired Then
+        If Me.m_filtersTV.InvokeRequired Then
             Dim MyDelegate As New SetFilter_Delegate(AddressOf SetFilter)
-            Me.Invoke(MyDelegate, New Object() {p_filter})
+            Me.m_filtersTV.Invoke(MyDelegate, New Object() {p_filter})
         Else
             Dim targetNode As vTreeNode = VTreeViewUtil.FindNode(m_filtersTV, p_filter.Id)
             If targetNode Is Nothing Then

@@ -58,6 +58,8 @@ Friend Class EntitiesController
         AddHandler GlobalVariables.AxisFilters.Read, AddressOf AfterEntityFilterRead
         AddHandler GlobalVariables.AxisFilters.UpdateEvent, AddressOf AfterEntityFilterUpdate
 
+        AddHandler GlobalVariables.EntityCurrencies.Read, AddressOf AfterEntityCurrencyRead
+
     End Sub
 
     Public Sub LoadInstanceVariables()
@@ -174,6 +176,17 @@ Friend Class EntitiesController
 #End Region
 
 #Region "Events"
+
+    Private Sub AfterEntityCurrencyRead(ByRef status As ErrorMessage, ByRef ht As EntityCurrency)
+
+        If (status = ErrorMessage.SUCCESS) Then
+            Dim l_entity As AxisElem = GetEntity(ht.Id)
+            If l_entity Is Nothing Then Exit Sub
+
+            View.UpdateEntity(l_entity)
+        End If
+
+    End Sub
 
     Private Sub AfterEntityRead(ByRef status As ErrorMessage, ByRef ht As AxisElem)
 

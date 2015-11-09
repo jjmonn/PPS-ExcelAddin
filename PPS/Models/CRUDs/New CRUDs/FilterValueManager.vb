@@ -85,7 +85,12 @@ Friend Class FilterValueManager : Inherits CRUDManager
         Dim id As UInt32 = packet.ReadInt32()
 
         If packet.GetError() = ErrorMessage.SUCCESS Then
-            m_filterValuesDic.Remove(CInt(id))
+            For Each filterValueDic In m_filterValuesDic.Values
+                If filterValueDic.ContainsKey(id) Then
+                    filterValueDic.Remove(id)
+                    Exit For
+                End If
+            Next
         End If
         RaiseDeleteEvent(packet.GetError(), id)
 

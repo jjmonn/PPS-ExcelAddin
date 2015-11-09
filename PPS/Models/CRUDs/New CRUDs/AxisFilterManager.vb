@@ -255,6 +255,7 @@ Class AxisFilterManager : Inherits CRUDManager
                                         Optional ByVal firstLevelFlag As Boolean = True)
 
         Dim filtersValuesDict = GlobalVariables.FiltersValues.GetDictionary(CUInt(filterNode.Value))
+        If filtersValuesDict Is Nothing Then Exit Sub
         For Each filterValue As FilterValue In filtersValuesDict.Values
             If firstLevelFlag = True Then
 
