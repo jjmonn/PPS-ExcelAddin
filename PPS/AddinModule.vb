@@ -91,7 +91,6 @@ Public Class AddinModule
     Friend WithEvents AdxRibbonMenu1 As AddinExpress.MSO.ADXRibbonMenu
     Friend WithEvents AdjustmentDropDown As AddinExpress.MSO.ADXRibbonDropDown
     Friend WithEvents MainTabImageList As System.Windows.Forms.ImageList
-    Friend WithEvents ConfigImageList As System.Windows.Forms.ImageList
     Friend WithEvents SubmissionOptionsBT As AddinExpress.MSO.ADXRibbonSplitButton
     Friend WithEvents AdxRibbonMenu5 As AddinExpress.MSO.ADXRibbonMenu
     Friend WithEvents AdxRibbonSeparator4 As AddinExpress.MSO.ADXRibbonSeparator
@@ -174,7 +173,6 @@ Public Class AddinModule
         Me.ConfigurationRibbonBT = New AddinExpress.MSO.ADXRibbonButton(Me.components)
         Me.SettingsBT = New AddinExpress.MSO.ADXRibbonButton(Me.components)
         Me.NewIcosSmall = New System.Windows.Forms.ImageList(Me.components)
-        Me.ConfigImageList = New System.Windows.Forms.ImageList(Me.components)
         Me.SubmissionRibbonIL = New System.Windows.Forms.ImageList(Me.components)
         Me.LightsImageList = New System.Windows.Forms.ImageList(Me.components)
         Me.adxExcelEvents = New AddinExpress.MSO.ADXExcelAppEvents(Me.components)
@@ -412,12 +410,13 @@ Public Class AddinModule
         Me.Menu3.Images.SetKeyName(15, "dna.ico")
         Me.Menu3.Images.SetKeyName(16, "system-settings-icon.ico")
         Me.Menu3.Images.SetKeyName(17, "font.ico")
+        Me.Menu3.Images.SetKeyName(18, "cloud.ico")
         '
         'EditionMainRibbonBT
         '
         Me.EditionMainRibbonBT.Caption = "Edition"
         Me.EditionMainRibbonBT.Id = "adxRibbonButton_617536f4e5cc44f795a1688e24afdeb8"
-        Me.EditionMainRibbonBT.Image = 14
+        Me.EditionMainRibbonBT.Image = 18
         Me.EditionMainRibbonBT.ImageList = Me.Menu3
         Me.EditionMainRibbonBT.ImageTransparentColor = System.Drawing.Color.Transparent
         Me.EditionMainRibbonBT.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
@@ -584,9 +583,9 @@ Public Class AddinModule
         'ConfigurationGroup
         '
         Me.ConfigurationGroup.Caption = "Configuration"
-        Me.ConfigurationGroup.Controls.Add(Me.FormatButton)
         Me.ConfigurationGroup.Controls.Add(Me.ConfigurationRibbonBT)
         Me.ConfigurationGroup.Controls.Add(Me.SettingsBT)
+        Me.ConfigurationGroup.Controls.Add(Me.FormatButton)
         Me.ConfigurationGroup.Id = "adxRibbonGroup_472aee773e454c20851d757e92f14553"
         Me.ConfigurationGroup.ImageTransparentColor = System.Drawing.Color.Transparent
         Me.ConfigurationGroup.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
@@ -631,16 +630,6 @@ Public Class AddinModule
         Me.NewIcosSmall.Images.SetKeyName(0, "university.ico")
         Me.NewIcosSmall.Images.SetKeyName(1, "tables.ico")
         Me.NewIcosSmall.Images.SetKeyName(2, "element_branch2.ico")
-        '
-        'ConfigImageList
-        '
-        Me.ConfigImageList.ImageStream = CType(resources.GetObject("ConfigImageList.ImageStream"), System.Windows.Forms.ImageListStreamer)
-        Me.ConfigImageList.TransparentColor = System.Drawing.Color.Transparent
-        Me.ConfigImageList.Images.SetKeyName(0, "favicon(10).ico")
-        Me.ConfigImageList.Images.SetKeyName(1, "favicon(14).ico")
-        Me.ConfigImageList.Images.SetKeyName(2, "favicon(15).ico")
-        Me.ConfigImageList.Images.SetKeyName(3, "favicon(10).ico")
-        Me.ConfigImageList.Images.SetKeyName(4, "config blue circle.ico")
         '
         'SubmissionRibbonIL
         '

@@ -23,11 +23,11 @@ Partial Class ConnectionTP
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(ConnectionTP))
-        Me.m_userLabel = New System.Windows.Forms.Label()
-        Me.userNameTextBox = New System.Windows.Forms.TextBox()
+        Me.m_userLabel = New VIBlend.WinForms.Controls.vLabel()
+        Me.userNameTextBox = New VIBlend.WinForms.Controls.vTextBox()
         Me.ImageList1 = New System.Windows.Forms.ImageList(Me.components)
-        Me.passwordTextBox = New System.Windows.Forms.TextBox()
-        Me.m_passwordLabel = New System.Windows.Forms.Label()
+        Me.passwordTextBox = New VIBlend.WinForms.Controls.vTextBox()
+        Me.m_passwordLabel = New VIBlend.WinForms.Controls.vLabel()
         Me.CPPanel = New System.Windows.Forms.Panel()
         Me.Panel1 = New System.Windows.Forms.Panel()
         Me.ConnectionBT = New VIBlend.WinForms.Controls.vButton()
@@ -37,20 +37,37 @@ Partial Class ConnectionTP
         '
         'm_userLabel
         '
-        Me.m_userLabel.AutoSize = True
-        Me.m_userLabel.Location = New System.Drawing.Point(99, 58)
+        Me.m_userLabel.BackColor = System.Drawing.Color.Transparent
+        Me.m_userLabel.DisplayStyle = VIBlend.WinForms.Controls.LabelItemStyle.TextOnly
+        Me.m_userLabel.Ellipsis = False
+        Me.m_userLabel.ImageAlignment = System.Drawing.ContentAlignment.TopLeft
+        Me.m_userLabel.Location = New System.Drawing.Point(52, 55)
+        Me.m_userLabel.Multiline = True
         Me.m_userLabel.Name = "m_userLabel"
-        Me.m_userLabel.Size = New System.Drawing.Size(117, 15)
+        Me.m_userLabel.Size = New System.Drawing.Size(141, 16)
         Me.m_userLabel.TabIndex = 1
         Me.m_userLabel.Text = "[connection.user_id]"
+        Me.m_userLabel.TextAlignment = System.Drawing.ContentAlignment.MiddleCenter
+        Me.m_userLabel.UseMnemonics = True
+        Me.m_userLabel.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
         '
         'userNameTextBox
         '
-        Me.userNameTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.userNameTextBox.BackColor = System.Drawing.Color.White
+        Me.userNameTextBox.BoundsOffset = New System.Drawing.Size(1, 1)
+        Me.userNameTextBox.ControlBorderColor = System.Drawing.Color.FromArgb(CType(CType(39, Byte), Integer), CType(CType(39, Byte), Integer), CType(CType(39, Byte), Integer))
+        Me.userNameTextBox.DefaultText = "Empty..."
         Me.userNameTextBox.Location = New System.Drawing.Point(53, 90)
+        Me.userNameTextBox.MaxLength = 32767
         Me.userNameTextBox.Name = "userNameTextBox"
+        Me.userNameTextBox.PasswordChar = Global.Microsoft.VisualBasic.ChrW(0)
+        Me.userNameTextBox.ScrollBars = System.Windows.Forms.ScrollBars.None
+        Me.userNameTextBox.SelectionLength = 0
+        Me.userNameTextBox.SelectionStart = 0
         Me.userNameTextBox.Size = New System.Drawing.Size(140, 21)
         Me.userNameTextBox.TabIndex = 2
+        Me.userNameTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Left
+        Me.userNameTextBox.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
         '
         'ImageList1
         '
@@ -63,21 +80,37 @@ Partial Class ConnectionTP
         '
         'passwordTextBox
         '
-        Me.passwordTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.passwordTextBox.BackColor = System.Drawing.Color.White
+        Me.passwordTextBox.BoundsOffset = New System.Drawing.Size(1, 1)
+        Me.passwordTextBox.ControlBorderColor = System.Drawing.Color.FromArgb(CType(CType(39, Byte), Integer), CType(CType(39, Byte), Integer), CType(CType(39, Byte), Integer))
+        Me.passwordTextBox.DefaultText = ""
         Me.passwordTextBox.Location = New System.Drawing.Point(53, 168)
+        Me.passwordTextBox.MaxLength = 32767
         Me.passwordTextBox.Name = "passwordTextBox"
+        Me.passwordTextBox.PasswordChar = Global.Microsoft.VisualBasic.ChrW(42)
+        Me.passwordTextBox.ScrollBars = System.Windows.Forms.ScrollBars.None
+        Me.passwordTextBox.SelectionLength = 0
+        Me.passwordTextBox.SelectionStart = 0
         Me.passwordTextBox.Size = New System.Drawing.Size(140, 21)
         Me.passwordTextBox.TabIndex = 3
-        Me.passwordTextBox.UseSystemPasswordChar = True
+        Me.passwordTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Left
+        Me.passwordTextBox.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
         '
         'm_passwordLabel
         '
-        Me.m_passwordLabel.AutoSize = True
-        Me.m_passwordLabel.Location = New System.Drawing.Point(93, 136)
+        Me.m_passwordLabel.BackColor = System.Drawing.Color.Transparent
+        Me.m_passwordLabel.DisplayStyle = VIBlend.WinForms.Controls.LabelItemStyle.TextOnly
+        Me.m_passwordLabel.Ellipsis = False
+        Me.m_passwordLabel.ImageAlignment = System.Drawing.ContentAlignment.TopLeft
+        Me.m_passwordLabel.Location = New System.Drawing.Point(52, 136)
+        Me.m_passwordLabel.Multiline = True
         Me.m_passwordLabel.Name = "m_passwordLabel"
-        Me.m_passwordLabel.Size = New System.Drawing.Size(129, 15)
+        Me.m_passwordLabel.Size = New System.Drawing.Size(141, 16)
         Me.m_passwordLabel.TabIndex = 6
         Me.m_passwordLabel.Text = "[connection.password]"
+        Me.m_passwordLabel.TextAlignment = System.Drawing.ContentAlignment.MiddleCenter
+        Me.m_passwordLabel.UseMnemonics = True
+        Me.m_passwordLabel.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
         '
         'CPPanel
         '
@@ -148,15 +181,14 @@ Partial Class ConnectionTP
         Me.Name = "ConnectionTP"
         Me.Text = "[connection.connection]"
         Me.Panel1.ResumeLayout(False)
-        Me.Panel1.PerformLayout()
         Me.ResumeLayout(False)
 
     End Sub
-    Friend WithEvents m_userLabel As System.Windows.Forms.Label
-    Friend WithEvents userNameTextBox As System.Windows.Forms.TextBox
+    Friend WithEvents m_userLabel As VIBlend.WinForms.Controls.vLabel
+    Friend WithEvents userNameTextBox As VIBlend.WinForms.Controls.vTextBox
     Friend WithEvents ImageList1 As System.Windows.Forms.ImageList
-    Friend WithEvents passwordTextBox As System.Windows.Forms.TextBox
-    Friend WithEvents m_passwordLabel As System.Windows.Forms.Label
+    Friend WithEvents passwordTextBox As VIBlend.WinForms.Controls.vTextBox
+    Friend WithEvents m_passwordLabel As VIBlend.WinForms.Controls.vLabel
     Friend WithEvents CPPanel As System.Windows.Forms.Panel
     Friend WithEvents BackgroundWorker1 As System.ComponentModel.BackgroundWorker
     Friend WithEvents Panel1 As System.Windows.Forms.Panel

@@ -146,7 +146,7 @@ Public Class ConnectionTP
             CP.Stop()
             AddinModule.DisplayConnectionStatus(connectionFailed = False)
             BackgroundWorker1 = Nothing
-            passwordTextBox.Clear()
+            passwordTextBox.Text = ""
             Me.Hide()
         End If
 
@@ -172,10 +172,10 @@ Public Class ConnectionTP
 
   Private Sub ConnectionPane_FormClosing(sender As Object, e As Windows.Forms.FormClosingEventArgs) Handles MyBase.FormClosing
 
-    If Not CP Is Nothing Then CP.Stop()
-    passwordTextBox.Clear()
-    CPPanel.Controls.Clear()
-    e.Cancel = True
+        If Not CP Is Nothing Then CP.Stop()
+        passwordTextBox.Text = ""
+        CPPanel.Controls.Clear()
+        e.Cancel = True
 
   End Sub
 

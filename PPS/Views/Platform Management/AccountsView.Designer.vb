@@ -33,8 +33,8 @@ Partial Class AccountsView
         Me.SaveDescriptionBT = New VIBlend.WinForms.Controls.vButton()
         Me.EditButtonsImagelist = New System.Windows.Forms.ImageList(Me.components)
         Me.m_accountFormulaGroupbox = New System.Windows.Forms.GroupBox()
+        Me.m_formulaEditionButton = New VIBlend.WinForms.Controls.vToggleButton()
         Me.m_formulaTextBox = New VIBlend.WinForms.Controls.vTextBox()
-        Me.formulaEdit = New System.Windows.Forms.CheckBox()
         Me.submit_cmd = New VIBlend.WinForms.Controls.vButton()
         Me.m_accountInformationGroupbox = New System.Windows.Forms.GroupBox()
         Me.ConsolidationOptionComboBox = New VIBlend.WinForms.Controls.vComboBox()
@@ -67,21 +67,21 @@ Partial Class AccountsView
         Me.DropSelectedAccountHierarchyToExcelToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.HelpToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.m_globalFactsImageList = New System.Windows.Forms.ImageList(Me.components)
-        CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.SplitContainer1.Panel1.SuspendLayout()
-        Me.SplitContainer1.Panel2.SuspendLayout()
-        Me.SplitContainer1.SuspendLayout()
-        CType(Me.SplitContainer2, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.SplitContainer2.Panel1.SuspendLayout()
-        Me.SplitContainer2.Panel2.SuspendLayout()
-        Me.SplitContainer2.SuspendLayout()
-        Me.TableLayoutPanel2.SuspendLayout()
-        Me.m_accountDescriptionGroupbox.SuspendLayout()
-        Me.m_accountFormulaGroupbox.SuspendLayout()
-        Me.m_accountInformationGroupbox.SuspendLayout()
-        Me.TVRCM.SuspendLayout()
-        Me.MainMenu.SuspendLayout()
-        Me.SuspendLayout()
+        CType(Me.SplitContainer1,System.ComponentModel.ISupportInitialize).BeginInit
+        Me.SplitContainer1.Panel1.SuspendLayout
+        Me.SplitContainer1.Panel2.SuspendLayout
+        Me.SplitContainer1.SuspendLayout
+        CType(Me.SplitContainer2,System.ComponentModel.ISupportInitialize).BeginInit
+        Me.SplitContainer2.Panel1.SuspendLayout
+        Me.SplitContainer2.Panel2.SuspendLayout
+        Me.SplitContainer2.SuspendLayout
+        Me.TableLayoutPanel2.SuspendLayout
+        Me.m_accountDescriptionGroupbox.SuspendLayout
+        Me.m_accountFormulaGroupbox.SuspendLayout
+        Me.m_accountInformationGroupbox.SuspendLayout
+        Me.TVRCM.SuspendLayout
+        Me.MainMenu.SuspendLayout
+        Me.SuspendLayout
         '
         'SplitContainer1
         '
@@ -102,9 +102,9 @@ Partial Class AccountsView
         '
         'AccountsTVPanel
         '
-        Me.AccountsTVPanel.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.AccountsTVPanel.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom)  _
+            Or System.Windows.Forms.AnchorStyles.Left)  _
+            Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
         Me.AccountsTVPanel.Location = New System.Drawing.Point(1, 35)
         Me.AccountsTVPanel.Margin = New System.Windows.Forms.Padding(1)
         Me.AccountsTVPanel.Name = "AccountsTVPanel"
@@ -133,7 +133,7 @@ Partial Class AccountsView
         'TableLayoutPanel2
         '
         Me.TableLayoutPanel2.ColumnCount = 1
-        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
+        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100!))
         Me.TableLayoutPanel2.Controls.Add(Me.m_accountDescriptionGroupbox, 0, 3)
         Me.TableLayoutPanel2.Controls.Add(Me.m_accountFormulaGroupbox, 0, 2)
         Me.TableLayoutPanel2.Controls.Add(Me.m_accountInformationGroupbox, 0, 1)
@@ -141,8 +141,8 @@ Partial Class AccountsView
         Me.TableLayoutPanel2.Location = New System.Drawing.Point(0, 0)
         Me.TableLayoutPanel2.Name = "TableLayoutPanel2"
         Me.TableLayoutPanel2.RowCount = 4
-        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 26.0!))
-        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 284.0!))
+        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 26!))
+        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 284!))
         Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 54.77032!))
         Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 45.22968!))
         Me.TableLayoutPanel2.Size = New System.Drawing.Size(561, 692)
@@ -157,21 +157,21 @@ Partial Class AccountsView
         Me.m_accountDescriptionGroupbox.Name = "m_accountDescriptionGroupbox"
         Me.m_accountDescriptionGroupbox.Size = New System.Drawing.Size(555, 167)
         Me.m_accountDescriptionGroupbox.TabIndex = 20
-        Me.m_accountDescriptionGroupbox.TabStop = False
+        Me.m_accountDescriptionGroupbox.TabStop = false
         Me.m_accountDescriptionGroupbox.Text = "Account description"
         '
         'm_descriptionTextBox
         '
-        Me.m_descriptionTextBox.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.m_descriptionTextBox.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom)  _
+            Or System.Windows.Forms.AnchorStyles.Left)  _
+            Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
         Me.m_descriptionTextBox.BackColor = System.Drawing.Color.White
         Me.m_descriptionTextBox.BoundsOffset = New System.Drawing.Size(1, 1)
-        Me.m_descriptionTextBox.ControlBorderColor = System.Drawing.Color.FromArgb(CType(CType(39, Byte), Integer), CType(CType(39, Byte), Integer), CType(CType(39, Byte), Integer))
+        Me.m_descriptionTextBox.ControlBorderColor = System.Drawing.Color.FromArgb(CType(CType(39,Byte),Integer), CType(CType(39,Byte),Integer), CType(CType(39,Byte),Integer))
         Me.m_descriptionTextBox.DefaultText = "Empty..."
         Me.m_descriptionTextBox.Location = New System.Drawing.Point(6, 21)
         Me.m_descriptionTextBox.MaxLength = 32767
-        Me.m_descriptionTextBox.Multiline = True
+        Me.m_descriptionTextBox.Multiline = true
         Me.m_descriptionTextBox.Name = "m_descriptionTextBox"
         Me.m_descriptionTextBox.PasswordChar = Global.Microsoft.VisualBasic.ChrW(0)
         Me.m_descriptionTextBox.ScrollBars = System.Windows.Forms.ScrollBars.None
@@ -184,8 +184,8 @@ Partial Class AccountsView
         '
         'SaveDescriptionBT
         '
-        Me.SaveDescriptionBT.AllowAnimations = True
-        Me.SaveDescriptionBT.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.SaveDescriptionBT.AllowAnimations = true
+        Me.SaveDescriptionBT.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
         Me.SaveDescriptionBT.BackColor = System.Drawing.Color.Transparent
         Me.SaveDescriptionBT.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
         Me.SaveDescriptionBT.ImageKey = "1420498403_340208.ico"
@@ -193,47 +193,67 @@ Partial Class AccountsView
         Me.SaveDescriptionBT.Location = New System.Drawing.Point(348, 127)
         Me.SaveDescriptionBT.Margin = New System.Windows.Forms.Padding(2)
         Me.SaveDescriptionBT.Name = "SaveDescriptionBT"
-        Me.SaveDescriptionBT.RoundedCornersMask = CType(15, Byte)
+        Me.SaveDescriptionBT.RoundedCornersMask = CType(15,Byte)
         Me.SaveDescriptionBT.Size = New System.Drawing.Size(187, 28)
         Me.SaveDescriptionBT.TabIndex = 7
         Me.SaveDescriptionBT.Text = "[accounts_edition.save_description]"
         Me.SaveDescriptionBT.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.SaveDescriptionBT.UseVisualStyleBackColor = True
+        Me.SaveDescriptionBT.UseVisualStyleBackColor = true
         Me.SaveDescriptionBT.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
         '
         'EditButtonsImagelist
         '
-        Me.EditButtonsImagelist.ImageStream = CType(resources.GetObject("EditButtonsImagelist.ImageStream"), System.Windows.Forms.ImageListStreamer)
+        Me.EditButtonsImagelist.ImageStream = CType(resources.GetObject("EditButtonsImagelist.ImageStream"),System.Windows.Forms.ImageListStreamer)
         Me.EditButtonsImagelist.TransparentColor = System.Drawing.Color.Transparent
         Me.EditButtonsImagelist.Images.SetKeyName(0, "1420498403_340208.ico")
         Me.EditButtonsImagelist.Images.SetKeyName(1, "config circle purple.ico")
+        Me.EditButtonsImagelist.Images.SetKeyName(2, "formula.ico")
         '
         'm_accountFormulaGroupbox
         '
+        Me.m_accountFormulaGroupbox.Controls.Add(Me.m_formulaEditionButton)
         Me.m_accountFormulaGroupbox.Controls.Add(Me.m_formulaTextBox)
-        Me.m_accountFormulaGroupbox.Controls.Add(Me.formulaEdit)
         Me.m_accountFormulaGroupbox.Controls.Add(Me.submit_cmd)
         Me.m_accountFormulaGroupbox.Dock = System.Windows.Forms.DockStyle.Fill
         Me.m_accountFormulaGroupbox.Location = New System.Drawing.Point(3, 313)
         Me.m_accountFormulaGroupbox.Name = "m_accountFormulaGroupbox"
         Me.m_accountFormulaGroupbox.Size = New System.Drawing.Size(555, 203)
         Me.m_accountFormulaGroupbox.TabIndex = 19
-        Me.m_accountFormulaGroupbox.TabStop = False
+        Me.m_accountFormulaGroupbox.TabStop = false
         Me.m_accountFormulaGroupbox.Text = "Account formula"
+        '
+        'm_formulaEditionButton
+        '
+        Me.m_formulaEditionButton.AllowAnimations = true
+        Me.m_formulaEditionButton.BackColor = System.Drawing.Color.Transparent
+        Me.m_formulaEditionButton.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.m_formulaEditionButton.ImageKey = "formula.ico"
+        Me.m_formulaEditionButton.ImageList = Me.EditButtonsImagelist
+        Me.m_formulaEditionButton.Location = New System.Drawing.Point(6, 23)
+        Me.m_formulaEditionButton.Name = "m_formulaEditionButton"
+        Me.m_formulaEditionButton.RoundedCornersMask = CType(15,Byte)
+        Me.m_formulaEditionButton.Size = New System.Drawing.Size(199, 20)
+        Me.m_formulaEditionButton.StyleKey = "ToggleButton"
+        Me.m_formulaEditionButton.TabIndex = 8
+        Me.m_formulaEditionButton.Text = "Formula Edition"
+        Me.m_formulaEditionButton.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.m_formulaEditionButton.Toggle = System.Windows.Forms.CheckState.Unchecked
+        Me.m_formulaEditionButton.UseVisualStyleBackColor = false
+        Me.m_formulaEditionButton.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
         '
         'm_formulaTextBox
         '
-        Me.m_formulaTextBox.AllowDrop = True
-        Me.m_formulaTextBox.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.m_formulaTextBox.AllowDrop = true
+        Me.m_formulaTextBox.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom)  _
+            Or System.Windows.Forms.AnchorStyles.Left)  _
+            Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
         Me.m_formulaTextBox.BackColor = System.Drawing.Color.White
         Me.m_formulaTextBox.BoundsOffset = New System.Drawing.Size(1, 1)
-        Me.m_formulaTextBox.ControlBorderColor = System.Drawing.Color.FromArgb(CType(CType(39, Byte), Integer), CType(CType(39, Byte), Integer), CType(CType(39, Byte), Integer))
+        Me.m_formulaTextBox.ControlBorderColor = System.Drawing.Color.FromArgb(CType(CType(39,Byte),Integer), CType(CType(39,Byte),Integer), CType(CType(39,Byte),Integer))
         Me.m_formulaTextBox.DefaultText = "Empty..."
         Me.m_formulaTextBox.Location = New System.Drawing.Point(6, 52)
         Me.m_formulaTextBox.MaxLength = 32767
-        Me.m_formulaTextBox.Multiline = True
+        Me.m_formulaTextBox.Multiline = true
         Me.m_formulaTextBox.Name = "m_formulaTextBox"
         Me.m_formulaTextBox.PasswordChar = Global.Microsoft.VisualBasic.ChrW(0)
         Me.m_formulaTextBox.ScrollBars = System.Windows.Forms.ScrollBars.None
@@ -244,25 +264,10 @@ Partial Class AccountsView
         Me.m_formulaTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Left
         Me.m_formulaTextBox.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
         '
-        'formulaEdit
-        '
-        Me.formulaEdit.Appearance = System.Windows.Forms.Appearance.Button
-        Me.formulaEdit.AutoSize = True
-        Me.formulaEdit.BackColor = System.Drawing.Color.AliceBlue
-        Me.formulaEdit.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
-        Me.formulaEdit.ImageKey = "config circle purple.ico"
-        Me.formulaEdit.ImageList = Me.EditButtonsImagelist
-        Me.formulaEdit.Location = New System.Drawing.Point(6, 21)
-        Me.formulaEdit.Name = "formulaEdit"
-        Me.formulaEdit.Size = New System.Drawing.Size(188, 25)
-        Me.formulaEdit.TabIndex = 5
-        Me.formulaEdit.Text = "[accounts_edition.edit_formula]"
-        Me.formulaEdit.UseVisualStyleBackColor = True
-        '
         'submit_cmd
         '
-        Me.submit_cmd.AllowAnimations = True
-        Me.submit_cmd.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.submit_cmd.AllowAnimations = true
+        Me.submit_cmd.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
         Me.submit_cmd.BackColor = System.Drawing.Color.Transparent
         Me.submit_cmd.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
         Me.submit_cmd.ImageKey = "1420498403_340208.ico"
@@ -270,12 +275,12 @@ Partial Class AccountsView
         Me.submit_cmd.Location = New System.Drawing.Point(348, 162)
         Me.submit_cmd.Margin = New System.Windows.Forms.Padding(2)
         Me.submit_cmd.Name = "submit_cmd"
-        Me.submit_cmd.RoundedCornersMask = CType(15, Byte)
+        Me.submit_cmd.RoundedCornersMask = CType(15,Byte)
         Me.submit_cmd.Size = New System.Drawing.Size(187, 28)
         Me.submit_cmd.TabIndex = 7
         Me.submit_cmd.Text = "[accounts_edition.validate_formula]"
         Me.submit_cmd.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.submit_cmd.UseVisualStyleBackColor = True
+        Me.submit_cmd.UseVisualStyleBackColor = true
         Me.submit_cmd.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
         '
         'm_accountInformationGroupbox
@@ -298,7 +303,7 @@ Partial Class AccountsView
         Me.m_accountInformationGroupbox.Padding = New System.Windows.Forms.Padding(2)
         Me.m_accountInformationGroupbox.Size = New System.Drawing.Size(557, 280)
         Me.m_accountInformationGroupbox.TabIndex = 17
-        Me.m_accountInformationGroupbox.TabStop = False
+        Me.m_accountInformationGroupbox.TabStop = false
         Me.m_accountInformationGroupbox.Text = "Account information"
         '
         'ConsolidationOptionComboBox
@@ -308,14 +313,14 @@ Partial Class AccountsView
         Me.ConsolidationOptionComboBox.DropDownMaximumSize = New System.Drawing.Size(1000, 1000)
         Me.ConsolidationOptionComboBox.DropDownMinimumSize = New System.Drawing.Size(10, 10)
         Me.ConsolidationOptionComboBox.DropDownResizeDirection = VIBlend.WinForms.Controls.SizingDirection.Both
-        Me.ConsolidationOptionComboBox.DropDownWidth = 216
+        Me.ConsolidationOptionComboBox.DropDownWidth = 310
         Me.ConsolidationOptionComboBox.Location = New System.Drawing.Point(160, 198)
         Me.ConsolidationOptionComboBox.Name = "ConsolidationOptionComboBox"
-        Me.ConsolidationOptionComboBox.RoundedCornersMaskListItem = CType(15, Byte)
-        Me.ConsolidationOptionComboBox.Size = New System.Drawing.Size(216, 20)
+        Me.ConsolidationOptionComboBox.RoundedCornersMaskListItem = CType(15,Byte)
+        Me.ConsolidationOptionComboBox.Size = New System.Drawing.Size(310, 22)
         Me.ConsolidationOptionComboBox.TabIndex = 32
-        Me.ConsolidationOptionComboBox.UseThemeBackColor = False
-        Me.ConsolidationOptionComboBox.UseThemeDropDownArrowColor = True
+        Me.ConsolidationOptionComboBox.UseThemeBackColor = false
+        Me.ConsolidationOptionComboBox.UseThemeDropDownArrowColor = true
         Me.ConsolidationOptionComboBox.ValueMember = ""
         Me.ConsolidationOptionComboBox.VIBlendScrollBarsTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
         Me.ConsolidationOptionComboBox.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
@@ -327,14 +332,14 @@ Partial Class AccountsView
         Me.CurrencyConversionComboBox.DropDownMaximumSize = New System.Drawing.Size(1000, 1000)
         Me.CurrencyConversionComboBox.DropDownMinimumSize = New System.Drawing.Size(10, 10)
         Me.CurrencyConversionComboBox.DropDownResizeDirection = VIBlend.WinForms.Controls.SizingDirection.Both
-        Me.CurrencyConversionComboBox.DropDownWidth = 216
+        Me.CurrencyConversionComboBox.DropDownWidth = 310
         Me.CurrencyConversionComboBox.Location = New System.Drawing.Point(161, 158)
         Me.CurrencyConversionComboBox.Name = "CurrencyConversionComboBox"
-        Me.CurrencyConversionComboBox.RoundedCornersMaskListItem = CType(15, Byte)
-        Me.CurrencyConversionComboBox.Size = New System.Drawing.Size(216, 20)
+        Me.CurrencyConversionComboBox.RoundedCornersMaskListItem = CType(15,Byte)
+        Me.CurrencyConversionComboBox.Size = New System.Drawing.Size(310, 22)
         Me.CurrencyConversionComboBox.TabIndex = 46
-        Me.CurrencyConversionComboBox.UseThemeBackColor = False
-        Me.CurrencyConversionComboBox.UseThemeDropDownArrowColor = True
+        Me.CurrencyConversionComboBox.UseThemeBackColor = false
+        Me.CurrencyConversionComboBox.UseThemeDropDownArrowColor = true
         Me.CurrencyConversionComboBox.ValueMember = ""
         Me.CurrencyConversionComboBox.VIBlendScrollBarsTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
         Me.CurrencyConversionComboBox.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
@@ -343,80 +348,80 @@ Partial Class AccountsView
         '
         Me.m_accountNameLabel.BackColor = System.Drawing.Color.Transparent
         Me.m_accountNameLabel.DisplayStyle = VIBlend.WinForms.Controls.LabelItemStyle.TextOnly
-        Me.m_accountNameLabel.Ellipsis = False
+        Me.m_accountNameLabel.Ellipsis = false
         Me.m_accountNameLabel.ImageAlignment = System.Drawing.ContentAlignment.TopLeft
         Me.m_accountNameLabel.Location = New System.Drawing.Point(20, 41)
-        Me.m_accountNameLabel.Multiline = True
+        Me.m_accountNameLabel.Multiline = true
         Me.m_accountNameLabel.Name = "m_accountNameLabel"
-        Me.m_accountNameLabel.Size = New System.Drawing.Size(129, 25)
+        Me.m_accountNameLabel.Size = New System.Drawing.Size(129, 22)
         Me.m_accountNameLabel.TabIndex = 45
         Me.m_accountNameLabel.Text = "Name"
-        Me.m_accountNameLabel.TextAlignment = System.Drawing.ContentAlignment.TopLeft
-        Me.m_accountNameLabel.UseMnemonics = True
+        Me.m_accountNameLabel.TextAlignment = System.Drawing.ContentAlignment.MiddleLeft
+        Me.m_accountNameLabel.UseMnemonics = true
         Me.m_accountNameLabel.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
         '
         'm_accountFormulaTypeLabel
         '
         Me.m_accountFormulaTypeLabel.BackColor = System.Drawing.Color.Transparent
         Me.m_accountFormulaTypeLabel.DisplayStyle = VIBlend.WinForms.Controls.LabelItemStyle.TextOnly
-        Me.m_accountFormulaTypeLabel.Ellipsis = False
+        Me.m_accountFormulaTypeLabel.Ellipsis = false
         Me.m_accountFormulaTypeLabel.ImageAlignment = System.Drawing.ContentAlignment.TopLeft
         Me.m_accountFormulaTypeLabel.Location = New System.Drawing.Point(20, 78)
-        Me.m_accountFormulaTypeLabel.Multiline = True
+        Me.m_accountFormulaTypeLabel.Multiline = true
         Me.m_accountFormulaTypeLabel.Name = "m_accountFormulaTypeLabel"
-        Me.m_accountFormulaTypeLabel.Size = New System.Drawing.Size(129, 25)
+        Me.m_accountFormulaTypeLabel.Size = New System.Drawing.Size(129, 22)
         Me.m_accountFormulaTypeLabel.TabIndex = 44
         Me.m_accountFormulaTypeLabel.Text = "Formula type"
-        Me.m_accountFormulaTypeLabel.TextAlignment = System.Drawing.ContentAlignment.TopLeft
-        Me.m_accountFormulaTypeLabel.UseMnemonics = True
+        Me.m_accountFormulaTypeLabel.TextAlignment = System.Drawing.ContentAlignment.MiddleLeft
+        Me.m_accountFormulaTypeLabel.UseMnemonics = true
         Me.m_accountFormulaTypeLabel.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
         '
         'm_accountTypeLabel
         '
         Me.m_accountTypeLabel.BackColor = System.Drawing.Color.Transparent
         Me.m_accountTypeLabel.DisplayStyle = VIBlend.WinForms.Controls.LabelItemStyle.TextOnly
-        Me.m_accountTypeLabel.Ellipsis = False
+        Me.m_accountTypeLabel.Ellipsis = false
         Me.m_accountTypeLabel.ImageAlignment = System.Drawing.ContentAlignment.TopLeft
         Me.m_accountTypeLabel.Location = New System.Drawing.Point(20, 117)
-        Me.m_accountTypeLabel.Multiline = True
+        Me.m_accountTypeLabel.Multiline = true
         Me.m_accountTypeLabel.Name = "m_accountTypeLabel"
-        Me.m_accountTypeLabel.Size = New System.Drawing.Size(129, 25)
+        Me.m_accountTypeLabel.Size = New System.Drawing.Size(129, 22)
         Me.m_accountTypeLabel.TabIndex = 43
         Me.m_accountTypeLabel.Text = "Account type"
-        Me.m_accountTypeLabel.TextAlignment = System.Drawing.ContentAlignment.TopLeft
-        Me.m_accountTypeLabel.UseMnemonics = True
+        Me.m_accountTypeLabel.TextAlignment = System.Drawing.ContentAlignment.MiddleLeft
+        Me.m_accountTypeLabel.UseMnemonics = true
         Me.m_accountTypeLabel.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
         '
         'm_accountConsolidationOptionLabel
         '
         Me.m_accountConsolidationOptionLabel.BackColor = System.Drawing.Color.Transparent
         Me.m_accountConsolidationOptionLabel.DisplayStyle = VIBlend.WinForms.Controls.LabelItemStyle.TextOnly
-        Me.m_accountConsolidationOptionLabel.Ellipsis = False
+        Me.m_accountConsolidationOptionLabel.Ellipsis = false
         Me.m_accountConsolidationOptionLabel.ImageAlignment = System.Drawing.ContentAlignment.TopLeft
-        Me.m_accountConsolidationOptionLabel.Location = New System.Drawing.Point(17, 198)
-        Me.m_accountConsolidationOptionLabel.Multiline = True
+        Me.m_accountConsolidationOptionLabel.Location = New System.Drawing.Point(20, 198)
+        Me.m_accountConsolidationOptionLabel.Multiline = true
         Me.m_accountConsolidationOptionLabel.Name = "m_accountConsolidationOptionLabel"
-        Me.m_accountConsolidationOptionLabel.Size = New System.Drawing.Size(129, 25)
+        Me.m_accountConsolidationOptionLabel.Size = New System.Drawing.Size(126, 22)
         Me.m_accountConsolidationOptionLabel.TabIndex = 42
         Me.m_accountConsolidationOptionLabel.Text = "Consolidation option"
-        Me.m_accountConsolidationOptionLabel.TextAlignment = System.Drawing.ContentAlignment.TopLeft
-        Me.m_accountConsolidationOptionLabel.UseMnemonics = True
+        Me.m_accountConsolidationOptionLabel.TextAlignment = System.Drawing.ContentAlignment.MiddleLeft
+        Me.m_accountConsolidationOptionLabel.UseMnemonics = true
         Me.m_accountConsolidationOptionLabel.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
         '
         'm_accountCurrenciesConversionLabel
         '
         Me.m_accountCurrenciesConversionLabel.BackColor = System.Drawing.Color.Transparent
         Me.m_accountCurrenciesConversionLabel.DisplayStyle = VIBlend.WinForms.Controls.LabelItemStyle.TextOnly
-        Me.m_accountCurrenciesConversionLabel.Ellipsis = False
+        Me.m_accountCurrenciesConversionLabel.Ellipsis = false
         Me.m_accountCurrenciesConversionLabel.ImageAlignment = System.Drawing.ContentAlignment.TopLeft
-        Me.m_accountCurrenciesConversionLabel.Location = New System.Drawing.Point(17, 158)
-        Me.m_accountCurrenciesConversionLabel.Multiline = True
+        Me.m_accountCurrenciesConversionLabel.Location = New System.Drawing.Point(20, 158)
+        Me.m_accountCurrenciesConversionLabel.Multiline = true
         Me.m_accountCurrenciesConversionLabel.Name = "m_accountCurrenciesConversionLabel"
-        Me.m_accountCurrenciesConversionLabel.Size = New System.Drawing.Size(129, 25)
+        Me.m_accountCurrenciesConversionLabel.Size = New System.Drawing.Size(126, 22)
         Me.m_accountCurrenciesConversionLabel.TabIndex = 41
         Me.m_accountCurrenciesConversionLabel.Text = "Currencies conversion"
-        Me.m_accountCurrenciesConversionLabel.TextAlignment = System.Drawing.ContentAlignment.TopLeft
-        Me.m_accountCurrenciesConversionLabel.UseMnemonics = True
+        Me.m_accountCurrenciesConversionLabel.TextAlignment = System.Drawing.ContentAlignment.MiddleLeft
+        Me.m_accountCurrenciesConversionLabel.UseMnemonics = true
         Me.m_accountCurrenciesConversionLabel.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
         '
         'FormulaTypeComboBox
@@ -426,14 +431,14 @@ Partial Class AccountsView
         Me.FormulaTypeComboBox.DropDownMaximumSize = New System.Drawing.Size(1000, 1000)
         Me.FormulaTypeComboBox.DropDownMinimumSize = New System.Drawing.Size(10, 10)
         Me.FormulaTypeComboBox.DropDownResizeDirection = VIBlend.WinForms.Controls.SizingDirection.Both
-        Me.FormulaTypeComboBox.DropDownWidth = 216
+        Me.FormulaTypeComboBox.DropDownWidth = 310
         Me.FormulaTypeComboBox.Location = New System.Drawing.Point(161, 78)
         Me.FormulaTypeComboBox.Name = "FormulaTypeComboBox"
-        Me.FormulaTypeComboBox.RoundedCornersMaskListItem = CType(15, Byte)
-        Me.FormulaTypeComboBox.Size = New System.Drawing.Size(216, 20)
+        Me.FormulaTypeComboBox.RoundedCornersMaskListItem = CType(15,Byte)
+        Me.FormulaTypeComboBox.Size = New System.Drawing.Size(310, 22)
         Me.FormulaTypeComboBox.TabIndex = 32
-        Me.FormulaTypeComboBox.UseThemeBackColor = False
-        Me.FormulaTypeComboBox.UseThemeDropDownArrowColor = True
+        Me.FormulaTypeComboBox.UseThemeBackColor = false
+        Me.FormulaTypeComboBox.UseThemeDropDownArrowColor = true
         Me.FormulaTypeComboBox.ValueMember = ""
         Me.FormulaTypeComboBox.VIBlendScrollBarsTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
         Me.FormulaTypeComboBox.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
@@ -445,14 +450,14 @@ Partial Class AccountsView
         Me.TypeComboBox.DropDownMaximumSize = New System.Drawing.Size(1000, 1000)
         Me.TypeComboBox.DropDownMinimumSize = New System.Drawing.Size(10, 10)
         Me.TypeComboBox.DropDownResizeDirection = VIBlend.WinForms.Controls.SizingDirection.Both
-        Me.TypeComboBox.DropDownWidth = 216
+        Me.TypeComboBox.DropDownWidth = 310
         Me.TypeComboBox.Location = New System.Drawing.Point(161, 117)
         Me.TypeComboBox.Name = "TypeComboBox"
-        Me.TypeComboBox.RoundedCornersMaskListItem = CType(15, Byte)
-        Me.TypeComboBox.Size = New System.Drawing.Size(216, 20)
+        Me.TypeComboBox.RoundedCornersMaskListItem = CType(15,Byte)
+        Me.TypeComboBox.Size = New System.Drawing.Size(310, 22)
         Me.TypeComboBox.TabIndex = 31
-        Me.TypeComboBox.UseThemeBackColor = False
-        Me.TypeComboBox.UseThemeDropDownArrowColor = True
+        Me.TypeComboBox.UseThemeBackColor = false
+        Me.TypeComboBox.UseThemeDropDownArrowColor = true
         Me.TypeComboBox.ValueMember = ""
         Me.TypeComboBox.VIBlendScrollBarsTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
         Me.TypeComboBox.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
@@ -461,7 +466,7 @@ Partial Class AccountsView
         '
         Me.Name_TB.BackColor = System.Drawing.SystemColors.ButtonHighlight
         Me.Name_TB.BoundsOffset = New System.Drawing.Size(1, 1)
-        Me.Name_TB.ControlBorderColor = System.Drawing.Color.FromArgb(CType(CType(39, Byte), Integer), CType(CType(39, Byte), Integer), CType(CType(39, Byte), Integer))
+        Me.Name_TB.ControlBorderColor = System.Drawing.Color.FromArgb(CType(CType(39,Byte),Integer), CType(CType(39,Byte),Integer), CType(CType(39,Byte),Integer))
         Me.Name_TB.DefaultText = "Empty..."
         Me.Name_TB.Location = New System.Drawing.Point(161, 41)
         Me.Name_TB.Margin = New System.Windows.Forms.Padding(2)
@@ -471,42 +476,42 @@ Partial Class AccountsView
         Me.Name_TB.ScrollBars = System.Windows.Forms.ScrollBars.None
         Me.Name_TB.SelectionLength = 0
         Me.Name_TB.SelectionStart = 0
-        Me.Name_TB.Size = New System.Drawing.Size(258, 20)
+        Me.Name_TB.Size = New System.Drawing.Size(309, 22)
         Me.Name_TB.TabIndex = 1
         Me.Name_TB.TextAlign = System.Windows.Forms.HorizontalAlignment.Left
         Me.Name_TB.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
         '
         'GlobalFactsPanel
         '
-        Me.GlobalFactsPanel.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.GlobalFactsPanel.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom)  _
+            Or System.Windows.Forms.AnchorStyles.Left)  _
+            Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
         Me.GlobalFactsPanel.Location = New System.Drawing.Point(12, 58)
         Me.GlobalFactsPanel.Name = "GlobalFactsPanel"
-        Me.GlobalFactsPanel.Size = New System.Drawing.Size(115, 619)
+        Me.GlobalFactsPanel.Size = New System.Drawing.Size(118, 619)
         Me.GlobalFactsPanel.TabIndex = 3
         '
         'm_globalFactsLabel
         '
-        Me.m_globalFactsLabel.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.m_globalFactsLabel.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left)  _
+            Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
         Me.m_globalFactsLabel.BackColor = System.Drawing.Color.Transparent
         Me.m_globalFactsLabel.DisplayStyle = VIBlend.WinForms.Controls.LabelItemStyle.TextOnly
-        Me.m_globalFactsLabel.Ellipsis = False
+        Me.m_globalFactsLabel.Ellipsis = false
         Me.m_globalFactsLabel.ImageAlignment = System.Drawing.ContentAlignment.TopLeft
         Me.m_globalFactsLabel.Location = New System.Drawing.Point(12, 28)
-        Me.m_globalFactsLabel.Multiline = True
+        Me.m_globalFactsLabel.Multiline = true
         Me.m_globalFactsLabel.Name = "m_globalFactsLabel"
-        Me.m_globalFactsLabel.Size = New System.Drawing.Size(137, 16)
+        Me.m_globalFactsLabel.Size = New System.Drawing.Size(140, 16)
         Me.m_globalFactsLabel.TabIndex = 0
         Me.m_globalFactsLabel.Text = "Macro economic indicators"
         Me.m_globalFactsLabel.TextAlignment = System.Drawing.ContentAlignment.TopLeft
-        Me.m_globalFactsLabel.UseMnemonics = True
+        Me.m_globalFactsLabel.UseMnemonics = true
         Me.m_globalFactsLabel.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
         '
         'accountsIL
         '
-        Me.accountsIL.ImageStream = CType(resources.GetObject("accountsIL.ImageStream"), System.Windows.Forms.ImageListStreamer)
+        Me.accountsIL.ImageStream = CType(resources.GetObject("accountsIL.ImageStream"),System.Windows.Forms.ImageListStreamer)
         Me.accountsIL.TransparentColor = System.Drawing.Color.Transparent
         Me.accountsIL.Images.SetKeyName(0, "WC blue.png")
         Me.accountsIL.Images.SetKeyName(1, "pencil.ico")
@@ -628,7 +633,7 @@ Partial Class AccountsView
         '
         'm_globalFactsImageList
         '
-        Me.m_globalFactsImageList.ImageStream = CType(resources.GetObject("m_globalFactsImageList.ImageStream"), System.Windows.Forms.ImageListStreamer)
+        Me.m_globalFactsImageList.ImageStream = CType(resources.GetObject("m_globalFactsImageList.ImageStream"),System.Windows.Forms.ImageListStreamer)
         Me.m_globalFactsImageList.TransparentColor = System.Drawing.Color.Transparent
         Me.m_globalFactsImageList.Images.SetKeyName(0, "currency_euro.ico")
         Me.m_globalFactsImageList.Images.SetKeyName(1, "chart_line.ico")
@@ -636,38 +641,36 @@ Partial Class AccountsView
         '
         'AccountsView
         '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(6!, 13!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.Controls.Add(Me.MainMenu)
         Me.Controls.Add(Me.SplitContainer1)
         Me.Name = "AccountsView"
         Me.Size = New System.Drawing.Size(981, 692)
-        Me.SplitContainer1.Panel1.ResumeLayout(False)
-        Me.SplitContainer1.Panel2.ResumeLayout(False)
-        CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.SplitContainer1.ResumeLayout(False)
-        Me.SplitContainer2.Panel1.ResumeLayout(False)
-        Me.SplitContainer2.Panel2.ResumeLayout(False)
-        CType(Me.SplitContainer2, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.SplitContainer2.ResumeLayout(False)
-        Me.TableLayoutPanel2.ResumeLayout(False)
-        Me.m_accountDescriptionGroupbox.ResumeLayout(False)
-        Me.m_accountFormulaGroupbox.ResumeLayout(False)
-        Me.m_accountFormulaGroupbox.PerformLayout()
-        Me.m_accountInformationGroupbox.ResumeLayout(False)
-        Me.TVRCM.ResumeLayout(False)
-        Me.MainMenu.ResumeLayout(False)
-        Me.MainMenu.PerformLayout()
-        Me.ResumeLayout(False)
-        Me.PerformLayout()
+        Me.SplitContainer1.Panel1.ResumeLayout(false)
+        Me.SplitContainer1.Panel2.ResumeLayout(false)
+        CType(Me.SplitContainer1,System.ComponentModel.ISupportInitialize).EndInit
+        Me.SplitContainer1.ResumeLayout(false)
+        Me.SplitContainer2.Panel1.ResumeLayout(false)
+        Me.SplitContainer2.Panel2.ResumeLayout(false)
+        CType(Me.SplitContainer2,System.ComponentModel.ISupportInitialize).EndInit
+        Me.SplitContainer2.ResumeLayout(false)
+        Me.TableLayoutPanel2.ResumeLayout(false)
+        Me.m_accountDescriptionGroupbox.ResumeLayout(false)
+        Me.m_accountFormulaGroupbox.ResumeLayout(false)
+        Me.m_accountInformationGroupbox.ResumeLayout(false)
+        Me.TVRCM.ResumeLayout(false)
+        Me.MainMenu.ResumeLayout(false)
+        Me.MainMenu.PerformLayout
+        Me.ResumeLayout(false)
+        Me.PerformLayout
 
-    End Sub
+End Sub
     Friend WithEvents SplitContainer1 As System.Windows.Forms.SplitContainer
     Friend WithEvents TableLayoutPanel2 As System.Windows.Forms.TableLayoutPanel
     Friend WithEvents m_accountInformationGroupbox As System.Windows.Forms.GroupBox
     Friend WithEvents Name_TB As VIBlend.WinForms.Controls.vTextBox
     Friend WithEvents m_accountFormulaGroupbox As System.Windows.Forms.GroupBox
-    Friend WithEvents formulaEdit As System.Windows.Forms.CheckBox
     Friend WithEvents accountsIL As System.Windows.Forms.ImageList
     Friend WithEvents EditButtonsImagelist As System.Windows.Forms.ImageList
     Friend WithEvents TVRCM As System.Windows.Forms.ContextMenuStrip
@@ -705,5 +708,6 @@ Partial Class AccountsView
     Friend WithEvents m_globalFactsImageList As System.Windows.Forms.ImageList
     Friend WithEvents submit_cmd As VIBlend.WinForms.Controls.vButton
     Friend WithEvents SaveDescriptionBT As VIBlend.WinForms.Controls.vButton
+    Friend WithEvents m_formulaEditionButton As VIBlend.WinForms.Controls.vToggleButton
 
 End Class
