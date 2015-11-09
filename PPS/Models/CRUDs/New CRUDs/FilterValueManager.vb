@@ -238,7 +238,7 @@ Friend Class FilterValueManager : Inherits CRUDManager
 
     Friend Function IsNameAvailable(ByRef name As String) As Boolean
 
-        If GetValue(name) Is Nothing Then Return False
+        If Not GetValue(name) Is Nothing Then Return False
         Return True
 
     End Function

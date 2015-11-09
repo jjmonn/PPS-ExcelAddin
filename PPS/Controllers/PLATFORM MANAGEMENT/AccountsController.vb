@@ -198,7 +198,7 @@ Friend Class AccountsController
     Friend Function ExistingDependantAccounts(ByRef node As VIBlend.WinForms.Controls.vTreeNode) As String()
 
         Dim dependantAccountsNames As New List(Of String)
-        Dim accountsKeyList As List(Of UInt32) = CType(VTreeViewUtil.GetNodesIds(node), Object)
+        Dim accountsKeyList As List(Of UInt32) = CType(CType(VTreeViewUtil.GetNodesIds(node), Object), List(Of UInt32))
         accountsKeyList.Reverse()
 
         Dim dependantAccountsId() As UInt32 = DependenciesLoopCheck(accountsKeyList).ToArray

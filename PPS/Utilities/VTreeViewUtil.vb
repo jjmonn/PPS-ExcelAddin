@@ -319,57 +319,30 @@ Public Class VTreeViewUtil
 
     Friend Shared Sub MoveNodeUp(ByRef p_node As vTreeNode)
 
-        Dim index As Int32
-        Dim l_treeview As vTreeView = p_node.TreeView
-        Try
-            If Not (p_node.PrevNode Is Nothing) Then
-                Dim prev_node = p_node.PrevNode
-                Dim l_namesValuesDict As Dictionary(Of String, String) = GetNodesNamesValueDict(l_treeview)
-                Dim l_accountId As Int32 = l_treeview.SelectedNode.Value
-                If p_node.Parent Is Nothing Then
-                    index = p_node.TreeView.Nodes.IndexOf(p_node)
-                    p_node.TreeView.Nodes.Insert(index - 1, CType(p_node.Clone, vTreeNode))
-                Else
-                    index = p_node.Parent.Nodes.IndexOf(p_node)
-                    p_node.Parent.Nodes.Insert(index - 1, CType(p_node.Clone, vTreeNode))
-                End If
-                prev_node.PrevNode.Value = p_node.Value
-                p_node.Remove()
-                PutBackNodesValues(l_treeview, l_namesValuesDict)
-                l_treeview.SelectedNode = FindNode(l_treeview, l_accountId)
-                l_treeview.Refresh()
-            End If
-        Catch ex As Exception
-        End Try
+        SwapNode(p_node, p_node.PrevSiblingNode)
+        p_node.TreeView.Refresh()
 
     End Sub
 
     Friend Shared Sub MoveNodeDown(ByRef p_node As vTreeNode)
 
-        Dim index As Int32
-        Dim l_treeview As vTreeView = p_node.TreeView
-        Try
-            If Not (p_node.NextNode Is Nothing) Then
-                Dim nextnode = p_node.NextNode
-                Dim l_namesValuesDict As Dictionary(Of String, String) = GetNodesNamesValueDict(l_treeview)
-                Dim l_accountId As Int32 = l_treeview.SelectedNode.Value
-                If p_node.Parent Is Nothing Then
-                    index = p_node.TreeView.Nodes.IndexOf(p_node)
-                    p_node.TreeView.Nodes.Insert(index + 2, CType(p_node.Clone, vTreeNode))
-                Else
-                    index = p_node.Parent.Nodes.IndexOf(p_node)
-                    p_node.Parent.Nodes.Insert(index + 2, CType(p_node.Clone, vTreeNode))
-                End If
-                nextnode.NextNode.Value = p_node.Value
-                p_node.Remove()
-                PutBackNodesValues(l_treeview, l_namesValuesDict)
-                l_treeview.SelectedNode = FindNode(l_treeview, l_accountId)
-                l_treeview.Refresh()
+        SwapNode(p_node, p_node.NextSiblingNode)
+        p_node.TreeView.Refresh()
 
-            End If
-        Catch ex As Exception
-        End Try
+    End Sub
 
+    Friend Shared Sub SwapNode(ByRef p_first As vTreeNode, ByRef p_second As vTreeNode)
+        If p_second Is Nothing OrElse p_first Is Nothing Then Exit Sub
+
+        Dim parentNode = If(p_first.Parent Is Nothing, p_first.TreeView, p_first.Parent)
+
+        Dim indexOrigin As Int32 = parentNode.Nodes.IndexOf(p_first)
+        Dim indexNext As Int32 = parentNode.Nodes.IndexOf(p_second)
+
+        parentNode.Nodes.RemoveAt(indexOrigin)
+        parentNode.Nodes.Insert(indexOrigin, p_second)
+        parentNode.Nodes.RemoveAt(indexNext)
+        parentNode.Nodes.Insert(indexNext, p_first)
     End Sub
 
     Private Shared Function GetNodesNamesValueDict(ByRef p_treeview As vTreeView) As Dictionary(Of String, String)

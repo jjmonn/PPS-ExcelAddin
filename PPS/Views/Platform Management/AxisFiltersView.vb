@@ -122,7 +122,7 @@ Friend Class AxisFiltersView
 
 #Region "Call backs"
 
-    Private Sub CreateFilterValueBT_Click_1(sender As Object, e As EventArgs) Handles AddValueRCM.Click
+    Private Sub CreateFilterValueBT_Click_1(sender As Object, e As EventArgs) Handles AddValueRCM.Click, AddValueMenuBT.Click
 
         Dim filterId, parentFilterValueId As Int32
         Dim currentNode As vTreeNode = m_filtersFiltersValuesTV.SelectedNode
@@ -176,14 +176,11 @@ NewFilterValue:
             Dim name = InputBox("Please enter the new Category Value Name:")
             If name <> "" Then
 
-                ' reimplement => update simply
-                ' the server manage validity
-                ' priority normal
-                'If Controller.RenameFilterValue(current_node.Name, name) Then
-                '    current_node.Text = name
-                'Else
-                '    MsgBox("This name is already used or contains forbiden characters.")
-                'End If
+                If m_controller.IsAllowedFilterName(name) Then
+                    m_controller.UpdateFilterValueName(current_node.Value, name)
+                Else
+                    MsgBox("This name is already used or contains forbiden characters.")
+                End If
             End If
         Else
             MsgBox("A Category must be selected in order ot Add a Value.")
@@ -245,19 +242,18 @@ NewFilterValue:
         Select Case e.KeyCode
             Case Keys.Delete : DeleteBT_Click(sender, e)
 
-                ' Below -> to be reviewed because it crashes sometimes !!! check priority normal
-                'Case Keys.Up
-                '    If e.Control Then
-                '        If Not m_filtersFiltersValuesTV.SelectedNode Is Nothing Then
-                '            VTreeViewUtil.MoveNodeUp(m_filtersFiltersValuesTV.SelectedNode)
-                '        End If
-                '    End If
-                'Case Keys.Down
-                '    If e.Control Then
-                '        If Not m_filtersFiltersValuesTV.SelectedNode Is Nothing Then
-                '            VTreeViewUtil.MoveNodeDown(m_filtersFiltersValuesTV.SelectedNode)
-                '        End If
-                '    End If
+            Case Keys.Up
+                If e.Control Then
+                    If Not m_filtersFiltersValuesTV.SelectedNode Is Nothing Then
+                        VTreeViewUtil.MoveNodeUp(m_filtersFiltersValuesTV.SelectedNode)
+                    End If
+                End If
+            Case Keys.Down
+                If e.Control Then
+                    If Not m_filtersFiltersValuesTV.SelectedNode Is Nothing Then
+                        VTreeViewUtil.MoveNodeDown(m_filtersFiltersValuesTV.SelectedNode)
+                    End If
+                End If
         End Select
 
     End Sub
@@ -270,5 +266,4 @@ NewFilterValue:
 
 #End Region
 
-  
 End Class

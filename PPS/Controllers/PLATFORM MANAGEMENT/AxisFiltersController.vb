@@ -151,11 +151,19 @@ Friend Class AxisFiltersController
     End Sub
 
     Friend Sub UpdateFilterName(ByVal p_id As UInt32, ByVal p_value As String)
-        Dim l_filter = GetFilterCopy(p_id)
+        Dim l_filter As Filter = GetFilterCopy(p_id)
 
         If l_filter Is Nothing Then Exit Sub
         l_filter.Name = p_value
         UpdateFilter(l_filter)
+    End Sub
+
+    Friend Sub UpdateFilterValueName(ByVal p_id As UInt32, ByVal p_value As String)
+        Dim l_filterValue As FilterValue = GetFilterValueCopy(p_id)
+
+        If l_filterValue Is Nothing Then Exit Sub
+        l_filterValue.Name = p_value
+        GlobalVariables.FiltersValues.Update(l_filterValue)
     End Sub
 
 #End Region
@@ -244,7 +252,7 @@ Friend Class AxisFiltersController
         Dim position As Int32
         Dim accountsUpdates As New List(Of Tuple(Of Int32, String, Int32))
 
-        Dim positionsDictionary As Dictionary(Of Int32, Int32) = GetFiltersValuesPositionsDictionary()
+        Dim positionsDictionary As Dictionary(Of Int32, Int32) = VTreeViewUtil.GeneratePositionsDictionary(m_filterTV)
         Dim updateList As New List(Of CRUDEntity)
 
         For Each filterValueId As Int32 In positionsDictionary.Keys
@@ -259,7 +267,8 @@ Friend Class AxisFiltersController
                 updateList.Add(filterValue)
             End If
         Next
-        UpdateFilterValuesBatch(updateList)
+
+        If updateList.Count > 0 Then UpdateFilterValuesBatch(updateList)
 
     End Sub
 
