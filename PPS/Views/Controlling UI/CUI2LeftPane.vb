@@ -66,6 +66,7 @@ Public Class CUI2LeftPane
         SplitContainer.Panel1.Controls.Add(entitiesTV)
         entitiesTV.Dock = DockStyle.Fill
         entitiesTV.CheckBoxes = True
+        entitiesTV.TriStateMode = True
 
         LoadTvs()
         InitCurrenciesCLB()
