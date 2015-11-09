@@ -117,6 +117,7 @@ Friend Class AxisView
         Else
             isFillingDGV = True
             FillRow(ht.Id, ht.Name, ht)
+            updateDGVFormat()
             isFillingDGV = False
         End If
 
@@ -128,7 +129,7 @@ Friend Class AxisView
         If InvokeRequired Then
             Dim MyDelegate As New DeleteAxis_Delegate(AddressOf DeleteAxis)
             Me.Invoke(MyDelegate, New Object() {id})
-        Else
+        ElseIf (rows_id_item_dic.ContainsKey(id)) Then
             rows_id_item_dic(id).Delete()
             rows_id_item_dic.Remove(id)
             DGV.Refresh()
@@ -152,7 +153,7 @@ Friend Class AxisView
 
     Private Sub DeleteAxisOrder()
 
-        If Not currentRowItem Is Nothing Then
+        If Not currentRowItem Is Nothing AndAlso DGV.ColumnsHierarchy.Items.Count > 0 Then
             Dim confirm As Integer = MessageBox.Show(Local.GetValue("axis.msg_axis_delete1") + Chr(13) + Chr(13) + _
                                                     DGV.CellsArea.GetCellValue(currentRowItem, DGV.ColumnsHierarchy.Items(0)) + Chr(13) + Chr(13) + _
                                                      Local.GetValue("axis.msg_axis_delete2") + Chr(13) + Chr(13), _

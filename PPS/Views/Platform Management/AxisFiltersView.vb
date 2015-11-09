@@ -40,9 +40,6 @@ Friend Class AxisFiltersView
         m_axisId = p_axidId
         m_filtersNode = p_filtersNode
         AxisFilterManager.LoadFvTv(m_filtersFiltersValuesTV, m_filtersNode, m_axisId)
-        For Each node As vTreeNode In m_filtersFiltersValuesTV.Nodes
-            node.Value = AxisFiltersController.m_FilterTag & node.Value
-        Next
 
         m_tableLayoutPanel.Controls.Add(m_filtersFiltersValuesTV, 0, 1)
         m_filtersFiltersValuesTV.Dock = DockStyle.Fill
@@ -84,30 +81,26 @@ Friend Class AxisFiltersView
         Else
             Dim TVExpansionTemp As Dictionary(Of String, Boolean) = VTreeViewUtil.SaveNodesExpansionsLevel(m_filtersFiltersValuesTV)
             AxisFilterManager.LoadFvTv(m_filtersFiltersValuesTV, m_filtersNode, m_axisId)
-            For Each node As vTreeNode In m_filtersFiltersValuesTV.Nodes
-                node.Value = AxisFiltersController.m_FilterTag & node.Value
-            Next
             VTreeViewUtil.ResumeExpansionsLevel(m_filtersFiltersValuesTV, TVExpansionTemp)
             m_filtersFiltersValuesTV.Refresh()
         End If
 
     End Sub
 
-    Delegate Sub SetFilter_Delegate(ByRef p_ht As Hashtable)
-    Friend Sub SetFilter(ByRef p_ht As Hashtable)
+    Delegate Sub SetFilter_Delegate(ByRef p_ht As Filter)
+    Friend Sub SetFilter(ByRef p_ht As Filter)
         If InvokeRequired Then
             Dim MyDelegate As New SetFilter_Delegate(AddressOf SetFilter)
             Me.Invoke(MyDelegate, New Object() {p_ht})
         Else
             Dim newNode As New vTreeNode
 
-            newNode.Text = p_ht(NAME_VARIABLE)
-            newNode.Value = p_ht(ID_VARIABLE)
-            If p_ht(PARENT_ID_VARIABLE) = 0 Then
-                newNode.Value = "filterId" & newNode.Value
+            newNode.Text = p_ht.Name
+            newNode.Value = p_ht.Id
+            If p_ht.ParentId = 0 Then
                 m_filtersFiltersValuesTV.Nodes.Add(newNode)
             Else
-                Dim parentNode = GetNode(m_filtersFiltersValuesTV.Nodes, p_ht(PARENT_ID_VARIABLE))
+                Dim parentNode = GetNode(m_filtersFiltersValuesTV.Nodes, p_ht.ParentId)
 
                 If Not parentNode Is Nothing Then parentNode.Nodes.Add(newNode)
             End If
@@ -139,8 +132,8 @@ Friend Class AxisFiltersView
         Else
 
             ' Check if node is filter Node
-            If currentNode.Value.IndexOf(AxisFiltersController.m_FilterTag) > -1 Then
-                filterId = Strings.Right(currentNode.Value, Len(currentNode.Value) - Len(AxisFiltersController.m_FilterTag))
+            If currentNode.Parent Is Nothing Then
+                filterId = currentNode.Value
                 parentFilterValueId = 0
                 GoTo NewFilterValue
             End If
@@ -202,9 +195,9 @@ NewFilterValue:
 
         If Not m_filtersFiltersValuesTV.SelectedNode Is Nothing Then
             Dim current_node As vTreeNode = m_filtersFiltersValuesTV.SelectedNode
-            If current_node.Value.IndexOf(AxisFiltersController.m_FilterTag) > -1 Then
+            If current_node.Parent Is Nothing Then
 
-                Dim filterId As Int32 = Strings.Right(current_node.Value, Len(current_node.Value) - Len(AxisFiltersController.m_FilterTag))
+                Dim filterId As UInt32 = current_node.Value
                 ' Delete Category
                 Dim confirm As Integer = MessageBox.Show("Careful, you are about to delete the Category: " + Chr(13) + current_node.Text + Chr(13) + "Do you confirm?", _
                                                          "Category deletion confirmation", _

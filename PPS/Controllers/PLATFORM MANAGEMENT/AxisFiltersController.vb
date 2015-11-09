@@ -29,7 +29,6 @@ Friend Class AxisFiltersController
 
     ' Variables
     Private m_axisId As Int32
-    Friend Const m_FilterTag As String = "filterId"
     Private m_editFilterStructUI As AxisFilterStructView
     Private m_isEditingFiltersStructure As Boolean
 
