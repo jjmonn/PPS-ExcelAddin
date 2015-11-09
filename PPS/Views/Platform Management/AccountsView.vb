@@ -801,51 +801,51 @@ SubmitFormula:
 
     Private Sub formulaTypeCB_SelectedValueChanged(sender As Object, e As EventArgs) Handles FormulaTypeComboBox.SelectedItemChanged
 
-        'Dim li = FormulaTypeComboBox.SelectedItem
-        'If m_currentNode IsNot Nothing _
-        'AndAlso m_isDisplayingAttributes = False _
-        'AndAlso m_isRevertingFType = False Then
+        Dim li = FormulaTypeComboBox.SelectedItem
+        If m_currentNode IsNot Nothing _
+        AndAlso m_isDisplayingAttributes = False _
+        AndAlso m_isRevertingFType = False Then
 
-        '    If m_controller.FormulaTypeChangeImpliesFactsDeletion(CInt(m_currentNode.Value), li.Value) = True Then
-        '        Dim confirm As GeneralUtilities.CheckResult = GeneralUtilities.AskPasswordConfirmation(Local.GetValue("accounts_edition.msg_password_required"), _
-        '                                                                                               Local.GetValue("accounts_edition.title_formula_type_validation_confirmation"))
-        '        If confirm = GeneralUtilities.CheckResult.Success Then
-        '            UpdateFormulaType(m_currentNode.Value, li)
-        '        Else
-        '            ' reverting formula type
-        '            m_isRevertingFType = True
-        '            Dim l_account As Account = GlobalVariables.Accounts.GetValue(CInt(m_currentNode.Value))
-        '            If Not l_account Is Nothing Then
-        '                FormulaTypeComboBox.SelectedValue = l_account.FormulaType
-        '            End If
-        '            m_isRevertingFType = False
-        '            If confirm = GeneralUtilities.CheckResult.Fail Then
-        '                MsgBox(Local.GetValue("accounts_edition.msg_password_confirmation_failed"))
-        '                Exit Sub
-        '            End If
-        '        End If
-        '    ElseIf m_controller.FormulaTypeChangeImpliesFormulaDeletion(CInt(m_currentNode.Value), li.Value) = True Then
-        '        Dim confirm As Integer = MessageBox.Show(Local.GetValue("This implies deleting the account formula, do you confirm ?"), _
-        '                                                 Local.GetValue("accounts_edition.title_formula_validation_confirmation"), _
-        '                                                 MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question)
-        '        If confirm = DialogResult.Yes Then
-        '            UpdateFormulaType(m_currentNode.Value, li)
-        '        End If
-        '    Else
-        '        UpdateFormulaType(m_currentNode.Value, li)
-        '    End If
-        'Else
-        '    If li.Value = Account.FormulaTypes.TITLE Then
-        '        CurrencyConversionComboBox.SelectedValue = Account.ConversionOptions.NO_CONVERSION
-        '        TypeComboBox.Enabled = False
-        '        CurrencyConversionComboBox.Enabled = False
-        '        ConsolidationOptionComboBox.Enabled = False
-        '    Else
-        '        TypeComboBox.Enabled = True
-        '        CurrencyConversionComboBox.Enabled = True
-        '        ConsolidationOptionComboBox.Enabled = True
-        '    End If
-        'End If
+            If m_controller.FormulaTypeChangeImpliesFactsDeletion(CInt(m_currentNode.Value), li.Value) = True Then
+                Dim confirm As GeneralUtilities.CheckResult = GeneralUtilities.AskPasswordConfirmation(Local.GetValue("accounts_edition.msg_password_required"), _
+                                                                                                       Local.GetValue("accounts_edition.title_formula_type_validation_confirmation"))
+                If confirm = GeneralUtilities.CheckResult.Success Then
+                    UpdateFormulaType(m_currentNode.Value, li)
+                Else
+                    ' reverting formula type
+                    m_isRevertingFType = True
+                    Dim l_account As Account = GlobalVariables.Accounts.GetValue(CInt(m_currentNode.Value))
+                    If Not l_account Is Nothing Then
+                        FormulaTypeComboBox.SelectedValue = l_account.FormulaType
+                    End If
+                    m_isRevertingFType = False
+                    If confirm = GeneralUtilities.CheckResult.Fail Then
+                        MsgBox(Local.GetValue("accounts_edition.msg_password_confirmation_failed"))
+                        Exit Sub
+                    End If
+                End If
+            ElseIf m_controller.FormulaTypeChangeImpliesFormulaDeletion(CInt(m_currentNode.Value), li.Value) = True Then
+                Dim confirm As Integer = MessageBox.Show(Local.GetValue("This implies deleting the account formula, do you confirm ?"), _
+                                                         Local.GetValue("accounts_edition.title_formula_validation_confirmation"), _
+                                                         MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question)
+                If confirm = DialogResult.Yes Then
+                    UpdateFormulaType(m_currentNode.Value, li)
+                End If
+            Else
+                UpdateFormulaType(m_currentNode.Value, li)
+            End If
+        Else
+            If li.Value = Account.FormulaTypes.TITLE Then
+                CurrencyConversionComboBox.SelectedValue = Account.ConversionOptions.NO_CONVERSION
+                TypeComboBox.Enabled = False
+                CurrencyConversionComboBox.Enabled = False
+                ConsolidationOptionComboBox.Enabled = False
+            Else
+                TypeComboBox.Enabled = True
+                CurrencyConversionComboBox.Enabled = True
+                ConsolidationOptionComboBox.Enabled = True
+            End If
+        End If
 
     End Sub
 
