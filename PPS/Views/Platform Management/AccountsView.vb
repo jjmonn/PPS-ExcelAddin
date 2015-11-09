@@ -140,7 +140,7 @@ Friend Class AccountsView
 
         AddHandler m_accountTV.AfterSelect, AddressOf AccountsTV_AfterSelect
         AddHandler m_accountTV.KeyDown, AddressOf AccountsTV_KeyDown
-        AddHandler m_accountTV.MouseDoubleClick, AddressOf AccountsTV_MouseDoubleClick
+        AddHandler m_accountTV.DoubleClick, AddressOf AccountsTV_MouseDoubleClick
 
         ' Drag and drop events
         AddHandler m_accountTV.MouseDown, AddressOf AccountsTV_MouseDown
@@ -720,9 +720,9 @@ SubmitFormula:
 
     End Sub
 
-    Private Sub AccountsTV_MouseDoubleClick(sender As Object, e As MouseEventArgs)
+    Private Sub AccountsTV_MouseDoubleClick(sender As Object, e As EventArgs)
 
-        Dim node As vTreeNode = Me.m_accountTV.HitTest(e.Location)
+        Dim node As vTreeNode = Me.m_accountTV.SelectedNode
         If node IsNot Nothing Then
             If formulaEdit.Checked = True Then
                 m_formulaTextBox.Text = m_formulaTextBox.Text & FormulasTranslations.ACCOUNTS_HUMAN_IDENTIFIER & _

@@ -200,7 +200,7 @@ Friend Class AccountsController
     Friend Function ExistingDependantAccounts(ByRef node As VIBlend.WinForms.Controls.vTreeNode) As String()
 
         Dim dependantAccountsNames As New List(Of String)
-        Dim accountsKeyList As List(Of UInt32) = CType(CType(VTreeViewUtil.GetNodesIds(node), Object), List(Of UInt32))
+        Dim accountsKeyList As List(Of UInt32) = VTreeViewUtil.GetNodesIdsUint(node)
         accountsKeyList.Reverse()
 
         Dim dependantAccountsId() As UInt32 = DependenciesLoopCheck(accountsKeyList).ToArray
@@ -298,9 +298,9 @@ Friend Class AccountsController
         Dim dependancies_dict As New Dictionary(Of UInt32, List(Of UInt32))
         Dim accounts_list = VTreeViewUtil.GetNodesIds(m_accountsTV)
         For Each account_id In accounts_list
-            Dim ftype As String = GetAccount(CUInt(account_id)).Formula
-            If ftype <> Account.FormulaTypes.HARD_VALUE_INPUT _
-            AndAlso ftype <> Account.FormulaTypes.TITLE Then
+            Dim l_formulaType As Int32 = GetAccount(CUInt(account_id)).FormulaType
+            If l_formulaType <> Account.FormulaTypes.HARD_VALUE_INPUT _
+            AndAlso l_formulaType <> Account.FormulaTypes.TITLE Then
                 If dependancies_dict.ContainsKey(account_id) = False Then AddDependantToDependanciesDict(account_id, dependancies_dict)
                 For Each dependant_id In dependancies_dict(account_id)
                     If CheckDependantsInterdependancy(account_id, dependant_id, dependancies_dict) = False Then
@@ -342,7 +342,7 @@ Friend Class AccountsController
         If GetAccount(dependant_id).FormulaType = Account.FormulaTypes.AGGREGATION_OF_SUB_ACCOUNTS Then
             Dim l_dependantNode As vTreeNode = VTreeViewUtil.FindNode(m_accountsTV, dependant_id)
             If l_dependantNode IsNot Nothing Then
-                dependancies_dict.Add(dependant_id, CType(VTreeViewUtil.GetNodesIds(l_dependantNode), Object))
+                dependancies_dict.Add(dependant_id, VTreeViewUtil.GetNodesIdsUint(l_dependantNode))
             End If
         Else
             dependancies_dict.Add(dependant_id, m_formulasTranslator.GetFormulaDependantsLIst(dependant_id))

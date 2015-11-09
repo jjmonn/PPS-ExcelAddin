@@ -184,18 +184,22 @@ Partial Class AccountsView
         '
         'SaveDescriptionBT
         '
+        Me.SaveDescriptionBT.AllowAnimations = True
         Me.SaveDescriptionBT.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.SaveDescriptionBT.BackColor = System.Drawing.Color.Transparent
         Me.SaveDescriptionBT.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
         Me.SaveDescriptionBT.ImageKey = "1420498403_340208.ico"
         Me.SaveDescriptionBT.ImageList = Me.EditButtonsImagelist
         Me.SaveDescriptionBT.Location = New System.Drawing.Point(348, 127)
         Me.SaveDescriptionBT.Margin = New System.Windows.Forms.Padding(2)
         Me.SaveDescriptionBT.Name = "SaveDescriptionBT"
+        Me.SaveDescriptionBT.RoundedCornersMask = CType(15, Byte)
         Me.SaveDescriptionBT.Size = New System.Drawing.Size(187, 28)
         Me.SaveDescriptionBT.TabIndex = 7
         Me.SaveDescriptionBT.Text = "[accounts_edition.save_description]"
         Me.SaveDescriptionBT.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         Me.SaveDescriptionBT.UseVisualStyleBackColor = True
+        Me.SaveDescriptionBT.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
         '
         'EditButtonsImagelist
         '
@@ -257,18 +261,22 @@ Partial Class AccountsView
         '
         'submit_cmd
         '
+        Me.submit_cmd.AllowAnimations = True
         Me.submit_cmd.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.submit_cmd.BackColor = System.Drawing.Color.Transparent
         Me.submit_cmd.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
         Me.submit_cmd.ImageKey = "1420498403_340208.ico"
         Me.submit_cmd.ImageList = Me.EditButtonsImagelist
         Me.submit_cmd.Location = New System.Drawing.Point(348, 162)
         Me.submit_cmd.Margin = New System.Windows.Forms.Padding(2)
         Me.submit_cmd.Name = "submit_cmd"
+        Me.submit_cmd.RoundedCornersMask = CType(15, Byte)
         Me.submit_cmd.Size = New System.Drawing.Size(187, 28)
         Me.submit_cmd.TabIndex = 7
         Me.submit_cmd.Text = "[accounts_edition.validate_formula]"
         Me.submit_cmd.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         Me.submit_cmd.UseVisualStyleBackColor = True
+        Me.submit_cmd.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
         '
         'm_accountInformationGroupbox
         '
@@ -452,11 +460,21 @@ Partial Class AccountsView
         'Name_TB
         '
         Me.Name_TB.BackColor = System.Drawing.SystemColors.ButtonHighlight
+        Me.Name_TB.BoundsOffset = New System.Drawing.Size(1, 1)
+        Me.Name_TB.ControlBorderColor = System.Drawing.Color.FromArgb(CType(CType(39, Byte), Integer), CType(CType(39, Byte), Integer), CType(CType(39, Byte), Integer))
+        Me.Name_TB.DefaultText = "Empty..."
         Me.Name_TB.Location = New System.Drawing.Point(161, 41)
         Me.Name_TB.Margin = New System.Windows.Forms.Padding(2)
+        Me.Name_TB.MaxLength = 32767
         Me.Name_TB.Name = "Name_TB"
+        Me.Name_TB.PasswordChar = Global.Microsoft.VisualBasic.ChrW(0)
+        Me.Name_TB.ScrollBars = System.Windows.Forms.ScrollBars.None
+        Me.Name_TB.SelectionLength = 0
+        Me.Name_TB.SelectionStart = 0
         Me.Name_TB.Size = New System.Drawing.Size(258, 20)
         Me.Name_TB.TabIndex = 1
+        Me.Name_TB.TextAlign = System.Windows.Forms.HorizontalAlignment.Left
+        Me.Name_TB.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
         '
         'GlobalFactsPanel
         '
@@ -465,7 +483,7 @@ Partial Class AccountsView
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.GlobalFactsPanel.Location = New System.Drawing.Point(12, 58)
         Me.GlobalFactsPanel.Name = "GlobalFactsPanel"
-        Me.GlobalFactsPanel.Size = New System.Drawing.Size(114, 619)
+        Me.GlobalFactsPanel.Size = New System.Drawing.Size(115, 619)
         Me.GlobalFactsPanel.TabIndex = 3
         '
         'm_globalFactsLabel
@@ -479,7 +497,7 @@ Partial Class AccountsView
         Me.m_globalFactsLabel.Location = New System.Drawing.Point(12, 28)
         Me.m_globalFactsLabel.Multiline = True
         Me.m_globalFactsLabel.Name = "m_globalFactsLabel"
-        Me.m_globalFactsLabel.Size = New System.Drawing.Size(136, 16)
+        Me.m_globalFactsLabel.Size = New System.Drawing.Size(137, 16)
         Me.m_globalFactsLabel.TabIndex = 0
         Me.m_globalFactsLabel.Text = "Macro economic indicators"
         Me.m_globalFactsLabel.TextAlignment = System.Drawing.ContentAlignment.TopLeft
@@ -491,11 +509,13 @@ Partial Class AccountsView
         Me.accountsIL.ImageStream = CType(resources.GetObject("accountsIL.ImageStream"), System.Windows.Forms.ImageListStreamer)
         Me.accountsIL.TransparentColor = System.Drawing.Color.Transparent
         Me.accountsIL.Images.SetKeyName(0, "WC blue.png")
-        Me.accountsIL.Images.SetKeyName(1, "config blue circle.png")
-        Me.accountsIL.Images.SetKeyName(2, "func.png")
+        Me.accountsIL.Images.SetKeyName(1, "pencil.ico")
+        Me.accountsIL.Images.SetKeyName(2, "formula.ico")
         Me.accountsIL.Images.SetKeyName(3, "sum purple.png")
         Me.accountsIL.Images.SetKeyName(4, "BS Blue.png")
         Me.accountsIL.Images.SetKeyName(5, "favicon(81).ico")
+        Me.accountsIL.Images.SetKeyName(6, "func.png")
+        Me.accountsIL.Images.SetKeyName(7, "config blue circle.png")
         '
         'TVRCM
         '
@@ -611,7 +631,8 @@ Partial Class AccountsView
         Me.m_globalFactsImageList.ImageStream = CType(resources.GetObject("m_globalFactsImageList.ImageStream"), System.Windows.Forms.ImageListStreamer)
         Me.m_globalFactsImageList.TransparentColor = System.Drawing.Color.Transparent
         Me.m_globalFactsImageList.Images.SetKeyName(0, "currency_euro.ico")
-        Me.m_globalFactsImageList.Images.SetKeyName(1, "money_interest.ico")
+        Me.m_globalFactsImageList.Images.SetKeyName(1, "chart_line.ico")
+        Me.m_globalFactsImageList.Images.SetKeyName(2, "money_interest.ico")
         '
         'AccountsView
         '
@@ -634,7 +655,6 @@ Partial Class AccountsView
         Me.m_accountFormulaGroupbox.ResumeLayout(False)
         Me.m_accountFormulaGroupbox.PerformLayout()
         Me.m_accountInformationGroupbox.ResumeLayout(False)
-        Me.m_accountInformationGroupbox.PerformLayout()
         Me.TVRCM.ResumeLayout(False)
         Me.MainMenu.ResumeLayout(False)
         Me.MainMenu.PerformLayout()
@@ -648,7 +668,6 @@ Partial Class AccountsView
     Friend WithEvents Name_TB As VIBlend.WinForms.Controls.vTextBox
     Friend WithEvents m_accountFormulaGroupbox As System.Windows.Forms.GroupBox
     Friend WithEvents formulaEdit As System.Windows.Forms.CheckBox
-    Friend WithEvents submit_cmd As System.Windows.Forms.Button
     Friend WithEvents accountsIL As System.Windows.Forms.ImageList
     Friend WithEvents EditButtonsImagelist As System.Windows.Forms.ImageList
     Friend WithEvents TVRCM As System.Windows.Forms.ContextMenuStrip
@@ -668,7 +687,6 @@ Partial Class AccountsView
     Friend WithEvents DropSelectedAccountHierarchyToExcelToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents HelpToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents m_accountDescriptionGroupbox As System.Windows.Forms.GroupBox
-    Friend WithEvents SaveDescriptionBT As System.Windows.Forms.Button
     Friend WithEvents FormulaTypeComboBox As VIBlend.WinForms.Controls.vComboBox
     Friend WithEvents TypeComboBox As VIBlend.WinForms.Controls.vComboBox
     Friend WithEvents m_accountConsolidationOptionLabel As VIBlend.WinForms.Controls.vLabel
@@ -685,5 +703,7 @@ Partial Class AccountsView
     Friend WithEvents m_formulaTextBox As VIBlend.WinForms.Controls.vTextBox
     Friend WithEvents AccountsTVPanel As System.Windows.Forms.Panel
     Friend WithEvents m_globalFactsImageList As System.Windows.Forms.ImageList
+    Friend WithEvents submit_cmd As VIBlend.WinForms.Controls.vButton
+    Friend WithEvents SaveDescriptionBT As VIBlend.WinForms.Controls.vButton
 
 End Class
