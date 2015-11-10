@@ -213,7 +213,7 @@ Friend Class DataGridViewsUtil
 
     End Sub
 
-    Protected Friend Shared Sub AdjustChildrenHierarchyItemSize(ByRef item As HierarchyItem)
+    Friend Shared Sub AdjustChildrenHierarchyItemSize(ByRef item As HierarchyItem)
 
         item.AutoResize(AutoResizeMode.FIT_ALL)
         item.TextAlignment = ContentAlignment.MiddleRight
@@ -226,7 +226,7 @@ Friend Class DataGridViewsUtil
 
     End Sub
 
-    Protected Friend Shared Sub EqualizeColumnsAndRowsHierarchyWidth(ByRef DGV As vDataGridView)
+    Friend Shared Sub EqualizeColumnsAndRowsHierarchyWidth(ByRef DGV As vDataGridView)
 
         Dim width As Int32 = DGV.Width / (DGV.ColumnsHierarchy.Items.Count + 1)
         DGV.RowsHierarchy.Items(0).Width = width
@@ -284,7 +284,7 @@ Friend Class DataGridViewsUtil
 
     End Sub
 
-    Protected Friend Shared Sub SetDGVCellsFontSize(ByRef DGV As vDataGridView, ByRef fontSize As Single)
+    Friend Shared Sub SetDGVCellsFontSize(ByRef DGV As vDataGridView, ByRef fontSize As Single)
 
         Dim CStyleN As GridCellStyle = GridTheme.GetDefaultTheme(DGV.VIBlendTheme).GridCellStyle
         CStyleN.Font = New System.Drawing.Font(DGV.Font.FontFamily, fontSize, FontStyle.Regular)
@@ -295,8 +295,8 @@ Friend Class DataGridViewsUtil
 
     End Sub
 
-    Protected Friend Shared Sub SetItemsCellsFontSize(ByRef item As HierarchyItem, _
-                                                      ByRef cstyleN As GridCellStyle)
+    Friend Shared Sub SetItemsCellsFontSize(ByRef item As HierarchyItem, _
+                                                     ByRef cstyleN As GridCellStyle)
 
         item.CellsStyle = cstyleN
         For Each subItem In item.Items
@@ -377,12 +377,12 @@ Friend Class DataGridViewsUtil
     ' Initializes VDataGridViewRows Hierarchy
     ' Calls the 2 private subs below
     ' param index: tab# (corresponds to the node#)
-    Protected Friend Function CreatesVDataGridViewRowsHierarchy(ByRef dgv As vDataGridView, _
-                                                              ByRef index As Integer, _
-                                                              ByRef AccountsTV As TreeView, _
-                                                              Optional ByRef entitiesArray() As String = Nothing, _
-                                                              Optional ByRef entity_node As TreeNode = Nothing) _
-                                                              As Dictionary(Of String, Int32)
+    Friend Function CreatesVDataGridViewRowsHierarchy(ByRef dgv As vDataGridView, _
+                                                             ByRef index As Integer, _
+                                                             ByRef AccountsTV As TreeView, _
+                                                             Optional ByRef entitiesArray() As String = Nothing, _
+                                                             Optional ByRef entity_node As TreeNode = Nothing) _
+                                                             As Dictionary(Of String, Int32)
 
         Dim KeyLineDictionary As New Dictionary(Of String, Int32)
         Dim line_index As Int32 = 0
@@ -460,10 +460,10 @@ Friend Class DataGridViewsUtil
     End Sub
 
     ' Recursively creates rows and sub rows for the current node and children - Case ONE ENTITY
-    Protected Friend Sub FillInSubRowsHierarchyOneEntity(ByRef inputNode As TreeNode, _
-                                                         ByRef LineIndex As Int32, _
-                                                         ByRef dataGridView As vDataGridView, _
-                                                         ByRef KeyLineDictionary As Dictionary(Of String, Int32))
+    Friend Sub FillInSubRowsHierarchyOneEntity(ByRef inputNode As TreeNode, _
+                                                        ByRef LineIndex As Int32, _
+                                                        ByRef dataGridView As vDataGridView, _
+                                                        ByRef KeyLineDictionary As Dictionary(Of String, Int32))
 
         Dim Row As HierarchyItem = dataGridView.RowsHierarchy.Items.Add(inputNode.Text)
         KeyLineDictionary.Add(inputNode.Name, LineIndex)
@@ -495,8 +495,8 @@ Friend Class DataGridViewsUtil
 
 #Region "Alternative Scenarios Report DGV Utility"
 
-    Protected Friend Shared Function CreateASDGVReport(ByRef period_list As List(Of Int32), _
-                                                       ByRef time_config As String) As vDataGridView
+    Friend Shared Function CreateASDGVReport(ByRef period_list As List(Of Int32), _
+                                                      ByRef time_config As String) As vDataGridView
 
         Dim DGV As New vDataGridView
         DGV.VIBlendTheme = BASIC_DGV_REPORT_THEME
@@ -521,9 +521,9 @@ Friend Class DataGridViewsUtil
 
     End Function
 
-    Protected Friend Shared Sub AddSerieToBasicDGVReport(ByRef row As HierarchyItem, _
-                                                         ByRef serie_name As String, _
-                                                         ByRef values As Double())
+    Friend Shared Sub AddSerieToBasicDGVReport(ByRef row As HierarchyItem, _
+                                                        ByRef serie_name As String, _
+                                                        ByRef values As Double())
 
         ' evolution -> border + bold around  important items !!
         Dim sub_row As HierarchyItem = row.Items.Add("")
@@ -534,7 +534,7 @@ Friend Class DataGridViewsUtil
 
     End Sub
 
-    Protected Friend Shared Sub FormatBasicDGV(ByRef DGV As vDataGridView)
+    Friend Shared Sub FormatBasicDGV(ByRef DGV As vDataGridView)
 
         DGV.ColumnsHierarchy.AutoStretchColumns = True
         AdjustDGVFColumnWidth(DGV, 0)
@@ -552,105 +552,135 @@ Friend Class DataGridViewsUtil
 
 #Region "Send to Excel Functions"
 
-    Protected Friend Shared Sub CopyDGVToExcelGeneric(ByRef DGV As vDataGridView, _
-                                                      ByRef dest_range As Excel.Range, _
-                                                      ByRef i As Int32)
+    Friend Shared Sub CopyDGVToExcelGeneric(ByRef DGV As vDataGridView, _
+                                            ByRef dest_range As Excel.Range, _
+                                            ByRef i As Int32, _
+                                            ByRef p_copyOnlyExpanded As Boolean)
 
         Dim j As Int32 = 1
         Dim nb_columns_floors As Int32 = i
 
         For Each column As HierarchyItem In DGV.ColumnsHierarchy.Items
-            SetupColumnsTitles(column, dest_range, i, j, nb_columns_floors)
+            SetupColumnsTitles(column, dest_range, i, j, nb_columns_floors, p_copyOnlyExpanded)
         Next
 
         j = 0
         i = i + 1
         For Each row As HierarchyItem In DGV.RowsHierarchy.Items
-            SetupRowsTitles(row, dest_range, i, j)
+            SetupRowsTitles(row, dest_range, i, j, p_copyOnlyExpanded)
         Next
 
         j = 1
         i = nb_columns_floors + 1
         For Each row As HierarchyItem In DGV.RowsHierarchy.Items
-            CopyRowHierarchy(row, dest_range, i, j)
+            CopyRowHierarchy(row, dest_range, i, j, p_copyOnlyExpanded)
         Next
         dest_range.Worksheet.Range(dest_range.Worksheet.Cells(1, 1), dest_range.Offset(i, j)).Columns.AutoFit()
 
     End Sub
 
-    Protected Friend Shared Sub SetupColumnsTitles(ByRef column As HierarchyItem, _
-                                                   ByRef range As Excel.Range, _
-                                                   ByRef i As Int32, _
-                                                   ByRef j As Int32, _
-                                                   ByRef parent_j As Int32)
+    Friend Shared Sub SetupColumnsTitles(ByRef column As HierarchyItem, _
+                                         ByRef range As Excel.Range, _
+                                         ByRef i As Int32, _
+                                         ByRef j As Int32, _
+                                         ByRef parent_j As Int32, _
+                                         ByRef p_copyOnlyExpanded As Boolean)
 
-        range.Offset(i, j).Value = column.Caption
-        range.Offset(i, j).Font.Bold = True
-        ' FormatRangeFromHierarchyItem(range.Offset(i, j), column)
-        j = j + 1
-        If column.Items.Count > 0 Then
-            For Each sub_column As HierarchyItem In column.Items
-                i = i + 1
-                SetupColumnsTitles(sub_column, range, i, j, parent_j)
-            Next
-            parent_j = parent_j + column.Items.Count
+      
+
+            range.Offset(i, j).Value = column.Caption
+            range.Offset(i, j).Font.Bold = True
+            ' FormatRangeFromHierarchyItem(range.Offset(i, j), column)
+            j = j + 1
+
+        If p_copyOnlyExpanded = False _
+      Or p_copyOnlyExpanded = True And column.Expanded = True Then
+            If column.Items.Count > 0 Then
+                For Each sub_column As HierarchyItem In column.Items
+                    i = i + 1
+                    SetupColumnsTitles(sub_column, range, i, j, parent_j, p_copyOnlyExpanded)
+                Next
+                parent_j = parent_j + column.Items.Count
+            End If
+
         End If
 
     End Sub
 
-    Protected Friend Shared Sub SetupRowsTitles(ByRef row As HierarchyItem, _
-                                                ByRef range As Excel.Range, _
-                                                ByRef i As Int32, _
-                                                ByRef j As Int32)
+    Friend Shared Sub SetupRowsTitles(ByRef row As HierarchyItem, _
+                                      ByRef range As Excel.Range, _
+                                      ByRef i As Int32, _
+                                      ByRef j As Int32, _
+                                      ByRef p_copyOnlyExpanded As Boolean)
 
+     
         range.Offset(i, j).Value = row.Caption
         FormatRangeFromHierarchyItem(range.Offset(i, j), row)
         i = i + 1
         Dim sub_rows_nb As Int32 = 0
         Dim group_start_row As Int32 = i + range.Row - 1
 
-        For Each sub_row As HierarchyItem In row.Items
-            SetupRowsTitles(sub_row, range, i, j)
-            sub_rows_nb = sub_rows_nb + sub_row.Items.Count
-        Next
+        If p_copyOnlyExpanded = False _
+        Or p_copyOnlyExpanded = True And row.Expanded = True Then
 
-        If row.Items.Count > 0 Then
-            Dim ws As Excel.Worksheet = range.Worksheet
-            Dim nb_sub_items As Int32 = 0
-            DataGridViewsUtil.CountSubItemsNb(row, nb_sub_items)
-            Dim grouped_range As Excel.Range = ws.Range(ws.Cells(group_start_row + 1, 1), ws.Cells(group_start_row + nb_sub_items, 2))
-            grouped_range.Rows.Group(Type.Missing, Type.Missing, Type.Missing, Type.Missing)
+
+            For Each sub_row As HierarchyItem In row.Items
+                SetupRowsTitles(sub_row, range, i, j, p_copyOnlyExpanded)
+                sub_rows_nb = sub_rows_nb + sub_row.Items.Count
+            Next
+
+            If row.Items.Count > 0 Then
+                Dim ws As Excel.Worksheet = range.Worksheet
+                Dim nb_sub_items As Int32 = 0
+                DataGridViewsUtil.CountSubItemsNb(row, nb_sub_items)
+                Dim grouped_range As Excel.Range = ws.Range(ws.Cells(group_start_row + 1, 1), ws.Cells(group_start_row + nb_sub_items, 2))
+                grouped_range.Rows.Group(Type.Missing, Type.Missing, Type.Missing, Type.Missing)
+            End If
+
         End If
 
     End Sub
 
-    Protected Friend Shared Sub CopyRowHierarchy(ByRef row As HierarchyItem, _
-                                                 ByRef range As Excel.Range, _
-                                                 ByRef i As Int32, ByRef j As Int32)
+    Friend Shared Sub CopyRowHierarchy(ByRef row As HierarchyItem, _
+                                        ByRef range As Excel.Range, _
+                                        ByRef i As Int32, _
+                                        ByRef j As Int32, _
+                                        ByRef p_copyOnlyExpanded As Boolean)
 
         j = 1
         Dim ws As Excel.Worksheet = range.Worksheet
         For Each column As HierarchyItem In row.DataGridView.ColumnsHierarchy.Items
-            CopyColumnHierarchy(row, column, range, i, j)
+            CopyColumnHierarchy(row, column, range, i, j, p_copyOnlyExpanded)
         Next
         FormatRangeFromGridCell(ws.Range(range.Offset(i, 1), range.Offset(i, j)), row)
-
         i = i + 1
-        For Each sub_row In row.Items
-            CopyRowHierarchy(sub_row, range, i, j)
-        Next
+
+        If p_copyOnlyExpanded = False _
+        Or p_copyOnlyExpanded = False AndAlso row.Expanded = True Then
+
+            For Each sub_row In row.Items
+                CopyRowHierarchy(sub_row, range, i, j, p_copyOnlyExpanded)
+            Next
+        End If
 
     End Sub
 
-    Protected Friend Shared Sub CopyColumnHierarchy(ByRef row As HierarchyItem, ByRef column As HierarchyItem, _
-                                                    ByRef range As Excel.Range, _
-                                                    ByRef i As Int32, ByRef j As Int32)
+    Friend Shared Sub CopyColumnHierarchy(ByRef row As HierarchyItem, _
+                                          ByRef column As HierarchyItem, _
+                                          ByRef range As Excel.Range, _
+                                          ByRef i As Int32, _
+                                          ByRef j As Int32, _
+                                          ByRef p_copyOnlyExpanded As Boolean)
 
         range.Offset(i, j).Value = row.DataGridView.CellsArea.GetCellValue(row, column)
         j = j + 1
-        For Each sub_column In column.Items
-            CopyColumnHierarchy(row, sub_column, range, i, j)
-        Next
+
+        If p_copyOnlyExpanded = False _
+        Or p_copyOnlyExpanded = True AndAlso column.Expanded = True Then
+            For Each sub_column In column.Items
+                CopyColumnHierarchy(row, sub_column, range, i, j, p_copyOnlyExpanded)
+            Next
+        End If
 
     End Sub
 
@@ -681,6 +711,14 @@ Friend Class DataGridViewsUtil
 
         Dim delta As Double = DGV.CellsArea.GetCellValue(row, column.Items(1)) - DGV.CellsArea.GetCellValue(row, column.Items(0))
         DGV.CellsArea.SetCellValue(row, column.Items(2), delta)
+
+        Dim CStyle As GridCellStyle = GridTheme.GetDefaultTheme(DGV.VIBlendTheme).GridCellStyle
+        If delta > 0 Then
+            CStyle.FillStyle = New FillStyleSolid(System.Drawing.Color.Green)
+        Else
+            CStyle.FillStyle = New FillStyleSolid(System.Drawing.Color.Red)
+        End If
+        DGV.CellsArea.SetCellDrawStyle(row, column, CStyle)
         For Each subRow In row.Items
             AddChildrenVersionsComparison(DGV, subRow, column)
         Next
@@ -752,7 +790,7 @@ Friend Class DataGridViewsUtil
 
 #Region "Formatting Utilities"
 
-    Protected Friend Shared Sub FormatDGVRowsHierarchy(ByRef dgv As vDataGridView)
+    Friend Shared Sub FormatDGVRowsHierarchy(ByRef dgv As vDataGridView)
 
         Dim maxLength As Int32 = 0
         Dim depth As Int32 = 0
@@ -769,8 +807,8 @@ Friend Class DataGridViewsUtil
 
     End Sub
 
-    Protected Friend Shared Sub AdjustDGVFColumnWidth(ByRef DGV As vDataGridView, _
-                                                      ByRef column_index As Int32)
+    Friend Shared Sub AdjustDGVFColumnWidth(ByRef DGV As vDataGridView, _
+                                                     ByRef column_index As Int32)
 
         Dim maxLength As Int32 = 0
         Dim characters_size As Single
@@ -788,9 +826,9 @@ Friend Class DataGridViewsUtil
 
     End Sub
 
-    Protected Friend Shared Sub GetItemMaxLength(ByRef item As HierarchyItem, _
-                                                 ByRef maxLength As Int32, _
-                                                 ByRef depth As Int32)
+    Friend Shared Sub GetItemMaxLength(ByRef item As HierarchyItem, _
+                                                ByRef maxLength As Int32, _
+                                                ByRef depth As Int32)
 
         If item.Caption.Length > maxLength Then
             maxLength = item.Caption.Length
@@ -802,9 +840,9 @@ Friend Class DataGridViewsUtil
 
     End Sub
 
-    Protected Friend Shared Sub GetColumnMaxLength(ByRef item As HierarchyItem, _
-                                                 ByVal column_index As Int32, _
-                                                 ByRef maxLength As Int32)
+    Friend Shared Sub GetColumnMaxLength(ByRef item As HierarchyItem, _
+                                                ByVal column_index As Int32, _
+                                                ByRef maxLength As Int32)
 
         Dim text As String = item.DataGridView.CellsArea.GetCellValue(item, item.DataGridView.ColumnsHierarchy.Items(column_index))
         If Not text Is Nothing AndAlso text.Length > maxLength Then
@@ -816,8 +854,8 @@ Friend Class DataGridViewsUtil
 
     End Sub
 
-    Protected Friend Shared Sub SetColumnsMinWidth(ByRef DGV As vDataGridView, _
-                                                   ByRef min_width As Int32)
+    Friend Shared Sub SetColumnsMinWidth(ByRef DGV As vDataGridView, _
+                                                  ByRef min_width As Int32)
 
         For Each column As HierarchyItem In DGV.ColumnsHierarchy.Items
             If column.Width < min_width Then column.Width = min_width
@@ -848,8 +886,8 @@ Friend Class DataGridViewsUtil
 
     End Sub
 
-    Protected Friend Shared Sub FormatRangeFromHierarchyItem(ByRef xlRange As Excel.Range, _
-                                                             ByRef item As HierarchyItem)
+    Friend Shared Sub FormatRangeFromHierarchyItem(ByRef xlRange As Excel.Range, _
+                                                            ByRef item As HierarchyItem)
 
         If Not item.HierarchyItemStyleNormal Is Nothing Then
             xlRange.Interior.Color = item.HierarchyItemStyleNormal.FillStyle.Colors(0)
@@ -857,7 +895,7 @@ Friend Class DataGridViewsUtil
             xlRange.Font.Bold = item.HierarchyItemStyleNormal.Font.Bold
             xlRange.Font.Italic = item.HierarchyItemStyleNormal.Font.Italic
         End If
-    
+
     End Sub
 
 #End Region

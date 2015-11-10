@@ -63,6 +63,7 @@ Partial Class ControllingUI_2
         Me.RefreshToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ChartBT = New System.Windows.Forms.ToolStripMenuItem()
         Me.ExpansionImageList = New System.Windows.Forms.ImageList(Me.components)
+        Me.DropOnlyTheVisibleItemsOnExcelToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.EntitiesRCMenu.SuspendLayout()
         Me.PeriodsRCMenu.SuspendLayout()
         Me.DataGridViewsRCMenu.SuspendLayout()
@@ -357,13 +358,13 @@ Partial Class ControllingUI_2
         Me.MainMenu.Location = New System.Drawing.Point(0, 0)
         Me.MainMenu.Name = "MainMenu"
         Me.MainMenu.ShowItemToolTips = True
-        Me.MainMenu.Size = New System.Drawing.Size(515, 59)
+        Me.MainMenu.Size = New System.Drawing.Size(607, 59)
         Me.MainMenu.TabIndex = 0
         Me.MainMenu.Text = "[CUI.main_menu]"
         '
         'ExcelToolStripMenuItem
         '
-        Me.ExcelToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.DropOnExcelToolStripMenuItem})
+        Me.ExcelToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.DropOnExcelToolStripMenuItem, Me.DropOnlyTheVisibleItemsOnExcelToolStripMenuItem})
         Me.ExcelToolStripMenuItem.Image = CType(resources.GetObject("ExcelToolStripMenuItem.Image"), System.Drawing.Image)
         Me.ExcelToolStripMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
         Me.ExcelToolStripMenuItem.Name = "ExcelToolStripMenuItem"
@@ -375,7 +376,7 @@ Partial Class ControllingUI_2
         'DropOnExcelToolStripMenuItem
         '
         Me.DropOnExcelToolStripMenuItem.Name = "DropOnExcelToolStripMenuItem"
-        Me.DropOnExcelToolStripMenuItem.Size = New System.Drawing.Size(198, 24)
+        Me.DropOnExcelToolStripMenuItem.Size = New System.Drawing.Size(294, 24)
         Me.DropOnExcelToolStripMenuItem.Text = "[CUI.drop_on_excel]"
         '
         'BusinessControlToolStripMenuItem
@@ -433,6 +434,12 @@ Partial Class ControllingUI_2
         Me.ExpansionImageList.TransparentColor = System.Drawing.Color.Transparent
         Me.ExpansionImageList.Images.SetKeyName(0, "add.ico")
         Me.ExpansionImageList.Images.SetKeyName(1, "minus")
+        '
+        'DropOnlyTheVisibleItemsOnExcelToolStripMenuItem
+        '
+        Me.DropOnlyTheVisibleItemsOnExcelToolStripMenuItem.Name = "DropOnlyTheVisibleItemsOnExcelToolStripMenuItem"
+        Me.DropOnlyTheVisibleItemsOnExcelToolStripMenuItem.Size = New System.Drawing.Size(294, 24)
+        Me.DropOnlyTheVisibleItemsOnExcelToolStripMenuItem.Text = "Drop only the visible items on Excel"
         '
         'ControllingUI_2
         '
@@ -503,4 +510,5 @@ Partial Class ControllingUI_2
     Friend WithEvents ExpandAllRightClick As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents CollapseAllRightClick As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ChartBT As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents DropOnlyTheVisibleItemsOnExcelToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
 End Class

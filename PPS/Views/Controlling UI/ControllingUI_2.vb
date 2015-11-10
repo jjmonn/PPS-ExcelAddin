@@ -589,8 +589,12 @@ Friend Class ControllingUI_2
 
     End Sub
 
-    Private Sub ExcelToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ExcelToolStripMenuItem.Click
-        m_controller.DropOnExcel()
+    Private Sub ExcelToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles DropOnExcelToolStripMenuItem.Click
+        m_controller.DropOnExcel(False)
+    End Sub
+
+    Private Sub DropOnlyTheVisibleItemsOnExcelToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles DropOnlyTheVisibleItemsOnExcelToolStripMenuItem.Click
+        m_controller.DropOnExcel(True)
     End Sub
 
     Private Sub RefreshToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles RefreshToolStripMenuItem.Click
@@ -982,4 +986,5 @@ Friend Class ControllingUI_2
 #End Region
 
 
+  
 End Class
