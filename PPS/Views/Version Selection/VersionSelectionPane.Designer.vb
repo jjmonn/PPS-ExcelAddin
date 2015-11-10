@@ -27,7 +27,7 @@ Partial Class VersionSelectionPane
         Me.Label1 = New System.Windows.Forms.Label()
         Me.ValidateBT = New System.Windows.Forms.Button()
         Me.BTsIL = New System.Windows.Forms.ImageList(Me.components)
-        Me.VersioningTVIL = New System.Windows.Forms.ImageList(Me.components)
+        Me.m_versionsTreeviewImageList = New System.Windows.Forms.ImageList(Me.components)
         Me.TableLayoutPanel1.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -55,7 +55,7 @@ Partial Class VersionSelectionPane
         Me.Label1.Location = New System.Drawing.Point(3, 4)
         Me.Label1.Margin = New System.Windows.Forms.Padding(3, 4, 3, 0)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(84, 13)
+        Me.Label1.Size = New System.Drawing.Size(95, 15)
         Me.Label1.TabIndex = 2
         Me.Label1.Text = "Select a Version"
         '
@@ -66,7 +66,7 @@ Partial Class VersionSelectionPane
         Me.ValidateBT.ImageList = Me.BTsIL
         Me.ValidateBT.Location = New System.Drawing.Point(3, 618)
         Me.ValidateBT.Name = "ValidateBT"
-        Me.ValidateBT.Size = New System.Drawing.Size(75, 23)
+        Me.ValidateBT.Size = New System.Drawing.Size(95, 23)
         Me.ValidateBT.TabIndex = 3
         Me.ValidateBT.Text = "Validate"
         Me.ValidateBT.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
@@ -78,12 +78,12 @@ Partial Class VersionSelectionPane
         Me.BTsIL.TransparentColor = System.Drawing.Color.Transparent
         Me.BTsIL.Images.SetKeyName(0, "1420498403_340208.ico")
         '
-        'VersioningTVIL
+        'm_versionsTreeviewImageList
         '
-        Me.VersioningTVIL.ImageStream = CType(resources.GetObject("VersioningTVIL.ImageStream"), System.Windows.Forms.ImageListStreamer)
-        Me.VersioningTVIL.TransparentColor = System.Drawing.Color.Transparent
-        Me.VersioningTVIL.Images.SetKeyName(0, "config circle orangev small.png")
-        Me.VersioningTVIL.Images.SetKeyName(1, "favicon(81).ico")
+        Me.m_versionsTreeviewImageList.ImageStream = CType(resources.GetObject("m_versionsTreeviewImageList.ImageStream"), System.Windows.Forms.ImageListStreamer)
+        Me.m_versionsTreeviewImageList.TransparentColor = System.Drawing.Color.Transparent
+        Me.m_versionsTreeviewImageList.Images.SetKeyName(0, "cloud_dark.ico")
+        Me.m_versionsTreeviewImageList.Images.SetKeyName(1, "favicon(81).ico")
         '
         'VersionSelectionPane
         '
@@ -99,7 +99,7 @@ Partial Class VersionSelectionPane
 
     End Sub
     Friend WithEvents TableLayoutPanel1 As System.Windows.Forms.TableLayoutPanel
-    Friend WithEvents VersioningTVIL As System.Windows.Forms.ImageList
+    Friend WithEvents m_versionsTreeviewImageList As System.Windows.Forms.ImageList
     Friend WithEvents Label1 As System.Windows.Forms.Label
     Friend WithEvents BTsIL As System.Windows.Forms.ImageList
     Friend WithEvents ValidateBT As System.Windows.Forms.Button

@@ -12,7 +12,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 09/11/2015
+' Last modified: 11/11/2015
 
 
 Imports System.Collections.Generic
@@ -69,7 +69,7 @@ Friend Class ExchangeRatesView
         m_ratesDataGridView.Dock = DockStyle.Fill
         m_ratesDataGridView.ContextMenuStrip = dgvRCM
         m_ratesVersionsTV.ContextMenuStrip = VersionsRCMenu
-        m_ratesVersionsTV.ImageList = ratesVersionsIL
+        m_ratesVersionsTV.ImageList = m_versionsTreeviewImageList
         VTreeViewUtil.InitTVFormat(m_ratesVersionsTV)
         FormatDGV()
 
@@ -356,7 +356,6 @@ Friend Class ExchangeRatesView
         m_ratesDataGridView.ColumnsHierarchy.AutoResize(AutoResizeMode.FIT_ALL)
         DataGridViewsUtil.FormatDGVRowsHierarchy(m_ratesDataGridView)
         m_ratesDataGridView.RowsHierarchy.CompactStyleRenderingEnabled = False
-        m_ratesDataGridView.BackColor = Color.White
         m_ratesDataGridView.Refresh()
 
     End Sub

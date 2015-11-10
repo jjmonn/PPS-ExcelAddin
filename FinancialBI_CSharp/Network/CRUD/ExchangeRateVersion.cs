@@ -33,6 +33,10 @@ namespace CRUD
       l_version.ItemPosition = p_packet.ReadInt32();
       l_version.StartPeriod = p_packet.ReadUint32();
       l_version.NbPeriod = p_packet.ReadUint16();
+      if (l_version.IsFolder == true)
+          l_version.Image = 1;
+      else
+          l_version.Image = 0;
 
       return (l_version);
     }
@@ -57,6 +61,7 @@ namespace CRUD
       ItemPosition = p_model.ItemPosition;
       StartPeriod = p_model.StartPeriod;
       NbPeriod = p_model.NbPeriod;
+      Image = p_model.Image;
     }
 
     public ExchangeRateVersion Clone()

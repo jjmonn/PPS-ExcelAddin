@@ -294,7 +294,7 @@ Friend Class DataVersionsController
 
         NewVersionUI.PreFill(input_parent_node)
         NewVersionUI.Show()
-    
+
     End Sub
 
     Friend Function IsNameValid(ByRef name As String)

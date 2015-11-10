@@ -32,7 +32,6 @@ Partial Class VersionsControl
         Me.rename_bt = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
         Me.delete_bt = New System.Windows.Forms.ToolStripMenuItem()
-        Me.VersionsTVIcons = New System.Windows.Forms.ImageList(Me.components)
         Me.TableLayoutPanel3 = New System.Windows.Forms.TableLayoutPanel()
         Me.SplitContainer1 = New System.Windows.Forms.SplitContainer()
         Me.VersionsTVPanel = New System.Windows.Forms.Panel()
@@ -62,6 +61,7 @@ Partial Class VersionsControl
         Me.DeleteVersionMenuBT = New System.Windows.Forms.ToolStripMenuItem()
         Me.RenameMenuBT = New System.Windows.Forms.ToolStripMenuItem()
         Me.BackgroundWorker1 = New System.ComponentModel.BackgroundWorker()
+        Me.m_versionsTreeviewImageList = New System.Windows.Forms.ImageList(Me.components)
         Me.RCM_TV.SuspendLayout()
         Me.TableLayoutPanel3.SuspendLayout()
         CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -124,13 +124,6 @@ Partial Class VersionsControl
         Me.delete_bt.Name = "delete_bt"
         Me.delete_bt.Size = New System.Drawing.Size(155, 24)
         Me.delete_bt.Text = "Delete"
-        '
-        'VersionsTVIcons
-        '
-        Me.VersionsTVIcons.ImageStream = CType(resources.GetObject("VersionsTVIcons.ImageStream"), System.Windows.Forms.ImageListStreamer)
-        Me.VersionsTVIcons.TransparentColor = System.Drawing.Color.Transparent
-        Me.VersionsTVIcons.Images.SetKeyName(0, "breakpoint.png")
-        Me.VersionsTVIcons.Images.SetKeyName(1, "favicon(81).ico")
         '
         'TableLayoutPanel3
         '
@@ -447,6 +440,13 @@ Partial Class VersionsControl
         Me.RenameMenuBT.Size = New System.Drawing.Size(212, 24)
         Me.RenameMenuBT.Text = "Rename"
         '
+        'm_versionsTreeviewImageList
+        '
+        Me.m_versionsTreeviewImageList.ImageStream = CType(resources.GetObject("m_versionsTreeviewImageList.ImageStream"), System.Windows.Forms.ImageListStreamer)
+        Me.m_versionsTreeviewImageList.TransparentColor = System.Drawing.Color.Transparent
+        Me.m_versionsTreeviewImageList.Images.SetKeyName(0, "cloud_dark.ico")
+        Me.m_versionsTreeviewImageList.Images.SetKeyName(1, "favicon(81).ico")
+        '
         'VersionsControl
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -476,7 +476,6 @@ Partial Class VersionsControl
     Friend WithEvents rename_bt As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ToolStripSeparator1 As System.Windows.Forms.ToolStripSeparator
     Friend WithEvents delete_bt As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents VersionsTVIcons As System.Windows.Forms.ImageList
     Friend WithEvents TableLayoutPanel3 As System.Windows.Forms.TableLayoutPanel
     Friend WithEvents MenuStrip1 As System.Windows.Forms.MenuStrip
     Friend WithEvents VersionsToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
@@ -506,5 +505,6 @@ Partial Class VersionsControl
     Friend WithEvents m_globalFactsVersionLabel As System.Windows.Forms.Label
     Friend WithEvents m_exchangeRatesVersionVTreeviewbox As VIBlend.WinForms.Controls.vTreeViewBox
     Friend WithEvents m_factsVersionVTreeviewbox As VIBlend.WinForms.Controls.vTreeViewBox
+    Friend WithEvents m_versionsTreeviewImageList As System.Windows.Forms.ImageList
 
 End Class

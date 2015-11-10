@@ -259,15 +259,17 @@ Friend Class VersionManager : Inherits NamedCRUDManager(Of NamedHierarchyCRUDEnt
 
 #Region "Utilities"
 
-    Friend Sub LoadVersionsTV(ByRef TV As Windows.Forms.TreeView)
+    Friend Sub LoadVersionsTV(ByRef p_treeview As Windows.Forms.TreeView)
 
-        TreeViewsUtilities.LoadTreeview(TV, m_CRUDDic)
+        TreeViewsUtilities.LoadTreeview(p_treeview, m_CRUDDic)
+        TreeViewsUtilities.LoadTreeviewIcons(p_treeview, m_CRUDDic)
 
     End Sub
 
-    Friend Sub LoadVersionsTV(ByRef TV As VIBlend.WinForms.Controls.vTreeView)
+    Friend Sub LoadVersionsTV(ByRef p_treeview As VIBlend.WinForms.Controls.vTreeView)
 
-        VTreeViewUtil.LoadTreeview(TV, m_CRUDDic)
+        VTreeViewUtil.LoadTreeview(p_treeview, m_CRUDDic)
+        VTreeViewUtil.LoadTreeviewIcons(p_treeview, m_CRUDDic)
 
     End Sub
 

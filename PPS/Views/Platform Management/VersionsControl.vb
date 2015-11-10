@@ -15,7 +15,7 @@
 ' Known bugs:
 '       
 '
-' Last modified: 09/11/2015
+' Last modified: 11/11/2015
 ' Author: Julien Monnereau
 
 
@@ -58,7 +58,7 @@ Friend Class VersionsControl
         ' Add any initialization after the InitializeComponent() call.
         Controller = input_controller
         VersionsTV = input_versionsTV
-        VersionsTV.ImageList = VersionsTVIcons
+        VersionsTV.ImageList = m_versionsTreeviewImageList
         VersionsTVPanel.Controls.Add(VersionsTV)
         VersionsTV.Dock = DockStyle.Fill
         VersionsTV.AllowDrop = True

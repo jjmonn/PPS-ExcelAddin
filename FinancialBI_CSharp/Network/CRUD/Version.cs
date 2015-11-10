@@ -52,7 +52,12 @@ namespace CRUD
       l_version.CreatedAt = p_packet.ReadString();
       l_version.GlobalFactVersionId = p_packet.ReadUint32();
 
-      return (l_version);
+      if (l_version.IsFolder == true)
+          l_version.Image = 1;
+      else
+          l_version.Image = 0;
+    
+        return (l_version);
     }
 
     public void Dump(ByteBuffer p_packet, bool p_includeId)
@@ -87,6 +92,7 @@ namespace CRUD
       NbPeriod = p_model.NbPeriod;
       CreatedAt = p_model.CreatedAt;
       GlobalFactVersionId = p_model.GlobalFactVersionId;
+      Image = p_model.Image;
     }
 
     public Version Clone()

@@ -33,6 +33,7 @@ Partial Class NewGlobalFactVersionUI
         Me.CancelBT = New System.Windows.Forms.Button()
         Me.ButtonIcons = New System.Windows.Forms.ImageList(Me.components)
         Me.ValidateBT = New System.Windows.Forms.Button()
+        Me.m_versionsTreeviewImageList = New System.Windows.Forms.ImageList(Me.components)
         CType(Me.StartPeriodNUD, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.m_nb_years, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
@@ -42,7 +43,7 @@ Partial Class NewGlobalFactVersionUI
         Me.m_nameLabel.AutoSize = True
         Me.m_nameLabel.Location = New System.Drawing.Point(28, 31)
         Me.m_nameLabel.Name = "m_nameLabel"
-        Me.m_nameLabel.Size = New System.Drawing.Size(77, 13)
+        Me.m_nameLabel.Size = New System.Drawing.Size(41, 15)
         Me.m_nameLabel.TabIndex = 0
         Me.m_nameLabel.Text = "Name"
         '
@@ -51,7 +52,7 @@ Partial Class NewGlobalFactVersionUI
         Me.m_startingPeriodLabel.AutoSize = True
         Me.m_startingPeriodLabel.Location = New System.Drawing.Point(28, 79)
         Me.m_startingPeriodLabel.Name = "m_startingPeriodLabel"
-        Me.m_startingPeriodLabel.Size = New System.Drawing.Size(153, 13)
+        Me.m_startingPeriodLabel.Size = New System.Drawing.Size(89, 15)
         Me.m_startingPeriodLabel.TabIndex = 1
         Me.m_startingPeriodLabel.Text = "starting_period"
         '
@@ -60,7 +61,7 @@ Partial Class NewGlobalFactVersionUI
         Me.m_numberPeriodsLabel.AutoSize = True
         Me.m_numberPeriodsLabel.Location = New System.Drawing.Point(28, 121)
         Me.m_numberPeriodsLabel.Name = "m_numberPeriodsLabel"
-        Me.m_numberPeriodsLabel.Size = New System.Drawing.Size(127, 13)
+        Me.m_numberPeriodsLabel.Size = New System.Drawing.Size(57, 15)
         Me.m_numberPeriodsLabel.TabIndex = 2
         Me.m_numberPeriodsLabel.Text = "nb_years"
         '
@@ -123,6 +124,13 @@ Partial Class NewGlobalFactVersionUI
         Me.ValidateBT.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         Me.ValidateBT.UseVisualStyleBackColor = True
         '
+        'm_versionsTreeviewImageList
+        '
+        Me.m_versionsTreeviewImageList.ImageStream = CType(resources.GetObject("m_versionsTreeviewImageList.ImageStream"), System.Windows.Forms.ImageListStreamer)
+        Me.m_versionsTreeviewImageList.TransparentColor = System.Drawing.Color.Transparent
+        Me.m_versionsTreeviewImageList.Images.SetKeyName(0, "cloud_dark.ico")
+        Me.m_versionsTreeviewImageList.Images.SetKeyName(1, "favicon(81).ico")
+        '
         'NewGlobalFactVersionUI
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -154,4 +162,5 @@ Partial Class NewGlobalFactVersionUI
     Friend WithEvents CancelBT As System.Windows.Forms.Button
     Friend WithEvents ValidateBT As System.Windows.Forms.Button
     Friend WithEvents ButtonIcons As System.Windows.Forms.ImageList
+    Friend WithEvents m_versionsTreeviewImageList As System.Windows.Forms.ImageList
 End Class
