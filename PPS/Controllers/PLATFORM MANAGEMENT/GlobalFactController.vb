@@ -28,17 +28,11 @@ Friend Class GlobalFactController
     Friend Sub New()
 
         GlobalVariables.GlobalFactsVersions.LoadVersionsTV(m_versionTV)
-        Dim version As Version = GlobalVariables.Versions.GetValue(My.Settings.version_id)
-        If version Is Nothing Then
-            MsgBox("Invalid version in settings.")
-            Exit Sub
-        End If
         m_view = New GlobalFactUI(Me, m_versionTV)
-        m_currentVersionId = version.GlobalFactVersionId
         m_newFactVersionUI = New NewGlobalFactVersionUI(Me)
         m_newFactUI = New NewGlobalFactUI(Me)
 
-        AddHandler GlobalVariables.GlobalFactsVersions.Read, AddressOf GlobalFactsVersionUpdateFromServer
+        AddHandler GlobalVariables.GlobalFactsVersions.Read, AddressOf AfterGlobalFactsVersionRead
         AddHandler GlobalVariables.GlobalFactsVersions.CreationEvent, AddressOf AfterGlobalFactsVersionCreate
         AddHandler GlobalVariables.GlobalFactsVersions.UpdateEvent, AddressOf AfterGlobalFactsVersionUpdate
         AddHandler GlobalVariables.GlobalFactsVersions.DeleteEvent, AddressOf AfterGlobalFactsVersionDelete
@@ -55,6 +49,7 @@ Friend Class GlobalFactController
 
     Friend Sub DisplayFacts(ByRef p_versionid As Int32)
 
+        If m_view Is Nothing Then Exit Sub
         m_currentVersionId = p_versionid
         m_MonthsIdList = GlobalVariables.GlobalFacts.GetMonthsList(p_versionid)
         m_view.InitializeDGV(GlobalVariables.Currencies.GetInUseCurrenciesIdList(), m_MonthsIdList, p_versionid)
@@ -66,6 +61,7 @@ Friend Class GlobalFactController
     Public Sub AddControlToPanel(ByRef p_destPanel As Panel, _
                              ByRef p_platformMGUI As PlatformMGTGeneralUI)
 
+        If m_view Is Nothing Then Exit Sub
         m_platformMGTUI = p_platformMGUI
         p_destPanel.Controls.Add(m_view)
         m_view.Dock = Windows.Forms.DockStyle.Fill
@@ -249,15 +245,15 @@ Friend Class GlobalFactController
 
 #Region "Events"
 
-    Private Sub AfterGlobalFactDelete(ByRef p_status As Boolean, ByRef p_id As Int32)
-        If p_status = False Then Exit Sub
+    Private Sub AfterGlobalFactDelete(ByRef p_status As ErrorMessage, ByRef p_id As Int32)
+        If p_status <> ErrorMessage.SUCCESS Then Exit Sub
         m_view.ReloadUI()
     End Sub
 
-    Private Sub GlobalFactsVersionUpdateFromServer(ByRef p_status As Boolean, ByRef p_versionHt As GlobalFactVersion)
+    Private Sub AfterGlobalFactsVersionRead(ByRef p_status As ErrorMessage, ByRef p_versionHt As GlobalFactVersion)
 
         If m_view Is Nothing Then Exit Sub
-        If p_status = True Then
+        If p_status = ErrorMessage.SUCCESS Then
             m_view.TVUpdate(p_versionHt.Id, _
                             p_versionHt.ParentId, _
                             p_versionHt.Name, _
@@ -266,15 +262,15 @@ Friend Class GlobalFactController
 
     End Sub
 
-    Private Sub AfterGlobalFactsVersionCreate(ByRef p_status As Boolean, ByRef id As Int32)
+    Private Sub AfterGlobalFactsVersionCreate(ByRef p_status As ErrorMessage, ByRef id As Int32)
 
-        If p_status = False Then
+        If p_status <> ErrorMessage.SUCCESS Then
             MsgBox("The version could not be created")
         End If
 
     End Sub
 
-    Private Sub AfterGlobalFactsVersionUpdate(ByRef status As Boolean, ByRef id As Int32)
+    Private Sub AfterGlobalFactsVersionUpdate(ByRef status As ErrorMessage, ByRef id As Int32)
 
 
     End Sub

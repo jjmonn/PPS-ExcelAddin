@@ -110,6 +110,7 @@ Friend Class EntitiesView
         m_currenciesComboBox.DropDownHeight = m_currenciesComboBox.ItemHeight * CB_NB_ITEMS_DISPLAYED
         m_currenciesComboBox.DropDownWidth = CB_WIDTH
         For Each currency As Currency In GlobalVariables.Currencies.GetDictionary().Values
+            If currency.InUse = False Then Continue For
             m_currenciesComboBox.Items.Add(currency.Name)
         Next
         AddHandler m_currenciesComboBox.EditBase.TextBox.KeyDown, AddressOf comboTextBox_KeyDown

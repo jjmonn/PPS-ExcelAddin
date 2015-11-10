@@ -9,9 +9,9 @@ namespace CRUD
   public class ExchangeRate : CRUDEntity, IComparable
   {
     public UInt32 Id { get; private set; }
-    public UInt32 DestCurrencyId { get; private set; }
-    public UInt32 RateVersionId { get; private set; }
-    public UInt32 Period { get; private set; }
+    public UInt32 DestCurrencyId { get; set; }
+    public UInt32 RateVersionId { get; set; }
+    public UInt32 Period { get; set; }
     public double Value { get; set; }
     public UInt32 Image { get; set; }
 
@@ -35,6 +35,8 @@ namespace CRUD
 
     public void Dump(ByteBuffer p_packet, bool p_includeId)
     {
+      if (p_includeId)
+        p_packet.WriteUint32(Id);
       p_packet.WriteUint32(DestCurrencyId);
       p_packet.WriteUint32(RateVersionId);
       p_packet.WriteUint32(Period);

@@ -246,7 +246,6 @@ Friend Class EntitiesController
             If l_axisFilter.Axis <> CRUD.AxisType.Entities Then Exit Sub
             If GlobalVariables.AxisElems.GetValue(AxisType.Entities, l_axisFilter.AxisElemId) Is Nothing Then Exit Sub
             View.UpdateEntity(GlobalVariables.AxisElems.GetValue(AxisType.Entities, l_axisFilter.AxisElemId))
-            MsgBox("The Entity could be updated.")
             ' catch and display message
         End If
 
@@ -269,14 +268,14 @@ Friend Class EntitiesController
 
     Friend Sub ShowNewEntityUI()
 
-        Dim parentEntityID As Int32 = 0
         Dim current_row As HierarchyItem = View.getCurrentRowItem
-        On Error GoTo ShowNewEntity
-        If Not current_row Is Nothing Then parentEntityID = VTreeViewUtil.FindNode(entitiesTV, current_row.ItemValue).Value
-        GoTo ShowNewEntity
+        If Not current_row Is Nothing Then
+            Dim node As vTreeNode = VTreeViewUtil.FindNode(entitiesTV, current_row.ItemValue)
+            If node IsNot Nothing Then
+                NewEntityView.SetParentEntityId(node.Value)
+            End If
+        End If
 
-ShowNewEntity:
-        NewEntityView.SetParentEntityId(parentEntityID)
         NewEntityView.Show()
 
     End Sub
