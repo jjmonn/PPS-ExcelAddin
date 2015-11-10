@@ -31,7 +31,6 @@ Friend Class SettingUI
     Private isFillingDGV As Boolean
     Private currentFormatDGVcell As GridCell
 
-
 #End Region
 
 
@@ -114,9 +113,9 @@ Friend Class SettingUI
         My.Settings.Save()
         My.Settings.serverIp = ServerAddressTB.Text
         My.Settings.Save()
-        My.Settings.Save()
         If IsNothing(CurrenciesCombobox.SelectedItem) = False Then
             My.Settings.currentCurrency = CurrenciesCombobox.SelectedItem.Value
+            My.Settings.Save()
         End If
         My.Settings.Save()
 
@@ -262,7 +261,7 @@ Friend Class SettingUI
                 Case 1
                     If ColorDialog1.ShowDialog <> Windows.Forms.DialogResult.Cancel Then
                         DataGridViewsUtil.SetCellFillColor(currentFormatDGVcell, ColorDialog1.Color.ToArgb)
-                        Select Case currentFormatDGVcell.RowItem.Caption
+                        Select Case currentFormatDGVcell.RowItem.ItemValue
                             Case "t" : My.Settings.titleFontColor = ColorDialog1.Color
                             Case "i" : My.Settings.importantFontColor = ColorDialog1.Color
                             Case "n" : My.Settings.normalFontColor = ColorDialog1.Color
@@ -273,7 +272,7 @@ Friend Class SettingUI
                 Case 2
                     If ColorDialog1.ShowDialog <> Windows.Forms.DialogResult.Cancel Then
                         DataGridViewsUtil.SetCellFillColor(currentFormatDGVcell, ColorDialog1.Color.ToArgb)
-                        Select Case currentFormatDGVcell.RowItem.Caption
+                        Select Case currentFormatDGVcell.RowItem.ItemValue
                             Case "t" : My.Settings.titleBackColor = ColorDialog1.Color
                             Case "i" : My.Settings.importantBackColor = ColorDialog1.Color
                             Case "n" : My.Settings.normalBackColor = ColorDialog1.Color
@@ -284,7 +283,7 @@ Friend Class SettingUI
             End Select
         End If
         My.Settings.Save()
-        FormatPreview(currentFormatDGVcell.RowItem, Formats.GetFormat(currentFormatDGVcell.RowItem.Caption))
+        FormatPreview(currentFormatDGVcell.RowItem, Formats.GetFormat(currentFormatDGVcell.RowItem.ItemValue))
 
     End Sub
 
@@ -293,7 +292,7 @@ Friend Class SettingUI
         Select Case currentFormatDGVcell.ColumnItem.ItemIndex
             Case 3
                 Dim checkBox As vCheckBox = TryCast(FormatsDGV.CellsArea.GetCellEditor(currentFormatDGVcell.RowItem, FormatsDGV.ColumnsHierarchy.Items(3)).Control, vCheckBox)
-                Select Case currentFormatDGVcell.RowItem.Caption
+                Select Case currentFormatDGVcell.RowItem.ItemValue
                     Case "t" : My.Settings.titleFontBold = checkBox.Checked
                     Case "i" : My.Settings.importantFontBold = checkBox.Checked
                     Case "n" : My.Settings.normalFontBold = checkBox.Checked
@@ -301,7 +300,7 @@ Friend Class SettingUI
                 End Select
             Case 4
                 Dim checkBox As vCheckBox = TryCast(FormatsDGV.CellsArea.GetCellEditor(currentFormatDGVcell.RowItem, FormatsDGV.ColumnsHierarchy.Items(4)).Control, vCheckBox)
-                Select Case currentFormatDGVcell.RowItem.Caption
+                Select Case currentFormatDGVcell.RowItem.ItemValue
                     Case "t" : My.Settings.titleFontItalic = checkBox.Checked
                     Case "i" : My.Settings.importantFontItalic = checkBox.Checked
                     Case "n" : My.Settings.normalFontItalic = checkBox.Checked
@@ -309,7 +308,7 @@ Friend Class SettingUI
                 End Select
             Case 5
                 Dim checkBox As vCheckBox = TryCast(FormatsDGV.CellsArea.GetCellEditor(currentFormatDGVcell.RowItem, FormatsDGV.ColumnsHierarchy.Items(5)).Control, vCheckBox)
-                Select Case currentFormatDGVcell.RowItem.Caption
+                Select Case currentFormatDGVcell.RowItem.ItemValue
                     Case "t" : My.Settings.titleBordersPresent = checkBox.Checked
                     Case "i" : My.Settings.importantBordersPresent = checkBox.Checked
                     Case "n" : My.Settings.normalBordersPresent = checkBox.Checked
@@ -317,7 +316,7 @@ Friend Class SettingUI
                 End Select
         End Select
         My.Settings.Save()
-        FormatPreview(currentFormatDGVcell.RowItem, Formats.GetFormat(currentFormatDGVcell.RowItem.Caption))
+        FormatPreview(currentFormatDGVcell.RowItem, Formats.GetFormat(currentFormatDGVcell.RowItem.ItemValue))
 
 
     End Sub
