@@ -126,6 +126,20 @@ Friend Class TreeViewsUtilities
 
     End Sub
 
+
+    Public Shared Sub LoadTreeviewIcons(Of T As {CRUDEntity})(ByRef p_treeview As TreeView, _
+                                       ByRef p_itemsAttributes As MultiIndexDictionary(Of UInt32, String, T))
+
+        For Each l_node As TreeNode In GetNodesList(p_treeview)
+            Dim value As T = p_itemsAttributes(CUInt(l_node.Name))
+            If value IsNot Nothing Then
+                l_node.ImageIndex = value.Image
+                l_node.SelectedImageIndex = value.Image
+            End If
+        Next
+
+    End Sub
+
 #End Region
 
 

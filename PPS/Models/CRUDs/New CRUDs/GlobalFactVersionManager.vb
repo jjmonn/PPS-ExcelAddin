@@ -45,9 +45,10 @@ Public Class GlobalFactVersionManager : Inherits NamedCRUDManager(Of NamedHierar
 
     End Function
 
-    Friend Sub LoadVersionsTV(ByRef TV As VIBlend.WinForms.Controls.vTreeView)
+    Friend Sub LoadVersionsTV(ByRef p_treeview As VIBlend.WinForms.Controls.vTreeView)
 
-        VTreeViewUtil.LoadTreeview(TV, m_CRUDDic)
+        VTreeViewUtil.LoadTreeview(p_treeview, m_CRUDDic)
+        VTreeViewUtil.LoadTreeviewIcons(p_treeview, m_CRUDDic)
 
     End Sub
 

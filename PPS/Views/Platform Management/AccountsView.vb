@@ -132,9 +132,8 @@ Friend Class AccountsView
         m_accountTV.AllowDrop = True
         m_accountTV.LabelEdit = False
         m_accountTV.CollapseAll()
-        VTreeViewUtil.InitTVFormat(m_accountTV)
         m_accountTV.ImageList = accountsIL
-        GlobalVariables.Accounts.LoadAccountsTVIcons(m_accountTV)
+        VTreeViewUtil.InitTVFormat(m_accountTV)
         m_accountTV.BorderColor = Drawing.Color.Transparent
         AccountsTVPanel.Controls.Add(m_accountTV)
 
@@ -494,18 +493,16 @@ SubmitFormula:
 
     Private Sub AccountsTV_AfterSelect(sender As Object, e As vTreeViewEventArgs)
 
-        If m_dragAndDrop = False Then
-            If m_formulaEditionButton.Toggle = CheckState.Unchecked Then
-                m_currentNode = e.Node
-                If m_currentNode IsNot Nothing Then
-                    DisplayAttributes()
-                    DesactivateUnallowed()
-                End If
+        If m_dragAndDrop = False _
+        AndAlso m_formulaEditionButton.Toggle = CheckState.Unchecked _
+        AndAlso m_isDisplayingAttributes = False Then
+            m_currentNode = e.Node
+            If m_currentNode IsNot Nothing Then
+                DesactivateUnallowed()
+                DisplayAttributes()
             End If
-        Else
-            Me.m_accountTV.Capture = False
         End If
-
+    
     End Sub
 
     Private Sub AccountsTV_KeyDown(sender As Object, e As KeyEventArgs)
@@ -868,6 +865,7 @@ SubmitFormula:
 
         If p_li.Value = Account.FormulaTypes.TITLE Then
             TypeComboBox.Enabled = False
+            CurrencyConversionComboBox.Enabled = False
             m_controller.UpdateAccountType(p_accountId, Account.AccountType.DATE_)
         End If
         m_controller.UpdateAccountFormulaType(p_accountId, p_li.Value)
@@ -937,12 +935,6 @@ SubmitFormula:
             Dim formulaTypeLI = m_formulasTypesIdItemDict(l_account.FormulaType)
             FormulaTypeComboBox.SelectedItem = formulaTypeLI
 
-            If formulaTypeLI.Value = Account.FormulaTypes.TITLE Then
-                SetEnableStatusEdition(False)
-            Else
-                SetEnableStatusEdition(True)
-            End If
-
             ' Format ComboBox
             If m_formatsIdItemDict.ContainsKey(l_account.Type) Then
                 Dim formatLI = m_formatsIdItemDict(l_account.Type)
@@ -970,19 +962,29 @@ SubmitFormula:
             End If
 
             m_descriptionTextBox.Text = l_account.Description
-            m_isDisplayingAttributes = False
 
+            Dim l_isRootAccount As Boolean = False
+            If m_currentNode.Parent Is Nothing Then l_isRootAccount = True
+            If formulaTypeLI.Value = Account.FormulaTypes.TITLE Then
+                SetEnableStatusEdition(False, l_isRootAccount)
+            Else
+                SetEnableStatusEdition(True, l_isRootAccount)
+            End If
+            m_isDisplayingAttributes = False
         End If
 
     End Sub
 
-    Private Sub SetEnableStatusEdition(ByRef status As Boolean)
+    Private Sub SetEnableStatusEdition(ByRef p_status As Boolean, _
+                                       ByRef p_isRootAccount As Boolean)
 
-        FormulaTypeComboBox.Enabled = status
-        TypeComboBox.Enabled = status
-        CurrencyConversionComboBox.Enabled = status
-        ConsolidationOptionComboBox.Enabled = status
-        m_formulaTextBox.Enabled = status
+        If p_isRootAccount = True Then
+            FormulaTypeComboBox.Enabled = p_status
+        End If
+        TypeComboBox.Enabled = p_status
+        CurrencyConversionComboBox.Enabled = p_status
+        ConsolidationOptionComboBox.Enabled = p_status
+        m_formulaTextBox.Enabled = p_status
 
     End Sub
 

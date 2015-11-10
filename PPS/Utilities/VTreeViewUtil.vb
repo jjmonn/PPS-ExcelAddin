@@ -291,10 +291,10 @@ Public Class VTreeViewUtil
     Public Shared Sub LoadTreeviewIcons(Of T As {CRUDEntity})(ByRef p_treeview As vTreeView, _
                                         ByRef p_itemsAttributes As MultiIndexDictionary(Of UInt32, String, T))
 
-        For Each l_node As vTreeNode In p_treeview.GetNodes
-            Dim value As T = p_itemsAttributes(CUInt(l_node.Value))
-            If value IsNot Nothing Then
-                l_node.ImageIndex = value.Image
+        For Each l_node In p_treeview.GetNodes
+            Dim l_attributes As T = p_itemsAttributes(CUInt(l_node.Value))
+            If l_attributes IsNot Nothing Then
+                l_node.ImageIndex = l_attributes.Image
             End If
         Next
 

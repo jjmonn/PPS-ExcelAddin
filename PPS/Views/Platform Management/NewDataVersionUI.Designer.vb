@@ -44,6 +44,7 @@ Partial Class NewDataVersionUI
         Me.m_startingMonthCombobox = New VIBlend.WinForms.Controls.vComboBox()
         Me.NbPeriodsNUD = New VIBlend.WinForms.Controls.vNumericUpDown()
         Me.StartingPeriodNUD = New VIBlend.WinForms.Controls.vNumericUpDown()
+        Me.m_versionsTreeviewImageList = New System.Windows.Forms.ImageList(Me.components)
         Me.SuspendLayout()
         '
         'm_factVersionLabel
@@ -52,7 +53,7 @@ Partial Class NewDataVersionUI
         Me.m_factVersionLabel.Location = New System.Drawing.Point(34, 327)
         Me.m_factVersionLabel.Margin = New System.Windows.Forms.Padding(3, 7, 3, 0)
         Me.m_factVersionLabel.Name = "m_factVersionLabel"
-        Me.m_factVersionLabel.Size = New System.Drawing.Size(142, 13)
+        Me.m_factVersionLabel.Size = New System.Drawing.Size(158, 15)
         Me.m_factVersionLabel.TabIndex = 30
         Me.m_factVersionLabel.Text = "[facts_versions.fact_version]"
         '
@@ -62,7 +63,7 @@ Partial Class NewDataVersionUI
         Me.m_rateVersionLabel.Location = New System.Drawing.Point(34, 291)
         Me.m_rateVersionLabel.Margin = New System.Windows.Forms.Padding(3, 7, 3, 0)
         Me.m_rateVersionLabel.Name = "m_rateVersionLabel"
-        Me.m_rateVersionLabel.Size = New System.Drawing.Size(200, 13)
+        Me.m_rateVersionLabel.Size = New System.Drawing.Size(227, 15)
         Me.m_rateVersionLabel.TabIndex = 28
         Me.m_rateVersionLabel.Text = "[facts_versions.exchange_rates_version]"
         '
@@ -72,7 +73,7 @@ Partial Class NewDataVersionUI
         Me.m_nbYearLabel.Location = New System.Drawing.Point(34, 255)
         Me.m_nbYearLabel.Margin = New System.Windows.Forms.Padding(3, 7, 3, 0)
         Me.m_nbYearLabel.Name = "m_nbYearLabel"
-        Me.m_nbYearLabel.Size = New System.Drawing.Size(127, 13)
+        Me.m_nbYearLabel.Size = New System.Drawing.Size(143, 15)
         Me.m_nbYearLabel.TabIndex = 25
         Me.m_nbYearLabel.Text = "[facts_versions.nb_years]"
         '
@@ -82,7 +83,7 @@ Partial Class NewDataVersionUI
         Me.m_startingPeriodLabel.Location = New System.Drawing.Point(34, 170)
         Me.m_startingPeriodLabel.Margin = New System.Windows.Forms.Padding(3, 7, 3, 0)
         Me.m_startingPeriodLabel.Name = "m_startingPeriodLabel"
-        Me.m_startingPeriodLabel.Size = New System.Drawing.Size(153, 13)
+        Me.m_startingPeriodLabel.Size = New System.Drawing.Size(175, 15)
         Me.m_startingPeriodLabel.TabIndex = 17
         Me.m_startingPeriodLabel.Text = "[facts_versions.starting_period]"
         '
@@ -92,7 +93,7 @@ Partial Class NewDataVersionUI
         Me.m_periodConfigLabel.Location = New System.Drawing.Point(34, 125)
         Me.m_periodConfigLabel.Margin = New System.Windows.Forms.Padding(3, 7, 3, 0)
         Me.m_periodConfigLabel.Name = "m_periodConfigLabel"
-        Me.m_periodConfigLabel.Size = New System.Drawing.Size(148, 13)
+        Me.m_periodConfigLabel.Size = New System.Drawing.Size(168, 15)
         Me.m_periodConfigLabel.TabIndex = 15
         Me.m_periodConfigLabel.Text = "[facts_versions.period_config]"
         '
@@ -103,7 +104,7 @@ Partial Class NewDataVersionUI
         Me.m_versionNameLabel.Location = New System.Drawing.Point(34, 36)
         Me.m_versionNameLabel.Margin = New System.Windows.Forms.Padding(3, 7, 3, 0)
         Me.m_versionNameLabel.Name = "m_versionNameLabel"
-        Me.m_versionNameLabel.Size = New System.Drawing.Size(179, 13)
+        Me.m_versionNameLabel.Size = New System.Drawing.Size(200, 15)
         Me.m_versionNameLabel.TabIndex = 7
         Me.m_versionNameLabel.Text = "[facts_versions.version_name]"
         '
@@ -261,7 +262,7 @@ Partial Class NewDataVersionUI
         Me.m_startingMonthLabel.Location = New System.Drawing.Point(34, 209)
         Me.m_startingMonthLabel.Margin = New System.Windows.Forms.Padding(3, 7, 3, 0)
         Me.m_startingMonthLabel.Name = "m_startingMonthLabel"
-        Me.m_startingMonthLabel.Size = New System.Drawing.Size(153, 13)
+        Me.m_startingMonthLabel.Size = New System.Drawing.Size(175, 15)
         Me.m_startingMonthLabel.TabIndex = 35
         Me.m_startingMonthLabel.Text = "[facts_versions.starting_month]"
         '
@@ -320,6 +321,13 @@ Partial Class NewDataVersionUI
         Me.StartingPeriodNUD.UseThemeForeColor = True
         Me.StartingPeriodNUD.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.OFFICESILVER
         '
+        'm_versionsTreeviewImageList
+        '
+        Me.m_versionsTreeviewImageList.ImageStream = CType(resources.GetObject("m_versionsTreeviewImageList.ImageStream"), System.Windows.Forms.ImageListStreamer)
+        Me.m_versionsTreeviewImageList.TransparentColor = System.Drawing.Color.Transparent
+        Me.m_versionsTreeviewImageList.Images.SetKeyName(0, "cloud_dark.ico")
+        Me.m_versionsTreeviewImageList.Images.SetKeyName(1, "favicon(81).ico")
+        '
         'NewDataVersionUI
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -370,4 +378,5 @@ Partial Class NewDataVersionUI
     Friend WithEvents m_startingMonthCombobox As VIBlend.WinForms.Controls.vComboBox
     Friend WithEvents NbPeriodsNUD As VIBlend.WinForms.Controls.vNumericUpDown
     Friend WithEvents StartingPeriodNUD As VIBlend.WinForms.Controls.vNumericUpDown
+    Friend WithEvents m_versionsTreeviewImageList As System.Windows.Forms.ImageList
 End Class

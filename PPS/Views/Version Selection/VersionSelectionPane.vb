@@ -45,7 +45,7 @@ Public Class VersionSelectionPane
 
     Friend Function Init() As Boolean
 
-        VERSEL = New VersionSelection(VersioningTVIL, Me)
+        VERSEL = New VersionSelection(m_versionsTreeviewImageList, Me)
         InsertDataVersionSelection()
         AddHandler ValidateBT.Click, AddressOf VERSEL.SetSelectedVersion
         Return False
@@ -78,7 +78,7 @@ Public Class VersionSelectionPane
 
     Protected Friend Sub SetVersion(ByRef version_id As String)
 
-        If VERSEL Is Nothing Then VERSEL = New VersionSelection(VersioningTVIL, Me)
+        If VERSEL Is Nothing Then VERSEL = New VersionSelection(m_versionsTreeviewImageList, Me)
         VERSEL.versionsTV.SelectedNode = VERSEL.versionsTV.Nodes.Find(version_id, True)(0)
         VERSEL.SetSelectedVersion()
 

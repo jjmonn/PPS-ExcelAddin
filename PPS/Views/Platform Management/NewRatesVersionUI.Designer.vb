@@ -33,6 +33,7 @@ Partial Class NewRatesVersionUI
         Me.CancelBT = New System.Windows.Forms.Button()
         Me.ButtonIcons = New System.Windows.Forms.ImageList(Me.components)
         Me.ValidateBT = New System.Windows.Forms.Button()
+        Me.m_versionsTreeviewImageList = New System.Windows.Forms.ImageList(Me.components)
         CType(Me.StartPeriodNUD, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.NBPeriodsNUD, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
@@ -123,6 +124,13 @@ Partial Class NewRatesVersionUI
         Me.ValidateBT.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         Me.ValidateBT.UseVisualStyleBackColor = True
         '
+        'm_versionsTreeviewImageList
+        '
+        Me.m_versionsTreeviewImageList.ImageStream = CType(resources.GetObject("m_versionsTreeviewImageList.ImageStream"), System.Windows.Forms.ImageListStreamer)
+        Me.m_versionsTreeviewImageList.TransparentColor = System.Drawing.Color.Transparent
+        Me.m_versionsTreeviewImageList.Images.SetKeyName(0, "cloud_dark.ico")
+        Me.m_versionsTreeviewImageList.Images.SetKeyName(1, "favicon(81).ico")
+        '
         'NewRatesVersionUI
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -154,4 +162,5 @@ Partial Class NewRatesVersionUI
     Friend WithEvents CancelBT As System.Windows.Forms.Button
     Friend WithEvents ValidateBT As System.Windows.Forms.Button
     Friend WithEvents ButtonIcons As System.Windows.Forms.ImageList
+    Friend WithEvents m_versionsTreeviewImageList As System.Windows.Forms.ImageList
 End Class

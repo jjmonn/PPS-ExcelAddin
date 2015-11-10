@@ -25,7 +25,6 @@ Partial Class GlobalFactUI
         Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(GlobalFactUI))
         Me.MenuButtonIL = New System.Windows.Forms.ImageList(Me.components)
-        Me.ratesVersionsIL = New System.Windows.Forms.ImageList(Me.components)
         Me.VersionsRCMenu = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.select_version = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator()
@@ -49,6 +48,8 @@ Partial Class GlobalFactUI
         Me.RenameBT = New System.Windows.Forms.ToolStripMenuItem()
         Me.DeleteBT = New System.Windows.Forms.ToolStripMenuItem()
         Me.CreateNewFact2 = New System.Windows.Forms.ToolStripMenuItem()
+        Me.m_versionsTreeviewImageList = New System.Windows.Forms.ImageList(Me.components)
+        Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
         Me.VersionsRCMenu.SuspendLayout()
         Me.dgvRCM.SuspendLayout()
         Me.TableLayoutPanel4.SuspendLayout()
@@ -69,14 +70,6 @@ Partial Class GlobalFactUI
         Me.MenuButtonIL.Images.SetKeyName(3, "favicon(125).ico")
         Me.MenuButtonIL.Images.SetKeyName(4, "favicon(217).ico")
         Me.MenuButtonIL.Images.SetKeyName(5, "favicon(126).ico")
-        '
-        'ratesVersionsIL
-        '
-        Me.ratesVersionsIL.ImageStream = CType(resources.GetObject("ratesVersionsIL.ImageStream"), System.Windows.Forms.ImageListStreamer)
-        Me.ratesVersionsIL.TransparentColor = System.Drawing.Color.Transparent
-        Me.ratesVersionsIL.Images.SetKeyName(0, "favicon(149).ico")
-        Me.ratesVersionsIL.Images.SetKeyName(1, "favicon(81).ico")
-        Me.ratesVersionsIL.Images.SetKeyName(2, "imageres_157.ico")
         '
         'VersionsRCMenu
         '
@@ -199,7 +192,7 @@ Partial Class GlobalFactUI
         Me.TableLayoutPanel5.ColumnCount = 3
         Me.TableLayoutPanel5.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 97.02381!))
         Me.TableLayoutPanel5.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 2.976191!))
-        Me.TableLayoutPanel5.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 243.0!))
+        Me.TableLayoutPanel5.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 245.0!))
         Me.TableLayoutPanel5.Controls.Add(Me.Panel1, 2, 0)
         Me.TableLayoutPanel5.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TableLayoutPanel5.Location = New System.Drawing.Point(0, 0)
@@ -215,10 +208,10 @@ Partial Class GlobalFactUI
         Me.Panel1.Controls.Add(Me.VersionLabel)
         Me.Panel1.Controls.Add(Me.version_TB)
         Me.Panel1.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Panel1.Location = New System.Drawing.Point(638, 0)
+        Me.Panel1.Location = New System.Drawing.Point(636, 0)
         Me.Panel1.Margin = New System.Windows.Forms.Padding(0)
         Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(244, 32)
+        Me.Panel1.Size = New System.Drawing.Size(246, 32)
         Me.Panel1.TabIndex = 6
         '
         'VersionLabel
@@ -241,29 +234,41 @@ Partial Class GlobalFactUI
         '
         'FactRightClickMenu
         '
-        Me.FactRightClickMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.RenameBT, Me.DeleteBT, Me.CreateNewFact2})
+        Me.FactRightClickMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.CreateNewFact2, Me.DeleteBT, Me.ToolStripSeparator1, Me.RenameBT})
         Me.FactRightClickMenu.Name = "ContextMenuStrip1"
-        Me.FactRightClickMenu.Size = New System.Drawing.Size(128, 76)
+        Me.FactRightClickMenu.Size = New System.Drawing.Size(153, 104)
         '
         'RenameBT
         '
         Me.RenameBT.Name = "RenameBT"
-        Me.RenameBT.Size = New System.Drawing.Size(127, 24)
+        Me.RenameBT.Size = New System.Drawing.Size(152, 24)
         Me.RenameBT.Text = "Rename"
         '
         'DeleteBT
         '
         Me.DeleteBT.Image = Global.FinancialBI.My.Resources.Resources.elements_delete
         Me.DeleteBT.Name = "DeleteBT"
-        Me.DeleteBT.Size = New System.Drawing.Size(127, 24)
+        Me.DeleteBT.Size = New System.Drawing.Size(152, 24)
         Me.DeleteBT.Text = "Delete"
         '
         'CreateNewFact2
         '
         Me.CreateNewFact2.Image = Global.FinancialBI.My.Resources.Resources.elements_add
         Me.CreateNewFact2.Name = "CreateNewFact2"
-        Me.CreateNewFact2.Size = New System.Drawing.Size(127, 24)
+        Me.CreateNewFact2.Size = New System.Drawing.Size(152, 24)
         Me.CreateNewFact2.Text = "New"
+        '
+        'm_versionsTreeviewImageList
+        '
+        Me.m_versionsTreeviewImageList.ImageStream = CType(resources.GetObject("m_versionsTreeviewImageList.ImageStream"), System.Windows.Forms.ImageListStreamer)
+        Me.m_versionsTreeviewImageList.TransparentColor = System.Drawing.Color.Transparent
+        Me.m_versionsTreeviewImageList.Images.SetKeyName(0, "cloud_dark.ico")
+        Me.m_versionsTreeviewImageList.Images.SetKeyName(1, "favicon(81).ico")
+        '
+        'ToolStripSeparator1
+        '
+        Me.ToolStripSeparator1.Name = "ToolStripSeparator1"
+        Me.ToolStripSeparator1.Size = New System.Drawing.Size(149, 6)
         '
         'GlobalFactUI
         '
@@ -286,7 +291,6 @@ Partial Class GlobalFactUI
 
     End Sub
     Friend WithEvents MenuButtonIL As System.Windows.Forms.ImageList
-    Friend WithEvents ratesVersionsIL As System.Windows.Forms.ImageList
     Friend WithEvents VersionsRCMenu As System.Windows.Forms.ContextMenuStrip
     Friend WithEvents select_version As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ToolStripSeparator2 As System.Windows.Forms.ToolStripSeparator
@@ -310,5 +314,7 @@ Partial Class GlobalFactUI
     Friend WithEvents CreateNewFact2 As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents RenameVersionBT As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ImportFromExcelBT As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents m_versionsTreeviewImageList As System.Windows.Forms.ImageList
+    Friend WithEvents ToolStripSeparator1 As System.Windows.Forms.ToolStripSeparator
 
 End Class

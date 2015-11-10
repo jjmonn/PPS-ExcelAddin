@@ -49,7 +49,7 @@ Friend Class GlobalFactUI
         m_dataGridView.Dock = DockStyle.Fill
         m_dataGridView.ContextMenuStrip = dgvRCM
         m_versionsTV.ContextMenuStrip = VersionsRCMenu
-        m_versionsTV.ImageList = ratesVersionsIL
+        m_versionsTV.ImageList = m_versionsTreeviewImageList
         VTreeViewUtil.InitTVFormat(m_versionsTV)
         DesactivateUnallowed()
         MultilanguageSetup()

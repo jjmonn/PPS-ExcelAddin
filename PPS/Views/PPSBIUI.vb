@@ -3,7 +3,7 @@
 ' User interface for the construction of PPSBI functions
 '
 ' 
-' Last modified: 24/10/2015 
+' Last modified: 11/11/2015 
 ' Author: Julien Monnereau
 
 
@@ -76,7 +76,7 @@ Friend Class PPSBI_UI
         VTreeViewUtil.InitTVFormat(ProductsTreeviewBox.TreeView)
         VTreeViewUtil.InitTVFormat(AdjustmentsTreeviewBox.TreeView)
 
-        VersionTreeBox.TreeView.ImageList = VersionsTVIcons
+        VersionTreeBox.TreeView.ImageList = m_versionsTreeviewImageList
 
     End Sub
 

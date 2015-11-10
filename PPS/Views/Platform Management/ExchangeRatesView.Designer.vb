@@ -25,7 +25,6 @@ Partial Class ExchangeRatesView
         Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(ExchangeRatesView))
         Me.MenuButtonIL = New System.Windows.Forms.ImageList(Me.components)
-        Me.ratesVersionsIL = New System.Windows.Forms.ImageList(Me.components)
         Me.VersionsRCMenu = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.select_version = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator()
@@ -36,6 +35,7 @@ Partial Class ExchangeRatesView
         Me.RenameBT = New System.Windows.Forms.ToolStripMenuItem()
         Me.dgvRCM = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.ToolStripSeparator3 = New System.Windows.Forms.ToolStripSeparator()
+        Me.ImportFromExcelToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
         Me.CopyRateDownToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.TableLayoutPanel4 = New System.Windows.Forms.TableLayoutPanel()
         Me.SplitContainer1 = New System.Windows.Forms.SplitContainer()
@@ -53,7 +53,7 @@ Partial Class ExchangeRatesView
         Me.Panel1 = New System.Windows.Forms.Panel()
         Me.VersionLabel = New System.Windows.Forms.Label()
         Me.rates_version_TB = New System.Windows.Forms.TextBox()
-        Me.ImportFromExcelToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
+        Me.m_versionsTreeviewImageList = New System.Windows.Forms.ImageList(Me.components)
         Me.VersionsRCMenu.SuspendLayout()
         Me.dgvRCM.SuspendLayout()
         Me.TableLayoutPanel4.SuspendLayout()
@@ -75,80 +75,79 @@ Partial Class ExchangeRatesView
         Me.MenuButtonIL.Images.SetKeyName(4, "favicon(217).ico")
         Me.MenuButtonIL.Images.SetKeyName(5, "favicon(126).ico")
         '
-        'ratesVersionsIL
-        '
-        Me.ratesVersionsIL.ImageStream = CType(resources.GetObject("ratesVersionsIL.ImageStream"), System.Windows.Forms.ImageListStreamer)
-        Me.ratesVersionsIL.TransparentColor = System.Drawing.Color.Transparent
-        Me.ratesVersionsIL.Images.SetKeyName(0, "favicon(149).ico")
-        Me.ratesVersionsIL.Images.SetKeyName(1, "favicon(81).ico")
-        Me.ratesVersionsIL.Images.SetKeyName(2, "imageres_157.ico")
-        '
         'VersionsRCMenu
         '
         Me.VersionsRCMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.select_version, Me.ToolStripSeparator2, Me.AddRatesVersionRCM, Me.AddFolderRCM, Me.ToolStripSeparator6, Me.DeleteVersionRCM, Me.RenameBT})
         Me.VersionsRCMenu.Name = "VersionsRCMenu"
-        Me.VersionsRCMenu.Size = New System.Drawing.Size(147, 126)
+        Me.VersionsRCMenu.Size = New System.Drawing.Size(162, 136)
         '
         'select_version
         '
         Me.select_version.Image = Global.FinancialBI.My.Resources.Resources.config_circle_green
         Me.select_version.Name = "select_version"
-        Me.select_version.Size = New System.Drawing.Size(146, 22)
+        Me.select_version.Size = New System.Drawing.Size(161, 24)
         Me.select_version.Text = "Select version"
         '
         'ToolStripSeparator2
         '
         Me.ToolStripSeparator2.Name = "ToolStripSeparator2"
-        Me.ToolStripSeparator2.Size = New System.Drawing.Size(143, 6)
+        Me.ToolStripSeparator2.Size = New System.Drawing.Size(158, 6)
         '
         'AddRatesVersionRCM
         '
         Me.AddRatesVersionRCM.Image = Global.FinancialBI.My.Resources.Resources.elements3_add
         Me.AddRatesVersionRCM.Name = "AddRatesVersionRCM"
-        Me.AddRatesVersionRCM.Size = New System.Drawing.Size(146, 22)
+        Me.AddRatesVersionRCM.Size = New System.Drawing.Size(161, 24)
         Me.AddRatesVersionRCM.Text = "New version"
         '
         'AddFolderRCM
         '
         Me.AddFolderRCM.Image = Global.FinancialBI.My.Resources.Resources.folder_open_add
         Me.AddFolderRCM.Name = "AddFolderRCM"
-        Me.AddFolderRCM.Size = New System.Drawing.Size(146, 22)
+        Me.AddFolderRCM.Size = New System.Drawing.Size(161, 24)
         Me.AddFolderRCM.Text = "New folder)"
         '
         'ToolStripSeparator6
         '
         Me.ToolStripSeparator6.Name = "ToolStripSeparator6"
-        Me.ToolStripSeparator6.Size = New System.Drawing.Size(143, 6)
+        Me.ToolStripSeparator6.Size = New System.Drawing.Size(158, 6)
         '
         'DeleteVersionRCM
         '
         Me.DeleteVersionRCM.Image = Global.FinancialBI.My.Resources.Resources.elements3_delete
         Me.DeleteVersionRCM.Name = "DeleteVersionRCM"
-        Me.DeleteVersionRCM.Size = New System.Drawing.Size(146, 22)
+        Me.DeleteVersionRCM.Size = New System.Drawing.Size(161, 24)
         Me.DeleteVersionRCM.Text = "Delete"
         '
         'RenameBT
         '
         Me.RenameBT.Name = "RenameBT"
-        Me.RenameBT.Size = New System.Drawing.Size(146, 22)
+        Me.RenameBT.Size = New System.Drawing.Size(161, 24)
         Me.RenameBT.Text = "Rename"
         '
         'dgvRCM
         '
         Me.dgvRCM.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripSeparator3, Me.ImportFromExcelToolStripMenuItem1, Me.CopyRateDownToolStripMenuItem})
         Me.dgvRCM.Name = "dgvRCM"
-        Me.dgvRCM.Size = New System.Drawing.Size(169, 76)
+        Me.dgvRCM.Size = New System.Drawing.Size(149, 58)
         '
         'ToolStripSeparator3
         '
         Me.ToolStripSeparator3.Name = "ToolStripSeparator3"
-        Me.ToolStripSeparator3.Size = New System.Drawing.Size(165, 6)
+        Me.ToolStripSeparator3.Size = New System.Drawing.Size(145, 6)
+        '
+        'ImportFromExcelToolStripMenuItem1
+        '
+        Me.ImportFromExcelToolStripMenuItem1.Image = Global.FinancialBI.My.Resources.Resources.Excel_Blue_32x32
+        Me.ImportFromExcelToolStripMenuItem1.Name = "ImportFromExcelToolStripMenuItem1"
+        Me.ImportFromExcelToolStripMenuItem1.Size = New System.Drawing.Size(148, 24)
+        Me.ImportFromExcelToolStripMenuItem1.Text = "Import"
         '
         'CopyRateDownToolStripMenuItem
         '
         Me.CopyRateDownToolStripMenuItem.Image = Global.FinancialBI.My.Resources.Resources.Download_
         Me.CopyRateDownToolStripMenuItem.Name = "CopyRateDownToolStripMenuItem"
-        Me.CopyRateDownToolStripMenuItem.Size = New System.Drawing.Size(168, 22)
+        Me.CopyRateDownToolStripMenuItem.Size = New System.Drawing.Size(148, 24)
         Me.CopyRateDownToolStripMenuItem.Text = "Copy down"
         '
         'TableLayoutPanel4
@@ -208,7 +207,7 @@ Partial Class ExchangeRatesView
         Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripMenuItem2, Me.ImportFromExcelToolStripMenuItem, Me.ToolStripMenuItem1})
         Me.MenuStrip1.Location = New System.Drawing.Point(0, 0)
         Me.MenuStrip1.Name = "MenuStrip1"
-        Me.MenuStrip1.Size = New System.Drawing.Size(227, 24)
+        Me.MenuStrip1.Size = New System.Drawing.Size(187, 27)
         Me.MenuStrip1.TabIndex = 5
         Me.MenuStrip1.Text = "MenuStrip1"
         '
@@ -217,58 +216,58 @@ Partial Class ExchangeRatesView
         Me.ToolStripMenuItem2.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.DisplayRatesToolStripMenuItem, Me.ToolStripSeparator5, Me.CreateFolderToolStripMenuItem, Me.CreateVersionToolStripMenuItem, Me.ToolStripSeparator4, Me.DeleteToolStripMenuItem})
         Me.ToolStripMenuItem2.Image = Global.FinancialBI.My.Resources.Resources.elements2
         Me.ToolStripMenuItem2.Name = "ToolStripMenuItem2"
-        Me.ToolStripMenuItem2.Size = New System.Drawing.Size(78, 20)
+        Me.ToolStripMenuItem2.Size = New System.Drawing.Size(88, 23)
         Me.ToolStripMenuItem2.Text = "Versions"
         '
         'DisplayRatesToolStripMenuItem
         '
         Me.DisplayRatesToolStripMenuItem.Image = Global.FinancialBI.My.Resources.Resources.config_circle_green
         Me.DisplayRatesToolStripMenuItem.Name = "DisplayRatesToolStripMenuItem"
-        Me.DisplayRatesToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.DisplayRatesToolStripMenuItem.Size = New System.Drawing.Size(156, 24)
         Me.DisplayRatesToolStripMenuItem.Text = "Display rates"
         '
         'ToolStripSeparator5
         '
         Me.ToolStripSeparator5.Name = "ToolStripSeparator5"
-        Me.ToolStripSeparator5.Size = New System.Drawing.Size(149, 6)
+        Me.ToolStripSeparator5.Size = New System.Drawing.Size(153, 6)
         '
         'CreateFolderToolStripMenuItem
         '
         Me.CreateFolderToolStripMenuItem.Image = Global.FinancialBI.My.Resources.Resources.folder_open_add
         Me.CreateFolderToolStripMenuItem.Name = "CreateFolderToolStripMenuItem"
-        Me.CreateFolderToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.CreateFolderToolStripMenuItem.Size = New System.Drawing.Size(156, 24)
         Me.CreateFolderToolStripMenuItem.Text = "New folder"
         '
         'CreateVersionToolStripMenuItem
         '
         Me.CreateVersionToolStripMenuItem.Image = Global.FinancialBI.My.Resources.Resources.elements3_add
         Me.CreateVersionToolStripMenuItem.Name = "CreateVersionToolStripMenuItem"
-        Me.CreateVersionToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.CreateVersionToolStripMenuItem.Size = New System.Drawing.Size(156, 24)
         Me.CreateVersionToolStripMenuItem.Text = "New version"
         '
         'ToolStripSeparator4
         '
         Me.ToolStripSeparator4.Name = "ToolStripSeparator4"
-        Me.ToolStripSeparator4.Size = New System.Drawing.Size(149, 6)
+        Me.ToolStripSeparator4.Size = New System.Drawing.Size(153, 6)
         '
         'DeleteToolStripMenuItem
         '
         Me.DeleteToolStripMenuItem.Image = Global.FinancialBI.My.Resources.Resources.elements3_delete
         Me.DeleteToolStripMenuItem.Name = "DeleteToolStripMenuItem"
-        Me.DeleteToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.DeleteToolStripMenuItem.Size = New System.Drawing.Size(156, 24)
         Me.DeleteToolStripMenuItem.Text = "Delete"
         '
         'ImportFromExcelToolStripMenuItem
         '
         Me.ImportFromExcelToolStripMenuItem.Image = Global.FinancialBI.My.Resources.Resources.excel_blue2
         Me.ImportFromExcelToolStripMenuItem.Name = "ImportFromExcelToolStripMenuItem"
-        Me.ImportFromExcelToolStripMenuItem.Size = New System.Drawing.Size(129, 20)
+        Me.ImportFromExcelToolStripMenuItem.Size = New System.Drawing.Size(79, 23)
         Me.ImportFromExcelToolStripMenuItem.Text = "Import"
         '
         'ToolStripMenuItem1
         '
         Me.ToolStripMenuItem1.Name = "ToolStripMenuItem1"
-        Me.ToolStripMenuItem1.Size = New System.Drawing.Size(12, 20)
+        Me.ToolStripMenuItem1.Size = New System.Drawing.Size(12, 23)
         '
         'Panel1
         '
@@ -286,7 +285,7 @@ Partial Class ExchangeRatesView
         Me.VersionLabel.AutoSize = True
         Me.VersionLabel.Location = New System.Drawing.Point(8, 7)
         Me.VersionLabel.Name = "VersionLabel"
-        Me.VersionLabel.Size = New System.Drawing.Size(42, 13)
+        Me.VersionLabel.Size = New System.Drawing.Size(48, 15)
         Me.VersionLabel.TabIndex = 3
         Me.VersionLabel.Text = "Version"
         '
@@ -299,12 +298,12 @@ Partial Class ExchangeRatesView
         Me.rates_version_TB.Size = New System.Drawing.Size(130, 20)
         Me.rates_version_TB.TabIndex = 2
         '
-        'ImportFromExcelToolStripMenuItem1
+        'm_versionsTreeviewImageList
         '
-        Me.ImportFromExcelToolStripMenuItem1.Image = Global.FinancialBI.My.Resources.Resources.Excel_Blue_32x32
-        Me.ImportFromExcelToolStripMenuItem1.Name = "ImportFromExcelToolStripMenuItem1"
-        Me.ImportFromExcelToolStripMenuItem1.Size = New System.Drawing.Size(168, 22)
-        Me.ImportFromExcelToolStripMenuItem1.Text = "Import"
+        Me.m_versionsTreeviewImageList.ImageStream = CType(resources.GetObject("m_versionsTreeviewImageList.ImageStream"), System.Windows.Forms.ImageListStreamer)
+        Me.m_versionsTreeviewImageList.TransparentColor = System.Drawing.Color.Transparent
+        Me.m_versionsTreeviewImageList.Images.SetKeyName(0, "cloud_dark.ico")
+        Me.m_versionsTreeviewImageList.Images.SetKeyName(1, "favicon(81).ico")
         '
         'ExchangeRatesView
         '
@@ -329,7 +328,6 @@ Partial Class ExchangeRatesView
 
     End Sub
     Friend WithEvents MenuButtonIL As System.Windows.Forms.ImageList
-    Friend WithEvents ratesVersionsIL As System.Windows.Forms.ImageList
     Friend WithEvents VersionsRCMenu As System.Windows.Forms.ContextMenuStrip
     Friend WithEvents select_version As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ToolStripSeparator2 As System.Windows.Forms.ToolStripSeparator
@@ -358,5 +356,6 @@ Partial Class ExchangeRatesView
     Friend WithEvents Panel1 As System.Windows.Forms.Panel
     Friend WithEvents RenameBT As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ImportFromExcelToolStripMenuItem1 As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents m_versionsTreeviewImageList As System.Windows.Forms.ImageList
 
 End Class
