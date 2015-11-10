@@ -16,7 +16,9 @@ Public Class Local
             m_localDic.Clear()
             Return False
         Catch ex As Exception
+            m_localDic.Clear()
             System.Diagnostics.Debug.WriteLine(ex.Message)
+            If (ex.InnerException IsNot Nothing) Then System.Diagnostics.Debug.WriteLine(ex.InnerException.Message)
             Return False
         End Try
     End Function

@@ -52,7 +52,9 @@ Friend Class DataVersionsController
         positions_dictionary = VTreeViewUtil.GeneratePositionsDictionary(versionsTV)
 
         AddHandler GlobalVariables.Versions.CreationEvent, AddressOf AfterCreate
+        AddHandler GlobalVariables.Versions.Read, AddressOf AfterRead
         AddHandler GlobalVariables.Versions.UpdateEvent, AddressOf AfterUpdate
+        AddHandler GlobalVariables.Versions.CopyEvent, AddressOf AfterCopy
         AddHandler GlobalVariables.Versions.DeleteEvent, AddressOf AfterDelete
 
     End Sub
@@ -75,35 +77,110 @@ Friend Class DataVersionsController
 
 #End Region
 
+#Region "Event"
 
-    ' implement the update view methods after listening events ;)
-    ' priority normal
+    Private Sub AfterRead(ByRef status As ErrorMessage, ByRef p_version As Version)
 
+        If status <> ErrorMessage.SUCCESS Then Exit Sub
+        View.AfterRead(status, p_version)
+
+    End Sub
+
+    Private Sub AfterCreate(ByRef status As ErrorMessage, ByRef id As Int32)
+
+        Dim message As String = Local.GetValue("facts_versions.msg_error_create") & ": "
+
+        Select Case status
+            Case ErrorMessage.SUCCESS
+                Exit Sub
+            Case ErrorMessage.INVALID_ATTRIBUTE
+                message = Local.GetValue("facts_versions.msg_invalid_attribute")
+            Case ErrorMessage.SYSTEM
+                message = Local.GetValue("facts_versions.msg_system")
+            Case Else
+                message = Local.GetValue("facts_versions.msg_unknown")
+        End Select
+
+        MsgBox(message)
+
+    End Sub
+
+    Private Sub AfterDelete(ByRef status As ErrorMessage, ByRef id As UInt32)
+
+        If status = ErrorMessage.SUCCESS Then
+            View.AfterDelete(status, id)
+        End If
+
+        Dim message As String = Local.GetValue("facts_versions.msg_error_delete") & ": "
+
+        Select Case status
+            Case ErrorMessage.SUCCESS
+                Exit Sub
+            Case ErrorMessage.NOT_FOUND
+                message &= Local.GetValue("facts_versions.msg_not_found")
+            Case ErrorMessage.SYSTEM
+                message &= Local.GetValue("facts_versions.msg_system")
+            Case Else
+                message &= Local.GetValue("facts_versions.msg_unknown")
+        End Select
+
+        MsgBox(message)
+
+    End Sub
+
+
+    Private Sub AfterUpdate(ByRef status As ErrorMessage, ByRef id As Int32)
+
+        Dim message As String = Local.GetValue("facts_versions.msg_error_update") & ": "
+
+        Select Case status
+            Case ErrorMessage.SUCCESS
+                Exit Sub
+            Case ErrorMessage.NOT_FOUND
+                message &= Local.GetValue("facts_versions.msg_not_found")
+            Case Else
+                message &= Local.GetValue("facts_versions.msg_unknown")
+        End Select
+
+        MsgBox(message)
+
+    End Sub
+
+    Private Sub AfterCopy(ByRef status As ErrorMessage, ByRef id As Int32)
+
+        Dim message As String = Local.GetValue("facts_versions.msg_error_copy") & ": "
+
+        Select Case status
+            Case ErrorMessage.SUCCESS
+                Exit Sub
+            Case ErrorMessage.NOT_FOUND
+                message &= Local.GetValue("facts_versions.msg_not_found")
+            Case ErrorMessage.SYSTEM
+                message &= Local.GetValue("facts_versions.msg_system")
+            Case Else
+                message &= Local.GetValue("facts_versions.msg_unknown")
+        End Select
+
+        MsgBox(message)
+
+    End Sub
+
+#End Region
 
 #Region "Interface"
 
-    Friend Sub CreateVersion(ByRef p_version As Version, _
-                             Optional ByRef origin_version_id As String = "")
+    Friend Sub CreateVersion(ByRef p_version As Version)
 
-        ' implement copy creation 
-        ' priority high
-        ' quid ratesversion id priority high
         GlobalVariables.Versions.Create(p_version)
         NewVersionUI.Hide()
 
     End Sub
 
-    Private Sub AfterCreate(ByRef status As Boolean, ByRef id As Int32)
+    Friend Sub CopyVersion(ByRef origin_version_id As UInt32, _
+                           ByRef p_version As Version)
 
-        ' not here -> deplaced in after update from server priority high
-
-        'If ht(PARENT_ID_VARIABLE) <> 0 Then
-        '    Dim parentNode As VIBlend.WinForms.Controls.vTreeNode = Nothing
-        '    parentNode = VTreeViewUtil.FindNode(versionsTV, ht(PARENT_ID_VARIABLE))
-        '    VTreeViewUtil.AddNode(ht(ID_VARIABLE), ht(NAME_VARIABLE), parentNode)
-        'Else
-        '    VTreeViewUtil.AddNode(ht(ID_VARIABLE), ht(NAME_VARIABLE), versionsTV)
-        'End If
+        GlobalVariables.Versions.Copy(origin_version_id, p_version)
+        NewVersionUI.Hide()
 
     End Sub
 
@@ -164,25 +241,11 @@ Friend Class DataVersionsController
 
     End Sub
 
-
-    Private Sub AfterUpdate(ByRef status As Boolean, ByRef id As Int32)
-
-        ' to be implemented
-        ' priority normal
-
-    End Sub
-
     Friend Sub DeleteVersions(ByRef node As VIBlend.WinForms.Controls.vTreeNode)
 
         ' priority high 
         ' ask for confirmation (deletion of all subversions)
         GlobalVariables.Versions.Delete(node.Value)
-
-    End Sub
-
-    Private Sub AfterDelete(ByRef status As Boolean, ByRef id As UInt32)
-
-        View.AfterDelete(status, id)
 
     End Sub
 
@@ -258,7 +321,7 @@ Friend Class DataVersionsController
 
     Friend Function IsRatesVersionCompatibleWithPeriods(ByRef start_period As Int32, _
                                                         ByRef nb_periods As Int32, _
-                                                        ByRef rates_version_id As String) As Boolean
+                                                        ByRef rates_version_id As UInt32) As Boolean
 
         Dim l_version As ExchangeRateVersion = GlobalVariables.RatesVersions.GetValue(rates_version_id)
         If l_version Is Nothing Then Return False
@@ -286,7 +349,7 @@ Friend Class DataVersionsController
 
     Friend Function IsFactVersionCompatibleWithPeriods(ByRef start_period As Int32, _
                                                         ByRef nb_periods As Int32, _
-                                                        ByRef fact_version_id As String) As Boolean
+                                                        ByRef fact_version_id As UInt32) As Boolean
 
         Dim version As GlobalFactVersion = GlobalVariables.GlobalFactsVersions.GetValue(fact_version_id)
         If version Is Nothing Then Return False

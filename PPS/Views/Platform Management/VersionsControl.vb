@@ -67,7 +67,6 @@ Friend Class VersionsControl
         AddHandler VersionsTV.AfterSelect, AddressOf VersionsTV_AfterSelect
         AddHandler VersionsTV.KeyDown, AddressOf CategoriesTV_KeyDown
         AddHandler VersionsTV.MouseClick, AddressOf tv_mouse_click
-        AddHandler GlobalVariables.Versions.Read, AddressOf versionReadEvent
 
         ' implement tv drag and drop -> common for all
 
@@ -210,32 +209,47 @@ Friend Class VersionsControl
 
     End Sub
 
-    Private Sub RenameVersionInTV(ByRef p_id As UInt32, ByRef p_name As String)
+    Private Function RenameVersionInTV(ByRef p_id As UInt32, ByRef p_name As String) As Boolean
 
-        For Each node In VersionsTV.Nodes
-            If node.Value = p_id Then node.Text = p_name
+        For Each node In VersionsTV.GetNodes()
+            If node.Value = p_id Then
+                node.Text = p_name
+                Return True
+            End If
         Next
+        Return False
 
-    End Sub
+    End Function
 
 #End Region
 
 
 #Region "Events"
 
-    Delegate Sub versionReadEvent_Delegate(ByRef p_status As Boolean, ByRef p_attributes As Hashtable)
-    Private Sub versionReadEvent(ByRef p_status As Boolean, ByRef p_attributes As Hashtable)
+    Delegate Sub AfterRead_Delegate(ByRef status As ErrorMessage, ByRef p_version As Version)
+    Friend Sub AfterRead(ByRef status As ErrorMessage, ByRef p_version As Version)
+
         If InvokeRequired Then
-            Dim MyDelegate As New versionReadEvent_Delegate(AddressOf versionReadEvent)
-            Me.Invoke(MyDelegate, New Object() {p_status, p_attributes})
+            Dim MyDelegate As New AfterRead_Delegate(AddressOf AfterRead)
+            Me.Invoke(MyDelegate, New Object() {status, p_version})
         Else
-            RenameVersionInTV(p_attributes(ID_VARIABLE), p_attributes(NAME_VARIABLE))
-            If p_attributes(ID_VARIABLE) = current_node.Value Then Display(current_node)
+            If (status = ErrorMessage.SUCCESS) Then
+                If RenameVersionInTV(p_version.Id, p_version.Name) = False Then
+                    If p_version.ParentId <> 0 Then
+                        Dim parentNode As VIBlend.WinForms.Controls.vTreeNode = Nothing
+                        parentNode = VTreeViewUtil.FindNode(VersionsTV, p_version.ParentId)
+                        VTreeViewUtil.AddNode(p_version.Id, p_version.Name, parentNode)
+                    Else
+                        VTreeViewUtil.AddNode(p_version.Id, p_version.Name, VersionsTV)
+                    End If
+                End If
+                If current_node IsNot Nothing AndAlso p_version.Id = current_node.Value Then Display(current_node)
+            End If
         End If
     End Sub
 
-    Delegate Sub AfterDelete_Delegate(ByRef status As Boolean, ByRef id As UInt32)
-    Friend Sub AfterDelete(ByRef status As Boolean, ByRef id As UInt32)
+    Delegate Sub AfterDelete_Delegate(ByRef status As ErrorMessage, ByRef id As UInt32)
+    Friend Sub AfterDelete(ByRef status As ErrorMessage, ByRef id As UInt32)
 
         If InvokeRequired Then
             Dim MyDelegate As New AfterDelete_Delegate(AddressOf AfterDelete)

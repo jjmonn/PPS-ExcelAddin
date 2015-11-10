@@ -99,12 +99,20 @@ Friend Class Period
     End Function
 
     ' yearId: "31/12/N" au format INT
-    Friend Shared Function GetMonthsIdsInYear(ByRef yearId As UInt32) As Int32()
+    Friend Shared Function GetMonthsIdsInYear(ByRef yearId As UInt32, ByRef p_startPeriod As UInt32, ByRef p_nbPeriod As UInt16) As Int32()
 
         Dim nbDaysinMonth As Int32
-        Dim monthsIds(12) As Int32
+        Dim tmpMonthList As Int32() = GetMonthsList(p_startPeriod, p_nbPeriod)
         Dim year_ As Int32 = Year(Date.FromOADate(yearId))
-        For i = 1 To 12
+        Dim nbMonth As Int32
+
+        If Year(Date.FromOADate(tmpMonthList(tmpMonthList.Length - 1))) < year_ Then nbMonth = 0
+        If Year(Date.FromOADate(tmpMonthList(tmpMonthList.Length - 1))) > year_ Then nbMonth = 12
+        If Year(Date.FromOADate(tmpMonthList(tmpMonthList.Length - 1))) = year_ Then nbMonth = Month(Date.FromOADate(tmpMonthList(tmpMonthList.Length - 1)))
+
+        Dim monthsIds(nbMonth) As Int32
+
+        For i = 1 To nbMonth
             nbDaysinMonth = DateTime.DaysInMonth(year_, i)
             monthsIds(i - 1) = (Int(CDbl(DateSerial(year_, i, nbDaysinMonth).ToOADate())))
         Next
@@ -149,32 +157,6 @@ Friend Class Period
             tmpList.Add(Int(CDbl(DateSerial(year, i - 1, nbDaysinMonth).ToOADate())))
         Next
         Return tmpList
-
-    End Function
-
-    Friend Shared Function GetGlobalPeriodsDictionary(ByRef yearly_periods_list As List(Of Int32)) _
-                                                      As Dictionary(Of Int32, List(Of Int32))
-
-        Dim tmp_dic As New Dictionary(Of Int32, List(Of Int32))
-
-        ' Add Period-1 (December of Year -1)
-        Dim year_minus_one_id As Integer = GetYearIDFromYearValue(Year(Date.FromOADate(yearly_periods_list.ElementAt(0))) - 1)
-        tmp_dic.Add(year_minus_one_id, GetLastMonthOfYear(Year(Date.FromOADate(year_minus_one_id))))
-
-        ' Add all Years and their corresponding month dictionary
-        For Each year_id In yearly_periods_list
-            tmp_dic.Add(year_id, GetMonthsPeriodsInOneYear(Year(Date.FromOADate(year_id)), 0))
-        Next
-        Return tmp_dic
-
-    End Function
-
-
-    Friend Shared Function GetLastMonthOfYear(ByRef year_value As Int32) As List(Of Int32)
-
-        Dim tmp_list As New List(Of Int32)
-        tmp_list.Add(Int(CDbl(DateSerial(year_value, 12, 31).ToOADate())))
-        Return tmp_list
 
     End Function
 
