@@ -1443,13 +1443,8 @@ Public Class AddinModule
         If GlobalVariables.AuthenticationFlag = False Then
             ConnectionBT_OnClick(sender, control, pressed)
         Else
-            If Not m_GRSControlersDictionary.ContainsKey(GlobalVariables.APPS.ActiveSheet) Then
-                Dim cREFRESH As New WorksheetRefreshController
-                cREFRESH.RefreshWorksheet()
-            Else
-                MsgBox("Cannot Refresh while the worksheet is being edited. " + Chr(13) + _
-                       "The submission must be closed for this worksheet in order to refresh it.")
-            End If
+            Dim cREFRESH As New WorksheetRefreshController
+            cREFRESH.RefreshWorksheet(Me)
         End If
 
     End Sub
@@ -1460,9 +1455,9 @@ Public Class AddinModule
             ConnectionBT_OnClick(sender, control, pressed)
         Else
             If Not m_GRSControlersDictionary.ContainsKey(GlobalVariables.APPS.ActiveSheet) Then
-                Dim cREFRESH As New WorksheetRefreshController
+                Dim l_refreshWorksheetModule As New WorksheetRefreshController
                 Dim ws As Excel.Worksheet = GlobalVariables.APPS.ActiveSheet
-                cREFRESH.RefreshWorksheet(GlobalVariables.APPS.Selection)
+                l_refreshWorksheetModule.RefreshWorksheet(GlobalVariables.APPS.Selection, Me)
             Else
                 MsgBox("Cannot Refresh while the worksheet is being edited. " + Chr(13) + _
                        "The submission must be closed for this worksheet in order to refresh it.")
@@ -1817,7 +1812,10 @@ Public Class AddinModule
     Private Sub AddinModule_Finalize(sender As Object, e As EventArgs) Handles MyBase.AddinFinalize
         If m_GRSControlersDictionary.Count > 0 Then
             For Each l_generalSubmissionController As GeneralSubmissionControler In m_GRSControlersDictionary.Values
-                ClearSubmissionMode(l_generalSubmissionController)
+                Try
+                    ClearSubmissionMode(l_generalSubmissionController)
+                Catch ex As Exception
+                End Try
             Next
         End If
     End Sub
@@ -2078,6 +2076,19 @@ Public Class AddinModule
         m_ppsbiController = New PPSBIController
     End Sub
 
+    Public Function IsCurrentGeneralSubmissionController() As Boolean
+        If m_currentGeneralSubmissionControler Is Nothing Then
+            Return False
+        Else
+            Return True
+        End If
+    End Function
+
+    Public Sub RefreshGeneralSubmissionControllerSnapshot(ByRef p_refreshFromDataBaseFlag As Boolean)
+        If m_currentGeneralSubmissionControler IsNot Nothing Then
+            m_currentGeneralSubmissionControler.RefreshSnapshot(p_refreshFromDataBaseFlag)
+        End If
+    End Sub
 
 #End Region
 

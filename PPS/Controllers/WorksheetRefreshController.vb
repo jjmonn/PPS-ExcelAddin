@@ -39,7 +39,8 @@ Friend Class WorksheetRefreshController
 
 #Region "Interface"
 
-    Friend Sub RefreshWorksheet(Optional ByRef rng As Excel.Range = Nothing)
+    Friend Sub RefreshWorksheet(ByRef p_addin As AddinModule, _
+                                Optional ByRef rng As Excel.Range = Nothing)
 
         GlobalVariables.g_mustResetCache = True
         Dim FormulasRangesCollection As New Dictionary(Of Excel.Range, String)
@@ -56,8 +57,17 @@ Friend Class WorksheetRefreshController
             End If
         End If
 
-        If findGetDataFormulaCells(FormulasRangesCollection, rng) Then
-            evaluateFormulas(FormulasRangesCollection)
+        If p_addin.IsCurrentGeneralSubmissionController = True Then
+            Dim l_refreshFromDataBaseFlag As Boolean
+            Dim confirm1 = Windows.Forms.MessageBox.Show("Do you want to download the inputs from the cloud?", "", _
+                                                         Windows.Forms.MessageBoxButtons.YesNoCancel, _
+                                                         Windows.Forms.MessageBoxIcon.Question)
+            If confirm1 = Windows.Forms.DialogResult.Yes Then
+                l_refreshFromDataBaseFlag = True
+            End If
+            p_addin.RefreshGeneralSubmissionControllerSnapshot(l_refreshFromDataBaseFlag)
+        ElseIf findGetDataFormulaCells(FormulasRangesCollection, rng) Then
+            EvaluateFormulas(FormulasRangesCollection)
         Else
             RefreshReport()
         End If
