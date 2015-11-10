@@ -18,6 +18,12 @@ Imports CRUD
 
 Friend Class VersionManager : Inherits NamedCRUDManager(Of NamedHierarchyCRUDEntity)
 
+#Region "Instance variables"
+    Protected CopyCMSG As ServerMessage = ClientMessage.CMSG_COPY_VERSION
+    Protected CopySMSG As ServerMessage = ServerMessage.SMSG_COPY_VERSION_ANSWER
+    Public Event CopyEvent(ByRef status As ErrorMessage, ByRef id As UInt32)
+#End Region
+
 #Region "Init"
 
     Friend Sub New()
@@ -40,6 +46,36 @@ Friend Class VersionManager : Inherits NamedCRUDManager(Of NamedHierarchyCRUDEnt
 
         InitCallbacks()
 
+    End Sub
+
+    Protected Shadows Sub InitCallbacks()
+        MyBase.InitCallbacks()
+        NetworkManager.GetInstance().SetCallback(CopySMSG, AddressOf CopyAnswer)
+    End Sub
+
+    Protected Overrides Sub finalize()
+        NetworkManager.GetInstance().RemoveCallback(CopySMSG, AddressOf CopyAnswer)
+    End Sub
+
+#End Region
+
+#Region "CRUD"
+
+    Public Sub Copy(p_originId As UInt32, p_new As Version)
+        Dim packet As New ByteBuffer(CUShort(CopyCMSG))
+
+        packet.WriteInt32(p_originId)
+        packet.WriteString(p_new.Name)
+        packet.WriteUint16(p_new.NbPeriod)
+        packet.WriteUint32(p_new.RateVersionId)
+        packet.WriteUint32(p_new.GlobalFactVersionId)
+
+        packet.Release()
+        NetworkManager.GetInstance().Send(packet)
+    End Sub
+
+    Private Sub CopyAnswer(packet As ByteBuffer)
+        RaiseEvent CopyEvent(packet.GetError(), packet.ReadUint32())
     End Sub
 
 #End Region
@@ -76,7 +112,7 @@ Friend Class VersionManager : Inherits NamedCRUDManager(Of NamedHierarchyCRUDEnt
             Select Case version.TimeConfiguration
                 Case CRUD.TimeConfig.YEARS
                     For Each yearId As Int32 In Period.GetYearsList(version.StartPeriod, version.NbPeriod, version.TimeConfiguration)
-                        For Each monthId As Int32 In Period.GetMonthsIdsInYear(yearId)
+                        For Each monthId As Int32 In Period.GetMonthsIdsInYear(yearId, version.StartPeriod, version.NbPeriod)
                             If monthsList.Contains(monthId) = False Then
                                 monthsList.Add(monthId)
                             End If

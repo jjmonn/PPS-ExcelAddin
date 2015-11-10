@@ -228,7 +228,7 @@
     <string name="msg_values_selection">Select value(s) range(s)</string>
     <string name="msg_snapshot_error">The Snapshot was unsuccessful because the following dimensions not found on the Worksheet: </string>
     <string name="msg_entity_not_computed1">The server return a computation error.</string>
-    <string name="msg_report_error">An error occured in the computation of this report. You may have not been granted access to this version or entity.Please contact your administrator.</string>
+    <string name="msg_report_error">An error occured in the computation of this report. You may have not been granted access to this version or entity. Please contact your administrator.</string>
     <string name="msg_accounts_orientation_unclear">Accounts orgnization is not clear. Please check that accounts are aligned in rows or columns.</string>
     <string name="msg_entities_orientation_unclear">Entities orgnization is not clear. Please check that entities are aligned in rows or columns.</string>
     <string name="msg_periods_orientation_unclear">Periods orgnization is not clear. Please check that periods are aligned in rows or columns.</string>
@@ -245,9 +245,10 @@
   <category name="facts_versions">
     <string name="fact_version">Data Version</string>
     <string name="exchange_rates_version">Exchange rates version</string>
-    <string name="nb_years">Number of years</string>
+    <string name="nb_years">Number of periods</string>
     <string name="copy_from">Create copy from</string>
     <string name="starting_period">Starting year</string>
+    <string name="starting_month">Starting month</string>
     <string name="period_config">Periods configuration (Yearly / Monthly)</string>
     <string name="version_name">Version name</string>
     <string name="version_new">New version</string>
@@ -269,8 +270,36 @@
     <string name="msg_new_version_name">Enter the new Name: </string>
     <string name="msg_invalid_name">This Name is not valid. Either it already exists or contains forbidden characters. Please Try with another Name.</string>
     <string name="msg_select_version_or_folder">Please select a Version or a Folder.</string>
+	<string name="msg_need_starting_month">Please select a starting month.</string>
+	<string name="msg_error_create">Unable to create this version</string>
+	<string name="msg_error_copy">Unable to create copy of this version</string>
+	<string name="msg_error_update">Unable to edit this version</string>
+	<string name="msg_error_delete">Unable to delete this version</string>
+	<string name="msg_invalid_attribute">Invalid attribute.</string>
+	<string name="msg_not_found">version specified has not been found.</string>
+	<string name="msg_system">Unknown error. Please contact your administrator.</string>
+	<string name="msg_unknown">Error system.  Please contact your administrator.</string>
   </category>
 
+    <category name="period">
+		<string name="month1">January</string>
+		<string name="month2">February</string>
+		<string name="month3">March</string>
+		<string name="month4">April</string>
+		<string name="month5">May</string>
+		<string name="month6">June</string>
+		<string name="month7">July</string>
+		<string name="month8">August</string>
+		<string name="month9">September</string>
+		<string name="month10">October</string>
+		<string name="month11">November</string>
+		<string name="month12">December</string>
+		<category name="timeconfig">
+			<string name="month">Monthly</string>
+			<string name="year">Annualy</string>
+		</category>
+	</category>
+	
   <category name="ppsbi">
     <string name="insert_formula">Insert Formula</string>
     <string name="categories_filter">Categories filter</string>

@@ -46,7 +46,7 @@ Friend Class NewRatesVersionUI
         If Len(name) < NAMES_MAX_LENGTH Then
             m_controller.CreateVersion(m_parentId, _
                                          name, 0, _
-                                         StartPeriodNUD.Value, _
+                                         StartPeriodNUD.Value, 
                                          NBPeriodsNUD.Value * 12)
             Me.Hide()
         Else

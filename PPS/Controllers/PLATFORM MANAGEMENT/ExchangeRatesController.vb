@@ -142,13 +142,14 @@ Friend Class ExchangeRatesController
                              ByRef p_startPeriodYear As Int32, _
                              ByRef p_nbPeriods As Int32)
 
-        Dim tmpHT As New Hashtable
-        tmpHT.Add(PARENT_ID_VARIABLE, p_parentId)
-        tmpHT.Add(NAME_VARIABLE, p_name)
-        tmpHT.Add(IS_FOLDER_VARIABLE, p_isFolder)
-        tmpHT.Add(ITEMS_POSITIONS, 1)
-        tmpHT.Add(VERSIONS_START_PERIOD_VAR, DateSerial(p_startPeriodYear, 12, 31).ToOADate())
-        tmpHT.Add(VERSIONS_NB_PERIODS_VAR, p_nbPeriods)
+
+        Dim tmpHT As New ExchangeRateVersion
+        tmpHT.ParentId = p_parentId
+        tmpHT.Name = p_name
+        tmpHT.IsFolder = p_isFolder
+        tmpHT.ItemPosition = 1
+        tmpHT.StartPeriod = DateSerial(p_startPeriodYear, 12, 31).ToOADate()
+        tmpHT.NbPeriod = p_nbPeriods
 
         GlobalVariables.RatesVersions.Create(tmpHT)
 
@@ -186,14 +187,14 @@ Friend Class ExchangeRatesController
 
 #Region "Events"
 
-    Private Sub RatesVersionUpdateFromServer(ByRef p_status As Boolean, ByRef p_ratesVersionHt As Hashtable)
+    Private Sub RatesVersionUpdateFromServer(ByRef p_status As Boolean, ByRef p_ratesVersionHt As ExchangeRateVersion)
 
         If m_view Is Nothing Then Exit Sub
         If p_status = True Then
-            m_view.TVUpdate(p_ratesVersionHt(ID_VARIABLE), _
-                            p_ratesVersionHt(PARENT_ID_VARIABLE), _
-                            p_ratesVersionHt(NAME_VARIABLE), _
-                            p_ratesVersionHt(IS_FOLDER_VARIABLE))
+            m_view.TVUpdate(p_ratesVersionHt.Id, _
+                            p_ratesVersionHt.ParentId, _
+                            p_ratesVersionHt.Name, _
+                            p_ratesVersionHt.IsFolder)
         End If
 
     End Sub

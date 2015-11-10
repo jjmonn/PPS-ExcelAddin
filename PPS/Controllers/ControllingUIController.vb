@@ -42,6 +42,7 @@ Friend Class ControllingUIController
     Private m_rowsHierarchyNode As New vTreeNode
     Private m_columnsHierarchyNode As New vTreeNode
     Private m_DisplayAxisHt As New Hashtable
+
     Private m_filtersAndAxisDict As New Dictionary(Of String, List(Of Int32))
     Private m_dataMap As Dictionary(Of String, Double)
     Private m_filters_dict As New Dictionary(Of String, Int32)

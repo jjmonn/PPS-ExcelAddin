@@ -178,13 +178,13 @@ Friend Class GlobalFactController
                            ByRef p_startPeriodYear As Int32, _
                            ByRef p_nbPeriods As Int32)
 
-        Dim tmpHT As New Hashtable
-        tmpHT.Add(PARENT_ID_VARIABLE, p_parentId)
-        tmpHT.Add(NAME_VARIABLE, p_name)
-        tmpHT.Add(IS_FOLDER_VARIABLE, p_isFolder)
-        tmpHT.Add(ITEMS_POSITIONS, 1)
-        tmpHT.Add(VERSIONS_START_PERIOD_VAR, DateSerial(p_startPeriodYear, 12, 31).ToOADate())
-        tmpHT.Add(VERSIONS_NB_PERIODS_VAR, p_nbPeriods)
+        Dim tmpHT As New GlobalFactVersion
+        tmpHT.ParentId = p_parentId
+        tmpHT.Name = p_name
+        tmpHT.IsFolder = p_isFolder
+        tmpHT.ItemPosition = 1
+        tmpHT.StartPeriod = DateSerial(p_startPeriodYear, 12, 31).ToOADate()
+        tmpHT.NbPeriod = p_nbPeriods
 
         GlobalVariables.GlobalFactsVersions.Create(tmpHT)
 
@@ -255,14 +255,14 @@ Friend Class GlobalFactController
         m_view.ReloadUI()
     End Sub
 
-    Private Sub GlobalFactsVersionUpdateFromServer(ByRef p_status As Boolean, ByRef p_versionHt As Hashtable)
+    Private Sub GlobalFactsVersionUpdateFromServer(ByRef p_status As Boolean, ByRef p_versionHt As GlobalFactVersion)
 
         If m_view Is Nothing Then Exit Sub
         If p_status = True Then
-            m_view.TVUpdate(p_versionHt(ID_VARIABLE), _
-                            p_versionHt(PARENT_ID_VARIABLE), _
-                            p_versionHt(NAME_VARIABLE), _
-                            p_versionHt(IS_FOLDER_VARIABLE))
+            m_view.TVUpdate(p_versionHt.Id, _
+                            p_versionHt.ParentId, _
+                            p_versionHt.Name, _
+                            p_versionHt.IsFolder)
         End If
 
     End Sub
