@@ -65,8 +65,17 @@ Friend Class NewDataVersionUI
     Private Sub InitializeComboboxes()
 
         m_timeConfigDictionary.Clear()
-        m_timeConfigDictionary.Add(Local.GetValue("period.timeconfig.month"), TimeConfigCB.Items.Add(Local.GetValue("period.timeconfig.month")))
-        m_timeConfigDictionary.Add(Local.GetValue("period.timeconfig.year"), TimeConfigCB.Items.Add(Local.GetValue("period.timeconfig.year")))
+
+        Dim timeConfigMonth As New ListItem()
+        timeConfigMonth.Text = Local.GetValue("period.timeconfig.month")
+        timeConfigMonth.Value = TimeConfig.MONTHS
+
+        Dim timeConfigYear As New ListItem()
+        timeConfigYear.Text = Local.GetValue("period.timeconfig.year")
+        timeConfigYear.Value = TimeConfig.YEARS
+
+        m_timeConfigDictionary.Add(timeConfigYear.Text, TimeConfigCB.Items.Add(timeConfigYear))
+        m_timeConfigDictionary.Add(timeConfigMonth.Text, TimeConfigCB.Items.Add(timeConfigMonth))
 
         Dim current_year As Int32 = Year(Now)
         StartingPeriodNUD.Value = current_year - 1
@@ -121,9 +130,7 @@ Friend Class NewDataVersionUI
             newVersion.IsFolder = False
             newVersion.Locked = False
             newVersion.LockDate = "NA"
-            Dim l_timeConfig As TimeConfig
-            If TimeConfigCB.Text = MONTHLY_TIME_CONFIGURATION Then l_timeConfig = TimeConfig.MONTHS Else l_timeConfig = TimeConfig.YEARS
-            newVersion.TimeConfiguration = l_timeConfig
+            newVersion.TimeConfiguration = TimeConfigCB.SelectedItem.Value
             Dim l_startingMonth As UInt32 = m_startingMonthCombobox.SelectedItem.Value
             newVersion.StartPeriod = DateSerial(StartingPeriodNUD.Value, l_startingMonth, 31).ToOADate()
             newVersion.NbPeriod = NbPeriodsNUD.Text
@@ -185,7 +192,8 @@ Friend Class NewDataVersionUI
     End Sub
 
     Private Sub TimeConfigCB_SelectedIndexChanged(sender As Object, e As EventArgs) Handles TimeConfigCB.SelectedIndexChanged
-        m_startingMonthCombobox.Enabled = (TimeConfigCB.Text = MONTHLY_TIME_CONFIGURATION)
+        If TimeConfigCB.SelectedItem Is Nothing Then Exit Sub
+        m_startingMonthCombobox.Enabled = (TimeConfigCB.SelectedItem.Value = TimeConfig.MONTHS)
 
         If m_startingMonthCombobox.Enabled = False Then
             Dim monthString As String = Local.GetValue("period.month12")
@@ -222,12 +230,14 @@ Friend Class NewDataVersionUI
             MsgBox(Local.GetValue("facts_versions.msg_need_starting_month"))
             Return False
         End If
-        If m_controller.IsRatesVersionValid(m_exchangeRatesVersionVTreeviewbox.TreeView.SelectedNode.Value) = False Then
+        If m_exchangeRatesVersionVTreeviewbox.TreeView.SelectedNode Is Nothing OrElse _
+            m_controller.IsRatesVersionValid(m_exchangeRatesVersionVTreeviewbox.TreeView.SelectedNode.Value) = False Then
             MsgBox(m_exchangeRatesVersionVTreeviewbox.TreeView.SelectedNode.Text & Local.GetValue("facts_versions.msg_cannot_use_exchange_rates_folder"))
             Return False
         End If
 
-        If m_controller.IsFactsVersionValid(m_factsVersionVTreeviewbox.TreeView.SelectedNode.Value) = False Then
+        If m_factsVersionVTreeviewbox.TreeView.SelectedNode Is Nothing OrElse _
+            m_controller.IsFactsVersionValid(m_factsVersionVTreeviewbox.TreeView.SelectedNode.Value) = False Then
             MsgBox(m_factsVersionVTreeviewbox.TreeView.SelectedNode.Text & Local.GetValue("facts_versions.msg_cannot_use_global_fact_folder"))
             Return False
         End If

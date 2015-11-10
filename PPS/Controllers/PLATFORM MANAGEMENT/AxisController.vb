@@ -155,6 +155,14 @@ Friend Class AxisController
 
     End Sub
 
+    Friend Sub UpdateAxisName(ByVal p_id As UInt32, ByVal p_value As String)
+        Dim l_axisElem = GetAxisElemCopy(m_axisType, p_id)
+
+        If l_axisElem Is Nothing Then Exit Sub
+        l_axisElem.Name = p_value
+        UpdateAxis(l_axisElem)
+    End Sub
+
     Friend Sub DeleteAxis(ByRef p_axisElemId As Int32)
 
         CrudModel.Delete(p_axisElemId)
@@ -175,7 +183,7 @@ Friend Class AxisController
 
     Friend Sub UpdateFilterValue(ByRef p_axisElem As AxisFilter)
 
-        If p_axisElem.FilterValueId = GlobalVariables.Filters.GetMostNestedFilterId(p_axisElem.FilterId) Then
+        If p_axisElem.FilterId = GlobalVariables.Filters.GetMostNestedFilterId(p_axisElem.FilterId) Then
             CrudModelFilters.Update(p_axisElem)
         End If
 
@@ -234,9 +242,8 @@ Friend Class AxisController
 
     Private Sub AfterAxisFilterUpdate(ByRef status As ErrorMessage, _
                                         ByRef p_axisFilterId As UInt32)
-        If status = False Then
+        If status = ErrorMessage.SUCCESS Then
             View.UpdateAxis(CrudModel.GetValue(p_axisFilterId))
-            MsgBox("The Axis could be updated.")
             ' catch and display message
         End If
 

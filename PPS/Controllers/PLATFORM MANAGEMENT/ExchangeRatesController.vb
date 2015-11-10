@@ -55,19 +55,12 @@ Friend Class ExchangeRatesController
             Exit Sub
         End If
 
-        Dim version As Version = GlobalVariables.Versions.GetValue(My.Settings.version_id)
-        If version Is Nothing Then
-            MsgBox("Invalid version in settings.")
-            m_isValid = False
-            Exit Sub
-        End If
         GlobalVariables.RatesVersions.LoadRateVersionsTV(m_ratesVersionTV)
         m_view = New ExchangeRatesView(Me, m_ratesVersionTV, GlobalVariables.Currencies.GetMainCurrency())
-        m_currentRatesVersionId = version.RateVersionId
         m_newRatesVersionUI = New NewRatesVersionUI(Me)
 
         AddHandler m_exchangeRates.UpdateEvent, AddressOf AfterRateUpdate
-        AddHandler GlobalVariables.RatesVersions.Read, AddressOf RatesVersionUpdateFromServer
+        AddHandler GlobalVariables.RatesVersions.Read, AddressOf AfterVersionRead
         AddHandler GlobalVariables.RatesVersions.CreationEvent, AddressOf AfterVersionCreate
         AddHandler GlobalVariables.RatesVersions.UpdateEvent, AddressOf AfterVersionUpdate
         AddHandler GlobalVariables.RatesVersions.DeleteEvent, AddressOf AfterVersionDelete
@@ -118,9 +111,19 @@ Friend Class ExchangeRatesController
 
         Dim rate As ExchangeRate = m_exchangeRates.GetValue(p_destinationCurrency, m_currentRatesVersionId, p_period)
 
-        If rate Is Nothing Then Exit Sub
-        rate.Value = p_value
-        m_exchangeRates.Update(rate)
+        If Not rate Is Nothing Then
+            rate = rate.Clone()
+
+            rate.Value = p_value
+            m_exchangeRates.Update(rate)
+        Else
+            rate = New ExchangeRate
+            rate.RateVersionId = m_currentRatesVersionId
+            rate.Period = p_period
+            rate.DestCurrencyId = p_destinationCurrency
+            rate.Value = p_value
+            m_exchangeRates.Create(rate)
+        End If
 
     End Sub
 
@@ -168,16 +171,9 @@ Friend Class ExchangeRatesController
 
     Friend Function DeleteRatesVersion(ByRef p_ratesVersionId As Int32) As Boolean
 
-        ' ---------------------------------------------------------------------------------------------------
-        ' caution PRIORITY HIGH => rule : cannot delete exchange rates version if binded to a fact verions !!!!!!!!!!!
-        ' checks before delete
-        ' return false
-        ' ---------------------------------------------------------------------------------------------------
 
         If p_ratesVersionId = m_currentRatesVersionId Then
             m_currentRatesVersionId = 0
-            ' not ok to be reviewed! 
-            '      m_view.InitializeDGV(GlobalVariables.Currencies.currencies_hash.Keys, m_MonthsIdList, p_ratesVersionId)
         End If
         GlobalVariables.RatesVersions.Delete(p_ratesVersionId)
         Return True
@@ -187,10 +183,10 @@ Friend Class ExchangeRatesController
 
 #Region "Events"
 
-    Private Sub RatesVersionUpdateFromServer(ByRef p_status As Boolean, ByRef p_ratesVersionHt As ExchangeRateVersion)
+    Private Sub AfterVersionRead(ByRef p_status As ErrorMessage, ByRef p_ratesVersionHt As ExchangeRateVersion)
 
         If m_view Is Nothing Then Exit Sub
-        If p_status = True Then
+        If p_status = ErrorMessage.SUCCESS Then
             m_view.TVUpdate(p_ratesVersionHt.Id, _
                             p_ratesVersionHt.ParentId, _
                             p_ratesVersionHt.Name, _
@@ -199,16 +195,16 @@ Friend Class ExchangeRatesController
 
     End Sub
 
-    Private Sub AfterVersionCreate(ByRef p_status As Boolean, ByRef id As Int32)
+    Private Sub AfterVersionCreate(ByRef p_status As ErrorMessage, ByRef id As Int32)
 
-        If p_status = False Then
+        If p_status <> ErrorMessage.SUCCESS Then
             MsgBox("The version could not be created")
             ' register error from CRUD and display details -> priority normal V1 
         End If
 
     End Sub
 
-    Private Sub AfterVersionUpdate(ByRef status As Boolean, ByRef id As Int32)
+    Private Sub AfterVersionUpdate(ByRef status As ErrorMessage, ByRef id As Int32)
 
         ' to be implemented -> priority normal
 

@@ -100,6 +100,8 @@ Friend Class AxisView
             CreateAxisToolStripMenuItem.Enabled = False
             CreateNewToolStripMenuItem.Enabled = False
             copy_down_bt.Enabled = False
+            CopyDownValuesToolStripMenuItem.Enabled = False
+            RenameToolStripMenuItem.Enabled = False
         End If
     End Sub
 
@@ -112,9 +114,10 @@ Friend Class AxisView
         Me.EditToolStripMenuItem.Text = Local.GetValue("general.menu")
         Me.CreateNewToolStripMenuItem.Text = Local.GetValue("general.create")
         Me.DeleteAxisToolStripMenuItem.Text = Local.GetValue("general.delete")
+        Me.RenameToolStripMenuItem.Text = Local.GetValue("general.rename")
+        Me.CopyDownValuesToolStripMenuItem.Text = Local.GetValue("general.copy_down")
         Me.SendEntitiesHierarchyToExcelToolStripMenuItem.Text = Local.GetValue("general.drop_on_excel")
-
-
+        Me.RenameToolStripMenuItem1.Text = Local.GetValue("general.rename")
 
     End Sub
 
@@ -135,6 +138,7 @@ Friend Class AxisView
             isFillingDGV = True
             FillRow(ht.Id, ht.Name, ht)
             updateDGVFormat()
+            DGV.Refresh()
             isFillingDGV = False
         End If
 
@@ -188,7 +192,20 @@ Friend Class AxisView
 
 #Region "DGV Right Click Menu"
 
-    Private Sub cop_down_bt_Click(sender As Object, e As EventArgs) Handles copy_down_bt.Click
+    Private Sub RenameEntityButton_Click(sender As Object, e As EventArgs) Handles RenameToolStripMenuItem.Click, RenameToolStripMenuItem1.Click
+
+        If currentRowItem Is Nothing Then
+            MsgBox(Local.GetValue("axis.msg_select_axis"))
+            Exit Sub
+        End If
+        Dim newAxisName As String = InputBox(Local.GetValue("axis.msg_enter_name"), , currentRowItem.Caption)
+        If newAxisName <> "" Then
+            Controller.UpdateAxisName(currentRowItem.ItemValue, newAxisName)
+        End If
+
+    End Sub
+
+    Private Sub cop_down_bt_Click(sender As Object, e As EventArgs) Handles copy_down_bt.Click, CopyDownValuesToolStripMenuItem.Click
 
         CopyValueDown()
         DGV.Refresh()
@@ -361,6 +378,7 @@ Friend Class AxisView
         Dim rowItem As HierarchyItem
         If rows_id_item_dic.ContainsKey(axisValueId) Then
             rowItem = rows_id_item_dic(axisValueId)
+            rowItem.Caption = p_axisName
         Else
             rowItem = CreateRow(axisValueId, p_axisName)
         End If
@@ -713,7 +731,5 @@ Friend Class AxisView
 #End Region
 
 #End Region
-
-
 
 End Class
