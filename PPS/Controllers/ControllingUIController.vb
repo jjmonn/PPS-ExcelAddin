@@ -431,11 +431,14 @@ Friend Class ControllingUIController
 
         Dim subColumn As HierarchyItem
         If valueNode Is Nothing Then
-            subColumn = column
-            ' Loop through values
-            For Each subNode In dimensionNode.Nodes
-                CreateColumn(dgv, dimensionNode, subNode, subColumn)
-            Next
+            If dimensionNode.Nodes.Count > 0 Then
+                ' Loop through values
+                For Each subNode In dimensionNode.Nodes
+                    CreateColumn(dgv, dimensionNode, subNode, column)
+                Next
+            ElseIf Not dimensionNode.NextSiblingNode Is Nothing Then
+                CreateColumn(dgv, dimensionNode.NextNode, , column)
+            End If
         Else
             'Set current value for current display axis
             If SetDisplayAxisValue(dimensionNode, valueNode) = True Then
@@ -459,7 +462,19 @@ Friend Class ControllingUIController
 
                 ' Dig one level deeper if any
                 If Not dimensionNode.NextSiblingNode Is Nothing Then
-                    CreateColumn(dgv, dimensionNode.NextNode, , subColumn)
+
+                    ' Test: Loop only if dimension is not account and account_formulatype = title
+                    If dimensionNode.Value = computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.ACCOUNTS Then
+                        Dim account As Account = GlobalVariables.Accounts.GetValue(CUInt(valueNode.Value))
+                        If account Is Nothing Then Exit Sub
+                        If account.FormulaType = account.FormulaTypes.TITLE Then
+                            ' Case account formula type title
+                        Else
+                            CreateColumn(dgv, dimensionNode.NextNode, , subColumn)
+                        End If
+                    Else
+                        CreateColumn(dgv, dimensionNode.NextNode, , subColumn)
+                    End If
                 End If
 
                 ' Loop through children if any
