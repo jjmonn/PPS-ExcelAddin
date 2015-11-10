@@ -73,26 +73,26 @@ Public Class ConnectionTP
 
 #Region "Call Backs"
 
-  Private Sub ConnectionBT_Click(sender As Object, e As EventArgs) Handles ConnectionBT.Click, ConnectionBT.KeyDown
+    Private Sub ConnectionBT_Click(sender As Object, e As EventArgs) Handles ConnectionBT.Click, ConnectionBT.KeyDown
 
-    BackgroundWorker1 = New ComponentModel.BackgroundWorker
-    AddHandler BackgroundWorker1.DoWork, AddressOf BackgroundWorker1_DoWork
-    AddHandler BackgroundWorker1.RunWorkerCompleted, AddressOf AfterConnectionAttemp_ThreadSafe
-    BackgroundWorker1.WorkerSupportsCancellation = True
+        BackgroundWorker1 = New ComponentModel.BackgroundWorker
+        AddHandler BackgroundWorker1.DoWork, AddressOf BackgroundWorker1_DoWork
+        AddHandler BackgroundWorker1.RunWorkerCompleted, AddressOf AfterConnectionAttemp_ThreadSafe
+        BackgroundWorker1.WorkerSupportsCancellation = True
 
-    If isConnecting = False Then
-      CP.Start()
-      CP.Show()
-      ConnectionBT.Visible = False
-      CP.Visible = True
-      id = Me.userNameTextBox.Text
-      pwd = Me.passwordTextBox.Text
-      CancelBT.Visible = True
-      BackgroundWorker1.RunWorkerAsync()
-    End If
+        If isConnecting = False Then
+            ConnectionBT.Visible = False
+            id = Me.userNameTextBox.Text
+            pwd = Me.passwordTextBox.Text
+            CancelBT.Visible = True
+            CP.Visible = True
+            CP.Enabled = True
+            CP.Start()
+            CP.Show()
+            BackgroundWorker1.RunWorkerAsync()
+        End If
 
-
-  End Sub
+    End Sub
 
   Private Sub IDTB_TextChanged(sender As Object, e As EventArgs) Handles userNameTextBox.TextChanged
 
@@ -108,29 +108,22 @@ Public Class ConnectionTP
 #Region "Background Worker 1"
 
     Private Sub BackgroundWorker1_DoWork(sender As Object, e As ComponentModel.DoWorkEventArgs)
-
         isConnecting = True
         AddHandler connectionFunction.ConnectionFailedEvent, AddressOf ConnectionFailedMethod
         ConnectionsFunctions.Connect(connectionFunction, connectionFailed, id, pwd)
-
     End Sub
 
-  Private Sub ConnectionFailedMethod() Handles CancelBT.Click
-
+    Private Sub ConnectionFailedMethod() Handles CancelBT.Click
         connectionFailed = True
-    BackgroundWorker1.CancelAsync()
-    AfterConnectionAttemp_ThreadSafe()
+        BackgroundWorker1.CancelAsync()
+        AfterConnectionAttemp_ThreadSafe()
+    End Sub
 
-  End Sub
+    Private Sub BackgroundWorker1_RunWorkerCompleted(sender As Object, e As ComponentModel.RunWorkerCompletedEventArgs)
+        AfterConnectionAttemp_ThreadSafe()
+    End Sub
 
-  Private Sub BackgroundWorker1_RunWorkerCompleted(sender As Object, e As ComponentModel.RunWorkerCompletedEventArgs)
-
-    AfterConnectionAttemp_ThreadSafe()
-
-  End Sub
-
-  Delegate Sub AfterConnectionAttemp_Delegate()
-
+    Delegate Sub AfterConnectionAttemp_Delegate()
     Private Sub AfterConnectionAttemp_ThreadSafe()
 
         If InvokeRequired Then
@@ -138,12 +131,12 @@ Public Class ConnectionTP
             Me.Invoke(MyDelegate, New Object() {})
         Else
             isConnecting = False
+            CP.Stop()
             CancelBT.Visible = False
-            CP.Visible = False
+            CP.Visible = CP.Enabled = False
             ConnectionBT.Visible = True
             id = ""
             pwd = ""
-            CP.Stop()
             AddinModule.DisplayConnectionStatus(connectionFailed = False)
             BackgroundWorker1 = Nothing
             passwordTextBox.Text = ""
@@ -157,27 +150,22 @@ Public Class ConnectionTP
 
 #Region "Form show and close events"
 
-  Private Sub ConnectionTP_Shown(sender As Object, e As EventArgs) Handles MyBase.Shown
+    Private Sub ConnectionTP_Shown(sender As Object, e As EventArgs) Handles MyBase.Shown
+        userNameTextBox.Text = My.Settings.user
+    End Sub
 
-    userNameTextBox.Text = My.Settings.user
+    Private Sub ConnectionPane_ADXBeforeTaskPaneShow(sender As Object, e As ADXBeforeTaskPaneShowEventArgs) Handles MyBase.ADXBeforeTaskPaneShow
+        Me.Visible = GlobalVariables.ConnectionPaneVisible
+    End Sub
 
-
-  End Sub
-
-  Private Sub ConnectionPane_ADXBeforeTaskPaneShow(sender As Object, e As ADXBeforeTaskPaneShowEventArgs) Handles MyBase.ADXBeforeTaskPaneShow
-
-    Me.Visible = GlobalVariables.ConnectionPaneVisible
-
-  End Sub
-
-  Private Sub ConnectionPane_FormClosing(sender As Object, e As Windows.Forms.FormClosingEventArgs) Handles MyBase.FormClosing
+    Private Sub ConnectionPane_FormClosing(sender As Object, e As Windows.Forms.FormClosingEventArgs) Handles MyBase.FormClosing
 
         If Not CP Is Nothing Then CP.Stop()
         passwordTextBox.Text = ""
         CPPanel.Controls.Clear()
         e.Cancel = True
 
-  End Sub
+    End Sub
 
 #End Region
 
