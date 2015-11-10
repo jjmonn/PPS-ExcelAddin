@@ -656,8 +656,21 @@ Friend Class ControllingUIController
 
                 If m_dataMap.ContainsKey(v1 & token) _
                 AndAlso m_dataMap.ContainsKey(v2 & token) Then
-                    args.CellValue = m_dataMap(v1 & token) - m_dataMap(v2 & token)
-                    If Double.IsNaN(args.CellValue) Then args.CellValue = "-"
+                    Dim l_deltaValue = m_dataMap(v1 & token) - m_dataMap(v2 & token)
+                    args.CellValue = l_deltaValue
+                    If Double.IsNaN(args.CellValue) Then
+                        args.CellValue = "-"
+                    Else
+                        Dim CStyle As GridCellStyle = GridTheme.GetDefaultTheme(args.RowItem.DataGridView.VIBlendTheme).GridCellStyle
+                        If l_deltaValue > 0 Then
+                            ' CStyle.FillStyle = New FillStyleSolid(System.Drawing.Color.Green)
+                            CStyle.TextColor = System.Drawing.Color.Green
+                        Else
+                            CStyle.TextColor = Drawing.Color.Red
+                            '  CStyle.FillStyle = New FillStyleSolid(System.Drawing.Color.Red)
+                        End If
+                        args.RowItem.DataGridView.CellsArea.SetCellDrawStyle(args.RowItem, args.ColumnItem, CStyle)
+                    End If
                     If My.Settings.controllingUIResizeTofitGrid = True Then
                         args.ColumnItem.DataGridView.ColumnsHierarchy.ResizeColumnsToFitGridWidth()
                         ' args.ColumnItem.AutoResize(AutoResizeMode.FIT_ALL)
@@ -1035,11 +1048,8 @@ Friend Class ControllingUIController
 
     End Sub
 
-    Friend Sub DropOnExcel()
+    Friend Sub DropOnExcel(ByRef p_copyOnlyExpanded As Boolean)
 
-        ' priority normal
-        ' Maybe issue if nothing in the DGV ? !
-        ' reimplement ??  
         On Error Resume Next
         If Not m_entityNode Is Nothing Then
             Dim destination As Microsoft.Office.Interop.Excel.Range = WorksheetWrittingFunctions.CreateReceptionWS(m_entityNode.Text, _
@@ -1048,11 +1058,12 @@ Friend Class ControllingUIController
             Dim i As Int32 = 1
             For Each tab_ As VIBlend.WinForms.Controls.vTabPage In m_view.DGVsControlTab.TabPages
                 Dim DGV As VIBlend.WinForms.DataGridView.vDataGridView = tab_.Controls(0)
-                DataGridViewsUtil.CopyDGVToExcelGeneric(DGV, destination, i)
+                DataGridViewsUtil.CopyDGVToExcelGeneric(DGV, destination, i, p_copyOnlyExpanded)
             Next
             destination.Worksheet.Columns.AutoFit()
             destination.Worksheet.Outline.ShowLevels(RowLevels:=1)
         End If
+        GlobalVariables.APPS.ActiveWindow.Activate()
 
     End Sub
 

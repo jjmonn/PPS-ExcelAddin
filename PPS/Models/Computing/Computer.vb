@@ -30,7 +30,7 @@ Friend Class Computer
 
     ' Variables
     Private m_dataMap As Dictionary(Of String, Double)
-    Private m_versionsComputationQueue As New Dictionary(Of Int32, Dictionary(Of Int32, Boolean))
+    Private m_versionsComputationQueue As Dictionary(Of Int32, Dictionary(Of Int32, Boolean))
     Private m_requestIdVersionIdDict As New Dictionary(Of Int32, Int32)
     Private m_requestIdEntityIdDict As New Dictionary(Of Int32, Int32)
 
@@ -38,7 +38,7 @@ Friend Class Computer
     Private m_isAxis As Boolean
     Private m_isFiltered As Boolean
     Private m_axisId As Int32
-    Private m_versionId As Int32
+    '  Private m_versionId As Int32
     Private m_entityId As Int32
     Private m_accountId As Int32
     Private m_periodId As Int32
@@ -77,16 +77,15 @@ Friend Class Computer
         m_dataMap = New Dictionary(Of String, Double)
         m_requestIdVersionIdDict.Clear()
         m_requestIdEntityIdDict.Clear()
-        m_versionsComputationQueue.Clear()
-
-        ' Initializing entities to be computed
-        Dim l_entitiesIds As New Dictionary(Of Int32, Boolean)
-        For Each l_entityId As Int32 In p_entitiesIds
-            l_entitiesIds.Add(l_entityId, False)
-        Next
+        m_versionsComputationQueue = New Dictionary(Of Int32, Dictionary(Of Int32, Boolean))
 
         ' Initializing versions to be computed
-        For Each l_versionId In p_versionsIds
+        For Each l_versionId As Int32 In p_versionsIds
+            ' Initializing entities to be computed
+            Dim l_entitiesIds As New Dictionary(Of Int32, Boolean)
+            For Each l_entityId As Int32 In p_entitiesIds
+                l_entitiesIds.Add(l_entityId, False)
+            Next
             m_versionsComputationQueue.Add(l_versionId, l_entitiesIds)
         Next
 
@@ -188,7 +187,7 @@ Friend Class Computer
                     MsgBox("Compute returned a result for an invalid version.") ' msg_local
                     Exit Sub
                 End If
-                m_versionId = version.Id
+                '     m_versionId = version.Id
 
                 Dim l_entity As AxisElem = GlobalVariables.AxisElems.GetValue(AxisType.Entities, m_requestIdEntityIdDict(request_id))
                 If l_entity Is Nothing Then
@@ -204,11 +203,10 @@ Friend Class Computer
                 End Select
 
                 ' Fill m_dataMap
-                FillResultData(p_packet)
+                FillResultData(p_packet, version.Id)
 
                 ' Register computed entities and versions of the Queue
-                m_versionsComputationQueue(m_versionId)(l_entity.Id) = True
-
+                m_versionsComputationQueue(CInt(version.Id))(CInt(l_entity.Id)) = True
                 If AreAllVersionsComputed() = True Then
                     NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_COMPUTE_RESULT, AddressOf SMSG_COMPUTE_RESULT)
                     RaiseEvent ComputationAnswered(m_requestIdEntityIdDict(request_id), p_packet.GetError(), request_id)
@@ -217,6 +215,8 @@ Friend Class Computer
             Else
                 RaiseEvent ComputationAnswered(0, p_packet.GetError(), 0)
             End If
+
+
         Catch ex As OutOfMemoryException
             System.Diagnostics.Debug.WriteLine(ex.Message)
             MsgBox("Server computations limits exceeded.")
@@ -231,7 +231,8 @@ Friend Class Computer
 
 #Region "DataMap Filling"
 
-    Private Sub FillResultData(ByRef packet As ByteBuffer)
+    Private Sub FillResultData(ByRef packet As ByteBuffer, _
+                               ByRef p_versionId As Int32)
 
         Dim filterCode As String = ""
         m_isFiltered = packet.ReadBool()
@@ -251,10 +252,10 @@ Friend Class Computer
         m_filterToken = GetFiltersToken(m_filtersDict)
         System.Diagnostics.Debug.WriteLine("filter Token:" & m_filterToken)
 
-        FillEntityData(packet)
+        FillEntityData(packet, p_versionId)
 
         For child_result_index As Int32 = 1 To packet.ReadUint32()
-            FillResultData(packet)
+            FillResultData(packet, p_versionId)
         Next
 
         If m_isFiltered = True Then
@@ -263,7 +264,8 @@ Friend Class Computer
 
     End Sub
 
-    Private Sub FillEntityData(ByRef packet As ByteBuffer)
+    Private Sub FillEntityData(ByRef packet As ByteBuffer, _
+                               ByRef p_versionId As Int32)
 
         m_entityId = packet.ReadUint32()
         System.Diagnostics.Debug.WriteLine("entityId:" & m_entityId)
@@ -273,7 +275,7 @@ Friend Class Computer
 
             ' Non aggregated data
             For period_index As Int16 = 0 To packet.ReadUint16() - 1
-                m_dataMap(m_versionId & TOKEN_SEPARATOR & _
+                m_dataMap(p_versionId & TOKEN_SEPARATOR & _
                         m_filterToken & TOKEN_SEPARATOR & _
                         m_entityId & TOKEN_SEPARATOR & _
                         m_accountId & TOKEN_SEPARATOR & _
@@ -283,7 +285,7 @@ Friend Class Computer
 
             ' Aggreagted data
             For aggregationIndex As Int32 = 0 To packet.ReadUint32() - 1
-                m_dataMap(m_versionId & TOKEN_SEPARATOR & _
+                m_dataMap(p_versionId & TOKEN_SEPARATOR & _
                         m_filterToken & TOKEN_SEPARATOR & _
                         m_entityId & TOKEN_SEPARATOR & _
                         m_accountId & TOKEN_SEPARATOR & _
@@ -294,7 +296,7 @@ Friend Class Computer
 
         ' Dim nb_children_entities As UInt32 = 
         For children_index As Int32 = 1 To packet.ReadUint32()
-            FillEntityData(packet)
+            FillEntityData(packet, p_versionId)
         Next
 
     End Sub
