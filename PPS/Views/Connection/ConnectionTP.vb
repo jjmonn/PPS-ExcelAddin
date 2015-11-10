@@ -120,8 +120,8 @@ Public Class ConnectionTP
             m_isConnecting = False
             m_circularProgress2.Stop()
             m_cancelButton.Visible = False
-            '  m_circularProgress.Visible = m_circularProgress.Enabled = False
-            ' ConnectionBT.Visible = True
+            m_circularProgress2.Visible = m_circularProgress2.Enabled = False
+            ConnectionBT.Visible = True
             m_id = ""
             m_password = ""
             AddinModule.DisplayConnectionStatus(m_connectionFailed = False)
@@ -139,6 +139,8 @@ Public Class ConnectionTP
 
     Private Sub ConnectionTP_Shown(sender As Object, e As EventArgs) Handles MyBase.Shown
         userNameTextBox.Text = My.Settings.user
+        m_circularProgress2.Visible = False
+        m_circularProgress2.Enabled = False
     End Sub
 
     Private Sub ConnectionPane_ADXBeforeTaskPaneShow(sender As Object, e As ADXBeforeTaskPaneShowEventArgs) Handles MyBase.ADXBeforeTaskPaneShow
@@ -154,8 +156,6 @@ Public Class ConnectionTP
     End Sub
 
 #End Region
-
-
 
 
 End Class
