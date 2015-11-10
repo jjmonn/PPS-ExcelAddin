@@ -19,7 +19,6 @@ Imports System.Collections.Generic
 
 Friend Class NewDataVersionUI
 
-
 #Region "Instance Variables"
 
     ' Objects
@@ -94,7 +93,6 @@ Friend Class NewDataVersionUI
     End Sub
 
 #End Region
-
 
 #Region "Interface"
 
@@ -199,7 +197,6 @@ Friend Class NewDataVersionUI
     End Sub
 
 #End Region
-
 
 #Region "Utilities"
 

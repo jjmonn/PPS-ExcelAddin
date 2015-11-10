@@ -52,7 +52,7 @@ Partial Class AxisFilterStructView
         Me.AddBT.RoundedCornersMask = CType(15, Byte)
         Me.AddBT.Size = New System.Drawing.Size(93, 25)
         Me.AddBT.TabIndex = 0
-        Me.AddBT.Text = Local.GetValue("general.create")
+        Me.AddBT.Text = "New"
         Me.AddBT.UseVisualStyleBackColor = False
         Me.AddBT.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.OFFICESILVER
         '
@@ -75,7 +75,7 @@ Partial Class AxisFilterStructView
         Me.DeleteBT.RoundedCornersMask = CType(15, Byte)
         Me.DeleteBT.Size = New System.Drawing.Size(93, 25)
         Me.DeleteBT.TabIndex = 1
-        Me.DeleteBT.Text = Local.GetValue("general.delete")
+        Me.DeleteBT.Text = "Delete"
         Me.DeleteBT.UseVisualStyleBackColor = False
         Me.DeleteBT.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.OFFICESILVER
         '
@@ -138,13 +138,13 @@ Partial Class AxisFilterStructView
         Me.m_createCategoryUnderCurrentCategoryButton.Image = Global.FinancialBI.My.Resources.Resources.add
         Me.m_createCategoryUnderCurrentCategoryButton.Name = "m_createCategoryUnderCurrentCategoryButton"
         Me.m_createCategoryUnderCurrentCategoryButton.Size = New System.Drawing.Size(306, 24)
-        Me.m_createCategoryUnderCurrentCategoryButton.Text = Local.GetValue("general.create_category_under_category")
+        Me.m_createCategoryUnderCurrentCategoryButton.Text = "Create_category_under_category"
         '
         'm_renameButton
         '
         Me.m_renameButton.Name = "m_renameButton"
         Me.m_renameButton.Size = New System.Drawing.Size(306, 24)
-        Me.m_renameButton.Text = Local.GetValue("general.renamme")
+        Me.m_renameButton.Text = "Renamme"
         '
         'ToolStripSeparator1
         '
@@ -156,7 +156,7 @@ Partial Class AxisFilterStructView
         Me.m_deleteButton.Image = Global.FinancialBI.My.Resources.Resources.imageres_89
         Me.m_deleteButton.Name = "m_deleteButton"
         Me.m_deleteButton.Size = New System.Drawing.Size(306, 24)
-        Me.m_deleteButton.Text = Local.GetValue("general.delete")
+        Me.m_deleteButton.Text = "Delete"
         '
         'AxisFilterStructView
         '
@@ -167,7 +167,7 @@ Partial Class AxisFilterStructView
         Me.Controls.Add(Me.VPanel1)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Name = "AxisFilterStructView"
-        Me.Text = Local.GetValue("filters.title_filters_structure")
+        Me.Text = "Categories"
         Me.VPanel1.Content.ResumeLayout(False)
         Me.VPanel1.ResumeLayout(False)
         Me.VPanel2.ResumeLayout(False)

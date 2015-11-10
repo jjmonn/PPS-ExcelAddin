@@ -32,8 +32,21 @@ Friend Class NewGlobalFactVersionUI
         ' Add any initialization after the InitializeComponent() call.
         m_controller = p_controller
         StartPeriodNUD.Value = Year(Now)
+        MultilangueSetup()
 
     End Sub
+
+    Private Sub MultilangueSetup()
+
+        Me.m_nameLabel.Text = Local.GetValue("general.name")
+        Me.m_startingPeriodLabel.Text = Local.GetValue("facts_versions.starting_period")
+        Me.m_numberPeriodsLabel.Text = Local.GetValue("facts_versions.nb_years")
+        Me.CancelBT.Text = Local.GetValue("general.cancel")
+        Me.ValidateBT.Text = Local.GetValue("general.create")
+        Me.Text = Local.GetValue("global_facts.new_version")
+
+    End Sub
+
 
 #End Region
 

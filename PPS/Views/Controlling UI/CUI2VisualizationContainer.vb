@@ -2,6 +2,7 @@
 
     Private Sub CUI2VisualizationContainer_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Me.WindowState = Windows.Forms.FormWindowState.Maximized
+        Me.Text = Local.GetValue("CUI_Charts.CUI2_vizualization")
     End Sub
 
     Private Sub CUI2VisualizationContainer_FormClosing(sender As Object, e As Windows.Forms.FormClosingEventArgs) Handles MyBase.FormClosing

@@ -51,6 +51,9 @@ Friend Class GlobalFactUI
         m_versionsTV.ContextMenuStrip = VersionsRCMenu
         m_versionsTV.ImageList = ratesVersionsIL
         VTreeViewUtil.InitTVFormat(m_versionsTV)
+        DesactivateUnallowed()
+        MultilanguageSetup()
+        FormatDGV()
 
         AddHandler m_dataGridView.CellValueChanging, AddressOf DataGridView_CellValueChanging
         AddHandler m_versionsTV.KeyPress, AddressOf VersionsTV_KeyPress
@@ -58,7 +61,13 @@ Friend Class GlobalFactUI
         AddHandler GlobalVariables.GlobalFacts.Read, AddressOf ReloadUI
         AddHandler m_dataGridView.MouseDown, AddressOf FactRightClick
 
-        DesactivateUnallowed()
+    End Sub
+
+    Private Sub FormatDGV()
+
+        m_dataGridView.BackColor = System.Drawing.SystemColors.Control
+        m_dataGridView.ColumnsHierarchy.AutoStretchColumns = True
+
     End Sub
 
     Private Sub DesactivateUnallowed()
@@ -76,17 +85,6 @@ Friend Class GlobalFactUI
         End If
     End Sub
 
-    Delegate Sub ReloadUI_Delegate()
-    Friend Sub ReloadUI()
-        If InvokeRequired Then
-            Dim MyDelegate As New ReloadUI_Delegate(AddressOf ReloadUI)
-            Me.Invoke(MyDelegate, New Object() {})
-        Else
-            If m_versionsTV.SelectedNode Is Nothing Then Exit Sub
-            ChangeRatesVersionDisplayRequest(m_versionsTV.SelectedNode.Value)
-        End If
-    End Sub
-
     Private Sub ManagementUI_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 
         m_dataGridView.AllowCopyPaste = True
@@ -97,8 +95,20 @@ Friend Class GlobalFactUI
 
     End Sub
 
-    Friend Sub closeControl()
+    Friend Sub MultilanguageSetup()
 
+        Me.select_version.Text = Local.GetValue("version.select")
+        Me.AddRatesVersionRCM.Text = Local.GetValue("version.add_version")
+        Me.AddFolderRCM.Text = Local.GetValue("version.add_folder")
+        Me.DeleteVersionRCM.Text = Local.GetValue("general.delete")
+        Me.RenameVersionBT.Text = Local.GetValue("general.delete")
+        Me.CopyFactDownToolStripMenuItem.Text = Local.GetValue("general.copy_down")
+        Me.ImportFromExcelBT.Text = Local.GetValue("general.import")
+        Me.CreateNewFact.Text = Local.GetValue("global_fact.new")
+        Me.VersionLabel.Text = Local.GetValue("general.version")
+        Me.RenameBT.Text = Local.GetValue("general.rename")
+        Me.DeleteBT.Text = Local.GetValue("general.delete")
+        Me.CreateNewFact2.Text = Local.GetValue("global_fact.new")
 
     End Sub
 
@@ -106,6 +116,17 @@ Friend Class GlobalFactUI
 
 
 #Region "Interface"
+
+    Delegate Sub ReloadUI_Delegate()
+    Friend Sub ReloadUI()
+        If InvokeRequired Then
+            Dim MyDelegate As New ReloadUI_Delegate(AddressOf ReloadUI)
+            Me.Invoke(MyDelegate, New Object() {})
+        Else
+            If m_versionsTV.SelectedNode Is Nothing Then Exit Sub
+            ChangeRatesVersionDisplayRequest(m_versionsTV.SelectedNode.Value)
+        End If
+    End Sub
 
     Private Sub ChangeRatesVersionDisplayRequest(ByRef p_ratesVersionId As Int32)
 

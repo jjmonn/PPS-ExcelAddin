@@ -8,7 +8,7 @@
 '
 '
 '
-' Last modified: 14/09/2015
+' Last modified: 09/11/2015
 ' Author: Julien Monnereau
 
 
@@ -89,6 +89,8 @@ Friend Class AxisView
         AddHandler DGV.CellValueChanged, AddressOf dataGridView_CellValueChanged
         AddHandler DGV.KeyDown, AddressOf DGV_KeyDown
         DesactivateUnallowed()
+        MultilanguageSetup()
+
     End Sub
 
     Private Sub DesactivateUnallowed()
@@ -99,6 +101,21 @@ Friend Class AxisView
             CreateNewToolStripMenuItem.Enabled = False
             copy_down_bt.Enabled = False
         End If
+    End Sub
+
+    Private Sub MultilanguageSetup()
+
+        Me.copy_down_bt.Text = Local.GetValue("general.copy_down")
+        Me.drop_to_excel_bt.Text = Local.GetValue("general.drop_on_excel")
+        Me.CreateAxisToolStripMenuItem.Text = Local.GetValue("general.create")
+        Me.DeleteAxisToolStripMenuItem2.Text = Local.GetValue("general.delete")
+        Me.EditToolStripMenuItem.Text = Local.GetValue("general.menu")
+        Me.CreateNewToolStripMenuItem.Text = Local.GetValue("general.create")
+        Me.DeleteAxisToolStripMenuItem.Text = Local.GetValue("general.delete")
+        Me.SendEntitiesHierarchyToExcelToolStripMenuItem.Text = Local.GetValue("general.drop_on_excel")
+
+
+
     End Sub
 
 

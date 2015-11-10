@@ -30,11 +30,11 @@ Partial Class ExcelExchangeRatesImportUI
         Me.ButtonsImageList = New System.Windows.Forms.ImageList(Me.components)
         Me.rates_edit_BT = New System.Windows.Forms.Button()
         Me.m_periodsRangeTextBox = New VIBlend.WinForms.Controls.vTextBox()
-        Me.VLabel1 = New VIBlend.WinForms.Controls.vLabel()
-        Me.VLabel2 = New VIBlend.WinForms.Controls.vLabel()
+        Me.m_periodsLabel = New VIBlend.WinForms.Controls.vLabel()
+        Me.m_ratesLabel = New VIBlend.WinForms.Controls.vLabel()
         Me.import_BT = New System.Windows.Forms.Button()
         Me.m_currencyComboBox = New VIBlend.WinForms.Controls.vComboBox()
-        Me.VLabel3 = New VIBlend.WinForms.Controls.vLabel()
+        Me.m_currencyLabel = New VIBlend.WinForms.Controls.vLabel()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -49,8 +49,8 @@ Partial Class ExcelExchangeRatesImportUI
         Me.TableLayoutPanel1.Controls.Add(Me.periods_edit_BT, 2, 0)
         Me.TableLayoutPanel1.Controls.Add(Me.rates_edit_BT, 2, 1)
         Me.TableLayoutPanel1.Controls.Add(Me.m_periodsRangeTextBox, 1, 0)
-        Me.TableLayoutPanel1.Controls.Add(Me.VLabel1, 0, 0)
-        Me.TableLayoutPanel1.Controls.Add(Me.VLabel2, 0, 1)
+        Me.TableLayoutPanel1.Controls.Add(Me.m_periodsLabel, 0, 0)
+        Me.TableLayoutPanel1.Controls.Add(Me.m_ratesLabel, 0, 1)
         Me.TableLayoutPanel1.Location = New System.Drawing.Point(12, 67)
         Me.TableLayoutPanel1.Name = "TableLayoutPanel1"
         Me.TableLayoutPanel1.RowCount = 2
@@ -132,37 +132,37 @@ Partial Class ExcelExchangeRatesImportUI
         Me.m_periodsRangeTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Left
         Me.m_periodsRangeTextBox.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
         '
-        'VLabel1
+        'm_periodsLabel
         '
-        Me.VLabel1.BackColor = System.Drawing.Color.Transparent
-        Me.VLabel1.DisplayStyle = VIBlend.WinForms.Controls.LabelItemStyle.TextOnly
-        Me.VLabel1.Ellipsis = False
-        Me.VLabel1.ImageAlignment = System.Drawing.ContentAlignment.TopLeft
-        Me.VLabel1.Location = New System.Drawing.Point(3, 3)
-        Me.VLabel1.Multiline = True
-        Me.VLabel1.Name = "VLabel1"
-        Me.VLabel1.Size = New System.Drawing.Size(80, 25)
-        Me.VLabel1.TabIndex = 11
-        Me.VLabel1.Text = Local.GetValue("upload.periods")
-        Me.VLabel1.TextAlignment = System.Drawing.ContentAlignment.TopLeft
-        Me.VLabel1.UseMnemonics = True
-        Me.VLabel1.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
+        Me.m_periodsLabel.BackColor = System.Drawing.Color.Transparent
+        Me.m_periodsLabel.DisplayStyle = VIBlend.WinForms.Controls.LabelItemStyle.TextOnly
+        Me.m_periodsLabel.Ellipsis = False
+        Me.m_periodsLabel.ImageAlignment = System.Drawing.ContentAlignment.TopLeft
+        Me.m_periodsLabel.Location = New System.Drawing.Point(3, 3)
+        Me.m_periodsLabel.Multiline = True
+        Me.m_periodsLabel.Name = "m_periodsLabel"
+        Me.m_periodsLabel.Size = New System.Drawing.Size(80, 25)
+        Me.m_periodsLabel.TabIndex = 11
+        Me.m_periodsLabel.Text = "Periods"
+        Me.m_periodsLabel.TextAlignment = System.Drawing.ContentAlignment.TopLeft
+        Me.m_periodsLabel.UseMnemonics = True
+        Me.m_periodsLabel.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
         '
-        'VLabel2
+        'm_ratesLabel
         '
-        Me.VLabel2.BackColor = System.Drawing.Color.Transparent
-        Me.VLabel2.DisplayStyle = VIBlend.WinForms.Controls.LabelItemStyle.TextOnly
-        Me.VLabel2.Ellipsis = False
-        Me.VLabel2.ImageAlignment = System.Drawing.ContentAlignment.TopLeft
-        Me.VLabel2.Location = New System.Drawing.Point(3, 35)
-        Me.VLabel2.Multiline = True
-        Me.VLabel2.Name = "VLabel2"
-        Me.VLabel2.Size = New System.Drawing.Size(80, 25)
-        Me.VLabel2.TabIndex = 12
-        Me.VLabel2.Text = Local.GetValue("upload.rates")
-        Me.VLabel2.TextAlignment = System.Drawing.ContentAlignment.TopLeft
-        Me.VLabel2.UseMnemonics = True
-        Me.VLabel2.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
+        Me.m_ratesLabel.BackColor = System.Drawing.Color.Transparent
+        Me.m_ratesLabel.DisplayStyle = VIBlend.WinForms.Controls.LabelItemStyle.TextOnly
+        Me.m_ratesLabel.Ellipsis = False
+        Me.m_ratesLabel.ImageAlignment = System.Drawing.ContentAlignment.TopLeft
+        Me.m_ratesLabel.Location = New System.Drawing.Point(3, 35)
+        Me.m_ratesLabel.Multiline = True
+        Me.m_ratesLabel.Name = "m_ratesLabel"
+        Me.m_ratesLabel.Size = New System.Drawing.Size(80, 25)
+        Me.m_ratesLabel.TabIndex = 12
+        Me.m_ratesLabel.Text = "Rates"
+        Me.m_ratesLabel.TextAlignment = System.Drawing.ContentAlignment.TopLeft
+        Me.m_ratesLabel.UseMnemonics = True
+        Me.m_ratesLabel.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
         '
         'import_BT
         '
@@ -173,7 +173,7 @@ Partial Class ExcelExchangeRatesImportUI
         Me.import_BT.Name = "import_BT"
         Me.import_BT.Size = New System.Drawing.Size(81, 28)
         Me.import_BT.TabIndex = 6
-        Me.import_BT.Text = Local.GetValue("upload.upload")
+        Me.import_BT.Text = "Upload"
         Me.import_BT.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         Me.import_BT.UseVisualStyleBackColor = True
         '
@@ -196,34 +196,34 @@ Partial Class ExcelExchangeRatesImportUI
         Me.m_currencyComboBox.VIBlendScrollBarsTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
         Me.m_currencyComboBox.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
         '
-        'VLabel3
+        'm_currencyLabel
         '
-        Me.VLabel3.BackColor = System.Drawing.Color.Transparent
-        Me.VLabel3.DisplayStyle = VIBlend.WinForms.Controls.LabelItemStyle.TextOnly
-        Me.VLabel3.Ellipsis = False
-        Me.VLabel3.ImageAlignment = System.Drawing.ContentAlignment.TopLeft
-        Me.VLabel3.Location = New System.Drawing.Point(76, 28)
-        Me.VLabel3.Multiline = True
-        Me.VLabel3.Name = "VLabel3"
-        Me.VLabel3.Size = New System.Drawing.Size(53, 25)
-        Me.VLabel3.TabIndex = 12
-        Me.VLabel3.Text = "Currency"
-        Me.VLabel3.TextAlignment = System.Drawing.ContentAlignment.TopLeft
-        Me.VLabel3.UseMnemonics = True
-        Me.VLabel3.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
+        Me.m_currencyLabel.BackColor = System.Drawing.Color.Transparent
+        Me.m_currencyLabel.DisplayStyle = VIBlend.WinForms.Controls.LabelItemStyle.TextOnly
+        Me.m_currencyLabel.Ellipsis = False
+        Me.m_currencyLabel.ImageAlignment = System.Drawing.ContentAlignment.TopLeft
+        Me.m_currencyLabel.Location = New System.Drawing.Point(76, 28)
+        Me.m_currencyLabel.Multiline = True
+        Me.m_currencyLabel.Name = "m_currencyLabel"
+        Me.m_currencyLabel.Size = New System.Drawing.Size(53, 25)
+        Me.m_currencyLabel.TabIndex = 12
+        Me.m_currencyLabel.Text = "Currency"
+        Me.m_currencyLabel.TextAlignment = System.Drawing.ContentAlignment.TopLeft
+        Me.m_currencyLabel.UseMnemonics = True
+        Me.m_currencyLabel.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
         '
         'ExcelExchangeRatesImportUI
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(423, 190)
-        Me.Controls.Add(Me.VLabel3)
+        Me.Controls.Add(Me.m_currencyLabel)
         Me.Controls.Add(Me.m_currencyComboBox)
         Me.Controls.Add(Me.import_BT)
         Me.Controls.Add(Me.TableLayoutPanel1)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Name = "ExcelExchangeRatesImportUI"
-        Me.Text = Local.GetValue("upload.exchange_rates_upload")
+        Me.Text = "Exchange rates upload"
         Me.TableLayoutPanel1.ResumeLayout(False)
         Me.ResumeLayout(False)
 
@@ -235,8 +235,8 @@ Partial Class ExcelExchangeRatesImportUI
     Friend WithEvents import_BT As System.Windows.Forms.Button
     Friend WithEvents m_ratesRangeTextBox As VIBlend.WinForms.Controls.vTextBox
     Friend WithEvents m_periodsRangeTextBox As VIBlend.WinForms.Controls.vTextBox
-    Friend WithEvents VLabel1 As VIBlend.WinForms.Controls.vLabel
-    Friend WithEvents VLabel2 As VIBlend.WinForms.Controls.vLabel
+    Friend WithEvents m_periodsLabel As VIBlend.WinForms.Controls.vLabel
+    Friend WithEvents m_ratesLabel As VIBlend.WinForms.Controls.vLabel
     Friend WithEvents m_currencyComboBox As VIBlend.WinForms.Controls.vComboBox
-    Friend WithEvents VLabel3 As VIBlend.WinForms.Controls.vLabel
+    Friend WithEvents m_currencyLabel As VIBlend.WinForms.Controls.vLabel
 End Class

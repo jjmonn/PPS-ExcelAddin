@@ -15,7 +15,7 @@
 ' Known bugs:
 '       
 '
-' Last modified: 25/08/2015
+' Last modified: 09/11/2015
 ' Author: Julien Monnereau
 
 
@@ -105,8 +105,29 @@ Friend Class VersionsControl
     End Sub
 
     Friend Sub closeControl()
-
         Controller.SendNewPositionsToModel()
+    End Sub
+
+    Private Sub MultilanguageSetup()
+
+        Me.new_version_bt.Text = Local.GetValue("versions.add_version")
+        Me.new_folder_bt.Text = Local.GetValue("versions.add_folder")
+        Me.rename_bt.Text = Local.GetValue("general.rename")
+        Me.delete_bt.Text = Local.GetValue("general.delete")
+        Me.m_globalFactsVersionLabel.Text = Local.GetValue("facts_versions.global_facts_version")
+        Me.m_exchangeRatesVersionLabel.Text = Local.GetValue("facts_versions.exchange_rates_version")
+        Me.m_numberOfYearsLabel.Text = Local.GetValue("facts_versions.nb_years")
+        Me.m_startingPeriodLabel.Text = Local.GetValue("facts_versions.starting_period")
+        Me.m_periodConfigLabel.Text = Local.GetValue("facts_versions.period_config")
+        Me.m_nameLabel.Text = Local.GetValue("facts_versions.version_name")
+        Me.m_lockedLabel.Text = Local.GetValue("facts_versions.version_locked")
+        Me.m_lockedDateLabel.Text = Local.GetValue("facts_versions.locked_date")
+        Me.m_creationDateLabel.Text = Local.GetValue("facts_versions.creation_date")
+        Me.VersionsToolStripMenuItem.Text = Local.GetValue("general.versions")
+        Me.NewVersionMenuBT.Text = Local.GetValue("versions.add_version")
+        Me.NewFolderMenuBT.Text = Local.GetValue("versions.add_folder")
+        Me.DeleteVersionMenuBT.Text = Local.GetValue("general.delete")
+        Me.RenameMenuBT.Text = Local.GetValue("general.rename")
 
     End Sub
 

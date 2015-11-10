@@ -3,7 +3,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 14/10/2015
+' Last modified: 09/11/2015
 
 
 Imports System.Windows.Forms
@@ -56,8 +56,25 @@ Friend Class AxisFiltersView
             EditStructureToolStripMenuItem.Enabled = False
         End If
 
+        MultilanguageSetup()
+
         AddHandler m_filtersFiltersValuesTV.KeyDown, AddressOf FiltersFiltersValuesTV_KeyDown
         AddHandler m_filtersFiltersValuesTV.AfterSelect, AddressOf TV_AfterSelect
+
+    End Sub
+
+    Private Sub MultilanguageSetup()
+
+        Me.CategoriesToolStripMenuItem.Text = Local.GetValue("filters.categories")
+        Me.AddValueMenuBT.Text = Local.GetValue("filters.new_value")
+        Me.DeleteMenuBT.Text = Local.GetValue("general.delete")
+        Me.RenameMenuBT.Text = Local.GetValue("general.rename")
+        Me.EditStructureToolStripMenuItem.Text = Local.GetValue("filters.edit_structure")
+        Me.AddValueRCM.Text = Local.GetValue("filters.new_value")
+        Me.DeleteRCM.Text = Local.GetValue("general.delete")
+        Me.RenameRCM.Text = Local.GetValue("general.rename")
+        Me.ExpandAllBT.Text = Local.GetValue("general.expand_all")
+        Me.CollapseAllBT.Text = Local.GetValue("general.collapse_all")
 
     End Sub
 

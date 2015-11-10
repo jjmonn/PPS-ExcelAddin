@@ -4,7 +4,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 24/08/2015
+' Last modified: 09/11/2015
 
 
 Imports System.Windows.Forms
@@ -32,6 +32,18 @@ Friend Class NewRatesVersionUI
         ' Add any initialization after the InitializeComponent() call.
         m_controller = input_controller
         StartPeriodNUD.Value = Year(Now)
+        MultilanguageSetup()
+
+    End Sub
+
+    Private Sub MultilanguageSetup()
+
+        Me.m_nameLabel.Text = Local.GetValue("general.name")
+        Me.m_startingYearLabel.Text = "facts_versions.starting_period"
+        Me.m_numberOfYearsLabel.Text = "facts_versions.nb_years"
+        Me.CancelBT.Text = Local.GetValue("general.cancel")
+        Me.ValidateBT.Text = Local.GetValue("general.create")
+        Me.Text = Local.GetValue("new_rates_version")
 
     End Sub
 

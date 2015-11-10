@@ -24,9 +24,9 @@ Partial Class NewRatesVersionUI
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(NewRatesVersionUI))
-        Me.Label1 = New System.Windows.Forms.Label()
-        Me.Label2 = New System.Windows.Forms.Label()
-        Me.Label3 = New System.Windows.Forms.Label()
+        Me.m_nameLabel = New System.Windows.Forms.Label()
+        Me.m_startingYearLabel = New System.Windows.Forms.Label()
+        Me.m_numberOfYearsLabel = New System.Windows.Forms.Label()
         Me.NameTB = New System.Windows.Forms.TextBox()
         Me.StartPeriodNUD = New System.Windows.Forms.NumericUpDown()
         Me.NBPeriodsNUD = New System.Windows.Forms.NumericUpDown()
@@ -37,32 +37,32 @@ Partial Class NewRatesVersionUI
         CType(Me.NBPeriodsNUD, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
-        'Label1
+        'm_nameLabel
         '
-        Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(46, 49)
-        Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(41, 15)
-        Me.Label1.TabIndex = 0
-        Me.Label1.Text = "Name"
+        Me.m_nameLabel.AutoSize = True
+        Me.m_nameLabel.Location = New System.Drawing.Point(46, 49)
+        Me.m_nameLabel.Name = "m_nameLabel"
+        Me.m_nameLabel.Size = New System.Drawing.Size(41, 15)
+        Me.m_nameLabel.TabIndex = 0
+        Me.m_nameLabel.Text = "Name"
         '
-        'Label2
+        'm_startingYearLabel
         '
-        Me.Label2.AutoSize = True
-        Me.Label2.Location = New System.Drawing.Point(46, 97)
-        Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(77, 15)
-        Me.Label2.TabIndex = 1
-        Me.Label2.Text = "Starting Year"
+        Me.m_startingYearLabel.AutoSize = True
+        Me.m_startingYearLabel.Location = New System.Drawing.Point(46, 97)
+        Me.m_startingYearLabel.Name = "m_startingYearLabel"
+        Me.m_startingYearLabel.Size = New System.Drawing.Size(77, 15)
+        Me.m_startingYearLabel.TabIndex = 1
+        Me.m_startingYearLabel.Text = "Starting Year"
         '
-        'Label3
+        'm_numberOfYearsLabel
         '
-        Me.Label3.AutoSize = True
-        Me.Label3.Location = New System.Drawing.Point(46, 139)
-        Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(99, 15)
-        Me.Label3.TabIndex = 2
-        Me.Label3.Text = "Number of Years"
+        Me.m_numberOfYearsLabel.AutoSize = True
+        Me.m_numberOfYearsLabel.Location = New System.Drawing.Point(46, 139)
+        Me.m_numberOfYearsLabel.Name = "m_numberOfYearsLabel"
+        Me.m_numberOfYearsLabel.Size = New System.Drawing.Size(99, 15)
+        Me.m_numberOfYearsLabel.TabIndex = 2
+        Me.m_numberOfYearsLabel.Text = "Number of Years"
         '
         'NameTB
         '
@@ -133,9 +133,9 @@ Partial Class NewRatesVersionUI
         Me.Controls.Add(Me.NBPeriodsNUD)
         Me.Controls.Add(Me.StartPeriodNUD)
         Me.Controls.Add(Me.NameTB)
-        Me.Controls.Add(Me.Label3)
-        Me.Controls.Add(Me.Label2)
-        Me.Controls.Add(Me.Label1)
+        Me.Controls.Add(Me.m_numberOfYearsLabel)
+        Me.Controls.Add(Me.m_startingYearLabel)
+        Me.Controls.Add(Me.m_nameLabel)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Name = "NewRatesVersionUI"
         Me.Text = "New Exchange Rates Version"
@@ -145,9 +145,9 @@ Partial Class NewRatesVersionUI
         Me.PerformLayout()
 
     End Sub
-    Friend WithEvents Label1 As System.Windows.Forms.Label
-    Friend WithEvents Label2 As System.Windows.Forms.Label
-    Friend WithEvents Label3 As System.Windows.Forms.Label
+    Friend WithEvents m_nameLabel As System.Windows.Forms.Label
+    Friend WithEvents m_startingYearLabel As System.Windows.Forms.Label
+    Friend WithEvents m_numberOfYearsLabel As System.Windows.Forms.Label
     Friend WithEvents NameTB As System.Windows.Forms.TextBox
     Friend WithEvents StartPeriodNUD As System.Windows.Forms.NumericUpDown
     Friend WithEvents NBPeriodsNUD As System.Windows.Forms.NumericUpDown

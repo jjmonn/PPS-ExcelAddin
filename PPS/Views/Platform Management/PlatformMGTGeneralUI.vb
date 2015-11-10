@@ -5,7 +5,7 @@
 
 
 'Author: Julien Monnereau
-'Last modified: 18/09/2015
+'Last modified: 09/11/2015
 
 
 Imports System.ComponentModel
@@ -28,8 +28,41 @@ Friend Class PlatformMGTGeneralUI
         '  This call is required by the designer.
         InitializeComponent()
         If Not GlobalVariables.Users.CurrentUserIsAdmin() Then GroupsBT.Enabled = False
+        MultilanguageSetup()
 
         ' Add any initialization after the InitializeComponent() call.
+
+    End Sub
+
+    Private Sub MultilanguageSetup()
+
+        Me.AccountsBT.Text = Local.GetValue("GeneralEditionUI.accounts")
+        Me.AccountsBT.ToolTipText = Local.GetValue("GeneralEditionUI.tool_tip_account")
+        Me.EntitiesBT.Text = Local.GetValue("GeneralEditionUI.entities")
+        Me.EntitiesBT.ToolTipText = Local.GetValue("GeneralEditionUI.tool_tip_entities")
+        Me.CategoriesBT.Text = Local.GetValue("GeneralEditionUI.categories")
+        Me.CategoriesBT.ToolTipText = Local.GetValue("GeneralEditionUI.tool_tip_categories")
+        Me.EntitiesFiltersBT.Text = Local.GetValue("general.entities")
+        Me.ClientsFiltersBT.Text = Local.GetValue("general.clients")
+        Me.ProductsFiltersBT.Text = Local.GetValue("general.products")
+        Me.AdjustmentsFiltersBT.Text = Local.GetValue("general.adjustments")
+        Me.ClientsBT.Text = Local.GetValue("general.clients")
+        Me.ClientsBT.ToolTipText = Local.GetValue("GeneralEditionUI.tool_tip_clients")
+        Me.ProductsBT.ToolTipText = Local.GetValue("GeneralEditionUI.tool_tip_products")
+        Me.AdjustmentsBT.Text = Local.GetValue("general.adjustments")
+        Me.AdjustmentsBT.ToolTipText = Local.GetValue("GeneralEditionUI.tool_tip_adjustments")
+        Me.VersionsBT.Text = Local.GetValue("general.versions")
+        Me.VersionsBT.ToolTipText = Local.GetValue("GeneralEditionUI.tool_tip_versions")
+        Me.CurrenciesBT.Text = Local.GetValue("general.currencies")
+        Me.CurrenciesBT.ToolTipText = Local.GetValue("GeneralEditionUI.tool_tip_currencies")
+        Me.GlobalFact_BT.Text = Local.GetValue("general.economic_indicators")
+        Me.GlobalFact_BT.ToolTipText = Local.GetValue("GeneralEditionUI.tool_tip_economic_indicators")
+        Me.ExchangeRatesButton.Text = Local.GetValue("GeneralEditionUI.exchange_rates")
+        Me.ExchangeRatesButton.ToolTipText = Local.GetValue("GeneralEditionUI.tool_tip_exchange_rates")
+        Me.GroupsBT.Text = Local.GetValue("GeneralEditionUI.users_groups")
+        Me.GroupsBT.ToolTipText = Local.GetValue("GeneralEditionUI.tool_tip_users_groups")
+        Me.Text = Local.GetValue("GeneralEditionUI.platform_config")
+
 
     End Sub
 
@@ -54,8 +87,6 @@ Friend Class PlatformMGTGeneralUI
         Me.WindowState = Windows.Forms.FormWindowState.Maximized
 
     End Sub
-
-
 
 #Region "Main Menu Call Backs"
 

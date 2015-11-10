@@ -7,7 +7,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 24/10/2015
+' Last modified: 09/11/2015
 
 
 Imports Microsoft.Office.Interop
@@ -59,6 +59,17 @@ Friend Class ExcelExchangeRatesImportUI
                 End If
             End If
         Next
+        MultilanguageSetup()
+
+    End Sub
+
+    Private Sub MultilanguageSetup()
+
+        Me.m_periodsLabel.Text = Local.GetValue("upload.periods")
+        Me.m_ratesLabel.Text = Local.GetValue("upload.rates")
+        Me.import_BT.Text = Local.GetValue("upload.upload")
+        Me.m_currencyLabel.Text = Local.GetValue("general.currency")
+        Me.Text = Local.GetValue("upload.exchange_rates_upload")
 
     End Sub
 

@@ -89,7 +89,7 @@ Friend Class ExchangeRatesController
     Public Sub close()
 
         If m_isValid = True Then
-            m_view.closeControl()
+            ' m_view.closeControl()
             m_view.Dispose()
             m_view = Nothing
         End If

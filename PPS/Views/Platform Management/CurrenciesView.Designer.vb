@@ -39,7 +39,7 @@ Partial Class CurrenciesView
         'SetMainCurrencyCallBack
         '
         Me.SetMainCurrencyCallBack.Index = 0
-        Me.SetMainCurrencyCallBack.Text = Local.GetValue("currencies.set_main_currency")
+        Me.SetMainCurrencyCallBack.Text = "Set_main_currency"
         '
         'ValidateButton
         '
@@ -54,7 +54,7 @@ Partial Class CurrenciesView
         Me.ValidateButton.RoundedCornersMask = CType(15, Byte)
         Me.ValidateButton.Size = New System.Drawing.Size(76, 30)
         Me.ValidateButton.TabIndex = 1
-        Me.ValidateButton.Text = Local.GetValue("general.save")
+        Me.ValidateButton.Text = "Save"
         Me.ValidateButton.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         Me.ValidateButton.UseVisualStyleBackColor = False
         Me.ValidateButton.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE

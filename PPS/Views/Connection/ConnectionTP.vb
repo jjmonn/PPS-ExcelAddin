@@ -17,13 +17,13 @@ Public Class ConnectionTP
 #Region "Instance Variables"
 
     ' Objects
-    Private Addin As AddinModule
-    Private CP As ProgressControls.ProgressIndicator
-    Private isConnecting As Boolean
-    Private id As String
-    Private pwd As String
-    Private connectionFunction As New ConnectionsFunctions
-    Private connectionFailed As Boolean
+    Private m_addin As AddinModule
+    ' Private m_circularProgress As New ProgressControls.ProgressIndicator
+    Private m_isConnecting As Boolean
+    Private m_id As String
+    Private m_password As String
+    Private m_connectionFunction As New ConnectionsFunctions
+    Private m_connectionFailed As Boolean
 
 #End Region
 
@@ -34,37 +34,24 @@ Public Class ConnectionTP
 
         MyBase.New()
         InitializeComponent()
-        CancelBT.Visible = False
-        CP = New ProgressControls.ProgressIndicator
-        CP.CircleColor = Drawing.Color.Blue
-        CP.NumberOfCircles = 12
-        CP.NumberOfVisibleCircles = 8
-        CP.AnimationSpeed = 75
-        CP.CircleSize = 0.7
-        CPPanel.Controls.Add(CP)
-        CP.Dock = Windows.Forms.DockStyle.Fill
-        CP.Width = 79
-        CP.Height = 79
-        CP.Visible = False
-
+        m_cancelButton.Visible = False
         SetupMultilangue()
 
     End Sub
 
-  Public Sub Init(ByRef addin As AddinModule)
+    Public Sub Init(ByRef addin As AddinModule)
 
-    Me.Addin = addin
+        Me.m_addin = addin
 
-  End Sub
+    End Sub
 
     Private Sub SetupMultilangue()
 
         Me.m_userLabel.Text = Local.GetValue("connection.user_id")
         Me.m_passwordLabel.Text = Local.GetValue("connection.password")
         Me.ConnectionBT.Text = Local.GetValue("connection.connection")
-        Me.CancelBT.Text = Local.GetValue("general.cancel")
+        Me.m_cancelButton.Text = Local.GetValue("general.cancel")
         Me.Text = Local.GetValue("connection.connection")
-
 
     End Sub
 
@@ -73,33 +60,33 @@ Public Class ConnectionTP
 
 #Region "Call Backs"
 
-  Private Sub ConnectionBT_Click(sender As Object, e As EventArgs) Handles ConnectionBT.Click, ConnectionBT.KeyDown
+    Private Sub ConnectionBT_Click(sender As Object, e As EventArgs) Handles ConnectionBT.Click, ConnectionBT.KeyDown
 
-    BackgroundWorker1 = New ComponentModel.BackgroundWorker
-    AddHandler BackgroundWorker1.DoWork, AddressOf BackgroundWorker1_DoWork
-    AddHandler BackgroundWorker1.RunWorkerCompleted, AddressOf AfterConnectionAttemp_ThreadSafe
-    BackgroundWorker1.WorkerSupportsCancellation = True
+        BackgroundWorker1 = New ComponentModel.BackgroundWorker
+        AddHandler BackgroundWorker1.DoWork, AddressOf BackgroundWorker1_DoWork
+        AddHandler BackgroundWorker1.RunWorkerCompleted, AddressOf AfterConnectionAttemp_ThreadSafe
+        BackgroundWorker1.WorkerSupportsCancellation = True
 
-    If isConnecting = False Then
-      CP.Start()
-      CP.Show()
-      ConnectionBT.Visible = False
-      CP.Visible = True
-      id = Me.userNameTextBox.Text
-      pwd = Me.passwordTextBox.Text
-      CancelBT.Visible = True
-      BackgroundWorker1.RunWorkerAsync()
-    End If
+        If m_isConnecting = False Then
+            ConnectionBT.Visible = False
+            m_id = Me.userNameTextBox.Text
+            m_password = Me.passwordTextBox.Text
 
+            m_circularProgress2.Start()
+            m_cancelButton.Visible = True
+            m_circularProgress2.Visible = True
+            m_circularProgress2.Enabled = True
+            BackgroundWorker1.RunWorkerAsync()
+        End If
 
-  End Sub
+    End Sub
 
-  Private Sub IDTB_TextChanged(sender As Object, e As EventArgs) Handles userNameTextBox.TextChanged
+    Private Sub IDTB_TextChanged(sender As Object, e As EventArgs) Handles userNameTextBox.TextChanged
 
-    My.Settings.user = userNameTextBox.Text
-    My.Settings.Save()
+        My.Settings.user = userNameTextBox.Text
+        My.Settings.Save()
 
-  End Sub
+    End Sub
 
 
 #End Region
@@ -108,45 +95,38 @@ Public Class ConnectionTP
 #Region "Background Worker 1"
 
     Private Sub BackgroundWorker1_DoWork(sender As Object, e As ComponentModel.DoWorkEventArgs)
-
-        isConnecting = True
-        AddHandler connectionFunction.ConnectionFailedEvent, AddressOf ConnectionFailedMethod
-        ConnectionsFunctions.Connect(connectionFunction, connectionFailed, id, pwd)
-
+        m_isConnecting = True
+        AddHandler m_connectionFunction.ConnectionFailedEvent, AddressOf ConnectionFailedMethod
+        ConnectionsFunctions.Connect(m_connectionFunction, m_connectionFailed, m_id, m_password)
     End Sub
 
-  Private Sub ConnectionFailedMethod() Handles CancelBT.Click
+    Private Sub ConnectionFailedMethod() Handles m_cancelButton.Click
+        m_connectionFailed = True
+        BackgroundWorker1.CancelAsync()
+        AfterConnectionAttemp_ThreadSafe()
+    End Sub
 
-        connectionFailed = True
-    BackgroundWorker1.CancelAsync()
-    AfterConnectionAttemp_ThreadSafe()
+    Private Sub BackgroundWorker1_RunWorkerCompleted(sender As Object, e As ComponentModel.RunWorkerCompletedEventArgs)
+        AfterConnectionAttemp_ThreadSafe()
+    End Sub
 
-  End Sub
-
-  Private Sub BackgroundWorker1_RunWorkerCompleted(sender As Object, e As ComponentModel.RunWorkerCompletedEventArgs)
-
-    AfterConnectionAttemp_ThreadSafe()
-
-  End Sub
-
-  Delegate Sub AfterConnectionAttemp_Delegate()
-
+    Delegate Sub AfterConnectionAttemp_Delegate()
     Private Sub AfterConnectionAttemp_ThreadSafe()
 
         If InvokeRequired Then
             Dim MyDelegate As New AfterConnectionAttemp_Delegate(AddressOf AfterConnectionAttemp_ThreadSafe)
             Me.Invoke(MyDelegate, New Object() {})
         Else
-            isConnecting = False
-            CancelBT.Visible = False
-            CP.Visible = False
+            m_isConnecting = False
+            m_circularProgress2.Stop()
+            m_cancelButton.Visible = False
+            m_circularProgress2.Visible = m_circularProgress2.Enabled = False
             ConnectionBT.Visible = True
-            id = ""
-            pwd = ""
-            CP.Stop()
-            AddinModule.DisplayConnectionStatus(connectionFailed = False)
+            m_id = ""
+            m_password = ""
+            AddinModule.DisplayConnectionStatus(m_connectionFailed = False)
             BackgroundWorker1 = Nothing
-            passwordTextBox.Clear()
+            passwordTextBox.Text = ""
             Me.Hide()
         End If
 
@@ -157,31 +137,25 @@ Public Class ConnectionTP
 
 #Region "Form show and close events"
 
-  Private Sub ConnectionTP_Shown(sender As Object, e As EventArgs) Handles MyBase.Shown
+    Private Sub ConnectionTP_Shown(sender As Object, e As EventArgs) Handles MyBase.Shown
+        userNameTextBox.Text = My.Settings.user
+        m_circularProgress2.Visible = False
+        m_circularProgress2.Enabled = False
+    End Sub
 
-    userNameTextBox.Text = My.Settings.user
+    Private Sub ConnectionPane_ADXBeforeTaskPaneShow(sender As Object, e As ADXBeforeTaskPaneShowEventArgs) Handles MyBase.ADXBeforeTaskPaneShow
+        Me.Visible = GlobalVariables.ConnectionPaneVisible
+    End Sub
 
+    Private Sub ConnectionPane_FormClosing(sender As Object, e As Windows.Forms.FormClosingEventArgs) Handles MyBase.FormClosing
 
-  End Sub
+        If Not m_circularProgress2 Is Nothing Then m_circularProgress2.Stop()
+        passwordTextBox.Text = ""
+        e.Cancel = True
 
-  Private Sub ConnectionPane_ADXBeforeTaskPaneShow(sender As Object, e As ADXBeforeTaskPaneShowEventArgs) Handles MyBase.ADXBeforeTaskPaneShow
-
-    Me.Visible = GlobalVariables.ConnectionPaneVisible
-
-  End Sub
-
-  Private Sub ConnectionPane_FormClosing(sender As Object, e As Windows.Forms.FormClosingEventArgs) Handles MyBase.FormClosing
-
-    If Not CP Is Nothing Then CP.Stop()
-    passwordTextBox.Clear()
-    CPPanel.Controls.Clear()
-    e.Cancel = True
-
-  End Sub
+    End Sub
 
 #End Region
-
-
 
 
 End Class

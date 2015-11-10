@@ -84,6 +84,16 @@ Public Class VTreeViewUtil
 
     End Function
 
+    Public Shared Function GetNodesIdsUint(ByRef node As vTreeNode) As List(Of UInt32)
+
+        Dim tmpList As New List(Of UInt32)
+        For Each subNode As vTreeNode In GetAllChildrenNodesList(node)
+            If tmpList.Contains(CInt(subNode.Value)) = False Then tmpList.Add(CUInt(subNode.Value))
+        Next
+        Return tmpList
+
+    End Function
+
     Public Shared Function GetAllChildrenNodesList(ByRef node As vTreeNode) As List(Of vTreeNode)
 
         Dim tmpList As New List(Of vTreeNode)

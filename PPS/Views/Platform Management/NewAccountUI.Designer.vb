@@ -30,18 +30,18 @@ Partial Class NewAccountUI
         Me.ButtonIcons = New System.Windows.Forms.ImageList(Me.components)
         Me.accountsIL = New System.Windows.Forms.ImageList(Me.components)
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
-        Me.Label4 = New System.Windows.Forms.Label()
-        Me.Label2 = New System.Windows.Forms.Label()
-        Me.Label6 = New System.Windows.Forms.Label()
-        Me.Label3 = New System.Windows.Forms.Label()
+        Me.m_accountNameLabel = New System.Windows.Forms.Label()
+        Me.m_accountParentLabel = New System.Windows.Forms.Label()
+        Me.m_formulaTypeLabel = New System.Windows.Forms.Label()
+        Me.m_formatLabel = New System.Windows.Forms.Label()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
         Me.recompute_RB = New System.Windows.Forms.RadioButton()
         Me.aggregation_RB = New System.Windows.Forms.RadioButton()
-        Me.Label7 = New System.Windows.Forms.Label()
+        Me.m_consolidationOptionLabel = New System.Windows.Forms.Label()
         Me.GroupBox2 = New System.Windows.Forms.GroupBox()
         Me.bs_item_RB = New System.Windows.Forms.RadioButton()
         Me.flux_RB = New System.Windows.Forms.RadioButton()
-        Me.Label8 = New System.Windows.Forms.Label()
+        Me.m_conversionOptionLabel = New System.Windows.Forms.Label()
         Me.ParentTVPanel = New System.Windows.Forms.Panel()
         Me.NameTextBox = New VIBlend.WinForms.Controls.vTextBox()
         Me.FormulaComboBox = New VIBlend.WinForms.Controls.vComboBox()
@@ -60,7 +60,7 @@ Partial Class NewAccountUI
         Me.CancelBT.Name = "CancelBT"
         Me.CancelBT.Size = New System.Drawing.Size(92, 25)
         Me.CancelBT.TabIndex = 10
-        Me.CancelBT.Text = Local.GetValue("general.cancel")
+        Me.CancelBT.Text = "Cancel"
         Me.CancelBT.UseVisualStyleBackColor = True
         '
         'ButtonsIL
@@ -81,7 +81,7 @@ Partial Class NewAccountUI
         Me.CreateAccountBT.Name = "CreateAccountBT"
         Me.CreateAccountBT.Size = New System.Drawing.Size(92, 25)
         Me.CreateAccountBT.TabIndex = 9
-        Me.CreateAccountBT.Text = Local.GetValue("general.create")
+        Me.CreateAccountBT.Text = "Create"
         Me.CreateAccountBT.UseVisualStyleBackColor = True
         '
         'ButtonIcons
@@ -114,14 +114,14 @@ Partial Class NewAccountUI
         Me.TableLayoutPanel1.ColumnCount = 2
         Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 34.75513!))
         Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 65.24487!))
-        Me.TableLayoutPanel1.Controls.Add(Me.Label4, 0, 1)
-        Me.TableLayoutPanel1.Controls.Add(Me.Label2, 0, 0)
-        Me.TableLayoutPanel1.Controls.Add(Me.Label6, 0, 2)
-        Me.TableLayoutPanel1.Controls.Add(Me.Label3, 0, 3)
+        Me.TableLayoutPanel1.Controls.Add(Me.m_accountNameLabel, 0, 1)
+        Me.TableLayoutPanel1.Controls.Add(Me.m_accountParentLabel, 0, 0)
+        Me.TableLayoutPanel1.Controls.Add(Me.m_formulaTypeLabel, 0, 2)
+        Me.TableLayoutPanel1.Controls.Add(Me.m_formatLabel, 0, 3)
         Me.TableLayoutPanel1.Controls.Add(Me.GroupBox1, 1, 4)
-        Me.TableLayoutPanel1.Controls.Add(Me.Label7, 0, 4)
+        Me.TableLayoutPanel1.Controls.Add(Me.m_consolidationOptionLabel, 0, 4)
         Me.TableLayoutPanel1.Controls.Add(Me.GroupBox2, 1, 5)
-        Me.TableLayoutPanel1.Controls.Add(Me.Label8, 0, 5)
+        Me.TableLayoutPanel1.Controls.Add(Me.m_conversionOptionLabel, 0, 5)
         Me.TableLayoutPanel1.Controls.Add(Me.ParentTVPanel, 1, 0)
         Me.TableLayoutPanel1.Controls.Add(Me.NameTextBox, 1, 1)
         Me.TableLayoutPanel1.Controls.Add(Me.FormulaComboBox, 1, 2)
@@ -138,41 +138,41 @@ Partial Class NewAccountUI
         Me.TableLayoutPanel1.Size = New System.Drawing.Size(633, 209)
         Me.TableLayoutPanel1.TabIndex = 36
         '
-        'Label4
+        'm_accountNameLabel
         '
-        Me.Label4.AutoSize = True
-        Me.Label4.Location = New System.Drawing.Point(3, 32)
-        Me.Label4.Name = "Label4"
-        Me.Label4.Size = New System.Drawing.Size(85, 13)
-        Me.Label4.TabIndex = 31
-        Me.Label4.Text = Local.GetValue("accounts_edition.account_name")
+        Me.m_accountNameLabel.AutoSize = True
+        Me.m_accountNameLabel.Location = New System.Drawing.Point(3, 32)
+        Me.m_accountNameLabel.Name = "m_accountNameLabel"
+        Me.m_accountNameLabel.Size = New System.Drawing.Size(85, 13)
+        Me.m_accountNameLabel.TabIndex = 31
+        Me.m_accountNameLabel.Text = "Account name"
         '
-        'Label2
+        'm_accountParentLabel
         '
-        Me.Label2.AutoSize = True
-        Me.Label2.Location = New System.Drawing.Point(3, 0)
-        Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(81, 13)
-        Me.Label2.TabIndex = 30
-        Me.Label2.Text = Local.GetValue("accounts_edition.account_parent")
+        Me.m_accountParentLabel.AutoSize = True
+        Me.m_accountParentLabel.Location = New System.Drawing.Point(3, 0)
+        Me.m_accountParentLabel.Name = "m_accountParentLabel"
+        Me.m_accountParentLabel.Size = New System.Drawing.Size(81, 13)
+        Me.m_accountParentLabel.TabIndex = 30
+        Me.m_accountParentLabel.Text = "Account parent"
         '
-        'Label6
+        'm_formulaTypeLabel
         '
-        Me.Label6.AutoSize = True
-        Me.Label6.Location = New System.Drawing.Point(3, 64)
-        Me.Label6.Name = "Label6"
-        Me.Label6.Size = New System.Drawing.Size(76, 13)
-        Me.Label6.TabIndex = 32
-        Me.Label6.Text = Local.GetValue("accounts_edition.formula_type")
+        Me.m_formulaTypeLabel.AutoSize = True
+        Me.m_formulaTypeLabel.Location = New System.Drawing.Point(3, 64)
+        Me.m_formulaTypeLabel.Name = "m_formulaTypeLabel"
+        Me.m_formulaTypeLabel.Size = New System.Drawing.Size(76, 13)
+        Me.m_formulaTypeLabel.TabIndex = 32
+        Me.m_formulaTypeLabel.Text = "Formula type"
         '
-        'Label3
+        'm_formatLabel
         '
-        Me.Label3.AutoSize = True
-        Me.Label3.Location = New System.Drawing.Point(3, 96)
-        Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(89, 13)
-        Me.Label3.TabIndex = 33
-        Me.Label3.Text = Local.GetValue("accounts_edition.account_format")
+        Me.m_formatLabel.AutoSize = True
+        Me.m_formatLabel.Location = New System.Drawing.Point(3, 96)
+        Me.m_formatLabel.Name = "m_formatLabel"
+        Me.m_formatLabel.Size = New System.Drawing.Size(89, 13)
+        Me.m_formatLabel.TabIndex = 33
+        Me.m_formatLabel.Text = "Account format"
         '
         'GroupBox1
         '
@@ -192,7 +192,7 @@ Partial Class NewAccountUI
         Me.recompute_RB.Name = "recompute_RB"
         Me.recompute_RB.Size = New System.Drawing.Size(97, 17)
         Me.recompute_RB.TabIndex = 5
-        Me.recompute_RB.Text = Local.GetValue("accounts_edition.recomputation")
+        Me.recompute_RB.Text = "Recomputation"
         Me.recompute_RB.UseVisualStyleBackColor = True
         '
         'aggregation_RB
@@ -204,17 +204,17 @@ Partial Class NewAccountUI
         Me.aggregation_RB.Size = New System.Drawing.Size(82, 17)
         Me.aggregation_RB.TabIndex = 4
         Me.aggregation_RB.TabStop = True
-        Me.aggregation_RB.Text = Local.GetValue("accounts_edition.aggregation")
+        Me.aggregation_RB.Text = "Aggregation"
         Me.aggregation_RB.UseVisualStyleBackColor = True
         '
-        'Label7
+        'm_consolidationOptionLabel
         '
-        Me.Label7.AutoSize = True
-        Me.Label7.Location = New System.Drawing.Point(3, 128)
-        Me.Label7.Name = "Label7"
-        Me.Label7.Size = New System.Drawing.Size(104, 13)
-        Me.Label7.TabIndex = 34
-        Me.Label7.Text = Local.GetValue("accounts_edition.consolidation_option")
+        Me.m_consolidationOptionLabel.AutoSize = True
+        Me.m_consolidationOptionLabel.Location = New System.Drawing.Point(3, 128)
+        Me.m_consolidationOptionLabel.Name = "m_consolidationOptionLabel"
+        Me.m_consolidationOptionLabel.Size = New System.Drawing.Size(104, 13)
+        Me.m_consolidationOptionLabel.TabIndex = 34
+        Me.m_consolidationOptionLabel.Text = "Consolidation option"
         '
         'GroupBox2
         '
@@ -234,7 +234,7 @@ Partial Class NewAccountUI
         Me.bs_item_RB.Name = "bs_item_RB"
         Me.bs_item_RB.Size = New System.Drawing.Size(131, 17)
         Me.bs_item_RB.TabIndex = 8
-        Me.bs_item_RB.Text = Local.GetValue("accounts_edition.end_of_period_rate")
+        Me.bs_item_RB.Text = "End of period rate"
         Me.bs_item_RB.UseVisualStyleBackColor = True
         '
         'flux_RB
@@ -246,17 +246,17 @@ Partial Class NewAccountUI
         Me.flux_RB.Size = New System.Drawing.Size(107, 17)
         Me.flux_RB.TabIndex = 6
         Me.flux_RB.TabStop = True
-        Me.flux_RB.Text = Local.GetValue("accounts_edition.average_rate")
+        Me.flux_RB.Text = "Average rate"
         Me.flux_RB.UseVisualStyleBackColor = True
         '
-        'Label8
+        'm_conversionOptionLabel
         '
-        Me.Label8.AutoSize = True
-        Me.Label8.Location = New System.Drawing.Point(3, 160)
-        Me.Label8.Name = "Label8"
-        Me.Label8.Size = New System.Drawing.Size(105, 13)
-        Me.Label8.TabIndex = 35
-        Me.Label8.Text = Local.GetValue("accounts_edition.currencies_conversion")
+        Me.m_conversionOptionLabel.AutoSize = True
+        Me.m_conversionOptionLabel.Location = New System.Drawing.Point(3, 160)
+        Me.m_conversionOptionLabel.Name = "m_conversionOptionLabel"
+        Me.m_conversionOptionLabel.Size = New System.Drawing.Size(105, 13)
+        Me.m_conversionOptionLabel.TabIndex = 35
+        Me.m_conversionOptionLabel.Text = "Currencies conversion"
         '
         'ParentTVPanel
         '
@@ -337,7 +337,7 @@ Partial Class NewAccountUI
         Me.Controls.Add(Me.CreateAccountBT)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Name = "NewAccountUI"
-        Me.Text = Local.GetValue("accounts_edition.title_new_account")
+        Me.Text = "New account"
         Me.TableLayoutPanel1.ResumeLayout(False)
         Me.TableLayoutPanel1.PerformLayout()
         Me.GroupBox1.ResumeLayout(False)
@@ -353,18 +353,18 @@ Partial Class NewAccountUI
     Friend WithEvents ButtonsIL As System.Windows.Forms.ImageList
     Friend WithEvents accountsIL As System.Windows.Forms.ImageList
     Friend WithEvents TableLayoutPanel1 As System.Windows.Forms.TableLayoutPanel
-    Friend WithEvents Label4 As System.Windows.Forms.Label
-    Friend WithEvents Label2 As System.Windows.Forms.Label
-    Friend WithEvents Label6 As System.Windows.Forms.Label
-    Friend WithEvents Label3 As System.Windows.Forms.Label
+    Friend WithEvents m_accountNameLabel As System.Windows.Forms.Label
+    Friend WithEvents m_accountParentLabel As System.Windows.Forms.Label
+    Friend WithEvents m_formulaTypeLabel As System.Windows.Forms.Label
+    Friend WithEvents m_formatLabel As System.Windows.Forms.Label
     Friend WithEvents GroupBox1 As System.Windows.Forms.GroupBox
     Friend WithEvents recompute_RB As System.Windows.Forms.RadioButton
     Friend WithEvents aggregation_RB As System.Windows.Forms.RadioButton
-    Friend WithEvents Label7 As System.Windows.Forms.Label
+    Friend WithEvents m_consolidationOptionLabel As System.Windows.Forms.Label
     Friend WithEvents GroupBox2 As System.Windows.Forms.GroupBox
     Friend WithEvents bs_item_RB As System.Windows.Forms.RadioButton
     Friend WithEvents flux_RB As System.Windows.Forms.RadioButton
-    Friend WithEvents Label8 As System.Windows.Forms.Label
+    Friend WithEvents m_conversionOptionLabel As System.Windows.Forms.Label
     Friend WithEvents ParentTVPanel As System.Windows.Forms.Panel
     Friend WithEvents NameTextBox As VIBlend.WinForms.Controls.vTextBox
     Friend WithEvents FormulaComboBox As VIBlend.WinForms.Controls.vComboBox

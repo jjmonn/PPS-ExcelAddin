@@ -37,18 +37,18 @@ Partial Class VersionsControl
         Me.SplitContainer1 = New System.Windows.Forms.SplitContainer()
         Me.VersionsTVPanel = New System.Windows.Forms.Panel()
         Me.TableLayoutPanel2 = New System.Windows.Forms.TableLayoutPanel()
-        Me.Label5 = New System.Windows.Forms.Label()
-        Me.Label2 = New System.Windows.Forms.Label()
-        Me.Label1 = New System.Windows.Forms.Label()
-        Me.Label11 = New System.Windows.Forms.Label()
-        Me.Label10 = New System.Windows.Forms.Label()
-        Me.Label4 = New System.Windows.Forms.Label()
+        Me.m_globalFactsVersionLabel = New System.Windows.Forms.Label()
+        Me.m_exchangeRatesVersionLabel = New System.Windows.Forms.Label()
+        Me.m_numberOfYearsLabel = New System.Windows.Forms.Label()
+        Me.m_startingPeriodLabel = New System.Windows.Forms.Label()
+        Me.m_periodConfigLabel = New System.Windows.Forms.Label()
+        Me.m_nameLabel = New System.Windows.Forms.Label()
         Me.CreationTB = New System.Windows.Forms.TextBox()
-        Me.Label7 = New System.Windows.Forms.Label()
-        Me.Label8 = New System.Windows.Forms.Label()
+        Me.m_lockedLabel = New System.Windows.Forms.Label()
+        Me.m_lockedDateLabel = New System.Windows.Forms.Label()
         Me.LockedDateT = New System.Windows.Forms.TextBox()
         Me.NameTB = New System.Windows.Forms.TextBox()
-        Me.Label3 = New System.Windows.Forms.Label()
+        Me.m_creationDateLabel = New System.Windows.Forms.Label()
         Me.lockedCB = New System.Windows.Forms.CheckBox()
         Me.TimeConfigTB = New System.Windows.Forms.TextBox()
         Me.StartPeriodTB = New System.Windows.Forms.ComboBox()
@@ -86,44 +86,44 @@ Partial Class VersionsControl
         '
         Me.RCM_TV.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.new_version_bt, Me.new_folder_bt, Me.ToolStripSeparator2, Me.rename_bt, Me.ToolStripSeparator1, Me.delete_bt})
         Me.RCM_TV.Name = "RCM_TV"
-        Me.RCM_TV.Size = New System.Drawing.Size(150, 104)
+        Me.RCM_TV.Size = New System.Drawing.Size(156, 112)
         '
         'new_version_bt
         '
         Me.new_version_bt.Image = Global.FinancialBI.My.Resources.Resources.elements3_add
         Me.new_version_bt.Name = "new_version_bt"
-        Me.new_version_bt.Size = New System.Drawing.Size(149, 22)
-        Me.new_version_bt.Text = Local.GetValue("versions.new_version")
+        Me.new_version_bt.Size = New System.Drawing.Size(155, 24)
+        Me.new_version_bt.Text = "New_version"
         '
         'new_folder_bt
         '
         Me.new_folder_bt.Image = Global.FinancialBI.My.Resources.Resources.folder2
         Me.new_folder_bt.Name = "new_folder_bt"
-        Me.new_folder_bt.Size = New System.Drawing.Size(149, 22)
-        Me.new_folder_bt.Text = Local.GetValue("versions.new_folder")
+        Me.new_folder_bt.Size = New System.Drawing.Size(155, 24)
+        Me.new_folder_bt.Text = "New_folder"
         '
         'ToolStripSeparator2
         '
         Me.ToolStripSeparator2.Name = "ToolStripSeparator2"
-        Me.ToolStripSeparator2.Size = New System.Drawing.Size(146, 6)
+        Me.ToolStripSeparator2.Size = New System.Drawing.Size(152, 6)
         '
         'rename_bt
         '
         Me.rename_bt.Name = "rename_bt"
-        Me.rename_bt.Size = New System.Drawing.Size(149, 22)
-        Me.rename_bt.Text = Local.GetValue("general.rename")
+        Me.rename_bt.Size = New System.Drawing.Size(155, 24)
+        Me.rename_bt.Text = "Rename"
         '
         'ToolStripSeparator1
         '
         Me.ToolStripSeparator1.Name = "ToolStripSeparator1"
-        Me.ToolStripSeparator1.Size = New System.Drawing.Size(146, 6)
+        Me.ToolStripSeparator1.Size = New System.Drawing.Size(152, 6)
         '
         'delete_bt
         '
         Me.delete_bt.Image = Global.FinancialBI.My.Resources.Resources.elements3_delete
         Me.delete_bt.Name = "delete_bt"
-        Me.delete_bt.Size = New System.Drawing.Size(149, 22)
-        Me.delete_bt.Text = Local.GetValue("general.delete")
+        Me.delete_bt.Size = New System.Drawing.Size(155, 24)
+        Me.delete_bt.Text = "Delete"
         '
         'VersionsTVIcons
         '
@@ -179,18 +179,18 @@ Partial Class VersionsControl
         Me.TableLayoutPanel2.ColumnCount = 2
         Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 28.07971!))
         Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 71.92029!))
-        Me.TableLayoutPanel2.Controls.Add(Me.Label5, 0, 8)
-        Me.TableLayoutPanel2.Controls.Add(Me.Label2, 0, 7)
-        Me.TableLayoutPanel2.Controls.Add(Me.Label1, 0, 6)
-        Me.TableLayoutPanel2.Controls.Add(Me.Label11, 0, 5)
-        Me.TableLayoutPanel2.Controls.Add(Me.Label10, 0, 4)
-        Me.TableLayoutPanel2.Controls.Add(Me.Label4, 0, 0)
+        Me.TableLayoutPanel2.Controls.Add(Me.m_globalFactsVersionLabel, 0, 8)
+        Me.TableLayoutPanel2.Controls.Add(Me.m_exchangeRatesVersionLabel, 0, 7)
+        Me.TableLayoutPanel2.Controls.Add(Me.m_numberOfYearsLabel, 0, 6)
+        Me.TableLayoutPanel2.Controls.Add(Me.m_startingPeriodLabel, 0, 5)
+        Me.TableLayoutPanel2.Controls.Add(Me.m_periodConfigLabel, 0, 4)
+        Me.TableLayoutPanel2.Controls.Add(Me.m_nameLabel, 0, 0)
         Me.TableLayoutPanel2.Controls.Add(Me.CreationTB, 1, 1)
-        Me.TableLayoutPanel2.Controls.Add(Me.Label7, 0, 2)
-        Me.TableLayoutPanel2.Controls.Add(Me.Label8, 0, 3)
+        Me.TableLayoutPanel2.Controls.Add(Me.m_lockedLabel, 0, 2)
+        Me.TableLayoutPanel2.Controls.Add(Me.m_lockedDateLabel, 0, 3)
         Me.TableLayoutPanel2.Controls.Add(Me.LockedDateT, 1, 3)
         Me.TableLayoutPanel2.Controls.Add(Me.NameTB, 1, 0)
-        Me.TableLayoutPanel2.Controls.Add(Me.Label3, 0, 1)
+        Me.TableLayoutPanel2.Controls.Add(Me.m_creationDateLabel, 0, 1)
         Me.TableLayoutPanel2.Controls.Add(Me.lockedCB, 1, 2)
         Me.TableLayoutPanel2.Controls.Add(Me.TimeConfigTB, 1, 4)
         Me.TableLayoutPanel2.Controls.Add(Me.StartPeriodTB, 1, 5)
@@ -212,66 +212,66 @@ Partial Class VersionsControl
         Me.TableLayoutPanel2.Size = New System.Drawing.Size(552, 392)
         Me.TableLayoutPanel2.TabIndex = 0
         '
-        'Label5
+        'm_globalFactsVersionLabel
         '
-        Me.Label5.AutoSize = True
-        Me.Label5.Location = New System.Drawing.Point(3, 359)
-        Me.Label5.Margin = New System.Windows.Forms.Padding(3, 7, 3, 0)
-        Me.Label5.Name = "Label5"
-        Me.Label5.Size = New System.Drawing.Size(139, 13)
-        Me.Label5.TabIndex = 24
-        Me.Label5.Text = Local.GetValue("facts_versions.global_facts_version")
+        Me.m_globalFactsVersionLabel.AutoSize = True
+        Me.m_globalFactsVersionLabel.Location = New System.Drawing.Point(3, 359)
+        Me.m_globalFactsVersionLabel.Margin = New System.Windows.Forms.Padding(3, 7, 3, 0)
+        Me.m_globalFactsVersionLabel.Name = "m_globalFactsVersionLabel"
+        Me.m_globalFactsVersionLabel.Size = New System.Drawing.Size(121, 15)
+        Me.m_globalFactsVersionLabel.TabIndex = 24
+        Me.m_globalFactsVersionLabel.Text = "Global_facts_version"
         '
-        'Label2
+        'm_exchangeRatesVersionLabel
         '
-        Me.Label2.AutoSize = True
-        Me.Label2.Location = New System.Drawing.Point(3, 315)
-        Me.Label2.Margin = New System.Windows.Forms.Padding(3, 7, 3, 0)
-        Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(118, 13)
-        Me.Label2.TabIndex = 22
-        Me.Label2.Text = Local.GetValue("facts_versions.exchange_rates_version")
+        Me.m_exchangeRatesVersionLabel.AutoSize = True
+        Me.m_exchangeRatesVersionLabel.Location = New System.Drawing.Point(3, 315)
+        Me.m_exchangeRatesVersionLabel.Margin = New System.Windows.Forms.Padding(3, 7, 3, 0)
+        Me.m_exchangeRatesVersionLabel.Name = "m_exchangeRatesVersionLabel"
+        Me.m_exchangeRatesVersionLabel.Size = New System.Drawing.Size(142, 15)
+        Me.m_exchangeRatesVersionLabel.TabIndex = 22
+        Me.m_exchangeRatesVersionLabel.Text = "Exchange_rates_version"
         '
-        'Label1
+        'm_numberOfYearsLabel
         '
-        Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(3, 271)
-        Me.Label1.Margin = New System.Windows.Forms.Padding(3, 7, 3, 0)
-        Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(93, 13)
-        Me.Label1.TabIndex = 20
-        Me.Label1.Text = Local.GetValue("facts_versions.nb_years")
+        Me.m_numberOfYearsLabel.AutoSize = True
+        Me.m_numberOfYearsLabel.Location = New System.Drawing.Point(3, 271)
+        Me.m_numberOfYearsLabel.Margin = New System.Windows.Forms.Padding(3, 7, 3, 0)
+        Me.m_numberOfYearsLabel.Name = "m_numberOfYearsLabel"
+        Me.m_numberOfYearsLabel.Size = New System.Drawing.Size(57, 15)
+        Me.m_numberOfYearsLabel.TabIndex = 20
+        Me.m_numberOfYearsLabel.Text = "nb_years"
         '
-        'Label11
+        'm_startingPeriodLabel
         '
-        Me.Label11.AutoSize = True
-        Me.Label11.Location = New System.Drawing.Point(3, 227)
-        Me.Label11.Margin = New System.Windows.Forms.Padding(3, 7, 3, 0)
-        Me.Label11.Name = "Label11"
-        Me.Label11.Size = New System.Drawing.Size(66, 13)
-        Me.Label11.TabIndex = 17
-        Me.Label11.Text = Local.GetValue("facts_versions.starting_period")
+        Me.m_startingPeriodLabel.AutoSize = True
+        Me.m_startingPeriodLabel.Location = New System.Drawing.Point(3, 227)
+        Me.m_startingPeriodLabel.Margin = New System.Windows.Forms.Padding(3, 7, 3, 0)
+        Me.m_startingPeriodLabel.Name = "m_startingPeriodLabel"
+        Me.m_startingPeriodLabel.Size = New System.Drawing.Size(89, 15)
+        Me.m_startingPeriodLabel.TabIndex = 17
+        Me.m_startingPeriodLabel.Text = "starting_period"
         '
-        'Label10
+        'm_periodConfigLabel
         '
-        Me.Label10.AutoSize = True
-        Me.Label10.Location = New System.Drawing.Point(3, 183)
-        Me.Label10.Margin = New System.Windows.Forms.Padding(3, 7, 3, 0)
-        Me.Label10.Name = "Label10"
-        Me.Label10.Size = New System.Drawing.Size(106, 13)
-        Me.Label10.TabIndex = 15
-        Me.Label10.Text = Local.GetValue("facts_versions.period_config")
+        Me.m_periodConfigLabel.AutoSize = True
+        Me.m_periodConfigLabel.Location = New System.Drawing.Point(3, 183)
+        Me.m_periodConfigLabel.Margin = New System.Windows.Forms.Padding(3, 7, 3, 0)
+        Me.m_periodConfigLabel.Name = "m_periodConfigLabel"
+        Me.m_periodConfigLabel.Size = New System.Drawing.Size(82, 15)
+        Me.m_periodConfigLabel.TabIndex = 15
+        Me.m_periodConfigLabel.Text = "period_config"
         '
-        'Label4
+        'm_nameLabel
         '
-        Me.Label4.AutoSize = True
-        Me.Label4.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label4.Location = New System.Drawing.Point(3, 7)
-        Me.Label4.Margin = New System.Windows.Forms.Padding(3, 7, 3, 0)
-        Me.Label4.Name = "Label4"
-        Me.Label4.Size = New System.Drawing.Size(85, 13)
-        Me.Label4.TabIndex = 7
-        Me.Label4.Text = Local.GetValue("facts_versions.version_name")
+        Me.m_nameLabel.AutoSize = True
+        Me.m_nameLabel.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.m_nameLabel.Location = New System.Drawing.Point(3, 7)
+        Me.m_nameLabel.Margin = New System.Windows.Forms.Padding(3, 7, 3, 0)
+        Me.m_nameLabel.Name = "m_nameLabel"
+        Me.m_nameLabel.Size = New System.Drawing.Size(99, 15)
+        Me.m_nameLabel.TabIndex = 7
+        Me.m_nameLabel.Text = "Version_name"
         '
         'CreationTB
         '
@@ -284,25 +284,25 @@ Partial Class VersionsControl
         Me.CreationTB.Size = New System.Drawing.Size(280, 20)
         Me.CreationTB.TabIndex = 3
         '
-        'Label7
+        'm_lockedLabel
         '
-        Me.Label7.AutoSize = True
-        Me.Label7.Location = New System.Drawing.Point(3, 95)
-        Me.Label7.Margin = New System.Windows.Forms.Padding(3, 7, 3, 0)
-        Me.Label7.Name = "Label7"
-        Me.Label7.Size = New System.Drawing.Size(77, 13)
-        Me.Label7.TabIndex = 10
-        Me.Label7.Text = Local.GetValue("facts_versions.version_locked")
+        Me.m_lockedLabel.AutoSize = True
+        Me.m_lockedLabel.Location = New System.Drawing.Point(3, 95)
+        Me.m_lockedLabel.Margin = New System.Windows.Forms.Padding(3, 7, 3, 0)
+        Me.m_lockedLabel.Name = "m_lockedLabel"
+        Me.m_lockedLabel.Size = New System.Drawing.Size(91, 15)
+        Me.m_lockedLabel.TabIndex = 10
+        Me.m_lockedLabel.Text = "Version_locked"
         '
-        'Label8
+        'm_lockedDateLabel
         '
-        Me.Label8.AutoSize = True
-        Me.Label8.Location = New System.Drawing.Point(3, 139)
-        Me.Label8.Margin = New System.Windows.Forms.Padding(3, 7, 3, 0)
-        Me.Label8.Name = "Label8"
-        Me.Label8.Size = New System.Drawing.Size(67, 13)
-        Me.Label8.TabIndex = 11
-        Me.Label8.Text = Local.GetValue("facts_versions.locked_date")
+        Me.m_lockedDateLabel.AutoSize = True
+        Me.m_lockedDateLabel.Location = New System.Drawing.Point(3, 139)
+        Me.m_lockedDateLabel.Margin = New System.Windows.Forms.Padding(3, 7, 3, 0)
+        Me.m_lockedDateLabel.Name = "m_lockedDateLabel"
+        Me.m_lockedDateLabel.Size = New System.Drawing.Size(78, 15)
+        Me.m_lockedDateLabel.TabIndex = 11
+        Me.m_lockedDateLabel.Text = "Locked_date"
         '
         'LockedDateT
         '
@@ -329,15 +329,15 @@ Partial Class VersionsControl
         Me.NameTB.Size = New System.Drawing.Size(392, 20)
         Me.NameTB.TabIndex = 13
         '
-        'Label3
+        'm_creationDateLabel
         '
-        Me.Label3.AutoSize = True
-        Me.Label3.Location = New System.Drawing.Point(3, 51)
-        Me.Label3.Margin = New System.Windows.Forms.Padding(3, 7, 3, 0)
-        Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(70, 13)
-        Me.Label3.TabIndex = 6
-        Me.Label3.Text = Local.GetValue("facts_versions.creation_date")
+        Me.m_creationDateLabel.AutoSize = True
+        Me.m_creationDateLabel.Location = New System.Drawing.Point(3, 51)
+        Me.m_creationDateLabel.Margin = New System.Windows.Forms.Padding(3, 7, 3, 0)
+        Me.m_creationDateLabel.Name = "m_creationDateLabel"
+        Me.m_creationDateLabel.Size = New System.Drawing.Size(84, 15)
+        Me.m_creationDateLabel.TabIndex = 6
+        Me.m_creationDateLabel.Text = "Creation_date"
         '
         'lockedCB
         '
@@ -409,7 +409,7 @@ Partial Class VersionsControl
         Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.VersionsToolStripMenuItem})
         Me.MenuStrip1.Location = New System.Drawing.Point(0, 0)
         Me.MenuStrip1.Name = "MenuStrip1"
-        Me.MenuStrip1.Size = New System.Drawing.Size(856, 24)
+        Me.MenuStrip1.Size = New System.Drawing.Size(856, 25)
         Me.MenuStrip1.TabIndex = 0
         Me.MenuStrip1.Text = "MenuStrip1"
         '
@@ -417,35 +417,35 @@ Partial Class VersionsControl
         '
         Me.VersionsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.NewVersionMenuBT, Me.NewFolderMenuBT, Me.DeleteVersionMenuBT, Me.RenameMenuBT})
         Me.VersionsToolStripMenuItem.Name = "VersionsToolStripMenuItem"
-        Me.VersionsToolStripMenuItem.Size = New System.Drawing.Size(62, 20)
-        Me.VersionsToolStripMenuItem.Text = Local.GetValue("general.versions")
+        Me.VersionsToolStripMenuItem.Size = New System.Drawing.Size(72, 21)
+        Me.VersionsToolStripMenuItem.Text = "Versions"
         '
         'NewVersionMenuBT
         '
         Me.NewVersionMenuBT.Image = Global.FinancialBI.My.Resources.Resources.elements3_add
         Me.NewVersionMenuBT.Name = "NewVersionMenuBT"
-        Me.NewVersionMenuBT.Size = New System.Drawing.Size(152, 22)
-        Me.NewVersionMenuBT.Text = Local.GetValue("versions.add_version")
+        Me.NewVersionMenuBT.Size = New System.Drawing.Size(212, 24)
+        Me.NewVersionMenuBT.Text = "[versions.add_version]"
         '
         'NewFolderMenuBT
         '
         Me.NewFolderMenuBT.Image = Global.FinancialBI.My.Resources.Resources.favicon_81_
         Me.NewFolderMenuBT.Name = "NewFolderMenuBT"
-        Me.NewFolderMenuBT.Size = New System.Drawing.Size(152, 22)
-        Me.NewFolderMenuBT.Text = Local.GetValue("versions.add_folder")
+        Me.NewFolderMenuBT.Size = New System.Drawing.Size(212, 24)
+        Me.NewFolderMenuBT.Text = "Add_folder"
         '
         'DeleteVersionMenuBT
         '
         Me.DeleteVersionMenuBT.Image = Global.FinancialBI.My.Resources.Resources.elements3_delete
         Me.DeleteVersionMenuBT.Name = "DeleteVersionMenuBT"
-        Me.DeleteVersionMenuBT.Size = New System.Drawing.Size(152, 22)
-        Me.DeleteVersionMenuBT.Text = Local.GetValue("general.delete")
+        Me.DeleteVersionMenuBT.Size = New System.Drawing.Size(212, 24)
+        Me.DeleteVersionMenuBT.Text = "Delete"
         '
         'RenameMenuBT
         '
         Me.RenameMenuBT.Name = "RenameMenuBT"
-        Me.RenameMenuBT.Size = New System.Drawing.Size(152, 22)
-        Me.RenameMenuBT.Text = Local.GetValue("general.rename")
+        Me.RenameMenuBT.Size = New System.Drawing.Size(212, 24)
+        Me.RenameMenuBT.Text = "Rename"
         '
         'VersionsControl
         '
@@ -486,24 +486,24 @@ Partial Class VersionsControl
     Friend WithEvents SplitContainer1 As System.Windows.Forms.SplitContainer
     Friend WithEvents VersionsTVPanel As System.Windows.Forms.Panel
     Friend WithEvents TableLayoutPanel2 As System.Windows.Forms.TableLayoutPanel
-    Friend WithEvents Label2 As System.Windows.Forms.Label
-    Friend WithEvents Label1 As System.Windows.Forms.Label
-    Friend WithEvents Label11 As System.Windows.Forms.Label
-    Friend WithEvents Label10 As System.Windows.Forms.Label
-    Friend WithEvents Label4 As System.Windows.Forms.Label
+    Friend WithEvents m_exchangeRatesVersionLabel As System.Windows.Forms.Label
+    Friend WithEvents m_numberOfYearsLabel As System.Windows.Forms.Label
+    Friend WithEvents m_startingPeriodLabel As System.Windows.Forms.Label
+    Friend WithEvents m_periodConfigLabel As System.Windows.Forms.Label
+    Friend WithEvents m_nameLabel As System.Windows.Forms.Label
     Friend WithEvents CreationTB As System.Windows.Forms.TextBox
-    Friend WithEvents Label7 As System.Windows.Forms.Label
-    Friend WithEvents Label8 As System.Windows.Forms.Label
+    Friend WithEvents m_lockedLabel As System.Windows.Forms.Label
+    Friend WithEvents m_lockedDateLabel As System.Windows.Forms.Label
     Friend WithEvents LockedDateT As System.Windows.Forms.TextBox
     Friend WithEvents NameTB As System.Windows.Forms.TextBox
-    Friend WithEvents Label3 As System.Windows.Forms.Label
+    Friend WithEvents m_creationDateLabel As System.Windows.Forms.Label
     Friend WithEvents lockedCB As System.Windows.Forms.CheckBox
     Friend WithEvents TimeConfigTB As System.Windows.Forms.TextBox
     Friend WithEvents StartPeriodTB As System.Windows.Forms.ComboBox
     Friend WithEvents NBPeriodsTB As System.Windows.Forms.TextBox
     Friend WithEvents RenameMenuBT As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents BackgroundWorker1 As System.ComponentModel.BackgroundWorker
-    Friend WithEvents Label5 As System.Windows.Forms.Label
+    Friend WithEvents m_globalFactsVersionLabel As System.Windows.Forms.Label
     Friend WithEvents m_exchangeRatesVersionVTreeviewbox As VIBlend.WinForms.Controls.vTreeViewBox
     Friend WithEvents m_factsVersionVTreeviewbox As VIBlend.WinForms.Controls.vTreeViewBox
 

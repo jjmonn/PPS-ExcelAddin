@@ -78,7 +78,7 @@ Friend Class AccountsView
         Me.m_accountDescriptionGroupBox.Text = Local.GetValue("accounts_edition.account_description")
         Me.SaveDescriptionBT.Text = Local.GetValue("accounts_edition.save_description")
         Me.m_accountFormulaGroupBox.Text = Local.GetValue("accounts_edition.account_formula")
-        Me.formulaEdit.Text = Local.GetValue("accounts_edition.edit_formula")
+        Me.m_formulaEditionButton.Text = Local.GetValue("accounts_edition.edit_formula")
         Me.submit_cmd.Text = Local.GetValue("accounts_edition.validate_formula")
         Me.m_accountInformationGroupbox.Text = Local.GetValue("accounts_edition.account_information")
         Me.m_accountNameLabel.Text = Local.GetValue("accounts_edition.account_name")
@@ -116,7 +116,7 @@ Friend Class AccountsView
         DeleteAccountToolStripMenuItem.Enabled = p_rightClickState
         DeleteAccountToolStripMenuItem1.Enabled = p_rightClickState
         submit_cmd.Enabled = p_uiState
-        formulaEdit.Enabled = p_uiState
+        m_formulaEditionButton.Enabled = p_uiState
         CreateANewAccountToolStripMenuItem.Enabled = p_rightClickState
         CreateANewCategoryToolStripMenuItem.Enabled = p_rightClickState
     End Sub
@@ -140,7 +140,7 @@ Friend Class AccountsView
 
         AddHandler m_accountTV.AfterSelect, AddressOf AccountsTV_AfterSelect
         AddHandler m_accountTV.KeyDown, AddressOf AccountsTV_KeyDown
-        AddHandler m_accountTV.MouseDoubleClick, AddressOf AccountsTV_MouseDoubleClick
+        AddHandler m_accountTV.DoubleClick, AddressOf AccountsTV_MouseDoubleClick
 
         ' Drag and drop events
         AddHandler m_accountTV.MouseDown, AddressOf AccountsTV_MouseDown
@@ -337,7 +337,7 @@ Friend Class AccountsView
     Private Sub newAccountBT_Click(sender As Object, e As EventArgs) Handles CreateANewAccountToolStripMenuItem.Click, _
                                                                              AddSubAccountToolStripMenuItem.Click
 
-        formulaEdit.Checked = False
+        m_formulaEditionButton.Toggle = CheckState.Unchecked
         If Not m_currentNode Is Nothing Then
             m_controller.DisplayNewAccountView(m_currentNode)
         Else
@@ -349,7 +349,7 @@ Friend Class AccountsView
     Private Sub newCategoryBT_Click(sender As Object, e As EventArgs) Handles CreateANewCategoryToolStripMenuItem.Click, _
                                                                               AddCategoryToolStripMenuItem.Click
 
-        formulaEdit.Checked = False
+        m_formulaEditionButton.Toggle = CheckState.Unchecked
         Dim newCategoryName As String = InputBox(Local.GetValue("accounts_edition.msg_new_tab_name"), _
                                                  Local.GetValue("accounts_edition.title_new_tab_name"), "")
         If newCategoryName <> "" Then
@@ -413,7 +413,7 @@ SubmitFormula:
                                                   MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question)
         If confirm = DialogResult.Yes Then
             If Not m_controller.GetAccount(Name_TB.Text) Is Nothing Then
-                formulaEdit.Checked = False
+                m_formulaEditionButton.Toggle = CheckState.Unchecked
                 Dim accountId As Int32 = m_controller.GetAccount(Name_TB.Text).Id
                 m_controller.UpdateAccountFormula(accountId, m_controller.GetCurrentParsedFormula)
             End If
@@ -427,7 +427,7 @@ SubmitFormula:
                                                                                 DeleteAccountToolStripMenuItem1.Click
 
         If Not m_currentNode Is Nothing Then
-            formulaEdit.Checked = False
+            m_formulaEditionButton.Toggle = CheckState.Unchecked
             Dim dependantAccountslist() As String = m_controller.ExistingDependantAccounts(m_currentNode)
             If dependantAccountslist.Length > 0 Then
 
@@ -459,7 +459,7 @@ SubmitFormula:
     Private Sub BDropToWS_Click(sender As Object, e As EventArgs) Handles DropAllAccountsHierarchyToExcelToolStripMenuItem.Click, _
                                                                           DropHierarchyToExcelToolStripMenuItem.Click
 
-        formulaEdit.Checked = False
+        m_formulaEditionButton.Toggle = CheckState.Unchecked
         Dim ActiveWS As Excel.Worksheet = GlobalVariables.APPS.ActiveSheet
         Dim RNG As Excel.Range = GlobalVariables.APPS.Application.ActiveCell
         Dim Response As MsgBoxResult
@@ -495,7 +495,7 @@ SubmitFormula:
     Private Sub AccountsTV_AfterSelect(sender As Object, e As vTreeViewEventArgs)
 
         If m_dragAndDrop = False Then
-            If formulaEdit.Checked = False Then
+            If m_formulaEditionButton.Toggle = CheckState.Unchecked Then
                 m_currentNode = e.Node
                 If m_currentNode IsNot Nothing Then
                     DisplayAttributes()
@@ -548,9 +548,16 @@ SubmitFormula:
 
     Private Sub AccountsTV_MouseDown(ByVal sender As Object, ByVal e As MouseEventArgs)
 
-        Dim l_node As vTreeNode = Me.m_accountTV.HitTest(e.Location)
-        If l_node IsNot Nothing Then
-            Me.m_accountTV.DoDragDrop(l_node, DragDropEffects.Move)
+        If e.Button = MouseButtons.Right Then
+            TVRCM.Visible = False
+            TVRCM.Show(e.Location)
+            TVRCM.Visible = True
+        Else
+            '  Dim l_node As vTreeNode = m_accountTV.SelectedNode
+            Dim l_node As vTreeNode = Me.m_accountTV.HitTest(e.Location)
+            If l_node IsNot Nothing Then
+                Me.m_accountTV.DoDragDrop(l_node, DragDropEffects.Move)
+            End If
         End If
 
     End Sub
@@ -566,7 +573,7 @@ SubmitFormula:
 
     Private Sub AccountsTV_DragOver(sender As Object, e As DragEventArgs)
 
-        If formulaEdit.Checked = False Then
+        If m_formulaEditionButton.Toggle = CheckState.Unchecked Then
 
             If e.Data.GetDataPresent("VIBlend.WinForms.Controls.vTreeNode", True) = False Then Exit Sub
             Dim selectedTreeview As vTreeView = CType(sender, vTreeView)
@@ -596,7 +603,7 @@ SubmitFormula:
 
     Private Sub AccountsTV_DragDrop(sender As Object, e As DragEventArgs)
 
-        If formulaEdit.Checked = False Then
+        If m_formulaEditionButton.Toggle = CheckState.Unchecked Then
             'Check that there is a TreeNode being dragged
             If e.Data.GetDataPresent("VIBlend.WinForms.Controls.vTreeNode", True) = False Then Exit Sub
 
@@ -657,20 +664,20 @@ SubmitFormula:
 
     Private Sub formula_TB_Enter(sender As Object, e As EventArgs) Handles m_formulaTextBox.Enter
 
-        If formulaEdit.Checked = False Then
+        If m_formulaEditionButton.Toggle = CheckState.Unchecked Then
             If Not m_currentNode Is Nothing Then
                 Dim l_account As Account = GlobalVariables.Accounts.GetValue(CInt(m_currentNode.value))
 
                 If l_account Is Nothing Then Exit Sub
                 If m_controller.m_formulaTypesToBeTested.Contains(l_account.FormulaType) Then
-                    formulaEdit.Checked = True
+                    m_formulaEditionButton.Toggle = CheckState.Checked
                 Else
                     MsgBox(Local.GetValue("accounts_edition.msg_formula_not_editable"))
                     FormulaTypeComboBox.Focus()
                 End If
             Else
                 MsgBox(Local.GetValue("accounts_edition.msg_select_account"))
-                formulaEdit.Checked = False
+                m_formulaEditionButton.Toggle = CheckState.Unchecked
                 m_accountTV.Focus()
                 m_accountTV.SelectedNode = m_accountTV.Nodes(0)
             End If
@@ -678,18 +685,18 @@ SubmitFormula:
 
     End Sub
 
-    Private Sub formulaEdit_Click(sender As Object, e As EventArgs) Handles formulaEdit.Click
+    Private Sub formulaEdit_Click(sender As Object, e As EventArgs)
 
-        If formulaEdit.Checked = False Then
+        If m_formulaEditionButton.Toggle = CheckState.Unchecked Then
             Dim confirm As Integer = MessageBox.Show(Local.GetValue("accounts_edition.msg_formula_validation_confirmation"), _
                                                      Local.GetValue("accounts_edition.title_formula_validation_confirmation"), MessageBoxButtons.YesNo, MessageBoxIcon.Question)
             If confirm = DialogResult.Yes Then
                 Submit_Formula_Click(sender, e)
             Else
-                m_formulaTextBox.Text = m_controller.GetFormulaText(m_accountTV.SelectedNode.value)
+                m_formulaTextBox.Text = m_controller.GetFormulaText(m_accountTV.SelectedNode.Value)
             End If
         Else
-            formulaEdit.Checked = False
+            m_formulaEditionButton.Toggle = CheckState.Unchecked
             formula_TB_Enter(sender, e)
         End If
 
@@ -706,18 +713,18 @@ SubmitFormula:
                 Else
                     m_formulaTextBox.Text = m_controller.GetFormulaText(m_accountTV.SelectedNode.value)
                 End If
-                formulaEdit.Checked = False
+                m_formulaEditionButton.Toggle = CheckState.Unchecked
             Case Keys.Enter
                 Submit_Formula_Click(sender, e)
         End Select
 
     End Sub
 
-    Private Sub AccountsTV_MouseDoubleClick(sender As Object, e As Windows.Forms.MouseEventArgs)
+    Private Sub AccountsTV_MouseDoubleClick(sender As Object, e As EventArgs)
 
-        Dim node As vTreeNode = Me.m_accountTV.HitTest(e.Location)
+        Dim node As vTreeNode = Me.m_accountTV.SelectedNode
         If node IsNot Nothing Then
-            If formulaEdit.Checked = True Then
+            If m_formulaEditionButton.Toggle = CheckState.Checked Then
                 m_formulaTextBox.Text = m_formulaTextBox.Text & FormulasTranslations.ACCOUNTS_HUMAN_IDENTIFIER & _
                                         node.Text & _
                                         FormulasTranslations.ACCOUNTS_HUMAN_IDENTIFIER
@@ -731,7 +738,7 @@ SubmitFormula:
 
         Dim node As vTreeNode = Me.m_globalFactsTV.HitTest(e.Location)
         If node IsNot Nothing Then
-            If formulaEdit.Checked = True Then
+            If m_formulaEditionButton.Toggle = CheckState.Checked Then
                 m_formulaTextBox.Text = m_formulaTextBox.Text & FormulasTranslations.FACTS_HUMAN_IDENTIFIER & _
                                   m_globalFactsTV.SelectedNode.Text & _
                                   FormulasTranslations.FACTS_HUMAN_IDENTIFIER
@@ -917,7 +924,7 @@ SubmitFormula:
     Private Sub DisplayAttributes()
 
         If Not IsNothing(m_currentNode) _
-        AndAlso formulaEdit.Checked = False Then
+        AndAlso m_formulaEditionButton.Toggle = CheckState.Unchecked Then
 
             m_isDisplayingAttributes = True
             Dim account_id As Int32 = m_currentNode.value
