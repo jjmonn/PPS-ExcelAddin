@@ -28,10 +28,10 @@ Partial Class ConnectionTP
         Me.ImageList1 = New System.Windows.Forms.ImageList(Me.components)
         Me.passwordTextBox = New VIBlend.WinForms.Controls.vTextBox()
         Me.m_passwordLabel = New VIBlend.WinForms.Controls.vLabel()
-        Me.CPPanel = New System.Windows.Forms.Panel()
         Me.Panel1 = New System.Windows.Forms.Panel()
         Me.ConnectionBT = New VIBlend.WinForms.Controls.vButton()
-        Me.CancelBT = New VIBlend.WinForms.Controls.vButton()
+        Me.m_cancelButton = New VIBlend.WinForms.Controls.vButton()
+        Me.m_circularProgress2 = New VIBlend.WinForms.Controls.vCircularProgressBar()
         Me.Panel1.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -112,21 +112,11 @@ Partial Class ConnectionTP
         Me.m_passwordLabel.UseMnemonics = True
         Me.m_passwordLabel.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
         '
-        'CPPanel
-        '
-        Me.CPPanel.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.CPPanel.Location = New System.Drawing.Point(81, 223)
-        Me.CPPanel.Name = "CPPanel"
-        Me.CPPanel.Size = New System.Drawing.Size(85, 85)
-        Me.CPPanel.TabIndex = 7
-        '
         'Panel1
         '
+        Me.Panel1.Controls.Add(Me.m_circularProgress2)
         Me.Panel1.Controls.Add(Me.ConnectionBT)
-        Me.Panel1.Controls.Add(Me.CancelBT)
-        Me.Panel1.Controls.Add(Me.CPPanel)
+        Me.Panel1.Controls.Add(Me.m_cancelButton)
         Me.Panel1.Controls.Add(Me.m_userLabel)
         Me.Panel1.Controls.Add(Me.userNameTextBox)
         Me.Panel1.Controls.Add(Me.m_passwordLabel)
@@ -144,7 +134,7 @@ Partial Class ConnectionTP
         Me.ConnectionBT.ImageAlign = System.Drawing.ContentAlignment.TopCenter
         Me.ConnectionBT.ImageKey = "upload.ico"
         Me.ConnectionBT.ImageList = Me.ImageList1
-        Me.ConnectionBT.Location = New System.Drawing.Point(73, 240)
+        Me.ConnectionBT.Location = New System.Drawing.Point(73, 206)
         Me.ConnectionBT.Name = "ConnectionBT"
         Me.ConnectionBT.RoundedCornersMask = CType(15, Byte)
         Me.ConnectionBT.Size = New System.Drawing.Size(100, 47)
@@ -154,22 +144,38 @@ Partial Class ConnectionTP
         Me.ConnectionBT.UseVisualStyleBackColor = False
         Me.ConnectionBT.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
         '
-        'CancelBT
+        'm_cancelButton
         '
-        Me.CancelBT.AllowAnimations = True
-        Me.CancelBT.BackColor = System.Drawing.Color.Transparent
-        Me.CancelBT.ImageAlign = System.Drawing.ContentAlignment.TopCenter
-        Me.CancelBT.ImageKey = "delete.ico"
-        Me.CancelBT.ImageList = Me.ImageList1
-        Me.CancelBT.Location = New System.Drawing.Point(73, 357)
-        Me.CancelBT.Name = "CancelBT"
-        Me.CancelBT.RoundedCornersMask = CType(15, Byte)
-        Me.CancelBT.Size = New System.Drawing.Size(100, 47)
-        Me.CancelBT.TabIndex = 5
-        Me.CancelBT.Text = "[general.cancel]"
-        Me.CancelBT.TextAlign = System.Drawing.ContentAlignment.BottomCenter
-        Me.CancelBT.UseVisualStyleBackColor = False
-        Me.CancelBT.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
+        Me.m_cancelButton.AllowAnimations = True
+        Me.m_cancelButton.BackColor = System.Drawing.Color.Transparent
+        Me.m_cancelButton.ImageAlign = System.Drawing.ContentAlignment.TopCenter
+        Me.m_cancelButton.ImageKey = "delete.ico"
+        Me.m_cancelButton.ImageList = Me.ImageList1
+        Me.m_cancelButton.Location = New System.Drawing.Point(73, 369)
+        Me.m_cancelButton.Name = "m_cancelButton"
+        Me.m_cancelButton.RoundedCornersMask = CType(15, Byte)
+        Me.m_cancelButton.Size = New System.Drawing.Size(100, 47)
+        Me.m_cancelButton.TabIndex = 5
+        Me.m_cancelButton.Text = "[general.cancel]"
+        Me.m_cancelButton.TextAlign = System.Drawing.ContentAlignment.BottomCenter
+        Me.m_cancelButton.UseVisualStyleBackColor = False
+        Me.m_cancelButton.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
+        '
+        'm_circularProgress2
+        '
+        Me.m_circularProgress2.AllowAnimations = True
+        Me.m_circularProgress2.BackColor = System.Drawing.Color.Transparent
+        Me.m_circularProgress2.IndicatorsCount = 8
+        Me.m_circularProgress2.Location = New System.Drawing.Point(73, 256)
+        Me.m_circularProgress2.Maximum = 100
+        Me.m_circularProgress2.Minimum = 0
+        Me.m_circularProgress2.Name = "m_circularProgress2"
+        Me.m_circularProgress2.Size = New System.Drawing.Size(100, 88)
+        Me.m_circularProgress2.TabIndex = 7
+        Me.m_circularProgress2.Text = "VCircularProgressBar1"
+        Me.m_circularProgress2.UseThemeBackground = False
+        Me.m_circularProgress2.Value = 0
+        Me.m_circularProgress2.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.OFFICE2010SILVER
         '
         'ConnectionTP
         '
@@ -189,10 +195,10 @@ Partial Class ConnectionTP
     Friend WithEvents ImageList1 As System.Windows.Forms.ImageList
     Friend WithEvents passwordTextBox As VIBlend.WinForms.Controls.vTextBox
     Friend WithEvents m_passwordLabel As VIBlend.WinForms.Controls.vLabel
-    Friend WithEvents CPPanel As System.Windows.Forms.Panel
     Friend WithEvents BackgroundWorker1 As System.ComponentModel.BackgroundWorker
     Friend WithEvents Panel1 As System.Windows.Forms.Panel
     Friend WithEvents ConnectionBT As VIBlend.WinForms.Controls.vButton
-    Friend WithEvents CancelBT As VIBlend.WinForms.Controls.vButton
+    Friend WithEvents m_cancelButton As VIBlend.WinForms.Controls.vButton
+    Friend WithEvents m_circularProgress2 As VIBlend.WinForms.Controls.vCircularProgressBar
 
 End Class
