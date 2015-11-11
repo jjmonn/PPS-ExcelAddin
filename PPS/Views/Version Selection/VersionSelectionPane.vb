@@ -27,7 +27,7 @@ Public Class VersionSelectionPane
 
 #Region "Instance Variables"
 
-    Private VERSEL As VersionSelection
+    Private m_versionSelectionController As VersionSelection
     Private mode As Int32
 
 #End Region
@@ -45,16 +45,16 @@ Public Class VersionSelectionPane
 
     Friend Function Init() As Boolean
 
-        VERSEL = New VersionSelection(m_versionsTreeviewImageList, Me)
+        m_versionSelectionController = New VersionSelection(m_versionsTreeviewImageList, Me)
         InsertDataVersionSelection()
-        AddHandler ValidateBT.Click, AddressOf VERSEL.SetSelectedVersion
+        AddHandler ValidateBT.Click, AddressOf m_versionSelectionController.SetSelectedVersion
         Return False
 
     End Function
 
     Private Sub InsertDataVersionSelection()
 
-        TableLayoutPanel1.Controls.Add(VERSEL.versionsTV, 0, 1)
+        TableLayoutPanel1.Controls.Add(m_versionSelectionController.versionsTV, 0, 1)
         TableLayoutPanel1.GetControlFromPosition(0, 1).Dock = DockStyle.Fill
 
     End Sub
@@ -67,20 +67,21 @@ Public Class VersionSelectionPane
 
     Public Sub ClearAndClose()
 
-        If Not VERSEL Is Nothing Then
-            VERSEL.versionsTV.Nodes.Clear()
+        If Not m_versionSelectionController Is Nothing Then
+            m_versionSelectionController.versionsTV.Nodes.Clear()
             TableLayoutPanel1.Controls.Remove(TableLayoutPanel1.GetControlFromPosition(0, 1))
-            VERSEL = Nothing
+            ' TableLayoutPanel1.Controls.Clear()
+            m_versionSelectionController = Nothing
             Me.Hide()
         End If
 
     End Sub
 
-    Protected Friend Sub SetVersion(ByRef version_id As String)
+    Friend Sub SetVersion(ByRef version_id As String)
 
-        If VERSEL Is Nothing Then VERSEL = New VersionSelection(m_versionsTreeviewImageList, Me)
-        VERSEL.versionsTV.SelectedNode = VERSEL.versionsTV.Nodes.Find(version_id, True)(0)
-        VERSEL.SetSelectedVersion()
+        If m_versionSelectionController Is Nothing Then m_versionSelectionController = New VersionSelection(m_versionsTreeviewImageList, Me)
+        m_versionSelectionController.versionsTV.SelectedNode = m_versionSelectionController.versionsTV.Nodes.Find(version_id, True)(0)
+        m_versionSelectionController.SetSelectedVersion()
 
     End Sub
 
@@ -90,9 +91,7 @@ Public Class VersionSelectionPane
 #Region "Events"
 
     Private Sub ADXExcelTaskPane1_ADXBeforeTaskPaneShow(sender As Object, e As ADXBeforeTaskPaneShowEventArgs) Handles MyBase.ADXBeforeTaskPaneShow
-
         Me.Visible = GlobalVariables.VersionsSelectionPaneVisible
-
     End Sub
 
     Private Sub CVersionSelectionPane_Deactivate(sender As Object, e As EventArgs) Handles MyBase.Deactivate

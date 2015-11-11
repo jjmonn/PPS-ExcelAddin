@@ -125,7 +125,7 @@ Public Class CUI2LeftPane
         InitTV(versionsTV)
         InitTV(periodsTV)
 
-        versionsTV.ImageList = VersionsIL
+        versionsTV.ImageList = m_versionsTreeviewImageList
         entitiesTV.ImageList = EntitiesTVImageList
 
     End Sub
@@ -157,13 +157,15 @@ Public Class CUI2LeftPane
     Private Sub InitCurrenciesCLB()
 
         For Each currency As Currency In GlobalVariables.Currencies.GetDictionary().Values
-            Dim li As New ListItem
-            li.Value = currency.Id
-            li.Text = currency.Name
-            currenciesCLB.Items.Add(li)
-            If li.Value = My.Settings.currentCurrency Then
-                li.IsChecked = True
-                currenciesCLB.SelectedItem = li
+            If currency.InUse = True Then
+                Dim li As New ListItem
+                li.Value = currency.Id
+                li.Text = currency.Name
+                currenciesCLB.Items.Add(li)
+                If li.Value = My.Settings.currentCurrency Then
+                    li.IsChecked = True
+                    currenciesCLB.SelectedItem = li
+                End If
             End If
         Next
 

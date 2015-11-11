@@ -29,9 +29,9 @@ Partial Class ConnectionTP
         Me.passwordTextBox = New VIBlend.WinForms.Controls.vTextBox()
         Me.m_passwordLabel = New VIBlend.WinForms.Controls.vLabel()
         Me.Panel1 = New System.Windows.Forms.Panel()
+        Me.m_circularProgress2 = New VIBlend.WinForms.Controls.vCircularProgressBar()
         Me.ConnectionBT = New VIBlend.WinForms.Controls.vButton()
         Me.m_cancelButton = New VIBlend.WinForms.Controls.vButton()
-        Me.m_circularProgress2 = New VIBlend.WinForms.Controls.vCircularProgressBar()
         Me.Panel1.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -127,6 +127,22 @@ Partial Class ConnectionTP
         Me.Panel1.Size = New System.Drawing.Size(256, 673)
         Me.Panel1.TabIndex = 14
         '
+        'm_circularProgress2
+        '
+        Me.m_circularProgress2.AllowAnimations = True
+        Me.m_circularProgress2.BackColor = System.Drawing.Color.Transparent
+        Me.m_circularProgress2.IndicatorsCount = 10
+        Me.m_circularProgress2.Location = New System.Drawing.Point(73, 256)
+        Me.m_circularProgress2.Maximum = 100
+        Me.m_circularProgress2.Minimum = 0
+        Me.m_circularProgress2.Name = "m_circularProgress2"
+        Me.m_circularProgress2.Size = New System.Drawing.Size(100, 88)
+        Me.m_circularProgress2.TabIndex = 7
+        Me.m_circularProgress2.Text = "VCircularProgressBar1"
+        Me.m_circularProgress2.UseThemeBackground = False
+        Me.m_circularProgress2.Value = 0
+        Me.m_circularProgress2.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.STEEL
+        '
         'ConnectionBT
         '
         Me.ConnectionBT.AllowAnimations = True
@@ -160,22 +176,6 @@ Partial Class ConnectionTP
         Me.m_cancelButton.TextAlign = System.Drawing.ContentAlignment.BottomCenter
         Me.m_cancelButton.UseVisualStyleBackColor = False
         Me.m_cancelButton.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
-        '
-        'm_circularProgress2
-        '
-        Me.m_circularProgress2.AllowAnimations = True
-        Me.m_circularProgress2.BackColor = System.Drawing.Color.Transparent
-        Me.m_circularProgress2.IndicatorsCount = 8
-        Me.m_circularProgress2.Location = New System.Drawing.Point(73, 256)
-        Me.m_circularProgress2.Maximum = 100
-        Me.m_circularProgress2.Minimum = 0
-        Me.m_circularProgress2.Name = "m_circularProgress2"
-        Me.m_circularProgress2.Size = New System.Drawing.Size(100, 88)
-        Me.m_circularProgress2.TabIndex = 7
-        Me.m_circularProgress2.Text = "VCircularProgressBar1"
-        Me.m_circularProgress2.UseThemeBackground = False
-        Me.m_circularProgress2.Value = 0
-        Me.m_circularProgress2.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.OFFICE2010SILVER
         '
         'ConnectionTP
         '

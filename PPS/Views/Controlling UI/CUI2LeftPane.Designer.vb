@@ -30,13 +30,13 @@ Partial Class CUI2LeftPane
         Me.TableLayoutPanel2 = New System.Windows.Forms.TableLayoutPanel()
         Me.SelectionCB = New VIBlend.WinForms.Controls.vComboBox()
         Me.CollapseSelectionBT = New VIBlend.WinForms.Controls.vButton()
+        Me.ExpansionImageList = New System.Windows.Forms.ImageList(Me.components)
         Me.Panel1 = New System.Windows.Forms.Panel()
         Me.PanelCollapseBT = New VIBlend.WinForms.Controls.vButton()
         Me.m_entitySelectionLabel = New System.Windows.Forms.Label()
         Me.CategoriesIL = New System.Windows.Forms.ImageList(Me.components)
         Me.EntitiesTVImageList = New System.Windows.Forms.ImageList(Me.components)
-        Me.VersionsIL = New System.Windows.Forms.ImageList(Me.components)
-        Me.ExpansionImageList = New System.Windows.Forms.ImageList(Me.components)
+        Me.m_versionsTreeviewImageList = New System.Windows.Forms.ImageList(Me.components)
         Me.MainTableLayout.SuspendLayout()
         CType(Me.SplitContainer, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SplitContainer.Panel2.SuspendLayout()
@@ -119,7 +119,7 @@ Partial Class CUI2LeftPane
         Me.SelectionCB.RoundedCornersMaskListItem = CType(15, Byte)
         Me.SelectionCB.Size = New System.Drawing.Size(233, 19)
         Me.SelectionCB.TabIndex = 0
-        Me.SelectionCB.Text = local.getvalue("CUI.selection")
+        Me.SelectionCB.Text = "[CUI.selection]"
         Me.SelectionCB.UseThemeBackColor = False
         Me.SelectionCB.UseThemeDropDownArrowColor = True
         Me.SelectionCB.ValueMember = ""
@@ -142,6 +142,13 @@ Partial Class CUI2LeftPane
         Me.CollapseSelectionBT.Text = " "
         Me.CollapseSelectionBT.UseVisualStyleBackColor = False
         Me.CollapseSelectionBT.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
+        '
+        'ExpansionImageList
+        '
+        Me.ExpansionImageList.ImageStream = CType(resources.GetObject("ExpansionImageList.ImageStream"), System.Windows.Forms.ImageListStreamer)
+        Me.ExpansionImageList.TransparentColor = System.Drawing.Color.Transparent
+        Me.ExpansionImageList.Images.SetKeyName(0, "add.ico")
+        Me.ExpansionImageList.Images.SetKeyName(1, "minus")
         '
         'Panel1
         '
@@ -178,9 +185,9 @@ Partial Class CUI2LeftPane
         Me.m_entitySelectionLabel.AutoSize = True
         Me.m_entitySelectionLabel.Location = New System.Drawing.Point(3, 5)
         Me.m_entitySelectionLabel.Name = "m_entitySelectionLabel"
-        Me.m_entitySelectionLabel.Size = New System.Drawing.Size(131, 15)
+        Me.m_entitySelectionLabel.Size = New System.Drawing.Size(115, 13)
         Me.m_entitySelectionLabel.TabIndex = 0
-        Me.m_entitySelectionLabel.Text = local.getvalue("CUI.entities_selection")
+        Me.m_entitySelectionLabel.Text = "[CUI.entities_selection]"
         Me.m_entitySelectionLabel.TextAlign = System.Drawing.ContentAlignment.BottomLeft
         '
         'CategoriesIL
@@ -197,19 +204,12 @@ Partial Class CUI2LeftPane
         Me.EntitiesTVImageList.Images.SetKeyName(0, "favicon(81).ico")
         Me.EntitiesTVImageList.Images.SetKeyName(1, "elements_branch.ico")
         '
-        'VersionsIL
+        'm_versionsTreeviewImageList
         '
-        Me.VersionsIL.ImageStream = CType(resources.GetObject("VersionsIL.ImageStream"), System.Windows.Forms.ImageListStreamer)
-        Me.VersionsIL.TransparentColor = System.Drawing.Color.Transparent
-        Me.VersionsIL.Images.SetKeyName(0, "versions.ico")
-        Me.VersionsIL.Images.SetKeyName(1, "favicon(81).ico")
-        '
-        'ExpansionImageList
-        '
-        Me.ExpansionImageList.ImageStream = CType(resources.GetObject("ExpansionImageList.ImageStream"), System.Windows.Forms.ImageListStreamer)
-        Me.ExpansionImageList.TransparentColor = System.Drawing.Color.Transparent
-        Me.ExpansionImageList.Images.SetKeyName(0, "add.ico")
-        Me.ExpansionImageList.Images.SetKeyName(1, "minus")
+        Me.m_versionsTreeviewImageList.ImageStream = CType(resources.GetObject("m_versionsTreeviewImageList.ImageStream"), System.Windows.Forms.ImageListStreamer)
+        Me.m_versionsTreeviewImageList.TransparentColor = System.Drawing.Color.Transparent
+        Me.m_versionsTreeviewImageList.Images.SetKeyName(0, "cloud_dark.ico")
+        Me.m_versionsTreeviewImageList.Images.SetKeyName(1, "favicon(81).ico")
         '
         'CUI2LeftPane
         '
@@ -239,9 +239,9 @@ Partial Class CUI2LeftPane
     Friend WithEvents CollapseSelectionBT As VIBlend.WinForms.Controls.vButton
     Friend WithEvents CategoriesIL As System.Windows.Forms.ImageList
     Public WithEvents EntitiesTVImageList As System.Windows.Forms.ImageList
-    Friend WithEvents VersionsIL As System.Windows.Forms.ImageList
     Friend WithEvents Panel1 As System.Windows.Forms.Panel
     Friend WithEvents PanelCollapseBT As VIBlend.WinForms.Controls.vButton
     Public WithEvents ExpansionImageList As System.Windows.Forms.ImageList
+    Friend WithEvents m_versionsTreeviewImageList As System.Windows.Forms.ImageList
 
 End Class

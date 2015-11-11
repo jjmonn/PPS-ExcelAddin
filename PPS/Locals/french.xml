@@ -20,7 +20,8 @@
     <string name="entity">Entité</string>
     <string name="main_menu">Menu principal</string>
     <string name="drop_on_excel">Envoyer dans Excel</string>
-    <string name="drop_on_excel_tooltip">Copie des données affichées dans Excel </string>
+    <string name="drop_on_excel_tooltip">Copie des données dans Excel </string>
+    <string name="drop_on_excel_visible_part">Envoyer uniquement les données affichées dans Excel</string>
     <string name="performance_review">Revue de performances</string>
     <string name="performance_review_tooltip">Fonctionnalités de comparaisons de versions</string>
     <string name="display_versions_comparison">Afficher les écarts</string>

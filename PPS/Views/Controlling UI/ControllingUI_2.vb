@@ -305,8 +305,11 @@ Friend Class ControllingUI_2
         Me.m_entityLabel.Text = Local.GetValue("CUI.entity")
 
         Me.MainMenu.Text = Local.GetValue("CUI.main_menu")
+        Me.RefreshToolStripMenuItem.Text = Local.GetValue("CUI.refresh")
         Me.ExcelToolStripMenuItem.ToolTipText = Local.GetValue("CUI.drop_on_excel_tooltip")
+        Me.ExcelToolStripMenuItem.Text = Local.GetValue("CUI.drop_on_excel")
         Me.DropOnExcelToolStripMenuItem.Text = Local.GetValue("CUI.drop_on_excel")
+        Me.DropOnlyTheVisibleItemsOnExcelToolStripMenuItem.Text = Local.GetValue("CUI.drop_on_excel_visible_part")
         Me.BusinessControlToolStripMenuItem.Text = Local.GetValue("CUI.performance_review")
         Me.BusinessControlToolStripMenuItem.ToolTipText = Local.GetValue("CUI.performance_review_tooltip")
         Me.VersionsComparisonToolStripMenuItem.Text = Local.GetValue("CUI.display_versions_comparison")
@@ -317,7 +320,6 @@ Friend Class ControllingUI_2
         Me.Text = Local.GetValue("CUI.financials")
 
     End Sub
-
 
 #End Region
 
@@ -523,24 +525,30 @@ Friend Class ControllingUI_2
                                        filterId)
 
             Dim l_account As Account = GlobalVariables.Accounts.GetValue(accountId)
-
             If l_account Is Nothing Then Exit Sub
-            ' Check that entity and account are input type !! priority normal
+            If l_account.FormulaType = Account.FormulaTypes.HARD_VALUE_INPUT _
+            Or l_account.FormulaType = Account.FormulaTypes.FIRST_PERIOD_INPUT Then
 
-            Dim logsHashTable As New Action(Of List(Of Hashtable))(AddressOf DisplayLog_ThreadSafe)
-            m_logController.GetFactLog(accountId, _
-                                       entityId, _
-                                       Strings.Right(periodId, Len(periodId) - 1), _
-                                       versionId,
-                                       logsHashTable)
+                Dim logsHashTable As New Action(Of List(Of Hashtable))(AddressOf DisplayLog_ThreadSafe)
+                m_logController.GetFactLog(accountId, _
+                                           entityId, _
+                                           Strings.Right(periodId, Len(periodId) - 1), _
+                                           versionId,
+                                           logsHashTable)
 
-            Dim l_entity As AxisElem = GlobalVariables.AxisElems.GetValue(CRUD.AxisType.Entities, entityId)
-            If l_entity Is Nothing Then Exit Sub
+                Dim l_entity As AxisElem = GlobalVariables.AxisElems.GetValue(CRUD.AxisType.Entities, entityId)
+                If l_entity Is Nothing Then Exit Sub
+                If l_entity.AllowEdition = True Then
 
-            m_logView = New LogView(False, _
-                                    l_entity.Name, _
-                                    l_account.Name)
-
+                End If
+                m_logView = New LogView(False, _
+                                        l_entity.Name, _
+                                        l_account.Name)
+            Else
+                MsgBox("Selected entity is not editable. Log is only available on editable entities.")
+            End If
+        Else
+            MsgBox("Selected account is not an input. Log is only available on inputs accounts.")
         End If
 
     End Sub

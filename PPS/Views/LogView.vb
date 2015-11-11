@@ -87,7 +87,7 @@ Friend Class LogView
             For Each logHashtable As Hashtable In p_logValuesHt
                 Dim r As HierarchyItem = m_logDataGridView.RowsHierarchy.Items.Add("")
                 m_logDataGridView.CellsArea.SetCellValue(r, m_userColumn, logHashtable(FACTLOG_USER_VARIABLE))
-                m_logDataGridView.CellsArea.SetCellValue(r, m_dateColumn, Format(Date.FromOADate(logHashtable(FACTLOG_DATE_VARIABLE)), "mm yyyy"))
+                m_logDataGridView.CellsArea.SetCellValue(r, m_dateColumn, logHashtable(FACTLOG_DATE_VARIABLE))
                 m_logDataGridView.CellsArea.SetCellValue(r, m_clientColumn, logHashtable(FACTLOG_CLIENT_ID_VARIABLE)) 'GlobalVariables.Clients.Axis_hash(logHashtable(FACTLOG_CLIENT_ID_VARIABLE))(NAME_VARIABLE))
                 m_logDataGridView.CellsArea.SetCellValue(r, m_productColumn, logHashtable(FACTLOG_PRODUCT_ID_VARIABLE)) ' GlobalVariables.Products.Axis_hash(logHashtable(FACTLOG_PRODUCT_ID_VARIABLE))(NAME_VARIABLE))
                 m_logDataGridView.CellsArea.SetCellValue(r, m_adjustmentColumn, logHashtable(FACTLOG_ADJUSTMENT_ID_VARIABLE)) ' GlobalVariables.Adjustments.Axis_hash(logHashtable(FACTLOG_ADJUSTMENT_ID_VARIABLE))(NAME_VARIABLE))

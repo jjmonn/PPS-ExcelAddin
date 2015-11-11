@@ -21,6 +21,7 @@
     <string name="main_menu">Main menu</string>
     <string name="drop_on_excel">Drop on Excel</string>
     <string name="drop_on_excel_tooltip">Drop the Data on the active Excel Worksheet</string>
+    <string name="drop_on_excel_visible_part">Drop only the visible items on Excel</string>
     <string name="performance_review">Performance Review</string>
     <string name="performance_review_tooltip">Versions comparisons functionalities</string>
     <string name="display_versions_comparison">Display versions comparison</string>
