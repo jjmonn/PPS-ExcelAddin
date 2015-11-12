@@ -292,9 +292,12 @@ ReturnError:
 
 #Region "Events"
 
-    Private Sub AfterCompute(ByRef entity_id As Int32, ByRef status As Boolean, ByRef request_id As Int32)
+    Private Sub AfterCompute(ByRef entity_id As Int32, ByRef status As ErrorMessage, ByRef request_id As Int32)
 
-        If status = True Then
+        If status = ErrorMessage.SUCCESS Then
+            requestIdComputeFlagDict(request_id) = True
+        Else
+            ' raise error message in this case ? priority high 
             requestIdComputeFlagDict(request_id) = True
         End If
 
