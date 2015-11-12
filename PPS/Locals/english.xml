@@ -110,6 +110,13 @@
     <string name="msg_name_empty">The Account Name must not be empty.</string>
     <string name="msg_fill_values">"Account's Format and Formula type must be populated."</string>
     <string name="msg_name_already_used">This name is already used by another fact or account.</string>
+	<string name="msg_error_create">The account could not be created.</string>
+    <string name="msg_error_update">The account could not be updated.</string>
+	<string name="msg_error_delete">The account could not be deleted.</string>
+	<string name="msg_invalid_attribute">Invalid attribute.</string>
+	<string name="msg_syntax">Syntax incorrect</string>
+	<string name="msg_not_found">One or more of formula's defined elements does not exist.</string>
+	<string name="msg_unknown">Unknown error.</string>
   </category>
  
   <category name="entities_edition">
@@ -386,8 +393,6 @@
     <string name=""></string>
     <string name=""></string>
     
-    
-
   </category>
 
 

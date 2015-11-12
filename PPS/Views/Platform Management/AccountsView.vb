@@ -613,7 +613,13 @@ SubmitFormula:
             Dim targetNode As vTreeNode = selectedTreeview.SelectedNode
 
             If targetNode Is Nothing Then
-                selectedTreeview.Nodes.Add(dropNode)
+                Dim l_dropAccount As Account = m_controller.GetAccount(CUInt(dropNode.Value))
+
+                If (l_dropAccount IsNot Nothing AndAlso l_dropAccount.ParentId <> 0 AndAlso l_dropAccount.FormulaType = Account.FormulaTypes.TITLE) Then
+                    selectedTreeview.Nodes.Add(dropNode)
+                Else
+                    Exit Sub
+                End If
             Else
                 If Not targetNode Is dropNode _
                 AndAlso VTreeViewUtil.GetAllChildrenNodesList(dropNode).Contains(targetNode) = False Then
@@ -628,16 +634,16 @@ SubmitFormula:
                 End If
             End If
 
-            m_dragAndDrop = False
-            dropNode.IsVisible = True                     ' Ensure the newley created node is visible to the user and 
-            selectedTreeview.SelectedNode = dropNode     ' Select it
-            Dim l_account = m_controller.GetAccountCopy(dropNode.Value)
+                m_dragAndDrop = False
+                dropNode.IsVisible = True                     ' Ensure the newley created node is visible to the user and 
+                selectedTreeview.SelectedNode = dropNode     ' Select it
+            Dim l_account = m_controller.GetAccountCopy(CUInt(dropNode.Value))
 
-            l_account.AccountTab = m_accountTV.Nodes.IndexOf(VTreeViewUtil.ReturnRootNodeFromNode(dropNode))
-            l_account.ParentId = targetNode.Value
-            m_controller.UpdateAccount(l_account)
+                l_account.AccountTab = m_accountTV.Nodes.IndexOf(VTreeViewUtil.ReturnRootNodeFromNode(dropNode))
+                l_account.ParentId = If(targetNode Is Nothing, 0, targetNode.Value)
+                m_controller.UpdateAccount(l_account)
 
-        End If
+            End If
 
 
     End Sub

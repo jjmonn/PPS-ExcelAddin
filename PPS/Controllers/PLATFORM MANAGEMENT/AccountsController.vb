@@ -426,8 +426,20 @@ Friend Class AccountsController
     Private Sub AccountCreateConfirmation(ByRef status As ErrorMessage, ByRef p_accountId As Int32)
 
         If status <> ErrorMessage.SUCCESS Then
-            MsgBox("The account could not be created." & Chr(13) & "Error" & "")
-            ' display error from error (to be catched in account) priority normal 
+            Dim errorMsg As String = Local.GetValue("accounts_edition.msg_error_create") & Chr(13)
+
+            Select Case status
+                Case ErrorMessage.SYNTAX
+                    errorMsg &= Local.GetValue("accounts_edition.msg_syntax")
+                Case ErrorMessage.INVALID_ATTRIBUTE
+                    errorMsg &= Local.GetValue("accounts_edition.msg_invalid_attribute")
+                Case ErrorMessage.NOT_FOUND
+                    errorMsg &= Local.GetValue("accounts_edition.msg_not_found")
+                Case Else
+                    errorMsg &= Local.GetValue("accounts_edition.msg_unknown")
+            End Select
+
+            MsgBox(errorMsg)
         End If
 
     End Sub
@@ -435,21 +447,20 @@ Friend Class AccountsController
     Private Sub AccountUpdateConfirmation(ByRef status As ErrorMessage, ByRef id As Int32)
 
         If status <> ErrorMessage.SUCCESS Then
-            Dim errorMsg As String
+            Dim errorMsg As String = Local.GetValue("accounts_edition.msg_error_update") & Chr(13)
 
             Select Case status
                 Case ErrorMessage.SYNTAX
-                    errorMsg = "Syntax incorrect."
+                    errorMsg &= Local.GetValue("accounts_edition.msg_syntax")
                 Case ErrorMessage.INVALID_ATTRIBUTE
-                    errorMsg = "Invalid attribute."
+                    errorMsg &= Local.GetValue("accounts_edition.msg_invalid_attribute")
                 Case ErrorMessage.NOT_FOUND
-                    errorMsg = "One or more of formula's defined elements does not exist."
+                    errorMsg &= Local.GetValue("accounts_edition.msg_not_found")
                 Case Else
-                    errorMsg = "Unknown error."
+                    errorMsg &= Local.GetValue("accounts_edition.msg_unknown")
             End Select
 
-            MsgBox("The account could not be created." & Chr(13) & _
-                   "Error: " & errorMsg)
+            MsgBox(errorMsg)
         End If
 
 
