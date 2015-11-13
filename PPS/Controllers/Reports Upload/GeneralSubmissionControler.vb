@@ -345,6 +345,7 @@ Friend Class GeneralSubmissionControler
 errorHandler:
         GlobalVariables.APPS.Interactive = True
         GlobalVariables.APPS.ScreenUpdating = True
+        m_isUpdating = False
         Exit Sub
 
     End Sub

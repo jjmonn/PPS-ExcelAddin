@@ -18,7 +18,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 01/09/2015
+' Last modified: 13/11/2015
 
 
 Imports VIBlend.WinForms.DataGridView
@@ -233,10 +233,10 @@ Friend Class AcquisitionModel
                                              l_periodToken
 
                         Case Computer.MONTH_PERIOD_IDENTIFIER
-                            l_periodToken = Computer.MONTH_PERIOD_IDENTIFIER & m_currentPeriodDict.ElementAt(0).Key
+                            l_periodToken = Computer.MONTH_PERIOD_IDENTIFIER & m_currentPeriodDict.ElementAt(0).Value(0)
                             l_dataMapToken = l_fixed_left_token & Computer.TOKEN_SEPARATOR & _
                                              l_accountId & Computer.TOKEN_SEPARATOR & _
-                                             Computer.YEAR_PERIOD_IDENTIFIER & m_currentPeriodDict.ElementAt(0).Value(0)
+                                             Computer.MONTH_PERIOD_IDENTIFIER & m_currentPeriodDict.ElementAt(0).Value(0)
                     End Select
                     If p_dataMap.ContainsKey(l_dataMapToken) Then
                         l_dataDict(accountName).Add(l_periodToken, p_dataMap(l_dataMapToken))

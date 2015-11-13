@@ -298,9 +298,11 @@ Friend Class DataModificationsTracking
             Case CRUD.TimeConfig.MONTHS : periodIdentifyer = Computer.MONTH_PERIOD_IDENTIFIER
         End Select
 
+        On Error Resume Next
         For Each entity As String In m_dataset.m_entitiesValuesAddressDict.Keys
             For Each elem As String In m_dataset.m_accountsValuesAddressDict.Keys
                 Dim l_account As Account = GlobalVariables.Accounts.GetValue(elem)
+                If l_account Is Nothing Then Continue For
 
                 Select Case l_account.FormulaType
                     Case Account.FormulaTypes.FIRST_PERIOD_INPUT
