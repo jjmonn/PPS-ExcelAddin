@@ -61,6 +61,7 @@ Friend Class SubmissionWSController
         m_dataModificationsTracker = p_dataModificationTracker
         m_logView = New LogView(True)
 
+        GlobalVariables.APPS.CellDragAndDrop = False
         AddHandler p_excelWorksheet.Change, AddressOf Worksheet_Change
         AddHandler p_excelWorksheet.BeforeRightClick, AddressOf Worksheet_BeforeRightClick
         AddHandler p_excelWorksheet.SelectionChange, AddressOf Worksheet_SelectionChange

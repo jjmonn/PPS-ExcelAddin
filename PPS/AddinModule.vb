@@ -1987,6 +1987,7 @@ Public Class AddinModule
         If m_GRSControlersDictionary.Count = 0 Then
             SubmissionModeRibbon.Visible = False
             m_GRSControlersDictionary.Clear()
+            GlobalVariables.APPS.CellDragAndDrop = True
         Else
             ActivateGRSController(m_GRSControlersDictionary.ElementAt(0).Value)
             m_submissionWorksheetCombobox.SelectedItemId = m_currentGeneralSubmissionControler.m_associatedWorksheet.Name

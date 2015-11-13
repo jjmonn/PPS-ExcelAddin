@@ -165,19 +165,17 @@ Friend Class GeneralSubmissionControler
 
     Friend Sub CloseInstance()
 
-        Try
-            m_dataModificationsTracker.TakeOffFormats()
-            If Not m_dataset Is Nothing Then m_dataset = Nothing
-            If Not m_dataModificationsTracker Is Nothing Then m_dataModificationsTracker = Nothing
-            If Not m_acquisitionModel Is Nothing Then m_acquisitionModel = Nothing
+        On Error Resume Next
+        m_dataModificationsTracker.TakeOffFormats()
+        If Not m_dataset Is Nothing Then m_dataset = Nothing
+        If Not m_dataModificationsTracker Is Nothing Then m_dataModificationsTracker = Nothing
+        If Not m_acquisitionModel Is Nothing Then m_acquisitionModel = Nothing
 
-            RemoveHandler m_associatedWorksheet.Change, AddressOf m_submissionWSController.Worksheet_Change
-            RemoveHandler m_associatedWorksheet.BeforeRightClick, AddressOf m_submissionWSController.Worksheet_BeforeRightClick
-            RemoveHandler m_associatedWorksheet.SelectionChange, AddressOf m_submissionWSController.Worksheet_SelectionChange
-            If Not m_submissionWSController Is Nothing Then m_submissionWSController = Nothing
-        Catch ex As Exception
-
-        End Try
+        '   GlobalVariables.APPS.CellDragAndDrop = True
+        RemoveHandler m_associatedWorksheet.Change, AddressOf m_submissionWSController.Worksheet_Change
+        RemoveHandler m_associatedWorksheet.BeforeRightClick, AddressOf m_submissionWSController.Worksheet_BeforeRightClick
+        RemoveHandler m_associatedWorksheet.SelectionChange, AddressOf m_submissionWSController.Worksheet_SelectionChange
+        If Not m_submissionWSController Is Nothing Then m_submissionWSController = Nothing
         'GlobalVariables.APPS.Interactive = True
         'GlobalVariables.APPS.ScreenUpdating = True
 
