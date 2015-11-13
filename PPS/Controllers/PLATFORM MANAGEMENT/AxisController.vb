@@ -271,7 +271,7 @@ Friend Class AxisController
 
         Dim position As Int32
         Dim axisUpdates As New List(Of CRUDEntity)
-        positionsDictionary = DataGridViewsUtil.GeneratePositionsDictionary(View.DGV)
+        positionsDictionary = DataGridViewsUtil.GeneratePositionsDictionary(View.m_axisDataGridView)
 
         For Each axisId As Int32 In positionsDictionary.Keys
             position = positionsDictionary(axisId)

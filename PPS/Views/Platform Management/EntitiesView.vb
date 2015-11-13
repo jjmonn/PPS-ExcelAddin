@@ -30,19 +30,18 @@ Friend Class EntitiesView
 #Region "Instance Variables"
 
     ' Objects
-    Private Controller As EntitiesController
-    Private entitiesTV As vTreeView
-    Private entitiesFilterTV As vTreeView
-    Private entitiesFilterValuesTV As vTreeView
+    Private m_controller As EntitiesController
+    Private m_entitiesTreeview As vTreeView
+    Private m_entitiesFilterTreeview As vTreeView
+    Private m_entitiesFilterValuesTreeview As vTreeView
     Friend m_entitiesDataGridView As New vDataGridView
-    Private CP As CircularProgressUI
     Private m_currenciesComboBox As New ComboBoxEditor()
 
     ' Variables
-    Private DGVArray(,) As String
-    Private filterGroup As New FilterGroup(Of String)()
-    Friend currentRowItem As HierarchyItem
-    Friend isFillingDGV As Boolean
+    Private m_DGVArray(,) As String
+    Private m_filterGroup As New FilterGroup(Of String)()
+    Friend m_currentRowItem As HierarchyItem
+    Friend m_isFillingDGV As Boolean
 
     ' Constants
     Private Const DGV_VI_BLEND_STYLE As VIBLEND_THEME = VIBLEND_THEME.OFFICE2010SILVER
@@ -67,24 +66,25 @@ Friend Class EntitiesView
         InitializeComponent()
 
         ' Add any initialization after the InitializeComponent() call.
-        Controller = p_controller
-        entitiesTV = p_entitiesTV
-        entitiesFilterTV = p_entitiesFiltersTV
-        entitiesFilterValuesTV = p_entitiesFilterValuesTV
+        m_controller = p_controller
+        m_entitiesTreeview = p_entitiesTV
+        m_entitiesFilterTreeview = p_entitiesFiltersTV
+        m_entitiesFilterValuesTreeview = p_entitiesFilterValuesTV
 
         initFilters()
         InitCurrenciesComboBox()
         InitializeDGVDisplay()
         DGVColumnsInitialize()
-        DGVRowsInitialize(entitiesTV)
+        DGVRowsInitialize(m_entitiesTreeview)
         fillDGV()
         m_entitiesDataGridView.RowsHierarchy.ExpandAllItems()
 
         Me.TableLayoutPanel1.Controls.Add(m_entitiesDataGridView, 0, 1)
         m_entitiesDataGridView.Dock = DockStyle.Fill
-        m_entitiesDataGridView.ContextMenuStrip = RCM_TGV
+        '    m_entitiesDataGridView.ContextMenuStrip = m_entitiesRightClickMenu
 
         AddHandler m_entitiesDataGridView.CellMouseClick, AddressOf dataGridView_CellMouseClick
+        AddHandler m_entitiesDataGridView.MouseDown, AddressOf DataGridViewRightClick
         AddHandler m_entitiesDataGridView.HierarchyItemMouseClick, AddressOf dataGridView_HierarchyItemMouseClick
         AddHandler m_entitiesDataGridView.CellValueChanged, AddressOf dataGridView_CellValueChanged
         AddHandler m_entitiesDataGridView.KeyDown, AddressOf DGV_KeyDown
@@ -154,7 +154,7 @@ Friend Class EntitiesView
             Dim MyDelegate As New LoadInstanceVariables_Delegate(AddressOf LoadInstanceVariables)
             Me.Invoke(MyDelegate, New Object() {})
         Else
-            Controller.LoadInstanceVariables()
+            m_controller.LoadInstanceVariables()
         End If
     End Sub
 
@@ -165,10 +165,10 @@ Friend Class EntitiesView
             Dim MyDelegate As New UpdateEntity_Delegate(AddressOf UpdateEntity)
             Me.Invoke(MyDelegate, New Object() {ht})
         Else
-            isFillingDGV = True
+            m_isFillingDGV = True
             FillRow(ht.Id, ht)
             UpdateDGVFormat()
-            isFillingDGV = False
+            m_isFillingDGV = False
         End If
 
     End Sub
@@ -194,15 +194,31 @@ Friend Class EntitiesView
 
 #Region "DGV Right Click Menu"
 
+    Private Sub DataGridViewRightClick(sender As Object, e As MouseEventArgs)
+
+        If (e.Button <> MouseButtons.Right) Then Exit Sub
+        Dim target As HierarchyItem = m_entitiesDataGridView.RowsHierarchy.HitTest(e.Location)
+        If target IsNot Nothing Then
+            m_currentRowItem = DataGridViewsUtil.GetHierarchyItemFromId(m_entitiesDataGridView.RowsHierarchy, target.ItemValue)
+        Else
+            Dim target2 As GridCell = m_entitiesDataGridView.CellsArea.HitTest(e.Location)
+            If target2 Is Nothing Then Exit Sub
+            m_currentRowItem = target2.RowItem
+        End If
+        m_entitiesRightClickMenu.Visible = True
+        m_entitiesRightClickMenu.Bounds = New Rectangle(MousePosition, New Size(m_entitiesRightClickMenu.Width, m_entitiesRightClickMenu.Height))
+
+    End Sub
+
     Private Sub RenameEntityButton_Click(sender As Object, e As EventArgs) Handles RenameEntityButton.Click
 
-        If currentRowItem Is Nothing Then
+        If m_currentRowItem Is Nothing Then
             MsgBox(Local.GetValue("entities_edition.msg_selection"))
             Exit Sub
         End If
-        Dim newEntityName As String = InputBox(Local.GetValue("entities_edition.msg_entity_name"), , currentRowItem.Caption)
+        Dim newEntityName As String = InputBox(Local.GetValue("entities_edition.msg_entity_name"), , m_currentRowItem.Caption)
         If newEntityName <> "" Then
-            Controller.UpdateEntityName(currentRowItem.ItemValue, newEntityName)
+            m_controller.UpdateEntityName(m_currentRowItem.ItemValue, newEntityName)
         End If
 
     End Sub
@@ -243,25 +259,25 @@ Friend Class EntitiesView
     Private Sub AddEntity_cmd_Click(sender As Object, e As EventArgs) Handles CreateEntityToolStripMenuItem.Click
 
         Me.Hide()
-        Controller.ShowNewEntityUI()
+        m_controller.ShowNewEntityUI()
 
     End Sub
 
     Private Sub DeleteEntity_cmd_Click(sender As Object, e As EventArgs) Handles DeleteEntityToolStripMenuItem.Click
 
-        If Not currentRowItem Is Nothing Then
+        If Not m_currentRowItem Is Nothing Then
             Dim confirm As Integer = MessageBox.Show(Local.GetValue("entities_edition.msg_delete1") + Chr(13) + Chr(13) + _
-                                                    currentRowItem.Caption + Chr(13) + Chr(13) + _
+                                                    m_currentRowItem.Caption + Chr(13) + Chr(13) + _
                                                     Local.GetValue("entities_edition.msg_delete2") + Chr(13) + Chr(13), _
                                                     Local.GetValue("entities_edition.title_delete_confirmation"), MessageBoxButtons.YesNo, MessageBoxIcon.Question)
             If confirm = DialogResult.Yes Then
-                Dim entity_id As String = currentRowItem.ItemValue
-                Controller.DeleteEntity(entity_id)
+                Dim entity_id As String = m_currentRowItem.ItemValue
+                m_controller.DeleteEntity(entity_id)
             End If
         Else
             MsgBox(Local.GetValue("entities_edition.msg_selection"))
         End If
-        currentRowItem = Nothing
+        m_currentRowItem = Nothing
 
     End Sub
 
@@ -302,11 +318,11 @@ Friend Class EntitiesView
 
     Private Sub fillDGV()
 
-        isFillingDGV = True
+        m_isFillingDGV = True
         For Each entity As AxisElem In GlobalVariables.AxisElems.GetDictionary(AxisType.Entities).Values
             FillRow(entity.Id, entity)
         Next
-        isFillingDGV = False
+        m_isFillingDGV = False
         UpdateDGVFormat()
 
     End Sub
@@ -325,7 +341,7 @@ Friend Class EntitiesView
         currencyColumn.Width = COLUMNS_WIDTH
         ' CreateFilter(col1)
 
-        For Each rootNode As vTreeNode In entitiesFilterTV.Nodes
+        For Each rootNode As vTreeNode In m_entitiesFilterTreeview.Nodes
             CreateSubFilters(rootNode)
             '   CreateFilter(col)
         Next
@@ -363,8 +379,8 @@ Friend Class EntitiesView
         stringFilter1.ComparisonOperator = StringFilterComparisonOperator.CONTAINS
         stringFilter1.Value = "a"
 
-        filterGroup.AddFilter(FilterOperator.AND, stringFilter1)
-        filterGroup.AddFilter(FilterOperator.AND, stringFilter2)
+        m_filterGroup.AddFilter(FilterOperator.AND, stringFilter1)
+        m_filterGroup.AddFilter(FilterOperator.AND, stringFilter2)
 
     End Sub
 
@@ -385,12 +401,12 @@ Friend Class EntitiesView
     Friend Sub AddRow(ByRef node As vTreeNode, _
                       Optional ByRef parent_row As HierarchyItem = Nothing)
 
-        isFillingDGV = True
+        m_isFillingDGV = True
         Dim row As HierarchyItem = CreateRow(node.Value, node.Text, parent_row)
         For Each child_node In node.Nodes
             AddRow(child_node, row)
         Next
-        isFillingDGV = False
+        m_isFillingDGV = False
 
     End Sub
 
@@ -439,7 +455,7 @@ Friend Class EntitiesView
 
             m_entitiesDataGridView.CellsArea.SetCellValue(rowItem, column, currency.Name)
 
-            For Each filterNode As vTreeNode In entitiesFilterTV.Nodes
+            For Each filterNode As vTreeNode In m_entitiesFilterTreeview.Nodes
                 FillSubFilters(filterNode, p_entityId, rowItem)
             Next
         End If
@@ -509,8 +525,8 @@ Friend Class EntitiesView
                                                  ByRef filterId As Int32, _
                                                  ByRef filterValueId As Int32)
 
-        isFillingDGV = True
-        Dim filterNode As vTreeNode = VTreeViewUtil.FindNode(entitiesFilterTV, filterId)
+        m_isFillingDGV = True
+        Dim filterNode As vTreeNode = VTreeViewUtil.FindNode(m_entitiesFilterTreeview, filterId)
 
         If filterNode Is Nothing Then Exit Sub
         ' Update parent filters recursively
@@ -525,7 +541,7 @@ Friend Class EntitiesView
                                             childFilterNode, _
                                             {filterValueId})
         Next
-        isFillingDGV = False
+        m_isFillingDGV = False
 
     End Sub
 
@@ -600,13 +616,13 @@ Friend Class EntitiesView
 
     Private Sub dataGridView_HierarchyItemMouseClick(sender As Object, args As HierarchyItemMouseEventArgs)
 
-        currentRowItem = args.HierarchyItem
+        m_currentRowItem = args.HierarchyItem
 
     End Sub
 
     Private Sub dataGridView_CellMouseClick(ByVal sender As Object, ByVal args As CellMouseEventArgs)
 
-        currentRowItem = args.Cell.RowItem
+        m_currentRowItem = args.Cell.RowItem
 
     End Sub
 
@@ -620,7 +636,7 @@ Friend Class EntitiesView
 
     Private Sub dataGridView_CellValueChanged(sender As Object, args As CellEventArgs)
 
-        If isFillingDGV = False Then
+        If m_isFillingDGV = False Then
             If (Not args.Cell.Value Is Nothing AndAlso args.Cell.Value <> "") Then
                 Dim entityId As Int32 = args.Cell.RowItem.ItemValue
 
@@ -633,7 +649,7 @@ Friend Class EntitiesView
                             MsgBox(Local.GetValue("entities_edition.msg_currency_not_found1") & args.Cell.Value & Local.GetValue("entities_edition.msg_currency_not_found2"))
                             Exit Sub
                         Else
-                            Controller.UpdateEntityCurrency(entityId, currencyId)
+                            m_controller.UpdateEntityCurrency(entityId, currencyId)
                         End If
 
                     Case Else
@@ -645,7 +661,7 @@ Friend Class EntitiesView
                         End If
                         Dim filterId As Int32 = args.Cell.ColumnItem.ItemValue
                         UpdateEntitiesFiltersAfterEdition(entityId, filterId, filterValueId)
-                        Controller.UpdateAxisFilter(entityId, filterId, filterValueId)
+                        m_controller.UpdateAxisFilter(entityId, filterId, filterValueId)
                 End Select
 
             End If
@@ -663,7 +679,7 @@ Friend Class EntitiesView
 
     Friend Function getCurrentRowItem() As HierarchyItem
 
-        Return currentRowItem
+        Return m_currentRowItem
 
     End Function
 
@@ -727,21 +743,21 @@ Friend Class EntitiesView
         Next
 
         Dim nbcols As Int32 = m_entitiesDataGridView.ColumnsHierarchy.Items.Count
-        ReDim DGVArray(nbRows + 1, nbcols + 2)
+        ReDim m_DGVArray(nbRows + 1, nbcols + 2)
         Dim i, j As Int32
 
-        DGVArray(i, 0) = "Entity's Name"
-        DGVArray(i, 1) = "Entity's Affiliate's Name"
+        m_DGVArray(i, 0) = "Entity's Name"
+        m_DGVArray(i, 1) = "Entity's Affiliate's Name"
         For j = 0 To nbcols - 1
-            DGVArray(i, j + 2) = m_entitiesDataGridView.ColumnsHierarchy.Items(j).Caption
+            m_DGVArray(i, j + 2) = m_entitiesDataGridView.ColumnsHierarchy.Items(j).Caption
         Next
 
         For Each row In m_entitiesDataGridView.RowsHierarchy.Items
             fillInDGVArrayRow(row, 1)
         Next
 
-        WorksheetWrittingFunctions.WriteArray(DGVArray, cell)
-        ExcelFormatting.FormatEntitiesReport(GlobalVariables.APPS.ActiveSheet.range(cell, cell.Offset(UBound(DGVArray, 1), UBound(DGVArray, 2))))
+        WorksheetWrittingFunctions.WriteArray(m_DGVArray, cell)
+        ExcelFormatting.FormatEntitiesReport(GlobalVariables.APPS.ActiveSheet.range(cell, cell.Offset(UBound(m_DGVArray, 1), UBound(m_DGVArray, 2))))
 
     End Sub
 
@@ -750,15 +766,15 @@ Friend Class EntitiesView
 
         Dim j As Int32
 
-        DGVArray(rowIndex, 0) = inputRow.Caption
+        m_DGVArray(rowIndex, 0) = inputRow.Caption
         If Not inputRow.ParentItem Is Nothing Then
-            DGVArray(rowIndex, 1) = inputRow.ParentItem.Caption
+            m_DGVArray(rowIndex, 1) = inputRow.ParentItem.Caption
         Else
-            DGVArray(rowIndex, 1) = ""
+            m_DGVArray(rowIndex, 1) = ""
         End If
 
         For Each column As HierarchyItem In m_entitiesDataGridView.ColumnsHierarchy.Items
-            DGVArray(rowIndex, j + 2) = m_entitiesDataGridView.CellsArea.GetCellValue(inputRow, column)
+            m_DGVArray(rowIndex, j + 2) = m_entitiesDataGridView.CellsArea.GetCellValue(inputRow, column)
             j = j + 1
         Next
         rowIndex = rowIndex + 1

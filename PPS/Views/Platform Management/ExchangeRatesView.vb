@@ -67,7 +67,7 @@ Friend Class ExchangeRatesView
 
         m_ratesVersionsTV.Dock = DockStyle.Fill
         m_ratesDataGridView.Dock = DockStyle.Fill
-        m_ratesDataGridView.ContextMenuStrip = dgvRCM
+        m_ratesDataGridView.ContextMenuStrip = m_exchangeRatesRightClickMenu
         m_ratesVersionsTV.ContextMenuStrip = VersionsRCMenu
         m_ratesVersionsTV.ImageList = m_versionsTreeviewImageList
         VTreeViewUtil.InitTVFormat(m_ratesVersionsTV)
@@ -76,7 +76,7 @@ Friend Class ExchangeRatesView
         AddHandler m_ratesDataGridView.CellValueChanging, AddressOf RatesDataGridView_CellValueChanging
         AddHandler m_ratesVersionsTV.KeyPress, AddressOf Rates_versionsTV_KeyPress
         AddHandler m_ratesVersionsTV.MouseDoubleClick, AddressOf RatesVersionsTV_MouseDoubleClick
-        '     AddHandler m_ratesVersionsTV.MouseClick, AddressOf Rates_versionsTV_MouseClick
+        ' AddHandler m_ratesVersionsTV.MouseClick, AddressOf Rates_versionsTV_MouseClick
         DesactivateUnallowed()
         MultiLanguageSetup()
 
@@ -292,6 +292,7 @@ Friend Class ExchangeRatesView
 
         If name <> "" Then m_controller.UpdateVersionName(m_ratesVersionsTV.SelectedNode.Value, name)
         m_ratesVersionsTV.SelectedNode.Remove()
+
     End Sub
 
     Private Sub RatesDataGridView_CellValueChanging(sender As Object, args As CellValueChangingEventArgs)

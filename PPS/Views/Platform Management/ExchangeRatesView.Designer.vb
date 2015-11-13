@@ -33,8 +33,7 @@ Partial Class ExchangeRatesView
         Me.ToolStripSeparator6 = New System.Windows.Forms.ToolStripSeparator()
         Me.DeleteVersionRCM = New System.Windows.Forms.ToolStripMenuItem()
         Me.RenameBT = New System.Windows.Forms.ToolStripMenuItem()
-        Me.dgvRCM = New System.Windows.Forms.ContextMenuStrip(Me.components)
-        Me.ToolStripSeparator3 = New System.Windows.Forms.ToolStripSeparator()
+        Me.m_exchangeRatesRightClickMenu = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.ImportFromExcelToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
         Me.CopyRateDownToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.TableLayoutPanel4 = New System.Windows.Forms.TableLayoutPanel()
@@ -55,7 +54,7 @@ Partial Class ExchangeRatesView
         Me.rates_version_TB = New System.Windows.Forms.TextBox()
         Me.m_versionsTreeviewImageList = New System.Windows.Forms.ImageList(Me.components)
         Me.VersionsRCMenu.SuspendLayout()
-        Me.dgvRCM.SuspendLayout()
+        Me.m_exchangeRatesRightClickMenu.SuspendLayout()
         Me.TableLayoutPanel4.SuspendLayout()
         CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SplitContainer1.SuspendLayout()
@@ -125,29 +124,24 @@ Partial Class ExchangeRatesView
         Me.RenameBT.Size = New System.Drawing.Size(161, 24)
         Me.RenameBT.Text = "Rename"
         '
-        'dgvRCM
+        'm_exchangeRatesRightClickMenu
         '
-        Me.dgvRCM.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripSeparator3, Me.ImportFromExcelToolStripMenuItem1, Me.CopyRateDownToolStripMenuItem})
-        Me.dgvRCM.Name = "dgvRCM"
-        Me.dgvRCM.Size = New System.Drawing.Size(149, 58)
-        '
-        'ToolStripSeparator3
-        '
-        Me.ToolStripSeparator3.Name = "ToolStripSeparator3"
-        Me.ToolStripSeparator3.Size = New System.Drawing.Size(145, 6)
+        Me.m_exchangeRatesRightClickMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ImportFromExcelToolStripMenuItem1, Me.CopyRateDownToolStripMenuItem})
+        Me.m_exchangeRatesRightClickMenu.Name = "dgvRCM"
+        Me.m_exchangeRatesRightClickMenu.Size = New System.Drawing.Size(153, 74)
         '
         'ImportFromExcelToolStripMenuItem1
         '
         Me.ImportFromExcelToolStripMenuItem1.Image = Global.FinancialBI.My.Resources.Resources.Excel_Blue_32x32
         Me.ImportFromExcelToolStripMenuItem1.Name = "ImportFromExcelToolStripMenuItem1"
-        Me.ImportFromExcelToolStripMenuItem1.Size = New System.Drawing.Size(148, 24)
+        Me.ImportFromExcelToolStripMenuItem1.Size = New System.Drawing.Size(152, 24)
         Me.ImportFromExcelToolStripMenuItem1.Text = "Import"
         '
         'CopyRateDownToolStripMenuItem
         '
         Me.CopyRateDownToolStripMenuItem.Image = Global.FinancialBI.My.Resources.Resources.Download_
         Me.CopyRateDownToolStripMenuItem.Name = "CopyRateDownToolStripMenuItem"
-        Me.CopyRateDownToolStripMenuItem.Size = New System.Drawing.Size(148, 24)
+        Me.CopyRateDownToolStripMenuItem.Size = New System.Drawing.Size(152, 24)
         Me.CopyRateDownToolStripMenuItem.Text = "Copy down"
         '
         'TableLayoutPanel4
@@ -314,7 +308,7 @@ Partial Class ExchangeRatesView
         Me.Name = "ExchangeRatesView"
         Me.Size = New System.Drawing.Size(886, 605)
         Me.VersionsRCMenu.ResumeLayout(False)
-        Me.dgvRCM.ResumeLayout(False)
+        Me.m_exchangeRatesRightClickMenu.ResumeLayout(False)
         Me.TableLayoutPanel4.ResumeLayout(False)
         CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.SplitContainer1.ResumeLayout(False)
@@ -334,8 +328,7 @@ Partial Class ExchangeRatesView
     Friend WithEvents AddRatesVersionRCM As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents AddFolderRCM As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents DeleteVersionRCM As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents dgvRCM As System.Windows.Forms.ContextMenuStrip
-    Friend WithEvents ToolStripSeparator3 As System.Windows.Forms.ToolStripSeparator
+    Friend WithEvents m_exchangeRatesRightClickMenu As System.Windows.Forms.ContextMenuStrip
     Friend WithEvents CopyRateDownToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents TableLayoutPanel4 As System.Windows.Forms.TableLayoutPanel
     Friend WithEvents TableLayoutPanel5 As System.Windows.Forms.TableLayoutPanel

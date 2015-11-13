@@ -257,16 +257,6 @@ Friend Class GlobalFactUI
 
 #Region "m_ratesDataGridView Right Click Menu"
 
-    Private Sub FactRightClick(sender As Object, e As MouseEventArgs)
-        If (e.Button <> MouseButtons.Right) Then Exit Sub
-        Dim target As HierarchyItem = m_dataGridView.ColumnsHierarchy.HitTest(e.Location)
-        If target Is Nothing Then Exit Sub
-
-        FactRightClickMenu.Visible = True
-        FactRightClickMenu.Bounds = New Rectangle(MousePosition, New Size(FactRightClickMenu.Width, FactRightClickMenu.Height))
-        m_selectedFact = target.ItemValue
-    End Sub
-
     Private Sub ImportFromExcelBT_Click_1(sender As Object, e As EventArgs) Handles ImportFromExcelBT.Click
 
         If m_dataGridView.CellsArea.SelectedCells.Length > 0 Then
@@ -288,6 +278,21 @@ Friend Class GlobalFactUI
 
 #Region "Events"
 
+    Private Sub FactRightClick(sender As Object, e As MouseEventArgs)
+
+        If (e.Button <> MouseButtons.Right) Then Exit Sub
+        Dim target As HierarchyItem = m_dataGridView.ColumnsHierarchy.HitTest(e.Location)
+        If target Is Nothing Then
+            target = m_dataGridView.RowsHierarchy.HitTest(e.Location)
+            If target Is Nothing Then Exit Sub
+        End If
+        
+        FactRightClickMenu.Visible = True
+        FactRightClickMenu.Bounds = New Rectangle(MousePosition, New Size(FactRightClickMenu.Width, FactRightClickMenu.Height))
+        m_selectedFact = target.ItemValue
+
+    End Sub
+
     Private Sub RenameVersionBT_Click(sender As Object, e As EventArgs) Handles RenameVersionBT.Click
 
         If m_versionsTV.SelectedNode Is Nothing Then Exit Sub
@@ -308,7 +313,6 @@ Friend Class GlobalFactUI
         End If
 
     End Sub
-
 
     Private Sub VersionsTV_MouseDoubleClick(sender As Object, e As MouseEventArgs)
 
