@@ -49,11 +49,12 @@ Public Class ComputerInputEntity
 
     End Function
 
-    Friend Function RemoveEntityDataFromDataMap(ByRef p_entityId As Int32)
+    Friend Function RemoveEntityDataFromDataMap(ByRef p_entityId As Int32) As Boolean
 
         If m_dataMap.ContainsKey(p_entityId) Then
             Return m_dataMap.Remove(p_entityId)
         End If
+        Return False
 
     End Function
 
