@@ -157,6 +157,7 @@ Friend Class SubmissionWSController
         If m_generalSubmissionController.m_isUpdating = False AndAlso m_disableWSChangeFlag = False Then
 
             For Each cell As Excel.Range In p_target.Cells
+                If CellBelongsToDimensionsDefinition(cell.Address) Then Continue For
 
                 Dim intersect = GlobalVariables.APPS.Intersect(cell, m_dataModificationsTracker.m_dataSetRegion)
                 If Not intersect Is Nothing Then
@@ -319,6 +320,32 @@ Friend Class SubmissionWSController
 #End Region
 
 
+#Region "Utilities"
+
+    Private Function CellBelongsToDimensionsDefinition(ByVal p_address As String) As Boolean
+
+        p_address = Replace(p_address, "$", "")
+        If m_dataSet.m_accountsAddressValuesDictionary.ContainsKey(p_address) Then
+            m_disableWSChangeFlag = True
+            m_excelWorksheet.Range(p_address).Value = m_dataSet.m_accountsAddressValuesDictionary(p_address)
+            m_disableWSChangeFlag = False
+            Return True
+        ElseIf m_dataSet.m_periodsAddressValuesDictionary.ContainsKey(p_address) Then
+            m_disableWSChangeFlag = True
+            m_excelWorksheet.Range(p_address).Value = m_dataSet.m_periodsAddressValuesDictionary(p_address)
+            m_disableWSChangeFlag = False
+            Return True
+        ElseIf m_dataSet.m_entitiesAddressValuesDictionary.ContainsKey(p_address) Then
+            m_disableWSChangeFlag = True
+            m_excelWorksheet.Range(p_address).Value = m_dataSet.m_entitiesAddressValuesDictionary(p_address)
+            m_disableWSChangeFlag = False
+            Return True
+        End If
+        Return False
+
+    End Function
+
+#End Region
 
 End Class
 
