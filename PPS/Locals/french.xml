@@ -110,7 +110,14 @@
     <string name="msg_name_empty">Le nom du compte ne peut pas être vide.</string>
     <string name="msg_fill_values">Le format et la formule doivent être remplis.</string>
     <string name="msg_name_already_used">Ce nom est déjà utilisé pour un autre compte.</string>
-    
+	<string name="msg_error_create">Impossible de créer le compte.</string>
+    <string name="msg_error_update">Impossible de modifier le compte.</string>
+	<string name="msg_error_delete">Impossible de supprimer le compte.</string>
+	<string name="msg_invalid_attribute">Attribut(s) invalide(s).</string>
+	<string name="msg_syntax">Syntaxe invalide.</string>
+	<string name="msg_not_found">Un ou plusieurs des éléments de la formule n'existent pas.</string>
+	<string name="msg_unknown">Erreur inconnue.</string>
+	
   </category>
 
   <category name="entities_edition">
