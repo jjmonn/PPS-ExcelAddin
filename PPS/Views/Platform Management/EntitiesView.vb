@@ -81,8 +81,7 @@ Friend Class EntitiesView
 
         Me.TableLayoutPanel1.Controls.Add(m_entitiesDataGridView, 0, 1)
         m_entitiesDataGridView.Dock = DockStyle.Fill
-        '    m_entitiesDataGridView.ContextMenuStrip = m_entitiesRightClickMenu
-
+       
         AddHandler m_entitiesDataGridView.CellMouseClick, AddressOf dataGridView_CellMouseClick
         AddHandler m_entitiesDataGridView.MouseDown, AddressOf DataGridViewRightClick
         AddHandler m_entitiesDataGridView.HierarchyItemMouseClick, AddressOf dataGridView_HierarchyItemMouseClick

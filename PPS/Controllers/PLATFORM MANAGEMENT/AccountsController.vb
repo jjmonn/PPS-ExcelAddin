@@ -56,7 +56,8 @@ Friend Class AccountsController
         GlobalVariables.Accounts.LoadAccountsTV(m_accountsTV)
         GlobalVariables.GlobalFacts.LoadGlobalFactsTV(m_globalFactsTV)
         m_view = New AccountsView(Me, m_accountsTV, m_globalFactsTV)
-        InstanceVariablesLoading()
+        m_newAccountView = New NewAccountUI(m_view, Me)
+        m_formulasTranslator = New FormulasTranslations()
         m_positionsDictionary = VTreeViewUtil.GeneratePositionsDictionary(m_accountsTV)
         m_formulaTypesToBeTested.Add(Account.FormulaTypes.FIRST_PERIOD_INPUT)
         m_formulaTypesToBeTested.Add(Account.FormulaTypes.FORMULA)
@@ -65,13 +66,6 @@ Friend Class AccountsController
         AddHandler GlobalVariables.Accounts.DeleteEvent, AddressOf AccountDeleteFromServer
         AddHandler GlobalVariables.Accounts.CreationEvent, AddressOf AccountCreateConfirmation
         AddHandler GlobalVariables.Accounts.UpdateEvent, AddressOf AccountUpdateConfirmation
-
-    End Sub
-
-    Private Sub InstanceVariablesLoading()
-
-        m_newAccountView = New NewAccountUI(m_view, Me)
-        m_formulasTranslator = New FormulasTranslations()
 
     End Sub
 
@@ -398,16 +392,23 @@ Friend Class AccountsController
         Dim l_node As vTreeNode = VTreeViewUtil.FindNode(m_accountsTV, p_account.Id)
         If status = ErrorMessage.SUCCESS _
         AndAlso m_isClosing = False Then
-            InstanceVariablesLoading()
+            m_formulasTranslator = New FormulasTranslations()
             If l_node Is Nothing Then
                 m_view.AccountNodeAddition(p_account.Id, _
                                            p_account.ParentId, _
                                            p_account.Name, _
                                            p_account.Image)
+                m_newAccountView.AccountNodeAddition(p_account.Id, _
+                                                     p_account.ParentId, _
+                                                     p_account.Name, _
+                                                     p_account.Image)
             Else
                 m_view.TVUpdate(l_node, _
                                 p_account.Name, _
                                 p_account.Image)
+                m_newAccountView.TVUpdate(l_node, _
+                                          p_account.Name, _
+                                          p_account.Image)
             End If
         End If
 
@@ -418,7 +419,8 @@ Friend Class AccountsController
         If status = ErrorMessage.SUCCESS _
          AndAlso m_isClosing = False Then
             m_view.TVNodeDelete(id)
-            InstanceVariablesLoading()
+            m_newAccountView.TVNodeDelete(id)
+            m_formulasTranslator = New FormulasTranslations()
         End If
 
     End Sub
@@ -438,7 +440,6 @@ Friend Class AccountsController
                 Case Else
                     errorMsg &= Local.GetValue("accounts_edition.msg_unknown")
             End Select
-
             MsgBox(errorMsg)
         End If
 
@@ -448,7 +449,6 @@ Friend Class AccountsController
 
         If status <> ErrorMessage.SUCCESS Then
             Dim errorMsg As String = Local.GetValue("accounts_edition.msg_error_update") & Chr(13)
-
             Select Case status
                 Case ErrorMessage.SYNTAX
                     errorMsg &= Local.GetValue("accounts_edition.msg_syntax")
@@ -478,7 +478,7 @@ Friend Class AccountsController
 
     Friend Sub DisplayNewAccountView(ByRef p_parentNode As VIBlend.WinForms.Controls.vTreeNode)
 
-        m_newAccountView.parentNodeId = p_parentNode.Value
+        m_newAccountView.m_parentNodeId = p_parentNode.Value
         m_newAccountView.Show()
 
     End Sub
