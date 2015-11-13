@@ -79,29 +79,7 @@
   </Product>
 
 
-  <Fragment>
-		<Directory Id="TARGETDIR" Name="SourceDir">
-			<Directory Id="LocalAppDataFolder">
-				<Directory Id="INSTALLFOLDER" Name="PPS" >
-         <Component Id="INSTALLFOLDER" Guid="997bdfac-e07d-4869-8fa6-6a3c96b5372c">
-            <RemoveFolder On="both" Id="INSTALLFOLDER"/>
-            <RegistryValue Root="HKCU" Key="Software\[Manufacturer]\[ProductName]" Type="string" Value="PPS" />
-         </Component>
-       </Directory>
-     </Directory>
-     <Directory Id="ProgramMenuFolder" />
-     <Directory Id="Drivers" Name="DRIVERS" >
-       <Directory Id="MSI" Name="MSI">
-         <Component Id="MSI" DiskId="1" Guid="ef4fb315-ad6d-49cb-a479-3f6be808aac5">
-           <File Id="mySqlODBCDriver5.1.msi"
-            Name="mySqlODBCDriver5.1.msi"
-            src="C:\Users\Julien Monnereau\Google Drive\OPERATIONS DEPARTMENT\PPS .V1\mySqlODBCDriver5.1.msi"
-               />
-         </Component>
-       </Directory>
-     </Directory>
-   </Directory>
- </Fragment>
+ 
 
 
  <Fragment>
