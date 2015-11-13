@@ -42,7 +42,7 @@ Partial Class InputSelectionPane
         Me.EntitiesTVImageList.ImageStream = CType(resources.GetObject("EntitiesTVImageList.ImageStream"), System.Windows.Forms.ImageListStreamer)
         Me.EntitiesTVImageList.TransparentColor = System.Drawing.Color.Transparent
         Me.EntitiesTVImageList.Images.SetKeyName(0, "favicon(81).ico")
-        Me.EntitiesTVImageList.Images.SetKeyName(1, "cloud.ico")
+        Me.EntitiesTVImageList.Images.SetKeyName(1, "cloud_dark.ico")
         '
         'EntitiesTV
         '

@@ -169,9 +169,9 @@ Public Class AddinModule
         Me.MainTabImageList = New System.Windows.Forms.ImageList(Me.components)
         Me.financialModelingBT = New AddinExpress.MSO.ADXRibbonButton(Me.components)
         Me.ConfigurationGroup = New AddinExpress.MSO.ADXRibbonGroup(Me.components)
-        Me.FormatButton = New AddinExpress.MSO.ADXRibbonButton(Me.components)
         Me.ConfigurationRibbonBT = New AddinExpress.MSO.ADXRibbonButton(Me.components)
         Me.SettingsBT = New AddinExpress.MSO.ADXRibbonButton(Me.components)
+        Me.FormatButton = New AddinExpress.MSO.ADXRibbonButton(Me.components)
         Me.NewIcosSmall = New System.Windows.Forms.ImageList(Me.components)
         Me.SubmissionRibbonIL = New System.Windows.Forms.ImageList(Me.components)
         Me.LightsImageList = New System.Windows.Forms.ImageList(Me.components)
@@ -410,7 +410,7 @@ Public Class AddinModule
         Me.Menu3.Images.SetKeyName(15, "dna.ico")
         Me.Menu3.Images.SetKeyName(16, "system-settings-icon.ico")
         Me.Menu3.Images.SetKeyName(17, "font.ico")
-        Me.Menu3.Images.SetKeyName(18, "cloud.ico")
+        Me.Menu3.Images.SetKeyName(18, "cloud_dark.ico")
         '
         'EditionMainRibbonBT
         '
@@ -590,16 +590,6 @@ Public Class AddinModule
         Me.ConfigurationGroup.ImageTransparentColor = System.Drawing.Color.Transparent
         Me.ConfigurationGroup.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
         '
-        'FormatButton
-        '
-        Me.FormatButton.Caption = "Format"
-        Me.FormatButton.Id = "adxRibbonButton_0609b73e6104420c9944e6db704cb0e9"
-        Me.FormatButton.Image = 17
-        Me.FormatButton.ImageList = Me.Menu3
-        Me.FormatButton.ImageTransparentColor = System.Drawing.Color.Transparent
-        Me.FormatButton.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
-        Me.FormatButton.Size = AddinExpress.MSO.ADXRibbonXControlSize.Large
-        '
         'ConfigurationRibbonBT
         '
         Me.ConfigurationRibbonBT.Caption = "Configuration"
@@ -622,6 +612,16 @@ Public Class AddinModule
         Me.SettingsBT.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
         Me.SettingsBT.ScreenTip = "Click to open the Setting Interface"
         Me.SettingsBT.Size = AddinExpress.MSO.ADXRibbonXControlSize.Large
+        '
+        'FormatButton
+        '
+        Me.FormatButton.Caption = "Format"
+        Me.FormatButton.Id = "adxRibbonButton_0609b73e6104420c9944e6db704cb0e9"
+        Me.FormatButton.Image = 17
+        Me.FormatButton.ImageList = Me.Menu3
+        Me.FormatButton.ImageTransparentColor = System.Drawing.Color.Transparent
+        Me.FormatButton.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
+        Me.FormatButton.Size = AddinExpress.MSO.ADXRibbonXControlSize.Large
         '
         'NewIcosSmall
         '
@@ -1289,7 +1289,7 @@ Public Class AddinModule
         GlobalVariables.GlobalPPSBIController = New PPSBIController
         GlobalVariables.Addin = Me
         SetMainMenuButtonState(False)
-        Local.LoadLocalFile("C:\Users\monnereau\Documents\GitHub\FinancialBI_Addin\PPS\Locals\english.xml")
+        Local.LoadLocalFile("C:\Users\PPS\Documents\GitHub\FinancialBI_Addin\PPS\Locals\english.xml")
 
     End Sub
 
