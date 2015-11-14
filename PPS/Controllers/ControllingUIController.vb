@@ -286,7 +286,8 @@ Friend Class ControllingUIController
         itemsDimensionsDict = New Dictionary(Of HierarchyItem, Hashtable)
         FillHierarchy(m_rowsHierarchyNode)
         FillHierarchy(m_columnsHierarchyNode)
-        m_view.m_progressBar.Launch(1, m_view.accountsTV.Nodes.Count)
+        m_view.m_progressBar.Value = 0
+        m_view.m_progressBar.Refresh()
 
         For Each tab_ As VIBlend.WinForms.Controls.vTabPage In m_view.DGVsControlTab.TabPages
             '  View.DGVsControlTab.SelectedTab = tab_
@@ -316,7 +317,8 @@ Friend Class ControllingUIController
             If m_rowsHierarchyNode.Nodes.Count > 0 Then CreateRow(DGV, m_rowsHierarchyNode.Nodes(0))
             DGV.ColumnsHierarchy.AutoStretchColumns = True
             AddHandler DGV.CellValueNeeded, AddressOf DGVs_CellValueNeeded
-            m_view.m_progressBar.AddProgress(1)
+            m_view.m_progressBar.Value = (tab_.TabIndex - 2) / m_view.DGVsControlTab.TabPages.Count * 100
+            m_view.m_progressBar.Refresh()
         Next
         m_initDisplayFlag = True
 

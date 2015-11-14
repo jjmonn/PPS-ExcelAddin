@@ -42,6 +42,7 @@ Partial Class ControllingUI_2
         Me.SelectAllToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
         Me.UnselectAllToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
         Me.SplitContainer1 = New System.Windows.Forms.SplitContainer()
+        Me.m_progressBar = New VIBlend.WinForms.Controls.vProgressBar()
         Me.DGVsControlTab = New VIBlend.WinForms.Controls.vTabControl()
         Me.ButtonsImageList = New System.Windows.Forms.ImageList(Me.components)
         Me.MenuImageList = New System.Windows.Forms.ImageList(Me.components)
@@ -56,6 +57,7 @@ Partial Class ControllingUI_2
         Me.MainMenu = New System.Windows.Forms.MenuStrip()
         Me.ExcelToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.DropOnExcelToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.DropOnlyTheVisibleItemsOnExcelToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.BusinessControlToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.VersionsComparisonToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.SwitchVersionsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -63,7 +65,6 @@ Partial Class ControllingUI_2
         Me.RefreshToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ChartBT = New System.Windows.Forms.ToolStripMenuItem()
         Me.ExpansionImageList = New System.Windows.Forms.ImageList(Me.components)
-        Me.DropOnlyTheVisibleItemsOnExcelToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.EntitiesRCMenu.SuspendLayout()
         Me.PeriodsRCMenu.SuspendLayout()
         Me.DataGridViewsRCMenu.SuspendLayout()
@@ -194,10 +195,23 @@ Partial Class ControllingUI_2
         '
         'SplitContainer1.Panel2
         '
+        Me.SplitContainer1.Panel2.Controls.Add(Me.m_progressBar)
         Me.SplitContainer1.Panel2.Controls.Add(Me.DGVsControlTab)
         Me.SplitContainer1.Size = New System.Drawing.Size(698, 369)
         Me.SplitContainer1.SplitterDistance = 129
         Me.SplitContainer1.TabIndex = 8
+        '
+        'm_progressBar
+        '
+        Me.m_progressBar.BackColor = System.Drawing.Color.Transparent
+        Me.m_progressBar.Location = New System.Drawing.Point(272, 310)
+        Me.m_progressBar.Name = "m_progressBar"
+        Me.m_progressBar.RoundedCornersMask = CType(15, Byte)
+        Me.m_progressBar.Size = New System.Drawing.Size(272, 18)
+        Me.m_progressBar.TabIndex = 3
+        Me.m_progressBar.Text = "VProgressBar1"
+        Me.m_progressBar.Value = 0
+        Me.m_progressBar.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
         '
         'DGVsControlTab
         '
@@ -358,7 +372,7 @@ Partial Class ControllingUI_2
         Me.MainMenu.Location = New System.Drawing.Point(0, 0)
         Me.MainMenu.Name = "MainMenu"
         Me.MainMenu.ShowItemToolTips = True
-        Me.MainMenu.Size = New System.Drawing.Size(607, 59)
+        Me.MainMenu.Size = New System.Drawing.Size(515, 59)
         Me.MainMenu.TabIndex = 0
         Me.MainMenu.Text = "[CUI.main_menu]"
         '
@@ -378,6 +392,12 @@ Partial Class ControllingUI_2
         Me.DropOnExcelToolStripMenuItem.Name = "DropOnExcelToolStripMenuItem"
         Me.DropOnExcelToolStripMenuItem.Size = New System.Drawing.Size(294, 24)
         Me.DropOnExcelToolStripMenuItem.Text = "[CUI.drop_on_excel]"
+        '
+        'DropOnlyTheVisibleItemsOnExcelToolStripMenuItem
+        '
+        Me.DropOnlyTheVisibleItemsOnExcelToolStripMenuItem.Name = "DropOnlyTheVisibleItemsOnExcelToolStripMenuItem"
+        Me.DropOnlyTheVisibleItemsOnExcelToolStripMenuItem.Size = New System.Drawing.Size(294, 24)
+        Me.DropOnlyTheVisibleItemsOnExcelToolStripMenuItem.Text = "Drop only the visible items on Excel"
         '
         'BusinessControlToolStripMenuItem
         '
@@ -434,12 +454,6 @@ Partial Class ControllingUI_2
         Me.ExpansionImageList.TransparentColor = System.Drawing.Color.Transparent
         Me.ExpansionImageList.Images.SetKeyName(0, "add.ico")
         Me.ExpansionImageList.Images.SetKeyName(1, "minus")
-        '
-        'DropOnlyTheVisibleItemsOnExcelToolStripMenuItem
-        '
-        Me.DropOnlyTheVisibleItemsOnExcelToolStripMenuItem.Name = "DropOnlyTheVisibleItemsOnExcelToolStripMenuItem"
-        Me.DropOnlyTheVisibleItemsOnExcelToolStripMenuItem.Size = New System.Drawing.Size(294, 24)
-        Me.DropOnlyTheVisibleItemsOnExcelToolStripMenuItem.Text = "Drop only the visible items on Excel"
         '
         'ControllingUI_2
         '
@@ -511,4 +525,5 @@ Partial Class ControllingUI_2
     Friend WithEvents CollapseAllRightClick As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ChartBT As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents DropOnlyTheVisibleItemsOnExcelToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents m_progressBar As VIBlend.WinForms.Controls.vProgressBar
 End Class

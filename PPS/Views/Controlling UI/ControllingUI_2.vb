@@ -44,7 +44,6 @@ Friend Class ControllingUI_2
     Private leftSplitContainer As SplitContainer
     Private rightSplitContainer As SplitContainer
     Private m_circularProgress As New ProgressIndicator
-    Friend m_progressBar As New ProgressBarControl
     Private leftPaneExpandBT As vButton
     Private rightPaneExpandBT As vButton
     Friend BackgroundWorker1 As New BackgroundWorker
@@ -161,7 +160,6 @@ Friend Class ControllingUI_2
     Private Sub SetupProgressUIs()
 
         ' Progress Bar
-        SplitContainer1.Panel2.Controls.Add(m_progressBar)
         m_progressBar.Visible = False
 
         ' Progress Indicator (circular)
@@ -331,10 +329,12 @@ Friend Class ControllingUI_2
         If m_controller.m_isComputingFlag = True Then
             Exit Sub
         End If
-        m_progressBar.Left = (SplitContainer1.Panel2.Width - m_progressBar.Width) / 2
-        m_progressBar.Top = (SplitContainer1.Panel2.Height - m_progressBar.Height) / 2
+        '   m_progressBar.Left = (SplitContainer1.Panel2.Width - m_progressBar.Width) / 2
+        '   m_progressBar.Top = (SplitContainer1.Panel2.Height - m_progressBar.Height) / 2
         DGVsControlTab.Visible = False
         m_progressBar.Visible = True
+        m_progressBar.Enabled = True
+        m_progressBar.Show()
         BackgroundWorker1.RunWorkerAsync()
 
     End Sub
