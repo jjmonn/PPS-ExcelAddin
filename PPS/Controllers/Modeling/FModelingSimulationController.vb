@@ -29,7 +29,6 @@ Friend Class FModelingSimulationController
     Private Model As New FDLL_Interface
     Private MainView As FModelingUI2
     Friend View As FModelingSimulationControl
-    Friend FModellingAccount As New FModellingAccount
     Friend scenario As Scenario
     Private fAccountsNodes As TreeNode
 
@@ -58,12 +57,12 @@ Friend Class FModelingSimulationController
 
         Me.MainView = MainView
         View = New FModelingSimulationControl(Me)
-        fAccountsNodes = FModellingAccount.getFAccountsNode()
-        possible_targets_name_id_dict = FModelingAccountsMapping.GetFModellingAccountsDict(FINANCIAL_MODELLING_NAME_VARIABLE, _
-                                                                                            FINANCIAL_MODELLING_ID_VARIABLE, _
-                                                                                            FINANCIAL_MODELLING_OUTPUT_TYPE)
-        initial_constraints_id_list = FModelingAccountsMapping.GetFModellingAccountsList(FINANCIAL_MODELLING_ID_VARIABLE, _
-                                                                                         FINANCIAL_MODELLING_CONSTRAINT_TYPE)
+        'fAccountsNodes = FModellingAccount.getFAccountsNode()
+        'possible_targets_name_id_dict = FModelingAccountsMapping.GetFModellingAccountsDict(FINANCIAL_MODELLING_NAME_VARIABLE, _
+        '                                                                                    FINANCIAL_MODELLING_ID_VARIABLE, _
+        '                                                                                    FINANCIAL_MODELLING_OUTPUT_TYPE)
+        'initial_constraints_id_list = FModelingAccountsMapping.GetFModellingAccountsList(FINANCIAL_MODELLING_ID_VARIABLE, _
+        '                                                                                 FINANCIAL_MODELLING_CONSTRAINT_TYPE)
 
     End Sub
 
@@ -95,20 +94,19 @@ Friend Class FModelingSimulationController
 
     Friend Sub NewScenario()
 
-        scenario = New Scenario(FModellingAccount, _
-                                periods_list,
-                                fAccountsNodes, _
-                                FModelingAccountsMapping.GetFModellingAccountsList(FINANCIAL_MODELLING_ID_VARIABLE, _
-                                                                                   FINANCIAL_MODELLING_CONSTRAINT_TYPE))
-        scenario.constraintsDGV.ContextMenuStrip = View.inputsDGVsRightClickMenu
-        View.DGVsSplitContainer.Panel1.Controls.Add(scenario.constraintsDGV)
-        View.DGVsSplitContainer.Panel2.Controls.Add(scenario.generalDGV)
-        View.SplitContainer1.Panel2.Controls.Add(scenario.Outputchart)
-        scenario.constraintsDGV.Dock = DockStyle.Fill
-        scenario.generalDGV.Dock = DockStyle.Fill
-        scenario.Outputchart.Dock = DockStyle.Fill
+        'scenario = New Scenario(periods_list,
+        '                        fAccountsNodes, _
+        '                        FModelingAccountsMapping.GetFModellingAccountsList(FINANCIAL_MODELLING_ID_VARIABLE, _
+        '                                                                           FINANCIAL_MODELLING_CONSTRAINT_TYPE))
+        'scenario.constraintsDGV.ContextMenuStrip = View.inputsDGVsRightClickMenu
+        'View.DGVsSplitContainer.Panel1.Controls.Add(scenario.constraintsDGV)
+        'View.DGVsSplitContainer.Panel2.Controls.Add(scenario.generalDGV)
+        'View.SplitContainer1.Panel2.Controls.Add(scenario.Outputchart)
+        'scenario.constraintsDGV.Dock = DockStyle.Fill
+        'scenario.generalDGV.Dock = DockStyle.Fill
+        'scenario.Outputchart.Dock = DockStyle.Fill
 
-        ComputeScenario()
+        'ComputeScenario()
 
     End Sub
 
@@ -181,7 +179,7 @@ Friend Class FModelingSimulationController
             Dim percentage_coef As Int32
 
             ' instance variable -> fModelingAccounts Attributes Hash !!! 
-            If FModellingAccount.ReadFModellingAccount(constraint_row.Caption, FINANCIAL_MODELLING_FORMAT_VARIABLE) = scenario.PERCENT_FORMAT Then percentage_coef = 100 Else percentage_coef = 1
+            '       If FModellingAccount.ReadFModellingAccount(constraint_row.Caption, FINANCIAL_MODELLING_FORMAT_VARIABLE) = scenario.PERCENT_FORMAT Then percentage_coef = 100 Else percentage_coef = 1
             For j As Int32 = 1 To periods_list.Length
                 Dim value = scenario.constraintsDGV.CellsArea.GetCellValue(constraint_row, scenario.constraintsDGV.ColumnsHierarchy.Items(j))
                 If IsNumeric(value) Then

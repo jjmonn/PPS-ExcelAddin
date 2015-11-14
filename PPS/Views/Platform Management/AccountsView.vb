@@ -154,7 +154,6 @@ Friend Class AccountsView
 
     Private Sub GlobalFactsTVInit()
 
-        '   TVInit(m_globalFactsTV)
         m_globalFactsTV.Dock = DockStyle.Fill
         m_globalFactsTV.LabelEdit = False
         m_globalFactsTV.CollapseAll()
@@ -553,12 +552,8 @@ SubmitFormula:
             TVRCM.Show(e.Location)
             TVRCM.Visible = True
         Else
-            Dim scrollY = m_accountTV.ScrollPosition.Y
-            Dim location As Drawing.Point = e.Location
-            location.Y -= scrollY
-            Dim l_node As vTreeNode = Me.m_accountTV.HitTest(location)
+            Dim l_node As vTreeNode = VTreeViewUtil.GetNodeAtPosition(m_accountTV, e.Location)
             If l_node IsNot Nothing Then
-                System.Diagnostics.Debug.WriteLine("Dragging node: " + l_node.Text)
                 Me.m_accountTV.DoDragDrop(l_node, DragDropEffects.Move)
             End If
         End If
@@ -570,13 +565,8 @@ SubmitFormula:
         If m_formulaEditionButton.Toggle = CheckState.Unchecked Then
 
             If e.Data.GetDataPresent("VIBlend.WinForms.Controls.vTreeNode", True) = False Then Exit Sub
-            '    Dim selectedTreeview As vTreeView = CType(sender, vTreeView)
             Dim pt As Drawing.Point = CType(sender, vTreeView).PointToClient(New Drawing.Point(e.X, e.Y))
-            '     Dim targetNode As vTreeNode = selectedTreeview.HitTest(pt)
-            Dim location As Drawing.Point = m_accountTV.PointToClient(Cursor.Position)
-            Dim yScroll = m_accountTV.ScrollPosition.Y
-            location.Y -= yScroll
-            Dim targetNode As vTreeNode = m_accountTV.HitTest(location)
+            Dim targetNode As vTreeNode = VTreeViewUtil.GetNodeAtPosition(m_accountTV, pt)
 
             'See if the targetNode is currently selected, if so no need to validate again
             If Not (m_accountTV.SelectedNode Is targetNode) Then       'Select the node currently under the cursor
@@ -591,7 +581,6 @@ SubmitFormula:
                         Exit Sub
                     End If
                     targetNode = targetNode.Parent
-                    '      System.Diagnostics.Debug.WriteLine("DraggingOver node: " + targetNode.Text)
                 Loop
             End If
             'Currently selected node is a suitable target
@@ -628,7 +617,6 @@ SubmitFormula:
 
                     dropNode.Remove()                   'Remove the drop node from its current location
                     targetNode.Nodes.Add(dropNode)
-                    System.Diagnostics.Debug.WriteLine("Dropping node: " + dropNode.Text + " on Target node: " + targetNode.Text)
 
                 Else
                     e.Effect = DragDropEffects.None
@@ -654,7 +642,7 @@ SubmitFormula:
     ' Facts TV
     Private Sub GlobalFactsTV_MouseDown(ByVal sender As Object, ByVal e As MouseEventArgs)
 
-        Dim l_node As vTreeNode = Me.m_globalFactsTV.HitTest(e.Location)
+        Dim l_node As vTreeNode = VTreeViewUtil.GetNodeAtPosition(m_globalFactsTV, e.Location)
         If l_node IsNot Nothing Then
             Me.m_globalFactsTV.DoDragDrop(l_node, DragDropEffects.Move)
         End If
@@ -753,7 +741,7 @@ SubmitFormula:
 
     Private Sub GlobalFactTV_NodeMouseDoubleClick(sender As Object, e As Windows.Forms.TreeNodeMouseClickEventArgs)
 
-        Dim node As vTreeNode = Me.m_globalFactsTV.HitTest(e.Location)
+        Dim node As vTreeNode = VTreeViewUtil.GetNodeAtPosition(m_globalFactsTV, e.Location)
         If node IsNot Nothing Then
             If m_formulaEditionButton.Toggle = CheckState.Checked Then
                 m_formulaTextBox.Text = m_formulaTextBox.Text & FormulasTranslations.FACTS_HUMAN_IDENTIFIER & _

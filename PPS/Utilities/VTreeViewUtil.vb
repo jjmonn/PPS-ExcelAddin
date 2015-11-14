@@ -505,6 +505,17 @@ Public Class VTreeViewUtil
 
 #End Region
 
+    Public Shared Function GetNodeAtPosition(ByRef p_treeview As vTreeView, p_position As Drawing.Point) As vTreeNode
 
+        p_position.Y -= p_treeview.ScrollPosition.Y
+        p_position.X -= p_treeview.ScrollPosition.X
+        Dim l_node As vTreeNode = p_treeview.HitTest(p_position)
+        If l_node IsNot Nothing Then
+            Return l_node
+        Else
+            Return Nothing
+        End If
+
+    End Function
 
 End Class

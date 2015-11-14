@@ -27,7 +27,6 @@ Friend Class FModelingInputsController
     ' Object 
     Private MainView As FModelingUI2
     Friend View As FModelingInputsControl
-    Private FModellingAccount As FModellingAccount
     Private VersionsTV As New TreeView
     Private EntitiesTV As New TreeView
     Friend InputsDGV As New vDataGridView
@@ -54,17 +53,15 @@ Friend Class FModelingInputsController
 
 #Region "Initialize"
 
-    Friend Sub New(ByRef MainView As FModelingUI2, _
-                   ByRef FModellingAccount As FModellingAccount)
+    Friend Sub New(ByRef MainView As FModelingUI2)
 
         Me.MainView = MainView
-        Me.FModellingAccount = FModellingAccount
-
+  
         View = New FModelingInputsControl(Me)
         GlobalVariables.Versions.LoadVersionsTV(VersionsTV)
         TreeViewsUtilities.CheckAllNodes(EntitiesTV)
         GlobalVariables.AxisElems.LoadEntitiesTV(EntitiesTV)
-        inputs_list = FModelingAccountsMapping.GetFModellingAccountsList(FINANCIAL_MODELLING_ID_VARIABLE, FINANCIAL_MODELLING_INPUT_TYPE)
+        '      inputs_list = FModelingAccountsMapping.GetFModellingAccountsList(FINANCIAL_MODELLING_ID_VARIABLE, FINANCIAL_MODELLING_INPUT_TYPE)
         accounts_id_list = GlobalVariables.Accounts.GetAccountsList(GlobalEnums.AccountsLookupOptions.LOOKUP_ALL)
 
         InitializeMappingDGV()
@@ -74,26 +71,26 @@ Friend Class FModelingInputsController
 
     Private Sub InitializeMappingDGV()
 
-        InitializeMappingCB()
-        m_mappingDGV.RowsHierarchy.Visible = False
-        Dim column1 = m_mappingDGV.ColumnsHierarchy.Items.Add("Accounts")
-        Dim column2 = m_mappingDGV.ColumnsHierarchy.Items.Add("Financing Modelling Inputs")
-        column1.CellsEditor = CBEditor
+        'InitializeMappingCB()
+        'm_mappingDGV.RowsHierarchy.Visible = False
+        'Dim column1 = m_mappingDGV.ColumnsHierarchy.Items.Add("Accounts")
+        'Dim column2 = m_mappingDGV.ColumnsHierarchy.Items.Add("Financing Modelling Inputs")
+        'column1.CellsEditor = CBEditor
 
-        For Each fmodelling_account_id In inputs_list
-            Dim account_id = FModellingAccount.ReadFModellingAccount(fmodelling_account_id, FINANCIAL_MODELLING_ACCOUNT_ID_VARIABLE)
-            Dim row = m_mappingDGV.RowsHierarchy.Items.Add(fmodelling_account_id)
-            m_mappingDGV.CellsArea.SetCellValue(row, m_mappingDGV.ColumnsHierarchy.Items(1), FModellingAccount.ReadFModellingAccount(fmodelling_account_id, FINANCIAL_MODELLING_NAME_VARIABLE))
-            Dim l_account As Account = GlobalVariables.Accounts.GetValue(account_id)
-            If l_account IsNot Nothing Then
-                m_mappingDGV.CellsArea.SetCellValue(row, m_mappingDGV.ColumnsHierarchy.Items(0), l_account.Name)
-            End If
-        Next
-        DataGridViewsUtil.InitDisplayVDataGridView(m_mappingDGV, DGV_THEME)
-        DataGridViewsUtil.DGVSetHiearchyFontSize(m_mappingDGV, DGV_CELLS_FONT_SIZE, DGV_CELLS_FONT_SIZE)
-        m_mappingDGV.ColumnsHierarchy.AutoStretchColumns = True
-        m_mappingDGV.BackColor = System.Drawing.SystemColors.Control
-        AddHandler m_mappingDGV.CellValueChanged, AddressOf MappingDGV_CellValueChanged
+        'For Each fmodelling_account_id In inputs_list
+        '    Dim account_id = FModellingAccount.ReadFModellingAccount(fmodelling_account_id, FINANCIAL_MODELLING_ACCOUNT_ID_VARIABLE)
+        '    Dim row = m_mappingDGV.RowsHierarchy.Items.Add(fmodelling_account_id)
+        '    m_mappingDGV.CellsArea.SetCellValue(row, m_mappingDGV.ColumnsHierarchy.Items(1), FModellingAccount.ReadFModellingAccount(fmodelling_account_id, FINANCIAL_MODELLING_NAME_VARIABLE))
+        '    Dim l_account As Account = GlobalVariables.Accounts.GetValue(account_id)
+        '    If l_account IsNot Nothing Then
+        '        m_mappingDGV.CellsArea.SetCellValue(row, m_mappingDGV.ColumnsHierarchy.Items(0), l_account.Name)
+        '    End If
+        'Next
+        'DataGridViewsUtil.InitDisplayVDataGridView(m_mappingDGV, DGV_THEME)
+        'DataGridViewsUtil.DGVSetHiearchyFontSize(m_mappingDGV, DGV_CELLS_FONT_SIZE, DGV_CELLS_FONT_SIZE)
+        'm_mappingDGV.ColumnsHierarchy.AutoStretchColumns = True
+        'm_mappingDGV.BackColor = System.Drawing.SystemColors.Control
+        'AddHandler m_mappingDGV.CellValueChanged, AddressOf MappingDGV_CellValueChanged
 
     End Sub
 
@@ -259,9 +256,9 @@ Friend Class FModelingInputsController
         Dim l_accountName As String = args.Cell.Value
         Dim l_account As Account = GlobalVariables.Accounts.GetValue(l_accountName)
         If l_account IsNot Nothing Then
-            FModellingAccount.UpdateFModellingAccount(args.Cell.RowItem.Caption, _
-                                                      FINANCIAL_MODELLING_ACCOUNT_ID_VARIABLE, _
-                                                      l_account.Id)
+            'FModellingAccount.UpdateFModellingAccount(args.Cell.RowItem.Caption, _
+            '                                          FINANCIAL_MODELLING_ACCOUNT_ID_VARIABLE, _
+            '                                          l_account.Id)
         End If
 
     End Sub

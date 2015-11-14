@@ -97,22 +97,22 @@ Friend Class SubmissionsControlUI
 
     Private Sub InitializeControlsDGV()
 
-        Dim controls_id_name_dic = ControlsMapping.GetControlsDictionary(CONTROL_ID_VARIABLE, CONTROL_NAME_VARIABLE)
-        ControlsDGV.RowsHierarchy.Visible = False
-        ControlsDGV.ColumnsHierarchy.Items.Add("Controls")
+        'Dim controls_id_name_dic = ControlsMapping.GetControlsDictionary(CONTROL_ID_VARIABLE, CONTROL_NAME_VARIABLE)
+        'ControlsDGV.RowsHierarchy.Visible = False
+        'ControlsDGV.ColumnsHierarchy.Items.Add("Controls")
 
-        For Each control_id In controls_id_name_dic.Keys
-            Dim row = ControlsDGV.RowsHierarchy.Items.Add(control_id)
-            ControlsDGV.CellsArea.SetCellValue(row, ControlsDGV.ColumnsHierarchy.Items(0), controls_id_name_dic(control_id))
-        Next
+        'For Each control_id In controls_id_name_dic.Keys
+        '    Dim row = ControlsDGV.RowsHierarchy.Items.Add(control_id)
+        '    ControlsDGV.CellsArea.SetCellValue(row, ControlsDGV.ColumnsHierarchy.Items(0), controls_id_name_dic(control_id))
+        'Next
 
-        DataGridViewsUtil.InitDisplayVDataGridView(ControlsDGV, DGV_THEME)
-        DataGridViewsUtil.DGVSetHiearchyFontSize(ControlsDGV, DGV_CELLS_FONT_SIZE, DGV_CELLS_FONT_SIZE)
-        ControlsDGV.ColumnsHierarchy.AutoStretchColumns = True
-        ControlsDGV.BackColor = System.Drawing.Color.White
+        'DataGridViewsUtil.InitDisplayVDataGridView(ControlsDGV, DGV_THEME)
+        'DataGridViewsUtil.DGVSetHiearchyFontSize(ControlsDGV, DGV_CELLS_FONT_SIZE, DGV_CELLS_FONT_SIZE)
+        'ControlsDGV.ColumnsHierarchy.AutoStretchColumns = True
+        'ControlsDGV.BackColor = System.Drawing.Color.White
 
-        ControlsDGVPanel.Controls.Add(ControlsDGV)
-        ControlsDGV.Dock = DockStyle.Fill
+        'ControlsDGVPanel.Controls.Add(ControlsDGV)
+        'ControlsDGV.Dock = DockStyle.Fill
 
     End Sub
 

@@ -35,14 +35,9 @@ Friend Class FModelingUI2
 
         ' Add any initialization after the InitializeComponent() call.
         m_simulationsController = New FModelingSimulationController(Me)
-        m_inputsController = New FModelingInputsController(Me, m_simulationsController.FModellingAccount)
-        m_exportsController = New FModelingExportController(Me, m_simulationsController.FModellingAccount, _
-                                                          m_inputsController.CBEditor)
-
-        m_FAccountsController = New FModellingAccountsController(m_simulationsController.possible_targets_name_id_dict, _
-                                                               m_simulationsController.FModellingAccount)
-
-
+        m_inputsController = New FModelingInputsController(Me)
+        m_exportsController = New FModelingExportController(Me,m_inputsController.CBEditor)
+        m_FAccountsController = New FModellingAccountsController(m_simulationsController.possible_targets_name_id_dict)
         m_inputsController.InitializeView()
         m_exportsController.InitializeView()
         Me.WindowState = Windows.Forms.FormWindowState.Maximized

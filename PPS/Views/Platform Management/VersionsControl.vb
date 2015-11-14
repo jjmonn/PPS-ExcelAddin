@@ -282,7 +282,7 @@ Friend Class VersionsControl
 
     Private Sub tv_mouse_click(sender As Object, e As MouseEventArgs)
 
-        current_node = VersionsTV.HitTest(e.Location)
+        current_node = VTreeViewUtil.GetNodeAtPosition(VersionsTV, e.Location)
 
     End Sub
 

@@ -113,7 +113,7 @@ Friend Class GroupsControl
 #Region "UI Events"
     Private Sub groupTreeView_Click(sender As Object, e As MouseEventArgs)
 
-        m_currentNode = m_groupTreeView.HitTest(e.Location)
+        m_currentNode = VTreeViewUtil.GetNodeAtPosition(m_groupTreeView, e.Location)
         LoadCurrent()
 
     End Sub

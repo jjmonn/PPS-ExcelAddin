@@ -19,9 +19,7 @@ Friend Class FModellingAccountsController
 #Region "Instance Variables"
 
     ' Objects
-    Private FModellingAccounts As FModellingAccount
     Private View As FModelingAccountsMGTUI
-
 
     ' Variables
     Friend f_accounts_name_id_dic As Hashtable
@@ -32,11 +30,10 @@ Friend Class FModellingAccountsController
 
 #Region "Initialize"
 
-    Protected Friend Sub New(ByRef input_fmodeling_accounts_name_id_dict As Hashtable, _
-                             Optional ByRef input_FModelingAccounts As FModellingAccount = Nothing)
+    Protected Friend Sub New(ByRef input_fmodeling_accounts_name_id_dict As Hashtable)
 
         f_accounts_name_id_dic = input_fmodeling_accounts_name_id_dict
-        If Not input_FModelingAccounts Is Nothing Then FModellingAccounts = input_FModelingAccounts Else FModellingAccounts = New FModellingAccount
+        '     If Not input_FModelingAccounts Is Nothing Then FModellingAccounts = input_FModelingAccounts Else FModellingAccounts = New FModellingAccount
         View = New FModelingAccountsMGTUI(Me, f_accounts_name_id_dic)
         InitializeDGVValues()
 
@@ -44,11 +41,11 @@ Friend Class FModellingAccountsController
 
     Private Sub InitializeDGVValues()
 
-        Dim f_accounts_dic As New Dictionary(Of String, Hashtable)
-        For Each f_account_id As String In f_accounts_name_id_dic.Values
-            f_accounts_dic.Add(f_account_id, FModellingAccounts.GetSeriHT(f_account_id))
-        Next
-        View.FillDGV(f_accounts_dic)
+        'Dim f_accounts_dic As New Dictionary(Of String, Hashtable)
+        'For Each f_account_id As String In f_accounts_name_id_dic.Values
+        '    f_accounts_dic.Add(f_account_id, FModellingAccounts.GetSeriHT(f_account_id))
+        'Next
+        'View.FillDGV(f_accounts_dic)
 
     End Sub
 
@@ -67,14 +64,14 @@ Friend Class FModellingAccountsController
     Protected Friend Sub UpdateSerieColor(ByRef f_account_id As String, _
                                           ByVal color_int As Int32)
 
-        FModellingAccounts.UpdateFModellingAccount(f_account_id, FINANCIAL_MODELLING_SERIE_COLOR_VARIABLE, color_int)
+        '  FModellingAccounts.UpdateFModellingAccount(f_account_id, FINANCIAL_MODELLING_SERIE_COLOR_VARIABLE, color_int)
 
     End Sub
 
     Protected Friend Sub UpdateSerieType(ByRef f_account_id As String, _
                                           ByVal serie_type As String)
 
-        FModellingAccounts.UpdateFModellingAccount(f_account_id, FINANCIAL_MODELLING_SERIE_TYPE_VARIABLE, serie_type)
+        '     FModellingAccounts.UpdateFModellingAccount(f_account_id, FINANCIAL_MODELLING_SERIE_TYPE_VARIABLE, serie_type)
 
     End Sub
 

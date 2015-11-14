@@ -28,7 +28,6 @@ Friend Class FModelingExportController
     ' Objects
     Private m_mainView As FModelingUI2
     Friend m_exportView As FModelingExportControl
-    Private m_FModellingAccount As FModellingAccount
     Private m_exportsTreeview As New TreeView
     Private m_EntitiesTreeview As New TreeView
 
@@ -51,17 +50,13 @@ Friend Class FModelingExportController
 #Region "Initialize"
 
     Friend Sub New(ByRef MainView As FModelingUI2, _
-                   ByRef FModellingAccount As FModellingAccount, _
                    ByRef CBEditor As ComboBoxEditor)
 
         Me.m_mainView = MainView
-        Me.m_FModellingAccount = FModellingAccount
         Me.m_comboBoxEditor = CBEditor
-
         m_exportView = New FModelingExportControl(Me)
-
         GlobalVariables.AxisElems.LoadEntitiesTV(m_EntitiesTreeview)
-        m_exportsIdsList = FModelingAccountsMapping.GetFModellingAccountsList(FINANCIAL_MODELLING_ID_VARIABLE, FINANCIAL_MODELLING_EXPORT_TYPE)
+        '    m_exportsIdsList = FModelingAccountsMapping.GetFModellingAccountsList(FINANCIAL_MODELLING_ID_VARIABLE, FINANCIAL_MODELLING_EXPORT_TYPE)
         InitializeExportMappingDGV()
         InitializeExportsTV()
 
@@ -69,40 +64,40 @@ Friend Class FModelingExportController
 
     Private Sub InitializeExportMappingDGV()
 
-        m_exportMappingDGV.RowsHierarchy.Visible = False
-        Dim column1 = m_exportMappingDGV.ColumnsHierarchy.Items.Add("Financing Modelling Export")
-        Dim column2 = m_exportMappingDGV.ColumnsHierarchy.Items.Add("Account")
-        column1.CellsEditor = m_comboBoxEditor
+        'm_exportMappingDGV.RowsHierarchy.Visible = False
+        'Dim column1 = m_exportMappingDGV.ColumnsHierarchy.Items.Add("Financing Modelling Export")
+        'Dim column2 = m_exportMappingDGV.ColumnsHierarchy.Items.Add("Account")
+        'column1.CellsEditor = m_comboBoxEditor
 
-        For Each fmodelling_account_id In m_exportsIdsList
-            Dim account_id = m_FModellingAccount.ReadFModellingAccount(fmodelling_account_id, FINANCIAL_MODELLING_ACCOUNT_ID_VARIABLE)
-            Dim row = m_exportMappingDGV.RowsHierarchy.Items.Add(fmodelling_account_id)
-            Dim l_account As Account = GlobalVariables.Accounts.GetValue(account_id)
-            If l_account IsNot Nothing Then
-                m_exportMappingDGV.CellsArea.SetCellValue(row, m_exportMappingDGV.ColumnsHierarchy.Items(0), m_FModellingAccount.ReadFModellingAccount(fmodelling_account_id, FINANCIAL_MODELLING_NAME_VARIABLE))
-                m_exportMappingDGV.CellsArea.SetCellValue(row, m_exportMappingDGV.ColumnsHierarchy.Items(1), l_account.Name)
-            End If
-        Next
-        DataGridViewsUtil.InitDisplayVDataGridView(m_exportMappingDGV, DGV_THEME)
-        DataGridViewsUtil.DGVSetHiearchyFontSize(m_exportMappingDGV, DGV_CELLS_FONT_SIZE, DGV_CELLS_FONT_SIZE)
-        m_exportMappingDGV.ColumnsHierarchy.AutoStretchColumns = True
-        m_exportMappingDGV.BackColor = System.Drawing.SystemColors.Control
-        AddHandler m_exportMappingDGV.CellValueChanged, AddressOf ExportMappingDGV_CellValueChanged
+        'For Each fmodelling_account_id In m_exportsIdsList
+        '    Dim account_id = GlobalVariables.fmodellingaccount.ReadFModellingAccount(fmodelling_account_id, FINANCIAL_MODELLING_ACCOUNT_ID_VARIABLE)
+        '    Dim row = m_exportMappingDGV.RowsHierarchy.Items.Add(fmodelling_account_id)
+        '    Dim l_account As Account = GlobalVariables.Accounts.GetValue(account_id)
+        '    If l_account IsNot Nothing Then
+        '        m_exportMappingDGV.CellsArea.SetCellValue(row, m_exportMappingDGV.ColumnsHierarchy.Items(0), globalvariables.fmodellingaccount.ReadFModellingAccount(fmodelling_account_id, FINANCIAL_MODELLING_NAME_VARIABLE))
+        '        m_exportMappingDGV.CellsArea.SetCellValue(row, m_exportMappingDGV.ColumnsHierarchy.Items(1), l_account.Name)
+        '    End If
+        'Next
+        'DataGridViewsUtil.InitDisplayVDataGridView(m_exportMappingDGV, DGV_THEME)
+        'DataGridViewsUtil.DGVSetHiearchyFontSize(m_exportMappingDGV, DGV_CELLS_FONT_SIZE, DGV_CELLS_FONT_SIZE)
+        'm_exportMappingDGV.ColumnsHierarchy.AutoStretchColumns = True
+        'm_exportMappingDGV.BackColor = System.Drawing.SystemColors.Control
+        'AddHandler m_exportMappingDGV.CellValueChanged, AddressOf ExportMappingDGV_CellValueChanged
 
 
     End Sub
 
     Private Sub InitializeExportsTV()
 
-        For Each fmodelling_account_id In m_exportsIdsList
-            Dim node As TreeNode = m_exportsTreeview.Nodes.Add(fmodelling_account_id, m_FModellingAccount.ReadFModellingAccount(fmodelling_account_id, FINANCIAL_MODELLING_NAME_VARIABLE), 0, 0)
-            Dim entity_id = m_FModellingAccount.ReadFModellingAccount(fmodelling_account_id, FINANCIAL_MODELLING_MAPPED_ENTITY_VARIABLE)
-            If Not IsDBNull(entity_id) _
-            AndAlso m_EntitiesTreeview.Nodes.Find(entity_id, True).Length > 0 Then
-                node.Nodes.Add(entity_id, m_EntitiesTreeview.Nodes.Find(entity_id, True)(0).Text, 1, 1)
-            End If
-        Next
-        m_exportsTreeview.AllowDrop = True
+        'For Each fmodelling_account_id In m_exportsIdsList
+        '    Dim node As TreeNode = m_exportsTreeview.Nodes.Add(fmodelling_account_id, globalvariables.fmodellingaccount.ReadFModellingAccount(fmodelling_account_id, FINANCIAL_MODELLING_NAME_VARIABLE), 0, 0)
+        '    Dim entity_id = globalvariables.fmodellingaccount.ReadFModellingAccount(fmodelling_account_id, FINANCIAL_MODELLING_MAPPED_ENTITY_VARIABLE)
+        '    If Not IsDBNull(entity_id) _
+        '    AndAlso m_EntitiesTreeview.Nodes.Find(entity_id, True).Length > 0 Then
+        '        node.Nodes.Add(entity_id, m_EntitiesTreeview.Nodes.Find(entity_id, True)(0).Text, 1, 1)
+        '    End If
+        'Next
+        'm_exportsTreeview.AllowDrop = True
 
     End Sub
 
@@ -133,8 +128,8 @@ Friend Class FModelingExportController
         InitializePBar()
 
         For Each export_id In m_exportsIdsList
-            Dim account_id = m_FModellingAccount.ReadFModellingAccount(export_id, FINANCIAL_MODELLING_ACCOUNT_ID_VARIABLE)
-            Dim entity_id = m_FModellingAccount.ReadFModellingAccount(export_id, FINANCIAL_MODELLING_MAPPED_ENTITY_VARIABLE)
+            '     Dim account_id = globalvariables.fmodellingaccount.ReadFModellingAccount(export_id, FINANCIAL_MODELLING_ACCOUNT_ID_VARIABLE)
+            '    Dim entity_id = globalvariables.fmodellingaccount.ReadFModellingAccount(export_id, FINANCIAL_MODELLING_MAPPED_ENTITY_VARIABLE)
             For j As Int32 = 0 To m_periodsList.Length - 1
 
                 ' use server upload object (to be designed) priority high !!
@@ -176,9 +171,9 @@ Friend Class FModelingExportController
         Dim l_accountName As String = args.Cell.Value
         Dim l_account As Account = GlobalVariables.Accounts.GetValue(l_accountName)
         If l_account IsNot Nothing Then
-            m_FModellingAccount.UpdateFModellingAccount(args.Cell.RowItem.Caption, _
-                                                      FINANCIAL_MODELLING_ACCOUNT_ID_VARIABLE, _
-                                                      l_account.Id)
+            'globalvariables.fmodellingaccount.UpdateFModellingAccount(args.Cell.RowItem.Caption, _
+            '                                          FINANCIAL_MODELLING_ACCOUNT_ID_VARIABLE, _
+            '                                          l_account.Id)
         End If
 
     End Sub
@@ -186,9 +181,9 @@ Friend Class FModelingExportController
     Friend Sub UpdateMappedEntity(ByRef fmodelling_account_id As String, _
                                   ByRef entity_id As String)
 
-        m_FModellingAccount.UpdateFModellingAccount(fmodelling_account_id, _
-                                                  FINANCIAL_MODELLING_MAPPED_ENTITY_VARIABLE, _
-                                                  entity_id)
+        'globalvariables.fmodellingaccount.UpdateFModellingAccount(fmodelling_account_id, _
+        '                                          FINANCIAL_MODELLING_MAPPED_ENTITY_VARIABLE, _
+        '                                          entity_id)
 
     End Sub
 
