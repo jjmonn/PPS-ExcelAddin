@@ -31,17 +31,17 @@ Partial Class PPSBI_UI
         Me.AdjustmentsTreeviewBox = New VIBlend.WinForms.Controls.vTreeViewBox()
         Me.ProductsTreeviewBox = New VIBlend.WinForms.Controls.vTreeViewBox()
         Me.CategoriesFiltersTreebox = New VIBlend.WinForms.Controls.vTreeViewBox()
-        Me.VLabel9 = New VIBlend.WinForms.Controls.vLabel()
+        Me.m_categoryFilterLabel = New VIBlend.WinForms.Controls.vLabel()
         Me.CurrenciesComboBox = New VIBlend.WinForms.Controls.vComboBox()
         Me.PeriodTreeBox = New VIBlend.WinForms.Controls.vTreeViewBox()
-        Me.VLabel7 = New VIBlend.WinForms.Controls.vLabel()
-        Me.VLabel6 = New VIBlend.WinForms.Controls.vLabel()
-        Me.VLabel5 = New VIBlend.WinForms.Controls.vLabel()
-        Me.VLabel4 = New VIBlend.WinForms.Controls.vLabel()
-        Me.VLabel1 = New VIBlend.WinForms.Controls.vLabel()
-        Me.VLabel2 = New VIBlend.WinForms.Controls.vLabel()
-        Me.VLabel3 = New VIBlend.WinForms.Controls.vLabel()
-        Me.VLabel8 = New VIBlend.WinForms.Controls.vLabel()
+        Me.m_productFilterLabel = New VIBlend.WinForms.Controls.vLabel()
+        Me.m_clientFilterLabel = New VIBlend.WinForms.Controls.vLabel()
+        Me.m_versionLabel = New VIBlend.WinForms.Controls.vLabel()
+        Me.m_currencyLabel = New VIBlend.WinForms.Controls.vLabel()
+        Me.m_entityLabel = New VIBlend.WinForms.Controls.vLabel()
+        Me.m_accountLabel = New VIBlend.WinForms.Controls.vLabel()
+        Me.m_periodLabel = New VIBlend.WinForms.Controls.vLabel()
+        Me.m_adjustmentFilterLabel = New VIBlend.WinForms.Controls.vLabel()
         Me.EntityTreeBox = New VIBlend.WinForms.Controls.vTreeViewBox()
         Me.AccountTreeBox = New VIBlend.WinForms.Controls.vTreeViewBox()
         Me.VersionTreeBox = New VIBlend.WinForms.Controls.vTreeViewBox()
@@ -69,7 +69,7 @@ Partial Class PPSBI_UI
         Me.validate_cmd.Name = "validate_cmd"
         Me.validate_cmd.Size = New System.Drawing.Size(114, 27)
         Me.validate_cmd.TabIndex = 10
-        Me.validate_cmd.Text = "[ppsbi.insert_formula]"
+        Me.validate_cmd.Text = "Insert formula"
         Me.validate_cmd.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         Me.validate_cmd.UseVisualStyleBackColor = True
         '
@@ -88,17 +88,17 @@ Partial Class PPSBI_UI
         Me.TableLayoutPanel1.Controls.Add(Me.AdjustmentsTreeviewBox, 1, 7)
         Me.TableLayoutPanel1.Controls.Add(Me.ProductsTreeviewBox, 1, 6)
         Me.TableLayoutPanel1.Controls.Add(Me.CategoriesFiltersTreebox, 1, 8)
-        Me.TableLayoutPanel1.Controls.Add(Me.VLabel9, 0, 8)
+        Me.TableLayoutPanel1.Controls.Add(Me.m_categoryFilterLabel, 0, 8)
         Me.TableLayoutPanel1.Controls.Add(Me.CurrenciesComboBox, 1, 3)
         Me.TableLayoutPanel1.Controls.Add(Me.PeriodTreeBox, 1, 2)
-        Me.TableLayoutPanel1.Controls.Add(Me.VLabel7, 0, 6)
-        Me.TableLayoutPanel1.Controls.Add(Me.VLabel6, 0, 5)
-        Me.TableLayoutPanel1.Controls.Add(Me.VLabel5, 0, 4)
-        Me.TableLayoutPanel1.Controls.Add(Me.VLabel4, 0, 3)
-        Me.TableLayoutPanel1.Controls.Add(Me.VLabel1, 0, 0)
-        Me.TableLayoutPanel1.Controls.Add(Me.VLabel2, 0, 1)
-        Me.TableLayoutPanel1.Controls.Add(Me.VLabel3, 0, 2)
-        Me.TableLayoutPanel1.Controls.Add(Me.VLabel8, 0, 7)
+        Me.TableLayoutPanel1.Controls.Add(Me.m_productFilterLabel, 0, 6)
+        Me.TableLayoutPanel1.Controls.Add(Me.m_clientFilterLabel, 0, 5)
+        Me.TableLayoutPanel1.Controls.Add(Me.m_versionLabel, 0, 4)
+        Me.TableLayoutPanel1.Controls.Add(Me.m_currencyLabel, 0, 3)
+        Me.TableLayoutPanel1.Controls.Add(Me.m_entityLabel, 0, 0)
+        Me.TableLayoutPanel1.Controls.Add(Me.m_accountLabel, 0, 1)
+        Me.TableLayoutPanel1.Controls.Add(Me.m_periodLabel, 0, 2)
+        Me.TableLayoutPanel1.Controls.Add(Me.m_adjustmentFilterLabel, 0, 7)
         Me.TableLayoutPanel1.Controls.Add(Me.EntityTreeBox, 1, 0)
         Me.TableLayoutPanel1.Controls.Add(Me.AccountTreeBox, 1, 1)
         Me.TableLayoutPanel1.Controls.Add(Me.VersionTreeBox, 1, 4)
@@ -166,22 +166,22 @@ Partial Class PPSBI_UI
         Me.CategoriesFiltersTreebox.UseThemeDropDownArrowColor = True
         Me.CategoriesFiltersTreebox.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
         '
-        'VLabel9
+        'm_categoryFilterLabel
         '
-        Me.VLabel9.BackColor = System.Drawing.Color.Transparent
-        Me.VLabel9.DisplayStyle = VIBlend.WinForms.Controls.LabelItemStyle.TextOnly
-        Me.VLabel9.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.VLabel9.Ellipsis = False
-        Me.VLabel9.ImageAlignment = System.Drawing.ContentAlignment.TopLeft
-        Me.VLabel9.Location = New System.Drawing.Point(3, 283)
-        Me.VLabel9.Multiline = True
-        Me.VLabel9.Name = "VLabel9"
-        Me.VLabel9.Size = New System.Drawing.Size(133, 29)
-        Me.VLabel9.TabIndex = 38
-        Me.VLabel9.Text = "[ppsbi.categories_filter]"
-        Me.VLabel9.TextAlignment = System.Drawing.ContentAlignment.MiddleLeft
-        Me.VLabel9.UseMnemonics = True
-        Me.VLabel9.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
+        Me.m_categoryFilterLabel.BackColor = System.Drawing.Color.Transparent
+        Me.m_categoryFilterLabel.DisplayStyle = VIBlend.WinForms.Controls.LabelItemStyle.TextOnly
+        Me.m_categoryFilterLabel.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.m_categoryFilterLabel.Ellipsis = False
+        Me.m_categoryFilterLabel.ImageAlignment = System.Drawing.ContentAlignment.TopLeft
+        Me.m_categoryFilterLabel.Location = New System.Drawing.Point(3, 283)
+        Me.m_categoryFilterLabel.Multiline = True
+        Me.m_categoryFilterLabel.Name = "m_categoryFilterLabel"
+        Me.m_categoryFilterLabel.Size = New System.Drawing.Size(133, 29)
+        Me.m_categoryFilterLabel.TabIndex = 38
+        Me.m_categoryFilterLabel.Text = "Categories filter"
+        Me.m_categoryFilterLabel.TextAlignment = System.Drawing.ContentAlignment.MiddleLeft
+        Me.m_categoryFilterLabel.UseMnemonics = True
+        Me.m_categoryFilterLabel.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
         '
         'CurrenciesComboBox
         '
@@ -219,134 +219,134 @@ Partial Class PPSBI_UI
         Me.PeriodTreeBox.UseThemeDropDownArrowColor = True
         Me.PeriodTreeBox.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
         '
-        'VLabel7
+        'm_productFilterLabel
         '
-        Me.VLabel7.BackColor = System.Drawing.Color.Transparent
-        Me.VLabel7.DisplayStyle = VIBlend.WinForms.Controls.LabelItemStyle.TextOnly
-        Me.VLabel7.Ellipsis = False
-        Me.VLabel7.ImageAlignment = System.Drawing.ContentAlignment.TopLeft
-        Me.VLabel7.Location = New System.Drawing.Point(3, 213)
-        Me.VLabel7.Multiline = True
-        Me.VLabel7.Name = "VLabel7"
-        Me.VLabel7.Size = New System.Drawing.Size(123, 24)
-        Me.VLabel7.TabIndex = 36
-        Me.VLabel7.Text = "[ppsbi.products_filter]"
-        Me.VLabel7.TextAlignment = System.Drawing.ContentAlignment.MiddleLeft
-        Me.VLabel7.UseMnemonics = True
-        Me.VLabel7.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
+        Me.m_productFilterLabel.BackColor = System.Drawing.Color.Transparent
+        Me.m_productFilterLabel.DisplayStyle = VIBlend.WinForms.Controls.LabelItemStyle.TextOnly
+        Me.m_productFilterLabel.Ellipsis = False
+        Me.m_productFilterLabel.ImageAlignment = System.Drawing.ContentAlignment.TopLeft
+        Me.m_productFilterLabel.Location = New System.Drawing.Point(3, 213)
+        Me.m_productFilterLabel.Multiline = True
+        Me.m_productFilterLabel.Name = "m_productFilterLabel"
+        Me.m_productFilterLabel.Size = New System.Drawing.Size(123, 24)
+        Me.m_productFilterLabel.TabIndex = 36
+        Me.m_productFilterLabel.Text = "Products filter"
+        Me.m_productFilterLabel.TextAlignment = System.Drawing.ContentAlignment.MiddleLeft
+        Me.m_productFilterLabel.UseMnemonics = True
+        Me.m_productFilterLabel.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
         '
-        'VLabel6
+        'm_clientFilterLabel
         '
-        Me.VLabel6.BackColor = System.Drawing.Color.Transparent
-        Me.VLabel6.DisplayStyle = VIBlend.WinForms.Controls.LabelItemStyle.TextOnly
-        Me.VLabel6.Ellipsis = False
-        Me.VLabel6.ImageAlignment = System.Drawing.ContentAlignment.TopLeft
-        Me.VLabel6.Location = New System.Drawing.Point(3, 178)
-        Me.VLabel6.Multiline = True
-        Me.VLabel6.Name = "VLabel6"
-        Me.VLabel6.Size = New System.Drawing.Size(123, 24)
-        Me.VLabel6.TabIndex = 35
-        Me.VLabel6.Text = "[ppsbi.clients_filter]"
-        Me.VLabel6.TextAlignment = System.Drawing.ContentAlignment.MiddleLeft
-        Me.VLabel6.UseMnemonics = True
-        Me.VLabel6.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
+        Me.m_clientFilterLabel.BackColor = System.Drawing.Color.Transparent
+        Me.m_clientFilterLabel.DisplayStyle = VIBlend.WinForms.Controls.LabelItemStyle.TextOnly
+        Me.m_clientFilterLabel.Ellipsis = False
+        Me.m_clientFilterLabel.ImageAlignment = System.Drawing.ContentAlignment.TopLeft
+        Me.m_clientFilterLabel.Location = New System.Drawing.Point(3, 178)
+        Me.m_clientFilterLabel.Multiline = True
+        Me.m_clientFilterLabel.Name = "m_clientFilterLabel"
+        Me.m_clientFilterLabel.Size = New System.Drawing.Size(123, 24)
+        Me.m_clientFilterLabel.TabIndex = 35
+        Me.m_clientFilterLabel.Text = "Clients filter"
+        Me.m_clientFilterLabel.TextAlignment = System.Drawing.ContentAlignment.MiddleLeft
+        Me.m_clientFilterLabel.UseMnemonics = True
+        Me.m_clientFilterLabel.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
         '
-        'VLabel5
+        'm_versionLabel
         '
-        Me.VLabel5.BackColor = System.Drawing.Color.Transparent
-        Me.VLabel5.DisplayStyle = VIBlend.WinForms.Controls.LabelItemStyle.TextOnly
-        Me.VLabel5.Ellipsis = False
-        Me.VLabel5.ImageAlignment = System.Drawing.ContentAlignment.TopLeft
-        Me.VLabel5.Location = New System.Drawing.Point(3, 143)
-        Me.VLabel5.Multiline = True
-        Me.VLabel5.Name = "VLabel5"
-        Me.VLabel5.Size = New System.Drawing.Size(123, 24)
-        Me.VLabel5.TabIndex = 34
-        Me.VLabel5.Text = "[general.version]"
-        Me.VLabel5.TextAlignment = System.Drawing.ContentAlignment.MiddleLeft
-        Me.VLabel5.UseMnemonics = True
-        Me.VLabel5.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
+        Me.m_versionLabel.BackColor = System.Drawing.Color.Transparent
+        Me.m_versionLabel.DisplayStyle = VIBlend.WinForms.Controls.LabelItemStyle.TextOnly
+        Me.m_versionLabel.Ellipsis = False
+        Me.m_versionLabel.ImageAlignment = System.Drawing.ContentAlignment.TopLeft
+        Me.m_versionLabel.Location = New System.Drawing.Point(3, 143)
+        Me.m_versionLabel.Multiline = True
+        Me.m_versionLabel.Name = "m_versionLabel"
+        Me.m_versionLabel.Size = New System.Drawing.Size(123, 24)
+        Me.m_versionLabel.TabIndex = 34
+        Me.m_versionLabel.Text = "Version"
+        Me.m_versionLabel.TextAlignment = System.Drawing.ContentAlignment.MiddleLeft
+        Me.m_versionLabel.UseMnemonics = True
+        Me.m_versionLabel.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
         '
-        'VLabel4
+        'm_currencyLabel
         '
-        Me.VLabel4.BackColor = System.Drawing.Color.Transparent
-        Me.VLabel4.DisplayStyle = VIBlend.WinForms.Controls.LabelItemStyle.TextOnly
-        Me.VLabel4.Ellipsis = False
-        Me.VLabel4.ImageAlignment = System.Drawing.ContentAlignment.TopLeft
-        Me.VLabel4.Location = New System.Drawing.Point(3, 108)
-        Me.VLabel4.Multiline = True
-        Me.VLabel4.Name = "VLabel4"
-        Me.VLabel4.Size = New System.Drawing.Size(123, 24)
-        Me.VLabel4.TabIndex = 33
-        Me.VLabel4.Text = "[general.currency]"
-        Me.VLabel4.TextAlignment = System.Drawing.ContentAlignment.MiddleLeft
-        Me.VLabel4.UseMnemonics = True
-        Me.VLabel4.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
+        Me.m_currencyLabel.BackColor = System.Drawing.Color.Transparent
+        Me.m_currencyLabel.DisplayStyle = VIBlend.WinForms.Controls.LabelItemStyle.TextOnly
+        Me.m_currencyLabel.Ellipsis = False
+        Me.m_currencyLabel.ImageAlignment = System.Drawing.ContentAlignment.TopLeft
+        Me.m_currencyLabel.Location = New System.Drawing.Point(3, 108)
+        Me.m_currencyLabel.Multiline = True
+        Me.m_currencyLabel.Name = "m_currencyLabel"
+        Me.m_currencyLabel.Size = New System.Drawing.Size(123, 24)
+        Me.m_currencyLabel.TabIndex = 33
+        Me.m_currencyLabel.Text = "Currency"
+        Me.m_currencyLabel.TextAlignment = System.Drawing.ContentAlignment.MiddleLeft
+        Me.m_currencyLabel.UseMnemonics = True
+        Me.m_currencyLabel.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
         '
-        'VLabel1
+        'm_entityLabel
         '
-        Me.VLabel1.BackColor = System.Drawing.Color.Transparent
-        Me.VLabel1.DisplayStyle = VIBlend.WinForms.Controls.LabelItemStyle.TextOnly
-        Me.VLabel1.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.VLabel1.Ellipsis = False
-        Me.VLabel1.ImageAlignment = System.Drawing.ContentAlignment.TopLeft
-        Me.VLabel1.Location = New System.Drawing.Point(3, 3)
-        Me.VLabel1.Multiline = True
-        Me.VLabel1.Name = "VLabel1"
-        Me.VLabel1.Size = New System.Drawing.Size(133, 29)
-        Me.VLabel1.TabIndex = 30
-        Me.VLabel1.Text = "[general.entity]"
-        Me.VLabel1.TextAlignment = System.Drawing.ContentAlignment.MiddleLeft
-        Me.VLabel1.UseMnemonics = True
-        Me.VLabel1.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
+        Me.m_entityLabel.BackColor = System.Drawing.Color.Transparent
+        Me.m_entityLabel.DisplayStyle = VIBlend.WinForms.Controls.LabelItemStyle.TextOnly
+        Me.m_entityLabel.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.m_entityLabel.Ellipsis = False
+        Me.m_entityLabel.ImageAlignment = System.Drawing.ContentAlignment.TopLeft
+        Me.m_entityLabel.Location = New System.Drawing.Point(3, 3)
+        Me.m_entityLabel.Multiline = True
+        Me.m_entityLabel.Name = "m_entityLabel"
+        Me.m_entityLabel.Size = New System.Drawing.Size(133, 29)
+        Me.m_entityLabel.TabIndex = 30
+        Me.m_entityLabel.Text = "Entity"
+        Me.m_entityLabel.TextAlignment = System.Drawing.ContentAlignment.MiddleLeft
+        Me.m_entityLabel.UseMnemonics = True
+        Me.m_entityLabel.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
         '
-        'VLabel2
+        'm_accountLabel
         '
-        Me.VLabel2.BackColor = System.Drawing.Color.Transparent
-        Me.VLabel2.DisplayStyle = VIBlend.WinForms.Controls.LabelItemStyle.TextOnly
-        Me.VLabel2.Ellipsis = False
-        Me.VLabel2.ImageAlignment = System.Drawing.ContentAlignment.TopLeft
-        Me.VLabel2.Location = New System.Drawing.Point(3, 38)
-        Me.VLabel2.Multiline = True
-        Me.VLabel2.Name = "VLabel2"
-        Me.VLabel2.Size = New System.Drawing.Size(123, 24)
-        Me.VLabel2.TabIndex = 31
-        Me.VLabel2.Text = "[general.account]"
-        Me.VLabel2.TextAlignment = System.Drawing.ContentAlignment.MiddleLeft
-        Me.VLabel2.UseMnemonics = True
-        Me.VLabel2.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
+        Me.m_accountLabel.BackColor = System.Drawing.Color.Transparent
+        Me.m_accountLabel.DisplayStyle = VIBlend.WinForms.Controls.LabelItemStyle.TextOnly
+        Me.m_accountLabel.Ellipsis = False
+        Me.m_accountLabel.ImageAlignment = System.Drawing.ContentAlignment.TopLeft
+        Me.m_accountLabel.Location = New System.Drawing.Point(3, 38)
+        Me.m_accountLabel.Multiline = True
+        Me.m_accountLabel.Name = "m_accountLabel"
+        Me.m_accountLabel.Size = New System.Drawing.Size(123, 24)
+        Me.m_accountLabel.TabIndex = 31
+        Me.m_accountLabel.Text = "Account"
+        Me.m_accountLabel.TextAlignment = System.Drawing.ContentAlignment.MiddleLeft
+        Me.m_accountLabel.UseMnemonics = True
+        Me.m_accountLabel.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
         '
-        'VLabel3
+        'm_periodLabel
         '
-        Me.VLabel3.BackColor = System.Drawing.Color.Transparent
-        Me.VLabel3.DisplayStyle = VIBlend.WinForms.Controls.LabelItemStyle.TextOnly
-        Me.VLabel3.Ellipsis = False
-        Me.VLabel3.ImageAlignment = System.Drawing.ContentAlignment.TopLeft
-        Me.VLabel3.Location = New System.Drawing.Point(3, 73)
-        Me.VLabel3.Multiline = True
-        Me.VLabel3.Name = "VLabel3"
-        Me.VLabel3.Size = New System.Drawing.Size(123, 24)
-        Me.VLabel3.TabIndex = 32
-        Me.VLabel3.Text = "[general.period]"
-        Me.VLabel3.TextAlignment = System.Drawing.ContentAlignment.MiddleLeft
-        Me.VLabel3.UseMnemonics = True
-        Me.VLabel3.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
+        Me.m_periodLabel.BackColor = System.Drawing.Color.Transparent
+        Me.m_periodLabel.DisplayStyle = VIBlend.WinForms.Controls.LabelItemStyle.TextOnly
+        Me.m_periodLabel.Ellipsis = False
+        Me.m_periodLabel.ImageAlignment = System.Drawing.ContentAlignment.TopLeft
+        Me.m_periodLabel.Location = New System.Drawing.Point(3, 73)
+        Me.m_periodLabel.Multiline = True
+        Me.m_periodLabel.Name = "m_periodLabel"
+        Me.m_periodLabel.Size = New System.Drawing.Size(123, 24)
+        Me.m_periodLabel.TabIndex = 32
+        Me.m_periodLabel.Text = "Period"
+        Me.m_periodLabel.TextAlignment = System.Drawing.ContentAlignment.MiddleLeft
+        Me.m_periodLabel.UseMnemonics = True
+        Me.m_periodLabel.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
         '
-        'VLabel8
+        'm_adjustmentFilterLabel
         '
-        Me.VLabel8.BackColor = System.Drawing.Color.Transparent
-        Me.VLabel8.DisplayStyle = VIBlend.WinForms.Controls.LabelItemStyle.TextOnly
-        Me.VLabel8.Ellipsis = False
-        Me.VLabel8.ImageAlignment = System.Drawing.ContentAlignment.TopLeft
-        Me.VLabel8.Location = New System.Drawing.Point(3, 248)
-        Me.VLabel8.Multiline = True
-        Me.VLabel8.Name = "VLabel8"
-        Me.VLabel8.Size = New System.Drawing.Size(123, 24)
-        Me.VLabel8.TabIndex = 37
-        Me.VLabel8.Text = "[ppsbi.adjustments_filter]"
-        Me.VLabel8.TextAlignment = System.Drawing.ContentAlignment.MiddleLeft
-        Me.VLabel8.UseMnemonics = True
-        Me.VLabel8.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
+        Me.m_adjustmentFilterLabel.BackColor = System.Drawing.Color.Transparent
+        Me.m_adjustmentFilterLabel.DisplayStyle = VIBlend.WinForms.Controls.LabelItemStyle.TextOnly
+        Me.m_adjustmentFilterLabel.Ellipsis = False
+        Me.m_adjustmentFilterLabel.ImageAlignment = System.Drawing.ContentAlignment.TopLeft
+        Me.m_adjustmentFilterLabel.Location = New System.Drawing.Point(3, 248)
+        Me.m_adjustmentFilterLabel.Multiline = True
+        Me.m_adjustmentFilterLabel.Name = "m_adjustmentFilterLabel"
+        Me.m_adjustmentFilterLabel.Size = New System.Drawing.Size(123, 24)
+        Me.m_adjustmentFilterLabel.TabIndex = 37
+        Me.m_adjustmentFilterLabel.Text = "Adjustments filter"
+        Me.m_adjustmentFilterLabel.TextAlignment = System.Drawing.ContentAlignment.MiddleLeft
+        Me.m_adjustmentFilterLabel.UseMnemonics = True
+        Me.m_adjustmentFilterLabel.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
         '
         'EntityTreeBox
         '
@@ -429,7 +429,7 @@ Partial Class PPSBI_UI
         Me.Controls.Add(Me.validate_cmd)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Name = "PPSBI_UI"
-        Me.Text = "[ppsbi.title]"
+        Me.Text = "Financial BI Excel Function"
         Me.TableLayoutPanel1.ResumeLayout(False)
         Me.ResumeLayout(False)
 
@@ -438,15 +438,15 @@ Partial Class PPSBI_UI
     Friend WithEvents ButtonsIL As System.Windows.Forms.ImageList
     Friend WithEvents categoriesIL As System.Windows.Forms.ImageList
     Friend WithEvents TableLayoutPanel1 As System.Windows.Forms.TableLayoutPanel
-    Friend WithEvents VLabel9 As VIBlend.WinForms.Controls.vLabel
-    Friend WithEvents VLabel7 As VIBlend.WinForms.Controls.vLabel
-    Friend WithEvents VLabel6 As VIBlend.WinForms.Controls.vLabel
-    Friend WithEvents VLabel5 As VIBlend.WinForms.Controls.vLabel
-    Friend WithEvents VLabel4 As VIBlend.WinForms.Controls.vLabel
-    Friend WithEvents VLabel1 As VIBlend.WinForms.Controls.vLabel
-    Friend WithEvents VLabel2 As VIBlend.WinForms.Controls.vLabel
-    Friend WithEvents VLabel3 As VIBlend.WinForms.Controls.vLabel
-    Friend WithEvents VLabel8 As VIBlend.WinForms.Controls.vLabel
+    Friend WithEvents m_categoryFilterLabel As VIBlend.WinForms.Controls.vLabel
+    Friend WithEvents m_productFilterLabel As VIBlend.WinForms.Controls.vLabel
+    Friend WithEvents m_clientFilterLabel As VIBlend.WinForms.Controls.vLabel
+    Friend WithEvents m_versionLabel As VIBlend.WinForms.Controls.vLabel
+    Friend WithEvents m_currencyLabel As VIBlend.WinForms.Controls.vLabel
+    Friend WithEvents m_entityLabel As VIBlend.WinForms.Controls.vLabel
+    Friend WithEvents m_accountLabel As VIBlend.WinForms.Controls.vLabel
+    Friend WithEvents m_periodLabel As VIBlend.WinForms.Controls.vLabel
+    Friend WithEvents m_adjustmentFilterLabel As VIBlend.WinForms.Controls.vLabel
     Friend WithEvents PeriodTreeBox As VIBlend.WinForms.Controls.vTreeViewBox
     Friend WithEvents EntityTreeBox As VIBlend.WinForms.Controls.vTreeViewBox
     Friend WithEvents AccountTreeBox As VIBlend.WinForms.Controls.vTreeViewBox
