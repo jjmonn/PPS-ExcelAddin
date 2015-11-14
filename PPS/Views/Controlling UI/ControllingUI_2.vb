@@ -412,13 +412,6 @@ Friend Class ControllingUI_2
 
     End Sub
 
-    'Friend Sub ClearDGVs()
-
-    '    Dim dgv As vDataGridView = DGVsControlTab.SelectedTab.Controls(0)
-    '    dgv.Clear()
-
-    'End Sub
-
 #End Region
 
 
@@ -968,24 +961,24 @@ Friend Class ControllingUI_2
         hierarchyItemDisabledStyle.Font = New System.Drawing.Font(hierarchyItemDisabledStyle.Font.FontFamily, My.Settings.dgvFontSize)
 
         hierarchyImportantItemNormalStyle = GridTheme.GetDefaultTheme(DGV_THEME).HierarchyItemStyleNormal
-        hierarchyImportantItemNormalStyle = GridTheme.GetDefaultTheme(DGV_THEME).HierarchyItemStyleSelected
-        hierarchyImportantItemNormalStyle = GridTheme.GetDefaultTheme(DGV_THEME).HierarchyItemStyleDisabled
+        hierarchyImportantItemSelectedStyle = GridTheme.GetDefaultTheme(DGV_THEME).HierarchyItemStyleSelected
+        hierarchyImportantItemDisabledStyle = GridTheme.GetDefaultTheme(DGV_THEME).HierarchyItemStyleDisabled
         hierarchyImportantItemNormalStyle.Font = New System.Drawing.Font(hierarchyImportantItemNormalStyle.Font.FontFamily, My.Settings.dgvFontSize, FontStyle.Bold)
-        hierarchyImportantItemNormalStyle.Font = New System.Drawing.Font(hierarchyImportantItemNormalStyle.Font.FontFamily, My.Settings.dgvFontSize, FontStyle.Bold)
-        hierarchyImportantItemNormalStyle.Font = New System.Drawing.Font(hierarchyImportantItemNormalStyle.Font.FontFamily, My.Settings.dgvFontSize, FontStyle.Bold)
+        hierarchyImportantItemSelectedStyle.Font = New System.Drawing.Font(hierarchyImportantItemSelectedStyle.Font.FontFamily, My.Settings.dgvFontSize, FontStyle.Bold)
+        hierarchyImportantItemDisabledStyle.Font = New System.Drawing.Font(hierarchyImportantItemDisabledStyle.Font.FontFamily, My.Settings.dgvFontSize, FontStyle.Bold)
 
-        hierarchyTitleItemDisabledStyle = GridTheme.GetDefaultTheme(DGV_THEME).HierarchyItemStyleNormal
-        hierarchyTitleItemDisabledStyle = GridTheme.GetDefaultTheme(DGV_THEME).HierarchyItemStyleSelected
+        hierarchyTitleItemNormalStyle = GridTheme.GetDefaultTheme(DGV_THEME).HierarchyItemStyleNormal
+        hierarchyTitleItemSelectedStyle = GridTheme.GetDefaultTheme(DGV_THEME).HierarchyItemStyleSelected
         hierarchyTitleItemDisabledStyle = GridTheme.GetDefaultTheme(DGV_THEME).HierarchyItemStyleDisabled
-        hierarchyTitleItemDisabledStyle.Font = New System.Drawing.Font(hierarchyTitleItemDisabledStyle.Font.FontFamily, My.Settings.dgvFontSize, FontStyle.Bold)
-        hierarchyTitleItemDisabledStyle.Font = New System.Drawing.Font(hierarchyTitleItemDisabledStyle.Font.FontFamily, My.Settings.dgvFontSize, FontStyle.Bold)
+        hierarchyTitleItemNormalStyle.Font = New System.Drawing.Font(hierarchyTitleItemNormalStyle.Font.FontFamily, My.Settings.dgvFontSize, FontStyle.Bold)
+        hierarchyTitleItemSelectedStyle.Font = New System.Drawing.Font(hierarchyTitleItemSelectedStyle.Font.FontFamily, My.Settings.dgvFontSize, FontStyle.Bold)
         hierarchyTitleItemDisabledStyle.Font = New System.Drawing.Font(hierarchyTitleItemDisabledStyle.Font.FontFamily, My.Settings.dgvFontSize, FontStyle.Bold)
 
-        hierarchyDetailItemDisabledStyle = GridTheme.GetDefaultTheme(DGV_THEME).HierarchyItemStyleNormal
-        hierarchyDetailItemDisabledStyle = GridTheme.GetDefaultTheme(DGV_THEME).HierarchyItemStyleSelected
+        hierarchyDetailItemNormalStyle = GridTheme.GetDefaultTheme(DGV_THEME).HierarchyItemStyleNormal
+        hierarchyDetailItemSelectedStyle = GridTheme.GetDefaultTheme(DGV_THEME).HierarchyItemStyleSelected
         hierarchyDetailItemDisabledStyle = GridTheme.GetDefaultTheme(DGV_THEME).HierarchyItemStyleDisabled
-        hierarchyDetailItemDisabledStyle.Font = New System.Drawing.Font(hierarchyDetailItemDisabledStyle.Font.FontFamily, My.Settings.dgvFontSize, FontStyle.Italic)
-        hierarchyDetailItemDisabledStyle.Font = New System.Drawing.Font(hierarchyDetailItemDisabledStyle.Font.FontFamily, My.Settings.dgvFontSize, FontStyle.Italic)
+        hierarchyDetailItemNormalStyle.Font = New System.Drawing.Font(hierarchyDetailItemNormalStyle.Font.FontFamily, My.Settings.dgvFontSize, FontStyle.Italic)
+        hierarchyDetailItemSelectedStyle.Font = New System.Drawing.Font(hierarchyDetailItemSelectedStyle.Font.FontFamily, My.Settings.dgvFontSize, FontStyle.Italic)
         hierarchyDetailItemDisabledStyle.Font = New System.Drawing.Font(hierarchyDetailItemDisabledStyle.Font.FontFamily, My.Settings.dgvFontSize, FontStyle.Italic)
 
     End Sub
