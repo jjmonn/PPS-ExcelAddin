@@ -122,20 +122,25 @@ Friend Class NewDataVersionUI
             Dim MyDelegate As New AfterRead_Delegate(AddressOf AfterRead)
             Me.m_parentVersionsTreeviewBox.TreeView.Invoke(MyDelegate, New Object() {p_version})
         Else
-                Dim l_versionNode As vTreeNode = VTreeViewUtil.FindNode(m_parentVersionsTreeviewBox.TreeView, p_version.Id)
-                If l_versionNode Is Nothing Then
-                    If p_version.ParentId <> 0 Then
-                        Dim parentNode As VIBlend.WinForms.Controls.vTreeNode = Nothing
-                        parentNode = VTreeViewUtil.FindNode(m_parentVersionsTreeviewBox.TreeView, p_version.ParentId)
-                        VTreeViewUtil.AddNode(p_version.Id, p_version.Name, parentNode)
-                    Else
-                        VTreeViewUtil.AddNode(p_version.Id, p_version.Name, m_parentVersionsTreeviewBox.TreeView)
-                    End If
+            On Error GoTo errorHandler
+            Dim l_versionNode As vTreeNode = VTreeViewUtil.FindNode(m_parentVersionsTreeviewBox.TreeView, p_version.Id)
+            If l_versionNode Is Nothing Then
+                If p_version.ParentId <> 0 Then
+                    Dim parentNode As VIBlend.WinForms.Controls.vTreeNode = Nothing
+                    parentNode = VTreeViewUtil.FindNode(m_parentVersionsTreeviewBox.TreeView, p_version.ParentId)
+                    VTreeViewUtil.AddNode(p_version.Id, p_version.Name, parentNode)
                 Else
-                    l_versionNode.Text = p_version.Name
-                    l_versionNode.ImageIndex = p_version.Image
+                    VTreeViewUtil.AddNode(p_version.Id, p_version.Name, m_parentVersionsTreeviewBox.TreeView)
                 End If
+            Else
+                l_versionNode.Text = p_version.Name
+                l_versionNode.ImageIndex = p_version.Image
+            End If
         End If
+
+errorHandler:
+        Exit Sub
+
     End Sub
 
     Delegate Sub AfterDelete_Delegate(ByRef id As UInt32)
@@ -145,11 +150,15 @@ Friend Class NewDataVersionUI
             Dim MyDelegate As New AfterDelete_Delegate(AddressOf AfterDelete)
             Me.m_parentVersionsTreeviewBox.TreeView.Invoke(MyDelegate, New Object() {id})
         Else
+            On Error GoTo errorHandler
             Dim node As vTreeNode = VTreeViewUtil.FindNode(m_parentVersionsTreeviewBox.TreeView, id)
             If Not node Is Nothing Then
                 node.Remove()
             End If
         End If
+errorHandler:
+        Exit Sub
+
     End Sub
 
 

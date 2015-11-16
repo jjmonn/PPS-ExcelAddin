@@ -216,8 +216,9 @@ Friend Class VersionsControl
             Dim MyDelegate As New AfterRead_Delegate(AddressOf AfterRead)
             Me.m_versionsTV.Invoke(MyDelegate, New Object() {p_version})
         Else
-                Dim l_versionNode As vTreeNode = VTreeViewUtil.FindNode(m_versionsTV, p_version.Id)
-                If l_versionNode Is Nothing Then
+            On Error GoTo errorHandler
+            Dim l_versionNode As vTreeNode = VTreeViewUtil.FindNode(m_versionsTV, p_version.Id)
+            If l_versionNode Is Nothing Then
                 If p_version.ParentId <> 0 Then
                     Dim parentNode As vTreeNode = VTreeViewUtil.FindNode(m_versionsTV, p_version.ParentId)
                     If parentNode IsNot Nothing Then
@@ -226,12 +227,15 @@ Friend Class VersionsControl
                 Else
                     VTreeViewUtil.AddNode(p_version.Id, p_version.Name, m_versionsTV, p_version.Image)
                 End If
-                Else
-                    l_versionNode.Text = p_version.Name
-                    l_versionNode.ImageIndex = p_version.Image
-                End If
-                If m_currentNode IsNot Nothing AndAlso p_version.Id = m_currentNode.Value Then Display(m_currentNode)
+            Else
+                l_versionNode.Text = p_version.Name
+                l_versionNode.ImageIndex = p_version.Image
             End If
+            If m_currentNode IsNot Nothing AndAlso p_version.Id = m_currentNode.Value Then Display(m_currentNode)
+        End If
+errorHandler:
+        Exit Sub
+
     End Sub
 
     Delegate Sub AfterDelete_Delegate(ByRef id As UInt32)
@@ -241,11 +245,15 @@ Friend Class VersionsControl
             Dim MyDelegate As New AfterDelete_Delegate(AddressOf AfterDelete)
             Me.m_versionsTV.Invoke(MyDelegate, New Object() {id})
         Else
+            On Error GoTo errorHandler
             Dim node As VIBlend.WinForms.Controls.vTreeNode = VTreeViewUtil.FindNode(m_versionsTV, id)
             If Not node Is Nothing Then
                 node.Remove()
             End If
         End If
+errorHandler:
+        Exit Sub
+
     End Sub
 
 #Region "TV Events"
