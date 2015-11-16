@@ -710,6 +710,7 @@ Friend Class EntitiesView
 
     Private Sub SetValueToSibbling(ByRef rowItem_ As HierarchyItem, ByRef columnItem_ As HierarchyItem, ByRef value As String)
 
+        On Error GoTo errorHandler
         Dim parent As HierarchyItem = rowItem_.ParentItem
         Dim currentItem = rowItem_
         While Not currentItem.ItemBelow Is Nothing
@@ -725,6 +726,9 @@ Friend Class EntitiesView
             End If
 
         End While
+
+errorHandler:
+        Exit Sub
 
     End Sub
 

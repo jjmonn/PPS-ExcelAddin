@@ -131,9 +131,9 @@ Friend Class AxisView
     Friend Sub UpdateAxis(ByRef ht As AxisElem)
 
         If ht Is Nothing Then Exit Sub
-        If InvokeRequired Then
+        If Me.m_axisDataGridView.InvokeRequired Then
             Dim MyDelegate As New UpdateAxis_Delegate(AddressOf UpdateAxis)
-            Me.Invoke(MyDelegate, New Object() {ht})
+            Me.m_axisDataGridView.Invoke(MyDelegate, New Object() {ht})
         Else
             m_isFillingDGV = True
             FillRow(ht.Id, ht.Name, ht)
@@ -147,9 +147,9 @@ Friend Class AxisView
     Delegate Sub DeleteAxis_Delegate(ByRef id As Int32)
     Friend Sub DeleteAxis(ByRef id As Int32)
 
-        If InvokeRequired Then
+        If Me.m_axisDataGridView.InvokeRequired Then
             Dim MyDelegate As New DeleteAxis_Delegate(AddressOf DeleteAxis)
-            Me.Invoke(MyDelegate, New Object() {id})
+            Me.m_axisDataGridView.Invoke(MyDelegate, New Object() {id})
         ElseIf (m_rowsIdsItemDic.ContainsKey(id)) Then
             m_rowsIdsItemDic(id).Delete()
             m_rowsIdsItemDic.Remove(id)
@@ -659,18 +659,12 @@ Friend Class AxisView
 
     End Sub
 
-    Private Sub SetValueToSibbling(ByRef rowItem_ As HierarchyItem, ByRef columnItem_ As HierarchyItem, ByRef value As String)
+    Private Sub SetValueToSibbling(ByRef p_rowItem As HierarchyItem, ByRef p_columnItem As HierarchyItem, ByRef p_value As String)
 
-        Dim parent As HierarchyItem = rowItem_.ParentItem
-        Dim currentItem = rowItem_
-        While Not currentItem.ItemBelow Is Nothing
-
-            currentItem = currentItem.ItemBelow
-            If currentItem.ParentItem.GetUniqueID = parent.GetUniqueID Then
-                m_axisDataGridView.CellsArea.SetCellValue(currentItem, columnItem_, value)
-                If currentItem.Items.Count > 0 Then SetValueToChildrenItems(currentItem, columnItem_, value)
-            End If
-
+        Dim l_itemBelow As HierarchyItem = p_rowItem
+        While Not l_itemBelow.ItemBelow Is Nothing
+            l_itemBelow = l_itemBelow.ItemBelow
+            m_axisDataGridView.CellsArea.SetCellValue(l_itemBelow, p_columnItem, p_value)
         End While
 
     End Sub

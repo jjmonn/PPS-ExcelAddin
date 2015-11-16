@@ -215,7 +215,7 @@ Friend Class AxisController
     Private Sub AfterAxisUpdate(ByRef status As ErrorMessage, ByRef id As UInt32)
 
         If (status <> ErrorMessage.SUCCESS) Then
-            View.UpdateAxis(CrudModel.GetValue(id))
+            '     View.UpdateAxis(CrudModel.GetValue(id))
             MsgBox("Invalid parameter")
         End If
 

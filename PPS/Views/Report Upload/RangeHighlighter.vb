@@ -113,7 +113,7 @@ Friend Class RangeHighlighter
 
     Friend Sub RevertToOriginalColors()
 
-        On Error Resume Next
+        On Error GoTo errorHandler
         GlobalVariables.APPS.ScreenUpdating = False
         For Each cell_address As String In original_cells_format.Keys
             Dim c As Excel.Range = WS.Range(cell_address)
@@ -122,6 +122,12 @@ Friend Class RangeHighlighter
         Next
         GlobalVariables.APPS.ScreenUpdating = True
         original_cells_format.Clear()
+
+errorHandler:
+        On Error Resume Next
+        GlobalVariables.APPS.ScreenUpdating = True
+        original_cells_format.Clear()
+        Exit Sub
 
     End Sub
 
