@@ -43,9 +43,12 @@ Friend Class NewDataVersionUI
         ' Add any initialization after the InitializeComponent() call.
         m_controller = input_controller
         StartingPeriodNUD.Value = Year(Now)
+        GlobalVariables.Versions.LoadVersionsTV(m_parentVersionsTreeviewBox.TreeView)
+        VTreeViewUtil.InitTVFormat(m_parentVersionsTreeviewBox.TreeView)
         InitializeComboboxes()
-        m_versionsTreeviewBox.Enabled = False
+        m_parentVersionsTreeviewBox.Enabled = False
         MultilangueSetup()
+
     End Sub
 
     Private Sub MultilangueSetup()
@@ -91,9 +94,6 @@ Friend Class NewDataVersionUI
             m_monthDictionary.Add(monthItem.Text, m_startingMonthCombobox.Items.Add(monthItem))
         Next
 
-        GlobalVariables.Versions.LoadVersionsTV(m_versionsTreeviewBox.TreeView)
-        VTreeViewUtil.InitTVFormat(m_versionsTreeviewBox.TreeView)
-
         VTreeViewUtil.LoadTreeview(m_exchangeRatesVersionVTreeviewbox.TreeView, GlobalVariables.RatesVersions.GetDictionary())
         VTreeViewUtil.LoadTreeview(m_factsVersionVTreeviewbox.TreeView, GlobalVariables.GlobalFactsVersions.GetDictionary())
         VTreeViewUtil.InitTVFormat(m_exchangeRatesVersionVTreeviewbox.TreeView)
@@ -109,11 +109,49 @@ Friend Class NewDataVersionUI
 
         m_parentNode = input_parent_node
         m_originVersionNode = Nothing
-        m_versionsTreeviewBox.TreeView.SelectedNode = Nothing
-        m_versionsTreeviewBox.Text = ""
+        m_parentVersionsTreeviewBox.TreeView.SelectedNode = Nothing
+        m_parentVersionsTreeviewBox.Text = ""
         NameTB.Select()
 
     End Sub
+
+    Delegate Sub AfterRead_Delegate(ByRef p_version As Version)
+    Friend Sub AfterRead(ByRef p_version As Version)
+
+        If Me.m_parentVersionsTreeviewBox.TreeView.InvokeRequired Then
+            Dim MyDelegate As New AfterRead_Delegate(AddressOf AfterRead)
+            Me.m_parentVersionsTreeviewBox.TreeView.Invoke(MyDelegate, New Object() {p_version})
+        Else
+                Dim l_versionNode As vTreeNode = VTreeViewUtil.FindNode(m_parentVersionsTreeviewBox.TreeView, p_version.Id)
+                If l_versionNode Is Nothing Then
+                    If p_version.ParentId <> 0 Then
+                        Dim parentNode As VIBlend.WinForms.Controls.vTreeNode = Nothing
+                        parentNode = VTreeViewUtil.FindNode(m_parentVersionsTreeviewBox.TreeView, p_version.ParentId)
+                        VTreeViewUtil.AddNode(p_version.Id, p_version.Name, parentNode)
+                    Else
+                        VTreeViewUtil.AddNode(p_version.Id, p_version.Name, m_parentVersionsTreeviewBox.TreeView)
+                    End If
+                Else
+                    l_versionNode.Text = p_version.Name
+                    l_versionNode.ImageIndex = p_version.Image
+                End If
+        End If
+    End Sub
+
+    Delegate Sub AfterDelete_Delegate(ByRef id As UInt32)
+    Friend Sub AfterDelete(ByRef id As UInt32)
+
+        If Me.m_parentVersionsTreeviewBox.TreeView.InvokeRequired Then
+            Dim MyDelegate As New AfterDelete_Delegate(AddressOf AfterDelete)
+            Me.m_parentVersionsTreeviewBox.TreeView.Invoke(MyDelegate, New Object() {id})
+        Else
+            Dim node As vTreeNode = VTreeViewUtil.FindNode(m_parentVersionsTreeviewBox.TreeView, id)
+            If Not node Is Nothing Then
+                node.Remove()
+            End If
+        End If
+    End Sub
+
 
 #End Region
 
@@ -164,21 +202,21 @@ Friend Class NewDataVersionUI
 
     Private Sub m_copyCheckbox_CheckedChanged(sender As Object, e As EventArgs) Handles m_copyCheckBox.CheckedChanged
 
-        m_versionsTreeviewBox.Enabled = m_copyCheckBox.Checked
+        m_parentVersionsTreeviewBox.Enabled = m_copyCheckBox.Checked
         StartingPeriodNUD.Enabled = Not m_copyCheckBox.Checked
         TimeConfigCB.Enabled = Not m_copyCheckBox.Checked
 
     End Sub
 
-    Private Sub m_versionsTreeviewBox_Click(sender As Object, e As EventArgs) Handles m_versionsTreeviewBox.TextChanged
+    Private Sub m_versionsTreeviewBox_Click(sender As Object, e As EventArgs) Handles m_parentVersionsTreeviewBox.TextChanged
         m_originVersionNode = Nothing
-        If m_copyCheckBox.Checked = True AndAlso m_versionsTreeviewBox.TreeView.SelectedNode IsNot Nothing AndAlso _
-        m_controller.IsFolder(m_versionsTreeviewBox.TreeView.SelectedNode.Value) = False Then
+        If m_copyCheckBox.Checked = True AndAlso m_parentVersionsTreeviewBox.TreeView.SelectedNode IsNot Nothing AndAlso _
+        m_controller.IsFolder(m_parentVersionsTreeviewBox.TreeView.SelectedNode.Value) = False Then
 
-            Dim version As Version = GlobalVariables.Versions.GetValue(CUInt(m_versionsTreeviewBox.TreeView.SelectedNode.Value))
+            Dim version As Version = GlobalVariables.Versions.GetValue(CUInt(m_parentVersionsTreeviewBox.TreeView.SelectedNode.Value))
             If version Is Nothing Then Exit Sub
 
-            m_originVersionNode = m_versionsTreeviewBox.TreeView.SelectedNode
+            m_originVersionNode = m_parentVersionsTreeviewBox.TreeView.SelectedNode
             TimeConfigCB.SelectedItem = m_timeConfigDictionary(
                 If(version.TimeConfiguration = TimeConfig.MONTHS, Local.GetValue("period.timeconfig.month"), Local.GetValue("period.timeconfig.year")))
             StartingPeriodNUD.Value = Year(Date.FromOADate(version.StartPeriod))

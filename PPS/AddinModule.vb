@@ -94,7 +94,6 @@ Public Class AddinModule
     Friend WithEvents SubmissionOptionsBT As AddinExpress.MSO.ADXRibbonSplitButton
     Friend WithEvents AdxRibbonMenu5 As AddinExpress.MSO.ADXRibbonMenu
     Friend WithEvents AdxRibbonSeparator4 As AddinExpress.MSO.ADXRibbonSeparator
-    Friend WithEvents AdxRibbonSeparator5 As AddinExpress.MSO.ADXRibbonSeparator
     Friend WithEvents NewICOs As System.Windows.Forms.ImageList
     Friend WithEvents NewIcosSmall As System.Windows.Forms.ImageList
     Friend WithEvents ConfigurationRibbonBT As AddinExpress.MSO.ADXRibbonButton
@@ -184,7 +183,6 @@ Public Class AddinModule
         Me.AdxRibbonSeparator6 = New AddinExpress.MSO.ADXRibbonSeparator(Me.components)
         Me.SubmissionStatus = New AddinExpress.MSO.ADXRibbonButton(Me.components)
         Me.CancelBT2 = New AddinExpress.MSO.ADXRibbonButton(Me.components)
-        Me.AdxRibbonSeparator5 = New AddinExpress.MSO.ADXRibbonSeparator(Me.components)
         Me.StateSelectionGroup = New AddinExpress.MSO.ADXRibbonGroup(Me.components)
         Me.entityEditBT = New AddinExpress.MSO.ADXRibbonButton(Me.components)
         Me.AdxRibbonButton1 = New AddinExpress.MSO.ADXRibbonButton(Me.components)
@@ -685,7 +683,6 @@ Public Class AddinModule
         Me.SubmissionnGroup.Controls.Add(Me.AdxRibbonSeparator6)
         Me.SubmissionnGroup.Controls.Add(Me.SubmissionStatus)
         Me.SubmissionnGroup.Controls.Add(Me.CancelBT2)
-        Me.SubmissionnGroup.Controls.Add(Me.AdxRibbonSeparator5)
         Me.SubmissionnGroup.Id = "adxRibbonGroup_d13fa5b1f4584ad99081875d975057c9"
         Me.SubmissionnGroup.ImageTransparentColor = System.Drawing.Color.Transparent
         Me.SubmissionnGroup.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
@@ -738,11 +735,6 @@ Public Class AddinModule
         Me.CancelBT2.ImageList = Me.SubmissionRibbonIL
         Me.CancelBT2.ImageTransparentColor = System.Drawing.Color.Transparent
         Me.CancelBT2.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
-        '
-        'AdxRibbonSeparator5
-        '
-        Me.AdxRibbonSeparator5.Id = "adxRibbonSeparator_4d06e3f646cb46e7bfbd9ed5fff3c739"
-        Me.AdxRibbonSeparator5.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
         '
         'StateSelectionGroup
         '
@@ -1289,7 +1281,7 @@ Public Class AddinModule
         GlobalVariables.GlobalPPSBIController = New PPSBIController
         GlobalVariables.Addin = Me
         SetMainMenuButtonState(False)
-        Local.LoadLocalFile("C:\Users\PPS\Documents\GitHub\FinancialBI_Addin\PPS\Locals\english.xml")
+        Local.LoadLocalFile("C:\Users\PPS\Documents\GitHub\PPS Client Addin\PPS\Locals\french.xml")
 
     End Sub
 

@@ -83,6 +83,7 @@ Friend Class NewAccountUI
         Dim parentNode = VTreeViewUtil.FindNode(m_parentAccountsTreeviewBox.TreeView, m_parentNodeId)
         If Not parentNode Is Nothing Then
             m_parentAccountsTreeviewBox.TreeView.SelectedNode = parentNode
+            m_parentAccountsTreeviewBox.Text = parentNode.Text
         End If
 
     End Sub

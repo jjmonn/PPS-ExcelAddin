@@ -396,29 +396,27 @@ TokensCheck:
             MsgBox(Local.GetValue("accounts_edition.msg_items_not_mapped") + Chr(13) & errorsStr)
             Exit Sub
         Else
-            GoTo DependanciesCheck
-        End If
-
-DependanciesCheck:
-        If m_controller.InterdependancyTest = True Then
-            GoTo SubmitFormula
-        Else
-            Exit Sub
-        End If
-
-SubmitFormula:
-        Dim confirm As Integer = MessageBox.Show(Local.GetValue("accounts_edition.msg_formula_edition_for_account") + Chr(13) + Name_TB.Text + Chr(13) + Local.GetValue("accounts_edition.msg_account_deletion2"), _
-                                                 Local.GetValue("accounts_edition.title_formula_validation_confirmation"), _
-                                                  MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question)
-        If confirm = DialogResult.Yes Then
-            If Not m_controller.GetAccount(Name_TB.Text) Is Nothing Then
-                m_formulaEditionButton.Toggle = CheckState.Unchecked
-                Dim accountId As Int32 = m_controller.GetAccount(Name_TB.Text).Id
-                m_controller.UpdateAccountFormula(accountId, m_controller.GetCurrentParsedFormula)
+            Dim confirm As Integer = MessageBox.Show(Local.GetValue("accounts_edition.msg_formula_edition_for_account") + Chr(13) + Name_TB.Text + Chr(13) + Local.GetValue("accounts_edition.msg_account_deletion2"), _
+                                               Local.GetValue("accounts_edition.title_formula_validation_confirmation"), _
+                                                MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question)
+            If confirm = DialogResult.Yes Then
+                If Not m_controller.GetAccount(Name_TB.Text) Is Nothing Then
+                    m_formulaEditionButton.Toggle = CheckState.Unchecked
+                    Dim accountId As Int32 = m_controller.GetAccount(Name_TB.Text).Id
+                    m_controller.UpdateAccountFormula(accountId, m_controller.GetCurrentParsedFormula)
+                End If
+            Else
+                m_formulaTextBox.Text = m_controller.GetFormulaText(m_accountTV.SelectedNode.Value)
             End If
-        Else
-            m_formulaTextBox.Text = m_controller.GetFormulaText(m_accountTV.SelectedNode.value)
         End If
+
+        'DependanciesCheck:
+        '        If m_controller.InterdependancyTest = True Then
+        '            GoTo SubmitFormula
+        '        Else
+        '            Exit Sub
+        '        End If
+
 
     End Sub
 
@@ -585,6 +583,7 @@ SubmitFormula:
             End If
             'Currently selected node is a suitable target
             e.Effect = DragDropEffects.Move
+            m_dragAndDrop = True
         End If
 
     End Sub

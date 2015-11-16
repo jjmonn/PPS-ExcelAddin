@@ -66,7 +66,7 @@ Partial Class EntitiesView
         '
         'm_entitiesRightClickMenu
         '
-        Me.m_entitiesRightClickMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.RenameEntityButton, Me.ToolStripSeparator1, Me.CreateEntityToolStripMenuItem, Me.DeleteEntityToolStripMenuItem2, Me.ToolStripSeparator5, Me.copy_down_bt, Me.ToolStripSeparator4, Me.drop_to_excel_bt, Me.AutoResizeColumnsButton, Me.ExpandAllBT, Me.CollapseAllBT})
+        Me.m_entitiesRightClickMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.CreateEntityToolStripMenuItem, Me.DeleteEntityToolStripMenuItem2, Me.ToolStripSeparator1, Me.RenameEntityButton, Me.ToolStripSeparator5, Me.copy_down_bt, Me.ToolStripSeparator4, Me.drop_to_excel_bt, Me.AutoResizeColumnsButton, Me.ExpandAllBT, Me.CollapseAllBT})
         Me.m_entitiesRightClickMenu.Name = "ContextMenuStripTGV"
         Me.m_entitiesRightClickMenu.Size = New System.Drawing.Size(202, 236)
         '

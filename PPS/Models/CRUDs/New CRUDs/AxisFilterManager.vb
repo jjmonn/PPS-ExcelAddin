@@ -264,7 +264,7 @@ Class AxisFilterManager : Inherits CRUDManager
                     LoadFiltersValues(filterNode.Nodes(0), valueNode, False)
                 End If
 
-            ElseIf filterValue.Id = FvTvNode.Value Then
+            ElseIf filterValue.ParentId = FvTvNode.Value Then
                 Dim valueNode As vTreeNode = VTreeViewUtil.AddNode(filterValue.Id, filterValue.Name, FvTvNode)
                 If filterNode.Nodes.Count > 0 Then
                     LoadFiltersValues(filterNode.Nodes(0), valueNode, False)

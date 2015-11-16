@@ -540,6 +540,8 @@ Friend Class EntitiesView
                                             childFilterNode, _
                                             {filterValueId})
         Next
+        m_entitiesDataGridView.ColumnsHierarchy.AutoResize(AutoResizeMode.FIT_ALL)
+        m_entitiesDataGridView.Refresh()
         m_isFillingDGV = False
 
     End Sub
@@ -593,7 +595,7 @@ Friend Class EntitiesView
                                             childFilterNode, _
                                             filterValuesIds)
         Next
-
+ 
     End Sub
 
 #End Region
@@ -797,6 +799,7 @@ Friend Class EntitiesView
 
 
 #End Region
+
 
 #End Region
 

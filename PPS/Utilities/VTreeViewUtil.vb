@@ -14,7 +14,7 @@ Public Class VTreeViewUtil
         Dim newNode As New vTreeNode()
         newNode.Text = text
         newNode.Value = value
-        parent.Nodes.Add(newNode)
+        parent.Nodes.add(newNode)
         If imageIndex > -1 Then newNode.ImageIndex = imageIndex
         Return newNode
 

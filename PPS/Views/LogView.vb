@@ -51,6 +51,7 @@ Friend Class LogView
         m_productColumn = m_logDataGridView.ColumnsHierarchy.Items.Add("Product")
         m_adjustmentColumn = m_logDataGridView.ColumnsHierarchy.Items.Add("Adjustment")
         m_valueColumn = m_logDataGridView.ColumnsHierarchy.Items.Add("Value")
+        m_valueColumn.CellsFormatString = "{0:N}"
         ' m_logDataGridView.ColumnsHierarchy.AutoResize(AutoResizeMode.FIT_ALL)
         m_logDataGridView.ColumnsHierarchy.AutoStretchColumns = True
 

@@ -35,14 +35,14 @@ Friend Class VersionsControl
 #Region "Instance variables"
 
     ' Objects
-    Private Controller As DataVersionsController
-    Private VersionsTV As VIBlend.WinForms.Controls.vTreeView
-    Private CP As CircularProgressUI
+    Private m_controller As DataVersionsController
+    Private m_versionsTV As VIBlend.WinForms.Controls.vTreeView
+    Private m_circularProgress As CircularProgressUI
 
     ' Variables
-    Private current_node As VIBlend.WinForms.Controls.vTreeNode
-    Private creationFlag As String
-    Private isDisplaying As Boolean
+    Private m_currentNode As VIBlend.WinForms.Controls.vTreeNode
+    Private m_creationFlag As String
+    Private m_isDisplaying As Boolean
 
 #End Region
 
@@ -56,24 +56,24 @@ Friend Class VersionsControl
         InitializeComponent()
 
         ' Add any initialization after the InitializeComponent() call.
-        Controller = input_controller
-        VersionsTV = input_versionsTV
-        VersionsTV.ImageList = m_versionsTreeviewImageList
-        VersionsTVPanel.Controls.Add(VersionsTV)
-        VersionsTV.Dock = DockStyle.Fill
-        VersionsTV.AllowDrop = True
-        VersionsTV.ContextMenuStrip = RCM_TV
+        m_controller = input_controller
+        m_versionsTV = input_versionsTV
+        m_versionsTV.ImageList = m_versionsTreeviewImageList
+        VersionsTVPanel.Controls.Add(m_versionsTV)
+        m_versionsTV.Dock = DockStyle.Fill
+        m_versionsTV.AllowDrop = True
+        m_versionsTV.ContextMenuStrip = RCM_TV
 
-        AddHandler VersionsTV.AfterSelect, AddressOf VersionsTV_AfterSelect
-        AddHandler VersionsTV.KeyDown, AddressOf CategoriesTV_KeyDown
-        AddHandler VersionsTV.MouseClick, AddressOf tv_mouse_click
+        AddHandler m_versionsTV.AfterSelect, AddressOf VersionsTV_AfterSelect
+        AddHandler m_versionsTV.KeyDown, AddressOf CategoriesTV_KeyDown
+        AddHandler m_versionsTV.MouseClick, AddressOf tv_mouse_click
 
         ' implement tv drag and drop -> common for all
 
         '   AddHandler VersionsTV.drag, AddressOf versionsTV_ItemDrag
-        AddHandler VersionsTV.DragEnter, AddressOf versionsTV_DragEnter
-        AddHandler VersionsTV.DragOver, AddressOf versionsTV_DragOver
-        AddHandler VersionsTV.DragDrop, AddressOf versionsTV_DragDrop
+        AddHandler m_versionsTV.DragEnter, AddressOf versionsTV_DragEnter
+        AddHandler m_versionsTV.DragOver, AddressOf versionsTV_DragOver
+        AddHandler m_versionsTV.DragDrop, AddressOf versionsTV_DragDrop
 
         AddHandler m_exchangeRatesVersionVTreeviewbox.TreeView.AfterSelect, AddressOf ExchangeRatesVTreebox_TextChanged
         AddHandler m_factsVersionVTreeviewbox.TreeView.AfterSelect, AddressOf FactsRatesVTreebox_TextChanged
@@ -104,10 +104,6 @@ Friend Class VersionsControl
         End If
     End Sub
 
-    Friend Sub closeControl()
-        Controller.SendNewPositionsToModel()
-    End Sub
-
     Private Sub MultilanguageSetup()
 
         Me.new_version_bt.Text = Local.GetValue("versions.add_version")
@@ -131,7 +127,6 @@ Friend Class VersionsControl
 
     End Sub
 
-
 #End Region
 
 
@@ -141,7 +136,7 @@ Friend Class VersionsControl
 
         Dim startPeriod As String = ""
 
-        If Controller.IsFolder(CUInt(inputNode.Value)) Then
+        If m_controller.IsFolder(CUInt(inputNode.Value)) Then
             NameTB.Text = ""
             CreationTB.Text = ""
             lockedCB.Checked = False
@@ -152,7 +147,7 @@ Friend Class VersionsControl
             m_exchangeRatesVersionVTreeviewbox.Text = ""
             m_factsVersionVTreeviewbox.Text = ""
         Else
-            Dim version As Version = Controller.GetVersion(CUInt(inputNode.Value))
+            Dim version As Version = m_controller.GetVersion(CUInt(inputNode.Value))
             If version Is Nothing Then Exit Sub
 
             NameTB.Text = inputNode.Text
@@ -196,66 +191,57 @@ Friend Class VersionsControl
 
     Private Sub DeleteVersion()
 
-        If Not current_node Is Nothing Then
+        If Not m_currentNode Is Nothing Then
             Dim confirm As Integer = MessageBox.Show(Local.GetValue("versions.msg_delete1") + Chr(13) + Chr(13) + _
-                                                     current_node.Text + Chr(13) + Chr(13) + _
+                                                     m_currentNode.Text + Chr(13) + Chr(13) + _
                                                      Local.GetValue("versions.msg_delete2") + Chr(13) + Chr(13), _
                                                      Local.GetValue("versions.title_delete_confirmation"), MessageBoxButtons.YesNo, MessageBoxIcon.Question)
             If confirm = DialogResult.Yes Then
-                Controller.DeleteVersions(current_node)
+                m_controller.DeleteVersions(m_currentNode)
                 MsgBox(Local.GetValue("facts_versions.msg_delete_successful"))
             End If
         End If
 
     End Sub
 
-    Private Function RenameVersionInTV(ByRef p_id As UInt32, ByRef p_name As String) As Boolean
-
-        For Each node In VersionsTV.GetNodes()
-            If node.Value = p_id Then
-                node.Text = p_name
-                Return True
-            End If
-        Next
-        Return False
-
-    End Function
-
 #End Region
 
 
 #Region "Events"
 
-    Delegate Sub AfterRead_Delegate(ByRef status As ErrorMessage, ByRef p_version As Version)
-    Friend Sub AfterRead(ByRef status As ErrorMessage, ByRef p_version As Version)
+    Delegate Sub AfterRead_Delegate(ByRef p_version As Version)
+    Friend Sub AfterRead(ByRef p_version As Version)
 
-        If InvokeRequired Then
+        If Me.m_versionsTV.InvokeRequired Then
             Dim MyDelegate As New AfterRead_Delegate(AddressOf AfterRead)
-            Me.Invoke(MyDelegate, New Object() {status, p_version})
+            Me.m_versionsTV.Invoke(MyDelegate, New Object() {p_version})
         Else
-            If (status = ErrorMessage.SUCCESS) Then
-                If RenameVersionInTV(p_version.Id, p_version.Name) = False Then
-                    If p_version.ParentId <> 0 Then
-                        Dim parentNode As VIBlend.WinForms.Controls.vTreeNode = Nothing
-                        parentNode = VTreeViewUtil.FindNode(VersionsTV, p_version.ParentId)
-                        VTreeViewUtil.AddNode(p_version.Id, p_version.Name, parentNode)
-                    Else
-                        VTreeViewUtil.AddNode(p_version.Id, p_version.Name, VersionsTV)
+                Dim l_versionNode As vTreeNode = VTreeViewUtil.FindNode(m_versionsTV, p_version.Id)
+                If l_versionNode Is Nothing Then
+                If p_version.ParentId <> 0 Then
+                    Dim parentNode As vTreeNode = VTreeViewUtil.FindNode(m_versionsTV, p_version.ParentId)
+                    If parentNode IsNot Nothing Then
+                        VTreeViewUtil.AddNode(p_version.Id, p_version.Name, parentNode, p_version.Image)
                     End If
+                Else
+                    VTreeViewUtil.AddNode(p_version.Id, p_version.Name, m_versionsTV, p_version.Image)
                 End If
-                If current_node IsNot Nothing AndAlso p_version.Id = current_node.Value Then Display(current_node)
+                Else
+                    l_versionNode.Text = p_version.Name
+                    l_versionNode.ImageIndex = p_version.Image
+                End If
+                If m_currentNode IsNot Nothing AndAlso p_version.Id = m_currentNode.Value Then Display(m_currentNode)
             End If
-        End If
     End Sub
 
-    Delegate Sub AfterDelete_Delegate(ByRef status As ErrorMessage, ByRef id As UInt32)
-    Friend Sub AfterDelete(ByRef status As ErrorMessage, ByRef id As UInt32)
+    Delegate Sub AfterDelete_Delegate(ByRef id As UInt32)
+    Friend Sub AfterDelete(ByRef id As UInt32)
 
-        If InvokeRequired Then
+        If Me.m_versionsTV.InvokeRequired Then
             Dim MyDelegate As New AfterDelete_Delegate(AddressOf AfterDelete)
-            Me.Invoke(MyDelegate, New Object() {status, id})
+            Me.m_versionsTV.Invoke(MyDelegate, New Object() {id})
         Else
-            Dim node As VIBlend.WinForms.Controls.vTreeNode = VTreeViewUtil.FindNode(VersionsTV, id)
+            Dim node As VIBlend.WinForms.Controls.vTreeNode = VTreeViewUtil.FindNode(m_versionsTV, id)
             If Not node Is Nothing Then
                 node.Remove()
             End If
@@ -271,10 +257,10 @@ Friend Class VersionsControl
             Dim MyDelegate As New VersionsTV_AfterSelect_Delegate(AddressOf VersionsTV_AfterSelect)
             Me.Invoke(MyDelegate, New Object() {sender, e})
         Else
-            current_node = e.Node
-            isDisplaying = True
-            Display(current_node)
-            isDisplaying = False
+            m_currentNode = e.Node
+            m_isDisplaying = True
+            Display(m_currentNode)
+            m_isDisplaying = False
             DesactivateUnallowed()
         End If
 
@@ -282,7 +268,7 @@ Friend Class VersionsControl
 
     Private Sub tv_mouse_click(sender As Object, e As MouseEventArgs)
 
-        current_node = VTreeViewUtil.GetNodeAtPosition(VersionsTV, e.Location)
+        m_currentNode = VTreeViewUtil.GetNodeAtPosition(m_versionsTV, e.Location)
 
     End Sub
 
@@ -293,14 +279,14 @@ Friend Class VersionsControl
             Case Keys.Delete : delete_bt_Click(sender, e)
             Case Keys.Up
                 If e.Control Then
-                    If Not current_node Is Nothing Then
-                        VTreeViewUtil.MoveNodeUp(current_node)
+                    If Not m_currentNode Is Nothing Then
+                        VTreeViewUtil.MoveNodeUp(m_currentNode)
                     End If
                 End If
             Case Keys.Down
                 If e.Control Then
-                    If Not current_node Is Nothing Then
-                        VTreeViewUtil.MoveNodeDown(current_node)
+                    If Not m_currentNode Is Nothing Then
+                        VTreeViewUtil.MoveNodeDown(m_currentNode)
                     End If
                 End If
         End Select
@@ -369,11 +355,11 @@ Friend Class VersionsControl
         If targetNode Is Nothing Then
             dropNode.Remove()                                               'Remove the drop node from its current location
             selectedTreeview.Nodes.Add(dropNode)
-            Controller.UpdateParent(dropNode.Name, DBNull.Value)
-        ElseIf Controller.IsFolder(targetNode.Name) = True Then
+            m_controller.UpdateParent(dropNode.Name, DBNull.Value)
+        ElseIf m_controller.IsFolder(targetNode.Name) = True Then
             dropNode.Remove()                                               'Remove the drop node from its current location
             targetNode.Nodes.Add(dropNode)
-            Controller.UpdateParent(dropNode.Name, targetNode.Name)
+            m_controller.UpdateParent(dropNode.Name, targetNode.Name)
         End If
         dropNode.EnsureVisible()
         selectedTreeview.SelectedNode = dropNode
@@ -391,10 +377,10 @@ Friend Class VersionsControl
     Private Sub lockedCB_CheckedChanged(sender As Object, e As EventArgs) Handles lockedCB.CheckedChanged
 
         ' only if not folder ?
-        If Not VersionsTV.SelectedNode Is Nothing AndAlso isDisplaying = False Then
+        If Not m_versionsTV.SelectedNode Is Nothing AndAlso m_isDisplaying = False Then
             Select Case lockedCB.Checked
-                Case True : Controller.LockVersion(VersionsTV.SelectedNode.Value)
-                Case False : Controller.UnlockVersion(VersionsTV.SelectedNode.Value)
+                Case True : m_controller.LockVersion(m_versionsTV.SelectedNode.Value)
+                Case False : m_controller.UnlockVersion(m_versionsTV.SelectedNode.Value)
             End Select
         End If
 
@@ -402,19 +388,19 @@ Friend Class VersionsControl
 
     Private Sub ExchangeRatesVTreebox_TextChanged(sender As Object, e As EventArgs)
 
-        If Not VersionsTV.SelectedNode Is Nothing AndAlso isDisplaying = False Then
-            Dim version_id As Int32 = VersionsTV.SelectedNode.Value
+        If Not m_versionsTV.SelectedNode Is Nothing AndAlso m_isDisplaying = False Then
+            Dim version_id As Int32 = m_versionsTV.SelectedNode.Value
             Dim rates_version_id As Int32 = m_exchangeRatesVersionVTreeviewbox.TreeView.SelectedNode.Value
 
             ' Not folder Control
-            If Controller.IsRatesVersionValid(rates_version_id) = False Then
+            If m_controller.IsRatesVersionValid(rates_version_id) = False Then
                 MsgBox(m_exchangeRatesVersionVTreeviewbox.TreeView.SelectedNode.Text & Local.GetValue("facts_versions.msg_is_folder"))
                 GoTo RevertToFormerValue
             End If
 
             ' Time configuration control
-            If Controller.IsRatesVersionCompatibleWithPeriods(StartPeriodTB.ValueMember, NBPeriodsTB.Text, rates_version_id) Then
-                Controller.UpdateRatesVersion_id(version_id, rates_version_id)
+            If m_controller.IsRatesVersionCompatibleWithPeriods(StartPeriodTB.ValueMember, NBPeriodsTB.Text, rates_version_id) Then
+                m_controller.UpdateRatesVersion_id(version_id, rates_version_id)
             Else
                 MsgBox(Local.GetValue("facts_versions.msg_rates_version_mismatch"))
                 GoTo RevertToFormerValue
@@ -424,31 +410,31 @@ Friend Class VersionsControl
 
 
 RevertToFormerValue:
-        isDisplaying = True
-        Dim version As Version = Controller.GetVersion(CUInt(current_node.Value))
+        m_isDisplaying = True
+        Dim version As Version = m_controller.GetVersion(CUInt(m_currentNode.Value))
 
         If Not version Is Nothing Then
             m_exchangeRatesVersionVTreeviewbox.TreeView.SelectedNode = VTreeViewUtil.FindNode(m_exchangeRatesVersionVTreeviewbox.TreeView, version.RateVersionId)
         End If
-        isDisplaying = False
+        m_isDisplaying = False
 
     End Sub
 
     Private Sub FactsRatesVTreebox_TextChanged(sender As Object, e As EventArgs)
 
-        If Not VersionsTV.SelectedNode Is Nothing AndAlso isDisplaying = False Then
-            Dim version_id As Int32 = VersionsTV.SelectedNode.Value
+        If Not m_versionsTV.SelectedNode Is Nothing AndAlso m_isDisplaying = False Then
+            Dim version_id As Int32 = m_versionsTV.SelectedNode.Value
             Dim fact_version_id As Int32 = m_factsVersionVTreeviewbox.TreeView.SelectedNode.Value
 
             ' Not folder Control
-            If Controller.IsFactsVersionValid(fact_version_id) = False Then
+            If m_controller.IsFactsVersionValid(fact_version_id) = False Then
                 MsgBox(m_factsVersionVTreeviewbox.TreeView.SelectedNode.Text & Local.GetValue("facts_versions.msg_is_folder"))
                 GoTo RevertToFormerValue
             End If
 
             ' Time configuration control
-            If Controller.IsFactVersionCompatibleWithPeriods(StartPeriodTB.ValueMember, NBPeriodsTB.Text, fact_version_id) Then
-                Controller.UpdateFactVersion_id(version_id, fact_version_id)
+            If m_controller.IsFactVersionCompatibleWithPeriods(StartPeriodTB.ValueMember, NBPeriodsTB.Text, fact_version_id) Then
+                m_controller.UpdateFactVersion_id(version_id, fact_version_id)
             Else
                 MsgBox(Local.GetValue("facts_versions.msg_fact_version_mismatch"))
                 GoTo RevertToFormerValue
@@ -457,13 +443,13 @@ RevertToFormerValue:
         Exit Sub
 
 RevertToFormerValue:
-        isDisplaying = True
-        Dim version As Version = Controller.GetVersion(CUInt(current_node.Value))
+        m_isDisplaying = True
+        Dim version As Version = m_controller.GetVersion(CUInt(m_currentNode.Value))
 
         If Not version Is Nothing Then
             m_factsVersionVTreeviewbox.TreeView.SelectedNode = VTreeViewUtil.FindNode(m_factsVersionVTreeviewbox.TreeView, version.GlobalFactVersionId)
         End If
-        isDisplaying = False
+        m_isDisplaying = False
 
     End Sub
 
@@ -474,14 +460,14 @@ RevertToFormerValue:
 
     Private Sub new_version_bt_Click(sender As Object, e As EventArgs) Handles new_version_bt.Click, NewVersionMenuBT.Click
 
-        If Not current_node Is Nothing Then
-            If Controller.IsFolder(current_node.Value) Then
-                Controller.ShowNewVersionUI(current_node)
+        If Not m_currentNode Is Nothing Then
+            If m_controller.IsFolder(m_currentNode.Value) Then
+                m_controller.ShowNewVersionUI(m_currentNode)
             Else
-                Controller.ShowNewVersionUI()
+                m_controller.ShowNewVersionUI()
             End If
         Else
-            Controller.ShowNewVersionUI()
+            m_controller.ShowNewVersionUI()
         End If
 
     End Sub
@@ -491,14 +477,14 @@ RevertToFormerValue:
         Dim name = InputBox(Local.GetValue("facts_versions.msg_folder_name"))
         Dim version As New Version
         If name <> "" Then
-            If Controller.IsNameValid(name) = True Then
+            If m_controller.IsNameValid(name) = True Then
 
                 version.Name = name
                 version.IsFolder = True
-                If Not current_node Is Nothing Then
-                    version.ParentId = current_node.Value
+                If Not m_currentNode Is Nothing Then
+                    version.ParentId = m_currentNode.Value
                 End If
-                Controller.CreateVersion(version)
+                m_controller.CreateVersion(version)
             Else
                 MsgBox(Local.GetValue("facts_versions.invalid_name"))
             End If
@@ -514,12 +500,12 @@ RevertToFormerValue:
 
     Private Sub rename_bt_Click(sender As Object, e As EventArgs) Handles rename_bt.Click, RenameMenuBT.Click
 
-        If Not current_node Is Nothing Then
+        If Not m_currentNode Is Nothing Then
             Dim name As String = InputBox(Local.GetValue("facts_versions.msg_new_version_name"))
             If name <> "" Then
-                If Controller.IsNameValid(name) Then
-                    Controller.UpdateName(current_node.Value, name)
-                    current_node.Text = name
+                If m_controller.IsNameValid(name) Then
+                    m_controller.UpdateName(m_currentNode.Value, name)
+                    m_currentNode.Text = name
                 Else
                     MsgBox(Local.GetValue("facts_versions.msg_invalid_name"))
                 End If

@@ -83,6 +83,7 @@ Friend Class AccountsController
         m_isClosing = True
         SendNewPositionsToModel()
         m_view.Dispose()
+        m_newAccountView.Dispose()
 
     End Sub
 
@@ -151,7 +152,6 @@ Friend Class AccountsController
     Friend Sub UpdateAccountImage(ByVal p_id As UInt32, ByVal p_value As UInt32)
         UpdateVar(p_id, p_value, New UpdateVarDelegate(Sub(ByRef p_account As Account, ByRef p_destValue As Object) p_account.Image = p_destValue))
     End Sub
-
 
     Friend Sub UpdateAccountConversionOption(ByVal p_id As UInt32, ByVal p_value As Account.ConversionOptions)
         UpdateVar(p_id, p_value, New UpdateVarDelegate(Sub(ByRef p_account As Account, ByRef p_destValue As Object) p_account.ConversionOptionId = p_destValue))
@@ -333,7 +333,9 @@ Friend Class AccountsController
     Private Sub AddDependantToDependanciesDict(ByRef dependant_id As UInt32, _
                                                ByRef dependancies_dict As Dictionary(Of UInt32, List(Of UInt32)))
 
-        If GetAccount(dependant_id).FormulaType = Account.FormulaTypes.AGGREGATION_OF_SUB_ACCOUNTS Then
+        Dim l_account As Account = GetAccount(dependant_id)
+        If l_account Is Nothing Then Exit Sub
+        If l_account.FormulaType = Account.FormulaTypes.AGGREGATION_OF_SUB_ACCOUNTS Then
             Dim l_dependantNode As vTreeNode = VTreeViewUtil.FindNode(m_accountsTV, dependant_id)
             If l_dependantNode IsNot Nothing Then
                 dependancies_dict.Add(dependant_id, VTreeViewUtil.GetNodesIdsUint(l_dependantNode))
@@ -349,8 +351,9 @@ Friend Class AccountsController
     Friend Function FormulaTypeChangeImpliesFactsDeletion(ByRef p_accountId As UInt32, _
                                                           ByRef p_newFormulaType As UInt32) As Boolean
 
-        Dim l_currentFType As Int32 = GetAccount(p_accountId).FormulaType
-
+        Dim l_account As Account = GetAccount(p_accountId)
+        If l_account Is Nothing Then Return False
+        Dim l_currentFType As Int32 = l_account.FormulaType
         Select Case l_currentFType
             Case Account.FormulaTypes.HARD_VALUE_INPUT, _
                  Account.FormulaTypes.FIRST_PERIOD_INPUT
