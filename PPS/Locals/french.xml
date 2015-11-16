@@ -249,6 +249,7 @@
     <string name="new_global_fact">Nouvel Indicateur Macro Economique</string>
     <string name="new_version">Nouvelle version des Indicateurs Macro Economiques</string>
     <string name="msg_name_already_taken">Ce nom est déjà utilisé pour un autre indicateur macro économique ou un compte.</string>
+    <string name="display_version">Afficher les indicateurs macro économiques</string>
   </category>
 
   <category name="facts_versions">
