@@ -83,12 +83,18 @@ Friend Class LogView
             Dim MyDelegate As New DisplayLogAttemp_Delegate(AddressOf DisplayLogValues)
             Me.Invoke(MyDelegate, New Object() {p_logValuesHt})
         Else
+            On Error GoTo errorHandler
             ' gestion du cas où des values  0 sont affichées - priority normal
             m_logDataGridView.RowsHierarchy.Clear()
             For Each logHashtable As Hashtable In p_logValuesHt
                 Dim r As HierarchyItem = m_logDataGridView.RowsHierarchy.Items.Add("")
                 m_logDataGridView.CellsArea.SetCellValue(r, m_userColumn, logHashtable(FACTLOG_USER_VARIABLE))
-                m_logDataGridView.CellsArea.SetCellValue(r, m_dateColumn, logHashtable(FACTLOG_DATE_VARIABLE))
+
+                Dim l_timestamp As Integer = logHashtable(FACTLOG_DATE_VARIABLE)
+                Dim l_epoch As New DateTime(1970, 1, 1)
+                Dim l_dateTime As DateTime = l_epoch.AddSeconds(l_timestamp)
+
+                m_logDataGridView.CellsArea.SetCellValue(r, m_dateColumn, l_dateTime.ToString("F", Globalization.CultureInfo.CreateSpecificCulture("fr-FR")))
                 m_logDataGridView.CellsArea.SetCellValue(r, m_clientColumn, logHashtable(FACTLOG_CLIENT_ID_VARIABLE)) 'GlobalVariables.Clients.Axis_hash(logHashtable(FACTLOG_CLIENT_ID_VARIABLE))(NAME_VARIABLE))
                 m_logDataGridView.CellsArea.SetCellValue(r, m_productColumn, logHashtable(FACTLOG_PRODUCT_ID_VARIABLE)) ' GlobalVariables.Products.Axis_hash(logHashtable(FACTLOG_PRODUCT_ID_VARIABLE))(NAME_VARIABLE))
                 m_logDataGridView.CellsArea.SetCellValue(r, m_adjustmentColumn, logHashtable(FACTLOG_ADJUSTMENT_ID_VARIABLE)) ' GlobalVariables.Adjustments.Axis_hash(logHashtable(FACTLOG_ADJUSTMENT_ID_VARIABLE))(NAME_VARIABLE))
@@ -96,6 +102,9 @@ Friend Class LogView
             Next
             If m_cancelExitFlag = False Then Me.Show()
         End If
+
+errorHandler:
+        Exit Sub
 
     End Sub
 
