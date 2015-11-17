@@ -141,6 +141,7 @@ Friend Class ConnectionsFunctions
         AddHandler GlobalVariables.Users.ObjectInitialized, AddressOf AfterUserInit
         AddHandler GlobalVariables.Groups.ObjectInitialized, AddressOf AfterGroupInit
         AddHandler GlobalVariables.GroupAllowedEntities.ObjectInitialized, AddressOf AfterGroupAllowedEntityInit
+        AddHandler GlobalVariables.EntityDistribution.ObjectInitialized, AddressOf AfterEntityDistributionInit
 
         globalVariablesInitFlags.Add(GlobalEnums.GlobalModels.ACCOUNTS, False)
         globalVariablesInitFlags.Add(GlobalEnums.GlobalModels.ENTITYCURRENCY, False)
@@ -158,6 +159,7 @@ Friend Class ConnectionsFunctions
         globalVariablesInitFlags.Add(GlobalEnums.GlobalModels.FMODELINGACCOUNT, False)
         globalVariablesInitFlags.Add(GlobalEnums.GlobalModels.AXIS_ELEM, False)
         globalVariablesInitFlags.Add(GlobalEnums.GlobalModels.AXIS_FILTER, False)
+        globalVariablesInitFlags.Add(GlobalEnums.GlobalModels.ENTITYDISTRIBUTION, False)
 
     End Sub
 
@@ -296,6 +298,11 @@ Friend Class ConnectionsFunctions
 
     Private Sub AfterGroupAllowedEntityInit()
         globalVariablesInitFlags(GlobalEnums.GlobalModels.GROUPALLOWEDENTITY) = True
+        globalInitFlag = CheckGlobalVariablesInitFlag()
+    End Sub
+
+    Private Sub AfterEntityDistributionInit()
+        globalVariablesInitFlags(GlobalEnums.GlobalModels.ENTITYDISTRIBUTION) = True
         globalInitFlag = CheckGlobalVariablesInitFlag()
     End Sub
 #End Region
