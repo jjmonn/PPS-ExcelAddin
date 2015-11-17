@@ -22,7 +22,7 @@ Friend Class SubmissionsControlsController
     ' Objects
     Private SubmissionControl As New SubmissionControlModel
     Private View As SubmissionsControlUI
-    Private ControlCharts As New ControlChart
+    '  Private ControlCharts As New ControlChart
     Private EntitiesTV As New TreeView
     Private ChartsTV As New TreeView
 
@@ -46,7 +46,7 @@ Friend Class SubmissionsControlsController
 
         GlobalVariables.AxisElems.LoadEntitiesTV(EntitiesTV)
         TreeViewsUtilities.CheckAllNodes(EntitiesTV)
-        ControlChart.LoadControlChartsTree(ChartsTV)
+        '   ControlChart.LoadControlChartsTree(ChartsTV)
         entities_id_list = TreeViewsUtilities.GetNodesKeysList(EntitiesTV)
         InitializeChartsDictionary()
         View = New SubmissionsControlUI(Me, EntitiesTV, charts_dic)
@@ -57,13 +57,13 @@ Friend Class SubmissionsControlsController
 
     Private Sub InitializeChartsDictionary()
 
-        For Each chart_node As TreeNode In ChartsTV.Nodes
-            charts_dic.Add(chart_node.Name, ChartsUtilities.CreateChart(ControlCharts.GetSerieHT(chart_node.Name)))
-            For Each serie_node As TreeNode In chart_node.Nodes
-                Dim serieHT As Hashtable = ControlCharts.GetSerieHT(serie_node.Name)
-                If Not IsDBNull(serieHT(CONTROL_CHART_ACCOUNT_ID_VARIABLE)) Then ChartsUtilities.AddSerieToChart(charts_dic(chart_node.Name), serieHT)
-            Next
-        Next
+        'For Each chart_node As TreeNode In ChartsTV.Nodes
+        '    charts_dic.Add(chart_node.Name, ChartsUtilities.CreateChart(ControlCharts.GetSerieHT(chart_node.Name)))
+        '    For Each serie_node As TreeNode In chart_node.Nodes
+        '        Dim serieHT As Hashtable = ControlCharts.GetSerieHT(serie_node.Name)
+        '        If Not IsDBNull(serieHT(CONTROL_CHART_ACCOUNT_ID_VARIABLE)) Then ChartsUtilities.AddSerieToChart(charts_dic(chart_node.Name), serieHT)
+        '    Next
+        'Next
 
     End Sub
 
@@ -90,10 +90,10 @@ Friend Class SubmissionsControlsController
 
         For Each chart_node In ChartsTV.Nodes
             For Each serie_node In chart_node.nodes
-                Dim serieHT As Hashtable = ControlCharts.GetSerieHT(serie_node.Name)
-                If Not IsDBNull(serieHT(CONTROL_CHART_ACCOUNT_ID_VARIABLE)) Then
-                    charts_dic(chart_node.name).Series(serieHT(CONTROL_CHART_NAME_VARIABLE)).Points.DataBindXY(charts_periods, data_dictionaries(entity_id)(serieHT(CONTROL_CHART_ACCOUNT_ID_VARIABLE)))
-                End If
+                'Dim serieHT As Hashtable = ControlCharts.GetSerieHT(serie_node.Name)
+                'If Not IsDBNull(serieHT(CONTROL_CHART_ACCOUNT_ID_VARIABLE)) Then
+                '    charts_dic(chart_node.name).Series(serieHT(CONTROL_CHART_NAME_VARIABLE)).Points.DataBindXY(charts_periods, data_dictionaries(entity_id)(serieHT(CONTROL_CHART_ACCOUNT_ID_VARIABLE)))
+                'End If
             Next
         Next
 

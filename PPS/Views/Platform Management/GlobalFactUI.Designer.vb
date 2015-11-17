@@ -34,10 +34,10 @@ Partial Class GlobalFactUI
         Me.DeleteVersionRCM = New System.Windows.Forms.ToolStripMenuItem()
         Me.RenameVersionBT = New System.Windows.Forms.ToolStripMenuItem()
         Me.dgvRCM = New System.Windows.Forms.ContextMenuStrip(Me.components)
+        Me.CreateNewFact = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator3 = New System.Windows.Forms.ToolStripSeparator()
         Me.CopyFactDownToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ImportFromExcelBT = New System.Windows.Forms.ToolStripMenuItem()
-        Me.CreateNewFact = New System.Windows.Forms.ToolStripMenuItem()
         Me.TableLayoutPanel4 = New System.Windows.Forms.TableLayoutPanel()
         Me.SplitContainer1 = New System.Windows.Forms.SplitContainer()
         Me.TableLayoutPanel5 = New System.Windows.Forms.TableLayoutPanel()
@@ -45,11 +45,13 @@ Partial Class GlobalFactUI
         Me.VersionLabel = New System.Windows.Forms.Label()
         Me.version_TB = New System.Windows.Forms.TextBox()
         Me.FactRightClickMenu = New System.Windows.Forms.ContextMenuStrip(Me.components)
-        Me.RenameBT = New System.Windows.Forms.ToolStripMenuItem()
-        Me.DeleteBT = New System.Windows.Forms.ToolStripMenuItem()
         Me.CreateNewFact2 = New System.Windows.Forms.ToolStripMenuItem()
-        Me.m_versionsTreeviewImageList = New System.Windows.Forms.ImageList(Me.components)
+        Me.DeleteBT = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
+        Me.RenameBT = New System.Windows.Forms.ToolStripMenuItem()
+        Me.m_versionsTreeviewImageList = New System.Windows.Forms.ImageList(Me.components)
+        Me.ToolStripSeparator4 = New System.Windows.Forms.ToolStripSeparator()
+        Me.m_importFromExcelBT2 = New System.Windows.Forms.ToolStripMenuItem()
         Me.VersionsRCMenu.SuspendLayout()
         Me.dgvRCM.SuspendLayout()
         Me.TableLayoutPanel4.SuspendLayout()
@@ -123,9 +125,16 @@ Partial Class GlobalFactUI
         '
         'dgvRCM
         '
-        Me.dgvRCM.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripSeparator3, Me.CopyFactDownToolStripMenuItem, Me.ImportFromExcelBT, Me.CreateNewFact})
+        Me.dgvRCM.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.CreateNewFact, Me.ToolStripSeparator3, Me.CopyFactDownToolStripMenuItem, Me.ImportFromExcelBT})
         Me.dgvRCM.Name = "dgvRCM"
         Me.dgvRCM.Size = New System.Drawing.Size(149, 82)
+        '
+        'CreateNewFact
+        '
+        Me.CreateNewFact.Image = Global.FinancialBI.My.Resources.Resources.elements_add
+        Me.CreateNewFact.Name = "CreateNewFact"
+        Me.CreateNewFact.Size = New System.Drawing.Size(148, 24)
+        Me.CreateNewFact.Text = "New"
         '
         'ToolStripSeparator3
         '
@@ -145,13 +154,6 @@ Partial Class GlobalFactUI
         Me.ImportFromExcelBT.Name = "ImportFromExcelBT"
         Me.ImportFromExcelBT.Size = New System.Drawing.Size(148, 24)
         Me.ImportFromExcelBT.Text = "Import"
-        '
-        'CreateNewFact
-        '
-        Me.CreateNewFact.Image = Global.FinancialBI.My.Resources.Resources.elements_add
-        Me.CreateNewFact.Name = "CreateNewFact"
-        Me.CreateNewFact.Size = New System.Drawing.Size(148, 24)
-        Me.CreateNewFact.Text = "New"
         '
         'TableLayoutPanel4
         '
@@ -192,7 +194,7 @@ Partial Class GlobalFactUI
         Me.TableLayoutPanel5.ColumnCount = 3
         Me.TableLayoutPanel5.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 97.02381!))
         Me.TableLayoutPanel5.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 2.976191!))
-        Me.TableLayoutPanel5.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 245.0!))
+        Me.TableLayoutPanel5.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 247.0!))
         Me.TableLayoutPanel5.Controls.Add(Me.Panel1, 2, 0)
         Me.TableLayoutPanel5.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TableLayoutPanel5.Location = New System.Drawing.Point(0, 0)
@@ -208,10 +210,10 @@ Partial Class GlobalFactUI
         Me.Panel1.Controls.Add(Me.VersionLabel)
         Me.Panel1.Controls.Add(Me.version_TB)
         Me.Panel1.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Panel1.Location = New System.Drawing.Point(636, 0)
+        Me.Panel1.Location = New System.Drawing.Point(634, 0)
         Me.Panel1.Margin = New System.Windows.Forms.Padding(0)
         Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(246, 32)
+        Me.Panel1.Size = New System.Drawing.Size(248, 32)
         Me.Panel1.TabIndex = 6
         '
         'VersionLabel
@@ -234,29 +236,34 @@ Partial Class GlobalFactUI
         '
         'FactRightClickMenu
         '
-        Me.FactRightClickMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.CreateNewFact2, Me.DeleteBT, Me.ToolStripSeparator1, Me.RenameBT})
+        Me.FactRightClickMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.CreateNewFact2, Me.DeleteBT, Me.ToolStripSeparator1, Me.RenameBT, Me.ToolStripSeparator4, Me.m_importFromExcelBT2})
         Me.FactRightClickMenu.Name = "ContextMenuStrip1"
-        Me.FactRightClickMenu.Size = New System.Drawing.Size(153, 104)
-        '
-        'RenameBT
-        '
-        Me.RenameBT.Name = "RenameBT"
-        Me.RenameBT.Size = New System.Drawing.Size(152, 24)
-        Me.RenameBT.Text = "Rename"
-        '
-        'DeleteBT
-        '
-        Me.DeleteBT.Image = Global.FinancialBI.My.Resources.Resources.elements_delete
-        Me.DeleteBT.Name = "DeleteBT"
-        Me.DeleteBT.Size = New System.Drawing.Size(152, 24)
-        Me.DeleteBT.Text = "Delete"
+        Me.FactRightClickMenu.Size = New System.Drawing.Size(187, 134)
         '
         'CreateNewFact2
         '
         Me.CreateNewFact2.Image = Global.FinancialBI.My.Resources.Resources.elements_add
         Me.CreateNewFact2.Name = "CreateNewFact2"
-        Me.CreateNewFact2.Size = New System.Drawing.Size(152, 24)
+        Me.CreateNewFact2.Size = New System.Drawing.Size(186, 24)
         Me.CreateNewFact2.Text = "New"
+        '
+        'DeleteBT
+        '
+        Me.DeleteBT.Image = Global.FinancialBI.My.Resources.Resources.elements_delete
+        Me.DeleteBT.Name = "DeleteBT"
+        Me.DeleteBT.Size = New System.Drawing.Size(186, 24)
+        Me.DeleteBT.Text = "Delete"
+        '
+        'ToolStripSeparator1
+        '
+        Me.ToolStripSeparator1.Name = "ToolStripSeparator1"
+        Me.ToolStripSeparator1.Size = New System.Drawing.Size(183, 6)
+        '
+        'RenameBT
+        '
+        Me.RenameBT.Name = "RenameBT"
+        Me.RenameBT.Size = New System.Drawing.Size(186, 24)
+        Me.RenameBT.Text = "Rename"
         '
         'm_versionsTreeviewImageList
         '
@@ -265,10 +272,17 @@ Partial Class GlobalFactUI
         Me.m_versionsTreeviewImageList.Images.SetKeyName(0, "cloud_dark.ico")
         Me.m_versionsTreeviewImageList.Images.SetKeyName(1, "favicon(81).ico")
         '
-        'ToolStripSeparator1
+        'ToolStripSeparator4
         '
-        Me.ToolStripSeparator1.Name = "ToolStripSeparator1"
-        Me.ToolStripSeparator1.Size = New System.Drawing.Size(149, 6)
+        Me.ToolStripSeparator4.Name = "ToolStripSeparator4"
+        Me.ToolStripSeparator4.Size = New System.Drawing.Size(183, 6)
+        '
+        'm_importFromExcelBT2
+        '
+        Me.m_importFromExcelBT2.Image = Global.FinancialBI.My.Resources.Resources.Excel_Blue_32x32
+        Me.m_importFromExcelBT2.Name = "m_importFromExcelBT2"
+        Me.m_importFromExcelBT2.Size = New System.Drawing.Size(186, 24)
+        Me.m_importFromExcelBT2.Text = "Import from Excel"
         '
         'GlobalFactUI
         '
@@ -316,5 +330,7 @@ Partial Class GlobalFactUI
     Friend WithEvents ImportFromExcelBT As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents m_versionsTreeviewImageList As System.Windows.Forms.ImageList
     Friend WithEvents ToolStripSeparator1 As System.Windows.Forms.ToolStripSeparator
+    Friend WithEvents ToolStripSeparator4 As System.Windows.Forms.ToolStripSeparator
+    Friend WithEvents m_importFromExcelBT2 As System.Windows.Forms.ToolStripMenuItem
 
 End Class

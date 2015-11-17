@@ -146,6 +146,7 @@ Friend Class AccountsView
         AddHandler m_accountTV.DragDrop, AddressOf AccountsTV_DragDrop
         AddHandler m_accountTV.DragOver, AddressOf AccountsTV_DragOver
         AddHandler m_accountTV.AfterSelect, AddressOf AccountsTV_AfterSelect
+
         AddHandler m_globalFactsTV.MouseDoubleClick, AddressOf GlobalFactTV_NodeMouseDoubleClick
         AddHandler m_formulaTextBox.KeyDown, AddressOf FormulaTextBox_KeyDown
 
@@ -153,7 +154,6 @@ Friend Class AccountsView
 
     Private Sub GlobalFactsTVInit()
 
-        '   TVInit(m_globalFactsTV)
         m_globalFactsTV.Dock = DockStyle.Fill
         m_globalFactsTV.LabelEdit = False
         m_globalFactsTV.CollapseAll()
@@ -161,7 +161,7 @@ Friend Class AccountsView
         VTreeViewUtil.InitTVFormat(m_globalFactsTV)
 
         GlobalFactsPanel.Controls.Add(m_globalFactsTV)
-        AddHandler m_globalFactsTV.DragEnter, AddressOf AccountsTV_DragEnter
+        AddHandler m_globalFactsTV.DragEnter, AddressOf GlobalFactsTV_DragEnter
         AddHandler m_globalFactsTV.MouseDown, AddressOf GlobalFactsTV_MouseDown
 
     End Sub
@@ -396,29 +396,27 @@ TokensCheck:
             MsgBox(Local.GetValue("accounts_edition.msg_items_not_mapped") + Chr(13) & errorsStr)
             Exit Sub
         Else
-            GoTo DependanciesCheck
-        End If
-
-DependanciesCheck:
-        If m_controller.InterdependancyTest = True Then
-            GoTo SubmitFormula
-        Else
-            Exit Sub
-        End If
-
-SubmitFormula:
-        Dim confirm As Integer = MessageBox.Show(Local.GetValue("accounts_edition.msg_formula_edition_for_account") + Chr(13) + Name_TB.Text + Chr(13) + Local.GetValue("accounts_edition.msg_account_deletion2"), _
-                                                 Local.GetValue("accounts_edition.title_formula_validation_confirmation"), _
-                                                  MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question)
-        If confirm = DialogResult.Yes Then
-            If Not m_controller.GetAccount(Name_TB.Text) Is Nothing Then
-                m_formulaEditionButton.Toggle = CheckState.Unchecked
-                Dim accountId As Int32 = m_controller.GetAccount(Name_TB.Text).Id
-                m_controller.UpdateAccountFormula(accountId, m_controller.GetCurrentParsedFormula)
+            Dim confirm As Integer = MessageBox.Show(Local.GetValue("accounts_edition.msg_formula_edition_for_account") + Chr(13) + Name_TB.Text + Chr(13) + Local.GetValue("accounts_edition.msg_account_deletion2"), _
+                                               Local.GetValue("accounts_edition.title_formula_validation_confirmation"), _
+                                                MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question)
+            If confirm = DialogResult.Yes Then
+                If Not m_controller.GetAccount(Name_TB.Text) Is Nothing Then
+                    m_formulaEditionButton.Toggle = CheckState.Unchecked
+                    Dim accountId As Int32 = m_controller.GetAccount(Name_TB.Text).Id
+                    m_controller.UpdateAccountFormula(accountId, m_controller.GetCurrentParsedFormula)
+                End If
+            Else
+                m_formulaTextBox.Text = m_controller.GetFormulaText(m_accountTV.SelectedNode.Value)
             End If
-        Else
-            m_formulaTextBox.Text = m_controller.GetFormulaText(m_accountTV.SelectedNode.value)
         End If
+
+        'DependanciesCheck:
+        '        If m_controller.InterdependancyTest = True Then
+        '            GoTo SubmitFormula
+        '        Else
+        '            Exit Sub
+        '        End If
+
 
     End Sub
 
@@ -501,8 +499,10 @@ SubmitFormula:
                 DesactivateUnallowed()
                 DisplayAttributes()
             End If
+        Else
+            m_accountTV.Capture = False
         End If
-    
+
     End Sub
 
     Private Sub AccountsTV_KeyDown(sender As Object, e As KeyEventArgs)
@@ -550,8 +550,7 @@ SubmitFormula:
             TVRCM.Show(e.Location)
             TVRCM.Visible = True
         Else
-            '  Dim l_node As vTreeNode = m_accountTV.SelectedNode
-            Dim l_node As vTreeNode = Me.m_accountTV.HitTest(e.Location)
+            Dim l_node As vTreeNode = VTreeViewUtil.GetNodeAtPosition(m_accountTV, e.Location)
             If l_node IsNot Nothing Then
                 Me.m_accountTV.DoDragDrop(l_node, DragDropEffects.Move)
             End If
@@ -559,27 +558,17 @@ SubmitFormula:
 
     End Sub
 
-    Private Sub AccountsTV_DragEnter(sender As Object, e As DragEventArgs)
-        If e.Data.GetDataPresent("VIBlend.WinForms.Controls.vTreeNode", True) Then
-            e.Effect = DragDropEffects.Move
-            m_dragAndDrop = True
-        Else
-            e.Effect = DragDropEffects.None
-        End If
-    End Sub
-
     Private Sub AccountsTV_DragOver(sender As Object, e As DragEventArgs)
 
         If m_formulaEditionButton.Toggle = CheckState.Unchecked Then
 
             If e.Data.GetDataPresent("VIBlend.WinForms.Controls.vTreeNode", True) = False Then Exit Sub
-            Dim selectedTreeview As vTreeView = CType(sender, vTreeView)
             Dim pt As Drawing.Point = CType(sender, vTreeView).PointToClient(New Drawing.Point(e.X, e.Y))
-            Dim targetNode As vTreeNode = selectedTreeview.HitTest(pt)
+            Dim targetNode As vTreeNode = VTreeViewUtil.GetNodeAtPosition(m_accountTV, pt)
 
             'See if the targetNode is currently selected, if so no need to validate again
-            If Not (selectedTreeview.SelectedNode Is targetNode) Then       'Select the node currently under the cursor
-                selectedTreeview.SelectedNode = targetNode
+            If Not (m_accountTV.SelectedNode Is targetNode) Then       'Select the node currently under the cursor
+                m_accountTV.SelectedNode = targetNode
 
                 'Check that the selected node is not the dropNode and also that it is not a child of the dropNode and therefore an invalid target
                 Dim dropNode As vTreeNode = CType(e.Data.GetData("VIBlend.WinForms.Controls.vTreeNode"), vTreeNode)
@@ -594,6 +583,7 @@ SubmitFormula:
             End If
             'Currently selected node is a suitable target
             e.Effect = DragDropEffects.Move
+            m_dragAndDrop = True
         End If
 
     End Sub
@@ -651,9 +641,20 @@ SubmitFormula:
     ' Facts TV
     Private Sub GlobalFactsTV_MouseDown(ByVal sender As Object, ByVal e As MouseEventArgs)
 
-        Dim l_node As vTreeNode = Me.m_globalFactsTV.HitTest(e.Location)
+        Dim l_node As vTreeNode = VTreeViewUtil.GetNodeAtPosition(m_globalFactsTV, e.Location)
         If l_node IsNot Nothing Then
             Me.m_globalFactsTV.DoDragDrop(l_node, DragDropEffects.Move)
+        End If
+
+    End Sub
+
+    Private Sub GlobalFactsTV_DragEnter(sender As Object, e As DragEventArgs)
+
+        If e.Data.GetDataPresent("VIBlend.WinForms.Controls.vTreeNode", True) Then
+            e.Effect = DragDropEffects.Move
+            m_dragAndDrop = True
+        Else
+            e.Effect = DragDropEffects.None
         End If
 
     End Sub
@@ -739,7 +740,7 @@ SubmitFormula:
 
     Private Sub GlobalFactTV_NodeMouseDoubleClick(sender As Object, e As Windows.Forms.TreeNodeMouseClickEventArgs)
 
-        Dim node As vTreeNode = Me.m_globalFactsTV.HitTest(e.Location)
+        Dim node As vTreeNode = VTreeViewUtil.GetNodeAtPosition(m_globalFactsTV, e.Location)
         If node IsNot Nothing Then
             If m_formulaEditionButton.Toggle = CheckState.Checked Then
                 m_formulaTextBox.Text = m_formulaTextBox.Text & FormulasTranslations.FACTS_HUMAN_IDENTIFIER & _

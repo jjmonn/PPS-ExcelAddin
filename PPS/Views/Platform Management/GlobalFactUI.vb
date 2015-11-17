@@ -97,18 +97,19 @@ Friend Class GlobalFactUI
 
     Friend Sub MultilanguageSetup()
 
-        Me.select_version.Text = Local.GetValue("version.select")
-        Me.AddRatesVersionRCM.Text = Local.GetValue("version.add_version")
-        Me.AddFolderRCM.Text = Local.GetValue("version.add_folder")
+        Me.select_version.Text = Local.GetValue("global_facts.display_version")
+        Me.AddRatesVersionRCM.Text = Local.GetValue("versions.new_version")
+        Me.AddFolderRCM.Text = Local.GetValue("versions.new_folder")
         Me.DeleteVersionRCM.Text = Local.GetValue("general.delete")
         Me.RenameVersionBT.Text = Local.GetValue("general.delete")
         Me.CopyFactDownToolStripMenuItem.Text = Local.GetValue("general.copy_down")
-        Me.ImportFromExcelBT.Text = Local.GetValue("general.import")
-        Me.CreateNewFact.Text = Local.GetValue("global_fact.new")
+        Me.ImportFromExcelBT.Text = Local.GetValue("currencies.import")
+        Me.CreateNewFact.Text = Local.GetValue("global_facts.new")
         Me.VersionLabel.Text = Local.GetValue("general.version")
         Me.RenameBT.Text = Local.GetValue("general.rename")
         Me.DeleteBT.Text = Local.GetValue("general.delete")
-        Me.CreateNewFact2.Text = Local.GetValue("global_fact.new")
+        Me.CreateNewFact2.Text = Local.GetValue("global_facts.new")
+        Me.m_importFromExcelBT2.Text = Local.GetValue("currencies.import")
 
     End Sub
 
@@ -253,19 +254,19 @@ Friend Class GlobalFactUI
         m_controller.ShowNewFact()
     End Sub
 
+    Private Sub m_importFromExcelBT2_Click(sender As Object, e As EventArgs) Handles m_importFromExcelBT2.Click
+
+        If m_dataGridView.CellsArea.SelectedCells.Length > 0 Then
+            m_controller.ImportRatesFromExcel(m_dataGridView.CellsArea.SelectedCells(0).ColumnItem.ItemValue)
+        Else
+            m_controller.ImportRatesFromExcel()
+        End If
+
+    End Sub
+
 #End Region
 
 #Region "m_ratesDataGridView Right Click Menu"
-
-    Private Sub FactRightClick(sender As Object, e As MouseEventArgs)
-        If (e.Button <> MouseButtons.Right) Then Exit Sub
-        Dim target As HierarchyItem = m_dataGridView.ColumnsHierarchy.HitTest(e.Location)
-        If target Is Nothing Then Exit Sub
-
-        FactRightClickMenu.Visible = True
-        FactRightClickMenu.Bounds = New Rectangle(MousePosition, New Size(FactRightClickMenu.Width, FactRightClickMenu.Height))
-        m_selectedFact = target.ItemValue
-    End Sub
 
     Private Sub ImportFromExcelBT_Click_1(sender As Object, e As EventArgs) Handles ImportFromExcelBT.Click
 
@@ -288,6 +289,21 @@ Friend Class GlobalFactUI
 
 #Region "Events"
 
+    Private Sub FactRightClick(sender As Object, e As MouseEventArgs)
+
+        If (e.Button <> MouseButtons.Right) Then Exit Sub
+        Dim target As HierarchyItem = m_dataGridView.ColumnsHierarchy.HitTest(e.Location)
+        If target Is Nothing Then
+            target = m_dataGridView.RowsHierarchy.HitTest(e.Location)
+            If target Is Nothing Then Exit Sub
+        End If
+        
+        FactRightClickMenu.Visible = True
+        FactRightClickMenu.Bounds = New Rectangle(MousePosition, New Size(FactRightClickMenu.Width, FactRightClickMenu.Height))
+        m_selectedFact = target.ItemValue
+
+    End Sub
+
     Private Sub RenameVersionBT_Click(sender As Object, e As EventArgs) Handles RenameVersionBT.Click
 
         If m_versionsTV.SelectedNode Is Nothing Then Exit Sub
@@ -308,7 +324,6 @@ Friend Class GlobalFactUI
         End If
 
     End Sub
-
 
     Private Sub VersionsTV_MouseDoubleClick(sender As Object, e As MouseEventArgs)
 

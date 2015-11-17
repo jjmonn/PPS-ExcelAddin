@@ -26,7 +26,7 @@ Partial Class EntitiesView
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(EntitiesView))
         Me.EntitiesIL = New System.Windows.Forms.ImageList(Me.components)
         Me.ButtonsIL = New System.Windows.Forms.ImageList(Me.components)
-        Me.RCM_TGV = New System.Windows.Forms.ContextMenuStrip(Me.components)
+        Me.m_entitiesRightClickMenu = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.RenameEntityButton = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
         Me.CreateEntityToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -46,7 +46,7 @@ Partial Class EntitiesView
         Me.ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator()
         Me.ExcelToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.SendEntitiesHierarchyToExcelToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.RCM_TGV.SuspendLayout()
+        Me.m_entitiesRightClickMenu.SuspendLayout()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.MenuStrip1.SuspendLayout()
         Me.SuspendLayout()
@@ -64,77 +64,77 @@ Partial Class EntitiesView
         Me.ButtonsIL.TransparentColor = System.Drawing.Color.Transparent
         Me.ButtonsIL.Images.SetKeyName(0, "submit 1 ok.ico")
         '
-        'RCM_TGV
+        'm_entitiesRightClickMenu
         '
-        Me.RCM_TGV.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.RenameEntityButton, Me.ToolStripSeparator1, Me.CreateEntityToolStripMenuItem, Me.DeleteEntityToolStripMenuItem2, Me.ToolStripSeparator5, Me.copy_down_bt, Me.ToolStripSeparator4, Me.drop_to_excel_bt, Me.AutoResizeColumnsButton, Me.ExpandAllBT, Me.CollapseAllBT})
-        Me.RCM_TGV.Name = "ContextMenuStripTGV"
-        Me.RCM_TGV.Size = New System.Drawing.Size(187, 198)
+        Me.m_entitiesRightClickMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.CreateEntityToolStripMenuItem, Me.DeleteEntityToolStripMenuItem2, Me.ToolStripSeparator1, Me.RenameEntityButton, Me.ToolStripSeparator5, Me.copy_down_bt, Me.ToolStripSeparator4, Me.drop_to_excel_bt, Me.AutoResizeColumnsButton, Me.ExpandAllBT, Me.CollapseAllBT})
+        Me.m_entitiesRightClickMenu.Name = "ContextMenuStripTGV"
+        Me.m_entitiesRightClickMenu.Size = New System.Drawing.Size(202, 236)
         '
         'RenameEntityButton
         '
         Me.RenameEntityButton.Name = "RenameEntityButton"
-        Me.RenameEntityButton.Size = New System.Drawing.Size(186, 22)
+        Me.RenameEntityButton.Size = New System.Drawing.Size(201, 24)
         Me.RenameEntityButton.Text = "Rename"
         '
         'ToolStripSeparator1
         '
         Me.ToolStripSeparator1.Name = "ToolStripSeparator1"
-        Me.ToolStripSeparator1.Size = New System.Drawing.Size(183, 6)
+        Me.ToolStripSeparator1.Size = New System.Drawing.Size(198, 6)
         '
         'CreateEntityToolStripMenuItem
         '
         Me.CreateEntityToolStripMenuItem.Image = Global.FinancialBI.My.Resources.Resources.element_branch2_add
         Me.CreateEntityToolStripMenuItem.Name = "CreateEntityToolStripMenuItem"
-        Me.CreateEntityToolStripMenuItem.Size = New System.Drawing.Size(186, 22)
+        Me.CreateEntityToolStripMenuItem.Size = New System.Drawing.Size(201, 24)
         Me.CreateEntityToolStripMenuItem.Text = "Create"
         '
         'DeleteEntityToolStripMenuItem2
         '
         Me.DeleteEntityToolStripMenuItem2.Image = Global.FinancialBI.My.Resources.Resources.element_branch2_delete
         Me.DeleteEntityToolStripMenuItem2.Name = "DeleteEntityToolStripMenuItem2"
-        Me.DeleteEntityToolStripMenuItem2.Size = New System.Drawing.Size(186, 22)
+        Me.DeleteEntityToolStripMenuItem2.Size = New System.Drawing.Size(201, 24)
         Me.DeleteEntityToolStripMenuItem2.Text = "Delete"
         '
         'ToolStripSeparator5
         '
         Me.ToolStripSeparator5.Name = "ToolStripSeparator5"
-        Me.ToolStripSeparator5.Size = New System.Drawing.Size(183, 6)
+        Me.ToolStripSeparator5.Size = New System.Drawing.Size(198, 6)
         '
         'copy_down_bt
         '
         Me.copy_down_bt.Image = Global.FinancialBI.My.Resources.Resources.Download_
         Me.copy_down_bt.Name = "copy_down_bt"
-        Me.copy_down_bt.Size = New System.Drawing.Size(186, 22)
+        Me.copy_down_bt.Size = New System.Drawing.Size(201, 24)
         Me.copy_down_bt.Text = "Copy down"
         '
         'ToolStripSeparator4
         '
         Me.ToolStripSeparator4.Name = "ToolStripSeparator4"
-        Me.ToolStripSeparator4.Size = New System.Drawing.Size(183, 6)
+        Me.ToolStripSeparator4.Size = New System.Drawing.Size(198, 6)
         '
         'drop_to_excel_bt
         '
         Me.drop_to_excel_bt.Image = Global.FinancialBI.My.Resources.Resources.Excel_Blue_32x32
         Me.drop_to_excel_bt.Name = "drop_to_excel_bt"
-        Me.drop_to_excel_bt.Size = New System.Drawing.Size(186, 22)
+        Me.drop_to_excel_bt.Size = New System.Drawing.Size(201, 24)
         Me.drop_to_excel_bt.Text = "Drop on excel"
         '
         'AutoResizeColumnsButton
         '
         Me.AutoResizeColumnsButton.Name = "AutoResizeColumnsButton"
-        Me.AutoResizeColumnsButton.Size = New System.Drawing.Size(186, 22)
+        Me.AutoResizeColumnsButton.Size = New System.Drawing.Size(201, 24)
         Me.AutoResizeColumnsButton.Text = "Auto resize columns"
         '
         'ExpandAllBT
         '
         Me.ExpandAllBT.Name = "ExpandAllBT"
-        Me.ExpandAllBT.Size = New System.Drawing.Size(186, 22)
+        Me.ExpandAllBT.Size = New System.Drawing.Size(201, 24)
         Me.ExpandAllBT.Text = "Expand all"
         '
         'CollapseAllBT
         '
         Me.CollapseAllBT.Name = "CollapseAllBT"
-        Me.CollapseAllBT.Size = New System.Drawing.Size(186, 22)
+        Me.CollapseAllBT.Size = New System.Drawing.Size(201, 24)
         Me.CollapseAllBT.Text = "Collapse all"
         '
         'TableLayoutPanel1
@@ -166,41 +166,41 @@ Partial Class EntitiesView
         Me.EditToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.CreateANewEntityToolStripMenuItem, Me.DeleteEntityToolStripMenuItem, Me.ToolStripSeparator2})
         Me.EditToolStripMenuItem.Image = Global.FinancialBI.My.Resources.Resources.element_branch23
         Me.EditToolStripMenuItem.Name = "EditToolStripMenuItem"
-        Me.EditToolStripMenuItem.Size = New System.Drawing.Size(104, 20)
+        Me.EditToolStripMenuItem.Size = New System.Drawing.Size(81, 20)
         Me.EditToolStripMenuItem.Text = "Entities"
         '
         'CreateANewEntityToolStripMenuItem
         '
         Me.CreateANewEntityToolStripMenuItem.Image = Global.FinancialBI.My.Resources.Resources.plus
         Me.CreateANewEntityToolStripMenuItem.Name = "CreateANewEntityToolStripMenuItem"
-        Me.CreateANewEntityToolStripMenuItem.Size = New System.Drawing.Size(175, 22)
+        Me.CreateANewEntityToolStripMenuItem.Size = New System.Drawing.Size(118, 24)
         Me.CreateANewEntityToolStripMenuItem.Text = "Create"
         '
         'DeleteEntityToolStripMenuItem
         '
         Me.DeleteEntityToolStripMenuItem.Image = Global.FinancialBI.My.Resources.Resources.imageres_89
         Me.DeleteEntityToolStripMenuItem.Name = "DeleteEntityToolStripMenuItem"
-        Me.DeleteEntityToolStripMenuItem.Size = New System.Drawing.Size(175, 22)
+        Me.DeleteEntityToolStripMenuItem.Size = New System.Drawing.Size(118, 24)
         Me.DeleteEntityToolStripMenuItem.Text = "Delete"
         '
         'ToolStripSeparator2
         '
         Me.ToolStripSeparator2.Name = "ToolStripSeparator2"
-        Me.ToolStripSeparator2.Size = New System.Drawing.Size(172, 6)
+        Me.ToolStripSeparator2.Size = New System.Drawing.Size(115, 6)
         '
         'ExcelToolStripMenuItem
         '
         Me.ExcelToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.SendEntitiesHierarchyToExcelToolStripMenuItem})
         Me.ExcelToolStripMenuItem.Image = Global.FinancialBI.My.Resources.Resources.Excel_dark_24_24
         Me.ExcelToolStripMenuItem.Name = "ExcelToolStripMenuItem"
-        Me.ExcelToolStripMenuItem.Size = New System.Drawing.Size(61, 20)
+        Me.ExcelToolStripMenuItem.Size = New System.Drawing.Size(66, 20)
         Me.ExcelToolStripMenuItem.Text = "Excel"
         '
         'SendEntitiesHierarchyToExcelToolStripMenuItem
         '
         Me.SendEntitiesHierarchyToExcelToolStripMenuItem.Image = Global.FinancialBI.My.Resources.Resources.Excel_Blue_32x32
         Me.SendEntitiesHierarchyToExcelToolStripMenuItem.Name = "SendEntitiesHierarchyToExcelToolStripMenuItem"
-        Me.SendEntitiesHierarchyToExcelToolStripMenuItem.Size = New System.Drawing.Size(238, 22)
+        Me.SendEntitiesHierarchyToExcelToolStripMenuItem.Size = New System.Drawing.Size(162, 24)
         Me.SendEntitiesHierarchyToExcelToolStripMenuItem.Text = "Drop on excel"
         '
         'EntitiesView
@@ -210,7 +210,7 @@ Partial Class EntitiesView
         Me.Controls.Add(Me.TableLayoutPanel1)
         Me.Name = "EntitiesView"
         Me.Size = New System.Drawing.Size(516, 420)
-        Me.RCM_TGV.ResumeLayout(False)
+        Me.m_entitiesRightClickMenu.ResumeLayout(False)
         Me.TableLayoutPanel1.ResumeLayout(False)
         Me.TableLayoutPanel1.PerformLayout()
         Me.MenuStrip1.ResumeLayout(False)
@@ -220,7 +220,7 @@ Partial Class EntitiesView
     End Sub
     Public WithEvents EntitiesIL As System.Windows.Forms.ImageList
     Friend WithEvents ButtonsIL As System.Windows.Forms.ImageList
-    Friend WithEvents RCM_TGV As System.Windows.Forms.ContextMenuStrip
+    Friend WithEvents m_entitiesRightClickMenu As System.Windows.Forms.ContextMenuStrip
     Friend WithEvents copy_down_bt As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ToolStripSeparator5 As System.Windows.Forms.ToolStripSeparator
     Friend WithEvents drop_to_excel_bt As System.Windows.Forms.ToolStripMenuItem

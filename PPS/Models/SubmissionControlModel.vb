@@ -19,7 +19,7 @@ Friend Class SubmissionControlModel
 #Region "Instance Variables"
 
     ' Variables
-    Protected Friend controls_dic As Dictionary(Of String, Hashtable)
+    Friend controls_dic As Dictionary(Of String, Hashtable)
     Private periods_list As List(Of Int32)
     Private data_dic As Dictionary(Of String, Double())
 
@@ -29,10 +29,10 @@ Friend Class SubmissionControlModel
 
 #Region "Initialize"
 
-    Protected Friend Sub New()
+    Friend Sub New()
 
-        Dim Controls As New Control
-        controls_dic = Controls.ReadAll
+        '     Dim Controls As New Control
+        '  controls_dic = Controls.ReadAll
 
     End Sub
 

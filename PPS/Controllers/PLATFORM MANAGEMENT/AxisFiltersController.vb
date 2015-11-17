@@ -23,15 +23,16 @@ Friend Class AxisFiltersController
 
     ' Objects
     Private m_view As AxisFiltersView
+    Private m_editFilterStructUI As AxisFilterStructView
+
     Private m_filtersNode As New vTreeNode
-    '    Private m_filtersFilterValuesTv As vTreeView
     Private m_filterTV As New vTreeView
     Private m_filtersFiltersValuesTV As New vTreeView
 
     ' Variables
     Private m_axisId As Int32
-    Private m_editFilterStructUI As AxisFilterStructView
     Private m_isEditingFiltersStructure As Boolean
+    Private m_isClosing As Boolean = False
 
 #End Region
 
@@ -69,9 +70,10 @@ Friend Class AxisFiltersController
 
     Public Sub Close()
 
-        m_view.closeControl()
-        ' m_view.Dispose()
-        m_view.Hide()
+        m_isClosing = True
+        SendNewPositionsToModel()
+        m_view.Dispose()
+        m_editFilterStructUI.Dispose()
 
     End Sub
 
@@ -213,7 +215,9 @@ Friend Class AxisFiltersController
     ' Filters values
     Private Sub AfterFilterValueRead(ByRef status As ErrorMessage, ByRef ht As FilterValue)
 
-        If status = ErrorMessage.SUCCESS AndAlso m_isEditingFiltersStructure = False Then
+        If status = ErrorMessage.SUCCESS _
+        AndAlso m_isEditingFiltersStructure = False _
+        AndAlso m_isClosing = False Then
             m_view.UpdateFiltersValuesTV()
         End If
 

@@ -161,9 +161,9 @@ Friend Class AxisFiltersView
                 If filterValue Is Nothing Then Exit Sub
                 filterId = filterValue.FilterId
             Else
-                Dim filterValue As FilterValue = GlobalVariables.FiltersValues.GetValue(CUInt(currentNode.Nodes(0).Value))
+                Dim filterValue As FilterValue = GlobalVariables.FiltersValues.GetValue(CUInt(currentNode.Value))
                 If filterValue Is Nothing Then Exit Sub
-                Dim parentFilterId As Int32 = filterValue.ParentId
+                Dim parentFilterId As Int32 = filterValue.FilterId
                 filterId = GlobalVariables.Filters.GetFilterChild(parentFilterId)
                 If (filterId = -1) Then
                     MsgBox("A value cannot be added under " & currentNode.Text & " because there is no deeper category.")

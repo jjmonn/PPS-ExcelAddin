@@ -14,7 +14,7 @@ Public Class VTreeViewUtil
         Dim newNode As New vTreeNode()
         newNode.Text = text
         newNode.Value = value
-        parent.Nodes.Add(newNode)
+        parent.Nodes.add(newNode)
         If imageIndex > -1 Then newNode.ImageIndex = imageIndex
         Return newNode
 
@@ -171,9 +171,10 @@ Public Class VTreeViewUtil
 
 #Region "TV loading"
 
-    Public Shared Sub LoadTreeview(Of T As {NamedHierarchyCRUDEntity})(ByRef TV As vTreeView, _
-                                ByRef items_attributes As MultiIndexDictionary(Of UInt32, String, T))
+    Public Shared Function LoadTreeview(Of T As {NamedHierarchyCRUDEntity})(ByRef TV As vTreeView, _
+                                        ByRef items_attributes As MultiIndexDictionary(Of UInt32, String, T)) As Boolean
 
+        On Error GoTo errorHandler
         Dim currentNode, ParentNode As vTreeNode
         Dim orphans_ids_list As New List(Of Int32)
         TV.Nodes.Clear()
@@ -194,15 +195,22 @@ Public Class VTreeViewUtil
                 End If
             End If
         Next
-        If orphans_ids_list.Count > 0 Then SolveOrphanNodesList(TV, items_attributes, orphans_ids_list)
+        If orphans_ids_list.Count > 0 Then
+            If SolveOrphanNodesList(TV, items_attributes, orphans_ids_list) = False Then Return False
+        End If
+        Return True
 
-    End Sub
+errorHandler:
+        Return False
 
-    Private Shared Sub SolveOrphanNodesList(Of T As {NamedHierarchyCRUDEntity})(ByRef TV As vTreeView, _
-                                          ByRef items_attributes As MultiIndexDictionary(Of UInt32, String, T), _
-                                          ByRef orphans_id_list As List(Of Int32), _
-                                          Optional ByRef solved_orphans_list As List(Of Int32) = Nothing)
+    End Function
 
+    Private Shared Function SolveOrphanNodesList(Of T As {NamedHierarchyCRUDEntity})(ByRef TV As vTreeView, _
+                                              ByRef items_attributes As MultiIndexDictionary(Of UInt32, String, T), _
+                                              ByRef orphans_id_list As List(Of Int32), _
+                                              Optional ByRef solved_orphans_list As List(Of Int32) = Nothing) As Boolean
+
+        On Error GoTo errorHandler
         Dim current_node, parent_node As vTreeNode
         If solved_orphans_list Is Nothing Then solved_orphans_list = New List(Of Int32)
         For Each orphan_id As UInt32 In orphans_id_list
@@ -217,16 +225,25 @@ Public Class VTreeViewUtil
                 End If
             End If
         Next
-        If solved_orphans_list.Count <> orphans_id_list.Count Then SolveOrphanNodesList(TV, _
-                                                                                        items_attributes, _
-                                                                                        orphans_id_list, _
-                                                                                        solved_orphans_list)
+        If solved_orphans_list.Count <> orphans_id_list.Count Then
+            If SolveOrphanNodesList(TV, _
+                                    items_attributes, _
+                                    orphans_id_list, _
+                                    solved_orphans_list) Then
+                Return False
+            End If
+        End If
+        Return True
 
-    End Sub
+errorHandler:
+        Return False
 
-    Public Shared Sub LoadTreenode(Of T As {NamedHierarchyCRUDEntity})(ByRef node As vTreeNode, _
-                                   ByRef items_attributes As MultiIndexDictionary(Of UInt32, String, T))
+    End Function
 
+    Public Shared Function LoadTreenode(Of T As {NamedHierarchyCRUDEntity})(ByRef node As vTreeNode, _
+                                        ByRef items_attributes As MultiIndexDictionary(Of UInt32, String, T)) As Boolean
+
+        On Error GoTo errorHandler
         Dim currentNode, ParentNode As vTreeNode
         Dim orphans_ids_list As New List(Of Int32)
         node.Nodes.Clear()
@@ -247,21 +264,27 @@ Public Class VTreeViewUtil
                 End If
             End If
         Next
-        If orphans_ids_list.Count > 0 Then SolveOrphanNodesList(node, items_attributes, orphans_ids_list)
+        If orphans_ids_list.Count > 0 Then
+            If SolveOrphanNodesList(node, items_attributes, orphans_ids_list) = False Then Return False
+        End If
+        Return True
 
-    End Sub
+errorHandler:
+        Return False
 
-    Private Shared Sub SolveOrphanNodesList(Of T As {NamedHierarchyCRUDEntity})(ByRef node As vTreeNode, _
-                                          ByRef items_attributes As MultiIndexDictionary(Of UInt32, String, T), _
-                                          ByRef orphans_id_list As List(Of Int32), _
-                                          Optional ByRef solved_orphans_list As List(Of Int32) = Nothing)
+    End Function
 
+    Private Shared Function SolveOrphanNodesList(Of T As {NamedHierarchyCRUDEntity})(ByRef node As vTreeNode, _
+                                                 ByRef items_attributes As MultiIndexDictionary(Of UInt32, String, T), _
+                                                 ByRef orphans_id_list As List(Of Int32), _
+                                                 Optional ByRef solved_orphans_list As List(Of Int32) = Nothing) As Boolean
+
+        On Error GoTo errorHandler
         Dim current_node, parent_node As vTreeNode
         If solved_orphans_list Is Nothing Then solved_orphans_list = New List(Of Int32)
         For Each orphan_id As UInt32 In orphans_id_list
             If solved_orphans_list.Contains(orphan_id) = False Then
                 parent_node = FindNode(node, items_attributes(orphan_id).ParentId)
-
                 If Not parent_node Is Nothing Then
                     current_node = AddNode(items_attributes(orphan_id).Id, _
                                            items_attributes(orphan_id).Name,
@@ -270,12 +293,20 @@ Public Class VTreeViewUtil
                 End If
             End If
         Next
-        If solved_orphans_list.Count <> orphans_id_list.Count Then SolveOrphanNodesList(node, _
-                                                                                        items_attributes, _
-                                                                                        orphans_id_list, _
-                                                                                        solved_orphans_list)
+        If solved_orphans_list.Count <> orphans_id_list.Count Then
+            If SolveOrphanNodesList(node, _
+                                    items_attributes, _
+                                    orphans_id_list, _
+                                    solved_orphans_list) Then
+                Return False
+            End If
+        End If
+        Return True
 
-    End Sub
+errorHandler:
+        Return False
+
+    End Function
 
     Public Shared Sub LoadFlatTreeview(Of T As {NamedCRUDEntity})(ByRef p_treeview As vTreeView, _
                                       ByRef p_itemsAttributes As MultiIndexDictionary(Of UInt32, String, T))
@@ -505,6 +536,17 @@ Public Class VTreeViewUtil
 
 #End Region
 
+    Public Shared Function GetNodeAtPosition(ByRef p_treeview As vTreeView, p_position As Drawing.Point) As vTreeNode
 
+        p_position.Y -= p_treeview.ScrollPosition.Y
+        p_position.X -= p_treeview.ScrollPosition.X
+        Dim l_node As vTreeNode = p_treeview.HitTest(p_position)
+        If l_node IsNot Nothing Then
+            Return l_node
+        Else
+            Return Nothing
+        End If
+
+    End Function
 
 End Class

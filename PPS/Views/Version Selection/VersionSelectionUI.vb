@@ -71,8 +71,8 @@ Public Class VersionSelectionUI
     ' Node Double click event
     Private Sub VersionsTV_NodeMouseDoubleClick(sender As Object, e As TreeNodeMouseClickEventArgs) Handles VersionsTreeComboBox.MouseDoubleClick
 
-        If Not VersionsTreeComboBox.TreeView.HitTest(e.Location) Is Nothing Then
-            SelectVersionIfNotFolder(VersionsTreeComboBox.TreeView.HitTest(e.Location))
+        If Not VTreeViewUtil.GetNodeAtPosition(VersionsTreeComboBox.TreeView, e.Location) Is Nothing Then
+            SelectVersionIfNotFolder(VTreeViewUtil.GetNodeAtPosition(VersionsTreeComboBox.TreeView, e.Location))
         End If
 
     End Sub

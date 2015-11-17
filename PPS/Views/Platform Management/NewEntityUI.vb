@@ -10,7 +10,7 @@
 '           -> should have "" and "NS" for each category (hence name-> keys dict in categories should be for each categories)
 '
 '
-' Last modified: 09/11/2015
+' Last modified: 16/11/2015
 ' Author: Julien Monnereau
 
 
@@ -26,13 +26,8 @@ Friend Class NewEntityUI
 #Region "Instance Variables"
 
     ' Objects
-    Private Controller As EntitiesController
-    Private entitiesTV As vTreeView
-
-    ' Variables
-    Private parentTB As New TextBox
-    Private isFormExpanded As Boolean
-
+    Private m_controller As EntitiesController
+ 
     ' Constants
     Private Const FIXED_ATTRIBUTES_NUMBER As Int32 = 3
 
@@ -42,18 +37,16 @@ Friend Class NewEntityUI
 #Region "Initialize"
 
     Friend Sub New(ByRef p_controller As EntitiesController, _
-                   ByRef p_entitiesTV As vTreeView, _
                    ByRef p_currenciesHT As MultiIndexDictionary(Of UInt32, String, NamedCRUDEntity))
 
         ' This call is required by the designer.
         InitializeComponent()
 
         ' Add any initialization after the InitializeComponent() call.
-        Controller = p_controller
-        entitiesTV = p_entitiesTV
+        m_controller = p_controller
+        GlobalVariables.AxisElems.LoadEntitiesTV(m_parentEntitiesTreeviewBox.TreeView)
         MultilanguageSetup()
-        'LoadCurrencies(p_currenciesHT)
-
+    
     End Sub
 
     'Private Sub LoadCurrencies(ByRef currenciesHt As MultiIndexDictionary(Of UInt32, String, NamedCRUDEntity))
@@ -69,14 +62,12 @@ Friend Class NewEntityUI
 
     Friend Sub SetParentEntityId(ByRef parentEntityId As Int32)
 
-        Dim parentEntityNode As VIBlend.WinForms.Controls.vTreeNode = VTreeViewUtil.FindNode(ParentEntityTreeViewBox.TreeView, parentEntityId)
-        ParentEntityTreeViewBox.TreeView.SelectedNode = parentEntityNode
-
-    End Sub
-
-    Private Sub NewEntityUI_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-
-        VTreeViewUtil.LoadParentsTreeviewBox(ParentEntityTreeViewBox, entitiesTV)
+        Dim parentEntityNode As VIBlend.WinForms.Controls.vTreeNode = VTreeViewUtil.FindNode(m_parentEntitiesTreeviewBox.TreeView, parentEntityId)
+        If parentEntityNode Is Nothing Then
+            ' msg error
+            Exit Sub
+        End If
+        m_parentEntitiesTreeviewBox.TreeView.SelectedNode = parentEntityNode
 
     End Sub
 
@@ -84,10 +75,77 @@ Friend Class NewEntityUI
 
         Me.m_parentEntityLabel.Text = Local.GetValue("entities_edition.parent_entity")
         Me.m_nameLabel.Text = Local.GetValue("general.name")
-        Me.ParentEntityTreeViewBox.Text = Local.GetValue("entities_edition.parent_entity_selection")
+        Me.m_parentEntitiesTreeviewBox.Text = Local.GetValue("entities_edition.parent_entity_selection")
         Me.CancelBT.Text = Local.GetValue("general.cancel")
         Me.CreateEntityBT.Text = Local.GetValue("general.create")
         Me.Text = Local.GetValue("entities_edition.new_entity")
+
+    End Sub
+
+#End Region
+
+
+#Region "Interface"
+
+    Delegate Sub TVUpdate_Delegate(ByRef p_node As vTreeNode, _
+                             ByRef p_entityName As String, _
+                             ByRef p_entityImage As Int32)
+    Friend Sub TVUpdate(ByRef p_node As vTreeNode, _
+                        ByRef p_entityName As String, _
+                        ByRef p_entityImage As Int32)
+
+        If Me.m_parentEntitiesTreeviewBox.TreeView.InvokeRequired Then
+            Dim MyDelegate As New TVUpdate_Delegate(AddressOf TVUpdate)
+            Me.m_parentEntitiesTreeviewBox.TreeView.Invoke(MyDelegate, New Object() {p_node, p_entityName, p_entityImage})
+        Else
+            p_node.Text = p_entityName
+            p_node.ImageIndex = p_entityImage
+            m_parentEntitiesTreeviewBox.TreeView.Refresh()
+        End If
+
+    End Sub
+
+    Delegate Sub entityNodeAddition_Delegate(ByRef p_entityId As Int32, _
+                                               ByRef p_entityParentId As Int32, _
+                                               ByRef p_entityName As String, _
+                                               ByRef p_entityImage As Int32)
+    Friend Sub entityNodeAddition(ByRef p_entityId As Int32, _
+                                   ByRef p_entityParentId As Int32, _
+                                   ByRef p_entityName As String, _
+                                   ByRef p_entityImage As Int32)
+
+        If Me.m_parentEntitiesTreeviewBox.TreeView.InvokeRequired Then
+            Dim MyDelegate As New entityNodeAddition_Delegate(AddressOf entityNodeAddition)
+            Me.m_parentEntitiesTreeviewBox.TreeView.Invoke(MyDelegate, New Object() {p_entityId, p_entityParentId, p_entityName, p_entityImage})
+        Else
+            If p_entityParentId = 0 Then
+                Dim new_node As vTreeNode = VTreeViewUtil.AddNode(CStr(p_entityId), p_entityName, m_parentEntitiesTreeviewBox.TreeView, p_entityImage)
+                new_node.IsVisible = True
+            Else
+                Dim l_parentNode As vTreeNode = VTreeViewUtil.FindNode(m_parentEntitiesTreeviewBox.TreeView, p_entityParentId)
+                If l_parentNode IsNot Nothing Then
+                    Dim new_node As vTreeNode = VTreeViewUtil.AddNode(CStr(p_entityId), p_entityName, l_parentNode, p_entityImage)
+                    new_node.IsVisible = True
+                End If
+            End If
+            m_parentEntitiesTreeviewBox.TreeView.Refresh()
+        End If
+
+    End Sub
+
+    Delegate Sub TVNodeDelete_Delegate(ByRef p_entity_id As Int32)
+    Friend Sub TVNodeDelete(ByRef p_entity_id As Int32)
+
+        If Me.m_parentEntitiesTreeviewBox.TreeView.InvokeRequired Then
+            Dim MyDelegate As New TVNodeDelete_Delegate(AddressOf TVNodeDelete)
+            Me.m_parentEntitiesTreeviewBox.TreeView.Invoke(MyDelegate, New Object() {p_entity_id})
+        Else
+            Dim l_entityNode As vTreeNode = VTreeViewUtil.FindNode(m_parentEntitiesTreeviewBox.TreeView, p_entity_id)
+            If l_entityNode IsNot Nothing Then
+                l_entityNode.Remove()
+                m_parentEntitiesTreeviewBox.TreeView.Refresh()
+            End If
+        End If
 
     End Sub
 
@@ -101,15 +159,15 @@ Friend Class NewEntityUI
         Dim new_entity_Name As String = NameTextBox.Text
         If IsFormValid(new_entity_Name) = True Then
             Dim parentEntityId As Int32 = 0
-            If Not ParentEntityTreeViewBox.TreeView.SelectedNode Is Nothing Then
-                parentEntityId = ParentEntityTreeViewBox.TreeView.SelectedNode.Value
+            If Not m_parentEntitiesTreeviewBox.TreeView.SelectedNode Is Nothing Then
+                parentEntityId = m_parentEntitiesTreeviewBox.TreeView.SelectedNode.Value
             End If
-            Controller.CreateEntity(new_entity_Name, _
+            m_controller.CreateEntity(new_entity_Name, _
                                     parentEntityId, _
                                     1, _
                                     1)
             Me.Hide()
-            Controller.ShowEntitiesMGT()
+            m_controller.ShowEntitiesMGT()
         End If
 
     End Sub
@@ -117,7 +175,7 @@ Friend Class NewEntityUI
     Private Sub CancelBT_Click(sender As Object, e As EventArgs) Handles CancelBT.Click
 
         Me.Hide()
-        Controller.ShowEntitiesMGT()
+        m_controller.ShowEntitiesMGT()
 
     End Sub
 
@@ -149,7 +207,7 @@ Friend Class NewEntityUI
 
         Me.Hide()
         e.Cancel = True
-        Controller.ShowEntitiesMGT()
+        m_controller.ShowEntitiesMGT()
 
     End Sub
 

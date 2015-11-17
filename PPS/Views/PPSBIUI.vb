@@ -143,6 +143,22 @@ Friend Class PPSBI_UI
 
     End Sub
 
+    Private Sub MultiLanguageSetup()
+
+        Me.validate_cmd.Text = Local.GetValue("ppsbi.insert_formula")
+        Me.m_categoryFilterLabel.Text = Local.GetValue("ppsbi.categories_filter")
+        Me.m_productFilterLabel.Text = Local.GetValue("ppsbi.products_filter")
+        Me.m_clientFilterLabel.Text = Local.GetValue("ppsbi.clients_filter")
+        Me.m_versionLabel.Text = Local.GetValue("general.version")
+        Me.m_currencyLabel.Text = Local.GetValue("general.currency")
+        Me.m_entityLabel.Text = Local.GetValue("general.entity")
+        Me.m_accountLabel.Text = Local.GetValue("general.account")
+        Me.m_periodLabel.Text = Local.GetValue("general.period")
+        Me.m_adjustmentFilterLabel.Text = Local.GetValue("ppsbi.adjustments_filter")
+        Me.Text = Local.GetValue("ppsbi.title")
+
+    End Sub
+
 #End Region
 
 

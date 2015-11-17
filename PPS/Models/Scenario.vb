@@ -30,7 +30,6 @@ Friend Class Scenario
     ' objects
     Friend constraintsDGV As New vDataGridView
     Friend generalDGV As New vDataGridView
-    Private FModellingAccounts As FModellingAccount
     Friend Outputchart As New Chart
     Private fAccountsNodes As TreeNode
     Private constraints_text_box_editor As New TextBoxEditor()
@@ -56,13 +55,11 @@ Friend Class Scenario
 
 #Region "Initialize"
 
-    Friend Sub New(ByRef FModellingAccounts As FModellingAccount, _
-                   ByRef periods_list As Int32(), _
+    Friend Sub New(ByRef periods_list As Int32(), _
                    ByRef fAccountsNodes As TreeNode, _
                    ByRef constraints_id_list As List(Of String))
 
         Me.periods_array = periods_list
-        Me.FModellingAccounts = FModellingAccounts
         Me.fAccountsNodes = fAccountsNodes
         buildConstraintsDGV(constraints_id_list)
         BuildGeneralDGV()
@@ -149,7 +146,7 @@ Friend Class Scenario
         ' Fill Accounts name Cell
         generalDGV.CellsArea.SetCellValue(row, generalDGV.ColumnsHierarchy.Items(0), f_accounts_node.Text)
         ' Format Row
-        row.CellsFormatString = FModellingAccounts.ReadFModellingAccount(f_accounts_node.Name, FINANCIAL_MODELLING_FORMAT_VARIABLE)
+        '       row.CellsFormatString = FModellingAccounts.ReadFModellingAccount(f_accounts_node.Name, FINANCIAL_MODELLING_FORMAT_VARIABLE)
         ' Register Row in General Rows Dictionary (id -> Item)
         generalDGV_rows_id_item_dict(f_accounts_node.Name) = row
 
@@ -205,7 +202,7 @@ Friend Class Scenario
         Dim f_account_name As String = fAccountsNodes.Nodes.Find(f_account_id, True)(0).Text
         constraintsDGV.CellsArea.SetCellValue(row, constraintsDGV.ColumnsHierarchy.Items(0), f_account_name)
         ' Format row
-        row.CellsFormatString = FModellingAccounts.ReadFModellingAccount(f_account_id, FINANCIAL_MODELLING_FORMAT_VARIABLE)
+        '     row.CellsFormatString = FModellingAccounts.ReadFModellingAccount(f_account_id, FINANCIAL_MODELLING_FORMAT_VARIABLE)
         ' Register Row in Rows Dictionary
         constraints_DGV_rows_id_item_dict(f_account_id) = row
         ' Fill with default value
@@ -298,13 +295,13 @@ Friend Class Scenario
                         args.Cancel = True
                     Else
                         Dim f_account_id As String = args.Cell.RowItem.Caption
-                        If FModellingAccounts.ReadFModellingAccount(f_account_id, FINANCIAL_MODELLING_FORMAT_VARIABLE) = PERCENT_FORMAT Then
-                            is_updating_value = True
-                            args.Cell.Value = args.NewValue / 100
-                            args.Cell.RowItem.CellsFormatString = PERCENT_FORMAT
-                            args.Cancel = True
-                            is_updating_value = False
-                        End If
+                        'If FModellingAccounts.ReadFModellingAccount(f_account_id, FINANCIAL_MODELLING_FORMAT_VARIABLE) = PERCENT_FORMAT Then
+                        '    is_updating_value = True
+                        '    args.Cell.Value = args.NewValue / 100
+                        '    args.Cell.RowItem.CellsFormatString = PERCENT_FORMAT
+                        '    args.Cancel = True
+                        '    is_updating_value = False
+                        'End If
                     End If
             End Select
             manual_edition = False

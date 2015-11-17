@@ -24,19 +24,18 @@ Imports CRUD
 
 Friend Class EntitiesController
 
-
 #Region "Instance Variables"
 
     ' Objects
-    Private View As EntitiesView
-    Private entitiesTV As New vTreeView
-    Private entitiesFilterTV As New vTreeView
-    Private entitiesFilterValuesTV As New vTreeView
-    Private NewEntityView As NewEntityUI
-    Private PlatformMGTUI As PlatformMGTGeneralUI
+    Private m_view As EntitiesView
+    Private m_entitiesTV As New vTreeView
+    Private m_entitiesFilterTV As New vTreeView
+    Private m_entitiesFilterValuesTV As New vTreeView
+    Private m_newEntityView As NewEntityUI
+    Private m_platformMGTUI As PlatformMGTGeneralUI
 
     ' Variables
-    Private positionsDictionary As New Dictionary(Of Int32, Double)
+    Private m_positionsDictionary As New Dictionary(Of Int32, Double)
 
 #End Region
 
@@ -45,8 +44,8 @@ Friend Class EntitiesController
     Friend Sub New()
 
         LoadInstanceVariables()
-        View = New EntitiesView(Me, entitiesTV, entitiesFilterValuesTV, entitiesFilterTV)
-        NewEntityView = New NewEntityUI(Me, entitiesTV, GlobalVariables.Currencies.GetDictionary())
+        m_view = New EntitiesView(Me, m_entitiesTV, m_entitiesFilterValuesTV, m_entitiesFilterTV)
+        m_newEntityView = New NewEntityUI(Me, GlobalVariables.Currencies.GetDictionary())
 
         ' Entities CRUD Events
         AddHandler GlobalVariables.AxisElems.CreationEvent, AddressOf AfterEntityCreation
@@ -64,18 +63,18 @@ Friend Class EntitiesController
 
     Public Sub LoadInstanceVariables()
 
-        GlobalVariables.AxisElems.LoadEntitiesTV(entitiesTV)
-        GlobalVariables.Filters.LoadFiltersTV(entitiesFilterTV, GlobalEnums.AnalysisAxis.ENTITIES)
-        AxisFilterManager.LoadFvTv(entitiesFilterValuesTV, GlobalEnums.AnalysisAxis.ENTITIES)
+        GlobalVariables.AxisElems.LoadEntitiesTV(m_entitiesTV)
+        GlobalVariables.Filters.LoadFiltersTV(m_entitiesFilterTV, GlobalEnums.AnalysisAxis.ENTITIES)
+        AxisFilterManager.LoadFvTv(m_entitiesFilterValuesTV, GlobalEnums.AnalysisAxis.ENTITIES)
 
     End Sub
 
     Public Sub addControlToPanel(ByRef dest_panel As Panel, _
                                  ByRef PlatformMGTUI As PlatformMGTGeneralUI)
 
-        Me.PlatformMGTUI = PlatformMGTUI
-        dest_panel.Controls.Add(View)
-        View.Dock = Windows.Forms.DockStyle.Fill
+        Me.m_platformMGTUI = PlatformMGTUI
+        dest_panel.Controls.Add(m_view)
+        m_view.Dock = Windows.Forms.DockStyle.Fill
 
     End Sub
 
@@ -84,7 +83,7 @@ Friend Class EntitiesController
         RemoveHandler GlobalVariables.AxisFilters.Read, AddressOf AfterEntityFilterRead
         RemoveHandler GlobalVariables.AxisFilters.UpdateEvent, AddressOf AfterEntityFilterUpdate
         SendNewPositionsToModel()
-        View.Dispose()
+        m_view.Dispose()
 
     End Sub
 
@@ -183,16 +182,27 @@ Friend Class EntitiesController
             Dim l_entity As AxisElem = GetEntity(ht.Id)
             If l_entity Is Nothing Then Exit Sub
 
-            View.UpdateEntity(l_entity)
+            m_view.UpdateEntity(l_entity)
         End If
 
     End Sub
 
-    Private Sub AfterEntityRead(ByRef status As ErrorMessage, ByRef ht As AxisElem)
+    Private Sub AfterEntityRead(ByRef status As ErrorMessage, ByRef p_axisElem As AxisElem)
 
         If (status = ErrorMessage.SUCCESS) Then
-            View.LoadInstanceVariables_Safe()
-            View.UpdateEntity(ht)
+            m_view.LoadInstanceVariables_Safe()
+            m_view.UpdateEntity(p_axisElem)
+            Dim l_node As vTreeNode = VTreeViewUtil.FindNode(m_newEntityView.m_parentEntitiesTreeviewBox.TreeView, p_axisElem.Id)
+            If l_node Is Nothing Then
+                m_newEntityView.entityNodeAddition(p_axisElem.Id, _
+                                                   p_axisElem.ParentId, _
+                                                   p_axisElem.Name, _
+                                                   p_axisElem.Image)
+            Else
+                m_newEntityView.TVUpdate(l_node, _
+                                         p_axisElem.Name, _
+                                         p_axisElem.Image)
+            End If
         End If
 
     End Sub
@@ -200,8 +210,9 @@ Friend Class EntitiesController
     Private Sub AfterEntityDeletion(ByRef status As ErrorMessage, ByRef id As Int32)
 
         If status = ErrorMessage.SUCCESS Then
-            View.LoadInstanceVariables_Safe()
-            View.DeleteEntity(id)
+            m_view.LoadInstanceVariables_Safe()
+            m_view.DeleteEntity(id)
+            m_newEntityView.TVNodeDelete(id)
         End If
 
     End Sub
@@ -210,7 +221,7 @@ Friend Class EntitiesController
 
         If (status <> ErrorMessage.SUCCESS) Then
             If GlobalVariables.AxisElems.GetValue(AxisType.Entities, id) Is Nothing Then Exit Sub
-            View.UpdateEntity(GlobalVariables.AxisElems.GetValue(AxisType.Entities, id))
+            m_view.UpdateEntity(GlobalVariables.AxisElems.GetValue(AxisType.Entities, id))
             MsgBox("Invalid parameter")
         End If
 
@@ -232,8 +243,8 @@ Friend Class EntitiesController
             If axisFilter.Axis <> AxisType.Entities Then Exit Sub
             Dim entityId As Int32 = p_axisFilter.Id
             If Not GlobalVariables.AxisElems.GetValue(AxisType.Entities, entityId) Is Nothing Then
-                View.LoadInstanceVariables()
-                View.UpdateEntity(GlobalVariables.AxisElems.GetValue(AxisType.Entities, entityId))
+                m_view.LoadInstanceVariables()
+                m_view.UpdateEntity(GlobalVariables.AxisElems.GetValue(AxisType.Entities, entityId))
             End If
         End If
 
@@ -245,7 +256,7 @@ Friend Class EntitiesController
             Dim l_axisFilter As AxisFilter = GlobalVariables.AxisFilters.GetValue(axisFilterId)
             If l_axisFilter.Axis <> CRUD.AxisType.Entities Then Exit Sub
             If GlobalVariables.AxisElems.GetValue(AxisType.Entities, l_axisFilter.AxisElemId) Is Nothing Then Exit Sub
-            View.UpdateEntity(GlobalVariables.AxisElems.GetValue(AxisType.Entities, l_axisFilter.AxisElemId))
+            m_view.UpdateEntity(GlobalVariables.AxisElems.GetValue(AxisType.Entities, l_axisFilter.AxisElemId))
             ' catch and display message
         End If
 
@@ -268,21 +279,21 @@ Friend Class EntitiesController
 
     Friend Sub ShowNewEntityUI()
 
-        Dim current_row As HierarchyItem = View.getCurrentRowItem
+        Dim current_row As HierarchyItem = m_view.getCurrentRowItem
         If Not current_row Is Nothing Then
-            Dim node As vTreeNode = VTreeViewUtil.FindNode(entitiesTV, current_row.ItemValue)
+            Dim node As vTreeNode = VTreeViewUtil.FindNode(m_entitiesTV, current_row.ItemValue)
             If node IsNot Nothing Then
-                NewEntityView.SetParentEntityId(node.Value)
+                m_newEntityView.SetParentEntityId(node.Value)
             End If
         End If
 
-        NewEntityView.Show()
+        m_newEntityView.Show()
 
     End Sub
 
     Friend Sub ShowEntitiesMGT()
 
-        View.Show()
+        m_view.Show()
 
     End Sub
 
@@ -297,9 +308,9 @@ Friend Class EntitiesController
         Dim position As Int32
         Dim listEntities As New List(Of CRUDEntity)
 
-        positionsDictionary = DataGridViewsUtil.GeneratePositionsDictionary(View.m_entitiesDataGridView)
-        For Each entity_id As Int32 In positionsDictionary.Keys
-            position = positionsDictionary(entity_id)
+        m_positionsDictionary = DataGridViewsUtil.GeneratePositionsDictionary(m_view.m_entitiesDataGridView)
+        For Each entity_id As Int32 In m_positionsDictionary.Keys
+            position = m_positionsDictionary(entity_id)
             If GetEntity(entity_id) Is Nothing Then Continue For
             If position <> GetEntity(entity_id).ItemPosition Then
                 Dim l_entity = GetEntityCopy(entity_id)

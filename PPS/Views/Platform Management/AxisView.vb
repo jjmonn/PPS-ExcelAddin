@@ -8,7 +8,7 @@
 '
 '
 '
-' Last modified: 09/11/2015
+' Last modified: 13/11/2015
 ' Author: Julien Monnereau
 
 
@@ -30,20 +30,20 @@ Friend Class AxisView
 #Region "Instance Variables"
 
     ' Objects
-    Private Controller As AxisController
-    Private axisTV As vTreeView
-    Private axisFilterTV As vTreeView
-    Private axisFilterValuesTV As vTreeView
-    Friend DGV As New vDataGridView
-    Private CP As CircularProgressUI
+    Private m_controller As AxisController
+    Private m_axisTreeview As vTreeView
+    Private m_axisFilterTreeview As vTreeView
+    Private m_axisFilterValuesTreeview As vTreeView
+    Friend m_axisDataGridView As New vDataGridView
+    Private m_CircularProgress As CircularProgressUI
 
     ' Variables
-    Friend columnsVariableItemDictionary As New Dictionary(Of String, HierarchyItem)
-    Friend rows_id_item_dic As New Dictionary(Of Int32, HierarchyItem)
-    Private DGVArray(,) As String
-    Private filterGroup As New FilterGroup(Of String)()
-    Friend currentRowItem As HierarchyItem
-    Friend isFillingDGV As Boolean
+    Friend m_columnsVariableItemDictionary As New Dictionary(Of String, HierarchyItem)
+    Friend m_rowsIdsItemDic As New Dictionary(Of Int32, HierarchyItem)
+    Private m_dataGridViewArray(,) As String
+    Private m_filterGroup As New FilterGroup(Of String)()
+    Friend m_currentRowItem As HierarchyItem
+    Friend m_isFillingDGV As Boolean
 
     ' Constants
     Private Const DGV_VI_BLEND_STYLE As VIBLEND_THEME = VIBLEND_THEME.OFFICE2010SILVER
@@ -67,27 +67,27 @@ Friend Class AxisView
         InitializeComponent()
 
         ' Add any initialization after the InitializeComponent() call.
-        Controller = p_controller
-        axisTV = p_axisTV
-        axisFilterTV = p_axisFiltersTV
-        axisFilterValuesTV = p_axisFilterValuesTV
+        m_controller = p_controller
+        m_axisTreeview = p_axisTV
+        m_axisFilterTreeview = p_axisFiltersTV
+        m_axisFilterValuesTreeview = p_axisFilterValuesTV
 
         initFilters()
         InitializeDGVDisplay()
         DGVColumnsInitialize()
-        DGVRowsInitialize(axisTV)
-        fillDGV(Controller.GetAxisDictionary())
+        DGVRowsInitialize(m_axisTreeview)
+        fillDGV(m_controller.GetAxisDictionary())
 
-        Me.TableLayoutPanel1.Controls.Add(DGV, 0, 1)
-        DGV.Dock = DockStyle.Fill
-        DGV.ContextMenuStrip = RCM_TGV
-        DGV.RowsHierarchy.AllowDragDrop = True
-        DGV.AllowDragDropIndication = True
+        Me.TableLayoutPanel1.Controls.Add(m_axisDataGridView, 0, 1)
+        m_axisDataGridView.Dock = DockStyle.Fill
+        m_axisDataGridView.RowsHierarchy.AllowDragDrop = True
+        m_axisDataGridView.AllowDragDropIndication = True
 
-        AddHandler DGV.CellMouseClick, AddressOf dataGridView_CellMouseClick
-        AddHandler DGV.HierarchyItemMouseClick, AddressOf dataGridView_HierarchyItemMouseClick
-        AddHandler DGV.CellValueChanged, AddressOf dataGridView_CellValueChanged
-        AddHandler DGV.KeyDown, AddressOf DGV_KeyDown
+        AddHandler m_axisDataGridView.CellMouseClick, AddressOf dataGridView_CellMouseClick
+        AddHandler m_axisDataGridView.MouseDown, AddressOf axisDataGridViewRightClick
+        AddHandler m_axisDataGridView.HierarchyItemMouseClick, AddressOf dataGridView_HierarchyItemMouseClick
+        AddHandler m_axisDataGridView.CellValueChanged, AddressOf dataGridView_CellValueChanged
+        AddHandler m_axisDataGridView.KeyDown, AddressOf DGV_KeyDown
         DesactivateUnallowed()
         MultilanguageSetup()
 
@@ -131,15 +131,15 @@ Friend Class AxisView
     Friend Sub UpdateAxis(ByRef ht As AxisElem)
 
         If ht Is Nothing Then Exit Sub
-        If InvokeRequired Then
+        If Me.m_axisDataGridView.InvokeRequired Then
             Dim MyDelegate As New UpdateAxis_Delegate(AddressOf UpdateAxis)
-            Me.Invoke(MyDelegate, New Object() {ht})
+            Me.m_axisDataGridView.Invoke(MyDelegate, New Object() {ht})
         Else
-            isFillingDGV = True
+            m_isFillingDGV = True
             FillRow(ht.Id, ht.Name, ht)
             updateDGVFormat()
-            DGV.Refresh()
-            isFillingDGV = False
+            m_axisDataGridView.Refresh()
+            m_isFillingDGV = False
         End If
 
     End Sub
@@ -147,13 +147,13 @@ Friend Class AxisView
     Delegate Sub DeleteAxis_Delegate(ByRef id As Int32)
     Friend Sub DeleteAxis(ByRef id As Int32)
 
-        If InvokeRequired Then
+        If Me.m_axisDataGridView.InvokeRequired Then
             Dim MyDelegate As New DeleteAxis_Delegate(AddressOf DeleteAxis)
-            Me.Invoke(MyDelegate, New Object() {id})
-        ElseIf (rows_id_item_dic.ContainsKey(id)) Then
-            rows_id_item_dic(id).Delete()
-            rows_id_item_dic.Remove(id)
-            DGV.Refresh()
+            Me.m_axisDataGridView.Invoke(MyDelegate, New Object() {id})
+        ElseIf (m_rowsIdsItemDic.ContainsKey(id)) Then
+            m_rowsIdsItemDic(id).Delete()
+            m_rowsIdsItemDic.Remove(id)
+            m_axisDataGridView.Refresh()
         End If
 
     End Sub
@@ -167,40 +167,57 @@ Friend Class AxisView
 
         Dim axisName As String = InputBox(Local.GetValue("axis.msg_enter_name"), Local.GetValue("axis.msg_axis_creation"))
         If axisName <> "" Then
-            Controller.CreateAxis(axisName)
+            m_controller.CreateAxis(axisName)
         End If
 
     End Sub
 
     Private Sub DeleteAxisOrder()
 
-        If Not currentRowItem Is Nothing AndAlso DGV.ColumnsHierarchy.Items.Count > 0 Then
+        If Not m_currentRowItem Is Nothing AndAlso m_axisDataGridView.ColumnsHierarchy.Items.Count > 0 Then
             Dim confirm As Integer = MessageBox.Show(Local.GetValue("axis.msg_axis_delete1") + Chr(13) + Chr(13) + _
-                                                    DGV.CellsArea.GetCellValue(currentRowItem, DGV.ColumnsHierarchy.Items(0)) + Chr(13) + Chr(13) + _
+                                                    m_axisDataGridView.CellsArea.GetCellValue(m_currentRowItem, m_axisDataGridView.ColumnsHierarchy.Items(0)) + Chr(13) + Chr(13) + _
                                                      Local.GetValue("axis.msg_axis_delete2") + Chr(13) + Chr(13), _
                                                      Local.GetValue("axis.msg_deletion_confirmation"), MessageBoxButtons.YesNo, MessageBoxIcon.Question)
             If confirm = DialogResult.Yes Then
-                Dim axisValueId As Int32 = currentRowItem.ItemValue
-                Controller.DeleteAxis(axisValueId)
+                Dim axisValueId As Int32 = m_currentRowItem.ItemValue
+                m_controller.DeleteAxis(axisValueId)
             End If
         Else
             MsgBox(Local.GetValue("axis.msg_select_axis"))
         End If
-        currentRowItem = Nothing
+        m_currentRowItem = Nothing
 
     End Sub
 
 #Region "DGV Right Click Menu"
 
+    Private Sub AxisDataGridViewRightClick(sender As Object, e As MouseEventArgs)
+
+        If (e.Button <> MouseButtons.Right) Then Exit Sub
+        Dim target As HierarchyItem = m_axisDataGridView.RowsHierarchy.HitTest(e.Location)
+        If target IsNot Nothing Then
+            m_currentRowItem = m_rowsIdsItemDic(target.ItemValue)
+        Else
+            Dim target2 As GridCell = m_axisDataGridView.CellsArea.HitTest(e.Location)
+            If target2 Is Nothing Then Exit Sub
+            m_currentRowItem = target2.RowItem
+        End If
+        m_dataGridViewRightClickMenu.Visible = True
+        m_dataGridViewRightClickMenu.Bounds = New Rectangle(MousePosition, New Size(m_dataGridViewRightClickMenu.Width, m_dataGridViewRightClickMenu.Height))
+
+
+    End Sub
+
     Private Sub RenameEntityButton_Click(sender As Object, e As EventArgs) Handles RenameToolStripMenuItem.Click, RenameToolStripMenuItem1.Click
 
-        If currentRowItem Is Nothing Then
+        If m_currentRowItem Is Nothing Then
             MsgBox(Local.GetValue("axis.msg_select_axis"))
             Exit Sub
         End If
-        Dim newAxisName As String = InputBox(Local.GetValue("axis.msg_enter_name"), , currentRowItem.Caption)
+        Dim newAxisName As String = InputBox(Local.GetValue("axis.msg_enter_name"), , m_currentRowItem.Caption)
         If newAxisName <> "" Then
-            Controller.UpdateAxisName(currentRowItem.ItemValue, newAxisName)
+            m_controller.UpdateAxisName(m_currentRowItem.ItemValue, newAxisName)
         End If
 
     End Sub
@@ -208,7 +225,7 @@ Friend Class AxisView
     Private Sub cop_down_bt_Click(sender As Object, e As EventArgs) Handles copy_down_bt.Click, CopyDownValuesToolStripMenuItem.Click
 
         CopyValueDown()
-        DGV.Refresh()
+        m_axisDataGridView.Refresh()
 
     End Sub
 
@@ -261,27 +278,27 @@ Friend Class AxisView
 
     Private Sub InitializeDGVDisplay()
 
-        DGV.ColumnsHierarchy.AutoResize(AutoResizeMode.FIT_ALL)
-        DGV.ColumnsHierarchy.AutoStretchColumns = True
-        DGV.ColumnsHierarchy.AllowResize = True
+        m_axisDataGridView.ColumnsHierarchy.AutoResize(AutoResizeMode.FIT_ALL)
+        m_axisDataGridView.ColumnsHierarchy.AutoStretchColumns = True
+        m_axisDataGridView.ColumnsHierarchy.AllowResize = True
         ' DGV.RowsHierarchy.AllowDragDrop = True
-        DGV.RowsHierarchy.CompactStyleRenderingEnabled = True
-        DGV.AllowDragDropIndication = True
-        DGV.AllowCopyPaste = True
-        DGV.FilterDisplayMode = FilterDisplayMode.Custom
-        DGV.VIBlendTheme = DGV_VI_BLEND_STYLE
-        DGV.BackColor = SystemColors.Control
+        m_axisDataGridView.RowsHierarchy.CompactStyleRenderingEnabled = True
+        m_axisDataGridView.AllowDragDropIndication = True
+        m_axisDataGridView.AllowCopyPaste = True
+        m_axisDataGridView.FilterDisplayMode = FilterDisplayMode.Custom
+        m_axisDataGridView.VIBlendTheme = DGV_VI_BLEND_STYLE
+        m_axisDataGridView.BackColor = SystemColors.Control
         'DGV.ImageList = AxisIL
 
     End Sub
 
     Private Sub fillDGV(ByRef axisHT As MultiIndexDictionary(Of UInt32, String, AxisElem))
 
-        isFillingDGV = True
+        m_isFillingDGV = True
         For Each axisValue In axisHT.SortedValues
             FillRow(axisValue.Id, axisValue.Name, axisValue)
         Next
-        isFillingDGV = False
+        m_isFillingDGV = False
         updateDGVFormat()
 
     End Sub
@@ -291,10 +308,10 @@ Friend Class AxisView
 
     Private Sub DGVColumnsInitialize()
 
-        DGV.ColumnsHierarchy.Clear()
-        columnsVariableItemDictionary.Clear()
+        m_axisDataGridView.ColumnsHierarchy.Clear()
+        m_columnsVariableItemDictionary.Clear()
 
-        For Each filterNode As vTreeNode In axisFilterTV.Nodes
+        For Each filterNode As vTreeNode In m_axisFilterTreeview.Nodes
             CreateSubFilters(filterNode)
         Next
 
@@ -302,9 +319,9 @@ Friend Class AxisView
 
     Private Sub CreateSubFilters(ByRef node As vTreeNode)
 
-        Dim col As HierarchyItem = DGV.ColumnsHierarchy.Items.Add(node.Text)
+        Dim col As HierarchyItem = m_axisDataGridView.ColumnsHierarchy.Items.Add(node.Text)
 
-        columnsVariableItemDictionary.Add(node.Value, col)
+        m_columnsVariableItemDictionary.Add(node.Value, col)
         col.ItemValue = node.Value
         col.AllowFiltering = True
 
@@ -324,8 +341,8 @@ Friend Class AxisView
         stringFilter1.ComparisonOperator = StringFilterComparisonOperator.CONTAINS
         stringFilter1.Value = "a"
 
-        filterGroup.AddFilter(FilterOperator.AND, stringFilter1)
-        filterGroup.AddFilter(FilterOperator.AND, stringFilter2)
+        m_filterGroup.AddFilter(FilterOperator.AND, stringFilter1)
+        m_filterGroup.AddFilter(FilterOperator.AND, stringFilter2)
 
     End Sub
 
@@ -336,20 +353,20 @@ Friend Class AxisView
 
     Private Sub DGVRowsInitialize(ByRef axis_tv As vTreeView)
 
-        DGV.RowsHierarchy.Clear()
-        rows_id_item_dic.Clear()
-        isFillingDGV = True
+        m_axisDataGridView.RowsHierarchy.Clear()
+        m_rowsIdsItemDic.Clear()
+        m_isFillingDGV = True
         For Each node In axis_tv.Nodes
             Dim row As HierarchyItem = CreateRow(node.Value, node.Text)
         Next
-        isFillingDGV = False
+        m_isFillingDGV = False
 
     End Sub
 
     Private Function CreateRow(ByRef p_axisId As Int32, ByRef p_axisName As String) As HierarchyItem
 
         Dim row As HierarchyItem
-        row = DGV.RowsHierarchy.Items.Add(p_axisName)
+        row = m_axisDataGridView.RowsHierarchy.Items.Add(p_axisName)
         row.ItemValue = p_axisId
         FormatRow(row, p_axisId)
         Return row
@@ -358,10 +375,10 @@ Friend Class AxisView
 
     Private Sub FormatRow(ByRef row As HierarchyItem, ByRef row_id As Int32)
 
-        If rows_id_item_dic.ContainsKey(row_id) Then
-            rows_id_item_dic(row_id) = row
+        If m_rowsIdsItemDic.ContainsKey(row_id) Then
+            m_rowsIdsItemDic(row_id) = row
         Else
-            rows_id_item_dic.Add(row_id, row)
+            m_rowsIdsItemDic.Add(row_id, row)
         End If
         row.TextAlignment = ContentAlignment.MiddleLeft
 
@@ -376,13 +393,13 @@ Friend Class AxisView
                        ByVal axis_ht As AxisElem)
 
         Dim rowItem As HierarchyItem
-        If rows_id_item_dic.ContainsKey(axisValueId) Then
-            rowItem = rows_id_item_dic(axisValueId)
+        If m_rowsIdsItemDic.ContainsKey(axisValueId) Then
+            rowItem = m_rowsIdsItemDic(axisValueId)
             rowItem.Caption = p_axisName
         Else
             rowItem = CreateRow(axisValueId, p_axisName)
         End If
-        For Each filterNode As vTreeNode In axisFilterTV.Nodes
+        For Each filterNode As vTreeNode In m_axisFilterTreeview.Nodes
             FillSubFilters(filterNode, axisValueId, rowItem)
         Next
 
@@ -394,8 +411,8 @@ Friend Class AxisView
 
         Dim combobox As New ComboBoxEditor
         combobox.DropDownList = True
-        Dim columnItem As HierarchyItem = columnsVariableItemDictionary(filterNode.Value)
-        Dim filterValueId As UInt32 = Controller.GetFilterValueId(CInt(filterNode.Value), axisValueId)
+        Dim columnItem As HierarchyItem = m_columnsVariableItemDictionary(filterNode.Value)
+        Dim filterValueId As UInt32 = m_controller.GetFilterValueId(CInt(filterNode.Value), axisValueId)
         If (filterValueId = 0) Then
             System.Diagnostics.Debug.WriteLine("AxisControl.FillSubFilters: Invalid filter value id")
             Exit Sub
@@ -403,7 +420,7 @@ Friend Class AxisView
         Dim filterValue As FilterValue = GlobalVariables.FiltersValues.GetValue(filterValueId)
 
         If filterValue Is Nothing Then Exit Sub
-        DGV.CellsArea.SetCellValue(rowItem, columnItem, filterValue.Name)
+        m_axisDataGridView.CellsArea.SetCellValue(rowItem, columnItem, filterValue.Name)
 
         ' Filters Choices Setup
         If filterNode.Parent Is Nothing Then
@@ -414,7 +431,7 @@ Friend Class AxisView
             Next
         Else
             ' Child Filter
-            Dim parentFilterFilterValueId As Int32 = Controller.GetFilterValueId(CInt(filterNode.Parent.Value), axisValueId)     ' Child Filter Id
+            Dim parentFilterFilterValueId As Int32 = m_controller.GetFilterValueId(CInt(filterNode.Parent.Value), axisValueId)     ' Child Filter Id
             Dim filterValuesIds = GlobalVariables.FiltersValues.GetFilterValueIdsFromParentFilterValueIds({parentFilterFilterValueId})
             For Each Id As UInt32 In filterValuesIds
                 combobox.Items.Add(GlobalVariables.FiltersValues.GetValueName(Id))
@@ -422,7 +439,7 @@ Friend Class AxisView
         End If
 
         ' Add ComboBoxEditor to Cell
-        If GlobalVariables.Users.CurrentUserIsAdmin() Then DGV.CellsArea.SetCellEditor(rowItem, columnItem, combobox)
+        If GlobalVariables.Users.CurrentUserIsAdmin() Then m_axisDataGridView.CellsArea.SetCellEditor(rowItem, columnItem, combobox)
 
         ' Recursive if Filters Children exist
         For Each childFilterNode As vTreeNode In filterNode.Nodes
@@ -433,9 +450,9 @@ Friend Class AxisView
 
     Private Sub updateDGVFormat()
 
-        DataGridViewsUtil.DGVSetHiearchyFontSize(DGV, My.Settings.dgvFontSize, My.Settings.dgvFontSize)
-        DataGridViewsUtil.FormatDGVRowsHierarchy(DGV)
-        DGV.Refresh()
+        DataGridViewsUtil.DGVSetHiearchyFontSize(m_axisDataGridView, My.Settings.dgvFontSize, My.Settings.dgvFontSize)
+        DataGridViewsUtil.FormatDGVRowsHierarchy(m_axisDataGridView)
+        m_axisDataGridView.Refresh()
 
     End Sub
 
@@ -459,7 +476,7 @@ Friend Class AxisView
             Dim MyDelegate As New LoadInstanceVariables_Delegate(AddressOf LoadInstanceVariables)
             Me.Invoke(MyDelegate, New Object() {})
         Else
-            Controller.LoadInstanceVariables()
+            m_controller.LoadInstanceVariables()
         End If
     End Sub
 
@@ -468,23 +485,23 @@ Friend Class AxisView
                                             ByRef filterId As Int32, _
                                             ByRef filterValueId As Int32)
 
-        isFillingDGV = True
-        Dim filterNode As vTreeNode = VTreeViewUtil.FindNode(axisFilterTV, filterId)
+        m_isFillingDGV = True
+        Dim filterNode As vTreeNode = VTreeViewUtil.FindNode(m_axisFilterTreeview, filterId)
         If (filterNode Is Nothing) Then Exit Sub
 
         ' Update parent filters recursively
-        UpdateParentFiltersValues(rows_id_item_dic(axisId), _
+        UpdateParentFiltersValues(m_rowsIdsItemDic(axisId), _
                                  axisId, _
                                  filterNode, _
                                  filterValueId)
 
         ' Update children filters comboboxes recursively
         For Each childFilterNode As vTreeNode In filterNode.Nodes
-            UpdateChildrenFiltersComboBoxes(rows_id_item_dic(axisId), _
+            UpdateChildrenFiltersComboBoxes(m_rowsIdsItemDic(axisId), _
                                             childFilterNode, _
                                             {filterValueId})
         Next
-        isFillingDGV = False
+        m_isFillingDGV = False
 
     End Sub
 
@@ -498,11 +515,11 @@ Friend Class AxisView
 
         If Not filterNode.Parent Is Nothing Then
             Dim parentFilterNode As vTreeNode = filterNode.Parent
-            Dim column As HierarchyItem = columnsVariableItemDictionary(parentFilterNode.Value)
+            Dim column As HierarchyItem = m_columnsVariableItemDictionary(parentFilterNode.Value)
             Dim parentFilterValue As FilterValue = GlobalVariables.FiltersValues.GetValue(filterValue.ParentId)
             If parentFilterValue Is Nothing Then Exit Sub
 
-            DGV.CellsArea.SetCellValue(row, column, parentFilterValue.Name)
+            m_axisDataGridView.CellsArea.SetCellValue(row, column, parentFilterValue.Name)
 
             ' Recursively update parent filters
             UpdateParentFiltersValues(row, _
@@ -517,7 +534,7 @@ Friend Class AxisView
                                                 ByRef filterNode As vTreeNode,
                                                 ByRef parentFilterValueIds() As Int32)
 
-        Dim column As HierarchyItem = columnsVariableItemDictionary(filterNode.Value)
+        Dim column As HierarchyItem = m_columnsVariableItemDictionary(filterNode.Value)
         Dim comboBox As New ComboBoxEditor
 
         Dim filterValuesIds As Int32() = GlobalVariables.FiltersValues.GetFilterValueIdsFromParentFilterValueIds(parentFilterValueIds)
@@ -526,10 +543,10 @@ Friend Class AxisView
         Next
 
         ' Set Cell value to nothing
-        DGV.CellsArea.SetCellValue(row, column, Nothing)
+        m_axisDataGridView.CellsArea.SetCellValue(row, column, Nothing)
 
         ' Add ComboBoxEditor to Cell
-        DGV.CellsArea.SetCellEditor(row, column, comboBox)
+        m_axisDataGridView.CellsArea.SetCellEditor(row, column, comboBox)
 
         ' Recursivly update children comboboxes
         For Each childFilterNode As vTreeNode In filterNode.Nodes
@@ -549,9 +566,9 @@ Friend Class AxisView
 
         If e.KeyCode = Keys.Enter OrElse e.KeyCode = Keys.Escape Then
             If e.KeyCode = Keys.Enter Then
-                DGV.CloseEditor(True)
+                m_axisDataGridView.CloseEditor(True)
             Else
-                DGV.CloseEditor(False)
+                m_axisDataGridView.CloseEditor(False)
             End If
         End If
 
@@ -559,13 +576,13 @@ Friend Class AxisView
 
     Private Sub dataGridView_HierarchyItemMouseClick(sender As Object, args As HierarchyItemMouseEventArgs)
 
-        currentRowItem = args.HierarchyItem
+        m_currentRowItem = args.HierarchyItem
 
     End Sub
 
     Private Sub dataGridView_CellMouseClick(ByVal sender As Object, ByVal args As CellMouseEventArgs)
 
-        currentRowItem = args.Cell.RowItem
+        m_currentRowItem = args.Cell.RowItem
 
     End Sub
 
@@ -579,7 +596,7 @@ Friend Class AxisView
 
     Private Sub dataGridView_CellValueChanged(sender As Object, args As CellEventArgs)
 
-        If isFillingDGV = False Then
+        If m_isFillingDGV = False Then
             If (Not args.Cell.Value Is Nothing AndAlso args.Cell.Value <> "") Then
                 Dim axisId As Int32 = args.Cell.RowItem.ItemValue
 
@@ -597,7 +614,7 @@ Friend Class AxisView
                         End If
                         Dim filterId As Int32 = args.Cell.ColumnItem.ItemValue
                         UpdateAxisFiltersAfterEdition(axisId, filterId, filterValueId)
-                        Controller.UpdateFilterValue(axisId, filterId, filterValueId)
+                        m_controller.UpdateFilterValue(axisId, filterId, filterValueId)
                 End Select
 
             End If
@@ -614,7 +631,7 @@ Friend Class AxisView
 
     Friend Function getCurrentRowItem() As HierarchyItem
 
-        Return currentRowItem
+        Return m_currentRowItem
 
     End Function
 
@@ -622,13 +639,13 @@ Friend Class AxisView
 
     Friend Sub CopyValueDown()
 
-        If Not DGV.CellsArea.SelectedCells(0) Is Nothing Then
-            Dim row As HierarchyItem = DGV.CellsArea.SelectedCells(0).RowItem
-            Dim column As HierarchyItem = DGV.CellsArea.SelectedCells(0).ColumnItem
-            Dim value As String = DGV.CellsArea.SelectedCells(0).Value
+        If Not m_axisDataGridView.CellsArea.SelectedCells(0) Is Nothing Then
+            Dim row As HierarchyItem = m_axisDataGridView.CellsArea.SelectedCells(0).RowItem
+            Dim column As HierarchyItem = m_axisDataGridView.CellsArea.SelectedCells(0).ColumnItem
+            Dim value As String = m_axisDataGridView.CellsArea.SelectedCells(0).Value
             If row.Items.Count > 0 Then SetValueToChildrenItems(row, column, value) Else SetValueToSibbling(row, column, value)
-            DGV.Refresh()
-            DGV.Select()
+            m_axisDataGridView.Refresh()
+            m_axisDataGridView.Select()
         End If
 
     End Sub
@@ -636,24 +653,18 @@ Friend Class AxisView
     Private Sub SetValueToChildrenItems(ByRef rowItem_ As HierarchyItem, ByRef columnItem_ As HierarchyItem, ByRef value As String)
 
         For Each childItem As HierarchyItem In rowItem_.Items
-            DGV.CellsArea.SetCellValue(childItem, columnItem_, value)
+            m_axisDataGridView.CellsArea.SetCellValue(childItem, columnItem_, value)
             If childItem.Items.Count > 0 Then SetValueToChildrenItems(childItem, columnItem_, value)
         Next
 
     End Sub
 
-    Private Sub SetValueToSibbling(ByRef rowItem_ As HierarchyItem, ByRef columnItem_ As HierarchyItem, ByRef value As String)
+    Private Sub SetValueToSibbling(ByRef p_rowItem As HierarchyItem, ByRef p_columnItem As HierarchyItem, ByRef p_value As String)
 
-        Dim parent As HierarchyItem = rowItem_.ParentItem
-        Dim currentItem = rowItem_
-        While Not currentItem.ItemBelow Is Nothing
-
-            currentItem = currentItem.ItemBelow
-            If currentItem.ParentItem.GetUniqueID = parent.GetUniqueID Then
-                DGV.CellsArea.SetCellValue(currentItem, columnItem_, value)
-                If currentItem.Items.Count > 0 Then SetValueToChildrenItems(currentItem, columnItem_, value)
-            End If
-
+        Dim l_itemBelow As HierarchyItem = p_rowItem
+        While Not l_itemBelow.ItemBelow Is Nothing
+            l_itemBelow = l_itemBelow.ItemBelow
+            m_axisDataGridView.CellsArea.SetCellValue(l_itemBelow, p_columnItem, p_value)
         End While
 
     End Sub
@@ -669,25 +680,25 @@ Friend Class AxisView
                                                                                 {"Axis Hierarchy"}, _
                                                                                 {""})
         Dim nbRows As Int32
-        For Each item As HierarchyItem In DGV.RowsHierarchy.Items
+        For Each item As HierarchyItem In m_axisDataGridView.RowsHierarchy.Items
             DGVRowsCount(item, nbRows)
         Next
 
-        Dim nbcols As Int32 = DGV.ColumnsHierarchy.Items.Count
-        ReDim DGVArray(nbRows + 1, nbcols + 2)
+        Dim nbcols As Int32 = m_axisDataGridView.ColumnsHierarchy.Items.Count
+        ReDim m_dataGridViewArray(nbRows + 1, nbcols + 2)
         Dim i, j As Int32
 
-        DGVArray(i, 0) = "Axis's Name"
-        DGVArray(i, 1) = "Axis's Affiliate's Name"
+        m_dataGridViewArray(i, 0) = "Axis's Name"
+        m_dataGridViewArray(i, 1) = "Axis's Affiliate's Name"
         For j = 0 To nbcols - 1
-            DGVArray(i, j + 2) = DGV.ColumnsHierarchy.Items(j).Caption
+            m_dataGridViewArray(i, j + 2) = m_axisDataGridView.ColumnsHierarchy.Items(j).Caption
         Next
 
-        For Each row In DGV.RowsHierarchy.Items
+        For Each row In m_axisDataGridView.RowsHierarchy.Items
             fillInDGVArrayRow(row, 1)
         Next
 
-        WorksheetWrittingFunctions.WriteArray(DGVArray, cell)
+        WorksheetWrittingFunctions.WriteArray(m_dataGridViewArray, cell)
         'ExcelFormatting.FormatAxisReport(GlobalVariables.APPS.ActiveSheet.range(cell, cell.Offset(UBound(DGVArray, 1), UBound(DGVArray, 2))))
 
     End Sub
@@ -697,15 +708,15 @@ Friend Class AxisView
 
         Dim j As Int32
 
-        DGVArray(rowIndex, 0) = DGV.CellsArea.GetCellValue(inputRow, DGV.ColumnsHierarchy.Items(0))
+        m_dataGridViewArray(rowIndex, 0) = m_axisDataGridView.CellsArea.GetCellValue(inputRow, m_axisDataGridView.ColumnsHierarchy.Items(0))
         If Not inputRow.ParentItem Is Nothing Then
-            DGVArray(rowIndex, 1) = DGV.CellsArea.GetCellValue(inputRow.ParentItem, DGV.ColumnsHierarchy.Items(0))
+            m_dataGridViewArray(rowIndex, 1) = m_axisDataGridView.CellsArea.GetCellValue(inputRow.ParentItem, m_axisDataGridView.ColumnsHierarchy.Items(0))
         Else
-            DGVArray(rowIndex, 1) = ""
+            m_dataGridViewArray(rowIndex, 1) = ""
         End If
 
-        For Each column As HierarchyItem In DGV.ColumnsHierarchy.Items
-            DGVArray(rowIndex, j + 2) = DGV.CellsArea.GetCellValue(inputRow, column)
+        For Each column As HierarchyItem In m_axisDataGridView.ColumnsHierarchy.Items
+            m_dataGridViewArray(rowIndex, j + 2) = m_axisDataGridView.CellsArea.GetCellValue(inputRow, column)
             j = j + 1
         Next
         rowIndex = rowIndex + 1

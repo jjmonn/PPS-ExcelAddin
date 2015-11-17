@@ -1,0 +1,116 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi" xmlns:netfx="http://schemas.microsoft.com/wix/NetFxExtension">
+	<Product 
+    Id="94121fcb-87b2-4a75-b902-dc6cf6ea808f" 
+    Name="Financial BI" 
+    Language="1033" 
+    Version="1.0.0" 
+    Manufacturer="Financial BI" 
+    UpgradeCode="94121fcb-87b2-4a75-b902-dc6cf6ea8080" 
+    Codepage="1252">
+    
+  	<Package 
+      InstallerVersion="200" 
+      Compressed="yes" 
+      InstallScope="perUser" 
+      Description="Financial BI Setup"
+      Manufacturer="Financial BI"
+      Languages="1033"
+      SummaryCodepage="1252" 
+      InstallPrivileges="limited"
+    />
+
+    <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
+    <Media Id="1" Cabinet="FinancialBI.cab" EmbedCab="yes" />
+
+    <Property Id="WIXUI_INSTALLDIR" Value="INSTALLFOLDER" />
+    
+    <Feature Id="ProductFeature" Title="Financial BI" Level="1" ConfigurableDirectory="INSTALLFOLDER">
+      <ComponentRef Id="INSTALLFOLDER" />
+      <ComponentGroupRef Id="ProductComponents" />
+    </Feature>
+
+    <UIRef Id="WixUI_InstallDir" />
+    <UIRef Id="WixUI_ErrorProgressText" />
+    <Binary Id="adxregistrator_exe" SourceFile="C:\Program Files (x86)\Add-in Express\Add-in Express for .NET\Redistributables\adxregistrator.exe" />
+    <!--   <Binary Id="adxregistrator_exe" SourceFile="$(var.ADX_PATH)\Redistributables\adxregistrator.exe" />-->
+    
+    <CustomAction Id="RegisterApp" BinaryKey="adxregistrator_exe" Execute="deferred" ExeCommand='/install="[INSTALLFOLDER]$(var.FinancialBI.TargetFileName)" /privileges=user /returnExitCode=false' Impersonate="yes" />
+    <CustomAction Id="RollbackApp" BinaryKey="adxregistrator_exe" Execute="rollback" ExeCommand='/uninstall="[INSTALLFOLDER]$(var.FinancialBI.TargetFileName)" /privileges=user' Impersonate="yes" Return="ignore" />
+    <CustomAction Id="UnregisterApp" BinaryKey="adxregistrator_exe" Execute="deferred" ExeCommand='/uninstall="[INSTALLFOLDER]$(var.FinancialBI.TargetFileName)" /privileges=user' Impersonate="yes" Return="ignore" />
+
+    <InstallExecuteSequence>
+      <Custom Action="RegisterApp" After="StartServices"><![CDATA[$ProductComponent>2]]></Custom>
+      <Custom Action="RollbackApp" After="RegisterApp"><![CDATA[$ProductComponent>2]]></Custom>
+      <Custom Action="UnregisterApp" After="MsiUnpublishAssemblies"><![CDATA[$ProductComponent=2]]></Custom>
+    </InstallExecuteSequence>
+
+    <!-- Properties for all current versions of the .NET Framework are available here: http://wix.sourceforge.net/manual-wix3/wixnetfxextension.htm -->
+    <PropertyRef Id="NETFRAMEWORK40CLIENT"/>
+    <Condition Message="This application requires .NET Framework 4.5. Please install the .NET Framework then run this installer again.">
+      <![CDATA[Installed OR NETFRAMEWORK40CLIENT]]>
+    </Condition>
+
+  </Product>
+
+	<Fragment>
+		<Directory Id="TARGETDIR" Name="SourceDir">
+			<Directory Id="LocalAppDataFolder">
+				<Directory Id="INSTALLFOLDER" Name="Financial BI" >
+         <Component Id="INSTALLFOLDER" Guid="534717b6-7679-46d7-b23e-d54a20f67659">
+            <RemoveFolder On="both" Id="INSTALLFOLDER"/>
+            <RegistryValue Root="HKCU" Key="Software\[Manufacturer]\[ProductName]" Type="string" Value="Financial BI" />
+          </Component>
+        </Directory>
+			</Directory>
+		</Directory>
+	</Fragment>
+
+	<Fragment>
+		<ComponentGroup Id="ProductComponents" >
+      <Component Id="ProductComponent" Guid="4068e294-87ee-4824-b460-dc3c9603cd6d" DiskId="1" Directory="INSTALLFOLDER" >
+        <RegistryKey Root="HKCU" Key="Software\[Manufacturer]\[ProductName]">
+          <RegistryValue Type="string" Name="Installed" Value="[INSTALLFOLDER]" KeyPath="yes" />
+        </RegistryKey>
+        <File Id="_$(var.FinancialBI.TargetName)_dll" Name="$(var.FinancialBI.TargetFileName)" Source="$(var.FinancialBI.TargetPath)" />
+        <File Id="_adxloader_dll_manifest" Name="adxloader.dll.manifest" Source="$(var.FinancialBI.ProjectDir)Loader\" />
+        <File Id="_adxloader_FinancialBI_dll" Name="adxloader.FinancialBI.dll" Source="$(var.FinancialBI.ProjectDir)Loader\"  />
+        <File Id="_adxloader64_FinancialBI_dll" Name="adxloader64.FinancialBI.dll" Source="$(var.FinancialBI.ProjectDir)Loader\" />
+        <File Id="_AddinExpress_MSO_2005_dll" Name="AddinExpress.MSO.2005.dll" Source="C:\Program Files (x86)\Add-in Express\Add-in Express for .NET\Bin\" />
+				<File Id="_AddinExpress_XL_2005_dll" Name="AddinExpress.XL.2005.dll" Source="C:\Program Files (x86)\Add-in Express\Add-in Express for .NET\Bin\" />
+				<File Id="_FinancialBI_CSharp_dll" Name="FinancialBI_CSharp.dll" Source="$(var.FinancialBI.TargetDir)" />
+				<File Id="_GaugeThis_dll" Name="GaugeThis.dll" Source="$(var.FinancialBI.TargetDir)" />
+				<File Id="_Jacksonsoft_CustomTabControl_dll" Name="Jacksonsoft.CustomTabControl.dll" Source="$(var.FinancialBI.TargetDir)" />
+				<File Id="_Microsoft_Office_Interop_Excel_dll" Name="Microsoft.Office.Interop.Excel.dll" Source="$(var.FinancialBI.TargetDir)" />
+				<File Id="_office_dll" Name="office.dll" Source="$(var.FinancialBI.TargetDir)" />
+				<File Id="_ProgressControls_dll" Name="ProgressControls.dll" Source="$(var.FinancialBI.TargetDir)" />
+				<File Id="_VIBlend_WinForms_Controls_dll" Name="VIBlend.WinForms.Controls.dll" Source="C:\WINDOWS\assembly\GAC_MSIL\VIBlend.WinForms.Controls\10.1.0.0__6feea38fef5ea0cf\" />
+				<File Id="_VIBlend_WinForms_DataGridView_dll" Name="VIBlend.WinForms.DataGridView.dll" Source="C:\WINDOWS\assembly\GAC_MSIL\VIBlend.WinForms.DataGridView\10.1.0.0__84a1a092e92851e6\" />
+				<File Id="_VIBlend_WinForms_Utilities_dll" Name="VIBlend.WinForms.Utilities.dll" Source="C:\WINDOWS\assembly\GAC_MSIL\VIBlend.WinForms.Utilities\10.1.0.0__970a5af59bc48043\" />
+				<File Id="_AxInterop_RefEdit_dll" Name="AxInterop.RefEdit.dll" Source="$(var.FinancialBI.TargetDir)" />
+				<File Id="_CheckBoxComboBox_dll" Name="CheckBoxComboBox.dll" Source="$(var.FinancialBI.TargetDir)" />
+				<File Id="_CheckBoxComboBox_pdb" Name="CheckBoxComboBox.pdb" Source="$(var.FinancialBI.TargetDir)" />
+				<File Id="_DataTableMaker_dll" Name="DataTableMaker.dll" Source="$(var.FinancialBI.TargetDir)" />
+				<File Id="_DataTableMaker_pdb" Name="DataTableMaker.pdb" Source="$(var.FinancialBI.TargetDir)" />
+				<File Id="_ExpandableGridView_dll" Name="ExpandableGridView.dll" Source="$(var.FinancialBI.TargetDir)" />
+				<File Id="_ExpandableGridView_pdb" Name="ExpandableGridView.pdb" Source="$(var.FinancialBI.TargetDir)" />
+				<File Id="_FDLL_dll" Name="FDLL.dll" Source="$(var.FinancialBI.TargetDir)" />
+				<File Id="_FinancialBI_dll_config" Name="FinancialBI.dll.config" Source="$(var.FinancialBI.TargetDir)" />
+				<File Id="_Interop_RefEdit_dll" Name="Interop.RefEdit.dll" Source="$(var.FinancialBI.TargetDir)" />
+				<File Id="_Ionic_Zlib_dll" Name="Ionic.Zlib.dll" Source="$(var.FinancialBI.TargetDir)" />
+				<File Id="_Ionic_Zlib_pdb" Name="Ionic.Zlib.pdb" Source="$(var.FinancialBI.TargetDir)" />
+				<File Id="_Ionic_Zlib_xml" Name="Ionic.Zlib.xml" Source="$(var.FinancialBI.TargetDir)" />
+				<File Id="_Microsoft_Vbe_Interop_dll" Name="Microsoft.Vbe.Interop.dll" Source="$(var.FinancialBI.TargetDir)" />
+      	<File Id="_PivotC_dll" Name="PivotC.dll" Source="$(var.FinancialBI.TargetDir)" />
+				<File Id="_PivotC_pdb" Name="PivotC.pdb" Source="$(var.FinancialBI.TargetDir)" />
+				<File Id="_PPS_dll" Name="PPS.dll" Source="$(var.FinancialBI.TargetDir)" />
+				<File Id="_PPS_dll_config" Name="PPS.dll.config" Source="$(var.FinancialBI.TargetDir)" />
+				<File Id="_PPS_pdb" Name="PPS.pdb" Source="$(var.FinancialBI.TargetDir)" />
+				<File Id="_PPS_tlb" Name="PPS.tlb" Source="$(var.FinancialBI.TargetDir)" />
+				<File Id="_ProGauge_dll" Name="ProGauge.dll" Source="$(var.FinancialBI.TargetDir)" />
+				<File Id="_SpannedDataGridViewNet2_dll" Name="SpannedDataGridViewNet2.dll" Source="$(var.FinancialBI.TargetDir)" />
+				<File Id="_SpannedDataGridViewNet2_pdb" Name="SpannedDataGridViewNet2.pdb" Source="$(var.FinancialBI.TargetDir)" />
+			</Component>
+		</ComponentGroup>
+	</Fragment>
+ </Wix>

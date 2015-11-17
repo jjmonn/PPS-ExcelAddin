@@ -216,11 +216,12 @@ Public Class CUI2RightPane
     End Sub
 
     Private Sub vTreeView1_MouseDown(ByVal sender As Object, ByVal e As MouseEventArgs)
-        Dim point As Drawing.Point = e.Location
-        Dim node As vTreeNode = Me.analysis_axis_tv.HitTest(e.Location)
+
+        Dim node As vTreeNode = VTreeViewUtil.GetNodeAtPosition(Me.analysis_axis_tv, e.Location)
         If node IsNot Nothing Then
             Me.analysis_axis_tv.DoDragDrop(node, DragDropEffects.All)
         End If
+
     End Sub
 
 #End Region

@@ -20,19 +20,19 @@ Imports CRUD
 
 Friend Class DataVersionsController
 
-
 #Region "Instance Variables"
 
     'Objects
-    Private View As VersionsControl
-    Private NewVersionUI As NewDataVersionUI
-    Private PlatformMGTUI As PlatformMGTGeneralUI
- 
+    Private m_view As VersionsControl
+    Private m_newVersionUI As NewDataVersionUI
+    Private m_platformMGTUI As PlatformMGTGeneralUI
+
     ' Variables
-    Private versionsTV As New VIBlend.WinForms.Controls.vTreeView
-    Friend positions_dictionary As New Dictionary(Of Int32, Int32)
-  
-    Private deletedVersionId As Int32 = 0
+    Private m_versionsTV As New VIBlend.WinForms.Controls.vTreeView
+    Friend m_positionsDictionary As New Dictionary(Of Int32, Int32)
+    Private m_isClosing As Boolean = False
+
+    Private m_deletedVersionId As Int32 = 0
 
     ' Constants
     Private FORBIDEN_CHARS As String() = {","}
@@ -40,16 +40,15 @@ Friend Class DataVersionsController
 
 #End Region
 
-
 #Region "Initialize"
 
     Friend Sub New()
 
-        GlobalVariables.Versions.LoadVersionsTV(versionsTV)
-        VTreeViewUtil.InitTVFormat(versionsTV)
-        View = New VersionsControl(Me, versionsTV)
-        NewVersionUI = New NewDataVersionUI(Me)
-        positions_dictionary = VTreeViewUtil.GeneratePositionsDictionary(versionsTV)
+        GlobalVariables.Versions.LoadVersionsTV(m_versionsTV)
+        VTreeViewUtil.InitTVFormat(m_versionsTV)
+        m_view = New VersionsControl(Me, m_versionsTV)
+        m_newVersionUI = New NewDataVersionUI(Me)
+        m_positionsDictionary = VTreeViewUtil.GeneratePositionsDictionary(m_versionsTV)
 
         AddHandler GlobalVariables.Versions.CreationEvent, AddressOf AfterCreate
         AddHandler GlobalVariables.Versions.Read, AddressOf AfterRead
@@ -62,16 +61,18 @@ Friend Class DataVersionsController
     Public Sub addControlToPanel(ByRef dest_panel As Panel, _
                                  ByRef PlatformMGTUI As PlatformMGTGeneralUI)
 
-        Me.PlatformMGTUI = PlatformMGTUI
-        dest_panel.Controls.Add(View)
-        View.Dock = Windows.Forms.DockStyle.Fill
+        Me.m_platformMGTUI = PlatformMGTUI
+        dest_panel.Controls.Add(m_view)
+        m_view.Dock = Windows.Forms.DockStyle.Fill
 
     End Sub
 
     Public Sub close()
 
-        View.closeControl()
-        View.Dispose()
+        m_isClosing = True
+        SendNewPositionsToModel()
+        m_view.Dispose()
+        m_newVersionUI.Dispose()
 
     End Sub
 
@@ -81,8 +82,11 @@ Friend Class DataVersionsController
 
     Private Sub AfterRead(ByRef status As ErrorMessage, ByRef p_version As Version)
 
-        If status <> ErrorMessage.SUCCESS Then Exit Sub
-        View.AfterRead(status, p_version)
+        If status = ErrorMessage.SUCCESS _
+        AndAlso m_isClosing = False Then
+            m_view.AfterRead(p_version)
+            m_newVersionUI.AfterRead(p_version)
+        End If
 
     End Sub
 
@@ -107,8 +111,10 @@ Friend Class DataVersionsController
 
     Private Sub AfterDelete(ByRef status As ErrorMessage, ByRef id As UInt32)
 
-        If status = ErrorMessage.SUCCESS Then
-            View.AfterDelete(status, id)
+        If status = ErrorMessage.SUCCESS _
+         AndAlso m_isClosing = False Then
+            m_view.AfterDelete(id)
+            m_newVersionUI.AfterDelete(id)
         End If
 
         Dim message As String = Local.GetValue("facts_versions.msg_error_delete") & ": "
@@ -127,7 +133,6 @@ Friend Class DataVersionsController
         MsgBox(message)
 
     End Sub
-
 
     Private Sub AfterUpdate(ByRef status As ErrorMessage, ByRef id As Int32)
 
@@ -172,7 +177,7 @@ Friend Class DataVersionsController
     Friend Sub CreateVersion(ByRef p_version As Version)
 
         GlobalVariables.Versions.Create(p_version)
-        NewVersionUI.Hide()
+        m_newVersionUI.Hide()
 
     End Sub
 
@@ -180,7 +185,7 @@ Friend Class DataVersionsController
                            ByRef p_version As Version)
 
         GlobalVariables.Versions.Copy(origin_version_id, p_version)
-        NewVersionUI.Hide()
+        m_newVersionUI.Hide()
 
     End Sub
 
@@ -273,7 +278,6 @@ Friend Class DataVersionsController
 
 #End Region
 
-
 #Region "utilities"
 
     Friend Function IsFolder(ByRef version_id As String) As Boolean
@@ -286,14 +290,14 @@ Friend Class DataVersionsController
 
     Friend Sub ShowVersionsMGT()
 
-        View.Show()
+        m_view.Show()
 
     End Sub
 
     Friend Sub ShowNewVersionUI(Optional ByRef input_parent_node As VIBlend.WinForms.Controls.vTreeNode = Nothing)
 
-        NewVersionUI.PreFill(input_parent_node)
-        NewVersionUI.Show()
+        m_newVersionUI.PreFill(input_parent_node)
+        m_newVersionUI.Show()
 
     End Sub
 
@@ -368,7 +372,7 @@ Friend Class DataVersionsController
                         Optional ByRef parent_node As TreeNode = Nothing)
 
         If parent_node Is Nothing Then
-            VTreeViewUtil.AddNode(id, name, versionsTV, is_folder)
+            VTreeViewUtil.AddNode(id, name, m_versionsTV, is_folder)
         Else
             VTreeViewUtil.AddNode(id, name, parent_node, is_folder)
         End If
@@ -377,12 +381,22 @@ Friend Class DataVersionsController
 
     Friend Sub SendNewPositionsToModel()
 
-        ' update batch to be implemented prioritiy normal
-        ' 
-        'positions_dictionary = VTreeViewUtil.GeneratePositionsDictionary(versionsTV)
-        'For Each version_id In positions_dictionary.Keys
-        '    Update(version_id, ITEMS_POSITIONS, positions_dictionary(version_id))
-        'Next
+        Dim position As Int32
+        Dim listversions As New List(Of CRUDEntity)
+        m_positionsDictionary = VTreeViewUtil.GeneratePositionsDictionary(m_versionsTV)
+        For Each version_id As UInt32 In m_positionsDictionary.Keys
+            position = m_positionsDictionary(version_id)
+            Dim l_version1 As Version = GetVersion(version_id)
+            If l_version1 Is Nothing Then Continue For
+            If position <> l_version1.ItemPosition Then
+                Dim l_version = GetVersionCopy(version_id)
+                If l_version IsNot Nothing Then
+                    l_version.ItemPosition = position
+                    listversions.Add(l_version)
+                End If
+            End If
+        Next
+        GlobalVariables.Versions.UpdateList(listversions)
 
     End Sub
 
@@ -399,7 +413,5 @@ Friend Class DataVersionsController
     End Function
 
 #End Region
-
-
 
 End Class

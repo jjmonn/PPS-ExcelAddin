@@ -34,7 +34,7 @@ Partial Class NewDataVersionUI
         Me.TimeConfigCB = New VIBlend.WinForms.Controls.vComboBox()
         Me.m_exchangeRatesVersionVTreeviewbox = New VIBlend.WinForms.Controls.vTreeViewBox()
         Me.m_factsVersionVTreeviewbox = New VIBlend.WinForms.Controls.vTreeViewBox()
-        Me.m_versionsTreeviewBox = New VIBlend.WinForms.Controls.vTreeViewBox()
+        Me.m_parentVersionsTreeviewBox = New VIBlend.WinForms.Controls.vTreeViewBox()
         Me.m_copyCheckBox = New VIBlend.WinForms.Controls.vCheckBox()
         Me.ButtonIcons = New System.Windows.Forms.ImageList(Me.components)
         Me.BigIcons = New System.Windows.Forms.ImageList(Me.components)
@@ -181,21 +181,21 @@ Partial Class NewDataVersionUI
         Me.m_factsVersionVTreeviewbox.UseThemeDropDownArrowColor = True
         Me.m_factsVersionVTreeviewbox.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.OFFICESILVER
         '
-        'm_versionsTreeviewBox
+        'm_parentVersionsTreeviewBox
         '
-        Me.m_versionsTreeviewBox.BackColor = System.Drawing.Color.White
-        Me.m_versionsTreeviewBox.BorderColor = System.Drawing.Color.Black
-        Me.m_versionsTreeviewBox.DropDownMaximumSize = New System.Drawing.Size(1000, 1000)
-        Me.m_versionsTreeviewBox.DropDownMinimumSize = New System.Drawing.Size(10, 10)
-        Me.m_versionsTreeviewBox.DropDownResizeDirection = VIBlend.WinForms.Controls.SizingDirection.Both
-        Me.m_versionsTreeviewBox.Location = New System.Drawing.Point(347, 78)
-        Me.m_versionsTreeviewBox.Name = "m_versionsTreeviewBox"
-        Me.m_versionsTreeviewBox.Size = New System.Drawing.Size(280, 23)
-        Me.m_versionsTreeviewBox.TabIndex = 33
-        Me.m_versionsTreeviewBox.Text = "VTreeViewBox1"
-        Me.m_versionsTreeviewBox.UseThemeBackColor = False
-        Me.m_versionsTreeviewBox.UseThemeDropDownArrowColor = True
-        Me.m_versionsTreeviewBox.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.OFFICESILVER
+        Me.m_parentVersionsTreeviewBox.BackColor = System.Drawing.Color.White
+        Me.m_parentVersionsTreeviewBox.BorderColor = System.Drawing.Color.Black
+        Me.m_parentVersionsTreeviewBox.DropDownMaximumSize = New System.Drawing.Size(1000, 1000)
+        Me.m_parentVersionsTreeviewBox.DropDownMinimumSize = New System.Drawing.Size(10, 10)
+        Me.m_parentVersionsTreeviewBox.DropDownResizeDirection = VIBlend.WinForms.Controls.SizingDirection.Both
+        Me.m_parentVersionsTreeviewBox.Location = New System.Drawing.Point(347, 78)
+        Me.m_parentVersionsTreeviewBox.Name = "m_parentVersionsTreeviewBox"
+        Me.m_parentVersionsTreeviewBox.Size = New System.Drawing.Size(280, 23)
+        Me.m_parentVersionsTreeviewBox.TabIndex = 33
+        Me.m_parentVersionsTreeviewBox.Text = "VTreeViewBox1"
+        Me.m_parentVersionsTreeviewBox.UseThemeBackColor = False
+        Me.m_parentVersionsTreeviewBox.UseThemeDropDownArrowColor = True
+        Me.m_parentVersionsTreeviewBox.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.OFFICESILVER
         '
         'm_copyCheckBox
         '
@@ -342,7 +342,7 @@ Partial Class NewDataVersionUI
         Me.Controls.Add(Me.m_factVersionLabel)
         Me.Controls.Add(Me.m_copyCheckBox)
         Me.Controls.Add(Me.CancelBT)
-        Me.Controls.Add(Me.m_versionsTreeviewBox)
+        Me.Controls.Add(Me.m_parentVersionsTreeviewBox)
         Me.Controls.Add(Me.m_rateVersionLabel)
         Me.Controls.Add(Me.m_periodConfigLabel)
         Me.Controls.Add(Me.CreateVersionBT)
@@ -372,7 +372,7 @@ Partial Class NewDataVersionUI
     Friend WithEvents m_factVersionLabel As System.Windows.Forms.Label
     Friend WithEvents m_exchangeRatesVersionVTreeviewbox As VIBlend.WinForms.Controls.vTreeViewBox
     Friend WithEvents m_factsVersionVTreeviewbox As VIBlend.WinForms.Controls.vTreeViewBox
-    Friend WithEvents m_versionsTreeviewBox As VIBlend.WinForms.Controls.vTreeViewBox
+    Friend WithEvents m_parentVersionsTreeviewBox As VIBlend.WinForms.Controls.vTreeViewBox
     Friend WithEvents m_copyCheckBox As VIBlend.WinForms.Controls.vCheckBox
     Friend WithEvents m_startingMonthLabel As System.Windows.Forms.Label
     Friend WithEvents m_startingMonthCombobox As VIBlend.WinForms.Controls.vComboBox
