@@ -27,7 +27,6 @@ Friend Class EntityDistributionManager : Inherits CRUDManager
         Build = AddressOf EntityDistribution.BuildEntityDistribution
 
         InitCallbacks()
-        List()
 
     End Sub
 
