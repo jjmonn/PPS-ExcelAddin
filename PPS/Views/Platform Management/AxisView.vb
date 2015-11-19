@@ -151,7 +151,8 @@ Friend Class AxisView
             Dim MyDelegate As New DeleteAxis_Delegate(AddressOf DeleteAxis)
             Me.m_axisDataGridView.Invoke(MyDelegate, New Object() {id})
         ElseIf (m_rowsIdsItemDic.ContainsKey(id)) Then
-            m_rowsIdsItemDic(id).Delete()
+            Dim l_row As HierarchyItem = m_rowsIdsItemDic(id)
+            If l_row IsNot Nothing Then l_row.Delete()
             m_rowsIdsItemDic.Remove(id)
             m_axisDataGridView.Refresh()
         End If

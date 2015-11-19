@@ -180,7 +180,8 @@ Friend Class EntitiesView
             Me.Invoke(MyDelegate, New Object() {id})
         Else
             Dim row As HierarchyItem = DataGridViewsUtil.GetHierarchyItemFromId(m_entitiesDataGridView.RowsHierarchy, id)
-            row.Delete()
+            If row IsNot Nothing Then row.Delete()
+            m_entitiesDataGridView.ColumnsHierarchy.ResizeColumnsToFitGridWidth()
             m_entitiesDataGridView.Refresh()
         End If
 
@@ -225,6 +226,7 @@ Friend Class EntitiesView
     Private Sub cop_down_bt_Click(sender As Object, e As EventArgs) Handles copy_down_bt.Click
 
         CopyValueDown()
+        m_entitiesDataGridView.ColumnsHierarchy.ResizeColumnsToFitGridWidth()
         m_entitiesDataGridView.Refresh()
 
     End Sub
@@ -311,6 +313,7 @@ Friend Class EntitiesView
         m_entitiesDataGridView.FilterDisplayMode = FilterDisplayMode.Custom
         m_entitiesDataGridView.VIBlendTheme = DGV_VI_BLEND_STYLE
         m_entitiesDataGridView.BackColor = SystemColors.Control
+        m_entitiesDataGridView.ColumnsHierarchy.AutoResize(AutoResizeMode.FIT_ALL)
         'DGV.ImageList = EntitiesIL
 
     End Sub
@@ -509,7 +512,7 @@ Friend Class EntitiesView
 
         DataGridViewsUtil.DGVSetHiearchyFontSize(m_entitiesDataGridView, My.Settings.dgvFontSize, My.Settings.dgvFontSize)
         DataGridViewsUtil.FormatDGVRowsHierarchy(m_entitiesDataGridView)
-        m_entitiesDataGridView.ColumnsHierarchy.AutoResize(AutoResizeMode.FIT_ALL)
+        m_entitiesDataGridView.ColumnsHierarchy.ResizeColumnsToFitGridWidth()
         m_entitiesDataGridView.Refresh()
 
     End Sub
@@ -540,7 +543,7 @@ Friend Class EntitiesView
                                             childFilterNode, _
                                             {filterValueId})
         Next
-        m_entitiesDataGridView.ColumnsHierarchy.AutoResize(AutoResizeMode.FIT_ALL)
+        m_entitiesDataGridView.ColumnsHierarchy.ResizeColumnsToFitGridWidth()
         m_entitiesDataGridView.Refresh()
         m_isFillingDGV = False
 
@@ -693,6 +696,7 @@ Friend Class EntitiesView
             Dim column As HierarchyItem = m_entitiesDataGridView.CellsArea.SelectedCells(0).ColumnItem
             Dim value As String = m_entitiesDataGridView.CellsArea.SelectedCells(0).Value
             If row.Items.Count > 0 Then SetValueToChildrenItems(row, column, value) Else SetValueToSibbling(row, column, value)
+            m_entitiesDataGridView.ColumnsHierarchy.ResizeColumnsToFitGridWidth()
             m_entitiesDataGridView.Refresh()
             m_entitiesDataGridView.Select()
         End If

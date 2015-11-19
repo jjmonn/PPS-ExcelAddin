@@ -1281,7 +1281,7 @@ Public Class AddinModule
         GlobalVariables.GlobalPPSBIController = New PPSBIController
         GlobalVariables.Addin = Me
         SetMainMenuButtonState(False)
-        Local.LoadLocalFile("C:\Users\PPS\Documents\GitHub\PPS Client Addin\PPS\Locals\french.xml")
+        Local.LoadLocalFile("C:\Users\monnereau\Documents\GitHub\FinancialBI_Addin\PPS\Locals\english.xml")
 
     End Sub
 
@@ -2031,9 +2031,13 @@ Public Class AddinModule
             GlobalVariables.Connection_Toggle_Button.Image = 1
             GlobalVariables.Connection_Toggle_Button.Caption = "Connected"
             SetCurrentVersionAfterConnection()
-            Dim c As Excel.Range = GlobalVariables.APPS.ActiveSheet.range("AZ200")
-            c.Formula = "=" & UDF_FORMULA_GET_DATA_NAME & "("","","","","","","","","")"
-            c.Formula = ""
+
+            Dim l_workheet As Excel.Worksheet = GlobalVariables.APPS.ActiveSheet
+            If l_workheet IsNot Nothing Then
+                Dim c As Excel.Range = l_workheet.Range("AZ9999")
+                c.Formula = "=" & UDF_FORMULA_GET_DATA_NAME & "("","","","","","","","","")"
+                c.Formula = ""
+            End If
         Else
             GlobalVariables.Connection_Toggle_Button.Image = 0
             GlobalVariables.Connection_Toggle_Button.Caption = "Not connected"
