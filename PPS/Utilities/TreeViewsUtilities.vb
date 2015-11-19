@@ -24,6 +24,10 @@ Friend Class TreeViewsUtilities
         Dim currentNode, ParentNode() As TreeNode
         Dim orphans_ids_list As New List(Of Int32)
         Dim image_index As UInt16 = 0
+        Dim l_parentIdsList As New List(Of Int32)
+        For Each value As T In items_attributes.SortedValues
+            If l_parentIdsList.Contains(value.Id) = False Then l_parentIdsList.Add(value.Id)
+        Next
         TV.Nodes.Clear()
 
         For Each value As T In items_attributes.SortedValues
@@ -35,7 +39,11 @@ Friend Class TreeViewsUtilities
                 If ParentNode.Length > 0 Then
                     currentNode = ParentNode(0).Nodes.Add(CStr(value.Id), value.Name, image_index, image_index)
                 Else
-                    orphans_ids_list.Add(value.Id)
+                    If l_parentIdsList.Contains(value.ParentId) Then
+                        orphans_ids_list.Add(value.Id)
+                    Else
+                        Exit Sub
+                    End If
                 End If
             End If
         Next
@@ -76,6 +84,10 @@ Friend Class TreeViewsUtilities
         Dim currentNode, ParentNode() As TreeNode
         Dim orphans_ids_list As New List(Of Int32)
         Dim image_index As UInt16 = 0
+        Dim l_parentIdsList As New List(Of Int32)
+        For Each value As T In items_attributes.SortedValues
+            If l_parentIdsList.Contains(value.Id) = False Then l_parentIdsList.Add(value.Id)
+        Next
         node.Nodes.Clear()
 
         For Each value As T In items_attributes.SortedValues
@@ -90,7 +102,11 @@ Friend Class TreeViewsUtilities
                                                           value.Name, _
                                                           image_index, image_index)
                 Else
-                    orphans_ids_list.Add(value.Id)
+                    If l_parentIdsList.Contains(value.ParentId) Then
+                        orphans_ids_list.Add(value.Id)
+                    Else
+                        Exit Sub
+                    End If
                 End If
             End If
         Next
@@ -125,7 +141,6 @@ Friend Class TreeViewsUtilities
                                                                                         solved_orphans_list)
 
     End Sub
-
 
     Public Shared Sub LoadTreeviewIcons(Of T As {CRUDEntity})(ByRef p_treeview As TreeView, _
                                        ByRef p_itemsAttributes As MultiIndexDictionary(Of UInt32, String, T))
