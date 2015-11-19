@@ -78,6 +78,7 @@
     <Compile Include="Network\CRUD\GlobalFactData.cs" />
     <Compile Include="Network\CRUD\GlobalFactVersion.cs" />
     <Compile Include="Network\CRUD\Group.cs" />
+    <Compile Include="Network\CRUD\EntityDistribution.cs" />
     <Compile Include="Network\CRUD\GroupAllowedEntity.cs" />
     <Compile Include="Network\CRUD\Base\HierarchyCRUDEntity.cs" />
     <Compile Include="Network\CRUD\User.cs" />

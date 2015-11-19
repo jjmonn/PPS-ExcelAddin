@@ -66,6 +66,7 @@
         FMODELINGACCOUNT
         AXIS_ELEM
         AXIS_FILTER
+        ENTITYDISTRIBUTION
 
     End Enum
 

@@ -1276,6 +1276,7 @@ Public Class AddinModule
         GlobalVariables.AxisElems = New AxisElemManager
         GlobalVariables.AxisFilters = New AxisFilterManager
         GlobalVariables.EntityCurrencies = New EntityCurrencyManager
+        GlobalVariables.EntityDistribution = New EntityDistributionManager
 
         ' Financial Bi User Defined Function
         GlobalVariables.GlobalPPSBIController = New PPSBIController

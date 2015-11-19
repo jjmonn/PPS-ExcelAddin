@@ -779,7 +779,7 @@ Friend Class ControllingUI_2
         Else
             RefreshToolStripMenuItem.Enabled = p_state
             rightPane_Control.UpdateBT.Enabled = p_state
-            RefreshToolStripMenuItem.GetCurrentParent().Refresh()
+            If Not RefreshToolStripMenuItem.GetCurrentParent() Is Nothing Then RefreshToolStripMenuItem.GetCurrentParent().Refresh()
         End If
     End Sub
 
@@ -900,6 +900,7 @@ Friend Class ControllingUI_2
         Else
             Dim dgvFormatter As New DataGridViewsUtil
             For Each tab_ As vTabPage In DGVsControlTab.TabPages
+                If tab_.Controls.Count <= 0 Then Continue For
                 Dim dgv As vDataGridView = tab_.Controls(0)
                 dgv.Select()
                 dgv.GroupingDefaultHeaderTextVisible = True
