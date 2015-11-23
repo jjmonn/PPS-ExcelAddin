@@ -107,10 +107,12 @@ Friend Class NewDataVersionUI
 
     Friend Sub PreFill(Optional ByRef input_parent_node As vTreeNode = Nothing)
 
+        On Error Resume Next
         m_parentNode = input_parent_node
         m_originVersionNode = Nothing
         m_parentVersionsTreeviewBox.TreeView.SelectedNode = Nothing
         m_parentVersionsTreeviewBox.Text = ""
+        NameTB.Text = ""
         NameTB.Select()
 
     End Sub
