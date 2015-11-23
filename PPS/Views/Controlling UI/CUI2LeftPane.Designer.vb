@@ -37,6 +37,9 @@ Partial Class CUI2LeftPane
         Me.CategoriesIL = New System.Windows.Forms.ImageList(Me.components)
         Me.EntitiesTVImageList = New System.Windows.Forms.ImageList(Me.components)
         Me.m_versionsTreeviewImageList = New System.Windows.Forms.ImageList(Me.components)
+        Me.m_rightClickMenu = New System.Windows.Forms.ContextMenuStrip(Me.components)
+        Me.SelectAllToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.UnselectAllToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.MainTableLayout.SuspendLayout()
         CType(Me.SplitContainer, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SplitContainer.Panel2.SuspendLayout()
@@ -44,6 +47,7 @@ Partial Class CUI2LeftPane
         Me.SelectionTVTableLayout.SuspendLayout()
         Me.TableLayoutPanel2.SuspendLayout()
         Me.Panel1.SuspendLayout()
+        Me.m_rightClickMenu.SuspendLayout()
         Me.SuspendLayout()
         '
         'MainTableLayout
@@ -211,6 +215,24 @@ Partial Class CUI2LeftPane
         Me.m_versionsTreeviewImageList.Images.SetKeyName(0, "cloud_dark.ico")
         Me.m_versionsTreeviewImageList.Images.SetKeyName(1, "favicon(81).ico")
         '
+        'm_rightClickMenu
+        '
+        Me.m_rightClickMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.SelectAllToolStripMenuItem, Me.UnselectAllToolStripMenuItem})
+        Me.m_rightClickMenu.Name = "periodsRightClickMenu"
+        Me.m_rightClickMenu.Size = New System.Drawing.Size(166, 70)
+        '
+        'SelectAllToolStripMenuItem
+        '
+        Me.SelectAllToolStripMenuItem.Name = "SelectAllToolStripMenuItem"
+        Me.SelectAllToolStripMenuItem.Size = New System.Drawing.Size(165, 22)
+        Me.SelectAllToolStripMenuItem.Text = "[CUI.select_all]"
+        '
+        'UnselectAllToolStripMenuItem
+        '
+        Me.UnselectAllToolStripMenuItem.Name = "UnselectAllToolStripMenuItem"
+        Me.UnselectAllToolStripMenuItem.Size = New System.Drawing.Size(165, 22)
+        Me.UnselectAllToolStripMenuItem.Text = "[CUI.unselect_all]"
+        '
         'CUI2LeftPane
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -227,6 +249,7 @@ Partial Class CUI2LeftPane
         Me.TableLayoutPanel2.ResumeLayout(False)
         Me.Panel1.ResumeLayout(False)
         Me.Panel1.PerformLayout()
+        Me.m_rightClickMenu.ResumeLayout(False)
         Me.ResumeLayout(False)
 
     End Sub
@@ -243,5 +266,8 @@ Partial Class CUI2LeftPane
     Friend WithEvents PanelCollapseBT As VIBlend.WinForms.Controls.vButton
     Public WithEvents ExpansionImageList As System.Windows.Forms.ImageList
     Friend WithEvents m_versionsTreeviewImageList As System.Windows.Forms.ImageList
+    Friend WithEvents m_rightClickMenu As System.Windows.Forms.ContextMenuStrip
+    Friend WithEvents SelectAllToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents UnselectAllToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
 
 End Class

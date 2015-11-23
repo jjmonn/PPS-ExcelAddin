@@ -32,9 +32,14 @@ Friend Class ExcelFormatting
                                         Optional ByRef startingDate As Date = Nothing)
 
         Dim ws As Excel.Worksheet = first_range_cell.Worksheet
-        Dim tmpRange As Excel.Range
-        tmpRange = ws.Range(first_range_cell, GeneralUtilities.GetRealLastCell(ws))
-        FormatExcelRangeAs(tmpRange, currency, startingDate)
+        Dim l_Range As Excel.Range
+        Dim l_lastCell As Excel.Range = GeneralUtilities.GetRealLastCell(ws)
+        If l_lastCell IsNot Nothing Then
+            l_Range = ws.Range(first_range_cell, l_lastCell)
+            FormatExcelRangeAs(l_Range, currency, startingDate)
+        Else
+            'MsgBox() ?
+        End If
 
     End Sub
 

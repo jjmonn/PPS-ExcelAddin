@@ -624,7 +624,7 @@ Friend Class ControllingUI_2
     Private Sub SelectAllToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles SelectAllToolStripMenuItem.Click
 
         m_isUpdatingPeriodsCheckList = True
-        VTreeViewUtil.CheckStateAllNodes(leftPane_control.periodsTV, True)
+        VTreeViewUtil.CheckStateAllNodes(leftPane_control.periodsTV, CheckState.Checked)
         m_isUpdatingPeriodsCheckList = False
         periodsTV_ItemCheck(sender, New vTreeViewEventArgs(leftPane_control.periodsTV.SelectedNode, vTreeViewAction.Unknown))
 
@@ -633,7 +633,7 @@ Friend Class ControllingUI_2
     Private Sub UnselectAllToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles UnselectAllToolStripMenuItem.Click
 
         m_isUpdatingPeriodsCheckList = True
-        VTreeViewUtil.CheckStateAllNodes(leftPane_control.periodsTV, False)
+        VTreeViewUtil.CheckStateAllNodes(leftPane_control.periodsTV, CheckState.Unchecked)
         m_isUpdatingPeriodsCheckList = False
         periodsTV_ItemCheck(sender, New vTreeViewEventArgs(leftPane_control.periodsTV.SelectedNode, vTreeViewAction.Unknown))
 
