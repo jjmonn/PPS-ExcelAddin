@@ -258,6 +258,12 @@ Friend Class AccountsView
         ConsolidationOptionComboBox.Items.Add(RecomputedLI)
         m_consoOptionIdItemDict.Add(RecomputedLI.Value, RecomputedLI)
 
+        Dim NoneLI As New ListItem
+        NoneLI.Text = "None"
+        NoneLI.Value = Account.ConsolidationOptions.NONE
+        ConsolidationOptionComboBox.Items.Add(NoneLI)
+        m_consoOptionIdItemDict.Add(NoneLI.Value, NoneLI)
+
     End Sub
 
 #End Region

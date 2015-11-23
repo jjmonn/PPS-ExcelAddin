@@ -32,7 +32,8 @@ namespace CRUD
     public enum ConsolidationOptions
     {
       AGGREGATION = 1,
-      RECOMPUTATION
+      RECOMPUTATION,
+      NONE
     }
 
     public enum AccountType
