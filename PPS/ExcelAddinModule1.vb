@@ -59,7 +59,6 @@ Public Class ExcelAddinModule1
 
 #End Region
 
-
 #Region "Initialize"
 
     Public Sub New()
@@ -73,16 +72,7 @@ Public Class ExcelAddinModule1
     Private Sub ExcelAddinModule1_AddinInitialize(sender As Object, e As EventArgs) Handles MyBase.AddinInitialize
 
         GlobalVariables.APPS = Me.HostApplication
-        If GlobalVariables.APPS.COMAddIns.Item("FinancialBI.AddinModule").Object.setupflag = True Then
-            setUpFlag = True
-        End If
-
-    End Sub
-
-    Private Sub InitializeComputer()
-
-        GlobalVariables.GlobalPPSBIController = New PPSBIController
-
+        
     End Sub
 
 #End Region
@@ -98,27 +88,19 @@ Public Class ExcelAddinModule1
                         ByRef Categories_Filters As Object) As Object
 
         If GlobalVariables.APPS.COMAddIns.Item("FinancialBI.AddinModule").Object.ppsbi_refresh_flag = True Then
-            If setUpFlag = False Then
-                If GlobalVariables.GlobalPPSBIController Is Nothing Then
-                    InitializeComputer()
-                    setUpFlag = True
-                End If
-            End If
-
-            If GlobalVariables.AuthenticationFlag = False Then
-                Return "Not connected"
-            End If
-            Return GlobalVariables.GlobalPPSBIController.GetDataCallBack(Entity, _
-                                                                       Account, _
-                                                                       Period, _
-                                                                       Currency,
-                                                                       Version, _
-                                                                       Clients_Filters, _
-                                                                       Products_Filters, _
-                                                                       Adjustments_Filters, _
-                                                                       Categories_Filters)
+            Return GlobalVariables.APPS.COMAddIns.Item("FinancialBI.AddinModule").Object.GetPPSBIResult(Entity, _
+                                                                                                        Account, _
+                                                                                                        Period, _
+                                                                                                        Currency,
+                                                                                                        Version, _
+                                                                                                        Clients_Filters, _
+                                                                                                        Products_Filters, _
+                                                                                                        Adjustments_Filters, _
+                                                                                                        Categories_Filters)
+        Else
+            Return "Not connected"
         End If
-        Return "Not connected"
+
 
     End Function
 
