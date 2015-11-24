@@ -177,6 +177,11 @@ Public Class VTreeViewUtil
         On Error GoTo errorHandler
         Dim currentNode, ParentNode As vTreeNode
         Dim orphans_ids_list As New List(Of Int32)
+        Dim l_parentIdsList As New List(Of Int32)
+        For Each value As T In items_attributes.SortedValues
+            If l_parentIdsList.Contains(value.Id) = False Then l_parentIdsList.Add(value.Id)
+        Next
+
         TV.Nodes.Clear()
 
         For Each value As T In items_attributes.SortedValues
@@ -191,7 +196,11 @@ Public Class VTreeViewUtil
                                         value.Name,
                                         ParentNode)
                 Else
-                    orphans_ids_list.Add(value.Id)
+                    If l_parentIdsList.Contains(value.ParentId) Then
+                        orphans_ids_list.Add(value.Id)
+                    Else
+                        Return False
+                    End If
                 End If
             End If
         Next
@@ -246,6 +255,10 @@ errorHandler:
         On Error GoTo errorHandler
         Dim currentNode, ParentNode As vTreeNode
         Dim orphans_ids_list As New List(Of Int32)
+        Dim l_parentIdsList As New List(Of Int32)
+        For Each value As T In items_attributes.SortedValues
+            If l_parentIdsList.Contains(value.Id) = False Then l_parentIdsList.Add(value.Id)
+        Next
         node.Nodes.Clear()
 
         For Each value As T In items_attributes.SortedValues
@@ -260,7 +273,11 @@ errorHandler:
                                         value.Name,
                                         ParentNode)
                 Else
-                    orphans_ids_list.Add(value.Id)
+                    If l_parentIdsList.Contains(value.ParentId) Then
+                        orphans_ids_list.Add(value.Id)
+                    Else
+                        Return False
+                    End If
                 End If
             End If
         Next

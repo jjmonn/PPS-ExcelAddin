@@ -88,14 +88,14 @@ Public Class CUI2LeftPane
         AxisFilterManager.LoadFvTv(productsFiltersTV, GlobalEnums.AnalysisAxis.PRODUCTS)
         AxisFilterManager.LoadFvTv(adjustmentsFiltersTV, GlobalEnums.AnalysisAxis.ADJUSTMENTS)
 
-        VTreeViewUtil.CheckStateAllNodes(entitiesTV, True)
-        VTreeViewUtil.CheckStateAllNodes(clientsTV, True)
-        VTreeViewUtil.CheckStateAllNodes(productsTV, True)
-        VTreeViewUtil.CheckStateAllNodes(adjustmentsTV, True)
-        VTreeViewUtil.CheckStateAllNodes(entitiesFiltersTV, True)
-        VTreeViewUtil.CheckStateAllNodes(clientsFiltersTV, True)
-        VTreeViewUtil.CheckStateAllNodes(productsFiltersTV, True)
-        VTreeViewUtil.CheckStateAllNodes(adjustmentsFiltersTV, True)
+        VTreeViewUtil.CheckStateAllNodes(entitiesTV, CheckState.Checked)
+        VTreeViewUtil.CheckStateAllNodes(clientsTV, CheckState.Checked)
+        VTreeViewUtil.CheckStateAllNodes(productsTV, CheckState.Checked)
+        VTreeViewUtil.CheckStateAllNodes(adjustmentsTV, CheckState.Checked)
+        VTreeViewUtil.CheckStateAllNodes(entitiesFiltersTV, CheckState.Checked)
+        VTreeViewUtil.CheckStateAllNodes(clientsFiltersTV, CheckState.Checked)
+        VTreeViewUtil.CheckStateAllNodes(productsFiltersTV, CheckState.Checked)
+        VTreeViewUtil.CheckStateAllNodes(adjustmentsFiltersTV, CheckState.Checked)
 
         entitiesFiltersTV.TriStateMode = True
         clientsFiltersTV.TriStateMode = True
@@ -125,6 +125,12 @@ Public Class CUI2LeftPane
         InitTV(versionsTV)
         InitTV(periodsTV)
 
+        clientsTV.ContextMenuStrip = m_rightClickMenu
+        productsTV.ContextMenuStrip = m_rightClickMenu
+        versionsTV.ContextMenuStrip = m_rightClickMenu
+        entitiesFiltersTV.ContextMenuStrip = m_rightClickMenu
+        clientsFiltersTV.ContextMenuStrip = m_rightClickMenu
+        productsFiltersTV.ContextMenuStrip = m_rightClickMenu
         versionsTV.ImageList = m_versionsTreeviewImageList
         entitiesTV.ImageList = EntitiesTVImageList
 
@@ -196,7 +202,8 @@ Public Class CUI2LeftPane
 
         Me.SelectionCB.Text = Local.GetValue("CUI.selection")
         Me.m_entitySelectionLabel.Text = Local.GetValue("CUI.entities_selection")
-
+        Me.SelectAllToolStripMenuItem.Text = Local.GetValue("CUI.select_all")
+        Me.UnselectAllToolStripMenuItem.Text = Local.GetValue("CUI.unselect_all")
 
     End Sub
 
@@ -256,6 +263,20 @@ Public Class CUI2LeftPane
 
     End Sub
 
+    Private Sub SelectAllToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles SelectAllToolStripMenuItem.Click
+        Dim myItem As ToolStripMenuItem = CType(sender, ToolStripMenuItem)
+        Dim cms As ContextMenuStrip = CType(myItem.Owner, ContextMenuStrip)
+        Dim l_treeview As vTreeView = CType(cms.SourceControl, vTreeView)
+        VTreeViewUtil.CheckStateAllNodes(l_treeview, CheckState.Checked)
+    End Sub
+
+    Private Sub UnselectAllToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles UnselectAllToolStripMenuItem.Click
+        Dim myItem As ToolStripMenuItem = CType(sender, ToolStripMenuItem)
+        Dim cms As ContextMenuStrip = CType(myItem.Owner, ContextMenuStrip)
+        Dim l_treeview As vTreeView = CType(cms.SourceControl, vTreeView)
+        VTreeViewUtil.CheckStateAllNodes(l_treeview, CheckState.Unchecked)
+    End Sub
+
 #End Region
 
 
@@ -293,7 +314,6 @@ Public Class CUI2LeftPane
     End Sub
 
 #End Region
-
 
 
 End Class

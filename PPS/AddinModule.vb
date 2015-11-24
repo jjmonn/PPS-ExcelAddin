@@ -1282,7 +1282,7 @@ Public Class AddinModule
         GlobalVariables.GlobalPPSBIController = New PPSBIController
         GlobalVariables.Addin = Me
         SetMainMenuButtonState(False)
-        Local.LoadLocalFile("C:\Users\PPS\Documents\GitHub\PPS Client Addin\PPS\Locals\french.xml")
+        Local.LoadLocalFile("C:\Users\monnereau\Documents\GitHub\FinancialBI_Addin\PPS\Locals\english.xml")
 
     End Sub
 
@@ -2032,9 +2032,6 @@ Public Class AddinModule
             GlobalVariables.Connection_Toggle_Button.Image = 1
             GlobalVariables.Connection_Toggle_Button.Caption = "Connected"
             SetCurrentVersionAfterConnection()
-            Dim c As Excel.Range = GlobalVariables.APPS.ActiveSheet.range("AZ200")
-            c.Formula = "=" & UDF_FORMULA_GET_DATA_NAME & "("","","","","","","","","")"
-            c.Formula = ""
         Else
             GlobalVariables.Connection_Toggle_Button.Image = 0
             GlobalVariables.Connection_Toggle_Button.Caption = "Not connected"
@@ -2083,6 +2080,28 @@ Public Class AddinModule
             m_currentGeneralSubmissionControler.RefreshSnapshot(p_refreshFromDataBaseFlag)
         End If
     End Sub
+
+    Public Function GetPPSBIResult(ByRef p_entity As Object, _
+                                    ByRef p_account As Object, _
+                                    ByRef p_period As Object, _
+                                    ByRef p_currency As Object, _
+                                    ByRef p_version As Object, _
+                                    ByRef p_clientsFilters As Object, _
+                                    ByRef p_productsFilters As Object, _
+                                    ByRef p_adjustmentsFilters As Object, _
+                                    ByRef p_filtersArray As Object) As Object
+
+        Return GlobalVariables.GlobalPPSBIController.GetDataCallBack(p_entity, _
+                                                                    p_account, _
+                                                                    p_period, _
+                                                                    p_currency,
+                                                                    p_version, _
+                                                                    p_clientsFilters, _
+                                                                    p_productsFilters, _
+                                                                    p_adjustmentsFilters, _
+                                                                    p_filtersArray)
+
+    End Function
 
 #End Region
 
