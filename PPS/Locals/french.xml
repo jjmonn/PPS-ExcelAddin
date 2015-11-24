@@ -56,6 +56,8 @@
     <string name="user_id">Identifiant</string>
     <string name="password">Mot de passe</string>
     <string name="connection">Connection</string>
+	<string name="msg_version_mismatch">Votre version de Financial BI n'est pas à jour. Veuillez redémarrer Excel.</string>
+	<string name="msg_auth_request_default">Le serveur a refusé votre demande d'authentification.</string>
   </category>
 
   <category name="accounts_edition">
@@ -390,6 +392,11 @@
 
   </category>
 
+  <category name="updater">
+	<string name="update_success">Financial BI has been updated, please restart Excel.</string>
+	<string name="update_launch_fail">Unable to install update of Financial BI. Please contact your administrator.</string>
+	<string name="update_dl_fail">Unable to download update of Financial BI. Please contact your administrator.</string>
+  </category>
 </category>
 
 

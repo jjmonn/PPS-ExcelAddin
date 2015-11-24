@@ -9,10 +9,15 @@ using System.IO;
 
 public class Updater
 {
-  string m_hostPath = "192.168.0.41/version";
+  string m_hostPath;
   string m_releaseName = "release.bin";
   string m_md5Name = "release.md5";
   string m_remoteMD5;
+
+  public Updater(string p_hostPath)
+  {
+    m_hostPath = p_hostPath;
+  }
 
   public bool CheckForUpdate()
   {
