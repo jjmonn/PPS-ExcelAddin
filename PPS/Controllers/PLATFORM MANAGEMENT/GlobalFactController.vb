@@ -73,11 +73,6 @@ Friend Class GlobalFactController
 
 #Region "Interface"
 
-#End Region
-
-
-#Region "Utilities"
-
     Friend Sub UpdateFactName(ByRef p_factId As UInt32, ByRef p_name As String)
         Dim fact As GlobalFact = GlobalVariables.GlobalFacts.GetValue(p_factId)
         If fact Is Nothing Then Exit Sub
@@ -178,7 +173,7 @@ Friend Class GlobalFactController
         tmpHT.Name = p_name
         tmpHT.IsFolder = p_isFolder
         tmpHT.ItemPosition = 1
-        tmpHT.StartPeriod = DateSerial(p_startPeriodYear, 12, 31).ToOADate()
+        tmpHT.StartPeriod = DateSerial(p_startPeriodYear, 1, 31).ToOADate()
         tmpHT.NbPeriod = p_nbPeriods
 
         GlobalVariables.GlobalFactsVersions.Create(tmpHT)

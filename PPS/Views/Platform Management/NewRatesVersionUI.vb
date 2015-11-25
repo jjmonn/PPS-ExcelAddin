@@ -34,13 +34,16 @@ Friend Class NewRatesVersionUI
         StartPeriodNUD.Value = Year(Now)
         MultilanguageSetup()
 
+        m_circularProgress.Visible = False
+        AddHandler m_creationBackgroundWorker.DoWork, AddressOf CreationBackgroundWorker_DoWork
+  
     End Sub
 
     Private Sub MultilanguageSetup()
 
         Me.m_nameLabel.Text = Local.GetValue("general.name")
-        Me.m_startingYearLabel.Text = "facts_versions.starting_period"
-        Me.m_numberOfYearsLabel.Text = "facts_versions.nb_years"
+        Me.m_startingYearLabel.Text = Local.GetValue("facts_versions.starting_period")
+        Me.m_numberOfYearsLabel.Text = Local.GetValue("facts_versions.nb_years")
         Me.CancelBT.Text = Local.GetValue("general.cancel")
         Me.ValidateBT.Text = Local.GetValue("general.create")
         Me.Text = Local.GetValue("new_rates_version")
@@ -54,13 +57,14 @@ Friend Class NewRatesVersionUI
 
     Private Sub ValidateBT_Click(sender As Object, e As EventArgs) Handles ValidateBT.Click
 
-        Dim name As String = NameTB.Text
-        If Len(name) < NAMES_MAX_LENGTH Then
-            m_controller.CreateVersion(m_parentId, _
-                                         name, 0, _
-                                         StartPeriodNUD.Value, 
-                                         NBPeriodsNUD.Value * 12)
-            Me.Hide()
+        Dim l_name As String = NameTB.Text
+        If Len(l_name) < NAMES_MAX_LENGTH Then
+
+            m_circularProgress.Visible = True
+            m_circularProgress.Enabled = True
+            m_circularProgress.Start()
+            m_creationBackgroundWorker.RunWorkerAsync()
+
         Else
             MsgBox("The Name cannot exceed " & NAMES_MAX_LENGTH & " characters")
         End If
@@ -84,6 +88,39 @@ Friend Class NewRatesVersionUI
 
         e.Cancel = True
         Me.Hide()
+
+    End Sub
+
+
+#End Region
+
+
+#Region "Background Workers"
+
+
+    Private Sub CreationBackgroundWorker_DoWork()
+
+        m_controller.CreateVersion(m_parentId, _
+                                   NameTB.Text, _
+                                   0, _
+                                   StartPeriodNUD.Value,
+                                   NBPeriodsNUD.Value * 12)
+
+
+    End Sub
+
+    Friend Delegate Sub CreationBackgroundWorker_AfterWork_ThreadSafe()
+    Friend Sub CreationBackgroundWorker_AfterWork()
+
+        If Me.InvokeRequired Then
+            Dim MyDelegate As New CreationBackgroundWorker_AfterWork_ThreadSafe(AddressOf CreationBackgroundWorker_AfterWork)
+            Me.Invoke(MyDelegate, New Object() {})
+        Else
+            m_circularProgress.Stop()
+            m_circularProgress.Visible = False
+            m_circularProgress.Enabled = False
+            Me.Visible = False
+        End If
 
     End Sub
 

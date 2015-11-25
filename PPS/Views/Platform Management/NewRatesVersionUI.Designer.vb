@@ -34,6 +34,8 @@ Partial Class NewRatesVersionUI
         Me.ButtonIcons = New System.Windows.Forms.ImageList(Me.components)
         Me.ValidateBT = New System.Windows.Forms.Button()
         Me.m_versionsTreeviewImageList = New System.Windows.Forms.ImageList(Me.components)
+        Me.m_creationBackgroundWorker = New System.ComponentModel.BackgroundWorker()
+        Me.m_circularProgress = New VIBlend.WinForms.Controls.vCircularProgressBar()
         CType(Me.StartPeriodNUD, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.NBPeriodsNUD, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
@@ -43,7 +45,7 @@ Partial Class NewRatesVersionUI
         Me.m_nameLabel.AutoSize = True
         Me.m_nameLabel.Location = New System.Drawing.Point(46, 49)
         Me.m_nameLabel.Name = "m_nameLabel"
-        Me.m_nameLabel.Size = New System.Drawing.Size(41, 15)
+        Me.m_nameLabel.Size = New System.Drawing.Size(35, 13)
         Me.m_nameLabel.TabIndex = 0
         Me.m_nameLabel.Text = "Name"
         '
@@ -52,7 +54,7 @@ Partial Class NewRatesVersionUI
         Me.m_startingYearLabel.AutoSize = True
         Me.m_startingYearLabel.Location = New System.Drawing.Point(46, 97)
         Me.m_startingYearLabel.Name = "m_startingYearLabel"
-        Me.m_startingYearLabel.Size = New System.Drawing.Size(77, 15)
+        Me.m_startingYearLabel.Size = New System.Drawing.Size(68, 13)
         Me.m_startingYearLabel.TabIndex = 1
         Me.m_startingYearLabel.Text = "Starting Year"
         '
@@ -61,7 +63,7 @@ Partial Class NewRatesVersionUI
         Me.m_numberOfYearsLabel.AutoSize = True
         Me.m_numberOfYearsLabel.Location = New System.Drawing.Point(46, 139)
         Me.m_numberOfYearsLabel.Name = "m_numberOfYearsLabel"
-        Me.m_numberOfYearsLabel.Size = New System.Drawing.Size(99, 15)
+        Me.m_numberOfYearsLabel.Size = New System.Drawing.Size(86, 13)
         Me.m_numberOfYearsLabel.TabIndex = 2
         Me.m_numberOfYearsLabel.Text = "Number of Years"
         '
@@ -131,11 +133,28 @@ Partial Class NewRatesVersionUI
         Me.m_versionsTreeviewImageList.Images.SetKeyName(0, "cloud_dark.ico")
         Me.m_versionsTreeviewImageList.Images.SetKeyName(1, "favicon(81).ico")
         '
+        'm_circularProgress
+        '
+        Me.m_circularProgress.AllowAnimations = True
+        Me.m_circularProgress.BackColor = System.Drawing.Color.Transparent
+        Me.m_circularProgress.IndicatorsCount = 8
+        Me.m_circularProgress.Location = New System.Drawing.Point(171, 82)
+        Me.m_circularProgress.Maximum = 100
+        Me.m_circularProgress.Minimum = 0
+        Me.m_circularProgress.Name = "m_circularProgress"
+        Me.m_circularProgress.Size = New System.Drawing.Size(75, 75)
+        Me.m_circularProgress.TabIndex = 26
+        Me.m_circularProgress.Text = "VCircularProgressBar1"
+        Me.m_circularProgress.UseThemeBackground = False
+        Me.m_circularProgress.Value = 0
+        Me.m_circularProgress.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.OFFICEBLUE
+        '
         'NewRatesVersionUI
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(402, 248)
+        Me.Controls.Add(Me.m_circularProgress)
         Me.Controls.Add(Me.CancelBT)
         Me.Controls.Add(Me.ValidateBT)
         Me.Controls.Add(Me.NBPeriodsNUD)
@@ -163,4 +182,6 @@ Partial Class NewRatesVersionUI
     Friend WithEvents ValidateBT As System.Windows.Forms.Button
     Friend WithEvents ButtonIcons As System.Windows.Forms.ImageList
     Friend WithEvents m_versionsTreeviewImageList As System.Windows.Forms.ImageList
+    Friend WithEvents m_creationBackgroundWorker As System.ComponentModel.BackgroundWorker
+    Friend WithEvents m_circularProgress As VIBlend.WinForms.Controls.vCircularProgressBar
 End Class

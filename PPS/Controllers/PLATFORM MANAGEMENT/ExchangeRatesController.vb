@@ -145,15 +145,13 @@ Friend Class ExchangeRatesController
                              ByRef p_startPeriodYear As Int32, _
                              ByRef p_nbPeriods As Int32)
 
-
         Dim tmpHT As New ExchangeRateVersion
         tmpHT.ParentId = p_parentId
         tmpHT.Name = p_name
         tmpHT.IsFolder = p_isFolder
         tmpHT.ItemPosition = 1
-        tmpHT.StartPeriod = DateSerial(p_startPeriodYear, 12, 31).ToOADate()
+        tmpHT.StartPeriod = DateSerial(p_startPeriodYear, 1, 31).ToOADate()
         tmpHT.NbPeriod = p_nbPeriods
-
         GlobalVariables.RatesVersions.Create(tmpHT)
 
     End Sub
@@ -180,7 +178,6 @@ Friend Class ExchangeRatesController
 
     End Function
 
-
 #Region "Events"
 
     Private Sub AfterVersionRead(ByRef p_status As ErrorMessage, ByRef p_ratesVersionHt As ExchangeRateVersion)
@@ -197,6 +194,7 @@ Friend Class ExchangeRatesController
 
     Private Sub AfterVersionCreate(ByRef p_status As ErrorMessage, ByRef id As Int32)
 
+        m_newRatesVersionUI.CreationBackgroundWorker_AfterWork()
         If p_status <> ErrorMessage.SUCCESS Then
             MsgBox("The version could not be created")
             ' register error from CRUD and display details -> priority normal V1 
@@ -213,7 +211,7 @@ Friend Class ExchangeRatesController
     Private Sub AfterVersionDelete(ByRef p_status As ErrorMessage, ByRef p_id As Int32)
 
         If m_view Is Nothing Then Exit Sub
-
+        m_view.AfterDeleteBackgroundWorker()
         Select Case p_status
             Case ErrorMessage.SUCCESS
                 m_view.TVNodeDelete(p_id)

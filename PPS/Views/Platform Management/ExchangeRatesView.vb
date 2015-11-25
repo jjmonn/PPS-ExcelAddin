@@ -72,10 +72,12 @@ Friend Class ExchangeRatesView
         m_ratesVersionsTV.ImageList = m_versionsTreeviewImageList
         VTreeViewUtil.InitTVFormat(m_ratesVersionsTV)
         FormatDGV()
+        m_circularProgress.Visible = False
 
         AddHandler m_ratesDataGridView.CellValueChanging, AddressOf RatesDataGridView_CellValueChanging
-        AddHandler m_ratesVersionsTV.KeyPress, AddressOf Rates_versionsTV_KeyPress
+        AddHandler m_ratesVersionsTV.KeyDown, AddressOf Rates_versionsTV_KeyDown
         AddHandler m_ratesVersionsTV.MouseDoubleClick, AddressOf RatesVersionsTV_MouseDoubleClick
+        AddHandler m_deleteBackgroundWorker.DoWork, AddressOf DeleteBackgroundWorker_DoWork
         ' AddHandler m_ratesVersionsTV.MouseClick, AddressOf Rates_versionsTV_MouseClick
         DesactivateUnallowed()
         MultiLanguageSetup()
@@ -202,7 +204,7 @@ Friend Class ExchangeRatesView
 
     End Sub
 
-    Private Sub AddFolderRCM_Click(sender As Object, e As EventArgs) Handles AddFolderRCM.Click
+    Private Sub AddFolderRCM_Click(sender As Object, e As EventArgs) Handles AddFolderRCM.Click, CreateFolderToolStripMenuItem.Click
 
         If Not m_ratesVersionsTV.SelectedNode Is Nothing Then
             If m_controller.IsFolderVersion(m_ratesVersionsTV.SelectedNode.Value) = False Then
@@ -226,7 +228,7 @@ Friend Class ExchangeRatesView
 
     End Sub
 
-    Private Sub AddRatesVersionRCM_Click(sender As Object, e As EventArgs) Handles AddRatesVersionRCM.Click
+    Private Sub AddRatesVersionRCM_Click(sender As Object, e As EventArgs) Handles AddRatesVersionRCM.Click, CreateVersionToolStripMenuItem.Click
 
         If Not m_ratesVersionsTV.SelectedNode Is Nothing Then
             If m_controller.IsFolderVersion(m_ratesVersionsTV.SelectedNode.Value) = True Then
@@ -248,7 +250,10 @@ Friend Class ExchangeRatesView
                                                       Local.GetValue("versions.msg_delete2") + Chr(13) + Chr(13), _
                                                       Local.GetValue("versions.title_delete_confirmation"), MessageBoxButtons.YesNo, MessageBoxIcon.Question)
             If confirm = DialogResult.Yes Then
-                m_controller.DeleteRatesVersion(m_ratesVersionsTV.SelectedNode.Value)
+                m_circularProgress.Visible = True
+                m_circularProgress.Enabled = True
+                m_circularProgress.Start()
+                m_deleteBackgroundWorker.RunWorkerAsync()
             End If
         End If
 
@@ -328,13 +333,23 @@ Friend Class ExchangeRatesView
 
     End Sub
 
-    Private Sub Rates_versionsTV_KeyPress(sender As Object, e As KeyPressEventArgs)
+    Private Sub Rates_versionsTV_KeyDown(sender As Object, e As KeyEventArgs)
 
-        If e.KeyChar = Chr(13) AndAlso Not m_ratesVersionsTV.SelectedNode Is Nothing _
-        AndAlso m_ratesVersionsTV.SelectedNode.SelectedImageIndex = 0 Then
-            ChangeRatesVersionDisplayRequest(m_ratesVersionsTV.SelectedNode.Value)
-        End If
-        '   If e.KeyChar = Chr(10) Then DeleteVersionBT_Click(sender, e)
+        Select Case e.KeyCode
+
+            Case Keys.Enter
+                If Not m_ratesVersionsTV.SelectedNode Is Nothing _
+                AndAlso m_controller.IsFolderVersion(m_ratesVersionsTV.SelectedNode.Value) = False Then
+                    ChangeRatesVersionDisplayRequest(m_ratesVersionsTV.SelectedNode.Value)
+                End If
+
+            Case Keys.Delete
+                If m_ratesVersionsTV.SelectedNode IsNot Nothing Then
+                    DeleteVersionBT_Click(sender, e)
+                End If
+
+        End Select
+
 
     End Sub
 
@@ -473,5 +488,29 @@ Friend Class ExchangeRatesView
 
 #End Region
 
+
+#Region "Version deletion Backgroudn worker"
+
+    Private Sub DeleteBackgroundWorker_DoWork()
+        m_controller.DeleteRatesVersion(m_ratesVersionsTV.SelectedNode.Value)
+    End Sub
+
+    Private Delegate Sub AfterDeleteBackgroundWorker_ThreadSafe()
+    Friend Sub AfterDeleteBackgroundWorker()
+
+        If Me.InvokeRequired Then
+            Dim MyDelegate As New AfterDeleteBackgroundWorker_ThreadSafe(AddressOf AfterDeleteBackgroundWorker)
+            Me.Invoke(MyDelegate, New Object() {})
+        Else
+            m_circularProgress.Stop()
+            m_circularProgress.Visible = False
+            m_circularProgress.Enabled = False
+        End If
+
+    End Sub
+
+
+
+#End Region
 
 End Class
