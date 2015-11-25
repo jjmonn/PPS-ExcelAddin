@@ -1833,46 +1833,6 @@ Public Class AddinModule
 
 #End Region
 
-#Region "Analysis Axis Drop Down Buttons Loading"
-
-    Friend Shared Sub loadDropDownsSubmissionButtons()
-
-        GlobalVariables.ClientsIDDropDown.Items.Clear()
-        For Each client_id As Int32 In GlobalVariables.AxisElems.GetDictionary(AxisType.Client).Keys
-            If GlobalVariables.AxisElems.GetValue(AxisType.Client, client_id) Is Nothing Then Continue For
-            AddButtonToDropDown(GlobalVariables.ClientsIDDropDown, _
-                                client_id, _
-                                GlobalVariables.AxisElems.GetValueName(AxisType.Client, client_id))
-        Next
-        GlobalVariables.ClientsIDDropDown.SelectedItemId = AxisType.Client
-        GlobalVariables.ClientsIDDropDown.Invalidate()
-        GlobalVariables.ClientsIDDropDown.ScreenTip = "screentip"
-        '  GlobalVariables.ClientsIDDropDown. = GlobalVariables.Clients.axis_hash(DEFAULT_ANALYSIS_AXIS_ID)(NAME_VARIABLE)
-
-        GlobalVariables.ProductsIDDropDown.Items.Clear()
-        For Each product_id As Int32 In GlobalVariables.AxisElems.GetDictionary(AxisType.Product).Keys
-            If GlobalVariables.AxisElems.GetValue(AxisType.Product, product_id) Is Nothing Then Continue For
-            AddButtonToDropDown(GlobalVariables.ProductsIDDropDown, _
-                                product_id, _
-                                GlobalVariables.AxisElems.GetValueName(AxisType.Product, product_id))
-        Next
-        GlobalVariables.ProductsIDDropDown.SelectedItemId = AxisType.Product
-        '    GlobalVariables.ProductsIDDropDown.Caption = GlobalVariables.Products.axis_hash(DEFAULT_ANALYSIS_AXIS_ID)(NAME_VARIABLE)
-
-        GlobalVariables.AdjustmentIDDropDown.Items.Clear()
-        For Each adjustment_id As Int32 In GlobalVariables.AxisElems.GetDictionary(AxisType.Adjustment).Keys
-            If GlobalVariables.AxisElems.GetValue(AxisType.Adjustment, adjustment_id) Is Nothing Then Continue For
-            AddButtonToDropDown(GlobalVariables.AdjustmentIDDropDown, _
-                                adjustment_id, _
-                                GlobalVariables.AxisElems.GetValueName(AxisType.Adjustment, adjustment_id))
-        Next
-        GlobalVariables.AdjustmentIDDropDown.SelectedItemId = AxisType.Adjustment
-        '  GlobalVariables.AdjustmentIDDropDown.Caption = GlobalVariables.Adjustments.axis_hash(DEFAULT_ANALYSIS_AXIS_ID)(NAME_VARIABLE)
-
-    End Sub
-
-#End Region
-
 #End Region
 
 #End Region
@@ -2093,6 +2053,52 @@ Public Class AddinModule
             GlobalVariables.APPS.ScreenUpdating = True
             m_currentGeneralSubmissionControler = Nothing
         End If
+
+    End Sub
+
+    Friend Shared Sub loadDropDownsSubmissionButtons()
+
+        GlobalVariables.ClientsIDDropDown.Items.Clear()
+        For Each client_id As Int32 In GlobalVariables.AxisElems.GetDictionary(AxisType.Client).Keys
+            If GlobalVariables.AxisElems.GetValue(AxisType.Client, client_id) Is Nothing Then Continue For
+            AddButtonToDropDown(GlobalVariables.ClientsIDDropDown, _
+                                client_id, _
+                                GlobalVariables.AxisElems.GetValueName(AxisType.Client, client_id))
+        Next
+        GlobalVariables.ClientsIDDropDown.SelectedItemId = AxisType.Client
+        GlobalVariables.ClientsIDDropDown.Invalidate()
+        GlobalVariables.ClientsIDDropDown.ScreenTip = "screentip"
+        '  GlobalVariables.ClientsIDDropDown. = GlobalVariables.Clients.axis_hash(DEFAULT_ANALYSIS_AXIS_ID)(NAME_VARIABLE)
+
+        GlobalVariables.ProductsIDDropDown.Items.Clear()
+        For Each product_id As Int32 In GlobalVariables.AxisElems.GetDictionary(AxisType.Product).Keys
+            If GlobalVariables.AxisElems.GetValue(AxisType.Product, product_id) Is Nothing Then Continue For
+            AddButtonToDropDown(GlobalVariables.ProductsIDDropDown, _
+                                product_id, _
+                                GlobalVariables.AxisElems.GetValueName(AxisType.Product, product_id))
+        Next
+        GlobalVariables.ProductsIDDropDown.SelectedItemId = AxisType.Product
+        '    GlobalVariables.ProductsIDDropDown.Caption = GlobalVariables.Products.axis_hash(DEFAULT_ANALYSIS_AXIS_ID)(NAME_VARIABLE)
+
+        GlobalVariables.AdjustmentIDDropDown.Items.Clear()
+        For Each adjustment_id As Int32 In GlobalVariables.AxisElems.GetDictionary(AxisType.Adjustment).Keys
+            If GlobalVariables.AxisElems.GetValue(AxisType.Adjustment, adjustment_id) Is Nothing Then Continue For
+            AddButtonToDropDown(GlobalVariables.AdjustmentIDDropDown, _
+                                adjustment_id, _
+                                GlobalVariables.AxisElems.GetValueName(AxisType.Adjustment, adjustment_id))
+        Next
+        GlobalVariables.AdjustmentIDDropDown.SelectedItemId = AxisType.Adjustment
+        '  GlobalVariables.AdjustmentIDDropDown.Caption = GlobalVariables.Adjustments.axis_hash(DEFAULT_ANALYSIS_AXIS_ID)(NAME_VARIABLE)
+
+    End Sub
+
+    Friend Sub SelectDropDownSubmissionButtons(ByRef p_clientId As Int32, _
+                                                      ByRef p_productId As Int32, _
+                                                      ByRef p_adjustmentId As Int32)
+
+        If p_clientId <> 0 Then GlobalVariables.ClientsIDDropDown.SelectedItemId = p_clientId
+        If p_productId <> 0 Then GlobalVariables.ProductsIDDropDown.SelectedItemId = p_productId
+        If p_adjustmentId <> 0 Then GlobalVariables.AdjustmentIDDropDown.SelectedItemId = p_adjustmentId
 
     End Sub
 

@@ -211,6 +211,9 @@ Friend Class GeneralSubmissionControler
                 m_snapshotSuccessFlag = True
                 FillInEntityAndCurrencyTB(m_dataset.m_entitiesAddressValuesDictionary.ElementAt(0).Value)
                 HighlightItemsAndDataRegions()
+                m_addin.SelectDropDownSubmissionButtons(m_dataset.AxisElemIdentify(AxisType.Client), _
+                                                        m_dataset.AxisElemIdentify(AxisType.Product), _
+                                                        m_dataset.AxisElemIdentify(AxisType.Adjustment))
                 UpdateAfterAnalysisAxisChanged(GlobalVariables.ClientsIDDropDown.SelectedItemId, _
                                                GlobalVariables.ProductsIDDropDown.SelectedItemId, _
                                                GlobalVariables.AdjustmentIDDropDown.SelectedItemId, _
