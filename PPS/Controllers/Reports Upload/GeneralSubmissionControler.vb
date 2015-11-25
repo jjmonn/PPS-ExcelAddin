@@ -192,6 +192,7 @@ Friend Class GeneralSubmissionControler
 
         m_isReportReadyFlag = False
         ' Unformat if necessary 
+        If m_dataModificationsTracker Is Nothing Then Return False
         If m_dataModificationsTracker.m_rangeHighlighter.FormattedCellsDictionnarySize > 0 Then
             m_dataModificationsTracker.m_rangeHighlighter.RevertToOriginalColors()
             m_itemsHighlightFlag = False

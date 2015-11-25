@@ -43,7 +43,7 @@ Friend Class WorksheetRefreshController
                                 Optional ByRef rng As Excel.Range = Nothing)
 
         GlobalVariables.g_mustResetCache = True
-        Dim FormulasRangesCollection As New Dictionary(Of Excel.Range, String)
+        Dim l_formulasRangesCollection As New Dictionary(Of Excel.Range, String)
 
         If rng Is Nothing Then
             Dim ws As Excel.Worksheet = GlobalVariables.APPS.ActiveSheet
@@ -65,12 +65,21 @@ Friend Class WorksheetRefreshController
             If confirm1 = Windows.Forms.DialogResult.Yes Then
                 l_refreshFromDataBaseFlag = True
             End If
-            p_addin.RefreshGeneralSubmissionControllerSnapshot(l_refreshFromDataBaseFlag)
-        ElseIf findGetDataFormulaCells(FormulasRangesCollection, rng) Then
-            EvaluateFormulas(FormulasRangesCollection)
+            If p_addin.RefreshGeneralSubmissionControllerSnapshot(l_refreshFromDataBaseFlag) = False Then
+                GoTo RefreshFormulasOnWorksheet
+            End If
         Else
-            RefreshReport()
+            GoTo RefreshFormulasOnWorksheet
         End If
+        Exit Sub
+
+RefreshFormulasOnWorksheet:
+        If findGetDataFormulaCells(l_formulasRangesCollection, rng) Then
+            EvaluateFormulas(l_formulasRangesCollection)
+        End If
+
+
+
     End Sub
 
 #End Region

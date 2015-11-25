@@ -2220,11 +2220,15 @@ Public Class AddinModule
         End If
     End Function
 
-    Public Sub RefreshGeneralSubmissionControllerSnapshot(ByRef p_refreshFromDataBaseFlag As Boolean)
+    Public Function RefreshGeneralSubmissionControllerSnapshot(ByRef p_refreshFromDataBaseFlag As Boolean) As Boolean
         If m_currentGeneralSubmissionControler IsNot Nothing Then
-            m_currentGeneralSubmissionControler.RefreshSnapshot(p_refreshFromDataBaseFlag)
+            If m_currentGeneralSubmissionControler.RefreshSnapshot(p_refreshFromDataBaseFlag) = False Then
+                Return False
+            Else
+                Return True
+            End If
         End If
-    End Sub
+    End Function
 
     Public Function GetPPSBIResult(ByRef p_entity As Object, _
                                     ByRef p_account As Object, _
