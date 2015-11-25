@@ -10,7 +10,7 @@
 '       - Orientation: in some cases does not work (max left or right cells)
 '
 '
-' Last modified: 04/11/2015
+' Last modified: 25/11/2015
 ' Author: Julien Monnereau
 
 
@@ -174,6 +174,29 @@ Friend Class ModelDataSet
             Next
         Next
         Return False
+
+    End Function
+
+    Friend Function AxisElemIdentify(ByRef p_axisType As CRUD.AxisType) As Int32
+
+        Dim l_cellContent As String
+        Dim l_axisElem As AxisElem
+        For rowIndex = 1 To m_lastCell.Row
+            For columnIndex = 1 To m_lastCell.Column
+                Try
+                    If VarType(m_excelWorkSheet.Cells(rowIndex, columnIndex).value) = 8 Then
+                        l_cellContent = m_excelWorkSheet.Cells(rowIndex, columnIndex).value
+                        l_axisElem = GlobalVariables.AxisElems.GetValue(p_axisType, l_cellContent)
+                        If l_axisElem IsNot Nothing Then
+                            Return l_axisElem.Id
+                        End If
+                    End If
+                Catch ex As Exception
+                    Return 0
+                End Try
+            Next
+        Next
+        Return 0
 
     End Function
 
