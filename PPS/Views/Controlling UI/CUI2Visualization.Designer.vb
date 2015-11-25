@@ -23,14 +23,14 @@ Partial Class CUI2Visualization
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
-        Dim ChartArea5 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
-        Dim Legend5 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
-        Dim ChartArea6 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
-        Dim Legend6 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
-        Dim ChartArea7 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
-        Dim Legend7 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
-        Dim ChartArea8 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
-        Dim Legend8 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
+        Dim ChartArea1 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
+        Dim Legend1 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
+        Dim ChartArea2 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
+        Dim Legend2 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
+        Dim ChartArea3 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
+        Dim Legend3 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
+        Dim ChartArea4 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
+        Dim Legend4 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(CUI2Visualization))
         Me.VSplitContainer1 = New VIBlend.WinForms.Controls.vSplitContainer()
         Me.VSplitContainer3 = New VIBlend.WinForms.Controls.vSplitContainer()
@@ -41,6 +41,8 @@ Partial Class CUI2Visualization
         Me.Chart4 = New System.Windows.Forms.DataVisualization.Charting.Chart()
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
         Me.Panel1 = New System.Windows.Forms.Panel()
+        Me.m_refreshButton = New VIBlend.WinForms.Controls.vButton()
+        Me.ImageList1 = New System.Windows.Forms.ImageList(Me.components)
         Me.VersionTB = New VIBlend.WinForms.Controls.vTextBox()
         Me.CurrencyTB = New VIBlend.WinForms.Controls.vTextBox()
         Me.EntityTB = New VIBlend.WinForms.Controls.vTextBox()
@@ -50,8 +52,6 @@ Partial Class CUI2Visualization
         Me.m_chartsRightClickMenu = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.m_editChartButton = New System.Windows.Forms.ToolStripMenuItem()
         Me.m_dropChartOnExcelButton = New System.Windows.Forms.ToolStripMenuItem()
-        Me.m_refreshButton = New VIBlend.WinForms.Controls.vButton()
-        Me.ImageList1 = New System.Windows.Forms.ImageList(Me.components)
         Me.VSplitContainer1.Panel1.SuspendLayout()
         Me.VSplitContainer1.Panel2.SuspendLayout()
         Me.VSplitContainer1.SuspendLayout()
@@ -141,11 +141,11 @@ Partial Class CUI2Visualization
         '
         'Chart1
         '
-        ChartArea5.Name = "ChartArea1"
-        Me.Chart1.ChartAreas.Add(ChartArea5)
+        ChartArea1.Name = "ChartArea1"
+        Me.Chart1.ChartAreas.Add(ChartArea1)
         Me.Chart1.Dock = System.Windows.Forms.DockStyle.Fill
-        Legend5.Name = "Legend1"
-        Me.Chart1.Legends.Add(Legend5)
+        Legend1.Name = "Legend1"
+        Me.Chart1.Legends.Add(Legend1)
         Me.Chart1.Location = New System.Drawing.Point(0, 0)
         Me.Chart1.Name = "Chart1"
         Me.Chart1.Size = New System.Drawing.Size(346, 191)
@@ -154,11 +154,11 @@ Partial Class CUI2Visualization
         '
         'Chart3
         '
-        ChartArea6.Name = "ChartArea1"
-        Me.Chart3.ChartAreas.Add(ChartArea6)
+        ChartArea2.Name = "ChartArea1"
+        Me.Chart3.ChartAreas.Add(ChartArea2)
         Me.Chart3.Dock = System.Windows.Forms.DockStyle.Fill
-        Legend6.Name = "Legend1"
-        Me.Chart3.Legends.Add(Legend6)
+        Legend2.Name = "Legend1"
+        Me.Chart3.Legends.Add(Legend2)
         Me.Chart3.Location = New System.Drawing.Point(0, 0)
         Me.Chart3.Name = "Chart3"
         Me.Chart3.Size = New System.Drawing.Size(346, 192)
@@ -201,11 +201,11 @@ Partial Class CUI2Visualization
         '
         'Chart2
         '
-        ChartArea7.Name = "ChartArea1"
-        Me.Chart2.ChartAreas.Add(ChartArea7)
+        ChartArea3.Name = "ChartArea1"
+        Me.Chart2.ChartAreas.Add(ChartArea3)
         Me.Chart2.Dock = System.Windows.Forms.DockStyle.Fill
-        Legend7.Name = "Legend1"
-        Me.Chart2.Legends.Add(Legend7)
+        Legend3.Name = "Legend1"
+        Me.Chart2.Legends.Add(Legend3)
         Me.Chart2.Location = New System.Drawing.Point(0, 0)
         Me.Chart2.Name = "Chart2"
         Me.Chart2.Size = New System.Drawing.Size(347, 191)
@@ -214,11 +214,11 @@ Partial Class CUI2Visualization
         '
         'Chart4
         '
-        ChartArea8.Name = "ChartArea1"
-        Me.Chart4.ChartAreas.Add(ChartArea8)
+        ChartArea4.Name = "ChartArea1"
+        Me.Chart4.ChartAreas.Add(ChartArea4)
         Me.Chart4.Dock = System.Windows.Forms.DockStyle.Fill
-        Legend8.Name = "Legend1"
-        Me.Chart4.Legends.Add(Legend8)
+        Legend4.Name = "Legend1"
+        Me.Chart4.Legends.Add(Legend4)
         Me.Chart4.Location = New System.Drawing.Point(0, 0)
         Me.Chart4.Name = "Chart4"
         Me.Chart4.Size = New System.Drawing.Size(347, 192)
@@ -261,6 +261,30 @@ Partial Class CUI2Visualization
         Me.Panel1.Name = "Panel1"
         Me.Panel1.Size = New System.Drawing.Size(704, 25)
         Me.Panel1.TabIndex = 1
+        '
+        'm_refreshButton
+        '
+        Me.m_refreshButton.AllowAnimations = True
+        Me.m_refreshButton.BackColor = System.Drawing.Color.Transparent
+        Me.m_refreshButton.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.m_refreshButton.ImageKey = "refresh classic green.ico"
+        Me.m_refreshButton.ImageList = Me.ImageList1
+        Me.m_refreshButton.Location = New System.Drawing.Point(3, 0)
+        Me.m_refreshButton.Name = "m_refreshButton"
+        Me.m_refreshButton.RoundedCornersMask = CType(15, Byte)
+        Me.m_refreshButton.Size = New System.Drawing.Size(73, 25)
+        Me.m_refreshButton.TabIndex = 13
+        Me.m_refreshButton.Text = "Refresh"
+        Me.m_refreshButton.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.m_refreshButton.UseVisualStyleBackColor = False
+        Me.m_refreshButton.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
+        '
+        'ImageList1
+        '
+        Me.ImageList1.ImageStream = CType(resources.GetObject("ImageList1.ImageStream"), System.Windows.Forms.ImageListStreamer)
+        Me.ImageList1.TransparentColor = System.Drawing.Color.Transparent
+        Me.ImageList1.Images.SetKeyName(0, "Export classic green bigger.ico")
+        Me.ImageList1.Images.SetKeyName(1, "refresh classic green.ico")
         '
         'VersionTB
         '
@@ -328,32 +352,53 @@ Partial Class CUI2Visualization
         'm_currencyLabel
         '
         Me.m_currencyLabel.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.m_currencyLabel.AutoSize = True
+        Me.m_currencyLabel.BackColor = System.Drawing.Color.Transparent
+        Me.m_currencyLabel.DisplayStyle = VIBlend.WinForms.Controls.LabelItemStyle.TextOnly
+        Me.m_currencyLabel.Ellipsis = False
+        Me.m_currencyLabel.ImageAlignment = System.Drawing.ContentAlignment.TopLeft
         Me.m_currencyLabel.Location = New System.Drawing.Point(356, 5)
+        Me.m_currencyLabel.Multiline = True
         Me.m_currencyLabel.Name = "m_currencyLabel"
-        Me.m_currencyLabel.Size = New System.Drawing.Size(49, 13)
+        Me.m_currencyLabel.Size = New System.Drawing.Size(55, 16)
         Me.m_currencyLabel.TabIndex = 9
         Me.m_currencyLabel.Text = "Currency"
+        Me.m_currencyLabel.TextAlignment = System.Drawing.ContentAlignment.TopLeft
+        Me.m_currencyLabel.UseMnemonics = True
+        Me.m_currencyLabel.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
         '
         'm_versionLabel
         '
         Me.m_versionLabel.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.m_versionLabel.AutoSize = True
+        Me.m_versionLabel.BackColor = System.Drawing.Color.Transparent
+        Me.m_versionLabel.DisplayStyle = VIBlend.WinForms.Controls.LabelItemStyle.TextOnly
+        Me.m_versionLabel.Ellipsis = False
+        Me.m_versionLabel.ImageAlignment = System.Drawing.ContentAlignment.TopLeft
         Me.m_versionLabel.Location = New System.Drawing.Point(492, 5)
+        Me.m_versionLabel.Multiline = True
         Me.m_versionLabel.Name = "m_versionLabel"
-        Me.m_versionLabel.Size = New System.Drawing.Size(42, 13)
+        Me.m_versionLabel.Size = New System.Drawing.Size(58, 16)
         Me.m_versionLabel.TabIndex = 8
         Me.m_versionLabel.Text = "Version"
+        Me.m_versionLabel.TextAlignment = System.Drawing.ContentAlignment.TopLeft
+        Me.m_versionLabel.UseMnemonics = True
+        Me.m_versionLabel.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
         '
         'm_entityLabel
         '
         Me.m_entityLabel.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.m_entityLabel.AutoSize = True
+        Me.m_entityLabel.BackColor = System.Drawing.Color.Transparent
+        Me.m_entityLabel.DisplayStyle = VIBlend.WinForms.Controls.LabelItemStyle.TextOnly
+        Me.m_entityLabel.Ellipsis = False
+        Me.m_entityLabel.ImageAlignment = System.Drawing.ContentAlignment.TopLeft
         Me.m_entityLabel.Location = New System.Drawing.Point(172, 5)
+        Me.m_entityLabel.Multiline = True
         Me.m_entityLabel.Name = "m_entityLabel"
         Me.m_entityLabel.Size = New System.Drawing.Size(33, 13)
         Me.m_entityLabel.TabIndex = 7
         Me.m_entityLabel.Text = "Entity"
+        Me.m_entityLabel.TextAlignment = System.Drawing.ContentAlignment.TopLeft
+        Me.m_entityLabel.UseMnemonics = True
+        Me.m_entityLabel.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
         '
         'm_chartsRightClickMenu
         '
@@ -374,30 +419,6 @@ Partial Class CUI2Visualization
         Me.m_dropChartOnExcelButton.Name = "m_dropChartOnExcelButton"
         Me.m_dropChartOnExcelButton.Size = New System.Drawing.Size(146, 22)
         Me.m_dropChartOnExcelButton.Text = "Drop on Excel"
-        '
-        'm_refreshButton
-        '
-        Me.m_refreshButton.AllowAnimations = True
-        Me.m_refreshButton.BackColor = System.Drawing.Color.Transparent
-        Me.m_refreshButton.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
-        Me.m_refreshButton.ImageKey = "refresh classic green.ico"
-        Me.m_refreshButton.ImageList = Me.ImageList1
-        Me.m_refreshButton.Location = New System.Drawing.Point(3, 0)
-        Me.m_refreshButton.Name = "m_refreshButton"
-        Me.m_refreshButton.RoundedCornersMask = CType(15, Byte)
-        Me.m_refreshButton.Size = New System.Drawing.Size(73, 25)
-        Me.m_refreshButton.TabIndex = 13
-        Me.m_refreshButton.Text = "Refresh"
-        Me.m_refreshButton.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.m_refreshButton.UseVisualStyleBackColor = False
-        Me.m_refreshButton.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
-        '
-        'ImageList1
-        '
-        Me.ImageList1.ImageStream = CType(resources.GetObject("ImageList1.ImageStream"), System.Windows.Forms.ImageListStreamer)
-        Me.ImageList1.TransparentColor = System.Drawing.Color.Transparent
-        Me.ImageList1.Images.SetKeyName(0, "Export classic green bigger.ico")
-        Me.ImageList1.Images.SetKeyName(1, "refresh classic green.ico")
         '
         'CUI2Visualization
         '

@@ -187,8 +187,9 @@ Public Class CUI2VisualisationChartsSettings
         Select Case m_chartIndex
             Case 1
                 My.Settings.chart1Title = m_chartTitleTextBox.Text
+                My.Settings.Save()
                 ' Serie 1
-                If Not m_serie1AccountTreeviewBox.TreeView.SelectedNode Is Nothing Then
+                If m_serie1AccountTreeviewBox.TreeView.SelectedNode IsNot Nothing Then
                     My.Settings.chart1Serie1AccountId = m_serie1AccountTreeviewBox.TreeView.SelectedNode.Value
                     My.Settings.Save()
                 Else
@@ -199,9 +200,10 @@ Public Class CUI2VisualisationChartsSettings
                 My.Settings.Save()
                 My.Settings.chart1Serie1Type = m_serie1TypeComboBox.SelectedItem.Value
                 My.Settings.Save()
+   
 
                 ' Serie 2
-                If Not m_serie2AccountTreeviewBox.TreeView.SelectedNode Is Nothing Then
+                If m_serie2AccountTreeviewBox.TreeView.SelectedNode IsNot Nothing Then
                     My.Settings.chart1Serie2AccountId = m_serie2AccountTreeviewBox.TreeView.SelectedNode.Value
                     My.Settings.Save()
                 Else
@@ -213,10 +215,12 @@ Public Class CUI2VisualisationChartsSettings
                 My.Settings.chart1Serie2Type = m_serie2TypeComboBox.SelectedItem.Value
                 My.Settings.Save()
 
+             
             Case 2
                 My.Settings.chart2Title = m_chartTitleTextBox.Text
+                My.Settings.Save()
                 ' Serie 1
-                If Not m_serie1AccountTreeviewBox.TreeView.SelectedNode Is Nothing Then
+                If m_serie1AccountTreeviewBox.TreeView.SelectedNode IsNot Nothing Then
                     My.Settings.chart2Serie1AccountId = m_serie1AccountTreeviewBox.TreeView.SelectedNode.Value
                     My.Settings.Save()
                 Else
@@ -229,7 +233,7 @@ Public Class CUI2VisualisationChartsSettings
                 My.Settings.Save()
 
                 ' Serie 2
-                If Not m_serie2AccountTreeviewBox.TreeView.SelectedNode Is Nothing Then
+                If m_serie2AccountTreeviewBox.TreeView.SelectedNode IsNot Nothing Then
                     My.Settings.chart2Serie2AccountId = m_serie2AccountTreeviewBox.TreeView.SelectedNode.Value
                     My.Settings.Save()
                 Else
@@ -240,10 +244,13 @@ Public Class CUI2VisualisationChartsSettings
                 My.Settings.Save()
                 My.Settings.chart2Serie2Type = m_serie2TypeComboBox.SelectedItem.Value
                 My.Settings.Save()
+
             Case 3
                 My.Settings.chart3Title = m_chartTitleTextBox.Text
+                My.Settings.Save()
+
                 ' Serie 1
-                If Not m_serie1AccountTreeviewBox.TreeView.SelectedNode Is Nothing Then
+                If m_serie1AccountTreeviewBox.TreeView.SelectedNode IsNot Nothing Then
                     My.Settings.chart3Serie1AccountId = m_serie1AccountTreeviewBox.TreeView.SelectedNode.Value
                     My.Settings.Save()
                 Else
@@ -256,7 +263,7 @@ Public Class CUI2VisualisationChartsSettings
                 My.Settings.Save()
 
                 ' Serie 2
-                If Not m_serie2AccountTreeviewBox.TreeView.SelectedNode Is Nothing Then
+                If m_serie2AccountTreeviewBox.TreeView.SelectedNode IsNot Nothing Then
                     My.Settings.chart3Serie2AccountId = m_serie2AccountTreeviewBox.TreeView.SelectedNode.Value
                     My.Settings.Save()
                 Else
@@ -268,10 +275,15 @@ Public Class CUI2VisualisationChartsSettings
                 My.Settings.chart3Serie2Type = m_serie2TypeComboBox.SelectedItem.Value
                 My.Settings.Save()
 
+                My.Settings.chart3Title = m_chartTitleTextBox.Text
+                My.Settings.Save()
+
             Case 4
                 My.Settings.chart4Title = m_chartTitleTextBox.Text
+                My.Settings.Save()
+
                 ' Serie 1
-                If m_serie1AccountTreeviewBox.TreeView.SelectedNode Is Nothing Then
+                If m_serie1AccountTreeviewBox.TreeView.SelectedNode IsNot Nothing Then
                     My.Settings.chart4Serie1AccountId = m_serie1AccountTreeviewBox.TreeView.SelectedNode.Value
                     My.Settings.Save()
                 Else
@@ -284,7 +296,7 @@ Public Class CUI2VisualisationChartsSettings
                 My.Settings.Save()
 
                 ' Serie 2
-                If Not m_serie2AccountTreeviewBox.TreeView.SelectedNode Is Nothing Then
+                If m_serie2AccountTreeviewBox.TreeView.SelectedNode IsNot Nothing Then
                     My.Settings.chart4Serie2AccountId = m_serie2AccountTreeviewBox.TreeView.SelectedNode.Value
                     My.Settings.Save()
                 Else
@@ -295,6 +307,8 @@ Public Class CUI2VisualisationChartsSettings
                 My.Settings.Save()
                 My.Settings.chart4Serie2Type = m_serie2TypeComboBox.SelectedItem.Value
                 My.Settings.Save()
+
+           
         End Select
 
 
