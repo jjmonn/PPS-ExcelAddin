@@ -20,6 +20,7 @@ Friend Class ConnectionsFunctions
 
 #Region "Instance Variables"
 
+    Public FBIVersionId As String = "1.0.0"
     ' Variables
     Public Event ConnectionFailedEvent()
     Private userName As String
@@ -70,6 +71,7 @@ Friend Class ConnectionsFunctions
             ' request auth token
             NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_AUTH_REQUEST_ANSWER, AddressOf SMSG_AUTH_REQUEST_ANSWER)
             Dim packet As New ByteBuffer(CType(ClientMessage.CMSG_AUTH_REQUEST, UShort))
+            packet.WriteString(FBIVersionId)
             packet.Release()
             NetworkManager.GetInstance().Send(packet)
             System.Diagnostics.Debug.WriteLine("Authtoken requested")
@@ -84,7 +86,7 @@ Friend Class ConnectionsFunctions
 
     Private Sub SMSG_AUTH_REQUEST_ANSWER(packet As ByteBuffer)
 
-        If packet.GetError() = 0 Then
+        If packet.GetError() = ErrorMessage.SUCCESS Then
 
             Dim authToken As String = packet.ReadString()
             NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_AUTH_ANSWER, AddressOf SMSG_AUTH_ANSWER)
@@ -96,7 +98,11 @@ Friend Class ConnectionsFunctions
             NetworkManager.GetInstance().Send(answer)
             System.Diagnostics.Debug.WriteLine("Authentication asked")
         Else
-            System.Diagnostics.Debug.WriteLine("The server did not reply to the authentication request.")
+            If (packet.GetError() = ErrorMessage.VERSION_MISMATCH) Then
+                MsgBox(Local.GetValue("connection.msg_version_mismatch"))
+            Else
+                MsgBox(Local.GetValue("connection.msg_auth_request_default"))
+            End If
             CloseNetworkConnection()
             RaiseEvent ConnectionFailedEvent()
         End If
