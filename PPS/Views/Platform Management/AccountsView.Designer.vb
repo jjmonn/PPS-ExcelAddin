@@ -486,32 +486,32 @@ Partial Class AccountsView
         Me.GlobalFactsPanel.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom)  _
             Or System.Windows.Forms.AnchorStyles.Left)  _
             Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
-        Me.GlobalFactsPanel.Location = New System.Drawing.Point(12, 58)
+        Me.GlobalFactsPanel.Location = New System.Drawing.Point(3, 58)
         Me.GlobalFactsPanel.Name = "GlobalFactsPanel"
-        Me.GlobalFactsPanel.Size = New System.Drawing.Size(118, 619)
+        Me.GlobalFactsPanel.Size = New System.Drawing.Size(122, 619)
         Me.GlobalFactsPanel.TabIndex = 3
         '
         'm_globalFactsLabel
         '
-        Me.m_globalFactsLabel.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left)  _
-            Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
+        Me.m_globalFactsLabel.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.m_globalFactsLabel.BackColor = System.Drawing.Color.Transparent
         Me.m_globalFactsLabel.DisplayStyle = VIBlend.WinForms.Controls.LabelItemStyle.TextOnly
-        Me.m_globalFactsLabel.Ellipsis = false
+        Me.m_globalFactsLabel.Ellipsis = False
         Me.m_globalFactsLabel.ImageAlignment = System.Drawing.ContentAlignment.TopLeft
         Me.m_globalFactsLabel.Location = New System.Drawing.Point(12, 28)
-        Me.m_globalFactsLabel.Multiline = true
+        Me.m_globalFactsLabel.Multiline = True
         Me.m_globalFactsLabel.Name = "m_globalFactsLabel"
-        Me.m_globalFactsLabel.Size = New System.Drawing.Size(140, 16)
+        Me.m_globalFactsLabel.Size = New System.Drawing.Size(141, 16)
         Me.m_globalFactsLabel.TabIndex = 0
         Me.m_globalFactsLabel.Text = "Macro economic indicators"
         Me.m_globalFactsLabel.TextAlignment = System.Drawing.ContentAlignment.TopLeft
-        Me.m_globalFactsLabel.UseMnemonics = true
+        Me.m_globalFactsLabel.UseMnemonics = True
         Me.m_globalFactsLabel.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
         '
         'accountsIL
         '
-        Me.accountsIL.ImageStream = CType(resources.GetObject("accountsIL.ImageStream"),System.Windows.Forms.ImageListStreamer)
+        Me.accountsIL.ImageStream = CType(resources.GetObject("accountsIL.ImageStream"), System.Windows.Forms.ImageListStreamer)
         Me.accountsIL.TransparentColor = System.Drawing.Color.Transparent
         Me.accountsIL.Images.SetKeyName(0, "WC blue.png")
         Me.accountsIL.Images.SetKeyName(1, "pencil.ico")
@@ -526,40 +526,40 @@ Partial Class AccountsView
         '
         Me.TVRCM.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.AddSubAccountToolStripMenuItem, Me.AddCategoryToolStripMenuItem, Me.DeleteAccountToolStripMenuItem, Me.DropHierarchyToExcelToolStripMenuItem, Me.ToolStripSeparator1})
         Me.TVRCM.Name = "ContextMenuStripTV"
-        Me.TVRCM.Size = New System.Drawing.Size(295, 106)
+        Me.TVRCM.Size = New System.Drawing.Size(266, 98)
         '
         'AddSubAccountToolStripMenuItem
         '
         Me.AddSubAccountToolStripMenuItem.Image = Global.FinancialBI.My.Resources.Resources.registry_add
         Me.AddSubAccountToolStripMenuItem.Name = "AddSubAccountToolStripMenuItem"
-        Me.AddSubAccountToolStripMenuItem.Size = New System.Drawing.Size(294, 24)
+        Me.AddSubAccountToolStripMenuItem.Size = New System.Drawing.Size(265, 22)
         Me.AddSubAccountToolStripMenuItem.Text = "[accounts_edition.new_account]"
         '
         'AddCategoryToolStripMenuItem
         '
         Me.AddCategoryToolStripMenuItem.Image = Global.FinancialBI.My.Resources.Resources.favicon_81_
         Me.AddCategoryToolStripMenuItem.Name = "AddCategoryToolStripMenuItem"
-        Me.AddCategoryToolStripMenuItem.Size = New System.Drawing.Size(294, 24)
+        Me.AddCategoryToolStripMenuItem.Size = New System.Drawing.Size(265, 22)
         Me.AddCategoryToolStripMenuItem.Text = "[accounts_edition.add_tab_account]"
         '
         'DeleteAccountToolStripMenuItem
         '
         Me.DeleteAccountToolStripMenuItem.Image = Global.FinancialBI.My.Resources.Resources.registry_delete
         Me.DeleteAccountToolStripMenuItem.Name = "DeleteAccountToolStripMenuItem"
-        Me.DeleteAccountToolStripMenuItem.Size = New System.Drawing.Size(294, 24)
+        Me.DeleteAccountToolStripMenuItem.Size = New System.Drawing.Size(265, 22)
         Me.DeleteAccountToolStripMenuItem.Text = "[accounts_edition.delete_account]"
         '
         'DropHierarchyToExcelToolStripMenuItem
         '
         Me.DropHierarchyToExcelToolStripMenuItem.Image = Global.FinancialBI.My.Resources.Resources.Excel_Blue_32x32
         Me.DropHierarchyToExcelToolStripMenuItem.Name = "DropHierarchyToExcelToolStripMenuItem"
-        Me.DropHierarchyToExcelToolStripMenuItem.Size = New System.Drawing.Size(294, 24)
+        Me.DropHierarchyToExcelToolStripMenuItem.Size = New System.Drawing.Size(265, 22)
         Me.DropHierarchyToExcelToolStripMenuItem.Text = "[accounts_edition.drop_to_excel]"
         '
         'ToolStripSeparator1
         '
         Me.ToolStripSeparator1.Name = "ToolStripSeparator1"
-        Me.ToolStripSeparator1.Size = New System.Drawing.Size(291, 6)
+        Me.ToolStripSeparator1.Size = New System.Drawing.Size(262, 6)
         '
         'MainMenu
         '
@@ -567,7 +567,7 @@ Partial Class AccountsView
         Me.MainMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.NewToolStripMenuItem, Me.DropHierarchyToExcelToolStripMenuItem1, Me.HelpToolStripMenuItem})
         Me.MainMenu.Location = New System.Drawing.Point(0, 0)
         Me.MainMenu.Name = "MainMenu"
-        Me.MainMenu.Size = New System.Drawing.Size(981, 27)
+        Me.MainMenu.Size = New System.Drawing.Size(981, 24)
         Me.MainMenu.TabIndex = 25
         Me.MainMenu.Text = "MenuStrip1"
         '
@@ -575,60 +575,60 @@ Partial Class AccountsView
         '
         Me.NewToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.CreateANewAccountToolStripMenuItem, Me.CreateANewCategoryToolStripMenuItem, Me.DeleteAccountToolStripMenuItem1, Me.ToolStripSeparator2})
         Me.NewToolStripMenuItem.Name = "NewToolStripMenuItem"
-        Me.NewToolStripMenuItem.Size = New System.Drawing.Size(125, 23)
+        Me.NewToolStripMenuItem.Size = New System.Drawing.Size(112, 20)
         Me.NewToolStripMenuItem.Text = "[general.account]"
         '
         'CreateANewAccountToolStripMenuItem
         '
         Me.CreateANewAccountToolStripMenuItem.Image = Global.FinancialBI.My.Resources.Resources.registry_add
         Me.CreateANewAccountToolStripMenuItem.Name = "CreateANewAccountToolStripMenuItem"
-        Me.CreateANewAccountToolStripMenuItem.Size = New System.Drawing.Size(296, 24)
+        Me.CreateANewAccountToolStripMenuItem.Size = New System.Drawing.Size(267, 22)
         Me.CreateANewAccountToolStripMenuItem.Text = "[accounts_edition.new_account]"
         '
         'CreateANewCategoryToolStripMenuItem
         '
         Me.CreateANewCategoryToolStripMenuItem.Image = Global.FinancialBI.My.Resources.Resources.favicon_81_
         Me.CreateANewCategoryToolStripMenuItem.Name = "CreateANewCategoryToolStripMenuItem"
-        Me.CreateANewCategoryToolStripMenuItem.Size = New System.Drawing.Size(296, 24)
+        Me.CreateANewCategoryToolStripMenuItem.Size = New System.Drawing.Size(267, 22)
         Me.CreateANewCategoryToolStripMenuItem.Text = "[accounts_edition.new_tab_account]"
         '
         'DeleteAccountToolStripMenuItem1
         '
         Me.DeleteAccountToolStripMenuItem1.Image = Global.FinancialBI.My.Resources.Resources.registry_delete
         Me.DeleteAccountToolStripMenuItem1.Name = "DeleteAccountToolStripMenuItem1"
-        Me.DeleteAccountToolStripMenuItem1.Size = New System.Drawing.Size(296, 24)
+        Me.DeleteAccountToolStripMenuItem1.Size = New System.Drawing.Size(267, 22)
         Me.DeleteAccountToolStripMenuItem1.Text = "[accounts_edition.delete_account]"
         '
         'ToolStripSeparator2
         '
         Me.ToolStripSeparator2.Name = "ToolStripSeparator2"
-        Me.ToolStripSeparator2.Size = New System.Drawing.Size(293, 6)
+        Me.ToolStripSeparator2.Size = New System.Drawing.Size(264, 6)
         '
         'DropHierarchyToExcelToolStripMenuItem1
         '
         Me.DropHierarchyToExcelToolStripMenuItem1.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.DropAllAccountsHierarchyToExcelToolStripMenuItem, Me.DropSelectedAccountHierarchyToExcelToolStripMenuItem})
         Me.DropHierarchyToExcelToolStripMenuItem1.Name = "DropHierarchyToExcelToolStripMenuItem1"
-        Me.DropHierarchyToExcelToolStripMenuItem1.Size = New System.Drawing.Size(50, 23)
+        Me.DropHierarchyToExcelToolStripMenuItem1.Size = New System.Drawing.Size(45, 20)
         Me.DropHierarchyToExcelToolStripMenuItem1.Text = "Excel"
         '
         'DropAllAccountsHierarchyToExcelToolStripMenuItem
         '
         Me.DropAllAccountsHierarchyToExcelToolStripMenuItem.Image = Global.FinancialBI.My.Resources.Resources.Excel_Blue_32x32
         Me.DropAllAccountsHierarchyToExcelToolStripMenuItem.Name = "DropAllAccountsHierarchyToExcelToolStripMenuItem"
-        Me.DropAllAccountsHierarchyToExcelToolStripMenuItem.Size = New System.Drawing.Size(391, 24)
+        Me.DropAllAccountsHierarchyToExcelToolStripMenuItem.Size = New System.Drawing.Size(349, 22)
         Me.DropAllAccountsHierarchyToExcelToolStripMenuItem.Text = "[accounts_edition.drop_to_excel]"
         '
         'DropSelectedAccountHierarchyToExcelToolStripMenuItem
         '
         Me.DropSelectedAccountHierarchyToExcelToolStripMenuItem.Image = Global.FinancialBI.My.Resources.Resources.Excel_Green_32x32
         Me.DropSelectedAccountHierarchyToExcelToolStripMenuItem.Name = "DropSelectedAccountHierarchyToExcelToolStripMenuItem"
-        Me.DropSelectedAccountHierarchyToExcelToolStripMenuItem.Size = New System.Drawing.Size(391, 24)
+        Me.DropSelectedAccountHierarchyToExcelToolStripMenuItem.Size = New System.Drawing.Size(349, 22)
         Me.DropSelectedAccountHierarchyToExcelToolStripMenuItem.Text = "[accounts_edition.drop_selected_hierarchy_to_excel]"
         '
         'HelpToolStripMenuItem
         '
         Me.HelpToolStripMenuItem.Name = "HelpToolStripMenuItem"
-        Me.HelpToolStripMenuItem.Size = New System.Drawing.Size(103, 23)
+        Me.HelpToolStripMenuItem.Size = New System.Drawing.Size(92, 20)
         Me.HelpToolStripMenuItem.Text = "[general.help]"
         '
         'm_globalFactsImageList
