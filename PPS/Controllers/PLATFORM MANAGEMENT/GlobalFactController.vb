@@ -52,7 +52,7 @@ Friend Class GlobalFactController
         If m_view Is Nothing Then Exit Sub
         m_currentVersionId = p_versionid
         m_MonthsIdList = GlobalVariables.GlobalFacts.GetMonthsList(p_versionid)
-        m_view.InitializeDGV(GlobalVariables.Currencies.GetInUseCurrenciesIdList(), m_MonthsIdList, p_versionid)
+        m_view.InitializeDGV(m_MonthsIdList, p_versionid)
         'm_view.DisplayRatesVersionValues(m_exchangeRates.m_exchangeRatesHash)
         m_view.version_TB.Text = GlobalVariables.GlobalFactsVersions.GetValueName(m_currentVersionId)
 

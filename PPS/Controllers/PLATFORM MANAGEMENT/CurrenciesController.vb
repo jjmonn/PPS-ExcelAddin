@@ -6,7 +6,6 @@ Imports CRUD
 
 Friend Class CurrenciesController
 
-
 #Region "Instance Variables"
 
     Private m_platformManagementInterface As PlatformMGTGeneralUI
@@ -14,7 +13,6 @@ Friend Class CurrenciesController
 
 
 #End Region
-
 
 #Region "Initialize"
 
@@ -40,7 +38,6 @@ Friend Class CurrenciesController
     End Sub
 
 #End Region
-
 
 #Region "Interface"
 
@@ -121,4 +118,5 @@ Friend Class CurrenciesController
         Return l_currency.Clone()
     End Function
 #End Region
+
 End Class

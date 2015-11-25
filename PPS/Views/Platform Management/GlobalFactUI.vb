@@ -56,7 +56,7 @@ Friend Class GlobalFactUI
         FormatDGV()
 
         AddHandler m_dataGridView.CellValueChanging, AddressOf DataGridView_CellValueChanging
-        AddHandler m_versionsTV.KeyPress, AddressOf VersionsTV_KeyPress
+        AddHandler m_versionsTV.KeyDown, AddressOf VersionsTV_Keydown
         AddHandler m_versionsTV.MouseDoubleClick, AddressOf VersionsTV_MouseDoubleClick
         AddHandler GlobalVariables.GlobalFacts.Read, AddressOf ReloadUI
         AddHandler m_dataGridView.MouseDown, AddressOf FactRightClick
@@ -335,14 +335,20 @@ Friend Class GlobalFactUI
 
     End Sub
 
-    Private Sub VersionsTV_KeyPress(sender As Object, e As KeyPressEventArgs)
+    Private Sub VersionsTV_Keydown(sender As Object, e As KeyEventArgs)
 
-        If e.KeyChar = Chr(13) AndAlso Not m_versionsTV.SelectedNode Is Nothing _
-        AndAlso m_versionsTV.SelectedNode.SelectedImageIndex = 0 Then
-            ChangeRatesVersionDisplayRequest(m_versionsTV.SelectedNode.Value)
-            DesactivateUnallowed()
-        End If
-        '   If e.KeyChar = Chr(10) Then DeleteVersionBT_Click(sender, e)
+        Select Case e.KeyCode
+            Case Keys.Enter
+                If Not m_versionsTV.SelectedNode Is Nothing _
+                AndAlso m_controller.IsFolderVersion(m_versionsTV.SelectedNode.Value) = False Then
+                    ChangeRatesVersionDisplayRequest(m_versionsTV.SelectedNode.Value)
+                    DesactivateUnallowed()
+                End If
+
+            Case Keys.Delete
+                DeleteVersionBT_Click(sender, e)
+
+        End Select
 
     End Sub
 
@@ -363,15 +369,14 @@ Friend Class GlobalFactUI
 
 #Region "Facts m_ratesDataGridView"
 
-    Friend Sub InitializeDGV(ByRef currenciesList As SortedSet(Of UInt32), _
-                             ByRef monthsIdList As List(Of Int32), _
+    Friend Sub InitializeDGV(ByRef p_monthsIdList As List(Of Int32), _
                              ByRef p_versionid As Int32)
 
         m_currentVersionId = p_versionid
         m_dataGridView.RowsHierarchy.Clear()
         m_dataGridView.ColumnsHierarchy.Clear()
-        InitColumns(currenciesList)
-        InitRows(monthsIdList)
+        InitColumns()
+        InitRows(p_monthsIdList)
         DataGridViewsUtil.DGVSetHiearchyFontSize(m_dataGridView, My.Settings.tablesFontSize, My.Settings.tablesFontSize)
         m_dataGridView.ColumnsHierarchy.AutoResize(AutoResizeMode.FIT_ALL)
         DataGridViewsUtil.FormatDGVRowsHierarchy(m_dataGridView)
@@ -381,17 +386,18 @@ Friend Class GlobalFactUI
 
     End Sub
 
-    Private Sub InitColumns(ByRef currenciesList As SortedSet(Of UInt32))
+    Private Sub InitColumns()
 
         m_dataGridView.ColumnsHierarchy.Clear()
         m_columnsVariableItemDictionary.Clear()
 
         For Each fact In m_controller.GetGlobalFactList().Values
-            Dim column As HierarchyItem = m_dataGridView.ColumnsHierarchy.Items.Add(fact.Name)
+            Dim l_column As HierarchyItem = m_dataGridView.ColumnsHierarchy.Items.Add(fact.Name)
 
-            m_columnsVariableItemDictionary.Add(fact.Name, column)
-            column.ItemValue = CInt(fact.Id)
-            column.AllowFiltering = False
+            m_columnsVariableItemDictionary.Add(fact.Name, l_column)
+            l_column.ItemValue = CInt(fact.Id)
+            l_column.AllowFiltering = False
+            l_column.CellsFormatString = "{0:N2}"
             m_dataGridView.ContextMenu = Nothing
 
         Next
