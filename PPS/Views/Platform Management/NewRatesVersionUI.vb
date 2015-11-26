@@ -59,12 +59,10 @@ Friend Class NewRatesVersionUI
 
         Dim l_name As String = NameTB.Text
         If Len(l_name) < NAMES_MAX_LENGTH Then
-
             m_circularProgress.Visible = True
             m_circularProgress.Enabled = True
             m_circularProgress.Start()
             m_creationBackgroundWorker.RunWorkerAsync()
-
         Else
             MsgBox("The Name cannot exceed " & NAMES_MAX_LENGTH & " characters")
         End If

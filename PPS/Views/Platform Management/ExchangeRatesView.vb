@@ -250,6 +250,7 @@ Friend Class ExchangeRatesView
                                                       Local.GetValue("versions.msg_delete2") + Chr(13) + Chr(13), _
                                                       Local.GetValue("versions.title_delete_confirmation"), MessageBoxButtons.YesNo, MessageBoxIcon.Question)
             If confirm = DialogResult.Yes Then
+                m_ratesDataGridView.Visible = False
                 m_circularProgress.Visible = True
                 m_circularProgress.Enabled = True
                 m_circularProgress.Start()
@@ -505,11 +506,10 @@ Friend Class ExchangeRatesView
             m_circularProgress.Stop()
             m_circularProgress.Visible = False
             m_circularProgress.Enabled = False
+            m_ratesDataGridView.Visible = True
         End If
 
     End Sub
-
-
 
 #End Region
 

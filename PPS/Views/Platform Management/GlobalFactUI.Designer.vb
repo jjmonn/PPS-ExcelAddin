@@ -40,6 +40,7 @@ Partial Class GlobalFactUI
         Me.ImportFromExcelBT = New System.Windows.Forms.ToolStripMenuItem()
         Me.TableLayoutPanel4 = New System.Windows.Forms.TableLayoutPanel()
         Me.SplitContainer1 = New System.Windows.Forms.SplitContainer()
+        Me.m_circularProgress = New VIBlend.WinForms.Controls.vCircularProgressBar()
         Me.TableLayoutPanel5 = New System.Windows.Forms.TableLayoutPanel()
         Me.Panel1 = New System.Windows.Forms.Panel()
         Me.VersionLabel = New System.Windows.Forms.Label()
@@ -49,13 +50,15 @@ Partial Class GlobalFactUI
         Me.DeleteBT = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
         Me.RenameBT = New System.Windows.Forms.ToolStripMenuItem()
-        Me.m_versionsTreeviewImageList = New System.Windows.Forms.ImageList(Me.components)
         Me.ToolStripSeparator4 = New System.Windows.Forms.ToolStripSeparator()
         Me.m_importFromExcelBT2 = New System.Windows.Forms.ToolStripMenuItem()
+        Me.m_versionsTreeviewImageList = New System.Windows.Forms.ImageList(Me.components)
+        Me.m_deleteBackgroundWorker = New System.ComponentModel.BackgroundWorker()
         Me.VersionsRCMenu.SuspendLayout()
         Me.dgvRCM.SuspendLayout()
         Me.TableLayoutPanel4.SuspendLayout()
         CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.SplitContainer1.Panel2.SuspendLayout()
         Me.SplitContainer1.SuspendLayout()
         Me.TableLayoutPanel5.SuspendLayout()
         Me.Panel1.SuspendLayout()
@@ -77,82 +80,82 @@ Partial Class GlobalFactUI
         '
         Me.VersionsRCMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.select_version, Me.ToolStripSeparator2, Me.AddRatesVersionRCM, Me.AddFolderRCM, Me.ToolStripSeparator6, Me.DeleteVersionRCM, Me.RenameVersionBT})
         Me.VersionsRCMenu.Name = "VersionsRCMenu"
-        Me.VersionsRCMenu.Size = New System.Drawing.Size(167, 136)
+        Me.VersionsRCMenu.Size = New System.Drawing.Size(150, 126)
         '
         'select_version
         '
         Me.select_version.Image = Global.FinancialBI.My.Resources.Resources.config_circle_green
         Me.select_version.Name = "select_version"
-        Me.select_version.Size = New System.Drawing.Size(166, 24)
+        Me.select_version.Size = New System.Drawing.Size(149, 22)
         Me.select_version.Text = "Select version"
         '
         'ToolStripSeparator2
         '
         Me.ToolStripSeparator2.Name = "ToolStripSeparator2"
-        Me.ToolStripSeparator2.Size = New System.Drawing.Size(163, 6)
+        Me.ToolStripSeparator2.Size = New System.Drawing.Size(146, 6)
         '
         'AddRatesVersionRCM
         '
         Me.AddRatesVersionRCM.Image = Global.FinancialBI.My.Resources.Resources.elements3_add
         Me.AddRatesVersionRCM.Name = "AddRatesVersionRCM"
-        Me.AddRatesVersionRCM.Size = New System.Drawing.Size(166, 24)
+        Me.AddRatesVersionRCM.Size = New System.Drawing.Size(149, 22)
         Me.AddRatesVersionRCM.Text = "Create version"
         '
         'AddFolderRCM
         '
         Me.AddFolderRCM.Image = Global.FinancialBI.My.Resources.Resources.folder_open_add
         Me.AddFolderRCM.Name = "AddFolderRCM"
-        Me.AddFolderRCM.Size = New System.Drawing.Size(166, 24)
+        Me.AddFolderRCM.Size = New System.Drawing.Size(149, 22)
         Me.AddFolderRCM.Text = "Add folder"
         '
         'ToolStripSeparator6
         '
         Me.ToolStripSeparator6.Name = "ToolStripSeparator6"
-        Me.ToolStripSeparator6.Size = New System.Drawing.Size(163, 6)
+        Me.ToolStripSeparator6.Size = New System.Drawing.Size(146, 6)
         '
         'DeleteVersionRCM
         '
         Me.DeleteVersionRCM.Image = Global.FinancialBI.My.Resources.Resources.elements3_delete
         Me.DeleteVersionRCM.Name = "DeleteVersionRCM"
-        Me.DeleteVersionRCM.Size = New System.Drawing.Size(166, 24)
+        Me.DeleteVersionRCM.Size = New System.Drawing.Size(149, 22)
         Me.DeleteVersionRCM.Text = "Delete"
         '
         'RenameVersionBT
         '
         Me.RenameVersionBT.Name = "RenameVersionBT"
-        Me.RenameVersionBT.Size = New System.Drawing.Size(166, 24)
+        Me.RenameVersionBT.Size = New System.Drawing.Size(149, 22)
         Me.RenameVersionBT.Text = "Delete"
         '
         'dgvRCM
         '
         Me.dgvRCM.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.CreateNewFact, Me.ToolStripSeparator3, Me.CopyFactDownToolStripMenuItem, Me.ImportFromExcelBT})
         Me.dgvRCM.Name = "dgvRCM"
-        Me.dgvRCM.Size = New System.Drawing.Size(149, 82)
+        Me.dgvRCM.Size = New System.Drawing.Size(136, 76)
         '
         'CreateNewFact
         '
         Me.CreateNewFact.Image = Global.FinancialBI.My.Resources.Resources.elements_add
         Me.CreateNewFact.Name = "CreateNewFact"
-        Me.CreateNewFact.Size = New System.Drawing.Size(148, 24)
+        Me.CreateNewFact.Size = New System.Drawing.Size(135, 22)
         Me.CreateNewFact.Text = "New"
         '
         'ToolStripSeparator3
         '
         Me.ToolStripSeparator3.Name = "ToolStripSeparator3"
-        Me.ToolStripSeparator3.Size = New System.Drawing.Size(145, 6)
+        Me.ToolStripSeparator3.Size = New System.Drawing.Size(132, 6)
         '
         'CopyFactDownToolStripMenuItem
         '
         Me.CopyFactDownToolStripMenuItem.Image = Global.FinancialBI.My.Resources.Resources.Download_
         Me.CopyFactDownToolStripMenuItem.Name = "CopyFactDownToolStripMenuItem"
-        Me.CopyFactDownToolStripMenuItem.Size = New System.Drawing.Size(148, 24)
+        Me.CopyFactDownToolStripMenuItem.Size = New System.Drawing.Size(135, 22)
         Me.CopyFactDownToolStripMenuItem.Text = "Copy down"
         '
         'ImportFromExcelBT
         '
         Me.ImportFromExcelBT.Image = Global.FinancialBI.My.Resources.Resources.Excel_Blue_32x32
         Me.ImportFromExcelBT.Name = "ImportFromExcelBT"
-        Me.ImportFromExcelBT.Size = New System.Drawing.Size(148, 24)
+        Me.ImportFromExcelBT.Size = New System.Drawing.Size(135, 22)
         Me.ImportFromExcelBT.Text = "Import"
         '
         'TableLayoutPanel4
@@ -184,17 +187,34 @@ Partial Class GlobalFactUI
         'SplitContainer1.Panel2
         '
         Me.SplitContainer1.Panel2.BackColor = System.Drawing.SystemColors.Control
+        Me.SplitContainer1.Panel2.Controls.Add(Me.m_circularProgress)
         Me.SplitContainer1.Size = New System.Drawing.Size(886, 553)
         Me.SplitContainer1.SplitterDistance = 191
         Me.SplitContainer1.SplitterWidth = 3
         Me.SplitContainer1.TabIndex = 7
+        '
+        'm_circularProgress
+        '
+        Me.m_circularProgress.AllowAnimations = True
+        Me.m_circularProgress.BackColor = System.Drawing.Color.Transparent
+        Me.m_circularProgress.IndicatorsCount = 8
+        Me.m_circularProgress.Location = New System.Drawing.Point(260, 239)
+        Me.m_circularProgress.Maximum = 100
+        Me.m_circularProgress.Minimum = 0
+        Me.m_circularProgress.Name = "m_circularProgress"
+        Me.m_circularProgress.Size = New System.Drawing.Size(85, 85)
+        Me.m_circularProgress.TabIndex = 1
+        Me.m_circularProgress.Text = "VCircularProgressBar1"
+        Me.m_circularProgress.UseThemeBackground = False
+        Me.m_circularProgress.Value = 0
+        Me.m_circularProgress.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.OFFICEBLUE
         '
         'TableLayoutPanel5
         '
         Me.TableLayoutPanel5.ColumnCount = 3
         Me.TableLayoutPanel5.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 97.02381!))
         Me.TableLayoutPanel5.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 2.976191!))
-        Me.TableLayoutPanel5.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 247.0!))
+        Me.TableLayoutPanel5.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 249.0!))
         Me.TableLayoutPanel5.Controls.Add(Me.Panel1, 2, 0)
         Me.TableLayoutPanel5.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TableLayoutPanel5.Location = New System.Drawing.Point(0, 0)
@@ -210,10 +230,10 @@ Partial Class GlobalFactUI
         Me.Panel1.Controls.Add(Me.VersionLabel)
         Me.Panel1.Controls.Add(Me.version_TB)
         Me.Panel1.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Panel1.Location = New System.Drawing.Point(634, 0)
+        Me.Panel1.Location = New System.Drawing.Point(632, 0)
         Me.Panel1.Margin = New System.Windows.Forms.Padding(0)
         Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(248, 32)
+        Me.Panel1.Size = New System.Drawing.Size(250, 32)
         Me.Panel1.TabIndex = 6
         '
         'VersionLabel
@@ -221,7 +241,7 @@ Partial Class GlobalFactUI
         Me.VersionLabel.AutoSize = True
         Me.VersionLabel.Location = New System.Drawing.Point(8, 7)
         Me.VersionLabel.Name = "VersionLabel"
-        Me.VersionLabel.Size = New System.Drawing.Size(48, 15)
+        Me.VersionLabel.Size = New System.Drawing.Size(42, 13)
         Me.VersionLabel.TabIndex = 3
         Me.VersionLabel.Text = "Version"
         '
@@ -238,32 +258,44 @@ Partial Class GlobalFactUI
         '
         Me.FactRightClickMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.CreateNewFact2, Me.DeleteBT, Me.ToolStripSeparator1, Me.RenameBT, Me.ToolStripSeparator4, Me.m_importFromExcelBT2})
         Me.FactRightClickMenu.Name = "ContextMenuStrip1"
-        Me.FactRightClickMenu.Size = New System.Drawing.Size(187, 134)
+        Me.FactRightClickMenu.Size = New System.Drawing.Size(169, 104)
         '
         'CreateNewFact2
         '
         Me.CreateNewFact2.Image = Global.FinancialBI.My.Resources.Resources.elements_add
         Me.CreateNewFact2.Name = "CreateNewFact2"
-        Me.CreateNewFact2.Size = New System.Drawing.Size(186, 24)
+        Me.CreateNewFact2.Size = New System.Drawing.Size(168, 22)
         Me.CreateNewFact2.Text = "New"
         '
         'DeleteBT
         '
         Me.DeleteBT.Image = Global.FinancialBI.My.Resources.Resources.elements_delete
         Me.DeleteBT.Name = "DeleteBT"
-        Me.DeleteBT.Size = New System.Drawing.Size(186, 24)
+        Me.DeleteBT.Size = New System.Drawing.Size(168, 22)
         Me.DeleteBT.Text = "Delete"
         '
         'ToolStripSeparator1
         '
         Me.ToolStripSeparator1.Name = "ToolStripSeparator1"
-        Me.ToolStripSeparator1.Size = New System.Drawing.Size(183, 6)
+        Me.ToolStripSeparator1.Size = New System.Drawing.Size(165, 6)
         '
         'RenameBT
         '
         Me.RenameBT.Name = "RenameBT"
-        Me.RenameBT.Size = New System.Drawing.Size(186, 24)
+        Me.RenameBT.Size = New System.Drawing.Size(168, 22)
         Me.RenameBT.Text = "Rename"
+        '
+        'ToolStripSeparator4
+        '
+        Me.ToolStripSeparator4.Name = "ToolStripSeparator4"
+        Me.ToolStripSeparator4.Size = New System.Drawing.Size(165, 6)
+        '
+        'm_importFromExcelBT2
+        '
+        Me.m_importFromExcelBT2.Image = Global.FinancialBI.My.Resources.Resources.Excel_Blue_32x32
+        Me.m_importFromExcelBT2.Name = "m_importFromExcelBT2"
+        Me.m_importFromExcelBT2.Size = New System.Drawing.Size(168, 22)
+        Me.m_importFromExcelBT2.Text = "Import from Excel"
         '
         'm_versionsTreeviewImageList
         '
@@ -271,18 +303,6 @@ Partial Class GlobalFactUI
         Me.m_versionsTreeviewImageList.TransparentColor = System.Drawing.Color.Transparent
         Me.m_versionsTreeviewImageList.Images.SetKeyName(0, "cloud_dark.ico")
         Me.m_versionsTreeviewImageList.Images.SetKeyName(1, "favicon(81).ico")
-        '
-        'ToolStripSeparator4
-        '
-        Me.ToolStripSeparator4.Name = "ToolStripSeparator4"
-        Me.ToolStripSeparator4.Size = New System.Drawing.Size(183, 6)
-        '
-        'm_importFromExcelBT2
-        '
-        Me.m_importFromExcelBT2.Image = Global.FinancialBI.My.Resources.Resources.Excel_Blue_32x32
-        Me.m_importFromExcelBT2.Name = "m_importFromExcelBT2"
-        Me.m_importFromExcelBT2.Size = New System.Drawing.Size(186, 24)
-        Me.m_importFromExcelBT2.Text = "Import from Excel"
         '
         'GlobalFactUI
         '
@@ -295,6 +315,7 @@ Partial Class GlobalFactUI
         Me.VersionsRCMenu.ResumeLayout(False)
         Me.dgvRCM.ResumeLayout(False)
         Me.TableLayoutPanel4.ResumeLayout(False)
+        Me.SplitContainer1.Panel2.ResumeLayout(False)
         CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.SplitContainer1.ResumeLayout(False)
         Me.TableLayoutPanel5.ResumeLayout(False)
@@ -332,5 +353,7 @@ Partial Class GlobalFactUI
     Friend WithEvents ToolStripSeparator1 As System.Windows.Forms.ToolStripSeparator
     Friend WithEvents ToolStripSeparator4 As System.Windows.Forms.ToolStripSeparator
     Friend WithEvents m_importFromExcelBT2 As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents m_circularProgress As VIBlend.WinForms.Controls.vCircularProgressBar
+    Friend WithEvents m_deleteBackgroundWorker As System.ComponentModel.BackgroundWorker
 
 End Class

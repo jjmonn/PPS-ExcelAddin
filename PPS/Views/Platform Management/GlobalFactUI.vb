@@ -60,6 +60,8 @@ Friend Class GlobalFactUI
         AddHandler m_versionsTV.MouseDoubleClick, AddressOf VersionsTV_MouseDoubleClick
         AddHandler GlobalVariables.GlobalFacts.Read, AddressOf ReloadUI
         AddHandler m_dataGridView.MouseDown, AddressOf FactRightClick
+        AddHandler m_deleteBackgroundWorker.DoWork, AddressOf DeleteBackgroundWorker_DoWork
+        m_circularProgress.Visible = False
 
     End Sub
 
@@ -240,7 +242,11 @@ Friend Class GlobalFactUI
                                                       Local.GetValue("versions.msg_delete2") + Chr(13) + Chr(13), _
                                                       Local.GetValue("versions.title_delete_confirmation"), MessageBoxButtons.YesNo, MessageBoxIcon.Question)
             If confirm = DialogResult.Yes Then
-                m_controller.DeleteRatesVersion(m_versionsTV.SelectedNode.Value)
+                m_dataGridView.Visible = False
+                m_circularProgress.Visible = True
+                m_circularProgress.Enabled = True
+                m_circularProgress.Start()
+                m_deleteBackgroundWorker.RunWorkerAsync()
             End If
         End If
 
@@ -459,5 +465,27 @@ Friend Class GlobalFactUI
 
 #End Region
 
+#Region "Version deletion Backgroudn worker"
+
+    Private Sub DeleteBackgroundWorker_DoWork()
+        m_controller.DeleteFactsVersion(m_versionsTV.SelectedNode.Value)
+    End Sub
+
+    Private Delegate Sub AfterDeleteBackgroundWorker_ThreadSafe()
+    Friend Sub AfterDeleteBackgroundWorker()
+
+        If Me.InvokeRequired Then
+            Dim MyDelegate As New AfterDeleteBackgroundWorker_ThreadSafe(AddressOf AfterDeleteBackgroundWorker)
+            Me.Invoke(MyDelegate, New Object() {})
+        Else
+            m_circularProgress.Stop()
+            m_circularProgress.Visible = False
+            m_circularProgress.Enabled = False
+            m_dataGridView.Visible = True
+        End If
+
+    End Sub
+
+#End Region
 
 End Class

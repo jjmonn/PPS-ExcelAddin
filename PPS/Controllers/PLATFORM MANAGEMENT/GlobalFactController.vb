@@ -189,12 +189,12 @@ Friend Class GlobalFactController
 
     End Sub
 
-    Friend Function DeleteRatesVersion(ByRef p_ratesVersionId As Int32) As Boolean
+    Friend Function DeleteFactsVersion(ByRef p_factsVersionId As Int32) As Boolean
 
-        If p_ratesVersionId = m_currentVersionId Then
+        If p_factsVersionId = m_currentVersionId Then
             m_currentVersionId = 0
         End If
-        GlobalVariables.GlobalFactsVersions.Delete(p_ratesVersionId)
+        GlobalVariables.GlobalFactsVersions.Delete(p_factsVersionId)
         Return True
 
     End Function
@@ -202,7 +202,7 @@ Friend Class GlobalFactController
 #End Region
 
 
-#Region "Import Rates from Excel"
+#Region "Import Facts from Excel"
 
     Friend Sub ImportRatesFromExcel(Optional ByRef p_globalFactId As Int32 = -1)
 
@@ -259,6 +259,7 @@ Friend Class GlobalFactController
 
     Private Sub AfterGlobalFactsVersionCreate(ByRef p_status As ErrorMessage, ByRef id As Int32)
 
+        m_newFactVersionUI.CreationBackgroundWorker_AfterWork()
         If p_status <> ErrorMessage.SUCCESS Then
             MsgBox("The version could not be created")
         End If
@@ -271,7 +272,9 @@ Friend Class GlobalFactController
     End Sub
 
     Private Sub AfterGlobalFactsVersionDelete(ByRef p_status As ErrorMessage, ByRef p_id As Int32)
+
         If m_view Is Nothing Then Exit Sub
+        m_view.AfterDeleteBackgroundWorker()
 
         Select Case p_status
             Case ErrorMessage.SUCCESS

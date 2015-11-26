@@ -33,6 +33,8 @@ Friend Class NewGlobalFactVersionUI
         m_controller = p_controller
         StartPeriodNUD.Value = Year(Now)
         MultilangueSetup()
+        m_circularProgress.Visible = False
+        AddHandler m_creationBackgroundWorker.DoWork, AddressOf CreationBackgroundWorker_DoWork
 
     End Sub
 
@@ -57,11 +59,10 @@ Friend Class NewGlobalFactVersionUI
 
         Dim name As String = NameTB.Text
         If Len(name) < NAMES_MAX_LENGTH AndAlso Len(name) > 0 Then
-            m_controller.CreateVersion(m_parentId, _
-                                         name, 0, _
-                                         StartPeriodNUD.Value, _
-                                         m_nb_years.Value * 12)
-            Me.Hide()
+            m_circularProgress.Visible = True
+            m_circularProgress.Enabled = True
+            m_circularProgress.Start()
+            m_creationBackgroundWorker.RunWorkerAsync()
         Else
             MsgBox("The Name cannot exceed " & NAMES_MAX_LENGTH & " characters")
         End If
@@ -74,9 +75,7 @@ Friend Class NewGlobalFactVersionUI
 
     End Sub
 
-
 #End Region
-
 
 #Region "Events"
 
@@ -85,6 +84,35 @@ Friend Class NewGlobalFactVersionUI
 
         e.Cancel = True
         Me.Hide()
+
+    End Sub
+
+
+#End Region
+
+#Region "Background Workers"
+
+    Private Sub CreationBackgroundWorker_DoWork()
+
+        m_controller.CreateVersion(m_parentId, _
+                                  Name, 0, _
+                                  StartPeriodNUD.Value, _
+                                  m_nb_years.Value * 12)
+
+    End Sub
+
+    Friend Delegate Sub CreationBackgroundWorker_AfterWork_ThreadSafe()
+    Friend Sub CreationBackgroundWorker_AfterWork()
+
+        If Me.InvokeRequired Then
+            Dim MyDelegate As New CreationBackgroundWorker_AfterWork_ThreadSafe(AddressOf CreationBackgroundWorker_AfterWork)
+            Me.Invoke(MyDelegate, New Object() {})
+        Else
+            m_circularProgress.Stop()
+            m_circularProgress.Visible = False
+            m_circularProgress.Enabled = False
+            Me.Visible = False
+        End If
 
     End Sub
 
