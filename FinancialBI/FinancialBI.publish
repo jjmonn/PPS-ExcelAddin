@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<publishConfiguration version="1.2" activeTab="0" lastOpenedMSI="">
+  <application version="1.0.0.0">
+    <signingOptions>
+      <certificatePath>C:\Users\PPS\Documents\Visual Studio 2012\Projects\FinancialBI\cert.pfx</certificatePath>
+    </signingOptions>
+    <deploymentOptions>
+      <providerURL>http://192.168.0.17/version/financialbi.application</providerURL>
+      <minimumVersion>1.0.0.0</minimumVersion>
+      <runAfterInstalling>false</runAfterInstalling>
+    </deploymentOptions>
+    <preferences>
+      <showErrors>true</showErrors>
+      <showGUI>true</showGUI>
+      <generateLogFile>false</generateLogFile>
+      <showRegMsg>true</showRegMsg>
+      <showRunningApplicationsWarning>true</showRunningApplicationsWarning>
+    </preferences>
+    <prerequisites createSetupProgram="true" installFromVendor="false" />
+  </application>
+  <application version="1.0.0.2">
+    <signingOptions>
+      <certificatePath>C:\Users\PPS\Documents\Visual Studio 2012\Projects\FinancialBI\cert.pfx</certificatePath>
+    </signingOptions>
+    <deploymentOptions>
+      <providerURL>http://192.168.0.17/version/financialbi.application</providerURL>
+      <minimumVersion>1.0.0.2</minimumVersion>
+      <runAfterInstalling>false</runAfterInstalling>
+    </deploymentOptions>
+    <preferences>
+      <showErrors>true</showErrors>
+      <showGUI>true</showGUI>
+      <generateLogFile>false</generateLogFile>
+      <showRegMsg>true</showRegMsg>
+      <showRunningApplicationsWarning>true</showRunningApplicationsWarning>
+    </preferences>
+    <prerequisites createSetupProgram="true" installFromVendor="false" />
+  </application>
+</publishConfiguration>

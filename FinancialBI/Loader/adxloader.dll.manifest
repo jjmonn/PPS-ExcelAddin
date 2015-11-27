@@ -1,0 +1,5 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<configuration>
+  <assemblyIdentity name="FinancialBI, PublicKeyToken=c7c7efacbb167bda" />
+  <loaderSettings generateLogFile="true" shadowCopyEnabled="false" privileges="user" configFileName="FinancialBI.dll.config" minOfficeVersionSupported="11" />
+</configuration>
