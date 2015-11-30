@@ -1385,6 +1385,7 @@ Public Class AddinModule
 
         If (Me.IsNetworkDeployed().ToString()) Then
             Me.CheckForUpdates()
+            My.Settings.Upgrade()
         End If
 
     End Sub
