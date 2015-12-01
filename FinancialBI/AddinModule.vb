@@ -7,6 +7,7 @@ Imports CRUD
 Imports System.Collections.Generic
 Imports System.Linq
 Imports System.IO
+Imports System.Reflection
 
 'Add-in Express Add-in Module
 <GuidAttribute("28A6804B-8A59-4465-86D0-3372EDC34E55"), ProgIdAttribute("FinancialBI.AddinModule")> _
@@ -1379,10 +1380,12 @@ Public Class AddinModule
         GlobalVariables.GlobalPPSBIController = New PPSBIController
         GlobalVariables.Addin = Me
         SetMainMenuButtonState(False)
-        Local.LoadLocalFile("C:\Users\monnereau\Documents\GitHub\FinancialBI_Addin\PPS\Locals\english.xml")
+
+        Local.LoadLocalFile(My.Resources.english)
 
         If (Me.IsNetworkDeployed().ToString()) Then
             Me.CheckForUpdates()
+            My.Settings.Upgrade()
         End If
 
     End Sub
@@ -1651,7 +1654,7 @@ Public Class AddinModule
             ConnectionBT_OnClick(sender, control, pressed)
         Else
             Dim startDate As Date = Nothing
-            Dim version As Version = GlobalVariables.Versions.GetValue(My.Settings.version_id)
+            Dim version As CRUD.Version = GlobalVariables.Versions.GetValue(My.Settings.version_id)
 
             If Not version Is Nothing Then
                 startDate = Date.FromOADate(version.StartPeriod)
@@ -1896,7 +1899,7 @@ Public Class AddinModule
     Friend Sub InputReportPaneCallBack_ReportCreation()
 
         GlobalVariables.APPS.ScreenUpdating = False
-        Dim version As Version = GlobalVariables.Versions.GetValue(My.Settings.version_id)
+        Dim version As CRUD.Version = GlobalVariables.Versions.GetValue(My.Settings.version_id)
         If version Is Nothing Then Exit Sub
 
         Dim entity_id As Int32 = Me.InputReportTaskPane.EntitiesTV.SelectedNode.Name
@@ -2160,7 +2163,7 @@ Public Class AddinModule
 
     Public Shared Sub SetCurrentVersionId(ByRef versionId As UInt32)
 
-        Dim version As Version = GlobalVariables.Versions.GetValue(versionId)
+        Dim version As CRUD.Version = GlobalVariables.Versions.GetValue(versionId)
         If version Is Nothing Then Exit Sub
 
         GlobalVariables.Version_Button.Caption = version.Name

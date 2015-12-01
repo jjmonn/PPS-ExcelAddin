@@ -1,5 +1,6 @@
 ﻿Imports System.Xml
 Imports System.Collections.Generic
+Imports System.IO
 
 Public Class Local
     Private Shared m_localDic As New Dictionary(Of String, String)
@@ -10,9 +11,9 @@ Public Class Local
         Return "[" & p_name & "]"
     End Function
 
-    Public Shared Function LoadLocalFile(ByRef p_path As String) As Boolean
+    Public Shared Function LoadLocalFile(ByRef p_file As String) As Boolean
         Try
-            If LoadLocalFile_intern(p_path) = True Then Return True
+            If LoadLocalFile_intern(p_file) = True Then Return True
             m_localDic.Clear()
             Return False
         Catch ex As Exception
@@ -23,8 +24,8 @@ Public Class Local
         End Try
     End Function
 
-    Private Shared Function LoadLocalFile_intern(ByRef p_path As String) As Boolean
-        Dim reader As XmlTextReader = New XmlTextReader(p_path)
+    Private Shared Function LoadLocalFile_intern(ByRef p_file As String) As Boolean
+        Dim reader As XmlTextReader = New XmlTextReader(New StringReader(p_file))
         Dim currentPath As New String("")
         Dim insideString As Boolean = False
         Dim insideCategory As Int32 = 0
