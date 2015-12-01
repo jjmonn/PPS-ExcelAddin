@@ -15,6 +15,7 @@ Friend Class EntityDistributionManager : Inherits CRUDManager
 
     Friend Sub New()
 
+        CreateCMSG = ClientMessage.CMSG_CREATE_ENTITY_DISTRIBUTION
         ReadCMSG = ClientMessage.CMSG_READ_ENTITY_DISTRIBUTION
         UpdateCMSG = ClientMessage.CMSG_UPDATE_ENTITY_DISTRIBUTION
         ListCMSG = ClientMessage.CMSG_LIST_ENTITY_DISTRIBUTION
@@ -23,6 +24,7 @@ Friend Class EntityDistributionManager : Inherits CRUDManager
         UpdateSMSG = ServerMessage.SMSG_UPDATE_ENTITY_DISTRIBUTION_ANSWER
         ListSMSG = ServerMessage.SMSG_LIST_ENTITY_DISTRIBUTION_ANSWER
         DeleteSMSG = ServerMessage.SMSG_DELETE_ENTITY_DISTRIBUTION_ANSWER
+        CreateSMSG = ServerMessage.SMSG_CREATE_ENTITY_DISTRIBUTION_ANSWER
 
         Build = AddressOf EntityDistribution.BuildEntityDistribution
 
