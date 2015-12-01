@@ -41,16 +41,6 @@ Friend Class EntityDistributionManager : Inherits CRUDManager
     Friend Overrides Sub Delete(ByRef p_id As UInt32)
     End Sub
 
-    <Obsolete("Not implemented", True)> _
-    <System.ComponentModel.EditorBrowsable(ComponentModel.EditorBrowsableState.Never)>
-    Friend Overrides Sub Create(ByRef p_crud As CRUDEntity)
-    End Sub
-
-    <Obsolete("Not implemented", True)> _
-    <System.ComponentModel.EditorBrowsable(ComponentModel.EditorBrowsableState.Never)>
-    Friend Overrides Sub UpdateList(ByRef p_crudList As List(Of CRUDEntity))
-    End Sub
-
 #End Region
 
     Protected Overrides Sub ListAnswer(packet As ByteBuffer)
@@ -59,10 +49,10 @@ Friend Class EntityDistributionManager : Inherits CRUDManager
             For i As Int32 = 1 To count
                 Dim l_entityDistribution As EntityDistribution = Build(packet)
 
-                If m_entityDistributionDic.ContainsKey(l_entityDistribution.EntityId) = False Then
-                    m_entityDistributionDic(l_entityDistribution.EntityId) = New MultiIndexDictionary(Of UInt32, UInt32, EntityDistribution)
+                If m_entityDistributionDic.ContainsKey(l_entityDistribution.AccountId) = False Then
+                    m_entityDistributionDic(l_entityDistribution.AccountId) = New MultiIndexDictionary(Of UInt32, UInt32, EntityDistribution)
                 End If
-                m_entityDistributionDic(l_entityDistribution.EntityId).Set(l_entityDistribution.Id, l_entityDistribution.AccountId, l_entityDistribution)
+                m_entityDistributionDic(l_entityDistribution.AccountId).Set(l_entityDistribution.Id, l_entityDistribution.EntityId, l_entityDistribution)
             Next
             RaiseObjectInitializedEvent()
             state_flag = True
@@ -76,10 +66,10 @@ Friend Class EntityDistributionManager : Inherits CRUDManager
     Protected Overrides Sub ReadAnswer(packet As ByteBuffer)
         Dim l_entityDistribution As EntityDistribution = Build(packet)
 
-        If m_entityDistributionDic.ContainsKey(l_entityDistribution.EntityId) = False Then
-            m_entityDistributionDic(l_entityDistribution.EntityId) = New MultiIndexDictionary(Of UInt32, UInt32, EntityDistribution)
+        If m_entityDistributionDic.ContainsKey(l_entityDistribution.AccountId) = False Then
+            m_entityDistributionDic(l_entityDistribution.AccountId) = New MultiIndexDictionary(Of UInt32, UInt32, EntityDistribution)
         End If
-        m_entityDistributionDic(l_entityDistribution.EntityId).Set(l_entityDistribution.Id, l_entityDistribution.AccountId, l_entityDistribution)
+        m_entityDistributionDic(l_entityDistribution.AccountId).Set(l_entityDistribution.Id, l_entityDistribution.EntityId, l_entityDistribution)
         RaiseReadEvent(packet.GetError(), l_entityDistribution)
     End Sub
 
@@ -113,8 +103,8 @@ Friend Class EntityDistributionManager : Inherits CRUDManager
     End Function
 
     Public Overloads Function GetValue(ByVal p_entityId As UInt32, ByVal p_accountId As UInt32) As EntityDistribution
-        If m_entityDistributionDic.ContainsKey(p_entityId) = False Then Return Nothing
-        Dim l_elem = m_entityDistributionDic(p_entityId)
+        If m_entityDistributionDic.ContainsKey(p_accountId) = False Then Return Nothing
+        Dim l_elem = m_entityDistributionDic(p_accountId)
 
         Return l_elem.SecondaryKeyItem(p_entityId)
     End Function
@@ -123,9 +113,9 @@ Friend Class EntityDistributionManager : Inherits CRUDManager
         Return m_entityDistributionDic
     End Function
 
-    Public Function GetDictionary(ByVal p_entityId As UInt32) As MultiIndexDictionary(Of UInt32, UInt32, EntityDistribution)
-        If m_entityDistributionDic.ContainsKey(p_entityId) = False Then Return Nothing
-        Return m_entityDistributionDic(p_entityId)
+    Public Function GetDictionary(ByVal p_accountId As UInt32) As MultiIndexDictionary(Of UInt32, UInt32, EntityDistribution)
+        If m_entityDistributionDic.ContainsKey(p_accountId) = False Then Return Nothing
+        Return m_entityDistributionDic(p_accountId)
     End Function
 
 #End Region
