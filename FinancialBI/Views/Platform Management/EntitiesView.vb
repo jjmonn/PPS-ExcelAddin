@@ -321,7 +321,7 @@ Friend Class EntitiesView
     Private Sub fillDGV()
 
         m_isFillingDGV = True
-        For Each entity As AxisElem In GlobalVariables.AxisElems.GetDictionary(AxisType.Entities).Values
+        For Each entity As AxisElem In GlobalVariables.AxisElems.GetDictionary(AxisType.Entities).SortedValues
             FillRow(entity.Id, entity)
         Next
         m_isFillingDGV = False
@@ -443,6 +443,7 @@ Friend Class EntitiesView
                 rowItem = CreateRow(p_entityId, p_entityHashtable.Name)
             Else
                 Dim parentRow As HierarchyItem = DataGridViewsUtil.GetHierarchyItemFromId(m_entitiesDataGridView.RowsHierarchy, parentEntityId)
+                If (parentRow Is Nothing) Then Exit Sub
                 rowItem = CreateRow(p_entityId, p_entityHashtable.Name, parentRow)
             End If
         End If

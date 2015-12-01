@@ -605,7 +605,7 @@ Friend Class AxisView
 
                     Case NAME_VARIABLE
                         Dim newAxisName As String = args.Cell.Value
-                        'Controller.UpdateAxis(axisId, args.Cell.ColumnItem.ItemValue, newAxisName) ' Nath_TODO
+                        m_controller.UpdateAxisName(axisId, newAxisName)
                     Case Else
                         Dim filterValueName As String = args.Cell.Value
                         Dim filterValueId As Int32 = GlobalVariables.FiltersValues.GetValueId(filterValueName)

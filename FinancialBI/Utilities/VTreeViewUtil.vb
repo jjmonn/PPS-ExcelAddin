@@ -171,158 +171,48 @@ Public Class VTreeViewUtil
 
 #Region "TV loading"
 
-    Public Shared Function LoadTreeview(Of T As {NamedHierarchyCRUDEntity})(ByRef TV As vTreeView, _
-                                        ByRef items_attributes As MultiIndexDictionary(Of UInt32, String, T)) As Boolean
+    Private Shared Function GenerateTreeNode(Of T As {NamedHierarchyCRUDEntity}) _
+        (ByRef p_node As vTreeNode, ByRef p_topItemId As UInt32, ByRef items_attributes As MultiIndexDictionary(Of UInt32, String, T)) As Boolean
+        Dim currentItem As NamedHierarchyCRUDEntity = items_attributes(p_topItemId)
+        If currentItem Is Nothing Then Return False
 
-        On Error GoTo errorHandler
-        Dim currentNode, ParentNode As vTreeNode
-        Dim orphans_ids_list As New List(Of Int32)
-        Dim l_parentIdsList As New List(Of Int32)
-        For Each value As T In items_attributes.SortedValues
-            If l_parentIdsList.Contains(value.Id) = False Then l_parentIdsList.Add(value.Id)
-        Next
-
-        TV.Nodes.Clear()
-
-        For Each value As T In items_attributes.SortedValues
-            If value.ParentId = 0 Then
-                currentNode = AddNode(value.Id, _
-                                      value.Name,
-                                      TV)
-            Else
-                ParentNode = FindNode(TV, value.Id)
-                If Not ParentNode Is Nothing Then
-                    currentNode = AddNode(value.Id, _
-                                        value.Name,
-                                        ParentNode)
-                Else
-                    If l_parentIdsList.Contains(value.ParentId) Then
-                        orphans_ids_list.Add(value.Id)
-                    Else
-                        Return False
-                    End If
-                End If
+        p_node.Value = CStr(currentItem.Id)
+        p_node.Text = currentItem.Name
+        For Each item As NamedHierarchyCRUDEntity In items_attributes.SortedValues
+            If item.ParentId = currentItem.Id Then
+                Dim childNode As New vTreeNode
+                If GenerateTreeNode(childNode, item.Id, items_attributes) = False Then Return False
+                p_node.Nodes.Add(childNode)
             End If
         Next
-        If orphans_ids_list.Count > 0 Then
-            If SolveOrphanNodesList(TV, items_attributes, orphans_ids_list) = False Then Return False
-        End If
         Return True
-
-errorHandler:
-        Return False
-
     End Function
 
-    Private Shared Function SolveOrphanNodesList(Of T As {NamedHierarchyCRUDEntity})(ByRef TV As vTreeView, _
-                                              ByRef items_attributes As MultiIndexDictionary(Of UInt32, String, T), _
-                                              ByRef orphans_id_list As List(Of Int32), _
-                                              Optional ByRef solved_orphans_list As List(Of Int32) = Nothing) As Boolean
+    Public Shared Function LoadTreeview(Of T As {NamedHierarchyCRUDEntity})(ByRef TV As vTreeView, _
+                                        ByRef items_attributes As MultiIndexDictionary(Of UInt32, String, T)) As Boolean
+        For Each item As NamedHierarchyCRUDEntity In items_attributes.SortedValues
+            If item.ParentId = 0 Then
+                Dim currentNode As New vTreeNode
 
-        On Error GoTo errorHandler
-        Dim current_node, parent_node As vTreeNode
-        If solved_orphans_list Is Nothing Then solved_orphans_list = New List(Of Int32)
-        For Each orphan_id As UInt32 In orphans_id_list
-            If solved_orphans_list.Contains(orphan_id) = False Then
-                parent_node = FindNode(TV, items_attributes(orphan_id).ParentId)
-
-                If Not parent_node Is Nothing Then
-                    current_node = AddNode(items_attributes(orphan_id).Id, _
-                                           items_attributes(orphan_id).Name,
-                                           parent_node)
-                    solved_orphans_list.Add(orphan_id)
-                End If
+                If (GenerateTreeNode(currentNode, item.Id, items_attributes) = True) Then TV.Nodes.Add(currentNode)
             End If
         Next
-        If solved_orphans_list.Count <> orphans_id_list.Count Then
-            If SolveOrphanNodesList(TV, _
-                                    items_attributes, _
-                                    orphans_id_list, _
-                                    solved_orphans_list) Then
-                Return False
-            End If
-        End If
         Return True
-
-errorHandler:
-        Return False
 
     End Function
 
     Public Shared Function LoadTreenode(Of T As {NamedHierarchyCRUDEntity})(ByRef node As vTreeNode, _
                                         ByRef items_attributes As MultiIndexDictionary(Of UInt32, String, T)) As Boolean
 
-        On Error GoTo errorHandler
-        Dim currentNode, ParentNode As vTreeNode
-        Dim orphans_ids_list As New List(Of Int32)
-        Dim l_parentIdsList As New List(Of Int32)
-        For Each value As T In items_attributes.SortedValues
-            If l_parentIdsList.Contains(value.Id) = False Then l_parentIdsList.Add(value.Id)
-        Next
-        node.Nodes.Clear()
+        For Each item As NamedHierarchyCRUDEntity In items_attributes.SortedValues
+            If item.ParentId = 0 Then
+                Dim currentNode As New vTreeNode
 
-        For Each value As T In items_attributes.SortedValues
-            If value.ParentId = 0 Then
-                currentNode = AddNode(value.Id, _
-                                       value.Name, _
-                                       node)
-            Else
-                ParentNode = FindNode(node, value.Id)
-                If Not ParentNode Is Nothing Then
-                    currentNode = AddNode(value.Id, _
-                                        value.Name,
-                                        ParentNode)
-                Else
-                    If l_parentIdsList.Contains(value.ParentId) Then
-                        orphans_ids_list.Add(value.Id)
-                    Else
-                        Return False
-                    End If
-                End If
+                If (GenerateTreeNode(currentNode, item.Id, items_attributes) = True) Then node.Nodes.Add(currentNode)
             End If
         Next
-        If orphans_ids_list.Count > 0 Then
-            If SolveOrphanNodesList(node, items_attributes, orphans_ids_list) = False Then Return False
-        End If
         Return True
-
-errorHandler:
-        Return False
-
-    End Function
-
-    Private Shared Function SolveOrphanNodesList(Of T As {NamedHierarchyCRUDEntity})(ByRef node As vTreeNode, _
-                                                 ByRef items_attributes As MultiIndexDictionary(Of UInt32, String, T), _
-                                                 ByRef orphans_id_list As List(Of Int32), _
-                                                 Optional ByRef solved_orphans_list As List(Of Int32) = Nothing) As Boolean
-
-        On Error GoTo errorHandler
-        Dim current_node, parent_node As vTreeNode
-        If solved_orphans_list Is Nothing Then solved_orphans_list = New List(Of Int32)
-        For Each orphan_id As UInt32 In orphans_id_list
-            If solved_orphans_list.Contains(orphan_id) = False Then
-                parent_node = FindNode(node, items_attributes(orphan_id).ParentId)
-                If Not parent_node Is Nothing Then
-                    current_node = AddNode(items_attributes(orphan_id).Id, _
-                                           items_attributes(orphan_id).Name,
-                                           parent_node)
-                    solved_orphans_list.Add(orphan_id)
-                End If
-            End If
-        Next
-        If solved_orphans_list.Count <> orphans_id_list.Count Then
-            If SolveOrphanNodesList(node, _
-                                    items_attributes, _
-                                    orphans_id_list, _
-                                    solved_orphans_list) Then
-                Return False
-            End If
-        End If
-        Return True
-
-errorHandler:
-        Return False
-
+ 
     End Function
 
     Public Shared Sub LoadFlatTreeview(Of T As {NamedCRUDEntity})(ByRef p_treeview As vTreeView, _

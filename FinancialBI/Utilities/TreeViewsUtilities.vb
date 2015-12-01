@@ -19,126 +19,45 @@ Friend Class TreeViewsUtilities
 
 #Region "Treeviews Loading"
 
+    Private Shared Function GenerateTreeNode(Of T As {NamedHierarchyCRUDEntity}) _
+    (ByRef p_node As TreeNode, ByRef p_topItemId As UInt32, ByRef items_attributes As MultiIndexDictionary(Of UInt32, String, T)) As Boolean
+        Dim currentItem As NamedHierarchyCRUDEntity = items_attributes(p_topItemId)
+        If currentItem Is Nothing Then Return False
+
+        p_node.Name = CStr(currentItem.Id)
+        p_node.Text = currentItem.Name
+        For Each item As NamedHierarchyCRUDEntity In items_attributes.SortedValues
+            If item.ParentId = currentItem.Id Then
+                Dim childNode As New TreeNode
+                If GenerateTreeNode(childNode, item.Id, items_attributes) = False Then Return False
+                p_node.Nodes.Add(childNode)
+            End If
+        Next
+        Return True
+
+    End Function
+
     Friend Shared Sub LoadTreeview(Of T As {NamedHierarchyCRUDEntity})(ByRef TV As TreeView, ByRef items_attributes As MultiIndexDictionary(Of UInt32, String, T))
 
-        Dim currentNode, ParentNode() As TreeNode
-        Dim orphans_ids_list As New List(Of Int32)
-        Dim image_index As UInt16 = 0
-        Dim l_parentIdsList As New List(Of Int32)
-        For Each value As T In items_attributes.SortedValues
-            If l_parentIdsList.Contains(value.Id) = False Then l_parentIdsList.Add(value.Id)
-        Next
-        TV.Nodes.Clear()
+        For Each item As NamedHierarchyCRUDEntity In items_attributes.SortedValues
+            If item.ParentId = 0 Then
+                Dim currentNode As New TreeNode
 
-        For Each value As T In items_attributes.SortedValues
-
-            If value.ParentId = 0 Then
-                currentNode = TV.Nodes.Add(CStr(value.Id), value.Name, image_index, image_index)
-            Else
-                ParentNode = TV.Nodes.Find((value.ParentId), True)
-                If ParentNode.Length > 0 Then
-                    currentNode = ParentNode(0).Nodes.Add(CStr(value.Id), value.Name, image_index, image_index)
-                Else
-                    If l_parentIdsList.Contains(value.ParentId) Then
-                        orphans_ids_list.Add(value.Id)
-                    Else
-                        Exit Sub
-                    End If
-                End If
+                If (GenerateTreeNode(currentNode, item.Id, items_attributes) = True) Then TV.Nodes.Add(currentNode)
             End If
         Next
-        If orphans_ids_list.Count > 0 Then SolveOrphanNodesList(TV, items_attributes, orphans_ids_list)
-
-    End Sub
-
-    Private Shared Sub SolveOrphanNodesList(Of T As {NamedHierarchyCRUDEntity})(ByRef TV As TreeView, _
-                                          ByRef items_attributes As MultiIndexDictionary(Of UInt32, String, T), _
-                                          ByRef orphans_id_list As List(Of Int32), _
-                                          Optional ByRef solved_orphans_list As List(Of Int32) = Nothing)
-
-        Dim current_node, parent_nodes() As TreeNode
-        Dim image_index As UInt16 = 0
-        If solved_orphans_list Is Nothing Then solved_orphans_list = New List(Of Int32)
-        For Each orphan_id As UInt32 In orphans_id_list
-            If solved_orphans_list.Contains(orphan_id) = False Then
-                parent_nodes = TV.Nodes.Find(items_attributes(orphan_id).ParentId, True)
-
-                If parent_nodes.Length > 0 Then
-                    current_node = parent_nodes(0).Nodes.Add(CStr(items_attributes(orphan_id).Id), _
-                                                             items_attributes(orphan_id).Name, _
-                                                             image_index, _
-                                                             image_index)
-                    solved_orphans_list.Add(orphan_id)
-                End If
-            End If
-        Next
-        If solved_orphans_list.Count <> orphans_id_list.Count Then SolveOrphanNodesList(TV, _
-                                                                                        items_attributes, _
-                                                                                        orphans_id_list, _
-                                                                                        solved_orphans_list)
 
     End Sub
 
     Friend Shared Sub LoadTreeview(Of T As {NamedHierarchyCRUDEntity})(ByRef node As TreeNode, ByRef items_attributes As MultiIndexDictionary(Of UInt32, String, T))
 
-        Dim currentNode, ParentNode() As TreeNode
-        Dim orphans_ids_list As New List(Of Int32)
-        Dim image_index As UInt16 = 0
-        Dim l_parentIdsList As New List(Of Int32)
-        For Each value As T In items_attributes.SortedValues
-            If l_parentIdsList.Contains(value.Id) = False Then l_parentIdsList.Add(value.Id)
-        Next
-        node.Nodes.Clear()
+        For Each item As NamedHierarchyCRUDEntity In items_attributes.SortedValues
+            If item.ParentId = 0 Then
+                Dim currentNode As New TreeNode
 
-        For Each value As T In items_attributes.SortedValues
-            If value.ParentId = 0 Then
-                currentNode = node.Nodes.Add(CStr(value.Id), _
-                                           value.Name, _
-                                           image_index, image_index)
-            Else
-                ParentNode = node.Nodes.Find((value.ParentId), True)
-                If ParentNode.Length > 0 Then
-                    currentNode = ParentNode(0).Nodes.Add(CStr(value.Id), _
-                                                          value.Name, _
-                                                          image_index, image_index)
-                Else
-                    If l_parentIdsList.Contains(value.ParentId) Then
-                        orphans_ids_list.Add(value.Id)
-                    Else
-                        Exit Sub
-                    End If
-                End If
+                If (GenerateTreeNode(currentNode, item.Id, items_attributes) = True) Then node.Nodes.Add(currentNode)
             End If
         Next
-        If orphans_ids_list.Count > 0 Then SolveOrphanNodesList(node, items_attributes, orphans_ids_list)
-
-    End Sub
-
-    Friend Shared Sub SolveOrphanNodesList(Of T As {NamedHierarchyCRUDEntity})(ByRef node As TreeNode, _
-                                          ByRef items_attributes As MultiIndexDictionary(Of UInt32, String, T), _
-                                          ByRef orphans_id_list As List(Of Int32), _
-                                          Optional ByRef solved_orphans_list As List(Of Int32) = Nothing)
-
-        Dim current_node, parent_nodes() As TreeNode
-        Dim image_index As UInt16 = 0
-        If solved_orphans_list Is Nothing Then solved_orphans_list = New List(Of Int32)
-        For Each orphan_id As UInt32 In orphans_id_list
-            If solved_orphans_list.Contains(orphan_id) = False Then
-                parent_nodes = node.Nodes.Find(items_attributes(orphan_id).ParentId, True)
-
-                If parent_nodes.Length > 0 Then
-                    current_node = parent_nodes(0).Nodes.Add(CStr(items_attributes(orphan_id).Id), _
-                                                             items_attributes(orphan_id).Name, _
-                                                             image_index, _
-                                                             image_index)
-                    solved_orphans_list.Add(orphan_id)
-                End If
-            End If
-        Next
-        If solved_orphans_list.Count <> orphans_id_list.Count Then SolveOrphanNodesList(node, _
-                                                                                        items_attributes, _
-                                                                                        orphans_id_list, _
-                                                                                        solved_orphans_list)
 
     End Sub
 
