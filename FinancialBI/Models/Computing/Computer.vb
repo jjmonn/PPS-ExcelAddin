@@ -92,6 +92,9 @@ Friend Class Computer
         NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_COMPUTE_RESULT, AddressOf SMSG_COMPUTE_RESULT)
         ' Start versions computing loop
         For Each l_versionId In p_versionsIds
+            Dim l_version As Version = GlobalVariables.Versions.GetValue(l_versionId)
+            If l_version Is Nothing Then Resume Next
+
             ' Start entities computing loop
             For Each l_entityId As Int32 In p_entitiesIds
 
@@ -109,6 +112,8 @@ Friend Class Computer
                 m_requestIdVersionIdDict.Add(l_requestId, l_versionId)
                 m_requestIdEntityIdDict.Add(l_requestId, l_entityId)
                 l_packet.WriteUint32(l_versionId)                                               ' version_id
+                l_packet.WriteUint32(l_version.GlobalFactVersionId)                             ' global facts version id
+                l_packet.WriteUint32(l_version.RateVersionId)                                   ' rates version id
                 l_packet.WriteUint32(l_entityId)                                                ' entity_id
                 l_packet.WriteUint32(p_currencyId)                                              ' currency_id
 

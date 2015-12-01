@@ -59,40 +59,45 @@ Public Class ComputerInputEntity
     End Function
 
     ' Compute request
-    Friend Sub CMSG_SOURCED_COMPUTE(ByRef p_versionId As Int32, _
-                                    ByRef p_entitiesId As List(Of Int32), _
-                                    ByRef p_entitiesIdInputsAccounts As Dictionary(Of Int32, Int32()), _
-                                    ByRef p_entitiesIdInputsPeriods As Dictionary(Of Int32, Int32()), _
-                                    ByRef p_entitiesIdInputsValues As Dictionary(Of Int32, Double()))
+    Friend Function CMSG_SOURCED_COMPUTE(ByRef p_versionId As Int32, _
+                                         ByRef p_entitiesId As List(Of Int32), _
+                                         ByRef p_entitiesIdInputsAccounts As Dictionary(Of Int32, Int32()), _
+                                         ByRef p_entitiesIdInputsPeriods As Dictionary(Of Int32, Int32()), _
+                                         ByRef p_entitiesIdInputsValues As Dictionary(Of Int32, Double())) As Boolean
 
         NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_SOURCED_COMPUTE_RESULT, AddressOf SMSG_SOURCED_COMPUTE_RESULT)
         m_versionId = p_versionId
+        Dim l_version As Version = GlobalVariables.Versions.GetValue(p_versionId)
+        If l_version Is Nothing Then Return False
+
         m_entitiesIdComputationQueue = p_entitiesId.ToList
         For Each l_entityId As Int32 In p_entitiesId
 
             Dim l_entityCurrency As EntityCurrency = GlobalVariables.EntityCurrencies.GetValue(l_entityId)
             If Not l_entityCurrency Is Nothing Then
 
-                Dim packet As New ByteBuffer(CType(ClientMessage.CMSG_SOURCED_COMPUTE, UShort))
-                Dim requestId As Int32 = packet.AssignRequestId()
+                Dim l_packet As New ByteBuffer(CType(ClientMessage.CMSG_SOURCED_COMPUTE, UShort))
+                Dim requestId As Int32 = l_packet.AssignRequestId()
 
-                packet.WriteUint32(p_versionId)                          ' version_id
-                packet.WriteUint32(l_entityId)                           ' entity_id
-                packet.WriteUint32(l_entityCurrency.CurrencyId)                         ' currency_id
+                l_packet.WriteUint32(p_versionId)                          ' version_id
+                l_packet.WriteUint32(l_version.GlobalFactVersionId)                             ' global facts version id
+                l_packet.WriteUint32(l_version.RateVersionId)                                   ' rates version id
+                l_packet.WriteUint32(l_entityId)                           ' entity_id
+                l_packet.WriteUint32(l_entityCurrency.CurrencyId)                         ' currency_id
 
-                packet.WriteUint32(p_entitiesIdInputsValues(l_entityId).Length)
+                l_packet.WriteUint32(p_entitiesIdInputsValues(l_entityId).Length)
                 For i = 0 To p_entitiesIdInputsValues(l_entityId).Length - 1
-                    packet.WriteUint32(p_entitiesIdInputsAccounts(l_entityId)(i))
-                    packet.WriteUint32(p_entitiesIdInputsPeriods(l_entityId)(i))
-                    packet.WriteDouble(p_entitiesIdInputsValues(l_entityId)(i))
+                    l_packet.WriteUint32(p_entitiesIdInputsAccounts(l_entityId)(i))
+                    l_packet.WriteUint32(p_entitiesIdInputsPeriods(l_entityId)(i))
+                    l_packet.WriteDouble(p_entitiesIdInputsValues(l_entityId)(i))
                 Next
-                packet.Release()
-                NetworkManager.GetInstance().Send(packet)
+                l_packet.Release()
+                NetworkManager.GetInstance().Send(l_packet)
 
             End If
         Next
 
-    End Sub
+    End Function
 
     ' Server Response
     Private Sub SMSG_SOURCED_COMPUTE_RESULT(packet As ByteBuffer)
