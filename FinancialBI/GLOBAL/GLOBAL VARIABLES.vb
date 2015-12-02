@@ -46,7 +46,7 @@ Friend Class GlobalVariables
 #Region "Computing"
 
     Friend Shared APPS As Application
-    Friend Shared GlobalPPSBIController As PPSBIController
+    Friend Shared GlobalPPSBIController As FBIFunctionController
     Friend Shared g_mustResetCache As Boolean
 
 #End Region

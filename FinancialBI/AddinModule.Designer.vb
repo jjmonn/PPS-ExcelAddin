@@ -9,6 +9,7 @@ Partial Public Class AddinModule
         Application.EnableVisualStyles()
 
         'This call is required by the Component Designer
+        VIBlend.Utilities.Licensing.LicenseContent = "0g0g635756920818516203geeae134609ccc047560baf100768868d8abc|P20sP8MuxE14HfXpiO3X3PueOBIpfMynKjd9/ifkWaAwYrH/u0NNk7rqh77rOQs3OmrTem7ghz4hnkVM+Bdu9Fzt6u6rne35u/o5JPTC00BzjTUNUXP7f/xplMNliHELbbHfixl1O/3/E6uDNHDVKJc6sRHHTOYPBnao09omX4s="
         InitializeComponent()
 
         'Please add any initialization code to the AddinInitialize event handler

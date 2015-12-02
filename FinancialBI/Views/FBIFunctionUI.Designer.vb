@@ -1,5 +1,5 @@
 ﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
-Partial Class PPSBI_UI
+Partial Class FBIFunctionUI
     Inherits System.Windows.Forms.Form
 
     'Form overrides dispose to clean up the component list.
@@ -23,7 +23,7 @@ Partial Class PPSBI_UI
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
-        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(PPSBI_UI))
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(FBIFunctionUI))
         Me.ButtonsIL = New System.Windows.Forms.ImageList(Me.components)
         Me.validate_cmd = New System.Windows.Forms.Button()
         Me.categoriesIL = New System.Windows.Forms.ImageList(Me.components)

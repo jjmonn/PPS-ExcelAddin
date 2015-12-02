@@ -1,4 +1,4 @@
-﻿' PPSBIController.vb
+﻿' FBIFunctionController.vb
 ' 
 ' - PPSBI user defined function call back
 ' 
@@ -24,7 +24,7 @@ Imports System.Windows.Forms
 Imports System.Linq
 Imports CRUD
 
-Public Class PPSBIController
+Public Class FBIFunctionController
 
 
 #Region "Instance Variables"

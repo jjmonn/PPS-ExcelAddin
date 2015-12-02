@@ -1,4 +1,4 @@
-﻿' PPSBI_UI.VB
+﻿' FBIFunctionUI.VB
 ' 
 ' User interface for the construction of PPSBI functions
 '
@@ -14,7 +14,7 @@ Imports System.Collections
 Imports VIBlend.WinForms.Controls
 Imports CRUD
 
-Friend Class PPSBI_UI
+Friend Class FBIFunctionUI
 
 
 #Region "Instance Variables"
@@ -238,7 +238,7 @@ Friend Class PPSBI_UI
             Return False
         End If
 
-            Return True
+        Return True
 
     End Function
 

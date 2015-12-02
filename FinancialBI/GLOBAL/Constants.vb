@@ -90,7 +90,7 @@ Module Constants
     'Friend Const FBI_FORMULA_PERIOD_INDEX As Integer = 3
     'Friend Const FBI_FORMULA_CURRENCY_INDEX As Integer = 4
 
-    Friend Const UDF_FORMULA_GET_DATA_NAME As String = "PPSBI"
+    Friend Const UDF_FORMULA_GET_DATA_NAME As String = "FBI"
     '  Friend Const NB_MONTHS = 12
 
     '-------------------------------------------------------------
