@@ -42,7 +42,9 @@ Public Class AllocationKeysView
         InitializeMultilanguage()
 
         AddHandler m_allocationsKeysDGV.CellValueChanging, AddressOf DataGridView_CellValueChanging
+        AddHandler m_allocationsKeysDGV.CellValueChanged, AddressOf DataGridView_CellValueChanged
         AddHandler m_allocationsKeysDGV.CellEditorActivate, AddressOf DataGridView_EditorActivation
+        AddHandler m_allocationTextBoxEditor.KeyDown, AddressOf CellsEditor_KeyDown
 
     End Sub
 
@@ -121,6 +123,7 @@ Public Class AllocationKeysView
                 FillChildRow(l_row, p_entitiesAllocationKeysDictionary)
             Next
             m_isFillingCells = False
+            m_allocationsKeysDGV.Refresh()
         End If
 
     End Sub
@@ -128,7 +131,10 @@ Public Class AllocationKeysView
     Private Sub FillChildRow(ByRef p_row As HierarchyItem, _
                              ByRef p_entitiesAllocationKeysDictionary As Dictionary(Of Int32, Double))
 
-        Dim l_keyValue As Double = p_entitiesAllocationKeysDictionary(p_row.ItemValue)
+        Dim l_keyValue As Double = 0
+        If p_entitiesAllocationKeysDictionary.ContainsKey(p_row.ItemValue) Then
+            l_keyValue = p_entitiesAllocationKeysDictionary(p_row.ItemValue)
+        End If
         m_allocationsKeysDGV.CellsArea.SetCellValue(p_row, m_allocationsKeysDGV.ColumnsHierarchy.Items(0), l_keyValue / 100.0)
         For Each l_childRow As HierarchyItem In p_row.Items
             FillChildRow(l_childRow, p_entitiesAllocationKeysDictionary)
@@ -147,6 +153,7 @@ Public Class AllocationKeysView
             Dim l_row As HierarchyItem = DataGridViewsUtil.GetHierarchyItemFromId(m_allocationsKeysDGV.RowsHierarchy, p_entitiesDistribution.EntityId)
             m_allocationsKeysDGV.CellsArea.SetCellValue(l_row, m_allocationsKeysDGV.ColumnsHierarchy.Items(0), p_entitiesDistribution.Percentage / 100.0)
             m_isFillingCells = False
+            m_allocationsKeysDGV.Refresh()
         End If
 
     End Sub
@@ -162,22 +169,45 @@ Public Class AllocationKeysView
             If Not IsNumeric(args.NewValue) Then
                 args.Cancel = True
             Else
-                Dim l_entitiesAllocationKeysDict = GetEntityAllocationKeysDictionary()
-                l_entitiesAllocationKeysDict(args.Cell.RowItem.ItemValue) = args.NewValue
-                If IsTotalPercentageValid(l_entitiesAllocationKeysDict) = False Then
-                    args.Cancel = True
-                    MsgBox(Local.GetValue("allocationKeys.msg_percentageOver100"))
+                If args.NewValue < 0 _
+                Or args.NewValue > 100 Then
+                    MsgBox(Local.GetValue("allocationKeys.msg_invalid_percentage"))
                 Else
-                    m_controller.UpdateAllocationKey(args.Cell.RowItem.ItemValue, args.NewValue)
+                    Dim l_entitiesAllocationKeysDict = GetEntityAllocationKeysDictionary()
+                    l_entitiesAllocationKeysDict(args.Cell.RowItem.ItemValue) = args.NewValue
+                    If IsTotalPercentageValid(l_entitiesAllocationKeysDict) = False Then
+                        args.Cancel = True
+                        MsgBox(Local.GetValue("allocationKeys.msg_percentageOver100"))
+                    End If
                 End If
             End If
         End If
 
     End Sub
 
+    Private Sub DataGridView_CellValueChanged(sender As Object, args As CellEventArgs)
+
+        If m_isFillingCells = False Then
+            m_isFillingCells = True
+            m_controller.UpdateAllocationKey(args.Cell.RowItem.ItemValue, args.Cell.Value)
+            m_isFillingCells = False
+        End If
+
+    End Sub
+
     Private Sub DataGridView_EditorActivation(sender As Object, e As EditorActivationCancelEventArgs)
 
+        m_isFillingCells = True
         e.Cell.Value *= 100
+        m_isFillingCells = False
+
+    End Sub
+
+    Private Sub CellsEditor_KeyDown(sender As Object, e As Windows.Forms.KeyEventArgs)
+
+        If e.KeyCode = Windows.Forms.Keys.Enter Then
+            m_allocationsKeysDGV.CloseEditor(False)
+        End If
 
     End Sub
 

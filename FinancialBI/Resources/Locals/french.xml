@@ -352,7 +352,7 @@
     <string name="repartition_column_name">Pourcentage de répartition (%)</string>
     <string name="msg_percentageOver100">Le pourcentage total ne peut pas excéder 100 %.</string>
     <string name="msg_error_update">La clé de répartition n'a pas pu être mise à jour.</string>
-    <string name=""></string>
+    <string name="msg_invalid_percentage">La clé de répartition doit être comprise entre 0% et 100%.</string>
     <string name=""></string>
 
   </category>

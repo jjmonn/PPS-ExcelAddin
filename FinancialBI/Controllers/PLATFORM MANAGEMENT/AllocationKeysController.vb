@@ -22,12 +22,20 @@ Public Class AllocationKeysController
         m_accountId = p_account_id
         GlobalVariables.AxisElems.LoadEntitiesTV(m_entitiesTreeview)
         m_allocationKeysView = New AllocationKeysView(Me, p_account_id, m_entitiesTreeview)
+        Dim l_entitiesAllocationKeysDictionary As New Dictionary(Of Int32, Double)
+        Dim l_entityDistributionMultiIndexDictionary = GlobalVariables.EntityDistribution.GetDictionary(p_account_id)
+        If l_entityDistributionMultiIndexDictionary IsNot Nothing Then
+            For Each l_entityDistribution As CRUD.EntityDistribution In l_entityDistributionMultiIndexDictionary.Values
+                l_entitiesAllocationKeysDictionary.Add(l_entityDistribution.EntityId, l_entityDistribution.Percentage)
+            Next
+        End If
+        m_allocationKeysView.FillAllocationKeysDataGridView_ThreadSafe(l_entitiesAllocationKeysDictionary)
         m_allocationKeysView.Show()
 
         ' Server Events listening
         AddHandler GlobalVariables.EntityDistribution.Read, AddressOf EntityDistributionRead
         AddHandler GlobalVariables.EntityDistribution.UpdateEvent, AddressOf EntityDistributionUpdate
- 
+
     End Sub
 
 #End Region
@@ -38,7 +46,7 @@ Public Class AllocationKeysController
     Friend Sub UpdateAllocationKey(ByRef p_entityId As Int32, _
                                    ByRef p_value As Double)
 
-        Dim l_entityDistribution As EntityDistribution = GetEntityDistributionCopy(m_accountId, p_entityId)
+        Dim l_entityDistribution As EntityDistribution = GetEntityDistributionCopy(p_entityId, m_accountId)
         If l_entityDistribution Is Nothing Then
             l_entityDistribution = New EntityDistribution()
             l_entityDistribution.AccountId = m_accountId
@@ -99,20 +107,20 @@ Public Class AllocationKeysController
 
 #Region "Utilities"
 
-    Friend Function ComputeCalculatedAllocationKeys(ByRef p_entitiesAllocationKeysDictionary As Dictionary(Of Int32, Double))
+    Friend Sub ComputeCalculatedAllocationKeys(ByRef p_entitiesAllocationKeysDictionary As Dictionary(Of Int32, Double))
 
         For Each l_node As vTreeNode In m_entitiesTreeview.Nodes
             ComputeEntityAllocationKey(l_node, p_entitiesAllocationKeysDictionary)
         Next
 
+    End Sub
+
+    Friend Function GetEntityDistribution(ByVal p_entityId As UInt32, ByVal p_accountId As UInt32) As CRUD.EntityDistribution
+        Return GlobalVariables.EntityDistribution.GetValue(p_entityId, p_accountId)
     End Function
 
-    Friend Function GetEntityDistribution(ByVal p_accountId As UInt32, p_entityId As UInt32) As CRUD.EntityDistribution
-        Return GlobalVariables.EntityDistribution.GetValue(p_accountId, p_entityId)
-    End Function
-
-    Friend Function GetEntityDistributionCopy(ByVal p_accountId As UInt32, p_entityId As UInt32) As CRUD.EntityDistribution
-        Dim l_entityDistribution As CRUD.EntityDistribution = GetEntityDistribution(p_accountId, p_entityId)
+    Friend Function GetEntityDistributionCopy(ByVal p_entityId As UInt32, ByVal p_accountId As UInt32) As CRUD.EntityDistribution
+        Dim l_entityDistribution As CRUD.EntityDistribution = GetEntityDistribution(p_entityId, p_accountId)
         If l_entityDistribution Is Nothing Then Return Nothing
         Return l_entityDistribution.Clone()
     End Function
