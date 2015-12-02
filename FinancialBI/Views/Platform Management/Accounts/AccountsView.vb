@@ -39,9 +39,10 @@ Friend Class AccountsView
     Private m_formatsIdItemDict As New Dictionary(Of Int32, ListItem)
     Private m_currenciesConversionIdItemDict As New Dictionary(Of Int32, ListItem)
     Private m_consoOptionIdItemDict As New Dictionary(Of Int32, ListItem)
-    Private m_isRevertingFType As Boolean = False
-    Private m_isDisplayingAttributes As Boolean
-    Private m_dragAndDrop As Boolean = False
+    Private m_isRevertingFTypeFlag As Boolean = False
+    Private m_isDisplayingAccountFlag As Boolean
+    Private m_dragAndDropFlag As Boolean = False
+    Private m_isEditingFormulaFlag As Boolean = False
 
     ' Constants
     Private Const MARGIN_SIZE As Integer = 15
@@ -70,6 +71,7 @@ Friend Class AccountsView
         ComboBoxesInit()
         SetAccountUIState(False, GlobalVariables.Users.CurrentUserIsAdmin())
         MultilangueSetup()
+        SetFormulaEditionState(False)
 
     End Sub
 
@@ -79,7 +81,8 @@ Friend Class AccountsView
         Me.SaveDescriptionBT.Text = Local.GetValue("accounts_edition.save_description")
         Me.m_accountFormulaGroupBox.Text = Local.GetValue("accounts_edition.account_formula")
         Me.m_formulaEditionButton.Text = Local.GetValue("accounts_edition.edit_formula")
-        Me.submit_cmd.Text = Local.GetValue("accounts_edition.validate_formula")
+        Me.m_validateFormulaButton.Text = Local.GetValue("general.save")
+        Me.m_cancelFormulaEditionButton.Text = Local.GetValue("general.cancel")
         Me.m_accountInformationGroupbox.Text = Local.GetValue("accounts_edition.account_information")
         Me.m_accountNameLabel.Text = Local.GetValue("accounts_edition.account_name")
         Me.m_accountFormulaTypeLabel.Text = Local.GetValue("accounts_edition.formula_type")
@@ -105,7 +108,6 @@ Friend Class AccountsView
     Private Sub SetAccountUIState(ByRef p_uiState As Boolean, ByRef p_rightClickState As Boolean)
         SaveDescriptionBT.Enabled = p_uiState
         Name_TB.Enabled = p_uiState
-        m_formulaTextBox.Enabled = p_uiState
         FormulaTypeComboBox.Enabled = p_uiState
         TypeComboBox.Enabled = p_uiState
         CurrencyConversionComboBox.Enabled = p_uiState
@@ -115,7 +117,7 @@ Friend Class AccountsView
         AddCategoryToolStripMenuItem.Enabled = p_rightClickState
         DeleteAccountToolStripMenuItem.Enabled = p_rightClickState
         DeleteAccountToolStripMenuItem1.Enabled = p_rightClickState
-        submit_cmd.Enabled = p_uiState
+        m_validateFormulaButton.Enabled = p_uiState
         m_formulaEditionButton.Enabled = p_uiState
         CreateANewAccountToolStripMenuItem.Enabled = p_rightClickState
         CreateANewCategoryToolStripMenuItem.Enabled = p_rightClickState
@@ -342,7 +344,7 @@ Friend Class AccountsView
     Private Sub newAccountBT_Click(sender As Object, e As EventArgs) Handles CreateANewAccountToolStripMenuItem.Click, _
                                                                              AddSubAccountToolStripMenuItem.Click
 
-        m_formulaEditionButton.Toggle = CheckState.Unchecked
+        m_isEditingFormulaFlag = False
         If Not m_currentNode Is Nothing Then
             m_controller.DisplayNewAccountView(m_currentNode)
         Else
@@ -354,7 +356,7 @@ Friend Class AccountsView
     Private Sub newCategoryBT_Click(sender As Object, e As EventArgs) Handles CreateANewCategoryToolStripMenuItem.Click, _
                                                                               AddCategoryToolStripMenuItem.Click
 
-        m_formulaEditionButton.Toggle = CheckState.Unchecked
+        m_isEditingFormulaFlag = False
         Dim newCategoryName As String = InputBox(Local.GetValue("accounts_edition.msg_new_tab_name"), _
                                                  Local.GetValue("accounts_edition.title_new_tab_name"), "")
         If newCategoryName <> "" Then
@@ -376,7 +378,7 @@ Friend Class AccountsView
 
     End Sub
 
-    Private Sub Submit_Formula_Click(sender As Object, e As EventArgs) Handles submit_cmd.Click
+    Private Sub Submit_Formula_Click(sender As Object, e As EventArgs) Handles m_validateFormulaButton.Click
 
         Dim formulastr As String = m_formulaTextBox.Text
         If formulastr = "" Then
@@ -407,7 +409,7 @@ TokensCheck:
                                                 MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question)
             If confirm = DialogResult.Yes Then
                 If Not m_controller.GetAccount(Name_TB.Text) Is Nothing Then
-                    m_formulaEditionButton.Toggle = CheckState.Unchecked
+                    m_isEditingFormulaFlag = False
                     Dim accountId As Int32 = m_controller.GetAccount(Name_TB.Text).Id
                     m_controller.UpdateAccountFormula(accountId, m_controller.GetCurrentParsedFormula)
                 End If
@@ -430,7 +432,7 @@ TokensCheck:
                                                                                 DeleteAccountToolStripMenuItem1.Click
 
         If Not m_currentNode Is Nothing Then
-            m_formulaEditionButton.Toggle = CheckState.Unchecked
+            m_isEditingFormulaFlag = False
             Dim dependantAccountslist() As String = m_controller.ExistingDependantAccounts(m_currentNode)
             If dependantAccountslist.Length > 0 Then
 
@@ -462,7 +464,7 @@ TokensCheck:
     Private Sub BDropToWS_Click(sender As Object, e As EventArgs) Handles DropAllAccountsHierarchyToExcelToolStripMenuItem.Click, _
                                                                           DropHierarchyToExcelToolStripMenuItem.Click
 
-        m_formulaEditionButton.Toggle = CheckState.Unchecked
+        m_isEditingFormulaFlag = False
         Dim ActiveWS As Excel.Worksheet = GlobalVariables.APPS.ActiveSheet
         Dim RNG As Excel.Range = GlobalVariables.APPS.Application.ActiveCell
         Dim Response As MsgBoxResult
@@ -505,9 +507,9 @@ TokensCheck:
 
     Private Sub AccountsTV_AfterSelect(sender As Object, e As vTreeViewEventArgs)
 
-        If m_dragAndDrop = False _
-        AndAlso m_formulaEditionButton.Toggle = CheckState.Unchecked _
-        AndAlso m_isDisplayingAttributes = False Then
+        If m_dragAndDropFlag = False _
+        AndAlso m_isEditingFormulaFlag = False _
+        AndAlso m_isDisplayingAccountFlag = False Then
             m_currentNode = e.Node
             If m_currentNode IsNot Nothing Then
                 DesactivateUnallowed()
@@ -521,7 +523,7 @@ TokensCheck:
 
     Private Sub AccountsTV_KeyDown(sender As Object, e As KeyEventArgs)
 
-        If m_dragAndDrop = False Then
+        If m_dragAndDropFlag = False Then
             Select Case e.KeyCode
                 Case Keys.Delete : B_DeleteAccount_Click(sender, e)
 
@@ -574,7 +576,7 @@ TokensCheck:
 
     Private Sub AccountsTV_DragOver(sender As Object, e As DragEventArgs)
 
-        If m_formulaEditionButton.Toggle = CheckState.Unchecked Then
+        If m_isEditingFormulaFlag = False Then
 
             If e.Data.GetDataPresent("VIBlend.WinForms.Controls.vTreeNode", True) = False Then Exit Sub
             Dim pt As Drawing.Point = CType(sender, vTreeView).PointToClient(New Drawing.Point(e.X, e.Y))
@@ -597,14 +599,14 @@ TokensCheck:
             End If
             'Currently selected node is a suitable target
             e.Effect = DragDropEffects.Move
-            m_dragAndDrop = True
+            m_dragAndDropFlag = True
         End If
 
     End Sub
 
     Private Sub AccountsTV_DragDrop(sender As Object, e As DragEventArgs)
 
-        If m_formulaEditionButton.Toggle = CheckState.Unchecked Then
+        If m_isEditingFormulaFlag = False Then
             'Check that there is a TreeNode being dragged
             If e.Data.GetDataPresent("VIBlend.WinForms.Controls.vTreeNode", True) = False Then Exit Sub
 
@@ -633,21 +635,21 @@ TokensCheck:
 
                 Else
                     e.Effect = DragDropEffects.None
-                    m_dragAndDrop = False
+                    m_dragAndDropFlag = False
                     Exit Sub
                 End If
             End If
 
-                m_dragAndDrop = False
-                dropNode.IsVisible = True                     ' Ensure the newley created node is visible to the user and 
-                selectedTreeview.SelectedNode = dropNode     ' Select it
+            m_dragAndDropFlag = False
+            dropNode.IsVisible = True                     ' Ensure the newley created node is visible to the user and 
+            selectedTreeview.SelectedNode = dropNode     ' Select it
             Dim l_account = m_controller.GetAccountCopy(CUInt(dropNode.Value))
 
-                l_account.AccountTab = m_accountTV.Nodes.IndexOf(VTreeViewUtil.ReturnRootNodeFromNode(dropNode))
-                l_account.ParentId = If(targetNode Is Nothing, 0, targetNode.Value)
-                m_controller.UpdateAccount(l_account)
+            l_account.AccountTab = m_accountTV.Nodes.IndexOf(VTreeViewUtil.ReturnRootNodeFromNode(dropNode))
+            l_account.ParentId = If(targetNode Is Nothing, 0, targetNode.Value)
+            m_controller.UpdateAccount(l_account)
 
-            End If
+        End If
 
 
     End Sub
@@ -666,7 +668,7 @@ TokensCheck:
 
         If e.Data.GetDataPresent("VIBlend.WinForms.Controls.vTreeNode", True) Then
             e.Effect = DragDropEffects.Move
-            m_dragAndDrop = True
+            m_dragAndDropFlag = True
         Else
             e.Effect = DragDropEffects.None
         End If
@@ -680,45 +682,91 @@ TokensCheck:
 
 #Region "Formula Events"
 
-    Private Sub formula_TB_Enter(sender As Object, e As EventArgs) Handles m_formulaTextBox.Enter
+    Private Sub m_formulaEditionButton_Click(sender As Object, e As EventArgs) Handles m_formulaEditionButton.Click
 
-        If m_formulaEditionButton.Toggle = CheckState.Unchecked Then
+        If m_isEditingFormulaFlag = False Then
             If Not m_currentNode Is Nothing Then
-                Dim l_account As Account = GlobalVariables.Accounts.GetValue(CInt(m_currentNode.value))
+                Dim l_account As Account = GlobalVariables.Accounts.GetValue(CInt(m_currentNode.Value))
 
                 If l_account Is Nothing Then Exit Sub
                 If m_controller.m_formulaTypesToBeTested.Contains(l_account.FormulaType) Then
-                    m_formulaEditionButton.Toggle = CheckState.Checked
+                    SetFormulaEditionState(True)
                 Else
                     MsgBox(Local.GetValue("accounts_edition.msg_formula_not_editable"))
                     FormulaTypeComboBox.Focus()
                 End If
             Else
                 MsgBox(Local.GetValue("accounts_edition.msg_select_account"))
-                m_formulaEditionButton.Toggle = CheckState.Unchecked
+                SetFormulaEditionState(False)
                 m_accountTV.Focus()
                 m_accountTV.SelectedNode = m_accountTV.Nodes(0)
             End If
+         
         End If
 
     End Sub
 
-    Private Sub formulaEdit_Click(sender As Object, e As EventArgs)
+    Private Sub m_cancelFormulaEditionButton_Click(sender As Object, e As EventArgs) Handles m_cancelFormulaEditionButton.Click
 
-        If m_formulaEditionButton.Toggle = CheckState.Unchecked Then
-            Dim confirm As Integer = MessageBox.Show(Local.GetValue("accounts_edition.msg_formula_validation_confirmation"), _
-                                                     Local.GetValue("accounts_edition.title_formula_validation_confirmation"), MessageBoxButtons.YesNo, MessageBoxIcon.Question)
-            If confirm = DialogResult.Yes Then
-                Submit_Formula_Click(sender, e)
-            Else
-                m_formulaTextBox.Text = m_controller.GetFormulaText(m_accountTV.SelectedNode.Value)
-            End If
+        m_formulaTextBox.Text = m_controller.GetFormulaText(m_accountTV.SelectedNode.Value)
+        SetFormulaEditionState(False)
+
+    End Sub
+
+    Private Sub SetFormulaEditionState(ByRef p_state As Boolean)
+
+        m_isEditingFormulaFlag = p_state
+        m_formulaTextBox.Enabled = p_state
+        m_validateFormulaButton.Visible = p_state
+        m_cancelFormulaEditionButton.Visible = p_state
+        m_formulaEditionButton.Visible = p_state = False
+        If p_state = True Then
+            m_formulaTextBox.BackColor = Drawing.Color.White
         Else
-            m_formulaEditionButton.Toggle = CheckState.Unchecked
-            formula_TB_Enter(sender, e)
+            m_formulaTextBox.BackColor = Drawing.Color.LightGray
         End If
-
+        
     End Sub
+
+    'Private Sub formula_TB_Enter(sender As Object, e As EventArgs) Handles m_formulaTextBox.Enter
+
+    '    If m_isEditingFormulaFlag = False Then
+    '        If Not m_currentNode Is Nothing Then
+    '            Dim l_account As Account = GlobalVariables.Accounts.GetValue(CInt(m_currentNode.value))
+
+    '            If l_account Is Nothing Then Exit Sub
+    '            If m_controller.m_formulaTypesToBeTested.Contains(l_account.FormulaType) Then
+    '                m_isEditingFormulaFlag = true
+    '            Else
+    '                MsgBox(Local.GetValue("accounts_edition.msg_formula_not_editable"))
+    '                FormulaTypeComboBox.Focus()
+    '            End If
+    '        Else
+    '            MsgBox(Local.GetValue("accounts_edition.msg_select_account"))
+    '            m_isEditingFormulaFlag = False
+    '            m_accountTV.Focus()
+    '            m_accountTV.SelectedNode = m_accountTV.Nodes(0)
+    '        End If
+    '    End If
+
+    'End Sub
+
+    'Private Sub formulaEdit_Click(sender As Object, e As EventArgs)
+
+    '    If m_isEditingFormulaFlag = False Then
+    '        Dim confirm As Integer = MessageBox.Show(Local.GetValue("accounts_edition.msg_formula_validation_confirmation"), _
+    '                                                 Local.GetValue("accounts_edition.title_formula_validation_confirmation"), MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+    '        If confirm = DialogResult.Yes Then
+    '            Submit_Formula_Click(sender, e)
+    '        Else
+    '            m_formulaTextBox.Text = m_controller.GetFormulaText(m_accountTV.SelectedNode.Value)
+    '        End If
+    '    Else
+    '        m_isEditingFormulaFlag = False
+    '        formula_TB_Enter(sender, e)
+    '    End If
+
+    'End Sub
 
     Private Sub formula_TB_Keydown(sender As Object, e As KeyEventArgs) Handles m_formulaTextBox.KeyDown
 
@@ -731,7 +779,7 @@ TokensCheck:
                 Else
                     m_formulaTextBox.Text = m_controller.GetFormulaText(m_accountTV.SelectedNode.value)
                 End If
-                m_formulaEditionButton.Toggle = CheckState.Unchecked
+                m_isEditingFormulaFlag = False
             Case Keys.Enter
                 Submit_Formula_Click(sender, e)
         End Select
@@ -742,7 +790,7 @@ TokensCheck:
 
         Dim node As vTreeNode = Me.m_accountTV.SelectedNode
         If node IsNot Nothing Then
-            If m_formulaEditionButton.Toggle = CheckState.Checked Then
+            If m_isEditingFormulaFlag = True Then
                 m_formulaTextBox.Text = m_formulaTextBox.Text & FormulasTranslations.ACCOUNTS_HUMAN_IDENTIFIER & _
                                         node.Text & _
                                         FormulasTranslations.ACCOUNTS_HUMAN_IDENTIFIER
@@ -756,7 +804,7 @@ TokensCheck:
 
         Dim node As vTreeNode = VTreeViewUtil.GetNodeAtPosition(m_globalFactsTV, e.Location)
         If node IsNot Nothing Then
-            If m_formulaEditionButton.Toggle = CheckState.Checked Then
+            If m_isEditingFormulaFlag = True Then
                 m_formulaTextBox.Text = m_formulaTextBox.Text & FormulasTranslations.FACTS_HUMAN_IDENTIFIER & _
                                   m_globalFactsTV.SelectedNode.Text & _
                                   FormulasTranslations.FACTS_HUMAN_IDENTIFIER
@@ -812,7 +860,7 @@ TokensCheck:
     Private Sub Name_TB_Validated(sender As Object, e As EventArgs) Handles Name_TB.Validated
 
         If Not IsNothing(m_currentNode) _
-        AndAlso m_isDisplayingAttributes = False Then
+        AndAlso m_isDisplayingAccountFlag = False Then
             Dim newNameStr = Name_TB.Text
 
             If m_controller.AccountNameCheck(newNameStr) = True Then
@@ -835,8 +883,8 @@ TokensCheck:
 
         Dim li = FormulaTypeComboBox.SelectedItem
         If m_currentNode IsNot Nothing _
-        AndAlso m_isDisplayingAttributes = False _
-        AndAlso m_isRevertingFType = False Then
+        AndAlso m_isDisplayingAccountFlag = False _
+        AndAlso m_isRevertingFTypeFlag = False Then
 
             If m_controller.FormulaTypeChangeImpliesFactsDeletion(CInt(m_currentNode.Value), li.Value) = True Then
                 Dim confirm As GeneralUtilities.CheckResult = GeneralUtilities.AskPasswordConfirmation(Local.GetValue("accounts_edition.msg_password_required"), _
@@ -845,12 +893,12 @@ TokensCheck:
                     UpdateFormulaType(m_currentNode.Value, li)
                 Else
                     ' reverting formula type
-                    m_isRevertingFType = True
+                    m_isRevertingFTypeFlag = True
                     Dim l_account As Account = GlobalVariables.Accounts.GetValue(CInt(m_currentNode.Value))
                     If Not l_account Is Nothing Then
                         FormulaTypeComboBox.SelectedValue = l_account.FormulaType
                     End If
-                    m_isRevertingFType = False
+                    m_isRevertingFTypeFlag = False
                     If confirm = GeneralUtilities.CheckResult.Fail Then
                         MsgBox(Local.GetValue("accounts_edition.msg_password_confirmation_failed"))
                         Exit Sub
@@ -898,7 +946,7 @@ TokensCheck:
 
         Dim li = TypeComboBox.SelectedItem
         If Not IsNothing(m_currentNode) _
-        AndAlso m_isDisplayingAttributes = False Then
+        AndAlso m_isDisplayingAccountFlag = False Then
             m_controller.UpdateAccountType(m_currentNode.value, li.Value)
         End If
         If li.Value = Account.AccountType.MONETARY Then
@@ -915,7 +963,7 @@ TokensCheck:
 
         Dim li = CurrencyConversionComboBox.SelectedItem
         If Not IsNothing(m_currentNode) _
-        AndAlso m_isDisplayingAttributes = False Then
+        AndAlso m_isDisplayingAccountFlag = False Then
             Select Case li.Value
                 Case Account.ConversionOptions.AVERAGE_RATE, _
                      Account.ConversionOptions.END_OF_PERIOD_RATE
@@ -929,7 +977,7 @@ TokensCheck:
 
         Dim li = ConsolidationOptionComboBox.SelectedItem
         If Not IsNothing(m_currentNode) _
-        AndAlso m_isDisplayingAttributes = False Then
+        AndAlso m_isDisplayingAccountFlag = False Then
             m_controller.UpdateAccountConsolidationOption(m_currentNode.value, li.Value)
         End If
 
@@ -943,9 +991,9 @@ TokensCheck:
     Private Sub DisplayAttributes()
 
         If Not IsNothing(m_currentNode) _
-        AndAlso m_formulaEditionButton.Toggle = CheckState.Unchecked Then
+        AndAlso m_isEditingFormulaFlag = False Then
 
-            m_isDisplayingAttributes = True
+            m_isDisplayingAccountFlag = True
             Dim account_id As Int32 = m_currentNode.value
             Dim l_account As Account = GlobalVariables.Accounts.GetValue(account_id)
 
@@ -987,30 +1035,36 @@ TokensCheck:
             Dim l_isRootAccount As Boolean = False
             If m_currentNode.Parent Is Nothing Then l_isRootAccount = True
             If formulaTypeLI.Value = Account.FormulaTypes.TITLE Then
-                SetEnableStatusEdition(False, l_isRootAccount)
+                SetEnableStatusEdition(False, l_isRootAccount, l_account.FormulaType)
             Else
-                SetEnableStatusEdition(True, l_isRootAccount)
+                SetEnableStatusEdition(True, l_isRootAccount, l_account.FormulaType)
             End If
-            m_isDisplayingAttributes = False
+            m_isDisplayingAccountFlag = False
         End If
 
     End Sub
 
     Private Sub SetEnableStatusEdition(ByRef p_status As Boolean, _
-                                       ByRef p_isRootAccount As Boolean)
+                                       ByRef p_isRootAccount As Boolean, _
+                                       ByRef p_accountFormulaType As Account.FormulaTypes)
 
         If p_isRootAccount = True Then
             FormulaTypeComboBox.Enabled = p_status
         End If
+        If p_accountFormulaType = Account.FormulaTypes.FORMULA _
+        Or p_accountFormulaType = Account.FormulaTypes.FIRST_PERIOD_INPUT Then
+            m_formulaEditionButton.Enabled = True
+        Else
+            m_formulaEditionButton.Enabled = False
+        End If
         TypeComboBox.Enabled = p_status
         CurrencyConversionComboBox.Enabled = p_status
         ConsolidationOptionComboBox.Enabled = p_status
-        m_formulaTextBox.Enabled = p_status
 
     End Sub
 
 #End Region
 
 
-  
+
 End Class

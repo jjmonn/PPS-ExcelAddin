@@ -33,9 +33,10 @@ Partial Class AccountsView
         Me.SaveDescriptionBT = New VIBlend.WinForms.Controls.vButton()
         Me.EditButtonsImagelist = New System.Windows.Forms.ImageList(Me.components)
         Me.m_accountFormulaGroupbox = New System.Windows.Forms.GroupBox()
-        Me.m_formulaEditionButton = New VIBlend.WinForms.Controls.vToggleButton()
+        Me.m_cancelFormulaEditionButton = New VIBlend.WinForms.Controls.vButton()
+        Me.m_formulaEditionButton = New VIBlend.WinForms.Controls.vButton()
         Me.m_formulaTextBox = New VIBlend.WinForms.Controls.vTextBox()
-        Me.submit_cmd = New VIBlend.WinForms.Controls.vButton()
+        Me.m_validateFormulaButton = New VIBlend.WinForms.Controls.vButton()
         Me.m_accountInformationGroupbox = New System.Windows.Forms.GroupBox()
         Me.ConsolidationOptionComboBox = New VIBlend.WinForms.Controls.vComboBox()
         Me.CurrencyConversionComboBox = New VIBlend.WinForms.Controls.vComboBox()
@@ -53,9 +54,12 @@ Partial Class AccountsView
         Me.TVRCM = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.AddSubAccountToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.AddCategoryToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.DeleteAccountToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.DropHierarchyToExcelToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
+        Me.DeleteAccountToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator3 = New System.Windows.Forms.ToolStripSeparator()
+        Me.m_allocationKeyButton = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator4 = New System.Windows.Forms.ToolStripSeparator()
+        Me.DropHierarchyToExcelToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.MainMenu = New System.Windows.Forms.MenuStrip()
         Me.NewToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.CreateANewAccountToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -67,9 +71,6 @@ Partial Class AccountsView
         Me.DropSelectedAccountHierarchyToExcelToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.HelpToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.m_globalFactsImageList = New System.Windows.Forms.ImageList(Me.components)
-        Me.ToolStripSeparator3 = New System.Windows.Forms.ToolStripSeparator()
-        Me.ToolStripSeparator4 = New System.Windows.Forms.ToolStripSeparator()
-        Me.m_allocationKeyButton = New System.Windows.Forms.ToolStripMenuItem()
         CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SplitContainer1.Panel1.SuspendLayout()
         Me.SplitContainer1.Panel2.SuspendLayout()
@@ -209,14 +210,15 @@ Partial Class AccountsView
         Me.EditButtonsImagelist.ImageStream = CType(resources.GetObject("EditButtonsImagelist.ImageStream"), System.Windows.Forms.ImageListStreamer)
         Me.EditButtonsImagelist.TransparentColor = System.Drawing.Color.Transparent
         Me.EditButtonsImagelist.Images.SetKeyName(0, "1420498403_340208.ico")
-        Me.EditButtonsImagelist.Images.SetKeyName(1, "config circle purple.ico")
-        Me.EditButtonsImagelist.Images.SetKeyName(2, "formula.ico")
+        Me.EditButtonsImagelist.Images.SetKeyName(1, "formula.ico")
+        Me.EditButtonsImagelist.Images.SetKeyName(2, "imageres_89.ico")
         '
         'm_accountFormulaGroupbox
         '
+        Me.m_accountFormulaGroupbox.Controls.Add(Me.m_cancelFormulaEditionButton)
         Me.m_accountFormulaGroupbox.Controls.Add(Me.m_formulaEditionButton)
         Me.m_accountFormulaGroupbox.Controls.Add(Me.m_formulaTextBox)
-        Me.m_accountFormulaGroupbox.Controls.Add(Me.submit_cmd)
+        Me.m_accountFormulaGroupbox.Controls.Add(Me.m_validateFormulaButton)
         Me.m_accountFormulaGroupbox.Dock = System.Windows.Forms.DockStyle.Fill
         Me.m_accountFormulaGroupbox.Location = New System.Drawing.Point(3, 313)
         Me.m_accountFormulaGroupbox.Name = "m_accountFormulaGroupbox"
@@ -225,6 +227,26 @@ Partial Class AccountsView
         Me.m_accountFormulaGroupbox.TabStop = False
         Me.m_accountFormulaGroupbox.Text = "Account formula"
         '
+        'm_cancelFormulaEditionButton
+        '
+        Me.m_cancelFormulaEditionButton.AllowAnimations = True
+        Me.m_cancelFormulaEditionButton.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.m_cancelFormulaEditionButton.BackColor = System.Drawing.Color.Transparent
+        Me.m_cancelFormulaEditionButton.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.m_cancelFormulaEditionButton.ImageKey = "imageres_89.ico"
+        Me.m_cancelFormulaEditionButton.ImageList = Me.EditButtonsImagelist
+        Me.m_cancelFormulaEditionButton.Location = New System.Drawing.Point(454, 162)
+        Me.m_cancelFormulaEditionButton.Margin = New System.Windows.Forms.Padding(2)
+        Me.m_cancelFormulaEditionButton.Name = "m_cancelFormulaEditionButton"
+        Me.m_cancelFormulaEditionButton.RoundedCornersMask = CType(15, Byte)
+        Me.m_cancelFormulaEditionButton.Size = New System.Drawing.Size(81, 28)
+        Me.m_cancelFormulaEditionButton.TabIndex = 8
+        Me.m_cancelFormulaEditionButton.Text = "Cancel"
+        Me.m_cancelFormulaEditionButton.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.m_cancelFormulaEditionButton.UseVisualStyleBackColor = True
+        Me.m_cancelFormulaEditionButton.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
+        Me.m_cancelFormulaEditionButton.Visible = False
+        '
         'm_formulaEditionButton
         '
         Me.m_formulaEditionButton.AllowAnimations = True
@@ -232,15 +254,13 @@ Partial Class AccountsView
         Me.m_formulaEditionButton.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
         Me.m_formulaEditionButton.ImageKey = "formula.ico"
         Me.m_formulaEditionButton.ImageList = Me.EditButtonsImagelist
-        Me.m_formulaEditionButton.Location = New System.Drawing.Point(6, 23)
+        Me.m_formulaEditionButton.Location = New System.Drawing.Point(6, 22)
         Me.m_formulaEditionButton.Name = "m_formulaEditionButton"
         Me.m_formulaEditionButton.RoundedCornersMask = CType(15, Byte)
-        Me.m_formulaEditionButton.Size = New System.Drawing.Size(199, 20)
-        Me.m_formulaEditionButton.StyleKey = "ToggleButton"
+        Me.m_formulaEditionButton.Size = New System.Drawing.Size(123, 22)
         Me.m_formulaEditionButton.TabIndex = 8
-        Me.m_formulaEditionButton.Text = "Formula Edition"
+        Me.m_formulaEditionButton.Text = "Edit formula"
         Me.m_formulaEditionButton.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.m_formulaEditionButton.Toggle = System.Windows.Forms.CheckState.Unchecked
         Me.m_formulaEditionButton.UseVisualStyleBackColor = False
         Me.m_formulaEditionButton.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
         '
@@ -254,6 +274,7 @@ Partial Class AccountsView
         Me.m_formulaTextBox.BoundsOffset = New System.Drawing.Size(1, 1)
         Me.m_formulaTextBox.ControlBorderColor = System.Drawing.Color.FromArgb(CType(CType(39, Byte), Integer), CType(CType(39, Byte), Integer), CType(CType(39, Byte), Integer))
         Me.m_formulaTextBox.DefaultText = "Empty..."
+        Me.m_formulaTextBox.Enabled = False
         Me.m_formulaTextBox.Location = New System.Drawing.Point(6, 52)
         Me.m_formulaTextBox.MaxLength = 32767
         Me.m_formulaTextBox.Multiline = True
@@ -267,24 +288,25 @@ Partial Class AccountsView
         Me.m_formulaTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Left
         Me.m_formulaTextBox.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
         '
-        'submit_cmd
+        'm_validateFormulaButton
         '
-        Me.submit_cmd.AllowAnimations = True
-        Me.submit_cmd.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.submit_cmd.BackColor = System.Drawing.Color.Transparent
-        Me.submit_cmd.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
-        Me.submit_cmd.ImageKey = "1420498403_340208.ico"
-        Me.submit_cmd.ImageList = Me.EditButtonsImagelist
-        Me.submit_cmd.Location = New System.Drawing.Point(348, 162)
-        Me.submit_cmd.Margin = New System.Windows.Forms.Padding(2)
-        Me.submit_cmd.Name = "submit_cmd"
-        Me.submit_cmd.RoundedCornersMask = CType(15, Byte)
-        Me.submit_cmd.Size = New System.Drawing.Size(187, 28)
-        Me.submit_cmd.TabIndex = 7
-        Me.submit_cmd.Text = "[accounts_edition.validate_formula]"
-        Me.submit_cmd.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.submit_cmd.UseVisualStyleBackColor = True
-        Me.submit_cmd.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
+        Me.m_validateFormulaButton.AllowAnimations = True
+        Me.m_validateFormulaButton.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.m_validateFormulaButton.BackColor = System.Drawing.Color.Transparent
+        Me.m_validateFormulaButton.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.m_validateFormulaButton.ImageKey = "1420498403_340208.ico"
+        Me.m_validateFormulaButton.ImageList = Me.EditButtonsImagelist
+        Me.m_validateFormulaButton.Location = New System.Drawing.Point(352, 162)
+        Me.m_validateFormulaButton.Margin = New System.Windows.Forms.Padding(2)
+        Me.m_validateFormulaButton.Name = "m_validateFormulaButton"
+        Me.m_validateFormulaButton.RoundedCornersMask = CType(15, Byte)
+        Me.m_validateFormulaButton.Size = New System.Drawing.Size(81, 28)
+        Me.m_validateFormulaButton.TabIndex = 7
+        Me.m_validateFormulaButton.Text = "Validate"
+        Me.m_validateFormulaButton.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.m_validateFormulaButton.UseVisualStyleBackColor = True
+        Me.m_validateFormulaButton.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
+        Me.m_validateFormulaButton.Visible = False
         '
         'm_accountInformationGroupbox
         '
@@ -491,7 +513,7 @@ Partial Class AccountsView
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.GlobalFactsPanel.Location = New System.Drawing.Point(3, 58)
         Me.GlobalFactsPanel.Name = "GlobalFactsPanel"
-        Me.GlobalFactsPanel.Size = New System.Drawing.Size(123, 619)
+        Me.GlobalFactsPanel.Size = New System.Drawing.Size(128, 619)
         Me.GlobalFactsPanel.TabIndex = 3
         '
         'm_globalFactsLabel
@@ -505,7 +527,7 @@ Partial Class AccountsView
         Me.m_globalFactsLabel.Location = New System.Drawing.Point(12, 28)
         Me.m_globalFactsLabel.Multiline = True
         Me.m_globalFactsLabel.Name = "m_globalFactsLabel"
-        Me.m_globalFactsLabel.Size = New System.Drawing.Size(142, 16)
+        Me.m_globalFactsLabel.Size = New System.Drawing.Size(147, 16)
         Me.m_globalFactsLabel.TabIndex = 0
         Me.m_globalFactsLabel.Text = "Macro economic indicators"
         Me.m_globalFactsLabel.TextAlignment = System.Drawing.ContentAlignment.TopLeft
@@ -529,7 +551,7 @@ Partial Class AccountsView
         '
         Me.TVRCM.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.AddSubAccountToolStripMenuItem, Me.AddCategoryToolStripMenuItem, Me.ToolStripSeparator1, Me.DeleteAccountToolStripMenuItem, Me.ToolStripSeparator3, Me.m_allocationKeyButton, Me.ToolStripSeparator4, Me.DropHierarchyToExcelToolStripMenuItem})
         Me.TVRCM.Name = "ContextMenuStripTV"
-        Me.TVRCM.Size = New System.Drawing.Size(221, 164)
+        Me.TVRCM.Size = New System.Drawing.Size(221, 142)
         '
         'AddSubAccountToolStripMenuItem
         '
@@ -545,6 +567,11 @@ Partial Class AccountsView
         Me.AddCategoryToolStripMenuItem.Size = New System.Drawing.Size(220, 24)
         Me.AddCategoryToolStripMenuItem.Text = "Add Category"
         '
+        'ToolStripSeparator1
+        '
+        Me.ToolStripSeparator1.Name = "ToolStripSeparator1"
+        Me.ToolStripSeparator1.Size = New System.Drawing.Size(217, 6)
+        '
         'DeleteAccountToolStripMenuItem
         '
         Me.DeleteAccountToolStripMenuItem.Image = Global.FinancialBI.My.Resources.Resources.registry_delete
@@ -552,17 +579,28 @@ Partial Class AccountsView
         Me.DeleteAccountToolStripMenuItem.Size = New System.Drawing.Size(220, 24)
         Me.DeleteAccountToolStripMenuItem.Text = "Delete Account"
         '
+        'ToolStripSeparator3
+        '
+        Me.ToolStripSeparator3.Name = "ToolStripSeparator3"
+        Me.ToolStripSeparator3.Size = New System.Drawing.Size(217, 6)
+        '
+        'm_allocationKeyButton
+        '
+        Me.m_allocationKeyButton.Name = "m_allocationKeyButton"
+        Me.m_allocationKeyButton.Size = New System.Drawing.Size(220, 24)
+        Me.m_allocationKeyButton.Text = "Set allocation keys"
+        '
+        'ToolStripSeparator4
+        '
+        Me.ToolStripSeparator4.Name = "ToolStripSeparator4"
+        Me.ToolStripSeparator4.Size = New System.Drawing.Size(217, 6)
+        '
         'DropHierarchyToExcelToolStripMenuItem
         '
         Me.DropHierarchyToExcelToolStripMenuItem.Image = Global.FinancialBI.My.Resources.Resources.excel_blue2
         Me.DropHierarchyToExcelToolStripMenuItem.Name = "DropHierarchyToExcelToolStripMenuItem"
         Me.DropHierarchyToExcelToolStripMenuItem.Size = New System.Drawing.Size(220, 24)
         Me.DropHierarchyToExcelToolStripMenuItem.Text = "Drop accounts on Excel"
-        '
-        'ToolStripSeparator1
-        '
-        Me.ToolStripSeparator1.Name = "ToolStripSeparator1"
-        Me.ToolStripSeparator1.Size = New System.Drawing.Size(217, 6)
         '
         'MainMenu
         '
@@ -642,49 +680,33 @@ Partial Class AccountsView
         Me.m_globalFactsImageList.Images.SetKeyName(1, "chart_line.ico")
         Me.m_globalFactsImageList.Images.SetKeyName(2, "money_interest.ico")
         '
-        'ToolStripSeparator3
-        '
-        Me.ToolStripSeparator3.Name = "ToolStripSeparator3"
-        Me.ToolStripSeparator3.Size = New System.Drawing.Size(217, 6)
-        '
-        'ToolStripSeparator4
-        '
-        Me.ToolStripSeparator4.Name = "ToolStripSeparator4"
-        Me.ToolStripSeparator4.Size = New System.Drawing.Size(217, 6)
-        '
-        'm_allocationKeyButton
-        '
-        Me.m_allocationKeyButton.Name = "m_allocationKeyButton"
-        Me.m_allocationKeyButton.Size = New System.Drawing.Size(220, 24)
-        Me.m_allocationKeyButton.Text = "Set allocation keys"
-        '
         'AccountsView
         '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(6!, 13!)
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.Controls.Add(Me.MainMenu)
         Me.Controls.Add(Me.SplitContainer1)
         Me.Name = "AccountsView"
         Me.Size = New System.Drawing.Size(981, 692)
-        Me.SplitContainer1.Panel1.ResumeLayout(false)
-        Me.SplitContainer1.Panel2.ResumeLayout(false)
-        CType(Me.SplitContainer1,System.ComponentModel.ISupportInitialize).EndInit
-        Me.SplitContainer1.ResumeLayout(false)
-        Me.SplitContainer2.Panel1.ResumeLayout(false)
-        Me.SplitContainer2.Panel2.ResumeLayout(false)
-        CType(Me.SplitContainer2,System.ComponentModel.ISupportInitialize).EndInit
-        Me.SplitContainer2.ResumeLayout(false)
-        Me.TableLayoutPanel2.ResumeLayout(false)
-        Me.m_accountDescriptionGroupbox.ResumeLayout(false)
-        Me.m_accountFormulaGroupbox.ResumeLayout(false)
-        Me.m_accountInformationGroupbox.ResumeLayout(false)
-        Me.TVRCM.ResumeLayout(false)
-        Me.MainMenu.ResumeLayout(false)
-        Me.MainMenu.PerformLayout
-        Me.ResumeLayout(false)
-        Me.PerformLayout
+        Me.SplitContainer1.Panel1.ResumeLayout(False)
+        Me.SplitContainer1.Panel2.ResumeLayout(False)
+        CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.SplitContainer1.ResumeLayout(False)
+        Me.SplitContainer2.Panel1.ResumeLayout(False)
+        Me.SplitContainer2.Panel2.ResumeLayout(False)
+        CType(Me.SplitContainer2, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.SplitContainer2.ResumeLayout(False)
+        Me.TableLayoutPanel2.ResumeLayout(False)
+        Me.m_accountDescriptionGroupbox.ResumeLayout(False)
+        Me.m_accountFormulaGroupbox.ResumeLayout(False)
+        Me.m_accountInformationGroupbox.ResumeLayout(False)
+        Me.TVRCM.ResumeLayout(False)
+        Me.MainMenu.ResumeLayout(False)
+        Me.MainMenu.PerformLayout()
+        Me.ResumeLayout(False)
+        Me.PerformLayout()
 
-End Sub
+    End Sub
     Friend WithEvents SplitContainer1 As System.Windows.Forms.SplitContainer
     Friend WithEvents TableLayoutPanel2 As System.Windows.Forms.TableLayoutPanel
     Friend WithEvents m_accountInformationGroupbox As System.Windows.Forms.GroupBox
@@ -725,11 +747,12 @@ End Sub
     Friend WithEvents m_formulaTextBox As VIBlend.WinForms.Controls.vTextBox
     Friend WithEvents AccountsTVPanel As System.Windows.Forms.Panel
     Friend WithEvents m_globalFactsImageList As System.Windows.Forms.ImageList
-    Friend WithEvents submit_cmd As VIBlend.WinForms.Controls.vButton
+    Friend WithEvents m_validateFormulaButton As VIBlend.WinForms.Controls.vButton
     Friend WithEvents SaveDescriptionBT As VIBlend.WinForms.Controls.vButton
-    Friend WithEvents m_formulaEditionButton As VIBlend.WinForms.Controls.vToggleButton
     Friend WithEvents ToolStripSeparator3 As System.Windows.Forms.ToolStripSeparator
     Friend WithEvents m_allocationKeyButton As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ToolStripSeparator4 As System.Windows.Forms.ToolStripSeparator
+    Friend WithEvents m_formulaEditionButton As VIBlend.WinForms.Controls.vButton
+    Friend WithEvents m_cancelFormulaEditionButton As VIBlend.WinForms.Controls.vButton
 
 End Class
