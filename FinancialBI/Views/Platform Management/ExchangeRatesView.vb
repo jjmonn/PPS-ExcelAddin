@@ -418,7 +418,11 @@ Friend Class ExchangeRatesView
                 Dim exchangeRate As ExchangeRate = p_exchangeRates.GetValue(currencyId, m_currentRatesVersionId, period)
 
                 If Not exchangeRate Is Nothing Then
-                    m_ratesDataGridView.CellsArea.SetCellValue(row, column, exchangeRate.Value)
+                    Dim item As New ListItem
+
+                    item.Value = exchangeRate.Id
+                    item.Text = exchangeRate.Value
+                    m_ratesDataGridView.CellsArea.SetCellValue(row, column, item)
                 Else
                     m_ratesDataGridView.CellsArea.SetCellValue(row, column, 0)
                 End If
@@ -450,6 +454,30 @@ Friend Class ExchangeRatesView
             m_ratesDataGridView.CellsArea.SetCellValue(m_ratesDataGridView.RowsHierarchy.Items(i), column, value)
         Next
         m_isCopyingValueDown = False
+
+    End Sub
+
+    Friend Delegate Sub ResetValue_Delegate(ByRef p_rate As ExchangeRate)
+    Friend Sub ResetValue(ByRef p_rate As ExchangeRate)
+
+        If InvokeRequired Then
+            Dim MyDelegate As New ResetValue_Delegate(AddressOf ResetValue)
+            Me.Invoke(MyDelegate, New Object() {p_rate})
+        Else
+            If p_rate Is Nothing Then Exit Sub
+
+            Dim columnItem As HierarchyItem = DataGridViewsUtil.GetHierarchyItemFromId(m_ratesDataGridView.ColumnsHierarchy, p_rate.DestCurrencyId)
+            Dim rowItem As HierarchyItem = DataGridViewsUtil.GetHierarchyItemFromId(m_ratesDataGridView.RowsHierarchy, p_rate.Period)
+
+            If rowItem Is Nothing OrElse columnItem Is Nothing Then Exit Sub
+            Dim item As New ListItem
+            item.Text = p_rate.Value
+            item.Value = p_rate.Id
+            m_isFillingCells = True
+            m_ratesDataGridView.CellsArea.SetCellValue(rowItem, columnItem, item)
+            m_isFillingCells = False
+            m_ratesDataGridView.Refresh()
+        End If
 
     End Sub
 
