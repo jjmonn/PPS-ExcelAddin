@@ -41,7 +41,7 @@ Friend Class FModellingAccountsController
 
     Private Sub InitializeDGVValues()
 
-        'Dim f_accounts_dic As New Dictionary(Of String, Hashtable)
+        'Dim f_accounts_dic As New SafeDictionary(Of String, Hashtable)
         'For Each f_account_id As String In f_accounts_name_id_dic.Values
         '    f_accounts_dic.Add(f_account_id, FModellingAccounts.GetSeriHT(f_account_id))
         'Next

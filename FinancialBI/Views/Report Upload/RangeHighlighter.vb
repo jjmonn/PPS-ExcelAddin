@@ -29,7 +29,7 @@ Friend Class RangeHighlighter
     Friend WS As Excel.Worksheet
 
     ' Variables
-    Private original_cells_format As New Dictionary(Of String, Hashtable)
+    Private original_cells_format As New SafeDictionary(Of String, Hashtable)
     Friend inputCellsAddresses As New List(Of String)
     Friend outputCellsAddresses As New List(Of String)
 

@@ -38,8 +38,8 @@ Friend Class AxisView
     Private m_CircularProgress As CircularProgressUI
 
     ' Variables
-    Friend m_columnsVariableItemDictionary As New Dictionary(Of String, HierarchyItem)
-    Friend m_rowsIdsItemDic As New Dictionary(Of Int32, HierarchyItem)
+    Friend m_columnsVariableItemDictionary As New SafeDictionary(Of String, HierarchyItem)
+    Friend m_rowsIdsItemDic As New SafeDictionary(Of Int32, HierarchyItem)
     Private m_dataGridViewArray(,) As String
     Private m_filterGroup As New FilterGroup(Of String)()
     Friend m_currentRowItem As HierarchyItem
@@ -605,7 +605,7 @@ Friend Class AxisView
 
                     Case NAME_VARIABLE
                         Dim newAxisName As String = args.Cell.Value
-                        'Controller.UpdateAxis(axisId, args.Cell.ColumnItem.ItemValue, newAxisName) ' Nath_TODO
+                        m_controller.UpdateAxisName(axisId, newAxisName)
                     Case Else
                         Dim filterValueName As String = args.Cell.Value
                         Dim filterValueId As Int32 = GlobalVariables.FiltersValues.GetValueId(filterValueName)

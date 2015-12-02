@@ -37,7 +37,7 @@ Friend Class FModelingInputsController
     Friend inputs_mapping As Dictionary(Of Int32, Int32)
     Private accounts_id_list As List(Of Account)
     Friend periods_list As List(Of Int32)
-    Private current_conso_data_dic As New Dictionary(Of Int32, Double())
+    Private current_conso_data_dic As New SafeDictionary(Of Int32, Double())
     '    Private versions_id_list As List(Of String)
 
     ' Display

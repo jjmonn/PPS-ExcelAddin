@@ -394,7 +394,7 @@ Err:
 
     Friend Shared Function GetDictionaryCopy(ByRef input_dict As Dictionary(Of String, String)) As Dictionary(Of String, String)
 
-        Dim tmp_dict As New Dictionary(Of String, String)
+        Dim tmp_dict As New SafeDictionary(Of String, String)
         For Each key As String In input_dict.Keys
             tmp_dict.Add(key, input_dict(key))
         Next

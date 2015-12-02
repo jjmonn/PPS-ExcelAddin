@@ -31,8 +31,8 @@ Friend Class Computer
     ' Variables
     Private m_dataMap As Dictionary(Of String, Double)
     Private m_versionsComputationQueue As Dictionary(Of Int32, Dictionary(Of Int32, Boolean))
-    Private m_requestIdVersionIdDict As New Dictionary(Of Int32, Int32)
-    Private m_requestIdEntityIdDict As New Dictionary(Of Int32, Int32)
+    Private m_requestIdVersionIdDict As New SafeDictionary(Of Int32, Int32)
+    Private m_requestIdEntityIdDict As New SafeDictionary(Of Int32, Int32)
 
     ' Computing
     Private m_isAxis As Boolean
@@ -45,7 +45,7 @@ Friend Class Computer
     Private m_filterToken As String
     Private m_periodIdentifier As Char
     Private m_periodsTokenDict As Dictionary(Of String, String)
-    Private m_filtersDict As New Dictionary(Of String, Int32)
+    Private m_filtersDict As New SafeDictionary(Of String, Int32)
 
     ' Constants
     Friend Const FILTERS_DECOMPOSITION_IDENTIFIER As Char = "F"
@@ -74,15 +74,15 @@ Friend Class Computer
                                          Optional ByRef p_axisFilters As Dictionary(Of Int32, List(Of Int32)) = Nothing, _
                                          Optional ByRef p_hierarchy As List(Of String) = Nothing) As Int32
 
-        m_dataMap = New Dictionary(Of String, Double)
+        m_dataMap = New SafeDictionary(Of String, Double)
         m_requestIdVersionIdDict.Clear()
         m_requestIdEntityIdDict.Clear()
-        m_versionsComputationQueue = New Dictionary(Of Int32, Dictionary(Of Int32, Boolean))
+        m_versionsComputationQueue = New SafeDictionary(Of Int32, Dictionary(Of Int32, Boolean))
 
         ' Initializing versions to be computed
         For Each l_versionId As Int32 In p_versionsIds
             ' Initializing entities to be computed
-            Dim l_entitiesIds As New Dictionary(Of Int32, Boolean)
+            Dim l_entitiesIds As New SafeDictionary(Of Int32, Boolean)
             For Each l_entityId As Int32 In p_entitiesIds
                 l_entitiesIds.Add(l_entityId, False)
             Next

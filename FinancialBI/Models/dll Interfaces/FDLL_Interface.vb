@@ -102,7 +102,7 @@ Friend Class FDLL_Interface
 
     Friend Function GetOutputMatrix(ByRef accounts_id_list) As Dictionary(Of String, Double())
 
-        Dim tmpDict As New Dictionary(Of String, Double())
+        Dim tmpDict As New SafeDictionary(Of String, Double())
         For Each account_id In accounts_id_list
             Dim tmpDataArray() As Double
             ' Gérer la possibilité d'un plantage au niveau c++ !!

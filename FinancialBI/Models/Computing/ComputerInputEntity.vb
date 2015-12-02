@@ -26,9 +26,9 @@ Public Class ComputerInputEntity
     Public Event ComputationAnswered(ByRef status As Boolean)
 
     ' Variables
-    '    Private m_requestIdEntityIdDict As New Dictionary(Of UInt32, UInt32)
+    '    Private m_requestIdEntityIdDict As New SafeDictionary(Of UInt32, UInt32)
     Private m_entitiesIdComputationQueue As List(Of Int32)
-    Private m_dataMap As New Dictionary(Of Int32, Dictionary(Of Int32, Dictionary(Of String, Double)))
+    Private m_dataMap As New SafeDictionary(Of Int32, Dictionary(Of Int32, Dictionary(Of String, Double)))
     '   Private m_entityId As Int32
     Private m_versionId As Int32
     Private m_accountId As Int32
@@ -119,7 +119,7 @@ Public Class ComputerInputEntity
             End Select
 
             Dim l_entityId As Int32 = packet.ReadUint32()
-            Dim l_entityDataMap As New Dictionary(Of Int32, Dictionary(Of String, Double))
+            Dim l_entityDataMap As New SafeDictionary(Of Int32, Dictionary(Of String, Double))
 
             FillEntityData(packet, l_entityId, l_entityDataMap)
 
@@ -153,7 +153,7 @@ Public Class ComputerInputEntity
         For account_index As Int32 = 1 To packet.ReadUint32()
             m_accountId = packet.ReadUint32()
 
-            Dim periodDict As New Dictionary(Of String, Double)
+            Dim periodDict As New SafeDictionary(Of String, Double)
             ' Non aggregated data
             For period_index As Int16 = 0 To packet.ReadUint16() - 1
                 periodDict.Add(m_periodsTokenDict(m_periodIdentifier & period_index), packet.ReadDouble())

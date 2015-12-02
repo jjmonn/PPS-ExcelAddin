@@ -82,7 +82,7 @@ Public MustInherit Class CRUDManager
 
     Protected Sub UpdateListAnswer(packet As ByteBuffer)
         If packet.GetError() = ErrorMessage.SUCCESS Then
-            Dim resultList As New Dictionary(Of UInt32, Boolean)
+            Dim resultList As New SafeDictionary(Of UInt32, Boolean)
             Dim nbResult As Int32 = packet.ReadInt32()
 
             For i As Int32 = 1 To nbResult

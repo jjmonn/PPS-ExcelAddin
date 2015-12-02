@@ -3,7 +3,7 @@ Imports System.Collections.Generic
 Imports System.IO
 
 Public Class Local
-    Private Shared m_localDic As New Dictionary(Of String, String)
+    Private Shared m_localDic As New SafeDictionary(Of String, String)
 
     Public Shared Function GetValue(ByRef p_name As String)
         If m_localDic.ContainsKey("FBI." & p_name) Then Return m_localDic("FBI." & p_name)

@@ -27,11 +27,11 @@ Friend Class SubmissionsControlsController
     Private ChartsTV As New TreeView
 
     ' Variables
-    Private data_dictionaries As New Dictionary(Of String, Dictionary(Of String, Double()))
-    Private charts_dic As New Dictionary(Of String, Chart)
+    Private data_dictionaries As New SafeDictionary(Of String, Dictionary(Of String, Double()))
+    Private charts_dic As New SafeDictionary(Of String, Chart)
     Private periods_list As List(Of Int32)
     Private version_id As String
-    Private successfull_controls_dic As New Dictionary(Of String, List(Of String))
+    Private successfull_controls_dic As New SafeDictionary(Of String, List(Of String))
     Private entities_id_list As List(Of Int32)
     Private charts_periods As New List(Of Int32)
 
@@ -137,7 +137,7 @@ Friend Class SubmissionsControlsController
 
         data_dictionaries.Clear()
         For Each entity_id In entities_id_list
-            Dim tmp_dic As New Dictionary(Of String, Double())
+            Dim tmp_dic As New SafeDictionary(Of String, Double())
 
             'Dim tmp_data_array = Computer.GetEntityArray(entity_id)
 
@@ -162,7 +162,7 @@ Friend Class SubmissionsControlsController
             successfull_controls_dic.Add(entity_id, SubmissionControl.CheckSubmission(periods_list, data_dictionaries(entity_id)))
         Next
 
-        Dim nodes_icon_dic As New Dictionary(Of UInt32, Int32)
+        Dim nodes_icon_dic As New SafeDictionary(Of UInt32, Int32)
         Dim nb_controls As Int32 = SubmissionControl.controls_dic.Keys.Count
         For Each entity_id In entities_id_list
             If successfull_controls_dic(entity_id).Count = nb_controls Then

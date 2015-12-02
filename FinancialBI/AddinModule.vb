@@ -152,8 +152,8 @@ Public Class AddinModule
 #Region "My Instance Variables"
 
     Friend m_ribbon As IRibbonUI
-    Friend m_GRSControlersDictionary As New Dictionary(Of Excel.Worksheet, GeneralSubmissionControler)
-    Private m_worksheetNamesObjectDict As New Dictionary(Of String, Excel.Worksheet)
+    Friend m_GRSControlersDictionary As New SafeDictionary(Of Excel.Worksheet, GeneralSubmissionControler)
+    Private m_worksheetNamesObjectDict As New SafeDictionary(Of String, Excel.Worksheet)
     Public setUpFlag As Boolean
     Public ppsbi_refresh_flag As Boolean = True
     Public m_ppsbiController As FBIFunctionController

@@ -280,7 +280,7 @@ Friend Class AxisFiltersController
 
     Private Function GetFiltersValuesPositionsDictionary() As Dictionary(Of Int32, Int32)
 
-        Dim positionsDictionary As New Dictionary(Of Int32, Int32)
+        Dim positionsDictionary As New SafeDictionary(Of Int32, Int32)
         For Each node As vTreeNode In m_view.m_filtersFiltersValuesTV.Nodes
 
 

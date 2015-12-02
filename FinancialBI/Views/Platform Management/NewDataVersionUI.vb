@@ -28,8 +28,8 @@ Friend Class NewDataVersionUI
     Private m_originVersionNode As vTreeNode
     Private m_parentNode As vTreeNode
     Private Const NB_YEARS_AVAILABLE As Int32 = 5
-    Private m_monthDictionary As New Dictionary(Of String, ListItem)
-    Private m_timeConfigDictionary As New Dictionary(Of String, ListItem)
+    Private m_monthDictionary As New SafeDictionary(Of String, ListItem)
+    Private m_timeConfigDictionary As New SafeDictionary(Of String, ListItem)
 
 #End Region
 

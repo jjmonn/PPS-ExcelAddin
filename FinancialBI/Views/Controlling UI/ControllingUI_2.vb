@@ -55,14 +55,14 @@ Friend Class ControllingUI_2
 #Region "Variables"
 
     Private current_DGV_cell As GridCell
-    Private rows_list_dic As New Dictionary(Of String, List(Of HierarchyItem))
-    Private columns_list_dic As New Dictionary(Of String, List(Of HierarchyItem))
+    Private rows_list_dic As New SafeDictionary(Of String, List(Of HierarchyItem))
+    Private columns_list_dic As New SafeDictionary(Of String, List(Of HierarchyItem))
     Private row_index As Int32
     Private column_index As Int32
     Friend accountsTV As New vTreeView
     Private SP1Distance As Single = 230
     Private SP2Distance As Single = 900
-    '   Private m_formatsDictionary As New Dictionary(Of int32, Formats.FinancialBIFormat)
+    '   Private m_formatsDictionary As New SafeDictionary(Of int32, Formats.FinancialBIFormat)
     Private m_currentEntityNode As vTreeNode
 
 
@@ -444,7 +444,7 @@ Friend Class ControllingUI_2
     Private Sub periodsTV_ItemCheck(sender As Object, e As vTreeViewEventArgs)
 
         If m_isUpdatingPeriodsCheckList = False Then
-            Dim periodSelectionDict As New Dictionary(Of String, Boolean)
+            Dim periodSelectionDict As New SafeDictionary(Of String, Boolean)
 
             For Each node As vTreeNode In leftPane_control.periodsTV.GetNodes
                 If node.Checked = CheckState.Checked Then

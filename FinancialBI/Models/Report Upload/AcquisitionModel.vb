@@ -44,8 +44,8 @@ Friend Class AcquisitionModel
 
     ' Variables
     '(entity_name)(account_name)(period_token) => values
-    Friend m_databaseInputsDictionary As New Dictionary(Of String, Dictionary(Of String, Dictionary(Of String, Double)))
-    Private m_computationDataMap As New Dictionary(Of Int32, Dictionary(Of Int32, Dictionary(Of String, Double)))
+    Friend m_databaseInputsDictionary As New SafeDictionary(Of String, Dictionary(Of String, Dictionary(Of String, Double)))
+    Private m_computationDataMap As New SafeDictionary(Of Int32, Dictionary(Of Int32, Dictionary(Of String, Double)))
     Friend m_currentPeriodDict As Dictionary(Of Int32, List(Of Int32))
     Friend m_currentPeriodList() As Int32
     Friend m_outputsList As List(Of Account)
@@ -57,9 +57,9 @@ Friend Class AcquisitionModel
     Private m_entitiesIdOutputList As New List(Of Int32)
 
     ' Dll computation related
-    Private m_entitiesIdInputsAccounts As New Dictionary(Of Int32, Int32())
-    Private m_entitiesIdInputsPeriods As New Dictionary(Of Int32, Int32())
-    Private m_entitiesIdInputsValues As New Dictionary(Of Int32, Double())
+    Private m_entitiesIdInputsAccounts As New SafeDictionary(Of Int32, Int32())
+    Private m_entitiesIdInputsPeriods As New SafeDictionary(Of Int32, Int32())
+    Private m_entitiesIdInputsValues As New SafeDictionary(Of Int32, Double())
 
     Private m_inputsDownloadFailureFlag As Boolean = False
     Private m_outputsComputationFailureFlag As Boolean = False
@@ -121,7 +121,7 @@ Friend Class AcquisitionModel
         Next
 
         ' Axis filters creation
-        Dim l_axisFilters As New Dictionary(Of Int32, List(Of Int32))
+        Dim l_axisFilters As New SafeDictionary(Of Int32, List(Of Int32))
         l_axisFilters.Add(GlobalEnums.AnalysisAxis.CLIENTS, New List(Of Int32))
         l_axisFilters.Add(GlobalEnums.AnalysisAxis.PRODUCTS, New List(Of Int32))
         l_axisFilters.Add(GlobalEnums.AnalysisAxis.ADJUSTMENTS, New List(Of Int32))
@@ -171,7 +171,7 @@ Friend Class AcquisitionModel
                                                ByRef p_dataMap As Dictionary(Of String, Double)) As Dictionary(Of String, Dictionary(Of String, Double))
 
         Dim l_dataMapToken As New String("")
-        Dim l_dataDict As New Dictionary(Of String, Dictionary(Of String, Double))
+        Dim l_dataDict As New SafeDictionary(Of String, Dictionary(Of String, Double))
         Dim l_fixed_left_token As String = m_currentVersionId & _
                                          Computer.TOKEN_SEPARATOR & _
                                          "0" & _
@@ -189,7 +189,7 @@ Friend Class AcquisitionModel
                 Case Account.FormulaTypes.HARD_VALUE_INPUT
 
                     Dim accountName As String = l_account.Name
-                    l_dataDict.Add(accountName, New Dictionary(Of String, Double))
+                    l_dataDict.Add(accountName, New SafeDictionary(Of String, Double))
 
                     ' Years
                     For Each l_yearId As Int32 In m_currentPeriodDict.Keys
@@ -222,7 +222,7 @@ Friend Class AcquisitionModel
                 Case Account.FormulaTypes.FIRST_PERIOD_INPUT
 
                     Dim accountName As String = l_account.Name
-                    l_dataDict.Add(accountName, New Dictionary(Of String, Double))
+                    l_dataDict.Add(accountName, New SafeDictionary(Of String, Double))
                     Dim l_periodToken As String = ""
 
                     Select Case m_periodsIdentifyer
@@ -253,7 +253,7 @@ Friend Class AcquisitionModel
     'Private Sub LoaddataBaseInputsDictionary(ByRef entityName As String)
 
     '    If Not dataBaseInputsDictionary.ContainsKey(entityName) Then
-    '        Dim tmpDict As New Dictionary(Of Int32, Dictionary(Of String, Double))
+    '        Dim tmpDict As New SafeDictionary(Of Int32, Dictionary(Of String, Double))
     '        dataBaseInputsDictionary.Add(entityName, tmpDict)
     '    Else
     '        dataBaseInputsDictionary(entityName).Clear()

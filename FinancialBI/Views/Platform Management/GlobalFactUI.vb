@@ -15,7 +15,7 @@ Friend Class GlobalFactUI
     Friend m_controller As GlobalFactController
     Friend m_dataGridView As New vDataGridView
     Private m_versionsTV As vTreeView
-    Private m_columnsVariableItemDictionary As New Dictionary(Of String, HierarchyItem)
+    Private m_columnsVariableItemDictionary As New SafeDictionary(Of String, HierarchyItem)
 
     ' Variables
     Friend m_currentVersionId As Int32

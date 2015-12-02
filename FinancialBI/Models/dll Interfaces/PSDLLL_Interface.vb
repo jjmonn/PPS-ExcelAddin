@@ -128,10 +128,10 @@
 '    ' Items are fixed (PSdll): incr_rev, incr_NR, incr_sensi
 '    Protected Friend Function GetResultsDict() As Dictionary(Of String, Dictionary(Of String, Double()))
 
-'        Dim result_dict As New Dictionary(Of String, Dictionary(Of String, Double()))
-'        Dim incr_rev_dict As New Dictionary(Of String, Double())
-'        Dim incr_NR_dict As New Dictionary(Of String, Double())
-'        Dim incr_sensis_dict As New Dictionary(Of String, Double())
+'        Dim result_dict As New SafeDictionary(Of String, Dictionary(Of String, Double()))
+'        Dim incr_rev_dict As New SafeDictionary(Of String, Double())
+'        Dim incr_NR_dict As New SafeDictionary(Of String, Double())
+'        Dim incr_sensis_dict As New SafeDictionary(Of String, Double())
 
 '        Dim incr_rev, incr_net_result, sensis As Double()
 '        GetArraysPSDLL(objptr, incr_rev, incr_net_result, sensis)

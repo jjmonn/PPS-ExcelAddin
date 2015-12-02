@@ -38,7 +38,7 @@ Friend Class FiltersReader
     Friend Shared Function GetFiltersValuesDict(ByRef FvTv As vTreeView, _
                                                 ByRef axis_id As Int32) As Dictionary(Of Int32, List(Of Int32))
 
-        Dim selectionDictionary As New Dictionary(Of Int32, List(Of Int32))
+        Dim selectionDictionary As New SafeDictionary(Of Int32, List(Of Int32))
         Dim activeFiltersList As List(Of Int32) = GetActiveFiltersList(FvTv)
 
         For Each node As vTreeNode In FvTv.Nodes
