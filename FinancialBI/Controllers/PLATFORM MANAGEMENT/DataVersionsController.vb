@@ -29,7 +29,7 @@ Friend Class DataVersionsController
 
     ' Variables
     Private m_versionsTV As New VIBlend.WinForms.Controls.vTreeView
-    Friend m_positionsDictionary As New Dictionary(Of Int32, Int32)
+    Friend m_positionsDictionary As New SafeDictionary(Of Int32, Int32)
     Private m_isClosing As Boolean = False
 
     Private m_deletedVersionId As Int32 = 0

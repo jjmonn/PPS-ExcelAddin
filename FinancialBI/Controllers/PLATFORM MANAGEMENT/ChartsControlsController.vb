@@ -24,7 +24,7 @@
 '    Private ChartsTV As New TreeView
 
 '    ' Variables
-'    Private positions_dictionary As New Dictionary(Of Int32, Double)
+'    Private positions_dictionary As New SafeDictionary(Of Int32, Double)
 
 
 '#End Region

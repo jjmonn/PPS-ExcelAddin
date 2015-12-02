@@ -39,7 +39,7 @@ Friend Class AxisController
 
     ' Variables
     Private m_axisType As AxisType
-    Private positionsDictionary As New Dictionary(Of Int32, Double)
+    Private positionsDictionary As New SafeDictionary(Of Int32, Double)
 
 #End Region
 

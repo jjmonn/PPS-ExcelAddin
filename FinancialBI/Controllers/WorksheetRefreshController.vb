@@ -43,7 +43,7 @@ Friend Class WorksheetRefreshController
                                 Optional ByRef rng As Excel.Range = Nothing)
 
         GlobalVariables.g_mustResetCache = True
-        Dim l_formulasRangesCollection As New Dictionary(Of Excel.Range, String)
+        Dim l_formulasRangesCollection As New SafeDictionary(Of Excel.Range, String)
 
         If rng Is Nothing Then
             Dim ws As Excel.Worksheet = GlobalVariables.APPS.ActiveSheet
@@ -133,7 +133,7 @@ RefreshFormulasOnWorksheet:
 
     Friend Shared Sub BreakLinks()
 
-        Dim FormulasRangesCollection As New Dictionary(Of Excel.Range, String)
+        Dim FormulasRangesCollection As New SafeDictionary(Of Excel.Range, String)
         Dim WS As Excel.Worksheet = GlobalVariables.APPS.ActiveSheet
         Dim c As Excel.Range
         Dim firstAddress As String

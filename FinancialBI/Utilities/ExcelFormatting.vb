@@ -49,7 +49,7 @@ Friend Class ExcelFormatting
 
         Dim l_currency As Currency = GlobalVariables.Currencies.GetValue(currency)
         If l_currency Is Nothing Then Exit Sub
-        Dim formatsDictionary As New Dictionary(Of String, Formats.FinancialBIFormat)
+        Dim formatsDictionary As New SafeDictionary(Of String, Formats.FinancialBIFormat)
         formatsDictionary.Add("t", Formats.GetFormat("t"))
         formatsDictionary.Add("i", Formats.GetFormat("i"))
         formatsDictionary.Add("n", Formats.GetFormat("n"))
@@ -74,7 +74,7 @@ Friend Class ExcelFormatting
                     If formatsDictionary(formatCode).isItalic = True Then row.Font.Italic = True
 
                     Select Case l_account.Type
-                        Case Account.AccountType.MONETARY : row.Cells.NumberFormat = l_currency.Symbol & "#,##0.00;(" & l_currency.Symbol & "#,##0.00)"
+                        Case Account.AccountType.MONETARY : row.Cells.NumberFormat = "[$" & l_currency.Symbol & "]#,##0.00;([$" & l_currency.Symbol & "]#,##0.00)"
                         Case Account.AccountType.PERCENTAGE : row.Cells.NumberFormat = "0.00%"        ' put this in a table ?
                         Case Account.AccountType.NUMBER : row.Cells.NumberFormat = "#,##0.00"        ' further evolution set unit ?
                         Case Account.AccountType.DATE_ : row.Cells.NumberFormat = "d-mmm-yy" ' d-mmm-yy

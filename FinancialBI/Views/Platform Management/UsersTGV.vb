@@ -32,8 +32,8 @@ Friend Class UsersTGV
     Private ParentView As UsersControl
 
     ' Variables
-    Friend columnsDictionary As New Dictionary(Of String, HierarchyItem)
-    Friend rowsIDItem As New Dictionary(Of String, HierarchyItem)
+    Friend columnsDictionary As New SafeDictionary(Of String, HierarchyItem)
+    Friend rowsIDItem As New SafeDictionary(Of String, HierarchyItem)
     Friend tmp_entity_name As String
     Friend tmp_entity_id As String
     Friend currentRowItem As HierarchyItem

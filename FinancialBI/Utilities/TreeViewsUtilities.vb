@@ -493,7 +493,7 @@ Friend Class TreeViewsUtilities
 
     Friend Shared Function GeneratePositionsDictionary(ByRef TV As TreeView) As Dictionary(Of Int32, Double)
 
-        Dim positionsDictionary As New Dictionary(Of Int32, Double)
+        Dim positionsDictionary As New SafeDictionary(Of Int32, Double)
         Dim currentPosition As Int32 = 0
         For Each node As TreeNode In TV.Nodes
             AddNodeToPositionDictionary(node, currentPosition, positionsDictionary)

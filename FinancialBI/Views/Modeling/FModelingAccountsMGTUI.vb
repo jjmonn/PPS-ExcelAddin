@@ -28,7 +28,7 @@ Friend Class FModelingAccountsMGTUI
 
     ' Variables
     Friend f_accounts_name_id_dic As Hashtable
-    Friend rows_id_item_dic As New Dictionary(Of String, HierarchyItem)
+    Friend rows_id_item_dic As New SafeDictionary(Of String, HierarchyItem)
     Friend isFillingDGV As Boolean
     Private current_serie_id As String
 

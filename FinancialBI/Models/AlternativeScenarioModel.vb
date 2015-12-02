@@ -25,12 +25,12 @@
 
 '    ' Variables
 '    Private indexes_list As List(Of String)
-'    Private entities_attributes_dictionary As New Dictionary(Of String, Hashtable)
-'    Friend sensitivities_dictionary As New Dictionary(Of String, Hashtable)
+'    Private entities_attributes_dictionary As New SafeDictionary(Of String, Hashtable)
+'    Friend sensitivities_dictionary As New SafeDictionary(Of String, Hashtable)
 
 '    ' Data Dictionaries
-'    Friend SensisResultsDict As New Dictionary(Of String, Dictionary(Of String, Dictionary(Of String, Double())))
-'    Friend current_conso_data_dic As New Dictionary(Of String, Dictionary(Of String, Double()))
+'    Friend SensisResultsDict As New SafeDictionary(Of String, Dictionary(Of String, Dictionary(Of String, Double())))
+'    Friend current_conso_data_dic As New SafeDictionary(Of String, Dictionary(Of String, Double()))
 
 '    ' Current Config
 '    Friend periods_list As List(Of Int32)
@@ -117,9 +117,9 @@
 '        For Each entity_id As String In all_entities_id
 '            If entities_id_list.Contains(entity_id) = False Then
 '                Dim node As TreeNode = entity_node.TreeView.Nodes.Find(entity_id, True)(0)
-'                Dim sensitivities_aggregations As New Dictionary(Of String, Double())
-'                Dim incr_rev_aggregations As New Dictionary(Of String, Double())
-'                Dim incr_NR_aggregations As New Dictionary(Of String, Double())
+'                Dim sensitivities_aggregations As New SafeDictionary(Of String, Double())
+'                Dim incr_rev_aggregations As New SafeDictionary(Of String, Double())
+'                Dim incr_NR_aggregations As New SafeDictionary(Of String, Double())
 
 '                For Each sensitivity_id As String In sensitivities_dictionary.Keys
 
@@ -157,7 +157,7 @@
 '                                                   ByRef alternative_scenario_accounts As Dictionary(Of String, String)) _
 '                                                   As Dictionary(Of String, Double())
 
-'        Dim new_scenario_aggregates As New Dictionary(Of String, Double())
+'        Dim new_scenario_aggregates As New SafeDictionary(Of String, Double())
 
 '        For Each account_id In alternative_scenario_accounts.Keys
 '            Dim tmp_array(periods_list.Count - 1) As Double
@@ -188,7 +188,7 @@
 
 '        'current_conso_data_dic.Clear()
 '        'For Each entity_id In TreeViewsUtilities.GetNodesKeysList(entity_node)
-'        '    Dim tmp_dict As New Dictionary(Of String, Double())
+'        '    Dim tmp_dict As New SafeDictionary(Of String, Double())
 '        '    Dim tmp_data_array = BaseComputer.GetEntityArray(entity_id)
 
 '        '    Dim i As Int32 = 0
@@ -326,7 +326,7 @@
 '    Private Sub ComputeIncrementalTaxes()
 
 '        For Each sensitivity_id In sensitivities_dictionary.Keys
-'            Dim tmp_dict As New Dictionary(Of String, Double())
+'            Dim tmp_dict As New SafeDictionary(Of String, Double())
 '            For Each entity_id In SensisResultsDict(sensitivity_id)(PSDLLL_Interface.SENSITIVITIES).Keys
 '                Dim tmp_array(periods_list.Count - 1) As Double
 '                For j = 0 To periods_list.Count - 1

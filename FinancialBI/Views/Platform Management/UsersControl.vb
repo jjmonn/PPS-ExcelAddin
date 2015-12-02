@@ -24,7 +24,7 @@ Friend Class UsersControl
     ' Objects
     Private m_controller As UsersController
     Private m_dataGridView As New vDataGridView
-    Private m_columnsVariableItemDictionary As New Dictionary(Of String, HierarchyItem)
+    Private m_columnsVariableItemDictionary As New SafeDictionary(Of String, HierarchyItem)
 
 #End Region
 

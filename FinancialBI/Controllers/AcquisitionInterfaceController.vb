@@ -37,10 +37,10 @@
 '    Friend currentEntityName As String  ' caution to be initialized !!! 
 
 '    ' DGV Dictionaries
-'    Friend rowsKeyItemDictionary As New Dictionary(Of String, HierarchyItem)
-'    Friend columnsKeyItemDictionary As New Dictionary(Of String, HierarchyItem)
-'    Friend editorKeyHierarchyDictionary As New Dictionary(Of String, HierarchyItem)
-'    Friend periodsItemIDPeriodCodeDict As New Dictionary(Of String, Integer)
+'    Friend rowsKeyItemDictionary As New SafeDictionary(Of String, HierarchyItem)
+'    Friend columnsKeyItemDictionary As New SafeDictionary(Of String, HierarchyItem)
+'    Friend editorKeyHierarchyDictionary As New SafeDictionary(Of String, HierarchyItem)
+'    Friend periodsItemIDPeriodCodeDict As New SafeDictionary(Of String, Integer)
 
 
 '#End Region

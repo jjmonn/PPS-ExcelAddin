@@ -316,7 +316,7 @@ Friend Class DataGridViewsUtil
                                              ByRef timeConfig As String, _
                                              ByRef columns_reinit As Boolean) As Dictionary(Of Integer, Int32)
 
-        Dim tmpDict As New Dictionary(Of Integer, Int32)
+        Dim tmpDict As New SafeDictionary(Of Integer, Int32)
         Dim i As Int32 = 0
         Dim periodStr As String
 
@@ -348,7 +348,7 @@ Friend Class DataGridViewsUtil
                                              As Dictionary(Of Integer, Int32)
 
         DataGridView.ColumnsHierarchy.Clear()
-        Dim tmpDict As New Dictionary(Of Integer, Int32)
+        Dim tmpDict As New SafeDictionary(Of Integer, Int32)
         Dim periodStr As String
 
         Dim i As Int32 = 0
@@ -384,7 +384,7 @@ Friend Class DataGridViewsUtil
                                                              Optional ByRef entity_node As TreeNode = Nothing) _
                                                              As Dictionary(Of String, Int32)
 
-        Dim KeyLineDictionary As New Dictionary(Of String, Int32)
+        Dim KeyLineDictionary As New SafeDictionary(Of String, Int32)
         Dim line_index As Int32 = 0
 
         dgv.RowsHierarchy.Clear()
@@ -586,12 +586,12 @@ Friend Class DataGridViewsUtil
                                          ByRef parent_j As Int32, _
                                          ByRef p_copyOnlyExpanded As Boolean)
 
-      
 
-            range.Offset(i, j).Value = column.Caption
-            range.Offset(i, j).Font.Bold = True
-            ' FormatRangeFromHierarchyItem(range.Offset(i, j), column)
-            j = j + 1
+
+        range.Offset(i, j).Value = column.Caption
+        range.Offset(i, j).Font.Bold = True
+        ' FormatRangeFromHierarchyItem(range.Offset(i, j), column)
+        j = j + 1
 
         If p_copyOnlyExpanded = False _
       Or p_copyOnlyExpanded = True And column.Expanded = True Then
@@ -613,7 +613,7 @@ Friend Class DataGridViewsUtil
                                       ByRef j As Int32, _
                                       ByRef p_copyOnlyExpanded As Boolean)
 
-     
+
         range.Offset(i, j).Value = row.Caption
         FormatRangeFromHierarchyItem(range.Offset(i, j), row)
         i = i + 1
@@ -741,7 +741,7 @@ Friend Class DataGridViewsUtil
 
         For Each column As HierarchyItem In DGV.ColumnsHierarchy.Items
             Dim subColumn0 = column.Items(0)
-            Dim valuesDic As New Dictionary(Of HierarchyItem, Object)
+            Dim valuesDic As New SafeDictionary(Of HierarchyItem, Object)
             For Each row In DGV.RowsHierarchy.Items
                 SaveRowHierarchy(row, subColumn0, DGV, valuesDic)
             Next
@@ -1005,7 +1005,7 @@ Friend Class DataGridViewsUtil
 
     Friend Shared Function GeneratePositionsDictionary(ByRef p_dataGridView As vDataGridView) As Dictionary(Of Int32, Double)
 
-        Dim positionsDictionary As New Dictionary(Of Int32, Double)
+        Dim positionsDictionary As New SafeDictionary(Of Int32, Double)
         Dim currentPosition As Int32 = 0
         For Each rowItem As HierarchyItem In p_dataGridView.RowsHierarchy.Items
             AddItemToPositionDictionary(rowItem, currentPosition, positionsDictionary)

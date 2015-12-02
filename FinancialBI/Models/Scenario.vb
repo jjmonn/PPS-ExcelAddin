@@ -38,8 +38,8 @@ Friend Class Scenario
     Friend data_dic As Dictionary(Of String, Double())
     Private periods_array As Int32()
     Private charts_periods As New List(Of Int32)
-    Friend generalDGV_rows_id_item_dict As New Dictionary(Of String, HierarchyItem)
-    Friend constraints_DGV_rows_id_item_dict As New Dictionary(Of String, HierarchyItem)
+    Friend generalDGV_rows_id_item_dict As New SafeDictionary(Of String, HierarchyItem)
+    Friend constraints_DGV_rows_id_item_dict As New SafeDictionary(Of String, HierarchyItem)
     Private current_constraint_cell As GridCell = Nothing
     Private is_updating_value As Boolean
     Private manual_edition As Boolean

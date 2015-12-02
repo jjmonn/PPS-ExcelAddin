@@ -152,7 +152,7 @@ Friend Class VersionManager : Inherits NamedCRUDManager(Of NamedHierarchyCRUDEnt
 
     Friend Function GetPeriodTokensDict(ByRef versionId As UInt32) As Dictionary(Of String, String)
 
-        Dim periodsTokens As New Dictionary(Of String, String)
+        Dim periodsTokens As New SafeDictionary(Of String, String)
         Dim version As Version = GetValue(versionId)
         If version Is Nothing Then Return periodsTokens
 
@@ -186,7 +186,7 @@ Friend Class VersionManager : Inherits NamedCRUDManager(Of NamedHierarchyCRUDEnt
 
     Friend Function GetPeriodsDictionary(ByRef versionId As UInt32) As Dictionary(Of Int32, List(Of Int32))
 
-        Dim periodsDict As New Dictionary(Of Int32, List(Of Int32))
+        Dim periodsDict As New SafeDictionary(Of Int32, List(Of Int32))
         Dim version As Version = GetValue(versionId)
         If version Is Nothing Then Return Nothing
 
@@ -217,7 +217,7 @@ Friend Class VersionManager : Inherits NamedCRUDManager(Of NamedHierarchyCRUDEnt
 
     Friend Function GetPeriodsDictionary(ByRef versionsIdDict As Dictionary(Of Int32, String)) As Dictionary(Of Int32, List(Of Int32))
 
-        Dim periodsDict As New Dictionary(Of Int32, List(Of Int32))
+        Dim periodsDict As New SafeDictionary(Of Int32, List(Of Int32))
         For Each versionId As Int32 In versionsIdDict.Keys
             Dim version As Version = GetValue(versionId)
             If version Is Nothing Then Continue For

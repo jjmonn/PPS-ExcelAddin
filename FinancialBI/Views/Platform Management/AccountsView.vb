@@ -35,10 +35,10 @@ Friend Class AccountsView
     Friend m_currentNode As vTreeNode
 
     ' Variables
-    Private m_formulasTypesIdItemDict As New Dictionary(Of Int32, ListItem)
-    Private m_formatsIdItemDict As New Dictionary(Of Int32, ListItem)
-    Private m_currenciesConversionIdItemDict As New Dictionary(Of Int32, ListItem)
-    Private m_consoOptionIdItemDict As New Dictionary(Of Int32, ListItem)
+    Private m_formulasTypesIdItemDict As New SafeDictionary(Of Int32, ListItem)
+    Private m_formatsIdItemDict As New SafeDictionary(Of Int32, ListItem)
+    Private m_currenciesConversionIdItemDict As New SafeDictionary(Of Int32, ListItem)
+    Private m_consoOptionIdItemDict As New SafeDictionary(Of Int32, ListItem)
     Private m_isRevertingFType As Boolean = False
     Private m_isDisplayingAttributes As Boolean
     Private m_dragAndDrop As Boolean = False

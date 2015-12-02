@@ -11,7 +11,7 @@ Public Class CUI2Visualization
 
     Private m_controller As ControllingUIController
     Private m_chartTab As Chart()
-    Private m_chartIndexes As New Dictionary(Of Chart, Int32)
+    Private m_chartIndexes As New SafeDictionary(Of Chart, Int32)
 
 #End Region
 

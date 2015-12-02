@@ -35,7 +35,7 @@ Friend Class EntitiesController
     Private m_platformMGTUI As PlatformMGTGeneralUI
 
     ' Variables
-    Private m_positionsDictionary As New Dictionary(Of Int32, Double)
+    Private m_positionsDictionary As New SafeDictionary(Of Int32, Double)
 
 #End Region
 

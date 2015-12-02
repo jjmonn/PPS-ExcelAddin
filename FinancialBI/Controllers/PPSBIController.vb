@@ -43,7 +43,7 @@ Public Class PPSBIController
 
     ' Variables
     Private error_message As String
-    Private requestIdComputeFlagDict As New Dictionary(Of Int32, Boolean)
+    Private requestIdComputeFlagDict As New SafeDictionary(Of Int32, Boolean)
     Private emptyCellFlag As Boolean
     Private cacheInitFlag As Boolean = False
     Friend mustUpdateFlag As Boolean = False
@@ -102,12 +102,12 @@ Public Class PPSBIController
         If CheckDate(p_period_str) = False Then Return error_message
 
         ' Filters Building
-        Dim filters = New Dictionary(Of Int32, List(Of Int32))
+        Dim filters = New SafeDictionary(Of Int32, List(Of Int32))
         BuildFilters(p_filtersArray, filters)
         Dim filtersToken As String = "0"
 
         ' Axis Filters building
-        Dim axis_filters = New Dictionary(Of Int32, List(Of Int32))()
+        Dim axis_filters = New SafeDictionary(Of Int32, List(Of Int32))()
         BuildAxisFilter(p_clients_filters, GlobalVariables.AxisElems, AxisType.Client, axis_filters)
         BuildAxisFilter(p_products_filters, GlobalVariables.AxisElems, AxisType.Product, axis_filters)
         BuildAxisFilter(p_adjustments_filters, GlobalVariables.AxisElems, AxisType.Adjustment, axis_filters)

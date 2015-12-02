@@ -37,11 +37,11 @@ Friend Class AccountsController
     Private m_platformMGTUI As PlatformMGTGeneralUI
 
     ' Variables
-    Friend m_positionsDictionary As New Dictionary(Of Int32, Int32)
+    Friend m_positionsDictionary As New SafeDictionary(Of Int32, Int32)
     Private m_dependant_account_id As String
     Friend m_formulaTypesToBeTested As New List(Of Int32)
     Private m_isClosing As Boolean = False
-    Private m_CRUDOperations As New Dictionary(Of Int32, CRUDAction)
+    Private m_CRUDOperations As New SafeDictionary(Of Int32, CRUDAction)
     Private Delegate Sub UpdateVarDelegate(ByRef p_account As Account, ByRef p_value As Object)
     ' Constants
     Friend Const ACCOUNTS_FORBIDDEN_CHARACTERS As String = "+-*=<>^?:;![]" ' to be reviewed - 
@@ -289,7 +289,7 @@ Friend Class AccountsController
     ' 3. interdependancies 
     Friend Function InterdependancyTest() As Boolean
 
-        Dim dependancies_dict As New Dictionary(Of UInt32, List(Of UInt32))
+        Dim dependancies_dict As New SafeDictionary(Of UInt32, List(Of UInt32))
         Dim accounts_list = VTreeViewUtil.GetNodesIds(m_accountsTV)
         For Each account_id In accounts_list
             Dim l_formulaType As Int32 = GetAccount(CUInt(account_id)).FormulaType

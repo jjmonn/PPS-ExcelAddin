@@ -255,7 +255,7 @@ Public Class VTreeViewUtil
 
     Public Shared Function GeneratePositionsDictionary(ByRef p_treeview As vTreeView) As Dictionary(Of Int32, Int32)
 
-        Dim positionsDictionary As New Dictionary(Of Int32, Int32)
+        Dim positionsDictionary As New SafeDictionary(Of Int32, Int32)
         Dim currentPosition As Int32 = 0
         For Each l_value As Int32 In GetNodesIds(p_treeview)
             positionsDictionary.Add(l_value, currentPosition)
@@ -296,9 +296,9 @@ Public Class VTreeViewUtil
         parentNode.Nodes.Insert(indexNext, p_first)
     End Sub
 
-    Private Shared Function GetNodesNamesValueDict(ByRef p_treeview As vTreeView) As Dictionary(Of String, String)
+    Private Shared Function GetNodesNamesValueDict(ByRef p_treeview As vTreeView) As SafeDictionary(Of String, String)
 
-        Dim l_namesValuesDict As New Dictionary(Of String, String)
+        Dim l_namesValuesDict As New SafeDictionary(Of String, String)
         For Each l_node As vTreeNode In p_treeview.GetNodes
             If l_namesValuesDict.ContainsKey(l_node.Text) = False Then
                 l_namesValuesDict.Add(l_node.Text, l_node.Value)
@@ -309,7 +309,7 @@ Public Class VTreeViewUtil
     End Function
 
     Private Shared Sub PutBackNodesValues(ByRef p_treeview As vTreeView, _
-                                   ByRef p_namesValuesDict As Dictionary(Of String, String))
+                                   ByRef p_namesValuesDict As SafeDictionary(Of String, String))
 
         For Each l_node As vTreeNode In p_treeview.GetNodes
             l_node.Value = p_namesValuesDict(l_node.Text)

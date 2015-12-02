@@ -208,7 +208,7 @@ Friend Class FilterValueManager : Inherits CRUDManager
 
     Friend Function GetChildrenFilterValueIdsFilterIdDic(ByRef parent_filter_value_id As Int32) As Dictionary(Of Int32, Int32)
 
-        Dim children_filters_values_id As New Dictionary(Of Int32, Int32)
+        Dim children_filters_values_id As New SafeDictionary(Of Int32, Int32)
         For Each filterValueSet As MultiIndexDictionary(Of UInt32, String, FilterValue) In m_filterValuesDic.Values
             For Each filterValue As FilterValue In filterValueSet.Values
                 If filterValue.ParentId = parent_filter_value_id Then

@@ -43,12 +43,12 @@ Friend Class ControllingUIController
     Private m_columnsHierarchyNode As New vTreeNode
     Private m_DisplayAxisHt As New Hashtable
 
-    Private m_filtersAndAxisDict As New Dictionary(Of String, List(Of Int32))
+    Private m_filtersAndAxisDict As New SafeDictionary(Of String, List(Of Int32))
     Private m_dataMap As Dictionary(Of String, Double)
-    Private m_filters_dict As New Dictionary(Of String, Int32)
+    Private m_filters_dict As New SafeDictionary(Of String, Int32)
     Private m_filtersNodes As New vTreeNode
     Private m_VersionsTV As New vTreeView
-    Friend m_versionsDict As New Dictionary(Of Int32, String)
+    Friend m_versionsDict As New SafeDictionary(Of Int32, String)
     Friend m_initDisplayFlag As Boolean = False
     Friend m_computedFlag As Boolean = False
     Friend m_isComputingFlag As Boolean
@@ -283,7 +283,7 @@ Friend Class ControllingUIController
     Private Sub InitDisplay()
 
         m_filters_dict.Clear()
-        itemsDimensionsDict = New Dictionary(Of HierarchyItem, Hashtable)
+        itemsDimensionsDict = New SafeDictionary(Of HierarchyItem, Hashtable)
         FillHierarchy(m_rowsHierarchyNode)
         FillHierarchy(m_columnsHierarchyNode)
         m_view.m_progressBar.Value = 0
@@ -507,46 +507,46 @@ Friend Class ControllingUIController
                 CreateRow(dgv, dimensionNode.NextNode, , row)
             End If
         Else
-                'Set current value for current display axis
-                If SetDisplayAxisValue(dimensionNode, valueNode) = True Then
+            'Set current value for current display axis
+            If SetDisplayAxisValue(dimensionNode, valueNode) = True Then
 
-                    If row Is Nothing Then
-                        subRow = dgv.RowsHierarchy.Items.Add(valueNode.Text)
-                    Else
-                        subRow = row.Items.Add(valueNode.Text)
-                    End If
-                    subRow.ItemValue = m_DisplayAxisHt(GlobalEnums.DataMapAxis.ACCOUNTS)
-                    subRow.CellsDataSource = GridCellDataSource.Virtual
-                    m_view.FormatDGVItem(subRow)
-                    HideHiearchyItemIfVComp(subRow, _
-                                            dimensionNode, _
-                                            valueNode)
-                    RegisterHierarchyItemDimensions(subRow)
+                If row Is Nothing Then
+                    subRow = dgv.RowsHierarchy.Items.Add(valueNode.Text)
+                Else
+                    subRow = row.Items.Add(valueNode.Text)
+                End If
+                subRow.ItemValue = m_DisplayAxisHt(GlobalEnums.DataMapAxis.ACCOUNTS)
+                subRow.CellsDataSource = GridCellDataSource.Virtual
+                m_view.FormatDGVItem(subRow)
+                HideHiearchyItemIfVComp(subRow, _
+                                        dimensionNode, _
+                                        valueNode)
+                RegisterHierarchyItemDimensions(subRow)
 
-                    ' Dig one level deeper if any
-                    If Not dimensionNode.NextSiblingNode Is Nothing Then
+                ' Dig one level deeper if any
+                If Not dimensionNode.NextSiblingNode Is Nothing Then
 
-                        ' Test: Loop only if dimension is not account and account_formulatype = title
-                        If dimensionNode.Value = computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.ACCOUNTS Then
-                            Dim account As Account = GlobalVariables.Accounts.GetValue(CUInt(valueNode.Value))
-                            If account Is Nothing Then Exit Sub
-                            If account.FormulaType = account.FormulaTypes.TITLE Then
-                                ' Case account formula type title
-                            Else
-                                CreateRow(dgv, dimensionNode.NextNode, , subRow)
-                            End If
+                    ' Test: Loop only if dimension is not account and account_formulatype = title
+                    If dimensionNode.Value = computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.ACCOUNTS Then
+                        Dim account As Account = GlobalVariables.Accounts.GetValue(CUInt(valueNode.Value))
+                        If account Is Nothing Then Exit Sub
+                        If account.FormulaType = account.FormulaTypes.TITLE Then
+                            ' Case account formula type title
                         Else
                             CreateRow(dgv, dimensionNode.NextNode, , subRow)
                         End If
+                    Else
+                        CreateRow(dgv, dimensionNode.NextNode, , subRow)
                     End If
-
-                    ' Loop through children if any
-                    For Each subNode In valueNode.Nodes
-                        CreateRow(dgv, dimensionNode, subNode, subRow)
-                    Next
-
-                    LevelDimensionFilterOrAxis(dimensionNode)
                 End If
+
+                ' Loop through children if any
+                For Each subNode In valueNode.Nodes
+                    CreateRow(dgv, dimensionNode, subNode, subRow)
+                Next
+
+                LevelDimensionFilterOrAxis(dimensionNode)
+            End If
         End If
 
     End Sub
@@ -856,7 +856,7 @@ Friend Class ControllingUIController
 
     Private Function GetAxisFilters() As Dictionary(Of Int32, List(Of Int32))
 
-        Dim axisFilters As New Dictionary(Of Int32, List(Of Int32))
+        Dim axisFilters As New SafeDictionary(Of Int32, List(Of Int32))
 
         AddAxisFilterFromTV(m_view.leftPane_control.entitiesTV, GlobalEnums.AnalysisAxis.ENTITIES, axisFilters)
         AddAxisFilterFromTV(m_view.leftPane_control.clientsTV, GlobalEnums.AnalysisAxis.CLIENTS, axisFilters)
@@ -886,7 +886,7 @@ Friend Class ControllingUIController
 
     Private Function GetFilters() As Dictionary(Of Int32, List(Of Int32))
 
-        Dim filters As New Dictionary(Of Int32, List(Of Int32))
+        Dim filters As New SafeDictionary(Of Int32, List(Of Int32))
 
         AddFiltersFromTV(m_view.leftPane_control.entitiesFiltersTV, _
                          GlobalEnums.AnalysisAxis.ENTITIES, _

@@ -31,18 +31,18 @@ Friend Class ModelDataSet
     Friend m_periodsDatesList As New List(Of Date)
 
     ' Axes
-    Friend m_periodsAddressValuesDictionary As New Dictionary(Of String, String)
-    Friend m_accountsAddressValuesDictionary As New Dictionary(Of String, String)
-    Friend m_outputsAccountsAddressvaluesDictionary As New Dictionary(Of String, String)
-    Friend m_entitiesAddressValuesDictionary As New Dictionary(Of String, String)
-    Friend m_periodsValuesAddressDict As New Dictionary(Of String, String)
-    Friend m_accountsValuesAddressDict As New Dictionary(Of String, String)
-    Friend m_outputsValuesAddressDict As New Dictionary(Of String, String)
-    Friend m_entitiesValuesAddressDict As New Dictionary(Of String, String)
+    Friend m_periodsAddressValuesDictionary As New SafeDictionary(Of String, String)
+    Friend m_accountsAddressValuesDictionary As New SafeDictionary(Of String, String)
+    Friend m_outputsAccountsAddressvaluesDictionary As New SafeDictionary(Of String, String)
+    Friend m_entitiesAddressValuesDictionary As New SafeDictionary(Of String, String)
+    Friend m_periodsValuesAddressDict As New SafeDictionary(Of String, String)
+    Friend m_accountsValuesAddressDict As New SafeDictionary(Of String, String)
+    Friend m_outputsValuesAddressDict As New SafeDictionary(Of String, String)
+    Friend m_entitiesValuesAddressDict As New SafeDictionary(Of String, String)
 
     ' DataSet Cells
-    Friend m_datasetCellsDictionary As New Dictionary(Of Tuple(Of String, String, String), Excel.Range)
-    Friend m_datasetCellDimensionsDictionary As New Dictionary(Of String, DataSetCellDimensions)
+    Friend m_datasetCellsDictionary As New SafeDictionary(Of Tuple(Of String, String, String), Excel.Range)
+    Friend m_datasetCellDimensionsDictionary As New SafeDictionary(Of String, DataSetCellDimensions)
     Friend m_currentVersionId As Int32
 
     'Flags"
