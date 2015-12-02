@@ -11,7 +11,7 @@ namespace CRUD
     public UInt32 Id { get; private set; }
     public UInt32 EntityId { get; set; }
     public UInt32 AccountId { get; set; }
-    public double Percentage { get; set; }
+    public byte Percentage { get; set; }
     public UInt32 Image { get; set; }
 
     public EntityDistribution() { }
@@ -26,7 +26,7 @@ namespace CRUD
 
       l_entity.EntityId = p_packet.ReadUint32();
       l_entity.AccountId = p_packet.ReadUint32();
-      l_entity.Percentage = p_packet.ReadDouble();
+      l_entity.Percentage = p_packet.ReadUint8();
 
       return (l_entity);
     }
@@ -37,8 +37,23 @@ namespace CRUD
         p_packet.WriteUint32(Id);
       p_packet.WriteUint32(EntityId);
       p_packet.WriteUint32(AccountId);
-      p_packet.WriteDouble(Percentage);
+      p_packet.WriteUint8(Percentage);
     }
+
+    public void CopyFrom(EntityDistribution p_model)
+    {
+        EntityId = p_model.EntityId;
+        AccountId = p_model.AccountId;
+        Percentage = p_model.Percentage;
+    }
+
+    public EntityDistribution Clone()
+    {
+        EntityDistribution l_clone = new EntityDistribution(Id);
+        l_clone.CopyFrom(this);
+        return (l_clone);
+    }
+
 
     public int CompareTo(object p_obj)
     {
