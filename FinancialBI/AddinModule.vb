@@ -786,13 +786,12 @@ Public Class AddinModule
 
     Private Sub AddinModule_Finalize(sender As Object, e As EventArgs) Handles MyBase.AddinFinalize
         If m_GRSControlersDictionary.Count > 0 Then
+            On Error Resume Next
             For Each l_generalSubmissionController As GeneralSubmissionControler In m_GRSControlersDictionary.Values
-                Try
-                    ClearSubmissionMode(l_generalSubmissionController)
-                Catch ex As Exception
-                End Try
+                ClearSubmissionMode(l_generalSubmissionController)
             Next
         End If
+        m_GRSControlersDictionary.Clear()
     End Sub
 
 
@@ -995,7 +994,6 @@ Public Class AddinModule
 
         On Error Resume Next
         m_worksheetNamesObjectDict.Remove(p_generalSubmissionController.m_associatedWorksheet.Name)
-        m_GRSControlersDictionary.Remove(p_generalSubmissionController.m_associatedWorksheet)
         For Each l_item In m_submissionWorksheetCombobox.Items
             If l_item.id = p_generalSubmissionController.m_associatedWorksheet.Name Then
                 m_submissionWorksheetCombobox.Items.Remove(l_item)
@@ -1003,8 +1001,7 @@ Public Class AddinModule
             End If
         Next
         p_generalSubmissionController.CloseInstance()
-        p_generalSubmissionController = Nothing
-
+ 
         If m_GRSControlersDictionary.Count = 0 Then
             SubmissionModeRibbon.Visible = False
             m_GRSControlersDictionary.Clear()
