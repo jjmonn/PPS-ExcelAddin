@@ -143,7 +143,7 @@ Public Class FBIFunctionController
                         ByRef axis_filters As Dictionary(Of Int32, List(Of Int32)))
 
         Dim request_id As Int32 = Computer.CMSG_COMPUTE_REQUEST({m_versionId}, _
-                                                                 {entity_id}.tolist, _
+                                                                 {entity_id}.ToList, _
                                                                  currency_id, _
                                                                  filters, _
                                                                  axis_filters, _

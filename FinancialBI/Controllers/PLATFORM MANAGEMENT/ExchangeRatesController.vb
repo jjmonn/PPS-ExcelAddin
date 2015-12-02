@@ -130,7 +130,7 @@ Friend Class ExchangeRatesController
     Private Sub AfterRateUpdate(ByRef status As ErrorMessage, _
                                 ByRef p_id As UInt32)
 
-        ' to be implemented priority normal
+        ' to be implemented priority high !!!
 
     End Sub
 
