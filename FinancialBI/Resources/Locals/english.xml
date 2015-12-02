@@ -346,9 +346,15 @@
 
   </category>
 
-  
-  
-  
+  <category name="allocationKeys">
+    
+    <string name="repartition_column_name">Allocation percentage (%)</string>
+    <string name="msg_percentageOver100">The total percentage cannot exceed 100%.</string>
+    <string name="msg_error_update">The allocation key could not be updated.</string>
+    <string name=""></string>
+    <string name=""></string>
+
+  </category>  
   
   <category name="general">
      <string name="account">Account</string>
@@ -402,12 +408,3 @@
   </category>
 
 </category>
-
-<!-- 
-  Category name: forbidden character: '.'
-<<<<<<< HEAD
-  Local.GetValue("general.save")
-=======
-  Local.GetValue("global_facts.new_global_fact")
->>>>>>> 2709d100f32119089a21aaaaea1d383d55486761
--->

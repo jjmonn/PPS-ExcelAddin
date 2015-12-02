@@ -26,7 +26,11 @@ Partial Class AllocationKeysView
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(AllocationKeysView))
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
         Me.m_allocationsKeysDGV = New VIBlend.WinForms.DataGridView.vDataGridView()
+        Me.Panel1 = New System.Windows.Forms.Panel()
+        Me.m_accountTextBox = New VIBlend.WinForms.Controls.vTextBox()
+        Me.m_accountLabel = New VIBlend.WinForms.Controls.vLabel()
         Me.TableLayoutPanel1.SuspendLayout()
+        Me.Panel1.SuspendLayout()
         Me.SuspendLayout()
         '
         'TableLayoutPanel1
@@ -34,6 +38,7 @@ Partial Class AllocationKeysView
         Me.TableLayoutPanel1.ColumnCount = 1
         Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
         Me.TableLayoutPanel1.Controls.Add(Me.m_allocationsKeysDGV, 0, 1)
+        Me.TableLayoutPanel1.Controls.Add(Me.Panel1, 0, 0)
         Me.TableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TableLayoutPanel1.Location = New System.Drawing.Point(0, 0)
         Me.TableLayoutPanel1.Name = "TableLayoutPanel1"
@@ -57,7 +62,7 @@ Partial Class AllocationKeysView
         Me.m_allocationsKeysDGV.AllowDragDropIndication = True
         Me.m_allocationsKeysDGV.AllowHeaderItemHighlightOnCellSelection = True
         Me.m_allocationsKeysDGV.AutoUpdateOnListChanged = False
-        Me.m_allocationsKeysDGV.BackColor = System.Drawing.Color.White
+        Me.m_allocationsKeysDGV.BackColor = System.Drawing.SystemColors.Control
         Me.m_allocationsKeysDGV.BindingProgressEnabled = False
         Me.m_allocationsKeysDGV.BindingProgressSampleRate = 20000
         Me.m_allocationsKeysDGV.BorderColor = System.Drawing.Color.Empty
@@ -107,8 +112,55 @@ Partial Class AllocationKeysView
         Me.m_allocationsKeysDGV.VerticalScroll = 0
         Me.m_allocationsKeysDGV.VerticalScrollBarLargeChange = 20
         Me.m_allocationsKeysDGV.VerticalScrollBarSmallChange = 5
-        Me.m_allocationsKeysDGV.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
+        Me.m_allocationsKeysDGV.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.OFFICE2010SILVER
         Me.m_allocationsKeysDGV.VirtualModeCellDefault = False
+        '
+        'Panel1
+        '
+        Me.Panel1.Controls.Add(Me.m_accountTextBox)
+        Me.Panel1.Controls.Add(Me.m_accountLabel)
+        Me.Panel1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Panel1.Location = New System.Drawing.Point(0, 0)
+        Me.Panel1.Margin = New System.Windows.Forms.Padding(0)
+        Me.Panel1.Name = "Panel1"
+        Me.Panel1.Size = New System.Drawing.Size(594, 25)
+        Me.Panel1.TabIndex = 1
+        '
+        'm_accountTextBox
+        '
+        Me.m_accountTextBox.BackColor = System.Drawing.Color.White
+        Me.m_accountTextBox.BoundsOffset = New System.Drawing.Size(1, 1)
+        Me.m_accountTextBox.ControlBorderColor = System.Drawing.Color.FromArgb(CType(CType(39, Byte), Integer), CType(CType(39, Byte), Integer), CType(CType(39, Byte), Integer))
+        Me.m_accountTextBox.DefaultText = "Empty..."
+        Me.m_accountTextBox.Enabled = False
+        Me.m_accountTextBox.Location = New System.Drawing.Point(77, 3)
+        Me.m_accountTextBox.MaxLength = 32767
+        Me.m_accountTextBox.Name = "m_accountTextBox"
+        Me.m_accountTextBox.PasswordChar = Global.Microsoft.VisualBasic.ChrW(0)
+        Me.m_accountTextBox.ScrollBars = System.Windows.Forms.ScrollBars.None
+        Me.m_accountTextBox.SelectionLength = 0
+        Me.m_accountTextBox.SelectionStart = 0
+        Me.m_accountTextBox.Size = New System.Drawing.Size(514, 19)
+        Me.m_accountTextBox.TabIndex = 3
+        Me.m_accountTextBox.Text = "Account"
+        Me.m_accountTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Left
+        Me.m_accountTextBox.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.OFFICE2010SILVER
+        '
+        'm_accountLabel
+        '
+        Me.m_accountLabel.BackColor = System.Drawing.Color.Transparent
+        Me.m_accountLabel.DisplayStyle = VIBlend.WinForms.Controls.LabelItemStyle.TextOnly
+        Me.m_accountLabel.Ellipsis = False
+        Me.m_accountLabel.ImageAlignment = System.Drawing.ContentAlignment.TopLeft
+        Me.m_accountLabel.Location = New System.Drawing.Point(3, 3)
+        Me.m_accountLabel.Multiline = True
+        Me.m_accountLabel.Name = "m_accountLabel"
+        Me.m_accountLabel.Size = New System.Drawing.Size(68, 19)
+        Me.m_accountLabel.TabIndex = 2
+        Me.m_accountLabel.Text = "Account"
+        Me.m_accountLabel.TextAlignment = System.Drawing.ContentAlignment.MiddleLeft
+        Me.m_accountLabel.UseMnemonics = True
+        Me.m_accountLabel.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
         '
         'AllocationKeysView
         '
@@ -120,9 +172,13 @@ Partial Class AllocationKeysView
         Me.Name = "AllocationKeysView"
         Me.Text = "Allocation Keys"
         Me.TableLayoutPanel1.ResumeLayout(False)
+        Me.Panel1.ResumeLayout(False)
         Me.ResumeLayout(False)
 
     End Sub
     Friend WithEvents TableLayoutPanel1 As System.Windows.Forms.TableLayoutPanel
     Friend WithEvents m_allocationsKeysDGV As VIBlend.WinForms.DataGridView.vDataGridView
+    Friend WithEvents Panel1 As System.Windows.Forms.Panel
+    Friend WithEvents m_accountTextBox As VIBlend.WinForms.Controls.vTextBox
+    Friend WithEvents m_accountLabel As VIBlend.WinForms.Controls.vLabel
 End Class

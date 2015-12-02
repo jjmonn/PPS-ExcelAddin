@@ -490,6 +490,14 @@ TokensCheck:
 
     End Sub
 
+    Private Sub m_allocationKeyButton_Click(sender As Object, e As EventArgs) Handles m_allocationKeyButton.Click
+
+        If m_currentNode IsNot Nothing Then
+            Dim l_allocationKeysController As New AllocationKeysController(m_currentNode.Value)
+        End If
+
+    End Sub
+
 #End Region
 
 
@@ -1004,4 +1012,5 @@ TokensCheck:
 #End Region
 
 
+  
 End Class

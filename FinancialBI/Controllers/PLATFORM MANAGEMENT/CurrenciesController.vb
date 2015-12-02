@@ -56,7 +56,6 @@ Friend Class CurrenciesController
     Friend Sub UpdateCurrencies(ByRef p_dataGridView As vDataGridView)
 
         Dim listCurrencies As New List(Of CRUDEntity)
-
         For Each row As HierarchyItem In p_dataGridView.RowsHierarchy.Items
             Dim l_currency As Currency = GetCurrencyCopy(row.ItemValue)
 
