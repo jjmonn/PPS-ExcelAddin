@@ -30,6 +30,7 @@ Imports VIBlend.WinForms.DataGridView
 Imports VIBlend.Utilities
 Imports Microsoft.Office.Interop
 Imports CRUD
+Imports VIBlend.WinForms.Controls
 
 
 Friend Class DataGridViewsUtil
@@ -43,8 +44,7 @@ Friend Class DataGridViewsUtil
     Public Const AVERAGE_CHAR_SIZE As Int32 = 9
     Public Const INDENT_CHAR_SIZE As Int32 = 2
     Private Const BASIC_DGV_REPORT_THEME As VIBLEND_THEME = VIBLEND_THEME.OFFICE2010SILVER
-    Private Const BASIC_DGV_REPORT_FONT_SIZE As Single = 8
-    Private Const BASIC_DGV_REPORT_FIRST_COLUMN_CAPTION As String = ""
+   Private Const BASIC_DGV_REPORT_FIRST_COLUMN_CAPTION As String = ""
 
     Friend Shared ADJUSTMENTS_ROW_THEME As VIBLEND_THEME = VIBLEND_THEME.OFFICE2010BLACK
     Friend Shared ADJUSTMENTS_COLOR As Color = Color.Blue
@@ -98,24 +98,24 @@ Friend Class DataGridViewsUtil
             Dim CAStyle As GridCellStyle = GridTheme.GetDefaultTheme(vDGV.VIBlendTheme).GridCellStyle
             Dim CEStyle As GridCellStyle = GridTheme.GetDefaultTheme(ENTITIES_ROWS_THEME).GridCellStyle
 
-            HANStyle.Font = New System.Drawing.Font(vDGV.Font.FontFamily, BASIC_DGV_REPORT_FONT_SIZE)
-            HASStyle.Font = New System.Drawing.Font(vDGV.Font.FontFamily, BASIC_DGV_REPORT_FONT_SIZE)
-            HENStyle.Font = New System.Drawing.Font(vDGV.Font.FontFamily, BASIC_DGV_REPORT_FONT_SIZE)
-            HESStyle.Font = New System.Drawing.Font(vDGV.Font.FontFamily, BASIC_DGV_REPORT_FONT_SIZE)
-            CAStyle.Font = New System.Drawing.Font(vDGV.Font.FontFamily, BASIC_DGV_REPORT_FONT_SIZE)
-            CEStyle.Font = New System.Drawing.Font(vDGV.Font.FontFamily, BASIC_DGV_REPORT_FONT_SIZE)
+            HANStyle.Font = New System.Drawing.Font(vDGV.Font.FontFamily, My.Settings.dgvFontSize)
+            HASStyle.Font = New System.Drawing.Font(vDGV.Font.FontFamily, My.Settings.dgvFontSize)
+            HENStyle.Font = New System.Drawing.Font(vDGV.Font.FontFamily, My.Settings.dgvFontSize)
+            HESStyle.Font = New System.Drawing.Font(vDGV.Font.FontFamily, My.Settings.dgvFontSize)
+            CAStyle.Font = New System.Drawing.Font(vDGV.Font.FontFamily, My.Settings.dgvFontSize)
+            CEStyle.Font = New System.Drawing.Font(vDGV.Font.FontFamily, My.Settings.dgvFontSize)
 
             ' priority normal => implement format CRUD
             'priority high !!!!!!!!!!!!!!!!!!!!
             'If InputsFormatsDictionary(formatCode)(FORMAT_BOLD_VARIABLE) = 1 Then
-            '    HANStyle.Font = New System.Drawing.Font(HANStyle.Font.FontFamily, BASIC_DGV_REPORT_FONT_SIZE, FontStyle.Bold)
-            '    HASStyle.Font = New System.Drawing.Font(HASStyle.Font.FontFamily, BASIC_DGV_REPORT_FONT_SIZE, FontStyle.Bold)
-            '    CAStyle.Font = New System.Drawing.Font(CAStyle.Font.FontFamily, BASIC_DGV_REPORT_FONT_SIZE, FontStyle.Bold)
+            '    HANStyle.Font = New System.Drawing.Font(HANStyle.Font.FontFamily, My.Settings.dgvFontSize, FontStyle.Bold)
+            '    HASStyle.Font = New System.Drawing.Font(HASStyle.Font.FontFamily, My.Settings.dgvFontSize, FontStyle.Bold)
+            '    CAStyle.Font = New System.Drawing.Font(CAStyle.Font.FontFamily, My.Settings.dgvFontSize, FontStyle.Bold)
             'End If
             'If InputsFormatsDictionary(formatCode)(FORMAT_ITALIC_VARIABLE) = 1 Then
-            '    HANStyle.Font = New System.Drawing.Font(HANStyle.Font.FontFamily, BASIC_DGV_REPORT_FONT_SIZE, FontStyle.Italic)
-            '    HASStyle.Font = New System.Drawing.Font(HASStyle.Font.FontFamily, BASIC_DGV_REPORT_FONT_SIZE, FontStyle.Italic)
-            '    CAStyle.Font = New System.Drawing.Font(CAStyle.Font.FontFamily, BASIC_DGV_REPORT_FONT_SIZE, FontStyle.Italic)
+            '    HANStyle.Font = New System.Drawing.Font(HANStyle.Font.FontFamily, My.Settings.dgvFontSize, FontStyle.Italic)
+            '    HASStyle.Font = New System.Drawing.Font(HASStyle.Font.FontFamily, My.Settings.dgvFontSize, FontStyle.Italic)
+            '    CAStyle.Font = New System.Drawing.Font(CAStyle.Font.FontFamily, My.Settings.dgvFontSize, FontStyle.Italic)
             'End If
 
             '' Colors 
@@ -127,7 +127,7 @@ Friend Class DataGridViewsUtil
             'End If
             Dim l_currency As Currency = GlobalVariables.Currencies.GetValue(currencyId)
 
-            If l_currency is Nothing then Continue For
+            If l_currency Is Nothing Then Continue For
             Select Case (l_account.Type)
                 ' nombe de chiffres après la virgule à variabiliser -> settings !!!!
                 Case Account.AccountType.MONETARY : fmtStr = "{0:" & l_currency.Symbol & "#,##0;(" & l_currency.Symbol & "#,##0)}"
@@ -511,7 +511,7 @@ Friend Class DataGridViewsUtil
 
         DGV.RowsHierarchy.Items.Add("Base Scenario")
         DGV.RowsHierarchy.Items.Add("New Scenario")
-        DGVSetHiearchyFontSize(DGV, BASIC_DGV_REPORT_FONT_SIZE, BASIC_DGV_REPORT_FONT_SIZE)
+        DGVSetHiearchyFontSize(DGV, My.Settings.dgvFontSize, My.Settings.dgvFontSize)
         DGV.RowsHierarchy.CompactStyleRenderingEnabled = True
         DGV.GridLinesDisplayMode = GridLinesDisplayMode.DISPLAY_COLUMN_LINES
         DGV.RowsHierarchy.AutoResize(AutoResizeMode.FIT_ALL)
@@ -586,12 +586,12 @@ Friend Class DataGridViewsUtil
                                          ByRef parent_j As Int32, _
                                          ByRef p_copyOnlyExpanded As Boolean)
 
-      
 
-            range.Offset(i, j).Value = column.Caption
-            range.Offset(i, j).Font.Bold = True
-            ' FormatRangeFromHierarchyItem(range.Offset(i, j), column)
-            j = j + 1
+
+        range.Offset(i, j).Value = column.Caption
+        range.Offset(i, j).Font.Bold = True
+        ' FormatRangeFromHierarchyItem(range.Offset(i, j), column)
+        j = j + 1
 
         If p_copyOnlyExpanded = False _
       Or p_copyOnlyExpanded = True And column.Expanded = True Then
@@ -613,7 +613,7 @@ Friend Class DataGridViewsUtil
                                       ByRef j As Int32, _
                                       ByRef p_copyOnlyExpanded As Boolean)
 
-     
+
         range.Offset(i, j).Value = row.Caption
         FormatRangeFromHierarchyItem(range.Offset(i, j), row)
         i = i + 1
@@ -808,14 +808,14 @@ Friend Class DataGridViewsUtil
     End Sub
 
     Friend Shared Sub AdjustDGVFColumnWidth(ByRef DGV As vDataGridView, _
-                                                     ByRef column_index As Int32)
+                                            ByRef column_index As Int32)
 
         Dim maxLength As Int32 = 0
         Dim characters_size As Single
         Try
             characters_size = DGV.RowsHierarchy.Items(0).CellsStyle.Font.Size
         Catch ex As Exception
-            characters_size = BASIC_DGV_REPORT_FONT_SIZE
+            characters_size = My.Settings.dgvFontSize
         End Try
 
 
@@ -1032,6 +1032,50 @@ Friend Class DataGridViewsUtil
 
 #End Region
 
+
+
+#Region "Data grid view loading from Treeview"
+
+    Friend Shared Sub DGVRowsInitialize(ByRef p_dataGridView As vDataGridView, _
+                                        ByRef p_treeview As vTreeView)
+
+        p_dataGridView.RowsHierarchy.Clear()
+        For Each node In p_treeview.Nodes
+            AddRow(p_dataGridView, node)
+        Next
+
+    End Sub
+
+    Friend Shared Sub AddRow(ByRef p_dataGridView As vDataGridView, _
+                             ByRef p_node As vTreeNode, _
+                             Optional ByRef p_parentRow As HierarchyItem = Nothing)
+
+
+        Dim l_row As HierarchyItem = CreateRow(p_dataGridView, p_node.Value, p_node.Text, p_parentRow)
+        For Each child_node In p_node.Nodes
+            AddRow(p_dataGridView, child_node, l_row)
+        Next
+    
+    End Sub
+
+    Friend Shared Function CreateRow(ByRef p_dataGridView As vDataGridView, _
+                                      ByRef p_entityId As Int32, _
+                                      ByRef p_entityName As String, _
+                                      Optional ByRef p_parentRow As HierarchyItem = Nothing) As HierarchyItem
+
+        Dim l_row As HierarchyItem
+        If p_parentRow Is Nothing Then
+            l_row = p_dataGridView.RowsHierarchy.Items.Add(p_entityName)
+        Else
+            l_row = p_parentRow.Items.Add(p_entityName)
+        End If
+        l_row.ItemValue = p_entityId
+        l_row.TextAlignment = ContentAlignment.MiddleLeft
+        Return l_row
+
+    End Function
+
+#End Region
 
 
 End Class

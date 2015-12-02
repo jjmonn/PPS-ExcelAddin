@@ -75,7 +75,7 @@ Friend Class EntitiesView
         InitCurrenciesComboBox()
         InitializeDGVDisplay()
         DGVColumnsInitialize()
-        DGVRowsInitialize(m_entitiesTreeview)
+        DataGridViewsUtil.DGVRowsInitialize(m_entitiesDataGridView, m_entitiesTreeview)
         fillDGV()
         m_entitiesDataGridView.RowsHierarchy.ExpandAllItems()
 
@@ -389,48 +389,6 @@ Friend Class EntitiesView
 #End Region
 
 
-#Region "Rows Initialization"
-
-    Private Sub DGVRowsInitialize(ByRef entities_tv As vTreeView)
-
-        m_entitiesDataGridView.RowsHierarchy.Clear()
-        For Each node In entities_tv.Nodes
-            AddRow(node)
-        Next
-
-    End Sub
-
-    Friend Sub AddRow(ByRef node As vTreeNode, _
-                      Optional ByRef parent_row As HierarchyItem = Nothing)
-
-        m_isFillingDGV = True
-        Dim row As HierarchyItem = CreateRow(node.Value, node.Text, parent_row)
-        For Each child_node In node.Nodes
-            AddRow(child_node, row)
-        Next
-        m_isFillingDGV = False
-
-    End Sub
-
-    Private Function CreateRow(ByRef p_entityId As Int32, _
-                               ByRef p_entityName As String, _
-                               Optional ByRef parentRow As HierarchyItem = Nothing) As HierarchyItem
-
-        Dim row As HierarchyItem
-        If parentRow Is Nothing Then
-            row = m_entitiesDataGridView.RowsHierarchy.Items.Add(p_entityName)
-        Else
-            row = parentRow.Items.Add(p_entityName)
-        End If
-        row.ItemValue = p_entityId
-        row.TextAlignment = ContentAlignment.MiddleLeft
-        Return row
-
-    End Function
-
-#End Region
-
-
 #Region "DGV Filling"
 
     Friend Sub FillRow(ByVal p_entityId As Int32, _
@@ -439,12 +397,14 @@ Friend Class EntitiesView
         Dim rowItem As HierarchyItem = DataGridViewsUtil.GetHierarchyItemFromId(m_entitiesDataGridView.RowsHierarchy, p_entityId)
         If rowItem Is Nothing Then
             Dim parentEntityId As Int32 = p_entityHashtable.ParentId
+            m_isFillingDGV = True
             If parentEntityId = 0 Then
-                rowItem = CreateRow(p_entityId, p_entityHashtable.Name)
+                rowItem = DataGridViewsUtil.CreateRow(m_entitiesDataGridView, p_entityId, p_entityHashtable.Name)
             Else
                 Dim parentRow As HierarchyItem = DataGridViewsUtil.GetHierarchyItemFromId(m_entitiesDataGridView.RowsHierarchy, parentEntityId)
-                rowItem = CreateRow(p_entityId, p_entityHashtable.Name, parentRow)
+                rowItem = DataGridViewsUtil.CreateRow(m_entitiesDataGridView, p_entityId, p_entityHashtable.Name, parentRow)
             End If
+            m_isFillingDGV = False
         End If
         rowItem.Caption = p_entityHashtable.Name
         Dim column As HierarchyItem = DataGridViewsUtil.GetHierarchyItemFromId(m_entitiesDataGridView.ColumnsHierarchy, ENTITIES_CURRENCY_VARIABLE)
