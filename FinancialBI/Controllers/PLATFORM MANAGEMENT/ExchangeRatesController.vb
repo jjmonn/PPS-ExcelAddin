@@ -130,7 +130,9 @@ Friend Class ExchangeRatesController
     Private Sub AfterRateUpdate(ByRef status As ErrorMessage, _
                                 ByRef p_id As UInt32)
 
-        ' to be implemented priority high !!!
+        If (status <> ErrorMessage.SUCCESS) Then
+            m_view.ResetValue(m_exchangeRates.GetValue(p_id))
+        End If
 
     End Sub
 
