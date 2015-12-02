@@ -93,7 +93,7 @@ Friend Class Computer
         ' Start versions computing loop
         For Each l_versionId In p_versionsIds
             Dim l_version As Version = GlobalVariables.Versions.GetValue(l_versionId)
-            If l_version Is Nothing Then Resume Next
+            If l_version Is Nothing Then Continue For
 
             ' Start entities computing loop
             For Each l_entityId As Int32 In p_entitiesIds
