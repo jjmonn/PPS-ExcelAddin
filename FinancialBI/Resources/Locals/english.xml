@@ -323,6 +323,8 @@
     <string name="msg_account_selection">Please select an Account</string>
     <string name="msg_invalid_version">Invalid Version (Folder) or no Version Selected.</string>
     <string name="msg_period_selection">Please select a Period (A version must be selected in order to select the period).</string>
+    <string name="msg_invalid_filter"> is an invalid filter.</string>
+  
   </category>
 
   <category name="settings">

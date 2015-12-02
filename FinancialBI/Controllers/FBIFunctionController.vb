@@ -31,22 +31,24 @@ Public Class FBIFunctionController
 
     ' Objects
     Private Computer As New Computer
-    Private computingCache As ComputingCache
+    Private m_computingCache As ComputingCache
 
     ' Compute Params
-    Private periodToken As String
-    Private entity_id As Int32
-    Private account_id As Int32
-    Private currency_id As Int32
+    Private m_periodToken As String
+    Private m_entityId As Int32
+    Private m_accountId As Int32
+    Private m_currencyId As Int32
     Private m_versionId As Int32
-    Private adjustment_id As Int32
+    Private m_adjustmentId As Int32
 
     ' Variables
-    Private error_message As String
-    Private requestIdComputeFlagDict As New SafeDictionary(Of Int32, Boolean)
-    Private emptyCellFlag As Boolean
-    Private cacheInitFlag As Boolean = False
-    Friend mustUpdateFlag As Boolean = False
+    Private m_errorMessage As String
+    Private m_requestIdComputeFlagDict As New SafeDictionary(Of Int32, Boolean)
+    Private m_emptyCellFlag As Boolean
+    Private m_cacheInitFlag As Boolean = False
+    Private m_mustUpdateFlag As Boolean = False
+    Private Const m_filtersToken As String = "0"
+
 
 #End Region
 
@@ -55,7 +57,7 @@ Public Class FBIFunctionController
 
     Friend Sub New()
 
-        emptyCellFlag = False
+        m_emptyCellFlag = False
         AddHandler Computer.ComputationAnswered, AddressOf AfterCompute
         If GlobalVariables.AuthenticationFlag = True Then InitCache()
 
@@ -63,8 +65,8 @@ Public Class FBIFunctionController
 
     Private Sub InitCache()
 
-        computingCache = New ComputingCache(False)
-        cacheInitFlag = True
+        m_computingCache = New ComputingCache(False)
+        m_cacheInitFlag = True
 
     End Sub
 
@@ -75,7 +77,7 @@ Public Class FBIFunctionController
 
     Friend Sub ReinitializeCache()
 
-        computingCache.ResetCache()
+        m_computingCache.ResetCache()
 
     End Sub
 
@@ -89,40 +91,42 @@ Public Class FBIFunctionController
                                    ByRef p_adjustments_filters As Object, _
                                    Optional ByRef p_filtersArray As Object = Nothing) As Object
 
-        If cacheInitFlag = False Then InitCache()
+        If m_cacheInitFlag = False Then InitCache()
         If GlobalVariables.g_mustResetCache = True Then ReinitializeCache()
-        error_message = ""
-        emptyCellFlag = False
+        m_errorMessage = ""
+        m_emptyCellFlag = False
 
         ' Checks
-        If CheckAccount(p_account_str) = False Then Return error_message
-        If CheckEntity(p_entity_str) = False Then Return error_message
-        If CheckCurrency(p_currency_str) = False Then Return error_message
-        If CheckVersion(p_version_str) = False Then Return error_message
-        If CheckDate(p_period_str) = False Then Return error_message
+        If CheckAccount(p_account_str) = False Then Return m_errorMessage
+        If CheckEntity(p_entity_str) = False Then Return m_errorMessage
+        If CheckCurrency(p_currency_str) = False Then Return m_errorMessage
+        If CheckVersion(p_version_str) = False Then Return m_errorMessage
+        If CheckDate(p_period_str) = False Then Return m_errorMessage
 
         ' Filters Building
         Dim filters = New SafeDictionary(Of Int32, List(Of Int32))
-        BuildFilters(p_filtersArray, filters)
-        Dim filtersToken As String = "0"
+        Dim l_filtersError As String = BuildFilters(p_filtersArray, filters)
+        If l_filtersError <> "" Then
+            Return l_filtersError & Local.GetValue("ppsbi.msg_invalid_filter")
+        End If
 
         ' Axis Filters building
         Dim axis_filters = New SafeDictionary(Of Int32, List(Of Int32))()
-        BuildAxisFilter(p_clients_filters, GlobalVariables.AxisElems, AxisType.Client, axis_filters)
+        Dim l_axisFilterError As String = BuildAxisFilter(p_clients_filters, GlobalVariables.AxisElems, AxisType.Client, axis_filters)
+        If l_axisFilterError <> "" Then Return l_axisFilterError & Local.GetValue("ppsbi.msg_invalid_filter")
         BuildAxisFilter(p_products_filters, GlobalVariables.AxisElems, AxisType.Product, axis_filters)
         BuildAxisFilter(p_adjustments_filters, GlobalVariables.AxisElems, AxisType.Adjustment, axis_filters)
 
-        ' -> filter token to be created !!!
         Dim token As String = m_versionId & Computer.TOKEN_SEPARATOR & _
-                              filtersToken & Computer.TOKEN_SEPARATOR & _
-                              entity_id & Computer.TOKEN_SEPARATOR & _
-                              account_id & Computer.TOKEN_SEPARATOR & _
-                              periodToken
+                              m_filtersToken & Computer.TOKEN_SEPARATOR & _
+                              m_entityId & Computer.TOKEN_SEPARATOR & _
+                              m_accountId & Computer.TOKEN_SEPARATOR & _
+                              m_periodToken
 
         ' Check Cache and Compute if necessary
-        If mustUpdateFlag = False _
-        AndAlso computingCache.MustCompute(entity_id, _
-                                            currency_id, _
+        If m_mustUpdateFlag = False _
+        AndAlso m_computingCache.MustCompute(m_entityId, _
+                                            m_currencyId, _
                                             {m_versionId}, _
                                             filters, _
                                             axis_filters) = True Then
@@ -143,22 +147,22 @@ Public Class FBIFunctionController
                         ByRef axis_filters As Dictionary(Of Int32, List(Of Int32)))
 
         Dim request_id As Int32 = Computer.CMSG_COMPUTE_REQUEST({m_versionId}, _
-                                                                 {entity_id}.ToList, _
-                                                                 currency_id, _
+                                                                 {m_entityId}.ToList, _
+                                                                 m_currencyId, _
                                                                  filters, _
                                                                  axis_filters, _
                                                                  Nothing)
-        requestIdComputeFlagDict.Add(request_id, False)
-        While requestIdComputeFlagDict(request_id) = False
+        m_requestIdComputeFlagDict.Add(request_id, False)
+        While m_requestIdComputeFlagDict(request_id) = False
             ' timeout ? priority high
         End While
         ' Cache Registering
-        computingCache.cacheEntityID = entity_id
-        computingCache.cacheCurrencyId = currency_id
-        computingCache.cacheVersions = {m_versionId}
-        computingCache.cacheFilters = filters
-        computingCache.cacheAxisFilters = axis_filters
-        mustUpdateFlag = False
+        m_computingCache.cacheEntityID = m_entityId
+        m_computingCache.cacheCurrencyId = m_currencyId
+        m_computingCache.cacheVersions = {m_versionId}
+        m_computingCache.cacheFilters = filters
+        m_computingCache.cacheAxisFilters = axis_filters
+        m_mustUpdateFlag = False
 
     End Sub
 
@@ -171,8 +175,8 @@ Public Class FBIFunctionController
 
         Dim accountName As String = ReturnValueFromRange(accountObject)
         If Not accountName Is Nothing Then
-            account_id = GlobalVariables.Accounts.GetValueId(accountName)
-            If account_id = 0 Then
+            m_accountId = GlobalVariables.Accounts.GetValueId(accountName)
+            If m_accountId = 0 Then
                 GoTo ReturnError
             Else
                 Return True
@@ -181,7 +185,7 @@ Public Class FBIFunctionController
         End If
 
 ReturnError:
-        error_message = "Invalid Account"
+        m_errorMessage = "Invalid Account"
         Return False
 
     End Function
@@ -190,8 +194,8 @@ ReturnError:
 
         Dim entityName As String = ReturnValueFromRange(entityObject)
         If Not entityName Is Nothing Then
-            entity_id = GlobalVariables.AxisElems.GetValueId(AxisType.Entities, entityName)
-            If entity_id = 0 Then
+            m_entityId = GlobalVariables.AxisElems.GetValueId(AxisType.Entities, entityName)
+            If m_entityId = 0 Then
                 GoTo ReturnError
             Else
                 Return True
@@ -200,7 +204,7 @@ ReturnError:
         End If
 
 ReturnError:
-        error_message = "Invalid Entity"
+        m_errorMessage = "Invalid Entity"
         Return False
 
     End Function
@@ -209,15 +213,15 @@ ReturnError:
 
         Dim currencyName As String = ReturnValueFromRange(currencyObject)
         If Not currencyName Is Nothing Then
-            currency_id = GlobalVariables.Currencies.GetValueId(currencyName)
-            If currency_id = 0 Then
-                error_message = "Invalid Currency"
+            m_currencyId = GlobalVariables.Currencies.GetValueId(currencyName)
+            If m_currencyId = 0 Then
+                m_errorMessage = "Invalid Currency"
                 Return False
             Else
                 Return True
             End If
         Else
-            error_message = "Invalid Currency"
+            m_errorMessage = "Invalid Currency"
             Return True
         End If
 
@@ -229,7 +233,7 @@ ReturnError:
         If Not version_name Is Nothing Then
             m_versionId = GlobalVariables.Versions.GetValueId(version_name)
             If m_versionId = 0 Then
-                error_message = "Invalid Version"
+                m_errorMessage = "Invalid Version"
                 Return False
             Else
                 Return True
@@ -274,7 +278,7 @@ ReturnError:
 PeriodIntegerIdentification:
         For Each p In periodsList
             If p = periodObject Then
-                periodToken = periodIdentifyer & periodObject
+                m_periodToken = periodIdentifyer & periodObject
                 Return True
             End If
         Next
@@ -282,7 +286,7 @@ PeriodIntegerIdentification:
 
 
 ReturnError:
-        error_message = "Invalid Period or Period format"
+        m_errorMessage = "Invalid Period or Period format"
         Return False
 
     End Function
@@ -295,10 +299,10 @@ ReturnError:
     Private Sub AfterCompute(ByRef entity_id As Int32, ByRef status As ErrorMessage, ByRef request_id As Int32)
 
         If status = ErrorMessage.SUCCESS Then
-            requestIdComputeFlagDict(request_id) = True
+            m_requestIdComputeFlagDict(request_id) = True
         Else
             ' raise error message in this case ? priority high 
-            requestIdComputeFlagDict(request_id) = True
+            m_requestIdComputeFlagDict(request_id) = True
         End If
 
     End Sub
@@ -308,8 +312,8 @@ ReturnError:
 
 #Region "Filters Dictionaries Building"
 
-    Private Sub BuildFilters(ByRef p_filters_object As Object, _
-                             ByRef filters As Dictionary(Of Int32, List(Of Int32)))
+    Private Function BuildFilters(ByRef p_filters_object As Object, _
+                                  ByRef filters As Dictionary(Of Int32, List(Of Int32))) As String
 
         Dim filterValue As FilterValue
         Dim filterId As Int32
@@ -323,16 +327,19 @@ ReturnError:
                         filters.Add(filterId, New List(Of Int32))
                     End If
                     filters(filterId).Add(filterValue.Id)
+                Else
+                    Return filterValueName
                 End If
             End If
         Next
+        Return ""
 
-    End Sub
+    End Function
 
-    Private Sub BuildAxisFilter(ByRef p_axis_filters_object As Object, _
-                                ByRef CRUDModel As AxisElemManager, _
-                                ByRef axisType As AxisType, _
-                                ByRef axis_filters As Dictionary(Of Int32, List(Of Int32)))
+    Private Function BuildAxisFilter(ByRef p_axis_filters_object As Object, _
+                                     ByRef CRUDModel As AxisElemManager, _
+                                     ByRef axisType As AxisType, _
+                                     ByRef axis_filters As Dictionary(Of Int32, List(Of Int32))) As String
 
         Dim axisFiltersList As New List(Of Int32)
         For Each axisFilter In p_axis_filters_object
@@ -341,12 +348,15 @@ ReturnError:
                 Dim axisValueId As Int32 = CRUDModel.GetValueId(axisType, axisName)
                 If axisValueId <> 0 Then
                     axisFiltersList.Add(axisValueId)
+                Else
+                    Return axisName
                 End If
             End If
         Next
         If axisFiltersList.Count > 0 Then axis_filters.Add(axisType, axisFiltersList)
+        Return ""
 
-    End Sub
+    End Function
 
 #End Region
 
@@ -358,7 +368,7 @@ ReturnError:
         If input Is Nothing Then Return ""
         If TypeOf (input) Is Excel.Range Then
             Dim rng As Excel.Range = CType(input, Excel.Range)
-            If rng.Value2 Is Nothing Then emptyCellFlag = True
+            If rng.Value2 Is Nothing Then m_emptyCellFlag = True
             Return rng.Value2
         Else
             Return input
@@ -366,15 +376,15 @@ ReturnError:
 
     End Function
 
-    Private Sub AddAxisFilterToFiltersList(ByRef filter As Object, _
-                                            ByRef filterList As List(Of Int32))
+    'Private Sub AddAxisFilterToFiltersList(ByRef filter As Object, _
+    '                                        ByRef filterList As List(Of Int32))
 
-        'Dim filterValue As String = ReturnValueFromRange(filter)
-        'If Not filterValue Is Nothing AndAlso EntitiesCategoriesNameKeyDictionary.ContainsKey(filterValue) Then
-        '    filterList.Add(EntitiesCategoriesNameKeyDictionary.Item(filterValue))
-        'End If
+    '    'Dim filterValue As String = ReturnValueFromRange(filter)
+    '    'If Not filterValue Is Nothing AndAlso EntitiesCategoriesNameKeyDictionary.ContainsKey(filterValue) Then
+    '    '    filterList.Add(EntitiesCategoriesNameKeyDictionary.Item(filterValue))
+    '    'End If
 
-    End Sub
+    'End Sub
 
 #End Region
 
