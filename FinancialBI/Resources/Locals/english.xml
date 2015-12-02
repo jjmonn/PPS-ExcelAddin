@@ -352,7 +352,7 @@
     <string name="msg_percentageOver100">The total percentage cannot exceed 100%.</string>
     <string name="msg_error_update">The allocation key could not be updated.</string>
     <string name="msg_invalid_percentage">The allocation key must be between 0 and 100%.</string>
-    <string name=""></string>
+    <string name="msg_not_input_account">Allocation keys can only be edited on inputs and first period input accounts</string>
 
   </category>  
   
