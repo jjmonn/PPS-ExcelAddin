@@ -36,8 +36,8 @@ Partial Class PlatformMGTGeneralUI
         Me.AdjustmentsBT = New System.Windows.Forms.ToolStripMenuItem()
         Me.VersionsBT = New System.Windows.Forms.ToolStripMenuItem()
         Me.CurrenciesBT = New System.Windows.Forms.ToolStripMenuItem()
-        Me.GlobalFact_BT = New System.Windows.Forms.ToolStripMenuItem()
         Me.ExchangeRatesButton = New System.Windows.Forms.ToolStripMenuItem()
+        Me.GlobalFact_BT = New System.Windows.Forms.ToolStripMenuItem()
         Me.GroupsBT = New System.Windows.Forms.ToolStripMenuItem()
         Me.Panel1 = New System.Windows.Forms.Panel()
         Me.MenuStrip1.SuspendLayout()
@@ -48,156 +48,154 @@ Partial Class PlatformMGTGeneralUI
         Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.AccountsBT, Me.EntitiesBT, Me.CategoriesBT, Me.ClientsBT, Me.ProductsBT, Me.AdjustmentsBT, Me.VersionsBT, Me.CurrenciesBT, Me.ExchangeRatesButton, Me.GlobalFact_BT, Me.GroupsBT})
         Me.MenuStrip1.Location = New System.Drawing.Point(0, 0)
         Me.MenuStrip1.Name = "MenuStrip1"
-        Me.MenuStrip1.Size = New System.Drawing.Size(1142, 55)
+        Me.MenuStrip1.Size = New System.Drawing.Size(1142, 59)
         Me.MenuStrip1.TabIndex = 0
         Me.MenuStrip1.Text = "MenuStrip1"
         '
         'AccountsBT
         '
         Me.AccountsBT.CheckOnClick = True
-        Me.AccountsBT.Image = Global.FinancialBI.My.Resources.fbi_dark_blue_icon
+        Me.AccountsBT.Image = Global.FinancialBI.My.Resources.Resources.fbiIcon
         Me.AccountsBT.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
         Me.AccountsBT.Name = "AccountsBT"
-        Me.AccountsBT.Size = New System.Drawing.Size(69, 51)
-        Me.AccountsBT.Text = Local.GetValue("GeneralEditionUI.accounts")
+        Me.AccountsBT.Size = New System.Drawing.Size(189, 55)
+        Me.AccountsBT.Text = "[GeneralEditionUI.accounts]"
         Me.AccountsBT.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
-        Me.AccountsBT.ToolTipText = Local.GetValue("GeneralEditionUI.tool_tip_account")
+        Me.AccountsBT.ToolTipText = "[GeneralEditionUI.tool_tip_account]"
         '
         'EntitiesBT
         '
         Me.EntitiesBT.CheckOnClick = True
-        Me.EntitiesBT.Image = Global.FinancialBI.My.Resources.elements_hierarchy
+        Me.EntitiesBT.Image = Global.FinancialBI.My.Resources.Resources.elements_hierarchy
         Me.EntitiesBT.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
         Me.EntitiesBT.Name = "EntitiesBT"
-        Me.EntitiesBT.Size = New System.Drawing.Size(111, 51)
-        Me.EntitiesBT.Text = Local.GetValue("GeneralEditionUI.entities")
+        Me.EntitiesBT.Size = New System.Drawing.Size(179, 55)
+        Me.EntitiesBT.Text = "[GeneralEditionUI.entities]"
         Me.EntitiesBT.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
-        Me.EntitiesBT.ToolTipText = Local.GetValue("GeneralEditionUI.tool_tip_entities")
+        Me.EntitiesBT.ToolTipText = "[GeneralEditionUI.tool_tip_entities]"
         '
         'CategoriesBT
         '
         Me.CategoriesBT.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.EntitiesFiltersBT, Me.ClientsFiltersBT, Me.ProductsFiltersBT, Me.AdjustmentsFiltersBT})
-        Me.CategoriesBT.Image = Global.FinancialBI.My.Resources.filter_and_sort
+        Me.CategoriesBT.Image = Global.FinancialBI.My.Resources.Resources.filter_and_sort
         Me.CategoriesBT.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
         Me.CategoriesBT.Name = "CategoriesBT"
-        Me.CategoriesBT.Size = New System.Drawing.Size(75, 51)
-        Me.CategoriesBT.Text = Local.GetValue("GeneralEditionUI.categories")
+        Me.CategoriesBT.Size = New System.Drawing.Size(197, 55)
+        Me.CategoriesBT.Text = "[GeneralEditionUI.categories]"
         Me.CategoriesBT.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
-        Me.CategoriesBT.ToolTipText = Local.GetValue("GeneralEditionUI.tool_tip_categories")
+        Me.CategoriesBT.ToolTipText = "[GeneralEditionUI.tool_tip_categories]"
         '
         'EntitiesFiltersBT
         '
-        Me.EntitiesFiltersBT.Image = Global.FinancialBI.My.Resources.elements_hierarchy
+        Me.EntitiesFiltersBT.Image = Global.FinancialBI.My.Resources.Resources.elements_hierarchy
         Me.EntitiesFiltersBT.Name = "EntitiesFiltersBT"
-        Me.EntitiesFiltersBT.Size = New System.Drawing.Size(141, 22)
-        Me.EntitiesFiltersBT.Text = Local.GetValue("general.entities")
+        Me.EntitiesFiltersBT.Size = New System.Drawing.Size(209, 24)
+        Me.EntitiesFiltersBT.Text = "[general.entities]"
         '
         'ClientsFiltersBT
         '
-        Me.ClientsFiltersBT.Image = Global.FinancialBI.My.Resources.users_relation
+        Me.ClientsFiltersBT.Image = Global.FinancialBI.My.Resources.Resources.users_relation
         Me.ClientsFiltersBT.Name = "ClientsFiltersBT"
-        Me.ClientsFiltersBT.Size = New System.Drawing.Size(141, 22)
-        Me.ClientsFiltersBT.Text = Local.GetValue("general.clients")
+        Me.ClientsFiltersBT.Size = New System.Drawing.Size(209, 24)
+        Me.ClientsFiltersBT.Text = "[general.clients]"
         '
         'ProductsFiltersBT
         '
-        Me.ProductsFiltersBT.Image = Global.FinancialBI.My.Resources.barcode1
+        Me.ProductsFiltersBT.Image = Global.FinancialBI.My.Resources.Resources.barcode1
         Me.ProductsFiltersBT.Name = "ProductsFiltersBT"
-        Me.ProductsFiltersBT.Size = New System.Drawing.Size(141, 22)
-        Me.ProductsFiltersBT.Text = Local.GetValue("general.products")
+        Me.ProductsFiltersBT.Size = New System.Drawing.Size(209, 24)
+        Me.ProductsFiltersBT.Text = "[general.products]"
         '
         'AdjustmentsFiltersBT
         '
-        Me.AdjustmentsFiltersBT.Image = Global.FinancialBI.My.Resources.elements4
+        Me.AdjustmentsFiltersBT.Image = Global.FinancialBI.My.Resources.Resources.elements4
         Me.AdjustmentsFiltersBT.Name = "AdjustmentsFiltersBT"
-        Me.AdjustmentsFiltersBT.Size = New System.Drawing.Size(141, 22)
-        Me.AdjustmentsFiltersBT.Text = Local.GetValue("general.adjustments")
+        Me.AdjustmentsFiltersBT.Size = New System.Drawing.Size(209, 24)
+        Me.AdjustmentsFiltersBT.Text = "[general.adjustments]"
         '
         'ClientsBT
         '
         Me.ClientsBT.CheckOnClick = True
-        Me.ClientsBT.Image = Global.FinancialBI.My.Resources.users_relation
+        Me.ClientsBT.Image = Global.FinancialBI.My.Resources.Resources.users_relation
         Me.ClientsBT.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
         Me.ClientsBT.Name = "ClientsBT"
-        Me.ClientsBT.Size = New System.Drawing.Size(55, 51)
-        Me.ClientsBT.Text = Local.GetValue("general.clients")
+        Me.ClientsBT.Size = New System.Drawing.Size(115, 55)
+        Me.ClientsBT.Text = "[general.clients]"
         Me.ClientsBT.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
-        Me.ClientsBT.ToolTipText = Local.GetValue("GeneralEditionUI.tool_tip_clients")
+        Me.ClientsBT.ToolTipText = "[GeneralEditionUI.tool_tip_clients]"
         '
         'ProductsBT
         '
         Me.ProductsBT.CheckOnClick = True
-        Me.ProductsBT.Image = Global.FinancialBI.My.Resources.barcode1
+        Me.ProductsBT.Image = Global.FinancialBI.My.Resources.Resources.barcode1
         Me.ProductsBT.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
         Me.ProductsBT.Name = "ProductsBT"
-        Me.ProductsBT.Size = New System.Drawing.Size(66, 51)
-        Me.ProductsBT.Text = Local.GetValue("general.products")
+        Me.ProductsBT.Size = New System.Drawing.Size(131, 55)
+        Me.ProductsBT.Text = "[general.products]"
         Me.ProductsBT.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
-        Me.ProductsBT.ToolTipText = Local.GetValue("GeneralEditionUI.tool_tip_products")
+        Me.ProductsBT.ToolTipText = "[GeneralEditionUI.tool_tip_products]"
         '
         'AdjustmentsBT
         '
-        Me.AdjustmentsBT.Image = Global.FinancialBI.My.Resources.elements4
+        Me.AdjustmentsBT.Image = Global.FinancialBI.My.Resources.Resources.elements4
         Me.AdjustmentsBT.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
         Me.AdjustmentsBT.Name = "AdjustmentsBT"
-        Me.AdjustmentsBT.Size = New System.Drawing.Size(86, 51)
-        Me.AdjustmentsBT.Text = Local.GetValue("general.adjustments")
+        Me.AdjustmentsBT.Size = New System.Drawing.Size(152, 55)
+        Me.AdjustmentsBT.Text = "[general.adjustments]"
         Me.AdjustmentsBT.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
-        Me.AdjustmentsBT.ToolTipText = Local.GetValue("GeneralEditionUI.tool_tip_adjustments")
+        Me.AdjustmentsBT.ToolTipText = "[GeneralEditionUI.tool_tip_adjustments]"
         '
         'VersionsBT
         '
         Me.VersionsBT.CheckOnClick = True
-        Me.VersionsBT.Image = Global.FinancialBI.My.Resources.Excel_dark_24_24
+        Me.VersionsBT.Image = Global.FinancialBI.My.Resources.Resources.Excel_dark_24_24
         Me.VersionsBT.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
         Me.VersionsBT.Name = "VersionsBT"
-        Me.VersionsBT.Size = New System.Drawing.Size(62, 51)
-        Me.VersionsBT.Text = Local.GetValue("general.versions")
+        Me.VersionsBT.Size = New System.Drawing.Size(127, 55)
+        Me.VersionsBT.Text = "[general.versions]"
         Me.VersionsBT.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
-        Me.VersionsBT.ToolTipText = Local.GetValue("GeneralEditionUI.tool_tip_versions")
+        Me.VersionsBT.ToolTipText = "[GeneralEditionUI.tool_tip_versions]"
         '
         'CurrenciesBT
         '
         Me.CurrenciesBT.CheckOnClick = True
-        Me.CurrenciesBT.Image = Global.FinancialBI.My.Resources.symbol_dollar_euro1
+        Me.CurrenciesBT.Image = Global.FinancialBI.My.Resources.Resources.symbol_dollar_euro1
         Me.CurrenciesBT.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
         Me.CurrenciesBT.Name = "CurrenciesBT"
-        Me.CurrenciesBT.Size = New System.Drawing.Size(75, 51)
-        Me.CurrenciesBT.Text = Local.GetValue("general.currencies")
+        Me.CurrenciesBT.Size = New System.Drawing.Size(138, 55)
+        Me.CurrenciesBT.Text = "[general.currencies]"
         Me.CurrenciesBT.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
-        Me.CurrenciesBT.ToolTipText = Local.GetValue("GeneralEditionUI.tool_tip_currencies")
-        '
-        'GlobalFact_BT
-        '
-        Me.GlobalFact_BT.Image = Global.FinancialBI.My.Resources.chart_line
-        Me.GlobalFact_BT.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
-        Me.GlobalFact_BT.Name = "GlobalFact_BT"
-        Me.GlobalFact_BT.Size = New System.Drawing.Size(127, 51)
-        Me.GlobalFact_BT.Text = Local.GetValue("general.economic_indicators")
-        Me.GlobalFact_BT.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
-        Me.GlobalFact_BT.ToolTipText = Local.GetValue("GeneralEditionUI.tool_tip_economic_indicators")
-
+        Me.CurrenciesBT.ToolTipText = "[GeneralEditionUI.tool_tip_currencies]"
         '
         'ExchangeRatesButton
         '
-        Me.ExchangeRatesButton.Image = Global.FinancialBI.My.Resources.money_interest2
+        Me.ExchangeRatesButton.Image = Global.FinancialBI.My.Resources.Resources.money_interest2
         Me.ExchangeRatesButton.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
         Me.ExchangeRatesButton.Name = "ExchangeRatesButton"
-        Me.ExchangeRatesButton.Size = New System.Drawing.Size(100, 51)
-        Me.ExchangeRatesButton.Text = Local.GetValue("GeneralEditionUI.exchange_rates")
+        Me.ExchangeRatesButton.Size = New System.Drawing.Size(228, 55)
+        Me.ExchangeRatesButton.Text = "[GeneralEditionUI.exchange_rates]"
         Me.ExchangeRatesButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
-        Me.ExchangeRatesButton.ToolTipText = Local.GetValue("GeneralEditionUI.tool_tip_exchange_rates")
+        Me.ExchangeRatesButton.ToolTipText = "[GeneralEditionUI.tool_tip_exchange_rates]"
+        '
+        'GlobalFact_BT
+        '
+        Me.GlobalFact_BT.Image = Global.FinancialBI.My.Resources.Resources.chart_line
+        Me.GlobalFact_BT.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
+        Me.GlobalFact_BT.Name = "GlobalFact_BT"
+        Me.GlobalFact_BT.Size = New System.Drawing.Size(200, 55)
+        Me.GlobalFact_BT.Text = "[general.economic_indicators]"
+        Me.GlobalFact_BT.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
+        Me.GlobalFact_BT.ToolTipText = "[GeneralEditionUI.tool_tip_economic_indicators]"
         '
         'GroupsBT
         '
-        Me.GroupsBT.Image = Global.FinancialBI.My.Resources.users_family
+        Me.GroupsBT.Image = Global.FinancialBI.My.Resources.Resources.users_family
         Me.GroupsBT.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
         Me.GroupsBT.Name = "GroupsBT"
-        Me.GroupsBT.Size = New System.Drawing.Size(57, 51)
-        Me.GroupsBT.Text = Local.GetValue("GeneralEditionUI.users_groups")
+        Me.GroupsBT.Size = New System.Drawing.Size(216, 55)
+        Me.GroupsBT.Text = "[GeneralEditionUI.users_groups]"
         Me.GroupsBT.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
-        Me.GroupsBT.TooltipText = Local.GetValue("GeneralEditionUI.tool_tip_users_groups")
-
+        Me.GroupsBT.ToolTipText = "[GeneralEditionUI.tool_tip_users_groups]"
         '
         'Panel1
         '
@@ -219,7 +217,7 @@ Partial Class PlatformMGTGeneralUI
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.MainMenuStrip = Me.MenuStrip1
         Me.Name = "PlatformMGTGeneralUI"
-        Me.Text = Local.GetValue("GeneralEditionUI.platform_config")
+        Me.Text = "[GeneralEditionUI.platform_config]"
         Me.MenuStrip1.ResumeLayout(False)
         Me.MenuStrip1.PerformLayout()
         Me.ResumeLayout(False)
