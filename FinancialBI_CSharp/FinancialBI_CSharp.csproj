@@ -84,6 +84,7 @@
     <Compile Include="Network\CRUD\User.cs" />
     <Compile Include="Network\CRUD\Version.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Updater\Updater.cs" />
     <Compile Include="Utils\Hash.cs" />
     <Compile Include="Utils\MultiIndexDictionary.cs" />
     <Compile Include="Utils\SafeDictionary.cs" />
