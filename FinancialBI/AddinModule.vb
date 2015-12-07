@@ -787,7 +787,8 @@ Public Class AddinModule
     Private Sub AddinModule_Finalize(sender As Object, e As EventArgs) Handles MyBase.AddinFinalize
         If m_GRSControlersDictionary.Count > 0 Then
             On Error Resume Next
-            For Each l_generalSubmissionController As GeneralSubmissionControler In m_GRSControlersDictionary.Values
+            Dim l_GRSList = m_GRSControlersDictionary.Values
+            For Each l_generalSubmissionController As GeneralSubmissionControler In l_GRSList
                 ClearSubmissionMode(l_generalSubmissionController)
             Next
         End If
@@ -1001,7 +1002,8 @@ Public Class AddinModule
             End If
         Next
         p_generalSubmissionController.CloseInstance()
- 
+        m_GRSControlersDictionary.Remove(p_generalSubmissionController.m_associatedWorksheet)
+
         If m_GRSControlersDictionary.Count = 0 Then
             SubmissionModeRibbon.Visible = False
             m_GRSControlersDictionary.Clear()
