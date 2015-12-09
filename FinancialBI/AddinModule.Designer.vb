@@ -37,14 +37,6 @@ Partial Public Class AddinModule
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
-        '
-        'AddinModule
-        '
-        Me.AddinName = "FinancialBI"
-
-        Me.SupportedApps = CType((AddinExpress.MSO.ADXOfficeHostApp.ohaExcel),  _
-                                  AddinExpress.MSO.ADXOfficeHostApp)
-
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(AddinModule))
         Me.MaintTab = New AddinExpress.MSO.ADXRibbonTab(Me.components)
         Me.ConnectionGroup = New AddinExpress.MSO.ADXRibbonGroup(Me.components)
@@ -132,17 +124,18 @@ Partial Public Class AddinModule
         Me.AdxRibbonQuickAccessToolbar1 = New AddinExpress.MSO.ADXRibbonQuickAccessToolbar(Me.components)
         Me.AdxRibbonButton5 = New AddinExpress.MSO.ADXRibbonButton(Me.components)
         Me.BindingNavigator1 = New System.Windows.Forms.BindingNavigator(Me.components)
+        Me.BindingNavigatorAddNewItem = New System.Windows.Forms.ToolStripButton()
+        Me.BindingNavigatorCountItem = New System.Windows.Forms.ToolStripLabel()
+        Me.BindingNavigatorDeleteItem = New System.Windows.Forms.ToolStripButton()
         Me.BindingNavigatorMoveFirstItem = New System.Windows.Forms.ToolStripButton()
         Me.BindingNavigatorMovePreviousItem = New System.Windows.Forms.ToolStripButton()
         Me.BindingNavigatorSeparator = New System.Windows.Forms.ToolStripSeparator()
         Me.BindingNavigatorPositionItem = New System.Windows.Forms.ToolStripTextBox()
-        Me.BindingNavigatorCountItem = New System.Windows.Forms.ToolStripLabel()
         Me.BindingNavigatorSeparator1 = New System.Windows.Forms.ToolStripSeparator()
         Me.BindingNavigatorMoveNextItem = New System.Windows.Forms.ToolStripButton()
         Me.BindingNavigatorMoveLastItem = New System.Windows.Forms.ToolStripButton()
         Me.BindingNavigatorSeparator2 = New System.Windows.Forms.ToolStripSeparator()
-        Me.BindingNavigatorAddNewItem = New System.Windows.Forms.ToolStripButton()
-        Me.BindingNavigatorDeleteItem = New System.Windows.Forms.ToolStripButton()
+        Me.m_PDCPlanningButton = New AddinExpress.MSO.ADXRibbonButton(Me.components)
         CType(Me.BindingNavigator1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.BindingNavigator1.SuspendLayout()
         '
@@ -412,6 +405,7 @@ Partial Public Class AddinModule
         'ComputeGroup
         '
         Me.ComputeGroup.Caption = " "
+        Me.ComputeGroup.Controls.Add(Me.m_PDCPlanningButton)
         Me.ComputeGroup.Controls.Add(Me.ControlingUI2BT)
         Me.ComputeGroup.Controls.Add(Me.FunctionDesigner)
         Me.ComputeGroup.Controls.Add(Me.financialModelingBT)
@@ -494,6 +488,7 @@ Partial Public Class AddinModule
         'financialModelingBT
         '
         Me.financialModelingBT.Caption = "Financial Modeling"
+        Me.financialModelingBT.Enabled = False
         Me.financialModelingBT.Id = "adxRibbonButton_92cac61b68be42c19c331fc2988b85c5"
         Me.financialModelingBT.Image = 3
         Me.financialModelingBT.ImageList = Me.Menu3
@@ -1026,10 +1021,32 @@ Partial Public Class AddinModule
         Me.BindingNavigator1.TabIndex = 0
         Me.BindingNavigator1.Text = "BindingNavigator1"
         '
+        'BindingNavigatorAddNewItem
+        '
+        Me.BindingNavigatorAddNewItem.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.BindingNavigatorAddNewItem.Name = "BindingNavigatorAddNewItem"
+        Me.BindingNavigatorAddNewItem.RightToLeftAutoMirrorImage = True
+        Me.BindingNavigatorAddNewItem.Size = New System.Drawing.Size(23, 4)
+        Me.BindingNavigatorAddNewItem.Text = "Add new"
+        '
+        'BindingNavigatorCountItem
+        '
+        Me.BindingNavigatorCountItem.Name = "BindingNavigatorCountItem"
+        Me.BindingNavigatorCountItem.Size = New System.Drawing.Size(35, 15)
+        Me.BindingNavigatorCountItem.Text = "of {0}"
+        Me.BindingNavigatorCountItem.ToolTipText = "Total number of items"
+        '
+        'BindingNavigatorDeleteItem
+        '
+        Me.BindingNavigatorDeleteItem.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.BindingNavigatorDeleteItem.Name = "BindingNavigatorDeleteItem"
+        Me.BindingNavigatorDeleteItem.RightToLeftAutoMirrorImage = True
+        Me.BindingNavigatorDeleteItem.Size = New System.Drawing.Size(23, 4)
+        Me.BindingNavigatorDeleteItem.Text = "Delete"
+        '
         'BindingNavigatorMoveFirstItem
         '
         Me.BindingNavigatorMoveFirstItem.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.BindingNavigatorMoveFirstItem.Image = CType(resources.GetObject("BindingNavigatorMoveFirstItem.Image"), System.Drawing.Image)
         Me.BindingNavigatorMoveFirstItem.Name = "BindingNavigatorMoveFirstItem"
         Me.BindingNavigatorMoveFirstItem.RightToLeftAutoMirrorImage = True
         Me.BindingNavigatorMoveFirstItem.Size = New System.Drawing.Size(23, 22)
@@ -1038,7 +1055,6 @@ Partial Public Class AddinModule
         'BindingNavigatorMovePreviousItem
         '
         Me.BindingNavigatorMovePreviousItem.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.BindingNavigatorMovePreviousItem.Image = CType(resources.GetObject("BindingNavigatorMovePreviousItem.Image"), System.Drawing.Image)
         Me.BindingNavigatorMovePreviousItem.Name = "BindingNavigatorMovePreviousItem"
         Me.BindingNavigatorMovePreviousItem.RightToLeftAutoMirrorImage = True
         Me.BindingNavigatorMovePreviousItem.Size = New System.Drawing.Size(23, 22)
@@ -1058,64 +1074,52 @@ Partial Public Class AddinModule
         Me.BindingNavigatorPositionItem.Text = "0"
         Me.BindingNavigatorPositionItem.ToolTipText = "Current position"
         '
-        'BindingNavigatorCountItem
-        '
-        Me.BindingNavigatorCountItem.Name = "BindingNavigatorCountItem"
-        Me.BindingNavigatorCountItem.Size = New System.Drawing.Size(35, 15)
-        Me.BindingNavigatorCountItem.Text = "of {0}"
-        Me.BindingNavigatorCountItem.ToolTipText = "Total number of items"
-        '
         'BindingNavigatorSeparator1
         '
-        Me.BindingNavigatorSeparator1.Name = "BindingNavigatorSeparator"
+        Me.BindingNavigatorSeparator1.Name = "BindingNavigatorSeparator1"
         Me.BindingNavigatorSeparator1.Size = New System.Drawing.Size(6, 6)
         '
         'BindingNavigatorMoveNextItem
         '
         Me.BindingNavigatorMoveNextItem.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.BindingNavigatorMoveNextItem.Image = CType(resources.GetObject("BindingNavigatorMoveNextItem.Image"), System.Drawing.Image)
         Me.BindingNavigatorMoveNextItem.Name = "BindingNavigatorMoveNextItem"
         Me.BindingNavigatorMoveNextItem.RightToLeftAutoMirrorImage = True
-        Me.BindingNavigatorMoveNextItem.Size = New System.Drawing.Size(23, 20)
+        Me.BindingNavigatorMoveNextItem.Size = New System.Drawing.Size(23, 4)
         Me.BindingNavigatorMoveNextItem.Text = "Move next"
         '
         'BindingNavigatorMoveLastItem
         '
         Me.BindingNavigatorMoveLastItem.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.BindingNavigatorMoveLastItem.Image = CType(resources.GetObject("BindingNavigatorMoveLastItem.Image"), System.Drawing.Image)
         Me.BindingNavigatorMoveLastItem.Name = "BindingNavigatorMoveLastItem"
         Me.BindingNavigatorMoveLastItem.RightToLeftAutoMirrorImage = True
-        Me.BindingNavigatorMoveLastItem.Size = New System.Drawing.Size(23, 20)
+        Me.BindingNavigatorMoveLastItem.Size = New System.Drawing.Size(23, 4)
         Me.BindingNavigatorMoveLastItem.Text = "Move last"
         '
         'BindingNavigatorSeparator2
         '
-        Me.BindingNavigatorSeparator2.Name = "BindingNavigatorSeparator"
+        Me.BindingNavigatorSeparator2.Name = "BindingNavigatorSeparator2"
         Me.BindingNavigatorSeparator2.Size = New System.Drawing.Size(6, 6)
         '
-        'BindingNavigatorAddNewItem
+        'm_PDCPlanningButton
         '
-        Me.BindingNavigatorAddNewItem.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.BindingNavigatorAddNewItem.Image = CType(resources.GetObject("BindingNavigatorAddNewItem.Image"), System.Drawing.Image)
-        Me.BindingNavigatorAddNewItem.Name = "BindingNavigatorAddNewItem"
-        Me.BindingNavigatorAddNewItem.RightToLeftAutoMirrorImage = True
-        Me.BindingNavigatorAddNewItem.Size = New System.Drawing.Size(23, 20)
-        Me.BindingNavigatorAddNewItem.Text = "Add new"
+        Me.m_PDCPlanningButton.Caption = "Planning PDC"
+        Me.m_PDCPlanningButton.Id = "adxRibbonButton_cd39b2299e0c490aaf9fbe1fbccc1aa5"
+        Me.m_PDCPlanningButton.Image = 12
+        Me.m_PDCPlanningButton.ImageList = Me.Menu3
+        Me.m_PDCPlanningButton.ImageTransparentColor = System.Drawing.Color.Transparent
+        Me.m_PDCPlanningButton.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
+        Me.m_PDCPlanningButton.Size = AddinExpress.MSO.ADXRibbonXControlSize.Large
         '
-        'BindingNavigatorDeleteItem
+        'AddinModule
         '
-        Me.BindingNavigatorDeleteItem.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.BindingNavigatorDeleteItem.Image = CType(resources.GetObject("BindingNavigatorDeleteItem.Image"), System.Drawing.Image)
-        Me.BindingNavigatorDeleteItem.Name = "BindingNavigatorDeleteItem"
-        Me.BindingNavigatorDeleteItem.RightToLeftAutoMirrorImage = True
-        Me.BindingNavigatorDeleteItem.Size = New System.Drawing.Size(23, 20)
-        Me.BindingNavigatorDeleteItem.Text = "Delete"
-        '
+        Me.AddinName = "FinancialBI"
+        Me.SupportedApps = AddinExpress.MSO.ADXOfficeHostApp.ohaExcel
         CType(Me.BindingNavigator1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.BindingNavigator1.ResumeLayout(False)
         Me.BindingNavigator1.PerformLayout()
 
     End Sub
+    Friend WithEvents m_PDCPlanningButton As AddinExpress.MSO.ADXRibbonButton
 
 End Class
 

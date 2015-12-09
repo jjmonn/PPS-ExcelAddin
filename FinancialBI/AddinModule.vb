@@ -437,6 +437,13 @@ Public Class AddinModule
 
 #Region "Download Data"
 
+    Private Sub m_PDCPlanningButton_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) Handles m_PDCPlanningButton.OnClick
+
+        Dim l_PDCUI As New PDCPlanningUI
+        l_PDCUI.Show()
+
+    End Sub
+
     Private Sub ControllingUI2BT_onclick(sender As System.Object,
                                         control As AddinExpress.MSO.IRibbonControl,
                                         pressed As System.Boolean) Handles ControlingUI2BT.OnClick
@@ -449,7 +456,6 @@ Public Class AddinModule
         End If
 
     End Sub
-
 
 #Region "Refresh"
 
@@ -500,7 +506,6 @@ Public Class AddinModule
     End Sub
 
 #End Region
-
 
     Private Sub PPSBIFuncBT_onclick(sender As System.Object,
                                     control As AddinExpress.MSO.IRibbonControl,
@@ -1138,5 +1143,6 @@ Public Class AddinModule
 
 
 
+    
 End Class
 
