@@ -51,7 +51,5 @@ Public Partial Class FinancialBIExcelFunctions
     End Function
 
 
-
-
 End Class
 

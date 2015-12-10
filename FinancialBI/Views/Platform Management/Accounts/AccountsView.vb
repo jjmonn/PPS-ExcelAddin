@@ -495,7 +495,14 @@ TokensCheck:
     Private Sub m_allocationKeyButton_Click(sender As Object, e As EventArgs) Handles m_allocationKeyButton.Click
 
         If m_currentNode IsNot Nothing Then
-            Dim l_allocationKeysController As New AllocationKeysController(m_currentNode.Value)
+            Dim l_account As Account = GlobalVariables.Accounts.GetValue(CInt(m_currentNode.Value))
+            If l_account Is Nothing Then Exit Sub
+            If l_account.FormulaType = Account.FormulaTypes.HARD_VALUE_INPUT _
+            Or l_account.FormulaType = Account.FormulaTypes.FIRST_PERIOD_INPUT Then
+                Dim l_allocationKeysController As New AllocationKeysController(l_account.Id, l_account.Name)
+            Else
+                MsgBox(Local.GetValue("allocationKeys.msg_not_input_account"))
+            End If
         End If
 
     End Sub

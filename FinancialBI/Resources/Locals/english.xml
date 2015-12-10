@@ -323,6 +323,8 @@
     <string name="msg_account_selection">Please select an Account</string>
     <string name="msg_invalid_version">Invalid Version (Folder) or no Version Selected.</string>
     <string name="msg_period_selection">Please select a Period (A version must be selected in order to select the period).</string>
+    <string name="msg_invalid_filter"> is an invalid filter.</string>
+  
   </category>
 
   <category name="settings">
@@ -352,7 +354,7 @@
     <string name="msg_percentageOver100">The total percentage cannot exceed 100%.</string>
     <string name="msg_error_update">The allocation key could not be updated.</string>
     <string name="msg_invalid_percentage">The allocation key must be between 0 and 100%.</string>
-    <string name=""></string>
+    <string name="msg_not_input_account">Allocation keys can only be edited on inputs and first period input accounts</string>
 
   </category>  
   

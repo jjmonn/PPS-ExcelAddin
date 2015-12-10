@@ -3,7 +3,6 @@ Imports System.Collections.Generic
 Imports CRUD
 
 
-
 Public Class AllocationKeysController
 
 #Region "Instance variables"
@@ -14,21 +13,22 @@ Public Class AllocationKeysController
 
 #End Region
 
-
 #Region "Initialize"
 
-    Friend Sub New(ByRef p_account_id As Int32)
+    Friend Sub New(ByRef p_accountId As Int32, _
+                   ByRef p_accountName As String)
 
-        m_accountId = p_account_id
+        m_accountId = p_accountId
         GlobalVariables.AxisElems.LoadEntitiesTV(m_entitiesTreeview)
-        m_allocationKeysView = New AllocationKeysView(Me, p_account_id, m_entitiesTreeview)
+        m_allocationKeysView = New AllocationKeysView(Me, p_accountName, m_entitiesTreeview)
         Dim l_entitiesAllocationKeysDictionary As New Dictionary(Of Int32, Double)
-        Dim l_entityDistributionMultiIndexDictionary = GlobalVariables.EntityDistribution.GetDictionary(p_account_id)
+        Dim l_entityDistributionMultiIndexDictionary = GlobalVariables.EntityDistribution.GetDictionary(p_accountId)
         If l_entityDistributionMultiIndexDictionary IsNot Nothing Then
             For Each l_entityDistribution As CRUD.EntityDistribution In l_entityDistributionMultiIndexDictionary.Values
                 l_entitiesAllocationKeysDictionary.Add(l_entityDistribution.EntityId, l_entityDistribution.Percentage)
             Next
         End If
+        ComputeCalculatedAllocationKeys(l_entitiesAllocationKeysDictionary)
         m_allocationKeysView.FillAllocationKeysDataGridView_ThreadSafe(l_entitiesAllocationKeysDictionary)
         m_allocationKeysView.Show()
 
@@ -39,7 +39,6 @@ Public Class AllocationKeysController
     End Sub
 
 #End Region
-
 
 #Region "Interface"
 
@@ -104,7 +103,6 @@ Public Class AllocationKeysController
 
 #End Region
 
-
 #Region "Utilities"
 
     Friend Sub ComputeCalculatedAllocationKeys(ByRef p_entitiesAllocationKeysDictionary As Dictionary(Of Int32, Double))
@@ -126,6 +124,5 @@ Public Class AllocationKeysController
     End Function
 
 #End Region
-
 
 End Class

@@ -1,15 +1,17 @@
-﻿Imports VIBlend.WinForms.Controls
+﻿' AllocationKeysView.vb
+'
+' User interface for managing allocation keys
+'
+' Created by: Julien Monnereau
+' Created on: 30/11/2015
+' Last modified: 02/12/2015
+
+
+Imports VIBlend.WinForms.Controls
 Imports VIBlend.WinForms.DataGridView
 Imports VIBlend.Utilities
 Imports System.Collections.Generic
 
-' AllocationKeysView.vb
-'
-' User interface for managing allocation keys
-'
-'
-' Created on: 30/11/2015
-' Last modified: 01/12/2015
 
 
 Public Class AllocationKeysView
@@ -26,7 +28,7 @@ Public Class AllocationKeysView
 #Region "Initialize"
 
     Friend Sub New(ByRef p_controller As AllocationKeysController, _
-                   ByRef p_accountId As Int32, _
+                   ByRef p_accountName As String, _
                    ByRef p_entitiesTreeview As vTreeView)
 
         ' This call is required by the designer.
@@ -34,9 +36,7 @@ Public Class AllocationKeysView
 
         ' Add any initialization after the InitializeComponent() call.
         m_controller = p_controller
-        Dim l_account As CRUD.Account = GlobalVariables.Accounts.GetValue(p_accountId)
-        If l_account Is Nothing Then Exit Sub
-        m_accountTextBox.Text = l_account.Name
+        m_accountTextBox.Text = p_accountName
 
         InitializeDataGridView(p_entitiesTreeview)
         InitializeMultilanguage()

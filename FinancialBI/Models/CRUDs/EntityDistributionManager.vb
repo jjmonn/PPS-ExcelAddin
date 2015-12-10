@@ -1,4 +1,8 @@
-﻿Imports System.Collections
+﻿' Created by: Nathanaël Landais
+' Last modified: 02/12/2015
+
+
+Imports System.Collections
 Imports System.Collections.Generic
 Imports CRUD
 

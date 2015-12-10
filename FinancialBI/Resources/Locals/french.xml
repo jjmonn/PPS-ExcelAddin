@@ -323,6 +323,8 @@
     <string name="msg_account_selection">Merci de sélectionner un compte.</string>
     <string name="msg_invalid_version">La version sélectionnée n'est pas valide (dossier) ou bien aucune version n'est sélectionnée.</string>
     <string name="msg_period_selection">Merci de sélectionner une période (Une version doit être sélectionnée avant de pouvoir choisir  une période).</string>
+    <string name="msg_invalid_filter"> est un filtre invalide.</string>
+
   </category>
 
   <category name="settings">
@@ -353,7 +355,8 @@
     <string name="msg_percentageOver100">Le pourcentage total ne peut pas excéder 100 %.</string>
     <string name="msg_error_update">La clé de répartition n'a pas pu être mise à jour.</string>
     <string name="msg_invalid_percentage">La clé de répartition doit être comprise entre 0% et 100%.</string>
-    <string name=""></string>
+    <string name="msg_not_input_account">Les clés d'allocation peuvent seulement être éditées sur les comptes de type "Input" ou "Input sur la première période".</string>
+
 
   </category>
 

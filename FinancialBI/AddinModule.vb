@@ -437,6 +437,13 @@ Public Class AddinModule
 
 #Region "Download Data"
 
+    Private Sub m_PDCPlanningButton_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) Handles m_PDCPlanningButton.OnClick
+
+        Dim l_PDCUI As New PDCPlanningUI
+        l_PDCUI.Show()
+
+    End Sub
+
     Private Sub ControllingUI2BT_onclick(sender As System.Object,
                                         control As AddinExpress.MSO.IRibbonControl,
                                         pressed As System.Boolean) Handles ControlingUI2BT.OnClick
@@ -449,7 +456,6 @@ Public Class AddinModule
         End If
 
     End Sub
-
 
 #Region "Refresh"
 
@@ -500,7 +506,6 @@ Public Class AddinModule
     End Sub
 
 #End Region
-
 
     Private Sub PPSBIFuncBT_onclick(sender As System.Object,
                                     control As AddinExpress.MSO.IRibbonControl,
@@ -787,7 +792,8 @@ Public Class AddinModule
     Private Sub AddinModule_Finalize(sender As Object, e As EventArgs) Handles MyBase.AddinFinalize
         If m_GRSControlersDictionary.Count > 0 Then
             On Error Resume Next
-            For Each l_generalSubmissionController As GeneralSubmissionControler In m_GRSControlersDictionary.Values
+            Dim l_GRSList = m_GRSControlersDictionary.Values
+            For Each l_generalSubmissionController As GeneralSubmissionControler In l_GRSList
                 ClearSubmissionMode(l_generalSubmissionController)
             Next
         End If
@@ -1001,7 +1007,8 @@ Public Class AddinModule
             End If
         Next
         p_generalSubmissionController.CloseInstance()
- 
+        m_GRSControlersDictionary.Remove(p_generalSubmissionController.m_associatedWorksheet)
+
         If m_GRSControlersDictionary.Count = 0 Then
             SubmissionModeRibbon.Visible = False
             m_GRSControlersDictionary.Clear()
@@ -1136,5 +1143,6 @@ Public Class AddinModule
 
 
 
+    
 End Class
 

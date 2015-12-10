@@ -96,11 +96,11 @@ Friend Class NewAccountUI
         Me.m_accountParentLabel.Text = Local.GetValue("accounts_edition.account_parent")
         Me.m_formulaTypeLabel.Text = Local.GetValue("accounts_edition.formula_type")
         Me.m_formatLabel.Text = Local.GetValue("accounts_edition.account_format")
-        Me.recompute_RB.Text = Local.GetValue("accounts_edition.recomputation")
-        Me.aggregation_RB.Text = Local.GetValue("accounts_edition.aggregation")
+        Me.m_recomputeRadioButton.Text = Local.GetValue("accounts_edition.recomputation")
+        Me.m_aggregationRadioButton.Text = Local.GetValue("accounts_edition.aggregation")
         Me.m_consolidationOptionLabel.Text = Local.GetValue("accounts_edition.consolidation_option")
-        Me.bs_item_RB.Text = Local.GetValue("accounts_edition.end_of_period_rate")
-        Me.flux_RB.Text = Local.GetValue("accounts_edition.average_rate")
+        Me.m_endOfPeriodRadioButton.Text = Local.GetValue("accounts_edition.end_of_period_rate")
+        Me.m_averageRateRadioButton.Text = Local.GetValue("accounts_edition.average_rate")
         Me.m_conversionOptionLabel.Text = Local.GetValue("accounts_edition.currencies_conversion")
         Me.Text = Local.GetValue("accounts_edition.title_new_account")
 
@@ -196,10 +196,10 @@ Friend Class NewAccountUI
                 parent_id = 0
                 account_tab = m_parentAccountsTreeviewBox.TreeView.Nodes.Count
             End If
-            If aggregation_RB.Checked = True Then conso_option = Account.ConsolidationOptions.AGGREGATION
-            If recompute_RB.Checked = True Then conso_option = Account.ConsolidationOptions.RECOMPUTATION
-            If flux_RB.Checked = True Then conversion_option = Account.ConversionOptions.AVERAGE_RATE
-            If bs_item_RB.Checked = True Then conversion_option = Account.ConversionOptions.END_OF_PERIOD_RATE
+            If m_aggregationRadioButton.Checked = True Then conso_option = Account.ConsolidationOptions.AGGREGATION
+            If m_recomputeRadioButton.Checked = True Then conso_option = Account.ConsolidationOptions.RECOMPUTATION
+            If m_averageRateRadioButton.Checked = True Then conversion_option = Account.ConversionOptions.AVERAGE_RATE
+            If m_endOfPeriodRadioButton.Checked = True Then conversion_option = Account.ConversionOptions.END_OF_PERIOD_RATE
 
             m_controller.CreateAccount(parent_id, _
                                      NameTextBox.Text, _
