@@ -8,6 +8,12 @@ namespace CRUD
 {
   public class Filter : NamedHierarchyCRUDEntity, AxedCRUDEntity, IComparable
   {
+    public enum Rules
+    {
+      NONE,
+      UNIQUE_ON_PERIOD
+    };
+
     public UInt32 Id { get; private set; }
     public UInt32 ParentId { get; set; }
     public AxisType Axis { get; set; }
@@ -15,6 +21,7 @@ namespace CRUD
     public string Name { get; set; }
     public Int32 ItemPosition { get; set; }
     public UInt32 Image { get; set; }
+    public Rules Rule { get; set; }
 
     public Filter() { }
     private Filter(UInt32 p_id)
@@ -31,6 +38,7 @@ namespace CRUD
       l_filter.IsParent = p_packet.ReadBool();
       l_filter.Name = p_packet.ReadString();
       l_filter.ItemPosition = p_packet.ReadInt32();
+      l_filter.Rule = (Rules)p_packet.ReadUint8();
 
       return (l_filter);
     }
@@ -44,6 +52,7 @@ namespace CRUD
       p_packet.WriteBool(IsParent);
       p_packet.WriteString(Name);
       p_packet.WriteInt32(ItemPosition);
+      p_packet.WriteUint8((byte)Rule);
     }
 
     public void CopyFrom(Filter p_model)
@@ -53,6 +62,7 @@ namespace CRUD
       IsParent = p_model.IsParent;
       Name = p_model.Name;
       ItemPosition = p_model.ItemPosition;
+      Rule = p_model.Rule;
     }
 
     public Filter Clone()

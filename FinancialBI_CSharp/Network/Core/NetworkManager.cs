@@ -152,35 +152,43 @@ public class NetworkManager
 
   public ByteBuffer Receive()
   {
-    byte[] l_buffer = new byte[19];
-    ByteBuffer l_byteBuffer;
-    ByteBuffer.Header l_header;
-    int l_size;
-    int l_byteReaded = 0;
-
-    l_size = m_StreamSSL.Read(l_buffer, 0, 19);
-    if (l_size < 19)
+    try
     {
-      System.Diagnostics.Debug.WriteLine("Invalid packet received");
-      return (null);
-    }
-    l_header = FillHeader(l_buffer);
-    l_buffer = new byte[l_header.payloadSize];
+      byte[] l_buffer = new byte[19];
+      ByteBuffer l_byteBuffer;
+      ByteBuffer.Header l_header;
+      int l_size;
+      int l_byteReaded = 0;
 
-    Debug.WriteLine("Receive packet of size " + l_header.payloadSize);
-    do
+      l_size = m_StreamSSL.Read(l_buffer, 0, 19);
+      if (l_size < 19)
+      {
+        System.Diagnostics.Debug.WriteLine("Invalid packet received");
+        return (null);
+      }
+      l_header = FillHeader(l_buffer);
+      if (l_header.opcode == (ushort)ServerMessage.SMSG_TEST_ANSWER)
+        return null;
+      l_buffer = new byte[l_header.payloadSize];
+
+      do
+      {
+        int sock = m_StreamSSL.Read(l_buffer, l_byteReaded, l_header.payloadSize - l_byteReaded);
+
+        if (sock == 0)
+          break;
+        l_byteReaded += sock;
+      }
+      while (l_byteReaded != l_header.payloadSize);
+
+      l_byteBuffer = new ByteBuffer(l_buffer, l_header);
+      return (l_byteBuffer);
+    }
+    catch (Exception e)
     {
-      int sock = m_StreamSSL.Read(l_buffer, l_byteReaded, l_header.payloadSize - l_byteReaded);
-
-      if (sock == 0)
-        break;
-      l_byteReaded += sock;
+      Debug.WriteLine(e.Message);
+      return null;
     }
-    while (l_byteReaded != l_header.payloadSize);
-
-    l_byteBuffer = new ByteBuffer(l_buffer, l_header);
-    Debug.WriteLine("Received packet of size " + l_byteBuffer.Length);
-    return (l_byteBuffer);
   }
 
   public void Disconnect()

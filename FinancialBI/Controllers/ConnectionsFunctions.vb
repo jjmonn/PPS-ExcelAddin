@@ -20,7 +20,7 @@ Friend Class ConnectionsFunctions
 
 #Region "Instance Variables"
 
-    Public FBIVersionId As String = "1.0.0"
+    Public FBIVersionId As String = "1.0.1"
     ' Variables
     Public Event ConnectionFailedEvent()
     Private userName As String
