@@ -10,7 +10,7 @@
 
 Imports System.Collections
 Imports System.Collections.Generic
-
+Imports CRUD
 
 Public Class Facts
 
@@ -19,7 +19,7 @@ Public Class Facts
 
     Private requestIdFactsCommitDict As New SafeDictionary(Of UInt32, List(Of String))
     Public Event AfterUpdate(ByRef status As Boolean, ByRef resultsDict As Dictionary(Of String, ErrorMessage))
-
+    Public Shared Event Read(Status As Boolean, fact_list As List(Of Fact))
 
 #End Region
 
@@ -31,6 +31,21 @@ Public Class Facts
 
         NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_UPDATE_FACT_LIST_ANSWER, AddressOf SMSG_UPDATE_FACT_LIST_ANSWER)
 
+    End Sub
+
+    Friend Shared Sub CMSG_GET_FACT(ByRef p_accountId As UInt32, ByRef p_productId As UInt32, ByRef p_versionId As UInt32, _
+                       ByRef p_startPeriod As UInt32, ByRef p_endPeriod As UInt32)
+        NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_GET_FACT_ANSWER, AddressOf SMSG_GET_FACT_ANSWER)
+        Dim packet As New ByteBuffer(CType(ClientMessage.CMSG_GET_FACT, UShort))
+
+        packet.WriteUint32(p_accountId)
+        packet.WriteUint32(p_productId)
+        packet.WriteUint32(p_versionId)
+        packet.WriteUint32(p_startPeriod)
+        packet.WriteUint32(p_endPeriod)
+
+        packet.Release()
+        NetworkManager.GetInstance().Send(packet)
     End Sub
 
     Friend Sub CMSG_UPDATE_FACT_LIST(ByRef factsValues As List(Of Hashtable), _
@@ -77,9 +92,26 @@ Public Class Facts
 
     End Sub
 
+    Private Shared Sub SMSG_GET_FACT_ANSWER(packet As ByteBuffer)
+        Dim fact_list As New List(Of Fact)
+
+        If packet.GetError() = ErrorMessage.SUCCESS Then
+
+            Dim nbResult As UInt32 = packet.ReadUint32()
+
+            For i As UInt32 = 0 To nbResult
+                Dim ht As Fact = Fact.BuildFact(packet)
+
+                fact_list.Add(ht)
+                RaiseEvent Read(True, fact_list)
+            Next
+        Else
+            RaiseEvent Read(False, Nothing)
+        End If
+
+    End Sub
 
 #End Region
-
 
     Protected Overrides Sub finalize()
 

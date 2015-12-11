@@ -149,5 +149,7 @@ public enum ServerMessage : int
 
   SMSG_CREATE_ENTITY_DISTRIBUTION_ANSWER,
 
+  SMSG_GET_FACT_ANSWER,
+
   OpcodeMax
 }

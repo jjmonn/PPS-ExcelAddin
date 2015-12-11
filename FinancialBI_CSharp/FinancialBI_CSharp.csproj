@@ -69,6 +69,7 @@
     <Compile Include="Network\CRUD\Base\CRUDEntity.cs" />
     <Compile Include="Network\CRUD\Currency.cs" />
     <Compile Include="Network\CRUD\Entity.cs" />
+    <Compile Include="Network\CRUD\Fact.cs" />
     <Compile Include="Network\CRUD\ExchangeRate.cs" />
     <Compile Include="Network\CRUD\ExchangeRateVersion.cs" />
     <Compile Include="Network\CRUD\Filter.cs" />
