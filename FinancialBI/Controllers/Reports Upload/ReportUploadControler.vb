@@ -1,38 +1,8 @@
-﻿' CGeneralReportSubmissionControler.vb
+﻿' ReportUploadControler.vb
 ' 
-' Manages the whole submission process:
-'       - Dataset                       ok
-'       - SubmissionInterface           ok
-'       - DatasetRibbon                 ok
-'       - DataModificationsTracking     ok
-'       - StatusReportInterface         ok
-'       - DataHighlighter               ok
-'       - Acquisition Interface         ok        
-'
-'
-' To do:  
-'       - changement de version -> changement du display (cf. periods <>)!!
-'
-'       - case where status = false -> modified to true...!!
-'       - Dans le cas où le snapshotStatus est false -> si une action le fait passer en true ->enable buttons
-'       -                                            >> actions = modifications sur les inputs -> dans addin
-'       - CellChanged -> no update for 2 orientations cases yet (account flag =1)
-'       - Choix d'un asset dans le cas où seul Entityflag = 0
-'       - Manage the flags checks after Dataset returned (can use read only array of valid global orientation flag)
-'       -  flag indicating GRSControler is associated to the WS and no flag errors
-'       -> manages all flag cases -> display errors and/or what to do in case of not okd 
-'       - must allow entity selection button only if entity flag = 1 at Dataset level
-'       - Update Single Value -> check for period on BS inputs necessary
-'       - entity selection on flag error = only entity=0
-'
-'
-' Known bugs:
-'       - 
-'
-'
 '
 ' Author: Julien Monnereau
-' Last modified: 19/09/2015
+' Last modified: 11/12/2015
 
 
 Imports Microsoft.Office.Interop
@@ -122,7 +92,10 @@ Friend Class ReportUploadControler
 
         If m_dataset.m_globalOrientationFlag <> ModelDataSet.Orientations.ORIENTATION_ERROR Then
             m_errorMessagesUI.ClearBox()
-            SubmitFinancialProcess()
+            Select Case m_dataset.m_processFlag
+                Case GlobalEnums.process.FINANCIAL : SubmitFinancialProcess()
+                Case globalenums.process.PDC : SubmitPDCProcess()
+            End Select
         Else
             GlobalVariables.SubmissionStatusButton.Image = 2
             m_errorMessagesUI.AddError("The worksheet recognition was not set up properly.")
@@ -244,8 +217,8 @@ Friend Class ReportUploadControler
             m_dataModificationsTracker.InitializeDataSetRegion()
             m_dataModificationsTracker.InitializeOutputsRegion()
             Select Case m_dataset.m_processFlag
-                Case ModelDataSet.Process.FINANCIAL : Return FinancialProcessSnapshotRefreshment(p_updateInputsFlag)
-                Case ModelDataSet.Process.PDC : Return PDCProcessSnapshotRefreshment()
+                Case globalenums.process.FINANCIAL : Return FinancialProcessSnapshotRefreshment(p_updateInputsFlag)
+                Case globalenums.process.PDC : Return PDCProcessSnapshotRefreshment()
             End Select
         End If
         Return False
@@ -275,7 +248,7 @@ Friend Class ReportUploadControler
                 m_reportUploadWorksheetEventHandler.AssociateSubmissionWSController(Me, m_dataset, m_acquisitionModel, m_dataModificationsTracker, m_associatedWorksheet)
             End If
         Else
-            SnapshotErrorGeneration(ModelDataSet.Process.FINANCIAL)
+            SnapshotErrorGeneration(globalenums.process.FINANCIAL)
             Return False
         End If
         m_addin.ModifySubmissionControlsStatus(m_snapshotSuccessFlag)
@@ -285,13 +258,14 @@ Friend Class ReportUploadControler
 
     Private Function PDCProcessSnapshotRefreshment() As Boolean
 
-        If m_dataset.m_globalOrientationFlag <> ModelDataSet.Orientations.ORIENTATION_ERROR _
-        AndAlso m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.ENTITY).Count > 0 Then
-
+        If m_dataset.m_globalOrientationFlag <> ModelDataSet.Orientations.ORIENTATION_ERROR Then
+            If m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.ENTITY).Count = 0 Then
+                MsgBox(Local.GetValue("upload.msg_entity_not_found"))
+            Else
+                m_addin.SetPDCSubmissionRibbonEntityName(m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.ENTITY).ElementAt(0).Value)
+            End If
             m_snapshotSuccessFlag = True
             HighlightItemsAndDataRegions()
-            m_addin.SetPDCSubmissionRibbonEntityName("BU Name -> ")
-
             ' Associate worksheet if not already associated 
             If m_reportUploadWorksheetEventHandler.m_excelWorksheet Is Nothing Then
                 m_reportUploadWorksheetEventHandler.AssociateSubmissionWSController(Me, m_dataset, m_acquisitionModel, m_dataModificationsTracker, m_associatedWorksheet)
@@ -299,7 +273,7 @@ Friend Class ReportUploadControler
                 m_reportUploadWorksheetEventHandler.AssociateSubmissionWSController(Me, m_dataset, m_acquisitionModel, m_dataModificationsTracker, m_associatedWorksheet)
             End If
         Else
-            SnapshotErrorGeneration(ModelDataSet.Process.PDC)
+            SnapshotErrorGeneration(globalenums.process.PDC)
             Return False
         End If
         m_addin.ModifySubmissionControlsStatus(m_snapshotSuccessFlag)
@@ -310,7 +284,7 @@ Friend Class ReportUploadControler
 
     End Function
 
-    Friend Function GetProcess() As ModelDataSet.Process
+    Friend Function GetProcess() As GlobalEnums.Process
         Return m_dataset.m_processFlag
     End Function
 
@@ -466,7 +440,7 @@ errorHandler:
 
             factsList.Add(ht)
         Next
-        m_fact.CMSG_UPDATE_FACT_LIST(factsList, cellsAddresses)
+        '   m_fact.CMSG_UPDATE_FACT_LIST(factsList, cellsAddresses)
 
     End Sub
 
@@ -503,12 +477,12 @@ errorHandler:
         Return m_acquisitionModel.m_currentPeriodList
     End Function
 
-    Private Sub SnapshotErrorGeneration(ByRef p_process As ModelDataSet.Process)
+    Private Sub SnapshotErrorGeneration(ByRef p_process As GlobalEnums.Process)
 
         Dim l_errorStr As String
         Select Case p_process
-            Case ModelDataSet.Process.FINANCIAL : l_errorStr = IdentifyFinancialSnapshotFlagsErrors()
-            Case ModelDataSet.Process.PDC : l_errorStr = IdentifyPDCSnapshotFlagsErrors()
+            Case GlobalEnums.Process.FINANCIAL : l_errorStr = IdentifyFinancialSnapshotFlagsErrors()
+            Case GlobalEnums.Process.PDC : l_errorStr = IdentifyPDCSnapshotFlagsErrors()
         End Select
         MsgBox(Local.GetValue("upload.msg_snapshot_error") & Chr(13) & l_errorStr)
         m_snapshotSuccessFlag = False

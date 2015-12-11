@@ -436,8 +436,12 @@ Public Class AddinModule
 
     Private Sub m_PDCPlanningButton_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) Handles m_PDCPlanningButton.OnClick
 
-        '    Dim l_PDCUI As New PDCPlanningUI
-        '    l_PDCUI.Show()
+        If GlobalVariables.AuthenticationFlag = False Then
+            ConnectionBT_OnClick(sender, control, pressed)
+        Else
+            Dim CONTROLLING As New ControllingUI_2(GlobalEnums.Process.PDC)
+            CONTROLLING.Show()
+        End If
 
     End Sub
 
@@ -448,7 +452,7 @@ Public Class AddinModule
         If GlobalVariables.AuthenticationFlag = False Then
             ConnectionBT_OnClick(sender, control, pressed)
         Else
-            Dim CONTROLLING As New ControllingUI_2
+            Dim CONTROLLING As New ControllingUI_2(globalenums.process.FINANCIAL)
             CONTROLLING.Show()
         End If
 
@@ -953,8 +957,8 @@ Public Class AddinModule
             m_reportUploadControlersDictionary.Add(l_excelWorksheet, l_reportUploadController)
             m_worksheetNamesObjectDict.Add(l_excelWorksheet.Name, GlobalVariables.APPS.ActiveSheet)
             Select Case l_reportUploadController.GetProcess
-                Case ModelDataSet.Process.FINANCIAL : DisplayFinancialSubmissionRibbon(l_excelWorksheet)
-                Case ModelDataSet.Process.PDC
+                Case globalenums.process.FINANCIAL : DisplayFinancialSubmissionRibbon(l_excelWorksheet)
+                Case globalenums.process.PDC : DisplayPDCSubmissionRibbon(l_excelWorksheet)
             End Select
         Else
             GlobalVariables.APPS.Interactive = True
@@ -1058,6 +1062,7 @@ Public Class AddinModule
 
         If m_reportUploadControlersDictionary.Count = 0 Then
             SubmissionModeRibbon.Visible = False
+            m_PDCSubmissionRibbon.Visible = False
             m_reportUploadControlersDictionary.Clear()
             GlobalVariables.APPS.CellDragAndDrop = True
         Else

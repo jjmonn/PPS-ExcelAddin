@@ -27,6 +27,8 @@
         YEARS
         MONTHS
         YMONTHS
+        WEEKS
+        DAYS
 
     End Enum
 
@@ -70,6 +72,11 @@
 
     End Enum
 
+    Enum Process
+        FINANCIAL = 0
+        PDC
+    End Enum
+
 
 End Class
 
@@ -78,3 +85,7 @@ Enum CRUDAction
     UPDATE = 2
     DELETE = 3
 End Enum
+
+
+
+

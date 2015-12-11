@@ -51,7 +51,7 @@ Friend Class ModelDataSet
     Friend m_entitiesOrientationFlag As Alignment
     Friend m_productsOrientationFlag As Alignment
 
-    Friend m_processFlag As Process
+    Friend m_processFlag As GlobalEnums.Process
 
     'Private Const m_accountStringFlag As String = "Account"
     'Private Const m_entityStringFlag As String = "Entity"
@@ -89,7 +89,8 @@ Friend Class ModelDataSet
     End Enum
 
     Enum Alignment
-        VERTICAL = 0
+        UNDEFINED = 0
+        VERTICAL
         HORIZONTAL
         UNCLEAR
     End Enum
@@ -102,11 +103,7 @@ Friend Class ModelDataSet
         PRODUCT
     End Enum
 
-    Enum Process
-        FINANCIAL = 0
-        PDC
-    End Enum
-
+   
 #End Region
 
 
@@ -517,7 +514,7 @@ Friend Class ModelDataSet
 
         End Select
         DefineGlobalOrientationFlag()
-        m_processFlag = Process.PDC
+        m_processFlag = GlobalEnums.Process.PDC
 
     End Sub
 
@@ -610,7 +607,7 @@ Friend Class ModelDataSet
                 GetDimensionOrientations(Dimension.ENTITY, m_entityFlag, m_entitiesOrientationFlag)                      ' Assets orientation
         End Select
         DefineGlobalOrientationFlag()
-        m_processFlag = Process.FINANCIAL
+        m_processFlag = GlobalEnums.Process.FINANCIAL
 
     End Sub
 
@@ -924,6 +921,8 @@ Friend Class ModelDataSet
 
         Dim l_periodColumn As Int32
         Dim l_period As String
+        Dim l_entityName As String = ""
+        If m_dimensionsValueAddressDict(Dimension.ENTITY).Count = 1 Then l_entityName = m_dimensionsValueAddressDict(Dimension.ENTITY).ElementAt(0).Key
 
         For Each l_periodAddressValuePair In m_dimensionsAddressValueDict(Dimension.PERIOD)
             l_period = l_periodAddressValuePair.Value
@@ -931,7 +930,7 @@ Friend Class ModelDataSet
 
             For Each l_productAddressValuePair In m_dimensionsAddressValueDict(Dimension.PRODUCT)
                 RegisterDatasetCell(m_excelWorkSheet.Cells(m_excelWorkSheet.Range(l_productAddressValuePair.Key).Row, l_periodColumn), _
-                                    "", _
+                                    l_entityName, _
                                     "", _
                                     l_productAddressValuePair.Value, _
                                     l_period)
@@ -945,6 +944,9 @@ Friend Class ModelDataSet
 
         Dim l_productColumn As Int32
         Dim l_productName As String
+        Dim l_entityName As String = ""
+        If m_dimensionsValueAddressDict(Dimension.ENTITY).Count = 1 Then l_entityName = m_dimensionsValueAddressDict(Dimension.ENTITY).ElementAt(0).Key
+
 
         For Each l_productAddressValuePair In m_dimensionsAddressValueDict(Dimension.PRODUCT)
             l_productName = l_productAddressValuePair.Value
@@ -952,7 +954,7 @@ Friend Class ModelDataSet
 
             For Each l_periodAddressValuePair In m_dimensionsAddressValueDict(Dimension.PERIOD)
                 RegisterDatasetCell(m_excelWorkSheet.Cells(m_excelWorkSheet.Range(l_periodAddressValuePair.Key).Row, l_productColumn), _
-                                    "", _
+                                    l_entityName, _
                                     "", _
                                     l_productName, _
                                     l_periodAddressValuePair.Value)
