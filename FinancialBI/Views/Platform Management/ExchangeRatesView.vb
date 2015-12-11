@@ -361,7 +361,7 @@ Friend Class ExchangeRatesView
 #Region "Exchange Rates m_ratesDataGridView"
 
     Friend Sub InitializeDGV(ByRef currenciesList As SortedSet(Of UInt32), _
-                             ByRef monthsIdList As List(Of Int32), _
+                             ByRef monthsIdList As Int32(), _
                              ByRef p_ratesVersionid As Int32)
 
         m_currentRatesVersionId = p_ratesVersionid
@@ -394,7 +394,7 @@ Friend Class ExchangeRatesView
 
     End Sub
 
-    Private Sub InitRows(ByRef p_monthsIdList As List(Of Int32))
+    Private Sub InitRows(ByRef p_monthsIdList As Int32())
 
         For Each monthId As Int32 In p_monthsIdList
             Dim period As Date = Date.FromOADate(monthId)

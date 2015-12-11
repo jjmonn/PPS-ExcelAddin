@@ -15,7 +15,7 @@
 ' Known bugs:
 '       
 '
-' Last modified: 11/11/2015
+' Last modified: 11/12/2015
 ' Author: Julien Monnereau
 
 
@@ -26,7 +26,6 @@ Imports System.Drawing
 Imports VIBlend.WinForms.Controls
 Imports CRUD
 'Imports VIBlend.WinForms.Controls
-
 
 
 Friend Class VersionsControl
@@ -141,7 +140,7 @@ Friend Class VersionsControl
             CreationTB.Text = ""
             lockedCB.Checked = False
             LockedDateT.Text = ""
-            TimeConfigTB.Text = ""
+            m_timeConfigTB.Text = ""
             StartPeriodTB.Text = ""
             NBPeriodsTB.Text = ""
             m_exchangeRatesVersionVTreeviewbox.Text = ""
@@ -152,13 +151,22 @@ Friend Class VersionsControl
 
             NameTB.Text = inputNode.Text
             CreationTB.Text = version.CreatedAt
-            TimeConfigTB.Text = version.TimeConfiguration
-
-            If version.TimeConfiguration = CRUD.TimeConfig.YEARS Then
-                startPeriod = Format(Date.FromOADate(version.StartPeriod), "yyyy")
-            Else
-                startPeriod = Format(Date.FromOADate(version.StartPeriod), "MMM yyyy")
-            End If
+   
+            Select Case version.TimeConfiguration
+                Case TimeConfig.YEARS
+                    m_timeConfigTB.Text = Local.GetValue("period.timeconfig.year")
+                    startPeriod = Format(Date.FromOADate(version.StartPeriod), "yyyy")
+                Case TimeConfig.MONTHS
+                    m_timeConfigTB.Text = Local.GetValue("period.timeconfig.month")
+                    startPeriod = Format(Date.FromOADate(version.StartPeriod), "MMM yyyy")
+                Case TimeConfig.WEEK
+                    m_timeConfigTB.Text = Local.GetValue("period.timeconfig.week")
+                    startPeriod = Format(Date.FromOADate(version.StartPeriod), "WW")
+                Case TimeConfig.DAYS
+                    m_timeConfigTB.Text = Local.GetValue("period.timeconfig.day")
+                    startPeriod = Format(Date.FromOADate(version.StartPeriod), "MMMM dd, yyyy")
+            End Select
+          
             StartPeriodTB.Text = startPeriod
             StartPeriodTB.ValueMember = version.StartPeriod
 

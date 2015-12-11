@@ -37,7 +37,7 @@ Public Class GlobalFactVersionManager : Inherits NamedCRUDManager(Of NamedHierar
         Dim version As GlobalFactVersion = m_CRUDDic(versionId)
         If version Is Nothing Then Return periodList
 
-        Dim monthList As Int32() = Period.GetMonthsList(version.StartPeriod, version.NbPeriod)
+        Dim monthList As Int32() = Period.GetMonthsList(version.StartPeriod, version.NbPeriod, CRUD.TimeConfig.MONTHS)
         For Each monthId As Int32 In monthList
             periodList.Add(monthId)
         Next

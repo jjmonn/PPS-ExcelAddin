@@ -60,12 +60,15 @@ Friend Class DataModificationsTracking
 
         m_dataSetRegion = Nothing
         Select Case m_dataset.m_globalOrientationFlag
-            Case ModelDataSet.Orientations.ACCOUNTS_PERIODS : AppendDataRegionRanges(m_dataSetRegion, m_dataset.m_accountsAddressValuesDictionary, m_dataset.m_periodsAddressValuesDictionary)
-            Case ModelDataSet.Orientations.PERIODS_ACCOUNTS : AppendDataRegionRanges(m_dataSetRegion, m_dataset.m_periodsAddressValuesDictionary, m_dataset.m_accountsAddressValuesDictionary)
-            Case ModelDataSet.Orientations.ACCOUNTS_ENTITIES : AppendDataRegionRanges(m_dataSetRegion, m_dataset.m_accountsAddressValuesDictionary, m_dataset.m_entitiesAddressValuesDictionary)
-            Case ModelDataSet.Orientations.ENTITIES_ACCOUNTS : AppendDataRegionRanges(m_dataSetRegion, m_dataset.m_entitiesAddressValuesDictionary, m_dataset.m_accountsAddressValuesDictionary)
-            Case ModelDataSet.Orientations.PERIODS_ENTITIES : AppendDataRegionRanges(m_dataSetRegion, m_dataset.m_periodsAddressValuesDictionary, m_dataset.m_entitiesAddressValuesDictionary)
-            Case ModelDataSet.Orientations.ENTITIES_PERIODS : AppendDataRegionRanges(m_dataSetRegion, m_dataset.m_entitiesAddressValuesDictionary, m_dataset.m_periodsAddressValuesDictionary)
+            Case ModelDataSet.Orientations.ACCOUNTS_PERIODS : AppendDataRegionRanges(m_dataSetRegion, m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.ACCOUNT), m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.PERIOD))
+            Case ModelDataSet.Orientations.PERIODS_ACCOUNTS : AppendDataRegionRanges(m_dataSetRegion, m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.PERIOD), m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.ACCOUNT))
+            Case ModelDataSet.Orientations.ACCOUNTS_ENTITIES : AppendDataRegionRanges(m_dataSetRegion, m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.ACCOUNT), m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.ENTITY))
+            Case ModelDataSet.Orientations.ENTITIES_ACCOUNTS : AppendDataRegionRanges(m_dataSetRegion, m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.ENTITY), m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.ACCOUNT))
+            Case ModelDataSet.Orientations.PERIODS_ENTITIES : AppendDataRegionRanges(m_dataSetRegion, m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.PERIOD), m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.ENTITY))
+            Case ModelDataSet.Orientations.ENTITIES_PERIODS : AppendDataRegionRanges(m_dataSetRegion, m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.ENTITY), m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.PERIOD))
+
+            Case ModelDataSet.Orientations.PRODUCTS_PERIODS : AppendDataRegionRanges(m_dataSetRegion, m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.PRODUCT), m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.PERIOD))
+            Case ModelDataSet.Orientations.PERIODS_PRODUCTS : AppendDataRegionRanges(m_dataSetRegion, m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.PERIOD), m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.PRODUCT))
             Case Else
                 ' PPS error tracking
                 Exit Sub
@@ -76,12 +79,12 @@ Friend Class DataModificationsTracking
     Friend Sub InitializeOutputsRegion()
 
         m_outputsRegion = Nothing
-        If m_dataset.m_outputsAccountsAddressvaluesDictionary.Count > 0 Then
+        If m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.OUTPUTACCOUNT).Count > 0 Then
             Select Case m_dataset.m_globalOrientationFlag
-                Case ModelDataSet.Orientations.ACCOUNTS_PERIODS : AppendDataRegionRanges(m_outputsRegion, m_dataset.m_outputsAccountsAddressvaluesDictionary, m_dataset.m_periodsAddressValuesDictionary)
-                Case ModelDataSet.Orientations.PERIODS_ACCOUNTS : AppendDataRegionRanges(m_outputsRegion, m_dataset.m_periodsAddressValuesDictionary, m_dataset.m_outputsAccountsAddressvaluesDictionary)
-                Case ModelDataSet.Orientations.ACCOUNTS_ENTITIES : AppendDataRegionRanges(m_outputsRegion, m_dataset.m_outputsAccountsAddressvaluesDictionary, m_dataset.m_entitiesAddressValuesDictionary)
-                Case ModelDataSet.Orientations.ENTITIES_ACCOUNTS : AppendDataRegionRanges(m_outputsRegion, m_dataset.m_entitiesAddressValuesDictionary, m_dataset.m_outputsAccountsAddressvaluesDictionary)
+                Case ModelDataSet.Orientations.ACCOUNTS_PERIODS : AppendDataRegionRanges(m_outputsRegion, m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.OUTPUTACCOUNT), m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.PERIOD))
+                Case ModelDataSet.Orientations.PERIODS_ACCOUNTS : AppendDataRegionRanges(m_outputsRegion, m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.PERIOD), m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.OUTPUTACCOUNT))
+                Case ModelDataSet.Orientations.ACCOUNTS_ENTITIES : AppendDataRegionRanges(m_outputsRegion, m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.OUTPUTACCOUNT), m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.ENTITY))
+                Case ModelDataSet.Orientations.ENTITIES_ACCOUNTS : AppendDataRegionRanges(m_outputsRegion, m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.ENTITY), m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.OUTPUTACCOUNT))
             End Select
         End If
 
@@ -117,7 +120,6 @@ Friend Class DataModificationsTracking
         Return rng
 
     End Function
-
 
 #End Region
 
@@ -187,10 +189,11 @@ Friend Class DataModificationsTracking
         m_startPeriod = version.StartPeriod
 
         ' Headers Coloring
-        HeaderRangesInputsHighlight(m_dataset.m_accountsAddressValuesDictionary)
-        HeaderRangesInputsHighlight(m_dataset.m_entitiesAddressValuesDictionary)
-        HeaderRangesInputsHighlight(m_dataset.m_periodsAddressValuesDictionary)
-        HeaderRangesOutputsHighlight(m_dataset.m_outputsAccountsAddressvaluesDictionary)
+        HeaderRangesInputsHighlight(m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.ACCOUNT))
+        HeaderRangesInputsHighlight(m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.ENTITY))
+        HeaderRangesInputsHighlight(m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.PERIOD))
+        HeaderRangesOutputsHighlight(m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.OUTPUTACCOUNT))
+        HeaderRangesOutputsHighlight(m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.PRODUCT))
 
         ' Data coloring
         DataHighlight()
@@ -235,12 +238,15 @@ Friend Class DataModificationsTracking
     Private Sub DataHighlight()
 
         Select Case m_dataset.m_globalOrientationFlag
-            Case ModelDataSet.Orientations.ACCOUNTS_PERIODS : DataAreasHighlight(m_dataset.m_accountsAddressValuesDictionary, m_dataset.m_periodsAddressValuesDictionary)
-            Case ModelDataSet.Orientations.PERIODS_ACCOUNTS : DataAreasHighlight(m_dataset.m_periodsAddressValuesDictionary, m_dataset.m_accountsAddressValuesDictionary)
-            Case ModelDataSet.Orientations.ACCOUNTS_ENTITIES : DataAreasHighlight(m_dataset.m_accountsAddressValuesDictionary, m_dataset.m_entitiesAddressValuesDictionary)
-            Case ModelDataSet.Orientations.ENTITIES_ACCOUNTS : DataAreasHighlight(m_dataset.m_entitiesAddressValuesDictionary, m_dataset.m_accountsAddressValuesDictionary)
-            Case ModelDataSet.Orientations.PERIODS_ENTITIES : DataAreasHighlight(m_dataset.m_periodsAddressValuesDictionary, m_dataset.m_entitiesAddressValuesDictionary)
-            Case ModelDataSet.Orientations.ENTITIES_PERIODS : DataAreasHighlight(m_dataset.m_entitiesAddressValuesDictionary, m_dataset.m_periodsAddressValuesDictionary)
+            Case ModelDataSet.Orientations.ACCOUNTS_PERIODS : DataAreasHighlight(m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.aCCOUNT), m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.PERIOD))
+            Case ModelDataSet.Orientations.PERIODS_ACCOUNTS : DataAreasHighlight(m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.PERIOD), m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.aCCOUNT))
+            Case ModelDataSet.Orientations.ACCOUNTS_ENTITIES : DataAreasHighlight(m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.aCCOUNT), m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.ENTITY))
+            Case ModelDataSet.Orientations.ENTITIES_ACCOUNTS : DataAreasHighlight(m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.ENTITY), m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.aCCOUNT))
+            Case ModelDataSet.Orientations.PERIODS_ENTITIES : DataAreasHighlight(m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.PERIOD), m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.ENTITY))
+            Case ModelDataSet.Orientations.ENTITIES_PERIODS : DataAreasHighlight(m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.ENTITY), m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.PERIOD))
+
+            Case ModelDataSet.Orientations.PRODUCTS_PERIODS : DataAreasHighlight(m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.PRODUCT), m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.PERIOD))
+            Case ModelDataSet.Orientations.PERIODS_PRODUCTS : DataAreasHighlight(m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.PERIOD), m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.PRODUCT))
             Case Else : Exit Sub
         End Select
 
@@ -248,7 +254,8 @@ Friend Class DataModificationsTracking
 
     Friend Sub HighlightsFPIOutputPart()
 
-        Dim tuple_ As Tuple(Of String, String, String)
+        Dim tuple_ As Tuple(Of String, String, String, String)
+        ' tuple -> entity, account, product, period
         Dim excelCell As Excel.Range
 
         For Each tupleCellPair In m_dataset.m_datasetCellsDictionary
@@ -258,7 +265,7 @@ Friend Class DataModificationsTracking
 
             If l_account Is Nothing Then Continue For
             If l_account.FormulaType = Account.FormulaTypes.FIRST_PERIOD_INPUT Then
-                If tuple_.Item3 <> m_startPeriod Then
+                If tuple_.Item4 <> m_startPeriod Then
                     m_rangeHighlighter.ColorOutputRange(excelCell)
                 End If
             End If
@@ -299,8 +306,8 @@ Friend Class DataModificationsTracking
         End Select
 
         On Error Resume Next
-        For Each entity As String In m_dataset.m_entitiesValuesAddressDict.Keys
-            For Each elem As String In m_dataset.m_accountsValuesAddressDict.Keys
+        For Each entity As String In m_dataset.m_dimensionsValueAddressDict(ModelDataSet.Dimension.ENTITY).Keys
+            For Each elem As String In m_dataset.m_dimensionsValueAddressDict(ModelDataSet.Dimension.ACCOUNT).Keys
                 Dim l_account As Account = GlobalVariables.Accounts.GetValue(elem)
                 If l_account Is Nothing Then Continue For
 
@@ -309,15 +316,15 @@ Friend Class DataModificationsTracking
                         Dim period As Integer = CInt(CDbl(m_dataset.m_periodsDatesList(0).ToOADate))
                         ' Date from dataset converted to integer to meet DB integer date storage
 
-                        Dim tuple_ As New Tuple(Of String, String, String)(entity, l_account.Name, period)
+                        Dim tuple_ As New Tuple(Of String, String, String, String)(entity, l_account.Name, "", period)
                         If m_dataset.m_datasetCellsDictionary.ContainsKey(tuple_) = True Then
                             Dim cell As Excel.Range = m_dataset.m_datasetCellsDictionary(tuple_)
                             If cell.Value2 <> p_dataBaseInputsDictionary(entity)(l_account.Name)(periodIdentifyer & period) Then _
                                RegisterModification(cell.Address)
                         End If
                     Case Else
-                        For Each period As String In m_dataset.m_periodsValuesAddressDict.Keys
-                            Dim tuple_ As New Tuple(Of String, String, String)(entity, l_account.Name, period)
+                        For Each period As String In m_dataset.m_dimensionsValueAddressDict(ModelDataSet.Dimension.PERIOD).Keys
+                            Dim tuple_ As New Tuple(Of String, String, String, String)(entity, l_account.Name, "", period)
                             If m_dataset.m_datasetCellsDictionary.ContainsKey(tuple_) = True Then
                                 Dim cell As Excel.Range = m_dataset.m_datasetCellsDictionary(tuple_)
                                 If cell.Value2 <> p_dataBaseInputsDictionary(entity)(l_account.Name)(periodIdentifyer & period) Then

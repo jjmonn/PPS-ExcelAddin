@@ -17,10 +17,9 @@ Public Class AddinModule
 
 #Region "instance Variables"
 
-
     Friend WithEvents ComputeGroup As AddinExpress.MSO.ADXRibbonGroup
     Friend WithEvents DataUploadGroup As AddinExpress.MSO.ADXRibbonGroup
-    Friend WithEvents MaintTab As AddinExpress.MSO.ADXRibbonTab
+    Friend WithEvents m_financialBIMainRibbon As AddinExpress.MSO.ADXRibbonTab
     Friend WithEvents WSUplaodBT As AddinExpress.MSO.ADXRibbonButton
     Friend WithEvents ControlingUI2BT As AddinExpress.MSO.ADXRibbonButton
     Friend WithEvents ConfigurationGroup As AddinExpress.MSO.ADXRibbonGroup
@@ -41,18 +40,18 @@ Public Class AddinModule
     Friend WithEvents EditSelectionGroup As AddinExpress.MSO.ADXRibbonGroup
     Friend WithEvents ShowReportBT As AddinExpress.MSO.ADXRibbonButton
     Friend WithEvents SubmissionnGroup As AddinExpress.MSO.ADXRibbonGroup
-    Friend WithEvents SubmitBT2 As AddinExpress.MSO.ADXRibbonButton
+    Friend WithEvents m_financialSubmissionSubmitButton As AddinExpress.MSO.ADXRibbonButton
     Friend WithEvents StateSelectionGroup As AddinExpress.MSO.ADXRibbonGroup
     Friend WithEvents CurrentEntityTB As AddinExpress.MSO.ADXRibbonEditBox
     Friend WithEvents AdxRibbonGroup9 As AddinExpress.MSO.ADXRibbonGroup
     Friend WithEvents CloseBT As AddinExpress.MSO.ADXRibbonButton
     Friend WithEvents VersionTBSubRibbon As AddinExpress.MSO.ADXRibbonEditBox
-    Friend WithEvents CancelBT2 As AddinExpress.MSO.ADXRibbonButton
+    Friend WithEvents m_financialSubmissionCancelButton As AddinExpress.MSO.ADXRibbonButton
     Friend WithEvents SubmissionRibbonIL As System.Windows.Forms.ImageList
-    Friend WithEvents SubmissionStatus As AddinExpress.MSO.ADXRibbonButton
+    Friend WithEvents m_financialSubmissionSatusButton As AddinExpress.MSO.ADXRibbonButton
     Friend WithEvents CurrentLinkedWSBT As AddinExpress.MSO.ADXRibbonButton
     Friend WithEvents AdxRibbonSeparator6 As AddinExpress.MSO.ADXRibbonSeparator
-    Friend WithEvents AutoComitBT As AddinExpress.MSO.ADXRibbonButton
+    Friend WithEvents m_financialSubmissionAutoCommitButton As AddinExpress.MSO.ADXRibbonButton
     Friend WithEvents EntCurrTB As AddinExpress.MSO.ADXRibbonEditBox
     Friend WithEvents RefreshInputsBT As AddinExpress.MSO.ADXRibbonButton
     Friend WithEvents entityEditBT As AddinExpress.MSO.ADXRibbonButton
@@ -152,12 +151,12 @@ Public Class AddinModule
 #Region "My Instance Variables"
 
     Friend m_ribbon As IRibbonUI
-    Friend m_GRSControlersDictionary As New SafeDictionary(Of Excel.Worksheet, GeneralSubmissionControler)
+    Friend m_reportUploadControlersDictionary As New SafeDictionary(Of Excel.Worksheet, ReportUploadControler)
     Private m_worksheetNamesObjectDict As New SafeDictionary(Of String, Excel.Worksheet)
     Public setUpFlag As Boolean
     Public ppsbi_refresh_flag As Boolean = True
     Public m_ppsbiController As FBIFunctionController
-    Private m_currentGeneralSubmissionControler As GeneralSubmissionControler
+    Private m_currentReportUploadControler As ReportUploadControler
     Private Const EXCEL_MIN_VERSION As Double = 9
 
 #End Region
@@ -234,7 +233,6 @@ Public Class AddinModule
 
 #Region "Initialize"
 
-
     Public Shared Shadows ReadOnly Property CurrentInstance() As AddinModule
         Get
             Return CType(AddinExpress.MSO.ADXAddinModule.CurrentInstance, AddinModule)
@@ -253,15 +251,13 @@ Public Class AddinModule
         End Get
     End Property
 
-
     Private Sub AddinModule_AddinInitialize(sender As Object, e As EventArgs) Handles MyBase.AddinInitialize
-
 
         GlobalVariables.APPS = Me.HostApplication
 
         ' Main Ribbon Initialize
         GlobalVariables.VersionSelectionTaskPane = Me.VersionSelectionTaskPane
-        GlobalVariables.SubmissionStatusButton = SubmissionStatus
+        GlobalVariables.SubmissionStatusButton = m_financialSubmissionSatusButton
         GlobalVariables.Connection_Toggle_Button = Me.ConnectionBT
         GlobalVariables.Version_Button = Me.VersionBT
         ConnectionBT.Image = 0
@@ -269,6 +265,7 @@ Public Class AddinModule
         ' Submission Ribbon Initialize
         m_submissionWorksheetCombobox.Items.RemoveAt(0)
         SubmissionModeRibbon.Visible = False
+        m_PDCSubmissionRibbon.Visible = False
         GlobalVariables.s_reportUploadSidePane = Me.ReportUploadTaskPane
         GlobalVariables.Version_label_Sub_Ribbon = VersionTBSubRibbon
         GlobalVariables.ClientsIDDropDown = ClientsDropDown
@@ -388,13 +385,13 @@ Public Class AddinModule
         If GlobalVariables.AuthenticationFlag = False Then
             ConnectionBT_OnClick(sender, control, pressed)
         Else
-            If m_GRSControlersDictionary.ContainsKey(GlobalVariables.APPS.ActiveSheet) Then
-                m_currentGeneralSubmissionControler = m_GRSControlersDictionary(GlobalVariables.APPS.ActiveSheet)
-                m_currentGeneralSubmissionControler.UpdateRibbon()
+            If m_reportUploadControlersDictionary.ContainsKey(GlobalVariables.APPS.ActiveSheet) Then
+                m_currentReportUploadControler = m_reportUploadControlersDictionary(GlobalVariables.APPS.ActiveSheet)
+                m_currentReportUploadControler.UpdateRibbon()
                 SubmissionModeRibbon.Visible = True
             Else
                 ' -> choix adjustment, client, product
-                AssociateGRSControler(False)
+                AssociateReportUploadControler(False)
             End If
         End If
 
@@ -439,8 +436,8 @@ Public Class AddinModule
 
     Private Sub m_PDCPlanningButton_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) Handles m_PDCPlanningButton.OnClick
 
-        Dim l_PDCUI As New PDCPlanningUI
-        l_PDCUI.Show()
+        '    Dim l_PDCUI As New PDCPlanningUI
+        '    l_PDCUI.Show()
 
     End Sub
 
@@ -475,7 +472,7 @@ Public Class AddinModule
         If GlobalVariables.AuthenticationFlag = False Then
             ConnectionBT_OnClick(sender, control, pressed)
         Else
-            If Not m_GRSControlersDictionary.ContainsKey(GlobalVariables.APPS.ActiveSheet) Then
+            If Not m_reportUploadControlersDictionary.ContainsKey(GlobalVariables.APPS.ActiveSheet) Then
                 Dim l_refreshWorksheetModule As New WorksheetRefreshController
                 Dim ws As Excel.Worksheet = GlobalVariables.APPS.ActiveSheet
                 l_refreshWorksheetModule.RefreshWorksheet(GlobalVariables.APPS.Selection, Me)
@@ -615,7 +612,7 @@ Public Class AddinModule
 
     Private Sub HighlightBT_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean)
 
-        m_currentGeneralSubmissionControler.HighlightItemsAndDataRegions()
+        m_currentReportUploadControler.HighlightItemsAndDataRegions()
 
     End Sub
 
@@ -629,7 +626,7 @@ Public Class AddinModule
 
     Private Sub EditRangesMenuBT_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) Handles EditRangesMenuBT.OnClick
 
-        m_currentGeneralSubmissionControler.RangeEdition()
+        m_currentReportUploadControler.RangeEdition()
 
     End Sub
 
@@ -649,32 +646,24 @@ Public Class AddinModule
 
 #Region "Submission"
 
-    Private Sub SubmitBT2_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) Handles SubmitBT2.OnClick
-
-        m_currentGeneralSubmissionControler.DataSubmission()
-
+    Private Sub SubmitBT2_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) Handles m_financialSubmissionSubmitButton.OnClick
+        m_currentReportUploadControler.DataSubmission()
     End Sub
 
-    Private Sub SubmissionStatus_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) Handles SubmissionStatus.OnClick
-
-        m_currentGeneralSubmissionControler.DisplayUploadStatusAndErrorsUI()
-
+    Private Sub SubmissionStatus_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) Handles m_financialSubmissionSatusButton.OnClick
+        m_currentReportUploadControler.DisplayUploadStatusAndErrorsUI()
     End Sub
 
-    Private Sub CancelBT2_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) Handles CancelBT2.OnClick
-
+    Private Sub CancelBT2_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) Handles m_financialSubmissionCancelButton.OnClick
         ' allow to come back a few steps before (cf log ?)
-
     End Sub
 
-    Private Sub AutoCommitBT_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) Handles AutoComitBT.OnClick
-
-        If m_currentGeneralSubmissionControler.m_autoCommitFlag = False Then
-            m_currentGeneralSubmissionControler.m_autoCommitFlag = True
+    Private Sub AutoCommitBT_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) Handles m_financialSubmissionAutoCommitButton.OnClick
+        If m_currentReportUploadControler.m_autoCommitFlag = False Then
+            m_currentReportUploadControler.m_autoCommitFlag = True
         Else
-            m_currentGeneralSubmissionControler.m_autoCommitFlag = False
+            m_currentReportUploadControler.m_autoCommitFlag = False
         End If
-
     End Sub
 
 #End Region
@@ -706,7 +695,7 @@ Public Class AddinModule
     End Sub
 
     Private Sub CloseBT_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) Handles CloseBT.OnClick
-        ClearSubmissionMode(m_currentGeneralSubmissionControler)
+        ClearSubmissionMode(m_currentReportUploadControler)
     End Sub
 
     Private Sub m_reportUploadAccountInfoButton_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) Handles m_reportUploadAccountInfoButton.OnClick
@@ -714,6 +703,46 @@ Public Class AddinModule
     End Sub
 
 #End Region
+
+#End Region
+
+#Region "PDC Submission Ribbon"
+
+    Private Sub m_PDCSubmissionButton_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) Handles m_PDCSubmissionButton.OnClick
+        m_currentReportUploadControler.DataSubmission()
+    End Sub
+
+    Private Sub m_PDCAutocommitButton_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) Handles m_PDCAutocommitButton.OnClick
+        If m_currentReportUploadControler.m_autoCommitFlag = False Then
+            m_currentReportUploadControler.m_autoCommitFlag = True
+        Else
+            m_currentReportUploadControler.m_autoCommitFlag = False
+        End If
+    End Sub
+
+    Private Sub m_PDCSUbmissionStatusButton_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) Handles m_PDCSUbmissionStatusButton.OnClick
+        m_currentReportUploadControler.DisplayUploadStatusAndErrorsUI()
+    End Sub
+
+    Private Sub m_PDCSubmissionCancelButton_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) Handles m_PDCSubmissionCancelButton.OnClick
+        ' to be implementd (ticket sur redmine)
+    End Sub
+
+    Private Sub m_PDCRefreshSnapthshotButton_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) Handles m_PDCRefreshSnapthshotButton.OnClick
+        RefreshSelectionBT_OnClick(sender, control, pressed)
+    End Sub
+
+    Private Sub m_PDCConsultantRangeEditButton_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) Handles m_PDCConsultantRangeEditButton.OnClick
+        ' to be implemented
+    End Sub
+
+    Private Sub m_PDCPeriodsRangeEditButton_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) Handles m_PDCPeriodsRangeEditButton.OnClick
+        ' to be implemented
+    End Sub
+
+    Private Sub m_PDCSumbissionExitButton_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) Handles m_PDCSumbissionExitButton.OnClick
+        ClearSubmissionMode(m_currentReportUploadControler)
+    End Sub
 
 #End Region
 
@@ -736,12 +765,13 @@ Public Class AddinModule
     Private Sub m_submissionWorksheetCombobox_OnAction(sender As Object, _
                                                        Control As IRibbonControl, _
                                                        selectedId As String, _
-                                                       selectedIndex As Integer) Handles m_submissionWorksheetCombobox.OnAction
+                                                       selectedIndex As Integer) Handles m_submissionWorksheetCombobox.OnAction, _
+                                                                                         m_PDCWorksheetDropDown.OnAction
 
         Try
-            If Not m_currentGeneralSubmissionControler.m_associatedWorksheet.Name = selectedId Then
-                ActivateGRSController(m_GRSControlersDictionary(m_worksheetNamesObjectDict(selectedId)))
-                m_currentGeneralSubmissionControler.UpdateRibbon()
+            If Not m_currentReportUploadControler.m_associatedWorksheet.Name = selectedId Then
+                ActivateReportUploadController(m_reportUploadControlersDictionary(m_worksheetNamesObjectDict(selectedId)))
+                m_currentReportUploadControler.UpdateRibbon()
                 m_worksheetNamesObjectDict(selectedId).Activate()
             End If
         Catch ex As Exception
@@ -756,7 +786,7 @@ Public Class AddinModule
     Private Sub ClientsDropDown_OnAction(sender As Object, Control As IRibbonControl, selectedId As String, selectedIndex As Integer) Handles ClientsDropDown.OnAction
 
         GlobalVariables.APPS.Interactive = False
-        m_currentGeneralSubmissionControler.UpdateAfterAnalysisAxisChanged(selectedId, _
+        m_currentReportUploadControler.UpdateAfterAnalysisAxisChanged(selectedId, _
                                                            ProductsDropDown.SelectedItemId, _
                                                            AdjustmentDropDown.SelectedItemId,
                                                            True)
@@ -767,7 +797,7 @@ Public Class AddinModule
     Private Sub ProductsDropDown_OnAction(sender As Object, Control As IRibbonControl, selectedId As String, selectedIndex As Integer) Handles ProductsDropDown.OnAction
 
         GlobalVariables.APPS.Interactive = False
-        m_currentGeneralSubmissionControler.UpdateAfterAnalysisAxisChanged(ClientsDropDown.SelectedItemId, _
+        m_currentReportUploadControler.UpdateAfterAnalysisAxisChanged(ClientsDropDown.SelectedItemId, _
                                                            selectedId, _
                                                            AdjustmentDropDown.SelectedItemId, _
                                                            True)
@@ -778,7 +808,7 @@ Public Class AddinModule
     Private Sub AdjustmentDD_OnAction(sender As Object, Control As IRibbonControl, selectedId As String, selectedIndex As Integer) Handles AdjustmentDropDown.OnAction
 
         GlobalVariables.APPS.Interactive = False
-        m_currentGeneralSubmissionControler.UpdateAfterAnalysisAxisChanged(ClientsDropDown.SelectedItemId, _
+        m_currentReportUploadControler.UpdateAfterAnalysisAxisChanged(ClientsDropDown.SelectedItemId, _
                                                             ProductsDropDown.SelectedItemId, _
                                                             selectedId, _
                                                             True)
@@ -790,14 +820,14 @@ Public Class AddinModule
 #Region "Addin Events"
 
     Private Sub AddinModule_Finalize(sender As Object, e As EventArgs) Handles MyBase.AddinFinalize
-        If m_GRSControlersDictionary.Count > 0 Then
+        If m_reportUploadControlersDictionary.Count > 0 Then
             On Error Resume Next
-            Dim l_GRSList = m_GRSControlersDictionary.Values
-            For Each l_generalSubmissionController As GeneralSubmissionControler In l_GRSList
+            Dim l_reportUploadList = m_reportUploadControlersDictionary.Values
+            For Each l_generalSubmissionController As ReportUploadControler In l_reportUploadList
                 ClearSubmissionMode(l_generalSubmissionController)
             Next
         End If
-        m_GRSControlersDictionary.Clear()
+        m_reportUploadControlersDictionary.Clear()
     End Sub
 
 
@@ -855,7 +885,7 @@ Public Class AddinModule
         ExcelFormatting.FormatExcelRange(currentcell, currency.Id, Date.FromOADate(periodlist(0)))
         GlobalVariables.APPS.Interactive = True
         GlobalVariables.APPS.ScreenUpdating = True
-        AssociateGRSControler(True)
+        AssociateReportUploadControler(True)
 
     End Sub
 
@@ -898,7 +928,7 @@ Public Class AddinModule
     ' call back from entitySelectionTP for setting up new entity in submission control mode
     Public Sub ValidateEntitySelection(ByRef entityName As String)
 
-        m_currentGeneralSubmissionControler.ChangeCurrentEntity(entityName)
+        m_currentReportUploadControler.ChangeCurrentEntity(entityName)
         Me.EntitySelectionTaskPane.ClearAndClose()
 
     End Sub
@@ -910,35 +940,52 @@ Public Class AddinModule
 
 #Region "Report Upload Methods"
 
-    ' Create GRS Conctroler and display
-    Private Sub AssociateGRSControler(ByRef p_mustUpdateInputs As Boolean)
+    ' Create report upload Conctroler and display
+    Private Sub AssociateReportUploadControler(ByRef p_mustUpdateInputs As Boolean)
 
-        ' GlobalVariables.APPS.Interactive = False
-        loadDropDownsSubmissionButtons()
-        Dim l_generalSubmissionController As New GeneralSubmissionControler(Me)
+        GlobalVariables.APPS.Interactive = False
+        LoadFinancialDropDownsSubmissionButtons()
+        Dim l_reportUploadController As New ReportUploadControler(Me)
         Dim l_excelWorksheet As Excel.Worksheet = GlobalVariables.APPS.ActiveSheet
 
-        If l_generalSubmissionController.RefreshSnapshot(p_mustUpdateInputs) = True Then
-            m_currentGeneralSubmissionControler = l_generalSubmissionController
-            m_GRSControlersDictionary.Add(l_excelWorksheet, l_generalSubmissionController)
+        If l_reportUploadController.RefreshSnapshot(p_mustUpdateInputs) = True Then
+            m_currentReportUploadControler = l_reportUploadController
+            m_reportUploadControlersDictionary.Add(l_excelWorksheet, l_reportUploadController)
             m_worksheetNamesObjectDict.Add(l_excelWorksheet.Name, GlobalVariables.APPS.ActiveSheet)
-            Dim l_item = AddButtonToDropDown(m_submissionWorksheetCombobox, _
-                                            l_excelWorksheet.Name, _
-                                            l_excelWorksheet.Name)
-            m_submissionWorksheetCombobox.SelectedItemId = l_excelWorksheet.Name
-
-            SubmissionModeRibbon.Visible = True
-            SubmissionModeRibbon.Activate()
-            DisplayReportUploadSidePane()
+            Select Case l_reportUploadController.GetProcess
+                Case ModelDataSet.Process.FINANCIAL : DisplayFinancialSubmissionRibbon(l_excelWorksheet)
+                Case ModelDataSet.Process.PDC
+            End Select
         Else
             GlobalVariables.APPS.Interactive = True
             GlobalVariables.APPS.ScreenUpdating = True
-            m_currentGeneralSubmissionControler = Nothing
+            m_currentReportUploadControler = Nothing
         End If
 
     End Sub
 
-    Friend Shared Sub loadDropDownsSubmissionButtons()
+    Private Sub DisplayFinancialSubmissionRibbon(ByRef p_ws As Excel.Worksheet)
+        Dim l_item = AddButtonToDropDown(m_submissionWorksheetCombobox, _
+                                         p_ws.Name, _
+                                         p_ws.Name)
+        m_submissionWorksheetCombobox.SelectedItemId = p_ws.Name
+        SubmissionModeRibbon.Visible = True
+        SubmissionModeRibbon.Activate()
+        DisplayReportUploadSidePane()
+    End Sub
+
+    Private Sub DisplayPDCSubmissionRibbon(ByRef p_ws As Excel.Worksheet)
+
+        m_PDCSubmissionRibbon.Activate()
+        m_PDCSubmissionRibbon.Visible = True
+        Dim l_item = AddButtonToDropDown(m_PDCWorksheetDropDown, _
+                                         p_ws.Name, _
+                                         p_ws.Name)
+        m_PDCWorksheetDropDown.SelectedItemId = p_ws.Name
+
+    End Sub
+
+    Friend Shared Sub LoadFinancialDropDownsSubmissionButtons()
 
         GlobalVariables.ClientsIDDropDown.Items.Clear()
         For Each client_id As Int32 In GlobalVariables.AxisElems.GetDictionary(AxisType.Client).Keys
@@ -974,9 +1021,9 @@ Public Class AddinModule
 
     End Sub
 
-    Friend Sub SelectDropDownSubmissionButtons(ByRef p_clientId As Int32, _
-                                                      ByRef p_productId As Int32, _
-                                                      ByRef p_adjustmentId As Int32)
+    Friend Sub SelectFinancialDropDownSubmissionButtons(ByRef p_clientId As Int32, _
+                                                        ByRef p_productId As Int32, _
+                                                        ByRef p_adjustmentId As Int32)
 
         If p_clientId <> 0 Then GlobalVariables.ClientsIDDropDown.SelectedItemId = p_clientId
         If p_productId <> 0 Then GlobalVariables.ProductsIDDropDown.SelectedItemId = p_productId
@@ -984,19 +1031,19 @@ Public Class AddinModule
 
     End Sub
 
-    ' Disable Submission Buttons (Call back from GRSController)
+    ' Disable Submission Buttons (Call back from Report upload Controller)
     Friend Sub ModifySubmissionControlsStatus(ByRef buttonsStatus As Boolean)
 
         RefreshInputsBT.Enabled = buttonsStatus
-        SubmitBT2.Enabled = buttonsStatus
-        SubmissionStatus.Enabled = buttonsStatus
-        CancelBT2.Enabled = buttonsStatus
-        AutoComitBT.Enabled = buttonsStatus
+        m_financialSubmissionSubmitButton.Enabled = buttonsStatus
+        m_financialSubmissionSatusButton.Enabled = buttonsStatus
+        m_financialSubmissionCancelButton.Enabled = buttonsStatus
+        m_financialSubmissionAutoCommitButton.Enabled = buttonsStatus
         ShowReportBT.Enabled = buttonsStatus
 
     End Sub
 
-    Friend Sub ClearSubmissionMode(ByRef p_generalSubmissionController As GeneralSubmissionControler)
+    Friend Sub ClearSubmissionMode(ByRef p_generalSubmissionController As ReportUploadControler)
 
         On Error Resume Next
         m_worksheetNamesObjectDict.Remove(p_generalSubmissionController.m_associatedWorksheet.Name)
@@ -1007,20 +1054,24 @@ Public Class AddinModule
             End If
         Next
         p_generalSubmissionController.CloseInstance()
-        m_GRSControlersDictionary.Remove(p_generalSubmissionController.m_associatedWorksheet)
+        m_reportUploadControlersDictionary.Remove(p_generalSubmissionController.m_associatedWorksheet)
 
-        If m_GRSControlersDictionary.Count = 0 Then
+        If m_reportUploadControlersDictionary.Count = 0 Then
             SubmissionModeRibbon.Visible = False
-            m_GRSControlersDictionary.Clear()
+            m_reportUploadControlersDictionary.Clear()
             GlobalVariables.APPS.CellDragAndDrop = True
         Else
-            ActivateGRSController(m_GRSControlersDictionary.ElementAt(0).Value)
-            m_submissionWorksheetCombobox.SelectedItemId = m_currentGeneralSubmissionControler.m_associatedWorksheet.Name
-            m_currentGeneralSubmissionControler.m_associatedWorksheet.Activate()
+            ActivateReportUploadController(m_reportUploadControlersDictionary.ElementAt(0).Value)
+            m_submissionWorksheetCombobox.SelectedItemId = m_currentReportUploadControler.m_associatedWorksheet.Name
+            m_currentReportUploadControler.m_associatedWorksheet.Activate()
         End If
         GlobalVariables.APPS.Interactive = True
         GlobalVariables.APPS.ScreenUpdating = True
 
+    End Sub
+
+    Friend Sub SetPDCSubmissionRibbonEntityName(ByRef p_entityName As String)
+        m_PDCEntityEditBox.Text = p_entityName
     End Sub
 
 #End Region
@@ -1042,13 +1093,13 @@ Public Class AddinModule
 
     End Function
 
-    Friend Function IsCurrentGRSController(ByRef p_GRSController As GeneralSubmissionControler) As Boolean
-        Return p_GRSController Is m_currentGeneralSubmissionControler
+    Friend Function IsCurrentReportUploadController(ByRef p_reportUploadController As ReportUploadControler) As Boolean
+        Return p_reportUploadController Is m_currentReportUploadControler
     End Function
 
-    Friend Sub ActivateGRSController(ByRef p_GRSController As GeneralSubmissionControler)
-        m_currentGeneralSubmissionControler = p_GRSController
-        m_submissionWorksheetCombobox.SelectedItemId = p_GRSController.m_associatedWorksheet.Name
+    Friend Sub ActivateReportUploadController(ByRef p_reportUploadController As ReportUploadControler)
+        m_currentReportUploadControler = p_reportUploadController
+        m_submissionWorksheetCombobox.SelectedItemId = p_reportUploadController.m_associatedWorksheet.Name
     End Sub
 
 #End Region
@@ -1100,7 +1151,7 @@ Public Class AddinModule
     End Sub
 
     Public Function IsCurrentGeneralSubmissionController() As Boolean
-        If m_currentGeneralSubmissionControler Is Nothing Then
+        If m_currentReportUploadControler Is Nothing Then
             Return False
         Else
             Return True
@@ -1108,8 +1159,8 @@ Public Class AddinModule
     End Function
 
     Public Function RefreshGeneralSubmissionControllerSnapshot(ByRef p_refreshFromDataBaseFlag As Boolean) As Boolean
-        If m_currentGeneralSubmissionControler IsNot Nothing Then
-            If m_currentGeneralSubmissionControler.RefreshSnapshot(p_refreshFromDataBaseFlag) = False Then
+        If m_currentReportUploadControler IsNot Nothing Then
+            If m_currentReportUploadControler.RefreshSnapshot(p_refreshFromDataBaseFlag) = False Then
                 Return False
             Else
                 Return True
@@ -1143,6 +1194,5 @@ Public Class AddinModule
 
 
 
-    
 End Class
 

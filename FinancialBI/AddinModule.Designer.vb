@@ -38,7 +38,7 @@ Partial Public Class AddinModule
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(AddinModule))
-        Me.MaintTab = New AddinExpress.MSO.ADXRibbonTab(Me.components)
+        Me.m_financialBIMainRibbon = New AddinExpress.MSO.ADXRibbonTab(Me.components)
         Me.ConnectionGroup = New AddinExpress.MSO.ADXRibbonGroup(Me.components)
         Me.ConnectionBT = New AddinExpress.MSO.ADXRibbonButton(Me.components)
         Me.ConnectionIcons = New System.Windows.Forms.ImageList(Me.components)
@@ -63,6 +63,7 @@ Partial Public Class AddinModule
         Me.AdxRibbonMenuSeparator1 = New AddinExpress.MSO.ADXRibbonMenuSeparator(Me.components)
         Me.AutoRefreshBT = New AddinExpress.MSO.ADXRibbonCheckBox(Me.components)
         Me.ComputeGroup = New AddinExpress.MSO.ADXRibbonGroup(Me.components)
+        Me.m_PDCPlanningButton = New AddinExpress.MSO.ADXRibbonButton(Me.components)
         Me.ControlingUI2BT = New AddinExpress.MSO.ADXRibbonButton(Me.components)
         Me.FunctionDesigner = New AddinExpress.MSO.ADXRibbonSplitButton(Me.components)
         Me.AdxRibbonMenu1 = New AddinExpress.MSO.ADXRibbonMenu(Me.components)
@@ -79,12 +80,12 @@ Partial Public Class AddinModule
         Me.adxExcelEvents = New AddinExpress.MSO.ADXExcelAppEvents(Me.components)
         Me.SubmissionModeRibbon = New AddinExpress.MSO.ADXRibbonTab(Me.components)
         Me.SubmissionnGroup = New AddinExpress.MSO.ADXRibbonGroup(Me.components)
-        Me.SubmitBT2 = New AddinExpress.MSO.ADXRibbonButton(Me.components)
+        Me.m_financialSubmissionSubmitButton = New AddinExpress.MSO.ADXRibbonButton(Me.components)
         Me.AdxRibbonSeparator4 = New AddinExpress.MSO.ADXRibbonSeparator(Me.components)
-        Me.AutoComitBT = New AddinExpress.MSO.ADXRibbonButton(Me.components)
+        Me.m_financialSubmissionAutoCommitButton = New AddinExpress.MSO.ADXRibbonButton(Me.components)
         Me.AdxRibbonSeparator6 = New AddinExpress.MSO.ADXRibbonSeparator(Me.components)
-        Me.SubmissionStatus = New AddinExpress.MSO.ADXRibbonButton(Me.components)
-        Me.CancelBT2 = New AddinExpress.MSO.ADXRibbonButton(Me.components)
+        Me.m_financialSubmissionSatusButton = New AddinExpress.MSO.ADXRibbonButton(Me.components)
+        Me.m_financialSubmissionCancelButton = New AddinExpress.MSO.ADXRibbonButton(Me.components)
         Me.StateSelectionGroup = New AddinExpress.MSO.ADXRibbonGroup(Me.components)
         Me.entityEditBT = New AddinExpress.MSO.ADXRibbonButton(Me.components)
         Me.AdxRibbonButton1 = New AddinExpress.MSO.ADXRibbonButton(Me.components)
@@ -135,19 +136,40 @@ Partial Public Class AddinModule
         Me.BindingNavigatorMoveNextItem = New System.Windows.Forms.ToolStripButton()
         Me.BindingNavigatorMoveLastItem = New System.Windows.Forms.ToolStripButton()
         Me.BindingNavigatorSeparator2 = New System.Windows.Forms.ToolStripSeparator()
-        Me.m_PDCPlanningButton = New AddinExpress.MSO.ADXRibbonButton(Me.components)
+        Me.m_PDCSubmissionRibbon = New AddinExpress.MSO.ADXRibbonTab(Me.components)
+        Me.AdxRibbonGroup1 = New AddinExpress.MSO.ADXRibbonGroup(Me.components)
+        Me.m_PDCSubmissionButton = New AddinExpress.MSO.ADXRibbonButton(Me.components)
+        Me.AdxRibbonSeparator2 = New AddinExpress.MSO.ADXRibbonSeparator(Me.components)
+        Me.m_PDCAutocommitButton = New AddinExpress.MSO.ADXRibbonButton(Me.components)
+        Me.AdxRibbonSeparator3 = New AddinExpress.MSO.ADXRibbonSeparator(Me.components)
+        Me.m_PDCSUbmissionStatusButton = New AddinExpress.MSO.ADXRibbonButton(Me.components)
+        Me.m_PDCSubmissionCancelButton = New AddinExpress.MSO.ADXRibbonButton(Me.components)
+        Me.AdxRibbonGroup2 = New AddinExpress.MSO.ADXRibbonGroup(Me.components)
+        Me.m_PDCEntityLabel = New AddinExpress.MSO.ADXRibbonButton(Me.components)
+        Me.m_PDCVersionLabel = New AddinExpress.MSO.ADXRibbonButton(Me.components)
+        Me.m_PDCWorksheetDropDown = New AddinExpress.MSO.ADXRibbonDropDown(Me.components)
+        Me.m_PDCEntityEditBox = New AddinExpress.MSO.ADXRibbonEditBox(Me.components)
+        Me.m_PDCVersionEditBox = New AddinExpress.MSO.ADXRibbonEditBox(Me.components)
+        Me.AdxRibbonGroup3 = New AddinExpress.MSO.ADXRibbonGroup(Me.components)
+        Me.m_PDCSubmissionOptionsButton = New AddinExpress.MSO.ADXRibbonSplitButton(Me.components)
+        Me.AdxRibbonMenu2 = New AddinExpress.MSO.ADXRibbonMenu(Me.components)
+        Me.m_PDCRefreshSnapthshotButton = New AddinExpress.MSO.ADXRibbonButton(Me.components)
+        Me.m_PDCConsultantRangeEditButton = New AddinExpress.MSO.ADXRibbonButton(Me.components)
+        Me.m_PDCPeriodsRangeEditButton = New AddinExpress.MSO.ADXRibbonButton(Me.components)
+        Me.AdxRibbonGroup4 = New AddinExpress.MSO.ADXRibbonGroup(Me.components)
+        Me.m_PDCSumbissionExitButton = New AddinExpress.MSO.ADXRibbonButton(Me.components)
         CType(Me.BindingNavigator1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.BindingNavigator1.SuspendLayout()
         '
-        'MaintTab
+        'm_financialBIMainRibbon
         '
-        Me.MaintTab.Caption = "Financial BI®"
-        Me.MaintTab.Controls.Add(Me.ConnectionGroup)
-        Me.MaintTab.Controls.Add(Me.DataUploadGroup)
-        Me.MaintTab.Controls.Add(Me.ComputeGroup)
-        Me.MaintTab.Controls.Add(Me.ConfigurationGroup)
-        Me.MaintTab.Id = "adxRibbonTab_b30b165b93e0463887478085c350e723"
-        Me.MaintTab.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
+        Me.m_financialBIMainRibbon.Caption = "Financial BI®"
+        Me.m_financialBIMainRibbon.Controls.Add(Me.ConnectionGroup)
+        Me.m_financialBIMainRibbon.Controls.Add(Me.DataUploadGroup)
+        Me.m_financialBIMainRibbon.Controls.Add(Me.ComputeGroup)
+        Me.m_financialBIMainRibbon.Controls.Add(Me.ConfigurationGroup)
+        Me.m_financialBIMainRibbon.Id = "adxRibbonTab_b30b165b93e0463887478085c350e723"
+        Me.m_financialBIMainRibbon.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
         '
         'ConnectionGroup
         '
@@ -413,6 +435,16 @@ Partial Public Class AddinModule
         Me.ComputeGroup.ImageTransparentColor = System.Drawing.Color.Transparent
         Me.ComputeGroup.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
         '
+        'm_PDCPlanningButton
+        '
+        Me.m_PDCPlanningButton.Caption = "Planning PDC"
+        Me.m_PDCPlanningButton.Id = "adxRibbonButton_cd39b2299e0c490aaf9fbe1fbccc1aa5"
+        Me.m_PDCPlanningButton.Image = 12
+        Me.m_PDCPlanningButton.ImageList = Me.Menu3
+        Me.m_PDCPlanningButton.ImageTransparentColor = System.Drawing.Color.Transparent
+        Me.m_PDCPlanningButton.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
+        Me.m_PDCPlanningButton.Size = AddinExpress.MSO.ADXRibbonXControlSize.Large
+        '
         'ControlingUI2BT
         '
         Me.ControlingUI2BT.Caption = "Financials"
@@ -596,64 +628,64 @@ Partial Public Class AddinModule
         'SubmissionnGroup
         '
         Me.SubmissionnGroup.Caption = "Submission"
-        Me.SubmissionnGroup.Controls.Add(Me.SubmitBT2)
+        Me.SubmissionnGroup.Controls.Add(Me.m_financialSubmissionSubmitButton)
         Me.SubmissionnGroup.Controls.Add(Me.AdxRibbonSeparator4)
-        Me.SubmissionnGroup.Controls.Add(Me.AutoComitBT)
+        Me.SubmissionnGroup.Controls.Add(Me.m_financialSubmissionAutoCommitButton)
         Me.SubmissionnGroup.Controls.Add(Me.AdxRibbonSeparator6)
-        Me.SubmissionnGroup.Controls.Add(Me.SubmissionStatus)
-        Me.SubmissionnGroup.Controls.Add(Me.CancelBT2)
+        Me.SubmissionnGroup.Controls.Add(Me.m_financialSubmissionSatusButton)
+        Me.SubmissionnGroup.Controls.Add(Me.m_financialSubmissionCancelButton)
         Me.SubmissionnGroup.Id = "adxRibbonGroup_d13fa5b1f4584ad99081875d975057c9"
         Me.SubmissionnGroup.ImageTransparentColor = System.Drawing.Color.Transparent
         Me.SubmissionnGroup.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
         '
-        'SubmitBT2
+        'm_financialSubmissionSubmitButton
         '
-        Me.SubmitBT2.Caption = "Submit"
-        Me.SubmitBT2.Id = "adxRibbonButton_f781efe7b70b4e2387fe5a59f0772128"
-        Me.SubmitBT2.Image = 23
-        Me.SubmitBT2.ImageList = Me.NewICOs
-        Me.SubmitBT2.ImageTransparentColor = System.Drawing.Color.Transparent
-        Me.SubmitBT2.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
-        Me.SubmitBT2.Size = AddinExpress.MSO.ADXRibbonXControlSize.Large
+        Me.m_financialSubmissionSubmitButton.Caption = "Submit"
+        Me.m_financialSubmissionSubmitButton.Id = "adxRibbonButton_f781efe7b70b4e2387fe5a59f0772128"
+        Me.m_financialSubmissionSubmitButton.Image = 23
+        Me.m_financialSubmissionSubmitButton.ImageList = Me.NewICOs
+        Me.m_financialSubmissionSubmitButton.ImageTransparentColor = System.Drawing.Color.Transparent
+        Me.m_financialSubmissionSubmitButton.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
+        Me.m_financialSubmissionSubmitButton.Size = AddinExpress.MSO.ADXRibbonXControlSize.Large
         '
         'AdxRibbonSeparator4
         '
         Me.AdxRibbonSeparator4.Id = "adxRibbonSeparator_90768c84873042c0b7a443753b999540"
         Me.AdxRibbonSeparator4.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
         '
-        'AutoComitBT
+        'm_financialSubmissionAutoCommitButton
         '
-        Me.AutoComitBT.Caption = "Auto Submit"
-        Me.AutoComitBT.Id = "adxRibbonButton_f68c1069d4d74f95bf5c5e89cebda486"
-        Me.AutoComitBT.Image = 5
-        Me.AutoComitBT.ImageList = Me.SubmissionRibbonIL
-        Me.AutoComitBT.ImageTransparentColor = System.Drawing.Color.Transparent
-        Me.AutoComitBT.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
-        Me.AutoComitBT.Size = AddinExpress.MSO.ADXRibbonXControlSize.Large
-        Me.AutoComitBT.ToggleButton = True
+        Me.m_financialSubmissionAutoCommitButton.Caption = "Auto Submit"
+        Me.m_financialSubmissionAutoCommitButton.Id = "adxRibbonButton_f68c1069d4d74f95bf5c5e89cebda486"
+        Me.m_financialSubmissionAutoCommitButton.Image = 5
+        Me.m_financialSubmissionAutoCommitButton.ImageList = Me.SubmissionRibbonIL
+        Me.m_financialSubmissionAutoCommitButton.ImageTransparentColor = System.Drawing.Color.Transparent
+        Me.m_financialSubmissionAutoCommitButton.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
+        Me.m_financialSubmissionAutoCommitButton.Size = AddinExpress.MSO.ADXRibbonXControlSize.Large
+        Me.m_financialSubmissionAutoCommitButton.ToggleButton = True
         '
         'AdxRibbonSeparator6
         '
         Me.AdxRibbonSeparator6.Id = "adxRibbonSeparator_b9b1011c15a54de3b20d1b83916ab7ce"
         Me.AdxRibbonSeparator6.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
         '
-        'SubmissionStatus
+        'm_financialSubmissionSatusButton
         '
-        Me.SubmissionStatus.Caption = "Status"
-        Me.SubmissionStatus.Id = "adxRibbonButton_83d245af23e34559ab274b13e9a52e0c"
-        Me.SubmissionStatus.Image = 0
-        Me.SubmissionStatus.ImageList = Me.LightsImageList
-        Me.SubmissionStatus.ImageTransparentColor = System.Drawing.Color.Transparent
-        Me.SubmissionStatus.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
+        Me.m_financialSubmissionSatusButton.Caption = "Status"
+        Me.m_financialSubmissionSatusButton.Id = "adxRibbonButton_83d245af23e34559ab274b13e9a52e0c"
+        Me.m_financialSubmissionSatusButton.Image = 0
+        Me.m_financialSubmissionSatusButton.ImageList = Me.LightsImageList
+        Me.m_financialSubmissionSatusButton.ImageTransparentColor = System.Drawing.Color.Transparent
+        Me.m_financialSubmissionSatusButton.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
         '
-        'CancelBT2
+        'm_financialSubmissionCancelButton
         '
-        Me.CancelBT2.Caption = "Cancel"
-        Me.CancelBT2.Id = "adxRibbonButton_b3163cbf2cf444a5af4934c23e854aa6"
-        Me.CancelBT2.Image = 13
-        Me.CancelBT2.ImageList = Me.SubmissionRibbonIL
-        Me.CancelBT2.ImageTransparentColor = System.Drawing.Color.Transparent
-        Me.CancelBT2.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
+        Me.m_financialSubmissionCancelButton.Caption = "Cancel"
+        Me.m_financialSubmissionCancelButton.Id = "adxRibbonButton_b3163cbf2cf444a5af4934c23e854aa6"
+        Me.m_financialSubmissionCancelButton.Image = 13
+        Me.m_financialSubmissionCancelButton.ImageList = Me.SubmissionRibbonIL
+        Me.m_financialSubmissionCancelButton.ImageTransparentColor = System.Drawing.Color.Transparent
+        Me.m_financialSubmissionCancelButton.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
         '
         'StateSelectionGroup
         '
@@ -1032,7 +1064,7 @@ Partial Public Class AddinModule
         'BindingNavigatorCountItem
         '
         Me.BindingNavigatorCountItem.Name = "BindingNavigatorCountItem"
-        Me.BindingNavigatorCountItem.Size = New System.Drawing.Size(35, 15)
+        Me.BindingNavigatorCountItem.Size = New System.Drawing.Size(41, 19)
         Me.BindingNavigatorCountItem.Text = "of {0}"
         Me.BindingNavigatorCountItem.ToolTipText = "Total number of items"
         '
@@ -1100,15 +1132,207 @@ Partial Public Class AddinModule
         Me.BindingNavigatorSeparator2.Name = "BindingNavigatorSeparator2"
         Me.BindingNavigatorSeparator2.Size = New System.Drawing.Size(6, 6)
         '
-        'm_PDCPlanningButton
+        'm_PDCSubmissionRibbon
         '
-        Me.m_PDCPlanningButton.Caption = "Planning PDC"
-        Me.m_PDCPlanningButton.Id = "adxRibbonButton_cd39b2299e0c490aaf9fbe1fbccc1aa5"
-        Me.m_PDCPlanningButton.Image = 12
-        Me.m_PDCPlanningButton.ImageList = Me.Menu3
-        Me.m_PDCPlanningButton.ImageTransparentColor = System.Drawing.Color.Transparent
-        Me.m_PDCPlanningButton.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
-        Me.m_PDCPlanningButton.Size = AddinExpress.MSO.ADXRibbonXControlSize.Large
+        Me.m_PDCSubmissionRibbon.Caption = "PDC Submission"
+        Me.m_PDCSubmissionRibbon.Controls.Add(Me.AdxRibbonGroup1)
+        Me.m_PDCSubmissionRibbon.Controls.Add(Me.AdxRibbonGroup2)
+        Me.m_PDCSubmissionRibbon.Controls.Add(Me.AdxRibbonGroup3)
+        Me.m_PDCSubmissionRibbon.Controls.Add(Me.AdxRibbonGroup4)
+        Me.m_PDCSubmissionRibbon.Id = "adxRibbonTab_7e9a50d1d91c429697388afda23d5b12"
+        Me.m_PDCSubmissionRibbon.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
+        '
+        'AdxRibbonGroup1
+        '
+        Me.AdxRibbonGroup1.Caption = "Submission"
+        Me.AdxRibbonGroup1.Controls.Add(Me.m_PDCSubmissionButton)
+        Me.AdxRibbonGroup1.Controls.Add(Me.AdxRibbonSeparator2)
+        Me.AdxRibbonGroup1.Controls.Add(Me.m_PDCAutocommitButton)
+        Me.AdxRibbonGroup1.Controls.Add(Me.AdxRibbonSeparator3)
+        Me.AdxRibbonGroup1.Controls.Add(Me.m_PDCSUbmissionStatusButton)
+        Me.AdxRibbonGroup1.Controls.Add(Me.m_PDCSubmissionCancelButton)
+        Me.AdxRibbonGroup1.Id = "adxRibbonGroup_d13fa5b1f4584ad99081875d975057c8"
+        Me.AdxRibbonGroup1.ImageTransparentColor = System.Drawing.Color.Transparent
+        Me.AdxRibbonGroup1.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
+        '
+        'm_PDCSubmissionButton
+        '
+        Me.m_PDCSubmissionButton.Caption = "Submit"
+        Me.m_PDCSubmissionButton.Id = "adxRibbonButton_f781efe7b70b4e2387fe5a59f0772129"
+        Me.m_PDCSubmissionButton.Image = 23
+        Me.m_PDCSubmissionButton.ImageList = Me.NewICOs
+        Me.m_PDCSubmissionButton.ImageTransparentColor = System.Drawing.Color.Transparent
+        Me.m_PDCSubmissionButton.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
+        Me.m_PDCSubmissionButton.Size = AddinExpress.MSO.ADXRibbonXControlSize.Large
+        '
+        'AdxRibbonSeparator2
+        '
+        Me.AdxRibbonSeparator2.Id = "adxRibbonSeparator_90768c84873042c0b7a443753b999541"
+        Me.AdxRibbonSeparator2.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
+        '
+        'm_PDCAutocommitButton
+        '
+        Me.m_PDCAutocommitButton.Caption = "Auto Submit"
+        Me.m_PDCAutocommitButton.Id = "adxRibbonButton_f68c1069d4d74f95bf5c5e89cebda487"
+        Me.m_PDCAutocommitButton.Image = 5
+        Me.m_PDCAutocommitButton.ImageList = Me.SubmissionRibbonIL
+        Me.m_PDCAutocommitButton.ImageTransparentColor = System.Drawing.Color.Transparent
+        Me.m_PDCAutocommitButton.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
+        Me.m_PDCAutocommitButton.Size = AddinExpress.MSO.ADXRibbonXControlSize.Large
+        Me.m_PDCAutocommitButton.ToggleButton = True
+        '
+        'AdxRibbonSeparator3
+        '
+        Me.AdxRibbonSeparator3.Id = "adxRibbonSeparator_b9b1011c15a54de3b20d1b83916ab7cf"
+        Me.AdxRibbonSeparator3.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
+        '
+        'm_PDCSUbmissionStatusButton
+        '
+        Me.m_PDCSUbmissionStatusButton.Caption = "Status"
+        Me.m_PDCSUbmissionStatusButton.Id = "adxRibbonButton_83d245af23e34559ab274b13e9a52e0d"
+        Me.m_PDCSUbmissionStatusButton.Image = 0
+        Me.m_PDCSUbmissionStatusButton.ImageList = Me.LightsImageList
+        Me.m_PDCSUbmissionStatusButton.ImageTransparentColor = System.Drawing.Color.Transparent
+        Me.m_PDCSUbmissionStatusButton.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
+        '
+        'm_PDCSubmissionCancelButton
+        '
+        Me.m_PDCSubmissionCancelButton.Caption = "Cancel"
+        Me.m_PDCSubmissionCancelButton.Id = "adxRibbonButton_b3163cbf2cf444a5af4934c23e854aa7"
+        Me.m_PDCSubmissionCancelButton.Image = 13
+        Me.m_PDCSubmissionCancelButton.ImageList = Me.SubmissionRibbonIL
+        Me.m_PDCSubmissionCancelButton.ImageTransparentColor = System.Drawing.Color.Transparent
+        Me.m_PDCSubmissionCancelButton.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
+        '
+        'AdxRibbonGroup2
+        '
+        Me.AdxRibbonGroup2.Caption = " PDC Information"
+        Me.AdxRibbonGroup2.Controls.Add(Me.m_PDCEntityLabel)
+        Me.AdxRibbonGroup2.Controls.Add(Me.m_PDCVersionLabel)
+        Me.AdxRibbonGroup2.Controls.Add(Me.m_PDCWorksheetDropDown)
+        Me.AdxRibbonGroup2.Controls.Add(Me.m_PDCEntityEditBox)
+        Me.AdxRibbonGroup2.Controls.Add(Me.m_PDCVersionEditBox)
+        Me.AdxRibbonGroup2.Id = "adxRibbonGroup_31e139cc6d9d421dbf833740d494b4a1"
+        Me.AdxRibbonGroup2.ImageTransparentColor = System.Drawing.Color.Transparent
+        Me.AdxRibbonGroup2.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
+        '
+        'm_PDCEntityLabel
+        '
+        Me.m_PDCEntityLabel.Caption = "BU"
+        Me.m_PDCEntityLabel.Id = "adxRibbonButton_4134f852978240a19f9e57bcd1ce4b14"
+        Me.m_PDCEntityLabel.Image = 19
+        Me.m_PDCEntityLabel.ImageList = Me.SubmissionRibbonIL
+        Me.m_PDCEntityLabel.ImageTransparentColor = System.Drawing.Color.Transparent
+        Me.m_PDCEntityLabel.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
+        '
+        'm_PDCVersionLabel
+        '
+        Me.m_PDCVersionLabel.Caption = "Version"
+        Me.m_PDCVersionLabel.Id = "adxRibbonButton_2a8644b2388844f9aa05d2c0c48d6968"
+        Me.m_PDCVersionLabel.Image = 21
+        Me.m_PDCVersionLabel.ImageList = Me.SubmissionRibbonIL
+        Me.m_PDCVersionLabel.ImageTransparentColor = System.Drawing.Color.Transparent
+        Me.m_PDCVersionLabel.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
+        '
+        'm_PDCWorksheetDropDown
+        '
+        Me.m_PDCWorksheetDropDown.Caption = " "
+        Me.m_PDCWorksheetDropDown.Id = "adxRibbonDropDown_051d087fb85b425c947f7c3a0fe28701"
+        Me.m_PDCWorksheetDropDown.ImageTransparentColor = System.Drawing.Color.Transparent
+        Me.m_PDCWorksheetDropDown.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
+        Me.m_PDCWorksheetDropDown.SelectedItemId = "1"
+        '
+        'm_PDCEntityEditBox
+        '
+        Me.m_PDCEntityEditBox.Caption = " "
+        Me.m_PDCEntityEditBox.Enabled = False
+        Me.m_PDCEntityEditBox.Id = "adxRibbonEditBox_994a7df7764c43dbb7a7f4392d489c7b"
+        Me.m_PDCEntityEditBox.ImageTransparentColor = System.Drawing.Color.Transparent
+        Me.m_PDCEntityEditBox.MaxLength = 30
+        Me.m_PDCEntityEditBox.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
+        Me.m_PDCEntityEditBox.SizeString = "wwwwwwwwwww"
+        '
+        'm_PDCVersionEditBox
+        '
+        Me.m_PDCVersionEditBox.Caption = " "
+        Me.m_PDCVersionEditBox.Enabled = False
+        Me.m_PDCVersionEditBox.Id = "adxRibbonEditBox_442b9a2b340041749e101a147e75eb44"
+        Me.m_PDCVersionEditBox.ImageTransparentColor = System.Drawing.Color.Transparent
+        Me.m_PDCVersionEditBox.MaxLength = 30
+        Me.m_PDCVersionEditBox.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
+        Me.m_PDCVersionEditBox.SizeString = "wwwwwwwwwww"
+        '
+        'AdxRibbonGroup3
+        '
+        Me.AdxRibbonGroup3.Caption = " Settings"
+        Me.AdxRibbonGroup3.Controls.Add(Me.m_PDCSubmissionOptionsButton)
+        Me.AdxRibbonGroup3.Id = "adxRibbonGroup_845aac06fe0b43ffa1a5ab1c8cf56d7b"
+        Me.AdxRibbonGroup3.ImageTransparentColor = System.Drawing.Color.Transparent
+        Me.AdxRibbonGroup3.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
+        '
+        'm_PDCSubmissionOptionsButton
+        '
+        Me.m_PDCSubmissionOptionsButton.Caption = " Options"
+        Me.m_PDCSubmissionOptionsButton.Controls.Add(Me.AdxRibbonMenu2)
+        Me.m_PDCSubmissionOptionsButton.Id = "adxRibbonSplitButton_ed37a10f5b0a4990ad8f16798266356"
+        Me.m_PDCSubmissionOptionsButton.Image = 16
+        Me.m_PDCSubmissionOptionsButton.ImageList = Me.Menu3
+        Me.m_PDCSubmissionOptionsButton.ImageTransparentColor = System.Drawing.Color.Transparent
+        Me.m_PDCSubmissionOptionsButton.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
+        Me.m_PDCSubmissionOptionsButton.Size = AddinExpress.MSO.ADXRibbonXControlSize.Large
+        '
+        'AdxRibbonMenu2
+        '
+        Me.AdxRibbonMenu2.Caption = "AdxRibbonMenu5"
+        Me.AdxRibbonMenu2.Controls.Add(Me.m_PDCRefreshSnapthshotButton)
+        Me.AdxRibbonMenu2.Controls.Add(Me.m_PDCConsultantRangeEditButton)
+        Me.AdxRibbonMenu2.Controls.Add(Me.m_PDCPeriodsRangeEditButton)
+        Me.AdxRibbonMenu2.Id = "adxRibbonMenu_22c008855d864379ba85629a938602dd"
+        Me.AdxRibbonMenu2.ImageTransparentColor = System.Drawing.Color.Transparent
+        Me.AdxRibbonMenu2.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
+        '
+        'm_PDCRefreshSnapthshotButton
+        '
+        Me.m_PDCRefreshSnapthshotButton.Caption = "Refresh Inputs"
+        Me.m_PDCRefreshSnapthshotButton.Id = "adxRibbonButton_88ae883ce9de414bacaf9f25f558dffd"
+        Me.m_PDCRefreshSnapthshotButton.Image = 11
+        Me.m_PDCRefreshSnapthshotButton.ImageList = Me.SubmissionRibbonIL
+        Me.m_PDCRefreshSnapthshotButton.ImageTransparentColor = System.Drawing.Color.Transparent
+        Me.m_PDCRefreshSnapthshotButton.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
+        '
+        'm_PDCConsultantRangeEditButton
+        '
+        Me.m_PDCConsultantRangeEditButton.Caption = "Select consultants Range"
+        Me.m_PDCConsultantRangeEditButton.Id = "adxRibbonButton_d24e5ee960704f1e9ca2612d5eebfa54"
+        Me.m_PDCConsultantRangeEditButton.ImageList = Me.SubmissionRibbonIL
+        Me.m_PDCConsultantRangeEditButton.ImageTransparentColor = System.Drawing.Color.Transparent
+        Me.m_PDCConsultantRangeEditButton.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
+        '
+        'm_PDCPeriodsRangeEditButton
+        '
+        Me.m_PDCPeriodsRangeEditButton.Caption = "Select Periods Range"
+        Me.m_PDCPeriodsRangeEditButton.Id = "adxRibbonButton_ab9e3107c41a4638be170f1f98a20b71"
+        Me.m_PDCPeriodsRangeEditButton.ImageTransparentColor = System.Drawing.Color.Transparent
+        Me.m_PDCPeriodsRangeEditButton.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
+        '
+        'AdxRibbonGroup4
+        '
+        Me.AdxRibbonGroup4.Caption = "Exit"
+        Me.AdxRibbonGroup4.Controls.Add(Me.m_PDCSumbissionExitButton)
+        Me.AdxRibbonGroup4.Id = "adxRibbonGroup_0a2b25ca3df2428895a2a7148bf5329e"
+        Me.AdxRibbonGroup4.ImageTransparentColor = System.Drawing.Color.Transparent
+        Me.AdxRibbonGroup4.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
+        '
+        'm_PDCSumbissionExitButton
+        '
+        Me.m_PDCSumbissionExitButton.Caption = "Close Edition Mode"
+        Me.m_PDCSumbissionExitButton.Id = "adxRibbonButton_f7a01388d2f243fc85709ca59b1af988"
+        Me.m_PDCSumbissionExitButton.Image = 14
+        Me.m_PDCSumbissionExitButton.ImageList = Me.SubmissionRibbonIL
+        Me.m_PDCSumbissionExitButton.ImageTransparentColor = System.Drawing.Color.Transparent
+        Me.m_PDCSumbissionExitButton.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
+        Me.m_PDCSumbissionExitButton.ScreenTip = "Close the current Entity Editor"
+        Me.m_PDCSumbissionExitButton.Size = AddinExpress.MSO.ADXRibbonXControlSize.Large
         '
         'AddinModule
         '
@@ -1120,6 +1344,28 @@ Partial Public Class AddinModule
 
     End Sub
     Friend WithEvents m_PDCPlanningButton As AddinExpress.MSO.ADXRibbonButton
+    Friend WithEvents m_PDCSubmissionRibbon As AddinExpress.MSO.ADXRibbonTab
+    Friend WithEvents AdxRibbonGroup1 As AddinExpress.MSO.ADXRibbonGroup
+    Friend WithEvents m_PDCSubmissionButton As AddinExpress.MSO.ADXRibbonButton
+    Friend WithEvents AdxRibbonSeparator2 As AddinExpress.MSO.ADXRibbonSeparator
+    Friend WithEvents m_PDCAutocommitButton As AddinExpress.MSO.ADXRibbonButton
+    Friend WithEvents AdxRibbonSeparator3 As AddinExpress.MSO.ADXRibbonSeparator
+    Friend WithEvents m_PDCSUbmissionStatusButton As AddinExpress.MSO.ADXRibbonButton
+    Friend WithEvents m_PDCSubmissionCancelButton As AddinExpress.MSO.ADXRibbonButton
+    Friend WithEvents AdxRibbonGroup2 As AddinExpress.MSO.ADXRibbonGroup
+    Friend WithEvents m_PDCEntityLabel As AddinExpress.MSO.ADXRibbonButton
+    Friend WithEvents m_PDCVersionLabel As AddinExpress.MSO.ADXRibbonButton
+    Friend WithEvents m_PDCWorksheetDropDown As AddinExpress.MSO.ADXRibbonDropDown
+    Friend WithEvents m_PDCEntityEditBox As AddinExpress.MSO.ADXRibbonEditBox
+    Friend WithEvents m_PDCVersionEditBox As AddinExpress.MSO.ADXRibbonEditBox
+    Friend WithEvents AdxRibbonGroup3 As AddinExpress.MSO.ADXRibbonGroup
+    Friend WithEvents m_PDCSubmissionOptionsButton As AddinExpress.MSO.ADXRibbonSplitButton
+    Friend WithEvents AdxRibbonMenu2 As AddinExpress.MSO.ADXRibbonMenu
+    Friend WithEvents m_PDCRefreshSnapthshotButton As AddinExpress.MSO.ADXRibbonButton
+    Friend WithEvents m_PDCConsultantRangeEditButton As AddinExpress.MSO.ADXRibbonButton
+    Friend WithEvents m_PDCPeriodsRangeEditButton As AddinExpress.MSO.ADXRibbonButton
+    Friend WithEvents AdxRibbonGroup4 As AddinExpress.MSO.ADXRibbonGroup
+    Friend WithEvents m_PDCSumbissionExitButton As AddinExpress.MSO.ADXRibbonButton
 
 End Class
 

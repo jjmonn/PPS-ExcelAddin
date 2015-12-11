@@ -27,7 +27,7 @@ Public Class ManualRangesSelectionUI
 #Region "Instance Variables"
 
     ' Objects
-    Private GRS As GeneralSubmissionControler
+    Private GRS As ReportUploadControler
     Private DATASET As ModelDataSet
 
     ' Variables
@@ -38,7 +38,7 @@ Public Class ManualRangesSelectionUI
 
 #Region "Initialize"
 
-    Friend Sub New(ByRef inputGRS As GeneralSubmissionControler, _
+    Friend Sub New(ByRef inputGRS As ReportUploadControler, _
                    ByRef inputDATASET As ModelDataSet)
 
         ' This call is required by the designer.
@@ -67,11 +67,11 @@ Public Class ManualRangesSelectionUI
 
         ' Check if it is a valid address !!
         If AccountsRefEdit.Text <> "" Then
-            DATASET.m_accountsAddressValuesDictionary.Clear()
+            DATASET.m_dimensionsAddressValueDict(ModelDataSet.Dimension.aCCOUNT).Clear()
             For Each cell As Excel.Range In tmpRng
                 For Each l_account In DATASET.m_inputsAccountsList
                     If l_account.Name = cell.Value2 Then
-                        DATASET.m_accountsAddressValuesDictionary.Add(CStr(cell.Address), CStr(cell.Value2))
+                        DATASET.m_dimensionsAddressValueDict(ModelDataSet.Dimension.aCCOUNT).Add(CStr(cell.Address), CStr(cell.Value2))
                         Exit For
                     End If
                 Next
@@ -94,10 +94,10 @@ Public Class ManualRangesSelectionUI
 
         ' Check if it is a valid address !!
         If EntitiesRefEdit.Text <> "" Then
-            DATASET.m_entitiesAddressValuesDictionary.Clear()
+            DATASET.m_dimensionsAddressValueDict(ModelDataSet.Dimension.ENTITY).Clear()
             For Each cell As Excel.Range In tmpRng
                 If Not GlobalVariables.AxisElems.GetValue(AxisType.Entities, CType(cell.Value2, String)) Is Nothing Then
-                    DATASET.m_entitiesAddressValuesDictionary.Add(CStr(cell.Address), CStr(cell.Value2))
+                    DATASET.m_dimensionsAddressValueDict(ModelDataSet.Dimension.ENTITY).Add(CStr(cell.Address), CStr(cell.Value2))
                 End If
             Next
         End If
@@ -118,11 +118,11 @@ Public Class ManualRangesSelectionUI
 
         ' Check if it is a valid address !!
         If PeriodsRefEdit.Text <> "" Then
-            DATASET.m_periodsAddressValuesDictionary.Clear()
+            DATASET.m_dimensionsAddressValueDict(ModelDataSet.Dimension.PERIOD).Clear()
             For Each cell As Excel.Range In tmpRng
                 ' Here control Int/ Double / Date
                 If DATASET.m_periodsDatesList.Contains(cell.Value2) Then
-                    DATASET.m_periodsAddressValuesDictionary.Add(CStr(cell.Address), CDate(cell.Value2).ToOADate())
+                    DATASET.m_dimensionsAddressValueDict(ModelDataSet.Dimension.PERIOD).Add(CStr(cell.Address), CDate(cell.Value2).ToOADate())
                 End If
             Next
         End If

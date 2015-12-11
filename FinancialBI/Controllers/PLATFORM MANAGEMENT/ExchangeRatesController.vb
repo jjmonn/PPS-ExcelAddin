@@ -39,7 +39,7 @@ Friend Class ExchangeRatesController
     ' Variables
     Friend m_isValid As Boolean
     Friend m_currentRatesVersionId As Int32
-    Friend m_MonthsIdList As List(Of Int32)
+    Friend m_MonthsIdList As Int32()
 
 
 #End Region

@@ -338,7 +338,7 @@ Friend Class AcquisitionModel
                         m_entitiesIdInputsAccounts(l_entityId)(i) = inputAccount.Id
                         m_entitiesIdInputsPeriods(l_entityId)(i) = period
 
-                        Dim tuple_ As New Tuple(Of String, String, String)(l_entityName, inputAccount.Name, CStr(period))
+                        Dim tuple_ As New Tuple(Of String, String, String, String)(l_entityName, inputAccount.Name, "", CStr(period))
                         If m_dataSet.m_datasetCellsDictionary.ContainsKey(tuple_) = True Then
                             m_entitiesIdInputsValues(l_entityId)(i) = m_dataSet.m_datasetCellsDictionary(tuple_).Value2
                         ElseIf m_databaseInputsDictionary(l_entityName).ContainsKey(inputAccount.Name) _
@@ -396,7 +396,7 @@ ReturnError:
                                         ByVal p_value As Double)
 
         ' -> should go back in dataset or controller !! no dataset here
-        Dim tuple_ As New Tuple(Of String, String, String)(p_entityName, p_accountName, p_period)
+        Dim tuple_ As New Tuple(Of String, String, String, String)(p_entityName, p_accountName, "", p_period)
         If m_dataSet.m_datasetCellsDictionary.ContainsKey(tuple_) = True Then
             Dim cell As Excel.Range = m_dataSet.m_datasetCellsDictionary(tuple_)
             Dim datasetCell As ModelDataSet.DataSetCellDimensions = m_dataSet.m_datasetCellDimensionsDictionary(cell.Address)

@@ -86,6 +86,7 @@ Friend Class AxisView
         AddHandler m_axisDataGridView.CellMouseClick, AddressOf dataGridView_CellMouseClick
         AddHandler m_axisDataGridView.MouseDown, AddressOf axisDataGridViewRightClick
         AddHandler m_axisDataGridView.HierarchyItemMouseClick, AddressOf dataGridView_HierarchyItemMouseClick
+        AddHandler m_axisDataGridView.HierarchyItemMouseDown, AddressOf dataGridView_HierarchyItemMouseDown
         AddHandler m_axisDataGridView.CellValueChanged, AddressOf dataGridView_CellValueChanged
         AddHandler m_axisDataGridView.KeyDown, AddressOf DGV_KeyDown
         DesactivateUnallowed()
@@ -175,9 +176,9 @@ Friend Class AxisView
 
     Private Sub DeleteAxisOrder()
 
-        If Not m_currentRowItem Is Nothing AndAlso m_axisDataGridView.ColumnsHierarchy.Items.Count > 0 Then
+        If Not m_currentRowItem Is Nothing Then
             Dim confirm As Integer = MessageBox.Show(Local.GetValue("axis.msg_axis_delete1") + Chr(13) + Chr(13) + _
-                                                    m_axisDataGridView.CellsArea.GetCellValue(m_currentRowItem, m_axisDataGridView.ColumnsHierarchy.Items(0)) + Chr(13) + Chr(13) + _
+                                                     m_currentRowItem.Caption + Chr(13) + Chr(13) + _
                                                      Local.GetValue("axis.msg_axis_delete2") + Chr(13) + Chr(13), _
                                                      Local.GetValue("axis.msg_deletion_confirmation"), MessageBoxButtons.YesNo, MessageBoxIcon.Question)
             If confirm = DialogResult.Yes Then
@@ -581,10 +582,12 @@ Friend Class AxisView
 
     End Sub
 
+    Private Sub dataGridView_HierarchyItemMouseDown(sender As Object, args As HierarchyItemMouseEventArgs)
+        m_currentRowItem = args.HierarchyItem
+    End Sub
+
     Private Sub dataGridView_CellMouseClick(ByVal sender As Object, ByVal args As CellMouseEventArgs)
-
         m_currentRowItem = args.Cell.RowItem
-
     End Sub
 
     Private Sub DGV_KeyDown(sender As Object, e As KeyEventArgs)

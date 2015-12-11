@@ -177,6 +177,10 @@
 
     <!--edition-->
     <string name="accounts">Comptes</string>
+    <string name="entities_filters">Catégories des Entités</string>
+    <string name="clients_filters">Catégories des Clients</string>
+    <string name="products_filters">Catégories des Produits</string>
+    <string name="adjustments_filters">Catégories des Ajustements</string>
     <string name="entities">Hiérarchy des entités légales</string>
     <string name="categories">Catégories</string>
     <string name="exchange_rates">Taux de change</string>
@@ -243,6 +247,7 @@
     <string name="msg_accounts_orientation_unclear">L'organisation des comptes n'est pas claire. Merci de vérifier que les comptes sont disposés en lignes ou en colones.</string>
     <string name="msg_entities_orientation_unclear">L'organisation des entités n'est pas claire. Merci de vérifier que les entités sont disposés en lignes ou en colones.</string>
     <string name="msg_periods_orientation_unclear">L'organisation des périodes n'est pas claire. Merci de vérifier que les périodes sont disposés en lignes ou en colones.</string>
+    <string name="msg_product_orientation_unclear">L'organisation des consultants n'est pas claire. Merci de vérifier que les consultants sont disposés en lignes ou en colones.</string>
 
   </category>
 
@@ -257,7 +262,11 @@
   <category name="facts_versions">
     <string name="fact_version">Version</string>
     <string name="exchange_rates_version">Version de taux de change</string>
-    <string name="nb_years">Nombre de périodes</string>
+    <string name="nb_periods">Nombre de periodes</string>
+    <string name="nb_years">Nombre d'années</string>
+    <string name="nb_months">Nombre de mois</string>
+    <string name="nb_weeks">Nombre de semaines</string>
+    <string name="nb_days">Nombre de jours</string>
     <string name="copy_from">Créer une copie de</string>
     <string name="starting_period">Année de départ</string>
 	<string name="starting_month">Mois de départ</string>
@@ -266,6 +275,8 @@
     <string name="version_new">Nouvelle Version</string>
     <string name="msg_config_selection">La configuration des périodes doit être indiquée.</string>
     <string name="msg_starting_period">L'année de départ doit être indiquée.</string>
+    <string name="msg_select_rates_version">Une version de Taux de change soit être sélectionnée.</string>
+    <string name="msg_select_global_facts_version">Une version des Indicateurs Macro Economique doit être sélectionnée.</string>
     <string name="msg_rates_version_mismatch">Cette version des taux de change n'est pas compatible avec les périodes indiquées.</string>
     <string name="msg_cannot_use_global_fact_folder"> est un dossier et ne peut pas être utilisé commme version des indicateurs macro économiques.</string>
     <string name="msg_cannot_use_exchange_rates_folder"> est un dossier et ne peut pas être utilisé commme version des taux de change.</string>
@@ -309,6 +320,8 @@
 	<category name="timeconfig">
 		<string name="month">Mensuel</string>
 		<string name="year">Annuel</string>
+    <string name="week">Hebdomadaire</string>
+    <string name="day">Journalier</string>
 	</category>
   </category>
 

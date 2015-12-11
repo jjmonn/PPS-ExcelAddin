@@ -8,7 +8,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 24/10/2015
+' Last modified: 11/12/2015
 
 
 Imports System.Windows.Forms
@@ -27,9 +27,11 @@ Friend Class NewDataVersionUI
     ' Variables
     Private m_originVersionNode As vTreeNode
     Private m_parentNode As vTreeNode
-    Private Const NB_YEARS_AVAILABLE As Int32 = 5
-    Private m_monthDictionary As New SafeDictionary(Of String, ListItem)
-    Private m_timeConfigDictionary As New SafeDictionary(Of String, ListItem)
+    Private m_timeConfigDayItem As New ListItem()
+    Private m_timeConfigWeekItem As New ListItem()
+    Private m_timeConfigMonthItem As New ListItem()
+    Private m_timeConfigYearItem As New ListItem()
+
 
 #End Region
 
@@ -42,7 +44,6 @@ Friend Class NewDataVersionUI
 
         ' Add any initialization after the InitializeComponent() call.
         m_controller = input_controller
-        StartingPeriodNUD.Value = Year(Now)
         GlobalVariables.Versions.LoadVersionsTV(m_parentVersionsTreeviewBox.TreeView)
         VTreeViewUtil.InitTVFormat(m_parentVersionsTreeviewBox.TreeView)
         InitializeComboboxes()
@@ -56,8 +57,7 @@ Friend Class NewDataVersionUI
         m_copyCheckBox.Text = Local.GetValue("facts_versions.copy_from")
         m_periodConfigLabel.Text = Local.GetValue("facts_versions.period_config")
         m_startingPeriodLabel.Text = Local.GetValue("facts_versions.starting_period")
-        m_startingMonthLabel.Text = Local.GetValue("facts_versions.starting_month")
-        m_nbYearLabel.Text = Local.GetValue("facts_versions.nb_years")
+        m_nbPeriodsLabel.Text = Local.GetValue("facts_versions.nb_periods")
         m_rateVersionLabel.Text = Local.GetValue("facts_versions.exchange_rates_version")
         m_factVersionLabel.Text = Local.GetValue("facts_versions.global_facts_version")
         CancelBT.Text = Local.GetValue("general.cancel")
@@ -67,32 +67,20 @@ Friend Class NewDataVersionUI
 
     Private Sub InitializeComboboxes()
 
-        m_timeConfigDictionary.Clear()
+        m_timeConfigDayItem.Text = Local.GetValue("period.timeconfig.day")
+        m_timeConfigDayItem.Value = TimeConfig.DAYS
+        m_timeConfigCB.Items.Add(m_timeConfigDayItem)
 
-        Dim timeConfigMonth As New ListItem()
-        timeConfigMonth.Text = Local.GetValue("period.timeconfig.month")
-        timeConfigMonth.Value = TimeConfig.MONTHS
+        m_timeConfigMonthItem.Text = Local.GetValue("period.timeconfig.month")
+        m_timeConfigMonthItem.Value = TimeConfig.MONTHS
+        m_timeConfigCB.Items.Add(m_timeConfigMonthItem)
 
-        Dim timeConfigYear As New ListItem()
-        timeConfigYear.Text = Local.GetValue("period.timeconfig.year")
-        timeConfigYear.Value = TimeConfig.YEARS
+        m_timeConfigYearItem.Text = Local.GetValue("period.timeconfig.year")
+        m_timeConfigYearItem.Value = TimeConfig.YEARS
+        m_timeConfigCB.Items.Add(m_timeConfigYearItem)
 
-        m_timeConfigDictionary.Add(timeConfigYear.Text, TimeConfigCB.Items.Add(timeConfigYear))
-        m_timeConfigDictionary.Add(timeConfigMonth.Text, TimeConfigCB.Items.Add(timeConfigMonth))
-
-        Dim current_year As Int32 = Year(Now)
-        StartingPeriodNUD.Value = current_year - 1
-        StartingPeriodNUD.Increment = 1
+        m_startingPeriodDatePicker.Value = Today
         NbPeriodsNUD.Increment = 1
-
-        m_monthDictionary.Clear()
-        For i As Int16 = 1 To 12
-            Dim monthItem As New ListItem()
-
-            monthItem.Value = i
-            monthItem.Text = Local.GetValue("period.month" + i.ToString())
-            m_monthDictionary.Add(monthItem.Text, m_startingMonthCombobox.Items.Add(monthItem))
-        Next
 
         VTreeViewUtil.LoadTreeview(m_exchangeRatesVersionVTreeviewbox.TreeView, GlobalVariables.RatesVersions.GetDictionary())
         VTreeViewUtil.LoadTreeview(m_factsVersionVTreeviewbox.TreeView, GlobalVariables.GlobalFactsVersions.GetDictionary())
@@ -163,38 +151,39 @@ errorHandler:
 
     End Sub
 
-
 #End Region
 
 #Region "Call Backs"
 
     Private Sub CreateBT_Click(sender As Object, e As EventArgs) Handles CreateVersionBT.Click
 
-        Dim name As String = NameTB.Text
-        If IsFormValid(name) = True Then
-            Dim newVersion As New Version
+        Dim l_name As String = NameTB.Text
+        If IsFormValid(l_name) = True Then
+            Dim l_newVersion As New Version
 
-            newVersion.Name = name
-            newVersion.CreatedAt = Format(Now, "short Date")
-            newVersion.IsFolder = False
-            newVersion.Locked = False
-            newVersion.LockDate = "NA"
-            newVersion.TimeConfiguration = TimeConfigCB.SelectedItem.Value
-            Dim l_startingMonth As UInt32 = m_startingMonthCombobox.SelectedItem.Value
-            newVersion.StartPeriod = DateSerial(StartingPeriodNUD.Value, l_startingMonth, 31).ToOADate()
-            newVersion.NbPeriod = NbPeriodsNUD.Text
-            newVersion.RateVersionId = m_exchangeRatesVersionVTreeviewbox.TreeView.SelectedNode.Value
-            newVersion.GlobalFactVersionId = m_factsVersionVTreeviewbox.TreeView.SelectedNode.Value()
-            If Not m_parentNode Is Nothing Then newVersion.ParentId = m_parentNode.Value
+            l_newVersion.Name = l_name
+            l_newVersion.CreatedAt = Format(Now, "short Date")
+            l_newVersion.IsFolder = False
+            l_newVersion.Locked = False
+            l_newVersion.LockDate = "NA"
+            l_newVersion.TimeConfiguration = m_timeConfigCB.SelectedItem.Value
+
+            Dim l_startDate As Date = m_startingPeriodDatePicker.Value
+            l_newVersion.StartPeriod = GetLastDayOfPeriod(l_newVersion.TimeConfiguration, l_startDate.ToOADate)
+
+            l_newVersion.NbPeriod = NbPeriodsNUD.Text
+            l_newVersion.RateVersionId = m_exchangeRatesVersionVTreeviewbox.TreeView.SelectedNode.Value
+            l_newVersion.GlobalFactVersionId = m_factsVersionVTreeviewbox.TreeView.SelectedNode.Value()
+            If Not m_parentNode Is Nothing Then l_newVersion.ParentId = m_parentNode.Value
 
             If m_copyCheckBox.Checked = True AndAlso _
             m_originVersionNode IsNot Nothing AndAlso _
             m_controller.IsFolder(m_originVersionNode.Value) = False Then
                 Dim id As UInt32 = m_originVersionNode.Value
 
-                m_controller.CopyVersion(id, newVersion)
+                m_controller.CopyVersion(id, l_newVersion)
             Else
-                m_controller.CreateVersion(newVersion)
+                m_controller.CreateVersion(l_newVersion)
             End If
         End If
 
@@ -214,12 +203,13 @@ errorHandler:
     Private Sub m_copyCheckbox_CheckedChanged(sender As Object, e As EventArgs) Handles m_copyCheckBox.CheckedChanged
 
         m_parentVersionsTreeviewBox.Enabled = m_copyCheckBox.Checked
-        StartingPeriodNUD.Enabled = Not m_copyCheckBox.Checked
-        TimeConfigCB.Enabled = Not m_copyCheckBox.Checked
+        m_startingPeriodDatePicker.Enabled = Not m_copyCheckBox.Checked
+        m_timeConfigCB.Enabled = Not m_copyCheckBox.Checked
 
     End Sub
 
     Private Sub m_versionsTreeviewBox_Click(sender As Object, e As EventArgs) Handles m_parentVersionsTreeviewBox.TextChanged
+
         m_originVersionNode = Nothing
         If m_copyCheckBox.Checked = True AndAlso m_parentVersionsTreeviewBox.TreeView.SelectedNode IsNot Nothing AndAlso _
         m_controller.IsFolder(m_parentVersionsTreeviewBox.TreeView.SelectedNode.Value) = False Then
@@ -228,29 +218,30 @@ errorHandler:
             If version Is Nothing Then Exit Sub
 
             m_originVersionNode = m_parentVersionsTreeviewBox.TreeView.SelectedNode
-            TimeConfigCB.SelectedItem = m_timeConfigDictionary(
-                If(version.TimeConfiguration = TimeConfig.MONTHS, Local.GetValue("period.timeconfig.month"), Local.GetValue("period.timeconfig.year")))
-            StartingPeriodNUD.Value = Year(Date.FromOADate(version.StartPeriod))
+            Select Case version.TimeConfiguration
+                Case TimeConfig.YEARS : m_timeConfigCB.SelectedItem = m_timeConfigYearItem
+                Case TimeConfig.MONTHS : m_timeConfigCB.SelectedItem = m_timeConfigMonthItem
+                Case TimeConfig.WEEK : m_timeConfigCB.SelectedItem = m_timeConfigWeekItem
+                Case TimeConfig.DAYS : m_timeConfigCB.SelectedItem = m_timeConfigDayItem
+            End Select
+
+            m_startingPeriodDatePicker.Value = Date.FromOADate(version.StartPeriod)
             NbPeriodsNUD.Value = version.NbPeriod
-            Dim selectedMonth As Integer = Month(Date.FromOADate(version.StartPeriod))
-            Dim selectedString As String = Local.GetValue("period.month" + selectedMonth.ToString())
-            Dim selectedItem As ListItem = m_monthDictionary(selectedString)
-            m_startingMonthCombobox.SelectedItem = selectedItem
 
         End If
+
     End Sub
 
-    Private Sub TimeConfigCB_SelectedIndexChanged(sender As Object, e As EventArgs) Handles TimeConfigCB.SelectedIndexChanged
-        If TimeConfigCB.SelectedItem Is Nothing Then Exit Sub
-        m_startingMonthCombobox.Enabled = (TimeConfigCB.SelectedItem.Value = TimeConfig.MONTHS)
+    Private Sub TimeConfigCB_SelectedIndexChanged(sender As Object, e As EventArgs) Handles m_timeConfigCB.SelectedIndexChanged
 
-        If m_startingMonthCombobox.Enabled = False Then
-            Dim monthString As String = Local.GetValue("period.month12")
+        If m_timeConfigCB.SelectedItem Is Nothing Then Exit Sub
+        Select Case m_timeConfigCB.SelectedValue
+            Case CRUD.TimeConfig.YEARS : m_nbPeriodsLabel.Text = Local.GetValue("facts_versions.nb_years")
+            Case CRUD.TimeConfig.MONTHS : m_nbPeriodsLabel.Text = Local.GetValue("facts_versions.nb_months")
+            Case CRUD.TimeConfig.WEEK : m_nbPeriodsLabel.Text = Local.GetValue("facts_versions.nb_weeks")
+            Case CRUD.TimeConfig.DAYS : m_nbPeriodsLabel.Text = Local.GetValue("facts_versions.nb_days")
+        End Select
 
-            If m_monthDictionary.ContainsKey(monthString) Then
-                m_startingMonthCombobox.SelectedItem = m_monthDictionary(monthString)
-            End If
-        End If
     End Sub
 
 #End Region
@@ -265,42 +256,57 @@ errorHandler:
             Return False
         End If
 
-        If TimeConfigCB.Text = "" Then
+        If m_timeConfigCB.Text = "" Then
             MsgBox(Local.GetValue("facts_versions.msg_config_selection"))
             Return False
         End If
 
-        If StartingPeriodNUD.Text = "" Then
+        If m_startingPeriodDatePicker.Text = "" _
+        Or IsDate(m_startingPeriodDatePicker.Value) = False Then
             MsgBox(Local.GetValue("facts_versions.msg_starting_period"))
             Return False
         End If
 
-        If m_startingMonthCombobox.SelectedItem Is Nothing Then
-            MsgBox(Local.GetValue("facts_versions.msg_need_starting_month"))
-            Return False
-        End If
-        If m_exchangeRatesVersionVTreeviewbox.TreeView.SelectedNode Is Nothing OrElse _
-            m_controller.IsRatesVersionValid(m_exchangeRatesVersionVTreeviewbox.TreeView.SelectedNode.Value) = False Then
-            MsgBox(m_exchangeRatesVersionVTreeviewbox.TreeView.SelectedNode.Text & Local.GetValue("facts_versions.msg_cannot_use_exchange_rates_folder"))
-            Return False
-        End If
-
-        If m_factsVersionVTreeviewbox.TreeView.SelectedNode Is Nothing OrElse _
-            m_controller.IsFactsVersionValid(m_factsVersionVTreeviewbox.TreeView.SelectedNode.Value) = False Then
-            MsgBox(m_factsVersionVTreeviewbox.TreeView.SelectedNode.Text & Local.GetValue("facts_versions.msg_cannot_use_global_fact_folder"))
-            Return False
+        ' Check exchange rates and global facts selection
+        If m_exchangeRatesVersionVTreeviewbox.TreeView.SelectedNode IsNot Nothing Then
+            If m_controller.IsRatesVersionValid(m_exchangeRatesVersionVTreeviewbox.TreeView.SelectedNode.Value) = False Then
+                MsgBox(m_exchangeRatesVersionVTreeviewbox.TreeView.SelectedNode.Text & Local.GetValue("facts_versions.msg_cannot_use_exchange_rates_folder"))
+                Return False
+            End If
+        Else
+            MsgBox(Local.GetValue("facts_versions.msg_select_rates_version"))
         End If
 
-        If m_controller.IsRatesVersionCompatibleWithPeriods(DateSerial(StartingPeriodNUD.Value, m_startingMonthCombobox.SelectedItem.Value, 31).ToOADate(), NbPeriodsNUD.Value, m_exchangeRatesVersionVTreeviewbox.TreeView.SelectedNode.Value) = False Then
-            MsgBox(Local.GetValue("facts_versions.msg_rates_version_mismatch"))
-            Return False
+        If m_factsVersionVTreeviewbox.TreeView.SelectedNode IsNot Nothing Then
+            If m_controller.IsFactsVersionValid(m_factsVersionVTreeviewbox.TreeView.SelectedNode.Value) = False Then
+                MsgBox(m_factsVersionVTreeviewbox.TreeView.SelectedNode.Text & Local.GetValue("facts_versions.msg_cannot_use_global_fact_folder"))
+                Return False
+            End If
+        Else
+            MsgBox(Local.GetValue("facts_versions.msg_select_global_facts_version"))
         End If
 
-        If m_controller.IsFactVersionCompatibleWithPeriods(DateSerial(StartingPeriodNUD.Value, m_startingMonthCombobox.SelectedItem.Value, 31).ToOADate(), NbPeriodsNUD.Value, m_factsVersionVTreeviewbox.TreeView.SelectedNode.Value) = False Then
-            MsgBox(Local.GetValue("facts_versions.msg_fact_version_mismatch"))
-            Return False
-        End If
+        ' Check exchange rates and global facts validity
+        Select Case m_timeConfigCB.SelectedValue
 
+            Case CRUD.TimeConfig.YEARS, CRUD.TimeConfig.MONTHS
+                Dim l_startDate As Date = m_startingPeriodDatePicker.Value
+                Dim l_startPeriodCheck = GetLastDayOfPeriod(m_timeConfigCB.SelectedValue, l_startDate.ToOADate)
+
+                If m_controller.IsRatesVersionCompatibleWithPeriods(l_startPeriodCheck, NbPeriodsNUD.Value, m_exchangeRatesVersionVTreeviewbox.TreeView.SelectedNode.Value) = False Then
+                    MsgBox(Local.GetValue("facts_versions.msg_rates_version_mismatch"))
+                    Return False
+                End If
+
+                If m_controller.IsFactVersionCompatibleWithPeriods(l_startPeriodCheck, NbPeriodsNUD.Value, m_factsVersionVTreeviewbox.TreeView.SelectedNode.Value) = False Then
+                    MsgBox(Local.GetValue("facts_versions.msg_fact_version_mismatch"))
+                    Return False
+                End If
+
+            Case CRUD.TimeConfig.DAYS
+                ' not checked so far
+
+        End Select
         Return True
 
     End Function
@@ -313,7 +319,20 @@ errorHandler:
 
     End Sub
 
+    Private Function GetLastDayOfPeriod(ByRef p_timeConfig As TimeConfig, _
+                                        ByRef p_startPeriod As Int32) As Int32
 
+        Dim l_startDate As Date = m_startingPeriodDatePicker.Value
+        Select Case p_timeConfig
+            Case TimeConfig.YEARS : Return Period.GetYearIdFromPeriodId(l_startDate.ToOADate)
+            Case TimeConfig.MONTHS : Return Period.GetMonthIdFromPeriodId(l_startDate.ToOADate)
+            Case TimeConfig.WEEK : Return Period.GetWeekIdFromPeriodId(l_startDate.ToOADate)
+            Case TimeConfig.DAYS : Return l_startDate.ToOADate()
+        End Select
+        System.Diagnostics.Debug.WriteLine("NewDataVersionUI - GetLastDayOfPeriod() - undefined timeconfig: " & p_timeConfig)
+        Return 0
+
+    End Function
 
 #End Region
 

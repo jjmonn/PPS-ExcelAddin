@@ -405,16 +405,18 @@ TokensCheck:
             Exit Sub
         Else
             Dim confirm As Integer = MessageBox.Show(Local.GetValue("accounts_edition.msg_formula_edition_for_account") + Chr(13) + Name_TB.Text + Chr(13) + Local.GetValue("accounts_edition.msg_account_deletion2"), _
-                                               Local.GetValue("accounts_edition.title_formula_validation_confirmation"), _
-                                                MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question)
+                                                     Local.GetValue("accounts_edition.title_formula_validation_confirmation"), _
+                                                     MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question)
             If confirm = DialogResult.Yes Then
                 If Not m_controller.GetAccount(Name_TB.Text) Is Nothing Then
                     m_isEditingFormulaFlag = False
                     Dim accountId As Int32 = m_controller.GetAccount(Name_TB.Text).Id
                     m_controller.UpdateAccountFormula(accountId, m_controller.GetCurrentParsedFormula)
+                    SetFormulaEditionState(False)
                 End If
             Else
                 m_formulaTextBox.Text = m_controller.GetFormulaText(m_accountTV.SelectedNode.Value)
+                SetFormulaEditionState(False)
             End If
         End If
 

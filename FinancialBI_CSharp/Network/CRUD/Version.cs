@@ -9,7 +9,9 @@ namespace CRUD
   public enum TimeConfig
   {
     YEARS = 1,
-    MONTHS
+    MONTHS,
+    WEEK,
+    DAYS
   }
 
   public class Version : NamedHierarchyCRUDEntity, IComparable

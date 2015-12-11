@@ -40,7 +40,7 @@ Friend Class GlobalFactManager : Inherits NamedCRUDManager(Of NamedCRUDEntity)
         Dim version As GlobalFactVersion = GlobalVariables.GlobalFactsVersions.GetValue(p_versionId)
         If version Is Nothing Then Return periodList
 
-        For Each monthId As Int32 In Period.GetMonthsList(version.StartPeriod, version.NbPeriod)
+        For Each monthId As Int32 In Period.GetMonthsList(version.StartPeriod, version.NbPeriod, CRUD.TimeConfig.MONTHS)
             periodList.Add(monthId)
         Next
         Return periodList

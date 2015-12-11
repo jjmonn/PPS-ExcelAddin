@@ -17,7 +17,7 @@ Imports CRUD
 '
 ' Author: Julien Monnereau Julien
 ' Created: 17/07/2015
-' Last modified: 20/08/2015
+' Last modified: 11/12/2015
 
 
 Friend Class Computer
@@ -53,7 +53,8 @@ Friend Class Computer
     Friend Const TOKEN_SEPARATOR As Char = "#"
     Friend Const YEAR_PERIOD_IDENTIFIER As Char = "y"
     Friend Const MONTH_PERIOD_IDENTIFIER As Char = "m"
-
+    Friend Const WEEK_PERIOD_IDENTIFIER As Char = "w"
+    Friend Const DAY_PERIOD_IDENTIFIER As Char = "d"
 
 #End Region
 
@@ -205,6 +206,7 @@ Friend Class Computer
                 Select Case version.TimeConfiguration
                     Case CRUD.TimeConfig.YEARS : m_periodIdentifier = YEAR_PERIOD_IDENTIFIER
                     Case CRUD.TimeConfig.MONTHS : m_periodIdentifier = MONTH_PERIOD_IDENTIFIER
+                    Case CRUD.TimeConfig.DAYS : m_periodIdentifier = DAY_PERIOD_IDENTIFIER
                 End Select
 
                 ' Fill m_dataMap
@@ -272,6 +274,12 @@ Friend Class Computer
     Private Sub FillEntityData(ByRef packet As ByteBuffer, _
                                ByRef p_versionId As Int32)
 
+        Dim l_aggregationPeriodsIdentifier As Char = ""
+        Select Case m_periodIdentifier
+            Case MONTH_PERIOD_IDENTIFIER : l_aggregationPeriodsIdentifier = YEAR_PERIOD_IDENTIFIER
+            Case DAY_PERIOD_IDENTIFIER : l_aggregationPeriodsIdentifier = WEEK_PERIOD_IDENTIFIER
+        End Select
+
         m_entityId = packet.ReadUint32()
         System.Diagnostics.Debug.WriteLine("entityId:" & m_entityId)
 
@@ -294,7 +302,7 @@ Friend Class Computer
                         m_filterToken & TOKEN_SEPARATOR & _
                         m_entityId & TOKEN_SEPARATOR & _
                         m_accountId & TOKEN_SEPARATOR & _
-                        m_periodsTokenDict(YEAR_PERIOD_IDENTIFIER & aggregationIndex)) _
+                        m_periodsTokenDict(l_aggregationPeriodsIdentifier & aggregationIndex)) _
                         = packet.ReadDouble()
             Next
         Next
