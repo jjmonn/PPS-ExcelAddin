@@ -13,6 +13,12 @@ namespace CRUD
 
     #region Enums
 
+    public enum AccountProcess
+    {
+      FINANCIAL,
+      RH
+    }
+
     public enum FormulaTypes
     {
       HARD_VALUE_INPUT = 1,
@@ -59,8 +65,9 @@ namespace CRUD
     public Int32 ItemPosition { get; set; }
     public Int32 AccountTab { get; set; }
     public string Description { get; set; }
+    public AccountProcess Process { get; set; }
 
-    public Account() { }
+    public Account() { Process = AccountProcess.FINANCIAL; }
     private Account(UInt32 p_id)
     {
       Id = p_id;
@@ -82,6 +89,7 @@ namespace CRUD
       l_account.ItemPosition = p_packet.ReadInt32();
       l_account.AccountTab = p_packet.ReadInt32();
       l_account.Description = p_packet.ReadString();
+      l_account.Process = (AccountProcess)p_packet.ReadUint8();
 
         // Currently image corresponds to formula type:
       l_account.Image = (UInt32)l_account.FormulaType;
@@ -105,6 +113,7 @@ namespace CRUD
       p_packet.WriteInt32(ItemPosition);
       p_packet.WriteInt32(AccountTab);
       p_packet.WriteString(Description);
+      p_packet.WriteUint8((byte)Process);
     }
 
     public void CopyFrom(Account p_model)
@@ -121,6 +130,7 @@ namespace CRUD
       ItemPosition = p_model.ItemPosition;
       AccountTab = p_model.AccountTab;
       Description = p_model.Description;
+      Process = p_model.Process;
     }
 
     public Account Clone()

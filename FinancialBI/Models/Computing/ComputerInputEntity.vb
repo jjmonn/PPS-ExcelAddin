@@ -79,11 +79,13 @@ Public Class ComputerInputEntity
                 Dim l_packet As New ByteBuffer(CType(ClientMessage.CMSG_SOURCED_COMPUTE, UShort))
                 Dim requestId As Int32 = l_packet.AssignRequestId()
 
-                l_packet.WriteUint32(p_versionId)                          ' version_id
+                l_packet.WriteUint32(p_versionId)                                               ' version_id
                 l_packet.WriteUint32(l_version.GlobalFactVersionId)                             ' global facts version id
                 l_packet.WriteUint32(l_version.RateVersionId)                                   ' rates version id
-                l_packet.WriteUint32(l_entityId)                           ' entity_id
-                l_packet.WriteUint32(l_entityCurrency.CurrencyId)                         ' currency_id
+                l_packet.WriteUint32(l_entityId)                                                ' entity_id
+                l_packet.WriteUint32(l_entityCurrency.CurrencyId)                               ' currency_id
+                l_packet.WriteUint32(l_version.StartPeriod)
+                l_packet.WriteUint32(l_version.NbPeriod)
 
                 l_packet.WriteUint32(p_entitiesIdInputsValues(l_entityId).Length)
                 For i = 0 To p_entitiesIdInputsValues(l_entityId).Length - 1
