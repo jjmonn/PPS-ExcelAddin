@@ -117,6 +117,8 @@ Friend Class Computer
                 l_packet.WriteUint32(l_version.RateVersionId)                                   ' rates version id
                 l_packet.WriteUint32(l_entityId)                                                ' entity_id
                 l_packet.WriteUint32(p_currencyId)                                              ' currency_id
+                l_packet.WriteUint32(l_version.StartPeriod)
+                l_packet.WriteUint32(l_version.NbPeriod)
 
                 ' Loop through filters
                 If Not p_filters Is Nothing Then
