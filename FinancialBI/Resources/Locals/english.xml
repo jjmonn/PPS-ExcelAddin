@@ -236,6 +236,8 @@
     <string name="rates">rates</string>
     <string name="values">Values</string>
     <string name="upload">Upload</string>
+    <string name="clientSelectionButtonText">PDC: Select client</string>
+    <string name="financialBILog">Financial BI: Data Log</string> 
     <string name="exchange_rates_upload">Exchange Rates Upload</string>
     <string name="global_facts_upload">Macro Economic Indicator Upload</string>
     <string name="range_mismatch">The Periods range and Rates range do not have the same size, or the dimensions of the ranges are not valid.</string>
@@ -249,7 +251,7 @@
     <string name="msg_entities_orientation_unclear">Entities orgnization is not clear. Please check that entities are aligned in rows or columns.</string>
     <string name="msg_periods_orientation_unclear">Periods orgnization is not clear. Please check that periods are aligned in rows or columns.</string>
     <string name="msg_product_orientation_unclear">Consultants orgnization is not clear. Please check that consultants are aligned in rows or columns.</string>
-
+    <string name="msg_entity_not_found">No BU identified on the worksheet.</string>
 
   </category>
 

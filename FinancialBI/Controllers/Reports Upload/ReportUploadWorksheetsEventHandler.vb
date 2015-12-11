@@ -35,6 +35,7 @@ Friend Class ReportUploadWorksheetsEventHandler
     Private m_reportUploadController As ReportUploadControler
     Private m_logController As New LogController
     Private m_logView As LogView
+    Private m_clientSelectionUI As PDCClientSelectionUI
 
     ' Variables
     Private m_disableWSChangeFlag As Boolean
@@ -146,11 +147,13 @@ Friend Class ReportUploadWorksheetsEventHandler
 
 #Region "Events"
 
+#Region "Worksheet change"
+
     ' Listen to changes in associated worksheet
     Friend Sub Worksheet_Change(ByVal p_target As Excel.Range)
         Select Case m_dataSet.m_processFlag
-            Case ModelDataSet.Process.FINANCIAL : WorksheetChangeFinancial(p_target)
-            Case ModelDataSet.Process.PDC : WorksheetChangePDC(p_target)
+            Case globalenums.process.FINANCIAL : WorksheetChangeFinancial(p_target)
+            Case globalenums.process.PDC : WorksheetChangePDC(p_target)
         End Select
     End Sub
 
@@ -289,19 +292,36 @@ Friend Class ReportUploadWorksheetsEventHandler
 
     End Sub
 
+#End Region
 
     Friend Sub Worksheet_BeforeRightClick(ByVal Target As Range, ByRef Cancel As Boolean)
 
-        Dim logButton As CommandBarButton
-        On Error Resume Next
-        GlobalVariables.APPS.CommandBars("Cell").Controls("Financial Bi Data Log").Delete()
-        logButton = GlobalVariables.APPS.CommandBars("Cell").Controls.Add(Temporary:=True)
-        logButton.Caption = "Financial Bi Data Log"
-        logButton.Style = MsoButtonStyle.msoButtonCaption
-        '   logButton.Picture = My.Resources.fbi_dark_blue_icon
-        m_currentCellAddress = Target.Address
-        AddHandler logButton.Click, AddressOf DisplayLogButton_Click
-        On Error GoTo 0
+        Select Case m_dataSet.m_processFlag
+            Case globalenums.process.FINANCIAL : WorksheetChangeFinancial(Target)
+                Dim logButton As CommandBarButton
+                On Error Resume Next
+                GlobalVariables.APPS.CommandBars("Cell").Controls(Local.GetValue("upload.financialBILog")).Delete()
+                logButton = GlobalVariables.APPS.CommandBars("Cell").Controls.Add(Temporary:=True)
+                logButton.Caption = Local.GetValue("upload.financialBILog")
+                logButton.Style = MsoButtonStyle.msoButtonCaption
+                '   logButton.Picture = My.Resources.fbi_dark_blue_icon
+                m_currentCellAddress = Target.Address
+                AddHandler logButton.Click, AddressOf DisplayLogButton_Click
+                On Error GoTo 0
+
+            Case globalenums.process.PDC : WorksheetChangePDC(Target)
+                Dim l_clientSelectionButton As CommandBarButton
+                On Error Resume Next
+                GlobalVariables.APPS.CommandBars("Cell").Controls(Local.GetValue("upload.clientSelectionButtonText")).Delete()
+                l_clientSelectionButton = GlobalVariables.APPS.CommandBars("Cell").Controls.Add(Temporary:=True)
+                l_clientSelectionButton.Caption = Local.GetValue("upload.clientSelectionButtonText")
+                l_clientSelectionButton.Style = MsoButtonStyle.msoButtonCaption
+                '   logButton.Picture = My.Resources.fbi_dark_blue_icon
+                m_currentCellAddress = Target.Address
+                AddHandler l_clientSelectionButton.Click, AddressOf DisplayClientSelection_Click
+                On Error GoTo 0
+
+        End Select
 
     End Sub
 
@@ -374,6 +394,17 @@ Friend Class ReportUploadWorksheetsEventHandler
         If m_reportUploadController.IsCurrentController() = False Then
             m_reportUploadController.ActivateReportUploadController()
         End If
+
+    End Sub
+
+#End Region
+
+#Region "PDC Clients Selection Events"
+
+    Private Sub DisplayClientSelection_Click(ctrl As CommandBarButton, ByRef cancelDefault As Boolean)
+
+        m_clientSelectionUI = New PDCClientSelectionUI()
+        m_clientSelectionUI.Show()
 
     End Sub
 

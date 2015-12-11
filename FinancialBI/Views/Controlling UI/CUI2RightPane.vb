@@ -21,9 +21,9 @@ Public Class CUI2RightPane
 #Region "Instance Variables"
 
     ' Objects
-    Private analysis_axis_tv As New vTreeView
-    Private dimensionsList As New List(Of String)
-
+    Private m_analysisAxisTreeview As New vTreeView
+    Private m_dimensionsList As New List(Of String)
+    Private m_process As GlobalEnums.Process
 
 
 #End Region
@@ -31,23 +31,32 @@ Public Class CUI2RightPane
 
 #Region "Initialization"
 
-    Public Sub New(ByRef p_entitiesFiltersNode As TreeNode, _
-                    ByRef p_clientsFiltersNode As TreeNode, _
-                    ByRef p_productsFiltersNode As TreeNode, _
-                    ByRef p_adjustmentsFiltersNode As TreeNode)
+    Friend Sub New(ByRef p_process As GlobalEnums.Process, _
+                   ByRef p_entitiesFiltersNode As TreeNode, _
+                   ByRef p_clientsFiltersNode As TreeNode, _
+                   ByRef p_productsFiltersNode As TreeNode, _
+                   ByRef p_adjustmentsFiltersNode As TreeNode)
 
         ' This call is required by the designer.
         InitializeComponent()
 
         ' Add any initialization after the InitializeComponent() call.
-        DimensionsTVPanel.Controls.Add(analysis_axis_tv)
-        analysis_axis_tv.Dock = DockStyle.Fill
+        m_process = p_process
+        DimensionsTVPanel.Controls.Add(m_analysisAxisTreeview)
+        m_analysisAxisTreeview.Dock = DockStyle.Fill
 
-        DimensionsDisplayPaneSetup(p_entitiesFiltersNode, _
-                                      p_clientsFiltersNode, _
-                                      p_productsFiltersNode, _
-                                      p_adjustmentsFiltersNode)
+        Select Case m_process
+            Case GlobalEnums.Process.FINANCIAL : InitializeFinancialDimensions(p_entitiesFiltersNode, _
+                                                                               p_clientsFiltersNode, _
+                                                                               p_productsFiltersNode, _
+                                                                               p_adjustmentsFiltersNode)
 
+            Case GlobalEnums.Process.PDC : InitializePDCDimensions(p_entitiesFiltersNode, _
+                                                                   p_clientsFiltersNode, _
+                                                                   p_productsFiltersNode, _
+                                                                   p_adjustmentsFiltersNode)
+        End Select
+        
         ' Init listboxes
         rowsDisplayList.ItemHeight = 17
         columnsDisplayList.ItemHeight = 17
@@ -58,21 +67,53 @@ Public Class CUI2RightPane
         rowsDisplayList.AllowDrop = True
         columnsDisplayList.AllowDrop = True
 
-        ' By default add the fisrt node
-        Dim accountsItem = rowsDisplayList.Items.Add(analysis_axis_tv.Nodes(0).Text)
-        accountsItem.Value = analysis_axis_tv.Nodes(0).Value
-        Dim entitiesItem = rowsDisplayList.Items.Add(analysis_axis_tv.Nodes(1).Text)
-        entitiesItem.Value = analysis_axis_tv.Nodes(1).Value
-        Dim yearsItem = columnsDisplayList.Items.Add(analysis_axis_tv.Nodes(2).Text)
-        yearsItem.Value = analysis_axis_tv.Nodes(2).Value
-
-        dimensionsList.Add(accountsItem.Value)
-        dimensionsList.Add(entitiesItem.Value)
-        dimensionsList.Add(yearsItem.Value)
-
         AddHandlers()
         MultilangueSetup()
 
+    End Sub
+
+    Private Sub InitializeFinancialDimensions(ByRef p_entitiesFiltersNode As TreeNode, _
+                                               ByRef p_clientsFiltersNode As TreeNode, _
+                                               ByRef p_productsFiltersNode As TreeNode, _
+                                               ByRef p_adjustmentsFiltersNode As TreeNode)
+
+        FinancialProcessDimensionsDisplayPaneSetup(p_entitiesFiltersNode, _
+                                                    p_clientsFiltersNode, _
+                                                    p_productsFiltersNode, _
+                                                    p_adjustmentsFiltersNode)
+        ' By default add the fisrt node
+        Dim accountsItem = rowsDisplayList.Items.Add(m_analysisAxisTreeview.Nodes(0).Text)
+        accountsItem.Value = m_analysisAxisTreeview.Nodes(0).Value
+        Dim entitiesItem = rowsDisplayList.Items.Add(m_analysisAxisTreeview.Nodes(1).Text)
+        entitiesItem.Value = m_analysisAxisTreeview.Nodes(1).Value
+        Dim yearsItem = columnsDisplayList.Items.Add(m_analysisAxisTreeview.Nodes(2).Text)
+        yearsItem.Value = m_analysisAxisTreeview.Nodes(2).Value
+
+        m_dimensionsList.Add(accountsItem.Value)
+        m_dimensionsList.Add(entitiesItem.Value)
+        m_dimensionsList.Add(yearsItem.Value)
+
+    End Sub
+
+    Private Sub InitializePDCDimensions(ByRef p_entitiesFiltersNode As TreeNode, _
+                                               ByRef p_clientsFiltersNode As TreeNode, _
+                                               ByRef p_productsFiltersNode As TreeNode, _
+                                               ByRef p_adjustmentsFiltersNode As TreeNode)
+
+        PDCProcessDimensionsDisplayPaneSetup(p_entitiesFiltersNode, _
+                                            p_clientsFiltersNode, _
+                                            p_productsFiltersNode, _
+                                            p_adjustmentsFiltersNode)
+
+        ' Default PDC report
+        Dim l_clientsItem = rowsDisplayList.Items.Add(m_analysisAxisTreeview.Nodes(4).Text)
+        l_clientsItem.Value = m_analysisAxisTreeview.Nodes(4).Value
+        m_dimensionsList.Add(l_clientsItem.Value)
+
+        Dim l_weeksItem = columnsDisplayList.Items.Add(m_analysisAxisTreeview.Nodes(1).Text)
+        l_weeksItem.Value = m_analysisAxisTreeview.Nodes(1).Value
+        m_dimensionsList.Add(l_weeksItem.Value)
+        
     End Sub
 
     Private Sub AddHandlers()
@@ -83,8 +124,8 @@ Public Class CUI2RightPane
 
         ' Tv Drag and drop
         '   AddHandler analysis_axis_tv.DragDrop, AddressOf vTreeView1_DragDrop
-        AddHandler analysis_axis_tv.MouseDown, AddressOf vTreeView1_MouseDown
-        AddHandler analysis_axis_tv.AfterSelect, AddressOf vTreeView_AfterSelect
+        AddHandler m_analysisAxisTreeview.MouseDown, AddressOf vTreeView1_MouseDown
+        AddHandler m_analysisAxisTreeview.AfterSelect, AddressOf vTreeView_AfterSelect
 
         ' List Drag and Drop
         AddHandler rowsDisplayList.ItemDragging, AddressOf rowsDisplayList_ItemDragging
@@ -100,31 +141,31 @@ Public Class CUI2RightPane
 
     End Sub
 
-    Private Sub DimensionsDisplayPaneSetup(ByRef p_entitiesFiltersNode As TreeNode, _
-                                           ByRef p_clientsFiltersNode As TreeNode, _
-                                           ByRef p_productsFiltersNode As TreeNode, _
-                                           ByRef p_adjustmentsFiltersNode As TreeNode)
+    Private Sub FinancialProcessDimensionsDisplayPaneSetup(ByRef p_entitiesFiltersNode As TreeNode, _
+                                                           ByRef p_clientsFiltersNode As TreeNode, _
+                                                           ByRef p_productsFiltersNode As TreeNode, _
+                                                           ByRef p_adjustmentsFiltersNode As TreeNode)
 
-        VTreeViewUtil.InitTVFormat(analysis_axis_tv)
-        VTreeViewUtil.AddNode(Computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.ACCOUNTS, ControllingUI_2.ACCOUNTS_CODE, analysis_axis_tv)
+        VTreeViewUtil.InitTVFormat(m_analysisAxisTreeview)
+        VTreeViewUtil.AddNode(Computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.ACCOUNTS, ControllingUI_2.ACCOUNTS_CODE, m_analysisAxisTreeview)
 
         ' Entities Analysis Axis and Categories Nodes
         Dim entities_node As vTreeNode = VTreeViewUtil.AddNode(Computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.ENTITIES, _
                                                                ControllingUI_2.ENTITIES_CODE, _
-                                                               analysis_axis_tv)
+                                                               m_analysisAxisTreeview)
 
         For Each entity_node As TreeNode In p_entitiesFiltersNode.Nodes
             FiltersNodeSubCategoriesInit(entity_node, entities_node)
         Next
 
-        VTreeViewUtil.AddNode(Computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.YEARS, ControllingUI_2.YEARS_CODE, analysis_axis_tv)
-        VTreeViewUtil.AddNode(Computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.MONTHS, ControllingUI_2.MONTHS_CODE, analysis_axis_tv)
-        VTreeViewUtil.AddNode(Computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.VERSIONS, ControllingUI_2.VERSIONS_CODE, analysis_axis_tv)
+        VTreeViewUtil.AddNode(Computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.YEARS, ControllingUI_2.YEARS_CODE, m_analysisAxisTreeview)
+        VTreeViewUtil.AddNode(Computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.MONTHS, ControllingUI_2.MONTHS_CODE, m_analysisAxisTreeview)
+        VTreeViewUtil.AddNode(Computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.VERSIONS, ControllingUI_2.VERSIONS_CODE, m_analysisAxisTreeview)
 
         ' Clients Analysis Axis and Categories Nodes
         Dim clientsNode As vTreeNode = VTreeViewUtil.AddNode(Computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.CLIENTS, _
                                                              ControllingUI_2.CLIENTS_CODE, _
-                                                             analysis_axis_tv)
+                                                             m_analysisAxisTreeview)
         For Each client_category_node As TreeNode In p_clientsFiltersNode.Nodes
             FiltersNodeSubCategoriesInit(client_category_node, clientsNode)
         Next
@@ -132,7 +173,7 @@ Public Class CUI2RightPane
         ' Products Analysis Axis and Categories Nodes
         Dim products_node As vTreeNode = VTreeViewUtil.AddNode(Computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.PRODUCTS,
                                                                ControllingUI_2.PRODUCTS_CODE, _
-                                                               analysis_axis_tv)
+                                                               m_analysisAxisTreeview)
 
         For Each product_category_node As TreeNode In p_productsFiltersNode.Nodes
             FiltersNodeSubCategoriesInit(product_category_node, products_node)
@@ -140,7 +181,55 @@ Public Class CUI2RightPane
 
         Dim adjustment_node As vTreeNode = VTreeViewUtil.AddNode(Computer.AXIS_DECOMPOSITION_IDENTIFIER _
                               & GlobalEnums.AnalysisAxis.ADJUSTMENTS, _
-                              ControllingUI_2.ADJUSTMENT_CODE, analysis_axis_tv)
+                              ControllingUI_2.ADJUSTMENT_CODE, m_analysisAxisTreeview)
+
+        For Each adjustment_category_node As TreeNode In p_adjustmentsFiltersNode.Nodes
+            FiltersNodeSubCategoriesInit(adjustment_category_node, adjustment_node)
+        Next
+
+
+    End Sub
+
+    Private Sub PDCProcessDimensionsDisplayPaneSetup(ByRef p_entitiesFiltersNode As TreeNode, _
+                                                     ByRef p_clientsFiltersNode As TreeNode, _
+                                                     ByRef p_productsFiltersNode As TreeNode, _
+                                                     ByRef p_adjustmentsFiltersNode As TreeNode)
+
+        VTreeViewUtil.InitTVFormat(m_analysisAxisTreeview)
+
+        ' Entities Analysis Axis and Categories Nodes
+        Dim entities_node As vTreeNode = VTreeViewUtil.AddNode(Computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.ENTITIES, _
+                                                               ControllingUI_2.ENTITIES_CODE, _
+                                                               m_analysisAxisTreeview)
+
+        For Each entity_node As TreeNode In p_entitiesFiltersNode.Nodes
+            FiltersNodeSubCategoriesInit(entity_node, entities_node)
+        Next
+
+        VTreeViewUtil.AddNode(Computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.WEEKS, ControllingUI_2.WEEKS_CODE, m_analysisAxisTreeview)
+        VTreeViewUtil.AddNode(Computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.DAYS, ControllingUI_2.DAYS_CODE, m_analysisAxisTreeview)
+        VTreeViewUtil.AddNode(Computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.VERSIONS, ControllingUI_2.VERSIONS_CODE, m_analysisAxisTreeview)
+
+        ' Clients Analysis Axis and Categories Nodes
+        Dim clientsNode As vTreeNode = VTreeViewUtil.AddNode(Computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.CLIENTS, _
+                                                             ControllingUI_2.CLIENTS_CODE, _
+                                                             m_analysisAxisTreeview)
+        For Each client_category_node As TreeNode In p_clientsFiltersNode.Nodes
+            FiltersNodeSubCategoriesInit(client_category_node, clientsNode)
+        Next
+
+        ' Products Analysis Axis and Categories Nodes
+        Dim products_node As vTreeNode = VTreeViewUtil.AddNode(Computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.PRODUCTS,
+                                                               ControllingUI_2.PRODUCTS_CODE, _
+                                                               m_analysisAxisTreeview)
+
+        For Each product_category_node As TreeNode In p_productsFiltersNode.Nodes
+            FiltersNodeSubCategoriesInit(product_category_node, products_node)
+        Next
+
+        Dim adjustment_node As vTreeNode = VTreeViewUtil.AddNode(Computer.AXIS_DECOMPOSITION_IDENTIFIER _
+                              & GlobalEnums.AnalysisAxis.ADJUSTMENTS, _
+                              ControllingUI_2.ADJUSTMENT_CODE, m_analysisAxisTreeview)
 
         For Each adjustment_category_node As TreeNode In p_adjustmentsFiltersNode.Nodes
             FiltersNodeSubCategoriesInit(adjustment_category_node, adjustment_node)
@@ -178,7 +267,7 @@ Public Class CUI2RightPane
 
     Public Function DimensionsListContainsItem(ByRef item As String) As Boolean
 
-        Return dimensionsList.Contains(item)
+        Return m_dimensionsList.Contains(item)
 
     End Function
 
@@ -187,7 +276,7 @@ Public Class CUI2RightPane
 
         Dim item = columnsDisplayList.Items.Add(text)
         item.Value = id
-        dimensionsList.Add(id)
+        m_dimensionsList.Add(id)
 
     End Sub
 
@@ -212,14 +301,14 @@ Public Class CUI2RightPane
     'End Sub
 
     Private Sub vTreeView_AfterSelect(ByVal sender As Object, ByVal e As vTreeViewEventArgs)
-        Me.analysis_axis_tv.Capture = False
+        Me.m_analysisAxisTreeview.Capture = False
     End Sub
 
     Private Sub vTreeView1_MouseDown(ByVal sender As Object, ByVal e As MouseEventArgs)
 
-        Dim node As vTreeNode = VTreeViewUtil.GetNodeAtPosition(Me.analysis_axis_tv, e.Location)
+        Dim node As vTreeNode = VTreeViewUtil.GetNodeAtPosition(Me.m_analysisAxisTreeview, e.Location)
         If node IsNot Nothing Then
-            Me.analysis_axis_tv.DoDragDrop(node, DragDropEffects.All)
+            Me.m_analysisAxisTreeview.DoDragDrop(node, DragDropEffects.All)
         End If
 
     End Sub
@@ -260,8 +349,8 @@ Public Class CUI2RightPane
         Dim rowsDisplayListScreenRectangle As Drawing.Rectangle = Me.rowsDisplayList.RectangleToScreen(rowsDisplayList.ClientRectangle)
         If rowsDisplayListScreenRectangle.Contains(Cursor.Position) Then
             vListBox.DropItem(Me.columnsDisplayList, Me.rowsDisplayList, e.SourceItem)
-            If dimensionsList.Contains(e.SourceItem.Value) = False Then
-                dimensionsList.Add(e.SourceItem.Value)
+            If m_dimensionsList.Contains(e.SourceItem.Value) = False Then
+                m_dimensionsList.Add(e.SourceItem.Value)
             End If
         End If
         rowsDisplayList.StopDraggingTimer()
@@ -274,9 +363,9 @@ Public Class CUI2RightPane
         Dim columnsDisplayListScreenRectangle As Drawing.Rectangle = Me.columnsDisplayList.RectangleToScreen(columnsDisplayList.ClientRectangle)
         If columnsDisplayListScreenRectangle.Contains(Cursor.Position) Then
             vListBox.DropItem(Me.rowsDisplayList, Me.columnsDisplayList, e.SourceItem)
-            If dimensionsList.Contains(e.SourceItem.Value) = False Then
-                dimensionsList.Add(e.SourceItem.Value)
-        End If
+            If m_dimensionsList.Contains(e.SourceItem.Value) = False Then
+                m_dimensionsList.Add(e.SourceItem.Value)
+            End If
         End If
         rowsDisplayList.StopDraggingTimer()
         columnsDisplayList.StopDraggingTimer()
@@ -336,13 +425,13 @@ Public Class CUI2RightPane
         Dim selectedListBox As vListBox = CType(sender, vListBox)
         Dim dropNode As vTreeNode = TryCast(e.Data.GetData(GetType(vTreeNode)), vTreeNode)
         If dropNode IsNot Nothing Then
-            If dimensionsList.Contains(dropNode.Value) = False Then
-                If dimensionsList.Count >= 6 Then
+            If m_dimensionsList.Contains(dropNode.Value) = False Then
+                If m_dimensionsList.Count >= 6 Then
                     MsgBox("Maximum allowed number of dimensions is 6.")
                 Else
                     Dim item = selectedListBox.Items.Add(dropNode.Text)
                     item.Value = dropNode.Value
-                    dimensionsList.Add(dropNode.Value)
+                    m_dimensionsList.Add(dropNode.Value)
                 End If
             End If
         End If
@@ -361,7 +450,7 @@ Public Class CUI2RightPane
                 Dim selectedListBox As vListBox = CType(sender, vListBox)
                 Dim itemValue = selectedListBox.SelectedItem.Value
                 selectedListBox.Items.Remove(selectedListBox.SelectedItem)
-                dimensionsList.Remove(itemValue)
+                m_dimensionsList.Remove(itemValue)
             Case Keys.Up
                 If e.Control Then
                     MoveItemUp(sender)

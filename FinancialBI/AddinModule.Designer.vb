@@ -348,6 +348,7 @@ Partial Public Class AddinModule
         Me.Menu3.Images.SetKeyName(16, "system-settings-icon.ico")
         Me.Menu3.Images.SetKeyName(17, "font.ico")
         Me.Menu3.Images.SetKeyName(18, "cloud_dark.ico")
+        Me.Menu3.Images.SetKeyName(19, "tablet_computer.ico")
         '
         'EditionMainRibbonBT
         '
@@ -427,8 +428,8 @@ Partial Public Class AddinModule
         'ComputeGroup
         '
         Me.ComputeGroup.Caption = " "
-        Me.ComputeGroup.Controls.Add(Me.m_PDCPlanningButton)
         Me.ComputeGroup.Controls.Add(Me.ControlingUI2BT)
+        Me.ComputeGroup.Controls.Add(Me.m_PDCPlanningButton)
         Me.ComputeGroup.Controls.Add(Me.FunctionDesigner)
         Me.ComputeGroup.Controls.Add(Me.financialModelingBT)
         Me.ComputeGroup.Id = "adxRibbonGroup_13e7ba6b0acf4975af1793d5cfec00ed"
@@ -439,7 +440,7 @@ Partial Public Class AddinModule
         '
         Me.m_PDCPlanningButton.Caption = "Planning PDC"
         Me.m_PDCPlanningButton.Id = "adxRibbonButton_cd39b2299e0c490aaf9fbe1fbccc1aa5"
-        Me.m_PDCPlanningButton.Image = 12
+        Me.m_PDCPlanningButton.Image = 19
         Me.m_PDCPlanningButton.ImageList = Me.Menu3
         Me.m_PDCPlanningButton.ImageTransparentColor = System.Drawing.Color.Transparent
         Me.m_PDCPlanningButton.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
