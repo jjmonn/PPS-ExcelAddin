@@ -271,6 +271,18 @@ Friend Class Period
 
     End Function
 
+    Friend Shared Function GetFirstDayOfWeekId(ByRef p_dayId As Int32) As Int32
+
+        ' Uses localized settings for the first day of the week.
+        If p_dayId = 0 Then
+            Return 0
+        End If
+        ' to be checked !!!!!
+        Dim l_weekId As Int32 = p_dayId - Weekday(Date.FromOADate(p_dayId), vbUseSystem)
+        Return l_weekId
+
+    End Function
+
 #End Region
 
 #Region "Days interface"
@@ -284,6 +296,18 @@ Friend Class Period
         Next
         Return l_daysList.ToArray
 
+    End Function
+
+    Friend Shared Function GetDaysIdListInWeek(ByRef p_weekId As Int32) As List(Of Int32)
+
+        Dim l_daysIdList As New List(Of Int32)
+        Dim l_dayId As Int32 = GetFirstDayOfWeekId(p_weekId)
+        For i = 1 To 7
+            l_daysIdList.Add(l_dayId)
+            l_dayId += 1
+        Next
+        Return l_daysIdList
+        ' to be checked !!
     End Function
 
 #End Region
@@ -311,6 +335,8 @@ Friend Class Period
         Return Int(CDbl(DateSerial(year_, 12, 31).ToOADate()))
 
     End Function
+
+
 
     Friend Shared Function GetWeekIdFromPeriodId(ByRef p_dayId As Int32) As Int32
 

@@ -29,6 +29,7 @@
         YMONTHS
         WEEKS
         DAYS
+        YDAYS
 
     End Enum
 
