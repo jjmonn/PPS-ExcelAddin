@@ -439,7 +439,7 @@ Public Class AddinModule
         If GlobalVariables.AuthenticationFlag = False Then
             ConnectionBT_OnClick(sender, control, pressed)
         Else
-            Dim CONTROLLING As New ControllingUI_2(GlobalEnums.Process.PDC)
+            Dim CONTROLLING As New ControllingUI_2(Account.AccountProcess.RH)
             CONTROLLING.Show()
         End If
 
@@ -452,7 +452,7 @@ Public Class AddinModule
         If GlobalVariables.AuthenticationFlag = False Then
             ConnectionBT_OnClick(sender, control, pressed)
         Else
-            Dim CONTROLLING As New ControllingUI_2(globalenums.process.FINANCIAL)
+            Dim CONTROLLING As New ControllingUI_2(Account.AccountProcess.FINANCIAL)
             CONTROLLING.Show()
         End If
 
@@ -957,8 +957,8 @@ Public Class AddinModule
             m_reportUploadControlersDictionary.Add(l_excelWorksheet, l_reportUploadController)
             m_worksheetNamesObjectDict.Add(l_excelWorksheet.Name, GlobalVariables.APPS.ActiveSheet)
             Select Case l_reportUploadController.GetProcess
-                Case globalenums.process.FINANCIAL : DisplayFinancialSubmissionRibbon(l_excelWorksheet)
-                Case globalenums.process.PDC : DisplayPDCSubmissionRibbon(l_excelWorksheet)
+                Case Account.AccountProcess.FINANCIAL : DisplayFinancialSubmissionRibbon(l_excelWorksheet)
+                Case Account.AccountProcess.RH : DisplayPDCSubmissionRibbon(l_excelWorksheet)
             End Select
         Else
             GlobalVariables.APPS.Interactive = True

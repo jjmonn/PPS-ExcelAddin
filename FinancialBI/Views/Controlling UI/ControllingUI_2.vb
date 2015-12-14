@@ -62,7 +62,7 @@ Friend Class ControllingUI_2
     Friend m_accountsTreeview As New vTreeView
     Private m_SplitContainer1Distance As Single = 230
     Private m_SplitContainer2Distance As Single = 900
-    Friend m_process As GlobalEnums.Process
+    Friend m_process As Account.AccountProcess
     Private m_currentEntityNode As vTreeNode
 
 #End Region
@@ -126,7 +126,7 @@ Friend Class ControllingUI_2
 
 #Region "Initialization"
 
-    Friend Sub New(ByRef p_process As GlobalEnums.Process)
+    Friend Sub New(ByRef p_process As Account.AccountProcess)
 
         ' This call is required by the designer.
         InitializeComponent()
@@ -139,26 +139,20 @@ Friend Class ControllingUI_2
         SetupProgressUIs()
 
         Select Case m_process
-            Case GlobalEnums.Process.FINANCIAL
-                GlobalVariables.Accounts.LoadAccountsTV(m_accountsTreeview)
-                ' Init TabControl
-                For Each node As vTreeNode In m_accountsTreeview.Nodes
-                    Dim newTab As New vTabPage
-                    newTab.Text = node.Text
-                    newTab.Name = node.Value
-                    DGVsControlTab.TabPages.Add(newTab)
-                Next
-                ' Accounts Events
-                AddHandler GlobalVariables.Accounts.Read, AddressOf AccountUpdateFromServer
-                AddHandler GlobalVariables.Accounts.DeleteEvent, AddressOf AccountDeleteFromServer
-
-            Case GlobalEnums.Process.PDC
-                Dim newTab As New vTabPage
-                newTab.Text = "PDC"
-                newTab.Name = "PDC"
-                DGVsControlTab.TabPages.Add(newTab)
-
+            Case Account.AccountProcess.FINANCIAL : GlobalVariables.Accounts.LoadAccountsTV(m_accountsTreeview)
+            Case Account.AccountProcess.RH : GlobalVariables.Accounts.LoadRHAccountsTV(m_accountsTreeview)
         End Select
+
+        ' Init TabControl
+        For Each node As vTreeNode In m_accountsTreeview.Nodes
+            Dim newTab As New vTabPage
+            newTab.Text = node.Text
+            newTab.Name = node.Value
+            DGVsControlTab.TabPages.Add(newTab)
+        Next
+        ' Accounts Events
+        AddHandler GlobalVariables.Accounts.Read, AddressOf AccountUpdateFromServer
+        AddHandler GlobalVariables.Accounts.DeleteEvent, AddressOf AccountDeleteFromServer
 
         InitItemsFormat()
         MultilangueSetup()

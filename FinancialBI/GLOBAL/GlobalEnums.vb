@@ -73,11 +73,7 @@
 
     End Enum
 
-    Enum Process
-        FINANCIAL = 0
-        PDC
-    End Enum
-
+ 
 
 End Class
 

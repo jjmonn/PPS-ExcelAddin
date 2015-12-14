@@ -23,7 +23,7 @@ Public Class CUI2RightPane
     ' Objects
     Private m_analysisAxisTreeview As New vTreeView
     Private m_dimensionsList As New List(Of String)
-    Private m_process As GlobalEnums.Process
+    Private m_process As CRUD.Account.AccountProcess
 
 
 #End Region
@@ -31,7 +31,7 @@ Public Class CUI2RightPane
 
 #Region "Initialization"
 
-    Friend Sub New(ByRef p_process As GlobalEnums.Process, _
+    Friend Sub New(ByRef p_process As CRUD.Account.AccountProcess, _
                    ByRef p_entitiesFiltersNode As TreeNode, _
                    ByRef p_clientsFiltersNode As TreeNode, _
                    ByRef p_productsFiltersNode As TreeNode, _
@@ -46,17 +46,17 @@ Public Class CUI2RightPane
         m_analysisAxisTreeview.Dock = DockStyle.Fill
 
         Select Case m_process
-            Case GlobalEnums.Process.FINANCIAL : InitializeFinancialDimensions(p_entitiesFiltersNode, _
+            Case CRUD.Account.AccountProcess.FINANCIAL : InitializeFinancialDimensions(p_entitiesFiltersNode, _
                                                                                p_clientsFiltersNode, _
                                                                                p_productsFiltersNode, _
                                                                                p_adjustmentsFiltersNode)
 
-            Case GlobalEnums.Process.PDC : InitializePDCDimensions(p_entitiesFiltersNode, _
+            Case CRUD.Account.AccountProcess.RH : InitializePDCDimensions(p_entitiesFiltersNode, _
                                                                    p_clientsFiltersNode, _
                                                                    p_productsFiltersNode, _
                                                                    p_adjustmentsFiltersNode)
         End Select
-        
+
         ' Init listboxes
         rowsDisplayList.ItemHeight = 17
         columnsDisplayList.ItemHeight = 17
@@ -106,12 +106,16 @@ Public Class CUI2RightPane
                                             p_adjustmentsFiltersNode)
 
         ' Default PDC report
-        Dim l_clientsItem = rowsDisplayList.Items.Add(m_analysisAxisTreeview.Nodes(4).Text)
-        l_clientsItem.Value = m_analysisAxisTreeview.Nodes(4).Value
+        Dim accountsItem = rowsDisplayList.Items.Add(m_analysisAxisTreeview.Nodes(0).Text)
+        accountsItem.Value = m_analysisAxisTreeview.Nodes(0).Value
+        m_dimensionsList.Add(accountsItem.Value)
+
+        Dim l_clientsItem = rowsDisplayList.Items.Add(m_analysisAxisTreeview.Nodes(5).Text)
+        l_clientsItem.Value = m_analysisAxisTreeview.Nodes(5).Value
         m_dimensionsList.Add(l_clientsItem.Value)
 
-        Dim l_weeksItem = columnsDisplayList.Items.Add(m_analysisAxisTreeview.Nodes(1).Text)
-        l_weeksItem.Value = m_analysisAxisTreeview.Nodes(1).Value
+        Dim l_weeksItem = columnsDisplayList.Items.Add(m_analysisAxisTreeview.Nodes(2).Text)
+        l_weeksItem.Value = m_analysisAxisTreeview.Nodes(2).Value
         m_dimensionsList.Add(l_weeksItem.Value)
         
     End Sub
@@ -196,6 +200,8 @@ Public Class CUI2RightPane
                                                      ByRef p_adjustmentsFiltersNode As TreeNode)
 
         VTreeViewUtil.InitTVFormat(m_analysisAxisTreeview)
+        VTreeViewUtil.AddNode(Computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.ACCOUNTS, _
+                              ControllingUI_2.ACCOUNTS_CODE, m_analysisAxisTreeview)
 
         ' Entities Analysis Axis and Categories Nodes
         Dim entities_node As vTreeNode = VTreeViewUtil.AddNode(Computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.ENTITIES, _

@@ -51,7 +51,7 @@ Friend Class ModelDataSet
     Friend m_entitiesOrientationFlag As Alignment
     Friend m_productsOrientationFlag As Alignment
 
-    Friend m_processFlag As GlobalEnums.Process
+    Friend m_processFlag As Account.AccountProcess
 
     'Private Const m_accountStringFlag As String = "Account"
     'Private Const m_entityStringFlag As String = "Entity"
@@ -515,7 +515,7 @@ Friend Class ModelDataSet
 
         End Select
         DefineGlobalOrientationFlag()
-        m_processFlag = GlobalEnums.Process.PDC
+        m_processFlag = Account.AccountProcess.RH
 
     End Sub
 
@@ -608,7 +608,7 @@ Friend Class ModelDataSet
                 GetDimensionOrientations(Dimension.ENTITY, m_entityFlag, m_entitiesOrientationFlag)                      ' Assets orientation
         End Select
         DefineGlobalOrientationFlag()
-        m_processFlag = GlobalEnums.Process.FINANCIAL
+        m_processFlag = Account.AccountProcess.FINANCIAL
 
     End Sub
 

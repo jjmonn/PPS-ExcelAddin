@@ -133,7 +133,7 @@ Friend Class ControllingUIController
     Private Function HasMinimumDimensions() As Boolean
 
         Select Case m_view.m_process
-            Case GlobalEnums.Process.FINANCIAL
+            Case Account.AccountProcess.FINANCIAL
                 If Not m_view.m_rightPaneControl.DimensionsListContainsItem(computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.YEARS) Then
                     If Not m_view.m_rightPaneControl.DimensionsListContainsItem(computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.MONTHS) Then
                         If Not m_view.m_rightPaneControl.DimensionsListContainsItem(computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.YMONTHS) Then
@@ -146,7 +146,7 @@ Friend Class ControllingUIController
                 End If
                 Return True
 
-            Case GlobalEnums.Process.PDC
+            Case Account.AccountProcess.RH
                 If Not m_view.m_rightPaneControl.DimensionsListContainsItem(computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.WEEKS) _
                 AndAlso m_view.m_rightPaneControl.DimensionsListContainsItem(computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.DAYS) Then
                     Return False
@@ -318,16 +318,16 @@ Friend Class ControllingUIController
             RemoveHandler l_DataGridView.CellValueNeeded, AddressOf DGVs_CellValueNeeded
             l_DataGridView.Clear()
 
-            If m_view.m_process = GlobalEnums.Process.FINANCIAL Then
-                m_accountsIdShortlist = VTreeViewUtil.GetNodesIds(VTreeViewUtil.FindNode(m_view.m_accountsTreeview, tab_.Name))
-                m_accountsIdShortlist.Remove(tab_.Name)
-            End If
+            '     If m_view.m_process = Account.AccountProcess.FINANCIAL Then
+            m_accountsIdShortlist = VTreeViewUtil.GetNodesIds(VTreeViewUtil.FindNode(m_view.m_accountsTreeview, tab_.Name))
+            m_accountsIdShortlist.Remove(tab_.Name)
+            '     End If
 
             ' Display_axis_values Initialization 
             m_DisplayAxisHt.Clear()
             Select Case m_view.m_process
-                Case GlobalEnums.Process.FINANCIAL : m_DisplayAxisHt(GlobalEnums.DataMapAxis.ACCOUNTS) = 0
-                Case GlobalEnums.Process.PDC : m_DisplayAxisHt(GlobalEnums.DataMapAxis.ACCOUNTS) = 0 '  PDC account id
+                Case Account.AccountProcess.FINANCIAL : m_DisplayAxisHt(GlobalEnums.DataMapAxis.ACCOUNTS) = 0
+                Case Account.AccountProcess.RH : m_DisplayAxisHt(GlobalEnums.DataMapAxis.ACCOUNTS) = 0 '  PDC account id
             End Select
             m_DisplayAxisHt(GlobalEnums.DataMapAxis.PERIODS) = ""
             m_DisplayAxisHt(GlobalEnums.DataMapAxis.FILTERS) = "0"
@@ -356,8 +356,8 @@ Friend Class ControllingUIController
     Private Sub FillHierarchy(ByRef p_hierarchyNode As vTreeNode)
 
         Select Case m_view.m_process
-            Case GlobalEnums.Process.FINANCIAL : FinancialHierarchyListPeriodsTreatment(p_hierarchyNode)
-            Case GlobalEnums.Process.PDC : PDCHierarchyListPeriodsTreatment(p_hierarchyNode)
+            Case Account.AccountProcess.FINANCIAL : FinancialHierarchyListPeriodsTreatment(p_hierarchyNode)
+            Case Account.AccountProcess.RH : PDCHierarchyListPeriodsTreatment(p_hierarchyNode)
         End Select
 
         For Each node As vTreeNode In p_hierarchyNode.Nodes

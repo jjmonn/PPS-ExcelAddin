@@ -5,7 +5,7 @@
 '
 ' Author: Julien Monnereau
 ' Created: 01/09/2015
-' Last modified: 01/09/2015
+' Last modified: 14/12/2015
 
 
 Imports System.Collections
@@ -18,40 +18,39 @@ Public Class Facts
 #Region "Intance Variables"
 
     Private requestIdFactsCommitDict As New SafeDictionary(Of UInt32, List(Of String))
-    Public Event AfterUpdate(ByRef status As Boolean, ByRef resultsDict As Dictionary(Of String, ErrorMessage))
-    Public Shared Event Read(Status As Boolean, fact_list As List(Of Fact))
+    Public Event AfterUpdate(ByRef p_status As Boolean, ByRef p_resultsDict As Dictionary(Of String, ErrorMessage))
+    Public Shared Event Read(p_status As Boolean, p_requestId As UInt32, p_fact_list As List(Of Fact))
 
 #End Region
 
 
 #Region "Interface"
 
-
     Public Sub New()
-
         NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_UPDATE_FACT_LIST_ANSWER, AddressOf SMSG_UPDATE_FACT_LIST_ANSWER)
-
     End Sub
 
-    Friend Shared Sub CMSG_GET_FACT(ByRef p_accountId As UInt32, _
+    Friend Shared Function CMSG_GET_FACT(ByRef p_accountId As UInt32, _
                                     ByRef p_productId As UInt32, _
                                     ByRef p_versionId As UInt32, _
                                     ByRef p_startPeriod As UInt32, _
-                                    ByRef p_endPeriod As UInt32)
+                                    ByRef p_endPeriod As UInt32) As Int32
 
         NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_GET_FACT_ANSWER, AddressOf SMSG_GET_FACT_ANSWER)
-        Dim packet As New ByteBuffer(CType(ClientMessage.CMSG_GET_FACT, UShort))
+        Dim l_packet As New ByteBuffer(CType(ClientMessage.CMSG_GET_FACT, UShort))
+        Dim l_requestId As Int32 = l_packet.AssignRequestId()
 
-        packet.WriteUint32(p_accountId)
-        packet.WriteUint32(p_productId)
-        packet.WriteUint32(p_versionId)
-        packet.WriteUint32(p_startPeriod)
-        packet.WriteUint32(p_endPeriod)
+        l_packet.WriteUint32(p_accountId)
+        l_packet.WriteUint32(p_productId)
+        l_packet.WriteUint32(p_versionId)
+        l_packet.WriteUint32(p_startPeriod)
+        l_packet.WriteUint32(p_endPeriod)
 
-        packet.Release()
-        NetworkManager.GetInstance().Send(packet)
+        l_packet.Release()
+        NetworkManager.GetInstance().Send(l_packet)
+        Return l_requestId
 
-    End Sub
+    End Function
 
     Friend Sub CMSG_UPDATE_FACT_LIST(ByRef factsValues As List(Of Hashtable), _
                                      ByRef cellsAddresses As List(Of String))
@@ -97,21 +96,19 @@ Public Class Facts
 
     End Sub
 
-    Private Shared Sub SMSG_GET_FACT_ANSWER(packet As ByteBuffer)
+    Private Shared Sub SMSG_GET_FACT_ANSWER(p_packet As ByteBuffer)
 
-        Dim fact_list As New List(Of Fact)
-        If packet.GetError() = ErrorMessage.SUCCESS Then
-
-            Dim nbResult As UInt32 = packet.ReadUint32()
-
-            For i As UInt32 = 0 To nbResult
-                Dim ht As Fact = Fact.BuildFact(packet)
-
-                fact_list.Add(ht)
-                RaiseEvent Read(True, fact_list)
+        Dim l_factList As New List(Of Fact)
+        If p_packet.GetError() = ErrorMessage.SUCCESS Then
+            Dim l_requestId As UInt32 = p_packet.GetRequestId()
+            Dim nbResult As UInt32 = p_packet.ReadUint32()
+            For i As UInt32 = 1 To nbResult
+                Dim hl_fact As Fact = Fact.BuildFact(p_packet)
+                l_factList.Add(hl_fact)
             Next
+            RaiseEvent Read(True, l_requestId, l_factList)
         Else
-            RaiseEvent Read(False, Nothing)
+            RaiseEvent Read(False, 0, Nothing)
         End If
 
     End Sub

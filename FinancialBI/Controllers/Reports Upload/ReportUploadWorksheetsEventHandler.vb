@@ -152,8 +152,8 @@ Friend Class ReportUploadWorksheetsEventHandler
     ' Listen to changes in associated worksheet
     Friend Sub Worksheet_Change(ByVal p_target As Excel.Range)
         Select Case m_dataSet.m_processFlag
-            Case globalenums.process.FINANCIAL : WorksheetChangeFinancial(p_target)
-            Case globalenums.process.PDC : WorksheetChangePDC(p_target)
+            Case Account.AccountProcess.FINANCIAL : WorksheetChangeFinancial(p_target)
+            Case Account.AccountProcess.RH : WorksheetChangePDC(p_target)
         End Select
     End Sub
 
@@ -297,7 +297,7 @@ Friend Class ReportUploadWorksheetsEventHandler
     Friend Sub Worksheet_BeforeRightClick(ByVal Target As Range, ByRef Cancel As Boolean)
 
         Select Case m_dataSet.m_processFlag
-            Case globalenums.process.FINANCIAL : WorksheetChangeFinancial(Target)
+            Case Account.AccountProcess.FINANCIAL : WorksheetChangeFinancial(Target)
                 Dim logButton As CommandBarButton
                 On Error Resume Next
                 GlobalVariables.APPS.CommandBars("Cell").Controls(Local.GetValue("upload.financialBILog")).Delete()
@@ -309,7 +309,7 @@ Friend Class ReportUploadWorksheetsEventHandler
                 AddHandler logButton.Click, AddressOf DisplayLogButton_Click
                 On Error GoTo 0
 
-            Case globalenums.process.PDC : WorksheetChangePDC(Target)
+            Case Account.AccountProcess.RH : WorksheetChangePDC(Target)
                 Dim l_clientSelectionButton As CommandBarButton
                 On Error Resume Next
                 GlobalVariables.APPS.CommandBars("Cell").Controls(Local.GetValue("upload.clientSelectionButtonText")).Delete()

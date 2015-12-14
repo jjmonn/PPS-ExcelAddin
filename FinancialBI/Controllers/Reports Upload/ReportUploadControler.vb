@@ -60,6 +60,7 @@ Friend Class ReportUploadControler
         AddHandler m_acquisitionModel.m_afterInputsDownloaded, AddressOf AfterDataBaseInputsDowloaded
         AddHandler m_acquisitionModel.m_afterOutputsComputed, AddressOf AfterOutputsComputed
         AddHandler m_fact.AfterUpdate, AddressOf AfterCommit
+        AddHandler m_factsStorage.FactsDownloaded, AddressOf AfterRHFactsDownload
 
     End Sub
 
@@ -94,8 +95,8 @@ Friend Class ReportUploadControler
         If m_dataset.m_globalOrientationFlag <> ModelDataSet.Orientations.ORIENTATION_ERROR Then
             m_errorMessagesUI.ClearBox()
             Select Case m_dataset.m_processFlag
-                Case GlobalEnums.process.FINANCIAL : SubmitFinancialProcess()
-                Case globalenums.process.PDC : SubmitPDCProcess()
+                Case Account.AccountProcess.FINANCIAL : SubmitFinancialProcess()
+                Case Account.AccountProcess.RH : SubmitPDCProcess()
             End Select
         Else
             GlobalVariables.SubmissionStatusButton.Image = 2
@@ -218,8 +219,8 @@ Friend Class ReportUploadControler
             m_dataModificationsTracker.InitializeDataSetRegion()
             m_dataModificationsTracker.InitializeOutputsRegion()
             Select Case m_dataset.m_processFlag
-                Case globalenums.process.FINANCIAL : Return FinancialProcessSnapshotRefreshment(p_updateInputsFlag)
-                Case globalenums.process.PDC : Return PDCProcessSnapshotRefreshment()
+                Case Account.AccountProcess.FINANCIAL : Return FinancialProcessSnapshotRefreshment(p_updateInputsFlag)
+                Case Account.AccountProcess.RH : Return PDCProcessSnapshotRefreshment()
             End Select
         End If
         Return False
@@ -249,7 +250,7 @@ Friend Class ReportUploadControler
                 m_reportUploadWorksheetEventHandler.AssociateSubmissionWSController(Me, m_dataset, m_acquisitionModel, m_dataModificationsTracker, m_associatedWorksheet)
             End If
         Else
-            SnapshotErrorGeneration(globalenums.process.FINANCIAL)
+            SnapshotErrorGeneration(Account.AccountProcess.FINANCIAL)
             Return False
         End If
         m_addin.ModifySubmissionControlsStatus(m_snapshotSuccessFlag)
@@ -275,29 +276,29 @@ Friend Class ReportUploadControler
                 m_reportUploadWorksheetEventHandler.AssociateSubmissionWSController(Me, m_dataset, m_acquisitionModel, m_dataModificationsTracker, m_associatedWorksheet)
             End If
 
+            m_dataset.RegisterDimensionsToCellDictionary()
+
             ' RH Cloud data loading
-            Dim l_RHaccountName As String = m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.ACCOUNT).ElementAt(0).Value
-            m_factsStorage.LoadRHFacts({l_RHaccountName}.ToList, _
+            m_factsStorage.LoadRHFacts({m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.ACCOUNT).ElementAt(0).Value}.ToList, _
                                        m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.PRODUCT).Values.ToList, _
                                        m_dataset.m_currentVersionId, _
                                        m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.PERIOD).Values.Min, _
                                        m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.PERIOD).Values.Max)
-            ' Initial differencies identifications
-            m_dataModificationsTracker.IdentifyRHDifferencesBtwDataSetAndDB(l_RHaccountName, m_factsStorage.m_FactsDict(l_RHaccountName))
 
+            Return True
         Else
-            SnapshotErrorGeneration(globalenums.process.PDC)
+            SnapshotErrorGeneration(Account.AccountProcess.RH)
+            m_addin.ModifySubmissionControlsStatus(m_snapshotSuccessFlag)
+            GlobalVariables.APPS.Interactive = True
+            GlobalVariables.APPS.ScreenUpdating = True
+            m_isUpdating = False
             Return False
         End If
-        m_addin.ModifySubmissionControlsStatus(m_snapshotSuccessFlag)
-        GlobalVariables.APPS.Interactive = True
-        GlobalVariables.APPS.ScreenUpdating = True
-        m_isUpdating = False
-        Return True
+
 
     End Function
 
-    Friend Function GetProcess() As GlobalEnums.Process
+    Friend Function GetProcess() As Account.AccountProcess
         Return m_dataset.m_processFlag
     End Function
 
@@ -383,6 +384,20 @@ errorHandler:
 
     End Sub
 
+    Private Sub AfterRHFactsDownload(ByRef p_status As Boolean)
+
+        If p_status = True Then
+            ' Initial differencies identifications
+            Dim l_RHaccountName As String = m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.ACCOUNT).ElementAt(0).Value
+            m_dataModificationsTracker.IdentifyRHDifferencesBtwDataSetAndDB(l_RHaccountName, m_factsStorage.m_FactsDict(l_RHaccountName))
+        End If
+        m_addin.ModifySubmissionControlsStatus(m_snapshotSuccessFlag)
+        GlobalVariables.APPS.Interactive = True
+        GlobalVariables.APPS.ScreenUpdating = True
+        m_isUpdating = False
+
+    End Sub
+
     Private Sub AfterOutputsComputed(ByRef p_entitiesName() As String)
 
         If p_entitiesName Is Nothing Then
@@ -443,13 +458,16 @@ errorHandler:
             '   -> create client if it doesn't exists (server side ?)
             '   -> check again that client is valid and a string
 
-            ht(ENTITY_ID_VARIABLE) = "consultant entity -> product.parentid"
-            ht(ACCOUNT_ID_VARIABLE) = "to be defined default PDC ACCOUNT"
+            ht(ENTITY_ID_VARIABLE) = 50 ' stub !!! 
+            ht(ACCOUNT_ID_VARIABLE) = GlobalVariables.Accounts.GetValueId(m_dataset.m_datasetCellDimensionsDictionary(cellAddress).m_accountName)
             ht(PERIOD_VARIABLE) = m_dataset.m_datasetCellDimensionsDictionary(cellAddress).m_period
-            ht(VERSION_ID_VARIABLE) = m_acquisitionModel.m_currentVersionId
-            ht(CLIENT_ID_VARIABLE) = GlobalVariables.APPS.ActiveSheet.range(cellAddress).value
-            ht(PRODUCT_ID_VARIABLE) = m_dataset.m_datasetCellDimensionsDictionary(cellAddress).m_product
-            ht(ADJUSTMENT_ID_VARIABLE) = CRUD.AxisType.Adjustment
+            ht(VERSION_ID_VARIABLE) = m_dataset.m_currentVersionId
+
+            ' quid : clients creation
+
+            ht(CLIENT_ID_VARIABLE) = 8 'GlobalVariables.APPS.ActiveSheet.range(cellAddress).value
+            ht(PRODUCT_ID_VARIABLE) = GlobalVariables.AxisElems.GetValue(AxisType.Product, m_dataset.m_datasetCellDimensionsDictionary(cellAddress).m_product).Id
+            ht(ADJUSTMENT_ID_VARIABLE) = CUInt(CRUD.AxisType.Adjustment)
             ht(VALUE_VARIABLE) = 1      ' * % working time of the consultant
 
             factsList.Add(ht)
@@ -491,12 +509,12 @@ errorHandler:
         Return m_acquisitionModel.m_currentPeriodList
     End Function
 
-    Private Sub SnapshotErrorGeneration(ByRef p_process As GlobalEnums.Process)
+    Private Sub SnapshotErrorGeneration(ByRef p_process As Account.AccountProcess)
 
         Dim l_errorStr As String
         Select Case p_process
-            Case GlobalEnums.Process.FINANCIAL : l_errorStr = IdentifyFinancialSnapshotFlagsErrors()
-            Case GlobalEnums.Process.PDC : l_errorStr = IdentifyPDCSnapshotFlagsErrors()
+            Case Account.AccountProcess.FINANCIAL : l_errorStr = IdentifyFinancialSnapshotFlagsErrors()
+            Case Account.AccountProcess.RH : l_errorStr = IdentifyPDCSnapshotFlagsErrors()
         End Select
         MsgBox(Local.GetValue("upload.msg_snapshot_error") & Chr(13) & l_errorStr)
         m_snapshotSuccessFlag = False
@@ -506,7 +524,7 @@ errorHandler:
     Private Function IdentifyFinancialSnapshotFlagsErrors() As String
 
         Dim tmpStr As String = ""
-        If m_dataset.m_EntityFlag = ModelDataSet.SnapshotResult.ZERO Then tmpStr = "  - " & Local.GetValue("general.entities") & Chr(13)
+        If m_dataset.m_entityFlag = ModelDataSet.SnapshotResult.ZERO Then tmpStr = "  - " & Local.GetValue("general.entities") & Chr(13)
         If m_dataset.m_periodFlag = ModelDataSet.SnapshotResult.ZERO Then tmpStr = tmpStr & "  - " & Local.GetValue("general.periods") & Chr(13)
         If m_dataset.m_accountFlag = ModelDataSet.SnapshotResult.ZERO Then tmpStr = tmpStr & "  - " & Local.GetValue("general.accounts")
         If m_dataset.m_entitiesOrientationFlag = ModelDataSet.Alignment.UNCLEAR Then tmpStr = "  - " & Local.GetValue("upload.msg_entities_orientation_unclear") & Chr(13)

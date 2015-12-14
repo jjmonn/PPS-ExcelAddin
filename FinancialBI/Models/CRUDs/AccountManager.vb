@@ -97,6 +97,17 @@ Friend Class AccountManager : Inherits NamedCRUDManager(Of NamedHierarchyCRUDEnt
         VTreeViewUtil.LoadTreeviewIcons(p_treeview, m_CRUDDic)
     End Sub
 
+    Friend Sub LoadRHAccountsTV(ByRef p_treeview As VIBlend.WinForms.Controls.vTreeView)
+        Dim l_RHCRUDDict As New MultiIndexDictionary(Of UInt32, String, NamedHierarchyCRUDEntity)
+        For Each l_value As Account In m_CRUDDic.Values
+            If l_value.Process = Account.AccountProcess.RH Then
+                l_RHCRUDDict.Set(l_value.Id, l_value.Name, l_value)
+            End If
+        Next
+        VTreeViewUtil.LoadTreeview(p_treeview, l_RHCRUDDict)
+        VTreeViewUtil.LoadTreeviewIcons(p_treeview, l_RHCRUDDict)
+    End Sub
+
 #End Region
 
 End Class

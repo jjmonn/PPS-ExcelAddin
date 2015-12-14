@@ -347,11 +347,19 @@ Friend Class DataModificationsTracking
         On Error Resume Next
         For Each l_productName As String In m_dataset.m_dimensionsValueAddressDict(ModelDataSet.Dimension.PRODUCT).Keys
             For Each p_periodId As String In m_dataset.m_dimensionsValueAddressDict(ModelDataSet.Dimension.PERIOD).Keys
-                Dim tuple_ As New Tuple(Of String, String, String, String)("", "", l_productName, p_periodId)
+                ' Dimensions : (entity)(account)(product)(period)
+                Dim tuple_ As New Tuple(Of String, String, String, String)("", p_accountName, l_productName, p_periodId)
                 If m_dataset.m_datasetCellsDictionary.ContainsKey(tuple_) = True Then
                     Dim cell As Excel.Range = m_dataset.m_datasetCellsDictionary(tuple_)
-                    If cell.Value2 <> p_factsDictionary(l_productName)(periodIdentifyer & p_periodId).Value Then
+                    If p_factsDictionary.ContainsKey(l_productName) = False _
+                    OrElse p_factsDictionary(l_productName).ContainsKey(periodIdentifyer & p_periodId) = False Then
                         RegisterModification(cell.Address)
+                    Else
+                        Dim l_client As AxisElem = GlobalVariables.AxisElems.GetValue(AxisType.Client, p_factsDictionary(l_productName)(periodIdentifyer & p_periodId).ClientId)
+                        If l_client Is Nothing Then Continue For
+                        If cell.Value2 <> l_client.Name Then
+                            RegisterModification(cell.Address)
+                        End If
                     End If
                 End If
             Next
