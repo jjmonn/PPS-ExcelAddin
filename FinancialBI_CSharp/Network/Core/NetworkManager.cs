@@ -167,8 +167,6 @@ public class NetworkManager
         return (null);
       }
       l_header = FillHeader(l_buffer);
-      if (l_header.opcode == (ushort)ServerMessage.SMSG_TEST_ANSWER)
-        return null;
       l_buffer = new byte[l_header.payloadSize];
 
       do
@@ -213,23 +211,20 @@ public class NetworkManager
       Debug.WriteLine("Disconnected by remote server");
       return (false);
     }
-    if (m_Sock.Available > 0)
-    {
-      UInt16 l_opcode;
-      ByteBuffer l_packet;
-      List<Action<ByteBuffer>> l_callback;
+    UInt16 l_opcode;
+    ByteBuffer l_packet;
+    List<Action<ByteBuffer>> l_callback;
 
-      if ((l_packet = this.Receive()) == null)
-        return (true);
-      l_opcode = l_packet.GetOpcode();
-      if ((l_callback = this.GetCallback(l_opcode)) == null)
-        System.Diagnostics.Debug.WriteLine("Undefined packet type " + (ServerMessage)(l_opcode) + " (" + l_opcode + ")");
-      else
-      {
-        System.Diagnostics.Debug.WriteLine("Receive defined " + (ServerMessage)(l_opcode) + " (" + l_opcode + ")");
-        for (int i = 0; i < l_callback.Count; i++)
-          l_callback.ElementAt(i)(l_packet.Clone());
-      }
+    if ((l_packet = this.Receive()) == null)
+      return (true);
+    l_opcode = l_packet.GetOpcode();
+    if ((l_callback = this.GetCallback(l_opcode)) == null)
+      System.Diagnostics.Debug.WriteLine("Undefined packet type " + (ServerMessage)(l_opcode) + " (" + l_opcode + ")");
+    else
+    {
+      System.Diagnostics.Debug.WriteLine("Receive defined " + (ServerMessage)(l_opcode) + " (" + l_opcode + ")");
+      for (int i = 0; i < l_callback.Count; i++)
+        l_callback.ElementAt(i)(l_packet.Clone());
     }
     return (true);
   }
