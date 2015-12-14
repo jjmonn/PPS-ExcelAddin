@@ -10,8 +10,8 @@ namespace CRUD
   {
     YEARS = 1,
     MONTHS,
-    WEEK,
-    DAYS
+    DAYS,
+    WEEK
   }
 
   public class Version : NamedHierarchyCRUDEntity, IComparable
