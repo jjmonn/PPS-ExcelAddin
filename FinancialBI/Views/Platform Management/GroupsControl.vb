@@ -49,8 +49,8 @@ Friend Class GroupsControl
 
         InitializeFormats()
        
-        AddHandler GlobalVariables.GroupAllowedEntities.Read, AddressOf GroupAllowedEntities_READ
-        AddHandler GlobalVariables.GroupAllowedEntities.DeleteEvent, AddressOf GroupAllowedEntities_DELETE
+        AddHandler GlobalVariables.UserAllowedEntities.Read, AddressOf UserAllowedEntities_READ
+        AddHandler GlobalVariables.UserAllowedEntities.DeleteEvent, AddressOf UserAllowedEntities_DELETE
         AddHandler m_entitiesTV.NodeChecked, AddressOf entitiesTreeView_Check
 
     End Sub
@@ -132,27 +132,27 @@ Friend Class GroupsControl
 
 #Region "CRUD Events"
 
-    Delegate Sub GroupAllowedEntities_READ_Delegate(ByRef p_status As ErrorMessage, ByRef p_groupAllowedEntity As GroupAllowedEntity)
-    Private Sub GroupAllowedEntities_READ(ByRef p_status As ErrorMessage, ByRef p_groupAllowedEntity As GroupAllowedEntity)
+    Delegate Sub UserAllowedEntities_READ_Delegate(ByRef p_status As ErrorMessage, ByRef p_userAllowedEntity As UserAllowedEntity)
+    Private Sub UserAllowedEntities_READ(ByRef p_status As ErrorMessage, ByRef p_userAllowedEntity As UserAllowedEntity)
         If InvokeRequired Then
-            Dim MyDelegate As New GroupAllowedEntities_READ_Delegate(AddressOf GroupAllowedEntities_READ)
-            Me.Invoke(MyDelegate, New Object() {p_status, p_groupAllowedEntity})
+            Dim MyDelegate As New UserAllowedEntities_READ_Delegate(AddressOf UserAllowedEntities_READ)
+            Me.Invoke(MyDelegate, New Object() {p_status, p_userAllowedEntity})
         Else
-            If (Not m_currentNode Is Nothing AndAlso p_groupAllowedEntity.GroupId = m_currentNode.Value) Then
+            If (Not m_currentNode Is Nothing AndAlso p_userAllowedEntity.UserId = m_currentNode.Value) Then
                 LoadCurrent()
             End If
         End If
     End Sub
 
-    Delegate Sub GroupAllowedEntities_DELETE_Delegate(ByRef p_status As ErrorMessage, ByRef p_id As UInt32)
-    Private Sub GroupAllowedEntities_DELETE(ByRef p_status As ErrorMessage, ByRef p_id As UInt32)
+    Delegate Sub UserAllowedEntities_DELETE_Delegate(ByRef p_status As ErrorMessage, ByRef p_id As UInt32)
+    Private Sub UserAllowedEntities_DELETE(ByRef p_status As ErrorMessage, ByRef p_id As UInt32)
         If InvokeRequired Then
-            Dim MyDelegate As New GroupAllowedEntities_DELETE_Delegate(AddressOf GroupAllowedEntities_DELETE)
+            Dim MyDelegate As New UserAllowedEntities_DELETE_Delegate(AddressOf UserAllowedEntities_DELETE)
             Me.Invoke(MyDelegate, New Object() {p_status, p_id})
         Else
-            Dim l_allowedEntity As GroupAllowedEntity = GlobalVariables.GroupAllowedEntities.GetValue(p_id)
+            Dim l_allowedEntity As UserAllowedEntity = GlobalVariables.UserAllowedEntities.GetValue(p_id)
 
-            If (Not l_allowedEntity Is Nothing AndAlso Not m_currentNode Is Nothing AndAlso l_allowedEntity.GroupId = m_currentNode.Value) Then
+            If (Not l_allowedEntity Is Nothing AndAlso Not m_currentNode Is Nothing AndAlso l_allowedEntity.UserId = m_currentNode.Value) Then
                 LoadCurrent()
             End If
         End If

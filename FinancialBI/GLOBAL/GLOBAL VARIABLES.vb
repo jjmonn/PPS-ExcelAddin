@@ -78,12 +78,13 @@ Friend Class GlobalVariables
     Friend Shared GlobalFactsVersions As GlobalFactVersionManager
     Friend Shared Users As UserManager
     Friend Shared Groups As GroupManager
-    Friend Shared GroupAllowedEntities As GroupAllowedEntityManager
+    Friend Shared UserAllowedEntities As UserAllowedEntityManager
     Friend Shared FModelingsAccounts As FModelingAccountManager
     Friend Shared AxisElems As AxisElemManager
     Friend Shared AxisFilters As AxisFilterManager
     Friend Shared EntityCurrencies As EntityCurrencyManager
     Friend Shared EntityDistribution As EntityDistributionManager
+    Friend Shared AxisParents As AxisParentManager
 
 #End Region
 

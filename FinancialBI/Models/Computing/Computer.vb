@@ -119,6 +119,8 @@ Friend Class Computer
                 l_packet.WriteUint32(p_currencyId)                                              ' currency_id
                 l_packet.WriteUint32(l_version.StartPeriod)
                 l_packet.WriteUint32(l_version.NbPeriod)
+                l_packet.WriteUint32(0) ' specific account
+                l_packet.WriteBool(False) ' axis hierarchy decomposition
 
                 ' Loop through filters
                 If Not p_filters Is Nothing Then
