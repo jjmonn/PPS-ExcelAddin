@@ -29,16 +29,20 @@ Friend Class FactController
 
 #Region "Interface"
 
-    Friend Sub GetFact(ByRef p_accountId As UInt32, ByRef p_productId As UInt32, ByRef p_versionId As UInt32, _
-                       ByRef p_startPeriod As UInt32, ByRef p_endPeriod As UInt32,
-                          ByRef p_onSuccess As Action(Of List(Of Hashtable)), _
-                          Optional ByRef p_onError As Action = Nothing)
+    Friend Sub GetFact(ByRef p_accountId As UInt32, _
+                       ByRef p_productId As UInt32, _
+                       ByRef p_versionId As UInt32, _
+                       ByRef p_startPeriod As UInt32, _
+                       ByRef p_endPeriod As UInt32,
+                       ByRef p_onSuccess As Action(Of List(Of Fact)), _
+                       Optional ByRef p_onError As Action = Nothing)
 
         m_onSuccess = p_onSuccess
         m_onError = p_onError
         AddHandler Facts.Read, AddressOf ReadEvent
-     
 
+        Dim l_factsVersion As Version = GlobalVariables.Versions.GetValue(p_versionId)
+        Facts.CMSG_GET_FACT(p_accountId, p_productId, p_versionId, p_startPeriod, p_endPeriod)
 
     End Sub
 

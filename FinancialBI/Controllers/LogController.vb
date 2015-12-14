@@ -29,7 +29,10 @@ Friend Class LogController
 
 #Region "Interface"
 
-    Friend Sub GetFactLog(ByRef p_accountId As Int32, ByRef p_entityId As Int32, ByRef p_period As Int32, ByRef p_versionId As Int32, _
+    Friend Sub GetFactLog(ByRef p_accountId As Int32, _
+                          ByRef p_entityId As Int32, _
+                          ByRef p_period As Int32, _
+                          ByRef p_versionId As Int32, _
                           ByRef p_onSuccess As Action(Of List(Of Hashtable)), _
                           Optional ByRef p_onError As Action = Nothing)
 

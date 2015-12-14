@@ -2,7 +2,7 @@
 ' 
 '
 ' Author: Julien Monnereau
-' Last modified: 11/12/2015
+' Last modified: 14/12/2015
 
 
 Imports Microsoft.Office.Interop
@@ -26,6 +26,7 @@ Friend Class ReportUploadControler
     Private m_dataset As ModelDataSet
     Private m_dataModificationsTracker As DataModificationsTracking
     Private m_acquisitionModel As AcquisitionModel
+    Private m_factsStorage As New FactsStorage
     Private Shared m_reportUploadWorksheetEventHandler As ReportUploadWorksheetsEventHandler
     Friend m_associatedWorksheet As Excel.Worksheet
     Private m_errorMessagesUI As New StatusReportInterfaceUI
@@ -262,7 +263,8 @@ Friend Class ReportUploadControler
             If m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.ENTITY).Count = 0 Then
                 MsgBox(Local.GetValue("upload.msg_entity_not_found"))
             Else
-                m_addin.SetPDCSubmissionRibbonEntityName(m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.ENTITY).ElementAt(0).Value)
+                m_addin.SetPDCSubmissionRibbonEntityAndAccountName(m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.ENTITY).ElementAt(0).Value, _
+                                                         m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.ACCOUNT).ElementAt(0).Value)
             End If
             m_snapshotSuccessFlag = True
             HighlightItemsAndDataRegions()
@@ -272,6 +274,17 @@ Friend Class ReportUploadControler
             ElseIf Not m_reportUploadWorksheetEventHandler.m_excelWorksheet.Name Is m_associatedWorksheet Then
                 m_reportUploadWorksheetEventHandler.AssociateSubmissionWSController(Me, m_dataset, m_acquisitionModel, m_dataModificationsTracker, m_associatedWorksheet)
             End If
+
+            ' RH Cloud data loading
+            Dim l_RHaccountName As String = m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.ACCOUNT).ElementAt(0).Value
+            m_factsStorage.LoadRHFacts({l_RHaccountName}.ToList, _
+                                       m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.PRODUCT).Values.ToList, _
+                                       m_dataset.m_currentVersionId, _
+                                       m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.PERIOD).Values.Min, _
+                                       m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.PERIOD).Values.Max)
+            ' Initial differencies identifications
+            m_dataModificationsTracker.IdentifyRHDifferencesBtwDataSetAndDB(l_RHaccountName, m_factsStorage.m_FactsDict(l_RHaccountName))
+
         Else
             SnapshotErrorGeneration(globalenums.process.PDC)
             Return False
@@ -347,9 +360,10 @@ Friend Class ReportUploadControler
             updateInputs()
         End If
         m_dataset.RegisterDataSetCellsValues()
-        m_dataModificationsTracker.IdentifyDifferencesBtwDataSetAndDB(m_acquisitionModel.m_databaseInputsDictionary)
 
-        ' update calculated items only if several accounts => 
+        m_dataModificationsTracker.IdentifyFinancialDifferencesBtwDataSetAndDB(m_acquisitionModel.m_databaseInputsDictionary)
+
+        ' update calculated items only if several accounts
         Select Case m_dataset.m_globalOrientationFlag
             Case ModelDataSet.Orientations.ACCOUNTS_PERIODS, _
                  ModelDataSet.Orientations.PERIODS_ACCOUNTS, _
@@ -435,12 +449,12 @@ errorHandler:
             ht(VERSION_ID_VARIABLE) = m_acquisitionModel.m_currentVersionId
             ht(CLIENT_ID_VARIABLE) = GlobalVariables.APPS.ActiveSheet.range(cellAddress).value
             ht(PRODUCT_ID_VARIABLE) = m_dataset.m_datasetCellDimensionsDictionary(cellAddress).m_product
-            ht(ADJUSTMENT_ID_VARIABLE) = "default adjustment"
-            ht(VALUE_VARIABLE) = "1 * quote part temps de travail consultant "
+            ht(ADJUSTMENT_ID_VARIABLE) = CRUD.AxisType.Adjustment
+            ht(VALUE_VARIABLE) = 1      ' * % working time of the consultant
 
             factsList.Add(ht)
         Next
-        '   m_fact.CMSG_UPDATE_FACT_LIST(factsList, cellsAddresses)
+        m_fact.CMSG_UPDATE_FACT_LIST(factsList, cellsAddresses)
 
     End Sub
 
