@@ -33,8 +33,12 @@ Public Class Facts
 
     End Sub
 
-    Friend Shared Sub CMSG_GET_FACT(ByRef p_accountId As UInt32, ByRef p_productId As UInt32, ByRef p_versionId As UInt32, _
-                       ByRef p_startPeriod As UInt32, ByRef p_endPeriod As UInt32)
+    Friend Shared Sub CMSG_GET_FACT(ByRef p_accountId As UInt32, _
+                                    ByRef p_productId As UInt32, _
+                                    ByRef p_versionId As UInt32, _
+                                    ByRef p_startPeriod As UInt32, _
+                                    ByRef p_endPeriod As UInt32)
+
         NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_GET_FACT_ANSWER, AddressOf SMSG_GET_FACT_ANSWER)
         Dim packet As New ByteBuffer(CType(ClientMessage.CMSG_GET_FACT, UShort))
 
@@ -46,6 +50,7 @@ Public Class Facts
 
         packet.Release()
         NetworkManager.GetInstance().Send(packet)
+
     End Sub
 
     Friend Sub CMSG_UPDATE_FACT_LIST(ByRef factsValues As List(Of Hashtable), _
@@ -93,8 +98,8 @@ Public Class Facts
     End Sub
 
     Private Shared Sub SMSG_GET_FACT_ANSWER(packet As ByteBuffer)
-        Dim fact_list As New List(Of Fact)
 
+        Dim fact_list As New List(Of Fact)
         If packet.GetError() = ErrorMessage.SUCCESS Then
 
             Dim nbResult As UInt32 = packet.ReadUint32()

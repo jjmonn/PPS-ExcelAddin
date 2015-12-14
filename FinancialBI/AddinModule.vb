@@ -1075,8 +1075,10 @@ Public Class AddinModule
 
     End Sub
 
-    Friend Sub SetPDCSubmissionRibbonEntityName(ByRef p_entityName As String)
+    Friend Sub SetPDCSubmissionRibbonEntityAndAccountName(ByRef p_entityName As String, _
+                                                ByRef p_accountName As String)
         m_PDCEntityEditBox.Text = p_entityName
+        m_PDCaccountNameEditBox.Text = p_accountName
     End Sub
 
 #End Region

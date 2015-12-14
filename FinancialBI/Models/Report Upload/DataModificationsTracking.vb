@@ -3,18 +3,8 @@
 ' Follows the modifications carried on in a worksheet on the data submission area while on submission mode
 '
 '
-'
-' To do: 
-'       - Modification registering -> version from WS or version BT
-'       
-'
-'
-' Known bugs
-'       - if orientation <> Ac|Pe DBInputsDictionary not loaded ?
-'
-'
 ' Author: Julien Monnereau
-' Last modified: 01/09/2015
+' Last modified: 14/12/2015
 
 
 Imports Microsoft.Office.Interop
@@ -294,7 +284,7 @@ Friend Class DataModificationsTracking
 
     ' Identify differences between captured data and and current DB
     ' Param: DBInputsDictionary (from ACQMODEL-> (entity)(account)(period))
-    Friend Sub IdentifyDifferencesBtwDataSetAndDB(ByRef p_dataBaseInputsDictionary As Dictionary(Of String, Dictionary(Of String, Dictionary(Of String, Double))))
+    Friend Sub IdentifyFinancialDifferencesBtwDataSetAndDB(ByRef p_dataBaseInputsDictionary As Dictionary(Of String, Dictionary(Of String, Dictionary(Of String, Double))))
 
         Dim periodIdentifyer As String = ""
         Dim version As Version = GlobalVariables.Versions.GetValue(m_dataset.m_currentVersionId)
@@ -303,6 +293,7 @@ Friend Class DataModificationsTracking
         Select Case version.TimeConfiguration
             Case CRUD.TimeConfig.YEARS : periodIdentifyer = Computer.YEAR_PERIOD_IDENTIFIER
             Case CRUD.TimeConfig.MONTHS : periodIdentifyer = Computer.MONTH_PERIOD_IDENTIFIER
+            Case CRUD.TimeConfig.DAYS : periodIdentifyer = Computer.DAY_PERIOD_IDENTIFIER
         End Select
 
         On Error Resume Next
@@ -338,6 +329,36 @@ Friend Class DataModificationsTracking
 
     End Sub
 
+    ' p_factsDictionary dimensions : : (productId)(period) -> Fact
+    ' to do : use account Name ?
+    Friend Sub IdentifyRHDifferencesBtwDataSetAndDB(ByRef p_accountName As String, _
+                                                    ByRef p_factsDictionary As SafeDictionary(Of String, SafeDictionary(Of String, Fact)))
+
+        Dim periodIdentifyer As String = ""
+        Dim version As Version = GlobalVariables.Versions.GetValue(m_dataset.m_currentVersionId)
+        If version Is Nothing Then Exit Sub
+
+        Select Case version.TimeConfiguration
+            Case CRUD.TimeConfig.YEARS : periodIdentifyer = Computer.YEAR_PERIOD_IDENTIFIER
+            Case CRUD.TimeConfig.MONTHS : periodIdentifyer = Computer.MONTH_PERIOD_IDENTIFIER
+            Case CRUD.TimeConfig.DAYS : periodIdentifyer = Computer.DAY_PERIOD_IDENTIFIER
+        End Select
+
+        On Error Resume Next
+        For Each l_productName As String In m_dataset.m_dimensionsValueAddressDict(ModelDataSet.Dimension.PRODUCT).Keys
+            For Each p_periodId As String In m_dataset.m_dimensionsValueAddressDict(ModelDataSet.Dimension.PERIOD).Keys
+                Dim tuple_ As New Tuple(Of String, String, String, String)("", "", l_productName, p_periodId)
+                If m_dataset.m_datasetCellsDictionary.ContainsKey(tuple_) = True Then
+                    Dim cell As Excel.Range = m_dataset.m_datasetCellsDictionary(tuple_)
+                    If cell.Value2 <> p_factsDictionary(l_productName)(periodIdentifyer & p_periodId).Value Then
+                        RegisterModification(cell.Address)
+                    End If
+                End If
+            Next
+
+        Next
+
+    End Sub
 
 #End Region
 

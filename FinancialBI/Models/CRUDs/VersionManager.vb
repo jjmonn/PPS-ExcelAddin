@@ -181,7 +181,7 @@ Friend Class VersionManager : Inherits NamedCRUDManager(Of NamedHierarchyCRUDEnt
 
     ' *****************************************************************************************************************************************
     ' to be reviewed -> change process -> do not use a dictionary but dynamic periods list generation (using period function fomr Period.vb)
-    '
+    ' (optional)
     ' *****************************************************************************************************************************************
 
     Friend Function GetPeriodsDictionary(ByRef p_versionId As UInt32) As Dictionary(Of Int32, List(Of Int32))

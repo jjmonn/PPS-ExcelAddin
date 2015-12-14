@@ -10,7 +10,7 @@
 '       - Orientation: in some cases does not work (max left or right cells)
 '
 '
-' Last modified: 25/11/2015
+' Last modified: 14/12/2015
 ' Author: Julien Monnereau
 
 
@@ -435,38 +435,39 @@ Friend Class ModelDataSet
     ' Determines the worksheet orientations of the ranges
     Public Sub GetOrientations()
 
-         Dim l_financialFlagsCode As String = CStr(m_periodFlag) & CStr(m_accountFlag) & CStr(m_entityFlag)
+        Dim l_financialFlagsCode As String = CStr(m_periodFlag) & CStr(m_accountFlag) & CStr(m_entityFlag)
         Dim l_PDCFlagsCode As String = CStr(m_periodFlag) & CStr(m_productFlag)
-        Dim l_financialOrientationFlag As Int16
-        Dim l_PDCOrientationFlag As Int16
-
-        If m_periodFlag = SnapshotResult.ZERO Then
+   
+        If m_periodFlag = SnapshotResult.ZERO _
+        Or m_accountFlag = SnapshotResult.ZERO Then
             m_globalOrientationFlag = Orientations.ORIENTATION_ERROR
             Exit Sub
         End If
 
-        If m_accountFlag = SnapshotResult.ZERO _
-        Or m_entityFlag = SnapshotResult.ZERO Then
-            If m_productFlag = SnapshotResult.ZERO Then
-                m_globalOrientationFlag = Orientations.ORIENTATION_ERROR
-                Exit Sub
-            Else
-                l_financialOrientationFlag = Orientations.FINANCIAL_ORIENTATION_ERROR
-            End If
-        Else
-            If m_productFlag = SnapshotResult.ZERO Then
-                l_PDCOrientationFlag = Orientations.PDC_ORIENTATION_ERROR
-            End If
-        End If
-
-        If l_financialOrientationFlag <> Orientations.FINANCIAL_ORIENTATION_ERROR Then
-            DefineFinancialDimensionsOrientation(l_financialFlagsCode)
-        ElseIf l_PDCOrientationFlag <> Orientations.PDC_ORIENTATION_ERROR Then
-            DefinePDCDimensionsOrientation(l_PDCFlagsCode)
-        Else
+        Dim l_account As Account = GlobalVariables.Accounts.GetValue(m_dimensionsAddressValueDict(Dimension.ACCOUNT).ElementAt(0).Value)
+        If l_account Is Nothing Then
             m_globalOrientationFlag = Orientations.ORIENTATION_ERROR
             Exit Sub
         End If
+
+        Select Case l_account.Process
+            Case Account.AccountProcess.FINANCIAL
+                If m_entityFlag <> SnapshotResult.ZERO Then
+                    DefineFinancialDimensionsOrientation(l_financialFlagsCode)
+                Else
+                    m_globalOrientationFlag = Orientations.ORIENTATION_ERROR
+                    Exit Sub
+                End If
+
+            Case Account.AccountProcess.RH
+                If m_productFlag <> SnapshotResult.ZERO Then
+                    DefinePDCDimensionsOrientation(l_PDCFlagsCode)
+                Else
+                    m_globalOrientationFlag = Orientations.ORIENTATION_ERROR
+                    Exit Sub
+                End If
+
+        End Select
 
     End Sub
 
@@ -921,17 +922,16 @@ Friend Class ModelDataSet
 
         Dim l_periodColumn As Int32
         Dim l_period As String
-        Dim l_entityName As String = ""
-        If m_dimensionsValueAddressDict(Dimension.ENTITY).Count = 1 Then l_entityName = m_dimensionsValueAddressDict(Dimension.ENTITY).ElementAt(0).Key
-
+     
         For Each l_periodAddressValuePair In m_dimensionsAddressValueDict(Dimension.PERIOD)
             l_period = l_periodAddressValuePair.Value
             l_periodColumn = m_excelWorkSheet.Range(l_periodAddressValuePair.Key).Column
 
             For Each l_productAddressValuePair In m_dimensionsAddressValueDict(Dimension.PRODUCT)
+
                 RegisterDatasetCell(m_excelWorkSheet.Cells(m_excelWorkSheet.Range(l_productAddressValuePair.Key).Row, l_periodColumn), _
-                                    l_entityName, _
                                     "", _
+                                    m_dimensionsAddressValueDict(Dimension.ACCOUNT).ElementAt(0).Value, _
                                     l_productAddressValuePair.Value, _
                                     l_period)
                 ' set BU value ?
@@ -944,18 +944,17 @@ Friend Class ModelDataSet
 
         Dim l_productColumn As Int32
         Dim l_productName As String
-        Dim l_entityName As String = ""
-        If m_dimensionsValueAddressDict(Dimension.ENTITY).Count = 1 Then l_entityName = m_dimensionsValueAddressDict(Dimension.ENTITY).ElementAt(0).Key
-
-
+    
         For Each l_productAddressValuePair In m_dimensionsAddressValueDict(Dimension.PRODUCT)
             l_productName = l_productAddressValuePair.Value
             l_productColumn = m_excelWorkSheet.Range(l_productAddressValuePair.Key).Column
 
             For Each l_periodAddressValuePair In m_dimensionsAddressValueDict(Dimension.PERIOD)
+
+
                 RegisterDatasetCell(m_excelWorkSheet.Cells(m_excelWorkSheet.Range(l_periodAddressValuePair.Key).Row, l_productColumn), _
-                                    l_entityName, _
                                     "", _
+                                    m_dimensionsAddressValueDict(Dimension.ACCOUNT).ElementAt(0).Value, _
                                     l_productName, _
                                     l_periodAddressValuePair.Value)
             Next
