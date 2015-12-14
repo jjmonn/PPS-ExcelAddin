@@ -68,7 +68,8 @@
     <Compile Include="Network\CRUD\Base\NamedCRUDEntity.cs" />
     <Compile Include="Network\CRUD\Base\CRUDEntity.cs" />
     <Compile Include="Network\CRUD\Currency.cs" />
-    <Compile Include="Network\CRUD\Entity.cs" />
+    <Compile Include="Network\CRUD\AxisParent.cs" />
+    <Compile Include="Network\CRUD\EntityCurrency.cs" />
     <Compile Include="Network\CRUD\Fact.cs" />
     <Compile Include="Network\CRUD\ExchangeRate.cs" />
     <Compile Include="Network\CRUD\ExchangeRateVersion.cs" />
@@ -80,7 +81,7 @@
     <Compile Include="Network\CRUD\GlobalFactVersion.cs" />
     <Compile Include="Network\CRUD\Group.cs" />
     <Compile Include="Network\CRUD\EntityDistribution.cs" />
-    <Compile Include="Network\CRUD\GroupAllowedEntity.cs" />
+    <Compile Include="Network\CRUD\UserAllowedEntity.cs" />
     <Compile Include="Network\CRUD\Base\HierarchyCRUDEntity.cs" />
     <Compile Include="Network\CRUD\User.cs" />
     <Compile Include="Network\CRUD\Version.cs" />

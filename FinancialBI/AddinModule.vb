@@ -284,12 +284,13 @@ Public Class AddinModule
         GlobalVariables.GlobalFactsVersions = New GlobalFactVersionManager
         GlobalVariables.Users = New UserManager
         GlobalVariables.Groups = New GroupManager
-        GlobalVariables.GroupAllowedEntities = New GroupAllowedEntityManager
+        GlobalVariables.UserAllowedEntities = New UserAllowedEntityManager
         GlobalVariables.FModelingsAccounts = New FModelingAccountManager
         GlobalVariables.AxisElems = New AxisElemManager
         GlobalVariables.AxisFilters = New AxisFilterManager
         GlobalVariables.EntityCurrencies = New EntityCurrencyManager
         GlobalVariables.EntityDistribution = New EntityDistributionManager
+        GlobalVariables.AxisParents = New AxisParentManager
 
         ' Financial Bi User Defined Function
         GlobalVariables.GlobalPPSBIController = New FBIFunctionController

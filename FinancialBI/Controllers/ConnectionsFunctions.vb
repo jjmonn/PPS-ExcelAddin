@@ -146,8 +146,9 @@ Friend Class ConnectionsFunctions
         AddHandler GlobalVariables.GlobalFactsVersions.ObjectInitialized, AddressOf AfterGlobalFactsVersionInit
         AddHandler GlobalVariables.Users.ObjectInitialized, AddressOf AfterUserInit
         AddHandler GlobalVariables.Groups.ObjectInitialized, AddressOf AfterGroupInit
-        AddHandler GlobalVariables.GroupAllowedEntities.ObjectInitialized, AddressOf AfterGroupAllowedEntityInit
+        AddHandler GlobalVariables.UserAllowedEntities.ObjectInitialized, AddressOf AfterUserAllowedEntityInit
         AddHandler GlobalVariables.EntityDistribution.ObjectInitialized, AddressOf AfterEntityDistributionInit
+        AddHandler GlobalVariables.AxisParents.ObjectInitialized, AddressOf AfterAxisParentInit
 
         globalVariablesInitFlags.Add(GlobalEnums.GlobalModels.ACCOUNTS, False)
         globalVariablesInitFlags.Add(GlobalEnums.GlobalModels.ENTITYCURRENCY, False)
@@ -161,11 +162,12 @@ Friend Class ConnectionsFunctions
         globalVariablesInitFlags.Add(GlobalEnums.GlobalModels.GLOBALFACTSVERSION, False)
         globalVariablesInitFlags.Add(GlobalEnums.GlobalModels.USER, False)
         globalVariablesInitFlags.Add(GlobalEnums.GlobalModels.GROUP, False)
-        globalVariablesInitFlags.Add(GlobalEnums.GlobalModels.GROUPALLOWEDENTITY, False)
+        globalVariablesInitFlags.Add(GlobalEnums.GlobalModels.USERALLOWEDENTITY, False)
         globalVariablesInitFlags.Add(GlobalEnums.GlobalModels.FMODELINGACCOUNT, False)
         globalVariablesInitFlags.Add(GlobalEnums.GlobalModels.AXIS_ELEM, False)
         globalVariablesInitFlags.Add(GlobalEnums.GlobalModels.AXIS_FILTER, False)
         globalVariablesInitFlags.Add(GlobalEnums.GlobalModels.ENTITYDISTRIBUTION, False)
+        globalVariablesInitFlags.Add(GlobalEnums.GlobalModels.AXISPARENT, False)
 
     End Sub
 
@@ -302,8 +304,8 @@ Friend Class ConnectionsFunctions
         globalInitFlag = CheckGlobalVariablesInitFlag()
     End Sub
 
-    Private Sub AfterGroupAllowedEntityInit()
-        globalVariablesInitFlags(GlobalEnums.GlobalModels.GROUPALLOWEDENTITY) = True
+    Private Sub AfterUserAllowedEntityInit()
+        globalVariablesInitFlags(GlobalEnums.GlobalModels.USERALLOWEDENTITY) = True
         globalInitFlag = CheckGlobalVariablesInitFlag()
     End Sub
 
@@ -311,6 +313,12 @@ Friend Class ConnectionsFunctions
         globalVariablesInitFlags(GlobalEnums.GlobalModels.ENTITYDISTRIBUTION) = True
         globalInitFlag = CheckGlobalVariablesInitFlag()
     End Sub
+
+    Private Sub AfterAxisParentInit()
+        globalVariablesInitFlags(GlobalEnums.GlobalModels.AXISPARENT) = True
+        globalInitFlag = CheckGlobalVariablesInitFlag()
+    End Sub
+
 #End Region
 
 

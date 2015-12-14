@@ -6,24 +6,24 @@ using System.Threading.Tasks;
 
 namespace CRUD
 {
-  public class GroupAllowedEntity : CRUDEntity, IComparable
+  public class UserAllowedEntity : CRUDEntity, IComparable
   {
     public UInt32 Id { get; private set; }
-    public UInt32 GroupId { get; set; }
+    public UInt32 UserId { get; set; }
     public UInt32 EntityId { get; set; }
     public UInt32 Image { get; set; }
 
-    public GroupAllowedEntity() { }
-    private GroupAllowedEntity(UInt32 p_id)
+    public UserAllowedEntity() { }
+    private UserAllowedEntity(UInt32 p_id)
     {
       Id = p_id;
     }
 
-    public static GroupAllowedEntity BuildGroupAllowedEntity(ByteBuffer p_packet)
+    public static UserAllowedEntity BuildUserAllowedEntity(ByteBuffer p_packet)
     {
-      GroupAllowedEntity l_entity = new GroupAllowedEntity(p_packet.ReadUint32());
+      UserAllowedEntity l_entity = new UserAllowedEntity(p_packet.ReadUint32());
 
-      l_entity.GroupId = p_packet.ReadUint32();
+      l_entity.UserId = p_packet.ReadUint32();
       l_entity.EntityId = p_packet.ReadUint32();
 
       return (l_entity);
@@ -33,7 +33,7 @@ namespace CRUD
     {
       if (p_includeId)
         p_packet.WriteUint32(Id);
-      p_packet.WriteUint32(GroupId);
+      p_packet.WriteUint32(UserId);
       p_packet.WriteUint32(EntityId);
     }
 
@@ -41,11 +41,11 @@ namespace CRUD
     {
       if (p_obj == null)
         return 0;
-      GroupAllowedEntity l_cmpEntity = p_obj as GroupAllowedEntity;
+      UserAllowedEntity l_cmpEntity = p_obj as UserAllowedEntity;
 
       if (l_cmpEntity == null)
         return 0;
-      if (l_cmpEntity.GroupId > GroupId)
+      if (l_cmpEntity.UserId > UserId)
         return -1;
       else
         return 1;
