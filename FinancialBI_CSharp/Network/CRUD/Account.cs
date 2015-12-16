@@ -15,8 +15,8 @@ namespace CRUD
 
     public enum AccountProcess
     {
-      FINANCIAL,
-      RH
+      FINANCIAL = 0x01,
+      RH        = 0x02
     }
 
     public enum FormulaTypes
