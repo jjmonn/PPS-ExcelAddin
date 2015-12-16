@@ -353,6 +353,7 @@
   </category>
 
   <category name="settings">
+    <string name="Settings">Réglages</string>
     <string name="port_number">Numéro de port</string>
     <string name="server_address">Adresse du serveur</string>
     <string name="display_options">Options d'affichage</string>
@@ -370,7 +371,10 @@
     <string name="important">Important</string>
     <string name="normal">Normal</string>
     <string name="detail">Détail</string>
-
+    <string name="language">Langue</string>
+    <string name="french">Français</string>
+    <string name="english">Anglais</string>
+    <string name="msg_excel_reboot">Excel doit être redémarré afin de prendre en compte la sélection de la langue.</string>
   </category>
 
 

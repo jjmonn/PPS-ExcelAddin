@@ -356,6 +356,7 @@
   </category>
 
   <category name="settings">
+    <string name="Settings">Settings</string>
     <string name="port_number">Port number</string>
     <string name="server_address">Server address</string>
     <string name="display_options">Display options</string>
@@ -373,7 +374,10 @@
     <string name="important">Important</string>
     <string name="normal">Normal</string>
     <string name="detail">Detail</string>
-
+    <string name="language">Language</string>
+    <string name="french">French</string>
+    <string name="english">English</string>
+    <string name="msg_excel_reboot">You must restart Excel in order to apply language selection.</string>
   </category>
 
   <category name="allocationKeys">

@@ -24,34 +24,37 @@ Partial Class SettingUI
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(SettingUI))
-        Dim DataGridLocalization1 As VIBlend.WinForms.DataGridView.DataGridLocalization = New VIBlend.WinForms.DataGridView.DataGridLocalization()
+        Dim DataGridLocalization2 As VIBlend.WinForms.DataGridView.DataGridLocalization = New VIBlend.WinForms.DataGridView.DataGridLocalization()
         Me.Panel1 = New System.Windows.Forms.Panel()
         Me.TabControl1 = New System.Windows.Forms.TabControl()
-        Me.TabPage1 = New System.Windows.Forms.TabPage()
-        Me.m_saveButton = New VIBlend.WinForms.Controls.vButton()
+        Me.m_connectionTab = New System.Windows.Forms.TabPage()
+        Me.m_saveConnectionButton = New VIBlend.WinForms.Controls.vButton()
         Me.ButtonIcons = New System.Windows.Forms.ImageList(Me.components)
         Me.PortTB = New System.Windows.Forms.TextBox()
-        Me.Label4 = New System.Windows.Forms.Label()
+        Me.m_portNumberLabel = New System.Windows.Forms.Label()
         Me.ServerAddressTB = New System.Windows.Forms.TextBox()
-        Me.Label3 = New System.Windows.Forms.Label()
+        Me.m_serverAddressLabel = New System.Windows.Forms.Label()
         Me.IDTB = New System.Windows.Forms.TextBox()
-        Me.Label1 = New System.Windows.Forms.Label()
-        Me.TabPage2 = New System.Windows.Forms.TabPage()
-        Me.VGroupBox1 = New VIBlend.WinForms.Controls.vGroupBox()
+        Me.m_userIdLabel = New System.Windows.Forms.Label()
+        Me.m_formatsTab = New System.Windows.Forms.TabPage()
+        Me.m_formatsGroup = New VIBlend.WinForms.Controls.vGroupBox()
         Me.FormatsDGV = New VIBlend.WinForms.DataGridView.vDataGridView()
-        Me.TabPage3 = New System.Windows.Forms.TabPage()
-        Me.CurrenciesCombobox = New VIBlend.WinForms.Controls.vComboBox()
-        Me.VLabel1 = New VIBlend.WinForms.Controls.vLabel()
+        Me.m_otherTab = New System.Windows.Forms.TabPage()
+        Me.m_otherValidateButton = New VIBlend.WinForms.Controls.vButton()
+        Me.m_languageComboBox = New VIBlend.WinForms.Controls.vComboBox()
+        Me.m_languageLabel = New VIBlend.WinForms.Controls.vLabel()
+        Me.m_currenciesCombobox = New VIBlend.WinForms.Controls.vComboBox()
+        Me.m_consolidationCurrencyLabel = New VIBlend.WinForms.Controls.vLabel()
         Me.ControlImages = New System.Windows.Forms.ImageList(Me.components)
         Me.ACFIcon = New System.Windows.Forms.ImageList(Me.components)
         Me.FolderBrowserDialog1 = New System.Windows.Forms.FolderBrowserDialog()
         Me.ColorDialog1 = New System.Windows.Forms.ColorDialog()
         Me.Panel1.SuspendLayout()
         Me.TabControl1.SuspendLayout()
-        Me.TabPage1.SuspendLayout()
-        Me.TabPage2.SuspendLayout()
-        Me.VGroupBox1.SuspendLayout()
-        Me.TabPage3.SuspendLayout()
+        Me.m_connectionTab.SuspendLayout()
+        Me.m_formatsTab.SuspendLayout()
+        Me.m_formatsGroup.SuspendLayout()
+        Me.m_otherTab.SuspendLayout()
         Me.SuspendLayout()
         '
         'Panel1
@@ -70,9 +73,9 @@ Partial Class SettingUI
         Me.TabControl1.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.TabControl1.Controls.Add(Me.TabPage1)
-        Me.TabControl1.Controls.Add(Me.TabPage2)
-        Me.TabControl1.Controls.Add(Me.TabPage3)
+        Me.TabControl1.Controls.Add(Me.m_connectionTab)
+        Me.TabControl1.Controls.Add(Me.m_formatsTab)
+        Me.TabControl1.Controls.Add(Me.m_otherTab)
         Me.TabControl1.DrawMode = System.Windows.Forms.TabDrawMode.OwnerDrawFixed
         Me.TabControl1.ItemSize = New System.Drawing.Size(30, 120)
         Me.TabControl1.Location = New System.Drawing.Point(11, 11)
@@ -83,38 +86,39 @@ Partial Class SettingUI
         Me.TabControl1.SizeMode = System.Windows.Forms.TabSizeMode.Fixed
         Me.TabControl1.TabIndex = 0
         '
-        'TabPage1
+        'm_connectionTab
         '
-        Me.TabPage1.Controls.Add(Me.m_saveButton)
-        Me.TabPage1.Controls.Add(Me.PortTB)
-        Me.TabPage1.Controls.Add(Me.Label4)
-        Me.TabPage1.Controls.Add(Me.ServerAddressTB)
-        Me.TabPage1.Controls.Add(Me.Label3)
-        Me.TabPage1.Controls.Add(Me.IDTB)
-        Me.TabPage1.Controls.Add(Me.Label1)
-        Me.TabPage1.Location = New System.Drawing.Point(124, 4)
-        Me.TabPage1.Name = "TabPage1"
-        Me.TabPage1.Padding = New System.Windows.Forms.Padding(3)
-        Me.TabPage1.Size = New System.Drawing.Size(700, 464)
-        Me.TabPage1.TabIndex = 0
-        Me.TabPage1.Text = Local.GetValue("connection.connection")
-        Me.TabPage1.UseVisualStyleBackColor = True
+        Me.m_connectionTab.Controls.Add(Me.m_saveConnectionButton)
+        Me.m_connectionTab.Controls.Add(Me.PortTB)
+        Me.m_connectionTab.Controls.Add(Me.m_portNumberLabel)
+        Me.m_connectionTab.Controls.Add(Me.ServerAddressTB)
+        Me.m_connectionTab.Controls.Add(Me.m_serverAddressLabel)
+        Me.m_connectionTab.Controls.Add(Me.IDTB)
+        Me.m_connectionTab.Controls.Add(Me.m_userIdLabel)
+        Me.m_connectionTab.Location = New System.Drawing.Point(124, 4)
+        Me.m_connectionTab.Name = "m_connectionTab"
+        Me.m_connectionTab.Padding = New System.Windows.Forms.Padding(3)
+        Me.m_connectionTab.Size = New System.Drawing.Size(700, 464)
+        Me.m_connectionTab.TabIndex = 0
+        Me.m_connectionTab.Text = "Connection"
+        Me.m_connectionTab.UseVisualStyleBackColor = True
         '
-        'm_saveButton
+        'm_saveConnectionButton
         '
-        Me.m_saveButton.AllowAnimations = True
-        Me.m_saveButton.BackColor = System.Drawing.Color.Transparent
-        Me.m_saveButton.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
-        Me.m_saveButton.ImageKey = "1420498403_340208.ico"
-        Me.m_saveButton.ImageList = Me.ButtonIcons
-        Me.m_saveButton.Location = New System.Drawing.Point(247, 206)
-        Me.m_saveButton.Name = "m_saveButton"
-        Me.m_saveButton.RoundedCornersMask = CType(15, Byte)
-        Me.m_saveButton.Size = New System.Drawing.Size(100, 30)
-        Me.m_saveButton.TabIndex = 20
-        Me.m_saveButton.Text = Local.GetValue("general.save")
-        Me.m_saveButton.UseVisualStyleBackColor = False
-        Me.m_saveButton.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
+        Me.m_saveConnectionButton.AllowAnimations = True
+        Me.m_saveConnectionButton.BackColor = System.Drawing.Color.Transparent
+        Me.m_saveConnectionButton.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.m_saveConnectionButton.ImageKey = "1420498403_340208.ico"
+        Me.m_saveConnectionButton.ImageList = Me.ButtonIcons
+        Me.m_saveConnectionButton.Location = New System.Drawing.Point(319, 206)
+        Me.m_saveConnectionButton.Name = "m_saveConnectionButton"
+        Me.m_saveConnectionButton.RoundedCornersMask = CType(15, Byte)
+        Me.m_saveConnectionButton.Size = New System.Drawing.Size(102, 30)
+        Me.m_saveConnectionButton.TabIndex = 20
+        Me.m_saveConnectionButton.Text = "Save"
+        Me.m_saveConnectionButton.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.m_saveConnectionButton.UseVisualStyleBackColor = False
+        Me.m_saveConnectionButton.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
         '
         'ButtonIcons
         '
@@ -132,78 +136,78 @@ Partial Class SettingUI
         'PortTB
         '
         Me.PortTB.AcceptsReturn = True
-        Me.PortTB.Location = New System.Drawing.Point(151, 104)
+        Me.PortTB.Location = New System.Drawing.Point(201, 104)
         Me.PortTB.Name = "PortTB"
-        Me.PortTB.Size = New System.Drawing.Size(196, 20)
+        Me.PortTB.Size = New System.Drawing.Size(220, 20)
         Me.PortTB.TabIndex = 16
         '
-        'Label4
+        'm_portNumberLabel
         '
-        Me.Label4.AutoSize = True
-        Me.Label4.Location = New System.Drawing.Point(27, 107)
-        Me.Label4.Name = "Label4"
-        Me.Label4.Size = New System.Drawing.Size(26, 13)
-        Me.Label4.TabIndex = 15
-        Me.Label4.Text = Local.GetValue("settings.port_number")
+        Me.m_portNumberLabel.AutoSize = True
+        Me.m_portNumberLabel.Location = New System.Drawing.Point(27, 107)
+        Me.m_portNumberLabel.Name = "m_portNumberLabel"
+        Me.m_portNumberLabel.Size = New System.Drawing.Size(75, 15)
+        Me.m_portNumberLabel.TabIndex = 15
+        Me.m_portNumberLabel.Text = "Port number"
         '
         'ServerAddressTB
         '
-        Me.ServerAddressTB.Location = New System.Drawing.Point(151, 52)
+        Me.ServerAddressTB.Location = New System.Drawing.Point(201, 52)
         Me.ServerAddressTB.Name = "ServerAddressTB"
-        Me.ServerAddressTB.Size = New System.Drawing.Size(196, 20)
+        Me.ServerAddressTB.Size = New System.Drawing.Size(220, 20)
         Me.ServerAddressTB.TabIndex = 5
         '
-        'Label3
+        'm_serverAddressLabel
         '
-        Me.Label3.AutoSize = True
-        Me.Label3.Location = New System.Drawing.Point(27, 55)
-        Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(38, 13)
-        Me.Label3.TabIndex = 4
-        Me.Label3.Text = Local.GetValue("settings.server_address")
+        Me.m_serverAddressLabel.AutoSize = True
+        Me.m_serverAddressLabel.Location = New System.Drawing.Point(27, 55)
+        Me.m_serverAddressLabel.Name = "m_serverAddressLabel"
+        Me.m_serverAddressLabel.Size = New System.Drawing.Size(89, 15)
+        Me.m_serverAddressLabel.TabIndex = 4
+        Me.m_serverAddressLabel.Text = "Server address"
         '
         'IDTB
         '
-        Me.IDTB.Location = New System.Drawing.Point(151, 153)
+        Me.IDTB.Location = New System.Drawing.Point(201, 153)
         Me.IDTB.Name = "IDTB"
-        Me.IDTB.Size = New System.Drawing.Size(196, 20)
+        Me.IDTB.Size = New System.Drawing.Size(220, 20)
         Me.IDTB.TabIndex = 1
         '
-        'Label1
+        'm_userIdLabel
         '
-        Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(27, 156)
-        Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(43, 13)
-        Me.Label1.TabIndex = 0
-        Me.Label1.Text = Local.GetValue("connection.user_id")
+        Me.m_userIdLabel.AutoSize = True
+        Me.m_userIdLabel.Location = New System.Drawing.Point(27, 156)
+        Me.m_userIdLabel.Name = "m_userIdLabel"
+        Me.m_userIdLabel.Size = New System.Drawing.Size(46, 15)
+        Me.m_userIdLabel.TabIndex = 0
+        Me.m_userIdLabel.Text = "User Id"
         '
-        'TabPage2
+        'm_formatsTab
         '
-        Me.TabPage2.Controls.Add(Me.VGroupBox1)
-        Me.TabPage2.Location = New System.Drawing.Point(124, 4)
-        Me.TabPage2.Name = "TabPage2"
-        Me.TabPage2.Padding = New System.Windows.Forms.Padding(3)
-        Me.TabPage2.Size = New System.Drawing.Size(700, 464)
-        Me.TabPage2.TabIndex = 1
-        Me.TabPage2.Text = Local.GetValue("settings.display_options")
-        Me.TabPage2.UseVisualStyleBackColor = True
+        Me.m_formatsTab.Controls.Add(Me.m_formatsGroup)
+        Me.m_formatsTab.Location = New System.Drawing.Point(124, 4)
+        Me.m_formatsTab.Name = "m_formatsTab"
+        Me.m_formatsTab.Padding = New System.Windows.Forms.Padding(3)
+        Me.m_formatsTab.Size = New System.Drawing.Size(700, 464)
+        Me.m_formatsTab.TabIndex = 1
+        Me.m_formatsTab.Text = "Formats options"
+        Me.m_formatsTab.UseVisualStyleBackColor = True
         '
-        'VGroupBox1
+        'm_formatsGroup
         '
-        Me.VGroupBox1.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+        Me.m_formatsGroup.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.VGroupBox1.BackColor = System.Drawing.Color.Transparent
-        Me.VGroupBox1.Controls.Add(Me.FormatsDGV)
-        Me.VGroupBox1.Location = New System.Drawing.Point(17, 19)
-        Me.VGroupBox1.Name = "VGroupBox1"
-        Me.VGroupBox1.Size = New System.Drawing.Size(670, 218)
-        Me.VGroupBox1.TabIndex = 1
-        Me.VGroupBox1.TabStop = False
-        Me.VGroupBox1.Text = Local.GetValue("settings.report_formats")
-        Me.VGroupBox1.UseThemeBorderColor = True
-        Me.VGroupBox1.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
+        Me.m_formatsGroup.BackColor = System.Drawing.Color.Transparent
+        Me.m_formatsGroup.Controls.Add(Me.FormatsDGV)
+        Me.m_formatsGroup.Location = New System.Drawing.Point(17, 19)
+        Me.m_formatsGroup.Name = "m_formatsGroup"
+        Me.m_formatsGroup.Size = New System.Drawing.Size(670, 218)
+        Me.m_formatsGroup.TabIndex = 1
+        Me.m_formatsGroup.TabStop = False
+        Me.m_formatsGroup.Text = "Reports formats"
+        Me.m_formatsGroup.UseThemeBorderColor = True
+        Me.m_formatsGroup.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
         '
         'FormatsDGV
         '
@@ -244,7 +248,7 @@ Partial Class SettingUI
         Me.FormatsDGV.HorizontalScrollBarLargeChange = 20
         Me.FormatsDGV.HorizontalScrollBarSmallChange = 5
         Me.FormatsDGV.ImageList = Nothing
-        Me.FormatsDGV.Localization = DataGridLocalization1
+        Me.FormatsDGV.Localization = DataGridLocalization2
         Me.FormatsDGV.Location = New System.Drawing.Point(6, 16)
         Me.FormatsDGV.MultipleSelectionEnabled = True
         Me.FormatsDGV.Name = "FormatsDGV"
@@ -274,52 +278,107 @@ Partial Class SettingUI
         Me.FormatsDGV.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.OFFICE2010SILVER
         Me.FormatsDGV.VirtualModeCellDefault = False
         '
-        'TabPage3
+        'm_otherTab
         '
-        Me.TabPage3.Controls.Add(Me.CurrenciesCombobox)
-        Me.TabPage3.Controls.Add(Me.VLabel1)
-        Me.TabPage3.Location = New System.Drawing.Point(124, 4)
-        Me.TabPage3.Name = "TabPage3"
-        Me.TabPage3.Padding = New System.Windows.Forms.Padding(3)
-        Me.TabPage3.Size = New System.Drawing.Size(700, 464)
-        Me.TabPage3.TabIndex = 2
-        Me.TabPage3.Text = Local.GetValue("settings.preferences")
-        Me.TabPage3.UseVisualStyleBackColor = True
+        Me.m_otherTab.Controls.Add(Me.m_otherValidateButton)
+        Me.m_otherTab.Controls.Add(Me.m_languageComboBox)
+        Me.m_otherTab.Controls.Add(Me.m_languageLabel)
+        Me.m_otherTab.Controls.Add(Me.m_currenciesCombobox)
+        Me.m_otherTab.Controls.Add(Me.m_consolidationCurrencyLabel)
+        Me.m_otherTab.Location = New System.Drawing.Point(124, 4)
+        Me.m_otherTab.Name = "m_otherTab"
+        Me.m_otherTab.Padding = New System.Windows.Forms.Padding(3)
+        Me.m_otherTab.Size = New System.Drawing.Size(700, 464)
+        Me.m_otherTab.TabIndex = 2
+        Me.m_otherTab.Text = "Other"
+        Me.m_otherTab.UseVisualStyleBackColor = True
         '
-        'CurrenciesCombobox
+        'm_otherValidateButton
         '
-        Me.CurrenciesCombobox.BackColor = System.Drawing.Color.White
-        Me.CurrenciesCombobox.DisplayMember = ""
-        Me.CurrenciesCombobox.DropDownMaximumSize = New System.Drawing.Size(1000, 1000)
-        Me.CurrenciesCombobox.DropDownMinimumSize = New System.Drawing.Size(10, 10)
-        Me.CurrenciesCombobox.DropDownResizeDirection = VIBlend.WinForms.Controls.SizingDirection.Both
-        Me.CurrenciesCombobox.DropDownWidth = 166
-        Me.CurrenciesCombobox.Location = New System.Drawing.Point(165, 35)
-        Me.CurrenciesCombobox.Name = "CurrenciesCombobox"
-        Me.CurrenciesCombobox.RoundedCornersMaskListItem = CType(15, Byte)
-        Me.CurrenciesCombobox.Size = New System.Drawing.Size(166, 23)
-        Me.CurrenciesCombobox.TabIndex = 0
-        Me.CurrenciesCombobox.UseThemeBackColor = False
-        Me.CurrenciesCombobox.UseThemeDropDownArrowColor = True
-        Me.CurrenciesCombobox.ValueMember = ""
-        Me.CurrenciesCombobox.VIBlendScrollBarsTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
-        Me.CurrenciesCombobox.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
+        Me.m_otherValidateButton.AllowAnimations = True
+        Me.m_otherValidateButton.BackColor = System.Drawing.Color.Transparent
+        Me.m_otherValidateButton.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.m_otherValidateButton.ImageKey = "1420498403_340208.ico"
+        Me.m_otherValidateButton.ImageList = Me.ButtonIcons
+        Me.m_otherValidateButton.Location = New System.Drawing.Point(264, 146)
+        Me.m_otherValidateButton.Name = "m_otherValidateButton"
+        Me.m_otherValidateButton.RoundedCornersMask = CType(15, Byte)
+        Me.m_otherValidateButton.Size = New System.Drawing.Size(102, 30)
+        Me.m_otherValidateButton.TabIndex = 21
+        Me.m_otherValidateButton.Text = "Save"
+        Me.m_otherValidateButton.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.m_otherValidateButton.UseVisualStyleBackColor = False
+        Me.m_otherValidateButton.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
         '
-        'VLabel1
+        'm_languageComboBox
         '
-        Me.VLabel1.BackColor = System.Drawing.Color.Transparent
-        Me.VLabel1.DisplayStyle = VIBlend.WinForms.Controls.LabelItemStyle.TextOnly
-        Me.VLabel1.Ellipsis = False
-        Me.VLabel1.ImageAlignment = System.Drawing.ContentAlignment.TopLeft
-        Me.VLabel1.Location = New System.Drawing.Point(22, 38)
-        Me.VLabel1.Multiline = True
-        Me.VLabel1.Name = "VLabel1"
-        Me.VLabel1.Size = New System.Drawing.Size(149, 25)
-        Me.VLabel1.TabIndex = 0
-        Me.VLabel1.Text = Local.GetValue("settings.consolidation_currency")
-        Me.VLabel1.TextAlignment = System.Drawing.ContentAlignment.TopLeft
-        Me.VLabel1.UseMnemonics = True
-        Me.VLabel1.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
+        Me.m_languageComboBox.BackColor = System.Drawing.Color.White
+        Me.m_languageComboBox.DisplayMember = ""
+        Me.m_languageComboBox.DropDownMaximumSize = New System.Drawing.Size(1000, 1000)
+        Me.m_languageComboBox.DropDownMinimumSize = New System.Drawing.Size(10, 10)
+        Me.m_languageComboBox.DropDownResizeDirection = VIBlend.WinForms.Controls.SizingDirection.Both
+        Me.m_languageComboBox.DropDownWidth = 166
+        Me.m_languageComboBox.Location = New System.Drawing.Point(200, 79)
+        Me.m_languageComboBox.Name = "m_languageComboBox"
+        Me.m_languageComboBox.RoundedCornersMaskListItem = CType(15, Byte)
+        Me.m_languageComboBox.Size = New System.Drawing.Size(166, 23)
+        Me.m_languageComboBox.TabIndex = 1
+        Me.m_languageComboBox.UseThemeBackColor = False
+        Me.m_languageComboBox.UseThemeDropDownArrowColor = True
+        Me.m_languageComboBox.ValueMember = ""
+        Me.m_languageComboBox.VIBlendScrollBarsTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
+        Me.m_languageComboBox.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
+        '
+        'm_languageLabel
+        '
+        Me.m_languageLabel.BackColor = System.Drawing.Color.Transparent
+        Me.m_languageLabel.DisplayStyle = VIBlend.WinForms.Controls.LabelItemStyle.TextOnly
+        Me.m_languageLabel.Ellipsis = False
+        Me.m_languageLabel.ImageAlignment = System.Drawing.ContentAlignment.TopLeft
+        Me.m_languageLabel.Location = New System.Drawing.Point(22, 82)
+        Me.m_languageLabel.Multiline = True
+        Me.m_languageLabel.Name = "m_languageLabel"
+        Me.m_languageLabel.Size = New System.Drawing.Size(179, 25)
+        Me.m_languageLabel.TabIndex = 2
+        Me.m_languageLabel.Text = "Language"
+        Me.m_languageLabel.TextAlignment = System.Drawing.ContentAlignment.TopLeft
+        Me.m_languageLabel.UseMnemonics = True
+        Me.m_languageLabel.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
+        '
+        'm_currenciesCombobox
+        '
+        Me.m_currenciesCombobox.BackColor = System.Drawing.Color.White
+        Me.m_currenciesCombobox.DisplayMember = ""
+        Me.m_currenciesCombobox.DropDownMaximumSize = New System.Drawing.Size(1000, 1000)
+        Me.m_currenciesCombobox.DropDownMinimumSize = New System.Drawing.Size(10, 10)
+        Me.m_currenciesCombobox.DropDownResizeDirection = VIBlend.WinForms.Controls.SizingDirection.Both
+        Me.m_currenciesCombobox.DropDownWidth = 166
+        Me.m_currenciesCombobox.Location = New System.Drawing.Point(200, 35)
+        Me.m_currenciesCombobox.Name = "m_currenciesCombobox"
+        Me.m_currenciesCombobox.RoundedCornersMaskListItem = CType(15, Byte)
+        Me.m_currenciesCombobox.Size = New System.Drawing.Size(166, 23)
+        Me.m_currenciesCombobox.TabIndex = 0
+        Me.m_currenciesCombobox.UseThemeBackColor = False
+        Me.m_currenciesCombobox.UseThemeDropDownArrowColor = True
+        Me.m_currenciesCombobox.ValueMember = ""
+        Me.m_currenciesCombobox.VIBlendScrollBarsTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
+        Me.m_currenciesCombobox.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
+        '
+        'm_consolidationCurrencyLabel
+        '
+        Me.m_consolidationCurrencyLabel.BackColor = System.Drawing.Color.Transparent
+        Me.m_consolidationCurrencyLabel.DisplayStyle = VIBlend.WinForms.Controls.LabelItemStyle.TextOnly
+        Me.m_consolidationCurrencyLabel.Ellipsis = False
+        Me.m_consolidationCurrencyLabel.ImageAlignment = System.Drawing.ContentAlignment.TopLeft
+        Me.m_consolidationCurrencyLabel.Location = New System.Drawing.Point(22, 38)
+        Me.m_consolidationCurrencyLabel.Multiline = True
+        Me.m_consolidationCurrencyLabel.Name = "m_consolidationCurrencyLabel"
+        Me.m_consolidationCurrencyLabel.Size = New System.Drawing.Size(179, 25)
+        Me.m_consolidationCurrencyLabel.TabIndex = 0
+        Me.m_consolidationCurrencyLabel.Text = "Devise de consolidation"
+        Me.m_consolidationCurrencyLabel.TextAlignment = System.Drawing.ContentAlignment.TopLeft
+        Me.m_consolidationCurrencyLabel.UseMnemonics = True
+        Me.m_consolidationCurrencyLabel.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
         '
         'ControlImages
         '
@@ -343,36 +402,39 @@ Partial Class SettingUI
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Name = "SettingUI"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = Local.GetValue("settings.settings")
+        Me.Text = "Settings"
         Me.Panel1.ResumeLayout(False)
         Me.TabControl1.ResumeLayout(False)
-        Me.TabPage1.ResumeLayout(False)
-        Me.TabPage1.PerformLayout()
-        Me.TabPage2.ResumeLayout(False)
-        Me.VGroupBox1.ResumeLayout(False)
-        Me.TabPage3.ResumeLayout(False)
+        Me.m_connectionTab.ResumeLayout(False)
+        Me.m_connectionTab.PerformLayout()
+        Me.m_formatsTab.ResumeLayout(False)
+        Me.m_formatsGroup.ResumeLayout(False)
+        Me.m_otherTab.ResumeLayout(False)
         Me.ResumeLayout(False)
 
     End Sub
     Friend WithEvents Panel1 As System.Windows.Forms.Panel
     Friend WithEvents TabControl1 As System.Windows.Forms.TabControl
-    Friend WithEvents TabPage1 As System.Windows.Forms.TabPage
+    Friend WithEvents m_connectionTab As System.Windows.Forms.TabPage
     Friend WithEvents ControlImages As System.Windows.Forms.ImageList
     Friend WithEvents ButtonIcons As System.Windows.Forms.ImageList
     Friend WithEvents ACFIcon As System.Windows.Forms.ImageList
     Friend WithEvents IDTB As System.Windows.Forms.TextBox
-    Friend WithEvents Label1 As System.Windows.Forms.Label
+    Friend WithEvents m_userIdLabel As System.Windows.Forms.Label
     Friend WithEvents ServerAddressTB As System.Windows.Forms.TextBox
-    Friend WithEvents Label3 As System.Windows.Forms.Label
+    Friend WithEvents m_serverAddressLabel As System.Windows.Forms.Label
     Friend WithEvents FolderBrowserDialog1 As System.Windows.Forms.FolderBrowserDialog
     Friend WithEvents PortTB As System.Windows.Forms.TextBox
-    Friend WithEvents Label4 As System.Windows.Forms.Label
-    Friend WithEvents TabPage2 As System.Windows.Forms.TabPage
-    Friend WithEvents VGroupBox1 As VIBlend.WinForms.Controls.vGroupBox
+    Friend WithEvents m_portNumberLabel As System.Windows.Forms.Label
+    Friend WithEvents m_formatsTab As System.Windows.Forms.TabPage
+    Friend WithEvents m_formatsGroup As VIBlend.WinForms.Controls.vGroupBox
     Friend WithEvents ColorDialog1 As System.Windows.Forms.ColorDialog
     Friend WithEvents FormatsDGV As VIBlend.WinForms.DataGridView.vDataGridView
-    Friend WithEvents TabPage3 As System.Windows.Forms.TabPage
-    Friend WithEvents CurrenciesCombobox As VIBlend.WinForms.Controls.vComboBox
-    Friend WithEvents VLabel1 As VIBlend.WinForms.Controls.vLabel
-    Friend WithEvents m_saveButton As VIBlend.WinForms.Controls.vButton
+    Friend WithEvents m_otherTab As System.Windows.Forms.TabPage
+    Friend WithEvents m_currenciesCombobox As VIBlend.WinForms.Controls.vComboBox
+    Friend WithEvents m_consolidationCurrencyLabel As VIBlend.WinForms.Controls.vLabel
+    Friend WithEvents m_saveConnectionButton As VIBlend.WinForms.Controls.vButton
+    Friend WithEvents m_languageComboBox As VIBlend.WinForms.Controls.vComboBox
+    Friend WithEvents m_languageLabel As VIBlend.WinForms.Controls.vLabel
+    Friend WithEvents m_otherValidateButton As VIBlend.WinForms.Controls.vButton
 End Class

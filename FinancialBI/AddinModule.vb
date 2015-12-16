@@ -311,7 +311,12 @@ Public Class AddinModule
         GlobalVariables.Addin = Me
         SetMainMenuButtonState(False)
 
-        Local.LoadLocalFile(My.Resources.english)
+        Select Case My.Settings.language
+            Case 0 : Local.LoadLocalFile(My.Resources.english)
+            Case 1 : Local.LoadLocalFile(My.Resources.french)
+            Case Else : Local.LoadLocalFile(My.Resources.english)
+        End Select
+
 
         If (Me.IsNetworkDeployed().ToString()) Then
             Me.CheckForUpdates()
