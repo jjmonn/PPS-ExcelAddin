@@ -136,7 +136,7 @@ Friend Class ReportUploadControler
 
     Friend Sub CloseInstance()
 
-        '    On Error Resume Next
+        On Error Resume Next
         m_dataModificationsTracker.TakeOffFormatsAndEnableConditionalFormatting()
         If Not m_dataset Is Nothing Then m_dataset = Nothing
         If Not m_dataModificationsTracker Is Nothing Then m_dataModificationsTracker = Nothing

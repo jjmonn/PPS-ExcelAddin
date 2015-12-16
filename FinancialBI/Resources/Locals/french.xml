@@ -40,7 +40,10 @@
     <string name="rows_label">Lignes</string>
     <string name="fields_choice">Choisissez les dimensions à ajouter au rapport:</string>
     <string name="msg_specify_dimensions1">Vous devez préciser les dimensions suivantes </string>
-    <string name="msg_specify_dimensions2">Comptes et périodes (années ou mois)</string>
+    <string name="msg_specify_dimension_account">Comptes</string>
+    <string name="msg_specify_dimension_periods1">Périodes (Années ou Mois)</string>
+    <string name="msg_specify_dimension_periods2">Périodes (Semaines ou Jours)</string>
+    <string name="msg_specify_dimension_client_or_entities">Business Unit ou Client</string>    
     <string name="msg_currency_selection">Vous devez sélectionner une devise.</string>
   </category>
 

@@ -130,37 +130,41 @@ Friend Class ControllingUIController
 
 #Region "Computing"
 
-    Private Function HasMinimumDimensions() As Boolean
+    Private Function HasMinimumDimensions() As String
 
         Select Case m_view.m_process
             Case Account.AccountProcess.FINANCIAL
                 If Not m_view.m_rightPaneControl.DimensionsListContainsItem(computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.YEARS) Then
                     If Not m_view.m_rightPaneControl.DimensionsListContainsItem(computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.MONTHS) Then
                         If Not m_view.m_rightPaneControl.DimensionsListContainsItem(computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.YMONTHS) Then
-                            Return False
+                            Return Local.GetValue("CUI.msg_specify_dimension_periods1")
                         End If
                     End If
                 End If
                 If Not m_view.m_rightPaneControl.DimensionsListContainsItem(computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.ACCOUNTS) Then
-                    Return False
+                    Return Local.GetValue("CUI.msg_specify_dimension_account")
                 End If
-                Return True
+                Return ""
 
             Case Account.AccountProcess.RH
-                If Not m_view.m_rightPaneControl.DimensionsListContainsItem(computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.WEEKS) _
-                AndAlso m_view.m_rightPaneControl.DimensionsListContainsItem(computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.DAYS) Then
-                    Return False
+                If Not m_view.m_rightPaneControl.DimensionsListContainsItem(computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.WEEKS) Then
+                    If m_view.m_rightPaneControl.DimensionsListContainsItem(computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.DAYS) Then
+                        If m_view.m_rightPaneControl.DimensionsListContainsItem(computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.YDAYS) Then
+                            Return Local.GetValue("CUI.msg_specify_dimension_periods2")
+                        End If
+                    End If
                 End If
-                If Not m_view.m_rightPaneControl.DimensionsListContainsItem(computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.ENTITIES) _
-                 AndAlso Not m_view.m_rightPaneControl.DimensionsListContainsItem(computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.CLIENTS) Then
-                    Return False
+                If Not m_view.m_rightPaneControl.DimensionsListContainsItem(computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.ENTITIES) Then
+                    If Not m_view.m_rightPaneControl.DimensionsListContainsItem(computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.CLIENTS) Then
+                        Return Local.GetValue("CUI.msg_specify_dimension_client_or_entities")
+                    End If
                 End If
-                Return True
+                Return ""
 
             Case Else
-                System.Diagnostics.Debug.WriteLine("CUI.Compute() -> ControllingUIController.HasMinimumDimensions() - undeifined process: " & m_view.m_process)
+                    System.Diagnostics.Debug.WriteLine("CUI.Compute() -> ControllingUIController.HasMinimumDimensions() - undeifined process: " & m_view.m_process)
         End Select
-        Return False
+        Return ""
 
     End Function
 
@@ -170,8 +174,9 @@ Friend Class ControllingUIController
 
         If (m_isComputingFlag = True Or m_isDisplayingFlag = True) Then Exit Sub
 
-        If HasMinimumDimensions() = False Then
-            MsgBox(Local.GetValue("CUI.msg_specify_dimensions1") + Chr(13))
+        Dim l_minimumDimensionsErrorMessage As String = HasMinimumDimensions()
+        If l_minimumDimensionsErrorMessage <> "" Then
+            MsgBox(Local.GetValue("CUI.msg_specify_dimensions1") & Chr(13) & l_minimumDimensionsErrorMessage)
             Exit Sub
         End If
         m_view.SetComputeButtonState(False)
