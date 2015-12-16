@@ -20,7 +20,7 @@ Friend Class FactsStorage
 #Region "Interface"
 
     Friend Sub LoadRHFacts(ByRef p_accountsList As List(Of String), _
-                           ByRef p_productList As List(Of String), _
+                           ByRef p_employeeList As List(Of String), _
                            ByRef p_versionId As UInt32, _
                            ByRef p_startPeriod As UInt32, _
                            ByRef p_endPeriod As UInt32)
@@ -32,12 +32,12 @@ Friend Class FactsStorage
             Dim l_account As Account = GlobalVariables.Accounts.GetValue(l_accountName)
             If l_account Is Nothing Then Continue For
 
-            For Each l_productName As String In p_productList
-                Dim l_product As AxisElem = GlobalVariables.AxisElems.GetValue(AxisType.Product, l_productName)
-                If l_product Is Nothing Then Continue For
+            For Each l_employeeName As String In p_employeeList
+                Dim l_employee As AxisElem = GlobalVariables.AxisElems.GetValue(AxisType.Employee, l_employeeName)
+                If l_employee Is Nothing Then Continue For
 
-                m_requestIdDict.Add(Facts.CMSG_GET_FACT(l_account.Id, l_product.Id, p_versionId, p_startPeriod, p_endPeriod), _
-                                    {l_accountName, l_productName})
+                m_requestIdDict.Add(Facts.CMSG_GET_FACT(l_account.Id, l_employee.Id, p_versionId, p_startPeriod, p_endPeriod), _
+                                    {l_accountName, l_employeeName})
             Next
         Next
 

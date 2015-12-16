@@ -98,7 +98,7 @@ Public Class ComputerInputEntity
 
             End If
         Next
-
+        Return True
     End Function
 
     ' Server Response

@@ -16,6 +16,7 @@ namespace CRUD
     public UInt32 ClientId { get; set; }
     public UInt32 ProductId { get; set; }
     public UInt32 AdjustmentId { get; set; }
+    public UInt32 EmployeeId { get; set; }
     public double Value { get; set; }
     public UInt32 Image { get; set; }
 
@@ -36,6 +37,7 @@ namespace CRUD
       l_fact.ClientId = p_packet.ReadUint32();
       l_fact.ProductId = p_packet.ReadUint32();
       l_fact.AdjustmentId = p_packet.ReadUint32();
+      l_fact.EmployeeId = p_packet.ReadUint32();
       l_fact.Value = p_packet.ReadDouble();
 
       return (l_fact);
@@ -52,6 +54,7 @@ namespace CRUD
       p_packet.WriteUint32(ClientId);
       p_packet.WriteUint32(ProductId);
       p_packet.WriteUint32(AdjustmentId);
+      p_packet.WriteUint32(EmployeeId);
       p_packet.WriteDouble(Value);
     }
 
@@ -64,6 +67,7 @@ namespace CRUD
       ClientId = p_model.ClientId;
       ProductId = p_model.ProductId;
       AdjustmentId = p_model.AdjustmentId;
+      EmployeeId = p_model.EmployeeId;
       Value = p_model.Value;
     }
 
