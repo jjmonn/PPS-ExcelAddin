@@ -12,6 +12,7 @@ namespace CRUD
     public UInt32 GroupId { get; set; }
     public string Name { get; set; }
     public string Password { private get; set; }
+    public Account.AccountProcess ProcessFlag { get; private set; }
     public UInt32 Image { get; set; }
 
     public User() { }
@@ -26,6 +27,7 @@ namespace CRUD
 
       l_user.Name = p_packet.ReadString();
       l_user.GroupId = p_packet.ReadUint32();
+      l_user.ProcessFlag = (Account.AccountProcess)p_packet.ReadUint8();
 
       return (l_user);
     }
@@ -52,6 +54,7 @@ namespace CRUD
       GroupId = p_model.GroupId;
       Name = p_model.Name;
       Password = p_model.Password;
+      ProcessFlag = p_model.ProcessFlag;
     }
 
     public User Clone()
