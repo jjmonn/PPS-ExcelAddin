@@ -36,6 +36,7 @@ Friend Class EntitiesView
     Private m_entitiesFilterValuesTreeview As vTreeView
     Friend m_entitiesDataGridView As New vDataGridView
     Private m_currenciesComboBox As New ComboBoxEditor()
+    Private m_rightMgr As New RightManager
 
     ' Variables
     Private m_DGVArray(,) As String
@@ -87,20 +88,24 @@ Friend Class EntitiesView
         AddHandler m_entitiesDataGridView.HierarchyItemMouseClick, AddressOf dataGridView_HierarchyItemMouseClick
         AddHandler m_entitiesDataGridView.CellValueChanged, AddressOf dataGridView_CellValueChanged
         AddHandler m_entitiesDataGridView.KeyDown, AddressOf DGV_KeyDown
+        DefineUIPermissions()
         DesactivateUnallowed()
         MultilanguageSetup()
 
     End Sub
 
+
+    Private Sub DefineUIPermissions()
+        m_rightMgr(RenameEntityButton) = Group.Permission.EDIT_AXIS
+        m_rightMgr(CreateEntityToolStripMenuItem) = Group.Permission.CREATE_AXIS
+        m_rightMgr(DeleteEntityToolStripMenuItem) = Group.Permission.DELETE_AXIS
+        m_rightMgr(DeleteEntityToolStripMenuItem2) = Group.Permission.DELETE_AXIS
+        m_rightMgr(CreateANewEntityToolStripMenuItem) = Group.Permission.CREATE_AXIS
+        m_rightMgr(copy_down_bt) = Group.Permission.EDIT_AXIS
+    End Sub
+
     Private Sub DesactivateUnallowed()
-        If Not GlobalVariables.Users.CurrentUserIsAdmin() Then
-            RenameEntityButton.Enabled = False
-            CreateEntityToolStripMenuItem.Enabled = False
-            DeleteEntityToolStripMenuItem.Enabled = False
-            DeleteEntityToolStripMenuItem2.Enabled = False
-            CreateANewEntityToolStripMenuItem.Enabled = False
-            copy_down_bt.Enabled = False
-        End If
+        m_rightMgr.Enable(GlobalVariables.Users.GetCurrentUserRights())
     End Sub
 
     Private Sub InitCurrenciesComboBox()
@@ -410,7 +415,7 @@ Friend Class EntitiesView
         rowItem.Caption = p_entityHashtable.Name
         Dim column As HierarchyItem = DataGridViewsUtil.GetHierarchyItemFromId(m_entitiesDataGridView.ColumnsHierarchy, ENTITIES_CURRENCY_VARIABLE)
         If p_entityHashtable.AllowEdition = True Then
-            If GlobalVariables.Users.CurrentUserIsAdmin() Then m_entitiesDataGridView.CellsArea.SetCellEditor(rowItem, column, m_currenciesComboBox)
+            If GlobalVariables.Users.CurrentUserHasRight(Group.Permission.EDIT_AXIS) Then m_entitiesDataGridView.CellsArea.SetCellEditor(rowItem, column, m_currenciesComboBox)
             Dim entityCurrency As EntityCurrency = GlobalVariables.EntityCurrencies.GetValue(p_entityId)
             If entityCurrency Is Nothing Then Exit Sub
             Dim currency As Currency = GlobalVariables.Currencies.GetValue(CInt(entityCurrency.CurrencyId))
@@ -459,7 +464,7 @@ Friend Class EntitiesView
         End If
 
         ' Add ComboBoxEditor to Cell
-        If GlobalVariables.Users.CurrentUserIsAdmin() Then m_entitiesDataGridView.CellsArea.SetCellEditor(rowItem, columnItem, combobox)
+        If GlobalVariables.Users.CurrentUserHasRight(Group.Permission.EDIT_AXIS) Then m_entitiesDataGridView.CellsArea.SetCellEditor(rowItem, columnItem, combobox)
 
         ' Recursive if Filters Children exist
         If filterNode.Nodes Is Nothing Then Exit Sub
@@ -551,7 +556,7 @@ Friend Class EntitiesView
         m_entitiesDataGridView.CellsArea.SetCellValue(row, column, Nothing)
 
         ' Add ComboBoxEditor to Cell
-        If GlobalVariables.Users.CurrentUserIsAdmin() Then m_entitiesDataGridView.CellsArea.SetCellEditor(row, column, comboBox)
+        If GlobalVariables.Users.CurrentUserHasRight(Group.Permission.EDIT_AXIS) Then m_entitiesDataGridView.CellsArea.SetCellEditor(row, column, comboBox)
 
         ' Recursivly update children comboboxes
         For Each childFilterNode As vTreeNode In filterNode.Nodes

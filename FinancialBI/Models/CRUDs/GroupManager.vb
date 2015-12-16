@@ -4,12 +4,6 @@ Imports CRUD
 
 Friend Class GroupManager : Inherits NamedCRUDManager(Of NamedHierarchyCRUDEntity)
 
-    Enum Permission
-        NONE = 0
-        ADMIN = 1
-        USER = 2
-    End Enum
-
 #Region "Init"
 
     Friend Sub New()
@@ -45,11 +39,11 @@ Friend Class GroupManager : Inherits NamedCRUDManager(Of NamedHierarchyCRUDEntit
         VTreeViewUtil.LoadTreeview(TV, m_CRUDDic)
     End Sub
 
-    Friend Function GroupIsAdmin(ByRef p_groupId As UInt32) As Boolean
+    Friend Function GetRight(ByRef p_groupId As UInt32) As UInt64
         Dim l_group As Group = GetValue(p_groupId)
 
-        If l_group Is Nothing Then Return False
-        Return l_group.Rights And Permission.ADMIN
+        If l_group Is Nothing Then Return 0
+        Return (l_group.Rights)
     End Function
 
 #End Region

@@ -27,7 +27,6 @@ Friend Class PlatformMGTGeneralUI
 
         '  This call is required by the designer.
         InitializeComponent()
-        If Not GlobalVariables.Users.CurrentUserIsAdmin() Then GroupsBT.Enabled = False
         MultilanguageSetup()
 
         ' Add any initialization after the InitializeComponent() call.

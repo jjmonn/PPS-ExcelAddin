@@ -44,6 +44,7 @@ Friend Class AxisView
     Private m_filterGroup As New FilterGroup(Of String)()
     Friend m_currentRowItem As HierarchyItem
     Friend m_isFillingDGV As Boolean
+    Private m_rightMgr As New RightManager
 
     ' Constants
     Private Const DGV_VI_BLEND_STYLE As VIBLEND_THEME = VIBLEND_THEME.OFFICE2010SILVER
@@ -51,7 +52,6 @@ Friend Class AxisView
     Friend Const NAME_COLUMN_NAME As String = "Name"
     Private Const CB_WIDTH As Double = 20
     Private Const CB_NB_ITEMS_DISPLAYED As Int32 = 7
-
 
 #End Region
 
@@ -89,21 +89,24 @@ Friend Class AxisView
         AddHandler m_axisDataGridView.HierarchyItemMouseDown, AddressOf dataGridView_HierarchyItemMouseDown
         AddHandler m_axisDataGridView.CellValueChanged, AddressOf dataGridView_CellValueChanged
         AddHandler m_axisDataGridView.KeyDown, AddressOf DGV_KeyDown
+        DefineUIPermissions()
         DesactivateUnallowed()
         MultilanguageSetup()
 
     End Sub
 
+    Private Sub DefineUIPermissions()
+        m_rightMgr(DeleteAxisToolStripMenuItem) = Group.Permission.DELETE_AXIS
+        m_rightMgr(DeleteAxisToolStripMenuItem2) = Group.Permission.DELETE_AXIS
+        m_rightMgr(CreateAxisToolStripMenuItem) = Group.Permission.CREATE_AXIS
+        m_rightMgr(CreateNewToolStripMenuItem) = Group.Permission.CREATE_AXIS
+        m_rightMgr(copy_down_bt) = Group.Permission.EDIT_AXIS
+        m_rightMgr(CopyDownValuesToolStripMenuItem) = Group.Permission.EDIT_AXIS
+        m_rightMgr(RenameToolStripMenuItem) = Group.Permission.EDIT_AXIS
+    End Sub
+
     Private Sub DesactivateUnallowed()
-        If Not GlobalVariables.Users.CurrentUserIsAdmin() Then
-            DeleteAxisToolStripMenuItem.Enabled = False
-            DeleteAxisToolStripMenuItem2.Enabled = False
-            CreateAxisToolStripMenuItem.Enabled = False
-            CreateNewToolStripMenuItem.Enabled = False
-            copy_down_bt.Enabled = False
-            CopyDownValuesToolStripMenuItem.Enabled = False
-            RenameToolStripMenuItem.Enabled = False
-        End If
+        m_rightMgr.Enable(GlobalVariables.Users.GetCurrentUserRights())
     End Sub
 
     Private Sub MultilanguageSetup()
@@ -441,7 +444,7 @@ Friend Class AxisView
         End If
 
         ' Add ComboBoxEditor to Cell
-        If GlobalVariables.Users.CurrentUserIsAdmin() Then m_axisDataGridView.CellsArea.SetCellEditor(rowItem, columnItem, combobox)
+        If GlobalVariables.Users.CurrentUserHasRight(Group.Permission.EDIT_AXIS) Then m_axisDataGridView.CellsArea.SetCellEditor(rowItem, columnItem, combobox)
 
         ' Recursive if Filters Children exist
         For Each childFilterNode As vTreeNode In filterNode.Nodes

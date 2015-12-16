@@ -5,6 +5,7 @@ Imports System.Windows.Forms
 Imports System.Windows.Forms.DataVisualization.Charting
 Imports VIBlend.WinForms.Controls
 Imports System.Drawing
+Imports CRUD
 
 
 Friend Class GlobalFactUI
@@ -23,6 +24,7 @@ Friend Class GlobalFactUI
     Private m_isCopyingValueDown As Boolean = False
     Private m_textBoxEditor As New TextBoxEditor()
     Private m_selectedFact As Int32
+    Private m_rightMgr As New RightManager
 
     ' Constants
     Private LINES_WIDTH As Single = 3
@@ -51,6 +53,7 @@ Friend Class GlobalFactUI
         m_versionsTV.ContextMenuStrip = VersionsRCMenu
         m_versionsTV.ImageList = m_versionsTreeviewImageList
         VTreeViewUtil.InitTVFormat(m_versionsTV)
+        DefineUIPermissions()
         DesactivateUnallowed()
         MultilanguageSetup()
         FormatDGV()
@@ -72,19 +75,21 @@ Friend Class GlobalFactUI
 
     End Sub
 
+    Private Sub DefineUIPermissions()
+        m_rightMgr(AddRatesVersionRCM) = Group.Permission.EDIT_BASE
+        m_rightMgr(DeleteVersionRCM) = Group.Permission.EDIT_BASE
+        m_rightMgr(AddFolderRCM) = Group.Permission.EDIT_BASE
+        m_rightMgr(ImportFromExcelBT) = Group.Permission.EDIT_GFACTS
+        m_rightMgr(RenameBT) = Group.Permission.EDIT_GFACTS
+        m_rightMgr(RenameVersionBT) = Group.Permission.EDIT_BASE
+        m_rightMgr(CopyFactDownToolStripMenuItem) = Group.Permission.EDIT_GFACTS
+        m_rightMgr(DeleteBT) = Group.Permission.DELETE_GFACTS
+        m_rightMgr(CreateNewFact) = Group.Permission.CREATE_GFACTS
+        m_rightMgr(CreateNewFact2) = Group.Permission.CREATE_GFACTS
+    End Sub
+
     Private Sub DesactivateUnallowed()
-        If Not GlobalVariables.Users.CurrentUserIsAdmin() Then
-            AddRatesVersionRCM.Enabled = False
-            DeleteVersionRCM.Enabled = False
-            AddFolderRCM.Enabled = False
-            ImportFromExcelBT.Enabled = False
-            RenameBT.Enabled = False
-            RenameVersionBT.Enabled = False
-            CopyFactDownToolStripMenuItem.Enabled = False
-            DeleteBT.Enabled = False
-            CreateNewFact.Enabled = False
-            CreateNewFact2.Enabled = False
-        End If
+        m_rightMgr.Enable(GlobalVariables.Users.GetCurrentUserRights())
     End Sub
 
     Private Sub ManagementUI_Load(sender As Object, e As EventArgs) Handles MyBase.Load
@@ -303,7 +308,7 @@ Friend Class GlobalFactUI
             target = m_dataGridView.RowsHierarchy.HitTest(e.Location)
             If target Is Nothing Then Exit Sub
         End If
-        
+
         FactRightClickMenu.Visible = True
         FactRightClickMenu.Bounds = New Rectangle(MousePosition, New Size(FactRightClickMenu.Width, FactRightClickMenu.Height))
         m_selectedFact = target.ItemValue
@@ -417,7 +422,7 @@ Friend Class GlobalFactUI
             Dim row As HierarchyItem = m_dataGridView.RowsHierarchy.Items.Add(Format(period, "MMMMMMMM yyyy"))
             row.ItemValue = monthId
             m_textBoxEditor.ActivationFlags = EditorActivationFlags.MOUSE_CLICK_SELECTED_CELL
-            If GlobalVariables.Users.CurrentUserIsAdmin() Then row.CellsEditor = m_textBoxEditor
+            If GlobalVariables.Users.CurrentUserHasRight(Group.Permission.EDIT_GFACTS) Then row.CellsEditor = m_textBoxEditor
 
             m_isFillingCells = True
             For Each column In m_columnsVariableItemDictionary

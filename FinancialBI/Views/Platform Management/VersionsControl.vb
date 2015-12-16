@@ -42,6 +42,7 @@ Friend Class VersionsControl
     Private m_currentNode As VIBlend.WinForms.Controls.vTreeNode
     Private m_creationFlag As String
     Private m_isDisplaying As Boolean
+    Private m_rightMgr As New RightManager
 
 #End Region
 
@@ -83,24 +84,27 @@ Friend Class VersionsControl
         m_exchangeRatesVersionVTreeviewbox.Text = ""
         m_factsVersionVTreeviewbox.Text = ""
 
+        DefineUIPermissions()
         DesactivateUnallowed()
 
     End Sub
 
+    Private Sub DefineUIPermissions()
+        m_rightMgr(lockedCB) = Group.Permission.EDIT_BASE
+        m_rightMgr(m_exchangeRatesVersionVTreeviewbox) = Group.Permission.EDIT_BASE
+        m_rightMgr(m_factsVersionVTreeviewbox) = Group.Permission.EDIT_BASE
+        m_rightMgr(new_folder_bt) = Group.Permission.EDIT_BASE
+        m_rightMgr(new_version_bt) = Group.Permission.EDIT_BASE
+        m_rightMgr(rename_bt) = Group.Permission.EDIT_BASE
+        m_rightMgr(delete_bt) = Group.Permission.EDIT_BASE
+        m_rightMgr(NewVersionMenuBT) = Group.Permission.EDIT_BASE
+        m_rightMgr(NewFolderMenuBT) = Group.Permission.EDIT_BASE
+        m_rightMgr(DeleteVersionMenuBT) = Group.Permission.EDIT_BASE
+        m_rightMgr(RenameMenuBT) = Group.Permission.EDIT_BASE
+    End Sub
+
     Private Sub DesactivateUnallowed()
-        If Not GlobalVariables.Users.CurrentUserIsAdmin() Then
-            lockedCB.Enabled = False
-            m_exchangeRatesVersionVTreeviewbox.Enabled = False
-            m_factsVersionVTreeviewbox.Enabled = False
-            new_folder_bt.Enabled = False
-            new_version_bt.Enabled = False
-            rename_bt.Enabled = False
-            delete_bt.Enabled = False
-            NewVersionMenuBT.Enabled = False
-            NewFolderMenuBT.Enabled = False
-            DeleteVersionMenuBT.Enabled = False
-            RenameMenuBT.Enabled = False
-        End If
+        m_rightMgr.Enable(GlobalVariables.Users.GetCurrentUserRights())
     End Sub
 
     Private Sub MultilanguageSetup()

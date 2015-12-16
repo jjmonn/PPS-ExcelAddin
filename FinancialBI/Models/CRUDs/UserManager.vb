@@ -45,11 +45,19 @@ Friend Class UserManager : Inherits NamedCRUDManager(Of NamedCRUDEntity)
         Return m_CRUDDic(currentUserName)
     End Function
 
-    Friend Function CurrentUserIsAdmin() As Boolean
+    Friend Function GetCurrentUserRights() As UInt64
         Dim l_user As User = GetCurrentUser()
-        If l_user Is Nothing Then Return False
+        If l_user Is Nothing Then Return Group.Permission.NONE
 
-        Return GlobalVariables.Groups.GroupIsAdmin(l_user.GroupId)
+        Return GlobalVariables.Groups.GetRight(l_user.GroupId)
+    End Function
+
+    Friend Function CurrentUserHasRight(ByRef p_right As Group.Permission) As Boolean
+        Dim l_user As User = GetCurrentUser()
+        If l_user Is Nothing Then Return Group.Permission.NONE
+
+        Dim val As UInt64 = GlobalVariables.Groups.GetRight(l_user.GroupId) And p_right
+        Return val <> 0
     End Function
 
 #End Region
