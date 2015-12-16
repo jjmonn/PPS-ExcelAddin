@@ -13,7 +13,7 @@
 '      
 '
 ' Author: Julien Monnereau
-' Last modified: 09/09/2015
+' Last modified: 16/15/2015
 '
 
 
@@ -148,6 +148,7 @@ Public Class FBIFunctionController
 
         Dim request_id As Int32 = Computer.CMSG_COMPUTE_REQUEST({m_versionId}, _
                                                                  {m_entityId}.ToList, _
+                                                                 CRUD.Account.AccountProcess.FINANCIAL, _
                                                                  m_currencyId, _
                                                                  filters, _
                                                                  axis_filters, _

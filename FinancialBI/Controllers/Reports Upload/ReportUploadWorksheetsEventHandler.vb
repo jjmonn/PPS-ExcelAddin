@@ -434,7 +434,7 @@ Friend Class ReportUploadWorksheetsEventHandler
     Private Function CellBelongsToPDCDimensionsDefinition(ByVal p_address As String) As Boolean
 
         p_address = Replace(p_address, "$", "")
-        If m_dataSet.m_dimensionsAddressValueDict(ModelDataSet.Dimension.PRODUCT).ContainsKey(p_address) Then
+        If m_dataSet.m_dimensionsAddressValueDict(ModelDataSet.Dimension.EMPLOYEE).ContainsKey(p_address) Then
             m_disableWSChangeFlag = True
             m_excelWorksheet.Range(p_address).Value = m_dataSet.m_dimensionsAddressValueDict(ModelDataSet.Dimension.ACCOUNT)(p_address)
             m_disableWSChangeFlag = False

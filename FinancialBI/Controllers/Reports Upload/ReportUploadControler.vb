@@ -220,7 +220,7 @@ Friend Class ReportUploadControler
             m_dataModificationsTracker.InitializeOutputsRegion()
             Select Case m_dataset.m_processFlag
                 Case Account.AccountProcess.FINANCIAL : Return FinancialProcessSnapshotRefreshment(p_updateInputsFlag)
-                Case Account.AccountProcess.RH : Return PDCProcessSnapshotRefreshment()
+                Case Account.AccountProcess.RH : Return PDCProcessSnapshotRefreshment(p_updateInputsFlag)
             End Select
         End If
         Return False
@@ -238,6 +238,7 @@ Friend Class ReportUploadControler
             m_addin.SelectFinancialDropDownSubmissionButtons(m_dataset.AxisElemIdentify(AxisType.Client), _
                                                     m_dataset.AxisElemIdentify(AxisType.Product), _
                                                     m_dataset.AxisElemIdentify(AxisType.Adjustment))
+
             UpdateAfterAnalysisAxisChanged(GlobalVariables.ClientsIDDropDown.SelectedItemId, _
                                            GlobalVariables.ProductsIDDropDown.SelectedItemId, _
                                            GlobalVariables.AdjustmentIDDropDown.SelectedItemId, _
@@ -258,7 +259,9 @@ Friend Class ReportUploadControler
 
     End Function
 
-    Private Function PDCProcessSnapshotRefreshment() As Boolean
+    Private Function PDCProcessSnapshotRefreshment(p_updateInputsFlag) As Boolean
+
+        ' -> update fomr server !
 
         If m_dataset.m_globalOrientationFlag <> ModelDataSet.Orientations.ORIENTATION_ERROR Then
             If m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.ENTITY).Count = 0 Then
@@ -280,7 +283,7 @@ Friend Class ReportUploadControler
 
             ' RH Cloud data loading
             m_factsStorage.LoadRHFacts({m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.ACCOUNT).ElementAt(0).Value}.ToList, _
-                                       m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.PRODUCT).Values.ToList, _
+                                       m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.EMPLOYEE).Values.ToList, _
                                        m_dataset.m_currentVersionId, _
                                        m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.PERIOD).Values.Min, _
                                        m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.PERIOD).Values.Max)
@@ -466,7 +469,7 @@ errorHandler:
             ' quid : clients creation
 
             ht(CLIENT_ID_VARIABLE) = 8 'GlobalVariables.APPS.ActiveSheet.range(cellAddress).value
-            ht(PRODUCT_ID_VARIABLE) = GlobalVariables.AxisElems.GetValue(AxisType.Product, m_dataset.m_datasetCellDimensionsDictionary(cellAddress).m_product).Id
+            ht(PRODUCT_ID_VARIABLE) = GlobalVariables.AxisElems.GetValue(AxisType.Employee, m_dataset.m_datasetCellDimensionsDictionary(cellAddress).m_employee).Id
             ht(ADJUSTMENT_ID_VARIABLE) = CUInt(CRUD.AxisType.Adjustment)
             ht(VALUE_VARIABLE) = 1      ' * % working time of the consultant
 
@@ -537,11 +540,11 @@ errorHandler:
     Private Function IdentifyPDCSnapshotFlagsErrors() As String
 
         Dim tmpStr As String = ""
-        If m_dataset.m_productFlag = ModelDataSet.SnapshotResult.ZERO Then tmpStr = tmpStr & "  - " & Local.GetValue("general.products") & Chr(13)
+        If m_dataset.m_employeeFlag = ModelDataSet.SnapshotResult.ZERO Then tmpStr = tmpStr & "  - " & Local.GetValue("general.products") & Chr(13)
         If m_dataset.m_entityFlag = ModelDataSet.SnapshotResult.ZERO Then tmpStr = "  - " & Local.GetValue("general.entities") & Chr(13)
         If m_dataset.m_periodFlag = ModelDataSet.SnapshotResult.ZERO Then tmpStr = tmpStr & "  - " & Local.GetValue("general.periods") & Chr(13)
         If m_dataset.m_periodsOrientationFlag = ModelDataSet.Alignment.UNCLEAR Then tmpStr = tmpStr & "  - " & Local.GetValue("upload.msg_periods_orientation_unclear") & Chr(13)
-        If m_dataset.m_productsOrientationFlag = ModelDataSet.Alignment.UNCLEAR Then tmpStr = tmpStr & "  - " & Local.GetValue("upload.msg_products_orientation_unclear") & Chr(13)
+        If m_dataset.m_employeeOrientationFlag = ModelDataSet.Alignment.UNCLEAR Then tmpStr = tmpStr & "  - " & Local.GetValue("upload.msg_products_orientation_unclear") & Chr(13)
         Return tmpStr
 
     End Function

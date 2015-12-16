@@ -20,7 +20,8 @@ Public Class Test
         Dim decompList As New Collections.Generic.List(Of String)
         decompList.Add("A2")
         Computer.CMSG_COMPUTE_REQUEST({5}, _
-                                      {2}.tolist, _
+                                      {2}.ToList, _
+                                      CRUD.Account.AccountProcess.FINANCIAL, _
                                       3, _
                                       , _
                                       , _

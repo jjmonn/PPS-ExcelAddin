@@ -43,26 +43,21 @@ Friend Class ModelDataSet
     Friend m_periodFlag As SnapshotResult
     Friend m_accountFlag As SnapshotResult
     Friend m_entityFlag As SnapshotResult
-    Friend m_productFlag As SnapshotResult
+    Friend m_employeeFlag As SnapshotResult
 
     Friend m_globalOrientationFlag As Orientations
     Friend m_periodsOrientationFlag As Alignment
     Friend m_accountsOrientationFlag As Alignment
     Friend m_entitiesOrientationFlag As Alignment
-    Friend m_productsOrientationFlag As Alignment
+    Friend m_employeeOrientationFlag As Alignment
 
     Friend m_processFlag As Account.AccountProcess
-
-    'Private Const m_accountStringFlag As String = "Account"
-    'Private Const m_entityStringFlag As String = "Entity"
-    'Private Const m_periodFormatflag As String = "Period"
-    'Private Const m_productFormatflag As String = "Product"
-
+   
     Structure DataSetCellDimensions
         Public m_accountName As String
         Public m_entityName As String
         Public m_period As String
-        Public m_product As String
+        Public m_employee As String
         Public m_value As Double
     End Structure
 
@@ -100,10 +95,9 @@ Friend Class ModelDataSet
         OUTPUTACCOUNT
         PERIOD
         ENTITY
-        PRODUCT
+        EMPLOYEE
     End Enum
 
-   
 #End Region
 
 
@@ -113,6 +107,7 @@ Friend Class ModelDataSet
 
         Me.m_excelWorkSheet = inputWS
         ReinitializeDimensionsDict()
+        m_processFlag = My.Settings.processId
 
     End Sub
 
@@ -124,7 +119,7 @@ Friend Class ModelDataSet
         m_dimensionsAddressValueDict.Add(Dimension.OUTPUTACCOUNT, New SafeDictionary(Of String, String))
         m_dimensionsAddressValueDict.Add(Dimension.ENTITY, New SafeDictionary(Of String, String))
         m_dimensionsAddressValueDict.Add(Dimension.PERIOD, New SafeDictionary(Of String, String))
-        m_dimensionsAddressValueDict.Add(Dimension.PRODUCT, New SafeDictionary(Of String, String))
+        m_dimensionsAddressValueDict.Add(Dimension.EMPLOYEE, New SafeDictionary(Of String, String))
 
         ' Initialization of the dimensions values->addresses dictionary
         m_dimensionsValueAddressDict.Clear()
@@ -132,10 +127,9 @@ Friend Class ModelDataSet
         m_dimensionsValueAddressDict.Add(Dimension.OUTPUTACCOUNT, New SafeDictionary(Of String, String))
         m_dimensionsValueAddressDict.Add(Dimension.ENTITY, New SafeDictionary(Of String, String))
         m_dimensionsValueAddressDict.Add(Dimension.PERIOD, New SafeDictionary(Of String, String))
-        m_dimensionsValueAddressDict.Add(Dimension.PRODUCT, New SafeDictionary(Of String, String))
+        m_dimensionsValueAddressDict.Add(Dimension.EMPLOYEE, New SafeDictionary(Of String, String))
 
     End Sub
-
 
 #End Region
 
@@ -173,7 +167,7 @@ Friend Class ModelDataSet
         DatesIdentify()
         AccountsIdentify()
         EntitiesIdentify()
-        ProductsIdentify()
+        EmployeesIdentify()
 
     End Sub
 
@@ -330,20 +324,20 @@ Friend Class ModelDataSet
     End Sub
 
     ' Identify the mapped products in the WS  
-    Friend Sub ProductsIdentify()
+    Friend Sub EmployeesIdentify()
 
-        Dim currentStr As String
+        Dim l_currentStr As String
 
         For rowIndex = 1 To m_lastCell.Row
             For columnIndex = 1 To m_lastCell.Column
                 Try
                     If VarType(m_excelWorkSheet.Cells(rowIndex, columnIndex).value) = 8 Then
-                        currentStr = CStr(m_excelWorkSheet.Cells(rowIndex, columnIndex).value)
+                        l_currentStr = CStr(m_excelWorkSheet.Cells(rowIndex, columnIndex).value)
 
-                        If Not GlobalVariables.AxisElems.GetValue(AxisType.Product, currentStr) Is Nothing _
-                        AndAlso Not m_dimensionsAddressValueDict(Dimension.PRODUCT).ContainsValue(currentStr) Then
-                            m_dimensionsAddressValueDict(Dimension.PRODUCT).Add(GetRangeAddressFromRowAndColumn(rowIndex, columnIndex), currentStr)
-                            m_dimensionsValueAddressDict(Dimension.PRODUCT).Add(currentStr, GetRangeAddressFromRowAndColumn(rowIndex, columnIndex))
+                        If Not GlobalVariables.AxisElems.GetValue(AxisType.Employee, l_currentStr) Is Nothing _
+                        AndAlso Not m_dimensionsAddressValueDict(Dimension.EMPLOYEE).ContainsValue(l_currentStr) Then
+                            m_dimensionsAddressValueDict(Dimension.EMPLOYEE).Add(GetRangeAddressFromRowAndColumn(rowIndex, columnIndex), l_currentStr)
+                            m_dimensionsValueAddressDict(Dimension.EMPLOYEE).Add(l_currentStr, GetRangeAddressFromRowAndColumn(rowIndex, columnIndex))
                         End If
                     End If
                 Catch ex As Exception
@@ -351,10 +345,10 @@ Friend Class ModelDataSet
             Next
         Next
 
-        Select Case m_dimensionsAddressValueDict(Dimension.PRODUCT).Count
-            Case 0 : m_productFlag = SnapshotResult.ZERO
-            Case 1 : m_productFlag = SnapshotResult.ONE
-            Case Else : m_productFlag = SnapshotResult.SEVERAL
+        Select Case m_dimensionsAddressValueDict(Dimension.EMPLOYEE).Count
+            Case 0 : m_employeeFlag = SnapshotResult.ZERO
+            Case 1 : m_employeeFlag = SnapshotResult.ONE
+            Case Else : m_employeeFlag = SnapshotResult.SEVERAL
         End Select
 
     End Sub
@@ -436,21 +430,15 @@ Friend Class ModelDataSet
     Public Sub GetOrientations()
 
         Dim l_financialFlagsCode As String = CStr(m_periodFlag) & CStr(m_accountFlag) & CStr(m_entityFlag)
-        Dim l_PDCFlagsCode As String = CStr(m_periodFlag) & CStr(m_productFlag)
-   
+        Dim l_PDCFlagsCode As String = CStr(m_periodFlag) & CStr(m_employeeFlag)
+
         If m_periodFlag = SnapshotResult.ZERO _
         Or m_accountFlag = SnapshotResult.ZERO Then
             m_globalOrientationFlag = Orientations.ORIENTATION_ERROR
             Exit Sub
         End If
 
-        Dim l_account As Account = GlobalVariables.Accounts.GetValue(m_dimensionsAddressValueDict(Dimension.ACCOUNT).ElementAt(0).Value)
-        If l_account Is Nothing Then
-            m_globalOrientationFlag = Orientations.ORIENTATION_ERROR
-            Exit Sub
-        End If
-
-        Select Case l_account.Process
+        Select Case m_processFlag
             Case Account.AccountProcess.FINANCIAL
                 If m_entityFlag <> SnapshotResult.ZERO Then
                     DefineFinancialDimensionsOrientation(l_financialFlagsCode)
@@ -460,7 +448,7 @@ Friend Class ModelDataSet
                 End If
 
             Case Account.AccountProcess.RH
-                If m_productFlag <> SnapshotResult.ZERO Then
+                If m_employeeFlag <> SnapshotResult.ZERO Then
                     DefinePDCDimensionsOrientation(l_PDCFlagsCode)
                 Else
                     m_globalOrientationFlag = Orientations.ORIENTATION_ERROR
@@ -476,7 +464,7 @@ Friend Class ModelDataSet
         Dim l_maxRight As String = ""
         Dim l_maxBelow As String = ""
         Dim l_lastPeriodCell As Excel.Range = GetLastCellOfDimensionDict(Dimension.PERIOD)
-        Dim l_lastProductCell As Excel.Range = GetLastCellOfDimensionDict(Dimension.PRODUCT)
+        Dim l_lastProductCell As Excel.Range = GetLastCellOfDimensionDict(Dimension.EMPLOYEE)
 
         Select Case p_PDCFlagsCode
             Case "11"           ' one period, one product
@@ -484,26 +472,26 @@ Friend Class ModelDataSet
                 GetMaxs(l_maxRight, l_maxBelow)
                 Dim l_maxsFlag As String = l_maxRight + l_maxBelow
                 Select Case l_maxsFlag
-                    Case Dimension.PRODUCT & Dimension.PERIOD
-                        m_productsOrientationFlag = Alignment.HORIZONTAL
+                    Case Dimension.EMPLOYEE & Dimension.PERIOD
+                        m_employeeOrientationFlag = Alignment.HORIZONTAL
                         m_periodsOrientationFlag = Alignment.VERTICAL
-                    Case Dimension.PERIOD & Dimension.PRODUCT
+                    Case Dimension.PERIOD & Dimension.EMPLOYEE
                         m_periodsOrientationFlag = Alignment.HORIZONTAL
-                        m_productsOrientationFlag = Alignment.VERTICAL
+                        m_employeeOrientationFlag = Alignment.VERTICAL
                 End Select
 
             Case "21"           ' several periods, one product
 
                 GetDimensionOrientations(Dimension.PERIOD, m_periodFlag, m_periodsOrientationFlag)
                 If m_periodsOrientationFlag = Alignment.HORIZONTAL Then
-                    m_productsOrientationFlag = Alignment.VERTICAL
+                    m_employeeOrientationFlag = Alignment.VERTICAL
                 Else
-                    m_productsOrientationFlag = Alignment.HORIZONTAL
+                    m_employeeOrientationFlag = Alignment.HORIZONTAL
                 End If
 
             Case "12"           ' one period, several products
-                GetDimensionOrientations(Dimension.PRODUCT, m_productFlag, m_productsOrientationFlag)
-                If m_productsOrientationFlag = Alignment.HORIZONTAL Then
+                GetDimensionOrientations(Dimension.EMPLOYEE, m_employeeFlag, m_employeeOrientationFlag)
+                If m_employeeOrientationFlag = Alignment.HORIZONTAL Then
                     m_periodsOrientationFlag = Alignment.VERTICAL
                 Else
                     m_periodsOrientationFlag = Alignment.HORIZONTAL
@@ -511,7 +499,7 @@ Friend Class ModelDataSet
 
             Case "22"           ' several periods, several products
                 GetDimensionOrientations(Dimension.PERIOD, m_periodFlag, m_periodsOrientationFlag)                      ' Dates Orientation
-                GetDimensionOrientations(Dimension.PRODUCT, m_productFlag, m_productsOrientationFlag)                   ' Products orientation
+                GetDimensionOrientations(Dimension.EMPLOYEE, m_employeeFlag, m_employeeOrientationFlag)                   ' Products orientation
 
         End Select
         DefineGlobalOrientationFlag()
@@ -618,14 +606,14 @@ Friend Class ModelDataSet
         Dim l_lastPeriodCell As Excel.Range = GetLastCellOfDimensionDict(Dimension.PERIOD)
         Dim l_lastAccountCell As Excel.Range = GetLastCellOfDimensionDict(Dimension.ACCOUNT)
         Dim l_lastEntityCell As Excel.Range = GetLastCellOfDimensionDict(Dimension.ENTITY)
-        Dim l_lastProductCell As Excel.Range = GetLastCellOfDimensionDict(Dimension.PRODUCT)
+        Dim l_lastProductCell As Excel.Range = GetLastCellOfDimensionDict(Dimension.EMPLOYEE)
 
         ' Max right cell identification
         Dim l_rightCellsDict As New Dictionary(Of Int16, Int32)
         l_rightCellsDict.Add(Dimension.PERIOD, l_lastPeriodCell.Column)
         l_rightCellsDict.Add(Dimension.ACCOUNT, l_lastAccountCell.Column)
         l_rightCellsDict.Add(Dimension.ENTITY, l_lastEntityCell.Column)
-        l_rightCellsDict.Add(Dimension.PRODUCT, l_lastProductCell.Column)
+        l_rightCellsDict.Add(Dimension.EMPLOYEE, l_lastProductCell.Column)
         Dim l_columnsSortedDict = (From entry In l_rightCellsDict Order By entry.Value Ascending Select entry)
         p_maxRight = l_columnsSortedDict.ElementAt(0).Key
 
@@ -634,7 +622,7 @@ Friend Class ModelDataSet
         l_rightCellsDict.Add(Dimension.PERIOD, l_lastPeriodCell.Row)
         l_rightCellsDict.Add(Dimension.ACCOUNT, l_lastAccountCell.Row)
         l_rightCellsDict.Add(Dimension.ENTITY, l_lastEntityCell.Row)
-        l_rightCellsDict.Add(Dimension.PRODUCT, l_lastProductCell.Row)
+        l_rightCellsDict.Add(Dimension.EMPLOYEE, l_lastProductCell.Row)
         Dim l_rowsSortedDict = (From entry In l_belowCellsDict Order By entry.Value Ascending Select entry)
         p_maxBelow = l_rowsSortedDict.ElementAt(0).Key
 
@@ -708,14 +696,14 @@ Friend Class ModelDataSet
             Exit Sub
         End If
 
-        If m_productsOrientationFlag = Alignment.VERTICAL _
+        If m_employeeOrientationFlag = Alignment.VERTICAL _
         AndAlso m_periodsOrientationFlag = Alignment.HORIZONTAL Then
             m_globalOrientationFlag = Orientations.PRODUCTS_PERIODS
             Exit Sub
         End If
 
         If m_periodsOrientationFlag = Alignment.VERTICAL _
-        AndAlso m_productsOrientationFlag = Alignment.HORIZONTAL Then
+        AndAlso m_employeeOrientationFlag = Alignment.HORIZONTAL Then
             m_globalOrientationFlag = Orientations.PERIODS_PRODUCTS
             Exit Sub
         End If
@@ -922,12 +910,12 @@ Friend Class ModelDataSet
 
         Dim l_periodColumn As Int32
         Dim l_period As String
-     
+
         For Each l_periodAddressValuePair In m_dimensionsAddressValueDict(Dimension.PERIOD)
             l_period = l_periodAddressValuePair.Value
             l_periodColumn = m_excelWorkSheet.Range(l_periodAddressValuePair.Key).Column
 
-            For Each l_productAddressValuePair In m_dimensionsAddressValueDict(Dimension.PRODUCT)
+            For Each l_productAddressValuePair In m_dimensionsAddressValueDict(Dimension.EMPLOYEE)
 
                 RegisterDatasetCell(m_excelWorkSheet.Cells(m_excelWorkSheet.Range(l_productAddressValuePair.Key).Row, l_periodColumn), _
                                     "", _
@@ -944,8 +932,8 @@ Friend Class ModelDataSet
 
         Dim l_productColumn As Int32
         Dim l_productName As String
-    
-        For Each l_productAddressValuePair In m_dimensionsAddressValueDict(Dimension.PRODUCT)
+
+        For Each l_productAddressValuePair In m_dimensionsAddressValueDict(Dimension.EMPLOYEE)
             l_productName = l_productAddressValuePair.Value
             l_productColumn = m_excelWorkSheet.Range(l_productAddressValuePair.Key).Column
 
@@ -975,7 +963,7 @@ Friend Class ModelDataSet
         Dim tmpStruct As DataSetCellDimensions
         tmpStruct.m_entityName = p_entityName
         tmpStruct.m_accountName = p_accountName
-        tmpStruct.m_product = p_productName
+        tmpStruct.m_employee = p_productName
         tmpStruct.m_period = p_period
         m_datasetCellDimensionsDictionary.Add(p_cell.Address, tmpStruct)
 
@@ -995,8 +983,8 @@ Friend Class ModelDataSet
             Case Orientations.ENTITIES_ACCOUNTS : RegisterDataSetCellsValues(Dimension.ENTITY, Dimension.ACCOUNT)
             Case Orientations.ENTITIES_PERIODS : RegisterDataSetCellsValues(Dimension.ENTITY, Dimension.PERIOD)
             Case Orientations.PERIODS_ENTITIES : RegisterDataSetCellsValues(Dimension.PERIOD, Dimension.ENTITY)
-            Case Orientations.PRODUCTS_PERIODS : RegisterDataSetCellsValues(Dimension.PRODUCT, Dimension.PERIOD)
-            Case Orientations.PERIODS_PRODUCTS : RegisterDataSetCellsValues(Dimension.PERIOD, Dimension.PRODUCT)
+            Case Orientations.PRODUCTS_PERIODS : RegisterDataSetCellsValues(Dimension.EMPLOYEE, Dimension.PERIOD)
+            Case Orientations.PERIODS_PRODUCTS : RegisterDataSetCellsValues(Dimension.PERIOD, Dimension.EMPLOYEE)
         End Select
 
     End Sub

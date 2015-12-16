@@ -263,6 +263,7 @@
     <string name="msg_periods_orientation_unclear">Periods orgnization is not clear. Please check that periods are aligned in rows or columns.</string>
     <string name="msg_product_orientation_unclear">Consultants orgnization is not clear. Please check that consultants are aligned in rows or columns.</string>
     <string name="msg_entity_not_found">No BU identified on the worksheet.</string>
+    <string name="msg_error_upload">An error occurred in Excel and the report could not be created.</string>
 
   </category>
 

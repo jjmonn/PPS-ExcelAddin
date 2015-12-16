@@ -17,7 +17,7 @@ Imports CRUD
 '
 ' Author: Julien Monnereau Julien
 ' Created: 17/07/2015
-' Last modified: 11/12/2015
+' Last modified: 16/12/2015
 
 
 Friend Class Computer
@@ -70,6 +70,7 @@ Friend Class Computer
     ' Query
     Friend Function CMSG_COMPUTE_REQUEST(ByRef p_versionsIds As Int32(), _
                                          ByRef p_entitiesIds As List(Of Int32), _
+                                         ByRef p_process As CRUD.Account.AccountProcess, _
                                          Optional ByRef p_currencyId As Int32 = 0, _
                                          Optional ByRef p_filters As Dictionary(Of Int32, List(Of Int32)) = Nothing, _
                                          Optional ByRef p_axisFilters As Dictionary(Of Int32, List(Of Int32)) = Nothing, _
@@ -113,7 +114,7 @@ Friend Class Computer
                 Dim l_requestId As Int32 = l_packet.AssignRequestId()
                 m_requestIdVersionIdDict.Add(l_requestId, l_versionId)
                 m_requestIdEntityIdDict.Add(l_requestId, l_entityId)
-                l_packet.WriteUint32(Account.AccountProcess.FINANCIAL)
+                l_packet.WriteUint32(p_process)
                 l_packet.WriteUint32(l_versionId)                                               ' version_id
                 l_packet.WriteUint32(l_version.GlobalFactVersionId)                             ' global facts version id
                 l_packet.WriteUint32(l_version.RateVersionId)                                   ' rates version id
