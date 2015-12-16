@@ -119,7 +119,6 @@ Friend Class Computer
                 l_packet.WriteUint32(p_currencyId)                                              ' currency_id
                 l_packet.WriteUint32(l_version.StartPeriod)
                 l_packet.WriteUint32(l_version.NbPeriod)
-                l_packet.WriteUint32(0) ' specific account
                 l_packet.WriteBool(False) ' axis hierarchy decomposition
 
                 ' Loop through filters
@@ -168,6 +167,7 @@ Friend Class Computer
                 Else
                     l_packet.WriteUint32(0)                                                    ' decomposition hierarchy size = 0
                 End If
+                l_packet.WriteUint32(Account.AccountProcess.FINANCIAL)
                 l_packet.Release()
                 NetworkManager.GetInstance().Send(l_packet)
                 If p_versionsIds.Length = 1 AndAlso p_entitiesIds.Count = 1 Then

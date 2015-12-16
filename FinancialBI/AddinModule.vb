@@ -1174,6 +1174,7 @@ Public Class AddinModule
                 Return True
             End If
         End If
+        Return False
     End Function
 
     Public Function GetPPSBIResult(ByRef p_entity As Object, _

@@ -1,5 +1,4 @@
-﻿Imports System.Web.Script.Serialization
-Imports System.IO
+﻿Imports System.IO
 Imports System.Windows.Forms
 Imports System.Collections.Generic
 Imports System.Windows.Forms.DataVisualization.Charting

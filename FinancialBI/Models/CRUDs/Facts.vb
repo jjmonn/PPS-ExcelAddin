@@ -31,7 +31,7 @@ Public Class Facts
     End Sub
 
     Friend Shared Function CMSG_GET_FACT(ByRef p_accountId As UInt32, _
-                                    ByRef p_productId As UInt32, _
+                                    ByRef p_employeeId As UInt32, _
                                     ByRef p_versionId As UInt32, _
                                     ByRef p_startPeriod As UInt32, _
                                     ByRef p_endPeriod As UInt32) As Int32
@@ -41,7 +41,7 @@ Public Class Facts
         Dim l_requestId As Int32 = l_packet.AssignRequestId()
 
         l_packet.WriteUint32(p_accountId)
-        l_packet.WriteUint32(p_productId)
+        l_packet.WriteUint32(p_employeeId)
         l_packet.WriteUint32(p_versionId)
         l_packet.WriteUint32(p_startPeriod)
         l_packet.WriteUint32(p_endPeriod)

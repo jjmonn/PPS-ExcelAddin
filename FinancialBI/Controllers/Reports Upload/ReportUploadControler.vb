@@ -511,7 +511,7 @@ errorHandler:
 
     Private Sub SnapshotErrorGeneration(ByRef p_process As Account.AccountProcess)
 
-        Dim l_errorStr As String
+        Dim l_errorStr As String = ""
         Select Case p_process
             Case Account.AccountProcess.FINANCIAL : l_errorStr = IdentifyFinancialSnapshotFlagsErrors()
             Case Account.AccountProcess.RH : l_errorStr = IdentifyPDCSnapshotFlagsErrors()

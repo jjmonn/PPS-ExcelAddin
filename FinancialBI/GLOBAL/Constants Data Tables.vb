@@ -75,6 +75,7 @@ Module Data_Tables_Constants
     Friend Const FACTLOG_CLIENT_ID_VARIABLE = "factlog_client_id"
     Friend Const FACTLOG_PRODUCT_ID_VARIABLE = "factlog_product_id"
     Friend Const FACTLOG_ADJUSTMENT_ID_VARIABLE = "factlog_adjustment_id"
+    Friend Const FACTLOG_EMPLOYEE_ID_VARIABLE = "factlog_employee_id"
     Friend Const FACTLOG_VALUE_VARIABLE = "factlog_value"
 
 #End Region

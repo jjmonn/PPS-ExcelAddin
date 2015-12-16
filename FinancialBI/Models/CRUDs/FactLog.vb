@@ -51,6 +51,7 @@ Public Class FactLog
         factlog_ht(FACTLOG_CLIENT_ID_VARIABLE) = packet.ReadUint32()
         factlog_ht(FACTLOG_PRODUCT_ID_VARIABLE) = packet.ReadUint32()
         factlog_ht(FACTLOG_ADJUSTMENT_ID_VARIABLE) = packet.ReadUint32()
+        factlog_ht(FACTLOG_EMPLOYEE_ID_VARIABLE) = packet.ReadUint32()
         factlog_ht(FACTLOG_VALUE_VARIABLE) = packet.ReadDouble()
 
     End Sub

@@ -12,6 +12,7 @@ namespace CRUD
     Client,
     Product,
     Adjustment,
+    Employee
   }
 
   public class AxisElem : NamedHierarchyCRUDEntity, AxedCRUDEntity, IComparable
