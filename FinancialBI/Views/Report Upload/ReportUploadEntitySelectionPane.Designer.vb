@@ -1,5 +1,5 @@
 <Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
-Partial Class InputSelectionPane
+Partial Class ReportUploadEntitySelectionPane
     Inherits AddinExpress.XL.ADXExcelTaskPane
 
     'Form overrides dispose to clean up the component list.
@@ -22,7 +22,7 @@ Partial Class InputSelectionPane
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
-        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(InputSelectionPane))
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(ReportUploadEntitySelectionPane))
         Me.ImageList1 = New System.Windows.Forms.ImageList(Me.components)
         Me.EntitiesTVImageList = New System.Windows.Forms.ImageList(Me.components)
         Me.EntitiesTV = New System.Windows.Forms.TreeView()

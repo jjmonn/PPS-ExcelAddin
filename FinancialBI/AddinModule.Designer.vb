@@ -147,9 +147,12 @@ Partial Public Class AddinModule
         Me.AdxRibbonGroup2 = New AddinExpress.MSO.ADXRibbonGroup(Me.components)
         Me.m_PDCEntityLabel = New AddinExpress.MSO.ADXRibbonButton(Me.components)
         Me.m_PDCVersionLabel = New AddinExpress.MSO.ADXRibbonButton(Me.components)
-        Me.m_PDCWorksheetDropDown = New AddinExpress.MSO.ADXRibbonDropDown(Me.components)
+        Me.AdxRibbonLabel2 = New AddinExpress.MSO.ADXRibbonLabel(Me.components)
         Me.m_PDCEntityEditBox = New AddinExpress.MSO.ADXRibbonEditBox(Me.components)
         Me.m_PDCVersionEditBox = New AddinExpress.MSO.ADXRibbonEditBox(Me.components)
+        Me.AdxRibbonSeparator5 = New AddinExpress.MSO.ADXRibbonSeparator(Me.components)
+        Me.m_PDCWorksheetDropDown = New AddinExpress.MSO.ADXRibbonDropDown(Me.components)
+        Me.m_PDCaccountNameEditBox = New AddinExpress.MSO.ADXRibbonEditBox(Me.components)
         Me.AdxRibbonGroup3 = New AddinExpress.MSO.ADXRibbonGroup(Me.components)
         Me.m_PDCSubmissionOptionsButton = New AddinExpress.MSO.ADXRibbonSplitButton(Me.components)
         Me.AdxRibbonMenu2 = New AddinExpress.MSO.ADXRibbonMenu(Me.components)
@@ -158,9 +161,6 @@ Partial Public Class AddinModule
         Me.m_PDCPeriodsRangeEditButton = New AddinExpress.MSO.ADXRibbonButton(Me.components)
         Me.AdxRibbonGroup4 = New AddinExpress.MSO.ADXRibbonGroup(Me.components)
         Me.m_PDCSumbissionExitButton = New AddinExpress.MSO.ADXRibbonButton(Me.components)
-        Me.AdxRibbonSeparator5 = New AddinExpress.MSO.ADXRibbonSeparator(Me.components)
-        Me.AdxRibbonLabel2 = New AddinExpress.MSO.ADXRibbonLabel(Me.components)
-        Me.m_PDCaccountNameEditBox = New AddinExpress.MSO.ADXRibbonEditBox(Me.components)
         CType(Me.BindingNavigator1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.BindingNavigator1.SuspendLayout()
         '
@@ -968,7 +968,7 @@ Partial Public Class AddinModule
         Me.InputSelectionTaskPaneItem.AlwaysShowHeader = True
         Me.InputSelectionTaskPaneItem.CloseButton = True
         Me.InputSelectionTaskPaneItem.Position = AddinExpress.XL.ADXExcelTaskPanePosition.Left
-        Me.InputSelectionTaskPaneItem.TaskPaneClassName = "InputSelectionPane"
+        Me.InputSelectionTaskPaneItem.TaskPaneClassName = "ReportUploadEntitySelectionPane"
         Me.InputSelectionTaskPaneItem.UseOfficeThemeForBackground = True
         '
         'VersionSelectionTaskPaneItem
@@ -1005,7 +1005,7 @@ Partial Public Class AddinModule
         Me.ReportUploadTaskPaneItem.AlwaysShowHeader = True
         Me.ReportUploadTaskPaneItem.CloseButton = True
         Me.ReportUploadTaskPaneItem.Position = AddinExpress.XL.ADXExcelTaskPanePosition.Right
-        Me.ReportUploadTaskPaneItem.TaskPaneClassName = "ReportUploadSidePane"
+        Me.ReportUploadTaskPaneItem.TaskPaneClassName = "ReportUploadAccountInfoSidePane"
         Me.ReportUploadTaskPaneItem.UseOfficeThemeForBackground = True
         '
         'AdxRibbonLabel1
@@ -1244,14 +1244,11 @@ Partial Public Class AddinModule
         Me.m_PDCVersionLabel.ImageTransparentColor = System.Drawing.Color.Transparent
         Me.m_PDCVersionLabel.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
         '
-        'm_PDCWorksheetDropDown
+        'AdxRibbonLabel2
         '
-        Me.m_PDCWorksheetDropDown.Caption = " "
-        Me.m_PDCWorksheetDropDown.Id = "adxRibbonDropDown_051d087fb85b425c947f7c3a0fe28701"
-        Me.m_PDCWorksheetDropDown.ImageTransparentColor = System.Drawing.Color.Transparent
-        Me.m_PDCWorksheetDropDown.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
-        Me.m_PDCWorksheetDropDown.SelectedItemId = "1"
-        Me.m_PDCWorksheetDropDown.SizeString = "wwwwwwwwwwwwwwww"
+        Me.AdxRibbonLabel2.Caption = " "
+        Me.AdxRibbonLabel2.Id = "adxRibbonLabel_f4257754446b433aa32c5a597427e7ee"
+        Me.AdxRibbonLabel2.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
         '
         'm_PDCEntityEditBox
         '
@@ -1272,6 +1269,29 @@ Partial Public Class AddinModule
         Me.m_PDCVersionEditBox.MaxLength = 30
         Me.m_PDCVersionEditBox.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
         Me.m_PDCVersionEditBox.SizeString = "wwwwwwwwwwwwwwww"
+        '
+        'AdxRibbonSeparator5
+        '
+        Me.AdxRibbonSeparator5.Id = "adxRibbonSeparator_f2e934847a774ee2b04feed2287be87e"
+        Me.AdxRibbonSeparator5.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
+        '
+        'm_PDCWorksheetDropDown
+        '
+        Me.m_PDCWorksheetDropDown.Caption = " "
+        Me.m_PDCWorksheetDropDown.Id = "adxRibbonDropDown_051d087fb85b425c947f7c3a0fe28701"
+        Me.m_PDCWorksheetDropDown.ImageTransparentColor = System.Drawing.Color.Transparent
+        Me.m_PDCWorksheetDropDown.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
+        Me.m_PDCWorksheetDropDown.SelectedItemId = "1"
+        Me.m_PDCWorksheetDropDown.SizeString = "wwwwwwwwwwwwwwww"
+        '
+        'm_PDCaccountNameEditBox
+        '
+        Me.m_PDCaccountNameEditBox.Caption = " "
+        Me.m_PDCaccountNameEditBox.Enabled = False
+        Me.m_PDCaccountNameEditBox.Id = "adxRibbonEditBox_5db95f346178469195863cbedf40f95a"
+        Me.m_PDCaccountNameEditBox.ImageTransparentColor = System.Drawing.Color.Transparent
+        Me.m_PDCaccountNameEditBox.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
+        Me.m_PDCaccountNameEditBox.SizeString = "wwwwvvwwwwwwwwwwww"
         '
         'AdxRibbonGroup3
         '
@@ -1344,26 +1364,6 @@ Partial Public Class AddinModule
         Me.m_PDCSumbissionExitButton.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
         Me.m_PDCSumbissionExitButton.ScreenTip = "Close the current Entity Editor"
         Me.m_PDCSumbissionExitButton.Size = AddinExpress.MSO.ADXRibbonXControlSize.Large
-        '
-        'AdxRibbonSeparator5
-        '
-        Me.AdxRibbonSeparator5.Id = "adxRibbonSeparator_f2e934847a774ee2b04feed2287be87e"
-        Me.AdxRibbonSeparator5.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
-        '
-        'AdxRibbonLabel2
-        '
-        Me.AdxRibbonLabel2.Caption = " "
-        Me.AdxRibbonLabel2.Id = "adxRibbonLabel_f4257754446b433aa32c5a597427e7ee"
-        Me.AdxRibbonLabel2.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
-        '
-        'm_PDCaccountNameEditBox
-        '
-        Me.m_PDCaccountNameEditBox.Caption = " "
-        Me.m_PDCaccountNameEditBox.Enabled = False
-        Me.m_PDCaccountNameEditBox.Id = "adxRibbonEditBox_5db95f346178469195863cbedf40f95a"
-        Me.m_PDCaccountNameEditBox.ImageTransparentColor = System.Drawing.Color.Transparent
-        Me.m_PDCaccountNameEditBox.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
-        Me.m_PDCaccountNameEditBox.SizeString = "wwwwvvwwwwwwwwwwww"
         '
         'AddinModule
         '
