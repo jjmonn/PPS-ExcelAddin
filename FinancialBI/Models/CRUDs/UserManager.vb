@@ -54,10 +54,18 @@ Friend Class UserManager : Inherits NamedCRUDManager(Of NamedCRUDEntity)
 
     Friend Function CurrentUserHasRight(ByRef p_right As Group.Permission) As Boolean
         Dim l_user As User = GetCurrentUser()
-        If l_user Is Nothing Then Return Group.Permission.NONE
+        If l_user Is Nothing Then Return False
 
         Dim val As UInt64 = GlobalVariables.Groups.GetRight(l_user.GroupId) And p_right
         Return val <> 0
+    End Function
+
+    Friend Function CurrentUserHasProcess(ByRef p_process As Account.AccountProcess) As Boolean
+        Dim l_user As User = GetCurrentUser()
+        If l_user Is Nothing Then Return False
+
+        If l_user.ProcessFlag And p_process <> 0 Then Return True
+        Return False
     End Function
 
 #End Region
