@@ -109,9 +109,11 @@ Friend Class Computer
                 End If
 
                 Dim l_packet As New ByteBuffer(CType(ClientMessage.CMSG_COMPUTE_REQUEST, UShort))
+
                 Dim l_requestId As Int32 = l_packet.AssignRequestId()
                 m_requestIdVersionIdDict.Add(l_requestId, l_versionId)
                 m_requestIdEntityIdDict.Add(l_requestId, l_entityId)
+                l_packet.WriteUint32(Account.AccountProcess.FINANCIAL)
                 l_packet.WriteUint32(l_versionId)                                               ' version_id
                 l_packet.WriteUint32(l_version.GlobalFactVersionId)                             ' global facts version id
                 l_packet.WriteUint32(l_version.RateVersionId)                                   ' rates version id
@@ -167,7 +169,6 @@ Friend Class Computer
                 Else
                     l_packet.WriteUint32(0)                                                    ' decomposition hierarchy size = 0
                 End If
-                l_packet.WriteUint32(Account.AccountProcess.FINANCIAL)
                 l_packet.Release()
                 NetworkManager.GetInstance().Send(l_packet)
                 If p_versionsIds.Length = 1 AndAlso p_entitiesIds.Count = 1 Then

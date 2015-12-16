@@ -79,6 +79,7 @@ Public Class ComputerInputEntity
                 Dim l_packet As New ByteBuffer(CType(ClientMessage.CMSG_SOURCED_COMPUTE, UShort))
                 Dim requestId As Int32 = l_packet.AssignRequestId()
 
+                l_packet.WriteUint32(Account.AccountProcess.FINANCIAL)
                 l_packet.WriteUint32(p_versionId)                                               ' version_id
                 l_packet.WriteUint32(l_version.GlobalFactVersionId)                             ' global facts version id
                 l_packet.WriteUint32(l_version.RateVersionId)                                   ' rates version id
