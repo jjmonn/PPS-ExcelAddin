@@ -42,9 +42,28 @@ Friend Class SettingUI
         InitializeComponent()
 
         ' Add any initialization after the InitializeComponent() call.
+        MultilanguageSetup()
+        InitializeLanguagesComboBox()
         InitializeFormatsDGVDisplay()
         AddHandler FormatsDGV.CellBeginEdit, AddressOf FormatsDGV_CellBeginEdit
         AddHandler FormatsDGV.CellMouseEnter, AddressOf FormatsDGV_CellMouseEnter
+
+    End Sub
+
+    Private Sub MultilanguageSetup()
+
+        Me.Text = Local.GetValue("settings.settings")
+        m_serverAddressLabel.Text = Local.GetValue("settings.server_address")
+        m_portNumberLabel.Text = Local.GetValue("settings.port_number")
+        m_userIdLabel.Text = m_serverAddressLabel.Text = Local.GetValue("connection.user_id")
+        m_saveConnectionButton.Text = Local.GetValue("general.save")
+        m_formatsGroup.Text = Local.GetValue("settings.report_formats")
+        m_consolidationCurrencyLabel.Text = Local.GetValue("settings.report_formats")
+        m_languageLabel.Text = Local.GetValue("settings.language")
+        m_otherValidateButton.Text = Local.GetValue("general.save")
+        m_connectionTab.Text = Local.GetValue("connection.connection")
+        m_formatsTab.Text = Local.GetValue("settings.display_options")
+        m_otherTab.Text = Local.GetValue("settings.preferences")
 
     End Sub
 
@@ -62,13 +81,29 @@ Friend Class SettingUI
                 Dim li As New ListItem
                 li.Value = currency.Id
                 li.Text = currency.Name
-                CurrenciesCombobox.Items.Add(li)
+                m_currenciesCombobox.Items.Add(li)
                 If li.Value = My.Settings.currentCurrency Then
                     li.IsChecked = True
-                    CurrenciesCombobox.SelectedItem = li
+                    m_currenciesCombobox.SelectedItem = li
                 End If
             Next
         End If
+
+    End Sub
+
+    Private Sub InitializeLanguagesComboBox()
+
+        Dim l_englishItem As New ListItem
+        l_englishItem.Value = 0
+        l_englishItem.Text = Local.GetValue("settings.english")
+        m_languageComboBox.Items.Add(l_englishItem)
+        If My.Settings.language = 0 Then m_languageComboBox.SelectedItem = l_englishItem
+
+        Dim l_frenchItem As New ListItem
+        l_frenchItem.Value = 1
+        l_frenchItem.Text = Local.GetValue("settings.french")
+        m_languageComboBox.Items.Add(l_frenchItem)
+        If My.Settings.language = 1 Then m_languageComboBox.SelectedItem = l_frenchItem
 
     End Sub
 
@@ -93,7 +128,6 @@ Friend Class SettingUI
 
     End Sub
 
-
 #End Region
 
 
@@ -105,7 +139,7 @@ Friend Class SettingUI
 
     End Sub
 
-    Private Sub m_saveButton_Click(sender As Object, e As EventArgs) Handles m_saveButton.Click
+    Private Sub m_saveButton_Click(sender As Object, e As EventArgs) Handles m_saveConnectionButton.Click
 
         My.Settings.port_number = PortTB.Text
         My.Settings.Save()
@@ -113,11 +147,21 @@ Friend Class SettingUI
         My.Settings.Save()
         My.Settings.serverIp = ServerAddressTB.Text
         My.Settings.Save()
-        If IsNothing(CurrenciesCombobox.SelectedItem) = False Then
-            My.Settings.currentCurrency = CurrenciesCombobox.SelectedItem.Value
+       
+    End Sub
+
+    Private Sub m_otherValidateButton_Click(sender As Object, e As EventArgs) Handles m_otherValidateButton.Click
+
+        If IsNothing(m_currenciesCombobox.SelectedItem) = False Then
+            My.Settings.currentCurrency = m_currenciesCombobox.SelectedItem.Value
             My.Settings.Save()
         End If
-        My.Settings.Save()
+
+        If IsNothing(m_languageComboBox.SelectedItem) = False Then
+            My.Settings.language = m_languageComboBox.SelectedItem.Value
+            My.Settings.Save()
+            MsgBox(Local.GetValue("settings.msg_excel_reboot"))
+        End If
 
     End Sub
 
@@ -327,4 +371,6 @@ Friend Class SettingUI
 #End Region
 
 
+  
+   
 End Class
