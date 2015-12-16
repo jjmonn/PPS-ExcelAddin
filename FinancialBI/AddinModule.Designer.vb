@@ -65,7 +65,6 @@ Partial Public Class AddinModule
         Me.AutoRefreshBT = New AddinExpress.MSO.ADXRibbonCheckBox(Me.components)
         Me.ComputeGroup = New AddinExpress.MSO.ADXRibbonGroup(Me.components)
         Me.ControlingUI2BT = New AddinExpress.MSO.ADXRibbonButton(Me.components)
-        Me.m_PDCPlanningButton = New AddinExpress.MSO.ADXRibbonButton(Me.components)
         Me.FunctionDesigner = New AddinExpress.MSO.ADXRibbonSplitButton(Me.components)
         Me.AdxRibbonMenu1 = New AddinExpress.MSO.ADXRibbonMenu(Me.components)
         Me.BreakLinksBT = New AddinExpress.MSO.ADXRibbonButton(Me.components)
@@ -443,7 +442,6 @@ Partial Public Class AddinModule
         '
         Me.ComputeGroup.Caption = " "
         Me.ComputeGroup.Controls.Add(Me.ControlingUI2BT)
-        Me.ComputeGroup.Controls.Add(Me.m_PDCPlanningButton)
         Me.ComputeGroup.Controls.Add(Me.FunctionDesigner)
         Me.ComputeGroup.Controls.Add(Me.financialModelingBT)
         Me.ComputeGroup.Id = "adxRibbonGroup_13e7ba6b0acf4975af1793d5cfec00ed"
@@ -461,16 +459,6 @@ Partial Public Class AddinModule
         Me.ControlingUI2BT.ScreenTip = resources.GetString("ControlingUI2BT.ScreenTip")
         Me.ControlingUI2BT.Size = AddinExpress.MSO.ADXRibbonXControlSize.Large
         Me.ControlingUI2BT.SuperTip = "General Data Crunching interface"
-        '
-        'm_PDCPlanningButton
-        '
-        Me.m_PDCPlanningButton.Caption = "Planning PDC"
-        Me.m_PDCPlanningButton.Id = "adxRibbonButton_cd39b2299e0c490aaf9fbe1fbccc1aa5"
-        Me.m_PDCPlanningButton.Image = 19
-        Me.m_PDCPlanningButton.ImageList = Me.Menu3
-        Me.m_PDCPlanningButton.ImageTransparentColor = System.Drawing.Color.Transparent
-        Me.m_PDCPlanningButton.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
-        Me.m_PDCPlanningButton.Size = AddinExpress.MSO.ADXRibbonXControlSize.Large
         '
         'FunctionDesigner
         '
@@ -1394,7 +1382,6 @@ Partial Public Class AddinModule
         Me.BindingNavigator1.PerformLayout()
 
     End Sub
-    Friend WithEvents m_PDCPlanningButton As AddinExpress.MSO.ADXRibbonButton
     Friend WithEvents m_PDCSubmissionRibbon As AddinExpress.MSO.ADXRibbonTab
     Friend WithEvents AdxRibbonGroup1 As AddinExpress.MSO.ADXRibbonGroup
     Friend WithEvents m_PDCSubmissionButton As AddinExpress.MSO.ADXRibbonButton

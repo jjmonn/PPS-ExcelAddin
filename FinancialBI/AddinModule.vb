@@ -324,6 +324,7 @@ Public Class AddinModule
         Dim Addin As AddinModule = GlobalVariables.Addin
 
         Addin.m_MainTabversionButton.Enabled = p_state
+        Addin.m_mainTabProcessButton.Enabled = p_state
         Addin.UploadBT.Enabled = p_state
         Addin.EditionMainRibbonBT.Enabled = p_state
         Addin.RefreshBT.Enabled = p_state
@@ -458,17 +459,6 @@ Public Class AddinModule
 
 #Region "Download Data"
 
-    Private Sub m_PDCPlanningButton_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) Handles m_PDCPlanningButton.OnClick
-
-        If GlobalVariables.AuthenticationFlag = False Then
-            ConnectionBT_OnClick(sender, control, pressed)
-        Else
-            Dim CONTROLLING As New ControllingUI_2(Account.AccountProcess.RH)
-            CONTROLLING.Show()
-        End If
-
-    End Sub
-
     Private Sub ControllingUI2BT_onclick(sender As System.Object,
                                         control As AddinExpress.MSO.IRibbonControl,
                                         pressed As System.Boolean) Handles ControlingUI2BT.OnClick
@@ -476,7 +466,7 @@ Public Class AddinModule
         If GlobalVariables.AuthenticationFlag = False Then
             ConnectionBT_OnClick(sender, control, pressed)
         Else
-            Dim CONTROLLING As New ControllingUI_2(Account.AccountProcess.FINANCIAL)
+            Dim CONTROLLING As New ControllingUI_2()
             CONTROLLING.Show()
         End If
 

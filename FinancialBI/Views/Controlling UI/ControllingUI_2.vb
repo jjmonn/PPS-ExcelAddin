@@ -126,13 +126,13 @@ Friend Class ControllingUI_2
 
 #Region "Initialization"
 
-    Friend Sub New(ByRef p_process As Account.AccountProcess)
+    Friend Sub New()
 
         ' This call is required by the designer.
         InitializeComponent()
 
         ' Add any initialization after the InitializeComponent() call. 
-        m_process = p_process
+        m_process = My.Settings.processId
         LeftPaneSetup()
         RightPaneSetup()
         m_controller = New ControllingUIController(Me)
