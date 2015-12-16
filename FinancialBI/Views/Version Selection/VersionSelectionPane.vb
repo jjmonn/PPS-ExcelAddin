@@ -35,13 +35,21 @@ Public Class VersionSelectionPane
     Public Sub New()
         MyBase.New()
         InitializeComponent()
+        InitializeMultiLanguage()
+    End Sub
+
+    Private Sub InitializeMultiLanguage()
+
+        m_versionSelectionLabel.Text = Local.GetValue("general.select_version")
+        m_validateButton.Text = Local.GetValue("general.validate")
+
     End Sub
 
     Friend Function Init() As Boolean
 
         m_versionSelectionController = New VersionSelection(m_versionsTreeviewImageList, Me)
         InsertDataVersionSelection()
-        AddHandler ValidateBT.Click, AddressOf m_versionSelectionController.SetSelectedVersion
+        AddHandler m_validateButton.Click, AddressOf m_versionSelectionController.SetSelectedVersion
         Return False
 
     End Function
@@ -63,7 +71,6 @@ Public Class VersionSelectionPane
         If Not m_versionSelectionController Is Nothing Then
             m_versionSelectionController.versionsTV.Nodes.Clear()
             TableLayoutPanel1.Controls.Remove(TableLayoutPanel1.GetControlFromPosition(0, 1))
-            ' TableLayoutPanel1.Controls.Clear()
             m_versionSelectionController = Nothing
             Me.Hide()
         End If
@@ -83,13 +90,11 @@ Public Class VersionSelectionPane
 #Region "Events"
 
     Private Sub ADXExcelTaskPane1_ADXBeforeTaskPaneShow(sender As Object, e As ADXBeforeTaskPaneShowEventArgs) Handles MyBase.ADXBeforeTaskPaneShow
-        Me.Visible = GlobalVariables.VersionsSelectionPaneVisible
+        Me.Visible = GlobalVariables.VersionsSelectionTaskPaneVisible
     End Sub
 
     Private Sub CVersionSelectionPane_Deactivate(sender As Object, e As EventArgs) Handles MyBase.Deactivate
-
         ClearAndClose()
-
     End Sub
 
 

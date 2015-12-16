@@ -64,30 +64,21 @@ Friend Class VersionSelection
 
     End Sub
 
-
 #End Region
-
 
 #Region "Events"
 
     Private Sub VersionsTV_NodeMouseDoubleClick(sender As Object, e As Windows.Forms.TreeNodeMouseClickEventArgs)
-
-              SetSelectedVersion()
-      
+        SetSelectedVersion()
     End Sub
 
     Private Sub VersionsTV_KeyPress(sender As Object, e As Windows.Forms.KeyPressEventArgs)
-
         If e.KeyChar = ChrW(Keys.Return) Then
             SetSelectedVersion()
         End If
-
     End Sub
 
-
 #End Region
-
-
 
 
 End Class

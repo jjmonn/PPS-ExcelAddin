@@ -144,7 +144,7 @@ Public Class ConnectionTP
     End Sub
 
     Private Sub ConnectionPane_ADXBeforeTaskPaneShow(sender As Object, e As ADXBeforeTaskPaneShowEventArgs) Handles MyBase.ADXBeforeTaskPaneShow
-        Me.Visible = GlobalVariables.ConnectionPaneVisible
+        Me.Visible = GlobalVariables.ConnectionTaskPaneVisible
     End Sub
 
     Private Sub ConnectionPane_FormClosing(sender As Object, e As Windows.Forms.FormClosingEventArgs) Handles MyBase.FormClosing

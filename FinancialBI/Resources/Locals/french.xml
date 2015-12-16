@@ -233,6 +233,14 @@
 
   </category>
 
+  <category name="process">
+    <string name="select_process">Selectionez un processus</string>
+    <string name="process_rh">Processus RH</string>
+    <string name="process_financial">Processus Financier</string>
+    <string name="process_selection">Selection du Process</string>
+  </category>
+  
+
   <category name="upload">
     <string name="periods">Périodes</string>
     <string name="rates">Taux</string>
@@ -389,6 +397,7 @@
     <string name="Entities">Entités</string>
 
     <string name="couleur">Couleur</string>
+    <string name="validate">Valider</string>
     <string name="type">Type</string>
     <string name="save">Enregistrer</string>
     <string name="cancel">Annuler</string>

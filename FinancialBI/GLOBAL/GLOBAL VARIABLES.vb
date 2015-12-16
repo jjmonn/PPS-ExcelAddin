@@ -26,19 +26,22 @@ Friend Class GlobalVariables
 #Region "Versioning"
 
     Friend Shared VersionSelectionTaskPane As VersionSelectionPane
-    Friend Shared Version_Button As ADXRibbonButton
-    Friend Shared Version_label_Sub_Ribbon As ADXRibbonEditBox
-  
+    Friend Shared ProcessSelectionTaskPane As ProcessSelectionTaskPane
+    Friend Shared VersionButton As ADXRibbonButton
+    Friend Shared VersionlabelSubRibbon As ADXRibbonEditBox
+    Friend Shared ProcessButton As ADXRibbonButton
+
 #End Region
 
 
 #Region "Menu Display"
 
-    Friend Shared Connection_Toggle_Button As ADXRibbonButton
-    Friend Shared InputSelectionPaneVisible As Boolean
-    Friend Shared VersionsSelectionPaneVisible As Boolean
-    Friend Shared EntitySelectionPaneVisible As Boolean
-    Friend Shared ConnectionPaneVisible As Boolean
+    Friend Shared ConnectionToggleButton As ADXRibbonButton
+    Friend Shared InputSelectionTaskPaneVisible As Boolean
+    Friend Shared VersionsSelectionTaskPaneVisible As Boolean
+    Friend Shared ProcessSelectionTaskPaneVisible As Boolean
+    Friend Shared EntitySelectionTaskPaneVisible As Boolean
+    Friend Shared ConnectionTaskPaneVisible As Boolean
 
 #End Region
 

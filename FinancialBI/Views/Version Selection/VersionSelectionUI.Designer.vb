@@ -71,7 +71,7 @@ Partial Class VersionSelectionUI
         Me.VersionsTreeComboBox.Name = "VersionsTreeComboBox"
         Me.VersionsTreeComboBox.Size = New System.Drawing.Size(307, 25)
         Me.VersionsTreeComboBox.TabIndex = 18
-        Me.VersionsTreeComboBox.Text = "$elect version"
+        Me.VersionsTreeComboBox.Text = "Select version"
         Me.VersionsTreeComboBox.UseThemeBackColor = False
         Me.VersionsTreeComboBox.UseThemeDropDownArrowColor = True
         Me.VersionsTreeComboBox.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
@@ -80,7 +80,7 @@ Partial Class VersionSelectionUI
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(351, 281)
+        Me.ClientSize = New System.Drawing.Size(344, 156)
         Me.Controls.Add(Me.VersionsTreeComboBox)
         Me.Controls.Add(Me.ValidateButton)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)

@@ -43,8 +43,9 @@ Partial Public Class AddinModule
         Me.ConnectionBT = New AddinExpress.MSO.ADXRibbonButton(Me.components)
         Me.ConnectionIcons = New System.Windows.Forms.ImageList(Me.components)
         Me.AdxRibbonSeparator1 = New AddinExpress.MSO.ADXRibbonSeparator(Me.components)
-        Me.VersionBT = New AddinExpress.MSO.ADXRibbonButton(Me.components)
+        Me.m_MainTabversionButton = New AddinExpress.MSO.ADXRibbonButton(Me.components)
         Me.NewICOs = New System.Windows.Forms.ImageList(Me.components)
+        Me.m_mainTabProcessButton = New AddinExpress.MSO.ADXRibbonButton(Me.components)
         Me.Addin_Version_label = New AddinExpress.MSO.ADXRibbonLabel(Me.components)
         Me.Addin_rates_version_label = New AddinExpress.MSO.ADXRibbonLabel(Me.components)
         Me.DataUploadGroup = New AddinExpress.MSO.ADXRibbonGroup(Me.components)
@@ -119,6 +120,7 @@ Partial Public Class AddinModule
         Me.EntitySelectionTaskPaneItem = New AddinExpress.XL.ADXExcelTaskPanesCollectionItem(Me.components)
         Me.ConnectionTaskPaneItem = New AddinExpress.XL.ADXExcelTaskPanesCollectionItem(Me.components)
         Me.ReportUploadTaskPaneItem = New AddinExpress.XL.ADXExcelTaskPanesCollectionItem(Me.components)
+        Me.ProcessSelectionTaskPaneItem = New AddinExpress.XL.ADXExcelTaskPanesCollectionItem(Me.components)
         Me.AdxRibbonLabel1 = New AddinExpress.MSO.ADXRibbonLabel(Me.components)
         Me.AdxRibbonMenu3 = New AddinExpress.MSO.ADXRibbonMenu(Me.components)
         Me.SubmissionControlBT = New AddinExpress.MSO.ADXRibbonSplitButton(Me.components)
@@ -180,7 +182,8 @@ Partial Public Class AddinModule
         Me.ConnectionGroup.CenterVertically = True
         Me.ConnectionGroup.Controls.Add(Me.ConnectionBT)
         Me.ConnectionGroup.Controls.Add(Me.AdxRibbonSeparator1)
-        Me.ConnectionGroup.Controls.Add(Me.VersionBT)
+        Me.ConnectionGroup.Controls.Add(Me.m_MainTabversionButton)
+        Me.ConnectionGroup.Controls.Add(Me.m_mainTabProcessButton)
         Me.ConnectionGroup.Controls.Add(Me.Addin_Version_label)
         Me.ConnectionGroup.Controls.Add(Me.Addin_rates_version_label)
         Me.ConnectionGroup.Id = "adxRibbonGroup_89e20fb41d2445e782d9c54beb6faae8"
@@ -211,15 +214,15 @@ Partial Public Class AddinModule
         Me.AdxRibbonSeparator1.Id = "adxRibbonSeparator_efa53406578a435ea76b4e776683ce26"
         Me.AdxRibbonSeparator1.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
         '
-        'VersionBT
+        'm_MainTabversionButton
         '
-        Me.VersionBT.Caption = "Select Version"
-        Me.VersionBT.Id = "adxRibbonButton_47a60ea441584fe3b0b975b2829b6ec1"
-        Me.VersionBT.ImageList = Me.NewICOs
-        Me.VersionBT.ImageTransparentColor = System.Drawing.Color.Transparent
-        Me.VersionBT.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
-        Me.VersionBT.ScreenTip = "Click to select the data version you want to work on."
-        Me.VersionBT.SuperTip = "Click to select a version"
+        Me.m_MainTabversionButton.Caption = "Select Version"
+        Me.m_MainTabversionButton.Id = "adxRibbonButton_47a60ea441584fe3b0b975b2829b6ec1"
+        Me.m_MainTabversionButton.ImageList = Me.NewICOs
+        Me.m_MainTabversionButton.ImageTransparentColor = System.Drawing.Color.Transparent
+        Me.m_MainTabversionButton.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
+        Me.m_MainTabversionButton.ScreenTip = "Click to select the data version you want to work on."
+        Me.m_MainTabversionButton.SuperTip = "Click to select a version"
         '
         'NewICOs
         '
@@ -257,6 +260,14 @@ Partial Public Class AddinModule
         Me.NewICOs.Images.SetKeyName(29, "favicon(10).ico")
         Me.NewICOs.Images.SetKeyName(30, "arrow_mix.ico")
         Me.NewICOs.Images.SetKeyName(31, "pieces.ico")
+        '
+        'm_mainTabProcessButton
+        '
+        Me.m_mainTabProcessButton.Caption = "Select Process"
+        Me.m_mainTabProcessButton.Id = "adxRibbonButton_dfe347a74131427b9e481a9233a81c29"
+        Me.m_mainTabProcessButton.ImageTransparentColor = System.Drawing.Color.Transparent
+        Me.m_mainTabProcessButton.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
+        Me.m_mainTabProcessButton.ScreenTip = "Click to select a process"
         '
         'Addin_Version_label
         '
@@ -958,6 +969,7 @@ Partial Public Class AddinModule
         Me.AdxExcelTaskPanesManager1.Items.Add(Me.EntitySelectionTaskPaneItem)
         Me.AdxExcelTaskPanesManager1.Items.Add(Me.ConnectionTaskPaneItem)
         Me.AdxExcelTaskPanesManager1.Items.Add(Me.ReportUploadTaskPaneItem)
+        Me.AdxExcelTaskPanesManager1.Items.Add(Me.ProcessSelectionTaskPaneItem)
         Me.AdxExcelTaskPanesManager1.SetOwner(Me)
         '
         'InputSelectionTaskPaneItem
@@ -1007,6 +1019,14 @@ Partial Public Class AddinModule
         Me.ReportUploadTaskPaneItem.Position = AddinExpress.XL.ADXExcelTaskPanePosition.Right
         Me.ReportUploadTaskPaneItem.TaskPaneClassName = "ReportUploadAccountInfoSidePane"
         Me.ReportUploadTaskPaneItem.UseOfficeThemeForBackground = True
+        '
+        'ProcessSelectionTaskPaneItem
+        '
+        Me.ProcessSelectionTaskPaneItem.AlwaysShowHeader = True
+        Me.ProcessSelectionTaskPaneItem.CloseButton = True
+        Me.ProcessSelectionTaskPaneItem.Position = AddinExpress.XL.ADXExcelTaskPanePosition.Right
+        Me.ProcessSelectionTaskPaneItem.TaskPaneClassName = "ProcessSelectionTaskPane"
+        Me.ProcessSelectionTaskPaneItem.UseOfficeThemeForBackground = True
         '
         'AdxRibbonLabel1
         '
@@ -1400,6 +1420,8 @@ Partial Public Class AddinModule
     Friend WithEvents AdxRibbonLabel2 As AddinExpress.MSO.ADXRibbonLabel
     Friend WithEvents AdxRibbonSeparator5 As AddinExpress.MSO.ADXRibbonSeparator
     Friend WithEvents m_PDCaccountNameEditBox As AddinExpress.MSO.ADXRibbonEditBox
+    Friend WithEvents m_mainTabProcessButton As AddinExpress.MSO.ADXRibbonButton
+    Friend WithEvents ProcessSelectionTaskPaneItem As AddinExpress.XL.ADXExcelTaskPanesCollectionItem
 
 End Class
 

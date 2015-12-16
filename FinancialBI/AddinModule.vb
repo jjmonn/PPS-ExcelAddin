@@ -31,7 +31,7 @@ Public Class AddinModule
     Friend WithEvents BreakLinksBT As AddinExpress.MSO.ADXRibbonButton
     Friend WithEvents ConnectionGroup As AddinExpress.MSO.ADXRibbonGroup
     Friend WithEvents LightsImageList As System.Windows.Forms.ImageList
-    Friend WithEvents VersionBT As AddinExpress.MSO.ADXRibbonButton
+    Friend WithEvents m_MainTabversionButton As AddinExpress.MSO.ADXRibbonButton
     Friend WithEvents Addin_Version_label As AddinExpress.MSO.ADXRibbonLabel
     Friend WithEvents ConnectionIcons As System.Windows.Forms.ImageList
     Friend WithEvents ConnectionBT As AddinExpress.MSO.ADXRibbonButton
@@ -190,6 +190,18 @@ Public Class AddinModule
         End Get
     End Property
 
+    Private ReadOnly Property ProcessSelectionTaskPane() As ProcessSelectionTaskPane
+        Get
+            Dim taskPaneInstance As AddinExpress.XL.ADXExcelTaskPane = Nothing
+            taskPaneInstance = ProcessSelectionTaskPaneItem.TaskPaneInstance
+
+            If taskPaneInstance Is Nothing Then
+                taskPaneInstance = ProcessSelectionTaskPaneItem.CreateTaskPaneInstance()
+            End If
+            Return TryCast(taskPaneInstance, ProcessSelectionTaskPane)
+        End Get
+    End Property
+
     Friend ReadOnly Property EntitySelectionTaskPane As EntitySelectionTP
         Get
             Dim taskPaneInstance As AddinExpress.XL.ADXExcelTaskPane = Nothing
@@ -257,9 +269,11 @@ Public Class AddinModule
 
         ' Main Ribbon Initialize
         GlobalVariables.VersionSelectionTaskPane = Me.VersionSelectionTaskPane
+        GlobalVariables.ProcessSelectionTaskPane = Me.ProcessSelectionTaskPane
         GlobalVariables.SubmissionStatusButton = m_financialSubmissionSatusButton
-        GlobalVariables.Connection_Toggle_Button = Me.ConnectionBT
-        GlobalVariables.Version_Button = Me.VersionBT
+        GlobalVariables.ConnectionToggleButton = Me.ConnectionBT
+        GlobalVariables.VersionButton = Me.m_MainTabversionButton
+        GlobalVariables.ProcessButton = Me.m_mainTabProcessButton
         ConnectionBT.Image = 0
 
         ' Submission Ribbon Initialize
@@ -267,7 +281,7 @@ Public Class AddinModule
         SubmissionModeRibbon.Visible = False
         m_PDCSubmissionRibbon.Visible = False
         GlobalVariables.s_reportUploadSidePane = Me.ReportUploadTaskPane
-        GlobalVariables.Version_label_Sub_Ribbon = VersionTBSubRibbon
+        GlobalVariables.VersionlabelSubRibbon = VersionTBSubRibbon
         GlobalVariables.ClientsIDDropDown = ClientsDropDown
         GlobalVariables.ProductsIDDropDown = ProductsDropDown
         GlobalVariables.AdjustmentIDDropDown = AdjustmentDropDown
@@ -309,7 +323,7 @@ Public Class AddinModule
     Friend Shared Sub SetMainMenuButtonState(ByRef p_state As Boolean)
         Dim Addin As AddinModule = GlobalVariables.Addin
 
-        Addin.VersionBT.Enabled = p_state
+        Addin.m_MainTabversionButton.Enabled = p_state
         Addin.UploadBT.Enabled = p_state
         Addin.EditionMainRibbonBT.Enabled = p_state
         Addin.RefreshBT.Enabled = p_state
@@ -332,7 +346,7 @@ Public Class AddinModule
 
     ' Returns the entities View variable
     Public Function GetVersionButton() As ADXRibbonButton
-        Return GlobalVariables.Version_Button
+        Return GlobalVariables.VersionButton
     End Function
 
 
@@ -351,7 +365,7 @@ Public Class AddinModule
 
         If CDbl(GlobalVariables.APPS.Version.Replace(".", ",")) > EXCEL_MIN_VERSION Then
 
-            GlobalVariables.ConnectionPaneVisible = True
+            GlobalVariables.ConnectionTaskPaneVisible = True
             Me.ConnectionTaskPane.Init(Me)
             Me.ConnectionTaskPane.Show()
 
@@ -364,7 +378,7 @@ Public Class AddinModule
 
     End Sub
 
-    Private Sub VersionBT_OnClick_1(sender As Object, control As IRibbonControl, pressed As Boolean) Handles VersionBT.OnClick
+    Private Sub VersionBT_OnClick_1(sender As Object, control As IRibbonControl, pressed As Boolean) Handles m_MainTabversionButton.OnClick
 
         If GlobalVariables.AuthenticationFlag = False Then
             ConnectionBT_OnClick(sender, control, pressed)
@@ -374,6 +388,15 @@ Public Class AddinModule
 
     End Sub
 
+    Private Sub m_mainTabProcessButton_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) Handles m_mainTabProcessButton.OnClick
+
+        If GlobalVariables.AuthenticationFlag = False Then
+            ConnectionBT_OnClick(sender, control, pressed)
+        Else
+            LaunchProcessSelection()
+        End If
+
+    End Sub
 
 #End Region
 
@@ -421,7 +444,7 @@ Public Class AddinModule
             ConnectionBT_OnClick(sender, control, pressed)
         Else
             If CDbl(GlobalVariables.APPS.Version.Replace(".", ",")) > EXCEL_MIN_VERSION Then
-                GlobalVariables.InputSelectionPaneVisible = True
+                GlobalVariables.InputSelectionTaskPaneVisible = True
                 Me.InputReportTaskPane.InitializeSelectionChoices(Me)
                 Me.InputReportTaskPane.Show()
             Else
@@ -869,7 +892,7 @@ Public Class AddinModule
 
         Dim currentcell As Excel.Range = WorksheetWrittingFunctions.CreateReceptionWS(entity_name, _
                                                                                        {"Entity", "Currency", "Version"}, _
-                                                                                       {entity_name, currency.Name, GlobalVariables.Version_Button.Caption})
+                                                                                       {entity_name, currency.Name, GlobalVariables.VersionButton.Caption})
 
         If currentcell Is Nothing Then
             MsgBox("An error occurred in Excel and the report could not be created.")
@@ -896,6 +919,15 @@ Public Class AddinModule
 
 #End Region
 
+    Private Shared Sub LaunchProcessSelection()
+        If CDbl(GlobalVariables.APPS.Version.Replace(".", ",")) > EXCEL_MIN_VERSION Then
+            GlobalVariables.ProcessSelectionTaskPaneVisible = True
+            GlobalVariables.ProcessSelectionTaskPane.Show()
+        Else
+            MsgBox("This version of Excel is below Excel 2003 and therefore cannot display TaskPanes. Please contact Financial BI team.")
+        End If
+    End Sub
+
 #Region "Version Selection"
 
     Public Sub SetVersion(ByRef version_id As String)
@@ -904,7 +936,7 @@ Public Class AddinModule
 
     Public Shared Sub LaunchVersionSelection()
         If CDbl(GlobalVariables.APPS.Version.Replace(".", ",")) > EXCEL_MIN_VERSION Then  ' 
-            GlobalVariables.VersionsSelectionPaneVisible = True
+            GlobalVariables.VersionsSelectionTaskPaneVisible = True
             GlobalVariables.VersionSelectionTaskPane.Init()
             GlobalVariables.VersionSelectionTaskPane.Show()
         Else
@@ -921,7 +953,7 @@ Public Class AddinModule
     Friend Sub LaunchEntitySelectionTP(ByRef parentObject As Object, Optional ByRef restrictionToInputsEntities As Boolean = False)
 
         If CDbl(GlobalVariables.APPS.Version.Replace(".", ",")) > EXCEL_MIN_VERSION Then
-            GlobalVariables.EntitySelectionPaneVisible = True
+            GlobalVariables.EntitySelectionTaskPaneVisible = True
             Me.EntitySelectionTaskPane.Init(parentObject, True)
             Me.EntitySelectionTaskPane.Show()
         Else
@@ -1120,12 +1152,13 @@ Public Class AddinModule
         On Error Resume Next
         SetMainMenuButtonState(connected)
         If connected = True Then
-            GlobalVariables.Connection_Toggle_Button.Image = 1
-            GlobalVariables.Connection_Toggle_Button.Caption = "Connected"
+            GlobalVariables.ConnectionToggleButton.Image = 1
+            GlobalVariables.ConnectionToggleButton.Caption = "Connected"
             SetCurrentVersionAfterConnection()
+            SetCurrentProcessAfterConnection()
         Else
-            GlobalVariables.Connection_Toggle_Button.Image = 0
-            GlobalVariables.Connection_Toggle_Button.Caption = "Not connected"
+            GlobalVariables.ConnectionToggleButton.Image = 0
+            GlobalVariables.ConnectionToggleButton.Caption = "Not connected"
         End If
         Return 0
 
@@ -1133,23 +1166,46 @@ Public Class AddinModule
 
     Private Shared Sub SetCurrentVersionAfterConnection()
 
-        Dim currentVersionId As Int32 = My.Settings.version_id
-        If GlobalVariables.Versions.IsVersionValid(currentVersionId) = True Then
-            SetCurrentVersionId(currentVersionId)
+        Dim l_currentVersionId As Int32 = My.Settings.version_id
+        If GlobalVariables.Versions.IsVersionValid(l_currentVersionId) = True Then
+            SetCurrentVersionId(l_currentVersionId)
         Else
             LaunchVersionSelection()
         End If
 
     End Sub
 
-    Public Shared Sub SetCurrentVersionId(ByRef versionId As UInt32)
+    Private Shared Sub SetCurrentProcessAfterConnection()
 
-        Dim version As CRUD.Version = GlobalVariables.Versions.GetValue(versionId)
-        If version Is Nothing Then Exit Sub
+        Dim l_currentProcessId As CRUD.Account.AccountProcess = My.Settings.processId
+        Select Case l_currentProcessId
+            Case Account.AccountProcess.FINANCIAL, Account.AccountProcess.RH
+                SetCurrentProcessId(l_currentProcessId)
+            Case Else
+                LaunchProcessSelection
+        End Select
 
-        GlobalVariables.Version_Button.Caption = version.Name
-        GlobalVariables.Version_label_Sub_Ribbon.Text = version.Name
-        My.Settings.version_id = versionId
+    End Sub
+
+    Public Shared Sub SetCurrentVersionId(ByRef p_versionId As UInt32)
+
+        Dim l_version As CRUD.Version = GlobalVariables.Versions.GetValue(p_versionId)
+        If l_version Is Nothing Then Exit Sub
+
+        GlobalVariables.VersionButton.Caption = l_version.Name
+        GlobalVariables.VersionlabelSubRibbon.Text = l_version.Name
+        My.Settings.version_id = p_versionId
+        My.Settings.Save()
+
+    End Sub
+
+    Public Shared Sub SetCurrentProcessId(ByRef p_processId As CRUD.Account.AccountProcess)
+
+        Select Case p_processId
+            Case Account.AccountProcess.FINANCIAL : GlobalVariables.ProcessButton.Caption = Local.GetValue("process.process_financial")
+            Case Account.AccountProcess.RH : GlobalVariables.ProcessButton.Caption = Local.GetValue("process.process_rh")
+        End Select
+        My.Settings.processId = p_processId
         My.Settings.Save()
 
     End Sub
@@ -1199,7 +1255,6 @@ Public Class AddinModule
     End Function
 
 #End Region
-
 
 
 End Class

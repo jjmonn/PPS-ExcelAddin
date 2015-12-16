@@ -25,7 +25,7 @@ Partial Class FBIFunctionUI
         Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(FBIFunctionUI))
         Me.ButtonsIL = New System.Windows.Forms.ImageList(Me.components)
-        Me.validate_cmd = New System.Windows.Forms.Button()
+        Me.validate_cmd = New viblend.winforms.controls.vButton()
         Me.categoriesIL = New System.Windows.Forms.ImageList(Me.components)
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
         Me.AdjustmentsTreeviewBox = New VIBlend.WinForms.Controls.vTreeViewBox()
@@ -434,7 +434,7 @@ Partial Class FBIFunctionUI
         Me.ResumeLayout(False)
 
     End Sub
-    Friend WithEvents validate_cmd As System.Windows.Forms.Button
+    Friend WithEvents validate_cmd As viblend.winforms.controls.vButton
     Friend WithEvents ButtonsIL As System.Windows.Forms.ImageList
     Friend WithEvents categoriesIL As System.Windows.Forms.ImageList
     Friend WithEvents TableLayoutPanel1 As System.Windows.Forms.TableLayoutPanel

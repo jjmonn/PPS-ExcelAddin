@@ -200,8 +200,8 @@ Friend Class ConnectionsFunctions
 
         On Error Resume Next
         GlobalVariables.NetworkConnect.Stop()
-        GlobalVariables.Connection_Toggle_Button.Image = 0
-        GlobalVariables.Connection_Toggle_Button.Caption = "Not connected"
+        GlobalVariables.ConnectionToggleButton.Image = 0
+        GlobalVariables.ConnectionToggleButton.Caption = "Not connected"
         GlobalVariables.ConnectionState = True
 
     End Sub

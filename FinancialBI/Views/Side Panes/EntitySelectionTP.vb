@@ -104,7 +104,7 @@ Public Class EntitySelectionTP
     End Sub
 
     Private Sub EntitySelectionTP_ADXBeforeTaskPaneShow(sender As Object, e As ADXBeforeTaskPaneShowEventArgs) Handles MyBase.ADXBeforeTaskPaneShow
-        Me.Visible = GlobalVariables.EntitySelectionPaneVisible
+        Me.Visible = GlobalVariables.EntitySelectionTaskPaneVisible
     End Sub
 
 #End Region

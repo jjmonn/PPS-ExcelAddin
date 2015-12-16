@@ -86,7 +86,7 @@ Public Class ReportUploadEntitySelectionPane
 #Region "Form show and close events"
 
     Private Sub ADXExcelTaskPane1_ADXBeforeTaskPaneShow(sender As Object, e As ADXBeforeTaskPaneShowEventArgs) Handles MyBase.ADXBeforeTaskPaneShow
-        Me.Visible = GlobalVariables.InputSelectionPaneVisible
+        Me.Visible = GlobalVariables.InputSelectionTaskPaneVisible
     End Sub
 
     Private Sub CInputSelectionPane_ADXAfterTaskPaneShow(sender As Object, e As ADXAfterTaskPaneShowEventArgs) Handles MyBase.ADXAfterTaskPaneShow
