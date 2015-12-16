@@ -4,10 +4,11 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 14/12/2015
+' Last modified: 15/12/2015
 
 
 Imports Microsoft.Office.Interop
+Imports Microsoft.Office.Interop.Excel
 Imports System.Collections.Generic
 Imports System.Linq
 Imports System.Collections
@@ -16,22 +17,23 @@ Imports CRUD
 
 Friend Class DataModificationsTracking
 
-
 #Region "Instance Variables"
 
     ' Objects
     Private m_dataset As ModelDataSet
     Friend m_rangeHighlighter As RangeHighlighter
-    Friend m_dataSetRegion As Excel.Range
-    Friend m_outputsRegion As Excel.Range
-    Friend m_cellBeingEdited As Excel.Range
+    Friend m_dataSetRegion As Range
+    Friend m_outputsRegion As Range
+    Friend m_cellBeingEdited As Range
 
     ' Variables
     Friend m_modifiedCellsList As New List(Of String)
     Private m_startPeriod As Int32
+    Private m_formatCondition As FormatCondition
 
 #End Region
 
+#Region "Initialize"
 
     Friend Sub New(ByRef p_dataSet As ModelDataSet)
 
@@ -41,6 +43,7 @@ Friend Class DataModificationsTracking
 
     End Sub
 
+#End Region
 
 #Region "Dataset and Outputs Region Set up"
 
@@ -81,12 +84,12 @@ Friend Class DataModificationsTracking
     End Sub
 
     ' Loop through param dictionaries to build a Dataset Range
-    Private Sub AppendDataRegionRanges(ByRef region As Excel.Range, _
+    Private Sub AppendDataRegionRanges(ByRef region As Range, _
                                        ByRef VDict As Dictionary(Of String, String), _
                                        ByRef HDict As Dictionary(Of String, String))
 
-        For Each VArea As Excel.Range In TransformDictionaryToRange(VDict).Areas
-            For Each HArea As Excel.Range In TransformDictionaryToRange(HDict).Areas
+        For Each VArea As range In TransformDictionaryToRange(VDict).Areas
+            For Each HArea As range In TransformDictionaryToRange(HDict).Areas
 
                 Dim appendRange = m_dataset.m_excelWorkSheet.Range(m_dataset.m_excelWorkSheet.Cells(VArea(1).row, HArea(1).column), _
                                                    m_dataset.m_excelWorkSheet.Cells(VArea(VArea.Count).row, HArea(HArea.Count).column))
@@ -99,10 +102,10 @@ Friend Class DataModificationsTracking
     End Sub
 
     ' Transforms a dictionary Addresses | Values into a range
-    Private Function TransformDictionaryToRange(ByRef inputDict As Dictionary(Of String, String)) As Excel.Range
+    Private Function TransformDictionaryToRange(ByRef inputDict As Dictionary(Of String, String)) As Range
 
         If inputDict.Count = 0 Then Return Nothing
-        Dim rng As Excel.Range
+        Dim rng As range
         rng = m_dataset.m_excelWorkSheet.Range(inputDict.ElementAt(0).Key)
         For Each address As String In inputDict.Keys
             rng = GlobalVariables.apps.Union(rng, m_dataset.m_excelWorkSheet.Range(address))
@@ -112,7 +115,6 @@ Friend Class DataModificationsTracking
     End Function
 
 #End Region
-
 
 #Region "Modifications Tracking"
 
@@ -167,13 +169,15 @@ Friend Class DataModificationsTracking
 
 #End Region
 
-
 #Region "Inputs/ Outputs Ranges Related Functions"
 
     ' Interface: Launch Items and Data Ranges Highlight
     Friend Sub HighlightItemsAndDataRanges()
 
         GlobalVariables.APPS.ScreenUpdating = False
+        DisableConditionalFormatting(m_dataset.m_excelWorkSheet.Range(m_dataset.m_excelWorkSheet.Range("A1"), _
+                                                                      m_dataset.m_lastCell))
+
         Dim version As Version = GlobalVariables.Versions.GetValue(My.Settings.version_id)
         If version Is Nothing Then Exit Sub
         m_startPeriod = version.StartPeriod
@@ -193,33 +197,33 @@ Friend Class DataModificationsTracking
     End Sub
 
     Friend Sub UnHighlightItemsAndDataRanges()
-
         m_rangeHighlighter.RevertToOriginalColors()
-
+        EnableConditionalFormatting(m_dataset.m_excelWorkSheet.Range(m_dataset.m_excelWorkSheet.Range("A1"), _
+                                                                      m_dataset.m_lastCell))
     End Sub
 
-    Friend Sub TakeOffFormats()
-
+    Friend Sub TakeOffFormatsAndEnableConditionalFormatting()
         m_rangeHighlighter.RevertToOriginalColors()
-
+        EnableConditionalFormatting(m_dataset.m_excelWorkSheet.Range(m_dataset.m_excelWorkSheet.Range("A1"), _
+                                                                      m_dataset.m_lastCell))
     End Sub
 
-    Private Sub HeaderRangesInputsHighlight(ByRef addressDictionary As Dictionary(Of String, String))
+    Private Sub HeaderRangesInputsHighlight(ByRef p_addressDictionary As Dictionary(Of String, String))
 
-        If addressDictionary.Count > 0 Then
-            For Each contiguousRange As Excel.Range In TransformDictionaryToRange(addressDictionary).Areas
-                m_rangeHighlighter.HighlightInputRange(contiguousRange)
+        If p_addressDictionary.Count > 0 Then
+            For Each l_contiguousRange As Range In TransformDictionaryToRange(p_addressDictionary).Areas
+                m_rangeHighlighter.HighlightInputRange(l_contiguousRange)
             Next
         End If
 
     End Sub
 
     ' Highlight the outputs headers
-    Private Sub HeaderRangesOutputsHighlight(ByRef addressDictionary As Dictionary(Of String, String))
+    Private Sub HeaderRangesOutputsHighlight(ByRef p_addressDictionary As Dictionary(Of String, String))
 
-        If addressDictionary.Count > 0 Then
-            For Each contiguousRange As Excel.Range In TransformDictionaryToRange(addressDictionary).Areas
-                m_rangeHighlighter.ColorOutputRange(contiguousRange)
+        If p_addressDictionary.Count > 0 Then
+            For Each l_contiguousRange As range In TransformDictionaryToRange(p_addressDictionary).Areas
+                m_rangeHighlighter.ColorOutputRange(l_contiguousRange)
             Next
         End If
 
@@ -234,7 +238,6 @@ Friend Class DataModificationsTracking
             Case ModelDataSet.Orientations.ENTITIES_ACCOUNTS : DataAreasHighlight(m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.ENTITY), m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.aCCOUNT))
             Case ModelDataSet.Orientations.PERIODS_ENTITIES : DataAreasHighlight(m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.PERIOD), m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.ENTITY))
             Case ModelDataSet.Orientations.ENTITIES_PERIODS : DataAreasHighlight(m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.ENTITY), m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.PERIOD))
-
             Case ModelDataSet.Orientations.PRODUCTS_PERIODS : DataAreasHighlight(m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.PRODUCT), m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.PERIOD))
             Case ModelDataSet.Orientations.PERIODS_PRODUCTS : DataAreasHighlight(m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.PERIOD), m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.PRODUCT))
             Case Else : Exit Sub
@@ -246,7 +249,7 @@ Friend Class DataModificationsTracking
 
         Dim tuple_ As Tuple(Of String, String, String, String)
         ' tuple -> entity, account, product, period
-        Dim excelCell As Excel.Range
+        Dim excelCell As range
 
         For Each tupleCellPair In m_dataset.m_datasetCellsDictionary
             tuple_ = tupleCellPair.Key
@@ -268,17 +271,17 @@ Friend Class DataModificationsTracking
                                    ByRef p_horizontalDictionary As Dictionary(Of String, String))
 
         If p_verticalDictionary.Count = 0 OrElse p_horizontalDictionary.Count = 0 Then Exit Sub
-        For Each l_verticalArea As Excel.Range In TransformDictionaryToRange(p_verticalDictionary).Areas
-            For Each l_horizontalArea As Excel.Range In TransformDictionaryToRange(p_horizontalDictionary).Areas
-                m_rangeHighlighter.HighlightInputRange(m_rangeHighlighter.WS.Range(m_rangeHighlighter.WS.Cells(l_verticalArea(1).row, l_horizontalArea(1).column), _
-                                                                                   m_rangeHighlighter.WS.Cells(l_verticalArea(l_verticalArea.Count).row, l_horizontalArea(l_horizontalArea.Count).column)))
+        For Each l_verticalArea As range In TransformDictionaryToRange(p_verticalDictionary).Areas
+            For Each l_horizontalArea As range In TransformDictionaryToRange(p_horizontalDictionary).Areas
+                Dim l_range = m_rangeHighlighter.WS.Range(m_rangeHighlighter.WS.Cells(l_verticalArea(1).row, l_horizontalArea(1).column), _
+                                                          m_rangeHighlighter.WS.Cells(l_verticalArea(l_verticalArea.Count).row, l_horizontalArea(l_horizontalArea.Count).column))
+                m_rangeHighlighter.HighlightInputRange(l_range)
             Next
         Next
 
     End Sub
 
 #End Region
-
 
 #Region "Initial Dataset Differences with DB"
 
@@ -309,7 +312,7 @@ Friend Class DataModificationsTracking
 
                         Dim tuple_ As New Tuple(Of String, String, String, String)(entity, l_account.Name, "", period)
                         If m_dataset.m_datasetCellsDictionary.ContainsKey(tuple_) = True Then
-                            Dim cell As Excel.Range = m_dataset.m_datasetCellsDictionary(tuple_)
+                            Dim cell As range = m_dataset.m_datasetCellsDictionary(tuple_)
                             If cell.Value2 <> p_dataBaseInputsDictionary(entity)(l_account.Name)(periodIdentifyer & period) Then _
                                RegisterModification(cell.Address)
                         End If
@@ -317,7 +320,7 @@ Friend Class DataModificationsTracking
                         For Each period As String In m_dataset.m_dimensionsValueAddressDict(ModelDataSet.Dimension.PERIOD).Keys
                             Dim tuple_ As New Tuple(Of String, String, String, String)(entity, l_account.Name, "", period)
                             If m_dataset.m_datasetCellsDictionary.ContainsKey(tuple_) = True Then
-                                Dim cell As Excel.Range = m_dataset.m_datasetCellsDictionary(tuple_)
+                                Dim cell As range = m_dataset.m_datasetCellsDictionary(tuple_)
                                 If cell.Value2 <> p_dataBaseInputsDictionary(entity)(l_account.Name)(periodIdentifyer & period) Then
                                     RegisterModification(cell.Address)
                                 End If
@@ -350,7 +353,7 @@ Friend Class DataModificationsTracking
                 ' Dimensions : (entity)(account)(product)(period)
                 Dim tuple_ As New Tuple(Of String, String, String, String)("", p_accountName, l_productName, p_periodId)
                 If m_dataset.m_datasetCellsDictionary.ContainsKey(tuple_) = True Then
-                    Dim cell As Excel.Range = m_dataset.m_datasetCellsDictionary(tuple_)
+                    Dim cell As range = m_dataset.m_datasetCellsDictionary(tuple_)
                     If p_factsDictionary.ContainsKey(l_productName) = False _
                     OrElse p_factsDictionary(l_productName).ContainsKey(periodIdentifyer & p_periodId) = False Then
                         RegisterModification(cell.Address)
@@ -370,5 +373,87 @@ Friend Class DataModificationsTracking
 
 #End Region
 
+#Region "Conditional Formatting"
+
+    Private Sub DisableConditionalFormatting(ByVal p_selection As Range)
+
+        Dim l_conditionCell As Range = m_dataset.m_excelWorkSheet.Range(m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.PERIOD).ElementAt(0).Key)
+        Dim l_conditionCellValue As String = m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.PERIOD).ElementAt(0).Value
+        m_formatCondition = AddConditionExpression(p_selection, "=1=1") 'l_conditionCell.Address & "=" & l_conditionCellValue
+        m_formatCondition.SetFirstPriority()
+        m_formatCondition.StopIfTrue = True
+
+    End Sub
+
+    Private Sub EnableConditionalFormatting(ByRef p_selection As Range)
+
+        Dim f_conditions As FormatConditions = RangeFormatConditions(p_selection)
+        '      f_conditions.Item(1).Delete()
+        Dim fc As FormatCondition = RangeFormatConditions(f_conditions)
+        '      fc.Delete()
+
+        '    p_selection.FormatConditions(1).Delete()
+        m_formatCondition.stopiftrue = False
+        DeleteFormatCondition(m_formatCondition)
+        '    m_formatCondition.Delete()
+        ' ne marche pas !!! enlever la première rule !
+
+    End Sub
+
+    Public Shared Function AddConditionValue(R As Range, ConditionOperator As XlFormatConditionOperator, Formula As String) As FormatCondition
+        Return CType(R.FormatConditions.GetType().InvokeMember("Add", _
+                                                               System.Reflection.BindingFlags.InvokeMethod, _
+                                                               Nothing, _
+                                                               CType(R.FormatConditions, Object), _
+                                                               New Object() {XlFormatConditionType.xlCellValue, ConditionOperator, Formula}) _
+                                                               , FormatCondition)
+    End Function
+
+    Public Shared Function AddConditionExpression(R As Range, Formula As String) As FormatCondition
+
+        Return CType(R.FormatConditions.GetType().InvokeMember("Add", _
+                                                               System.Reflection.BindingFlags.InvokeMethod, _
+                                                               Nothing, _
+                                                               CType(R.FormatConditions, Object), _
+                                                               New Object() {XlFormatConditionType.xlExpression, Type.Missing, Formula}), FormatCondition)
+
+    End Function
+
+    Public Shared Function RangeFormatConditions(R As Range) As FormatConditions
+
+    
+        '  Dim fc = FormatConditions.GetType().InvokeMember("AddDatabar", BindingFlags.InvokeMethod, Nothing, FormatConditions, null)
+
+        Return CType(R.GetType().InvokeMember("FormatConditions", _
+                                                System.Reflection.BindingFlags.GetProperty, _
+                                                Nothing, _
+                                                CType(R, Range), _
+                                                New Object() {}),  _
+                                                FormatConditions)
+
+    End Function
+
+    Public Shared Function RangeFormatConditions(p_formatConditions As FormatConditions) As FormatCondition
+
+             Return CType(p_formatConditions.GetType().InvokeMember("Item", _
+                                                               System.Reflection.BindingFlags.InvokeMethod, _
+                                                                Nothing, _
+                                                                CType(p_formatConditions, FormatConditions), _
+                                                                New Object() {1}),  _
+                                                                FormatCondition)
+
+    End Function
+
+    Public Shared Sub DeleteFormatCondition(p_formatCondition As FormatCondition)
+
+        p_formatCondition.GetType().InvokeMember("delete", _
+                                                 System.Reflection.BindingFlags.InvokeMethod, _
+                                                 Nothing, _
+                                                 CType(p_formatCondition, FormatCondition), _
+                                                 New Object() {})
+
+    End Sub
+
+#End Region
 
 End Class

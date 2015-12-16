@@ -1050,7 +1050,7 @@ Public Class AddinModule
 
     Friend Sub ClearSubmissionMode(ByRef p_generalSubmissionController As ReportUploadControler)
 
-        On Error Resume Next
+        '     On Error Resume Next
         m_worksheetNamesObjectDict.Remove(p_generalSubmissionController.m_associatedWorksheet.Name)
         For Each l_item In m_submissionWorksheetCombobox.Items
             If l_item.id = p_generalSubmissionController.m_associatedWorksheet.Name Then
