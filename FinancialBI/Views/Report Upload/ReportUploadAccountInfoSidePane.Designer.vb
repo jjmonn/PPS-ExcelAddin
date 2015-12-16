@@ -1,5 +1,5 @@
 <Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
-Partial Class ReportUploadSidePane
+Partial Class ReportUploadAccountInfoSidePane
     Inherits AddinExpress.XL.ADXExcelTaskPane
 
     'Form overrides dispose to clean up the component list.
@@ -21,7 +21,7 @@ Partial Class ReportUploadSidePane
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
-        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(ReportUploadSidePane))
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(ReportUploadAccountInfoSidePane))
         Me.m_accountTypeTextBox = New VIBlend.WinForms.Controls.vTextBox()
         Me.m_accountTextBox = New VIBlend.WinForms.Controls.vTextBox()
         Me.m_formulaTextBox = New System.Windows.Forms.TextBox()

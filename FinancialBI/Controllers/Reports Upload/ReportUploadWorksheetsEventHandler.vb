@@ -25,7 +25,6 @@ Imports CRUD
 
 Friend Class ReportUploadWorksheetsEventHandler
 
-
 #Region "Instance Variables"
 
     ' Objects
@@ -48,7 +47,6 @@ Friend Class ReportUploadWorksheetsEventHandler
 
 
 #End Region
-
 
 #Region "Initialize"
 
@@ -73,7 +71,6 @@ Friend Class ReportUploadWorksheetsEventHandler
     End Sub
 
 #End Region
-
 
 #Region "Update Worksheet"
 
@@ -143,7 +140,6 @@ Friend Class ReportUploadWorksheetsEventHandler
     End Sub
 
 #End Region
-
 
 #Region "Events"
 
@@ -409,7 +405,6 @@ Friend Class ReportUploadWorksheetsEventHandler
     End Sub
 
 #End Region
-
 
 #Region "Utilities"
 

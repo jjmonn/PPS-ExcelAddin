@@ -164,7 +164,7 @@ Public Class AddinModule
 
 #Region "Task Panes"
 
-    Private ReadOnly Property InputReportTaskPane() As InputSelectionPane
+    Private ReadOnly Property InputReportTaskPane() As ReportUploadEntitySelectionPane
 
         Get
             Dim taskPaneInstance As AddinExpress.XL.ADXExcelTaskPane = Nothing
@@ -174,7 +174,7 @@ Public Class AddinModule
                 taskPaneInstance = InputSelectionTaskPaneItem.CreateTaskPaneInstance()
             End If
 
-            Return TryCast(taskPaneInstance, InputSelectionPane)
+            Return TryCast(taskPaneInstance, ReportUploadEntitySelectionPane)
         End Get
     End Property
 
@@ -202,7 +202,7 @@ Public Class AddinModule
         End Get
     End Property
 
-    Friend ReadOnly Property ReportUploadTaskPane As ReportUploadSidePane
+    Friend ReadOnly Property ReportUploadTaskPane As ReportUploadAccountInfoSidePane
         Get
             Dim taskPaneInstance As AddinExpress.XL.ADXExcelTaskPane = Nothing
             taskPaneInstance = ReportUploadTaskPaneItem.TaskPaneInstance
@@ -210,7 +210,7 @@ Public Class AddinModule
             If taskPaneInstance Is Nothing Then
                 taskPaneInstance = ReportUploadTaskPaneItem.CreateTaskPaneInstance()
             End If
-            Return TryCast(taskPaneInstance, ReportUploadSidePane)
+            Return TryCast(taskPaneInstance, ReportUploadAccountInfoSidePane)
         End Get
     End Property
 

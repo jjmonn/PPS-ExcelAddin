@@ -40,8 +40,12 @@
     <string name="rows_label">Rows labels</string>
     <string name="fields_choice">Choose fields to add to report:</string>
     <string name="msg_specify_dimensions1">You need to specify at least the following dimensions </string>
-    <string name="msg_specify_dimensions2">Accounts and periods (Years or Months)</string>
+    <string name="msg_specify_dimension_account">Accounts</string>
+    <string name="msg_specify_dimension_periods1">Periods (Years or Months)</string>
+    <string name="msg_specify_dimension_periods2">Periods (Weeks or Days)</string>
+    <string name="msg_specify_dimension_client_or_entities">Business Unit or Client</string>
     <string name="msg_currency_selection">Please select a Currency.</string>
+
   </category>
 
   <category name="CUI_Charts">

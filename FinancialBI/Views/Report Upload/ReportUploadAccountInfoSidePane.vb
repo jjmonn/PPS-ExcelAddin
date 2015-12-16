@@ -12,7 +12,7 @@ Imports System.Runtime.InteropServices
 Imports AddinExpress.XL
 Imports CRUD
 
-Public Class ReportUploadSidePane
+Public Class ReportUploadAccountInfoSidePane
 
     Private m_formulaTranslator As FormulasTranslations
 

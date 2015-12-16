@@ -13,8 +13,7 @@
 ' 
 '
 ' Author: Julien Monnereau
-' Last modified: 05/03/2015
-
+' Last modified: 16/12/2015
 
 
 Imports System.Runtime.InteropServices
@@ -24,7 +23,6 @@ Imports System.Windows.Forms
 
 Public Class VersionSelectionPane
 
-
 #Region "Instance Variables"
 
     Private m_versionSelectionController As VersionSelection
@@ -32,15 +30,11 @@ Public Class VersionSelectionPane
 
 #End Region
 
-
 #Region "Initialize"
 
-
     Public Sub New()
-
         MyBase.New()
         InitializeComponent()
-
     End Sub
 
     Friend Function Init() As Boolean
@@ -54,14 +48,13 @@ Public Class VersionSelectionPane
 
     Private Sub InsertDataVersionSelection()
 
+        TableLayoutPanel1.Controls.Clear()
         TableLayoutPanel1.Controls.Add(m_versionSelectionController.versionsTV, 0, 1)
         TableLayoutPanel1.GetControlFromPosition(0, 1).Dock = DockStyle.Fill
 
     End Sub
 
-
 #End Region
-
 
 #Region "Interface"
 
@@ -87,7 +80,6 @@ Public Class VersionSelectionPane
 
 #End Region
 
-
 #Region "Events"
 
     Private Sub ADXExcelTaskPane1_ADXBeforeTaskPaneShow(sender As Object, e As ADXBeforeTaskPaneShowEventArgs) Handles MyBase.ADXBeforeTaskPaneShow
@@ -102,7 +94,6 @@ Public Class VersionSelectionPane
 
 
 #End Region
-
 
 
 End Class
