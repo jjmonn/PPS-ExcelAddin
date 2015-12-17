@@ -260,7 +260,7 @@
     <string name="msg_periods_orientation_unclear">L'organisation des périodes n'est pas claire. Merci de vérifier que les périodes sont disposés en lignes ou en colones.</string>
     <string name="msg_product_orientation_unclear">L'organisation des consultants n'est pas claire. Merci de vérifier que les consultants sont disposés en lignes ou en colones.</string>
     <string name="msg_entity_not_found">Aucune BU n'a été identifiée sur la feuille.</string>
-
+    <string name="msg_error_upload">Une erreur est survenue dans Excel et le rapport ne peut pas être affiché.</string>
   </category>
 
   <category name="global_facts">

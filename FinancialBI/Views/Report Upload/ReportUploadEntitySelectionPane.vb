@@ -1,16 +1,6 @@
-' CInputSelectionPane.vb
+' ReportUploadEntitySelectionPane.vb
 ' 
 ' Task pane for Entity Input Report Selection
-'
-' To do:
-'       - simplification actuelle -> le choix des periods est enlevé
-'
-'
-'
-' Known bugs:
-'
-'
-'
 '
 ' Author: Julien Monnereau
 ' Last modified: 16/12/2015
@@ -28,7 +18,7 @@ Public Class ReportUploadEntitySelectionPane
 
 #Region "Instance Variables"
 
-    Private ADDIN As AddinModule
+    Private m_inputReportCreatinoController As New InputReportController
 
 #End Region
 
@@ -47,8 +37,7 @@ Public Class ReportUploadEntitySelectionPane
     Friend Sub InitializeSelectionChoices(ByRef AddinInstance As AddinModule)
 
         If EntitiesTV.Nodes.Count > 0 Then EntitiesTV.Nodes.Clear()
-        ADDIN = AddinInstance
-        GlobalVariables.AxisElems.LoadEntitiesTV(EntitiesTV)
+         GlobalVariables.AxisElems.LoadEntitiesTV(EntitiesTV)
         EntitiesTV.CollapseAll()
 
     End Sub
@@ -60,7 +49,10 @@ Public Class ReportUploadEntitySelectionPane
 
     ' Validate
     Private Sub ValidateInputSelection()
-        If Not EntitiesTV.SelectedNode Is Nothing AndAlso EntitiesTV.SelectedNode.Nodes.Count = 0 Then ADDIN.InputReportPaneCallBack_ReportCreation()
+        If Not EntitiesTV.SelectedNode Is Nothing AndAlso EntitiesTV.SelectedNode.Nodes.Count = 0 Then
+            m_inputReportCreatinoController.InputReportPaneCallBack_ReportCreation(My.Settings.processId)
+        End If
+
     End Sub
 
 
@@ -103,8 +95,6 @@ Public Class ReportUploadEntitySelectionPane
 #End Region
 
 #End Region
-
-
 
 
 End Class

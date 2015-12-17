@@ -2,7 +2,7 @@
 ' 
 '
 ' Author: Julien Monnereau
-' Last modified: 14/12/2015
+' Last modified: 17/12/2015
 
 
 Imports Microsoft.Office.Interop
@@ -22,7 +22,7 @@ Friend Class ReportUploadControler
 
     ' Objects
     Private m_addin As AddinModule
-    Private m_fact As New Facts
+    Private m_fact As New FactsManager
     Private m_dataset As ModelDataSet
     Private m_dataModificationsTracker As DataModificationsTracking
     Private m_acquisitionModel As AcquisitionModel
@@ -96,7 +96,14 @@ Friend Class ReportUploadControler
             m_errorMessagesUI.ClearBox()
             Select Case m_dataset.m_processFlag
                 Case Account.AccountProcess.FINANCIAL : SubmitFinancialProcess()
-                Case Account.AccountProcess.RH : SubmitPDCProcess()
+                Case Account.AccountProcess.RH
+                    Dim l_unreferencedClientsNameList As List(Of String) = GetClientsNotReferenced()
+                    If l_unreferencedClientsNameList.Count = 0 Then
+                        SubmitPDCProcess()
+                    Else
+                        Dim l_unreferencedClientsClients As New UnReferencedClientsUI(Me, l_unreferencedClientsNameList)
+                        l_unreferencedClientsClients.Show()
+                    End If
             End Select
         Else
             GlobalVariables.SubmissionStatusButton.Image = 2
@@ -220,7 +227,7 @@ Friend Class ReportUploadControler
             m_dataModificationsTracker.InitializeOutputsRegion()
             Select Case m_dataset.m_processFlag
                 Case Account.AccountProcess.FINANCIAL : Return FinancialProcessSnapshotRefreshment(p_updateInputsFlag)
-                Case Account.AccountProcess.RH : Return PDCProcessSnapshotRefreshment()
+                Case Account.AccountProcess.RH : Return PDCProcessSnapshotRefreshment(p_updateInputsFlag)
             End Select
         End If
         Return False
@@ -238,6 +245,7 @@ Friend Class ReportUploadControler
             m_addin.SelectFinancialDropDownSubmissionButtons(m_dataset.AxisElemIdentify(AxisType.Client), _
                                                     m_dataset.AxisElemIdentify(AxisType.Product), _
                                                     m_dataset.AxisElemIdentify(AxisType.Adjustment))
+
             UpdateAfterAnalysisAxisChanged(GlobalVariables.ClientsIDDropDown.SelectedItemId, _
                                            GlobalVariables.ProductsIDDropDown.SelectedItemId, _
                                            GlobalVariables.AdjustmentIDDropDown.SelectedItemId, _
@@ -258,7 +266,9 @@ Friend Class ReportUploadControler
 
     End Function
 
-    Private Function PDCProcessSnapshotRefreshment() As Boolean
+    Private Function PDCProcessSnapshotRefreshment(p_updateInputsFlag) As Boolean
+
+        ' -> update fomr server !
 
         If m_dataset.m_globalOrientationFlag <> ModelDataSet.Orientations.ORIENTATION_ERROR Then
             If m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.ENTITY).Count = 0 Then
@@ -280,7 +290,7 @@ Friend Class ReportUploadControler
 
             ' RH Cloud data loading
             m_factsStorage.LoadRHFacts({m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.ACCOUNT).ElementAt(0).Value}.ToList, _
-                                       m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.PRODUCT).Values.ToList, _
+                                       m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.EMPLOYEE).Values.ToList, _
                                        m_dataset.m_currentVersionId, _
                                        m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.PERIOD).Values.Min, _
                                        m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.PERIOD).Values.Max)
@@ -426,22 +436,23 @@ errorHandler:
 
     Private Sub SubmitFinancialProcess()
 
-        Dim factsList As New List(Of Hashtable)
+        Dim factsList As New List(Of Fact)
         Dim cellsAddresses As List(Of String) = m_dataModificationsTracker.GetModificationsListCopy
         For Each cellAddress In cellsAddresses
             ' Implies type of cell checked before -> only double -> check if we can enter anything else !!!
-            Dim ht As New Hashtable()
+            Dim l_fact As New Fact
 
-            ht(ENTITY_ID_VARIABLE) = GlobalVariables.AxisElems.GetValueId(AxisType.Entities, m_dataset.m_datasetCellDimensionsDictionary(cellAddress).m_entityName)
-            ht(ACCOUNT_ID_VARIABLE) = GlobalVariables.Accounts.GetValueId(m_dataset.m_datasetCellDimensionsDictionary(cellAddress).m_accountName)
-            ht(PERIOD_VARIABLE) = m_dataset.m_datasetCellDimensionsDictionary(cellAddress).m_period
-            ht(VERSION_ID_VARIABLE) = m_acquisitionModel.m_currentVersionId
-            ht(CLIENT_ID_VARIABLE) = GlobalVariables.ClientsIDDropDown.SelectedItemId
-            ht(PRODUCT_ID_VARIABLE) = GlobalVariables.ProductsIDDropDown.SelectedItemId
-            ht(ADJUSTMENT_ID_VARIABLE) = GlobalVariables.AdjustmentIDDropDown.SelectedItemId
-            ht(VALUE_VARIABLE) = GlobalVariables.APPS.ActiveSheet.range(cellAddress).value
+            l_fact.EntityId = GlobalVariables.AxisElems.GetValueId(AxisType.Entities, m_dataset.m_datasetCellDimensionsDictionary(cellAddress).m_entityName)
+             l_fact.AccountId = GlobalVariables.Accounts.GetValueId(m_dataset.m_datasetCellDimensionsDictionary(cellAddress).m_accountName)
+            l_fact.Period = m_dataset.m_datasetCellDimensionsDictionary(cellAddress).m_period
+            l_fact.VersionId = m_acquisitionModel.m_currentVersionId
+            l_fact.ClientId = GlobalVariables.ClientsIDDropDown.SelectedItemId
+            l_fact.ProductId = GlobalVariables.ProductsIDDropDown.SelectedItemId
+            l_fact.AdjustmentId = GlobalVariables.AdjustmentIDDropDown.SelectedItemId
+            l_fact.EmployeeId = CType(CRUD.AxisType.Employee, UInt32)
+            l_fact.Value = GlobalVariables.APPS.ActiveSheet.range(cellAddress).value
 
-            factsList.Add(ht)
+            factsList.Add(l_fact)
         Next
         m_fact.CMSG_UPDATE_FACT_LIST(factsList, cellsAddresses)
 
@@ -449,30 +460,43 @@ errorHandler:
 
     Private Sub SubmitPDCProcess()
 
-        Dim factsList As New List(Of Hashtable)
-        Dim cellsAddresses As List(Of String) = m_dataModificationsTracker.GetModificationsListCopy
-        For Each cellAddress In cellsAddresses
-            Dim ht As New Hashtable()
+        If m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.ACCOUNT).Count > 0 Then
+            Dim l_factsList As New List(Of Fact)
+            Dim l_cellsAddressesList As List(Of String) = m_dataModificationsTracker.GetModificationsListCopy
+            For Each l_cellAddress In l_cellsAddressesList
+                Dim l_clientName As String = GlobalVariables.APPS.ActiveSheet.range(l_cellAddress).value
+                If l_clientName <> "" Then
 
-            ' attention à faire :
-            '   -> create client if it doesn't exists (server side ?)
-            '   -> check again that client is valid and a string
+                    Dim l_client As AxisElem = GlobalVariables.AxisElems.GetValue(CRUD.AxisType.Client, l_clientName)
+                    If l_client Is Nothing Then Continue For
 
-            ht(ENTITY_ID_VARIABLE) = 50 ' stub !!! 
-            ht(ACCOUNT_ID_VARIABLE) = GlobalVariables.Accounts.GetValueId(m_dataset.m_datasetCellDimensionsDictionary(cellAddress).m_accountName)
-            ht(PERIOD_VARIABLE) = m_dataset.m_datasetCellDimensionsDictionary(cellAddress).m_period
-            ht(VERSION_ID_VARIABLE) = m_dataset.m_currentVersionId
+                    Dim l_employeeName As String = m_dataset.m_datasetCellDimensionsDictionary(l_cellAddress).m_employee
+                    Dim l_employee As AxisElem = GlobalVariables.AxisElems.GetValue(CRUD.AxisType.Employee, l_employeeName)
+                    If l_employee Is Nothing Then Continue For
 
-            ' quid : clients creation
+                    Dim l_axisParent As AxisParent = GlobalVariables.AxisParents.GetValue(l_employee.Id)
+                    If l_axisParent Is Nothing Then Continue For
 
-            ht(CLIENT_ID_VARIABLE) = 8 'GlobalVariables.APPS.ActiveSheet.range(cellAddress).value
-            ht(PRODUCT_ID_VARIABLE) = GlobalVariables.AxisElems.GetValue(AxisType.Product, m_dataset.m_datasetCellDimensionsDictionary(cellAddress).m_product).Id
-            ht(ADJUSTMENT_ID_VARIABLE) = CUInt(CRUD.AxisType.Adjustment)
-            ht(VALUE_VARIABLE) = 1      ' * % working time of the consultant
+                    Dim l_fact As New Fact
+                    l_fact.EntityId = l_axisParent.ParentId
+                    l_fact.AccountId = GlobalVariables.Accounts.GetValueId(m_dataset.m_datasetCellDimensionsDictionary(l_cellAddress).m_accountName)
+                    l_fact.Period = m_dataset.m_datasetCellDimensionsDictionary(l_cellAddress).m_period
+                    l_fact.VersionId = m_dataset.m_currentVersionId
+                    l_fact.ClientId = l_client.Id
+                    l_fact.ProductId = CUInt(CRUD.AxisType.Adjustment)
+                    l_fact.AdjustmentId = CUInt(CRUD.AxisType.Adjustment)
+                    l_fact.EmployeeId = l_employee.Id
+                    l_fact.Value = 1   ' * % working time of the consultant
 
-            factsList.Add(ht)
-        Next
-        m_fact.CMSG_UPDATE_FACT_LIST(factsList, cellsAddresses)
+
+                    l_factsList.Add(l_fact)
+
+                End If
+            Next
+            m_fact.CMSG_UPDATE_FACT_LIST(l_factsList, l_cellsAddressesList)
+        Else
+            MsgBox("No Account was setup. Cannot submit")
+        End If
 
     End Sub
 
@@ -537,11 +561,11 @@ errorHandler:
     Private Function IdentifyPDCSnapshotFlagsErrors() As String
 
         Dim tmpStr As String = ""
-        If m_dataset.m_productFlag = ModelDataSet.SnapshotResult.ZERO Then tmpStr = tmpStr & "  - " & Local.GetValue("general.products") & Chr(13)
+        If m_dataset.m_employeeFlag = ModelDataSet.SnapshotResult.ZERO Then tmpStr = tmpStr & "  - " & Local.GetValue("general.products") & Chr(13)
         If m_dataset.m_entityFlag = ModelDataSet.SnapshotResult.ZERO Then tmpStr = "  - " & Local.GetValue("general.entities") & Chr(13)
         If m_dataset.m_periodFlag = ModelDataSet.SnapshotResult.ZERO Then tmpStr = tmpStr & "  - " & Local.GetValue("general.periods") & Chr(13)
         If m_dataset.m_periodsOrientationFlag = ModelDataSet.Alignment.UNCLEAR Then tmpStr = tmpStr & "  - " & Local.GetValue("upload.msg_periods_orientation_unclear") & Chr(13)
-        If m_dataset.m_productsOrientationFlag = ModelDataSet.Alignment.UNCLEAR Then tmpStr = tmpStr & "  - " & Local.GetValue("upload.msg_products_orientation_unclear") & Chr(13)
+        If m_dataset.m_employeeOrientationFlag = ModelDataSet.Alignment.UNCLEAR Then tmpStr = tmpStr & "  - " & Local.GetValue("upload.msg_products_orientation_unclear") & Chr(13)
         Return tmpStr
 
     End Function
@@ -553,6 +577,20 @@ errorHandler:
     Friend Sub ActivateReportUploadController()
         m_addin.ActivateReportUploadController(Me)
     End Sub
+
+    Private Function GetClientsNotReferenced() As List(Of String)
+
+        Dim l_unereferencedClientsList As New List(Of String)
+        For Each l_cellAddress In m_dataModificationsTracker.GetModificationsListCopy()
+            Dim l_clientName As String = GlobalVariables.APPS.ActiveSheet.range(l_cellAddress).value()
+            If l_clientName <> "" _
+            AndAlso GlobalVariables.AxisElems.GetValue(AxisType.Client, l_clientName) Is Nothing Then
+                l_unereferencedClientsList.Add(l_clientName)
+            End If
+        Next
+        Return l_unereferencedClientsList
+
+    End Function
 
 #End Region
 

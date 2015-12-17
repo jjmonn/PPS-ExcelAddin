@@ -245,6 +245,7 @@ Friend Class ControllingUIController
             If computingHierarchyList.Count = 0 Then computingHierarchyList = Nothing
             computer.CMSG_COMPUTE_REQUEST(p_versionIDs, _
                                           {CInt(m_entityNode.Value)}.ToList, _
+                                          m_view.m_process, _
                                           currencyId, _
                                           filters, _
                                           axisFilters, _

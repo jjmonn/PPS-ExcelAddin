@@ -41,10 +41,10 @@ Friend Class LogController
         AddHandler FactLog.Read, AddressOf ReadEvent
         Dim ht As New Hashtable()
 
-        ht.Add(ACCOUNT_ID_VARIABLE, p_accountId)
-        ht.Add(ENTITY_ID_VARIABLE, p_entityId)
-        ht.Add(PERIOD_VARIABLE, p_period)
-        ht.Add(VERSION_ID_VARIABLE, p_versionId)
+        'ht.Add(ACCOUNT_ID_VARIABLE, p_accountId)
+        'ht.Add(ENTITY_ID_VARIABLE, p_entityId)
+        'ht.Add(PERIOD_VARIABLE, p_period)
+        'ht.Add(VERSION_ID_VARIABLE, p_versionId)
         FactLog.CMSG_GET_FACT_LOG(ht)
 
     End Sub

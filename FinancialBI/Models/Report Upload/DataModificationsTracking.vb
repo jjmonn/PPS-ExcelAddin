@@ -60,8 +60,8 @@ Friend Class DataModificationsTracking
             Case ModelDataSet.Orientations.PERIODS_ENTITIES : AppendDataRegionRanges(m_dataSetRegion, m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.PERIOD), m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.ENTITY))
             Case ModelDataSet.Orientations.ENTITIES_PERIODS : AppendDataRegionRanges(m_dataSetRegion, m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.ENTITY), m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.PERIOD))
 
-            Case ModelDataSet.Orientations.PRODUCTS_PERIODS : AppendDataRegionRanges(m_dataSetRegion, m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.PRODUCT), m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.PERIOD))
-            Case ModelDataSet.Orientations.PERIODS_PRODUCTS : AppendDataRegionRanges(m_dataSetRegion, m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.PERIOD), m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.PRODUCT))
+            Case ModelDataSet.Orientations.EMPLOYEES_PERIODS : AppendDataRegionRanges(m_dataSetRegion, m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.EMPLOYEE), m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.PERIOD))
+            Case ModelDataSet.Orientations.PERIODS_EMPLOYEES : AppendDataRegionRanges(m_dataSetRegion, m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.PERIOD), m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.EMPLOYEE))
             Case Else
                 ' PPS error tracking
                 Exit Sub
@@ -187,7 +187,7 @@ Friend Class DataModificationsTracking
         HeaderRangesInputsHighlight(m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.ENTITY))
         HeaderRangesInputsHighlight(m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.PERIOD))
         HeaderRangesOutputsHighlight(m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.OUTPUTACCOUNT))
-        HeaderRangesOutputsHighlight(m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.PRODUCT))
+        HeaderRangesOutputsHighlight(m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.EMPLOYEE))
 
         ' Data coloring
         DataHighlight()
@@ -238,8 +238,8 @@ Friend Class DataModificationsTracking
             Case ModelDataSet.Orientations.ENTITIES_ACCOUNTS : DataAreasHighlight(m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.ENTITY), m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.aCCOUNT))
             Case ModelDataSet.Orientations.PERIODS_ENTITIES : DataAreasHighlight(m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.PERIOD), m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.ENTITY))
             Case ModelDataSet.Orientations.ENTITIES_PERIODS : DataAreasHighlight(m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.ENTITY), m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.PERIOD))
-            Case ModelDataSet.Orientations.PRODUCTS_PERIODS : DataAreasHighlight(m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.PRODUCT), m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.PERIOD))
-            Case ModelDataSet.Orientations.PERIODS_PRODUCTS : DataAreasHighlight(m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.PERIOD), m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.PRODUCT))
+            Case ModelDataSet.Orientations.EMPLOYEES_PERIODS : DataAreasHighlight(m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.EMPLOYEE), m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.PERIOD))
+            Case ModelDataSet.Orientations.PERIODS_EMPLOYEES : DataAreasHighlight(m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.PERIOD), m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.EMPLOYEE))
             Case Else : Exit Sub
         End Select
 
@@ -348,7 +348,7 @@ Friend Class DataModificationsTracking
         End Select
 
         On Error Resume Next
-        For Each l_productName As String In m_dataset.m_dimensionsValueAddressDict(ModelDataSet.Dimension.PRODUCT).Keys
+        For Each l_productName As String In m_dataset.m_dimensionsValueAddressDict(ModelDataSet.Dimension.EMPLOYEE).Keys
             For Each p_periodId As String In m_dataset.m_dimensionsValueAddressDict(ModelDataSet.Dimension.PERIOD).Keys
                 ' Dimensions : (entity)(account)(product)(period)
                 Dim tuple_ As New Tuple(Of String, String, String, String)("", p_accountName, l_productName, p_periodId)

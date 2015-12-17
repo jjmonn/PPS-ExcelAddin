@@ -56,7 +56,7 @@ Friend Class UserManager : Inherits NamedCRUDManager(Of NamedCRUDEntity)
         Dim l_user As User = GetCurrentUser()
         If l_user Is Nothing Then Return False
 
-        Dim val As UInt64 = GlobalVariables.Groups.GetRight(l_user.GroupId) And p_right
+        Dim val As UInt64 = GlobalVariables.Groups.GetRight(l_user.GroupId) And CType(p_right, UInt64)
         Return val <> 0
     End Function
 

@@ -270,6 +270,7 @@ Public Class AddinModule
         ' Main Ribbon Initialize
         GlobalVariables.VersionSelectionTaskPane = Me.VersionSelectionTaskPane
         GlobalVariables.ProcessSelectionTaskPane = Me.ProcessSelectionTaskPane
+        GlobalVariables.InputReportTaskPane = Me.InputReportTaskPane
         GlobalVariables.SubmissionStatusButton = m_financialSubmissionSatusButton
         GlobalVariables.ConnectionToggleButton = Me.ConnectionBT
         GlobalVariables.VersionButton = Me.m_MainTabversionButton
@@ -607,7 +608,7 @@ Public Class AddinModule
             If Not l_currency Is Nothing Then
                 l_currencyId = l_currency.Id
             End If
-            ExcelFormatting.FormatExcelRange(GlobalVariables.APPS.ActiveSheet.cells(1, 1), l_currencyId, startDate)
+            ExcelFormatting.FormatFinancialExcelRange(GlobalVariables.APPS.ActiveSheet.cells(1, 1), l_currencyId, startDate)
         End If
 
     End Sub
@@ -861,8 +862,6 @@ Public Class AddinModule
 
 #Region "Task Panes Launches and call backs"
 
-#Region "Report Upload"
-
     Private Sub DisplayReportUploadSidePane()
 
         If CDbl(GlobalVariables.APPS.Version.Replace(".", ",")) > EXCEL_MIN_VERSION Then  ' 
@@ -871,48 +870,6 @@ Public Class AddinModule
         End If
 
     End Sub
-
-    Friend Sub InputReportPaneCallBack_ReportCreation()
-
-        GlobalVariables.APPS.ScreenUpdating = False
-        Dim version As CRUD.Version = GlobalVariables.Versions.GetValue(My.Settings.version_id)
-        If version Is Nothing Then Exit Sub
-
-        Dim entity_id As Int32 = Me.InputReportTaskPane.EntitiesTV.SelectedNode.Name
-        Dim entity_name As String = Me.InputReportTaskPane.EntitiesTV.SelectedNode.Text
-        Dim l_entity As EntityCurrency = GlobalVariables.EntityCurrencies.GetValue(entity_id)
-        If l_entity Is Nothing Then Exit Sub
-        Dim currency As Currency = GlobalVariables.Currencies.GetValue(l_entity.CurrencyId)
-        If currency Is Nothing Then Exit Sub
-
-        Dim currentcell As Excel.Range = WorksheetWrittingFunctions.CreateReceptionWS(entity_name, _
-                                                                                       {"Entity", "Currency", "Version"}, _
-                                                                                       {entity_name, currency.Name, GlobalVariables.VersionButton.Caption})
-
-        If currentcell Is Nothing Then
-            MsgBox("An error occurred in Excel and the report could not be created.")
-            Exit Sub
-        End If
-
-        Dim timeConfig As UInt32 = version.TimeConfiguration
-        Dim periodlist As Int32() = GlobalVariables.Versions.GetPeriodsList(My.Settings.version_id)
-
-        If periodlist Is Nothing Then Exit Sub
-        GlobalVariables.APPS.Interactive = False
-        WorksheetWrittingFunctions.InsertInputReportOnWS(currentcell, _
-                                                          periodlist, _
-                                                          timeConfig)
-
-        Me.InputReportTaskPane.Hide()
-        Me.InputReportTaskPane.Close()
-        ExcelFormatting.FormatExcelRange(currentcell, currency.Id, Date.FromOADate(periodlist(0)))
-        GlobalVariables.APPS.Interactive = True
-        GlobalVariables.APPS.ScreenUpdating = True
-        AssociateReportUploadControler(True)
-
-    End Sub
-
-#End Region
 
     Private Shared Sub LaunchProcessSelection()
         If CDbl(GlobalVariables.APPS.Version.Replace(".", ",")) > EXCEL_MIN_VERSION Then
@@ -973,7 +930,7 @@ Public Class AddinModule
 #Region "Report Upload Methods"
 
     ' Create report upload Conctroler and display
-    Private Sub AssociateReportUploadControler(ByRef p_mustUpdateInputs As Boolean)
+    Friend Sub AssociateReportUploadControler(ByRef p_mustUpdateInputs As Boolean)
 
         GlobalVariables.APPS.Interactive = False
         LoadFinancialDropDownsSubmissionButtons()
