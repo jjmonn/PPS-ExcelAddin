@@ -52,6 +52,18 @@ Public Class AxisElemManager : Inherits AxedCRUDManager(Of AxisElem)
         Return True
 
     End Function
+
+    Friend Function GetLowerCaseNamesId(ByRef p_axis As AxisType) As SafeDictionary(Of String, UInt32)
+
+        Dim l_lowerCaseNamesIdDict As New SafeDictionary(Of String, UInt32)
+        For Each l_axisElem As AxisElem In m_CRUDDic(p_axis).SortedValues
+            l_lowerCaseNamesIdDict.Add(Strings.LCase(l_axisElem.Name), l_axisElem.Id)
+        Next
+        Return l_lowerCaseNamesIdDict
+
+    End Function
+
+
 #End Region
 
 #Region "Utilities"

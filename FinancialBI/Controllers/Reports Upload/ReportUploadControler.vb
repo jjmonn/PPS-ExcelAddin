@@ -100,6 +100,8 @@ Friend Class ReportUploadControler
                     Dim l_unreferencedClientsNameList As List(Of String) = GetClientsNotReferenced()
                     If l_unreferencedClientsNameList.Count = 0 Then
                         SubmitPDCProcess()
+                    ElseIf AntiDuplicateClientsSystem(l_unreferencedClientsNameList) = True Then
+                        SubmitPDCProcess()
                     Else
                         Dim l_unreferencedClientsClients As New UnReferencedClientsUI(Me, l_unreferencedClientsNameList)
                         l_unreferencedClientsClients.Show()
@@ -432,6 +434,41 @@ errorHandler:
 
 #End Region
 
+#Region "Anti Duplication System"
+
+    Private Function AntiDuplicateClientsSystem(ByRef p_clientsNameList As List(Of String)) As Boolean
+
+        Dim l_clientsLCaseNamesIdDict = GlobalVariables.AxisElems.GetLowerCaseNamesId(CRUD.AxisType.Client)
+        For Each l_clientName As String In p_clientsNameList
+            Dim l_lCaseUndefinedClientName = Strings.LCase(l_clientName)
+            If l_clientsLCaseNamesIdDict.ContainsKey(l_lCaseUndefinedClientName) Then
+                ReplaceClientNameOnWorksheet(l_lCaseUndefinedClientName, l_clientsLCaseNamesIdDict.ContainsKey(l_lCaseUndefinedClientName))
+                p_clientsNameList.Remove(l_clientName)
+            End If
+        Next
+        If p_clientsNameList.Count = 0 Then
+            Return True
+        Else
+            Return False
+        End If
+
+    End Function
+
+    Private Sub ReplaceClientNameOnWorksheet(ByRef p_clientUndefinedName As String, _
+                                             ByRef p_clientId As UInt32)
+
+        Dim l_client As AxisElem = GlobalVariables.AxisElems.GetValue(CRUD.AxisType.Client, p_clientId)
+        If l_client Is Nothing Then Exit Sub
+        m_isUpdating = True
+        For Each l_cellAddress In m_dataModificationsTracker.GetModificationsListCopy()
+            GlobalVariables.APPS.ActiveSheet.range(l_cellAddress).value2 = l_client.Name
+        Next
+        m_isUpdating = False
+
+    End Sub
+
+#End Region
+
 #Region "Data Submission"
 
     Private Sub SubmitFinancialProcess()
@@ -487,7 +524,6 @@ errorHandler:
                     l_fact.AdjustmentId = CUInt(CRUD.AxisType.Adjustment)
                     l_fact.EmployeeId = l_employee.Id
                     l_fact.Value = 1   ' * % working time of the consultant
-
 
                     l_factsList.Add(l_fact)
 
@@ -549,7 +585,7 @@ errorHandler:
 
         Dim tmpStr As String = ""
         If m_dataset.m_entityFlag = ModelDataSet.SnapshotResult.ZERO Then tmpStr = "  - " & Local.GetValue("general.entities") & Chr(13)
-        If m_dataset.m_periodFlag = ModelDataSet.SnapshotResult.ZERO Then tmpStr = tmpStr & "  - " & Local.GetValue("general.periods") & Chr(13)
+        If m_dataset.m_periodFlag = ModelDataSet.SnapshotResult.ZERO Then tmpStr = tmpStr & "  - " & Local.GetValue("general.Periods") & Chr(13)
         If m_dataset.m_accountFlag = ModelDataSet.SnapshotResult.ZERO Then tmpStr = tmpStr & "  - " & Local.GetValue("general.accounts")
         If m_dataset.m_entitiesOrientationFlag = ModelDataSet.Alignment.UNCLEAR Then tmpStr = "  - " & Local.GetValue("upload.msg_entities_orientation_unclear") & Chr(13)
         If m_dataset.m_periodsOrientationFlag = ModelDataSet.Alignment.UNCLEAR Then tmpStr = tmpStr & "  - " & Local.GetValue("upload.msg_periods_orientation_unclear") & Chr(13)
@@ -563,7 +599,7 @@ errorHandler:
         Dim tmpStr As String = ""
         If m_dataset.m_employeeFlag = ModelDataSet.SnapshotResult.ZERO Then tmpStr = tmpStr & "  - " & Local.GetValue("general.products") & Chr(13)
         If m_dataset.m_entityFlag = ModelDataSet.SnapshotResult.ZERO Then tmpStr = "  - " & Local.GetValue("general.entities") & Chr(13)
-        If m_dataset.m_periodFlag = ModelDataSet.SnapshotResult.ZERO Then tmpStr = tmpStr & "  - " & Local.GetValue("general.periods") & Chr(13)
+        If m_dataset.m_periodFlag = ModelDataSet.SnapshotResult.ZERO Then tmpStr = tmpStr & "  - " & Local.GetValue("general.Periods") & Chr(13)
         If m_dataset.m_periodsOrientationFlag = ModelDataSet.Alignment.UNCLEAR Then tmpStr = tmpStr & "  - " & Local.GetValue("upload.msg_periods_orientation_unclear") & Chr(13)
         If m_dataset.m_employeeOrientationFlag = ModelDataSet.Alignment.UNCLEAR Then tmpStr = tmpStr & "  - " & Local.GetValue("upload.msg_products_orientation_unclear") & Chr(13)
         Return tmpStr
@@ -584,7 +620,8 @@ errorHandler:
         For Each l_cellAddress In m_dataModificationsTracker.GetModificationsListCopy()
             Dim l_clientName As String = GlobalVariables.APPS.ActiveSheet.range(l_cellAddress).value()
             If l_clientName <> "" _
-            AndAlso GlobalVariables.AxisElems.GetValue(AxisType.Client, l_clientName) Is Nothing Then
+            AndAlso GlobalVariables.AxisElems.GetValue(AxisType.Client, l_clientName) Is Nothing _
+            AndAlso l_unereferencedClientsList.Contains(l_clientName) = False Then
                 l_unereferencedClientsList.Add(l_clientName)
             End If
         Next

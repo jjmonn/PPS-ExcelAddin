@@ -17,14 +17,14 @@ Public Class UnReferencedClientsUI
     Private m_clientsDataGrid As New vDataGridView
 
     Private m_clientsNamesList As List(Of String)
-
+    Private m_isUpdatingDGV As Boolean
     Private m_similarClientsColumn As HierarchyItem
     Private m_replaceOptionColumn As HierarchyItem
     Private m_createColumn As HierarchyItem
-    Private m_createButtonRowItemDict As New SafeDictionary(Of vButton, HierarchyItem)
+    Private m_replaceCheckEditorsItemsDict As New SafeDictionary(Of CheckBoxEditor, HierarchyItem)
+    Private m_createCheckEditorsItemsDict As New SafeDictionary(Of CheckBoxEditor, HierarchyItem)
 
 #End Region
-
 
 #Region "Initialize"
 
@@ -43,41 +43,53 @@ Public Class UnReferencedClientsUI
         MultilanguageSetup()
         InitializeClientsDataGridColumns()
         InitializeClientsDataGridRows()
+        InitializeDGVFormat()
 
         AddHandler m_axisController.AxisCreated, AddressOf AfterClientCreation
-
+     
     End Sub
 
     Private Sub MultilanguageSetup()
 
         Me.Text = Local.GetValue("clientAutoCreation.unerefenced_clients")
-        m_createAllButton.Text = Local.GetValue("clientAutoCreation.create_all")
-        m_replaceSelectionButton.Text = Local.GetValue("clientAutoCreation.replace_selection")
-
+        m_createAllButton.Text = Local.GetValue("general.validate")
 
     End Sub
 
     Private Sub InitializeClientsDataGridColumns()
 
-        m_createColumn = m_clientsDataGrid.ColumnsHierarchy.Items.Add(Local.GetValue(""))
         m_similarClientsColumn = m_clientsDataGrid.ColumnsHierarchy.Items.Add(Local.GetValue("clientAutoCreation.similar_clients_column_name"))
-        m_replaceOptionColumn = m_clientsDataGrid.ColumnsHierarchy.Items.Add(Local.GetValue("clientAutoCreation.Replace"))
+        m_replaceOptionColumn = m_clientsDataGrid.ColumnsHierarchy.Items.Add(Local.GetValue("clientAutoCreation.replace_column_name"))
+        m_createColumn = m_clientsDataGrid.ColumnsHierarchy.Items.Add(Local.GetValue("clientAutoCreation.create_column_name"))
 
     End Sub
 
     Private Sub InitializeClientsDataGridRows()
 
+        m_isUpdatingDGV = True
         For Each l_clientName In m_clientsNamesList
             Dim l_row As HierarchyItem = m_clientsDataGrid.RowsHierarchy.Items.Add(l_clientName)
             Dim l_replaceOptionCheckBox As New CheckBoxEditor
             m_clientsDataGrid.CellsArea.SetCellEditor(l_row, m_replaceOptionColumn, l_replaceOptionCheckBox)
+            m_replaceCheckEditorsItemsDict.Add(l_replaceOptionCheckBox, l_row)
+            AddHandler l_replaceOptionCheckBox.CheckedChanged, AddressOf ReplaceCheckBoxChanged
 
-            Dim l_createButton As New vButton
-            l_createButton.Text = Local.GetValue("general.create")
-            m_clientsDataGrid.CellsArea.SetCellEditor(l_row, m_createColumn, l_createButton)
-            m_createButtonRowItemDict.Add(l_createButton, l_row)
-            AddHandler l_createButton.Click, AddressOf ClientCreationButton_OnClick
+            Dim l_createOptionCheckBox As New CheckBoxEditor
+            m_clientsDataGrid.CellsArea.SetCellEditor(l_row, m_createColumn, l_createOptionCheckBox)
+            m_createCheckEditorsItemsDict.Add(l_createOptionCheckBox, l_row)
+            AddHandler l_createOptionCheckBox.CheckedChanged, AddressOf CreateCheckBoxChanged
         Next
+        m_isUpdatingDGV = False
+
+    End Sub
+
+    Private Sub InitializeDGVFormat()
+
+        m_clientsDataGrid.ContextMenuStrip = m_DGVContextMenuStrip
+        m_clientsDataGrid.BackColor = System.Drawing.SystemColors.Control
+        m_clientsDataGrid.ColumnsHierarchy.AutoResize(AutoResizeMode.FIT_ALL)
+        m_clientsDataGrid.ColumnsHierarchy.AutoStretchColumns = True
+        m_clientsDataGrid.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.OFFICE2010SILVER
 
     End Sub
 
@@ -89,43 +101,90 @@ Public Class UnReferencedClientsUI
 
         Dim l_clientsToBeCreated As New List(Of String)
         For Each l_row In m_clientsDataGrid.RowsHierarchy.Items
-            Dim l_mustBeReplaced As Boolean = CType(m_clientsDataGrid.CellsArea.GetCellValue(l_row, m_replaceOptionColumn), Boolean)
-            If l_mustBeReplaced = False Then l_clientsToBeCreated.Add(l_row.Caption)
+            Dim l_mustBeCreated As Boolean = CType(m_clientsDataGrid.CellsArea.GetCellValue(l_row, m_createColumn), Boolean)
+            If l_mustBeCreated = True Then l_clientsToBeCreated.Add(l_row.Caption)
         Next
 
         For Each l_clientName As String In l_clientsToBeCreated
             m_axisController.CreateAxis(l_clientName)
         Next
-        
-    End Sub
-
-    Private Sub m_replaceSelectionButton_Click(sender As Object, e As EventArgs) Handles m_replaceSelectionButton.Click
-
 
     End Sub
 
-    Private Sub ClientCreationButton_OnClick(sender As Object, e As EventArgs)
+    Private Sub UnselectBothOptionsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles UnselectBothOptionsToolStripMenuItem.Click
 
-        Dim l_createButton As vButton = CType(sender, vButton)
-        Dim l_row As HierarchyItem = m_createButtonRowItemDict(l_createButton)
-        m_axisController.CreateAxis(l_row.Caption)
-
-    End Sub
-
-    Private Sub m_resumeDataSubmissionButton_Click(sender As Object, e As EventArgs) Handles m_resumeDataSubmissionButton.Click
-
-        If m_clientsDataGrid.RowsHierarchy.Items.Count = 0 Then
-            m_reportUploadController.DataSubmission()
-        Else
-            MsgBox(Local.GetValue("clientAutoCreation.msg_all_clients_must_be_treated"))
+        If m_clientsDataGrid.CellsArea.SelectedCellsCount > 0 Then
+            Dim l_row = m_clientsDataGrid.CellsArea.SelectedCells(0).RowItem
+            If l_row IsNot Nothing Then
+                m_isUpdatingDGV = True
+                m_clientsDataGrid.CellsArea.SetCellValue(l_row, m_createColumn, False)
+                m_clientsDataGrid.CellsArea.SetCellValue(l_row, m_replaceOptionColumn, False)
+                m_isUpdatingDGV = False
+            End If
         End If
+    End Sub
 
+    Private Sub SelectAllOnColumnToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles SelectAllOnColumnToolStripMenuItem.Click
+        m_isUpdatingDGV = True
+
+        If m_clientsDataGrid.CellsArea.SelectedCellsCount > 0 Then
+            Dim l_column = m_clientsDataGrid.CellsArea.SelectedCells(0).ColumnItem
+            If l_column IsNot Nothing Then
+                For Each l_row In m_clientsDataGrid.RowsHierarchy.Items
+                    m_clientsDataGrid.CellsArea.SetCellValue(l_row, l_column, True)
+                Next
+            End If
+        End If
+        m_isUpdatingDGV = False
+    End Sub
+
+    Private Sub UnselectAllOnColumnToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles UnselectAllOnColumnToolStripMenuItem.Click
+        m_isUpdatingDGV = True
+        If m_clientsDataGrid.CellsArea.SelectedCellsCount > 0 Then
+            Dim l_column = m_clientsDataGrid.CellsArea.SelectedCells(0).ColumnItem
+            If l_column IsNot Nothing Then
+                For Each l_row In m_clientsDataGrid.RowsHierarchy.Items
+                    m_clientsDataGrid.CellsArea.SetCellValue(l_row, l_column, False)
+                Next
+            End If
+        End If
+        m_isUpdatingDGV = False
     End Sub
 
 #End Region
 
-
 #Region "Events"
+
+    Private Sub CreateCheckBoxChanged(sender As Object, e As EventArgs)
+
+        If m_isUpdatingDGV = False Then
+            m_isUpdatingDGV = True
+            Dim l_checkBox As CheckBoxEditor = CType(sender, CheckBoxEditor)
+            Dim l_row = m_createCheckEditorsItemsDict(l_checkBox)
+            If l_row IsNot Nothing Then
+                Dim l_value As Boolean = l_checkBox.EditorValue
+                m_clientsDataGrid.CellsArea.SetCellValue(l_row, m_replaceOptionColumn, l_value = False)
+            End If
+            m_isUpdatingDGV = False
+        End If
+
+    End Sub
+
+    Private Sub ReplaceCheckBoxChanged(sender As Object, e As EventArgs)
+
+        If m_isUpdatingDGV = False Then
+            m_isUpdatingDGV = True
+            Dim l_checkBox As CheckBoxEditor = CType(sender, CheckBoxEditor)
+            Dim l_row = m_replaceCheckEditorsItemsDict(l_checkBox)
+            If l_row IsNot Nothing Then
+                Dim l_value As Boolean = l_checkBox.EditorValue
+                m_clientsDataGrid.CellsArea.SetCellValue(l_row, m_createColumn, l_value = False)
+            End If
+            m_isUpdatingDGV = False
+        End If
+
+
+    End Sub
 
     Private Sub AfterClientCreation(ByRef p_status As Boolean, ByRef p_clientId As Int32)
 
@@ -139,11 +198,14 @@ Public Class UnReferencedClientsUI
             If Not l_row Is Nothing Then l_row.Delete()
         End If
 
+        ' Resume submission if everything has been treated
+        If m_clientsDataGrid.RowsHierarchy.Items.Count = 0 Then
+            m_reportUploadController.DataSubmission()
+        End If
+
     End Sub
 
-
 #End Region
-
 
    
 End Class
