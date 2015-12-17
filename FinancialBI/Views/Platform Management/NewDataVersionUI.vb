@@ -221,7 +221,6 @@ errorHandler:
             Select Case version.TimeConfiguration
                 Case TimeConfig.YEARS : m_timeConfigCB.SelectedItem = m_timeConfigYearItem
                 Case TimeConfig.MONTHS : m_timeConfigCB.SelectedItem = m_timeConfigMonthItem
-                Case TimeConfig.WEEK : m_timeConfigCB.SelectedItem = m_timeConfigWeekItem
                 Case TimeConfig.DAYS : m_timeConfigCB.SelectedItem = m_timeConfigDayItem
             End Select
 
@@ -232,16 +231,21 @@ errorHandler:
 
     End Sub
 
-    Private Sub TimeConfigCB_SelectedIndexChanged(sender As Object, e As EventArgs) Handles m_timeConfigCB.SelectedIndexChanged
+    Private Sub TimeConfigCB_SelectedIndexChanged(sender As Object, e As EventArgs) Handles m_timeConfigCB.SelectedValueChanged
 
         If m_timeConfigCB.SelectedItem Is Nothing Then Exit Sub
-        Select Case m_timeConfigCB.SelectedValue
-            Case CRUD.TimeConfig.YEARS : m_nbPeriodsLabel.Text = Local.GetValue("facts_versions.nb_years")
-            Case CRUD.TimeConfig.MONTHS : m_nbPeriodsLabel.Text = Local.GetValue("facts_versions.nb_months")
-            Case CRUD.TimeConfig.WEEK : m_nbPeriodsLabel.Text = Local.GetValue("facts_versions.nb_weeks")
-            Case CRUD.TimeConfig.DAYS : m_nbPeriodsLabel.Text = Local.GetValue("facts_versions.nb_days")
+        Select Case m_timeConfigCB.SelectedItem.Value
+            Case CRUD.TimeConfig.YEARS
+                m_nbPeriodsLabel.Text = Local.GetValue("facts_versions.nb_years")
+                m_startingPeriodDatePicker.FormatValue = "yyyy"
+            Case CRUD.TimeConfig.MONTHS
+                m_nbPeriodsLabel.Text = Local.GetValue("facts_versions.nb_months")
+                m_startingPeriodDatePicker.FormatValue = "MMM. yyyy"
+            Case CRUD.TimeConfig.DAYS
+                m_nbPeriodsLabel.Text = Local.GetValue("facts_versions.nb_days")
+                m_startingPeriodDatePicker.FormatValue = "dd MMM. yyyy"
         End Select
-
+        m_startingPeriodDatePicker.Refresh()
     End Sub
 
 #End Region

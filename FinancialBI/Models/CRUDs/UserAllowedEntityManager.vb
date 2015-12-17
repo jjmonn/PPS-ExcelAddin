@@ -101,7 +101,7 @@ Friend Class UserAllowedEntityManager : Inherits CRUDManager
                 Exit For
             End If
         Next
-        RaiseDeleteEvent(packet.GetError() = 0, Id)
+        RaiseDeleteEvent(packet.GetError(), Id)
     End Sub
 
 #End Region

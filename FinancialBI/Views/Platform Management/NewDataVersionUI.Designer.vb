@@ -51,7 +51,7 @@ Partial Class NewDataVersionUI
         Me.m_factVersionLabel.Location = New System.Drawing.Point(34, 297)
         Me.m_factVersionLabel.Margin = New System.Windows.Forms.Padding(3, 7, 3, 0)
         Me.m_factVersionLabel.Name = "m_factVersionLabel"
-        Me.m_factVersionLabel.Size = New System.Drawing.Size(158, 15)
+        Me.m_factVersionLabel.Size = New System.Drawing.Size(142, 13)
         Me.m_factVersionLabel.TabIndex = 30
         Me.m_factVersionLabel.Text = "[facts_versions.fact_version]"
         '
@@ -61,7 +61,7 @@ Partial Class NewDataVersionUI
         Me.m_rateVersionLabel.Location = New System.Drawing.Point(34, 259)
         Me.m_rateVersionLabel.Margin = New System.Windows.Forms.Padding(3, 7, 3, 0)
         Me.m_rateVersionLabel.Name = "m_rateVersionLabel"
-        Me.m_rateVersionLabel.Size = New System.Drawing.Size(227, 15)
+        Me.m_rateVersionLabel.Size = New System.Drawing.Size(200, 13)
         Me.m_rateVersionLabel.TabIndex = 28
         Me.m_rateVersionLabel.Text = "[facts_versions.exchange_rates_version]"
         '
@@ -71,7 +71,7 @@ Partial Class NewDataVersionUI
         Me.m_nbPeriodsLabel.Location = New System.Drawing.Point(34, 217)
         Me.m_nbPeriodsLabel.Margin = New System.Windows.Forms.Padding(3, 7, 3, 0)
         Me.m_nbPeriodsLabel.Name = "m_nbPeriodsLabel"
-        Me.m_nbPeriodsLabel.Size = New System.Drawing.Size(65, 15)
+        Me.m_nbPeriodsLabel.Size = New System.Drawing.Size(56, 13)
         Me.m_nbPeriodsLabel.TabIndex = 25
         Me.m_nbPeriodsLabel.Text = "Number of"
         '
@@ -81,7 +81,7 @@ Partial Class NewDataVersionUI
         Me.m_startingPeriodLabel.Location = New System.Drawing.Point(34, 172)
         Me.m_startingPeriodLabel.Margin = New System.Windows.Forms.Padding(3, 7, 3, 0)
         Me.m_startingPeriodLabel.Name = "m_startingPeriodLabel"
-        Me.m_startingPeriodLabel.Size = New System.Drawing.Size(175, 15)
+        Me.m_startingPeriodLabel.Size = New System.Drawing.Size(153, 13)
         Me.m_startingPeriodLabel.TabIndex = 17
         Me.m_startingPeriodLabel.Text = "[facts_versions.starting_period]"
         '
@@ -91,7 +91,7 @@ Partial Class NewDataVersionUI
         Me.m_periodConfigLabel.Location = New System.Drawing.Point(34, 125)
         Me.m_periodConfigLabel.Margin = New System.Windows.Forms.Padding(3, 7, 3, 0)
         Me.m_periodConfigLabel.Name = "m_periodConfigLabel"
-        Me.m_periodConfigLabel.Size = New System.Drawing.Size(168, 15)
+        Me.m_periodConfigLabel.Size = New System.Drawing.Size(148, 13)
         Me.m_periodConfigLabel.TabIndex = 15
         Me.m_periodConfigLabel.Text = "[facts_versions.period_config]"
         '
@@ -102,7 +102,7 @@ Partial Class NewDataVersionUI
         Me.m_versionNameLabel.Location = New System.Drawing.Point(34, 36)
         Me.m_versionNameLabel.Margin = New System.Windows.Forms.Padding(3, 7, 3, 0)
         Me.m_versionNameLabel.Name = "m_versionNameLabel"
-        Me.m_versionNameLabel.Size = New System.Drawing.Size(200, 15)
+        Me.m_versionNameLabel.Size = New System.Drawing.Size(179, 13)
         Me.m_versionNameLabel.TabIndex = 7
         Me.m_versionNameLabel.Text = "[facts_versions.version_name]"
         '
@@ -286,7 +286,7 @@ Partial Class NewDataVersionUI
         Me.m_startingPeriodDatePicker.DropDownMaximumSize = New System.Drawing.Size(1000, 1000)
         Me.m_startingPeriodDatePicker.DropDownMinimumSize = New System.Drawing.Size(10, 10)
         Me.m_startingPeriodDatePicker.DropDownResizeDirection = VIBlend.WinForms.Controls.SizingDirection.None
-        Me.m_startingPeriodDatePicker.FormatValue = "MMMM dd, yyyy"
+        Me.m_startingPeriodDatePicker.FormatValue = "dd MMM yyyy"
         Me.m_startingPeriodDatePicker.Location = New System.Drawing.Point(347, 172)
         Me.m_startingPeriodDatePicker.MaxDate = New Date(2100, 1, 1, 0, 0, 0, 0)
         Me.m_startingPeriodDatePicker.MinDate = New Date(1900, 1, 1, 0, 0, 0, 0)
