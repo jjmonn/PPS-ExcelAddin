@@ -313,8 +313,8 @@ Friend Class UsersControl
                 If value Is Nothing Then Exit Select
 
                 If value.Value <> GlobalVariables.Users.GetCurrentUser().Name Then
-                    DisplayEntities = DisplayEntities = False
                     m_selectedUser = GlobalVariables.Users.GetValueId(value.Value)
+                    DisplayEntities = DisplayEntities = False
                 End If
 
         End Select
