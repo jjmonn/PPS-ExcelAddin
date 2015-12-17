@@ -298,6 +298,7 @@ Friend Class UsersControl
                 Dim groupId As Int32 = list.SelectedItem.Value
 
                 m_controller.SetUserGroup(args.Cell.RowItem.ItemValue, groupId)
+                UpdateUser(args.Cell.RowItem.ItemValue)
         End Select
 
     End Sub
