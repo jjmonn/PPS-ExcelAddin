@@ -326,15 +326,16 @@ Module Data_Tables_Constants
 
 #Region "Data Tables"
 
-    Friend Const ENTITY_ID_VARIABLE = "entity_id"
-    Friend Const ACCOUNT_ID_VARIABLE = "account_id"
-    Friend Const PERIOD_VARIABLE = "period"
-    Friend Const VERSION_ID_VARIABLE = "version_id"
-    Friend Const CLIENT_ID_VARIABLE = "client_id"
-    Friend Const PRODUCT_ID_VARIABLE = "product_id"
-    Friend Const ADJUSTMENT_ID_VARIABLE = "adjustment_id"
-    Friend Const VALUE_VARIABLE = "value"
-    Friend Const GLOBAL_FACT_ID_VARIABLE = "global_fact_id"
+    'Friend Const ENTITY_ID_VARIABLE = "entity_id"
+    'Friend Const ACCOUNT_ID_VARIABLE = "account_id"
+    'Friend Const PERIOD_VARIABLE = "period"
+    'Friend Const VERSION_ID_VARIABLE = "version_id"
+    'Friend Const CLIENT_ID_VARIABLE = "client_id"
+    'Friend Const PRODUCT_ID_VARIABLE = "product_id"
+    'Friend Const ADJUSTMENT_ID_VARIABLE = "adjustment_id"
+    'Friend Const EMPLOYEE_ID_VARIABLE = "adjustment_id"
+    'Friend Const VALUE_VARIABLE = "value"
+    'Friend Const GLOBAL_FACT_ID_VARIABLE = "global_fact_id"
 
 #End Region
 

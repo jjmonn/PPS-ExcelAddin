@@ -25,7 +25,7 @@ Friend Class FactsStorage
                            ByRef p_startPeriod As UInt32, _
                            ByRef p_endPeriod As UInt32)
 
-        AddHandler Facts.Read, AddressOf LoadRHFacts_ThreadSafe
+        AddHandler FactsManager.Read, AddressOf LoadRHFacts_ThreadSafe
         m_requestIdDict.Clear()
         m_factDownloadErrorFlag = False
         For Each l_accountName As String In p_accountsList
@@ -36,7 +36,7 @@ Friend Class FactsStorage
                 Dim l_employee As AxisElem = GlobalVariables.AxisElems.GetValue(AxisType.Employee, l_employeeName)
                 If l_employee Is Nothing Then Continue For
 
-                m_requestIdDict.Add(Facts.CMSG_GET_FACT(l_account.Id, l_employee.Id, p_versionId, p_startPeriod, p_endPeriod), _
+                m_requestIdDict.Add(FactsManager.CMSG_GET_FACT(l_account.Id, l_employee.Id, p_versionId, p_startPeriod, p_endPeriod), _
                                     {l_accountName, l_employeeName})
             Next
         Next
@@ -65,11 +65,11 @@ Friend Class FactsStorage
             m_requestIdDict.Remove(p_requestId)
             If m_requestIdDict.Count = 0 Then
                 RaiseEvent FactsDownloaded(True)
-                RemoveHandler Facts.Read, AddressOf LoadRHFacts_ThreadSafe
+                RemoveHandler FactsManager.Read, AddressOf LoadRHFacts_ThreadSafe
             End If
         Else
             RaiseEvent FactsDownloaded(False)
-            RemoveHandler Facts.Read, AddressOf LoadRHFacts_ThreadSafe
+            RemoveHandler FactsManager.Read, AddressOf LoadRHFacts_ThreadSafe
         End If
 
     End Sub

@@ -443,4 +443,18 @@
 	<string name="update_dl_fail">Unable to download update of Financial BI. Please contact your administrator.</string>
   </category>
 
+
+  <category name="clientAutoCreation">
+    <string name="unerefenced_clients">Unerefenced Clients</string>
+    <string name="create_all">Create all</string>
+    <string name="replace_selection">Replace selection</string>
+    <string name="similar_clients_column_name">Similar clients</string>
+    <string name="replace_column_name">Replace</string>
+    <string name="resume_data_sumbission">Resume data submission</string>
+    <string name="msg_all_clients_must_be_treated">All clients must be either replaced or created before submission.</string>
+  </category>
+
+
+
+
 </category>

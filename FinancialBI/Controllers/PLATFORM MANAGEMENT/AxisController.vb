@@ -41,6 +41,8 @@ Friend Class AxisController
     Private m_axisType As AxisType
     Private positionsDictionary As New SafeDictionary(Of Int32, Double)
 
+    Public Event AxisCreated(ByRef p_status As Boolean, ByRef p_axisId As Int32)
+
 #End Region
 
 
@@ -221,12 +223,13 @@ Friend Class AxisController
 
     End Sub
 
-    Private Sub AfterAxisCreation(ByRef status As ErrorMessage, ByRef id As UInt32)
+    Private Sub AfterAxisCreation(ByRef p_status As ErrorMessage, ByRef p_id As UInt32)
 
-        If status <> ErrorMessage.SUCCESS Then
+        If p_status <> ErrorMessage.SUCCESS Then
             MsgBox("The Axis Could not be created.")
             ' catch and display error as well V2 priority normal
         End If
+        RaiseEvent AxisCreated(p_status, p_id)
 
     End Sub
 

@@ -12,7 +12,7 @@ Imports System.Collections
 Imports System.Collections.Generic
 Imports CRUD
 
-Public Class Facts
+Public Class FactsManager
 
 
 #Region "Intance Variables"
@@ -31,10 +31,10 @@ Public Class Facts
     End Sub
 
     Friend Shared Function CMSG_GET_FACT(ByRef p_accountId As UInt32, _
-                                    ByRef p_employeeId As UInt32, _
-                                    ByRef p_versionId As UInt32, _
-                                    ByRef p_startPeriod As UInt32, _
-                                    ByRef p_endPeriod As UInt32) As Int32
+                                        ByRef p_employeeId As UInt32, _
+                                        ByRef p_versionId As UInt32, _
+                                        ByRef p_startPeriod As UInt32, _
+                                        ByRef p_endPeriod As UInt32) As Int32
 
         NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_GET_FACT_ANSWER, AddressOf SMSG_GET_FACT_ANSWER)
         Dim l_packet As New ByteBuffer(CType(ClientMessage.CMSG_GET_FACT, UShort))
@@ -52,22 +52,15 @@ Public Class Facts
 
     End Function
 
-    Friend Sub CMSG_UPDATE_FACT_LIST(ByRef factsValues As List(Of Hashtable), _
+    Friend Sub CMSG_UPDATE_FACT_LIST(ByRef factsValues As List(Of Fact), _
                                      ByRef cellsAddresses As List(Of String))
 
         Dim packet As New ByteBuffer(CType(ClientMessage.CMSG_UPDATE_FACT_LIST, UShort))
         Dim requestId As UInt32 = packet.AssignRequestId()
         requestIdFactsCommitDict.Add(requestId, cellsAddresses)
         packet.WriteUint32(factsValues.Count)
-        For Each fact_value As Hashtable In factsValues
-            packet.WriteUint32(fact_value(ENTITY_ID_VARIABLE))
-            packet.WriteUint32(fact_value(ACCOUNT_ID_VARIABLE))
-            packet.WriteUint32(fact_value(PERIOD_VARIABLE))
-            packet.WriteUint32(fact_value(VERSION_ID_VARIABLE))
-            packet.WriteUint32(fact_value(CLIENT_ID_VARIABLE))
-            packet.WriteUint32(fact_value(PRODUCT_ID_VARIABLE))
-            packet.WriteUint32(fact_value(ADJUSTMENT_ID_VARIABLE))
-            packet.WriteDouble(fact_value(VALUE_VARIABLE))
+        For Each fact_value As Fact In factsValues
+            fact_value.Dump(packet, True)
         Next
         packet.Release()
         NetworkManager.GetInstance().Send(packet)

@@ -60,10 +60,10 @@ Public Class FactLog
 
         Dim requestId As UInt32 = packet.AssignRequestId()
 
-        packet.WriteInt32(attributes(ACCOUNT_ID_VARIABLE))
-        packet.WriteInt32(attributes(ENTITY_ID_VARIABLE))
-        packet.WriteInt32(attributes(PERIOD_VARIABLE))
-        packet.WriteInt32(attributes(VERSION_ID_VARIABLE))
+        'packet.WriteInt32(attributes(ACCOUNT_ID_VARIABLE))
+        'packet.WriteInt32(attributes(ENTITY_ID_VARIABLE))
+        'packet.WriteInt32(attributes(PERIOD_VARIABLE))
+        'packet.WriteInt32(attributes(VERSION_ID_VARIABLE))
 
     End Sub
 

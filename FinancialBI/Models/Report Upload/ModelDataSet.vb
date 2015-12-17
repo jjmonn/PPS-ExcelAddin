@@ -75,8 +75,8 @@ Friend Class ModelDataSet
         PERIODS_ENTITIES
         ENTITIES_PERIODS
 
-        PRODUCTS_PERIODS
-        PERIODS_PRODUCTS
+        EMPLOYEES_PERIODS
+        PERIODS_EMPLOYEES
 
         FINANCIAL_ORIENTATION_ERROR
         PDC_ORIENTATION_ERROR
@@ -698,13 +698,13 @@ Friend Class ModelDataSet
 
         If m_employeeOrientationFlag = Alignment.VERTICAL _
         AndAlso m_periodsOrientationFlag = Alignment.HORIZONTAL Then
-            m_globalOrientationFlag = Orientations.PRODUCTS_PERIODS
+            m_globalOrientationFlag = Orientations.EMPLOYEES_PERIODS
             Exit Sub
         End If
 
         If m_periodsOrientationFlag = Alignment.VERTICAL _
         AndAlso m_employeeOrientationFlag = Alignment.HORIZONTAL Then
-            m_globalOrientationFlag = Orientations.PERIODS_PRODUCTS
+            m_globalOrientationFlag = Orientations.PERIODS_EMPLOYEES
             Exit Sub
         End If
 
@@ -734,8 +734,8 @@ Friend Class ModelDataSet
             Case Orientations.ENTITIES_PERIODS : RegisterDimensionsToCellDictionaryENTITIES_PERIODS()
             Case Orientations.PERIODS_ENTITIES : RegisterDimensionsToCellDictionaryPERIODS_ENTITIES()
 
-            Case Orientations.PRODUCTS_PERIODS : RegisterDimensionsToCellDictionaryPRODUCTS_PERIODS()
-            Case Orientations.PERIODS_PRODUCTS : RegisterDimensionsToCellDictionaryPERIODS_PRODUCTS()
+            Case Orientations.EMPLOYEES_PERIODS : RegisterDimensionsToCellDictionaryPRODUCTS_PERIODS()
+            Case Orientations.PERIODS_EMPLOYEES : RegisterDimensionsToCellDictionaryPERIODS_PRODUCTS()
         End Select
 
     End Sub
@@ -983,8 +983,8 @@ Friend Class ModelDataSet
             Case Orientations.ENTITIES_ACCOUNTS : RegisterDataSetCellsValues(Dimension.ENTITY, Dimension.ACCOUNT)
             Case Orientations.ENTITIES_PERIODS : RegisterDataSetCellsValues(Dimension.ENTITY, Dimension.PERIOD)
             Case Orientations.PERIODS_ENTITIES : RegisterDataSetCellsValues(Dimension.PERIOD, Dimension.ENTITY)
-            Case Orientations.PRODUCTS_PERIODS : RegisterDataSetCellsValues(Dimension.EMPLOYEE, Dimension.PERIOD)
-            Case Orientations.PERIODS_PRODUCTS : RegisterDataSetCellsValues(Dimension.PERIOD, Dimension.EMPLOYEE)
+            Case Orientations.EMPLOYEES_PERIODS : RegisterDataSetCellsValues(Dimension.EMPLOYEE, Dimension.PERIOD)
+            Case Orientations.PERIODS_EMPLOYEES : RegisterDataSetCellsValues(Dimension.PERIOD, Dimension.EMPLOYEE)
         End Select
 
     End Sub
