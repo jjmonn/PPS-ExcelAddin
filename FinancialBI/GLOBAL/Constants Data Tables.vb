@@ -44,6 +44,7 @@ Module Data_Tables_Constants
 
 #Region "Users"
     Friend Const GROUP_ID_VARIABLE As String = "group_id"
+    Friend Const ENTITIES_VARIABLE As String = "entities"
     Friend Const PASSWORD_VARIABLE As String = "password"
     Friend Const RIGHTS_VARIABLE As String = "rights"
 #End Region
