@@ -1,4 +1,5 @@
 ﻿Imports Microsoft.Office.Interop
+Imports System.Collections.Generic
 
 ' InputReportController.vb
 '
@@ -18,14 +19,16 @@ Friend Class InputReportController
         Dim l_version As CRUD.Version = GlobalVariables.Versions.GetValue(My.Settings.version_id)
         If l_version Is Nothing Then Exit Sub
 
-        Dim l_entityId As Int32 = GlobalVariables.InputReportTaskPane.EntitiesTV.SelectedNode.Name
-        Dim l_entityName As String = GlobalVariables.InputReportTaskPane.EntitiesTV.SelectedNode.Text
+        Dim l_entityId As Int32 = GlobalVariables.InputReportTaskPane.m_entitiesTV.SelectedNode.Value
+        Dim l_entityName As String = GlobalVariables.InputReportTaskPane.m_entitiesTV.SelectedNode.Text
         Dim l_entity As CRUD.EntityCurrency = GlobalVariables.EntityCurrencies.GetValue(l_entityId)
         If l_entity Is Nothing Then Exit Sub
 
         Select Case p_process
             Case CRUD.Account.AccountProcess.FINANCIAL : InputReportCreationProcessFinancial(l_entityName, l_entity, l_version)
-            Case CRUD.Account.AccountProcess.RH : InputReportCreationProcessRH(l_entityName, l_entityId, l_version)
+            Case CRUD.Account.AccountProcess.RH
+                Dim l_accountName As String = GlobalVariables.InputReportTaskPane.m_accountSelectionComboBox.Text
+                InputReportCreationProcessRH(l_entityName, l_accountName, l_entityId, l_version)
         End Select
 
         GlobalVariables.InputReportTaskPane.Hide()
@@ -47,8 +50,8 @@ Friend Class InputReportController
         If currency Is Nothing Then Exit Sub
 
         Dim currentcell As Excel.Range = WorksheetWrittingFunctions.CreateReceptionWS(p_entityName, _
-                                                                                     {Local.GetValue("general.Entity"), _
-                                                                                      Local.GetValue("general.Currency"), _
+                                                                                     {Local.GetValue("general.entity"), _
+                                                                                      Local.GetValue("general.currency"), _
                                                                                       Local.GetValue("general.Version")}, _
                                                                                      {p_entityName, currency.Name, GlobalVariables.VersionButton.Caption})
 
@@ -86,13 +89,17 @@ Friend Class InputReportController
 #Region "RH Report"
 
     Private Sub InputReportCreationProcessRH(ByRef p_entityName As String, _
+                                             ByRef p_accountName As String, _
                                              ByRef p_entityId As UInt32, _
                                              ByRef p_version As CRUD.Version)
 
         Dim currentcell As Excel.Range = WorksheetWrittingFunctions.CreateReceptionWS(p_entityName, _
-                                                                                       {Local.GetValue("general.Entity"), _
-                                                                                        Local.GetValue("general.Version")}, _
-                                                                                       {p_entityName, GlobalVariables.VersionButton.Caption})
+                                                                                                    {Local.GetValue("general.account"), _
+                                                                                                     Local.GetValue("general.entity"), _
+                                                                                                     Local.GetValue("general.Version")}, _
+                                                                                                    {p_accountName, _
+                                                                                                     p_entityName, _
+                                                                                                     GlobalVariables.VersionButton.Caption})
         If currentcell Is Nothing Then
             MsgBox(Local.GetValue("upload.msg_error_upload"))
             Exit Sub
@@ -102,6 +109,7 @@ Friend Class InputReportController
         ' start period / end period
 
         Dim periodlist As Int32() = GlobalVariables.Versions.GetPeriodsList(My.Settings.version_id)
+        currentcell = currentcell.Offset(1, 0)
 
         If periodlist Is Nothing Then Exit Sub
         GlobalVariables.APPS.Interactive = False
@@ -111,6 +119,7 @@ Friend Class InputReportController
                                 p_version.TimeConfiguration)
 
         ExcelFormatting.FormatRHExcelRange(currentcell, Date.FromOADate(periodlist(0)))
+
 
     End Sub
 

@@ -279,7 +279,7 @@ Friend Class ReportUploadWorksheetsEventHandler
                     Else
                         ' Put back the former value in case invalid input has been given (eg. double, ...)
                         m_disableWSChangeFlag = True
-                        cell.Value = m_dataSet.m_datasetCellDimensionsDictionary(cell.Address).m_value
+                        cell.Value = m_dataSet.m_datasetCellDimensionsDictionary(cell.Address).m_client
                         m_disableWSChangeFlag = False
                     End If
                 End If

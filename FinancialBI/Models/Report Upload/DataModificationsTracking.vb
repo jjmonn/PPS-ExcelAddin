@@ -29,6 +29,7 @@ Friend Class DataModificationsTracking
     ' Variables
     Friend m_modifiedCellsList As New List(Of String)
     Private m_startPeriod As Int32
+    Friend m_periodIdentifier As Char
     Private m_formatCondition As FormatCondition
 
 #End Region
@@ -337,14 +338,13 @@ Friend Class DataModificationsTracking
     Friend Sub IdentifyRHDifferencesBtwDataSetAndDB(ByRef p_accountName As String, _
                                                     ByRef p_factsDictionary As SafeDictionary(Of String, SafeDictionary(Of String, Fact)))
 
-        Dim periodIdentifyer As String = ""
         Dim version As Version = GlobalVariables.Versions.GetValue(m_dataset.m_currentVersionId)
         If version Is Nothing Then Exit Sub
 
         Select Case version.TimeConfiguration
-            Case CRUD.TimeConfig.YEARS : periodIdentifyer = Computer.YEAR_PERIOD_IDENTIFIER
-            Case CRUD.TimeConfig.MONTHS : periodIdentifyer = Computer.MONTH_PERIOD_IDENTIFIER
-            Case CRUD.TimeConfig.DAYS : periodIdentifyer = Computer.DAY_PERIOD_IDENTIFIER
+            Case CRUD.TimeConfig.YEARS : m_periodIdentifier = Computer.YEAR_PERIOD_IDENTIFIER
+            Case CRUD.TimeConfig.MONTHS : m_periodIdentifier = Computer.MONTH_PERIOD_IDENTIFIER
+            Case CRUD.TimeConfig.DAYS : m_periodIdentifier = Computer.DAY_PERIOD_IDENTIFIER
         End Select
 
         On Error Resume Next
@@ -355,12 +355,13 @@ Friend Class DataModificationsTracking
                 If m_dataset.m_datasetCellsDictionary.ContainsKey(tuple_) = True Then
                     Dim cell As range = m_dataset.m_datasetCellsDictionary(tuple_)
                     If p_factsDictionary.ContainsKey(l_productName) = False _
-                    OrElse p_factsDictionary(l_productName).ContainsKey(periodIdentifyer & p_periodId) = False Then
-                        RegisterModification(cell.Address)
+                    OrElse p_factsDictionary(l_productName).ContainsKey(m_periodIdentifier & p_periodId) = False Then
+                        If m_dataset.m_excelWorkSheet.Range(cell.Address).Value2 <> "" Then RegisterModification(cell.Address)
                     Else
-                        Dim l_client As AxisElem = GlobalVariables.AxisElems.GetValue(AxisType.Client, p_factsDictionary(l_productName)(periodIdentifyer & p_periodId).ClientId)
+                        Dim l_client As AxisElem = GlobalVariables.AxisElems.GetValue(AxisType.Client, p_factsDictionary(l_productName)(m_periodIdentifier & p_periodId).ClientId)
                         If l_client Is Nothing Then Continue For
-                        If cell.Value2 <> l_client.Name Then
+                        Dim l_cellValue As String = cell.Value2
+                        If l_cellValue <> l_client.Name Then
                             RegisterModification(cell.Address)
                         End If
                     End If

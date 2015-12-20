@@ -249,6 +249,12 @@
     <string name="exchange_rates_upload">Import des Taux de Change</string>
     <string name="global_facts_upload">Import des Indicateurs Macro Economiques</string>
     <string name="range_mismatch">Les sélections pour les périodes et les valeurs n'ont pas la même taille, ou la sélection n'est pas valide.</string>
+ 
+    <string name="input_sidepane_title">Import de données depuis Excel</string>
+    <string name="entity_selection">Selection de l'entité</string>
+    <string name="periods_selection">Sélection des périodes</string>
+    <string name="accounts_selection">Sélection du compte/ process</string>
+    
     <string name="msg_periods_selection">Sélectionnez la(les) période(s)</string>
     <string name="msg_rates_selection">Sélectionnez le(s) taux</string>
     <string name="msg_values_selection">Sélectionnez la(les) valeur(s)</string>

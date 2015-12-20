@@ -2,7 +2,7 @@
 ' 
 '
 ' Author: Julien Monnereau
-' Last modified: 17/12/2015
+' Last modified: 20/12/2015
 
 
 Imports Microsoft.Office.Interop
@@ -331,7 +331,22 @@ Friend Class ReportUploadControler
     End Sub
 
     Friend Sub RegisterModification(ByRef p_cellAddress As String)
-        m_dataModificationsTracker.RegisterModification(p_cellAddress)
+
+        Dim l_fact As Fact = m_factsStorage.GetRHFact(m_dataset.m_datasetCellDimensionsDictionary(p_cellAddress).m_accountName, _
+                                                      m_dataset.m_datasetCellDimensionsDictionary(p_cellAddress).m_employee, _
+                                                      m_dataModificationsTracker.m_periodIdentifier & m_dataset.m_datasetCellDimensionsDictionary(p_cellAddress).m_period)
+
+        If l_fact Is Nothing Then
+            m_dataModificationsTracker.RegisterModification(p_cellAddress)
+        End If
+
+        Dim l_employee As CRUD.AxisElem = GlobalVariables.AxisElems.GetValue(AxisType.Employee, l_fact.EmployeeId)
+        If l_employee Is Nothing Then Exit Sub
+
+        If l_employee.Name <> m_dataset.m_excelWorkSheet.Range(p_cellAddress).Value2 Then
+            m_dataModificationsTracker.RegisterModification(p_cellAddress)
+        End If
+
     End Sub
 
     Friend Sub updateInputs()
@@ -439,29 +454,57 @@ errorHandler:
     Private Function AntiDuplicateClientsSystem(ByRef p_clientsNameList As List(Of String)) As Boolean
 
         Dim l_clientsLCaseNamesIdDict = GlobalVariables.AxisElems.GetLowerCaseNamesId(CRUD.AxisType.Client)
+        Dim l_DefinedClientsDict As New Dictionary(Of String, CRUD.AxisElem)
         For Each l_clientName As String In p_clientsNameList
             Dim l_lCaseUndefinedClientName = Strings.LCase(l_clientName)
             If l_clientsLCaseNamesIdDict.ContainsKey(l_lCaseUndefinedClientName) Then
-                ReplaceClientNameOnWorksheet(l_lCaseUndefinedClientName, l_clientsLCaseNamesIdDict.ContainsKey(l_lCaseUndefinedClientName))
-                p_clientsNameList.Remove(l_clientName)
+                Dim l_client As AxisElem = GlobalVariables.AxisElems.GetValue(CRUD.AxisType.Client, l_clientsLCaseNamesIdDict(l_lCaseUndefinedClientName))
+                If l_client Is Nothing Then Continue For
+                l_DefinedClientsDict.Add(l_clientName, l_client)
             End If
         Next
+
+        For Each l_definedClient In l_DefinedClientsDict
+            ReplaceClientNameOnWorksheet(l_definedClient.Key, l_definedClient.Value.Name)
+            p_clientsNameList.Remove(l_definedClient.Key)
+        Next
+
         If p_clientsNameList.Count = 0 Then
             Return True
         Else
+            EliminateCaseDifferencesIntoUndefinedClients(p_clientsNameList)
             Return False
         End If
 
     End Function
 
-    Private Sub ReplaceClientNameOnWorksheet(ByRef p_clientUndefinedName As String, _
-                                             ByRef p_clientId As UInt32)
+    Private Sub EliminateCaseDifferencesIntoUndefinedClients(ByRef p_clientsNameList As List(Of String))
 
-        Dim l_client As AxisElem = GlobalVariables.AxisElems.GetValue(CRUD.AxisType.Client, p_clientId)
-        If l_client Is Nothing Then Exit Sub
+        Dim l_clientsNamesToBeDeleted As New List(Of String)
+        Dim l_lCaseUndefinedClientDict As New Dictionary(Of String, String)
+        For Each l_clientName In p_clientsNameList
+            Dim l_lCaseClientName As String = Strings.LCase(l_clientName)
+            If l_lCaseUndefinedClientDict.ContainsKey(l_lCaseClientName) = False Then
+                l_lCaseUndefinedClientDict.Add(l_lCaseClientName, l_clientName)
+            Else
+                ReplaceClientNameOnWorksheet(l_clientName, l_lCaseUndefinedClientDict(l_lCaseClientName))
+                l_clientsNamesToBeDeleted.Add(l_clientName)
+            End If
+        Next
+
+        For Each l_clientToBeDeleted In l_clientsNamesToBeDeleted
+            p_clientsNameList.Remove(l_clientToBeDeleted)
+        Next
+
+    End Sub
+
+    Private Sub ReplaceClientNameOnWorksheet(ByRef p_clientUndefinedName As String, _
+                                             ByRef p_replacementClientName As String)
+
         m_isUpdating = True
         For Each l_cellAddress In m_dataModificationsTracker.GetModificationsListCopy()
-            GlobalVariables.APPS.ActiveSheet.range(l_cellAddress).value2 = l_client.Name
+            Dim l_cell As Excel.Range = GlobalVariables.APPS.ActiveSheet.range(l_cellAddress)
+            If l_cell.Value2 = p_clientUndefinedName Then l_cell.Value2 = p_replacementClientName
         Next
         m_isUpdating = False
 
@@ -480,7 +523,7 @@ errorHandler:
             Dim l_fact As New Fact
 
             l_fact.EntityId = GlobalVariables.AxisElems.GetValueId(AxisType.Entities, m_dataset.m_datasetCellDimensionsDictionary(cellAddress).m_entityName)
-             l_fact.AccountId = GlobalVariables.Accounts.GetValueId(m_dataset.m_datasetCellDimensionsDictionary(cellAddress).m_accountName)
+            l_fact.AccountId = GlobalVariables.Accounts.GetValueId(m_dataset.m_datasetCellDimensionsDictionary(cellAddress).m_accountName)
             l_fact.Period = m_dataset.m_datasetCellDimensionsDictionary(cellAddress).m_period
             l_fact.VersionId = m_acquisitionModel.m_currentVersionId
             l_fact.ClientId = GlobalVariables.ClientsIDDropDown.SelectedItemId
@@ -501,7 +544,7 @@ errorHandler:
             Dim l_factsList As New List(Of Fact)
             Dim l_cellsAddressesList As List(Of String) = m_dataModificationsTracker.GetModificationsListCopy
             For Each l_cellAddress In l_cellsAddressesList
-                Dim l_clientName As String = GlobalVariables.APPS.ActiveSheet.range(l_cellAddress).value
+                Dim l_clientName As String = m_dataset.m_excelWorkSheet.Range(l_cellAddress).Value2
                 If l_clientName <> "" Then
 
                     Dim l_client As AxisElem = GlobalVariables.AxisElems.GetValue(CRUD.AxisType.Client, l_clientName)
@@ -520,8 +563,8 @@ errorHandler:
                     l_fact.Period = m_dataset.m_datasetCellDimensionsDictionary(l_cellAddress).m_period
                     l_fact.VersionId = m_dataset.m_currentVersionId
                     l_fact.ClientId = l_client.Id
-                    l_fact.ProductId = CUInt(CRUD.AxisType.Adjustment)
-                    l_fact.AdjustmentId = CUInt(CRUD.AxisType.Adjustment)
+                    l_fact.ProductId = CType(CRUD.AxisType.Product, UInt32)
+                    l_fact.AdjustmentId = CType(CRUD.AxisType.Adjustment, UInt32)
                     l_fact.EmployeeId = l_employee.Id
                     l_fact.Value = 1   ' * % working time of the consultant
 
@@ -600,6 +643,7 @@ errorHandler:
         If m_dataset.m_employeeFlag = ModelDataSet.SnapshotResult.ZERO Then tmpStr = tmpStr & "  - " & Local.GetValue("general.products") & Chr(13)
         If m_dataset.m_entityFlag = ModelDataSet.SnapshotResult.ZERO Then tmpStr = "  - " & Local.GetValue("general.entities") & Chr(13)
         If m_dataset.m_periodFlag = ModelDataSet.SnapshotResult.ZERO Then tmpStr = tmpStr & "  - " & Local.GetValue("general.Periods") & Chr(13)
+        If m_dataset.m_accountFlag = ModelDataSet.SnapshotResult.ZERO Then tmpStr = tmpStr & "  - " & Local.GetValue("general.accounts")
         If m_dataset.m_periodsOrientationFlag = ModelDataSet.Alignment.UNCLEAR Then tmpStr = tmpStr & "  - " & Local.GetValue("upload.msg_periods_orientation_unclear") & Chr(13)
         If m_dataset.m_employeeOrientationFlag = ModelDataSet.Alignment.UNCLEAR Then tmpStr = tmpStr & "  - " & Local.GetValue("upload.msg_products_orientation_unclear") & Chr(13)
         Return tmpStr
@@ -618,7 +662,7 @@ errorHandler:
 
         Dim l_unereferencedClientsList As New List(Of String)
         For Each l_cellAddress In m_dataModificationsTracker.GetModificationsListCopy()
-            Dim l_clientName As String = GlobalVariables.APPS.ActiveSheet.range(l_cellAddress).value()
+            Dim l_clientName As String = m_dataset.m_excelWorkSheet.Range(l_cellAddress).Value()
             If l_clientName <> "" _
             AndAlso GlobalVariables.AxisElems.GetValue(AxisType.Client, l_clientName) Is Nothing _
             AndAlso l_unereferencedClientsList.Contains(l_clientName) = False Then
@@ -630,6 +674,5 @@ errorHandler:
     End Function
 
 #End Region
-
 
 End Class
