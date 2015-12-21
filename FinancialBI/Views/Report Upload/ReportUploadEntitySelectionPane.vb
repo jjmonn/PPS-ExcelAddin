@@ -20,7 +20,7 @@ Public Class ReportUploadEntitySelectionPane
 
 #Region "Instance Variables"
 
-    Private m_inputReportCreatinoController As New InputReportController
+    Private m_inputReportCreatinoController As New InputReportsBuildingController
 
 #End Region
 

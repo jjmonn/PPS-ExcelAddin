@@ -190,7 +190,7 @@ Friend Class EntitiesController
     Private Sub AfterEntityRead(ByRef status As ErrorMessage, ByRef p_axisElem As AxisElem)
 
         If (status = ErrorMessage.SUCCESS) Then
-            m_view.LoadInstanceVariables_Safe()
+            m_view.LoadInstanceVariables()
             m_view.UpdateEntity(p_axisElem)
             Dim l_node As vTreeNode = VTreeViewUtil.FindNode(m_newEntityView.m_parentEntitiesTreeviewBox.TreeView, p_axisElem.Id)
             If l_node Is Nothing Then
@@ -210,7 +210,7 @@ Friend Class EntitiesController
     Private Sub AfterEntityDeletion(ByRef status As ErrorMessage, ByRef id As Int32)
 
         If status = ErrorMessage.SUCCESS Then
-            m_view.LoadInstanceVariables_Safe()
+            m_view.LoadInstanceVariables()
             m_view.DeleteEntity(id)
             m_newEntityView.TVNodeDelete(id)
         End If

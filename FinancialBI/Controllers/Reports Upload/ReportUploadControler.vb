@@ -338,6 +338,7 @@ Friend Class ReportUploadControler
 
         If l_fact Is Nothing Then
             m_dataModificationsTracker.RegisterModification(p_cellAddress)
+            Exit Sub
         End If
 
         Dim l_employee As CRUD.AxisElem = GlobalVariables.AxisElems.GetValue(AxisType.Employee, l_fact.EmployeeId)
@@ -503,7 +504,7 @@ errorHandler:
 
         m_isUpdating = True
         For Each l_cellAddress In m_dataModificationsTracker.GetModificationsListCopy()
-            Dim l_cell As Excel.Range = GlobalVariables.APPS.ActiveSheet.range(l_cellAddress)
+            Dim l_cell As Excel.Range = m_dataset.m_excelWorkSheet.Range(l_cellAddress)
             If l_cell.Value2 = p_clientUndefinedName Then l_cell.Value2 = p_replacementClientName
         Next
         m_isUpdating = False
@@ -530,7 +531,7 @@ errorHandler:
             l_fact.ProductId = GlobalVariables.ProductsIDDropDown.SelectedItemId
             l_fact.AdjustmentId = GlobalVariables.AdjustmentIDDropDown.SelectedItemId
             l_fact.EmployeeId = CType(CRUD.AxisType.Employee, UInt32)
-            l_fact.Value = GlobalVariables.APPS.ActiveSheet.range(cellAddress).value
+            l_fact.Value = m_dataset.m_excelWorkSheet.Range(cellAddress).Value
 
             factsList.Add(l_fact)
         Next
@@ -579,19 +580,20 @@ errorHandler:
 
     End Sub
 
-    Private Sub AfterCommit(ByRef status As Boolean, ByRef commitResults As Dictionary(Of String, ErrorMessage))
+    Private Sub AfterCommit(ByRef p_status As Boolean, ByRef p_commitResults As Dictionary(Of String, ErrorMessage))
 
-        If status = True Then
-            Dim HasError As Boolean = False
-            m_errorMessagesUI.AfterCommit(m_dataset, commitResults)
-            For Each result In commitResults
-                If commitResults(result.Key) = ErrorMessage.SUCCESS Then
-                    m_dataModificationsTracker.UnregisterSingleModification(result.Key)
+        If p_status = True Then
+            Dim l_hasError As Boolean = False
+            m_errorMessagesUI.AfterCommit(m_dataset, p_commitResults)
+            For Each l_result In p_commitResults
+                If l_result.Value = ErrorMessage.SUCCESS Then
+                    m_dataModificationsTracker.UnregisterSingleModification(l_result.Key)
                 Else
-                    HasError = True
+                    System.Diagnostics.Debug.WriteLine("Error cell: " & l_result.Key & " Error message: " & l_result.Value)
+                    l_hasError = True
                 End If
             Next
-            If HasError = False Then
+            If l_hasError = False Then
                 m_uploadState = True
                 GlobalVariables.SubmissionStatusButton.Image = 1
             Else

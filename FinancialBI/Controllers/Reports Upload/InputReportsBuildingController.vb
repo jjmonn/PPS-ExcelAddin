@@ -10,7 +10,7 @@ Imports System.Collections.Generic
 ' Last modified: 16/12/2015
 
 
-Friend Class InputReportController
+Friend Class InputReportsBuildingController
 
 
     Friend Sub InputReportPaneCallBack_ReportCreation(ByRef p_process As CRUD.Account.AccountProcess)

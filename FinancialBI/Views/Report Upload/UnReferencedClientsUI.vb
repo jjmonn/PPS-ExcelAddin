@@ -88,7 +88,7 @@ Public Class UnReferencedClientsUI
         m_clientsDataGrid.ContextMenuStrip = m_DGVContextMenuStrip
         m_clientsDataGrid.BackColor = System.Drawing.SystemColors.Control
         m_clientsDataGrid.ColumnsHierarchy.AutoResize(AutoResizeMode.FIT_ALL)
-        m_clientsDataGrid.ColumnsHierarchy.AutoStretchColumns = True
+        '  m_clientsDataGrid.ColumnsHierarchy.AutoStretchColumns = True
         m_clientsDataGrid.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.OFFICE2010SILVER
 
     End Sub
