@@ -263,7 +263,7 @@ Friend Class Computer
         End If
 
         m_filterToken = GetFiltersToken(m_filtersDict)
-        System.Diagnostics.Debug.WriteLine("filter Token:" & m_filterToken)
+        '        System.Diagnostics.Debug.WriteLine("filter Token:" & m_filterToken)
 
         FillEntityData(packet, p_versionId)
 
@@ -287,7 +287,7 @@ Friend Class Computer
         End Select
 
         m_entityId = packet.ReadUint32()
-        System.Diagnostics.Debug.WriteLine("entityId:" & m_entityId)
+        ' System.Diagnostics.Debug.WriteLine("entityId:" & m_entityId)
 
         For account_index As Int32 = 1 To packet.ReadUint32()
             m_accountId = packet.ReadUint32()

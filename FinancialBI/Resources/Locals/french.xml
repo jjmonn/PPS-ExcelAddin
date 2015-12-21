@@ -249,6 +249,12 @@
     <string name="exchange_rates_upload">Import des Taux de Change</string>
     <string name="global_facts_upload">Import des Indicateurs Macro Economiques</string>
     <string name="range_mismatch">Les sélections pour les périodes et les valeurs n'ont pas la même taille, ou la sélection n'est pas valide.</string>
+ 
+    <string name="input_sidepane_title">Import de données depuis Excel</string>
+    <string name="entity_selection">Selection de l'entité</string>
+    <string name="periods_selection">Sélection des périodes</string>
+    <string name="accounts_selection">Sélection du compte/ process</string>
+    
     <string name="msg_periods_selection">Sélectionnez la(les) période(s)</string>
     <string name="msg_rates_selection">Sélectionnez le(s) taux</string>
     <string name="msg_values_selection">Sélectionnez la(les) valeur(s)</string>
@@ -395,7 +401,7 @@
     <string name="client">Client</string>
     <string name="product">product</string>
     <string name="adjustment">Adjustment</string>
-
+    <string name="employees">Employé</string>
     <string name="Periods">Périodes</string>
     <string name="Accounts">Comptes</string>
     <string name="Entities">Entités</string>
@@ -440,6 +446,20 @@
 	<string name="update_launch_fail">Unable to install update of Financial BI. Please contact your administrator.</string>
 	<string name="update_dl_fail">Unable to download update of Financial BI. Please contact your administrator.</string>
   </category>
+
+
+  <category name="clientAutoCreation">
+    <string name="unerefenced_clients">Clients non enregistrés</string>
+    <string name="create_all">Creer</string>
+    <string name="replace_selection">Remplacer</string>
+    <string name="similar_clients_column_name">Clients similaires</string>
+    <string name="replace_column_name">Remplacer</string>
+    <string name="create_column_name">Créer</string>
+    <string name="resume_data_sumbission">Reprendre la soumission</string>
+    <string name="msg_all_clients_must_be_treated">Tous les clients doivent être remplacés ou créés pour pouvoir reprendre la soumission.</string>
+  </category>
+
+
 </category>
 
 

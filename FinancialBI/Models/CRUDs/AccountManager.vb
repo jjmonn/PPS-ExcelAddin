@@ -45,7 +45,8 @@ Friend Class AccountManager : Inherits NamedCRUDManager(Of NamedHierarchyCRUDEnt
 
 #Region "Mappings"
 
-    Friend Function GetAccountsList(ByRef LookupOption As String) As List(Of Account)
+    Friend Function GetAccountsList(ByRef LookupOption As String, _
+                                    ByRef p_process As Account.AccountProcess) As List(Of Account)
 
         Dim tmp_list As New List(Of Account)
         Dim selection As New List(Of Account.FormulaTypes)
@@ -75,7 +76,8 @@ Friend Class AccountManager : Inherits NamedCRUDManager(Of NamedHierarchyCRUDEnt
             Dim l_account As Account = GetValue(id)
 
             If l_account Is Nothing Then Continue For
-            If selection.Contains(l_account.FormulaType) Then
+            If selection.Contains(l_account.FormulaType) _
+            AndAlso l_account.Process = p_process Then
                 tmp_list.Add(l_account)
             End If
         Next

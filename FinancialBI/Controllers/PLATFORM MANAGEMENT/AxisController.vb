@@ -57,7 +57,12 @@ Friend Class AxisController
         CrudModel = p_CrudModel
         CrudModelFilters = p_CrudFilterModel
         LoadInstanceVariables()
-        View = New AxisView(Me, AxisTV, AxisFilterValuesTV, AxisFilterTV)
+
+        Select Case p_axisType
+            Case AxisType.Employee : View = New EmployeeView(Me, AxisTV, AxisFilterValuesTV, AxisFilterTV)
+            Case Else : View = New AxisView(Me, AxisTV, AxisFilterValuesTV, AxisFilterTV)
+        End Select
+
 
         ' Axis CRUD Events
         AddHandler CrudModel.CreationEvent, AddressOf AfterAxisCreation

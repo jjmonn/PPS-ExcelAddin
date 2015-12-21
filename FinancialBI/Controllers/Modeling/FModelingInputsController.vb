@@ -62,7 +62,7 @@ Friend Class FModelingInputsController
         TreeViewsUtilities.CheckAllNodes(EntitiesTV)
         GlobalVariables.AxisElems.LoadEntitiesTV(EntitiesTV)
         '      inputs_list = FModelingAccountsMapping.GetFModellingAccountsList(FINANCIAL_MODELLING_ID_VARIABLE, FINANCIAL_MODELLING_INPUT_TYPE)
-        accounts_id_list = GlobalVariables.Accounts.GetAccountsList(GlobalEnums.AccountsLookupOptions.LOOKUP_ALL)
+        accounts_id_list = GlobalVariables.Accounts.GetAccountsList(GlobalEnums.AccountsLookupOptions.LOOKUP_ALL, Account.AccountProcess.FINANCIAL)
 
         InitializeMappingDGV()
         InitializeInputsDGV()
@@ -98,7 +98,7 @@ Friend Class FModelingInputsController
 
         CBEditor.DropDownHeight = CBEditor.ItemHeight * CB_NB_ITEMS_DISPLAYED
         CBEditor.DropDownWidth = CB_WIDTH
-        For Each l_account As Account In GlobalVariables.Accounts.GetAccountsList(GlobalEnums.AccountsLookupOptions.LOOKUP_ALL)
+        For Each l_account As Account In GlobalVariables.Accounts.GetAccountsList(GlobalEnums.AccountsLookupOptions.LOOKUP_ALL, Account.AccountProcess.FINANCIAL)
             Dim li As New VIBlend.WinForms.Controls.ListItem
             li.Value = l_account.Id
             li.Text = l_account.Name

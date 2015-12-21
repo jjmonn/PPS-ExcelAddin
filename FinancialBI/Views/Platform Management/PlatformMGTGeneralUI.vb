@@ -5,7 +5,7 @@
 
 
 'Author: Julien Monnereau
-'Last modified: 09/11/2015
+'Last modified: 21/12/2015
 
 
 Imports System.ComponentModel
@@ -103,6 +103,14 @@ Friend Class PlatformMGTGeneralUI
 
         closeCurrentControl()
         current_controller = New EntitiesController()
+        current_controller.addControlToPanel(Panel1, Me)
+
+    End Sub
+
+    Private Sub m_employeesButton_Click(sender As Object, e As EventArgs) Handles m_employeesButton.Click
+
+        closeCurrentControl()
+        current_controller = New AxisController(GlobalVariables.AxisElems, GlobalVariables.AxisFilters, AxisType.Employee)
         current_controller.addControlToPanel(Panel1, Me)
 
     End Sub
@@ -217,4 +225,5 @@ Friend Class PlatformMGTGeneralUI
 
 #End Region
 
+   
 End Class

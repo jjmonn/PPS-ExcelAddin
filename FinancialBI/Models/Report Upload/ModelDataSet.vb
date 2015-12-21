@@ -10,7 +10,7 @@
 '       - Orientation: in some cases does not work (max left or right cells)
 '
 '
-' Last modified: 14/12/2015
+' Last modified: 20/12/2015
 ' Author: Julien Monnereau
 
 
@@ -38,6 +38,7 @@ Friend Class ModelDataSet
     Friend m_datasetCellsDictionary As New SafeDictionary(Of Tuple(Of String, String, String, String), Excel.Range)
     Friend m_datasetCellDimensionsDictionary As New SafeDictionary(Of String, DataSetCellDimensions)
     Friend m_currentVersionId As Int32
+    Friend m_rhAccount As Account
 
     'Flags"
     Friend m_periodFlag As SnapshotResult
@@ -59,6 +60,7 @@ Friend Class ModelDataSet
         Public m_period As String
         Public m_employee As String
         Public m_value As Double
+        Public m_client As String
     End Structure
 
     Enum SnapshotResult
@@ -165,7 +167,7 @@ Friend Class ModelDataSet
         End If
 
         DatesIdentify()
-        AccountsIdentify()
+        AccountsIdentify(m_processFlag)
         EntitiesIdentify()
         EmployeesIdentify()
 
@@ -259,11 +261,11 @@ Friend Class ModelDataSet
     End Sub
 
     ' Identify the mapped accounts in the WS  | CURRENTLY NOT using the Accounts Search Algo
-    Friend Sub AccountsIdentify()
+    Private Sub AccountsIdentify(ByRef p_process As Account.AccountProcess)
 
         Dim currentStr As String
-        Dim outputsAccountsList As List(Of Account) = GlobalVariables.Accounts.GetAccountsList(GlobalEnums.AccountsLookupOptions.LOOKUP_OUTPUTS)
-        m_inputsAccountsList = GlobalVariables.Accounts.GetAccountsList(GlobalEnums.AccountsLookupOptions.LOOKUP_INPUTS)
+        Dim outputsAccountsList As List(Of Account) = GlobalVariables.Accounts.GetAccountsList(GlobalEnums.AccountsLookupOptions.LOOKUP_OUTPUTS, p_process)
+        m_inputsAccountsList = GlobalVariables.Accounts.GetAccountsList(GlobalEnums.AccountsLookupOptions.LOOKUP_INPUTS, p_process)
 
         For rowIndex = 1 To m_lastCell.Row
             For columnIndex = 1 To m_lastCell.Column
@@ -432,15 +434,15 @@ Friend Class ModelDataSet
         Dim l_financialFlagsCode As String = CStr(m_periodFlag) & CStr(m_accountFlag) & CStr(m_entityFlag)
         Dim l_PDCFlagsCode As String = CStr(m_periodFlag) & CStr(m_employeeFlag)
 
-        If m_periodFlag = SnapshotResult.ZERO _
-        Or m_accountFlag = SnapshotResult.ZERO Then
+        If m_periodFlag = SnapshotResult.ZERO Then
             m_globalOrientationFlag = Orientations.ORIENTATION_ERROR
             Exit Sub
         End If
 
         Select Case m_processFlag
             Case Account.AccountProcess.FINANCIAL
-                If m_entityFlag <> SnapshotResult.ZERO Then
+                If m_entityFlag <> SnapshotResult.ZERO _
+                Or m_accountFlag = SnapshotResult.ZERO Then
                     DefineFinancialDimensionsOrientation(l_financialFlagsCode)
                 Else
                     m_globalOrientationFlag = Orientations.ORIENTATION_ERROR
@@ -1003,6 +1005,7 @@ Friend Class ModelDataSet
                                                 m_excelWorkSheet.Range(l_verticalAddressValuePair.Key).Row)
                 l_datasetCell = m_datasetCellDimensionsDictionary(l_cell.Address)
                 l_datasetCell.m_value = l_cell.Value2
+                l_datasetCell.m_client = l_cell.Value2
             Next
         Next
 

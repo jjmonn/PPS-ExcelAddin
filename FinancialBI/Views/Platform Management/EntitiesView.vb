@@ -143,15 +143,6 @@ Friend Class EntitiesView
 
 #Region "Interface"
 
-    Friend Sub LoadInstanceVariables_Safe()
-        Try
-            Dim MyDelegate As New LoadInstanceVariables_Delegate(AddressOf LoadInstanceVariables)
-            Me.Invoke(MyDelegate, New Object() {})
-        Catch ex As Exception
-            System.Diagnostics.Debug.WriteLine(ex.Message)
-        End Try
-    End Sub
-
     Delegate Sub LoadInstanceVariables_Delegate()
     Friend Sub LoadInstanceVariables()
         If InvokeRequired Then
@@ -162,29 +153,29 @@ Friend Class EntitiesView
         End If
     End Sub
 
-    Delegate Sub UpdateEntity_Delegate(ByRef ht As AxisElem)
-    Friend Sub UpdateEntity(ByRef ht As AxisElem)
+    Delegate Sub UpdateEntity_Delegate(ByRef p_entity As AxisElem)
+    Friend Sub UpdateEntity(ByRef p_entity As AxisElem)
 
         If InvokeRequired Then
             Dim MyDelegate As New UpdateEntity_Delegate(AddressOf UpdateEntity)
-            Me.Invoke(MyDelegate, New Object() {ht})
+            Me.Invoke(MyDelegate, New Object() {p_entity})
         Else
             m_isFillingDGV = True
-            FillRow(ht.Id, ht)
+            FillRow(p_entity.Id, p_entity)
             UpdateDGVFormat()
             m_isFillingDGV = False
         End If
 
     End Sub
 
-    Delegate Sub DeleteEntity_Delegate(ByRef id As Int32)
-    Friend Sub DeleteEntity(ByRef id As Int32)
+    Delegate Sub DeleteEntity_Delegate(ByRef p_id As Int32)
+    Friend Sub DeleteEntity(ByRef p_id As Int32)
 
         If InvokeRequired Then
             Dim MyDelegate As New DeleteEntity_Delegate(AddressOf DeleteEntity)
-            Me.Invoke(MyDelegate, New Object() {id})
+            Me.Invoke(MyDelegate, New Object() {p_id})
         Else
-            Dim row As HierarchyItem = DataGridViewsUtil.GetHierarchyItemFromId(m_entitiesDataGridView.RowsHierarchy, id)
+            Dim row As HierarchyItem = DataGridViewsUtil.GetHierarchyItemFromId(m_entitiesDataGridView.RowsHierarchy, p_id)
             If row IsNot Nothing Then row.Delete()
             m_entitiesDataGridView.ColumnsHierarchy.ResizeColumnsToFitGridWidth()
             m_entitiesDataGridView.Refresh()
@@ -397,24 +388,24 @@ Friend Class EntitiesView
 #Region "DGV Filling"
 
     Friend Sub FillRow(ByVal p_entityId As Int32, _
-                       ByVal p_entityHashtable As AxisElem)
+                       ByVal p_entity As AxisElem)
 
         Dim rowItem As HierarchyItem = DataGridViewsUtil.GetHierarchyItemFromId(m_entitiesDataGridView.RowsHierarchy, p_entityId)
         If rowItem Is Nothing Then
-            Dim parentEntityId As Int32 = p_entityHashtable.ParentId
+            Dim parentEntityId As Int32 = p_entity.ParentId
             m_isFillingDGV = True
             If parentEntityId = 0 Then
-                rowItem = DataGridViewsUtil.CreateRow(m_entitiesDataGridView, p_entityId, p_entityHashtable.Name)
+                rowItem = DataGridViewsUtil.CreateRow(m_entitiesDataGridView, p_entityId, p_entity.Name)
             Else
                 Dim parentRow As HierarchyItem = DataGridViewsUtil.GetHierarchyItemFromId(m_entitiesDataGridView.RowsHierarchy, parentEntityId)
                 If (parentRow Is Nothing) Then Exit Sub
-                rowItem = DataGridViewsUtil.CreateRow(m_entitiesDataGridView, p_entityId, p_entityHashtable.Name, parentRow)
+                rowItem = DataGridViewsUtil.CreateRow(m_entitiesDataGridView, p_entityId, p_entity.Name, parentRow)
             End If
             m_isFillingDGV = False
         End If
-        rowItem.Caption = p_entityHashtable.Name
+        rowItem.Caption = p_entity.Name
         Dim column As HierarchyItem = DataGridViewsUtil.GetHierarchyItemFromId(m_entitiesDataGridView.ColumnsHierarchy, ENTITIES_CURRENCY_VARIABLE)
-        If p_entityHashtable.AllowEdition = True Then
+        If p_entity.AllowEdition = True Then
             If GlobalVariables.Users.CurrentUserHasRight(Group.Permission.EDIT_AXIS) Then m_entitiesDataGridView.CellsArea.SetCellEditor(rowItem, column, m_currenciesComboBox)
             Dim entityCurrency As EntityCurrency = GlobalVariables.EntityCurrencies.GetValue(p_entityId)
             If entityCurrency Is Nothing Then Exit Sub
@@ -427,7 +418,7 @@ Friend Class EntitiesView
                 FillSubFilters(filterNode, p_entityId, rowItem)
             Next
         End If
-        If p_entityHashtable.AllowEdition = False Then rowItem.ImageIndex = 0 Else rowItem.ImageIndex = 1
+        If p_entity.AllowEdition = False Then rowItem.ImageIndex = 0 Else rowItem.ImageIndex = 1
 
     End Sub
 

@@ -66,18 +66,18 @@ Partial Class AxisView
         '
         Me.m_dataGridViewRightClickMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.CreateAxisToolStripMenuItem, Me.DeleteAxisToolStripMenuItem2, Me.RenameToolStripMenuItem1, Me.ToolStripSeparator4, Me.copy_down_bt, Me.ToolStripSeparator5, Me.drop_to_excel_bt})
         Me.m_dataGridViewRightClickMenu.Name = "ContextMenuStripTGV"
-        Me.m_dataGridViewRightClickMenu.Size = New System.Drawing.Size(167, 158)
+        Me.m_dataGridViewRightClickMenu.Size = New System.Drawing.Size(167, 136)
         '
         'CreateAxisToolStripMenuItem
         '
-        Me.CreateAxisToolStripMenuItem.Image = Global.FinancialBI.My.resources.element_branch2_add
+        Me.CreateAxisToolStripMenuItem.Image = Global.FinancialBI.My.Resources.Resources.element_branch2_add
         Me.CreateAxisToolStripMenuItem.Name = "CreateAxisToolStripMenuItem"
         Me.CreateAxisToolStripMenuItem.Size = New System.Drawing.Size(166, 24)
         Me.CreateAxisToolStripMenuItem.Text = "General.create"
         '
         'DeleteAxisToolStripMenuItem2
         '
-        Me.DeleteAxisToolStripMenuItem2.Image = Global.FinancialBI.My.resources.element_branch2_delete
+        Me.DeleteAxisToolStripMenuItem2.Image = Global.FinancialBI.My.Resources.Resources.element_branch2_delete
         Me.DeleteAxisToolStripMenuItem2.Name = "DeleteAxisToolStripMenuItem2"
         Me.DeleteAxisToolStripMenuItem2.Size = New System.Drawing.Size(166, 24)
         Me.DeleteAxisToolStripMenuItem2.Text = "Delete"
@@ -95,7 +95,7 @@ Partial Class AxisView
         '
         'copy_down_bt
         '
-        Me.copy_down_bt.Image = Global.FinancialBI.My.Resources.Download
+        Me.copy_down_bt.Image = Global.FinancialBI.My.Resources.Resources.Download
         Me.copy_down_bt.Name = "copy_down_bt"
         Me.copy_down_bt.Size = New System.Drawing.Size(166, 24)
         Me.copy_down_bt.Text = "Copy down"
@@ -107,7 +107,7 @@ Partial Class AxisView
         '
         'drop_to_excel_bt
         '
-        Me.drop_to_excel_bt.Image = Global.FinancialBI.My.Resources.excel_blue2
+        Me.drop_to_excel_bt.Image = Global.FinancialBI.My.Resources.Resources.excel_blue2
         Me.drop_to_excel_bt.Name = "drop_to_excel_bt"
         Me.drop_to_excel_bt.Size = New System.Drawing.Size(166, 24)
         Me.drop_to_excel_bt.Text = "Drop_on_excel"
@@ -139,21 +139,21 @@ Partial Class AxisView
         'EditToolStripMenuItem
         '
         Me.EditToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.CreateNewToolStripMenuItem, Me.DeleteAxisToolStripMenuItem, Me.ToolStripSeparator2, Me.RenameToolStripMenuItem, Me.CopyDownValuesToolStripMenuItem})
-        Me.EditToolStripMenuItem.Image = Global.FinancialBI.My.Resources.element_branch21
+        Me.EditToolStripMenuItem.Image = Global.FinancialBI.My.Resources.Resources.element_branch23
         Me.EditToolStripMenuItem.Name = "EditToolStripMenuItem"
         Me.EditToolStripMenuItem.Size = New System.Drawing.Size(73, 20)
         Me.EditToolStripMenuItem.Text = "Menu"
         '
         'CreateNewToolStripMenuItem
         '
-        Me.CreateNewToolStripMenuItem.Image = Global.FinancialBI.My.Resources.element_branch2_add
+        Me.CreateNewToolStripMenuItem.Image = Global.FinancialBI.My.Resources.Resources.element_branch2_add
         Me.CreateNewToolStripMenuItem.Name = "CreateNewToolStripMenuItem"
         Me.CreateNewToolStripMenuItem.Size = New System.Drawing.Size(190, 24)
         Me.CreateNewToolStripMenuItem.Text = "Create"
         '
         'DeleteAxisToolStripMenuItem
         '
-        Me.DeleteAxisToolStripMenuItem.Image = Global.FinancialBI.My.Resources.element_branch2_delete
+        Me.DeleteAxisToolStripMenuItem.Image = Global.FinancialBI.My.Resources.Resources.element_branch2_delete
         Me.DeleteAxisToolStripMenuItem.Name = "DeleteAxisToolStripMenuItem"
         Me.DeleteAxisToolStripMenuItem.Size = New System.Drawing.Size(190, 24)
         Me.DeleteAxisToolStripMenuItem.Text = "Delete"
@@ -184,7 +184,7 @@ Partial Class AxisView
         '
         'SendEntitiesHierarchyToExcelToolStripMenuItem
         '
-        Me.SendEntitiesHierarchyToExcelToolStripMenuItem.Image = Global.FinancialBI.My.Resources.excel_blue2
+        Me.SendEntitiesHierarchyToExcelToolStripMenuItem.Image = Global.FinancialBI.My.Resources.Resources.excel_blue2
         Me.SendEntitiesHierarchyToExcelToolStripMenuItem.Name = "SendEntitiesHierarchyToExcelToolStripMenuItem"
         Me.SendEntitiesHierarchyToExcelToolStripMenuItem.Size = New System.Drawing.Size(162, 24)
         Me.SendEntitiesHierarchyToExcelToolStripMenuItem.Text = "Drop on excel"

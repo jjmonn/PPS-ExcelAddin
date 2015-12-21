@@ -78,7 +78,7 @@ Friend Class AcquisitionModel
         GlobalVariables.Accounts.LoadAccountsTV(m_accountsTV)
         m_dataSet = inputDataSet
 
-        m_outputsList = GlobalVariables.Accounts.GetAccountsList(GlobalEnums.AccountsLookupOptions.LOOKUP_OUTPUTS)
+        m_outputsList = GlobalVariables.Accounts.GetAccountsList(GlobalEnums.AccountsLookupOptions.LOOKUP_OUTPUTS, Account.AccountProcess.FINANCIAL)
 
         AddHandler m_computer.ComputationAnswered, AddressOf AfterInputsComputation
         AddHandler m_singleComputer.ComputationAnswered, AddressOf AfterOutputsComputed

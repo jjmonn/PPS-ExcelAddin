@@ -252,6 +252,12 @@
     <string name="exchange_rates_upload">Exchange Rates Upload</string>
     <string name="global_facts_upload">Macro Economic Indicator Upload</string>
     <string name="range_mismatch">The Periods range and Rates range do not have the same size, or the dimensions of the ranges are not valid.</string>
+
+    <string name="input_sidepane_title">Report Upload</string>
+    <string name="entity_selection">Entity selection</string>
+    <string name="periods_selection">Periods selection</string>
+    <string name="accounts_selection">Account/ Process selection</string>
+    
     <string name="msg_periods_selection">Select periods(s) range(s)</string>
     <string name="msg_rates_selection">Select rates(s) range(s)</string>
     <string name="msg_values_selection">Select value(s) range(s)</string>
@@ -397,6 +403,8 @@
      <string name="client">Client</string>
      <string name="product">Product</string>
      <string name="adjustment">Adjustment</string>
+
+    <string name="employees">Employee</string>
     <string name="version">Version</string>
     <string name="Periods">Periods</string>
     <string name="Accounts">Accounts</string>
@@ -445,11 +453,10 @@
 
 
   <category name="clientAutoCreation">
-    <string name="unerefenced_clients">Unerefenced Clients</string>
-    <string name="create_all">Create all</string>
-    <string name="replace_selection">Replace selection</string>
+    <string name="unerefenced_clients">Unreferenced Clients</string>
     <string name="similar_clients_column_name">Similar clients</string>
     <string name="replace_column_name">Replace</string>
+    <string name="create_column_name">Create</string>
     <string name="resume_data_sumbission">Resume data submission</string>
     <string name="msg_all_clients_must_be_treated">All clients must be either replaced or created before submission.</string>
   </category>

@@ -60,7 +60,7 @@ Public Class FactsManager
         requestIdFactsCommitDict.Add(requestId, cellsAddresses)
         packet.WriteUint32(factsValues.Count)
         For Each fact_value As Fact In factsValues
-            fact_value.Dump(packet, True)
+            fact_value.Dump(packet, False)
         Next
         packet.Release()
         NetworkManager.GetInstance().Send(packet)

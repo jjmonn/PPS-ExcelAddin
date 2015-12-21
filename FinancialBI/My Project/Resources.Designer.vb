@@ -461,6 +461,16 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Looks up a localized resource of type System.Drawing.Bitmap.
+        '''</summary>
+        Friend ReadOnly Property engineer() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("engineer", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
         '''&lt;category name=&quot;FBI&quot;&gt;
         '''  &lt;category name=&quot;Platform Management&quot;&gt;
@@ -474,7 +484,7 @@ Namespace My.Resources
         '''    &lt;string name=&quot;unselect_all&quot;&gt;Unselect all&lt;/string&gt;
         '''    &lt;string name=&quot;expand_all&quot;&gt;Expand all&lt;/string&gt;
         '''    &lt;string name=&quot;collapse_all&quot;&gt;Collapse all&lt;/string&gt;
-        '''    &lt;string name=&quot;log&quot; [rest of string was truncated]&quot;;.
+        '''    &lt;stri [rest of string was truncated]&quot;;.
         '''</summary>
         Friend ReadOnly Property english() As String
             Get
@@ -735,8 +745,7 @@ Namespace My.Resources
         '''    &lt;string name=&quot;select_all&quot;&gt;Tout sélectionner&lt;/string&gt;
         '''    &lt;string name=&quot;unselect_all&quot;&gt;Tout désélectionner&lt;/string&gt;
         '''    &lt;string name=&quot;expand_all&quot;&gt;Tout dégrouper&lt;/string&gt;
-        '''    &lt;string name=&quot;collapse_all&quot;&gt;Tout grouper&lt;/string&gt;
-        '''   [rest of string was truncated]&quot;;.
+        '''    &lt;string name=&quot;collapse_all&quot;&gt;Tout grouper [rest of string was truncated]&quot;;.
         '''</summary>
         Friend ReadOnly Property french() As String
             Get

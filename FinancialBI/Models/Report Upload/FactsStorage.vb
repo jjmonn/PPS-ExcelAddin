@@ -8,7 +8,7 @@ Friend Class FactsStorage
 #Region "Instance variables"
 
     Friend m_FactsDict As New SafeDictionary(Of String, SafeDictionary(Of String, SafeDictionary(Of String, Fact)))
-    ' m_FactsDict dimensions : (accountsName)(productName)(period) -> Fact
+    ' m_FactsDict dimensions : (accountsName)(employeeName)(periodToken) -> Fact
     Private m_requestIdDict As New SafeDictionary(Of UInt32, String())
 
     Public Event FactsDownloaded(ByRef p_status As Boolean)
@@ -43,6 +43,18 @@ Friend Class FactsStorage
 
     End Sub
 
+    Friend Function GetRHFact(ByRef p_accountName As String, ByRef p_employeeName As String, ByRef p_periodToken As String) As Fact
+
+        If m_FactsDict.ContainsKey(p_accountName) _
+        AndAlso m_FactsDict(p_accountName).ContainsKey(p_employeeName) _
+        AndAlso m_FactsDict(p_accountName)(p_employeeName).ContainsKey(p_periodToken) Then
+            Return m_FactsDict(p_accountName)(p_employeeName)(p_periodToken)
+        Else
+            Return Nothing
+        End If
+
+    End Function
+
 #End Region
 
 #Region "Events"
@@ -53,7 +65,7 @@ Friend Class FactsStorage
 
         If p_status <> False Then
             Dim l_accountName As String = m_requestIdDict(p_requestId)(0)
-            Dim l_productName As String = m_requestIdDict(p_requestId)(1)
+            Dim l_employeeName As String = m_requestIdDict(p_requestId)(1)
 
             If m_FactsDict.ContainsKey(l_accountName) = False Then
                 Dim l_accountFactsDict As New SafeDictionary(Of String, SafeDictionary(Of String, Fact))
@@ -61,7 +73,7 @@ Friend Class FactsStorage
             End If
             Dim l_factsDict As New SafeDictionary(Of String, Fact)
             BuildRHPeriodsFactsDict(p_factsList, l_factsDict)
-            m_FactsDict(l_accountName)(l_productName) = l_factsDict
+            m_FactsDict(l_accountName)(l_employeeName) = l_factsDict
             m_requestIdDict.Remove(p_requestId)
             If m_requestIdDict.Count = 0 Then
                 RaiseEvent FactsDownloaded(True)

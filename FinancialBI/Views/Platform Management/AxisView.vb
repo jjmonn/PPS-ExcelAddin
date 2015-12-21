@@ -73,18 +73,14 @@ Friend Class AxisView
         m_axisFilterValuesTreeview = p_axisFilterValuesTV
 
         initFilters()
+        LoadControls()
         InitializeDGVDisplay()
         DGVColumnsInitialize()
         DGVRowsInitialize(m_axisTreeview)
         fillDGV(m_controller.GetAxisDictionary())
 
-        Me.TableLayoutPanel1.Controls.Add(m_axisDataGridView, 0, 1)
-        m_axisDataGridView.Dock = DockStyle.Fill
-        m_axisDataGridView.RowsHierarchy.AllowDragDrop = True
-        m_axisDataGridView.AllowDragDropIndication = True
-
         AddHandler m_axisDataGridView.CellMouseClick, AddressOf dataGridView_CellMouseClick
-        AddHandler m_axisDataGridView.MouseDown, AddressOf axisDataGridViewRightClick
+        AddHandler m_axisDataGridView.MouseDown, AddressOf AxisDataGridViewRightClick
         AddHandler m_axisDataGridView.HierarchyItemMouseClick, AddressOf dataGridView_HierarchyItemMouseClick
         AddHandler m_axisDataGridView.HierarchyItemMouseDown, AddressOf dataGridView_HierarchyItemMouseDown
         AddHandler m_axisDataGridView.CellValueChanged, AddressOf dataGridView_CellValueChanged
@@ -92,6 +88,13 @@ Friend Class AxisView
         DefineUIPermissions()
         DesactivateUnallowed()
         MultilanguageSetup()
+
+    End Sub
+
+    Protected Overridable Sub LoadControls()
+
+        Me.TableLayoutPanel1.Controls.Add(m_axisDataGridView, 0, 1)
+        m_axisDataGridView.Dock = DockStyle.Fill
 
     End Sub
 
@@ -125,6 +128,23 @@ Friend Class AxisView
 
     End Sub
 
+    Private Sub InitializeDGVDisplay()
+
+        m_axisDataGridView.ColumnsHierarchy.AutoResize(AutoResizeMode.FIT_ALL)
+        m_axisDataGridView.ColumnsHierarchy.AutoStretchColumns = True
+        m_axisDataGridView.ColumnsHierarchy.AllowResize = True
+        ' DGV.RowsHierarchy.AllowDragDrop = True
+        m_axisDataGridView.RowsHierarchy.CompactStyleRenderingEnabled = True
+        m_axisDataGridView.AllowDragDropIndication = True
+        m_axisDataGridView.AllowCopyPaste = True
+        m_axisDataGridView.FilterDisplayMode = FilterDisplayMode.Custom
+        m_axisDataGridView.VIBlendTheme = DGV_VI_BLEND_STYLE
+        m_axisDataGridView.BackColor = SystemColors.Control
+        'DGV.ImageList = AxisIL
+        m_axisDataGridView.RowsHierarchy.AllowDragDrop = True
+        m_axisDataGridView.AllowDragDropIndication = True
+
+    End Sub
 
 #End Region
 
@@ -280,22 +300,6 @@ Friend Class AxisView
 
 
 #Region "DGV"
-
-    Private Sub InitializeDGVDisplay()
-
-        m_axisDataGridView.ColumnsHierarchy.AutoResize(AutoResizeMode.FIT_ALL)
-        m_axisDataGridView.ColumnsHierarchy.AutoStretchColumns = True
-        m_axisDataGridView.ColumnsHierarchy.AllowResize = True
-        ' DGV.RowsHierarchy.AllowDragDrop = True
-        m_axisDataGridView.RowsHierarchy.CompactStyleRenderingEnabled = True
-        m_axisDataGridView.AllowDragDropIndication = True
-        m_axisDataGridView.AllowCopyPaste = True
-        m_axisDataGridView.FilterDisplayMode = FilterDisplayMode.Custom
-        m_axisDataGridView.VIBlendTheme = DGV_VI_BLEND_STYLE
-        m_axisDataGridView.BackColor = SystemColors.Control
-        'DGV.ImageList = AxisIL
-
-    End Sub
 
     Private Sub fillDGV(ByRef axisHT As MultiIndexDictionary(Of UInt32, String, AxisElem))
 
