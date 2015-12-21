@@ -115,6 +115,16 @@ Friend Class PlatformMGTGeneralUI
 
     End Sub
 
+    Private Sub ConsultantsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ConsultantsToolStripMenuItem.Click
+
+
+        closeCurrentControl()
+        current_controller = New AxisFiltersController(AxisType.Employee)
+        current_controller.addControlToPanel(Panel1, Me)
+
+
+    End Sub
+
     Private Sub ClientsBT_Click(sender As Object, e As EventArgs) Handles ClientsBT.Click
 
         closeCurrentControl()
@@ -134,7 +144,7 @@ Friend Class PlatformMGTGeneralUI
     Private Sub ClientsFiltersBT_Click(sender As Object, e As EventArgs) Handles ClientsFiltersBT.Click
 
         closeCurrentControl()
-        current_controller = New AxisFiltersController(GlobalEnums.AnalysisAxis.CLIENTS)
+        current_controller = New AxisFiltersController(AxisType.Client)
         current_controller.addControlToPanel(Panel1, Me)
 
     End Sub
@@ -142,7 +152,7 @@ Friend Class PlatformMGTGeneralUI
     Private Sub EntitiesFiltersBT_Click(sender As Object, e As EventArgs) Handles EntitiesFiltersBT.Click
 
         closeCurrentControl()
-        current_controller = New AxisFiltersController(GlobalEnums.AnalysisAxis.ENTITIES)
+        current_controller = New AxisFiltersController(AxisType.Entities)
         current_controller.addControlToPanel(Panel1, Me)
 
     End Sub
@@ -150,7 +160,7 @@ Friend Class PlatformMGTGeneralUI
     Private Sub ProductsFiltersBT_Click(sender As Object, e As EventArgs) Handles ProductsFiltersBT.Click
 
         closeCurrentControl()
-        current_controller = New AxisFiltersController(GlobalEnums.AnalysisAxis.PRODUCTS)
+        current_controller = New AxisFiltersController(AxisType.Product)
         current_controller.addControlToPanel(Panel1, Me)
 
     End Sub
@@ -158,7 +168,7 @@ Friend Class PlatformMGTGeneralUI
     Private Sub AdjustmentsFiltersBT_Click_1(sender As Object, e As EventArgs) Handles AdjustmentsFiltersBT.Click
 
         closeCurrentControl()
-        current_controller = New AxisFiltersController(GlobalEnums.AnalysisAxis.ADJUSTMENTS)
+        current_controller = New AxisFiltersController(AxisType.Adjustment)
         current_controller.addControlToPanel(Panel1, Me)
 
     End Sub
@@ -225,5 +235,6 @@ Friend Class PlatformMGTGeneralUI
 
 #End Region
 
+   
    
 End Class

@@ -12,7 +12,7 @@
 '
 ' Author: Julien Monnereau
 ' Created: 04/09/2015
-' Last modified: 04/09/2015
+' Last modified: 21/12/2015
 
 
 Imports System.Windows.Forms
@@ -39,9 +39,9 @@ Friend Class AxisController
 
     ' Variables
     Private m_axisType As AxisType
-    Private positionsDictionary As New SafeDictionary(Of Int32, Double)
-
+    Private m_positionsDictionary As New SafeDictionary(Of Int32, Double)
     Public Event AxisCreated(ByRef p_status As Boolean, ByRef p_axisId As Int32)
+    Private m_newAxisNameAxisParentDict As New SafeDictionary(Of String, UInt32)
 
 #End Region
 
@@ -56,13 +56,11 @@ Friend Class AxisController
         m_axisType = p_axisType
         CrudModel = p_CrudModel
         CrudModelFilters = p_CrudFilterModel
-        LoadInstanceVariables()
 
         Select Case p_axisType
             Case AxisType.Employee : View = New EmployeeView(Me, AxisTV, AxisFilterValuesTV, AxisFilterTV)
             Case Else : View = New AxisView(Me, AxisTV, AxisFilterValuesTV, AxisFilterTV)
         End Select
-
 
         ' Axis CRUD Events
         AddHandler CrudModel.CreationEvent, AddressOf AfterAxisCreation
@@ -87,9 +85,13 @@ Friend Class AxisController
         RemoveHandler CrudModelFilters.UpdateEvent, AddressOf AfterAxisFilterUpdate
     End Sub
 
-    Friend Sub LoadInstanceVariables()
+    Friend Sub LoadInstanceVariables(Optional ByRef p_axisParentId As UInt32 = 0)
 
-        CrudModel.LoadAxisTree(m_axisType, AxisTV)
+        If p_axisParentId <> 0 Then
+            CrudModel.LoadAxisTree(m_axisType, AxisTV, p_axisParentId)
+        Else
+            CrudModel.LoadAxisTree(m_axisType, AxisTV)
+        End If
         GlobalVariables.Filters.LoadFiltersTV(AxisFilterTV, m_axisType)
         AxisFilterManager.LoadFvTv(AxisFilterValuesTV, CInt(m_axisType))
 
@@ -122,8 +124,14 @@ Friend Class AxisController
         Return l_axis.Clone()
     End Function
 
-    Friend Function GetAxisDictionary() As MultiIndexDictionary(Of UInt32, String, AxisElem)
-        Return CrudModel.GetDictionary(CType(m_axisType, AxisType))
+    Friend Function GetAxisDictionary(Optional ByRef p_axisParentId As UInt32 = 0) As MultiIndexDictionary(Of UInt32, String, AxisElem)
+
+        If p_axisParentId <> 0 Then
+            Return CrudModel.GetDictionary(CType(m_axisType, AxisType), p_axisParentId)
+        Else
+            Return CrudModel.GetDictionary(CType(m_axisType, AxisType))
+        End If
+
     End Function
 
     Friend Function GetAxisFilter(ByRef p_axisType As AxisType, ByVal p_axisFilterId As UInt32) As AxisFilter
@@ -146,13 +154,19 @@ Friend Class AxisController
 
 #Region "Interface"
 
-    Friend Sub CreateAxis(ByRef p_axisName As String)
+    Friend Sub CreateAxis(ByRef p_axisName As String, _
+                          Optional ByRef p_axisParent As UInt32 = 0)
 
-        Dim ht As New AxisElem
-        ht.Name = p_axisName
-        ht.ItemPosition = 0
-        ht.Axis = m_axisType
-        CrudModel.Create(ht)
+
+        If p_axisParent <> 0 Then
+            m_newAxisNameAxisParentDict.Add(p_axisName, p_axisParent)
+        End If
+
+        Dim l_axisElem As New AxisElem
+        l_axisElem.Name = p_axisName
+        l_axisElem.ItemPosition = 0
+        l_axisElem.Axis = m_axisType
+        CrudModel.Create(l_axisElem)
 
     End Sub
 
@@ -204,7 +218,7 @@ Friend Class AxisController
     Private Sub AfterAxisRead(ByRef status As ErrorMessage, ByRef ht As CRUDEntity)
 
         If (status = ErrorMessage.SUCCESS) Then
-            View.LoadInstanceVariables_Safe()
+            View.LoadInstanceVariables()
             View.UpdateAxis(ht)
         End If
 
@@ -213,7 +227,7 @@ Friend Class AxisController
     Private Sub AfterAxisDeletion(ByRef status As ErrorMessage, ByRef id As UInt32)
 
         If status = ErrorMessage.SUCCESS Then
-            View.LoadInstanceVariables_Safe()
+            View.LoadInstanceVariables()
             View.DeleteAxis(id)
         End If
 
@@ -233,7 +247,18 @@ Friend Class AxisController
         If p_status <> ErrorMessage.SUCCESS Then
             MsgBox("The Axis Could not be created.")
             ' catch and display error as well V2 priority normal
+        Else
+            Dim l_axisElem As AxisElem = GlobalVariables.AxisElems.GetValue(m_axisType, p_id)
+            If l_axisElem IsNot Nothing _
+            AndAlso m_newAxisNameAxisParentDict.ContainsKey(l_axisElem.Name) Then
+                Dim l_axisParent As New AxisParent()
+                l_axisParent.Id = l_axisElem.Id
+                l_axisParent.ParentId = m_newAxisNameAxisParentDict(l_axisElem.Name)
+                GlobalVariables.AxisParents.Create(l_axisParent)
+                m_newAxisNameAxisParentDict.Remove(l_axisElem.Name)
+            End If
         End If
+
         RaiseEvent AxisCreated(p_status, p_id)
 
     End Sub
@@ -242,7 +267,7 @@ Friend Class AxisController
 
         If (status = ErrorMessage.SUCCESS) Then
             Dim axisFilter As AxisFilter = CType(p_axisFilter, AxisFilter)
-            View.LoadInstanceVariables_Safe()
+            View.LoadInstanceVariables()
             View.UpdateAxis(CrudModel.GetValue(axisFilter.Axis, axisFilter.Id))
         End If
 
@@ -279,10 +304,10 @@ Friend Class AxisController
 
         Dim position As Int32
         Dim axisUpdates As New List(Of CRUDEntity)
-        positionsDictionary = DataGridViewsUtil.GeneratePositionsDictionary(View.m_axisDataGridView)
+        m_positionsDictionary = DataGridViewsUtil.GeneratePositionsDictionary(View.m_axisDataGridView)
 
-        For Each axisId As Int32 In positionsDictionary.Keys
-            position = positionsDictionary(axisId)
+        For Each axisId As Int32 In m_positionsDictionary.Keys
+            position = m_positionsDictionary(axisId)
             Dim axisElem As AxisElem = CrudModel.GetValue(m_axisType, axisId)
 
             If axisElem Is Nothing Then Continue For
