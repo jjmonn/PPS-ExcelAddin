@@ -63,7 +63,6 @@ Public Class AxisElemManager : Inherits AxedCRUDManager(Of AxisElem)
 
     End Function
 
-
 #End Region
 
 #Region "Utilities"
@@ -98,40 +97,61 @@ Public Class AxisElemManager : Inherits AxedCRUDManager(Of AxisElem)
 
     End Sub
 
-    Friend Sub LoadAxisTree(ByVal p_axis As AxisType, ByRef TV As VIBlend.WinForms.Controls.vTreeView)
+    Friend Sub LoadAxisTree(ByVal p_axis As AxisType, _
+                            ByRef p_treeview As VIBlend.WinForms.Controls.vTreeView)
 
-        TV.Nodes.Clear()
+        p_treeview.Nodes.Clear()
         For Each l_axisElem As AxisElem In m_CRUDDic(p_axis).SortedValues
-            Dim node As VIBlend.WinForms.Controls.vTreeNode = VTreeViewUtil.AddNode(l_axisElem.Id, l_axisElem.Name, TV, 0)
+            Dim node As VIBlend.WinForms.Controls.vTreeNode = VTreeViewUtil.AddNode(l_axisElem.Id, l_axisElem.Name, p_treeview, 0)
             node.Checked = Windows.Forms.CheckState.Checked
         Next
-        VTreeViewUtil.SetTreeviewIconsHiearachy(TV)
+        VTreeViewUtil.SetTreeviewIconsHiearachy(p_treeview)
 
     End Sub
 
-    Friend Sub LoadAxisTree(ByVal p_axis As AxisType, ByRef DestNode As VIBlend.WinForms.Controls.vTreeNode)
+    Friend Sub LoadAxisTree(ByVal p_axis As AxisType, _
+                            ByRef p_treeview As VIBlend.WinForms.Controls.vTreeView, _
+                            ByRef p_axisParentId As UInt32)
 
-        DestNode.Nodes.Clear()
+        p_treeview.Nodes.Clear()
         For Each l_axisElem As AxisElem In m_CRUDDic(p_axis).SortedValues
-            Dim newNode As VIBlend.WinForms.Controls.vTreeNode = VTreeViewUtil.AddNode(l_axisElem.Id, l_axisElem.Name, DestNode, 0)
+            Dim l_axisParent As CRUD.AxisParent = GlobalVariables.AxisParents.GetValue(l_axisElem.Id)
+            If l_axisParent IsNot Nothing _
+            AndAlso l_axisParent.ParentId = p_axisParentId Then
+                Dim node As VIBlend.WinForms.Controls.vTreeNode = VTreeViewUtil.AddNode(l_axisElem.Id, l_axisElem.Name, p_treeview, 0)
+                node.Checked = Windows.Forms.CheckState.Checked
+            End If
+        Next
+        VTreeViewUtil.SetTreeviewIconsHiearachy(p_treeview)
+
+    End Sub
+
+    Friend Sub LoadAxisTree(ByVal p_axis As AxisType, _
+                            ByRef p_treenode As VIBlend.WinForms.Controls.vTreeNode)
+
+        p_treenode.Nodes.Clear()
+        For Each l_axisElem As AxisElem In m_CRUDDic(p_axis).SortedValues
+            Dim newNode As VIBlend.WinForms.Controls.vTreeNode = VTreeViewUtil.AddNode(l_axisElem.Id, l_axisElem.Name, p_treenode, 0)
             newNode.Checked = Windows.Forms.CheckState.Checked
         Next
 
     End Sub
 
-    Friend Sub LoadAxisTree(ByVal p_axis As AxisType, ByRef TV As VIBlend.WinForms.Controls.vTreeView, _
-                            ByRef filter_list As List(Of UInt32))
+    Friend Sub LoadAxisTree(ByVal p_axis As AxisType, _
+                            ByRef p_treeview As VIBlend.WinForms.Controls.vTreeView, _
+                            ByRef p_filterList As List(Of UInt32))
 
-        TV.Nodes.Clear()
+        p_treeview.Nodes.Clear()
         For Each l_axisElem As AxisElem In m_CRUDDic(p_axis).SortedValues
-            Dim node As VIBlend.WinForms.Controls.vTreeNode = VTreeViewUtil.AddNode(l_axisElem.Id, l_axisElem.Name, TV, 0)
+            Dim node As VIBlend.WinForms.Controls.vTreeNode = VTreeViewUtil.AddNode(l_axisElem.Id, l_axisElem.Name, p_treeview, 0)
             node.Checked = Windows.Forms.CheckState.Checked
         Next
-        VTreeViewUtil.SetTreeviewIconsHiearachy(TV)
+        VTreeViewUtil.SetTreeviewIconsHiearachy(p_treeview)
 
     End Sub
 
-    Friend Function GetAxisListFilteredOnAxisParent(ByRef p_axis As AxisType, ByRef p_axisParentId As UInt32) As List(Of AxisElem)
+    Friend Function GetAxisListFilteredOnAxisParent(ByRef p_axis As AxisType, _
+                                                    ByRef p_axisParentId As UInt32) As List(Of AxisElem)
 
         Dim l_list As New List(Of AxisElem)
         For Each l_axisElem As AxisElem In m_CRUDDic(p_axis).SortedValues

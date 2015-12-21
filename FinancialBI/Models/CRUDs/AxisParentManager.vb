@@ -44,11 +44,6 @@ Public Class AxisParentManager : Inherits CRUDManager
     Friend Overrides Sub Delete(ByRef p_id As UInt32)
     End Sub
 
-    <Obsolete("Not implemented", True)> _
-    <System.ComponentModel.EditorBrowsable(ComponentModel.EditorBrowsableState.Never)>
-    Friend Overrides Sub Create(ByRef p_crud As CRUDEntity)
-    End Sub
-
 #End Region
 
     Protected Overrides Sub ListAnswer(packet As ByteBuffer)

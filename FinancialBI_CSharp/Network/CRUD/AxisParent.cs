@@ -8,7 +8,7 @@ namespace CRUD
 {
   public class AxisParent : CRUDEntity, IComparable
   {
-    public UInt32 Id { get; private set; }
+    public UInt32 Id { get; set; }
     public UInt32 ParentId { get; set; }
     public UInt32 Image { get; set; }
 

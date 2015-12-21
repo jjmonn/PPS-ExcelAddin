@@ -154,7 +154,9 @@
     <string name="msg_deletion_confirmation">Axis deletion confirmation</string>
     <string name="msg_select_axis">An Axis must be selected in order to be deleted</string>
     <string name="msg_filter_value_not_found">The Filter Value Name could not be found.</string>
-
+    <string name="msg_entity_axis_parent_selection">An editable entity must be selected in order to create an employee.</string>
+    <string name="msg_entity_axis_parent_not_allowed">This entity is not editable. Employees can only be created under editable entities.</string>
+  
   </category>
   
   <category name="filters">

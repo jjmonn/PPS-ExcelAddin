@@ -30,8 +30,8 @@ Friend Class AxisView
 #Region "Instance Variables"
 
     ' Objects
-    Private m_controller As AxisController
-    Private m_axisTreeview As vTreeView
+    Protected m_controller As AxisController
+    Protected m_axisTreeview As vTreeView
     Private m_axisFilterTreeview As vTreeView
     Private m_axisFilterValuesTreeview As vTreeView
     Friend m_axisDataGridView As New vDataGridView
@@ -72,12 +72,13 @@ Friend Class AxisView
         m_axisFilterTreeview = p_axisFiltersTV
         m_axisFilterValuesTreeview = p_axisFilterValuesTV
 
+        LoadInstanceVariables()
         initFilters()
         LoadControls()
         InitializeDGVDisplay()
         DGVColumnsInitialize()
         DGVRowsInitialize(m_axisTreeview)
-        fillDGV(m_controller.GetAxisDictionary())
+        fillDGV()
 
         AddHandler m_axisDataGridView.CellMouseClick, AddressOf dataGridView_CellMouseClick
         AddHandler m_axisDataGridView.MouseDown, AddressOf AxisDataGridViewRightClick
@@ -151,16 +152,16 @@ Friend Class AxisView
 
 #Region "Interface"
 
-    Delegate Sub UpdateAxis_Delegate(ByRef ht As AxisElem)
-    Friend Sub UpdateAxis(ByRef ht As AxisElem)
+    Delegate Sub UpdateAxis_Delegate(ByRef p_axisElem As AxisElem)
+    Friend Sub UpdateAxis(ByRef p_axisElem As AxisElem)
 
-        If ht Is Nothing Then Exit Sub
+        If p_axisElem Is Nothing Then Exit Sub
         If Me.m_axisDataGridView.InvokeRequired Then
             Dim MyDelegate As New UpdateAxis_Delegate(AddressOf UpdateAxis)
-            Me.m_axisDataGridView.Invoke(MyDelegate, New Object() {ht})
+            Me.m_axisDataGridView.Invoke(MyDelegate, New Object() {p_axisElem})
         Else
             m_isFillingDGV = True
-            FillRow(ht.Id, ht.Name, ht)
+            FillRow(p_axisElem.Id, p_axisElem.Name, p_axisElem)
             updateDGVFormat()
             m_axisDataGridView.Refresh()
             m_isFillingDGV = False
@@ -169,15 +170,15 @@ Friend Class AxisView
     End Sub
 
     Delegate Sub DeleteAxis_Delegate(ByRef id As Int32)
-    Friend Sub DeleteAxis(ByRef id As Int32)
+    Friend Sub DeleteAxis(ByRef p_id As Int32)
 
         If Me.m_axisDataGridView.InvokeRequired Then
             Dim MyDelegate As New DeleteAxis_Delegate(AddressOf DeleteAxis)
-            Me.m_axisDataGridView.Invoke(MyDelegate, New Object() {id})
-        ElseIf (m_rowsIdsItemDic.ContainsKey(id)) Then
-            Dim l_row As HierarchyItem = m_rowsIdsItemDic(id)
+            Me.m_axisDataGridView.Invoke(MyDelegate, New Object() {p_id})
+        ElseIf (m_rowsIdsItemDic.ContainsKey(p_id)) Then
+            Dim l_row As HierarchyItem = m_rowsIdsItemDic(p_id)
             If l_row IsNot Nothing Then l_row.Delete()
-            m_rowsIdsItemDic.Remove(id)
+            m_rowsIdsItemDic.Remove(p_id)
             m_axisDataGridView.Refresh()
         End If
 
@@ -188,7 +189,7 @@ Friend Class AxisView
 
 #Region "Calls Back"
 
-    Private Sub CreateAxisOrder()
+    Protected Overridable Sub CreateAxisOrder()
 
         Dim axisName As String = InputBox(Local.GetValue("axis.msg_enter_name"), Local.GetValue("axis.msg_axis_creation"))
         If axisName <> "" Then
@@ -301,10 +302,16 @@ Friend Class AxisView
 
 #Region "DGV"
 
-    Private Sub fillDGV(ByRef axisHT As MultiIndexDictionary(Of UInt32, String, AxisElem))
+    Protected Overridable Sub FillDGV()
+
+        FillDGV(m_controller.GetAxisDictionary())
+
+    End Sub
+
+    Protected Sub FillDGV(ByRef p_axisElems As MultiIndexDictionary(Of UInt32, String, AxisElem))
 
         m_isFillingDGV = True
-        For Each axisValue In axisHT.SortedValues
+        For Each axisValue In p_axisElems.SortedValues
             FillRow(axisValue.Id, axisValue.Name, axisValue)
         Next
         m_isFillingDGV = False
@@ -360,12 +367,12 @@ Friend Class AxisView
 
 #Region "Rows Initialization"
 
-    Private Sub DGVRowsInitialize(ByRef axis_tv As vTreeView)
+    Protected Sub DGVRowsInitialize(ByRef p_axisTreeview As vTreeView)
 
         m_axisDataGridView.RowsHierarchy.Clear()
         m_rowsIdsItemDic.Clear()
         m_isFillingDGV = True
-        For Each node In axis_tv.Nodes
+        For Each node In p_axisTreeview.Nodes
             Dim row As HierarchyItem = CreateRow(node.Value, node.Text)
         Next
         m_isFillingDGV = False
@@ -470,17 +477,17 @@ Friend Class AxisView
 
 #Region "DGV Updates"
 
-    Friend Sub LoadInstanceVariables_Safe()
-        Try
-            Dim MyDelegate As New LoadInstanceVariables_Delegate(AddressOf LoadInstanceVariables)
-            Me.Invoke(MyDelegate, New Object() {})
-        Catch ex As Exception
-            System.Diagnostics.Debug.WriteLine(ex.Message)
-        End Try
-    End Sub
+    'Friend Sub LoadInstanceVariables_Safe()
+    '    Try
+    '        Dim MyDelegate As New LoadInstanceVariables_Delegate(AddressOf LoadInstanceVariables)
+    '        Me.Invoke(MyDelegate, New Object() {})
+    '    Catch ex As Exception
+    '        System.Diagnostics.Debug.WriteLine(ex.Message)
+    '    End Try
+    'End Sub
 
     Friend Delegate Sub LoadInstanceVariables_Delegate()
-    Friend Sub LoadInstanceVariables()
+    Friend Overridable Sub LoadInstanceVariables()
         If InvokeRequired Then
             Dim MyDelegate As New LoadInstanceVariables_Delegate(AddressOf LoadInstanceVariables)
             Me.Invoke(MyDelegate, New Object() {})

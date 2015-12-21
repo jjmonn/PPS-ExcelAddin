@@ -153,6 +153,8 @@
     <string name="msg_deletion_confirmation">Confirmation de la suppression d'un élément.</string>
     <string name="msg_select_axis">Un élément doit être sélectionné pour pouvoir être supprimé.</string>
     <string name="msg_filter_value_not_found">La valeur n'a pas pu être trouvée.</string>
+    <string name="msg_entity_axis_parent_selection">Une entité input doit être sélectionée pour pouvoir créer un employé.</string>
+    <string name="msg_entity_axis_parent_not_allowed">Cette entité n'est pas un éditable. Les employés peuvennt uniquement être créés sous une entité éditable.</string>
 
   </category>
 
