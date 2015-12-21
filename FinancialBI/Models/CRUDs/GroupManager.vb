@@ -46,6 +46,23 @@ Friend Class GroupManager : Inherits NamedCRUDManager(Of NamedHierarchyCRUDEntit
         Return (l_group.Rights)
     End Function
 
+    Friend Function GetInheritedRight(ByRef p_groupId As UInt32) As UInt64
+        Dim l_group As Group = GetValue(p_groupId)
+
+        If l_group Is Nothing Then Return 0
+        Return (l_group.Rights Or GetInheritedRight(l_group.ParentId))
+    End Function
+
+    Friend Function HasRight(ByRef p_groupId As UInt32, ByRef p_permission As Group.Permission) As Boolean
+
+        Dim group As Group = GlobalVariables.Groups.GetValue(p_groupId)
+
+        If group Is Nothing Then Return False
+        If (group.Rights And CType(p_permission, UInt64)) <> 0 Then Return True
+        Return HasRight(group.ParentId, p_permission)
+
+    End Function
+
 #End Region
 
 

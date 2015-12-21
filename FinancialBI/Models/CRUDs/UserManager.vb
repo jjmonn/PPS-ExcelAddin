@@ -49,15 +49,14 @@ Friend Class UserManager : Inherits NamedCRUDManager(Of NamedCRUDEntity)
         Dim l_user As User = GetCurrentUser()
         If l_user Is Nothing Then Return Group.Permission.NONE
 
-        Return GlobalVariables.Groups.GetRight(l_user.GroupId)
+        Return GlobalVariables.Groups.GetInheritedRight(l_user.GroupId)
     End Function
 
     Friend Function CurrentUserHasRight(ByRef p_right As Group.Permission) As Boolean
         Dim l_user As User = GetCurrentUser()
         If l_user Is Nothing Then Return False
 
-        Dim val As UInt64 = GlobalVariables.Groups.GetRight(l_user.GroupId) And CType(p_right, UInt64)
-        Return val <> 0
+        Return GlobalVariables.Groups.HasRight(l_user.GroupId, p_right)
     End Function
 
     Friend Function CurrentUserHasProcess(ByRef p_process As Account.AccountProcess) As Boolean
