@@ -322,7 +322,7 @@ Friend Class AxisView
 
 #Region "Columns Initialization"
 
-    Private Sub DGVColumnsInitialize()
+    Protected Sub DGVColumnsInitialize()
 
         m_axisDataGridView.ColumnsHierarchy.Clear()
         m_columnsVariableItemDictionary.Clear()
