@@ -100,7 +100,7 @@ Friend Class AxisFiltersView
     Delegate Sub UpdateFiltersValuesTV_Delegate()
     Friend Sub UpdateFiltersValuesTV()
 
-        If InvokeRequired Then
+        If m_filtersFiltersValuesTV.InvokeRequired Then
             Dim MyDelegate As New UpdateFiltersValuesTV_Delegate(AddressOf UpdateFiltersValuesTV)
             Me.Invoke(MyDelegate, New Object() {})
         Else
@@ -114,7 +114,7 @@ Friend Class AxisFiltersView
 
     Delegate Sub SetFilter_Delegate(ByRef p_ht As Filter)
     Friend Sub SetFilter(ByRef p_ht As Filter)
-        If InvokeRequired Then
+        If m_filtersFiltersValuesTV.InvokeRequired Then
             Dim MyDelegate As New SetFilter_Delegate(AddressOf SetFilter)
             Me.Invoke(MyDelegate, New Object() {p_ht})
         Else
