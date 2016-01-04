@@ -218,8 +218,12 @@ Friend Class AxisController
     Private Sub AfterAxisRead(ByRef status As ErrorMessage, ByRef ht As CRUDEntity)
 
         If (status = ErrorMessage.SUCCESS) Then
-            View.LoadInstanceVariables()
-            View.UpdateAxis(ht)
+            Dim axisElem As AxisElem = CType(ht, AxisElem)
+
+            If axisElem.Axis = m_axisType Then
+                View.LoadInstanceVariables()
+                View.UpdateAxis(ht)
+            End If
         End If
 
     End Sub

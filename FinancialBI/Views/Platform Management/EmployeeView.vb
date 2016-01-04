@@ -118,6 +118,7 @@ Friend Class EmployeeView
             End If
         End If
         LoadInstanceVariables()
+        DGVColumnsInitialize()
         DGVRowsInitialize(m_axisTreeview)
         FillDGV()
 

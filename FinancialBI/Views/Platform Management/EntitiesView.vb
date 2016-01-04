@@ -145,7 +145,7 @@ Friend Class EntitiesView
 
     Delegate Sub LoadInstanceVariables_Delegate()
     Friend Sub LoadInstanceVariables()
-        If InvokeRequired Then
+        If m_entitiesDataGridView.InvokeRequired Then
             Dim MyDelegate As New LoadInstanceVariables_Delegate(AddressOf LoadInstanceVariables)
             Me.Invoke(MyDelegate, New Object() {})
         Else
@@ -156,7 +156,7 @@ Friend Class EntitiesView
     Delegate Sub UpdateEntity_Delegate(ByRef p_entity As AxisElem)
     Friend Sub UpdateEntity(ByRef p_entity As AxisElem)
 
-        If InvokeRequired Then
+        If m_entitiesDataGridView.InvokeRequired Then
             Dim MyDelegate As New UpdateEntity_Delegate(AddressOf UpdateEntity)
             Me.Invoke(MyDelegate, New Object() {p_entity})
         Else
@@ -171,7 +171,7 @@ Friend Class EntitiesView
     Delegate Sub DeleteEntity_Delegate(ByRef p_id As Int32)
     Friend Sub DeleteEntity(ByRef p_id As Int32)
 
-        If InvokeRequired Then
+        If m_entitiesDataGridView.InvokeRequired Then
             Dim MyDelegate As New DeleteEntity_Delegate(AddressOf DeleteEntity)
             Me.Invoke(MyDelegate, New Object() {p_id})
         Else

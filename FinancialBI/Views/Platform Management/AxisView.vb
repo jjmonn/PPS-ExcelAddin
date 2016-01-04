@@ -322,7 +322,7 @@ Friend Class AxisView
 
 #Region "Columns Initialization"
 
-    Private Sub DGVColumnsInitialize()
+    Protected Sub DGVColumnsInitialize()
 
         m_axisDataGridView.ColumnsHierarchy.Clear()
         m_columnsVariableItemDictionary.Clear()
@@ -488,7 +488,7 @@ Friend Class AxisView
 
     Friend Delegate Sub LoadInstanceVariables_Delegate()
     Friend Overridable Sub LoadInstanceVariables()
-        If InvokeRequired Then
+        If m_axisDataGridView.InvokeRequired Then
             Dim MyDelegate As New LoadInstanceVariables_Delegate(AddressOf LoadInstanceVariables)
             Me.Invoke(MyDelegate, New Object() {})
         Else

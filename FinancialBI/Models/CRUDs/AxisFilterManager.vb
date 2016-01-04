@@ -184,6 +184,7 @@ Class AxisFilterManager : Inherits CRUDManager
                                ByRef axis_id As Int32)
 
         FvTv.Nodes.Clear()
+        filtersNode.Nodes.Clear()
         GlobalVariables.Filters.LoadFiltersNode(filtersNode, axis_id)
         For Each filterNode As vTreeNode In filtersNode.Nodes
             Dim NewFvTvNode As New vTreeNode

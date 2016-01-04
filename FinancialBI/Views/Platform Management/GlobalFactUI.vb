@@ -108,7 +108,7 @@ Friend Class GlobalFactUI
         Me.AddRatesVersionRCM.Text = Local.GetValue("versions.new_version")
         Me.AddFolderRCM.Text = Local.GetValue("versions.new_folder")
         Me.DeleteVersionRCM.Text = Local.GetValue("general.delete")
-        Me.RenameVersionBT.Text = Local.GetValue("general.delete")
+        Me.RenameVersionBT.Text = Local.GetValue("general.rename")
         Me.CopyFactDownToolStripMenuItem.Text = Local.GetValue("general.copy_down")
         Me.ImportFromExcelBT.Text = Local.GetValue("currencies.import")
         Me.CreateNewFact.Text = Local.GetValue("global_facts.new")
