@@ -464,6 +464,16 @@
   </category>
 
 
-
+  <category name="submissionsFollowUp">
+    <string name="submissions_tracking">Submissions Tracking</string>
+    <string name="start_date">Start date</string>
+    <string name="end_date">End date</string>
+    <string name="red_status">Not edited</string>
+    <string name="orange_status">In edition</string>
+    <string name="green_status">Committed</string>
+    <string name=""></string>
+    <string name=""></string>
+    <string name=""></string>
+  </category>
 
 </category>

@@ -35,7 +35,6 @@ Imports VIBlend.WinForms.Controls
 
 Friend Class DataGridViewsUtil
 
-
 #Region "Instance Variables"
 
     ' 
@@ -53,11 +52,6 @@ Friend Class DataGridViewsUtil
     Friend Shared DGV_HEIGHT_MARGIN As Int32 = 10
 
 #End Region
-
-
-    Friend Sub New()
-
-    End Sub
 
 
 #Region "ControllingUI2 DGVs Formatting"
@@ -826,7 +820,7 @@ Friend Class DataGridViewsUtil
 
     End Sub
 
-    Friend Shared Sub GetItemMaxLength(ByRef item As HierarchyItem, _
+    Private Shared Sub GetItemMaxLength(ByRef item As HierarchyItem, _
                                                 ByRef maxLength As Int32, _
                                                 ByRef depth As Int32)
 
@@ -840,7 +834,7 @@ Friend Class DataGridViewsUtil
 
     End Sub
 
-    Friend Shared Sub GetColumnMaxLength(ByRef item As HierarchyItem, _
+    Private Shared Sub GetColumnMaxLength(ByRef item As HierarchyItem, _
                                                 ByVal column_index As Int32, _
                                                 ByRef maxLength As Int32)
 
@@ -854,7 +848,7 @@ Friend Class DataGridViewsUtil
 
     End Sub
 
-    Friend Shared Sub SetColumnsMinWidth(ByRef DGV As vDataGridView, _
+    Private Shared Sub SetColumnsMinWidth(ByRef DGV As vDataGridView, _
                                                   ByRef min_width As Int32)
 
         For Each column As HierarchyItem In DGV.ColumnsHierarchy.Items

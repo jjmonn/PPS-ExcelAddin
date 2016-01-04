@@ -304,7 +304,7 @@ Public Class AddinModule
         GlobalVariables.AxisElems = New AxisElemManager
         GlobalVariables.AxisFilters = New AxisFilterManager
         GlobalVariables.EntityCurrencies = New EntityCurrencyManager
-        GlobalVariables.EntityDistribution = New EntityDistributionManager
+        GlobalVariables.EntitiesDistributions = New EntityDistributionManager
         GlobalVariables.AxisParents = New AxisParentManager
 
         ' Financial Bi User Defined Function
@@ -339,6 +339,7 @@ Public Class AddinModule
         Addin.financialModelingBT.Enabled = p_state
         Addin.FormatButton.Enabled = p_state
         Addin.ConfigurationRibbonBT.Enabled = p_state
+        Addin.m_submissionFolloupButton.Enabled = p_state
 
     End Sub
 
@@ -464,6 +465,17 @@ Public Class AddinModule
 #End Region
 
 #Region "Download Data"
+
+    Private Sub m_submissionFolloupButton_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) Handles m_submissionFolloupButton.OnClick
+
+        If GlobalVariables.AuthenticationFlag = False Then
+            ConnectionBT_OnClick(sender, control, pressed)
+        Else
+            Dim l_submissionsFollowUpUI As New SubmissionsFollowUpView
+            l_submissionsFollowUpUI.Show()
+        End If
+
+    End Sub
 
     Private Sub ControllingUI2BT_onclick(sender As System.Object,
                                         control As AddinExpress.MSO.IRibbonControl,
@@ -1210,5 +1222,6 @@ Public Class AddinModule
 #End Region
 
 
+   
 End Class
 

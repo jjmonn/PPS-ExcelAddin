@@ -11,10 +11,10 @@ Public Class FactLog
 
 #Region "CRUD"
 
-    Friend Shared Sub CMSG_GET_FACT_LOG(ByRef attributes As Hashtable)
+    Friend Shared Sub CMSG_GET_FACT_LOG()
         NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_GET_FACT_LOG_ANSWER, AddressOf SMSG_GET_FACT_LOG_ANSWER)
         Dim packet As New ByteBuffer(CType(ClientMessage.CMSG_GET_FACT_LOG, UShort))
-        WriteFactLogPacket(packet, attributes)
+        WriteFactLogPacket(packet)
         packet.Release()
         NetworkManager.GetInstance().Send(packet)
     End Sub
@@ -56,7 +56,7 @@ Public Class FactLog
 
     End Sub
 
-    Private Shared Sub WriteFactLogPacket(ByRef packet As ByteBuffer, ByRef attributes As Hashtable)
+    Private Shared Sub WriteFactLogPacket(ByRef packet As ByteBuffer)
 
         Dim requestId As UInt32 = packet.AssignRequestId()
 

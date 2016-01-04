@@ -162,6 +162,9 @@ Partial Public Class AddinModule
         Me.m_PDCPeriodsRangeEditButton = New AddinExpress.MSO.ADXRibbonButton(Me.components)
         Me.AdxRibbonGroup4 = New AddinExpress.MSO.ADXRibbonGroup(Me.components)
         Me.m_PDCSumbissionExitButton = New AddinExpress.MSO.ADXRibbonButton(Me.components)
+        Me.AdxRibbonSeparator7 = New AddinExpress.MSO.ADXRibbonSeparator(Me.components)
+        Me.AdxRibbonSeparator8 = New AddinExpress.MSO.ADXRibbonSeparator(Me.components)
+        Me.m_submissionFolloupButton = New AddinExpress.MSO.ADXRibbonButton(Me.components)
         CType(Me.BindingNavigator1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.BindingNavigator1.SuspendLayout()
         '
@@ -285,7 +288,6 @@ Partial Public Class AddinModule
         Me.DataUploadGroup.Caption = "Data Upload"
         Me.DataUploadGroup.Controls.Add(Me.UploadBT)
         Me.DataUploadGroup.Controls.Add(Me.EditionMainRibbonBT)
-        Me.DataUploadGroup.Controls.Add(Me.RefreshBT)
         Me.DataUploadGroup.Id = "adxRibbonGroup_6d270a7302274c0bb0cb396921e59e09"
         Me.DataUploadGroup.ImageTransparentColor = System.Drawing.Color.Transparent
         Me.DataUploadGroup.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
@@ -362,6 +364,8 @@ Partial Public Class AddinModule
         Me.Menu3.Images.SetKeyName(17, "font.ico")
         Me.Menu3.Images.SetKeyName(18, "cloud_dark.ico")
         Me.Menu3.Images.SetKeyName(19, "tablet_computer.ico")
+        Me.Menu3.Images.SetKeyName(20, "calendar_52.ico")
+        Me.Menu3.Images.SetKeyName(21, "rotate_left.ico")
         '
         'EditionMainRibbonBT
         '
@@ -379,7 +383,7 @@ Partial Public Class AddinModule
         Me.RefreshBT.Caption = "Refresh"
         Me.RefreshBT.Controls.Add(Me.RefreshMenu)
         Me.RefreshBT.Id = "adxRibbonSplitButton_8aab3e36ecdf4fdfbd62b6bc29af40ee"
-        Me.RefreshBT.Image = 11
+        Me.RefreshBT.Image = 21
         Me.RefreshBT.ImageList = Me.Menu3
         Me.RefreshBT.ImageTransparentColor = System.Drawing.Color.Transparent
         Me.RefreshBT.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
@@ -441,8 +445,12 @@ Partial Public Class AddinModule
         'ComputeGroup
         '
         Me.ComputeGroup.Caption = " "
+        Me.ComputeGroup.Controls.Add(Me.m_submissionFolloupButton)
         Me.ComputeGroup.Controls.Add(Me.ControlingUI2BT)
+        Me.ComputeGroup.Controls.Add(Me.AdxRibbonSeparator7)
         Me.ComputeGroup.Controls.Add(Me.FunctionDesigner)
+        Me.ComputeGroup.Controls.Add(Me.RefreshBT)
+        Me.ComputeGroup.Controls.Add(Me.AdxRibbonSeparator8)
         Me.ComputeGroup.Controls.Add(Me.financialModelingBT)
         Me.ComputeGroup.Id = "adxRibbonGroup_13e7ba6b0acf4975af1793d5cfec00ed"
         Me.ComputeGroup.ImageTransparentColor = System.Drawing.Color.Transparent
@@ -1373,6 +1381,26 @@ Partial Public Class AddinModule
         Me.m_PDCSumbissionExitButton.ScreenTip = "Close the current Entity Editor"
         Me.m_PDCSumbissionExitButton.Size = AddinExpress.MSO.ADXRibbonXControlSize.Large
         '
+        'AdxRibbonSeparator7
+        '
+        Me.AdxRibbonSeparator7.Id = "adxRibbonSeparator_21301453e2cb4d029c874568ac00bb62"
+        Me.AdxRibbonSeparator7.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
+        '
+        'AdxRibbonSeparator8
+        '
+        Me.AdxRibbonSeparator8.Id = "adxRibbonSeparator_71f8a6c84f7348dbbbd685db44f9f4f6"
+        Me.AdxRibbonSeparator8.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
+        '
+        'm_submissionFolloupButton
+        '
+        Me.m_submissionFolloupButton.Caption = "Submissions Tracking"
+        Me.m_submissionFolloupButton.Id = "adxRibbonButton_bcb8669fa7f64922a1ddf3025605cf61"
+        Me.m_submissionFolloupButton.Image = 20
+        Me.m_submissionFolloupButton.ImageList = Me.Menu3
+        Me.m_submissionFolloupButton.ImageTransparentColor = System.Drawing.Color.Transparent
+        Me.m_submissionFolloupButton.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
+        Me.m_submissionFolloupButton.Size = AddinExpress.MSO.ADXRibbonXControlSize.Large
+        '
         'AddinModule
         '
         Me.AddinName = "FinancialBI"
@@ -1409,6 +1437,9 @@ Partial Public Class AddinModule
     Friend WithEvents m_PDCaccountNameEditBox As AddinExpress.MSO.ADXRibbonEditBox
     Friend WithEvents m_mainTabProcessButton As AddinExpress.MSO.ADXRibbonButton
     Friend WithEvents ProcessSelectionTaskPaneItem As AddinExpress.XL.ADXExcelTaskPanesCollectionItem
+    Friend WithEvents m_submissionFolloupButton As AddinExpress.MSO.ADXRibbonButton
+    Friend WithEvents AdxRibbonSeparator7 As AddinExpress.MSO.ADXRibbonSeparator
+    Friend WithEvents AdxRibbonSeparator8 As AddinExpress.MSO.ADXRibbonSeparator
 
 End Class
 

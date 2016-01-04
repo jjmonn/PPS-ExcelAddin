@@ -88,7 +88,7 @@ Friend Class GlobalVariables
     Friend Shared AxisElems As AxisElemManager
     Friend Shared AxisFilters As AxisFilterManager
     Friend Shared EntityCurrencies As EntityCurrencyManager
-    Friend Shared EntityDistribution As EntityDistributionManager
+    Friend Shared EntitiesDistributions As EntityDistributionManager
     Friend Shared AxisParents As AxisParentManager
 
 #End Region
