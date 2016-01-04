@@ -95,7 +95,7 @@ Friend Class NewGlobalFactVersionUI
     Private Sub CreationBackgroundWorker_DoWork()
 
         m_controller.CreateVersion(m_parentId, _
-                                  Name, 0, _
+                                  NameTB.Text, 0, _
                                   StartPeriodNUD.Value, _
                                   m_nb_years.Value * 12)
 
