@@ -10,17 +10,15 @@ Friend Class EmployeeView
     Private m_entitiesTreeview As vTreeView
     Private m_axisParentId As UInt32
 
-
 #End Region
 
 #Region "Initialize"
 
     Friend Sub New(ByRef p_controller As AxisController, _
-                   ByRef p_axisTV As vTreeView, _
                    ByRef p_axisFilterValuesTV As vTreeView, _
                    ByRef p_axisFiltersTV As vTreeView)
 
-        MyBase.New(p_controller, p_axisTV, p_axisFilterValuesTV, p_axisFiltersTV)
+        MyBase.New(p_controller, p_axisFilterValuesTV, p_axisFiltersTV)
         VTreeViewUtil.InitTVFormat(m_entitiesTreeview)
         m_entitiesTreeview.ImageList = VTreeViewUtil.GetEntitiesImageList()
         GlobalVariables.AxisElems.LoadEntitiesTV(m_entitiesTreeview)
@@ -118,7 +116,7 @@ Friend Class EmployeeView
         End If
         LoadInstanceVariables()
         DGVColumnsInitialize()
-        DGVRowsInitialize(m_axisTreeview)
+        DGVRowsInitialize()
         FillDGV()
 
     End Sub

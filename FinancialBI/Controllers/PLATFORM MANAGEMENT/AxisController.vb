@@ -49,8 +49,8 @@ Friend Class AxisController
 
         m_axisType = p_axisType
         Select Case p_axisType
-            Case AxisType.Employee : m_view = New EmployeeView(Me, m_axisTV, m_axisFilterTV, m_axisFilterValuesTV)
-            Case Else : m_view = New AxisView(Me, m_axisTV, m_axisFilterTV, m_axisFilterValuesTV)
+            Case AxisType.Employee : m_view = New EmployeeView(Me, m_axisFilterTV, m_axisFilterValuesTV)
+            Case Else : m_view = New AxisView(Me, m_axisFilterTV, m_axisFilterValuesTV)
         End Select
         m_newAxisView = New NewAxisUI(Me, GlobalVariables.Currencies.GetDictionary())
 
@@ -70,11 +70,11 @@ Friend Class AxisController
 
     Public Sub LoadInstanceVariables(Optional ByRef p_axisParentId As UInt32 = 0)
 
-        'If p_axisParentId <> 0 Then
-        '    GlobalVariables.AxisElems.LoadAxisTree(m_axisType, m_axisTV, p_axisParentId)
-        'Else
-        '    GlobalVariables.AxisElems.LoadAxisTree(m_axisType, m_axisTV)
-        'End If
+        If p_axisParentId <> 0 Then
+            GlobalVariables.AxisElems.LoadAxisTree(m_axisType, m_axisTV, p_axisParentId)
+        Else
+            GlobalVariables.AxisElems.LoadAxisTree(m_axisType, m_axisTV)
+        End If
         GlobalVariables.Filters.LoadFiltersTV(m_axisFilterTV, m_axisType)
         AxisFilterManager.LoadFvTv(m_axisFilterValuesTV, CInt(m_axisType))
 

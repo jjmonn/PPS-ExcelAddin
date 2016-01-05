@@ -16,7 +16,6 @@ Friend Class AxisView
 
     ' Objects
     Protected m_controller As AxisController
-    Protected m_axisTreeview As vTreeView
     Protected m_axisFilterTreeview As vTreeView
     Protected m_axisFilterValuesTreeview As vTreeView
     Friend m_axisDataGridView As New vDataGridView
@@ -48,7 +47,6 @@ Friend Class AxisView
     End Sub
 
     Friend Sub New(ByRef p_controller As AxisController, _
-                   ByRef p_axisTV As vTreeView, _
                    ByRef p_axisFilterValuesTV As vTreeView, _
                    ByRef p_axisFiltersTV As vTreeView)
 
@@ -57,7 +55,6 @@ Friend Class AxisView
 
         ' Add any initialization after the InitializeComponent() call.
         m_controller = p_controller
-        m_axisTreeview = p_axisTV
         m_axisFilterTreeview = p_axisFiltersTV
         m_axisFilterValuesTreeview = p_axisFilterValuesTV
 
@@ -67,7 +64,7 @@ Friend Class AxisView
         If m_controller.GetAxisType() = AxisType.Entities Then InitCurrenciesComboBox()
         InitializeDGVDisplay()
         DGVColumnsInitialize()
-        DGVRowsInitialize(m_axisTreeview)
+        DGVRowsInitialize()
         FillDGV()
         m_axisDataGridView.RowsHierarchy.ExpandAllItems()
 
@@ -136,15 +133,15 @@ Friend Class AxisView
 
 #Region "Rows Initialization"
 
-    Protected Sub DGVRowsInitialize(ByRef p_axisTreeview As vTreeView)
+    Protected Sub DGVRowsInitialize()
 
         m_axisDataGridView.RowsHierarchy.Clear()
         m_rowsIdsItemDic.Clear()
-        m_isFillingDGV = True
-        For Each node In p_axisTreeview.Nodes
-            Dim row As HierarchyItem = CreateRow(node.Value, node.Text)
-        Next
-        m_isFillingDGV = False
+        'm_isFillingDGV = True
+        'For Each node In p_axisTreeview.Nodes
+        '    Dim row As HierarchyItem = CreateRow(node.Value, node.Text)
+        'Next
+        'm_isFillingDGV = False
 
     End Sub
 
