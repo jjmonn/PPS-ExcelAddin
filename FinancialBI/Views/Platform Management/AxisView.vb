@@ -137,32 +137,6 @@ Friend Class AxisView
 
         m_axisDataGridView.RowsHierarchy.Clear()
         m_rowsIdsItemDic.Clear()
-        'm_isFillingDGV = True
-        'For Each node In p_axisTreeview.Nodes
-        '    Dim row As HierarchyItem = CreateRow(node.Value, node.Text)
-        'Next
-        'm_isFillingDGV = False
-
-    End Sub
-
-    Private Function CreateRow(ByRef p_axisId As Int32, ByRef p_axisName As String) As HierarchyItem
-
-        Dim row As HierarchyItem
-        row = m_axisDataGridView.RowsHierarchy.Items.Add(p_axisName)
-        row.ItemValue = p_axisId
-        FormatRow(row, p_axisId)
-        Return row
-
-    End Function
-
-    Private Sub FormatRow(ByRef row As HierarchyItem, ByRef row_id As Int32)
-
-        If m_rowsIdsItemDic.ContainsKey(row_id) Then
-            m_rowsIdsItemDic(row_id) = row
-        Else
-            m_rowsIdsItemDic.Add(row_id, row)
-        End If
-        row.TextAlignment = ContentAlignment.MiddleLeft
 
     End Sub
 

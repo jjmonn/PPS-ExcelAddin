@@ -49,8 +49,8 @@ Friend Class AxisController
 
         m_axisType = p_axisType
         Select Case p_axisType
-            Case AxisType.Employee : m_view = New EmployeeView(Me, m_axisFilterTV, m_axisFilterValuesTV)
-            Case Else : m_view = New AxisView(Me, m_axisFilterTV, m_axisFilterValuesTV)
+            Case AxisType.Employee : m_view = New EmployeeView(Me, m_axisFilterValuesTV, m_axisFilterTV)
+            Case Else : m_view = New AxisView(Me, m_axisFilterValuesTV, m_axisFilterTV)
         End Select
         m_newAxisView = New NewAxisUI(Me, GlobalVariables.Currencies.GetDictionary())
 
