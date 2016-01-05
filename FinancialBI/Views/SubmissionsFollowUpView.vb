@@ -12,10 +12,10 @@ Imports System.Collections.Generic
 Imports VIBlend.WinForms.Controls
 Imports VIBlend.WinForms.DataGridView
 Imports VIBlend.Utilities
+Imports System.Windows.Forms
 
 
 Public Class SubmissionsFollowUpView
-
 
 #Region "Instance variables"
 
@@ -23,12 +23,9 @@ Public Class SubmissionsFollowUpView
     Private m_periods As New List(Of Int32)
     Private m_isEditingDGV As Boolean
     Private m_entitiesTreeview As New vTreeView
-
-    Private Const DGV_VI_BLEND_STYLE As VIBLEND_THEME = VIBLEND_THEME.OFFICESILVER
-
+    Private Const DGV_VI_BLEND_STYLE As VIBLEND_THEME = VIBLEND_THEME.OFFICE2010SILVER
 
 #End Region
-
 
 #Region "Initialization"
 
@@ -47,6 +44,12 @@ Public Class SubmissionsFollowUpView
         FormatsInitialize()
         FillDGV()
 
+        ' m_submissionsDGV.ContextMenuStrip = m_cellsRightClickMenu
+
+        AddHandler m_endDate.ValueChanged, AddressOf m_endDate_ValueChanged
+        AddHandler m_startDate.ValueChanged, AddressOf m_startDate_ValueChanged
+        AddHandler m_submissionsDGV.HierarchyItemMouseClick, AddressOf DataGridViewRightClick
+
     End Sub
 
     Private Sub MultilanguageSetup()
@@ -54,7 +57,6 @@ Public Class SubmissionsFollowUpView
         Me.Text = Local.GetValue("submissionsFollowUp.submissions_tracking")
         Me.m_startDateLabel.Text = Local.GetValue("submissionsFollowUp.start_date")
         Me.m_endDateLabel.Text = Local.GetValue("submissionsFollowUp.end_date")
-
 
     End Sub
 
@@ -95,12 +97,12 @@ Public Class SubmissionsFollowUpView
 
         m_submissionsDGV.VIBlendTheme = DGV_VI_BLEND_STYLE
         m_submissionsDGV.RowsHierarchy.CompactStyleRenderingEnabled = True
-        m_submissionsDGV.BackColor = Drawing.Color.White
+        m_submissionsDGV.BackColor = System.Drawing.SystemColors.Control
 
         m_startDate.FormatValue = "MM-dd-yy"
         m_endDate.FormatValue = "MM-dd-yy"
-        m_startDate.DateTimeEditor.DefaultDateTimeFormat = VIBlend.WinForms.Controls.DefaultDateTimePatterns.ShortDatePattern
-        m_endDate.DateTimeEditor.DefaultDateTimeFormat = VIBlend.WinForms.Controls.DefaultDateTimePatterns.ShortDatePattern
+        '   m_startDate.DateTimeEditor.DefaultDateTimeFormat = VIBlend.WinForms.Controls.DefaultDateTimePatterns.ShortDatePattern
+        '   m_endDate.DateTimeEditor.DefaultDateTimeFormat = VIBlend.WinForms.Controls.DefaultDateTimePatterns.ShortDatePattern
 
     End Sub
 
@@ -197,21 +199,26 @@ Public Class SubmissionsFollowUpView
 
     End Sub
 
-
 #End Region
-
 
 #Region "Events"
 
 #Region "Date time pickers events"
 
-    Private Sub m_endDate_ValueChanged(sender As Object, e As EventArgs) Handles m_endDate.ValueChanged
-
-
+    Private Sub m_endDate_ValueChanged(sender As Object, e As EventArgs)
+        UpdateFollowingPeriodChange()
     End Sub
 
-    Private Sub m_startDate_ValueChanged(sender As Object, e As EventArgs) Handles m_startDate.ValueChanged
+    Private Sub m_startDate_ValueChanged(sender As Object, e As EventArgs)
+        UpdateFollowingPeriodChange()
+    End Sub
 
+    Private Sub UpdateFollowingPeriodChange()
+
+        DefinePeriods(m_startDate.DateTimeEditor.Value, m_endDate.DateTimeEditor.Value)
+        DGVColumnsInitialize()
+        FillDGV()
+        m_submissionsDGV.Refresh()
 
     End Sub
 
@@ -290,11 +297,29 @@ Public Class SubmissionsFollowUpView
 
     End Sub
 
+    Private Sub DataGridViewRightClick(sender As Object, e As MouseEventArgs)
+
+        If (e.Button <> MouseButtons.Right) Then Exit Sub
+        m_hierarchyRightClickMenu.Visible = True
+        m_hierarchyRightClickMenu.Bounds = New Drawing.Rectangle(MousePosition, New Drawing.Size(m_hierarchyRightClickMenu.Width, m_hierarchyRightClickMenu.Height))
+
+    End Sub
 
 #End Region
 
 #End Region
 
+#Region "Call backs"
+
+    Private Sub ExpandAllToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ExpandAllToolStripMenuItem.Click
+        m_submissionsDGV.RowsHierarchy.ExpandAllItems()
+    End Sub
+
+    Private Sub CollapseAllToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles CollapseAllToolStripMenuItem.Click
+        m_submissionsDGV.RowsHierarchy.CollapseAllItems()
+    End Sub
+
+#End Region
 
 #Region "Utilities"
 
@@ -309,7 +334,6 @@ Public Class SubmissionsFollowUpView
     End Sub
 
 #End Region
-
 
 
 End Class
