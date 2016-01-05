@@ -135,8 +135,10 @@ Friend Class AxisView
 
     Protected Sub DGVRowsInitialize()
 
+        m_isFillingDGV = True
         m_axisDataGridView.RowsHierarchy.Clear()
         m_rowsIdsItemDic.Clear()
+        m_isFillingDGV = False
 
     End Sub
 
@@ -410,7 +412,6 @@ Friend Class AxisView
         Dim rowItem As HierarchyItem = DataGridViewsUtil.GetHierarchyItemFromId(m_axisDataGridView.RowsHierarchy, p_axisElemId)
         If rowItem Is Nothing Then
             Dim parentAxisElemId As Int32 = p_axisElem.ParentId
-            m_isFillingDGV = True
             If parentAxisElemId = 0 Then
                 rowItem = DataGridViewsUtil.CreateRow(m_axisDataGridView, p_axisElemId, p_axisElem.Name)
             Else
@@ -418,7 +419,6 @@ Friend Class AxisView
                 If (parentRow Is Nothing) Then Exit Sub
                 rowItem = DataGridViewsUtil.CreateRow(m_axisDataGridView, p_axisElemId, p_axisElem.Name, parentRow)
             End If
-            m_isFillingDGV = False
         End If
         rowItem.Caption = p_axisElem.Name
         Dim column As HierarchyItem = DataGridViewsUtil.GetHierarchyItemFromId(m_axisDataGridView.ColumnsHierarchy, ENTITIES_CURRENCY_VARIABLE)

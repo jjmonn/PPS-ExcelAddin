@@ -70,6 +70,8 @@ Friend Class AxisController
 
     Public Sub LoadInstanceVariables(Optional ByRef p_axisParentId As UInt32 = 0)
 
+        m_axisFilterTV.Nodes.Clear()
+        m_axisFilterValuesTV.Nodes.Clear()
         If p_axisParentId <> 0 Then
             GlobalVariables.AxisElems.LoadAxisTree(m_axisType, m_axisTV, p_axisParentId)
         Else
