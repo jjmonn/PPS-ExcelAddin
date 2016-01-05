@@ -10,7 +10,7 @@
 '       - 
 '
 ' Author: Julien Monnereau
-' Last modified: 15/10/2015
+' Last modified: 05/01/2016
 
 
 Imports System.Collections.Generic
@@ -30,6 +30,7 @@ Friend Class ReportUploadWorksheetsEventHandler
     ' Objects
     Private m_dataSet As ModelDataSet
     Private m_acquisitionModel As AcquisitionModel
+    Private m_factsStorage As New FactsStorage
     Private m_dataModificationsTracker As DataModificationsTracking
     Private m_reportUploadController As ReportUploadControler
     Private m_logController As New LogController
@@ -53,12 +54,14 @@ Friend Class ReportUploadWorksheetsEventHandler
     Friend Sub AssociateSubmissionWSController(ByRef p_generalSubmissionController As ReportUploadControler, _
                                                ByRef p_dataSet As ModelDataSet, _
                                                ByRef p_acquisitionModel As AcquisitionModel, _
+                                                ByRef p_factsStorage As FactsStorage, _
                                                ByRef p_dataModificationTracker As DataModificationsTracking, _
                                                ByRef p_excelWorksheet As Excel.Worksheet)
 
         m_reportUploadController = p_generalSubmissionController
         m_dataSet = p_dataSet
         m_acquisitionModel = p_acquisitionModel
+        m_factsStorage = p_factsStorage
         m_dataModificationsTracker = p_dataModificationTracker
         m_logView = New LogView(True)
 
@@ -74,7 +77,7 @@ Friend Class ReportUploadWorksheetsEventHandler
 
 #Region "Update Worksheet"
 
-    Friend Sub UpdateCalculatedItemsOnWS(ByRef p_entitiesName() As String)
+    Friend Sub UpdateFinancialCalculatedItemsOnWS(ByRef p_entitiesName() As String)
 
         For Each l_entityName As String In p_entitiesName
             Dim l_entity As AxisElem = GlobalVariables.AxisElems.GetValue(AxisType.Entities, l_entityName)
@@ -118,22 +121,59 @@ Friend Class ReportUploadWorksheetsEventHandler
 
     End Sub
 
-    Friend Sub UpdateInputsOnWS()
+    Friend Sub UpdateFinancialInputsOnWorsheet()
 
-        Dim value As Double
-        For Each entityName As String In m_dataSet.m_dimensionsAddressValueDict(ModelDataSet.Dimension.ENTITY).Values
+        Dim l_value As Double
+        For Each l_entityName As String In m_dataSet.m_dimensionsAddressValueDict(ModelDataSet.Dimension.ENTITY).Values
             For Each l_account As Account In m_dataSet.m_inputsAccountsList
-                For Each period As Int32 In m_acquisitionModel.m_currentPeriodList
-                    If m_acquisitionModel.m_databaseInputsDictionary(entityName)(l_account.Name).ContainsKey(m_acquisitionModel.m_periodsIdentifyer & period) = True Then
-                        value = m_acquisitionModel.m_databaseInputsDictionary(entityName)(l_account.Name)(m_acquisitionModel.m_periodsIdentifyer & period)
+                For Each l_period As Int32 In m_acquisitionModel.m_currentPeriodList
+                    If m_acquisitionModel.m_databaseInputsDictionary(l_entityName)(l_account.Name).ContainsKey(m_acquisitionModel.m_periodsIdentifyer & l_period) = True Then
+                        l_value = m_acquisitionModel.m_databaseInputsDictionary(l_entityName)(l_account.Name)(m_acquisitionModel.m_periodsIdentifyer & l_period)
                     Else
-                        value = 0
+                        l_value = 0
                     End If
-                    If Double.IsNaN(value) Then value = 0
-                    ' tuple -> entity, account, product, period
-                    Dim tuple_ As New Tuple(Of String, String, String, String)(entityName, l_account.Name, "", period)
-                    m_dataSet.m_datasetCellsDictionary(tuple_).Value2 = value
+                    If Double.IsNaN(l_value) Then l_value = 0
+                    ' tuple -> entity, account, employee, period
+                    Dim l_tuple As New Tuple(Of String, String, String, String)(l_entityName, l_account.Name, "", l_period)
+                    m_dataSet.m_datasetCellsDictionary(l_tuple).Value2 = l_value
                 Next
+            Next
+        Next
+
+    End Sub
+
+    Friend Sub UpdateRHInputsOnWorsheet()
+
+        Dim l_value As String
+        On Error Resume Next
+        Dim l_entityName As String = m_dataSet.m_dimensionsAddressValueDict(ModelDataSet.Dimension.ENTITY).Values(0)
+        Dim l_accountName As String = m_dataSet.m_dimensionsAddressValueDict(ModelDataSet.Dimension.ACCOUNT).Values(0)
+
+        Dim version As Version = GlobalVariables.Versions.GetValue(m_dataSet.m_currentVersionId)
+        If version Is Nothing Then Exit Sub
+
+        Dim l_periodIdentifier As Char
+        Select Case version.TimeConfiguration
+            Case CRUD.TimeConfig.YEARS : l_periodIdentifier = Computer.YEAR_PERIOD_IDENTIFIER
+            Case CRUD.TimeConfig.MONTHS : l_periodIdentifier = Computer.MONTH_PERIOD_IDENTIFIER
+            Case CRUD.TimeConfig.DAYS : l_periodIdentifier = Computer.DAY_PERIOD_IDENTIFIER
+        End Select
+
+        For Each l_employeeName As String In m_dataSet.m_dimensionsAddressValueDict(ModelDataSet.Dimension.EMPLOYEE).Values
+            For Each l_period As Int32 In m_dataSet.m_dimensionsValueAddressDict(ModelDataSet.Dimension.PERIOD).Keys
+
+                Dim l_fact As CRUD.Fact = m_factsStorage.GetRHFact(l_accountName, l_employeeName, l_periodIdentifier & l_period)
+                If l_fact Is Nothing Then
+                    l_value = ""
+                Else
+                    Dim l_client As AxisElem = GlobalVariables.AxisElems.GetValue(CRUD.AxisType.Client, l_fact.ClientId)
+                    If l_client Is Nothing Then Continue For
+                    l_value = l_client.Name
+                End If
+
+                ' tuple -> entity, account, employee, period
+                Dim l_tuple As New Tuple(Of String, String, String, String)(l_entityName, l_accountName, l_employeeName, l_period)
+                m_dataSet.m_datasetCellsDictionary(l_tuple).Value2 = l_value
             Next
         Next
 

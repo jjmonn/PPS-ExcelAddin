@@ -4,7 +4,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 15/12/2015
+' Last modified: 05/01/2016
 
 
 Imports Microsoft.Office.Interop
@@ -319,6 +319,7 @@ Friend Class DataModificationsTracking
                         End If
                     Case Else
                         For Each period As String In m_dataset.m_dimensionsValueAddressDict(ModelDataSet.Dimension.PERIOD).Keys
+                            ' Dimensions : (entity)(account)(employee)(period)
                             Dim tuple_ As New Tuple(Of String, String, String, String)(entity, l_account.Name, "", period)
                             If m_dataset.m_datasetCellsDictionary.ContainsKey(tuple_) = True Then
                                 Dim cell As range = m_dataset.m_datasetCellsDictionary(tuple_)
@@ -348,12 +349,13 @@ Friend Class DataModificationsTracking
         End Select
 
         On Error Resume Next
+        Dim l_entityName As String = m_dataset.m_dimensionsValueAddressDict(ModelDataSet.Dimension.ENTITY).Keys(0)
         For Each l_productName As String In m_dataset.m_dimensionsValueAddressDict(ModelDataSet.Dimension.EMPLOYEE).Keys
             For Each p_periodId As String In m_dataset.m_dimensionsValueAddressDict(ModelDataSet.Dimension.PERIOD).Keys
-                ' Dimensions : (entity)(account)(product)(period)
-                Dim tuple_ As New Tuple(Of String, String, String, String)("", p_accountName, l_productName, p_periodId)
+                ' Dimensions : (entity)(account)(employee)(period)
+                Dim tuple_ As New Tuple(Of String, String, String, String)(l_entityName, p_accountName, l_productName, p_periodId)
                 If m_dataset.m_datasetCellsDictionary.ContainsKey(tuple_) = True Then
-                    Dim cell As range = m_dataset.m_datasetCellsDictionary(tuple_)
+                    Dim cell As Range = m_dataset.m_datasetCellsDictionary(tuple_)
                     If p_factsDictionary.ContainsKey(l_productName) = False _
                     OrElse p_factsDictionary(l_productName).ContainsKey(m_periodIdentifier & p_periodId) = False Then
                         If m_dataset.m_excelWorkSheet.Range(cell.Address).Value2 <> "" Then RegisterModification(cell.Address)

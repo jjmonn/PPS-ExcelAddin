@@ -52,7 +52,7 @@ Friend Class InputReportsBuildingController
         Dim currentcell As Excel.Range = WorksheetWrittingFunctions.CreateReceptionWS(p_entityName, _
                                                                                      {Local.GetValue("general.entity"), _
                                                                                       Local.GetValue("general.currency"), _
-                                                                                      Local.GetValue("general.Version")}, _
+                                                                                      Local.GetValue("general.version")}, _
                                                                                      {p_entityName, currency.Name, GlobalVariables.VersionButton.Caption})
 
         If currentcell Is Nothing Then
@@ -96,7 +96,7 @@ Friend Class InputReportsBuildingController
         Dim currentcell As Excel.Range = WorksheetWrittingFunctions.CreateReceptionWS(p_entityName, _
                                                                                                     {Local.GetValue("general.account"), _
                                                                                                      Local.GetValue("general.entity"), _
-                                                                                                     Local.GetValue("general.Version")}, _
+                                                                                                     Local.GetValue("general.version")}, _
                                                                                                     {p_accountName, _
                                                                                                      p_entityName, _
                                                                                                      GlobalVariables.VersionButton.Caption})

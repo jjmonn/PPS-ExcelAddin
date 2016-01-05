@@ -17,13 +17,11 @@ Imports VIBlend.WinForms.Controls
 
 Public Class ReportUploadEntitySelectionPane
 
-
 #Region "Instance Variables"
 
     Private m_inputReportCreatinoController As New InputReportsBuildingController
 
 #End Region
-
 
 #Region "Initialize"
 
@@ -33,7 +31,6 @@ Public Class ReportUploadEntitySelectionPane
         InitializeComponent()
         VTreeViewUtil.InitTVFormat(m_entitiesTV)
         m_entitiesTV.ImageList = EntitiesTVImageList
-        MultilangueSetup()
 
     End Sub
 
@@ -137,6 +134,7 @@ Public Class ReportUploadEntitySelectionPane
 
         m_entitiesTV.Select()
         If m_entitiesTV.Nodes.Count > 0 Then m_entitiesTV.SelectedNode = m_entitiesTV.Nodes(0)
+        MultilangueSetup()
 
     End Sub
 
@@ -155,7 +153,6 @@ Public Class ReportUploadEntitySelectionPane
     End Function
 
 #End Region
-
 
 
 End Class

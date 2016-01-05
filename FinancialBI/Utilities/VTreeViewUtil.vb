@@ -255,8 +255,9 @@ Public Class VTreeViewUtil
         Dim l_imageList As New Windows.Forms.ImageList
         l_imageList.ColorDepth = Windows.Forms.ColorDepth.Depth32Bit
         l_imageList.ImageSize = New Size(16, 16)
-        l_imageList.Images.Add(My.Resources.element_branch25)
         l_imageList.Images.Add(My.Resources.favicon_81_)
+        l_imageList.Images.Add(My.Resources.element_branch25)
+
         Return l_imageList
 
     End Function

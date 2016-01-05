@@ -248,10 +248,12 @@
     <string name="rates">Taux</string>
     <string name="values">Valeurs</string>
     <string name="upload">Importer</string>
+    <string name="clientSelectionButtonText">PDC: Sélection client</string>
     <string name="exchange_rates_upload">Import des Taux de Change</string>
     <string name="global_facts_upload">Import des Indicateurs Macro Economiques</string>
     <string name="range_mismatch">Les sélections pour les périodes et les valeurs n'ont pas la même taille, ou la sélection n'est pas valide.</string>
- 
+    <string name="report_as_of">Rapport du </string>
+
     <string name="input_sidepane_title">Import de données depuis Excel</string>
     <string name="entity_selection">Selection de l'entité</string>
     <string name="periods_selection">Sélection des périodes</string>
@@ -401,7 +403,8 @@
     <string name="account">Compte</string>
     <string name="entity">Entity</string>
     <string name="client">Client</string>
-    <string name="product">product</string>
+    <string name="product">Product</string>
+    <string name="version">Version</string>
     <string name="adjustment">Adjustment</string>
     <string name="employees">Employé</string>
     <string name="Periods">Périodes</string>

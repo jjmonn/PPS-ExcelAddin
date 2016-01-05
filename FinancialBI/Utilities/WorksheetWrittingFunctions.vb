@@ -189,8 +189,7 @@ Friend Class WorksheetWrittingFunctions
             destination.Offset(i + 1, 1).Value = header_values_array(i)
             i = i + 1
         Next
-        destination.Offset(i + 1, 0).Value = "Date"
-        destination.Offset(i + 1, 1).Value = Today
+        destination.Offset(i + 1, 0).Value = Local.GetValue("upload.report_as_of") & CStr(Format(Today, "D"))
 
         destination = destination.Offset(i + 2, 0)
         Return destination
