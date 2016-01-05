@@ -102,7 +102,7 @@ Friend Class PlatformMGTGeneralUI
     Private Sub EntitiesBT_Click(sender As Object, e As EventArgs) Handles EntitiesBT.Click
 
         closeCurrentControl()
-        current_controller = New EntitiesController()
+        current_controller = New AxisController(AxisType.Entities)
         current_controller.addControlToPanel(Panel1, Me)
 
     End Sub
@@ -110,7 +110,7 @@ Friend Class PlatformMGTGeneralUI
     Private Sub m_employeesButton_Click(sender As Object, e As EventArgs) Handles m_employeesButton.Click
 
         closeCurrentControl()
-        current_controller = New AxisController(GlobalVariables.AxisElems, GlobalVariables.AxisFilters, AxisType.Employee)
+        current_controller = New AxisController(AxisType.Employee)
         current_controller.addControlToPanel(Panel1, Me)
 
     End Sub
@@ -128,7 +128,7 @@ Friend Class PlatformMGTGeneralUI
     Private Sub ClientsBT_Click(sender As Object, e As EventArgs) Handles ClientsBT.Click
 
         closeCurrentControl()
-        current_controller = New AxisController(GlobalVariables.AxisElems, GlobalVariables.AxisFilters, AxisType.Client)
+        current_controller = New AxisController(AxisType.Client)
         current_controller.addControlToPanel(Panel1, Me)
 
     End Sub
@@ -136,7 +136,7 @@ Friend Class PlatformMGTGeneralUI
     Private Sub ProductsBT_Click(sender As Object, e As EventArgs) Handles ProductsBT.Click
 
         closeCurrentControl()
-        current_controller = New AxisController(GlobalVariables.AxisElems, GlobalVariables.AxisFilters, AxisType.Product)
+        current_controller = New AxisController(AxisType.Product)
         current_controller.addControlToPanel(Panel1, Me)
 
     End Sub
@@ -176,7 +176,7 @@ Friend Class PlatformMGTGeneralUI
     Private Sub AdjustmentsBT_Click(sender As Object, e As EventArgs) Handles AdjustmentsBT.Click
 
         closeCurrentControl()
-        current_controller = New AxisController(GlobalVariables.AxisElems, GlobalVariables.AxisFilters, AxisType.Adjustment)
+        current_controller = New AxisController(AxisType.Adjustment)
         current_controller.addControlToPanel(Panel1, Me)
 
     End Sub

@@ -13,7 +13,7 @@ Public Class UnReferencedClientsUI
 #Region "Instance variables"
 
     Private m_reportUploadController As ReportUploadControler
-    Private m_axisController As New AxisController(GlobalVariables.AxisElems, GlobalVariables.AxisFilters, CRUD.AxisType.Client)
+    Private m_axisController As New AxisController(CRUD.AxisType.Client)
     Private m_clientsDataGrid As New vDataGridView
 
     Private m_clientsNamesList As List(Of String)
@@ -106,7 +106,7 @@ Public Class UnReferencedClientsUI
         Next
 
         For Each l_clientName As String In l_clientsToBeCreated
-            m_axisController.CreateAxis(l_clientName)
+            m_axisController.CreateAxisElem(l_clientName)
         Next
 
     End Sub

@@ -51,9 +51,7 @@ Friend Class EmployeeView
             Dim MyDelegate As New LoadInstanceVariables_Delegate(AddressOf LoadInstanceVariables)
             Me.Invoke(MyDelegate, New Object() {})
         Else
-            If m_axisParentId <> 0 Then
-                m_controller.LoadInstanceVariables(m_axisParentId)
-            End If
+            m_controller.LoadInstanceVariables(m_axisParentId)
         End If
     End Sub
 
@@ -92,7 +90,7 @@ Friend Class EmployeeView
 
                 Dim axisName As String = InputBox(Local.GetValue("axis.msg_enter_name"), Local.GetValue("axis.msg_axis_creation"))
                 If axisName <> "" Then
-                    m_controller.CreateAxis(axisName, m_axisParentId)
+                    m_controller.CreateAxisElem(axisName, m_axisParentId)
                 End If
             Else
                 MsgBox(Local.GetValue("axis.msg_entity_axis_parent_not_allowed"))
