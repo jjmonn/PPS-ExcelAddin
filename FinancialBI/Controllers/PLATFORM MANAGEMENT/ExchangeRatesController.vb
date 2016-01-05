@@ -85,6 +85,11 @@ Friend Class ExchangeRatesController
             ' m_view.closeControl()
             m_view.Dispose()
             m_view = Nothing
+            RemoveHandler m_exchangeRates.UpdateEvent, AddressOf AfterRateUpdate
+            RemoveHandler GlobalVariables.RatesVersions.Read, AddressOf AfterVersionRead
+            RemoveHandler GlobalVariables.RatesVersions.CreationEvent, AddressOf AfterVersionCreate
+            RemoveHandler GlobalVariables.RatesVersions.UpdateEvent, AddressOf AfterVersionUpdate
+            RemoveHandler GlobalVariables.RatesVersions.DeleteEvent, AddressOf AfterVersionDelete
         End If
 
     End Sub
@@ -182,19 +187,20 @@ Friend Class ExchangeRatesController
 
 #Region "Events"
 
-    Private Sub AfterVersionRead(ByRef p_status As ErrorMessage, ByRef p_ratesVersionHt As ExchangeRateVersion)
+    Private Sub AfterVersionRead(ByRef p_status As ErrorMessage, ByRef p_ratesVersionHt As CRUDEntity)
 
+        Dim rateVersionHt As ExchangeRateVersion = p_ratesVersionHt
         If m_view Is Nothing Then Exit Sub
         If p_status = ErrorMessage.SUCCESS Then
-            m_view.TVUpdate(p_ratesVersionHt.Id, _
-                            p_ratesVersionHt.ParentId, _
-                            p_ratesVersionHt.Name, _
-                            p_ratesVersionHt.IsFolder)
+            m_view.TVUpdate(rateVersionHt.Id, _
+                            rateVersionHt.ParentId, _
+                            rateVersionHt.Name, _
+                            rateVersionHt.IsFolder)
         End If
 
     End Sub
 
-    Private Sub AfterVersionCreate(ByRef p_status As ErrorMessage, ByRef id As Int32)
+    Private Sub AfterVersionCreate(ByRef p_status As ErrorMessage, ByRef id As UInt32)
 
         m_newRatesVersionUI.CreationBackgroundWorker_AfterWork()
         If p_status <> ErrorMessage.SUCCESS Then
@@ -204,13 +210,13 @@ Friend Class ExchangeRatesController
 
     End Sub
 
-    Private Sub AfterVersionUpdate(ByRef status As ErrorMessage, ByRef id As Int32)
+    Private Sub AfterVersionUpdate(ByRef status As ErrorMessage, ByRef id As UInt32)
 
         ' to be implemented -> priority normal
 
     End Sub
 
-    Private Sub AfterVersionDelete(ByRef p_status As ErrorMessage, ByRef p_id As Int32)
+    Private Sub AfterVersionDelete(ByRef p_status As ErrorMessage, ByRef p_id As UInt32)
 
         If m_view Is Nothing Then Exit Sub
         m_view.AfterDeleteBackgroundWorker()

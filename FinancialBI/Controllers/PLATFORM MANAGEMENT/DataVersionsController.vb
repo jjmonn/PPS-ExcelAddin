@@ -73,6 +73,11 @@ Friend Class DataVersionsController
         SendNewPositionsToModel()
         m_view.Dispose()
         m_newVersionUI.Dispose()
+        RemoveHandler GlobalVariables.Versions.CreationEvent, AddressOf AfterCreate
+        RemoveHandler GlobalVariables.Versions.Read, AddressOf AfterRead
+        RemoveHandler GlobalVariables.Versions.UpdateEvent, AddressOf AfterUpdate
+        RemoveHandler GlobalVariables.Versions.CopyEvent, AddressOf AfterCopy
+        RemoveHandler GlobalVariables.Versions.DeleteEvent, AddressOf AfterDelete
 
     End Sub
 
@@ -80,7 +85,7 @@ Friend Class DataVersionsController
 
 #Region "Event"
 
-    Private Sub AfterRead(ByRef status As ErrorMessage, ByRef p_version As Version)
+    Private Sub AfterRead(ByRef status As ErrorMessage, ByRef p_version As CRUDEntity)
 
         If status = ErrorMessage.SUCCESS _
         AndAlso m_isClosing = False Then
@@ -90,7 +95,7 @@ Friend Class DataVersionsController
 
     End Sub
 
-    Private Sub AfterCreate(ByRef status As ErrorMessage, ByRef id As Int32)
+    Private Sub AfterCreate(ByRef status As ErrorMessage, ByRef id As UInt32)
 
         Dim message As String = Local.GetValue("facts_versions.msg_error_create") & ": "
 
@@ -134,7 +139,7 @@ Friend Class DataVersionsController
 
     End Sub
 
-    Private Sub AfterUpdate(ByRef status As ErrorMessage, ByRef id As Int32)
+    Private Sub AfterUpdate(ByRef status As ErrorMessage, ByRef id As UInt32)
 
         Dim message As String = Local.GetValue("facts_versions.msg_error_update") & ": "
 
@@ -151,7 +156,7 @@ Friend Class DataVersionsController
 
     End Sub
 
-    Private Sub AfterCopy(ByRef status As ErrorMessage, ByRef id As Int32)
+    Private Sub AfterCopy(ByRef status As ErrorMessage, ByRef id As UInt32)
 
         Dim message As String = Local.GetValue("facts_versions.msg_error_copy") & ": "
 

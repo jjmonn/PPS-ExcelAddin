@@ -29,7 +29,7 @@ Friend Class LogController
         m_onSuccess = p_onSuccess
         m_onError = p_onError
         AddHandler FactLog.Read, AddressOf ReadEvent
-       FactLog.CMSG_GET_FACT_LOG()
+        FactLog.CMSG_GET_FACT_LOG()
 
     End Sub
 

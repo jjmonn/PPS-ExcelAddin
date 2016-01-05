@@ -68,12 +68,21 @@ Friend Class AxisFiltersController
 
     End Sub
 
-    Public Sub Close()
+    Public Sub close()
 
         m_isClosing = True
         SendNewPositionsToModel()
         m_view.Dispose()
         m_editFilterStructUI.Dispose()
+        RemoveHandler GlobalVariables.Filters.CreationEvent, AddressOf AfterFilterCreation
+        RemoveHandler GlobalVariables.Filters.Read, AddressOf AfterFilterRead
+        RemoveHandler GlobalVariables.Filters.UpdateEvent, AddressOf AfterFilterUpdate
+        RemoveHandler GlobalVariables.Filters.DeleteEvent, AddressOf AfterFilterDelete
+
+        RemoveHandler GlobalVariables.FiltersValues.CreationEvent, AddressOf AfterFilterValueCreation
+        RemoveHandler GlobalVariables.FiltersValues.Read, AddressOf AfterFilterValueRead
+        RemoveHandler GlobalVariables.FiltersValues.UpdateEvent, AddressOf AfterFilterValueUpdate
+        RemoveHandler GlobalVariables.FiltersValues.DeleteEvent, AddressOf AfterFilterValueDelete
 
     End Sub
 
@@ -176,7 +185,7 @@ Friend Class AxisFiltersController
 #Region "Events"
 
     ' Filters
-    Private Sub AfterFilterRead(ByRef status As ErrorMessage, ByRef ht As Filter)
+    Private Sub AfterFilterRead(ByRef status As ErrorMessage, ByRef ht As CRUDEntity)
 
         If status = ErrorMessage.SUCCESS Then
             m_view.UpdateFiltersValuesTV()
@@ -186,7 +195,7 @@ Friend Class AxisFiltersController
 
     End Sub
 
-    Private Sub AfterFilterDelete(ByRef status As ErrorMessage, ByRef id As Int32)
+    Private Sub AfterFilterDelete(ByRef status As ErrorMessage, ByRef id As UInt32)
 
         If status = ErrorMessage.SUCCESS Then
             m_view.UpdateFiltersValuesTV()
@@ -196,7 +205,7 @@ Friend Class AxisFiltersController
 
     End Sub
 
-    Private Sub AfterFilterCreation(ByRef status As ErrorMessage, ByRef id As Int32)
+    Private Sub AfterFilterCreation(ByRef status As ErrorMessage, ByRef id As UInt32)
 
         If status <> ErrorMessage.SUCCESS Then
             MsgBox("The Filter could not be created.")
@@ -204,7 +213,7 @@ Friend Class AxisFiltersController
 
     End Sub
 
-    Private Sub AfterFilterUpdate(ByRef status As ErrorMessage, ByRef id As Int32)
+    Private Sub AfterFilterUpdate(ByRef status As ErrorMessage, ByRef id As UInt32)
 
         If status <> ErrorMessage.SUCCESS Then
             MsgBox("The Filter could not be updated.")
@@ -213,7 +222,7 @@ Friend Class AxisFiltersController
     End Sub
 
     ' Filters values
-    Private Sub AfterFilterValueRead(ByRef status As ErrorMessage, ByRef ht As FilterValue)
+    Private Sub AfterFilterValueRead(ByRef status As ErrorMessage, ByRef ht As CRUDEntity)
 
         If status = ErrorMessage.SUCCESS _
         AndAlso m_isEditingFiltersStructure = False _
@@ -223,7 +232,7 @@ Friend Class AxisFiltersController
 
     End Sub
 
-    Private Sub AfterFilterValueDelete(ByRef status As ErrorMessage, ByRef id As Int32)
+    Private Sub AfterFilterValueDelete(ByRef status As ErrorMessage, ByRef id As UInt32)
 
         If status = ErrorMessage.SUCCESS AndAlso m_isEditingFiltersStructure = False Then
             m_view.UpdateFiltersValuesTV()
@@ -231,7 +240,7 @@ Friend Class AxisFiltersController
 
     End Sub
 
-    Private Sub AfterFilterValueCreation(ByRef status As ErrorMessage, ByRef id As Int32)
+    Private Sub AfterFilterValueCreation(ByRef status As ErrorMessage, ByRef id As UInt32)
 
         If status <> ErrorMessage.SUCCESS Then
             MsgBox("The Filter Value could not be created.")
@@ -239,7 +248,7 @@ Friend Class AxisFiltersController
 
     End Sub
 
-    Private Sub AfterFilterValueUpdate(ByRef status As ErrorMessage, ByRef id As Int32)
+    Private Sub AfterFilterValueUpdate(ByRef status As ErrorMessage, ByRef id As UInt32)
 
         If status <> ErrorMessage.SUCCESS Then
             MsgBox("The Filter Value could not be updated.")
