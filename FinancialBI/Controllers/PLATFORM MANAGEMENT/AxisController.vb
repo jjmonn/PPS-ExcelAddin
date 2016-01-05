@@ -52,7 +52,7 @@ Friend Class AxisController
             Case AxisType.Employee : m_view = New EmployeeView(Me, m_axisFilterValuesTV, m_axisFilterTV)
             Case Else : m_view = New AxisView(Me, m_axisFilterValuesTV, m_axisFilterTV)
         End Select
-        m_newAxisView = New NewAxisUI(Me, GlobalVariables.Currencies.GetDictionary())
+        m_newAxisView = New NewAxisUI(Me)
 
         ' Entities CRUD Events
         AddHandler GlobalVariables.AxisElems.CreationEvent, AddressOf AfterAxisElemCreation

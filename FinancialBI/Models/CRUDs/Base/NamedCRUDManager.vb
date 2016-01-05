@@ -3,7 +3,7 @@ Imports System.Collections.Generic
 Imports System.Linq
 Imports CRUD
 
-Public Class NamedCRUDManager(Of T As {NamedCRUDEntity}) : Inherits CRUDManager
+Class NamedCRUDManager(Of T As {NamedCRUDEntity}) : Inherits CRUDManager
 
 #Region "Instance variables"
     Protected m_CRUDDic As New MultiIndexDictionary(Of UInt32, String, T)

@@ -13,7 +13,7 @@ Imports System.Linq
 Imports System.Globalization
 
 
-Friend Class Period
+Class Period
 
 
 #Region "Instance Variables"
@@ -381,7 +381,7 @@ Friend Class Period
 
     End Function
 
-   
+
 
 #End Region
 

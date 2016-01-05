@@ -1,7 +1,7 @@
 ﻿Imports System.Collections
 Imports System.Collections.Generic
 
-Public Class FactLog
+Class FactLog
 
 #Region "Instance variables"
 

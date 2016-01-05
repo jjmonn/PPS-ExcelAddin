@@ -3,7 +3,7 @@ Imports System.Collections.Generic
 Imports System.Linq
 Imports CRUD
 
-Public Class AxedCRUDManager(Of T As {AxedCRUDEntity, NamedCRUDEntity}) : Inherits CRUDManager
+Class AxedCRUDManager(Of T As {AxedCRUDEntity, NamedCRUDEntity}) : Inherits CRUDManager
 
 #Region "Instance variables"
     Protected m_CRUDDic As New SortedDictionary(Of AxisType, MultiIndexDictionary(Of UInt32, String, T))

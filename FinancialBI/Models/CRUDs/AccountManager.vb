@@ -15,7 +15,7 @@ Imports System.Collections.Generic
 Imports System.Linq
 Imports CRUD
 
-Friend Class AccountManager : Inherits NamedCRUDManager(Of NamedHierarchyCRUDEntity)
+Class AccountManager : Inherits NamedCRUDManager(Of NamedHierarchyCRUDEntity)
 
 #Region "Init"
 

@@ -36,8 +36,7 @@ Friend Class NewAxisUI
 
 #Region "Initialize"
 
-    Friend Sub New(ByRef p_controller As AxisController, _
-                   ByRef p_currenciesHT As MultiIndexDictionary(Of UInt32, String, NamedCRUDEntity))
+    Friend Sub New(ByRef p_controller As AxisController)
 
         ' This call is required by the designer.
         InitializeComponent()

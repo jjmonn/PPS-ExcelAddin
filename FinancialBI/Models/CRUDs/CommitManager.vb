@@ -12,7 +12,7 @@ Imports System.Collections.Generic
 Imports CRUD
 
 
-Friend Class CommitManager : Inherits CRUDManager
+Class CommitManager : Inherits CRUDManager
 
 #Region "Instance variables"
 

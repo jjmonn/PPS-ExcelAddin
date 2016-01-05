@@ -6,7 +6,7 @@ Imports System.Collections
 Imports System.Collections.Generic
 Imports CRUD
 
-Friend Class EntityDistributionManager : Inherits CRUDManager
+Class EntityDistributionManager : Inherits CRUDManager
 
 #Region "Instance variables"
 

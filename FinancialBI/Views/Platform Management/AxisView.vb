@@ -404,69 +404,72 @@ Friend Class AxisView
 
 #Region "DGV Filling"
 
-    Friend Sub FillRow(ByVal p_entityId As Int32, _
-                       ByVal p_entity As AxisElem)
+    Friend Sub FillRow(ByVal p_axisElemId As Int32, _
+                       ByVal p_axisElem As AxisElem)
 
-        Dim rowItem As HierarchyItem = DataGridViewsUtil.GetHierarchyItemFromId(m_axisDataGridView.RowsHierarchy, p_entityId)
+        Dim rowItem As HierarchyItem = DataGridViewsUtil.GetHierarchyItemFromId(m_axisDataGridView.RowsHierarchy, p_axisElemId)
         If rowItem Is Nothing Then
-            Dim parentAxisElemId As Int32 = p_entity.ParentId
+            Dim parentAxisElemId As Int32 = p_axisElem.ParentId
             m_isFillingDGV = True
             If parentAxisElemId = 0 Then
-                rowItem = DataGridViewsUtil.CreateRow(m_axisDataGridView, p_entityId, p_entity.Name)
+                rowItem = DataGridViewsUtil.CreateRow(m_axisDataGridView, p_axisElemId, p_axisElem.Name)
             Else
                 Dim parentRow As HierarchyItem = DataGridViewsUtil.GetHierarchyItemFromId(m_axisDataGridView.RowsHierarchy, parentAxisElemId)
                 If (parentRow Is Nothing) Then Exit Sub
-                rowItem = DataGridViewsUtil.CreateRow(m_axisDataGridView, p_entityId, p_entity.Name, parentRow)
+                rowItem = DataGridViewsUtil.CreateRow(m_axisDataGridView, p_axisElemId, p_axisElem.Name, parentRow)
             End If
             m_isFillingDGV = False
         End If
-        rowItem.Caption = p_entity.Name
+        rowItem.Caption = p_axisElem.Name
         Dim column As HierarchyItem = DataGridViewsUtil.GetHierarchyItemFromId(m_axisDataGridView.ColumnsHierarchy, ENTITIES_CURRENCY_VARIABLE)
-        If p_entity.AllowEdition = True Then
-            If m_controller.GetAxisType() = AxisType.Entities AndAlso GlobalVariables.Users.CurrentUserHasRight(Group.Permission.EDIT_AXIS) Then
-                m_axisDataGridView.CellsArea.SetCellEditor(rowItem, column, m_currenciesComboBox)
-            End If
-            Dim entityCurrency As EntityCurrency = GlobalVariables.EntityCurrencies.GetValue(p_entityId)
-            If entityCurrency Is Nothing Then Exit Sub
-            Dim currency As Currency = GlobalVariables.Currencies.GetValue(CInt(entityCurrency.CurrencyId))
-            If currency Is Nothing Then Exit Sub
+        If p_axisElem.AllowEdition = True Then
 
-            m_axisDataGridView.CellsArea.SetCellValue(rowItem, column, currency.Name)
+            If m_controller.GetAxisType() = AxisType.Entities Then
+                If GlobalVariables.Users.CurrentUserHasRight(Group.Permission.EDIT_AXIS) Then
+                    m_axisDataGridView.CellsArea.SetCellEditor(rowItem, column, m_currenciesComboBox)
+                End If
+                Dim entityCurrency As EntityCurrency = GlobalVariables.EntityCurrencies.GetValue(p_axisElemId)
+                If entityCurrency Is Nothing Then Exit Sub
+                Dim currency As Currency = GlobalVariables.Currencies.GetValue(CInt(entityCurrency.CurrencyId))
+                If currency Is Nothing Then Exit Sub
+
+                m_axisDataGridView.CellsArea.SetCellValue(rowItem, column, currency.Name)
+            End If
 
             For Each filterNode As vTreeNode In m_axisFilterTreeview.Nodes
-                FillSubFilters(filterNode, p_entityId, rowItem)
+                FillSubFilters(filterNode, p_axisElemId, rowItem)
             Next
         End If
-        If p_entity.AllowEdition = False Then rowItem.ImageIndex = 0 Else rowItem.ImageIndex = 1
+        If p_axisElem.AllowEdition = False Then rowItem.ImageIndex = 0 Else rowItem.ImageIndex = 1
 
     End Sub
 
-    Private Sub FillSubFilters(ByRef filterNode As vTreeNode, _
-                               ByRef entity_id As Int32, _
-                               ByRef rowItem As HierarchyItem)
+    Private Sub FillSubFilters(ByRef p_filterNode As vTreeNode, _
+                               ByRef p_axisElemId As Int32, _
+                               ByRef p_rowItem As HierarchyItem)
 
         Dim combobox As New ComboBoxEditor
         combobox.DropDownList = True
-        Dim columnItem As HierarchyItem = DataGridViewsUtil.GetHierarchyItemFromId(m_axisDataGridView.ColumnsHierarchy, filterNode.Value)
-        Dim filterValueId As UInt32 = GlobalVariables.AxisFilters.GetFilterValueId(AxisType.Entities, CInt(filterNode.Value), entity_id)
+        Dim columnItem As HierarchyItem = DataGridViewsUtil.GetHierarchyItemFromId(m_axisDataGridView.ColumnsHierarchy, p_filterNode.Value)
+        Dim filterValueId As UInt32 = GlobalVariables.AxisFilters.GetFilterValueId(m_controller.GetAxisType(), CInt(p_filterNode.Value), p_axisElemId)
         Dim filter_value_name As String = ""
         If filterValueId <> 0 Then
             filter_value_name = GlobalVariables.FiltersValues.GetValueName(filterValueId)
         End If
 
-        m_axisDataGridView.CellsArea.SetCellValue(rowItem, columnItem, filter_value_name)
+        m_axisDataGridView.CellsArea.SetCellValue(p_rowItem, columnItem, filter_value_name)
 
         ' Filters Choices Setup
-        If filterNode.Parent Is Nothing Then
+        If p_filterNode.Parent Is Nothing Then
             ' Root Filter
-            If Not GlobalVariables.FiltersValues.GetDictionary(filterNode.Value) Is Nothing Then
-                For Each value As FilterValue In GlobalVariables.FiltersValues.GetDictionary(filterNode.Value).Values
+            If Not GlobalVariables.FiltersValues.GetDictionary(p_filterNode.Value) Is Nothing Then
+                For Each value As FilterValue In GlobalVariables.FiltersValues.GetDictionary(p_filterNode.Value).Values
                     combobox.Items.Add(value.Name)
                 Next
             End If
         Else
             ' Child Filter
-            Dim parentFilterFilterValueId As Int32 = GlobalVariables.AxisFilters.GetFilterValueId(AxisType.Entities, filterNode.Parent.Value, entity_id)     ' Child Filter Id
+            Dim parentFilterFilterValueId As Int32 = GlobalVariables.AxisFilters.GetFilterValueId(m_controller.GetAxisType(), p_filterNode.Parent.Value, p_axisElemId)     ' Child Filter Id
             Dim filterValuesIds = GlobalVariables.FiltersValues.GetFilterValueIdsFromParentFilterValueIds({parentFilterFilterValueId})
             For Each Id As UInt32 In filterValuesIds
                 combobox.Items.Add(GlobalVariables.FiltersValues.GetValueName(Id))
@@ -474,12 +477,12 @@ Friend Class AxisView
         End If
 
         ' Add ComboBoxEditor to Cell
-        If GlobalVariables.Users.CurrentUserHasRight(Group.Permission.EDIT_AXIS) Then m_axisDataGridView.CellsArea.SetCellEditor(rowItem, columnItem, combobox)
+        If GlobalVariables.Users.CurrentUserHasRight(Group.Permission.EDIT_AXIS) Then m_axisDataGridView.CellsArea.SetCellEditor(p_rowItem, columnItem, combobox)
 
         ' Recursive if Filters Children exist
-        If filterNode.Nodes Is Nothing Then Exit Sub
-        For Each childFilterNode As vTreeNode In filterNode.Nodes
-            FillSubFilters(childFilterNode, entity_id, rowItem)
+        If p_filterNode.Nodes Is Nothing Then Exit Sub
+        For Each childFilterNode As vTreeNode In p_filterNode.Nodes
+            FillSubFilters(childFilterNode, p_axisElemId, p_rowItem)
         Next
 
     End Sub
@@ -499,7 +502,7 @@ Friend Class AxisView
 #Region "DGV Updates"
 
     ' Update Parents and Children Filters Cells or comboboxes after a filter cell has been edited
-    Friend Sub UpdateEntitiesFiltersAfterEdition(ByRef entityId As Int32, _
+    Friend Sub UpdateEntitiesFiltersAfterEdition(ByRef axisElemId As Int32, _
                                                  ByRef filterId As Int32, _
                                                  ByRef filterValueId As Int32)
 
@@ -508,14 +511,14 @@ Friend Class AxisView
 
         If filterNode Is Nothing Then Exit Sub
         ' Update parent filters recursively
-        UpdateParentFiltersValues(DataGridViewsUtil.GetHierarchyItemFromId(m_axisDataGridView.RowsHierarchy, entityId), _
-                                 entityId, _
+        UpdateParentFiltersValues(DataGridViewsUtil.GetHierarchyItemFromId(m_axisDataGridView.RowsHierarchy, axisElemId), _
+                                 axisElemId, _
                                  filterNode, _
                                  filterValueId)
 
         ' Update children filters comboboxes recursively
         For Each childFilterNode As vTreeNode In filterNode.Nodes
-            UpdateChildrenFiltersComboBoxes(DataGridViewsUtil.GetHierarchyItemFromId(m_axisDataGridView.RowsHierarchy, entityId), _
+            UpdateChildrenFiltersComboBoxes(DataGridViewsUtil.GetHierarchyItemFromId(m_axisDataGridView.RowsHierarchy, axisElemId), _
                                             childFilterNode, _
                                             {filterValueId})
         Next

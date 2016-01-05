@@ -15,7 +15,7 @@ Imports System.Collections
 Imports System.Collections.Generic
 Imports CRUD
 
-Friend Class ExchangeRateManager : Inherits CRUDManager
+Class ExchangeRateManager : Inherits CRUDManager
 
 #Region "Instance variables"
 
