@@ -80,8 +80,16 @@ Friend Class EntitiesController
 
     Public Sub close()
 
+        RemoveHandler GlobalVariables.AxisElems.CreationEvent, AddressOf AfterEntityCreation
+        RemoveHandler GlobalVariables.AxisElems.DeleteEvent, AddressOf AfterEntityDeletion
+        RemoveHandler GlobalVariables.AxisElems.UpdateEvent, AddressOf AfterEntityUpdate
+        RemoveHandler GlobalVariables.AxisElems.Read, AddressOf AfterEntityRead
+
+        ' Entities Filters CRUD Events
         RemoveHandler GlobalVariables.AxisFilters.Read, AddressOf AfterEntityFilterRead
         RemoveHandler GlobalVariables.AxisFilters.UpdateEvent, AddressOf AfterEntityFilterUpdate
+
+        RemoveHandler GlobalVariables.EntityCurrencies.Read, AddressOf AfterEntityCurrencyRead
         SendNewPositionsToModel()
         m_view.Dispose()
 
@@ -176,7 +184,7 @@ Friend Class EntitiesController
 
 #Region "Events"
 
-    Private Sub AfterEntityCurrencyRead(ByRef status As ErrorMessage, ByRef ht As EntityCurrency)
+    Private Sub AfterEntityCurrencyRead(ByRef status As ErrorMessage, ByRef ht As CRUDEntity)
 
         If (status = ErrorMessage.SUCCESS) Then
             Dim l_entity As AxisElem = GetEntity(ht.Id)
@@ -187,27 +195,28 @@ Friend Class EntitiesController
 
     End Sub
 
-    Private Sub AfterEntityRead(ByRef status As ErrorMessage, ByRef p_axisElem As AxisElem)
+    Private Sub AfterEntityRead(ByRef status As ErrorMessage, ByRef p_axisElem As CRUDEntity)
 
+        Dim axisElem As AxisElem = p_axisElem
         If (status = ErrorMessage.SUCCESS) Then
             m_view.LoadInstanceVariables()
-            m_view.UpdateEntity(p_axisElem)
-            Dim l_node As vTreeNode = VTreeViewUtil.FindNode(m_newEntityView.m_parentEntitiesTreeviewBox.TreeView, p_axisElem.Id)
+            m_view.UpdateEntity(axisElem)
+            Dim l_node As vTreeNode = VTreeViewUtil.FindNode(m_newEntityView.m_parentEntitiesTreeviewBox.TreeView, axisElem.Id)
             If l_node Is Nothing Then
-                m_newEntityView.entityNodeAddition(p_axisElem.Id, _
-                                                   p_axisElem.ParentId, _
-                                                   p_axisElem.Name, _
-                                                   p_axisElem.Image)
+                m_newEntityView.entityNodeAddition(axisElem.Id, _
+                                                   axisElem.ParentId, _
+                                                   axisElem.Name, _
+                                                   axisElem.Image)
             Else
                 m_newEntityView.TVUpdate(l_node, _
-                                         p_axisElem.Name, _
-                                         p_axisElem.Image)
+                                         axisElem.Name, _
+                                         axisElem.Image)
             End If
         End If
 
     End Sub
 
-    Private Sub AfterEntityDeletion(ByRef status As ErrorMessage, ByRef id As Int32)
+    Private Sub AfterEntityDeletion(ByRef status As ErrorMessage, ByRef id As UInt32)
 
         If status = ErrorMessage.SUCCESS Then
             m_view.LoadInstanceVariables()
@@ -217,7 +226,7 @@ Friend Class EntitiesController
 
     End Sub
 
-    Private Sub AfterEntityUpdate(ByRef status As ErrorMessage, ByRef id As Int32)
+    Private Sub AfterEntityUpdate(ByRef status As ErrorMessage, ByRef id As UInt32)
 
         If (status <> ErrorMessage.SUCCESS) Then
             If GlobalVariables.AxisElems.GetValue(AxisType.Entities, id) Is Nothing Then Exit Sub
@@ -227,7 +236,7 @@ Friend Class EntitiesController
 
     End Sub
 
-    Private Sub AfterEntityCreation(ByRef status As ErrorMessage, ByRef id As Int32)
+    Private Sub AfterEntityCreation(ByRef status As ErrorMessage, ByRef id As UInt32)
 
         If status <> ErrorMessage.SUCCESS Then
             MsgBox("The Entity Could not be created.")

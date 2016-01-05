@@ -74,17 +74,6 @@ Friend Class AxisController
 
     End Sub
 
-    Protected Overrides Sub Finalize()
-        RemoveHandler CrudModel.CreationEvent, AddressOf AfterAxisCreation
-        RemoveHandler CrudModel.DeleteEvent, AddressOf AfterAxisDeletion
-        RemoveHandler CrudModel.UpdateEvent, AddressOf AfterAxisUpdate
-        RemoveHandler CrudModel.Read, AddressOf AfterAxisRead
-
-        ' Axis Filters CRUD Events
-        RemoveHandler CrudModelFilters.Read, AddressOf AfterAxisFilterRead
-        RemoveHandler CrudModelFilters.UpdateEvent, AddressOf AfterAxisFilterUpdate
-    End Sub
-
     Friend Sub LoadInstanceVariables(Optional ByRef p_axisParentId As UInt32 = 0)
 
         If p_axisParentId <> 0 Then
@@ -110,6 +99,14 @@ Friend Class AxisController
 
         SendNewPositionsToModel()
         View.Dispose()
+        RemoveHandler CrudModel.CreationEvent, AddressOf AfterAxisCreation
+        RemoveHandler CrudModel.DeleteEvent, AddressOf AfterAxisDeletion
+        RemoveHandler CrudModel.UpdateEvent, AddressOf AfterAxisUpdate
+        RemoveHandler CrudModel.Read, AddressOf AfterAxisRead
+
+        ' Axis Filters CRUD Events
+        RemoveHandler CrudModelFilters.Read, AddressOf AfterAxisFilterRead
+        RemoveHandler CrudModelFilters.UpdateEvent, AddressOf AfterAxisFilterUpdate
 
     End Sub
 

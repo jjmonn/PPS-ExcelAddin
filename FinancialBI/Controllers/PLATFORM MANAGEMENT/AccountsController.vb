@@ -84,6 +84,10 @@ Friend Class AccountsController
         SendNewPositionsToModel()
         m_view.Dispose()
         m_newAccountView.Dispose()
+        RemoveHandler GlobalVariables.Accounts.Read, AddressOf AccountReadFromServer
+        RemoveHandler GlobalVariables.Accounts.DeleteEvent, AddressOf AccountDeleteFromServer
+        RemoveHandler GlobalVariables.Accounts.CreationEvent, AddressOf AccountCreateConfirmation
+        RemoveHandler GlobalVariables.Accounts.UpdateEvent, AddressOf AccountUpdateConfirmation
 
     End Sub
 
@@ -390,28 +394,29 @@ Friend Class AccountsController
 
 #Region "Events"
 
-    Private Sub AccountReadFromServer(ByRef status As ErrorMessage, ByRef p_account As Account)
+    Private Sub AccountReadFromServer(ByRef status As ErrorMessage, ByRef p_account As CRUDEntity)
 
+        Dim account As Account = p_account
         Dim l_node As vTreeNode = VTreeViewUtil.FindNode(m_accountsTV, p_account.Id)
         If status = ErrorMessage.SUCCESS _
         AndAlso m_isClosing = False Then
             m_formulasTranslator = New FormulasTranslations()
             If l_node Is Nothing Then
-                m_view.AccountNodeAddition(p_account.Id, _
-                                           p_account.ParentId, _
-                                           p_account.Name, _
-                                           p_account.Image)
-                m_newAccountView.AccountNodeAddition(p_account.Id, _
-                                                     p_account.ParentId, _
-                                                     p_account.Name, _
-                                                     p_account.Image)
+                m_view.AccountNodeAddition(account.Id, _
+                                           account.ParentId, _
+                                           account.Name, _
+                                           account.Image)
+                m_newAccountView.AccountNodeAddition(account.Id, _
+                                                     account.ParentId, _
+                                                     account.Name, _
+                                                     account.Image)
             Else
                 m_view.TVUpdate(l_node, _
-                                p_account.Name, _
-                                p_account.Image)
+                                account.Name, _
+                                account.Image)
                 m_newAccountView.TVUpdate(l_node, _
-                                          p_account.Name, _
-                                          p_account.Image)
+                                          account.Name, _
+                                          account.Image)
             End If
         End If
 
@@ -428,7 +433,7 @@ Friend Class AccountsController
 
     End Sub
 
-    Private Sub AccountCreateConfirmation(ByRef status As ErrorMessage, ByRef p_accountId As Int32)
+    Private Sub AccountCreateConfirmation(ByRef status As ErrorMessage, ByRef p_accountId As UInt32)
 
         If status <> ErrorMessage.SUCCESS Then
             Dim errorMsg As String = Local.GetValue("accounts_edition.msg_error_create") & Chr(13)
@@ -448,7 +453,7 @@ Friend Class AccountsController
 
     End Sub
 
-    Private Sub AccountUpdateConfirmation(ByRef status As ErrorMessage, ByRef id As Int32)
+    Private Sub AccountUpdateConfirmation(ByRef status As ErrorMessage, ByRef id As UInt32)
 
         If status <> ErrorMessage.SUCCESS Then
             Dim errorMsg As String = Local.GetValue("accounts_edition.msg_error_update") & Chr(13)

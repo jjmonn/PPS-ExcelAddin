@@ -38,6 +38,13 @@ Public Class AllocationKeysController
 
     End Sub
 
+    Public Sub close()
+
+        RemoveHandler GlobalVariables.EntitiesDistributions.Read, AddressOf EntityDistributionRead
+        RemoveHandler GlobalVariables.EntitiesDistributions.UpdateEvent, AddressOf EntityDistributionUpdate
+
+    End Sub
+
 #End Region
 
 #Region "Interface"
@@ -79,11 +86,12 @@ Public Class AllocationKeysController
 
 #Region "Servers Events"
 
-    Private Sub EntityDistributionRead(ByRef status As ErrorMessage, ByRef p_entityDistribution As EntityDistribution)
+    Private Sub EntityDistributionRead(ByRef status As ErrorMessage, ByRef p_entityDistribution As CRUDEntity)
 
+        Dim entityDistribution As EntityDistribution = p_entityDistribution
         If status = ErrorMessage.SUCCESS Then
             Dim l_entitiesAllocationKeysDictionary As Dictionary(Of Int32, Double) = m_allocationKeysView.GetEntityAllocationKeysDictionary
-            l_entitiesAllocationKeysDictionary(p_entityDistribution.EntityId) = p_entityDistribution.Percentage
+            l_entitiesAllocationKeysDictionary(entityDistribution.EntityId) = entityDistribution.Percentage
             ComputeCalculatedAllocationKeys(l_entitiesAllocationKeysDictionary)
             m_allocationKeysView.FillAllocationKeysDataGridView_ThreadSafe(l_entitiesAllocationKeysDictionary)
         Else
