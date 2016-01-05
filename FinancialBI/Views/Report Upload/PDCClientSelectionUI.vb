@@ -4,8 +4,6 @@ Public Class PDCClientSelectionUI
 
 #Region "Instance variables"
 
-    Friend m_clientsTreeview As New vTreeView
-
 #End Region
 
     Friend Sub New()
@@ -15,26 +13,24 @@ Public Class PDCClientSelectionUI
 
         ' Add any initialization after the InitializeComponent() call.
         GlobalVariables.AxisElems.LoadAxisTree(CRUD.AxisType.Client, m_clientsTreeview)
-        Me.Controls.Add(m_clientsTreeview)
-        VTreeViewUtil.InitTVFormat(m_clientsTreeview)
-        m_clientsTreeview.Dock = Windows.Forms.DockStyle.Fill
         m_clientsTreeview.ExpandAll()
+        VTreeViewUtil.InitTVFormat(m_clientsTreeview)
 
-        AddHandler m_clientsTreeview.KeyPress, AddressOf ClientSelectionKeyPress
-        AddHandler m_clientsTreeview.MouseDoubleClick, AddressOf ClientSelectionMouseDoubleClick
+        m_validateButton.Text = Local.GetValue("general.validate")
 
     End Sub
 
-    Friend Sub ClientSelectionMouseDoubleClick(sender As Object, e As System.Windows.Forms.MouseEventArgs)
+    Friend Sub ClientSelectionMouseDoubleClick(sender As Object, e As System.Windows.Forms.MouseEventArgs) Handles m_clientsTreeview.MouseDoubleClick
 
-        If m_clientsTreeview.SelectedNode IsNot Nothing Then
-            GlobalVariables.APPS.ActiveCell.Value2 = m_clientsTreeview.SelectedNode.Text
+        Dim l_node As vTreeNode = VTreeViewUtil.GetNodeAtPosition(m_clientsTreeview, e.Location)
+        If l_node IsNot Nothing Then
+            GlobalVariables.APPS.ActiveCell.Value2 = l_node.Text
             Me.Close()
         End If
 
     End Sub
 
-    Friend Sub ClientSelectionKeyPress(sender As Object, e As System.Windows.Forms.KeyPressEventArgs)
+    Friend Sub ClientSelectionKeyPress(sender As Object, e As System.Windows.Forms.KeyPressEventArgs) Handles m_clientsTreeview.KeyPress
 
         If e.KeyChar = Chr(13) _
         AndAlso m_clientsTreeview.SelectedNode IsNot Nothing Then
@@ -50,4 +46,13 @@ Public Class PDCClientSelectionUI
         Me.Top = GlobalVariables.APPS.ActiveCell.Top
 
     End Sub
+
+    Private Sub m_validateButton_Click(sender As Object, e As EventArgs) Handles m_validateButton.Click
+        If m_clientsTreeview.SelectedNode IsNot Nothing Then
+            GlobalVariables.APPS.ActiveCell.Value2 = m_clientsTreeview.SelectedNode.Text
+            Me.Close()
+        End If
+    End Sub
+
+
 End Class

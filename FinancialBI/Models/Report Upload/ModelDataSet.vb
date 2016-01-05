@@ -10,7 +10,7 @@
 '       - Orientation: in some cases does not work (max left or right cells)
 '
 '
-' Last modified: 20/12/2015
+' Last modified: 05/01/2016
 ' Author: Julien Monnereau
 
 
@@ -434,20 +434,15 @@ Friend Class ModelDataSet
         Dim l_financialFlagsCode As String = CStr(m_periodFlag) & CStr(m_accountFlag) & CStr(m_entityFlag)
         Dim l_PDCFlagsCode As String = CStr(m_periodFlag) & CStr(m_employeeFlag)
 
-        If m_periodFlag = SnapshotResult.ZERO Then
+        If m_periodFlag = SnapshotResult.ZERO _
+        Or m_accountFlag = SnapshotResult.ZERO _
+        Or m_entityFlag = SnapshotResult.ZERO Then
             m_globalOrientationFlag = Orientations.ORIENTATION_ERROR
             Exit Sub
         End If
 
         Select Case m_processFlag
-            Case Account.AccountProcess.FINANCIAL
-                If m_entityFlag <> SnapshotResult.ZERO _
-                Or m_accountFlag = SnapshotResult.ZERO Then
-                    DefineFinancialDimensionsOrientation(l_financialFlagsCode)
-                Else
-                    m_globalOrientationFlag = Orientations.ORIENTATION_ERROR
-                    Exit Sub
-                End If
+            Case Account.AccountProcess.FINANCIAL : DefineFinancialDimensionsOrientation(l_financialFlagsCode)
 
             Case Account.AccountProcess.RH
                 If m_employeeFlag <> SnapshotResult.ZERO Then
@@ -736,8 +731,8 @@ Friend Class ModelDataSet
             Case Orientations.ENTITIES_PERIODS : RegisterDimensionsToCellDictionaryENTITIES_PERIODS()
             Case Orientations.PERIODS_ENTITIES : RegisterDimensionsToCellDictionaryPERIODS_ENTITIES()
 
-            Case Orientations.EMPLOYEES_PERIODS : RegisterDimensionsToCellDictionaryPRODUCTS_PERIODS()
-            Case Orientations.PERIODS_EMPLOYEES : RegisterDimensionsToCellDictionaryPERIODS_PRODUCTS()
+            Case Orientations.EMPLOYEES_PERIODS : RegisterDimensionsToCellDictionaryEMPLOYEES_PERIODS()
+            Case Orientations.PERIODS_EMPLOYEES : RegisterDimensionsToCellDictionaryPERIODS_EMPLOYEES()
         End Select
 
     End Sub
@@ -908,7 +903,7 @@ Friend Class ModelDataSet
 
     End Sub
 
-    Private Sub RegisterDimensionsToCellDictionaryPRODUCTS_PERIODS()
+    Private Sub RegisterDimensionsToCellDictionaryEMPLOYEES_PERIODS()
 
         Dim l_periodColumn As Int32
         Dim l_period As String
@@ -920,7 +915,7 @@ Friend Class ModelDataSet
             For Each l_productAddressValuePair In m_dimensionsAddressValueDict(Dimension.EMPLOYEE)
 
                 RegisterDatasetCell(m_excelWorkSheet.Cells(m_excelWorkSheet.Range(l_productAddressValuePair.Key).Row, l_periodColumn), _
-                                    "", _
+                                    m_dimensionsAddressValueDict(Dimension.ENTITY).ElementAt(0).Value, _
                                     m_dimensionsAddressValueDict(Dimension.ACCOUNT).ElementAt(0).Value, _
                                     l_productAddressValuePair.Value, _
                                     l_period)
@@ -930,7 +925,7 @@ Friend Class ModelDataSet
 
     End Sub
 
-    Private Sub RegisterDimensionsToCellDictionaryPERIODS_PRODUCTS()
+    Private Sub RegisterDimensionsToCellDictionaryPERIODS_EMPLOYEES()
 
         Dim l_productColumn As Int32
         Dim l_productName As String
@@ -943,7 +938,7 @@ Friend Class ModelDataSet
 
 
                 RegisterDatasetCell(m_excelWorkSheet.Cells(m_excelWorkSheet.Range(l_periodAddressValuePair.Key).Row, l_productColumn), _
-                                    "", _
+                                    m_dimensionsAddressValueDict(Dimension.ENTITY).ElementAt(0).Value, _
                                     m_dimensionsAddressValueDict(Dimension.ACCOUNT).ElementAt(0).Value, _
                                     l_productName, _
                                     l_periodAddressValuePair.Value)

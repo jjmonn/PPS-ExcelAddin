@@ -2,7 +2,7 @@
 ' 
 '
 ' Author: Julien Monnereau
-' Last modified: 20/12/2015
+' Last modified: 05/01/2016
 
 
 Imports Microsoft.Office.Interop
@@ -255,9 +255,9 @@ Friend Class ReportUploadControler
 
             ' Associate worksheet if not already associated 
             If m_reportUploadWorksheetEventHandler.m_excelWorksheet Is Nothing Then
-                m_reportUploadWorksheetEventHandler.AssociateSubmissionWSController(Me, m_dataset, m_acquisitionModel, m_dataModificationsTracker, m_associatedWorksheet)
+                m_reportUploadWorksheetEventHandler.AssociateSubmissionWSController(Me, m_dataset, m_acquisitionModel, m_factsStorage, m_dataModificationsTracker, m_associatedWorksheet)
             ElseIf Not m_reportUploadWorksheetEventHandler.m_excelWorksheet.Name Is m_associatedWorksheet Then
-                m_reportUploadWorksheetEventHandler.AssociateSubmissionWSController(Me, m_dataset, m_acquisitionModel, m_dataModificationsTracker, m_associatedWorksheet)
+                m_reportUploadWorksheetEventHandler.AssociateSubmissionWSController(Me, m_dataset, m_acquisitionModel, m_factsStorage, m_dataModificationsTracker, m_associatedWorksheet)
             End If
         Else
             SnapshotErrorGeneration(Account.AccountProcess.FINANCIAL)
@@ -270,22 +270,23 @@ Friend Class ReportUploadControler
 
     Private Function PDCProcessSnapshotRefreshment(p_updateInputsFlag) As Boolean
 
-        ' -> update fomr server !
-
         If m_dataset.m_globalOrientationFlag <> ModelDataSet.Orientations.ORIENTATION_ERROR Then
             If m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.ENTITY).Count = 0 Then
                 MsgBox(Local.GetValue("upload.msg_entity_not_found"))
             Else
                 m_addin.SetPDCSubmissionRibbonEntityAndAccountName(m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.ENTITY).ElementAt(0).Value, _
-                                                         m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.ACCOUNT).ElementAt(0).Value)
+                                                                   m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.ACCOUNT).ElementAt(0).Value)
             End If
             m_snapshotSuccessFlag = True
             HighlightItemsAndDataRegions()
+
+            m_mustUpdateExcelWorksheetFromDataBase = p_updateInputsFlag
+
             ' Associate worksheet if not already associated 
             If m_reportUploadWorksheetEventHandler.m_excelWorksheet Is Nothing Then
-                m_reportUploadWorksheetEventHandler.AssociateSubmissionWSController(Me, m_dataset, m_acquisitionModel, m_dataModificationsTracker, m_associatedWorksheet)
+                m_reportUploadWorksheetEventHandler.AssociateSubmissionWSController(Me, m_dataset, m_acquisitionModel, m_factsStorage, m_dataModificationsTracker, m_associatedWorksheet)
             ElseIf Not m_reportUploadWorksheetEventHandler.m_excelWorksheet.Name Is m_associatedWorksheet Then
-                m_reportUploadWorksheetEventHandler.AssociateSubmissionWSController(Me, m_dataset, m_acquisitionModel, m_dataModificationsTracker, m_associatedWorksheet)
+                m_reportUploadWorksheetEventHandler.AssociateSubmissionWSController(Me, m_dataset, m_acquisitionModel, m_factsStorage, m_dataModificationsTracker, m_associatedWorksheet)
             End If
 
             m_dataset.RegisterDimensionsToCellDictionary()
@@ -350,14 +351,17 @@ Friend Class ReportUploadControler
 
     End Sub
 
-    Friend Sub updateInputs()
+    Friend Sub UpdateInputsOnWorksheet()
 
         m_isUpdating = True
         GlobalVariables.APPS.ScreenUpdating = False
         GlobalVariables.APPS.Interactive = False
-        m_reportUploadWorksheetEventHandler.UpdateInputsOnWS()
+        Select Case m_dataset.m_processFlag
+            Case Account.AccountProcess.FINANCIAL : m_reportUploadWorksheetEventHandler.UpdateFinancialInputsOnWorsheet()
+            Case Account.AccountProcess.RH : m_reportUploadWorksheetEventHandler.UpdateRHInputsOnWorsheet()
+        End Select
         GlobalVariables.APPS.ScreenUpdating = True
-        GlobalVariables.APPS.ScreenUpdating = False
+        GlobalVariables.APPS.Interactive = True
         'isUpdating = False
 
     End Sub
@@ -386,7 +390,7 @@ Friend Class ReportUploadControler
         m_dataset.RegisterDimensionsToCellDictionary()
         m_dataModificationsTracker.HighlightsFPIOutputPart()
         If m_mustUpdateExcelWorksheetFromDataBase = True Then
-            updateInputs()
+            UpdateInputsOnWorksheet()
         End If
         m_dataset.RegisterDataSetCellsValues()
 
@@ -415,6 +419,10 @@ errorHandler:
     Private Sub AfterRHFactsDownload(ByRef p_status As Boolean)
 
         If p_status = True Then
+            If m_mustUpdateExcelWorksheetFromDataBase = True Then
+                UpdateInputsOnWorksheet()
+            End If
+
             ' Initial differencies identifications
             Dim l_RHaccountName As String = m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.ACCOUNT).ElementAt(0).Value
             m_dataModificationsTracker.IdentifyRHDifferencesBtwDataSetAndDB(l_RHaccountName, m_factsStorage.m_FactsDict(l_RHaccountName))
@@ -440,7 +448,7 @@ errorHandler:
             m_isUpdating = True
             GlobalVariables.APPS.Interactive = False
             GlobalVariables.APPS.ScreenUpdating = False
-            m_reportUploadWorksheetEventHandler.UpdateCalculatedItemsOnWS(p_entitiesName)
+            m_reportUploadWorksheetEventHandler.UpdateFinancialCalculatedItemsOnWS(p_entitiesName)
             GlobalVariables.APPS.ScreenUpdating = True
             GlobalVariables.APPS.Interactive = True
             m_isUpdating = False
@@ -642,7 +650,7 @@ errorHandler:
     Private Function IdentifyPDCSnapshotFlagsErrors() As String
 
         Dim tmpStr As String = ""
-        If m_dataset.m_employeeFlag = ModelDataSet.SnapshotResult.ZERO Then tmpStr = tmpStr & "  - " & Local.GetValue("general.products") & Chr(13)
+        If m_dataset.m_employeeFlag = ModelDataSet.SnapshotResult.ZERO Then tmpStr = tmpStr & "  - " & Local.GetValue("general.employee") & Chr(13)
         If m_dataset.m_entityFlag = ModelDataSet.SnapshotResult.ZERO Then tmpStr = "  - " & Local.GetValue("general.entities") & Chr(13)
         If m_dataset.m_periodFlag = ModelDataSet.SnapshotResult.ZERO Then tmpStr = tmpStr & "  - " & Local.GetValue("general.Periods") & Chr(13)
         If m_dataset.m_accountFlag = ModelDataSet.SnapshotResult.ZERO Then tmpStr = tmpStr & "  - " & Local.GetValue("general.accounts")

@@ -249,6 +249,7 @@
     <string name="rates">rates</string>
     <string name="values">Values</string>
     <string name="upload">Upload</string>
+    <string name="report_as_of">Report as of </string>
     <string name="clientSelectionButtonText">PDC: Select client</string>
     <string name="financialBILog">Financial BI: Data Log</string> 
     <string name="exchange_rates_upload">Exchange Rates Upload</string>

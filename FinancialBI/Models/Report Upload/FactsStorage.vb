@@ -16,7 +16,6 @@ Friend Class FactsStorage
 
 #End Region
 
-
 #Region "Interface"
 
     Friend Sub LoadRHFacts(ByRef p_accountsList As List(Of String), _
@@ -96,7 +95,5 @@ Friend Class FactsStorage
     End Sub
 
 #End Region
-
-
 
 End Class
