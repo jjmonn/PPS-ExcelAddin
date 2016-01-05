@@ -157,14 +157,15 @@ public class NetworkManager
       byte[] l_buffer = new byte[19];
       ByteBuffer l_byteBuffer;
       ByteBuffer.Header l_header;
-      int l_size;
+      int l_size = 0;
       int l_byteReaded = 0;
 
-      l_size = m_StreamSSL.Read(l_buffer, 0, 19);
-      if (l_size < 19)
+      while (l_size < 19)
       {
-        System.Diagnostics.Debug.WriteLine("Invalid packet received");
-        return (null);
+        int ret = m_StreamSSL.Read(l_buffer, l_size, 19 - l_size);
+        l_size += ret;
+        if (ret <= 0)
+          return (null);
       }
       l_header = FillHeader(l_buffer);
       l_buffer = new byte[l_header.payloadSize];

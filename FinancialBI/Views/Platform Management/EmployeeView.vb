@@ -46,6 +46,7 @@ Friend Class EmployeeView
 #Region "Overrides"
 
     Friend Overrides Sub LoadInstanceVariables()
+        If Not IsHandleCreated Then Exit Sub
         If InvokeRequired Then
             Dim MyDelegate As New LoadInstanceVariables_Delegate(AddressOf LoadInstanceVariables)
             Me.Invoke(MyDelegate, New Object() {})
