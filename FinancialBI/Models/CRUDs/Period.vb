@@ -337,7 +337,6 @@ Friend Class Period
     End Function
 
 
-
     Friend Shared Function GetWeekIdFromPeriodId(ByRef p_dayId As Int32) As Int32
 
         ' Uses localized settings for the first day of the week.

@@ -17,16 +17,6 @@ Friend Class LogController
 #End Region
 
 
-#Region "Initialize"
-
-    Protected Friend Sub New()
-
-
-    End Sub
-
-#End Region
-
-
 #Region "Interface"
 
     Friend Sub GetFactLog(ByRef p_accountId As Int32, _
@@ -39,13 +29,7 @@ Friend Class LogController
         m_onSuccess = p_onSuccess
         m_onError = p_onError
         AddHandler FactLog.Read, AddressOf ReadEvent
-        Dim ht As New Hashtable()
-
-        'ht.Add(ACCOUNT_ID_VARIABLE, p_accountId)
-        'ht.Add(ENTITY_ID_VARIABLE, p_entityId)
-        'ht.Add(PERIOD_VARIABLE, p_period)
-        'ht.Add(VERSION_ID_VARIABLE, p_versionId)
-        FactLog.CMSG_GET_FACT_LOG(ht)
+       FactLog.CMSG_GET_FACT_LOG()
 
     End Sub
 

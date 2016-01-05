@@ -147,7 +147,7 @@ Friend Class ConnectionsFunctions
         AddHandler GlobalVariables.Users.ObjectInitialized, AddressOf AfterUserInit
         AddHandler GlobalVariables.Groups.ObjectInitialized, AddressOf AfterGroupInit
         AddHandler GlobalVariables.UserAllowedEntities.ObjectInitialized, AddressOf AfterUserAllowedEntityInit
-        AddHandler GlobalVariables.EntityDistribution.ObjectInitialized, AddressOf AfterEntityDistributionInit
+        AddHandler GlobalVariables.EntitiesDistributions.ObjectInitialized, AddressOf AfterEntityDistributionInit
         AddHandler GlobalVariables.AxisParents.ObjectInitialized, AddressOf AfterAxisParentInit
 
         globalVariablesInitFlags.Add(GlobalEnums.GlobalModels.ACCOUNTS, False)

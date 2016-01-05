@@ -82,6 +82,7 @@
     <Compile Include="Network\CRUD\Group.cs" />
     <Compile Include="Network\CRUD\EntityDistribution.cs" />
     <Compile Include="Network\CRUD\Base\HierarchyCRUDEntity.cs" />
+    <Compile Include="Network\CRUD\Commit.cs" />
     <Compile Include="Network\CRUD\User.cs" />
     <Compile Include="Network\CRUD\UserAllowedEntity.cs" />
     <Compile Include="Network\CRUD\Version.cs" />
