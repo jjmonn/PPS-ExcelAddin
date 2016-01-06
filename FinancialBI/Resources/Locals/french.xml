@@ -146,6 +146,8 @@
   <category name="axis">
 
     <!--messages-->
+    <string name="msg_unable_create">Impossible de créer cet élément</string>
+    <string name="msg_unable_update">Impossible de modifier cet élément</string>
     <string name="msg_enter_name">Entrez le nouveau nom :</string>
     <string name="msg_axis_creation">Création</string>
     <string name="msg_axis_delete1">Attention, vous allez supprimer cet élément. </string>

@@ -241,6 +241,10 @@ Friend Class AxisView
 
     End Sub
 
+    Private Sub CreateANewAxisElemToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles CreateANewAxisElemToolStripMenuItem.Click
+        AddAxisElem_cmd_Click(sender, e)
+    End Sub
+
     Private Sub DeleteAxisElemToolStripMenuItem2_Click(sender As Object, e As EventArgs) Handles DeleteAxisElemToolStripMenuItem2.Click
 
         DeleteAxisElem_cmd_Click(sender, e)
