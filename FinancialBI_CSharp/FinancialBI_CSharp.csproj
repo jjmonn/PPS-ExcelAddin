@@ -68,10 +68,14 @@
     <Compile Include="Network\CRUD\Base\NamedHierarchyCRUDEntity.cs" />
     <Compile Include="Network\CRUD\Base\NamedCRUDEntity.cs" />
     <Compile Include="Network\CRUD\Base\CRUDEntity.cs" />
+    <Compile Include="Network\CRUD\AxisElemLog.cs" />
+    <Compile Include="Network\CRUD\CRUDAction.cs" />
     <Compile Include="Network\CRUD\Currency.cs" />
     <Compile Include="Network\CRUD\EntityCurrency.cs" />
     <Compile Include="Network\CRUD\ExchangeRate.cs" />
     <Compile Include="Network\CRUD\ExchangeRateVersion.cs" />
+    <Compile Include="Network\CRUD\CommitLog.cs" />
+    <Compile Include="Network\CRUD\FactLog.cs" />
     <Compile Include="Network\CRUD\Fact.cs" />
     <Compile Include="Network\CRUD\Filter.cs" />
     <Compile Include="Network\CRUD\FilterValue.cs" />

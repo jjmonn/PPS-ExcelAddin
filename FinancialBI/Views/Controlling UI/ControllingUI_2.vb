@@ -47,7 +47,7 @@ Friend Class ControllingUI_2
     Private m_leftPaneExpandBT As vButton
     Private m_rightPaneExpandBT As vButton
     Friend m_BackgroundWorker1 As New BackgroundWorker
-    Private m_logController As New LogController
+    Private m_logController As New FactLogController
     Private m_logView As LogView
 
 #End Region
@@ -530,7 +530,7 @@ Friend Class ControllingUI_2
             If l_account.FormulaType = Account.FormulaTypes.HARD_VALUE_INPUT _
             Or l_account.FormulaType = Account.FormulaTypes.FIRST_PERIOD_INPUT Then
 
-                Dim logsHashTable As New Action(Of List(Of Hashtable))(AddressOf DisplayLog_ThreadSafe)
+                Dim logsHashTable As New Action(Of List(Of FactLog))(AddressOf DisplayLog_ThreadSafe)
                 m_logController.GetFactLog(accountId, _
                                            entityId, _
                                            Strings.Right(periodId, Len(periodId) - 1), _
@@ -931,8 +931,8 @@ Friend Class ControllingUI_2
 
     End Sub
 
-    Delegate Sub DisplayLogAttemp_Delegate(p_logValuesHt As List(Of Hashtable))
-    Private Sub DisplayLog_ThreadSafe(p_logValuesHt As List(Of Hashtable))
+    Delegate Sub DisplayLogAttemp_Delegate(p_logValuesHt As List(Of FactLog))
+    Private Sub DisplayLog_ThreadSafe(p_logValuesHt As List(Of FactLog))
 
         If InvokeRequired Then
             Dim MyDelegate As New DisplayLogAttemp_Delegate(AddressOf DisplayLog_ThreadSafe)
