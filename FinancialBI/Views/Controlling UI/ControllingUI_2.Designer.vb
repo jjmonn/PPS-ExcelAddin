@@ -197,8 +197,8 @@ Partial Class ControllingUI_2
         '
         Me.SplitContainer1.Panel2.Controls.Add(Me.m_progressBar)
         Me.SplitContainer1.Panel2.Controls.Add(Me.DGVsControlTab)
-        Me.SplitContainer1.Size = New System.Drawing.Size(698, 369)
-        Me.SplitContainer1.SplitterDistance = 129
+        Me.SplitContainer1.Size = New System.Drawing.Size(861, 407)
+        Me.SplitContainer1.SplitterDistance = 159
         Me.SplitContainer1.TabIndex = 8
         '
         'm_progressBar
@@ -220,7 +220,7 @@ Partial Class ControllingUI_2
         Me.DGVsControlTab.Location = New System.Drawing.Point(0, 0)
         Me.DGVsControlTab.Name = "DGVsControlTab"
         Me.DGVsControlTab.Padding = New System.Windows.Forms.Padding(0, 25, 0, 0)
-        Me.DGVsControlTab.Size = New System.Drawing.Size(565, 369)
+        Me.DGVsControlTab.Size = New System.Drawing.Size(698, 407)
         Me.DGVsControlTab.TabAlignment = VIBlend.WinForms.Controls.vTabPageAlignment.Top
         Me.DGVsControlTab.TabIndex = 0
         Me.DGVsControlTab.TabsAreaBackColor = System.Drawing.Color.FromArgb(CType(CType(207, Byte), Integer), CType(CType(212, Byte), Integer), CType(CType(221, Byte), Integer))
@@ -255,8 +255,8 @@ Partial Class ControllingUI_2
         'SplitContainer2.Panel1
         '
         Me.SplitContainer2.Panel1.Controls.Add(Me.SplitContainer1)
-        Me.SplitContainer2.Size = New System.Drawing.Size(881, 375)
-        Me.SplitContainer2.SplitterDistance = 701
+        Me.SplitContainer2.Size = New System.Drawing.Size(1086, 413)
+        Me.SplitContainer2.SplitterDistance = 864
         Me.SplitContainer2.TabIndex = 8
         '
         'Panel1
@@ -272,7 +272,7 @@ Partial Class ControllingUI_2
         Me.Panel1.Dock = System.Windows.Forms.DockStyle.Top
         Me.Panel1.Location = New System.Drawing.Point(0, 0)
         Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(881, 61)
+        Me.Panel1.Size = New System.Drawing.Size(1086, 61)
         Me.Panel1.TabIndex = 9
         '
         'VersionTB
@@ -283,7 +283,7 @@ Partial Class ControllingUI_2
         Me.VersionTB.ControlBorderColor = System.Drawing.Color.FromArgb(CType(CType(39, Byte), Integer), CType(CType(39, Byte), Integer), CType(CType(39, Byte), Integer))
         Me.VersionTB.DefaultText = ""
         Me.VersionTB.Enabled = False
-        Me.VersionTB.Location = New System.Drawing.Point(724, 5)
+        Me.VersionTB.Location = New System.Drawing.Point(929, 5)
         Me.VersionTB.MaxLength = 32767
         Me.VersionTB.Name = "VersionTB"
         Me.VersionTB.PasswordChar = Global.Microsoft.VisualBasic.ChrW(0)
@@ -303,7 +303,7 @@ Partial Class ControllingUI_2
         Me.CurrencyTB.ControlBorderColor = System.Drawing.Color.FromArgb(CType(CType(39, Byte), Integer), CType(CType(39, Byte), Integer), CType(CType(39, Byte), Integer))
         Me.CurrencyTB.DefaultText = ""
         Me.CurrencyTB.Enabled = False
-        Me.CurrencyTB.Location = New System.Drawing.Point(595, 5)
+        Me.CurrencyTB.Location = New System.Drawing.Point(800, 5)
         Me.CurrencyTB.MaxLength = 32767
         Me.CurrencyTB.Name = "CurrencyTB"
         Me.CurrencyTB.PasswordChar = Global.Microsoft.VisualBasic.ChrW(0)
@@ -323,7 +323,7 @@ Partial Class ControllingUI_2
         Me.EntityTB.ControlBorderColor = System.Drawing.Color.FromArgb(CType(CType(39, Byte), Integer), CType(CType(39, Byte), Integer), CType(CType(39, Byte), Integer))
         Me.EntityTB.DefaultText = ""
         Me.EntityTB.Enabled = False
-        Me.EntityTB.Location = New System.Drawing.Point(392, 5)
+        Me.EntityTB.Location = New System.Drawing.Point(597, 5)
         Me.EntityTB.MaxLength = 32767
         Me.EntityTB.Name = "EntityTB"
         Me.EntityTB.PasswordChar = Global.Microsoft.VisualBasic.ChrW(0)
@@ -339,7 +339,7 @@ Partial Class ControllingUI_2
         '
         Me.m_currencyLabel.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.m_currencyLabel.AutoSize = True
-        Me.m_currencyLabel.Location = New System.Drawing.Point(534, 9)
+        Me.m_currencyLabel.Location = New System.Drawing.Point(739, 9)
         Me.m_currencyLabel.Name = "m_currencyLabel"
         Me.m_currencyLabel.Size = New System.Drawing.Size(82, 15)
         Me.m_currencyLabel.TabIndex = 3
@@ -349,7 +349,7 @@ Partial Class ControllingUI_2
         '
         Me.m_versionLabel.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.m_versionLabel.AutoSize = True
-        Me.m_versionLabel.Location = New System.Drawing.Point(670, 9)
+        Me.m_versionLabel.Location = New System.Drawing.Point(875, 9)
         Me.m_versionLabel.Name = "m_versionLabel"
         Me.m_versionLabel.Size = New System.Drawing.Size(75, 15)
         Me.m_versionLabel.TabIndex = 2
@@ -359,7 +359,7 @@ Partial Class ControllingUI_2
         '
         Me.m_entityLabel.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.m_entityLabel.AutoSize = True
-        Me.m_entityLabel.Location = New System.Drawing.Point(350, 9)
+        Me.m_entityLabel.Location = New System.Drawing.Point(555, 9)
         Me.m_entityLabel.Name = "m_entityLabel"
         Me.m_entityLabel.Size = New System.Drawing.Size(64, 15)
         Me.m_entityLabel.TabIndex = 1
@@ -441,7 +441,7 @@ Partial Class ControllingUI_2
         '
         'ChartBT
         '
-        Me.ChartBT.Image = Global.FinancialBI.My.resources.chart_pie
+        Me.ChartBT.Image = Global.FinancialBI.My.Resources.Resources.chart_pie
         Me.ChartBT.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
         Me.ChartBT.Name = "ChartBT"
         Me.ChartBT.Size = New System.Drawing.Size(92, 55)
@@ -461,7 +461,7 @@ Partial Class ControllingUI_2
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.Color.FromArgb(CType(CType(207, Byte), Integer), CType(CType(212, Byte), Integer), CType(CType(221, Byte), Integer))
         Me.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
-        Me.ClientSize = New System.Drawing.Size(881, 437)
+        Me.ClientSize = New System.Drawing.Size(1086, 475)
         Me.Controls.Add(Me.Panel1)
         Me.Controls.Add(Me.SplitContainer2)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)

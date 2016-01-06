@@ -408,8 +408,8 @@
     <string name="version">Version</string>
     <string name="adjustment">Adjustment</string>
     <string name="employee">Employé</string>
-    <string name="Periods">Périodes</string>
-    <string name="Accounts">Comptes</string>
+    <string name="periods">Périodes</string>
+    <string name="accounts">Comptes</string>
     <string name="Entities">Entités</string>
 
     <string name="couleur">Couleur</string>
@@ -436,6 +436,18 @@
     <string name="adjustments">Ajustements</string>
     <string name="versions">Versions</string>
     <string name="currencies">Devises</string>
+    <string name="employees">Employés</string>
+    <string name="days">Jours</string>
+    <string name="weeks">Semaines</string>
+    <string name="years">Années</string>
+    <string name="months">Mois</string>
+
+    <string name="entities_filters">Filtres entités légales</string>
+    <string name="clients_filters">Filtres clients</string>
+    <string name="products_filters">Filtres produits</string>
+    <string name="adjustments_filters">Filtres ajustements</string>
+    <string name="employees_filters">Filtres employés</string>
+    
     <string name="economic_indicators">Indicateurs Macro Economiques</string>
     <string name="msg_name_exceed1">Le nom ne peut pas excéder </string>
     <string name="msg_name_exceed2"> charactères</string>

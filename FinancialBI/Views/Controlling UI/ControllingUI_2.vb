@@ -64,6 +64,7 @@ Friend Class ControllingUI_2
     Private m_SplitContainer2Distance As Single = 900
     Friend m_process As Account.AccountProcess
     Private m_currentEntityNode As vTreeNode
+    Private m_periodsList As List(Of Int32)
 
 #End Region
 
@@ -107,16 +108,17 @@ Friend Class ControllingUI_2
     Friend Const BOTTOM_LEFT_CHART_POSITION As String = "bl"
     Friend Const BOTTOM_RIGHT_CHART_POSITION As String = "br"
 
-    Friend Const ACCOUNTS_CODE As String = "Accounts"
-    Friend Const YEARS_CODE As String = "Years"
-    Friend Const MONTHS_CODE As String = "Months"
-    Friend Const WEEKS_CODE As String = "Weeks"
-    Friend Const DAYS_CODE As String = "Days"
-    Friend Const VERSIONS_CODE As String = "Versions"
-    Friend Const ENTITIES_CODE As String = "Entities"
-    Friend Const CLIENTS_CODE As String = "Clients"
-    Friend Const PRODUCTS_CODE As String = "Products"
-    Friend Const ADJUSTMENT_CODE As String = "Adjustments"
+    Friend Shared ACCOUNTS_CODE As String = Local.GetValue("general.accounts")
+    Friend Shared YEARS_CODE As String = Local.GetValue("general.years")
+    Friend Shared MONTHS_CODE As String = Local.GetValue("general.months")
+    Friend Shared WEEKS_CODE As String = Local.GetValue("general.weeks")
+    Friend Shared DAYS_CODE As String = Local.GetValue("general.days")
+    Friend Shared VERSIONS_CODE As String = Local.GetValue("general.versions")
+    Friend Shared ENTITIES_CODE As String = Local.GetValue("general.entities")
+    Friend Shared CLIENTS_CODE As String = Local.GetValue("general.clients")
+    Friend Shared PRODUCTS_CODE As String = Local.GetValue("general.products")
+    Friend Shared ADJUSTMENT_CODE As String = Local.GetValue("general.adjustments")
+    Friend Shared EMPLOYEE_CODE As String = Local.GetValue("general.employees")
 
 
 #End Region
@@ -184,7 +186,7 @@ Friend Class ControllingUI_2
 
     Private Sub LeftPaneSetup()
 
-        m_leftPaneControl = New CUI2LeftPane
+        m_leftPaneControl = New CUI2LeftPane(m_process)
         Me.SplitContainer1.Panel1.Controls.Add(m_leftPaneControl)
         m_leftPaneControl.Dock = DockStyle.Fill
 
@@ -223,21 +225,24 @@ Friend Class ControllingUI_2
 
     Private Sub RightPaneSetup()
 
-        Dim entitiesFiltersNode As New TreeNode
-        Dim clientsFiltersNode As New TreeNode
-        Dim productsFiltersNode As New TreeNode
-        Dim adjustmentsFiltersNode As New TreeNode
+        Dim l_entitiesFiltersNode As New TreeNode
+        Dim l_clientsFiltersNode As New TreeNode
+        Dim l_productsFiltersNode As New TreeNode
+        Dim l_adjustmentsFiltersNode As New TreeNode
+        Dim l_employeesFiltersNode As New TreeNode
 
-        GlobalVariables.Filters.LoadFiltersNode(entitiesFiltersNode, GlobalEnums.AnalysisAxis.ENTITIES)
-        GlobalVariables.Filters.LoadFiltersNode(clientsFiltersNode, GlobalEnums.AnalysisAxis.CLIENTS)
-        GlobalVariables.Filters.LoadFiltersNode(productsFiltersNode, GlobalEnums.AnalysisAxis.PRODUCTS)
-        GlobalVariables.Filters.LoadFiltersNode(adjustmentsFiltersNode, GlobalEnums.AnalysisAxis.ADJUSTMENTS)
+        GlobalVariables.Filters.LoadFiltersNode(l_entitiesFiltersNode, GlobalEnums.AnalysisAxis.ENTITIES)
+        GlobalVariables.Filters.LoadFiltersNode(l_clientsFiltersNode, GlobalEnums.AnalysisAxis.CLIENTS)
+        GlobalVariables.Filters.LoadFiltersNode(l_productsFiltersNode, GlobalEnums.AnalysisAxis.PRODUCTS)
+        GlobalVariables.Filters.LoadFiltersNode(l_adjustmentsFiltersNode, GlobalEnums.AnalysisAxis.ADJUSTMENTS)
+        GlobalVariables.Filters.LoadFiltersNode(l_employeesFiltersNode, GlobalEnums.AnalysisAxis.EMPLOYEES)
 
         m_rightPaneControl = New CUI2RightPane(m_process, _
-                                              entitiesFiltersNode, _
-                                              clientsFiltersNode, _
-                                              productsFiltersNode, _
-                                              adjustmentsFiltersNode)
+                                              l_entitiesFiltersNode, _
+                                              l_clientsFiltersNode, _
+                                              l_productsFiltersNode, _
+                                              l_adjustmentsFiltersNode, _
+                                              l_employeesFiltersNode)
 
         SplitContainer2.Panel2.Controls.Add(m_rightPaneControl)
         m_rightPaneControl.Dock = DockStyle.Fill
@@ -337,6 +342,13 @@ Friend Class ControllingUI_2
         If m_controller.m_isComputingFlag = True Then
             Exit Sub
         End If
+
+        If m_process = Account.AccountProcess.RH Then
+            m_periodsList = m_leftPaneControl.GetRHPeriodSelection
+        Else
+            m_periodsList = Nothing
+        End If
+
         '   m_progressBar.Left = (SplitContainer1.Panel2.Width - m_progressBar.Width) / 2
         '   m_progressBar.Top = (SplitContainer1.Panel2.Height - m_progressBar.Height) / 2
         DGVsControlTab.Visible = False
@@ -419,6 +431,14 @@ Friend Class ControllingUI_2
         End If
 
     End Sub
+
+    Friend Function GetPeriodsList() As Int32()
+        If m_periodsList Is Nothing Then
+            Return Nothing
+        Else
+            Return m_periodsList.ToArray
+        End If
+    End Function
 
 #End Region
 
@@ -996,5 +1016,24 @@ Friend Class ControllingUI_2
 #End Region
 
 
-  
+#Region "Utilities"
+
+    Friend Function FilterPeriodList(ByRef p_periods As Int32()) As List(Of Int32)
+
+        Dim l_periods As New List(Of Int32)
+        For Each l_periodId In p_periods
+            If l_periodId >= m_periodsList(0) Then
+                If l_periodId <= m_periodsList(m_periodsList.Count - 1) Then
+                    l_periods.Add(l_periodId)
+                Else
+                    Return l_periods
+                End If
+            End If
+        Next
+        Return l_periods
+
+    End Function
+
+#End Region
+
 End Class

@@ -26,7 +26,7 @@ Partial Class CUI2LeftPane
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(CUI2LeftPane))
         Me.MainTableLayout = New System.Windows.Forms.TableLayoutPanel()
         Me.SplitContainer = New System.Windows.Forms.SplitContainer()
-        Me.SelectionTVTableLayout = New System.Windows.Forms.TableLayoutPanel()
+        Me.m_selectionTableLayout = New System.Windows.Forms.TableLayoutPanel()
         Me.TableLayoutPanel2 = New System.Windows.Forms.TableLayoutPanel()
         Me.SelectionCB = New VIBlend.WinForms.Controls.vComboBox()
         Me.CollapseSelectionBT = New VIBlend.WinForms.Controls.vButton()
@@ -44,7 +44,7 @@ Partial Class CUI2LeftPane
         CType(Me.SplitContainer, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SplitContainer.Panel2.SuspendLayout()
         Me.SplitContainer.SuspendLayout()
-        Me.SelectionTVTableLayout.SuspendLayout()
+        Me.m_selectionTableLayout.SuspendLayout()
         Me.TableLayoutPanel2.SuspendLayout()
         Me.Panel1.SuspendLayout()
         Me.m_rightClickMenu.SuspendLayout()
@@ -74,24 +74,24 @@ Partial Class CUI2LeftPane
         '
         'SplitContainer.Panel2
         '
-        Me.SplitContainer.Panel2.Controls.Add(Me.SelectionTVTableLayout)
+        Me.SplitContainer.Panel2.Controls.Add(Me.m_selectionTableLayout)
         Me.SplitContainer.Size = New System.Drawing.Size(264, 640)
         Me.SplitContainer.SplitterDistance = 297
         Me.SplitContainer.TabIndex = 1
         '
-        'SelectionTVTableLayout
+        'm_selectionTableLayout
         '
-        Me.SelectionTVTableLayout.ColumnCount = 1
-        Me.SelectionTVTableLayout.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.SelectionTVTableLayout.Controls.Add(Me.TableLayoutPanel2, 0, 0)
-        Me.SelectionTVTableLayout.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.SelectionTVTableLayout.Location = New System.Drawing.Point(0, 0)
-        Me.SelectionTVTableLayout.Name = "SelectionTVTableLayout"
-        Me.SelectionTVTableLayout.RowCount = 2
-        Me.SelectionTVTableLayout.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25.0!))
-        Me.SelectionTVTableLayout.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.SelectionTVTableLayout.Size = New System.Drawing.Size(264, 339)
-        Me.SelectionTVTableLayout.TabIndex = 0
+        Me.m_selectionTableLayout.ColumnCount = 1
+        Me.m_selectionTableLayout.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
+        Me.m_selectionTableLayout.Controls.Add(Me.TableLayoutPanel2, 0, 0)
+        Me.m_selectionTableLayout.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.m_selectionTableLayout.Location = New System.Drawing.Point(0, 0)
+        Me.m_selectionTableLayout.Name = "m_selectionTableLayout"
+        Me.m_selectionTableLayout.RowCount = 2
+        Me.m_selectionTableLayout.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25.0!))
+        Me.m_selectionTableLayout.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
+        Me.m_selectionTableLayout.Size = New System.Drawing.Size(264, 339)
+        Me.m_selectionTableLayout.TabIndex = 0
         '
         'TableLayoutPanel2
         '
@@ -189,7 +189,7 @@ Partial Class CUI2LeftPane
         Me.m_entitySelectionLabel.AutoSize = True
         Me.m_entitySelectionLabel.Location = New System.Drawing.Point(3, 5)
         Me.m_entitySelectionLabel.Name = "m_entitySelectionLabel"
-        Me.m_entitySelectionLabel.Size = New System.Drawing.Size(115, 13)
+        Me.m_entitySelectionLabel.Size = New System.Drawing.Size(131, 15)
         Me.m_entitySelectionLabel.TabIndex = 0
         Me.m_entitySelectionLabel.Text = "[CUI.entities_selection]"
         Me.m_entitySelectionLabel.TextAlign = System.Drawing.ContentAlignment.BottomLeft
@@ -219,18 +219,18 @@ Partial Class CUI2LeftPane
         '
         Me.m_rightClickMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.SelectAllToolStripMenuItem, Me.UnselectAllToolStripMenuItem})
         Me.m_rightClickMenu.Name = "periodsRightClickMenu"
-        Me.m_rightClickMenu.Size = New System.Drawing.Size(166, 70)
+        Me.m_rightClickMenu.Size = New System.Drawing.Size(182, 52)
         '
         'SelectAllToolStripMenuItem
         '
         Me.SelectAllToolStripMenuItem.Name = "SelectAllToolStripMenuItem"
-        Me.SelectAllToolStripMenuItem.Size = New System.Drawing.Size(165, 22)
+        Me.SelectAllToolStripMenuItem.Size = New System.Drawing.Size(181, 24)
         Me.SelectAllToolStripMenuItem.Text = "[CUI.select_all]"
         '
         'UnselectAllToolStripMenuItem
         '
         Me.UnselectAllToolStripMenuItem.Name = "UnselectAllToolStripMenuItem"
-        Me.UnselectAllToolStripMenuItem.Size = New System.Drawing.Size(165, 22)
+        Me.UnselectAllToolStripMenuItem.Size = New System.Drawing.Size(181, 24)
         Me.UnselectAllToolStripMenuItem.Text = "[CUI.unselect_all]"
         '
         'CUI2LeftPane
@@ -245,7 +245,7 @@ Partial Class CUI2LeftPane
         Me.SplitContainer.Panel2.ResumeLayout(False)
         CType(Me.SplitContainer, System.ComponentModel.ISupportInitialize).EndInit()
         Me.SplitContainer.ResumeLayout(False)
-        Me.SelectionTVTableLayout.ResumeLayout(False)
+        Me.m_selectionTableLayout.ResumeLayout(False)
         Me.TableLayoutPanel2.ResumeLayout(False)
         Me.Panel1.ResumeLayout(False)
         Me.Panel1.PerformLayout()
@@ -256,7 +256,7 @@ Partial Class CUI2LeftPane
     Friend WithEvents MainTableLayout As System.Windows.Forms.TableLayoutPanel
     Friend WithEvents m_entitySelectionLabel As System.Windows.Forms.Label
     Friend WithEvents SplitContainer As System.Windows.Forms.SplitContainer
-    Friend WithEvents SelectionTVTableLayout As System.Windows.Forms.TableLayoutPanel
+    Friend WithEvents m_selectionTableLayout As System.Windows.Forms.TableLayoutPanel
     Friend WithEvents SelectionCB As VIBlend.WinForms.Controls.vComboBox
     Friend WithEvents TableLayoutPanel2 As System.Windows.Forms.TableLayoutPanel
     Friend WithEvents CollapseSelectionBT As VIBlend.WinForms.Controls.vButton

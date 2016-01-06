@@ -22,6 +22,7 @@
         CLIENTS
         PRODUCTS
         ADJUSTMENTS
+        EMPLOYEES
         ACCOUNTS
         VERSIONS
         YEARS

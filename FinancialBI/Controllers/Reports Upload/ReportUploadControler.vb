@@ -639,7 +639,7 @@ errorHandler:
 
         Dim tmpStr As String = ""
         If m_dataset.m_entityFlag = ModelDataSet.SnapshotResult.ZERO Then tmpStr = "  - " & Local.GetValue("general.entities") & Chr(13)
-        If m_dataset.m_periodFlag = ModelDataSet.SnapshotResult.ZERO Then tmpStr = tmpStr & "  - " & Local.GetValue("general.Periods") & Chr(13)
+        If m_dataset.m_periodFlag = ModelDataSet.SnapshotResult.ZERO Then tmpStr = tmpStr & "  - " & Local.GetValue("general.periods") & Chr(13)
         If m_dataset.m_accountFlag = ModelDataSet.SnapshotResult.ZERO Then tmpStr = tmpStr & "  - " & Local.GetValue("general.accounts")
         If m_dataset.m_entitiesOrientationFlag = ModelDataSet.Alignment.UNCLEAR Then tmpStr = "  - " & Local.GetValue("upload.msg_entities_orientation_unclear") & Chr(13)
         If m_dataset.m_periodsOrientationFlag = ModelDataSet.Alignment.UNCLEAR Then tmpStr = tmpStr & "  - " & Local.GetValue("upload.msg_periods_orientation_unclear") & Chr(13)
@@ -653,7 +653,7 @@ errorHandler:
         Dim tmpStr As String = ""
         If m_dataset.m_employeeFlag = ModelDataSet.SnapshotResult.ZERO Then tmpStr = tmpStr & "  - " & Local.GetValue("general.employee") & Chr(13)
         If m_dataset.m_entityFlag = ModelDataSet.SnapshotResult.ZERO Then tmpStr = "  - " & Local.GetValue("general.entities") & Chr(13)
-        If m_dataset.m_periodFlag = ModelDataSet.SnapshotResult.ZERO Then tmpStr = tmpStr & "  - " & Local.GetValue("general.Periods") & Chr(13)
+        If m_dataset.m_periodFlag = ModelDataSet.SnapshotResult.ZERO Then tmpStr = tmpStr & "  - " & Local.GetValue("general.periods") & Chr(13)
         If m_dataset.m_accountFlag = ModelDataSet.SnapshotResult.ZERO Then tmpStr = tmpStr & "  - " & Local.GetValue("general.accounts")
         If m_dataset.m_periodsOrientationFlag = ModelDataSet.Alignment.UNCLEAR Then tmpStr = tmpStr & "  - " & Local.GetValue("upload.msg_periods_orientation_unclear") & Chr(13)
         If m_dataset.m_employeeOrientationFlag = ModelDataSet.Alignment.UNCLEAR Then tmpStr = tmpStr & "  - " & Local.GetValue("upload.msg_products_orientation_unclear") & Chr(13)
