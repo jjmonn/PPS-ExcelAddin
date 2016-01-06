@@ -46,7 +46,7 @@ Public Class UnReferencedClientsUI
         InitializeDGVFormat()
 
         AddHandler m_axisController.AxisCreated, AddressOf AfterClientCreation
-     
+
     End Sub
 
     Private Sub MultilanguageSetup()

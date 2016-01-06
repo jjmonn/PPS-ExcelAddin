@@ -410,7 +410,7 @@ Public Class AddinModule
 
 #Region "Financial BI Data Acquisition"
 
-    Private Sub snapshotBT_onclick(sender As System.Object,
+    Private Sub SnapshotBT_onclick(sender As System.Object,
                                  control As AddinExpress.MSO.IRibbonControl,
                                  pressed As System.Boolean) Handles UploadBT.OnClick
 
@@ -422,8 +422,15 @@ Public Class AddinModule
                 m_currentReportUploadControler.UpdateRibbon()
                 SubmissionModeRibbon.Visible = True
             Else
-                ' -> choix adjustment, client, product
-                AssociateReportUploadControler(False, Nothing)
+                Select Case My.Settings.processId
+                    Case Account.AccountProcess.FINANCIAL
+                        ' -> choix adjustment, client, product
+                        AssociateReportUploadControler(False, Nothing)
+
+                    Case Account.AccountProcess.RH
+                        Dim l_periodsRangeSelectionUI As New SnapshotPeriodRangeSelectionUI(Me)
+                        l_periodsRangeSelectionUI.Show()
+                End Select
             End If
         End If
 
@@ -439,10 +446,6 @@ Public Class AddinModule
             '    Dim DSDUI As New SubmissionControlUI
             '    DSDUI.Show()
         End If
-
-    End Sub
-
-    Private Sub CurrentLinkedWSBT_OnClick(sender As Object, control As IRibbonControl, pressed As Boolean) Handles CurrentLinkedWSBT.OnClick
 
     End Sub
 

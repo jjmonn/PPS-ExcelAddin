@@ -53,9 +53,16 @@ Partial Public Class AddinModule
         Me.UplodBT1 = New AddinExpress.MSO.ADXRibbonMenu(Me.components)
         Me.WSUplaodBT = New AddinExpress.MSO.ADXRibbonButton(Me.components)
         Me.WBUplaodBT = New AddinExpress.MSO.ADXRibbonButton(Me.components)
-        Me.CurrentLinkedWSBT = New AddinExpress.MSO.ADXRibbonButton(Me.components)
         Me.Menu3 = New System.Windows.Forms.ImageList(Me.components)
         Me.EditionMainRibbonBT = New AddinExpress.MSO.ADXRibbonButton(Me.components)
+        Me.ComputeGroup = New AddinExpress.MSO.ADXRibbonGroup(Me.components)
+        Me.m_submissionFolloupButton = New AddinExpress.MSO.ADXRibbonButton(Me.components)
+        Me.ControlingUI2BT = New AddinExpress.MSO.ADXRibbonButton(Me.components)
+        Me.AdxRibbonSeparator7 = New AddinExpress.MSO.ADXRibbonSeparator(Me.components)
+        Me.FunctionDesigner = New AddinExpress.MSO.ADXRibbonSplitButton(Me.components)
+        Me.AdxRibbonMenu1 = New AddinExpress.MSO.ADXRibbonMenu(Me.components)
+        Me.BreakLinksBT = New AddinExpress.MSO.ADXRibbonButton(Me.components)
+        Me.MainTabImageList = New System.Windows.Forms.ImageList(Me.components)
         Me.RefreshBT = New AddinExpress.MSO.ADXRibbonSplitButton(Me.components)
         Me.RefreshMenu = New AddinExpress.MSO.ADXRibbonMenu(Me.components)
         Me.RefreshSelectionBT = New AddinExpress.MSO.ADXRibbonButton(Me.components)
@@ -63,12 +70,7 @@ Partial Public Class AddinModule
         Me.RefreshWorkbookBT = New AddinExpress.MSO.ADXRibbonButton(Me.components)
         Me.AdxRibbonMenuSeparator1 = New AddinExpress.MSO.ADXRibbonMenuSeparator(Me.components)
         Me.AutoRefreshBT = New AddinExpress.MSO.ADXRibbonCheckBox(Me.components)
-        Me.ComputeGroup = New AddinExpress.MSO.ADXRibbonGroup(Me.components)
-        Me.ControlingUI2BT = New AddinExpress.MSO.ADXRibbonButton(Me.components)
-        Me.FunctionDesigner = New AddinExpress.MSO.ADXRibbonSplitButton(Me.components)
-        Me.AdxRibbonMenu1 = New AddinExpress.MSO.ADXRibbonMenu(Me.components)
-        Me.BreakLinksBT = New AddinExpress.MSO.ADXRibbonButton(Me.components)
-        Me.MainTabImageList = New System.Windows.Forms.ImageList(Me.components)
+        Me.AdxRibbonSeparator8 = New AddinExpress.MSO.ADXRibbonSeparator(Me.components)
         Me.financialModelingBT = New AddinExpress.MSO.ADXRibbonButton(Me.components)
         Me.ConfigurationGroup = New AddinExpress.MSO.ADXRibbonGroup(Me.components)
         Me.ConfigurationRibbonBT = New AddinExpress.MSO.ADXRibbonButton(Me.components)
@@ -162,9 +164,6 @@ Partial Public Class AddinModule
         Me.m_PDCPeriodsRangeEditButton = New AddinExpress.MSO.ADXRibbonButton(Me.components)
         Me.AdxRibbonGroup4 = New AddinExpress.MSO.ADXRibbonGroup(Me.components)
         Me.m_PDCSumbissionExitButton = New AddinExpress.MSO.ADXRibbonButton(Me.components)
-        Me.AdxRibbonSeparator7 = New AddinExpress.MSO.ADXRibbonSeparator(Me.components)
-        Me.AdxRibbonSeparator8 = New AddinExpress.MSO.ADXRibbonSeparator(Me.components)
-        Me.m_submissionFolloupButton = New AddinExpress.MSO.ADXRibbonButton(Me.components)
         CType(Me.BindingNavigator1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.BindingNavigator1.SuspendLayout()
         '
@@ -310,7 +309,6 @@ Partial Public Class AddinModule
         Me.UplodBT1.Caption = "AdxRibbonMenu1"
         Me.UplodBT1.Controls.Add(Me.WSUplaodBT)
         Me.UplodBT1.Controls.Add(Me.WBUplaodBT)
-        Me.UplodBT1.Controls.Add(Me.CurrentLinkedWSBT)
         Me.UplodBT1.Id = "adxRibbonMenu_e0b4ef4400e94c5daab76efc03b1c471"
         Me.UplodBT1.ImageMso = "SmartArtChangeColorGallery"
         Me.UplodBT1.ImageTransparentColor = System.Drawing.Color.Transparent
@@ -332,13 +330,6 @@ Partial Public Class AddinModule
         Me.WBUplaodBT.ImageTransparentColor = System.Drawing.Color.Transparent
         Me.WBUplaodBT.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
         Me.WBUplaodBT.Size = AddinExpress.MSO.ADXRibbonXControlSize.Large
-        '
-        'CurrentLinkedWSBT
-        '
-        Me.CurrentLinkedWSBT.Caption = "Show current Linked worksheets"
-        Me.CurrentLinkedWSBT.Id = "adxRibbonButton_c06e146922f940e9b666907620e328c9"
-        Me.CurrentLinkedWSBT.ImageTransparentColor = System.Drawing.Color.Transparent
-        Me.CurrentLinkedWSBT.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
         '
         'Menu3
         '
@@ -377,6 +368,107 @@ Partial Public Class AddinModule
         Me.EditionMainRibbonBT.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
         Me.EditionMainRibbonBT.ScreenTip = "Open the data edition mode to submit data on the cloud"
         Me.EditionMainRibbonBT.Size = AddinExpress.MSO.ADXRibbonXControlSize.Large
+        '
+        'ComputeGroup
+        '
+        Me.ComputeGroup.Caption = " "
+        Me.ComputeGroup.Controls.Add(Me.m_submissionFolloupButton)
+        Me.ComputeGroup.Controls.Add(Me.ControlingUI2BT)
+        Me.ComputeGroup.Controls.Add(Me.AdxRibbonSeparator7)
+        Me.ComputeGroup.Controls.Add(Me.FunctionDesigner)
+        Me.ComputeGroup.Controls.Add(Me.RefreshBT)
+        Me.ComputeGroup.Controls.Add(Me.AdxRibbonSeparator8)
+        Me.ComputeGroup.Controls.Add(Me.financialModelingBT)
+        Me.ComputeGroup.Id = "adxRibbonGroup_13e7ba6b0acf4975af1793d5cfec00ed"
+        Me.ComputeGroup.ImageTransparentColor = System.Drawing.Color.Transparent
+        Me.ComputeGroup.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
+        '
+        'm_submissionFolloupButton
+        '
+        Me.m_submissionFolloupButton.Caption = "Submissions Tracking"
+        Me.m_submissionFolloupButton.Id = "adxRibbonButton_bcb8669fa7f64922a1ddf3025605cf61"
+        Me.m_submissionFolloupButton.Image = 20
+        Me.m_submissionFolloupButton.ImageList = Me.Menu3
+        Me.m_submissionFolloupButton.ImageTransparentColor = System.Drawing.Color.Transparent
+        Me.m_submissionFolloupButton.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
+        Me.m_submissionFolloupButton.Size = AddinExpress.MSO.ADXRibbonXControlSize.Large
+        '
+        'ControlingUI2BT
+        '
+        Me.ControlingUI2BT.Caption = "Financials"
+        Me.ControlingUI2BT.Id = "adxRibbonButton_7d5683509a144f39bf95ea6b3db155b9"
+        Me.ControlingUI2BT.Image = 12
+        Me.ControlingUI2BT.ImageList = Me.Menu3
+        Me.ControlingUI2BT.ImageTransparentColor = System.Drawing.Color.Transparent
+        Me.ControlingUI2BT.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
+        Me.ControlingUI2BT.ScreenTip = resources.GetString("ControlingUI2BT.ScreenTip")
+        Me.ControlingUI2BT.Size = AddinExpress.MSO.ADXRibbonXControlSize.Large
+        Me.ControlingUI2BT.SuperTip = "General Data Crunching interface"
+        '
+        'AdxRibbonSeparator7
+        '
+        Me.AdxRibbonSeparator7.Id = "adxRibbonSeparator_21301453e2cb4d029c874568ac00bb62"
+        Me.AdxRibbonSeparator7.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
+        '
+        'FunctionDesigner
+        '
+        Me.FunctionDesigner.Caption = "PPSBI"
+        Me.FunctionDesigner.Controls.Add(Me.AdxRibbonMenu1)
+        Me.FunctionDesigner.Id = "adxRibbonSplitButton_5986acbd4f414054bdd1177565ae2cf3"
+        Me.FunctionDesigner.Image = 13
+        Me.FunctionDesigner.ImageList = Me.Menu3
+        Me.FunctionDesigner.ImageTransparentColor = System.Drawing.Color.Transparent
+        Me.FunctionDesigner.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
+        Me.FunctionDesigner.ScreenTip = resources.GetString("FunctionDesigner.ScreenTip")
+        Me.FunctionDesigner.Size = AddinExpress.MSO.ADXRibbonXControlSize.Large
+        '
+        'AdxRibbonMenu1
+        '
+        Me.AdxRibbonMenu1.Caption = "AdxRibbonMenu1"
+        Me.AdxRibbonMenu1.Controls.Add(Me.BreakLinksBT)
+        Me.AdxRibbonMenu1.Id = "adxRibbonMenu_6e1a0370a3d0401780f6447d7d60358b"
+        Me.AdxRibbonMenu1.ImageTransparentColor = System.Drawing.Color.Transparent
+        Me.AdxRibbonMenu1.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
+        '
+        'BreakLinksBT
+        '
+        Me.BreakLinksBT.Caption = "Break Links"
+        Me.BreakLinksBT.Id = "adxRibbonButton_ac7f61741e004304a0942f8512a8456b"
+        Me.BreakLinksBT.Image = 20
+        Me.BreakLinksBT.ImageList = Me.MainTabImageList
+        Me.BreakLinksBT.ImageTransparentColor = System.Drawing.Color.Transparent
+        Me.BreakLinksBT.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
+        '
+        'MainTabImageList
+        '
+        Me.MainTabImageList.ImageStream = CType(resources.GetObject("MainTabImageList.ImageStream"), System.Windows.Forms.ImageListStreamer)
+        Me.MainTabImageList.TransparentColor = System.Drawing.Color.Transparent
+        Me.MainTabImageList.Images.SetKeyName(0, "favicon(262).ico")
+        Me.MainTabImageList.Images.SetKeyName(1, "favicon(251).ico")
+        Me.MainTabImageList.Images.SetKeyName(2, "financial-graph ctrl bcgk(1).ico")
+        Me.MainTabImageList.Images.SetKeyName(3, "favicon(238).ico")
+        Me.MainTabImageList.Images.SetKeyName(4, "favicon(208).ico")
+        Me.MainTabImageList.Images.SetKeyName(5, "favicon(16).ico")
+        Me.MainTabImageList.Images.SetKeyName(6, "favicon (6).ico")
+        Me.MainTabImageList.Images.SetKeyName(7, "favicon(13).ico")
+        Me.MainTabImageList.Images.SetKeyName(8, "favicon(248).ico")
+        Me.MainTabImageList.Images.SetKeyName(9, "favicon(236).ico")
+        Me.MainTabImageList.Images.SetKeyName(10, "favicon(242).ico")
+        Me.MainTabImageList.Images.SetKeyName(11, "Edit glossy.ico")
+        Me.MainTabImageList.Images.SetKeyName(12, "Controlling glossy.ico")
+        Me.MainTabImageList.Images.SetKeyName(13, "favicon(12).ico")
+        Me.MainTabImageList.Images.SetKeyName(14, "favicon(249).ico")
+        Me.MainTabImageList.Images.SetKeyName(15, "favicon(8).ico")
+        Me.MainTabImageList.Images.SetKeyName(16, "favicon(233).ico")
+        Me.MainTabImageList.Images.SetKeyName(17, "favicon(9).ico")
+        Me.MainTabImageList.Images.SetKeyName(18, "favicon(7).ico")
+        Me.MainTabImageList.Images.SetKeyName(19, "favicon(11).ico")
+        Me.MainTabImageList.Images.SetKeyName(20, "break link orange.png")
+        Me.MainTabImageList.Images.SetKeyName(21, "Scenario.ico")
+        Me.MainTabImageList.Images.SetKeyName(22, "db Purple big.ico")
+        Me.MainTabImageList.Images.SetKeyName(23, "favicon(13).ico")
+        Me.MainTabImageList.Images.SetKeyName(24, "favicon(15).ico")
+        Me.MainTabImageList.Images.SetKeyName(25, "symbol_dollar_euro.ico")
         '
         'RefreshBT
         '
@@ -442,91 +534,10 @@ Partial Public Class AddinModule
         Me.AutoRefreshBT.Pressed = True
         Me.AutoRefreshBT.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
         '
-        'ComputeGroup
+        'AdxRibbonSeparator8
         '
-        Me.ComputeGroup.Caption = " "
-        Me.ComputeGroup.Controls.Add(Me.m_submissionFolloupButton)
-        Me.ComputeGroup.Controls.Add(Me.ControlingUI2BT)
-        Me.ComputeGroup.Controls.Add(Me.AdxRibbonSeparator7)
-        Me.ComputeGroup.Controls.Add(Me.FunctionDesigner)
-        Me.ComputeGroup.Controls.Add(Me.RefreshBT)
-        Me.ComputeGroup.Controls.Add(Me.AdxRibbonSeparator8)
-        Me.ComputeGroup.Controls.Add(Me.financialModelingBT)
-        Me.ComputeGroup.Id = "adxRibbonGroup_13e7ba6b0acf4975af1793d5cfec00ed"
-        Me.ComputeGroup.ImageTransparentColor = System.Drawing.Color.Transparent
-        Me.ComputeGroup.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
-        '
-        'ControlingUI2BT
-        '
-        Me.ControlingUI2BT.Caption = "Financials"
-        Me.ControlingUI2BT.Id = "adxRibbonButton_7d5683509a144f39bf95ea6b3db155b9"
-        Me.ControlingUI2BT.Image = 12
-        Me.ControlingUI2BT.ImageList = Me.Menu3
-        Me.ControlingUI2BT.ImageTransparentColor = System.Drawing.Color.Transparent
-        Me.ControlingUI2BT.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
-        Me.ControlingUI2BT.ScreenTip = resources.GetString("ControlingUI2BT.ScreenTip")
-        Me.ControlingUI2BT.Size = AddinExpress.MSO.ADXRibbonXControlSize.Large
-        Me.ControlingUI2BT.SuperTip = "General Data Crunching interface"
-        '
-        'FunctionDesigner
-        '
-        Me.FunctionDesigner.Caption = "PPSBI"
-        Me.FunctionDesigner.Controls.Add(Me.AdxRibbonMenu1)
-        Me.FunctionDesigner.Id = "adxRibbonSplitButton_5986acbd4f414054bdd1177565ae2cf3"
-        Me.FunctionDesigner.Image = 13
-        Me.FunctionDesigner.ImageList = Me.Menu3
-        Me.FunctionDesigner.ImageTransparentColor = System.Drawing.Color.Transparent
-        Me.FunctionDesigner.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
-        Me.FunctionDesigner.ScreenTip = resources.GetString("FunctionDesigner.ScreenTip")
-        Me.FunctionDesigner.Size = AddinExpress.MSO.ADXRibbonXControlSize.Large
-        '
-        'AdxRibbonMenu1
-        '
-        Me.AdxRibbonMenu1.Caption = "AdxRibbonMenu1"
-        Me.AdxRibbonMenu1.Controls.Add(Me.BreakLinksBT)
-        Me.AdxRibbonMenu1.Id = "adxRibbonMenu_6e1a0370a3d0401780f6447d7d60358b"
-        Me.AdxRibbonMenu1.ImageTransparentColor = System.Drawing.Color.Transparent
-        Me.AdxRibbonMenu1.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
-        '
-        'BreakLinksBT
-        '
-        Me.BreakLinksBT.Caption = "Break Links"
-        Me.BreakLinksBT.Id = "adxRibbonButton_ac7f61741e004304a0942f8512a8456b"
-        Me.BreakLinksBT.Image = 20
-        Me.BreakLinksBT.ImageList = Me.MainTabImageList
-        Me.BreakLinksBT.ImageTransparentColor = System.Drawing.Color.Transparent
-        Me.BreakLinksBT.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
-        '
-        'MainTabImageList
-        '
-        Me.MainTabImageList.ImageStream = CType(resources.GetObject("MainTabImageList.ImageStream"), System.Windows.Forms.ImageListStreamer)
-        Me.MainTabImageList.TransparentColor = System.Drawing.Color.Transparent
-        Me.MainTabImageList.Images.SetKeyName(0, "favicon(262).ico")
-        Me.MainTabImageList.Images.SetKeyName(1, "favicon(251).ico")
-        Me.MainTabImageList.Images.SetKeyName(2, "financial-graph ctrl bcgk(1).ico")
-        Me.MainTabImageList.Images.SetKeyName(3, "favicon(238).ico")
-        Me.MainTabImageList.Images.SetKeyName(4, "favicon(208).ico")
-        Me.MainTabImageList.Images.SetKeyName(5, "favicon(16).ico")
-        Me.MainTabImageList.Images.SetKeyName(6, "favicon (6).ico")
-        Me.MainTabImageList.Images.SetKeyName(7, "favicon(13).ico")
-        Me.MainTabImageList.Images.SetKeyName(8, "favicon(248).ico")
-        Me.MainTabImageList.Images.SetKeyName(9, "favicon(236).ico")
-        Me.MainTabImageList.Images.SetKeyName(10, "favicon(242).ico")
-        Me.MainTabImageList.Images.SetKeyName(11, "Edit glossy.ico")
-        Me.MainTabImageList.Images.SetKeyName(12, "Controlling glossy.ico")
-        Me.MainTabImageList.Images.SetKeyName(13, "favicon(12).ico")
-        Me.MainTabImageList.Images.SetKeyName(14, "favicon(249).ico")
-        Me.MainTabImageList.Images.SetKeyName(15, "favicon(8).ico")
-        Me.MainTabImageList.Images.SetKeyName(16, "favicon(233).ico")
-        Me.MainTabImageList.Images.SetKeyName(17, "favicon(9).ico")
-        Me.MainTabImageList.Images.SetKeyName(18, "favicon(7).ico")
-        Me.MainTabImageList.Images.SetKeyName(19, "favicon(11).ico")
-        Me.MainTabImageList.Images.SetKeyName(20, "break link orange.png")
-        Me.MainTabImageList.Images.SetKeyName(21, "Scenario.ico")
-        Me.MainTabImageList.Images.SetKeyName(22, "db Purple big.ico")
-        Me.MainTabImageList.Images.SetKeyName(23, "favicon(13).ico")
-        Me.MainTabImageList.Images.SetKeyName(24, "favicon(15).ico")
-        Me.MainTabImageList.Images.SetKeyName(25, "symbol_dollar_euro.ico")
+        Me.AdxRibbonSeparator8.Id = "adxRibbonSeparator_71f8a6c84f7348dbbbd685db44f9f4f6"
+        Me.AdxRibbonSeparator8.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
         '
         'financialModelingBT
         '
@@ -1380,26 +1391,6 @@ Partial Public Class AddinModule
         Me.m_PDCSumbissionExitButton.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
         Me.m_PDCSumbissionExitButton.ScreenTip = "Close the current Entity Editor"
         Me.m_PDCSumbissionExitButton.Size = AddinExpress.MSO.ADXRibbonXControlSize.Large
-        '
-        'AdxRibbonSeparator7
-        '
-        Me.AdxRibbonSeparator7.Id = "adxRibbonSeparator_21301453e2cb4d029c874568ac00bb62"
-        Me.AdxRibbonSeparator7.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
-        '
-        'AdxRibbonSeparator8
-        '
-        Me.AdxRibbonSeparator8.Id = "adxRibbonSeparator_71f8a6c84f7348dbbbd685db44f9f4f6"
-        Me.AdxRibbonSeparator8.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
-        '
-        'm_submissionFolloupButton
-        '
-        Me.m_submissionFolloupButton.Caption = "Submissions Tracking"
-        Me.m_submissionFolloupButton.Id = "adxRibbonButton_bcb8669fa7f64922a1ddf3025605cf61"
-        Me.m_submissionFolloupButton.Image = 20
-        Me.m_submissionFolloupButton.ImageList = Me.Menu3
-        Me.m_submissionFolloupButton.ImageTransparentColor = System.Drawing.Color.Transparent
-        Me.m_submissionFolloupButton.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
-        Me.m_submissionFolloupButton.Size = AddinExpress.MSO.ADXRibbonXControlSize.Large
         '
         'AddinModule
         '

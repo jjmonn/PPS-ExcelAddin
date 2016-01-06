@@ -447,6 +447,11 @@ Err:
 
 #End Region
 
+    Public Shared Sub FillWeekTextBox(ByRef p_textBox As VIBlend.WinForms.Controls.vTextBox, p_date As Date)
+        Dim l_period As Int32 = p_date.ToOADate
+        p_textBox.Text = "Week " & Period.GetWeekNumberFromDateId(l_period) & ", " & Year(Date.FromOADate(l_period))
+    End Sub
+
     Public Shared Function getSHA1Hash(ByVal strToHash As String) As String
 
         Dim sha1Obj As New Security.Cryptography.SHA1CryptoServiceProvider
