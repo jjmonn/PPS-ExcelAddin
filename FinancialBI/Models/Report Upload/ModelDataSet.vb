@@ -961,7 +961,7 @@ Friend Class ModelDataSet
         Dim tuple_ As New Tuple(Of String, String, String, String)(p_entityName, p_accountName, p_productName, p_period)
         m_datasetCellsDictionary.Add(tuple_, p_cell)
 
-        Dim tmpStruct As DataSetCellDimensions
+        Dim tmpStruct As New DataSetCellDimensions
         tmpStruct.m_entityName = p_entityName
         tmpStruct.m_accountName = p_accountName
         tmpStruct.m_employee = p_productName

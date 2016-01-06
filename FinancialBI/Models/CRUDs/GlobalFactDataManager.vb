@@ -3,7 +3,7 @@ Imports System.Collections.Generic
 Imports System.Tuple
 Imports CRUD
 
-Friend Class GlobalFactDataManager : Inherits CRUDManager
+Class GlobalFactDataManager : Inherits CRUDManager
 
 #Region "Instance Variable"
     Private m_globalFactDic As New MultiIndexDictionary(Of UInt32, Tuple(Of UInt32, UInt32, UInt32), GlobalFactData)

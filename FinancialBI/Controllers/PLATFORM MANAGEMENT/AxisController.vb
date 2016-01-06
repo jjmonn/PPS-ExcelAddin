@@ -1,8 +1,9 @@
-﻿' AxisController.vb
+﻿' EntitiesController.vb
 '
-' Controller for Clients, Products, Adjustments
+' Controller for axis 
+'
 ' To do:
-'     
+'       - implement rows up down ?
 '       - 
 '   
 '
@@ -11,8 +12,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Created: 04/09/2015
-' Last modified: 21/12/2015
+' Last modified: 03/09/2015
 
 
 Imports System.Windows.Forms
@@ -24,229 +24,239 @@ Imports CRUD
 
 Friend Class AxisController
 
-
 #Region "Instance Variables"
 
     ' Objects
-    Private View As AxisView
-    Private CrudModel As AxisElemManager
-    Private CrudModelFilters As AxisFilterManager
+    Private m_view As AxisView
+    Private m_axisTV As New vTreeView
+    Private m_axisFilterTV As New vTreeView
+    Private m_axisFilterValuesTV As New vTreeView
+    Private m_newAxisView As NewAxisUI
+    Private m_platformMGTUI As PlatformMGTGeneralUI
+    Private m_newAxisNameAxisParentDict As New SafeDictionary(Of String, UInt32)
 
-    Private AxisTV As New vTreeView
-    Private AxisFilterTV As New vTreeView
-    Private AxisFilterValuesTV As New vTreeView
-    Private PlatformMGTUI As PlatformMGTGeneralUI
+    Private m_axisType As AxisType
 
     ' Variables
-    Private m_axisType As AxisType
     Private m_positionsDictionary As New SafeDictionary(Of Int32, Double)
     Public Event AxisCreated(ByRef p_status As Boolean, ByRef p_axisId As Int32)
-    Private m_newAxisNameAxisParentDict As New SafeDictionary(Of String, UInt32)
 
 #End Region
 
-
 #Region "Initialize"
 
-    ' p_axisId => GlobalEnums.AnalysisAxis (client, product, adjustment)
-    Friend Sub New(ByRef p_CrudModel As AxisElemManager, _
-                   ByRef p_CrudFilterModel As AxisFilterManager, _
-                   ByRef p_axisType As AxisType)
+    Friend Sub New(ByRef p_axisType As AxisType)
 
         m_axisType = p_axisType
-        CrudModel = p_CrudModel
-        CrudModelFilters = p_CrudFilterModel
-
         Select Case p_axisType
-            Case AxisType.Employee : View = New EmployeeView(Me, AxisTV, AxisFilterValuesTV, AxisFilterTV)
-            Case Else : View = New AxisView(Me, AxisTV, AxisFilterValuesTV, AxisFilterTV)
+            Case AxisType.Employee : m_view = New EmployeeView(Me, m_axisFilterValuesTV, m_axisFilterTV)
+            Case Else : m_view = New AxisView(Me, m_axisFilterValuesTV, m_axisFilterTV)
         End Select
+        m_newAxisView = New NewAxisUI(Me)
 
-        ' Axis CRUD Events
-        AddHandler CrudModel.CreationEvent, AddressOf AfterAxisCreation
-        AddHandler CrudModel.DeleteEvent, AddressOf AfterAxisDeletion
-        AddHandler CrudModel.UpdateEvent, AddressOf AfterAxisUpdate
-        AddHandler CrudModel.Read, AddressOf AfterAxisRead
+        ' Entities CRUD Events
+        AddHandler GlobalVariables.AxisElems.CreationEvent, AddressOf AfterAxisElemCreation
+        AddHandler GlobalVariables.AxisElems.DeleteEvent, AddressOf AfterAxisElemDeletion
+        AddHandler GlobalVariables.AxisElems.UpdateEvent, AddressOf AfterAxisElemUpdate
+        AddHandler GlobalVariables.AxisElems.Read, AddressOf AfterAxisElemRead
 
-        ' Axis Filters CRUD Events
-        AddHandler CrudModelFilters.Read, AddressOf AfterAxisFilterRead
-        AddHandler CrudModelFilters.UpdateEvent, AddressOf AfterAxisFilterUpdate
+        ' Entities Filters CRUD Events
+        AddHandler GlobalVariables.AxisFilters.Read, AddressOf AfterAxisElemFilterRead
+        AddHandler GlobalVariables.AxisFilters.UpdateEvent, AddressOf AfterAxisElemFilterUpdate
+
+        AddHandler GlobalVariables.EntityCurrencies.Read, AddressOf AfterEntityCurrencyRead
 
     End Sub
 
-    Friend Sub LoadInstanceVariables(Optional ByRef p_axisParentId As UInt32 = 0)
+    Public Sub LoadInstanceVariables(Optional ByRef p_axisParentId As UInt32 = 0)
 
+        m_axisFilterTV.Nodes.Clear()
+        m_axisFilterValuesTV.Nodes.Clear()
         If p_axisParentId <> 0 Then
-            CrudModel.LoadAxisTree(m_axisType, AxisTV, p_axisParentId)
+            GlobalVariables.AxisElems.LoadAxisTree(m_axisType, m_axisTV, p_axisParentId)
         Else
-            CrudModel.LoadAxisTree(m_axisType, AxisTV)
+            GlobalVariables.AxisElems.LoadAxisTree(m_axisType, m_axisTV)
         End If
-        GlobalVariables.Filters.LoadFiltersTV(AxisFilterTV, m_axisType)
-        AxisFilterManager.LoadFvTv(AxisFilterValuesTV, CInt(m_axisType))
+        GlobalVariables.Filters.LoadFiltersTV(m_axisFilterTV, m_axisType)
+        AxisFilterManager.LoadFvTv(m_axisFilterValuesTV, CInt(m_axisType))
 
     End Sub
 
-    Public Sub AddControlToPanel(ByRef dest_panel As Panel, _
+    Public Sub addControlToPanel(ByRef dest_panel As Panel, _
                                  ByRef PlatformMGTUI As PlatformMGTGeneralUI)
 
-        Me.PlatformMGTUI = PlatformMGTUI
-        dest_panel.Controls.Add(View)
-        View.Dock = Windows.Forms.DockStyle.Fill
+        Me.m_platformMGTUI = PlatformMGTUI
+        dest_panel.Controls.Add(m_view)
+        m_view.Dock = Windows.Forms.DockStyle.Fill
 
     End Sub
 
     Public Sub close()
 
-        SendNewPositionsToModel()
-        View.Dispose()
-        RemoveHandler CrudModel.CreationEvent, AddressOf AfterAxisCreation
-        RemoveHandler CrudModel.DeleteEvent, AddressOf AfterAxisDeletion
-        RemoveHandler CrudModel.UpdateEvent, AddressOf AfterAxisUpdate
-        RemoveHandler CrudModel.Read, AddressOf AfterAxisRead
+        RemoveHandler GlobalVariables.AxisElems.CreationEvent, AddressOf AfterAxisElemCreation
+        RemoveHandler GlobalVariables.AxisElems.DeleteEvent, AddressOf AfterAxisElemDeletion
+        RemoveHandler GlobalVariables.AxisElems.UpdateEvent, AddressOf AfterAxisElemUpdate
+        RemoveHandler GlobalVariables.AxisElems.Read, AddressOf AfterAxisElemRead
 
-        ' Axis Filters CRUD Events
-        RemoveHandler CrudModelFilters.Read, AddressOf AfterAxisFilterRead
-        RemoveHandler CrudModelFilters.UpdateEvent, AddressOf AfterAxisFilterUpdate
+        ' Entities Filters CRUD Events
+        RemoveHandler GlobalVariables.AxisFilters.Read, AddressOf AfterAxisElemFilterRead
+        RemoveHandler GlobalVariables.AxisFilters.UpdateEvent, AddressOf AfterAxisElemFilterUpdate
+
+        RemoveHandler GlobalVariables.EntityCurrencies.Read, AddressOf AfterEntityCurrencyRead
+        SendNewPositionsToModel()
+        m_view.Dispose()
 
     End Sub
 
-    Friend Function GetAxisElem(ByRef p_axisType As AxisType, ByVal p_axisId As UInt32) As AxisElem
-        Return CrudModel.GetValue(p_axisType, p_axisId)
-    End Function
+#End Region
 
-    Friend Function GetAxisElemCopy(ByRef p_axisType As AxisType, ByVal p_axisId As UInt32) As AxisElem
-        Dim l_axis = GetAxisElem(p_axisType, p_axisId)
+#Region "Interface"
 
-        If l_axis Is Nothing Then Return Nothing
-        Return l_axis.Clone()
-    End Function
+    Friend Sub CreateAxisElem(ByRef p_axisName As String, _
+                            Optional ByRef p_axisParent As Int32 = 0, _
+                            Optional ByRef position As Int32 = 0, _
+                            Optional ByRef allowEdition As Int32 = 1)
 
-    Friend Function GetAxisDictionary(Optional ByRef p_axisParentId As UInt32 = 0) As MultiIndexDictionary(Of UInt32, String, AxisElem)
-
-        If p_axisParentId <> 0 Then
-            Return CrudModel.GetDictionary(CType(m_axisType, AxisType), p_axisParentId)
-        Else
-            Return CrudModel.GetDictionary(CType(m_axisType, AxisType))
+        If m_axisType <> AxisType.Entities AndAlso p_axisParent <> 0 Then
+            m_newAxisNameAxisParentDict.Add(p_axisName, p_axisParent)
         End If
 
+        Dim l_axisElem As New AxisElem
+
+        l_axisElem.Name = p_axisName
+        l_axisElem.Axis = m_axisType
+        l_axisElem.ParentId = p_axisParent
+        l_axisElem.ItemPosition = position
+        l_axisElem.AllowEdition = allowEdition
+        GlobalVariables.AxisElems.Create(l_axisElem)
+
+    End Sub
+
+    Friend Sub UpdateAxisElem(ByRef entity_attributes As AxisElem)
+
+        GlobalVariables.AxisElems.Update(entity_attributes)
+
+    End Sub
+
+    Friend Sub DeleteAxisElem(ByRef entity_id As Int32)
+
+        GlobalVariables.AxisElems.Delete(entity_id)
+
+    End Sub
+
+    Friend Sub UpdateAxisFilter(ByRef p_axisElemId As Int32, _
+                             ByRef filterId As Int32, _
+                             ByRef filterValueId As Int32)
+        For Each axisFilter As AxisFilter In GetAxisFilterDictionary().Values
+            If axisFilter.FilterId = filterId AndAlso axisFilter.AxisElemId = p_axisElemId Then
+                Dim l_copy = GetAxisFilterCopy(axisFilter.Id)
+                l_copy.FilterValueId = filterValueId
+                UpdateAxisFilter(l_copy)
+            End If
+        Next
+    End Sub
+
+    Friend Sub UpdateAxisFilter(ByRef p_axisFilter As AxisFilter)
+
+        If p_axisFilter.FilterId = GlobalVariables.Filters.GetMostNestedFilterId(p_axisFilter.FilterId) Then
+            GlobalVariables.AxisFilters.Update(p_axisFilter)
+        End If
+
+    End Sub
+
+    Friend Function GetAxisFilter(ByVal p_axisFilterId As UInt32) As AxisFilter
+        Return GlobalVariables.AxisFilters.GetValue(m_axisType, p_axisFilterId)
     End Function
 
-    Friend Function GetAxisFilter(ByRef p_axisType As AxisType, ByVal p_axisFilterId As UInt32) As AxisFilter
-        Return CrudModelFilters.GetValue(p_axisType, p_axisFilterId)
-    End Function
-
-    Friend Function GetAxisFilterCopy(ByRef p_axisType As AxisType, ByVal p_axisId As UInt32) As AxisFilter
-        Dim l_axis = GetAxisFilter(p_axisType, p_axisId)
+    Friend Function GetAxisFilterCopy(ByVal p_axisId As UInt32) As AxisFilter
+        Dim l_axis = GetAxisFilter(p_axisId)
 
         If l_axis Is Nothing Then Return Nothing
         Return l_axis.Clone()
     End Function
 
     Friend Function GetAxisFilterDictionary() As MultiIndexDictionary(Of UInt32, Tuple(Of UInt32, UInt32), AxisFilter)
-        Return CrudModelFilters.GetDictionary(CType(m_axisType, AxisType))
+        Return GlobalVariables.AxisFilters.GetDictionary(m_axisType)
     End Function
 
-#End Region
+    Friend Sub UpdateAxisElemName(ByVal p_id As UInt32, ByVal p_value As String)
+        Dim l_entity = GetAxisElemCopy(p_id)
 
-
-#Region "Interface"
-
-    Friend Sub CreateAxis(ByRef p_axisName As String, _
-                          Optional ByRef p_axisParent As UInt32 = 0)
-
-
-        If p_axisParent <> 0 Then
-            m_newAxisNameAxisParentDict.Add(p_axisName, p_axisParent)
-        End If
-
-        Dim l_axisElem As New AxisElem
-        l_axisElem.Name = p_axisName
-        l_axisElem.ItemPosition = 0
-        l_axisElem.Axis = m_axisType
-        CrudModel.Create(l_axisElem)
-
+        If l_entity Is Nothing Then Exit Sub
+        l_entity.Name = p_value
+        UpdateAxisElem(l_entity)
     End Sub
 
-    Friend Sub UpdateAxis(ByRef p_axisElem As AxisElem)
+    Friend Sub UpdateEntityCurrency(ByVal p_id As UInt32, ByVal p_value As UInt32)
+        Dim l_entityCurrency As EntityCurrency = GlobalVariables.EntityCurrencies.GetValue(p_id)
 
-        CrudModel.Update(p_axisElem)
+        If l_entityCurrency Is Nothing Then Exit Sub
+        l_entityCurrency = l_entityCurrency.Clone()
 
-    End Sub
-
-    Friend Sub UpdateAxisName(ByVal p_id As UInt32, ByVal p_value As String)
-        Dim l_axisElem = GetAxisElemCopy(m_axisType, p_id)
-
-        If l_axisElem Is Nothing Then Exit Sub
-        l_axisElem.Name = p_value
-        UpdateAxis(l_axisElem)
-    End Sub
-
-    Friend Sub DeleteAxis(ByRef p_axisElemId As Int32)
-
-        CrudModel.Delete(p_axisElemId)
-
-    End Sub
-
-    Friend Sub UpdateFilterValue(ByRef p_axisElemId As Int32, _
-                                 ByRef filterId As Int32, _
-                                 ByRef filterValueId As Int32)
-        For Each axisFilter As AxisFilter In GetAxisFilterDictionary().Values
-            If axisFilter.FilterId = filterId AndAlso p_axisElemId = axisFilter.AxisElemId Then
-                Dim l_copy = GetAxisFilterCopy(m_axisType, axisFilter.Id)
-                l_copy.FilterValueId = filterValueId
-                UpdateFilterValue(l_copy)
-            End If
-        Next
-    End Sub
-
-    Friend Sub UpdateFilterValue(ByRef p_axisElem As AxisFilter)
-
-        If p_axisElem.FilterId = GlobalVariables.Filters.GetMostNestedFilterId(p_axisElem.FilterId) Then
-            CrudModelFilters.Update(p_axisElem)
-        End If
-
+        l_entityCurrency.CurrencyId = p_value
+        GlobalVariables.EntityCurrencies.Update(l_entityCurrency)
     End Sub
 
 #End Region
-
 
 #Region "Events"
 
-    Private Sub AfterAxisRead(ByRef status As ErrorMessage, ByRef ht As CRUDEntity)
+    Private Sub AfterEntityCurrencyRead(ByRef status As ErrorMessage, ByRef ht As CRUDEntity)
 
         If (status = ErrorMessage.SUCCESS) Then
-            Dim axisElem As AxisElem = CType(ht, AxisElem)
+            Dim l_entity As AxisElem = GetAxisElem(ht.Id)
+            If l_entity Is Nothing Then Exit Sub
 
-            If axisElem.Axis = m_axisType Then
-                View.LoadInstanceVariables()
-                View.UpdateAxis(ht)
+            m_view.UpdateAxisElem(l_entity)
+        End If
+
+    End Sub
+
+    Private Sub AfterAxisElemRead(ByRef status As ErrorMessage, ByRef p_axisElem As CRUDEntity)
+
+        Dim axisElem As AxisElem = p_axisElem
+        If (status = ErrorMessage.SUCCESS) Then
+            m_view.LoadInstanceVariables()
+            m_view.UpdateAxisElem(axisElem)
+            Dim l_node As vTreeNode = VTreeViewUtil.FindNode(m_newAxisView.m_parentAxisElemTreeviewBox.TreeView, axisElem.Id)
+            If l_node Is Nothing Then
+                m_newAxisView.entityNodeAddition(axisElem.Id, _
+                                                   axisElem.ParentId, _
+                                                   axisElem.Name, _
+                                                   axisElem.Image)
+            Else
+                m_newAxisView.TVUpdate(l_node, _
+                                         axisElem.Name, _
+                                         axisElem.Image)
             End If
         End If
 
     End Sub
 
-    Private Sub AfterAxisDeletion(ByRef status As ErrorMessage, ByRef id As UInt32)
+    Private Sub AfterAxisElemDeletion(ByRef status As ErrorMessage, ByRef id As UInt32)
 
         If status = ErrorMessage.SUCCESS Then
-            View.LoadInstanceVariables()
-            View.DeleteAxis(id)
+            m_view.LoadInstanceVariables()
+            m_view.DeleteAxisElem(id)
+            m_newAxisView.TVNodeDelete(id)
         End If
 
     End Sub
 
-    Private Sub AfterAxisUpdate(ByRef status As ErrorMessage, ByRef id As UInt32)
+    Private Sub AfterAxisElemUpdate(ByRef status As ErrorMessage, ByRef id As UInt32)
 
         If (status <> ErrorMessage.SUCCESS) Then
-            '     View.UpdateAxis(CrudModel.GetValue(id))
+            If GlobalVariables.AxisElems.GetValue(m_axisType, id) Is Nothing Then Exit Sub
+            m_view.UpdateAxisElem(GlobalVariables.AxisElems.GetValue(m_axisType, id))
             MsgBox("Invalid parameter")
         End If
 
     End Sub
 
-    Private Sub AfterAxisCreation(ByRef p_status As ErrorMessage, ByRef p_id As UInt32)
+    Private Sub AfterAxisElemCreation(ByRef p_status As ErrorMessage, ByRef p_id As UInt32)
 
         If p_status <> ErrorMessage.SUCCESS Then
-            MsgBox("The Axis Could not be created.")
+            MsgBox("The AxisElem Could not be created.")
             ' catch and display error as well V2 priority normal
         Else
             Dim l_axisElem As AxisElem = GlobalVariables.AxisElems.GetValue(m_axisType, p_id)
@@ -258,26 +268,34 @@ Friend Class AxisController
                 GlobalVariables.AxisParents.Create(l_axisParent)
                 m_newAxisNameAxisParentDict.Remove(l_axisElem.Name)
             End If
-        End If
 
-        RaiseEvent AxisCreated(p_status, p_id)
+            RaiseEvent AxisCreated(p_status, p_id)
+
+        End If
 
     End Sub
 
-    Private Sub AfterAxisFilterRead(ByRef status As ErrorMessage, ByRef p_axisFilter As CRUDEntity)
+    Private Sub AfterAxisElemFilterRead(ByRef status As ErrorMessage, ByRef p_axisFilter As CRUDEntity)
 
         If (status = ErrorMessage.SUCCESS) Then
             Dim axisFilter As AxisFilter = CType(p_axisFilter, AxisFilter)
-            View.LoadInstanceVariables()
-            View.UpdateAxis(CrudModel.GetValue(axisFilter.Axis, axisFilter.Id))
+            If axisFilter.Axis <> m_axisType Then Exit Sub
+            Dim entityId As Int32 = p_axisFilter.Id
+            If Not GlobalVariables.AxisElems.GetValue(m_axisType, entityId) Is Nothing Then
+                m_view.LoadInstanceVariables()
+                m_view.UpdateAxisElem(GlobalVariables.AxisElems.GetValue(m_axisType, entityId))
+            End If
         End If
 
     End Sub
 
-    Private Sub AfterAxisFilterUpdate(ByRef status As ErrorMessage, _
-                                        ByRef p_axisFilterId As UInt32)
-        If status = ErrorMessage.SUCCESS Then
-            View.UpdateAxis(CrudModel.GetValue(p_axisFilterId))
+    Private Sub AfterAxisElemFilterUpdate(ByRef status As ErrorMessage, _
+                                        ByRef axisFilterId As UInt32)
+        If status <> ErrorMessage.SUCCESS Then
+            Dim l_axisFilter As AxisFilter = GlobalVariables.AxisFilters.GetValue(axisFilterId)
+            If l_axisFilter.Axis <> m_axisType Then Exit Sub
+            If GlobalVariables.AxisElems.GetValue(m_axisType, l_axisFilter.AxisElemId) Is Nothing Then Exit Sub
+            m_view.UpdateAxisElem(GlobalVariables.AxisElems.GetValue(m_axisType, l_axisFilter.AxisElemId))
             ' catch and display message
         End If
 
@@ -285,45 +303,81 @@ Friend Class AxisController
 
 #End Region
 
-
 #Region "Utilities"
 
-    Friend Function GetAxisValueId(ByRef name As String) As Int32
+    Friend Function GetAxisDictionary(Optional ByRef p_axisParentId As UInt32 = 0) As MultiIndexDictionary(Of UInt32, String, AxisElem)
 
-        Return CrudModel.GetValueId(m_axisType, name)
+        If p_axisParentId <> 0 Then
+            Return GlobalVariables.AxisElems.GetDictionary(CType(m_axisType, AxisType), p_axisParentId)
+        Else
+            Return GlobalVariables.AxisElems.GetDictionary(CType(m_axisType, AxisType))
+        End If
 
     End Function
 
-    Friend Function GetFilterValueId(ByRef filterId As Int32, _
-                                     ByRef p_axisElemId As Int32) As Int32
+    Friend Function GetAxisElem(ByVal p_id As UInt32) As AxisElem
+        Return GlobalVariables.AxisElems.GetValue(m_axisType, p_id)
+    End Function
 
-        Return CrudModelFilters.GetFilterValueId(m_axisType, filterId, p_axisElemId)
+    Friend Function GetAxisElemCopy(ByVal p_id As UInt32) As AxisElem
+        Dim l_entity As AxisElem = GetAxisElem(p_id)
 
+        If l_entity Is Nothing Then Return Nothing
+        Return l_entity.Clone()
+    End Function
+
+    Friend Sub ShowNewAxisElemUI()
+
+        Dim current_row As HierarchyItem = m_view.getCurrentRowItem
+        If Not current_row Is Nothing Then
+            Dim node As vTreeNode = VTreeViewUtil.FindNode(m_axisTV, current_row.ItemValue)
+            If node IsNot Nothing Then
+                m_newAxisView.SetParentEntityId(node.Value)
+            End If
+        End If
+
+        m_newAxisView.Show()
+
+    End Sub
+
+    Friend Sub ShowEntitiesMGT()
+
+        m_view.Show()
+
+    End Sub
+
+    Friend Function GetAxisElemId(ByRef name As String) As Int32
+
+        Return GlobalVariables.AxisElems.GetValueId(m_axisType, name)
+
+    End Function
+
+    Friend Function GetAxisType() As AxisType
+        Return m_axisType
     End Function
 
     Friend Sub SendNewPositionsToModel()
 
         Dim position As Int32
-        Dim axisUpdates As New List(Of CRUDEntity)
-        m_positionsDictionary = DataGridViewsUtil.GeneratePositionsDictionary(View.m_axisDataGridView)
+        Dim listEntities As New List(Of CRUDEntity)
 
-        For Each axisId As Int32 In m_positionsDictionary.Keys
-            position = m_positionsDictionary(axisId)
-            Dim axisElem As AxisElem = CrudModel.GetValue(m_axisType, axisId)
+        m_positionsDictionary = DataGridViewsUtil.GeneratePositionsDictionary(m_view.m_axisDataGridView)
+        For Each entity_id As Int32 In m_positionsDictionary.Keys
+            position = m_positionsDictionary(entity_id)
+            If GetAxisElem(entity_id) Is Nothing Then Continue For
+            If position <> GetAxisElem(entity_id).ItemPosition Then
+                Dim l_entity = GetAxisElemCopy(entity_id)
 
-            If axisElem Is Nothing Then Continue For
-            If position <> axisElem.ItemPosition Then
-                axisElem = axisElem.Clone()
-                axisElem.ItemPosition = position
-                axisUpdates.Add(axisElem)
+                If Not l_entity Is Nothing Then
+                    l_entity.ItemPosition = position
+                    listEntities.Add(l_entity)
+                End If
             End If
         Next
-        If axisUpdates.Count > 0 Then CrudModel.UpdateList(axisUpdates)
-
+        If listEntities.Count > 0 Then GlobalVariables.AxisElems.UpdateList(listEntities)
     End Sub
 
+
 #End Region
-
-
 
 End Class

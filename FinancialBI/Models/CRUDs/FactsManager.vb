@@ -12,8 +12,7 @@ Imports System.Collections
 Imports System.Collections.Generic
 Imports CRUD
 
-Public Class FactsManager
-
+Class FactsManager
 
 #Region "Intance Variables"
 
@@ -22,7 +21,6 @@ Public Class FactsManager
     Public Shared Event Read(p_status As Boolean, p_requestId As UInt32, p_fact_list As List(Of Fact))
 
 #End Region
-
 
 #Region "Interface"
 

@@ -3,7 +3,7 @@ Imports System.Collections.Generic
 Imports System.Linq
 Imports CRUD
 
-Public MustInherit Class CRUDManager
+MustInherit Class CRUDManager
 
 #Region "Instance variables"
 

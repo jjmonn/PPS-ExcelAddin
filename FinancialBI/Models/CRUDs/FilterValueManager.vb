@@ -13,7 +13,7 @@ Imports CRUD
 ' Created: 23/07/2015
 ' Last modified: 01/09/2015
 
-Friend Class FilterValueManager : Inherits CRUDManager
+Class FilterValueManager : Inherits CRUDManager
 
 #Region "Instance variables"
 

@@ -10,17 +10,15 @@ Friend Class EmployeeView
     Private m_entitiesTreeview As vTreeView
     Private m_axisParentId As UInt32
 
-
 #End Region
 
 #Region "Initialize"
 
     Friend Sub New(ByRef p_controller As AxisController, _
-                   ByRef p_axisTV As vTreeView, _
                    ByRef p_axisFilterValuesTV As vTreeView, _
                    ByRef p_axisFiltersTV As vTreeView)
 
-        MyBase.New(p_controller, p_axisTV, p_axisFilterValuesTV, p_axisFiltersTV)
+        MyBase.New(p_controller, p_axisFilterValuesTV, p_axisFiltersTV)
         VTreeViewUtil.InitTVFormat(m_entitiesTreeview)
         m_entitiesTreeview.ImageList = VTreeViewUtil.GetEntitiesImageList()
         GlobalVariables.AxisElems.LoadEntitiesTV(m_entitiesTreeview)
@@ -51,9 +49,7 @@ Friend Class EmployeeView
             Dim MyDelegate As New LoadInstanceVariables_Delegate(AddressOf LoadInstanceVariables)
             Me.Invoke(MyDelegate, New Object() {})
         Else
-            If m_axisParentId <> 0 Then
-                m_controller.LoadInstanceVariables(m_axisParentId)
-            End If
+            m_controller.LoadInstanceVariables(m_axisParentId)
         End If
     End Sub
 
@@ -92,7 +88,7 @@ Friend Class EmployeeView
 
                 Dim axisName As String = InputBox(Local.GetValue("axis.msg_enter_name"), Local.GetValue("axis.msg_axis_creation"))
                 If axisName <> "" Then
-                    m_controller.CreateAxis(axisName, m_axisParentId)
+                    m_controller.CreateAxisElem(axisName, m_axisParentId)
                 End If
             Else
                 MsgBox(Local.GetValue("axis.msg_entity_axis_parent_not_allowed"))
@@ -120,7 +116,7 @@ Friend Class EmployeeView
         End If
         LoadInstanceVariables()
         DGVColumnsInitialize()
-        DGVRowsInitialize(m_axisTreeview)
+        DGVRowsInitialize()
         FillDGV()
 
     End Sub

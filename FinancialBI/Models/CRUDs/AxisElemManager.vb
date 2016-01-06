@@ -5,7 +5,7 @@ Imports System.Linq
 Imports CRUD
 
 
-Public Class AxisElemManager : Inherits AxedCRUDManager(Of AxisElem)
+Class AxisElemManager : Inherits AxedCRUDManager(Of AxisElem)
 
 #Region "Init"
 

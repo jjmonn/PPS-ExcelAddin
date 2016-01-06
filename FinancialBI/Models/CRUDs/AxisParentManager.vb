@@ -2,7 +2,7 @@
 Imports System.Collections.Generic
 Imports CRUD
 
-Public Class AxisParentManager : Inherits CRUDManager
+Class AxisParentManager : Inherits CRUDManager
 
 #Region "Instance variables"
 
@@ -16,11 +16,13 @@ Public Class AxisParentManager : Inherits CRUDManager
 
     Friend Sub New()
 
+        CreateCMSG = ClientMessage.CMSG_CREATE_AXIS_PARENT
         ReadCMSG = ClientMessage.CMSG_READ_AXIS_PARENT
         UpdateCMSG = ClientMessage.CMSG_UPDATE_AXIS_PARENT
         UpdateListCMSG = ClientMessage.CMSG_CRUD_AXIS_PARENT
         ListCMSG = ClientMessage.CMSG_LIST_AXIS_PARENT
 
+        CreateSMSG = ServerMessage.SMSG_CREATE_AXIS_PARENT_ANSWER
         ReadSMSG = ServerMessage.SMSG_READ_AXIS_PARENT_ANSWER
         UpdateSMSG = ServerMessage.SMSG_UPDATE_AXIS_PARENT_ANSWER
         UpdateListSMSG = ServerMessage.SMSG_CRUD_AXIS_PARENT_LIST_ANSWER

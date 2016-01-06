@@ -1,5 +1,5 @@
 ﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
-Partial Class NewEntityUI
+Partial Class NewAxisUI
     Inherits System.Windows.Forms.Form
 
     'Form overrides dispose to clean up the component list.
@@ -23,12 +23,12 @@ Partial Class NewEntityUI
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
-        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(NewEntityUI))
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(NewAxisUI))
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
         Me.m_parentEntityLabel = New VIBlend.WinForms.Controls.vLabel()
         Me.NameTextBox = New VIBlend.WinForms.Controls.vTextBox()
         Me.m_nameLabel = New VIBlend.WinForms.Controls.vLabel()
-        Me.m_parentEntitiesTreeviewBox = New VIBlend.WinForms.Controls.vTreeViewBox()
+        Me.m_parentAxisElemTreeviewBox = New VIBlend.WinForms.Controls.vTreeViewBox()
         Me.ButtonIcons = New System.Windows.Forms.ImageList(Me.components)
         Me.CancelBT = New System.Windows.Forms.Button()
         Me.ButtonsIL = New System.Windows.Forms.ImageList(Me.components)
@@ -45,7 +45,7 @@ Partial Class NewEntityUI
         Me.TableLayoutPanel1.Controls.Add(Me.m_parentEntityLabel, 0, 1)
         Me.TableLayoutPanel1.Controls.Add(Me.NameTextBox, 1, 0)
         Me.TableLayoutPanel1.Controls.Add(Me.m_nameLabel, 0, 0)
-        Me.TableLayoutPanel1.Controls.Add(Me.m_parentEntitiesTreeviewBox, 1, 1)
+        Me.TableLayoutPanel1.Controls.Add(Me.m_parentAxisElemTreeviewBox, 1, 1)
         Me.TableLayoutPanel1.Location = New System.Drawing.Point(22, 25)
         Me.TableLayoutPanel1.Name = "TableLayoutPanel1"
         Me.TableLayoutPanel1.RowCount = 3
@@ -109,19 +109,19 @@ Partial Class NewEntityUI
         '
         'm_parentEntitiesTreeviewBox
         '
-        Me.m_parentEntitiesTreeviewBox.BackColor = System.Drawing.Color.White
-        Me.m_parentEntitiesTreeviewBox.BorderColor = System.Drawing.Color.Black
-        Me.m_parentEntitiesTreeviewBox.DropDownMaximumSize = New System.Drawing.Size(1000, 1000)
-        Me.m_parentEntitiesTreeviewBox.DropDownMinimumSize = New System.Drawing.Size(10, 10)
-        Me.m_parentEntitiesTreeviewBox.DropDownResizeDirection = VIBlend.WinForms.Controls.SizingDirection.Both
-        Me.m_parentEntitiesTreeviewBox.Location = New System.Drawing.Point(178, 33)
-        Me.m_parentEntitiesTreeviewBox.Name = "m_parentEntitiesTreeviewBox"
-        Me.m_parentEntitiesTreeviewBox.Size = New System.Drawing.Size(301, 23)
-        Me.m_parentEntitiesTreeviewBox.TabIndex = 4
-        Me.m_parentEntitiesTreeviewBox.Text = "parent_entity_selection"
-        Me.m_parentEntitiesTreeviewBox.UseThemeBackColor = False
-        Me.m_parentEntitiesTreeviewBox.UseThemeDropDownArrowColor = True
-        Me.m_parentEntitiesTreeviewBox.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
+        Me.m_parentAxisElemTreeviewBox.BackColor = System.Drawing.Color.White
+        Me.m_parentAxisElemTreeviewBox.BorderColor = System.Drawing.Color.Black
+        Me.m_parentAxisElemTreeviewBox.DropDownMaximumSize = New System.Drawing.Size(1000, 1000)
+        Me.m_parentAxisElemTreeviewBox.DropDownMinimumSize = New System.Drawing.Size(10, 10)
+        Me.m_parentAxisElemTreeviewBox.DropDownResizeDirection = VIBlend.WinForms.Controls.SizingDirection.Both
+        Me.m_parentAxisElemTreeviewBox.Location = New System.Drawing.Point(178, 33)
+        Me.m_parentAxisElemTreeviewBox.Name = "m_parentEntitiesTreeviewBox"
+        Me.m_parentAxisElemTreeviewBox.Size = New System.Drawing.Size(301, 23)
+        Me.m_parentAxisElemTreeviewBox.TabIndex = 4
+        Me.m_parentAxisElemTreeviewBox.Text = "parent_entity_selection"
+        Me.m_parentAxisElemTreeviewBox.UseThemeBackColor = False
+        Me.m_parentAxisElemTreeviewBox.UseThemeDropDownArrowColor = True
+        Me.m_parentAxisElemTreeviewBox.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
         '
         'ButtonIcons
         '
@@ -190,5 +190,5 @@ Partial Class NewEntityUI
     Friend WithEvents NameTextBox As VIBlend.WinForms.Controls.vTextBox
     Friend WithEvents m_nameLabel As VIBlend.WinForms.Controls.vLabel
     Friend WithEvents m_parentEntityLabel As VIBlend.WinForms.Controls.vLabel
-    Friend WithEvents m_parentEntitiesTreeviewBox As VIBlend.WinForms.Controls.vTreeViewBox
+    Friend WithEvents m_parentAxisElemTreeviewBox As VIBlend.WinForms.Controls.vTreeViewBox
 End Class

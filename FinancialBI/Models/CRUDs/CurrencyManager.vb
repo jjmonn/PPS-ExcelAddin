@@ -14,7 +14,7 @@ Imports System.Collections
 Imports System.Collections.Generic
 Imports CRUD
 
-Friend Class CurrencyManager : Inherits NamedCRUDManager(Of NamedCRUDEntity)
+Class CurrencyManager : Inherits NamedCRUDManager(Of NamedCRUDEntity)
 
 #Region "Instance variables"
 

@@ -16,7 +16,7 @@ Imports System.Linq
 Imports CRUD
 
 
-Friend Class VersionManager : Inherits NamedCRUDManager(Of NamedHierarchyCRUDEntity)
+Class VersionManager : Inherits NamedCRUDManager(Of NamedHierarchyCRUDEntity)
 
 #Region "Instance variables"
     Protected CopyCMSG As ServerMessage = ClientMessage.CMSG_COPY_VERSION
