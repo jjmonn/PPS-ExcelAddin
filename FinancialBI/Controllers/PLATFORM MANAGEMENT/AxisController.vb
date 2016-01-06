@@ -248,7 +248,7 @@ Friend Class AxisController
         If (status <> ErrorMessage.SUCCESS) Then
             If GlobalVariables.AxisElems.GetValue(m_axisType, id) Is Nothing Then Exit Sub
             m_view.UpdateAxisElem(GlobalVariables.AxisElems.GetValue(m_axisType, id))
-            MsgBox("Invalid parameter")
+            MsgBox(Local.GetValue("axis.msg_unable_update"))
         End If
 
     End Sub
@@ -256,7 +256,7 @@ Friend Class AxisController
     Private Sub AfterAxisElemCreation(ByRef p_status As ErrorMessage, ByRef p_id As UInt32)
 
         If p_status <> ErrorMessage.SUCCESS Then
-            MsgBox("The AxisElem Could not be created.")
+            MsgBox(Local.GetValue("axis.msg_unable_create"))
             ' catch and display error as well V2 priority normal
         Else
             Dim l_axisElem As AxisElem = GlobalVariables.AxisElems.GetValue(m_axisType, p_id)

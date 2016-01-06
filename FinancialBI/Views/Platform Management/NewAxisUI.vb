@@ -49,6 +49,7 @@ Friend Class NewAxisUI
             m_parentEntityLabel.Visible = False
             m_parentAxisElemTreeviewBox.Visible = False
         End If
+
         MultilanguageSetup()
 
     End Sub
@@ -164,7 +165,9 @@ Friend Class NewAxisUI
         If IsFormValid(new_entity_Name) = True Then
             Dim parentEntityId As Int32 = 0
             If Not m_parentAxisElemTreeviewBox.TreeView.SelectedNode Is Nothing Then
-                parentEntityId = m_parentAxisElemTreeviewBox.TreeView.SelectedNode.Value
+                If m_controller.GetAxisType() = AxisType.Entities OrElse m_controller.GetAxisType = AxisType.Client Then
+                    parentEntityId = m_parentAxisElemTreeviewBox.TreeView.SelectedNode.Value
+                End If
             End If
             m_controller.CreateAxisElem(new_entity_Name, _
                                     parentEntityId, _
