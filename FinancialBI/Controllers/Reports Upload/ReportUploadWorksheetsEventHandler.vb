@@ -33,7 +33,7 @@ Friend Class ReportUploadWorksheetsEventHandler
     Private m_factsStorage As New FactsStorage
     Private m_dataModificationsTracker As DataModificationsTracking
     Private m_reportUploadController As ReportUploadControler
-    Private m_logController As New LogController
+    Private m_logController As New FactLogController
     Private m_logView As LogView
     Private m_clientSelectionUI As PDCClientSelectionUI
 
@@ -385,7 +385,7 @@ Friend Class ReportUploadWorksheetsEventHandler
                 ' we must add the check for entity = input when report upload is adapted to all orientations
                 ' Priority normal
 
-                Dim logsHashTable As New Action(Of List(Of Hashtable))(AddressOf DisplayLogUI)
+                Dim logsHashTable As New Action(Of List(Of CRUD.FactLog))(AddressOf DisplayLogUI)
                 m_logController.GetFactLog(l_account.Id, _
                                            entityId, _
                                            periodId, _
@@ -404,7 +404,7 @@ Friend Class ReportUploadWorksheetsEventHandler
 
     End Sub
 
-    Private Sub DisplayLogUI(p_logValuesHt As List(Of Hashtable))
+    Private Sub DisplayLogUI(p_logValuesHt As List(Of FactLog))
 
         m_logView.DisplayLogValues(p_logValuesHt)
         ' ui position = right click location ?
