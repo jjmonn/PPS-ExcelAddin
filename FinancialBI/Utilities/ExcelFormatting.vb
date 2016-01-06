@@ -45,8 +45,7 @@ Friend Class ExcelFormatting
 
     ' Identify the current range and 
     ' Param: REPORT_FORMAT_CODE or INPUT_FORMAT_CODE
-    Friend Shared Sub FormatRHExcelRange(ByRef first_range_cell As Excel.Range, _
-                                         Optional ByRef startingDate As Date = Nothing)
+    Friend Shared Sub FormatRHExcelRange(ByRef first_range_cell As Excel.Range)
 
         Dim ws As Excel.Worksheet = first_range_cell.Worksheet
         Dim l_Range As Excel.Range

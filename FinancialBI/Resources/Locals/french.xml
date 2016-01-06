@@ -400,13 +400,14 @@
   </category>
 
   <category name="general">
+    <string name="week">Semaine</string>
     <string name="account">Compte</string>
     <string name="entity">Entity</string>
     <string name="client">Client</string>
     <string name="product">Product</string>
     <string name="version">Version</string>
     <string name="adjustment">Adjustment</string>
-    <string name="employees">Employé</string>
+    <string name="employee">Employé</string>
     <string name="Periods">Périodes</string>
     <string name="Accounts">Comptes</string>
     <string name="Entities">Entités</string>
