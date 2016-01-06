@@ -187,9 +187,9 @@ Friend Class DataModificationsTracking
         HeaderRangesInputsHighlight(m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.ACCOUNT))
         HeaderRangesInputsHighlight(m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.ENTITY))
         HeaderRangesInputsHighlight(m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.PERIOD))
+        HeaderRangesInputsHighlight(m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.EMPLOYEE))
         HeaderRangesOutputsHighlight(m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.OUTPUTACCOUNT))
-        HeaderRangesOutputsHighlight(m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.EMPLOYEE))
-
+     
         ' Data coloring
         DataHighlight()
         If Not m_outputsRegion Is Nothing Then m_rangeHighlighter.ColorOutputRange(m_outputsRegion)
@@ -390,10 +390,18 @@ Friend Class DataModificationsTracking
 
     Private Sub EnableConditionalFormatting(ByRef p_selection As Range)
 
+        ' Tested not working:
+        ' DeleteFormatCondition(f_conditions.Item(1))
+
         Dim f_conditions As FormatConditions = RangeFormatConditions(p_selection)
-        '      f_conditions.Item(1).Delete()
-        Dim fc As FormatCondition = RangeFormatConditions(f_conditions)
-        '      fc.Delete()
+        ' f_conditions.Item(1).Delete()
+        '    Delete1st(f_conditions)
+
+        'Dim fc As FormatCondition = RangeFormatConditions(f_conditions)
+        ''    fc.Delete()
+        'DeleteFormatCondition(fc)
+        ' fc.Delete()
+
 
         '    p_selection.FormatConditions(1).Delete()
         m_formatCondition.stopiftrue = False
@@ -424,9 +432,7 @@ Friend Class DataModificationsTracking
 
     Public Shared Function RangeFormatConditions(R As Range) As FormatConditions
 
-    
         '  Dim fc = FormatConditions.GetType().InvokeMember("AddDatabar", BindingFlags.InvokeMethod, Nothing, FormatConditions, null)
-
         Return CType(R.GetType().InvokeMember("FormatConditions", _
                                                 System.Reflection.BindingFlags.GetProperty, _
                                                 Nothing, _
@@ -436,24 +442,24 @@ Friend Class DataModificationsTracking
 
     End Function
 
-    Public Shared Function RangeFormatConditions(p_formatConditions As FormatConditions) As FormatCondition
+    Private Shared Sub Delete1st(p_formatConditions As FormatConditions)
 
-             Return CType(p_formatConditions.GetType().InvokeMember("Item", _
-                                                               System.Reflection.BindingFlags.InvokeMethod, _
-                                                                Nothing, _
-                                                                CType(p_formatConditions, FormatConditions), _
-                                                                New Object() {1}),  _
-                                                                FormatCondition)
+        '  Dim fc = FormatConditions.GetType().InvokeMember("AddDatabar", BindingFlags.InvokeMethod, Nothing, FormatConditions, null)
+        p_formatConditions.GetType().InvokeMember("(1).delete", _
+                                                System.Reflection.BindingFlags.InvokeMethod, _
+                                                Nothing, _
+                                                CType(p_formatConditions, FormatConditions), _
+                                                New Object() {})
 
-    End Function
+    End Sub
 
     Public Shared Sub DeleteFormatCondition(p_formatCondition As FormatCondition)
 
-        p_formatCondition.GetType().InvokeMember("delete", _
+        p_formatCondition.GetType().InvokeMember("Delete", _
                                                  System.Reflection.BindingFlags.InvokeMethod, _
                                                  Nothing, _
-                                                 CType(p_formatCondition, FormatCondition), _
-                                                 New Object() {})
+                                                 p_formatCondition, _
+                                                 Nothing)
 
     End Sub
 

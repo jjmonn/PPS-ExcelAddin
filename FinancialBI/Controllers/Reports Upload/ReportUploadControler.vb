@@ -212,7 +212,8 @@ Friend Class ReportUploadControler
 
 #Region "Snapshot Interface"
 
-    Friend Function RefreshSnapshot(ByRef p_updateInputsFlag As Boolean) As Boolean
+    Friend Function RefreshSnapshot(ByRef p_updateInputsFlag As Boolean, _
+                                    Optional ByRef p_periodList As List(Of Int32) = Nothing) As Boolean
 
         m_isReportReadyFlag = False
         ' Unformat if necessary 
@@ -223,7 +224,7 @@ Friend Class ReportUploadControler
         End If
 
         If m_dataset.WsScreenshot() = True Then
-            m_dataset.SnapshotWS()
+            m_dataset.SnapshotWS(p_periodList)
             m_dataset.GetOrientations()
             m_dataModificationsTracker.InitializeDataSetRegion()
             m_dataModificationsTracker.InitializeOutputsRegion()

@@ -10,7 +10,7 @@
 '       - Orientation: in some cases does not work (max left or right cells)
 '
 '
-' Last modified: 05/01/2016
+' Last modified: 06/01/2016
 ' Author: Julien Monnereau
 
 
@@ -150,7 +150,7 @@ Friend Class ModelDataSet
     End Function
 
     ' Lookup for Versions, Accounts, Periods and Entities
-    Friend Sub SnapshotWS()
+    Friend Sub SnapshotWS(Optional ByRef p_periodsList As List(Of Int32) = Nothing)
 
         ReinitializeDimensionsDict()
 
@@ -166,7 +166,7 @@ Friend Class ModelDataSet
             End If
         End If
 
-        DatesIdentify()
+        DatesIdentify(p_periodsList)
         AccountsIdentify(m_processFlag)
         EntitiesIdentify()
         EmployeesIdentify()
@@ -226,14 +226,18 @@ Friend Class ModelDataSet
     End Function
 
     ' Look for date in the spreasheet, and populate periodsAddressValuesDictionary
-    Private Sub DatesIdentify()
+    Private Sub DatesIdentify(Optional ByRef p_periodsList As List(Of Int32) = Nothing)
 
         Dim periodStoredAsInt As Int32
-        For Each periodId As UInt32 In GlobalVariables.Versions.GetPeriodsList(m_currentVersionId)
+        If p_periodsList Is Nothing Then
+            p_periodsList = GlobalVariables.Versions.GetPeriodsList(m_currentVersionId).ToList
+        End If
+
+        For Each periodId As UInt32 In p_periodsList
             m_periodsDatesList.Add(Date.FromOADate(periodId))
         Next
 
-        For rowIndex = 1 To m_lastCell.Row
+         For rowIndex = 1 To m_lastCell.Row
             For columnIndex = 1 To m_lastCell.Column
                 Try
                     If IsDate(m_excelWorkSheet.Cells(rowIndex, columnIndex).value) Then
@@ -253,9 +257,9 @@ Friend Class ModelDataSet
 
         ' Flag
         Select Case m_dimensionsAddressValueDict(Dimension.PERIOD).Count
-            Case 0 : m_periodFlag = snapshotResult.ZERO
-            Case 1 : m_periodFlag = snapshotResult.ONE
-            Case Else : m_periodFlag = snapshotResult.SEVERAL
+            Case 0 : m_periodFlag = SnapshotResult.ZERO
+            Case 1 : m_periodFlag = SnapshotResult.ONE
+            Case Else : m_periodFlag = SnapshotResult.SEVERAL
         End Select
 
     End Sub

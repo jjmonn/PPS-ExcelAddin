@@ -283,6 +283,17 @@ Friend Class Period
 
     End Function
 
+    Friend Shared Function GetWeeksPeriodListFromPeriodsRange(ByVal p_startDate As Date, ByVal p_endDate As Date) As List(Of Int32)
+
+        Dim l_periods As New List(Of Int32)
+        While p_startDate < p_endDate
+            l_periods.Add(Period.GetWeekIdFromPeriodId(p_startDate.ToOADate))
+            p_startDate = p_startDate.AddDays(m_nbDaysInWeek)
+        End While
+        Return l_periods
+
+    End Function
+
 #End Region
 
 #Region "Days interface"
@@ -295,6 +306,18 @@ Friend Class Period
             p_startDayId += 1
         Next
         Return l_daysList.ToArray
+
+    End Function
+
+    Friend Shared Function GetDaysPeriodsListFromWeeksId(ByRef p_weeksPeriodsList As List(Of Int32)) As List(Of Int32)
+
+        Dim l_periods As New List(Of Int32)
+        For Each l_weekId In p_weeksPeriodsList
+            For Each l_day In GetDaysIdListInWeek(l_weekId)
+                l_periods.Add(l_day)
+            Next
+        Next
+        Return l_periods
 
     End Function
 

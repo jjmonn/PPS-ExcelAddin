@@ -423,7 +423,7 @@ Public Class AddinModule
                 SubmissionModeRibbon.Visible = True
             Else
                 ' -> choix adjustment, client, product
-                AssociateReportUploadControler(False)
+                AssociateReportUploadControler(False, Nothing)
             End If
         End If
 
@@ -942,14 +942,14 @@ Public Class AddinModule
 #Region "Report Upload Methods"
 
     ' Create report upload Conctroler and display
-    Friend Sub AssociateReportUploadControler(ByRef p_mustUpdateInputs As Boolean)
+    Friend Sub AssociateReportUploadControler(ByRef p_mustUpdateInputs As Boolean, ByRef p_periodList As List(Of Int32))
 
         GlobalVariables.APPS.Interactive = False
         LoadFinancialDropDownsSubmissionButtons()
         Dim l_reportUploadController As New ReportUploadControler(Me)
         Dim l_excelWorksheet As Excel.Worksheet = GlobalVariables.APPS.ActiveSheet
 
-        If l_reportUploadController.RefreshSnapshot(p_mustUpdateInputs) = True Then
+        If l_reportUploadController.RefreshSnapshot(p_mustUpdateInputs, p_periodList) = True Then
             m_currentReportUploadControler = l_reportUploadController
             m_reportUploadControlersDictionary.Add(l_excelWorksheet, l_reportUploadController)
             m_worksheetNamesObjectDict.Add(l_excelWorksheet.Name, GlobalVariables.APPS.ActiveSheet)

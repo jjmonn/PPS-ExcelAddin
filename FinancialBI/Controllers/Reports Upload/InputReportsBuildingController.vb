@@ -13,7 +13,8 @@ Imports System.Collections.Generic
 Friend Class InputReportsBuildingController
 
 
-    Friend Sub InputReportPaneCallBack_ReportCreation(ByRef p_process As CRUD.Account.AccountProcess)
+    Friend Sub InputReportPaneCallBack_ReportCreation(ByRef p_process As CRUD.Account.AccountProcess, _
+                                                      ByRef p_periodList As List(Of Int32))
 
         GlobalVariables.APPS.ScreenUpdating = False
         Dim l_version As CRUD.Version = GlobalVariables.Versions.GetValue(My.Settings.version_id)
@@ -28,7 +29,7 @@ Friend Class InputReportsBuildingController
             Case CRUD.Account.AccountProcess.FINANCIAL : InputReportCreationProcessFinancial(l_entityName, l_entity, l_version)
             Case CRUD.Account.AccountProcess.RH
                 Dim l_accountName As String = GlobalVariables.InputReportTaskPane.m_accountSelectionComboBox.Text
-                InputReportCreationProcessRH(l_entityName, l_accountName, l_entityId, l_version)
+                InputReportCreationProcessRH(l_entityName, l_accountName, l_entityId, p_periodList, l_version)
         End Select
 
         GlobalVariables.InputReportTaskPane.Hide()
@@ -36,7 +37,7 @@ Friend Class InputReportsBuildingController
         GlobalVariables.APPS.Interactive = True
         GlobalVariables.APPS.ScreenUpdating = True
 
-        GlobalVariables.Addin.AssociateReportUploadControler(True)
+        GlobalVariables.Addin.AssociateReportUploadControler(True, p_periodList)
 
     End Sub
 
@@ -68,8 +69,9 @@ Friend Class InputReportsBuildingController
         InsertFinancialInputReportOnWS(currentcell, _
                                        periodlist, _
                                        timeConfig)
-
-        ExcelFormatting.FormatFinancialExcelRange(currentcell, currency.Id, Date.FromOADate(periodlist(0)))
+        If periodlist.Length > 0 Then
+            ExcelFormatting.FormatFinancialExcelRange(currentcell, currency.Id, Date.FromOADate(periodlist(0)))
+        End If
 
     End Sub
 
@@ -91,34 +93,30 @@ Friend Class InputReportsBuildingController
     Private Sub InputReportCreationProcessRH(ByRef p_entityName As String, _
                                              ByRef p_accountName As String, _
                                              ByRef p_entityId As UInt32, _
+                                             ByRef p_periods As List(Of Int32), _
                                              ByRef p_version As CRUD.Version)
 
         Dim currentcell As Excel.Range = WorksheetWrittingFunctions.CreateReceptionWS(p_entityName, _
-                                                                                                    {Local.GetValue("general.account"), _
-                                                                                                     Local.GetValue("general.entity"), _
-                                                                                                     Local.GetValue("general.version")}, _
-                                                                                                    {p_accountName, _
-                                                                                                     p_entityName, _
-                                                                                                     GlobalVariables.VersionButton.Caption})
+                                                                                    {Local.GetValue("general.account"), _
+                                                                                     Local.GetValue("general.entity"), _
+                                                                                     Local.GetValue("general.version")}, _
+                                                                                    {p_accountName, _
+                                                                                     p_entityName, _
+                                                                                     GlobalVariables.VersionButton.Caption})
         If currentcell Is Nothing Then
             MsgBox(Local.GetValue("upload.msg_error_upload"))
             Exit Sub
         End If
 
-        ' ask for a period range ? !!  ->  skipable
-        ' start period / end period
-
-        Dim periodlist As Int32() = GlobalVariables.Versions.GetPeriodsList(My.Settings.version_id)
         currentcell = currentcell.Offset(1, 0)
 
-        If periodlist Is Nothing Then Exit Sub
         GlobalVariables.APPS.Interactive = False
         InsertRHInputReportOnWS(currentcell, _
                                 p_entityId, _
-                                periodlist, _
+                                p_periods.ToArray, _
                                 p_version.TimeConfiguration)
 
-        ExcelFormatting.FormatRHExcelRange(currentcell, Date.FromOADate(periodlist(0)))
+        ExcelFormatting.FormatRHExcelRange(currentcell)
 
 
     End Sub

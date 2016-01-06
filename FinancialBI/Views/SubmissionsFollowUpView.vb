@@ -63,9 +63,9 @@ Public Class SubmissionsFollowUpView
     Private Sub PeriodsRangeSetup()
 
         Dim l_todaysDate As Date = Today.Date
-        m_startDate.Text = l_todaysDate.AddDays(-7)
-        m_endDate.Text = l_todaysDate.AddDays(7 * 2)
-        DefinePeriods(m_startDate.Text, m_endDate.Text)
+        m_startDate.Text = l_todaysDate.AddDays(-Period.m_nbDaysInWeek)
+        m_endDate.Text = l_todaysDate.AddDays(Period.m_nbDaysInWeek * 2)
+        m_periods = Period.GetWeeksPeriodListFromPeriodsRange(m_startDate.Text, m_endDate.Text)
 
     End Sub
 
@@ -215,7 +215,7 @@ Public Class SubmissionsFollowUpView
 
     Private Sub UpdateFollowingPeriodChange()
 
-        DefinePeriods(m_startDate.DateTimeEditor.Value, m_endDate.DateTimeEditor.Value)
+        m_periods = Period.GetWeeksPeriodListFromPeriodsRange(m_startDate.DateTimeEditor.Value, m_endDate.DateTimeEditor.Value)
         DGVColumnsInitialize()
         FillDGV()
         m_submissionsDGV.Refresh()
@@ -317,20 +317,6 @@ Public Class SubmissionsFollowUpView
 
     Private Sub CollapseAllToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles CollapseAllToolStripMenuItem.Click
         m_submissionsDGV.RowsHierarchy.CollapseAllItems()
-    End Sub
-
-#End Region
-
-#Region "Utilities"
-
-    Private Sub DefinePeriods(ByVal p_startDate As Date, ByVal p_endDate As Date)
-
-        m_periods.Clear()
-        While p_startDate < p_endDate
-            m_periods.Add(Period.GetWeekIdFromPeriodId(p_startDate.ToOADate))
-            p_startDate = p_startDate.AddDays(7)
-        End While
-
     End Sub
 
 #End Region
