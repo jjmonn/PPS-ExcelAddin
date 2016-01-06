@@ -34,9 +34,7 @@ Partial Class ReportUploadEntitySelectionPane
         Me.m_validateButton = New VIBlend.WinForms.Controls.vButton()
         Me.Panel1 = New System.Windows.Forms.Panel()
         Me.m_endWeekTB = New VIBlend.WinForms.Controls.vTextBox()
-        Me.m_weekLabel2 = New VIBlend.WinForms.Controls.vLabel()
         Me.m_startWeekTB = New VIBlend.WinForms.Controls.vTextBox()
-        Me.m_weekLabel = New VIBlend.WinForms.Controls.vLabel()
         Me.m_startDateLabel = New VIBlend.WinForms.Controls.vLabel()
         Me.m_endDateLabel = New VIBlend.WinForms.Controls.vLabel()
         Me.m_startDate = New VIBlend.WinForms.Controls.vDatePicker()
@@ -192,9 +190,7 @@ Partial Class ReportUploadEntitySelectionPane
         'Panel1
         '
         Me.Panel1.Controls.Add(Me.m_endWeekTB)
-        Me.Panel1.Controls.Add(Me.m_weekLabel2)
         Me.Panel1.Controls.Add(Me.m_startWeekTB)
-        Me.Panel1.Controls.Add(Me.m_weekLabel)
         Me.Panel1.Controls.Add(Me.m_startDateLabel)
         Me.Panel1.Controls.Add(Me.m_endDateLabel)
         Me.Panel1.Controls.Add(Me.m_startDate)
@@ -211,6 +207,7 @@ Partial Class ReportUploadEntitySelectionPane
         Me.m_endWeekTB.BoundsOffset = New System.Drawing.Size(1, 1)
         Me.m_endWeekTB.ControlBorderColor = System.Drawing.Color.FromArgb(CType(CType(39, Byte), Integer), CType(CType(39, Byte), Integer), CType(CType(39, Byte), Integer))
         Me.m_endWeekTB.DefaultText = "Empty..."
+        Me.m_endWeekTB.Enabled = False
         Me.m_endWeekTB.Location = New System.Drawing.Point(124, 128)
         Me.m_endWeekTB.MaxLength = 32767
         Me.m_endWeekTB.Name = "m_endWeekTB"
@@ -224,29 +221,13 @@ Partial Class ReportUploadEntitySelectionPane
         Me.m_endWeekTB.TextAlign = System.Windows.Forms.HorizontalAlignment.Left
         Me.m_endWeekTB.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
         '
-        'm_weekLabel2
-        '
-        Me.m_weekLabel2.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.m_weekLabel2.BackColor = System.Drawing.Color.Transparent
-        Me.m_weekLabel2.DisplayStyle = VIBlend.WinForms.Controls.LabelItemStyle.TextOnly
-        Me.m_weekLabel2.Ellipsis = False
-        Me.m_weekLabel2.ImageAlignment = System.Drawing.ContentAlignment.TopLeft
-        Me.m_weekLabel2.Location = New System.Drawing.Point(9, 128)
-        Me.m_weekLabel2.Multiline = True
-        Me.m_weekLabel2.Name = "m_weekLabel2"
-        Me.m_weekLabel2.Size = New System.Drawing.Size(105, 23)
-        Me.m_weekLabel2.TabIndex = 10
-        Me.m_weekLabel2.Text = "Week"
-        Me.m_weekLabel2.TextAlignment = System.Drawing.ContentAlignment.MiddleRight
-        Me.m_weekLabel2.UseMnemonics = True
-        Me.m_weekLabel2.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
-        '
         'm_startWeekTB
         '
         Me.m_startWeekTB.BackColor = System.Drawing.Color.White
         Me.m_startWeekTB.BoundsOffset = New System.Drawing.Size(1, 1)
         Me.m_startWeekTB.ControlBorderColor = System.Drawing.Color.FromArgb(CType(CType(39, Byte), Integer), CType(CType(39, Byte), Integer), CType(CType(39, Byte), Integer))
         Me.m_startWeekTB.DefaultText = "Empty..."
+        Me.m_startWeekTB.Enabled = False
         Me.m_startWeekTB.Location = New System.Drawing.Point(124, 50)
         Me.m_startWeekTB.MaxLength = 32767
         Me.m_startWeekTB.Name = "m_startWeekTB"
@@ -259,23 +240,6 @@ Partial Class ReportUploadEntitySelectionPane
         Me.m_startWeekTB.Text = "w"
         Me.m_startWeekTB.TextAlign = System.Windows.Forms.HorizontalAlignment.Left
         Me.m_startWeekTB.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
-        '
-        'm_weekLabel
-        '
-        Me.m_weekLabel.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.m_weekLabel.BackColor = System.Drawing.Color.Transparent
-        Me.m_weekLabel.DisplayStyle = VIBlend.WinForms.Controls.LabelItemStyle.TextOnly
-        Me.m_weekLabel.Ellipsis = False
-        Me.m_weekLabel.ImageAlignment = System.Drawing.ContentAlignment.TopLeft
-        Me.m_weekLabel.Location = New System.Drawing.Point(9, 50)
-        Me.m_weekLabel.Multiline = True
-        Me.m_weekLabel.Name = "m_weekLabel"
-        Me.m_weekLabel.Size = New System.Drawing.Size(105, 23)
-        Me.m_weekLabel.TabIndex = 8
-        Me.m_weekLabel.Text = "Week"
-        Me.m_weekLabel.TextAlignment = System.Drawing.ContentAlignment.MiddleRight
-        Me.m_weekLabel.UseMnemonics = True
-        Me.m_weekLabel.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
         '
         'm_startDateLabel
         '
@@ -382,8 +346,6 @@ Partial Class ReportUploadEntitySelectionPane
     Friend WithEvents m_startDate As VIBlend.WinForms.Controls.vDatePicker
     Friend WithEvents m_endDate As VIBlend.WinForms.Controls.vDatePicker
     Friend WithEvents m_endWeekTB As VIBlend.WinForms.Controls.vTextBox
-    Friend WithEvents m_weekLabel2 As VIBlend.WinForms.Controls.vLabel
     Friend WithEvents m_startWeekTB As VIBlend.WinForms.Controls.vTextBox
-    Friend WithEvents m_weekLabel As VIBlend.WinForms.Controls.vLabel
 
 End Class

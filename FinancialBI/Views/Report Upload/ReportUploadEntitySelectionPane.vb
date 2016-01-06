@@ -41,8 +41,6 @@ Public Class ReportUploadEntitySelectionPane
         m_entitySelectionLabel.Text = Local.GetValue("upload.entity_selection")
         m_accountSelectionLabel.Text = Local.GetValue("upload.accounts_selection")
         m_periodsSelectionLabel.Text = Local.GetValue("upload.periods_selection")
-        m_weekLabel.Text = Local.GetValue("general.week")
-        m_weekLabel2.Text = Local.GetValue("general.week")
         m_startDateLabel.Text = Local.GetValue("submissionsFollowUp.start_date")
         m_endDateLabel.Text = Local.GetValue("submissionsFollowUp.end_date")
         m_validateButton.Text = Local.GetValue("general.validate")
@@ -102,8 +100,8 @@ Public Class ReportUploadEntitySelectionPane
         m_startDate.Text = l_todaysDate.AddDays(-Period.m_nbDaysInWeek)
         m_endDate.Text = l_todaysDate.AddDays(Period.m_nbDaysInWeek * 3)
 
-        FillWeekTextBox(m_startWeekTB, m_startDate.Text)
-        FillWeekTextBox(m_endWeekTB, m_endDate.Text)
+        GeneralUtilities.FillWeekTextBox(m_startWeekTB, m_startDate.Text)
+        GeneralUtilities.FillWeekTextBox(m_endWeekTB, m_endDate.Text)
 
     End Sub
 
@@ -175,11 +173,11 @@ Public Class ReportUploadEntitySelectionPane
 #Region "Datepickers Events"
 
     Private Sub m_startDate_ValueChanged(sender As Object, e As EventArgs) Handles m_startDate.ValueChanged
-        FillWeekTextBox(m_startWeekTB, m_startDate.DateTimeEditor.Value.Value)
+        GeneralUtilities.FillWeekTextBox(m_startWeekTB, m_startDate.DateTimeEditor.Value.Value)
     End Sub
 
     Private Sub m_endDate_ValueChanged(sender As Object, e As EventArgs) Handles m_endDate.ValueChanged
-        FillWeekTextBox(m_endWeekTB, m_endDate.DateTimeEditor.Value.Value)
+        GeneralUtilities.FillWeekTextBox(m_endWeekTB, m_endDate.DateTimeEditor.Value.Value)
     End Sub
 
 #End Region
@@ -198,11 +196,6 @@ Public Class ReportUploadEntitySelectionPane
 
     End Function
 
-    Private Sub FillWeekTextBox(ByRef p_textBox As vTextBox, p_date As Date)
-        Dim l_period As Int32 = p_date.ToOADate
-        p_textBox.Text = "Week " & Period.GetWeekNumberFromDateId(l_period) & ", " & Year(Date.FromOADate(l_period))
-    End Sub
-
     Private Sub PeriodsControlDisplay(ByRef p_visible As Boolean)
 
         m_startDate.Visible = p_visible
@@ -211,9 +204,7 @@ Public Class ReportUploadEntitySelectionPane
         m_endDateLabel.Visible = p_visible
         m_startWeekTB.Visible = p_visible
         m_endWeekTB.Visible = p_visible
-        m_weekLabel.Visible = p_visible
-        m_weekLabel2.Visible = p_visible
-
+   
     End Sub
 
 #End Region
