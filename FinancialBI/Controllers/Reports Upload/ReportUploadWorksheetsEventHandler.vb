@@ -10,7 +10,7 @@
 '       - 
 '
 ' Author: Julien Monnereau
-' Last modified: 05/01/2016
+' Last modified: 06/01/2016
 
 
 Imports System.Collections.Generic
@@ -36,6 +36,7 @@ Friend Class ReportUploadWorksheetsEventHandler
     Private m_logController As New FactLogController
     Private m_logView As LogView
     Private m_clientSelectionUI As PDCClientSelectionUI
+    Private m_periodIdentifier As Char
 
     ' Variables
     Private m_disableWSChangeFlag As Boolean
@@ -64,6 +65,18 @@ Friend Class ReportUploadWorksheetsEventHandler
         m_factsStorage = p_factsStorage
         m_dataModificationsTracker = p_dataModificationTracker
         m_logView = New LogView(True)
+
+           Select m_dataSet.m_processFlag
+            Case Account.AccountProcess.RH
+                Dim version As Version = GlobalVariables.Versions.GetValue(m_dataSet.m_currentVersionId)
+                If version Is Nothing Then Exit Sub
+
+                Select Case version.TimeConfiguration
+                    Case CRUD.TimeConfig.YEARS : m_periodIdentifier = Computer.YEAR_PERIOD_IDENTIFIER
+                    Case CRUD.TimeConfig.MONTHS : m_periodIdentifier = Computer.MONTH_PERIOD_IDENTIFIER
+                    Case CRUD.TimeConfig.DAYS : m_periodIdentifier = Computer.DAY_PERIOD_IDENTIFIER
+                End Select
+        End Select
 
         GlobalVariables.APPS.CellDragAndDrop = False
         AddHandler p_excelWorksheet.Change, AddressOf Worksheet_Change
@@ -149,20 +162,10 @@ Friend Class ReportUploadWorksheetsEventHandler
         Dim l_entityName As String = m_dataSet.m_dimensionsAddressValueDict(ModelDataSet.Dimension.ENTITY).Values(0)
         Dim l_accountName As String = m_dataSet.m_dimensionsAddressValueDict(ModelDataSet.Dimension.ACCOUNT).Values(0)
 
-        Dim version As Version = GlobalVariables.Versions.GetValue(m_dataSet.m_currentVersionId)
-        If version Is Nothing Then Exit Sub
-
-        Dim l_periodIdentifier As Char
-        Select Case version.TimeConfiguration
-            Case CRUD.TimeConfig.YEARS : l_periodIdentifier = Computer.YEAR_PERIOD_IDENTIFIER
-            Case CRUD.TimeConfig.MONTHS : l_periodIdentifier = Computer.MONTH_PERIOD_IDENTIFIER
-            Case CRUD.TimeConfig.DAYS : l_periodIdentifier = Computer.DAY_PERIOD_IDENTIFIER
-        End Select
-
         For Each l_employeeName As String In m_dataSet.m_dimensionsAddressValueDict(ModelDataSet.Dimension.EMPLOYEE).Values
             For Each l_period As Int32 In m_dataSet.m_dimensionsValueAddressDict(ModelDataSet.Dimension.PERIOD).Keys
 
-                Dim l_fact As CRUD.Fact = m_factsStorage.GetRHFact(l_accountName, l_employeeName, l_periodIdentifier & l_period)
+                Dim l_fact As CRUD.Fact = m_factsStorage.GetRHFact(l_accountName, l_employeeName, m_periodIdentifier & l_period)
                 If l_fact Is Nothing Then
                     l_value = ""
                 Else
@@ -287,43 +290,50 @@ Friend Class ReportUploadWorksheetsEventHandler
             Exit Sub
         End If
 
-        Dim modelUpdateFlag As Boolean = False
-        Dim dependents_cells As Excel.Range = Nothing
-        Dim entityName As New String("")
+        Dim l_modelUpdateFlag As Boolean = False
         If m_reportUploadController.m_isUpdating = False AndAlso m_disableWSChangeFlag = False Then
 
-            For Each cell As Excel.Range In p_target.Cells
-                If CellBelongsToPDCDimensionsDefinition(cell.Address) Then Continue For
+            For Each l_cell As Excel.Range In p_target.Cells
+                If CellBelongsToPDCDimensionsDefinition(l_cell.Address) Then Continue For
 
-                Dim intersect = GlobalVariables.APPS.Intersect(cell, m_dataModificationsTracker.m_dataSetRegion)
-                If Not intersect Is Nothing Then
-
-                    entityName = m_dataSet.m_datasetCellDimensionsDictionary(cell.Address).m_entityName
-                    If VarType(cell.Value) = VariantType.String Then
-
-                        modelUpdateFlag = True
-                        m_reportUploadController.RegisterModification(cell.Address)
-
-                        ' Register modification in dependant cells
-                        On Error Resume Next
-                        dependents_cells = cell.Dependents
-                        If Not dependents_cells Is Nothing Then
-                            For Each dependant_cell As Excel.Range In dependents_cells
-                                intersect = GlobalVariables.APPS.Intersect(dependant_cell, m_dataModificationsTracker.m_dataSetRegion)
-                                If Not intersect Is Nothing Then
-                                    m_reportUploadController.RegisterModification(cell.Address)
-                                End If
-                            Next
-                        End If
-                        If m_reportUploadController.m_autoCommitFlag = True Then m_reportUploadController.DataSubmission()
-                    Else
-                        ' Put back the former value in case invalid input has been given (eg. double, ...)
-                        m_disableWSChangeFlag = True
-                        cell.Value = m_dataSet.m_datasetCellDimensionsDictionary(cell.Address).m_client
-                        m_disableWSChangeFlag = False
-                    End If
+                Dim l_intersect = GlobalVariables.APPS.Intersect(l_cell, m_dataModificationsTracker.m_dataSetRegion)
+                If Not l_intersect Is Nothing Then
+                    ' Modifications registering
+                    RHCellsModificationTreatment(l_cell, l_modelUpdateFlag)
+                    ' Auto commit if needed
+                    If m_reportUploadController.m_autoCommitFlag = True Then m_reportUploadController.DataSubmission()
+                Else
+                    ' Put back the former value in case invalid input has been given (eg. double, ...)
+                    m_disableWSChangeFlag = True
+                    l_cell.Value = m_dataSet.m_datasetCellDimensionsDictionary(l_cell.Address).m_client
+                    m_disableWSChangeFlag = False
                 End If
             Next
+        End If
+
+    End Sub
+
+    Private Sub RHCellsModificationTreatment(ByRef p_cell As Excel.Range, _
+                                             ByRef p_modelUpdateFlag As Boolean)
+
+        On Error Resume Next
+        Dim l_cellDimensions = m_dataSet.m_datasetCellDimensionsDictionary(p_cell.Address)
+        Dim l_entityName As String = l_cellDimensions.m_entityName
+
+        If VarType(p_cell.Value) = VariantType.String Then
+
+            ' Register modification if needed
+            RHRegisterModificationIfDifferentValue(p_cell, l_cellDimensions, p_modelUpdateFlag)
+
+            ' Register modification in dependant cells
+            If Not p_cell.Dependents Is Nothing Then
+                For Each l_dependantCell As Excel.Range In p_cell.Dependents
+                    Dim l_dependantIntersect = GlobalVariables.APPS.Intersect(l_dependantCell, m_dataModificationsTracker.m_dataSetRegion)
+                    If Not l_dependantIntersect Is Nothing Then
+                        RHCellsModificationTreatment(l_dependantCell, p_modelUpdateFlag)
+                    End If
+                Next
+            End If
         End If
 
     End Sub
@@ -476,7 +486,7 @@ Friend Class ReportUploadWorksheetsEventHandler
         p_address = Replace(p_address, "$", "")
         If m_dataSet.m_dimensionsAddressValueDict(ModelDataSet.Dimension.EMPLOYEE).ContainsKey(p_address) Then
             m_disableWSChangeFlag = True
-            m_excelWorksheet.Range(p_address).Value = m_dataSet.m_dimensionsAddressValueDict(ModelDataSet.Dimension.ACCOUNT)(p_address)
+            m_excelWorksheet.Range(p_address).Value = m_dataSet.m_dimensionsAddressValueDict(ModelDataSet.Dimension.EMPLOYEE)(p_address)
             m_disableWSChangeFlag = False
             Return True
         ElseIf m_dataSet.m_dimensionsAddressValueDict(ModelDataSet.Dimension.PERIOD).ContainsKey(p_address) Then
@@ -484,10 +494,46 @@ Friend Class ReportUploadWorksheetsEventHandler
             m_excelWorksheet.Range(p_address).Value = m_dataSet.m_dimensionsAddressValueDict(ModelDataSet.Dimension.PERIOD)(p_address)
             m_disableWSChangeFlag = False
             Return True
+        ElseIf m_dataSet.m_dimensionsAddressValueDict(ModelDataSet.Dimension.ENTITY).ContainsKey(p_address) Then
+            m_disableWSChangeFlag = True
+            m_excelWorksheet.Range(p_address).Value = m_dataSet.m_dimensionsAddressValueDict(ModelDataSet.Dimension.ENTITY)(p_address)
+            m_disableWSChangeFlag = False
+            Return True
+        ElseIf m_dataSet.m_dimensionsAddressValueDict(ModelDataSet.Dimension.ACCOUNT).ContainsKey(p_address) Then
+            m_disableWSChangeFlag = True
+            m_excelWorksheet.Range(p_address).Value = m_dataSet.m_dimensionsAddressValueDict(ModelDataSet.Dimension.ACCOUNT)(p_address)
+            m_disableWSChangeFlag = False
+            Return True
         End If
         Return False
 
     End Function
+
+    Private Sub RHRegisterModificationIfDifferentValue(ByRef p_cell As Excel.Range, _
+                                                       ByRef p_cellDimensions As ModelDataSet.DataSetCellDimensions, _
+                                                       ByRef p_updateFlag As Boolean)
+
+        Dim l_fact = m_factsStorage.GetRHFact(p_cellDimensions.m_accountName, _
+                                              p_cellDimensions.m_employee, _
+                                              m_periodIdentifier & p_cellDimensions.m_period)
+        If l_fact Is Nothing Then GoTo RegisterModification
+
+        Dim l_client As AxisElem = GlobalVariables.AxisElems.GetValue(l_fact.ClientId)
+        If l_client Is Nothing Then GoTo RegisterModification
+
+        Dim l_caseInsensitiveWSClientName = LCase(p_cell.Value2)
+        Dim l_caseInsensitiveDBClientName = LCase(l_client.Name)
+        If l_caseInsensitiveWSClientName <> l_caseInsensitiveDBClientName Then
+            GoTo RegisterModification
+        Else
+            Exit Sub
+        End If
+        
+RegisterModification:
+        p_updateFlag = True
+        m_reportUploadController.RegisterModification(p_cell.Address)
+
+    End Sub
 
 #End Region
 

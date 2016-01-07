@@ -291,6 +291,7 @@ Friend Class ReportUploadControler
             End If
 
             m_dataset.RegisterDimensionsToCellDictionary()
+            m_dataset.RegisterDataSetCellsValues()
 
             ' RH Cloud data loading
             m_factsStorage.LoadRHFacts({m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.ACCOUNT).ElementAt(0).Value}.ToList, _
