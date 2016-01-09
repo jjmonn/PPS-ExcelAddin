@@ -116,7 +116,7 @@ Err:
     ' Function GetRealLastCell()
     ' starting from "A1", finds the cell closing the range really used within the worksheet
     ' Inlude if err.number > 0 then ?
-    Protected Friend Shared Function GetRealLastCell(ByRef WS As Excel.Worksheet) As Excel.Range
+    Friend Shared Function GetRealLastCell(ByRef WS As Excel.Worksheet) As Excel.Range
 
         Dim lRealLastRow As Long
         Dim lRealLastColumn As Long
@@ -135,7 +135,7 @@ Err:
 
     End Function
 
-    Protected Friend Function IsRange(ByVal sRangeAddress As String) As Boolean
+    Friend Function IsRange(ByVal sRangeAddress As String) As Boolean
 
         Dim TestRange As Excel.Range
 
@@ -155,7 +155,7 @@ Err:
     ' Input: address
     ' Output: valid address
     '----------------------------------------------------------------
-    Protected Friend Function CheckAddress(sAddress As String) As String
+    Friend Function CheckAddress(sAddress As String) As String
         Dim rng As Microsoft.Office.Interop.Excel.Range = Nothing
         Dim sFullAddress As String
 

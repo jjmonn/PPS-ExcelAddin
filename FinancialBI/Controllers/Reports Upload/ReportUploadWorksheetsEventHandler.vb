@@ -317,24 +317,27 @@ Friend Class ReportUploadWorksheetsEventHandler
                                              ByRef p_modelUpdateFlag As Boolean)
 
         On Error Resume Next
-        Dim l_cellDimensions = m_dataSet.m_datasetCellDimensionsDictionary(p_cell.Address)
-        Dim l_entityName As String = l_cellDimensions.m_entityName
+        SyncLock (m_dataSet)
+            Dim l_cellDimensions = m_dataSet.m_datasetCellDimensionsDictionary(p_cell.Address)
+            Dim l_entityName As String = l_cellDimensions.m_entityName
 
-        If VarType(p_cell.Value) = VariantType.String Then
+            If VarType(p_cell.Value) = VariantType.String Then
 
-            ' Register modification if needed
-            RHRegisterModificationIfDifferentValue(p_cell, l_cellDimensions, p_modelUpdateFlag)
+                ' Register modification if needed
+                RHRegisterModificationIfDifferentValue(p_cell, l_cellDimensions, p_modelUpdateFlag)
 
-            ' Register modification in dependant cells
-            If Not p_cell.Dependents Is Nothing Then
-                For Each l_dependantCell As Excel.Range In p_cell.Dependents
-                    Dim l_dependantIntersect = GlobalVariables.APPS.Intersect(l_dependantCell, m_dataModificationsTracker.m_dataSetRegion)
-                    If Not l_dependantIntersect Is Nothing Then
-                        RHCellsModificationTreatment(l_dependantCell, p_modelUpdateFlag)
-                    End If
-                Next
+                ' Register modification in dependant cells
+                Dim l_dependantCells = p_cell.Dependents
+                If Not l_dependantCells Is Nothing Then
+                    For Each l_dependantCell In l_dependantCells.Cells
+                        Dim l_dependantIntersect = GlobalVariables.APPS.Intersect(l_dependantCell, m_dataModificationsTracker.m_dataSetRegion)
+                        If Not l_dependantIntersect Is Nothing Then
+                            RHCellsModificationTreatment(l_dependantCell, p_modelUpdateFlag)
+                        End If
+                    Next
+                End If
             End If
-        End If
+        End SyncLock
 
     End Sub
 
@@ -516,23 +519,28 @@ Friend Class ReportUploadWorksheetsEventHandler
         Dim l_fact = m_factsStorage.GetRHFact(p_cellDimensions.m_accountName, _
                                               p_cellDimensions.m_employee, _
                                               m_periodIdentifier & p_cellDimensions.m_period)
-        If l_fact Is Nothing Then GoTo RegisterModification
+        If l_fact Is Nothing Then
+            p_updateFlag = True
+            m_reportUploadController.RegisterModification(p_cell.Address)
+
+        End If
 
         Dim l_client As AxisElem = GlobalVariables.AxisElems.GetValue(l_fact.ClientId)
-        If l_client Is Nothing Then GoTo RegisterModification
+        If l_client Is Nothing Then
+            p_updateFlag = True
+            m_reportUploadController.RegisterModification(p_cell.Address)
+
+        End If
 
         Dim l_caseInsensitiveWSClientName = LCase(p_cell.Value2)
         Dim l_caseInsensitiveDBClientName = LCase(l_client.Name)
         If l_caseInsensitiveWSClientName <> l_caseInsensitiveDBClientName Then
-            GoTo RegisterModification
+            p_updateFlag = True
+            m_reportUploadController.RegisterModification(p_cell.Address)
         Else
             Exit Sub
         End If
         
-RegisterModification:
-        p_updateFlag = True
-        m_reportUploadController.RegisterModification(p_cell.Address)
-
     End Sub
 
 #End Region

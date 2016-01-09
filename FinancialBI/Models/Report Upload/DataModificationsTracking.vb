@@ -314,6 +314,12 @@ Friend Class DataModificationsTracking
                         Dim tuple_ As New Tuple(Of String, String, String, String)(entity, l_account.Name, "", period)
                         If m_dataset.m_datasetCellsDictionary.ContainsKey(tuple_) = True Then
                             Dim cell As range = m_dataset.m_datasetCellsDictionary(tuple_)
+
+                            ' !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                            ' prevent error -> get value from acquisition model
+                            ' acquisition model checks if the value is in the dictionary
+                            ' !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
                             If cell.Value2 <> p_dataBaseInputsDictionary(entity)(l_account.Name)(periodIdentifyer & period) Then _
                                RegisterModification(cell.Address)
                         End If
@@ -323,9 +329,21 @@ Friend Class DataModificationsTracking
                             Dim tuple_ As New Tuple(Of String, String, String, String)(entity, l_account.Name, "", period)
                             If m_dataset.m_datasetCellsDictionary.ContainsKey(tuple_) = True Then
                                 Dim cell As range = m_dataset.m_datasetCellsDictionary(tuple_)
+
+                                ' !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                                ' prevent error -> get value from acquisition model
+                                ' acquisition model checks if the value is in the dictionary
+                                ' !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
                                 If cell.Value2 <> p_dataBaseInputsDictionary(entity)(l_account.Name)(periodIdentifyer & period) Then
                                     RegisterModification(cell.Address)
                                 End If
+                            Else
+                                System.Diagnostics.Debug.WriteLine("DataModification tracking: financial process > method: IdentifyFinancialDifferencesBtwDataSetAndDB > " _
+                                                                   & "Tuple not in dataset dicitonary." & Chr(13) _
+                                                                   & "entity: " & entity _
+                                                                   & " Account: " & l_account.Name _
+                                                                   & " period: " & period)
                             End If
                         Next
                 End Select

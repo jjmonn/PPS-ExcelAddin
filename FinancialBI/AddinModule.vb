@@ -1057,7 +1057,10 @@ Public Class AddinModule
                 Exit For
             End If
         Next
-        p_generalSubmissionController.CloseInstance()
+        SyncLock (p_generalSubmissionController)
+            p_generalSubmissionController.CloseInstance()
+        End SyncLock
+
         m_reportUploadControlersDictionary.Remove(p_generalSubmissionController.m_associatedWorksheet)
 
         If m_reportUploadControlersDictionary.Count = 0 Then

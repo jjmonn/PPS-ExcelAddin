@@ -18,7 +18,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 13/11/2015
+' Last modified: 07/01/2016
 
 
 Imports VIBlend.WinForms.DataGridView
@@ -132,7 +132,7 @@ Friend Class AcquisitionModel
         ' Actual Computation
         m_computer.CMSG_COMPUTE_REQUEST({m_currentVersionId}, _
                                         l_entitiesId, _
-                                        0, _
+                                        CRUD.Account.AccountProcess.FINANCIAL, _
                                         Nothing, _
                                         l_axisFilters, _
                                         Nothing)

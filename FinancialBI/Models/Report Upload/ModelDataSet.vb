@@ -166,10 +166,8 @@ Friend Class ModelDataSet
             End If
         End If
 
-        DatesIdentify(p_periodsList)
-        AccountsIdentify(m_processFlag)
-        EntitiesIdentify()
-        EmployeesIdentify()
+        DimensionsIdentificationProcess(m_processFlag, p_periodsList)
+        SnapshotFlagResultFill()
 
     End Sub
 
@@ -225,10 +223,10 @@ Friend Class ModelDataSet
 
     End Function
 
-    ' Look for date in the spreasheet, and populate periodsAddressValuesDictionary
-    Private Sub DatesIdentify(Optional ByRef p_periodsList As List(Of Int32) = Nothing)
+    Private Sub DimensionsIdentificationProcess(ByRef p_process As Account.AccountProcess, _
+                                                Optional ByRef p_periodsList As List(Of Int32) = Nothing)
 
-        Dim periodStoredAsInt As Int32
+        ' periods init
         If p_periodsList Is Nothing Then
             p_periodsList = GlobalVariables.Versions.GetPeriodsList(m_currentVersionId).ToList
         End If
@@ -237,61 +235,112 @@ Friend Class ModelDataSet
             m_periodsDatesList.Add(Date.FromOADate(periodId))
         Next
 
-         For rowIndex = 1 To m_lastCell.Row
-            For columnIndex = 1 To m_lastCell.Column
-                Try
-                    If IsDate(m_excelWorkSheet.Cells(rowIndex, columnIndex).value) Then
-                        periodStoredAsInt = CInt(CDate((m_excelWorkSheet.Cells(rowIndex, columnIndex).value)).ToOADate())
-                        Dim res As Date = CDate(m_excelWorkSheet.Cells(rowIndex, columnIndex).value)
-                        If m_periodsDatesList.Contains(CDate(m_excelWorkSheet.Cells(rowIndex, columnIndex).value)) _
-                        AndAlso Not m_dimensionsAddressValueDict(Dimension.PERIOD).ContainsValue(periodStoredAsInt) Then
-                            m_dimensionsAddressValueDict(Dimension.PERIOD).Add(GetRangeAddressFromRowAndColumn(rowIndex, columnIndex), periodStoredAsInt)
-                            m_dimensionsValueAddressDict(Dimension.PERIOD).Add(periodStoredAsInt, GetRangeAddressFromRowAndColumn(rowIndex, columnIndex))
-                        End If
+        ' Accounts init
+        Dim l_cell As Excel.Range
+        Dim l_cellAddress As String
+        Dim l_outputsAccountsList As List(Of Account) = GlobalVariables.Accounts.GetAccountsList(GlobalEnums.AccountsLookupOptions.LOOKUP_OUTPUTS, p_process)
+        m_inputsAccountsList = GlobalVariables.Accounts.GetAccountsList(GlobalEnums.AccountsLookupOptions.LOOKUP_INPUTS, p_process)
+
+        For l_rowIndex = 1 To m_lastCell.Row
+            For l_columnIndex = 1 To m_lastCell.Column
+                l_cell = m_excelWorkSheet.Cells(l_rowIndex, l_columnIndex)
+                If l_cell Is Nothing Then
+                    Continue For
+                    System.Diagnostics.Debug.WriteLine("Dataset: Snapshot method: DimensionsIdentificationProcess > error in cell identication process: address : ")
+                End If
+                l_cellAddress = GetRangeAddressFromRowAndColumn(l_rowIndex, l_columnIndex)
+
+                If IsDate(l_cell.Value) Then
+                    If DateIdentify(l_cell, l_cellAddress) = False Then
+                        StringDimensionsIdentify(p_process, l_cell, l_cellAddress, l_outputsAccountsList)
                     End If
-                Catch ex As Exception
-                    ' Impossible to read cell's value.
-                End Try
+                Else
+                    StringDimensionsIdentify(p_process, l_cell, l_cellAddress, l_outputsAccountsList)
+                End If
             Next
         Next
-
-        ' Flag
-        Select Case m_dimensionsAddressValueDict(Dimension.PERIOD).Count
-            Case 0 : m_periodFlag = SnapshotResult.ZERO
-            Case 1 : m_periodFlag = SnapshotResult.ONE
-            Case Else : m_periodFlag = SnapshotResult.SEVERAL
-        End Select
 
     End Sub
 
-    ' Identify the mapped accounts in the WS  | CURRENTLY NOT using the Accounts Search Algo
-    Private Sub AccountsIdentify(ByRef p_process As Account.AccountProcess)
+    Private Function DateIdentify(ByRef p_cell As Excel.Range, _
+                                  ByRef p_cellAddress As String)
 
-        Dim currentStr As String
-        Dim outputsAccountsList As List(Of Account) = GlobalVariables.Accounts.GetAccountsList(GlobalEnums.AccountsLookupOptions.LOOKUP_OUTPUTS, p_process)
-        m_inputsAccountsList = GlobalVariables.Accounts.GetAccountsList(GlobalEnums.AccountsLookupOptions.LOOKUP_INPUTS, p_process)
+        Dim periodStoredAsInt As Int32 = CInt(CDate((p_cell).Value).ToOADate())
+        Dim res As Date = CDate(p_cell.Value)
+        If m_periodsDatesList.Contains(CDate(p_cell.Value)) _
+        AndAlso Not m_dimensionsAddressValueDict(Dimension.PERIOD).ContainsValue(periodStoredAsInt) Then
+            m_dimensionsAddressValueDict(Dimension.PERIOD).Add(p_cellAddress, periodStoredAsInt)
+            m_dimensionsValueAddressDict(Dimension.PERIOD).Add(periodStoredAsInt, p_cellAddress)
+            Return True
+        End If
+        Return False
 
-        For rowIndex = 1 To m_lastCell.Row
-            For columnIndex = 1 To m_lastCell.Column
-                Try
-                    If VarType(m_excelWorkSheet.Cells(rowIndex, columnIndex).value) = 8 Then
-                        currentStr = CStr(m_excelWorkSheet.Cells(rowIndex, columnIndex).value)
-                        If m_inputsAccountsList.Contains(GlobalVariables.Accounts.GetValue(currentStr)) _
-                        AndAlso Not m_dimensionsAddressValueDict(Dimension.ACCOUNT).ContainsValue(currentStr) Then
-                            ' Input account
-                            m_dimensionsAddressValueDict(Dimension.ACCOUNT).Add(GetRangeAddressFromRowAndColumn(rowIndex, columnIndex), currentStr)
-                            m_dimensionsValueAddressDict(Dimension.ACCOUNT).Add(currentStr, GetRangeAddressFromRowAndColumn(rowIndex, columnIndex))
-                        ElseIf outputsAccountsList.Contains(GlobalVariables.Accounts.GetValue(currentStr)) _
-                        AndAlso m_dimensionsAddressValueDict(Dimension.ACCOUNT).ContainsValue(currentStr) = False Then
-                            ' Computed Account
-                            m_dimensionsAddressValueDict(Dimension.OUTPUTACCOUNT).Add(GetRangeAddressFromRowAndColumn(rowIndex, columnIndex), currentStr)
-                            m_dimensionsValueAddressDict(Dimension.OUTPUTACCOUNT).Add(currentStr, GetRangeAddressFromRowAndColumn(rowIndex, columnIndex))
-                        End If
-                    End If
-                Catch ex As Exception
-                End Try
-            Next
-        Next
+    End Function
+
+    Private Sub StringDimensionsIdentify(ByRef p_process As Account.AccountProcess, _
+                                         ByRef p_cell As Excel.Range, _
+                                         ByRef p_cellAddress As String, _
+                                         ByRef m_outputsAccountsList As List(Of Account))
+
+        If VarType(p_cell.Value) = 8 Then
+            Dim l_currentStr As String = CStr(p_cell.Value2)
+            If AccountsIdentify(l_currentStr, p_process, p_cell, p_cellAddress, m_outputsAccountsList) = True Then Exit Sub
+            If EntitiesIdentify(l_currentStr, p_cell, p_cellAddress) = True Then Exit Sub
+            If EmployeesIdentify(l_currentStr, p_cell, p_cellAddress) = True Then Exit Sub
+        End If
+
+    End Sub
+
+    Private Function AccountsIdentify(ByRef p_currentStr As String, _
+                                      ByRef p_process As Account.AccountProcess, _
+                                      ByRef p_cell As Excel.Range, _
+                                      ByRef p_cellAddress As String, _
+                                      ByRef m_outputsAccountsList As List(Of Account)) As Boolean
+
+        If m_inputsAccountsList.Contains(GlobalVariables.Accounts.GetValue(p_currentStr)) _
+        AndAlso Not m_dimensionsAddressValueDict(Dimension.ACCOUNT).ContainsValue(p_currentStr) Then
+            ' Input account
+            m_dimensionsAddressValueDict(Dimension.ACCOUNT).Add(p_cellAddress, p_currentStr)
+            m_dimensionsValueAddressDict(Dimension.ACCOUNT).Add(p_currentStr, p_cellAddress)
+            Return True
+        ElseIf m_outputsAccountsList.Contains(GlobalVariables.Accounts.GetValue(p_currentStr)) _
+        AndAlso m_dimensionsAddressValueDict(Dimension.ACCOUNT).ContainsValue(p_currentStr) = False Then
+            ' Computed Account
+            m_dimensionsAddressValueDict(Dimension.OUTPUTACCOUNT).Add(p_cellAddress, p_currentStr)
+            m_dimensionsValueAddressDict(Dimension.OUTPUTACCOUNT).Add(p_currentStr, p_cellAddress)
+            Return True
+        End If
+        Return False
+
+    End Function
+
+    Private Function EntitiesIdentify(ByRef p_currentStr As String, _
+                                      ByRef p_cell As Excel.Range, _
+                                      ByRef p_cellAddress As String)
+
+        If Not GlobalVariables.AxisElems.GetValue(AxisType.Entities, p_currentStr) Is Nothing _
+        AndAlso Not m_dimensionsAddressValueDict(Dimension.ENTITY).ContainsValue(p_currentStr) Then
+            m_dimensionsAddressValueDict(Dimension.ENTITY).Add(p_cellAddress, p_currentStr)
+            m_dimensionsValueAddressDict(Dimension.ENTITY).Add(p_currentStr, p_cellAddress)
+            Return True
+        End If
+        Return False
+
+    End Function
+
+    Friend Function EmployeesIdentify(ByRef p_currentStr As String, _
+                                      ByRef p_cell As Excel.Range, _
+                                      ByRef p_cellAddress As String) As Boolean
+
+        If Not GlobalVariables.AxisElems.GetValue(AxisType.Employee, p_currentStr) Is Nothing _
+        AndAlso Not m_dimensionsAddressValueDict(Dimension.EMPLOYEE).ContainsValue(p_currentStr) Then
+            m_dimensionsAddressValueDict(Dimension.EMPLOYEE).Add(p_cellAddress, p_currentStr)
+            m_dimensionsValueAddressDict(Dimension.EMPLOYEE).Add(p_currentStr, p_cellAddress)
+        End If
+  
+    End Function
+
+    Private Function SnapshotFlagResultFill()
 
         Select Case m_dimensionsAddressValueDict(Dimension.ACCOUNT).Count
             Case 0 : m_accountFlag = SnapshotResult.ZERO
@@ -299,57 +348,17 @@ Friend Class ModelDataSet
             Case Else : m_accountFlag = SnapshotResult.SEVERAL
         End Select
 
-    End Sub
-
-    ' Identify the assets from mapping      | CURRENTLY NOT using the AssetsSearch Algorithm (>leveinstein Threshold%)
-    Private Sub EntitiesIdentify()
-
-        Dim currentStr As String
-        For rowIndex = 1 To m_lastCell.Row
-            For columnIndex = 1 To m_lastCell.Column
-                Try
-                    If VarType(m_excelWorkSheet.Cells(rowIndex, columnIndex).value) = 8 Then
-                        currentStr = CStr(m_excelWorkSheet.Cells(rowIndex, columnIndex).value)
-                        If Not GlobalVariables.AxisElems.GetValue(AxisType.Entities, currentStr) Is Nothing _
-                        AndAlso Not m_dimensionsAddressValueDict(Dimension.ENTITY).ContainsValue(currentStr) Then
-                            m_dimensionsAddressValueDict(Dimension.ENTITY).Add(GetRangeAddressFromRowAndColumn(rowIndex, columnIndex), currentStr)
-                            m_dimensionsValueAddressDict(Dimension.ENTITY).Add(currentStr, GetRangeAddressFromRowAndColumn(rowIndex, columnIndex))
-                        End If
-                    End If
-                Catch ex As Exception
-                End Try
-            Next
-        Next
-
-        Select Case m_dimensionsAddressValueDict(Dimension.ENTITY).Count
-            Case 0 : m_EntityFlag = SnapshotResult.ZERO
-            Case 1 : m_EntityFlag = SnapshotResult.ONE
-            Case Else : m_EntityFlag = SnapshotResult.SEVERAL
+        Select Case m_dimensionsAddressValueDict(Dimension.PERIOD).Count
+            Case 0 : m_periodFlag = SnapshotResult.ZERO
+            Case 1 : m_periodFlag = SnapshotResult.ONE
+            Case Else : m_periodFlag = SnapshotResult.SEVERAL
         End Select
 
-    End Sub
-
-    ' Identify the mapped products in the WS  
-    Friend Sub EmployeesIdentify()
-
-        Dim l_currentStr As String
-
-        For rowIndex = 1 To m_lastCell.Row
-            For columnIndex = 1 To m_lastCell.Column
-                Try
-                    If VarType(m_excelWorkSheet.Cells(rowIndex, columnIndex).value) = 8 Then
-                        l_currentStr = CStr(m_excelWorkSheet.Cells(rowIndex, columnIndex).value)
-
-                        If Not GlobalVariables.AxisElems.GetValue(AxisType.Employee, l_currentStr) Is Nothing _
-                        AndAlso Not m_dimensionsAddressValueDict(Dimension.EMPLOYEE).ContainsValue(l_currentStr) Then
-                            m_dimensionsAddressValueDict(Dimension.EMPLOYEE).Add(GetRangeAddressFromRowAndColumn(rowIndex, columnIndex), l_currentStr)
-                            m_dimensionsValueAddressDict(Dimension.EMPLOYEE).Add(l_currentStr, GetRangeAddressFromRowAndColumn(rowIndex, columnIndex))
-                        End If
-                    End If
-                Catch ex As Exception
-                End Try
-            Next
-        Next
+        Select Case m_dimensionsAddressValueDict(Dimension.ENTITY).Count
+            Case 0 : m_entityFlag = SnapshotResult.ZERO
+            Case 1 : m_entityFlag = SnapshotResult.ONE
+            Case Else : m_entityFlag = SnapshotResult.SEVERAL
+        End Select
 
         Select Case m_dimensionsAddressValueDict(Dimension.EMPLOYEE).Count
             Case 0 : m_employeeFlag = SnapshotResult.ZERO
@@ -357,7 +366,7 @@ Friend Class ModelDataSet
             Case Else : m_employeeFlag = SnapshotResult.SEVERAL
         End Select
 
-    End Sub
+    End Function
 
     Private Function GetRangeAddressFromRowAndColumn(ByRef p_rowIndex As Int32, _
                                                      ByRef p_columnIndex As Int32) As String

@@ -311,7 +311,7 @@ Friend Class Computer
                         = packet.ReadDouble()
             Next
 
-            ' Aggreagted data
+            ' Aggregated data
             For aggregationIndex As Int32 = 0 To packet.ReadUint32() - 1
                 m_dataMap(p_versionId & TOKEN_SEPARATOR & _
                         m_filterToken & TOKEN_SEPARATOR & _

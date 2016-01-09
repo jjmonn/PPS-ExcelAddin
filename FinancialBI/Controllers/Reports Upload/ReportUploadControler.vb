@@ -27,7 +27,7 @@ Friend Class ReportUploadControler
     Private m_dataModificationsTracker As DataModificationsTracking
     Private m_acquisitionModel As AcquisitionModel
     Private m_factsStorage As New FactsStorage
-    Private Shared m_reportUploadWorksheetEventHandler As ReportUploadWorksheetsEventHandler
+    Private m_reportUploadWorksheetEventHandler As ReportUploadWorksheetsEventHandler
     Friend m_associatedWorksheet As Excel.Worksheet
     Private m_errorMessagesUI As New StatusReportInterfaceUI
 
@@ -291,7 +291,7 @@ Friend Class ReportUploadControler
             End If
 
             m_dataset.RegisterDimensionsToCellDictionary()
-            m_dataset.RegisterDataSetCellsValues()
+            '     m_dataset.RegisterDataSetCellsValues()
 
             ' RH Cloud data loading
             m_factsStorage.LoadRHFacts({m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.ACCOUNT).ElementAt(0).Value}.ToList, _
@@ -335,21 +335,9 @@ Friend Class ReportUploadControler
 
     Friend Sub RegisterModification(ByRef p_cellAddress As String)
 
-        Dim l_fact As Fact = m_factsStorage.GetRHFact(m_dataset.m_datasetCellDimensionsDictionary(p_cellAddress).m_accountName, _
-                                                      m_dataset.m_datasetCellDimensionsDictionary(p_cellAddress).m_employee, _
-                                                      m_dataModificationsTracker.m_periodIdentifier & m_dataset.m_datasetCellDimensionsDictionary(p_cellAddress).m_period)
-
-        If l_fact Is Nothing Then
+        SyncLock (m_dataModificationsTracker)
             m_dataModificationsTracker.RegisterModification(p_cellAddress)
-            Exit Sub
-        End If
-
-        Dim l_employee As CRUD.AxisElem = GlobalVariables.AxisElems.GetValue(AxisType.Employee, l_fact.EmployeeId)
-        If l_employee Is Nothing Then Exit Sub
-
-        If l_employee.Name <> m_dataset.m_excelWorkSheet.Range(p_cellAddress).Value2 Then
-            m_dataModificationsTracker.RegisterModification(p_cellAddress)
-        End If
+        End SyncLock
 
     End Sub
 
