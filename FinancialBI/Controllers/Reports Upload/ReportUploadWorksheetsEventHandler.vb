@@ -10,7 +10,7 @@
 '       - 
 '
 ' Author: Julien Monnereau
-' Last modified: 06/01/2016
+' Last modified: 09/01/2016
 
 
 Imports System.Collections.Generic
@@ -321,7 +321,8 @@ Friend Class ReportUploadWorksheetsEventHandler
             Dim l_cellDimensions = m_dataSet.m_datasetCellDimensionsDictionary(p_cell.Address)
             Dim l_entityName As String = l_cellDimensions.m_entityName
 
-            If VarType(p_cell.Value) = VariantType.String Then
+            If VarType(p_cell.Value) = VariantType.String _
+            Or p_cell.Value2 = "" Then
 
                 ' Register modification if needed
                 RHRegisterModificationIfDifferentValue(p_cell, l_cellDimensions, p_modelUpdateFlag)
@@ -516,20 +517,25 @@ Friend Class ReportUploadWorksheetsEventHandler
                                                        ByRef p_cellDimensions As ModelDataSet.DataSetCellDimensions, _
                                                        ByRef p_updateFlag As Boolean)
 
+
+        ' si la cellule est vide register !!!!!!!!!!
+
         Dim l_fact = m_factsStorage.GetRHFact(p_cellDimensions.m_accountName, _
                                               p_cellDimensions.m_employee, _
                                               m_periodIdentifier & p_cellDimensions.m_period)
         If l_fact Is Nothing Then
-            p_updateFlag = True
-            m_reportUploadController.RegisterModification(p_cell.Address)
-
+            If p_cell.Value2 <> "" Then
+                p_updateFlag = True
+                m_reportUploadController.RegisterModification(p_cell.Address)
+                Exit Sub
+            End If
         End If
 
         Dim l_client As AxisElem = GlobalVariables.AxisElems.GetValue(l_fact.ClientId)
         If l_client Is Nothing Then
             p_updateFlag = True
             m_reportUploadController.RegisterModification(p_cell.Address)
-
+            Exit Sub
         End If
 
         Dim l_caseInsensitiveWSClientName = LCase(p_cell.Value2)
@@ -540,7 +546,7 @@ Friend Class ReportUploadWorksheetsEventHandler
         Else
             Exit Sub
         End If
-        
+
     End Sub
 
 #End Region

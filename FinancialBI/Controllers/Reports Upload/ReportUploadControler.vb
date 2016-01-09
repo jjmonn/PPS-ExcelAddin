@@ -42,6 +42,7 @@ Friend Class ReportUploadControler
     Friend m_isUpdating As Boolean
     Private m_mustUpdateExcelWorksheetFromDataBase As Boolean
     Friend m_isReportReadyFlag As Boolean
+    Private m_deleteRequestIdCellAddressDict As New Dictionary(Of Int32, String)
 
 #End Region
 
@@ -544,10 +545,14 @@ errorHandler:
             Dim l_cellsAddressesList As List(Of String) = m_dataModificationsTracker.GetModificationsListCopy
             For Each l_cellAddress In l_cellsAddressesList
                 Dim l_clientName As String = m_dataset.m_excelWorkSheet.Range(l_cellAddress).Value2
+
+                ' controlle de la valeur contenue dans la cellule
+                ' -> if date or double or not string -> message !
+
                 If l_clientName <> "" Then
 
                     Dim l_client As AxisElem = GlobalVariables.AxisElems.GetValue(CRUD.AxisType.Client, l_clientName)
-                    If l_client Is Nothing Then Continue For
+                    If l_client Is Nothing Then Resume Next
 
                     Dim l_employeeName As String = m_dataset.m_datasetCellDimensionsDictionary(l_cellAddress).m_employee
                     Dim l_employee As AxisElem = GlobalVariables.AxisElems.GetValue(CRUD.AxisType.Employee, l_employeeName)
@@ -569,6 +574,16 @@ errorHandler:
 
                     l_factsList.Add(l_fact)
 
+                Else
+                    ' if fact exist then delete
+                    Dim l_factToBeDeleted = m_factsStorage.GetRHFact(m_dataset.m_datasetCellDimensionsDictionary(l_cellAddress).m_accountName, _
+                                                                     m_dataset.m_datasetCellDimensionsDictionary(l_cellAddress).m_employee, _
+                                                                     m_dataModificationsTracker.m_periodIdentifier & m_dataset.m_datasetCellDimensionsDictionary(l_cellAddress).m_period)
+
+                    If l_factToBeDeleted IsNot Nothing Then
+                        m_deleteRequestIdCellAddressDict.Add(m_fact.CMSG_DELETE_FACT(l_factToBeDeleted), l_cellAddress)
+                    End If
+                    Continue For
                 End If
             Next
             m_fact.CMSG_UPDATE_FACT_LIST(l_factsList, l_cellsAddressesList)
@@ -600,6 +615,17 @@ errorHandler:
             End If
         Else
             MsgBox("Commit failed. Check network connection and try again." & Chr(13) & "If the error persists, please contact your administrator or the Financial BI team.")
+        End If
+
+    End Sub
+
+    Private Sub AfterFactDelete(ByRef p_status As Boolean, ByRef p_requestId As UInt32)
+
+        If p_status = True Then
+            If m_deleteRequestIdCellAddressDict.ContainsKey(p_requestId) Then
+                m_dataModificationsTracker.UnregisterSingleModification(m_deleteRequestIdCellAddressDict(p_requestId))
+                m_deleteRequestIdCellAddressDict.Remove(p_requestId)
+            End If
         End If
 
     End Sub

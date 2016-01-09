@@ -18,7 +18,9 @@ Class FactsManager
 
     Private requestIdFactsCommitDict As New SafeDictionary(Of UInt32, List(Of String))
     Public Event AfterUpdate(ByRef p_status As Boolean, ByRef p_resultsDict As Dictionary(Of String, ErrorMessage))
+    Public Event AfterDelete(ByRef p_status As Boolean, ByRef p_requestId As Int32)
     Public Shared Event Read(p_status As Boolean, p_requestId As UInt32, p_fact_list As List(Of Fact))
+
 
 #End Region
 
@@ -26,6 +28,7 @@ Class FactsManager
 
     Public Sub New()
         NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_UPDATE_FACT_LIST_ANSWER, AddressOf SMSG_UPDATE_FACT_LIST_ANSWER)
+        NetworkManager.GetInstance().SetCallback(ServerMessage.SMSG_DELETE_FACT_ANSWER, AddressOf SMSG_DELETE_FACT_ANSWER)
     End Sub
 
     Friend Shared Function CMSG_GET_FACT(ByRef p_accountId As UInt32, _
@@ -64,6 +67,17 @@ Class FactsManager
         NetworkManager.GetInstance().Send(packet)
 
     End Sub
+
+    Friend Function CMSG_DELETE_FACT(ByRef p_fact As Fact) As UInt32
+
+        Dim l_packet As New ByteBuffer(CType(ClientMessage.CMSG_DELETE_FACT, UShort))
+        Dim l_requestId As UInt32 = l_packet.AssignRequestId()
+        l_packet.WriteUint32(p_fact.Id)
+        l_packet.Release()
+        NetworkManager.GetInstance().Send(l_packet)
+        Return l_requestId
+
+    End Function
 
     Private Sub SMSG_UPDATE_FACT_LIST_ANSWER(packet As ByteBuffer)
 
@@ -104,12 +118,24 @@ Class FactsManager
 
     End Sub
 
+    Private Sub SMSG_DELETE_FACT_ANSWER(packet As ByteBuffer)
+
+        If packet.GetError() = 0 Then
+            Dim l_requestId As UInt32 = packet.GetRequestId()
+            RaiseEvent AfterDelete(True, l_requestId)
+        Else
+            RaiseEvent AfterDelete(False, 0)
+        End If
+
+    End Sub
+
+
 #End Region
 
     Protected Overrides Sub finalize()
 
         NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_UPDATE_FACT_LIST_ANSWER, AddressOf SMSG_UPDATE_FACT_LIST_ANSWER)
-
+        NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_DELETE_FACT_ANSWER, AddressOf SMSG_DELETE_FACT_ANSWER)
     End Sub
 
 
