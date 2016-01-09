@@ -298,15 +298,18 @@ Friend Class ReportUploadWorksheetsEventHandler
 
                 Dim l_intersect = GlobalVariables.APPS.Intersect(l_cell, m_dataModificationsTracker.m_dataSetRegion)
                 If Not l_intersect Is Nothing Then
-                    ' Modifications registering
-                    RHCellsModificationTreatment(l_cell, l_modelUpdateFlag)
-                    ' Auto commit if needed
-                    If m_reportUploadController.m_autoCommitFlag = True Then m_reportUploadController.DataSubmission()
-                Else
-                    ' Put back the former value in case invalid input has been given (eg. double, ...)
-                    m_disableWSChangeFlag = True
-                    l_cell.Value = m_dataSet.m_datasetCellDimensionsDictionary(l_cell.Address).m_client
-                    m_disableWSChangeFlag = False
+
+                    If VarType(l_cell.Value) = VariantType.String Then
+                        ' Modifications registering
+                        RHCellsModificationTreatment(l_cell, l_modelUpdateFlag)
+                        ' Auto commit if needed
+                        If m_reportUploadController.m_autoCommitFlag = True Then m_reportUploadController.DataSubmission()
+                    Else
+                        ' Put back the former value in case invalid input has been given (eg. double, ...)
+                        m_disableWSChangeFlag = True
+                        l_cell.Value = m_dataSet.m_datasetCellDimensionsDictionary(l_cell.Address).m_client
+                        m_disableWSChangeFlag = False
+                    End If
                 End If
             Next
         End If
@@ -319,11 +322,7 @@ Friend Class ReportUploadWorksheetsEventHandler
         On Error Resume Next
         SyncLock (m_dataSet)
             Dim l_cellDimensions = m_dataSet.m_datasetCellDimensionsDictionary(p_cell.Address)
-            Dim l_entityName As String = l_cellDimensions.m_entityName
-
-            If VarType(p_cell.Value) = VariantType.String _
-            Or p_cell.Value2 = "" Then
-
+            
                 ' Register modification if needed
                 RHRegisterModificationIfDifferentValue(p_cell, l_cellDimensions, p_modelUpdateFlag)
 
@@ -337,7 +336,7 @@ Friend Class ReportUploadWorksheetsEventHandler
                         End If
                     Next
                 End If
-            End If
+
         End SyncLock
 
     End Sub

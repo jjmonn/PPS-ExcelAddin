@@ -934,18 +934,14 @@ Friend Class ControllingUI_2
                 dgv.GroupingDefaultHeaderTextVisible = True
                 dgv.BackColor = Color.White
                 dgv.GridLinesDisplayMode = GridLinesDisplayMode.DISPLAY_NONE
-                dgv.ColumnsHierarchy.AutoResize(AutoResizeMode.FIT_ALL)
                 dgv.RowsHierarchy.AutoResize(AutoResizeMode.FIT_ALL)
                 '    dgv.RowsHierarchy.AllowResize = False
                 dgv.RowsHierarchy.CompactStyleRenderingEnabled = True
-                dgv.ColumnsHierarchy.AutoStretchColumns = True
                 dgv.ColumnsHierarchy.ExpandAllItems()
-
-                ' attention !!! test
-                '    dgvFormatter.FormatDGVs(dgv, 34)
-
-                dgv.Update()
+                '     dgv.ColumnsHierarchy.AutoStretchColumns = True
+                dgv.ColumnsHierarchy.AutoResize(AutoResizeMode.FIT_ALL)
                 dgv.Refresh()
+                dgv.Select()
             Next
         End If
 

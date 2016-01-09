@@ -504,7 +504,10 @@ errorHandler:
         m_isUpdating = True
         For Each l_cellAddress In m_dataModificationsTracker.GetModificationsListCopy()
             Dim l_cell As Excel.Range = m_dataset.m_excelWorkSheet.Range(l_cellAddress)
-            If l_cell.Value2 = p_clientUndefinedName Then l_cell.Value2 = p_replacementClientName
+            If VarType(l_cell.Value2) = VariantType.String _
+            AndAlso l_cell.Value2 = p_clientUndefinedName Then
+                l_cell.Value2 = p_replacementClientName
+            End If
         Next
         m_isUpdating = False
 
@@ -516,25 +519,26 @@ errorHandler:
 
     Private Sub SubmitFinancialProcess()
 
-        Dim factsList As New List(Of Fact)
-        Dim cellsAddresses As List(Of String) = m_dataModificationsTracker.GetModificationsListCopy
-        For Each cellAddress In cellsAddresses
+        Dim l_factsList As New List(Of Fact)
+        Dim l_cellsAddresses As New List(Of String)
+        For Each l_cellAddress In m_dataModificationsTracker.GetModificationsListCopy
             ' Implies type of cell checked before -> only double -> check if we can enter anything else !!!
             Dim l_fact As New Fact
 
-            l_fact.EntityId = GlobalVariables.AxisElems.GetValueId(AxisType.Entities, m_dataset.m_datasetCellDimensionsDictionary(cellAddress).m_entityName)
-            l_fact.AccountId = GlobalVariables.Accounts.GetValueId(m_dataset.m_datasetCellDimensionsDictionary(cellAddress).m_accountName)
-            l_fact.Period = m_dataset.m_datasetCellDimensionsDictionary(cellAddress).m_period
+            l_fact.EntityId = GlobalVariables.AxisElems.GetValueId(AxisType.Entities, m_dataset.m_datasetCellDimensionsDictionary(l_cellAddress).m_entityName)
+            l_fact.AccountId = GlobalVariables.Accounts.GetValueId(m_dataset.m_datasetCellDimensionsDictionary(l_cellAddress).m_accountName)
+            l_fact.Period = m_dataset.m_datasetCellDimensionsDictionary(l_cellAddress).m_period
             l_fact.VersionId = m_acquisitionModel.m_currentVersionId
             l_fact.ClientId = GlobalVariables.ClientsIDDropDown.SelectedItemId
             l_fact.ProductId = GlobalVariables.ProductsIDDropDown.SelectedItemId
             l_fact.AdjustmentId = GlobalVariables.AdjustmentIDDropDown.SelectedItemId
             l_fact.EmployeeId = CType(CRUD.AxisType.Employee, UInt32)
-            l_fact.Value = m_dataset.m_excelWorkSheet.Range(cellAddress).Value
+            l_fact.Value = m_dataset.m_excelWorkSheet.Range(l_cellAddress).Value
 
-            factsList.Add(l_fact)
+            l_factsList.Add(l_fact)
+            l_cellsAddresses.Add(l_cellAddress)
         Next
-        m_fact.CMSG_UPDATE_FACT_LIST(factsList, cellsAddresses)
+        If l_factsList.Count > 0 Then m_fact.CMSG_UPDATE_FACT_LIST(l_factsList, l_cellsAddresses)
 
     End Sub
 
@@ -542,12 +546,15 @@ errorHandler:
 
         If m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.ACCOUNT).Count > 0 Then
             Dim l_factsList As New List(Of Fact)
-            Dim l_cellsAddressesList As List(Of String) = m_dataModificationsTracker.GetModificationsListCopy
-            For Each l_cellAddress In l_cellsAddressesList
-                Dim l_clientName As String = m_dataset.m_excelWorkSheet.Range(l_cellAddress).Value2
+            Dim l_cellsAddressesList As New List(Of String)
+            For Each l_cellAddress In m_dataModificationsTracker.GetModificationsListCopy
 
-                ' controlle de la valeur contenue dans la cellule
-                ' -> if date or double or not string -> message !
+                Dim l_cell As Excel.Range = m_dataset.m_excelWorkSheet.Range(l_cellAddress)
+                If IsClientRHCellValueValid(l_cell) = False Then
+                    MsgBox(Local.GetValue("upload.msg_invalid_value_for_client") & l_cell.Value2)
+                    Continue For
+                End If
+                Dim l_clientName As String = l_cell.Value2
 
                 If l_clientName <> "" Then
 
@@ -573,6 +580,7 @@ errorHandler:
                     l_fact.Value = 1   ' * % working time of the consultant
 
                     l_factsList.Add(l_fact)
+                    l_cellsAddressesList.Add(l_cellAddress)
 
                 Else
                     ' if fact exist then delete
@@ -586,9 +594,9 @@ errorHandler:
                     Continue For
                 End If
             Next
-            m_fact.CMSG_UPDATE_FACT_LIST(l_factsList, l_cellsAddressesList)
+            If l_factsList.Count > 0 Then m_fact.CMSG_UPDATE_FACT_LIST(l_factsList, l_cellsAddressesList)
         Else
-            MsgBox("No Account was setup. Cannot submit")
+            MsgBox(Local.GetValue("upload.msg_no_account_setup"))
         End If
 
     End Sub
@@ -688,14 +696,31 @@ errorHandler:
 
         Dim l_unereferencedClientsList As New List(Of String)
         For Each l_cellAddress In m_dataModificationsTracker.GetModificationsListCopy()
-            Dim l_clientName As String = m_dataset.m_excelWorkSheet.Range(l_cellAddress).Value()
-            If l_clientName <> "" _
+            Dim l_cell As Excel.Range = m_dataset.m_excelWorkSheet.Range(l_cellAddress)
+            Dim l_clientName As String = l_cell.Value()
+            If IsClientRHCellValueValid(l_cell) _
+            AndAlso l_clientName <> "" _
             AndAlso GlobalVariables.AxisElems.GetValue(AxisType.Client, l_clientName) Is Nothing _
             AndAlso l_unereferencedClientsList.Contains(l_clientName) = False Then
                 l_unereferencedClientsList.Add(l_clientName)
             End If
         Next
         Return l_unereferencedClientsList
+
+    End Function
+
+    Private Function IsClientRHCellValueValid(ByRef p_cell As Excel.Range) As Boolean
+
+        If VarType(p_cell.Value2) = VariantType.Date _
+        Or VarType(p_cell.Value2) = VariantType.Double _
+        Or VarType(p_cell.Value2) = VariantType.Error _
+        Or VarType(p_cell.Value2) = VariantType.Integer Then
+            Return False
+        ElseIf VarType(p_cell.Value2) = VariantType.String Then
+            Return True
+        Else
+            Return False
+        End If
 
     End Function
 

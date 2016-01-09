@@ -319,7 +319,8 @@
     <string name="msg_product_orientation_unclear">Consultants orgnization is not clear. Please check that consultants are aligned in rows or columns.</string>
     <string name="msg_entity_not_found">No BU identified on the worksheet.</string>
     <string name="msg_error_upload">An error occurred in Excel and the report could not be created.</string>
-
+    <string name="msg_invalid_value_for_client">This value is not suitable for a client's name: </string>
+    <string name="msg_no_account_setup">No Account was setup. Cannot submit.</string>
   </category>
 
   <category name="global_facts">
