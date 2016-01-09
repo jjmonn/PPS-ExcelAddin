@@ -26,7 +26,7 @@ Public Class CUI2LeftPane
     Friend entitiesFiltersTV As New vTreeView
     Friend adjustmentsTV As New vTreeView
     Friend adjustmentsFiltersTV As New vTreeView
-    Friend clientsTV As New vTreeView
+    Friend m_clientsTV As New vTreeView
     Friend clientsFiltersTV As New vTreeView
     Friend productsTV As New vTreeView
     Friend productsFiltersTV As New vTreeView
@@ -88,7 +88,7 @@ Public Class CUI2LeftPane
     Private Sub LoadTvs(ByRef p_process As Account.AccountProcess)
 
         GlobalVariables.AxisElems.LoadEntitiesTV(entitiesTV)
-        GlobalVariables.AxisElems.LoadAxisTree(AxisType.Client, clientsTV)
+        GlobalVariables.AxisElems.LoadHierarchyAxisTree(AxisType.Client, m_clientsTV)
         GlobalVariables.AxisElems.LoadAxisTree(AxisType.Product, productsTV)
         GlobalVariables.AxisElems.LoadAxisTree(AxisType.Adjustment, adjustmentsTV)
 
@@ -98,7 +98,7 @@ Public Class CUI2LeftPane
         AxisFilterManager.LoadFvTv(adjustmentsFiltersTV, GlobalEnums.AnalysisAxis.ADJUSTMENTS)
 
         VTreeViewUtil.CheckStateAllNodes(entitiesTV, CheckState.Checked)
-        VTreeViewUtil.CheckStateAllNodes(clientsTV, CheckState.Checked)
+        VTreeViewUtil.CheckStateAllNodes(m_clientsTV, CheckState.Checked)
         VTreeViewUtil.CheckStateAllNodes(productsTV, CheckState.Checked)
         VTreeViewUtil.CheckStateAllNodes(adjustmentsTV, CheckState.Checked)
         VTreeViewUtil.CheckStateAllNodes(entitiesFiltersTV, CheckState.Checked)
@@ -114,7 +114,7 @@ Public Class CUI2LeftPane
         GlobalVariables.Versions.LoadVersionsTV(versionsTV)
 
         VTreeViewUtil.InitTVFormat(entitiesTV)
-        VTreeViewUtil.InitTVFormat(clientsTV)
+        VTreeViewUtil.InitTVFormat(m_clientsTV)
         VTreeViewUtil.InitTVFormat(productsTV)
         VTreeViewUtil.InitTVFormat(adjustmentsTV)
         VTreeViewUtil.InitTVFormat(versionsTV)
@@ -125,7 +125,7 @@ Public Class CUI2LeftPane
         VTreeViewUtil.SeEntitiesTVImageIndexes(entitiesTV)
 
         InitTV(entitiesFiltersTV)
-        InitTV(clientsTV)
+        InitTV(m_clientsTV)
         InitTV(clientsFiltersTV)
         InitTV(productsTV)
         InitTV(productsFiltersTV)
@@ -134,7 +134,7 @@ Public Class CUI2LeftPane
         InitTV(versionsTV)
         InitTV(periodsTV)
 
-        clientsTV.ContextMenuStrip = m_rightClickMenu
+        m_clientsTV.ContextMenuStrip = m_rightClickMenu
         productsTV.ContextMenuStrip = m_rightClickMenu
         versionsTV.ContextMenuStrip = m_rightClickMenu
         entitiesFiltersTV.ContextMenuStrip = m_rightClickMenu
@@ -283,7 +283,7 @@ Public Class CUI2LeftPane
         HideAllTVs()
         Select Case SelectionCB.SelectedItem.Text
             Case ENTITIES_FILTERS_STR : entitiesFiltersTV.Visible = True
-            Case CLIENTS_STR : clientsTV.Visible = True
+            Case CLIENTS_STR : m_clientsTV.Visible = True
             Case CLIENTS_FILTERS_STR : clientsFiltersTV.Visible = True
             Case PRODUCTS_STR : productsTV.Visible = True
             Case PRODUCTS_FILTERS_STR : productsFiltersTV.Visible = True
@@ -347,7 +347,7 @@ Public Class CUI2LeftPane
 
     Private Sub HideAllTVs()
 
-        Me.clientsTV.Visible = False
+        Me.m_clientsTV.Visible = False
         Me.clientsFiltersTV.Visible = False
         Me.productsTV.Visible = False
         Me.productsFiltersTV.Visible = False

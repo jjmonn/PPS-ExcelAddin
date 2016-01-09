@@ -67,17 +67,17 @@ Class AxisElemManager : Inherits AxedCRUDManager(Of AxisElem)
 
 #Region "Utilities"
 
-    Friend Sub LoadEntitiesTV(ByRef TV As Windows.Forms.TreeView)
+    Friend Sub LoadEntitiesTV(ByRef p_treeview As Windows.Forms.TreeView)
 
-        TreeViewsUtilities.LoadTreeview(TV, m_CRUDDic(AxisType.Entities))
-        TreeViewsUtilities.SetTreeviewIconsHiearachy(TV)
+        TreeViewsUtilities.LoadTreeview(p_treeview, m_CRUDDic(AxisType.Entities))
+        TreeViewsUtilities.SetTreeviewIconsHiearachy(p_treeview)
 
     End Sub
 
     Friend Sub LoadEntitiesTV(ByRef p_treeview As VIBlend.WinForms.Controls.vTreeView)
 
         VTreeViewUtil.LoadTreeview(p_treeview, m_CRUDDic(AxisType.Entities))
-        VTreeViewUtil.SetTreeviewIconsHiearachy(p_treeview)
+        VTreeViewUtil.SetTreeviewIconsHierarchy(p_treeview)
 
     End Sub
 
@@ -105,7 +105,16 @@ Class AxisElemManager : Inherits AxedCRUDManager(Of AxisElem)
             Dim node As VIBlend.WinForms.Controls.vTreeNode = VTreeViewUtil.AddNode(l_axisElem.Id, l_axisElem.Name, p_treeview, 0)
             node.Checked = Windows.Forms.CheckState.Checked
         Next
-        VTreeViewUtil.SetTreeviewIconsHiearachy(p_treeview)
+        VTreeViewUtil.SetTreeviewIconsHierarchy(p_treeview)
+
+    End Sub
+
+    Friend Sub LoadHierarchyAxisTree(ByVal p_axis As AxisType, _
+                                     ByRef p_treeview As VIBlend.WinForms.Controls.vTreeView)
+
+        p_treeview.Nodes.Clear()
+        VTreeViewUtil.LoadTreeview(p_treeview, m_CRUDDic(p_axis))
+        VTreeViewUtil.SetTreeviewIconsHierarchy(p_treeview)
 
     End Sub
 
@@ -122,7 +131,7 @@ Class AxisElemManager : Inherits AxedCRUDManager(Of AxisElem)
                 node.Checked = Windows.Forms.CheckState.Checked
             End If
         Next
-        VTreeViewUtil.SetTreeviewIconsHiearachy(p_treeview)
+        VTreeViewUtil.SetTreeviewIconsHierarchy(p_treeview)
 
     End Sub
 
@@ -146,7 +155,7 @@ Class AxisElemManager : Inherits AxedCRUDManager(Of AxisElem)
             Dim node As VIBlend.WinForms.Controls.vTreeNode = VTreeViewUtil.AddNode(l_axisElem.Id, l_axisElem.Name, p_treeview, 0)
             node.Checked = Windows.Forms.CheckState.Checked
         Next
-        VTreeViewUtil.SetTreeviewIconsHiearachy(p_treeview)
+        VTreeViewUtil.SetTreeviewIconsHierarchy(p_treeview)
 
     End Sub
 

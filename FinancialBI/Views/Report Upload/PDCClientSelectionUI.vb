@@ -12,7 +12,7 @@ Public Class PDCClientSelectionUI
         InitializeComponent()
 
         ' Add any initialization after the InitializeComponent() call.
-        GlobalVariables.AxisElems.LoadAxisTree(CRUD.AxisType.Client, m_clientsTreeview)
+        GlobalVariables.AxisElems.LoadHierarchyAxisTree(CRUD.AxisType.Client, m_clientsTreeview)
         m_clientsTreeview.ExpandAll()
         VTreeViewUtil.InitTVFormat(m_clientsTreeview)
 

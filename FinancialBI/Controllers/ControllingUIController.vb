@@ -21,6 +21,7 @@ Imports System.Linq
 Imports VIBlend.Utilities
 Imports VIBlend.WinForms.Controls
 Imports CRUD
+Imports FinancialBI.GlobalEnums
 
 
 
@@ -97,30 +98,23 @@ Friend Class ControllingUIController
 
             Next
         Next
-        ' Load Clients Nodes
-        Dim clientsNode As vTreeNode = VTreeViewUtil.AddNode(computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.CLIENTS, _
-                                                             ControllingUI_2.CLIENTS_CODE, _
-                                                             m_filtersNodes)
-        For Each clientId As Int32 In GlobalVariables.AxisElems.GetDictionary(AxisType.Client).Keys
-            If GlobalVariables.AxisElems.GetValue(AxisType.Client, clientId) Is Nothing Then Continue For
-            VTreeViewUtil.AddNode(clientId, GlobalVariables.AxisElems.GetValueName(AxisType.Client, clientId), clientsNode)
-        Next
 
-        ' Load Products Nodes
-        Dim productsNode As vTreeNode = VTreeViewUtil.AddNode(computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.PRODUCTS, _
-                                                              ControllingUI_2.PRODUCTS_CODE, _
-                                                              m_filtersNodes)
-        For Each productId As Int32 In GlobalVariables.AxisElems.GetDictionary(AxisType.Product).Keys
-            If GlobalVariables.AxisElems.GetValue(AxisType.Product, productId) Is Nothing Then Continue For
-            VTreeViewUtil.AddNode(productId, GlobalVariables.AxisElems.GetValueName(AxisType.Product, productId), productsNode)
-        Next
+        LoadAxisNodes(AxisType.Client, AnalysisAxis.CLIENTS, ControllingUI_2.CLIENTS_CODE)
+        LoadAxisNodes(AxisType.Product, AnalysisAxis.PRODUCTS, ControllingUI_2.PRODUCTS_CODE)
+        LoadAxisNodes(AxisType.Adjustment, AnalysisAxis.ADJUSTMENTS, ControllingUI_2.ADJUSTMENT_CODE)
+        LoadAxisNodes(AxisType.Employee, AnalysisAxis.EMPLOYEES, ControllingUI_2.EMPLOYEE_CODE)
 
-        ' Load Adjustment Nodes
-        Dim adjustmentsNode As vTreeNode = VTreeViewUtil.AddNode(computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.ADJUSTMENTS, _
-                                                                 ControllingUI_2.ADJUSTMENT_CODE, _
-                                                                 m_filtersNodes)
-        For Each elem In GlobalVariables.AxisElems.GetDictionary(AxisType.Adjustment).Values
-            VTreeViewUtil.AddNode(elem.Id, elem.Name, adjustmentsNode)
+    End Sub
+
+    Private Sub LoadAxisNodes(ByRef p_axisType As AxisType, _
+                              ByRef p_analysisAxis As AnalysisAxis, _
+                              ByRef p_axisCode As String)
+
+        Dim l_AxisNode As vTreeNode = VTreeViewUtil.AddNode(computer.AXIS_DECOMPOSITION_IDENTIFIER & p_analysisAxis, _
+                                                            p_axisCode, _
+                                                            m_filtersNodes)
+        For Each l_elem In GlobalVariables.AxisElems.GetDictionary(p_axisType).Values
+            VTreeViewUtil.AddNode(l_elem.Id, l_elem.Name, l_AxisNode)
         Next
 
     End Sub
@@ -162,7 +156,7 @@ Friend Class ControllingUIController
                 Return ""
 
             Case Else
-                    System.Diagnostics.Debug.WriteLine("CUI.Compute() -> ControllingUIController.HasMinimumDimensions() - undeifined process: " & m_view.m_process)
+                System.Diagnostics.Debug.WriteLine("CUI.Compute() -> ControllingUIController.HasMinimumDimensions() - undeifined process: " & m_view.m_process)
         End Select
         Return ""
 
@@ -371,8 +365,8 @@ Friend Class ControllingUIController
         For Each node As vTreeNode In p_hierarchyNode.Nodes
             Select Case node.Value
                 Case computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.ENTITIES
-                    For Each Entity_node As vTreeNode In m_entityNode.Nodes
-                        VTreeViewUtil.CopySubNodes(Entity_node, node)
+                    For Each l_entityNode As vTreeNode In m_entityNode.Nodes
+                        VTreeViewUtil.CopySubNodes(l_entityNode, node)
                     Next
 
                 Case computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.ACCOUNTS
@@ -391,6 +385,11 @@ Friend Class ControllingUIController
                             VTreeViewUtil.AddNode(account_node.Value, account_node.Text, node)
                         Next
                     End If
+
+                Case computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.CLIENTS
+                    For Each l_clientsNode As vTreeNode In m_view.m_leftPaneControl.m_clientsTV.Nodes
+                        VTreeViewUtil.CopySubNodes(l_clientsNode, node)
+                    Next
 
                 Case computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.VERSIONS
                     For Each l_version_id In m_versionsDict.Keys
@@ -978,7 +977,7 @@ Friend Class ControllingUIController
         Dim axisFilters As New SafeDictionary(Of Int32, List(Of Int32))
 
         AddAxisFilterFromTV(m_view.m_leftPaneControl.entitiesTV, GlobalEnums.AnalysisAxis.ENTITIES, axisFilters)
-        AddAxisFilterFromTV(m_view.m_leftPaneControl.clientsTV, GlobalEnums.AnalysisAxis.CLIENTS, axisFilters)
+        AddAxisFilterFromTV(m_view.m_leftPaneControl.m_clientsTV, GlobalEnums.AnalysisAxis.CLIENTS, axisFilters)
         AddAxisFilterFromTV(m_view.m_leftPaneControl.productsTV, GlobalEnums.AnalysisAxis.PRODUCTS, axisFilters)
         AddAxisFilterFromTV(m_view.m_leftPaneControl.adjustmentsTV, GlobalEnums.AnalysisAxis.ADJUSTMENTS, axisFilters)
 

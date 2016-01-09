@@ -238,7 +238,7 @@ Public Class VTreeViewUtil
 
     End Sub
 
-    Public Shared Sub SetTreeviewIconsHiearachy(ByRef p_treeview As vTreeView)
+    Public Shared Sub SetTreeviewIconsHierarchy(ByRef p_treeview As vTreeView)
 
         For Each l_node As vTreeNode In p_treeview.GetNodes
             If l_node.Nodes.Count > 0 Then
