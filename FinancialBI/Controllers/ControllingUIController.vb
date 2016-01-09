@@ -444,7 +444,7 @@ Friend Class ControllingUIController
                     If m_view.m_process = Account.AccountProcess.RH Then l_weekPeriods = m_view.FilterPeriodList(l_weekPeriods.ToArray)
 
                     For Each l_weekId As Int32 In l_weekPeriods
-                        VTreeViewUtil.AddNode(computer.WEEK_PERIOD_IDENTIFIER & l_weekId, "Week " & Period.GetWeekNumberFromDateId(l_weekId) & ", " & Year(Date.FromOADate(l_weekId)), node)
+                        VTreeViewUtil.AddNode(computer.WEEK_PERIOD_IDENTIFIER & l_weekId, Local.GetValue("general.week") & " " & Period.GetWeekNumberFromDateId(l_weekId) & ", " & Year(Date.FromOADate(l_weekId)), node)
                     Next
                     m_view.m_leftPaneControl.SetupPeriodsTV(node)
 
@@ -1019,9 +1019,11 @@ Friend Class ControllingUIController
         AddFiltersFromTV(m_view.m_leftPaneControl.adjustmentsFiltersTV, _
                          GlobalEnums.AnalysisAxis.ADJUSTMENTS, _
                          filters)
-        AddFiltersFromTV(m_view.m_leftPaneControl.m_employeesFiltersTV, _
-                        GlobalEnums.AnalysisAxis.EMPLOYEES, _
-                        filters)
+        If m_view.m_process = Account.AccountProcess.RH Then
+            AddFiltersFromTV(m_view.m_leftPaneControl.m_employeesFiltersTV, _
+                            GlobalEnums.AnalysisAxis.EMPLOYEES, _
+                            filters)
+        End If
 
         If filters.Count = 0 Then
             Return Nothing

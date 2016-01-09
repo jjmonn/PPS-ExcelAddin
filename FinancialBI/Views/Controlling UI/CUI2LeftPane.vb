@@ -353,10 +353,10 @@ Public Class CUI2LeftPane
         Me.productsFiltersTV.Visible = False
         Me.adjustmentsTV.Visible = False
         Me.adjustmentsFiltersTV.Visible = False
-        Me.m_employeesFiltersTV.Visible = False
+        If Me.m_employeesFiltersTV IsNot Nothing Then Me.m_employeesFiltersTV.Visible = False
         Me.versionsTV.Visible = False
         Me.periodsTV.Visible = False
-        Me.currenciesCLB.Visible = False
+        If Me.currenciesCLB IsNot Nothing Then Me.currenciesCLB.Visible = False
 
     End Sub
 
