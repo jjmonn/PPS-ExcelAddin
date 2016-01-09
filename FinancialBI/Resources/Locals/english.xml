@@ -126,18 +126,62 @@
 	<string name="msg_unknown">Unknown error.</string>
   </category>
  
-  <category name="entities_edition">
+  <category name="axis_edition">
 
     <string name="parent_entity">Parent Entity</string>
     <string name="parent_entity_selection">Select Parent Entity</string>
     <string name="new_entity">New Legal Entity</string>
+
+    <string name="parent_client">Parent Client</string>
+    <string name="parent_client_selection">Select Parent Client</string>
+    <string name="new_client">New Client</string>
+
+    <string name="parent_product">Parent Product</string>
+    <string name="parent_product_selection">Select Parent Product</string>
+    <string name="new_product">New Product</string>
+
+    <string name="parent_adjustment">Parent Adjustment</string>
+    <string name="parent_adjustment_selection">Select Parent Adjustment</string>
+    <string name="new_adjustment">New Adjustment</string>
+
+    <string name="parent_employee">Parent Employee</string>
+    <string name="parent_employee_selection">Select Parent Employee</string>
+    <string name="new_employee">New Employee</string>
+    
    
     <!--messages-->
-      <string name="msg_selection">An Entity must be selected.</string>
-      <string name="msg_entity_name">Enter the name of the new entity:</string>
-      <string name="msg_delete1">Careful, you are about to delete the entity </string>
-      <string name="msg_delete2">This entity and all sub entities will be deleted, do you confirm?</string>
-      <string name="title_delete_confirmation">Entity deletion confirmation</string>
+
+      <string name="msg_selection1">An Entity must be selected.</string>
+      <string name="msg_name1">Enter the name of the new entity:</string>
+      <string name="msg_delete11">Careful, you are about to delete the entity </string>
+      <string name="msg_delete21">This entity and all sub entities will be deleted, do you confirm?</string>
+      <string name="title_delete_confirmation1">Entity deletion confirmation</string>
+
+    <string name="msg_selection2">A client must be selected.</string>
+    <string name="msg_client_name2">Enter the name of the new client:</string>
+    <string name="msg_delete12">Careful, you are about to delete the client </string>
+    <string name="msg_delete22">This client and all sub clients will be deleted, do you confirm?</string>
+    <string name="title_delete_confirmation2">Client deletion confirmation</string>
+
+    <string name="msg_selection3">A product must be selected.</string>
+    <string name="msg_name3">Enter the name of the new product:</string>
+    <string name="msg_delete13">Careful, you are about to delete the product </string>
+    <string name="msg_delete23">This product and all sub products will be deleted, do you confirm?</string>
+    <string name="title_delete_confirmation3">product deletion confirmation</string>
+
+    <string name="msg_selection4">An adjustment must be selected.</string>
+    <string name="msg_name4">Enter the name of the new adjustment:</string>
+    <string name="msg_delete14">Careful, you are about to delete the adjustment </string>
+    <string name="msg_delete24">This adjustment and all sub adjustments will be deleted, do you confirm?</string>
+    <string name="title_delete_confirmation4">Adjustment deletion confirmation</string>
+
+    <string name="msg_selection5">An employee must be selected.</string>
+    <string name="msg_name5">Enter the name of the new employee:</string>
+    <string name="msg_delete15">Careful, you are about to delete the employee </string>
+    <string name="msg_delete25">This employee and all sub employees will be deleted, do you confirm?</string>
+    <string name="title_delete_confirmation5">Employee deletion confirmation</string>
+
+    
       <string name="msg_currency_not_found1">Currency </string>
       <string name="msg_currency_not_found2"> not found</string>  
       <string name="msg_select_currency">A currency must be selected.</string>
@@ -404,7 +448,7 @@
   
   <category name="general">
     <string name="week">Week</string>
-    
+    <string name="edition">Edition</string>
     
      <string name="account">Account</string>
      <string name="entity">Entity</string>

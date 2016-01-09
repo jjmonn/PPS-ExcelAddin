@@ -25,7 +25,7 @@ Partial Class NewAxisUI
         Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(NewAxisUI))
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
-        Me.m_parentEntityLabel = New VIBlend.WinForms.Controls.vLabel()
+        Me.m_parentAxisLabel = New VIBlend.WinForms.Controls.vLabel()
         Me.NameTextBox = New VIBlend.WinForms.Controls.vTextBox()
         Me.m_nameLabel = New VIBlend.WinForms.Controls.vLabel()
         Me.m_parentAxisElemTreeviewBox = New VIBlend.WinForms.Controls.vTreeViewBox()
@@ -42,7 +42,7 @@ Partial Class NewAxisUI
         Me.TableLayoutPanel1.ColumnCount = 2
         Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 36.51376!))
         Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 63.48624!))
-        Me.TableLayoutPanel1.Controls.Add(Me.m_parentEntityLabel, 0, 1)
+        Me.TableLayoutPanel1.Controls.Add(Me.m_parentAxisLabel, 0, 1)
         Me.TableLayoutPanel1.Controls.Add(Me.NameTextBox, 1, 0)
         Me.TableLayoutPanel1.Controls.Add(Me.m_nameLabel, 0, 0)
         Me.TableLayoutPanel1.Controls.Add(Me.m_parentAxisElemTreeviewBox, 1, 1)
@@ -57,19 +57,19 @@ Partial Class NewAxisUI
         '
         'm_parentEntityLabel
         '
-        Me.m_parentEntityLabel.BackColor = System.Drawing.Color.Transparent
-        Me.m_parentEntityLabel.DisplayStyle = VIBlend.WinForms.Controls.LabelItemStyle.TextOnly
-        Me.m_parentEntityLabel.Ellipsis = False
-        Me.m_parentEntityLabel.ImageAlignment = System.Drawing.ContentAlignment.TopLeft
-        Me.m_parentEntityLabel.Location = New System.Drawing.Point(3, 33)
-        Me.m_parentEntityLabel.Multiline = True
-        Me.m_parentEntityLabel.Name = "m_parentEntityLabel"
-        Me.m_parentEntityLabel.Size = New System.Drawing.Size(169, 24)
-        Me.m_parentEntityLabel.TabIndex = 5
-        Me.m_parentEntityLabel.Text = "parent_entity"
-        Me.m_parentEntityLabel.TextAlignment = System.Drawing.ContentAlignment.MiddleLeft
-        Me.m_parentEntityLabel.UseMnemonics = True
-        Me.m_parentEntityLabel.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
+        Me.m_parentAxisLabel.BackColor = System.Drawing.Color.Transparent
+        Me.m_parentAxisLabel.DisplayStyle = VIBlend.WinForms.Controls.LabelItemStyle.TextOnly
+        Me.m_parentAxisLabel.Ellipsis = False
+        Me.m_parentAxisLabel.ImageAlignment = System.Drawing.ContentAlignment.TopLeft
+        Me.m_parentAxisLabel.Location = New System.Drawing.Point(3, 33)
+        Me.m_parentAxisLabel.Multiline = True
+        Me.m_parentAxisLabel.Name = "m_parentEntityLabel"
+        Me.m_parentAxisLabel.Size = New System.Drawing.Size(169, 24)
+        Me.m_parentAxisLabel.TabIndex = 5
+        Me.m_parentAxisLabel.Text = "parent_entity"
+        Me.m_parentAxisLabel.TextAlignment = System.Drawing.ContentAlignment.MiddleLeft
+        Me.m_parentAxisLabel.UseMnemonics = True
+        Me.m_parentAxisLabel.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
         '
         'NameTextBox
         '
@@ -189,6 +189,6 @@ Partial Class NewAxisUI
     Friend WithEvents ButtonIcons As System.Windows.Forms.ImageList
     Friend WithEvents NameTextBox As VIBlend.WinForms.Controls.vTextBox
     Friend WithEvents m_nameLabel As VIBlend.WinForms.Controls.vLabel
-    Friend WithEvents m_parentEntityLabel As VIBlend.WinForms.Controls.vLabel
+    Friend WithEvents m_parentAxisLabel As VIBlend.WinForms.Controls.vLabel
     Friend WithEvents m_parentAxisElemTreeviewBox As VIBlend.WinForms.Controls.vTreeViewBox
 End Class

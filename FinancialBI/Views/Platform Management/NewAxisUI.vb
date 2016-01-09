@@ -36,7 +36,8 @@ Friend Class NewAxisUI
 
 #Region "Initialize"
 
-    Friend Sub New(ByRef p_controller As AxisController)
+    Friend Sub New(ByRef p_controller As AxisController, _
+                   ByRef p_axisType As AxisType)
 
         ' This call is required by the designer.
         InitializeComponent()
@@ -46,11 +47,11 @@ Friend Class NewAxisUI
         If m_controller.GetAxisType() = AxisType.Entities OrElse m_controller.GetAxisType = AxisType.Client Then
             GlobalVariables.AxisElems.LoadAxisTree(m_controller.GetAxisType(), m_parentAxisElemTreeviewBox.TreeView)
         Else
-            m_parentEntityLabel.Visible = False
+            m_parentAxisLabel.Visible = False
             m_parentAxisElemTreeviewBox.Visible = False
         End If
 
-        MultilanguageSetup()
+        MultilanguageSetup(p_axisType)
 
     End Sub
 
@@ -76,14 +77,39 @@ Friend Class NewAxisUI
 
     End Sub
 
-    Private Sub MultilanguageSetup()
+    Private Sub MultilanguageSetup(ByRef p_axisType As AxisType)
 
-        Me.m_parentEntityLabel.Text = Local.GetValue("entities_edition.parent_entity")
         Me.m_nameLabel.Text = Local.GetValue("general.name")
-        Me.m_parentAxisElemTreeviewBox.Text = Local.GetValue("entities_edition.parent_entity_selection")
         Me.CancelBT.Text = Local.GetValue("general.cancel")
         Me.CreateEntityBT.Text = Local.GetValue("general.create")
-        Me.Text = Local.GetValue("entities_edition.new_entity")
+
+        Select Case p_axisType
+            Case AxisType.Entities
+                Me.m_parentAxisLabel.Text = Local.GetValue("axis_edition.parent_entity")
+                Me.m_parentAxisElemTreeviewBox.Text = Local.GetValue("axis_edition.parent_entity_selection")
+                Me.Text = Local.GetValue("axis_edition.new_entity")
+
+            Case AxisType.Client
+                Me.m_parentAxisLabel.Text = Local.GetValue("axis_edition.parent_client")
+                Me.m_parentAxisElemTreeviewBox.Text = Local.GetValue("axis_edition.parent_client_selection")
+                Me.Text = Local.GetValue("axis_edition.new_client")
+
+            Case AxisType.Product
+                Me.m_parentAxisLabel.Text = Local.GetValue("axis_edition.parent_product")
+                Me.m_parentAxisElemTreeviewBox.Text = Local.GetValue("axis_edition.parent_product_selection")
+                Me.Text = Local.GetValue("axis_edition.new_product")
+
+            Case AxisType.Adjustment
+                Me.m_parentAxisLabel.Text = Local.GetValue("axis_edition.parent_adjustment")
+                Me.m_parentAxisElemTreeviewBox.Text = Local.GetValue("axis_edition.parent_adjustment_selection")
+                Me.Text = Local.GetValue("axis_edition.new_adjustment")
+
+            Case AxisType.Employee
+                Me.m_parentAxisLabel.Text = Local.GetValue("axis_edition.parent_employee")
+                Me.m_parentAxisElemTreeviewBox.Text = Local.GetValue("axis_edition.parent_employee_selection")
+                Me.Text = Local.GetValue("axis_edition.new_employee")
+
+        End Select
 
     End Sub
 
@@ -194,7 +220,7 @@ Friend Class NewAxisUI
     Private Function IsFormValid(ByRef new_entity_name As String) As Boolean
 
         If new_entity_name = "" Then
-            MsgBox(Local.GetValue("entities_edition.msg_entity_name"))
+            MsgBox(Local.GetValue("axis_edition.msg_entity_name"))
             Return False
         End If
         ' below -> check is on server priority normal
@@ -203,7 +229,7 @@ Friend Class NewAxisUI
         '    Return False
         'End If
         'If CurrenciesComboBox1.SelectedItem Is Nothing Then
-        '    MsgBox(Local.GetValue("entities_edition.msg_select_currency"))
+        '    MsgBox(Local.GetValue("axis_edition.msg_select_currency"))
         '    Return False
         'End If
         Return True

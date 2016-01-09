@@ -125,18 +125,59 @@
 	
   </category>
 
-  <category name="entities_edition">
+  <category name="axis_edition">
 
     <string name="parent_entity">Entité parente</string>
     <string name="parent_entity_selection">Selectionnez l'entité parente</string>
     <string name="new_entity">Nouvelle Entité Légale</string>
 
+     <string name="parent_client">Client Parent</string>
+    <string name="parent_client_selection">Selectionnez le Client parent</string>
+    <string name="new_client">Nouveau Client</string>
+
+    <string name="parent_product">Produit parent</string>
+    <string name="parent_product_selection">Selectionnez le produit parent</string>
+    <string name="new_product">Nouveau produit</string>
+
+    <string name="parent_adjustment">Ajustement parent</string>
+    <string name="parent_adjustment_selection">Selectionnez l'ajustement parent</string>
+    <string name="new_adjustment">Nouvel ajustement</string>
+
+    <string name="parent_employee">Employé parent</string>
+    <string name="parent_employee_selection">Selectionnez l'employé parent</string>
+    <string name="new_employee">Nouvel employé</string>
+    
     <!--messages-->
-    <string name="msg_selection">Une entité doit être sélectionnée.</string>
-    <string name="msg_entity_name">Entrez le nom de la nouvelle entité :</string>
-    <string name="msg_delete1">Attention, vous êtes sur le point de supprimer l'entité </string>
-    <string name="msg_delete2">Cette entité et toutes les sous entités vont être supprimées, est-ce que vous confirmez ?</string>
-    <string name="title_delete_confirmation">Confirmation de la suppression d'entités</string>
+    <string name="msg_selection1">Une entité doit être sélectionnée.</string>
+    <string name="msg_name1">Entrez le nom de la nouvelle entité :</string>
+    <string name="msg_delete11">Attention, vous êtes sur le point de supprimer l'entité </string>
+    <string name="msg_delete21">Cette entité et toutes les sous entités vont être supprimées, est-ce que vous confirmez ?</string>
+    <string name="title_delete_confirmation1">Confirmation de la suppression d'entités</string>
+
+    <string name="msg_selection2">Un client doit être sélectionné.</string>
+    <string name="msg_name2">Entrez le nom du nouveau client :</string>
+    <string name="msg_delete12">Attention, vous êtes sur le point de supprimer le client </string>
+    <string name="msg_delete22">Ce client et tous ses sous clients vont être supprimés, est-ce que vous confirmez ?</string>
+    <string name="title_delete_confirmation2">Confirmation de la suppression de clients</string>
+
+    <string name="msg_selection3">Un produit doit être sélectionné.</string>
+    <string name="msg_name3">Entrez le nom du nouveau produit :</string>
+    <string name="msg_delete13">Attention, vous êtes sur le point de supprimer le produit </string>
+    <string name="msg_delete23">Ce produit et tous ses sous produits vont être supprimés, est-ce que vous confirmez ?</string>
+    <string name="title_delete_confirmation3">Confirmation de la suppression de produits</string>
+
+    <string name="msg_selection4">Un ajustement doit être sélectionné.</string>
+    <string name="msg_name4">Entrez le nom du nouveau ajustement :</string>
+    <string name="msg_delete14">Attention, vous êtes sur le point de supprimer le ajustement </string>
+    <string name="msg_delete24">Ce ajustement et tous ses sous ajustements vont être supprimés, est-ce que vous confirmez ?</string>
+    <string name="title_delete_confirmation4">Confirmation de la suppression de ajustements</string>
+
+    <string name="msg_selection5">Un employé doit être sélectionné.</string>
+    <string name="msg_name5">Entrez le nom du nouveau employé :</string>
+    <string name="msg_delete15">Attention, vous êtes sur le point de supprimer le employé </string>
+    <string name="msg_delete25">Ce employé et tous ses sous employés vont être supprimés, est-ce que vous confirmez ?</string>
+    <string name="title_delete_confirmation5">Confirmation de la suppression de employés</string>
+
     <string name="msg_currency_not_found1">Devise </string>
     <string name="msg_currency_not_found2"> non enregistrée.</string>
     <string name="msg_select_currency">Une devise doit être sélectionnée.</string>
@@ -188,7 +229,7 @@
     <string name="clients_filters">Catégories des Clients</string>
     <string name="products_filters">Catégories des Produits</string>
     <string name="adjustments_filters">Catégories des Ajustements</string>
-    <string name="entities">Hiérarchy des entités légales</string>
+    <string name="entities">Entités légales</string>
     <string name="categories">Catégories</string>
     <string name="exchange_rates">Taux de change</string>
     <string name="users_groups">Groupes d'utilisateurs</string>
@@ -402,6 +443,7 @@
   </category>
 
   <category name="general">
+    <string name="edition">Edition</string>
     <string name="week">Semaine</string>
     <string name="account">Compte</string>
     <string name="entity">Entity</string>

@@ -37,14 +37,15 @@ Friend Class PlatformMGTGeneralUI
 
         Me.AccountsBT.Text = Local.GetValue("GeneralEditionUI.accounts")
         Me.AccountsBT.ToolTipText = Local.GetValue("GeneralEditionUI.tool_tip_account")
-        Me.EntitiesBT.Text = Local.GetValue("GeneralEditionUI.entities")
-        Me.EntitiesBT.ToolTipText = Local.GetValue("GeneralEditionUI.tool_tip_entities")
+        Me.m_entitiesBT.Text = Local.GetValue("GeneralEditionUI.entities")
+        Me.m_entitiesBT.ToolTipText = Local.GetValue("GeneralEditionUI.tool_tip_entities")
         Me.CategoriesBT.Text = Local.GetValue("GeneralEditionUI.categories")
         Me.CategoriesBT.ToolTipText = Local.GetValue("GeneralEditionUI.tool_tip_categories")
-        Me.EntitiesFiltersBT.Text = Local.GetValue("GeneralEditionUI.entities_filters")
-        Me.ClientsFiltersBT.Text = Local.GetValue("GeneralEditionUI.clients_filters")
-        Me.ProductsFiltersBT.Text = Local.GetValue("GeneralEditionUI.products_filters")
-        Me.AdjustmentsFiltersBT.Text = Local.GetValue("GeneralEditionUI.adjustments_filters")
+        Me.m_entitiesFiltersBT.Text = Local.GetValue("general.entities_filters")
+        Me.m_clientsFiltersBT.Text = Local.GetValue("general.clients_filters")
+        Me.m_productsFiltersBT.Text = Local.GetValue("general.products_filters")
+        Me.m_adjustmentsFiltersBT.Text = Local.GetValue("general.adjustments_filters")
+        Me.m_employeesFiltersBT.Text = Local.GetValue("general.employees_filters")
         Me.ClientsBT.Text = Local.GetValue("general.clients")
         Me.ClientsBT.ToolTipText = Local.GetValue("GeneralEditionUI.tool_tip_clients")
         Me.ProductsBT.Text = Local.GetValue("general.products")
@@ -99,7 +100,7 @@ Friend Class PlatformMGTGeneralUI
 
     End Sub
 
-    Private Sub EntitiesBT_Click(sender As Object, e As EventArgs) Handles EntitiesBT.Click
+    Private Sub EntitiesBT_Click(sender As Object, e As EventArgs) Handles m_entitiesBT.Click
 
         closeCurrentControl()
         current_controller = New AxisController(AxisType.Entities)
@@ -115,7 +116,7 @@ Friend Class PlatformMGTGeneralUI
 
     End Sub
 
-    Private Sub ConsultantsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ConsultantsToolStripMenuItem.Click
+    Private Sub ConsultantsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles m_employeesFiltersBT.Click
 
 
         closeCurrentControl()
@@ -141,7 +142,7 @@ Friend Class PlatformMGTGeneralUI
 
     End Sub
 
-    Private Sub ClientsFiltersBT_Click(sender As Object, e As EventArgs) Handles ClientsFiltersBT.Click
+    Private Sub ClientsFiltersBT_Click(sender As Object, e As EventArgs) Handles m_clientsFiltersBT.Click
 
         closeCurrentControl()
         current_controller = New AxisFiltersController(AxisType.Client)
@@ -149,7 +150,7 @@ Friend Class PlatformMGTGeneralUI
 
     End Sub
 
-    Private Sub EntitiesFiltersBT_Click(sender As Object, e As EventArgs) Handles EntitiesFiltersBT.Click
+    Private Sub EntitiesFiltersBT_Click(sender As Object, e As EventArgs) Handles m_entitiesFiltersBT.Click
 
         closeCurrentControl()
         current_controller = New AxisFiltersController(AxisType.Entities)
@@ -157,7 +158,7 @@ Friend Class PlatformMGTGeneralUI
 
     End Sub
 
-    Private Sub ProductsFiltersBT_Click(sender As Object, e As EventArgs) Handles ProductsFiltersBT.Click
+    Private Sub ProductsFiltersBT_Click(sender As Object, e As EventArgs) Handles m_productsFiltersBT.Click
 
         closeCurrentControl()
         current_controller = New AxisFiltersController(AxisType.Product)
@@ -165,7 +166,7 @@ Friend Class PlatformMGTGeneralUI
 
     End Sub
 
-    Private Sub AdjustmentsFiltersBT_Click_1(sender As Object, e As EventArgs) Handles AdjustmentsFiltersBT.Click
+    Private Sub AdjustmentsFiltersBT_Click_1(sender As Object, e As EventArgs) Handles m_adjustmentsFiltersBT.Click
 
         closeCurrentControl()
         current_controller = New AxisFiltersController(AxisType.Adjustment)

@@ -122,10 +122,10 @@ Friend Class AxisView
         Me.AutoResizeColumnsButton.Text = Local.GetValue("general.auto_resize_columns")
         Me.ExpandAllBT.Text = Local.GetValue("general.expand_all")
         Me.CollapseAllBT.Text = Local.GetValue("general.collapse_all")
-        Me.EditToolStripMenuItem.Text = Local.GetValue("general.axis")
         Me.CreateANewAxisElemToolStripMenuItem.Text = Local.GetValue("general.create")
         Me.DeleteAxisElemToolStripMenuItem.Text = Local.GetValue("general.delete")
         Me.SendEntitiesHierarchyToExcelToolStripMenuItem.Text = Local.GetValue("general.drop_on_excel")
+        Me.m_axisEditionButton.Text = Local.GetValue("general.edition")
 
     End Sub
 
@@ -211,10 +211,10 @@ Friend Class AxisView
     Private Sub RenameAxisElemButton_Click(sender As Object, e As EventArgs) Handles RenameAxisElemButton.Click
 
         If m_currentRowItem Is Nothing Then
-            MsgBox(Local.GetValue("axis_edition.msg_selection"))
+            MsgBox(Local.GetValue("axis_edition.msg_selection" & m_controller.GetAxisType))
             Exit Sub
         End If
-        Dim newAxisElemName As String = InputBox(Local.GetValue("axis_edition.msg_entity_name"), , m_currentRowItem.Caption)
+        Dim newAxisElemName As String = InputBox(Local.GetValue("axis_edition.msg_name" & m_controller.GetAxisType), , m_currentRowItem.Caption)
         If newAxisElemName <> "" Then
             m_controller.UpdateAxisElemName(m_currentRowItem.ItemValue, newAxisElemName)
         End If
@@ -236,9 +236,7 @@ Friend Class AxisView
     End Sub
 
     Private Sub CreateAxisElemToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles CreateAxisElemToolStripMenuItem.Click
-
         AddAxisElem_cmd_Click(sender, e)
-
     End Sub
 
     Private Sub CreateANewAxisElemToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles CreateANewAxisElemToolStripMenuItem.Click
@@ -268,17 +266,18 @@ Friend Class AxisView
 
     Private Sub DeleteAxisElem_cmd_Click(sender As Object, e As EventArgs) Handles DeleteAxisElemToolStripMenuItem.Click
 
+        Dim l_axisType = m_controller.GetAxisType
         If Not m_currentRowItem Is Nothing Then
-            Dim confirm As Integer = MessageBox.Show(Local.GetValue("axis_edition.msg_delete1") + Chr(13) + Chr(13) + _
+            Dim confirm As Integer = MessageBox.Show(Local.GetValue("axis_edition.msg_delete1" & l_axisType) + Chr(13) + Chr(13) + _
                                                     m_currentRowItem.Caption + Chr(13) + Chr(13) + _
-                                                    Local.GetValue("axis_edition.msg_delete2") + Chr(13) + Chr(13), _
-                                                    Local.GetValue("axis_edition.title_delete_confirmation"), MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+                                                    Local.GetValue("axis_edition.msg_delete2" & l_axisType) + Chr(13) + Chr(13), _
+                                                    Local.GetValue("axis_edition.title_delete_confirmation" & l_axisType), MessageBoxButtons.YesNo, MessageBoxIcon.Question)
             If confirm = DialogResult.Yes Then
                 Dim entity_id As String = m_currentRowItem.ItemValue
                 m_controller.DeleteAxisElem(entity_id)
             End If
         Else
-            MsgBox(Local.GetValue("axis_edition.msg_selection"))
+            MsgBox(Local.GetValue("axis_edition.msg_selection" & l_axisType))
         End If
         m_currentRowItem = Nothing
 

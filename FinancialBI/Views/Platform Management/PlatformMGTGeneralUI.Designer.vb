@@ -25,29 +25,29 @@ Partial Class PlatformMGTGeneralUI
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(PlatformMGTGeneralUI))
         Me.MenuStrip1 = New System.Windows.Forms.MenuStrip()
         Me.AccountsBT = New System.Windows.Forms.ToolStripMenuItem()
-        Me.EntitiesBT = New System.Windows.Forms.ToolStripMenuItem()
+        Me.m_entitiesBT = New System.Windows.Forms.ToolStripMenuItem()
         Me.m_employeesButton = New System.Windows.Forms.ToolStripMenuItem()
         Me.ClientsBT = New System.Windows.Forms.ToolStripMenuItem()
         Me.ProductsBT = New System.Windows.Forms.ToolStripMenuItem()
         Me.AdjustmentsBT = New System.Windows.Forms.ToolStripMenuItem()
         Me.CategoriesBT = New System.Windows.Forms.ToolStripMenuItem()
-        Me.EntitiesFiltersBT = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ClientsFiltersBT = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ProductsFiltersBT = New System.Windows.Forms.ToolStripMenuItem()
-        Me.AdjustmentsFiltersBT = New System.Windows.Forms.ToolStripMenuItem()
+        Me.m_entitiesFiltersBT = New System.Windows.Forms.ToolStripMenuItem()
+        Me.m_employeesFiltersBT = New System.Windows.Forms.ToolStripMenuItem()
+        Me.m_clientsFiltersBT = New System.Windows.Forms.ToolStripMenuItem()
+        Me.m_productsFiltersBT = New System.Windows.Forms.ToolStripMenuItem()
+        Me.m_adjustmentsFiltersBT = New System.Windows.Forms.ToolStripMenuItem()
         Me.VersionsBT = New System.Windows.Forms.ToolStripMenuItem()
         Me.CurrenciesBT = New System.Windows.Forms.ToolStripMenuItem()
         Me.ExchangeRatesButton = New System.Windows.Forms.ToolStripMenuItem()
         Me.GlobalFact_BT = New System.Windows.Forms.ToolStripMenuItem()
         Me.GroupsBT = New System.Windows.Forms.ToolStripMenuItem()
         Me.Panel1 = New System.Windows.Forms.Panel()
-        Me.ConsultantsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.MenuStrip1.SuspendLayout()
         Me.SuspendLayout()
         '
         'MenuStrip1
         '
-        Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.AccountsBT, Me.EntitiesBT, Me.m_employeesButton, Me.ClientsBT, Me.ProductsBT, Me.AdjustmentsBT, Me.CategoriesBT, Me.VersionsBT, Me.CurrenciesBT, Me.ExchangeRatesButton, Me.GlobalFact_BT, Me.GroupsBT})
+        Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.AccountsBT, Me.m_entitiesBT, Me.m_employeesButton, Me.ClientsBT, Me.ProductsBT, Me.AdjustmentsBT, Me.CategoriesBT, Me.VersionsBT, Me.CurrenciesBT, Me.ExchangeRatesButton, Me.GlobalFact_BT, Me.GroupsBT})
         Me.MenuStrip1.Location = New System.Drawing.Point(0, 0)
         Me.MenuStrip1.Name = "MenuStrip1"
         Me.MenuStrip1.Size = New System.Drawing.Size(1445, 59)
@@ -65,16 +65,16 @@ Partial Class PlatformMGTGeneralUI
         Me.AccountsBT.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
         Me.AccountsBT.ToolTipText = "[GeneralEditionUI.tool_tip_account]"
         '
-        'EntitiesBT
+        'm_entitiesBT
         '
-        Me.EntitiesBT.CheckOnClick = True
-        Me.EntitiesBT.Image = Global.FinancialBI.My.Resources.Resources.elements_hierarchy
-        Me.EntitiesBT.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
-        Me.EntitiesBT.Name = "EntitiesBT"
-        Me.EntitiesBT.Size = New System.Drawing.Size(65, 55)
-        Me.EntitiesBT.Text = "Entities"
-        Me.EntitiesBT.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
-        Me.EntitiesBT.ToolTipText = "[GeneralEditionUI.tool_tip_entities]"
+        Me.m_entitiesBT.CheckOnClick = True
+        Me.m_entitiesBT.Image = Global.FinancialBI.My.Resources.Resources.elements_hierarchy
+        Me.m_entitiesBT.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
+        Me.m_entitiesBT.Name = "m_entitiesBT"
+        Me.m_entitiesBT.Size = New System.Drawing.Size(65, 55)
+        Me.m_entitiesBT.Text = "Entities"
+        Me.m_entitiesBT.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
+        Me.m_entitiesBT.ToolTipText = "[GeneralEditionUI.tool_tip_entities]"
         '
         'm_employeesButton
         '
@@ -119,7 +119,7 @@ Partial Class PlatformMGTGeneralUI
         '
         'CategoriesBT
         '
-        Me.CategoriesBT.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.EntitiesFiltersBT, Me.ConsultantsToolStripMenuItem, Me.ClientsFiltersBT, Me.ProductsFiltersBT, Me.AdjustmentsFiltersBT})
+        Me.CategoriesBT.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.m_entitiesFiltersBT, Me.m_employeesFiltersBT, Me.m_clientsFiltersBT, Me.m_productsFiltersBT, Me.m_adjustmentsFiltersBT})
         Me.CategoriesBT.Image = Global.FinancialBI.My.Resources.Resources.filter_and_sort
         Me.CategoriesBT.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
         Me.CategoriesBT.Name = "CategoriesBT"
@@ -128,33 +128,40 @@ Partial Class PlatformMGTGeneralUI
         Me.CategoriesBT.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
         Me.CategoriesBT.ToolTipText = "[GeneralEditionUI.tool_tip_categories]"
         '
-        'EntitiesFiltersBT
+        'm_entitiesFiltersBT
         '
-        Me.EntitiesFiltersBT.Image = Global.FinancialBI.My.Resources.Resources.elements_hierarchy
-        Me.EntitiesFiltersBT.Name = "EntitiesFiltersBT"
-        Me.EntitiesFiltersBT.Size = New System.Drawing.Size(155, 24)
-        Me.EntitiesFiltersBT.Text = "Entities"
+        Me.m_entitiesFiltersBT.Image = Global.FinancialBI.My.Resources.Resources.elements_hierarchy
+        Me.m_entitiesFiltersBT.Name = "m_entitiesFiltersBT"
+        Me.m_entitiesFiltersBT.Size = New System.Drawing.Size(155, 24)
+        Me.m_entitiesFiltersBT.Text = "Entities"
         '
-        'ClientsFiltersBT
+        'm_employeesFiltersBT
         '
-        Me.ClientsFiltersBT.Image = Global.FinancialBI.My.Resources.Resources.users_relation
-        Me.ClientsFiltersBT.Name = "ClientsFiltersBT"
-        Me.ClientsFiltersBT.Size = New System.Drawing.Size(155, 24)
-        Me.ClientsFiltersBT.Text = "Clients"
+        Me.m_employeesFiltersBT.Image = Global.FinancialBI.My.Resources.Resources.engineer
+        Me.m_employeesFiltersBT.Name = "m_employeesFiltersBT"
+        Me.m_employeesFiltersBT.Size = New System.Drawing.Size(155, 24)
+        Me.m_employeesFiltersBT.Text = "Consultants"
         '
-        'ProductsFiltersBT
+        'm_clientsFiltersBT
         '
-        Me.ProductsFiltersBT.Image = Global.FinancialBI.My.Resources.Resources.barcode1
-        Me.ProductsFiltersBT.Name = "ProductsFiltersBT"
-        Me.ProductsFiltersBT.Size = New System.Drawing.Size(155, 24)
-        Me.ProductsFiltersBT.Text = "Products"
+        Me.m_clientsFiltersBT.Image = Global.FinancialBI.My.Resources.Resources.users_relation
+        Me.m_clientsFiltersBT.Name = "m_clientsFiltersBT"
+        Me.m_clientsFiltersBT.Size = New System.Drawing.Size(155, 24)
+        Me.m_clientsFiltersBT.Text = "Clients"
         '
-        'AdjustmentsFiltersBT
+        'm_productsFiltersBT
         '
-        Me.AdjustmentsFiltersBT.Image = Global.FinancialBI.My.Resources.Resources.elements4
-        Me.AdjustmentsFiltersBT.Name = "AdjustmentsFiltersBT"
-        Me.AdjustmentsFiltersBT.Size = New System.Drawing.Size(155, 24)
-        Me.AdjustmentsFiltersBT.Text = "Adjustments"
+        Me.m_productsFiltersBT.Image = Global.FinancialBI.My.Resources.Resources.barcode1
+        Me.m_productsFiltersBT.Name = "m_productsFiltersBT"
+        Me.m_productsFiltersBT.Size = New System.Drawing.Size(155, 24)
+        Me.m_productsFiltersBT.Text = "Products"
+        '
+        'm_adjustmentsFiltersBT
+        '
+        Me.m_adjustmentsFiltersBT.Image = Global.FinancialBI.My.Resources.Resources.elements4
+        Me.m_adjustmentsFiltersBT.Name = "m_adjustmentsFiltersBT"
+        Me.m_adjustmentsFiltersBT.Size = New System.Drawing.Size(155, 24)
+        Me.m_adjustmentsFiltersBT.Text = "Adjustments"
         '
         'VersionsBT
         '
@@ -218,13 +225,6 @@ Partial Class PlatformMGTGeneralUI
         Me.Panel1.Size = New System.Drawing.Size(1445, 432)
         Me.Panel1.TabIndex = 1
         '
-        'ConsultantsToolStripMenuItem
-        '
-        Me.ConsultantsToolStripMenuItem.Image = Global.FinancialBI.My.Resources.Resources.engineer
-        Me.ConsultantsToolStripMenuItem.Name = "ConsultantsToolStripMenuItem"
-        Me.ConsultantsToolStripMenuItem.Size = New System.Drawing.Size(155, 24)
-        Me.ConsultantsToolStripMenuItem.Text = "Consultants"
-        '
         'PlatformMGTGeneralUI
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -244,7 +244,7 @@ Partial Class PlatformMGTGeneralUI
     End Sub
     Friend WithEvents MenuStrip1 As System.Windows.Forms.MenuStrip
     Friend WithEvents AccountsBT As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents EntitiesBT As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents m_entitiesBT As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ClientsBT As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ProductsBT As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents VersionsBT As System.Windows.Forms.ToolStripMenuItem
@@ -252,13 +252,13 @@ Partial Class PlatformMGTGeneralUI
     Friend WithEvents Panel1 As System.Windows.Forms.Panel
     Friend WithEvents AdjustmentsBT As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents CategoriesBT As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents ClientsFiltersBT As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents EntitiesFiltersBT As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents ProductsFiltersBT As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents AdjustmentsFiltersBT As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents m_clientsFiltersBT As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents m_entitiesFiltersBT As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents m_productsFiltersBT As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents m_adjustmentsFiltersBT As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents GroupsBT As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ExchangeRatesButton As System.Windows.Forms.ToolStripMenuItem
     Private WithEvents GlobalFact_BT As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents m_employeesButton As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents ConsultantsToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents m_employeesFiltersBT As System.Windows.Forms.ToolStripMenuItem
 End Class

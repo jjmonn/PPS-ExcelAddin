@@ -12,7 +12,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 03/09/2015
+' Last modified: 07/01/2016
 
 
 Imports System.Windows.Forms
@@ -52,7 +52,7 @@ Friend Class AxisController
             Case AxisType.Employee : m_view = New EmployeeView(Me, m_axisFilterValuesTV, m_axisFilterTV)
             Case Else : m_view = New AxisView(Me, m_axisFilterValuesTV, m_axisFilterTV)
         End Select
-        m_newAxisView = New NewAxisUI(Me)
+        m_newAxisView = New NewAxisUI(Me, p_axisType)
 
         ' Entities CRUD Events
         AddHandler GlobalVariables.AxisElems.CreationEvent, AddressOf AfterAxisElemCreation

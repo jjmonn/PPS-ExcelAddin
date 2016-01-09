@@ -142,7 +142,7 @@ Public Class SubmissionsFollowUpView
 
         m_submissionsDGV.ColumnsHierarchy.Clear()
         For Each l_period As Int32 In m_periods
-            Dim l_periodCaption As String = "Week " & Period.GetWeekNumberFromDateId(l_period) & ", " & Year(Date.FromOADate(l_period))
+            Dim l_periodCaption As String = Local.GetValue("general.week") & " " & Period.GetWeekNumberFromDateId(l_period) & ", " & Year(Date.FromOADate(l_period))
             Dim l_column = m_submissionsDGV.ColumnsHierarchy.Items.Add(l_periodCaption)
             l_column.ItemValue = l_period
         Next
