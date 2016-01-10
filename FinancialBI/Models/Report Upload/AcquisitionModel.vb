@@ -410,6 +410,13 @@ ReturnError:
 
     End Sub
 
+    Friend Sub Flush()
+
+        m_databaseInputsDictionary.Clear()
+        m_singleComputer.Flush()
+
+    End Sub
+
 #End Region
 
 

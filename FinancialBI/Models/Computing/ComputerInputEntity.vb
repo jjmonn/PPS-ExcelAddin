@@ -14,7 +14,7 @@ Imports CRUD
 '
 ' Author: Julien Monnereau Julien
 ' Created: 20/07/2015
-' Last modified: 05/11/2015
+' Last modified: 10/01/2016
 
 
 Public Class ComputerInputEntity
@@ -175,5 +175,12 @@ Public Class ComputerInputEntity
 
     End Sub
 
+    Friend Sub Flush()
+
+        If m_dataMap IsNot Nothing Then m_dataMap.Clear()
+        If m_entitiesIdComputationQueue IsNot Nothing Then m_entitiesIdComputationQueue.Clear()
+        If m_periodsTokenDict IsNot Nothing Then m_periodsTokenDict.Clear()
+
+    End Sub
 
 End Class

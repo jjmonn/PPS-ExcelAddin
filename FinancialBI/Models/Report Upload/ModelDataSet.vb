@@ -38,7 +38,7 @@ Friend Class ModelDataSet
     Friend m_datasetCellsDictionary As New SafeDictionary(Of Tuple(Of String, String, String, String), Excel.Range)
     Friend m_datasetCellDimensionsDictionary As New SafeDictionary(Of String, DataSetCellDimensions)
     Friend m_currentVersionId As Int32
-    Friend m_rhAccount As Account
+    ' Friend m_rhAccount As Account
 
     'Flags"
     Friend m_periodFlag As SnapshotResult
@@ -171,6 +171,17 @@ Friend Class ModelDataSet
 
     End Sub
 
+    Friend Sub Flush()
+
+        m_dimensionsAddressValueDict.Clear()
+        m_dimensionsValueAddressDict.Clear()
+        m_inputsAccountsList.Clear()
+        m_periodsDatesList.Clear()
+        m_datasetCellsDictionary.Clear()
+        m_datasetCellDimensionsDictionary.Clear()
+
+    End Sub
+
 #End Region
 
 
@@ -231,6 +242,7 @@ Friend Class ModelDataSet
             p_periodsList = GlobalVariables.Versions.GetPeriodsList(m_currentVersionId).ToList
         End If
 
+        m_periodsDatesList.Clear()
         For Each periodId As UInt32 In p_periodsList
             m_periodsDatesList.Add(Date.FromOADate(periodId))
         Next
@@ -282,20 +294,45 @@ Friend Class ModelDataSet
                                          ByRef p_cellAddress As String, _
                                          ByRef m_outputsAccountsList As List(Of Account))
 
+        Select Case m_processFlag
+            Case Account.AccountProcess.FINANCIAL : StringDimensionsIdentifyFinancial(p_cell, p_cellAddress, m_outputsAccountsList)
+            Case Account.AccountProcess.RH : StringDimensionsIdentifyRH(p_cell, p_cellAddress, m_outputsAccountsList)
+        End Select
+
+    End Sub
+
+    Private Sub StringDimensionsIdentifyFinancial(ByRef p_cell As Excel.Range, _
+                                                  ByRef p_cellAddress As String, _
+                                                  ByRef m_outputsAccountsList As List(Of Account))
+
         If VarType(p_cell.Value) = 8 Then
             Dim l_currentStr As String = CStr(p_cell.Value2)
-            If AccountsIdentify(l_currentStr, p_process, p_cell, p_cellAddress, m_outputsAccountsList) = True Then Exit Sub
+            If AccountsIdentify(l_currentStr, p_cell, p_cellAddress, m_outputsAccountsList) = True Then Exit Sub
             If EntitiesIdentify(l_currentStr, p_cell, p_cellAddress) = True Then Exit Sub
+        End If
+
+    End Sub
+
+    Private Sub StringDimensionsIdentifyRH(ByRef p_cell As Excel.Range, _
+                                           ByRef p_cellAddress As String, _
+                                           ByRef m_outputsAccountsList As List(Of Account))
+
+        If VarType(p_cell.Value) = 8 Then
+            Dim l_currentStr As String = CStr(p_cell.Value2)
             If EmployeesIdentify(l_currentStr, p_cell, p_cellAddress) = True Then Exit Sub
+            If AccountsIdentify(l_currentStr, p_cell, p_cellAddress, m_outputsAccountsList) = True Then Exit Sub
+            If EntitiesIdentify(l_currentStr, p_cell, p_cellAddress) = True Then Exit Sub
         End If
 
     End Sub
 
     Private Function AccountsIdentify(ByRef p_currentStr As String, _
-                                      ByRef p_process As Account.AccountProcess, _
                                       ByRef p_cell As Excel.Range, _
                                       ByRef p_cellAddress As String, _
                                       ByRef m_outputsAccountsList As List(Of Account)) As Boolean
+
+        ' -> amélioration speed: inputs and outputs list = lists of string (direct comparison)
+        ' ou bien les dictionaires comparaison devrait contenir les CRUD directement
 
         If m_inputsAccountsList.Contains(GlobalVariables.Accounts.GetValue(p_currentStr)) _
         AndAlso Not m_dimensionsAddressValueDict(Dimension.ACCOUNT).ContainsValue(p_currentStr) Then
@@ -318,7 +355,7 @@ Friend Class ModelDataSet
                                       ByRef p_cell As Excel.Range, _
                                       ByRef p_cellAddress As String)
 
-        If Not GlobalVariables.AxisElems.GetValue(AxisType.Entities, p_currentStr) Is Nothing _
+        If GlobalVariables.AxisElems.GetDictionary(AxisType.Entities).SecondaryKeys.Contains(p_currentStr) _
         AndAlso Not m_dimensionsAddressValueDict(Dimension.ENTITY).ContainsValue(p_currentStr) Then
             m_dimensionsAddressValueDict(Dimension.ENTITY).Add(p_cellAddress, p_currentStr)
             m_dimensionsValueAddressDict(Dimension.ENTITY).Add(p_currentStr, p_cellAddress)
@@ -332,11 +369,13 @@ Friend Class ModelDataSet
                                       ByRef p_cell As Excel.Range, _
                                       ByRef p_cellAddress As String) As Boolean
 
-        If Not GlobalVariables.AxisElems.GetValue(AxisType.Employee, p_currentStr) Is Nothing _
+        If GlobalVariables.AxisElems.GetDictionary(AxisType.Employee).SecondaryKeys.Contains(p_currentStr) _
         AndAlso Not m_dimensionsAddressValueDict(Dimension.EMPLOYEE).ContainsValue(p_currentStr) Then
             m_dimensionsAddressValueDict(Dimension.EMPLOYEE).Add(p_cellAddress, p_currentStr)
             m_dimensionsValueAddressDict(Dimension.EMPLOYEE).Add(p_currentStr, p_cellAddress)
+            Return True
         End If
+        Return False
   
     End Function
 

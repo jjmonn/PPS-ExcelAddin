@@ -4,7 +4,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 05/01/2016
+' Last modified: 09/01/2016
 
 
 Imports Microsoft.Office.Interop
@@ -45,6 +45,20 @@ Friend Class DataModificationsTracking
     End Sub
 
 #End Region
+
+#Region "Interface"
+
+    Friend Sub Flush()
+
+        m_dataSetRegion = Nothing
+        m_outputsRegion = Nothing
+        m_cellBeingEdited = Nothing
+        m_modifiedCellsList.Clear()
+
+    End Sub
+
+#End Region
+
 
 #Region "Dataset and Outputs Region Set up"
 

@@ -2,7 +2,7 @@
 ' 
 '
 ' Author: Julien Monnereau
-' Last modified: 05/01/2016
+' Last modified: 10/01/2016
 
 
 Imports Microsoft.Office.Interop
@@ -16,7 +16,7 @@ Imports System.Collections.Generic
 Imports Microsoft.Office.Core
 Imports CRUD
 
-Friend Class ReportUploadControler
+Public Class ReportUploadControler
 
 #Region "Instance Variables"
 
@@ -28,7 +28,7 @@ Friend Class ReportUploadControler
     Private m_acquisitionModel As AcquisitionModel
     Private m_factsStorage As New FactsStorage
     Private m_reportUploadWorksheetEventHandler As ReportUploadWorksheetsEventHandler
-    Friend m_associatedWorksheet As Excel.Worksheet
+    Private m_associatedWorksheet As Excel.Worksheet
     Private m_errorMessagesUI As New StatusReportInterfaceUI
 
     ' Variables
@@ -82,11 +82,46 @@ Friend Class ReportUploadControler
 
 #End Region
 
+#Region "Properties"
+
+    Friend ReadOnly Property AssociatedWorksheet As Excel.Worksheet
+        Get
+            Return m_associatedWorksheet
+        End Get
+    End Property
+
+    Friend ReadOnly Property DataSet As ModelDataSet
+        Get
+            Return m_dataset
+        End Get
+    End Property
+
+    Friend ReadOnly Property AcquisitionModel As AcquisitionModel
+        Get
+            Return m_acquisitionModel
+        End Get
+    End Property
+
+    Friend ReadOnly Property FactsStorage As FactsStorage
+        Get
+            Return m_factsStorage
+        End Get
+    End Property
+
+    Friend ReadOnly Property DataModificationTracker As DataModificationsTracking
+        Get
+            Return m_dataModificationsTracker
+        End Get
+    End Property
+
+#End Region
+
+
 #Region "Ribbon Interface"
 
     Friend Sub UpdateRibbon()
 
-        If m_dataset.m_EntityFlag = 1 Then FillInFinancialSubmissionRibbonEntityAndCurrencyTB(m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.ENTITY).ElementAt(0).Value)
+        If m_dataset.m_entityFlag = 1 Then FillInFinancialSubmissionRibbonEntityAndCurrencyTB(m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.ENTITY).ElementAt(0).Value)
         ' Check that the Dataset is still the same ?
 
     End Sub
@@ -144,21 +179,28 @@ Friend Class ReportUploadControler
 
     End Sub
 
+    Friend Sub DissociateWorksheet()
+
+        If Not m_associatedWorksheet Is Nothing Then m_associatedWorksheet = Nothing
+
+    End Sub
+
     Friend Sub CloseInstance()
 
         On Error Resume Next
+        m_dataset.Flush()
+        m_factsStorage.Flush()
+        m_acquisitionModel.Flush()
         m_dataModificationsTracker.TakeOffFormatsAndEnableConditionalFormatting()
+        m_dataModificationsTracker.Flush()
         If Not m_dataset Is Nothing Then m_dataset = Nothing
         If Not m_dataModificationsTracker Is Nothing Then m_dataModificationsTracker = Nothing
         If Not m_acquisitionModel Is Nothing Then m_acquisitionModel = Nothing
-
-        '   GlobalVariables.APPS.CellDragAndDrop = True
-        RemoveHandler m_associatedWorksheet.Change, AddressOf m_reportUploadWorksheetEventHandler.Worksheet_Change
-        RemoveHandler m_associatedWorksheet.BeforeRightClick, AddressOf m_reportUploadWorksheetEventHandler.Worksheet_BeforeRightClick
-        RemoveHandler m_associatedWorksheet.SelectionChange, AddressOf m_reportUploadWorksheetEventHandler.Worksheet_SelectionChange
         If Not m_reportUploadWorksheetEventHandler Is Nothing Then m_reportUploadWorksheetEventHandler = Nothing
-        'GlobalVariables.APPS.Interactive = True
-        'GlobalVariables.APPS.ScreenUpdating = True
+
+        GlobalVariables.APPS.CellDragAndDrop = True
+        GlobalVariables.APPS.Interactive = True
+        GlobalVariables.APPS.ScreenUpdating = True
 
     End Sub
 
@@ -233,6 +275,7 @@ Friend Class ReportUploadControler
                 Case Account.AccountProcess.FINANCIAL : Return FinancialProcessSnapshotRefreshment(p_updateInputsFlag)
                 Case Account.AccountProcess.RH : Return PDCProcessSnapshotRefreshment(p_updateInputsFlag)
             End Select
+            Return True
         End If
         Return False
 
@@ -255,12 +298,7 @@ Friend Class ReportUploadControler
                                            GlobalVariables.AdjustmentIDDropDown.SelectedItemId, _
                                            p_updateInputsFlag)
 
-            ' Associate worksheet if not already associated 
-            If m_reportUploadWorksheetEventHandler.m_excelWorksheet Is Nothing Then
-                m_reportUploadWorksheetEventHandler.AssociateSubmissionWSController(Me, m_dataset, m_acquisitionModel, m_factsStorage, m_dataModificationsTracker, m_associatedWorksheet)
-            ElseIf Not m_reportUploadWorksheetEventHandler.m_excelWorksheet.Name Is m_associatedWorksheet Then
-                m_reportUploadWorksheetEventHandler.AssociateSubmissionWSController(Me, m_dataset, m_acquisitionModel, m_factsStorage, m_dataModificationsTracker, m_associatedWorksheet)
-            End If
+            AssociateReportUploadEventHandlers()
         Else
             SnapshotErrorGeneration(Account.AccountProcess.FINANCIAL)
             Return False
@@ -272,7 +310,9 @@ Friend Class ReportUploadControler
 
     Private Function PDCProcessSnapshotRefreshment(p_updateInputsFlag) As Boolean
 
+
         If m_dataset.m_globalOrientationFlag <> ModelDataSet.Orientations.ORIENTATION_ERROR Then
+
             If m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.ENTITY).Count = 0 Then
                 MsgBox(Local.GetValue("upload.msg_entity_not_found"))
             Else
@@ -280,17 +320,10 @@ Friend Class ReportUploadControler
                                                                    m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.ACCOUNT).ElementAt(0).Value)
             End If
             m_snapshotSuccessFlag = True
+
             HighlightItemsAndDataRegions()
-
             m_mustUpdateExcelWorksheetFromDataBase = p_updateInputsFlag
-
-            ' Associate worksheet if not already associated 
-            If m_reportUploadWorksheetEventHandler.m_excelWorksheet Is Nothing Then
-                m_reportUploadWorksheetEventHandler.AssociateSubmissionWSController(Me, m_dataset, m_acquisitionModel, m_factsStorage, m_dataModificationsTracker, m_associatedWorksheet)
-            ElseIf Not m_reportUploadWorksheetEventHandler.m_excelWorksheet.Name Is m_associatedWorksheet Then
-                m_reportUploadWorksheetEventHandler.AssociateSubmissionWSController(Me, m_dataset, m_acquisitionModel, m_factsStorage, m_dataModificationsTracker, m_associatedWorksheet)
-            End If
-
+            AssociateReportUploadEventHandlers()
             m_dataset.RegisterDimensionsToCellDictionary()
             '     m_dataset.RegisterDataSetCellsValues()
 
@@ -313,6 +346,20 @@ Friend Class ReportUploadControler
 
 
     End Function
+
+    Private Sub AssociateReportUploadEventHandlers()
+
+        If m_reportUploadWorksheetEventHandler.m_associatedWorksheetName = "" Then
+            m_reportUploadWorksheetEventHandler.AssociateSubmissionWSController(Me)
+        ElseIf Not m_reportUploadWorksheetEventHandler.m_associatedWorksheetName <> m_associatedWorksheet.Name Then
+            m_reportUploadWorksheetEventHandler.AssociateSubmissionWSController(Me)
+        End If
+
+        m_addin.ActivateEventHandler(m_associatedWorksheet)
+        GlobalVariables.APPS.CellDragAndDrop = False
+
+
+    End Sub
 
     Friend Function GetProcess() As Account.AccountProcess
         Return m_dataset.m_processFlag
@@ -554,6 +601,12 @@ errorHandler:
                     MsgBox(Local.GetValue("upload.msg_invalid_value_for_client") & l_cell.Value2)
                     Continue For
                 End If
+
+                If l_cell.Value2 Is Nothing Then
+                    DeleteRHFact(l_cellAddress)
+                    Continue For
+                End If
+
                 Dim l_clientName As String = l_cell.Value2
 
                 If l_clientName <> "" Then
@@ -583,20 +636,26 @@ errorHandler:
                     l_cellsAddressesList.Add(l_cellAddress)
 
                 Else
-                    ' if fact exist then delete
-                    Dim l_factToBeDeleted = m_factsStorage.GetRHFact(m_dataset.m_datasetCellDimensionsDictionary(l_cellAddress).m_accountName, _
-                                                                     m_dataset.m_datasetCellDimensionsDictionary(l_cellAddress).m_employee, _
-                                                                     m_dataModificationsTracker.m_periodIdentifier & m_dataset.m_datasetCellDimensionsDictionary(l_cellAddress).m_period)
-
-                    If l_factToBeDeleted IsNot Nothing Then
-                        m_deleteRequestIdCellAddressDict.Add(m_fact.CMSG_DELETE_FACT(l_factToBeDeleted), l_cellAddress)
-                    End If
+                    DeleteRHFact(l_cellAddress)
                     Continue For
                 End If
             Next
             If l_factsList.Count > 0 Then m_fact.CMSG_UPDATE_FACT_LIST(l_factsList, l_cellsAddressesList)
         Else
             MsgBox(Local.GetValue("upload.msg_no_account_setup"))
+        End If
+
+    End Sub
+
+    Private Sub DeleteRHFact(ByRef p_cellAddress As String)
+
+        ' if fact exist then delete
+        Dim l_factToBeDeleted = m_factsStorage.GetRHFact(m_dataset.m_datasetCellDimensionsDictionary(p_cellAddress).m_accountName, _
+                                                         m_dataset.m_datasetCellDimensionsDictionary(p_cellAddress).m_employee, _
+                                                         m_dataModificationsTracker.m_periodIdentifier & m_dataset.m_datasetCellDimensionsDictionary(p_cellAddress).m_period)
+
+        If l_factToBeDeleted IsNot Nothing Then
+            m_deleteRequestIdCellAddressDict.Add(m_fact.CMSG_DELETE_FACT(l_factToBeDeleted), p_cellAddress)
         End If
 
     End Sub
@@ -711,6 +770,7 @@ errorHandler:
 
     Private Function IsClientRHCellValueValid(ByRef p_cell As Excel.Range) As Boolean
 
+        If p_cell.Value2 Is Nothing Then Return True
         If VarType(p_cell.Value2) = VariantType.Date _
         Or VarType(p_cell.Value2) = VariantType.Double _
         Or VarType(p_cell.Value2) = VariantType.Error _
@@ -723,6 +783,22 @@ errorHandler:
         End If
 
     End Function
+
+#End Region
+
+#Region "Events"
+
+    public Sub Worksheet_Change(ByVal p_target As Excel.Range)
+        m_reportUploadWorksheetEventHandler.Worksheet_Change(p_target)
+    End Sub
+
+    Friend Sub Worksheet_BeforeRightClick(ByVal Target As Range, ByRef Cancel As Boolean)
+        m_reportUploadWorksheetEventHandler.Worksheet_BeforeRightClick(Target, Cancel)
+    End Sub
+
+    Friend Sub Worksheet_SelectionChange(ByVal Target As Excel.Range)
+        m_reportUploadWorksheetEventHandler.Worksheet_SelectionChange(Target)
+    End Sub
 
 #End Region
 

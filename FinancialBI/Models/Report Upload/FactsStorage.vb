@@ -54,6 +54,13 @@ Friend Class FactsStorage
 
     End Function
 
+    Friend Sub Flush()
+
+        If m_FactsDict IsNot Nothing Then m_FactsDict.Clear()
+        If m_requestIdDict IsNot Nothing Then m_requestIdDict.Clear()
+
+    End Sub
+
 #End Region
 
 #Region "Events"

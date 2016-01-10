@@ -151,13 +151,14 @@ Public Class AddinModule
 #Region "My Instance Variables"
 
     Friend m_ribbon As IRibbonUI
-    Friend m_reportUploadControlersDictionary As New SafeDictionary(Of Excel.Worksheet, ReportUploadControler)
+    Friend m_reportUploadControlersDictionary As New SafeDictionary(Of String, ReportUploadControler)
     Private m_worksheetNamesObjectDict As New SafeDictionary(Of String, Excel.Worksheet)
     Public setUpFlag As Boolean
     Public ppsbi_refresh_flag As Boolean = True
     Public m_ppsbiController As FBIFunctionController
     Private m_currentReportUploadControler As ReportUploadControler
     Private Const EXCEL_MIN_VERSION As Double = 9
+    Private MyEventClass As ExcelWorksheetEventsClass1
 
 #End Region
 
@@ -357,6 +358,12 @@ Public Class AddinModule
         Return GlobalVariables.VersionButton
     End Function
 
+    Public ReadOnly Property ReportUploadControlersDictionary() As Dictionary(Of String, ReportUploadControler)
+        Get
+            Return m_reportUploadControlersDictionary
+        End Get
+    End Property
+
 
 #End Region
 
@@ -417,8 +424,8 @@ Public Class AddinModule
         If GlobalVariables.AuthenticationFlag = False Then
             ConnectionBT_OnClick(sender, control, pressed)
         Else
-            If m_reportUploadControlersDictionary.ContainsKey(GlobalVariables.APPS.ActiveSheet) Then
-                m_currentReportUploadControler = m_reportUploadControlersDictionary(GlobalVariables.APPS.ActiveSheet)
+            If m_reportUploadControlersDictionary.ContainsKey(GlobalVariables.APPS.ActiveSheet.name) Then
+                m_currentReportUploadControler = m_reportUploadControlersDictionary(GlobalVariables.APPS.ActiveSheet.name)
                 m_currentReportUploadControler.UpdateRibbon()
                 SubmissionModeRibbon.Visible = True
             Else
@@ -808,8 +815,8 @@ Public Class AddinModule
                                                                                          m_PDCWorksheetDropDown.OnAction
 
         Try
-            If Not m_currentReportUploadControler.m_associatedWorksheet.Name = selectedId Then
-                ActivateReportUploadController(m_reportUploadControlersDictionary(m_worksheetNamesObjectDict(selectedId)))
+            If Not m_currentReportUploadControler.AssociatedWorksheet.Name = selectedId Then
+                ActivateReportUploadController(m_reportUploadControlersDictionary(selectedId))
                 m_currentReportUploadControler.UpdateRibbon()
                 m_worksheetNamesObjectDict(selectedId).Activate()
             End If
@@ -948,13 +955,16 @@ Public Class AddinModule
     Friend Sub AssociateReportUploadControler(ByRef p_mustUpdateInputs As Boolean, ByRef p_periodList As List(Of Int32))
 
         GlobalVariables.APPS.Interactive = False
-        LoadFinancialDropDownsSubmissionButtons()
+        Select Case My.Settings.processId
+            Case Account.AccountProcess.FINANCIAL : LoadFinancialDropDownsSubmissionButtons()
+        End Select
+
         Dim l_reportUploadController As New ReportUploadControler(Me)
         Dim l_excelWorksheet As Excel.Worksheet = GlobalVariables.APPS.ActiveSheet
 
         If l_reportUploadController.RefreshSnapshot(p_mustUpdateInputs, p_periodList) = True Then
             m_currentReportUploadControler = l_reportUploadController
-            m_reportUploadControlersDictionary.Add(l_excelWorksheet, l_reportUploadController)
+            m_reportUploadControlersDictionary.Add(l_excelWorksheet.Name, l_reportUploadController)
             m_worksheetNamesObjectDict.Add(l_excelWorksheet.Name, GlobalVariables.APPS.ActiveSheet)
             Select Case l_reportUploadController.GetProcess
                 Case Account.AccountProcess.FINANCIAL : DisplayFinancialSubmissionRibbon(l_excelWorksheet)
@@ -968,7 +978,7 @@ Public Class AddinModule
 
     End Sub
 
-    Private Sub DisplayFinancialSubmissionRibbon(ByRef p_ws As Excel.Worksheet)
+    Private Sub DisplayFinancialSubmissionRibbon(ByVal p_ws As Excel.Worksheet)
         Dim l_item = AddButtonToDropDown(m_submissionWorksheetCombobox, _
                                          p_ws.Name, _
                                          p_ws.Name)
@@ -978,7 +988,7 @@ Public Class AddinModule
         DisplayReportUploadSidePane()
     End Sub
 
-    Private Sub DisplayPDCSubmissionRibbon(ByRef p_ws As Excel.Worksheet)
+    Private Sub DisplayPDCSubmissionRibbon(ByVal p_ws As Excel.Worksheet)
 
         m_PDCSubmissionRibbon.Activate()
         m_PDCSubmissionRibbon.Visible = True
@@ -1050,9 +1060,10 @@ Public Class AddinModule
     Friend Sub ClearSubmissionMode(ByRef p_generalSubmissionController As ReportUploadControler)
 
         On Error Resume Next
-        m_worksheetNamesObjectDict.Remove(p_generalSubmissionController.m_associatedWorksheet.Name)
+        DesactivateEventHandler()
+        m_worksheetNamesObjectDict.Remove(p_generalSubmissionController.AssociatedWorksheet.Name)
         For Each l_item In m_submissionWorksheetCombobox.Items
-            If l_item.id = p_generalSubmissionController.m_associatedWorksheet.Name Then
+            If l_item.id = p_generalSubmissionController.AssociatedWorksheet.Name Then
                 m_submissionWorksheetCombobox.Items.Remove(l_item)
                 Exit For
             End If
@@ -1061,7 +1072,10 @@ Public Class AddinModule
             p_generalSubmissionController.CloseInstance()
         End SyncLock
 
-        m_reportUploadControlersDictionary.Remove(p_generalSubmissionController.m_associatedWorksheet)
+        m_reportUploadControlersDictionary(p_generalSubmissionController.AssociatedWorksheet.Name) = Nothing
+        m_reportUploadControlersDictionary.Remove(p_generalSubmissionController.AssociatedWorksheet.Name)
+        p_generalSubmissionController.DissociateWorksheet()
+        If p_generalSubmissionController IsNot Nothing Then p_generalSubmissionController = Nothing
 
         If m_reportUploadControlersDictionary.Count = 0 Then
             SubmissionModeRibbon.Visible = False
@@ -1070,20 +1084,54 @@ Public Class AddinModule
             GlobalVariables.APPS.CellDragAndDrop = True
         Else
             ActivateReportUploadController(m_reportUploadControlersDictionary.ElementAt(0).Value)
-            m_submissionWorksheetCombobox.SelectedItemId = m_currentReportUploadControler.m_associatedWorksheet.Name
-            m_currentReportUploadControler.m_associatedWorksheet.Activate()
+            m_submissionWorksheetCombobox.SelectedItemId = m_currentReportUploadControler.AssociatedWorksheet.Name
+            m_currentReportUploadControler.AssociatedWorksheet.Activate()
         End If
+
+
+        GC.Collect()
         GlobalVariables.APPS.Interactive = True
         GlobalVariables.APPS.ScreenUpdating = True
 
     End Sub
 
-    Friend Sub SetPDCSubmissionRibbonEntityAndAccountName(ByRef p_entityName As String, _
-                                                ByRef p_accountName As String)
+
+    Friend Sub SetPDCSubmissionRibbonEntityAndAccountName(ByVal p_entityName As String, _
+                                                          ByVal p_accountName As String)
         m_PDCEntityEditBox.Text = p_entityName
         m_PDCaccountNameEditBox.Text = p_accountName
     End Sub
 
+    Private Sub Deactivate(ByVal sender As Object, ByVal hostObj As Object, ByVal window As Object) Handles adxExcelEvents.WindowDeactivate
+
+        If MyEventClass IsNot Nothing Then
+            If MyEventClass.IsConnected Then
+                MyEventClass.RemoveConnection()
+            End If
+        End If
+
+    End Sub
+
+    Friend Sub ActivateEventHandler(ByRef p_worksheet As Excel.Worksheet)
+
+        MyEventClass = New ExcelWorksheetEventsClass1(Me)
+        MyEventClass.ConnectTo(p_worksheet, True)
+
+    End Sub
+
+    Friend Sub DesactivateEventHandler()
+
+        If MyEventClass.IsConnected Then
+            MyEventClass.RemoveConnection()
+        End If
+        If MyEventClass IsNot Nothing Then
+            MyEventClass.Dispose()
+            MyEventClass = Nothing
+        End If
+
+    End Sub
+
+  
 #End Region
 
 
@@ -1109,7 +1157,7 @@ Public Class AddinModule
 
     Friend Sub ActivateReportUploadController(ByRef p_reportUploadController As ReportUploadControler)
         m_currentReportUploadControler = p_reportUploadController
-        m_submissionWorksheetCombobox.SelectedItemId = p_reportUploadController.m_associatedWorksheet.Name
+        m_submissionWorksheetCombobox.SelectedItemId = p_reportUploadController.AssociatedWorksheet.Name
     End Sub
 
 #End Region
@@ -1152,7 +1200,7 @@ Public Class AddinModule
             Case Account.AccountProcess.FINANCIAL, Account.AccountProcess.RH
                 SetCurrentProcessId(l_currentProcessId)
             Case Else
-                LaunchProcessSelection
+                LaunchProcessSelection()
         End Select
 
     End Sub
@@ -1228,6 +1276,6 @@ Public Class AddinModule
 #End Region
 
 
-   
+
 End Class
 
