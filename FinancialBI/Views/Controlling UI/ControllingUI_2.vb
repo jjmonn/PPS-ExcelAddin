@@ -1016,17 +1016,17 @@ Friend Class ControllingUI_2
 
     Friend Function FilterPeriodList(ByRef p_periods As Int32()) As List(Of Int32)
 
-        Dim l_periods As New List(Of Int32)
+        Dim l_resultPeriods As New List(Of Int32)
         For Each l_periodId In p_periods
             If l_periodId >= m_periodsList(0) Then
                 If l_periodId <= m_periodsList(m_periodsList.Count - 1) Then
-                    l_periods.Add(l_periodId)
+                    l_resultPeriods.Add(l_periodId)
                 Else
-                    Return l_periods
+                    Return l_resultPeriods
                 End If
             End If
         Next
-        Return l_periods
+        Return l_resultPeriods
 
     End Function
 

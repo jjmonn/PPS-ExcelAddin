@@ -457,17 +457,17 @@ Friend Class ControllingUIController
                     m_view.m_leftPaneControl.SetupPeriodsTV(node)
 
                 Case computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.YDAYS
-                    Dim l_periodsDict = GlobalVariables.Versions.GetPeriodsDictionary(m_versionsDict)
+                    '     Dim l_periodsDict = GlobalVariables.Versions.GetPeriodsDictionary(m_versionsDict)
 
                     Dim l_weekPeriods = GlobalVariables.Versions.GetWeeks(m_versionsDict)
                     If m_view.m_process = Account.AccountProcess.RH Then l_weekPeriods = m_view.FilterPeriodList(l_weekPeriods.ToArray)
                     For Each l_weekId As Int32 In l_weekPeriods
                         Dim l_weekNode As vTreeNode = VTreeViewUtil.AddNode(computer.WEEK_PERIOD_IDENTIFIER & l_weekId, _
-                                                                            Format(Date.FromOADate(l_weekId), "ww, yyyy"), _
+                                                                           Local.GetValue("general.week") & " " & Period.GetWeekNumberFromDateId(l_weekId) & ", " & Year(Date.FromOADate(l_weekId)), _
                                                                             node)
 
                         Dim l_daysPeriods = Period.GetDaysIdListInWeek(l_weekId)
-                        If m_view.m_process = Account.AccountProcess.RH Then l_daysPeriods = m_view.FilterPeriodList(l_daysPeriods.ToArray)
+                        '  If m_view.m_process = Account.AccountProcess.RH Then l_daysPeriods = m_view.FilterPeriodList(l_daysPeriods.ToArray)
                         For Each l_dayId As Int32 In l_daysPeriods
                             VTreeViewUtil.AddNode(computer.DAY_PERIOD_IDENTIFIER & l_dayId, Format(Date.FromOADate(l_dayId), "MMMM dd, yyyy"), l_weekNode)
                         Next
@@ -799,6 +799,9 @@ Friend Class ControllingUIController
                     args.CellValue = ""
                 End If
             Else
+                ' 2#51
+                Dim l_testToken = "11#A251#50#392#d42373"
+                Dim l_testResult = m_dataMap(l_testToken)
                 If m_dataMap.ContainsKey(versionId & token) Then
                     args.CellValue = m_dataMap(versionId & token)
                     If Double.IsNaN(args.CellValue) Then args.CellValue = "-"
