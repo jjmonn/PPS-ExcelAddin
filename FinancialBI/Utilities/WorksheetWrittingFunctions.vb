@@ -88,7 +88,9 @@ Friend Class WorksheetWrittingFunctions
                                               ByRef p_timeConfig As CRUD.TimeConfig)
         Dim i As Int32 = 0
         For Each period As UInt32 In p_periods
-            p_range.Offset(0, 1 + i).Value = Format(Date.FromOADate(period), "Short Date")
+            ' need to adjust period format according to local settings ?
+            Dim l_cultue = My.Application.Culture
+            p_range.Offset(0, 1 + i).Value = Format(Date.FromOADate(period), "MM/dd/yyyy") ' "Short Date")
             i = i + 1
         Next
 
