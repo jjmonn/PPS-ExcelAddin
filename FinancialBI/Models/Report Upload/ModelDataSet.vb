@@ -10,7 +10,7 @@
 '       - Orientation: in some cases does not work (max left or right cells)
 '
 '
-' Last modified: 06/01/2016
+' Last modified: 13/01/2016
 ' Author: Julien Monnereau
 
 
@@ -256,7 +256,9 @@ Friend Class ModelDataSet
         For l_rowIndex = 1 To m_lastCell.Row
             For l_columnIndex = 1 To m_lastCell.Column
                 l_cell = m_excelWorkSheet.Cells(l_rowIndex, l_columnIndex)
-                If l_cell Is Nothing Then
+                If l_cell Is Nothing _
+                Or l_cell.EntireRow.Hidden = True _
+                Or l_cell.EntireColumn.Hidden = True Then
                     Continue For
                     System.Diagnostics.Debug.WriteLine("Dataset: Snapshot method: DimensionsIdentificationProcess > error in cell identication process: address : ")
                 End If

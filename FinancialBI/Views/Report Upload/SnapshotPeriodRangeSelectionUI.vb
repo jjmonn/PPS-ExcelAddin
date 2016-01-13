@@ -55,6 +55,9 @@ Public Class SnapshotPeriodRangeSelectionUI
         m_startDate.Text = l_todaysDate.AddDays(-Period.m_nbDaysInWeek)
         m_endDate.Text = l_todaysDate.AddDays(Period.m_nbDaysInWeek * 3)
 
+        m_startDate.DateTimeEditor.Value = m_startDate.Text
+        m_endDate.DateTimeEditor.Value = m_endDate.Text
+
         GeneralUtilities.FillWeekTextBox(m_startWeekTB, m_startDate.Text)
         GeneralUtilities.FillWeekTextBox(m_endWeekTB, m_endDate.Text)
 
@@ -79,7 +82,8 @@ Public Class SnapshotPeriodRangeSelectionUI
 #Region "Call backs"
 
     Private Sub m_validateButton_Click(sender As Object, e As EventArgs) Handles m_validateButton.Click
-        Dim l_weeksIdList As List(Of Int32) = Period.GetWeeksPeriodListFromPeriodsRange(m_startDate.Text, m_endDate.Text)
+        Dim l_weeksIdList As List(Of Int32) = Period.GetWeeksPeriodListFromPeriodsRange(m_startDate.DateTimeEditor.Value.Value, _
+                                                                                        m_endDate.DateTimeEditor.Value.Value)
         Dim l_periods = Period.GetDaysPeriodsListFromWeeksId(l_weeksIdList)
         Me.Hide()
         m_addin.AssociateReportUploadControler(False, l_periods)

@@ -17,7 +17,7 @@ Imports CRUD
 '
 ' Author: Julien Monnereau Julien
 ' Created: 17/07/2015
-' Last modified: 06/01/2016
+' Last modified: 13/01/2016
 
 
 Friend Class Computer
@@ -75,7 +75,8 @@ Friend Class Computer
                                          Optional ByRef p_filters As Dictionary(Of Int32, List(Of Int32)) = Nothing, _
                                          Optional ByRef p_axisFilters As Dictionary(Of Int32, List(Of Int32)) = Nothing, _
                                          Optional ByRef p_hierarchy As List(Of String) = Nothing, _
-                                         Optional ByRef p_periods As Int32() = Nothing) As Int32
+                                         Optional ByRef p_periods As Int32() = Nothing, _
+                                         Optional ByRef p_axisHierarchyDecomposition As Boolean = True) As Int32
 
         m_dataMap = New SafeDictionary(Of String, Double)
         m_requestIdVersionIdDict.Clear()
@@ -105,7 +106,7 @@ Friend Class Computer
                 p_periods = GlobalVariables.Versions.GetPeriodsList(l_versionId)
             End If
             If p_periods.Length = 0 Then Continue For
-            
+
             ' Start entities computing loop
             For Each l_entityId As Int32 In p_entitiesIds
 
@@ -131,7 +132,7 @@ Friend Class Computer
                 l_packet.WriteUint32(p_currencyId)                                              ' currency_id
                 l_packet.WriteUint32(p_periods(0))
                 l_packet.WriteUint32(p_periods.Length)
-                l_packet.WriteBool(True) ' axis hierarchy decomposition
+                l_packet.WriteBool(p_axisHierarchyDecomposition)                                ' axis hierarchy decomposition
 
                 ' Loop through filters
                 If Not p_filters Is Nothing Then

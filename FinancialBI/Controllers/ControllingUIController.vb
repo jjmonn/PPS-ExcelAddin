@@ -245,7 +245,8 @@ Friend Class ControllingUIController
                                           filters, _
                                           axisFilters, _
                                           computingHierarchyList, _
-                                          m_view.GetPeriodsList())
+                                          m_view.GetPeriodsList(), _
+                                          False)
         End If
 
         ' Cache registering
