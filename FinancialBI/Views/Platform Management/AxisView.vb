@@ -1,4 +1,10 @@
-﻿Imports System.Windows.Forms
+﻿'
+'
+'
+' Last modified: 13/01/2016
+
+
+Imports System.Windows.Forms
 Imports System.Collections
 Imports System.Collections.Generic
 Imports VIBlend.WinForms.DataGridView
@@ -66,7 +72,7 @@ Friend Class AxisView
         DGVColumnsInitialize()
         DGVRowsInitialize()
         FillDGV()
-        m_axisDataGridView.RowsHierarchy.ExpandAllItems()
+        ' m_axisDataGridView.RowsHierarchy.ExpandAllItems()
 
         AddHandler m_axisDataGridView.CellMouseClick, AddressOf dataGridView_CellMouseClick
         AddHandler m_axisDataGridView.MouseDown, AddressOf DataGridViewRightClick

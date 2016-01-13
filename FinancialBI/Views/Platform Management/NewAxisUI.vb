@@ -10,7 +10,7 @@
 '           -> should have "" and "NS" for each category (hence name-> keys dict in categories should be for each categories)
 '
 '
-' Last modified: 16/11/2015
+' Last modified: 13/01/2016
 ' Author: Julien Monnereau
 
 
@@ -45,7 +45,7 @@ Friend Class NewAxisUI
         ' Add any initialization after the InitializeComponent() call.
         m_controller = p_controller
         If m_controller.GetAxisType() = AxisType.Entities OrElse m_controller.GetAxisType = AxisType.Client Then
-            GlobalVariables.AxisElems.LoadAxisTree(m_controller.GetAxisType(), m_parentAxisElemTreeviewBox.TreeView)
+            GlobalVariables.AxisElems.LoadHierarchyAxisTree(m_controller.GetAxisType(), m_parentAxisElemTreeviewBox.TreeView)
         Else
             m_parentAxisLabel.Visible = False
             m_parentAxisElemTreeviewBox.Visible = False
@@ -66,14 +66,14 @@ Friend Class NewAxisUI
 
     'End Sub
 
-    Friend Sub SetParentEntityId(ByRef parentEntityId As Int32)
+    Friend Sub SetParentAxisId(ByRef p_parentAxisId As Int32)
 
-        Dim parentEntityNode As VIBlend.WinForms.Controls.vTreeNode = VTreeViewUtil.FindNode(m_parentAxisElemTreeviewBox.TreeView, parentEntityId)
-        If parentEntityNode Is Nothing Then
+        Dim parentAxisNode As VIBlend.WinForms.Controls.vTreeNode = VTreeViewUtil.FindNode(m_parentAxisElemTreeviewBox.TreeView, p_parentAxisId)
+        If parentAxisNode Is Nothing Then
             ' msg error
             Exit Sub
         End If
-        m_parentAxisElemTreeviewBox.TreeView.SelectedNode = parentEntityNode
+        m_parentAxisElemTreeviewBox.TreeView.SelectedNode = parentAxisNode
 
     End Sub
 
@@ -81,7 +81,7 @@ Friend Class NewAxisUI
 
         Me.m_nameLabel.Text = Local.GetValue("general.name")
         Me.CancelBT.Text = Local.GetValue("general.cancel")
-        Me.CreateEntityBT.Text = Local.GetValue("general.create")
+        Me.CreateAxisBT.Text = Local.GetValue("general.create")
 
         Select Case p_axisType
             Case AxisType.Entities
@@ -136,26 +136,26 @@ Friend Class NewAxisUI
 
     End Sub
 
-    Delegate Sub entityNodeAddition_Delegate(ByRef p_entityId As Int32, _
-                                               ByRef p_entityParentId As Int32, _
-                                               ByRef p_entityName As String, _
-                                               ByRef p_entityImage As Int32)
-    Friend Sub entityNodeAddition(ByRef p_entityId As Int32, _
-                                   ByRef p_entityParentId As Int32, _
-                                   ByRef p_entityName As String, _
-                                   ByRef p_entityImage As Int32)
+    Delegate Sub AxisNodeAddition_Delegate(ByRef p_axisId As Int32, _
+                                               ByRef p_axisParentId As Int32, _
+                                               ByRef p_axisName As String, _
+                                               ByRef p_axisImage As Int32)
+    Friend Sub AxisNodeAddition(ByRef p_AxisId As Int32, _
+                                   ByRef p_axisParentId As Int32, _
+                                   ByRef p_axisName As String, _
+                                   ByRef p_axisImage As Int32)
 
         If Me.m_parentAxisElemTreeviewBox.TreeView.InvokeRequired Then
-            Dim MyDelegate As New entityNodeAddition_Delegate(AddressOf entityNodeAddition)
-            Me.m_parentAxisElemTreeviewBox.TreeView.Invoke(MyDelegate, New Object() {p_entityId, p_entityParentId, p_entityName, p_entityImage})
+            Dim MyDelegate As New AxisNodeAddition_Delegate(AddressOf AxisNodeAddition)
+            Me.m_parentAxisElemTreeviewBox.TreeView.Invoke(MyDelegate, New Object() {p_AxisId, p_axisParentId, p_axisName, p_axisImage})
         Else
-            If p_entityParentId = 0 Then
-                Dim new_node As vTreeNode = VTreeViewUtil.AddNode(CStr(p_entityId), p_entityName, m_parentAxisElemTreeviewBox.TreeView, p_entityImage)
+            If p_axisParentId = 0 Then
+                Dim new_node As vTreeNode = VTreeViewUtil.AddNode(CStr(p_AxisId), p_axisName, m_parentAxisElemTreeviewBox.TreeView, p_axisImage)
                 new_node.IsVisible = True
             Else
-                Dim l_parentNode As vTreeNode = VTreeViewUtil.FindNode(m_parentAxisElemTreeviewBox.TreeView, p_entityParentId)
+                Dim l_parentNode As vTreeNode = VTreeViewUtil.FindNode(m_parentAxisElemTreeviewBox.TreeView, p_axisParentId)
                 If l_parentNode IsNot Nothing Then
-                    Dim new_node As vTreeNode = VTreeViewUtil.AddNode(CStr(p_entityId), p_entityName, l_parentNode, p_entityImage)
+                    Dim new_node As vTreeNode = VTreeViewUtil.AddNode(CStr(p_AxisId), p_axisName, l_parentNode, p_axisImage)
                     new_node.IsVisible = True
                 End If
             End If
@@ -164,16 +164,16 @@ Friend Class NewAxisUI
 
     End Sub
 
-    Delegate Sub TVNodeDelete_Delegate(ByRef p_entity_id As Int32)
-    Friend Sub TVNodeDelete(ByRef p_entity_id As Int32)
+    Delegate Sub TVNodeDelete_Delegate(ByRef p_axisId As Int32)
+    Friend Sub TVNodeDelete(ByRef p_axis_id As Int32)
 
         If Me.m_parentAxisElemTreeviewBox.TreeView.InvokeRequired Then
             Dim MyDelegate As New TVNodeDelete_Delegate(AddressOf TVNodeDelete)
-            Me.m_parentAxisElemTreeviewBox.TreeView.Invoke(MyDelegate, New Object() {p_entity_id})
+            Me.m_parentAxisElemTreeviewBox.TreeView.Invoke(MyDelegate, New Object() {p_axis_id})
         Else
-            Dim l_entityNode As vTreeNode = VTreeViewUtil.FindNode(m_parentAxisElemTreeviewBox.TreeView, p_entity_id)
-            If l_entityNode IsNot Nothing Then
-                l_entityNode.Remove()
+            Dim l_axisNode As vTreeNode = VTreeViewUtil.FindNode(m_parentAxisElemTreeviewBox.TreeView, p_axis_id)
+            If l_axisNode IsNot Nothing Then
+                l_axisNode.Remove()
                 m_parentAxisElemTreeviewBox.TreeView.Refresh()
             End If
         End If
@@ -185,18 +185,18 @@ Friend Class NewAxisUI
 
 #Region "Call backs"
 
-    Private Sub CreateAxisElemBT_Click(sender As Object, e As EventArgs) Handles CreateEntityBT.Click
+    Private Sub CreateAxisElemBT_Click(sender As Object, e As EventArgs) Handles CreateAxisBT.Click
 
-        Dim new_entity_Name As String = NameTextBox.Text
-        If IsFormValid(new_entity_Name) = True Then
-            Dim parentEntityId As Int32 = 0
+        Dim l_newAxisName As String = NameTextBox.Text
+        If IsFormValid(l_newAxisName) = True Then
+            Dim l_parentAxisId As Int32 = 0
             If Not m_parentAxisElemTreeviewBox.TreeView.SelectedNode Is Nothing Then
                 If m_controller.GetAxisType() = AxisType.Entities OrElse m_controller.GetAxisType = AxisType.Client Then
-                    parentEntityId = m_parentAxisElemTreeviewBox.TreeView.SelectedNode.Value
+                    l_parentAxisId = m_parentAxisElemTreeviewBox.TreeView.SelectedNode.Value
                 End If
             End If
-            m_controller.CreateAxisElem(new_entity_Name, _
-                                    parentEntityId, _
+            m_controller.CreateAxisElem(l_newAxisName, _
+                                    l_parentAxisId, _
                                     1, _
                                     1)
             Me.Hide()
@@ -217,9 +217,9 @@ Friend Class NewAxisUI
 
 #Region "Utilities"
 
-    Private Function IsFormValid(ByRef new_entity_name As String) As Boolean
+    Private Function IsFormValid(ByRef l_newAxisName As String) As Boolean
 
-        If new_entity_name = "" Then
+        If l_newAxisName = "" Then
             MsgBox(Local.GetValue("axis_edition.msg_entity_name"))
             Return False
         End If

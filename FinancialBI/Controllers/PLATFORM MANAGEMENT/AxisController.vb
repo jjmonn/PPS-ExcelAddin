@@ -75,7 +75,8 @@ Friend Class AxisController
         If p_axisParentId <> 0 Then
             GlobalVariables.AxisElems.LoadAxisTree(m_axisType, m_axisTV, p_axisParentId)
         Else
-            GlobalVariables.AxisElems.LoadAxisTree(m_axisType, m_axisTV)
+            GlobalVariables.AxisElems.LoadHierarchyAxisTree(m_axisType, m_axisTV)
+            'GlobalVariables.AxisElems.LoadAxisTree(m_axisType, m_axisTV)
         End If
         GlobalVariables.Filters.LoadFiltersTV(m_axisFilterTV, m_axisType)
         AxisFilterManager.LoadFvTv(m_axisFilterValuesTV, CInt(m_axisType))
@@ -220,7 +221,7 @@ Friend Class AxisController
             m_view.UpdateAxisElem(axisElem)
             Dim l_node As vTreeNode = VTreeViewUtil.FindNode(m_newAxisView.m_parentAxisElemTreeviewBox.TreeView, axisElem.Id)
             If l_node Is Nothing Then
-                m_newAxisView.entityNodeAddition(axisElem.Id, _
+                m_newAxisView.AxisNodeAddition(axisElem.Id, _
                                                    axisElem.ParentId, _
                                                    axisElem.Name, _
                                                    axisElem.Image)
@@ -332,7 +333,7 @@ Friend Class AxisController
         If Not current_row Is Nothing Then
             Dim node As vTreeNode = VTreeViewUtil.FindNode(m_axisTV, current_row.ItemValue)
             If node IsNot Nothing Then
-                m_newAxisView.SetParentEntityId(node.Value)
+                m_newAxisView.SetParentAxisId(node.Value)
             End If
         End If
 

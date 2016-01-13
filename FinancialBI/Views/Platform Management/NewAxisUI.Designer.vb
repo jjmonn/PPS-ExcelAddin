@@ -32,7 +32,7 @@ Partial Class NewAxisUI
         Me.ButtonIcons = New System.Windows.Forms.ImageList(Me.components)
         Me.CancelBT = New System.Windows.Forms.Button()
         Me.ButtonsIL = New System.Windows.Forms.ImageList(Me.components)
-        Me.CreateEntityBT = New System.Windows.Forms.Button()
+        Me.CreateAxisBT = New System.Windows.Forms.Button()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -156,16 +156,16 @@ Partial Class NewAxisUI
         '
         'CreateEntityBT
         '
-        Me.CreateEntityBT.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
-        Me.CreateEntityBT.ImageKey = "submit 1 ok.ico"
-        Me.CreateEntityBT.ImageList = Me.ButtonsIL
-        Me.CreateEntityBT.Location = New System.Drawing.Point(412, 187)
-        Me.CreateEntityBT.Name = "CreateEntityBT"
-        Me.CreateEntityBT.Size = New System.Drawing.Size(92, 30)
-        Me.CreateEntityBT.TabIndex = 20
-        Me.CreateEntityBT.Text = "Create"
-        Me.CreateEntityBT.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.CreateEntityBT.UseVisualStyleBackColor = True
+        Me.CreateAxisBT.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.CreateAxisBT.ImageKey = "submit 1 ok.ico"
+        Me.CreateAxisBT.ImageList = Me.ButtonsIL
+        Me.CreateAxisBT.Location = New System.Drawing.Point(412, 187)
+        Me.CreateAxisBT.Name = "CreateEntityBT"
+        Me.CreateAxisBT.Size = New System.Drawing.Size(92, 30)
+        Me.CreateAxisBT.TabIndex = 20
+        Me.CreateAxisBT.Text = "Create"
+        Me.CreateAxisBT.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.CreateAxisBT.UseVisualStyleBackColor = True
         '
         'NewEntityUI
         '
@@ -174,7 +174,7 @@ Partial Class NewAxisUI
         Me.ClientSize = New System.Drawing.Size(523, 237)
         Me.Controls.Add(Me.TableLayoutPanel1)
         Me.Controls.Add(Me.CancelBT)
-        Me.Controls.Add(Me.CreateEntityBT)
+        Me.Controls.Add(Me.CreateAxisBT)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Name = "NewEntityUI"
         Me.Text = "New_entity"
@@ -184,7 +184,7 @@ Partial Class NewAxisUI
     End Sub
     Friend WithEvents TableLayoutPanel1 As System.Windows.Forms.TableLayoutPanel
     Friend WithEvents CancelBT As System.Windows.Forms.Button
-    Friend WithEvents CreateEntityBT As System.Windows.Forms.Button
+    Friend WithEvents CreateAxisBT As System.Windows.Forms.Button
     Friend WithEvents ButtonsIL As System.Windows.Forms.ImageList
     Friend WithEvents ButtonIcons As System.Windows.Forms.ImageList
     Friend WithEvents NameTextBox As VIBlend.WinForms.Controls.vTextBox
