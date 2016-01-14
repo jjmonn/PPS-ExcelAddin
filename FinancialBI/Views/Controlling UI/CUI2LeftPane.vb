@@ -12,7 +12,7 @@ Imports CRUD
 '
 '
 ' Created on : 15/08/2015
-' Last modified: 06/01/2016
+' Last modified: 14/01/2016
 
 
 Public Class CUI2LeftPane
@@ -226,7 +226,7 @@ Public Class CUI2LeftPane
 
         m_selectionTableLayout.RowStyles.Add(New RowStyle(SizeType.Absolute, PERIOD_SELECTION_HEIGHT))
         m_selectionTableLayout.RowCount += 1
-        m_periodSelection = New PeriodRangeSelectionControl
+        m_periodSelection = New PeriodRangeSelectionControl(My.Settings.version_id)
         m_selectionTableLayout.Controls.Add(m_periodSelection, 0, m_selectionTableLayout.RowCount - 1)
         m_periodSelection.Dock = DockStyle.Fill
         m_periodSelection.BackColor = Drawing.Color.White

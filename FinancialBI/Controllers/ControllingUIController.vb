@@ -10,7 +10,7 @@
 '
 '
 ' Author: Julien Monnereau
-' Last modified: 06/01/2016
+' Last modified: 14/01/2016
 
 
 Imports System.Windows.Forms
@@ -800,9 +800,6 @@ Friend Class ControllingUIController
                     args.CellValue = ""
                 End If
             Else
-                ' 2#51
-                Dim l_testToken = "11#A251#50#392#d42373"
-                Dim l_testResult = m_dataMap(l_testToken)
                 If m_dataMap.ContainsKey(versionId & token) Then
                     args.CellValue = m_dataMap(versionId & token)
                     If Double.IsNaN(args.CellValue) Then args.CellValue = "-"
