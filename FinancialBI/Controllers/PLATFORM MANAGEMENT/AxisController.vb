@@ -75,7 +75,9 @@ Friend Class AxisController
         If p_axisParentId <> 0 Then
             GlobalVariables.AxisElems.LoadAxisTree(m_axisType, m_axisTV, p_axisParentId)
         Else
-            GlobalVariables.AxisElems.LoadHierarchyAxisTree(m_axisType, m_axisTV)
+            If m_axisType <> AxisType.Client Then
+                GlobalVariables.AxisElems.LoadHierarchyAxisTree(m_axisType, m_axisTV)
+            End If
             'GlobalVariables.AxisElems.LoadAxisTree(m_axisType, m_axisTV)
         End If
         GlobalVariables.Filters.LoadFiltersTV(m_axisFilterTV, m_axisType)
@@ -114,21 +116,21 @@ Friend Class AxisController
 #Region "Interface"
 
     Friend Sub CreateAxisElem(ByRef p_axisName As String, _
-                            Optional ByRef p_axisParent As Int32 = 0, _
-                            Optional ByRef position As Int32 = 0, _
-                            Optional ByRef allowEdition As Int32 = 1)
+                              Optional ByRef p_axisParentId As Int32 = 0, _
+                              Optional ByRef p_position As Int32 = 0, _
+                              Optional ByRef p_allowEdition As Int32 = 1, _
+                              Optional ByRef p_axisParentParentId As Int32 = 0)
 
-        If m_axisType <> AxisType.Entities AndAlso p_axisParent <> 0 Then
-            m_newAxisNameAxisParentDict.Add(p_axisName, p_axisParent)
+        If m_axisType <> AxisType.Entities AndAlso p_axisParentParentId <> 0 Then
+            m_newAxisNameAxisParentDict.Add(p_axisName, p_axisParentParentId)
         End If
 
         Dim l_axisElem As New AxisElem
-
         l_axisElem.Name = p_axisName
         l_axisElem.Axis = m_axisType
-        l_axisElem.ParentId = p_axisParent
-        l_axisElem.ItemPosition = position
-        l_axisElem.AllowEdition = allowEdition
+        l_axisElem.ParentId = p_axisParentId
+        l_axisElem.ItemPosition = p_position
+        l_axisElem.AllowEdition = p_allowEdition
         GlobalVariables.AxisElems.Create(l_axisElem)
 
     End Sub
@@ -146,15 +148,15 @@ Friend Class AxisController
     End Sub
 
     Friend Sub UpdateAxisFilter(ByRef p_axisElemId As Int32, _
-                             ByRef filterId As Int32, _
-                             ByRef filterValueId As Int32)
-        For Each axisFilter As AxisFilter In GetAxisFilterDictionary().Values
-            If axisFilter.FilterId = filterId AndAlso axisFilter.AxisElemId = p_axisElemId Then
-                Dim l_copy = GetAxisFilterCopy(axisFilter.Id)
-                l_copy.FilterValueId = filterValueId
-                UpdateAxisFilter(l_copy)
-            End If
-        Next
+                                ByRef p_filterId As Int32, _
+                                ByRef p_filterValueId As Int32)
+
+        Dim l_filter As AxisFilter = GlobalVariables.AxisFilters.GetValue(m_axisType, p_axisElemId, p_filterId)
+        If l_filter Is Nothing Then Exit Sub
+        Dim l_copy = l_filter.Clone
+        l_copy.FilterValueId = p_filterValueId
+        UpdateAxisFilter(l_copy)
+
     End Sub
 
     Friend Sub UpdateAxisFilter(ByRef p_axisFilter As AxisFilter)
@@ -165,20 +167,19 @@ Friend Class AxisController
 
     End Sub
 
-    Friend Function GetAxisFilter(ByVal p_axisFilterId As UInt32) As AxisFilter
-        Return GlobalVariables.AxisFilters.GetValue(m_axisType, p_axisFilterId)
-    End Function
-
     Friend Function GetAxisFilterCopy(ByVal p_axisId As UInt32) As AxisFilter
         Dim l_axis = GetAxisFilter(p_axisId)
-
         If l_axis Is Nothing Then Return Nothing
         Return l_axis.Clone()
     End Function
 
-    Friend Function GetAxisFilterDictionary() As MultiIndexDictionary(Of UInt32, Tuple(Of UInt32, UInt32), AxisFilter)
-        Return GlobalVariables.AxisFilters.GetDictionary(m_axisType)
+    Friend Function GetAxisFilter(ByVal p_axisFilterId As UInt32) As AxisFilter
+        Return GlobalVariables.AxisFilters.GetValue(m_axisType, p_axisFilterId)
     End Function
+
+    'Friend Function GetAxisFilterDictionary() As MultiIndexDictionary(Of UInt32, Tuple(Of UInt32, UInt32), AxisFilter)
+    '    Return GlobalVariables.AxisFilters.GetDictionary(m_axisType)
+    'End Function
 
     Friend Sub UpdateAxisElemName(ByVal p_id As UInt32, ByVal p_value As String)
         Dim l_entity = GetAxisElemCopy(p_id)
@@ -202,10 +203,11 @@ Friend Class AxisController
 
 #Region "Events"
 
-    Private Sub AfterEntityCurrencyRead(ByRef status As ErrorMessage, ByRef ht As CRUDEntity)
+    Private Sub AfterEntityCurrencyRead(ByRef status As ErrorMessage, ByRef p_entityCurrency As CRUDEntity)
 
-        If (status = ErrorMessage.SUCCESS) Then
-            Dim l_entity As AxisElem = GetAxisElem(ht.Id)
+        If m_axisType = AxisType.Entities _
+        AndAlso (status = ErrorMessage.SUCCESS) Then
+            Dim l_entity As AxisElem = GetAxisElem(p_entityCurrency.Id)
             If l_entity Is Nothing Then Exit Sub
 
             m_view.UpdateAxisElem(l_entity)
@@ -215,20 +217,21 @@ Friend Class AxisController
 
     Private Sub AfterAxisElemRead(ByRef status As ErrorMessage, ByRef p_axisElem As CRUDEntity)
 
-        Dim axisElem As AxisElem = p_axisElem
-        If (status = ErrorMessage.SUCCESS) Then
+        Dim l_axisElem As AxisElem = p_axisElem
+        If l_axisElem.Axis = m_axisType _
+        AndAlso (status = ErrorMessage.SUCCESS) Then
             m_view.LoadInstanceVariables()
-            m_view.UpdateAxisElem(axisElem)
-            Dim l_node As vTreeNode = VTreeViewUtil.FindNode(m_newAxisView.m_parentAxisElemTreeviewBox.TreeView, axisElem.Id)
+            m_view.UpdateAxisElem(l_axisElem)
+            Dim l_node As vTreeNode = VTreeViewUtil.FindNode(m_newAxisView.m_parentAxisElemTreeviewBox.TreeView, l_axisElem.Id)
             If l_node Is Nothing Then
-                m_newAxisView.AxisNodeAddition(axisElem.Id, _
-                                                   axisElem.ParentId, _
-                                                   axisElem.Name, _
-                                                   axisElem.Image)
+                m_newAxisView.AxisNodeAddition(l_axisElem.Id, _
+                                                   l_axisElem.ParentId, _
+                                                   l_axisElem.Name, _
+                                                   l_axisElem.Image)
             Else
                 m_newAxisView.TVUpdate(l_node, _
-                                         axisElem.Name, _
-                                         axisElem.Image)
+                                         l_axisElem.Name, _
+                                         l_axisElem.Image)
             End If
         End If
 
@@ -237,6 +240,7 @@ Friend Class AxisController
     Private Sub AfterAxisElemDeletion(ByRef status As ErrorMessage, ByRef id As UInt32)
 
         If status = ErrorMessage.SUCCESS Then
+            If GlobalVariables.AxisElems.GetValue(m_axisType, id) Is Nothing Then Exit Sub
             m_view.LoadInstanceVariables()
             m_view.DeleteAxisElem(id)
             m_newAxisView.TVNodeDelete(id)
@@ -262,6 +266,7 @@ Friend Class AxisController
         Else
             Dim l_axisElem As AxisElem = GlobalVariables.AxisElems.GetValue(m_axisType, p_id)
             If l_axisElem IsNot Nothing _
+            AndAlso l_axisElem.Axis = m_axisType _
             AndAlso m_newAxisNameAxisParentDict.ContainsKey(l_axisElem.Name) Then
                 Dim l_axisParent As New AxisParent()
                 l_axisParent.Id = l_axisElem.Id
@@ -327,12 +332,13 @@ Friend Class AxisController
         Return l_entity.Clone()
     End Function
 
-    Friend Sub ShowNewAxisElemUI()
+    Friend Sub ShowNewAxisElemUI(Optional ByRef p_axisParentParentId As Int32 = 0)
 
         Dim current_row As HierarchyItem = m_view.getCurrentRowItem
         If Not current_row Is Nothing Then
             Dim node As vTreeNode = VTreeViewUtil.FindNode(m_axisTV, current_row.ItemValue)
             If node IsNot Nothing Then
+                m_newAxisView.SetAxisParentParentId(p_axisParentParentId)
                 m_newAxisView.SetParentAxisId(node.Value)
             End If
         End If

@@ -78,18 +78,14 @@ Friend Class EmployeeView
 
     End Sub
 
-    Protected Overrides Sub CreateAxisOrder()
+    Protected Overrides Sub AddAxisElem_cmd_Click(sender As Object, e As EventArgs)
 
-        If m_axisParentId <> 0  Then
+        If m_axisParentId <> 0 Then
             Dim l_entity As CRUD.AxisElem = GlobalVariables.AxisElems.GetValue(CRUD.AxisType.Entities, m_axisParentId)
             If l_entity Is Nothing Then Exit Sub
 
             If l_entity.AllowEdition = True Then
-
-                Dim axisName As String = InputBox(Local.GetValue("axis.msg_enter_name"), Local.GetValue("axis.msg_axis_creation"))
-                If axisName <> "" Then
-                    m_controller.CreateAxisElem(axisName, m_axisParentId)
-                End If
+                m_controller.ShowNewAxisElemUI(m_axisParentId)
             Else
                 MsgBox(Local.GetValue("axis.msg_entity_axis_parent_not_allowed"))
             End If
@@ -104,11 +100,11 @@ Friend Class EmployeeView
     Private Sub DisplayEmployeesBelongingToAxisParent(Optional ByRef p_axisParentId As UInt32 = 0)
 
         If p_axisParentId <> 0 Then
-            '        m_controller.AxisParentId = p_axisParentId
+            ' m_controller.AxisParentId = p_axisParentId
             m_axisParentId = p_axisParentId
         Else
             If m_entitiesTreeview.SelectedNode IsNot Nothing Then
-                '               m_controller.AxisParentId = m_entitiesTreeview.SelectedNode.Value
+                ' m_controller.AxisParentId = m_entitiesTreeview.SelectedNode.Value
                 m_axisParentId = m_entitiesTreeview.SelectedNode.Value
             Else
                 Exit Sub

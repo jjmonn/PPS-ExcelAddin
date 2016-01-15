@@ -263,9 +263,9 @@ Friend Class AxisView
 
 #Region "Main menu"
 
-    Private Sub AddAxisElem_cmd_Click(sender As Object, e As EventArgs) Handles CreateAxisElemToolStripMenuItem.Click
+    Protected Overridable Sub AddAxisElem_cmd_Click(sender As Object, e As EventArgs) Handles CreateAxisElemToolStripMenuItem.Click
 
-        Me.Hide()
+        '    Me.Hide()
         m_controller.ShowNewAxisElemUI()
 
     End Sub
@@ -344,14 +344,6 @@ Friend Class AxisView
 
     End Sub
 
-    Protected Overridable Sub CreateAxisOrder()
-
-        Dim axisName As String = InputBox(Local.GetValue("axis.msg_enter_name"), Local.GetValue("axis.msg_axis_creation"))
-        If axisName <> "" Then
-            m_controller.CreateAxisElem(axisName)
-        End If
-
-    End Sub
 
 #Region "Columns Initialization"
 
@@ -376,10 +368,10 @@ Friend Class AxisView
 
     Private Sub CreateSubFilters(ByRef node As vTreeNode)
 
-        Dim col As HierarchyItem = m_axisDataGridView.ColumnsHierarchy.Items.Add(node.Text)
-        col.ItemValue = node.Value
-        col.AllowFiltering = True
-        col.Width = COLUMNS_WIDTH
+        Dim l_column As HierarchyItem = m_axisDataGridView.ColumnsHierarchy.Items.Add(node.Text)
+        l_column.ItemValue = node.Value
+        l_column.AllowFiltering = True
+        l_column.Width = COLUMNS_WIDTH
         For Each childNode As vTreeNode In node.Nodes
             CreateSubFilters(childNode)
         Next
@@ -418,6 +410,7 @@ Friend Class AxisView
     Friend Sub FillRow(ByVal p_axisElemId As Int32, _
                        ByVal p_axisElem As AxisElem)
 
+        m_isFillingDGV = True
         Dim rowItem As HierarchyItem = DataGridViewsUtil.GetHierarchyItemFromId(m_axisDataGridView.RowsHierarchy, p_axisElemId)
         If rowItem Is Nothing Then
             Dim parentAxisElemId As Int32 = p_axisElem.ParentId
@@ -450,6 +443,7 @@ Friend Class AxisView
             Next
         End If
         If p_axisElem.AllowEdition = False Then rowItem.ImageIndex = 0 Else rowItem.ImageIndex = 1
+        m_isFillingDGV = False
 
     End Sub
 
@@ -457,23 +451,23 @@ Friend Class AxisView
                                ByRef p_axisElemId As Int32, _
                                ByRef p_rowItem As HierarchyItem)
 
-        Dim combobox As New ComboBoxEditor
-        combobox.DropDownList = True
-        Dim columnItem As HierarchyItem = DataGridViewsUtil.GetHierarchyItemFromId(m_axisDataGridView.ColumnsHierarchy, p_filterNode.Value)
-        Dim filterValueId As UInt32 = GlobalVariables.AxisFilters.GetFilterValueId(m_controller.GetAxisType(), CInt(p_filterNode.Value), p_axisElemId)
-        Dim filter_value_name As String = ""
-        If filterValueId <> 0 Then
-            filter_value_name = GlobalVariables.FiltersValues.GetValueName(filterValueId)
+        Dim l_combobox As New ComboBoxEditor
+        l_combobox.DropDownList = True
+        Dim l_columnItem As HierarchyItem = DataGridViewsUtil.GetHierarchyItemFromId(m_axisDataGridView.ColumnsHierarchy, p_filterNode.Value)
+        Dim l_filterValueId As UInt32 = GlobalVariables.AxisFilters.GetFilterValueId(m_controller.GetAxisType(), CInt(p_filterNode.Value), p_axisElemId)
+        Dim l_filterValueName As String = ""
+        If l_filterValueId <> 0 Then
+            l_filterValueName = GlobalVariables.FiltersValues.GetValueName(l_filterValueId)
         End If
 
-        m_axisDataGridView.CellsArea.SetCellValue(p_rowItem, columnItem, filter_value_name)
+        m_axisDataGridView.CellsArea.SetCellValue(p_rowItem, l_columnItem, l_filterValueName)
 
         ' Filters Choices Setup
         If p_filterNode.Parent Is Nothing Then
             ' Root Filter
             If Not GlobalVariables.FiltersValues.GetDictionary(p_filterNode.Value) Is Nothing Then
                 For Each value As FilterValue In GlobalVariables.FiltersValues.GetDictionary(p_filterNode.Value).Values
-                    combobox.Items.Add(value.Name)
+                    l_combobox.Items.Add(value.Name)
                 Next
             End If
         Else
@@ -481,12 +475,14 @@ Friend Class AxisView
             Dim parentFilterFilterValueId As Int32 = GlobalVariables.AxisFilters.GetFilterValueId(m_controller.GetAxisType(), p_filterNode.Parent.Value, p_axisElemId)     ' Child Filter Id
             Dim filterValuesIds = GlobalVariables.FiltersValues.GetFilterValueIdsFromParentFilterValueIds({parentFilterFilterValueId})
             For Each Id As UInt32 In filterValuesIds
-                combobox.Items.Add(GlobalVariables.FiltersValues.GetValueName(Id))
+                l_combobox.Items.Add(GlobalVariables.FiltersValues.GetValueName(Id))
             Next
         End If
 
         ' Add ComboBoxEditor to Cell
-        If GlobalVariables.Users.CurrentUserHasRight(Group.Permission.EDIT_AXIS) Then m_axisDataGridView.CellsArea.SetCellEditor(p_rowItem, columnItem, combobox)
+        If GlobalVariables.Users.CurrentUserHasRight(Group.Permission.EDIT_AXIS) Then
+            m_axisDataGridView.CellsArea.SetCellEditor(p_rowItem, l_columnItem, l_combobox)
+        End If
 
         ' Recursive if Filters Children exist
         If p_filterNode.Nodes Is Nothing Then Exit Sub
@@ -630,8 +626,7 @@ Friend Class AxisView
 
         If m_isFillingDGV = False Then
             If (Not args.Cell.Value Is Nothing AndAlso args.Cell.Value <> "") Then
-                Dim entityId As Int32 = args.Cell.RowItem.ItemValue
-
+                Dim l_axisId As Int32 = args.Cell.RowItem.ItemValue
 
                 Select Case args.Cell.ColumnItem.ItemValue
 
@@ -641,19 +636,19 @@ Friend Class AxisView
                             MsgBox(Local.GetValue("axis_edition.msg_currency_not_found1") & args.Cell.Value & Local.GetValue("axis_edition.msg_currency_not_found2"))
                             Exit Sub
                         Else
-                            m_controller.UpdateEntityCurrency(entityId, currencyId)
+                            m_controller.UpdateEntityCurrency(l_axisId, currencyId)
                         End If
 
                     Case Else
-                        Dim filterValueName As String = args.Cell.Value
-                        Dim filterValueId As Int32 = GlobalVariables.FiltersValues.GetValueId(filterValueName)
-                        If filterValueId = 0 Then
+                        Dim l_filterValueName As String = args.Cell.Value
+                        Dim l_filterValueId As Int32 = GlobalVariables.FiltersValues.GetValueId(l_filterValueName)
+                        If l_filterValueId = 0 Then
                             MsgBox(Local.GetValue("axis.msg_filter_value_not_found"))
                             Exit Sub
                         End If
-                        Dim filterId As Int32 = args.Cell.ColumnItem.ItemValue
-                        UpdateEntitiesFiltersAfterEdition(entityId, filterId, filterValueId)
-                        m_controller.UpdateAxisFilter(entityId, filterId, filterValueId)
+                        Dim l_filterId As Int32 = args.Cell.ColumnItem.ItemValue
+                        UpdateEntitiesFiltersAfterEdition(l_axisId, l_filterId, l_filterValueId)
+                        m_controller.UpdateAxisFilter(l_axisId, l_filterId, l_filterValueId)
                 End Select
 
             End If
@@ -702,13 +697,14 @@ Friend Class AxisView
     Private Sub SetValueToSibbling(ByRef rowItem_ As HierarchyItem, ByRef columnItem_ As HierarchyItem, ByRef value As String)
 
         On Error GoTo errorHandler
-        Dim parent As HierarchyItem = rowItem_.ParentItem
+        Dim l_parentItem As HierarchyItem = rowItem_.ParentItem
         Dim currentItem = rowItem_
         While Not currentItem.ItemBelow Is Nothing
 
             currentItem = currentItem.ItemBelow
-            If currentItem.ParentItem.GetUniqueID = parent.GetUniqueID Then
-
+            If currentItem.ParentItem IsNot Nothing _
+            AndAlso l_parentItem IsNot Nothing _
+            AndAlso currentItem.ParentItem.GetUniqueID = l_parentItem.GetUniqueID Then
                 If currentItem.Items.Count > 0 Then
                     SetValueToChildrenItems(currentItem, columnItem_, value)
                 Else

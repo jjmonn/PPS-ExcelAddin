@@ -27,6 +27,7 @@ Friend Class NewAxisUI
 
     ' Objects
     Private m_controller As AxisController
+    Private m_axisParentParentId As Int32
 
     ' Constants
     Private Const FIXED_ATTRIBUTES_NUMBER As Int32 = 3
@@ -44,12 +45,13 @@ Friend Class NewAxisUI
 
         ' Add any initialization after the InitializeComponent() call.
         m_controller = p_controller
-        If m_controller.GetAxisType() = AxisType.Entities OrElse m_controller.GetAxisType = AxisType.Client Then
-            GlobalVariables.AxisElems.LoadHierarchyAxisTree(m_controller.GetAxisType(), m_parentAxisElemTreeviewBox.TreeView)
-        Else
-            m_parentAxisLabel.Visible = False
-            m_parentAxisElemTreeviewBox.Visible = False
-        End If
+        Select Case m_controller.GetAxisType()
+            Case AxisType.Entities ', AxisType.Client
+                GlobalVariables.AxisElems.LoadHierarchyAxisTree(m_controller.GetAxisType(), m_parentAxisElemTreeviewBox.TreeView)
+            Case Else
+                m_parentAxisLabel.Visible = False
+                m_parentAxisElemTreeviewBox.Visible = False
+        End Select
 
         MultilanguageSetup(p_axisType)
 
@@ -75,6 +77,10 @@ Friend Class NewAxisUI
         End If
         m_parentAxisElemTreeviewBox.TreeView.SelectedNode = parentAxisNode
 
+    End Sub
+
+    Friend Sub SetAxisParentParentId(ByRef p_axisParentParentId As Int32)
+        m_axisParentParentId = p_axisParentParentId
     End Sub
 
     Private Sub MultilanguageSetup(ByRef p_axisType As AxisType)
@@ -196,9 +202,10 @@ Friend Class NewAxisUI
                 End If
             End If
             m_controller.CreateAxisElem(l_newAxisName, _
-                                    l_parentAxisId, _
-                                    1, _
-                                    1)
+                                        l_parentAxisId, _
+                                        1, _
+                                        1, _
+                                        m_axisParentParentId)
             Me.Hide()
             m_controller.ShowEntitiesMGT()
         End If
