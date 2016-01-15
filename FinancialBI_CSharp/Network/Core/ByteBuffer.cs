@@ -5,7 +5,7 @@ using System.Text;
 using System.IO;
 using Ionic.Zlib;
 
-public class ByteBuffer : MemoryStream
+public class ByteBuffer
 {
   public struct Header
   {
@@ -17,18 +17,48 @@ public class ByteBuffer : MemoryStream
     public UInt16 opcode;
   }
 
+  const long NbArray = 8;
+  const long MaxSizeArray = 256 * 1024 * 1024;
+  const long LimitTotalSize = NbArray * MaxSizeArray;
   static Int32 m_nextId = 1;
   Int32 m_requestId = -1;
   Header m_header;
   long m_sizeHeader;
+  byte[][] m_storage = new byte[NbArray][];
+  long m_position = 0;
+  long m_length = 0;
+  long m_capacity = 0;
+
+  void SetCapacity(long p_newCapacity)
+  {
+    // TODO: manage case with inferior capacity
+
+    if (p_newCapacity >= LimitTotalSize)
+      throw new ArgumentOutOfRangeException("p_newCapacity", "Try to set a capacity of " + p_newCapacity + ", max allowed capacity is " + LimitTotalSize + " bytes");
+    long startArray = (m_capacity + 1) / MaxSizeArray;
+    long endArray = p_newCapacity / MaxSizeArray;
+
+    for (long currentArray = startArray; currentArray <= endArray; ++currentArray)
+    {
+      long sizeCurrent = p_newCapacity - startArray * MaxSizeArray;
+      sizeCurrent = (sizeCurrent > MaxSizeArray) ? MaxSizeArray : sizeCurrent;
+
+      byte[] newArray = new byte[sizeCurrent];
+      if (m_storage[currentArray] != null)
+        m_storage[currentArray].CopyTo(newArray, 0);
+      m_storage[currentArray] = newArray;
+    }
+    m_capacity = p_newCapacity;
+  }
 
   public ByteBuffer(ushort p_opcode)
   {
+    SetCapacity(4096);
     m_header.opcode = p_opcode;
     m_header.error = 0;
     m_header.isCompressed = false;
     WriteHeader();
-    m_sizeHeader = Length;
+    m_sizeHeader = m_length;
   }
 
   public UInt32 GetError()
@@ -45,40 +75,50 @@ public class ByteBuffer : MemoryStream
 
   public ByteBuffer(byte[] p_buffer, Header p_header)
   {
+    if (p_header.isCompressed && p_header.payloadSize > MaxSizeArray)
+      throw new ArgumentOutOfRangeException("p_buffer", "Maximum compressed ByteBuffer size is " + LimitTotalSize + " bytes");
+    SetCapacity(p_header.realPayloadSize + 4096);
     m_header = p_header;
     WriteHeader();
-    m_sizeHeader = Length;
+    m_sizeHeader = m_length;
     Write(p_buffer, 0, (int)m_header.payloadSize);
     if (m_header.isCompressed)
       Uncompress(m_header.realPayloadSize);
     m_header.isCompressed = false;
-    Position = m_sizeHeader;
+    m_position = m_sizeHeader;
   }
 
   public ByteBuffer Clone()
   {
     ByteBuffer clone = new ByteBuffer();
-    long pos = Position;
 
     clone.m_header = m_header;
     clone.m_sizeHeader = m_sizeHeader;
     clone.m_requestId = m_requestId;
-    Position = 0;
-    CopyTo(clone);
-    clone.Position = pos;
-    Position = pos;
+    for (int i = 0; i < NbArray; ++i)
+    {
+      if (m_storage[i] != null)
+      {
+        clone.m_storage[i] = new byte[m_storage[i].Length];
+
+        m_storage[i].CopyTo(clone.m_storage[i], 0);
+      }
+    }
+    clone.m_position = m_position;
+    clone.m_capacity = m_capacity;
+    clone.m_length = m_length;
     return (clone);
   }
 
   public void Release()
   {
-    long prevPos = Position;
+    long prevPos = m_position;
 
-    m_header.payloadSize = (Int32)(Length - m_sizeHeader);
+    m_header.payloadSize = (Int32)(m_length - m_sizeHeader);
     m_header.realPayloadSize = m_header.payloadSize;
-    Position = 0;
+    m_position = 0;
     WriteHeader();
-    Position = prevPos;
+    m_position = prevPos;
   }
 
   private void WriteHeader()
@@ -91,9 +131,32 @@ public class ByteBuffer : MemoryStream
     WriteUint16(m_header.opcode);
   }
 
-  public void WriteUint8(Byte value)
+  public void Write(byte[] p_array, long p_offset, long p_size)
   {
-    WriteByte(value);
+    if (p_offset + p_size + m_position > m_capacity)
+    {
+      if (p_offset + p_size + m_position > m_capacity * 2)
+        SetCapacity(p_offset + p_size + m_position);
+      else if (m_capacity * 2 > LimitTotalSize)
+        SetCapacity(LimitTotalSize - 1);
+      else
+        SetCapacity(m_capacity * 2);
+    }
+    for (long i = 0; i < p_size; ++i)
+    {
+      long array = m_position / MaxSizeArray;
+      long pos = m_position - array * MaxSizeArray;
+
+      m_storage[array][pos] = p_array[i + p_offset];
+      m_position++;
+    }
+    if (m_position > m_length)
+      m_length = m_position;
+  }
+
+  public void WriteUint8(byte value)
+  {
+    Write(BitConverter.GetBytes(value), 0, 1);
   }
 
   public void WriteBool(bool value)
@@ -138,13 +201,28 @@ public class ByteBuffer : MemoryStream
       byte[] tmp = System.Text.Encoding.UTF8.GetBytes(value);
       Write(tmp, 0, tmp.Length);
     }
-    WriteByte(0x00);
+    WriteUint8(0x00);
   }
 
   public bool ReadBool()
   {
     return ReadUint8() != 0 ? true : false;
   }
+
+  void Read(byte[] p_array, long p_offset, long p_size)
+  {
+    for (long i = 0; i < p_size; ++i)
+    {
+      if (m_position >= m_length)
+        return;
+      long array = m_position / MaxSizeArray;
+      long pos = m_position - array * MaxSizeArray;
+
+      p_array[i + p_offset] = m_storage[array][pos];
+      m_position++;
+    }
+  }
+
   public Byte ReadUint8()
   {
     byte[] tmp = new byte[1];
@@ -232,11 +310,11 @@ public class ByteBuffer : MemoryStream
 
   public void ReplaceUint32(UInt32 p_value, int p_pos)
   {
-    long l_savePos = Position;
+    long l_savePos = m_position;
 
-    Position = p_pos;
+    m_position = p_pos;
     Write(BitConverter.GetBytes(p_value), 0, sizeof(UInt32));
-    Position = l_savePos;
+    m_position = l_savePos;
   }
 
   public Int32 AssignRequestId()
@@ -253,21 +331,48 @@ public class ByteBuffer : MemoryStream
     return (m_requestId);
   }
 
+  public byte[] GetBuffer()
+  {
+    return (m_storage[0]);
+  }
+
+  public long Length
+  {
+    get { return (m_length); }
+  }
+
   public void Uncompress(int p_realSize)
   {
-    byte[] array = this.ToArray();
+    byte[] uncompressed;
+    int size;
+    int readed = 0;
+
+    byte[] array = m_storage[0];
     byte[] resultArray = new byte[m_header.payloadSize];
 
     for (int i = 0; i < m_header.payloadSize; ++i)
       resultArray[i] = array[m_sizeHeader + i];
-    ZlibStream stream = new ZlibStream(new MemoryStream(resultArray), CompressionMode.Decompress);
-    byte[] uncompressed = new byte[p_realSize];
-    int size = stream.Read(uncompressed, 0, p_realSize);
+    m_position = m_sizeHeader;
+    m_length = m_sizeHeader;
 
-    byte[] buffer = GetBuffer();
-    Array.Clear(buffer, (int)m_sizeHeader, buffer.Length - (int)m_sizeHeader);
-    Position = m_sizeHeader;
-    SetLength(m_sizeHeader);
-    Write(uncompressed, 0, size);
+    ZlibStream stream = new ZlibStream(new MemoryStream(resultArray), CompressionMode.Decompress);
+    Array.Clear(GetBuffer(), (int)m_sizeHeader, GetBuffer().Length - (int)m_sizeHeader);
+
+    try
+    {
+      while (readed < p_realSize)
+      {
+        uncompressed = new byte[4096];
+        size = stream.Read(uncompressed, 0, 4096);
+
+        Write(uncompressed, 0, size);
+        readed += size;
+      }
+    }
+    catch (ArgumentOutOfRangeException e)
+    {
+      System.Diagnostics.Debug.WriteLine("ByteBuffer.Uncompress: " + e.Message);
+      return;
+    }
   }
 }
