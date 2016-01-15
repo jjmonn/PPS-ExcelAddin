@@ -113,6 +113,7 @@ Friend Class AccountsController
         l_account.FormulaType = p_formulaType
         l_account.Formula = p_formula
         l_account.Type = p_type
+        l_account.PeriodAggregationOptionId = p_conversionOption
         l_account.ConsolidationOptionId = p_consolidationOption
         l_account.ConversionOptionId = p_conversionOption
         l_account.FormatId = p_format

@@ -35,6 +35,13 @@ namespace CRUD
       NO_CONVERSION
     }
 
+    public enum PeriodAggregationOptions
+    {
+      SUM_OF_PERIODS = 1,
+      END_PERIOD,
+      AVERAGE_PERIOD
+    }
+
     public enum ConsolidationOptions
     {
       AGGREGATION = 1,
@@ -60,6 +67,7 @@ namespace CRUD
     public AccountType Type { get; set; }
     public ConsolidationOptions ConsolidationOptionId { get; set; }
     public ConversionOptions ConversionOptionId { get; set; }
+    public PeriodAggregationOptions PeriodAggregationOptionId { get; set; }
     public string FormatId { get; set; }
     public UInt32 Image { get; set; }
     public Int32 ItemPosition { get; set; }
@@ -82,6 +90,7 @@ namespace CRUD
       l_account.FormulaType = (FormulaTypes)p_packet.ReadUint32();
       l_account.Formula = p_packet.ReadString();
       l_account.Type = (AccountType)p_packet.ReadUint32();
+      l_account.PeriodAggregationOptionId = (PeriodAggregationOptions)p_packet.ReadUint32();
       l_account.ConsolidationOptionId = (ConsolidationOptions)p_packet.ReadUint32();
       l_account.ConversionOptionId = (ConversionOptions)p_packet.ReadInt32();
       l_account.FormatId = p_packet.ReadString();
@@ -106,6 +115,7 @@ namespace CRUD
       p_packet.WriteInt32((Int32)FormulaType);
       p_packet.WriteString(Formula);
       p_packet.WriteInt32((Int32)Type);
+      p_packet.WriteInt32((Int32)PeriodAggregationOptionId);
       p_packet.WriteInt32((Int32)ConsolidationOptionId);
       p_packet.WriteInt32((Int32)ConversionOptionId);
       p_packet.WriteString(FormatId);
@@ -123,6 +133,7 @@ namespace CRUD
       FormulaType = p_model.FormulaType;
       Formula = p_model.Formula;
       Type = p_model.Type;
+      PeriodAggregationOptionId = p_model.PeriodAggregationOptionId;
       ConsolidationOptionId = p_model.ConsolidationOptionId;
       ConversionOptionId = p_model.ConversionOptionId;
       FormatId = p_model.FormatId;
