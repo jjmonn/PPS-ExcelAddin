@@ -29,8 +29,8 @@ Friend Class Computer
     Public Event ComputationAnswered(ByRef entityId As String, ByRef status As Boolean, ByRef requestId As Int32)
 
     ' Variables
-    Private m_dataMap As Dictionary(Of String, Double)
-    Private m_versionsComputationQueue As Dictionary(Of Int32, Dictionary(Of Int32, Boolean))
+    Private m_dataMap As SafeDictionary(Of String, Double)
+    Private m_versionsComputationQueue As SafeDictionary(Of Int32, Dictionary(Of Int32, Boolean))
     Private m_requestIdVersionIdDict As New SafeDictionary(Of Int32, Int32)
     Private m_requestIdEntityIdDict As New SafeDictionary(Of Int32, Int32)
 
@@ -44,7 +44,7 @@ Friend Class Computer
     Private m_periodId As Int32
     Private m_filterToken As String
     Private m_periodIdentifier As Char
-    Private m_periodsTokenDict As Dictionary(Of String, String)
+    Private m_periodsTokenDict As SafeDictionary(Of String, String)
     Private m_filtersDict As New SafeDictionary(Of String, Int32)
 
     ' Constants
@@ -60,7 +60,7 @@ Friend Class Computer
 
 
     ' dataMap: [version_id][filter_id][entity_id][account_id][period]
-    Friend Function GetData() As Dictionary(Of String, Double)
+    Friend Function GetData() As SafeDictionary(Of String, Double)
         Return m_dataMap
     End Function
 
