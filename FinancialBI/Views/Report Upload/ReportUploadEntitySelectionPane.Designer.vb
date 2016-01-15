@@ -32,15 +32,8 @@ Partial Class ReportUploadEntitySelectionPane
         Me.m_accountSelectionComboBox = New VIBlend.WinForms.Controls.vComboBox()
         Me.m_entitiesTV = New VIBlend.WinForms.Controls.vTreeView()
         Me.m_validateButton = New VIBlend.WinForms.Controls.vButton()
-        Me.Panel1 = New System.Windows.Forms.Panel()
-        Me.m_endWeekTB = New VIBlend.WinForms.Controls.vTextBox()
-        Me.m_startWeekTB = New VIBlend.WinForms.Controls.vTextBox()
-        Me.m_startDateLabel = New VIBlend.WinForms.Controls.vLabel()
-        Me.m_endDateLabel = New VIBlend.WinForms.Controls.vLabel()
-        Me.m_startDate = New VIBlend.WinForms.Controls.vDatePicker()
-        Me.m_endDate = New VIBlend.WinForms.Controls.vDatePicker()
+        Me.m_periodsSelectionPanel = New System.Windows.Forms.Panel()
         Me.TableLayoutPanel1.SuspendLayout()
-        Me.Panel1.SuspendLayout()
         Me.SuspendLayout()
         '
         'ImageList1
@@ -67,7 +60,7 @@ Partial Class ReportUploadEntitySelectionPane
         Me.TableLayoutPanel1.Controls.Add(Me.m_accountSelectionComboBox, 0, 5)
         Me.TableLayoutPanel1.Controls.Add(Me.m_entitiesTV, 0, 1)
         Me.TableLayoutPanel1.Controls.Add(Me.m_validateButton, 0, 6)
-        Me.TableLayoutPanel1.Controls.Add(Me.Panel1, 0, 3)
+        Me.TableLayoutPanel1.Controls.Add(Me.m_periodsSelectionPanel, 0, 3)
         Me.TableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TableLayoutPanel1.Location = New System.Drawing.Point(0, 0)
         Me.TableLayoutPanel1.Name = "TableLayoutPanel1"
@@ -187,135 +180,13 @@ Partial Class ReportUploadEntitySelectionPane
         Me.m_validateButton.UseVisualStyleBackColor = False
         Me.m_validateButton.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
         '
-        'Panel1
+        'm_periodsSelectionPanel
         '
-        Me.Panel1.Controls.Add(Me.m_endWeekTB)
-        Me.Panel1.Controls.Add(Me.m_startWeekTB)
-        Me.Panel1.Controls.Add(Me.m_startDateLabel)
-        Me.Panel1.Controls.Add(Me.m_endDateLabel)
-        Me.Panel1.Controls.Add(Me.m_startDate)
-        Me.Panel1.Controls.Add(Me.m_endDate)
-        Me.Panel1.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Panel1.Location = New System.Drawing.Point(3, 355)
-        Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(253, 197)
-        Me.Panel1.TabIndex = 8
-        '
-        'm_endWeekTB
-        '
-        Me.m_endWeekTB.BackColor = System.Drawing.Color.White
-        Me.m_endWeekTB.BoundsOffset = New System.Drawing.Size(1, 1)
-        Me.m_endWeekTB.ControlBorderColor = System.Drawing.Color.FromArgb(CType(CType(39, Byte), Integer), CType(CType(39, Byte), Integer), CType(CType(39, Byte), Integer))
-        Me.m_endWeekTB.DefaultText = "Empty..."
-        Me.m_endWeekTB.Enabled = False
-        Me.m_endWeekTB.Location = New System.Drawing.Point(124, 128)
-        Me.m_endWeekTB.MaxLength = 32767
-        Me.m_endWeekTB.Name = "m_endWeekTB"
-        Me.m_endWeekTB.PasswordChar = Global.Microsoft.VisualBasic.ChrW(0)
-        Me.m_endWeekTB.ScrollBars = System.Windows.Forms.ScrollBars.None
-        Me.m_endWeekTB.SelectionLength = 0
-        Me.m_endWeekTB.SelectionStart = 0
-        Me.m_endWeekTB.Size = New System.Drawing.Size(120, 23)
-        Me.m_endWeekTB.TabIndex = 9
-        Me.m_endWeekTB.Text = "w"
-        Me.m_endWeekTB.TextAlign = System.Windows.Forms.HorizontalAlignment.Left
-        Me.m_endWeekTB.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
-        '
-        'm_startWeekTB
-        '
-        Me.m_startWeekTB.BackColor = System.Drawing.Color.White
-        Me.m_startWeekTB.BoundsOffset = New System.Drawing.Size(1, 1)
-        Me.m_startWeekTB.ControlBorderColor = System.Drawing.Color.FromArgb(CType(CType(39, Byte), Integer), CType(CType(39, Byte), Integer), CType(CType(39, Byte), Integer))
-        Me.m_startWeekTB.DefaultText = "Empty..."
-        Me.m_startWeekTB.Enabled = False
-        Me.m_startWeekTB.Location = New System.Drawing.Point(124, 50)
-        Me.m_startWeekTB.MaxLength = 32767
-        Me.m_startWeekTB.Name = "m_startWeekTB"
-        Me.m_startWeekTB.PasswordChar = Global.Microsoft.VisualBasic.ChrW(0)
-        Me.m_startWeekTB.ScrollBars = System.Windows.Forms.ScrollBars.None
-        Me.m_startWeekTB.SelectionLength = 0
-        Me.m_startWeekTB.SelectionStart = 0
-        Me.m_startWeekTB.Size = New System.Drawing.Size(120, 23)
-        Me.m_startWeekTB.TabIndex = 0
-        Me.m_startWeekTB.Text = "w"
-        Me.m_startWeekTB.TextAlign = System.Windows.Forms.HorizontalAlignment.Left
-        Me.m_startWeekTB.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
-        '
-        'm_startDateLabel
-        '
-        Me.m_startDateLabel.BackColor = System.Drawing.Color.Transparent
-        Me.m_startDateLabel.DisplayStyle = VIBlend.WinForms.Controls.LabelItemStyle.TextOnly
-        Me.m_startDateLabel.Ellipsis = False
-        Me.m_startDateLabel.ImageAlignment = System.Drawing.ContentAlignment.TopLeft
-        Me.m_startDateLabel.Location = New System.Drawing.Point(7, 18)
-        Me.m_startDateLabel.Multiline = True
-        Me.m_startDateLabel.Name = "m_startDateLabel"
-        Me.m_startDateLabel.Size = New System.Drawing.Size(105, 26)
-        Me.m_startDateLabel.TabIndex = 7
-        Me.m_startDateLabel.Text = "Start date"
-        Me.m_startDateLabel.TextAlignment = System.Drawing.ContentAlignment.MiddleLeft
-        Me.m_startDateLabel.UseMnemonics = True
-        Me.m_startDateLabel.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
-        '
-        'm_endDateLabel
-        '
-        Me.m_endDateLabel.BackColor = System.Drawing.Color.Transparent
-        Me.m_endDateLabel.DisplayStyle = VIBlend.WinForms.Controls.LabelItemStyle.TextOnly
-        Me.m_endDateLabel.Ellipsis = False
-        Me.m_endDateLabel.ImageAlignment = System.Drawing.ContentAlignment.TopLeft
-        Me.m_endDateLabel.Location = New System.Drawing.Point(7, 96)
-        Me.m_endDateLabel.Multiline = True
-        Me.m_endDateLabel.Name = "m_endDateLabel"
-        Me.m_endDateLabel.Size = New System.Drawing.Size(105, 26)
-        Me.m_endDateLabel.TabIndex = 6
-        Me.m_endDateLabel.Text = "End date"
-        Me.m_endDateLabel.TextAlignment = System.Drawing.ContentAlignment.MiddleLeft
-        Me.m_endDateLabel.UseMnemonics = True
-        Me.m_endDateLabel.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
-        '
-        'm_startDate
-        '
-        Me.m_startDate.BackColor = System.Drawing.Color.White
-        Me.m_startDate.BorderColor = System.Drawing.Color.Black
-        Me.m_startDate.Culture = New System.Globalization.CultureInfo("")
-        Me.m_startDate.DropDownMaximumSize = New System.Drawing.Size(1000, 1000)
-        Me.m_startDate.DropDownMinimumSize = New System.Drawing.Size(10, 10)
-        Me.m_startDate.DropDownResizeDirection = VIBlend.WinForms.Controls.SizingDirection.None
-        Me.m_startDate.FormatValue = ""
-        Me.m_startDate.Location = New System.Drawing.Point(124, 18)
-        Me.m_startDate.MaxDate = New Date(2100, 1, 1, 0, 0, 0, 0)
-        Me.m_startDate.MinDate = New Date(1900, 1, 1, 0, 0, 0, 0)
-        Me.m_startDate.Name = "m_startDate"
-        Me.m_startDate.ShowGrip = False
-        Me.m_startDate.Size = New System.Drawing.Size(120, 26)
-        Me.m_startDate.TabIndex = 5
-        Me.m_startDate.Text = "VDatePicker1"
-        Me.m_startDate.UseThemeBackColor = False
-        Me.m_startDate.UseThemeDropDownArrowColor = True
-        Me.m_startDate.Value = New Date(2016, 1, 4, 9, 28, 7, 919)
-        Me.m_startDate.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
-        '
-        'm_endDate
-        '
-        Me.m_endDate.BackColor = System.Drawing.Color.White
-        Me.m_endDate.BorderColor = System.Drawing.Color.Black
-        Me.m_endDate.Culture = New System.Globalization.CultureInfo("")
-        Me.m_endDate.DropDownMaximumSize = New System.Drawing.Size(1000, 1000)
-        Me.m_endDate.DropDownMinimumSize = New System.Drawing.Size(10, 10)
-        Me.m_endDate.DropDownResizeDirection = VIBlend.WinForms.Controls.SizingDirection.None
-        Me.m_endDate.FormatValue = ""
-        Me.m_endDate.Location = New System.Drawing.Point(124, 96)
-        Me.m_endDate.MaxDate = New Date(2100, 1, 1, 0, 0, 0, 0)
-        Me.m_endDate.MinDate = New Date(1900, 1, 1, 0, 0, 0, 0)
-        Me.m_endDate.Name = "m_endDate"
-        Me.m_endDate.ShowGrip = False
-        Me.m_endDate.Size = New System.Drawing.Size(120, 26)
-        Me.m_endDate.TabIndex = 4
-        Me.m_endDate.Text = "VDatePicker1"
-        Me.m_endDate.UseThemeBackColor = False
-        Me.m_endDate.UseThemeDropDownArrowColor = True
-        Me.m_endDate.Value = New Date(2016, 1, 4, 9, 27, 20, 177)
-        Me.m_endDate.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
+        Me.m_periodsSelectionPanel.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.m_periodsSelectionPanel.Location = New System.Drawing.Point(3, 355)
+        Me.m_periodsSelectionPanel.Name = "m_periodsSelectionPanel"
+        Me.m_periodsSelectionPanel.Size = New System.Drawing.Size(253, 197)
+        Me.m_periodsSelectionPanel.TabIndex = 8
         '
         'ReportUploadEntitySelectionPane
         '
@@ -327,7 +198,6 @@ Partial Class ReportUploadEntitySelectionPane
         Me.Name = "ReportUploadEntitySelectionPane"
         Me.Text = "Data Edition"
         Me.TableLayoutPanel1.ResumeLayout(False)
-        Me.Panel1.ResumeLayout(False)
         Me.ResumeLayout(False)
 
     End Sub
@@ -340,12 +210,6 @@ Partial Class ReportUploadEntitySelectionPane
     Friend WithEvents m_accountSelectionComboBox As VIBlend.WinForms.Controls.vComboBox
     Friend WithEvents m_entitiesTV As VIBlend.WinForms.Controls.vTreeView
     Friend WithEvents m_validateButton As VIBlend.WinForms.Controls.vButton
-    Friend WithEvents Panel1 As System.Windows.Forms.Panel
-    Friend WithEvents m_startDateLabel As VIBlend.WinForms.Controls.vLabel
-    Friend WithEvents m_endDateLabel As VIBlend.WinForms.Controls.vLabel
-    Friend WithEvents m_startDate As VIBlend.WinForms.Controls.vDatePicker
-    Friend WithEvents m_endDate As VIBlend.WinForms.Controls.vDatePicker
-    Friend WithEvents m_endWeekTB As VIBlend.WinForms.Controls.vTextBox
-    Friend WithEvents m_startWeekTB As VIBlend.WinForms.Controls.vTextBox
+    Friend WithEvents m_periodsSelectionPanel As System.Windows.Forms.Panel
 
 End Class

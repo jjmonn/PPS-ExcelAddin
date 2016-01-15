@@ -435,7 +435,7 @@ Public Class AddinModule
                         AssociateReportUploadControler(False, Nothing)
 
                     Case Account.AccountProcess.RH
-                        Dim l_periodsRangeSelectionUI As New SnapshotPeriodRangeSelectionUI(Me)
+                        Dim l_periodsRangeSelectionUI As New SnapshotPeriodRangeSelectionUI(Me, My.Settings.version_id)
                         l_periodsRangeSelectionUI.Show()
                 End Select
             End If
