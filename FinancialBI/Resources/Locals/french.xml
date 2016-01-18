@@ -317,6 +317,7 @@
     <string name="msg_error_upload">Une erreur est survenue dans Excel et le rapport ne peut pas être affiché.</string>
     <string name="msg_invalid_value_for_client">Cette valeur n'est pas valide pour un nom de client: </string>
     <string name="msg_no_account_setup">Aucun compte n'a été spécifié. Impossible de soumettre la donnée.</string>
+      <string name="msg_no_account_selected">Aucun compte n'a été sélectioné.</string>
   </category>
 
   <category name="global_facts">

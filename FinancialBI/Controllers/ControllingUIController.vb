@@ -148,11 +148,11 @@ Friend Class ControllingUIController
                         End If
                     End If
                 End If
-                If Not m_view.m_rightPaneControl.DimensionsListContainsItem(computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.ENTITIES) Then
-                    If Not m_view.m_rightPaneControl.DimensionsListContainsItem(computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.CLIENTS) Then
-                        Return Local.GetValue("CUI.msg_specify_dimension_client_or_entities")
-                    End If
-                End If
+                'If Not m_view.m_rightPaneControl.DimensionsListContainsItem(computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.ENTITIES) Then
+                '    If Not m_view.m_rightPaneControl.DimensionsListContainsItem(computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.CLIENTS) Then
+                '        Return Local.GetValue("CUI.msg_specify_dimension_client_or_entities")
+                '    End If
+                'End If
                 Return ""
 
             Case Else
@@ -406,7 +406,9 @@ Friend Class ControllingUIController
 
                 Case computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.YEARS
                     Dim l_yearsPeriodList = GlobalVariables.Versions.GetYears(m_versionsDict)
-                    If m_view.m_process = Account.AccountProcess.RH Then l_yearsPeriodList = m_view.FilterPeriodList(l_yearsPeriodList.ToArray)
+                    If m_view.m_process = Account.AccountProcess.RH Then
+                        l_yearsPeriodList = Period.FilterPeriodList(l_yearsPeriodList.ToArray, m_view.PeriodsShortList)
+                    End If
                     For Each l_yearId As Int32 In l_yearsPeriodList
                         VTreeViewUtil.AddNode(computer.YEAR_PERIOD_IDENTIFIER & l_yearId, Format(Date.FromOADate(l_yearId), "yyyy"), node)
                     Next
@@ -414,7 +416,9 @@ Friend Class ControllingUIController
 
                 Case computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.MONTHS
                     Dim l_monthsPeriods = GlobalVariables.Versions.GetMonths(m_versionsDict)
-                    If m_view.m_process = Account.AccountProcess.RH Then l_monthsPeriods = m_view.FilterPeriodList(l_monthsPeriods.ToArray)
+                    If m_view.m_process = Account.AccountProcess.RH Then
+                        l_monthsPeriods = Period.FilterPeriodList(l_monthsPeriods.ToArray, m_view.PeriodsShortList)
+                    End If
                     For Each l_monthId As Int32 In l_monthsPeriods
                         VTreeViewUtil.AddNode(computer.MONTH_PERIOD_IDENTIFIER & l_monthId, Format(Date.FromOADate(l_monthId), "MMM yyyy"), node)
                     Next
@@ -424,15 +428,19 @@ Friend Class ControllingUIController
                     Dim l_periodsDict = GlobalVariables.Versions.GetPeriodsDictionary(m_versionsDict)
 
                     Dim l_yearsPeriodList = l_periodsDict.Keys.ToArray
-                    If m_view.m_process = Account.AccountProcess.RH Then l_yearsPeriodList = m_view.FilterPeriodList(l_yearsPeriodList).ToArray
-
+                    If m_view.m_process = Account.AccountProcess.RH Then
+                        l_yearsPeriodList = Period.FilterPeriodList(l_yearsPeriodList, m_view.PeriodsShortList).ToArray
+                    End If
+                    
                     For Each l_yearId As Int32 In l_periodsDict.Keys
                         Dim l_yearNode As vTreeNode = VTreeViewUtil.AddNode(computer.YEAR_PERIOD_IDENTIFIER & l_yearId, _
                                                                           Format(Date.FromOADate(l_yearId), "yyyy"), _
                                                                           node)
 
                         Dim l_monthsPeriods = l_periodsDict(l_yearId)
-                        If m_view.m_process = Account.AccountProcess.RH Then l_monthsPeriods = m_view.FilterPeriodList(l_monthsPeriods.ToArray)
+                        If m_view.m_process = Account.AccountProcess.RH Then
+                            l_monthsPeriods = Period.FilterPeriodList(l_monthsPeriods.ToArray, m_view.PeriodsShortList)
+                        End If
                         For Each l_monthId As Int32 In l_monthsPeriods
                             VTreeViewUtil.AddNode(computer.MONTH_PERIOD_IDENTIFIER & l_monthId, Format(Date.FromOADate(l_monthId), "MMM yyyy"), l_yearNode)
                         Next
@@ -441,7 +449,9 @@ Friend Class ControllingUIController
 
                 Case computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.WEEKS
                     Dim l_weekPeriods = GlobalVariables.Versions.GetWeeks(m_versionsDict)
-                    If m_view.m_process = Account.AccountProcess.RH Then l_weekPeriods = m_view.FilterPeriodList(l_weekPeriods.ToArray)
+                    If m_view.m_process = Account.AccountProcess.RH Then
+                        l_weekPeriods = Period.FilterPeriodList(l_weekPeriods.ToArray, m_view.PeriodsShortList)
+                    End If
 
                     For Each l_weekId As Int32 In l_weekPeriods
                         VTreeViewUtil.AddNode(computer.WEEK_PERIOD_IDENTIFIER & l_weekId, Local.GetValue("general.week") & " " & Period.GetWeekNumberFromDateId(l_weekId) & ", " & Year(Date.FromOADate(l_weekId)), node)
@@ -450,7 +460,9 @@ Friend Class ControllingUIController
 
                 Case computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.DAYS
                     Dim l_daysPeriods = GlobalVariables.Versions.GetDays(m_versionsDict)
-                    If m_view.m_process = Account.AccountProcess.RH Then l_daysPeriods = m_view.FilterPeriodList(l_daysPeriods.ToArray)
+                    If m_view.m_process = Account.AccountProcess.RH Then
+                        l_daysPeriods = Period.FilterPeriodList(l_daysPeriods.ToArray, m_view.PeriodsShortList)
+                    End If
 
                     For Each l_dayId As Int32 In l_daysPeriods
                         VTreeViewUtil.AddNode(computer.DAY_PERIOD_IDENTIFIER & l_dayId, Format(Date.FromOADate(l_dayId), "MMMM dd, yyyy"), node)
@@ -461,7 +473,9 @@ Friend Class ControllingUIController
                     '     Dim l_periodsDict = GlobalVariables.Versions.GetPeriodsDictionary(m_versionsDict)
 
                     Dim l_weekPeriods = GlobalVariables.Versions.GetWeeks(m_versionsDict)
-                    If m_view.m_process = Account.AccountProcess.RH Then l_weekPeriods = m_view.FilterPeriodList(l_weekPeriods.ToArray)
+                    If m_view.m_process = Account.AccountProcess.RH Then
+                        l_weekPeriods = Period.FilterPeriodList(l_weekPeriods.ToArray, m_view.PeriodsShortList)
+                    End If
                     For Each l_weekId As Int32 In l_weekPeriods
                         Dim l_weekNode As vTreeNode = VTreeViewUtil.AddNode(computer.WEEK_PERIOD_IDENTIFIER & l_weekId, _
                                                                            Local.GetValue("general.week") & " " & Period.GetWeekNumberFromDateId(l_weekId) & ", " & Year(Date.FromOADate(l_weekId)), _

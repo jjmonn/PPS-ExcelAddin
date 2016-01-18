@@ -27,6 +27,8 @@ Partial Class SnapshotPeriodRangeSelectionUI
         Me.m_validateButton = New VIBlend.WinForms.Controls.vButton()
         Me.ImageList1 = New System.Windows.Forms.ImageList(Me.components)
         Me.m_periodSelectionPanel = New System.Windows.Forms.Panel()
+        Me.m_accountSelectionComboBox = New VIBlend.WinForms.Controls.vComboBox()
+        Me.m_accountSelectionLabel = New VIBlend.WinForms.Controls.vLabel()
         Me.SuspendLayout()
         '
         'm_validateButton
@@ -37,10 +39,10 @@ Partial Class SnapshotPeriodRangeSelectionUI
         Me.m_validateButton.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
         Me.m_validateButton.ImageKey = "1420498403_340208.ico"
         Me.m_validateButton.ImageList = Me.ImageList1
-        Me.m_validateButton.Location = New System.Drawing.Point(276, 154)
+        Me.m_validateButton.Location = New System.Drawing.Point(304, 187)
         Me.m_validateButton.Name = "m_validateButton"
         Me.m_validateButton.RoundedCornersMask = CType(15, Byte)
-        Me.m_validateButton.Size = New System.Drawing.Size(98, 24)
+        Me.m_validateButton.Size = New System.Drawing.Size(91, 24)
         Me.m_validateButton.TabIndex = 3
         Me.m_validateButton.Text = "Validate"
         Me.m_validateButton.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
@@ -57,14 +59,52 @@ Partial Class SnapshotPeriodRangeSelectionUI
         '
         Me.m_periodSelectionPanel.Location = New System.Drawing.Point(12, 13)
         Me.m_periodSelectionPanel.Name = "m_periodSelectionPanel"
-        Me.m_periodSelectionPanel.Size = New System.Drawing.Size(361, 129)
+        Me.m_periodSelectionPanel.Size = New System.Drawing.Size(383, 129)
         Me.m_periodSelectionPanel.TabIndex = 4
+        '
+        'm_accountSelectionComboBox
+        '
+        Me.m_accountSelectionComboBox.BackColor = System.Drawing.Color.White
+        Me.m_accountSelectionComboBox.DisplayMember = ""
+        Me.m_accountSelectionComboBox.DropDownList = True
+        Me.m_accountSelectionComboBox.DropDownMaximumSize = New System.Drawing.Size(1000, 1000)
+        Me.m_accountSelectionComboBox.DropDownMinimumSize = New System.Drawing.Size(10, 10)
+        Me.m_accountSelectionComboBox.DropDownResizeDirection = VIBlend.WinForms.Controls.SizingDirection.Both
+        Me.m_accountSelectionComboBox.DropDownWidth = 256
+        Me.m_accountSelectionComboBox.Location = New System.Drawing.Point(139, 148)
+        Me.m_accountSelectionComboBox.Name = "m_accountSelectionComboBox"
+        Me.m_accountSelectionComboBox.RoundedCornersMaskListItem = CType(15, Byte)
+        Me.m_accountSelectionComboBox.Size = New System.Drawing.Size(256, 23)
+        Me.m_accountSelectionComboBox.TabIndex = 5
+        Me.m_accountSelectionComboBox.UseThemeBackColor = False
+        Me.m_accountSelectionComboBox.UseThemeDropDownArrowColor = True
+        Me.m_accountSelectionComboBox.ValueMember = ""
+        Me.m_accountSelectionComboBox.VIBlendScrollBarsTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
+        Me.m_accountSelectionComboBox.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
+        '
+        'm_accountSelectionLabel
+        '
+        Me.m_accountSelectionLabel.BackColor = System.Drawing.Color.Transparent
+        Me.m_accountSelectionLabel.DisplayStyle = VIBlend.WinForms.Controls.LabelItemStyle.TextOnly
+        Me.m_accountSelectionLabel.Ellipsis = False
+        Me.m_accountSelectionLabel.ImageAlignment = System.Drawing.ContentAlignment.TopLeft
+        Me.m_accountSelectionLabel.Location = New System.Drawing.Point(12, 148)
+        Me.m_accountSelectionLabel.Multiline = True
+        Me.m_accountSelectionLabel.Name = "m_accountSelectionLabel"
+        Me.m_accountSelectionLabel.Size = New System.Drawing.Size(121, 23)
+        Me.m_accountSelectionLabel.TabIndex = 6
+        Me.m_accountSelectionLabel.Text = "Account selection"
+        Me.m_accountSelectionLabel.TextAlignment = System.Drawing.ContentAlignment.MiddleLeft
+        Me.m_accountSelectionLabel.UseMnemonics = True
+        Me.m_accountSelectionLabel.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE
         '
         'SnapshotPeriodRangeSelectionUI
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(385, 190)
+        Me.ClientSize = New System.Drawing.Size(407, 223)
+        Me.Controls.Add(Me.m_accountSelectionLabel)
+        Me.Controls.Add(Me.m_accountSelectionComboBox)
         Me.Controls.Add(Me.m_periodSelectionPanel)
         Me.Controls.Add(Me.m_validateButton)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
@@ -76,4 +116,6 @@ Partial Class SnapshotPeriodRangeSelectionUI
     Friend WithEvents m_validateButton As VIBlend.WinForms.Controls.vButton
     Friend WithEvents ImageList1 As System.Windows.Forms.ImageList
     Friend WithEvents m_periodSelectionPanel As System.Windows.Forms.Panel
+    Friend WithEvents m_accountSelectionComboBox As VIBlend.WinForms.Controls.vComboBox
+    Friend WithEvents m_accountSelectionLabel As VIBlend.WinForms.Controls.vLabel
 End Class

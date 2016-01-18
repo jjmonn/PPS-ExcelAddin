@@ -115,7 +115,7 @@ Public Class ComputerInputEntity
                 Exit Sub
             End If
 
-            m_periodsTokenDict = GlobalVariables.Versions.GetPeriodTokensDict(m_versionId)
+            m_periodsTokenDict = GlobalVariables.Versions.GetPeriodTokensDict(m_versionId, Nothing)
             Select Case version.TimeConfiguration
                 Case CRUD.TimeConfig.YEARS : m_periodIdentifier = Computer.YEAR_PERIOD_IDENTIFIER
                 Case CRUD.TimeConfig.MONTHS : m_periodIdentifier = Computer.MONTH_PERIOD_IDENTIFIER

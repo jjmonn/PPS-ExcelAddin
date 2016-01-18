@@ -10,6 +10,7 @@
 Imports Microsoft.Office.Interop
 Imports System.Collections.Generic
 Imports System.Collections
+Imports VIBlend.WinForms.Controls
 
 
 Friend Class GeneralUtilities
@@ -479,5 +480,16 @@ Err:
 
     End Sub
 
+    Friend Shared Function AddItemToCombobox(ByRef p_combobox As vComboBox, _
+                                             ByRef p_id As String, _
+                                             ByRef p_name As String) As ListItem
+
+        Dim l_item As New ListItem
+        l_item.Value = p_id
+        l_item.Text = p_name
+        p_combobox.Items.Add(l_item)
+        Return l_item
+
+    End Function
 
 End Class

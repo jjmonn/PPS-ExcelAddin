@@ -258,64 +258,111 @@ Class VersionManager : Inherits NamedCRUDManager(Of NamedHierarchyCRUDEntity)
 
 #Region "Periods Tokens (for computing and CUI2)"
 
-    Friend Function GetPeriodTokensDict(ByRef p_versionId As UInt32) As Dictionary(Of String, String)
+    Friend Function GetPeriodTokensDict(ByRef p_versionId As UInt32, _
+                                        ByRef p_periods As Int32()) As Dictionary(Of String, String)
 
-        Dim l_periodsTokensDict As New SafeDictionary(Of String, String)
-        Dim l_version As Version = GetValue(p_versionId)
-        If l_version Is Nothing Then Return l_periodsTokensDict
-
+            Dim l_periodsTokensDict As New SafeDictionary(Of String, String)
+            Dim l_version As Version = GetValue(p_versionId)
+            If l_version Is Nothing Then Return l_periodsTokensDict
+    
         Select Case l_version.TimeConfiguration
             Case CRUD.TimeConfig.YEARS
-                AddYearsToPeriodTokensDict(l_version, l_periodsTokensDict)
+                AddYearsToPeriodTokensDict(l_version, l_periodsTokensDict, p_periods)
 
             Case CRUD.TimeConfig.MONTHS
-                AddYearsToPeriodTokensDict(l_version, l_periodsTokensDict)
-                AddMonthsToPeriodTokensDict(l_version, l_periodsTokensDict)
+                AddYearsToPeriodTokensDict(l_version, l_periodsTokensDict, p_periods)
+                AddMonthsToPeriodTokensDict(l_version, l_periodsTokensDict, p_periods)
 
             Case CRUD.TimeConfig.WEEK
-                AddYearsToPeriodTokensDict(l_version, l_periodsTokensDict)
-                AddMonthsToPeriodTokensDict(l_version, l_periodsTokensDict)
-                AddWeeksToPeriodTokensDict(l_version, l_periodsTokensDict)
+                AddYearsToPeriodTokensDict(l_version, l_periodsTokensDict, p_periods)
+                AddMonthsToPeriodTokensDict(l_version, l_periodsTokensDict, p_periods)
+                AddWeeksToPeriodTokensDict(l_version, l_periodsTokensDict, p_periods)
 
             Case CRUD.TimeConfig.DAYS
-                AddYearsToPeriodTokensDict(l_version, l_periodsTokensDict)
-                AddMonthsToPeriodTokensDict(l_version, l_periodsTokensDict)
-                AddWeeksToPeriodTokensDict(l_version, l_periodsTokensDict)
-                AddDaysToPeriodTokensDict(l_version, l_periodsTokensDict)
+                AddYearsToPeriodTokensDict(l_version, l_periodsTokensDict, p_periods)
+                AddMonthsToPeriodTokensDict(l_version, l_periodsTokensDict, p_periods)
+                AddWeeksToPeriodTokensDict(l_version, l_periodsTokensDict, p_periods)
+                AddDaysToPeriodTokensDict(l_version, l_periodsTokensDict, p_periods)
 
         End Select
         Return l_periodsTokensDict
 
     End Function
 
-    Private Sub AddYearsToPeriodTokensDict(ByRef p_version As Version, ByRef p_periodsTokensDict As SafeDictionary(Of String, String))
+    Private Sub AddYearsToPeriodTokensDict(ByRef p_version As Version, _
+                                           ByRef p_periodsTokensDict As SafeDictionary(Of String, String), _
+                                           ByVal p_periodsShortList As Int32())
+
         Dim l_yearIndex As Int32 = 0
-        For Each l_yearId As Int32 In Period.GetYearsList(p_version.StartPeriod, p_version.NbPeriod, p_version.TimeConfiguration)
+        Dim l_periodsList = Period.GetYearsList(p_version.StartPeriod, p_version.NbPeriod, p_version.TimeConfiguration)
+        If p_periodsShortList IsNot Nothing Then
+            Dim l_periodsShortList = p_periodsShortList.ToList
+            ' Include last period's Year id in short list
+            Dim l_lastFilterYear As Int32 = Period.GetYearIdFromPeriodId(l_periodsShortList(l_periodsShortList.Count - 1))
+            If l_periodsShortList.Contains(l_lastFilterYear) = False Then l_periodsShortList.Add(l_lastFilterYear)
+            ' Filter
+            l_periodsList = Period.FilterPeriodList(l_periodsList, l_periodsShortList).ToArray
+        End If
+
+        For Each l_yearId As Int32 In l_periodsList
             p_periodsTokensDict.Add(Computer.YEAR_PERIOD_IDENTIFIER & l_yearIndex, Computer.YEAR_PERIOD_IDENTIFIER & l_yearId)
             l_yearIndex += 1
         Next
+
     End Sub
 
-    Private Sub AddMonthsToPeriodTokensDict(ByRef p_version As Version, ByRef p_periodsTokensDict As SafeDictionary(Of String, String))
+    Private Sub AddMonthsToPeriodTokensDict(ByRef p_version As Version, _
+                                            ByRef p_periodsTokensDict As SafeDictionary(Of String, String), _
+                                            ByVal p_periodsShortList As Int32())
         Dim l_monthIndex As Int32 = 0
-        For Each l_monthId As Int32 In Period.GetMonthsList(p_version.StartPeriod, p_version.NbPeriod, p_version.TimeConfiguration)
+        Dim l_periodsList = Period.GetMonthsList(p_version.StartPeriod, p_version.NbPeriod, p_version.TimeConfiguration)
+        If p_periodsShortList IsNot Nothing Then
+            Dim l_periodsShortList = p_periodsShortList.ToList
+            ' Include last period's month id in short list
+            Dim l_lastFilterMonth As Int32 = Period.GetMonthIdFromPeriodId(l_periodsShortList(l_periodsShortList.Count - 1))
+            If l_periodsShortList.Contains(l_lastFilterMonth) = False Then l_periodsShortList.Add(l_lastFilterMonth)
+            ' Filter
+            l_periodsList = Period.FilterPeriodList(l_periodsList, l_periodsShortList.ToList).ToArray
+        End If
+
+        For Each l_monthId As Int32 In l_periodsList
             p_periodsTokensDict.Add(Computer.MONTH_PERIOD_IDENTIFIER & l_monthIndex, Computer.MONTH_PERIOD_IDENTIFIER & l_monthId)
             l_monthIndex += 1
         Next
     End Sub
 
-    Private Sub AddWeeksToPeriodTokensDict(ByRef p_version As Version, ByRef p_periodsTokensDict As SafeDictionary(Of String, String))
+    Private Sub AddWeeksToPeriodTokensDict(ByRef p_version As Version, _
+                                           ByRef p_periodsTokensDict As SafeDictionary(Of String, String), _
+                                           ByVal p_periodsShortList As Int32())
         Dim l_weekIndex As Int32 = 0
-        For Each l_weekId As Int32 In Period.GetWeeksList(p_version.StartPeriod, p_version.NbPeriod, p_version.TimeConfiguration)
+        Dim l_periodsList = Period.GetWeeksList(p_version.StartPeriod, p_version.NbPeriod, p_version.TimeConfiguration)
+        If p_periodsShortList IsNot Nothing Then
+            Dim l_periodsShortList = p_periodsShortList.ToList
+            ' Include last period's week id in short list
+            Dim l_lastFilterWeek As Int32 = Period.GetWeekIdFromPeriodId(l_periodsShortList(l_periodsShortList.Count - 1))
+            If l_periodsShortList.Contains(l_lastFilterWeek) = False Then l_periodsShortList.Add(l_lastFilterWeek)
+            ' Filter
+            l_periodsList = Period.FilterPeriodList(l_periodsList, l_periodsShortList.ToList).ToArray
+        End If
+
+        For Each l_weekId As Int32 In l_periodsList
             p_periodsTokensDict.Add(Computer.WEEK_PERIOD_IDENTIFIER & l_weekIndex, Computer.WEEK_PERIOD_IDENTIFIER & l_weekId)
             l_weekIndex += 1
         Next
     End Sub
 
-    Private Sub AddDaysToPeriodTokensDict(ByRef p_version As Version, ByRef p_periodsTokensDict As SafeDictionary(Of String, String))
+    Private Sub AddDaysToPeriodTokensDict(ByRef p_version As Version, _
+                                          ByRef p_periodsTokensDict As SafeDictionary(Of String, String), _
+                                          ByVal p_periodsShortList As Int32())
+
         If p_version.TimeConfiguration = TimeConfig.DAYS Then
             Dim l_dayIndex As Int32 = 0
-            For Each l_dayId As Int32 In Period.GetDaysList(p_version.StartPeriod, p_version.NbPeriod)
+            Dim l_periodsList = Period.GetDaysList(p_version.StartPeriod, p_version.NbPeriod)
+            If p_periodsShortList IsNot Nothing Then
+                l_periodsList = Period.FilterPeriodList(l_periodsList, p_periodsShortList.ToList).ToArray
+            End If
+
+            For Each l_dayId As Int32 In l_periodsList
                 p_periodsTokensDict.Add(Computer.DAY_PERIOD_IDENTIFIER & l_dayIndex, Computer.DAY_PERIOD_IDENTIFIER & l_dayId)
                 l_dayIndex += 1
             Next

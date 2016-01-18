@@ -32,7 +32,6 @@ Imports CRUD
 
 Friend Class ControllingUI_2
 
-
 #Region "Instance Variables"
 
 #Region "Objects"
@@ -125,6 +124,15 @@ Friend Class ControllingUI_2
 
 #End Region
 
+#Region "Properties Getters and Setters"
+
+    Friend ReadOnly Property PeriodsShortList As List(Of Int32)
+        Get
+            Return m_periodsList
+        End Get
+    End Property
+
+#End Region
 
 #Region "Initialization"
 
@@ -334,7 +342,6 @@ Friend Class ControllingUI_2
 
 #End Region
 
-
 #Region "Interface"
 
     Friend Sub RefreshData(Optional ByRef useCache As Boolean = False)
@@ -442,7 +449,6 @@ Friend Class ControllingUI_2
 
 #End Region
 
-
 #Region "Events"
 
     Private Sub AccountUpdateFromServer(ByRef status As Boolean, ByRef p_account As Account)
@@ -499,7 +505,6 @@ Friend Class ControllingUI_2
     End Sub
 
 #End Region
-
 
 #Region "Calls Backs"
 
@@ -796,7 +801,6 @@ Friend Class ControllingUI_2
 
 #End Region
 
-
 #Region "ThreadSafe"
 
     Delegate Sub SetComputeButtonState_Delegate(ByRef p_state As Boolean)
@@ -973,7 +977,6 @@ Friend Class ControllingUI_2
 
 #End Region
 
-
 #Region "Formatting"
 
     Private Sub InitItemsFormat()
@@ -1008,27 +1011,6 @@ Friend Class ControllingUI_2
 
     End Sub
 
-
-#End Region
-
-
-#Region "Utilities"
-
-    Friend Function FilterPeriodList(ByRef p_periods As Int32()) As List(Of Int32)
-
-        Dim l_resultPeriods As New List(Of Int32)
-        For Each l_periodId In p_periods
-            If l_periodId >= m_periodsList(0) Then
-                If l_periodId <= m_periodsList(m_periodsList.Count - 1) Then
-                    l_resultPeriods.Add(l_periodId)
-                Else
-                    Return l_resultPeriods
-                End If
-            End If
-        Next
-        Return l_resultPeriods
-
-    End Function
 
 #End Region
 

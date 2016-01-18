@@ -4,7 +4,7 @@
 '
 '
 ' Auhtor: Julien Monnereau
-' Last modified: 11/12/2015
+' Last modified: 17/12/2015
 
 
 Imports System.Collections.Generic
@@ -359,7 +359,6 @@ Class Period
 
     End Function
 
-
     Friend Shared Function GetWeekIdFromPeriodId(ByRef p_dayId As Int32) As Int32
 
         ' Uses localized settings for the first day of the week.
@@ -404,7 +403,22 @@ Class Period
 
     End Function
 
+    Friend Shared Function FilterPeriodList(ByRef p_filteredPeriods As Int32(), _
+                                            ByRef m_FilterReferencePeriodsList As List(Of Int32)) As List(Of Int32)
 
+        Dim l_resultPeriods As New List(Of Int32)
+        For Each l_periodId In p_filteredPeriods
+            If l_periodId >= m_FilterReferencePeriodsList(0) Then
+                If l_periodId <= m_FilterReferencePeriodsList(m_FilterReferencePeriodsList.Count - 1) Then
+                    l_resultPeriods.Add(l_periodId)
+                Else
+                    Return l_resultPeriods
+                End If
+            End If
+        Next
+        Return l_resultPeriods
+
+    End Function
 
 #End Region
 

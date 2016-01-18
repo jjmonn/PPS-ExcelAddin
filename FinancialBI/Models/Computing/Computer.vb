@@ -6,14 +6,8 @@ Imports CRUD
 '
 ' Computing interface with c++ server
 '
-'
 ' To do:
 '       - 
-'
-'
-' Known bugs:
-'       - 
-'
 '
 ' Author: Julien Monnereau Julien
 ' Created: 17/07/2015
@@ -33,6 +27,7 @@ Friend Class Computer
     Private m_versionsComputationQueue As SafeDictionary(Of Int32, Dictionary(Of Int32, Boolean))
     Private m_requestIdVersionIdDict As New SafeDictionary(Of Int32, Int32)
     Private m_requestIdEntityIdDict As New SafeDictionary(Of Int32, Int32)
+    Private m_requestIdPeriodsDict As New SafeDictionary(Of Int32, Int32())
 
     ' Computing
     Private m_isAxis As Boolean
@@ -76,7 +71,7 @@ Friend Class Computer
                                          Optional ByRef p_axisFilters As Dictionary(Of Int32, List(Of Int32)) = Nothing, _
                                          Optional ByRef p_hierarchy As List(Of String) = Nothing, _
                                          Optional ByRef p_periods As Int32() = Nothing, _
-                                         Optional ByRef p_axisHierarchyDecomposition As Boolean = True) As Int32
+                                         Optional ByRef p_axisHierarchyDecomposition As Boolean = False) As Int32
 
         m_dataMap = New SafeDictionary(Of String, Double)
         m_requestIdVersionIdDict.Clear()
@@ -124,6 +119,7 @@ Friend Class Computer
                 Dim l_requestId As Int32 = l_packet.AssignRequestId()
                 m_requestIdVersionIdDict.Add(l_requestId, l_versionId)
                 m_requestIdEntityIdDict.Add(l_requestId, l_entityId)
+                m_requestIdPeriodsDict.Add(l_requestId, p_periods)
                 l_packet.WriteUint32(p_process)
                 l_packet.WriteUint32(l_versionId)                                               ' version_id
                 l_packet.WriteUint32(l_version.GlobalFactVersionId)                             ' global facts version id
@@ -218,7 +214,8 @@ Friend Class Computer
                 End If
 
                 m_filtersDict.Clear()
-                m_periodsTokenDict = GlobalVariables.Versions.GetPeriodTokensDict(version.Id)
+                m_periodsTokenDict = GlobalVariables.Versions.GetPeriodTokensDict(version.Id, m_requestIdPeriodsDict(request_id))
+                m_requestIdPeriodsDict.Remove(request_id)
                 Select Case version.TimeConfiguration
                     Case CRUD.TimeConfig.YEARS : m_periodIdentifier = YEAR_PERIOD_IDENTIFIER
                     Case CRUD.TimeConfig.MONTHS : m_periodIdentifier = MONTH_PERIOD_IDENTIFIER

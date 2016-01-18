@@ -131,6 +131,7 @@ Partial Class ReportUploadEntitySelectionPane
         Me.m_accountSelectionComboBox.BackColor = System.Drawing.Color.White
         Me.m_accountSelectionComboBox.DisplayMember = ""
         Me.m_accountSelectionComboBox.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.m_accountSelectionComboBox.DropDownList = True
         Me.m_accountSelectionComboBox.DropDownMaximumSize = New System.Drawing.Size(1000, 1000)
         Me.m_accountSelectionComboBox.DropDownMinimumSize = New System.Drawing.Size(10, 10)
         Me.m_accountSelectionComboBox.DropDownResizeDirection = VIBlend.WinForms.Controls.SizingDirection.Both

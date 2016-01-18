@@ -247,10 +247,10 @@ Public Class CUI2RightPane
             FiltersNodeSubCategoriesInit(l_adjustmentFilterNode, l_adjustmentNode)
         Next
 
-        ' employees Analysis Axis and Categories Nodes
+        ' Employees Analysis Axis and Categories Nodes
         Dim l_employeeNode As vTreeNode = VTreeViewUtil.AddNode(Computer.AXIS_DECOMPOSITION_IDENTIFIER _
-                                                              & GlobalEnums.AnalysisAxis.EMPLOYEES, _
-                                                              ControllingUI_2.EMPLOYEE_CODE, m_analysisAxisTreeview)
+                                                                & GlobalEnums.AnalysisAxis.EMPLOYEES, _
+                                                                ControllingUI_2.EMPLOYEE_CODE, m_analysisAxisTreeview)
 
         For Each l_employeeFilterNode As TreeNode In p_employeesFiltersNode.Nodes
             FiltersNodeSubCategoriesInit(l_employeeFilterNode, l_employeeNode)

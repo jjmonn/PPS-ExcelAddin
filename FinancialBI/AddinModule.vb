@@ -432,7 +432,7 @@ Public Class AddinModule
                 Select Case My.Settings.processId
                     Case Account.AccountProcess.FINANCIAL
                         ' -> choix adjustment, client, product
-                        AssociateReportUploadControler(False, Nothing)
+                        AssociateReportUploadControler(False, Nothing, "")
 
                     Case Account.AccountProcess.RH
                         Dim l_periodsRangeSelectionUI As New SnapshotPeriodRangeSelectionUI(Me, My.Settings.version_id)
@@ -952,14 +952,16 @@ Public Class AddinModule
 #Region "Report Upload Methods"
 
     ' Create report upload Conctroler and display
-    Friend Sub AssociateReportUploadControler(ByRef p_mustUpdateInputs As Boolean, ByRef p_periodList As List(Of Int32))
+    Friend Sub AssociateReportUploadControler(ByRef p_mustUpdateInputs As Boolean, _
+                                              ByRef p_periodList As List(Of Int32), _
+                                              ByRef p_RHAccountName As String)
 
         GlobalVariables.APPS.Interactive = False
         Select Case My.Settings.processId
             Case Account.AccountProcess.FINANCIAL : LoadFinancialDropDownsSubmissionButtons()
         End Select
 
-        Dim l_reportUploadController As New ReportUploadControler(Me)
+        Dim l_reportUploadController As New ReportUploadControler(Me, p_RHAccountName)
         Dim l_excelWorksheet As Excel.Worksheet = GlobalVariables.APPS.ActiveSheet
 
         If l_reportUploadController.RefreshSnapshot(p_mustUpdateInputs, p_periodList) = True Then

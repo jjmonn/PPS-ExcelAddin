@@ -69,9 +69,18 @@ Public Class PeriodRangeSelectionControl
 #Region "Interface"
 
     Friend Function GetPeriodList() As List(Of Int32)
-        Dim l_weeksIdList As List(Of Int32) = Period.GetWeeksPeriodListFromPeriodsRange(m_startDate.DateTimeEditor.Value.Value, _
-                                                                                        m_endDate.DateTimeEditor.Value.Value)
-        Return Period.GetDaysPeriodsListFromWeeksId(l_weeksIdList)
+
+        'Dim l_weeksIdList As List(Of Int32) = Period.GetWeeksPeriodListFromPeriodsRange(m_startDate.DateTimeEditor.Value.Value, _
+        '                                                                                m_endDate.DateTimeEditor.Value.Value)
+        'Return Period.GetDaysPeriodsListFromWeeksId(l_weeksIdList)
+        Dim l_periodsRange As New List(Of Int32)
+        Dim l_date As Date = m_startDate.DateTimeEditor.Value.Value
+        Do While l_date <= m_endDate.DateTimeEditor.Value.Value
+            l_periodsRange.Add(l_date.ToOADate)
+            l_date = l_date.AddDays(1)
+        Loop
+        Return l_periodsRange
+
     End Function
 
     Friend Sub ReinitializePeriodsRange(ByRef p_versionId As UInt32)

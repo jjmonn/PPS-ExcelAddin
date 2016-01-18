@@ -43,18 +43,20 @@ Public Class ReportUploadControler
     Private m_mustUpdateExcelWorksheetFromDataBase As Boolean
     Friend m_isReportReadyFlag As Boolean
     Private m_deleteRequestIdCellAddressDict As New Dictionary(Of Int32, String)
+    Private m_sourceExcelCalculationMode As Excel.XlCalculation
 
 #End Region
 
 #Region "Initialize"
 
-    Friend Sub New(ByRef inputAddIn As AddinModule)
+    Friend Sub New(ByRef inputAddIn As AddinModule, _
+                   ByRef p_RHAccountName As String)
 
         m_reportUploadWorksheetEventHandler = New ReportUploadWorksheetsEventHandler()
         m_addin = inputAddIn
         m_associatedWorksheet = GlobalVariables.APPS.ActiveSheet
 
-        m_dataset = New ModelDataSet(m_associatedWorksheet)
+        m_dataset = New ModelDataSet(m_associatedWorksheet, p_RHAccountName)
         m_acquisitionModel = New AcquisitionModel(m_dataset)
         m_dataModificationsTracker = New DataModificationsTracking(m_dataset)
 
@@ -115,7 +117,6 @@ Public Class ReportUploadControler
     End Property
 
 #End Region
-
 
 #Region "Ribbon Interface"
 
@@ -313,11 +314,13 @@ Public Class ReportUploadControler
 
         If m_dataset.m_globalOrientationFlag <> ModelDataSet.Orientations.ORIENTATION_ERROR Then
 
+            m_sourceExcelCalculationMode = GlobalVariables.APPS.Calculation
+            GlobalVariables.APPS.Calculation = XlCalculation.xlCalculationManual
             If m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.ENTITY).Count = 0 Then
                 MsgBox(Local.GetValue("upload.msg_entity_not_found"))
             Else
                 m_addin.SetPDCSubmissionRibbonEntityAndAccountName(m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.ENTITY).ElementAt(0).Value, _
-                                                                   m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.ACCOUNT).ElementAt(0).Value)
+                                                                   m_dataset.RhAccountName)
             End If
             m_snapshotSuccessFlag = True
 
@@ -325,10 +328,10 @@ Public Class ReportUploadControler
             m_mustUpdateExcelWorksheetFromDataBase = p_updateInputsFlag
             AssociateReportUploadEventHandlers()
             m_dataset.RegisterDimensionsToCellDictionary()
-            '     m_dataset.RegisterDataSetCellsValues()
+            ' m_dataset.RegisterDataSetCellsValues()
 
             ' RH Cloud data loading
-            m_factsStorage.LoadRHFacts({m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.ACCOUNT).ElementAt(0).Value}.ToList, _
+            m_factsStorage.LoadRHFacts({m_dataset.RhAccountName}.ToList, _
                                        m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.EMPLOYEE).Values.ToList, _
                                        m_dataset.m_currentVersionId, _
                                        m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.PERIOD).Values.Min, _
@@ -340,6 +343,7 @@ Public Class ReportUploadControler
             m_addin.ModifySubmissionControlsStatus(m_snapshotSuccessFlag)
             GlobalVariables.APPS.Interactive = True
             GlobalVariables.APPS.ScreenUpdating = True
+            GlobalVariables.APPS.Calculation = m_sourceExcelCalculationMode
             m_isUpdating = False
             Return False
         End If
@@ -445,10 +449,12 @@ Public Class ReportUploadControler
         m_isUpdating = False
         ' Update DGV in acquisitionInterface 
         GlobalVariables.APPS.Interactive = True
+        GlobalVariables.APPS.Calculation = m_sourceExcelCalculationMode
 
 errorHandler:
         GlobalVariables.APPS.Interactive = True
         GlobalVariables.APPS.ScreenUpdating = True
+        GlobalVariables.APPS.Calculation = m_sourceExcelCalculationMode
         m_isUpdating = False
         Exit Sub
 
@@ -462,12 +468,12 @@ errorHandler:
             End If
 
             ' Initial differencies identifications
-            Dim l_RHaccountName As String = m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.ACCOUNT).ElementAt(0).Value
-            m_dataModificationsTracker.IdentifyRHDifferencesBtwDataSetAndDB(l_RHaccountName, m_factsStorage.m_FactsDict(l_RHaccountName))
+            m_dataModificationsTracker.IdentifyRHDifferencesBtwDataSetAndDB(m_dataset.RhAccountName, m_factsStorage.m_FactsDict(m_dataset.RhAccountName))
         End If
         m_addin.ModifySubmissionControlsStatus(m_snapshotSuccessFlag)
         GlobalVariables.APPS.Interactive = True
         GlobalVariables.APPS.ScreenUpdating = True
+        GlobalVariables.APPS.Calculation = m_sourceExcelCalculationMode
         m_isUpdating = False
 
     End Sub
@@ -486,9 +492,12 @@ errorHandler:
             m_isUpdating = True
             GlobalVariables.APPS.Interactive = False
             GlobalVariables.APPS.ScreenUpdating = False
+            m_sourceExcelCalculationMode = GlobalVariables.APPS.Calculation
+            ' Outputs updates
             m_reportUploadWorksheetEventHandler.UpdateFinancialCalculatedItemsOnWS(p_entitiesName)
             GlobalVariables.APPS.ScreenUpdating = True
             GlobalVariables.APPS.Interactive = True
+            GlobalVariables.APPS.Calculation = m_sourceExcelCalculationMode
             m_isUpdating = False
         End SyncLock
 
@@ -500,6 +509,9 @@ errorHandler:
 
     Private Function AntiDuplicateClientsSystem(ByRef p_clientsNameList As List(Of String)) As Boolean
 
+        GlobalVariables.APPS.Interactive = False
+        m_sourceExcelCalculationMode = GlobalVariables.APPS.Calculation
+        GlobalVariables.APPS.Calculation = XlCalculation.xlCalculationManual
         Dim l_clientsLCaseNamesIdDict = GlobalVariables.AxisElems.GetLowerCaseNamesId(CRUD.AxisType.Client)
         Dim l_DefinedClientsDict As New Dictionary(Of String, CRUD.AxisElem)
         For Each l_clientName As String In p_clientsNameList
@@ -522,6 +534,8 @@ errorHandler:
             EliminateCaseDifferencesIntoUndefinedClients(p_clientsNameList)
             Return False
         End If
+        GlobalVariables.APPS.Calculation = m_sourceExcelCalculationMode
+        GlobalVariables.APPS.Interactive = True
 
     End Function
 
@@ -591,7 +605,8 @@ errorHandler:
 
     Private Sub SubmitPDCProcess()
 
-        If m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.ACCOUNT).Count > 0 Then
+        If m_dataset.RhAccountName <> "" Then
+            GlobalVariables.APPS.Interactive = False
             Dim l_factsList As New List(Of Fact)
             Dim l_cellsAddressesList As New List(Of String)
             For Each l_cellAddress In m_dataModificationsTracker.GetModificationsListCopy
@@ -640,7 +655,11 @@ errorHandler:
                     Continue For
                 End If
             Next
-            If l_factsList.Count > 0 Then m_fact.CMSG_UPDATE_FACT_LIST(l_factsList, l_cellsAddressesList)
+            If l_factsList.Count > 0 Then
+                m_fact.CMSG_UPDATE_FACT_LIST(l_factsList, l_cellsAddressesList)
+            Else
+                GlobalVariables.APPS.Interactive = True
+            End If
         Else
             MsgBox(Local.GetValue("upload.msg_no_account_setup"))
         End If
@@ -680,8 +699,10 @@ errorHandler:
                 m_uploadState = False
                 GlobalVariables.SubmissionStatusButton.Image = 2
             End If
+            GlobalVariables.APPS.Interactive = True
         Else
             MsgBox("Commit failed. Check network connection and try again." & Chr(13) & "If the error persists, please contact your administrator or the Financial BI team.")
+            GlobalVariables.APPS.Interactive = True
         End If
 
     End Sub

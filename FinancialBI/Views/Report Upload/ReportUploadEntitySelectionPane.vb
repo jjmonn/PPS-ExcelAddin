@@ -71,12 +71,12 @@ Public Class ReportUploadEntitySelectionPane
         Select Case l_rhAccounts.Count
             Case 0
             Case 1
-                m_accountSelectionComboBox.SelectedItem = AddItemToCombobox(l_rhAccounts(0).Id, l_rhAccounts(0).Name)
+                m_accountSelectionComboBox.SelectedItem = GeneralUtilities.AddItemToCombobox(m_accountSelectionComboBox, l_rhAccounts(0).Id, l_rhAccounts(0).Name)
                 m_accountSelectionComboBox.Enabled = False
 
             Case Else
                 For Each l_account As CRUD.Account In l_rhAccounts
-                    AddItemToCombobox(l_account.Id, l_account.Name)
+                    GeneralUtilities.AddItemToCombobox(m_accountSelectionComboBox, l_account.Id, l_account.Name)
                 Next
                 m_accountSelectionComboBox.SelectedItem = m_accountSelectionComboBox.Items(0)
 
@@ -107,10 +107,14 @@ Public Class ReportUploadEntitySelectionPane
         If Not m_entitiesTV.SelectedNode Is Nothing AndAlso m_entitiesTV.SelectedNode.Nodes.Count = 0 Then
               Select My.Settings.processId
                 Case CRUD.Account.AccountProcess.FINANCIAL
-                    m_inputReportCreationController.InputReportPaneCallBack_ReportCreation(My.Settings.processId, Nothing)
+                    m_inputReportCreationController.InputReportPaneCallBack_ReportCreation(My.Settings.processId, Nothing, "")
                 Case CRUD.Account.AccountProcess.RH
                     Dim l_periods = m_periodsRangeSelection.GetPeriodList()
-                    m_inputReportCreationController.InputReportPaneCallBack_ReportCreation(My.Settings.processId, l_periods)
+                    If m_accountSelectionComboBox.Text <> "" Then
+                        m_inputReportCreationController.InputReportPaneCallBack_ReportCreation(My.Settings.processId, l_periods, m_accountSelectionComboBox.Text)
+                    Else
+                        MsgBox(Local.GetValue("upload.msg_no_account_selected"))
+                    End If
             End Select
       
         End If
@@ -165,16 +169,6 @@ Public Class ReportUploadEntitySelectionPane
 #End Region
 
 #Region "Utilities"
-
-    Private Function AddItemToCombobox(ByRef p_id As String, ByRef p_name As String) As ListItem
-
-        Dim l_item As New ListItem
-        l_item.Value = p_id
-        l_item.Text = p_name
-        m_accountSelectionComboBox.Items.Add(l_item)
-        Return l_item
-
-    End Function
 
     Private Sub PeriodsControlDisplay(ByRef p_visible As Boolean)
         m_periodsRangeSelection.Visible = p_visible

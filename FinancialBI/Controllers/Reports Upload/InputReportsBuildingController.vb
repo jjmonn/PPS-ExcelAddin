@@ -7,14 +7,15 @@ Imports System.Collections.Generic
 '
 ' Created on: 16/12/2015
 ' Created by: Julien Monnereau
-' Last modified: 16/12/2015
+' Last modified: 16/01/2016
 
 
 Friend Class InputReportsBuildingController
 
 
     Friend Sub InputReportPaneCallBack_ReportCreation(ByRef p_process As CRUD.Account.AccountProcess, _
-                                                      ByRef p_periodList As List(Of Int32))
+                                                      ByRef p_periodList As List(Of Int32), _
+                                                      ByRef p_RHaccountName As String)
 
         GlobalVariables.APPS.ScreenUpdating = False
         Dim l_version As CRUD.Version = GlobalVariables.Versions.GetValue(My.Settings.version_id)
@@ -37,7 +38,7 @@ Friend Class InputReportsBuildingController
         GlobalVariables.APPS.Interactive = True
         GlobalVariables.APPS.ScreenUpdating = True
 
-        GlobalVariables.Addin.AssociateReportUploadControler(True, p_periodList)
+        GlobalVariables.Addin.AssociateReportUploadControler(True, p_periodList, p_RHaccountName)
 
     End Sub
 
@@ -138,12 +139,7 @@ Friend Class InputReportsBuildingController
 
     End Sub
 
-
 #End Region
-
-
-
-
 
 
 End Class

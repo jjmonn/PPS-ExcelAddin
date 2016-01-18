@@ -10,7 +10,7 @@
 '       - Orientation: in some cases does not work (max left or right cells)
 '
 '
-' Last modified: 13/01/2016
+' Last modified: 18/01/2016
 ' Author: Julien Monnereau
 
 
@@ -29,6 +29,7 @@ Friend Class ModelDataSet
     Friend m_lastCell As Excel.Range
     Friend m_inputsAccountsList As List(Of Account)
     Friend m_periodsDatesList As New List(Of Date)
+    Private m_rhAccountName As String
 
     ' Axes
     Friend m_dimensionsAddressValueDict As New SafeDictionary(Of Int16, Dictionary(Of String, String))
@@ -102,11 +103,23 @@ Friend Class ModelDataSet
 
 #End Region
 
+#Region "Properties getters"
+
+    Friend ReadOnly Property RhAccountName As String
+        Get
+            Return m_rhAccountName
+        End Get
+    End Property
+
+#End Region
+
 
 #Region "Initialize"
 
-    Public Sub New(inputWS As Excel.Worksheet)
+    Public Sub New(ByRef inputWS As Excel.Worksheet, _
+                   ByRef p_RHAccountName As String)
 
+        m_rhAccountName = p_RHAccountName
         Me.m_excelWorkSheet = inputWS
         ReinitializeDimensionsDict()
         m_processFlag = My.Settings.processId
@@ -322,7 +335,7 @@ Friend Class ModelDataSet
         If VarType(p_cell.Value) = 8 Then
             Dim l_currentStr As String = CStr(p_cell.Value2)
             If EmployeesIdentify(l_currentStr, p_cell, p_cellAddress) = True Then Exit Sub
-            If AccountsIdentify(l_currentStr, p_cell, p_cellAddress, m_outputsAccountsList) = True Then Exit Sub
+            '      If AccountsIdentify(l_currentStr, p_cell, p_cellAddress, m_outputsAccountsList) = True Then Exit Sub
             If EntitiesIdentify(l_currentStr, p_cell, p_cellAddress) = True Then Exit Sub
         End If
 
@@ -378,7 +391,7 @@ Friend Class ModelDataSet
             Return True
         End If
         Return False
-  
+
     End Function
 
     Private Function SnapshotFlagResultFill()
@@ -489,21 +502,26 @@ Friend Class ModelDataSet
         Dim l_PDCFlagsCode As String = CStr(m_periodFlag) & CStr(m_employeeFlag)
 
         If m_periodFlag = SnapshotResult.ZERO _
-        Or m_accountFlag = SnapshotResult.ZERO _
         Or m_entityFlag = SnapshotResult.ZERO Then
             m_globalOrientationFlag = Orientations.ORIENTATION_ERROR
             Exit Sub
         End If
 
         Select Case m_processFlag
-            Case Account.AccountProcess.FINANCIAL : DefineFinancialDimensionsOrientation(l_financialFlagsCode)
-
-            Case Account.AccountProcess.RH
-                If m_employeeFlag <> SnapshotResult.ZERO Then
-                    DefinePDCDimensionsOrientation(l_PDCFlagsCode)
-                Else
+            Case Account.AccountProcess.FINANCIAL
+                If m_accountFlag = SnapshotResult.ZERO Then
                     m_globalOrientationFlag = Orientations.ORIENTATION_ERROR
                     Exit Sub
+                End If
+                DefineFinancialDimensionsOrientation(l_financialFlagsCode)
+
+            Case Account.AccountProcess.RH
+                If m_employeeFlag = SnapshotResult.ZERO _
+                OrElse m_rhAccountName = "" Then
+                    m_globalOrientationFlag = Orientations.ORIENTATION_ERROR
+                    Exit Sub
+                Else
+                    DefinePDCDimensionsOrientation(l_PDCFlagsCode)
                 End If
 
         End Select
@@ -970,9 +988,11 @@ Friend Class ModelDataSet
 
                 RegisterDatasetCell(m_excelWorkSheet.Cells(m_excelWorkSheet.Range(l_productAddressValuePair.Key).Row, l_periodColumn), _
                                     m_dimensionsAddressValueDict(Dimension.ENTITY).ElementAt(0).Value, _
-                                    m_dimensionsAddressValueDict(Dimension.ACCOUNT).ElementAt(0).Value, _
+                                    m_rhAccountName, _
                                     l_productAddressValuePair.Value, _
                                     l_period)
+
+                ' m_dimensionsAddressValueDict(Dimension.ACCOUNT).ElementAt(0).Value, _
                 ' set BU value ?
             Next
         Next
@@ -993,9 +1013,12 @@ Friend Class ModelDataSet
 
                 RegisterDatasetCell(m_excelWorkSheet.Cells(m_excelWorkSheet.Range(l_periodAddressValuePair.Key).Row, l_productColumn), _
                                     m_dimensionsAddressValueDict(Dimension.ENTITY).ElementAt(0).Value, _
-                                    m_dimensionsAddressValueDict(Dimension.ACCOUNT).ElementAt(0).Value, _
+                                    m_rhAccountName, _
                                     l_productName, _
                                     l_periodAddressValuePair.Value)
+
+                '  m_dimensionsAddressValueDict(Dimension.ACCOUNT).ElementAt(0).Value, _
+                '  set BU value ?
             Next
         Next
 

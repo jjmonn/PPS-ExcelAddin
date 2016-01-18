@@ -109,6 +109,20 @@ Class AxisElemManager : Inherits AxedCRUDManager(Of AxisElem)
 
     End Sub
 
+    Friend Sub LoadAxisTreeOnlyFirstHierarchyLevel(ByVal p_axis As AxisType, _
+                                                   ByRef p_treeview As VIBlend.WinForms.Controls.vTreeView)
+
+        p_treeview.Nodes.Clear()
+        For Each l_axisElem As AxisElem In m_CRUDDic(p_axis).SortedValues
+            If l_axisElem.ParentId = 0 Then
+                Dim node As VIBlend.WinForms.Controls.vTreeNode = VTreeViewUtil.AddNode(l_axisElem.Id, l_axisElem.Name, p_treeview, 0)
+                node.Checked = Windows.Forms.CheckState.Checked
+            End If
+Next
+        VTreeViewUtil.SetTreeviewIconsHierarchy(p_treeview)
+
+    End Sub
+
     Friend Sub LoadHierarchyAxisTree(ByVal p_axis As AxisType, _
                                      ByRef p_treeview As VIBlend.WinForms.Controls.vTreeView)
 
