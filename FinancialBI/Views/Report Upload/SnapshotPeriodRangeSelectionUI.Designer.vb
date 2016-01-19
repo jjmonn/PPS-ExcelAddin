@@ -70,11 +70,11 @@ Partial Class SnapshotPeriodRangeSelectionUI
         Me.m_accountSelectionComboBox.DropDownMaximumSize = New System.Drawing.Size(1000, 1000)
         Me.m_accountSelectionComboBox.DropDownMinimumSize = New System.Drawing.Size(10, 10)
         Me.m_accountSelectionComboBox.DropDownResizeDirection = VIBlend.WinForms.Controls.SizingDirection.Both
-        Me.m_accountSelectionComboBox.DropDownWidth = 256
-        Me.m_accountSelectionComboBox.Location = New System.Drawing.Point(139, 148)
+        Me.m_accountSelectionComboBox.DropDownWidth = 243
+        Me.m_accountSelectionComboBox.Location = New System.Drawing.Point(152, 148)
         Me.m_accountSelectionComboBox.Name = "m_accountSelectionComboBox"
         Me.m_accountSelectionComboBox.RoundedCornersMaskListItem = CType(15, Byte)
-        Me.m_accountSelectionComboBox.Size = New System.Drawing.Size(256, 23)
+        Me.m_accountSelectionComboBox.Size = New System.Drawing.Size(243, 23)
         Me.m_accountSelectionComboBox.TabIndex = 5
         Me.m_accountSelectionComboBox.UseThemeBackColor = False
         Me.m_accountSelectionComboBox.UseThemeDropDownArrowColor = True
@@ -91,7 +91,7 @@ Partial Class SnapshotPeriodRangeSelectionUI
         Me.m_accountSelectionLabel.Location = New System.Drawing.Point(12, 148)
         Me.m_accountSelectionLabel.Multiline = True
         Me.m_accountSelectionLabel.Name = "m_accountSelectionLabel"
-        Me.m_accountSelectionLabel.Size = New System.Drawing.Size(121, 23)
+        Me.m_accountSelectionLabel.Size = New System.Drawing.Size(134, 23)
         Me.m_accountSelectionLabel.TabIndex = 6
         Me.m_accountSelectionLabel.Text = "Account selection"
         Me.m_accountSelectionLabel.TextAlignment = System.Drawing.ContentAlignment.MiddleLeft

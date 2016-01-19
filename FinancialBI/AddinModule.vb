@@ -20,13 +20,12 @@ Public Class AddinModule
     Friend WithEvents ComputeGroup As AddinExpress.MSO.ADXRibbonGroup
     Friend WithEvents DataUploadGroup As AddinExpress.MSO.ADXRibbonGroup
     Friend WithEvents m_financialBIMainRibbon As AddinExpress.MSO.ADXRibbonTab
-    Friend WithEvents WSUplaodBT As AddinExpress.MSO.ADXRibbonButton
+    Friend WithEvents m_directorySnapshotButton As AddinExpress.MSO.ADXRibbonButton
     Friend WithEvents ControlingUI2BT As AddinExpress.MSO.ADXRibbonButton
     Friend WithEvents ConfigurationGroup As AddinExpress.MSO.ADXRibbonGroup
     Friend WithEvents adxExcelEvents As AddinExpress.MSO.ADXExcelAppEvents
     Friend WithEvents UploadBT As AddinExpress.MSO.ADXRibbonSplitButton
     Friend WithEvents UplodBT1 As AddinExpress.MSO.ADXRibbonMenu
-    Friend WithEvents WBUplaodBT As AddinExpress.MSO.ADXRibbonButton
     Friend WithEvents SettingsBT As AddinExpress.MSO.ADXRibbonButton
     Friend WithEvents BreakLinksBT As AddinExpress.MSO.ADXRibbonButton
     Friend WithEvents ConnectionGroup As AddinExpress.MSO.ADXRibbonGroup
@@ -445,13 +444,13 @@ Public Class AddinModule
 
     Private Sub WSUploadBT_onclick(sender As System.Object,
                                   control As AddinExpress.MSO.IRibbonControl,
-                                  pressed As System.Boolean) Handles WSUplaodBT.OnClick
+                                  pressed As System.Boolean) Handles m_directorySnapshotButton.OnClick
 
         If GlobalVariables.AuthenticationFlag = False Then
             ConnectionBT_OnClick(sender, control, pressed)
         Else
-            '    Dim DSDUI As New SubmissionControlUI
-            '    DSDUI.Show()
+            Dim l_DirectorySnapshotUI As New DirectorySnapshotUI()
+            l_DirectorySnapshotUI.Show()
         End If
 
     End Sub
@@ -813,7 +812,6 @@ Public Class AddinModule
                                                        selectedId As String, _
                                                        selectedIndex As Integer) Handles m_submissionWorksheetCombobox.OnAction, _
                                                                                          m_PDCWorksheetDropDown.OnAction
-
         Try
             If Not m_currentReportUploadControler.AssociatedWorksheet.Name = selectedId Then
                 ActivateReportUploadController(m_reportUploadControlersDictionary(selectedId))
@@ -952,9 +950,9 @@ Public Class AddinModule
 #Region "Report Upload Methods"
 
     ' Create report upload Conctroler and display
-    Friend Sub AssociateReportUploadControler(ByRef p_mustUpdateInputs As Boolean, _
+    Friend Function AssociateReportUploadControler(ByRef p_mustUpdateInputs As Boolean, _
                                               ByRef p_periodList As List(Of Int32), _
-                                              ByRef p_RHAccountName As String)
+                                              ByRef p_RHAccountName As String) As ReportUploadControler
 
         GlobalVariables.APPS.Interactive = False
         Select Case My.Settings.processId
@@ -972,13 +970,15 @@ Public Class AddinModule
                 Case Account.AccountProcess.FINANCIAL : DisplayFinancialSubmissionRibbon(l_excelWorksheet)
                 Case Account.AccountProcess.RH : DisplayPDCSubmissionRibbon(l_excelWorksheet)
             End Select
+            Return l_reportUploadController
         Else
             GlobalVariables.APPS.Interactive = True
             GlobalVariables.APPS.ScreenUpdating = True
             m_currentReportUploadControler = Nothing
+            Return Nothing
         End If
 
-    End Sub
+    End Function
 
     Private Sub DisplayFinancialSubmissionRibbon(ByVal p_ws As Excel.Worksheet)
         Dim l_item = AddButtonToDropDown(m_submissionWorksheetCombobox, _
@@ -1133,7 +1133,7 @@ Public Class AddinModule
 
     End Sub
 
-  
+
 #End Region
 
 
@@ -1276,7 +1276,6 @@ Public Class AddinModule
     End Function
 
 #End Region
-
 
 
 End Class

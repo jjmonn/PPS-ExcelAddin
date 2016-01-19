@@ -61,6 +61,7 @@ Friend Class RangeHighlighter
     Friend Sub ColorRangeGreen(ByRef cellAddress As String)
 
         '     If original_cells_format.ContainsKey(cellAddress) = False Then SaveCellFormat(WS.Range(cellAddress))
+        On Error Resume Next
         WS.Range(cellAddress).Interior.Color = GREEN_BKG_COLOR
         WS.Range(cellAddress).Font.Color = GREEN_TXT_COLOR
 
@@ -69,6 +70,7 @@ Friend Class RangeHighlighter
     Friend Sub ColorRangeRed(ByRef cellAddress As String)
 
         '    If original_cells_format.ContainsKey(cellAddress) = False Then SaveCellFormat(WS.Range(cellAddress))
+        On Error Resume Next
         WS.Range(cellAddress).Interior.Color = RED_BKG_COLOR
         WS.Range(cellAddress).Font.Color = RED_TXT_COLOR
 

@@ -51,8 +51,7 @@ Partial Public Class AddinModule
         Me.DataUploadGroup = New AddinExpress.MSO.ADXRibbonGroup(Me.components)
         Me.UploadBT = New AddinExpress.MSO.ADXRibbonSplitButton(Me.components)
         Me.UplodBT1 = New AddinExpress.MSO.ADXRibbonMenu(Me.components)
-        Me.WSUplaodBT = New AddinExpress.MSO.ADXRibbonButton(Me.components)
-        Me.WBUplaodBT = New AddinExpress.MSO.ADXRibbonButton(Me.components)
+        Me.m_directorySnapshotButton = New AddinExpress.MSO.ADXRibbonButton(Me.components)
         Me.Menu3 = New System.Windows.Forms.ImageList(Me.components)
         Me.EditionMainRibbonBT = New AddinExpress.MSO.ADXRibbonButton(Me.components)
         Me.ComputeGroup = New AddinExpress.MSO.ADXRibbonGroup(Me.components)
@@ -307,29 +306,20 @@ Partial Public Class AddinModule
         'UplodBT1
         '
         Me.UplodBT1.Caption = "AdxRibbonMenu1"
-        Me.UplodBT1.Controls.Add(Me.WSUplaodBT)
-        Me.UplodBT1.Controls.Add(Me.WBUplaodBT)
+        Me.UplodBT1.Controls.Add(Me.m_directorySnapshotButton)
         Me.UplodBT1.Id = "adxRibbonMenu_e0b4ef4400e94c5daab76efc03b1c471"
         Me.UplodBT1.ImageMso = "SmartArtChangeColorGallery"
         Me.UplodBT1.ImageTransparentColor = System.Drawing.Color.Transparent
         Me.UplodBT1.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
         Me.UplodBT1.Size = AddinExpress.MSO.ADXRibbonXControlSize.Large
         '
-        'WSUplaodBT
+        'm_directorySnapshotButton
         '
-        Me.WSUplaodBT.Caption = "Current Worksheet Upload"
-        Me.WSUplaodBT.Id = "adxRibbonButton_4bc310353ac24cecbc9d51abdb4fd682"
-        Me.WSUplaodBT.ImageTransparentColor = System.Drawing.Color.Transparent
-        Me.WSUplaodBT.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
-        Me.WSUplaodBT.Size = AddinExpress.MSO.ADXRibbonXControlSize.Large
-        '
-        'WBUplaodBT
-        '
-        Me.WBUplaodBT.Caption = "Workbook Upload"
-        Me.WBUplaodBT.Id = "adxRibbonButton_24b9e7a516574e889eda47fea0a5cc43"
-        Me.WBUplaodBT.ImageTransparentColor = System.Drawing.Color.Transparent
-        Me.WBUplaodBT.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
-        Me.WBUplaodBT.Size = AddinExpress.MSO.ADXRibbonXControlSize.Large
+        Me.m_directorySnapshotButton.Caption = "Directory Snapshot"
+        Me.m_directorySnapshotButton.Id = "adxRibbonButton_4bc310353ac24cecbc9d51abdb4fd682"
+        Me.m_directorySnapshotButton.ImageTransparentColor = System.Drawing.Color.Transparent
+        Me.m_directorySnapshotButton.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
+        Me.m_directorySnapshotButton.Size = AddinExpress.MSO.ADXRibbonXControlSize.Large
         '
         'Menu3
         '
@@ -636,6 +626,9 @@ Partial Public Class AddinModule
         Me.LightsImageList.Images.SetKeyName(0, "favicon.ico")
         Me.LightsImageList.Images.SetKeyName(1, "ok.ico")
         Me.LightsImageList.Images.SetKeyName(2, "delete.ico")
+        '
+        'adxExcelEvents
+        '
         '
         'SubmissionModeRibbon
         '

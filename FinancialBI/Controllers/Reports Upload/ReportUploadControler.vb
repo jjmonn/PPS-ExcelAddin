@@ -2,7 +2,7 @@
 ' 
 '
 ' Author: Julien Monnereau
-' Last modified: 10/01/2016
+' Last modified: 18/01/2016
 
 
 Imports Microsoft.Office.Interop
@@ -44,6 +44,10 @@ Public Class ReportUploadControler
     Friend m_isReportReadyFlag As Boolean
     Private m_deleteRequestIdCellAddressDict As New Dictionary(Of Int32, String)
     Private m_sourceExcelCalculationMode As Excel.XlCalculation
+
+    ' Events
+    Public Event AfterSnapshotInitialized(ByRef p_status As Boolean)
+    Public Event AfterSubmission(ByRef p_status As Boolean, ByRef p_ws As Excel.Worksheet)
 
 #End Region
 
@@ -302,6 +306,7 @@ Public Class ReportUploadControler
             AssociateReportUploadEventHandlers()
         Else
             SnapshotErrorGeneration(Account.AccountProcess.FINANCIAL)
+            RaiseEvent AfterSnapshotInitialized(False)
             Return False
         End If
         m_addin.ModifySubmissionControlsStatus(m_snapshotSuccessFlag)
@@ -345,6 +350,7 @@ Public Class ReportUploadControler
             GlobalVariables.APPS.ScreenUpdating = True
             GlobalVariables.APPS.Calculation = m_sourceExcelCalculationMode
             m_isUpdating = False
+            RaiseEvent AfterSnapshotInitialized(False)
             Return False
         End If
 
@@ -455,6 +461,7 @@ errorHandler:
         GlobalVariables.APPS.Interactive = True
         GlobalVariables.APPS.ScreenUpdating = True
         GlobalVariables.APPS.Calculation = m_sourceExcelCalculationMode
+        RaiseEvent AfterSnapshotInitialized(False)
         m_isUpdating = False
         Exit Sub
 
@@ -474,6 +481,7 @@ errorHandler:
         GlobalVariables.APPS.Interactive = True
         GlobalVariables.APPS.ScreenUpdating = True
         GlobalVariables.APPS.Calculation = m_sourceExcelCalculationMode
+        RaiseEvent AfterSnapshotInitialized(True)
         m_isUpdating = False
 
     End Sub
@@ -484,6 +492,7 @@ errorHandler:
             MsgBox(Local.GetValue("upload.msg_report_error"))
             m_isUpdating = False
             m_addin.ClearSubmissionMode(Me)
+            RaiseEvent AfterSnapshotInitialized(False)
             Exit Sub
         End If
 
@@ -498,6 +507,7 @@ errorHandler:
             GlobalVariables.APPS.ScreenUpdating = True
             GlobalVariables.APPS.Interactive = True
             GlobalVariables.APPS.Calculation = m_sourceExcelCalculationMode
+            RaiseEvent AfterSnapshotInitialized(True)
             m_isUpdating = False
         End SyncLock
 
@@ -658,6 +668,7 @@ errorHandler:
             If l_factsList.Count > 0 Then
                 m_fact.CMSG_UPDATE_FACT_LIST(l_factsList, l_cellsAddressesList)
             Else
+                RaiseEvent AfterSubmission(True, m_dataset.m_excelWorkSheet)
                 GlobalVariables.APPS.Interactive = True
             End If
         Else
@@ -695,14 +706,17 @@ errorHandler:
             If l_hasError = False Then
                 m_uploadState = True
                 GlobalVariables.SubmissionStatusButton.Image = 1
+                RaiseEvent AfterSubmission(True, m_dataset.m_excelWorkSheet)
             Else
                 m_uploadState = False
                 GlobalVariables.SubmissionStatusButton.Image = 2
+                RaiseEvent AfterSubmission(False, m_dataset.m_excelWorkSheet)
             End If
             GlobalVariables.APPS.Interactive = True
         Else
             MsgBox("Commit failed. Check network connection and try again." & Chr(13) & "If the error persists, please contact your administrator or the Financial BI team.")
             GlobalVariables.APPS.Interactive = True
+            RaiseEvent AfterSubmission(False, m_dataset.m_excelWorkSheet)
         End If
 
     End Sub
@@ -714,6 +728,9 @@ errorHandler:
                 m_dataModificationsTracker.UnregisterSingleModification(m_deleteRequestIdCellAddressDict(p_requestId))
                 m_deleteRequestIdCellAddressDict.Remove(p_requestId)
             End If
+            RaiseEvent AfterSubmission(True, m_dataset.m_excelWorkSheet)
+        Else
+            RaiseEvent AfterSubmission(False, m_dataset.m_excelWorkSheet)
         End If
 
     End Sub
@@ -757,7 +774,7 @@ errorHandler:
         If m_dataset.m_employeeFlag = ModelDataSet.SnapshotResult.ZERO Then tmpStr = tmpStr & "  - " & Local.GetValue("general.employee") & Chr(13)
         If m_dataset.m_entityFlag = ModelDataSet.SnapshotResult.ZERO Then tmpStr = "  - " & Local.GetValue("general.entities") & Chr(13)
         If m_dataset.m_periodFlag = ModelDataSet.SnapshotResult.ZERO Then tmpStr = tmpStr & "  - " & Local.GetValue("general.periods") & Chr(13)
-        If m_dataset.m_accountFlag = ModelDataSet.SnapshotResult.ZERO Then tmpStr = tmpStr & "  - " & Local.GetValue("general.accounts")
+        '  If m_dataset.m_accountFlag = ModelDataSet.SnapshotResult.ZERO Then tmpStr = tmpStr & "  - " & Local.GetValue("general.accounts")
         If m_dataset.m_periodsOrientationFlag = ModelDataSet.Alignment.UNCLEAR Then tmpStr = tmpStr & "  - " & Local.GetValue("upload.msg_periods_orientation_unclear") & Chr(13)
         If m_dataset.m_employeeOrientationFlag = ModelDataSet.Alignment.UNCLEAR Then tmpStr = tmpStr & "  - " & Local.GetValue("upload.msg_products_orientation_unclear") & Chr(13)
         Return tmpStr

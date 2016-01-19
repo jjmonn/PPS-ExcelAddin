@@ -301,11 +301,12 @@
     <string name="exchange_rates_upload">Exchange Rates Upload</string>
     <string name="global_facts_upload">Macro Economic Indicator Upload</string>
     <string name="range_mismatch">The Periods range and Rates range do not have the same size, or the dimensions of the ranges are not valid.</string>
-
+    <string name="folder_snapshot">Directory Snapshot</string>
+    
     <string name="input_sidepane_title">Report Upload</string>
     <string name="entity_selection">Entity selection</string>
     <string name="periods_selection">Periods selection</string>
-    <string name="accounts_selection">Account/ Process selection</string>
+    <string name="accounts_selection">Account selection</string>
     
     <string name="msg_periods_selection">Select periods(s) range(s)</string>
     <string name="msg_rates_selection">Select rates(s) range(s)</string>
