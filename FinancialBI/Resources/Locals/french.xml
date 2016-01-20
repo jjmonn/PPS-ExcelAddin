@@ -50,6 +50,8 @@
     <string name="msg_return_invalid_entity">Resultat reçu sur une entitée invalide.</string>
     <string name="msg_error_system">Une erreur est survenue au cours du calcul. Veuillez contacter votre administrateur si le problème persiste.</string>
     <string name="msg_permission_denied">Vous n'êtes pas autorisé à effectuer ce calcul.</string>
+    <string name="warning_complexity">La requête demandée est complexe et peut-être longue à calculer. Confirmer la requête ?</string>
+    <string name="error_complexity">La requête demandée est trop complexe.</string>
   </category>
 
   <category name="CUI_Charts">

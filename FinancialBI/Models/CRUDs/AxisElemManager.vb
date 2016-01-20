@@ -67,6 +67,18 @@ Class AxisElemManager : Inherits AxedCRUDManager(Of AxisElem)
 
 #Region "Utilities"
 
+    Friend Function CountChildren(ByRef p_axis As AxisType, ByRef p_id As UInt32)
+        Dim count As UInt32 = 1
+        Dim parent As AxisElem = GetValue(p_axis, p_id)
+        Dim dictionary = GetDictionary(p_axis)
+
+        If parent Is Nothing OrElse dictionary Is Nothing Then Return count
+        For Each elem As AxisElem In dictionary.Values
+            If elem.ParentId = parent.Id Then count += CountChildren(p_axis, elem.Id)
+        Next
+        Return count
+    End Function
+
     Friend Sub LoadEntitiesTV(ByRef p_treeview As Windows.Forms.TreeView)
 
         TreeViewsUtilities.LoadTreeview(p_treeview, m_CRUDDic(AxisType.Entities))

@@ -50,6 +50,8 @@
     <string name="msg_return_invalid_entity">Result received for an invalid entity.</string>
     <string name="msg_error_system">An error occured during computation. Please contact your administrator if this problem persist.</string>
     <string name="msg_permission_denied">You are not allowed to execute this compute.</string>
+    <string name="warning_complexity">Asked request can be long to compute. Compute anyway ?</string>
+    <string name="error_complexity">Asked request is too complex.</string>
   </category>
 
   <category name="CUI_Charts">

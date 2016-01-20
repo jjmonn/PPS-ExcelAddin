@@ -97,6 +97,22 @@ Public Class CUI2RightPane
 
     End Sub
 
+    Public Function GetDimensionsComplexity(ByVal p_entityId As UInt32) As UInt32
+        Dim complexity As UInt32 = 1
+
+        For Each dimensionStr As String In m_dimensionsList
+            Dim dimension As CRUD.AxisType = CType(dimensionStr.Remove(0, 1), CRUD.AxisType)
+
+            If dimension = CRUD.AxisType.Entities Then
+                complexity = complexity * GlobalVariables.AxisElems.CountChildren(CRUD.AxisType.Entities, p_entityId)
+            Else
+                Dim dic = GlobalVariables.AxisElems.GetDictionary(dimension)
+                If Not dic Is Nothing Then complexity = complexity * dic.Count
+            End If
+        Next
+        Return complexity
+    End Function
+
     Private Sub InitializePDCDimensions(ByRef p_entitiesFiltersNode As TreeNode, _
                                         ByRef p_clientsFiltersNode As TreeNode, _
                                         ByRef p_productsFiltersNode As TreeNode, _

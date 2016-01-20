@@ -247,7 +247,7 @@ Friend Class Computer
 
         Catch ex As OutOfMemoryException
             System.Diagnostics.Debug.WriteLine(ex.Message)
-            MsgBox(Local.GetValue("CUI.msg_out_of_memory"));
+            MsgBox(Local.GetValue("CUI.msg_out_of_memory"))
             RaiseEvent ComputationAnswered(0, p_packet.GetError(), 0)
         End Try
 

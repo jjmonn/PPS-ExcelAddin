@@ -350,6 +350,25 @@ Friend Class ControllingUI_2
             Exit Sub
         End If
 
+        Dim entityId As UInt32 = 0
+
+        If m_leftPaneControl.entitiesTV.SelectedNode IsNot Nothing Then
+            entityId = m_leftPaneControl.entitiesTV.SelectedNode.Value
+        ElseIf m_leftPaneControl.entitiesTV.Nodes.Count > 0 Then
+            entityId = m_leftPaneControl.entitiesTV.Nodes(0).Value
+        End If
+
+        Dim complexity As UInt32 = m_rightPaneControl.GetDimensionsComplexity(entityId)
+
+        If complexity > 500000 Then
+            MsgBox(Local.GetValue("CUI.error_complexity"))
+            Exit Sub
+        ElseIf complexity > 100000 Then
+            Dim result As Integer = MsgBox(Local.GetValue("CUI.warning_complexity"), MsgBoxStyle.YesNo, "Warning")
+
+            If result <> MsgBoxResult.Yes Then Exit Sub
+        End If
+
         If m_process = Account.AccountProcess.RH Then
             m_periodsList = m_leftPaneControl.GetRHPeriodSelection
         Else
