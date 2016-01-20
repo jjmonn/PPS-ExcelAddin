@@ -45,6 +45,11 @@
     <string name="msg_specify_dimension_periods2">Périodes (Semaines ou Jours)</string>
     <string name="msg_specify_dimension_client_or_entities">Business Unit ou Client</string>    
     <string name="msg_currency_selection">Vous devez sélectionner une devise.</string>
+    <string name="msg_out_of_memory">Impossible de charger toutes les données, requête trop complexe.</string>
+    <string name="msg_return_invalid_version">Resultat reçu sur une version invalide.</string>
+    <string name="msg_return_invalid_entity">Resultat reçu sur une entitée invalide.</string>
+    <string name="msg_error_system">Une erreur est survenue au cours du calcul. Veuillez contacter votre administrateur si le problème persiste.</string>
+    <string name="msg_permission_denied">Vous n'êtes pas autorisé à effectuer ce calcul.</string>
   </category>
 
   <category name="CUI_Charts">

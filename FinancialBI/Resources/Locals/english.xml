@@ -45,7 +45,11 @@
     <string name="msg_specify_dimension_periods2">Periods (Weeks or Days)</string>
     <string name="msg_specify_dimension_client_or_entities">Business Unit or Client</string>
     <string name="msg_currency_selection">Please select a Currency.</string>
-
+    <string name="msg_out_of_memory">Unable to load all data, query too complex.</string>
+    <string name="msg_return_invalid_version">Result received for an invalid version.</string>
+    <string name="msg_return_invalid_entity">Result received for an invalid entity.</string>
+    <string name="msg_error_system">An error occured during computation. Please contact your administrator if this problem persist.</string>
+    <string name="msg_permission_denied">You are not allowed to execute this compute.</string>
   </category>
 
   <category name="CUI_Charts">

@@ -203,14 +203,14 @@ Friend Class Computer
                 Dim version As Version = GlobalVariables.Versions.GetValue(m_requestIdVersionIdDict(request_id))
                 m_requestIdVersionIdDict.Remove(request_id)
                 If version Is Nothing Then
-                    MsgBox("Compute returned a result for an invalid version.") ' msg_local
+                    MsgBox(Local.GetValue("CUI.msg_return_invalid_version")) ' msg_local
                     Exit Sub
                 End If
                 '     m_versionId = version.Id
 
                 Dim l_entity As AxisElem = GlobalVariables.AxisElems.GetValue(AxisType.Entities, m_requestIdEntityIdDict(request_id))
                 If l_entity Is Nothing Then
-                    MsgBox("Compute returned a result for an invalid entity.") ' msg_local
+                    MsgBox(Local.GetValue("CUI.msg_return_invalid_entity")) ' msg_local
                     Exit Sub
                 End If
 
@@ -234,13 +234,20 @@ Friend Class Computer
                     m_requestIdEntityIdDict.Remove(request_id)
                 End If
             Else
+                Select Case (CType(p_packet.GetError(), ErrorMessage))
+                    Case ErrorMessage.SYSTEM
+                        MsgBox(Local.GetValue("CUI.msg_error_system"))
+                    Case ErrorMessage.PERMISSION_DENIED
+                        MsgBox(Local.GetValue("CUI.msg_permission_denied"))
+                End Select
+
                 RaiseEvent ComputationAnswered(0, p_packet.GetError(), 0)
             End If
 
 
         Catch ex As OutOfMemoryException
             System.Diagnostics.Debug.WriteLine(ex.Message)
-            MsgBox("Server computations limits exceeded.")
+            MsgBox(Local.GetValue("CUI.msg_out_of_memory"));
             RaiseEvent ComputationAnswered(0, p_packet.GetError(), 0)
         End Try
 

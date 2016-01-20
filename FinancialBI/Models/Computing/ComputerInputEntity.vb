@@ -110,7 +110,7 @@ Public Class ComputerInputEntity
 
             Dim version As Version = GlobalVariables.Versions.GetValue(m_versionId)
             If version Is Nothing Then
-                MsgBox("Compute returned a result for an invalid version.")
+                MsgBox(Local.GetValue("CUI.msg_return_invalid_version"))
                 RaiseEvent ComputationAnswered(False)
                 Exit Sub
             End If
