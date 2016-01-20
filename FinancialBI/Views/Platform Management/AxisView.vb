@@ -43,6 +43,9 @@ Friend Class AxisView
     Private Const CB_NB_ITEMS_DISPLAYED As Int32 = 7
     Private Const COLUMNS_WIDTH As Single = 150
 
+    ' Drag and drop
+    '   Private m_dgvDragRowIndex As Int32
+    Private m_draggedItem As HierarchyItem
 
 #End Region
 
@@ -72,13 +75,22 @@ Friend Class AxisView
         DGVColumnsInitialize()
         DGVRowsInitialize()
         FillDGV()
-        ' m_axisDataGridView.RowsHierarchy.ExpandAllItems()
+  
+        Select Case m_controller.GetAxisType
+            Case AxisType.Client, AxisType.Entities
+                m_axisDataGridView.AllowDrop = True
+                AddHandler m_axisDataGridView.DragEnter, AddressOf DGV_DragEnter
+                AddHandler m_axisDataGridView.DragOver, AddressOf DGV_DragOver
+                AddHandler m_axisDataGridView.DragDrop, AddressOf DGV_DragDrop
+                AddHandler m_axisDataGridView.HierarchyItemDragStarting, AddressOf DGV_ItemDragStarting
+        End Select
 
         AddHandler m_axisDataGridView.CellMouseClick, AddressOf dataGridView_CellMouseClick
-        AddHandler m_axisDataGridView.MouseDown, AddressOf DataGridViewRightClick
+        AddHandler m_axisDataGridView.MouseDown, AddressOf DGV_MouseDown
         AddHandler m_axisDataGridView.HierarchyItemMouseClick, AddressOf dataGridView_HierarchyItemMouseClick
         AddHandler m_axisDataGridView.CellValueChanged, AddressOf dataGridView_CellValueChanged
         AddHandler m_axisDataGridView.KeyDown, AddressOf DGV_KeyDown
+
         DefineUIPermissions()
         DesactivateUnallowed()
         MultilanguageSetup()
@@ -198,19 +210,29 @@ Friend Class AxisView
 
 #Region "DGV Right Click Menu"
 
-    Private Sub DataGridViewRightClick(sender As Object, e As MouseEventArgs)
+    Private Sub DGV_MouseDown(sender As Object, e As MouseEventArgs)
 
-        If (e.Button <> MouseButtons.Right) Then Exit Sub
-        Dim target As HierarchyItem = m_axisDataGridView.RowsHierarchy.HitTest(e.Location)
-        If target IsNot Nothing Then
-            m_currentRowItem = DataGridViewsUtil.GetHierarchyItemFromId(m_axisDataGridView.RowsHierarchy, target.ItemValue)
+        If (e.Button = Windows.Forms.MouseButtons.Left) Then
+            ' If ctrl not pressed launch drag and drop
+            If ModifierKeys.HasFlag(Keys.Control) = True Then
+                Dim l_item As HierarchyItem = m_axisDataGridView.RowsHierarchy.HitTest(e.Location)
+                If l_item IsNot Nothing Then
+                    m_draggedItem = l_item
+                    m_axisDataGridView.DoDragDrop(m_draggedItem, DragDropEffects.Move)
+                End If
+            End If
         Else
-            Dim target2 As GridCell = m_axisDataGridView.CellsArea.HitTest(e.Location)
-            If target2 Is Nothing Then Exit Sub
-            m_currentRowItem = target2.RowItem
+            Dim target As HierarchyItem = m_axisDataGridView.RowsHierarchy.HitTest(e.Location)
+            If target IsNot Nothing Then
+                m_currentRowItem = DataGridViewsUtil.GetHierarchyItemFromId(m_axisDataGridView.RowsHierarchy, target.ItemValue)
+            Else
+                Dim target2 As GridCell = m_axisDataGridView.CellsArea.HitTest(e.Location)
+                If target2 Is Nothing Then Exit Sub
+                m_currentRowItem = target2.RowItem
+            End If
+            m_axisRightClickMenu.Visible = True
+            m_axisRightClickMenu.Bounds = New Rectangle(MousePosition, New Size(m_axisRightClickMenu.Width, m_axisRightClickMenu.Height))
         End If
-        m_axisRightClickMenu.Visible = True
-        m_axisRightClickMenu.Bounds = New Rectangle(MousePosition, New Size(m_axisRightClickMenu.Width, m_axisRightClickMenu.Height))
 
     End Sub
 
@@ -314,9 +336,7 @@ Friend Class AxisView
         m_axisDataGridView.ColumnsHierarchy.AutoResize(AutoResizeMode.FIT_ALL)
         m_axisDataGridView.ColumnsHierarchy.AutoStretchColumns = True
         m_axisDataGridView.ColumnsHierarchy.AllowResize = True
-        ' DGV.RowsHierarchy.AllowDragDrop = True
         m_axisDataGridView.RowsHierarchy.CompactStyleRenderingEnabled = True
-        m_axisDataGridView.AllowDragDropIndication = True
         m_axisDataGridView.AllowCopyPaste = True
         m_axisDataGridView.FilterDisplayMode = FilterDisplayMode.Custom
         m_axisDataGridView.VIBlendTheme = DGV_VI_BLEND_STYLE
@@ -343,7 +363,6 @@ Friend Class AxisView
         updateDGVFormat()
 
     End Sub
-
 
 #Region "Columns Initialization"
 
@@ -404,10 +423,9 @@ Friend Class AxisView
 
 #End Region
 
-
 #Region "DGV Filling"
 
-    Friend Sub FillRow(ByVal p_axisElemId As Int32, _
+    Private Sub FillRow(ByVal p_axisElemId As Int32, _
                        ByVal p_axisElem As AxisElem)
 
         m_isFillingDGV = True
@@ -503,7 +521,6 @@ Friend Class AxisView
 
 #End Region
 
-
 #Region "DGV Updates"
 
     ' Update Parents and Children Filters Cells or comboboxes after a filter cell has been edited
@@ -587,7 +604,6 @@ Friend Class AxisView
 
 #End Region
 
-
 #Region "DGV Events"
 
     Friend Sub comboTextBox_KeyDown(ByVal sender As Object, ByVal e As KeyEventArgs)
@@ -603,15 +619,11 @@ Friend Class AxisView
     End Sub
 
     Private Sub dataGridView_HierarchyItemMouseClick(sender As Object, args As HierarchyItemMouseEventArgs)
-
         m_currentRowItem = args.HierarchyItem
-
     End Sub
 
     Private Sub dataGridView_CellMouseClick(ByVal sender As Object, ByVal args As CellMouseEventArgs)
-
         m_currentRowItem = args.Cell.RowItem
-
     End Sub
 
     Private Sub DGV_KeyDown(sender As Object, e As KeyEventArgs)
@@ -657,7 +669,6 @@ Friend Class AxisView
     End Sub
 
 #End Region
-
 
 #End Region
 
@@ -791,6 +802,74 @@ errorHandler:
 
 #End Region
 
+
+#End Region
+
+
+#Region "DataGridView Drag and Drop"
+
+    Private Sub DGV_ItemDragStarting(sender As Object, e As HierarchyItemDragCancelEventArgs)
+
+        ' If shift not pressed 
+        If ModifierKeys.HasFlag(Keys.Shift) = False Then
+            e.Cancel = True
+        End If
+
+    End Sub
+
+    Private Sub DGV_DragEnter(sender As Object, e As DragEventArgs)
+
+        Dim l_item As HierarchyItem = m_axisDataGridView.RowsHierarchy.HitTest(Cursor.HotSpot)
+        If l_item IsNot Nothing Then
+            e.Effect = DragDropEffects.Move
+        End If
+
+    End Sub
+
+    Private Sub DGV_DragOver(sender As Object, e As DragEventArgs)
+
+        Dim clientPoint As Point = m_axisDataGridView.PointToClient(New Point(e.X, e.Y))
+        Dim l_item As HierarchyItem = m_axisDataGridView.RowsHierarchy.HitTest(clientPoint)
+        If l_item IsNot Nothing _
+        AndAlso l_item IsNot m_draggedItem Then
+            e.Effect = DragDropEffects.Move
+        End If
+
+    End Sub
+
+    Private Sub DGV_DragDrop(sender As Object, e As DragEventArgs)
+
+        Dim clientPoint As Point = m_axisDataGridView.PointToClient(New Point(e.X, e.Y))
+        Dim l_targetItem As HierarchyItem = m_axisDataGridView.RowsHierarchy.HitTest(clientPoint)
+
+        If (e.Effect = DragDropEffects.Move) Then
+            m_axisDataGridView.DoDragDrop(m_draggedItem, DragDropEffects.None)
+            If l_targetItem IsNot m_draggedItem Then
+                Dim l_newRow = l_targetItem.Items.Add(m_draggedItem.Caption)
+                l_newRow.ItemValue = m_draggedItem.ItemValue
+                m_draggedItem.Delete()
+                m_draggedItem = Nothing
+                FillRowAndUpdateParentAfterDragAndDrop(l_newRow.ItemValue, l_targetItem.ItemValue)
+            Else
+                e.Effect = DragDropEffects.None
+            End If
+        End If
+
+    End Sub
+
+    Private Sub FillRowAndUpdateParentAfterDragAndDrop(ByRef p_axisElemId As Int32, _
+                                                       ByRef p_newParentId As Int32)
+
+        Dim l_axisElem As AxisElem = GlobalVariables.AxisElems.GetValue(m_controller.GetAxisType, p_axisElemId).Clone
+        If l_axisElem Is Nothing Then Exit Sub
+
+        FillRow(p_axisElemId, l_axisElem)
+        If GlobalVariables.AxisElems.GetValue(m_controller.GetAxisType, p_newParentId) IsNot Nothing Then
+            l_axisElem.ParentId = p_newParentId
+            m_controller.UpdateAxisElem(l_axisElem)
+        End If
+
+    End Sub
 
 #End Region
 
