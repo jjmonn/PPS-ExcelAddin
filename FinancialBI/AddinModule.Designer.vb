@@ -540,6 +540,7 @@ Partial Public Class AddinModule
         Me.financialModelingBT.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook
         Me.financialModelingBT.ScreenTip = resources.GetString("financialModelingBT.ScreenTip")
         Me.financialModelingBT.Size = AddinExpress.MSO.ADXRibbonXControlSize.Large
+        Me.financialModelingBT.Visible = False
         '
         'ConfigurationGroup
         '
@@ -1091,7 +1092,7 @@ Partial Public Class AddinModule
         'BindingNavigatorCountItem
         '
         Me.BindingNavigatorCountItem.Name = "BindingNavigatorCountItem"
-        Me.BindingNavigatorCountItem.Size = New System.Drawing.Size(41, 19)
+        Me.BindingNavigatorCountItem.Size = New System.Drawing.Size(35, 15)
         Me.BindingNavigatorCountItem.Text = "of {0}"
         Me.BindingNavigatorCountItem.ToolTipText = "Total number of items"
         '
