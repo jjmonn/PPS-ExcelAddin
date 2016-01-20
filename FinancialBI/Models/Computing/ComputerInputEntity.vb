@@ -139,6 +139,12 @@ Public Class ComputerInputEntity
                 NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_SOURCED_COMPUTE_RESULT, AddressOf SMSG_SOURCED_COMPUTE_RESULT)
             End If
         Else
+            Select Case (CType(packet.GetError(), ErrorMessage))
+                Case ErrorMessage.SYSTEM
+                    MsgBox(Local.GetValue("CUI.msg_error_system"))
+                Case ErrorMessage.PERMISSION_DENIED
+                    MsgBox(Local.GetValue("CUI.msg_permission_denied"))
+            End Select
             RaiseEvent ComputationAnswered(False)
             NetworkManager.GetInstance().RemoveCallback(ServerMessage.SMSG_SOURCED_COMPUTE_RESULT, AddressOf SMSG_SOURCED_COMPUTE_RESULT)
         End If
