@@ -71,7 +71,7 @@
         AXIS_ELEM
         AXIS_FILTER
         ENTITYDISTRIBUTION
-        AXISPARENT
+        AXISOWNER
 
     End Enum
 

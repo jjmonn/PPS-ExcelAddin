@@ -305,7 +305,7 @@ Public Class AddinModule
         GlobalVariables.AxisFilters = New AxisFilterManager
         GlobalVariables.EntityCurrencies = New EntityCurrencyManager
         GlobalVariables.EntitiesDistributions = New EntityDistributionManager
-        GlobalVariables.AxisParents = New AxisParentManager
+        GlobalVariables.AxisOwners = New AxisOwnerManager
 
         ' Financial Bi User Defined Function
         GlobalVariables.GlobalPPSBIController = New FBIFunctionController
@@ -1279,4 +1279,3 @@ Public Class AddinModule
 
 
 End Class
-

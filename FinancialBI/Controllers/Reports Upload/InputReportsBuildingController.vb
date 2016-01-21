@@ -132,7 +132,7 @@ Friend Class InputReportsBuildingController
 
         ' Employees drop on worksheet
         Dim p_employeesNameList As New Collections.Generic.List(Of String)
-        For Each l_employee As CRUD.AxisElem In GlobalVariables.AxisElems.GetAxisListFilteredOnAxisParent(CRUD.AxisType.Employee, p_entityId)
+        For Each l_employee As CRUD.AxisElem In GlobalVariables.AxisElems.GetAxisListFilteredOnAxisOwner(CRUD.AxisType.Employee, p_entityId)
             p_employeesNameList.Add(l_employee.Name)
         Next
         WorksheetWrittingFunctions.WriteListOnExcel(p_destinationCell, p_employeesNameList)

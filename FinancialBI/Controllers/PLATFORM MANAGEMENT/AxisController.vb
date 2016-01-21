@@ -33,7 +33,7 @@ Friend Class AxisController
     Private m_axisFilterValuesTV As New vTreeView
     Private m_newAxisView As NewAxisUI
     Private m_platformMGTUI As PlatformMGTGeneralUI
-    Private m_newAxisNameAxisParentDict As New SafeDictionary(Of String, UInt32)
+    Private m_newAxisNameAxisOwnerDict As New SafeDictionary(Of String, UInt32)
 
     Private m_axisType As AxisType
 
@@ -68,12 +68,12 @@ Friend Class AxisController
 
     End Sub
 
-    Public Sub LoadInstanceVariables(Optional ByRef p_axisParentId As UInt32 = 0)
+    Public Sub LoadInstanceVariables(Optional ByRef p_AxisOwnerId As UInt32 = 0)
 
         m_axisFilterTV.Nodes.Clear()
         m_axisFilterValuesTV.Nodes.Clear()
-        If p_axisParentId <> 0 Then
-            GlobalVariables.AxisElems.LoadAxisTree(m_axisType, m_axisTV, p_axisParentId)
+        If p_AxisOwnerId <> 0 Then
+            GlobalVariables.AxisElems.LoadAxisTree(m_axisType, m_axisTV, p_AxisOwnerId)
         Else
             If m_axisType <> AxisType.Client Then
                 GlobalVariables.AxisElems.LoadHierarchyAxisTree(m_axisType, m_axisTV)
@@ -116,15 +116,15 @@ Friend Class AxisController
 #Region "Interface"
 
     Friend Sub CreateAxisElem(ByRef p_axisName As String, _
-                              Optional ByRef p_axisParentId As Int32 = 0, _
+                              Optional ByRef p_AxisOwnerId As Int32 = 0, _
                               Optional ByRef p_allowEdition As Int32 = 1, _
-                              Optional ByRef p_axisParentParentId As Int32 = 0)
+                              Optional ByRef p_AxisOwnerParentId As Int32 = 0)
         If (GlobalVariables.AxisElems.IsNameValid(p_axisName) = False) Then
             MsgBox(Local.GetValue("axis.msg_invalid_name") & "(" & p_axisName & ")")
             Exit Sub
         End If
-        If m_axisType <> AxisType.Entities AndAlso p_axisParentParentId <> 0 Then
-            m_newAxisNameAxisParentDict.Add(p_axisName, p_axisParentParentId)
+        If m_axisType <> AxisType.Entities AndAlso p_AxisOwnerParentId <> 0 Then
+            m_newAxisNameAxisOwnerDict.Add(p_axisName, p_AxisOwnerParentId)
         End If
 
         Dim dict As MultiIndexDictionary(Of UInt32, String, AxisElem) = GetAxisDictionary()
@@ -132,7 +132,7 @@ Friend Class AxisController
         Dim l_axisElem As New AxisElem
         l_axisElem.Name = p_axisName
         l_axisElem.Axis = m_axisType
-        l_axisElem.ParentId = p_axisParentId
+        l_axisElem.ParentId = p_AxisOwnerId
         If dict Is Nothing OrElse dict.SortedValues.Count() = 0 Then
             l_axisElem.ItemPosition = 0
         Else
@@ -274,12 +274,12 @@ Friend Class AxisController
             Dim l_axisElem As AxisElem = GlobalVariables.AxisElems.GetValue(m_axisType, p_id)
             If l_axisElem IsNot Nothing _
             AndAlso l_axisElem.Axis = m_axisType _
-            AndAlso m_newAxisNameAxisParentDict.ContainsKey(l_axisElem.Name) Then
-                Dim l_axisParent As New AxisParent()
-                l_axisParent.Id = l_axisElem.Id
-                l_axisParent.ParentId = m_newAxisNameAxisParentDict(l_axisElem.Name)
-                GlobalVariables.AxisParents.Create(l_axisParent)
-                m_newAxisNameAxisParentDict.Remove(l_axisElem.Name)
+            AndAlso m_newAxisNameAxisOwnerDict.ContainsKey(l_axisElem.Name) Then
+                Dim l_AxisOwner As New AxisOwner()
+                l_AxisOwner.Id = l_axisElem.Id
+                l_AxisOwner.OwnerId = m_newAxisNameAxisOwnerDict(l_axisElem.Name)
+                GlobalVariables.AxisOwners.Create(l_AxisOwner)
+                m_newAxisNameAxisOwnerDict.Remove(l_axisElem.Name)
             End If
 
             RaiseEvent AxisCreated(p_status, p_id)
@@ -318,10 +318,10 @@ Friend Class AxisController
 
 #Region "Utilities"
 
-    Friend Function GetAxisDictionary(Optional ByRef p_axisParentId As UInt32 = 0) As MultiIndexDictionary(Of UInt32, String, AxisElem)
+    Friend Function GetAxisDictionary(Optional ByRef p_AxisOwnerId As UInt32 = 0) As MultiIndexDictionary(Of UInt32, String, AxisElem)
 
-        If p_axisParentId <> 0 Then
-            Return GlobalVariables.AxisElems.GetDictionary(CType(m_axisType, AxisType), p_axisParentId)
+        If p_AxisOwnerId <> 0 Then
+            Return GlobalVariables.AxisElems.GetDictionary(CType(m_axisType, AxisType), p_AxisOwnerId)
         Else
             Return GlobalVariables.AxisElems.GetDictionary(CType(m_axisType, AxisType))
         End If
@@ -339,13 +339,13 @@ Friend Class AxisController
         Return l_entity.Clone()
     End Function
 
-    Friend Sub ShowNewAxisElemUI(Optional ByRef p_axisParentParentId As Int32 = 0)
+    Friend Sub ShowNewAxisElemUI(Optional ByRef p_AxisOwnerParentId As Int32 = 0)
 
         Dim current_row As HierarchyItem = m_view.getCurrentRowItem
         If Not current_row Is Nothing Then
             Dim node As vTreeNode = VTreeViewUtil.FindNode(m_axisTV, current_row.ItemValue)
             If node IsNot Nothing Then
-                m_newAxisView.SetAxisParentParentId(p_axisParentParentId)
+                m_newAxisView.SetAxisOwnerParentId(p_AxisOwnerParentId)
                 m_newAxisView.SetParentAxisId(node.Value)
             End If
         End If
