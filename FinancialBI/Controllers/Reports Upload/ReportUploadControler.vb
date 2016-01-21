@@ -336,7 +336,8 @@ Public Class ReportUploadControler
             ' m_dataset.RegisterDataSetCellsValues()
 
             ' RH Cloud data loading
-            m_factsStorage.LoadRHFacts({m_dataset.RhAccountName}.ToList, _
+            m_factsStorage.LoadRHFacts(m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.ENTITY).Values(0), _
+                                       {m_dataset.RhAccountName}.ToList, _
                                        m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.EMPLOYEE).Values.ToList, _
                                        m_dataset.m_currentVersionId, _
                                        m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.PERIOD).Values.Min, _
