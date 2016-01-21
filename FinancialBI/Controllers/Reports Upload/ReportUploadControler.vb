@@ -643,11 +643,12 @@ errorHandler:
                     Dim l_employee As AxisElem = GlobalVariables.AxisElems.GetValue(CRUD.AxisType.Employee, l_employeeName)
                     If l_employee Is Nothing Then Continue For
 
-                    Dim l_axisParent As AxisParent = GlobalVariables.AxisParents.GetValue(l_employee.Id)
-                    If l_axisParent Is Nothing Then Continue For
+                    Dim l_entityName = m_dataset.m_datasetCellDimensionsDictionary(l_cellAddress).m_entityName
+                    Dim l_entity As AxisElem = GlobalVariables.AxisElems.GetValue(CRUD.AxisType.Entities, l_entityName)
+                    If l_entity Is Nothing Then Continue For
 
                     Dim l_fact As New Fact
-                    l_fact.EntityId = l_axisParent.ParentId
+                    l_fact.EntityId = l_entity.Id
                     l_fact.AccountId = GlobalVariables.Accounts.GetValueId(m_dataset.m_datasetCellDimensionsDictionary(l_cellAddress).m_accountName)
                     l_fact.Period = m_dataset.m_datasetCellDimensionsDictionary(l_cellAddress).m_period
                     l_fact.VersionId = m_dataset.m_currentVersionId
