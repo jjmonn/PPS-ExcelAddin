@@ -88,7 +88,7 @@ Public Class CUI2LeftPane
     Private Sub LoadTvs(ByRef p_process As Account.AccountProcess)
 
         GlobalVariables.AxisElems.LoadEntitiesTV(entitiesTV)
-        GlobalVariables.AxisElems.LoadAxisTreeOnlyFirstHierarchyLevel(AxisType.Client, m_clientsTV)
+        GlobalVariables.AxisElems.LoadHierarchyAxisTree(AxisType.Client, m_clientsTV) 'LoadAxisTreeOnlyFirstHierarchyLevel
         GlobalVariables.AxisElems.LoadAxisTree(AxisType.Product, productsTV)
         GlobalVariables.AxisElems.LoadAxisTree(AxisType.Adjustment, adjustmentsTV)
 

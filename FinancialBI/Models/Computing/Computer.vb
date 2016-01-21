@@ -128,8 +128,8 @@ Friend Class Computer
                 l_packet.WriteUint32(p_currencyId)                                              ' currency_id
                 l_packet.WriteUint32(p_periods(0))
                 l_packet.WriteUint32(p_periods.Length)
-                l_packet.WriteBool(p_axisHierarchyDecomposition)                                ' axis hierarchy decomposition
-                l_packet.WriteBool(False)                                                        ' entity decomposition
+                l_packet.WriteBool(True) 'p_axisHierarchyDecomposition                                ' axis hierarchy decomposition
+                l_packet.WriteBool(True)                                                        ' entity decomposition
 
                 ' Loop through filters
                 If Not p_filters Is Nothing Then
