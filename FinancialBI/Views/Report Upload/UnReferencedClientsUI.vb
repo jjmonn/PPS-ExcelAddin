@@ -196,6 +196,8 @@ Public Class UnReferencedClientsUI
                 If row.Caption = l_client.Name Then l_row = row
             Next
             If Not l_row Is Nothing Then l_row.Delete()
+        Else
+            MsgBox(Local.GetValue("axis.msg_unable_create"))
         End If
 
         ' Resume submission if everything has been treated
