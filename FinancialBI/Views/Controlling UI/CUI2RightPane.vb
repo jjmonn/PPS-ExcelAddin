@@ -100,13 +100,21 @@ Public Class CUI2RightPane
 
         For Each dimensionStr As String In m_dimensionsList
             Dim dimension As CRUD.AxisType = CType(dimensionStr.Remove(0, 1), CRUD.AxisType)
+            Dim dimensionType As String = dimensionStr.Remove(1, dimensionStr.Length - 1)
 
-            If dimension = CRUD.AxisType.Entities Then
-                complexity = complexity * GlobalVariables.AxisElems.CountChildren(CRUD.AxisType.Entities, p_entityId)
-            Else
-                Dim dic = GlobalVariables.AxisElems.GetDictionary(dimension)
-                If Not dic Is Nothing Then complexity = complexity * dic.Count
-            End If
+            Select Case dimensionType
+                Case "A"
+                    If dimension = CRUD.AxisType.Entities Then
+                        complexity = complexity * GlobalVariables.AxisElems.CountChildren(CRUD.AxisType.Entities, p_entityId)
+                    Else
+                        Dim dic = GlobalVariables.AxisElems.GetDictionary(dimension)
+                        If Not dic Is Nothing Then complexity = complexity * dic.Count
+                    End If
+                Case "F"
+                    Dim dic = GlobalVariables.FiltersValues.GetDictionary(dimension)
+                    If Not dic Is Nothing Then complexity = complexity * dic.Count
+            End Select
+
         Next
         Return complexity
     End Function
