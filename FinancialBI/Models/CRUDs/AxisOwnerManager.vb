@@ -2,12 +2,12 @@
 Imports System.Collections.Generic
 Imports CRUD
 
-Class AxisParentManager : Inherits CRUDManager
+Class AxisOwnerManager : Inherits CRUDManager
 
 #Region "Instance variables"
 
     ' Variables
-    Private m_axisParentDic As New SortedDictionary(Of UInt32, AxisParent)
+    Private m_AxisOwnerDic As New SortedDictionary(Of UInt32, AxisOwner)
     Private request_id As Dictionary(Of UInt32, Boolean)
 
 #End Region
@@ -16,20 +16,20 @@ Class AxisParentManager : Inherits CRUDManager
 
     Friend Sub New()
 
-        CreateCMSG = ClientMessage.CMSG_CREATE_AXIS_PARENT
-        ReadCMSG = ClientMessage.CMSG_READ_AXIS_PARENT
-        UpdateCMSG = ClientMessage.CMSG_UPDATE_AXIS_PARENT
-        UpdateListCMSG = ClientMessage.CMSG_CRUD_AXIS_PARENT
-        ListCMSG = ClientMessage.CMSG_LIST_AXIS_PARENT
+        CreateCMSG = ClientMessage.CMSG_CREATE_AXIS_OWNER
+        ReadCMSG = ClientMessage.CMSG_READ_AXIS_OWNER
+        UpdateCMSG = ClientMessage.CMSG_UPDATE_AXIS_OWNER
+        UpdateListCMSG = ClientMessage.CMSG_CRUD_AXIS_OWNER
+        ListCMSG = ClientMessage.CMSG_LIST_AXIS_OWNER
 
-        CreateSMSG = ServerMessage.SMSG_CREATE_AXIS_PARENT_ANSWER
-        ReadSMSG = ServerMessage.SMSG_READ_AXIS_PARENT_ANSWER
-        UpdateSMSG = ServerMessage.SMSG_UPDATE_AXIS_PARENT_ANSWER
-        UpdateListSMSG = ServerMessage.SMSG_CRUD_AXIS_PARENT_LIST_ANSWER
-        DeleteSMSG = ServerMessage.SMSG_DELETE_AXIS_PARENT_ANSWER
-        ListSMSG = ServerMessage.SMSG_LIST_AXIS_PARENT_ANSWER
+        CreateSMSG = ServerMessage.SMSG_CREATE_AXIS_OWNER_ANSWER
+        ReadSMSG = ServerMessage.SMSG_READ_AXIS_OWNER_ANSWER
+        UpdateSMSG = ServerMessage.SMSG_UPDATE_AXIS_OWNER_ANSWER
+        UpdateListSMSG = ServerMessage.SMSG_CRUD_AXIS_OWNER_LIST_ANSWER
+        DeleteSMSG = ServerMessage.SMSG_DELETE_AXIS_OWNER_ANSWER
+        ListSMSG = ServerMessage.SMSG_LIST_AXIS_OWNER_ANSWER
 
-        Build = AddressOf AxisParent.BuildAxisParent
+        Build = AddressOf AxisOwner.BuildAxisOwner
 
         InitCallbacks()
 
@@ -51,11 +51,11 @@ Class AxisParentManager : Inherits CRUDManager
     Protected Overrides Sub ListAnswer(packet As ByteBuffer)
 
         If packet.GetError() = ErrorMessage.SUCCESS Then
-            m_axisParentDic.Clear()
+            m_AxisOwnerDic.Clear()
             For i As Int32 = 1 To packet.ReadInt32()
                 Dim tmp_axis = Build(packet)
 
-                m_axisParentDic.Add(tmp_axis.Id, tmp_axis)
+                m_AxisOwnerDic.Add(tmp_axis.Id, tmp_axis)
             Next
             state_flag = True
             RaiseObjectInitializedEvent()
@@ -73,10 +73,10 @@ Class AxisParentManager : Inherits CRUDManager
         If packet.GetError() = ErrorMessage.SUCCESS Then
             Dim tmp_axis = Build(packet)
 
-            If m_axisParentDic.ContainsKey(tmp_axis.Id) Then
-                m_axisParentDic(tmp_axis.Id) = tmp_axis
+            If m_AxisOwnerDic.ContainsKey(tmp_axis.Id) Then
+                m_AxisOwnerDic(tmp_axis.Id) = tmp_axis
             Else
-                m_axisParentDic.Add(tmp_axis.Id, tmp_axis)
+                m_AxisOwnerDic.Add(tmp_axis.Id, tmp_axis)
             End If
             RaiseReadEvent(packet.GetError(), tmp_axis)
         Else
@@ -88,7 +88,7 @@ Class AxisParentManager : Inherits CRUDManager
     Protected Overrides Sub DeleteAnswer(packet As ByteBuffer)
         Dim id As UInt32 = packet.ReadUint32()
         If packet.GetError() = ErrorMessage.SUCCESS Then
-            m_axisParentDic.Remove(id)
+            m_AxisOwnerDic.Remove(id)
         End If
         RaiseDeleteEvent(packet.GetError(), id)
     End Sub
@@ -98,8 +98,8 @@ Class AxisParentManager : Inherits CRUDManager
 #Region "Mapping"
 
     Public Overrides Function GetValue(ByVal p_id As UInt32) As CRUDEntity
-        If m_axisParentDic.ContainsKey(p_id) = False Then Return Nothing
-        Return m_axisParentDic(p_id)
+        If m_AxisOwnerDic.ContainsKey(p_id) = False Then Return Nothing
+        Return m_AxisOwnerDic(p_id)
     End Function
 
     Public Overrides Function GetValue(ByVal p_id As Int32) As CRUDEntity

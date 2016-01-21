@@ -8,7 +8,7 @@ Friend Class EmployeeView
 #Region "Instance variables"
 
     Private m_entitiesTreeview As vTreeView
-    Private m_axisParentId As UInt32
+    Private m_AxisOwnerId As UInt32
 
 #End Region
 
@@ -33,7 +33,7 @@ Friend Class EmployeeView
 
         If m_entitiesTreeview.Nodes.Count > 0 Then
             m_entitiesTreeview.SelectedNode = m_entitiesTreeview.Nodes(0)
-            m_axisParentId = m_entitiesTreeview.SelectedNode.Value
+            m_AxisOwnerId = m_entitiesTreeview.SelectedNode.Value
         End If
 
     End Sub
@@ -49,7 +49,7 @@ Friend Class EmployeeView
             Dim MyDelegate As New LoadInstanceVariables_Delegate(AddressOf LoadInstanceVariables)
             Me.Invoke(MyDelegate, New Object() {})
         Else
-            m_controller.LoadInstanceVariables(m_axisParentId)
+            m_controller.LoadInstanceVariables(m_AxisOwnerId)
         End If
     End Sub
 
@@ -72,40 +72,40 @@ Friend Class EmployeeView
 
     Protected Overrides Sub FillDGV()
 
-        If m_axisParentId <> 0 Then
-            FillDGV((m_controller.GetAxisDictionary(m_axisParentId)))
+        If m_AxisOwnerId <> 0 Then
+            FillDGV((m_controller.GetAxisDictionary(m_AxisOwnerId)))
         End If
 
     End Sub
 
     Protected Overrides Sub AddAxisElem_cmd_Click(sender As Object, e As EventArgs)
 
-        If m_axisParentId <> 0 Then
-            Dim l_entity As CRUD.AxisElem = GlobalVariables.AxisElems.GetValue(CRUD.AxisType.Entities, m_axisParentId)
+        If m_AxisOwnerId <> 0 Then
+            Dim l_entity As CRUD.AxisElem = GlobalVariables.AxisElems.GetValue(CRUD.AxisType.Entities, m_AxisOwnerId)
             If l_entity Is Nothing Then Exit Sub
 
             If l_entity.AllowEdition = True Then
-                m_controller.ShowNewAxisElemUI(m_axisParentId)
+                m_controller.ShowNewAxisElemUI(m_AxisOwnerId)
             Else
-                MsgBox(Local.GetValue("axis.msg_entity_axis_parent_not_allowed"))
+                MsgBox(Local.GetValue("axis.msg_entity_axis_owner_not_allowed"))
             End If
         Else
-            MsgBox(Local.GetValue("axis.msg_entity_axis_parent_selection"))
+            MsgBox(Local.GetValue("axis.msg_entity_axis_owner_selection"))
         End If
 
     End Sub
 
 #End Region
 
-    Private Sub DisplayEmployeesBelongingToAxisParent(Optional ByRef p_axisParentId As UInt32 = 0)
+    Private Sub DisplayEmployeesBelongingToAxisOwner(Optional ByRef p_AxisOwnerId As UInt32 = 0)
 
-        If p_axisParentId <> 0 Then
-            ' m_controller.AxisParentId = p_axisParentId
-            m_axisParentId = p_axisParentId
+        If p_AxisOwnerId <> 0 Then
+            ' m_controller.AxisOwnerId = p_AxisOwnerId
+            m_AxisOwnerId = p_AxisOwnerId
         Else
             If m_entitiesTreeview.SelectedNode IsNot Nothing Then
-                ' m_controller.AxisParentId = m_entitiesTreeview.SelectedNode.Value
-                m_axisParentId = m_entitiesTreeview.SelectedNode.Value
+                ' m_controller.AxisOwnerId = m_entitiesTreeview.SelectedNode.Value
+                m_AxisOwnerId = m_entitiesTreeview.SelectedNode.Value
             Else
                 Exit Sub
             End If
@@ -122,7 +122,7 @@ Friend Class EmployeeView
     Private Sub EntitiesTreeview_KeyPress(sender As Object, e As KeyEventArgs)
 
         If e.KeyCode = Keys.Enter Then
-            DisplayEmployeesBelongingToAxisParent()
+            DisplayEmployeesBelongingToAxisOwner()
         End If
 
     End Sub
@@ -130,7 +130,7 @@ Friend Class EmployeeView
     Private Sub EntitiesTreeview_MouseDoubleClick(sender As Object, e As MouseEventArgs)
 
         Dim l_node = VTreeViewUtil.GetNodeAtPosition(m_entitiesTreeview, e.Location)
-        If l_node IsNot Nothing Then DisplayEmployeesBelongingToAxisParent(l_node.Value)
+        If l_node IsNot Nothing Then DisplayEmployeesBelongingToAxisOwner(l_node.Value)
 
     End Sub
 

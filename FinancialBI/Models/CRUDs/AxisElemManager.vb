@@ -146,13 +146,13 @@ Next
 
     Friend Sub LoadAxisTree(ByVal p_axis As AxisType, _
                             ByRef p_treeview As VIBlend.WinForms.Controls.vTreeView, _
-                            ByRef p_axisParentId As UInt32)
+                            ByRef p_AxisOwnerId As UInt32)
 
         p_treeview.Nodes.Clear()
         For Each l_axisElem As AxisElem In m_CRUDDic(p_axis).SortedValues
-            Dim l_axisParent As CRUD.AxisParent = GlobalVariables.AxisParents.GetValue(l_axisElem.Id)
-            If l_axisParent IsNot Nothing _
-            AndAlso l_axisParent.ParentId = p_axisParentId Then
+            Dim l_AxisOwner As CRUD.AxisOwner = GlobalVariables.AxisOwners.GetValue(l_axisElem.Id)
+            If l_AxisOwner IsNot Nothing _
+            AndAlso l_AxisOwner.OwnerId = p_AxisOwnerId Then
                 Dim node As VIBlend.WinForms.Controls.vTreeNode = VTreeViewUtil.AddNode(l_axisElem.Id, l_axisElem.Name, p_treeview, 0)
                 node.Checked = Windows.Forms.CheckState.Checked
             End If
@@ -185,14 +185,14 @@ Next
 
     End Sub
 
-    Friend Function GetAxisListFilteredOnAxisParent(ByRef p_axis As AxisType, _
-                                                    ByRef p_axisParentId As UInt32) As List(Of AxisElem)
+    Friend Function GetAxisListFilteredOnAxisOwner(ByRef p_axis As AxisType, _
+                                                    ByRef p_AxisOwnerId As UInt32) As List(Of AxisElem)
 
         Dim l_list As New List(Of AxisElem)
         For Each l_axisElem As AxisElem In m_CRUDDic(p_axis).SortedValues
-            Dim l_axisParent As CRUD.AxisParent = GlobalVariables.AxisParents.GetValue(l_axisElem.Id)
-            If l_axisParent IsNot Nothing _
-            AndAlso l_axisParent.ParentId = p_axisParentId Then
+            Dim l_AxisOwner As CRUD.AxisOwner = GlobalVariables.AxisOwners.GetValue(l_axisElem.Id)
+            If l_AxisOwner IsNot Nothing _
+            AndAlso l_AxisOwner.OwnerId = p_AxisOwnerId Then
                 l_list.Add(l_axisElem)
             End If
         Next

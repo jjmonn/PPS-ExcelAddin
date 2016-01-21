@@ -27,7 +27,7 @@ Friend Class NewAxisUI
 
     ' Objects
     Private m_controller As AxisController
-    Private m_axisParentParentId As Int32
+    Private m_AxisOwnerParentId As Int32
 
     ' Constants
     Private Const FIXED_ATTRIBUTES_NUMBER As Int32 = 3
@@ -79,8 +79,8 @@ Friend Class NewAxisUI
 
     End Sub
 
-    Friend Sub SetAxisParentParentId(ByRef p_axisParentParentId As Int32)
-        m_axisParentParentId = p_axisParentParentId
+    Friend Sub SetAxisOwnerParentId(ByRef p_AxisOwnerParentId As Int32)
+        m_AxisOwnerParentId = p_AxisOwnerParentId
     End Sub
 
     Private Sub MultilanguageSetup(ByRef p_axisType As AxisType)
@@ -143,23 +143,23 @@ Friend Class NewAxisUI
     End Sub
 
     Delegate Sub AxisNodeAddition_Delegate(ByRef p_axisId As Int32, _
-                                               ByRef p_axisParentId As Int32, _
+                                               ByRef p_AxisOwnerId As Int32, _
                                                ByRef p_axisName As String, _
                                                ByRef p_axisImage As Int32)
     Friend Sub AxisNodeAddition(ByRef p_AxisId As Int32, _
-                                   ByRef p_axisParentId As Int32, _
+                                   ByRef p_AxisOwnerId As Int32, _
                                    ByRef p_axisName As String, _
                                    ByRef p_axisImage As Int32)
 
         If Me.m_parentAxisElemTreeviewBox.TreeView.InvokeRequired Then
             Dim MyDelegate As New AxisNodeAddition_Delegate(AddressOf AxisNodeAddition)
-            Me.m_parentAxisElemTreeviewBox.TreeView.Invoke(MyDelegate, New Object() {p_AxisId, p_axisParentId, p_axisName, p_axisImage})
+            Me.m_parentAxisElemTreeviewBox.TreeView.Invoke(MyDelegate, New Object() {p_AxisId, p_AxisOwnerId, p_axisName, p_axisImage})
         Else
-            If p_axisParentId = 0 Then
+            If p_AxisOwnerId = 0 Then
                 Dim new_node As vTreeNode = VTreeViewUtil.AddNode(CStr(p_AxisId), p_axisName, m_parentAxisElemTreeviewBox.TreeView, p_axisImage)
                 new_node.IsVisible = True
             Else
-                Dim l_parentNode As vTreeNode = VTreeViewUtil.FindNode(m_parentAxisElemTreeviewBox.TreeView, p_axisParentId)
+                Dim l_parentNode As vTreeNode = VTreeViewUtil.FindNode(m_parentAxisElemTreeviewBox.TreeView, p_AxisOwnerId)
                 If l_parentNode IsNot Nothing Then
                     Dim new_node As vTreeNode = VTreeViewUtil.AddNode(CStr(p_AxisId), p_axisName, l_parentNode, p_axisImage)
                     new_node.IsVisible = True
@@ -204,7 +204,7 @@ Friend Class NewAxisUI
             m_controller.CreateAxisElem(l_newAxisName, _
                                         l_parentAxisId, _
                                         1, _
-                                        m_axisParentParentId)
+                                        m_AxisOwnerParentId)
             Me.Hide()
             m_controller.ShowEntitiesMGT()
         End If
