@@ -54,7 +54,8 @@ Public Class CUI2RightPane
 
             Case CRUD.Account.AccountProcess.RH : InitializePDCDimensions(p_entitiesFiltersNode, _
                                                                            p_clientsFiltersNode, _
-                                                                           p_adjustmentsFiltersNode)
+                                                                           p_adjustmentsFiltersNode, _
+                                                                           p_employeesFiltersNode)
         End Select
 
         ' Init listboxes
@@ -113,11 +114,13 @@ Public Class CUI2RightPane
 
     Private Sub InitializePDCDimensions(ByRef p_entitiesFiltersNode As TreeNode, _
                                         ByRef p_clientsFiltersNode As TreeNode, _
-                                        ByRef p_adjustmentsFiltersNode As TreeNode)
+                                        ByRef p_adjustmentsFiltersNode As TreeNode, _
+                                        ByRef p_employeesFiltersNode As TreeNode)
 
         PDCProcessDimensionsDisplayPaneSetup(p_entitiesFiltersNode, _
                                             p_clientsFiltersNode, _
-                                            p_adjustmentsFiltersNode)
+                                            p_adjustmentsFiltersNode, _
+                                            p_employeesFiltersNode)
 
         ' Default PDC report
         Dim accountsItem = rowsDisplayList.Items.Add(m_analysisAxisTreeview.Nodes(0).Text)
@@ -210,7 +213,8 @@ Public Class CUI2RightPane
 
     Private Sub PDCProcessDimensionsDisplayPaneSetup(ByRef p_entitiesFiltersNode As TreeNode, _
                                                      ByRef p_clientsFiltersNode As TreeNode, _
-                                                     ByRef p_adjustmentsFiltersNode As TreeNode)
+                                                     ByRef p_adjustmentsFiltersNode As TreeNode, _
+                                                     ByRef p_employeesFiltersNode As TreeNode)
 
         VTreeViewUtil.InitTVFormat(m_analysisAxisTreeview)
         VTreeViewUtil.AddNode(Computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.ACCOUNTS, _
@@ -235,6 +239,14 @@ Public Class CUI2RightPane
                                                              m_analysisAxisTreeview)
         For Each client_category_node As TreeNode In p_clientsFiltersNode.Nodes
             FiltersNodeSubCategoriesInit(client_category_node, clientsNode)
+        Next
+
+        ' Employees Analysis Axis and Categories Nodes
+        Dim l_employeesNode As vTreeNode = VTreeViewUtil.AddNode(Computer.AXIS_DECOMPOSITION_IDENTIFIER & GlobalEnums.AnalysisAxis.EMPLOYEES, _
+                                                             ControllingUI_2.EMPLOYEE_CODE, _
+                                                             m_analysisAxisTreeview)
+        For Each employee_category_node As TreeNode In p_employeesFiltersNode.Nodes
+            FiltersNodeSubCategoriesInit(employee_category_node, l_employeesNode)
         Next
 
         ' Adjustments Analysis Axis and Categories Nodes
