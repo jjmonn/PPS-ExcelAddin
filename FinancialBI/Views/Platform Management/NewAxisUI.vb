@@ -204,7 +204,6 @@ Friend Class NewAxisUI
             m_controller.CreateAxisElem(l_newAxisName, _
                                         l_parentAxisId, _
                                         1, _
-                                        1, _
                                         m_axisParentParentId)
             Me.Hide()
             m_controller.ShowEntitiesMGT()

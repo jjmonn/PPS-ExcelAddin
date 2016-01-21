@@ -208,7 +208,8 @@
     <string name="msg_filter_value_not_found">The Filter Value Name could not be found.</string>
     <string name="msg_entity_axis_parent_selection">An editable entity must be selected in order to create an employee.</string>
     <string name="msg_entity_axis_parent_not_allowed">This entity is not editable. Employees can only be created under editable entities.</string>
-  
+    <string name="msg_invalid_name">This name is not valid. Either it already exists or contains forbidden characters. Please Try with another Name.</string>
+
   </category>
   
   <category name="filters">
