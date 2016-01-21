@@ -185,7 +185,7 @@ Friend Class ConnectionsFunctions
             start_time = Now
             Do While connectionFunction.globalInitFlag = False
                 secs = DateDiff("s", start_time, Now)
-                If secs > 6 Then Exit Do
+                If secs > 15 Then Exit Do
             Loop
         Else
             ConnectionsFunctions.CloseNetworkConnection()

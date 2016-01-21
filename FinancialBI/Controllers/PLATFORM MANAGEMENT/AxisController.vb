@@ -117,19 +117,27 @@ Friend Class AxisController
 
     Friend Sub CreateAxisElem(ByRef p_axisName As String, _
                               Optional ByRef p_axisParentId As Int32 = 0, _
-                              Optional ByRef p_position As Int32 = 0, _
                               Optional ByRef p_allowEdition As Int32 = 1, _
                               Optional ByRef p_axisParentParentId As Int32 = 0)
-
+        If (GlobalVariables.AxisElems.IsNameValid(p_axisName) = False) Then
+            MsgBox(Local.GetValue("axis.msg_invalid_name") & "(" & p_axisName & ")")
+            Exit Sub
+        End If
         If m_axisType <> AxisType.Entities AndAlso p_axisParentParentId <> 0 Then
             m_newAxisNameAxisParentDict.Add(p_axisName, p_axisParentParentId)
         End If
+
+        Dim dict As MultiIndexDictionary(Of UInt32, String, AxisElem) = GetAxisDictionary()
 
         Dim l_axisElem As New AxisElem
         l_axisElem.Name = p_axisName
         l_axisElem.Axis = m_axisType
         l_axisElem.ParentId = p_axisParentId
-        l_axisElem.ItemPosition = p_position
+        If dict Is Nothing OrElse dict.SortedValues.Count() = 0 Then
+            l_axisElem.ItemPosition = 0
+        Else
+            l_axisElem.ItemPosition = dict.SortedValues(dict.SortedValues.Count - 1).ItemPosition + 1
+        End If
         l_axisElem.AllowEdition = p_allowEdition
         GlobalVariables.AxisElems.Create(l_axisElem)
 
@@ -262,7 +270,6 @@ Friend Class AxisController
 
         If p_status <> ErrorMessage.SUCCESS Then
             MsgBox(Local.GetValue("axis.msg_unable_create"))
-            ' catch and display error as well V2 priority normal
         Else
             Dim l_axisElem As AxisElem = GlobalVariables.AxisElems.GetValue(m_axisType, p_id)
             If l_axisElem IsNot Nothing _
