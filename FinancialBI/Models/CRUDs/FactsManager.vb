@@ -32,6 +32,7 @@ Class FactsManager
     End Sub
 
     Friend Shared Function CMSG_GET_FACT(ByRef p_accountId As UInt32, _
+                                         ByRef p_entityId As UInt32, _
                                         ByRef p_employeeId As UInt32, _
                                         ByRef p_versionId As UInt32, _
                                         ByRef p_startPeriod As UInt32, _
@@ -46,6 +47,7 @@ Class FactsManager
         l_packet.WriteUint32(p_versionId)
         l_packet.WriteUint32(p_startPeriod)
         l_packet.WriteUint32(p_endPeriod)
+        l_packet.WriteUint32(p_entityId)
 
         l_packet.Release()
         NetworkManager.GetInstance().Send(l_packet)

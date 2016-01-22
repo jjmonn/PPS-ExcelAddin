@@ -18,11 +18,17 @@ Friend Class FactsStorage
 
 #Region "Interface"
 
-    Friend Sub LoadRHFacts(ByRef p_accountsList As List(Of String), _
+    Friend Sub LoadRHFacts(ByRef p_entityName As String, _
+                           ByRef p_accountsList As List(Of String), _
                            ByRef p_employeeList As List(Of String), _
                            ByRef p_versionId As UInt32, _
                            ByRef p_startPeriod As UInt32, _
                            ByRef p_endPeriod As UInt32)
+
+
+        Dim l_entity As AxisElem = GlobalVariables.AxisElems.GetValue(AxisType.Entities, p_entityName)
+        ' attention dans ce cas message user
+        If l_entity Is Nothing Then Exit Sub
 
         AddHandler FactsManager.Read, AddressOf LoadRHFacts_ThreadSafe
         m_requestIdDict.Clear()
@@ -35,7 +41,7 @@ Friend Class FactsStorage
                 Dim l_employee As AxisElem = GlobalVariables.AxisElems.GetValue(AxisType.Employee, l_employeeName)
                 If l_employee Is Nothing Then Continue For
 
-                m_requestIdDict.Add(FactsManager.CMSG_GET_FACT(l_account.Id, l_employee.Id, p_versionId, p_startPeriod, p_endPeriod), _
+                m_requestIdDict.Add(FactsManager.CMSG_GET_FACT(l_account.Id, l_entity.Id, l_employee.Id, p_versionId, p_startPeriod, p_endPeriod), _
                                     {l_accountName, l_employeeName})
             Next
         Next

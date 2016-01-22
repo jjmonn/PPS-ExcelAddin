@@ -336,7 +336,8 @@ Public Class ReportUploadControler
             ' m_dataset.RegisterDataSetCellsValues()
 
             ' RH Cloud data loading
-            m_factsStorage.LoadRHFacts({m_dataset.RhAccountName}.ToList, _
+            m_factsStorage.LoadRHFacts(m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.ENTITY).Values(0), _
+                                       {m_dataset.RhAccountName}.ToList, _
                                        m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.EMPLOYEE).Values.ToList, _
                                        m_dataset.m_currentVersionId, _
                                        m_dataset.m_dimensionsAddressValueDict(ModelDataSet.Dimension.PERIOD).Values.Min, _
@@ -643,11 +644,12 @@ errorHandler:
                     Dim l_employee As AxisElem = GlobalVariables.AxisElems.GetValue(CRUD.AxisType.Employee, l_employeeName)
                     If l_employee Is Nothing Then Continue For
 
-                    Dim l_AxisOwner As AxisOwner = GlobalVariables.AxisOwners.GetValue(l_employee.Id)
-                    If l_AxisOwner Is Nothing Then Continue For
+                    Dim l_entityName = m_dataset.m_datasetCellDimensionsDictionary(l_cellAddress).m_entityName
+                    Dim l_entity As AxisElem = GlobalVariables.AxisElems.GetValue(CRUD.AxisType.Entities, l_entityName)
+                    If l_entity Is Nothing Then Continue For
 
                     Dim l_fact As New Fact
-                    l_fact.EntityId = l_AxisOwner.OwnerId
+                    l_fact.EntityId = l_entity.Id
                     l_fact.AccountId = GlobalVariables.Accounts.GetValueId(m_dataset.m_datasetCellDimensionsDictionary(l_cellAddress).m_accountName)
                     l_fact.Period = m_dataset.m_datasetCellDimensionsDictionary(l_cellAddress).m_period
                     l_fact.VersionId = m_dataset.m_currentVersionId
