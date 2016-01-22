@@ -272,8 +272,9 @@ Friend Class ControllingUIController
 
         While m_initDisplayFlag = False
         End While
-        m_view.FormatDGV_ThreadSafe()
         m_dataMap = computer.GetData()
+        If m_view.m_process = Account.AccountProcess.RH Then m_view.DeleteNonUsedClientsRH()
+        m_view.FormatDGV_ThreadSafe()
         m_view.TerminateCircularProgress()
 
         UpdateCUICharts()
@@ -764,92 +765,102 @@ Friend Class ControllingUIController
 
         ' priority high -> no update if alraedy displayed !!!! 
         '---------------------------------------------------------
-        If Not m_dataMap Is Nothing Then
+        If Not m_dataMap Is Nothing  Then
 
-            Dim accountId As UInt32 = 0
-            Dim entityId As Int32 = 0
-            Dim periodId As String = ""
-            Dim versionId As String = 0
-            Dim filterId As String = "0"
+            Dim l_accountId As UInt32 = 0
+            Dim l_entityId As Int32 = 0
+            Dim l_periodId As String = ""
+            Dim l_versionId As String = 0
+            Dim l_filterId As String = "0"
 
             SetCellsItems(args.RowItem, _
                           args.ColumnItem, _
-                          entityId, _
-                          accountId, _
-                          periodId, _
-                          versionId, _
-                          filterId)
+                          l_entityId, _
+                          l_accountId, _
+                          l_periodId, _
+                          l_versionId, _
+                          l_filterId)
 
-            Dim token As String = computer.TOKEN_SEPARATOR & _
-                                  filterId & computer.TOKEN_SEPARATOR & _
-                                  entityId & computer.TOKEN_SEPARATOR & _
-                                  accountId & computer.TOKEN_SEPARATOR & _
-                                  periodId
-            If versionId.Contains(computer.TOKEN_SEPARATOR) Then
-                Dim v1 As Int32 = GetFirstVersionId(versionId)
-                Dim v2 As Int32 = GetSecondVersionId(versionId)
-
-                If m_dataMap.ContainsKey(v1 & token) _
-                AndAlso m_dataMap.ContainsKey(v2 & token) Then
-                    Dim l_deltaValue = m_dataMap(v1 & token) - m_dataMap(v2 & token)
-                    args.CellValue = l_deltaValue
-                    If Double.IsNaN(args.CellValue) Then
-                        args.CellValue = "-"
-                    Else
-                        Dim CStyle As GridCellStyle = GridTheme.GetDefaultTheme(args.RowItem.DataGridView.VIBlendTheme).GridCellStyle
-                        If l_deltaValue > 0 Then
-                            ' CStyle.FillStyle = New FillStyleSolid(System.Drawing.Color.Green)
-                            CStyle.TextColor = System.Drawing.Color.Green
-                        Else
-                            CStyle.TextColor = Drawing.Color.Red
-                            '  CStyle.FillStyle = New FillStyleSolid(System.Drawing.Color.Red)
-                        End If
-                        args.RowItem.DataGridView.CellsArea.SetCellDrawStyle(args.RowItem, args.ColumnItem, CStyle)
-                    End If
-                    If My.Settings.controllingUIResizeTofitGrid = True Then
-                        args.ColumnItem.DataGridView.ColumnsHierarchy.ResizeColumnsToFitGridWidth()
-                        ' args.ColumnItem.AutoResize(AutoResizeMode.FIT_ALL)
-                    End If
-                Else
-                    args.CellValue = ""
-                End If
+            Dim l_token As String = computer.TOKEN_SEPARATOR & _
+                                  l_filterId & computer.TOKEN_SEPARATOR & _
+                                  l_entityId & computer.TOKEN_SEPARATOR & _
+                                  l_accountId & computer.TOKEN_SEPARATOR & _
+                                  l_periodId
+            If l_versionId.Contains(computer.TOKEN_SEPARATOR) Then
+                SetVersionsComparisonCellsValues(l_versionId, l_token, args)
             Else
-                If m_dataMap.ContainsKey(versionId & token) Then
-                    args.CellValue = m_dataMap(versionId & token)
+                If m_dataMap.ContainsKey(l_versionId & l_token) Then
+                    ' The data CONTAINS the token
+                    args.CellValue = m_dataMap(l_versionId & l_token)
                     If Double.IsNaN(args.CellValue) Then args.CellValue = "-"
-                    If My.Settings.controllingUIResizeTofitGrid = True Then
-                        args.ColumnItem.DataGridView.ColumnsHierarchy.ResizeColumnsToFitGridWidth()
-                        ' args.ColumnItem.AutoResize(AutoResizeMode.FIT_ALL)
-                    End If
+                    'If My.Settings.controllingUIResizeTofitGrid = True Then
+                    '    ' args.ColumnItem.DataGridView.ColumnsHierarchy.ResizeColumnsToFitGridWidth()
+                    '    ' args.ColumnItem.AutoResize(AutoResizeMode.FIT_ALL)
+                    'End If
                 Else
+                    ' The data DOES NOT CONTAIN the token
                     args.CellValue = ""
-                    Dim l_account As Account = GlobalVariables.Accounts.GetValue(accountId)
-
-                    If Not l_account Is Nothing Then
-                        If (l_account.FormulaType <> Account.FormulaTypes.TITLE) Then
-                            args.CellValue = "-"
-                            'Dim parent = args.RowItem.ParentItem
-
-                            'If Not parent Is Nothing AndAlso IsEmptyRow(args.RowItem) Then
-                            '    parent.Items.Remove(args.RowItem)
-                            'End If
-                        End If
-                    End If
+                    '  DeleteRowsIfNeededCaseTokenNotFound(args, l_accountId)
                 End If
             End If
         End If
 
     End Sub
 
-    Private Function IsEmptyRow(ByRef p_row As HierarchyItem) As Boolean
-        For Each item In p_row.Cells
-            If item.Value <> "" Then Return (False)
-        Next
-        Return (True)
-    End Function
+    Private Sub SetVersionsComparisonCellsValues(ByRef p_versionid As Int32, _
+                                                 ByRef p_token As String, _
+                                                 ByVal args As CellValueNeededEventArgs)
 
-    ' si ralentissement de l'affichage des valeurs remettre la function directement 
-    ' au dessus (pour éviter le byval)
+        Dim v1 As Int32 = GetFirstVersionId(p_versionid)
+        Dim v2 As Int32 = GetSecondVersionId(p_versionid)
+
+        If m_dataMap.ContainsKey(v1 & p_token) _
+        AndAlso m_dataMap.ContainsKey(v2 & p_token) Then
+            Dim l_deltaValue = m_dataMap(v1 & p_token) - m_dataMap(v2 & p_token)
+            args.CellValue = l_deltaValue
+            If Double.IsNaN(args.CellValue) Then
+                args.CellValue = "-"
+            Else
+                Dim CStyle As GridCellStyle = GridTheme.GetDefaultTheme(args.RowItem.DataGridView.VIBlendTheme).GridCellStyle
+                If l_deltaValue > 0 Then
+                    ' CStyle.FillStyle = New FillStyleSolid(System.Drawing.Color.Green)
+                    CStyle.TextColor = System.Drawing.Color.Green
+                Else
+                    CStyle.TextColor = Drawing.Color.Red
+                    '  CStyle.FillStyle = New FillStyleSolid(System.Drawing.Color.Red)
+                End If
+                args.RowItem.DataGridView.CellsArea.SetCellDrawStyle(args.RowItem, args.ColumnItem, CStyle)
+            End If
+            If My.Settings.controllingUIResizeTofitGrid = True Then
+                args.ColumnItem.DataGridView.ColumnsHierarchy.ResizeColumnsToFitGridWidth()
+                ' args.ColumnItem.AutoResize(AutoResizeMode.FIT_ALL)
+            End If
+        Else
+            args.CellValue = ""
+        End If
+
+    End Sub
+
+    Private Sub DeleteRowsIfNeededCaseTokenNotFound(ByRef args As CellValueNeededEventArgs, _
+                                                    ByRef p_accountid As Int32)
+
+        Dim l_account As Account = GlobalVariables.Accounts.GetValue(p_accountid)
+        If Not l_account Is Nothing Then
+            If (l_account.FormulaType <> Account.FormulaTypes.TITLE) Then
+                args.CellValue = "-"
+
+                ' Attention à commenter -> Ou bien flexibilité rows/columns
+                ' *******************************************************
+                If IsEmptyRow(args.RowItem) Then
+                    args.RowItem.Delete()
+                End If
+                ' *******************************************************
+
+            End If
+        End If
+
+    End Sub
+
     Friend Sub SetCellsItems(ByVal p_row As HierarchyItem, _
                              ByVal p_column As HierarchyItem, _
                              ByRef p_entityId As Int32, _
@@ -890,6 +901,17 @@ Friend Class ControllingUIController
 
 
     End Sub
+
+#Region "Utilities"
+
+    Private Function IsEmptyRow(ByRef p_row As HierarchyItem) As Boolean
+        For Each item In p_row.Cells
+            If item.Value <> "" Then Return (False)
+        Next
+        Return (True)
+    End Function
+
+#End Region
 
 #End Region
 
