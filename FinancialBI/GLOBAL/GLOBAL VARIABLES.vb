@@ -90,6 +90,7 @@ Friend Class GlobalVariables
     Friend Shared EntityCurrencies As EntityCurrencyManager
     Friend Shared EntitiesDistributions As EntityDistributionManager
     Friend Shared AxisOwners As AxisOwnerManager
+    Friend Shared FactTags As FactTagManager
 
 #End Region
 
