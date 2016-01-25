@@ -72,6 +72,7 @@
         AXIS_FILTER
         ENTITYDISTRIBUTION
         AXISOWNER
+        FACTTAG
 
     End Enum
 

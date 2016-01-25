@@ -63,6 +63,7 @@
     <Compile Include="Network\Core\ServerMessage.cs" />
     <Compile Include="Network\CRUD\AxisElem.cs" />
     <Compile Include="Network\CRUD\AxisFilter.cs" />
+    <Compile Include="Network\CRUD\FactTag.cs" />
     <Compile Include="Network\CRUD\AxisOwner.cs" />
     <Compile Include="Network\CRUD\Base\AxedCRUDEntity.cs" />
     <Compile Include="Network\CRUD\Base\NamedHierarchyCRUDEntity.cs" />
