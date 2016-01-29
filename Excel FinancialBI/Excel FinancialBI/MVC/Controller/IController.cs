@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace FBI.MVC.Controller
 {
-  interface IController
+  public interface IController
   {
     void LoadView();
   }

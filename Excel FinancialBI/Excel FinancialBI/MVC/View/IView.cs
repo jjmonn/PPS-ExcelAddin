@@ -8,7 +8,7 @@ namespace FBI.MVC.View
 {
   using Controller;
 
-  interface IView
+  public interface IView
   {
     void SetController(IController p_controller);
   }

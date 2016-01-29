@@ -66,6 +66,22 @@
       <HintPath>Interops\Microsoft.Office.Interop.Excel.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="VIBlend.WinForms.Controls, Version=10.1.0.0, Culture=neutral, PublicKeyToken=6feea38fef5ea0cf, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\VIBlend\Windows Forms Controls v.10.1.0.0\VIBlend.WinForms.Controls.dll</HintPath>
+    </Reference>
+    <Reference Include="VIBlend.WinForms.Controls.Design, Version=10.1.0.0, Culture=neutral, PublicKeyToken=6feea38fef5ea0cf, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\VIBlend\Windows Forms Controls v.10.1.0.0\VIBlend.WinForms.Controls.Design.dll</HintPath>
+    </Reference>
+    <Reference Include="VIBlend.WinForms.DataGridView, Version=10.1.0.0, Culture=neutral, PublicKeyToken=84a1a092e92851e6, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\VIBlend\Windows Forms Controls v.10.1.0.0\VIBlend.WinForms.DataGridView.dll</HintPath>
+    </Reference>
+    <Reference Include="VIBlend.WinForms.Utilities, Version=10.1.0.0, Culture=neutral, PublicKeyToken=970a5af59bc48043, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\VIBlend\Windows Forms Controls v.10.1.0.0\VIBlend.WinForms.Utilities.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -268,12 +284,111 @@
     <Compile Include="MVC\Model\UserAllowedEntityModel.cs" />
     <Compile Include="MVC\Model\UserModel.cs" />
     <Compile Include="MVC\Model\VersionModel.cs" />
-    <Compile Include="MVC\View\IView.cs" />
-    <Compile Include="MVC\View\PlatformMGTGeneralUI.cs">
+    <Compile Include="MVC\View\Plateform Management\NewGlobalFactVersionUI.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="MVC\View\PlatformMGTGeneralUI.Designer.cs">
+    <Compile Include="MVC\View\Plateform Management\NewGlobalFactVersionUI.Designer.cs">
+      <DependentUpon>NewGlobalFactVersionUI.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MVC\View\Plateform Management\NewAxisUI.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MVC\View\Plateform Management\NewAxisUI.Designer.cs">
+      <DependentUpon>NewAxisUI.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MVC\View\Plateform Management\NewDataVersionUI.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MVC\View\Plateform Management\NewDataVersionUI.Designer.cs">
+      <DependentUpon>NewDataVersionUI.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MVC\View\Plateform Management\GlobalFactUI.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="MVC\View\Plateform Management\GlobalFactUI.Designer.cs">
+      <DependentUpon>GlobalFactUI.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MVC\View\Plateform Management\AxisView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="MVC\View\Plateform Management\AxisView.Designer.cs">
+      <DependentUpon>AxisView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MVC\View\Plateform Management\EmployeeView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MVC\View\Plateform Management\CurrenciesView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="MVC\View\Plateform Management\CurrenciesView.Designer.cs">
+      <DependentUpon>CurrenciesView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MVC\View\Plateform Management\Axis Filters\AxisFiltersView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="MVC\View\Plateform Management\Axis Filters\AxisFiltersView.Designer.cs">
+      <DependentUpon>AxisFiltersView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MVC\View\Plateform Management\Accounts\AccountsView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="MVC\View\Plateform Management\Accounts\AccountsView.Designer.cs">
+      <DependentUpon>AccountsView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MVC\View\Plateform Management\Accounts\AllocationKeysView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MVC\View\Plateform Management\Accounts\AllocationKeysView.Designer.cs">
+      <DependentUpon>AllocationKeysView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MVC\View\Plateform Management\Accounts\NewAccountUI.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MVC\View\Plateform Management\Accounts\NewAccountUI.Designer.cs">
+      <DependentUpon>NewAccountUI.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MVC\View\IView.cs" />
+    <Compile Include="MVC\View\Plateform Management\Axis Filters\AxisFilterStructView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MVC\View\Plateform Management\Axis Filters\AxisFilterStructView.Designer.cs">
+      <DependentUpon>AxisFilterStructView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MVC\View\Plateform Management\ExcelExchangeRatesImportUI.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MVC\View\Plateform Management\ExcelExchangeRatesImportUI.Designer.cs">
+      <DependentUpon>ExcelExchangeRatesImportUI.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MVC\View\Plateform Management\ExcelGlobalFactsImportUI.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MVC\View\Plateform Management\ExcelGlobalFactsImportUI.Designer.cs">
+      <DependentUpon>ExcelGlobalFactsImportUI.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MVC\View\Plateform Management\ExchangeRatesView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="MVC\View\Plateform Management\ExchangeRatesView.Designer.cs">
+      <DependentUpon>ExchangeRatesView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MVC\View\Plateform Management\NewGlobalFactUI.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MVC\View\Plateform Management\NewGlobalFactUI.Designer.cs">
+      <DependentUpon>NewGlobalFactUI.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MVC\View\Plateform Management\PlatformMGTGeneralUI.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MVC\View\Plateform Management\PlatformMGTGeneralUI.Designer.cs">
       <DependentUpon>PlatformMGTGeneralUI.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MVC\View\UsersControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="MVC\View\UsersControl.Designer.cs">
+      <DependentUpon>UsersControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Network\ByteBuffer.cs" />
     <Compile Include="Network\ClientMessage.cs" />
@@ -300,10 +415,58 @@
     <Compile Include="Utils\SafeDictionary.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="MVC\View\PlatformMGTGeneralUI.resx" />
+    <EmbeddedResource Include="MVC\View\Plateform Management\NewGlobalFactVersionUI.resx">
+      <DependentUpon>NewGlobalFactVersionUI.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MVC\View\Plateform Management\NewAxisUI.resx">
+      <DependentUpon>NewAxisUI.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MVC\View\Plateform Management\NewDataVersionUI.resx">
+      <DependentUpon>NewDataVersionUI.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MVC\View\Plateform Management\AxisView.resx">
+      <DependentUpon>AxisView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MVC\View\Plateform Management\CurrenciesView.resx">
+      <DependentUpon>CurrenciesView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MVC\View\Plateform Management\Axis Filters\AxisFiltersView.resx">
+      <DependentUpon>AxisFiltersView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MVC\View\Plateform Management\Accounts\AccountsView.resx">
+      <DependentUpon>AccountsView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MVC\View\Plateform Management\Accounts\AllocationKeysView.resx">
+      <DependentUpon>AllocationKeysView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MVC\View\Plateform Management\Accounts\NewAccountUI.resx">
+      <DependentUpon>NewAccountUI.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MVC\View\Plateform Management\Axis Filters\AxisFilterStructView.resx">
+      <DependentUpon>AxisFilterStructView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MVC\View\Plateform Management\ExcelExchangeRatesImportUI.resx">
+      <DependentUpon>ExcelExchangeRatesImportUI.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MVC\View\Plateform Management\ExcelGlobalFactsImportUI.resx">
+      <DependentUpon>ExcelGlobalFactsImportUI.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MVC\View\Plateform Management\ExchangeRatesView.resx">
+      <DependentUpon>ExchangeRatesView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MVC\View\Plateform Management\GlobalFactUI.resx">
+      <DependentUpon>GlobalFactUI.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MVC\View\Plateform Management\NewGlobalFactUI.resx">
+      <DependentUpon>NewGlobalFactUI.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MVC\View\Plateform Management\PlatformMGTGeneralUI.resx">
+      <DependentUpon>PlatformMGTGeneralUI.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup />
 </Project>
