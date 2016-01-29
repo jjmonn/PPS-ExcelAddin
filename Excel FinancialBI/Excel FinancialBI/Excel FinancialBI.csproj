@@ -269,6 +269,12 @@
     <Compile Include="MVC\Model\UserModel.cs" />
     <Compile Include="MVC\Model\VersionModel.cs" />
     <Compile Include="MVC\View\IView.cs" />
+    <Compile Include="MVC\View\PlatformMGTGeneralUI.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MVC\View\PlatformMGTGeneralUI.Designer.cs">
+      <DependentUpon>PlatformMGTGeneralUI.cs</DependentUpon>
+    </Compile>
     <Compile Include="Network\ByteBuffer.cs" />
     <Compile Include="Network\ClientMessage.cs" />
     <Compile Include="Network\ClientState.cs" />
@@ -294,6 +300,7 @@
     <Compile Include="Utils\SafeDictionary.cs" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="MVC\View\PlatformMGTGeneralUI.resx" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
