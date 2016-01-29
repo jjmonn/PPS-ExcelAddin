@@ -1,0 +1,302 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{5790199F-A286-4EC5-90D9-C9A7E5441697}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>FBI</RootNamespace>
+    <AssemblyName>Excel FinancialBI</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <StartupObject>
+    </StartupObject>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>Excel FinancialBI.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <RegisterForComInterop>true</RegisterForComInterop>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <Reference Include="AddinExpress.Design.2005, Version=7.7.4087.2005, Culture=neutral, PublicKeyToken=4416dd98f0861965, processorArchitecture=MSIL" />
+    <Reference Include="AddinExpress.Install.2005, Version=5.2.2024.2005, Culture=neutral, processorArchitecture=MSIL" />
+    <Reference Include="AddinExpress.VisualDesigner, Version=7.7.4087.2005, Culture=neutral, PublicKeyToken=4416dd98f0861965, processorArchitecture=MSIL" />
+    <Reference Include="AddinExpress.XL.2005, Version=7.7.4087.2005, Culture=neutral, PublicKeyToken=e69a7e0f3592d2b8, processorArchitecture=MSIL" />
+    <Reference Include="AddinExpress.XL.2005.Design, Version=7.7.4087.2005, Culture=neutral, PublicKeyToken=e69a7e0f3592d2b8, processorArchitecture=MSIL" />
+    <Reference Include="Ionic.Zlib">
+      <HintPath>dependencies\Ionic.Zlib.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Build.Framework" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="AddinExpress.MSO.2005">
+      <HintPath>AddinExpress.MSO.2005.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.Vbe.Interop.dll">
+      <HintPath>Interops\Microsoft.Vbe.Interop.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Office.dll">
+      <HintPath>Interops\Office.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Office.Interop.Excel.dll">
+      <HintPath>Interops\Microsoft.Office.Interop.Excel.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="Loader\adxloader.dll.manifest" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <!--<None Include="Excel FinancialBI.snk" /> -->
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Loader\adxloader.dll" />
+    <Content Include="Loader\adxloader64.dll" />
+    <Content Include="Resources\Add file.png" />
+    <Content Include="Resources\add.ico" />
+    <Content Include="Resources\add3.ico" />
+    <Content Include="Resources\arrow_1.png" />
+    <Content Include="Resources\arrow_down.ico" />
+    <Content Include="Resources\bank_building.ico" />
+    <Content Include="Resources\barcode.ico" />
+    <Content Include="Resources\barcode1.ico" />
+    <Content Include="Resources\barcode_add.ico" />
+    <Content Include="Resources\barcode_delete.ico" />
+    <Content Include="Resources\Benjigarner-Softdimension-Excel.ico" />
+    <Content Include="Resources\breakpoints.ico" />
+    <Content Include="Resources\calendar_31.ico" />
+    <Content Include="Resources\chart2.ico" />
+    <Content Include="Resources\chart_line.ico" />
+    <Content Include="Resources\chart_pie.ico" />
+    <Content Include="Resources\checkbox.ico" />
+    <Content Include="Resources\checkbox1.ico" />
+    <Content Include="Resources\checkbox3.ico" />
+    <Content Include="Resources\checked.jpg" />
+    <Content Include="Resources\Close transp.ico" />
+    <Content Include="Resources\config_circle_green.ico" />
+    <Content Include="Resources\constraint.png" />
+    <Content Include="Resources\db Purple big.ico" />
+    <Content Include="Resources\down arrow.png" />
+    <Content Include="Resources\Download .jpg" />
+    <Content Include="Resources\elements.ico" />
+    <Content Include="Resources\elements1.ico" />
+    <Content Include="Resources\elements2.ico" />
+    <Content Include="Resources\elements3.ico" />
+    <Content Include="Resources\elements31.ico" />
+    <Content Include="Resources\elements3_add.ico" />
+    <Content Include="Resources\elements3_delete.ico" />
+    <Content Include="Resources\elements4.ico" />
+    <Content Include="Resources\elements_add.ico" />
+    <Content Include="Resources\elements_delete.ico" />
+    <Content Include="Resources\elements_hierarchy.ico" />
+    <Content Include="Resources\element_branch2.ico" />
+    <Content Include="Resources\element_branch21.ico" />
+    <Content Include="Resources\element_branch23.ico" />
+    <Content Include="Resources\element_branch24.ico" />
+    <Content Include="Resources\element_branch25.ico" />
+    <Content Include="Resources\element_branch2_add.ico" />
+    <Content Include="Resources\element_branch2_delete.ico" />
+    <Content Include="Resources\engineer.ico" />
+    <Content Include="Resources\excel 2.png" />
+    <Content Include="Resources\Excel Blue 32x32.ico" />
+    <Content Include="Resources\excel blue2.png" />
+    <Content Include="Resources\Excel dark 24 24.ico" />
+    <Content Include="Resources\Excel Green 32x32.ico" />
+    <Content Include="Resources\excel.png" />
+    <Content Include="Resources\favicon%2817%291.ico" />
+    <Content Include="Resources\favicon%2818%29.ico" />
+    <Content Include="Resources\favicon%28188%29.ico" />
+    <Content Include="Resources\favicon%28217%29.ico" />
+    <Content Include="Resources\favicon%28220%29.ico" />
+    <Content Include="Resources\favicon%28226%29.ico" />
+    <Content Include="Resources\favicon%28232%29.ico" />
+    <Content Include="Resources\favicon%28233%29.ico" />
+    <Content Include="Resources\favicon%28239%29.ico" />
+    <Content Include="Resources\favicon%28249%29.ico" />
+    <Content Include="Resources\favicon%2848%29.ico" />
+    <Content Include="Resources\favicon%2881%29.ico" />
+    <Content Include="Resources\fbiIcon.ico" />
+    <Content Include="Resources\filter_and_sort.ico" />
+    <Content Include="Resources\Financial BI dark blue.ico" />
+    <Content Include="Resources\folder2.jpg" />
+    <Content Include="Resources\folder_open_add.ico" />
+    <Content Include="Resources\graph 5 ctrl bgd.png" />
+    <Content Include="Resources\imageres_59.ico" />
+    <Content Include="Resources\imageres_89.ico" />
+    <Content Include="Resources\imageres_891.ico" />
+    <Content Include="Resources\imageres_891.png" />
+    <Content Include="Resources\images.jpg" />
+    <Content Include="Resources\Locals\english.xml" />
+    <Content Include="Resources\Locals\french.xml" />
+    <Content Include="Resources\money_interest.ico" />
+    <Content Include="Resources\money_interest.png" />
+    <Content Include="Resources\money_interest1.ico" />
+    <Content Include="Resources\ok.png" />
+    <Content Include="Resources\page_add2.ico" />
+    <Content Include="Resources\plus.ico" />
+    <Content Include="Resources\presentation2.ico" />
+    <Content Include="Resources\purple table.ico" />
+    <Content Include="Resources\refresh 2.png" />
+    <Content Include="Resources\Refresh blue 32x32.ico" />
+    <Content Include="Resources\refresh dark blue small.ico" />
+    <Content Include="Resources\Refresh DB 16.ico" />
+    <Content Include="Resources\refresh db 32.ico" />
+    <Content Include="Resources\Refresh DB 321.ico" />
+    <Content Include="Resources\Refresh DB 322.ico" />
+    <Content Include="Resources\refresh greay bcgd.bmp" />
+    <Content Include="Resources\refresh.ico" />
+    <Content Include="Resources\refresh.png" />
+    <Content Include="Resources\refresh0.1.png" />
+    <Content Include="Resources\Refresh2.png" />
+    <Content Include="Resources\registry.ico" />
+    <Content Include="Resources\registry1.ico" />
+    <Content Include="Resources\registry2.ico" />
+    <Content Include="Resources\registry_add.ico" />
+    <Content Include="Resources\registry_delete.ico" />
+    <Content Include="Resources\Report.png" />
+    <Content Include="Resources\symbol_dollar_euro.ico" />
+    <Content Include="Resources\symbol_dollar_euro1.ico" />
+    <Content Include="Resources\symbol_dollar_euro_add.ico" />
+    <Content Include="Resources\symbol_dollar_euro_delete.ico" />
+    <Content Include="Resources\tablet_computer.ico" />
+    <Content Include="Resources\tablet_computer1.ico" />
+    <Content Include="Resources\tablet_computer2.ico" />
+    <Content Include="Resources\tablet_computer3.ico" />
+    <Content Include="Resources\UIscon Yellow.ico" />
+    <Content Include="Resources\UIscon Yellow.png" />
+    <Content Include="Resources\upload.ico" />
+    <Content Include="Resources\user.ico" />
+    <Content Include="Resources\user1.ico" />
+    <Content Include="Resources\users_family.ico" />
+    <Content Include="Resources\users_relation.ico" />
+    <Content Include="Resources\users_relation2.ico" />
+    <Content Include="Resources\users_relation21.ico" />
+    <Content Include="Resources\users_relation2_add.ico" />
+    <Content Include="Resources\users_relation2_delete.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Addin.cs" />
+    <Compile Include="AddinModule.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="AddinModule.Designer.cs">
+      <DependentUpon>AddinModule.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MVC\Controller\IController.cs" />
+    <Compile Include="MVC\Model\AccountModel.cs" />
+    <Compile Include="MVC\Model\AxisElemModel.cs" />
+    <Compile Include="MVC\Model\AxisFilterModel.cs" />
+    <Compile Include="MVC\Model\AxisOwnerModel.cs" />
+    <Compile Include="MVC\Model\Base\AxedCRUDModel.cs" />
+    <Compile Include="MVC\Model\Base\ICRUDModel.cs" />
+    <Compile Include="MVC\Model\Base\NamedCRUDModel.cs" />
+    <Compile Include="MVC\Model\Base\SimpleCRUDModel.cs" />
+    <Compile Include="MVC\Model\CommitModel.cs" />
+    <Compile Include="MVC\Model\CRUD\Account.cs" />
+    <Compile Include="MVC\Model\CRUD\AxisElem.cs" />
+    <Compile Include="MVC\Model\CRUD\AxisElemLog.cs" />
+    <Compile Include="MVC\Model\CRUD\AxisFilter.cs" />
+    <Compile Include="MVC\Model\CRUD\AxisOwner.cs" />
+    <Compile Include="MVC\Model\CRUD\Base\AxedCRUDEntity.cs" />
+    <Compile Include="MVC\Model\CRUD\Base\CRUDEntity.cs" />
+    <Compile Include="MVC\Model\CRUD\Base\HierarchyCRUDEntity.cs" />
+    <Compile Include="MVC\Model\CRUD\Base\NamedCRUDEntity.cs" />
+    <Compile Include="MVC\Model\CRUD\Base\NamedHierarchyCRUDEntity.cs" />
+    <Compile Include="MVC\Model\CRUD\Commit.cs" />
+    <Compile Include="MVC\Model\CRUD\CommitLog.cs" />
+    <Compile Include="MVC\Model\CRUD\CRUDAction.cs" />
+    <Compile Include="MVC\Model\CRUD\Currency.cs" />
+    <Compile Include="MVC\Model\CRUD\EntityCurrency.cs" />
+    <Compile Include="MVC\Model\CRUD\EntityDistribution.cs" />
+    <Compile Include="MVC\Model\CRUD\ExchangeRate.cs" />
+    <Compile Include="MVC\Model\CRUD\ExchangeRateVersion.cs" />
+    <Compile Include="MVC\Model\CRUD\Fact.cs" />
+    <Compile Include="MVC\Model\CRUD\FactLog.cs" />
+    <Compile Include="MVC\Model\CRUD\FactTag.cs" />
+    <Compile Include="MVC\Model\CRUD\Filter.cs" />
+    <Compile Include="MVC\Model\CRUD\FilterValue.cs" />
+    <Compile Include="MVC\Model\CRUD\FModelingAccount.cs" />
+    <Compile Include="MVC\Model\CRUD\GlobalFact.cs" />
+    <Compile Include="MVC\Model\CRUD\GlobalFactData.cs" />
+    <Compile Include="MVC\Model\CRUD\GlobalFactVersion.cs" />
+    <Compile Include="MVC\Model\CRUD\Group.cs" />
+    <Compile Include="MVC\Model\CRUD\User.cs" />
+    <Compile Include="MVC\Model\CRUD\UserAllowedEntity.cs" />
+    <Compile Include="MVC\Model\CRUD\Version.cs" />
+    <Compile Include="MVC\Model\CurrencyModel.cs" />
+    <Compile Include="MVC\Model\EntityCurrencyModel.cs" />
+    <Compile Include="MVC\Model\EntityDistributionModel.cs" />
+    <Compile Include="MVC\Model\ExchangeRateModel.cs" />
+    <Compile Include="MVC\Model\FactLogModel.cs" />
+    <Compile Include="MVC\Model\FactsModel.cs" />
+    <Compile Include="MVC\Model\FactTagModel.cs" />
+    <Compile Include="MVC\Model\FilterModel.cs" />
+    <Compile Include="MVC\Model\FilterValueModel.cs" />
+    <Compile Include="MVC\Model\FModelingAccountModel.cs" />
+    <Compile Include="MVC\Model\GlobalFactDataModel.cs" />
+    <Compile Include="MVC\Model\GlobalFactModel.cs" />
+    <Compile Include="MVC\Model\GlobalFactVersionModel.cs" />
+    <Compile Include="MVC\Model\GroupModel.cs" />
+    <Compile Include="MVC\Model\RatesVersionModel.cs" />
+    <Compile Include="MVC\Model\UserAllowedEntityModel.cs" />
+    <Compile Include="MVC\Model\UserModel.cs" />
+    <Compile Include="MVC\Model\VersionModel.cs" />
+    <Compile Include="MVC\View\IView.cs" />
+    <Compile Include="Network\ByteBuffer.cs" />
+    <Compile Include="Network\ClientMessage.cs" />
+    <Compile Include="Network\ClientState.cs" />
+    <Compile Include="Network\ErrorMessage.cs" />
+    <Compile Include="Network\NetworkLauncher.cs" />
+    <Compile Include="Network\NetworkManager.cs" />
+    <Compile Include="Network\ServerMessage.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+    <Compile Include="Utils\Hash.cs" />
+    <Compile Include="Utils\Local.cs" />
+    <Compile Include="Utils\MultiIndexDictionary.cs" />
+    <Compile Include="Utils\RightManager.cs" />
+    <Compile Include="Utils\SafeDictionary.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+</Project>
