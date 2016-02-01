@@ -45,10 +45,14 @@
     </Reference>
     <Reference Include="Microsoft.Build.Framework" />
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="ProgressControls">
+      <HintPath>dependencies\ProgressControls.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Windows.Forms.DataVisualization" />
     <Reference Include="System.Xml" />
     <Reference Include="AddinExpress.MSO.2005">
       <HintPath>AddinExpress.MSO.2005.dll</HintPath>
@@ -284,6 +288,78 @@
     <Compile Include="MVC\Model\UserAllowedEntityModel.cs" />
     <Compile Include="MVC\Model\UserModel.cs" />
     <Compile Include="MVC\Model\VersionModel.cs" />
+    <Compile Include="MVC\View\Connection\ConnectionTP.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MVC\View\Connection\ConnectionTP.Designer.cs">
+      <DependentUpon>ConnectionTP.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MVC\View\Controlling UI\ControllingUI_2.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MVC\View\Controlling UI\ControllingUI_2.Designer.cs">
+      <DependentUpon>ControllingUI_2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MVC\View\Controlling UI\CUI2LeftPane.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="MVC\View\Controlling UI\CUI2LeftPane.Designer.cs">
+      <DependentUpon>CUI2LeftPane.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MVC\View\Controlling UI\CUI2RightPane.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="MVC\View\Controlling UI\CUI2RightPane.designer.cs">
+      <DependentUpon>CUI2RightPane.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MVC\View\Controlling UI\CUI2VisualisationChartsSettings.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MVC\View\Controlling UI\CUI2VisualisationChartsSettings.Designer.cs">
+      <DependentUpon>CUI2VisualisationChartsSettings.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MVC\View\Controlling UI\CUI2Visualization.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="MVC\View\Controlling UI\CUI2Visualization.Designer.cs">
+      <DependentUpon>CUI2Visualization.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MVC\View\Controlling UI\CUI2VisualizationContainer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MVC\View\Controlling UI\CUI2VisualizationContainer.Designer.cs">
+      <DependentUpon>CUI2VisualizationContainer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MVC\View\FBIFunctionUI.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MVC\View\FBIFunctionUI.Designer.cs">
+      <DependentUpon>FBIFunctionUI.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MVC\View\GenericView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MVC\View\GenericView.Designer.cs">
+      <DependentUpon>GenericView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MVC\View\LogView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MVC\View\LogView.Designer.cs">
+      <DependentUpon>LogView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MVC\View\PDCPlanningUI.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MVC\View\PDCPlanningUI.Designer.cs">
+      <DependentUpon>PDCPlanningUI.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MVC\View\PeriodRangeSelectionControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="MVC\View\PeriodRangeSelectionControl.Designer.cs">
+      <DependentUpon>PeriodRangeSelectionControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="MVC\View\Plateform Management\NewGlobalFactVersionUI.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -315,7 +391,7 @@
       <DependentUpon>AxisView.cs</DependentUpon>
     </Compile>
     <Compile Include="MVC\View\Plateform Management\EmployeeView.cs">
-      <SubType>Form</SubType>
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="MVC\View\Plateform Management\CurrenciesView.cs">
       <SubType>UserControl</SubType>
@@ -384,11 +460,131 @@
     <Compile Include="MVC\View\Plateform Management\PlatformMGTGeneralUI.Designer.cs">
       <DependentUpon>PlatformMGTGeneralUI.cs</DependentUpon>
     </Compile>
-    <Compile Include="MVC\View\UsersControl.cs">
+    <Compile Include="MVC\View\Plateform Management\UsersView.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="MVC\View\UsersControl.Designer.cs">
-      <DependentUpon>UsersControl.cs</DependentUpon>
+    <Compile Include="MVC\View\Plateform Management\UsersView.Designer.cs">
+      <DependentUpon>UsersView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MVC\View\Plateform Management\VersionsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="MVC\View\Plateform Management\VersionsControl.designer.cs">
+      <DependentUpon>VersionsControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MVC\View\PPS Controls\CircularProgressUI.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MVC\View\PPS Controls\CircularProgressUI.Designer.cs">
+      <DependentUpon>CircularProgressUI.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MVC\View\PPS Controls\PasswordBox.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MVC\View\PPS Controls\PasswordBox.Designer.cs">
+      <DependentUpon>PasswordBox.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MVC\View\PPS Controls\PBarUI.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MVC\View\PPS Controls\PBarUI.Designer.cs">
+      <DependentUpon>PBarUI.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MVC\View\PPS Controls\ProgressBarControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="MVC\View\PPS Controls\ProgressBarControl.Designer.cs">
+      <DependentUpon>ProgressBarControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MVC\View\Report Upload\DirectorySnapshotUI.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MVC\View\Report Upload\DirectorySnapshotUI.Designer.cs">
+      <DependentUpon>DirectorySnapshotUI.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MVC\View\Report Upload\ManualRangesSelectionUI.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MVC\View\Report Upload\ManualRangesSelectionUI.Designer.cs">
+      <DependentUpon>ManualRangesSelectionUI.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MVC\View\Report Upload\PDCClientSelectionUI.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MVC\View\Report Upload\PDCClientSelectionUI.Designer.cs">
+      <DependentUpon>PDCClientSelectionUI.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MVC\View\Report Upload\ReportUploadAccountInfoSidePane.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MVC\View\Report Upload\ReportUploadAccountInfoSidePane.Designer.cs">
+      <DependentUpon>ReportUploadAccountInfoSidePane.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MVC\View\Report Upload\ReportUploadEntitySelectionPane.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MVC\View\Report Upload\ReportUploadEntitySelectionPane.Designer.cs">
+      <DependentUpon>ReportUploadEntitySelectionPane.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MVC\View\Report Upload\SnapshotPeriodRangeSelectionUI.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MVC\View\Report Upload\SnapshotPeriodRangeSelectionUI.Designer.cs">
+      <DependentUpon>SnapshotPeriodRangeSelectionUI.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MVC\View\Report Upload\StatusReportInterfaceUI.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MVC\View\Report Upload\StatusReportInterfaceUI.Designer.cs">
+      <DependentUpon>StatusReportInterfaceUI.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MVC\View\Report Upload\UnReferencedClientsUI.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MVC\View\Report Upload\UnReferencedClientsUI.Designer.cs">
+      <DependentUpon>UnReferencedClientsUI.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MVC\View\ReportsDesignerUI.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MVC\View\ReportsDesignerUI.Designer.cs">
+      <DependentUpon>ReportsDesignerUI.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MVC\View\Side Panes\EntitySelectionTP.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MVC\View\Side Panes\EntitySelectionTP.Designer.cs">
+      <DependentUpon>EntitySelectionTP.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MVC\View\Side Panes\ProcessSelectionTaskPane.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MVC\View\Side Panes\ProcessSelectionTaskPane.Designer.cs">
+      <DependentUpon>ProcessSelectionTaskPane.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MVC\View\SubmissionsControlUI.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MVC\View\SubmissionsControlUI.Designer.cs">
+      <DependentUpon>SubmissionsControlUI.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MVC\View\SubmissionsFollowUpView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MVC\View\SubmissionsFollowUpView.Designer.cs">
+      <DependentUpon>SubmissionsFollowUpView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MVC\View\Version Selection\VersionSelectionPane.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MVC\View\Version Selection\VersionSelectionPane.Designer.cs">
+      <DependentUpon>VersionSelectionPane.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MVC\View\Version Selection\VersionSelectionUI.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MVC\View\Version Selection\VersionSelectionUI.Designer.cs">
+      <DependentUpon>VersionSelectionUI.cs</DependentUpon>
     </Compile>
     <Compile Include="Network\ByteBuffer.cs" />
     <Compile Include="Network\ClientMessage.cs" />
@@ -415,6 +611,42 @@
     <Compile Include="Utils\SafeDictionary.cs" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="MVC\View\Connection\ConnectionTP.resx">
+      <DependentUpon>ConnectionTP.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MVC\View\Controlling UI\ControllingUI_2.resx">
+      <DependentUpon>ControllingUI_2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MVC\View\Controlling UI\CUI2LeftPane.resx">
+      <DependentUpon>CUI2LeftPane.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MVC\View\Controlling UI\CUI2RightPane.resx">
+      <DependentUpon>CUI2RightPane.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MVC\View\Controlling UI\CUI2VisualisationChartsSettings.resx">
+      <DependentUpon>CUI2VisualisationChartsSettings.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MVC\View\Controlling UI\CUI2Visualization.resx">
+      <DependentUpon>CUI2Visualization.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MVC\View\Controlling UI\CUI2VisualizationContainer.resx">
+      <DependentUpon>CUI2VisualizationContainer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MVC\View\FBIFunctionUI.resx">
+      <DependentUpon>FBIFunctionUI.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MVC\View\GenericView.resx">
+      <DependentUpon>GenericView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MVC\View\LogView.resx">
+      <DependentUpon>LogView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MVC\View\PDCPlanningUI.resx">
+      <DependentUpon>PDCPlanningUI.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MVC\View\PeriodRangeSelectionControl.resx">
+      <DependentUpon>PeriodRangeSelectionControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="MVC\View\Plateform Management\NewGlobalFactVersionUI.resx">
       <DependentUpon>NewGlobalFactVersionUI.cs</DependentUpon>
     </EmbeddedResource>
@@ -462,6 +694,66 @@
     </EmbeddedResource>
     <EmbeddedResource Include="MVC\View\Plateform Management\PlatformMGTGeneralUI.resx">
       <DependentUpon>PlatformMGTGeneralUI.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MVC\View\Plateform Management\VersionsControl.resx">
+      <DependentUpon>VersionsControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MVC\View\PPS Controls\CircularProgressUI.resx">
+      <DependentUpon>CircularProgressUI.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MVC\View\PPS Controls\PasswordBox.resx">
+      <DependentUpon>PasswordBox.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MVC\View\PPS Controls\PBarUI.resx">
+      <DependentUpon>PBarUI.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MVC\View\PPS Controls\ProgressBarControl.resx">
+      <DependentUpon>ProgressBarControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MVC\View\Report Upload\DirectorySnapshotUI.resx">
+      <DependentUpon>DirectorySnapshotUI.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MVC\View\Report Upload\ManualRangesSelectionUI.resx">
+      <DependentUpon>ManualRangesSelectionUI.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MVC\View\Report Upload\PDCClientSelectionUI.resx">
+      <DependentUpon>PDCClientSelectionUI.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MVC\View\Report Upload\ReportUploadAccountInfoSidePane.resx">
+      <DependentUpon>ReportUploadAccountInfoSidePane.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MVC\View\Report Upload\ReportUploadEntitySelectionPane.resx">
+      <DependentUpon>ReportUploadEntitySelectionPane.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MVC\View\Report Upload\SnapshotPeriodRangeSelectionUI.resx">
+      <DependentUpon>SnapshotPeriodRangeSelectionUI.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MVC\View\Report Upload\StatusReportInterfaceUI.resx">
+      <DependentUpon>StatusReportInterfaceUI.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MVC\View\Report Upload\UnReferencedClientsUI.resx">
+      <DependentUpon>UnReferencedClientsUI.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MVC\View\ReportsDesignerUI.resx">
+      <DependentUpon>ReportsDesignerUI.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MVC\View\Side Panes\EntitySelectionTP.resx">
+      <DependentUpon>EntitySelectionTP.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MVC\View\Side Panes\ProcessSelectionTaskPane.resx">
+      <DependentUpon>ProcessSelectionTaskPane.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MVC\View\SubmissionsControlUI.resx">
+      <DependentUpon>SubmissionsControlUI.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MVC\View\SubmissionsFollowUpView.resx">
+      <DependentUpon>SubmissionsFollowUpView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MVC\View\Version Selection\VersionSelectionPane.resx">
+      <DependentUpon>VersionSelectionPane.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MVC\View\Version Selection\VersionSelectionUI.resx">
+      <DependentUpon>VersionSelectionUI.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

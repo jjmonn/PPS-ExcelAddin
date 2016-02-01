@@ -12,7 +12,7 @@ namespace FBI.Utils
   {
 
     private static SafeDictionary<string, string> m_localDic = new SafeDictionary<string, string>();
-    public static object GetValue(string p_name)
+    public static string GetValue(string p_name)
     {
       if (m_localDic.ContainsKey("FBI." + p_name))
         return (m_localDic["FBI." + p_name]);
