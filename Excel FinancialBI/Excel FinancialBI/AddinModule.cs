@@ -67,5 +67,88 @@ namespace FBI
     }
 
     #endregion
+
+
+
+
+    private void m_connectionButton_OnClick(object sender, IRibbonControl control, bool pressed)
+    {
+
+    }
+
+    private void m_versionRibbonButton_OnClick(object sender, IRibbonControl control, bool pressed)
+    {
+
+    }
+
+    private void m_snapshotRibbonSplitButton_OnClick(object sender, IRibbonControl control, bool pressed)
+    {
+
+    }
+
+    private void m_directoryRibbonButton_OnClick(object sender, IRibbonControl control, bool pressed)
+    {
+
+    }
+
+    private void m_reportUploadRibbonButton_OnClick(object sender, IRibbonControl control, bool pressed)
+    {
+
+    }
+
+    private void m_CUIRibbonButton_OnClick(object sender, IRibbonControl control, bool pressed)
+    {
+
+    }
+
+    private void m_submissionsTrackingRibbonButton_OnClick(object sender, IRibbonControl control, bool pressed)
+    {
+
+    }
+
+    private void m_fbiRibbonButton_OnClick(object sender, IRibbonControl control, bool pressed)
+    {
+
+    }
+
+    private void m_fbiBreakLinksRibbonButton_OnClick(object sender, IRibbonControl control, bool pressed)
+    {
+
+    }
+
+    private void m_refreshRibbonButton_OnClick(object sender, IRibbonControl control, bool pressed)
+    {
+
+    }
+
+    private void m_resfreshSelectionRibbonButton_OnClick(object sender, IRibbonControl control, bool pressed)
+    {
+
+    }
+
+    private void m_refreshWorksheetRibbonButton_OnClick(object sender, IRibbonControl control, bool pressed)
+    {
+
+    }
+
+    private void m_refreshWorkbookRibbonButton_OnClick(object sender, IRibbonControl control, bool pressed)
+    {
+
+    }
+
+    private void m_autoRefreshRibbonChackBox_OnClick(object sender, IRibbonControl control, bool pressed)
+    {
+
+    }
+
+    private void m_platformManagementButton_OnClick(object sender, IRibbonControl control, bool pressed)
+    {
+
+    }
+
+    private void m_settingsRibbonButton_OnClick(object sender, IRibbonControl control, bool pressed)
+    {
+
+    }
   }
 }
