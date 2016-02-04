@@ -242,11 +242,13 @@
     <Compile Include="MVC\Model\Base\NamedCRUDModel.cs" />
     <Compile Include="MVC\Model\Base\SimpleCRUDModel.cs" />
     <Compile Include="MVC\Model\CommitModel.cs" />
+    <Compile Include="MVC\Model\Constants.cs" />
     <Compile Include="MVC\Model\CRUD\Account.cs" />
     <Compile Include="MVC\Model\CRUD\AxisElem.cs" />
     <Compile Include="MVC\Model\CRUD\AxisElemLog.cs" />
     <Compile Include="MVC\Model\CRUD\AxisFilter.cs" />
     <Compile Include="MVC\Model\CRUD\AxisOwner.cs" />
+    <Compile Include="MVC\Model\CRUD\BaseVersion.cs" />
     <Compile Include="MVC\Model\CRUD\Base\AxedCRUDEntity.cs" />
     <Compile Include="MVC\Model\CRUD\Base\CRUDEntity.cs" />
     <Compile Include="MVC\Model\CRUD\Base\HierarchyCRUDEntity.cs" />
@@ -612,6 +614,7 @@
     <Compile Include="Utils\MultiIndexDictionary.cs" />
     <Compile Include="Utils\RightManager.cs" />
     <Compile Include="Utils\SafeDictionary.cs" />
+    <Compile Include="Utils\StringUtils.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="AddinModule.resx">

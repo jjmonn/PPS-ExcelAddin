@@ -8,7 +8,7 @@ namespace FBI.MVC.Model.CRUD
 {
   using Network;
 
-  public class GlobalFactVersion : BaseVersion, IComparable
+  public class GlobalFactVersion : BaseVersion, IComparable, NamedHierarchyCRUDEntity
   {
     public GlobalFactVersion() { }
     private GlobalFactVersion(UInt32 p_id)

@@ -16,7 +16,7 @@ namespace FBI.MVC.Model.CRUD
     WEEK
   }
 
-  public class Version : BaseVersion, IComparable
+  public class Version : BaseVersion, IComparable, NamedHierarchyCRUDEntity
   {
     public bool Locked { get; set; }
     public string LockDate { get; set; }

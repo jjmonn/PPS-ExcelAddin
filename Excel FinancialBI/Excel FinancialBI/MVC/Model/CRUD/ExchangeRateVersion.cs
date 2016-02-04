@@ -8,7 +8,7 @@ namespace FBI.MVC.Model.CRUD
 {
   using Network;
 
-  public class ExchangeRateVersion : BaseVersion, IComparable
+  public class ExchangeRateVersion : BaseVersion, IComparable, NamedHierarchyCRUDEntity
   {
     public ExchangeRateVersion() { }
     private ExchangeRateVersion(UInt32 p_id)

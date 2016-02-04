@@ -8,7 +8,7 @@ namespace FBI.MVC.Model.CRUD
 {
   using Network;
 
-  public class BaseVersion : NamedHierarchyCRUDEntity
+  public class BaseVersion
   {
     public UInt32 Id { get; protected set; }
     public UInt32 ParentId { get; set; }

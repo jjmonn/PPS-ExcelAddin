@@ -15,7 +15,6 @@ namespace FBI
     static NetworkLauncher m_networkLauncher = new NetworkLauncher();
     static bool m_connectionTaskPaneVisible;
 
-
     static void SelectLanguage()
     {
       switch (Settings.Default.language)
@@ -37,7 +36,6 @@ namespace FBI
       SelectLanguage();
       m_networkLauncher.Launch("127.0.0.1", 4242);
     }
-
 
     #region Accessors
 

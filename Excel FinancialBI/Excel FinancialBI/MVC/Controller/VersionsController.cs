@@ -11,15 +11,21 @@ namespace FBI.MVC.Controller
   using Model.CRUD;
   using Utils;
 
-  class VersionsController : IController
+  public class VersionsController : IController
   {
     VersionsView m_view;
-    public string Error { get; private set; }
+    public string Error { get; set; }
 
     public VersionsController(VersionsView p_view)
     {
       m_view = p_view;
       m_view.SetController(this);
+      LoadView();
+    }
+
+    public void LoadView()
+    {
+
     }
 
     #region Validity Check

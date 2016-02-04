@@ -9,6 +9,6 @@ namespace FBI.MVC.Controller
   public interface IController
   {
     void LoadView();
-    string Error { get; private set; }
+    string Error { get; set; }
   }
 }
