@@ -20,7 +20,11 @@ namespace FBI
         CheckForUpdates();
         Properties.Settings.Default.Upgrade();
       }
-      Addin.Main();
+    }
+
+    private void AddinModule_AddinInitialize(object sender, EventArgs e)
+    {
+      //  Addin.Main();
     }
 
     #region Add-in Express automatic code
@@ -66,14 +70,47 @@ namespace FBI
       get { return (HostApplication as Excel._Application); }
     }
 
+
+    //public MVC.View.Connection.ConnectionSidePane ConnectionSidePane
+    //{
+    //    get
+    //    {
+    //        AddinExpress.XL.ADXExcelTaskPane l_taskPaneInstance = null;
+    //        l_taskPaneInstance = ConnectionSidePaneItem.TaskPaneInstance;
+    //        if (l_taskPaneInstance == null)
+    //        {
+    //            l_taskPaneInstance = ConnectionSidePaneItem.CreateTaskPaneInstance();
+    //        }
+
+    //        return l_taskPaneInstance as MVC.View.Connection.ConnectionSidePane;
+    //    }
+    //}
+
+
+
     #endregion
 
+    #region Instance variables
 
+        private const Double EXCEL_MIN_VERSION = 9;
 
+    #endregion
+
+    #region Call backs
+
+    #region Main Ribbon
 
     private void m_connectionButton_OnClick(object sender, IRibbonControl control, bool pressed)
     {
-
+        if (Convert.ToDouble(ExcelApp.Version.Replace(".", ",")) > EXCEL_MIN_VERSION)
+        {
+            Addin.ConnectionTaskPaneVisible = true;
+       
+            // Besoin de créer un connection controller et de l'associer à la view !
+            // ConnectionSidePane.Init();
+          //  ConnectionSidePane.Show();
+        }
+        
     }
 
     private void m_versionRibbonButton_OnClick(object sender, IRibbonControl control, bool pressed)
@@ -150,5 +187,13 @@ namespace FBI
     {
 
     }
+
+    #endregion
+
+  
+
+    #endregion
+
+
   }
 }

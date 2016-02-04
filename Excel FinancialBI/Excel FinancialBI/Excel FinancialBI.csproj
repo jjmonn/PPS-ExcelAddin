@@ -38,7 +38,9 @@
     <Reference Include="AddinExpress.Design.2005, Version=7.7.4087.2005, Culture=neutral, PublicKeyToken=4416dd98f0861965, processorArchitecture=MSIL" />
     <Reference Include="AddinExpress.Install.2005, Version=5.2.2024.2005, Culture=neutral, processorArchitecture=MSIL" />
     <Reference Include="AddinExpress.VisualDesigner, Version=7.7.4087.2005, Culture=neutral, PublicKeyToken=4416dd98f0861965, processorArchitecture=MSIL" />
-    <Reference Include="AddinExpress.XL.2005, Version=7.7.4087.2005, Culture=neutral, PublicKeyToken=e69a7e0f3592d2b8, processorArchitecture=MSIL" />
+    <Reference Include="AddinExpress.XL.2005, Version=7.7.4087.2005, Culture=neutral, PublicKeyToken=e69a7e0f3592d2b8, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
     <Reference Include="AddinExpress.XL.2005.Design, Version=7.7.4087.2005, Culture=neutral, PublicKeyToken=e69a7e0f3592d2b8, processorArchitecture=MSIL" />
     <Reference Include="Ionic.Zlib">
       <HintPath>dependencies\Ionic.Zlib.dll</HintPath>
@@ -288,11 +290,11 @@
     <Compile Include="MVC\Model\UserAllowedEntityModel.cs" />
     <Compile Include="MVC\Model\UserModel.cs" />
     <Compile Include="MVC\Model\VersionModel.cs" />
-    <Compile Include="MVC\View\Connection\ConnectionTP.cs">
+    <Compile Include="MVC\View\Connection\ConnectionSidePane.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="MVC\View\Connection\ConnectionTP.Designer.cs">
-      <DependentUpon>ConnectionTP.cs</DependentUpon>
+    <Compile Include="MVC\View\Connection\ConnectionSidePane.Designer.cs">
+      <DependentUpon>ConnectionSidePane.cs</DependentUpon>
     </Compile>
     <Compile Include="MVC\View\Controlling UI\ControllingUI_2.cs">
       <SubType>Form</SubType>
@@ -611,8 +613,8 @@
     <Compile Include="Utils\SafeDictionary.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="MVC\View\Connection\ConnectionTP.resx">
-      <DependentUpon>ConnectionTP.cs</DependentUpon>
+    <EmbeddedResource Include="AddinModule.resx">
+      <DependentUpon>AddinModule.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MVC\View\Controlling UI\ControllingUI_2.resx">
       <DependentUpon>ControllingUI_2.cs</DependentUpon>
