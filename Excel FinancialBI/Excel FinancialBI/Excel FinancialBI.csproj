@@ -230,6 +230,7 @@
       <DependentUpon>AddinModule.cs</DependentUpon>
     </Compile>
     <Compile Include="MVC\Controller\IController.cs" />
+    <Compile Include="MVC\Controller\VersionsController.cs" />
     <Compile Include="MVC\Model\AccountModel.cs" />
     <Compile Include="MVC\Model\AxisElemModel.cs" />
     <Compile Include="MVC\Model\AxisFilterModel.cs" />
@@ -466,11 +467,11 @@
     <Compile Include="MVC\View\Plateform Management\UsersView.Designer.cs">
       <DependentUpon>UsersView.cs</DependentUpon>
     </Compile>
-    <Compile Include="MVC\View\Plateform Management\VersionsControl.cs">
+    <Compile Include="MVC\View\Plateform Management\VersionsView.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="MVC\View\Plateform Management\VersionsControl.designer.cs">
-      <DependentUpon>VersionsControl.cs</DependentUpon>
+    <Compile Include="MVC\View\Plateform Management\VersionsView.designer.cs">
+      <DependentUpon>VersionsView.cs</DependentUpon>
     </Compile>
     <Compile Include="MVC\View\PPS Controls\CircularProgressUI.cs">
       <SubType>Form</SubType>
@@ -695,8 +696,8 @@
     <EmbeddedResource Include="MVC\View\Plateform Management\PlatformMGTGeneralUI.resx">
       <DependentUpon>PlatformMGTGeneralUI.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="MVC\View\Plateform Management\VersionsControl.resx">
-      <DependentUpon>VersionsControl.cs</DependentUpon>
+    <EmbeddedResource Include="MVC\View\Plateform Management\VersionsView.resx">
+      <DependentUpon>VersionsView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MVC\View\PPS Controls\CircularProgressUI.resx">
       <DependentUpon>CircularProgressUI.cs</DependentUpon>

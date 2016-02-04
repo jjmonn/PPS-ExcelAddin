@@ -16,22 +16,14 @@ namespace FBI.MVC.Model.CRUD
     WEEK
   }
 
-  public class Version : NamedHierarchyCRUDEntity, IComparable
+  public class Version : BaseVersion, IComparable
   {
-    public UInt32 Id { get; private set; }
-    public UInt32 ParentId { get; set; }
-    public string Name { get; set; }
     public bool Locked { get; set; }
     public string LockDate { get; set; }
-    public bool IsFolder { get; set; }
-    public Int32 ItemPosition { get; set; }
     public TimeConfig TimeConfiguration { get; set; }
     public UInt32 RateVersionId { get; set; }
-    public UInt32 StartPeriod { get; set; }
-    public UInt16 NbPeriod { get; set; }
     public string CreatedAt { get; set; }
     public UInt32 GlobalFactVersionId { get; set; }
-    public UInt32 Image { get; set; }
 
     public Version() { }
     private Version(UInt32 p_id)

@@ -7,7 +7,7 @@ using System.Diagnostics;
 
 namespace FBI.MVC.View
 {
-  partial class VersionsControl : System.Windows.Forms.UserControl
+  partial class VersionsView : System.Windows.Forms.UserControl
   {
 
     //UserControl overrides dispose to clean up the component list.
@@ -37,7 +37,7 @@ namespace FBI.MVC.View
     private void InitializeComponent()
     {
       this.components = new System.ComponentModel.Container();
-      System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(VersionsControl));
+      System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(VersionsView));
       this.ButtonsImageList = new System.Windows.Forms.ImageList(this.components);
       this.RCM_TV = new System.Windows.Forms.ContextMenuStrip(this.components);
       this.new_version_bt = new System.Windows.Forms.ToolStripMenuItem();
@@ -472,12 +472,12 @@ namespace FBI.MVC.View
       this.m_versionsTreeviewImageList.Images.SetKeyName(0, "cloud_dark.ico");
       this.m_versionsTreeviewImageList.Images.SetKeyName(1, "favicon(81).ico");
       // 
-      // VersionsControl
+      // VersionsView
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
       this.Controls.Add(this.TableLayoutPanel3);
-      this.Name = "VersionsControl";
+      this.Name = "VersionsView";
       this.Size = new System.Drawing.Size(840, 475);
       this.RCM_TV.ResumeLayout(false);
       this.TableLayoutPanel3.ResumeLayout(false);
