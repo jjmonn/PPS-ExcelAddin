@@ -13,6 +13,8 @@ namespace FBI
   static class Addin
   {
     static NetworkLauncher m_networkLauncher = new NetworkLauncher();
+    static bool m_connectionTaskPaneVisible;
+
 
     static void SelectLanguage()
     {
@@ -35,5 +37,27 @@ namespace FBI
       SelectLanguage();
       m_networkLauncher.Launch("127.0.0.1", 4242);
     }
+
+
+    #region Accessors
+
+        public static bool ConnectionTaskPaneVisible
+        {
+            get 
+            { 
+                return m_connectionTaskPaneVisible; 
+            }
+
+            set
+            {
+                m_connectionTaskPaneVisible = value;
+            }
+        }
+
+        
+
+    #endregion
+
+
   }
 }
