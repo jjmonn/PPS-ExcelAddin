@@ -3,17 +3,26 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace FBI.MVC.Controller
 {
   using Utils;
-  using MVC.Model;
+  using View;
+  using Model;
 
-  public abstract class NameController : IController
+  public abstract class NameController : IController, IPlatformManagementController
   {
     public string Error { get; set; }
 
     abstract public void LoadView();
+    abstract public void Close();
+    abstract public void AddControlToPanel(Panel p_panel, PlatformMGTGeneralUI p_platformMgtUI);
+
+    public bool IsNameValidAndNotAlreadyUsed(string p_name)
+    {
+      return (this.IsNameValid(p_name) && !this.IsNameAlreadyUsed(p_name));
+    }
 
     public bool IsNameAlreadyUsed(string p_name)
     {
@@ -27,6 +36,11 @@ namespace FBI.MVC.Controller
 
     public bool IsNameValid(string p_name)
     {
+      if (p_name == "")
+      {
+        Error = Local.GetValue("general.error.name_too_long");
+        return (false);
+      }
       if (p_name.Length > Constants.NAMES_MAX_LENGTH)
       {
         Error = Local.GetValue("general.error.name_too_long");

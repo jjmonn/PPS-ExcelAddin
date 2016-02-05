@@ -3,13 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace FBI.MVC.Controller
 {
+  using View;
+
   interface IPlatformManagementController
   {
     void Close();
-    void AddControlToPanel(System.Windows.Forms.Panel p_panel, FBI.MVC.View.PlatformMGTGeneralUI p_platformMgtUI);
+    void AddControlToPanel(Panel p_panel, PlatformMGTGeneralUI p_platformMgtUI);
   
   }
 }
