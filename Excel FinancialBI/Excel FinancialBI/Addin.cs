@@ -39,6 +39,7 @@ namespace FBI
     public static void Main()
     {
       //SelectLanguage();
+      Local.LoadLocalFile(Properties.Resources.english);
     }
 
     static bool Connect()

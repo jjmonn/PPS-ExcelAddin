@@ -27,6 +27,7 @@ namespace FBI
       Addin.Main();
     }
 
+  
     #region Add-in Express automatic code
 
     // Required by Add-in Express - do not modify
@@ -70,23 +71,68 @@ namespace FBI
       get { return (HostApplication as Excel._Application); }
     }
 
+    #region Side panes accessors
 
-    //public MVC.View.Connection.ConnectionSidePane ConnectionSidePane
-    //{
-    //    get
-    //    {
-    //        AddinExpress.XL.ADXExcelTaskPane l_taskPaneInstance = null;
-    //        l_taskPaneInstance = ConnectionSidePaneItem.TaskPaneInstance;
-    //        if (l_taskPaneInstance == null)
-    //        {
-    //            l_taskPaneInstance = ConnectionSidePaneItem.CreateTaskPaneInstance();
-    //        }
+    public MVC.View.ConnectionSidePane ConnectionSidePane
+    {
+        get
+        {
+            AddinExpress.XL.ADXExcelTaskPane l_taskPaneInstance = null;
+            l_taskPaneInstance = (AddinExpress.XL.ADXExcelTaskPane)ConnectionSidePaneItem.TaskPaneInstance;
+            if (l_taskPaneInstance == null)
+            {
+                l_taskPaneInstance = (MVC.View.ConnectionSidePane)ConnectionSidePaneItem.CreateTaskPaneInstance();
+            }
 
-    //        return l_taskPaneInstance as MVC.View.Connection.ConnectionSidePane;
-    //    }
-    //}
+            return l_taskPaneInstance as MVC.View.ConnectionSidePane;
+        }
+    }
+
+    public MVC.View.VersionSelectionPane VersionSelectionSidePane
+    {
+      get
+      {
+        AddinExpress.XL.ADXExcelTaskPane l_taskPaneInstance = null;
+        l_taskPaneInstance = (AddinExpress.XL.ADXExcelTaskPane)VersionSelectionSidePaneItem.TaskPaneInstance;
+        if (l_taskPaneInstance == null)
+        {
+          l_taskPaneInstance = (MVC.View.VersionSelectionPane)VersionSelectionSidePaneItem.CreateTaskPaneInstance();
+        }
+
+        return l_taskPaneInstance as MVC.View.VersionSelectionPane;
+      }
+    }
+
+    public MVC.View.ReportUploadEntitySelectionSidePane ReportUploadEntitySelectionSidePane
+    {
+      get
+      {
+        AddinExpress.XL.ADXExcelTaskPane l_taskPaneInstance = null;
+        l_taskPaneInstance = (AddinExpress.XL.ADXExcelTaskPane)ReportUploadEntitySelectionSidePaneItem.TaskPaneInstance;
+        if (l_taskPaneInstance == null)
+        {
+          l_taskPaneInstance = (MVC.View.ReportUploadEntitySelectionSidePane)ReportUploadEntitySelectionSidePaneItem.CreateTaskPaneInstance();
+        }
+        return l_taskPaneInstance as MVC.View.ReportUploadEntitySelectionSidePane;
+      }
+    }
+
+    public MVC.View.ReportUploadAccountInfoSidePane ReportUploadAccountInfoSidePane
+    {
+      get
+      {
+        AddinExpress.XL.ADXExcelTaskPane l_taskPaneInstance = null;
+        l_taskPaneInstance = (AddinExpress.XL.ADXExcelTaskPane)ReportUploadAccountInfoSidePaneItem.TaskPaneInstance;
+        if (l_taskPaneInstance == null)
+        {
+          l_taskPaneInstance = (MVC.View.ReportUploadAccountInfoSidePane)ReportUploadAccountInfoSidePaneItem.CreateTaskPaneInstance();
+        }
+        return l_taskPaneInstance as MVC.View.ReportUploadAccountInfoSidePane;
+      }
+    }
 
 
+    #endregion
 
     #endregion
 
@@ -105,10 +151,9 @@ namespace FBI
         if (Convert.ToDouble(ExcelApp.Version.Replace(".", ",")) > EXCEL_MIN_VERSION)
         {
             Addin.ConnectionTaskPaneVisible = true;
-       
-            // Besoin de créer un connection controller et de l'associer à la view !
+            ConnectionSidePane.MVisible = true;
             // ConnectionSidePane.Init();
-          //  ConnectionSidePane.Show();
+            ConnectionSidePane.Show();
         }
         
     }
@@ -180,6 +225,9 @@ namespace FBI
 
     private void m_platformManagementButton_OnClick(object sender, IRibbonControl control, bool pressed)
     {
+      // if connected
+      FBI.MVC.View.PlatformMGTGeneralUI l_platformMgtUI = new FBI.MVC.View.PlatformMGTGeneralUI();
+      l_platformMgtUI.Show();
 
     }
 
@@ -189,6 +237,8 @@ namespace FBI
     }
 
     #endregion
+
+   
 
   
 

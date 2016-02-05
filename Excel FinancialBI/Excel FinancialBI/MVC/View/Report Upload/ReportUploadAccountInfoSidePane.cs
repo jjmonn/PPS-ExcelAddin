@@ -1,27 +1,24 @@
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-
+using System.Runtime.InteropServices;
+using AddinExpress.XL;
+  
 namespace FBI.MVC.View
-{
-  using Controller;
-
-  public partial class ReportUploadAccountInfoSidePane : AddinExpress.XL.ADXExcelTaskPane, IView
-  {
-    public ReportUploadAccountInfoSidePane()
-    {
-      InitializeComponent();
-    }
-
-    public void SetController(IController p_controller)
+{  
+    public partial class ReportUploadAccountInfoSidePane : AddinExpress.XL.ADXExcelTaskPane
     {
 
+      private bool m_visible = false;
+
+      public ReportUploadAccountInfoSidePane()
+      {
+          InitializeComponent();
+      }
+
+      private void ReportUploadAccountInfoSidePane_ADXBeforeTaskPaneShow(object sender, ADXBeforeTaskPaneShowEventArgs e)
+      {
+        this.Visible = m_visible;
+      }
     }
-  }
 }
