@@ -53,14 +53,13 @@ namespace FBI.MVC.Model
           m_CRUDDic.Set(tmp_rate.Id, new Tuple<UInt32, UInt32, UInt32>(tmp_rate.DestCurrencyId, tmp_rate.RateVersionId, tmp_rate.Period), tmp_rate);
         }
         IsInit = true;
-        RaiseObjectInitializedEvent();
+        RaiseObjectInitializedEvent(p_packet.GetError(), typeof(ExchangeRate));
       }
       else
       {
         IsInit = false;
-        RaiseObjectInitializedEvent();
+        RaiseObjectInitializedEvent(p_packet.GetError(), typeof(ExchangeRate));
       }
-
     }
 
 

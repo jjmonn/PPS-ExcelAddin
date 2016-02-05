@@ -38,48 +38,51 @@ namespace FBI.MVC.Model
 
     #region "CRUD"
 
-    protected override void ListAnswer(ByteBuffer packet)
+    protected override void ListAnswer(ByteBuffer p_packet)
     {
-      if (packet.GetError() == ErrorMessage.SUCCESS)
+      if (p_packet.GetError() == ErrorMessage.SUCCESS)
       {
         m_globalFactDic.Clear();
-        UInt32 count = packet.ReadUint32();
+        UInt32 count = p_packet.ReadUint32();
         for (UInt32 i = 1; i <= count; i++)
         {
-          GlobalFactData tmp_ht = Build(packet) as GlobalFactData;
+          GlobalFactData tmp_ht = Build(p_packet) as GlobalFactData;
 
           m_globalFactDic.Set(tmp_ht.Id, new Tuple<UInt32, UInt32, UInt32>(tmp_ht.GlobalFactId, tmp_ht.Period, tmp_ht.VersionId), tmp_ht);
         }
         IsInit = true;
-        RaiseObjectInitializedEvent();
+        RaiseObjectInitializedEvent(p_packet.GetError(), typeof(GlobalFactData));
       }
       else
+      {
         IsInit = false;
+        RaiseObjectInitializedEvent(p_packet.GetError(), typeof(GlobalFactData));
+      }
     }
 
 
-    protected override void ReadAnswer(ByteBuffer packet)
+    protected override void ReadAnswer(ByteBuffer p_packet)
     {
-      if (packet.GetError() == ErrorMessage.SUCCESS)
+      if (p_packet.GetError() == ErrorMessage.SUCCESS)
       {
-        GlobalFactData tmp_ht = Build(packet) as GlobalFactData;
+        GlobalFactData tmp_ht = Build(p_packet) as GlobalFactData;
 
         m_globalFactDic.Set(tmp_ht.Id, new Tuple<UInt32, UInt32, UInt32>(tmp_ht.GlobalFactId, tmp_ht.Period, tmp_ht.VersionId), tmp_ht);
-        RaiseReadEvent(packet.GetError(), tmp_ht);
+        RaiseReadEvent(p_packet.GetError(), tmp_ht);
       }
       else
-        RaiseReadEvent(packet.GetError(), null);
+        RaiseReadEvent(p_packet.GetError(), null);
     }
 
 
-    protected override void DeleteAnswer(ByteBuffer packet)
+    protected override void DeleteAnswer(ByteBuffer p_packet)
     {
-      UInt32 Id = packet.ReadUint32();
-      if (packet.GetError() == ErrorMessage.SUCCESS)
+      UInt32 Id = p_packet.ReadUint32();
+      if (p_packet.GetError() == ErrorMessage.SUCCESS)
       {
         m_globalFactDic.Remove(Id);
       }
-      RaiseDeleteEvent(packet.GetError(), Id);
+      RaiseDeleteEvent(p_packet.GetError(), Id);
     }
 
     #endregion

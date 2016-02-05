@@ -234,15 +234,17 @@
     <Compile Include="Forms\FbiTreeView.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="MVC\Controller\Connection\ConnectionSidePaneController.cs" />
+    <Compile Include="MVC\Controller\Plateform Management\AxisController.cs" />
     <Compile Include="MVC\Controller\AccountController.cs" />
     <Compile Include="MVC\Controller\AxisController.cs" />
     <Compile Include="MVC\Controller\IController.cs" />
-    <Compile Include="MVC\Controller\IPlatformManagementController.cs" />
+    <Compile Include="MVC\Controller\Plateform Management\IPlatformManagementController.cs" />
     <Compile Include="MVC\Controller\Plateform Management\AxisFilterController.cs" />
-    <Compile Include="MVC\Controller\PlatformMgtController.cs" />
+    <Compile Include="MVC\Controller\Plateform Management\PlatformMgtController.cs" />
     <Compile Include="MVC\Controller\NameController.cs" />
     <Compile Include="MVC\Controller\Plateform Management\AxisFiltersStructController.cs" />
-    <Compile Include="MVC\Controller\VersionsController.cs" />
+    <Compile Include="MVC\Controller\Plateform Management\VersionsController.cs" />
     <Compile Include="MVC\Model\AccountModel.cs" />
     <Compile Include="MVC\Model\AxisElemModel.cs" />
     <Compile Include="MVC\Model\AxisFilterModel.cs" />

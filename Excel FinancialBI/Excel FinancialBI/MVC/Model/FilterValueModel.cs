@@ -39,55 +39,55 @@ namespace FBI.MVC.Model
 
     #region CRUD
 
-    protected override void ListAnswer(ByteBuffer packet)
+    protected override void ListAnswer(ByteBuffer p_packet)
     {
-      if (packet.GetError() == ErrorMessage.SUCCESS)
+      if (p_packet.GetError() == ErrorMessage.SUCCESS)
       {
         m_filterValuesDic.Clear();
-        UInt32 count = packet.ReadUint32();
+        UInt32 count = p_packet.ReadUint32();
         for (UInt32 i = 1; i <= count; i++)
         {
-          FilterValue filterValue = Build(packet) as FilterValue;
+          FilterValue filterValue = Build(p_packet) as FilterValue;
 
           if (m_filterValuesDic.ContainsKey(filterValue.FilterId) == false)
             m_filterValuesDic[filterValue.FilterId] = new MultiIndexDictionary<UInt32, string, FilterValue>();
           m_filterValuesDic[filterValue.FilterId].Set(filterValue.Id, filterValue.Name, filterValue);
         }
         IsInit = true;
-        RaiseObjectInitializedEvent();
+        RaiseObjectInitializedEvent(p_packet.GetError(), typeof(FilterValue));
       }
       else
         IsInit = false;
     }
 
 
-    protected override void ReadAnswer(ByteBuffer packet)
+    protected override void ReadAnswer(ByteBuffer p_packet)
     {
-      if (packet.GetError() == ErrorMessage.SUCCESS)
+      if (p_packet.GetError() == ErrorMessage.SUCCESS)
       {
-        FilterValue filterValue = Build(packet) as FilterValue;
+        FilterValue filterValue = Build(p_packet) as FilterValue;
 
         if (m_filterValuesDic.ContainsKey(filterValue.FilterId) == false)
           m_filterValuesDic[filterValue.FilterId] = new MultiIndexDictionary<uint, string, FilterValue>();
         m_filterValuesDic[filterValue.FilterId].Set(filterValue.Id, filterValue.Name, filterValue);
-        RaiseReadEvent(packet.GetError(), filterValue);
+        RaiseReadEvent(p_packet.GetError(), filterValue);
       }
       else
-        RaiseReadEvent(packet.GetError(), null);
+        RaiseReadEvent(p_packet.GetError(), null);
     }
 
-    protected override void DeleteAnswer(ByteBuffer packet)
+    protected override void DeleteAnswer(ByteBuffer p_packet)
     {
-      UInt32 id = packet.ReadUint32();
+      UInt32 id = p_packet.ReadUint32();
 
-      if (packet.GetError() == ErrorMessage.SUCCESS)
+      if (p_packet.GetError() == ErrorMessage.SUCCESS)
         foreach (MultiIndexDictionary<UInt32, string, FilterValue> filterValueDic in m_filterValuesDic.Values)
           if (filterValueDic.ContainsKey(id))
           {
             filterValueDic.Remove(id);
             break;
           }
-      RaiseDeleteEvent(packet.GetError(), id);
+      RaiseDeleteEvent(p_packet.GetError(), id);
     }
 
     #endregion

@@ -14,10 +14,11 @@ namespace FBI
 
   static class Addin
   {
-    static public event DisconnectEventHandler DisconnectEvent;
-    public delegate void DisconnectEventHandler();
-    static public event ConnectEventHandler ConnectEvent;
-    public delegate void ConnectEventHandler();
+    static public event ConnectionStateEventHandler ConnectionStateEvent;
+    public delegate void ConnectionStateEventHandler(bool p_connected);
+    static HashSet<Type> m_initTypeSet = new HashSet<Type>();
+    public static event InitializationEventHandler InitializationEvent;
+    public delegate void InitializationEventHandler();
 
     static NetworkLauncher m_networkLauncher = new NetworkLauncher();
 
@@ -39,13 +40,42 @@ namespace FBI
 
     static void InitModels()
     {
-      ICRUDModel<AxisElem> l_axisElem = AxisElemModel.Instance;
-      ICRUDModel<Filter> l_filter = FilterModel.Instance;
-      ICRUDModel<FilterValue> l_filterValue = FilterValueModel.Instance;
-      ICRUDModel<AxisFilter> l_axisFilter = AxisFilterModel.Instance;
-      ICRUDModel<Version> l_version = VersionModel.Instance;
-      ICRUDModel<Account> l_account = AccountModel.Instance;
-      ICRUDModel<GlobalFact> l_globalFact = GlobalFactModel.Instance;
+      SuscribeModel<Account>(AccountModel.Instance);
+      SuscribeModel<AxisElem>(AxisElemModel.Instance);
+      SuscribeModel<AxisFilter>(AxisFilterModel.Instance);
+      SuscribeModel<AxisOwner>(AxisOwnerModel.Instance);
+      SuscribeModel<Commit>(CommitModel.Instance);
+      SuscribeModel<Currency>(CurrencyModel.Instance);
+      SuscribeModel<EntityCurrency>(EntityCurrencyModel.Instance);
+      SuscribeModel<EntityDistribution>(EntityDistributionModel.Instance);
+      SuscribeModel<FactTag>(FactTagModel.Instance);
+      SuscribeModel<Filter>(FilterModel.Instance);
+      SuscribeModel<FilterValue>(FilterValueModel.Instance);
+      SuscribeModel<FModelingAccount>(FModelingAccountModel.Instance);
+      SuscribeModel<GlobalFactData>(GlobalFactDataModel.Instance);
+      SuscribeModel<GlobalFact>(GlobalFactModel.Instance);
+      SuscribeModel<GlobalFactVersion>(GlobalFactVersionModel.Instance);
+      SuscribeModel<Group>(GroupModel.Instance);
+      SuscribeModel<ExchangeRateVersion>(RatesVersionModel.Instance);
+      SuscribeModel<UserAllowedEntity>(UserAllowedEntityModel.Instance);
+      SuscribeModel<User>(UserModel.Instance);
+      SuscribeModel<Version>(VersionModel.Instance);
+    }
+
+    static void SuscribeModel<T>(ICRUDModel<T> p_model) where T : class, CRUDEntity
+    {
+      p_model.ObjectInitialized += OnModelInit;
+      m_initTypeSet.Add(typeof(T));
+    }
+
+    static void OnModelInit(ErrorMessage p_success, Type p_type)
+    {
+      if (p_success == ErrorMessage.SUCCESS && m_initTypeSet.Contains(p_type))
+      {
+        m_initTypeSet.Remove(p_type);
+        if (m_initTypeSet.Count == 0 && InitializationEvent != null)
+          InitializationEvent();
+      }
     }
 
     public static void Main()
@@ -77,14 +107,13 @@ namespace FBI
 
     static bool Connect_Intern(string p_userName = "", string p_password = "")
     {
-      if (m_networkLauncher.Launch("192.168.0.41", 4242, OnDisconnect) == true)
-      {
-        if (ConnectEvent != null)
-          ConnectEvent();
+      bool result;
+
+      if ((result = m_networkLauncher.Launch("192.168.0.41", 4242, OnDisconnect)) == true)
         Authenticator.Instance.AskAuthentication(p_userName, p_password);
-        return (true);
-      }
-      return (false);
+      if (ConnectionStateEvent != null)
+        ConnectionStateEvent(result);
+      return (result);
     }
 
     static void OnDisconnect()
@@ -97,8 +126,8 @@ namespace FBI
         System.Threading.Thread.Sleep(3000);
         Connect_Intern();
       }
-      if (DisconnectEvent != null)
-        DisconnectEvent();
+      if (ConnectionStateEvent != null)
+        ConnectionStateEvent(false);
     }
 
 

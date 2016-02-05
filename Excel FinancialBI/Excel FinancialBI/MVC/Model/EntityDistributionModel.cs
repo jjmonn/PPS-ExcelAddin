@@ -51,12 +51,12 @@ namespace FBI.MVC.Model
             m_CRUDDic[l_commit.AccountId] = new MultiIndexDictionary<UInt32, UInt32, EntityDistribution>();
           m_CRUDDic[l_commit.AccountId].Set(l_commit.Id, l_commit.EntityId, l_commit);
         }
-        RaiseObjectInitializedEvent();
+        RaiseObjectInitializedEvent(p_packet.GetError(), typeof(EntityDistribution));
         IsInit = true;
       }
       else
       {
-        RaiseObjectInitializedEvent();
+        RaiseObjectInitializedEvent(p_packet.GetError(), typeof(EntityDistribution));
         IsInit = false;
       }
     }

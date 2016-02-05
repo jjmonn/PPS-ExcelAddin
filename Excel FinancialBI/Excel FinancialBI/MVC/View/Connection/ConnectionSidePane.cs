@@ -17,13 +17,16 @@ namespace FBI.MVC.View
   public partial class ConnectionSidePane : AddinExpress.XL.ADXExcelTaskPane, IView
   {
     internal bool m_shown { set; get; }
+    ConnectionSidePaneController m_controller;
 
     #region Initialize
 
     public ConnectionSidePane()
     {
       InitializeComponent();
-      Authenticator.AuthenticationEvent += OnAuthResult;
+      Authenticator.AuthenticationEvent += OnAuthentification;
+      Addin.InitializationEvent += OnInitComplete;
+      Addin.ConnectionStateEvent += OnConnectionChanged;
     }
 
     public void SetController(IController p_controller)
@@ -35,25 +38,45 @@ namespace FBI.MVC.View
 
     #region Callbacks
 
-    delegate void OnAuthResult_delegate(ErrorMessage p_status);
-    void OnAuthResult(ErrorMessage p_status)
+    delegate void OnConnectionOrAuth_delegate(ErrorMessage p_status);
+    void OnAuthentification(ErrorMessage p_status)
     {
       if (InvokeRequired)
       {
-        OnAuthResult_delegate func = new OnAuthResult_delegate(OnAuthResult);
-        Invoke(func, p_status);
+        OnAuthResult_delegate func = new OnAuthResult_delegate(OnInitComplete);
+        Invoke(func);
+      }
+      else
+        FBI.AddinModule.CurrentInstance.SetConnectionIcon((p_status == ErrorMessage.SUCCESS));
+    }
+
+    delegate void OnAuthResult_delegate();
+    void OnInitComplete()
+    {
+      if (InvokeRequired)
+      {
+        OnAuthResult_delegate func = new OnAuthResult_delegate(OnInitComplete);
+        Invoke(func);
       }
       else
       {
-        if (p_status == ErrorMessage.SUCCESS)
-        {
-          Hide();
-          FBI.AddinModule.CurrentInstance.SetConnectionIcon(true);
-        }
-        else
-        {
+        Hide();
+        FBI.AddinModule.CurrentInstance.SetConnectionIcon(true);
+      }
+    }
+
+    delegate void OnConnectionChanged_delegate(bool p_connected);
+    void OnConnectionChanged(bool p_connected)
+    {
+      if (InvokeRequired)
+      {
+        OnConnectionChanged_delegate func = new OnConnectionChanged_delegate(OnConnectionChanged);
+        Invoke(func);
+      }
+      else
+      {
+        if (p_connected == false)
           FBI.AddinModule.CurrentInstance.SetConnectionIcon(false);
-        }
       }
     }
 
