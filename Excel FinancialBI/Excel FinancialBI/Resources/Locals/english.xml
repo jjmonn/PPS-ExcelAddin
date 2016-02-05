@@ -222,12 +222,14 @@
       <string name="new_category">New category</string>
       <string name="new_value">New value</string>
       <string name="edit_structure">Edit structure</string>
-      <string name="create_category_under_category">Create Category Under this Category</string>
+      <string name="create_sub_category">Create category under this category</string>
+      <string name="delete_category">Category deletion confirmation</string>
     
      <!--messages-->
-      <string name="msg_new_category_name">Please enter the new Category Name:</string>
-      <string name="msg_name_used">This name is already used or contains forbiden characters.</string>
-      <string name="msg_select_category">A Category must be selected in order ot Add a Value.</string>
+      <string name="msg_new_category_name">Please enter the new category name:</string>
+      <string name="msg_name_erroneous">This name is already used or contains forbiden characters.</string>
+      <string name="msg_no_category_selected">A category must be selected in order to to this.</string>
+      <string name="msg_delete_category">You are about to delete a category. Do you confirm ?</string>
   
   </category>  
       

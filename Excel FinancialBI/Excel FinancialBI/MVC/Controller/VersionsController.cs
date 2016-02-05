@@ -22,9 +22,19 @@ namespace FBI.MVC.Controller
       LoadView();
     }
 
+    public override void AddControlToPanel(System.Windows.Forms.Panel p_panel, PlatformMGTGeneralUI p_platformMgtUI)
+    {
+      throw new NotImplementedException();
+    }
+
+    public override void Close()
+    {
+      throw new NotImplementedException();
+    }
+
     public override void LoadView()
     {
-
+      throw new NotImplementedException();
     }
 
     #region Validity Check
