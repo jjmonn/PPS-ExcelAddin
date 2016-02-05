@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace FBI.MVC.Controller
 {
@@ -22,7 +23,7 @@ namespace FBI.MVC.Controller
       LoadView();
     }
 
-    public override void AddControlToPanel(System.Windows.Forms.Panel p_panel, PlatformMGTGeneralUI p_platformMgtUI)
+    public override void AddControlToPanel(Panel p_panel)
     {
       throw new NotImplementedException();
     }

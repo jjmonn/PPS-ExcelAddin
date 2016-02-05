@@ -56,7 +56,8 @@ namespace FBI.MVC.Model
       if (p_packet.GetError() == ErrorMessage.SUCCESS)
       {
         Clear();
-        for (Int32 i = 1; i <= p_packet.ReadInt32(); i++)
+        UInt32 count = p_packet.ReadUint32();
+        for (UInt32 i = 1; i <= count; i++)
         {
           AxisFilter tmp_ht = AxisFilter.BuildAxisFilter(p_packet);
           m_axisFilterDictionary[tmp_ht.Axis].Set(tmp_ht.Id, new Tuple<UInt32, UInt32>(tmp_ht.AxisElemId, tmp_ht.FilterId), tmp_ht);

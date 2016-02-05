@@ -44,7 +44,8 @@ namespace FBI.MVC.Model
       if (packet.GetError() == ErrorMessage.SUCCESS)
       {
         m_filterValuesDic.Clear();
-        for (Int32 i = 1; i <= packet.ReadInt32(); i++)
+        UInt32 count = packet.ReadUint32();
+        for (UInt32 i = 1; i <= count; i++)
         {
           FilterValue filterValue = Build(packet) as FilterValue;
 
