@@ -38,7 +38,7 @@ namespace FBI.MVC.Controller
     {
       if (p_name == "")
       {
-        Error = Local.GetValue("general.error.name_too_long");
+        Error = Local.GetValue("general.error.name_empty");
         return (false);
       }
       if (p_name.Length > Constants.NAMES_MAX_LENGTH)

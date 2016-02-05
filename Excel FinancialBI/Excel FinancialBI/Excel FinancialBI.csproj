@@ -173,7 +173,9 @@
     <Content Include="Resources\imageres_891.ico" />
     <Content Include="Resources\imageres_891.png" />
     <Content Include="Resources\images.jpg" />
-    <Content Include="Resources\Locals\english.xml" />
+    <Content Include="Resources\Locals\english.xml">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Resources\Locals\french.xml" />
     <Content Include="Resources\money_interest.ico" />
     <Content Include="Resources\money_interest.png" />
@@ -235,6 +237,7 @@
     <Compile Include="MVC\Controller\IController.cs" />
     <Compile Include="MVC\Controller\NameController.cs" />
     <Compile Include="MVC\Controller\IPlatformManagementController.cs" />
+    <Compile Include="MVC\Controller\Plateform Management\AxisFiltersStructController.cs" />
     <Compile Include="MVC\Controller\VersionsController.cs" />
     <Compile Include="MVC\Model\AccountModel.cs" />
     <Compile Include="MVC\Model\AxisElemModel.cs" />

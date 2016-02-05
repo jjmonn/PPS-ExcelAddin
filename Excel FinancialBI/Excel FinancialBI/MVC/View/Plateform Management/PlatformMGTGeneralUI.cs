@@ -16,7 +16,7 @@ namespace FBI.MVC.View
   //  using CRUD;
   using Utils;
 
-  internal partial class PlatformMGTGeneralUI : Form, IView
+  public partial class PlatformMGTGeneralUI : Form, IView
   {
     private IPlatformManagementController m_currentController;
     private IView m_currentView;

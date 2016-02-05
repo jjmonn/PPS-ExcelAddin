@@ -7,6 +7,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Microsoft.VisualBasic;
+using System.Diagnostics;
 
 namespace FBI.MVC.View
 {
@@ -15,8 +17,6 @@ namespace FBI.MVC.View
   using Utils;
   using Controller;
   using Model.CRUD;
-  using Microsoft.VisualBasic;
-  using System.Diagnostics;
 
   public partial class AxisFilterStructView : Form, IView
   {
