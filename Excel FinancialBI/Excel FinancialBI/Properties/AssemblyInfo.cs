@@ -6,13 +6,13 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 //
-[assembly: AssemblyTitle("ExcelFinancialBI")]
-[assembly: AssemblyDescription("ExcelFinancialBI")]
+[assembly: AssemblyTitle("Excel FinancialBI")]
+[assembly: AssemblyDescription("Excel COM Addin")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Default Company")]
-[assembly: AssemblyProduct("ExcelFinancialBI")]
-[assembly: AssemblyCopyright("")]
-[assembly: AssemblyTrademark("")]
+[assembly: AssemblyCompany("PurpleSun Solutions")]
+[assembly: AssemblyProduct("Excel FinancialBI")]
+[assembly: AssemblyCopyright("Financial BI")]
+[assembly: AssemblyTrademark("Financial BI")]
 [assembly: AssemblyCulture("")]
  
 //
@@ -48,3 +48,4 @@ using System.Runtime.InteropServices;
 //
 [assembly: ComVisible(true)]
 
+[assembly: AssemblyFileVersionAttribute("1.0.0.1")]

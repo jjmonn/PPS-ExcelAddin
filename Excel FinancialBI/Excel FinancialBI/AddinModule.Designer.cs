@@ -32,14 +32,17 @@
       this.m_financialbiRibbon = new AddinExpress.MSO.ADXRibbonTab(this.components);
       this.m_connectionGroup = new AddinExpress.MSO.ADXRibbonGroup(this.components);
       this.m_connectionButton = new AddinExpress.MSO.ADXRibbonButton(this.components);
+      this.m_mainRibbonImageList = new System.Windows.Forms.ImageList(this.components);
       this.m_versionGroup = new AddinExpress.MSO.ADXRibbonGroup(this.components);
       this.m_versionRibbonButton = new AddinExpress.MSO.ADXRibbonButton(this.components);
-      this.m_processRibbonDropDown = new AddinExpress.MSO.ADXRibbonDropDown(this.components);
+      this.m_processRibbonButton = new AddinExpress.MSO.ADXRibbonSplitButton(this.components);
+      this.adxRibbonMenu4 = new AddinExpress.MSO.ADXRibbonMenu(this.components);
+      this.m_financialProcessRibbonButton = new AddinExpress.MSO.ADXRibbonButton(this.components);
+      this.m_RHProcessRibbonButton = new AddinExpress.MSO.ADXRibbonButton(this.components);
       this.m_uploadGroup = new AddinExpress.MSO.ADXRibbonGroup(this.components);
       this.m_snapshotRibbonSplitButton = new AddinExpress.MSO.ADXRibbonSplitButton(this.components);
       this.adxRibbonMenu1 = new AddinExpress.MSO.ADXRibbonMenu(this.components);
       this.m_directoryRibbonButton = new AddinExpress.MSO.ADXRibbonButton(this.components);
-      this.m_mainRibbonImageList = new System.Windows.Forms.ImageList(this.components);
       this.m_reportUploadRibbonButton = new AddinExpress.MSO.ADXRibbonButton(this.components);
       this.m_visualizationGroup = new AddinExpress.MSO.ADXRibbonGroup(this.components);
       this.m_CUIRibbonButton = new AddinExpress.MSO.ADXRibbonButton(this.components);
@@ -94,11 +97,31 @@
       this.m_connectionButton.Size = AddinExpress.MSO.ADXRibbonXControlSize.Large;
       this.m_connectionButton.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(this.m_connectionButton_OnClick);
       // 
+      // m_mainRibbonImageList
+      // 
+      this.m_mainRibbonImageList.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("m_mainRibbonImageList.ImageStream")));
+      this.m_mainRibbonImageList.TransparentColor = System.Drawing.Color.Transparent;
+      this.m_mainRibbonImageList.Images.SetKeyName(0, "client_network.ico");
+      this.m_mainRibbonImageList.Images.SetKeyName(1, "connected.ico");
+      this.m_mainRibbonImageList.Images.SetKeyName(2, "cloud_dark.ico");
+      this.m_mainRibbonImageList.Images.SetKeyName(3, "dna.ico");
+      this.m_mainRibbonImageList.Images.SetKeyName(4, "ok.ico");
+      this.m_mainRibbonImageList.Images.SetKeyName(5, "tablet_computer.ico");
+      this.m_mainRibbonImageList.Images.SetKeyName(6, "financial_bi.ico");
+      this.m_mainRibbonImageList.Images.SetKeyName(7, "font.ico");
+      this.m_mainRibbonImageList.Images.SetKeyName(8, "snapshot 3.0.ico");
+      this.m_mainRibbonImageList.Images.SetKeyName(9, "calendar_52.ico");
+      this.m_mainRibbonImageList.Images.SetKeyName(10, "rotate_left.ico");
+      this.m_mainRibbonImageList.Images.SetKeyName(11, "system-settings-icon.ico");
+      this.m_mainRibbonImageList.Images.SetKeyName(12, "spreadsheed_cell.ico");
+      this.m_mainRibbonImageList.Images.SetKeyName(13, "selection_refresh.ico");
+      this.m_mainRibbonImageList.Images.SetKeyName(14, "Excel Blue 32x32.ico");
+      // 
       // m_versionGroup
       // 
       this.m_versionGroup.Caption = "Version";
       this.m_versionGroup.Controls.Add(this.m_versionRibbonButton);
-      this.m_versionGroup.Controls.Add(this.m_processRibbonDropDown);
+      this.m_versionGroup.Controls.Add(this.m_processRibbonButton);
       this.m_versionGroup.Id = "adxRibbonGroup_c1bf35d451f742078971f5a6282def5f";
       this.m_versionGroup.ImageTransparentColor = System.Drawing.Color.Transparent;
       this.m_versionGroup.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook;
@@ -111,12 +134,38 @@
       this.m_versionRibbonButton.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook;
       this.m_versionRibbonButton.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(this.m_versionRibbonButton_OnClick);
       // 
-      // m_processRibbonDropDown
+      // m_processRibbonButton
       // 
-      this.m_processRibbonDropDown.Caption = "Process";
-      this.m_processRibbonDropDown.Id = "adxRibbonDropDown_40c8f59734dc4ec9b21ce7a0a0215531";
-      this.m_processRibbonDropDown.ImageTransparentColor = System.Drawing.Color.Transparent;
-      this.m_processRibbonDropDown.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook;
+      this.m_processRibbonButton.Caption = "Process";
+      this.m_processRibbonButton.Controls.Add(this.adxRibbonMenu4);
+      this.m_processRibbonButton.Id = "adxRibbonSplitButton_3de81472eae0421f91e03dfcd92b0d4f";
+      this.m_processRibbonButton.ImageTransparentColor = System.Drawing.Color.Transparent;
+      this.m_processRibbonButton.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook;
+      // 
+      // adxRibbonMenu4
+      // 
+      this.adxRibbonMenu4.Caption = "adxRibbonMenu4";
+      this.adxRibbonMenu4.Controls.Add(this.m_financialProcessRibbonButton);
+      this.adxRibbonMenu4.Controls.Add(this.m_RHProcessRibbonButton);
+      this.adxRibbonMenu4.Id = "adxRibbonMenu_490233da36544ff39d6369c104d6ac85";
+      this.adxRibbonMenu4.ImageTransparentColor = System.Drawing.Color.Transparent;
+      this.adxRibbonMenu4.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook;
+      // 
+      // m_financialProcessRibbonButton
+      // 
+      this.m_financialProcessRibbonButton.Caption = "Financial";
+      this.m_financialProcessRibbonButton.Id = "adxRibbonButton_a77bbbc9cdd344fcb5b7e1651689bb4a";
+      this.m_financialProcessRibbonButton.ImageTransparentColor = System.Drawing.Color.Transparent;
+      this.m_financialProcessRibbonButton.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook;
+      this.m_financialProcessRibbonButton.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(this.m_financialProcessRibbonButton_OnClick);
+      // 
+      // m_RHProcessRibbonButton
+      // 
+      this.m_RHProcessRibbonButton.Caption = "Human ressources";
+      this.m_RHProcessRibbonButton.Id = "adxRibbonButton_c5e2cabc5bd44fbc85a297f95569b467";
+      this.m_RHProcessRibbonButton.ImageTransparentColor = System.Drawing.Color.Transparent;
+      this.m_RHProcessRibbonButton.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook;
+      this.m_RHProcessRibbonButton.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(this.m_RHProcessRibbonButton_OnClick);
       // 
       // m_uploadGroup
       // 
@@ -154,26 +203,6 @@
       this.m_directoryRibbonButton.ImageTransparentColor = System.Drawing.Color.Transparent;
       this.m_directoryRibbonButton.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook;
       this.m_directoryRibbonButton.OnClick += new AddinExpress.MSO.ADXRibbonOnAction_EventHandler(this.m_directoryRibbonButton_OnClick);
-      // 
-      // m_mainRibbonImageList
-      // 
-      this.m_mainRibbonImageList.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("m_mainRibbonImageList.ImageStream")));
-      this.m_mainRibbonImageList.TransparentColor = System.Drawing.Color.Transparent;
-      this.m_mainRibbonImageList.Images.SetKeyName(0, "not_connected.ico");
-      this.m_mainRibbonImageList.Images.SetKeyName(1, "connected.ico");
-      this.m_mainRibbonImageList.Images.SetKeyName(2, "cloud_dark.ico");
-      this.m_mainRibbonImageList.Images.SetKeyName(3, "dna.ico");
-      this.m_mainRibbonImageList.Images.SetKeyName(4, "ok.ico");
-      this.m_mainRibbonImageList.Images.SetKeyName(5, "tablet_computer.ico");
-      this.m_mainRibbonImageList.Images.SetKeyName(6, "financial_bi.ico");
-      this.m_mainRibbonImageList.Images.SetKeyName(7, "font.ico");
-      this.m_mainRibbonImageList.Images.SetKeyName(8, "snapshot 3.0.ico");
-      this.m_mainRibbonImageList.Images.SetKeyName(9, "calendar_52.ico");
-      this.m_mainRibbonImageList.Images.SetKeyName(10, "rotate_left.ico");
-      this.m_mainRibbonImageList.Images.SetKeyName(11, "system-settings-icon.ico");
-      this.m_mainRibbonImageList.Images.SetKeyName(12, "spreadsheed_cell.ico");
-      this.m_mainRibbonImageList.Images.SetKeyName(13, "selection_refresh.ico");
-      this.m_mainRibbonImageList.Images.SetKeyName(14, "Excel Blue 32x32.ico");
       // 
       // m_reportUploadRibbonButton
       // 
@@ -295,7 +324,6 @@
       // 
       this.m_refreshWorkbookRibbonButton.Caption = "Refresh Workbook";
       this.m_refreshWorkbookRibbonButton.Id = "adxRibbonButton_f226d5d027434790a16dbedf9778128a";
-      this.m_refreshWorkbookRibbonButton.Image = 14;
       this.m_refreshWorkbookRibbonButton.ImageList = this.m_mainRibbonImageList;
       this.m_refreshWorkbookRibbonButton.ImageTransparentColor = System.Drawing.Color.Transparent;
       this.m_refreshWorkbookRibbonButton.Ribbons = AddinExpress.MSO.ADXRibbons.msrExcelWorkbook;
@@ -356,6 +384,7 @@
       // 
       // ConnectionSidePaneItem
       // 
+      this.ConnectionSidePaneItem.AllowedDropPositions = ((AddinExpress.XL.ADXExcelAllowedDropPositions)((AddinExpress.XL.ADXExcelAllowedDropPositions.Right | AddinExpress.XL.ADXExcelAllowedDropPositions.Left)));
       this.ConnectionSidePaneItem.AlwaysShowHeader = true;
       this.ConnectionSidePaneItem.CloseButton = true;
       this.ConnectionSidePaneItem.Position = AddinExpress.XL.ADXExcelTaskPanePosition.Left;
@@ -364,22 +393,27 @@
       // 
       // VersionSelectionSidePaneItem
       // 
+      this.VersionSelectionSidePaneItem.AllowedDropPositions = ((AddinExpress.XL.ADXExcelAllowedDropPositions)((AddinExpress.XL.ADXExcelAllowedDropPositions.Right | AddinExpress.XL.ADXExcelAllowedDropPositions.Left)));
       this.VersionSelectionSidePaneItem.AlwaysShowHeader = true;
       this.VersionSelectionSidePaneItem.CloseButton = true;
+      this.VersionSelectionSidePaneItem.IsDragDropAllowed = true;
       this.VersionSelectionSidePaneItem.Position = AddinExpress.XL.ADXExcelTaskPanePosition.Left;
       this.VersionSelectionSidePaneItem.TaskPaneClassName = "FBI.MVC.View.VersionSelectionPane";
       this.VersionSelectionSidePaneItem.UseOfficeThemeForBackground = true;
       // 
       // ReportUploadAccountInfoSidePaneItem
       // 
+      this.ReportUploadAccountInfoSidePaneItem.AllowedDropPositions = ((AddinExpress.XL.ADXExcelAllowedDropPositions)((AddinExpress.XL.ADXExcelAllowedDropPositions.Right | AddinExpress.XL.ADXExcelAllowedDropPositions.Left)));
       this.ReportUploadAccountInfoSidePaneItem.AlwaysShowHeader = true;
       this.ReportUploadAccountInfoSidePaneItem.CloseButton = true;
-      this.ReportUploadAccountInfoSidePaneItem.Position = AddinExpress.XL.ADXExcelTaskPanePosition.Right;
+      this.ReportUploadAccountInfoSidePaneItem.DefaultRegionState = AddinExpress.XL.ADXRegionState.Hidden;
+      this.ReportUploadAccountInfoSidePaneItem.Position = AddinExpress.XL.ADXExcelTaskPanePosition.Left;
       this.ReportUploadAccountInfoSidePaneItem.TaskPaneClassName = "FBI.MVC.View.ReportUploadAccountInfoSidePane";
       this.ReportUploadAccountInfoSidePaneItem.UseOfficeThemeForBackground = true;
       // 
       // ReportUploadEntitySelectionSidePaneItem
       // 
+      this.ReportUploadEntitySelectionSidePaneItem.AllowedDropPositions = ((AddinExpress.XL.ADXExcelAllowedDropPositions)((AddinExpress.XL.ADXExcelAllowedDropPositions.Right | AddinExpress.XL.ADXExcelAllowedDropPositions.Left)));
       this.ReportUploadEntitySelectionSidePaneItem.Position = AddinExpress.XL.ADXExcelTaskPanePosition.Left;
       this.ReportUploadEntitySelectionSidePaneItem.TaskPaneClassName = "FBI.MVC.View.ReportUploadEntitySelectionSidePane";
       this.ReportUploadEntitySelectionSidePaneItem.UseOfficeThemeForBackground = true;
@@ -397,7 +431,6 @@
         private AddinExpress.MSO.ADXRibbonButton m_connectionButton;
         private AddinExpress.MSO.ADXRibbonGroup m_versionGroup;
         private AddinExpress.MSO.ADXRibbonButton m_versionRibbonButton;
-        private AddinExpress.MSO.ADXRibbonDropDown m_processRibbonDropDown;
         private AddinExpress.MSO.ADXRibbonGroup m_uploadGroup;
         private AddinExpress.MSO.ADXRibbonSplitButton m_snapshotRibbonSplitButton;
         private AddinExpress.MSO.ADXRibbonMenu adxRibbonMenu1;
@@ -427,6 +460,10 @@
         internal AddinExpress.XL.ADXExcelTaskPanesCollectionItem ReportUploadAccountInfoSidePaneItem;
         private AddinExpress.MSO.ADXExcelAppEvents adxExcelAppEvents1;
         internal AddinExpress.XL.ADXExcelTaskPanesCollectionItem ReportUploadEntitySelectionSidePaneItem;
+        private AddinExpress.MSO.ADXRibbonSplitButton m_processRibbonButton;
+        private AddinExpress.MSO.ADXRibbonMenu adxRibbonMenu4;
+        private AddinExpress.MSO.ADXRibbonButton m_financialProcessRibbonButton;
+        private AddinExpress.MSO.ADXRibbonButton m_RHProcessRibbonButton;
     }
 }
 

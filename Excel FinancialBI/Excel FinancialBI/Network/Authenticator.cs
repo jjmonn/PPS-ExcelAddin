@@ -27,8 +27,8 @@ namespace FBI.Network
     public void AskAuthentication(string p_username, string p_password)
     {
       ByteBuffer l_packet = new ByteBuffer((UInt16)ClientMessage.CMSG_AUTH_REQUEST);
-      Username = p_username;
-      m_password = Hash.GetSHA1(p_password + p_username);
+      Username = (p_username != "") ? p_username : Username;
+      m_password = (p_password != "") ? Hash.GetSHA1(p_password + p_username) : m_password;
       l_packet.WriteString(FBIVersionId);
       l_packet.Release();
       NetworkManager.Send(l_packet);

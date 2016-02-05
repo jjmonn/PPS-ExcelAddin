@@ -7,7 +7,7 @@ using System.Diagnostics;
 
 namespace FBI.MVC.View
 {
-partial class VersionSelectionPane : AddinExpress.XL.ADXExcelTaskPane
+partial class VersionSelectionPane : AddinExpress.XL.ADXExcelTaskPane, IView
 {
 
 	//Form overrides dispose to clean up the component list.
@@ -33,7 +33,7 @@ partial class VersionSelectionPane : AddinExpress.XL.ADXExcelTaskPane
 	{
       this.components = new System.ComponentModel.Container();
       System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(VersionSelectionPane));
-      this.TableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+    this.TableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
       this.m_versionSelectionLabel = new VIBlend.WinForms.Controls.vLabel();
       this.m_validateButton = new VIBlend.WinForms.Controls.vButton();
       this.BTsIL = new System.Windows.Forms.ImageList(this.components);
@@ -115,7 +115,8 @@ partial class VersionSelectionPane : AddinExpress.XL.ADXExcelTaskPane
       this.Name = "VersionSelectionPane";
       this.Text = "Versions Selection";
       this.ADXBeforeTaskPaneShow += new AddinExpress.XL.ADXBeforeTaskPaneShowEventHandler(this.VersionSelectionPane_ADXBeforeTaskPaneShow);
-      this.TableLayoutPanel1.ResumeLayout(false);
+      this.Visible = false;  
+    this.TableLayoutPanel1.ResumeLayout(false);
       this.ResumeLayout(false);
 
 	}

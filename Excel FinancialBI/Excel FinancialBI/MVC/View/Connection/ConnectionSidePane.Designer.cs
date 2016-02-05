@@ -131,7 +131,7 @@ namespace FBI.MVC.View
       // 
       this.m_circularProgress2.AllowAnimations = true;
       this.m_circularProgress2.BackColor = System.Drawing.Color.Transparent;
-      this.m_circularProgress2.IndicatorsCount = 10;
+      this.m_circularProgress2.IndicatorsCount = 8;
       this.m_circularProgress2.Location = new System.Drawing.Point(73, 256);
       this.m_circularProgress2.Maximum = 100;
       this.m_circularProgress2.Minimum = 0;

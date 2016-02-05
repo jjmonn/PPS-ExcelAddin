@@ -4,9 +4,12 @@ using System.ComponentModel;
 using System.Windows.Forms;
 using AddinExpress.MSO;
 using Excel = Microsoft.Office.Interop.Excel;
+using AddinExpress.XL;
 
 namespace FBI
 {
+  using MVC.View;
+
   [GuidAttribute("D046D807-38A0-47AF-AB7B-71AA24A67FB9"), ProgId("ExcelFinancialBI.AddinModule")]
   public partial class AddinModule : AddinExpress.MSO.ADXAddinModule
   {
@@ -27,7 +30,6 @@ namespace FBI
       Addin.Main();
     }
 
-  
     #region Add-in Express automatic code
 
     // Required by Add-in Express - do not modify
@@ -73,64 +75,45 @@ namespace FBI
 
     #region Side panes accessors
 
-    public MVC.View.ConnectionSidePane ConnectionSidePane
-    {
-        get
-        {
-            AddinExpress.XL.ADXExcelTaskPane l_taskPaneInstance = null;
-            l_taskPaneInstance = (AddinExpress.XL.ADXExcelTaskPane)ConnectionSidePaneItem.TaskPaneInstance;
-            if (l_taskPaneInstance == null)
-            {
-                l_taskPaneInstance = (MVC.View.ConnectionSidePane)ConnectionSidePaneItem.CreateTaskPaneInstance();
-            }
-
-            return l_taskPaneInstance as MVC.View.ConnectionSidePane;
-        }
-    }
-
-    public MVC.View.VersionSelectionPane VersionSelectionSidePane
+    public ConnectionSidePane ConnectionSidePane
     {
       get
       {
-        AddinExpress.XL.ADXExcelTaskPane l_taskPaneInstance = null;
-        l_taskPaneInstance = (AddinExpress.XL.ADXExcelTaskPane)VersionSelectionSidePaneItem.TaskPaneInstance;
-        if (l_taskPaneInstance == null)
-        {
-          l_taskPaneInstance = (MVC.View.VersionSelectionPane)VersionSelectionSidePaneItem.CreateTaskPaneInstance();
-        }
-
-        return l_taskPaneInstance as MVC.View.VersionSelectionPane;
+        if (ConnectionSidePaneItem.TaskPaneInstance != null)
+          return (ConnectionSidePaneItem.TaskPaneInstance as ConnectionSidePane);
+        return (ConnectionSidePaneItem.CreateTaskPaneInstance() as ConnectionSidePane);
       }
     }
 
-    public MVC.View.ReportUploadEntitySelectionSidePane ReportUploadEntitySelectionSidePane
+    public VersionSelectionPane VersionSelectionSidePane
     {
       get
       {
-        AddinExpress.XL.ADXExcelTaskPane l_taskPaneInstance = null;
-        l_taskPaneInstance = (AddinExpress.XL.ADXExcelTaskPane)ReportUploadEntitySelectionSidePaneItem.TaskPaneInstance;
-        if (l_taskPaneInstance == null)
-        {
-          l_taskPaneInstance = (MVC.View.ReportUploadEntitySelectionSidePane)ReportUploadEntitySelectionSidePaneItem.CreateTaskPaneInstance();
-        }
-        return l_taskPaneInstance as MVC.View.ReportUploadEntitySelectionSidePane;
+        if (VersionSelectionSidePaneItem.TaskPaneInstance != null)
+          return (VersionSelectionSidePaneItem.TaskPaneInstance as VersionSelectionPane);
+        return (VersionSelectionSidePaneItem.CreateTaskPaneInstance() as VersionSelectionPane);
       }
     }
 
-    public MVC.View.ReportUploadAccountInfoSidePane ReportUploadAccountInfoSidePane
+    public ReportUploadEntitySelectionSidePane ReportUploadEntitySelectionSidePane
     {
       get
       {
-        AddinExpress.XL.ADXExcelTaskPane l_taskPaneInstance = null;
-        l_taskPaneInstance = (AddinExpress.XL.ADXExcelTaskPane)ReportUploadAccountInfoSidePaneItem.TaskPaneInstance;
-        if (l_taskPaneInstance == null)
-        {
-          l_taskPaneInstance = (MVC.View.ReportUploadAccountInfoSidePane)ReportUploadAccountInfoSidePaneItem.CreateTaskPaneInstance();
-        }
-        return l_taskPaneInstance as MVC.View.ReportUploadAccountInfoSidePane;
+        if (ReportUploadEntitySelectionSidePaneItem.TaskPaneInstance != null)
+          return (ReportUploadEntitySelectionSidePaneItem.TaskPaneInstance as ReportUploadEntitySelectionSidePane);
+        return (ReportUploadEntitySelectionSidePaneItem.CreateTaskPaneInstance() as ReportUploadEntitySelectionSidePane);
       }
     }
 
+    public ReportUploadAccountInfoSidePane ReportUploadAccountInfoSidePane
+    {
+      get
+      {
+        if (ReportUploadAccountInfoSidePaneItem.TaskPaneInstance != null)
+          return (ReportUploadAccountInfoSidePaneItem.TaskPaneInstance as ReportUploadAccountInfoSidePane);
+        return (ReportUploadAccountInfoSidePaneItem.CreateTaskPaneInstance() as ReportUploadAccountInfoSidePane);
+      }
+    }
 
     #endregion
 
@@ -138,7 +121,7 @@ namespace FBI
 
     #region Instance variables
 
-        private const Double EXCEL_MIN_VERSION = 9;
+    private const Double EXCEL_MIN_VERSION = 9;
 
     #endregion
 
@@ -148,19 +131,29 @@ namespace FBI
 
     private void m_connectionButton_OnClick(object sender, IRibbonControl control, bool pressed)
     {
-        if (Convert.ToDouble(ExcelApp.Version.Replace(".", ",")) > EXCEL_MIN_VERSION)
-        {
-            Addin.ConnectionTaskPaneVisible = true;
-            ConnectionSidePane.MVisible = true;
-            // ConnectionSidePane.Init();
-            ConnectionSidePane.Show();
-        }
-        
+      if (Convert.ToDouble(ExcelApp.Version.Replace(".", ",")) > EXCEL_MIN_VERSION)
+      {
+        ConnectionSidePane.m_shown = true;
+        ConnectionSidePane.Show();
+      }
     }
 
     private void m_versionRibbonButton_OnClick(object sender, IRibbonControl control, bool pressed)
     {
+      VersionSelectionSidePane.m_shown = true;
+      VersionSelectionSidePane.Show();
+    }
 
+    private void m_financialProcessRibbonButton_OnClick(object sender, IRibbonControl control, bool pressed)
+    {
+      m_processRibbonButton.Caption = FBI.Utils.Local.GetValue("process.process_financial");
+      Addin.SetCurrentProcessId(FBI.MVC.Model.CRUD.Account.AccountProcess.FINANCIAL);
+    }
+
+    private void m_RHProcessRibbonButton_OnClick(object sender, IRibbonControl control, bool pressed)
+    {
+      m_processRibbonButton.Caption = FBI.Utils.Local.GetValue("process.process_rh");
+      Addin.SetCurrentProcessId(FBI.MVC.Model.CRUD.Account.AccountProcess.RH);
     }
 
     private void m_snapshotRibbonSplitButton_OnClick(object sender, IRibbonControl control, bool pressed)
@@ -238,12 +231,8 @@ namespace FBI
 
     #endregion
 
-   
-
-  
-
     #endregion
-
 
   }
 }
+

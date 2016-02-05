@@ -9,6 +9,7 @@ namespace FBI
   using Network;
   using Properties;
   using Utils;
+  using FBI.MVC.Model.CRUD;
 
   static class Addin
   {
@@ -18,7 +19,6 @@ namespace FBI
     public delegate void ConnectEventHandler();
 
     static NetworkLauncher m_networkLauncher = new NetworkLauncher();
-    public static bool ConnectionTaskPaneVisible { get; set; }
 
     static void SelectLanguage()
     {
@@ -38,17 +38,27 @@ namespace FBI
 
     public static void Main()
     {
-      //SelectLanguage();
-      Local.LoadLocalFile(Properties.Resources.english);
+      SelectLanguage();
     }
 
-    static bool Connect()
+    public static void SetCurrentProcessId(Account.AccountProcess p_processId)
+    {
+      FBI.Properties.Settings.Default.processId = (int)p_processId;
+      FBI.Properties.Settings.Default.Save();
+    }
+
+    public static bool Connect(string p_userName, string p_password)
+    {
+      return (Connect_Intern(p_userName, p_password));
+    }
+
+    static bool Connect_Intern(string p_userName = "", string p_password = "")
     {
       if (m_networkLauncher.Launch("192.168.0.41", 4242, OnDisconnect) == true)
       {
         if (ConnectEvent != null)
           ConnectEvent();
-        Authenticator.Instance.AskAuthentication("root", "root");
+        Authenticator.Instance.AskAuthentication(p_userName, p_password);
         return (true);
       }
       return (false);
@@ -62,7 +72,7 @@ namespace FBI
       while (failed && nbTry > 0)
       {
         System.Threading.Thread.Sleep(3000);
-        Connect();
+        Connect_Intern();
       }
       if (DisconnectEvent != null)
         DisconnectEvent();

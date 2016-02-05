@@ -29,6 +29,7 @@ namespace FBI.MVC.View
         /// </summary>
         private void InitializeComponent()
         {
+      System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ReportUploadEntitySelectionSidePane));
       this.TableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
       this.m_entitySelectionLabel = new VIBlend.WinForms.Controls.vLabel();
       this.m_periodsSelectionLabel = new VIBlend.WinForms.Controls.vLabel();
@@ -184,6 +185,7 @@ namespace FBI.MVC.View
       this.BackColor = System.Drawing.SystemColors.Control;
       this.ClientSize = new System.Drawing.Size(259, 685);
       this.Controls.Add(this.TableLayoutPanel1);
+      this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
       this.Location = new System.Drawing.Point(0, 0);
       this.Name = "ReportUploadEntitySelectionSidePane";
       this.Text = "Data Edition";

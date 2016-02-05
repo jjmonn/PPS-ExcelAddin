@@ -128,7 +128,7 @@ namespace FBI.MVC.Model
       return null;
     }
 
-    MultiIndexDictionary<UInt32, Tuple<UInt32, UInt32>, AxisFilter> GetDictionary(AxisType p_axis)
+    public MultiIndexDictionary<UInt32, Tuple<UInt32, UInt32>, AxisFilter> GetDictionary(AxisType p_axis)
     {
       if (m_axisFilterDictionary.ContainsKey(p_axis) == false)
         return null;

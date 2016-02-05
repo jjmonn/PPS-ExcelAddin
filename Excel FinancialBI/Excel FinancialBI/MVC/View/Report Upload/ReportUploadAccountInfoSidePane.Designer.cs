@@ -29,6 +29,7 @@ namespace FBI.MVC.View
         /// </summary>
         private void InitializeComponent()
         {
+      System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ReportUploadAccountInfoSidePane));
       this.m_accountTypeTextBox = new VIBlend.WinForms.Controls.vTextBox();
       this.m_accountTextBox = new VIBlend.WinForms.Controls.vTextBox();
       this.m_formulaTextBox = new System.Windows.Forms.TextBox();
@@ -178,6 +179,7 @@ namespace FBI.MVC.View
       this.Controls.Add(this.VLabel2);
       this.Controls.Add(this.m_accountTextBox);
       this.Controls.Add(this.VLabel1);
+      this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
       this.Location = new System.Drawing.Point(0, 0);
       this.Name = "ReportUploadAccountInfoSidePane";
       this.Text = "Account\'s details";
