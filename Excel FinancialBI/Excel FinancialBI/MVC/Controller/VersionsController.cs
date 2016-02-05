@@ -14,7 +14,6 @@ namespace FBI.MVC.Controller
   public class VersionsController : NameController
   {
     VersionsView m_view;
-    public string Error { get; set; }
 
     public VersionsController(VersionsView p_view)
     {
@@ -23,7 +22,7 @@ namespace FBI.MVC.Controller
       LoadView();
     }
 
-    public void LoadView()
+    public override void LoadView()
     {
 
     }

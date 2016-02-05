@@ -13,6 +13,8 @@ namespace FBI.MVC.Controller
   {
     public string Error { get; set; }
 
+    abstract public void LoadView();
+
     public bool IsNameAlreadyUsed(string p_name)
     {
       if (VersionModel.Instance.GetValue(p_name) != null)
