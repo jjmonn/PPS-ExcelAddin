@@ -17,7 +17,7 @@ namespace FBI.MVC.Controller
 
     abstract public void LoadView();
     abstract public void Close();
-   
+
     public bool IsNameValidAndNotAlreadyUsed(string p_name)
     {
       return (this.IsNameValid(p_name) && !this.IsNameAlreadyUsed(p_name));
