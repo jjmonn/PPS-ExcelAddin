@@ -234,9 +234,7 @@
     <Compile Include="AddinModule.Designer.cs">
       <DependentUpon>AddinModule.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\FBIDataGridView.cs">
-      <SubType>Component</SubType>
-    </Compile>
+    <Compile Include="Forms\FBIDataGridView.cs" />
     <Compile Include="Forms\FbiTreeView.cs">
       <SubType>Component</SubType>
     </Compile>

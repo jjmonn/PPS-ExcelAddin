@@ -33,7 +33,11 @@ namespace FBI.MVC.View
       MultiIndexDictionary<UInt32, string, AxisElem> l_axisElemDic = AxisElemModel.Instance.GetDictionary(m_axisType);
       MultiIndexDictionary<UInt32, string, Filter> l_filterDic = FilterModel.Instance.GetDictionary(m_axisType);
 
+      if (l_axisElemDic == null)
+        return;
       m_dgv.InitializeRows(AxisElemModel.Instance, l_axisElemDic);
+      if (l_filterDic == null)
+        return;
       m_dgv.InitializeColumns(FilterModel.Instance, l_filterDic);
       FillDGV();
       Controls.Add(m_dgv);
@@ -43,6 +47,8 @@ namespace FBI.MVC.View
     {
       MultiIndexDictionary<UInt32, Tuple<UInt32, UInt32>, AxisFilter> l_axisFilterDic = AxisFilterModel.Instance.GetDictionary(m_axisType);
 
+      if (l_axisFilterDic == null)
+        return;
       foreach (AxisFilter l_axisFilter in l_axisFilterDic.Values)
       {
         FilterValue l_filterValue = FilterValueModel.Instance.GetValue(l_axisFilter.FilterValueId);
