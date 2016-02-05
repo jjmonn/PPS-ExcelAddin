@@ -24,7 +24,7 @@ namespace FBI
 
     private void AddinModule_AddinInitialize(object sender, EventArgs e)
     {
-      //  Addin.Main();
+      Addin.Main();
     }
 
     #region Add-in Express automatic code
