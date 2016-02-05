@@ -11,10 +11,9 @@ namespace FBI.MVC.Controller
   using Model.CRUD;
   using Utils;
 
-  public class VersionsController : IController
+  public class VersionsController : NameController
   {
     VersionsView m_view;
-    public string Error { get; set; }
 
     public VersionsController(VersionsView p_view)
     {
@@ -23,38 +22,12 @@ namespace FBI.MVC.Controller
       LoadView();
     }
 
-    public void LoadView()
+    public override void LoadView()
     {
 
     }
 
     #region Validity Check
-
-    bool IsNameAlreadyUsed(string p_name)
-    {
-      if (VersionModel.Instance.GetValue(p_name) != null)
-      {
-        Error = Local.GetValue("general.error.name_already_used");
-        return (true);
-      }
-      return (false);
-    }
-
-    bool IsNameValid(string p_name)
-    {
-      if (p_name.Length > Constants.NAMES_MAX_LENGTH)
-      {
-        Error = Local.GetValue("general.error.name_too_long");
-        return (false);
-      }
-      if (StringUtils.ContainChars(p_name, Constants.FORBIDEN_CHARS))
-      {
-        Error = Local.GetValue("general.error.invalid_name");
-        return (false);
-      }
-      return (true);
-    }
-
     bool IsCompatibleVersion(Version p_version, BaseVersion p_cmpVersion)
     {
       if (p_cmpVersion == null)
