@@ -8,17 +8,8 @@ namespace FBI.MVC.Model.CRUD
 {
   using Network;
 
-  public class GlobalFactVersion : NamedHierarchyCRUDEntity, IComparable
+  public class GlobalFactVersion : BaseVersion, IComparable, NamedHierarchyCRUDEntity
   {
-    public UInt32 Id { get; private set; }
-    public UInt32 ParentId { get; set; }
-    public string Name { get; set; }
-    public bool IsFolder { get; set; }
-    public Int32 ItemPosition { get; set; }
-    public UInt32 StartPeriod { get; set; }
-    public UInt16 NbPeriod { get; set; }
-    public UInt32 Image { get; set; }
-
     public GlobalFactVersion() { }
     private GlobalFactVersion(UInt32 p_id)
     {

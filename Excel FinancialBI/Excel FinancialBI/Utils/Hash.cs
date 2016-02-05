@@ -32,5 +32,21 @@ namespace FBI.Utils
 
       return sb.ToString().ToUpperInvariant();
     }
+
+    public static string GetSHA1(string p_stringToHash)
+    {
+      SHA1CryptoServiceProvider sha1Obj = new SHA1CryptoServiceProvider();
+      byte[] bytesToHash = System.Text.Encoding.ASCII.GetBytes(p_stringToHash);
+
+      bytesToHash = sha1Obj.ComputeHash(bytesToHash);
+
+      string strResult = "";
+
+      foreach (byte b in bytesToHash)
+      {
+        strResult += b.ToString("x2");
+      }
+      return strResult;
+    }
   }
 }
