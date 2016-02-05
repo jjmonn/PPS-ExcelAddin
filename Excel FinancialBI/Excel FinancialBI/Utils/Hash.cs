@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using System.Security.Cryptography;
 using System.IO;
 using System.Diagnostics;
-using System.Security.Cryptography;
 
 namespace FBI.Utils
 {

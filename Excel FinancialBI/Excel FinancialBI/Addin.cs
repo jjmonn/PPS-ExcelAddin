@@ -42,13 +42,18 @@ namespace FBI
       Local.LoadLocalFile(Properties.Resources.english);
     }
 
-    static bool Connect()
+    public static bool Connect(string p_userName, string p_password)
+    {
+      return (Connect_Intern(p_userName, p_password));
+    }
+
+    static bool Connect_Intern(string p_userName = "", string p_password = "")
     {
       if (m_networkLauncher.Launch("192.168.0.41", 4242, OnDisconnect) == true)
       {
         if (ConnectEvent != null)
           ConnectEvent();
-        Authenticator.Instance.AskAuthentication("root", "root");
+        Authenticator.Instance.AskAuthentication(p_userName, p_password);
         return (true);
       }
       return (false);
@@ -62,7 +67,7 @@ namespace FBI
       while (failed && nbTry > 0)
       {
         System.Threading.Thread.Sleep(3000);
-        Connect();
+        Connect_Intern();
       }
       if (DisconnectEvent != null)
         DisconnectEvent();
