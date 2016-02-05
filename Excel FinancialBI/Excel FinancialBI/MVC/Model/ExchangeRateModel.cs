@@ -40,14 +40,15 @@ namespace FBI.MVC.Model
 
     #region CRUD
 
-    protected override void ListAnswer(ByteBuffer packet)
+    protected override void ListAnswer(ByteBuffer p_packet)
     {
-      if (packet.GetError() == ErrorMessage.SUCCESS)
+      if (p_packet.GetError() == ErrorMessage.SUCCESS)
       {
         m_CRUDDic.Clear();
-        for (Int32 i = 1; i <= packet.ReadInt32(); i++)
+        UInt32 count = p_packet.ReadUint32();
+        for (UInt32 i = 1; i <= count; i++)
         {
-          ExchangeRate tmp_rate = Build(packet) as ExchangeRate;
+          ExchangeRate tmp_rate = Build(p_packet) as ExchangeRate;
 
           m_CRUDDic.Set(tmp_rate.Id, new Tuple<UInt32, UInt32, UInt32>(tmp_rate.DestCurrencyId, tmp_rate.RateVersionId, tmp_rate.Period), tmp_rate);
         }

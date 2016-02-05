@@ -16,6 +16,15 @@ namespace FBI.Forms
     SafeDictionary<UInt32, HierarchyItem> m_rowsDic = new SafeDictionary<UInt32, HierarchyItem>();
     SafeDictionary<UInt32, HierarchyItem> m_columnsDic = new SafeDictionary<UInt32, HierarchyItem>();
 
+    static bool Implements<TInterface>(Type type) where TInterface : class
+    {
+      var interfaceType = typeof(TInterface);
+
+      if (!interfaceType.IsInterface)
+        return (false);
+      return (interfaceType.IsAssignableFrom(type));
+    }
+
     public FbiDataGridView()
     {
       this.RowsHierarchy.Clear();
@@ -30,7 +39,7 @@ namespace FBI.Forms
 
     public void InitializeRows(ICRUDModel<T> p_model, MultiIndexDictionary<uint, string, T> p_dic)
     {
-      if (typeof(T).IsSubclassOf(typeof(NamedHierarchyCRUDEntity)))
+      if (Implements<NamedHierarchyCRUDEntity>(typeof(T)))
         foreach (T l_elem in p_dic.Values)
         {
           NamedHierarchyCRUDEntity l_hierarchyElem = l_elem as NamedHierarchyCRUDEntity;
@@ -44,7 +53,7 @@ namespace FBI.Forms
     public void InitializeColumns(ICRUDModel<U> p_model, MultiIndexDictionary<uint, string, U> p_dic)
     {
       foreach (U l_elem in p_dic.Values)
-        SetDimension(m_rowsDic, p_model, l_elem.Id, l_elem.Name);
+        SetDimension(m_columnsDic, p_model, l_elem.Id, l_elem.Name);
     }
 
     HierarchyItem SetDimension<J>(SafeDictionary<UInt32, HierarchyItem> p_saveDic, ICRUDModel<J> p_model, UInt32 p_id, string p_name, bool p_hasParent = false, UInt32 p_parentId = 0) where J : class, NamedCRUDEntity
@@ -63,7 +72,8 @@ namespace FBI.Forms
         l_row = p_saveDic[p_id];
       l_row.ItemValue = p_id;
       l_row.Caption = p_name;
-      if (p_hasParent == true && p_parentId != 0 && typeof(J).IsSubclassOf(typeof(NamedHierarchyCRUDEntity)))
+      if (p_hasParent == true && p_parentId != 0 && Implements<NamedHierarchyCRUDEntity>(typeof(J)))
+
       {
         HierarchyItem parent = null;
         NamedHierarchyCRUDEntity parentEntity = p_model.GetValue(p_parentId) as NamedHierarchyCRUDEntity;

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace FBI.MVC.Controller
 {
@@ -20,6 +21,11 @@ namespace FBI.MVC.Controller
       m_view = p_view;
       m_view.SetController(this);
       LoadView();
+    }
+
+    public override void AddControlToPanel(Panel p_panel)
+    {
+
     }
 
     public override void LoadView()
