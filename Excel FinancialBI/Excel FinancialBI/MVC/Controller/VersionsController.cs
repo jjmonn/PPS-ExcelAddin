@@ -23,11 +23,6 @@ namespace FBI.MVC.Controller
       LoadView();
     }
 
-    public override void AddControlToPanel(Panel p_panel)
-    {
-
-    }
-
     public override void LoadView()
     {
     
