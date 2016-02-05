@@ -20,7 +20,7 @@ namespace FBI.MVC.Controller
       m_axisId = p_axisId;
     }
 
-    public override void AddControlToPanel(Panel p_panel)
+    public void AddControlToPanel(Panel p_panel)
     {
       throw new NotImplementedException();
     }
