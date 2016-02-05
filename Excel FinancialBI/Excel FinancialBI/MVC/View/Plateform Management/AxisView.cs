@@ -19,7 +19,7 @@ namespace FBI.MVC.View
 
   public partial class AxisView : UserControl, IView
   {
-    FBIDataGridView<AxisElem, Filter, string> m_dgv;
+    FBIDataGridView<AxisElem, Filter, string> m_dgv = new FBIDataGridView<AxisElem,Filter,string>();
     AxisType m_axisType;
 
     public AxisView(AxisType p_axisType)
@@ -28,13 +28,15 @@ namespace FBI.MVC.View
       m_axisType = p_axisType;
     }
     
-    void LoadView()
+    public void LoadView()
     {
       MultiIndexDictionary<UInt32, string, AxisElem> l_axisElemDic = AxisElemModel.Instance.GetDictionary(m_axisType);
       MultiIndexDictionary<UInt32, string, Filter> l_filterDic = FilterModel.Instance.GetDictionary(m_axisType);
 
       m_dgv.InitializeRows(AxisElemModel.Instance, l_axisElemDic);
       m_dgv.InitializeColumns(FilterModel.Instance, l_filterDic);
+      FillDGV();
+      Controls.Add(m_dgv);
     }
 
     void FillDGV()

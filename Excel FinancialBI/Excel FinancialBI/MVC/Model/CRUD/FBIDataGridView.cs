@@ -13,8 +13,8 @@ namespace FBI.Forms
     where T : class, NamedCRUDEntity 
     where U : class, NamedCRUDEntity
   {
-    SafeDictionary<UInt32, HierarchyItem> m_rowsDic;
-    SafeDictionary<UInt32, HierarchyItem> m_columnsDic;
+    SafeDictionary<UInt32, HierarchyItem> m_rowsDic = new SafeDictionary<UInt32, HierarchyItem>();
+    SafeDictionary<UInt32, HierarchyItem> m_columnsDic = new SafeDictionary<UInt32, HierarchyItem>();
 
     public FBIDataGridView()
     {
@@ -79,6 +79,10 @@ namespace FBI.Forms
       HierarchyItem row = m_rowsDic[p_row];
       HierarchyItem column = m_columnsDic[p_column];
 
+      if (row == null)
+        return;
+      if (column == null)
+        return;
       this.CellsArea.SetCellValue(row, column, p_value);
       this.CellsArea.SetCellEditor(row, column, p_editor);
     }
