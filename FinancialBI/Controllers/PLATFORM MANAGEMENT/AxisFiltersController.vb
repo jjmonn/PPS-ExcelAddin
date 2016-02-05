@@ -41,7 +41,7 @@ Friend Class AxisFiltersController
 
     Friend Sub New(ByRef p_axisType As AxisType)
 
-        m_axisId = p_axisType
+    m_axisId = p_axisType
         AxisFilterManager.LoadFvTv(m_filtersFiltersValuesTV, m_filtersNode, m_axisId)
         m_view = New AxisFiltersView(Me, m_filtersFiltersValuesTV, m_filtersNode, m_axisId)
 

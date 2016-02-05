@@ -231,6 +231,9 @@
     <Compile Include="AddinModule.Designer.cs">
       <DependentUpon>AddinModule.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\FbiTreeView.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="MVC\Controller\IController.cs" />
     <Compile Include="MVC\Model\AccountModel.cs" />
     <Compile Include="MVC\Model\AxisElemModel.cs" />
