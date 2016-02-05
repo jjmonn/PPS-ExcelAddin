@@ -20,8 +20,12 @@ namespace FBI.Forms
     {
       this.RowsHierarchy.Clear();
       m_rowsDic = new SafeDictionary<uint, HierarchyItem>();
+      if (m_columnsDic == null)
+        return;
       this.ColumnsHierarchy.Clear();
       m_columnsDic = new SafeDictionary<uint, HierarchyItem>();
+      if (m_columnsDic == null)
+        return;
     }
 
     public void InitializeRows(ICRUDModel<T> p_model, MultiIndexDictionary<uint, string, T> p_dic)
@@ -50,6 +54,8 @@ namespace FBI.Forms
       if (p_saveDic.ContainsKey(p_id) == false)
       {
         l_row = new HierarchyItem();
+        if (l_row == null)
+          return (null);
         p_saveDic[p_id] = l_row;
         this.ColumnsHierarchy.Items.Add(l_row);
       }
