@@ -13,12 +13,13 @@ namespace FBI.MVC.Controller
 
   class AxisFiltersStructController : NameController
   {
-    private AxisType m_axisType;
+    private AxisFiltersView m_view;
 
-    public AxisFiltersStructController(AxisType p_axisType)
+    public AxisFiltersStructController(AxisFiltersView p_view)
     {
-      m_axisType = p_axisType;
+      m_view = p_view;
     }
+
     public override void Close()
     {
       //TODO
@@ -37,7 +38,7 @@ namespace FBI.MVC.Controller
       {
         l_filter.Name = p_filterName;
         l_filter.ParentId = p_parentId;
-        l_filter.Axis = m_axisType;
+        l_filter.Axis = m_view.AxisType;
         l_filter.IsParent = false;
         FilterModel.Instance.Create(l_filter);
         return (true);

@@ -228,6 +228,7 @@
     
      <!--messages-->
       <string name="msg_new_category_name">Please enter the new category name:</string>
+      <string name="msg_new_value_name">Please enter the new value:</string>
       <string name="msg_no_category_selected">A category must be selected in order to to this.</string>
       <string name="msg_delete_category">You are about to delete a category. Do you confirm ?</string>
       <string name="msg_delete_value">You are about to delete a value. Do you confirm ?</string>

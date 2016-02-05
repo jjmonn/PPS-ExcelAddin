@@ -13,15 +13,16 @@ namespace FBI.MVC.Controller
 
   class AxisFilterController : NameController
   {
+    private AxisFiltersView m_view;
+
+    public AxisFilterController(AxisFiltersView p_view)
+    {
+      m_view = p_view;
+    }
+
     public override void LoadView()
     {
-      // Add any dispose action here !
-      /* if (m_view != null)
-       {
-         m_view.Hide();
-         m_view.Dispose();
-         m_view = null;
-       }*/
+      //
     }
 
     public override void Close()

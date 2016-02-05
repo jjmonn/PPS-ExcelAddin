@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Microsoft.VisualBasic;
 using System.Diagnostics;
+using VIBlend.WinForms.Controls;
 
 namespace FBI.MVC.View
 {
@@ -31,8 +32,17 @@ namespace FBI.MVC.View
       try
       {
         m_axisType = p_axisType;
-        //FilterValueModel.Instance.GetDictionary(m_axisType);
-        //m_tree = new FbiTreeView<FilterValue>(null);
+        m_tree = new FbiTreeView<FilterValue>();
+        foreach (MultiIndexDictionary<UInt32, string, FilterValue> l_dic in FilterValueModel.Instance.GetDictionary().Values)
+        {
+          if (!m_tree.Append(l_dic))
+          {
+            throw new Exception("[FbiTreeView] Cannot append dictionnary. Either the dictionnary is null or incorrect");
+          }
+        }
+        m_tree.ContextMenuStrip = m_contextRightClick;
+        m_tree.Dock = DockStyle.Fill;
+        m_valuePanel.Controls.Add(m_tree, 0, 1);
         this.RegisterEvents();
         this.LoadLanguage();
       }
@@ -46,6 +56,11 @@ namespace FBI.MVC.View
     public void SetController(IController p_controller)
     {
       m_controller = p_controller as AxisFilterController;
+    }
+
+    public AxisType AxisType
+    {
+      get { return (m_axisType); }
     }
 
     private void LoadLanguage()
@@ -97,7 +112,20 @@ namespace FBI.MVC.View
 
     private void m_addValue_Click(object sender, EventArgs e)
     {
-      //m_controller.Add();
+      string l_filterName;
+
+      //You can only add a value if you selected a category !
+      if (m_tree.SelectedNode == null || this.IsValue())
+      {
+        MessageBox.Show(Local.GetValue("filters.msg_no_category_selected"), Local.GetValue("filters.new_value"), MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+        return;
+      }
+      l_filterName = Interaction.InputBox(Local.GetValue("filters.msg_new_value_name")).Trim();
+      if (!m_controller.Add(l_filterName, (UInt32)FbiTreeView<FilterValue>.GetRoot(m_tree.SelectedNode).Value, (UInt32)m_tree.SelectedNode.Parent.Value))
+      {
+        MessageBox.Show(Local.GetValue(m_controller.Error), Local.GetValue("filters.new_value"), MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+      }
+      //UPDATE THE TREEVIEW
     }
 
     private void m_delete_Click(object sender, EventArgs e)
@@ -105,10 +133,16 @@ namespace FBI.MVC.View
       if (this.IsCategory() && this.AskConfirmation("filters.msg_delete_category", "filters.delete_category"))
       {
         m_controller.Remove((UInt32)m_tree.SelectedNode.Value);
+        //UPDATE TREEVIEW!!!
       }
       else if (this.IsValue() && this.AskConfirmation("filters.msg_delete_value", "filters.delete_value"))
       {
         m_controller.Remove((UInt32)m_tree.SelectedNode.Value);
+        //UPDATE TREEVIEW!!!
+      }
+      else
+      {
+        MessageBox.Show(Local.GetValue("filters.msg_no_category_selected"), Local.GetValue("filters.categories"), MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
       }
     }
 
@@ -126,6 +160,7 @@ namespace FBI.MVC.View
       {
         MessageBox.Show(Local.GetValue(m_controller.Error), Local.GetValue("filters.new_value"), MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
       }
+      //UPDATE TREEVIEW!!!
     }
 
     private void m_editStruct_Click(object sender, EventArgs e)
@@ -137,16 +172,5 @@ namespace FBI.MVC.View
     {
       m_tree.SelectedNode = null;
     }
-
-    /*
-     * - Country          (Category)
-     *   - City           (Category)
-     *     - Cap-Breton   (Value)
-     * The filterId is 'City'
-     * The parentId is 'Country'
-     * 
-     */
-
-
   }
 }

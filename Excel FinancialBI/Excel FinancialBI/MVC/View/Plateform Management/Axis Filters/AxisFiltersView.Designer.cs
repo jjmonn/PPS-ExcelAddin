@@ -46,7 +46,7 @@ namespace FBI.MVC.View
       this.m_rename = new System.Windows.Forms.ToolStripMenuItem();
       this.ToolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
       this.m_editStruct = new System.Windows.Forms.ToolStripMenuItem();
-      this.RCM_TV = new System.Windows.Forms.ContextMenuStrip(this.components);
+      this.m_contextRightClick = new System.Windows.Forms.ContextMenuStrip(this.components);
       this.m_addValueRightClick = new System.Windows.Forms.ToolStripMenuItem();
       this.ToolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
       this.m_deleteRightClick = new System.Windows.Forms.ToolStripMenuItem();
@@ -55,7 +55,7 @@ namespace FBI.MVC.View
       this.m_expand = new System.Windows.Forms.ToolStripMenuItem();
       this.m_collapse = new System.Windows.Forms.ToolStripMenuItem();
       this.MenuStrip1.SuspendLayout();
-      this.RCM_TV.SuspendLayout();
+      this.m_contextRightClick.SuspendLayout();
       this.SuspendLayout();
       // 
       // m_valuePanel
@@ -107,7 +107,6 @@ namespace FBI.MVC.View
       this.m_addValue.Name = "m_addValue";
       this.m_addValue.Size = new System.Drawing.Size(129, 22);
       this.m_addValue.Text = "New value";
-      this.m_addValue.Click += new System.EventHandler(this.m_addValue_Click);
       // 
       // m_delete
       // 
@@ -115,14 +114,13 @@ namespace FBI.MVC.View
       this.m_delete.Name = "m_delete";
       this.m_delete.Size = new System.Drawing.Size(129, 22);
       this.m_delete.Text = "Delete";
-      this.m_delete.Click += new System.EventHandler(this.m_delete_Click);
+      //this.m_delete.Click += new System.EventHandler(this.m_delete_Click);
       // 
       // m_rename
       // 
       this.m_rename.Name = "m_rename";
       this.m_rename.Size = new System.Drawing.Size(129, 22);
       this.m_rename.Text = "Rename";
-      this.m_rename.Click += new System.EventHandler(this.m_rename_Click);
       // 
       // ToolStripSeparator3
       // 
@@ -135,9 +133,9 @@ namespace FBI.MVC.View
       this.m_editStruct.Size = new System.Drawing.Size(89, 20);
       this.m_editStruct.Text = "Edit structure";
       // 
-      // RCM_TV
+      // m_contextRightClick
       // 
-      this.RCM_TV.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+      this.m_contextRightClick.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.m_addValueRightClick,
             this.ToolStripSeparator2,
             this.m_deleteRightClick,
@@ -145,49 +143,49 @@ namespace FBI.MVC.View
             this.m_renameRightClick,
             this.m_expand,
             this.m_collapse});
-      this.RCM_TV.Name = "RCM_TV";
-      this.RCM_TV.Size = new System.Drawing.Size(135, 126);
+      this.m_contextRightClick.Name = "RCM_TV";
+      this.m_contextRightClick.Size = new System.Drawing.Size(153, 148);
       // 
       // m_addValueRightClick
       // 
       this.m_addValueRightClick.Image = global::FBI.Properties.Resources.add;
       this.m_addValueRightClick.Name = "m_addValueRightClick";
-      this.m_addValueRightClick.Size = new System.Drawing.Size(134, 22);
+      this.m_addValueRightClick.Size = new System.Drawing.Size(152, 22);
       this.m_addValueRightClick.Text = "New value";
       // 
       // ToolStripSeparator2
       // 
       this.ToolStripSeparator2.Name = "ToolStripSeparator2";
-      this.ToolStripSeparator2.Size = new System.Drawing.Size(131, 6);
+      this.ToolStripSeparator2.Size = new System.Drawing.Size(149, 6);
       // 
       // m_deleteRightClick
       // 
       this.m_deleteRightClick.Image = global::FBI.Properties.Resources.imageres_89;
       this.m_deleteRightClick.Name = "m_deleteRightClick";
-      this.m_deleteRightClick.Size = new System.Drawing.Size(134, 22);
+      this.m_deleteRightClick.Size = new System.Drawing.Size(152, 22);
       this.m_deleteRightClick.Text = "Delete";
       // 
       // ToolStripSeparator1
       // 
       this.ToolStripSeparator1.Name = "ToolStripSeparator1";
-      this.ToolStripSeparator1.Size = new System.Drawing.Size(131, 6);
+      this.ToolStripSeparator1.Size = new System.Drawing.Size(149, 6);
       // 
       // m_renameRightClick
       // 
       this.m_renameRightClick.Name = "m_renameRightClick";
-      this.m_renameRightClick.Size = new System.Drawing.Size(134, 22);
+      this.m_renameRightClick.Size = new System.Drawing.Size(152, 22);
       this.m_renameRightClick.Text = "Rename";
       // 
       // m_expand
       // 
       this.m_expand.Name = "m_expand";
-      this.m_expand.Size = new System.Drawing.Size(134, 22);
+      this.m_expand.Size = new System.Drawing.Size(152, 22);
       this.m_expand.Text = "Expand_all";
       // 
       // m_collapse
       // 
       this.m_collapse.Name = "m_collapse";
-      this.m_collapse.Size = new System.Drawing.Size(134, 22);
+      this.m_collapse.Size = new System.Drawing.Size(152, 22);
       this.m_collapse.Text = "Collapse all";
       // 
       // AxisFiltersView
@@ -200,7 +198,7 @@ namespace FBI.MVC.View
       this.Size = new System.Drawing.Size(525, 430);
       this.MenuStrip1.ResumeLayout(false);
       this.MenuStrip1.PerformLayout();
-      this.RCM_TV.ResumeLayout(false);
+      this.m_contextRightClick.ResumeLayout(false);
       this.ResumeLayout(false);
       this.PerformLayout();
 
@@ -212,7 +210,7 @@ namespace FBI.MVC.View
     internal System.Windows.Forms.ToolStripMenuItem m_addValue;
     internal System.Windows.Forms.ToolStripMenuItem m_rename;
     internal System.Windows.Forms.ToolStripMenuItem m_delete;
-    internal System.Windows.Forms.ContextMenuStrip RCM_TV;
+    internal System.Windows.Forms.ContextMenuStrip m_contextRightClick;
     internal System.Windows.Forms.ToolStripMenuItem m_addValueRightClick;
     internal System.Windows.Forms.ToolStripSeparator ToolStripSeparator2;
     internal System.Windows.Forms.ToolStripMenuItem m_renameRightClick;

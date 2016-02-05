@@ -15,17 +15,22 @@ namespace FBI.Forms
   public class FbiTreeView<T> : vTreeView where T : NamedCRUDEntity
   {
     private MultiIndexDictionary<UInt32, String, T> m_items;
-    private MultiIndexDictionary<UInt32, String, T> m_icons;
     private static readonly string ERR_GENERATE = "[FbiTreeView] Cannot generate vTreeView. Either the MultiIndexDictionary is null or incorrect";
 
-    public FbiTreeView(MultiIndexDictionary<UInt32, String, T> p_items, MultiIndexDictionary<UInt32, String, T> p_icons = null)
+    public FbiTreeView(MultiIndexDictionary<UInt32, String, T> p_items = null, MultiIndexDictionary<UInt32, String, T> p_icons = null)
     {
       m_items = p_items;
-      m_icons = p_icons;
-      if (p_items == null || !this.Load())
+      if (p_items != null && !this.Load(p_items, p_icons))
       {
         throw new Exception(ERR_GENERATE);
       }
+    }
+
+    public bool Append(MultiIndexDictionary<UInt32, String, T> p_items, MultiIndexDictionary<UInt32, String, T> p_icons = null)
+    {
+      if (p_items == null)
+        return (false);
+      return (this.Load(p_items, p_icons));
     }
 
     public bool Add(vTreeNode p_node)
@@ -92,6 +97,15 @@ namespace FBI.Forms
         BackColor = Color.White;
     }
 
+    public static vTreeNode GetRoot(vTreeNode p_node)
+    {
+      vTreeNode l_node = p_node;
+
+      while (l_node.Parent != null)
+        l_node = l_node.Parent;
+      return (l_node);
+    }
+
     public static bool Swap(vTreeNode p_nodeX, vTreeNode p_nodeY)
     {
       vTreeNode l_node = p_nodeX;
@@ -112,16 +126,16 @@ namespace FBI.Forms
       return (interfaceType.IsAssignableFrom(type));
     }
 
-    private bool Load()
+    private bool Load(MultiIndexDictionary<UInt32, String, T> p_items, MultiIndexDictionary<UInt32, String, T> p_icons = null)
     {
       if (Implements<NamedHierarchyCRUDEntity>(typeof(T)))
       {
-        foreach (NamedHierarchyCRUDEntity l_item in m_items.SortedValues)
+        foreach (NamedHierarchyCRUDEntity l_item in p_items.SortedValues)
         {
           if (l_item.ParentId == 0)
           {
             vTreeNode l_node = new vTreeNode();
-            if (!this.Generate(l_node, l_item.Id))
+            if (!this.Generate(p_items, l_node, l_item.Id, p_icons))
               return (false);
             this.Nodes.Add(l_node);
           }
@@ -140,27 +154,27 @@ namespace FBI.Forms
       return (true);
     }
 
-    private bool Generate(vTreeNode p_node, UInt32 p_itemId)
+    private bool Generate(MultiIndexDictionary<UInt32, String, T> p_items, vTreeNode p_node, UInt32 p_itemId, MultiIndexDictionary<UInt32, String, T> p_icons = null)
     {
       if (Implements<NamedHierarchyCRUDEntity>(typeof(T)))
       {
-        NamedHierarchyCRUDEntity l_currentItem = (NamedHierarchyCRUDEntity)m_items[p_itemId];
+        NamedHierarchyCRUDEntity l_currentItem = (NamedHierarchyCRUDEntity)p_items[p_itemId];
 
         if (l_currentItem == null)
           return (false);
         p_node.Value = l_currentItem.ToString();
         p_node.Text = l_currentItem.Name;
-        foreach (NamedHierarchyCRUDEntity l_item in m_items.SortedValues)
+        foreach (NamedHierarchyCRUDEntity l_item in p_items.SortedValues)
         {
           if (l_item.ParentId == l_currentItem.Id)
           {
             vTreeNode l_node = new vTreeNode();
-            if (!this.Generate(l_node, l_item.Id))
+            if (!this.Generate(p_items, l_node, l_item.Id, p_icons))
               return (false);
             p_node.Nodes.Add(l_node);
-            if (m_icons != null)
+            if (p_icons != null)
             {
-              p_node.ImageIndex = (int)m_icons[l_item.Id].Image;
+              p_node.ImageIndex = (int)p_icons[l_item.Id].Image;
             }
           }
         }
