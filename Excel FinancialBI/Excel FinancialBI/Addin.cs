@@ -44,6 +44,8 @@ namespace FBI
       ICRUDModel<FilterValue> l_filterValue = FilterValueModel.Instance;
       ICRUDModel<AxisFilter> l_axisFilter = AxisFilterModel.Instance;
       ICRUDModel<Version> l_version = VersionModel.Instance;
+      ICRUDModel<Account> l_account = AccountModel.Instance;
+      ICRUDModel<GlobalFact> l_globalFact = GlobalFactModel.Instance;
     }
 
     public static void Main()

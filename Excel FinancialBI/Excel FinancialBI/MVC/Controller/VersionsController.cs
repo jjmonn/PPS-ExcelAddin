@@ -31,9 +31,12 @@ namespace FBI.MVC.Controller
     public override void Close()
     {
       // Add any dispose action here !
-      m_view.Hide();
-      m_view.Dispose();
-      m_view = null;
+      if (m_view != null)
+      {
+        m_view.Hide();
+        m_view.Dispose();
+        m_view = null;
+      }
     }
 
 

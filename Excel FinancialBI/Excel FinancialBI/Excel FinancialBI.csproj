@@ -234,6 +234,7 @@
     <Compile Include="Forms\FbiTreeView.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="MVC\Controller\AccountController.cs" />
     <Compile Include="MVC\Controller\AxisController.cs" />
     <Compile Include="MVC\Controller\IController.cs" />
     <Compile Include="MVC\Controller\IPlatformManagementController.cs" />
