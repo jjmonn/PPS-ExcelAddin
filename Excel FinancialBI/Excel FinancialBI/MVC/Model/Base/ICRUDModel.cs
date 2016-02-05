@@ -20,7 +20,7 @@ namespace FBI.MVC.Model
 	public bool IsInit { get; protected set; }
 	// Events
 	public event ObjectInitializedEventHandler ObjectInitialized;
-	public delegate void ObjectInitializedEventHandler();
+  public delegate void ObjectInitializedEventHandler(ErrorMessage p_status, Type p_type);
 	public event ReadEventHandler ReadEvent;
 	public delegate void ReadEventHandler(ErrorMessage status, T attributes);
 	public event CreationEventHandler CreationEvent;
@@ -266,10 +266,10 @@ namespace FBI.MVC.Model
 
 	#region "Events"
 
-  protected void RaiseObjectInitializedEvent()
+  protected void RaiseObjectInitializedEvent(ErrorMessage p_status, Type p_type)
   {
     if (ObjectInitialized != null)
-      ObjectInitialized();
+      ObjectInitialized(p_status, p_type);
   }
 
   protected void RaiseReadEvent(ErrorMessage p_status, T p_attributes)

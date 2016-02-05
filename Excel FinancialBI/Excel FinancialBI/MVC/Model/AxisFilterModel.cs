@@ -63,11 +63,11 @@ namespace FBI.MVC.Model
           m_axisFilterDictionary[tmp_ht.Axis].Set(tmp_ht.Id, new Tuple<UInt32, UInt32>(tmp_ht.AxisElemId, tmp_ht.FilterId), tmp_ht);
         }
         IsInit = true;
-        RaiseObjectInitializedEvent();
+        RaiseObjectInitializedEvent(p_packet.GetError(), typeof(AxisFilter));
       }
       else
       {
-        RaiseObjectInitializedEvent();
+        RaiseObjectInitializedEvent(p_packet.GetError(), typeof(AxisFilter));
         IsInit = false;
       }
     }

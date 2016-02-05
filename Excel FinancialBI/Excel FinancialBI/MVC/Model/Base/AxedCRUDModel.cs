@@ -25,39 +25,40 @@ namespace FBI.MVC.Model
         m_CRUDDic[l_axis] = new MultiIndexDictionary<UInt32, string, T>();
     }
 
-    protected override void ListAnswer(ByteBuffer packet)
+    protected override void ListAnswer(ByteBuffer p_packet)
     {
-      if (packet.GetError() == ErrorMessage.SUCCESS)
+      if (p_packet.GetError() == ErrorMessage.SUCCESS)
       {
         Clear();
-        UInt32 count = packet.ReadUint32();
+        UInt32 count = p_packet.ReadUint32();
         for (UInt32 i = 1; i <= count; i++)
         {
-          T tmp_filter = Build(packet) as T;
+          T tmp_filter = Build(p_packet) as T;
 
           m_CRUDDic[tmp_filter.Axis].Set(tmp_filter.Id, tmp_filter.Name, tmp_filter);
         }
         IsInit = true;
-        RaiseObjectInitializedEvent();
+        RaiseObjectInitializedEvent(p_packet.GetError(), typeof(T));
       }
       else
       {
         IsInit = false;
+        RaiseObjectInitializedEvent(p_packet.GetError(), typeof(T));
       }
     }
 
-    protected override void ReadAnswer(ByteBuffer packet)
+    protected override void ReadAnswer(ByteBuffer p_packet)
     {
-      if (packet.GetError() == ErrorMessage.SUCCESS)
+      if (p_packet.GetError() == ErrorMessage.SUCCESS)
       {
-        T tmp_filter = Build(packet) as T;
+        T tmp_filter = Build(p_packet) as T;
 
         m_CRUDDic[tmp_filter.Axis].Set(tmp_filter.Id, tmp_filter.Name, tmp_filter);
-        RaiseReadEvent(packet.GetError(), tmp_filter);
+        RaiseReadEvent(p_packet.GetError(), tmp_filter);
       }
       else
       {
-        RaiseReadEvent(packet.GetError(), null);
+        RaiseReadEvent(p_packet.GetError(), null);
       }
 
     }

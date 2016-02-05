@@ -12,6 +12,8 @@ namespace FBI.MVC.Model
 
   class FactTagModel : SimpleCRUDModel<FactTag>
   {
+    static FactTagModel s_instance = new FactTagModel();
+    public static FactTagModel Instance { get { return (s_instance); } }
     FactTagModel()
     {
       CreateCMSG = ClientMessage.CMSG_CREATE_FACT_TAG;

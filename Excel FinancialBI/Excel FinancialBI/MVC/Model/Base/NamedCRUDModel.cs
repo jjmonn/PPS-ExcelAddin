@@ -30,11 +30,12 @@ namespace FBI.MVC.Model
         }
 
         IsInit = true;
-        RaiseObjectInitializedEvent();
+        RaiseObjectInitializedEvent(p_packet.GetError(), typeof(T));
       }
       else
       {
         IsInit = false;
+        RaiseObjectInitializedEvent(p_packet.GetError(), typeof(T));
       }
     }
 

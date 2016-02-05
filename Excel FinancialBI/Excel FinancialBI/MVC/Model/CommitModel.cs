@@ -100,12 +100,12 @@ namespace FBI.MVC.Model
             m_commitDic[l_commit.EntityId] = new MultiIndexDictionary<UInt32, UInt32, Commit>();
           m_commitDic[l_commit.EntityId].Set(l_commit.Id, l_commit.Period, l_commit);
         }
-        RaiseObjectInitializedEvent();
+        RaiseObjectInitializedEvent(p_packet.GetError(), typeof(Commit));
         IsInit = true;
       }
       else
       {
-        RaiseObjectInitializedEvent();
+        RaiseObjectInitializedEvent(p_packet.GetError(), typeof(Commit));
         IsInit = false;
       }
     }

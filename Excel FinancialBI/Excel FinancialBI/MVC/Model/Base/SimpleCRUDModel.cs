@@ -29,12 +29,12 @@ namespace FBI.MVC.Model
           m_dic.Add(tmpValue.Id, tmpValue);
         }
         IsInit = true;
-        RaiseObjectInitializedEvent();
+        RaiseObjectInitializedEvent(packet.GetError(), typeof(T));
       }
       else
       {
         IsInit = false;
-        RaiseObjectInitializedEvent();
+        RaiseObjectInitializedEvent(packet.GetError(), typeof(T));
       }
 
     }

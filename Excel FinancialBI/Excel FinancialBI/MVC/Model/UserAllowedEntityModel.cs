@@ -61,24 +61,27 @@ namespace FBI.MVC.Model
       NetworkManager.Send(packet);
     }
 
-    protected override void ListAnswer(ByteBuffer packet)
+    protected override void ListAnswer(ByteBuffer p_packet)
     {
-      if (packet.GetError() == ErrorMessage.SUCCESS)
+      if (p_packet.GetError() == ErrorMessage.SUCCESS)
       {
-        UInt32 count = packet.ReadUint32();
+        UInt32 count = p_packet.ReadUint32();
         for (Int32 i = 1; i <= count; i++)
         {
-          UserAllowedEntity l_allowedEntity = Build(packet) as UserAllowedEntity;
+          UserAllowedEntity l_allowedEntity = Build(p_packet) as UserAllowedEntity;
 
           if (m_userAllowedEntityDic.ContainsKey(l_allowedEntity.UserId) == false)
             m_userAllowedEntityDic[l_allowedEntity.UserId] = new MultiIndexDictionary<UInt32, UInt32, UserAllowedEntity>();
           m_userAllowedEntityDic[l_allowedEntity.UserId].Set(l_allowedEntity.Id, l_allowedEntity.EntityId, l_allowedEntity);
         }
-        RaiseObjectInitializedEvent();
+        RaiseObjectInitializedEvent(p_packet.GetError(), typeof(UserAllowedEntity));
         IsInit = true;
       }
       else
+      {
+        RaiseObjectInitializedEvent(p_packet.GetError(), typeof(UserAllowedEntity));
         IsInit = false;
+      }
     }
 
     protected override void ReadAnswer(ByteBuffer packet)
