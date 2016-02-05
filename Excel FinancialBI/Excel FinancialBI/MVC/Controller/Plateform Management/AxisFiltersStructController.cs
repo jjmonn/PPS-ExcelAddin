@@ -19,15 +19,15 @@ namespace FBI.MVC.Controller
     {
       m_axisId = p_axisId;
     }
-
-    public void AddControlToPanel(Panel p_panel)
-    {
-      throw new NotImplementedException();
-    }
-
     public override void Close()
     {
-      throw new NotImplementedException();
+      // Add any dispose action here !
+     /* if (m_view != null)
+      {
+        m_view.Hide();
+        m_view.Dispose();
+        m_view = null;
+      }*/
     }
 
     public override void LoadView()

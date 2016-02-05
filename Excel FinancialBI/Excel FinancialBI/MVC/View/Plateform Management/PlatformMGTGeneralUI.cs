@@ -69,11 +69,12 @@ namespace FBI.MVC.View
 
     }
 
-    private void closeCurrentControl()
+    private void CloseCurrentControl()
     {
       if ((m_currentController != null))
       {
         m_currentController.Close();
+        m_currentController = null;
       }
 
     }
@@ -98,15 +99,15 @@ namespace FBI.MVC.View
 
     private void AccountsBT_Click(object sender, EventArgs e)
     {
-      closeCurrentControl();
+      CloseCurrentControl();
       AccountsView l_accountsView = new AccountsView();
-      // m_currentController = new AccountsController(m_currentView);
+      m_currentController = new AccountController(l_accountsView);
       Panel1.Controls.Add(l_accountsView);
     }
 
     private void m_entitiesBT_Click(object sender, EventArgs e)
     {
-      closeCurrentControl();
+      CloseCurrentControl();
       AxisView l_entitiesView = new AxisView(Model.CRUD.AxisType.Entities);
       m_currentController = new AxisController(l_entitiesView);
       // m_currentController = new EntitiesController(m_currentView);
@@ -115,7 +116,7 @@ namespace FBI.MVC.View
 
     private void m_employeesButton_Click(object sender, EventArgs e)
     {
-      closeCurrentControl();
+      CloseCurrentControl();
       AxisView l_employeesView = new EmployeeView();
       // m_currentController = new EmployeesController(m_currentView);
       Panel1.Controls.Add(l_employeesView);
@@ -168,7 +169,7 @@ namespace FBI.MVC.View
 
     private void VersionsBT_Click(object sender, EventArgs e)
     {
-      closeCurrentControl();
+      CloseCurrentControl();
       VersionsView l_versionsView = new VersionsView();
       m_currentController = new VersionsController(l_versionsView);
       Panel1.Controls.Add(l_versionsView);

@@ -23,11 +23,6 @@ namespace FBI.MVC.Controller
       LoadView();
     }
 
-    public void AddControlToPanel(Panel p_panel)
-    {
-
-    }
-
     public override void LoadView()
     {
     
@@ -36,9 +31,12 @@ namespace FBI.MVC.Controller
     public override void Close()
     {
       // Add any dispose action here !
-      m_view.Hide();
-      m_view.Dispose();
-      m_view = null;
+      if (m_view != null)
+      {
+        m_view.Hide();
+        m_view.Dispose();
+        m_view = null;
+      }
     }
 
 
