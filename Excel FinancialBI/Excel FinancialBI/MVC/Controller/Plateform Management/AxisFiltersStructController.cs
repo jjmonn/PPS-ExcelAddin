@@ -13,16 +13,11 @@ namespace FBI.MVC.Controller
 
   class AxisFiltersStructController : NameController
   {
-    AxisType m_axisId;
+    private AxisType m_axisId;
 
     public AxisFiltersStructController(AxisType p_axisId)
     {
       m_axisId = p_axisId;
-    }
-
-    public override void AddControlToPanel(Panel p_panel, PlatformMGTGeneralUI p_platformMgtUI)
-    {
-      throw new NotImplementedException();
     }
 
     public override void Close()

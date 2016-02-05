@@ -46,7 +46,14 @@ namespace FBI.MVC.View
       else
       {
         if (p_status == ErrorMessage.SUCCESS)
+        {
           Hide();
+          FBI.AddinModule.CurrentInstance.SetConnectionIcon(true);
+        }
+        else
+        {
+          FBI.AddinModule.CurrentInstance.SetConnectionIcon(false);
+        }
       }
     }
 

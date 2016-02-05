@@ -17,8 +17,7 @@ namespace FBI.MVC.Controller
 
     abstract public void LoadView();
     abstract public void Close();
-    abstract public void AddControlToPanel(Panel p_panel, PlatformMGTGeneralUI p_platformMgtUI);
-
+   
     public bool IsNameValidAndNotAlreadyUsed(string p_name)
     {
       return (this.IsNameValid(p_name) && !this.IsNameAlreadyUsed(p_name));
