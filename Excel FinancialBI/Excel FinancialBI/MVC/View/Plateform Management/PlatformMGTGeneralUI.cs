@@ -101,7 +101,7 @@ namespace FBI.MVC.View
     {
       CloseCurrentControl();
       AccountsView l_accountsView = new AccountsView();
-      // m_currentController = new AccountsController(m_currentView);
+      m_currentController = new AccountController(l_accountsView);
       Panel1.Controls.Add(l_accountsView);
     }
 
