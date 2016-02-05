@@ -34,7 +34,8 @@ namespace FBI
 
     public static void Main()
     {
-      SelectLanguage();
+      //SelectLanguage();
+      Local.LoadLocalFile(Properties.Resources.english);
       m_networkLauncher.Launch("127.0.0.1", 4242);
     }
 

@@ -232,6 +232,7 @@
       <DependentUpon>AddinModule.cs</DependentUpon>
     </Compile>
     <Compile Include="MVC\Controller\IController.cs" />
+    <Compile Include="MVC\Controller\IPlatformManagementController.cs" />
     <Compile Include="MVC\Model\AccountModel.cs" />
     <Compile Include="MVC\Model\AxisElemModel.cs" />
     <Compile Include="MVC\Model\AxisFilterModel.cs" />
@@ -522,11 +523,11 @@
     <Compile Include="MVC\View\Report Upload\ReportUploadAccountInfoSidePane.Designer.cs">
       <DependentUpon>ReportUploadAccountInfoSidePane.cs</DependentUpon>
     </Compile>
-    <Compile Include="MVC\View\Report Upload\ReportUploadEntitySelectionPane.cs">
+    <Compile Include="MVC\View\Report Upload\ReportUploadEntitySelectionSidePane.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="MVC\View\Report Upload\ReportUploadEntitySelectionPane.Designer.cs">
-      <DependentUpon>ReportUploadEntitySelectionPane.cs</DependentUpon>
+    <Compile Include="MVC\View\Report Upload\ReportUploadEntitySelectionSidePane.Designer.cs">
+      <DependentUpon>ReportUploadEntitySelectionSidePane.cs</DependentUpon>
     </Compile>
     <Compile Include="MVC\View\Report Upload\SnapshotPeriodRangeSelectionUI.cs">
       <SubType>Form</SubType>
@@ -551,18 +552,6 @@
     </Compile>
     <Compile Include="MVC\View\ReportsDesignerUI.Designer.cs">
       <DependentUpon>ReportsDesignerUI.cs</DependentUpon>
-    </Compile>
-    <Compile Include="MVC\View\Side Panes\EntitySelectionTP.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="MVC\View\Side Panes\EntitySelectionTP.Designer.cs">
-      <DependentUpon>EntitySelectionTP.cs</DependentUpon>
-    </Compile>
-    <Compile Include="MVC\View\Side Panes\ProcessSelectionTaskPane.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="MVC\View\Side Panes\ProcessSelectionTaskPane.Designer.cs">
-      <DependentUpon>ProcessSelectionTaskPane.cs</DependentUpon>
     </Compile>
     <Compile Include="MVC\View\SubmissionsControlUI.cs">
       <SubType>Form</SubType>
@@ -615,6 +604,9 @@
   <ItemGroup>
     <EmbeddedResource Include="AddinModule.resx">
       <DependentUpon>AddinModule.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MVC\View\Connection\ConnectionSidePane.resx">
+      <DependentUpon>ConnectionSidePane.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MVC\View\Controlling UI\ControllingUI_2.resx">
       <DependentUpon>ControllingUI_2.cs</DependentUpon>
@@ -724,8 +716,8 @@
     <EmbeddedResource Include="MVC\View\Report Upload\ReportUploadAccountInfoSidePane.resx">
       <DependentUpon>ReportUploadAccountInfoSidePane.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="MVC\View\Report Upload\ReportUploadEntitySelectionPane.resx">
-      <DependentUpon>ReportUploadEntitySelectionPane.cs</DependentUpon>
+    <EmbeddedResource Include="MVC\View\Report Upload\ReportUploadEntitySelectionSidePane.resx">
+      <DependentUpon>ReportUploadEntitySelectionSidePane.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MVC\View\Report Upload\SnapshotPeriodRangeSelectionUI.resx">
       <DependentUpon>SnapshotPeriodRangeSelectionUI.cs</DependentUpon>
@@ -738,12 +730,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="MVC\View\ReportsDesignerUI.resx">
       <DependentUpon>ReportsDesignerUI.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="MVC\View\Side Panes\EntitySelectionTP.resx">
-      <DependentUpon>EntitySelectionTP.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="MVC\View\Side Panes\ProcessSelectionTaskPane.resx">
-      <DependentUpon>ProcessSelectionTaskPane.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MVC\View\SubmissionsControlUI.resx">
       <DependentUpon>SubmissionsControlUI.cs</DependentUpon>
