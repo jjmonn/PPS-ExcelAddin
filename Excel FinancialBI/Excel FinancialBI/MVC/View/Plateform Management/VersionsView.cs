@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -12,9 +12,9 @@ namespace FBI.MVC.View
 {
   using Controller;
 
-  public partial class EntitySelectionTP : AddinExpress.XL.ADXExcelTaskPane, IView
+  public partial class VersionsView : UserControl, IView
   {
-    public EntitySelectionTP()
+    public VersionsView()
     {
       InitializeComponent();
     }

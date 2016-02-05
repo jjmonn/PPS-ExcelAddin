@@ -12,9 +12,13 @@ namespace FBI
 
   static class Addin
   {
-    static NetworkLauncher m_networkLauncher = new NetworkLauncher();
-    static bool m_connectionTaskPaneVisible;
+    static public event DisconnectEventHandler DisconnectEvent;
+    public delegate void DisconnectEventHandler();
+    static public event ConnectEventHandler ConnectEvent;
+    public delegate void ConnectEventHandler();
 
+    static NetworkLauncher m_networkLauncher = new NetworkLauncher();
+    public static bool ConnectionTaskPaneVisible { get; set; }
 
     static void SelectLanguage()
     {
@@ -34,30 +38,35 @@ namespace FBI
 
     public static void Main()
     {
-      SelectLanguage();
-      m_networkLauncher.Launch("127.0.0.1", 4242);
+      //SelectLanguage();
+      Local.LoadLocalFile(Properties.Resources.english);
     }
 
+    static bool Connect()
+    {
+      if (m_networkLauncher.Launch("192.168.0.41", 4242, OnDisconnect) == true)
+      {
+        if (ConnectEvent != null)
+          ConnectEvent();
+        Authenticator.Instance.AskAuthentication("root", "root");
+        return (true);
+      }
+      return (false);
+    }
 
-    #region Accessors
+    static void OnDisconnect()
+    {
+      bool failed = true;
+      Int32 nbTry = 10;
 
-        public static bool ConnectionTaskPaneVisible
-        {
-            get 
-            { 
-                return m_connectionTaskPaneVisible; 
-            }
-
-            set
-            {
-                m_connectionTaskPaneVisible = value;
-            }
-        }
-
-        
-
-    #endregion
-
+      while (failed && nbTry > 0)
+      {
+        System.Threading.Thread.Sleep(3000);
+        Connect();
+      }
+      if (DisconnectEvent != null)
+        DisconnectEvent();
+    }
 
   }
 }
