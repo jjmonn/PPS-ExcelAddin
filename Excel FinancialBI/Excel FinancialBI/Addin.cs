@@ -10,6 +10,7 @@ namespace FBI
   using Properties;
   using Utils;
   using FBI.MVC.Model.CRUD;
+  using FBI.Utils;
 
   static class Addin
   {
@@ -39,12 +40,22 @@ namespace FBI
     public static void Main()
     {
       SelectLanguage();
+      SetCurrentProcessId(Settings.Default.processId);
     }
 
-    public static void SetCurrentProcessId(Account.AccountProcess p_processId)
+    public static void SetCurrentProcessId(int p_processId)
     {
-      FBI.Properties.Settings.Default.processId = (int)p_processId;
-      FBI.Properties.Settings.Default.Save();
+      Settings.Default.processId = (int)p_processId;
+      Settings.Default.Save();
+      if (p_processId == (int)Account.AccountProcess.FINANCIAL)
+      {
+        AddinModule.CurrentInstance.SetProcessCaption(Local.GetValue("process.process_financial"));
+      }
+      else
+      {
+        AddinModule.CurrentInstance.SetProcessCaption(Local.GetValue("process.process_rh"));
+      }
+
     }
 
     public static bool Connect(string p_userName, string p_password)
@@ -77,6 +88,9 @@ namespace FBI
       if (DisconnectEvent != null)
         DisconnectEvent();
     }
+
+
+
 
   }
 }
