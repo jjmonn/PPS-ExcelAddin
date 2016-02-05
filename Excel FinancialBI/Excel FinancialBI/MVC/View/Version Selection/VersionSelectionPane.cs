@@ -14,11 +14,11 @@ namespace FBI.MVC.View
 
   public partial class VersionSelectionPane : AddinExpress.XL.ADXExcelTaskPane, IView
   {
-    internal bool m_showned { set; get; } 
+    internal bool m_shown { set; get; } 
     public VersionSelectionPane()
     {
       InitializeComponent();
-      m_showned = false;
+      m_shown = false;
     }
 
     public void SetController(IController p_controller)
@@ -28,7 +28,7 @@ namespace FBI.MVC.View
 
     private void VersionSelectionPane_ADXBeforeTaskPaneShow(object sender, AddinExpress.XL.ADXBeforeTaskPaneShowEventArgs e)
     {
-      if (m_showned == false) { this.Visible = false; }
+      if (m_shown == false) { this.Visible = false; }
     }
   }
 }

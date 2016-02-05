@@ -4,9 +4,12 @@ using System.ComponentModel;
 using System.Windows.Forms;
 using AddinExpress.MSO;
 using Excel = Microsoft.Office.Interop.Excel;
+using AddinExpress.XL;
 
 namespace FBI
 {
+  using MVC.View;
+
   [GuidAttribute("D046D807-38A0-47AF-AB7B-71AA24A67FB9"), ProgId("ExcelFinancialBI.AddinModule")]
   public partial class AddinModule : AddinExpress.MSO.ADXAddinModule
   {
@@ -72,64 +75,45 @@ namespace FBI
 
     #region Side panes accessors
 
-    public MVC.View.ConnectionSidePane ConnectionSidePane
+    public ConnectionSidePane ConnectionSidePane
     {
       get
       {
-        AddinExpress.XL.ADXExcelTaskPane l_taskPaneInstance = null;
-        l_taskPaneInstance = (AddinExpress.XL.ADXExcelTaskPane)ConnectionSidePaneItem.TaskPaneInstance;
-        if (l_taskPaneInstance == null)
-        {
-          l_taskPaneInstance = (MVC.View.ConnectionSidePane)ConnectionSidePaneItem.CreateTaskPaneInstance();
-        }
-
-        return l_taskPaneInstance as MVC.View.ConnectionSidePane;
+        if (ConnectionSidePaneItem.TaskPaneInstance != null)
+          return (ConnectionSidePaneItem.TaskPaneInstance as ConnectionSidePane);
+        return (ConnectionSidePaneItem.CreateTaskPaneInstance() as ConnectionSidePane);
       }
     }
 
-    public MVC.View.VersionSelectionPane VersionSelectionSidePane
+    public VersionSelectionPane VersionSelectionSidePane
     {
       get
       {
-        AddinExpress.XL.ADXExcelTaskPane l_taskPaneInstance = null;
-        l_taskPaneInstance = (AddinExpress.XL.ADXExcelTaskPane)VersionSelectionSidePaneItem.TaskPaneInstance;
-        if (l_taskPaneInstance == null)
-        {
-          l_taskPaneInstance = (MVC.View.VersionSelectionPane)VersionSelectionSidePaneItem.CreateTaskPaneInstance();
-        }
-
-        return l_taskPaneInstance as MVC.View.VersionSelectionPane;
+        if (VersionSelectionSidePaneItem.TaskPaneInstance != null)
+          return (VersionSelectionSidePaneItem.TaskPaneInstance as VersionSelectionPane);
+        return (VersionSelectionSidePaneItem.CreateTaskPaneInstance() as VersionSelectionPane);
       }
     }
 
-    public MVC.View.ReportUploadEntitySelectionSidePane ReportUploadEntitySelectionSidePane
+    public ReportUploadEntitySelectionSidePane ReportUploadEntitySelectionSidePane
     {
       get
       {
-        AddinExpress.XL.ADXExcelTaskPane l_taskPaneInstance = null;
-        l_taskPaneInstance = (AddinExpress.XL.ADXExcelTaskPane)ReportUploadEntitySelectionSidePaneItem.TaskPaneInstance;
-        if (l_taskPaneInstance == null)
-        {
-          l_taskPaneInstance = (MVC.View.ReportUploadEntitySelectionSidePane)ReportUploadEntitySelectionSidePaneItem.CreateTaskPaneInstance();
-        }
-        return l_taskPaneInstance as MVC.View.ReportUploadEntitySelectionSidePane;
+        if (ReportUploadEntitySelectionSidePaneItem.TaskPaneInstance != null)
+          return (ReportUploadEntitySelectionSidePaneItem.TaskPaneInstance as ReportUploadEntitySelectionSidePane);
+        return (ReportUploadEntitySelectionSidePaneItem.CreateTaskPaneInstance() as ReportUploadEntitySelectionSidePane);
       }
     }
 
-    public MVC.View.ReportUploadAccountInfoSidePane ReportUploadAccountInfoSidePane
+    public ReportUploadAccountInfoSidePane ReportUploadAccountInfoSidePane
     {
       get
       {
-        AddinExpress.XL.ADXExcelTaskPane l_taskPaneInstance = null;
-        l_taskPaneInstance = (AddinExpress.XL.ADXExcelTaskPane)ReportUploadAccountInfoSidePaneItem.TaskPaneInstance;
-        if (l_taskPaneInstance == null)
-        {
-          l_taskPaneInstance = (MVC.View.ReportUploadAccountInfoSidePane)ReportUploadAccountInfoSidePaneItem.CreateTaskPaneInstance();
-        }
-        return l_taskPaneInstance as MVC.View.ReportUploadAccountInfoSidePane;
+        if (ReportUploadAccountInfoSidePaneItem.TaskPaneInstance != null)
+          return (ReportUploadAccountInfoSidePaneItem.TaskPaneInstance as ReportUploadAccountInfoSidePane);
+        return (ReportUploadAccountInfoSidePaneItem.CreateTaskPaneInstance() as ReportUploadAccountInfoSidePane);
       }
     }
-
 
     #endregion
 
@@ -149,15 +133,14 @@ namespace FBI
     {
       if (Convert.ToDouble(ExcelApp.Version.Replace(".", ",")) > EXCEL_MIN_VERSION)
       {
-        ConnectionSidePane.m_showned = true;
+        ConnectionSidePane.m_shown = true;
         ConnectionSidePane.Show();
       }
-
     }
 
     private void m_versionRibbonButton_OnClick(object sender, IRibbonControl control, bool pressed)
     {
-      VersionSelectionSidePane.m_showned = true;
+      VersionSelectionSidePane.m_shown = true;
       VersionSelectionSidePane.Show();
     }
 
@@ -247,8 +230,6 @@ namespace FBI
     }
 
     #endregion
-
-
 
     #endregion
 

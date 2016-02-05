@@ -8,7 +8,7 @@ namespace FBI.MVC.View
 {
   public partial class ReportUploadEntitySelectionSidePane : AddinExpress.XL.ADXExcelTaskPane
   {
-    internal bool m_showned { set; get; }
+    internal bool m_shown { set; get; }
     public ReportUploadEntitySelectionSidePane()
     {
       InitializeComponent();
@@ -16,8 +16,9 @@ namespace FBI.MVC.View
 
     private void ReportUploadEntitySelectionSidePane_ADXBeforeTaskPaneShow(object sender, ADXBeforeTaskPaneShowEventArgs e)
     {
-      if (m_showned == false) { this.Visible = false; }
+      if (m_shown == false) { this.Visible = false; }
     }
 
   }
 }
+

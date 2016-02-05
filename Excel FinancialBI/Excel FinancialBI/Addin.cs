@@ -13,6 +13,11 @@ namespace FBI
 
   static class Addin
   {
+    static public event DisconnectEventHandler DisconnectEvent;
+    public delegate void DisconnectEventHandler();
+    static public event ConnectEventHandler ConnectEvent;
+    public delegate void ConnectEventHandler();
+
     static NetworkLauncher m_networkLauncher = new NetworkLauncher();
 
     static void SelectLanguage()
@@ -33,15 +38,44 @@ namespace FBI
 
     public static void Main()
     {
-      //SelectLanguage();
-      Local.LoadLocalFile(Properties.Resources.english);
-      m_networkLauncher.Launch("127.0.0.1", 4242);
+      SelectLanguage();
     }
 
     public static void SetCurrentProcessId(Account.AccountProcess p_processId)
     {
       FBI.Properties.Settings.Default.processId = (int)p_processId;
       FBI.Properties.Settings.Default.Save();
+    }
+
+    public static bool Connect(string p_userName, string p_password)
+    {
+      return (Connect_Intern(p_userName, p_password));
+    }
+
+    static bool Connect_Intern(string p_userName = "", string p_password = "")
+    {
+      if (m_networkLauncher.Launch("192.168.0.41", 4242, OnDisconnect) == true)
+      {
+        if (ConnectEvent != null)
+          ConnectEvent();
+        Authenticator.Instance.AskAuthentication(p_userName, p_password);
+        return (true);
+      }
+      return (false);
+    }
+
+    static void OnDisconnect()
+    {
+      bool failed = true;
+      Int32 nbTry = 10;
+
+      while (failed && nbTry > 0)
+      {
+        System.Threading.Thread.Sleep(3000);
+        Connect_Intern();
+      }
+      if (DisconnectEvent != null)
+        DisconnectEvent();
     }
 
   }
