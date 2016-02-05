@@ -25,11 +25,12 @@ namespace FBI.MVC.View
 
     private FbiTreeView<Filter> m_tree;
 
-    public AxisFilterStructView()
+    public AxisFilterStructView(AxisType p_axisType)
     {
       InitializeComponent();
       try
       {
+        m_axisType = p_axisType;
         m_tree = new FbiTreeView<Filter>(FilterModel.Instance.GetDictionary(m_axisType));
         m_tree.ContextMenuStrip = m_structureTreeviewRightClickMenu;
         m_filterPanel.Controls.Add(m_tree);
@@ -40,11 +41,15 @@ namespace FBI.MVC.View
       {
         MessageBox.Show(Local.GetValue("CUI.msg_error_system"), Local.GetValue("filters.categories"), MessageBoxButtons.OK, MessageBoxIcon.Error);
         Debug.WriteLine(e.Message);
-        this.Close();
       }
     }
 
     //TODO Drag and drop
+
+    public void SetController(IController p_controller)
+    {
+      m_controller = p_controller as AxisFiltersStructController;
+    }
 
     private void LoadLanguage()
     {
@@ -63,11 +68,6 @@ namespace FBI.MVC.View
       m_filterPanel.Click += m_filterPanel_Click;
       m_renameButton.Click += m_renameButton_Click;
       m_createCategoryUnderCurrentCategoryButton.Click += m_createCategoryUnderCurrentCategoryButton_Click;
-    }
-
-    public void SetController(IController p_controller)
-    {
-      m_controller = p_controller as AxisFiltersStructController;
     }
 
     private void m_tree_KeyDown(object sender, KeyEventArgs e)
@@ -122,8 +122,6 @@ namespace FBI.MVC.View
 
     private void m_filterPanel_Click(object sender, EventArgs e)
     {
-      if (m_tree.SelectedNode == null)
-        return;
       m_tree.SelectedNode = null;
     }
 
