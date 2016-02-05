@@ -93,19 +93,19 @@ namespace FBI.MVC.Model
 
     #region Mapping
 
-    MultiIndexDictionary<UInt32, string, FilterValue> GetDictionary(UInt32 p_filterId)
+    public MultiIndexDictionary<UInt32, string, FilterValue> GetDictionary(UInt32 p_filterId)
     {
       if (m_filterValuesDic.ContainsKey(p_filterId) == false)
         return null;
       return (m_filterValuesDic[p_filterId]);
     }
 
-    SortedDictionary<UInt32, MultiIndexDictionary<UInt32, string, FilterValue>> GetDictionary()
+    public SortedDictionary<UInt32, MultiIndexDictionary<UInt32, string, FilterValue>> GetDictionary()
     {
       return (m_filterValuesDic);
     }
 
-    UInt32 GetValueId(string p_name)
+    public UInt32 GetValueId(string p_name)
     {
       FilterValue filterValue = GetValue(p_name);
 
@@ -115,7 +115,7 @@ namespace FBI.MVC.Model
 
     }
 
-    string GetValueName(UInt32 p_id)
+    public string GetValueName(UInt32 p_id)
     {
 
       FilterValue filterValue = GetValue(p_id);
