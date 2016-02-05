@@ -43,18 +43,29 @@ namespace FBI
       ICRUDModel<Filter> l_filter = FilterModel.Instance;
       ICRUDModel<FilterValue> l_filterValue = FilterValueModel.Instance;
       ICRUDModel<AxisFilter> l_axisFilter = AxisFilterModel.Instance;
+      ICRUDModel<Version> l_version = VersionModel.Instance;
     }
 
     public static void Main()
     {
       InitModels();
       SelectLanguage();
+      SetCurrentProcessId(Settings.Default.processId);
     }
 
-    public static void SetCurrentProcessId(Account.AccountProcess p_processId)
+    public static void SetCurrentProcessId(int p_processId)
     {
-      FBI.Properties.Settings.Default.processId = (int)p_processId;
-      FBI.Properties.Settings.Default.Save();
+      Settings.Default.processId = (int)p_processId;
+      Settings.Default.Save();
+      if (p_processId == (int)Account.AccountProcess.FINANCIAL)
+      {
+        AddinModule.CurrentInstance.SetProcessCaption(Local.GetValue("process.process_financial"));
+      }
+      else
+      {
+        AddinModule.CurrentInstance.SetProcessCaption(Local.GetValue("process.process_rh"));
+      }
+
     }
 
     public static bool Connect(string p_userName, string p_password)
@@ -87,6 +98,9 @@ namespace FBI
       if (DisconnectEvent != null)
         DisconnectEvent();
     }
+
+
+
 
   }
 }

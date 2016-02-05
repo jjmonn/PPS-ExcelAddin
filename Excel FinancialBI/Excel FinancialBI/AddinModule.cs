@@ -9,6 +9,7 @@ using AddinExpress.XL;
 namespace FBI
 {
   using MVC.View;
+  using FBI.MVC.Model.CRUD;
 
   [GuidAttribute("D046D807-38A0-47AF-AB7B-71AA24A67FB9"), ProgId("ExcelFinancialBI.AddinModule")]
   public partial class AddinModule : AddinExpress.MSO.ADXAddinModule
@@ -146,14 +147,12 @@ namespace FBI
 
     private void m_financialProcessRibbonButton_OnClick(object sender, IRibbonControl control, bool pressed)
     {
-      m_processRibbonButton.Caption = FBI.Utils.Local.GetValue("process.process_financial");
-      Addin.SetCurrentProcessId(FBI.MVC.Model.CRUD.Account.AccountProcess.FINANCIAL);
+      Addin.SetCurrentProcessId((int)Account.AccountProcess.FINANCIAL);
     }
 
     private void m_RHProcessRibbonButton_OnClick(object sender, IRibbonControl control, bool pressed)
     {
-      m_processRibbonButton.Caption = FBI.Utils.Local.GetValue("process.process_rh");
-      Addin.SetCurrentProcessId(FBI.MVC.Model.CRUD.Account.AccountProcess.RH);
+      Addin.SetCurrentProcessId((int)Account.AccountProcess.RH);
     }
 
     private void m_snapshotRibbonSplitButton_OnClick(object sender, IRibbonControl control, bool pressed)
@@ -232,6 +231,23 @@ namespace FBI
     #endregion
 
     #endregion
+
+    public void SetConnectionIcon(bool p_connectionState)
+    {
+      if (p_connectionState == false)
+      {
+        m_connectionButton.Image = 0;
+      }
+      else
+      {
+        m_connectionButton.Image = 1;
+      }
+    }
+
+    public void SetProcessCaption(string p_process)
+    {
+      m_processRibbonButton.Caption = p_process;
+    }
 
   }
 }

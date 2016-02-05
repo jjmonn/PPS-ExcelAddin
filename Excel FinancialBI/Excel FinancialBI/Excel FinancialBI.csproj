@@ -35,13 +35,10 @@
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
-    <Reference Include="AddinExpress.Design.2005, Version=7.7.4087.2005, Culture=neutral, PublicKeyToken=4416dd98f0861965, processorArchitecture=MSIL" />
     <Reference Include="AddinExpress.Install.2005, Version=5.2.2024.2005, Culture=neutral, processorArchitecture=MSIL" />
-    <Reference Include="AddinExpress.VisualDesigner, Version=7.7.4087.2005, Culture=neutral, PublicKeyToken=4416dd98f0861965, processorArchitecture=MSIL" />
     <Reference Include="AddinExpress.XL.2005, Version=7.7.4087.2005, Culture=neutral, PublicKeyToken=e69a7e0f3592d2b8, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
     </Reference>
-    <Reference Include="AddinExpress.XL.2005.Design, Version=7.7.4087.2005, Culture=neutral, PublicKeyToken=e69a7e0f3592d2b8, processorArchitecture=MSIL" />
     <Reference Include="Ionic.Zlib">
       <HintPath>dependencies\Ionic.Zlib.dll</HintPath>
     </Reference>
@@ -234,7 +231,7 @@
     <Compile Include="AddinModule.Designer.cs">
       <DependentUpon>AddinModule.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\FBIDataGridView.cs">
+    <Compile Include="Forms\FbiDataGridView.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Forms\FbiTreeView.cs">
@@ -243,6 +240,8 @@
     <Compile Include="MVC\Controller\AxisController.cs" />
     <Compile Include="MVC\Controller\IController.cs" />
     <Compile Include="MVC\Controller\IPlatformManagementController.cs" />
+    <Compile Include="MVC\Controller\Plateform Management\AxisFilterController.cs" />
+    <Compile Include="MVC\Controller\PlatformMgtController.cs" />
     <Compile Include="MVC\Controller\NameController.cs" />
     <Compile Include="MVC\Controller\Plateform Management\AxisFiltersStructController.cs" />
     <Compile Include="MVC\Controller\VersionsController.cs" />
@@ -765,5 +764,27 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <COMReference Include="Microsoft.Office.Core">
+      <Guid>{2DF8D04C-5BFA-101B-BDE5-00AA0044DE52}</Guid>
+      <VersionMajor>2</VersionMajor>
+      <VersionMinor>4</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>primary</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+    <COMReference Include="VBIDE">
+      <Guid>{0002E157-0000-0000-C000-000000000046}</Guid>
+      <VersionMajor>5</VersionMajor>
+      <VersionMinor>3</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>primary</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+  </ItemGroup>
 </Project>

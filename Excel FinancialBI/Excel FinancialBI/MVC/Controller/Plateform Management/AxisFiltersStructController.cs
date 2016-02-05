@@ -13,7 +13,7 @@ namespace FBI.MVC.Controller
 
   class AxisFiltersStructController : NameController
   {
-    AxisType m_axisId;
+    private AxisType m_axisId;
 
     public AxisFiltersStructController(AxisType p_axisId)
     {
