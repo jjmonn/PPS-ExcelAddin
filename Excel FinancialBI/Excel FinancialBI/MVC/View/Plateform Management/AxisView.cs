@@ -19,7 +19,7 @@ namespace FBI.MVC.View
 
   public partial class AxisView : UserControl, IView
   {
-    FBIDataGridView<AxisElem, Filter, string> m_dgv;
+    FbiDataGridView<AxisElem, Filter, string> m_dgv;
     AxisType m_axisType;
 
     public AxisView(AxisType p_axisType)

@@ -11,7 +11,7 @@ namespace FBI.MVC.Controller
   using Model.CRUD;
   using Utils;
 
-  public class VersionsController : NameController
+  public class VersionsController : NameController , IPlatformManagementController
   {
     VersionsView m_view;
 
@@ -26,6 +26,15 @@ namespace FBI.MVC.Controller
     {
 
     }
+
+    public void Close()
+    {
+      // Add any dispose action here !
+      m_view.Hide();
+      m_view.Dispose();
+      m_view = null;
+    }
+
 
     #region Validity Check
     bool IsCompatibleVersion(Version p_version, BaseVersion p_cmpVersion)

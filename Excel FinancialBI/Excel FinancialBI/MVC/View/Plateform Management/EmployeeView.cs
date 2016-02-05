@@ -14,8 +14,9 @@ namespace FBI.MVC.View
 
   public partial class EmployeeView : AxisView
   {
-    public EmployeeView()
+    public EmployeeView() : base(Model.CRUD.AxisType.Employee)
     {
+      
     }
   }
 }

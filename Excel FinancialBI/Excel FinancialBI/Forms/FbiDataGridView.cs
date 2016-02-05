@@ -9,14 +9,14 @@ namespace FBI.Forms
   using MVC.Model.CRUD;
   using MVC.Model;
 
-  class FBIDataGridView<T, U, V> : vDataGridView 
+  class FbiDataGridView<T, U, V> : vDataGridView 
     where T : class, NamedCRUDEntity 
     where U : class, NamedCRUDEntity
   {
     SafeDictionary<UInt32, HierarchyItem> m_rowsDic;
     SafeDictionary<UInt32, HierarchyItem> m_columnsDic;
 
-    public FBIDataGridView()
+    public FbiDataGridView()
     {
       this.RowsHierarchy.Clear();
       m_rowsDic = new SafeDictionary<uint, HierarchyItem>();
