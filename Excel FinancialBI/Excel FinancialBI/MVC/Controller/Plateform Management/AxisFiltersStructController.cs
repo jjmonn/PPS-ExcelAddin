@@ -22,7 +22,13 @@ namespace FBI.MVC.Controller
 
     public override void Close()
     {
-      throw new NotImplementedException();
+      // Add any dispose action here !
+     /* if (m_view != null)
+      {
+        m_view.Hide();
+        m_view.Dispose();
+        m_view = null;
+      }*/
     }
 
     public override void LoadView()
