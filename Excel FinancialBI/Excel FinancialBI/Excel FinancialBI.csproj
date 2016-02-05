@@ -239,6 +239,8 @@
     </Compile>
     <Compile Include="MVC\Controller\Connection\ConnectionSidePaneController.cs" />
     <Compile Include="MVC\Controller\Plateform Management\AxisController.cs" />
+    <Compile Include="MVC\Controller\AccountController.cs" />
+    <Compile Include="MVC\Controller\AxisController.cs" />
     <Compile Include="MVC\Controller\IController.cs" />
     <Compile Include="MVC\Controller\Plateform Management\IPlatformManagementController.cs" />
     <Compile Include="MVC\Controller\Plateform Management\AxisFilterController.cs" />

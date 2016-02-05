@@ -4,6 +4,7 @@ using System.Linq;
 using System.Drawing;
 using System.Text;
 using System.Threading.Tasks;
+using VIBlend;
 using VIBlend.WinForms.Controls;
 
 namespace FBI.Forms
@@ -11,7 +12,7 @@ namespace FBI.Forms
   using Utils;
   using MVC.Model.CRUD;
 
-  public class FbiTreeView<T> : vTreeView where T : NamedHierarchyCRUDEntity
+  public class FbiTreeView<T> : vTreeView where T : NamedCRUDEntity
   {
     private MultiIndexDictionary<UInt32, String, T> m_items;
     private MultiIndexDictionary<UInt32, String, T> m_icons;
@@ -76,6 +77,21 @@ namespace FBI.Forms
       return (true);
     }
 
+    public void InitTVFormat()
+    {
+        //VIBlendScrollBarsTheme = VIBLEND_THEME.OFFICESILVER;
+
+        // Change the Expand/Collapse arrow color.
+        UseThemeIndicatorsColor = false;
+        IndicatorsColor = Color.FromArgb(128, 128, 128);
+        IndicatorsHighlightColor = Color.FromArgb(128, 128, 128);
+        EnableIndicatorsAnimation = false;
+        PaintNodesDefaultBorder = false;
+        PaintNodesDefaultFill = false;
+        UseThemeBackColor = false;
+        BackColor = Color.White;
+    }
+
     public static bool Swap(vTreeNode p_nodeX, vTreeNode p_nodeY)
     {
       vTreeNode l_node = p_nodeX;
@@ -87,32 +103,77 @@ namespace FBI.Forms
       return (true);
     }
 
+    static bool Implements<TInterface>(Type type) where TInterface : class //TODO : use Benjamin thingy
+    {
+      var interfaceType = typeof(TInterface);
+
+      if (!interfaceType.IsInterface)
+        return (false);
+      return (interfaceType.IsAssignableFrom(type));
+    }
+
     private bool Load()
     {
-      foreach (NamedHierarchyCRUDEntity l_item in m_items.SortedValues)
+      if (Implements<NamedHierarchyCRUDEntity>(typeof(T)))
       {
-        if (l_item.ParentId == 0)
+        foreach (NamedHierarchyCRUDEntity l_item in m_items.SortedValues)
+        {
+          if (l_item.ParentId == 0)
+          {
+            vTreeNode l_node = new vTreeNode();
+            if (!this.Generate(l_node, l_item.Id))
+              return (false);
+            this.Nodes.Add(l_node);
+          }
+        }
+      }
+      else
+      {
+        /*foreach (NamedCRUDEntity l_item in m_items.SortedValues)
         {
           vTreeNode l_node = new vTreeNode();
           if (!this.Generate(l_node, l_item.Id))
             return (false);
-           this.Nodes.Add(l_node);
-        }
+          this.Nodes.Add(l_node);
+        }*/
       }
       return (true);
     }
 
     private bool Generate(vTreeNode p_node, UInt32 p_itemId)
     {
-      NamedHierarchyCRUDEntity l_currentItem = (NamedHierarchyCRUDEntity)m_items[p_itemId];
-
-      if (l_currentItem == null)
-        return (false);
-      p_node.Value = l_currentItem.ToString();
-      p_node.Text = l_currentItem.Name;
-      foreach (NamedHierarchyCRUDEntity l_item in m_items.SortedValues)
+      if (Implements<NamedHierarchyCRUDEntity>(typeof(T)))
       {
-        if (l_item.ParentId == l_currentItem.Id)
+        NamedHierarchyCRUDEntity l_currentItem = (NamedHierarchyCRUDEntity)m_items[p_itemId];
+
+        if (l_currentItem == null)
+          return (false);
+        p_node.Value = l_currentItem.ToString();
+        p_node.Text = l_currentItem.Name;
+        foreach (NamedHierarchyCRUDEntity l_item in m_items.SortedValues)
+        {
+          if (l_item.ParentId == l_currentItem.Id)
+          {
+            vTreeNode l_node = new vTreeNode();
+            if (!this.Generate(l_node, l_item.Id))
+              return (false);
+            p_node.Nodes.Add(l_node);
+            if (m_icons != null)
+            {
+              p_node.ImageIndex = (int)m_icons[l_item.Id].Image;
+            }
+          }
+        }
+      }
+      else
+      {
+        /*NamedCRUDEntity l_currentItem = (NamedCRUDEntity)m_items[p_itemId];
+
+        if (l_currentItem == null)
+          return (false);
+        p_node.Value = l_currentItem.ToString();
+        p_node.Text = l_currentItem.Name;
+        foreach (NamedCRUDEntity l_item in m_items.SortedValues)
         {
           vTreeNode l_node = new vTreeNode();
           if (!this.Generate(l_node, l_item.Id))
@@ -122,7 +183,7 @@ namespace FBI.Forms
           {
             p_node.ImageIndex = (int)m_icons[l_item.Id].Image;
           }
-        }
+        }*/
       }
       return (true);
     }
