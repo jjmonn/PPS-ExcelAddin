@@ -12,9 +12,9 @@ namespace FBI.MVC.View
 {
   using Controller;
 
-  public partial class VersionsControl : UserControl, IView
+  public partial class VersionsView : UserControl, IView
   {
-    public VersionsControl()
+    public VersionsView()
     {
       InitializeComponent();
     }

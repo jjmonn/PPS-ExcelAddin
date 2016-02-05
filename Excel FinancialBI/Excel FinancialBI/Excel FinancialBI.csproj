@@ -233,6 +233,7 @@
     </Compile>
     <Compile Include="MVC\Controller\IController.cs" />
     <Compile Include="MVC\Controller\IPlatformManagementController.cs" />
+    <Compile Include="MVC\Controller\VersionsController.cs" />
     <Compile Include="MVC\Model\AccountModel.cs" />
     <Compile Include="MVC\Model\AxisElemModel.cs" />
     <Compile Include="MVC\Model\AxisFilterModel.cs" />
@@ -242,11 +243,13 @@
     <Compile Include="MVC\Model\Base\NamedCRUDModel.cs" />
     <Compile Include="MVC\Model\Base\SimpleCRUDModel.cs" />
     <Compile Include="MVC\Model\CommitModel.cs" />
+    <Compile Include="MVC\Model\Constants.cs" />
     <Compile Include="MVC\Model\CRUD\Account.cs" />
     <Compile Include="MVC\Model\CRUD\AxisElem.cs" />
     <Compile Include="MVC\Model\CRUD\AxisElemLog.cs" />
     <Compile Include="MVC\Model\CRUD\AxisFilter.cs" />
     <Compile Include="MVC\Model\CRUD\AxisOwner.cs" />
+    <Compile Include="MVC\Model\CRUD\BaseVersion.cs" />
     <Compile Include="MVC\Model\CRUD\Base\AxedCRUDEntity.cs" />
     <Compile Include="MVC\Model\CRUD\Base\CRUDEntity.cs" />
     <Compile Include="MVC\Model\CRUD\Base\HierarchyCRUDEntity.cs" />
@@ -469,11 +472,11 @@
     <Compile Include="MVC\View\Plateform Management\UsersView.Designer.cs">
       <DependentUpon>UsersView.cs</DependentUpon>
     </Compile>
-    <Compile Include="MVC\View\Plateform Management\VersionsControl.cs">
+    <Compile Include="MVC\View\Plateform Management\VersionsView.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="MVC\View\Plateform Management\VersionsControl.designer.cs">
-      <DependentUpon>VersionsControl.cs</DependentUpon>
+    <Compile Include="MVC\View\Plateform Management\VersionsView.designer.cs">
+      <DependentUpon>VersionsView.cs</DependentUpon>
     </Compile>
     <Compile Include="MVC\View\PPS Controls\CircularProgressUI.cs">
       <SubType>Form</SubType>
@@ -600,6 +603,7 @@
     <Compile Include="Utils\MultiIndexDictionary.cs" />
     <Compile Include="Utils\RightManager.cs" />
     <Compile Include="Utils\SafeDictionary.cs" />
+    <Compile Include="Utils\StringUtils.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="AddinModule.resx">
@@ -689,8 +693,8 @@
     <EmbeddedResource Include="MVC\View\Plateform Management\PlatformMGTGeneralUI.resx">
       <DependentUpon>PlatformMGTGeneralUI.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="MVC\View\Plateform Management\VersionsControl.resx">
-      <DependentUpon>VersionsControl.cs</DependentUpon>
+    <EmbeddedResource Include="MVC\View\Plateform Management\VersionsView.resx">
+      <DependentUpon>VersionsView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MVC\View\PPS Controls\CircularProgressUI.resx">
       <DependentUpon>CircularProgressUI.cs</DependentUpon>
@@ -748,5 +752,7 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
 </Project>
