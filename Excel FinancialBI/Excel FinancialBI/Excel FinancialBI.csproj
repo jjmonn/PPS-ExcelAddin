@@ -240,6 +240,7 @@
     <Compile Include="MVC\Controller\IController.cs" />
     <Compile Include="MVC\Controller\NameController.cs" />
     <Compile Include="MVC\Controller\IPlatformManagementController.cs" />
+    <Compile Include="MVC\Controller\Plateform Management\AxisFilterController.cs" />
     <Compile Include="MVC\Controller\Plateform Management\AxisFiltersStructController.cs" />
     <Compile Include="MVC\Controller\VersionsController.cs" />
     <Compile Include="MVC\Model\AccountModel.cs" />
