@@ -11,7 +11,7 @@ namespace FBI.MVC.Controller
   using Model.CRUD;
   using Utils;
 
-  public class VersionsController : NameController
+  public class VersionsController : NameController , IPlatformManagementController
   {
     VersionsView m_view;
 
@@ -22,20 +22,19 @@ namespace FBI.MVC.Controller
       LoadView();
     }
 
-    public override void AddControlToPanel(System.Windows.Forms.Panel p_panel, PlatformMGTGeneralUI p_platformMgtUI)
+    public override void LoadView()
     {
-      throw new NotImplementedException();
+    
     }
 
     public override void Close()
     {
-      throw new NotImplementedException();
+      // Add any dispose action here !
+      m_view.Hide();
+      m_view.Dispose();
+      m_view = null;
     }
 
-    public override void LoadView()
-    {
-      throw new NotImplementedException();
-    }
 
     #region Validity Check
     bool IsCompatibleVersion(Version p_version, BaseVersion p_cmpVersion)

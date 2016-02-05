@@ -9,7 +9,8 @@ namespace FBI
   using Network;
   using Properties;
   using Utils;
-  using FBI.MVC.Model.CRUD;
+  using MVC.Model.CRUD;
+  using MVC.Model;
 
   static class Addin
   {
@@ -36,15 +37,35 @@ namespace FBI
       }
     }
 
-    public static void Main()
+    static void InitModels()
     {
-      SelectLanguage();
+      ICRUDModel<AxisElem> l_axisElem = AxisElemModel.Instance;
+      ICRUDModel<Filter> l_filter = FilterModel.Instance;
+      ICRUDModel<FilterValue> l_filterValue = FilterValueModel.Instance;
+      ICRUDModel<AxisFilter> l_axisFilter = AxisFilterModel.Instance;
+      ICRUDModel<Version> l_version = VersionModel.Instance;
     }
 
-    public static void SetCurrentProcessId(Account.AccountProcess p_processId)
+    public static void Main()
     {
-      FBI.Properties.Settings.Default.processId = (int)p_processId;
-      FBI.Properties.Settings.Default.Save();
+      InitModels();
+      SelectLanguage();
+      SetCurrentProcessId(Settings.Default.processId);
+    }
+
+    public static void SetCurrentProcessId(int p_processId)
+    {
+      Settings.Default.processId = (int)p_processId;
+      Settings.Default.Save();
+      if (p_processId == (int)Account.AccountProcess.FINANCIAL)
+      {
+        AddinModule.CurrentInstance.SetProcessCaption(Local.GetValue("process.process_financial"));
+      }
+      else
+      {
+        AddinModule.CurrentInstance.SetProcessCaption(Local.GetValue("process.process_rh"));
+      }
+
     }
 
     public static bool Connect(string p_userName, string p_password)
@@ -77,6 +98,9 @@ namespace FBI
       if (DisconnectEvent != null)
         DisconnectEvent();
     }
+
+
+
 
   }
 }

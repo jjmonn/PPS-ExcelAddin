@@ -13,19 +13,19 @@ namespace FBI.MVC.Controller
 
   class AxisFilterController : NameController
   {
-    public override void AddControlToPanel(Panel p_panel, PlatformMGTGeneralUI p_platformMgtUI)
+    /*public override void AddControlToPanel(Panel p_panel, PlatformMGTGeneralUI p_platformMgtUI)
     {
-      throw new NotImplementedException();
-    }
+      //
+    }*/
 
     public override void Close()
     {
-      throw new NotImplementedException();
+      //
     }
 
     public override void LoadView()
     {
-      throw new NotImplementedException();
+      //
     }
 
     public bool Add(string p_filterValueName, UInt32 p_filterId, UInt32 p_parentId)

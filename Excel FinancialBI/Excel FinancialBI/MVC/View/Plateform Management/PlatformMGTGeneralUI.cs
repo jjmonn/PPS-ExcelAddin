@@ -16,10 +16,9 @@ namespace FBI.MVC.View
   //  using CRUD;
   using Utils;
 
-  public partial class PlatformMGTGeneralUI : Form, IView
+  internal partial class PlatformMGTGeneralUI : Form, IView
   {
     private IPlatformManagementController m_currentController;
-    private IView m_currentView;
 
     #region Initialization
 
@@ -75,7 +74,6 @@ namespace FBI.MVC.View
       if ((m_currentController != null))
       {
         m_currentController.Close();
-        m_currentView = null;
       }
 
     }
@@ -101,25 +99,25 @@ namespace FBI.MVC.View
     private void AccountsBT_Click(object sender, EventArgs e)
     {
       closeCurrentControl();
-      m_currentView = new AccountsView();
-      m_currentController = new AccountsController(m_currentView);
-      m_currentController.AddControlToPanel(Panel1, this);
+      AccountsView l_accountsView = new AccountsView();
+      // m_currentController = new AccountsController(m_currentView);
+      Panel1.Controls.Add(l_accountsView);
     }
 
     private void m_entitiesBT_Click(object sender, EventArgs e)
     {
       closeCurrentControl();
-      m_currentView = new AxisView();
+      AxisView l_entitiesView = new AxisView(Model.CRUD.AxisType.Entities);
       // m_currentController = new EntitiesController(m_currentView);
-      m_currentController.AddControlToPanel(Panel1, this);
+      Panel1.Controls.Add(l_entitiesView);
     }
 
     private void m_employeesButton_Click(object sender, EventArgs e)
     {
       closeCurrentControl();
-      m_currentView = new EmployeeView(); 
+      AxisView l_employeesView = new EmployeeView();
       // m_currentController = new EmployeesController(m_currentView);
-      m_currentController.AddControlToPanel(Panel1, this);
+      Panel1.Controls.Add(l_employeesView);
     }
 
     private void ClientsBT_Click(object sender, EventArgs e)
@@ -169,7 +167,10 @@ namespace FBI.MVC.View
 
     private void VersionsBT_Click(object sender, EventArgs e)
     {
-      // to be filled with your controller and view like examples above
+      closeCurrentControl();
+      VersionsView l_versionsView = new VersionsView();
+      m_currentController = new VersionsController(l_versionsView);
+      Panel1.Controls.Add(l_versionsView);
     }
 
     private void CurrenciesBT_Click(object sender, EventArgs e)
