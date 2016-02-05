@@ -19,7 +19,6 @@ namespace FBI.MVC.Controller
     {
       m_axisType = p_axisType;
     }
-
     public override void Close()
     {
       //TODO

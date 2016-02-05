@@ -109,6 +109,7 @@ namespace FBI.MVC.View
     {
       CloseCurrentControl();
       AxisView l_entitiesView = new AxisView(Model.CRUD.AxisType.Entities);
+      m_currentController = new AxisController(l_entitiesView);
       // m_currentController = new EntitiesController(m_currentView);
       Panel1.Controls.Add(l_entitiesView);
     }
