@@ -9,8 +9,9 @@ namespace FBI
   using Network;
   using Properties;
   using Utils;
-  using FBI.MVC.Model.CRUD;
   using FBI.Utils;
+  using MVC.Model.CRUD;
+  using MVC.Model;
 
   static class Addin
   {
@@ -37,8 +38,18 @@ namespace FBI
       }
     }
 
+    static void InitModels()
+    {
+      ICRUDModel<AxisElem> l_axisElem = AxisElemModel.Instance;
+      ICRUDModel<Filter> l_filter = FilterModel.Instance;
+      ICRUDModel<FilterValue> l_filterValue = FilterValueModel.Instance;
+      ICRUDModel<AxisFilter> l_axisFilter = AxisFilterModel.Instance;
+      ICRUDModel<Version> l_version = VersionModel.Instance;
+    }
+
     public static void Main()
     {
+      InitModels();
       SelectLanguage();
       SetCurrentProcessId(Settings.Default.processId);
     }

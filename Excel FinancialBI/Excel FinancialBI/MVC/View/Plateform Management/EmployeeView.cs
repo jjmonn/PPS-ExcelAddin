@@ -10,11 +10,12 @@ using System.Windows.Forms;
 
 namespace FBI.MVC.View
 {
+  using Model.CRUD;
   using Controller;
 
   public partial class EmployeeView : AxisView
   {
-    public EmployeeView() : base(Model.CRUD.AxisType.Employee)
+    public EmployeeView() : base(AxisType.Employee)
     {
       
     }

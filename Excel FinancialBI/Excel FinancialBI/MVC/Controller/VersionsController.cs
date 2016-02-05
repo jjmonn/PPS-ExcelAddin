@@ -24,10 +24,10 @@ namespace FBI.MVC.Controller
 
     public override void LoadView()
     {
-
+    
     }
 
-    public void Close()
+    public override void Close()
     {
       // Add any dispose action here !
       m_view.Hide();

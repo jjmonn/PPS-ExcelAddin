@@ -7,6 +7,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Microsoft.VisualBasic;
+using System.Diagnostics;
 
 namespace FBI.MVC.View
 {
@@ -15,11 +17,10 @@ namespace FBI.MVC.View
   using Utils;
   using Controller;
   using Model.CRUD;
-  using Microsoft.VisualBasic;
 
   public partial class AxisFilterStructView : Form, IView
   {
-    private IController m_controller;
+    private AxisFiltersStructController m_controller;
     private AxisType m_axisType;
 
     private FbiTreeView<Filter> m_tree;
@@ -30,15 +31,20 @@ namespace FBI.MVC.View
       try
       {
         m_tree = new FbiTreeView<Filter>(FilterModel.Instance.GetDictionary(m_axisType));
+        m_tree.ContextMenuStrip = m_structureTreeviewRightClickMenu;
+        m_filterPanel.Controls.Add(m_tree);
+        this.LoadLanguage();
+        this.RegisterEvents();
       }
-      catch
+      catch (Exception e)
       {
-        //TODO
+        MessageBox.Show(Local.GetValue("CUI.msg_error_system"), Local.GetValue("filters.categories"), MessageBoxButtons.OK, MessageBoxIcon.Error);
+        Debug.WriteLine(e.Message);
+        this.Close();
       }
-      m_filterPanel.Controls.Add(m_tree);
-      this.LoadLanguage();
-      this.RegisterEvents();
     }
+
+    //TODO Drag and drop
 
     private void LoadLanguage()
     {
@@ -55,11 +61,13 @@ namespace FBI.MVC.View
       m_tree.KeyDown += m_tree_KeyDown;
       m_deleteFilter.Click += m_deleteFilter_Click;
       m_filterPanel.Click += m_filterPanel_Click;
+      m_renameButton.Click += m_renameButton_Click;
+      m_createCategoryUnderCurrentCategoryButton.Click += m_createCategoryUnderCurrentCategoryButton_Click;
     }
 
     public void SetController(IController p_controller)
     {
-      m_controller = p_controller;
+      m_controller = p_controller as AxisFiltersStructController;
     }
 
     private void m_tree_KeyDown(object sender, KeyEventArgs e)
@@ -74,10 +82,28 @@ namespace FBI.MVC.View
 
     private void m_addFilter_Click(object sender, EventArgs e)
     {
-      string l_filterName = Interaction.InputBox(Local.GetValue("filters.msg_new_category_name"), Local.GetValue("filters.new_category"));
-      if (l_filterName.Trim() == "")
+      string l_filterName;
+
+      l_filterName = Interaction.InputBox(Local.GetValue("filters.msg_new_category_name"), Local.GetValue("filters.new_category")).Trim();
+      if (!m_controller.Add(l_filterName, 0))
       {
-        //FilterModel.Instance.Create();
+        MessageBox.Show(Local.GetValue(m_controller.Error), Local.GetValue("filters.new_category"), MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+      }
+    }
+
+    private void m_createCategoryUnderCurrentCategoryButton_Click(object sender, EventArgs e)
+    {
+      string l_filterName;
+
+      if (m_tree.SelectedNode == null)
+      {
+        MessageBox.Show(Local.GetValue("filters.msg_no_category_selected"), Local.GetValue("filters.new_category"), MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+        return;
+      }
+      l_filterName = Interaction.InputBox(Local.GetValue("filters.msg_new_category_name"), Local.GetValue("filters.new_category")).Trim();
+      if (!m_controller.Add(l_filterName, (UInt32)m_tree.SelectedNode.Value))
+      {
+        MessageBox.Show(Local.GetValue(m_controller.Error), Local.GetValue("filters.new_category"), MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
       }
     }
 
@@ -87,10 +113,10 @@ namespace FBI.MVC.View
 
       if (m_tree.SelectedNode == null)
         return;
-      l_confirm = MessageBox.Show(Local.GetValue(""), Local.GetValue(""), MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
+      l_confirm = MessageBox.Show(Local.GetValue("filters.msg_delete_category"), Local.GetValue("filters.delete_category"), MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
       if (l_confirm == DialogResult.Yes)
       {
-        //m_controller.DeleteFilter(m_tree.SelectedNode.Value);
+        m_controller.Remove((UInt32)m_tree.SelectedNode.Value);
       }
     }
 
@@ -99,6 +125,19 @@ namespace FBI.MVC.View
       if (m_tree.SelectedNode == null)
         return;
       m_tree.SelectedNode = null;
+    }
+
+    private void m_renameButton_Click(object sender, EventArgs e)
+    {
+      string l_filterName;
+
+      if (m_tree.SelectedNode == null)
+        return;
+      l_filterName = Interaction.InputBox(Local.GetValue("filters.msg_new_category_name")).Trim();
+      if (!m_controller.Update((UInt32)m_tree.SelectedNode.Value, l_filterName))
+      {
+        MessageBox.Show(Local.GetValue(m_controller.Error), Local.GetValue("filters.new_category"), MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+      }
     }
   }
 }

@@ -15,7 +15,7 @@ namespace FBI.Forms
   {
     private MultiIndexDictionary<UInt32, String, T> m_items;
     private MultiIndexDictionary<UInt32, String, T> m_icons;
-    private static readonly string ERR_GENERATE = "Cannot generate vTreeView. Either the MultiIndexDictionary is null or incorrect";
+    private static readonly string ERR_GENERATE = "[FbiTreeView] Cannot generate vTreeView. Either the MultiIndexDictionary is null or incorrect";
 
     public FbiTreeView(MultiIndexDictionary<UInt32, String, T> p_items, MultiIndexDictionary<UInt32, String, T> p_icons = null)
     {
@@ -33,16 +33,6 @@ namespace FBI.Forms
         return (false);
       this.Nodes.Add(p_node);
       return (true);
-    }
-
-    public vTreeNode Find(string p_value)
-    {
-      foreach (vTreeNode l_node in this.GetNodes())
-      {
-        if (l_node.Value == p_value)
-          return (l_node);
-      }
-      return (null);
     }
 
     public bool Remove(vTreeNode p_node)

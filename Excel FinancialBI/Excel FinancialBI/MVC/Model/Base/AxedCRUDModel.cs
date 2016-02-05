@@ -16,7 +16,6 @@ namespace FBI.MVC.Model
 
     public AxedCRUDModel()
     {
-      Clear();
     }
 
     private void Clear()

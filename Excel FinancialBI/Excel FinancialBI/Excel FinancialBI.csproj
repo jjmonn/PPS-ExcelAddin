@@ -35,10 +35,13 @@
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
+    <Reference Include="AddinExpress.Design.2005, Version=7.7.4087.2005, Culture=neutral, PublicKeyToken=4416dd98f0861965, processorArchitecture=MSIL" />
     <Reference Include="AddinExpress.Install.2005, Version=5.2.2024.2005, Culture=neutral, processorArchitecture=MSIL" />
+    <Reference Include="AddinExpress.VisualDesigner, Version=7.7.4087.2005, Culture=neutral, PublicKeyToken=4416dd98f0861965, processorArchitecture=MSIL" />
     <Reference Include="AddinExpress.XL.2005, Version=7.7.4087.2005, Culture=neutral, PublicKeyToken=e69a7e0f3592d2b8, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
     </Reference>
+    <Reference Include="AddinExpress.XL.2005.Design, Version=7.7.4087.2005, Culture=neutral, PublicKeyToken=e69a7e0f3592d2b8, processorArchitecture=MSIL" />
     <Reference Include="Ionic.Zlib">
       <HintPath>dependencies\Ionic.Zlib.dll</HintPath>
     </Reference>
@@ -173,7 +176,9 @@
     <Content Include="Resources\imageres_891.ico" />
     <Content Include="Resources\imageres_891.png" />
     <Content Include="Resources\images.jpg" />
-    <Content Include="Resources\Locals\english.xml" />
+    <Content Include="Resources\Locals\english.xml">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Resources\Locals\french.xml" />
     <Content Include="Resources\money_interest.ico" />
     <Content Include="Resources\money_interest.png" />
@@ -235,10 +240,12 @@
     <Compile Include="Forms\FbiTreeView.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="MVC\Controller\AxisController.cs" />
     <Compile Include="MVC\Controller\IController.cs" />
-    <Compile Include="MVC\Controller\NameController.cs" />
     <Compile Include="MVC\Controller\IPlatformManagementController.cs" />
     <Compile Include="MVC\Controller\PlatformMgtController.cs" />
+    <Compile Include="MVC\Controller\NameController.cs" />
+    <Compile Include="MVC\Controller\Plateform Management\AxisFiltersStructController.cs" />
     <Compile Include="MVC\Controller\VersionsController.cs" />
     <Compile Include="MVC\Model\AccountModel.cs" />
     <Compile Include="MVC\Model\AxisElemModel.cs" />
@@ -591,9 +598,9 @@
     <Compile Include="Network\Core\ClientMessage.cs" />
     <Compile Include="Network\Core\ClientState.cs" />
     <Compile Include="Network\Core\ErrorMessage.cs" />
-    <Compile Include="Network\NetworkLauncher.cs" />
     <Compile Include="Network\Core\NetworkManager.cs" />
     <Compile Include="Network\Core\ServerMessage.cs" />
+    <Compile Include="Network\NetworkLauncher.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
