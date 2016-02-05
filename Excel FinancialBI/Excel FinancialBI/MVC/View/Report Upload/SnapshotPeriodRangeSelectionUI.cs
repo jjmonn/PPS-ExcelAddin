@@ -14,6 +14,7 @@ namespace FBI.MVC.View
 
   public partial class SnapshotPeriodRangeSelectionUI : Form, IView
   {
+    internal bool m_showned { set; get; } 
     public SnapshotPeriodRangeSelectionUI()
     {
       InitializeComponent();
@@ -21,7 +22,7 @@ namespace FBI.MVC.View
 
     public void SetController(IController p_controller)
     {
-
+      if (m_showned == false) { this.Visible = false; }
     }
   }
 }

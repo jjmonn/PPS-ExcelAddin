@@ -3,24 +3,21 @@ using System.Drawing;
 using System.Windows.Forms;
 using System.Runtime.InteropServices;
 using AddinExpress.XL;
-  
+
 namespace FBI.MVC.View
-{  
-    public partial class ReportUploadEntitySelectionSidePane : AddinExpress.XL.ADXExcelTaskPane
+{
+  public partial class ReportUploadEntitySelectionSidePane : AddinExpress.XL.ADXExcelTaskPane
+  {
+    internal bool m_showned { set; get; }
+    public ReportUploadEntitySelectionSidePane()
     {
-      private bool m_visible = false;
-
-        public ReportUploadEntitySelectionSidePane()
-        {
-            InitializeComponent();
-        }
-
-        private void ReportUploadEntitySelectionSidePane_ADXBeforeTaskPaneShow(object sender, ADXBeforeTaskPaneShowEventArgs e)
-        {
-          this.Visible = m_visible;
-        }
-
-     
-
+      InitializeComponent();
     }
+
+    private void ReportUploadEntitySelectionSidePane_ADXBeforeTaskPaneShow(object sender, ADXBeforeTaskPaneShowEventArgs e)
+    {
+      if (m_showned == false) { this.Visible = false; }
+    }
+
+  }
 }

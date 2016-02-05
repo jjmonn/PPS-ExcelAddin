@@ -12,65 +12,53 @@ namespace FBI.MVC.View
 {
   using Controller;
 
-    public partial class ConnectionSidePane : AddinExpress.XL.ADXExcelTaskPane, IView
+  public partial class ConnectionSidePane : AddinExpress.XL.ADXExcelTaskPane, IView
   {
 
-    private bool m_visible = false;
-    internal bool MVisible
-    {
-      get
-      {
-        return this.m_visible;
-      }
-      set
-      {
-        this.m_visible = value;
-      }
-    }
-
+    internal bool m_showned { set; get; }
 
 
     #region Initialize
 
-      public ConnectionSidePane()
-      {
-        InitializeComponent();
-      }
+    public ConnectionSidePane()
+    {
+      InitializeComponent();
+    }
 
-      public void SetController(IController p_controller)
-      {
+    public void SetController(IController p_controller)
+    {
 
-      }
+    }
 
     #endregion
 
 
     #region Callbacks
 
-      private void ConnectionBT_Click(object sender, EventArgs e)
-      {
+    private void ConnectionBT_Click(object sender, EventArgs e)
+    {
 
-      }
+    }
 
-      private void m_cancelButton_Click(object sender, EventArgs e)
-      {
+    private void m_cancelButton_Click(object sender, EventArgs e)
+    {
 
-      }
+    }
 
     #endregion
 
 
-      private void ConnectionSidePane_FormClosing(object sender, FormClosingEventArgs e)
-      {
-        if (m_circularProgress2 != null) { m_circularProgress2.Stop();}
-        m_passwordTextBox.Text = "";
-        e.Cancel = true;
-      }
+    private void ConnectionSidePane_FormClosing(object sender, FormClosingEventArgs e)
+    {
+      if (m_circularProgress2 != null) { m_circularProgress2.Stop(); }
+      m_passwordTextBox.Text = "";
+      e.Cancel = true;
+    }
 
-      private void ConnectionSidePane_ADXBeforeTaskPaneShow(object sender, AddinExpress.XL.ADXBeforeTaskPaneShowEventArgs e)
-      {
-        this.Visible = m_visible;
-      }
+    private void ConnectionSidePane_ADXBeforeTaskPaneShow(object sender, AddinExpress.XL.ADXBeforeTaskPaneShowEventArgs e)
+    {
+      if (m_showned == false) { this.Visible = false; }
+    }
 
 
   }

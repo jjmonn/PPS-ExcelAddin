@@ -9,11 +9,11 @@ namespace FBI
   using Network;
   using Properties;
   using Utils;
+  using FBI.MVC.Model.CRUD;
 
   static class Addin
   {
     static NetworkLauncher m_networkLauncher = new NetworkLauncher();
-    static bool m_connectionTaskPaneVisible;
 
     static void SelectLanguage()
     {
@@ -38,25 +38,11 @@ namespace FBI
       m_networkLauncher.Launch("127.0.0.1", 4242);
     }
 
-    #region Accessors
-
-        public static bool ConnectionTaskPaneVisible
-        {
-            get 
-            { 
-                return m_connectionTaskPaneVisible; 
-            }
-
-            set
-            {
-                m_connectionTaskPaneVisible = value;
-            }
-        }
-
-        
-
-    #endregion
-
+    public static void SetCurrentProcessId(Account.AccountProcess p_processId)
+    {
+      FBI.Properties.Settings.Default.processId = (int)p_processId;
+      FBI.Properties.Settings.Default.Save();
+    }
 
   }
 }

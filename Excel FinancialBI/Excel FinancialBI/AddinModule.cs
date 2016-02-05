@@ -23,12 +23,10 @@ namespace FBI
     }
 
     private void AddinModule_AddinInitialize(object sender, EventArgs e)
-    {   
+    {
       Addin.Main();
-      
     }
 
-  
     #region Add-in Express automatic code
 
     // Required by Add-in Express - do not modify
@@ -76,17 +74,17 @@ namespace FBI
 
     public MVC.View.ConnectionSidePane ConnectionSidePane
     {
-        get
+      get
+      {
+        AddinExpress.XL.ADXExcelTaskPane l_taskPaneInstance = null;
+        l_taskPaneInstance = (AddinExpress.XL.ADXExcelTaskPane)ConnectionSidePaneItem.TaskPaneInstance;
+        if (l_taskPaneInstance == null)
         {
-            AddinExpress.XL.ADXExcelTaskPane l_taskPaneInstance = null;
-            l_taskPaneInstance = (AddinExpress.XL.ADXExcelTaskPane)ConnectionSidePaneItem.TaskPaneInstance;
-            if (l_taskPaneInstance == null)
-            {
-                l_taskPaneInstance = (MVC.View.ConnectionSidePane)ConnectionSidePaneItem.CreateTaskPaneInstance();
-            }
-
-            return l_taskPaneInstance as MVC.View.ConnectionSidePane;
+          l_taskPaneInstance = (MVC.View.ConnectionSidePane)ConnectionSidePaneItem.CreateTaskPaneInstance();
         }
+
+        return l_taskPaneInstance as MVC.View.ConnectionSidePane;
+      }
     }
 
     public MVC.View.VersionSelectionPane VersionSelectionSidePane
@@ -139,7 +137,7 @@ namespace FBI
 
     #region Instance variables
 
-        private const Double EXCEL_MIN_VERSION = 9;
+    private const Double EXCEL_MIN_VERSION = 9;
 
     #endregion
 
@@ -149,19 +147,30 @@ namespace FBI
 
     private void m_connectionButton_OnClick(object sender, IRibbonControl control, bool pressed)
     {
-        if (Convert.ToDouble(ExcelApp.Version.Replace(".", ",")) > EXCEL_MIN_VERSION)
-        {
-            Addin.ConnectionTaskPaneVisible = true;
-            ConnectionSidePane.MVisible = true;
-            // ConnectionSidePane.Init();
-            ConnectionSidePane.Show();
-        }
-        
+      if (Convert.ToDouble(ExcelApp.Version.Replace(".", ",")) > EXCEL_MIN_VERSION)
+      {
+        ConnectionSidePane.m_showned = true;
+        ConnectionSidePane.Show();
+      }
+
     }
 
     private void m_versionRibbonButton_OnClick(object sender, IRibbonControl control, bool pressed)
     {
+      VersionSelectionSidePane.m_showned = true;
+      VersionSelectionSidePane.Show();
+    }
 
+    private void m_financialProcessRibbonButton_OnClick(object sender, IRibbonControl control, bool pressed)
+    {
+      m_processRibbonButton.Caption = FBI.Utils.Local.GetValue("process.process_financial");
+      Addin.SetCurrentProcessId(FBI.MVC.Model.CRUD.Account.AccountProcess.FINANCIAL);
+    }
+
+    private void m_RHProcessRibbonButton_OnClick(object sender, IRibbonControl control, bool pressed)
+    {
+      m_processRibbonButton.Caption = FBI.Utils.Local.GetValue("process.process_rh");
+      Addin.SetCurrentProcessId(FBI.MVC.Model.CRUD.Account.AccountProcess.RH);
     }
 
     private void m_snapshotRibbonSplitButton_OnClick(object sender, IRibbonControl control, bool pressed)
@@ -239,12 +248,10 @@ namespace FBI
 
     #endregion
 
-   
 
-  
 
     #endregion
 
-
   }
 }
+

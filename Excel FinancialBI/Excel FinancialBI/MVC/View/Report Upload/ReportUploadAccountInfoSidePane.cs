@@ -8,9 +8,7 @@ namespace FBI.MVC.View
 {  
     public partial class ReportUploadAccountInfoSidePane : AddinExpress.XL.ADXExcelTaskPane
     {
-
-      private bool m_visible = false;
-
+      internal bool m_showned { set; get; }
       public ReportUploadAccountInfoSidePane()
       {
           InitializeComponent();
@@ -18,7 +16,7 @@ namespace FBI.MVC.View
 
       private void ReportUploadAccountInfoSidePane_ADXBeforeTaskPaneShow(object sender, ADXBeforeTaskPaneShowEventArgs e)
       {
-        this.Visible = m_visible;
+        if (m_showned == false) { this.Visible = false; }
       }
     }
 }
