@@ -35,16 +35,6 @@ namespace FBI.Forms
       return (true);
     }
 
-    public vTreeNode Find(string p_value)
-    {
-      foreach (vTreeNode l_node in this.GetNodes())
-      {
-        if (l_node.Value == p_value)
-          return (l_node);
-      }
-      return (null);
-    }
-
     public bool Remove(vTreeNode p_node)
     {
       if (p_node == null || this.GetNodes().Exists(x => x != p_node))

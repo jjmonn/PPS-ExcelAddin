@@ -36,7 +36,7 @@ namespace FBI.MVC.Controller
 
     public bool IsNameValid(string p_name)
     {
-      if (p_name == "")
+      if (p_name.Trim() == "")
       {
         Error = Local.GetValue("general.error.name_empty");
         return (false);

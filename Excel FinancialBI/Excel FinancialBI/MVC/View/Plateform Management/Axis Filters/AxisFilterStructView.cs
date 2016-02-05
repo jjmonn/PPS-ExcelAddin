@@ -44,6 +44,8 @@ namespace FBI.MVC.View
       }
     }
 
+    //TODO Drag and drop
+
     private void LoadLanguage()
     {
       m_addFilter.Text = Local.GetValue("general.create");
@@ -132,7 +134,10 @@ namespace FBI.MVC.View
       if (m_tree.SelectedNode == null)
         return;
       l_filterName = Interaction.InputBox(Local.GetValue("filters.msg_new_category_name")).Trim();
-      //RENAME
+      if (!m_controller.Update((UInt32)m_tree.SelectedNode.Value, l_filterName))
+      {
+        MessageBox.Show(Local.GetValue(m_controller.Error), Local.GetValue("filters.new_category"), MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+      }
     }
   }
 }
