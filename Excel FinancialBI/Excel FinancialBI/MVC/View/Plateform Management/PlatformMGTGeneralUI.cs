@@ -154,7 +154,10 @@ namespace FBI.MVC.View
 
     private void m_clientsFiltersBT_Click(object sender, EventArgs e)
     {
-      // to be filled with your controller and view like examples above
+      CloseCurrentControl();
+      AxisFiltersView l_clientView = new AxisFiltersView(Model.CRUD.AxisType.Client);
+      m_currentController = new AxisFilterController(l_clientView);
+      Panel1.Controls.Add(l_clientView);
     }
 
     private void m_productsFiltersBT_Click(object sender, EventArgs e)

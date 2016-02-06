@@ -13,23 +13,19 @@ namespace FBI.MVC.Controller
 
   class AxisFilterController : NameController
   {
-    /*public override void AddControlToPanel(Panel p_panel, PlatformMGTGeneralUI p_platformMgtUI)
-    {
-      //
-    }*/
+    private AxisFiltersView m_view;
 
-    public override void Close()
+    public AxisFilterController(AxisFiltersView p_view)
     {
-      // Add any dispose action here !
-      /* if (m_view != null)
-       {
-         m_view.Hide();
-         m_view.Dispose();
-         m_view = null;
-       }*/
+      m_view = p_view;
     }
 
     public override void LoadView()
+    {
+      //
+    }
+
+    public override void Close()
     {
       //
     }

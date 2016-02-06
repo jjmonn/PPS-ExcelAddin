@@ -150,7 +150,7 @@ namespace FBI.MVC.View
             this.ToolStripSeparator1,
             this.m_deleteButton});
       this.m_structureTreeviewRightClickMenu.Name = "ContextMenuStripTV";
-      this.m_structureTreeviewRightClickMenu.Size = new System.Drawing.Size(247, 98);
+      this.m_structureTreeviewRightClickMenu.Size = new System.Drawing.Size(247, 76);
       // 
       // m_createCategoryUnderCurrentCategoryButton
       // 
@@ -163,7 +163,7 @@ namespace FBI.MVC.View
       // 
       this.m_renameButton.Name = "m_renameButton";
       this.m_renameButton.Size = new System.Drawing.Size(246, 22);
-      this.m_renameButton.Text = "Renamme";
+      this.m_renameButton.Text = "Rename";
       // 
       // ToolStripSeparator1
       // 

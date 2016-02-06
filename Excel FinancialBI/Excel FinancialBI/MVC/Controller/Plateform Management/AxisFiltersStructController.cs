@@ -13,26 +13,21 @@ namespace FBI.MVC.Controller
 
   class AxisFiltersStructController : NameController
   {
-    private AxisType m_axisId;
+    private AxisFiltersView m_view;
 
-    public AxisFiltersStructController(AxisType p_axisId)
+    public AxisFiltersStructController(AxisFiltersView p_view)
     {
-      m_axisId = p_axisId;
+      m_view = p_view;
     }
+
     public override void Close()
     {
-      // Add any dispose action here !
-     /* if (m_view != null)
-      {
-        m_view.Hide();
-        m_view.Dispose();
-        m_view = null;
-      }*/
+      //TODO
     }
 
     public override void LoadView()
     {
-      throw new NotImplementedException();
+      //TODO
     }
 
     public bool Add(string p_filterName, UInt32 p_parentId)
@@ -43,7 +38,7 @@ namespace FBI.MVC.Controller
       {
         l_filter.Name = p_filterName;
         l_filter.ParentId = p_parentId;
-        l_filter.Axis = m_axisId;
+        l_filter.Axis = m_view.AxisType;
         l_filter.IsParent = false;
         FilterModel.Instance.Create(l_filter);
         return (true);

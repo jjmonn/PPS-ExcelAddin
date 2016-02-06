@@ -36,9 +36,10 @@
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
     <Reference Include="AddinExpress.Install.2005, Version=5.2.2024.2005, Culture=neutral, processorArchitecture=MSIL" />
-    <Reference Include="AddinExpress.XL.2005, Version=7.7.4087.2005, Culture=neutral, PublicKeyToken=e69a7e0f3592d2b8, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="AddinExpress.MSO.2005, Version=7.7.4087.2005, Culture=neutral, PublicKeyToken=4416dd98f0861965, processorArchitecture=MSIL">
+      <Private>False</Private>
     </Reference>
+    <Reference Include="AddinExpress.XL.2005, Version=7.7.4087.2005, Culture=neutral, PublicKeyToken=e69a7e0f3592d2b8, processorArchitecture=MSIL" />
     <Reference Include="Ionic.Zlib">
       <HintPath>dependencies\Ionic.Zlib.dll</HintPath>
     </Reference>
@@ -54,10 +55,6 @@
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Windows.Forms.DataVisualization" />
     <Reference Include="System.Xml" />
-    <Reference Include="AddinExpress.MSO.2005">
-      <HintPath>AddinExpress.MSO.2005.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="Microsoft.Vbe.Interop.dll">
       <HintPath>Interops\Microsoft.Vbe.Interop.dll</HintPath>
       <Private>True</Private>
@@ -240,7 +237,6 @@
     <Compile Include="MVC\Controller\Connection\ConnectionSidePaneController.cs" />
     <Compile Include="MVC\Controller\Plateform Management\AxisController.cs" />
     <Compile Include="MVC\Controller\AccountController.cs" />
-    <Compile Include="MVC\Controller\AxisController.cs" />
     <Compile Include="MVC\Controller\IController.cs" />
     <Compile Include="MVC\Controller\Plateform Management\IPlatformManagementController.cs" />
     <Compile Include="MVC\Controller\Plateform Management\AxisFilterController.cs" />
