@@ -339,7 +339,7 @@ Friend Class AxisView
         m_axisDataGridView.RowsHierarchy.CompactStyleRenderingEnabled = True
         m_axisDataGridView.AllowCopyPaste = True
         m_axisDataGridView.FilterDisplayMode = FilterDisplayMode.Custom
-        m_axisDataGridView.VIBlendTheme = DGV_VI_BLEND_STYLE
+    m_axisDataGridView.VIBlendTheme = VIBLEND_THEME.VISTABLUE
         m_axisDataGridView.BackColor = SystemColors.Control
         'DGV.ImageList = AxisIL
         m_axisDataGridView.RowsHierarchy.AllowDragDrop = True
