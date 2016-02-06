@@ -12,13 +12,14 @@ namespace FBI.MVC.Controller
   using Model.CRUD;
   using Utils;
 
-  public class VersionsController : NameController , IPlatformManagementController
+  public class VersionsController : NameController, IPlatformManagementController
   {
     VersionsView m_view;
+    public override IView View { get { return (m_view); } }
 
-    public VersionsController(VersionsView p_view)
+    public VersionsController()
     {
-      m_view = p_view;
+      m_view = new VersionsView();
       m_view.SetController(this);
       LoadView();
     }

@@ -14,6 +14,7 @@ namespace FBI.MVC.Controller
   public abstract class NameController : IController, IPlatformManagementController
   {
     public string Error { get; set; }
+    public abstract IView View { get; }
 
     abstract public void LoadView();
     abstract public void Close();

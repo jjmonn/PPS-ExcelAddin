@@ -7,7 +7,7 @@ using System.Diagnostics;
 
 namespace FBI.MVC.View
 {
-partial class VersionSelectionPane : AddinExpress.XL.ADXExcelTaskPane, IView
+partial class VersionSelectionPane : AddinExpress.XL.ADXExcelTaskPane
 {
 
 	//Form overrides dispose to clean up the component list.

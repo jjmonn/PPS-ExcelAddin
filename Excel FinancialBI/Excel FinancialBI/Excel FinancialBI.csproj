@@ -234,10 +234,10 @@
     <Compile Include="Forms\FbiTreeView.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="MVC\Controller\Connection\ConnectionSidePaneController.cs" />
+    <Compile Include="MVC\Controller\Plateform Management\AccountController.cs" />
     <Compile Include="MVC\Controller\Plateform Management\AxisController.cs" />
-    <Compile Include="MVC\Controller\AccountController.cs" />
     <Compile Include="MVC\Controller\IController.cs" />
+    <Compile Include="MVC\Controller\Plateform Management\ExchangeRatesController.cs" />
     <Compile Include="MVC\Controller\Plateform Management\IPlatformManagementController.cs" />
     <Compile Include="MVC\Controller\Plateform Management\AxisFilterController.cs" />
     <Compile Include="MVC\Controller\Plateform Management\PlatformMgtController.cs" />
@@ -300,6 +300,7 @@
     <Compile Include="MVC\Model\GlobalFactModel.cs" />
     <Compile Include="MVC\Model\GlobalFactVersionModel.cs" />
     <Compile Include="MVC\Model\GroupModel.cs" />
+    <Compile Include="MVC\Model\PeriodModel.cs" />
     <Compile Include="MVC\Model\RatesVersionModel.cs" />
     <Compile Include="MVC\Model\UserAllowedEntityModel.cs" />
     <Compile Include="MVC\Model\UserModel.cs" />
@@ -375,6 +376,12 @@
     </Compile>
     <Compile Include="MVC\View\PeriodRangeSelectionControl.Designer.cs">
       <DependentUpon>PeriodRangeSelectionControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MVC\View\Plateform Management\FactBaseView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="MVC\View\Plateform Management\FactBaseView.Designer.cs">
+      <DependentUpon>FactBaseView.cs</DependentUpon>
     </Compile>
     <Compile Include="MVC\View\Plateform Management\NewGlobalFactVersionUI.cs">
       <SubType>Form</SubType>
@@ -460,9 +467,6 @@
     </Compile>
     <Compile Include="MVC\View\Plateform Management\ExchangeRatesView.cs">
       <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="MVC\View\Plateform Management\ExchangeRatesView.Designer.cs">
-      <DependentUpon>ExchangeRatesView.cs</DependentUpon>
     </Compile>
     <Compile Include="MVC\View\Plateform Management\NewGlobalFactUI.cs">
       <SubType>Form</SubType>
@@ -657,6 +661,9 @@
     <EmbeddedResource Include="MVC\View\PeriodRangeSelectionControl.resx">
       <DependentUpon>PeriodRangeSelectionControl.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="MVC\View\Plateform Management\FactBaseView.resx">
+      <DependentUpon>FactBaseView.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="MVC\View\Plateform Management\NewGlobalFactVersionUI.resx">
       <DependentUpon>NewGlobalFactVersionUI.cs</DependentUpon>
     </EmbeddedResource>
@@ -692,9 +699,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="MVC\View\Plateform Management\ExcelGlobalFactsImportUI.resx">
       <DependentUpon>ExcelGlobalFactsImportUI.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="MVC\View\Plateform Management\ExchangeRatesView.resx">
-      <DependentUpon>ExchangeRatesView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MVC\View\Plateform Management\GlobalFactUI.resx">
       <DependentUpon>GlobalFactUI.cs</DependentUpon>

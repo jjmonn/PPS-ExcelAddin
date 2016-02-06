@@ -6,8 +6,11 @@ using System.Threading.Tasks;
 
 namespace FBI.MVC.Controller
 {
+  using View;
+
   public interface IController
   {
     string Error { get; set; }
+    IView View { get; }
   }
 }

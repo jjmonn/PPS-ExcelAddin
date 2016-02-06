@@ -12,18 +12,13 @@ namespace FBI.MVC.View
 {
   using Controller;
 
-  public partial class VersionSelectionPane : AddinExpress.XL.ADXExcelTaskPane, IView
+  public partial class VersionSelectionPane : AddinExpress.XL.ADXExcelTaskPane
   {
     internal bool m_shown { set; get; } 
     public VersionSelectionPane()
     {
       InitializeComponent();
       m_shown = false;
-    }
-
-    public void SetController(IController p_controller)
-    {
-
     }
 
     private void VersionSelectionPane_ADXBeforeTaskPaneShow(object sender, AddinExpress.XL.ADXBeforeTaskPaneShowEventArgs e)
