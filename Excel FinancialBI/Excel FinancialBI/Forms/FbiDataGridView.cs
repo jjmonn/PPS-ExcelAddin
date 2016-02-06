@@ -121,5 +121,16 @@ namespace FBI.Forms
       this.CellsArea.SetCellValue(row, column, p_value);
       this.CellsArea.SetCellEditor(row, column, p_editor);
     }
+
+    public void FillField(HierarchyItem p_row, UInt32 p_column, V p_value)
+    {
+      HierarchyItem column = m_columnsDic[p_column];
+
+      if (p_row == null)
+        return;
+      if (column == null)
+        return;
+      this.CellsArea.SetCellValue(p_row, column, p_value);
+    }
   }
 }

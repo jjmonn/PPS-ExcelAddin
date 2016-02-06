@@ -21,6 +21,8 @@ namespace FBI.MVC.View
   {
     FbiDataGridView<AxisElem, Filter, string> m_dgv = new FbiDataGridView<AxisElem,Filter,string>();
     AxisType m_axisType;
+    AxisController m_controller = null;
+    bool cellModif = false;
 
     public AxisView(AxisType p_axisType)
     {
@@ -57,14 +59,18 @@ namespace FBI.MVC.View
         MultiIndexDictionary<UInt32, string, FilterValue> l_filterValueDic = FilterValueModel.Instance.GetDictionary(l_axisFilter.FilterId);
 
         if (l_filterValueDic != null && l_cbEditor != null)
+        {
           foreach (FilterValue l_fv in l_filterValueDic.Values)
             l_cbEditor.Items.Add(l_fv.Name);
+          l_cbEditor.SelectedIndexChanged += l_cbEditor_SelectedIndexChanged;
+        }
         if (l_filterValue != null && l_cbEditor != null)
         {
           m_dgv.FillField(l_axisFilter.AxisElemId, l_axisFilter.FilterId, l_filterValue.Name, l_cbEditor);
           this.fillParentsColumn(l_filterValue.Id, l_filterValue.ParentId, l_axisFilter);
         }
       }
+      m_dgv.CellValueChanged += m_dgv_CellValueChanged;
     }
 
     void fillParentsColumn(uint p_filterValueId, uint p_parentId, AxisFilter p_axisFilter)
@@ -74,6 +80,7 @@ namespace FBI.MVC.View
         FilterValue l_parent = FilterValueModel.Instance.GetValue(p_parentId);
         MultiIndexDictionary<UInt32, string, FilterValue> l_filterValueDic = FilterValueModel.Instance.GetDictionary(l_parent.FilterId);
         ComboBoxEditor l_cbEditor = new ComboBoxEditor();
+        l_cbEditor.SelectedIndexChanged += l_cbEditor_SelectedIndexChanged;
         if (l_filterValueDic != null && l_cbEditor != null)
           foreach (FilterValue l_fv in l_filterValueDic.Values)
             l_cbEditor.Items.Add(l_fv.Name);
@@ -81,9 +88,35 @@ namespace FBI.MVC.View
       }
     }
 
+    private void m_dgv_CellValueChanged(object sender, CellEventArgs args)
+    {
+      if (cellModif == false)
+        return;
+      cellModif = false;
+      
+      changeParentCellValue(FilterValueModel.Instance.GetValue(args.Cell.Value.ToString()), args.Cell.RowItem);
+    }
+
+    void changeParentCellValue(FilterValue p_filterValue, HierarchyItem p_row)
+    {
+      if (p_filterValue == null)
+        return;
+      if (p_filterValue.ParentId == 0)
+        return;
+      FilterValue l_parent = FilterValueModel.Instance.GetValue(p_filterValue.ParentId);
+      if (l_parent == null)
+        return;
+      m_dgv.FillField(p_row, l_parent.FilterId, l_parent.Name);
+    }
+
+    void l_cbEditor_SelectedIndexChanged(object sender, EventArgs e)
+    {
+      cellModif = true;
+    }
+
     public void SetController(IController p_controller)
     {
-
+      m_controller = p_controller as AxisController;
     }
   }
 }
