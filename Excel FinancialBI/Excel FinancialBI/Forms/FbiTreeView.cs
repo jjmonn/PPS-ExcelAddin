@@ -24,6 +24,7 @@ namespace FBI.Forms
       {
         throw new Exception(ERR_GENERATE);
       }
+      InitTVFormat(this);
     }
 
     public bool Append(MultiIndexDictionary<UInt32, String, T> p_items, MultiIndexDictionary<UInt32, String, T> p_icons = null)
@@ -82,19 +83,19 @@ namespace FBI.Forms
       return (true);
     }
 
-    public void InitTVFormat()
+    public static void InitTVFormat(vTreeView p_treeview)
     {
-        //VIBlendScrollBarsTheme = VIBLEND_THEME.OFFICESILVER;
+      //VIBlendScrollBarsTheme = VIBLEND_THEME.OFFICESILVER;
 
-        // Change the Expand/Collapse arrow color.
-        UseThemeIndicatorsColor = false;
-        IndicatorsColor = Color.FromArgb(128, 128, 128);
-        IndicatorsHighlightColor = Color.FromArgb(128, 128, 128);
-        EnableIndicatorsAnimation = false;
-        PaintNodesDefaultBorder = false;
-        PaintNodesDefaultFill = false;
-        UseThemeBackColor = false;
-        BackColor = Color.White;
+      // Change the Expand/Collapse arrow color.
+      p_treeview.UseThemeIndicatorsColor = false;
+      p_treeview.IndicatorsColor = Color.FromArgb(128, 128, 128);
+      p_treeview.IndicatorsHighlightColor = Color.FromArgb(128, 128, 128);
+      p_treeview.EnableIndicatorsAnimation = false;
+      p_treeview.PaintNodesDefaultBorder = false;
+      p_treeview.PaintNodesDefaultFill = false;
+      p_treeview.UseThemeBackColor = false;
+      p_treeview.BackColor = Color.White;
     }
 
     public static vTreeNode GetRoot(vTreeNode p_node)
