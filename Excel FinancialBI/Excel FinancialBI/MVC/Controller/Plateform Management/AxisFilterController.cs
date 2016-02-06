@@ -18,11 +18,13 @@ namespace FBI.MVC.Controller
     public AxisFilterController(AxisFiltersView p_view)
     {
       m_view = p_view;
+      m_view.SetController(this);
+      this.LoadView();
     }
 
     public override void LoadView()
     {
-      //
+      m_view.InitView();
     }
 
     public override void Close()

@@ -77,6 +77,7 @@ namespace FBI.MVC.View
         case Keys.Delete:
           this.m_addFilter_Click(sender, e);
           break;
+        //ECHAP, REMOVE SELECTED ELEM
       }
     }
 

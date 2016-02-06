@@ -105,27 +105,26 @@ namespace FBI.MVC.View
       // m_addValue
       // 
       this.m_addValue.Name = "m_addValue";
-      this.m_addValue.Size = new System.Drawing.Size(129, 22);
+      this.m_addValue.Size = new System.Drawing.Size(152, 22);
       this.m_addValue.Text = "New value";
       // 
       // m_delete
       // 
       this.m_delete.Image = global::FBI.Properties.Resources.imageres_891;
       this.m_delete.Name = "m_delete";
-      this.m_delete.Size = new System.Drawing.Size(129, 22);
+      this.m_delete.Size = new System.Drawing.Size(152, 22);
       this.m_delete.Text = "Delete";
-      //this.m_delete.Click += new System.EventHandler(this.m_delete_Click);
       // 
       // m_rename
       // 
       this.m_rename.Name = "m_rename";
-      this.m_rename.Size = new System.Drawing.Size(129, 22);
+      this.m_rename.Size = new System.Drawing.Size(152, 22);
       this.m_rename.Text = "Rename";
       // 
       // ToolStripSeparator3
       // 
       this.ToolStripSeparator3.Name = "ToolStripSeparator3";
-      this.ToolStripSeparator3.Size = new System.Drawing.Size(126, 6);
+      this.ToolStripSeparator3.Size = new System.Drawing.Size(149, 6);
       // 
       // m_editStruct
       // 
