@@ -11,13 +11,12 @@ namespace FBI.MVC.Controller
   using View;
   using Model;
 
-  public abstract class NameController : IController, IPlatformManagementController
+  public abstract class NameController<T> : BasePlatformMgtComponent<T>, IController where T : ContainerControl, IView
   {
     public string Error { get; set; }
     public abstract IView View { get; }
 
     abstract public void LoadView();
-    abstract public void Close();
 
     public bool IsNameValidAndNotAlreadyUsed(string p_name)
     {

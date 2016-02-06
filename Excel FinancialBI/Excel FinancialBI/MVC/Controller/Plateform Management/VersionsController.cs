@@ -12,9 +12,8 @@ namespace FBI.MVC.Controller
   using Model.CRUD;
   using Utils;
 
-  public class VersionsController : NameController, IPlatformManagementController
+  public class VersionsController : NameController<VersionsView>
   {
-    VersionsView m_view;
     public override IView View { get { return (m_view); } }
 
     public VersionsController()
@@ -28,18 +27,6 @@ namespace FBI.MVC.Controller
     {
     
     }
-
-    public override void Close()
-    {
-      // Add any dispose action here !
-      if (m_view != null)
-      {
-        m_view.Hide();
-        m_view.Dispose();
-        m_view = null;
-      }
-    }
-
 
     #region Validity checks
   

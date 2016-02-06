@@ -10,11 +10,9 @@ namespace FBI.MVC.Controller
   using View;
   using Model.CRUD;
 
-  class AxisController : IController, IPlatformManagementController
+  class AxisController : NameController<AxisView>
   {
-    AxisView m_view;
-    public IView View { get { return (m_view); } }
-    public string Error { get; set; }
+    public override IView View { get { return (m_view); } }
 
     public AxisController(AxisType p_axisType)
     {
@@ -23,17 +21,9 @@ namespace FBI.MVC.Controller
       m_view.LoadView();
     }
 
-    public void Close()
+    public override void LoadView()
     {
-      // Add any dispose action here !
-      if (m_view != null)
-      {
-        m_view.Hide();
-        m_view.Dispose();
-        m_view = null;
-      }
+      throw new NotImplementedException();
     }
-
-   
   }
 }

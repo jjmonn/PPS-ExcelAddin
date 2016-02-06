@@ -33,8 +33,6 @@ namespace FBI.MVC.View
     public virtual void LoadView()
     {
       m_versionTV = new FbiTreeView<TCrudType>(m_versionModel.GetDictionary());
-      m_versionTV.InitTVFormat();
-
       m_mainContainer.Panel1.Controls.Add(m_versionTV);
     }
 

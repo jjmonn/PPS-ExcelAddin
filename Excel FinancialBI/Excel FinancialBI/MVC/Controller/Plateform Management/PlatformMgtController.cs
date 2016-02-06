@@ -16,7 +16,7 @@ namespace FBI.MVC.Controller
     PlatformMGTGeneralUI m_view;
     public string Error { get; set; }
     public IView View { get { return (m_view); } }
-    private IPlatformManagementController m_currentController;
+    private IBasePlatformMgtComponent m_currentController;
 
     public PlatformMgtController()
     {
@@ -36,7 +36,7 @@ namespace FBI.MVC.Controller
 
     public void SwitchView<TView, TController>(TController p_controller)
       where TView : UserControl, IView
-      where TController : IPlatformManagementController, IController
+      where TController : IBasePlatformMgtComponent, IController
     {
       CloseCurrentControl();
       m_currentController = p_controller;

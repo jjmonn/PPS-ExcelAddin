@@ -11,9 +11,8 @@ namespace FBI.MVC.Controller
   using Model.CRUD;
   using Utils;
 
-  class ExchangeRatesController : NameController, IPlatformManagementController
+  class ExchangeRatesController : NameController<ExchangeRatesView>
   {
-    ExchangeRatesView m_view;
     public override IView View { get { return (m_view); } }
 
     public ExchangeRatesController()
@@ -26,17 +25,6 @@ namespace FBI.MVC.Controller
     public override void LoadView()
     {
 
-    }
-
-    public override void Close()
-    {
-      // Add any dispose action here !
-      if (m_view != null)
-      {
-        m_view.Hide();
-        m_view.Dispose();
-        m_view = null;
-      }
     }
   }
 }
