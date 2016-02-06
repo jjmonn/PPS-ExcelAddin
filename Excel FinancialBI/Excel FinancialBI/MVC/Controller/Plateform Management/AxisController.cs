@@ -8,6 +8,7 @@ using System.Windows.Forms;
 namespace FBI.MVC.Controller
 {
   using View;
+  using Model;
   using Model.CRUD;
 
   class AxisController : IController, IPlatformManagementController
@@ -34,6 +35,15 @@ namespace FBI.MVC.Controller
       }
     }
 
-   
+    public bool Add(AxisFilter p_axisFilter, FilterValue p_filterValue)
+    {
+      if (p_axisFilter == null || p_filterValue == null)
+        return (false);
+      p_axisFilter = p_axisFilter.Clone();
+
+      p_axisFilter.FilterValueId = p_filterValue.Id;
+      AxisFilterModel.Instance.Update(p_axisFilter);
+      return (true);
+    }
   }
 }

@@ -133,7 +133,7 @@ namespace FBI.Forms
       this.CellsArea.SetCellEditor(row, column, p_editor);
     }
 
-    public void FillField(HierarchyItem p_row, UInt32 p_column, V p_value)
+    public void FillField<V>(HierarchyItem p_row, UInt32 p_column, V p_value)
     {
       HierarchyItem column = m_columnsDic[p_column];
 

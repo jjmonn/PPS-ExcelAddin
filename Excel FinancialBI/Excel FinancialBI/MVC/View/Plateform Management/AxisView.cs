@@ -28,7 +28,9 @@ namespace FBI.MVC.View
     {
       InitializeComponent();
       m_axisType = p_axisType;
+      AxisElemModel.Instance.ReadEvent += Instance_ReadEvent;
     }
+
     
     public void LoadView()
     {
@@ -93,8 +95,12 @@ namespace FBI.MVC.View
       if (cellModif == false)
         return;
       cellModif = false;
-      
-      changeParentCellValue(FilterValueModel.Instance.GetValue(args.Cell.Value.ToString()), args.Cell.RowItem);
+
+      UInt32 l_axisElemId = (UInt32)args.Cell.RowItem.ItemValue;
+      UInt32 l_filterId = (UInt32)args.Cell.ColumnItem.ItemValue;
+      AxisFilter l_axisFilter = AxisFilterModel.Instance.GetValue(m_axisType, l_axisElemId, l_filterId);
+      FilterValue l_filterValue = FilterValueModel.Instance.GetValue(args.Cell.Value.ToString());
+      this.m_controller.Add(l_axisFilter, l_filterValue);
     }
 
     void changeParentCellValue(FilterValue p_filterValue, HierarchyItem p_row)
@@ -112,6 +118,11 @@ namespace FBI.MVC.View
     void l_cbEditor_SelectedIndexChanged(object sender, EventArgs e)
     {
       cellModif = true;
+    }
+
+    void Instance_ReadEvent(Network.ErrorMessage status, AxisElem attributes)
+    {
+      throw new NotImplementedException();
     }
 
     public void SetController(IController p_controller)
