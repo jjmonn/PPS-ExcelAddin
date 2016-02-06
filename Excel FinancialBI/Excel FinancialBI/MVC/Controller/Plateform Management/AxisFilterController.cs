@@ -27,7 +27,13 @@ namespace FBI.MVC.Controller
 
     public override void Close()
     {
-      //
+      // Add any dispose action here !
+      if (m_view != null)
+      {
+        m_view.Hide();
+        m_view.Dispose();
+        m_view = null;
+      }
     }
 
     public bool Add(string p_filterValueName, UInt32 p_filterId, UInt32 p_parentId)

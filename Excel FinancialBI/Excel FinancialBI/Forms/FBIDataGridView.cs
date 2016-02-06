@@ -45,6 +45,8 @@ namespace FBI.Forms
     void InitDGVDisplay()
     {
       Dock = System.Windows.Forms.DockStyle.Fill;
+      BackColor = System.Drawing.SystemColors.Control;
+      VIBlendTheme = Addin.VIBLEND_THEME;
       ColumnsHierarchy.AutoResize(AutoResizeMode.FIT_ALL);
       ColumnsHierarchy.AutoStretchColumns = true;
       ColumnsHierarchy.AllowResize = true;

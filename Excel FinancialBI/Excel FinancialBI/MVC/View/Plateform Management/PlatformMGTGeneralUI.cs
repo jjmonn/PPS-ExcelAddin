@@ -103,6 +103,7 @@ namespace FBI.MVC.View
       AccountsView l_accountsView = new AccountsView();
       m_currentController = new AccountController(l_accountsView);
       Panel1.Controls.Add(l_accountsView);
+      l_accountsView.Dock = DockStyle.Fill;
     }
 
     private void m_entitiesBT_Click(object sender, EventArgs e)
@@ -110,16 +111,17 @@ namespace FBI.MVC.View
       CloseCurrentControl();
       AxisView l_entitiesView = new AxisView(Model.CRUD.AxisType.Entities);
       m_currentController = new AxisController(l_entitiesView);
-      // m_currentController = new EntitiesController(m_currentView);
       Panel1.Controls.Add(l_entitiesView);
+      l_entitiesView.Dock = DockStyle.Fill;
     }
 
     private void m_employeesButton_Click(object sender, EventArgs e)
     {
       CloseCurrentControl();
       AxisView l_employeesView = new EmployeeView();
-      // m_currentController = new EmployeesController(m_currentView);
+      m_currentController = new AxisController(l_employeesView);
       Panel1.Controls.Add(l_employeesView);
+      l_employeesView.Dock = DockStyle.Fill;
     }
 
     private void ClientsBT_Click(object sender, EventArgs e)
@@ -139,35 +141,47 @@ namespace FBI.MVC.View
 
     private void m_entitiesFiltersBT_Click(object sender, EventArgs e)
     {
-      // to be filled with your controller and view like examples above
+      CloseCurrentControl();
+      AxisFiltersView l_entitiesFiltersView = new AxisFiltersView(Model.CRUD.AxisType.Entities);
+      m_currentController = new AxisFilterController(l_entitiesFiltersView);
+      Panel1.Controls.Add(l_entitiesFiltersView);
+      l_entitiesFiltersView.Dock = DockStyle.Fill;
     }
 
     private void m_employeesFiltersBT_Click(object sender, EventArgs e)
     {
-      // to be filled with your controller and view like examples above
-    }
-
-    private void CategoriesBT_Click(object sender, EventArgs e)
-    {
-      // to be filled with your controller and view like examples above
+      CloseCurrentControl();
+      AxisFiltersView l_employeesFiltersView = new AxisFiltersView(Model.CRUD.AxisType.Employee);
+      m_currentController = new AxisFilterController(l_employeesFiltersView);
+      Panel1.Controls.Add(l_employeesFiltersView);
+      l_employeesFiltersView.Dock = DockStyle.Fill;
     }
 
     private void m_clientsFiltersBT_Click(object sender, EventArgs e)
     {
       CloseCurrentControl();
-      AxisFiltersView l_clientView = new AxisFiltersView(Model.CRUD.AxisType.Client);
-      m_currentController = new AxisFilterController(l_clientView);
-      Panel1.Controls.Add(l_clientView);
+      AxisFiltersView l_clientFiltersView = new AxisFiltersView(Model.CRUD.AxisType.Client);
+      m_currentController = new AxisFilterController(l_clientFiltersView);
+      Panel1.Controls.Add(l_clientFiltersView);
+      l_clientFiltersView.Dock = DockStyle.Fill;
     }
 
     private void m_productsFiltersBT_Click(object sender, EventArgs e)
     {
-      // to be filled with your controller and view like examples above
+      CloseCurrentControl();
+      AxisFiltersView l_productsFiltersView = new AxisFiltersView(Model.CRUD.AxisType.Product);
+      m_currentController = new AxisFilterController(l_productsFiltersView);
+      Panel1.Controls.Add(l_productsFiltersView);
+      l_productsFiltersView.Dock = DockStyle.Fill;
     }
 
     private void m_adjustmentsFiltersBT_Click(object sender, EventArgs e)
     {
-      // to be filled with your controller and view like examples above
+      CloseCurrentControl();
+      AxisFiltersView l_adjustmentsFiltersView = new AxisFiltersView(Model.CRUD.AxisType.Adjustment);
+      m_currentController = new AxisFilterController(l_adjustmentsFiltersView);
+      Panel1.Controls.Add(l_adjustmentsFiltersView);
+      l_adjustmentsFiltersView.Dock = DockStyle.Fill;
     }
 
     private void VersionsBT_Click(object sender, EventArgs e)
@@ -176,6 +190,7 @@ namespace FBI.MVC.View
       VersionsView l_versionsView = new VersionsView();
       m_currentController = new VersionsController(l_versionsView);
       Panel1.Controls.Add(l_versionsView);
+      l_versionsView.Dock = DockStyle.Fill;
     }
 
     private void CurrenciesBT_Click(object sender, EventArgs e)
