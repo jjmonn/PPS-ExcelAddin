@@ -56,16 +56,16 @@ namespace FBI.MVC.View
       this.m_startingPeriodLabel = new System.Windows.Forms.Label();
       this.m_periodConfigLabel = new System.Windows.Forms.Label();
       this.m_nameLabel = new System.Windows.Forms.Label();
-      this.CreationTB = new System.Windows.Forms.TextBox();
+      this.m_CreationDateTextbox = new System.Windows.Forms.TextBox();
       this.m_lockedLabel = new System.Windows.Forms.Label();
       this.m_lockedDateLabel = new System.Windows.Forms.Label();
       this.LockedDateT = new System.Windows.Forms.TextBox();
-      this.NameTB = new System.Windows.Forms.TextBox();
+      this.m_nameTextbox = new System.Windows.Forms.TextBox();
       this.m_creationDateLabel = new System.Windows.Forms.Label();
       this.lockedCB = new System.Windows.Forms.CheckBox();
       this.m_timeConfigTB = new System.Windows.Forms.TextBox();
-      this.StartPeriodTB = new System.Windows.Forms.ComboBox();
-      this.NBPeriodsTB = new System.Windows.Forms.TextBox();
+      this.m_startPeriodTextbox = new System.Windows.Forms.ComboBox();
+      this.m_nbPeriodsTextbox = new System.Windows.Forms.TextBox();
       this.m_exchangeRatesVersionVTreeviewbox = new VIBlend.WinForms.Controls.vTreeViewBox();
       this.m_factsVersionVTreeviewbox = new VIBlend.WinForms.Controls.vTreeViewBox();
       this.MenuStrip1 = new System.Windows.Forms.MenuStrip();
@@ -196,16 +196,16 @@ namespace FBI.MVC.View
       this.TableLayoutPanel2.Controls.Add(this.m_startingPeriodLabel, 0, 5);
       this.TableLayoutPanel2.Controls.Add(this.m_periodConfigLabel, 0, 4);
       this.TableLayoutPanel2.Controls.Add(this.m_nameLabel, 0, 0);
-      this.TableLayoutPanel2.Controls.Add(this.CreationTB, 1, 1);
+      this.TableLayoutPanel2.Controls.Add(this.m_CreationDateTextbox, 1, 1);
       this.TableLayoutPanel2.Controls.Add(this.m_lockedLabel, 0, 2);
       this.TableLayoutPanel2.Controls.Add(this.m_lockedDateLabel, 0, 3);
       this.TableLayoutPanel2.Controls.Add(this.LockedDateT, 1, 3);
-      this.TableLayoutPanel2.Controls.Add(this.NameTB, 1, 0);
+      this.TableLayoutPanel2.Controls.Add(this.m_nameTextbox, 1, 0);
       this.TableLayoutPanel2.Controls.Add(this.m_creationDateLabel, 0, 1);
       this.TableLayoutPanel2.Controls.Add(this.lockedCB, 1, 2);
       this.TableLayoutPanel2.Controls.Add(this.m_timeConfigTB, 1, 4);
-      this.TableLayoutPanel2.Controls.Add(this.StartPeriodTB, 1, 5);
-      this.TableLayoutPanel2.Controls.Add(this.NBPeriodsTB, 1, 6);
+      this.TableLayoutPanel2.Controls.Add(this.m_startPeriodTextbox, 1, 5);
+      this.TableLayoutPanel2.Controls.Add(this.m_nbPeriodsTextbox, 1, 6);
       this.TableLayoutPanel2.Controls.Add(this.m_exchangeRatesVersionVTreeviewbox, 1, 7);
       this.TableLayoutPanel2.Controls.Add(this.m_factsVersionVTreeviewbox, 1, 8);
       this.TableLayoutPanel2.Location = new System.Drawing.Point(28, 18);
@@ -284,16 +284,16 @@ namespace FBI.MVC.View
       this.m_nameLabel.TabIndex = 7;
       this.m_nameLabel.Text = "Version name";
       // 
-      // CreationTB
+      // m_CreationDateTextbox
       // 
-      this.CreationTB.Enabled = false;
-      this.CreationTB.Location = new System.Drawing.Point(290, 49);
-      this.CreationTB.Margin = new System.Windows.Forms.Padding(3, 5, 3, 3);
-      this.CreationTB.MaximumSize = new System.Drawing.Size(400, 4);
-      this.CreationTB.MinimumSize = new System.Drawing.Size(280, 20);
-      this.CreationTB.Name = "CreationTB";
-      this.CreationTB.Size = new System.Drawing.Size(386, 20);
-      this.CreationTB.TabIndex = 3;
+      this.m_CreationDateTextbox.Enabled = false;
+      this.m_CreationDateTextbox.Location = new System.Drawing.Point(290, 49);
+      this.m_CreationDateTextbox.Margin = new System.Windows.Forms.Padding(3, 5, 3, 3);
+      this.m_CreationDateTextbox.MaximumSize = new System.Drawing.Size(400, 4);
+      this.m_CreationDateTextbox.MinimumSize = new System.Drawing.Size(280, 20);
+      this.m_CreationDateTextbox.Name = "m_CreationDateTextbox";
+      this.m_CreationDateTextbox.Size = new System.Drawing.Size(386, 20);
+      this.m_CreationDateTextbox.TabIndex = 3;
       // 
       // m_lockedLabel
       // 
@@ -326,19 +326,19 @@ namespace FBI.MVC.View
       this.LockedDateT.Size = new System.Drawing.Size(386, 20);
       this.LockedDateT.TabIndex = 12;
       // 
-      // NameTB
+      // m_nameTextbox
       // 
-      this.NameTB.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+      this.m_nameTextbox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-      this.NameTB.Enabled = false;
-      this.NameTB.Location = new System.Drawing.Point(290, 5);
-      this.NameTB.Margin = new System.Windows.Forms.Padding(3, 5, 3, 3);
-      this.NameTB.MaximumSize = new System.Drawing.Size(400, 4);
-      this.NameTB.MinimumSize = new System.Drawing.Size(280, 20);
-      this.NameTB.Name = "NameTB";
-      this.NameTB.Size = new System.Drawing.Size(386, 20);
-      this.NameTB.TabIndex = 13;
+      this.m_nameTextbox.Enabled = false;
+      this.m_nameTextbox.Location = new System.Drawing.Point(290, 5);
+      this.m_nameTextbox.Margin = new System.Windows.Forms.Padding(3, 5, 3, 3);
+      this.m_nameTextbox.MaximumSize = new System.Drawing.Size(400, 4);
+      this.m_nameTextbox.MinimumSize = new System.Drawing.Size(280, 20);
+      this.m_nameTextbox.Name = "m_nameTextbox";
+      this.m_nameTextbox.Size = new System.Drawing.Size(386, 20);
+      this.m_nameTextbox.TabIndex = 13;
       // 
       // m_creationDateLabel
       // 
@@ -369,21 +369,21 @@ namespace FBI.MVC.View
       this.m_timeConfigTB.Size = new System.Drawing.Size(386, 20);
       this.m_timeConfigTB.TabIndex = 18;
       // 
-      // StartPeriodTB
+      // m_startPeriodTextbox
       // 
-      this.StartPeriodTB.Enabled = false;
-      this.StartPeriodTB.Location = new System.Drawing.Point(290, 223);
-      this.StartPeriodTB.Name = "StartPeriodTB";
-      this.StartPeriodTB.Size = new System.Drawing.Size(386, 21);
-      this.StartPeriodTB.TabIndex = 19;
+      this.m_startPeriodTextbox.Enabled = false;
+      this.m_startPeriodTextbox.Location = new System.Drawing.Point(290, 223);
+      this.m_startPeriodTextbox.Name = "m_startPeriodTextbox";
+      this.m_startPeriodTextbox.Size = new System.Drawing.Size(386, 21);
+      this.m_startPeriodTextbox.TabIndex = 19;
       // 
-      // NBPeriodsTB
+      // m_nbPeriodsTextbox
       // 
-      this.NBPeriodsTB.Enabled = false;
-      this.NBPeriodsTB.Location = new System.Drawing.Point(290, 267);
-      this.NBPeriodsTB.Name = "NBPeriodsTB";
-      this.NBPeriodsTB.Size = new System.Drawing.Size(384, 20);
-      this.NBPeriodsTB.TabIndex = 21;
+      this.m_nbPeriodsTextbox.Enabled = false;
+      this.m_nbPeriodsTextbox.Location = new System.Drawing.Point(290, 267);
+      this.m_nbPeriodsTextbox.Name = "m_nbPeriodsTextbox";
+      this.m_nbPeriodsTextbox.Size = new System.Drawing.Size(384, 20);
+      this.m_nbPeriodsTextbox.TabIndex = 21;
       // 
       // m_exchangeRatesVersionVTreeviewbox
       // 
@@ -513,16 +513,16 @@ namespace FBI.MVC.View
     internal System.Windows.Forms.Label m_startingPeriodLabel;
     internal System.Windows.Forms.Label m_periodConfigLabel;
     internal System.Windows.Forms.Label m_nameLabel;
-    internal System.Windows.Forms.TextBox CreationTB;
+    internal System.Windows.Forms.TextBox m_CreationDateTextbox;
     internal System.Windows.Forms.Label m_lockedLabel;
     internal System.Windows.Forms.Label m_lockedDateLabel;
     internal System.Windows.Forms.TextBox LockedDateT;
-    internal System.Windows.Forms.TextBox NameTB;
+    internal System.Windows.Forms.TextBox m_nameTextbox;
     internal System.Windows.Forms.Label m_creationDateLabel;
     internal System.Windows.Forms.CheckBox lockedCB;
     internal System.Windows.Forms.TextBox m_timeConfigTB;
-    internal System.Windows.Forms.ComboBox StartPeriodTB;
-    internal System.Windows.Forms.TextBox NBPeriodsTB;
+    internal System.Windows.Forms.ComboBox m_startPeriodTextbox;
+    internal System.Windows.Forms.TextBox m_nbPeriodsTextbox;
     internal System.Windows.Forms.ToolStripMenuItem RenameMenuBT;
     internal System.ComponentModel.BackgroundWorker BackgroundWorker1;
     internal System.Windows.Forms.Label m_globalFactsVersionLabel;
