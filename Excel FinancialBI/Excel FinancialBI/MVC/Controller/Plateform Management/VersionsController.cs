@@ -140,7 +140,10 @@ namespace FBI.MVC.Controller
       m_newVersionView.Show();
     }
 
-  
+    public void ShowVersionCopyView()
+    {
+      // TO DO
+    }
 
 
   }

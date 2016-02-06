@@ -286,6 +286,7 @@
     
       <!--messages-->
       <string name="msg_folder_name">Please enter a name for the new Folder</string>
+      <string name="msg_new_name">Please enter the new name</string>
       <string name="msg_folder_under_folder">A folder cannot be added under a version</string>
       <string name="msg_version_under_folder">A Version can only be added under a folder</string>
       <string name="msg_delete1">Careful, you are about to delete the version </string>

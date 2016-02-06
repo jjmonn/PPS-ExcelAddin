@@ -210,7 +210,7 @@ namespace FBI.MVC.View
         m_currentNode = e.Node;
         m_isDisplaying = true;
 
-        Version l_version = VersionModel.Instance.GetValue((uint)m_currentNode.value);
+        Version l_version = VersionModel.Instance.GetValue((uint)m_currentNode.Value);
         if (l_version == null) return;
         DisplayVersion(l_version);
         m_isDisplaying = false;
@@ -273,7 +273,7 @@ namespace FBI.MVC.View
     {
       if (m_currentNode != null && m_isDisplaying == false)
       {
-        Version l_version = VersionModel.Instance.GetValue((utin)m_currentNode.value);
+        Version l_version = VersionModel.Instance.GetValue((uint)m_currentNode.Value);
         if (l_version != null)
         {
           uint l_ratesVersionId = (uint)m_exchangeRatesVersionVTreeviewbox.TreeView.SelectedNode.Value;
