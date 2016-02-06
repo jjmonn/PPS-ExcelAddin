@@ -11,6 +11,7 @@ namespace FBI
   using Utils;
   using MVC.Model.CRUD;
   using MVC.Model;
+  using VIBlend.Utilities;
 
   static class Addin
   {
@@ -19,7 +20,7 @@ namespace FBI
     static HashSet<Type> m_initTypeSet = new HashSet<Type>();
     public static event InitializationEventHandler InitializationEvent;
     public delegate void InitializationEventHandler();
-
+    public static VIBLEND_THEME VIBLEND_THEME = VIBLEND_THEME.VISTABLUE;
     static NetworkLauncher m_networkLauncher = new NetworkLauncher();
 
     static void SelectLanguage()

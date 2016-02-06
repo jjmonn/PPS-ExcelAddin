@@ -32,9 +32,6 @@ namespace FBI.MVC.Controller
       }
     }
 
-    public void AddControlToPanel(Panel p_panel)
-    {
-      p_panel.Controls.Add(m_view);
-    }
+   
   }
 }

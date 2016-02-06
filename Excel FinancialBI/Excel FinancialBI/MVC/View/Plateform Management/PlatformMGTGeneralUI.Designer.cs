@@ -164,7 +164,6 @@ namespace FBI.MVC.View
             this.CategoriesBT.Text = "Categories";
             this.CategoriesBT.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.CategoriesBT.ToolTipText = "[GeneralEditionUI.tool_tip_categories]";
-            this.CategoriesBT.Click += new System.EventHandler(this.CategoriesBT_Click);
             // 
             // m_entitiesFiltersBT
             // 
