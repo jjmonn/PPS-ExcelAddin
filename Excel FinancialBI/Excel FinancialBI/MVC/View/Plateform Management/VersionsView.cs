@@ -58,6 +58,20 @@ namespace FBI.MVC.View
       m_exchangeRatesVersionVTreeviewbox.TreeView.AfterSelect += ExchangeRatesVTreebox_TextChanged;
       m_factsVersionVTreeviewbox.TreeView.AfterSelect += FactsRatesVTreebox_TextChanged;
 
+      // Main menu events
+      this.m_newVersionMenuBT.Click += new System.EventHandler(this.m_newVersionMenuBT_Click);
+      this.m_newFolderMenuBT.Click += new System.EventHandler(this.m_newFolderMenuBT_Click);
+      this.m_renameMenuBT.Click += new System.EventHandler(this.m_renameMenuBT_Click);
+      this.m_deleteVersionMenuBT.Click += new System.EventHandler(this.m_deleteVersionMenuBT_Click);
+
+      // Right click menu events
+      this.m_new_VersionRCMButton.Click += new System.EventHandler(this.m_new_VersionRCMButton_Click);
+      this.m_copyVersionRCMButton.Click += new System.EventHandler(this.m_copyVersionRCMButton_Click);
+      this.m_newFolderRCMButton.Click += new System.EventHandler(this.m_newFolderRCMButton_Click);
+      this.m_renameRCMButton.Click += new System.EventHandler(this.m_renameRCMButton_Click);
+      this.m_deleteRCMButton.Click += new System.EventHandler(this.m_deleteRCMButton_Click);
+
+
       //this.DefineUIPermissions(); TODO : RightManager
       //this.DesactivateUnallowed(); TODO : RightManager  
       this.MultilanguageSetup();
@@ -65,10 +79,10 @@ namespace FBI.MVC.View
 
     private void MultilanguageSetup()
     {
-      this.new_version_bt.Text = Local.GetValue("versions.add_version");
-      this.new_folder_bt.Text = Local.GetValue("versions.add_folder");
-      this.rename_bt.Text = Local.GetValue("general.rename");
-      this.delete_bt.Text = Local.GetValue("general.delete");
+      this.m_new_VersionRCMButton.Text = Local.GetValue("versions.add_version");
+      this.m_newFolderRCMButton.Text = Local.GetValue("versions.add_folder");
+      this.m_renameRCMButton.Text = Local.GetValue("general.rename");
+      this.m_deleteRCMButton.Text = Local.GetValue("general.delete");
       this.m_globalFactsVersionLabel.Text = Local.GetValue("facts_versions.global_facts_version");
       this.m_exchangeRatesVersionLabel.Text = Local.GetValue("facts_versions.exchange_rates_version");
       this.m_numberOfYearsLabel.Text = Local.GetValue("facts_versions.nb_periods");
@@ -79,10 +93,10 @@ namespace FBI.MVC.View
       this.m_lockedDateLabel.Text = Local.GetValue("facts_versions.locked_date");
       this.m_creationDateLabel.Text = Local.GetValue("facts_versions.creation_date");
       this.VersionsToolStripMenuItem.Text = Local.GetValue("general.versions");
-      this.NewVersionMenuBT.Text = Local.GetValue("versions.add_version");
-      this.NewFolderMenuBT.Text = Local.GetValue("versions.add_folder");
-      this.DeleteVersionMenuBT.Text = Local.GetValue("general.delete");
-      this.RenameMenuBT.Text = Local.GetValue("general.rename");
+      this.m_newVersionMenuBT.Text = Local.GetValue("versions.add_version");
+      this.m_newFolderMenuBT.Text = Local.GetValue("versions.add_folder");
+      this.m_deleteVersionMenuBT.Text = Local.GetValue("general.delete");
+      this.m_renameMenuBT.Text = Local.GetValue("general.rename");
     }
 
     public void SetController(IController p_controller)
@@ -106,7 +120,7 @@ namespace FBI.MVC.View
       m_nbPeriodsTextbox.Text = p_version.NbPeriod.ToString();
       SetGlobalFactsVersion(p_version);
       SetExchangeVersion(p_version);
-        
+
       if (p_version.Locked)
       {
         lockedCB.Checked = true;
@@ -118,15 +132,12 @@ namespace FBI.MVC.View
         LockedDateT.Text = Local.GetValue("facts_versions.version_not_locked");
       }
     }
- 
+
     private void SetControlsEnabled(bool p_allowed)
     {
       lockedCB.Checked = p_allowed;
-      m_timeConfigTB.Enabled = p_allowed;
-      m_startPeriodTextbox.Enabled = p_allowed;
-      m_nbPeriodsTextbox.Enabled = p_allowed;
       m_exchangeRatesVersionVTreeviewbox.Enabled = p_allowed;
-      m_factsVersionVTreeviewbox.Enabled = p_allowed; 
+      m_factsVersionVTreeviewbox.Enabled = p_allowed;
     }
 
     private string SetStartPeriodAndPeriodConfig(Version p_version)
@@ -140,7 +151,7 @@ namespace FBI.MVC.View
           break;
         case TimeConfig.MONTHS:
           m_timeConfigTB.Text = Local.GetValue("period.timeconfig.month");
-          startPeriod =  DateTime.FromOADate(p_version.StartPeriod).ToString("MMM yyyy");
+          startPeriod = DateTime.FromOADate(p_version.StartPeriod).ToString("MMM yyyy");
           break;
         case TimeConfig.WEEK:
           m_timeConfigTB.Text = Local.GetValue("period.timeconfig.week");
@@ -172,7 +183,7 @@ namespace FBI.MVC.View
     private void DisplayFolderVersion()
     {
       m_nameTextbox.Text = "";
-      m_CreationDateTextbox.Text = "";    
+      m_CreationDateTextbox.Text = "";
       LockedDateT.Text = "";
       m_timeConfigTB.Text = "";
       m_startPeriodTextbox.Text = "";
@@ -198,12 +209,12 @@ namespace FBI.MVC.View
       {
         m_currentNode = e.Node;
         m_isDisplaying = true;
-       
-        Version l_version = VersionModel.Instance.GetValue(m_currentNode.Text);
+
+        Version l_version = VersionModel.Instance.GetValue((uint)m_currentNode.value);
         if (l_version == null) return;
         DisplayVersion(l_version);
         m_isDisplaying = false;
-        
+
         // DesactivateUnallowed();
       }
 
@@ -221,16 +232,16 @@ namespace FBI.MVC.View
         switch (e.KeyCode)
         {
           case Keys.Up:
-          {
-            m_versionsTreeview.moveNodeUp(m_currentNode);
-          }
-          return;
+            {
+              m_versionsTreeview.moveNodeUp(m_currentNode);
+            }
+            return;
 
           case Keys.Down:
-          {
-            m_versionsTreeview.moveNodeDown(m_currentNode);
-          }
-          return;
+            {
+              m_versionsTreeview.moveNodeDown(m_currentNode);
+            }
+            return;
         }
       }
       if (e.KeyCode == Keys.Delete)
@@ -246,9 +257,9 @@ namespace FBI.MVC.View
       {
         if ((m_versionsTreeview.SelectedNode != null) && m_isDisplaying == false)
         {
-          if(lockedCB.Checked)
+          if (lockedCB.Checked)
           {
-              // m_controller.LockVersion(m_versionsTreeview.SelectedNode.Value);
+            // m_controller.LockVersion(m_versionsTreeview.SelectedNode.Value);
           }
           else
           {
@@ -262,7 +273,7 @@ namespace FBI.MVC.View
     {
       if (m_currentNode != null && m_isDisplaying == false)
       {
-        Version l_version = VersionModel.Instance.GetValue(m_currentNode.Text);
+        Version l_version = VersionModel.Instance.GetValue((utin)m_currentNode.value);
         if (l_version != null)
         {
           uint l_ratesVersionId = (uint)m_exchangeRatesVersionVTreeviewbox.TreeView.SelectedNode.Value;
@@ -289,7 +300,7 @@ namespace FBI.MVC.View
     {
       if (m_currentNode != null && m_isDisplaying == false)
       {
-        Version l_version = VersionModel.Instance.GetValue(m_currentNode.Text);
+        Version l_version = VersionModel.Instance.GetValue((uint)m_currentNode.Value);
         if (l_version != null)
         {
           uint l_globalFactsVersionId = (uint)m_factsVersionVTreeviewbox.TreeView.SelectedNode.Value;
@@ -312,7 +323,7 @@ namespace FBI.MVC.View
       }
     }
 
-    
+
     #endregion
 
 
@@ -423,7 +434,102 @@ namespace FBI.MVC.View
 
     #endregion
 
+
+    #region Main menu call back
+
+    private void m_newVersionMenuBT_Click(object sender, EventArgs e)
+    {
+      m_controller.ShowNewVersionView();
+    }
+
+    private void m_newFolderMenuBT_Click(object sender, EventArgs e)
+    {
+      CreateFolder();
+    }
+
+    private void m_renameMenuBT_Click(object sender, EventArgs e)
+    {
+      RenameVersion(m_currentNode);
+    }
+
+    private void m_deleteVersionMenuBT_Click(object sender, EventArgs e)
+    {
+      DeleteVersion(m_currentNode);
+    }
+
+    #endregion
+
+    #region ""Right click menu call backs
+
+    private void m_new_VersionRCMButton_Click(object sender, EventArgs e)
+    {
+      m_controller.ShowNewVersionView();
+    }
+
+    private void m_copyVersionRCMButton_Click(object sender, EventArgs e)
+    {
+      m_controller.ShowVersionCopyView();
+    }
+
+    private void m_newFolderRCMButton_Click(object sender, EventArgs e)
+    {
+      CreateFolder();
+    }
+
+    private void m_renameRCMButton_Click(object sender, EventArgs e)
+    {
+      RenameVersion(m_currentNode);
+    }
+
+    private void m_deleteRCMButton_Click(object sender, EventArgs e)
+    {
+      DeleteVersion(m_currentNode);
+    }
+
+    #endregion
+
+    private void CreateFolder()
+    {
+      Version l_newFolderVersion = new Version();
+      string l_name = Microsoft.VisualBasic.Interaction.InputBox(Local.GetValue("versions.msg_folder_name"));
+      l_newFolderVersion.Name = l_name;
+      l_newFolderVersion.IsFolder = true;
+      if (m_controller.Create(l_newFolderVersion) == false)
+        MessageBox.Show(m_controller.Error);
+    }
+
+    private void DeleteVersion(vTreeNode p_node)
+    {
+      if (p_node != null)
+      {
+        Version l_version = VersionModel.Instance.GetValue((uint)m_currentNode.Value);
+        if (l_version != null)
+        {
+          if (m_controller.Delete(l_version) == false)
+            MessageBox.Show(m_controller.Error);
+        }
+       }
+    }
+
+    private void RenameVersion(vTreeNode p_node)
+    {
+      if (p_node != null)
+      {
+        Version l_version = VersionModel.Instance.GetValue((uint)m_currentNode.Value).Clone();
+        if (l_version != null)
+        {
+          string l_name = Microsoft.VisualBasic.Interaction.InputBox(Local.GetValue("versions.msg_new_name"));
+          l_version.Name = l_name;
+          if (m_controller.Update(l_version) == false)
+            MessageBox.Show(m_controller.Error);
+        }
+      }
+    }
+
+
   }
 }
+
+
 
 
