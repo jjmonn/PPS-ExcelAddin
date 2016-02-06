@@ -64,8 +64,8 @@ namespace FBI.MVC.View
             {
               l_cbEditor.Items.Add(l_fv.Name);
             }
-          m_dgv.FillField(l_axisFilter.AxisElemId, l_axisFilter.FilterValueId, l_filterValue.Name, l_cbEditor);
-          if (l_filterValue.Id != 0 && l_filterValue.ParentId != 0)
+          m_dgv.FillField(l_axisFilter.AxisElemId, l_axisFilter.FilterId, l_filterValue.Name, l_cbEditor);
+         /*if (l_filterValue.Id != 0 && l_filterValue.ParentId != 0)
           {
             FilterValue l_parent = FilterValueModel.Instance.GetValue(l_filterValue.ParentId);
             l_filterValueDic = FilterValueModel.Instance.GetDictionary(l_parent.FilterId);
@@ -76,9 +76,25 @@ namespace FBI.MVC.View
                 l_cbEditor.Items.Add(l_fv.Name);
               }
             m_dgv.FillField(l_axisFilter.AxisElemId, l_parent.FilterId, l_parent.Name, l_cbEditor);
-            
-          }
+          }*/
+          this.fillParentsColumn(l_filterValue.Id, l_filterValue.ParentId, l_axisFilter.Id);
         }
+      }
+    }
+
+    void fillParentsColumn(uint p_filterValueId, uint p_parentId, uint p_axisElemId)
+    {
+      if (p_filterValueId != 0 && p_parentId != 0)
+      {
+        FilterValue l_parent = FilterValueModel.Instance.GetValue(p_parentId);
+        MultiIndexDictionary<UInt32, string, FilterValue> l_filterValueDic = FilterValueModel.Instance.GetDictionary(l_parent.FilterId);
+        ComboBoxEditor l_cbEditor = new ComboBoxEditor();
+        if (l_filterValueDic != null && l_cbEditor != null)
+          foreach (FilterValue l_fv in l_filterValueDic.Values)
+          {
+            l_cbEditor.Items.Add(l_fv.Name);
+          }
+        m_dgv.FillField(p_axisElemId, l_parent.FilterId, l_parent.Name, l_cbEditor);
       }
     }
 
