@@ -14,14 +14,14 @@ namespace FBI.MVC.Controller
 
   class AccountController : NameController
   {
-
-    private AccountsView m_view;
+    AccountsView m_view;
+    public override IView View { get { return (m_view); } }
     private FbiTreeView<Account> m_accountTV;
     private FbiTreeView<GlobalFact> m_globalFactTV;
 
-    public AccountController(AccountsView p_view)
+    public AccountController()
     {
-      m_view = p_view;
+      m_view = new AccountsView();
       m_view.SetController(this);
       this.LoadView();
     }

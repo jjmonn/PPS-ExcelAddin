@@ -14,7 +14,7 @@ namespace FBI.MVC.View
   using Controller;
   using Network;
 
-  public partial class ConnectionSidePane : AddinExpress.XL.ADXExcelTaskPane, IView
+  public partial class ConnectionSidePane : AddinExpress.XL.ADXExcelTaskPane
   {
     internal bool m_shown { set; get; }
 
@@ -27,11 +27,6 @@ namespace FBI.MVC.View
       Addin.InitializationEvent += OnInitComplete;
       Addin.ConnectionStateEvent += OnConnectionChanged;
       IsLoading = false;
-    }
-
-    public void SetController(IController p_controller)
-    {
-
     }
 
     bool IsLoading

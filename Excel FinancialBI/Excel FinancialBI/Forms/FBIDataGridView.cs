@@ -9,7 +9,7 @@ namespace FBI.Forms
   using MVC.Model.CRUD;
   using MVC.Model;
 
-  public class FbiDataGridView<V> : vDataGridView 
+  public class FbiDataGridView : vDataGridView 
   {
     public enum Dimension
     {
@@ -120,7 +120,7 @@ namespace FBI.Forms
       return (l_dim);
     }
 
-    public void FillField<Q>(UInt32 p_row, UInt32 p_column, V p_value, Q p_editor) where Q : IEditor
+    public void FillField<V, Q>(UInt32 p_row, UInt32 p_column, V p_value, Q p_editor) where Q : IEditor
     {
       HierarchyItem row = m_rowsDic[p_row];
       HierarchyItem column = m_columnsDic[p_column];

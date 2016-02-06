@@ -6,7 +6,7 @@ using System.Diagnostics;
 
 namespace FBI.MVC.View
 {
-  partial class FactBaseView<T> : System.Windows.Forms.UserControl
+  partial class FactBaseView<TCrudType> : System.Windows.Forms.UserControl
   {
 
     //UserControl overrides dispose to clean up the component list.
@@ -36,7 +36,7 @@ namespace FBI.MVC.View
     private void InitializeComponent()
     {
       this.components = new System.ComponentModel.Container();
-      System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FactBaseView<T>));
+      System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FactBaseView<TCrudType>));
       this.MenuButtonIL = new System.Windows.Forms.ImageList(this.components);
       this.VersionsRCMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
       this.select_version = new System.Windows.Forms.ToolStripMenuItem();

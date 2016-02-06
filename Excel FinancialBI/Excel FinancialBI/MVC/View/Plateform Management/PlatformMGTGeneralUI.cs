@@ -15,10 +15,11 @@ namespace FBI.MVC.View
   using System.Threading.Tasks;
   //  using CRUD;
   using Utils;
+  using Model.CRUD;
 
   internal partial class PlatformMGTGeneralUI : Form, IView
   {
-    private IPlatformManagementController m_currentController;
+    PlatformMgtController m_controller;
 
     #region Initialization
 
@@ -32,7 +33,7 @@ namespace FBI.MVC.View
 
     public void SetController(IController p_controller)
     {
-
+      m_controller = p_controller as PlatformMgtController;
     }
 
     private void MultilanguageSetup()
@@ -69,23 +70,11 @@ namespace FBI.MVC.View
 
     }
 
-    private void CloseCurrentControl()
-    {
-      if ((m_currentController != null))
-      {
-        m_currentController.Close();
-        m_currentController = null;
-      }
 
-    }
 
     private void PlatformMGTGeneralUI_FormClosing(object sender, FormClosingEventArgs e)
     {
-      if ((m_currentController != null))
-      {
-        m_currentController.Close();
-      }
-
+      
     }
 
     private void PlatformMGTGeneralUI_Load(object sender, EventArgs e)
@@ -99,98 +88,65 @@ namespace FBI.MVC.View
 
     private void AccountsBT_Click(object sender, EventArgs e)
     {
-      CloseCurrentControl();
-      AccountsView l_accountsView = new AccountsView();
-      m_currentController = new AccountController(l_accountsView);
-      Panel1.Controls.Add(l_accountsView);
-      l_accountsView.Dock = DockStyle.Fill;
+      m_controller.SwitchView<AccountsView, AccountController>(new AccountController());
     }
 
     private void m_entitiesBT_Click(object sender, EventArgs e)
     {
-      CloseCurrentControl();
-      AxisView l_entitiesView = new AxisView(Model.CRUD.AxisType.Entities);
-      m_currentController = new AxisController(l_entitiesView);
-      Panel1.Controls.Add(l_entitiesView);
-      l_entitiesView.Dock = DockStyle.Fill;
+      m_controller.SwitchView<AxisView, AxisController>(new AxisController(AxisType.Entities));
     }
 
     private void m_employeesButton_Click(object sender, EventArgs e)
     {
-      CloseCurrentControl();
-      AxisView l_employeesView = new EmployeeView();
-      m_currentController = new AxisController(l_employeesView);
-      Panel1.Controls.Add(l_employeesView);
-      l_employeesView.Dock = DockStyle.Fill;
+      m_controller.SwitchView<AxisView, AxisController>(new AxisController(AxisType.Employee));
     }
 
     private void ClientsBT_Click(object sender, EventArgs e)
     {
-      // to be filled with your controller and view like examples above
+      m_controller.SwitchView<AxisView, AxisController>(new AxisController(AxisType.Client));
     }
 
     private void ProductsBT_Click(object sender, EventArgs e)
     {
-      // to be filled with your controller and view like examples above
+      m_controller.SwitchView<AxisView, AxisController>(new AxisController(AxisType.Product));
     }
 
     private void AdjustmentsBT_Click(object sender, EventArgs e)
     {
-      // to be filled with your controller and view like examples above
+      m_controller.SwitchView<AxisView, AxisController>(new AxisController(AxisType.Adjustment));
     }
 
     private void m_entitiesFiltersBT_Click(object sender, EventArgs e)
     {
-      CloseCurrentControl();
-      AxisFiltersView l_entitiesFiltersView = new AxisFiltersView(Model.CRUD.AxisType.Entities);
-      m_currentController = new AxisFilterController(l_entitiesFiltersView);
-      Panel1.Controls.Add(l_entitiesFiltersView);
-      l_entitiesFiltersView.Dock = DockStyle.Fill;
+      m_controller.SwitchView<AxisFiltersView, AxisFilterController>(new AxisFilterController(AxisType.Entities));
+
     }
 
     private void m_employeesFiltersBT_Click(object sender, EventArgs e)
     {
-      CloseCurrentControl();
-      AxisFiltersView l_employeesFiltersView = new AxisFiltersView(Model.CRUD.AxisType.Employee);
-      m_currentController = new AxisFilterController(l_employeesFiltersView);
-      Panel1.Controls.Add(l_employeesFiltersView);
-      l_employeesFiltersView.Dock = DockStyle.Fill;
+      m_controller.SwitchView<AxisFiltersView, AxisFilterController>(new AxisFilterController(AxisType.Employee));
     }
 
     private void m_clientsFiltersBT_Click(object sender, EventArgs e)
     {
-      CloseCurrentControl();
-      AxisFiltersView l_clientFiltersView = new AxisFiltersView(Model.CRUD.AxisType.Client);
-      m_currentController = new AxisFilterController(l_clientFiltersView);
-      Panel1.Controls.Add(l_clientFiltersView);
-      l_clientFiltersView.Dock = DockStyle.Fill;
+      m_controller.SwitchView<AxisFiltersView, AxisFilterController>(new AxisFilterController(AxisType.Client));
+
     }
 
     private void m_productsFiltersBT_Click(object sender, EventArgs e)
     {
-      CloseCurrentControl();
-      AxisFiltersView l_productsFiltersView = new AxisFiltersView(Model.CRUD.AxisType.Product);
-      m_currentController = new AxisFilterController(l_productsFiltersView);
-      Panel1.Controls.Add(l_productsFiltersView);
-      l_productsFiltersView.Dock = DockStyle.Fill;
+      m_controller.SwitchView<AxisFiltersView, AxisFilterController>(new AxisFilterController(AxisType.Product));
     }
 
     private void m_adjustmentsFiltersBT_Click(object sender, EventArgs e)
     {
-      CloseCurrentControl();
-      AxisFiltersView l_adjustmentsFiltersView = new AxisFiltersView(Model.CRUD.AxisType.Adjustment);
-      m_currentController = new AxisFilterController(l_adjustmentsFiltersView);
-      Panel1.Controls.Add(l_adjustmentsFiltersView);
-      l_adjustmentsFiltersView.Dock = DockStyle.Fill;
+      m_controller.SwitchView<AxisFiltersView, AxisFilterController>(new AxisFilterController(AxisType.Adjustment));
+
     }
 
     private void VersionsBT_Click(object sender, EventArgs e)
     {
-      CloseCurrentControl();
-      VersionsView l_versionsView = new VersionsView();
-      m_currentController = new VersionsController(l_versionsView);
-      Panel1.Controls.Add(l_versionsView);
-      l_versionsView.Dock = DockStyle.Fill;
+      m_controller.SwitchView<VersionsView, VersionsController>(new VersionsController());
     }
 
     private void CurrenciesBT_Click(object sender, EventArgs e)

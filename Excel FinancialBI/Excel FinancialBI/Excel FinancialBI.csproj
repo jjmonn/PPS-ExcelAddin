@@ -234,10 +234,10 @@
     <Compile Include="Forms\FbiTreeView.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="MVC\Controller\Connection\ConnectionSidePaneController.cs" />
     <Compile Include="MVC\Controller\Plateform Management\AccountController.cs" />
     <Compile Include="MVC\Controller\Plateform Management\AxisController.cs" />
     <Compile Include="MVC\Controller\IController.cs" />
+    <Compile Include="MVC\Controller\Plateform Management\ExchangeRatesController.cs" />
     <Compile Include="MVC\Controller\Plateform Management\IPlatformManagementController.cs" />
     <Compile Include="MVC\Controller\Plateform Management\AxisFilterController.cs" />
     <Compile Include="MVC\Controller\Plateform Management\PlatformMgtController.cs" />

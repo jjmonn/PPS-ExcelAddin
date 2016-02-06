@@ -22,7 +22,7 @@ namespace FBI.MVC.View
 
     //private RightManager m_rightMGR; //TODO : not here
 
-    IController m_controller;
+    AccountController m_controller;
     FbiTreeView<Account> m_accountTV;
     FbiTreeView<GlobalFact> m_globalFactsTV; //TODO : FbiTreeView
     vTreeNode m_currentNode;
@@ -47,7 +47,7 @@ namespace FBI.MVC.View
     
     public void SetController(IController p_controller)
     {
-      this.m_controller = p_controller;
+      this.m_controller = p_controller as AccountController;
     }
 
     public void InitView(FbiTreeView<Account> p_accountTv, FbiTreeView<GlobalFact> p_globalFactsTv)
