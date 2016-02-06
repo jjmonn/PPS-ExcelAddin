@@ -39,6 +39,9 @@ namespace FBI.MVC.View
       m_versionsTVPanel.Controls.Add(m_versionsTreeview);
       m_versionsTreeview.Dock = DockStyle.Fill;
 
+      FbiTreeView<ExchangeRateVersion>.Load(m_exchangeRatesVersionVTreeviewbox.TreeView.Nodes, RatesVersionModel.Instance.GetDictionary());
+      FbiTreeView<GlobalFactVersion>.Load(m_factsVersionVTreeviewbox.TreeView.Nodes, GlobalFactVersionModel.Instance.GetDictionary());
+
       // Combobox Treeviews loading TO DO -> cf. function Loading TV Nath
 
       // Models events
@@ -95,6 +98,7 @@ namespace FBI.MVC.View
       this.VersionsToolStripMenuItem.Text = Local.GetValue("general.versions");
       this.m_newVersionMenuBT.Text = Local.GetValue("versions.add_version");
       this.m_newFolderMenuBT.Text = Local.GetValue("versions.add_folder");
+      this.m_copyVersionRCMButton.Text = Local.GetValue("versions.copy_version");
       this.m_deleteVersionMenuBT.Text = Local.GetValue("general.delete");
       this.m_renameMenuBT.Text = Local.GetValue("general.rename");
     }

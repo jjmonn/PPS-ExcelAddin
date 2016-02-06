@@ -282,9 +282,13 @@
       <string name="select_version">Select a version</string> 
       <string name="new_version">Create a new version</string> 
       <string name="new_folder">Create a new folder</string> 
-      <string name="version">Version</string> 
-    
-      <!--messages-->
+      <string name="version">Version</string>
+
+    <string name="add_version">Add version</string>
+    <string name="add_folder">Add folder</string>
+    <string name="copy_version">Copy version</string>
+
+    <!--messages-->
       <string name="msg_folder_name">Please enter a name for the new Folder</string>
       <string name="msg_new_name">Please enter the new name</string>
       <string name="msg_folder_under_folder">A folder cannot be added under a version</string>

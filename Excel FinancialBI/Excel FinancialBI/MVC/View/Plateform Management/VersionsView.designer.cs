@@ -454,37 +454,37 @@ namespace FBI.MVC.View
       // 
       this.m_newVersionMenuBT.Image = global::FBI.Properties.Resources.elements3_add;
       this.m_newVersionMenuBT.Name = "m_newVersionMenuBT";
-      this.m_newVersionMenuBT.Size = new System.Drawing.Size(152, 24);
+      this.m_newVersionMenuBT.Size = new System.Drawing.Size(151, 24);
       this.m_newVersionMenuBT.Text = "Add version";
       // 
       // m_newFolderMenuBT
       // 
       this.m_newFolderMenuBT.Image = global::FBI.Properties.Resources.favicon_81_;
       this.m_newFolderMenuBT.Name = "m_newFolderMenuBT";
-      this.m_newFolderMenuBT.Size = new System.Drawing.Size(152, 24);
+      this.m_newFolderMenuBT.Size = new System.Drawing.Size(151, 24);
       this.m_newFolderMenuBT.Text = "Add folder";
       // 
       // toolStripSeparator3
       // 
       this.toolStripSeparator3.Name = "toolStripSeparator3";
-      this.toolStripSeparator3.Size = new System.Drawing.Size(149, 6);
+      this.toolStripSeparator3.Size = new System.Drawing.Size(148, 6);
       // 
       // m_renameMenuBT
       // 
       this.m_renameMenuBT.Name = "m_renameMenuBT";
-      this.m_renameMenuBT.Size = new System.Drawing.Size(152, 24);
+      this.m_renameMenuBT.Size = new System.Drawing.Size(151, 24);
       this.m_renameMenuBT.Text = "Rename";
       // 
       // toolStripSeparator4
       // 
       this.toolStripSeparator4.Name = "toolStripSeparator4";
-      this.toolStripSeparator4.Size = new System.Drawing.Size(149, 6);
+      this.toolStripSeparator4.Size = new System.Drawing.Size(148, 6);
       // 
       // m_deleteVersionMenuBT
       // 
       this.m_deleteVersionMenuBT.Image = global::FBI.Properties.Resources.elements3_delete;
       this.m_deleteVersionMenuBT.Name = "m_deleteVersionMenuBT";
-      this.m_deleteVersionMenuBT.Size = new System.Drawing.Size(152, 24);
+      this.m_deleteVersionMenuBT.Size = new System.Drawing.Size(151, 24);
       this.m_deleteVersionMenuBT.Text = "Delete";
       // 
       // m_versionsTreeviewImageList

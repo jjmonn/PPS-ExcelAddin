@@ -163,7 +163,7 @@ namespace FBI.Forms
       return (Load(Nodes, p_items, p_icons));
     }
 
-    private static bool Load(vTreeNodeCollection p_nodes, MultiIndexDictionary<UInt32, String, T> p_items, MultiIndexDictionary<UInt32, String, T> p_icons = null)
+    public static bool Load(vTreeNodeCollection p_nodes, MultiIndexDictionary<UInt32, String, T> p_items, MultiIndexDictionary<UInt32, String, T> p_icons = null)
     {
       if (Implements<NamedHierarchyCRUDEntity>(typeof(T)))
       {
