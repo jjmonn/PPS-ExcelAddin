@@ -17,7 +17,6 @@ namespace FBI.MVC.View
   public partial class ConnectionSidePane : AddinExpress.XL.ADXExcelTaskPane, IView
   {
     internal bool m_shown { set; get; }
-    ConnectionSidePaneController m_controller;
 
     #region Initialize
 
@@ -27,6 +26,7 @@ namespace FBI.MVC.View
       Authenticator.AuthenticationEvent += OnAuthentification;
       Addin.InitializationEvent += OnInitComplete;
       Addin.ConnectionStateEvent += OnConnectionChanged;
+      IsLoading = false;
     }
 
     public void SetController(IController p_controller)
@@ -34,34 +34,50 @@ namespace FBI.MVC.View
 
     }
 
+    bool IsLoading
+    {
+      set
+      {
+        ConnectionBT.Visible = !value;
+        m_cancelButton.Visible  = value;
+      }
+    }
+
     #endregion
 
     #region Callbacks
 
-    delegate void OnConnectionOrAuth_delegate(ErrorMessage p_status);
+    delegate void OnAuthentification_delegate(ErrorMessage p_status);
     void OnAuthentification(ErrorMessage p_status)
     {
       if (InvokeRequired)
       {
-        OnAuthResult_delegate func = new OnAuthResult_delegate(OnInitComplete);
-        Invoke(func);
+        OnAuthentification_delegate func = new OnAuthentification_delegate(OnAuthentification);
+        Invoke(func, p_status);
       }
       else
-        FBI.AddinModule.CurrentInstance.SetConnectionIcon((p_status == ErrorMessage.SUCCESS));
+      {
+        if (p_status != ErrorMessage.SUCCESS)
+        {
+          IsLoading = false;
+          FBI.AddinModule.CurrentInstance.SetConnectionIcon(false);
+        }
+      }
     }
 
-    delegate void OnAuthResult_delegate();
+    delegate void OnInitComplete_delegate();
     void OnInitComplete()
     {
       if (InvokeRequired)
       {
-        OnAuthResult_delegate func = new OnAuthResult_delegate(OnInitComplete);
+        OnInitComplete_delegate func = new OnInitComplete_delegate(OnInitComplete);
         Invoke(func);
       }
       else
       {
         Hide();
         FBI.AddinModule.CurrentInstance.SetConnectionIcon(true);
+        IsLoading = false;
       }
     }
 
@@ -76,18 +92,23 @@ namespace FBI.MVC.View
       else
       {
         if (p_connected == false)
+        {
+          IsLoading = false;
           FBI.AddinModule.CurrentInstance.SetConnectionIcon(false);
+        }
       }
     }
 
     private void ConnectionBT_Click(object sender, EventArgs e)
     {
+      IsLoading = true;
       if (Addin.Connect(m_userNameTextBox.Text, m_passwordTextBox.Text) == false)
         MessageBox.Show("The temporary connection function did not suceed.");
     }
 
     private void m_cancelButton_Click(object sender, EventArgs e)
     {
+      IsLoading = false;
     }
 
     private void ConnectionSidePane_ADXBeforeTaskPaneShow(object sender, AddinExpress.XL.ADXBeforeTaskPaneShowEventArgs e)
