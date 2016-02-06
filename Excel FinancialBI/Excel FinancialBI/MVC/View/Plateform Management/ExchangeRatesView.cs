@@ -24,12 +24,17 @@ namespace FBI.MVC.View
 
     public ExchangeRatesView() : base(RatesVersionModel.Instance)
     {
-      SuscribeEvents();
     }
 
     override public void SetController(IController p_controller)
     {
       m_controller = p_controller as ExchangeRatesController;
+    }
+
+    public override void LoadView()
+    {
+      base.LoadView();
+      SuscribeEvents();
     }
 
     void SuscribeEvents()
