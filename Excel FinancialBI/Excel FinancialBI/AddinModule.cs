@@ -9,7 +9,8 @@ using AddinExpress.XL;
 namespace FBI
 {
   using MVC.View;
-  using FBI.MVC.Model.CRUD;
+  using MVC.Model.CRUD;
+  using MVC.Controller;
 
   [GuidAttribute("D046D807-38A0-47AF-AB7B-71AA24A67FB9"), ProgId("ExcelFinancialBI.AddinModule")]
   public partial class AddinModule : AddinExpress.MSO.ADXAddinModule
@@ -218,9 +219,7 @@ namespace FBI
     private void m_platformManagementButton_OnClick(object sender, IRibbonControl control, bool pressed)
     {
       // if connected
-      FBI.MVC.View.PlatformMGTGeneralUI l_platformMgtUI = new FBI.MVC.View.PlatformMGTGeneralUI();
-      l_platformMgtUI.Show();
-
+      new PlatformMgtController();
     }
 
     private void m_settingsRibbonButton_OnClick(object sender, IRibbonControl control, bool pressed)

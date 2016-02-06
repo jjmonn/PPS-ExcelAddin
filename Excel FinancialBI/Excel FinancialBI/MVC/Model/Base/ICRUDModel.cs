@@ -10,7 +10,7 @@ namespace FBI.MVC.Model
   using CRUD;
   using Network;
 
-  abstract class ICRUDModel<T> where T : class, CRUDEntity
+  abstract public class ICRUDModel<T> where T : class, CRUDEntity
   {
 
 	#region "Instance variables"

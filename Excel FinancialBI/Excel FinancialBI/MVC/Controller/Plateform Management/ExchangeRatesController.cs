@@ -3,27 +3,32 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace FBI.MVC.Controller
 {
   using View;
+  using Model;
   using Model.CRUD;
+  using Utils;
 
-  class AxisController : IController, IPlatformManagementController
+  class ExchangeRatesController : NameController, IPlatformManagementController
   {
-    AxisView m_view;
-    public IView View { get { return (m_view); } }
-    public string Error { get; set; }
+    ExchangeRatesView m_view;
+    public override IView View { get { return (m_view); } }
 
-    public AxisController(AxisType p_axisType)
+    public ExchangeRatesController()
     {
-      m_view = new AxisView(p_axisType);
+      m_view = new ExchangeRatesView();
       m_view.SetController(this);
-      m_view.LoadView();
+      LoadView();
     }
 
-    public void Close()
+    public override void LoadView()
+    {
+
+    }
+
+    public override void Close()
     {
       // Add any dispose action here !
       if (m_view != null)
@@ -33,7 +38,5 @@ namespace FBI.MVC.Controller
         m_view = null;
       }
     }
-
-   
   }
 }

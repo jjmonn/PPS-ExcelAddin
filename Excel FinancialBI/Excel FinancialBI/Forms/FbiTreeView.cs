@@ -63,6 +63,18 @@ namespace FBI.Forms
       return (this.HitTest(p_position));
     }
 
+    public void moveNodeUp(vTreeNode p_node)
+    {
+      Swap(p_node, p_node.PrevSiblingNode);
+      this.Refresh();
+    }
+
+    public void moveNodeDown(vTreeNode p_node)
+    {
+      Swap(p_node, p_node.NextSiblingNode);
+      this.Refresh();
+    }
+
     /*
      * Insert node at the node p_nodeInsertAt.
      * If p_fixedParent = true, the p_nodeInsertAt MUST have childrens to insert a node.
@@ -108,12 +120,31 @@ namespace FBI.Forms
 
     public static bool Swap(vTreeNode p_nodeX, vTreeNode p_nodeY)
     {
-      vTreeNode l_node = p_nodeX;
-
-      if (p_nodeX == null || p_nodeY == null)
+      if (p_nodeY == null || p_nodeX == null)
         return (false);
-      p_nodeX = p_nodeY;
-      p_nodeY = l_node;
+
+      if (p_nodeX.Parent == null)
+      {
+        vTreeView l_parentNode = p_nodeX.TreeView;
+        Int32 indexOrigin = l_parentNode.Nodes.IndexOf(p_nodeX);
+        Int32 indexNext = l_parentNode.Nodes.IndexOf(p_nodeY);
+
+        l_parentNode.Nodes.RemoveAt(indexOrigin);
+        l_parentNode.Nodes.Insert(indexOrigin, p_nodeY);
+        l_parentNode.Nodes.RemoveAt(indexNext);
+        l_parentNode.Nodes.Insert(indexNext, p_nodeX);
+      }
+      else
+      {
+        vTreeNode l_parentNode = p_nodeX.Parent;
+        Int32 indexOrigin = l_parentNode.Nodes.IndexOf(p_nodeX);
+        Int32 indexNext = l_parentNode.Nodes.IndexOf(p_nodeY);
+
+        l_parentNode.Nodes.RemoveAt(indexOrigin);
+        l_parentNode.Nodes.Insert(indexOrigin, p_nodeY);
+        l_parentNode.Nodes.RemoveAt(indexNext);
+        l_parentNode.Nodes.Insert(indexNext, p_nodeX);
+      }
       return (true);
     }
 
@@ -143,13 +174,13 @@ namespace FBI.Forms
       }
       else
       {
-        /*foreach (NamedCRUDEntity l_item in m_items.SortedValues)
+        foreach (NamedCRUDEntity l_item in m_items.SortedValues)
         {
           vTreeNode l_node = new vTreeNode();
-          if (!this.Generate(l_node, l_item.Id))
+          if (!this.Generate(p_items, l_node, l_item.Id, p_icons))
             return (false);
           this.Nodes.Add(l_node);
-        }*/
+        }
       }
       return (true);
     }
@@ -162,7 +193,7 @@ namespace FBI.Forms
 
         if (l_currentItem == null)
           return (false);
-        p_node.Value = l_currentItem.ToString();
+        p_node.Value = l_currentItem.Id;
         p_node.Text = l_currentItem.Name;
         foreach (NamedHierarchyCRUDEntity l_item in p_items.SortedValues)
         {
@@ -181,23 +212,12 @@ namespace FBI.Forms
       }
       else
       {
-        /*NamedCRUDEntity l_currentItem = (NamedCRUDEntity)m_items[p_itemId];
+        NamedCRUDEntity l_currentItem = (NamedCRUDEntity)m_items[p_itemId];
 
         if (l_currentItem == null)
           return (false);
-        p_node.Value = l_currentItem.ToString();
+        p_node.Value = l_currentItem.Id;
         p_node.Text = l_currentItem.Name;
-        foreach (NamedCRUDEntity l_item in m_items.SortedValues)
-        {
-          vTreeNode l_node = new vTreeNode();
-          if (!this.Generate(l_node, l_item.Id))
-            return (false);
-          p_node.Nodes.Add(l_node);
-          if (m_icons != null)
-          {
-            p_node.ImageIndex = (int)m_icons[l_item.Id].Image;
-          }
-        }*/
       }
       return (true);
     }

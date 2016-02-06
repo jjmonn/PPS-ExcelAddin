@@ -10,7 +10,7 @@ namespace FBI.MVC.Model
   using Network;
   using Utils;
 
-  class NamedCRUDModel<T> : ICRUDModel<T> where T : class, NamedCRUDEntity
+  public class NamedCRUDModel<T> : ICRUDModel<T> where T : class, NamedCRUDEntity
   {
     protected MultiIndexDictionary<UInt32, string, T> m_CRUDDic = new MultiIndexDictionary<UInt32, string, T>();
 

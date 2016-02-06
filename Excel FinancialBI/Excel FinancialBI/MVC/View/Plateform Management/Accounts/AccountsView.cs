@@ -22,7 +22,7 @@ namespace FBI.MVC.View
 
     //private RightManager m_rightMGR; //TODO : not here
 
-    IController m_controller;
+    AccountController m_controller;
     FbiTreeView<Account> m_accountTV;
     FbiTreeView<GlobalFact> m_globalFactsTV; //TODO : FbiTreeView
     vTreeNode m_currentNode;
@@ -47,7 +47,7 @@ namespace FBI.MVC.View
     
     public void SetController(IController p_controller)
     {
-      this.m_controller = p_controller;
+      this.m_controller = p_controller as AccountController;
     }
 
     public void InitView(FbiTreeView<Account> p_accountTv, FbiTreeView<GlobalFact> p_globalFactsTv)
@@ -58,10 +58,10 @@ namespace FBI.MVC.View
 
       //this.DefineUIPermissions(); TODO : RightManager
       //this.DesactivateUnallowed(); TODO : RightManager
-      //this.SetAccountUIState(false);
+      this.SetAccountUIState(false);
 
       this.MultilangueSetup();
-      //this.SetFormulaEditionState(false);
+      this.SetFormulaEditionState(false);
     }
 
     private void MultilangueSetup()
@@ -130,11 +130,13 @@ namespace FBI.MVC.View
     {
       if (e.KeyCode == Keys.Down) //TODO : Maybe switch
       {
-
+        if (e.Control == true)
+          this.m_accountTV.moveNodeDown(this.m_accountTV.SelectedNode);
       }
       if (e.KeyCode == Keys.Up)
       {
-
+        if (e.Control == true)
+          this.m_accountTV.moveNodeUp(this.m_accountTV.SelectedNode);
       }
     }
 
@@ -184,7 +186,7 @@ namespace FBI.MVC.View
         this.m_currentNode = e.Node;
         if (this.m_currentNode != null)
         {
-          //this.DisplayAttributes(); TODO : Change dat thing
+          this.DisplayAttributes(); //TODO : Change dat thing
           //this.DesactivateUnallowed(); TODO : RightManager
         }
         else
@@ -328,64 +330,65 @@ namespace FBI.MVC.View
 
     private void DisplayAttributes()
     {
-      //if ((this.m_currentNode != null) && this.m_isEditingFormulaFlag == false)
-      //{
-      //  this.m_isDisplayingAccountFlag = true;
-      //  UInt32 l_account_id = (UInt32) m_currentNode.Value; //TODO : not sure about casting
-      //  Account l_account = GlobalVariables.Accounts.GetValue(l_account_id);
+      if ((this.m_currentNode != null) && this.m_isEditingFormulaFlag == false)
+      {
+        this.m_isDisplayingAccountFlag = true;
+        UInt32 l_accountId = (UInt32)m_currentNode.Value; //TODO : not sure about casting
+        Account l_account = AccountModel.Instance.GetValue(l_accountId);
+        if (l_account == null)
+          return;
 
-      //  if (l_account == null)
-      //    return;
-      //  this.Name_TB.Text = m_currentNode.Text;
+        this.Name_TB.Text = m_currentNode.Text;
+        
+        // Formula Type ComboBox
+        ListItem l_formulaTypeLI = m_formulasTypesIdItemDict[l_account.FormulaType];
+        this.FormulaTypeComboBox.SelectedItem = l_formulaTypeLI;
+        
+        // Format ComboBox
+        if (this.m_formatsIdItemDict.ContainsKey(l_account.Type))
+        {
+          ListItem l_formatLI = this.m_formatsIdItemDict[l_account.Type];
+          this.TypeComboBox.SelectedItem = l_formatLI;
+          if ((Account.AccountType)l_formatLI.Value == Account.AccountType.MONETARY)
+          {
+            // Currency Conversion
+            /*ListItem conversionLI = this.m_currenciesConversionIdItemDict[l_account.ConversionOptionId]; //TODO : see why crash
+            CurrencyConversionComboBox.SelectedItem = conversionLI;*/
+          }
+        }
+        else
+        {
+          TypeComboBox.SelectedItem = null;
+          TypeComboBox.Text = "";
+        }
+        
+        // Consolidation Option
+        ListItem consolidationLI = this.m_consoOptionIdItemDict[l_account.ConsolidationOptionId];
+        ConsolidationOptionComboBox.SelectedItem = consolidationLI;
 
-      //  // Formula Type ComboBox
-      //  ListItem l_formulaTypeLI = m_formulasTypesIdItemDict[l_account.FormulaType];
-      //  this.FormulaTypeComboBox.SelectedItem = l_formulaTypeLI;
+        
+        // Formula TB
+        /*if (m_controller.m_formulaTypesToBeTested.Contains(l_account.FormulaType))
+        {
+          m_formulaTextBox.Text = m_controller.GetFormulaText(l_account_id); //TODO : Controller
+        }
+        else
+        {
+          m_formulaTextBox.Text = "";
+        }*/
 
-      //  // Format ComboBox
-      //  if (this.m_formatsIdItemDict.ContainsKey(l_account.Type))
-      //  {
-      //    /*dynamic l_formatLI = this.m_formatsIdItemDict[l_account.Type];
-      //    this.TypeComboBox.SelectedItem = l_formatLI;
-      //    if (l_formatLI.Value == Account.AccountType.MONETARY)
-      //    {
-      //      // Currency Conversion
-      //      ListItem conversionLI = this.m_currenciesConversionIdItemDict[l_account.ConversionOptionId];
-      //      CurrencyConversionComboBox.SelectedItem = conversionLI;
-      //    }
-      //  }
-      //  else
-      //  {
-      //    TypeComboBox.SelectedItem = null;
-      //    TypeComboBox.Text = "";
-      //  }
+        m_descriptionTextBox.Text = l_account.Description;
 
-      //  // Consolidation Option
-      //  ListItem consolidationLI = this.m_consoOptionIdItemDict[l_account.ConsolidationOptionId];
-      //  ConsolidationOptionComboBox.SelectedItem = consolidationLI;
-
-
-      //  // Formula TB
-      //  if (m_controller.m_formulaTypesToBeTested.Contains(l_account.FormulaType))
-      //  {
-      //    m_formulaTextBox.Text = m_controller.GetFormulaText(l_account_id); //TODO : Controller
-      //  }
-      //  else
-      //  {
-      //    m_formulaTextBox.Text = "";
-      //  }*/
-
-      //  m_descriptionTextBox.Text = l_account.Description;
-
-      //  bool l_isRootAccount = false;
-      //  if (m_currentNode.Parent == null)
-      //    l_isRootAccount = true;
-      //  /*if (l_formulaTypeLI.Value == Account.FormulaTypes.TITLE)
-      //    SetEnableStatusEdition(false, l_isRootAccount, l_account.FormulaType);
-      //  else
-      //    SetEnableStatusEdition(true, l_isRootAccount, l_account.FormulaType);
-      //  m_isDisplayingAccountFlag = false;
-      //}
+        bool l_isRootAccount = false;
+        if (m_currentNode.Parent == null)
+          l_isRootAccount = true;
+        if ((Account.FormulaTypes)l_formulaTypeLI.Value == Account.FormulaTypes.TITLE)
+          SetEnableStatusEdition(false, l_isRootAccount, l_account.FormulaType);
+        else
+          SetEnableStatusEdition(true, l_isRootAccount, l_account.FormulaType);
+        
+        m_isDisplayingAccountFlag = false;
+      }
     }
 
     private void SetEnableStatusEdition(Boolean p_status, Boolean p_isRootAccount, Account.FormulaTypes p_accountFormulaType)
