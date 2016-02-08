@@ -16,6 +16,7 @@ namespace FBI.MVC.View
   using Model.CRUD;
   using Utils;
   using FBI.Forms;
+  using Network;
 
   public partial class AxisView : UserControl, IView
   {
@@ -68,6 +69,7 @@ namespace FBI.MVC.View
         }
         if (l_filterValue != null && l_cbEditor != null)
         {
+          Filter l_filter = FilterModel.Instance.GetValue(l_axisFilter.FilterId);
           m_dgv.FillField(l_axisFilter.AxisElemId, l_axisFilter.FilterId, l_filterValue.Name, l_cbEditor);
           this.fillParentsColumn(l_filterValue.Id, l_filterValue.ParentId, l_axisFilter);
         }
@@ -92,22 +94,22 @@ namespace FBI.MVC.View
 
     private void m_dgv_CellValueChanged(object sender, CellEventArgs args)
     {
-      if (cellModif == false)
+      if (cellModif == false || args == null)
         return;
       cellModif = false;
       UInt32 l_axisElemId = (UInt32)args.Cell.RowItem.ItemValue;
       UInt32 l_filterId = (UInt32)args.Cell.ColumnItem.ItemValue;
       AxisFilter l_axisFilter = AxisFilterModel.Instance.GetValue(m_axisType, l_axisElemId, l_filterId);
       FilterValue l_filterValue = FilterValueModel.Instance.GetValue(args.Cell.Value.ToString());
-      this.m_controller.Add(l_axisFilter, l_filterValue);
+      if (l_axisFilter != null && l_filterValue != null)
+        this.m_controller.UpdateAxisFilter(l_axisFilter, l_filterValue);
     }
 
     void changeParentCellValue(uint p_axisElemId, uint p_filterValueId)
     {
       FilterValue l_filterValue = FilterValueModel.Instance.GetValue(p_filterValueId);
-      if (l_filterValue == null)
-        return;
-      m_dgv.FillField(p_axisElemId, p_filterValueId, l_filterValue.Name);
+      if (l_filterValue != null)
+        m_dgv.FillField(p_axisElemId, l_filterValue.FilterId, l_filterValue.Name);
     }
 
     void l_cbEditor_SelectedIndexChanged(object sender, EventArgs e)
@@ -117,13 +119,16 @@ namespace FBI.MVC.View
 
     void Instance_ReadEvent(Network.ErrorMessage status, AxisFilter attributes)
     {
-      if (status == Network.ErrorMessage.SUCCESS)
+      if (status == ErrorMessage.SUCCESS && attributes != null)
       {
-        AxisFilterModel.Instance.Update(attributes);
-        AxisElem l_filterValue = AxisElemModel.Instance.GetValue(attributes.Axis, attributes.AxisElemId);
-        changeParentCellValue(attributes.AxisElemId, l_filterValue.ParentId);
+        AxisFilter l_test = AxisFilterModel.Instance.GetValue(attributes.Id);
+        AxisElem l_axisElem = AxisElemModel.Instance.GetValue(attributes.Axis, attributes.AxisElemId);
+        FilterValue l_filterValue = FilterValueModel.Instance.GetValue(attributes.FilterValueId);
+        if (l_filterValue != null && l_filterValue != null)
+          changeParentCellValue(l_axisElem.Id, l_filterValue.ParentId);
       }
-      throw new NotImplementedException();
+      else
+        MessageBox.Show(Local.GetValue("general.error.system"));
     }
 
     public void SetController(IController p_controller)
