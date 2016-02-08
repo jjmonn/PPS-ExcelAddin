@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Microsoft.VisualBasic;
 using System.Diagnostics;
+using VIBlend.WinForms.Controls;
 
 namespace FBI.MVC.View
 {
@@ -33,15 +34,9 @@ namespace FBI.MVC.View
       try
       {
         m_tree = new FbiTreeView<Filter>(FilterModel.Instance.GetDictionary(m_controller.AxisType));
-        //
-        System.Diagnostics.Debug.WriteLine("Total nodes = " + m_tree.GetNodes().Count);
-        foreach (Filter m in FilterModel.Instance.GetDictionary(m_controller.AxisType).Values)
-        {
-          System.Diagnostics.Debug.WriteLine("Filter: " + m.Name + " " + m.Id + " " + m.ParentId);
-        }
-        //
+        m_tree.Dock = DockStyle.Fill;
         m_tree.ContextMenuStrip = m_structureTreeviewRightClickMenu;
-        m_filterPanel.Controls.Add(m_tree);
+        m_filterPanel.Content.Controls.Add(m_tree);
         this.LoadLanguage();
         this.RegisterEvents();
       }
@@ -83,9 +78,7 @@ namespace FBI.MVC.View
       switch (e.KeyCode)
       {
         case Keys.Delete:
-          this.m_addFilter_Click(sender, e);
           break;
-        //ECHAP, REMOVE SELECTED ELEM
       }
     }
 

@@ -22,6 +22,7 @@ namespace FBI.Forms
       m_axisType = p_axisType;
       m_filters = FilterModel.Instance.GetDictionary(m_axisType);
       this.Load();
+      FbiTreeView<Filter>.InitTVFormat(this);
     }
 
     private bool Load()

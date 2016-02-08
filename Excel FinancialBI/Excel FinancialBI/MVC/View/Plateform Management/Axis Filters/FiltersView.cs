@@ -41,7 +41,6 @@ namespace FBI.MVC.View
         m_valuePanel.Controls.Add(m_tree, 0, 1);
         this.RegisterEvents();
         this.LoadLanguage();
-        m_filtersStructController.LoadView();
       }
       catch (Exception e)
       {
