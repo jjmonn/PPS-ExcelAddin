@@ -103,10 +103,15 @@ namespace FBI.Forms
 
     public void SetDimension(Dimension p_dimension, UInt32 p_id, string p_name)
     {
+      SetDimension<NamedCRUDEntity>(p_dimension, p_id, p_name);
+    }
+
+    public void SetDimension<J>(Dimension p_dimension, UInt32 p_id, string p_name, UInt32 p_parentId = 0, ICRUDModel<J> p_model = null) where J : class, NamedCRUDEntity
+    {
       if (p_dimension == Dimension.COLUMN)
-        SetDimension<NamedCRUDEntity>(ColumnsHierarchy.Items, m_columnsDic, p_id, p_name);
+        SetDimension<J>(ColumnsHierarchy.Items, m_columnsDic, p_id, p_name, p_model, p_parentId != 0, p_parentId);
       else if (p_dimension == Dimension.ROW)
-        SetDimension<NamedCRUDEntity>(RowsHierarchy.Items, m_rowsDic, p_id, p_name);
+        SetDimension<J>(RowsHierarchy.Items, m_rowsDic, p_id, p_name, p_model, p_parentId != 0, p_parentId);
     }
 
     HierarchyItem SetDimension<J>(HierarchyItemsCollection p_dimension, SafeDictionary<UInt32, HierarchyItem> p_saveDic, UInt32 p_id,

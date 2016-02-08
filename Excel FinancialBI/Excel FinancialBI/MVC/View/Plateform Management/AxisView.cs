@@ -60,6 +60,7 @@ namespace FBI.MVC.View
 
     void SuscribeEvents()
     {
+      AxisElemModel.Instance.ReadEvent   += OnModelRead;
       AxisElemModel.Instance.DeleteEvent += OnModelDelete;
       AxisFilterModel.Instance.ReadEvent += OnModelReadAxisFilter;
     }
@@ -177,12 +178,19 @@ namespace FBI.MVC.View
 
     #region Model Callback
 
-    private void OnModelDelete(ErrorMessage p_status, UInt32 p_id)
+    void OnModelRead(ErrorMessage p_status, AxisElem p_attributes)
+    {
+      m_dgv.SetDimension(FbiDataGridView.Dimension.ROW, p_attributes.Id, p_attributes.Name, p_attributes.ParentId, AxisElemModel.Instance);
+      m_dgv.Refresh();
+    }
+
+    void OnModelDelete(ErrorMessage p_status, UInt32 p_id)
     {
       switch (p_status)
       {
         case ErrorMessage.SUCCESS:
           m_dgv.DeleteRow(p_id);
+          m_dgv.Refresh();
           break;
         case ErrorMessage.PERMISSION_DENIED:
           MessageBox.Show(Local.GetValue("general.error.permission_denied"));
