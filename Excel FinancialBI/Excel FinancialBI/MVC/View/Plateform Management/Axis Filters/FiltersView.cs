@@ -18,30 +18,30 @@ namespace FBI.MVC.View
   using Model;
   using Controller;
   using Model.CRUD;
+  using Network;
 
-  public partial class AxisFiltersView : UserControl, IView
+  public partial class FiltersView : UserControl, IView
   {
     private FbiFilterHierarchyTreeView m_tree;
-    private AxisFilterController m_controller;
-    private AxisType m_axisType;
+    private FilterController m_controller;
+    private FiltersStructController m_filtersStructController;
 
-    public AxisFiltersView(AxisType p_axisType)
+    public FiltersView()
     {
       InitializeComponent();
-      m_axisType = p_axisType;
-      this.InitView();
     }
 
-    public void InitView()
+    public void LoadView()
     {
       try
       {
-        m_tree = new FbiFilterHierarchyTreeView(m_axisType);
+        m_tree = new FbiFilterHierarchyTreeView(m_controller.AxisType);
         m_tree.ContextMenuStrip = m_contextRightClick;
         m_tree.Dock = DockStyle.Fill;
         m_valuePanel.Controls.Add(m_tree, 0, 1);
         this.RegisterEvents();
         this.LoadLanguage();
+        m_filtersStructController.LoadView();
       }
       catch (Exception e)
       {
@@ -52,12 +52,8 @@ namespace FBI.MVC.View
 
     public void SetController(IController p_controller)
     {
-      m_controller = p_controller as AxisFilterController;
-    }
-
-    public AxisType AxisType
-    {
-      get { return (m_axisType); }
+      m_controller = p_controller as FilterController;
+      m_filtersStructController = new FiltersStructController(m_controller.AxisType);
     }
 
     private void LoadLanguage()
@@ -76,20 +72,30 @@ namespace FBI.MVC.View
 
     private void RegisterEvents()
     {
-      m_addValue.Click += m_addValue_Click;
-      m_addValueRightClick.Click += m_addValue_Click;
-      m_delete.Click += m_delete_Click;
+//      m_addValue.Click += OnAddValueClick;
+      m_addValueRightClick.Click += OnAddValueClick;
+//      m_delete.Click += m_delete_Click;
       m_deleteRightClick.Click += m_delete_Click;
-      m_rename.Click += m_rename_Click;
+//      m_rename.Click += m_rename_Click;
       m_renameRightClick.Click += m_rename_Click;
       m_editStruct.Click += m_editStruct_Click;
-      m_valuePanel.Click += m_valuePanel_Click;
+      m_valuePanel.Click += m_deselect;
       m_collapse.Click += m_collapse_Click;
       m_expand.Click += m_expand_Click;
-      FilterValueModel.Instance.CreationEvent += Instance_CreationEvent;
-      FilterValueModel.Instance.ReadEvent += Server_ReadEvent;
-      FilterValueModel.Instance.DeleteEvent += Instance_DeleteEvent;
-      FilterValueModel.Instance.UpdateEvent += Instance_UpdateEvent;
+      this.KeyDown += OnKeyDown;
+      FilterValueModel.Instance.ReadEvent += OnModelRead;
+      FilterValueModel.Instance.CreationEvent += OnModelCreate;
+      FilterValueModel.Instance.DeleteEvent += OnModelDelete;
+      FilterValueModel.Instance.UpdateEvent += OnModelUpdate;
+    }
+
+    private void OnKeyDown(object p_sender, KeyEventArgs p_e)
+    {
+      switch (p_e.KeyCode)
+      {
+        case Keys.Delete:
+          break;
+      }
     }
 
     #region Utils
@@ -119,23 +125,25 @@ namespace FBI.MVC.View
 
     #region FormEvents
 
-    private void m_addValue_Click(object sender, EventArgs e)
+    private void OnAddValueClick(object p_sender, EventArgs p_e)
     {
-      vTreeNode l_parent;
-      string l_filterName;
       UInt32 l_parentId;
+      string l_filterName;
+      FilterValue l_filter;
 
-      //You can only add a value if you selected a category !
       if (m_tree.SelectedNode == null)
       {
         MessageBox.Show(Local.GetValue("filters.msg_no_category_selected"), Local.GetValue("filters.new_value"), MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
         return;
       }
-      l_parentId = ((l_parent = m_tree.SelectedNode.Parent) == null ? 0 : (UInt32)l_parent.Value);
-      l_filterName = Interaction.InputBox(Local.GetValue("filters.msg_new_value_name")).Trim();
-      if (!m_controller.Add(l_filterName, (UInt32)FbiTreeView<FilterValue>.GetRoot(m_tree.SelectedNode).Value, l_parentId))
+      if ((l_filter = FilterValueModel.Instance.GetValue((UInt32)m_tree.SelectedNode.Value)) != null)
       {
-        MessageBox.Show(Local.GetValue(m_controller.Error), Local.GetValue("filters.new_value"), MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+        l_parentId = (m_tree.SelectedNode == null ? 0 : (UInt32)m_tree.SelectedNode.Value);
+        l_filterName = Interaction.InputBox(Local.GetValue("filters.msg_new_value_name")).Trim();
+        if (!m_controller.Add(l_filterName, l_filter.FilterId, l_parentId))
+        {
+          MessageBox.Show(Local.GetValue(m_controller.Error), Local.GetValue("filters.new_value"), MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+        }
       }
     }
 
@@ -176,7 +184,7 @@ namespace FBI.MVC.View
       //Open AxisFiltersStructController
     }
 
-    private void m_valuePanel_Click(object sender, EventArgs e)
+    private void m_deselect(object sender, EventArgs e)
     {
       m_tree.SelectedNode = null;
     }
@@ -185,7 +193,7 @@ namespace FBI.MVC.View
     {
       foreach (vTreeNode l_node in m_tree.Nodes)
       {
-        l_node.Collapse(false);
+        l_node.Expand();
       }
     }
 
@@ -193,7 +201,7 @@ namespace FBI.MVC.View
     {
       foreach (vTreeNode l_node in m_tree.Nodes)
       {
-        l_node.Expand();
+        l_node.Collapse(false);
       }
     }
 
@@ -201,36 +209,67 @@ namespace FBI.MVC.View
 
     #region ServerEvents
 
-    void Instance_CreationEvent(Network.ErrorMessage status, uint id)
+    void OnModelCreate(Network.ErrorMessage p_status, uint p_id)
     {
-      if (status != Network.ErrorMessage.SUCCESS)
+      if (p_status != Network.ErrorMessage.SUCCESS)
       {
         MessageBox.Show("", "filters.new_value", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
       }
     }
 
-    void Instance_UpdateEvent(Network.ErrorMessage status, uint id)
+    void OnModelUpdate(Network.ErrorMessage p_status, uint p_id)
     {
-      if (status != Network.ErrorMessage.SUCCESS)
+      if (p_status != Network.ErrorMessage.SUCCESS)
       {
         MessageBox.Show("", "filters.new_value", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
       }
     }
 
-    void Instance_DeleteEvent(Network.ErrorMessage status, uint id)
+    void OnModelDelete(ErrorMessage p_status, uint p_id)
     {
-      if (status != Network.ErrorMessage.SUCCESS)
+      if (p_status == Network.ErrorMessage.SUCCESS)
       {
-        MessageBox.Show("", "filters.new_value", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+        vTreeNode l_node;
+
+        if ((l_node = m_tree.Get(p_id, typeof(FilterValue))) != null && l_node.Parent != null)
+        {
+          l_node.Parent.Nodes.Remove(l_node);
+          return;
+        }
       }
+      MessageBox.Show("CANNOT DELETE, BECAUSE FUCK YOU !", "filters.new_value", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
     }
 
-    private void Server_ReadEvent(Network.ErrorMessage status, FilterValue attributes)
+    //A FilterValue as changed in the model
+    private void OnModelRead(ErrorMessage p_status, FilterValue p_attributes)
     {
-      //Update treeView here
+      vTreeNode l_node, l_parentNode;
+
+      if (p_status == ErrorMessage.SUCCESS)
+      {
+        if ((l_node = m_tree.Get(p_attributes.Id, typeof(FilterValue))) == null) //If the node must be created
+        {
+          if ((l_parentNode = m_tree.Get(p_attributes.ParentId, typeof(FilterValue))) == null) //Cannot update without the parent
+            return;
+          l_node = new vTreeNode();
+          l_node.Value = p_attributes.Id;
+          l_node.Text = p_attributes.Name;
+          l_node.Tag = p_attributes.GetType();
+          l_parentNode.Nodes.Add(l_node);
+        }
+        else //Else, the node must be updated
+        {
+          l_node.Text = p_attributes.Name;
+        }
+      }
     }
 
     #endregion
+
+    private void m_editStruct_Click_1(object sender, EventArgs e)
+    {
+      m_filtersStructController.ShowView();
+    }
 
   }
 }

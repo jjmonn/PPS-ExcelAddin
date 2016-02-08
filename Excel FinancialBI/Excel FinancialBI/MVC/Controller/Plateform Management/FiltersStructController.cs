@@ -11,18 +11,22 @@ namespace FBI.MVC.Controller
   using Model;
   using Model.CRUD;
 
-  class AxisFiltersStructController : NameController<AxisFilterStructView>
+  class FiltersStructController : NameController<FilterStructView>
   {
     public override IView View { get { return (m_view); } }
+    public AxisType AxisType { get; private set; }
 
-    public AxisFiltersStructController(AxisType p_axisType)
+    public FiltersStructController(AxisType p_axisType)
     {
-      m_view = new AxisFilterStructView(p_axisType);
+      AxisType = p_axisType;
+      m_view = new FilterStructView();
+      m_view.SetController(this);
+      LoadView();
     }
 
     public override void LoadView()
     {
-      //TODO
+      m_view.LoadView();
     }
 
     public bool Add(string p_filterName, UInt32 p_parentId)
@@ -33,7 +37,7 @@ namespace FBI.MVC.Controller
       {
         l_filter.Name = p_filterName;
         l_filter.ParentId = p_parentId;
-        l_filter.Axis = m_view.AxisType;
+        l_filter.Axis = AxisType;
         l_filter.IsParent = false;
         FilterModel.Instance.Create(l_filter);
         return (true);
@@ -59,6 +63,11 @@ namespace FBI.MVC.Controller
         return (true);
       }
       return (false);
+    }
+
+    public void ShowView()
+    {
+      m_view.ShowDialog();
     }
   }
 }

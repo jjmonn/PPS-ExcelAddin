@@ -10,25 +10,40 @@ namespace FBI.MVC.Controller
   using View;
   using Model;
   using Model.CRUD;
+  using Utils;
 
-  class AxisFilterController : NameController<AxisFiltersView>
+  class FilterController : NameController<FiltersView>
   {
+    public AxisType AxisType { get; private set; }
     public override IView View { get { return (m_view); } }
 
-    public AxisFilterController(AxisType p_axisType)
+    public FilterController(AxisType p_axisType)
     {
-      m_view = new AxisFiltersView(p_axisType);
+      AxisType = p_axisType;
+      m_view = new FiltersView();
+      m_view.SetController(this);
+      LoadView();
     }
 
     public override void LoadView()
     {
-      m_view.InitView();
+      m_view.LoadView();
+    }
+
+    public void ShowFilterStructView()
+    {
+      
     }
 
     public bool Add(string p_filterValueName, UInt32 p_filterId, UInt32 p_parentId)
     {
       FilterValue l_filter = new FilterValue();
 
+      if (!FilterModel.Instance.HasChild(p_filterId, this.AxisType))
+      {
+        Error = Local.GetValue("filters.error.no_child");
+        return (false);
+      }
       if (this.IsNameValidAndNotAlreadyUsed(p_filterValueName))
       {
         l_filter.Name = p_filterValueName;

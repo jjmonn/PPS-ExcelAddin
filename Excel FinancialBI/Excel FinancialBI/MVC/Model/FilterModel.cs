@@ -35,5 +35,15 @@ namespace FBI.MVC.Model
 
       InitCallbacks();
     }
+
+    public bool HasChild(UInt32 p_filterId, AxisType p_axisType)
+    {
+      foreach (Filter l_filter in this.GetDictionary(p_axisType).Values)
+      {
+        if (l_filter.ParentId == p_filterId)
+          return (true);
+      }
+      return (false);
+    }
   }
 }

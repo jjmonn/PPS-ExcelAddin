@@ -118,29 +118,29 @@ namespace FBI.MVC.View
 
     private void m_entitiesFiltersBT_Click(object sender, EventArgs e)
     {
-      m_controller.SwitchView<AxisFiltersView, AxisFilterController>(new AxisFilterController(AxisType.Entities));
+      m_controller.SwitchView<FiltersView, FilterController>(new FilterController(AxisType.Entities));
 
     }
 
     private void m_employeesFiltersBT_Click(object sender, EventArgs e)
     {
-      m_controller.SwitchView<AxisFiltersView, AxisFilterController>(new AxisFilterController(AxisType.Employee));
+      m_controller.SwitchView<FiltersView, FilterController>(new FilterController(AxisType.Employee));
     }
 
     private void m_clientsFiltersBT_Click(object sender, EventArgs e)
     {
-      m_controller.SwitchView<AxisFiltersView, AxisFilterController>(new AxisFilterController(AxisType.Client));
+      m_controller.SwitchView<FiltersView, FilterController>(new FilterController(AxisType.Client));
 
     }
 
     private void m_productsFiltersBT_Click(object sender, EventArgs e)
     {
-      m_controller.SwitchView<AxisFiltersView, AxisFilterController>(new AxisFilterController(AxisType.Product));
+      m_controller.SwitchView<FiltersView, FilterController>(new FilterController(AxisType.Product));
     }
 
     private void m_adjustmentsFiltersBT_Click(object sender, EventArgs e)
     {
-      m_controller.SwitchView<AxisFiltersView, AxisFilterController>(new AxisFilterController(AxisType.Adjustment));
+      m_controller.SwitchView<FiltersView, FilterController>(new FilterController(AxisType.Adjustment));
 
     }
 

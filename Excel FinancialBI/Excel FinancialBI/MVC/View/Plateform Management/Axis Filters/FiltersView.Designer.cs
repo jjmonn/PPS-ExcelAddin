@@ -6,7 +6,7 @@ using System.Diagnostics;
 
 namespace FBI.MVC.View
 {
-  partial class AxisFiltersView : System.Windows.Forms.UserControl
+  partial class FiltersView : System.Windows.Forms.UserControl
   {
 
     //UserControl overrides dispose to clean up the component list.
@@ -36,7 +36,7 @@ namespace FBI.MVC.View
     private void InitializeComponent()
     {
       this.components = new System.ComponentModel.Container();
-      System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AxisFiltersView));
+      System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FiltersView));
       this.m_valuePanel = new System.Windows.Forms.TableLayoutPanel();
       this.ImageList1 = new System.Windows.Forms.ImageList(this.components);
       this.MenuStrip1 = new System.Windows.Forms.MenuStrip();
@@ -131,6 +131,7 @@ namespace FBI.MVC.View
       this.m_editStruct.Name = "m_editStruct";
       this.m_editStruct.Size = new System.Drawing.Size(89, 20);
       this.m_editStruct.Text = "Edit structure";
+      this.m_editStruct.Click += new System.EventHandler(this.m_editStruct_Click_1);
       // 
       // m_contextRightClick
       // 
@@ -143,57 +144,57 @@ namespace FBI.MVC.View
             this.m_expand,
             this.m_collapse});
       this.m_contextRightClick.Name = "RCM_TV";
-      this.m_contextRightClick.Size = new System.Drawing.Size(153, 148);
+      this.m_contextRightClick.Size = new System.Drawing.Size(135, 126);
       // 
       // m_addValueRightClick
       // 
       this.m_addValueRightClick.Image = global::FBI.Properties.Resources.add;
       this.m_addValueRightClick.Name = "m_addValueRightClick";
-      this.m_addValueRightClick.Size = new System.Drawing.Size(152, 22);
+      this.m_addValueRightClick.Size = new System.Drawing.Size(134, 22);
       this.m_addValueRightClick.Text = "New value";
       // 
       // ToolStripSeparator2
       // 
       this.ToolStripSeparator2.Name = "ToolStripSeparator2";
-      this.ToolStripSeparator2.Size = new System.Drawing.Size(149, 6);
+      this.ToolStripSeparator2.Size = new System.Drawing.Size(131, 6);
       // 
       // m_deleteRightClick
       // 
       this.m_deleteRightClick.Image = global::FBI.Properties.Resources.imageres_89;
       this.m_deleteRightClick.Name = "m_deleteRightClick";
-      this.m_deleteRightClick.Size = new System.Drawing.Size(152, 22);
+      this.m_deleteRightClick.Size = new System.Drawing.Size(134, 22);
       this.m_deleteRightClick.Text = "Delete";
       // 
       // ToolStripSeparator1
       // 
       this.ToolStripSeparator1.Name = "ToolStripSeparator1";
-      this.ToolStripSeparator1.Size = new System.Drawing.Size(149, 6);
+      this.ToolStripSeparator1.Size = new System.Drawing.Size(131, 6);
       // 
       // m_renameRightClick
       // 
       this.m_renameRightClick.Name = "m_renameRightClick";
-      this.m_renameRightClick.Size = new System.Drawing.Size(152, 22);
+      this.m_renameRightClick.Size = new System.Drawing.Size(134, 22);
       this.m_renameRightClick.Text = "Rename";
       // 
       // m_expand
       // 
       this.m_expand.Name = "m_expand";
-      this.m_expand.Size = new System.Drawing.Size(152, 22);
+      this.m_expand.Size = new System.Drawing.Size(134, 22);
       this.m_expand.Text = "Expand_all";
       // 
       // m_collapse
       // 
       this.m_collapse.Name = "m_collapse";
-      this.m_collapse.Size = new System.Drawing.Size(152, 22);
+      this.m_collapse.Size = new System.Drawing.Size(134, 22);
       this.m_collapse.Text = "Collapse all";
       // 
-      // AxisFiltersView
+      // FiltersView
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
       this.Controls.Add(this.MenuStrip1);
       this.Controls.Add(this.m_valuePanel);
-      this.Name = "AxisFiltersView";
+      this.Name = "FiltersView";
       this.Size = new System.Drawing.Size(525, 430);
       this.MenuStrip1.ResumeLayout(false);
       this.MenuStrip1.PerformLayout();

@@ -18,20 +18,28 @@ namespace FBI.MVC.View
   using Controller;
   using Model.CRUD;
 
-  public partial class AxisFilterStructView : Form, IView
+  public partial class FilterStructView : Form, IView
   {
-    private AxisFiltersStructController m_controller;
-    private AxisType m_axisType;
-
+    private FiltersStructController m_controller;
     private FbiTreeView<Filter> m_tree;
 
-    public AxisFilterStructView(AxisType p_axisType)
+    public FilterStructView()
     {
       InitializeComponent();
+    }
+
+    public void LoadView()
+    {
       try
       {
-        m_axisType = p_axisType;
-        m_tree = new FbiTreeView<Filter>(FilterModel.Instance.GetDictionary(m_axisType));
+        m_tree = new FbiTreeView<Filter>(FilterModel.Instance.GetDictionary(m_controller.AxisType));
+        //
+        System.Diagnostics.Debug.WriteLine("Total nodes = " + m_tree.GetNodes().Count);
+        foreach (Filter m in FilterModel.Instance.GetDictionary(m_controller.AxisType).Values)
+        {
+          System.Diagnostics.Debug.WriteLine("Filter: " + m.Name + " " + m.Id + " " + m.ParentId);
+        }
+        //
         m_tree.ContextMenuStrip = m_structureTreeviewRightClickMenu;
         m_filterPanel.Controls.Add(m_tree);
         this.LoadLanguage();
@@ -44,16 +52,11 @@ namespace FBI.MVC.View
       }
     }
 
-    public AxisType AxisType
-    {
-      get { return (m_axisType); }
-    }
-
     //TODO Drag and drop
 
     public void SetController(IController p_controller)
     {
-      m_controller = p_controller as AxisFiltersStructController;
+      m_controller = p_controller as FiltersStructController;
     }
 
     private void LoadLanguage()
