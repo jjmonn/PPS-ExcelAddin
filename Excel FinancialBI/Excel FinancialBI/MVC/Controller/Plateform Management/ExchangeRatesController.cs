@@ -24,7 +24,7 @@ namespace FBI.MVC.Controller
 
     public override void LoadView()
     {
-
+      m_view.LoadView();
     }
   }
 }
