@@ -42,8 +42,6 @@ namespace FBI.MVC.View
       FbiTreeView<ExchangeRateVersion>.Load(m_exchangeRatesVersionVTreeviewbox.TreeView.Nodes, RatesVersionModel.Instance.GetDictionary());
       FbiTreeView<GlobalFactVersion>.Load(m_factsVersionVTreeviewbox.TreeView.Nodes, GlobalFactVersionModel.Instance.GetDictionary());
 
-      // Combobox Treeviews loading TO DO -> cf. function Loading TV Nath
-
       // Models events
       VersionModel.Instance.CreationEvent += AfterCreate;
       VersionModel.Instance.ReadEvent += AfterRead;

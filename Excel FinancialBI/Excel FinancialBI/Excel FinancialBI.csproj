@@ -173,7 +173,9 @@
     <Content Include="Resources\Locals\english.xml">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="Resources\Locals\french.xml" />
+    <Content Include="Resources\Locals\french.xml">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Resources\money_interest.ico" />
     <Content Include="Resources\money_interest.png" />
     <Content Include="Resources\money_interest1.ico" />

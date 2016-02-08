@@ -43,115 +43,116 @@ namespace FBI.MVC.View
       this.m_startingPeriodLabel = new System.Windows.Forms.Label();
       this.m_periodConfigLabel = new System.Windows.Forms.Label();
       this.m_versionNameLabel = new System.Windows.Forms.Label();
-      this.NameTB = new VIBlend.WinForms.Controls.vTextBox();
+      this.m_versionNameTextbox = new VIBlend.WinForms.Controls.vTextBox();
       this.m_timeConfigCB = new VIBlend.WinForms.Controls.vComboBox();
       this.m_exchangeRatesVersionVTreeviewbox = new VIBlend.WinForms.Controls.vTreeViewBox();
       this.m_factsVersionVTreeviewbox = new VIBlend.WinForms.Controls.vTreeViewBox();
-      this.m_parentVersionsTreeviewBox = new VIBlend.WinForms.Controls.vTreeViewBox();
-      this.m_copyCheckBox = new VIBlend.WinForms.Controls.vCheckBox();
       this.ButtonIcons = new System.Windows.Forms.ImageList(this.components);
       this.BigIcons = new System.Windows.Forms.ImageList(this.components);
-      this.CancelBT = new VIBlend.WinForms.Controls.vButton();
-      this.CreateVersionBT = new VIBlend.WinForms.Controls.vButton();
-      this.NbPeriodsNUD = new VIBlend.WinForms.Controls.vNumericUpDown();
+      this.m_CancelButton = new VIBlend.WinForms.Controls.vButton();
+      this.m_createVersionButton = new VIBlend.WinForms.Controls.vButton();
+      this.m_nbPeriods = new VIBlend.WinForms.Controls.vNumericUpDown();
       this.m_versionsTreeviewImageList = new System.Windows.Forms.ImageList(this.components);
       this.m_startingPeriodDatePicker = new VIBlend.WinForms.Controls.vDatePicker();
       this.SuspendLayout();
-      //
-      //m_factVersionLabel
-      //
+      // 
+      // m_factVersionLabel
+      // 
       this.m_factVersionLabel.AutoSize = true;
-      this.m_factVersionLabel.Location = new System.Drawing.Point(34, 297);
+      this.m_factVersionLabel.Location = new System.Drawing.Point(34, 254);
       this.m_factVersionLabel.Margin = new System.Windows.Forms.Padding(3, 7, 3, 0);
       this.m_factVersionLabel.Name = "m_factVersionLabel";
-      this.m_factVersionLabel.Size = new System.Drawing.Size(142, 13);
+      this.m_factVersionLabel.Size = new System.Drawing.Size(158, 15);
       this.m_factVersionLabel.TabIndex = 30;
       this.m_factVersionLabel.Text = "[facts_versions.fact_version]";
-      //
-      //m_rateVersionLabel
-      //
+      // 
+      // m_rateVersionLabel
+      // 
       this.m_rateVersionLabel.AutoSize = true;
-      this.m_rateVersionLabel.Location = new System.Drawing.Point(34, 259);
+      this.m_rateVersionLabel.Location = new System.Drawing.Point(34, 216);
       this.m_rateVersionLabel.Margin = new System.Windows.Forms.Padding(3, 7, 3, 0);
       this.m_rateVersionLabel.Name = "m_rateVersionLabel";
-      this.m_rateVersionLabel.Size = new System.Drawing.Size(200, 13);
+      this.m_rateVersionLabel.Size = new System.Drawing.Size(227, 15);
       this.m_rateVersionLabel.TabIndex = 28;
       this.m_rateVersionLabel.Text = "[facts_versions.exchange_rates_version]";
-      //
-      //m_nbPeriodsLabel
-      //
+      // 
+      // m_nbPeriodsLabel
+      // 
       this.m_nbPeriodsLabel.AutoSize = true;
-      this.m_nbPeriodsLabel.Location = new System.Drawing.Point(34, 217);
+      this.m_nbPeriodsLabel.Location = new System.Drawing.Point(34, 174);
       this.m_nbPeriodsLabel.Margin = new System.Windows.Forms.Padding(3, 7, 3, 0);
       this.m_nbPeriodsLabel.Name = "m_nbPeriodsLabel";
-      this.m_nbPeriodsLabel.Size = new System.Drawing.Size(56, 13);
+      this.m_nbPeriodsLabel.Size = new System.Drawing.Size(65, 15);
       this.m_nbPeriodsLabel.TabIndex = 25;
       this.m_nbPeriodsLabel.Text = "Number of";
-      //
-      //m_startingPeriodLabel
-      //
+      // 
+      // m_startingPeriodLabel
+      // 
       this.m_startingPeriodLabel.AutoSize = true;
-      this.m_startingPeriodLabel.Location = new System.Drawing.Point(34, 172);
+      this.m_startingPeriodLabel.Location = new System.Drawing.Point(34, 129);
       this.m_startingPeriodLabel.Margin = new System.Windows.Forms.Padding(3, 7, 3, 0);
       this.m_startingPeriodLabel.Name = "m_startingPeriodLabel";
-      this.m_startingPeriodLabel.Size = new System.Drawing.Size(153, 13);
+      this.m_startingPeriodLabel.Size = new System.Drawing.Size(175, 15);
       this.m_startingPeriodLabel.TabIndex = 17;
       this.m_startingPeriodLabel.Text = "[facts_versions.starting_period]";
-      //
-      //m_periodConfigLabel
-      //
+      // 
+      // m_periodConfigLabel
+      // 
       this.m_periodConfigLabel.AutoSize = true;
-      this.m_periodConfigLabel.Location = new System.Drawing.Point(34, 125);
+      this.m_periodConfigLabel.Location = new System.Drawing.Point(34, 82);
       this.m_periodConfigLabel.Margin = new System.Windows.Forms.Padding(3, 7, 3, 0);
       this.m_periodConfigLabel.Name = "m_periodConfigLabel";
-      this.m_periodConfigLabel.Size = new System.Drawing.Size(148, 13);
+      this.m_periodConfigLabel.Size = new System.Drawing.Size(168, 15);
       this.m_periodConfigLabel.TabIndex = 15;
       this.m_periodConfigLabel.Text = "[facts_versions.period_config]";
-      //
-      //m_versionNameLabel
-      //
+      // 
+      // m_versionNameLabel
+      // 
       this.m_versionNameLabel.AutoSize = true;
-      this.m_versionNameLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25f, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, Convert.ToByte(0));
+      this.m_versionNameLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
       this.m_versionNameLabel.Location = new System.Drawing.Point(34, 36);
       this.m_versionNameLabel.Margin = new System.Windows.Forms.Padding(3, 7, 3, 0);
       this.m_versionNameLabel.Name = "m_versionNameLabel";
-      this.m_versionNameLabel.Size = new System.Drawing.Size(179, 13);
+      this.m_versionNameLabel.Size = new System.Drawing.Size(200, 15);
       this.m_versionNameLabel.TabIndex = 7;
       this.m_versionNameLabel.Text = "[facts_versions.version_name]";
-      //
-      //NameTB
-      //
-      this.NameTB.Anchor = (System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right);
-      this.NameTB.BackColor = System.Drawing.Color.White;
-      this.NameTB.BoundsOffset = new System.Drawing.Size(1, 1);
-      this.NameTB.ControlBorderColor = System.Drawing.Color.FromArgb(Convert.ToInt32(Convert.ToByte(39)), Convert.ToInt32(Convert.ToByte(39)), Convert.ToInt32(Convert.ToByte(39)));
-      this.NameTB.DefaultText = "Empty...";
-      this.NameTB.Location = new System.Drawing.Point(347, 36);
-      this.NameTB.Margin = new System.Windows.Forms.Padding(3, 5, 3, 3);
-      this.NameTB.MaximumSize = new System.Drawing.Size(400, 4);
-      this.NameTB.MaxLength = 32767;
-      this.NameTB.MinimumSize = new System.Drawing.Size(280, 20);
-      this.NameTB.Name = "NameTB";
-      this.NameTB.PasswordChar = '\0';
-      this.NameTB.ScrollBars = System.Windows.Forms.ScrollBars.None;
-      this.NameTB.SelectionLength = 0;
-      this.NameTB.SelectionStart = 0;
-      this.NameTB.Size = new System.Drawing.Size(280, 20);
-      this.NameTB.TabIndex = 13;
-      this.NameTB.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
-      this.NameTB.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.OFFICESILVER;
-      //
-      //m_timeConfigCB
-      //
+      // 
+      // m_versionNameTextbox
+      // 
+      this.m_versionNameTextbox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+      this.m_versionNameTextbox.BackColor = System.Drawing.Color.White;
+      this.m_versionNameTextbox.BoundsOffset = new System.Drawing.Size(1, 1);
+      this.m_versionNameTextbox.ControlBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(39)))), ((int)(((byte)(39)))), ((int)(((byte)(39)))));
+      this.m_versionNameTextbox.DefaultText = "";
+      this.m_versionNameTextbox.Location = new System.Drawing.Point(347, 36);
+      this.m_versionNameTextbox.Margin = new System.Windows.Forms.Padding(3, 5, 3, 3);
+      this.m_versionNameTextbox.MaximumSize = new System.Drawing.Size(400, 4);
+      this.m_versionNameTextbox.MaxLength = 32767;
+      this.m_versionNameTextbox.MinimumSize = new System.Drawing.Size(280, 20);
+      this.m_versionNameTextbox.Name = "m_versionNameTextbox";
+      this.m_versionNameTextbox.PasswordChar = '\0';
+      this.m_versionNameTextbox.ScrollBars = System.Windows.Forms.ScrollBars.None;
+      this.m_versionNameTextbox.SelectionLength = 0;
+      this.m_versionNameTextbox.SelectionStart = 0;
+      this.m_versionNameTextbox.Size = new System.Drawing.Size(280, 20);
+      this.m_versionNameTextbox.TabIndex = 13;
+      this.m_versionNameTextbox.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+      this.m_versionNameTextbox.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.OFFICESILVER;
+      // 
+      // m_timeConfigCB
+      // 
       this.m_timeConfigCB.BackColor = System.Drawing.Color.White;
       this.m_timeConfigCB.DisplayMember = "";
+      this.m_timeConfigCB.DropDownList = true;
       this.m_timeConfigCB.DropDownMaximumSize = new System.Drawing.Size(1000, 1000);
       this.m_timeConfigCB.DropDownMinimumSize = new System.Drawing.Size(10, 10);
       this.m_timeConfigCB.DropDownResizeDirection = VIBlend.WinForms.Controls.SizingDirection.Both;
       this.m_timeConfigCB.DropDownWidth = 280;
-      this.m_timeConfigCB.Location = new System.Drawing.Point(347, 123);
+      this.m_timeConfigCB.Location = new System.Drawing.Point(347, 80);
       this.m_timeConfigCB.Name = "m_timeConfigCB";
-      this.m_timeConfigCB.RoundedCornersMaskListItem = Convert.ToByte(15);
+      this.m_timeConfigCB.RoundedCornersMaskListItem = ((byte)(15));
       this.m_timeConfigCB.Size = new System.Drawing.Size(280, 21);
       this.m_timeConfigCB.TabIndex = 16;
       this.m_timeConfigCB.UseThemeBackColor = false;
@@ -159,138 +160,113 @@ namespace FBI.MVC.View
       this.m_timeConfigCB.ValueMember = "";
       this.m_timeConfigCB.VIBlendScrollBarsTheme = VIBlend.Utilities.VIBLEND_THEME.OFFICESILVER;
       this.m_timeConfigCB.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.OFFICESILVER;
-      //
-      //m_exchangeRatesVersionVTreeviewbox
-      //
+      // 
+      // m_exchangeRatesVersionVTreeviewbox
+      // 
       this.m_exchangeRatesVersionVTreeviewbox.BackColor = System.Drawing.Color.White;
       this.m_exchangeRatesVersionVTreeviewbox.BorderColor = System.Drawing.Color.Black;
       this.m_exchangeRatesVersionVTreeviewbox.DropDownMaximumSize = new System.Drawing.Size(1000, 1000);
       this.m_exchangeRatesVersionVTreeviewbox.DropDownMinimumSize = new System.Drawing.Size(10, 10);
       this.m_exchangeRatesVersionVTreeviewbox.DropDownResizeDirection = VIBlend.WinForms.Controls.SizingDirection.Both;
-      this.m_exchangeRatesVersionVTreeviewbox.Location = new System.Drawing.Point(347, 259);
+      this.m_exchangeRatesVersionVTreeviewbox.Location = new System.Drawing.Point(347, 216);
       this.m_exchangeRatesVersionVTreeviewbox.Name = "m_exchangeRatesVersionVTreeviewbox";
       this.m_exchangeRatesVersionVTreeviewbox.Size = new System.Drawing.Size(280, 23);
       this.m_exchangeRatesVersionVTreeviewbox.TabIndex = 31;
+      this.m_exchangeRatesVersionVTreeviewbox.Text = " ";
       this.m_exchangeRatesVersionVTreeviewbox.UseThemeBackColor = false;
       this.m_exchangeRatesVersionVTreeviewbox.UseThemeDropDownArrowColor = true;
       this.m_exchangeRatesVersionVTreeviewbox.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.OFFICESILVER;
-      //
-      //m_factsVersionVTreeviewbox
-      //
+      // 
+      // m_factsVersionVTreeviewbox
+      // 
       this.m_factsVersionVTreeviewbox.BackColor = System.Drawing.Color.White;
       this.m_factsVersionVTreeviewbox.BorderColor = System.Drawing.Color.Black;
       this.m_factsVersionVTreeviewbox.DropDownMaximumSize = new System.Drawing.Size(1000, 1000);
       this.m_factsVersionVTreeviewbox.DropDownMinimumSize = new System.Drawing.Size(10, 10);
       this.m_factsVersionVTreeviewbox.DropDownResizeDirection = VIBlend.WinForms.Controls.SizingDirection.Both;
-      this.m_factsVersionVTreeviewbox.Location = new System.Drawing.Point(347, 295);
+      this.m_factsVersionVTreeviewbox.Location = new System.Drawing.Point(347, 252);
       this.m_factsVersionVTreeviewbox.Name = "m_factsVersionVTreeviewbox";
       this.m_factsVersionVTreeviewbox.Size = new System.Drawing.Size(280, 23);
       this.m_factsVersionVTreeviewbox.TabIndex = 32;
+      this.m_factsVersionVTreeviewbox.Text = " ";
       this.m_factsVersionVTreeviewbox.UseThemeBackColor = false;
       this.m_factsVersionVTreeviewbox.UseThemeDropDownArrowColor = true;
       this.m_factsVersionVTreeviewbox.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.OFFICESILVER;
-      //
-      //m_parentVersionsTreeviewBox
-      //
-      this.m_parentVersionsTreeviewBox.BackColor = System.Drawing.Color.White;
-      this.m_parentVersionsTreeviewBox.BorderColor = System.Drawing.Color.Black;
-      this.m_parentVersionsTreeviewBox.DropDownMaximumSize = new System.Drawing.Size(1000, 1000);
-      this.m_parentVersionsTreeviewBox.DropDownMinimumSize = new System.Drawing.Size(10, 10);
-      this.m_parentVersionsTreeviewBox.DropDownResizeDirection = VIBlend.WinForms.Controls.SizingDirection.Both;
-      this.m_parentVersionsTreeviewBox.Location = new System.Drawing.Point(347, 78);
-      this.m_parentVersionsTreeviewBox.Name = "m_parentVersionsTreeviewBox";
-      this.m_parentVersionsTreeviewBox.Size = new System.Drawing.Size(280, 23);
-      this.m_parentVersionsTreeviewBox.TabIndex = 33;
-      this.m_parentVersionsTreeviewBox.Text = "VTreeViewBox1";
-      this.m_parentVersionsTreeviewBox.UseThemeBackColor = false;
-      this.m_parentVersionsTreeviewBox.UseThemeDropDownArrowColor = true;
-      this.m_parentVersionsTreeviewBox.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.OFFICESILVER;
-      //
-      //m_copyCheckBox
-      //
-      this.m_copyCheckBox.BackColor = System.Drawing.Color.Transparent;
-      this.m_copyCheckBox.Location = new System.Drawing.Point(37, 76);
-      this.m_copyCheckBox.Name = "m_copyCheckBox";
-      this.m_copyCheckBox.Size = new System.Drawing.Size(175, 24);
-      this.m_copyCheckBox.TabIndex = 34;
-      this.m_copyCheckBox.Text = "Create copy from";
-      this.m_copyCheckBox.UseVisualStyleBackColor = false;
-      this.m_copyCheckBox.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.OFFICESILVER;
-      //
-      //ButtonIcons
-      //
-      this.ButtonIcons.ImageStream = (System.Windows.Forms.ImageListStreamer)resources.GetObject("ButtonIcons.ImageStream");
+      // 
+      // ButtonIcons
+      // 
+      this.ButtonIcons.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("ButtonIcons.ImageStream")));
       this.ButtonIcons.TransparentColor = System.Drawing.Color.Transparent;
       this.ButtonIcons.Images.SetKeyName(0, "favicon(81) (1).ico");
       this.ButtonIcons.Images.SetKeyName(1, "imageres_89.ico");
       this.ButtonIcons.Images.SetKeyName(2, "1420498403_340208.ico");
-      //
-      //BigIcons
-      //
-      this.BigIcons.ImageStream = (System.Windows.Forms.ImageListStreamer)resources.GetObject("BigIcons.ImageStream");
+      // 
+      // BigIcons
+      // 
+      this.BigIcons.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("BigIcons.ImageStream")));
       this.BigIcons.TransparentColor = System.Drawing.Color.Transparent;
       this.BigIcons.Images.SetKeyName(0, "favicon(230).ico");
-      //
-      //CancelBT
-      //
-      this.CancelBT.AllowAnimations = true;
-      this.CancelBT.BackColor = System.Drawing.Color.Transparent;
-      this.CancelBT.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-      this.CancelBT.ImageKey = "imageres_89.ico";
-      this.CancelBT.ImageList = this.ButtonIcons;
-      this.CancelBT.Location = new System.Drawing.Point(348, 349);
-      this.CancelBT.Name = "CancelBT";
-      this.CancelBT.RoundedCornersMask = Convert.ToByte(15);
-      this.CancelBT.Size = new System.Drawing.Size(119, 30);
-      this.CancelBT.TabIndex = 23;
-      this.CancelBT.Text = "[general.cancel]";
-      this.CancelBT.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-      this.CancelBT.UseVisualStyleBackColor = true;
-      this.CancelBT.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.OFFICESILVER;
-      //
-      //CreateVersionBT
-      //
-      this.CreateVersionBT.AllowAnimations = true;
-      this.CreateVersionBT.BackColor = System.Drawing.Color.Transparent;
-      this.CreateVersionBT.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-      this.CreateVersionBT.ImageKey = "1420498403_340208.ico";
-      this.CreateVersionBT.ImageList = this.ButtonIcons;
-      this.CreateVersionBT.Location = new System.Drawing.Point(508, 349);
-      this.CreateVersionBT.Name = "CreateVersionBT";
-      this.CreateVersionBT.RoundedCornersMask = Convert.ToByte(15);
-      this.CreateVersionBT.Size = new System.Drawing.Size(119, 30);
-      this.CreateVersionBT.TabIndex = 22;
-      this.CreateVersionBT.Text = "[general.create]";
-      this.CreateVersionBT.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-      this.CreateVersionBT.UseVisualStyleBackColor = true;
-      this.CreateVersionBT.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.OFFICESILVER;
-      //
-      //NbPeriodsNUD
-      //
-      this.NbPeriodsNUD.BackColor = System.Drawing.Color.White;
-      this.NbPeriodsNUD.DropDownArrowBackgroundEnabled = true;
-      this.NbPeriodsNUD.EnableBorderHighlight = false;
-      this.NbPeriodsNUD.Location = new System.Drawing.Point(348, 217);
-      this.NbPeriodsNUD.MaxLength = 32767;
-      this.NbPeriodsNUD.Name = "NbPeriodsNUD";
-      this.NbPeriodsNUD.OverrideBackColor = System.Drawing.Color.White;
-      this.NbPeriodsNUD.OverrideBorderColor = System.Drawing.Color.Gray;
-      this.NbPeriodsNUD.OverrideFont = new System.Drawing.Font("Microsoft Sans Serif", 8.25f);
-      this.NbPeriodsNUD.OverrideForeColor = System.Drawing.Color.Black;
-      this.NbPeriodsNUD.Size = new System.Drawing.Size(279, 22);
-      this.NbPeriodsNUD.TabIndex = 37;
-      this.NbPeriodsNUD.UseThemeForeColor = true;
-      this.NbPeriodsNUD.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.OFFICESILVER;
-      //
-      //m_versionsTreeviewImageList
-      //
-      this.m_versionsTreeviewImageList.ImageStream = (System.Windows.Forms.ImageListStreamer)resources.GetObject("m_versionsTreeviewImageList.ImageStream");
+      // 
+      // m_CancelButton
+      // 
+      this.m_CancelButton.AllowAnimations = true;
+      this.m_CancelButton.BackColor = System.Drawing.Color.Transparent;
+      this.m_CancelButton.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+      this.m_CancelButton.ImageKey = "imageres_89.ico";
+      this.m_CancelButton.ImageList = this.ButtonIcons;
+      this.m_CancelButton.Location = new System.Drawing.Point(348, 306);
+      this.m_CancelButton.Name = "m_CancelButton";
+      this.m_CancelButton.RoundedCornersMask = ((byte)(15));
+      this.m_CancelButton.Size = new System.Drawing.Size(119, 30);
+      this.m_CancelButton.TabIndex = 23;
+      this.m_CancelButton.Text = "[general.cancel]";
+      this.m_CancelButton.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+      this.m_CancelButton.UseVisualStyleBackColor = true;
+      this.m_CancelButton.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.OFFICESILVER;
+      // 
+      // m_createVersionButton
+      // 
+      this.m_createVersionButton.AllowAnimations = true;
+      this.m_createVersionButton.BackColor = System.Drawing.Color.Transparent;
+      this.m_createVersionButton.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+      this.m_createVersionButton.ImageKey = "1420498403_340208.ico";
+      this.m_createVersionButton.ImageList = this.ButtonIcons;
+      this.m_createVersionButton.Location = new System.Drawing.Point(508, 306);
+      this.m_createVersionButton.Name = "m_createVersionButton";
+      this.m_createVersionButton.RoundedCornersMask = ((byte)(15));
+      this.m_createVersionButton.Size = new System.Drawing.Size(119, 30);
+      this.m_createVersionButton.TabIndex = 22;
+      this.m_createVersionButton.Text = "[general.create]";
+      this.m_createVersionButton.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+      this.m_createVersionButton.UseVisualStyleBackColor = true;
+      this.m_createVersionButton.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.OFFICESILVER;
+      // 
+      // m_nbPeriods
+      // 
+      this.m_nbPeriods.BackColor = System.Drawing.Color.White;
+      this.m_nbPeriods.DropDownArrowBackgroundEnabled = true;
+      this.m_nbPeriods.EnableBorderHighlight = false;
+      this.m_nbPeriods.Location = new System.Drawing.Point(348, 174);
+      this.m_nbPeriods.MaxLength = 32767;
+      this.m_nbPeriods.Name = "m_nbPeriods";
+      this.m_nbPeriods.OverrideBackColor = System.Drawing.Color.White;
+      this.m_nbPeriods.OverrideBorderColor = System.Drawing.Color.Gray;
+      this.m_nbPeriods.OverrideFont = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
+      this.m_nbPeriods.OverrideForeColor = System.Drawing.Color.Black;
+      this.m_nbPeriods.Size = new System.Drawing.Size(279, 22);
+      this.m_nbPeriods.TabIndex = 37;
+      this.m_nbPeriods.UseThemeForeColor = true;
+      this.m_nbPeriods.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.OFFICESILVER;
+      // 
+      // m_versionsTreeviewImageList
+      // 
+      this.m_versionsTreeviewImageList.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("m_versionsTreeviewImageList.ImageStream")));
       this.m_versionsTreeviewImageList.TransparentColor = System.Drawing.Color.Transparent;
       this.m_versionsTreeviewImageList.Images.SetKeyName(0, "cloud_dark.ico");
       this.m_versionsTreeviewImageList.Images.SetKeyName(1, "favicon(81).ico");
-      //
-      //m_startingPeriodDatePicker
-      //
+      // 
+      // m_startingPeriodDatePicker
+      // 
       this.m_startingPeriodDatePicker.BackColor = System.Drawing.Color.White;
       this.m_startingPeriodDatePicker.BorderColor = System.Drawing.Color.Black;
       this.m_startingPeriodDatePicker.Culture = new System.Globalization.CultureInfo("");
@@ -298,7 +274,7 @@ namespace FBI.MVC.View
       this.m_startingPeriodDatePicker.DropDownMinimumSize = new System.Drawing.Size(10, 10);
       this.m_startingPeriodDatePicker.DropDownResizeDirection = VIBlend.WinForms.Controls.SizingDirection.None;
       this.m_startingPeriodDatePicker.FormatValue = "dd MMM yyyy";
-      this.m_startingPeriodDatePicker.Location = new System.Drawing.Point(347, 172);
+      this.m_startingPeriodDatePicker.Location = new System.Drawing.Point(347, 129);
       this.m_startingPeriodDatePicker.MaxDate = new System.DateTime(2100, 1, 1, 0, 0, 0, 0);
       this.m_startingPeriodDatePicker.MinDate = new System.DateTime(1900, 1, 1, 0, 0, 0, 0);
       this.m_startingPeriodDatePicker.Name = "m_startingPeriodDatePicker";
@@ -310,29 +286,27 @@ namespace FBI.MVC.View
       this.m_startingPeriodDatePicker.UseThemeDropDownArrowColor = true;
       this.m_startingPeriodDatePicker.Value = new System.DateTime(2015, 12, 11, 9, 57, 35, 808);
       this.m_startingPeriodDatePicker.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE;
-      //
-      //NewDataVersionUI
-      //
-      this.AutoScaleDimensions = new System.Drawing.SizeF(6f, 13f);
+      // 
+      // NewDataVersionUI
+      // 
+      this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-      this.ClientSize = new System.Drawing.Size(672, 439);
+      this.ClientSize = new System.Drawing.Size(672, 369);
       this.Controls.Add(this.m_startingPeriodDatePicker);
-      this.Controls.Add(this.NbPeriodsNUD);
+      this.Controls.Add(this.m_nbPeriods);
       this.Controls.Add(this.m_versionNameLabel);
-      this.Controls.Add(this.NameTB);
+      this.Controls.Add(this.m_versionNameTextbox);
       this.Controls.Add(this.m_factVersionLabel);
-      this.Controls.Add(this.m_copyCheckBox);
-      this.Controls.Add(this.CancelBT);
-      this.Controls.Add(this.m_parentVersionsTreeviewBox);
+      this.Controls.Add(this.m_CancelButton);
       this.Controls.Add(this.m_rateVersionLabel);
       this.Controls.Add(this.m_periodConfigLabel);
-      this.Controls.Add(this.CreateVersionBT);
+      this.Controls.Add(this.m_createVersionButton);
       this.Controls.Add(this.m_timeConfigCB);
       this.Controls.Add(this.m_nbPeriodsLabel);
       this.Controls.Add(this.m_startingPeriodLabel);
       this.Controls.Add(this.m_factsVersionVTreeviewbox);
       this.Controls.Add(this.m_exchangeRatesVersionVTreeviewbox);
-      this.Icon = (System.Drawing.Icon)resources.GetObject("$this.Icon");
+      this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
       this.Name = "NewDataVersionUI";
       this.Text = "[facts_versions.version_new]";
       this.ResumeLayout(false);
@@ -342,10 +316,10 @@ namespace FBI.MVC.View
     internal System.Windows.Forms.Label m_startingPeriodLabel;
     internal System.Windows.Forms.Label m_periodConfigLabel;
     internal System.Windows.Forms.Label m_versionNameLabel;
-    internal VIBlend.WinForms.Controls.vTextBox NameTB;
+    internal VIBlend.WinForms.Controls.vTextBox m_versionNameTextbox;
     internal VIBlend.WinForms.Controls.vComboBox m_timeConfigCB;
-    internal VIBlend.WinForms.Controls.vButton CancelBT;
-    internal VIBlend.WinForms.Controls.vButton CreateVersionBT;
+    internal VIBlend.WinForms.Controls.vButton m_CancelButton;
+    internal VIBlend.WinForms.Controls.vButton m_createVersionButton;
     internal System.Windows.Forms.ImageList ButtonIcons;
     internal System.Windows.Forms.ImageList BigIcons;
     internal System.Windows.Forms.Label m_nbPeriodsLabel;
@@ -353,9 +327,7 @@ namespace FBI.MVC.View
     internal System.Windows.Forms.Label m_factVersionLabel;
     internal VIBlend.WinForms.Controls.vTreeViewBox m_exchangeRatesVersionVTreeviewbox;
     internal VIBlend.WinForms.Controls.vTreeViewBox m_factsVersionVTreeviewbox;
-    internal VIBlend.WinForms.Controls.vTreeViewBox m_parentVersionsTreeviewBox;
-    internal VIBlend.WinForms.Controls.vCheckBox m_copyCheckBox;
-    internal VIBlend.WinForms.Controls.vNumericUpDown NbPeriodsNUD;
+    internal VIBlend.WinForms.Controls.vNumericUpDown m_nbPeriods;
     internal System.Windows.Forms.ImageList m_versionsTreeviewImageList;
     internal VIBlend.WinForms.Controls.vDatePicker m_startingPeriodDatePicker;
   }
