@@ -29,7 +29,7 @@ namespace FBI.MVC.Controller
     {
       Filter l_filter = new Filter();
 
-      if (this.IsNameValidAndNotAlreadyUsed(p_filterName))
+      if (this.IsNameValid(p_filterName) && FilterModel.Instance.GetValue(m_view.AxisType, p_filterName) != null)
       {
         l_filter.Name = p_filterName;
         l_filter.ParentId = p_parentId;
@@ -52,7 +52,7 @@ namespace FBI.MVC.Controller
       Filter l_filter;
 
       l_filter = FilterModel.Instance.GetValue(p_filterId).Clone();
-      if (l_filter != null && this.IsNameValidAndNotAlreadyUsed(p_filterNewName))
+      if (l_filter != null && this.IsNameValid(p_filterNewName) && FilterModel.Instance.GetValue(m_view.AxisType, p_filterNewName) != null)
       {
         l_filter.Name = p_filterNewName;
         FilterModel.Instance.Update(l_filter);
