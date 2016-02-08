@@ -40,10 +40,13 @@ namespace FBI.MVC.View
       FbiTreeView<GlobalFactVersion>.Load(m_factsVersionVTreeviewbox.TreeView.Nodes, GlobalFactVersionModel.Instance.GetDictionary());
 
       // Time config combobox
-      ListItem l_monthlyConfigItem = m_timeConfigCB.Items.Add(Local.GetValue("period.timeconfig.month"));
-      l_monthlyConfigItem.Value = TimeConfig.MONTHS;
       ListItem l_yearlyConfigItem = m_timeConfigCB.Items.Add(Local.GetValue("period.timeconfig.year"));
       l_yearlyConfigItem.Value = TimeConfig.YEARS;
+      m_timeConfigCB.SelectedItem = l_yearlyConfigItem;
+      ListItem l_monthlyConfigItem = m_timeConfigCB.Items.Add(Local.GetValue("period.timeconfig.month"));
+      l_monthlyConfigItem.Value = TimeConfig.MONTHS;
+      ListItem l_dailyConfigItem = m_timeConfigCB.Items.Add(Local.GetValue("period.timeconfig.day"));
+      l_dailyConfigItem.Value = TimeConfig.DAYS;
 
       this.m_startingPeriodDatePicker.Value = DateTime.Now;
 
@@ -91,17 +94,33 @@ namespace FBI.MVC.View
 
     private void CreateVersionBT_Click(object sender, EventArgs e)
     {
+      if (m_exchangeRatesVersionVTreeviewbox.TreeView.SelectedNode == null)
+      {
+        MessageBox.Show(Local.GetValue("versions.error.rates_version_not_selected"));
+        return;
+      }
+      if (m_factsVersionVTreeviewbox.TreeView.SelectedNode == null)
+      {
+        MessageBox.Show(Local.GetValue("versions.error.gfacts_version_not_selected"));
+        return;
+      }
       Version l_version = new Version();
       l_version.Name = this.m_versionNameTextbox.Text;
       l_version.ParentId = m_parentId;   
-      l_version.StartPeriod = 0;
+      l_version.StartPeriod = (uint)m_startingPeriodDatePicker.Value.Value.ToOADate();
       l_version.NbPeriod = (ushort)m_nbPeriods.Value;
       l_version.IsFolder = false;
       l_version.ItemPosition = 0;
       l_version.TimeConfiguration = (TimeConfig)this.m_timeConfigCB.SelectedItem.Value;
-      l_version.RateVersionId = p_packet.ReadUint32();
-      l_version.GlobalFactVersionId = p_packet.ReadUint32();
+      l_version.RateVersionId = (uint)m_exchangeRatesVersionVTreeviewbox.TreeView.SelectedNode.Value;
+      l_version.GlobalFactVersionId = (uint)m_factsVersionVTreeviewbox.TreeView.SelectedNode.Value;
       l_version.CreatedAt = DateTime.Now.ToShortDateString();
+      if (m_controller.Create(l_version) == false)
+      {
+        MessageBox.Show(m_controller.Error);
+      }
+      else
+        this.Hide();
     }
 
     private void CancelBT_Click(object sender, EventArgs e)
@@ -132,80 +151,6 @@ namespace FBI.MVC.View
     }
 
     #endregion
-
-
-
-    private bool IsFormValid(ref string name)
-    {
-
-      if (string.IsNullOrEmpty(m_timeConfigCB.Text))
-      {
-        MessageBox.Show(Local.GetValue("facts_versions.msg_config_selection"));
-        return false;
-      }
-
-      if (string.IsNullOrEmpty(m_startingPeriodDatePicker.Text) | Information.IsDate(m_startingPeriodDatePicker.Value) == false)
-      {
-        MessageBox.Show(Local.GetValue("facts_versions.msg_starting_period"));
-        return false;
-      }
-
-      // Check exchange rates and global facts selection
-      if (m_exchangeRatesVersionVTreeviewbox.TreeView.SelectedNode != null)
-      {
-        if (m_controller.IsRatesVersionValid(m_exchangeRatesVersionVTreeviewbox.TreeView.SelectedNode.Value) == false)
-        {
-          MessageBox.Show(m_exchangeRatesVersionVTreeviewbox.TreeView.SelectedNode.Text + Local.GetValue("facts_versions.msg_cannot_use_exchange_rates_folder"));
-          return false;
-        }
-      }
-      else
-      {
-        MessageBox.Show(Local.GetValue("facts_versions.msg_select_rates_version"));
-      }
-
-      if (m_factsVersionVTreeviewbox.TreeView.SelectedNode != null)
-      {
-        if (m_controller.IsFactsVersionValid(m_factsVersionVTreeviewbox.TreeView.SelectedNode.Value) == false)
-        {
-          MessageBox.Show(m_factsVersionVTreeviewbox.TreeView.SelectedNode.Text + Local.GetValue("facts_versions.msg_cannot_use_global_fact_folder"));
-          return false;
-        }
-      }
-      else
-      {
-        MessageBox.Show(Local.GetValue("facts_versions.msg_select_global_facts_version"));
-      }
-
-      // Check exchange rates and global facts validity
-      switch ((TimeConfig)this.m_timeConfigCB.SelectedItem.Value)
-      {
-        case TimeConfig.YEARS:
-
-        case TimeConfig.MONTHS:
-          DateTime l_startDate = this.m_startingPeriodDatePicker.Value.Value;
-          dynamic l_startPeriodCheck = GetLastDayOfPeriod(m_timeConfigCB.SelectedValue, l_startDate.ToOADate);
-
-          if (m_controller.IsRatesVersionCompatible(l_startPeriodCheck, this.m_nbPeriods.Value, m_exchangeRatesVersionVTreeviewbox.TreeView.SelectedNode.Value) == false)
-          {
-            MessageBox.Show(Local.GetValue("facts_versions.msg_rates_version_mismatch"));
-            return false;
-          }
-
-          if (m_controller.IsFactVersionCompatibleWithPeriods(l_startPeriodCheck, this.m_nbPeriods.Value, m_factsVersionVTreeviewbox.TreeView.SelectedNode.Value) == false)
-          {
-            MessageBox.Show(Local.GetValue("facts_versions.msg_fact_version_mismatch"));
-            return false;
-          }
-          break;
-
-        // So far only Months and Years period config are allowed
-
-      }
-      return true;
-
-    }
-
 
 
   }

@@ -103,7 +103,7 @@ namespace FBI.MVC.View
       this.m_periodConfigLabel.Margin = new System.Windows.Forms.Padding(3, 7, 3, 0);
       this.m_periodConfigLabel.Name = "m_periodConfigLabel";
       this.m_periodConfigLabel.Size = new System.Drawing.Size(168, 15);
-      this.m_periodConfigLabel.TabIndex = 15;
+      this.m_periodConfigLabel.TabIndex = 10;
       this.m_periodConfigLabel.Text = "[facts_versions.period_config]";
       // 
       // m_versionNameLabel
@@ -114,7 +114,7 @@ namespace FBI.MVC.View
       this.m_versionNameLabel.Margin = new System.Windows.Forms.Padding(3, 7, 3, 0);
       this.m_versionNameLabel.Name = "m_versionNameLabel";
       this.m_versionNameLabel.Size = new System.Drawing.Size(200, 15);
-      this.m_versionNameLabel.TabIndex = 7;
+      this.m_versionNameLabel.TabIndex = 9;
       this.m_versionNameLabel.Text = "[facts_versions.version_name]";
       // 
       // m_versionNameTextbox
@@ -137,7 +137,7 @@ namespace FBI.MVC.View
       this.m_versionNameTextbox.SelectionLength = 0;
       this.m_versionNameTextbox.SelectionStart = 0;
       this.m_versionNameTextbox.Size = new System.Drawing.Size(280, 20);
-      this.m_versionNameTextbox.TabIndex = 13;
+      this.m_versionNameTextbox.TabIndex = 1;
       this.m_versionNameTextbox.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
       this.m_versionNameTextbox.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.OFFICESILVER;
       // 
@@ -154,7 +154,7 @@ namespace FBI.MVC.View
       this.m_timeConfigCB.Name = "m_timeConfigCB";
       this.m_timeConfigCB.RoundedCornersMaskListItem = ((byte)(15));
       this.m_timeConfigCB.Size = new System.Drawing.Size(280, 21);
-      this.m_timeConfigCB.TabIndex = 16;
+      this.m_timeConfigCB.TabIndex = 2;
       this.m_timeConfigCB.UseThemeBackColor = false;
       this.m_timeConfigCB.UseThemeDropDownArrowColor = true;
       this.m_timeConfigCB.ValueMember = "";
@@ -171,7 +171,7 @@ namespace FBI.MVC.View
       this.m_exchangeRatesVersionVTreeviewbox.Location = new System.Drawing.Point(347, 216);
       this.m_exchangeRatesVersionVTreeviewbox.Name = "m_exchangeRatesVersionVTreeviewbox";
       this.m_exchangeRatesVersionVTreeviewbox.Size = new System.Drawing.Size(280, 23);
-      this.m_exchangeRatesVersionVTreeviewbox.TabIndex = 31;
+      this.m_exchangeRatesVersionVTreeviewbox.TabIndex = 5;
       this.m_exchangeRatesVersionVTreeviewbox.Text = " ";
       this.m_exchangeRatesVersionVTreeviewbox.UseThemeBackColor = false;
       this.m_exchangeRatesVersionVTreeviewbox.UseThemeDropDownArrowColor = true;
@@ -187,7 +187,7 @@ namespace FBI.MVC.View
       this.m_factsVersionVTreeviewbox.Location = new System.Drawing.Point(347, 252);
       this.m_factsVersionVTreeviewbox.Name = "m_factsVersionVTreeviewbox";
       this.m_factsVersionVTreeviewbox.Size = new System.Drawing.Size(280, 23);
-      this.m_factsVersionVTreeviewbox.TabIndex = 32;
+      this.m_factsVersionVTreeviewbox.TabIndex = 6;
       this.m_factsVersionVTreeviewbox.Text = " ";
       this.m_factsVersionVTreeviewbox.UseThemeBackColor = false;
       this.m_factsVersionVTreeviewbox.UseThemeDropDownArrowColor = true;
@@ -218,7 +218,7 @@ namespace FBI.MVC.View
       this.m_CancelButton.Name = "m_CancelButton";
       this.m_CancelButton.RoundedCornersMask = ((byte)(15));
       this.m_CancelButton.Size = new System.Drawing.Size(119, 30);
-      this.m_CancelButton.TabIndex = 23;
+      this.m_CancelButton.TabIndex = 8;
       this.m_CancelButton.Text = "[general.cancel]";
       this.m_CancelButton.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
       this.m_CancelButton.UseVisualStyleBackColor = true;
@@ -235,7 +235,7 @@ namespace FBI.MVC.View
       this.m_createVersionButton.Name = "m_createVersionButton";
       this.m_createVersionButton.RoundedCornersMask = ((byte)(15));
       this.m_createVersionButton.Size = new System.Drawing.Size(119, 30);
-      this.m_createVersionButton.TabIndex = 22;
+      this.m_createVersionButton.TabIndex = 7;
       this.m_createVersionButton.Text = "[general.create]";
       this.m_createVersionButton.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
       this.m_createVersionButton.UseVisualStyleBackColor = true;
@@ -254,7 +254,7 @@ namespace FBI.MVC.View
       this.m_nbPeriods.OverrideFont = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
       this.m_nbPeriods.OverrideForeColor = System.Drawing.Color.Black;
       this.m_nbPeriods.Size = new System.Drawing.Size(279, 22);
-      this.m_nbPeriods.TabIndex = 37;
+      this.m_nbPeriods.TabIndex = 4;
       this.m_nbPeriods.UseThemeForeColor = true;
       this.m_nbPeriods.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.OFFICESILVER;
       // 
@@ -280,7 +280,7 @@ namespace FBI.MVC.View
       this.m_startingPeriodDatePicker.Name = "m_startingPeriodDatePicker";
       this.m_startingPeriodDatePicker.ShowGrip = false;
       this.m_startingPeriodDatePicker.Size = new System.Drawing.Size(280, 23);
-      this.m_startingPeriodDatePicker.TabIndex = 39;
+      this.m_startingPeriodDatePicker.TabIndex = 3;
       this.m_startingPeriodDatePicker.Text = "VDatePicker1";
       this.m_startingPeriodDatePicker.UseThemeBackColor = false;
       this.m_startingPeriodDatePicker.UseThemeDropDownArrowColor = true;

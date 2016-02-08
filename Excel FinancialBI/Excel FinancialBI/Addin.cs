@@ -22,6 +22,8 @@ namespace FBI
     public delegate void InitializationEventHandler();
     public static VIBLEND_THEME VIBLEND_THEME = VIBLEND_THEME.VISTABLUE;
     static NetworkLauncher m_networkLauncher = new NetworkLauncher();
+    public static string UserName { get; private set; }
+    public static string Password { get; private set; }
 
     static void SelectLanguage()
     {
@@ -104,15 +106,12 @@ namespace FBI
 
     public static bool Connect(string p_userName, string p_password)
     {
-      return (Connect_Intern(p_userName, p_password));
-    }
-
-    static bool Connect_Intern(string p_userName = "", string p_password = "")
-    {
       bool result;
 
+      UserName = p_userName;
+      Password = p_password;
       if ((result = m_networkLauncher.Launch("192.168.0.41", 4242, OnDisconnect)) == true)
-        Authenticator.Instance.AskAuthentication(p_userName, p_password);
+        Authenticator.Instance.AskAuthentication(UserName, Password);
       if (ConnectionStateEvent != null)
         ConnectionStateEvent(result);
       return (result);
@@ -126,14 +125,10 @@ namespace FBI
       while (failed && nbTry > 0)
       {
         System.Threading.Thread.Sleep(3000);
-        Connect_Intern();
+        Connect(UserName, Password);
       }
       if (ConnectionStateEvent != null)
         ConnectionStateEvent(false);
     }
-
-
-
-
   }
 }

@@ -288,6 +288,9 @@
     <string name="msg_delete2">Cette version/ dossier et tout ce qu'elle/ il contient va être supprimé.</string>
     <string name="title_delete_confirmation">Confirmation de la suppression de Versions</string>
 
+    <string name="rates_version_not_selected">Une version des taux de change doit être sélectionnée.</string>
+    <string name="gfacts_version_not_selected">Une version des indicateurs macro economiques doit être sélectionnée.</string>
+  
   </category>
 
   <category name="process">

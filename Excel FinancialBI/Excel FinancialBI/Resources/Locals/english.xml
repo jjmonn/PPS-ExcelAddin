@@ -296,8 +296,13 @@
       <string name="msg_delete1">Careful, you are about to delete the version </string>
       <string name="msg_delete2">This version and all sub versions will be deleted, do you confirm?</string>
       <string name="title_delete_confirmation">Version deletion confirmation</string>
-   
-   </category>
+
+    <category name="error">
+      <string name="rates_version_not_selected">Please select an exchange rates version.</string>
+      <string name="gfacts_version_not_selected">Please select a macro economic indicators rates version.</string>
+      <string name="time_config_not_supported">This time configuration is not supported. Please contact your local administrator.</string>
+    </category>
+  </category>
 
   <category name="process">
     <string name="select_process">Select a process</string>
@@ -533,6 +538,10 @@
   
     <string name="macro_economic_indicator">Macro Economic Indicator</string>
     <string name="log">Log</string>
+
+    <category name="error">
+      <string name="name_in_use">This name is already in use.</string>
+    </category>
     
   </category>
   

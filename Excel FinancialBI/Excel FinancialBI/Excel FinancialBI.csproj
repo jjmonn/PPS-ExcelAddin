@@ -233,6 +233,9 @@
     <Compile Include="Forms\FbiDataGridView.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Forms\FbiFilterHierarchyTreeView.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Forms\FbiTreeView.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -241,11 +244,11 @@
     <Compile Include="MVC\Controller\IController.cs" />
     <Compile Include="MVC\Controller\Plateform Management\ExchangeRatesController.cs" />
     <Compile Include="MVC\Controller\Plateform Management\BasePlatformMgtComponent.cs" />
-    <Compile Include="MVC\Controller\Plateform Management\AxisFilterController.cs" />
+    <Compile Include="MVC\Controller\Plateform Management\FilterController.cs" />
     <Compile Include="MVC\Controller\Plateform Management\IBasePlatformMgtComponent.cs" />
     <Compile Include="MVC\Controller\Plateform Management\PlatformMgtController.cs" />
     <Compile Include="MVC\Controller\NameController.cs" />
-    <Compile Include="MVC\Controller\Plateform Management\AxisFiltersStructController.cs" />
+    <Compile Include="MVC\Controller\Plateform Management\FiltersStructController.cs" />
     <Compile Include="MVC\Controller\Plateform Management\VersionsController.cs" />
     <Compile Include="MVC\Model\AccountModel.cs" />
     <Compile Include="MVC\Model\AxisElemModel.cs" />
@@ -380,6 +383,12 @@
     <Compile Include="MVC\View\PeriodRangeSelectionControl.Designer.cs">
       <DependentUpon>PeriodRangeSelectionControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="MVC\View\Plateform Management\Axis Filters\HierarchyTreeView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="MVC\View\Plateform Management\Axis Filters\HierarchyTreeView.Designer.cs">
+      <DependentUpon>HierarchyTreeView.cs</DependentUpon>
+    </Compile>
     <Compile Include="MVC\View\Plateform Management\FactBaseView.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -425,11 +434,11 @@
     <Compile Include="MVC\View\Plateform Management\CurrenciesView.Designer.cs">
       <DependentUpon>CurrenciesView.cs</DependentUpon>
     </Compile>
-    <Compile Include="MVC\View\Plateform Management\Axis Filters\AxisFiltersView.cs">
+    <Compile Include="MVC\View\Plateform Management\Axis Filters\FiltersView.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="MVC\View\Plateform Management\Axis Filters\AxisFiltersView.Designer.cs">
-      <DependentUpon>AxisFiltersView.cs</DependentUpon>
+    <Compile Include="MVC\View\Plateform Management\Axis Filters\FiltersView.Designer.cs">
+      <DependentUpon>FiltersView.cs</DependentUpon>
     </Compile>
     <Compile Include="MVC\View\Plateform Management\Accounts\AccountsView.cs">
       <SubType>UserControl</SubType>
@@ -450,11 +459,11 @@
       <DependentUpon>NewAccountUI.cs</DependentUpon>
     </Compile>
     <Compile Include="MVC\View\IView.cs" />
-    <Compile Include="MVC\View\Plateform Management\Axis Filters\AxisFilterStructView.cs">
+    <Compile Include="MVC\View\Plateform Management\Axis Filters\FilterStructView.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="MVC\View\Plateform Management\Axis Filters\AxisFilterStructView.Designer.cs">
-      <DependentUpon>AxisFilterStructView.cs</DependentUpon>
+    <Compile Include="MVC\View\Plateform Management\Axis Filters\FilterStructView.Designer.cs">
+      <DependentUpon>FilterStructView.cs</DependentUpon>
     </Compile>
     <Compile Include="MVC\View\Plateform Management\ExcelExchangeRatesImportUI.cs">
       <SubType>Form</SubType>
@@ -665,6 +674,9 @@
     <EmbeddedResource Include="MVC\View\PeriodRangeSelectionControl.resx">
       <DependentUpon>PeriodRangeSelectionControl.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="MVC\View\Plateform Management\Axis Filters\HierarchyTreeView.resx">
+      <DependentUpon>HierarchyTreeView.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="MVC\View\Plateform Management\FactBaseView.resx">
       <DependentUpon>FactBaseView.cs</DependentUpon>
     </EmbeddedResource>
@@ -683,8 +695,8 @@
     <EmbeddedResource Include="MVC\View\Plateform Management\CurrenciesView.resx">
       <DependentUpon>CurrenciesView.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="MVC\View\Plateform Management\Axis Filters\AxisFiltersView.resx">
-      <DependentUpon>AxisFiltersView.cs</DependentUpon>
+    <EmbeddedResource Include="MVC\View\Plateform Management\Axis Filters\FiltersView.resx">
+      <DependentUpon>FiltersView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MVC\View\Plateform Management\Accounts\AccountsView.resx">
       <DependentUpon>AccountsView.cs</DependentUpon>
@@ -695,8 +707,8 @@
     <EmbeddedResource Include="MVC\View\Plateform Management\Accounts\NewAccountUI.resx">
       <DependentUpon>NewAccountUI.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="MVC\View\Plateform Management\Axis Filters\AxisFilterStructView.resx">
-      <DependentUpon>AxisFilterStructView.cs</DependentUpon>
+    <EmbeddedResource Include="MVC\View\Plateform Management\Axis Filters\FilterStructView.resx">
+      <DependentUpon>FilterStructView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MVC\View\Plateform Management\ExcelExchangeRatesImportUI.resx">
       <DependentUpon>ExcelExchangeRatesImportUI.cs</DependentUpon>

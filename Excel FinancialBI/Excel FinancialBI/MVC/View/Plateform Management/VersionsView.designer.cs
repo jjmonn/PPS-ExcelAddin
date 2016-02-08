@@ -39,7 +39,7 @@ namespace FBI.MVC.View
       this.components = new System.ComponentModel.Container();
       System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(VersionsView));
       this.ButtonsImageList = new System.Windows.Forms.ImageList(this.components);
-      this.RCM_TV = new System.Windows.Forms.ContextMenuStrip(this.components);
+      this.m_versionsRightClickMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
       this.m_new_VersionRCMButton = new System.Windows.Forms.ToolStripMenuItem();
       this.m_copyVersionRCMButton = new System.Windows.Forms.ToolStripMenuItem();
       this.m_newFolderRCMButton = new System.Windows.Forms.ToolStripMenuItem();
@@ -79,7 +79,7 @@ namespace FBI.MVC.View
       this.m_deleteVersionMenuBT = new System.Windows.Forms.ToolStripMenuItem();
       this.BackgroundWorker1 = new System.ComponentModel.BackgroundWorker();
       this.m_versionsTreeviewImageList = new System.Windows.Forms.ImageList(this.components);
-      this.RCM_TV.SuspendLayout();
+      this.m_versionsRightClickMenu.SuspendLayout();
       this.TableLayoutPanel3.SuspendLayout();
       ((System.ComponentModel.ISupportInitialize)(this.SplitContainer1)).BeginInit();
       this.SplitContainer1.Panel1.SuspendLayout();
@@ -99,9 +99,9 @@ namespace FBI.MVC.View
       this.ButtonsImageList.Images.SetKeyName(3, "imageres_89.ico");
       this.ButtonsImageList.Images.SetKeyName(4, "favicon(2).ico");
       // 
-      // RCM_TV
+      // m_versionsRightClickMenu
       // 
-      this.RCM_TV.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+      this.m_versionsRightClickMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.m_new_VersionRCMButton,
             this.m_copyVersionRCMButton,
             this.m_newFolderRCMButton,
@@ -109,8 +109,8 @@ namespace FBI.MVC.View
             this.m_renameRCMButton,
             this.ToolStripSeparator1,
             this.m_deleteRCMButton});
-      this.RCM_TV.Name = "RCM_TV";
-      this.RCM_TV.Size = new System.Drawing.Size(159, 136);
+      this.m_versionsRightClickMenu.Name = "RCM_TV";
+      this.m_versionsRightClickMenu.Size = new System.Drawing.Size(159, 158);
       // 
       // m_new_VersionRCMButton
       // 
@@ -501,7 +501,7 @@ namespace FBI.MVC.View
       this.Controls.Add(this.TableLayoutPanel3);
       this.Name = "VersionsView";
       this.Size = new System.Drawing.Size(1049, 635);
-      this.RCM_TV.ResumeLayout(false);
+      this.m_versionsRightClickMenu.ResumeLayout(false);
       this.TableLayoutPanel3.ResumeLayout(false);
       this.TableLayoutPanel3.PerformLayout();
       this.SplitContainer1.Panel1.ResumeLayout(false);
@@ -516,7 +516,7 @@ namespace FBI.MVC.View
 
     }
     internal System.Windows.Forms.ImageList ButtonsImageList;
-    internal System.Windows.Forms.ContextMenuStrip RCM_TV;
+    internal System.Windows.Forms.ContextMenuStrip m_versionsRightClickMenu;
     internal System.Windows.Forms.ToolStripMenuItem m_new_VersionRCMButton;
     internal System.Windows.Forms.ToolStripMenuItem m_newFolderRCMButton;
     internal System.Windows.Forms.ToolStripSeparator ToolStripSeparator2;

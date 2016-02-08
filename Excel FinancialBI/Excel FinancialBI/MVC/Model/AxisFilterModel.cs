@@ -113,9 +113,12 @@ namespace FBI.MVC.Model
       return m_axisFilterDictionary[p_axis][new Tuple<UInt32, UInt32>(p_axisElemId, p_filterId)];
     }
 
-    public AxisFilter GetValue(AxisType p_axis, Int32 p_axisFilterId)
+    public AxisFilter GetValue(AxisType p_axis, UInt32 p_axisFilterId)
     {
-      return GetValue(p_axis, p_axisFilterId);
+      if (m_axisFilterDictionary.ContainsKey(p_axis) == false)
+        if (m_axisFilterDictionary[p_axis].ContainsKey(p_axisFilterId))
+          return (m_axisFilterDictionary[p_axis][p_axisFilterId]);
+      return (null);
     }
 
     public override AxisFilter GetValue(UInt32 p_axisFilterId)

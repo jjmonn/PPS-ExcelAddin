@@ -396,7 +396,7 @@ namespace FBI.MVC.Model
       return (DateTime.FromOADate(Convert.ToDouble(p_yearId)).Year);
     }
 
-    static internal Int32 GetYearIdFromPeriodId(Int32 p_periodId)
+    static internal Int32 GetYearIdFromPeriodId(int p_periodId)
     {
       return (GetYearIdFromMonthID(GetMonthIdFromPeriodId(p_periodId)));
     }
