@@ -48,13 +48,13 @@ namespace FBI.MVC.View
       this.CreateAxisBT = new System.Windows.Forms.Button();
       this.TableLayoutPanel1.SuspendLayout();
       this.SuspendLayout();
-      //
-      //TableLayoutPanel1
-      //
+      // 
+      // TableLayoutPanel1
+      // 
       this.TableLayoutPanel1.BackColor = System.Drawing.SystemColors.Control;
       this.TableLayoutPanel1.ColumnCount = 2;
-      this.TableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 36.51376f));
-      this.TableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 63.48624f));
+      this.TableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 36.51376F));
+      this.TableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 63.48624F));
       this.TableLayoutPanel1.Controls.Add(this.m_parentAxisLabel, 0, 1);
       this.TableLayoutPanel1.Controls.Add(this.NameTextBox, 1, 0);
       this.TableLayoutPanel1.Controls.Add(this.m_nameLabel, 0, 0);
@@ -62,33 +62,33 @@ namespace FBI.MVC.View
       this.TableLayoutPanel1.Location = new System.Drawing.Point(22, 25);
       this.TableLayoutPanel1.Name = "TableLayoutPanel1";
       this.TableLayoutPanel1.RowCount = 3;
-      this.TableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30f));
-      this.TableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30f));
-      this.TableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24f));
-      this.TableLayoutPanel1.Size = new System.Drawing.Size(482, 156);
+      this.TableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+      this.TableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+      this.TableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
+      this.TableLayoutPanel1.Size = new System.Drawing.Size(482, 90);
       this.TableLayoutPanel1.TabIndex = 18;
-      //
-      //m_parentEntityLabel
-      //
+      // 
+      // m_parentAxisLabel
+      // 
       this.m_parentAxisLabel.BackColor = System.Drawing.Color.Transparent;
       this.m_parentAxisLabel.DisplayStyle = VIBlend.WinForms.Controls.LabelItemStyle.TextOnly;
       this.m_parentAxisLabel.Ellipsis = false;
       this.m_parentAxisLabel.ImageAlignment = System.Drawing.ContentAlignment.TopLeft;
       this.m_parentAxisLabel.Location = new System.Drawing.Point(3, 33);
       this.m_parentAxisLabel.Multiline = true;
-      this.m_parentAxisLabel.Name = "m_parentEntityLabel";
+      this.m_parentAxisLabel.Name = "m_parentAxisLabel";
       this.m_parentAxisLabel.Size = new System.Drawing.Size(169, 24);
       this.m_parentAxisLabel.TabIndex = 5;
       this.m_parentAxisLabel.Text = "parent_entity";
       this.m_parentAxisLabel.TextAlignment = System.Drawing.ContentAlignment.MiddleLeft;
       this.m_parentAxisLabel.UseMnemonics = true;
       this.m_parentAxisLabel.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE;
-      //
-      //NameTextBox
-      //
+      // 
+      // NameTextBox
+      // 
       this.NameTextBox.BackColor = System.Drawing.Color.White;
       this.NameTextBox.BoundsOffset = new System.Drawing.Size(1, 1);
-      this.NameTextBox.ControlBorderColor = System.Drawing.Color.FromArgb(Convert.ToInt32(Convert.ToByte(39)), Convert.ToInt32(Convert.ToByte(39)), Convert.ToInt32(Convert.ToByte(39)));
+      this.NameTextBox.ControlBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(39)))), ((int)(((byte)(39)))), ((int)(((byte)(39)))));
       this.NameTextBox.DefaultText = "Empty...";
       this.NameTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
       this.NameTextBox.Location = new System.Drawing.Point(178, 3);
@@ -102,9 +102,9 @@ namespace FBI.MVC.View
       this.NameTextBox.TabIndex = 0;
       this.NameTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
       this.NameTextBox.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE;
-      //
-      //m_nameLabel
-      //
+      // 
+      // m_nameLabel
+      // 
       this.m_nameLabel.BackColor = System.Drawing.Color.Transparent;
       this.m_nameLabel.DisplayStyle = VIBlend.WinForms.Controls.LabelItemStyle.TextOnly;
       this.m_nameLabel.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -119,77 +119,77 @@ namespace FBI.MVC.View
       this.m_nameLabel.TextAlignment = System.Drawing.ContentAlignment.MiddleLeft;
       this.m_nameLabel.UseMnemonics = true;
       this.m_nameLabel.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE;
-      //
-      //m_parentEntitiesTreeviewBox
-      //
+      // 
+      // m_parentAxisElemTreeviewBox
+      // 
       this.m_parentAxisElemTreeviewBox.BackColor = System.Drawing.Color.White;
       this.m_parentAxisElemTreeviewBox.BorderColor = System.Drawing.Color.Black;
       this.m_parentAxisElemTreeviewBox.DropDownMaximumSize = new System.Drawing.Size(1000, 1000);
       this.m_parentAxisElemTreeviewBox.DropDownMinimumSize = new System.Drawing.Size(10, 10);
       this.m_parentAxisElemTreeviewBox.DropDownResizeDirection = VIBlend.WinForms.Controls.SizingDirection.Both;
       this.m_parentAxisElemTreeviewBox.Location = new System.Drawing.Point(178, 33);
-      this.m_parentAxisElemTreeviewBox.Name = "m_parentEntitiesTreeviewBox";
+      this.m_parentAxisElemTreeviewBox.Name = "m_parentAxisElemTreeviewBox";
       this.m_parentAxisElemTreeviewBox.Size = new System.Drawing.Size(301, 23);
       this.m_parentAxisElemTreeviewBox.TabIndex = 4;
       this.m_parentAxisElemTreeviewBox.Text = "parent_entity_selection";
       this.m_parentAxisElemTreeviewBox.UseThemeBackColor = false;
       this.m_parentAxisElemTreeviewBox.UseThemeDropDownArrowColor = true;
       this.m_parentAxisElemTreeviewBox.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE;
-      //
-      //ButtonIcons
-      //
-      this.ButtonIcons.ImageStream = (System.Windows.Forms.ImageListStreamer)resources.GetObject("ButtonIcons.ImageStream");
+      // 
+      // ButtonIcons
+      // 
+      this.ButtonIcons.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("ButtonIcons.ImageStream")));
       this.ButtonIcons.TransparentColor = System.Drawing.Color.Transparent;
       this.ButtonIcons.Images.SetKeyName(0, "imageres_89.ico");
       this.ButtonIcons.Images.SetKeyName(1, "favicon(95).ico");
       this.ButtonIcons.Images.SetKeyName(2, "submit 1 ok.ico");
       this.ButtonIcons.Images.SetKeyName(3, "favicon(97).ico");
       this.ButtonIcons.Images.SetKeyName(4, "imageres_99.ico");
-      //
-      //CancelBT
-      //
+      // 
+      // CancelBT
+      // 
       this.CancelBT.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
       this.CancelBT.ImageKey = "delete-2-xxl.png";
       this.CancelBT.ImageList = this.ButtonsIL;
-      this.CancelBT.Location = new System.Drawing.Point(314, 187);
+      this.CancelBT.Location = new System.Drawing.Point(314, 136);
       this.CancelBT.Name = "CancelBT";
       this.CancelBT.Size = new System.Drawing.Size(92, 30);
       this.CancelBT.TabIndex = 21;
       this.CancelBT.Text = "Cancel";
       this.CancelBT.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
       this.CancelBT.UseVisualStyleBackColor = true;
-      //
-      //ButtonsIL
-      //
-      this.ButtonsIL.ImageStream = (System.Windows.Forms.ImageListStreamer)resources.GetObject("ButtonsIL.ImageStream");
+      // 
+      // ButtonsIL
+      // 
+      this.ButtonsIL.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("ButtonsIL.ImageStream")));
       this.ButtonsIL.TransparentColor = System.Drawing.Color.Transparent;
       this.ButtonsIL.Images.SetKeyName(0, "submit 1 ok.ico");
       this.ButtonsIL.Images.SetKeyName(1, "delete-2-xxl.png");
       this.ButtonsIL.Images.SetKeyName(2, "favicon(97).ico");
-      //
-      //CreateEntityBT
-      //
+      // 
+      // CreateAxisBT
+      // 
       this.CreateAxisBT.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
       this.CreateAxisBT.ImageKey = "submit 1 ok.ico";
       this.CreateAxisBT.ImageList = this.ButtonsIL;
-      this.CreateAxisBT.Location = new System.Drawing.Point(412, 187);
-      this.CreateAxisBT.Name = "CreateEntityBT";
+      this.CreateAxisBT.Location = new System.Drawing.Point(412, 136);
+      this.CreateAxisBT.Name = "CreateAxisBT";
       this.CreateAxisBT.Size = new System.Drawing.Size(92, 30);
       this.CreateAxisBT.TabIndex = 20;
       this.CreateAxisBT.Text = "Create";
       this.CreateAxisBT.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
       this.CreateAxisBT.UseVisualStyleBackColor = true;
-      //
-      //NewEntityUI
-      //
-      this.AutoScaleDimensions = new System.Drawing.SizeF(6f, 13f);
+      // 
+      // NewAxisUI
+      // 
+      this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-      this.ClientSize = new System.Drawing.Size(523, 237);
+      this.ClientSize = new System.Drawing.Size(523, 178);
       this.Controls.Add(this.TableLayoutPanel1);
       this.Controls.Add(this.CancelBT);
       this.Controls.Add(this.CreateAxisBT);
-      this.Icon = (System.Drawing.Icon)resources.GetObject("$this.Icon");
-      this.Name = "NewEntityUI";
+      this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+      this.Name = "NewAxisUI";
       this.Text = "New_entity";
       this.TableLayoutPanel1.ResumeLayout(false);
       this.ResumeLayout(false);

@@ -8,7 +8,9 @@ using System.Windows.Forms;
 namespace FBI.MVC.Controller
 {
   using View;
+  using Model;
   using Model.CRUD;
+  using Utils;
 
   class AxisController : NameController<AxisView>
   {
@@ -18,12 +20,23 @@ namespace FBI.MVC.Controller
     {
       m_view = new AxisView(p_axisType);
       m_view.SetController(this);
-      m_view.LoadView();
+      LoadView();
     }
 
     public override void LoadView()
     {
-      throw new NotImplementedException();
+      m_view.LoadView();
+    }
+
+    public bool Delete(AxisElem p_elem)
+    {
+      if (p_elem == null)
+      {
+        Error = Local.GetValue("axis.error.not_found");
+        return (false);
+      }
+      AxisElemModel.Instance.Delete(p_elem.Id);
+      return (true);
     }
   }
 }

@@ -16,18 +16,28 @@ namespace FBI.MVC.View
   using Model.CRUD;
   using Utils;
   using FBI.Forms;
+  using Network;
 
   public partial class AxisView : UserControl, IView
   {
     FbiDataGridView m_dgv = new FbiDataGridView();
     AxisType m_axisType;
+    AxisController m_controller;
 
     public AxisView(AxisType p_axisType)
     {
       InitializeComponent();
       m_axisType = p_axisType;
+      m_dgv.ContextMenuStrip = m_axisRightClickMenu;
     }
-    
+
+    public void SetController(IController p_controller)
+    {
+      m_controller = p_controller as AxisController;
+    }
+
+    #region "Load"
+
     public void LoadView()
     {
       Dock = DockStyle.Fill;
@@ -42,7 +52,17 @@ namespace FBI.MVC.View
         return;
       m_dgv.InitializeColumns(FilterModel.Instance, l_filterDic);
       FillDGV();
+      SuscribeEvents();
     }
+
+    void SuscribeEvents()
+    {
+      AxisElemModel.Instance.DeleteEvent += OnModelDelete;
+    }
+
+    #endregion
+
+    #region Initialize DGV
 
     void FillDGV()
     {
@@ -62,12 +82,12 @@ namespace FBI.MVC.View
         if (l_filterValue != null && l_cbEditor != null)
         {
           m_dgv.FillField(l_axisFilter.AxisElemId, l_axisFilter.FilterId, l_filterValue.Name, l_cbEditor);
-          this.fillParentsColumn(l_filterValue.Id, l_filterValue.ParentId, l_axisFilter);
+          this.FillParentsColumn(l_filterValue.Id, l_filterValue.ParentId, l_axisFilter);
         }
       }
     }
 
-    void fillParentsColumn(uint p_filterValueId, uint p_parentId, AxisFilter p_axisFilter)
+    void FillParentsColumn(uint p_filterValueId, uint p_parentId, AxisFilter p_axisFilter)
     {
       if (p_filterValueId != 0 && p_parentId != 0)
       {
@@ -81,9 +101,62 @@ namespace FBI.MVC.View
       }
     }
 
-    public void SetController(IController p_controller)
+    #endregion
+
+    #region User Callback
+
+    private void OnClickDelete(object p_sender, EventArgs p_e)
+    {
+      HierarchyItem l_row = m_dgv.HoveredRow;
+
+      if (l_row == null && l_row.ItemValue == null)
+        return;
+      AxisElem l_axisItem = AxisElemModel.Instance.GetValue((UInt32)l_row.ItemValue);
+
+      if (l_axisItem == null)
+      {
+        MessageBox.Show(Local.GetValue("axis.error.not_found"));
+        return;
+      }
+      string l_result = PasswordBox.Open(Local.GetValue("axis.creation_confirm"));
+
+      if (l_result != PasswordBox.Canceled && l_result != Addin.Password)
+      {
+        MessageBox.Show(Local.GetValue("general.invalid_password"));
+        return;
+      }
+      if (m_controller.Delete(l_axisItem) == false)
+        MessageBox.Show(m_controller.Error);
+    }
+
+    private void OnClickCreate(object p_sender, EventArgs p_e)
     {
 
     }
+
+    #endregion
+
+    #region Model Callback
+
+    private void OnModelDelete(ErrorMessage p_status, UInt32 p_id)
+    {
+      switch (p_status)
+      {
+        case ErrorMessage.SUCCESS:
+          m_dgv.DeleteRow(p_id);
+          break;
+        case ErrorMessage.PERMISSION_DENIED:
+          MessageBox.Show(Local.GetValue("general.error.permission_denied"));
+          break;
+        case ErrorMessage.NOT_FOUND:
+          MessageBox.Show(Local.GetValue("general.error.not_found"));
+          break;
+        default:
+          MessageBox.Show(Local.GetValue("general.error.system"));
+          break;
+      }
+    }
+
+    #endregion
   }
 }
