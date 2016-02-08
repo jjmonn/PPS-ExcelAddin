@@ -16,9 +16,31 @@ namespace FBI.Forms
       COLUMN,
       ROW
     };
+
     SafeDictionary<UInt32, HierarchyItem> m_rowsDic = new SafeDictionary<UInt32, HierarchyItem>();
     SafeDictionary<UInt32, HierarchyItem> m_columnsDic = new SafeDictionary<UInt32, HierarchyItem>();
     const Int32 COLUMNS_WIDTH = 150;
+    public GridCell HoveredCell { get; private set; }
+
+    public HierarchyItem HoveredColumn
+    {
+      get
+      {
+        if (HoveredCell == null)
+          return (null);
+        return (HoveredCell.ColumnItem);
+      }
+    }
+
+    public HierarchyItem HoveredRow
+    {
+      get
+      {
+        if (HoveredCell == null)
+          return (null);
+        return (HoveredCell.RowItem);
+      }
+    }
 
     static bool Implements<TInterface>(Type type) where TInterface : class
     {
@@ -31,6 +53,7 @@ namespace FBI.Forms
 
     public FbiDataGridView()
     {
+      HoveredCell = null;
       InitDGVDisplay();
       this.RowsHierarchy.Clear();
       m_rowsDic = new SafeDictionary<uint, HierarchyItem>();
@@ -40,6 +63,8 @@ namespace FBI.Forms
       m_columnsDic = new SafeDictionary<uint, HierarchyItem>();
       if (m_columnsDic == null)
         return;
+      CellMouseEnter += OnMouseEnterCell;
+      CellMouseLeave += OnMouseLeaveCell;
     }
 
     void InitDGVDisplay()
@@ -78,10 +103,15 @@ namespace FBI.Forms
 
     public void SetDimension(Dimension p_dimension, UInt32 p_id, string p_name)
     {
+      SetDimension<NamedCRUDEntity>(p_dimension, p_id, p_name);
+    }
+
+    public void SetDimension<J>(Dimension p_dimension, UInt32 p_id, string p_name, UInt32 p_parentId = 0, ICRUDModel<J> p_model = null) where J : class, NamedCRUDEntity
+    {
       if (p_dimension == Dimension.COLUMN)
-        SetDimension<NamedCRUDEntity>(ColumnsHierarchy.Items, m_columnsDic, p_id, p_name);
+        SetDimension<J>(ColumnsHierarchy.Items, m_columnsDic, p_id, p_name, p_model, p_parentId != 0, p_parentId);
       else if (p_dimension == Dimension.ROW)
-        SetDimension<NamedCRUDEntity>(RowsHierarchy.Items, m_rowsDic, p_id, p_name);
+        SetDimension<J>(RowsHierarchy.Items, m_rowsDic, p_id, p_name, p_model, p_parentId != 0, p_parentId);
     }
 
     HierarchyItem SetDimension<J>(HierarchyItemsCollection p_dimension, SafeDictionary<UInt32, HierarchyItem> p_saveDic, UInt32 p_id,
@@ -131,6 +161,40 @@ namespace FBI.Forms
         return;
       this.CellsArea.SetCellValue(row, column, p_value);
       this.CellsArea.SetCellEditor(row, column, p_editor);
+    }
+
+    void OnMouseEnterCell(object p_sender, CellEventArgs p_args)
+    {
+      HoveredCell = p_args.Cell;
+    }
+
+    void OnMouseLeaveCell(object p_sender, CellEventArgs p_args)
+    {
+      HoveredCell = null;
+    }
+
+    public void DeleteRow(UInt32 p_value)
+    {
+      HierarchyItem l_item = m_rowsDic[p_value];
+
+      if (l_item == null)
+        return;
+      if (l_item.ParentItem != null)
+        l_item.ParentItem.Items.Remove(l_item);
+      else
+        RowsHierarchy.Items.Remove(l_item);
+    }
+
+    public void DeleteColumn(UInt32 p_value)
+    {
+      HierarchyItem l_item = m_columnsDic[p_value];
+
+      if (l_item == null)
+        return;
+      if (l_item.ParentItem != null)
+        l_item.ParentItem.Items.Remove(l_item);
+      else
+        ColumnsHierarchy.Items.Remove(l_item);
     }
 
     public void FillField<V>(UInt32 p_row, UInt32 p_column, V p_value)

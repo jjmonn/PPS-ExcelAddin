@@ -11,29 +11,33 @@ namespace FBI.MVC.Controller
   using Model;
   using Model.CRUD;
 
-  class AxisFiltersStructController : NameController<AxisFilterStructView>
+  class FiltersStructController : NameController<FilterStructView>
   {
     public override IView View { get { return (m_view); } }
+    public AxisType AxisType { get; private set; }
 
-    public AxisFiltersStructController(AxisType p_axisType)
+    public FiltersStructController(AxisType p_axisType)
     {
-      m_view = new AxisFilterStructView(p_axisType);
+      AxisType = p_axisType;
+      m_view = new FilterStructView();
+      m_view.SetController(this);
+      LoadView();
     }
 
     public override void LoadView()
     {
-      //TODO
+      m_view.LoadView();
     }
 
     public bool Add(string p_filterName, UInt32 p_parentId)
     {
       Filter l_filter = new Filter();
 
-      if (this.IsNameValid(p_filterName) && FilterModel.Instance.GetValue(m_view.AxisType, p_filterName) != null)
+      if (this.IsNameValid(p_filterName) && FilterModel.Instance.GetValue(AxisType, p_filterName) != null)
       {
         l_filter.Name = p_filterName;
         l_filter.ParentId = p_parentId;
-        l_filter.Axis = m_view.AxisType;
+        l_filter.Axis = AxisType;
         l_filter.IsParent = false;
         FilterModel.Instance.Create(l_filter);
         return (true);
@@ -52,13 +56,18 @@ namespace FBI.MVC.Controller
       Filter l_filter;
 
       l_filter = FilterModel.Instance.GetValue(p_filterId).Clone();
-      if (l_filter != null && this.IsNameValid(p_filterNewName) && FilterModel.Instance.GetValue(m_view.AxisType, p_filterNewName) != null)
+      if (l_filter != null && this.IsNameValid(p_filterNewName) && FilterModel.Instance.GetValue(AxisType, p_filterNewName) != null)
       {
         l_filter.Name = p_filterNewName;
         FilterModel.Instance.Update(l_filter);
         return (true);
       }
       return (false);
+    }
+
+    public void ShowView()
+    {
+      m_view.ShowDialog();
     }
   }
 }
