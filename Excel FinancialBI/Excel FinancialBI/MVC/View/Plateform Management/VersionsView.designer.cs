@@ -110,49 +110,49 @@ namespace FBI.MVC.View
             this.ToolStripSeparator1,
             this.m_deleteRCMButton});
       this.RCM_TV.Name = "RCM_TV";
-      this.RCM_TV.Size = new System.Drawing.Size(159, 136);
+      this.RCM_TV.Size = new System.Drawing.Size(144, 126);
       // 
       // m_new_VersionRCMButton
       // 
       this.m_new_VersionRCMButton.Image = global::FBI.Properties.Resources.elements3_add;
       this.m_new_VersionRCMButton.Name = "m_new_VersionRCMButton";
-      this.m_new_VersionRCMButton.Size = new System.Drawing.Size(158, 24);
+      this.m_new_VersionRCMButton.Size = new System.Drawing.Size(143, 22);
       this.m_new_VersionRCMButton.Text = "New_version";
       // 
       // m_copyVersionRCMButton
       // 
       this.m_copyVersionRCMButton.Name = "m_copyVersionRCMButton";
-      this.m_copyVersionRCMButton.Size = new System.Drawing.Size(158, 24);
+      this.m_copyVersionRCMButton.Size = new System.Drawing.Size(143, 22);
       this.m_copyVersionRCMButton.Text = "Copy version";
       // 
       // m_newFolderRCMButton
       // 
       this.m_newFolderRCMButton.Image = global::FBI.Properties.Resources.folder2;
       this.m_newFolderRCMButton.Name = "m_newFolderRCMButton";
-      this.m_newFolderRCMButton.Size = new System.Drawing.Size(158, 24);
+      this.m_newFolderRCMButton.Size = new System.Drawing.Size(143, 22);
       this.m_newFolderRCMButton.Text = "New_folder";
       // 
       // ToolStripSeparator2
       // 
       this.ToolStripSeparator2.Name = "ToolStripSeparator2";
-      this.ToolStripSeparator2.Size = new System.Drawing.Size(155, 6);
+      this.ToolStripSeparator2.Size = new System.Drawing.Size(140, 6);
       // 
       // m_renameRCMButton
       // 
       this.m_renameRCMButton.Name = "m_renameRCMButton";
-      this.m_renameRCMButton.Size = new System.Drawing.Size(158, 24);
+      this.m_renameRCMButton.Size = new System.Drawing.Size(143, 22);
       this.m_renameRCMButton.Text = "Rename";
       // 
       // ToolStripSeparator1
       // 
       this.ToolStripSeparator1.Name = "ToolStripSeparator1";
-      this.ToolStripSeparator1.Size = new System.Drawing.Size(155, 6);
+      this.ToolStripSeparator1.Size = new System.Drawing.Size(140, 6);
       // 
       // m_deleteRCMButton
       // 
       this.m_deleteRCMButton.Image = global::FBI.Properties.Resources.elements3_delete;
       this.m_deleteRCMButton.Name = "m_deleteRCMButton";
-      this.m_deleteRCMButton.Size = new System.Drawing.Size(158, 24);
+      this.m_deleteRCMButton.Size = new System.Drawing.Size(143, 22);
       this.m_deleteRCMButton.Text = "Delete";
       // 
       // TableLayoutPanel3
@@ -239,7 +239,7 @@ namespace FBI.MVC.View
       this.m_globalFactsVersionLabel.Location = new System.Drawing.Point(3, 359);
       this.m_globalFactsVersionLabel.Margin = new System.Windows.Forms.Padding(3, 7, 3, 0);
       this.m_globalFactsVersionLabel.Name = "m_globalFactsVersionLabel";
-      this.m_globalFactsVersionLabel.Size = new System.Drawing.Size(113, 15);
+      this.m_globalFactsVersionLabel.Size = new System.Drawing.Size(100, 13);
       this.m_globalFactsVersionLabel.TabIndex = 24;
       this.m_globalFactsVersionLabel.Text = "Global facts version";
       // 
@@ -249,7 +249,7 @@ namespace FBI.MVC.View
       this.m_exchangeRatesVersionLabel.Location = new System.Drawing.Point(3, 315);
       this.m_exchangeRatesVersionLabel.Margin = new System.Windows.Forms.Padding(3, 7, 3, 0);
       this.m_exchangeRatesVersionLabel.Name = "m_exchangeRatesVersionLabel";
-      this.m_exchangeRatesVersionLabel.Size = new System.Drawing.Size(134, 15);
+      this.m_exchangeRatesVersionLabel.Size = new System.Drawing.Size(118, 13);
       this.m_exchangeRatesVersionLabel.TabIndex = 22;
       this.m_exchangeRatesVersionLabel.Text = "Exchange rates version";
       // 
@@ -259,7 +259,7 @@ namespace FBI.MVC.View
       this.m_numberOfYearsLabel.Location = new System.Drawing.Point(3, 271);
       this.m_numberOfYearsLabel.Margin = new System.Windows.Forms.Padding(3, 7, 3, 0);
       this.m_numberOfYearsLabel.Name = "m_numberOfYearsLabel";
-      this.m_numberOfYearsLabel.Size = new System.Drawing.Size(109, 15);
+      this.m_numberOfYearsLabel.Size = new System.Drawing.Size(93, 13);
       this.m_numberOfYearsLabel.TabIndex = 20;
       this.m_numberOfYearsLabel.Text = "Number of periods";
       // 
@@ -269,7 +269,7 @@ namespace FBI.MVC.View
       this.m_startingPeriodLabel.Location = new System.Drawing.Point(3, 227);
       this.m_startingPeriodLabel.Margin = new System.Windows.Forms.Padding(3, 7, 3, 0);
       this.m_startingPeriodLabel.Name = "m_startingPeriodLabel";
-      this.m_startingPeriodLabel.Size = new System.Drawing.Size(87, 15);
+      this.m_startingPeriodLabel.Size = new System.Drawing.Size(75, 13);
       this.m_startingPeriodLabel.TabIndex = 17;
       this.m_startingPeriodLabel.Text = "Starting period";
       // 
@@ -279,7 +279,7 @@ namespace FBI.MVC.View
       this.m_periodConfigLabel.Location = new System.Drawing.Point(3, 183);
       this.m_periodConfigLabel.Margin = new System.Windows.Forms.Padding(3, 7, 3, 0);
       this.m_periodConfigLabel.Name = "m_periodConfigLabel";
-      this.m_periodConfigLabel.Size = new System.Drawing.Size(79, 15);
+      this.m_periodConfigLabel.Size = new System.Drawing.Size(69, 13);
       this.m_periodConfigLabel.TabIndex = 15;
       this.m_periodConfigLabel.Text = "Period config";
       // 
@@ -290,7 +290,7 @@ namespace FBI.MVC.View
       this.m_nameLabel.Location = new System.Drawing.Point(3, 7);
       this.m_nameLabel.Margin = new System.Windows.Forms.Padding(3, 7, 3, 0);
       this.m_nameLabel.Name = "m_nameLabel";
-      this.m_nameLabel.Size = new System.Drawing.Size(95, 15);
+      this.m_nameLabel.Size = new System.Drawing.Size(83, 13);
       this.m_nameLabel.TabIndex = 7;
       this.m_nameLabel.Text = "Version name";
       // 
@@ -311,7 +311,7 @@ namespace FBI.MVC.View
       this.m_lockedLabel.Location = new System.Drawing.Point(3, 95);
       this.m_lockedLabel.Margin = new System.Windows.Forms.Padding(3, 7, 3, 0);
       this.m_lockedLabel.Name = "m_lockedLabel";
-      this.m_lockedLabel.Size = new System.Drawing.Size(87, 15);
+      this.m_lockedLabel.Size = new System.Drawing.Size(77, 13);
       this.m_lockedLabel.TabIndex = 10;
       this.m_lockedLabel.Text = "Version locked";
       // 
@@ -321,7 +321,7 @@ namespace FBI.MVC.View
       this.m_lockedDateLabel.Location = new System.Drawing.Point(3, 139);
       this.m_lockedDateLabel.Margin = new System.Windows.Forms.Padding(3, 7, 3, 0);
       this.m_lockedDateLabel.Name = "m_lockedDateLabel";
-      this.m_lockedDateLabel.Size = new System.Drawing.Size(74, 15);
+      this.m_lockedDateLabel.Size = new System.Drawing.Size(67, 13);
       this.m_lockedDateLabel.TabIndex = 11;
       this.m_lockedDateLabel.Text = "Locked date";
       // 
@@ -356,7 +356,7 @@ namespace FBI.MVC.View
       this.m_creationDateLabel.Location = new System.Drawing.Point(3, 51);
       this.m_creationDateLabel.Margin = new System.Windows.Forms.Padding(3, 7, 3, 0);
       this.m_creationDateLabel.Name = "m_creationDateLabel";
-      this.m_creationDateLabel.Size = new System.Drawing.Size(80, 15);
+      this.m_creationDateLabel.Size = new System.Drawing.Size(70, 13);
       this.m_creationDateLabel.TabIndex = 6;
       this.m_creationDateLabel.Text = "Creation date";
       // 
@@ -433,7 +433,7 @@ namespace FBI.MVC.View
             this.VersionsToolStripMenuItem});
       this.MenuStrip1.Location = new System.Drawing.Point(0, 0);
       this.MenuStrip1.Name = "MenuStrip1";
-      this.MenuStrip1.Size = new System.Drawing.Size(1049, 27);
+      this.MenuStrip1.Size = new System.Drawing.Size(1049, 24);
       this.MenuStrip1.TabIndex = 0;
       this.MenuStrip1.Text = "MenuStrip1";
       // 
@@ -447,44 +447,44 @@ namespace FBI.MVC.View
             this.toolStripSeparator4,
             this.m_deleteVersionMenuBT});
       this.VersionsToolStripMenuItem.Name = "VersionsToolStripMenuItem";
-      this.VersionsToolStripMenuItem.Size = new System.Drawing.Size(72, 23);
+      this.VersionsToolStripMenuItem.Size = new System.Drawing.Size(62, 20);
       this.VersionsToolStripMenuItem.Text = "Versions";
       // 
       // m_newVersionMenuBT
       // 
       this.m_newVersionMenuBT.Image = global::FBI.Properties.Resources.elements3_add;
       this.m_newVersionMenuBT.Name = "m_newVersionMenuBT";
-      this.m_newVersionMenuBT.Size = new System.Drawing.Size(151, 24);
+      this.m_newVersionMenuBT.Size = new System.Drawing.Size(137, 22);
       this.m_newVersionMenuBT.Text = "Add version";
       // 
       // m_newFolderMenuBT
       // 
       this.m_newFolderMenuBT.Image = global::FBI.Properties.Resources.favicon_81_;
       this.m_newFolderMenuBT.Name = "m_newFolderMenuBT";
-      this.m_newFolderMenuBT.Size = new System.Drawing.Size(151, 24);
+      this.m_newFolderMenuBT.Size = new System.Drawing.Size(137, 22);
       this.m_newFolderMenuBT.Text = "Add folder";
       // 
       // toolStripSeparator3
       // 
       this.toolStripSeparator3.Name = "toolStripSeparator3";
-      this.toolStripSeparator3.Size = new System.Drawing.Size(148, 6);
+      this.toolStripSeparator3.Size = new System.Drawing.Size(134, 6);
       // 
       // m_renameMenuBT
       // 
       this.m_renameMenuBT.Name = "m_renameMenuBT";
-      this.m_renameMenuBT.Size = new System.Drawing.Size(151, 24);
+      this.m_renameMenuBT.Size = new System.Drawing.Size(137, 22);
       this.m_renameMenuBT.Text = "Rename";
       // 
       // toolStripSeparator4
       // 
       this.toolStripSeparator4.Name = "toolStripSeparator4";
-      this.toolStripSeparator4.Size = new System.Drawing.Size(148, 6);
+      this.toolStripSeparator4.Size = new System.Drawing.Size(134, 6);
       // 
       // m_deleteVersionMenuBT
       // 
       this.m_deleteVersionMenuBT.Image = global::FBI.Properties.Resources.elements3_delete;
       this.m_deleteVersionMenuBT.Name = "m_deleteVersionMenuBT";
-      this.m_deleteVersionMenuBT.Size = new System.Drawing.Size(151, 24);
+      this.m_deleteVersionMenuBT.Size = new System.Drawing.Size(137, 22);
       this.m_deleteVersionMenuBT.Text = "Delete";
       // 
       // m_versionsTreeviewImageList

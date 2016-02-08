@@ -17,22 +17,22 @@ namespace FBI.MVC.View
   using Model;
   using Model.CRUD;
   using FBI.Network;
+  using Microsoft.VisualBasic;
 
   public partial class VersionsView : UserControl, IView
   {
     VersionsController m_controller;
     FbiTreeView<Version> m_versionsTreeview;
-    private bool m_isClosing;
     private bool m_isDisplaying;
     private vTreeNode m_currentNode;
 
     public VersionsView()
     {
       InitializeComponent();
-      this.InitView();
+      this.LoadView();
     }
 
-    public void InitView()
+    public void LoadView()
     {
       m_versionsTreeview = new FbiTreeView<Version>(VersionModel.Instance.GetDictionary());
       m_versionsTreeview.ImageList = m_versionsTreeviewImageList;
@@ -44,6 +44,13 @@ namespace FBI.MVC.View
 
       // Combobox Treeviews loading TO DO -> cf. function Loading TV Nath
 
+      //this.DefineUIPermissions(); TODO : RightManager
+      //this.DesactivateUnallowed(); TODO : RightManager  
+      this.MultilanguageSetup();
+    }
+
+    void SuscribeEvents()
+    {
       // Models events
       VersionModel.Instance.CreationEvent += AfterCreate;
       VersionModel.Instance.ReadEvent += AfterRead;
@@ -52,32 +59,27 @@ namespace FBI.MVC.View
       VersionModel.Instance.DeleteEvent += AfterDelete;
 
       // View events
-      m_versionsTreeview.AfterSelect += VersionsTreeview_AfterSelect;
-      m_versionsTreeview.KeyDown += VersionsTreeview_KeyDown;
-      m_versionsTreeview.MouseClick += VersionsTreeview_MouseClick;
+      m_versionsTreeview.AfterSelect += OnVersionTVSelectNode;
+      m_versionsTreeview.KeyDown += OnVersionTVKeyDown;
+      m_versionsTreeview.MouseClick += OnVersionTVMouseClick;
       //   m_versionsTreeview.DragEnter += versionsTV_DragEnter;
       //   m_versionsTreeview.DragOver += versionsTV_DragOver;
       //   m_versionsTreeview.DragDrop += versionsTV_DragDrop;
-      m_exchangeRatesVersionVTreeviewbox.TreeView.AfterSelect += ExchangeRatesVTreebox_TextChanged;
-      m_factsVersionVTreeviewbox.TreeView.AfterSelect += FactsRatesVTreebox_TextChanged;
+      m_exchangeRatesVersionVTreeviewbox.TreeView.AfterSelect += OnChangeVersionExchangeRate;
+      m_factsVersionVTreeviewbox.TreeView.AfterSelect += OnChangeVersionFactRate;
 
       // Main menu events
-      this.m_newVersionMenuBT.Click += new System.EventHandler(this.m_newVersionMenuBT_Click);
-      this.m_newFolderMenuBT.Click += new System.EventHandler(this.m_newFolderMenuBT_Click);
-      this.m_renameMenuBT.Click += new System.EventHandler(this.m_renameMenuBT_Click);
-      this.m_deleteVersionMenuBT.Click += new System.EventHandler(this.m_deleteVersionMenuBT_Click);
+      this.m_newVersionMenuBT.Click += new System.EventHandler(this.OnClickNewVersion);
+      this.m_newFolderMenuBT.Click += new System.EventHandler(this.OnClickNewFolder);
+      this.m_renameMenuBT.Click += new System.EventHandler(this.OnClickRename);
+      this.m_deleteVersionMenuBT.Click += new System.EventHandler(this.OnClickDelete);
 
       // Right click menu events
-      this.m_new_VersionRCMButton.Click += new System.EventHandler(this.m_new_VersionRCMButton_Click);
-      this.m_copyVersionRCMButton.Click += new System.EventHandler(this.m_copyVersionRCMButton_Click);
-      this.m_newFolderRCMButton.Click += new System.EventHandler(this.m_newFolderRCMButton_Click);
-      this.m_renameRCMButton.Click += new System.EventHandler(this.m_renameRCMButton_Click);
-      this.m_deleteRCMButton.Click += new System.EventHandler(this.m_deleteRCMButton_Click);
-
-
-      //this.DefineUIPermissions(); TODO : RightManager
-      //this.DesactivateUnallowed(); TODO : RightManager  
-      this.MultilanguageSetup();
+      this.m_new_VersionRCMButton.Click += new System.EventHandler(this.OnClickNewVersion);
+      this.m_copyVersionRCMButton.Click += new System.EventHandler(this.OnClickCopyVersion);
+      this.m_newFolderRCMButton.Click += new System.EventHandler(this.OnClickNewFolder);
+      this.m_renameRCMButton.Click += new System.EventHandler(this.OnClickRename);
+      this.m_deleteRCMButton.Click += new System.EventHandler(this.OnClickDelete);
     }
 
     private void MultilanguageSetup()
@@ -199,14 +201,97 @@ namespace FBI.MVC.View
 
     #endregion
 
-    #region View events
+    #region Model events
 
-    public delegate void VersionsTreeview_AfterSelect_Delegate(object sender, VIBlend.WinForms.Controls.vTreeViewEventArgs e);
-    private void VersionsTreeview_AfterSelect(object sender, VIBlend.WinForms.Controls.vTreeViewEventArgs e)
+    private void AfterRead(ErrorMessage p_status, CRUDEntity p_version)
+    {
+      if (p_status == ErrorMessage.SUCCESS)
+      { }
+    }
+
+    private void AfterCreate(ErrorMessage p_status, UInt32 p_id)
+    {
+      if (p_status != ErrorMessage.SUCCESS)
+        DisplayErrorMessage(Local.GetValue("facts_versions.msg_error_create"), p_status);
+    }
+
+    private void AfterDelete(ErrorMessage p_status, UInt32 p_id)
+    {
+      if (p_status != ErrorMessage.SUCCESS)
+        DisplayErrorMessage(Local.GetValue("facts_versions.msg_error_delete"), p_status);
+    }
+
+    private void AfterUpdate(ErrorMessage p_status, UInt32 p_id)
+    {
+      if (p_status != ErrorMessage.SUCCESS)
+        DisplayErrorMessage(Local.GetValue("facts_versions.msg_error_update"), p_status);
+    }
+
+    private void AfterCopy(ErrorMessage p_status, UInt32 p_id)
+    {
+      if (p_status != ErrorMessage.SUCCESS)
+        DisplayErrorMessage(Local.GetValue("facts_versions.msg_error_copy"), p_status);
+    }
+
+    void DisplayErrorMessage(string p_message, ErrorMessage p_status)
+    {
+      p_message += ": ";
+
+      switch (p_status)
+      {
+        case ErrorMessage.SUCCESS:
+          return;
+        case ErrorMessage.NOT_FOUND:
+          p_message += Local.GetValue("facts_versions.msg_not_found");
+          break;
+        case ErrorMessage.SYSTEM:
+          p_message += Local.GetValue("facts_versions.msg_system");
+          break;
+        case ErrorMessage.INVALID_ATTRIBUTE:
+          p_message = Local.GetValue("facts_versions.msg_invalid_attribute");
+          break;
+        default:
+          p_message += Local.GetValue("facts_versions.msg_unknown");
+          break;
+      }
+      MessageBox.Show(p_message);
+    }
+
+    #endregion
+
+    #region User Callback
+
+    private void OnClickNewVersion(object sender, EventArgs e)
+    {
+      m_controller.ShowNewVersionView();
+    }
+
+    private void OnClickCopyVersion(object sender, EventArgs e)
+    {
+      m_controller.ShowVersionCopyView();
+    }
+
+    private void OnClickNewFolder(object sender, EventArgs e)
+    {
+      CreateFolder();
+    }
+
+    private void OnClickRename(object sender, EventArgs e)
+    {
+      RenameVersion(m_currentNode);
+    }
+
+    private void OnClickDelete(object sender, EventArgs e)
+    {
+      DeleteVersion(m_currentNode);
+    }
+
+    public delegate void VersionsTreeview_AfterSelect_Delegate(object sender, vTreeViewEventArgs e);
+    private void OnVersionTVSelectNode(object sender, vTreeViewEventArgs e)
     {
       if (InvokeRequired)
       {
-        VersionsTreeview_AfterSelect_Delegate MyDelegate = new VersionsTreeview_AfterSelect_Delegate(VersionsTreeview_AfterSelect);
+        VersionsTreeview_AfterSelect_Delegate MyDelegate = new VersionsTreeview_AfterSelect_Delegate(OnVersionTVSelectNode);
         this.Invoke(MyDelegate, new object[] { sender, e });
       }
       else
@@ -224,27 +309,23 @@ namespace FBI.MVC.View
 
     }
 
-    private void VersionsTreeview_MouseClick(object sender, MouseEventArgs e)
+    private void OnVersionTVMouseClick(object sender, MouseEventArgs e)
     {
       m_currentNode = m_versionsTreeview.FindAtPosition(e.Location);
     }
 
-    private void VersionsTreeview_KeyDown(object sender, KeyEventArgs e)
+    private void OnVersionTVKeyDown(object sender, KeyEventArgs e)
     {
       if (e.Control == true && m_currentNode != null)
       {
         switch (e.KeyCode)
         {
           case Keys.Up:
-            {
-              m_versionsTreeview.moveNodeUp(m_currentNode);
-            }
+            m_versionsTreeview.moveNodeUp(m_currentNode);
             return;
 
           case Keys.Down:
-            {
-              m_versionsTreeview.moveNodeDown(m_currentNode);
-            }
+            m_versionsTreeview.moveNodeDown(m_currentNode);
             return;
         }
       }
@@ -254,9 +335,8 @@ namespace FBI.MVC.View
       }
     }
 
-    private void LockedCheckBox_CheckedChanged(object sender, EventArgs e)
+    private void OnChangeVersionLock(object sender, EventArgs e)
     {
-
       if (m_isDisplaying == false)
       {
         if ((m_versionsTreeview.SelectedNode != null) && m_isDisplaying == false)
@@ -273,7 +353,7 @@ namespace FBI.MVC.View
       }
     }
 
-    private void ExchangeRatesVTreebox_TextChanged(object sender, EventArgs e)
+    private void OnChangeVersionExchangeRate(object sender, EventArgs e)
     {
       if (m_currentNode != null && m_isDisplaying == false)
       {
@@ -295,7 +375,7 @@ namespace FBI.MVC.View
       }
     }
 
-    private void FactsRatesVTreebox_TextChanged(object sender, EventArgs e)
+    private void OnChangeVersionFactRate(object sender, EventArgs e)
     {
       if (m_currentNode != null && m_isDisplaying == false)
       {
@@ -315,169 +395,6 @@ namespace FBI.MVC.View
           }
         }
       }
-    }
-
-
-    #endregion
-
-
-    #region Model events
-
-    private void AfterRead(ErrorMessage status, CRUDEntity p_version)
-    {
-      if (status == ErrorMessage.SUCCESS && m_isClosing == false)
-      {
-        // TO DO
-      }
-    }
-
-    private void AfterCreate(ErrorMessage status, UInt32 id)
-    {
-      string l_message = Local.GetValue("facts_versions.msg_error_create") + ": ";
-
-      switch (status)
-      {
-        case ErrorMessage.SUCCESS:
-          return;
-
-        case ErrorMessage.INVALID_ATTRIBUTE:
-          l_message = Local.GetValue("facts_versions.msg_invalid_attribute");
-          break;
-
-        case ErrorMessage.SYSTEM:
-          l_message = Local.GetValue("facts_versions.msg_system");
-          break;
-
-        default:
-          l_message = Local.GetValue("facts_versions.msg_unknown");
-          break;
-      }
-      MessageBox.Show(l_message);
-    }
-
-    private void AfterDelete(ErrorMessage status, UInt32 id)
-    {
-      if (status == ErrorMessage.SUCCESS && m_isClosing == false)
-      {
-        // TO DO
-      }
-
-      string l_message = Local.GetValue("facts_versions.msg_error_delete") + ": ";
-
-      switch (status)
-      {
-        case ErrorMessage.SUCCESS:
-          return;
-
-        case ErrorMessage.NOT_FOUND:
-          l_message += Local.GetValue("facts_versions.msg_not_found");
-          break;
-
-        case ErrorMessage.SYSTEM:
-          l_message += Local.GetValue("facts_versions.msg_system");
-          break;
-
-        default:
-          l_message += Local.GetValue("facts_versions.msg_unknown");
-          break;
-      }
-      MessageBox.Show(l_message);
-    }
-
-    private void AfterUpdate(ErrorMessage status, UInt32 id)
-    {
-      string l_message = Local.GetValue("facts_versions.msg_error_update") + ": ";
-
-      switch (status)
-      {
-        case ErrorMessage.SUCCESS:
-          return;
-
-        case ErrorMessage.NOT_FOUND:
-          l_message += Local.GetValue("facts_versions.msg_not_found");
-          break;
-
-        default:
-          l_message += Local.GetValue("facts_versions.msg_unknown");
-          break;
-      }
-      MessageBox.Show(l_message);
-    }
-
-    private void AfterCopy(ErrorMessage status, UInt32 id)
-    {
-      string l_message = Local.GetValue("facts_versions.msg_error_copy") + ": ";
-
-      switch (status)
-      {
-        case ErrorMessage.SUCCESS:
-          return;
-
-        case ErrorMessage.NOT_FOUND:
-          l_message += Local.GetValue("facts_versions.msg_not_found");
-          break;
-        case ErrorMessage.SYSTEM:
-          l_message += Local.GetValue("facts_versions.msg_system");
-          break;
-        default:
-          l_message += Local.GetValue("facts_versions.msg_unknown");
-          break;
-      }
-      MessageBox.Show(l_message);
-    }
-
-    #endregion
-
-
-    #region Main menu call back
-
-    private void m_newVersionMenuBT_Click(object sender, EventArgs e)
-    {
-      m_controller.ShowNewVersionView();
-    }
-
-    private void m_newFolderMenuBT_Click(object sender, EventArgs e)
-    {
-      CreateFolder();
-    }
-
-    private void m_renameMenuBT_Click(object sender, EventArgs e)
-    {
-      RenameVersion(m_currentNode);
-    }
-
-    private void m_deleteVersionMenuBT_Click(object sender, EventArgs e)
-    {
-      DeleteVersion(m_currentNode);
-    }
-
-    #endregion
-
-    #region ""Right click menu call backs
-
-    private void m_new_VersionRCMButton_Click(object sender, EventArgs e)
-    {
-      m_controller.ShowNewVersionView();
-    }
-
-    private void m_copyVersionRCMButton_Click(object sender, EventArgs e)
-    {
-      m_controller.ShowVersionCopyView();
-    }
-
-    private void m_newFolderRCMButton_Click(object sender, EventArgs e)
-    {
-      CreateFolder();
-    }
-
-    private void m_renameRCMButton_Click(object sender, EventArgs e)
-    {
-      RenameVersion(m_currentNode);
-    }
-
-    private void m_deleteRCMButton_Click(object sender, EventArgs e)
-    {
-      DeleteVersion(m_currentNode);
     }
 
     #endregion
@@ -485,8 +402,7 @@ namespace FBI.MVC.View
     private void CreateFolder()
     {
       Version l_newFolderVersion = new Version();
-      string l_name = Microsoft.VisualBasic.Interaction.InputBox(Local.GetValue("versions.msg_folder_name"));
-      l_newFolderVersion.Name = l_name;
+      l_newFolderVersion.Name = Interaction.InputBox(Local.GetValue("versions.msg_folder_name"));
       l_newFolderVersion.IsFolder = true;
       if (m_controller.Create(l_newFolderVersion) == false)
         MessageBox.Show(m_controller.Error);
@@ -498,11 +414,9 @@ namespace FBI.MVC.View
       {
         Version l_version = VersionModel.Instance.GetValue((uint)m_currentNode.Value);
         if (l_version != null)
-        {
           if (m_controller.Delete(l_version) == false)
             MessageBox.Show(m_controller.Error);
-        }
-       }
+      }
     }
 
     private void RenameVersion(vTreeNode p_node)
@@ -512,15 +426,12 @@ namespace FBI.MVC.View
         Version l_version = VersionModel.Instance.GetValue((uint)m_currentNode.Value).Clone();
         if (l_version != null)
         {
-          string l_name = Microsoft.VisualBasic.Interaction.InputBox(Local.GetValue("versions.msg_new_name"));
-          l_version.Name = l_name;
+          l_version.Name = Interaction.InputBox(Local.GetValue("versions.msg_new_name"));
           if (m_controller.Update(l_version) == false)
             MessageBox.Show(m_controller.Error);
         }
       }
     }
-
-
   }
 }
 

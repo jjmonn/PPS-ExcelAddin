@@ -74,7 +74,6 @@ namespace FBI.MVC.Controller
       return (true);
     }
 
-
     #endregion
 
     public bool Create(Version p_version)
@@ -112,14 +111,12 @@ namespace FBI.MVC.Controller
 
     public void ShowNewVersionView()
     {
-      m_newVersionView.Show();
+      m_newVersionView.ShowDialog();
     }
 
     public void ShowVersionCopyView()
     {
       // TO DO
     }
-
-
   }
 }
