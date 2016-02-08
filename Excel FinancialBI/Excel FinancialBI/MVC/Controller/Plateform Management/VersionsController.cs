@@ -79,7 +79,7 @@ namespace FBI.MVC.Controller
 
     public bool Create(Version p_version)
     {
-      if (!IsVersionValid(p_version) || IsNameAlreadyUsed(p_version.Name))
+      if (!IsVersionValid(p_version) || VersionModel.Instance.GetValue(p_version.Name) != null)
         return (false);
       VersionModel.Instance.Create(p_version);
       return (true);

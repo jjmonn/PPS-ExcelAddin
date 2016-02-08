@@ -43,7 +43,7 @@ namespace FBI.MVC.Controller
 
     public bool Create(AxisElem p_axisElem)
     {
-      if (IsNameValidAndNotAlreadyUsed(p_axisElem.Name) == false)
+      if (IsNameValid(p_axisElem.Name) == false || AxisElemModel.Instance.GetValue(p_axisElem.Id) == null)
         return (false);
       if (Enum.IsDefined(typeof(AxisType), p_axisElem.Axis) == false)
       {

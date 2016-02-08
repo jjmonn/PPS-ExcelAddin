@@ -39,12 +39,13 @@ namespace FBI.MVC.Controller
     {
       FilterValue l_filter = new FilterValue();
 
+
       if (!FilterModel.Instance.HasChild(p_filterId, this.AxisType))
       {
         Error = Local.GetValue("filters.error.no_child");
         return (false);
       }
-      if (this.IsNameValidAndNotAlreadyUsed(p_filterValueName))
+      if (this.IsNameValid(p_filterValueName) && FilterValueModel.Instance.GetValue(p_filterValueName) != null)
       {
         l_filter.Name = p_filterValueName;
         l_filter.FilterId = p_filterId;
@@ -66,7 +67,7 @@ namespace FBI.MVC.Controller
       FilterValue l_filter;
 
       l_filter = FilterValueModel.Instance.GetValue(p_filterValue).Clone();
-      if (l_filter != null && this.IsNameValidAndNotAlreadyUsed(p_filterValueNewName))
+      if (l_filter != null && this.IsNameValid(p_filterValueNewName) && FilterValueModel.Instance.GetValue(p_filterValueNewName) != null)
       {
         l_filter.Name = p_filterValueNewName;
         FilterValueModel.Instance.Update(l_filter);

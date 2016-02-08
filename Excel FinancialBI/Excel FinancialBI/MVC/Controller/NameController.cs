@@ -10,6 +10,7 @@ namespace FBI.MVC.Controller
   using Utils;
   using View;
   using Model;
+  using Model.CRUD;
 
   public abstract class NameController<T> : BasePlatformMgtComponent<T>, IController where T : ContainerControl, IView
   {
@@ -17,21 +18,6 @@ namespace FBI.MVC.Controller
     public abstract IView View { get; }
 
     abstract public void LoadView();
-
-    public bool IsNameValidAndNotAlreadyUsed(string p_name)
-    {
-      return (this.IsNameValid(p_name) && !this.IsNameAlreadyUsed(p_name));
-    }
-
-    public bool IsNameAlreadyUsed(string p_name)
-    {
-      if (VersionModel.Instance.GetValue(p_name) != null)
-      {
-        Error = Local.GetValue("general.error.name_already_used");
-        return (true);
-      }
-      return (false);
-    }
 
     public bool IsNameValid(string p_name)
     {
