@@ -21,19 +21,21 @@ namespace FBI.MVC.View
   public partial class AxisView : UserControl, IView
   {
     FbiDataGridView m_dgv = new FbiDataGridView();
-    AxisType m_axisType;
     AxisController m_controller;
+    bool m_cellModif = false;
+    NewAxisUI m_newAxisUI;
 
-    public AxisView(AxisType p_axisType)
+    public AxisView()
     {
       InitializeComponent();
-      m_axisType = p_axisType;
       m_dgv.ContextMenuStrip = m_axisRightClickMenu;
+      m_newAxisUI = new NewAxisUI();
     }
 
     public void SetController(IController p_controller)
     {
       m_controller = p_controller as AxisController;
+      m_newAxisUI.SetController(m_controller);
     }
 
     #region "Load"
@@ -41,8 +43,8 @@ namespace FBI.MVC.View
     public void LoadView()
     {
       Dock = DockStyle.Fill;
-      MultiIndexDictionary<UInt32, string, AxisElem> l_axisElemDic = AxisElemModel.Instance.GetDictionary(m_axisType);
-      MultiIndexDictionary<UInt32, string, Filter> l_filterDic = FilterModel.Instance.GetDictionary(m_axisType);
+      MultiIndexDictionary<UInt32, string, AxisElem> l_axisElemDic = AxisElemModel.Instance.GetDictionary(m_controller.AxisType);
+      MultiIndexDictionary<UInt32, string, Filter> l_filterDic = FilterModel.Instance.GetDictionary(m_controller.AxisType);
 
       TableLayoutPanel1.Controls.Add(m_dgv);
       if (l_axisElemDic == null)
@@ -53,11 +55,13 @@ namespace FBI.MVC.View
       m_dgv.InitializeColumns(FilterModel.Instance, l_filterDic);
       FillDGV();
       SuscribeEvents();
+      m_newAxisUI.LoadView();
     }
 
     void SuscribeEvents()
     {
       AxisElemModel.Instance.DeleteEvent += OnModelDelete;
+      AxisFilterModel.Instance.ReadEvent += OnModelRead;
     }
 
     #endregion
@@ -66,7 +70,7 @@ namespace FBI.MVC.View
 
     void FillDGV()
     {
-      MultiIndexDictionary<UInt32, Tuple<UInt32, UInt32>, AxisFilter> l_axisFilterDic = AxisFilterModel.Instance.GetDictionary(m_axisType);
+      MultiIndexDictionary<UInt32, Tuple<UInt32, UInt32>, AxisFilter> l_axisFilterDic = AxisFilterModel.Instance.GetDictionary(m_controller.AxisType);
 
       if (l_axisFilterDic == null)
         return;
@@ -77,14 +81,18 @@ namespace FBI.MVC.View
         MultiIndexDictionary<UInt32, string, FilterValue> l_filterValueDic = FilterValueModel.Instance.GetDictionary(l_axisFilter.FilterId);
 
         if (l_filterValueDic != null && l_cbEditor != null)
+        {
           foreach (FilterValue l_fv in l_filterValueDic.Values)
             l_cbEditor.Items.Add(l_fv.Name);
+          l_cbEditor.SelectedIndexChanged += OnCBEditorSelectedIndexChanged;
+        }
         if (l_filterValue != null && l_cbEditor != null)
         {
           m_dgv.FillField(l_axisFilter.AxisElemId, l_axisFilter.FilterId, l_filterValue.Name, l_cbEditor);
           this.FillParentsColumn(l_filterValue.Id, l_filterValue.ParentId, l_axisFilter);
         }
       }
+      m_dgv.CellValueChanged += OnDGVCellValueChanged;
     }
 
     void FillParentsColumn(uint p_filterValueId, uint p_parentId, AxisFilter p_axisFilter)
@@ -94,6 +102,7 @@ namespace FBI.MVC.View
         FilterValue l_parent = FilterValueModel.Instance.GetValue(p_parentId);
         MultiIndexDictionary<UInt32, string, FilterValue> l_filterValueDic = FilterValueModel.Instance.GetDictionary(l_parent.FilterId);
         ComboBoxEditor l_cbEditor = new ComboBoxEditor();
+        l_cbEditor.SelectedIndexChanged += OnCBEditorSelectedIndexChanged;
         if (l_filterValueDic != null && l_cbEditor != null)
           foreach (FilterValue l_fv in l_filterValueDic.Values)
             l_cbEditor.Items.Add(l_fv.Name);
@@ -129,9 +138,38 @@ namespace FBI.MVC.View
         MessageBox.Show(m_controller.Error);
     }
 
-    private void OnClickCreate(object p_sender, EventArgs p_e)
+    private void OnClickCreate(object sender, EventArgs e)
     {
+      HierarchyItem row = m_dgv.HoveredRow;
 
+      if (row != null)
+        m_newAxisUI.ParentAxisElemId = (UInt32)row.ItemValue;
+      m_newAxisUI.ShowDialog();
+    }
+
+    private void OnDGVCellValueChanged(object sender, CellEventArgs args)
+    {
+      if (m_cellModif == false)
+        return;
+      m_cellModif = false;
+      UInt32 l_axisElemId = (UInt32)args.Cell.RowItem.ItemValue;
+      UInt32 l_filterId = (UInt32)args.Cell.ColumnItem.ItemValue;
+      AxisFilter l_axisFilter = AxisFilterModel.Instance.GetValue(m_controller.AxisType, l_axisElemId, l_filterId);
+      FilterValue l_filterValue = FilterValueModel.Instance.GetValue(args.Cell.Value.ToString());
+      this.m_controller.Add(l_axisFilter, l_filterValue);
+    }
+
+    void OnDGVChangeParentCellValue(uint p_axisElemId, uint p_filterValueId)
+    {
+      FilterValue l_filterValue = FilterValueModel.Instance.GetValue(p_filterValueId);
+      if (l_filterValue == null)
+        return;
+      m_dgv.FillField(p_axisElemId, p_filterValueId, l_filterValue.Name);
+    }
+
+    void OnCBEditorSelectedIndexChanged(object sender, EventArgs e)
+    {
+      m_cellModif = true;
     }
 
     #endregion
@@ -157,6 +195,16 @@ namespace FBI.MVC.View
       }
     }
 
+    void OnModelRead(Network.ErrorMessage p_status, AxisFilter p_attributes)
+    {
+      if (p_status == Network.ErrorMessage.SUCCESS)
+      {
+        AxisFilterModel.Instance.Update(p_attributes);
+        AxisElem l_filterValue = AxisElemModel.Instance.GetValue(p_attributes.Axis, p_attributes.AxisElemId);
+        OnDGVChangeParentCellValue(p_attributes.AxisElemId, l_filterValue.ParentId);
+      }
+    }
+    
     #endregion
   }
 }

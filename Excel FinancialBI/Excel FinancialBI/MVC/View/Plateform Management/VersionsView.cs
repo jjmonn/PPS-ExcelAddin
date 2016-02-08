@@ -277,21 +277,16 @@ namespace FBI.MVC.View
     {
       if (m_currentNode != null && m_isDisplaying == false)
       {
-        Version l_version = VersionModel.Instance.GetValue((uint)m_currentNode.Value);
-        if (l_version != null)
+        Version l_version = VersionModel.Instance.GetValue((UInt32)m_currentNode.Value);
+        if (l_version != null && m_exchangeRatesVersionVTreeviewbox.TreeView.SelectedNode != null)
         {
-          uint l_ratesVersionId = (uint)m_exchangeRatesVersionVTreeviewbox.TreeView.SelectedNode.Value;
+          UInt32 l_ratesVersionId = (UInt32)m_exchangeRatesVersionVTreeviewbox.TreeView.SelectedNode.Value;
 
-          // Time configuration validity control
-          if (m_controller.IsRatesVersionCompatible(l_version, l_ratesVersionId))
+          Version l_versionCopy = l_version.Clone();
+          l_versionCopy.RateVersionId = l_ratesVersionId;
+          if (m_controller.Update(l_versionCopy) == false)
           {
-            Version l_versionCopy = l_version.Clone();
-            l_versionCopy.RateVersionId = l_ratesVersionId;
-            m_controller.Update(l_versionCopy);
-          }
-          else
-          {
-            MessageBox.Show(Local.GetValue("facts_versions.msg_rates_version_mismatch"));
+            MessageBox.Show(m_controller.Error);
             m_isDisplaying = true;
             SetExchangeVersion(l_version);
             m_isDisplaying = false;
@@ -304,23 +299,18 @@ namespace FBI.MVC.View
     {
       if (m_currentNode != null && m_isDisplaying == false)
       {
-        Version l_version = VersionModel.Instance.GetValue((uint)m_currentNode.Value);
-        if (l_version != null)
+        Version l_version = VersionModel.Instance.GetValue((UInt32)m_currentNode.Value);
+        if (l_version != null && m_exchangeRatesVersionVTreeviewbox.TreeView.SelectedNode != null)
         {
-          uint l_globalFactsVersionId = (uint)m_factsVersionVTreeviewbox.TreeView.SelectedNode.Value;
+          UInt32 l_ratesVersionId = (UInt32)m_exchangeRatesVersionVTreeviewbox.TreeView.SelectedNode.Value;
 
-          // Time configuration validity control
-          if (m_controller.IsGlobalFactsVersionCompatible(l_version, l_globalFactsVersionId))
+          Version l_versionCopy = l_version.Clone();
+          l_versionCopy.RateVersionId = l_ratesVersionId;
+          if (m_controller.Update(l_versionCopy) == false)
           {
-            Version l_versionCopy = l_version.Clone();
-            l_versionCopy.GlobalFactVersionId = l_globalFactsVersionId;
-            m_controller.Update(l_versionCopy);
-          }
-          else
-          {
-            MessageBox.Show(Local.GetValue("facts_versions.msg_rates_version_mismatch"));
+            MessageBox.Show(m_controller.Error);
             m_isDisplaying = true;
-            SetGlobalFactsVersion(l_version);
+            SetExchangeVersion(l_version);
             m_isDisplaying = false;
           }
         }

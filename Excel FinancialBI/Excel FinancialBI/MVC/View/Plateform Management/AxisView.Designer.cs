@@ -203,20 +203,20 @@ namespace FBI.MVC.View
       // 
       this.m_createNewAxisElemMenuTop.Image = global::FBI.Properties.Resources.plus;
       this.m_createNewAxisElemMenuTop.Name = "m_createNewAxisElemMenuTop";
-      this.m_createNewAxisElemMenuTop.Size = new System.Drawing.Size(152, 22);
+      this.m_createNewAxisElemMenuTop.Size = new System.Drawing.Size(108, 22);
       this.m_createNewAxisElemMenuTop.Text = "Create";
       // 
       // m_deleteAxisElemMenuTop
       // 
       this.m_deleteAxisElemMenuTop.Image = global::FBI.Properties.Resources.imageres_89;
       this.m_deleteAxisElemMenuTop.Name = "m_deleteAxisElemMenuTop";
-      this.m_deleteAxisElemMenuTop.Size = new System.Drawing.Size(152, 22);
+      this.m_deleteAxisElemMenuTop.Size = new System.Drawing.Size(108, 22);
       this.m_deleteAxisElemMenuTop.Text = "Delete";
       // 
       // ToolStripSeparator2
       // 
       this.ToolStripSeparator2.Name = "ToolStripSeparator2";
-      this.ToolStripSeparator2.Size = new System.Drawing.Size(149, 6);
+      this.ToolStripSeparator2.Size = new System.Drawing.Size(105, 6);
       // 
       // ExcelToolStripMenuItem
       // 

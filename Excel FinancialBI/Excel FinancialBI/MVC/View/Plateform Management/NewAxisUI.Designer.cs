@@ -39,7 +39,7 @@ namespace FBI.MVC.View
       System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(NewAxisUI));
       this.TableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
       this.m_parentAxisLabel = new VIBlend.WinForms.Controls.vLabel();
-      this.NameTextBox = new VIBlend.WinForms.Controls.vTextBox();
+      this.m_nameTextBox = new VIBlend.WinForms.Controls.vTextBox();
       this.m_nameLabel = new VIBlend.WinForms.Controls.vLabel();
       this.m_parentAxisElemTreeviewBox = new VIBlend.WinForms.Controls.vTreeViewBox();
       this.ButtonIcons = new System.Windows.Forms.ImageList(this.components);
@@ -56,7 +56,7 @@ namespace FBI.MVC.View
       this.TableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 36.51376F));
       this.TableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 63.48624F));
       this.TableLayoutPanel1.Controls.Add(this.m_parentAxisLabel, 0, 1);
-      this.TableLayoutPanel1.Controls.Add(this.NameTextBox, 1, 0);
+      this.TableLayoutPanel1.Controls.Add(this.m_nameTextBox, 1, 0);
       this.TableLayoutPanel1.Controls.Add(this.m_nameLabel, 0, 0);
       this.TableLayoutPanel1.Controls.Add(this.m_parentAxisElemTreeviewBox, 1, 1);
       this.TableLayoutPanel1.Location = new System.Drawing.Point(22, 25);
@@ -84,24 +84,24 @@ namespace FBI.MVC.View
       this.m_parentAxisLabel.UseMnemonics = true;
       this.m_parentAxisLabel.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE;
       // 
-      // NameTextBox
+      // m_nameTextBox
       // 
-      this.NameTextBox.BackColor = System.Drawing.Color.White;
-      this.NameTextBox.BoundsOffset = new System.Drawing.Size(1, 1);
-      this.NameTextBox.ControlBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(39)))), ((int)(((byte)(39)))), ((int)(((byte)(39)))));
-      this.NameTextBox.DefaultText = "Empty...";
-      this.NameTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
-      this.NameTextBox.Location = new System.Drawing.Point(178, 3);
-      this.NameTextBox.MaxLength = 32767;
-      this.NameTextBox.Name = "NameTextBox";
-      this.NameTextBox.PasswordChar = '\0';
-      this.NameTextBox.ScrollBars = System.Windows.Forms.ScrollBars.None;
-      this.NameTextBox.SelectionLength = 0;
-      this.NameTextBox.SelectionStart = 0;
-      this.NameTextBox.Size = new System.Drawing.Size(301, 24);
-      this.NameTextBox.TabIndex = 0;
-      this.NameTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
-      this.NameTextBox.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE;
+      this.m_nameTextBox.BackColor = System.Drawing.Color.White;
+      this.m_nameTextBox.BoundsOffset = new System.Drawing.Size(1, 1);
+      this.m_nameTextBox.ControlBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(39)))), ((int)(((byte)(39)))), ((int)(((byte)(39)))));
+      this.m_nameTextBox.DefaultText = "Empty...";
+      this.m_nameTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
+      this.m_nameTextBox.Location = new System.Drawing.Point(178, 3);
+      this.m_nameTextBox.MaxLength = 32767;
+      this.m_nameTextBox.Name = "m_nameTextBox";
+      this.m_nameTextBox.PasswordChar = '\0';
+      this.m_nameTextBox.ScrollBars = System.Windows.Forms.ScrollBars.None;
+      this.m_nameTextBox.SelectionLength = 0;
+      this.m_nameTextBox.SelectionStart = 0;
+      this.m_nameTextBox.Size = new System.Drawing.Size(301, 24);
+      this.m_nameTextBox.TabIndex = 0;
+      this.m_nameTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+      this.m_nameTextBox.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE;
       // 
       // m_nameLabel
       // 
@@ -158,6 +158,7 @@ namespace FBI.MVC.View
       this.CancelBT.Text = "Cancel";
       this.CancelBT.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
       this.CancelBT.UseVisualStyleBackColor = true;
+      this.CancelBT.Click += new System.EventHandler(this.CancelBT_Click);
       // 
       // ButtonsIL
       // 
@@ -179,6 +180,7 @@ namespace FBI.MVC.View
       this.CreateAxisBT.Text = "Create";
       this.CreateAxisBT.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
       this.CreateAxisBT.UseVisualStyleBackColor = true;
+      this.CreateAxisBT.Click += new System.EventHandler(this.CreateAxisBT_Click);
       // 
       // NewAxisUI
       // 
@@ -200,7 +202,7 @@ namespace FBI.MVC.View
     internal System.Windows.Forms.Button CreateAxisBT;
     internal System.Windows.Forms.ImageList ButtonsIL;
     internal System.Windows.Forms.ImageList ButtonIcons;
-    internal VIBlend.WinForms.Controls.vTextBox NameTextBox;
+    internal VIBlend.WinForms.Controls.vTextBox m_nameTextBox;
     internal VIBlend.WinForms.Controls.vLabel m_nameLabel;
     internal VIBlend.WinForms.Controls.vLabel m_parentAxisLabel;
     internal VIBlend.WinForms.Controls.vTreeViewBox m_parentAxisElemTreeviewBox;
