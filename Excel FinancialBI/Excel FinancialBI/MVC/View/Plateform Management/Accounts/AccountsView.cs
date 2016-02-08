@@ -7,6 +7,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Microsoft.VisualBasic;
+
 using VIBlend.WinForms.Controls;
 
 namespace FBI.MVC.View
@@ -15,30 +17,35 @@ namespace FBI.MVC.View
   using Utils;
   using Forms;
   using Model;
+  using Network;
   using Model.CRUD;
 
   public partial class AccountsView : UserControl, IView
   {
 
-    //private RightManager m_rightMGR; //TODO : not here
+    #region Variables
 
-    AccountController m_controller;
-    FbiTreeView<Account> m_accountTV;
-    FbiTreeView<GlobalFact> m_globalFactsTV; //TODO : FbiTreeView
-    vTreeNode m_currentNode;
+    private RightManager m_rightMgr = new RightManager();
 
-    private SafeDictionary<Account.FormulaTypes, ListItem> m_formulasTypesIdItemDict = new SafeDictionary<Account.FormulaTypes,ListItem>();
-    private SafeDictionary<Account.AccountType, ListItem> m_formatsIdItemDict = new SafeDictionary<Account.AccountType,ListItem>();
-    private Dictionary<Account.ConversionOptions, ListItem>  m_currenciesConversionIdItemDict = new Dictionary<Account.ConversionOptions,ListItem>();
-    private SafeDictionary<Account.ConsolidationOptions, ListItem> m_consoOptionIdItemDict = new SafeDictionary<Account.ConsolidationOptions,ListItem>();
+    private AccountController m_controller = null;
+    private FbiTreeView<Account> m_accountTV = null;
+    private FbiTreeView<GlobalFact> m_globalFactsTV = null;
+    private vTreeNode m_currentNode = null;
+
+    private SafeDictionary<Account.FormulaTypes, ListItem> m_formulasTypesIdItemDict = new SafeDictionary<Account.FormulaTypes, ListItem>();
+    private SafeDictionary<Account.AccountType, ListItem> m_formatsIdItemDict = new SafeDictionary<Account.AccountType, ListItem>();
+    private Dictionary<Account.ConversionOptions, ListItem> m_currenciesConversionIdItemDict = new Dictionary<Account.ConversionOptions, ListItem>();
+    private SafeDictionary<Account.ConsolidationOptions, ListItem> m_consoOptionIdItemDict = new SafeDictionary<Account.ConsolidationOptions, ListItem>();
+    private SafeDictionary<Account.AccountProcess, ListItem> m_processIdItemDict = new SafeDictionary<Account.AccountProcess, ListItem>();
     private Boolean m_dragAndDropFlag = false;
-    private Boolean m_isDisplayingAccountFlag;
+    private Boolean m_isDisplayingAccountFlag = false;
     private Boolean m_isEditingFormulaFlag = false;
-    private Boolean m_isRevertingFTypeFlag = false;
 
     private const UInt32 MARGIN_SIZE = 15;
     private const UInt32 ACCOUNTS_VIEW_TV_MAX_WIDTH = 600;
     private const UInt32 MARGIN1 = 30;
+
+    #endregion
 
     public AccountsView()
     {
@@ -50,22 +57,149 @@ namespace FBI.MVC.View
       this.m_controller = p_controller as AccountController;
     }
 
-    public void InitView(FbiTreeView<Account> p_accountTv, FbiTreeView<GlobalFact> p_globalFactsTv)
+    public void InitView()
     {
-      this.AccountsTVInit(p_accountTv);
-      this.GlobalFactsTVInit(p_globalFactsTv);
+      try
+      {
+        this.m_accountTV = new FbiTreeView<Account>(AccountModel.Instance.GetDictionary());
+        this.m_globalFactsTV = new FbiTreeView<GlobalFact>(GlobalFactModel.Instance.GetDictionary());
+      }
+      catch (Exception e)
+      {
+        //TODO : aff error
+      }
+
+      this.AccountsTVInit();
+      this.GlobalFactsTVInit();
       this.ComboBoxesInit();
 
-      //this.DefineUIPermissions(); TODO : RightManager
-      //this.DesactivateUnallowed(); TODO : RightManager
+      AccountModel.Instance.UpdateEvent += OnModelUpdate;
+      AccountModel.Instance.ReadEvent += OnModelRead;
+      AccountModel.Instance.CreationEvent += OnModelCreation;
+      AccountModel.Instance.DeleteEvent += OnModelDelete;
+
+      this.AddCategoryToolStripMenuItem.Click += OnAddCategoryToolStripMenuItemClick;
+      this.CreateANewCategoryToolStripMenuItem.Click += OnAddCategoryToolStripMenuItemClick;
+      this.SaveDescriptionBT.Click += OnSaveDescriptionBTClick;
+      this.DeleteAccountToolStripMenuItem.Click += OnCheckDeleteAccount;
+      this.DeleteAccountToolStripMenuItem1.Click += OnCheckDeleteAccount;
+
+      this.DefineUIPermissions();
+      //this.DesactivateUnallowed();
       this.SetAccountUIState(false);
 
       this.MultilangueSetup();
       this.SetFormulaEditionState(false);
     }
 
+    private void OnAddCategoryToolStripMenuItemClick(object p_sender, EventArgs p_e)
+    {
+      m_isEditingFormulaFlag = false;
+
+      string l_nameAccount = Interaction.InputBox(Local.GetValue("accounts_edition.msg_new_tab_name"), 
+                                                 Local.GetValue("accounts_edition.title_new_tab_name"), "");
+      if (l_nameAccount != "")
+      {
+        bool l = this.m_controller.AccountNameCheck(l_nameAccount);
+        if (this.m_controller.AccountNameCheck(l_nameAccount))
+        {
+          l_nameAccount = "swa";
+          return; //TODO : what 
+        }
+      }
+    }
+
+    private void DesactivateUnallowed()
+    {
+      this.m_rightMgr.Enable(UserModel.Instance.GetCurrentUserRights());
+    }
+
+    private void DefineUIPermissions()
+    {
+      this.m_rightMgr[SaveDescriptionBT] = Group.Permission.EDIT_ACCOUNT;
+      this.m_rightMgr[Name_TB] = Group.Permission.EDIT_ACCOUNT;
+      this.m_rightMgr[ProcessComboBox] = Group.Permission.EDIT_ACCOUNT;
+      this.m_rightMgr[FormulaTypeComboBox] = Group.Permission.EDIT_ACCOUNT;
+      this.m_rightMgr[TypeComboBox] = Group.Permission.EDIT_ACCOUNT;
+      this.m_rightMgr[CurrencyConversionComboBox] = Group.Permission.EDIT_ACCOUNT;
+      this.m_rightMgr[m_descriptionTextBox] = Group.Permission.EDIT_ACCOUNT;
+      this.m_rightMgr[ConsolidationOptionComboBox] = Group.Permission.EDIT_ACCOUNT;
+      this.m_rightMgr[AddSubAccountToolStripMenuItem] = Group.Permission.CREATE_ACCOUNT;
+      this.m_rightMgr[AddCategoryToolStripMenuItem] = Group.Permission.CREATE_ACCOUNT;
+      this.m_rightMgr[DeleteAccountToolStripMenuItem] = Group.Permission.DELETE_ACCOUNT;
+      this.m_rightMgr[DeleteAccountToolStripMenuItem1] = Group.Permission.DELETE_ACCOUNT;
+      this.m_rightMgr[m_validateFormulaButton] = Group.Permission.EDIT_ACCOUNT;
+      this.m_rightMgr[m_formulaEditionButton] = Group.Permission.EDIT_ACCOUNT;
+      this.m_rightMgr[CreateANewAccountToolStripMenuItem] = Group.Permission.CREATE_ACCOUNT;
+      this.m_rightMgr[CreateANewCategoryToolStripMenuItem] = Group.Permission.CREATE_ACCOUNT;
+    }
+
+    private void OnCheckDeleteAccount(object p_sender, EventArgs p_e)
+    {
+      if (this.m_accountTV.SelectedNode != null)
+      {
+        List<String> l_dependantAccounts = this.m_controller.ExistingDependantAccounts(this.m_accountTV.SelectedNode);
+        if (l_dependantAccounts.Count > 0)
+        {
+          string l_msg = "";
+          foreach (string l_account in l_dependantAccounts)
+            l_msg += " - " + l_account + "\n\r";
+          MessageBox.Show(Local.GetValue("accounts_edition.msg_dependant_accounts") + "\n\r" +
+                       l_msg + "\n\r" +
+                       Local.GetValue("accounts_edition.msg_formula_to_be_changed"), "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning); //TODO : maybe warning on xml
+        }
+        else
+        {
+          PasswordBox l_passwordBox = new PasswordBox();
+          //TODO : Do
+          l_passwordBox.Show();
+          this.m_controller.DeleteAccount((UInt32)this.m_accountTV.SelectedNode.Value);
+        }
+      }
+    }
+
+    private void OnSaveDescriptionBTClick(object p_sender, EventArgs p_e)
+    {
+      if (m_currentNode != null)
+      {
+        if (AccountModel.Instance.GetValue((UInt32)this.m_currentNode.Value) != null)
+        {
+          Account l_currentAccount = AccountModel.Instance.GetValue((UInt32)this.m_currentNode.Value).Clone();
+          l_currentAccount.Description = m_descriptionTextBox.Text;
+          this.m_controller.UpdateAccount(l_currentAccount);
+        }
+      }
+    }
+
+    private void OnModelCreation(ErrorMessage p_status, uint p_id)
+    {
+      throw new NotImplementedException();
+    }
+
+    private void OnModelRead(ErrorMessage p_status, Account p_attributes)
+    {
+      if (p_status != Network.ErrorMessage.SUCCESS)
+      {
+        //TODO : check every error
+      }
+    }
+
+    private void OnModelUpdate(ErrorMessage p_status, uint p_id)
+    {
+      if (p_status != Network.ErrorMessage.SUCCESS)
+      {
+        //TODO : check every error
+      }
+    }
+
+    private void OnModelDelete(ErrorMessage p_status, uint p_id)
+    {
+      throw new NotImplementedException();
+    }
+
     private void MultilangueSetup()
     {
+      this.m_ProcessLabel.Text = Local.GetValue("process.process_selection");
       this.m_accountDescriptionGroupbox.Text = Local.GetValue("accounts_edition.account_description");
       this.SaveDescriptionBT.Text = Local.GetValue("accounts_edition.save_description");
       this.m_accountFormulaGroupbox.Text = Local.GetValue("accounts_edition.account_formula");
@@ -96,18 +230,22 @@ namespace FBI.MVC.View
     {
       this.SaveDescriptionBT.Enabled = p_uiState;
       this.Name_TB.Enabled = p_uiState;
+      this.ProcessComboBox.Enabled = p_uiState;
       this.FormulaTypeComboBox.Enabled = p_uiState;
       this.TypeComboBox.Enabled = p_uiState;
       this.CurrencyConversionComboBox.Enabled = p_uiState;
       this.m_descriptionTextBox.Enabled = p_uiState;
+      if (p_uiState == true)
+        this.m_descriptionTextBox.BackColor = Color.White;
+      else
+        this.m_descriptionTextBox.BackColor = Color.LightGray;
       this.ConsolidationOptionComboBox.Enabled = p_uiState;
       this.m_validateFormulaButton.Enabled = p_uiState;
       this.m_formulaEditionButton.Enabled = p_uiState;
     }
 
-    private void AccountsTVInit(FbiTreeView<Account> p_accountTV)
+    private void AccountsTVInit()
     {
-      this.m_accountTV = p_accountTV;
       this.m_accountTV.ContextMenuStrip = TVRCM;
       this.m_accountTV.Dock = DockStyle.Fill;
       this.m_accountTV.AllowDrop = true;
@@ -118,84 +256,85 @@ namespace FBI.MVC.View
       this.AccountsTVPanel.Controls.Add(m_accountTV);
 
       //TODO : do event
-      this.m_accountTV.KeyDown += AccountTV_KeyDown;
-      this.m_accountTV.MouseDown += AccountTV_MouseDown;
-      this.m_accountTV.DragOver += AccountTV_DragOver;
-      this.m_accountTV.DragDrop += AccountTV_DragDrop;
-      this.m_accountTV.AfterSelect += AccountTV_AfterSelect;
+      this.m_accountTV.KeyDown += OnAccountTVKeyDown;
+      this.m_accountTV.MouseDown += OnAccountTVMouseDown;
+      this.m_accountTV.DragOver += OnAccountTVDragOver;
+      this.m_accountTV.DragDrop += OnAccountTVDragDrop;
+      this.m_accountTV.AfterSelect += OnAccountTVAfterSelect;
     }
 
-    private void AccountTV_KeyDown(object sender, KeyEventArgs e)
+    private void OnAccountTVKeyDown(object p_sender, KeyEventArgs p_e)
     {
-      if (e.KeyCode == Keys.Down) //TODO : Maybe switch
+      if (p_e.KeyCode == Keys.Down) //TODO : Maybe switch
       {
-        if (e.Control == true)
+        if (p_e.Control == true)
           this.m_accountTV.moveNodeDown(this.m_accountTV.SelectedNode);
       }
-      if (e.KeyCode == Keys.Up)
+      if (p_e.KeyCode == Keys.Up)
       {
-        if (e.Control == true)
+        if (p_e.Control == true)
           this.m_accountTV.moveNodeUp(this.m_accountTV.SelectedNode);
       }
+      if (p_e.KeyCode == Keys.Delete || p_e.KeyCode == Keys.X) //TODO : not X
+        OnCheckDeleteAccount(p_sender, p_e);
     }
 
-    private void AccountTV_DragDrop(object sender, DragEventArgs e)
+    private void OnAccountTVDragDrop(object p_sender, DragEventArgs p_e)
     {
       if (this.m_isEditingFormulaFlag == false)
       {
-        if (e.Data.GetDataPresent("VIBlend.WinForms.Controls.vTreeNode", true) == true)
+        if (p_e.Data.GetDataPresent("VIBlend.WinForms.Controls.vTreeNode", true) == true)
         {
           //TODO : DO
         }
       }
     }
 
-    private void AccountTV_MouseDown(object sender, MouseEventArgs e)
+    private void OnAccountTVMouseDown(object p_sender, MouseEventArgs p_e)
     {
-      if (e.Button == MouseButtons.Right)
+      if (p_e.Button == MouseButtons.Right)
       {
         TVRCM.Visible = false;
-        TVRCM.Show(e.Location);
+        TVRCM.Show(p_e.Location);
         TVRCM.Visible = true;
       }
-      if (e.Button == MouseButtons.Left) // TODO : see for keydown
+      if (p_e.Button == MouseButtons.Left) // TODO : see for keydown
       {
-        vTreeNode l_node = this.m_accountTV.FindAtPosition(e.Location);
+        vTreeNode l_node = this.m_accountTV.FindAtPosition(p_e.Location);
         if (l_node != null)
           this.m_accountTV.DoDragDrop(l_node, DragDropEffects.Move);
       }
     }
 
-    private void AccountTV_DragOver(object sender, DragEventArgs e)
+    private void OnAccountTVDragOver(object p_sender, DragEventArgs p_e)
     {
       if (this.m_isEditingFormulaFlag == false)
       {
-        if (e.Data.GetDataPresent("VIBlend.WinForms.Controls.vTreeNode", true) == true)
+        if (p_e.Data.GetDataPresent("VIBlend.WinForms.Controls.vTreeNode", true) == true)
         {
           //TODO : DO
         }
       }
     }
 
-    private void AccountTV_AfterSelect(object sender, vTreeViewEventArgs e)
+    private void OnAccountTVAfterSelect(object p_sender, vTreeViewEventArgs p_e)
     {
       if (this.m_dragAndDropFlag == false && this.m_isEditingFormulaFlag == false
         && m_isDisplayingAccountFlag == false)
       {
-        this.m_currentNode = e.Node;
+        this.m_currentNode = p_e.Node;
         if (this.m_currentNode != null)
         {
-          this.DisplayAttributes(); //TODO : Change dat thing
-          //this.DesactivateUnallowed(); TODO : RightManager
+          this.DisplayAttributes();
+          //this.DesactivateUnallowed(); //TODO : watch out
         }
         else
           this.m_accountTV.Capture = false;
       }
     }
 
-    private void GlobalFactsTVInit(FbiTreeView<GlobalFact> p_globalFactsTV)
+    private void GlobalFactsTVInit()
     {
-      this.m_globalFactsTV = p_globalFactsTV;
       this.m_globalFactsTV.Dock = DockStyle.Fill;
       this.m_globalFactsTV.LabelEdit = false;
       this.m_globalFactsTV.CollapseAll();
@@ -203,10 +342,51 @@ namespace FBI.MVC.View
       this.GlobalFactsPanel.Controls.Add(m_globalFactsTV);
 
       //TODO : see event
+      this.m_globalFactsTV.MouseDown += OnGlobalFactsTVMouseDown;
+      this.m_globalFactsTV.DragEnter += OnGlobalFactsTVDragEnter;
+    }
+
+    private void OnGlobalFactsTVDragEnter(object p_sender, DragEventArgs p_e)
+    {
+      if (p_e.Data.GetDataPresent("VIBlend.WinForms.Controls.vTreeNode", true) == true)
+      {
+        p_e.Effect = DragDropEffects.Move;
+        this.m_dragAndDropFlag = true;
+      }
+      else
+        p_e.Effect = DragDropEffects.None;
+    }
+
+    private void OnGlobalFactsTVMouseDown(object p_sender, MouseEventArgs p_e)
+    {
+      if (p_e.Button == MouseButtons.Left)
+      {
+        vTreeNode l_node = this.m_globalFactsTV.FindAtPosition(p_e.Location);
+        if (l_node != null)
+          this.m_globalFactsTV.DoDragDrop(l_node, DragDropEffects.Move);
+      }
     }
 
     private void ComboBoxesInit() //TODO : maybe put hardcoded strings away
     {
+      //Process
+      ListItem l_financialListItem = new ListItem();
+      l_financialListItem.Text = Local.GetValue("process.process_financial");
+      l_financialListItem.Value = Account.AccountProcess.FINANCIAL;
+      this.ProcessComboBox.Items.Add(l_financialListItem);
+      this.m_processIdItemDict[(Account.AccountProcess)l_financialListItem.Value] = l_financialListItem;
+
+      ListItem l_rhListItem = new ListItem();
+      l_rhListItem.Text = Local.GetValue("process.process_rh");
+      l_rhListItem.Value = Account.AccountProcess.RH;
+      this.ProcessComboBox.Items.Add(l_rhListItem);
+      this.m_processIdItemDict[(Account.AccountProcess)l_rhListItem.Value] = l_rhListItem;
+
+      this.ProcessComboBox.SelectedIndex = 0;
+      this.ProcessComboBox.DropDownList = true;
+      this.ProcessComboBox.SelectedItemChanged += OnProcessComboBoxSelectedItemChanged;
+
+      //Formula Type
       ListItem l_inputListItem = new ListItem();
       l_inputListItem.Text = "Input";
       l_inputListItem.Value = Account.FormulaTypes.HARD_VALUE_INPUT;
@@ -239,6 +419,7 @@ namespace FBI.MVC.View
 
       this.FormulaTypeComboBox.SelectedIndex = 0;
       this.FormulaTypeComboBox.DropDownList = true;
+      this.FormulaTypeComboBox.SelectedItemChanged += OnFormulaTypeComboBoxSelectedItemChanged;
 
       // Type
       ListItem l_monetaryFormatLI = new ListItem();
@@ -267,6 +448,7 @@ namespace FBI.MVC.View
 
       this.TypeComboBox.SelectedIndex = 0;
       this.TypeComboBox.DropDownList = true;
+      this.TypeComboBox.SelectedItemChanged += OnTypeComboBoxSelectedItemChanged;
 
       // Currencies Conversion
       ListItem l_noConversionLI = new ListItem();
@@ -279,7 +461,7 @@ namespace FBI.MVC.View
       l_averageRateLI.Text = "Average Exchange Rate";
       l_averageRateLI.Value = Account.ConversionOptions.AVERAGE_RATE;
       this.CurrencyConversionComboBox.Items.Add(l_averageRateLI);
-      this.m_currenciesConversionIdItemDict[(Account.ConversionOptions)l_noConversionLI.Value] = l_noConversionLI;
+      this.m_currenciesConversionIdItemDict[(Account.ConversionOptions)l_averageRateLI.Value] = l_averageRateLI;
 
       ListItem l_endOfPeriodRateLI = new ListItem();
       l_endOfPeriodRateLI.Text = "End of Period Exchange Rate";
@@ -289,6 +471,7 @@ namespace FBI.MVC.View
 
       this.CurrencyConversionComboBox.SelectedIndex = 0;
       this.CurrencyConversionComboBox.DropDownList = true;
+      this.CurrencyConversionComboBox.SelectedItemChanged += OnCurrencyConversionComboBoxSelectedItemChanged;
 
       // Recomputation Option
       ListItem l_aggregatedLI = new ListItem();
@@ -311,6 +494,67 @@ namespace FBI.MVC.View
 
       this.ConsolidationOptionComboBox.SelectedIndex = 0;
       this.ConsolidationOptionComboBox.DropDownList = true;
+      this.ConsolidationOptionComboBox.SelectedItemChanged += OnConsolidationOptionComboBoxSelectedItemChanged;
+    }
+
+    private void OnProcessComboBoxSelectedItemChanged(object p_sender, EventArgs p_e)
+    {
+      if (this.m_isDisplayingAccountFlag == false && m_currentNode != null)
+      {
+        if (AccountModel.Instance.GetValue((UInt32)this.m_currentNode.Value) != null)
+        {
+          Account l_currentAccount = AccountModel.Instance.GetValue((UInt32)this.m_currentNode.Value).Clone();
+          l_currentAccount.Process = (Account.AccountProcess)((vComboBox)p_sender).SelectedItem.Value;
+          this.m_controller.UpdateAccount(l_currentAccount);
+        }
+      }
+    }
+
+    private void OnTypeComboBoxSelectedItemChanged(object p_sender, EventArgs p_e)
+    {
+      if (this.m_isDisplayingAccountFlag == false && m_currentNode != null)
+      {
+        if (AccountModel.Instance.GetValue((UInt32)this.m_currentNode.Value) != null)
+        {
+          Account l_currentAccount = AccountModel.Instance.GetValue((UInt32)this.m_currentNode.Value).Clone();
+          l_currentAccount.Type = (Account.AccountType)((vComboBox)p_sender).SelectedItem.Value;
+          this.m_controller.UpdateAccount(l_currentAccount);
+        }
+      }
+    }
+
+    private void OnCurrencyConversionComboBoxSelectedItemChanged(object p_sender, EventArgs p_e)
+    {
+      if (this.m_isDisplayingAccountFlag == false && m_currentNode != null)
+      {
+        if (AccountModel.Instance.GetValue((UInt32)this.m_currentNode.Value) != null)
+        {
+          Account l_currentAccount = AccountModel.Instance.GetValue((UInt32)this.m_currentNode.Value).Clone();
+          l_currentAccount.ConversionOptionId = (Account.ConversionOptions)((vComboBox)p_sender).SelectedItem.Value;
+          this.m_controller.UpdateAccount(l_currentAccount);
+        }
+      }
+    }
+
+    private void OnConsolidationOptionComboBoxSelectedItemChanged(object p_sender, EventArgs p_e)
+    {
+      if (this.m_isDisplayingAccountFlag == false && m_currentNode != null)
+      {
+        if (AccountModel.Instance.GetValue((UInt32)this.m_currentNode.Value) != null)
+        {
+          Account l_currentAccount = AccountModel.Instance.GetValue((UInt32)this.m_currentNode.Value).Clone();
+          l_currentAccount.ConsolidationOptionId = (Account.ConsolidationOptions)((vComboBox)p_sender).SelectedItem.Value;
+          this.m_controller.UpdateAccount(l_currentAccount);
+        }
+      }
+    }
+
+    private void OnFormulaTypeComboBoxSelectedItemChanged(object p_sender, EventArgs p_e)
+    {
+      if (this.m_isDisplayingAccountFlag == false)
+      {
+        //Account l_currentAccount = AccountModel.Instance.GetValue((UInt32)this.m_currentNode.Value).Clone();
+      }
     }
 
     private void SetFormulaEditionState(Boolean p_state)
@@ -331,61 +575,88 @@ namespace FBI.MVC.View
       if ((this.m_currentNode != null) && this.m_isEditingFormulaFlag == false)
       {
         this.m_isDisplayingAccountFlag = true;
-        UInt32 l_accountId = (UInt32)m_currentNode.Value; //TODO : not sure about casting
-        Account l_account = AccountModel.Instance.GetValue(l_accountId);
+        Boolean l_error = false;
+
+        Account l_account = AccountModel.Instance.GetValue((UInt32)this.m_currentNode.Value);
         if (l_account == null)
           return;
 
+        //Name
         this.Name_TB.Text = m_currentNode.Text;
-        
-        // Formula Type ComboBox
-        ListItem l_formulaTypeLI = m_formulasTypesIdItemDict[l_account.FormulaType];
-        this.FormulaTypeComboBox.SelectedItem = l_formulaTypeLI;
-        
-        // Format ComboBox
+
+        //Process
+        if (this.m_processIdItemDict.ContainsKey(l_account.Process))
+        {
+          ListItem l_processLI = m_processIdItemDict[l_account.Process];
+          this.ProcessComboBox.SelectedItem = l_processLI;
+        }
+        else
+          l_error = true;
+
+        //Formula Type
+        if (this.m_formulasTypesIdItemDict.ContainsKey(l_account.FormulaType))
+        {
+          ListItem l_formulaTypeLI = m_formulasTypesIdItemDict[l_account.FormulaType];
+          this.FormulaTypeComboBox.SelectedItem = l_formulaTypeLI;
+
+          bool l_isRootAccount = false;
+          if (this.m_currentNode.Parent == null)
+            l_isRootAccount = true;
+          if ((Account.FormulaTypes)l_formulaTypeLI.Value == Account.FormulaTypes.TITLE)
+            this.SetEnableStatusEdition(false, l_isRootAccount, l_account.FormulaType);
+          else
+            this.SetEnableStatusEdition(true, l_isRootAccount, l_account.FormulaType);
+        }
+        else
+          l_error = true;
+
         if (this.m_formatsIdItemDict.ContainsKey(l_account.Type))
         {
           ListItem l_formatLI = this.m_formatsIdItemDict[l_account.Type];
           this.TypeComboBox.SelectedItem = l_formatLI;
           if ((Account.AccountType)l_formatLI.Value == Account.AccountType.MONETARY)
           {
-            // Currency Conversion
-            /*ListItem conversionLI = this.m_currenciesConversionIdItemDict[l_account.ConversionOptionId]; //TODO : see why crash
-            CurrencyConversionComboBox.SelectedItem = conversionLI;*/
+            if (this.m_currenciesConversionIdItemDict.ContainsKey(l_account.ConversionOptionId))
+            {
+              ListItem conversionLI = this.m_currenciesConversionIdItemDict[l_account.ConversionOptionId];
+              this.CurrencyConversionComboBox.SelectedItem = conversionLI;
+            }
           }
+          else
+            l_error = true;
         }
         else
         {
-          TypeComboBox.SelectedItem = null;
-          TypeComboBox.Text = "";
+          this.TypeComboBox.SelectedItem = null;
+          this.TypeComboBox.Text = "";
         }
-        
-        // Consolidation Option
-        ListItem consolidationLI = this.m_consoOptionIdItemDict[l_account.ConsolidationOptionId];
-        ConsolidationOptionComboBox.SelectedItem = consolidationLI;
 
-        
+        //Consolidation
+        if (this.m_consoOptionIdItemDict.ContainsKey(l_account.ConsolidationOptionId))
+        {
+          ListItem consolidationLI = this.m_consoOptionIdItemDict[l_account.ConsolidationOptionId];
+          this.ConsolidationOptionComboBox.SelectedItem = consolidationLI;
+        }
+        else
+          l_error = true;
+
         // Formula TB
-        /*if (m_controller.m_formulaTypesToBeTested.Contains(l_account.FormulaType))
+        //if (m_controller.m_formulaTypesToBeTested.Contains(l_account.FormulaType))
+        //m_formulaTextBox.Text = m_controller.GetFormulaText(l_account_id); //TODO : Controller formula test
+        //else
+        //  m_formulaTextBox.Text = "";
+        m_formulaTextBox.Text = l_account.Formula;
+
+        //Description
+        this.m_descriptionTextBox.BackColor = Color.White;
+        this.m_descriptionTextBox.Text = l_account.Description;
+
+        if (l_error == true)
         {
-          m_formulaTextBox.Text = m_controller.GetFormulaText(l_account_id); //TODO : Controller
+          //TODO : message box with error
         }
-        else
-        {
-          m_formulaTextBox.Text = "";
-        }*/
 
-        m_descriptionTextBox.Text = l_account.Description;
-
-        bool l_isRootAccount = false;
-        if (m_currentNode.Parent == null)
-          l_isRootAccount = true;
-        if ((Account.FormulaTypes)l_formulaTypeLI.Value == Account.FormulaTypes.TITLE)
-          SetEnableStatusEdition(false, l_isRootAccount, l_account.FormulaType);
-        else
-          SetEnableStatusEdition(true, l_isRootAccount, l_account.FormulaType);
-        
-        m_isDisplayingAccountFlag = false;
+        this.m_isDisplayingAccountFlag = false;
       }
     }
 
@@ -399,6 +670,12 @@ namespace FBI.MVC.View
         this.m_formulaEditionButton.Enabled = false;
       this.TypeComboBox.Enabled = p_status;
       this.CurrencyConversionComboBox.Enabled = p_status;
+      this.SaveDescriptionBT.Enabled = p_status;
+      this.m_descriptionTextBox.Enabled = p_status;
+      if (p_status == true)
+        this.m_descriptionTextBox.BackColor = Color.White;
+      else
+        this.m_descriptionTextBox.BackColor = Color.LightGray;
       this.ConsolidationOptionComboBox.Enabled = p_status;
     }
   }

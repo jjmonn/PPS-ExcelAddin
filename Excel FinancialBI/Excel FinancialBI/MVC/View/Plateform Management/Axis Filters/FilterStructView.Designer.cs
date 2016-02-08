@@ -6,7 +6,7 @@ using System.Diagnostics;
 
 namespace FBI.MVC.View
 {
-  partial class AxisFilterStructView : System.Windows.Forms.Form
+  partial class FilterStructView : System.Windows.Forms.Form
   {
 
     //Form overrides dispose to clean up the component list.
@@ -36,7 +36,7 @@ namespace FBI.MVC.View
     private void InitializeComponent()
     {
       this.components = new System.ComponentModel.Container();
-      System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AxisFilterStructView));
+      System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FilterStructView));
       this.m_addFilter = new VIBlend.WinForms.Controls.vButton();
       this.EditButtonsImagelist = new System.Windows.Forms.ImageList(this.components);
       this.m_deleteFilter = new VIBlend.WinForms.Controls.vButton();

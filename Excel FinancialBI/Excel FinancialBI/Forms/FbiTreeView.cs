@@ -76,6 +76,29 @@ namespace FBI.Forms
       this.Refresh();
     }
 
+    public static List<UInt32> GetNodesIdsUint(vTreeNode p_node)
+    {
+      List<UInt32> l_tmpList = new List<UInt32>();
+
+      foreach (vTreeNode l_node in GetAllChildrenNodesList(p_node))
+      {
+        if (!l_tmpList.Contains((UInt32)l_node.Value))
+          l_tmpList.Add((UInt32)l_node.Value);
+      }
+      return (l_tmpList);
+    }
+
+    public static List<vTreeNode> GetAllChildrenNodesList(vTreeNode p_node)
+    {
+      List<vTreeNode> l_tmpList = new List<vTreeNode>();
+
+      foreach (vTreeNode l_node in p_node.Nodes)
+      {
+        FillChildrenNodesList(l_node, l_tmpList);
+      }
+      return (l_tmpList);
+    }
+
     /*
      * Insert node at the node p_nodeInsertAt.
      * If p_fixedParent = true, the p_nodeInsertAt MUST have childrens to insert a node.
@@ -149,6 +172,16 @@ namespace FBI.Forms
       return (true);
     }
 
+    private static void FillChildrenNodesList(vTreeNode p_node, List<vTreeNode> p_list)
+    {
+      p_list.Add(p_node);
+      foreach (vTreeNode l_subNode in p_node.Nodes)
+      {
+        p_list.Add(l_subNode);
+        FillChildrenNodesList(l_subNode, p_list);
+      }
+    }
+
     static bool Implements<TInterface>(Type type) where TInterface : class //TODO : use Benjamin thingy
     {
       var interfaceType = typeof(TInterface);
@@ -201,6 +234,7 @@ namespace FBI.Forms
           return (false);
         p_node.Value = l_currentItem.Id;
         p_node.Text = l_currentItem.Name;
+        p_node.ImageIndex = (Int32)l_currentItem.Image;
         foreach (NamedHierarchyCRUDEntity l_item in p_items.SortedValues)
         {
           if (l_item.ParentId == l_currentItem.Id)
@@ -224,6 +258,7 @@ namespace FBI.Forms
           return (false);
         p_node.Value = l_currentItem.Id;
         p_node.Text = l_currentItem.Name;
+        p_node.ImageIndex = (Int32)l_currentItem.Image;
       }
       return (true);
     }
