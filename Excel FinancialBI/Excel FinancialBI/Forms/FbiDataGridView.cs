@@ -9,10 +9,13 @@ namespace FBI.Forms
   using MVC.Model.CRUD;
   using MVC.Model;
 
-  class FbiDataGridView<T, U, V> : vDataGridView 
-    where T : class, NamedCRUDEntity 
-    where U : class, NamedCRUDEntity
+  public class FbiDataGridView : vDataGridView 
   {
+    public enum Dimension
+    {
+      COLUMN,
+      ROW
+    };
     SafeDictionary<UInt32, HierarchyItem> m_rowsDic = new SafeDictionary<UInt32, HierarchyItem>();
     SafeDictionary<UInt32, HierarchyItem> m_columnsDic = new SafeDictionary<UInt32, HierarchyItem>();
     const Int32 COLUMNS_WIDTH = 150;
@@ -54,27 +57,35 @@ namespace FBI.Forms
       AllowDragDropIndication = true;
     }
 
-    public void InitializeRows(ICRUDModel<T> p_model, MultiIndexDictionary<uint, string, T> p_dic)
+    public void InitializeRows<T>(ICRUDModel<T> p_model, MultiIndexDictionary<uint, string, T> p_dic) where T : class, NamedCRUDEntity 
     {
       if (Implements<NamedHierarchyCRUDEntity>(typeof(T)))
         foreach (T l_elem in p_dic.Values)
         {
           NamedHierarchyCRUDEntity l_hierarchyElem = l_elem as NamedHierarchyCRUDEntity;
-          SetDimension(RowsHierarchy.Items, m_rowsDic, p_model, l_elem.Id, l_elem.Name, true, l_hierarchyElem.ParentId);
+          SetDimension(RowsHierarchy.Items, m_rowsDic, l_elem.Id, l_elem.Name, p_model, true, l_hierarchyElem.ParentId);
         }
       else
         foreach (T l_elem in p_dic.Values)
-          SetDimension(RowsHierarchy.Items, m_rowsDic, p_model, l_elem.Id, l_elem.Name);
+          SetDimension(RowsHierarchy.Items, m_rowsDic, l_elem.Id, l_elem.Name, p_model);
     }
 
-    public void InitializeColumns(ICRUDModel<U> p_model, MultiIndexDictionary<uint, string, U> p_dic)
+    public void InitializeColumns<U>(ICRUDModel<U> p_model, MultiIndexDictionary<uint, string, U> p_dic) where U : class, NamedCRUDEntity
     {
       foreach (U l_elem in p_dic.Values)
-        SetDimension(ColumnsHierarchy.Items, m_columnsDic, p_model, l_elem.Id, l_elem.Name);
+        SetDimension(ColumnsHierarchy.Items, m_columnsDic, l_elem.Id, l_elem.Name, p_model);
     }
 
-    HierarchyItem SetDimension<J>(HierarchyItemsCollection p_dimension, SafeDictionary<UInt32, HierarchyItem> p_saveDic, ICRUDModel<J> p_model, UInt32 p_id,
-      string p_name, bool p_hasParent = false, UInt32 p_parentId = 0) where J : class, NamedCRUDEntity
+    public void SetDimension(Dimension p_dimension, UInt32 p_id, string p_name)
+    {
+      if (p_dimension == Dimension.COLUMN)
+        SetDimension<NamedCRUDEntity>(ColumnsHierarchy.Items, m_columnsDic, p_id, p_name);
+      else if (p_dimension == Dimension.ROW)
+        SetDimension<NamedCRUDEntity>(RowsHierarchy.Items, m_rowsDic, p_id, p_name);
+    }
+
+    HierarchyItem SetDimension<J>(HierarchyItemsCollection p_dimension, SafeDictionary<UInt32, HierarchyItem> p_saveDic, UInt32 p_id,
+      string p_name, ICRUDModel<J> p_model = null, bool p_hasParent = false, UInt32 p_parentId = 0) where J : class, NamedCRUDEntity
     {
       HierarchyItem l_dim;
 
@@ -92,7 +103,7 @@ namespace FBI.Forms
       l_dim.ItemValue = p_id;
       l_dim.Caption = p_name;
       l_dim.Width = COLUMNS_WIDTH;
-      if (p_hasParent == true && p_parentId != 0 && Implements<NamedHierarchyCRUDEntity>(typeof(J)))
+      if (p_hasParent == true && p_parentId != 0 && Implements<NamedHierarchyCRUDEntity>(typeof(J)) && p_model != null)
       {
         HierarchyItem parent = null;
         NamedHierarchyCRUDEntity parentEntity = p_model.GetValue(p_parentId) as NamedHierarchyCRUDEntity;
@@ -102,14 +113,14 @@ namespace FBI.Forms
         if (p_saveDic.ContainsKey(p_parentId) == true)
           parent = p_saveDic[p_parentId];
         else
-          parent = SetDimension(p_dimension, p_saveDic, p_model, parentEntity.Id, p_name, p_hasParent, parentEntity.ParentId);
+          parent = SetDimension(p_dimension, p_saveDic, parentEntity.Id, p_name, p_model, p_hasParent, parentEntity.ParentId);
         if (parent != null)
           parent.Items.Add(l_dim);
       }
       return (l_dim);
     }
 
-    public void FillField<Q>(UInt32 p_row, UInt32 p_column, V p_value, Q p_editor) where Q : IEditor
+    public void FillField<V, Q>(UInt32 p_row, UInt32 p_column, V p_value, Q p_editor) where Q : IEditor
     {
       HierarchyItem row = m_rowsDic[p_row];
       HierarchyItem column = m_columnsDic[p_column];

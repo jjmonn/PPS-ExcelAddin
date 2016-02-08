@@ -11,18 +11,13 @@ namespace FBI.MVC.Controller
   using Model;
   using Model.CRUD;
 
-  class AxisFiltersStructController : NameController
+  class AxisFiltersStructController : NameController<AxisFilterStructView>
   {
-    private AxisFiltersView m_view;
+    public override IView View { get { return (m_view); } }
 
-    public AxisFiltersStructController(AxisFiltersView p_view)
+    public AxisFiltersStructController(AxisType p_axisType)
     {
-      m_view = p_view;
-    }
-
-    public override void Close()
-    {
-      //TODO
+      m_view = new AxisFilterStructView(p_axisType);
     }
 
     public override void LoadView()

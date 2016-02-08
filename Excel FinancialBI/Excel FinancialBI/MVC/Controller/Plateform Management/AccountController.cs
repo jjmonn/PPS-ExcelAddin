@@ -12,16 +12,15 @@ namespace FBI.MVC.Controller
   using Model.CRUD;
   using Utils;
 
-  class AccountController : NameController
+  class AccountController : NameController<AccountsView>
   {
-
-    private AccountsView m_view;
+    public override IView View { get { return (m_view); } }
     private FbiTreeView<Account> m_accountTV;
     private FbiTreeView<GlobalFact> m_globalFactTV;
 
-    public AccountController(AccountsView p_view)
+    public AccountController()
     {
-      m_view = p_view;
+      m_view = new AccountsView();
       m_view.SetController(this);
       this.LoadView();
     }
@@ -32,17 +31,5 @@ namespace FBI.MVC.Controller
       m_globalFactTV = new FbiTreeView<GlobalFact>(GlobalFactModel.Instance.GetDictionary());
       m_view.InitView(m_accountTV, m_globalFactTV);
     }
-
-    public override void Close()
-    {
-      // Add any dispose action here !
-      if (m_view != null)
-      {
-        m_view.Hide();
-        m_view.Dispose();
-        m_view = null;
-      }
-    }
-
   }
 }

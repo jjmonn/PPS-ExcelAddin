@@ -12,13 +12,13 @@ namespace FBI.MVC.Controller
   using Model.CRUD;
   using Utils;
 
-  public class VersionsController : NameController , IPlatformManagementController
+  public class VersionsController : NameController<VersionsView>
   {
-    VersionsView m_view;
+    public override IView View { get { return (m_view); } }
 
-    public VersionsController(VersionsView p_view)
+    public VersionsController()
     {
-      m_view = p_view;
+      m_view = new VersionsView();
       m_view.SetController(this);
       LoadView();
     }
@@ -28,19 +28,8 @@ namespace FBI.MVC.Controller
     
     }
 
-    public override void Close()
-    {
-      // Add any dispose action here !
-      if (m_view != null)
-      {
-        m_view.Hide();
-        m_view.Dispose();
-        m_view = null;
-      }
-    }
-
-
-    #region Validity Check
+    #region Validity checks
+  
     bool IsCompatibleVersion(Version p_version, BaseVersion p_cmpVersion)
     {
       if (p_cmpVersion == null)
@@ -83,7 +72,34 @@ namespace FBI.MVC.Controller
       return (true);
     }
 
+    internal bool IsRatesVersionCompatible(Version p_version, uint p_ratesVersionId)
+    {
+      ExchangeRateVersion l_ratesVersion = RatesVersionModel.Instance.GetValue(p_ratesVersionId);
+      if (l_ratesVersion == null)
+        return false;
+
+      if (p_version.StartPeriod >= l_ratesVersion.StartPeriod && p_version.NbPeriod <= l_ratesVersion.NbPeriod)
+      {
+        return true;
+      }
+      return false;
+    }
+
+    internal bool IsGlobalFactsVersionCompatible(Version p_version, uint p_globalFactsVersionId)
+    {
+      GlobalFactVersion l_globalFactsVersion = GlobalFactVersionModel.Instance.GetValue(p_globalFactsVersionId);
+      if (l_globalFactsVersion == null)
+        return false;
+
+      if (p_version.StartPeriod >= l_globalFactsVersion.StartPeriod && p_version.NbPeriod <= l_globalFactsVersion.NbPeriod)
+      {
+        return true;
+      }
+      return false;
+    }
+
     #endregion
+
 
     public bool Create(Version p_version)
     {

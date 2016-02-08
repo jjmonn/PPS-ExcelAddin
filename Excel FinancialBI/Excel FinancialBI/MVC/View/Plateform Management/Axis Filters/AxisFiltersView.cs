@@ -29,6 +29,7 @@ namespace FBI.MVC.View
     {
       InitializeComponent();
       m_axisType = p_axisType;
+      this.InitView();
     }
 
     public void InitView()

@@ -11,31 +11,18 @@ namespace FBI.MVC.Controller
   using Model;
   using Model.CRUD;
 
-  class AxisFilterController : NameController
+  class AxisFilterController : NameController<AxisFiltersView>
   {
-    private AxisFiltersView m_view;
+    public override IView View { get { return (m_view); } }
 
-    public AxisFilterController(AxisFiltersView p_view)
+    public AxisFilterController(AxisType p_axisType)
     {
-      m_view = p_view;
-      m_view.SetController(this);
-      this.LoadView();
+      m_view = new AxisFiltersView(p_axisType);
     }
 
     public override void LoadView()
     {
       m_view.InitView();
-    }
-
-    public override void Close()
-    {
-      // Add any dispose action here !
-      if (m_view != null)
-      {
-        m_view.Hide();
-        m_view.Dispose();
-        m_view = null;
-      }
     }
 
     public bool Add(string p_filterValueName, UInt32 p_filterId, UInt32 p_parentId)

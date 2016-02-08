@@ -42,6 +42,8 @@ namespace FBI.MVC.View
       this.imageList1 = new System.Windows.Forms.ImageList(this.components);
       this.m_cancelButton = new VIBlend.WinForms.Controls.vButton();
       this.Panel1.SuspendLayout();
+      this.m_circularProgress2.SuspendLayout();
+      this.ConnectionBT.SuspendLayout();
       this.SuspendLayout();
       // 
       // m_userLabel
@@ -115,8 +117,6 @@ namespace FBI.MVC.View
       // Panel1
       // 
       this.Panel1.Controls.Add(this.m_circularProgress2);
-      this.Panel1.Controls.Add(this.ConnectionBT);
-      this.Panel1.Controls.Add(this.m_cancelButton);
       this.Panel1.Controls.Add(this.m_userLabel);
       this.Panel1.Controls.Add(this.m_userNameTextBox);
       this.Panel1.Controls.Add(this.m_passwordLabel);
@@ -131,6 +131,7 @@ namespace FBI.MVC.View
       // 
       this.m_circularProgress2.AllowAnimations = true;
       this.m_circularProgress2.BackColor = System.Drawing.Color.Transparent;
+      this.m_circularProgress2.Controls.Add(this.ConnectionBT);
       this.m_circularProgress2.IndicatorsCount = 8;
       this.m_circularProgress2.Location = new System.Drawing.Point(73, 256);
       this.m_circularProgress2.Maximum = 100;
@@ -147,10 +148,11 @@ namespace FBI.MVC.View
       // 
       this.ConnectionBT.AllowAnimations = true;
       this.ConnectionBT.BackColor = System.Drawing.Color.Transparent;
+      this.ConnectionBT.Controls.Add(this.m_cancelButton);
       this.ConnectionBT.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
       this.ConnectionBT.ImageKey = "upload.png";
       this.ConnectionBT.ImageList = this.imageList1;
-      this.ConnectionBT.Location = new System.Drawing.Point(73, 206);
+      this.ConnectionBT.Location = new System.Drawing.Point(0, 0);
       this.ConnectionBT.Name = "ConnectionBT";
       this.ConnectionBT.RoundedCornersMask = ((byte)(15));
       this.ConnectionBT.Size = new System.Drawing.Size(100, 47);
@@ -175,7 +177,7 @@ namespace FBI.MVC.View
       this.m_cancelButton.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
       this.m_cancelButton.ImageKey = "delete.ico";
       this.m_cancelButton.ImageList = this.imageList1;
-      this.m_cancelButton.Location = new System.Drawing.Point(73, 369);
+      this.m_cancelButton.Location = new System.Drawing.Point(0, 0);
       this.m_cancelButton.Name = "m_cancelButton";
       this.m_cancelButton.RoundedCornersMask = ((byte)(15));
       this.m_cancelButton.Size = new System.Drawing.Size(100, 47);
@@ -198,6 +200,8 @@ namespace FBI.MVC.View
       this.ADXBeforeTaskPaneShow += new AddinExpress.XL.ADXBeforeTaskPaneShowEventHandler(this.ConnectionSidePane_ADXBeforeTaskPaneShow);
       this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ConnectionSidePane_FormClosing);
       this.Panel1.ResumeLayout(false);
+      this.m_circularProgress2.ResumeLayout(false);
+      this.ConnectionBT.ResumeLayout(false);
       this.ResumeLayout(false);
 
     }

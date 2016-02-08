@@ -26,6 +26,9 @@ namespace FBI.Forms
 
     private bool Load()
     {
+      SafeDictionary<UInt32, vTreeNode> l_dic;
+
+      l_dic = new SafeDictionary<uint, vTreeNode>();
       if (m_filters == null)
         return (false);
       foreach (Filter l_filter in m_filters.SortedValues)
@@ -35,41 +38,50 @@ namespace FBI.Forms
           vTreeNode l_node = new vTreeNode();
           l_node.Text = l_filter.Name;
           l_node.Value = l_filter.Id;
-          //
-          Debug.WriteLine("Root: " + l_filter.Name + " " + l_filter.Id);
-          //
-          if (!this.Generate(l_node, 0, l_filter.Id, l_node))
+          if (!this.Generate(l_dic, l_node))
             return (false);
+          this.Sort(l_dic, l_node);
           this.Nodes.Add(l_node);
         }
       }
       return (true);
     }
 
-    private bool Generate(vTreeNode p_node, UInt32 p_parentId, UInt32 p_filterId, vTreeNode p_root)
+    private bool Generate(SafeDictionary<UInt32, vTreeNode> p_dic, vTreeNode p_root)
     {
-      foreach (FilterValue l_filterValue in FilterValueModel.Instance.GetDictionary(p_filterId).SortedValues)
+      foreach (Filter l_filter in m_filters.SortedValues)
       {
-        //
-        Debug.WriteLine("Value: " + l_filterValue.Name + " " + l_filterValue.Id + " " + l_filterValue.ParentId + " " + l_filterValue.FilterId);
-        //
-        if (l_filterValue.ParentId == 0)
+        foreach (FilterValue l_filterValue in FilterValueModel.Instance.GetDictionary(l_filter.Id).SortedValues)
         {
           vTreeNode l_node = new vTreeNode();
           l_node.Text = l_filterValue.Name;
           l_node.Value = l_filterValue.Id;
-          //if (!this.Generate(l_node, l_filterValue.Id, l_filterValue.FilterId, p_root))
-          //return (false);
+          Debug.WriteLine(l_filterValue.Name + " " + l_filterValue.Id);
+          p_dic[l_filterValue.Id] = l_node;
           p_root.Nodes.Add(l_node);
         }
-        if (l_filterValue.ParentId == p_parentId)
+      }
+      return (true);
+    }
+
+    private bool Sort(SafeDictionary<UInt32, vTreeNode> p_dic, vTreeNode p_root)
+    {
+      FilterValue l_val;
+      vTreeNode l_node, l_tmpNode;
+
+      for (int i = 0; i < p_root.Nodes.Count; ++i)
+      {
+        if ((l_val = FilterValueModel.Instance.GetValue((UInt32)p_root.Nodes[i].Value)) == null)
         {
-          vTreeNode l_node = new vTreeNode();
-          l_node.Text = l_filterValue.Name;
-          l_node.Value = l_filterValue.Id;
-          //if (!this.Generate(l_node, l_filterValue.Id, l_filterValue.Id, p_root))
-          //return (false);
-          p_node.Nodes.Add(l_node);
+          p_root.Nodes[i].Remove();
+          continue;
+        }
+        if (l_val.ParentId != 0 && (l_tmpNode = p_dic[l_val.ParentId]) != null)
+        {
+          l_node = p_root.Nodes[i];
+          p_root.Nodes.Remove(l_node);
+          l_tmpNode.Nodes.Add(l_node);
+          i--;
         }
       }
       return (true);
