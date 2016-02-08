@@ -441,7 +441,7 @@ namespace FBI.MVC.View
 
     private void m_newVersionMenuBT_Click(object sender, EventArgs e)
     {
-      m_controller.ShowNewVersionView();
+      CreateVersion();
     }
 
     private void m_newFolderMenuBT_Click(object sender, EventArgs e)
@@ -465,7 +465,7 @@ namespace FBI.MVC.View
 
     private void m_new_VersionRCMButton_Click(object sender, EventArgs e)
     {
-      m_controller.ShowNewVersionView();
+      CreateVersion();
     }
 
     private void m_copyVersionRCMButton_Click(object sender, EventArgs e)
@@ -489,6 +489,18 @@ namespace FBI.MVC.View
     }
 
     #endregion
+
+    private void CreateVersion()
+    {
+      uint l_parentId = 0;
+      if (m_currentNode != null)
+      {
+        Version l_version = VersionModel.Instance.GetValue((uint)m_currentNode.Value);
+        if (l_version != null && l_version.IsFolder == false)
+          l_parentId = l_version.Id;
+      }
+      m_controller.ShowNewVersionView(l_parentId);
+    }
 
     private void CreateFolder()
     {
