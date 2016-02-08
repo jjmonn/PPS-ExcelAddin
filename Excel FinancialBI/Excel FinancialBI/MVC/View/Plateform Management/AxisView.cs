@@ -61,7 +61,7 @@ namespace FBI.MVC.View
     void SuscribeEvents()
     {
       AxisElemModel.Instance.DeleteEvent += OnModelDelete;
-      AxisFilterModel.Instance.ReadEvent += OnModelRead;
+      AxisFilterModel.Instance.ReadEvent += OnModelReadAxisFilter;
     }
 
     #endregion
@@ -88,6 +88,7 @@ namespace FBI.MVC.View
         }
         if (l_filterValue != null && l_cbEditor != null)
         {
+          Filter l_filter = FilterModel.Instance.GetValue(l_axisFilter.FilterId);
           m_dgv.FillField(l_axisFilter.AxisElemId, l_axisFilter.FilterId, l_filterValue.Name, l_cbEditor);
           this.FillParentsColumn(l_filterValue.Id, l_filterValue.ParentId, l_axisFilter);
         }
@@ -149,22 +150,22 @@ namespace FBI.MVC.View
 
     private void OnDGVCellValueChanged(object sender, CellEventArgs args)
     {
-      if (m_cellModif == false)
+      if (m_cellModif == false || args == null)
         return;
       m_cellModif = false;
       UInt32 l_axisElemId = (UInt32)args.Cell.RowItem.ItemValue;
       UInt32 l_filterId = (UInt32)args.Cell.ColumnItem.ItemValue;
       AxisFilter l_axisFilter = AxisFilterModel.Instance.GetValue(m_controller.AxisType, l_axisElemId, l_filterId);
       FilterValue l_filterValue = FilterValueModel.Instance.GetValue(args.Cell.Value.ToString());
-      this.m_controller.Add(l_axisFilter, l_filterValue);
+      if (l_axisFilter != null && l_filterValue != null)
+        this.m_controller.UpdateAxisFilter(l_axisFilter, l_filterValue);
     }
 
     void OnDGVChangeParentCellValue(uint p_axisElemId, uint p_filterValueId)
     {
       FilterValue l_filterValue = FilterValueModel.Instance.GetValue(p_filterValueId);
-      if (l_filterValue == null)
-        return;
-      m_dgv.FillField(p_axisElemId, p_filterValueId, l_filterValue.Name);
+      if (l_filterValue != null)
+        m_dgv.FillField(p_axisElemId, l_filterValue.FilterId, l_filterValue.Name);
     }
 
     void OnCBEditorSelectedIndexChanged(object sender, EventArgs e)
@@ -195,14 +196,18 @@ namespace FBI.MVC.View
       }
     }
 
-    void OnModelRead(Network.ErrorMessage p_status, AxisFilter p_attributes)
+    void OnModelReadAxisFilter(Network.ErrorMessage p_status, AxisFilter p_attributes)
     {
-      if (p_status == Network.ErrorMessage.SUCCESS)
+      if (p_status == ErrorMessage.SUCCESS && p_attributes != null)
       {
-        AxisFilterModel.Instance.Update(p_attributes);
-        AxisElem l_filterValue = AxisElemModel.Instance.GetValue(p_attributes.Axis, p_attributes.AxisElemId);
-        OnDGVChangeParentCellValue(p_attributes.AxisElemId, l_filterValue.ParentId);
+        AxisFilter l_test = AxisFilterModel.Instance.GetValue(p_attributes.Id);
+        AxisElem l_axisElem = AxisElemModel.Instance.GetValue(p_attributes.Axis, p_attributes.AxisElemId);
+        FilterValue l_filterValue = FilterValueModel.Instance.GetValue(p_attributes.FilterValueId);
+        if (l_filterValue != null && l_axisElem != null)
+          OnDGVChangeParentCellValue(l_axisElem.Id, l_filterValue.ParentId);
       }
+      else
+        MessageBox.Show(Local.GetValue("general.error.system"));
     }
     
     #endregion

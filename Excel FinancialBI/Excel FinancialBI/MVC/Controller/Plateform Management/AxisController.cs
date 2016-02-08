@@ -54,7 +54,7 @@ namespace FBI.MVC.Controller
       return (true);
     }
 
-    public bool Add(AxisFilter p_axisFilter, FilterValue p_filterValue)
+    public bool UpdateAxisFilter(AxisFilter p_axisFilter, FilterValue p_filterValue)
     {
       if (p_axisFilter == null || p_filterValue == null)
         return (false);
