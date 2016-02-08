@@ -28,7 +28,7 @@ namespace FBI.MVC.View
     {
       InitializeComponent();
       m_axisType = p_axisType;
-      AxisElemModel.Instance.ReadEvent += Instance_ReadEvent;
+      AxisFilterModel.Instance.ReadEvent += Instance_ReadEvent;
     }
 
     
@@ -95,7 +95,6 @@ namespace FBI.MVC.View
       if (cellModif == false)
         return;
       cellModif = false;
-
       UInt32 l_axisElemId = (UInt32)args.Cell.RowItem.ItemValue;
       UInt32 l_filterId = (UInt32)args.Cell.ColumnItem.ItemValue;
       AxisFilter l_axisFilter = AxisFilterModel.Instance.GetValue(m_axisType, l_axisElemId, l_filterId);
@@ -103,16 +102,12 @@ namespace FBI.MVC.View
       this.m_controller.Add(l_axisFilter, l_filterValue);
     }
 
-    void changeParentCellValue(FilterValue p_filterValue, HierarchyItem p_row)
+    void changeParentCellValue(uint p_axisElemId, uint p_filterValueId)
     {
-      if (p_filterValue == null)
+      FilterValue l_filterValue = FilterValueModel.Instance.GetValue(p_filterValueId);
+      if (l_filterValue == null)
         return;
-      if (p_filterValue.ParentId == 0)
-        return;
-      FilterValue l_parent = FilterValueModel.Instance.GetValue(p_filterValue.ParentId);
-      if (l_parent == null)
-        return;
-      m_dgv.FillField(p_row, l_parent.FilterId, l_parent.Name);
+      m_dgv.FillField(p_axisElemId, p_filterValueId, l_filterValue.Name);
     }
 
     void l_cbEditor_SelectedIndexChanged(object sender, EventArgs e)
@@ -120,8 +115,14 @@ namespace FBI.MVC.View
       cellModif = true;
     }
 
-    void Instance_ReadEvent(Network.ErrorMessage status, AxisElem attributes)
+    void Instance_ReadEvent(Network.ErrorMessage status, AxisFilter attributes)
     {
+      if (status == Network.ErrorMessage.SUCCESS)
+      {
+        AxisFilterModel.Instance.Update(attributes);
+        AxisElem l_filterValue = AxisElemModel.Instance.GetValue(attributes.Axis, attributes.AxisElemId);
+        changeParentCellValue(attributes.AxisElemId, l_filterValue.ParentId);
+      }
       throw new NotImplementedException();
     }
 

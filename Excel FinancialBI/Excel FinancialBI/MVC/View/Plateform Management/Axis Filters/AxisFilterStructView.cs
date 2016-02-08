@@ -44,6 +44,11 @@ namespace FBI.MVC.View
       }
     }
 
+    public AxisType AxisType
+    {
+      get { return (m_axisType); }
+    }
+
     //TODO Drag and drop
 
     public void SetController(IController p_controller)

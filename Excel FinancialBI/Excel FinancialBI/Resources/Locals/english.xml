@@ -347,18 +347,19 @@
 
   <category name="facts_versions">
     <string name="fact_version">Data Version</string>
-    <string name="exchange_rates_version">Exchange rates version</string>
+    <string name="exchange_rates_version">Exchange rates Version</string>
     <string name="nb_periods">Number of periods</string>
     <string name="nb_years">Number of years</string>
     <string name="nb_months">Number of months</string>
     <string name="nb_weeks">Number of weeks</string>
     <string name="nb_days">Number of days</string>
     <string name="copy_from">Create copy from</string>
-    <string name="starting_period">Starting year</string>
+    <string name="starting_period">Starting period</string>
     <string name="starting_month">Starting month</string>
     <string name="period_config">Periods configuration (Yearly / Monthly)</string>
     <string name="version_name">Version name</string>
     <string name="version_new">New version</string>
+    
     <string name="msg_config_selection">The Time Configuration must be selected.</string>
     <string name="msg_starting_period">The starting period must be selected</string>
     <string name="msg_select_rates_version">An Exchange Rates version must be selected</string>
@@ -367,19 +368,23 @@
     <string name="msg_cannot_use_global_fact_folder"> is a folder and cannot be set as the Economic Indicators version</string>
     <string name="msg_cannot_use_exchange_rates_folder"> is a folder and cannot be set as the Exchange Rates version.</string>
     <string name="msg_fact_version_mismatch">This Fact Version is not compatible with the Periods Configuration.</string>
-
-    <string name="global_facts_version">Macro Economic Indicators version</string>
+    
+    <string name="global_facts_version">Macro Economic Indicators Version</string>
     <string name="version_locked">Locked</string>
     <string name="locked_date">Locked date</string>
     <string name="creation_date">Creation date</string>
     <string name="version_not_locked">Version not locked</string>
+ 
+    
+    
     <string name="msg_delete_successful">The version has successfully been deleted</string>
     <string name="msg_is_folder"> is a folder</string>
     <string name="msg_folder_name">Please enter the new Folder Name</string>
     <string name="msg_new_version_name">Enter the new Name: </string>
     <string name="msg_invalid_name">This Name is not valid. Either it already exists or contains forbidden characters. Please Try with another Name.</string>
     <string name="msg_select_version_or_folder">Please select a Version or a Folder.</string>
-	<string name="msg_need_starting_month">Please select a starting month.</string>
+
+    <string name="msg_need_starting_month">Please select a starting month.</string>
 	<string name="msg_error_create">Unable to create this version</string>
 	<string name="msg_error_copy">Unable to create copy of this version</string>
 	<string name="msg_error_update">Unable to edit this version</string>

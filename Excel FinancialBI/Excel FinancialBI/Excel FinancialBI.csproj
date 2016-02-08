@@ -238,8 +238,9 @@
     <Compile Include="MVC\Controller\Plateform Management\AxisController.cs" />
     <Compile Include="MVC\Controller\IController.cs" />
     <Compile Include="MVC\Controller\Plateform Management\ExchangeRatesController.cs" />
-    <Compile Include="MVC\Controller\Plateform Management\IPlatformManagementController.cs" />
+    <Compile Include="MVC\Controller\Plateform Management\BasePlatformMgtComponent.cs" />
     <Compile Include="MVC\Controller\Plateform Management\AxisFilterController.cs" />
+    <Compile Include="MVC\Controller\Plateform Management\IBasePlatformMgtComponent.cs" />
     <Compile Include="MVC\Controller\Plateform Management\PlatformMgtController.cs" />
     <Compile Include="MVC\Controller\NameController.cs" />
     <Compile Include="MVC\Controller\Plateform Management\AxisFiltersStructController.cs" />
@@ -619,6 +620,7 @@
     <Compile Include="Utils\RightManager.cs" />
     <Compile Include="Utils\SafeDictionary.cs" />
     <Compile Include="Utils\StringUtils.cs" />
+    <Compile Include="Utils\TreeviewUtils.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="AddinModule.resx">

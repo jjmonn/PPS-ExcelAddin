@@ -100,9 +100,6 @@ namespace FBI.Forms
       }
       else
         l_dim = p_saveDic[p_id];
-      l_dim.ItemValue = p_id;
-      l_dim.Caption = p_name;
-      l_dim.Width = COLUMNS_WIDTH;
       if (p_hasParent == true && p_parentId != 0 && Implements<NamedHierarchyCRUDEntity>(typeof(J)) && p_model != null)
       {
         HierarchyItem parent = null;
@@ -117,6 +114,9 @@ namespace FBI.Forms
         if (parent != null)
           parent.Items.Add(l_dim);
       }
+      l_dim.ItemValue = p_id;
+      l_dim.Caption = p_name;
+      l_dim.Width = COLUMNS_WIDTH;
       return (l_dim);
     }
 
@@ -133,15 +133,16 @@ namespace FBI.Forms
       this.CellsArea.SetCellEditor(row, column, p_editor);
     }
 
-    public void FillField(HierarchyItem p_row, UInt32 p_column, V p_value)
+    public void FillField<V>(UInt32 p_row, UInt32 p_column, V p_value)
     {
       HierarchyItem column = m_columnsDic[p_column];
+      HierarchyItem row = m_rowsDic[p_row];
 
-      if (p_row == null)
+      if (row == null)
         return;
       if (column == null)
         return;
-      this.CellsArea.SetCellValue(p_row, column, p_value);
+      this.CellsArea.SetCellValue(row, column, p_value);
     }
   }
 }

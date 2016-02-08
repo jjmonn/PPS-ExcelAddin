@@ -347,7 +347,7 @@
     <string name="nb_weeks">Nombre de semaines</string>
     <string name="nb_days">Nombre de jours</string>
     <string name="copy_from">Créer une copie de</string>
-    <string name="starting_period">Année de départ</string>
+    <string name="starting_period">Période de départ</string>
 	<string name="starting_month">Mois de départ</string>
     <string name="period_config">Configuration des périodes (annuel ou mensuel)</string>
     <string name="version_name">Nom de la version</string>

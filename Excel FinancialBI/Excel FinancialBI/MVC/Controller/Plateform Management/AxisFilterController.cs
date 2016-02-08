@@ -11,7 +11,7 @@ namespace FBI.MVC.Controller
   using Model;
   using Model.CRUD;
 
-  class AxisFilterController : NameController
+  class AxisFilterController : NameController<AxisFiltersView>
   {
     AxisFiltersView m_view;
     public override IView View { get { return (m_view); } }
@@ -24,17 +24,6 @@ namespace FBI.MVC.Controller
     public override void LoadView()
     {
       //
-    }
-
-    public override void Close()
-    {
-      // Add any dispose action here !
-      if (m_view != null)
-      {
-        m_view.Hide();
-        m_view.Dispose();
-        m_view = null;
-      }
     }
 
     public bool Add(string p_filterValueName, UInt32 p_filterId, UInt32 p_parentId)

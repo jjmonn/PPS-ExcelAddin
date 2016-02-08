@@ -114,7 +114,6 @@ namespace FBI.MVC.View
       this.m_accountTV.LabelEdit = false;
       this.m_accountTV.CollapseAll();
       this.m_accountTV.ImageList = this.accountsIL;
-      this.m_accountTV.InitTVFormat();
       this.m_accountTV.BorderColor = Color.Transparent;
       this.AccountsTVPanel.Controls.Add(m_accountTV);
 
@@ -201,7 +200,6 @@ namespace FBI.MVC.View
       this.m_globalFactsTV.LabelEdit = false;
       this.m_globalFactsTV.CollapseAll();
       this.m_globalFactsTV.ImageList = m_globalFactsImageList;
-      this.m_globalFactsTV.InitTVFormat();
       this.GlobalFactsPanel.Controls.Add(m_globalFactsTV);
 
       //TODO : see event
