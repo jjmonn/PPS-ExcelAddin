@@ -37,7 +37,7 @@ namespace FBI.MVC.View
     {
       Dock = DockStyle.Fill;
       MultiIndexDictionary<UInt32, string, AxisElem> l_axisElemDic = AxisElemModel.Instance.GetDictionary(m_axisType);
-      MultiIndexDictionary<UInt32, string, Filter> l_filterDic = FilterModel.Instance.GetDictionary(m_axisType);
+      MultiIndexDictionary<UInt32, string, Filter> l_filterDic = FilterModel.Instance.GetSortedByParentsDictionary(m_axisType);
 
       TableLayoutPanel1.Controls.Add(m_dgv);
       if (l_axisElemDic == null)
@@ -58,18 +58,15 @@ namespace FBI.MVC.View
       foreach (AxisFilter l_axisFilter in l_axisFilterDic.Values)
       {
         FilterValue l_filterValue = FilterValueModel.Instance.GetValue(l_axisFilter.FilterValueId);
-        ComboBoxEditor l_cbEditor = new ComboBoxEditor();
         MultiIndexDictionary<UInt32, string, FilterValue> l_filterValueDic = FilterValueModel.Instance.GetDictionary(l_axisFilter.FilterId);
+        ComboBoxEditor l_cbEditor = null;
 
-        if (l_filterValueDic != null && l_cbEditor != null)
+        if (l_filterValueDic != null)
         {
-          foreach (FilterValue l_fv in l_filterValueDic.Values)
-            l_cbEditor.Items.Add(l_fv.Name);
-          l_cbEditor.SelectedIndexChanged += l_cbEditor_SelectedIndexChanged;
+          l_cbEditor = BuildComboBoxEditor(l_filterValueDic);
         }
         if (l_filterValue != null && l_cbEditor != null)
         {
-          Filter l_filter = FilterModel.Instance.GetValue(l_axisFilter.FilterId);
           m_dgv.FillField(l_axisFilter.AxisElemId, l_axisFilter.FilterId, l_filterValue.Name, l_cbEditor);
           this.fillParentsColumn(l_filterValue.Id, l_filterValue.ParentId, l_axisFilter);
         }
@@ -82,14 +79,27 @@ namespace FBI.MVC.View
       if (p_filterValueId != 0 && p_parentId != 0)
       {
         FilterValue l_parent = FilterValueModel.Instance.GetValue(p_parentId);
+        if (l_parent == null)
+          return;
         MultiIndexDictionary<UInt32, string, FilterValue> l_filterValueDic = FilterValueModel.Instance.GetDictionary(l_parent.FilterId);
-        ComboBoxEditor l_cbEditor = new ComboBoxEditor();
-        l_cbEditor.SelectedIndexChanged += l_cbEditor_SelectedIndexChanged;
-        if (l_filterValueDic != null && l_cbEditor != null)
-          foreach (FilterValue l_fv in l_filterValueDic.Values)
-            l_cbEditor.Items.Add(l_fv.Name);
-        m_dgv.FillField(p_axisFilter.AxisElemId, l_parent.FilterId, l_parent.Name, l_cbEditor);
+        if (l_filterValueDic == null)
+          return;
+        ComboBoxEditor l_cbEditor = BuildComboBoxEditor(l_filterValueDic);
+        if (l_cbEditor == null)
+          m_dgv.FillField(p_axisFilter.AxisElemId, l_parent.FilterId, l_parent.Name, l_cbEditor);
       }
+    }
+
+    private ComboBoxEditor BuildComboBoxEditor(MultiIndexDictionary<UInt32, string, FilterValue> p_filterValueDic)
+    {
+      ComboBoxEditor l_cbEditor = new ComboBoxEditor();
+      if (p_filterValueDic != null && l_cbEditor != null)
+      {
+        l_cbEditor.SelectedIndexChanged += l_cbEditor_SelectedIndexChanged;
+        foreach (FilterValue l_fv in p_filterValueDic.SortedValues)
+          l_cbEditor.Items.Add(l_fv.Name);
+      }
+      return (l_cbEditor);
     }
 
     private void m_dgv_CellValueChanged(object sender, CellEventArgs args)
@@ -101,6 +111,23 @@ namespace FBI.MVC.View
       UInt32 l_filterId = (UInt32)args.Cell.ColumnItem.ItemValue;
       AxisFilter l_axisFilter = AxisFilterModel.Instance.GetValue(m_axisType, l_axisElemId, l_filterId);
       FilterValue l_filterValue = FilterValueModel.Instance.GetValue(args.Cell.Value.ToString());
+      Filter l_filter = FilterModel.Instance.GetValue(l_filterId);
+
+      if (l_filter.IsParent == true)
+      {
+        Filter l_filterChild = FilterModel.Instance.GetValue(FilterModel.Instance.FindChildId(m_axisType, l_filterId));
+        if (l_filterChild != null)
+        {
+          AxisFilter l_axisFilterChild = AxisFilterModel.Instance.GetValue(m_axisType, l_axisFilter.AxisElemId, l_filterChild.Id);
+          if (l_axisFilterChild != null)
+          {
+            MultiIndexDictionary<UInt32, string, FilterValue> l_filterValueDic = FilterValueModel.Instance.GetChildrenDictionary(l_filterValue.Id);
+            ComboBoxEditor l_cbEditor = BuildComboBoxEditor(l_filterValueDic);
+            if (l_cbEditor != null && l_filterValueDic.SortedValues.Count > 0)
+              m_dgv.FillField(l_axisElemId, l_filterChild.Id, l_filterValueDic.SortedValues[0].Name, l_cbEditor);
+          }
+        }
+      }
       if (l_axisFilter != null && l_filterValue != null)
         this.m_controller.UpdateAxisFilter(l_axisFilter, l_filterValue);
     }
