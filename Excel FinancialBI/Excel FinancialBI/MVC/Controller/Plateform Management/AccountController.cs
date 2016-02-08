@@ -31,5 +31,7 @@ namespace FBI.MVC.Controller
       m_globalFactTV = new FbiTreeView<GlobalFact>(GlobalFactModel.Instance.GetDictionary());
       m_view.InitView(m_accountTV, m_globalFactTV);
     }
+
+
   }
 }
