@@ -21,7 +21,7 @@ namespace FBI.Utils
       }
       foreach (vTreeNode subNode in childrenNodesList)
       {
-        if ((int)subNode.Value == p_id)
+        if ((uint)subNode.Value == p_id)
           return subNode;
       }
       return null;

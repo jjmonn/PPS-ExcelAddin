@@ -617,6 +617,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
+    <Compile Include="Utils\CustomComponentResourceManager.cs" />
     <Compile Include="Utils\Hash.cs" />
     <Compile Include="Utils\Local.cs" />
     <Compile Include="Utils\MultiIndexDictionary.cs" />

@@ -27,13 +27,14 @@ namespace FBI.MVC.View
       InitializeComponent();
 
       m_versionModel = p_versionModel;
-      m_dgv = new FbiDataGridView();
     }
 
     public virtual void LoadView()
     {
+      m_dgv = new FbiDataGridView();
       m_versionTV = new FbiTreeView<TCrudType>(m_versionModel.GetDictionary());
       m_mainContainer.Panel1.Controls.Add(m_versionTV);
+      m_mainContainer.Panel2.Controls.Add(m_dgv);
     }
 
     public abstract void SetController(IController p_controller);

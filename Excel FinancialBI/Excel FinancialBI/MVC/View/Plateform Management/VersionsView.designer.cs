@@ -40,12 +40,13 @@ namespace FBI.MVC.View
       System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(VersionsView));
       this.ButtonsImageList = new System.Windows.Forms.ImageList(this.components);
       this.RCM_TV = new System.Windows.Forms.ContextMenuStrip(this.components);
-      this.new_version_bt = new System.Windows.Forms.ToolStripMenuItem();
-      this.new_folder_bt = new System.Windows.Forms.ToolStripMenuItem();
+      this.m_new_VersionRCMButton = new System.Windows.Forms.ToolStripMenuItem();
+      this.m_copyVersionRCMButton = new System.Windows.Forms.ToolStripMenuItem();
+      this.m_newFolderRCMButton = new System.Windows.Forms.ToolStripMenuItem();
       this.ToolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
-      this.rename_bt = new System.Windows.Forms.ToolStripMenuItem();
+      this.m_renameRCMButton = new System.Windows.Forms.ToolStripMenuItem();
       this.ToolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-      this.delete_bt = new System.Windows.Forms.ToolStripMenuItem();
+      this.m_deleteRCMButton = new System.Windows.Forms.ToolStripMenuItem();
       this.TableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
       this.SplitContainer1 = new System.Windows.Forms.SplitContainer();
       this.m_versionsTVPanel = new System.Windows.Forms.Panel();
@@ -70,10 +71,12 @@ namespace FBI.MVC.View
       this.m_factsVersionVTreeviewbox = new VIBlend.WinForms.Controls.vTreeViewBox();
       this.MenuStrip1 = new System.Windows.Forms.MenuStrip();
       this.VersionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-      this.NewVersionMenuBT = new System.Windows.Forms.ToolStripMenuItem();
-      this.NewFolderMenuBT = new System.Windows.Forms.ToolStripMenuItem();
-      this.DeleteVersionMenuBT = new System.Windows.Forms.ToolStripMenuItem();
-      this.RenameMenuBT = new System.Windows.Forms.ToolStripMenuItem();
+      this.m_newVersionMenuBT = new System.Windows.Forms.ToolStripMenuItem();
+      this.m_newFolderMenuBT = new System.Windows.Forms.ToolStripMenuItem();
+      this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+      this.m_renameMenuBT = new System.Windows.Forms.ToolStripMenuItem();
+      this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
+      this.m_deleteVersionMenuBT = new System.Windows.Forms.ToolStripMenuItem();
       this.BackgroundWorker1 = new System.ComponentModel.BackgroundWorker();
       this.m_versionsTreeviewImageList = new System.Windows.Forms.ImageList(this.components);
       this.RCM_TV.SuspendLayout();
@@ -99,51 +102,58 @@ namespace FBI.MVC.View
       // RCM_TV
       // 
       this.RCM_TV.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.new_version_bt,
-            this.new_folder_bt,
+            this.m_new_VersionRCMButton,
+            this.m_copyVersionRCMButton,
+            this.m_newFolderRCMButton,
             this.ToolStripSeparator2,
-            this.rename_bt,
+            this.m_renameRCMButton,
             this.ToolStripSeparator1,
-            this.delete_bt});
+            this.m_deleteRCMButton});
       this.RCM_TV.Name = "RCM_TV";
-      this.RCM_TV.Size = new System.Drawing.Size(156, 112);
+      this.RCM_TV.Size = new System.Drawing.Size(159, 136);
       // 
-      // new_version_bt
+      // m_new_VersionRCMButton
       // 
-      this.new_version_bt.Image = global::FBI.Properties.Resources.elements3_add;
-      this.new_version_bt.Name = "new_version_bt";
-      this.new_version_bt.Size = new System.Drawing.Size(155, 24);
-      this.new_version_bt.Text = "New_version";
+      this.m_new_VersionRCMButton.Image = global::FBI.Properties.Resources.elements3_add;
+      this.m_new_VersionRCMButton.Name = "m_new_VersionRCMButton";
+      this.m_new_VersionRCMButton.Size = new System.Drawing.Size(158, 24);
+      this.m_new_VersionRCMButton.Text = "New_version";
       // 
-      // new_folder_bt
+      // m_copyVersionRCMButton
       // 
-      this.new_folder_bt.Image = global::FBI.Properties.Resources.folder2;
-      this.new_folder_bt.Name = "new_folder_bt";
-      this.new_folder_bt.Size = new System.Drawing.Size(155, 24);
-      this.new_folder_bt.Text = "New_folder";
+      this.m_copyVersionRCMButton.Name = "m_copyVersionRCMButton";
+      this.m_copyVersionRCMButton.Size = new System.Drawing.Size(158, 24);
+      this.m_copyVersionRCMButton.Text = "Copy version";
+      // 
+      // m_newFolderRCMButton
+      // 
+      this.m_newFolderRCMButton.Image = global::FBI.Properties.Resources.folder2;
+      this.m_newFolderRCMButton.Name = "m_newFolderRCMButton";
+      this.m_newFolderRCMButton.Size = new System.Drawing.Size(158, 24);
+      this.m_newFolderRCMButton.Text = "New_folder";
       // 
       // ToolStripSeparator2
       // 
       this.ToolStripSeparator2.Name = "ToolStripSeparator2";
-      this.ToolStripSeparator2.Size = new System.Drawing.Size(152, 6);
+      this.ToolStripSeparator2.Size = new System.Drawing.Size(155, 6);
       // 
-      // rename_bt
+      // m_renameRCMButton
       // 
-      this.rename_bt.Name = "rename_bt";
-      this.rename_bt.Size = new System.Drawing.Size(155, 24);
-      this.rename_bt.Text = "Rename";
+      this.m_renameRCMButton.Name = "m_renameRCMButton";
+      this.m_renameRCMButton.Size = new System.Drawing.Size(158, 24);
+      this.m_renameRCMButton.Text = "Rename";
       // 
       // ToolStripSeparator1
       // 
       this.ToolStripSeparator1.Name = "ToolStripSeparator1";
-      this.ToolStripSeparator1.Size = new System.Drawing.Size(152, 6);
+      this.ToolStripSeparator1.Size = new System.Drawing.Size(155, 6);
       // 
-      // delete_bt
+      // m_deleteRCMButton
       // 
-      this.delete_bt.Image = global::FBI.Properties.Resources.elements3_delete;
-      this.delete_bt.Name = "delete_bt";
-      this.delete_bt.Size = new System.Drawing.Size(155, 24);
-      this.delete_bt.Text = "Delete";
+      this.m_deleteRCMButton.Image = global::FBI.Properties.Resources.elements3_delete;
+      this.m_deleteRCMButton.Name = "m_deleteRCMButton";
+      this.m_deleteRCMButton.Size = new System.Drawing.Size(158, 24);
+      this.m_deleteRCMButton.Text = "Delete";
       // 
       // TableLayoutPanel3
       // 
@@ -396,6 +406,7 @@ namespace FBI.MVC.View
       this.m_exchangeRatesVersionVTreeviewbox.Name = "m_exchangeRatesVersionVTreeviewbox";
       this.m_exchangeRatesVersionVTreeviewbox.Size = new System.Drawing.Size(386, 23);
       this.m_exchangeRatesVersionVTreeviewbox.TabIndex = 25;
+      this.m_exchangeRatesVersionVTreeviewbox.Text = " ";
       this.m_exchangeRatesVersionVTreeviewbox.UseThemeBackColor = false;
       this.m_exchangeRatesVersionVTreeviewbox.UseThemeDropDownArrowColor = true;
       this.m_exchangeRatesVersionVTreeviewbox.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE;
@@ -411,6 +422,7 @@ namespace FBI.MVC.View
       this.m_factsVersionVTreeviewbox.Name = "m_factsVersionVTreeviewbox";
       this.m_factsVersionVTreeviewbox.Size = new System.Drawing.Size(384, 23);
       this.m_factsVersionVTreeviewbox.TabIndex = 26;
+      this.m_factsVersionVTreeviewbox.Text = " ";
       this.m_factsVersionVTreeviewbox.UseThemeBackColor = false;
       this.m_factsVersionVTreeviewbox.UseThemeDropDownArrowColor = true;
       this.m_factsVersionVTreeviewbox.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.VISTABLUE;
@@ -428,40 +440,52 @@ namespace FBI.MVC.View
       // VersionsToolStripMenuItem
       // 
       this.VersionsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.NewVersionMenuBT,
-            this.NewFolderMenuBT,
-            this.DeleteVersionMenuBT,
-            this.RenameMenuBT});
+            this.m_newVersionMenuBT,
+            this.m_newFolderMenuBT,
+            this.toolStripSeparator3,
+            this.m_renameMenuBT,
+            this.toolStripSeparator4,
+            this.m_deleteVersionMenuBT});
       this.VersionsToolStripMenuItem.Name = "VersionsToolStripMenuItem";
       this.VersionsToolStripMenuItem.Size = new System.Drawing.Size(72, 23);
       this.VersionsToolStripMenuItem.Text = "Versions";
       // 
-      // NewVersionMenuBT
+      // m_newVersionMenuBT
       // 
-      this.NewVersionMenuBT.Image = global::FBI.Properties.Resources.elements3_add;
-      this.NewVersionMenuBT.Name = "NewVersionMenuBT";
-      this.NewVersionMenuBT.Size = new System.Drawing.Size(212, 24);
-      this.NewVersionMenuBT.Text = "[versions.add_version]";
+      this.m_newVersionMenuBT.Image = global::FBI.Properties.Resources.elements3_add;
+      this.m_newVersionMenuBT.Name = "m_newVersionMenuBT";
+      this.m_newVersionMenuBT.Size = new System.Drawing.Size(151, 24);
+      this.m_newVersionMenuBT.Text = "Add version";
       // 
-      // NewFolderMenuBT
+      // m_newFolderMenuBT
       // 
-      this.NewFolderMenuBT.Image = global::FBI.Properties.Resources.favicon_81_;
-      this.NewFolderMenuBT.Name = "NewFolderMenuBT";
-      this.NewFolderMenuBT.Size = new System.Drawing.Size(212, 24);
-      this.NewFolderMenuBT.Text = "Add_folder";
+      this.m_newFolderMenuBT.Image = global::FBI.Properties.Resources.favicon_81_;
+      this.m_newFolderMenuBT.Name = "m_newFolderMenuBT";
+      this.m_newFolderMenuBT.Size = new System.Drawing.Size(151, 24);
+      this.m_newFolderMenuBT.Text = "Add folder";
       // 
-      // DeleteVersionMenuBT
+      // toolStripSeparator3
       // 
-      this.DeleteVersionMenuBT.Image = global::FBI.Properties.Resources.elements3_delete;
-      this.DeleteVersionMenuBT.Name = "DeleteVersionMenuBT";
-      this.DeleteVersionMenuBT.Size = new System.Drawing.Size(212, 24);
-      this.DeleteVersionMenuBT.Text = "Delete";
+      this.toolStripSeparator3.Name = "toolStripSeparator3";
+      this.toolStripSeparator3.Size = new System.Drawing.Size(148, 6);
       // 
-      // RenameMenuBT
+      // m_renameMenuBT
       // 
-      this.RenameMenuBT.Name = "RenameMenuBT";
-      this.RenameMenuBT.Size = new System.Drawing.Size(212, 24);
-      this.RenameMenuBT.Text = "Rename";
+      this.m_renameMenuBT.Name = "m_renameMenuBT";
+      this.m_renameMenuBT.Size = new System.Drawing.Size(151, 24);
+      this.m_renameMenuBT.Text = "Rename";
+      // 
+      // toolStripSeparator4
+      // 
+      this.toolStripSeparator4.Name = "toolStripSeparator4";
+      this.toolStripSeparator4.Size = new System.Drawing.Size(148, 6);
+      // 
+      // m_deleteVersionMenuBT
+      // 
+      this.m_deleteVersionMenuBT.Image = global::FBI.Properties.Resources.elements3_delete;
+      this.m_deleteVersionMenuBT.Name = "m_deleteVersionMenuBT";
+      this.m_deleteVersionMenuBT.Size = new System.Drawing.Size(151, 24);
+      this.m_deleteVersionMenuBT.Text = "Delete";
       // 
       // m_versionsTreeviewImageList
       // 
@@ -493,18 +517,18 @@ namespace FBI.MVC.View
     }
     internal System.Windows.Forms.ImageList ButtonsImageList;
     internal System.Windows.Forms.ContextMenuStrip RCM_TV;
-    internal System.Windows.Forms.ToolStripMenuItem new_version_bt;
-    internal System.Windows.Forms.ToolStripMenuItem new_folder_bt;
+    internal System.Windows.Forms.ToolStripMenuItem m_new_VersionRCMButton;
+    internal System.Windows.Forms.ToolStripMenuItem m_newFolderRCMButton;
     internal System.Windows.Forms.ToolStripSeparator ToolStripSeparator2;
-    internal System.Windows.Forms.ToolStripMenuItem rename_bt;
+    internal System.Windows.Forms.ToolStripMenuItem m_renameRCMButton;
     internal System.Windows.Forms.ToolStripSeparator ToolStripSeparator1;
-    internal System.Windows.Forms.ToolStripMenuItem delete_bt;
+    internal System.Windows.Forms.ToolStripMenuItem m_deleteRCMButton;
     internal System.Windows.Forms.TableLayoutPanel TableLayoutPanel3;
     internal System.Windows.Forms.MenuStrip MenuStrip1;
     internal System.Windows.Forms.ToolStripMenuItem VersionsToolStripMenuItem;
-    internal System.Windows.Forms.ToolStripMenuItem NewVersionMenuBT;
-    internal System.Windows.Forms.ToolStripMenuItem NewFolderMenuBT;
-    internal System.Windows.Forms.ToolStripMenuItem DeleteVersionMenuBT;
+    internal System.Windows.Forms.ToolStripMenuItem m_newVersionMenuBT;
+    internal System.Windows.Forms.ToolStripMenuItem m_newFolderMenuBT;
+    internal System.Windows.Forms.ToolStripMenuItem m_deleteVersionMenuBT;
     internal System.Windows.Forms.SplitContainer SplitContainer1;
     internal System.Windows.Forms.Panel m_versionsTVPanel;
     internal System.Windows.Forms.TableLayoutPanel TableLayoutPanel2;
@@ -523,12 +547,15 @@ namespace FBI.MVC.View
     internal System.Windows.Forms.TextBox m_timeConfigTB;
     internal System.Windows.Forms.ComboBox m_startPeriodTextbox;
     internal System.Windows.Forms.TextBox m_nbPeriodsTextbox;
-    internal System.Windows.Forms.ToolStripMenuItem RenameMenuBT;
+    internal System.Windows.Forms.ToolStripMenuItem m_renameMenuBT;
     internal System.ComponentModel.BackgroundWorker BackgroundWorker1;
     internal System.Windows.Forms.Label m_globalFactsVersionLabel;
     internal VIBlend.WinForms.Controls.vTreeViewBox m_exchangeRatesVersionVTreeviewbox;
     internal VIBlend.WinForms.Controls.vTreeViewBox m_factsVersionVTreeviewbox;
 
     internal System.Windows.Forms.ImageList m_versionsTreeviewImageList;
+    private System.Windows.Forms.ToolStripMenuItem m_copyVersionRCMButton;
+    private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
+    private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
   }
 }

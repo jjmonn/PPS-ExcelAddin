@@ -158,7 +158,12 @@ namespace FBI.Forms
       return (interfaceType.IsAssignableFrom(type));
     }
 
-    private bool Load(MultiIndexDictionary<UInt32, String, T> p_items, MultiIndexDictionary<UInt32, String, T> p_icons = null)
+    bool Load(MultiIndexDictionary<UInt32, String, T> p_items, MultiIndexDictionary<UInt32, String, T> p_icons = null)
+    {
+      return (Load(Nodes, p_items, p_icons));
+    }
+
+    public static bool Load(vTreeNodeCollection p_nodes, MultiIndexDictionary<UInt32, String, T> p_items, MultiIndexDictionary<UInt32, String, T> p_icons = null)
     {
       if (Implements<NamedHierarchyCRUDEntity>(typeof(T)))
       {
@@ -167,26 +172,26 @@ namespace FBI.Forms
           if (l_item.ParentId == 0)
           {
             vTreeNode l_node = new vTreeNode();
-            if (!this.Generate(p_items, l_node, l_item.Id, p_icons))
+            if (!Generate(p_items, l_node, l_item.Id, p_icons))
               return (false);
-            this.Nodes.Add(l_node);
+            p_nodes.Add(l_node);
           }
         }
       }
       else
       {
-        foreach (NamedCRUDEntity l_item in m_items.SortedValues)
+        foreach (NamedCRUDEntity l_item in p_items.SortedValues)
         {
           vTreeNode l_node = new vTreeNode();
-          if (!this.Generate(p_items, l_node, l_item.Id, p_icons))
+          if (!Generate(p_items, l_node, l_item.Id, p_icons))
             return (false);
-          this.Nodes.Add(l_node);
+          p_nodes.Add(l_node);
         }
       }
       return (true);
     }
 
-    private bool Generate(MultiIndexDictionary<UInt32, String, T> p_items, vTreeNode p_node, UInt32 p_itemId, MultiIndexDictionary<UInt32, String, T> p_icons = null)
+    private static bool Generate(MultiIndexDictionary<UInt32, String, T> p_items, vTreeNode p_node, UInt32 p_itemId, MultiIndexDictionary<UInt32, String, T> p_icons = null)
     {
       if (Implements<NamedHierarchyCRUDEntity>(typeof(T)))
       {
@@ -201,7 +206,7 @@ namespace FBI.Forms
           if (l_item.ParentId == l_currentItem.Id)
           {
             vTreeNode l_node = new vTreeNode();
-            if (!this.Generate(p_items, l_node, l_item.Id, p_icons))
+            if (!Generate(p_items, l_node, l_item.Id, p_icons))
               return (false);
             p_node.Nodes.Add(l_node);
             if (p_icons != null)
@@ -213,7 +218,7 @@ namespace FBI.Forms
       }
       else
       {
-        NamedCRUDEntity l_currentItem = (NamedCRUDEntity)m_items[p_itemId];
+        NamedCRUDEntity l_currentItem = (NamedCRUDEntity)p_items[p_itemId];
 
         if (l_currentItem == null)
           return (false);

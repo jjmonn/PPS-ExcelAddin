@@ -15,17 +15,19 @@ namespace FBI.MVC.Controller
   public class VersionsController : NameController<VersionsView>
   {
     public override IView View { get { return (m_view); } }
+    private NewDataVersionUI m_newVersionView;
 
     public VersionsController()
     {
-      m_view = new VersionsView();
-      m_view.SetController(this);
       LoadView();
     }
 
     public override void LoadView()
     {
-    
+      m_view = new VersionsView();
+      m_view.SetController(this);
+      m_newVersionView = new NewDataVersionUI();
+      m_newVersionView.SetController(this);
     }
 
     #region Validity checks
@@ -100,7 +102,6 @@ namespace FBI.MVC.Controller
 
     #endregion
 
-
     public bool Create(Version p_version)
     {
       if (!IsVersionValid(p_version) || IsNameAlreadyUsed(p_version.Name))
@@ -133,5 +134,17 @@ namespace FBI.MVC.Controller
       VersionModel.Instance.Delete(p_version.Id);
       return (true);
     }
+
+    public void ShowNewVersionView()
+    {
+      m_newVersionView.Show();
+    }
+
+    public void ShowVersionCopyView()
+    {
+      // TO DO
+    }
+
+
   }
 }
