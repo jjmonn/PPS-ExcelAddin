@@ -162,6 +162,7 @@
     <Content Include="Resources\fbiIcon.ico" />
     <Content Include="Resources\filter_and_sort.ico" />
     <Content Include="Resources\Financial BI dark blue.ico" />
+    <None Include="Resources\Financial BI dark blue_add.png" />
     <Content Include="Resources\folder2.jpg" />
     <Content Include="Resources\folder_open_add.ico" />
     <Content Include="Resources\graph 5 ctrl bgd.png" />
