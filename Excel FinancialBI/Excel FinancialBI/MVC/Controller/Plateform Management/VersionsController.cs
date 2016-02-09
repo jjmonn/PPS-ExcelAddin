@@ -139,6 +139,11 @@ namespace FBI.MVC.Controller
 
     public void ShowNewVersionView(uint p_parentVersionId)
     {
+      Version l_parentVersion = VersionModel.Instance.GetValue(p_parentVersionId);
+      if (l_parentVersion == null || l_parentVersion.IsFolder == false)
+      {
+        p_parentVersionId = 0;
+      }
       m_newVersionView.m_parentId = p_parentVersionId;
       m_newVersionView.ShowDialog();
     }

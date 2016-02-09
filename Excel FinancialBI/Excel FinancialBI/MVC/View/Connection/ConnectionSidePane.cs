@@ -13,6 +13,7 @@ namespace FBI.MVC.View
 {
   using Controller;
   using Network;
+  using Utils;
 
   public partial class ConnectionSidePane : AddinExpress.XL.ADXExcelTaskPane
   {
@@ -23,19 +24,47 @@ namespace FBI.MVC.View
     public ConnectionSidePane()
     {
       InitializeComponent();
+   
+      EventsSubscribtion();
+      SetupMultilangue();
+      IsLoading = false;
+      ConnectionBT.Visible = true;
+    }
+
+    private void EventsSubscribtion()
+    {
       Authenticator.AuthenticationEvent += OnAuthentification;
       Addin.InitializationEvent += OnInitComplete;
       Addin.ConnectionStateEvent += OnConnectionChanged;
-      IsLoading = false;
+
+      this.ADXBeforeTaskPaneShow += new AddinExpress.XL.ADXBeforeTaskPaneShowEventHandler(this.ConnectionSidePane_ADXBeforeTaskPaneShow);
+      this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ConnectionSidePane_FormClosing);
+      this.ConnectionBT.Click += new System.EventHandler(this.ConnectionBT_Click);
+      this.m_cancelButton.Click += new System.EventHandler(this.m_cancelButton_Click);
+
     }
 
+    private void SetupMultilangue()
+    {
+      this.m_userLabel.Text = Local.GetValue("connection.user_id");
+      this.m_passwordLabel.Text = Local.GetValue("connection.password");
+      this.ConnectionBT.Text = Local.GetValue("connection.connection");
+      this.m_cancelButton.Text = Local.GetValue("general.cancel");
+      this.Text = Local.GetValue("connection.connection");
+    }
+
+    bool m_isloading;
     bool IsLoading
     {
       set
       {
+        m_isloading = value;
         ConnectionBT.Visible = !value;
-        m_cancelButton.Visible  = value;
+        m_cancelButton.Visible = value;
+        m_circularProgress2.Visible = value;
+        m_circularProgress2.Enabled = value;
       }
+      get { return m_isloading;}
     }
 
     #endregion
@@ -70,9 +99,9 @@ namespace FBI.MVC.View
       }
       else
       {
-        Hide();
         FBI.AddinModule.CurrentInstance.SetConnectionIcon(true);
         IsLoading = false;
+        Hide(); 
       }
     }
 
@@ -96,9 +125,16 @@ namespace FBI.MVC.View
 
     private void ConnectionBT_Click(object sender, EventArgs e)
     {
+
+      this.BackgroundWorker1 = new BackgroundWorker();
+      this.BackgroundWorker1.DoWork += BackgroundWorker1_DoWork;
+      this.BackgroundWorker1.RunWorkerCompleted += BackgroundWorker1_RunWorkerCompleted;
+      this.BackgroundWorker1.WorkerSupportsCancellation = true;
+
       IsLoading = true;
-      if (Addin.Connect(m_userNameTextBox.Text, m_passwordTextBox.Text) == false)
-        MessageBox.Show("The temporary connection function did not suceed.");
+      m_circularProgress2.Start();
+      BackgroundWorker1.RunWorkerAsync();
+     
     }
 
     private void m_cancelButton_Click(object sender, EventArgs e)
@@ -113,12 +149,47 @@ namespace FBI.MVC.View
 
     #endregion
 
+    #region Connection background worker
+
+
+    private void BackgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
+    {
+      if (Addin.Connect(m_userNameTextBox.Text, m_passwordTextBox.Text) == false)
+      {
+        this.BackgroundWorker1.CancelAsync();
+        MessageBox.Show(Local.GetValue("connection.msg_wrong_credentials"));     // TO DO: procedure
+      }
+      else
+      {
+        while (IsLoading == true) { }
+        bool test = IsLoading;
+      }
+    }
+
+    private delegate void AfterConnectionAttemp_Delegate(object sender, RunWorkerCompletedEventArgs e);
+    private void BackgroundWorker1_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+    {
+      if (InvokeRequired)
+      {
+        AfterConnectionAttemp_Delegate MyDelegate = new AfterConnectionAttemp_Delegate(BackgroundWorker1_RunWorkerCompleted);
+        this.Invoke(MyDelegate, new object[] {sender, e});
+      }
+      else
+      {
+      //  IsLoading = false;
+        m_circularProgress2.Stop();
+      }
+    }
+    
+    #endregion
+    
     private void ConnectionSidePane_FormClosing(object sender, FormClosingEventArgs e)
     {
       if (m_circularProgress2 != null) { m_circularProgress2.Stop(); }
       m_passwordTextBox.Text = "";
       e.Cancel = true;
     }
+
   }
 }
 

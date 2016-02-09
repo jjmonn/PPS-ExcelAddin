@@ -84,12 +84,16 @@ namespace FBI.Forms
 
     public void moveNodeUp(vTreeNode p_node)
     {
+      if (p_node == null)
+        return;
       Swap(p_node, p_node.PrevSiblingNode);
       this.Refresh();
     }
 
     public void moveNodeDown(vTreeNode p_node)
     {
+      if (p_node == null)
+        return;
       Swap(p_node, p_node.NextSiblingNode);
       this.Refresh();
     }
