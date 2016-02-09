@@ -101,6 +101,30 @@ namespace FBI.MVC.Model
       return (m_filterValuesDic[p_filterId]);
     }
 
+    public MultiIndexDictionary<UInt32, string, FilterValue> GetChildrenDictionary(UInt32 p_filterValueId)
+    {
+      MultiIndexDictionary<UInt32, string, FilterValue> l_resultDic = new MultiIndexDictionary<uint,string,FilterValue>();
+
+      foreach (MultiIndexDictionary<UInt32, string, FilterValue> l_dic in m_filterValuesDic.Values)
+        foreach (FilterValue l_fv in l_dic.Values)
+          if (l_fv.ParentId == p_filterValueId)
+            l_resultDic.Set(l_fv.Id, l_fv.Name, l_fv);
+      return (l_resultDic);
+    }
+
+    public void GetChildrenDictionary(UInt32 p_filterValueId, MultiIndexDictionary<UInt32, string, FilterValue> p_childrenDic)
+    {
+      MultiIndexDictionary<UInt32, string, Filter> l_resultDic = new MultiIndexDictionary<uint, string, Filter>();
+
+      foreach (dynamic l_fvDic in m_filterValuesDic.Values)
+        foreach (FilterValue l_fv in l_fvDic.Values)
+          if (l_fv.ParentId == p_filterValueId)
+          {
+            p_childrenDic.Set(l_fv.Id, l_fv.Name, l_fv);
+            GetChildrenDictionary(l_fv.Id, p_childrenDic);
+          }
+    }
+
     public SortedDictionary<UInt32, MultiIndexDictionary<UInt32, string, FilterValue>> GetDictionary()
     {
       return (m_filterValuesDic);

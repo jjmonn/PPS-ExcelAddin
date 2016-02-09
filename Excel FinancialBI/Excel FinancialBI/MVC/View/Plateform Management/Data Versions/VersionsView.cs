@@ -139,6 +139,7 @@ namespace FBI.MVC.View
 
     private void DisplayVersion(Version p_version)
     {
+      m_isDisplaying = true;
       if (p_version.IsFolder)
       {
         DisplayFolderVersion();
@@ -162,6 +163,7 @@ namespace FBI.MVC.View
         m_lockCombobox.Checked = false;
         LockedDateT.Text = Local.GetValue("facts_versions.version_not_locked");
       }
+      m_isDisplaying = false;
     }
 
     private void SetControlsEnabled(bool p_allowed)
@@ -299,7 +301,8 @@ namespace FBI.MVC.View
 
     private void OnClickCopyVersion(object sender, EventArgs e)
     {
-      m_controller.ShowVersionCopyView((uint)m_currentNode.Value);
+      if (m_currentNode != null)
+        m_controller.ShowVersionCopyView((uint)m_currentNode.Value);
     }
 
     private void OnClickNewFolder(object sender, EventArgs e)
@@ -485,7 +488,8 @@ namespace FBI.MVC.View
 
     private void VersionsTV_MouseDown(object sender, MouseEventArgs e)
     {
-      m_currentNode = m_versionsTreeview.FindAtPosition(new Point(e.X, e.Y));
+      if (m_versionsTreeview.FindAtPosition(new Point(e.X, e.Y)) != null)
+        m_currentNode = m_versionsTreeview.FindAtPosition(new Point(e.X, e.Y));
       if (m_currentNode != null && ModifierKeys.HasFlag(Keys.Control) == true)
       {
         m_versionsTreeview.DoDragDrop(m_currentNode, DragDropEffects.Move);
@@ -499,22 +503,26 @@ namespace FBI.MVC.View
       {
         Point location = m_versionsTreeview.PointToClient(Cursor.Position);
         vTreeNode l_targetNode = m_versionsTreeview.HitTest(location);
+        if (l_targetNode == null)
+          return;
 
-        uint l_parent_id = 0;
         Version l_targetVersion = VersionModel.Instance.GetValue((uint)l_targetNode.Value);
         
-        if (l_draggedNode.Equals(l_targetNode) == true || l_targetVersion == null 
-            || l_targetVersion.IsFolder == false)
+        if (l_draggedNode.Equals(l_targetNode) == true || l_targetVersion.IsFolder == false || l_draggedNode.Parent.Equals(l_targetNode.Value))
           return;
-       
-        if (l_targetNode != null)
-          l_parent_id = (uint)l_targetNode.Value;
-          
+             
         Version l_version = VersionModel.Instance.GetValue((uint)l_draggedNode.Value).Clone();
         if (l_version == null)
           return;
+
+        vTreeNode l_newNode = new vTreeNode();
+        l_newNode.Value = l_draggedNode.Value;
+        l_newNode.Text = l_draggedNode.Text;
+        l_newNode.ImageIndex = l_draggedNode.ImageIndex;
         l_draggedNode.Remove();
-        l_version.ParentId = l_parent_id;
+        m_versionsTreeview.DoDragDrop(l_draggedNode, DragDropEffects.None);
+        l_targetNode.Nodes.Add(l_newNode);
+        l_version.ParentId = (uint)l_targetNode.Value;
         m_controller.Update(l_version);
       }
     }

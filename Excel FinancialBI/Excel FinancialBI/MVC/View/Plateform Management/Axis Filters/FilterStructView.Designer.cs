@@ -43,7 +43,7 @@ namespace FBI.MVC.View
       this.VPanel1 = new VIBlend.WinForms.Controls.vPanel();
       this.m_filterPanel = new VIBlend.WinForms.Controls.vPanel();
       this.m_structureTreeviewRightClickMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
-      this.m_createCategoryUnderCurrentCategoryButton = new System.Windows.Forms.ToolStripMenuItem();
+      this.m_createSubCategory = new System.Windows.Forms.ToolStripMenuItem();
       this.m_renameButton = new System.Windows.Forms.ToolStripMenuItem();
       this.ToolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
       this.m_deleteButton = new System.Windows.Forms.ToolStripMenuItem();
@@ -68,7 +68,6 @@ namespace FBI.MVC.View
       this.m_addFilter.Text = "New";
       this.m_addFilter.UseVisualStyleBackColor = false;
       this.m_addFilter.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.OFFICESILVER;
-      this.m_addFilter.Click += new System.EventHandler(this.m_addFilter_Click);
       // 
       // EditButtonsImagelist
       // 
@@ -92,7 +91,6 @@ namespace FBI.MVC.View
       this.m_deleteFilter.Text = "Delete";
       this.m_deleteFilter.UseVisualStyleBackColor = false;
       this.m_deleteFilter.VIBlendTheme = VIBlend.Utilities.VIBLEND_THEME.OFFICESILVER;
-      this.m_deleteFilter.Click += new System.EventHandler(this.m_deleteFilter_Click);
       // 
       // VPanel1
       // 
@@ -145,19 +143,19 @@ namespace FBI.MVC.View
       // m_structureTreeviewRightClickMenu
       // 
       this.m_structureTreeviewRightClickMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.m_createCategoryUnderCurrentCategoryButton,
+            this.m_createSubCategory,
             this.m_renameButton,
             this.ToolStripSeparator1,
             this.m_deleteButton});
       this.m_structureTreeviewRightClickMenu.Name = "ContextMenuStripTV";
-      this.m_structureTreeviewRightClickMenu.Size = new System.Drawing.Size(247, 76);
+      this.m_structureTreeviewRightClickMenu.Size = new System.Drawing.Size(247, 98);
       // 
-      // m_createCategoryUnderCurrentCategoryButton
+      // m_createSubCategory
       // 
-      this.m_createCategoryUnderCurrentCategoryButton.Image = global::FBI.Properties.Resources.add;
-      this.m_createCategoryUnderCurrentCategoryButton.Name = "m_createCategoryUnderCurrentCategoryButton";
-      this.m_createCategoryUnderCurrentCategoryButton.Size = new System.Drawing.Size(246, 22);
-      this.m_createCategoryUnderCurrentCategoryButton.Text = "Create_category_under_category";
+      this.m_createSubCategory.Image = global::FBI.Properties.Resources.add;
+      this.m_createSubCategory.Name = "m_createSubCategory";
+      this.m_createSubCategory.Size = new System.Drawing.Size(246, 22);
+      this.m_createSubCategory.Text = "Create_category_under_category";
       // 
       // m_renameButton
       // 
@@ -177,7 +175,7 @@ namespace FBI.MVC.View
       this.m_deleteButton.Size = new System.Drawing.Size(246, 22);
       this.m_deleteButton.Text = "Delete";
       // 
-      // AxisFilterStructView
+      // FilterStructView
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -185,7 +183,7 @@ namespace FBI.MVC.View
       this.Controls.Add(this.m_filterPanel);
       this.Controls.Add(this.VPanel1);
       this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-      this.Name = "AxisFilterStructView";
+      this.Name = "FilterStructView";
       this.Text = "Categories";
       this.VPanel1.Content.ResumeLayout(false);
       this.VPanel1.ResumeLayout(false);
@@ -199,7 +197,7 @@ namespace FBI.MVC.View
     internal VIBlend.WinForms.Controls.vPanel VPanel1;
     internal VIBlend.WinForms.Controls.vPanel m_filterPanel;
     internal System.Windows.Forms.ContextMenuStrip m_structureTreeviewRightClickMenu;
-    internal System.Windows.Forms.ToolStripMenuItem m_createCategoryUnderCurrentCategoryButton;
+    internal System.Windows.Forms.ToolStripMenuItem m_createSubCategory;
     internal System.Windows.Forms.ToolStripMenuItem m_renameButton;
     internal System.Windows.Forms.ToolStripSeparator ToolStripSeparator1;
     internal System.Windows.Forms.ToolStripMenuItem m_deleteButton;

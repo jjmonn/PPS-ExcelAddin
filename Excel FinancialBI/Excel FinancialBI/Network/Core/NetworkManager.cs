@@ -86,14 +86,14 @@ namespace FBI.Network
         Debug.WriteLine("No valid entry point found.");
         return (false);
       }
-      m_StreamSSL = new SslStream(new NetworkStream(m_Sock), false,
-                new RemoteCertificateValidationCallback(ValidateServerCertificate),
-                null);
       try
       {
+        m_StreamSSL = new SslStream(new NetworkStream(m_Sock), false,
+          new RemoteCertificateValidationCallback(ValidateServerCertificate),
+          null);
         m_StreamSSL.AuthenticateAsClient("pps");
       }
-      catch (AuthenticationException e)
+      catch (Exception e)
       {
         Debug.WriteLine(e.Message);
         if (e.InnerException != null)

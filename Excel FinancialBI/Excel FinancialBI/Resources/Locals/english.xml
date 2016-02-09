@@ -223,13 +223,13 @@
       <string name="new_category">New category</string>
       <string name="new_value">New value</string>
       <string name="edit_structure">Edit structure</string>
-      <string name="create_sub_category">Create category under this category</string>
+      <string name="create_sub_category">Create a sub category</string>
       <string name="delete_category">Category deletion confirmation</string>
       <string name="delete_value">Value deletion confirmation</string>
     
      <!--messages-->
       <string name="msg_new_category_name">Please enter the new category name:</string>
-      <string name="msg_new_value_name">Please enter the new value:</string>
+      <string name="msg_new_value_name">Please enter the new value:</string>f
       <string name="msg_no_category_selected">A category must be selected in order to to this.</string>
       <string name="msg_delete_category">You are about to delete a category. Do you confirm ?</string>
       <string name="msg_delete_value">You are about to delete a value. Do you confirm ?</string>
@@ -544,6 +544,8 @@
     <string name="macro_economic_indicator">Macro Economic Indicator</string>
     <string name="log">Log</string>
 
+    <string name="warning">Warning</string>
+    
     <category name="error">
       <string name="name_in_use">This name is already in use.</string>
     </category>

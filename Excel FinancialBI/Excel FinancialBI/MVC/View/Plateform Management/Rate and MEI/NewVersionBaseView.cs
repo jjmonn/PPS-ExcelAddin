@@ -12,16 +12,16 @@ namespace FBI.MVC.View
 {
   using Controller;
 
-  public partial class NewGlobalFactVersionUI : Form, IView
+  public abstract partial class NewVersionBaseView : Form, IView
   {
-    public NewGlobalFactVersionUI()
+    public UInt32 SelectedParent { get; set;}
+
+    public NewVersionBaseView()
     {
       InitializeComponent();
     }
 
-    public void SetController(IController p_controller)
-    {
-
-    }
+    public abstract void SetController(IController p_controller);
+    public abstract void LoadView();
   }
 }

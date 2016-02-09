@@ -52,24 +52,13 @@ namespace FBI.MVC.Model
       return (count);
     }
 
-    public bool IsNameValid(ref string name)
+    public bool IsParent(UInt32 p_axisElemId)
     {
-/*
-      if (name.Length > NAMES_MAX_LENGTH)
-        return false;
-      foreach (char char_ in AXIS_NAME_FORBIDEN_CHARS)
-      {
-        if (name.Contains(char_))
-          return false;
-      }
-      if (string.IsNullOrEmpty(name))
-        return false;
-      foreach (AxisType axis in m_CRUDDic.Keys)
-      {
-        if ((m_CRUDDic[axis][name] != null))
-          return false;
-      }*/
-      return true;
+      foreach (MultiIndexDictionary<UInt32, string, AxisElem> l_axisElemDic in m_CRUDDic.Values)
+        foreach (AxisElem l_axisElem in l_axisElemDic.Values)
+          if (l_axisElem.ParentId == p_axisElemId)
+            return (true);
+      return (false);
     }
 
     #endregion
