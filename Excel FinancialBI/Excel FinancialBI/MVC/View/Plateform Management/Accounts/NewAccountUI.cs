@@ -61,8 +61,8 @@ namespace FBI.MVC.View
       {
         if (this.m_controller.AccountNameCheck(this.NameTextBox.Text))
         {
-          UInt32 l_parentId;
-          Int32 l_itemPosition;
+          UInt32 l_parentId = 0;
+          Int32 l_itemPosition = 0;
           Account l_parentAccount;
 
           if (this.m_parentAccountsTreeviewBox.TreeView.SelectedNode != null)
@@ -81,8 +81,17 @@ namespace FBI.MVC.View
           }
           else
           {
-            l_parentId = 0;
-            l_itemPosition = 0;
+            if ((Account.FormulaTypes)this.FormulaComboBox.SelectedItem.Value == Account.FormulaTypes.TITLE)
+            {
+              l_parentId = 0;
+              l_itemPosition = 0;
+            }
+            else
+            {
+              MessageBox.Show(Local.GetValue("accounts_edition.msg_select_parent_account"), Local.GetValue("general.accounts"),
+                  MessageBoxButtons.OK, MessageBoxIcon.Warning);
+              return;
+            }
           }
 
           Account.ConsolidationOptions l_concolidation;

@@ -96,6 +96,7 @@
     <string name="msg_account_deletion1">Careful, you are about to delete account </string>
     <string name="msg_account_deletion2">Do you confirm? </string>
     <string name="msg_account_deletion3">This Account and all its Sub Accounts will be deleted.</string>
+    <string name="msg_account_deletion4">Please enter your password.</string>
     <string name="msg_account_deletion_confirmation">Account deletion confirmation</string>  
     <string name="msg_incorrect_password">Incorrect password</string>
     <string name="msg_destination_cell_not_valid">A destination cell must be selected in order to drop the Accounts on the Worksheet.</string>
