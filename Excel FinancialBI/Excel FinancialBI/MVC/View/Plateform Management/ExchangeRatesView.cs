@@ -43,6 +43,7 @@ namespace FBI.MVC.View
 
     protected override void SuscribeEvents()
     {
+      base.SuscribeEvents();
       m_versionTV.NodeMouseDown += OnNodeSelect;
       m_dgv.CellChangedAndValidated += OnCellChanged;
       CopyRateDownToolStripMenuItem.Click += CopyValueDown;
@@ -204,7 +205,7 @@ namespace FBI.MVC.View
 
       UInt32 l_currencyId = (UInt32)m_dgv.HoveredColumn.ItemValue;
       UInt32 l_versionId = m_controller.SelectedVersion;
-      double l_value = Convert.ToDouble(l_cell.Value); // bug parfois string parfois double
+      double l_value = Convert.ToDouble(l_cell.Value);
       for (int i = m_dgv.HoveredRow.ItemIndex; i < m_dgv.RowsHierarchy.Items.Count; ++i)
       {
         UInt32 l_period = (UInt32)m_dgv.RowsHierarchy.Items[i].ItemValue;
