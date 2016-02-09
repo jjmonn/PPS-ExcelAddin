@@ -6,7 +6,7 @@ using System.Diagnostics;
 
 namespace FBI.MVC.View
 {
-  partial class FiltersView : System.Windows.Forms.UserControl
+  partial class FilterView : System.Windows.Forms.UserControl
   {
 
     //UserControl overrides dispose to clean up the component list.
@@ -36,15 +36,10 @@ namespace FBI.MVC.View
     private void InitializeComponent()
     {
       this.components = new System.ComponentModel.Container();
-      System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FiltersView));
+      System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FilterView));
       this.m_valuePanel = new System.Windows.Forms.TableLayoutPanel();
       this.ImageList1 = new System.Windows.Forms.ImageList(this.components);
       this.MenuStrip1 = new System.Windows.Forms.MenuStrip();
-      this.m_categoriesMenu = new System.Windows.Forms.ToolStripMenuItem();
-      this.m_addValue = new System.Windows.Forms.ToolStripMenuItem();
-      this.m_delete = new System.Windows.Forms.ToolStripMenuItem();
-      this.m_rename = new System.Windows.Forms.ToolStripMenuItem();
-      this.ToolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
       this.m_editStruct = new System.Windows.Forms.ToolStripMenuItem();
       this.m_contextRightClick = new System.Windows.Forms.ContextMenuStrip(this.components);
       this.m_addValueRightClick = new System.Windows.Forms.ToolStripMenuItem();
@@ -82,7 +77,6 @@ namespace FBI.MVC.View
       // MenuStrip1
       // 
       this.MenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.m_categoriesMenu,
             this.m_editStruct});
       this.MenuStrip1.Location = new System.Drawing.Point(0, 0);
       this.MenuStrip1.Name = "MenuStrip1";
@@ -90,48 +84,11 @@ namespace FBI.MVC.View
       this.MenuStrip1.TabIndex = 2;
       this.MenuStrip1.Text = "MenuStrip1";
       // 
-      // m_categoriesMenu
-      // 
-      this.m_categoriesMenu.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.m_addValue,
-            this.m_delete,
-            this.m_rename,
-            this.ToolStripSeparator3});
-      this.m_categoriesMenu.Image = global::FBI.Properties.Resources.element_branch25;
-      this.m_categoriesMenu.Name = "m_categoriesMenu";
-      this.m_categoriesMenu.Size = new System.Drawing.Size(91, 20);
-      this.m_categoriesMenu.Text = "Categories";
-      // 
-      // m_addValue
-      // 
-      this.m_addValue.Name = "m_addValue";
-      this.m_addValue.Size = new System.Drawing.Size(152, 22);
-      this.m_addValue.Text = "New value";
-      // 
-      // m_delete
-      // 
-      this.m_delete.Image = global::FBI.Properties.Resources.imageres_891;
-      this.m_delete.Name = "m_delete";
-      this.m_delete.Size = new System.Drawing.Size(152, 22);
-      this.m_delete.Text = "Delete";
-      // 
-      // m_rename
-      // 
-      this.m_rename.Name = "m_rename";
-      this.m_rename.Size = new System.Drawing.Size(152, 22);
-      this.m_rename.Text = "Rename";
-      // 
-      // ToolStripSeparator3
-      // 
-      this.ToolStripSeparator3.Name = "ToolStripSeparator3";
-      this.ToolStripSeparator3.Size = new System.Drawing.Size(149, 6);
-      // 
       // m_editStruct
       // 
       this.m_editStruct.Name = "m_editStruct";
       this.m_editStruct.Size = new System.Drawing.Size(89, 20);
       this.m_editStruct.Text = "Edit structure";
-      this.m_editStruct.Click += new System.EventHandler(this.m_editStruct_Click_1);
       // 
       // m_contextRightClick
       // 
@@ -188,13 +145,13 @@ namespace FBI.MVC.View
       this.m_collapse.Size = new System.Drawing.Size(134, 22);
       this.m_collapse.Text = "Collapse all";
       // 
-      // FiltersView
+      // FilterView
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
       this.Controls.Add(this.MenuStrip1);
       this.Controls.Add(this.m_valuePanel);
-      this.Name = "FiltersView";
+      this.Name = "FilterView";
       this.Size = new System.Drawing.Size(525, 430);
       this.MenuStrip1.ResumeLayout(false);
       this.MenuStrip1.PerformLayout();
@@ -206,17 +163,12 @@ namespace FBI.MVC.View
     internal System.Windows.Forms.TableLayoutPanel m_valuePanel;
     internal System.Windows.Forms.ImageList ImageList1;
     internal System.Windows.Forms.MenuStrip MenuStrip1;
-    internal System.Windows.Forms.ToolStripMenuItem m_categoriesMenu;
-    internal System.Windows.Forms.ToolStripMenuItem m_addValue;
-    internal System.Windows.Forms.ToolStripMenuItem m_rename;
-    internal System.Windows.Forms.ToolStripMenuItem m_delete;
     internal System.Windows.Forms.ContextMenuStrip m_contextRightClick;
     internal System.Windows.Forms.ToolStripMenuItem m_addValueRightClick;
     internal System.Windows.Forms.ToolStripSeparator ToolStripSeparator2;
     internal System.Windows.Forms.ToolStripMenuItem m_renameRightClick;
     internal System.Windows.Forms.ToolStripSeparator ToolStripSeparator1;
     internal System.Windows.Forms.ToolStripMenuItem m_deleteRightClick;
-    internal System.Windows.Forms.ToolStripSeparator ToolStripSeparator3;
     internal System.Windows.Forms.ToolStripMenuItem m_expand;
     internal System.Windows.Forms.ToolStripMenuItem m_collapse;
 

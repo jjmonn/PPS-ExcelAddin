@@ -104,7 +104,18 @@ namespace FBI.Utils
         id = m_id;
         ++m_id;
       }
-
+      foreach (KeyValuePair<KeyA, UInt32> pair in m_firstDic)
+        if (pair.Value == id)
+        {
+          m_firstDic.Remove(pair.Key);
+          break;
+        }
+      foreach (KeyValuePair<KeyB, UInt32> pair in m_secondDic)
+        if (pair.Value == id)
+        {
+          m_secondDic.Remove(pair.Key);
+          break;
+        }
       m_firstDic[p_keyA] = id;
       m_secondDic[p_keyB] = id;
       m_mainDic[id] = p_value;
@@ -177,6 +188,11 @@ namespace FBI.Utils
       dest.m_id = m_id;
       dest.m_mainDic = m_mainDic as Dictionary<uint, DValue>;
       return dest;
+    }
+
+    public Value AtIndex(uint p_index)
+    {
+      return (m_mainDic[p_index]);
     }
   }
 }
