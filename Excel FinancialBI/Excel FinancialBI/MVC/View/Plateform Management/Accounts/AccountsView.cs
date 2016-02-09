@@ -37,9 +37,10 @@ namespace FBI.MVC.View
     private Dictionary<Account.ConversionOptions, ListItem> m_currenciesConversionIdItemDict = new Dictionary<Account.ConversionOptions, ListItem>();
     private SafeDictionary<Account.ConsolidationOptions, ListItem> m_consoOptionIdItemDict = new SafeDictionary<Account.ConsolidationOptions, ListItem>();
     private SafeDictionary<Account.AccountProcess, ListItem> m_processIdItemDict = new SafeDictionary<Account.AccountProcess, ListItem>();
-    private Boolean m_dragAndDropFlag = false;
-    private Boolean m_isDisplayingAccountFlag = false;
-    private Boolean m_isEditingFormulaFlag = false;
+    private bool m_dragAndDropFlag = false;
+    private bool m_isDisplayingAccountFlag = false;
+    private bool m_isEditingFormulaFlag = false;
+    private string m_saveFormula = "";
 
     private const UInt32 MARGIN_SIZE = 15;
     private const UInt32 ACCOUNTS_VIEW_TV_MAX_WIDTH = 600;
@@ -73,16 +74,7 @@ namespace FBI.MVC.View
       this.GlobalFactsTVInit();
       this.ComboBoxesInit();
 
-      AccountModel.Instance.UpdateEvent += OnModelUpdate;
-      AccountModel.Instance.ReadEvent += OnModelRead;
-      AccountModel.Instance.CreationEvent += OnModelCreation;
-      AccountModel.Instance.DeleteEvent += OnModelDelete;
-
-      this.AddCategoryToolStripMenuItem.Click += OnAddCategoryToolStripMenuItemClick;
-      this.CreateANewCategoryToolStripMenuItem.Click += OnAddCategoryToolStripMenuItemClick;
-      this.SaveDescriptionBT.Click += OnSaveDescriptionBTClick;
-      this.DeleteAccountToolStripMenuItem.Click += OnCheckDeleteAccount;
-      this.DeleteAccountToolStripMenuItem1.Click += OnCheckDeleteAccount;
+      this.InitGeneralEvent();
 
       this.DefineUIPermissions();
       //this.DesactivateUnallowed();
@@ -92,21 +84,99 @@ namespace FBI.MVC.View
       this.SetFormulaEditionState(false);
     }
 
-    private void OnAddCategoryToolStripMenuItemClick(object p_sender, EventArgs p_e)
+    private void InitGeneralEvent()
+    {
+      AccountModel.Instance.UpdateEvent += OnModelUpdate;
+      AccountModel.Instance.ReadEvent += OnModelRead;
+      AccountModel.Instance.CreationEvent += OnModelCreation;
+      AccountModel.Instance.DeleteEvent += OnModelDelete;
+
+      this.AddCategoryToolStripMenuItem.Click += OnAddCategoryClick;
+      this.CreateANewCategoryToolStripMenuItem.Click += OnAddCategoryClick;
+      this.SaveDescriptionBT.Click += OnSaveDescriptionBTClick;
+      this.DeleteAccountToolStripMenuItem.Click += OnCheckDeleteAccount;
+      this.DeleteAccountToolStripMenuItem1.Click += OnCheckDeleteAccount;
+      this.Name_TB.KeyDown += OnNameTextBoxKeyDown;
+      this.CreateANewAccountToolStripMenuItem.Click += OnNewAccountClick;
+      this.AddSubAccountToolStripMenuItem.Click += OnNewAccountClick;
+      this.m_formulaEditionButton.Click += OnFormulaEditionButtonClick;
+      this.m_cancelFormulaEditionButton.Click += OnCancelFormulaEditionButtonClick;
+      this.m_validateFormulaButton.Click += OnValidateFormulaButtonClick;
+    }
+
+    private void OnValidateFormulaButtonClick(object p_sender, EventArgs p_e)
+    {
+      this.OnCancelFormulaEditionButtonClick(p_sender, p_e);
+      return; //TODO : do check
+      if (m_currentNode != null)
+      {
+        if (AccountModel.Instance.GetValue((UInt32)this.m_currentNode.Value) != null)
+        {
+          Account l_currentAccount = AccountModel.Instance.GetValue((UInt32)this.m_currentNode.Value).Clone();
+          l_currentAccount.Formula = m_formulaTextBox.Text;
+          this.m_controller.UpdateAccount(l_currentAccount);
+        }
+      }
+    }
+
+    private void OnCancelFormulaEditionButtonClick(object p_sender, EventArgs p_e)
+    {
+      this.m_formulaTextBox.Text = this.m_saveFormula;
+      this.SetEditingFormulaUI(false);
+    }
+
+    private void SetEditingFormulaUI(bool p_state)
+    {
+      this.m_isEditingFormulaFlag = p_state;
+      this.m_formulaEditionButton.Visible = !p_state;
+      this.m_validateFormulaButton.Visible = p_state;
+      this.m_validateFormulaButton.Enabled = p_state;
+      this.m_cancelFormulaEditionButton.Visible = p_state;
+      this.m_cancelFormulaEditionButton.Enabled = p_state;
+      this.m_formulaTextBox.Enabled = p_state;
+      if (p_state == false)
+        this.m_formulaTextBox.BackColor = Color.LightGray;
+      else
+        this.m_formulaTextBox.BackColor = Color.White;
+    }
+
+    private void OnFormulaEditionButtonClick(object p_sender, EventArgs p_e)
+    {
+      this.m_saveFormula = this.m_formulaTextBox.Text;
+      this.SetEditingFormulaUI(true);
+    }
+
+    private void OnNewAccountClick(object p_sender, EventArgs p_e)
+    {
+      this.m_controller.CreateNewUI(this.m_accountTV.SelectedNode);
+    }
+
+    private void OnNameTextBoxKeyDown(object p_sender, KeyEventArgs p_e)
+    {
+      if (p_e.KeyCode == Keys.Enter)
+      {
+        if (m_currentNode != null)
+        {
+          if (AccountModel.Instance.GetValue((UInt32)this.m_currentNode.Value) != null)
+          {
+            Account l_currentAccount = AccountModel.Instance.GetValue((UInt32)this.m_currentNode.Value).Clone();
+            l_currentAccount.Name = Name_TB.Text;
+            this.m_controller.UpdateAccount(l_currentAccount);
+          }
+        }
+      }
+    }
+
+    private void OnAddCategoryClick(object p_sender, EventArgs p_e)
     {
       m_isEditingFormulaFlag = false;
 
       string l_nameAccount = Interaction.InputBox(Local.GetValue("accounts_edition.msg_new_tab_name"), 
                                                  Local.GetValue("accounts_edition.title_new_tab_name"), "");
       if (l_nameAccount != "")
-      {
-        bool l = this.m_controller.AccountNameCheck(l_nameAccount);
         if (this.m_controller.AccountNameCheck(l_nameAccount))
-        {
-          l_nameAccount = "swa";
-          return; //TODO : what 
-        }
-      }
+          this.m_controller.CreateAccount(0, l_nameAccount, Account.AccountProcess.FINANCIAL, Account.FormulaTypes.TITLE, "", Account.AccountType.DATE_, Account.ConsolidationOptions.AGGREGATION,
+            Account.PeriodAggregationOptions.AVERAGE_PERIOD, "t", (UInt32)Account.FormulaTypes.TITLE, this.m_accountTV.Nodes.Count);
     }
 
     private void DesactivateUnallowed()
@@ -137,25 +207,7 @@ namespace FBI.MVC.View
     private void OnCheckDeleteAccount(object p_sender, EventArgs p_e)
     {
       if (this.m_accountTV.SelectedNode != null)
-      {
-        List<String> l_dependantAccounts = this.m_controller.ExistingDependantAccounts(this.m_accountTV.SelectedNode);
-        if (l_dependantAccounts.Count > 0)
-        {
-          string l_msg = "";
-          foreach (string l_account in l_dependantAccounts)
-            l_msg += " - " + l_account + "\n\r";
-          MessageBox.Show(Local.GetValue("accounts_edition.msg_dependant_accounts") + "\n\r" +
-                       l_msg + "\n\r" +
-                       Local.GetValue("accounts_edition.msg_formula_to_be_changed"), "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning); //TODO : maybe warning on xml
-        }
-        else
-        {
-          PasswordBox l_passwordBox = new PasswordBox();
-          //TODO : Do
-          l_passwordBox.Show();
-          this.m_controller.DeleteAccount((UInt32)this.m_accountTV.SelectedNode.Value);
-        }
-      }
+        this.m_controller.DeleteAccount(this.m_accountTV.SelectedNode);
     }
 
     private void OnSaveDescriptionBTClick(object p_sender, EventArgs p_e)
@@ -173,14 +225,36 @@ namespace FBI.MVC.View
 
     private void OnModelCreation(ErrorMessage p_status, uint p_id)
     {
-      throw new NotImplementedException();
+      if (p_status != ErrorMessage.SUCCESS)
+      {
+        throw new NotImplementedException();
+      }
     }
 
     private void OnModelRead(ErrorMessage p_status, Account p_attributes)
     {
-      if (p_status != Network.ErrorMessage.SUCCESS)
+      if (this.m_accountTV.FindNode(p_attributes.Id) != null)
       {
-        //TODO : check every error
+        vTreeNode l_oldNode = this.m_accountTV.FindNode(p_attributes.Id);
+        l_oldNode.Text = p_attributes.Name;
+        l_oldNode.ImageIndex = (Int32)p_attributes.Image;
+        /*if (this.m_currentNode == l_oldNode)
+        {
+          this.DisplayAttributes();
+          //this.DesactivateUnallowed(); //TODO : watch out
+        }*/
+      }
+      else
+      {
+        if (p_attributes.ParentId == 0)
+        {
+          vTreeNode l_node = new vTreeNode();
+          l_node.Value = p_attributes.Id;
+          l_node.Text = p_attributes.Name;
+          l_node.ImageIndex = (Int32)p_attributes.Image;
+          this.m_accountTV.Add(l_node);
+          this.m_accountTV.Refresh();
+        }
       }
     }
 
@@ -194,7 +268,16 @@ namespace FBI.MVC.View
 
     private void OnModelDelete(ErrorMessage p_status, uint p_id)
     {
-      throw new NotImplementedException();
+      if (p_status != ErrorMessage.SUCCESS)
+      {
+        throw new NotImplementedException();
+      }
+      /*vTreeNode l_toDelete = this.m_accountTV.FindNode(p_id);
+      if (l_toDelete != null)
+      {
+        //this.m_accountTV.Remove(l_toDelete);
+        this.Refresh();
+      }*/
     }
 
     private void MultilangueSetup()
@@ -241,7 +324,6 @@ namespace FBI.MVC.View
         this.m_descriptionTextBox.BackColor = Color.LightGray;
       this.ConsolidationOptionComboBox.Enabled = p_uiState;
       this.m_validateFormulaButton.Enabled = p_uiState;
-      this.m_formulaEditionButton.Enabled = p_uiState;
     }
 
     private void AccountsTVInit()
@@ -255,28 +337,40 @@ namespace FBI.MVC.View
       this.m_accountTV.BorderColor = Color.Transparent;
       this.AccountsTVPanel.Controls.Add(m_accountTV);
 
-      //TODO : do event
       this.m_accountTV.KeyDown += OnAccountTVKeyDown;
       this.m_accountTV.MouseDown += OnAccountTVMouseDown;
       this.m_accountTV.DragOver += OnAccountTVDragOver;
       this.m_accountTV.DragDrop += OnAccountTVDragDrop;
       this.m_accountTV.AfterSelect += OnAccountTVAfterSelect;
+      this.m_accountTV.MouseDoubleClick += OnAccountTVMouseDoubleClick;
+    }
+
+    void OnAccountTVMouseDoubleClick(object p_sender, EventArgs p_e)
+    {
+      if (this.m_isEditingFormulaFlag == true)
+      {
+        /*vTreeNode l_node = this.m_accountTV.FindAtPosition(p_e.Location);
+        if (l_node != null)
+          this.m_formulaTextBox.Text += l_node.Text;*/
+      }
     }
 
     private void OnAccountTVKeyDown(object p_sender, KeyEventArgs p_e)
     {
-      if (p_e.KeyCode == Keys.Down) //TODO : Maybe switch
+      switch (p_e.KeyCode)
       {
-        if (p_e.Control == true)
-          this.m_accountTV.moveNodeDown(this.m_accountTV.SelectedNode);
+        case Keys.Down:
+          if (p_e.Control == true)
+            this.m_accountTV.moveNodeDown(this.m_accountTV.SelectedNode);
+          break;
+        case Keys.Up:
+          if (p_e.Control == true)
+            this.m_accountTV.moveNodeUp(this.m_accountTV.SelectedNode);
+          break;
+        case Keys.Delete:
+          OnCheckDeleteAccount(p_sender, p_e);
+          break;
       }
-      if (p_e.KeyCode == Keys.Up)
-      {
-        if (p_e.Control == true)
-          this.m_accountTV.moveNodeUp(this.m_accountTV.SelectedNode);
-      }
-      if (p_e.KeyCode == Keys.Delete || p_e.KeyCode == Keys.X) //TODO : not X
-        OnCheckDeleteAccount(p_sender, p_e);
     }
 
     private void OnAccountTVDragDrop(object p_sender, DragEventArgs p_e)
@@ -298,12 +392,10 @@ namespace FBI.MVC.View
         TVRCM.Show(p_e.Location);
         TVRCM.Visible = true;
       }
-      if (p_e.Button == MouseButtons.Left) // TODO : see for keydown
+      /*if (p_e.Button == MouseButtons.Left)
       {
-        vTreeNode l_node = this.m_accountTV.FindAtPosition(p_e.Location);
-        if (l_node != null)
-          this.m_accountTV.DoDragDrop(l_node, DragDropEffects.Move);
-      }
+
+      }*/
     }
 
     private void OnAccountTVDragOver(object p_sender, DragEventArgs p_e)
@@ -331,6 +423,10 @@ namespace FBI.MVC.View
         else
           this.m_accountTV.Capture = false;
       }
+      else
+      {
+        ((FbiTreeView<Account>)p_sender).SelectedNode = this.m_currentNode;
+      }
     }
 
     private void GlobalFactsTVInit()
@@ -341,7 +437,6 @@ namespace FBI.MVC.View
       this.m_globalFactsTV.ImageList = m_globalFactsImageList;
       this.GlobalFactsPanel.Controls.Add(m_globalFactsTV);
 
-      //TODO : see event
       this.m_globalFactsTV.MouseDown += OnGlobalFactsTVMouseDown;
       this.m_globalFactsTV.DragEnter += OnGlobalFactsTVDragEnter;
     }
@@ -451,12 +546,6 @@ namespace FBI.MVC.View
       this.TypeComboBox.SelectedItemChanged += OnTypeComboBoxSelectedItemChanged;
 
       // Currencies Conversion
-      ListItem l_noConversionLI = new ListItem();
-      l_noConversionLI.Text = "Non Converted";
-      l_noConversionLI.Value = Account.ConversionOptions.NO_CONVERSION;
-      this.CurrencyConversionComboBox.Items.Add(l_noConversionLI);
-      this.m_currenciesConversionIdItemDict[(Account.ConversionOptions)l_noConversionLI.Value] = l_noConversionLI;
-
       ListItem l_averageRateLI = new ListItem();
       l_averageRateLI.Text = "Average Exchange Rate";
       l_averageRateLI.Value = Account.ConversionOptions.AVERAGE_RATE;
@@ -501,7 +590,7 @@ namespace FBI.MVC.View
     {
       if (this.m_isDisplayingAccountFlag == false && m_currentNode != null)
       {
-        if (AccountModel.Instance.GetValue((UInt32)this.m_currentNode.Value) != null)
+        if (AccountModel.Instance.GetValue((UInt32)this.m_currentNode.Value) != null && ((vComboBox)p_sender).SelectedItem != null)
         {
           Account l_currentAccount = AccountModel.Instance.GetValue((UInt32)this.m_currentNode.Value).Clone();
           l_currentAccount.Process = (Account.AccountProcess)((vComboBox)p_sender).SelectedItem.Value;
@@ -512,14 +601,26 @@ namespace FBI.MVC.View
 
     private void OnTypeComboBoxSelectedItemChanged(object p_sender, EventArgs p_e)
     {
-      if (this.m_isDisplayingAccountFlag == false && m_currentNode != null)
+      if (m_currentNode == null)
+        return;
+      if (this.m_isDisplayingAccountFlag == false)
       {
-        if (AccountModel.Instance.GetValue((UInt32)this.m_currentNode.Value) != null)
+        if (AccountModel.Instance.GetValue((UInt32)this.m_currentNode.Value) != null && ((vComboBox)p_sender).SelectedItem != null)
         {
           Account l_currentAccount = AccountModel.Instance.GetValue((UInt32)this.m_currentNode.Value).Clone();
           l_currentAccount.Type = (Account.AccountType)((vComboBox)p_sender).SelectedItem.Value;
           this.m_controller.UpdateAccount(l_currentAccount);
         }
+      }
+      if ((Account.AccountType)((vComboBox)p_sender).SelectedItem.Value == Account.AccountType.MONETARY)
+      {
+        this.CurrencyConversionComboBox.Visible = true;
+        this.m_accountCurrenciesConversionLabel.Visible = true;
+      }
+      else
+      {
+        this.CurrencyConversionComboBox.Visible = false;
+        this.m_accountCurrenciesConversionLabel.Visible = false;
       }
     }
 
@@ -527,7 +628,7 @@ namespace FBI.MVC.View
     {
       if (this.m_isDisplayingAccountFlag == false && m_currentNode != null)
       {
-        if (AccountModel.Instance.GetValue((UInt32)this.m_currentNode.Value) != null)
+        if (AccountModel.Instance.GetValue((UInt32)this.m_currentNode.Value) != null && ((vComboBox)p_sender).SelectedItem != null)
         {
           Account l_currentAccount = AccountModel.Instance.GetValue((UInt32)this.m_currentNode.Value).Clone();
           l_currentAccount.ConversionOptionId = (Account.ConversionOptions)((vComboBox)p_sender).SelectedItem.Value;
@@ -540,7 +641,7 @@ namespace FBI.MVC.View
     {
       if (this.m_isDisplayingAccountFlag == false && m_currentNode != null)
       {
-        if (AccountModel.Instance.GetValue((UInt32)this.m_currentNode.Value) != null)
+        if (AccountModel.Instance.GetValue((UInt32)this.m_currentNode.Value) != null && ((vComboBox)p_sender).SelectedItem != null)
         {
           Account l_currentAccount = AccountModel.Instance.GetValue((UInt32)this.m_currentNode.Value).Clone();
           l_currentAccount.ConsolidationOptionId = (Account.ConsolidationOptions)((vComboBox)p_sender).SelectedItem.Value;
@@ -551,9 +652,14 @@ namespace FBI.MVC.View
 
     private void OnFormulaTypeComboBoxSelectedItemChanged(object p_sender, EventArgs p_e)
     {
-      if (this.m_isDisplayingAccountFlag == false)
+      if (this.m_isDisplayingAccountFlag == false && m_currentNode != null)
       {
-        //Account l_currentAccount = AccountModel.Instance.GetValue((UInt32)this.m_currentNode.Value).Clone();
+        if (AccountModel.Instance.GetValue((UInt32)this.m_currentNode.Value) != null && ((vComboBox)p_sender).SelectedItem != null)
+        {
+          Account l_currentAccount = AccountModel.Instance.GetValue((UInt32)this.m_currentNode.Value).Clone();
+          l_currentAccount.FormulaType = (Account.FormulaTypes)((vComboBox)p_sender).SelectedItem.Value;
+          this.m_controller.UpdateAccount(l_currentAccount);
+        }
       }
     }
 
@@ -563,7 +669,7 @@ namespace FBI.MVC.View
       this.m_formulaTextBox.Enabled = p_state;
       this.m_validateFormulaButton.Visible = p_state;
       this.m_cancelFormulaEditionButton.Visible = p_state;
-      this.m_formulaEditionButton.Visible = p_state = false;
+      this.m_formulaEditionButton.Visible = p_state;
       if (p_state == true)
         this.m_formulaTextBox.BackColor = Color.White;
       else
@@ -575,11 +681,13 @@ namespace FBI.MVC.View
       if ((this.m_currentNode != null) && this.m_isEditingFormulaFlag == false)
       {
         this.m_isDisplayingAccountFlag = true;
-        Boolean l_error = false;
 
         Account l_account = AccountModel.Instance.GetValue((UInt32)this.m_currentNode.Value);
         if (l_account == null)
+        {
+          this.m_isDisplayingAccountFlag = false;
           return;
+        }
 
         //Name
         this.Name_TB.Text = m_currentNode.Text;
@@ -590,8 +698,6 @@ namespace FBI.MVC.View
           ListItem l_processLI = m_processIdItemDict[l_account.Process];
           this.ProcessComboBox.SelectedItem = l_processLI;
         }
-        else
-          l_error = true;
 
         //Formula Type
         if (this.m_formulasTypesIdItemDict.ContainsKey(l_account.FormulaType))
@@ -603,12 +709,10 @@ namespace FBI.MVC.View
           if (this.m_currentNode.Parent == null)
             l_isRootAccount = true;
           if ((Account.FormulaTypes)l_formulaTypeLI.Value == Account.FormulaTypes.TITLE)
-            this.SetEnableStatusEdition(false, l_isRootAccount, l_account.FormulaType);
+            this.SetEnableStatusEdition(false, l_isRootAccount, l_account);
           else
-            this.SetEnableStatusEdition(true, l_isRootAccount, l_account.FormulaType);
+            this.SetEnableStatusEdition(true, l_isRootAccount, l_account);
         }
-        else
-          l_error = true;
 
         if (this.m_formatsIdItemDict.ContainsKey(l_account.Type))
         {
@@ -622,13 +726,6 @@ namespace FBI.MVC.View
               this.CurrencyConversionComboBox.SelectedItem = conversionLI;
             }
           }
-          else
-            l_error = true;
-        }
-        else
-        {
-          this.TypeComboBox.SelectedItem = null;
-          this.TypeComboBox.Text = "";
         }
 
         //Consolidation
@@ -637,8 +734,6 @@ namespace FBI.MVC.View
           ListItem consolidationLI = this.m_consoOptionIdItemDict[l_account.ConsolidationOptionId];
           this.ConsolidationOptionComboBox.SelectedItem = consolidationLI;
         }
-        else
-          l_error = true;
 
         // Formula TB
         //if (m_controller.m_formulaTypesToBeTested.Contains(l_account.FormulaType))
@@ -648,26 +743,24 @@ namespace FBI.MVC.View
         m_formulaTextBox.Text = l_account.Formula;
 
         //Description
-        this.m_descriptionTextBox.BackColor = Color.White;
         this.m_descriptionTextBox.Text = l_account.Description;
-
-        if (l_error == true)
-        {
-          //TODO : message box with error
-        }
 
         this.m_isDisplayingAccountFlag = false;
       }
     }
 
-    private void SetEnableStatusEdition(Boolean p_status, Boolean p_isRootAccount, Account.FormulaTypes p_accountFormulaType)
+    private void SetEnableStatusEdition(Boolean p_status, Boolean p_isRootAccount, Account p_account)
     {
+      if (p_account == null)
+        return;
       if (p_isRootAccount == true)
         this.FormulaTypeComboBox.Enabled = p_status;
-      if (p_accountFormulaType == Account.FormulaTypes.FORMULA | p_accountFormulaType == Account.FormulaTypes.FIRST_PERIOD_INPUT)
-        this.m_formulaEditionButton.Enabled = true;
+      if (p_account.FormulaType == Account.FormulaTypes.FORMULA || p_account.FormulaType == Account.FormulaTypes.FIRST_PERIOD_INPUT)
+        this.m_formulaEditionButton.Visible = true;
       else
-        this.m_formulaEditionButton.Enabled = false;
+        this.m_formulaEditionButton.Visible = false;
+      this.Name_TB.Enabled = p_status;
+      this.ProcessComboBox.Enabled = p_status;
       this.TypeComboBox.Enabled = p_status;
       this.CurrencyConversionComboBox.Enabled = p_status;
       this.SaveDescriptionBT.Enabled = p_status;
@@ -678,5 +771,6 @@ namespace FBI.MVC.View
         this.m_descriptionTextBox.BackColor = Color.LightGray;
       this.ConsolidationOptionComboBox.Enabled = p_status;
     }
+
   }
 }

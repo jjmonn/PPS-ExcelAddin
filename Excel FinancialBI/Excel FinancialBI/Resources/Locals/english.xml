@@ -543,6 +543,8 @@
     <string name="macro_economic_indicator">Macro Economic Indicator</string>
     <string name="log">Log</string>
 
+    <string name="warning">Warning</string>
+    
     <category name="error">
       <string name="name_in_use">This name is already in use.</string>
     </category>
