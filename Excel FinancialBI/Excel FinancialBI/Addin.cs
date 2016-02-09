@@ -75,7 +75,6 @@ namespace FBI
     {
       if (p_success == ErrorMessage.SUCCESS && m_initTypeSet.Contains(p_type))
       {
-        System.Threading.Thread.Sleep(100);
         m_initTypeSet.Remove(p_type);
         if (m_initTypeSet.Count == 0 && InitializationEvent != null)
           InitializationEvent();
